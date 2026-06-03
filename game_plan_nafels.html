@@ -1,0 +1,3409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PLAN DE JUEGO — CASL VOLEY</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07080f;--card:#0d0e1a;--card2:#111220;
+  --border:rgba(255,255,255,.06);
+  --amber:#f59e0b;--indigo:#818cf8;--green:#22c55e;
+  --red:#ef4444;--orange:#f97316;--mut:#475569;--txt:#e2e8f0;
+}
+body{
+  background:var(--bg);
+  background-image:radial-gradient(ellipse at 0% 0%,rgba(129,140,248,.08) 0%,transparent 50%),
+    radial-gradient(ellipse at 100% 100%,rgba(245,158,11,.06) 0%,transparent 50%);
+  font-family:'Barlow Condensed',sans-serif;color:var(--txt);min-height:100vh;
+}
+.page-header{
+  padding:20px 32px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(255,255,255,.015);backdrop-filter:blur(20px);
+  position:sticky;top:0;z-index:100;
+}
+.page-title{
+  font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:5px;
+  background:linear-gradient(120deg,#f59e0b,#fff 50%,#818cf8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.rival-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--amber);}
+.match-info{font-size:10px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase;
+  border:1px solid rgba(245,158,11,.2);border-radius:6px;padding:4px 10px;
+  background:rgba(245,158,11,.05);margin-top:3px;display:inline-block;}
+.nav-dots{display:flex;gap:8px;align-items:center;}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s;}
+.nav-dot.on{background:var(--amber);box-shadow:0 0 8px rgba(245,158,11,.5);}
+.main{max-width:1600px;margin:0 auto;padding:24px 32px;}
+
+/* Jugador */
+.jugador-section{margin-bottom:2px;border-radius:16px;overflow:hidden;border:1px solid var(--border);transition:all .3s;}
+.jugador-section:hover{border-color:rgba(255,255,255,.1);}
+.jugador-header{
+  display:grid;grid-template-columns:260px 1fr;
+  background:var(--card);cursor:pointer;transition:background .2s;min-height:130px;
+}
+.jugador-header:hover{background:var(--card2);}
+.jugador-identity{
+  padding:18px 20px;display:flex;align-items:center;gap:14px;
+  border-right:1px solid var(--border);position:relative;overflow:hidden;
+}
+.jug-color-bar{position:absolute;left:0;top:0;bottom:0;width:3px;}
+.jug-num-bg{
+  font-family:'Bebas Neue',sans-serif;font-size:56px;line-height:1;
+  opacity:.08;position:absolute;right:8px;bottom:-6px;letter-spacing:-2px;
+}
+.jug-foto{
+  width:60px;height:60px;border-radius:50%;border:2px solid;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:20px;
+  flex-shrink:0;position:relative;z-index:1;
+  background:rgba(255,255,255,.04);
+}
+.jug-info{position:relative;z-index:1;}
+.jug-num-lbl{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;opacity:.7;margin-bottom:1px;}
+.jug-nombre{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;line-height:1;margin-bottom:4px;}
+.jug-pos{font-size:10px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;}
+.jugador-tactico{
+  padding:14px 20px;display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;align-content:start;
+}
+.tac-item{display:flex;align-items:flex-start;gap:7px;}
+.tac-icon{
+  width:16px;height:16px;border-radius:4px;display:flex;align-items:center;
+  justify-content:center;font-size:8px;font-weight:900;flex-shrink:0;margin-top:2px;
+}
+.tac-lbl{font-size:8px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;margin-bottom:1px;}
+.tac-val{font-size:11px;font-weight:700;letter-spacing:.3px;line-height:1.3;}
+.jug-footer{
+  grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;
+  padding-top:8px;margin-top:4px;border-top:1px solid var(--border);
+}
+.tab-row{display:flex;gap:4px;}
+.tab-btn{
+  padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.03);color:var(--mut);
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:1px;cursor:pointer;transition:all .15s;text-transform:uppercase;
+}
+.tab-btn:hover{background:rgba(255,255,255,.07);color:#e2e8f0;}
+.tab-btn.active-ataque{background:rgba(129,140,248,.12);border-color:rgba(129,140,248,.4);color:#818cf8;}
+.tab-btn.active-saque{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.4);color:#f59e0b;}
+.toggle-arrow{color:var(--mut);font-size:11px;transition:transform .3s;}
+.jugador-section.open .toggle-arrow{transform:rotate(180deg);}
+
+/* Canchitas */
+.canchitas-wrap{
+  display:none;background:linear-gradient(180deg,var(--card2) 0%,rgba(7,8,15,.8) 100%);
+  padding:16px 20px 20px;border-top:1px solid var(--border);
+}
+.jugador-section.open .canchitas-wrap{display:block;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.canchitas-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:14px;
+}
+.canchita-card{
+  background:rgba(255,255,255,.02);border:1px solid var(--border);
+  border-radius:12px;overflow:hidden;transition:all .2s;cursor:pointer;
+}
+.canchita-card:hover{border-color:rgba(255,255,255,.12);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4);}
+.canchita-hdr{
+  padding:7px 11px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+}
+.canchita-cod{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;}
+.canchita-tipo{font-size:8px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;}
+.canchita-canvas-wrap{padding:6px;display:flex;justify-content:center;}
+.canchita-stats{
+  padding:7px 10px;display:grid;grid-template-columns:repeat(3,1fr);
+  gap:3px;border-top:1px solid var(--border);
+}
+.cs-item{display:flex;flex-direction:column;align-items:center;gap:1px;}
+.cs-val{font-family:'Bebas Neue',sans-serif;font-size:14px;line-height:1;}
+.cs-lbl{font-size:7px;color:var(--mut);letter-spacing:.8px;text-transform:uppercase;}
+.no-data-msg{
+  padding:28px;text-align:center;color:var(--mut);
+  font-size:11px;letter-spacing:1px;text-transform:uppercase;
+  grid-column:1/-1;
+}
+
+/* Modal */
+.modal-overlay{
+  display:none;position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,.92);backdrop-filter:blur(20px);
+  align-items:center;justify-content:center;
+}
+.modal-overlay.open{display:flex;}
+.modal-box{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:22px;max-width:480px;width:92%;
+  box-shadow:0 32px 80px rgba(0,0,0,.8);
+}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;}
+.modal-close{
+  padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.04);color:var(--mut);cursor:pointer;
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;
+}
+.modal-stats-row{display:flex;gap:8px;margin-top:10px;}
+.modal-stat{
+  flex:1;padding:8px 6px;background:rgba(255,255,255,.03);
+  border:1px solid var(--border);border-radius:8px;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+}
+.modal-stat-val{font-family:'Bebas Neue',sans-serif;font-size:18px;line-height:1;}
+.modal-stat-lbl{font-size:8px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;}
+.modal-info{font-size:10px;color:var(--mut);letter-spacing:.5px;text-align:center;margin-bottom:8px;}
+.legend{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px;}
+.lg-item{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--mut);letter-spacing:.5px;text-transform:uppercase;}
+.lg-dot{width:16px;height:3px;border-radius:2px;}
+
+canvas { image-rendering: -webkit-optimize-contrast; }
+
+/* ── MOBILE ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  .page-header { padding:12px 16px; flex-wrap:wrap; gap:8px; }
+  .page-title { font-size:18px; letter-spacing:3px; }
+  .rival-name { font-size:15px; }
+  .nav-dots { display:none; }
+
+  .main { padding:12px 10px; }
+
+  .jugador-header { grid-template-columns:1fr; min-height:unset; }
+  .jugador-identity { border-right:none; border-bottom:1px solid var(--border); padding:12px 14px; }
+  .jug-num-bg { font-size:40px; }
+  .jug-foto { width:48px; height:48px; font-size:16px; }
+  .jug-nombre { font-size:17px; }
+
+  .jugador-tactico { grid-template-columns:1fr; padding:10px 14px; gap:6px; }
+
+  .canchitas-grid { grid-template-columns:repeat(2,1fr); gap:8px; }
+  .canchitas-wrap { padding:10px 10px 14px; }
+
+  .modal-box { width:96%; padding:16px; border-radius:12px; max-height:90vh; overflow-y:auto; }
+
+  .tab-btn { padding:5px 10px; font-size:10px; }
+}
+
+@media (max-width: 400px) {
+  .canchitas-grid { grid-template-columns:1fr 1fr; gap:6px; }
+  .page-title { font-size:15px; }
+}
+
+
+/* ── DROPDOWNS — texto siempre negro ── */
+select, select option {
+  color: #111111 !important;
+  background-color: #ffffff !important;
+}
+
+.pdf-btn {
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(232,25,44,.4);
+  background: rgba(232,25,44,.08);
+  color: #e8192c;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all .15s;
+  text-transform: uppercase;
+}
+.pdf-btn:hover { background: rgba(232,25,44,.18); border-color: rgba(232,25,44,.7); }
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body { background: #07080f !important; color: #e2e8f0 !important; }
+  .page-header { position: relative !important; }
+  .back-btn, .pdf-btn, .lang-switcher, #lang-switcher, #nav-dots,
+  [style*="position:fixed"], .modal-overlay { display: none !important; }
+  .jugador-section { page-break-inside: avoid !important; }
+  .jugador-section .canchitas-wrap { display: block !important; }
+  .section-title { page-break-after: avoid !important; }
+  canvas { display: block !important; }
+  @page { margin: 1cm; size: A4 portrait; }
+}
+
+</style>
+<script src="lang.js" onerror="void 0"></script>
+</head>
+<body>
+<script>
+// Preload canvas fonts immediately
+if(document.fonts && document.fonts.load){
+  document.fonts.load("800 16px Inter").catch(function(){});
+  document.fonts.load("bold 16px 'Bebas Neue'").catch(function(){});
+}
+</script>
+
+<header class="page-header">
+  <a href="index.html" class="back-btn">← Inicio</a>
+  <button onclick="descargarPDF()" class="pdf-btn" id="pdf-btn">📄 Descargar PDF</button>
+  <div>
+    <div class="page-title"><span data-t="game_plan">Plan de Juego</span></div>
+    <div style="font-size:10px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;margin-top:1px">Análisis táctico de rivales — CASL Voley</div>
+  </div>
+  <div>
+    <div class="rival-name" id="rival-nombre">CIUDAD VOLEY</div>
+    <div class="match-info" id="match-info">Liga Argentina · Fecha 12</div>
+  </div>
+  <div id="lang-wrap" style="display:flex;align-items:center;gap:4px;margin-right:8px"></div>
+  <div class="nav-dots" id="nav-dots"></div>
+</header>
+
+<main class="main" id="main-content">
+  <!-- ARMADOR -->
+  <div style="margin-top:40px;padding-top:28px;border-top:1px solid rgba(255,255,255,.06)">
+    <div style="font-size:10px;color:#475569;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px">
+      ANÁLISIS DEL ARMADOR RIVAL
+      <div style="flex:1;height:1px;background:rgba(255,255,255,.06)"></div>
+    </div>
+    <div id="seccion-armador"></div>
+  </div>
+
+  <!-- COMO VAMOS A JUGAR -->
+  <div style="margin-top:40px;padding-top:28px;border-top:2px solid rgba(232,25,44,.15)" id="anchor-juego">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+      <div style="width:4px;height:28px;background:linear-gradient(180deg,#e8192c,transparent);border-radius:2px;flex-shrink:0"></div>
+      <div>
+        <div style="font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase">Planificación táctica</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:#fff">CÓMO VAMOS A JUGAR</div>
+      </div>
+    </div>
+    <div id="seccion-juego"></div>
+  </div>
+</main>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <div class="modal-title" id="modal-title">Análisis</div>
+      <button class="modal-close" onclick="closeModal()">✕ Cerrar</button>
+    </div>
+    <div class="modal-info" id="modal-info"></div>
+    <div style="border-radius:10px;overflow:hidden;box-shadow:0 0 0 4px rgba(255,255,255,.04)">
+      <canvas id="modal-canvas" width="436" height="380" style="display:block"></canvas>
+    </div>
+    <div class="modal-stats-row" id="modal-stats"></div>
+    <div class="legend">
+      <div class="lg-item"><div class="lg-dot" style="background:#a855f7"></div>1° zona</div>
+      <div class="lg-item"><div class="lg-dot" style="background:#a855f7"></div>2° zona</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATOS — Reemplazá con los datos reales de tu rival
+// ═══════════════════════════════════════════════════════
+const RIVAL = {
+  nombre: "DBANF",
+  info: "NLA Suiza 2025/26 . Fecha 6",
+  fecha: "6"
+};
+const JUGADORES = [
+  {
+    "num": 1,
+    "nombre": "1 Barrios L.",
+    "pos": "CENTRAL",
+    "color": "#f97316",
+    "info": {
+      "bloqueo": "",
+      "defensa": "",
+      "pos6": "",
+      "pos5": "",
+      "pos1": "",
+      "extra": ""
+    },
+    "ataques": [
+      {
+        "cod": "X1",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 75
+          },
+          {
+            "z": 5,
+            "pct": 25
+          }
+        ],
+        "eff": 27,
+        "tot": 11,
+        "pts": 4,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 36
+      },
+      {
+        "cod": "X7",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 40
+          },
+          {
+            "z": 1,
+            "pct": 20
+          }
+        ],
+        "eff": -5,
+        "tot": 19,
+        "pts": 5,
+        "slash": 3,
+        "err": 3,
+        "video": "https://youtu.be/A89Hy9iI1jA",
+        "pts_pct": 26
+      },
+      {
+        "cod": "XM",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 29
+          },
+          {
+            "z": 6,
+            "pct": 29
+          }
+        ],
+        "eff": 57,
+        "tot": 23,
+        "pts": 14,
+        "slash": 1,
+        "err": 0,
+        "video": "https://youtu.be/8oQHvlemVlU",
+        "pts_pct": 61
+      },
+      {
+        "cod": "X2",
+        "orig": 3,
+        "destinos": [],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      }
+    ],
+    "saques": [
+      {
+        "cod": "SM",
+        "tipo": "FLOTADO",
+        "orig": 6,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 36
+          },
+          {
+            "z": 5,
+            "pct": 33
+          }
+        ],
+        "eff": 7,
+        "tot": 76,
+        "pts": 0,
+        "plus": 12,
+        "slash": 4,
+        "err": 0,
+        "video": "https://youtu.be/_oqWK184Kw8",
+        "pts_pct": 0
+      },
+      {
+        "cod": "SQ",
+        "tipo": "POTENCIA",
+        "orig": 6,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 27
+          },
+          {
+            "z": 5,
+            "pct": 25
+          }
+        ],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "plus": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "video": null
+  },
+  {
+    "num": 2,
+    "nombre": "2 Corzo M.",
+    "pos": "OPUESTO",
+    "color": "#818cf8",
+    "info": {
+      "bloqueo": "",
+      "defensa": "",
+      "pos6": "",
+      "pos5": "",
+      "pos1": "",
+      "extra": ""
+    },
+    "ataques": [
+      {
+        "cod": "X5",
+        "orig": 4,
+        "destinos": [],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "V5",
+        "orig": 4,
+        "destinos": [],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X6",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 40
+          },
+          {
+            "z": 1,
+            "pct": 20
+          }
+        ],
+        "eff": 67,
+        "tot": 9,
+        "pts": 6,
+        "slash": 0,
+        "err": 0,
+        "video": "https://youtu.be/ILZSs7b0VMk",
+        "pts_pct": 67
+      },
+      {
+        "cod": "V6",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 50
+          },
+          {
+            "z": 5,
+            "pct": 50
+          }
+        ],
+        "eff": 0,
+        "tot": 3,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X8",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 9,
+        "pts": 4,
+        "slash": 2,
+        "err": 2,
+        "video": "https://youtu.be/u5v_YqmT3do",
+        "pts_pct": 44
+      },
+      {
+        "cod": "V8",
+        "orig": 9,
+        "destinos": [],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "saques": [
+      {
+        "cod": "SM",
+        "tipo": "FLOTADO",
+        "orig": 6,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 27
+          },
+          {
+            "z": 5,
+            "pct": 25
+          }
+        ],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "plus": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "SQ",
+        "tipo": "POTENCIA",
+        "orig": 1,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 29
+          },
+          {
+            "z": 7,
+            "pct": 24
+          }
+        ],
+        "eff": -7,
+        "tot": 11,
+        "pts": 3,
+        "plus": 1,
+        "slash": 0,
+        "err": 4,
+        "video": "https://youtu.be/qWmEh4tA1xI",
+        "pts_pct": 100
+      }
+    ],
+    "video": null
+  },
+  {
+    "num": 3,
+    "nombre": "3 Wagner B.",
+    "pos": "PUNTA",
+    "color": "#22c55e",
+    "info": {
+      "bloqueo": "",
+      "defensa": "",
+      "pos6": "",
+      "pos5": "",
+      "pos1": "",
+      "extra": ""
+    },
+    "ataques": [
+      {
+        "cod": "X5",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 28
+          },
+          {
+            "z": 7,
+            "pct": 28
+          }
+        ],
+        "eff": 50,
+        "tot": 72,
+        "pts": 44,
+        "slash": 0,
+        "err": 0,
+        "video": "https://youtu.be/KwwGy2JinBw",
+        "pts_pct": 61
+      },
+      {
+        "cod": "V5",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 38
+          },
+          {
+            "z": 7,
+            "pct": 23
+          }
+        ],
+        "eff": 0,
+        "tot": 16,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X6",
+        "orig": 2,
+        "destinos": [],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "V6",
+        "orig": 2,
+        "destinos": [],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "XP",
+        "orig": 8,
+        "destinos": [],
+        "eff": 25,
+        "tot": 63,
+        "pts": 26,
+        "slash": 0,
+        "err": 0,
+        "video": "https://youtu.be/2Bsz3D6AZcw",
+        "pts_pct": 41
+      }
+    ],
+    "saques": [
+      {
+        "cod": "SM",
+        "tipo": "FLOTADO",
+        "orig": 1,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 29
+          },
+          {
+            "z": 7,
+            "pct": 22
+          }
+        ],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "plus": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "SQ",
+        "tipo": "POTENCIA",
+        "orig": 6,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 31
+          },
+          {
+            "z": 5,
+            "pct": 24
+          }
+        ],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "plus": 0,
+        "slash": 0,
+        "err": 0,
+        "video": "https://youtu.be/sGmA3K0uY9g",
+        "pts_pct": 0
+      }
+    ],
+    "video": null
+  },
+  {
+    "num": 4,
+    "nombre": "4 Soria N.",
+    "pos": "CENTRAL",
+    "color": "#f97316",
+    "info": {
+      "bloqueo": "",
+      "defensa": "",
+      "pos6": "",
+      "pos5": "",
+      "pos1": "",
+      "extra": ""
+    },
+    "ataques": [],
+    "saques": [
+      {
+        "cod": "SM",
+        "tipo": "FLOTADO",
+        "orig": 6,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 31
+          },
+          {
+            "z": 5,
+            "pct": 24
+          }
+        ],
+        "eff": 38,
+        "tot": 4,
+        "pts": 1,
+        "plus": 0,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "SQ",
+        "tipo": "POTENCIA",
+        "orig": 1,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 31
+          },
+          {
+            "z": 1,
+            "pct": 25
+          }
+        ],
+        "eff": 0,
+        "tot": 4,
+        "pts": 1,
+        "plus": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "video": null
+  },
+  {
+    "num": 5,
+    "nombre": "5 Gallardo A.",
+    "pos": "CENTRAL",
+    "color": "#f97316",
+    "info": {
+      "bloqueo": "",
+      "defensa": "",
+      "pos6": "",
+      "pos5": "",
+      "pos1": "",
+      "extra": ""
+    },
+    "ataques": [
+      {
+        "cod": "X1",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 50
+          },
+          {
+            "z": 7,
+            "pct": 25
+          }
+        ],
+        "eff": 46,
+        "tot": 28,
+        "pts": 17,
+        "slash": 0,
+        "err": 0,
+        "video": "https://youtu.be/5tTn1SARR5A",
+        "pts_pct": 61
+      },
+      {
+        "cod": "X7",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 67
+          },
+          {
+            "z": 1,
+            "pct": 33
+          }
+        ],
+        "eff": 50,
+        "tot": 6,
+        "pts": 3,
+        "slash": 0,
+        "err": 0,
+        "video": "https://youtu.be/gE1gfnk4Lvs",
+        "pts_pct": 50
+      },
+      {
+        "cod": "XM",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 33
+          },
+          {
+            "z": 9,
+            "pct": 33
+          }
+        ],
+        "eff": 43,
+        "tot": 7,
+        "pts": 4,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 57
+      },
+      {
+        "cod": "X2",
+        "orig": 3,
+        "destinos": [],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "saques": [
+      {
+        "cod": "SM",
+        "tipo": "FLOTADO",
+        "orig": 6,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 35
+          },
+          {
+            "z": 1,
+            "pct": 23
+          }
+        ],
+        "eff": 19,
+        "tot": 13,
+        "pts": 2,
+        "plus": 2,
+        "slash": 0,
+        "err": 0,
+        "video": "https://youtu.be/XWXc0OyQ-L0",
+        "pts_pct": 15
+      },
+      {
+        "cod": "SQ",
+        "tipo": "POTENCIA",
+        "orig": 1,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 34
+          },
+          {
+            "z": 1,
+            "pct": 22
+          }
+        ],
+        "eff": -14,
+        "tot": 57,
+        "pts": 3,
+        "plus": 9,
+        "slash": 3,
+        "err": 15,
+        "video": null,
+        "pts_pct": 5
+      }
+    ],
+    "video": null
+  },
+  {
+    "num": 7,
+    "nombre": "7 Sarmiento Britos J.",
+    "pos": "PUNTA",
+    "color": "#22c55e",
+    "info": {
+      "bloqueo": "",
+      "defensa": "",
+      "pos6": "",
+      "pos5": "",
+      "pos1": "",
+      "extra": ""
+    },
+    "ataques": [
+      {
+        "cod": "X5",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 60
+          },
+          {
+            "z": 6,
+            "pct": 20
+          }
+        ],
+        "eff": 18,
+        "tot": 17,
+        "pts": 7,
+        "slash": 0,
+        "err": 0,
+        "video": "https://youtu.be/3BJd_EDbiUQ",
+        "pts_pct": 41
+      },
+      {
+        "cod": "V5",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 2,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 3,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X6",
+        "orig": 2,
+        "destinos": [],
+        "eff": 0,
+        "tot": 2,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "V6",
+        "orig": 2,
+        "destinos": [],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "XP",
+        "orig": 8,
+        "destinos": [],
+        "eff": 29,
+        "tot": 17,
+        "pts": 7,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 41
+      }
+    ],
+    "saques": [
+      {
+        "cod": "SM",
+        "tipo": "FLOTADO",
+        "orig": 1,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 34
+          },
+          {
+            "z": 1,
+            "pct": 22
+          }
+        ],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "plus": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "SQ",
+        "tipo": "POTENCIA",
+        "orig": 1,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 35
+          },
+          {
+            "z": 1,
+            "pct": 22
+          }
+        ],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "plus": 0,
+        "slash": 0,
+        "err": 0,
+        "video": "https://youtu.be/Lg0nOPQ6C-o",
+        "pts_pct": 0
+      }
+    ],
+    "video": null
+  },
+  {
+    "num": 9,
+    "nombre": "9 Corvalan C.",
+    "pos": "ARMADOR",
+    "color": "#f59e0b",
+    "info": {
+      "bloqueo": "",
+      "defensa": "",
+      "pos6": "",
+      "pos5": "",
+      "pos1": "",
+      "extra": ""
+    },
+    "ataques": [],
+    "saques": [
+      {
+        "cod": "SM",
+        "tipo": "FLOTADO",
+        "orig": 6,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 32
+          },
+          {
+            "z": 1,
+            "pct": 22
+          }
+        ],
+        "eff": -1,
+        "tot": 54,
+        "pts": 0,
+        "plus": 2,
+        "slash": 0,
+        "err": 1,
+        "video": "https://youtu.be/SIVDkx3Z9MA",
+        "pts_pct": 0
+      },
+      {
+        "cod": "SQ",
+        "tipo": "POTENCIA",
+        "orig": 6,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 32
+          },
+          {
+            "z": 1,
+            "pct": 22
+          }
+        ],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "plus": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "video": null
+  },
+  {
+    "num": 12,
+    "nombre": "12 La Gioia T.",
+    "pos": "ARMADOR",
+    "color": "#f59e0b",
+    "info": {
+      "bloqueo": "",
+      "defensa": "",
+      "pos6": "",
+      "pos5": "",
+      "pos1": "",
+      "extra": ""
+    },
+    "ataques": [],
+    "saques": [
+      {
+        "cod": "SM",
+        "tipo": "FLOTADO",
+        "orig": 1,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 32
+          },
+          {
+            "z": 1,
+            "pct": 23
+          }
+        ],
+        "eff": -7,
+        "tot": 11,
+        "pts": 0,
+        "plus": 1,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 100
+      },
+      {
+        "cod": "SQ",
+        "tipo": "POTENCIA",
+        "orig": 1,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 32
+          },
+          {
+            "z": 1,
+            "pct": 23
+          }
+        ],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "plus": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "video": null
+  },
+  {
+    "num": 16,
+    "nombre": "16 Lopez Peralta J.",
+    "pos": "OPUESTO",
+    "color": "#818cf8",
+    "info": {
+      "bloqueo": "",
+      "defensa": "",
+      "pos6": "",
+      "pos5": "",
+      "pos1": "",
+      "extra": ""
+    },
+    "ataques": [
+      {
+        "cod": "X5",
+        "orig": 4,
+        "destinos": [],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "V5",
+        "orig": 4,
+        "destinos": [],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X6",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 43
+          },
+          {
+            "z": 8,
+            "pct": 21
+          }
+        ],
+        "eff": 43,
+        "tot": 44,
+        "pts": 24,
+        "slash": 3,
+        "err": 2,
+        "video": null,
+        "pts_pct": 55
+      },
+      {
+        "cod": "V6",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 36
+          },
+          {
+            "z": 8,
+            "pct": 27
+          }
+        ],
+        "eff": 33,
+        "tot": 36,
+        "pts": 16,
+        "slash": 1,
+        "err": 3,
+        "video": null,
+        "pts_pct": 44
+      },
+      {
+        "cod": "X8",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 45
+          },
+          {
+            "z": 9,
+            "pct": 36
+          }
+        ],
+        "eff": 22,
+        "tot": 37,
+        "pts": 16,
+        "slash": 2,
+        "err": 6,
+        "video": null,
+        "pts_pct": 43
+      },
+      {
+        "cod": "V8",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 57
+          },
+          {
+            "z": 6,
+            "pct": 43
+          }
+        ],
+        "eff": 27,
+        "tot": 15,
+        "pts": 9,
+        "slash": 3,
+        "err": 2,
+        "video": null,
+        "pts_pct": 60
+      }
+    ],
+    "saques": [
+      {
+        "cod": "SM",
+        "tipo": "FLOTADO",
+        "orig": 1,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 32
+          },
+          {
+            "z": 1,
+            "pct": 23
+          }
+        ],
+        "eff": -7,
+        "tot": 39,
+        "pts": 0,
+        "plus": 1,
+        "slash": 2,
+        "err": 4,
+        "video": null,
+        "pts_pct": 100
+      },
+      {
+        "cod": "SQ",
+        "tipo": "POTENCIA",
+        "orig": 1,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 29
+          },
+          {
+            "z": 1,
+            "pct": 26
+          }
+        ],
+        "eff": -32,
+        "tot": 25,
+        "pts": 2,
+        "plus": 2,
+        "slash": 1,
+        "err": 11,
+        "video": null,
+        "pts_pct": 8
+      }
+    ],
+    "video": null
+  },
+  {
+    "num": 17,
+    "nombre": "17 Acosta� J.",
+    "pos": "CENTRAL",
+    "color": "#f97316",
+    "info": {
+      "bloqueo": "",
+      "defensa": "",
+      "pos6": "",
+      "pos5": "",
+      "pos1": "",
+      "extra": ""
+    },
+    "ataques": [],
+    "saques": [
+      {
+        "cod": "SM",
+        "tipo": "FLOTADO",
+        "orig": 1,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 29
+          },
+          {
+            "z": 1,
+            "pct": 26
+          }
+        ],
+        "eff": 25,
+        "tot": 1,
+        "pts": 0,
+        "plus": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "SQ",
+        "tipo": "POTENCIA",
+        "orig": 1,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 29
+          },
+          {
+            "z": 1,
+            "pct": 26
+          }
+        ],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "plus": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "video": null
+  },
+  {
+    "num": 18,
+    "nombre": "18 Corso E.",
+    "pos": "CENTRAL",
+    "color": "#f97316",
+    "info": {
+      "bloqueo": "",
+      "defensa": "",
+      "pos6": "",
+      "pos5": "",
+      "pos1": "",
+      "extra": ""
+    },
+    "ataques": [
+      {
+        "cod": "X1",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 50
+          },
+          {
+            "z": 5,
+            "pct": 50
+          }
+        ],
+        "eff": 67,
+        "tot": 3,
+        "pts": 2,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 67
+      },
+      {
+        "cod": "X7",
+        "orig": 3,
+        "destinos": [],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "XM",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 75,
+        "tot": 4,
+        "pts": 3,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 75
+      },
+      {
+        "cod": "X2",
+        "orig": 3,
+        "destinos": [],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "saques": [
+      {
+        "cod": "SM",
+        "tipo": "FLOTADO",
+        "orig": 1,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 29
+          },
+          {
+            "z": 1,
+            "pct": 26
+          }
+        ],
+        "eff": -3,
+        "tot": 24,
+        "pts": 1,
+        "plus": 5,
+        "slash": 0,
+        "err": 3,
+        "video": null,
+        "pts_pct": 4
+      },
+      {
+        "cod": "SQ",
+        "tipo": "POTENCIA",
+        "orig": 1,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 30
+          },
+          {
+            "z": 6,
+            "pct": 28
+          }
+        ],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "plus": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "video": null
+  },
+  {
+    "num": 30,
+    "nombre": "30 Mansilla M.",
+    "pos": "PUNTA",
+    "color": "#22c55e",
+    "info": {
+      "bloqueo": "",
+      "defensa": "",
+      "pos6": "",
+      "pos5": "",
+      "pos1": "",
+      "extra": ""
+    },
+    "ataques": [
+      {
+        "cod": "X5",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 43
+          },
+          {
+            "z": 9,
+            "pct": 14
+          }
+        ],
+        "eff": 21,
+        "tot": 39,
+        "pts": 16,
+        "slash": 4,
+        "err": 4,
+        "video": "https://youtu.be/lzCMOJQGsC4",
+        "pts_pct": 41
+      },
+      {
+        "cod": "V5",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 40
+          },
+          {
+            "z": 6,
+            "pct": 20
+          }
+        ],
+        "eff": 0,
+        "tot": 12,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X6",
+        "orig": 2,
+        "destinos": [],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "V6",
+        "orig": 2,
+        "destinos": [],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "XP",
+        "orig": 8,
+        "destinos": [],
+        "eff": 0,
+        "tot": 0,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "saques": [
+      {
+        "cod": "SM",
+        "tipo": "FLOTADO",
+        "orig": 1,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 29
+          },
+          {
+            "z": 6,
+            "pct": 28
+          }
+        ],
+        "eff": 6,
+        "tot": 4,
+        "pts": 0,
+        "plus": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      },
+      {
+        "cod": "SQ",
+        "tipo": "POTENCIA",
+        "orig": 6,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 31
+          },
+          {
+            "z": 1,
+            "pct": 29
+          }
+        ],
+        "eff": -16,
+        "tot": 49,
+        "pts": 3,
+        "plus": 7,
+        "slash": 1,
+        "err": 13,
+        "video": "https://youtu.be/qU12sAdfKvo",
+        "pts_pct": 6
+      }
+    ],
+    "video": null
+  }
+];
+// ═══════════════════════════════════════════════════════
+// UTILIDADES
+// ═══════════════════════════════════════════════════════
+function effColor(e){
+  if(e===null||e===undefined) return 'var(--mut)';
+  if(e>=60) return '#22c55e';
+  if(e>=30) return '#fbbf24';
+  if(e>=0)  return '#f97316';
+  return '#ef4444';
+}
+
+function drawWood(ctx,x,y,w,h,c1,c2){
+  var bg=ctx.createLinearGradient(x,y,x,y+h);
+  bg.addColorStop(0,c1);bg.addColorStop(0.5,c2);bg.addColorStop(1,c1);
+  ctx.fillStyle=bg;ctx.fillRect(x,y,w,h);
+  ctx.save();ctx.globalAlpha=0.07;ctx.strokeStyle='#3a1800';ctx.lineWidth=0.5;
+  for(var iy=y+5;iy<y+h;iy+=5){ctx.beginPath();ctx.moveTo(x,iy);ctx.lineTo(x+w,iy);ctx.stroke();}
+  ctx.restore();
+}
+
+function drawNet(ctx,CL,CW,Y){
+  var ng=ctx.createLinearGradient(0,Y-3,0,Y+7);
+  ng.addColorStop(0,'#2a2a3a');ng.addColorStop(0.4,'#d0d0e0');ng.addColorStop(1,'#2a2a3a');
+  ctx.fillStyle=ng;ctx.fillRect(CL-3,Y-3,CW+6,8);
+  ctx.fillStyle='#cc1515';ctx.fillRect(CL-3,Y-5,CW+6,3);
+}
+
+function drawCone(ctx,ox,oy,dx,dy,col,bw,pct,showPct,label,W){
+  var ex=ox+(dx-ox)*pct, ey=oy+(dy-oy)*pct;
+  var vx=dx-ox,vy=dy-oy,len=Math.sqrt(vx*vx+vy*vy);
+  if(len===0) return;
+  var px=-vy/len,py=vx/len;
+  var bwP=bw*pct;
+  var cg=ctx.createLinearGradient(ox,oy,dx,dy);
+  cg.addColorStop(0,col+'08');cg.addColorStop(0.5,col+'55');cg.addColorStop(1,col+'bb');
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(ox,oy);
+  ctx.lineTo(ex+px*bwP/2,ey+py*bwP/2);
+  ctx.lineTo(ex-px*bwP/2,ey-py*bwP/2);
+  ctx.closePath();
+  ctx.fillStyle=cg;ctx.fill();
+  ctx.strokeStyle=col;ctx.lineWidth=1.5;ctx.globalAlpha=0.85;ctx.stroke();
+  ctx.restore();
+  if(pct>=0.85){
+    var r=Math.max(bwP*0.42,8);
+    ctx.save();
+    ctx.beginPath();ctx.arc(dx,dy,r,0,Math.PI*2);
+    ctx.fillStyle=col;ctx.globalAlpha=0.12;ctx.fill();
+    ctx.globalAlpha=1;ctx.strokeStyle=col;ctx.lineWidth=1.5;
+    ctx.shadowColor=col;ctx.shadowBlur=8;ctx.stroke();
+    if(showPct && W>140){
+      ctx.font='800 '+Math.round(W*0.062)+'px Inter';
+      ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.shadowColor='rgba(0,0,0,.95)';ctx.shadowBlur=4;
+      ctx.fillText(label,dx,dy);
+    }
+    ctx.restore();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// CANCHA ATAQUE — franja rival delgada + 9 cuadritos propios
+// ═══════════════════════════════════════════════════════
+function drawAtaqueCourt(ctx,W,H,ataque,color,pct){
+  pct=pct===undefined?1:pct;
+  var PAD=8,CL=PAD,CR=W-PAD,CT=PAD,CB=H-PAD;
+  var CW=CR-CL;
+  var RIVAL_H=Math.round(H*0.20);
+  var NET=CT+RIVAL_H;
+  var OWN_H=CB-NET-4;
+  var c1=CL+CW/3,c2=CL+CW*2/3;
+
+  ctx.fillStyle='#1a2a40';ctx.fillRect(0,0,W,H);
+  drawWood(ctx,CL,CT,CW,RIVAL_H,'#6B4510','#8B5A18');
+  drawWood(ctx,CL,NET+4,CW,OWN_H,'#C88030','#E09840');
+  drawNet(ctx,CL,CW,NET);
+
+  ctx.save();ctx.setLineDash([]);
+  ctx.strokeStyle='rgba(255,255,255,.6)';ctx.lineWidth=1.2;
+  ctx.strokeRect(CL,CT,CW,RIVAL_H);
+  ctx.strokeStyle='rgba(255,255,255,.45)';ctx.lineWidth=0.8;
+  [c1,c2].forEach(function(x){ctx.beginPath();ctx.moveTo(x,CT);ctx.lineTo(x,CT+RIVAL_H);ctx.stroke();});
+  ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=1.5;ctx.setLineDash([]);
+  ctx.strokeRect(CL,NET+4,CW,OWN_H);
+  ctx.setLineDash([3,3]);ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=0.8;
+  [c1,c2].forEach(function(x){ctx.beginPath();ctx.moveTo(x,NET+4);ctx.lineTo(x,CB);ctx.stroke();});
+  ctx.beginPath();ctx.moveTo(CL,NET+4+OWN_H/3);ctx.lineTo(CR,NET+4+OWN_H/3);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(CL,NET+4+OWN_H*2/3);ctx.lineTo(CR,NET+4+OWN_H*2/3);ctx.stroke();
+  ctx.restore();
+
+  if(ataque.destinos && ataque.destinos.length>0){
+    // Origen en franja rival
+    var origZ=ataque.orig||8;
+    var origXmap={1:CL+CW/6,9:CL+CW/6,2:CL+CW/6,6:CL+CW/2,8:CL+CW/2,3:CL+CW/2,5:CL+CW*5/6,7:CL+CW*5/6,4:CL+CW*5/6};
+    var origYmap={1:CT+RIVAL_H*0.85,6:CT+RIVAL_H*0.85,5:CT+RIVAL_H*0.85,9:CT+RIVAL_H*0.55,8:CT+RIVAL_H*0.55,7:CT+RIVAL_H*0.55,2:CT+RIVAL_H*0.2,3:CT+RIVAL_H*0.2,4:CT+RIVAL_H*0.2};
+    var ox=origXmap[origZ]||CL+CW/2;
+    var oy=CT+RIVAL_H*0.58;
+
+    // Destinos en campo propio
+    var O6=NET+4;
+    var destX={4:CL+CW/6,3:CL+CW/2,2:CL+CW*5/6,7:CL+CW/6,8:CL+CW/2,9:CL+CW*5/6,5:CL+CW/6,6:CL+CW/2,1:CL+CW*5/6};
+    var destY={4:O6+OWN_H/6,3:O6+OWN_H/6,2:O6+OWN_H/6,7:O6+OWN_H/2,8:O6+OWN_H/2,9:O6+OWN_H/2,5:O6+OWN_H*5/6,6:O6+OWN_H*5/6,1:O6+OWN_H*5/6};
+    var cones=['#a855f7','#22c55e'];
+
+    ataque.destinos.slice(0,2).forEach(function(d,i){
+      var dx=destX[d.z]||CL+CW/2, dy=destY[d.z]||O6+OWN_H/2;
+      drawCone(ctx,ox,oy,dx,dy,cones[i],(i===0?26:20),pct,true,d.pct+'%',W);
+    });
+
+    // Círculo origen
+    ctx.save();
+    ctx.beginPath();ctx.arc(ox,oy,Math.max(W*0.052,5),0,Math.PI*2);
+    ctx.fillStyle=color;ctx.globalAlpha=0.25;ctx.fill();
+    ctx.globalAlpha=1;ctx.strokeStyle=color;ctx.lineWidth=1.5;
+    ctx.shadowColor=color;ctx.shadowBlur=8;ctx.stroke();
+    ctx.font='bold '+Math.round(W*0.07)+'px \'Bebas Neue\', Impact, sans-serif';
+    ctx.fillStyle=color;ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.shadowColor='rgba(0,0,0,.95)';ctx.shadowBlur=3;
+    ctx.fillText(ataque.cod,ox,oy);
+    ctx.restore();
+  } else {
+    ctx.save();
+    ctx.font='800 '+Math.round(W*0.065)+'px Inter';
+    ctx.fillStyle='rgba(255,255,255,.13)';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('—',CL+CW/2,NET+4+OWN_H/2);
+    ctx.restore();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// CANCHA SAQUE — cancha completa, origen abajo, destino arriba
+// ═══════════════════════════════════════════════════════
+function drawSaqueCourt(ctx,W,H,saque,color,pct){
+  pct=pct===undefined?1:pct;
+  var PAD=8,CL=PAD,CR=W-PAD,CT=PAD,CB=H-PAD;
+  var CW=CR-CL,CH=CB-CT;
+  var NET=CT+CH*0.5;
+  var RIVAL_H=NET-CT, OWN_H=CB-NET;
+  var c1=CL+CW/3,c2=CL+CW*2/3;
+
+  ctx.fillStyle='#1a2a40';ctx.fillRect(0,0,W,H);
+  drawWood(ctx,CL,CT,CW,RIVAL_H,'#C88030','#E09840');
+  drawWood(ctx,CL,NET,CW,OWN_H,'#8B5E1A','#A06820');
+  drawNet(ctx,CL,CW,NET);
+
+  ctx.save();ctx.setLineDash([]);
+  // Campo rival (destino)
+  ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=1.5;
+  ctx.strokeRect(CL,CT,CW,RIVAL_H);
+  ctx.setLineDash([3,3]);ctx.strokeStyle='rgba(255,255,255,.4)';ctx.lineWidth=0.8;
+  [c1,c2].forEach(function(x){ctx.beginPath();ctx.moveTo(x,CT);ctx.lineTo(x,NET);ctx.stroke();});
+  ctx.beginPath();ctx.moveTo(CL,CT+RIVAL_H/3);ctx.lineTo(CR,CT+RIVAL_H/3);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(CL,CT+RIVAL_H*2/3);ctx.lineTo(CR,CT+RIVAL_H*2/3);ctx.stroke();
+  // Campo propio (origen)
+  ctx.setLineDash([]);ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=1.5;
+  ctx.strokeRect(CL,NET,CW,OWN_H);
+  ctx.setLineDash([3,3]);ctx.strokeStyle='rgba(255,255,255,.4)';ctx.lineWidth=0.8;
+  [c1,c2].forEach(function(x){ctx.beginPath();ctx.moveTo(x,NET);ctx.lineTo(x,CB);ctx.stroke();});
+  ctx.beginPath();ctx.moveTo(CL,NET+OWN_H/3);ctx.lineTo(CR,NET+OWN_H/3);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(CL,NET+OWN_H*2/3);ctx.lineTo(CR,NET+OWN_H*2/3);ctx.stroke();
+  ctx.restore();
+
+  if(saque.destinos && saque.destinos.length>0){
+    // Origen: zona de fondo propio
+    var origZone=saque.orig||1;
+    var origXmap={1:CL+CW*5/6,6:CL+CW/2,5:CL+CW/6};
+    var ox=origXmap[origZone]||CL+CW*5/6;
+    var oy=NET+OWN_H*5/6;
+
+    // Destinos en campo rival
+    var destX={1:CL+CW/6,9:CL+CW/6,2:CL+CW/6,6:CL+CW/2,8:CL+CW/2,3:CL+CW/2,5:CL+CW*5/6,7:CL+CW*5/6,4:CL+CW*5/6};
+    var destY={1:CT+RIVAL_H/6,6:CT+RIVAL_H/6,5:CT+RIVAL_H/6,9:CT+RIVAL_H/2,8:CT+RIVAL_H/2,7:CT+RIVAL_H/2,2:CT+RIVAL_H*5/6,3:CT+RIVAL_H*5/6,4:CT+RIVAL_H*5/6};
+    var cones=['#a855f7','#22c55e'];
+
+    saque.destinos.slice(0,2).forEach(function(d,i){
+      var dx=destX[d.z]||CL+CW/2,dy=destY[d.z]||CT+RIVAL_H/2;
+      drawCone(ctx,ox,oy,dx,dy,cones[i],(i===0?30:22),pct,true,d.pct+'%',W);
+    });
+
+    // Círculo origen
+    ctx.save();
+    ctx.beginPath();ctx.arc(ox,oy,W*0.055,0,Math.PI*2);
+    ctx.fillStyle=color;ctx.globalAlpha=0.25;ctx.fill();
+    ctx.globalAlpha=1;ctx.strokeStyle=color;ctx.lineWidth=1.5;
+    ctx.shadowColor=color;ctx.shadowBlur=8;ctx.stroke();
+    ctx.font='bold '+Math.round(W*0.07)+'px \'Bebas Neue\', Impact, sans-serif';
+    ctx.fillStyle=color;ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.shadowColor='rgba(0,0,0,.95)';ctx.shadowBlur=3;
+    ctx.fillText(saque.cod,ox,oy);
+    ctx.restore();
+  } else {
+    ctx.save();
+    ctx.font='800 '+Math.round(W*0.065)+'px Inter';
+    ctx.fillStyle='rgba(255,255,255,.13)';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('SIN DATOS',CL+CW/2,NET+OWN_H/2);
+    ctx.restore();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER JUGADOR
+// ═══════════════════════════════════════════════════════
+function buildCanchita(item,jIdx,i,prefix,W,H,drawFn,color,j){
+  var card=document.createElement('div');
+  card.className='canchita-card';
+  var effC=effColor(item.eff);
+  var hasDatos=item.tot>0||(item.destinos&&item.destinos.length>0);
+
+  var hdr=document.createElement('div');
+  hdr.className='canchita-hdr';
+  var codWrap=document.createElement('div');
+  codWrap.style.cssText='display:flex;align-items:center;gap:5px';
+  var cod=document.createElement('span');
+  cod.className='canchita-cod';
+  cod.style.color=color;
+  cod.textContent=item.cod;
+  var vbtn=document.createElement('a');
+  vbtn.href=item.video||'#';vbtn.target='_blank';
+  vbtn.title='Ver video';
+  vbtn.style.cssText='font-size:12px;opacity:'+(item.video?'1':'0.2')+';text-decoration:none;line-height:1;cursor:'+(item.video?'pointer':'default');
+  vbtn.textContent='🎬';
+  vbtn.addEventListener('click',function(e){if(!item.video){e.preventDefault();}e.stopPropagation();});
+  codWrap.appendChild(cod);codWrap.appendChild(vbtn);
+  var tipo=document.createElement('span');
+  tipo.className='canchita-tipo';
+  tipo.textContent=item.tipo;
+  hdr.appendChild(codWrap);hdr.appendChild(tipo);
+  card.appendChild(hdr);
+
+  var wrap=document.createElement('div');
+  wrap.className='canchita-canvas-wrap';
+  var cv=document.createElement('canvas');
+  cv.className='mini-court';
+  cv.id=prefix+'-'+jIdx+'-'+i;
+  // HiDPI: render at 2x for crisp text and lines
+  var dpr=window.devicePixelRatio||2;
+  cv.width=W*dpr;cv.height=H*dpr;
+  cv.style.width=W+'px';cv.style.height=H+'px';
+  wrap.appendChild(cv);card.appendChild(wrap);
+
+  var stats=document.createElement('div');
+  stats.className='canchita-stats';
+  [{l:'EFF',v:hasDatos&&item.eff!=null?item.eff+'%':'—',c:effC},{l:'TOT',v:item.tot,c:color},{l:'#%',v:hasDatos&&item.pts!=null?item.pts+'%':'—',c:'#22c55e'}].forEach(function(s){
+    var ci=document.createElement('div');ci.className='cs-item';
+    var cv2=document.createElement('div');cv2.className='cs-val';cv2.style.color=s.c;cv2.textContent=s.v;
+    var cl=document.createElement('div');cl.className='cs-lbl';cl.textContent=s.l;
+    ci.appendChild(cv2);ci.appendChild(cl);stats.appendChild(ci);
+  });
+  card.appendChild(stats);
+
+  var tipo2=prefix==='ms'?'saque':'ataque';
+  card.addEventListener('click',function(){openModal(item,j,tipo2);});
+  return card;
+}
+
+function renderJugador(j,idx){
+  var sec=document.createElement('div');
+  sec.className='jugador-section';
+  sec.id='jug-'+idx;
+
+  // Header
+  var hdr=document.createElement('div');
+  hdr.className='jugador-header';
+
+  // Identity
+  var ident=document.createElement('div');
+  ident.className='jugador-identity';
+  var bar=document.createElement('div');
+  bar.className='jug-color-bar';
+  bar.style.background='linear-gradient(180deg,'+j.color+',transparent)';
+  var numBg=document.createElement('div');
+  numBg.className='jug-num-bg';
+  numBg.style.color=j.color;
+  numBg.textContent=j.num;
+  var foto=document.createElement('div');
+  foto.className='jug-foto';
+  foto.style.borderColor=j.color;
+  foto.style.color=j.color;
+  foto.textContent=j.num;
+  var info=document.createElement('div');
+  info.className='jug-info';
+  var numLbl=document.createElement('div');numLbl.className='jug-num-lbl';numLbl.style.color=j.color;numLbl.textContent='# '+j.num;
+  var nombre=document.createElement('div');nombre.className='jug-nombre';nombre.textContent=j.nombre;
+  var pos=document.createElement('div');pos.className='jug-pos';pos.textContent=j.pos;
+  info.appendChild(numLbl);info.appendChild(nombre);info.appendChild(pos);
+  ident.appendChild(bar);ident.appendChild(numBg);ident.appendChild(foto);ident.appendChild(info);
+
+  // Táctico
+  var tac=document.createElement('div');
+  tac.className='jugador-tactico';
+  var tacItems=[
+    {icon:'⚡',bg:'rgba(255,140,0,.12)',ic:'#ff8c00',lbl:'Bloqueo',key:'bloqueo',val:j.info.bloqueo||''},
+    {icon:'🛡',bg:'rgba(239,68,68,.12)',ic:'#ef4444',lbl:'Defensa',key:'defensa',val:j.info.defensa||''},
+    {icon:'6',bg:'rgba(129,140,248,.12)',ic:'#818cf8',lbl:'Posición 6',key:'pos6',val:j.info.pos6||''},
+    {icon:'5',bg:'rgba(129,140,248,.12)',ic:'#818cf8',lbl:'Posición 5',key:'pos5',val:j.info.pos5||''},
+    {icon:'1',bg:'rgba(129,140,248,.12)',ic:'#818cf8',lbl:'Posición 1',key:'pos1',val:j.info.pos1||''},
+  ];
+  tacItems.push({icon:'★',bg:'rgba(245,158,11,.12)',ic:'#f59e0b',lbl:'Nota',key:'extra',val:j.info.extra||''});
+  tacItems.forEach(function(t){
+    var ti=document.createElement('div');ti.className='tac-item';
+    var icon=document.createElement('div');icon.className='tac-icon';
+    icon.style.background=t.bg;icon.style.color=t.ic;icon.textContent=t.icon;
+    var txt=document.createElement('div');
+    var lbl=document.createElement('div');lbl.className='tac-lbl';lbl.textContent=t.lbl;
+    var storageKey='casla_jug_'+j.num+'_'+t.key;
+    var inp=document.createElement('input');inp.type='text';
+    inp.className='tac-val';inp.placeholder=t.lbl+'...';
+    inp.style.cssText='background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.1);color:#e2e8f0;font-family:inherit;font-size:12px;width:100%;outline:none;padding:2px 0;cursor:text;';
+    var saved=localStorage.getItem(storageKey);
+    inp.value=saved!==null?saved:(t.val||'');
+    inp.addEventListener('input',function(){localStorage.setItem(storageKey,this.value);});
+    inp.addEventListener('click',function(e){e.stopPropagation();});
+    txt.appendChild(lbl);txt.appendChild(inp);
+    ti.appendChild(icon);ti.appendChild(txt);tac.appendChild(ti);
+  });
+
+  // Footer con pestañas
+  var footer=document.createElement('div');
+  footer.className='jug-footer';
+  footer.style.cssText='grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding-top:8px;margin-top:4px;border-top:1px solid rgba(255,255,255,.05)';
+  var tabRow=document.createElement('div');tabRow.className='tab-row';
+  var btnAtaque=document.createElement('button');
+  btnAtaque.className='tab-btn active-ataque';
+  btnAtaque.dataset.tab='ataque';
+  btnAtaque.textContent='⚡ Ataque';
+  var btnSaque=document.createElement('button');
+  btnSaque.className='tab-btn';
+  btnSaque.dataset.tab='saque';
+  btnSaque.textContent='🏐 Saque';
+  tabRow.appendChild(btnAtaque);tabRow.appendChild(btnSaque);
+  var arrow=document.createElement('span');arrow.className='toggle-arrow';arrow.textContent='▼';
+  footer.appendChild(tabRow);footer.appendChild(arrow);
+  tac.appendChild(footer);
+
+  hdr.appendChild(ident);hdr.appendChild(tac);
+  sec.appendChild(hdr);
+
+  // Canchitas wrap
+  var wrap=document.createElement('div');
+  wrap.className='canchitas-wrap';
+  // Panel ataque
+  var panelA=document.createElement('div');panelA.className='tab-panel active';panelA.dataset.panel='ataque';
+  var gridA=document.createElement('div');gridA.className='canchitas-grid';panelA.appendChild(gridA);
+  // Panel saque
+  var panelS=document.createElement('div');panelS.className='tab-panel';panelS.dataset.panel='saque';
+  var gridS=document.createElement('div');gridS.className='canchitas-grid';panelS.appendChild(gridS);
+  wrap.appendChild(panelA);wrap.appendChild(panelS);
+  sec.appendChild(wrap);
+
+  // Click header → toggle open + render
+  hdr.addEventListener('click',function(e){
+    if(e.target.closest('.tab-btn')) return;
+    sec.classList.toggle('open');
+    if(sec.classList.contains('open') && !wrap.dataset.rendered){
+      wrap.dataset.rendered='1';
+      renderPanelAtaque(j,idx,gridA);
+      renderPanelSaque(j,idx,gridS);
+    }
+  });
+
+  // Pestañas
+  btnAtaque.addEventListener('click',function(e){
+    e.stopPropagation();
+    if(!sec.classList.contains('open')){sec.classList.add('open');}
+    if(!wrap.dataset.rendered){wrap.dataset.rendered='1';renderPanelAtaque(j,idx,gridA);renderPanelSaque(j,idx,gridS);}
+    btnAtaque.className='tab-btn active-ataque';
+    btnSaque.className='tab-btn';
+    panelA.className='tab-panel active';panelS.className='tab-panel';
+  });
+  btnSaque.addEventListener('click',function(e){
+    e.stopPropagation();
+    if(!sec.classList.contains('open')){sec.classList.add('open');}
+    if(!wrap.dataset.rendered){wrap.dataset.rendered='1';renderPanelAtaque(j,idx,gridA);renderPanelSaque(j,idx,gridS);}
+    btnSaque.className='tab-btn active-saque';
+    btnAtaque.className='tab-btn';
+    panelS.className='tab-panel active';panelA.className='tab-panel';
+  });
+
+  return sec;
+}
+
+function renderPanelAtaque(j,jIdx,grid){
+  var combosPos = {
+    'PUNTA':   ['X5','V5','X6','V6','XP'],
+    'CENTRAL': ['X1','X7','XM','X2'],
+    'OPUESTO': ['X5','V5','X6','V6','X8','V8'],
+    'ARMADOR': [],
+    'LIBERO':  []
+  };
+  var ordenCombos = combosPos[j.pos.toUpperCase()] || [];
+  var ataqueMap = {};
+  j.ataques.forEach(function(a){ ataqueMap[a.cod] = a; });
+  var ataquesMostrar = ordenCombos.length > 0
+    ? ordenCombos.map(function(cod){ return ataqueMap[cod] || {cod:cod,orig:8,destinos:[],eff:null,tot:0,pts:null,slash:0,err:0,video:null}; })
+    : j.ataques.filter(function(a){ return a.destinos && a.destinos.length>0; });
+  ataquesMostrar.forEach(function(a,i){
+    var card=buildCanchita(a,jIdx,i,'ma',180,140,drawAtaqueCourt,j.color,j);
+    grid.appendChild(card);
+    setTimeout(function(){
+      var cv=document.getElementById('ma-'+jIdx+'-'+i);
+      if(!cv) return;
+      var ctx=cv.getContext('2d');
+      var start=null;
+      function step(ts){if(!start)start=ts;var p=Math.min((ts-start)/500,1),e=1-Math.pow(1-p,3);var _dpr=window.devicePixelRatio||2;ctx.setTransform(_dpr,0,0,_dpr,0,0);ctx.clearRect(0,0,180,140);drawAtaqueCourt(ctx,180,140,a,j.color,e);if(p<1)requestAnimationFrame(step);}
+      requestAnimationFrame(step);
+    },i*70);
+  });
+}
+
+function renderPanelSaque(j,jIdx,grid){
+  var saques=j.saques||[];
+  if(saques.length===0){
+    var nd=document.createElement('div');nd.className='no-data-msg';nd.textContent='Sin datos de saque registrados';
+    grid.appendChild(nd);return;
+  }
+  saques.forEach(function(s,i){
+    var card=buildCanchita(s,jIdx,i,'ms',180,160,drawSaqueCourt,j.color,j);
+    grid.appendChild(card);
+    setTimeout(function(){
+      var cv=document.getElementById('ms-'+jIdx+'-'+i);
+      if(!cv) return;
+      var ctx=cv.getContext('2d');
+      var start=null;
+      function step(ts){if(!start)start=ts;var p=Math.min((ts-start)/520,1),e=1-Math.pow(1-p,3);var _dpr=window.devicePixelRatio||2;ctx.setTransform(_dpr,0,0,_dpr,0,0);ctx.clearRect(0,0,180,160);drawSaqueCourt(ctx,180,160,s,j.color,e);if(p<1)requestAnimationFrame(step);}
+      requestAnimationFrame(step);
+    },i*70);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════════════════════
+var modalAnim=null;
+function openModal(item,j,tipo){
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+  var titleEl=document.getElementById('modal-title');
+  titleEl.textContent=item.cod+' — '+item.tipo;
+  titleEl.style.color=j.color;
+  var hasDatos=item.tot>0;
+  var infoTxt=j.nombre+' · '+item.tot+' '+(tipo==='saque'?'saques':'ataques');
+  if(hasDatos && item.destinos && item.destinos.length>0){
+    infoTxt+=' · Top destinos: '+item.destinos.map(function(d){return 'zona '+d.z+' ('+d.pct+'%)'}).join(' · ');
+  }
+  document.getElementById('modal-info').textContent=infoTxt;
+  var cv=document.getElementById('modal-canvas');
+  var MH=tipo==='saque'?400:370;
+  cv.height=MH;
+  var ctx=cv.getContext('2d');
+  if(modalAnim) cancelAnimationFrame(modalAnim);
+  var start=null;
+  var drawFn=tipo==='saque'?drawSaqueCourt:drawAtaqueCourt;
+  function step(ts){
+    if(!start)start=ts;
+    var p=Math.min((ts-start)/550,1),e=1-Math.pow(1-p,3);
+    ctx.clearRect(0,0,436,MH);
+    drawFn(ctx,436,MH,item,j.color,e);
+    if(p<1) modalAnim=requestAnimationFrame(step);
+  }
+  modalAnim=requestAnimationFrame(step);
+  var statsEl=document.getElementById('modal-stats');
+  statsEl.innerHTML='';
+  if(hasDatos){
+    [{l:'EFF',v:item.eff!=null?item.eff+'%':'—',c:effColor(item.eff)},{l:'TOT',v:item.tot,c:j.color},{l:'#%',v:item.pts!=null?item.pts+'%':'—',c:'#22c55e'}].forEach(function(s){
+      var el=document.createElement('div');el.className='modal-stat';
+      var v=document.createElement('div');v.className='modal-stat-val';v.style.color=s.c;v.textContent=s.v;
+      var l=document.createElement('div');l.className='modal-stat-lbl';l.textContent=s.l;
+      el.appendChild(v);el.appendChild(l);statsEl.appendChild(el);
+    });
+  }
+}
+
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+  if(modalAnim) cancelAnimationFrame(modalAnim);
+}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+document.getElementById('rival-nombre').textContent=RIVAL.nombre;
+document.getElementById('match-info').textContent=RIVAL.info;
+var main=document.getElementById('main-content');
+var dots=document.getElementById('nav-dots');
+
+JUGADORES.forEach(function(j,i){
+  main.appendChild(renderJugador(j,i));
+  var dot=document.createElement('div');
+  dot.className='nav-dot'+(i===0?' on':'');
+  dot.addEventListener('click',function(){
+    document.getElementById('jug-'+i).scrollIntoView({behavior:'smooth'});
+    dots.querySelectorAll('.nav-dot').forEach(function(d){d.classList.remove('on');});
+    dot.classList.add('on');
+  });
+  dots.appendChild(dot);
+});
+
+// Abrir primero por defecto
+setTimeout(function(){
+  var first=document.getElementById('jug-0');
+  if(first){
+    first.classList.add('open');
+    var wrap=first.querySelector('.canchitas-wrap');
+    if(!wrap.dataset.rendered){
+      wrap.dataset.rendered='1';
+      renderPanelAtaque(JUGADORES[0],0,first.querySelector('[data-panel="ataque"] .canchitas-grid'));
+      renderPanelSaque(JUGADORES[0],0,first.querySelector('[data-panel="saque"] .canchitas-grid'));
+    }
+  }
+},100);
+
+// Nav dots con IntersectionObserver
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      var i=e.target.id.split('-')[1];
+      dots.querySelectorAll('.nav-dot').forEach(function(d,di){d.classList.toggle('on',di==i);});
+    }
+  });
+},{threshold:0.3});
+JUGADORES.forEach(function(_,i){
+  var el=document.getElementById('jug-'+i);
+  if(el) obs.observe(el);
+});
+
+var BLQ_OPCIONES=[
+  {v:"",      label:"— Sin definir —"},
+  {v:"1BLQ",  label:"☝  Opción 1"},
+  {v:"2BLQ",  label:"✌  Opción 2"},
+  {v:"CIERRE",label:"✊  Colgado"},
+  {v:"LECTURA",label:"🖐  Lectura"},
+  {v:"CUERNO",label:"🤘  Punta y Punta"},
+  {v:"6-5",   label:"6-5"},
+  {v:"6-1",   label:"6-1"},
+];
+const ARMADOR_DATA=/*__ARM_START__*/{"titular": {"nombre": "9 Corvalan C.", "rotaciones": [{"pos": "P1", "total": 28, "dist": [{"zona": 4, "tot": 8, "pts": 6, "pct": 29, "pct_p": 75}, {"zona": 3, "tot": 8, "pts": 4, "pct": 29, "pct_p": 50}, {"zona": 2, "tot": 9, "pts": 3, "pct": 32, "pct_p": 33}, {"zona": 6, "tot": 3, "pts": 1, "pct": 11, "pct_p": 33}]}, {"pos": "P6", "total": 36, "dist": [{"zona": 4, "tot": 13, "pts": 8, "pct": 36, "pct_p": 62}, {"zona": 3, "tot": 14, "pts": 7, "pct": 39, "pct_p": 50}, {"zona": 2, "tot": 2, "pts": 1, "pct": 6, "pct_p": 50}, {"zona": 6, "tot": 7, "pts": 1, "pct": 19, "pct_p": 14}]}, {"pos": "P5", "total": 33, "dist": [{"zona": 4, "tot": 12, "pts": 8, "pct": 36, "pct_p": 67}, {"zona": 3, "tot": 10, "pts": 6, "pct": 30, "pct_p": 60}, {"zona": 2, "tot": 8, "pts": 6, "pct": 24, "pct_p": 75}, {"zona": 6, "tot": 3, "pts": 1, "pct": 9, "pct_p": 33}]}, {"pos": "P4", "total": 36, "dist": [{"zona": 4, "tot": 8, "pts": 6, "pct": 22, "pct_p": 75}, {"zona": 3, "tot": 16, "pts": 9, "pct": 44, "pct_p": 56}, {"zona": 2, "tot": 12, "pts": 7, "pct": 33, "pct_p": 58}, {"zona": 6, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}, {"pos": "P3", "total": 18, "dist": [{"zona": 4, "tot": 7, "pts": 4, "pct": 39, "pct_p": 57}, {"zona": 3, "tot": 5, "pts": 2, "pct": 28, "pct_p": 40}, {"zona": 2, "tot": 3, "pts": 0, "pct": 17, "pct_p": 0}, {"zona": 6, "tot": 3, "pts": 3, "pct": 17, "pct_p": 100}]}, {"pos": "P2", "total": 19, "dist": [{"zona": 4, "tot": 6, "pts": 2, "pct": 32, "pct_p": 33}, {"zona": 3, "tot": 7, "pts": 5, "pct": 37, "pct_p": 71}, {"zona": 2, "tot": 6, "pts": 3, "pct": 32, "pct_p": 50}, {"zona": 6, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}], "pills": [{"label": "P1", "eff": 32, "tot": 28, "pts": 14, "pts_pct": 50, "err_pct": 18}, {"label": "P6", "eff": 39, "tot": 36, "pts": 17, "pts_pct": 47, "err_pct": 8}, {"label": "P5", "eff": 58, "tot": 33, "pts": 21, "pts_pct": 64, "err_pct": 6}, {"label": "P4", "eff": 44, "tot": 36, "pts": 22, "pts_pct": 61, "err_pct": 17}, {"label": "P3", "eff": 39, "tot": 18, "pts": 9, "pts_pct": 50, "err_pct": 11}, {"label": "P2", "eff": 37, "tot": 19, "pts": 10, "pts_pct": 53, "err_pct": 16}, {"label": "SO", "eff": 42, "tot": 170, "pts": 93, "pts_pct": 55, "err_pct": 12}, {"label": "TR", "eff": 28, "tot": 148, "pts": 67, "pts_pct": 45, "err_pct": 17}], "recepcion": [{"label": "SO", "eff": 35}, {"label": "REC #", "eff": 42}, {"label": "REC +", "eff": 42}, {"label": "REC !", "eff": 26}, {"label": "REC -", "eff": 10}, {"label": "TRANS", "eff": 28}], "so": {"label": "SO", "total": 141, "dist": [{"zona": 4, "tot": 47, "pts": 32, "pct": 33, "pct_p": 68}, {"zona": 3, "tot": 46, "pts": 23, "pct": 33, "pct_p": 50}, {"zona": 2, "tot": 15, "pts": 8, "pct": 11, "pct_p": 53}, {"zona": 8, "tot": 14, "pts": 6, "pct": 10, "pct_p": 43}, {"zona": 9, "tot": 19, "pts": 8, "pct": 13, "pct_p": 42}]}, "tr": {"label": "TR", "total": 58, "dist": [{"zona": 4, "tot": 56, "pts": 22, "pct": 97, "pct_p": 39}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 2, "pts": 1, "pct": 3, "pct_p": 50}, {"zona": 8, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 9, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}}, "suplente": {"nombre": "12 La Gioia T.", "rotaciones": [{"pos": "P1", "total": 0, "dist": [{"zona": 4, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 6, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}, {"pos": "P6", "total": 0, "dist": [{"zona": 4, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 6, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}, {"pos": "P5", "total": 0, "dist": [{"zona": 4, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 6, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}, {"pos": "P4", "total": 0, "dist": [{"zona": 4, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 6, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}, {"pos": "P3", "total": 0, "dist": [{"zona": 4, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 6, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}, {"pos": "P2", "total": 0, "dist": [{"zona": 4, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 6, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}], "pills": [{"label": "P1", "eff": 0, "tot": 7, "pts": 3, "pts_pct": 43, "err_pct": 43}, {"label": "P6", "eff": 67, "tot": 3, "pts": 2, "pts_pct": 67, "err_pct": 0}, {"label": "P5", "eff": 50, "tot": 4, "pts": 2, "pts_pct": 50, "err_pct": 0}, {"label": "P4", "eff": 100, "tot": 3, "pts": 3, "pts_pct": 100, "err_pct": 0}, {"label": "P3", "eff": 67, "tot": 3, "pts": 2, "pts_pct": 67, "err_pct": 0}, {"label": "P2", "eff": 100, "tot": 3, "pts": 3, "pts_pct": 100, "err_pct": 0}, {"label": "SO", "eff": 52, "tot": 23, "pts": 15, "pts_pct": 65, "err_pct": 13}, {"label": "TR", "eff": 16, "tot": 32, "pts": 12, "pts_pct": 38, "err_pct": 22}], "recepcion": [{"label": "SO", "eff": 41}, {"label": "REC #", "eff": 57}, {"label": "REC +", "eff": 44}, {"label": "REC !", "eff": 32}, {"label": "REC -", "eff": 25}, {"label": "TRANS", "eff": 16}], "so": {"label": "SO", "total": 0, "dist": [{"zona": 4, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 8, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 9, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}, "tr": {"label": "TR", "total": 0, "dist": [{"zona": 4, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 8, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 9, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}}}/*__ARM_END__*/;
+const JUEGO_DATA={
+  imagenes:[]
+};
+
+// ═══ ARMADOR ═══════════════════════════════════════════════════
+var FORMACION_ATAQUE = {
+  'P1': { front:[{n:'WAGNER',z:4},{n:'BARRIOS',z:3},{n:'CORZO',z:2}], back:[{n:'MANSILLA',z:6}] },
+  'P6': { front:[{n:'MANSILLA',z:4},{n:'BARRIOS',z:3},{n:'CORZO',z:2}], back:[{n:'WAGNER',z:6}] },
+  'P5': { front:[{n:'MANSILLA',z:4},{n:'GALLARDO',z:3},{n:'CORZO',z:2}], back:[{n:'WAGNER',z:6}] },
+  'P4': { front:[{n:'MANSILLA',z:4},{n:'GALLARDO',z:3},{n:'CORZO',z:1}], back:[{n:'WAGNER',z:6}] },
+  'P3': { front:[{n:'MANSILLA',z:4},{n:'GALLARDO',z:3},{n:'CORZO',z:1}], back:[{n:'WAGNER',z:6}] },
+  'P2': { front:[{n:'WAGNER',z:4},{n:'BARRIOS',z:3},{n:'CORZO',z:1}], back:[{n:'MANSILLA',z:6}] }
+};
+
+function renderArmador(){
+  var sec=document.getElementById('seccion-armador');
+  if(!sec||!ARMADOR_DATA) return;
+
+  // Tabs titular/suplente
+  var tipos=['titular','suplente'];
+  var tabsEl=document.createElement('div');
+  tabsEl.style.cssText='display:flex;gap:2px;margin-bottom:0';
+  var panels={};
+  var activeType='titular';
+
+  tipos.forEach(function(tipo){
+    var arm=ARMADOR_DATA[tipo];
+    if(!arm) return;
+    var color=tipo==='titular'?'#f59e0b':'#818cf8';
+    var btn=document.createElement('button');
+    btn.style.cssText='padding:9px 18px;border-radius:10px 10px 0 0;border:1px solid rgba(255,255,255,.08);border-bottom:none;background:'+(tipo===activeType?'rgba(255,255,255,.04)':'rgba(255,255,255,.01)')+';color:'+(tipo===activeType?color:'#475569')+';font-family:Barlow Condensed,sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;transition:all .2s;text-transform:uppercase';
+    btn.textContent='#'+arm.nombre.split(' ')[0]+' '+arm.nombre.split(' ').slice(1).join(' ');
+    btn.dataset.tipo=tipo;
+    btn.addEventListener('click',function(){
+      activeType=tipo;
+      tabsEl.querySelectorAll('button').forEach(function(b){
+        var t=b.dataset.tipo;
+        var c2=t==='titular'?'#f59e0b':'#818cf8';
+        b.style.color=t===activeType?c2:'#475569';
+        b.style.background=t===activeType?'rgba(255,255,255,.04)':'rgba(255,255,255,.01)';
+      });
+      Object.keys(panels).forEach(function(k){
+        panels[k].style.display=k===activeType?'block':'none';
+      });
+    });
+    tabsEl.appendChild(btn);
+  });
+  sec.appendChild(tabsEl);
+
+  tipos.forEach(function(tipo){
+    var arm=ARMADOR_DATA[tipo];
+    if(!arm) return;
+    var color=tipo==='titular'?'#f59e0b':'#818cf8';
+    var panel=document.createElement('div');
+    panel.style.cssText='background:var(--card);border:1px solid var(--border);border-radius:0 12px 12px 12px;overflow:hidden;display:'+(tipo===activeType?'block':'none');
+    panels[tipo]=panel;
+
+    // Header
+    var hdr=document.createElement('div');
+    hdr.style.cssText='padding:14px 18px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--border);flex-wrap:wrap';
+    var circle=document.createElement('div');
+    circle.style.cssText='width:48px;height:48px;border-radius:50%;border:2px solid '+color+';background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:17px;color:'+color+';flex-shrink:0';
+    circle.textContent=arm.nombre.split(' ')[0];
+    var nameDiv=document.createElement('div');
+    nameDiv.innerHTML='<div style="font-size:8px;color:#475569;letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">ARMADOR '+tipo.toUpperCase()+'</div><div style="font-family:Bebas Neue,sans-serif;font-size:18px;letter-spacing:2px;color:'+color+'">'+arm.nombre+'</div>';
+    hdr.appendChild(circle);hdr.appendChild(nameDiv);
+
+    // Pills EFF por rotación
+    var pillsWrap=document.createElement('div');
+    pillsWrap.style.cssText='margin-left:auto;display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end';
+    if(arm.pills) arm.pills.forEach(function(p){
+      var effC=p.eff===null||p.eff===undefined?'#475569':p.eff>=50?'#22c55e':p.eff>=25?'#fbbf24':p.eff>=0?'#f97316':'#ef4444';
+      var pill=document.createElement('div');
+      pill.style.cssText='display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 7px;border-radius:7px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);min-width:38px';
+      var lv=document.createElement('div');lv.style.cssText='font-size:8px;color:'+color+';letter-spacing:1px;font-weight:700;text-transform:uppercase';lv.textContent=p.label;
+      var ev=document.createElement('div');ev.style.cssText='font-family:Bebas Neue,sans-serif;font-size:15px;color:'+effC+';line-height:1';ev.textContent=p.eff!==null&&p.eff!==undefined?p.eff+'%':'—';
+      var tv=document.createElement('div');tv.style.cssText='font-size:7px;color:#475569';tv.textContent=p.tot+' acc';
+      pill.appendChild(lv);pill.appendChild(ev);pill.appendChild(tv);
+      // SO y TR tienen modal propio
+      if(p.label==='SO'||p.label==='TR'){
+        pill.style.cursor='pointer';
+        pill.title='Doble click para ver detalle';
+        pill.style.border='1px solid '+(p.label==='SO'?'rgba(34,197,94,.2)':'rgba(129,140,248,.2)');
+        var hintSO=document.createElement('div');
+        hintSO.style.cssText='font-size:6px;color:'+(p.label==='SO'?'#22c55e':'#818cf8')+';letter-spacing:.5px;margin-top:1px';
+        hintSO.textContent='2x clic';
+        pill.appendChild(hintSO);
+        pill.addEventListener('dblclick',(function(pLabel,armData,clr){
+          return function(){
+            var sotrData = pLabel==='SO' ? armData.so : armData.tr;
+            if(sotrData) abrirModalSOTR(sotrData, pLabel, clr);
+          };
+        })(p.label, arm, color));
+      }
+      pillsWrap.appendChild(pill);
+    });
+    hdr.appendChild(pillsWrap);
+    panel.appendChild(hdr);
+
+    // EFF por recepción
+    if(arm.recepcion && arm.recepcion.length){
+      var recRow=document.createElement('div');
+      recRow.style.cssText='padding:10px 18px;display:flex;gap:6px;align-items:center;border-bottom:1px solid var(--border);flex-wrap:wrap';
+      var recLbl=document.createElement('div');recLbl.style.cssText='font-size:8px;color:#475569;letter-spacing:2px;text-transform:uppercase;margin-right:4px;flex-shrink:0';recLbl.textContent='EFF/RECEPCIÓN';
+      recRow.appendChild(recLbl);
+      arm.recepcion.forEach(function(r){
+        var ec=r.eff===null?'#475569':r.eff>=50?'#22c55e':r.eff>=30?'#fbbf24':r.eff>=0?'#f97316':'#ef4444';
+        var item=document.createElement('div');
+        item.style.cssText='display:flex;flex-direction:column;align-items:center;gap:1px;padding:4px 9px;border-radius:6px;border:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02)';
+        var v=document.createElement('div');v.style.cssText='font-family:Bebas Neue,sans-serif;font-size:14px;color:'+ec;v.textContent=r.eff!==null?r.eff+'%':'—';
+        var l=document.createElement('div');l.style.cssText='font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap';l.textContent=r.label;
+        item.appendChild(v);item.appendChild(l);recRow.appendChild(item);
+      });
+      panel.appendChild(recRow);
+    }
+
+    // Grid 6 rotaciones
+    var rotLbl=document.createElement('div');
+    rotLbl.style.cssText='font-size:8px;color:#475569;letter-spacing:3px;text-transform:uppercase;padding:10px 18px 5px';
+    rotLbl.textContent='DISTRIBUCIÓN POR ROTACIÓN';
+    panel.appendChild(rotLbl);
+
+    var rotGrid=document.createElement('div');
+    rotGrid.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)';
+
+    if(arm.rotaciones) arm.rotaciones.forEach(function(rot){
+      var card=document.createElement('div');
+      card.style.cssText='background:var(--card);display:flex;flex-direction:column';
+
+      // Header rotación
+      var rh=document.createElement('div');
+      rh.style.cssText='padding:7px 11px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between';
+      var rp=document.createElement('div');rp.style.cssText='font-family:Bebas Neue,sans-serif;font-size:17px;color:'+color;rp.textContent=rot.pos;
+      var rt=document.createElement('div');rt.style.cssText='font-size:8px;color:#475569';rt.textContent=rot.total+' acc';
+      rh.appendChild(rp);rh.appendChild(rt);card.appendChild(rh);
+
+      // Canvas
+      var cvW=document.createElement('div');cvW.style.cssText='padding:5px;background:rgba(0,0,0,.2);cursor:pointer;position:relative';
+      var cv=document.createElement('canvas');
+      var dpr4=window.devicePixelRatio||2;
+  cv.width=200*dpr4;cv.height=220*dpr4;
+  cv.style.width='200px';cv.style.height='220px';
+      cv.style.cssText='display:block;border-radius:6px;width:100%;height:220px';
+      var expandHint=document.createElement('div');
+      expandHint.style.cssText='position:absolute;top:8px;right:8px;background:rgba(0,0,0,.5);color:rgba(255,255,255,.4);font-size:9px;padding:2px 5px;border-radius:4px;letter-spacing:.5px;pointer-events:none';
+      expandHint.textContent='2x clic';
+      cvW.appendChild(cv);cvW.appendChild(expandHint);card.appendChild(cvW);
+      cvW.addEventListener('dblclick',(function(rotation,armColor,armPills){
+        return function(){
+          abrirModalArmador(rotation,armColor,armPills);
+        };
+      })(rot,color,arm.pills));
+
+      // Zaguero atacante
+      var rotForm=FORMACION_ATAQUE[rot.pos]||null;
+
+      // Dropdowns bloqueo
+      var blqRow=document.createElement('div');
+      blqRow.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(129,140,248,.08);border-top:1px solid rgba(129,140,248,.12)';
+      var blqDat={izq:'',cen:'',der:''};
+      [{l:'IZQ',k:'izq'},{l:'CEN',k:'cen'},{l:'DER',k:'der'}].forEach(function(side){
+        var col2=document.createElement('div');
+        col2.style.cssText='background:var(--card);padding:4px 2px;display:flex;flex-direction:column;align-items:center;gap:2px';
+        var sl=document.createElement('div');sl.style.cssText='font-size:6px;color:rgba(129,140,248,.5);letter-spacing:1px;text-transform:uppercase';sl.textContent=side.l;
+        var sel=document.createElement('select');
+        sel.style.cssText='background:rgba(255,255,255,.03);border:1px solid rgba(129,140,248,.12);border-radius:4px;color:#e2e8f0;font-family:Barlow Condensed,sans-serif;font-size:8px;padding:2px 1px;width:100%;cursor:pointer';
+        BLQ_OPCIONES.forEach(function(op){
+          var opt=document.createElement('option');opt.value=op.v;opt.textContent=op.label;sel.appendChild(opt);
+        });
+        sel.addEventListener('change',function(){
+          blqDat[side.k]=sel.value;
+          redrawArmadorCourt(cv,rot,color,blqDat);
+        });
+        col2.appendChild(sl);col2.appendChild(sel);blqRow.appendChild(col2);
+      });
+      card.appendChild(blqRow);
+
+      // Stats
+      var stRow=document.createElement('div');
+      stRow.style.cssText='display:flex;border-top:1px solid var(--border)';
+      var pill=arm.pills?arm.pills.find(function(p){return p.label===rot.pos;})||{}:{};
+      var ec=pill.eff===null||pill.eff===undefined?'#475569':pill.eff>=50?'#22c55e':pill.eff>=25?'#fbbf24':pill.eff>=0?'#f97316':'#ef4444';
+      [{l:'EFF',v:(pill.eff!==null&&pill.eff!==undefined)?pill.eff+'%':'—',c:ec},
+       {l:'TOT',v:pill.tot||0,c:color},
+       {l:'#%',v:pill.pts_pct!==undefined?pill.pts_pct+'%':'—',c:'#22c55e'}
+      ].forEach(function(s,si){
+        var cs=document.createElement('div');cs.style.cssText='flex:1;display:flex;flex-direction:column;align-items:center;padding:5px 2px;'+(si<2?'border-right:1px solid var(--border)':'');
+        var cv2=document.createElement('div');cv2.style.cssText='font-family:Bebas Neue,sans-serif;font-size:13px;color:'+s.c;cv2.textContent=s.v;
+        var cl=document.createElement('div');cl.style.cssText='font-size:6px;color:#475569;letter-spacing:.5px;text-transform:uppercase';cl.textContent=s.l;
+        cs.appendChild(cv2);cs.appendChild(cl);stRow.appendChild(cs);
+      });
+      card.appendChild(stRow);
+      rotGrid.appendChild(card);
+
+      setTimeout((function(canvas,rotation,clr,blq){
+        return function(){
+          // ensure canvas has been laid out
+          var cssW=canvas.offsetWidth||200;
+          var cssH=canvas.offsetHeight||220;
+          var _dpr=window.devicePixelRatio||2;
+          canvas.width=cssW*_dpr; canvas.height=cssH*_dpr;
+          redrawArmadorCourt(canvas,rotation,clr,blq);
+        };
+      })(cv,rot,color,blqDat),80);
+    });
+    panel.appendChild(rotGrid);
+    sec.appendChild(panel);
+  });
+}
+
+function redrawArmadorCourt(canvas,rot,color,blqData){
+  var dprA=window.devicePixelRatio||2;
+  var W=canvas.offsetWidth||200, H=canvas.offsetHeight||220;
+  var ctx=canvas.getContext('2d');
+  ctx.setTransform(dprA,0,0,dprA,0,0);
+  ctx.clearRect(0,0,W,H);
+
+  var PAD=4,CL=PAD,CR=W-PAD,CT=PAD,CB=H-PAD,CW=CR-CL,CH=CB-CT;
+  // Red a 18% de la altura total — zona rival pequeña, cancha propia grande
+  var NET=CT+CH*0.18, OWN=CB-NET;
+  var c1=CL+CW/3, c2=CL+CW*2/3;
+
+  // ── Fondo ────────────────────────────────────────────────────
+  ctx.fillStyle='#0d1117'; ctx.fillRect(0,0,W,H);
+
+  // ── Piso naranja ─────────────────────────────────────────────
+  var bg=ctx.createLinearGradient(CL,NET,CL,CB);
+  bg.addColorStop(0,'#b87428'); bg.addColorStop(0.5,'#d4893a'); bg.addColorStop(1,'#b87428');
+  ctx.fillStyle=bg; ctx.fillRect(CL,NET,CW,OWN);
+
+  // ── Red ──────────────────────────────────────────────────────
+  var ng=ctx.createLinearGradient(0,NET-3,0,NET+5);
+  ng.addColorStop(0,'#1a1a2e'); ng.addColorStop(0.4,'#c8c8d8'); ng.addColorStop(1,'#1a1a2e');
+  ctx.fillStyle=ng; ctx.fillRect(CL-2,NET-3,CW+4,6);
+  ctx.fillStyle='#cc1515'; ctx.fillRect(CL-2,NET-5,CW+4,3);
+
+  // ── Líneas cancha ────────────────────────────────────────────
+  ctx.save();
+  ctx.strokeStyle='rgba(255,255,255,.5)'; ctx.lineWidth=1; ctx.setLineDash([]);
+  ctx.strokeRect(CL,NET,CW,OWN);
+  ctx.strokeStyle='rgba(255,255,255,.18)'; ctx.lineWidth=0.6; ctx.setLineDash([3,3]);
+  [c1,c2].forEach(function(x){
+    ctx.beginPath(); ctx.moveTo(x,NET); ctx.lineTo(x,CB); ctx.stroke();
+  });
+  // Línea de 3m
+  var L3=NET+OWN*0.33;
+  ctx.beginPath(); ctx.moveTo(CL,L3); ctx.lineTo(CR,L3); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+
+  // ── Formación atacantes ──────────────────────────────────────
+  var FORM=FORMACION_ATAQUE;
+  var armDelantero=(rot.pos==='P4'||rot.pos==='P3'||rot.pos==='P2');
+  var rotForm=FORM[rot.pos]||null;
+
+  var zoneX={1:armDelantero?CR-CW/6:CL+CW/6, 2:CR-CW/6, 3:CL+CW/2, 4:CL+CW/6, 6:CL+CW/2};
+  var PILL_Y = NET - (NET-CT)*0.45;  // delanteros sobre la red
+  var BACK_Y = NET + OWN*0.52;       // zaguero en el medio, entre fila 1 y fila 3
+
+  function drawPill(x,y,label,solid){
+    var pw=Math.min(CW*0.28,52), ph=13;
+    ctx.save();
+    ctx.shadowColor='rgba(0,0,0,.7)'; ctx.shadowBlur=4;
+    ctx.fillStyle=solid?'rgba(10,14,30,.95)':'rgba(6,9,20,.75)';
+    ctx.beginPath();
+    if(ctx.roundRect) ctx.roundRect(x-pw/2,y-ph/2,pw,ph,6);
+    else ctx.rect(x-pw/2,y-ph/2,pw,ph);
+    ctx.fill();
+    ctx.globalAlpha=solid?1:0.55;
+    ctx.shadowColor=color; ctx.shadowBlur=solid?5:0;
+    ctx.strokeStyle=color; ctx.lineWidth=solid?1.2:0.8;
+    if(!solid) ctx.setLineDash([2,2]);
+    ctx.beginPath();
+    if(ctx.roundRect) ctx.roundRect(x-pw/2,y-ph/2,pw,ph,6);
+    else ctx.rect(x-pw/2,y-ph/2,pw,ph);
+    ctx.stroke(); ctx.setLineDash([]);
+    ctx.globalAlpha=solid?1:0.7;
+    ctx.font='800 7px Inter,system-ui,sans-serif';
+    ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.shadowColor='rgba(0,0,0,.9)'; ctx.shadowBlur=2;
+    ctx.fillText(label,x,y+0.5);
+    ctx.restore();
+  }
+
+  if(rotForm){
+    rotForm.front.forEach(function(jug){ drawPill(zoneX[jug.z]||CL+CW/2, PILL_Y, jug.n, true); });
+    rotForm.back.forEach(function(jug){  drawPill(zoneX[jug.z]||CL+CW/2, BACK_Y, jug.n, false); });
+  }
+
+  // ── Datos por zona — 1 por celda, centrados ──────────────────
+  // Zonas: 4=IZQ, 3=CEN, 2=DER, 6=CEN-BAJO
+  // Cada zona ocupa 1/3 del ancho. Zona 6 comparte x con zona 3.
+  // Y: zona delantera a 55% del OWN, zona 6 a 75% del OWN
+  // Layout: 3 columnas x 3 filas
+  // Fila 1 (cuadrante superior): Z4=IZQ, Z3=CEN, Z2=DER  → y = NET + OWN*0.22
+  // Fila 2 (medio): libre — nombres atacantes ya están sobre la red
+  // Fila 3 (inferior): Z6=CEN, Z1=DER(opp delantero)     → y = NET + OWN*0.78
+
+  var ROW_TOP = NET + OWN*0.26;
+  var ROW_BOT = NET + OWN*0.76;
+
+  var zonePosMap={
+    4:{x:CL+CW/6,   y:ROW_TOP},
+    3:{x:CL+CW/2,   y:ROW_TOP},
+    // Zona 2: arriba cuando armador zaguero, abajo cuando armador delantero (opuesto ataca desde P1)
+    2:{x:CL+CW*5/6, y:armDelantero ? ROW_BOT : ROW_TOP},
+    6:{x:CL+CW/2,   y:ROW_BOT},
+    1:{x:CL+CW*5/6, y:ROW_BOT}
+  };
+
+  var distMap={};
+  if(rot.dist) rot.dist.forEach(function(d){ distMap[d.zona]=d; });
+
+  var fs1=Math.round(OWN*0.155);
+  var fs2=Math.round(OWN*0.105);
+
+  [4,3,2,6,1].forEach(function(z){
+    var d=distMap[z]; if(!d||d.pct<=0||d.tot<=0) return;
+    var zp=zonePosMap[z]; if(!zp) return;
+
+    ctx.save();
+
+    // % distribución — blanco con outline negro
+    ctx.font='bold '+fs1+'px \'Bebas Neue\',Impact,sans-serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.lineWidth=3; ctx.strokeStyle='rgba(0,0,0,.85)';
+    ctx.shadowColor='rgba(0,0,0,1)'; ctx.shadowBlur=5;
+    ctx.strokeText(d.pct+'%', zp.x, zp.y-fs1*0.35);
+    ctx.fillStyle='#fff'; ctx.shadowBlur=2;
+    ctx.fillText(d.pct+'%', zp.x, zp.y-fs1*0.35);
+
+    // % puntos — coloreado con outline
+    var ptCol=d.pct_p>=60?'#22c55e':d.pct_p>=40?'#fbbf24':d.pct_p>=20?'#f97316':'#ef4444';
+    ctx.font='800 '+fs2+'px Inter,system-ui,sans-serif';
+    ctx.lineWidth=2.5; ctx.strokeStyle='rgba(0,0,0,.9)';
+    ctx.shadowBlur=4;
+    ctx.strokeText(d.pct_p+'%', zp.x, zp.y+fs1*0.52);
+    ctx.fillStyle=ptCol; ctx.shadowBlur=2;
+    ctx.fillText(d.pct_p+'%', zp.x, zp.y+fs1*0.52);
+
+    ctx.restore();
+  });
+
+  // ── Bloqueadores ────────────────────────────────────────────────
+  if(blqData){
+    var bc={'1BLQ':'#22c55e','2BLQ':'#818cf8','CIERRE':'#f97316','ABIERTO':'#fbbf24','CUERNO':'#a855f7','LECTURA':'#06b6d4','6-5':'#f59e0b','6-1':'#f59e0b',''  :'rgba(255,255,255,.07)'};
+    var px={izq:CL+CW/6,cen:CL+CW/2,der:CL+CW*5/6};
+    var by=CT+(NET-CT)*0.55;
+    var r2=Math.min(CW/6*0.62,14);
+    ['izq','cen','der'].forEach(function(side){
+      var val=blqData[side]||'';var col2=bc[val]||'rgba(255,255,255,.07)';var x2=px[side];
+      ctx.save();
+      ctx.beginPath();ctx.arc(x2,by,r2,0,Math.PI*2);
+      ctx.fillStyle=col2;ctx.globalAlpha=val?0.18:0.04;ctx.fill();
+      ctx.globalAlpha=1;ctx.strokeStyle=col2;ctx.lineWidth=val?1.5:0.5;
+      if(val){ctx.shadowColor=col2;ctx.shadowBlur=5;}
+      ctx.stroke();
+      if(val){ dibujarIconoBloqueo(ctx,x2,by,r2,val,col2); }
+      ctx.restore();
+    });
+  }
+}
+
+// ═══ COMO VAMOS A JUGAR ════════════════════════════════════════
+function renderJuego(){
+  var sec=document.getElementById('seccion-juego');
+  if(!sec) return;
+  sec.innerHTML='';
+  var wrap=document.createElement('div');
+  wrap.style.cssText='display:flex;flex-direction:column;gap:16px';
+
+  var fila1=document.createElement('div');
+  fila1.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:14px';
+
+  // PLAN DE SAQUE
+  var saqCard=jCard('🏐 PLAN DE SAQUE','#f59e0b');
+  [1,2,3].forEach(function(n){
+    var row=document.createElement('div');row.style.cssText='display:flex;align-items:flex-start;gap:8px;margin-bottom:10px';
+    var num=document.createElement('div');num.style.cssText='min-width:26px;height:26px;border-radius:50%;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:14px;color:#f59e0b;flex-shrink:0;margin-top:2px';num.textContent=n;
+    var inner=document.createElement('div');inner.style.cssText='flex:1;display:flex;flex-direction:column;gap:5px';
+    inner.appendChild(jInput('Descripción del plan de saque...','#f59e0b'));
+    var sub=document.createElement('div');sub.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:5px';
+    sub.appendChild(jInput('Jugador','#f59e0b'));
+    var sel=document.createElement('select');sel.style.cssText='background:#0a0b14;border:1px solid rgba(255,255,255,.1);border-radius:7px;color:#94a3b8;font-family:Barlow Condensed,sans-serif;font-size:12px;padding:8px 6px;outline:none;cursor:pointer;width:100%';
+    ['','FLOTADO','POTENCIA','SALTADO'].forEach(function(o){var opt=document.createElement('option');opt.value=o;opt.textContent=o||'Tipo';sel.appendChild(opt);});
+    sub.appendChild(sel);inner.appendChild(sub);
+    row.appendChild(num);row.appendChild(inner);
+    saqCard.querySelector('.jb').appendChild(row);
+  });
+  fila1.appendChild(saqCard);
+
+  // RECEPCION
+  var recCard=jCard('🛡 RECEPCIÓN Y SISTEMA','#22c55e');
+  ['SISTEMA','ROL DEL LÍBERO','FORMACIÓN'].forEach(function(lbl){
+    var d2=document.createElement('div');d2.style.cssText='margin-bottom:10px';
+    d2.appendChild(jLbl(lbl,'#22c55e'));d2.appendChild(jInput(lbl+'...','#22c55e'));
+    recCard.querySelector('.jb').appendChild(d2);
+  });
+  var dn=document.createElement('div');dn.appendChild(jLbl('NOTAS','#22c55e'));dn.appendChild(jArea('Situaciones especiales, señas, coberturas...','#22c55e',3));
+  recCard.querySelector('.jb').appendChild(dn);
+  fila1.appendChild(recCard);
+  wrap.appendChild(fila1);
+
+  var fila2=document.createElement('div');fila2.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:14px';
+
+  // ATAQUE
+  var atkCard=jCard('⚡ ATAQUE PROPIO','#f97316');
+  ['PRIORIDAD DE ATAQUE','COMBINACIONES A USAR','PLAN EN TRANSICIÓN'].forEach(function(lbl){
+    var d2=document.createElement('div');d2.style.cssText='margin-bottom:10px';
+    d2.appendChild(jLbl(lbl,'#f97316'));d2.appendChild(jInput(lbl+'...','#f97316'));
+    atkCard.querySelector('.jb').appendChild(d2);
+  });
+  var dn2=document.createElement('div');dn2.appendChild(jLbl('NOTAS','#f97316'));dn2.appendChild(jArea('Señas, coberturas...','#f97316',3));
+  atkCard.querySelector('.jb').appendChild(dn2);
+  fila2.appendChild(atkCard);
+
+  // ANALISIS RIVAL
+  var rivCard=jCard('🔍 ANÁLISIS DEL RIVAL','#e8192c');
+  var pfg=document.createElement('div');pfg.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px';
+  var pfc=document.createElement('div');pfc.style.cssText='background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.1);border-radius:8px;padding:10px';
+  var pdc=document.createElement('div');pdc.style.cssText='background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.1);border-radius:8px;padding:10px';
+  var pfh=document.createElement('div');pfh.style.cssText='font-size:8px;color:#22c55e;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;margin-bottom:5px';pfh.textContent='✅ PUNTOS FUERTES';
+  var pdh=document.createElement('div');pdh.style.cssText='font-size:8px;color:#ef4444;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;margin-bottom:5px';pdh.textContent='❌ PUNTOS DÉBILES';
+  pfc.appendChild(pfh);pdc.appendChild(pdh);
+  [1,2,3].forEach(function(){
+    var i1=jInput('Punto fuerte...','#22c55e');i1.style.marginBottom='5px';pfc.appendChild(i1);
+    var i2=jInput('Punto débil...','#ef4444');i2.style.marginBottom='5px';pdc.appendChild(i2);
+  });
+  pfg.appendChild(pfc);pfg.appendChild(pdc);
+  rivCard.querySelector('.jb').appendChild(pfg);
+  rivCard.querySelector('.jb').appendChild(jLbl('COMENTARIOS GENERALES','#e8192c'));
+  rivCard.querySelector('.jb').appendChild(jArea('Tendencias del equipo, jugadores clave, situaciones a explotar...','#e8192c',4));
+  fila2.appendChild(rivCard);
+  wrap.appendChild(fila2);
+
+  // MENSAJE
+  var msgCard=jCard('💬 MENSAJE AL EQUIPO / ESTRATEGIA GENERAL','#818cf8');
+  msgCard.querySelector('.jb').appendChild(jArea('Escribí acá la estrategia general del partido, el mensaje que querés darle al equipo, las claves del juego...','#818cf8',6));
+  wrap.appendChild(msgCard);
+
+  sec.appendChild(wrap);
+}
+
+// HELPERS UI
+function jCard(title,color){
+  var card=document.createElement('div');
+  card.style.cssText='background:#0f1020;border:1px solid rgba(255,255,255,.1);border-radius:13px;overflow:hidden';
+  var hdr=document.createElement('div');hdr.style.cssText='padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.01)';
+  var ttl=document.createElement('div');ttl.style.cssText='font-family:Barlow Condensed,sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:'+color+';text-transform:uppercase';ttl.textContent=title;
+  hdr.appendChild(ttl);card.appendChild(hdr);
+  var body=document.createElement('div');body.className='jb';body.style.cssText='padding:14px 16px';card.appendChild(body);
+  return card;
+}
+function jLbl(text,color){
+  var l=document.createElement('div');l.style.cssText='font-size:8px;color:'+(color||'#475569')+';letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;opacity:.8';l.textContent=text;return l;
+}
+function jInput(ph,color){
+  var inp=document.createElement('input');inp.type='text';inp.placeholder=ph||'';
+  inp.style.cssText='width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#e2e8f0;font-family:Barlow Condensed,sans-serif;font-size:13px;padding:8px 11px;outline:none;transition:all .15s;display:block';
+  inp.addEventListener('focus',function(){this.style.borderColor=(color||'rgba(255,255,255,.4)');this.style.background='rgba(255,255,255,.07)';});
+  inp.addEventListener('blur',function(){this.style.borderColor='rgba(255,255,255,.12)';this.style.background='rgba(255,255,255,.05)';});
+  return inp;
+}
+function jArea(ph,color,rows){
+  var ta=document.createElement('textarea');ta.placeholder=ph||'';ta.rows=rows||4;
+  ta.style.cssText='width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#e2e8f0;font-family:Barlow Condensed,sans-serif;font-size:13px;padding:8px 11px;outline:none;resize:vertical;line-height:1.6;transition:all .15s;display:block';
+  ta.addEventListener('focus',function(){this.style.borderColor=(color||'rgba(255,255,255,.4)');this.style.background='rgba(255,255,255,.07)';});
+  ta.addEventListener('blur',function(){this.style.borderColor='rgba(255,255,255,.12)';this.style.background='rgba(255,255,255,.05)';});
+  return ta;
+}
+
+// Llamar armador y juego
+// Wait for fonts before rendering canvases
+document.fonts.ready.then(function(){
+  setTimeout(function(){renderArmador();renderJuego();},100);
+}).catch(function(){
+  setTimeout(function(){renderArmador();renderJuego();},400);
+});
+
+function abrirModalArmador(rot, color, pills){
+  var modal = document.getElementById('modal-armador');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  // Título
+  var title = document.getElementById('modal-arm-title');
+  title.textContent = rot.pos + ' — ' + rot.total + ' acciones';
+  // Zaguero atacante en el modal
+  var FORM_MODAL = {
+    'P1': [{n:'MANSILLA',z:6}], 'P6': [{n:'WAGNER',z:6}], 'P5': [{n:'WAGNER',z:6}],
+    'P4': [{n:'WAGNER',z:6}],   'P3': [{n:'WAGNER',z:6}], 'P2': [{n:'MANSILLA',z:6}]
+  };
+  var modalBackPlayers = FORM_MODAL[rot.pos] || [];
+  var existingBack = document.getElementById('modal-back-row');
+  if(existingBack) existingBack.remove();
+  if(modalBackPlayers.length){
+    var mbRow=document.createElement('div');
+    mbRow.id='modal-back-row';
+    mbRow.style.cssText='display:flex;align-items:center;gap:8px;padding:6px 20px;background:rgba(0,0,0,.2);border-top:1px solid rgba(255,255,255,.05)';
+    var mbLbl=document.createElement('span');
+    mbLbl.style.cssText='font-size:8px;color:#475569;letter-spacing:1.5px;text-transform:uppercase';
+    mbLbl.textContent='ATACA DESDE P6 →';
+    mbRow.appendChild(mbLbl);
+    modalBackPlayers.forEach(function(bj){
+      var mbPill=document.createElement('div');
+      mbPill.style.cssText='padding:3px 12px;border-radius:20px;border:1px dashed '+color+';background:rgba(255,255,255,.04);font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.7)';
+      mbPill.textContent=bj.n;
+      mbRow.appendChild(mbPill);
+    });
+    var modalContent=document.querySelector('#modal-armador > div');
+    if(modalContent) modalContent.insertBefore(mbRow, modalContent.children[1]);
+  }
+  title.style.color = color;
+
+  // Pills EFF por zona desde pills array
+  var pillsEl = document.getElementById('modal-arm-pills');
+  pillsEl.innerHTML = '';
+  var pill = pills ? pills.find(function(p){return p.label===rot.pos;}) : null;
+  if(pill){
+    var items = [
+      {l:'EFF%', v:pill.eff!==null&&pill.eff!==undefined?pill.eff+'%':'—'},
+      {l:'TOT',  v:pill.tot||0},
+      {l:'#',    v:pill.pts||0},
+      {l:'#%',   v:pill.pts_pct!==undefined?pill.pts_pct+'%':'—'},
+      {l:'/ %=', v:pill.err_pct!==undefined?pill.err_pct+'%':'—'},
+    ];
+    items.forEach(function(item){
+      var effC = (item.l==='EFF%' && pill.eff!==null) ? (pill.eff>=50?'#22c55e':pill.eff>=25?'#fbbf24':pill.eff>=0?'#f97316':'#ef4444') : color;
+      var p = document.createElement('div');
+      p.style.cssText = 'flex:1;min-width:60px;padding:8px 6px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;display:flex;flex-direction:column;align-items:center;gap:2px';
+      var pv = document.createElement('div');pv.style.cssText='font-family:Bebas Neue,sans-serif;font-size:20px;color:'+effC+';line-height:1';pv.textContent=item.v;
+      var pl = document.createElement('div');pl.style.cssText='font-size:8px;color:#475569;letter-spacing:1px;text-transform:uppercase';pl.textContent=item.l;
+      p.appendChild(pv);p.appendChild(pl);pillsEl.appendChild(p);
+    });
+  }
+
+  // Header tabla distribución
+  var hdrRow=document.createElement('div');
+  hdrRow.style.cssText='display:grid;grid-template-columns:110px 1fr 48px 10px 64px 64px;gap:6px;align-items:center;margin-bottom:4px;margin-top:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,.06)';
+  ['ZONA','DISTRIBUCIÓN','DIST%','','ATAQUES','% PTS / PTS'].forEach(function(lbl){
+    var h2=document.createElement('div');h2.style.cssText='font-size:7px;color:#475569;letter-spacing:1px;text-transform:uppercase;text-align:center';h2.textContent=lbl;pillsEl.appendChild(h2);
+  });
+  // Distribución detallada por zona
+  var distInfo = document.createElement('div');
+  if(rot.dist && rot.dist.length){
+    var sorted = rot.dist.slice().sort(function(a,b){return b.pct-a.pct;});
+    var esDelantero = (rot.pos==='P4'||rot.pos==='P3'||rot.pos==='P2');
+    var labels = {4:'POS 4 — IZQ', 3:'POS 3 — CEN', 2: esDelantero ? 'POS 9 — DER MEDIO' : 'POS 2 — DER', 6:'POS 6 — CEN'};
+    // Separador
+    var sep=document.createElement('div');
+    sep.style.cssText='grid-column:1/-1;height:1px;background:rgba(255,255,255,.06);margin:8px 0 6px';
+    pillsEl.appendChild(sep);
+    // Tabla con los 4 datos por zona
+    sorted.forEach(function(d){
+      if(d.tot<=0) return;
+      var ptCol=d.pct_p>=50?'#22c55e':d.pct_p>=25?'#fbbf24':'#f97316';
+      var row=document.createElement('div');
+      row.style.cssText='display:grid;grid-template-columns:110px 1fr 48px 10px 64px 64px;gap:6px;align-items:center;margin-bottom:8px';
+      // Label zona
+      var lbl=document.createElement('div');
+      lbl.style.cssText='font-size:10px;color:#94a3b8;letter-spacing:.5px;font-weight:700';
+      lbl.textContent=labels[d.zona]||'Zona '+d.zona;
+      // Barra distribución
+      var bw=document.createElement('div');bw.style.cssText='height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden';
+      var bf=document.createElement('div');bf.style.cssText='height:100%;border-radius:3px;background:'+color+';width:'+d.pct+'%';
+      bw.appendChild(bf);
+      // % distribución
+      var pd=document.createElement('div');
+      pd.style.cssText='font-family:Bebas Neue,sans-serif;font-size:16px;color:'+color+';text-align:right';
+      pd.textContent=d.pct+'%';
+      // separador
+      var sp=document.createElement('div');sp.style.cssText='color:rgba(255,255,255,.1);text-align:center;font-size:10px';sp.textContent='|';
+      // cantidad atacada
+      var ta=document.createElement('div');
+      ta.style.cssText='font-size:11px;color:rgba(255,255,255,.6);text-align:center';
+      ta.innerHTML='<span style="font-family:Bebas Neue,sans-serif;font-size:15px;color:#e2e8f0">'+d.tot+'</span><span style="font-size:9px;color:#475569"> att</span>';
+      // % puntos + cantidad
+      var pp=document.createElement('div');
+      pp.style.cssText='text-align:center';
+      pp.innerHTML='<span style="font-family:Bebas Neue,sans-serif;font-size:16px;color:'+ptCol+'">'+d.pct_p+'%</span>'
+        +'<span style="font-size:9px;color:#475569;display:block;margin-top:-2px">'+d.pts+' pts</span>';
+      row.appendChild(lbl);row.appendChild(bw);row.appendChild(pd);row.appendChild(sp);row.appendChild(ta);row.appendChild(pp);
+      pillsEl.appendChild(row);
+    });
+  }
+
+  // Dibujar cancha grande
+  var cv = document.getElementById('modal-arm-canvas');
+  cv.width=480; cv.height=340;
+  var ctx = cv.getContext('2d');
+  ctx.clearRect(0,0,480,340);
+  redrawArmadorCourtLarge(ctx, 480, 340, rot, color);
+}
+
+function redrawArmadorCourtLarge(ctx, W, H, rot, color){
+  var PAD=12,CL=PAD,CR=W-PAD,CT=PAD,CB=H-PAD,CW=CR-CL,CH=CB-CT;
+  var NET=CT+CH*0.20,OWN=CB-NET,c1=CL+CW/3,c2=CL+CW*2/3;
+
+  // Background
+  ctx.fillStyle='#0d1117';ctx.fillRect(0,0,W,H);
+
+  // Piso
+  var bg=ctx.createLinearGradient(CL,NET,CL,CB);
+  bg.addColorStop(0,'#B87428');bg.addColorStop(0.5,'#D4893A');bg.addColorStop(1,'#B87428');
+  ctx.fillStyle=bg;ctx.fillRect(CL,NET,CW,OWN);
+  ctx.save();ctx.globalAlpha=0.05;ctx.strokeStyle='#000';ctx.lineWidth=0.8;
+  for(var iy=NET+8;iy<CB;iy+=8){ctx.beginPath();ctx.moveTo(CL,iy);ctx.lineTo(CR,iy);ctx.stroke();}
+  ctx.restore();
+
+  // Red
+  var ng=ctx.createLinearGradient(0,NET-4,0,NET+8);
+  ng.addColorStop(0,'#1a1a2e');ng.addColorStop(0.4,'#d0d0e0');ng.addColorStop(1,'#1a1a2e');
+  ctx.fillStyle=ng;ctx.fillRect(CL-4,NET-4,CW+8,8);
+  ctx.fillStyle='#cc1515';ctx.fillRect(CL-4,NET-7,CW+8,4);
+
+  // Líneas
+  ctx.save();
+  ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=2;ctx.setLineDash([]);
+  ctx.strokeRect(CL,NET,CW,OWN);
+  ctx.setLineDash([5,5]);ctx.strokeStyle='rgba(255,255,255,.3)';ctx.lineWidth=1;
+  [c1,c2].forEach(function(x){ctx.beginPath();ctx.moveTo(x,NET);ctx.lineTo(x,CB);ctx.stroke();});
+  ctx.beginPath();ctx.moveTo(CL,NET+OWN/3);ctx.lineTo(CR,NET+OWN/3);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(CL,NET+OWN*2/3);ctx.lineTo(CR,NET+OWN*2/3);ctx.stroke();
+  ctx.restore();
+
+  // ── Formacion ────────────────────────────────────────────────
+  var FORM = FORMACION_ATAQUE;
+  var armDelantero2=(rot.pos==='P4'||rot.pos==='P3'||rot.pos==='P2');
+  var rotForm = FORM[rot.pos];
+
+  var frontY = NET - (NET-CT)*0.52;
+  var backY  = NET + OWN*0.58;
+  var zoneX = {
+    1: armDelantero2 ? CL+CW*5/6 : CL+CW/6,
+    2: CL+CW*5/6,
+    3: CL+CW/2,
+    4: CL+CW/6,
+    6: CL+CW/2
+  };
+
+  if(rotForm){
+    // Delanteros — pill grande
+    rotForm.front.forEach(function(jug){
+      var x = zoneX[jug.z] || CL+CW/2;
+      var y = frontY;
+      var capsW = 72, capsH = 20;
+      ctx.save();
+      ctx.shadowColor='rgba(0,0,0,.7)';ctx.shadowBlur=8;
+      var grad=ctx.createLinearGradient(x-capsW/2,y-capsH/2,x+capsW/2,y+capsH/2);
+      grad.addColorStop(0,'rgba(10,15,30,.97)');grad.addColorStop(1,'rgba(20,25,45,.97)');
+      ctx.fillStyle=grad;
+      ctx.beginPath();
+      if(ctx.roundRect) ctx.roundRect(x-capsW/2,y-capsH/2,capsW,capsH,10);
+      else ctx.rect(x-capsW/2,y-capsH/2,capsW,capsH);
+      ctx.fill();
+      ctx.globalAlpha=1;ctx.shadowColor=color;ctx.shadowBlur=8;
+      ctx.strokeStyle=color;ctx.lineWidth=1.5;
+      ctx.beginPath();
+      if(ctx.roundRect) ctx.roundRect(x-capsW/2,y-capsH/2,capsW,capsH,10);
+      else ctx.rect(x-capsW/2,y-capsH/2,capsW,capsH);
+      ctx.stroke();
+      ctx.shadowBlur=3;ctx.shadowColor='rgba(0,0,0,.9)';
+      ctx.font='800 10px Inter';
+      ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(jug.n,x,y+0.5);
+      ctx.restore();
+    });
+
+  }
+
+  // ── Bubbles ───────────────────────────────────────────────────
+  var zoneLabels={
+    4:{x:CL+CW/6,   y:NET+OWN*0.28},
+    3:{x:CL+CW/2,   y:NET+OWN*0.28},
+    2:{x:CL+CW*5/6, y:armDelantero2 ? NET+OWN*0.60 : NET+OWN*0.28},
+    6:{x:CL+CW/2,   y:NET+OWN*0.60}
+  };
+
+  if(rot.dist) rot.dist.forEach(function(d){
+    if(d.pct<=0||d.tot<=0) return;
+    var zc=zoneLabels[d.zona];if(!zc) return;
+    var r=Math.max(W*0.09,22)*(0.35+d.pct/100*0.65);
+    ctx.save();
+    ctx.shadowColor=color;ctx.shadowBlur=18;
+    ctx.beginPath();ctx.arc(zc.x,zc.y,r,0,Math.PI*2);
+    ctx.fillStyle=color;ctx.globalAlpha=0.07+d.pct/100*0.13;ctx.fill();
+    ctx.globalAlpha=1;ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.stroke();
+    ctx.shadowBlur=0;
+
+    // % distrib grande
+    ctx.font='bold '+Math.round(W*0.055)+'px \'Bebas Neue\', Impact, sans-serif';
+    ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.shadowColor='rgba(0,0,0,.95)';ctx.shadowBlur=6;
+    ctx.fillText(d.pct+'%',zc.x,zc.y-14);
+
+    // total ataques
+    ctx.font='700 '+Math.round(W*0.022)+'px Inter';
+    ctx.fillStyle='rgba(255,255,255,.65)';ctx.shadowBlur=2;
+    ctx.fillText(d.tot+' ataques',zc.x,zc.y-2);
+
+    // % puntos
+    var ptCol=d.pct_p>=60?'#22c55e':d.pct_p>=40?'#fbbf24':d.pct_p>=20?'#f97316':'#ef4444';
+    ctx.font='bold '+Math.round(W*0.034)+'px \'Bebas Neue\', Impact, sans-serif';
+    ctx.fillStyle=ptCol;ctx.shadowColor='rgba(0,0,0,.9)';ctx.shadowBlur=4;
+    ctx.fillText(d.pct_p+'% pts',zc.x,zc.y+11);
+
+    ctx.font='700 '+Math.round(W*0.020)+'px Inter';
+    ctx.fillStyle='rgba(255,255,255,.45)';ctx.shadowBlur=2;
+    ctx.fillText('('+d.pts+' puntos)',zc.x,zc.y+22);
+    ctx.restore();
+  });
+
+  // ── Zaguero atacante — entre zona 3 y zona 6 ──────────────────
+  if(rotForm && rotForm.back && rotForm.back.length){
+    var bzX2 = CL + CW/2;
+    var bzY2 = NET + OWN * 0.44;
+    rotForm.back.forEach(function(jug){
+      var bcapsW = Math.min(CW*0.32, 90);
+      var bcapsH = 20;
+      ctx.save();
+      ctx.shadowColor='rgba(0,0,0,.7)';ctx.shadowBlur=8;
+      ctx.fillStyle='rgba(8,12,28,.92)';
+      ctx.beginPath();
+      if(ctx.roundRect) ctx.roundRect(bzX2-bcapsW/2,bzY2-bcapsH/2,bcapsW,bcapsH,10);
+      else ctx.rect(bzX2-bcapsW/2,bzY2-bcapsH/2,bcapsW,bcapsH);
+      ctx.fill();
+      ctx.shadowBlur=0;ctx.globalAlpha=0.7;ctx.setLineDash([3,3]);
+      ctx.strokeStyle=color;ctx.lineWidth=1.2;
+      ctx.beginPath();
+      if(ctx.roundRect) ctx.roundRect(bzX2-bcapsW/2,bzY2-bcapsH/2,bcapsW,bcapsH,10);
+      else ctx.rect(bzX2-bcapsW/2,bzY2-bcapsH/2,bcapsW,bcapsH);
+      ctx.stroke();ctx.setLineDash([]);
+      ctx.globalAlpha=0.9;
+      ctx.font='800 11px Inter';
+      ctx.fillStyle='rgba(255,255,255,.85)';
+      ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.shadowColor='rgba(0,0,0,.9)';ctx.shadowBlur=3;
+      ctx.fillText(jug.n, bzX2, bzY2);
+      ctx.restore();
+    });
+  }
+}
+
+function cerrarModalArmador(){
+  document.getElementById('modal-armador').style.display='none';
+  document.body.style.overflow='';
+}
+// Safe: modal-armador is defined after this script tag
+document.addEventListener('DOMContentLoaded', function(){
+  var mArm = document.getElementById('modal-armador');
+  if(mArm) mArm.addEventListener('click',function(e){ if(e.target===this) cerrarModalArmador(); });
+});
+
+
+// ═══ ÍCONOS DE BLOQUEO ══════════════════════════════════════════
+function dibujarIconoBloqueo(ctx, x, y, r, tipo, color){
+  // Usar símbolos Unicode — claros y nítidos en cualquier tamaño
+  var iconMap = {
+    '1BLQ':  '☝',
+    '2BLQ':  '✌',
+    'CIERRE':'✊',
+    'LECTURA':'🖐',
+    'CUERNO': '🤘',
+    '6-5':   '6-5',
+    '6-1':   '6-1',
+  };
+  var icon = iconMap[tipo];
+  if(!icon) return;
+  ctx.save();
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.shadowColor = 'rgba(0,0,0,.8)';
+  ctx.shadowBlur = 4;
+  if(tipo === '6-5' || tipo === '6-1'){
+    ctx.font = 'bold ' + Math.round(r*0.72) + 'px Inter';
+    ctx.fillStyle = color;
+    ctx.fillText(icon, x, y);
+  } else {
+    // Emoji — usar fuente del sistema
+    ctx.font = Math.round(r*1.1) + 'px serif';
+    ctx.fillText(icon, x, y);
+  }
+  ctx.restore();
+}
+
+
+// ═══ MODAL SO / TR ══════════════════════════════════════════════
+function abrirModalSOTR(data, tipo, color){
+  var modal = document.getElementById('modal-armador');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  var title = document.getElementById('modal-arm-title');
+  var tipoLabel = tipo==='SO' ? 'SIDE OUT' : 'TRANSICIÓN';
+  title.textContent = tipoLabel + ' — ' + data.total + ' acciones';
+  title.style.color = tipo==='SO' ? '#22c55e' : '#818cf8';
+
+  var pillsEl = document.getElementById('modal-arm-pills');
+  pillsEl.innerHTML = '';
+
+  // Header de columnas
+  var hdrRow = document.createElement('div');
+  hdrRow.style.cssText = 'display:grid;grid-template-columns:110px 1fr 48px 10px 64px 64px;gap:6px;align-items:center;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.06)';
+  ['ZONA','DISTRIBUCIÓN','DIST%','','ATAQUES','% PTS / PTS'].forEach(function(lbl){
+    var h2=document.createElement('div');
+    h2.style.cssText='font-size:7px;color:#475569;letter-spacing:1px;text-transform:uppercase;text-align:center';
+    h2.textContent=lbl; pillsEl.appendChild(h2);
+  });
+
+  // Filas por zona
+  var zoneNames={4:'POS 4 — IZQ',3:'POS 3 — CEN',2:'POS 2 — DER',8:'POS 8 — CEN MED',9:'POS 9 — DER MED'};
+  var sorted = data.dist.slice().sort(function(a,b){return b.pct-a.pct;});
+  sorted.forEach(function(d){
+    if(d.tot<=0) return;
+    var ptCol = d.pct_p>=50?'#22c55e':d.pct_p>=30?'#fbbf24':'#f97316';
+    var row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:110px 1fr 48px 10px 64px 64px;gap:6px;align-items:center;margin-bottom:8px';
+    var lbl=document.createElement('div');lbl.style.cssText='font-size:10px;color:#94a3b8;letter-spacing:.5px;font-weight:700';lbl.textContent=zoneNames[d.zona]||'Zona '+d.zona;
+    var bw=document.createElement('div');bw.style.cssText='height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden';
+    var bf=document.createElement('div');bf.style.cssText='height:100%;border-radius:3px;background:'+color+';width:'+d.pct+'%';
+    bw.appendChild(bf);
+    var pd=document.createElement('div');pd.style.cssText='font-family:Bebas Neue,sans-serif;font-size:16px;color:'+color+';text-align:right';pd.textContent=d.pct+'%';
+    var sp=document.createElement('div');sp.style.cssText='color:rgba(255,255,255,.1);text-align:center;font-size:10px';sp.textContent='|';
+    var ta=document.createElement('div');ta.style.cssText='text-align:center';
+    ta.innerHTML='<span style="font-family:Bebas Neue,sans-serif;font-size:15px;color:#e2e8f0">'+d.tot+'</span><span style="font-size:9px;color:#475569"> att</span>';
+    var pp=document.createElement('div');pp.style.cssText='text-align:center';
+    pp.innerHTML='<span style="font-family:Bebas Neue,sans-serif;font-size:16px;color:'+ptCol+'">'+d.pct_p+'%</span><span style="font-size:9px;color:#475569;display:block;margin-top:-2px">'+d.pts+' pts</span>';
+    row.appendChild(lbl);row.appendChild(bw);row.appendChild(pd);row.appendChild(sp);row.appendChild(ta);row.appendChild(pp);
+    pillsEl.appendChild(row);
+  });
+
+  // Canvas
+  var cv = document.getElementById('modal-arm-canvas');
+  cv.width=480; cv.height=340;
+  var ctx = cv.getContext('2d');
+  ctx.clearRect(0,0,480,340);
+  redrawSOTRCourt(ctx, 480, 340, data, color);
+}
+
+function redrawSOTRCourt(ctx, W, H, data, color){
+  var PAD=10,CL=PAD,CR=W-PAD,CT=PAD,CB=H-PAD,CW=CR-CL,CH=CB-CT;
+  var NET=CT+CH*0.18,OWN=CB-NET,c1=CL+CW/3,c2=CL+CW*2/3;
+
+  // Fondo y madera
+  ctx.fillStyle='#1a2a40';ctx.fillRect(0,0,W,H);
+  var bg=ctx.createLinearGradient(CL,NET,CL,CB);
+  bg.addColorStop(0,'#C88030');bg.addColorStop(0.5,'#E09840');bg.addColorStop(1,'#C88030');
+  ctx.fillStyle=bg;ctx.fillRect(CL,NET,CW,OWN);
+  ctx.save();ctx.globalAlpha=0.06;ctx.strokeStyle='#3a1800';ctx.lineWidth=0.8;
+  for(var iy=NET+8;iy<CB;iy+=8){ctx.beginPath();ctx.moveTo(CL,iy);ctx.lineTo(CR,iy);ctx.stroke();}
+  ctx.restore();
+
+  // Red
+  var ng=ctx.createLinearGradient(0,NET-3,0,NET+7);
+  ng.addColorStop(0,'#2a2a3a');ng.addColorStop(0.4,'#d0d0e0');ng.addColorStop(1,'#2a2a3a');
+  ctx.fillStyle=ng;ctx.fillRect(CL-4,NET-3,CW+8,8);
+  ctx.fillStyle='#cc1515';ctx.fillRect(CL-4,NET-6,CW+8,4);
+
+  // Líneas campo
+  ctx.save();ctx.setLineDash([]);
+  ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=2;
+  ctx.strokeRect(CL,NET,CW,OWN);
+  ctx.setLineDash([5,5]);ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=1;
+  [c1,c2].forEach(function(x){ctx.beginPath();ctx.moveTo(x,NET);ctx.lineTo(x,CB);ctx.stroke();});
+  ctx.beginPath();ctx.moveTo(CL,NET+OWN/3);ctx.lineTo(CR,NET+OWN/3);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(CL,NET+OWN*2/3);ctx.lineTo(CR,NET+OWN*2/3);ctx.stroke();
+  ctx.restore();
+
+  // Coordenadas de zonas (campo propio)
+  // Zona 4=izq delantera, 3=cen delantera, 2=der delantera
+  // Zona 8=cen media, 9=der media
+  var zoneCoords = {
+    4:{x:CL+CW/6,   y:NET+OWN*0.22},
+    3:{x:CL+CW/2,   y:NET+OWN*0.22},
+    2:{x:CL+CW*5/6, y:NET+OWN*0.22},
+    8:{x:CL+CW/2,   y:NET+OWN*0.55},
+    9:{x:CL+CW*5/6, y:NET+OWN*0.55},
+  };
+
+  // Labels de zona
+  var zoneNames={4:'P4',3:'P3',2:'P2',8:'P8',9:'P9'};
+  Object.keys(zoneCoords).forEach(function(z){
+    var zc=zoneCoords[z];
+    ctx.save();
+    ctx.font='800 12px Inter';
+    ctx.fillStyle='rgba(255,255,255,.12)';
+    ctx.textAlign='center';ctx.textBaseline='bottom';
+    ctx.fillText(zoneNames[z],zc.x,zc.y-22);
+    ctx.restore();
+  });
+
+  // Dibujar distribución
+  if(data.dist) data.dist.forEach(function(d){
+    if(d.pct<=0||d.tot<=0) return;
+    var zc=zoneCoords[d.zona];if(!zc) return;
+    var r=Math.max(W*0.09,20)*(0.3+d.pct/100*0.7);
+    ctx.save();
+    ctx.beginPath();ctx.arc(zc.x,zc.y,r,0,Math.PI*2);
+    ctx.fillStyle=color;ctx.globalAlpha=0.07+d.pct/100*0.14;ctx.fill();
+    ctx.globalAlpha=1;ctx.strokeStyle=color;ctx.lineWidth=2;
+    ctx.shadowColor=color;ctx.shadowBlur=10;ctx.stroke();
+    // % distribución
+    ctx.font='bold '+Math.round(W*0.055)+'px \'Bebas Neue\', Impact, sans-serif';
+    ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.shadowColor='rgba(0,0,0,.9)';ctx.shadowBlur=6;
+    ctx.fillText(d.pct+'%',zc.x,zc.y-18);
+    // cantidad
+    ctx.font='700 '+Math.round(W*0.026)+'px Inter';
+    ctx.fillStyle='rgba(255,255,255,.7)';ctx.shadowBlur=3;
+    ctx.fillText(d.tot+' att',zc.x,zc.y-4);
+    // % puntos
+    var ptCol=d.pct_p>=50?'#22c55e':d.pct_p>=30?'#fbbf24':'#f97316';
+    ctx.font='bold '+Math.round(W*0.034)+'px \'Bebas Neue\', Impact, sans-serif';
+    ctx.fillStyle=ptCol;ctx.shadowColor='rgba(0,0,0,.9)';ctx.shadowBlur=4;
+    ctx.fillText(d.pct_p+'%',zc.x,zc.y+11);
+    // puntos
+    ctx.font='700 '+Math.round(W*0.024)+'px Inter';
+    ctx.fillStyle='rgba(255,255,255,.55)';ctx.shadowBlur=2;
+    ctx.fillText('('+d.pts+' pts)',zc.x,zc.y+23);
+    ctx.restore();
+  });
+}
+
+
+function descargarPDF() {
+  var btn = document.getElementById('pdf-btn');
+  if(btn){ btn.textContent = '⏳ Generando...'; btn.disabled = true; }
+
+  // Load html2canvas + jsPDF if not loaded
+  function loadScript(src, cb){
+    if(document.querySelector('script[src="'+src+'"]')){ cb(); return; }
+    var s = document.createElement('script'); s.src = src;
+    s.onload = cb; s.onerror = function(){ console.error('Failed to load '+src); cb(); };
+    document.head.appendChild(s);
+  }
+
+  loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', function(){
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', function(){
+      generarPDFConLibrerias();
+    });
+  });
+}
+
+function generarPDFConLibrerias(){
+  var btn = document.getElementById('pdf-btn');
+  var rival = RIVAL.nombre || 'GamePlan';
+  var { jsPDF } = window.jspdf;
+
+  // Sections to capture
+  var secciones = [];
+
+  // Header
+  var header = document.querySelector('.page-header');
+  if(header) secciones.push(header);
+
+  // Each jugador section - force open all
+  document.querySelectorAll('.jugador-section').forEach(function(s){
+    s.classList.add('open');
+    secciones.push(s);
+  });
+
+  // Armador section
+  var armador = document.getElementById('seccion-armador');
+  if(armador) secciones.push(armador);
+
+  // Estrategia section
+  var estrategia = document.getElementById('seccion-juego');
+  if(estrategia) secciones.push(estrategia);
+
+  var pdf = new jsPDF('p', 'mm', 'a4');
+  var pageW = pdf.internal.pageSize.getWidth();
+  var pageH = pdf.internal.pageSize.getHeight();
+  var margin = 10;
+  var usableW = pageW - margin*2;
+  var yPos = margin;
+  var first = true;
+
+  // Cover page
+  pdf.setFillColor(7, 8, 15);
+  pdf.rect(0, 0, pageW, pageH, 'F');
+  pdf.setTextColor(232, 25, 44);
+  pdf.setFontSize(28);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('PLAN DE JUEGO', pageW/2, 40, {align:'center'});
+  pdf.setTextColor(245, 158, 11);
+  pdf.setFontSize(20);
+  pdf.text('vs ' + rival, pageW/2, 55, {align:'center'});
+  pdf.setTextColor(100, 116, 139);
+  pdf.setFontSize(10);
+  pdf.text(RIVAL.info || '', pageW/2, 64, {align:'center'});
+  pdf.setTextColor(255,255,255);
+  pdf.setFontSize(8);
+  pdf.text('NAFELS VOLEY · Análisis Táctico', pageW/2, pageH-15, {align:'center'});
+
+  // Links summary page
+  pdf.addPage();
+  pdf.setFillColor(7, 8, 15);
+  pdf.rect(0, 0, pageW, pageH, 'F');
+  pdf.setTextColor(245, 158, 11);
+  pdf.setFontSize(14);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('VIDEOS DE REFERENCIA', margin, 20);
+  pdf.setDrawColor(245, 158, 11);
+  pdf.setLineWidth(0.3);
+  pdf.line(margin, 23, pageW-margin, 23);
+
+  var vy = 32;
+  pdf.setFontSize(8);
+  JUGADORES.forEach(function(j){
+    var hasVideo = false;
+    var combos = (j.ataques||[]).concat(j.saques||[]);
+    combos.forEach(function(c){
+      if(c.video){
+        if(!hasVideo){
+          pdf.setTextColor(255,255,255);
+          pdf.setFont('helvetica','bold');
+          pdf.setFontSize(9);
+          pdf.text(j.nombre + ' (' + j.pos + ')', margin, vy);
+          vy += 5;
+          hasVideo = true;
+        }
+        pdf.setTextColor(100,116,139);
+        pdf.setFont('helvetica','normal');
+        pdf.setFontSize(7);
+        pdf.text('  ' + c.cod + (c.tipo?' ('+c.tipo+')':'') + ':', margin, vy);
+        pdf.setTextColor(129,140,248);
+        pdf.text('  ' + c.video, margin+25, vy);
+        vy += 4;
+        if(vy > pageH - 15){
+          pdf.addPage();
+          pdf.setFillColor(7,8,15);
+          pdf.rect(0,0,pageW,pageH,'F');
+          vy = 20;
+        }
+      }
+    });
+    if(hasVideo) vy += 3;
+  });
+
+  // Capture each section as image
+  var idx = 0;
+  function captureNext(){
+    if(idx >= secciones.length){
+      var fecha = new Date().toISOString().slice(0,10);
+      pdf.save('GamePlan_vs_' + rival.replace(/[^a-z0-9]/gi,'_') + '_' + fecha + '.pdf');
+      var btn2 = document.getElementById('pdf-btn');
+      if(btn2){ btn2.textContent = '📄 Descargar PDF'; btn2.disabled = false; }
+
+      // Re-close jugador sections
+      document.querySelectorAll('.jugador-section').forEach(function(s){
+        s.classList.remove('open');
+      });
+      return;
+    }
+
+    var el = secciones[idx];
+    idx++;
+    html2canvas(el, {
+      backgroundColor: '#07080f',
+      scale: 1.5,
+      useCORS: true,
+      logging: false
+    }).then(function(canvas){
+      var imgData = canvas.toDataURL('image/jpeg', 0.85);
+      var imgW = usableW;
+      var imgH = imgW * canvas.height / canvas.width;
+
+      if(yPos + imgH > pageH - margin){
+        pdf.addPage();
+        pdf.setFillColor(7,8,15);
+        pdf.rect(0,0,pageW,pageH,'F');
+        yPos = margin;
+      }
+      pdf.addImage(imgData, 'JPEG', margin, yPos, imgW, imgH);
+      yPos += imgH + 4;
+      captureNext();
+    }).catch(function(){ captureNext(); });
+  }
+
+  pdf.addPage();
+  pdf.setFillColor(7,8,15);
+  pdf.rect(0,0,pageW,pageH,'F');
+  pdf.setTextColor(245,158,11);
+  pdf.setFontSize(14);
+  pdf.setFont('helvetica','bold');
+  pdf.text('ANÁLISIS POR JUGADOR', margin, 20);
+  pdf.setDrawColor(245,158,11);
+  pdf.setLineWidth(0.3);
+  pdf.line(margin, 23, pageW-margin, 23);
+  yPos = 30;
+
+  captureNext();
+}
+
+</script>
+
+<div style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:150;display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+  <div onclick="window.scrollTo({top:0,behavior:'smooth'})" style="display:flex;align-items:center;gap:7px;cursor:pointer;padding:5px 9px;border-radius:7px;background:rgba(13,14,26,.92);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(10px)">
+    <span style="font-size:8px;color:#818cf8;letter-spacing:1.5px;font-weight:700;text-transform:uppercase">Jugadores</span>
+    <div style="width:5px;height:5px;border-radius:50%;background:#818cf8;flex-shrink:0"></div>
+  </div>
+  <div onclick="document.getElementById('seccion-armador').scrollIntoView({behavior:'smooth'})" style="display:flex;align-items:center;gap:7px;cursor:pointer;padding:5px 9px;border-radius:7px;background:rgba(13,14,26,.92);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(10px)">
+    <span style="font-size:8px;color:#f59e0b;letter-spacing:1.5px;font-weight:700;text-transform:uppercase">Armador</span>
+    <div style="width:5px;height:5px;border-radius:50%;background:#f59e0b;flex-shrink:0"></div>
+  </div>
+  <div onclick="document.getElementById('anchor-juego').scrollIntoView({behavior:'smooth'})" style="display:flex;align-items:center;gap:7px;cursor:pointer;padding:5px 9px;border-radius:7px;background:rgba(13,14,26,.92);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(10px)">
+    <span style="font-size:8px;color:#e8192c;letter-spacing:1.5px;font-weight:700;text-transform:uppercase">Estrategia</span>
+    <div style="width:5px;height:5px;border-radius:50%;background:#e8192c;flex-shrink:0"></div>
+  </div>
+</div>
+
+<button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="position:fixed;bottom:20px;right:20px;z-index:200;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.1);background:rgba(13,14,26,.95);backdrop-filter:blur(10px);color:#64748b;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.5)" title="Volver al inicio">↑</button>
+
+<!-- MODAL ARMADOR -->
+<div id="modal-armador" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.92);backdrop-filter:blur(20px);align-items:center;justify-content:center">
+  <div style="background:#0d0e1a;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;max-width:520px;width:92%;box-shadow:0 32px 80px rgba(0,0,0,.8)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div id="modal-arm-title" style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#f59e0b"></div>
+      <button onclick="cerrarModalArmador()" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#475569;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px">✕ CERRAR</button>
+    </div>
+    <!-- Pills EFF por zona -->
+    <div id="modal-arm-pills" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
+    <!-- Canvas grande -->
+    <div style="border-radius:10px;overflow:hidden;box-shadow:0 0 0 3px rgba(255,255,255,.04)">
+      <canvas id="modal-arm-canvas" width="480" height="340" style="display:block;max-width:100%"></canvas>
+    </div>
+    <!-- Leyenda -->
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:10px;flex-wrap:wrap">
+      <div style="font-size:9px;color:#475569;letter-spacing:.5px">Zona 4 = Pos 4 (izq)</div>
+      <div style="font-size:9px;color:#475569;letter-spacing:.5px">Zona 3 = Pos 3 (cen)</div>
+      <div style="font-size:9px;color:#475569;letter-spacing:.5px">Zona 2 = Pos 2 (der)</div>
+      <div style="font-size:9px;color:#475569;letter-spacing:.5px">Zona 6 = Pos 6 (cen)</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
