@@ -474,3 +474,129 @@ if __name__ == '__main__':
     print(f"\n{'='*60}")
     print(f"✓ DONE — {len(games_log)} total games in DB")
     print(f"{'='*60}\n")
+
+
+# ═══════════════════════════════════════════════════════════════════
+# GENERADORES DE DATOS PARA PÁGINAS (historial, partidos)
+# ═══════════════════════════════════════════════════════════════════
+
+# Roster Nafels (posiciones + nombres oficiales)
+NAFELS_ROSTER = {
+    1:'LIBERO',2:'PUNTA',3:'PUNTA',4:'ARMADOR',5:'CENTRAL',6:'OPUESTO',
+    7:'CENTRAL',8:'LIBERO',9:'PUNTA',10:'CENTRAL',11:'PUNTA',14:'OPUESTO',15:'CENTRAL',
+}
+NAFELS_NAMES = {
+    1:'DEECKE',2:'CORZO',3:'SCHWITTER',4:'VAZQUEZ',5:'HESSELHOLT',6:'DENIS CABANAS',
+    7:'SCHMID',8:'PETER',9:'BROCH',10:'BOGDANOVSKI',11:'BARTHOLET',14:'FIGUEIREDO',15:'NIKOLOV',
+}
+POS_COLOR = {'CENTRAL':'#f97316','OPUESTO':'#818cf8','PUNTA':'#22c55e','ARMADOR':'#f59e0b','LIBERO':'#06b6d4'}
+
+def parse_set_scores(content):
+    """Extract final set scores from [3SET]. Field index 4 = final score (e.g. 25-17)."""
+    idx = content.find('[3SET]')
+    if idx < 0: return []
+    end = content.find('[3', idx+6)
+    block = content[idx+6:end].strip().split('\n')
+    sets = []
+    for line in block:
+        parts = line.split(';')
+        if len(parts) >= 5:
+            final = parts[4].strip()
+            m = re.match(r'(\d+)\s*-\s*(\d+)', final)
+            if m: sets.append((int(m.group(1)), int(m.group(2))))
+    return sets
+
+def calc_match_skill(acts, skill_type):
+    """Per-match skill stats using confirmed EFF formulas."""
+    t=len(acts)
+    if t==0: return {'T':0,'Eff':0,'Punto':0,'Pos':0,'Adm':0,'Neg':0,'Err':0,'Vend':0}
+    k=sum(1 for a in acts if a['effect']=='#'); pp=sum(1 for a in acts if a['effect']=='+')
+    exc=sum(1 for a in acts if a['effect']=='!'); sl=sum(1 for a in acts if a['effect']=='/')
+    e=sum(1 for a in acts if a['effect']=='='); minus=sum(1 for a in acts if a['effect']=='-')
+    if   skill_type=='a': eff=round((k-sl-e)/t*100)
+    elif skill_type=='s': eff=round((k+0.5*sl+0.25*pp-e)/t*100)
+    elif skill_type=='r': eff=round((k+0.5*pp-0.5*sl-e)/t*100)
+    else: eff=0
+    return {'T':t,'Eff':eff,'Punto':k,'Pos':pp,'Adm':exc,'Neg':sl,'Err':e,'Vend':minus}
+
+def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025/26'):
+    """Generate datos_historial.js + datos_partidos.js for a specific team from DVW."""
+    from datetime import datetime
+    files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
+
+    games = []
+    for fname in files:
+        with open(os.path.join(dvw_dir,fname), encoding='utf-8', errors='ignore') as f:
+            content = f.read()
+        lines = content.split('\n')
+        home_raw, away_raw = get_teams(lines)
+        home = norm(home_raw); away = norm(away_raw)
+        if team_name not in (home, away): continue
+
+        sets = parse_set_scores(content)
+        m = re.search(r'(\d{4}-\d{2}-\d{2})', fname)
+        date = m.group(1) if m else ''
+        team_home = home == team_name
+        rival = away if team_home else home
+
+        tsets=0; rsets=0; set_strings=[]
+        for h,a in sets:
+            th = h if team_home else a; tr = a if team_home else h
+            set_strings.append(f"{th}-{tr}")
+            if th>tr: tsets+=1
+            else: rsets+=1
+        if tsets+rsets==0: continue
+
+        games.append({'file':fname,'date':date,'rival':rival,'team_home':team_home,
+                       'tsets':tsets,'rsets':rsets,'result':'V' if tsets>rsets else 'D',
+                       'set_strings':set_strings,'content_path':os.path.join(dvw_dir,fname)})
+
+    # HISTORIAL entries (per match player stats)
+    historial = []
+    for g in sorted(games, key=lambda x:x['date']):
+        if not g['date']: continue
+        with open(g['content_path'], encoding='utf-8', errors='ignore') as f:
+            content = f.read()
+        lines = content.split('\n')
+        home_raw,_ = get_teams(lines)
+        team_home = norm(home_raw)==team_name
+        pfx = '*' if team_home else 'a'
+        section = '[3PLAYERS-H]' if team_home else '[3PLAYERS-V]'
+        players = get_players(lines, section)
+
+        idx = content.find('[3SCOUT]\n')
+        scout = content[idx+9:content.find('\n[3',idx+9)].strip().split('\n')
+        pa = defaultdict(lambda: {'a':[],'s':[],'r':[],'b':[]})
+        for line in scout:
+            l=line.strip()
+            if len(l)<6 or l[0]!=pfx: continue
+            code=l[1:]
+            try: pn=int(code[:2])
+            except: continue
+            sk=code[2].upper() if len(code)>2 else ''
+            ef=code[4] if len(code)>4 else ''
+            if sk=='A': pa[pn]['a'].append({'effect':ef})
+            elif sk=='S': pa[pn]['s'].append({'effect':ef})
+            elif sk=='R': pa[pn]['r'].append({'effect':ef})
+            elif sk=='B': pa[pn]['b'].append({'effect':ef})
+
+        jugs=[]
+        for pn, acts in pa.items():
+            s=calc_match_skill(acts['s'],'s'); r=calc_match_skill(acts['r'],'r'); a=calc_match_skill(acts['a'],'a')
+            bk=sum(1 for x in acts['b'] if x['effect']=='#'); bp=sum(1 for x in acts['b'] if x['effect']=='+')
+            bT=len(acts['b']); bEff=round((bk+bp)/bT*100) if bT else 0
+            if s['T']+r['T']+a['T']+bT<1: continue
+            nm = NAFELS_NAMES.get(pn, players.get(pn,{}).get('name','').split()[-1] if players.get(pn,{}).get('name') else str(pn))
+            jugs.append({'c':pn,'n':nm,
+                's'+'T':s['T'],'sEff':s['Eff'],'sPunto':s['Punto'],'sPos':s['Pos'],'sNeg':s['Neg'],'sErr':s['Err'],'sAdm':s['Adm'],'sVend':s['Vend'],
+                'rT':r['T'],'rEff':r['Eff'],'rPunto':r['Punto'],'rPos':r['Pos'],'rNeg':r['Neg'],'rErr':r['Err'],'rAdm':r['Adm'],'rVend':r['Vend'],
+                'aT':a['T'],'aEff':a['Eff'],'aPunto':a['Punto'],'aPos':a['Pos'],'aNeg':a['Neg'],'aErr':a['Err'],'aAdm':a['Adm'],'aVend':a['Vend'],
+                'bT':bT,'bPt':bk,'bPtPos':bp,'bEff':bEff})
+        historial.append({'fecha':'/'.join(reversed(g['date'].split('-'))),'tipo':'P','rival':g['rival'],
+            'resultado':{'nafels':g['tsets'],'rival':g['rsets'],'sets':g['set_strings']},'jugadores':jugs})
+
+    now = datetime.now().strftime('%d/%m/%Y, %H:%M:%S')
+    hist_js = 'window.HISTORIAL_DATA = ' + json.dumps({'generado':now,'entrenamientos':historial}, ensure_ascii=False, indent=2) + ';\n'
+    with open(os.path.join(output_dir,'datos_historial.js'),'w',encoding='utf-8') as f: f.write(hist_js)
+
+    return len(historial), len(games)

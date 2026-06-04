@@ -163,7 +163,18 @@ var POS_COLOR={ARMADOR:'#F59E0B',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97
 
 // ── INIT ──────────────────────────────────────────────────────────────
 function tryInit(n){
-  if(typeof Nafels_JUGADORES!=='undefined'){ buildSelector(); checkURL(); }
+  var ready = (typeof Nafels_JUGADORES!=='undefined') || (typeof PARTIDOS_JUGADORES!=='undefined') || (window.EQUIPO_DATA&&window.EQUIPO_DATA.jugadores);
+  if(ready){
+    buildSelector();
+    var p=new URLSearchParams(window.location.search);
+    var n2=parseInt(p.get('num'))||0;
+    if(n2){ selectJug(n2); }
+    else {
+      // auto-select first player with match data
+      var jugs=(typeof PARTIDOS_JUGADORES!=='undefined')?PARTIDOS_JUGADORES:(window.EQUIPO_DATA?window.EQUIPO_DATA.jugadores:[]);
+      if(jugs && jugs.length) selectJug(jugs[0].num);
+    }
+  }
   else if(n>0) setTimeout(function(){tryInit(n-1);},200);
 }
 document.fonts.ready.then(function(){tryInit(25);}).catch(function(){tryInit(25);});
@@ -177,7 +188,10 @@ function checkURL(){
 function buildSelector(){
   var el=document.getElementById('jug-scroller');
   if(!el) return;
-  var jugs=typeof Nafels_JUGADORES!=='undefined'?Nafels_JUGADORES:[];
+  var jugs=[];
+  if(typeof Nafels_JUGADORES!=='undefined') jugs=Nafels_JUGADORES;
+  else if(typeof PARTIDOS_JUGADORES!=='undefined') jugs=PARTIDOS_JUGADORES;
+  else if(window.EQUIPO_DATA&&window.EQUIPO_DATA.jugadores) jugs=window.EQUIPO_DATA.jugadores;
   el.innerHTML=jugs.map(function(j){
     var nm=j.nombre?j.nombre.replace(/^\d+\s*/,'').split(' ')[0]:'#'+j.num;
     return '<button class="jbtn" onclick="selectJug('+j.num+')">#'+j.num+' '+nm+'</button>';
@@ -185,7 +199,15 @@ function buildSelector(){
 }
 
 function selectJug(num){
-  window.location.href = 'jugador.html?num=' + num;
+  G.num = num;
+  var jugs=(typeof PARTIDOS_JUGADORES!=='undefined')?PARTIDOS_JUGADORES:(window.EQUIPO_DATA?window.EQUIPO_DATA.jugadores:[]);
+  G.jug = jugs.find(function(j){return j.num===num;}) || {num:num,nombre:'#'+num};
+  document.querySelectorAll('.jbtn').forEach(function(b){b.classList.remove('active');});
+  var btns=document.querySelectorAll('.jbtn');
+  for(var i=0;i<btns.length;i++){if(btns[i].textContent.indexOf('#'+num+' ')===0){btns[i].classList.add('active');break;}}
+  if(typeof renderHero==='function') renderHero();
+  if(typeof renderFilters==='function') renderFilters();
+  if(typeof renderContent==='function') renderContent();
 }
 
 // ── HERO ─────────────────────────────────────────────────────────────
