@@ -1,4 +1,4 @@
-// datos_partidos.js — Nafels NLA 2025/26 — generado 03/06/2026
+// datos_partidos.js — Nafels NLA 2025/26 — DEFINITIVO 03/06/2026
 const PARTIDOS_GENERADO = "03/06/2026";
 const PARTIDOS_TOTAL = 26;
 const PARTIDOS_META = [

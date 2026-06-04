@@ -40,7 +40,7 @@ window.EQUIPO_DATA = {
     {
       "num": 5,
       "nombre": "HESSELHOLT",
-      "pos": "PUNTA",
+      "pos": "CENTRAL",
       "foto": null,
       "pais": "🇩🇰",
       "altura": "",
@@ -124,11 +124,6 @@ window.EQUIPO_DATA = {
       "nombre": "HEAD COACH",
       "rol": "Entrenador",
       "icon": "📋"
-    },
-    {
-      "nombre": "PREP. FISICO",
-      "rol": "Fuerza y Cond.",
-      "icon": "💪"
     }
   ]
 };
