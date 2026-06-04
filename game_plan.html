@@ -650,68 +650,88 @@ function abrirModalDefensa(item, jugador, def){
     +'<div style="font-size:13px;color:#94a3b8;margin-bottom:4px">'+(jugador.nombre||'')+'</div>'
     +'<div style="font-size:12px;color:#cbd5e1;margin-bottom:14px">'+def.bloqueo+'</div>'
     +'<canvas id="canvas-defensa" width="500" height="420" style="width:100%;background:#0a0f1a;border-radius:10px"></canvas>'
-    +'<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">'
-      +'<div style="flex:1;min-width:90px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#64748b;letter-spacing:1px">DIAGONAL</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:20px;color:#4ade80">'+lec.diagonal+'%</div></div>'
-      +'<div style="flex:1;min-width:90px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#64748b;letter-spacing:1px">CENTRO</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:20px;color:#cbd5e1">'+lec.centro+'%</div></div>'
-      +'<div style="flex:1;min-width:90px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#64748b;letter-spacing:1px">PARALELA</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:20px;color:#cbd5e1">'+lec.paralela+'%</div></div>'
-    +'</div>'
+    +(function(){
+      var qs=[{k:'DIAGONAL',v:lec.diagonal},{k:'CENTRO',v:lec.centro},{k:'PARALELA',v:lec.paralela}];
+      var mx=Math.max(lec.diagonal,lec.centro,lec.paralela);
+      var h='<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">';
+      qs.forEach(function(q){
+        var hot=(q.v===mx && mx>0);
+        h+='<div style="flex:1;min-width:90px;background:'+(hot?'rgba(34,197,94,.15)':'rgba(255,255,255,.04)')+';border:1px solid '+(hot?'rgba(34,197,94,.4)':'rgba(255,255,255,.08)')+';border-radius:8px;padding:8px;text-align:center">'
+          +'<div style="font-size:9px;color:'+(hot?'#4ade80':'#64748b')+';letter-spacing:1px">'+q.k+'</div>'
+          +'<div style="font-family:\'Bebas Neue\',sans-serif;font-size:20px;color:'+(hot?'#4ade80':'#cbd5e1')+'">'+q.v+'%</div></div>';
+      });
+      return h+'</div>';
+    })()
     +'<div style="font-size:12px;color:#94a3b8;margin-top:12px;line-height:1.5">'+def.foco+'<br><span style="color:#64748b">Rebote en bloqueo: '+lec.rebote+'% de sus pelotas</span></div>';
 
   ov.appendChild(box);
   document.body.appendChild(ov);
-  setTimeout(function(){dibujarCanchaDefensa('canvas-defensa',def);},50);
+  setTimeout(function(){dibujarCanchaDefensa('canvas-defensa',def,item);},50);
 }
 function cerrarModalDefensa(){
   var ov=document.getElementById('modal-defensa-ov');
   if(ov)ov.remove();
 }
-function dibujarCanchaDefensa(canvasId, def){
+function dibujarCanchaDefensa(canvasId, def, item){
   var cv=document.getElementById(canvasId); if(!cv)return;
   var ctx=cv.getContext('2d'); var W=cv.width,H=cv.height;
   ctx.clearRect(0,0,W,H);
-  // Mapa cancha: campo rival arriba, propio abajo
-  // Posiciones en pantalla (x,y) para cada zona del campo PROPIO: 4 3 2 / 7 8 9 / 5 6 1
-  var cx=W/2, netY=H*0.42;
+  var netY=H*0.42;
   var colX={izq:W*0.30, cen:W*0.50, der:W*0.70};
-  // campo propio filas
-  var rowY={red:netY+38, med:netY+95, fondo:netY+150};
-  // zona → (x,y) en campo propio
+  var rowY={red:netY+34, med:netY+88, fondo:netY+142};
   var zonaPos={
     4:[colX.izq,rowY.red], 3:[colX.cen,rowY.red], 2:[colX.der,rowY.red],
     7:[colX.izq,rowY.med], 8:[colX.cen,rowY.med], 9:[colX.der,rowY.med],
     5:[colX.izq,rowY.fondo], 6:[colX.cen,rowY.fondo], 1:[colX.der,rowY.fondo]
   };
-  // dibujar cancha
+  // AJUSTES pedidos:
+  // P5 entre zona 5 y 7 (izq) · P4 entre zona 4 y 7 (izq) — espejo para P1/P2 (der)
+  var yEntre57 = (rowY.med+rowY.fondo)/2;   // entre media y fondo
+  var yEntre47 = (rowY.red+rowY.med)/2;     // entre red y media
+  var posAjuste={
+    P5:[colX.izq, yEntre57], P4:[colX.izq, yEntre47],
+    P1:[colX.der, yEntre57], P2:[colX.der, yEntre47]
+  };
+  // cancha
   ctx.strokeStyle='rgba(255,255,255,.25)';ctx.lineWidth=1;
-  ctx.strokeRect(W*0.18,netY+12,W*0.64,170); // campo propio
-  ctx.strokeRect(W*0.18,netY-150,W*0.64,150); // campo rival
-  // red
-  ctx.strokeStyle='rgba(255,255,255,.55)';ctx.lineWidth=2.5;
+  ctx.strokeRect(W*0.18,netY+12,W*0.64,160);
+  ctx.strokeRect(W*0.18,netY-148,W*0.64,150);
+  ctx.strokeStyle='rgba(255,255,255,.5)';ctx.lineWidth=2.5;
   ctx.beginPath();ctx.moveTo(W*0.14,netY);ctx.lineTo(W*0.86,netY);ctx.stroke();
   ctx.fillStyle='#64748b';ctx.font='10px sans-serif';ctx.textAlign='center';
   ctx.fillText('RED',W*0.90,netY+3);
-  ctx.fillText('CAMPO RIVAL',cx,netY-130);
+  ctx.fillText('CAMPO RIVAL',W*0.50,netY-128);
   // atacante rival
-  var atkZona=def.zonaBloqueo===2?'der':'izq'; // si bloqueamos en 2, ataca desde su 4 (nuestra der visual arriba)
   var atkX=def.zonaBloqueo===2?W*0.70:W*0.30;
-  ctx.fillStyle='#e24b4a';ctx.beginPath();ctx.arc(atkX,netY-30,13,0,7);ctx.fill();
-  ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.fillText('ATK',atkX,netY-26);
-  // flecha diagonal
-  ctx.strokeStyle='rgba(226,75,74,.6)';ctx.lineWidth=2;ctx.setLineDash([5,4]);
-  ctx.beginPath();ctx.moveTo(atkX,netY-15);
-  var diagX=def.zonaBloqueo===2?colX.izq:colX.der;
-  ctx.lineTo(diagX,rowY.fondo-20);ctx.stroke();ctx.setLineDash([]);
-  // dibujar puestos
+  ctx.fillStyle='#e24b4a';ctx.beginPath();ctx.arc(atkX,netY-28,13,0,7);ctx.fill();
+  ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.fillText('ATK',atkX,netY-24);
+  // FLECHAS = replican canchita (top 2 destinos KILLS, con colores y %)
+  var cones=['#a855f7','#22c55e'];
+  if(item && item.destinos && item.destinos.length){
+    item.destinos.slice(0,2).forEach(function(d,idx){
+      var pos=zonaPos[d.z]; if(!pos)return;
+      ctx.strokeStyle=cones[idx];ctx.lineWidth=idx===0?3:2;ctx.globalAlpha=idx===0?0.95:0.6;
+      ctx.setLineDash(idx===0?[]:[5,4]);
+      ctx.beginPath();ctx.moveTo(atkX,netY-14);ctx.lineTo(pos[0],pos[1]);ctx.stroke();
+      ctx.setLineDash([]);ctx.globalAlpha=1;
+      ctx.fillStyle=cones[idx];
+      ctx.beginPath();ctx.arc(pos[0],pos[1],4,0,7);ctx.fill();
+      ctx.font='bold 10px sans-serif';ctx.fillText(d.pct+'%',pos[0]+(idx===0?0:14),pos[1]-10);
+    });
+  }
+  ctx.globalAlpha=1;ctx.setLineDash([]);
+  // puestos defensivos (con ajustes P4/P5/P1/P2)
   var puestos=def.puestos;
   Object.keys(puestos).forEach(function(p){
-    var info=puestos[p]; var pos=zonaPos[info.zona]; if(!pos)return;
+    var info=puestos[p];
+    var pos=posAjuste[p] || zonaPos[info.zona]; if(!pos)return;
     var esBloqueo=(p==='BLOQ');
     ctx.fillStyle=esBloqueo?'#f59e0b':'#06b6d4';
     ctx.beginPath();ctx.arc(pos[0],pos[1],esBloqueo?15:14,0,7);ctx.fill();
     ctx.fillStyle='#0a0f1a';ctx.font='bold 11px sans-serif';ctx.textAlign='center';
     ctx.fillText(esBloqueo?'BL':p,pos[0],pos[1]+4);
-    ctx.fillStyle='#94a3b8';ctx.font='8px sans-serif';
-    ctx.fillText(info.txt.substring(0,18),pos[0],pos[1]+26);
+    ctx.fillStyle='#cbd5e1';ctx.font='8px sans-serif';
+    ctx.fillText(info.txt.substring(0,20),pos[0],pos[1]+26);
   });
 }
 
