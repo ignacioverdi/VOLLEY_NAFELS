@@ -294,11 +294,12 @@ canvas.panel-court{position:absolute;inset:0;width:100%;height:100%;opacity:.28;
   </div>
   <div id="rec-subfiltro" style="display:none;gap:4px;flex-wrap:wrap;padding:6px 0;width:100%"></div>
   <div class="jbtns" id="jbtns"></div>
-  
+  <div id="rival-selector" style="display:flex;gap:4px;flex-wrap:wrap;padding:8px 0;width:100%"></div>
 </div>
 <div class="content" id="content"></div>
 
 <script src="datos_partidos.js" onerror="void 0"></script>
+<script src="datos_recepcion.js"></script>
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
 
 
@@ -317,6 +318,9 @@ function cargarRecepcionNafels(){
   if(typeof PARTIDOS_JUGADORES === 'undefined') return;
   PARTIDOS_JUGADORES.forEach(function(j){
     if(!j.recepcion || !j.recepcion.flotado) return;
+    // Solo receptores reales (definidos en RECEPCION_RIVAL_DATA): #8,#9,#10,#11,#14
+    var RECEPTOR_NUMS = [8,9,10,11,14];
+    if(RECEPTOR_NUMS.indexOf(j.num) < 0) return;
     var apellido = j.nombre.replace(/^\d+\s*/,'').split(' ')[0].toUpperCase();
     var rec = j.recepcion;
     // Convertir estructura desde_z1/z6/z5 → desde_z1/z6/z5 con p1/p6/p5
@@ -408,8 +412,9 @@ window._recPartido = 'acumulado';
 function initReceptores(){
   cargarRecepcionNafels();
   RECEPTORES = Object.keys(window.RECEPCION_DATA);
+  if(typeof buildRivalSelector==='function') buildRivalSelector();
   if(RECEPTORES.length === 0){
-    RECEPTORES = ["FIGUEIREDO", "PETER", "BROCH", "BARTHOLET", "BOGDANOVSKI"];
+    RECEPTORES = ["FIGUEIREDO", "BROCH", "PETER", "BARTHOLET", "BOGDANOVSKI"];
   }
   CUR = 'EQUIPO';
   var jbtns=document.getElementById('jbtns');
@@ -422,7 +427,7 @@ function initReceptores(){
     bEq.onclick=function(){
       document.querySelectorAll('.jbtn').forEach(function(x){x.classList.remove('on');x.style.cssText='';});
       bEq.classList.add('on');bEq.style.cssText='border-color:rgba(232,25,44,.5);background:rgba(232,25,44,.12);color:#e8192c';
-      CUR='EQUIPO'; render();
+      CUR='EQUIPO'; CUR_RIVAL='TODOS'; buildRivalSelector(); render();
     };
     jbtns.appendChild(bEq);
     RECEPTORES.forEach(function(p){
@@ -430,7 +435,7 @@ function initReceptores(){
       b.className='jbtn'; b.textContent=p;
       b.onclick=function(){
         document.querySelectorAll('.jbtn').forEach(function(x){x.classList.remove('on');x.style.cssText='';});
-        b.classList.add('on'); CUR=p; render();
+        b.classList.add('on'); CUR=p; CUR_RIVAL='TODOS'; buildRivalSelector(); render();
       };
       jbtns.appendChild(b);
     });
@@ -554,8 +559,83 @@ function makeAcumPanel(td, typeColor, typeLabel){
   return el;
 }
 
+
+var CUR_RIVAL = 'TODOS';
+var CUR = 'EQUIPO';  // rival filter state
+
+function buildRivalSelector(){
+  var sel = document.getElementById('rival-selector');
+  if(!sel) return;
+  // Get rivals available for current player
+  var rivals = ['TODOS'];
+  if(CUR !== 'EQUIPO' && window.RECEPCION_RIVAL_DATA && window.RECEPCION_RIVAL_DATA[CUR]){
+    rivals = rivals.concat(Object.keys(window.RECEPCION_RIVAL_DATA[CUR].por_rival).sort());
+  } else if(CUR === 'EQUIPO' && window.RECEPCION_RIVAL_DATA){
+    var rset = {};
+    Object.keys(window.RECEPCION_RIVAL_DATA).forEach(function(p){
+      Object.keys(window.RECEPCION_RIVAL_DATA[p].por_rival).forEach(function(r){rset[r]=1;});
+    });
+    rivals = rivals.concat(Object.keys(rset).sort());
+  }
+  sel.innerHTML = '';
+  rivals.forEach(function(rv){
+    var b = document.createElement('button');
+    b.textContent = rv === 'TODOS' ? '🌐 TODOS' : rv;
+    b.style.cssText = 'padding:5px 10px;border-radius:6px;border:1px solid '+(CUR_RIVAL===rv?'rgba(34,197,94,.5)':'rgba(255,255,255,.1)')+';background:'+(CUR_RIVAL===rv?'rgba(34,197,94,.15)':'rgba(255,255,255,.03)')+';color:'+(CUR_RIVAL===rv?'#4ade80':'#94a3b8')+';font-size:10px;font-weight:700;letter-spacing:.5px;cursor:pointer;font-family:Barlow Condensed,sans-serif';
+    b.onclick = function(){ CUR_RIVAL = rv; buildRivalSelector(); render(); };
+    sel.appendChild(b);
+  });
+}
+
+function getPlayerRecData(playerKey){
+  // Returns reception structure filtered by CUR_RIVAL
+  if(!window.RECEPCION_RIVAL_DATA || !window.RECEPCION_RIVAL_DATA[playerKey]) return null;
+  var pd = window.RECEPCION_RIVAL_DATA[playerKey];
+  if(CUR_RIVAL === 'TODOS') return pd.acumulado;
+  return pd.por_rival[CUR_RIVAL] || null;
+}
+
+
+function calcEquipoDataRival(rival){
+  // Aggregate all receptors for a specific rival
+  if(!window.RECEPCION_RIVAL_DATA) return null;
+  var agg = {flotado:{},potencia:{}};
+  ['flotado','potencia'].forEach(function(tp){
+    ['desde_z1','desde_z6','desde_z5'].forEach(function(dz){
+      agg[tp][dz]={p1:{tot:0,eff:0,pos:0,neg:0,err:0,perf:0},p6:{tot:0,eff:0,pos:0,neg:0,err:0,perf:0},p5:{tot:0,eff:0,pos:0,neg:0,err:0,perf:0}};
+    });
+  });
+  Object.keys(window.RECEPCION_RIVAL_DATA).forEach(function(p){
+    var pr = window.RECEPCION_RIVAL_DATA[p].por_rival[rival];
+    if(!pr) return;
+    ['flotado','potencia'].forEach(function(tp){
+      ['desde_z1','desde_z6','desde_z5'].forEach(function(dz){
+        ['p1','p6','p5'].forEach(function(pz){
+          var src=pr[tp]&&pr[tp][dz]&&pr[tp][dz][pz];
+          if(src){var a=agg[tp][dz][pz];a.tot+=src.tot||0;a.perf+=src.perf||0;a.pos+=src.pos||0;a.neg+=src.neg||0;a.err+=src.err||0;}
+        });
+      });
+    });
+  });
+  // recompute eff
+  ['flotado','potencia'].forEach(function(tp){
+    ['desde_z1','desde_z6','desde_z5'].forEach(function(dz){
+      ['p1','p6','p5'].forEach(function(pz){
+        var c=agg[tp][dz][pz];
+        c.eff = c.tot? Math.round((c.perf+0.5*c.pos-0.5*c.neg-c.err)/c.tot*100):0;
+      });
+    });
+  });
+  return agg;
+}
+
 function render(){
-  var d = CUR === 'EQUIPO' ? calcEquipoData() : (window.RECEPCION_DATA && window.RECEPCION_DATA[CUR]);
+  var d;
+  if(CUR === 'EQUIPO'){
+    d = (CUR_RIVAL==='TODOS') ? calcEquipoData() : calcEquipoDataRival(CUR_RIVAL);
+  } else {
+    d = getPlayerRecData(CUR) || (window.RECEPCION_DATA && window.RECEPCION_DATA[CUR]);
+  }
   var cont = document.getElementById('content');
   cont.innerHTML = '';
 
@@ -619,8 +699,9 @@ if(jugParam){
     });
   }
 }
-document.fonts.ready.then(function(){
+(function(){var _init=function(){
   initReceptores();
+  if(typeof render==='function') render();
   // Read ?jug= param to preselect player
   var params = new URLSearchParams(window.location.search);
   var jugParam = params.get('jug');
@@ -639,7 +720,7 @@ document.fonts.ready.then(function(){
     }
   }
   setTimeout(render,100);
-}).catch(function(){ setTimeout(render,400); });
+};if(document.fonts&&document.fonts.ready){document.fonts.ready.then(_init).catch(_init);}else{if(document.readyState!=="loading")setTimeout(_init,50);else document.addEventListener("DOMContentLoaded",function(){setTimeout(_init,50);});}})();
 </script>
 
 <script>
@@ -717,7 +798,7 @@ function recLoadEnt(nombre){
 }
 
 function recBuildJbtns(receptores){
-  if(!receptores || !receptores.length) receptores = ["FIGUEIREDO", "PETER", "BROCH", "BARTHOLET", "BOGDANOVSKI"];
+  if(!receptores || !receptores.length) receptores = ["FIGUEIREDO", "BROCH", "PETER", "BARTHOLET", "BOGDANOVSKI"];
   CUR = 'EQUIPO';
   var jbtns = document.getElementById('jbtns');
   if(!jbtns) return;
@@ -726,7 +807,7 @@ function recBuildJbtns(receptores){
   var bEq = recMakeBtn('EQUIPO', function(){
     jbtns.querySelectorAll('button').forEach(function(x){ recBtnOff(x); x.style.cssText=''; });
     recBtnOn(bEq); bEq.style.cssText = 'border-color:rgba(232,25,44,.5);background:rgba(232,25,44,.12);color:#e8192c';
-    CUR='EQUIPO'; render();
+    CUR='EQUIPO'; CUR_RIVAL='TODOS'; buildRivalSelector(); render();
   });
   bEq.classList.add('jbtn','on');
   bEq.style.cssText = 'border-color:rgba(232,25,44,.5);background:rgba(232,25,44,.12);color:#e8192c';
@@ -735,7 +816,7 @@ function recBuildJbtns(receptores){
   receptores.forEach(function(p){
     var b = recMakeBtn(p, function(){
       jbtns.querySelectorAll('button').forEach(function(x){ recBtnOff(x); x.style.cssText=''; });
-      recBtnOn(b); CUR=p; render();
+      recBtnOn(b); CUR=p; CUR_RIVAL='TODOS'; buildRivalSelector(); render();
     });
     b.classList.add('jbtn');
     jbtns.appendChild(b);

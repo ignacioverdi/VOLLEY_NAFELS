@@ -248,8 +248,7 @@ body{padding-top:56px}
   <div class="arm-title">ARMADORES <span>Nafels</span></div>
   <div style="display:flex;gap:6px;margin-left:8px">
     <button class="arm-btn on" onclick="switchArm('04',this)">#4 VAZQUEZ</button>
-    <button class="arm-btn"   onclick="switchArm('09',this)">#9 GODOY</button>
-    <button class="arm-btn"   onclick="switchArm('19',this)">#19 DIAZ BOLLI</button>
+    <button class="arm-btn"   onclick="switchArm('01',this)">#1 DEECKE</button>
   </div>
 </div>
 
@@ -291,7 +290,7 @@ body{padding-top:56px}
   </div>
 </div>
 
-<script src="datos_casla.js" onerror="void 0"></script>
+<script src="datos_armadores.js"></script>
 <script src="datos_partidos.js" onerror="void 0"></script>
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
 <script>
@@ -305,17 +304,17 @@ body{padding-top:56px}
 window.ARMADORES_DATA = {};
 
 function cargarDatosNafels(){
-  if(typeof Nafels_ARMADOR === 'undefined') return;
+  if(typeof NAFELS_ARMADOR === 'undefined') return;
 
   // Setear ARMADOR_DATA que usa renderArmador() directamente
   window.ARMADOR_DATA = {
-    titular: Nafels_ARMADOR.titular || null,
-    suplente: Nafels_ARMADOR.suplente || null
+    titular: NAFELS_ARMADOR.titular || null,
+    suplente: NAFELS_ARMADOR.suplente || null
   };
 
   // También llenar ARMADORES_DATA por número (por si lo usan otras funciones)
   ['titular','suplente'].forEach(function(tipo){
-    var arm = Nafels_ARMADOR[tipo];
+    var arm = NAFELS_ARMADOR[tipo];
     if(!arm || !arm.nombre) return;
     var num = null;
     if(typeof Nafels_JUGADORES !== 'undefined'){
@@ -324,13 +323,14 @@ function cargarDatosNafels(){
       });
       if(found) num = String(found.num).padStart(2,'0');
     }
-    if(!num) num = tipo === 'titular' ? '04' : '09';
+    if(!num) num = tipo === 'titular' ? '04' : '01';
     window.ARMADORES_DATA[num] = {
       nombre: arm.nombre,
       numero: parseInt(num),
       rotaciones: arm.rotaciones || [],
       pills: arm.pills || [],
       recepcion: arm.recepcion || [],
+      llamadas: arm.llamadas || [],
       so: arm.so || {},
       tr: arm.tr || {}
     };
@@ -340,7 +340,7 @@ function cargarDatosNafels(){
 
 
 
-var ARMADOR_DATA = {"titular": {"nombre": "4 VAZQUEZ", "rotaciones": [{"pos": "P1", "total": 0, "dist": [{"zona": 4, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 6, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}, {"pos": "P6", "total": 0, "dist": [{"zona": 4, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 6, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}, {"pos": "P5", "total": 0, "dist": [{"zona": 4, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 6, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}, {"pos": "P4", "total": 0, "dist": [{"zona": 4, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 6, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}, {"pos": "P3", "total": 0, "dist": [{"zona": 4, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 6, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}, {"pos": "P2", "total": 0, "dist": [{"zona": 4, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 6, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}], "pills": [{"label": "P1", "eff": 0, "tot": 0, "pts": 0, "pts_pct": 0, "err_pct": 0}, {"label": "P6", "eff": 0, "tot": 0, "pts": 0, "pts_pct": 0, "err_pct": 0}, {"label": "P5", "eff": 0, "tot": 0, "pts": 0, "pts_pct": 0, "err_pct": 0}, {"label": "P4", "eff": 0, "tot": 0, "pts": 0, "pts_pct": 0, "err_pct": 0}, {"label": "P3", "eff": 0, "tot": 0, "pts": 0, "pts_pct": 0, "err_pct": 0}, {"label": "P2", "eff": 0, "tot": 0, "pts": 0, "pts_pct": 0, "err_pct": 0}, {"label": "SO", "eff": 0, "tot": 0, "pts": 0, "pts_pct": 0, "err_pct": 0}, {"label": "TR", "eff": 0, "tot": 0, "pts": 0, "pts_pct": 0, "err_pct": 0}], "recepcion": [{"label": "SO", "eff": 0}, {"label": "REC #", "eff": 0}, {"label": "REC +", "eff": 0}, {"label": "REC !", "eff": 0}, {"label": "REC -", "eff": 0}, {"label": "TRANS", "eff": 0}], "so": {"label": "SO", "total": 0, "dist": [{"zona": 4, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 8, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 9, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}, "tr": {"label": "TR", "total": 0, "dist": [{"zona": 4, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 3, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 2, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 8, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}, {"zona": 9, "tot": 0, "pts": 0, "pct": 0, "pct_p": 0}]}}, "suplente": null};
+var ARMADOR_DATA = {titular:null, suplente:null};
 
 var FORMACION_ATAQUE = {
   'P1': { front:[{n:'Z4',z:4},{n:'Z3',z:3},{n:'Z2',z:2}], back:[{n:'Z6',z:6}] },
@@ -1231,7 +1231,7 @@ function renderArmadorConFiltro(){
       if(sec) sec.innerHTML='<div style="padding:40px;text-align:center;color:#475569;font-size:12px;letter-spacing:1px">SIN DATOS DE ARMADOR PARA ESTE PARTIDO</div>';
       return;
     }
-    // Set ARMADOR_DATA with mismo formato que Nafels_ARMADOR
+    // Set ARMADOR_DATA with mismo formato que NAFELS_ARMADOR
     window.ARMADOR_DATA = {
       titular:  pd.armadores.titular  || null,
       suplente: pd.armadores.suplente || null
@@ -1241,15 +1241,11 @@ function renderArmadorConFiltro(){
 }
 
 // Init subfiltro
-document.fonts.ready.then(function(){
+(function(){var _init=function(){
   cargarDatosNafels();
   buildArmSubfiltro();
   setTimeout(function(){ renderArmador(); }, 100);
-}).catch(function(){
-  cargarDatosNafels();
-  buildArmSubfiltro();
-  setTimeout(function(){ renderArmador(); }, 400);
-});
+};if(document.fonts&&document.fonts.ready){document.fonts.ready.then(_init).catch(_init);}else{if(document.readyState!=="loading")setTimeout(_init,50);else document.addEventListener("DOMContentLoaded",function(){setTimeout(_init,50);});}})();
 </script>
 </body>
 </html>
