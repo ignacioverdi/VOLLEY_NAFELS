@@ -179,7 +179,7 @@ function tryInit(n){
 }
 (function(){
   function _go(){ tryInit(25); }
-  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(_go).catch(_go); }
+  if(document.fonts && document.fonts.ready){ (function(){var _f=_go;if(document.fonts&&document.fonts.ready){document.fonts.ready.then(_f).catch(_f);}else{if(document.readyState!=="loading")setTimeout(_f,50);else document.addEventListener("DOMContentLoaded",function(){setTimeout(_f,50);});}})(); }
   else if(document.readyState !== "loading"){ setTimeout(_go,50); }
   else { document.addEventListener("DOMContentLoaded", function(){ setTimeout(_go,50); }); }
 })();

@@ -24,6 +24,17 @@ ESTRUCTURA DE ARCHIVOS:
 import os, re, json, argparse, shutil
 from collections import defaultdict, Counter
 
+# ── NORMALIZACIÓN DE COMBOS AL CANÓNICO MUNDIAL ──────────────────────
+# Equivalencias argentino → canónico (mismo ataque, distinto idioma de scout)
+COMBO_EQUIV = {
+    'W4':'X5','G4':'V5','J1':'X1','J4':'XM','J3':'X2','J2':'X7','J5':'CB',
+    'W2':'X6','G2':'V6','Y9':'X8','G9':'V8','Y8':'XP','G8':'VP',
+}
+def normalize_combo(combo):
+    """Convierte cualquier código de ataque a su canónico mundial."""
+    return COMBO_EQUIV.get(combo, combo)
+
+
 # ── CONFIGURACIÓN ─────────────────────────────────────────────────
 NLA_TEAMS = ['Amriswil','Chenois','Colombier','Jona','Lausanne',
              'Nafels','Schonenwerd','St Gallen']
@@ -202,7 +213,7 @@ def parse_dvw_both(fpath, temporada):
                 current_atype=0 if t!=pfx else 1
             if t!=pfx: continue
 
-            action={'pnum':pnum,'stype':stype,'effect':effect,'combo':combo,
+            action={'pnum':pnum,'stype':stype,'effect':effect,'combo': normalize_combo(combo),
                     'orig':orig,'dest':dest,'setter_pos':setter_pos,'set_num':set_num,
                     'date':date,'rival':rival,'atype':current_atype,
                     'srv_orig':prev_srv_orig,'temporada':temporada}
@@ -337,10 +348,62 @@ def calculate_stats(teams_data, temporada_filter=None):
     return players, team_stats_out
 
 # ── BUILD HEATMAPS ────────────────────────────────────────────────
+
+def apply_heatmap_safety_fixes(html):
+    """Apply robustness fixes to generated heatmaps: protect localStorage, document.fonts."""
+    # Protect localStorage
+    html = html.replace(
+        "var l=localStorage.getItem('vb_lang');",
+        "var l=null;try{l=localStorage.getItem('vb_lang');}catch(e){}")
+    html = html.replace(
+        "localStorage.setItem('vb_lang',l);",
+        "try{localStorage.setItem('vb_lang',l);}catch(e){}")
+    # Protect document.fonts.ready
+    import re as _re
+    html = _re.sub(
+        r'document\.fonts\.ready\.then\(([^)]+)\)\.catch\(([^)]+)\);',
+        r'(function(){var _f=\1;if(document.fonts&&document.fonts.ready){document.fonts.ready.then(_f).catch(_f);}else{setTimeout(_f,50);}})();',
+        html)
+    return html
+
+
+
+def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=None):
+    """Genera liga_data.js con TODA la liga para los heatmaps universales."""
+    COMBO_IDX={c:i for i,c in enumerate(combos)}
+    RES_IDX={'#':0,'/':1,'+':2,'!':3,'=':4,'-':5}
+    REC_IDX={'#':0,'+':1,'!':2,'-':3,'/':4,'=':5}
+    CALL_LIST=['K1','K7','KM','K2','KC','KP','KE','KB','KO','KS']
+    CALL_IDX={c:i for i,c in enumerate(CALL_LIST)}
+    setters=setters or {}; rallies=rallies or {}
+    LIGA={'combos':combos,'calls':CALL_LIST,'teams':{}}
+    for team, td in teams_data.items():
+        rivals=sorted(set(a.get('rival','') for pd in td.values() for sk in ['atk','srv','rec'] for a in pd.get(sk,[]) if a.get('rival')))
+        ridx={r:i for i,r in enumerate(rivals)}
+        atk_p,srv_p,rec_p={},{},{}
+        for ns,pd in td.items():
+            info=pd.get('info') or {}; name=info.get('name',ns); num=int(ns)
+            atk,srv,rec=pd.get('atk',[]),pd.get('srv',[]),pd.get('rec',[])
+            if atk: atk_p[ns]={'name':name,'num':num,'a':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,a.get('atype',0),COMBO_IDX.get(a.get('combo',''),-1),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),6,-1] for a in atk]}
+            if srv:
+                stl=list(dict.fromkeys('S'+a.get('stype','Q') for a in srv)) or ['SQ']; sidx={s:i for i,s in enumerate(stl)}
+                srv_p[ns]={'name':name,'num':num,'stypes':stl,'s':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,sidx.get('S'+a.get('stype','Q'),0),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0)] for a in srv]}
+            if rec:
+                rtl=list(dict.fromkeys('R'+a.get('stype','M') for a in rec)) or ['RM']; rtidx={r:i for i,r in enumerate(rtl)}
+                rec_p[ns]={'name':name,'num':num,'rtypes':rtl,'r':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,rtidx.get('R'+a.get('stype','M'),0),REC_IDX.get(a.get('effect','-'),3),a.get('orig',0),a.get('dest',0)] for a in rec]}
+        sn=setters.get(team,[None])[0] if isinstance(setters.get(team),list) else setters.get(team)
+        rl=rallies.get(team,[])
+        sname=td.get(str(sn),{}).get('info',{}).get('name',f'#{sn}') if sn else ''
+        arm=[[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],0,COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig']] for r in rl]
+        LIGA['teams'][team.lower().replace(' ','_')]={'name':team,'rivals':rivals,'atk':atk_p,'srv':srv_p,'rec':rec_p,'setter':{'num':sn,'name':sname,'s':arm} if sn else None}
+    with open(os.path.join(output_dir,'liga_data.js'),'w',encoding='utf-8') as f:
+        f.write('window.LIGA_DATA = '+json.dumps(LIGA,ensure_ascii=False)+';\n')
+    return len(LIGA['teams'])
+
+
 def build_heatmaps(teams_data, template_dir='.', output_dir='.', temporada_filter=None):
     """Build ataque/saque/recepcion heatmaps for each NLA team."""
     for team in NLA_TEAMS:
-        if team == 'Nafels': continue
         td = teams_data.get(team, {})
         if not td: continue
 
@@ -411,6 +474,7 @@ def build_heatmaps(teams_data, template_dir='.', output_dir='.', temporada_filte
             new_raw = 'var RAW=' + json.dumps(raw_data, ensure_ascii=False) + ';'
             old_raw = re2.search(r'var RAW=\{.*?\};', html, re2.DOTALL)
             if old_raw: html = html[:old_raw.start()] + new_raw + html[old_raw.end():]
+            html = apply_heatmap_safety_fixes(html)
             out_path = os.path.join(output_dir, out)
             with open(out_path, 'w', encoding='utf-8') as f: f.write(html)
 
