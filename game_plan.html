@@ -339,6 +339,78 @@ select, select option {
 // ═══════════════════════════════════════════════════════════════
 // GAME PLAN UNIVERSAL — carga el rival desde liga_data.js (?rival=X)
 // ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+// SISTEMA DE BLOQUEO-DEFENSA AUTOCOMPLETADO
+// Principio: bloqueo a la PELOTA en el lado OPUESTO (tapa, abre diagonal) → defensa a la diagonal
+// Mapa cancha propia:  4 3 2 (red) / 7 8 9 / 5 6 1 (fondo)
+// ═══════════════════════════════════════════════════════════════
+
+function gpClasificarDestinos(destinos, ladoAtaque){
+  // destinos: [{z, pct}] · ladoAtaque 'izq'(X5/pos4 rival) o 'der'(X6/pos2 rival)
+  var rebote=0, diagonal=0, centro=0, paralela=0;
+  destinos.forEach(function(d){
+    var z=d.z, p=d.pct;
+    if(z===2||z===3||z===4){ rebote+=p; return; }   // rebote bloqueo/finta
+    if(ladoAtaque==='izq'){ // X5: diagonal cae en 5,7 / paralela en 1,9
+      if(z===5||z===7) diagonal+=p;
+      else if(z===1||z===9) paralela+=p;
+      else if(z===6||z===8) centro+=p;
+    } else { // X6 espejo: diagonal en 1,9 / paralela en 5,7
+      if(z===1||z===9) diagonal+=p;
+      else if(z===5||z===7) paralela+=p;
+      else if(z===6||z===8) centro+=p;
+    }
+  });
+  var real=diagonal+centro+paralela;
+  return { rebote:Math.round(rebote),
+    diagonal: real?Math.round(diagonal/real*100):0,
+    centro: real?Math.round(centro/real*100):0,
+    paralela: real?Math.round(paralela/real*100):0 };
+}
+
+function gpDefensa(combo, origen, destinos){
+  var esIzq = (combo==='X5'||combo==='V5'||origen===4);
+  var esDer = (combo==='X6'||combo==='V6'||origen===2);
+  if(!esIzq && !esDer) return null;
+  var lado = esIzq?'izq':'der';
+  var c = gpClasificarDestinos(destinos, lado);
+  var cargaDiagonal = c.diagonal >= c.paralela;
+
+  if(esIzq){ // X5: rival ataca desde su zona 4 → bloqueo en NUESTRA zona 2 (lado opuesto)
+    return {
+      titulo:'Defensa vs '+combo+' (ataque desde zona 4 rival)',
+      zonaBloqueo:2,
+      bloqueo:'Bloqueo en ZONA 2 (lado opuesto) — a la pelota, tapa y abre diagonal',
+      puestos:{
+        BLOQ:{zona:2, txt:'Bloqueo a la pelota'},
+        P4:{zona:4, txt:'Baja a la diagonal corta'},
+        P5:{zona:5, txt:'Diagonal (doble defensa)'},
+        P6:{zona:6, txt:'Diagonal (doble defensa)'},
+        P1:{zona:9, txt:'Sube a posición 9'}
+      },
+      lectura:c,
+      foco: cargaDiagonal ? 'Diagonal cargada: '+c.diagonal+'% de su ataque real'
+                          : 'OJO: rompe a paralela ('+c.paralela+'%) — ajustar P6'
+    };
+  } else { // X6 espejo: rival desde su zona 2 → bloqueo en NUESTRA zona 4
+    return {
+      titulo:'Defensa vs '+combo+' (ataque desde zona 2 rival)',
+      zonaBloqueo:4,
+      bloqueo:'Bloqueo en ZONA 4 (lado opuesto) — a la pelota, tapa y abre diagonal',
+      puestos:{
+        BLOQ:{zona:4, txt:'Bloqueo a la pelota'},
+        P2:{zona:2, txt:'Baja a la diagonal corta'},
+        P1:{zona:1, txt:'Diagonal (doble defensa)'},
+        P6:{zona:6, txt:'Diagonal (doble defensa)'},
+        P5:{zona:7, txt:'Sube a posición 7'}
+      },
+      lectura:c,
+      foco: cargaDiagonal ? 'Diagonal cargada: '+c.diagonal+'% de su ataque real'
+                          : 'OJO: rompe a paralela ('+c.paralela+'%) — ajustar P6'
+    };
+  }
+}
+
 var GP_PARAMS = new URLSearchParams(window.location.search);
 var GP_RIVAL_SLUG = (GP_PARAMS.get('rival') || '').toLowerCase();
 var GP_L = window.LIGA_DATA;
@@ -544,6 +616,100 @@ function gpBuildJugadores(){
   return jugadores;
 }
 var JUGADORES = gpBuildJugadores();
+
+// ═══ MODAL DE DEFENSA (botón DIG) ═══════════════════════════════
+function abrirModalDefensa(item, jugador, def){
+  var ov=document.createElement('div');
+  ov.id='modal-defensa-ov';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  ov.addEventListener('click',function(e){if(e.target===ov)cerrarModalDefensa();});
+
+  var box=document.createElement('div');
+  box.style.cssText='background:#0f1623;border:1px solid rgba(255,255,255,.12);border-radius:16px;max-width:560px;width:100%;max-height:90vh;overflow:auto;padding:22px;';
+
+  var lec=def.lectura||{diagonal:0,centro:0,paralela:0,rebote:0};
+  box.innerHTML =
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
+    +'<div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;letter-spacing:1px;color:'+(jugador.color||'#e8192c')+'">DEFENSA vs '+item.cod+'</div>'
+    +'<div style="cursor:pointer;font-size:24px;color:#64748b;line-height:1" onclick="cerrarModalDefensa()">&times;</div></div>'
+    +'<div style="font-size:13px;color:#94a3b8;margin-bottom:4px">'+(jugador.nombre||'')+'</div>'
+    +'<div style="font-size:12px;color:#cbd5e1;margin-bottom:14px">'+def.bloqueo+'</div>'
+    +'<canvas id="canvas-defensa" width="500" height="420" style="width:100%;background:#0a0f1a;border-radius:10px"></canvas>'
+    +'<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">'
+      +'<div style="flex:1;min-width:90px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#64748b;letter-spacing:1px">DIAGONAL</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:20px;color:#4ade80">'+lec.diagonal+'%</div></div>'
+      +'<div style="flex:1;min-width:90px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#64748b;letter-spacing:1px">CENTRO</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:20px;color:#cbd5e1">'+lec.centro+'%</div></div>'
+      +'<div style="flex:1;min-width:90px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#64748b;letter-spacing:1px">PARALELA</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:20px;color:#cbd5e1">'+lec.paralela+'%</div></div>'
+    +'</div>'
+    +'<div style="font-size:12px;color:#94a3b8;margin-top:12px;line-height:1.5">'+def.foco+'<br><span style="color:#64748b">Rebote en bloqueo: '+lec.rebote+'% de sus pelotas</span></div>';
+
+  ov.appendChild(box);
+  document.body.appendChild(ov);
+  setTimeout(function(){dibujarCanchaDefensa('canvas-defensa',def,item);},50);
+}
+function cerrarModalDefensa(){
+  var ov=document.getElementById('modal-defensa-ov');
+  if(ov)ov.remove();
+}
+function dibujarCanchaDefensa(canvasId, def, item){
+  var cv=document.getElementById(canvasId); if(!cv)return;
+  var ctx=cv.getContext('2d'); var W=cv.width,H=cv.height;
+  ctx.clearRect(0,0,W,H);
+  var netY=H*0.42;
+  var colX={izq:W*0.30, cen:W*0.50, der:W*0.70};
+  var rowY={red:netY+34, med:netY+88, fondo:netY+142};
+  // P4 baja un poco (entre red y media) · P5 sube un poco (entre media y fondo)
+  var p4y=netY+60, p5y=netY+115;
+  var zonaPos={
+    4:[colX.izq,rowY.red], 3:[colX.cen,rowY.red], 2:[colX.der,rowY.red],
+    7:[colX.izq,rowY.med], 8:[colX.cen,rowY.med], 9:[colX.der,rowY.med],
+    5:[colX.izq,rowY.fondo], 6:[colX.cen,rowY.fondo], 1:[colX.der,rowY.fondo]
+  };
+  // ajustes pedidos: P4 entre 4 y 7 · P5 entre 7 y 5
+  var posAjuste={ P4:[colX.izq,p4y], P5:[colX.izq,p5y] };
+  // cancha
+  ctx.strokeStyle='rgba(255,255,255,.25)';ctx.lineWidth=1;
+  ctx.strokeRect(W*0.18,netY+12,W*0.64,160);
+  ctx.strokeRect(W*0.18,netY-148,W*0.64,150);
+  ctx.strokeStyle='rgba(255,255,255,.5)';ctx.lineWidth=2.5;
+  ctx.beginPath();ctx.moveTo(W*0.14,netY);ctx.lineTo(W*0.86,netY);ctx.stroke();
+  ctx.fillStyle='#64748b';ctx.font='10px sans-serif';ctx.textAlign='center';
+  ctx.fillText('RED',W*0.90,netY+3);
+  ctx.fillText('CAMPO RIVAL',W*0.50,netY-128);
+  // atacante rival (origen)
+  var atkX=def.zonaBloqueo===2?W*0.70:W*0.30;
+  ctx.fillStyle='#e24b4a';ctx.beginPath();ctx.arc(atkX,netY-28,13,0,7);ctx.fill();
+  ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.fillText('ATK',atkX,netY-24);
+  // FLECHAS = replican la canchita (top 2 destinos con colores y %)
+  var cones=['#a855f7','#22c55e'];
+  if(item && item.destinos && item.destinos.length){
+    item.destinos.slice(0,2).forEach(function(d,idx){
+      var pos=zonaPos[d.z]; if(!pos)return;
+      ctx.strokeStyle=cones[idx];ctx.lineWidth=idx===0?3:2;ctx.globalAlpha=idx===0?0.95:0.6;
+      ctx.setLineDash(idx===0?[]:[5,4]);
+      ctx.beginPath();ctx.moveTo(atkX,netY-14);ctx.lineTo(pos[0],pos[1]);ctx.stroke();
+      ctx.setLineDash([]);ctx.globalAlpha=1;
+      // punta de flecha + %
+      ctx.fillStyle=cones[idx];
+      ctx.beginPath();ctx.arc(pos[0],pos[1],4,0,7);ctx.fill();
+      ctx.font='bold 10px sans-serif';ctx.fillText(d.pct+'%',pos[0]+(idx===0?0:14),pos[1]-10);
+    });
+  }
+  ctx.globalAlpha=1;ctx.setLineDash([]);
+  // puestos defensivos
+  var puestos=def.puestos;
+  Object.keys(puestos).forEach(function(p){
+    var info=puestos[p];
+    var pos=posAjuste[p] || zonaPos[info.zona]; if(!pos)return;
+    var esBloqueo=(p==='BLOQ');
+    ctx.fillStyle=esBloqueo?'#f59e0b':'#06b6d4';
+    ctx.beginPath();ctx.arc(pos[0],pos[1],esBloqueo?15:14,0,7);ctx.fill();
+    ctx.fillStyle='#0a0f1a';ctx.font='bold 11px sans-serif';ctx.textAlign='center';
+    ctx.fillText(esBloqueo?'BL':p,pos[0],pos[1]+4);
+    ctx.fillStyle='#cbd5e1';ctx.font='8px sans-serif';
+    ctx.fillText(info.txt.substring(0,20),pos[0],pos[1]+26);
+  });
+}
+
 
 
 // ═══════════════════════════════════════════════════════
@@ -777,6 +943,17 @@ function buildCanchita(item,jIdx,i,prefix,W,H,drawFn,color,j){
   vbtn.textContent='🎬';
   vbtn.addEventListener('click',function(e){if(!item.video){e.preventDefault();}e.stopPropagation();});
   codWrap.appendChild(cod);codWrap.appendChild(vbtn);
+  if(prefix==='ma' && typeof gpDefensa==='function'){
+    var defData=gpDefensa(item.cod,item.orig,item.destinos||[]);
+    if(defData){
+      var dbtn=document.createElement('span');
+      dbtn.title='Ver defensa';
+      dbtn.style.cssText='font-size:9px;font-weight:800;letter-spacing:.5px;padding:2px 5px;border:1px solid '+color+';border-radius:4px;color:'+color+';cursor:pointer;line-height:1;';
+      dbtn.textContent='DIG';
+      dbtn.addEventListener('click',function(e){e.stopPropagation();abrirModalDefensa(item,j,defData);});
+      codWrap.appendChild(dbtn);
+    }
+  }
   var tipo=document.createElement('span');
   tipo.className='canchita-tipo';
   tipo.textContent=item.tipo;
