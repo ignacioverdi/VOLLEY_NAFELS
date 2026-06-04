@@ -177,7 +177,12 @@ function tryInit(n){
   }
   else if(n>0) setTimeout(function(){tryInit(n-1);},200);
 }
-document.fonts.ready.then(function(){tryInit(25);}).catch(function(){tryInit(25);});
+(function(){
+  function _go(){ tryInit(25); }
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(_go).catch(_go); }
+  else if(document.readyState !== "loading"){ setTimeout(_go,50); }
+  else { document.addEventListener("DOMContentLoaded", function(){ setTimeout(_go,50); }); }
+})();
 
 function checkURL(){
   var p=new URLSearchParams(window.location.search);
@@ -202,6 +207,9 @@ function selectJug(num){
   G.num = num;
   var jugs=(typeof PARTIDOS_JUGADORES!=='undefined')?PARTIDOS_JUGADORES:(window.EQUIPO_DATA?window.EQUIPO_DATA.jugadores:[]);
   G.jug = jugs.find(function(j){return j.num===num;}) || {num:num,nombre:'#'+num};
+  // Set accumulated data for ataque/saque/recepcion tabs
+  G.partJug = (typeof PARTIDOS_JUGADORES!=='undefined') ? PARTIDOS_JUGADORES.find(function(j){return j.num===num;}) : null;
+  G.entJug  = G.partJug;
   document.querySelectorAll('.jbtn').forEach(function(b){b.classList.remove('active');});
   var btns=document.querySelectorAll('.jbtn');
   for(var i=0;i<btns.length;i++){if(btns[i].textContent.indexOf('#'+num+' ')===0){btns[i].classList.add('active');break;}}
@@ -486,6 +494,31 @@ function renderRendimiento(c){
 }
 
 // ── ATAQUE ────────────────────────────────────────────────────────────
+
+function buildCanchitaHTML(item, color){
+  var hasDatos = item.tot > 0;
+  if(!hasDatos) return '<div style="padding:12px;text-align:center;color:#475569;font-size:11px">Sin datos</div>';
+  var destinos = item.destinos || [];
+  // Zone position map for a mini court (zones 1-9)
+  var zonePos = {
+    4:{x:16,y:18}, 3:{x:50,y:18}, 2:{x:84,y:18},
+    7:{x:16,y:50}, 8:{x:50,y:50}, 9:{x:84,y:50},
+    5:{x:16,y:82}, 6:{x:50,y:82}, 1:{x:84,y:82}
+  };
+  var maxPct = Math.max.apply(null, destinos.map(function(d){return d.pct;}).concat([1]));
+  var dots = destinos.map(function(d){
+    var p = zonePos[d.z] || {x:50,y:50};
+    var size = 8 + (d.pct/maxPct)*22;
+    var op = 0.35 + (d.pct/maxPct)*0.65;
+    return '<div style="position:absolute;left:'+p.x+'%;top:'+p.y+'%;transform:translate(-50%,-50%);width:'+size+'px;height:'+size+'px;border-radius:50%;background:'+color+';opacity:'+op+';display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#fff">'+d.pct+'</div>';
+  }).join('');
+  return '<div style="position:relative;width:100%;aspect-ratio:1;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:6px">'
+    +'<div style="position:absolute;top:0;left:0;right:0;height:1px;background:rgba(255,255,255,.15)"></div>'
+    +'<div style="position:absolute;top:33%;left:0;right:0;height:1px;background:rgba(255,255,255,.06)"></div>'
+    +'<div style="position:absolute;top:66%;left:0;right:0;height:1px;background:rgba(255,255,255,.06)"></div>'
+    +dots+'</div>';
+}
+
 function renderAtaque(c,sesData){
   var html='';
   // From PARTIDOS_INDIVIDUAL or acumulado
@@ -500,7 +533,7 @@ function renderAtaque(c,sesData){
         html+='<div class="cancha-title"><span>'+a.cod+'</span>';
         html+='<span class="cancha-stat" style="color:#F97316">'+a.eff+'%</span>';
         html+='<span style="font-size:9px;color:var(--muted)">'+a.tot+' acc · '+a.pts+' pts</span></div>';
-        html+=buildCanchita(a,'#F97316');
+        html+=buildCanchitaHTML(a,'#F97316');
         html+='</div>';
       });
       html+='</div>';
@@ -570,7 +603,7 @@ function renderSaque(c,sesData){
         html+='<div class="cancha-title"><span>'+(s.tipo||s.cod)+'</span>';
         html+='<span class="cancha-stat" style="color:#F59E0B">'+s.eff+'%</span>';
         html+='<span style="font-size:9px;color:var(--muted)">'+s.tot+' saq · '+s.pts+' pts</span></div>';
-        html+=buildCanchita(s,'#F59E0B');
+        html+=buildCanchitaHTML(s,'#F59E0B');
         html+='</div>';
       });
       html+='</div>';
@@ -611,6 +644,15 @@ function renderRecepcion(c,sesData){
 
 <script>
 function pct(a,b){return b>0?Math.round(a*100/b):0;}
+
+function effColor(v){
+  if(v==null||isNaN(v)) return '#475569';
+  if(v>=40) return '#22c55e';
+  if(v>=20) return '#fbbf24';
+  if(v>=0)  return '#f97316';
+  return '#ef4444';
+}
+
 function buildCanchita(item,jIdx,i,prefix,W,H,drawFn,color,j){
   var card=document.createElement('div');
   card.className='canchita-card';
