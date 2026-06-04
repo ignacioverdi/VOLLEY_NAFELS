@@ -1,5 +1,5 @@
-// datos_partidos.js — 04/06/2026 04:32
-const PARTIDOS_GENERADO = "04/06/2026 04:32";
+// datos_partidos.js — 04/06/2026 11:00
+const PARTIDOS_GENERADO = "04/06/2026 11:00";
 const PARTIDOS_TOTAL = 26;
 const PARTIDOS_META = [
   {
@@ -241,8 +241,8 @@ const PARTIDOS_JUGADORES = [
   {
     "num": 1,
     "nombre": "1 Deecke",
-    "pos": "LIBERO",
-    "color": "#06b6d4",
+    "pos": "ARMADOR",
+    "color": "#f59e0b",
     "info": {},
     "ataques": [
       {
@@ -327,8 +327,8 @@ const PARTIDOS_JUGADORES = [
   {
     "num": 3,
     "nombre": "3 Schwitter",
-    "pos": "PUNTA",
-    "color": "#22c55e",
+    "pos": "OPUESTO",
+    "color": "#818cf8",
     "info": {},
     "ataques": [
       {
@@ -2699,8 +2699,8 @@ const PARTIDOS_JUGADORES = [
   {
     "num": 10,
     "nombre": "10 Bogdanovski",
-    "pos": "CENTRAL",
-    "color": "#f97316",
+    "pos": "PUNTA",
+    "color": "#22c55e",
     "info": {},
     "ataques": [
       {
@@ -3610,8 +3610,8 @@ const PARTIDOS_JUGADORES = [
   {
     "num": 14,
     "nombre": "14 Figueiredo",
-    "pos": "OPUESTO",
-    "color": "#818cf8",
+    "pos": "PUNTA",
+    "color": "#22c55e",
     "info": {},
     "ataques": [
       {
@@ -5054,4 +5054,4 @@ const PARTIDOS_JUGADORES = [
   }
 ];
 var Nafels_JUGADORES = PARTIDOS_JUGADORES;
-try{ window.Nafels_JUGADORES = PARTIDOS_JUGADORES; window.PARTIDOS_JUGADORES = PARTIDOS_JUGADORES; }catch(e){}
+try{window.Nafels_JUGADORES=PARTIDOS_JUGADORES;window.PARTIDOS_JUGADORES=PARTIDOS_JUGADORES;}catch(e){}
