@@ -263,6 +263,7 @@ select, select option {
 </style>
 <script src="lang.js" onerror="void 0"></script>
 <script src="liga_data.js"></script>
+<script src="videos.js" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 </head>
 <body>
 
@@ -411,6 +412,9 @@ function gpDefensa(combo, origen, destinos){
 // ═══════════════════════════════════════════════════════════════
 // GAME PLAN UNIVERSAL — carga el rival desde liga_data.js (?rival=X)
 // ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+// GAME PLAN UNIVERSAL — carga el rival desde liga_data.js (?rival=X)
+// ═══════════════════════════════════════════════════════════════
 var GP_PARAMS = new URLSearchParams(window.location.search);
 var GP_RIVAL_SLUG = (GP_PARAMS.get('rival') || '').toLowerCase();
 var GP_L = window.LIGA_DATA;
@@ -422,6 +426,19 @@ if (!GP_RIVAL_SLUG || !GP_L.teams[GP_RIVAL_SLUG]) {
 }
 var GP_TD = GP_L.teams[GP_RIVAL_SLUG];
 var GP_COMBOS = GP_L.combos;
+
+// ── Buscar video de un combo desde videos.js ──
+function gpGetVideo(num, tipo, combo){
+  try{
+    var V=window.VIDEOS_DATA;
+    if(!V) return null;
+    var t=V[GP_RIVAL_SLUG]; if(!t) return null;
+    var p=t[String(num)]; if(!p) return null;
+    var ti=p[tipo]; if(!ti) return null;
+    return ti[combo] || null;
+  }catch(e){ return null; }
+}
+
 
 // ── Lógica de zona del armador (idéntica al sistema) ──
 var GP_FRONT_POS = [4,3,2];
@@ -601,7 +618,7 @@ function gpBuildJugadores(){
       Object.keys(byCombo).forEach(function(c){
         var rows=byCombo[c]; if(rows.length<2)return;
         var st=gpStatAtk(rows);
-        ataques.push(Object.assign({cod:c,orig:gpComboOrigin(c,rows[0][7]),destinos:gpDistKills(rows,8,6),video:null},st));
+        ataques.push(Object.assign({cod:c,orig:gpComboOrigin(c,rows[0][7]),destinos:gpDistKills(rows,8,6),video:gpGetVideo(ns,'ataque',c)},st));
       });
       ataques.sort(function(a,b){return b.tot-a.tot;});
     }
@@ -614,7 +631,7 @@ function gpBuildJugadores(){
         var rows=byType[t]; if(rows.length<2)return;
         var st=gpStatSrv(rows);
         var tipo=t.indexOf('M')>=0?'FLOTADO':'POTENCIA';
-        saques.push(Object.assign({cod:t,tipo:tipo,orig:rows[0][6]||6,destinos:gpDist(rows,7),video:null},st));
+        saques.push(Object.assign({cod:t,tipo:tipo,orig:rows[0][6]||6,destinos:gpDist(rows,7),video:gpGetVideo(ns,'saque',t)},st));
       });
       saques.sort(function(a,b){return b.tot-a.tot;});
     }
@@ -630,6 +647,7 @@ function gpBuildJugadores(){
   return jugadores;
 }
 var JUGADORES = gpBuildJugadores();
+
 
 
 // ═══ MODAL DE DEFENSA (botón DIG) ═══════════════════════════════
