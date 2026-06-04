@@ -599,4 +599,56 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
     hist_js = 'window.HISTORIAL_DATA = ' + json.dumps({'generado':now,'entrenamientos':historial}, ensure_ascii=False, indent=2) + ';\n'
     with open(os.path.join(output_dir,'datos_historial.js'),'w',encoding='utf-8') as f: f.write(hist_js)
 
+    # ── DATOS_PARTIDOS.JS (ataques, saques, recepciones por jugador acumulado) ──
+    if os.path.exists('nla_players_db.json'):
+        with open('nla_players_db.json') as f: _db = json.load(f)
+    else:
+        _db = {'teams':{}}
+    team_db = _db['teams'].get(team_name, {})
+
+    def _combo_origin(combo, orig):
+        M={'X5':4,'V5':4,'X6':2,'V6':2,'X8':9,'V8':9,'X1':3,'X7':3,'XM':3,'X2':3,'XP':8,'X4':4,'X3':2}
+        return M.get(combo, orig if orig else 3)
+    def _eff(acts, kind):
+        t=len(acts)
+        if not t: return 0
+        k=sum(1 for a in acts if a['effect']=='#'); pp=sum(1 for a in acts if a['effect']=='+')
+        sl=sum(1 for a in acts if a['effect']=='/'); e=sum(1 for a in acts if a['effect']=='=')
+        if kind=='a': return round((k-sl-e)/t*100)
+        if kind=='s': return round((k+0.5*sl+0.25*pp-e)/t*100)
+        if kind=='r': return round((k+0.5*pp-0.5*sl-e)/t*100)
+        return 0
+    def _dist(acts):
+        dc=Counter(a.get('dest',0) for a in acts if a.get('dest')); tot=sum(dc.values())
+        return [{'z':z,'pct':round(n/tot*100)} for z,n in dc.most_common() if z and tot]
+
+    partidos_jug=[]
+    for ns, pd in team_db.items():
+        num=int(ns); info=pd.get('info') or {}
+        atk=pd.get('atk',[]); srv=pd.get('srv',[]); rec=pd.get('rec',[])
+        if len(atk)+len(srv)+len(rec)<5: continue
+        pos_label=NAFELS_ROSTER.get(num,'OTRO')
+        name=NAFELS_NAMES.get(num, info.get('name','').split()[-1] if info.get('name') else str(num))
+        cg=defaultdict(list)
+        for a in atk:
+            if a.get('combo'): cg[a['combo']].append(a)
+        ataques=[{'cod':c,'orig':_combo_origin(c,acts[0].get('orig',0)),'tot':len(acts),'eff':_eff(acts,'a'),'destinos':_dist(acts)} for c,acts in sorted(cg.items(),key=lambda x:-len(x[1])) if len(acts)>=2]
+        sg=defaultdict(list)
+        for a in srv: sg['S'+a.get('stype','Q')].append(a)
+        saques=[{'cod':st,'orig':acts[0].get('orig',0),'tot':len(acts),'eff':_eff(acts,'s'),'destinos':_dist(acts)} for st,acts in sorted(sg.items(),key=lambda x:-len(x[1])) if len(acts)>=2]
+        rg=defaultdict(list)
+        for a in rec: rg['R'+a.get('stype','M')].append(a)
+        recepciones=[{'cod':rt,'orig':acts[0].get('orig',0),'tot':len(acts),'eff':_eff(acts,'r'),'destinos':_dist(acts)} for rt,acts in sorted(rg.items(),key=lambda x:-len(x[1])) if len(acts)>=2]
+        partidos_jug.append({'num':num,'nombre':f"{num} {name.title()}",'pos':pos_label,'color':POS_COLOR.get(pos_label,'#64748b'),'info':{},'ataques':ataques,'saques':saques,'recepciones':recepciones})
+    partidos_jug.sort(key=lambda x:x['num'])
+
+    partidos_meta=[{'nombre':g['rival'],'rival':g['rival'],'fecha':'/'.join(reversed(g['date'].split('-'))),'torneo':f'NLA Suiza {temporada}','resultado':g['result'],'sets_nafels':str(g['tsets']),'sets_rival':str(g['rsets'])} for g in sorted(games,key=lambda x:x['date']) if g['date']]
+
+    pjs = f'// datos_partidos.js — {now}\n'
+    pjs += f'const PARTIDOS_GENERADO = "{now}";\n'
+    pjs += f'const PARTIDOS_TOTAL = {len(partidos_meta)};\n'
+    pjs += 'const PARTIDOS_META = ' + json.dumps(partidos_meta, ensure_ascii=False, indent=2) + ';\n'
+    pjs += 'const PARTIDOS_JUGADORES = ' + json.dumps(partidos_jug, ensure_ascii=False, indent=2) + ';\n'
+    with open(os.path.join(output_dir,'datos_partidos.js'),'w',encoding='utf-8') as f: f.write(pjs)
+
     return len(historial), len(games)
