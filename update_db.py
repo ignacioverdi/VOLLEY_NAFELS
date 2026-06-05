@@ -36,6 +36,9 @@ def normalize_combo(combo):
 
 
 # ── CONFIGURACIÓN ─────────────────────────────────────────────────
+# ═══════════════════════════════════════════════════════════════════
+# CONFIGURACIÓN CASLA (Liga Argentina División de Honor)
+# ═══════════════════════════════════════════════════════════════════
 NLA_TEAMS = ['Amriswil','Chenois','Colombier','Jona','Lausanne',
              'Nafels','Schonenwerd','St Gallen']
 
@@ -56,6 +59,8 @@ TEAM_NORM = {
     'Neftohimic 2010 BURGAS': 'Burgas',
     'SCM ZALAU': 'Zalau', 'SCM Zalau': 'Zalau',
 }
+MAIN_TEAM = 'Nafels'
+
 
 TEAM_COLORS = {
     'Nafels':'#22c55e','Amriswil':'#3b82f6','Schonenwerd':'#f97316',
@@ -98,7 +103,7 @@ def get_players(lines, section):
                 pc=parts[13].strip() if len(parts)>13 else ''
                 pm={'1':'OH','2':'OPP','3':'MB','4':'S','L':'L','5':'OH','':'?'}
                 pos='L' if role=='L' else pm.get(pc,'?')
-                players[num]={'name':f"{first} {last}".strip(),'pos':pos,'num':num}
+                players[num]={'name':f"{last} {first}".strip(),'pos':pos,'num':num}
             except: pass
     return players
 
@@ -368,6 +373,176 @@ def apply_heatmap_safety_fixes(html):
 
 
 
+# Funciones a integrar en update_db_casla.py para los armadores
+
+def _get_positions(content, players_section):
+    """Lee la posición codificada (campo 13) de cada jugador.
+    Códigos observados: 1=LIBERO, 3=OPUESTO, 4=CENTRAL, 5=ARMADOR, 2=PUNTA (aprox)."""
+    positions = {}
+    i = content.find(players_section)
+    if i < 0: return positions
+    section = content[i:content.find('[3', i+5)]
+    for line in section.split('\n'):
+        if ';' in line:
+            parts = line.split(';')
+            if len(parts) > 13:
+                try:
+                    num = int(parts[1])
+                    positions[num] = parts[13].strip()
+                except: pass
+    return positions
+
+def _get_liberos(content, players_section):
+    """Devuelve el set de números que son líbero (campo 12 = 'L')."""
+    liberos = set()
+    i = content.find(players_section)
+    if i < 0: return liberos
+    section = content[i:content.find('[3', i+5)]
+    for line in section.split('\n'):
+        if ';' in line:
+            parts = line.split(';')
+            if len(parts) > 12 and parts[12].strip().upper() == 'L':
+                try: liberos.add(int(parts[1]))
+                except: pass
+    return liberos
+
+def detectar_armadores(content, pfx, setter_count=2, extra_liberos=None, positions=None):
+    """Detecta armadores: prioriza posición ARMADOR (codigo 5) + volumen de armado.
+    Excluye líberos. Para el suplente, prefiere quien tenga rol de armador."""
+    from collections import Counter
+    content = content.replace('\r\n','\n')
+    players_section = '[3PLAYERS-H]' if pfx == '*' else '[3PLAYERS-V]'
+    liberos = _get_liberos(content, players_section)
+    if extra_liberos: liberos |= set(extra_liberos)
+    pos = positions or _get_positions(content, players_section)
+    idx = content.find('[3SCOUT]\n')
+    if idx < 0: return []
+    scout = content[idx+9:content.find('\n[3', idx+9)].strip().split('\n')
+    sets = Counter()
+    for line in scout:
+        l = line.strip()
+        if len(l) < 6: continue
+        if l[0] != pfx: continue
+        code2 = l[1:]
+        try: pnum = int(code2[:2])
+        except: continue
+        if pnum in liberos: continue
+        skill = code2[2].upper() if len(code2) > 2 else ''
+        if skill == 'E':
+            sets[pnum] += 1
+    if not sets: return []
+    # Separar candidatos: los que tienen rol ARMADOR (codigo '5') van primero
+    ranked = sets.most_common()
+    armadores_rol = [n for n,_ in ranked if str(pos.get(n,'')) == '5']
+    otros = [n for n,_ in ranked if str(pos.get(n,'')) != '5']
+    # El titular es el que más arma (casi siempre rol armador)
+    result = []
+    for n in armadores_rol + otros:
+        if n not in result:
+            result.append(n)
+        if len(result) >= setter_count: break
+    return result[:setter_count]
+def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, rival):
+    """Extrae los rallies de armado de un setter específico."""
+    content = content.replace('\r\n','\n')
+    idx = content.find('[3SCOUT]\n')
+    if idx < 0: return []
+    scout = content[idx+9:content.find('\n[3', idx+9)].strip().split('\n')
+    rallies = []; pending = None; last_skill = ''; last_rq = '?'; atype = 0
+    for line in scout:
+        l = line.strip()
+        if len(l) < 6: continue
+        t = l[0]; code = l[1:]
+        try: pnum = int(code[:2])
+        except: continue
+        skill = code[2].upper() if len(code) > 2 else ''
+        effect = code[4] if len(code) > 4 else ''
+        rest = code[5:] if len(code) > 5 else ''
+        tp = rest.split('~')
+        sc = l.split(';')
+        try:
+            sp_h = int(sc[9].strip()) if len(sc) > 9 and sc[9].strip().isdigit() else 0
+            sp_v = int(sc[10].strip()) if len(sc) > 10 and sc[10].strip().isdigit() else 0
+            spos = sp_h if is_home else sp_v
+        except: spos = 0
+        try: setn = int(sc[8].strip()) if len(sc) > 8 and sc[8].strip().isdigit() else 1
+        except: setn = 1
+        if skill == 'S':
+            if pending: rallies.append(pending); pending = None
+            last_skill = ''; last_rq = '?'; atype = 0 if t == rival_pfx else 1
+            continue
+        if t != pfx: continue
+        if skill == 'R': last_rq = effect; last_skill = 'R'
+        elif skill == 'E' and pnum == setter_num:
+            if pending: rallies.append(pending)
+            rq = last_rq if last_skill == 'R' else '?'
+            raw = tp[0] if tp else ''; call = raw[:2] if len(raw) >= 2 else raw
+            pending = {'setter_pos': spos, 'set_num': setn, 'call': call, 'rec_quality': rq, 'atype': atype,
+                       'atk_combo': '', 'atk_result': '', 'atk_dest': 0, 'atk_orig': 0, 'date': date, 'rival': rival}
+            last_skill = 'E'
+        elif skill == 'A':
+            if pending:
+                combo = tp[0] if tp else ''; traj = tp[1] if len(tp) > 1 else ''
+                pending['atk_combo'] = combo; pending['atk_result'] = effect
+                pending['atk_dest'] = int(traj[1]) if traj and len(traj) > 1 and traj[1].isdigit() else 0
+                pending['atk_orig'] = int(traj[0]) if traj and traj[0].isdigit() else 0
+                rallies.append(pending); pending = None
+            last_skill = 'A'
+        elif skill in ('B', 'D', 'F'):
+            if pending: rallies.append(pending); pending = None
+            last_skill = skill
+    if pending: rallies.append(pending)
+    return rallies
+
+
+
+def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
+    """Recorre todos los DVW y junta los rallies de los 2 armadores de cada equipo.
+    Excluye líberos (jugadores que NO atacan y reciben mucho)."""
+    import os, re
+    from collections import defaultdict
+    # Identificar líberos por equipo: 0 ataques + recepciones > 15
+    liberos_by_team = {}
+    if teams_data:
+        for tm, td in teams_data.items():
+            libs = set()
+            for ns, pd in td.items():
+                atk = len(pd.get('atk',[])); rec = len(pd.get('rec',[]))
+                if rec > 15 and atk <= max(2, rec*0.05):
+                    try: libs.add(int(ns))
+                    except: pass
+            liberos_by_team[tm] = libs
+    rallies_both = defaultdict(lambda: defaultdict(list))
+    setters_detected = {}
+    files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
+    for fname in files:
+        with open(os.path.join(dvw_dir, fname), encoding='utf-8', errors='ignore') as f:
+            content = f.read()
+        lines = content.replace('\r\n','\n').split('\n')
+        h_raw, a_raw = get_teams(lines)
+        home = norm(h_raw); away = norm(a_raw)
+        m = re.search(r'(\d{4}-\d{2}-\d{2})', fname)
+        date = m.group(1) if m else ''
+        for team, pfx, rpfx, ishome, rival in [(home, '*', 'a', True, away), (away, 'a', '*', False, home)]:
+            if team not in main_teams: continue
+            team_libs = liberos_by_team.get(team, set())
+            psec = '[3PLAYERS-H]' if pfx=='*' else '[3PLAYERS-V]'
+            team_pos = _get_positions(content, psec)
+            setters = detectar_armadores(content, pfx, 2, team_libs, team_pos)
+            for sn in setters:
+                setters_detected.setdefault(team, set()).add(sn)
+                r = parse_setter_rallies(content, pfx, rpfx, ishome, sn, date, rival)
+                if r: rallies_both[team][sn].extend(r)
+    # Keep top-2 setters per team by volume
+    setters_map = {}
+    rallies_final = {}
+    for team, sd in rallies_both.items():
+        ranked = sorted(sd.items(), key=lambda x: -len(x[1]))[:2]
+        setters_map[team] = [sn for sn, _ in ranked]
+        rallies_final[team] = {str(sn): rl for sn, rl in ranked}
+    return setters_map, rallies_final
+
+
 def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=None):
     """Genera liga_data.js con TODA la liga para los heatmaps universales."""
     COMBO_IDX={c:i for i,c in enumerate(combos)}
@@ -377,7 +552,9 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
     CALL_IDX={c:i for i,c in enumerate(CALL_LIST)}
     setters=setters or {}; rallies=rallies or {}
     LIGA={'combos':combos,'calls':CALL_LIST,'teams':{}}
-    for team, td in teams_data.items():
+    for team in NLA_TEAMS:
+        td = teams_data.get(team, {})
+        if not td: continue
         rivals=sorted(set(a.get('rival','') for pd in td.values() for sk in ['atk','srv','rec'] for a in pd.get(sk,[]) if a.get('rival')))
         ridx={r:i for i,r in enumerate(rivals)}
         atk_p,srv_p,rec_p={},{},{}
@@ -391,11 +568,19 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
             if rec:
                 rtl=list(dict.fromkeys('R'+a.get('stype','M') for a in rec)) or ['RM']; rtidx={r:i for i,r in enumerate(rtl)}
                 rec_p[ns]={'name':name,'num':num,'rtypes':rtl,'r':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,rtidx.get('R'+a.get('stype','M'),0),REC_IDX.get(a.get('effect','-'),3),a.get('orig',0),a.get('dest',0)] for a in rec]}
-        sn=setters.get(team,[None])[0] if isinstance(setters.get(team),list) else setters.get(team)
-        rl=rallies.get(team,[])
-        sname=td.get(str(sn),{}).get('info',{}).get('name',f'#{sn}') if sn else ''
-        arm=[[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],0,COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig']] for r in rl]
-        LIGA['teams'][team.lower().replace(' ','_')]={'name':team,'rivals':rivals,'atk':atk_p,'srv':srv_p,'rec':rec_p,'setter':{'num':sn,'name':sname,'s':arm} if sn else None}
+        # Armar AMBOS armadores (estructura setters array que usa el game plan)
+        team_setters = setters.get(team, [])
+        if not isinstance(team_setters, list): team_setters = [team_setters]
+        team_rallies = rallies.get(team, {})  # dict {str(num): [rallies]}
+        setters_list = []
+        for sn in team_setters:
+            rl = team_rallies.get(str(sn), []) if isinstance(team_rallies, dict) else []
+            if not rl: continue
+            sname = td.get(str(sn),{}).get('info',{}).get('name',f'#{sn}')
+            arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],0,COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig']] for r in rl]
+            setters_list.append({'num':sn,'name':sname,'s':arm,'total':len(rl)})
+        setters_list.sort(key=lambda x:-x['total'])
+        LIGA['teams'][team.lower().replace(' ','_')]={'name':team,'rivals':rivals,'atk':atk_p,'srv':srv_p,'rec':rec_p,'setters':setters_list,'setter':setters_list[0] if setters_list else None}
     with open(os.path.join(output_dir,'liga_data.js'),'w',encoding='utf-8') as f:
         f.write('window.LIGA_DATA = '+json.dumps(LIGA,ensure_ascii=False)+';\n')
     return len(LIGA['teams'])
@@ -499,62 +684,6 @@ def build_stats_table(players, teams, output_path='nla_stats_table.html'):
     print(f"   ✓ Stats table: {os.path.getsize(output_path)//1024}KB")
 
 # ── MAIN ──────────────────────────────────────────────────────────
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Update NLA volleyball database from DVW files')
-    parser.add_argument('--dvw_dir',    required=True,  help='Directory with new DVW files')
-    parser.add_argument('--temporada',  default='2025/26', help='Season label (e.g. 2026/27)')
-    parser.add_argument('--db_path',    default='nla_players_db.json', help='Database file path')
-    parser.add_argument('--output_dir', default='.',    help='Output directory for HTML files')
-    parser.add_argument('--template_dir', default='.', help='Directory with CASLA template HTML files')
-    parser.add_argument('--filter_temporada', default=None, help='Show only this season in stats (default: all)')
-    args = parser.parse_args()
-
-    print(f"\n{'='*60}")
-    print(f"NLA DATABASE UPDATE — {args.temporada}")
-    print(f"{'='*60}\n")
-
-    # Step 1: Update DB
-    print("1. Parsing DVW files...")
-    teams_data, games_log = update_database(args.dvw_dir, args.temporada, args.db_path)
-
-    # Step 2: Calculate stats
-    print("\n2. Calculating stats...")
-    t_filter = args.filter_temporada or args.temporada
-    players, teams = calculate_stats(teams_data, t_filter)
-    stats_path = os.path.join(args.output_dir, 'nla_full_stats.json')
-    with open(stats_path, 'w') as f:
-        json.dump({'players':players,'teams':teams,'temporada':t_filter}, f, ensure_ascii=False)
-    print(f"   ✓ {len(players)} players, {len(teams)} teams")
-
-    # Step 3: Build heatmaps
-    print("\n3. Building heatmaps...")
-    build_heatmaps(teams_data, args.template_dir, args.output_dir, t_filter)
-
-    # Step 4: Build stats table
-    print("\n4. Building stats table...")
-    table_path = os.path.join(args.output_dir, 'nla_stats_table.html')
-    build_stats_table(players, teams, table_path)
-
-    print(f"\n{'='*60}")
-    print(f"✓ DONE — {len(games_log)} total games in DB")
-    print(f"{'='*60}\n")
-
-
-# ═══════════════════════════════════════════════════════════════════
-# GENERADORES DE DATOS PARA PÁGINAS (historial, partidos)
-# ═══════════════════════════════════════════════════════════════════
-
-# Roster Nafels (posiciones + nombres oficiales)
-NAFELS_ROSTER = {
-    1:'LIBERO',2:'PUNTA',3:'PUNTA',4:'ARMADOR',5:'CENTRAL',6:'OPUESTO',
-    7:'CENTRAL',8:'LIBERO',9:'PUNTA',10:'CENTRAL',11:'PUNTA',14:'OPUESTO',15:'CENTRAL',
-}
-NAFELS_NAMES = {
-    1:'DEECKE',2:'CORZO',3:'SCHWITTER',4:'VAZQUEZ',5:'HESSELHOLT',6:'DENIS CABANAS',
-    7:'SCHMID',8:'PETER',9:'BROCH',10:'BOGDANOVSKI',11:'BARTHOLET',14:'FIGUEIREDO',15:'NIKOLOV',
-}
-POS_COLOR = {'CENTRAL':'#f97316','OPUESTO':'#818cf8','PUNTA':'#22c55e','ARMADOR':'#f59e0b','LIBERO':'#06b6d4'}
-
 def parse_set_scores(content):
     """Extract final set scores from [3SET]. Field index 4 = final score (e.g. 25-17)."""
     idx = content.find('[3SET]')
@@ -582,6 +711,22 @@ def calc_match_skill(acts, skill_type):
     elif skill_type=='r': eff=round((k+0.5*pp-0.5*sl-e)/t*100)
     else: eff=0
     return {'T':t,'Eff':eff,'Punto':k,'Pos':pp,'Adm':exc,'Neg':sl,'Err':e,'Vend':minus}
+
+
+
+# Rosters opcionales (si están vacíos, usa los nombres del DVW)
+try:
+    NAFELS_ROSTER
+except NameError:
+    NAFELS_ROSTER = {}
+try:
+    NAFELS_NAMES
+except NameError:
+    NAFELS_NAMES = {}
+try:
+    POS_COLOR
+except NameError:
+    POS_COLOR = {'ARMADOR':'#a855f7','OPUESTO':'#ef4444','CENTRAL':'#22c55e','PUNTA':'#3b82f6','LIBERO':'#f59e0b','OTRO':'#64748b'}
 
 def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025/26'):
     """Generate datos_historial.js + datos_partidos.js for a specific team from DVW."""
@@ -716,3 +861,81 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
     with open(os.path.join(output_dir,'datos_partidos.js'),'w',encoding='utf-8') as f: f.write(pjs)
 
     return len(historial), len(games)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Update CASLA volleyball database from DVW files')
+    parser.add_argument('--dvw_dir',    required=True,  help='Directory with new DVW files')
+    parser.add_argument('--temporada',  default='2026', help='Season label (e.g. 2026)')
+    parser.add_argument('--db_path',    default='nla_players_db.json', help='Database file path')
+    parser.add_argument('--output_dir', default='.',    help='Output directory for HTML files')
+    parser.add_argument('--template_dir', default='.', help='Directory with CASLA template HTML files')
+    parser.add_argument('--filter_temporada', default=None, help='Show only this season in stats (default: all)')
+    args = parser.parse_args()
+
+    print(f"\n{'='*60}")
+    print(f"NAFELS DATABASE UPDATE — {args.temporada}")
+    print(f"{'='*60}\n")
+
+    # Step 1: Update DB
+    print("1. Parsing DVW files...")
+    teams_data, games_log = update_database(args.dvw_dir, args.temporada, args.db_path)
+
+    # Step 2: Calculate stats
+    print("\n2. Calculating stats...")
+    t_filter = args.filter_temporada  # None = mostrar todo lo que hay en la base
+    players, teams = calculate_stats(teams_data, t_filter)
+    with open(os.path.join(args.output_dir,'nla_full_stats.json'),'w') as f:
+        json.dump({'players':players,'teams':teams,'temporada':t_filter}, f, ensure_ascii=False)
+    print(f"   \u2713 {len(players)} players, {len(teams)} teams")
+
+    # Step 3: Detect setters + collect rallies (both setters per team)
+    print("\n3. Detecting setters and collecting rallies...")
+    setters_map, rallies = collect_setter_rallies(args.dvw_dir, TEAM_NORM, NLA_TEAMS, teams_data)
+    # Detectar líberos por patrón (0 ataques + recibe) para el chequeo
+    liberos_map = {}
+    for team in NLA_TEAMS:
+        td = teams_data.get(team, {})
+        libs = [int(ns) for ns,pd in td.items() if len(pd.get('rec',[]))>15 and len(pd.get('atk',[]))<=max(2,len(pd.get('rec',[]))*0.05)]
+        liberos_map[team] = libs
+    print("\n   ┌─ CHEQUEO DE POSICIONES (confirma que esten bien) ─┐")
+    for team in NLA_TEAMS:
+        if team in setters_map:
+            arms = setters_map[team]
+            libs = liberos_map.get(team,[])
+            print(f"   {team:14} armadores: {arms}  liberos: {libs}")
+    print("   └────────────────────────────────────────────────────┘")
+    print("   Si algun armador/libero esta mal, avisa para ajustar.")
+
+    # Step 4: Build liga_data.js (universal heatmaps + game plan)
+    print("\n4. Building liga_data.js (sistema universal)...")
+    # Canonical combos: collect all combos that appear, in canonical order
+    all_combos = set()
+    for td in teams_data.values():
+        for pd in td.values():
+            for a in pd.get('atk',[]):
+                if a.get('combo'): all_combos.add(a['combo'])
+    # Order: known canonical first, then any extras
+    canon_order = ['X5','V5','C5','V4','X1','XM','XG','XC','XD','X2','X7','CB','CD','CF','V3',
+                   'X6','V6','V2','X8','V8','XB','XR','XP','VB','VR','VP']
+    combos = [c for c in canon_order if c in all_combos] + sorted(c for c in all_combos if c not in canon_order)
+    build_liga_data(teams_data, combos, args.output_dir, setters_map, rallies)
+    print(f"   \u2713 liga_data.js ({len(combos)} combos, {len(setters_map)} equipos con armadores)")
+
+    # Step 5: Build stats table
+    print("\n5. Building stats table...")
+    build_stats_table(players, teams, os.path.join(args.output_dir,'nla_stats_table.html'))
+    print("   \u2713 nla_stats_table.html")
+
+    # Step 6: datos_partidos.js (para el equipo principal)
+    print("\n6. Building datos_partidos.js...")
+    try:
+        generate_team_pages_data(args.dvw_dir, MAIN_TEAM, args.output_dir, args.temporada)
+        print("   \u2713 datos_partidos.js")
+    except Exception as e:
+        print(f"   (datos_partidos: {e})")
+
+    print(f"\n{'='*60}")
+    print(f"\u2713 LISTO — {len(games_log)} partidos en la base")
+    print(f"  Subir a GitHub: liga_data.js, nla_stats_table.html, datos_partidos.js")
+    print(f"{'='*60}\n")
