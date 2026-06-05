@@ -388,6 +388,18 @@ select, select option {
         </div>
         <div class="card-arrow">→</div>
       </a>
+      <a href="game_plan.html" id="card-gameplan" class="card" style="--card-color:#fbbf24;grid-column:1/-1">
+        <div class="card-glow"></div>
+        <div class="card-top">
+          <div class="card-icon" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.2)">📋</div>
+          <div class="card-badge" id="gp-badge" style="background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)">Próximo partido</div>
+        </div>
+        <div class="card-body">
+          <div class="card-title" id="gp-title" style="color:#fbbf24">Game Plan</div>
+          <div class="card-desc" id="gp-desc">Plan del próximo rival: defensa, armadores, recepción y videos.</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
       <a href="nla_stats_table.html" class="card" style="--card-color:#3b82f6">
         <div class="card-glow"></div>
         <div class="card-top">
@@ -1359,5 +1371,26 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 </script>
 
 <script src="chat_nafels.js"></script>
+
+<script src="proximo_rival.js" onerror="window.FIXTURE_DATA=null"></script>
+<script>
+(function(){
+  try{
+    var F=window.FIXTURE_DATA;
+    if(F && F.proximo){
+      var card=document.getElementById('card-gameplan');
+      var title=document.getElementById('gp-title');
+      var desc=document.getElementById('gp-desc');
+      var badge=document.getElementById('gp-badge');
+      if(card) card.href='game_plan.html?rival='+F.proximo.slug;
+      if(title) title.textContent='Game Plan vs '+F.proximo.rival;
+      var f=F.proximo.fecha ? F.proximo.fecha.split('-').reverse().join('/') : '';
+      var cond=F.proximo.cond?(' · '+F.proximo.cond):'';
+      if(desc) desc.textContent='Próximo partido'+(f?' ('+f+')':'')+cond+': defensa, armadores, recepción y videos.';
+      if(badge) badge.textContent = f || 'Próximo partido';
+    }
+  }catch(e){}
+})();
+</script>
 </body>
 </html>
