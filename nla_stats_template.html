@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>NLA Suiza 2025/26 — Estadísticas Liga</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0f1a;--surface:#111827;--border:rgba(255,255,255,.08);--text:#e2e8f0;--muted:#64748b;--accent:#3b82f6;--green:#22c55e;--orange:#f97316;--red:#ef4444;--purple:#818cf8;--yellow:#fbbf24}
+body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-serif;min-height:100vh}
+.header{background:linear-gradient(135deg,#0f172a,#1e293b);border-bottom:1px solid var(--border);padding:20px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.header h1{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px}
+.header .subtitle{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+.season-badge{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:#93c5fd;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;margin-left:auto}
+.tabs{display:flex;gap:0;background:rgba(0,0,0,.2);border-bottom:1px solid var(--border);padding:0 24px}
+.tab{padding:12px 20px;cursor:pointer;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid transparent;transition:all .2s}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab:hover:not(.active){color:var(--text)}
+.filters{display:flex;gap:12px;padding:14px 24px;background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center}
+.filter-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+select,input[type=text]{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:13px;outline:none;cursor:pointer;min-width:120px}
+select:focus,input:focus{border-color:var(--accent)}
+.filter-group{display:flex;align-items:center;gap:6px}
+.reset-btn{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#fca5a5;padding:6px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:1px;font-family:'Barlow Condensed',sans-serif}
+.reset-btn:hover{background:rgba(239,68,68,.2)}
+.results-count{font-size:11px;color:var(--muted);margin-left:auto}
+.panel{display:none;padding:24px}
+.panel.active{display:block}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--muted);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+/* TEAM CARDS */
+.ranking-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.team-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;position:relative;overflow:hidden;transition:border-color .2s}
+.team-card:hover{border-color:rgba(255,255,255,.15)}
+.team-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--tc,#3b82f6)}
+.team-rank{position:absolute;top:10px;right:14px;font-family:'Bebas Neue',sans-serif;font-size:42px;color:rgba(255,255,255,.04);line-height:1}
+.team-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;margin-bottom:14px}
+.metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.metric{background:rgba(255,255,255,.03);border-radius:8px;padding:10px 12px;border:1px solid rgba(255,255,255,.05)}
+.metric-label{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
+.metric-val{font-family:'Bebas Neue',sans-serif;font-size:24px;line-height:1}
+.metric-sub{font-size:10px;color:var(--muted);margin-top:2px}
+/* TABLE */
+.table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{background:#0c1526;padding:10px 12px;text-align:left;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);cursor:pointer;white-space:nowrap;border-bottom:1px solid var(--border);user-select:none;position:sticky;top:0}
+thead th:hover{color:var(--text)}
+thead th.sort-asc::after{content:' ▲';color:var(--accent)}
+thead th.sort-desc::after{content:' ▼';color:var(--accent)}
+thead th.col-group-atk{border-left:1px solid rgba(249,115,22,.2)}
+thead th.col-group-srv{border-left:1px solid rgba(34,197,94,.2)}
+thead th.col-group-rec{border-left:1px solid rgba(129,140,248,.2)}
+thead th.col-group-blk{border-left:1px solid rgba(250,204,21,.2)}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .1s}
+tbody tr:hover{background:rgba(255,255,255,.03)}
+tbody td{padding:8px 12px;white-space:nowrap}
+tbody td.col-group-atk{border-left:1px solid rgba(249,115,22,.08)}
+tbody td.col-group-srv{border-left:1px solid rgba(34,197,94,.08)}
+tbody td.col-group-rec{border-left:1px solid rgba(129,140,248,.08)}
+tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
+.pos-badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:800;letter-spacing:1px}
+.pos-PUNTA{background:rgba(249,115,22,.15);color:#fb923c}
+.pos-OPUESTO{background:rgba(34,197,94,.15);color:#4ade80}
+.pos-CENTRAL{background:rgba(129,140,248,.15);color:#a5b4fc}
+.pos-ARMADOR{background:rgba(245,158,11,.15);color:#fcd34d}
+.pos-LIBERO{background:rgba(6,182,212,.15);color:#22d3ee}
+.pos-OTRO{background:rgba(100,116,139,.15);color:#94a3b8}
+.eff-val{font-family:'Bebas Neue',sans-serif;font-size:14px}
+.pos-eff{color:#22c55e}.neg-eff{color:#ef4444}.neu-eff{color:#64748b}
+.no-data{text-align:center;padding:48px;color:var(--muted);font-size:13px;letter-spacing:1px}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:rgba(255,255,255,.02)}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <div class="subtitle">Volley Nafels — Análisis Liga</div>
+    <h1>NLA SUIZA — ESTADÍSTICAS</h1>
+  </div>
+  <div class="season-badge">TEMPORADA 2025/26</div>
+</div>
+<div class="tabs">
+  <div class="tab active" data-tab="equipos">🏆 Ranking Equipos</div>
+  <div class="tab" data-tab="jugadores">👤 Jugadores</div>
+</div>
+<div class="filters">
+  <div class="filter-group">
+    <span class="filter-label">Equipo</span>
+    <select id="f-team">
+      <option value="">Todos</option>
+      <option>Amriswil</option><option>Chenois</option><option>Colombier</option>
+      <option>Jona</option><option>Lausanne</option><option>Nafels</option>
+      <option>Schonenwerd</option><option>St Gallen</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Temporada</span>
+    <select id="f-temporada"><option value="">Todas</option><!--__TEMPORADAS__--></select>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Posición</span>
+    <select id="f-pos">
+      <option value="">Todas</option>
+      <option>PUNTA</option><option>OPUESTO</option><option>CENTRAL</option>
+      <option>ARMADOR</option><option>LIBERO</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Buscar</span>
+    <input type="text" id="f-search" placeholder="Nombre..." style="min-width:140px">
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Mín. ataques</span>
+    <select id="f-min-atk">
+      <option value="0">Sin mínimo</option>
+      <option value="50">50+</option><option value="100">100+</option>
+      <option value="200">200+</option><option value="300">300+</option>
+    </select>
+  </div>
+  <button class="reset-btn" id="reset-btn">✕ Limpiar</button>
+  <span class="results-count" id="results-count"></span>
+</div>
+<div class="panel active" id="panel-equipos">
+  <div class="section-title">RANKING EQUIPOS NLA 2025/26</div>
+  <div class="ranking-grid" id="team-ranking"></div>
+</div>
+<div class="panel" id="panel-jugadores">
+  <div class="table-wrap">
+    <table id="players-table">
+      <thead><tr>
+        <th data-col="name">Jugador</th>
+        <th data-col="team">Equipo</th>
+        <th data-col="pos_label">Pos</th>
+        <th data-col="atk_tot" class="col-group-atk">ATK</th>
+        <th data-col="atk_eff" class="col-group-atk">EFF%</th>
+        <th data-col="atk_k" class="col-group-atk">%Kill</th>
+        <th data-col="atk_e" class="col-group-atk">%Err</th>
+        <th data-col="atk_so_eff" class="col-group-atk">SO%</th>
+        <th data-col="atk_tr_eff" class="col-group-atk">TR%</th>
+        <th data-col="srv_tot" class="col-group-srv">SRV</th>
+        <th data-col="srv_eff" class="col-group-srv">EFF%</th>
+        <th data-col="srv_ace" class="col-group-srv">%Ace</th>
+        <th data-col="srv_q_eff" class="col-group-srv">SQ%</th>
+        <th data-col="srv_m_eff" class="col-group-srv">SM%</th>
+        <th data-col="rec_tot" class="col-group-rec">REC</th>
+        <th data-col="rec_eff" class="col-group-rec">EFF%</th>
+        <th data-col="rec_perf" class="col-group-rec">%Perf</th>
+        <th data-col="blk_tot" class="col-group-blk">BLK</th>
+        <th data-col="blk_eff" class="col-group-blk">EFF%</th>
+      </tr></thead>
+      <tbody id="players-tbody"></tbody>
+    </table>
+  </div>
+</div>
+<script>
+/*__DATA_PLACEHOLDER__*/
+
+var TEAM_COLORS={
+  'Nafels':'#22c55e','Amriswil':'#3b82f6','Schonenwerd':'#f97316',
+  'Chenois':'#818cf8','Colombier':'#f59e0b','Jona':'#06b6d4',
+  'Lausanne':'#ec4899','St Gallen':'#94a3b8'
+};
+var sortState={col:'atk_eff',dir:-1};
+
+// TABS
+document.querySelectorAll('.tab').forEach(function(t){
+  t.addEventListener('click',function(){
+    document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active')});
+    document.querySelectorAll('.panel').forEach(function(x){x.classList.remove('active')});
+    t.classList.add('active');
+    document.getElementById('panel-'+t.dataset.tab).classList.add('active');
+  });
+});
+
+// FILTERS
+function getF(){
+  return{
+    team:document.getElementById('f-team').value,
+    temporada:document.getElementById('f-temporada')?document.getElementById('f-temporada').value:'',
+    pos:document.getElementById('f-pos').value,
+    search:document.getElementById('f-search').value.toLowerCase().trim(),
+    minAtk:parseInt(document.getElementById('f-min-atk').value)||0
+  };
+}
+['f-team','f-temporada','f-pos','f-search','f-min-atk'].forEach(function(id){
+  var el=document.getElementById(id);
+  el.addEventListener('input',render);el.addEventListener('change',render);
+});
+document.getElementById('reset-btn').addEventListener('click',function(){
+  ['f-team','f-pos','f-min-atk'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('f-search').value='';
+  render();
+});
+
+function filterP(data){
+  var f=getF();
+  return data.filter(function(p){
+    if(f.team&&p.team!==f.team)return false;
+    if(f.temporada&&p.temporada!==f.temporada)return false;
+    if(f.pos&&p.pos_label!==f.pos)return false;
+    if(f.search&&!p.name.toLowerCase().includes(f.search)&&!p.team.toLowerCase().includes(f.search))return false;
+    if(f.minAtk&&(p.atk_tot||0)<f.minAtk)return false;
+    return true;
+  });
+}
+
+function effC(v,rec){
+  if(v==null)return '#475569';
+  if(rec)return v>=40?'#22c55e':v>=25?'#fbbf24':v>=10?'#f97316':'#ef4444';
+  return v>=40?'#22c55e':v>=20?'#fbbf24':v>=0?'#f97316':'#ef4444';
+}
+function effCls(v){return v==null?'neu-eff':v>0?'pos-eff':v<0?'neg-eff':'neu-eff';}
+
+function fmtEff(v,rec){
+  if(v==null)return '<span style="color:#334155">—</span>';
+  var s=(v>=0?'+':'')+v.toFixed(1)+'%';
+  return '<span class="eff-val" style="color:'+effC(v,rec)+'">'+s+'</span>';
+}
+function fmtPct(v){
+  if(v==null)return '<span style="color:#334155">—</span>';
+  return '<span style="color:#94a3b8">'+v.toFixed(1)+'%</span>';
+}
+function fmtN(v){
+  if(!v)return '<span style="color:#334155">0</span>';
+  return '<span style="color:#cbd5e1;font-weight:600">'+v+'</span>';
+}
+
+// TEAM RANKING
+function renderTeams(){
+  var f=getF();
+  var sorted=TEAMS.slice().sort(function(a,b){return(b.atk_eff||0)-(a.atk_eff||0);});
+  var cont=document.getElementById('team-ranking');
+  cont.innerHTML='';
+  sorted.forEach(function(t,i){
+    if(f.team&&t.team!==f.team)return;
+    var c=TEAM_COLORS[t.team]||'#3b82f6';
+    var metrics=[
+      {l:'ATK EFF',v:t.atk_eff,r:false},{l:'SRV EFF',v:t.srv_eff,r:false},
+      {l:'REC EFF',v:t.rec_eff,r:true},{l:'BLK EFF',v:t.blk_eff,r:true},
+    ].map(function(m){
+      var vc=effC(m.v,m.r);
+      var fmt=m.v!=null?(m.v>=0?'+':'')+m.v.toFixed(1)+'%':'—';
+      return '<div class="metric"><div class="metric-label">'+m.l+'</div>'
+            +'<div class="metric-val eff-val" style="color:'+vc+'">'+fmt+'</div></div>';
+    }).join('');
+    var totals=[
+      {l:'ATK tot',v:t.atk_tot},{l:'SRV tot',v:t.srv_tot},
+      {l:'REC tot',v:t.rec_tot},{l:'BLK tot',v:t.blk_tot},
+    ].map(function(m){
+      return '<div class="metric"><div class="metric-label">'+m.l+'</div>'
+            +'<div class="metric-val eff-val" style="color:#94a3b8">'+(m.v||0)+'</div></div>';
+    }).join('');
+    var card=document.createElement('div');
+    card.className='team-card';
+    card.style.setProperty('--tc',c);
+    var slug=t.team.toLowerCase().replace(/ /g,'_');
+    var hmLinks='<div style="display:flex;gap:5px;margin-top:12px;flex-wrap:wrap">'
+      +'<a href="ataque_'+slug+'.html" style="flex:1;text-align:center;padding:6px;border-radius:6px;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.25);color:#fb923c;text-decoration:none;font-size:10px;font-weight:700;letter-spacing:.5px">⚡ ATK</a>'
+      +'<a href="saque_'+slug+'.html" style="flex:1;text-align:center;padding:6px;border-radius:6px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#4ade80;text-decoration:none;font-size:10px;font-weight:700;letter-spacing:.5px">🎯 SAQ</a>'
+      +'<a href="recepcion_'+slug+'.html" style="flex:1;text-align:center;padding:6px;border-radius:6px;background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.25);color:#a5b4fc;text-decoration:none;font-size:10px;font-weight:700;letter-spacing:.5px">🛡️ REC</a>'
+      +'<a href="armador_'+slug+'.html" style="flex:1;text-align:center;padding:6px;border-radius:6px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:#fcd34d;text-decoration:none;font-size:10px;font-weight:700;letter-spacing:.5px">🎱 ARM</a>'
+      +'</div>';
+    card.innerHTML='<div class="team-rank">'+(i+1)+'</div>'
+      +'<div class="team-name" style="color:'+c+'">'+t.team.toUpperCase()+'</div>'
+      +'<div class="metrics-grid">'+metrics+totals+'</div>'
+      +hmLinks;
+    cont.appendChild(card);
+  });
+}
+
+// PLAYER TABLE
+function renderPlayers(){
+  var data=filterP(PLAYERS);
+  data.sort(function(a,b){
+    var av=a[sortState.col],bv=b[sortState.col];
+    if(av==null&&bv==null)return 0;
+    if(av==null)return 1;if(bv==null)return -1;
+    return sortState.dir*(typeof av==='string'?av.localeCompare(bv):av-bv);
+  });
+  document.getElementById('results-count').textContent=data.length+' jugadores';
+  var tbody=document.getElementById('players-tbody');
+  if(!data.length){
+    tbody.innerHTML='<tr><td colspan="19" class="no-data">Sin resultados con los filtros actuales</td></tr>';
+    return;
+  }
+  tbody.innerHTML=data.map(function(p){
+    var tc=TEAM_COLORS[p.team]||'#64748b';
+    var g=['col-group-atk','col-group-atk','col-group-atk','col-group-atk','col-group-atk','col-group-atk',
+           'col-group-srv','col-group-srv','col-group-srv','col-group-srv','col-group-srv',
+           'col-group-rec','col-group-rec','col-group-rec',
+           'col-group-blk','col-group-blk'];
+    return '<tr>'
+      +'<td><span style="font-weight:700">#'+p.num+'</span> <span style="color:#e2e8f0">'+p.name+'</span></td>'
+      +'<td><span style="display:inline-block;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;background:'+tc+'22;color:'+tc+'">'+p.team+'</span></td>'
+      +'<td><span class="pos-badge pos-'+p.pos_label+'">'+p.pos_label+'</span></td>'
+      +'<td class="col-group-atk">'+fmtN(p.atk_tot)+'</td>'
+      +'<td class="col-group-atk">'+fmtEff(p.atk_eff,false)+'</td>'
+      +'<td class="col-group-atk">'+fmtPct(p.atk_k)+'</td>'
+      +'<td class="col-group-atk">'+fmtPct(p.atk_e)+'</td>'
+      +'<td class="col-group-atk">'+fmtEff(p.atk_so_eff,false)+'</td>'
+      +'<td class="col-group-atk">'+fmtEff(p.atk_tr_eff,false)+'</td>'
+      +'<td class="col-group-srv">'+fmtN(p.srv_tot)+'</td>'
+      +'<td class="col-group-srv">'+fmtEff(p.srv_eff,false)+'</td>'
+      +'<td class="col-group-srv">'+fmtPct(p.srv_ace)+'</td>'
+      +'<td class="col-group-srv">'+fmtEff(p.srv_q_eff,false)+'</td>'
+      +'<td class="col-group-srv">'+fmtEff(p.srv_m_eff,false)+'</td>'
+      +'<td class="col-group-rec">'+fmtN(p.rec_tot)+'</td>'
+      +'<td class="col-group-rec">'+fmtEff(p.rec_eff,true)+'</td>'
+      +'<td class="col-group-rec">'+fmtPct(p.rec_perf)+'</td>'
+      +'<td class="col-group-blk">'+fmtN(p.blk_tot)+'</td>'
+      +'<td class="col-group-blk">'+(p.blk_eff!=null?'<span class="eff-val" style="color:'+effC(p.blk_eff,true)+'">'+p.blk_eff.toFixed(1)+'%</span>':'<span style="color:#334155">—</span>')+'</td>'
+      +'</tr>';
+  }).join('');
+}
+
+// Sort headers
+document.querySelectorAll('thead th[data-col]').forEach(function(th){
+  th.addEventListener('click',function(){
+    var col=th.dataset.col;
+    if(sortState.col===col){sortState.dir*=-1;}
+    else{sortState.col=col;sortState.dir=-1;}
+    document.querySelectorAll('thead th').forEach(function(h){h.classList.remove('sort-asc','sort-desc');});
+    th.classList.add(sortState.dir===-1?'sort-desc':'sort-asc');
+    renderPlayers();
+  });
+});
+
+function render(){renderTeams();renderPlayers();}
+render();
+</script></body></html>

@@ -355,6 +355,12 @@ select, select option {
 // Mapa cancha propia:  4 3 2 (red) / 7 8 9 / 5 6 1 (fondo)
 // ═══════════════════════════════════════════════════════════════
 
+// ═══════════════════════════════════════════════════════════════
+// SISTEMA DE BLOQUEO-DEFENSA AUTOCOMPLETADO
+// Principio: bloqueo a la PELOTA en el lado OPUESTO (tapa, abre diagonal) → defensa a la diagonal
+// Mapa cancha propia:  4 3 2 (red) / 7 8 9 / 5 6 1 (fondo)
+// ═══════════════════════════════════════════════════════════════
+
 function gpClasificarDestinos(destinos, ladoAtaque){
   // destinos: [{z, pct}] · ladoAtaque 'izq'(X5/pos4 rival) o 'der'(X6/pos2 rival)
   var rebote=0, diagonal=0, centro=0, paralela=0;
@@ -389,27 +395,29 @@ function gpDefensaCentral(combo, origen, destinos){
     else if(z===5||z===7) izq+=p;
     else if(z===6||z===8) centro+=p;
   });
-  // Configuración por combo
+  // Config de bloqueo/ayuda por combo
   var cfg;
   if(combo==='XM'){
-    cfg={ayuda:'P2', toque:'P4', ayudaLado:'der', p6:'der', blq:'centro',
-         desc:'Bloqueo P3 + P2 ayuda · P4 toque · P6 doble a la derecha (6-1)'};
+    cfg={ayuda:'P2', toque:'P4', ayudaLado:'der', defaultP6:'der', blq:'centro'};
   } else if(combo==='X7'){
-    cfg={ayuda:'P2', toque:'P4', ayudaLado:'der', p6:'der', blq:'der',
-         desc:'Central corrido al 3-4 · Bloqueo P3 enfrenta el ataque · P2 ayuda · P4 toque · P6 a la derecha (6-1)'};
+    cfg={ayuda:'P2', toque:'P4', ayudaLado:'der', defaultP6:'der', blq:'der'};
   } else if(combo==='X2'){
-    cfg={ayuda:'P4', toque:'P2', ayudaLado:'izq', p6:'izq', blq:'der_leve',
-         desc:'Bloqueo P3 (corrido leve a zona 2) + P4 ayuda · P2 toque · P6 doble a la izquierda (6-5)'};
-  } else { // X1 (default) - P6 según tendencia
-    var p6auto = der>izq?'der':(izq>der?'izq':'auto');
-    cfg={ayuda:'P4', toque:'P2', ayudaLado:'izq', p6:p6auto, blq:'centro',
-         desc:'Bloqueo P3 central + P4 ayuda · P2 toque · P6 según tendencia'};
+    cfg={ayuda:'P4', toque:'P2', ayudaLado:'izq', defaultP6:'izq', blq:'der_leve'};
+  } else { // X1
+    cfg={ayuda:'P4', toque:'P2', ayudaLado:'izq', defaultP6:'auto', blq:'centro'};
   }
-  // Texto del P6 según dirección
+  // P6 SIEMPRE sigue la tendencia real si hay datos; si no, usa el default del combo
+  var hayDatos = (der+izq) > 0;
+  var p6dir;
+  if(hayDatos){
+    p6dir = der>izq ? 'der' : (izq>der ? 'izq' : 'centro');
+  } else {
+    p6dir = cfg.defaultP6==='auto' ? 'centro' : cfg.defaultP6;
+  }
   var p6txt;
-  if(cfg.p6==='der') p6txt='Paso DERECHA → doble 6-1';
-  else if(cfg.p6==='izq') p6txt='Paso IZQUIERDA → doble 6-5';
-  else p6txt = der>izq?'Paso DERECHA (6-1, '+Math.round(der)+'%)':(izq>der?'Paso IZQUIERDA (6-5, '+Math.round(izq)+'%)':'Centrado');
+  if(p6dir==='der') p6txt='Paso DERECHA → doble 6-1'+(hayDatos?' ('+Math.round(der)+'%)':'');
+  else if(p6dir==='izq') p6txt='Paso IZQUIERDA → doble 6-5'+(hayDatos?' ('+Math.round(izq)+'%)':'');
+  else p6txt='Centrado';
 
   var puestos={
     BLOQ:{zona:3, txt:'Bloqueo primer tiempo'},
@@ -417,18 +425,17 @@ function gpDefensaCentral(combo, origen, destinos){
     P6:{zona:6, txt:p6txt},
     P1:{zona:1, txt:'Límite 1-9, paso izquierda'}
   };
-  // Ayuda y toque según combo
   if(cfg.ayuda==='P2'){ puestos.P2={zona:2,txt:'Ayuda al bloqueo'}; puestos.P4={zona:4,txt:'Cubre el toque'}; }
   else { puestos.P4={zona:4,txt:'Ayuda al bloqueo'}; puestos.P2={zona:2,txt:'Cubre el toque'}; }
 
   return {
     titulo:'Defensa vs '+combo+' (central, primer tiempo)',
     zonaBloqueo:3, esCentral:true,
-    blqLado:cfg.blq, ayudaLado:cfg.ayudaLado, p6dir:cfg.p6,
-    bloqueo:cfg.desc,
+    blqLado:cfg.blq, ayudaLado:cfg.ayudaLado, p6dir:p6dir,
+    bloqueo:'Bloqueo P3 + ayuda · '+p6txt,
     puestos:puestos,
     lectura:{der:Math.round(der),izq:Math.round(izq),centro:Math.round(centro)},
-    foco:'Fondo cerrado al centro · '+p6txt
+    foco:'P6 '+p6txt
   };
 }
 
@@ -668,8 +675,117 @@ function gpStatSrv(rows){
   rows.forEach(function(r){var x=RES[r[5]];if(x==='#')k++;else if(x==='+')pl++;else if(x==='/')bl++;else if(x==='=')e++;});
   return {tot:t,pts:k,plus:pl,slash:bl,err:e,eff:t?Math.round((k+0.5*bl+0.25*pl-e)/t*100):0,pts_pct:t?Math.round(k/t*100):0};
 }
-var GP_POS_COLOR={'OPUESTO':'#818cf8','CENTRAL':'#f97316','PUNTA':'#22c55e','ARMADOR':'#fbbf24','LIBERO':'#06b6d4','OTRO':'#64748b'};
+var GP_POS_COLOR={'OPPOSITE':'#818cf8','MIDDLE':'#f97316','OUTSIDE':'#22c55e','SETTER':'#fbbf24','LIBERO':'#06b6d4','OTRO':'#64748b',
+  'OPUESTO':'#818cf8','CENTRAL':'#f97316','PUNTA':'#22c55e','ARMADOR':'#fbbf24'};
+var GP_POS_LABEL={'OPPOSITE':'OPPOSITE','MIDDLE':'MIDDLE BLOCKER','OUTSIDE':'OUTSIDE HITTER','SETTER':'SETTER','LIBERO':'LIBERO','OTRO':'—',
+  'OPUESTO':'OPPOSITE','CENTRAL':'MIDDLE BLOCKER','PUNTA':'OUTSIDE HITTER','ARMADOR':'SETTER'};
 
+
+// ═══════════════════════════════════════════════════════════════
+// ANÁLISIS ÉLITE DEL JUGADOR — scouting de alto nivel
+// Mínimo 1 línea por fundamento. Zona origen → destino siempre.
+// ═══════════════════════════════════════════════════════════════
+function gpAnalizarJugador(j){
+  var out={ataque:[], saque:[], recepcion:[]};
+
+  // ── Helpers de lenguaje ──
+  function zonaSaque(z){ // zona de saque (origen): 1=zona1, 6=zona6, 5=zona5
+    return {1:'desde z1',6:'desde z6',5:'desde z5',9:'desde z9',7:'desde z7',8:'desde z8'}[z]||('desde z'+z);
+  }
+  function zonaRecep(z){ // a qué zona de recepción manda el saque
+    return {1:'z1',6:'z6',5:'z5',2:'z2',9:'z9(corto)',7:'z7(corto)',8:'z8(corto)'}[z]||('z'+z);
+  }
+  // dirección de ataque en términos técnicos
+  function lineaAtaque(combo, dest){
+    var O = (combo==='X5'||combo==='V5'||combo==='C5') ? 4 :
+            (combo==='X6'||combo==='V6'||combo==='V2') ? 2 : null;
+    if(O===4){ // ataca desde nuestra visión: punta zona 4 rival
+      if(dest===5||dest===7) return 'paralela (línea)';
+      if(dest===1||dest===2) return 'diagonal';
+      if(dest===6||dest===8) return 'diagonal corta / centro';
+      if(dest===4||dest===3) return 'mano fuera / corto';
+    }
+    if(O===2){ // opuesto/punta zona 2 rival
+      if(dest===1||dest===9) return 'paralela (línea)';
+      if(dest===4||dest===5) return 'diagonal';
+      if(dest===6||dest===8) return 'diagonal corta / centro';
+      if(dest===2||dest===3) return 'mano fuera / corto';
+    }
+    if(combo==='X8'||combo==='V8'||combo==='XP'||combo==='XB'){ // zaguero/pipe
+      if(dest===5||dest===7) return 'cruzado a la izquierda';
+      if(dest===1||dest===9) return 'abierto a la derecha';
+      if(dest===6||dest===8) return 'recto por el medio';
+      if(dest===4) return 'cruzado profundo izq';
+      if(dest===2) return 'abierto profundo der';
+      return 'al fondo';
+    }
+    if(combo==='X1'||combo==='XM'||combo==='X7'||combo==='X2'){ // central
+      if(dest===1||dest===9) return 'a 6-1 (derecha)';
+      if(dest===5||dest===7) return 'a 6-5 (izquierda)';
+      if(dest===6||dest===8) return 'recto por el medio';
+    }
+    return 'zona '+dest;
+  }
+  function nombreCombo(c){
+    return {X5:'X5 (punta z4)',V5:'V5 (alta z4)',X6:'X6 (opuesto z2)',V6:'V6 (alta z2)',
+      X8:'X8 (zaguero z9)',V8:'V8 (alta zaguero)',XP:'XP (pipe z8)',
+      X1:'X1 (1er tiempo)',XM:'XM (corrido)',X7:'X7 (corrido 3-4)',X2:'X2 (espalda)',
+      XB:'XB (rápida)',C5:'C5'}[c]||c;
+  }
+
+  // ════ ATAQUE (mínimo 2 líneas) ════
+  var atks=(j.ataques||[]).filter(function(a){return (a.tot||0)>=3;});
+  atks.sort(function(a,b){return (b.pts||0)-(a.pts||0);});
+  if(atks.length){
+    // Línea 1: combo principal
+    var t=atks[0];
+    var d=(t.destinos||[]).slice().sort(function(a,b){return b.pct-a.pct;})[0];
+    if(d){
+      out.ataque.push('Arma principal <b>'+nombreCombo(t.cod)+'</b>: '+lineaAtaque(t.cod,d.z)+' a <b>'+('z'+d.z)+'</b> ('+d.pct+'% · '+t.pts+' pts · '+t.eff+'% ef.)');
+    }
+    // Línea 2: segundo recurso o variante
+    if(atks.length>1){
+      var s=atks[1];
+      var ds=(s.destinos||[]).slice().sort(function(a,b){return b.pct-a.pct;})[0];
+      if(ds) out.ataque.push('2do recurso <b>'+nombreCombo(s.cod)+'</b>: '+lineaAtaque(s.cod,ds.z)+' a <b>z'+ds.z+'</b> ('+ds.pct+'%)');
+    } else if(d){
+      // si solo tiene un combo, agregar lectura de eficacia
+      var alt=(t.destinos||[]).slice().sort(function(a,b){return b.pct-a.pct;})[1];
+      if(alt) out.ataque.push('También suelta a <b>z'+alt.z+'</b> ('+alt.pct+'%) — '+lineaAtaque(t.cod,alt.z));
+    }
+  }
+
+  // ════ SAQUE (mínimo 1 línea, origen → destino) ════
+  var srvs=(j.saques||[]).filter(function(s){return (s.tot||0)>=6;});
+  srvs.sort(function(a,b){return (b.tot||0)-(a.tot||0);});
+  if(srvs.length){
+    var sv=srvs[0];
+    var tipoN=(sv.tipo==='FLOTADO')?'Flotado':'Potencia (salto)';
+    var sd=(sv.destinos||[]).slice().sort(function(a,b){return b.pct-a.pct;})[0];
+    var orig=zonaSaque(sv.orig);
+    if(sd){
+      out.saque.push('<b>'+tipoN+'</b> '+orig+' → busca <b>'+zonaRecep(sd.z)+'</b> ('+sd.pct+'%). Reforzar recepción ahí'+(sv.eff>15?' — saque peligroso':''));
+    } else {
+      out.saque.push('<b>'+tipoN+'</b> '+orig+' ('+sv.tot+' saques)');
+    }
+  }
+
+  // ════ RECEPCIÓN (solo OUTSIDE / LIBERO) ════
+  var esReceptor = (j.pos==='OUTSIDE'||j.pos==='PUNTA'||j.pos==='LIBERO');
+  if(esReceptor && j.recepcion && (j.recepcion.total||0)>=15){
+    var pb=j.recepcion.pctPos;
+    if(pb!=null){
+      var lect = pb<50?'VULNERABLE ('+pb+'% pos.) → atacarlo con el saque':
+                 pb<65?'correcta ('+pb+'% pos.)':
+                 'sólida ('+pb+'% pos.) → variar saque/ritmo';
+      out.recepcion.push('Recepción '+lect);
+    } else {
+      out.recepcion.push('Recibe ('+j.recepcion.total+' rec.)');
+    }
+  }
+
+  return out;
+}
 function gpBuildJugadores(){
   var jugadores=[];
   var atkP=GP_TD.atk||{}, srvP=GP_TD.srv||{}, recP=GP_TD.rec||{};
@@ -736,6 +852,15 @@ function abrirModalDefensa(item, jugador, def){
     'XP':[['Pipe','XP.JPG']]
   };
   var opciones = IMG_OPC[item.cod] || null;
+  // Para centrales con imagen: avisar si la tendencia del jugador no coincide con la imagen default
+  var avisoTendencia='';
+  if(def && def.esCentral && def.lectura){
+    var L=def.lectura;
+    if(L.der>0 || L.izq>0){
+      var lado = L.der>L.izq?'6-1 (derecha)':'6-5 (izquierda)';
+      avisoTendencia='<div style="font-size:12px;color:#fbbf24;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);border-radius:8px;padding:8px 10px;margin-bottom:10px">⚠ Este jugador en '+item.cod+' tiende a <b>'+lado+'</b> → ubicá el P6 de ese lado</div>';
+    }
+  }
 
   var ov=document.createElement('div');
   ov.id='modal-defensa-ov';
@@ -760,7 +885,7 @@ function abrirModalDefensa(item, jugador, def){
       sel+='</select>';
     }
     var imgUrl=IMG_BASE+encodeURIComponent(opciones[0][1]);
-    box.innerHTML=head+sel
+    box.innerHTML=head+avisoTendencia+sel
       +'<img id="def-img" src="'+imgUrl+'" style="width:100%;border-radius:10px;display:block" '
       +'onerror="this.style.display=\'none\';document.getElementById(\'def-img-fallback\').style.display=\'block\'"/>'
       +'<div id="def-img-fallback" style="display:none;color:#64748b;padding:20px;text-align:center">Imagen no disponible. Subila a la carpeta /imagenes/ del repo.</div>';
@@ -777,7 +902,7 @@ function abrirModalDefensa(item, jugador, def){
     }
   } else {
     // Sin imagen (XM, X2): usar el dibujo esquemático
-    box.innerHTML=head
+    box.innerHTML=head+avisoTendencia
       +'<div style="font-size:12px;color:#cbd5e1;margin-bottom:10px">'+def.bloqueo+'</div>'
       +'<canvas id="canvas-defensa" width="500" height="420" style="width:100%;background:#0a0f1a;border-radius:10px"></canvas>';
     ov.appendChild(box);
@@ -876,8 +1001,6 @@ function dibujarCanchaDefensa(canvasId, def, item){
     ctx.fillStyle='#0a0f1a';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
     ctx.fillText(esBloqueo?'BL':p,pos[0],pos[1]);
     ctx.textBaseline='alphabetic';
-    ctx.fillStyle='#cbd5e1';ctx.font='8px sans-serif';
-    ctx.fillText(info.txt.substring(0,20),pos[0],pos[1]+26);
   });
 }
 
@@ -1181,38 +1304,68 @@ function renderJugador(j,idx){
   info.className='jug-info';
   var numLbl=document.createElement('div');numLbl.className='jug-num-lbl';numLbl.style.color=j.color;numLbl.textContent='# '+j.num;
   var nombre=document.createElement('div');nombre.className='jug-nombre';nombre.textContent=j.nombre;
-  var pos=document.createElement('div');pos.className='jug-pos';pos.textContent=j.pos;
+  var pos=document.createElement('div');pos.className='jug-pos';pos.textContent=(GP_POS_LABEL[j.pos]||j.pos);
   info.appendChild(numLbl);info.appendChild(nombre);info.appendChild(pos);
   ident.appendChild(bar);ident.appendChild(numBg);ident.appendChild(foto);ident.appendChild(info);
 
-  // Táctico
+  // Táctico — ANÁLISIS AUTOMÁTICO (scouting) + línea libre
   var tac=document.createElement('div');
   tac.className='jugador-tactico';
-  var tacItems=[
-    {icon:'⚡',bg:'rgba(255,140,0,.12)',ic:'#ff8c00',lbl:'Bloqueo',key:'bloqueo',val:j.info.bloqueo||''},
-    {icon:'🛡',bg:'rgba(239,68,68,.12)',ic:'#ef4444',lbl:'Defensa',key:'defensa',val:j.info.defensa||''},
-    {icon:'6',bg:'rgba(129,140,248,.12)',ic:'#818cf8',lbl:'Posición 6',key:'pos6',val:j.info.pos6||''},
-    {icon:'5',bg:'rgba(129,140,248,.12)',ic:'#818cf8',lbl:'Posición 5',key:'pos5',val:j.info.pos5||''},
-    {icon:'1',bg:'rgba(129,140,248,.12)',ic:'#818cf8',lbl:'Posición 1',key:'pos1',val:j.info.pos1||''},
+  tac.style.cssText='flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;padding:2px 0;';
+
+  // Título
+  var anaTit=document.createElement('div');
+  anaTit.style.cssText='font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:'+j.color+';font-weight:700;margin-bottom:2px;opacity:.85;';
+  anaTit.textContent='◆ Claves del jugador';
+  tac.appendChild(anaTit);
+
+  // Punteo automático agrupado por fundamento
+  var ana={ataque:[],saque:[],recepcion:[]};
+  try{ ana=gpAnalizarJugador(j)||ana; }catch(e){}
+  var grupos=[
+    {key:'ataque', lbl:'ATAQUE', col:'#818cf8'},
+    {key:'saque', lbl:'SAQUE', col:'#f59e0b'},
+    {key:'recepcion', lbl:'RECEPCIÓN', col:'#22c55e'}
   ];
-  tacItems.push({icon:'★',bg:'rgba(245,158,11,.12)',ic:'#f59e0b',lbl:'Nota',key:'extra',val:j.info.extra||''});
-  tacItems.forEach(function(t){
-    var ti=document.createElement('div');ti.className='tac-item';
-    var icon=document.createElement('div');icon.className='tac-icon';
-    icon.style.background=t.bg;icon.style.color=t.ic;icon.textContent=t.icon;
-    var txt=document.createElement('div');
-    var lbl=document.createElement('div');lbl.className='tac-lbl';lbl.textContent=t.lbl;
-    var storageKey='casla_jug_'+j.num+'_'+t.key;
-    var inp=document.createElement('input');inp.type='text';
-    inp.className='tac-val';inp.placeholder=t.lbl+'...';
-    inp.style.cssText='background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.1);color:#e2e8f0;font-family:inherit;font-size:12px;width:100%;outline:none;padding:2px 0;cursor:text;';
-    var saved=localStorage.getItem(storageKey);
-    inp.value=saved!==null?saved:(t.val||'');
-    inp.addEventListener('input',function(){localStorage.setItem(storageKey,this.value);});
-    inp.addEventListener('click',function(e){e.stopPropagation();});
-    txt.appendChild(lbl);txt.appendChild(inp);
-    ti.appendChild(icon);ti.appendChild(txt);tac.appendChild(ti);
+  var algo=false;
+  grupos.forEach(function(g){
+    var lineas=ana[g.key]||[];
+    if(!lineas.length) return;
+    algo=true;
+    var gl=document.createElement('div');
+    gl.style.cssText='font-size:9px;letter-spacing:1px;color:'+g.col+';font-weight:700;margin-top:3px;opacity:.7;';
+    gl.textContent=g.lbl;
+    tac.appendChild(gl);
+    lineas.forEach(function(p){
+      var li=document.createElement('div');
+      li.style.cssText='font-size:12px;color:#dbe4f0;line-height:1.4;display:flex;gap:6px;align-items:flex-start;';
+      li.innerHTML='<span style="color:'+g.col+';font-size:10px;line-height:1.4">▸</span><span>'+p+'</span>';
+      tac.appendChild(li);
+    });
   });
+  if(!algo){
+    var none=document.createElement('div');
+    none.style.cssText='font-size:11px;color:#64748b;font-style:italic;';
+    none.textContent='Sin datos suficientes para análisis automático.';
+    tac.appendChild(none);
+  }
+
+  // Línea libre editable (para que el CT agregue lo suyo)
+  var libreWrap=document.createElement('div');
+  libreWrap.style.cssText='margin-top:4px;display:flex;gap:6px;align-items:center;';
+  var lapiz=document.createElement('span');
+  lapiz.style.cssText='color:#f59e0b;font-size:11px;';
+  lapiz.textContent='✎';
+  var storageKey='casla_jug_'+j.num+'_nota_ct';
+  var inp=document.createElement('input');inp.type='text';
+  inp.placeholder='Agregá tu observación...';
+  inp.style.cssText='flex:1;background:transparent;border:none;border-bottom:1px dashed rgba(245,158,11,.35);color:#f8d77a;font-family:inherit;font-size:12px;outline:none;padding:3px 0;cursor:text;';
+  var saved=localStorage.getItem(storageKey);
+  if(saved!==null) inp.value=saved;
+  inp.addEventListener('input',function(){localStorage.setItem(storageKey,this.value);});
+  inp.addEventListener('click',function(e){e.stopPropagation();});
+  libreWrap.appendChild(lapiz);libreWrap.appendChild(inp);
+  tac.appendChild(libreWrap);
 
   // Footer con pestañas
   var footer=document.createElement('div');
@@ -2037,7 +2190,7 @@ function renderRecepcionRival(){
     html+='<div style="padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06)">';
     html+='<div style="width:38px;height:38px;border-radius:50%;border:2px solid '+color+';display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:15px;color:'+color+';flex-shrink:0">'+j.num+'</div>';
     html+='<div style="flex:1"><div style="font-family:Bebas Neue,sans-serif;font-size:15px;letter-spacing:1px;color:#e2e8f0">'+nm+'</div>';
-    html+='<div style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">'+j.pos+'</div></div>';
+    html+='<div style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">'+(GP_POS_LABEL[j.pos]||j.pos)+'</div></div>';
     // SM / SQ pills
     html+='<div style="display:flex;gap:5px">';
     if(sm.tot){html+='<div style="text-align:center;padding:5px 9px;border-radius:7px;background:rgba(129,140,248,.08);border:1px solid rgba(129,140,248,.2)"><div style="font-family:Bebas Neue,sans-serif;font-size:15px;color:'+ec(sm.eff||0)+'">'+( sm.eff||0)+'%</div><div style="font-size:7px;color:#475569;letter-spacing:1px">SM</div></div>';}

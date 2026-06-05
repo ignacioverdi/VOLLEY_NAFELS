@@ -143,7 +143,7 @@ POS_COMBOS = {
     'MB':  {'X1','X7','XM','X2','XG','XC','XD','XB'},
     'S':   {'PP'},
 }
-POS_ORDER = {'OH':'PUNTA','OPP':'OPUESTO','MB':'CENTRAL','S':'ARMADOR','L':'LIBERO','?':'OTRO'}
+POS_ORDER = {'OH':'OUTSIDE','OPP':'OPPOSITE','MB':'MIDDLE','S':'SETTER','L':'LIBERO','?':'OTRO'}
 
 def infer_pos(atk_acts):
     if not atk_acts: return '?'
@@ -580,7 +580,19 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
             arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],0,COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig']] for r in rl]
             setters_list.append({'num':sn,'name':sname,'s':arm,'total':len(rl)})
         setters_list.sort(key=lambda x:-x['total'])
-        LIGA['teams'][team.lower().replace(' ','_')]={'name':team,'rivals':rivals,'atk':atk_p,'srv':srv_p,'rec':rec_p,'setters':setters_list,'setter':setters_list[0] if setters_list else None}
+        # Roster de posiciones (profesional) por jugador — robusto
+        roster={}
+        team_setters = set(str(s['num']) for s in setters_list)
+        for ns0, pd0 in td.items():
+            atk0 = pd0.get('atk',[]); rec0 = pd0.get('rec',[])
+            nser = str(ns0)
+            if nser in team_setters:
+                roster[nser]='SETTER'; continue
+            if len(rec0) > 15 and len(atk0) <= max(2, len(rec0)*0.05):
+                roster[nser]='LIBERO'; continue
+            p = infer_pos(atk0)
+            roster[nser] = POS_ORDER.get(p, 'OTRO')
+        LIGA['teams'][team.lower().replace(' ','_')]={'name':team,'rivals':rivals,'atk':atk_p,'srv':srv_p,'rec':rec_p,'setters':setters_list,'setter':setters_list[0] if setters_list else None,'roster':roster}
     with open(os.path.join(output_dir,'liga_data.js'),'w',encoding='utf-8') as f:
         f.write('window.LIGA_DATA = '+json.dumps(LIGA,ensure_ascii=False)+';\n')
     return len(LIGA['teams'])

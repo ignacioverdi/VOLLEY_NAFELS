@@ -1,5 +1,5 @@
 window.HISTORIAL_DATA = {
-  "generado": "04/06/2026, 04:08:34",
+  "generado": "05/06/2026, 10:13:40",
   "entrenamientos": [
     {
       "fecha": "19/10/2025",
@@ -18,7 +18,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 17,
           "sEff": -6,
           "sPunto": 0,
@@ -50,7 +50,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Denis",
           "sT": 14,
           "sEff": -29,
           "sPunto": 1,
@@ -82,7 +82,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 19,
           "sEff": 3,
           "sPunto": 1,
@@ -114,7 +114,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 16,
           "sEff": -3,
           "sPunto": 0,
@@ -146,7 +146,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 25,
           "sEff": 7,
           "sPunto": 1,
@@ -178,7 +178,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 10,
           "sEff": -15,
           "sPunto": 0,
@@ -210,7 +210,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -242,7 +242,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 4,
           "sEff": 0,
           "sPunto": 0,
@@ -274,7 +274,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 1,
-          "n": "DEECKE",
+          "n": "Linus",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -322,7 +322,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 13,
           "sEff": 13,
           "sPunto": 2,
@@ -354,7 +354,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 11,
           "sEff": 0,
           "sPunto": 0,
@@ -386,7 +386,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 14,
           "sEff": 2,
           "sPunto": 3,
@@ -418,7 +418,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 9,
           "sEff": 31,
           "sPunto": 2,
@@ -450,7 +450,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -482,7 +482,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 4,
           "sEff": 0,
           "sPunto": 0,
@@ -514,7 +514,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 11,
           "sEff": -11,
           "sPunto": 0,
@@ -546,7 +546,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 6,
           "sEff": -33,
           "sPunto": 1,
@@ -578,7 +578,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 2,
           "sEff": 0,
           "sPunto": 0,
@@ -610,7 +610,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 3,
-          "n": "SCHWITTER",
+          "n": "Tom",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -642,7 +642,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 4,
           "sEff": -25,
           "sPunto": 0,
@@ -690,7 +690,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 8,
           "sEff": -12,
           "sPunto": 0,
@@ -722,7 +722,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 13,
           "sEff": -6,
           "sPunto": 0,
@@ -754,7 +754,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 16,
           "sEff": -5,
           "sPunto": 2,
@@ -786,7 +786,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 14,
           "sEff": -5,
           "sPunto": 0,
@@ -818,7 +818,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -850,7 +850,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 12,
           "sEff": -12,
           "sPunto": 1,
@@ -882,7 +882,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 9,
           "sEff": 8,
           "sPunto": 1,
@@ -914,7 +914,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 1,
           "sEff": 0,
           "sPunto": 0,
@@ -963,7 +963,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 14,
           "sEff": -7,
           "sPunto": 0,
@@ -995,7 +995,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 17,
           "sEff": -16,
           "sPunto": 0,
@@ -1027,7 +1027,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 14,
           "sEff": -21,
           "sPunto": 0,
@@ -1059,7 +1059,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 15,
           "sEff": -33,
           "sPunto": 0,
@@ -1091,7 +1091,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -1123,7 +1123,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 24,
           "sEff": 16,
           "sPunto": 4,
@@ -1155,7 +1155,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 15,
           "sEff": -2,
           "sPunto": 1,
@@ -1187,7 +1187,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 1,
           "sEff": -100,
           "sPunto": 0,
@@ -1235,7 +1235,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 11,
           "sEff": -16,
           "sPunto": 0,
@@ -1267,7 +1267,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 12,
           "sEff": 6,
           "sPunto": 0,
@@ -1299,7 +1299,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 10,
           "sEff": -40,
           "sPunto": 0,
@@ -1331,7 +1331,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 6,
           "sEff": -4,
           "sPunto": 0,
@@ -1363,7 +1363,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 9,
           "sEff": -8,
           "sPunto": 0,
@@ -1395,7 +1395,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 13,
           "sEff": 4,
           "sPunto": 0,
@@ -1427,7 +1427,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -1459,7 +1459,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 2,
           "sEff": 0,
           "sPunto": 0,
@@ -1491,7 +1491,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 1,
           "sEff": -100,
           "sPunto": 0,
@@ -1540,7 +1540,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 17,
           "sEff": 0,
           "sPunto": 0,
@@ -1572,7 +1572,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 13,
           "sEff": -21,
           "sPunto": 0,
@@ -1604,7 +1604,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 15,
           "sEff": -7,
           "sPunto": 0,
@@ -1636,7 +1636,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 14,
           "sEff": -27,
           "sPunto": 0,
@@ -1668,7 +1668,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 19,
           "sEff": 5,
           "sPunto": 1,
@@ -1700,7 +1700,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 17,
           "sEff": 0,
           "sPunto": 0,
@@ -1732,7 +1732,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -1764,7 +1764,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 3,
           "sEff": -25,
           "sPunto": 0,
@@ -1796,7 +1796,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 5,
           "sEff": 25,
           "sPunto": 1,
@@ -1844,7 +1844,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 14,
           "sEff": 11,
           "sPunto": 1,
@@ -1876,7 +1876,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 13,
           "sEff": -10,
           "sPunto": 0,
@@ -1908,7 +1908,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 10,
           "sEff": 8,
           "sPunto": 1,
@@ -1940,7 +1940,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -1972,7 +1972,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 17,
           "sEff": -1,
           "sPunto": 0,
@@ -2004,7 +2004,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 14,
           "sEff": -2,
           "sPunto": 2,
@@ -2036,7 +2036,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 8,
           "sEff": -6,
           "sPunto": 0,
@@ -2068,7 +2068,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 2,
           "sEff": -38,
           "sPunto": 0,
@@ -2100,7 +2100,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -2150,7 +2150,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -2182,7 +2182,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 17,
           "sEff": 10,
           "sPunto": 2,
@@ -2214,7 +2214,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 17,
           "sEff": -6,
           "sPunto": 0,
@@ -2246,7 +2246,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 19,
           "sEff": 1,
           "sPunto": 0,
@@ -2278,7 +2278,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 17,
           "sEff": -21,
           "sPunto": 1,
@@ -2310,7 +2310,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 15,
           "sEff": -3,
           "sPunto": 1,
@@ -2342,7 +2342,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 11,
           "sEff": 9,
           "sPunto": 0,
@@ -2374,7 +2374,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 2,
           "sEff": -38,
           "sPunto": 0,
@@ -2406,7 +2406,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 4,
           "sEff": -19,
           "sPunto": 0,
@@ -2456,7 +2456,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 1,
-          "n": "DEECKE",
+          "n": "Linus",
           "sT": 25,
           "sEff": 11,
           "sPunto": 1,
@@ -2488,7 +2488,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 19,
           "sEff": -17,
           "sPunto": 0,
@@ -2520,7 +2520,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 17,
           "sEff": 3,
           "sPunto": 2,
@@ -2552,7 +2552,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 19,
           "sEff": -4,
           "sPunto": 0,
@@ -2584,7 +2584,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 4,
           "sEff": 0,
           "sPunto": 0,
@@ -2616,7 +2616,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -2648,7 +2648,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 3,
           "sEff": 0,
           "sPunto": 0,
@@ -2680,7 +2680,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 12,
           "sEff": 4,
           "sPunto": 0,
@@ -2712,7 +2712,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 12,
           "sEff": 10,
           "sPunto": 1,
@@ -2760,7 +2760,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 19,
           "sEff": 12,
           "sPunto": 2,
@@ -2792,7 +2792,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 9,
           "sEff": 14,
           "sPunto": 1,
@@ -2824,7 +2824,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -2856,7 +2856,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 8,
           "sEff": 16,
           "sPunto": 1,
@@ -2888,7 +2888,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 9,
           "sEff": 11,
           "sPunto": 0,
@@ -2920,7 +2920,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 12,
           "sEff": 23,
           "sPunto": 3,
@@ -2952,7 +2952,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 8,
           "sEff": 16,
           "sPunto": 0,
@@ -2984,7 +2984,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 4,
           "sEff": 25,
           "sPunto": 1,
@@ -3016,7 +3016,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 5,
           "sEff": -10,
           "sPunto": 0,
@@ -3065,7 +3065,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 28,
           "sEff": 12,
           "sPunto": 2,
@@ -3097,7 +3097,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 14,
           "sEff": 5,
           "sPunto": 0,
@@ -3129,7 +3129,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 13,
           "sEff": -19,
           "sPunto": 0,
@@ -3161,7 +3161,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -3193,7 +3193,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 9,
           "sEff": -53,
           "sPunto": 0,
@@ -3225,7 +3225,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 7,
           "sEff": 4,
           "sPunto": 0,
@@ -3257,7 +3257,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 9,
           "sEff": -11,
           "sPunto": 0,
@@ -3289,7 +3289,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 11,
           "sEff": 0,
           "sPunto": 0,
@@ -3321,7 +3321,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -3370,7 +3370,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 11,
           "sEff": -9,
           "sPunto": 0,
@@ -3402,7 +3402,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 11,
           "sEff": -39,
           "sPunto": 0,
@@ -3434,7 +3434,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -3466,7 +3466,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 15,
           "sEff": -7,
           "sPunto": 0,
@@ -3498,7 +3498,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 8,
           "sEff": -3,
           "sPunto": 0,
@@ -3530,7 +3530,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 21,
           "sEff": -8,
           "sPunto": 1,
@@ -3562,7 +3562,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 16,
           "sEff": -3,
           "sPunto": 1,
@@ -3594,7 +3594,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 1,
           "sEff": 0,
           "sPunto": 0,
@@ -3626,7 +3626,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 10,
           "sEff": 2,
           "sPunto": 0,
@@ -3674,7 +3674,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 8,
           "sEff": 22,
           "sPunto": 1,
@@ -3706,7 +3706,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 8,
           "sEff": 3,
           "sPunto": 1,
@@ -3738,7 +3738,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 5,
           "sEff": 10,
           "sPunto": 0,
@@ -3770,7 +3770,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 3,
           "sEff": 8,
           "sPunto": 0,
@@ -3802,7 +3802,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 14,
           "sEff": 9,
           "sPunto": 2,
@@ -3834,7 +3834,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 8,
           "sEff": -3,
           "sPunto": 0,
@@ -3866,7 +3866,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 1,
-          "n": "DEECKE",
+          "n": "Linus",
           "sT": 7,
           "sEff": 14,
           "sPunto": 0,
@@ -3898,7 +3898,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 3,
-          "n": "SCHWITTER",
+          "n": "Tom",
           "sT": 4,
           "sEff": 6,
           "sPunto": 0,
@@ -3930,7 +3930,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -3962,7 +3962,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 5,
           "sEff": -20,
           "sPunto": 0,
@@ -3994,7 +3994,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 11,
           "sEff": -9,
           "sPunto": 1,
@@ -4043,7 +4043,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 17,
           "sEff": -4,
           "sPunto": 0,
@@ -4075,7 +4075,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 11,
           "sEff": 2,
           "sPunto": 0,
@@ -4107,7 +4107,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 15,
           "sEff": 3,
           "sPunto": 2,
@@ -4139,7 +4139,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 21,
           "sEff": -1,
           "sPunto": 2,
@@ -4171,7 +4171,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 6,
           "sEff": 0,
           "sPunto": 0,
@@ -4203,7 +4203,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 7,
           "sEff": -29,
           "sPunto": 0,
@@ -4235,7 +4235,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -4267,7 +4267,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 4,
           "sEff": -25,
           "sPunto": 0,
@@ -4299,7 +4299,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 10,
           "sEff": 20,
           "sPunto": 1,
@@ -4349,7 +4349,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 14,
           "sEff": -5,
           "sPunto": 0,
@@ -4381,7 +4381,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 22,
           "sEff": -7,
           "sPunto": 1,
@@ -4413,7 +4413,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 13,
           "sEff": 8,
           "sPunto": 1,
@@ -4445,7 +4445,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 20,
           "sEff": -5,
           "sPunto": 3,
@@ -4477,7 +4477,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 24,
           "sEff": 3,
           "sPunto": 1,
@@ -4509,7 +4509,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 10,
           "sEff": -5,
           "sPunto": 0,
@@ -4541,7 +4541,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -4573,7 +4573,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 5,
           "sEff": 5,
           "sPunto": 0,
@@ -4605,7 +4605,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 3,
           "sEff": -67,
           "sPunto": 0,
@@ -4637,7 +4637,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 1,
           "sEff": 0,
           "sPunto": 0,
@@ -4669,7 +4669,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 3,
-          "n": "SCHWITTER",
+          "n": "Tom",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -4701,7 +4701,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 1,
-          "n": "DEECKE",
+          "n": "Linus",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -4749,7 +4749,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 10,
           "sEff": 2,
           "sPunto": 1,
@@ -4781,7 +4781,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 20,
           "sEff": -5,
           "sPunto": 1,
@@ -4813,7 +4813,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 10,
           "sEff": -5,
           "sPunto": 0,
@@ -4845,7 +4845,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 9,
           "sEff": -31,
           "sPunto": 0,
@@ -4877,7 +4877,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -4909,7 +4909,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 13,
           "sEff": 6,
           "sPunto": 1,
@@ -4941,7 +4941,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 8,
           "sEff": 9,
           "sPunto": 0,
@@ -4973,7 +4973,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 2,
           "sEff": 0,
           "sPunto": 1,
@@ -5005,7 +5005,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 1,
           "sEff": 50,
           "sPunto": 0,
@@ -5053,7 +5053,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 12,
           "sEff": -12,
           "sPunto": 0,
@@ -5085,7 +5085,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 10,
           "sEff": 8,
           "sPunto": 0,
@@ -5117,7 +5117,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 13,
           "sEff": -8,
           "sPunto": 1,
@@ -5149,7 +5149,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 13,
           "sEff": 17,
           "sPunto": 2,
@@ -5181,7 +5181,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 6,
           "sEff": -12,
           "sPunto": 0,
@@ -5213,7 +5213,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -5245,7 +5245,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 6,
           "sEff": -17,
           "sPunto": 0,
@@ -5277,7 +5277,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 9,
           "sEff": -19,
           "sPunto": 1,
@@ -5309,7 +5309,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 3,
           "sEff": -33,
           "sPunto": 0,
@@ -5341,7 +5341,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 1,
           "sEff": 0,
           "sPunto": 0,
@@ -5373,7 +5373,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 1,
-          "n": "DEECKE",
+          "n": "Linus",
           "sT": 1,
           "sEff": 0,
           "sPunto": 0,
@@ -5421,7 +5421,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 12,
           "sEff": 2,
           "sPunto": 0,
@@ -5453,7 +5453,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 18,
           "sEff": 11,
           "sPunto": 3,
@@ -5485,7 +5485,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 9,
           "sEff": -25,
           "sPunto": 0,
@@ -5517,7 +5517,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 10,
           "sEff": -30,
           "sPunto": 0,
@@ -5549,7 +5549,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 10,
           "sEff": 15,
           "sPunto": 1,
@@ -5581,7 +5581,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 14,
           "sEff": 16,
           "sPunto": 0,
@@ -5613,7 +5613,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -5645,7 +5645,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 2,
           "sEff": 50,
           "sPunto": 1,
@@ -5693,7 +5693,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 17,
           "sEff": -6,
           "sPunto": 0,
@@ -5725,7 +5725,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 8,
           "sEff": 3,
           "sPunto": 1,
@@ -5757,7 +5757,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 11,
           "sEff": -23,
           "sPunto": 0,
@@ -5789,7 +5789,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 8,
           "sEff": 12,
           "sPunto": 2,
@@ -5821,7 +5821,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -5853,7 +5853,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 7,
           "sEff": 0,
           "sPunto": 0,
@@ -5885,7 +5885,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 9,
           "sEff": -8,
           "sPunto": 0,
@@ -5917,7 +5917,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 3,
           "sEff": 0,
           "sPunto": 0,
@@ -5949,7 +5949,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 6,
           "sEff": 0,
           "sPunto": 1,
@@ -5981,7 +5981,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 3,
           "sEff": -33,
           "sPunto": 0,
@@ -6013,7 +6013,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 1,
-          "n": "DEECKE",
+          "n": "Linus",
           "sT": 2,
           "sEff": 12,
           "sPunto": 0,
@@ -6061,7 +6061,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 14,
           "sEff": 7,
           "sPunto": 0,
@@ -6093,7 +6093,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 16,
           "sEff": 2,
           "sPunto": 2,
@@ -6125,7 +6125,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 8,
           "sEff": 6,
           "sPunto": 1,
@@ -6157,7 +6157,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 11,
           "sEff": 16,
           "sPunto": 2,
@@ -6189,7 +6189,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 15,
           "sEff": 12,
           "sPunto": 2,
@@ -6221,7 +6221,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 8,
           "sEff": -9,
           "sPunto": 0,
@@ -6253,7 +6253,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -6285,7 +6285,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 1,
           "sEff": 0,
           "sPunto": 0,
@@ -6317,7 +6317,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 1,
           "sEff": 0,
           "sPunto": 0,
@@ -6365,7 +6365,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 13,
           "sEff": 8,
           "sPunto": 0,
@@ -6397,7 +6397,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 15,
           "sEff": 8,
           "sPunto": 1,
@@ -6429,7 +6429,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 13,
           "sEff": 6,
           "sPunto": 1,
@@ -6461,7 +6461,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 9,
           "sEff": 6,
           "sPunto": 1,
@@ -6493,7 +6493,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -6525,7 +6525,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 2,
           "sEff": 62,
           "sPunto": 1,
@@ -6557,7 +6557,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 4,
           "sEff": -25,
           "sPunto": 0,
@@ -6589,7 +6589,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 14,
           "sEff": -7,
           "sPunto": 0,
@@ -6621,7 +6621,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 4,
           "sEff": 12,
           "sPunto": 0,
@@ -6670,7 +6670,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -6702,7 +6702,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 19,
           "sEff": -11,
           "sPunto": 2,
@@ -6734,7 +6734,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 20,
           "sEff": 4,
           "sPunto": 0,
@@ -6766,7 +6766,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 11,
           "sEff": -5,
           "sPunto": 0,
@@ -6798,7 +6798,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 20,
           "sEff": -18,
           "sPunto": 2,
@@ -6830,7 +6830,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 7,
           "sEff": -11,
           "sPunto": 0,
@@ -6862,7 +6862,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 15,
           "sEff": 7,
           "sPunto": 0,
@@ -6894,7 +6894,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 2,
           "sEff": 0,
           "sPunto": 0,
@@ -6926,7 +6926,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 1,
           "sEff": 25,
           "sPunto": 0,
@@ -6975,7 +6975,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 9,
           "sEff": 0,
           "sPunto": 0,
@@ -7007,7 +7007,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 10,
           "sEff": -20,
           "sPunto": 0,
@@ -7039,7 +7039,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 9,
           "sEff": -17,
           "sPunto": 0,
@@ -7071,7 +7071,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 20,
           "sEff": 5,
           "sPunto": 0,
@@ -7103,7 +7103,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 13,
           "sEff": -6,
           "sPunto": 0,
@@ -7135,7 +7135,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 13,
           "sEff": -19,
           "sPunto": 0,
@@ -7167,7 +7167,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -7199,7 +7199,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 5,
           "sEff": 15,
           "sPunto": 0,
@@ -7231,7 +7231,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 1,
           "sEff": 0,
           "sPunto": 0,
@@ -7263,7 +7263,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 1,
           "sEff": 0,
           "sPunto": 0,
@@ -7311,7 +7311,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 9,
           "sEff": 17,
           "sPunto": 1,
@@ -7343,7 +7343,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 9,
           "sEff": 8,
           "sPunto": 1,
@@ -7375,7 +7375,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 2,
-          "n": "CORZO",
+          "n": "Nevin",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -7407,7 +7407,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 9,
           "sEff": 3,
           "sPunto": 0,
@@ -7439,7 +7439,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 8,
           "sEff": 22,
           "sPunto": 1,
@@ -7471,7 +7471,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 7,
           "sEff": 14,
           "sPunto": 0,
@@ -7503,7 +7503,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 4,
           "sEff": -25,
           "sPunto": 0,
@@ -7535,7 +7535,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -7567,7 +7567,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 1,
           "sEff": -100,
           "sPunto": 0,
@@ -7599,7 +7599,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 3,
           "sEff": -33,
           "sPunto": 0,
@@ -7631,7 +7631,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 3,
           "sEff": -33,
           "sPunto": 0,
@@ -7679,7 +7679,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 2,
           "sEff": 12,
           "sPunto": 0,
@@ -7711,7 +7711,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -7743,7 +7743,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 7,
           "sEff": 4,
           "sPunto": 0,
@@ -7775,7 +7775,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 15,
           "sEff": -3,
           "sPunto": 1,
@@ -7807,7 +7807,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 9,
           "sEff": -50,
           "sPunto": 0,
@@ -7839,7 +7839,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 9,
           "sEff": 11,
           "sPunto": 0,
@@ -7871,7 +7871,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 12,
           "sEff": 4,
           "sPunto": 0,
@@ -7903,7 +7903,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 6,
           "sEff": 4,
           "sPunto": 0,
@@ -7935,7 +7935,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 2,
           "sEff": 0,
           "sPunto": 0,
@@ -7985,7 +7985,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 15,
-          "n": "NIKOLOV",
+          "n": "Risto",
           "sT": 17,
           "sEff": 1,
           "sPunto": 0,
@@ -8017,7 +8017,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "HESSELHOLT",
+          "n": "Joachim",
           "sT": 10,
           "sEff": -2,
           "sPunto": 1,
@@ -8049,7 +8049,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "BROCH",
+          "n": "Nathan",
           "sT": 11,
           "sEff": 5,
           "sPunto": 1,
@@ -8081,7 +8081,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 6,
-          "n": "DENIS CABANAS",
+          "n": "Pablo",
           "sT": 22,
           "sEff": 14,
           "sPunto": 4,
@@ -8113,7 +8113,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 8,
-          "n": "PETER",
+          "n": "Jonas",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -8145,7 +8145,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "Ezequiel",
           "sT": 18,
           "sEff": 4,
           "sPunto": 0,
@@ -8177,7 +8177,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 14,
-          "n": "FIGUEIREDO",
+          "n": "Manuel",
           "sT": 15,
           "sEff": 10,
           "sPunto": 2,
@@ -8209,7 +8209,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "BARTHOLET",
+          "n": "Christian",
           "sT": 9,
           "sEff": -19,
           "sPunto": 0,
@@ -8241,7 +8241,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 10,
-          "n": "BOGDANOVSKI",
+          "n": "Dejan",
           "sT": 3,
           "sEff": 0,
           "sPunto": 0,
@@ -8273,7 +8273,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHMID",
+          "n": "Roy",
           "sT": 1,
           "sEff": -100,
           "sPunto": 0,
