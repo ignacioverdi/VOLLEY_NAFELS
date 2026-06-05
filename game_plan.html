@@ -682,105 +682,112 @@ var GP_POS_LABEL={'OPPOSITE':'OPPOSITE','MIDDLE':'MIDDLE BLOCKER','OUTSIDE':'OUT
 
 
 // ═══════════════════════════════════════════════════════════════
-// ANÁLISIS ÉLITE DEL JUGADOR — scouting de alto nivel
-// Mínimo 1 línea por fundamento. Zona origen → destino siempre.
+// ANÁLISIS ÉLITE DEL JUGADOR — scouting premium
+// 1 línea por fundamento. Terminología voleibolística (traducible).
 // ═══════════════════════════════════════════════════════════════
 function gpAnalizarJugador(j){
   var out={ataque:[], saque:[], recepcion:[]};
 
-  // ── Helpers de lenguaje ──
-  function zonaSaque(z){ // zona de saque (origen): 1=zona1, 6=zona6, 5=zona5
-    return {1:'desde z1',6:'desde z6',5:'desde z5',9:'desde z9',7:'desde z7',8:'desde z8'}[z]||('desde z'+z);
-  }
-  function zonaRecep(z){ // a qué zona de recepción manda el saque
-    return {1:'z1',6:'z6',5:'z5',2:'z2',9:'z9(corto)',7:'z7(corto)',8:'z8(corto)'}[z]||('z'+z);
-  }
-  // dirección de ataque en términos técnicos
-  function lineaAtaque(combo, dest){
-    var O = (combo==='X5'||combo==='V5'||combo==='C5') ? 4 :
-            (combo==='X6'||combo==='V6'||combo==='V2') ? 2 : null;
-    if(O===4){ // ataca desde nuestra visión: punta zona 4 rival
-      if(dest===5||dest===7) return 'paralela (línea)';
+  // Combos de pelota vendida (sin dirección clara) — EXCLUIR del análisis
+  var VENDIDAS={'V4':1,'V3':1,'V2':1,'V0':1};
+
+  function zonaSaque(z){ return {1:'z1',6:'z6',5:'z5',9:'z9',7:'z7',8:'z8'}[z]||('z'+z); }
+  function zonaRec(z){ return {1:'z1',6:'z6',5:'z5',2:'z2',9:'z9',7:'z7',8:'z8'}[z]||('z'+z); }
+
+  // Dirección del ataque en terminología voleibolística (traducible)
+  function direccion(combo, dest){
+    // Punta zona 4 (X5/V5/C5)
+    if(combo==='X5'||combo==='V5'||combo==='C5'){
+      if(dest===5||dest===7) return 'línea';
       if(dest===1||dest===2) return 'diagonal';
-      if(dest===6||dest===8) return 'diagonal corta / centro';
-      if(dest===4||dest===3) return 'mano fuera / corto';
+      if(dest===6||dest===8) return 'diagonal corta';
+      return 'centro';
     }
-    if(O===2){ // opuesto/punta zona 2 rival
-      if(dest===1||dest===9) return 'paralela (línea)';
+    // Opuesto/punta zona 2 (X6/V6)
+    if(combo==='X6'||combo==='V6'){
+      if(dest===1||dest===9) return 'línea';
       if(dest===4||dest===5) return 'diagonal';
-      if(dest===6||dest===8) return 'diagonal corta / centro';
-      if(dest===2||dest===3) return 'mano fuera / corto';
+      if(dest===6||dest===8) return 'diagonal corta';
+      return 'centro';
     }
-    if(combo==='X8'||combo==='V8'||combo==='XP'||combo==='XB'){ // zaguero/pipe
-      if(dest===5||dest===7) return 'cruzado a la izquierda';
-      if(dest===1||dest===9) return 'abierto a la derecha';
-      if(dest===6||dest===8) return 'recto por el medio';
-      if(dest===4) return 'cruzado profundo izq';
-      if(dest===2) return 'abierto profundo der';
-      return 'al fondo';
+    // Zaguero (X8/V8/XP)
+    if(combo==='X8'||combo==='V8'||combo==='XP'||combo==='XB'){
+      if(dest===5||dest===7) return 'diagonal izquierda';
+      if(dest===1||dest===9) return 'diagonal derecha';
+      return 'fondo centro';
     }
-    if(combo==='X1'||combo==='XM'||combo==='X7'||combo==='X2'){ // central
-      if(dest===1||dest===9) return 'a 6-1 (derecha)';
-      if(dest===5||dest===7) return 'a 6-5 (izquierda)';
-      if(dest===6||dest===8) return 'recto por el medio';
+    // Central (X1/XM/X7/X2)
+    if(combo==='X1'||combo==='XM'||combo==='X7'||combo==='X2'){
+      if(dest===1||dest===9) return 'zona 1';
+      if(dest===5||dest===7) return 'zona 5';
+      return 'centro';
     }
     return 'zona '+dest;
   }
-  function nombreCombo(c){
-    return {X5:'X5 (punta z4)',V5:'V5 (alta z4)',X6:'X6 (opuesto z2)',V6:'V6 (alta z2)',
-      X8:'X8 (zaguero z9)',V8:'V8 (alta zaguero)',XP:'XP (pipe z8)',
-      X1:'X1 (1er tiempo)',XM:'XM (corrido)',X7:'X7 (corrido 3-4)',X2:'X2 (espalda)',
-      XB:'XB (rápida)',C5:'C5'}[c]||c;
-  }
 
-  // ════ ATAQUE (mínimo 2 líneas) ════
-  var atks=(j.ataques||[]).filter(function(a){return (a.tot||0)>=3;});
+  // ════ ATAQUE — 1 línea, sin leyenda de combo ════
+  var atks=(j.ataques||[]).filter(function(a){
+    return (a.tot||0)>=3 && !VENDIDAS[a.cod];
+  });
   atks.sort(function(a,b){return (b.pts||0)-(a.pts||0);});
   if(atks.length){
-    // Línea 1: combo principal
     var t=atks[0];
     var d=(t.destinos||[]).slice().sort(function(a,b){return b.pct-a.pct;})[0];
-    if(d){
-      out.ataque.push('Arma principal <b>'+nombreCombo(t.cod)+'</b>: '+lineaAtaque(t.cod,d.z)+' a <b>'+('z'+d.z)+'</b> ('+d.pct+'% · '+t.pts+' pts · '+t.eff+'% ef.)');
-    }
-    // Línea 2: segundo recurso o variante
-    if(atks.length>1){
+    var linea='<b>'+t.cod+'</b>';
+    if(d) linea += ': '+direccion(t.cod,d.z)+' ('+d.pct+'%, '+t.pts+' pts, '+t.eff+'% ef.)';
+    // Segundo recurso en la MISMA línea
+    if(atks.length>1 && (atks[1].pts||0)>0){
       var s=atks[1];
       var ds=(s.destinos||[]).slice().sort(function(a,b){return b.pct-a.pct;})[0];
-      if(ds) out.ataque.push('2do recurso <b>'+nombreCombo(s.cod)+'</b>: '+lineaAtaque(s.cod,ds.z)+' a <b>z'+ds.z+'</b> ('+ds.pct+'%)');
-    } else if(d){
-      // si solo tiene un combo, agregar lectura de eficacia
-      var alt=(t.destinos||[]).slice().sort(function(a,b){return b.pct-a.pct;})[1];
-      if(alt) out.ataque.push('También suelta a <b>z'+alt.z+'</b> ('+alt.pct+'%) — '+lineaAtaque(t.cod,alt.z));
+      if(ds) linea += ' · 2do <b>'+s.cod+'</b> '+direccion(s.cod,ds.z)+' ('+ds.pct+'%)';
     }
+    out.ataque.push(linea);
   }
 
-  // ════ SAQUE (mínimo 1 línea, origen → destino) ════
+  // ════ SAQUE — 1 línea (origen → destino) ════
   var srvs=(j.saques||[]).filter(function(s){return (s.tot||0)>=6;});
   srvs.sort(function(a,b){return (b.tot||0)-(a.tot||0);});
   if(srvs.length){
     var sv=srvs[0];
-    var tipoN=(sv.tipo==='FLOTADO')?'Flotado':'Potencia (salto)';
+    var tipoN=(sv.tipo==='FLOTADO')?'Flotado':'Potencia';
     var sd=(sv.destinos||[]).slice().sort(function(a,b){return b.pct-a.pct;})[0];
-    var orig=zonaSaque(sv.orig);
     if(sd){
-      out.saque.push('<b>'+tipoN+'</b> '+orig+' → busca <b>'+zonaRecep(sd.z)+'</b> ('+sd.pct+'%). Reforzar recepción ahí'+(sv.eff>15?' — saque peligroso':''));
+      out.saque.push('<b>'+tipoN+'</b> '+zonaSaque(sv.orig)+' → '+zonaRec(sd.z)+' ('+sd.pct+'%)'+(sv.eff>15?' · peligroso':''));
     } else {
-      out.saque.push('<b>'+tipoN+'</b> '+orig+' ('+sv.tot+' saques)');
+      out.saque.push('<b>'+tipoN+'</b> desde '+zonaSaque(sv.orig)+' ('+sv.tot+')');
     }
   }
 
-  // ════ RECEPCIÓN (solo OUTSIDE / LIBERO) ════
+  // ════ RECEPCIÓN — 1 línea premium (OUTSIDE / LIBERO) ════
   var esReceptor = (j.pos==='OUTSIDE'||j.pos==='PUNTA'||j.pos==='LIBERO');
-  if(esReceptor && j.recepcion && (j.recepcion.total||0)>=15){
-    var pb=j.recepcion.pctPos;
-    if(pb!=null){
-      var lect = pb<50?'VULNERABLE ('+pb+'% pos.) → atacarlo con el saque':
-                 pb<65?'correcta ('+pb+'% pos.)':
-                 'sólida ('+pb+'% pos.) → variar saque/ritmo';
-      out.recepcion.push('Recepción '+lect);
+  if(esReceptor && j.recepcion){
+    var acc=j.recepcion;  // {flotado:{desde_zX:{total:{...}}}, potencia:{...}}
+    // Agregar todo y encontrar el punto MÁS DÉBIL (tipo+zona donde recibe peor)
+    var totalGlobal=0, posGlobal=0, peor=null;
+    ['flotado','potencia'].forEach(function(tp){
+      if(!acc[tp])return;
+      ['desde_z1','desde_z6','desde_z5'].forEach(function(z){
+        var T=acc[tp][z]&&acc[tp][z].total;
+        if(!T||!T.tot)return;
+        totalGlobal+=T.tot; posGlobal+=(T.perf+T.pos);
+        if(T.tot>=4){
+          if(!peor || T.eff<peor.eff) peor={tipo:tp,zona:z,eff:T.eff,tot:T.tot};
+        }
+      });
+    });
+    if(totalGlobal>=12){
+      var pctPos=Math.round(posGlobal/totalGlobal*100);
+      var nivel = pctPos<50?'vulnerable':pctPos<65?'correcta':'sólida';
+      var linea='Recepción <b>'+nivel+'</b> ('+pctPos+'% pos.)';
+      // Agregar el punto débil concreto: tipo de saque + zona origen
+      if(peor){
+        var tipoTxt=peor.tipo==='flotado'?'flotado':'potencia';
+        var zonaTxt={'desde_z1':'z1','desde_z6':'z6','desde_z5':'z5'}[peor.zona]||peor.zona;
+        linea+=' · sufre el <b>'+tipoTxt+' '+zonaTxt+'</b> ('+peor.eff+'% ef.) → atacar ahí';
+      }
+      out.recepcion.push(linea);
     } else {
-      out.recepcion.push('Recibe ('+j.recepcion.total+' rec.)');
+      out.recepcion.push('Recepción: muestra insuficiente');
     }
   }
 

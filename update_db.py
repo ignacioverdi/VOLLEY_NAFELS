@@ -580,18 +580,30 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
             arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],0,COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig']] for r in rl]
             setters_list.append({'num':sn,'name':sname,'s':arm,'total':len(rl)})
         setters_list.sort(key=lambda x:-x['total'])
-        # Roster de posiciones (profesional) por jugador — robusto
+        # Roster de posiciones (profesional) — jerarquía: setter→libero→central→outside/opposite
         roster={}
         team_setters = set(str(s['num']) for s in setters_list)
         for ns0, pd0 in td.items():
-            atk0 = pd0.get('atk',[]); rec0 = pd0.get('rec',[])
+            atk0 = pd0.get('atk',[]); rec0 = len(pd0.get('rec',[]))
             nser = str(ns0)
-            if nser in team_setters:
-                roster[nser]='SETTER'; continue
-            if len(rec0) > 15 and len(atk0) <= max(2, len(rec0)*0.05):
-                roster[nser]='LIBERO'; continue
-            p = infer_pos(atk0)
-            roster[nser] = POS_ORDER.get(p, 'OTRO')
+            # 1) SETTER
+            if nser in team_setters: roster[nser]='SETTER'; continue
+            # 2) LIBERO: recibe mucho, casi no ataca
+            if rec0 > 15 and len(atk0) <= max(2, rec0*0.05): roster[nser]='LIBERO'; continue
+            if len(atk0) < 5:
+                roster[nser]='OTRO'; continue
+            from collections import Counter as _C
+            cc = _C(a.get('combo','') for a in atk0)
+            tot = len(atk0)
+            central = sum(cc.get(c,0) for c in ['X1','X7','XM','X2','XG','XC','XD','XB'])
+            punta = sum(cc.get(c,0) for c in ['X5','V5','C5'])
+            opp = sum(cc.get(c,0) for c in ['X6','V6'])
+            # 3) MIDDLE: mayoría primer tiempo
+            if central > tot*0.4: roster[nser]='MIDDLE'; continue
+            # 4) OUTSIDE vs OPPOSITE por recepción
+            if rec0 >= 20: roster[nser]='OUTSIDE'
+            elif rec0 <= 8: roster[nser]=('OUTSIDE' if punta>opp else 'OPPOSITE')
+            else: roster[nser]=('OUTSIDE' if punta>=opp else 'OPPOSITE')
         LIGA['teams'][team.lower().replace(' ','_')]={'name':team,'rivals':rivals,'atk':atk_p,'srv':srv_p,'rec':rec_p,'setters':setters_list,'setter':setters_list[0] if setters_list else None,'roster':roster}
     with open(os.path.join(output_dir,'liga_data.js'),'w',encoding='utf-8') as f:
         f.write('window.LIGA_DATA = '+json.dumps(LIGA,ensure_ascii=False)+';\n')

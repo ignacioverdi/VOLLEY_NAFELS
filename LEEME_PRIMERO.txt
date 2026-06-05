@@ -1,0 +1,6 @@
+SISTEMA NAFELS VOLEY - CARPETA DE TRABAJO
+1. Pone los .dvw en "DVW NAFELS 2026"
+2. (Opcional) videos + fixture en videos_nafels.xlsx
+3. DOBLE-CLIC en correr_nafels.bat (mira el CHEQUEO DE POSICIONES)
+4. Subi a GitHub (VOLLEY_NAFELS): liga_data.js, nafels_stats_table.html, datos_partidos.js, videos.js, proximo_rival.js
+5. Entra a Vercel. El sistema acumula y detecta armadores/liberos solo.
