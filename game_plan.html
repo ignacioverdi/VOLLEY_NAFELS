@@ -2257,6 +2257,152 @@ function renderTransicion(){
   });
 }
 
+// ═══════════════════════════════════════════════════════════════
+// SCOUTING REPORT — claves del partido. Datos reales, sin toques de bloqueo.
+// Direcciones según mapa de cancha real. Comparado con media de liga.
+// ═══════════════════════════════════════════════════════════════
+function gpEsBloqueo(orig, dest){
+  // Toque de bloqueo: cae pegado a la red del lado lejano al ataque
+  if(orig===2) return dest===3||dest===4;      // ataque z2 rival → z3/z4 propias = bloqueo
+  if(orig===4) return dest===2||dest===3;      // ataque z4 rival → z2/z3 propias = bloqueo
+  if(orig===9||orig===8||orig===1||orig===7) return dest===2||dest===3||dest===4; // zaguero
+  return false;
+}
+function gpDireccion(orig, dest){
+  if(orig===2){ // X6/V6 desde zona 2 rival
+    if(dest===1||dest===9) return 'diagonal';
+    if(dest===2) return 'diagonal corta';
+    if(dest===5||dest===7) return 'línea';
+    if(dest===6||dest===8) return 'centro';
+  }
+  if(orig===4){ // X5/V5 desde zona 4 rival
+    if(dest===5||dest===7) return 'diagonal';
+    if(dest===4) return 'diagonal corta';
+    if(dest===1||dest===9) return 'línea';
+    if(dest===6||dest===8) return 'centro';
+  }
+  if(orig===9||orig===8||orig===1||orig===7){ // zaguero
+    if(dest===1||dest===9) return 'diagonal';
+    if(dest===5||dest===7) return 'línea';
+    if(dest===6||dest===8) return 'centro';
+  }
+  return null;
+}
+function gpMediasLiga(){
+  var RES=['#','/','+','!','=','-'];
+  var teams=(window.LIGA_DATA&&window.LIGA_DATA.teams)||{};
+  var efAtk=[], recF={b:0,n:0}, recP={b:0,n:0};
+  Object.keys(teams).forEach(function(tn){
+    var td=teams[tn];
+    Object.keys(td.atk||{}).forEach(function(ns){
+      var a=td.atk[ns].a||[]; if(a.length>=30){var k=a.filter(function(x){return RES[x[6]]==='#';}).length;var e=a.filter(function(x){return RES[x[6]]==='='||RES[x[6]]==='/';}).length;efAtk.push((k-e)/a.length*100);}
+    });
+    Object.keys(td.rec||{}).forEach(function(ns){
+      (td.rec[ns].r||[]).forEach(function(r){var b=r[5]===0||r[5]===2;if(r[4]===0){recF.n++;if(b)recF.b++;}else{recP.n++;if(b)recP.b++;}});
+    });
+  });
+  function avg(a){return a.length?Math.round(a.reduce(function(x,y){return x+y;},0)/a.length):0;}
+  return {atk:avg(efAtk), recF:recF.n?Math.round(recF.b/recF.n*100):0, recP:recP.n?Math.round(recP.b/recP.n*100):0};
+}
+
+function gpScoutingReport(){
+  var RES=['#','/','+','!','=','-'];
+  var rep={ataque:[],rotaciones:[],saque:[]};
+  var roster=GP_TD.roster||{};
+  var medias=gpMediasLiga();
+  function ape(n){
+    n=(n||'').replace(/^\d+\s*/,'').trim();
+    var p=n.split(/\s+/), pre=['DE','DEL','DI','LA','LE','VAN','VON','MC','SAN','SANTA'];
+    var a=p[0]||''; if(p.length>1&&pre.indexOf(p[0].toUpperCase())>=0)a=p[0]+' '+p[1];
+    return a.split(' ').map(function(w){return w.charAt(0).toUpperCase()+w.slice(1).toLowerCase();}).join(' ');
+  }
+  function sig(p){return {OUTSIDE:'OH',MIDDLE:'MB',OPPOSITE:'OP',SETTER:'S',LIBERO:'L'}[p]||'';}
+
+  // ════ ATAQUE — armas principales con dirección real (sin bloqueos) ════
+  var atk=GP_TD.atk||{};
+  var ats=[], totEq=0;
+  Object.keys(atk).forEach(function(ns){
+    var a=atk[ns].a||[]; if(a.length<15) return;
+    var k=a.filter(function(x){return RES[x[6]]==='#';}).length;
+    var e=a.filter(function(x){return RES[x[6]]==='='||RES[x[6]]==='/';}).length;
+    ats.push({num:ns,name:atk[ns].name,tot:a.length,k:k,eff:Math.round((k-e)/a.length*100),pos:roster[ns]||'?'});
+    totEq+=a.length;
+  });
+  ats.sort(function(a,b){return b.tot-a.tot;});
+  // Para los 2-3 atacantes de más volumen, su combo principal + dirección
+  ats.slice(0,3).forEach(function(jug){
+    if(jug.tot<15) return;
+    var a=atk[jug.num].a||[];
+    var porCombo={};
+    a.forEach(function(x){
+      if(RES[x[6]]!=='#') return;
+      if(gpEsBloqueo(x[7],x[8])) return;
+      var c=(x[5]>=0&&x[5]<GP_COMBOS.length)?GP_COMBOS[x[5]]:'?';
+      var dr=gpDireccion(x[7],x[8]); if(!dr) return;
+      porCombo[c]=porCombo[c]||{};
+      porCombo[c][dr]=(porCombo[c][dr]||0)+1;
+    });
+    var combosArr=Object.keys(porCombo).map(function(c){
+      var tot=0,top=null; Object.keys(porCombo[c]).forEach(function(dr){tot+=porCombo[c][dr];if(!top||porCombo[c][dr]>porCombo[c][top])top=dr;});
+      return {c:c,tot:tot,dir:top,dirN:porCombo[c][top]};
+    }).sort(function(a,b){return b.tot-a.tot;});
+    if(!combosArr.length) return;
+    var efTxt = jug.eff>=medias.atk+6?' ['+jug.eff+'% ef, sobre la media]':jug.eff<=medias.atk-6?' ['+jug.eff+'% ef, bajo media]':'';
+    var armas=combosArr.slice(0,2).map(function(x){return '<b>'+x.c+'</b> '+x.dir;}).join(' · ');
+    rep.ataque.push('#'+jug.num+' '+ape(jug.name)+' ('+sig(jug.pos)+'): '+armas+efTxt);
+  });
+
+  // ════ ROTACIONES — eficacia side-out (dónde apretar) ════
+  var setters=GP_TD.setters||[];
+  if(setters.length && setters[0].s){
+    var s0=setters[0];
+    var porRot={};
+    s0.s.forEach(function(r){
+      if(r[7]!==0&&r[7]!==2) return;
+      var p=r[6]; porRot[p]=porRot[p]||{k:0,e:0,n:0};
+      porRot[p].n++;
+      if(RES[r[9]]==='#')porRot[p].k++; else if(RES[r[9]]==='='||RES[r[9]]==='/')porRot[p].e++;
+    });
+    var effs=[];
+    [1,2,3,4,5,6].forEach(function(p){var x=porRot[p];if(x&&x.n>=5)effs.push({p:p,ef:Math.round((x.k-x.e)/x.n*100),n:x.n});});
+    effs.sort(function(a,b){return a.ef-b.ef;});
+    if(effs.length>=2){
+      rep.rotaciones.push('Más vulnerable en <b>P'+effs[0].p+'</b> ('+effs[0].ef+'% ef): cargar el saque cuando rotan ahí.');
+      rep.rotaciones.push('Más sólida en <b>P'+effs[effs.length-1].p+'</b> ('+effs[effs.length-1].ef+'% ef): evitar el saque-error, jugar seguro.');
+    }
+  }
+
+  // ════ SAQUE / RECEPCIÓN — qué saque y a qué zona ════
+  var rec=GP_TD.rec||{};
+  // Flotado vs potencia global del equipo
+  var eqF={b:0,n:0}, eqP={b:0,n:0};
+  var flotZona={};
+  Object.keys(rec).forEach(function(ns){
+    (rec[ns].r||[]).forEach(function(r){
+      var b=r[5]===0||r[5]===2;
+      if(r[4]===0){eqF.n++;if(b)eqF.b++; var key=r[6]+'-'+r[7]; flotZona[key]=flotZona[key]||{b:0,n:0}; flotZona[key].n++; if(b)flotZona[key].b++;}
+      else{eqP.n++;if(b)eqP.b++;}
+    });
+  });
+  if(eqF.n>=20 && eqP.n>=20){
+    var pf=Math.round(eqF.b/eqF.n*100), pp=Math.round(eqP.b/eqP.n*100);
+    var peor = pf<pp?'flotado':'potencia';
+    var pPeor = Math.min(pf,pp);
+    var vsLiga = peor==='flotado'?(pf<medias.recF-3?' (peor que la media liga '+medias.recF+'%)':''):(pp<medias.recP-3?' (peor que la media '+medias.recP+'%)':'');
+    rep.saque.push('Reciben peor el <b>'+peor+'</b> ('+pPeor+'% pos vs '+(peor==='flotado'?pp:pf)+'% el otro)'+vsLiga+': priorizar ese saque.');
+    // Zonas específicas donde sufren el flotado
+    if(peor==='flotado'){
+      var zonasDebiles=Object.keys(flotZona).map(function(k){var v=flotZona[k];return {k:k,pct:Math.round(v.b/v.n*100),n:v.n};}).filter(function(x){return x.n>=10;}).sort(function(a,b){return a.pct-b.pct;});
+      if(zonasDebiles.length){
+        var zd=zonasDebiles.slice(0,3).map(function(x){var z=x.k.split('-');return 'z'+z[0]+'→z'+z[1]+' ('+x.pct+'%)';}).join(', ');
+        rep.saque.push('Flotado más efectivo desde: '+zd+'.');
+      }
+    }
+  }
+
+  return rep;
+}
+
 function renderJuego(){
   var sec=document.getElementById('seccion-juego');
   if(!sec) return;
@@ -2284,30 +2430,69 @@ function renderJuego(){
   });
   fila1.appendChild(saqCard);
 
-  // RECEPCION
-  var recCard=jCard('🛡 RECEPCIÓN Y SISTEMA','#22c55e');
-  ['SISTEMA','ROL DEL LÍBERO','FORMACIÓN'].forEach(function(lbl){
-    var d2=document.createElement('div');d2.style.cssText='margin-bottom:10px';
-    d2.appendChild(jLbl(lbl,'#22c55e'));d2.appendChild(jInput(lbl+'...','#22c55e'));
-    recCard.querySelector('.jb').appendChild(d2);
-  });
-  var dn=document.createElement('div');dn.appendChild(jLbl('NOTAS','#22c55e'));dn.appendChild(jArea('Situaciones especiales, señas, coberturas...','#22c55e',3));
-  recCard.querySelector('.jb').appendChild(dn);
-  fila1.appendChild(recCard);
+  // RECEPCION → reemplazado por CONCLUSIONES TÁCTICAS (ataque + distribución)
+  var rep={ataque:[],distribucion:[],saque:[],recepcion:[]};
+  try{ rep=gpScoutingReport()||rep; }catch(e){}
+  function scoutCard(title,color,bloques,cardKey){
+    var card=jCard(title,color);
+    var jb=card.querySelector('.jb');
+    var idx=0;
+    bloques.forEach(function(b){
+      if(!b.lineas.length) return;
+      var h=document.createElement('div');
+      h.style.cssText='font-size:9px;letter-spacing:1.5px;color:'+b.col+';font-weight:700;text-transform:uppercase;margin:8px 0 5px;opacity:.85';
+      h.textContent=b.lbl;
+      jb.appendChild(h);
+      b.lineas.forEach(function(t){
+        var row=document.createElement('div');
+        row.style.cssText='display:flex;gap:6px;align-items:flex-start;margin-bottom:5px';
+        var bullet=document.createElement('span');
+        bullet.style.cssText='color:'+b.col+';font-size:10px;line-height:1.5;flex-shrink:0';
+        bullet.textContent='▸';
+        // texto editable (contenteditable) que persiste
+        var span=document.createElement('div');
+        var k=cardKey+'_'+idx;
+        span.contentEditable='true';
+        span.style.cssText='font-size:12px;color:#dbe4f0;line-height:1.4;flex:1;outline:none;border-radius:4px;padding:1px 3px;transition:background .15s';
+        span.addEventListener('focus',function(){this.style.background='rgba(255,255,255,.06)';});
+        span.addEventListener('blur',function(){this.style.background='transparent';try{localStorage.setItem(k,this.innerHTML);}catch(e){}});
+        var saved=null; try{saved=localStorage.getItem(k);}catch(e){}
+        span.innerHTML=(saved!==null&&saved!=='')?saved:t;
+        row.appendChild(bullet);row.appendChild(span);
+        jb.appendChild(row);
+        idx++;
+      });
+    });
+    // Línea libre para agregar conclusión propia
+    var freeRow=document.createElement('div');
+    freeRow.style.cssText='display:flex;gap:6px;align-items:center;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.06)';
+    var lapiz=document.createElement('span');lapiz.style.cssText='color:#f59e0b;font-size:11px;flex-shrink:0';lapiz.textContent='✎';
+    var freeInp=document.createElement('div');
+    var fk=cardKey+'_libre';
+    freeInp.contentEditable='true';
+    freeInp.setAttribute('data-ph','Agregá tu conclusión...');
+    freeInp.style.cssText='font-size:12px;color:#f8d77a;line-height:1.4;flex:1;outline:none;min-height:18px';
+    var fsv=null;try{fsv=localStorage.getItem(fk);}catch(e){}
+    if(fsv) freeInp.innerHTML=fsv;
+    freeInp.addEventListener('blur',function(){try{localStorage.setItem(fk,this.innerHTML);}catch(e){}});
+    freeRow.appendChild(lapiz);freeRow.appendChild(freeInp);
+    jb.appendChild(freeRow);
+    return card;
+  }
+  var scoutCard1=scoutCard('⚡ CÓMO ATACAN','#f97316',[
+    {lbl:'Armas y direcciones',col:'#f97316',lineas:rep.ataque}
+  ],'scout_atk');
+  fila1.appendChild(scoutCard1);
   wrap.appendChild(fila1);
 
   var fila2=document.createElement('div');fila2.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:14px';
 
-  // ATAQUE
-  var atkCard=jCard('⚡ ATAQUE PROPIO','#f97316');
-  ['PRIORIDAD DE ATAQUE','COMBINACIONES A USAR','PLAN EN TRANSICIÓN'].forEach(function(lbl){
-    var d2=document.createElement('div');d2.style.cssText='margin-bottom:10px';
-    d2.appendChild(jLbl(lbl,'#f97316'));d2.appendChild(jInput(lbl+'...','#f97316'));
-    atkCard.querySelector('.jb').appendChild(d2);
-  });
-  var dn2=document.createElement('div');dn2.appendChild(jLbl('NOTAS','#f97316'));dn2.appendChild(jArea('Señas, coberturas...','#f97316',3));
-  atkCard.querySelector('.jb').appendChild(dn2);
-  fila2.appendChild(atkCard);
+  // ATAQUE PROPIO → reemplazado por CONCLUSIONES (rotaciones + saque/recepción)
+  var scoutCard2=scoutCard('🎯 DÓNDE Y CÓMO SACAR','#06b6d4',[
+    {lbl:'Rotaciones',col:'#818cf8',lineas:rep.rotaciones},
+    {lbl:'Saque / Recepción',col:'#22c55e',lineas:rep.saque}
+  ],'scout_srv');
+  fila2.appendChild(scoutCard2);
 
   // ANALISIS RIVAL
   var rivCard=jCard('🔍 ANÁLISIS DEL RIVAL','#e8192c');
