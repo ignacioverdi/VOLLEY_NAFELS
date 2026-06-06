@@ -305,6 +305,15 @@ select, select option {
     </div>
   </div>
 
+  <!-- SI NEUTRALIZAMOS A X -->
+  <div style="margin-top:32px" id="seccion-neutralizar">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:#e2e8f0;margin-bottom:6px">
+      SI NEUTRALIZAMOS UNA POSICIÓN
+      <span style="font-size:11px;font-family:'Barlow Condensed',sans-serif;color:#475569;letter-spacing:1px;margin-left:12px;font-weight:400">Cómo redistribuye el armador su juego (dato histórico)</span>
+    </div>
+    <div id="neutralizar-content"></div>
+  </div>
+
   <!-- RECEPCIÓN RIVAL -->
   <div style="margin-top:32px" id="seccion-recepcion">
     <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:#e2e8f0;margin-bottom:16px">
@@ -2229,6 +2238,133 @@ function gpRecomTransicion(dist, eff){
   return 'Prioriza '+NOM[top.p]+' ('+top.pct+'%)';
 }
 
+// ═══════════════════════════════════════════════════════════════
+// FILTRO "SI NEUTRALIZAMOS A X" — redistribución del armador
+// Muestra cómo cambia la distribución (side-out + transición) si
+// se neutraliza una posición de ataque. Dato histórico, no predicción.
+// ═══════════════════════════════════════════════════════════════
+function gpJugadoresPorPosicion(){
+  // Devuelve {opuesto:{jugador, num}, punta:[...], central:[...], zaguero:'—'}
+  var RES=['#','/','+','!','=','-'];
+  var atk=GP_TD.atk||{}, roster=GP_TD.roster||{};
+  function ape(n){
+    n=(n||'').replace(/^\d+\s*/,'').trim();
+    var p=n.split(/\s+/),pre=['DE','DEL','DI','LA','LE','VAN','VON','MC'];
+    var a=p[0]||''; if(p.length>1&&pre.indexOf(p[0].toUpperCase())>=0)a=p[0]+' '+p[1];
+    return a.split(' ').map(function(w){return w.charAt(0).toUpperCase()+w.slice(1).toLowerCase();}).join(' ');
+  }
+  var porPos={punta:[],opuesto:[],central:[]};
+  Object.keys(atk).forEach(function(ns){
+    var a=atk[ns].a||[]; if(a.length<15) return;
+    var k=a.filter(function(x){return RES[x[6]]==='#';}).length;
+    var pos=roster[ns]||'';
+    var grupo = pos==='OPPOSITE'?'opuesto':pos==='OUTSIDE'?'punta':pos==='MIDDLE'?'central':null;
+    if(grupo) porPos[grupo].push({num:ns,name:ape(atk[ns].name),kills:k,tot:a.length});
+  });
+  Object.keys(porPos).forEach(function(g){porPos[g].sort(function(a,b){return b.kills-a.kills;});});
+  return porPos;
+}
+
+function gpRedistribucion(posExcluir){
+  // posExcluir: 'punta'|'opuesto'|'central'|'zaguero'
+  var RES=['#','/','+','!','=','-'];
+  var setters=GP_TD.setters||[];
+  if(!setters.length||!setters[0].s) return null;
+  var s0=setters[0];
+  function cap(c){
+    if(c==='X5'||c==='V5'||c==='C5')return'punta';
+    if(c==='X6'||c==='V6')return'opuesto';
+    if(c==='X1'||c==='X7'||c==='XM'||c==='X2'||c==='XG'||c==='XC'||c==='XD'||c==='XB'||c==='PR')return'central';
+    if(c==='X8'||c==='V8'||c==='XP')return'zaguero';
+    return null;
+  }
+  // Distribución NORMAL (todo el juego: side-out + transición) y SIN la posición
+  function distrib(filtrarPos){
+    var dist={punta:0,opuesto:0,central:0,zaguero:0}, tot=0;
+    s0.s.forEach(function(r){
+      var p=cap((r[8]>=0&&r[8]<GP_COMBOS.length)?GP_COMBOS[r[8]]:'?');
+      if(!p) return;
+      if(filtrarPos && p===filtrarPos) return; // excluir esa posición
+      dist[p]++; tot++;
+    });
+    return {dist:dist,tot:tot};
+  }
+  var normal=distrib(null);
+  var sinX=distrib(posExcluir);
+  if(!sinX.tot) return null;
+  var resultado=[];
+  ['central','punta','opuesto','zaguero'].forEach(function(p){
+    if(p===posExcluir) return;
+    var pn=normal.tot?Math.round(normal.dist[p]/normal.tot*100):0;
+    var ps=Math.round(sinX.dist[p]/sinX.tot*100);
+    resultado.push({pos:p,normal:pn,sin:ps,delta:ps-pn});
+  });
+  resultado.sort(function(a,b){return b.sin-a.sin;});
+  return {resultado:resultado, posExcluir:posExcluir};
+}
+
+
+function renderNeutralizar(){
+  var cont=document.getElementById('neutralizar-content');
+  if(!cont) return;
+  var jugadores=gpJugadoresPorPosicion();
+  // Opciones: solo posiciones con jugador identificado
+  var opciones=[];
+  if(jugadores.opuesto.length) opciones.push({pos:'opuesto',lbl:'OPUESTO',jug:jugadores.opuesto[0],col:'#818cf8'});
+  if(jugadores.punta.length) opciones.push({pos:'punta',lbl:'PUNTAS',jug:jugadores.punta[0],col:'#22c55e'});
+  if(jugadores.central.length) opciones.push({pos:'central',lbl:'CENTRAL',jug:jugadores.central[0],col:'#f59e0b'});
+  if(!opciones.length){ cont.innerHTML='<div style="color:#475569;font-size:13px;padding:20px;text-align:center;border:1px solid rgba(255,255,255,.06);border-radius:12px">Sin datos suficientes</div>'; return; }
+
+  var POSLBL={punta:'puntas',opuesto:'opuesto',central:'central',zaguero:'zaguero'};
+  var html='';
+  // Botones selectores
+  html+='<div style="font-size:11px;color:#94a3b8;margin-bottom:12px;font-family:Barlow Condensed,sans-serif;letter-spacing:.5px">Elegí qué posición neutralizar para ver hacia dónde se vuelca el armador:</div>';
+  html+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px" id="neut-botones">';
+  opciones.forEach(function(op,i){
+    var jugTxt = op.jug?(' #'+op.jug.num+' '+op.jug.name):'';
+    html+='<button data-neut="'+op.pos+'" style="cursor:pointer;background:'+(i===0?'rgba(232,25,44,.15)':'transparent')+';border:1px solid '+(i===0?'#e8192c':'rgba(255,255,255,.12)')+';border-radius:9px;padding:8px 14px;color:'+(i===0?'#fff':'#94a3b8')+';font-family:Barlow Condensed,sans-serif;font-size:13px;font-weight:600;letter-spacing:.5px;transition:all .15s">'+op.lbl+jugTxt+'</button>';
+  });
+  html+='</div>';
+  html+='<div id="neut-resultado"></div>';
+  cont.innerHTML=html;
+
+  function pintar(pos){
+    var data=gpRedistribucion(pos);
+    var op=opciones.filter(function(o){return o.pos===pos;})[0];
+    var rdiv=document.getElementById('neut-resultado');
+    if(!data||!op){ rdiv.innerHTML=''; return; }
+    var jugTxt = op.jug?('#'+op.jug.num+' '+op.jug.name):('el '+POSLBL[pos]);
+    var h='<div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:16px">';
+    h+='<div style="font-size:13px;color:#e2e8f0;margin-bottom:14px;line-height:1.5">Si neutralizamos a <b style="color:'+op.col+'">'+jugTxt+'</b> ('+POSLBL[pos]+'), el armador se vuelca a:</div>';
+    data.resultado.forEach(function(r){
+      var arrow = r.delta>0?('<span style="color:#22c55e;font-weight:700">+'+r.delta+'</span>'):r.delta<0?('<span style="color:#ef4444">'+r.delta+'</span>'):'<span style="color:#64748b">=</span>';
+      var barW=Math.min(r.sin,100);
+      var destaca = r.delta>=5;
+      h+='<div style="margin-bottom:11px">';
+      h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">';
+      h+='<span style="font-size:13px;color:'+(destaca?'#fff':'#cbd5e1')+';font-weight:'+(destaca?'700':'400')+';text-transform:capitalize">'+POSLBL[r.pos]+(destaca?' ◀ plan B':'')+'</span>';
+      h+='<span style="font-size:12px;color:#94a3b8">'+r.normal+'% → <b style="color:#e2e8f0">'+r.sin+'%</b> ('+arrow+')</span>';
+      h+='</div>';
+      h+='<div style="height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden"><div style="width:'+barW+'%;height:100%;background:'+(destaca?op.col:'rgba(255,255,255,.2)')+';transition:width .3s"></div></div>';
+      h+='</div>';
+    });
+    h+='<div style="font-size:10px;color:#475569;margin-top:8px;font-style:italic">Basado en cómo distribuyó históricamente en las pelotas que NO fueron a esa posición.</div>';
+    h+='</div>';
+    rdiv.innerHTML=h;
+  }
+
+  // Eventos de los botones
+  var btns=cont.querySelectorAll('button[data-neut]');
+  btns.forEach(function(b){
+    b.addEventListener('click',function(){
+      btns.forEach(function(x){x.style.background='transparent';x.style.borderColor='rgba(255,255,255,.12)';x.style.color='#94a3b8';});
+      this.style.background='rgba(232,25,44,.15)';this.style.borderColor='#e8192c';this.style.color='#fff';
+      pintar(this.getAttribute('data-neut'));
+    });
+  });
+  pintar(opciones[0].pos);
+}
+
 function renderTransicion(){
   var cont=document.getElementById('trans-content');
   if(!cont) return;
@@ -2621,7 +2757,7 @@ function renderRecepcionRival(){
 // Llamar armador y juego
 (function(){var _f=function(){
   setTimeout(function(){renderArmador();
-  renderRecepcionRival();renderTransicion();renderJuego();},100);
+  renderRecepcionRival();renderTransicion();renderNeutralizar();renderJuego();},100);
 };if(document.fonts&&document.fonts.ready){document.fonts.ready.then(_f).catch(_f);}else{setTimeout(_f,80);}})();
 
 function abrirModalArmador(rot, color, pills){
