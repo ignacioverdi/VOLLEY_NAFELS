@@ -1447,7 +1447,33 @@ function renderJugador(j,idx){
   // Footer con pestañas
   var footer=document.createElement('div');
   footer.className='jug-footer';
-  var heatLink=document.createElement('a');heatLink.href='recepcion_'+GP_RIVAL_SLUG+'.html?player='+j.num;heatLink.target='_blank';heatLink.style.cssText='font-size:10px;font-weight:700;color:var(--muted);text-decoration:none;padding:4px 10px;border:1px solid var(--border);border-radius:8px;letter-spacing:.5px;white-space:nowrap;';heatLink.textContent='Ver heatmap →';footer.appendChild(heatLink);
+  // Botón heatmap con menú desplegable (4 opciones)
+  var heatWrap=document.createElement('div');heatWrap.style.cssText='position:relative;display:inline-block';
+  var heatBtn=document.createElement('button');
+  heatBtn.type='button';
+  heatBtn.style.cssText='font-size:10px;font-weight:700;color:var(--muted);background:transparent;cursor:pointer;padding:4px 10px;border:1px solid var(--border);border-radius:8px;letter-spacing:.5px;white-space:nowrap;';
+  heatBtn.textContent='Ver heatmap ▾';
+  var heatMenu=document.createElement('div');
+  heatMenu.style.cssText='display:none;position:absolute;bottom:100%;left:0;margin-bottom:4px;background:#11131d;border:1px solid rgba(255,255,255,.12);border-radius:9px;overflow:hidden;z-index:50;min-width:170px;box-shadow:0 8px 24px rgba(0,0,0,.5)';
+  [['⚡ Ataque','hm_ataque'],['🎯 Saque','hm_saque'],['🛡 Recepción','hm_recepcion'],['🎽 Distribución','hm_armador']].forEach(function(op){
+    var a=document.createElement('a');
+    a.href=op[1]+'.html?equipo='+GP_RIVAL_SLUG;
+    a.target='_blank';
+    a.style.cssText='display:block;padding:9px 13px;font-size:11px;font-weight:600;color:#cbd5e1;text-decoration:none;letter-spacing:.5px;border-bottom:1px solid rgba(255,255,255,.05);transition:background .12s';
+    a.textContent='Heatmap '+op[0];
+    a.addEventListener('mouseenter',function(){this.style.background='rgba(255,255,255,.06)';});
+    a.addEventListener('mouseleave',function(){this.style.background='transparent';});
+    heatMenu.appendChild(a);
+  });
+  heatBtn.addEventListener('click',function(e){
+    e.stopPropagation();
+    var open=heatMenu.style.display==='block';
+    document.querySelectorAll('.heat-menu-open').forEach(function(m){m.style.display='none';m.classList.remove('heat-menu-open');});
+    if(!open){heatMenu.style.display='block';heatMenu.classList.add('heat-menu-open');}
+  });
+  document.addEventListener('click',function(){heatMenu.style.display='none';heatMenu.classList.remove('heat-menu-open');});
+  heatWrap.appendChild(heatBtn);heatWrap.appendChild(heatMenu);
+  footer.appendChild(heatWrap);
   footer.style.cssText='grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding-top:8px;margin-top:4px;border-top:1px solid rgba(255,255,255,.05)';
   var tabRow=document.createElement('div');tabRow.className='tab-row';
   var btnAtaque=document.createElement('button');
@@ -1982,7 +2008,7 @@ function renderArmador(){
         if(ll.dist&&ll.dist.length){var zonesRow=document.createElement('div');zonesRow.style.cssText='display:flex;gap:4px;margin-top:5px;flex-wrap:wrap';ll.dist.slice(0,2).forEach(function(dz){var ptC2=dz.pct_p>=60?'#22c55e':dz.pct_p>=40?'#fbbf24':'#f97316';var zEl=document.createElement('div');zEl.style.cssText='font-size:9px;padding:2px 5px;border-radius:4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);white-space:nowrap';zEl.innerHTML='Z'+dz.zona+' <span style="color:'+ptC2+';font-weight:700">'+dz.pct_p+'%</span>';zonesRow.appendChild(zEl);});card2.appendChild(zonesRow);}
         llamGrid.appendChild(card2);});panel.appendChild(llamGrid);}
     var heatArmDiv=document.createElement('div');heatArmDiv.style.cssText='padding:0 18px 14px;display:flex;gap:8px;align-items:center';
-    var heatArmLink=document.createElement('a');heatArmLink.href='armador_'+GP_RIVAL_SLUG+'.html';heatArmLink.target='_blank';heatArmLink.style.cssText='font-size:10px;font-weight:700;color:var(--muted);text-decoration:none;padding:5px 12px;border:1px solid var(--border);border-radius:8px;letter-spacing:.5px;white-space:nowrap;';heatArmLink.textContent='Ver heatmap armador →';
+    var heatArmLink=document.createElement('a');heatArmLink.href='hm_armador.html?equipo='+GP_RIVAL_SLUG;heatArmLink.target='_blank';heatArmLink.style.cssText='font-size:10px;font-weight:700;color:var(--muted);text-decoration:none;padding:5px 12px;border:1px solid var(--border);border-radius:8px;letter-spacing:.5px;white-space:nowrap;';heatArmLink.textContent='Ver heatmap armador →';
     var heatArmNote=document.createElement('span');heatArmNote.style.cssText='font-size:9px;color:#475569';heatArmNote.textContent='Filtros completos: llamada, posición, SO/TR';
     heatArmDiv.appendChild(heatArmLink);heatArmDiv.appendChild(heatArmNote);panel.appendChild(heatArmDiv);
     sec.appendChild(panel);
