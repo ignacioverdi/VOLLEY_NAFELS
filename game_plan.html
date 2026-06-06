@@ -1447,7 +1447,7 @@ function renderJugador(j,idx){
   // Footer con pestañas
   var footer=document.createElement('div');
   footer.className='jug-footer';
-  var heatLink=document.createElement('a');heatLink.href='recepcion_amriswil.html?player='+j.num;heatLink.target='_blank';heatLink.style.cssText='font-size:10px;font-weight:700;color:var(--muted);text-decoration:none;padding:4px 10px;border:1px solid var(--border);border-radius:8px;letter-spacing:.5px;white-space:nowrap;';heatLink.textContent='Ver heatmap →';footer.appendChild(heatLink);
+  var heatLink=document.createElement('a');heatLink.href='recepcion_'+GP_RIVAL_SLUG+'.html?player='+j.num;heatLink.target='_blank';heatLink.style.cssText='font-size:10px;font-weight:700;color:var(--muted);text-decoration:none;padding:4px 10px;border:1px solid var(--border);border-radius:8px;letter-spacing:.5px;white-space:nowrap;';heatLink.textContent='Ver heatmap →';footer.appendChild(heatLink);
   footer.style.cssText='grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding-top:8px;margin-top:4px;border-top:1px solid rgba(255,255,255,.05)';
   var tabRow=document.createElement('div');tabRow.className='tab-row';
   var btnAtaque=document.createElement('button');
@@ -1982,7 +1982,7 @@ function renderArmador(){
         if(ll.dist&&ll.dist.length){var zonesRow=document.createElement('div');zonesRow.style.cssText='display:flex;gap:4px;margin-top:5px;flex-wrap:wrap';ll.dist.slice(0,2).forEach(function(dz){var ptC2=dz.pct_p>=60?'#22c55e':dz.pct_p>=40?'#fbbf24':'#f97316';var zEl=document.createElement('div');zEl.style.cssText='font-size:9px;padding:2px 5px;border-radius:4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);white-space:nowrap';zEl.innerHTML='Z'+dz.zona+' <span style="color:'+ptC2+';font-weight:700">'+dz.pct_p+'%</span>';zonesRow.appendChild(zEl);});card2.appendChild(zonesRow);}
         llamGrid.appendChild(card2);});panel.appendChild(llamGrid);}
     var heatArmDiv=document.createElement('div');heatArmDiv.style.cssText='padding:0 18px 14px;display:flex;gap:8px;align-items:center';
-    var heatArmLink=document.createElement('a');heatArmLink.href='armador_amriswil.html';heatArmLink.target='_blank';heatArmLink.style.cssText='font-size:10px;font-weight:700;color:var(--muted);text-decoration:none;padding:5px 12px;border:1px solid var(--border);border-radius:8px;letter-spacing:.5px;white-space:nowrap;';heatArmLink.textContent='Ver heatmap armador →';
+    var heatArmLink=document.createElement('a');heatArmLink.href='armador_'+GP_RIVAL_SLUG+'.html';heatArmLink.target='_blank';heatArmLink.style.cssText='font-size:10px;font-weight:700;color:var(--muted);text-decoration:none;padding:5px 12px;border:1px solid var(--border);border-radius:8px;letter-spacing:.5px;white-space:nowrap;';heatArmLink.textContent='Ver heatmap armador →';
     var heatArmNote=document.createElement('span');heatArmNote.style.cssText='font-size:9px;color:#475569';heatArmNote.textContent='Filtros completos: llamada, posición, SO/TR';
     heatArmDiv.appendChild(heatArmLink);heatArmDiv.appendChild(heatArmNote);panel.appendChild(heatArmDiv);
     sec.appendChild(panel);
@@ -2408,31 +2408,11 @@ function renderJuego(){
   if(!sec) return;
   sec.innerHTML='';
   var wrap=document.createElement('div');
-  wrap.style.cssText='display:flex;flex-direction:column;gap:16px';
+  wrap.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:16px';
 
-  var fila1=document.createElement('div');
-  fila1.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:14px';
-
-  // PLAN DE SAQUE
-  var saqCard=jCard('🏐 PLAN DE SAQUE','#f59e0b');
-  [1,2,3].forEach(function(n){
-    var row=document.createElement('div');row.style.cssText='display:flex;align-items:flex-start;gap:8px;margin-bottom:10px';
-    var num=document.createElement('div');num.style.cssText='min-width:26px;height:26px;border-radius:50%;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:14px;color:#f59e0b;flex-shrink:0;margin-top:2px';num.textContent=n;
-    var inner=document.createElement('div');inner.style.cssText='flex:1;display:flex;flex-direction:column;gap:5px';
-    inner.appendChild(jInput('Descripción del plan de saque...','#f59e0b'));
-    var sub=document.createElement('div');sub.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:5px';
-    sub.appendChild(jInput('Jugador','#f59e0b'));
-    var sel=document.createElement('select');sel.style.cssText='background:#0a0b14;border:1px solid rgba(255,255,255,.1);border-radius:7px;color:#94a3b8;font-family:Barlow Condensed,sans-serif;font-size:12px;padding:8px 6px;outline:none;cursor:pointer;width:100%';
-    ['','FLOTADO','POTENCIA','SALTADO'].forEach(function(o){var opt=document.createElement('option');opt.value=o;opt.textContent=o||'Tipo';sel.appendChild(opt);});
-    sub.appendChild(sel);inner.appendChild(sub);
-    row.appendChild(num);row.appendChild(inner);
-    saqCard.querySelector('.jb').appendChild(row);
-  });
-  fila1.appendChild(saqCard);
-
-  // RECEPCION → reemplazado por CONCLUSIONES TÁCTICAS (ataque + distribución)
-  var rep={ataque:[],distribucion:[],saque:[],recepcion:[]};
+  var rep={ataque:[],rotaciones:[],saque:[]};
   try{ rep=gpScoutingReport()||rep; }catch(e){}
+
   function scoutCard(title,color,bloques,cardKey){
     var card=jCard(title,color);
     var jb=card.querySelector('.jb');
@@ -2440,20 +2420,19 @@ function renderJuego(){
     bloques.forEach(function(b){
       if(!b.lineas.length) return;
       var h=document.createElement('div');
-      h.style.cssText='font-size:9px;letter-spacing:1.5px;color:'+b.col+';font-weight:700;text-transform:uppercase;margin:8px 0 5px;opacity:.85';
+      h.style.cssText='font-size:11px;letter-spacing:1.5px;color:'+b.col+';font-weight:700;text-transform:uppercase;margin:11px 0 7px;opacity:.85';
       h.textContent=b.lbl;
       jb.appendChild(h);
       b.lineas.forEach(function(t){
         var row=document.createElement('div');
-        row.style.cssText='display:flex;gap:6px;align-items:flex-start;margin-bottom:5px';
+        row.style.cssText='display:flex;gap:8px;align-items:flex-start;margin-bottom:8px';
         var bullet=document.createElement('span');
-        bullet.style.cssText='color:'+b.col+';font-size:10px;line-height:1.5;flex-shrink:0';
+        bullet.style.cssText='color:'+b.col+';font-size:13px;line-height:1.5;flex-shrink:0';
         bullet.textContent='▸';
-        // texto editable (contenteditable) que persiste
         var span=document.createElement('div');
         var k=cardKey+'_'+idx;
         span.contentEditable='true';
-        span.style.cssText='font-size:12px;color:#dbe4f0;line-height:1.4;flex:1;outline:none;border-radius:4px;padding:1px 3px;transition:background .15s';
+        span.style.cssText='font-size:15px;color:#dbe4f0;line-height:1.5;flex:1;outline:none;border-radius:4px;padding:2px 4px;transition:background .15s';
         span.addEventListener('focus',function(){this.style.background='rgba(255,255,255,.06)';});
         span.addEventListener('blur',function(){this.style.background='transparent';try{localStorage.setItem(k,this.innerHTML);}catch(e){}});
         var saved=null; try{saved=localStorage.getItem(k);}catch(e){}
@@ -2463,15 +2442,14 @@ function renderJuego(){
         idx++;
       });
     });
-    // Línea libre para agregar conclusión propia
+    // Línea libre para conclusión propia
     var freeRow=document.createElement('div');
-    freeRow.style.cssText='display:flex;gap:6px;align-items:center;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.06)';
-    var lapiz=document.createElement('span');lapiz.style.cssText='color:#f59e0b;font-size:11px;flex-shrink:0';lapiz.textContent='✎';
+    freeRow.style.cssText='display:flex;gap:8px;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06)';
+    var lapiz=document.createElement('span');lapiz.style.cssText='color:#f59e0b;font-size:14px;flex-shrink:0';lapiz.textContent='✎';
     var freeInp=document.createElement('div');
     var fk=cardKey+'_libre';
     freeInp.contentEditable='true';
-    freeInp.setAttribute('data-ph','Agregá tu conclusión...');
-    freeInp.style.cssText='font-size:12px;color:#f8d77a;line-height:1.4;flex:1;outline:none;min-height:18px';
+    freeInp.style.cssText='font-size:15px;color:#f8d77a;line-height:1.5;flex:1;outline:none;min-height:20px';
     var fsv=null;try{fsv=localStorage.getItem(fk);}catch(e){}
     if(fsv) freeInp.innerHTML=fsv;
     freeInp.addEventListener('blur',function(){try{localStorage.setItem(fk,this.innerHTML);}catch(e){}});
@@ -2479,44 +2457,17 @@ function renderJuego(){
     jb.appendChild(freeRow);
     return card;
   }
-  var scoutCard1=scoutCard('⚡ CÓMO ATACAN','#f97316',[
+
+  var c1=scoutCard('⚡ CÓMO ATACAN','#f97316',[
     {lbl:'Armas y direcciones',col:'#f97316',lineas:rep.ataque}
   ],'scout_atk');
-  fila1.appendChild(scoutCard1);
-  wrap.appendChild(fila1);
+  wrap.appendChild(c1);
 
-  var fila2=document.createElement('div');fila2.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:14px';
-
-  // ATAQUE PROPIO → reemplazado por CONCLUSIONES (rotaciones + saque/recepción)
-  var scoutCard2=scoutCard('🎯 DÓNDE Y CÓMO SACAR','#06b6d4',[
+  var c2=scoutCard('🎯 DÓNDE Y CÓMO SACAR','#06b6d4',[
     {lbl:'Rotaciones',col:'#818cf8',lineas:rep.rotaciones},
     {lbl:'Saque / Recepción',col:'#22c55e',lineas:rep.saque}
   ],'scout_srv');
-  fila2.appendChild(scoutCard2);
-
-  // ANALISIS RIVAL
-  var rivCard=jCard('🔍 ANÁLISIS DEL RIVAL','#e8192c');
-  var pfg=document.createElement('div');pfg.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px';
-  var pfc=document.createElement('div');pfc.style.cssText='background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.1);border-radius:8px;padding:10px';
-  var pdc=document.createElement('div');pdc.style.cssText='background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.1);border-radius:8px;padding:10px';
-  var pfh=document.createElement('div');pfh.style.cssText='font-size:8px;color:#22c55e;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;margin-bottom:5px';pfh.textContent='✅ PUNTOS FUERTES';
-  var pdh=document.createElement('div');pdh.style.cssText='font-size:8px;color:#ef4444;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;margin-bottom:5px';pdh.textContent='❌ PUNTOS DÉBILES';
-  pfc.appendChild(pfh);pdc.appendChild(pdh);
-  [1,2,3].forEach(function(){
-    var i1=jInput('Punto fuerte...','#22c55e');i1.style.marginBottom='5px';pfc.appendChild(i1);
-    var i2=jInput('Punto débil...','#ef4444');i2.style.marginBottom='5px';pdc.appendChild(i2);
-  });
-  pfg.appendChild(pfc);pfg.appendChild(pdc);
-  rivCard.querySelector('.jb').appendChild(pfg);
-  rivCard.querySelector('.jb').appendChild(jLbl('COMENTARIOS GENERALES','#e8192c'));
-  rivCard.querySelector('.jb').appendChild(jArea('Tendencias del equipo, jugadores clave, situaciones a explotar...','#e8192c',4));
-  fila2.appendChild(rivCard);
-  wrap.appendChild(fila2);
-
-  // MENSAJE
-  var msgCard=jCard('💬 MENSAJE AL EQUIPO / ESTRATEGIA GENERAL','#818cf8');
-  msgCard.querySelector('.jb').appendChild(jArea('Escribí acá la estrategia general del partido, el mensaje que querés darle al equipo, las claves del juego...','#818cf8',6));
-  wrap.appendChild(msgCard);
+  wrap.appendChild(c2);
 
   sec.appendChild(wrap);
 }
