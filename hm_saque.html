@@ -105,6 +105,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   var equipo=(params.get('equipo')||'casla').toLowerCase();
   window.__MODO=(function(){try{return localStorage.getItem('vb_modo')||'partido';}catch(e){return 'partido';}})();
   var L = window.__MODO==='entrenamiento' ? (window.LIGA_DATA_ENT||window.LIGA_DATA) : window.LIGA_DATA;
+  if(window.__MODO==='entrenamiento' && L && L.teams && L.teams['entrenamiento']) equipo='entrenamiento';
   if(!L||!L.teams[equipo]){ var _k=Object.keys(L.teams); equipo=_k[0]; }
   var td=L.teams[equipo];
   try{ document.title='Saque — '+td.name; }catch(e){}
