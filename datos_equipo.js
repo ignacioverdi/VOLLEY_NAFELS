@@ -1,10 +1,10 @@
 window.EQUIPO_DATA = {
-  "generado": "03/06/2026",
+  "generado": "07/06/2026",
   "jugadores": [
     {
       "num": 1,
       "nombre": "DEECKE",
-      "pos": "LIBERO",
+      "pos": "ARMADOR",
       "foto": null,
       "pais": "🇩🇪",
       "altura": "",
@@ -12,17 +12,17 @@ window.EQUIPO_DATA = {
     },
     {
       "num": 2,
-      "nombre": "CORZO",
-      "pos": "PUNTA",
+      "nombre": "FEUZ",
+      "pos": "CENTRAL",
       "foto": null,
-      "pais": "🇦🇷",
+      "pais": "🇨🇭",
       "altura": "",
       "edad": 0
     },
     {
       "num": 3,
       "nombre": "SCHWITTER",
-      "pos": "PUNTA",
+      "pos": "OPUESTO",
       "foto": null,
       "pais": "🇨🇭",
       "altura": "",
@@ -85,7 +85,7 @@ window.EQUIPO_DATA = {
     {
       "num": 10,
       "nombre": "BOGDANOVSKI",
-      "pos": "CENTRAL",
+      "pos": "PUNTA",
       "foto": null,
       "pais": "🇲🇰",
       "altura": "",
@@ -103,7 +103,7 @@ window.EQUIPO_DATA = {
     {
       "num": 14,
       "nombre": "FIGUEIREDO",
-      "pos": "OPUESTO",
+      "pos": "PUNTA",
       "foto": null,
       "pais": "🇧🇷",
       "altura": "",
@@ -121,8 +121,8 @@ window.EQUIPO_DATA = {
   ],
   "staff": [
     {
-      "nombre": "HEAD COACH",
-      "rol": "Entrenador",
+      "nombre": "IGNACIO VERDI",
+      "rol": "Head Coach",
       "icon": "📋"
     }
   ]
