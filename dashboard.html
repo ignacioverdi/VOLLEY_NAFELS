@@ -358,6 +358,8 @@ window.OBJETIVOS_CONFIG={metas:{
 var EQ_FILTRO    = 'todos';
 var EQ_SESION    = -2;   // -2 = acumulado
 var EQ_TAB       = 'saque';
+var RECEP_TIPO   = 'total';  // total | flotado | potencia
+function setRecepTipo(t){ RECEP_TIPO=t; renderEqContent(); }
 var AN_FILTRO    = 'todos';
 var AN_SESION    = null;
 var JUG_ACTUAL   = null;
@@ -435,6 +437,8 @@ function getJugadoresAcum(sesiones){
       if(!acum[j.c]) acum[j.c]={c:j.c,n:j.n,PJ:0,
         sT:0,sPunto:0,sPos:0,sOvp:0,sNeg:0,sVend:0,sErr:0,sOrig:'',sDest:'',
         rT:0,rPunto:0,rPos:0,rOvp:0,rNeg:0,rVend:0,rErr:0,
+        rFlo:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},
+        rPot:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},
         aT:0,aPunto:0,aPos:0,aOvp:0,aNeg:0,aVend:0,aErr:0,
         bT:0,bPt:0,bPtPos:0,dv4:{}};
       var a=acum[j.c];
@@ -443,6 +447,10 @@ function getJugadoresAcum(sesiones){
        'rT','rPunto','rPos','rOvp','rNeg','rVend','rErr',
        'aT','aPunto','aPos','aOvp','aNeg','aVend','aErr',
        'bT','bPt','bPtPos'].forEach(function(k){ a[k]+=(j[k]||0); });
+      ['T','Punto','Pos','Adm','Neg','Vend','Err'].forEach(function(k){
+        if(j.rFlo) a.rFlo[k]+=(j.rFlo[k]||0);
+        if(j.rPot) a.rPot[k]+=(j.rPot[k]||0);
+      });
       if(j.dv4) Object.keys(j.dv4).forEach(function(cod){
         if(!a.dv4[cod]) a.dv4[cod]={tot:0,pt:0,err:0,orig:j.dv4[cod].orig||0};
         a.dv4[cod].tot+=j.dv4[cod].tot||0;
@@ -606,11 +614,21 @@ function renderEqContent(){
       getTot:function(a){var e=a.sT>0?Math.round((a.sPunto+0.5*a.sVend+0.25*a.sPos-a.sErr)/a.sT*100):null;
         return[{v:e!==null?fmt(e):'—',c:effColor(e),b:true},{v:a.sT,c:'#f59e0b',b:true},{v:a.sPunto,c:'#22c55e'},{v:a.sVend,c:'#86efac'},{v:a.sPos,c:'#86efac'},{v:a.sOvp||0,c:'#94a3b8'},{v:a.sNeg,c:'#f97316'},{v:a.sErr,c:'#ef4444'}];}},
     recepcion:{color:'#22c55e',ths:['EFF%','TOT','# Perf','+ Pos','! Ntr','– Neg','/ Vnd','= Err'],
-      getData:function(j){if(!j.rT)return null;
-        var e=Math.round((j.rPunto+0.5*j.rPos-0.5*j.rVend-j.rErr)/j.rT*100);
-        return[{v:fmt(e),c:effColor(e),b:true},{v:j.rT,c:'#22c55e',b:true},{v:j.rPunto,c:'#22c55e'},{v:j.rPos,c:'#86efac'},{v:j.rOvp||0,c:'#94a3b8'},{v:j.rNeg,c:'#f97316'},{v:j.rVend,c:'#fbbf24'},{v:j.rErr,c:'#ef4444'}];},
-      getTot:function(a){var e=a.rT>0?Math.round((a.rPunto+0.5*a.rPos-0.5*a.rVend-a.rErr)/a.rT*100):null;
-        return[{v:e!==null?fmt(e):'—',c:effColor(e),b:true},{v:a.rT,c:'#22c55e',b:true},{v:a.rPunto,c:'#22c55e'},{v:a.rPos,c:'#86efac'},{v:a.rOvp||0,c:'#94a3b8'},{v:a.rNeg,c:'#f97316'},{v:a.rVend,c:'#fbbf24'},{v:a.rErr,c:'#ef4444'}];}},
+      getData:function(j){
+        var src; // elegir total / flotado / potencia
+        if(RECEP_TIPO==='flotado'&&j.rFlo) src={T:j.rFlo.T,Punto:j.rFlo.Punto,Pos:j.rFlo.Pos,Ovp:j.rFlo.Adm,Neg:j.rFlo.Neg,Vend:j.rFlo.Vend,Err:j.rFlo.Err};
+        else if(RECEP_TIPO==='potencia'&&j.rPot) src={T:j.rPot.T,Punto:j.rPot.Punto,Pos:j.rPot.Pos,Ovp:j.rPot.Adm,Neg:j.rPot.Neg,Vend:j.rPot.Vend,Err:j.rPot.Err};
+        else src={T:j.rT,Punto:j.rPunto,Pos:j.rPos,Ovp:j.rOvp||0,Neg:j.rNeg,Vend:j.rVend,Err:j.rErr};
+        if(!src.T)return null;
+        var e=Math.round((src.Punto+0.5*src.Pos-0.5*src.Vend-src.Err)/src.T*100);
+        return[{v:fmt(e),c:effColor(e),b:true},{v:src.T,c:'#22c55e',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Pos,c:'#86efac'},{v:src.Ovp,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Vend,c:'#fbbf24'},{v:src.Err,c:'#ef4444'}];},
+      getTot:function(a){
+        var src;
+        if(RECEP_TIPO==='flotado'&&a.rFlo) src={T:a.rFlo.T,Punto:a.rFlo.Punto,Pos:a.rFlo.Pos,Ovp:a.rFlo.Adm,Neg:a.rFlo.Neg,Vend:a.rFlo.Vend,Err:a.rFlo.Err};
+        else if(RECEP_TIPO==='potencia'&&a.rPot) src={T:a.rPot.T,Punto:a.rPot.Punto,Pos:a.rPot.Pos,Ovp:a.rPot.Adm,Neg:a.rPot.Neg,Vend:a.rPot.Vend,Err:a.rPot.Err};
+        else src={T:a.rT,Punto:a.rPunto,Pos:a.rPos,Ovp:a.rOvp||0,Neg:a.rNeg,Vend:a.rVend,Err:a.rErr};
+        var e=src.T>0?Math.round((src.Punto+0.5*src.Pos-0.5*src.Vend-src.Err)/src.T*100):null;
+        return[{v:e!==null?fmt(e):'—',c:effColor(e),b:true},{v:src.T,c:'#22c55e',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Pos,c:'#86efac'},{v:src.Ovp,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Vend,c:'#fbbf24'},{v:src.Err,c:'#ef4444'}];}},
     ataque:{color:'#818cf8',ths:['EFF%','TOT','# Pto','+ Pos','! Ntr','– Neg','/ Blq','= Err'],
       getData:function(j){if(!j.aT)return null;
         var e=Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100);
@@ -660,9 +678,20 @@ function renderEqContent(){
   }
 
   var cfg=configs[EQ_TAB]; if(!cfg||!cfg.getData)return;
+  // Selector Flotado/Potencia/Total (solo en recepción)
+  var recepSelector='';
+  if(EQ_TAB==='recepcion'){
+    var opts=[['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']];
+    recepSelector='<div style="display:flex;gap:6px;margin-bottom:12px">'
+      +opts.map(function(o){
+        var on=RECEP_TIPO===o[0];
+        return '<button onclick="setRecepTipo(\''+o[0]+'\')" style="padding:6px 16px;border-radius:7px;border:1px solid '+(on?'#22c55e':'rgba(34,197,94,.3)')+';background:'+(on?'rgba(34,197,94,.18)':'rgba(34,197,94,.05)')+';color:'+(on?'#22c55e':'#94a3b8')+';font-size:11px;font-weight:800;letter-spacing:1px;cursor:pointer;font-family:inherit">'+o[1]+'</button>';
+      }).join('')
+      +'</div>';
+  }
   // accumulate totals
   var tot={sT:0,sPunto:0,sPos:0,sOvp:0,sNeg:0,sVend:0,sErr:0,rT:0,rPunto:0,rPos:0,rOvp:0,rNeg:0,rVend:0,rErr:0,aT:0,aPunto:0,aPos:0,aOvp:0,aNeg:0,aVend:0,aErr:0,bT:0,bPt:0,bPtPos:0};
-  var html='<div class="tabla-wrap"><table><thead><tr>'
+  var html=recepSelector+'<div class="tabla-wrap"><table><thead><tr>'
     +'<th style="text-align:left">Jugador</th>'+(isAcum?'<th>Ses.</th>':'')
     +cfg.ths.map(function(t,i){return'<th style="color:'+cfg.color+';'+(i===0?'border-left:2px solid '+cfg.color+'33':'')+'">'+t+'</th>';}).join('')
     +'</tr></thead><tbody>';
