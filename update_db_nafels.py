@@ -1172,7 +1172,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         partidos_jug.append({'num':num,'nombre':f"{num} {name.title()}",'pos':pos_label,'color':POS_COLOR.get(pos_label,'#64748b'),'info':{},'ataques':ataques,'saques':saques,'recepciones':recepciones})
     partidos_jug.sort(key=lambda x:x['num'])
 
-    partidos_meta=[{'nombre':g['rival'],'rival':g['rival'],'fecha':'/'.join(reversed(g['date'].split('-'))),'torneo':f'NLA Suiza {temporada}','resultado':g['result'],'sets_nafels':str(g['tsets']),'sets_rival':str(g['rsets'])} for g in sorted(games,key=lambda x:x['date']) if g['date']]
+    partidos_meta=[{'id':g['rival']+'__'+g['date'],'nombre':g['rival'],'rival':g['rival'],'fecha':'/'.join(reversed(g['date'].split('-'))),'torneo':f'NLA Suiza {temporada}','resultado':g['result'],'sets_nafels':str(g['tsets']),'sets_rival':str(g['rsets'])} for g in sorted(games,key=lambda x:x['date']) if g['date']]
 
     # ═══ BATERÍAS (objetivos) por partido, jugador y acumulado ═══
     def _bat_name_map(content, side):
@@ -1204,7 +1204,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
             _canch=to_canchitas(P)
             jug_obj.append({'nombre':bnames.get(num,num),'num':int(num),'objetivos':to_pcts(P),
                 'saques':_canch['saques'],'ataques':_canch['ataques'],'recepcion':_canch.get('recepcion',{})})
-        partidos_individual.append({'nombre':g['rival'],'rival':g['rival'],
+        partidos_individual.append({'id':g['rival']+'__'+g['date'],'nombre':g['rival'],'rival':g['rival'],'fecha':'/'.join(reversed(g['date'].split('-'))),
             'resultado':g['result'],'equipo_obj':to_pcts(bpl['__EQUIPO__']),'jugadores':jug_obj})
 
     # Acumulado

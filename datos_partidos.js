@@ -1,8 +1,9 @@
-// datos_partidos.js — 08/06/2026, 03:33:37
-const PARTIDOS_GENERADO = "08/06/2026, 03:33:37";
+// datos_partidos.js — 08/06/2026, 04:06:17
+const PARTIDOS_GENERADO = "08/06/2026, 04:06:17";
 const PARTIDOS_TOTAL = 26;
 const PARTIDOS_META = [
   {
+    "id": "Lausanne__2025-10-19",
     "nombre": "Lausanne",
     "rival": "Lausanne",
     "fecha": "19/10/2025",
@@ -12,6 +13,7 @@ const PARTIDOS_META = [
     "sets_rival": "1"
   },
   {
+    "id": "St Gallen__2025-10-25",
     "nombre": "St Gallen",
     "rival": "St Gallen",
     "fecha": "25/10/2025",
@@ -21,6 +23,7 @@ const PARTIDOS_META = [
     "sets_rival": "0"
   },
   {
+    "id": "Colombier__2025-11-01",
     "nombre": "Colombier",
     "rival": "Colombier",
     "fecha": "01/11/2025",
@@ -30,6 +33,7 @@ const PARTIDOS_META = [
     "sets_rival": "0"
   },
   {
+    "id": "Jona__2025-11-05",
     "nombre": "Jona",
     "rival": "Jona",
     "fecha": "05/11/2025",
@@ -39,6 +43,7 @@ const PARTIDOS_META = [
     "sets_rival": "1"
   },
   {
+    "id": "Amriswil__2025-11-08",
     "nombre": "Amriswil",
     "rival": "Amriswil",
     "fecha": "08/11/2025",
@@ -48,6 +53,7 @@ const PARTIDOS_META = [
     "sets_rival": "3"
   },
   {
+    "id": "Schonenwerd__2025-11-15",
     "nombre": "Schonenwerd",
     "rival": "Schonenwerd",
     "fecha": "15/11/2025",
@@ -57,6 +63,7 @@ const PARTIDOS_META = [
     "sets_rival": "1"
   },
   {
+    "id": "Chenois__2025-11-22",
     "nombre": "Chenois",
     "rival": "Chenois",
     "fecha": "22/11/2025",
@@ -66,6 +73,7 @@ const PARTIDOS_META = [
     "sets_rival": "0"
   },
   {
+    "id": "Jona__2025-11-29",
     "nombre": "Jona",
     "rival": "Jona",
     "fecha": "29/11/2025",
@@ -75,6 +83,7 @@ const PARTIDOS_META = [
     "sets_rival": "2"
   },
   {
+    "id": "Lausanne__2025-12-07",
     "nombre": "Lausanne",
     "rival": "Lausanne",
     "fecha": "07/12/2025",
@@ -84,6 +93,7 @@ const PARTIDOS_META = [
     "sets_rival": "2"
   },
   {
+    "id": "St Gallen__2025-12-13",
     "nombre": "St Gallen",
     "rival": "St Gallen",
     "fecha": "13/12/2025",
@@ -93,6 +103,7 @@ const PARTIDOS_META = [
     "sets_rival": "0"
   },
   {
+    "id": "Colombier__2025-12-20",
     "nombre": "Colombier",
     "rival": "Colombier",
     "fecha": "20/12/2025",
@@ -102,6 +113,7 @@ const PARTIDOS_META = [
     "sets_rival": "1"
   },
   {
+    "id": "Amriswil__2026-01-03",
     "nombre": "Amriswil",
     "rival": "Amriswil",
     "fecha": "03/01/2026",
@@ -111,6 +123,7 @@ const PARTIDOS_META = [
     "sets_rival": "1"
   },
   {
+    "id": "Sursee__2026-01-11",
     "nombre": "Sursee",
     "rival": "Sursee",
     "fecha": "11/01/2026",
@@ -120,6 +133,7 @@ const PARTIDOS_META = [
     "sets_rival": "0"
   },
   {
+    "id": "Schonenwerd__2026-01-17",
     "nombre": "Schonenwerd",
     "rival": "Schonenwerd",
     "fecha": "17/01/2026",
@@ -129,6 +143,7 @@ const PARTIDOS_META = [
     "sets_rival": "3"
   },
   {
+    "id": "Chenois__2026-01-31",
     "nombre": "Chenois",
     "rival": "Chenois",
     "fecha": "31/01/2026",
@@ -138,6 +153,7 @@ const PARTIDOS_META = [
     "sets_rival": "2"
   },
   {
+    "id": "Jona__2026-02-08",
     "nombre": "Jona",
     "rival": "Jona",
     "fecha": "08/02/2026",
@@ -147,6 +163,7 @@ const PARTIDOS_META = [
     "sets_rival": "0"
   },
   {
+    "id": "Colombier__2026-02-14",
     "nombre": "Colombier",
     "rival": "Colombier",
     "fecha": "14/02/2026",
@@ -156,6 +173,7 @@ const PARTIDOS_META = [
     "sets_rival": "0"
   },
   {
+    "id": "Colombier__2026-02-21",
     "nombre": "Colombier",
     "rival": "Colombier",
     "fecha": "21/02/2026",
@@ -165,6 +183,7 @@ const PARTIDOS_META = [
     "sets_rival": "0"
   },
   {
+    "id": "Colombier__2026-02-25",
     "nombre": "Colombier",
     "rival": "Colombier",
     "fecha": "25/02/2026",
@@ -174,6 +193,7 @@ const PARTIDOS_META = [
     "sets_rival": "0"
   },
   {
+    "id": "Chenois__2026-03-07",
     "nombre": "Chenois",
     "rival": "Chenois",
     "fecha": "07/03/2026",
@@ -183,6 +203,7 @@ const PARTIDOS_META = [
     "sets_rival": "0"
   },
   {
+    "id": "Chenois__2026-03-14",
     "nombre": "Chenois",
     "rival": "Chenois",
     "fecha": "14/03/2026",
@@ -192,6 +213,7 @@ const PARTIDOS_META = [
     "sets_rival": "0"
   },
   {
+    "id": "Chenois__2026-03-17",
     "nombre": "Chenois",
     "rival": "Chenois",
     "fecha": "17/03/2026",
@@ -201,6 +223,7 @@ const PARTIDOS_META = [
     "sets_rival": "1"
   },
   {
+    "id": "Amriswil__2026-03-28",
     "nombre": "Amriswil",
     "rival": "Amriswil",
     "fecha": "28/03/2026",
@@ -210,6 +233,7 @@ const PARTIDOS_META = [
     "sets_rival": "3"
   },
   {
+    "id": "Amriswil__2026-04-04",
     "nombre": "Amriswil",
     "rival": "Amriswil",
     "fecha": "04/04/2026",
@@ -219,6 +243,7 @@ const PARTIDOS_META = [
     "sets_rival": "3"
   },
   {
+    "id": "Amriswil__2026-04-09",
     "nombre": "Amriswil",
     "rival": "Amriswil",
     "fecha": "09/04/2026",
@@ -228,6 +253,7 @@ const PARTIDOS_META = [
     "sets_rival": "3"
   },
   {
+    "id": "Amriswil__2026-04-12",
     "nombre": "Amriswil",
     "rival": "Amriswil",
     "fecha": "12/04/2026",
@@ -6628,8 +6654,10 @@ const PARTIDOS_JUGADORES = [
 const PARTIDOS_EQUIPO_OBJ = {"sq": -2, "rec": 25, "bqpos": 43, "bqpt": 18, "atk": 31, "atqq": 36, "atqhb": 17, "atqx": 34, "atqrp": 38, "atqri": 33, "atqrm": 19, "atqtr": 30};
 const PARTIDOS_INDIVIDUAL = [
   {
+    "id": "Lausanne__2025-10-19",
     "nombre": "Lausanne",
     "rival": "Lausanne",
+    "fecha": "19/10/2025",
     "resultado": "V",
     "equipo_obj": {
       "sq": -5,
@@ -9164,8 +9192,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "St Gallen__2025-10-25",
     "nombre": "St Gallen",
     "rival": "St Gallen",
+    "fecha": "25/10/2025",
     "resultado": "V",
     "equipo_obj": {
       "sq": 1,
@@ -12209,8 +12239,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Colombier__2025-11-01",
     "nombre": "Colombier",
     "rival": "Colombier",
+    "fecha": "01/11/2025",
     "resultado": "V",
     "equipo_obj": {
       "sq": -5,
@@ -14467,8 +14499,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Jona__2025-11-05",
     "nombre": "Jona",
     "rival": "Jona",
+    "fecha": "05/11/2025",
     "resultado": "V",
     "equipo_obj": {
       "sq": -9,
@@ -16719,8 +16753,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Amriswil__2025-11-08",
     "nombre": "Amriswil",
     "rival": "Amriswil",
+    "fecha": "08/11/2025",
     "resultado": "D",
     "equipo_obj": {
       "sq": -10,
@@ -19614,8 +19650,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Schonenwerd__2025-11-15",
     "nombre": "Schonenwerd",
     "rival": "Schonenwerd",
+    "fecha": "15/11/2025",
     "resultado": "V",
     "equipo_obj": {
       "sq": -6,
@@ -22637,8 +22675,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Chenois__2025-11-22",
     "nombre": "Chenois",
     "rival": "Chenois",
+    "fecha": "22/11/2025",
     "resultado": "V",
     "equipo_obj": {
       "sq": -1,
@@ -25226,8 +25266,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Jona__2025-11-29",
     "nombre": "Jona",
     "rival": "Jona",
+    "fecha": "29/11/2025",
     "resultado": "V",
     "equipo_obj": {
       "sq": -3,
@@ -28243,8 +28285,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Lausanne__2025-12-07",
     "nombre": "Lausanne",
     "rival": "Lausanne",
+    "fecha": "07/12/2025",
     "resultado": "V",
     "equipo_obj": {
       "sq": 1,
@@ -31158,8 +31202,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "St Gallen__2025-12-13",
     "nombre": "St Gallen",
     "rival": "St Gallen",
+    "fecha": "13/12/2025",
     "resultado": "V",
     "equipo_obj": {
       "sq": 14,
@@ -33445,8 +33491,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Colombier__2025-12-20",
     "nombre": "Colombier",
     "rival": "Colombier",
+    "fecha": "20/12/2025",
     "resultado": "V",
     "equipo_obj": {
       "sq": -4,
@@ -36469,8 +36517,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Amriswil__2026-01-03",
     "nombre": "Amriswil",
     "rival": "Amriswil",
+    "fecha": "03/01/2026",
     "resultado": "V",
     "equipo_obj": {
       "sq": -9,
@@ -38850,8 +38900,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Sursee__2026-01-11",
     "nombre": "Sursee",
     "rival": "Sursee",
+    "fecha": "11/01/2026",
     "resultado": "V",
     "equipo_obj": {
       "sq": 4,
@@ -41954,8 +42006,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Schonenwerd__2026-01-17",
     "nombre": "Schonenwerd",
     "rival": "Schonenwerd",
+    "fecha": "17/01/2026",
     "resultado": "D",
     "equipo_obj": {
       "sq": -1,
@@ -45053,8 +45107,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Chenois__2026-01-31",
     "nombre": "Chenois",
     "rival": "Chenois",
+    "fecha": "31/01/2026",
     "resultado": "V",
     "equipo_obj": {
       "sq": -3,
@@ -48255,8 +48311,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Jona__2026-02-08",
     "nombre": "Jona",
     "rival": "Jona",
+    "fecha": "08/02/2026",
     "resultado": "V",
     "equipo_obj": {
       "sq": -3,
@@ -50244,8 +50302,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Colombier__2026-02-14",
     "nombre": "Colombier",
     "rival": "Colombier",
+    "fecha": "14/02/2026",
     "resultado": "V",
     "equipo_obj": {
       "sq": -5,
@@ -53297,8 +53357,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Colombier__2026-02-21",
     "nombre": "Colombier",
     "rival": "Colombier",
+    "fecha": "21/02/2026",
     "resultado": "V",
     "equipo_obj": {
       "sq": 2,
@@ -55242,8 +55304,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Colombier__2026-02-25",
     "nombre": "Colombier",
     "rival": "Colombier",
+    "fecha": "25/02/2026",
     "resultado": "V",
     "equipo_obj": {
       "sq": -5,
@@ -58024,8 +58088,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Chenois__2026-03-07",
     "nombre": "Chenois",
     "rival": "Chenois",
+    "fecha": "07/03/2026",
     "resultado": "V",
     "equipo_obj": {
       "sq": 6,
@@ -60617,8 +60683,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Chenois__2026-03-14",
     "nombre": "Chenois",
     "rival": "Chenois",
+    "fecha": "14/03/2026",
     "resultado": "V",
     "equipo_obj": {
       "sq": 4,
@@ -63562,8 +63630,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Chenois__2026-03-17",
     "nombre": "Chenois",
     "rival": "Chenois",
+    "fecha": "17/03/2026",
     "resultado": "V",
     "equipo_obj": {
       "sq": -5,
@@ -66535,8 +66605,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Amriswil__2026-03-28",
     "nombre": "Amriswil",
     "rival": "Amriswil",
+    "fecha": "28/03/2026",
     "resultado": "D",
     "equipo_obj": {
       "sq": -6,
@@ -69677,8 +69749,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Amriswil__2026-04-04",
     "nombre": "Amriswil",
     "rival": "Amriswil",
+    "fecha": "04/04/2026",
     "resultado": "D",
     "equipo_obj": {
       "sq": 2,
@@ -72351,8 +72425,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Amriswil__2026-04-09",
     "nombre": "Amriswil",
     "rival": "Amriswil",
+    "fecha": "09/04/2026",
     "resultado": "D",
     "equipo_obj": {
       "sq": -4,
@@ -75618,8 +75694,10 @@ const PARTIDOS_INDIVIDUAL = [
     ]
   },
   {
+    "id": "Amriswil__2026-04-12",
     "nombre": "Amriswil",
     "rival": "Amriswil",
+    "fecha": "12/04/2026",
     "resultado": "D",
     "equipo_obj": {
       "sq": 3,

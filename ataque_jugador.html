@@ -228,11 +228,18 @@ function buildSubfiltro(){
   var b=document.createElement('button');b.className='sfbtn'+(currentPartido==='acumulado'?' on':'');b.textContent='Acumulado';
   b.onclick=function(){ currentPartido='acumulado'; updateSfBtns(this); renderPage(); };row.appendChild(b);
   if(typeof PARTIDOS_META!=='undefined'){
+    // contar repeticiones de rival para mostrar fecha
+    var __cuenta={};PARTIDOS_META.forEach(function(m){var r=m.rival||m.nombre;__cuenta[r]=(__cuenta[r]||0)+1;});
     PARTIDOS_META.forEach(function(m){
-      var btn=document.createElement('button');btn.className='sfbtn'+(currentPartido===m.nombre?' on':'');
-      var label=m.rival||m.nombre;if(m.resultado) label+=' ('+m.resultado+')';
-      btn.textContent=label;btn.dataset.nombre=m.nombre;
-      btn.onclick=function(){ currentPartido=m.nombre; updateSfBtns(this); renderPage(); };row.appendChild(btn);
+      var pid=m.id||m.nombre;
+      var btn=document.createElement('button');
+      btn.className='sfbtn'+(currentPartido===pid?' on':'');
+      var rival=m.rival||m.nombre;var label=rival;
+      if(__cuenta[rival]>1 && m.fecha) label+=' '+m.fecha;
+      if(m.resultado) label+=' ('+m.resultado+')';
+      btn.textContent=label;btn.dataset.nombre=pid;
+      btn.onclick=function(){currentPartido=pid;updateSfBtns(this);renderPage();};
+      row.appendChild(btn);
     });
   }
 }
@@ -249,7 +256,7 @@ function getJugadorPartido(){
     return PARTIDOS_JUGADORES.find(function(x){return x.num===currentNum;});
   } else {
     if(typeof PARTIDOS_INDIVIDUAL==='undefined') return null;
-    var partido=PARTIDOS_INDIVIDUAL.find(function(p){return p.nombre===currentPartido;});
+    var partido=PARTIDOS_INDIVIDUAL.find(function(p){return (p.id||p.nombre)===currentPartido;});
     if(!partido) return null;
     return partido.jugadores.find(function(x){return x.num===currentNum;});
   }
@@ -266,7 +273,13 @@ function renderPage(){
     if(!j){cont.innerHTML='<div class="empty">Sin ataques en entrenamientos</div>';return;}
   }
   var nm=j.nombre.replace(/^\d+\s*/,'');
-  var suffix=currentFiltro==='entrenamiento'?' (ENT)':currentPartido!=='acumulado'?' ('+currentPartido+')':'';
+  var suffix='';
+  if(currentFiltro==='entrenamiento'){suffix=' (ENT)';}
+  else if(currentPartido!=='acumulado'){
+    var __pm=(typeof PARTIDOS_META!=='undefined')?PARTIDOS_META.find(function(m){return (m.id||m.nombre)===currentPartido;}):null;
+    var __et=__pm?((__pm.rival||__pm.nombre)+(__pm.fecha?' '+__pm.fecha:'')):currentPartido;
+    suffix=' ('+__et+')';
+  }
   document.getElementById('back-jug').href='jugador.html?num='+currentNum;
   document.getElementById('jug-title').textContent='💥 ATAQUES — '+nm+suffix;
   cont.innerHTML='';
@@ -352,7 +365,7 @@ function effColorCmp(v, type){
 function renderComparativaPosicion(cont, currentNum, type){
   var pjugs = [];
   if(typeof currentPartido !== 'undefined' && currentPartido !== 'acumulado' && typeof PARTIDOS_INDIVIDUAL !== 'undefined'){
-    var pdm = PARTIDOS_INDIVIDUAL.find(function(p){ return p.nombre === currentPartido; });
+    var pdm = PARTIDOS_INDIVIDUAL.find(function(p){ return (p.id||p.nombre) === currentPartido; });
     if(pdm && pdm.jugadores) pjugs = pdm.jugadores;
   }
   if(!pjugs.length){

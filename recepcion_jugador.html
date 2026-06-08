@@ -182,10 +182,19 @@ function buildSubfiltro(){
   var b=document.createElement('button');b.className='sfbtn'+(currentPartido==='acumulado'?' on':'');b.textContent='Acumulado';
   b.onclick=function(){currentPartido='acumulado';updateSfBtns(this);renderPage();};row.appendChild(b);
   if(typeof PARTIDOS_META!=='undefined'){
+    // contar cuántas veces aparece cada rival para decidir si mostrar la fecha
+    var cuenta={};
+    PARTIDOS_META.forEach(function(m){var r=m.rival||m.nombre;cuenta[r]=(cuenta[r]||0)+1;});
     PARTIDOS_META.forEach(function(m){
-      var btn=document.createElement('button');btn.className='sfbtn'+(currentPartido===m.nombre?' on':'');
-      var label=m.rival||m.nombre;if(m.resultado) label+=' ('+m.resultado+')';
-      btn.textContent=label;btn.onclick=function(){currentPartido=m.nombre;updateSfBtns(this);renderPage();};row.appendChild(btn);
+      var pid=m.id||m.nombre;
+      var btn=document.createElement('button');btn.className='sfbtn'+(currentPartido===pid?' on':'');
+      var rival=m.rival||m.nombre;
+      var label=rival;
+      // si el rival se repite, agregar la fecha para distinguir cada partido
+      if(cuenta[rival]>1 && m.fecha) label+=' '+m.fecha;
+      if(m.resultado) label+=' ('+m.resultado+')';
+      btn.textContent=label;
+      btn.onclick=function(){currentPartido=pid;updateSfBtns(this);renderPage();};row.appendChild(btn);
     });
   }
 }
@@ -198,10 +207,10 @@ function setFiltro(filtro){
 }
 
 function getJugadorPartidoRec(){
-  // Por partido: buscar en PARTIDOS_INDIVIDUAL (ahora tiene recepcion por zona)
+  // Por partido: buscar en PARTIDOS_INDIVIDUAL por id único (rival+fecha)
   if(currentPartido!=='acumulado'){
     if(typeof PARTIDOS_INDIVIDUAL!=='undefined'){
-      var pd=PARTIDOS_INDIVIDUAL.find(function(p){return p.nombre===currentPartido;});
+      var pd=PARTIDOS_INDIVIDUAL.find(function(p){return (p.id||p.nombre)===currentPartido;});
       if(pd&&pd.jugadores){
         var jj=pd.jugadores.find(function(x){return x.num===currentNum;});
         if(jj&&jj.recepcion&&jj.recepcion.flotado) return jj;
@@ -237,7 +246,13 @@ function renderPage(){
   if(!nombre&&typeof PARTIDOS_JUGADORES!=='undefined'){var jj=PARTIDOS_JUGADORES.find(function(x){return x.num===currentNum;});if(jj)nombre=jj.nombre;}
   nombre=nombre||(currentNum+'');
   var nm=nombre.replace(/^\d+\s*/,'');
-  var suffix=currentFiltro==='entrenamiento'?' (ENT)':currentPartido!=='acumulado'?' ('+currentPartido+')':'';
+  var suffix='';
+  if(currentFiltro==='entrenamiento'){ suffix=' (ENT)'; }
+  else if(currentPartido!=='acumulado'){
+    var pm=(typeof PARTIDOS_META!=='undefined')?PARTIDOS_META.find(function(m){return (m.id||m.nombre)===currentPartido;}):null;
+    var et=pm?((pm.rival||pm.nombre)+(pm.fecha?' '+pm.fecha:'')):currentPartido;
+    suffix=' ('+et+')';
+  }
   document.getElementById('back-jug').href='jugador.html?num='+currentNum;
   document.getElementById('jug-title').textContent='🛡 RECEPCIÓN — '+nm+suffix;
   cont.innerHTML='';
