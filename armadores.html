@@ -300,13 +300,17 @@ body{padding-top:56px}
 // Cargado por: jugador.html, dashboard.html
 // ================================================================
 
-// Datos cargados dinámicamente desde datos_casla.js
+// Datos cargados dinámicamente desde datos_armadores.js
 window.ARMADORES_DATA = {};
 
 function cargarDatosNafels(){
+  // PRIORIDAD: armador acumulado generado por el .bat (mismo motor que game plan)
+  if(typeof PARTIDOS_ARMADOR !== 'undefined' && PARTIDOS_ARMADOR && (PARTIDOS_ARMADOR.titular||PARTIDOS_ARMADOR.suplente)){
+    window.ARMADOR_DATA = { titular: PARTIDOS_ARMADOR.titular||null, suplente: PARTIDOS_ARMADOR.suplente||null };
+    return;
+  }
+  // FALLBACK: datos_armadores.js viejo
   if(typeof NAFELS_ARMADOR === 'undefined') return;
-
-  // Setear ARMADOR_DATA que usa renderArmador() directamente
   window.ARMADOR_DATA = {
     titular: NAFELS_ARMADOR.titular || null,
     suplente: NAFELS_ARMADOR.suplente || null

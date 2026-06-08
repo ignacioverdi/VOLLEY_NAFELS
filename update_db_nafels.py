@@ -1048,6 +1048,92 @@ def to_canchitas(P):
             rec_struct[tkey][okey]['total']=_celda(ztot)
     return {'saques':saques,'ataques':ataques,'recepcion':rec_struct if tiene_rec else {}}
 
+
+# ═══ MOTOR ARMADOR (canchitas, reusa lógica del game plan) ═══
+# Función que replica gpBuildArmador del game plan, pero desde rallies crudos (dict con date/rival)
+# Cada rally: {setter_pos, set_num, call, rec_quality, atype, atk_combo, atk_result, atk_dest, atk_orig, date, rival}
+
+FRONT_POS = [4,3,2]
+def arm_get_zone(combo, orig, sp):
+    c = combo
+    if c in ('X6','V6'): return 2
+    if c in ('X8','V8','X0','V0'): return 9 if orig in (9,8) else 2
+    if c in ('X5','V5'): return 4
+    if c in ('X1','XM','X2','XG','XC','XD'): return 3
+    if c == 'XB': return orig if orig>0 else 8
+    if c == 'X7': return 3
+    if c in ('X3','X4'): return 2
+    if c in ('XP','XR','X9','XT'): return orig if orig>0 else 8
+    if c in ('PP','CB','CF','CD'): return 2 if sp in FRONT_POS else 0
+    return orig
+
+def arm_eff_atk(arr):
+    if not arr: return None
+    k=bl=e=0
+    for r in arr:
+        res=r.get('atk_result','=')
+        if res=='#': k+=1
+        elif res=='/': bl+=1
+        elif res=='=': e+=1
+    return round((k-bl-e)/len(arr)*100)
+
+def arm_pts_pct(arr):
+    if not arr: return None
+    k=sum(1 for r in arr if r.get('atk_result')=='#')
+    return round(k/len(arr)*100)
+
+def build_dist(subset):
+    # side-out con recepción # o + (rec_quality)
+    k1=[r for r in subset if r.get('rec_quality') in ('#','+')]
+    base = k1 if len(k1)>=3 else subset
+    linked=[r for r in base if r.get('atk_combo') and arm_get_zone(r['atk_combo'], r.get('atk_orig',0), r.get('setter_pos',0))>0]
+    total=len(linked)
+    if not total: return []
+    zc={}
+    for r in linked:
+        z=arm_get_zone(r['atk_combo'], r.get('atk_orig',0), r.get('setter_pos',0))
+        zc[z]=zc.get(z,0)+1
+    out=[]
+    for z,n in zc.items():
+        k=sum(1 for r in linked if arm_get_zone(r['atk_combo'],r.get('atk_orig',0),r.get('setter_pos',0))==z and r.get('atk_result')=='#')
+        out.append({'zona':int(z),'tot':n,'pts':k,'pct':round(n/total*100),'pct_p':round(k/n*100) if n else 0})
+    return sorted(out, key=lambda x:-x['tot'])
+
+def build_one_setter(name, num, rallies):
+    if not rallies: return None
+    rotaciones=[]
+    for pos in [4,3,2,5,6,1]:
+        g=[r for r in rallies if r.get('setter_pos')==pos]
+        k1=[r for r in g if r.get('rec_quality') in ('#','+')]
+        rotaciones.append({'pos':'P'+str(pos),'total':len(k1),'total_all':len(g),'dist':build_dist(g)})
+    pills=[]
+    for pos in [1,6,5,4,3,2]:
+        g=[r for r in rallies if r.get('setter_pos')==pos]
+        pills.append({'label':'P'+str(pos),'eff':arm_eff_atk(g),'tot':len(g),
+                      'pts':sum(1 for r in g if r.get('atk_result')=='#'),'pts_pct':arm_pts_pct(g)})
+    so=[r for r in rallies if r.get('atype')==0]; tr=[r for r in rallies if r.get('atype')==1]
+    pills.append({'label':'SO','eff':arm_eff_atk(so),'tot':len(so),'pts':sum(1 for r in so if r.get('atk_result')=='#'),'pts_pct':arm_pts_pct(so)})
+    pills.append({'label':'TR','eff':arm_eff_atk(tr),'tot':len(tr),'pts':sum(1 for r in tr if r.get('atk_result')=='#'),'pts_pct':arm_pts_pct(tr)})
+    calls=['K1','K7','KM','K2','KC','KP','KE','KB']
+    llamadas=[]
+    for call in calls:
+        subset=[r for r in rallies if r.get('call')==call]
+        if len(subset)>=5:
+            llamadas.append({'call':call,'tot':len(subset),'eff':arm_eff_atk(subset),'pts_pct':arm_pts_pct(subset),'dist':build_dist(subset)})
+    return {'nombre':('%d %s'%(num,name)).strip(),'num':num,'rotaciones':rotaciones,'pills':pills,'llamadas':llamadas,
+            'so':{'eff':arm_eff_atk(so),'tot':len(so)},'tr':{'eff':arm_eff_atk(tr),'tot':len(tr)}}
+
+def build_armador_data(setters_rallies, setter_names):
+    # setters_rallies: {num: [rallies]}, setter_names: {num: name}
+    ranked=sorted(setters_rallies.items(), key=lambda x:-len(x[1]))[:2]
+    res={'titular':None,'suplente':None}
+    if len(ranked)>=1:
+        n,rl=ranked[0]; res['titular']=build_one_setter(setter_names.get(n,str(n)),n,rl)
+    if len(ranked)>=2:
+        n,rl=ranked[1]; res['suplente']=build_one_setter(setter_names.get(n,str(n)),n,rl)
+    return res
+
+
 def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025/26'):
     """Generate datos_historial.js + datos_partidos.js for a specific team from DVW."""
     from datetime import datetime
@@ -1187,6 +1273,8 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
 
     bat_all_pl=[]              # acumuladores por partido (para merge)
     partidos_individual=[]     # baterías por partido
+    _arm_acum_rallies={}       # acumulado de rallies por setter (para armador acumulado)
+    _arm_acum_names={}
     for g in sorted(games,key=lambda x:x['date']):
         if not g['date']: continue
         with open(g['content_path'], encoding='utf-8', errors='ignore') as f:
@@ -1204,8 +1292,29 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
             _canch=to_canchitas(P)
             jug_obj.append({'nombre':bnames.get(num,num),'num':int(num),'objetivos':to_pcts(P),
                 'saques':_canch['saques'],'ataques':_canch['ataques'],'recepcion':_canch.get('recepcion',{})})
+        # ── ARMADOR de este partido (mismo motor que game plan, filtrable por id) ──
+        _arm_pd={}
+        try:
+            _psec='[3PLAYERS-H]' if g['team_home'] else '[3PLAYERS-V]'
+            _pos=_get_positions(bcontent, _psec)
+            _setters=detectar_armadores(bcontent, bside, 2, None, _pos)
+            _snames={}
+            for _sn in _setters:
+                _snames[_sn]=bnames.get(str(_sn).zfill(2), str(_sn)).split(' ',1)[-1] if bnames.get(str(_sn).zfill(2)) else str(_sn)
+            _rpfx='a' if g['team_home'] else '*'
+            _sr={}
+            for _sn in _setters:
+                _rl=parse_setter_rallies(bcontent, bside, _rpfx, g['team_home'], _sn, g['date'], g['rival'])
+                if _rl:
+                    _sr[_sn]=_rl
+                    _arm_acum_rallies.setdefault(_sn,[]).extend(_rl)
+                    _arm_acum_names[_sn]=_snames.get(_sn,str(_sn))
+            if _sr:
+                _arm_pd=build_armador_data(_sr, _snames)
+        except Exception as _e:
+            _arm_pd={}
         partidos_individual.append({'id':g['rival']+'__'+g['date'],'nombre':g['rival'],'rival':g['rival'],'fecha':'/'.join(reversed(g['date'].split('-'))),
-            'resultado':g['result'],'equipo_obj':to_pcts(bpl['__EQUIPO__']),'jugadores':jug_obj})
+            'resultado':g['result'],'equipo_obj':to_pcts(bpl['__EQUIPO__']),'jugadores':jug_obj,'armadores':_arm_pd})
 
     # Acumulado
     bat_acum=merge_acum(bat_all_pl)
@@ -1262,6 +1371,9 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
     pjs += 'const PARTIDOS_JUGADORES = ' + json.dumps(partidos_jug, ensure_ascii=False, indent=2) + ';\n'
     pjs += 'const PARTIDOS_EQUIPO_OBJ = ' + json.dumps(equipo_obj_acum, ensure_ascii=False) + ';\n'
     pjs += 'const PARTIDOS_INDIVIDUAL = ' + json.dumps(partidos_individual, ensure_ascii=False, indent=2) + ';\n'
+    # Armador acumulado (todos los partidos) — mismo formato que el de cada partido
+    _arm_acum = build_armador_data(_arm_acum_rallies, _arm_acum_names) if _arm_acum_rallies else {'titular':None,'suplente':None}
+    pjs += 'const PARTIDOS_ARMADOR = ' + json.dumps(_arm_acum, ensure_ascii=False) + ';\n'
     with open(os.path.join(output_dir,'datos_partidos.js'),'w',encoding='utf-8') as f: f.write(pjs)
 
     return len(historial), len(games)
