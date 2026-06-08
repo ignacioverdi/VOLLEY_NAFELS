@@ -85,11 +85,12 @@ def calc_baterias(scout, side):
                 _dd=''.join(ch for ch in _s if ch.isdigit())
                 if len(_dd)>=2: _rd=_dd[:2]; break
             if _rd:
-                _zdest=_rd[1]
+                _zorig=_rd[0]; _zdest=_rd[1]
                 _ZMAP={'1':'P1','2':'P1','9':'P1','6':'P6','3':'P6','8':'P6','5':'P5','4':'P5','7':'P5'}
-                _P=_ZMAP.get(_zdest)
-                if _P:
-                    T=P['_rec'].setdefault(_rtp,{}).setdefault(_P,{'tot':0,'#':0,'+':0,'!':0,'-':0,'/':0,'=':0})
+                _OMAP={'1':'Z1','2':'Z1','9':'Z1','6':'Z6','3':'Z6','8':'Z6','5':'Z5','4':'Z5','7':'Z5'}
+                _O=_OMAP.get(_zorig); _P=_ZMAP.get(_zdest)
+                if _O and _P:
+                    T=P['_rec'].setdefault(_rtp,{}).setdefault(_O,{}).setdefault(_P,{'tot':0,'#':0,'+':0,'!':0,'-':0,'/':0,'=':0})
                     T['tot']+=1
                     if res in T: T[res]+=1
         elif pfx!=side and skill in('A','D','E','B'):
@@ -195,10 +196,11 @@ def merge_acum(lista_pl):
                         if not ac['orig']: ac['orig']=d.get('orig',0)
                         for z,n in d.get('dest',{}).items(): ac['dest'][z]=ac['dest'].get(z,0)+n
                 elif sec=='_rec':
-                    for tp,pd in P[sec].items():
-                        for Pp,d in pd.items():
-                            T=A[sec].setdefault(tp,{}).setdefault(Pp,{'tot':0,'#':0,'+':0,'!':0,'-':0,'/':0,'=':0})
-                            for kk in ('tot','#','+','!','-','/','='): T[kk]+=d.get(kk,0)
+                    for tp,od in P[sec].items():
+                        for O,pd in od.items():
+                            for Pp,d in pd.items():
+                                T=A[sec].setdefault(tp,{}).setdefault(O,{}).setdefault(Pp,{'tot':0,'#':0,'+':0,'!':0,'-':0,'/':0,'=':0})
+                                for kk in ('tot','#','+','!','-','/','='): T[kk]+=d.get(kk,0)
                 else:
                     for k in P[sec]: A[sec][k]+=P[sec][k]
     return acum
@@ -248,38 +250,39 @@ def to_canchitas(P):
         ataques.append({'cod':cb,'tipo':'','orig':ORIG.get(cb,8),'destinos':destinos,
             'eff':eff,'tot':d['tot'],'pts':d['#'],'slash':d['/'],'err':d['='],
             'video':None,'pts_pct':round(d['#']/d['tot']*100) if d['tot'] else 0})
-    # recepción por posición agrupada: flotado/potencia → P1/P6/P5
-    # P1=Z1+Z2+Z9, P6=Z6+Z3+Z8, P5=Z5+Z4+Z7 (ya agrupado en _rec)
+    # recepción: tipo (flotado/potencia) → origen (desde_z1/z6/z5) → destino (P5/P6/P1)
+    # P1=Z1+Z2+Z9, P6=Z6+Z3+Z8, P5=Z5+Z4+Z7 (origen y destino con misma agrupación)
     def _celda(d):
         t=d.get('tot',0)
-        if not t: return {'tot':0,'eff':0,'pos':0,'neg':0,'pt':0,'mas':0,'neu':0,'med':0,'err':0,'ovp':0}
-        # categorías DataVolley: # + ! - / =
+        if not t: return {'tot':0,'eff':0,'pos':0,'neg':0,'pt':0,'mas':0,'neu':0,'med':0,'ovp':0,'err':0}
         npt=d.get('#',0); nmas=d.get('+',0); nneu=d.get('!',0)
         nmed=d.get('-',0); novp=d.get('/',0); nerr=d.get('=',0)
         eff=round((npt*1 + nmas*0.5 - novp*0.5 - nerr)/t*100)
-        pos=round((npt+nmas)/t*100)
-        neg=round((novp+nerr)/t*100)
+        pos=round((npt+nmas)/t*100); neg=round((novp+nerr)/t*100)
         return {'tot':t,'eff':eff,'pos':pos,'neg':neg,
                 'pt':npt,'mas':nmas,'neu':nneu,'med':nmed,'ovp':novp,'err':nerr}
+    def _zona_vacia():
+        return {'P5':_celda({}),'P6':_celda({}),'P1':_celda({}),'total':_celda({})}
     def _tipo_vacio():
-        return {'P1':_celda({}),'P6':_celda({}),'P5':_celda({}),'total':_celda({})}
+        return {'desde_z1':_zona_vacia(),'desde_z6':_zona_vacia(),'desde_z5':_zona_vacia()}
     rec_struct={'flotado':_tipo_vacio(),'potencia':_tipo_vacio()}
     TIPO_MAP={'M':'flotado','H':'flotado','Q':'potencia','T':'potencia'}
+    OKEY={'Z1':'desde_z1','Z6':'desde_z6','Z5':'desde_z5'}
     rec=P.get('_rec',{})
     tiene_rec=False
-    # acumuladores de total por tipo
-    _acc={'flotado':{'tot':0,'#':0,'+':0,'!':0,'-':0,'/':0,'=':0},
-          'potencia':{'tot':0,'#':0,'+':0,'!':0,'-':0,'/':0,'=':0}}
-    for tp,pd in rec.items():
+    for tp,od in rec.items():
         tkey=TIPO_MAP.get(tp)
         if not tkey: continue
-        for Pp,d in pd.items():
-            if Pp not in ('P1','P6','P5'): continue
-            rec_struct[tkey][Pp]=_celda(d)
-            tiene_rec=True
-            for kk in _acc[tkey]: _acc[tkey][kk]+=d.get(kk,0)
-    rec_struct['flotado']['total']=_celda(_acc['flotado'])
-    rec_struct['potencia']['total']=_celda(_acc['potencia'])
+        for O,pd in od.items():
+            okey=OKEY.get(O)
+            if not okey: continue
+            ztot={'tot':0,'#':0,'+':0,'!':0,'-':0,'/':0,'=':0}
+            for Pp,d in pd.items():
+                if Pp not in ('P1','P6','P5'): continue
+                rec_struct[tkey][okey][Pp]=_celda(d)
+                tiene_rec=True
+                for kk in ztot: ztot[kk]+=d.get(kk,0)
+            rec_struct[tkey][okey]['total']=_celda(ztot)
     return {'saques':saques,'ataques':ataques,'recepcion':rec_struct if tiene_rec else {}}
 
 print("✓ Motor de baterías grabado en baterias_engine.py")
