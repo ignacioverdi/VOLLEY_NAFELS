@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Recepción — CASLA Voley</title>
+<title>Recepción — Nafels Voley</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="datos_casla.js" onerror="void 0"></script>
+<script src="datos_equipo.js" onerror="void 0"></script>
 <script src="datos_partidos.js" onerror="void 0"></script>
 <script src="datos_historial.js" onerror="void 0"></script>
 <style>
@@ -32,7 +32,7 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
   <a id="back-jug" href="jugador.html" class="back-btn">← Perfil</a>
   <div style="flex-shrink:0">
     <div id="jug-title" style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#e2e8f0">RECEPCIÓN</div>
-    <div style="font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase">CASLA VOLEY</div>
+    <div style="font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase">NAFELS VOLEY</div>
   </div>
   <div class="filter-row">
     <button class="fbtn active-partido" id="btn-partido" onclick="setFiltro('partido')">🏆 PARTIDO</button>
@@ -182,13 +182,13 @@ function getJugadorPartidoRec(){
     }
     return null;
   }
-  // Acumulado: PARTIDOS_JUGADORES (recepcion por zona), fallback CASLA_JUGADORES
+  // Acumulado: PARTIDOS_JUGADORES (recepcion por zona), fallback Nafels_JUGADORES
   if(typeof PARTIDOS_JUGADORES!=='undefined'){
     var j=PARTIDOS_JUGADORES.find(function(x){return x.num===currentNum;});
     if(j&&j.recepcion&&j.recepcion.flotado) return j;
   }
-  if(typeof CASLA_JUGADORES!=='undefined'){
-    var j=CASLA_JUGADORES.find(function(x){return x.num===currentNum;});
+  if(typeof Nafels_JUGADORES!=='undefined'){
+    var j=Nafels_JUGADORES.find(function(x){return x.num===currentNum;});
     if(j&&j.recepcion&&j.recepcion.flotado) return j;
   }
   return null;
@@ -243,7 +243,7 @@ function recEffByTipo(jug){
 }
 
 function renderComparativaRecepcion(j, cont, num){
-  var JUG = typeof PARTIDOS_JUGADORES!=='undefined'&&PARTIDOS_JUGADORES.length?PARTIDOS_JUGADORES:(typeof CASLA_JUGADORES!=='undefined'?CASLA_JUGADORES:[]);
+  var JUG = typeof PARTIDOS_JUGADORES!=='undefined'&&PARTIDOS_JUGADORES.length?PARTIDOS_JUGADORES:(typeof Nafels_JUGADORES!=='undefined'?Nafels_JUGADORES:[]);
   if(!JUG.length) return;
   var mio=recEffByTipo(j);
   if(!mio||!mio.total) return;
@@ -312,7 +312,7 @@ function renderComparativaRecepcion(j, cont, num){
 }
 
 function waitAndInit(tries){
-  var ok=typeof CASLA_JUGADORES!=='undefined'||typeof PARTIDOS_JUGADORES!=='undefined'||typeof window.HISTORIAL_DATA!=='undefined';
+  var ok=typeof Nafels_JUGADORES!=='undefined'||typeof PARTIDOS_JUGADORES!=='undefined'||typeof window.HISTORIAL_DATA!=='undefined';
   if(ok){var params=new URLSearchParams(window.location.search);currentNum=parseInt(params.get('num'))||0;buildSubfiltro();document.fonts.ready.then(renderPage).catch(renderPage);}
   else if(tries>0){setTimeout(function(){waitAndInit(tries-1);},200);}
   else {document.getElementById('content').innerHTML='<div class="empty">No se pudieron cargar los datos.</div>';}
