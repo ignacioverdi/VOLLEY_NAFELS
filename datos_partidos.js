@@ -1,5 +1,5 @@
-// datos_partidos.js — 08/06/2026, 13:56:29
-const PARTIDOS_GENERADO = "08/06/2026, 13:56:29";
+// datos_partidos.js — 08/06/2026, 17:18:51
+const PARTIDOS_GENERADO = "08/06/2026, 17:18:51";
 const PARTIDOS_TOTAL = 26;
 const PARTIDOS_META = [
   {
@@ -302,6 +302,54 @@ const PARTIDOS_JUGADORES = [
         "pts_pct": 25
       }
     ],
+    "ataques_so": [
+      {
+        "cod": "PP",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 33
+          },
+          {
+            "z": 9,
+            "pct": 33
+          },
+          {
+            "z": 5,
+            "pct": 33
+          }
+        ],
+        "eff": 33,
+        "tot": 3,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 33
+      }
+    ],
+    "ataques_tr": [
+      {
+        "cod": "PP",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
     "saques": [
       {
         "cod": "SM",
@@ -409,6 +457,45 @@ const PARTIDOS_JUGADORES = [
         "pts_pct": 0
       }
     ],
+    "ataques_so": [
+      {
+        "cod": "X0",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "V0",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "ataques_tr": [],
     "saques": [],
     "recepciones": [],
     "recepcion": {},
@@ -527,6 +614,122 @@ const PARTIDOS_JUGADORES = [
         "tot": 1,
         "pts": 0,
         "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "ataques_so": [
+      {
+        "cod": "X6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 75
+          },
+          {
+            "z": 7,
+            "pct": 25
+          }
+        ],
+        "eff": 25,
+        "tot": 4,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 25
+      },
+      {
+        "cod": "X5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 2,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "V6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "V8",
+        "tipo": "",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X8",
+        "tipo": "",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "ataques_tr": [
+      {
+        "cod": "X8",
+        "tipo": "",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 1,
         "err": 0,
         "video": null,
         "pts_pct": 0
@@ -711,6 +914,198 @@ const PARTIDOS_JUGADORES = [
         "err": 0,
         "video": null,
         "pts_pct": 100
+      },
+      {
+        "cod": "VB",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 4,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X4",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "ataques_so": [
+      {
+        "cod": "PP",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 29
+          },
+          {
+            "z": 4,
+            "pct": 21
+          },
+          {
+            "z": 3,
+            "pct": 18
+          },
+          {
+            "z": 5,
+            "pct": 8
+          }
+        ],
+        "eff": 29,
+        "tot": 38,
+        "pts": 14,
+        "slash": 3,
+        "err": 0,
+        "video": null,
+        "pts_pct": 37
+      },
+      {
+        "cod": "X6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X8",
+        "tipo": "",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 100
+          }
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      }
+    ],
+    "ataques_tr": [
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 32
+          },
+          {
+            "z": 6,
+            "pct": 14
+          },
+          {
+            "z": 4,
+            "pct": 14
+          },
+          {
+            "z": 8,
+            "pct": 14
+          }
+        ],
+        "eff": 39,
+        "tot": 28,
+        "pts": 15,
+        "slash": 1,
+        "err": 3,
+        "video": null,
+        "pts_pct": 54
+      },
+      {
+        "cod": "PP",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 4,
+            "pct": 30
+          },
+          {
+            "z": 6,
+            "pct": 30
+          },
+          {
+            "z": 1,
+            "pct": 10
+          },
+          {
+            "z": 8,
+            "pct": 10
+          }
+        ],
+        "eff": 30,
+        "tot": 10,
+        "pts": 5,
+        "slash": 2,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
+      },
+      {
+        "cod": "V6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 43
+          },
+          {
+            "z": 3,
+            "pct": 29
+          },
+          {
+            "z": 7,
+            "pct": 29
+          }
+        ],
+        "eff": 43,
+        "tot": 7,
+        "pts": 3,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 43
       },
       {
         "cod": "VB",
@@ -1406,6 +1801,416 @@ const PARTIDOS_JUGADORES = [
         "err": 0,
         "video": null,
         "pts_pct": 100
+      }
+    ],
+    "ataques_so": [
+      {
+        "cod": "X7",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 40
+          },
+          {
+            "z": 8,
+            "pct": 33
+          },
+          {
+            "z": 1,
+            "pct": 9
+          },
+          {
+            "z": 6,
+            "pct": 8
+          }
+        ],
+        "eff": 29,
+        "tot": 75,
+        "pts": 35,
+        "slash": 5,
+        "err": 8,
+        "video": null,
+        "pts_pct": 47
+      },
+      {
+        "cod": "X1",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 47
+          },
+          {
+            "z": 7,
+            "pct": 21
+          },
+          {
+            "z": 1,
+            "pct": 12
+          },
+          {
+            "z": 9,
+            "pct": 7
+          }
+        ],
+        "eff": 51,
+        "tot": 43,
+        "pts": 28,
+        "slash": 4,
+        "err": 2,
+        "video": null,
+        "pts_pct": 65
+      },
+      {
+        "cod": "XM",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 52
+          },
+          {
+            "z": 8,
+            "pct": 28
+          },
+          {
+            "z": 3,
+            "pct": 12
+          },
+          {
+            "z": 7,
+            "pct": 8
+          }
+        ],
+        "eff": 52,
+        "tot": 25,
+        "pts": 15,
+        "slash": 1,
+        "err": 1,
+        "video": null,
+        "pts_pct": 60
+      },
+      {
+        "cod": "X2",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 50
+          },
+          {
+            "z": 8,
+            "pct": 25
+          },
+          {
+            "z": 1,
+            "pct": 25
+          }
+        ],
+        "eff": 0,
+        "tot": 4,
+        "pts": 1,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 25
+      },
+      {
+        "cod": "X5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 67
+          },
+          {
+            "z": 8,
+            "pct": 33
+          }
+        ],
+        "eff": 67,
+        "tot": 3,
+        "pts": 2,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 67
+      },
+      {
+        "cod": "X9",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 67
+          },
+          {
+            "z": 7,
+            "pct": 33
+          }
+        ],
+        "eff": 33,
+        "tot": 3,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 33
+      },
+      {
+        "cod": "X3",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 100
+          }
+        ],
+        "eff": 50,
+        "tot": 2,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 3,
+            "pct": 100
+          }
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      }
+    ],
+    "ataques_tr": [
+      {
+        "cod": "X7",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 65
+          },
+          {
+            "z": 7,
+            "pct": 12
+          },
+          {
+            "z": 8,
+            "pct": 12
+          },
+          {
+            "z": 1,
+            "pct": 6
+          }
+        ],
+        "eff": 59,
+        "tot": 17,
+        "pts": 10,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 59
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 40
+          },
+          {
+            "z": 8,
+            "pct": 30
+          },
+          {
+            "z": 1,
+            "pct": 20
+          },
+          {
+            "z": 3,
+            "pct": 10
+          }
+        ],
+        "eff": 50,
+        "tot": 10,
+        "pts": 6,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 60
+      },
+      {
+        "cod": "X1",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 43
+          },
+          {
+            "z": 6,
+            "pct": 29
+          },
+          {
+            "z": 7,
+            "pct": 14
+          },
+          {
+            "z": 4,
+            "pct": 14
+          }
+        ],
+        "eff": 43,
+        "tot": 7,
+        "pts": 4,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 57
+      },
+      {
+        "cod": "XM",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 50
+          },
+          {
+            "z": 6,
+            "pct": 25
+          },
+          {
+            "z": 3,
+            "pct": 25
+          }
+        ],
+        "eff": 50,
+        "tot": 4,
+        "pts": 2,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
+      },
+      {
+        "cod": "X2",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 50
+          },
+          {
+            "z": 7,
+            "pct": 50
+          }
+        ],
+        "eff": 50,
+        "tot": 2,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
+      },
+      {
+        "cod": "X5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X9",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X3",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
       }
     ],
     "saques": [
@@ -2104,6 +2909,550 @@ const PARTIDOS_JUGADORES = [
         "pts_pct": 0
       }
     ],
+    "ataques_so": [
+      {
+        "cod": "X8",
+        "tipo": "",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 41
+          },
+          {
+            "z": 1,
+            "pct": 14
+          },
+          {
+            "z": 6,
+            "pct": 12
+          },
+          {
+            "z": 8,
+            "pct": 11
+          }
+        ],
+        "eff": 42,
+        "tot": 165,
+        "pts": 97,
+        "slash": 10,
+        "err": 18,
+        "video": null,
+        "pts_pct": 59
+      },
+      {
+        "cod": "X6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 40
+          },
+          {
+            "z": 6,
+            "pct": 18
+          },
+          {
+            "z": 9,
+            "pct": 14
+          },
+          {
+            "z": 1,
+            "pct": 12
+          }
+        ],
+        "eff": 39,
+        "tot": 130,
+        "pts": 72,
+        "slash": 9,
+        "err": 12,
+        "video": null,
+        "pts_pct": 55
+      },
+      {
+        "cod": "X5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 35
+          },
+          {
+            "z": 6,
+            "pct": 27
+          },
+          {
+            "z": 9,
+            "pct": 10
+          },
+          {
+            "z": 5,
+            "pct": 8
+          }
+        ],
+        "eff": 53,
+        "tot": 102,
+        "pts": 64,
+        "slash": 6,
+        "err": 4,
+        "video": null,
+        "pts_pct": 63
+      },
+      {
+        "cod": "V8",
+        "tipo": "",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 37
+          },
+          {
+            "z": 8,
+            "pct": 23
+          },
+          {
+            "z": 1,
+            "pct": 17
+          },
+          {
+            "z": 9,
+            "pct": 9
+          }
+        ],
+        "eff": 6,
+        "tot": 35,
+        "pts": 15,
+        "slash": 5,
+        "err": 8,
+        "video": null,
+        "pts_pct": 43
+      },
+      {
+        "cod": "V5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 46
+          },
+          {
+            "z": 5,
+            "pct": 19
+          },
+          {
+            "z": 9,
+            "pct": 12
+          },
+          {
+            "z": 6,
+            "pct": 12
+          }
+        ],
+        "eff": 46,
+        "tot": 26,
+        "pts": 13,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 50
+      },
+      {
+        "cod": "V6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 36
+          },
+          {
+            "z": 8,
+            "pct": 16
+          },
+          {
+            "z": 9,
+            "pct": 16
+          },
+          {
+            "z": 6,
+            "pct": 12
+          }
+        ],
+        "eff": 40,
+        "tot": 25,
+        "pts": 12,
+        "slash": 2,
+        "err": 0,
+        "video": null,
+        "pts_pct": 48
+      },
+      {
+        "cod": "X4",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 67
+          },
+          {
+            "z": 5,
+            "pct": 33
+          }
+        ],
+        "eff": 0,
+        "tot": 3,
+        "pts": 1,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 33
+      },
+      {
+        "cod": "VB",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 33
+          },
+          {
+            "z": 6,
+            "pct": 33
+          },
+          {
+            "z": 1,
+            "pct": 33
+          }
+        ],
+        "eff": -33,
+        "tot": 3,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X9",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 100
+          }
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      },
+      {
+        "cod": "X3",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 100
+          }
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      }
+    ],
+    "ataques_tr": [
+      {
+        "cod": "V6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 39
+          },
+          {
+            "z": 6,
+            "pct": 14
+          },
+          {
+            "z": 8,
+            "pct": 14
+          },
+          {
+            "z": 9,
+            "pct": 13
+          }
+        ],
+        "eff": 24,
+        "tot": 126,
+        "pts": 51,
+        "slash": 11,
+        "err": 10,
+        "video": null,
+        "pts_pct": 40
+      },
+      {
+        "cod": "X8",
+        "tipo": "",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 35
+          },
+          {
+            "z": 1,
+            "pct": 18
+          },
+          {
+            "z": 9,
+            "pct": 17
+          },
+          {
+            "z": 5,
+            "pct": 12
+          }
+        ],
+        "eff": 36,
+        "tot": 120,
+        "pts": 63,
+        "slash": 7,
+        "err": 13,
+        "video": null,
+        "pts_pct": 52
+      },
+      {
+        "cod": "X6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 36
+          },
+          {
+            "z": 6,
+            "pct": 18
+          },
+          {
+            "z": 9,
+            "pct": 17
+          },
+          {
+            "z": 1,
+            "pct": 14
+          }
+        ],
+        "eff": 35,
+        "tot": 115,
+        "pts": 60,
+        "slash": 9,
+        "err": 11,
+        "video": null,
+        "pts_pct": 52
+      },
+      {
+        "cod": "V8",
+        "tipo": "",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 41
+          },
+          {
+            "z": 9,
+            "pct": 19
+          },
+          {
+            "z": 5,
+            "pct": 10
+          },
+          {
+            "z": 8,
+            "pct": 9
+          }
+        ],
+        "eff": 22,
+        "tot": 68,
+        "pts": 29,
+        "slash": 6,
+        "err": 8,
+        "video": null,
+        "pts_pct": 43
+      },
+      {
+        "cod": "V5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 37
+          },
+          {
+            "z": 6,
+            "pct": 32
+          },
+          {
+            "z": 2,
+            "pct": 16
+          },
+          {
+            "z": 8,
+            "pct": 5
+          }
+        ],
+        "eff": 16,
+        "tot": 19,
+        "pts": 7,
+        "slash": 1,
+        "err": 3,
+        "video": null,
+        "pts_pct": 37
+      },
+      {
+        "cod": "X5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 33
+          },
+          {
+            "z": 1,
+            "pct": 33
+          },
+          {
+            "z": 9,
+            "pct": 11
+          },
+          {
+            "z": 2,
+            "pct": 6
+          }
+        ],
+        "eff": 44,
+        "tot": 18,
+        "pts": 9,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 25
+          },
+          {
+            "z": 7,
+            "pct": 19
+          },
+          {
+            "z": 1,
+            "pct": 19
+          },
+          {
+            "z": 3,
+            "pct": 12
+          }
+        ],
+        "eff": 75,
+        "tot": 16,
+        "pts": 12,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 75
+      },
+      {
+        "cod": "X4",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 43
+          },
+          {
+            "z": 1,
+            "pct": 14
+          },
+          {
+            "z": 9,
+            "pct": 14
+          },
+          {
+            "z": 7,
+            "pct": 14
+          }
+        ],
+        "eff": 57,
+        "tot": 7,
+        "pts": 5,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 71
+      },
+      {
+        "cod": "XB",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
     "saques": [
       {
         "cod": "SQ",
@@ -2653,6 +4002,174 @@ const PARTIDOS_JUGADORES = [
         "pts_pct": 0
       }
     ],
+    "ataques_so": [
+      {
+        "cod": "X1",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 43
+          },
+          {
+            "z": 7,
+            "pct": 21
+          },
+          {
+            "z": 4,
+            "pct": 7
+          },
+          {
+            "z": 6,
+            "pct": 7
+          }
+        ],
+        "eff": 36,
+        "tot": 14,
+        "pts": 5,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 36
+      },
+      {
+        "cod": "X7",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 50
+          },
+          {
+            "z": 1,
+            "pct": 50
+          }
+        ],
+        "eff": -50,
+        "tot": 2,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "XM",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X2",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "ataques_tr": [
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 2,
+            "pct": 50
+          },
+          {
+            "z": 3,
+            "pct": 50
+          }
+        ],
+        "eff": 0,
+        "tot": 2,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X7",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X1",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 100
+          }
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      },
+      {
+        "cod": "X0",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
     "saques": [
       {
         "cod": "SM",
@@ -3076,6 +4593,27 @@ const PARTIDOS_JUGADORES = [
         "pts_pct": 0
       }
     ],
+    "ataques_so": [
+      {
+        "cod": "X8",
+        "tipo": "",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "ataques_tr": [],
     "saques": [],
     "recepciones": [],
     "recepcion": {
@@ -3620,6 +5158,312 @@ const PARTIDOS_JUGADORES = [
         "pts_pct": 0
       }
     ],
+    "ataques_so": [
+      {
+        "cod": "X5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 44
+          },
+          {
+            "z": 6,
+            "pct": 17
+          },
+          {
+            "z": 5,
+            "pct": 10
+          },
+          {
+            "z": 9,
+            "pct": 9
+          }
+        ],
+        "eff": 17,
+        "tot": 98,
+        "pts": 42,
+        "slash": 8,
+        "err": 17,
+        "video": null,
+        "pts_pct": 43
+      },
+      {
+        "cod": "V5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 48
+          },
+          {
+            "z": 6,
+            "pct": 43
+          },
+          {
+            "z": 9,
+            "pct": 10
+          }
+        ],
+        "eff": 33,
+        "tot": 21,
+        "pts": 9,
+        "slash": 2,
+        "err": 0,
+        "video": null,
+        "pts_pct": 43
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 50
+          },
+          {
+            "z": 8,
+            "pct": 50
+          }
+        ],
+        "eff": 50,
+        "tot": 2,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
+      },
+      {
+        "cod": "X9",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X0",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 4,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "VR",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "ataques_tr": [
+      {
+        "cod": "X5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 63
+          },
+          {
+            "z": 6,
+            "pct": 13
+          },
+          {
+            "z": 7,
+            "pct": 6
+          },
+          {
+            "z": 9,
+            "pct": 5
+          }
+        ],
+        "eff": 8,
+        "tot": 63,
+        "pts": 18,
+        "slash": 9,
+        "err": 4,
+        "video": null,
+        "pts_pct": 29
+      },
+      {
+        "cod": "V5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 50
+          },
+          {
+            "z": 9,
+            "pct": 15
+          },
+          {
+            "z": 6,
+            "pct": 12
+          },
+          {
+            "z": 7,
+            "pct": 10
+          }
+        ],
+        "eff": 0,
+        "tot": 48,
+        "pts": 10,
+        "slash": 5,
+        "err": 5,
+        "video": null,
+        "pts_pct": 21
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 2,
+            "pct": 27
+          },
+          {
+            "z": 1,
+            "pct": 27
+          },
+          {
+            "z": 6,
+            "pct": 18
+          },
+          {
+            "z": 3,
+            "pct": 18
+          }
+        ],
+        "eff": 27,
+        "tot": 11,
+        "pts": 6,
+        "slash": 1,
+        "err": 2,
+        "video": null,
+        "pts_pct": 55
+      },
+      {
+        "cod": "X9",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 50
+          },
+          {
+            "z": 9,
+            "pct": 50
+          }
+        ],
+        "eff": 50,
+        "tot": 2,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
+      },
+      {
+        "cod": "X8",
+        "tipo": "",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 50
+          },
+          {
+            "z": 7,
+            "pct": 50
+          }
+        ],
+        "eff": 0,
+        "tot": 2,
+        "pts": 1,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
+      },
+      {
+        "cod": "VP",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 2,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "VB",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
     "saques": [
       {
         "cod": "SM",
@@ -4092,6 +5936,184 @@ const PARTIDOS_JUGADORES = [
         ],
         "eff": 0,
         "tot": 3,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "XP",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      }
+    ],
+    "ataques_so": [
+      {
+        "cod": "X5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 40
+          },
+          {
+            "z": 6,
+            "pct": 30
+          },
+          {
+            "z": 8,
+            "pct": 20
+          },
+          {
+            "z": 7,
+            "pct": 10
+          }
+        ],
+        "eff": 30,
+        "tot": 10,
+        "pts": 5,
+        "slash": 2,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
+      },
+      {
+        "cod": "V5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 38
+          },
+          {
+            "z": 1,
+            "pct": 25
+          },
+          {
+            "z": 2,
+            "pct": 25
+          },
+          {
+            "z": 8,
+            "pct": 12
+          }
+        ],
+        "eff": 50,
+        "tot": 8,
+        "pts": 4,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "ataques_tr": [
+      {
+        "cod": "V5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 38
+          },
+          {
+            "z": 9,
+            "pct": 25
+          },
+          {
+            "z": 1,
+            "pct": 25
+          },
+          {
+            "z": 8,
+            "pct": 12
+          }
+        ],
+        "eff": 0,
+        "tot": 8,
+        "pts": 2,
+        "slash": 2,
+        "err": 0,
+        "video": null,
+        "pts_pct": 25
+      },
+      {
+        "cod": "X5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 20
+          },
+          {
+            "z": 1,
+            "pct": 20
+          },
+          {
+            "z": 2,
+            "pct": 20
+          },
+          {
+            "z": 6,
+            "pct": 20
+          }
+        ],
+        "eff": 40,
+        "tot": 5,
+        "pts": 2,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 40
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 2,
         "pts": 0,
         "slash": 0,
         "err": 0,
@@ -4746,6 +6768,432 @@ const PARTIDOS_JUGADORES = [
         "pts": 0,
         "slash": 0,
         "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "VP",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X3",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "ataques_so": [
+      {
+        "cod": "X5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 31
+          },
+          {
+            "z": 1,
+            "pct": 30
+          },
+          {
+            "z": 9,
+            "pct": 11
+          },
+          {
+            "z": 7,
+            "pct": 10
+          }
+        ],
+        "eff": 31,
+        "tot": 70,
+        "pts": 33,
+        "slash": 4,
+        "err": 7,
+        "video": null,
+        "pts_pct": 47
+      },
+      {
+        "cod": "V5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 50
+          },
+          {
+            "z": 1,
+            "pct": 20
+          },
+          {
+            "z": 5,
+            "pct": 10
+          },
+          {
+            "z": 7,
+            "pct": 10
+          }
+        ],
+        "eff": -10,
+        "tot": 10,
+        "pts": 2,
+        "slash": 2,
+        "err": 1,
+        "video": null,
+        "pts_pct": 20
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 100
+          }
+        ],
+        "eff": 33,
+        "tot": 3,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 33
+      },
+      {
+        "cod": "X6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 4,
+            "pct": 50
+          },
+          {
+            "z": 6,
+            "pct": 50
+          }
+        ],
+        "eff": 50,
+        "tot": 2,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
+      },
+      {
+        "cod": "XP",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X8",
+        "tipo": "",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "V6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "VB",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "XR",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "ataques_tr": [
+      {
+        "cod": "V5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 34
+          },
+          {
+            "z": 6,
+            "pct": 25
+          },
+          {
+            "z": 9,
+            "pct": 15
+          },
+          {
+            "z": 8,
+            "pct": 9
+          }
+        ],
+        "eff": 13,
+        "tot": 53,
+        "pts": 12,
+        "slash": 4,
+        "err": 1,
+        "video": null,
+        "pts_pct": 23
+      },
+      {
+        "cod": "X5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 48
+          },
+          {
+            "z": 6,
+            "pct": 31
+          },
+          {
+            "z": 8,
+            "pct": 8
+          },
+          {
+            "z": 2,
+            "pct": 4
+          }
+        ],
+        "eff": 29,
+        "tot": 52,
+        "pts": 16,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 31
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 33
+          },
+          {
+            "z": 1,
+            "pct": 25
+          },
+          {
+            "z": 2,
+            "pct": 25
+          },
+          {
+            "z": 8,
+            "pct": 8
+          }
+        ],
+        "eff": 25,
+        "tot": 12,
+        "pts": 3,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 25
+      },
+      {
+        "cod": "XR",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 50
+          },
+          {
+            "z": 8,
+            "pct": 50
+          }
+        ],
+        "eff": -50,
+        "tot": 2,
+        "pts": 0,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "VB",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 50
+          },
+          {
+            "z": 9,
+            "pct": 50
+          }
+        ],
+        "eff": 50,
+        "tot": 2,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
+      },
+      {
+        "cod": "XP",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 50
+          },
+          {
+            "z": 7,
+            "pct": 50
+          }
+        ],
+        "eff": 100,
+        "tot": 2,
+        "pts": 2,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      },
+      {
+        "cod": "X6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 50
+          },
+          {
+            "z": 9,
+            "pct": 50
+          }
+        ],
+        "eff": 50,
+        "tot": 2,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
+      },
+      {
+        "cod": "X1",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
         "video": null,
         "pts_pct": 0
       },
@@ -5607,6 +8055,644 @@ const PARTIDOS_JUGADORES = [
         "pts_pct": 0
       }
     ],
+    "ataques_so": [
+      {
+        "cod": "X5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 52
+          },
+          {
+            "z": 6,
+            "pct": 18
+          },
+          {
+            "z": 7,
+            "pct": 10
+          },
+          {
+            "z": 5,
+            "pct": 6
+          }
+        ],
+        "eff": 32,
+        "tot": 173,
+        "pts": 82,
+        "slash": 16,
+        "err": 10,
+        "video": null,
+        "pts_pct": 47
+      },
+      {
+        "cod": "X6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 38
+          },
+          {
+            "z": 6,
+            "pct": 21
+          },
+          {
+            "z": 1,
+            "pct": 12
+          },
+          {
+            "z": 9,
+            "pct": 8
+          }
+        ],
+        "eff": 25,
+        "tot": 48,
+        "pts": 21,
+        "slash": 2,
+        "err": 7,
+        "video": null,
+        "pts_pct": 44
+      },
+      {
+        "cod": "XP",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 26
+          },
+          {
+            "z": 5,
+            "pct": 20
+          },
+          {
+            "z": 6,
+            "pct": 20
+          },
+          {
+            "z": 1,
+            "pct": 11
+          }
+        ],
+        "eff": 37,
+        "tot": 35,
+        "pts": 20,
+        "slash": 3,
+        "err": 4,
+        "video": null,
+        "pts_pct": 57
+      },
+      {
+        "cod": "V5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 30
+          },
+          {
+            "z": 1,
+            "pct": 30
+          },
+          {
+            "z": 9,
+            "pct": 15
+          },
+          {
+            "z": 5,
+            "pct": 11
+          }
+        ],
+        "eff": -26,
+        "tot": 27,
+        "pts": 4,
+        "slash": 7,
+        "err": 4,
+        "video": null,
+        "pts_pct": 15
+      },
+      {
+        "cod": "XR",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 35
+          },
+          {
+            "z": 1,
+            "pct": 17
+          },
+          {
+            "z": 6,
+            "pct": 17
+          },
+          {
+            "z": 8,
+            "pct": 13
+          }
+        ],
+        "eff": 48,
+        "tot": 23,
+        "pts": 13,
+        "slash": 1,
+        "err": 1,
+        "video": null,
+        "pts_pct": 57
+      },
+      {
+        "cod": "V6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 40
+          },
+          {
+            "z": 6,
+            "pct": 20
+          },
+          {
+            "z": 1,
+            "pct": 20
+          },
+          {
+            "z": 3,
+            "pct": 10
+          }
+        ],
+        "eff": -10,
+        "tot": 10,
+        "pts": 3,
+        "slash": 2,
+        "err": 2,
+        "video": null,
+        "pts_pct": 30
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 33
+          },
+          {
+            "z": 8,
+            "pct": 33
+          },
+          {
+            "z": 9,
+            "pct": 33
+          }
+        ],
+        "eff": 33,
+        "tot": 3,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 33
+      },
+      {
+        "cod": "XB",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 3,
+            "pct": 33
+          },
+          {
+            "z": 9,
+            "pct": 33
+          },
+          {
+            "z": 5,
+            "pct": 33
+          }
+        ],
+        "eff": 67,
+        "tot": 3,
+        "pts": 2,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 67
+      },
+      {
+        "cod": "X8",
+        "tipo": "",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 50
+          },
+          {
+            "z": 4,
+            "pct": 50
+          }
+        ],
+        "eff": 50,
+        "tot": 2,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
+      },
+      {
+        "cod": "X1",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 100
+          }
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      },
+      {
+        "cod": "VR",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "ataques_tr": [
+      {
+        "cod": "X5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 36
+          },
+          {
+            "z": 6,
+            "pct": 27
+          },
+          {
+            "z": 7,
+            "pct": 10
+          },
+          {
+            "z": 5,
+            "pct": 10
+          }
+        ],
+        "eff": 41,
+        "tot": 105,
+        "pts": 56,
+        "slash": 8,
+        "err": 5,
+        "video": null,
+        "pts_pct": 53
+      },
+      {
+        "cod": "V5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 50
+          },
+          {
+            "z": 6,
+            "pct": 15
+          },
+          {
+            "z": 5,
+            "pct": 13
+          },
+          {
+            "z": 7,
+            "pct": 8
+          }
+        ],
+        "eff": 24,
+        "tot": 102,
+        "pts": 41,
+        "slash": 11,
+        "err": 6,
+        "video": null,
+        "pts_pct": 40
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 21
+          },
+          {
+            "z": 6,
+            "pct": 18
+          },
+          {
+            "z": 1,
+            "pct": 15
+          },
+          {
+            "z": 5,
+            "pct": 12
+          }
+        ],
+        "eff": 53,
+        "tot": 34,
+        "pts": 20,
+        "slash": 2,
+        "err": 0,
+        "video": null,
+        "pts_pct": 59
+      },
+      {
+        "cod": "XP",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 20
+          },
+          {
+            "z": 9,
+            "pct": 20
+          },
+          {
+            "z": 8,
+            "pct": 15
+          },
+          {
+            "z": 5,
+            "pct": 15
+          }
+        ],
+        "eff": 50,
+        "tot": 20,
+        "pts": 13,
+        "slash": 0,
+        "err": 3,
+        "video": null,
+        "pts_pct": 65
+      },
+      {
+        "cod": "V6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 30
+          },
+          {
+            "z": 9,
+            "pct": 30
+          },
+          {
+            "z": 6,
+            "pct": 20
+          },
+          {
+            "z": 1,
+            "pct": 10
+          }
+        ],
+        "eff": 50,
+        "tot": 10,
+        "pts": 6,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 60
+      },
+      {
+        "cod": "X6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 33
+          },
+          {
+            "z": 4,
+            "pct": 11
+          },
+          {
+            "z": 6,
+            "pct": 11
+          },
+          {
+            "z": 9,
+            "pct": 11
+          }
+        ],
+        "eff": 11,
+        "tot": 9,
+        "pts": 4,
+        "slash": 0,
+        "err": 3,
+        "video": null,
+        "pts_pct": 44
+      },
+      {
+        "cod": "XR",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 50
+          },
+          {
+            "z": 1,
+            "pct": 25
+          },
+          {
+            "z": 7,
+            "pct": 25
+          }
+        ],
+        "eff": 50,
+        "tot": 4,
+        "pts": 3,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 75
+      },
+      {
+        "cod": "X9",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 25
+          },
+          {
+            "z": 1,
+            "pct": 25
+          },
+          {
+            "z": 7,
+            "pct": 25
+          },
+          {
+            "z": 8,
+            "pct": 25
+          }
+        ],
+        "eff": 25,
+        "tot": 4,
+        "pts": 2,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
+      },
+      {
+        "cod": "VR",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "VB",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "VP",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X0",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      },
+      {
+        "cod": "XB",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X3",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
     "saques": [
       {
         "cod": "SQ",
@@ -6297,6 +9383,392 @@ const PARTIDOS_JUGADORES = [
         "pts_pct": 100
       }
     ],
+    "ataques_so": [
+      {
+        "cod": "X1",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 31
+          },
+          {
+            "z": 7,
+            "pct": 26
+          },
+          {
+            "z": 5,
+            "pct": 13
+          },
+          {
+            "z": 9,
+            "pct": 12
+          }
+        ],
+        "eff": 28,
+        "tot": 99,
+        "pts": 47,
+        "slash": 5,
+        "err": 14,
+        "video": null,
+        "pts_pct": 47
+      },
+      {
+        "cod": "X7",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 30
+          },
+          {
+            "z": 8,
+            "pct": 27
+          },
+          {
+            "z": 7,
+            "pct": 15
+          },
+          {
+            "z": 1,
+            "pct": 6
+          }
+        ],
+        "eff": 30,
+        "tot": 33,
+        "pts": 13,
+        "slash": 0,
+        "err": 3,
+        "video": null,
+        "pts_pct": 39
+      },
+      {
+        "cod": "XM",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 50
+          },
+          {
+            "z": 7,
+            "pct": 23
+          },
+          {
+            "z": 5,
+            "pct": 12
+          },
+          {
+            "z": 1,
+            "pct": 8
+          }
+        ],
+        "eff": 54,
+        "tot": 26,
+        "pts": 17,
+        "slash": 0,
+        "err": 3,
+        "video": null,
+        "pts_pct": 65
+      },
+      {
+        "cod": "X2",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 50
+          },
+          {
+            "z": 6,
+            "pct": 17
+          },
+          {
+            "z": 1,
+            "pct": 17
+          },
+          {
+            "z": 9,
+            "pct": 17
+          }
+        ],
+        "eff": 0,
+        "tot": 6,
+        "pts": 2,
+        "slash": 1,
+        "err": 1,
+        "video": null,
+        "pts_pct": 33
+      },
+      {
+        "cod": "X3",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 40
+          },
+          {
+            "z": 1,
+            "pct": 20
+          },
+          {
+            "z": 7,
+            "pct": 20
+          },
+          {
+            "z": 5,
+            "pct": 20
+          }
+        ],
+        "eff": 100,
+        "tot": 5,
+        "pts": 5,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      },
+      {
+        "cod": "XL",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 60
+          },
+          {
+            "z": 7,
+            "pct": 20
+          },
+          {
+            "z": 4,
+            "pct": 20
+          }
+        ],
+        "eff": 60,
+        "tot": 5,
+        "pts": 4,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 80
+      },
+      {
+        "cod": "X5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 50
+          },
+          {
+            "z": 6,
+            "pct": 50
+          }
+        ],
+        "eff": 100,
+        "tot": 2,
+        "pts": 2,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      },
+      {
+        "cod": "X9",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 3,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "XP",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      }
+    ],
+    "ataques_tr": [
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 25
+          },
+          {
+            "z": 4,
+            "pct": 17
+          },
+          {
+            "z": 7,
+            "pct": 17
+          },
+          {
+            "z": 2,
+            "pct": 17
+          }
+        ],
+        "eff": 67,
+        "tot": 12,
+        "pts": 8,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 67
+      },
+      {
+        "cod": "X1",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 40
+          },
+          {
+            "z": 7,
+            "pct": 30
+          },
+          {
+            "z": 5,
+            "pct": 20
+          },
+          {
+            "z": 9,
+            "pct": 10
+          }
+        ],
+        "eff": 30,
+        "tot": 10,
+        "pts": 4,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 40
+      },
+      {
+        "cod": "X7",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 33
+          },
+          {
+            "z": 3,
+            "pct": 33
+          },
+          {
+            "z": 6,
+            "pct": 17
+          },
+          {
+            "z": 5,
+            "pct": 17
+          }
+        ],
+        "eff": 50,
+        "tot": 6,
+        "pts": 4,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 67
+      },
+      {
+        "cod": "XM",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 67
+          },
+          {
+            "z": 3,
+            "pct": 33
+          }
+        ],
+        "eff": 33,
+        "tot": 3,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 33
+      },
+      {
+        "cod": "X5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 100
+          }
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      }
+    ],
     "saques": [
       {
         "cod": "SM",
@@ -6911,6 +10383,164 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 70
+              },
+              {
+                "z": 6,
+                "pct": 20
+              },
+              {
+                "z": 7,
+                "pct": 10
+              }
+            ],
+            "eff": 60,
+            "tot": 10,
+            "pts": 7,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 70
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 43
+              },
+              {
+                "z": 5,
+                "pct": 43
+              },
+              {
+                "z": 7,
+                "pct": 14
+              }
+            ],
+            "eff": 0,
+            "tot": 7,
+            "pts": 2,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 29
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 25
+              },
+              {
+                "z": 4,
+                "pct": 25
+              }
+            ],
+            "eff": 75,
+            "tot": 4,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -7443,6 +11073,226 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 60
+              },
+              {
+                "z": 1,
+                "pct": 30
+              },
+              {
+                "z": 6,
+                "pct": 10
+              }
+            ],
+            "eff": 40,
+            "tot": 10,
+            "pts": 4,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 40
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 17
+              },
+              {
+                "z": 7,
+                "pct": 17
+              },
+              {
+                "z": 1,
+                "pct": 17
+              }
+            ],
+            "eff": 50,
+            "tot": 6,
+            "pts": 4,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 40
+              },
+              {
+                "z": 6,
+                "pct": 40
+              },
+              {
+                "z": 1,
+                "pct": 20
+              }
+            ],
+            "eff": 100,
+            "tot": 5,
+            "pts": 5,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 67
+              },
+              {
+                "z": 2,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 33
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 25
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 7,
+                "pct": 17
+              },
+              {
+                "z": 6,
+                "pct": 8
+              }
+            ],
+            "eff": 8,
+            "tot": 12,
+            "pts": 4,
+            "slash": 2,
+            "err": 1,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 17
+              },
+              {
+                "z": 1,
+                "pct": 17
+              }
+            ],
+            "eff": 17,
+            "tot": 6,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 25
+              },
+              {
+                "z": 6,
+                "pct": 25
+              },
+              {
+                "z": 7,
+                "pct": 25
+              },
+              {
+                "z": 8,
+                "pct": 25
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -7842,6 +11692,54 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 80
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 25
+              },
+              {
+                "z": 7,
+                "pct": 25
+              }
+            ],
+            "eff": 100,
+            "tot": 4,
+            "pts": 4,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -7946,6 +11844,53 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 43
+              },
+              {
+                "z": 7,
+                "pct": 43
+              },
+              {
+                "z": 9,
+                "pct": 14
+              }
+            ],
+            "eff": 29,
+            "tot": 7,
+            "pts": 4,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 57
+          },
+          {
+            "cod": "X9",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -8369,6 +12314,116 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 1,
             "video": null,
             "pts_pct": 40
+          },
+          {
+            "cod": "X9",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 86
+              },
+              {
+                "z": 4,
+                "pct": 14
+              }
+            ],
+            "eff": 0,
+            "tot": 7,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 14
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 7,
+                "pct": 25
+              },
+              {
+                "z": 6,
+                "pct": 25
+              },
+              {
+                "z": 4,
+                "pct": 25
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 25
           },
           {
             "cod": "X9",
@@ -8828,6 +12883,128 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 25
+              },
+              {
+                "z": 2,
+                "pct": 12
+              },
+              {
+                "z": 6,
+                "pct": 12
+              }
+            ],
+            "eff": 75,
+            "tot": 8,
+            "pts": 6,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 33
+              },
+              {
+                "z": 7,
+                "pct": 33
+              },
+              {
+                "z": 3,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 2,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 67
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -8849,6 +13026,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -9224,6 +13403,27 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -9245,6 +13445,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       }
     ],
@@ -10386,6 +14588,46 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -10512,6 +14754,71 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 60
+              },
+              {
+                "z": 5,
+                "pct": 20
+              },
+              {
+                "z": 7,
+                "pct": 20
+              }
+            ],
+            "eff": 40,
+            "tot": 5,
+            "pts": 3,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 60
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -10700,6 +15007,200 @@ const PARTIDOS_INDIVIDUAL = [
             "destinos": [
               {
                 "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 67
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": 100,
+            "tot": 3,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X4",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 25
+              },
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 7,
+                "pct": 25
+              }
+            ],
+            "eff": 100,
+            "tot": 4,
+            "pts": 4,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 67
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 9,
                 "pct": 100
               }
             ],
@@ -11187,6 +15688,130 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -11513,6 +16138,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -11894,6 +16521,54 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 1,
             "video": null,
             "pts_pct": 60
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 2,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 67
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
           }
         ],
         "recepcion": {
@@ -12309,6 +16984,86 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -12437,6 +17192,116 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": 100,
+            "tot": 3,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 67
+              },
+              {
+                "z": 2,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
           }
         ],
         "recepcion": {
@@ -12871,6 +17736,100 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -13234,6 +18193,45 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -13328,6 +18326,64 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
           }
         ],
         "recepcion": {}
@@ -14245,6 +19301,156 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 25
+              },
+              {
+                "z": 2,
+                "pct": 25
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 4,
+                "pct": 25
+              }
+            ],
+            "eff": 75,
+            "tot": 4,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "X9",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 7,
+                "pct": 33
+              }
+            ],
+            "eff": 50,
+            "tot": 6,
+            "pts": 4,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X9",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -14676,6 +19882,71 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 25
+              },
+              {
+                "z": 7,
+                "pct": 25
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -14860,6 +20131,166 @@ const PARTIDOS_INDIVIDUAL = [
             "pts": 0,
             "slash": 0,
             "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 9,
+                "pct": 17
+              },
+              {
+                "z": 7,
+                "pct": 17
+              }
+            ],
+            "eff": 67,
+            "tot": 6,
+            "pts": 4,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 67
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -60,
+            "tot": 5,
+            "pts": 0,
+            "slash": 3,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 2,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
             "video": null,
             "pts_pct": 0
           }
@@ -15273,6 +20704,50 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 50
+              },
+              {
+                "z": 4,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -15294,6 +20769,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -15793,6 +21270,212 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 50
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 25
+              },
+              {
+                "z": 8,
+                "pct": 25
+              }
+            ],
+            "eff": 100,
+            "tot": 4,
+            "pts": 4,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 6,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 17
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 33
+              },
+              {
+                "z": 9,
+                "pct": 17
+              },
+              {
+                "z": 1,
+                "pct": 17
+              },
+              {
+                "z": 8,
+                "pct": 17
+              }
+            ],
+            "eff": 50,
+            "tot": 6,
+            "pts": 4,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 67
+              },
+              {
+                "z": 7,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -15923,6 +21606,94 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 25
+              },
+              {
+                "z": 3,
+                "pct": 25
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X9",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -15966,6 +21737,63 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [],
+        "ataques_tr": [
           {
             "cod": "X5",
             "tipo": "",
@@ -17459,6 +23287,190 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 60
+              },
+              {
+                "z": 2,
+                "pct": 20
+              },
+              {
+                "z": 7,
+                "pct": 10
+              },
+              {
+                "z": 5,
+                "pct": 10
+              }
+            ],
+            "eff": 0,
+            "tot": 10,
+            "pts": 2,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 20
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 3,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 6,
+                "pct": 25
+              },
+              {
+                "z": 2,
+                "pct": 25
+              },
+              {
+                "z": 4,
+                "pct": 25
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 2,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -17894,6 +23906,75 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 25
+              },
+              {
+                "z": 8,
+                "pct": 25
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 3,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -18018,6 +24099,76 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 100,
             "tot": 1,
             "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 40
+              },
+              {
+                "z": 7,
+                "pct": 40
+              },
+              {
+                "z": 8,
+                "pct": 20
+              }
+            ],
+            "eff": 40,
+            "tot": 5,
+            "pts": 3,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 60
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -18582,6 +24733,226 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 30
+              },
+              {
+                "z": 6,
+                "pct": 10
+              },
+              {
+                "z": 2,
+                "pct": 10
+              }
+            ],
+            "eff": 30,
+            "tot": 10,
+            "pts": 5,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 7,
+                "pct": 22
+              },
+              {
+                "z": 5,
+                "pct": 22
+              },
+              {
+                "z": 9,
+                "pct": 11
+              }
+            ],
+            "eff": 56,
+            "tot": 9,
+            "pts": 6,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 4,
+                "pct": 12
+              },
+              {
+                "z": 5,
+                "pct": 12
+              }
+            ],
+            "eff": 62,
+            "tot": 8,
+            "pts": 5,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 62
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 30
+              },
+              {
+                "z": 5,
+                "pct": 30
+              },
+              {
+                "z": 6,
+                "pct": 20
+              },
+              {
+                "z": 1,
+                "pct": 10
+              }
+            ],
+            "eff": 40,
+            "tot": 10,
+            "pts": 7,
+            "slash": 3,
+            "err": 0,
+            "video": null,
+            "pts_pct": 70
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 44
+              },
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 11
+              },
+              {
+                "z": 7,
+                "pct": 11
+              }
+            ],
+            "eff": 56,
+            "tot": 9,
+            "pts": 5,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 56
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 33
+              },
+              {
+                "z": 7,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -18603,6 +24974,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -19020,6 +25393,72 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 3,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -19138,6 +25577,120 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 1,
             "video": null,
             "pts_pct": 20
+          },
+          {
+            "cod": "VP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 40
+              },
+              {
+                "z": 9,
+                "pct": 20
+              },
+              {
+                "z": 7,
+                "pct": 20
+              },
+              {
+                "z": 8,
+                "pct": 20
+              }
+            ],
+            "eff": 40,
+            "tot": 5,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 40
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 4,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
           },
           {
             "cod": "VP",
@@ -19506,6 +26059,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       }
     ],
@@ -20575,6 +27130,290 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 17
+              },
+              {
+                "z": 4,
+                "pct": 17
+              },
+              {
+                "z": 8,
+                "pct": 17
+              }
+            ],
+            "eff": 67,
+            "tot": 6,
+            "pts": 4,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 40
+              },
+              {
+                "z": 5,
+                "pct": 20
+              },
+              {
+                "z": 6,
+                "pct": 20
+              },
+              {
+                "z": 8,
+                "pct": 20
+              }
+            ],
+            "eff": 60,
+            "tot": 5,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 60
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 3,
+                "pct": 25
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 25
+              },
+              {
+                "z": 2,
+                "pct": 25
+              },
+              {
+                "z": 6,
+                "pct": 25
+              },
+              {
+                "z": 9,
+                "pct": 25
+              }
+            ],
+            "eff": 100,
+            "tot": 4,
+            "pts": 4,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 3,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -20991,6 +27830,112 @@ const PARTIDOS_INDIVIDUAL = [
             "cod": "~~",
             "tipo": "",
             "orig": 8,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 25
+              },
+              {
+                "z": 9,
+                "pct": 25
+              }
+            ],
+            "eff": -25,
+            "tot": 4,
+            "pts": 1,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 83
+              },
+              {
+                "z": 9,
+                "pct": 17
+              }
+            ],
+            "eff": 17,
+            "tot": 6,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 17
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
             "destinos": [
               {
                 "z": 2,
@@ -21531,6 +28476,246 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 9,
+                "pct": 25
+              }
+            ],
+            "eff": 50,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 60
+              },
+              {
+                "z": 6,
+                "pct": 20
+              },
+              {
+                "z": 9,
+                "pct": 20
+              }
+            ],
+            "eff": 60,
+            "tot": 5,
+            "pts": 4,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 80
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "VR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -21948,6 +29133,90 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 50
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 67
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": 100,
+            "tot": 3,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
           }
         ],
         "recepcion": {
@@ -22377,6 +29646,79 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 40
+              },
+              {
+                "z": 9,
+                "pct": 20
+              },
+              {
+                "z": 7,
+                "pct": 20
+              },
+              {
+                "z": 8,
+                "pct": 20
+              }
+            ],
+            "eff": 20,
+            "tot": 5,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 40
+          },
+          {
+            "cod": "X2",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -22491,6 +29833,68 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -22512,6 +29916,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -22883,6 +30289,27 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -23231,6 +30658,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       }
     ],
@@ -24187,6 +31616,72 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 2,
+                "pct": 25
+              },
+              {
+                "z": 1,
+                "pct": 25
+              }
+            ],
+            "eff": 50,
+            "tot": 4,
+            "pts": 3,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 75
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "VB",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -24731,6 +32226,234 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 25
+              },
+              {
+                "z": 5,
+                "pct": 12
+              },
+              {
+                "z": 6,
+                "pct": 12
+              }
+            ],
+            "eff": 38,
+            "tot": 8,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 38
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 40
+              },
+              {
+                "z": 5,
+                "pct": 20
+              },
+              {
+                "z": 7,
+                "pct": 20
+              },
+              {
+                "z": 8,
+                "pct": 20
+              }
+            ],
+            "eff": 60,
+            "tot": 5,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 60
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 8,
+                "pct": 25
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 33
+              }
+            ],
+            "eff": -100,
+            "tot": 3,
+            "pts": 0,
+            "slash": 2,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X9",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -25176,6 +32899,85 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 67
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X2",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -25748,6 +33550,292 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 38
+              },
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 7,
+                "pct": 12
+              },
+              {
+                "z": 9,
+                "pct": 12
+              }
+            ],
+            "eff": 25,
+            "tot": 8,
+            "pts": 4,
+            "slash": 2,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 43
+              },
+              {
+                "z": 6,
+                "pct": 29
+              },
+              {
+                "z": 1,
+                "pct": 14
+              },
+              {
+                "z": 8,
+                "pct": 14
+              }
+            ],
+            "eff": 57,
+            "tot": 7,
+            "pts": 5,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 71
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 33
+              },
+              {
+                "z": 9,
+                "pct": 17
+              },
+              {
+                "z": 7,
+                "pct": 17
+              },
+              {
+                "z": 6,
+                "pct": 17
+              }
+            ],
+            "eff": 50,
+            "tot": 6,
+            "pts": 4,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": -67,
+            "tot": 3,
+            "pts": 0,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 45
+              },
+              {
+                "z": 9,
+                "pct": 27
+              },
+              {
+                "z": 6,
+                "pct": 9
+              },
+              {
+                "z": 5,
+                "pct": 9
+              }
+            ],
+            "eff": 73,
+            "tot": 11,
+            "pts": 8,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 73
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 2,
+                "pct": 25
+              },
+              {
+                "z": 5,
+                "pct": 25
+              }
+            ],
+            "eff": -25,
+            "tot": 4,
+            "pts": 1,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 1,
+                "pct": 25
+              }
+            ],
+            "eff": 50,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -25898,6 +33986,112 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 1,
             "video": null,
             "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 25
+              },
+              {
+                "z": 3,
+                "pct": 25
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 2,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X3",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
           }
         ],
         "recepcion": {
@@ -26323,6 +34517,64 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -26344,6 +34596,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -26700,6 +34954,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -26778,6 +35034,27 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -28209,6 +36486,68 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 50
+              },
+              {
+                "z": 3,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -28403,6 +36742,200 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 1,
             "video": null,
             "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 57
+              },
+              {
+                "z": 6,
+                "pct": 43
+              }
+            ],
+            "eff": 0,
+            "tot": 7,
+            "pts": 3,
+            "slash": 2,
+            "err": 1,
+            "video": null,
+            "pts_pct": 43
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 43
+              },
+              {
+                "z": 6,
+                "pct": 29
+              },
+              {
+                "z": 5,
+                "pct": 14
+              },
+              {
+                "z": 7,
+                "pct": 14
+              }
+            ],
+            "eff": 43,
+            "tot": 7,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 43
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
           }
         ],
         "recepcion": {
@@ -28828,6 +37361,76 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 25
+              },
+              {
+                "z": 6,
+                "pct": 25
+              }
+            ],
+            "eff": 100,
+            "tot": 4,
+            "pts": 4,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 67
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -29154,6 +37757,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -29540,6 +38145,54 @@ const PARTIDOS_INDIVIDUAL = [
             "video": null,
             "pts_pct": 71
           },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 25
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 71
+              },
+              {
+                "z": 5,
+                "pct": 29
+              }
+            ],
+            "eff": 43,
+            "tot": 7,
+            "pts": 5,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 71
+          }
+        ],
+        "ataques_tr": [
           {
             "cod": "V5",
             "tipo": "",
@@ -30109,6 +38762,224 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 50
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 17
+              },
+              {
+                "z": 6,
+                "pct": 17
+              },
+              {
+                "z": 5,
+                "pct": 17
+              }
+            ],
+            "eff": -33,
+            "tot": 6,
+            "pts": 2,
+            "slash": 1,
+            "err": 3,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 40
+              },
+              {
+                "z": 5,
+                "pct": 40
+              },
+              {
+                "z": 1,
+                "pct": 20
+              }
+            ],
+            "eff": 40,
+            "tot": 5,
+            "pts": 3,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 60
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 7,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 67
+              },
+              {
+                "z": 1,
+                "pct": 17
+              },
+              {
+                "z": 9,
+                "pct": 17
+              }
+            ],
+            "eff": -33,
+            "tot": 6,
+            "pts": 0,
+            "slash": 2,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 5,
+                "pct": 25
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 2,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 67
+              },
+              {
+                "z": 5,
+                "pct": 33
+              }
+            ],
+            "eff": 100,
+            "tot": 3,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -30221,6 +39092,108 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 100
+          },
+          {
+            "cod": "X2",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 80
+              },
+              {
+                "z": 1,
+                "pct": 20
+              }
+            ],
+            "eff": 20,
+            "tot": 5,
+            "pts": 3,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 60
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 3,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
           },
           {
             "cod": "X2",
@@ -30610,6 +39583,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -30631,6 +39606,31 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [],
+        "ataques_tr": [
           {
             "cod": "X5",
             "tipo": "",
@@ -31592,6 +40592,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -32117,6 +41119,246 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 60
+              },
+              {
+                "z": 5,
+                "pct": 30
+              },
+              {
+                "z": 6,
+                "pct": 10
+              }
+            ],
+            "eff": 30,
+            "tot": 10,
+            "pts": 5,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 40
+              },
+              {
+                "z": 8,
+                "pct": 20
+              },
+              {
+                "z": 5,
+                "pct": 20
+              },
+              {
+                "z": 1,
+                "pct": 20
+              }
+            ],
+            "eff": 60,
+            "tot": 5,
+            "pts": 4,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 80
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 2,
+                "pct": 25
+              },
+              {
+                "z": 1,
+                "pct": 25
+              }
+            ],
+            "eff": -50,
+            "tot": 4,
+            "pts": 0,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 67
+              },
+              {
+                "z": 9,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "VR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 29
+              },
+              {
+                "z": 1,
+                "pct": 29
+              },
+              {
+                "z": 6,
+                "pct": 29
+              },
+              {
+                "z": 8,
+                "pct": 14
+              }
+            ],
+            "eff": 86,
+            "tot": 7,
+            "pts": 6,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 86
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 75,
+            "tot": 4,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 67
+              },
+              {
+                "z": 3,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 4,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -32552,6 +41794,94 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 17
+              },
+              {
+                "z": 1,
+                "pct": 17
+              }
+            ],
+            "eff": 83,
+            "tot": 6,
+            "pts": 5,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 83
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -32961,6 +42291,49 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -33247,6 +42620,344 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 44
+              },
+              {
+                "z": 9,
+                "pct": 22
+              },
+              {
+                "z": 1,
+                "pct": 22
+              },
+              {
+                "z": 6,
+                "pct": 11
+              }
+            ],
+            "eff": 44,
+            "tot": 9,
+            "pts": 4,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 44
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 17
+              },
+              {
+                "z": 6,
+                "pct": 17
+              },
+              {
+                "z": 9,
+                "pct": 17
+              }
+            ],
+            "eff": 50,
+            "tot": 6,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 60
+              },
+              {
+                "z": 6,
+                "pct": 40
+              }
+            ],
+            "eff": 40,
+            "tot": 5,
+            "pts": 3,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 60
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X9",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 43
+              },
+              {
+                "z": 1,
+                "pct": 43
+              },
+              {
+                "z": 5,
+                "pct": 14
+              }
+            ],
+            "eff": 14,
+            "tot": 7,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 29
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 17
+              },
+              {
+                "z": 1,
+                "pct": 17
+              },
+              {
+                "z": 6,
+                "pct": 17
+              },
+              {
+                "z": 9,
+                "pct": 17
+              }
+            ],
+            "eff": 17,
+            "tot": 6,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 6,
+                "pct": 25
+              },
+              {
+                "z": 8,
+                "pct": 25
+              },
+              {
+                "z": 2,
+                "pct": 25
+              }
+            ],
+            "eff": 50,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X4",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -33387,6 +43098,116 @@ const PARTIDOS_INDIVIDUAL = [
             "destinos": [
               {
                 "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 43
+              },
+              {
+                "z": 9,
+                "pct": 29
+              },
+              {
+                "z": 5,
+                "pct": 14
+              },
+              {
+                "z": 7,
+                "pct": 14
+              }
+            ],
+            "eff": 0,
+            "tot": 7,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 14
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
                 "pct": 100
               }
             ],
@@ -33830,6 +43651,116 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 80
+              },
+              {
+                "z": 9,
+                "pct": 20
+              }
+            ],
+            "eff": 40,
+            "tot": 5,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 40
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 20
+              },
+              {
+                "z": 4,
+                "pct": 20
+              },
+              {
+                "z": 7,
+                "pct": 20
+              },
+              {
+                "z": 6,
+                "pct": 20
+              }
+            ],
+            "eff": 0,
+            "tot": 5,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -34182,6 +44113,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -34255,6 +44188,54 @@ const PARTIDOS_INDIVIDUAL = [
             "video": null,
             "pts_pct": 25
           },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 75
+              },
+              {
+                "z": 8,
+                "pct": 25
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 25
+          }
+        ],
+        "ataques_tr": [
           {
             "cod": "V5",
             "tipo": "",
@@ -35791,6 +45772,54 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 25
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 9,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -35985,6 +46014,202 @@ const PARTIDOS_INDIVIDUAL = [
             "pts": 0,
             "slash": 0,
             "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 7,
+                "pct": 17
+              },
+              {
+                "z": 6,
+                "pct": 8
+              },
+              {
+                "z": 4,
+                "pct": 8
+              }
+            ],
+            "eff": 42,
+            "tot": 12,
+            "pts": 7,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 58
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 25
+              },
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 6,
+                "pct": 25
+              },
+              {
+                "z": 5,
+                "pct": 25
+              }
+            ],
+            "eff": 50,
+            "tot": 4,
+            "pts": 3,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 5,
+                "pct": 25
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 8,
+                "pct": 25
+              }
+            ],
+            "eff": 50,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 33
+              },
+              {
+                "z": 7,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": 100,
+            "tot": 3,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 67
+              },
+              {
+                "z": 7,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
             "video": null,
             "pts_pct": 0
           }
@@ -36496,6 +46721,266 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 33
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 60
+              },
+              {
+                "z": 9,
+                "pct": 10
+              },
+              {
+                "z": 6,
+                "pct": 10
+              },
+              {
+                "z": 3,
+                "pct": 10
+              }
+            ],
+            "eff": 50,
+            "tot": 10,
+            "pts": 6,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 60
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 78
+              },
+              {
+                "z": 7,
+                "pct": 11
+              },
+              {
+                "z": 6,
+                "pct": 11
+              }
+            ],
+            "eff": 56,
+            "tot": 9,
+            "pts": 6,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 6,
+                "pct": 12
+              },
+              {
+                "z": 8,
+                "pct": 12
+              }
+            ],
+            "eff": 62,
+            "tot": 8,
+            "pts": 6,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 67
+              },
+              {
+                "z": 3,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 40
+              },
+              {
+                "z": 8,
+                "pct": 20
+              },
+              {
+                "z": 9,
+                "pct": 10
+              },
+              {
+                "z": 2,
+                "pct": 10
+              }
+            ],
+            "eff": 30,
+            "tot": 10,
+            "pts": 4,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 40
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 67
+              },
+              {
+                "z": 9,
+                "pct": 22
+              },
+              {
+                "z": 6,
+                "pct": 11
+              }
+            ],
+            "eff": 44,
+            "tot": 9,
+            "pts": 5,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 56
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 17
+              },
+              {
+                "z": 1,
+                "pct": 17
+              },
+              {
+                "z": 2,
+                "pct": 17
+              }
+            ],
+            "eff": 50,
+            "tot": 6,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 2,
+                "pct": 25
+              },
+              {
+                "z": 9,
+                "pct": 25
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -36612,6 +47097,61 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 2,
+                "pct": 25
+              },
+              {
+                "z": 7,
+                "pct": 25
+              },
+              {
+                "z": 8,
+                "pct": 25
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 67
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": -67,
+            "tot": 3,
+            "pts": 0,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -37017,6 +47557,110 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 25
+              },
+              {
+                "z": 7,
+                "pct": 25
+              },
+              {
+                "z": 8,
+                "pct": 25
+              },
+              {
+                "z": 1,
+                "pct": 25
+              }
+            ],
+            "eff": -25,
+            "tot": 4,
+            "pts": 1,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 2,
+                "pct": 17
+              },
+              {
+                "z": 9,
+                "pct": 17
+              },
+              {
+                "z": 5,
+                "pct": 17
+              }
+            ],
+            "eff": 50,
+            "tot": 6,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -37343,6 +47987,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -37736,6 +48382,50 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 67
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": 100,
+            "tot": 3,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -37888,6 +48578,106 @@ const PARTIDOS_INDIVIDUAL = [
             ],
             "eff": 0,
             "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 17
+              },
+              {
+                "z": 6,
+                "pct": 17
+              },
+              {
+                "z": 5,
+                "pct": 17
+              }
+            ],
+            "eff": 0,
+            "tot": 6,
+            "pts": 2,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 43
+              },
+              {
+                "z": 7,
+                "pct": 14
+              },
+              {
+                "z": 8,
+                "pct": 14
+              },
+              {
+                "z": 6,
+                "pct": 14
+              }
+            ],
+            "eff": 0,
+            "tot": 7,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
             "pts": 0,
             "slash": 0,
             "err": 0,
@@ -38285,6 +49075,50 @@ const PARTIDOS_INDIVIDUAL = [
             "video": null,
             "pts_pct": 0
           },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
           {
             "cod": "~~",
             "tipo": "",
@@ -39738,6 +50572,86 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "VB",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -39951,6 +50865,188 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 5,
+                "pct": 25
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -39972,6 +51068,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -40443,6 +51541,170 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -40826,6 +52088,27 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -40936,6 +52219,120 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 25
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 67
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 25
+              },
+              {
+                "z": 6,
+                "pct": 25
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
           },
           {
             "cod": "XR",
@@ -41387,6 +52784,68 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 75,
+            "tot": 4,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -41461,6 +52920,27 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -41853,6 +53333,27 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       }
     ],
@@ -42677,6 +54178,50 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -43145,6 +54690,87 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 40
+              },
+              {
+                "z": 5,
+                "pct": 20
+              },
+              {
+                "z": 8,
+                "pct": 20
+              },
+              {
+                "z": 9,
+                "pct": 20
+              }
+            ],
+            "eff": 40,
+            "tot": 5,
+            "pts": 3,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 60
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 2,
+                "pct": 25
+              },
+              {
+                "z": 1,
+                "pct": 25
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X3",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -43345,6 +54971,208 @@ const PARTIDOS_INDIVIDUAL = [
             "pts": 0,
             "slash": 0,
             "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 44
+              },
+              {
+                "z": 5,
+                "pct": 22
+              },
+              {
+                "z": 4,
+                "pct": 11
+              },
+              {
+                "z": 6,
+                "pct": 11
+              }
+            ],
+            "eff": 33,
+            "tot": 9,
+            "pts": 4,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 44
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 17
+              },
+              {
+                "z": 9,
+                "pct": 17
+              },
+              {
+                "z": 7,
+                "pct": 17
+              }
+            ],
+            "eff": 50,
+            "tot": 6,
+            "pts": 4,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 80
+              },
+              {
+                "z": 7,
+                "pct": 20
+              }
+            ],
+            "eff": 0,
+            "tot": 5,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 20
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
             "video": null,
             "pts_pct": 0
           }
@@ -43675,6 +55503,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -44287,6 +56117,316 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 44
+              },
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 9,
+                "pct": 11
+              },
+              {
+                "z": 7,
+                "pct": 11
+              }
+            ],
+            "eff": 56,
+            "tot": 9,
+            "pts": 6,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 17
+              }
+            ],
+            "eff": 33,
+            "tot": 6,
+            "pts": 4,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 25
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 2,
+                "pct": 25
+              },
+              {
+                "z": 1,
+                "pct": 25
+              }
+            ],
+            "eff": 75,
+            "tot": 4,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "X3",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "VB",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 62
+              },
+              {
+                "z": 2,
+                "pct": 12
+              },
+              {
+                "z": 9,
+                "pct": 12
+              },
+              {
+                "z": 1,
+                "pct": 12
+              }
+            ],
+            "eff": 38,
+            "tot": 8,
+            "pts": 5,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 62
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 12
+              },
+              {
+                "z": 6,
+                "pct": 12
+              },
+              {
+                "z": 9,
+                "pct": 12
+              }
+            ],
+            "eff": 50,
+            "tot": 8,
+            "pts": 5,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 62
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 9,
+                "pct": 25
+              }
+            ],
+            "eff": -25,
+            "tot": 4,
+            "pts": 1,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 67
+              },
+              {
+                "z": 3,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -44380,6 +56520,86 @@ const PARTIDOS_INDIVIDUAL = [
             ],
             "eff": 0,
             "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 2,
+            "pts": 0,
+            "slash": 2,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 67
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": -33,
+            "tot": 3,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
             "pts": 0,
             "slash": 0,
             "err": 0,
@@ -44778,6 +56998,58 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 38
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 29
+              },
+              {
+                "z": 6,
+                "pct": 14
+              },
+              {
+                "z": 9,
+                "pct": 14
+              },
+              {
+                "z": 7,
+                "pct": 14
+              }
+            ],
+            "eff": 29,
+            "tot": 7,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 29
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -44932,6 +57204,138 @@ const PARTIDOS_INDIVIDUAL = [
             "destinos": [
               {
                 "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": 50,
+            "tot": 6,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 67
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 2,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "VB",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
                 "pct": 100
               }
             ],
@@ -45289,6 +57693,27 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -46782,6 +59207,130 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 5,
+                "pct": 11
+              },
+              {
+                "z": 6,
+                "pct": 11
+              },
+              {
+                "z": 7,
+                "pct": 11
+              }
+            ],
+            "eff": 33,
+            "tot": 9,
+            "pts": 5,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 56
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "VP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -47321,6 +59870,238 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 62
+              },
+              {
+                "z": 5,
+                "pct": 38
+              }
+            ],
+            "eff": 62,
+            "tot": 8,
+            "pts": 6,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 4,
+                "pct": 12
+              },
+              {
+                "z": 9,
+                "pct": 12
+              },
+              {
+                "z": 8,
+                "pct": 12
+              }
+            ],
+            "eff": 12,
+            "tot": 8,
+            "pts": 4,
+            "slash": 1,
+            "err": 2,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 57
+              },
+              {
+                "z": 9,
+                "pct": 29
+              },
+              {
+                "z": 1,
+                "pct": 14
+              }
+            ],
+            "eff": 71,
+            "tot": 7,
+            "pts": 5,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 71
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 43
+              },
+              {
+                "z": 9,
+                "pct": 29
+              },
+              {
+                "z": 1,
+                "pct": 14
+              },
+              {
+                "z": 2,
+                "pct": 14
+              }
+            ],
+            "eff": 100,
+            "tot": 7,
+            "pts": 7,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 80
+              },
+              {
+                "z": 7,
+                "pct": 20
+              }
+            ],
+            "eff": 40,
+            "tot": 5,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 40
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X4",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -47342,6 +60123,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -47883,6 +60666,236 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 73
+              },
+              {
+                "z": 6,
+                "pct": 18
+              },
+              {
+                "z": 4,
+                "pct": 9
+              }
+            ],
+            "eff": 18,
+            "tot": 11,
+            "pts": 5,
+            "slash": 2,
+            "err": 1,
+            "video": null,
+            "pts_pct": 45
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 38
+              },
+              {
+                "z": 7,
+                "pct": 25
+              },
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 4,
+                "pct": 12
+              }
+            ],
+            "eff": 62,
+            "tot": 8,
+            "pts": 5,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 62
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 80
+              },
+              {
+                "z": 3,
+                "pct": 20
+              }
+            ],
+            "eff": -20,
+            "tot": 5,
+            "pts": 1,
+            "slash": 2,
+            "err": 0,
+            "video": null,
+            "pts_pct": 20
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X9",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -48310,6 +61323,67 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 67
+              },
+              {
+                "z": 7,
+                "pct": 33
+              }
+            ],
+            "eff": -67,
+            "tot": 3,
+            "pts": 0,
+            "slash": 2,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -48373,6 +61447,49 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [],
+        "ataques_tr": [
           {
             "cod": "PP",
             "tipo": "",
@@ -48566,6 +61683,98 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 29
+              },
+              {
+                "z": 8,
+                "pct": 29
+              },
+              {
+                "z": 7,
+                "pct": 14
+              },
+              {
+                "z": 9,
+                "pct": 14
+              }
+            ],
+            "eff": 57,
+            "tot": 7,
+            "pts": 4,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 57
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X2",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -48628,6 +61837,27 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -48996,6 +62226,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       }
     ],
@@ -49917,6 +63149,68 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "VB",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -50300,6 +63594,27 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -50378,6 +63693,64 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 100
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
           },
           {
             "cod": "~~",
@@ -50869,6 +64242,178 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 2,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 67
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X4",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -51092,6 +64637,204 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "VB",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 2,
+                "pct": 12
+              },
+              {
+                "z": 8,
+                "pct": 12
+              }
+            ],
+            "eff": 25,
+            "tot": 8,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 17
+              },
+              {
+                "z": 7,
+                "pct": 17
+              }
+            ],
+            "eff": 33,
+            "tot": 6,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
           }
         ],
         "recepcion": {
@@ -51521,6 +65264,68 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 67
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -51889,6 +65694,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -52013,6 +65820,81 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -52034,6 +65916,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -52453,6 +66337,106 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 57
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 60
+              },
+              {
+                "z": 1,
+                "pct": 40
+              }
+            ],
+            "eff": 20,
+            "tot": 5,
+            "pts": 2,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 40
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 2,
+                "pct": 25
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 25
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 40
+              },
+              {
+                "z": 1,
+                "pct": 40
+              },
+              {
+                "z": 9,
+                "pct": 20
+              }
+            ],
+            "eff": 0,
+            "tot": 5,
+            "pts": 2,
+            "slash": 2,
+            "err": 0,
+            "video": null,
+            "pts_pct": 40
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 2,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
           }
         ],
         "recepcion": {
@@ -52881,6 +66865,86 @@ const PARTIDOS_INDIVIDUAL = [
             "video": null,
             "pts_pct": 0
           },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X2",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
           {
             "cod": "~~",
             "tipo": "",
@@ -54063,6 +68127,72 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 67
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 33
+              },
+              {
+                "z": 4,
+                "pct": 33
+              },
+              {
+                "z": 3,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -54213,6 +68343,120 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 38
+              },
+              {
+                "z": 8,
+                "pct": 25
+              },
+              {
+                "z": 5,
+                "pct": 12
+              },
+              {
+                "z": 3,
+                "pct": 12
+              }
+            ],
+            "eff": 25,
+            "tot": 8,
+            "pts": 3,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 38
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 67
+              },
+              {
+                "z": 4,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "XL",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
           }
         ],
         "recepcion": {
@@ -54787,6 +69031,308 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 57
+              },
+              {
+                "z": 6,
+                "pct": 29
+              },
+              {
+                "z": 9,
+                "pct": 14
+              }
+            ],
+            "eff": 0,
+            "tot": 7,
+            "pts": 2,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 29
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 17
+              }
+            ],
+            "eff": -17,
+            "tot": 6,
+            "pts": 1,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 17
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 1,
+                "pct": 25
+              }
+            ],
+            "eff": 100,
+            "tot": 4,
+            "pts": 4,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 67
+              },
+              {
+                "z": 5,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 57
+              },
+              {
+                "z": 5,
+                "pct": 43
+              }
+            ],
+            "eff": 29,
+            "tot": 7,
+            "pts": 4,
+            "slash": 2,
+            "err": 0,
+            "video": null,
+            "pts_pct": 57
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 75
+              },
+              {
+                "z": 9,
+                "pct": 25
+              }
+            ],
+            "eff": -25,
+            "tot": 4,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 8,
+                "pct": 25
+              }
+            ],
+            "eff": -25,
+            "tot": 4,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 67
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": -67,
+            "tot": 3,
+            "pts": 0,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -55340,6 +69886,270 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 60
+              },
+              {
+                "z": 1,
+                "pct": 30
+              },
+              {
+                "z": 4,
+                "pct": 10
+              }
+            ],
+            "eff": 30,
+            "tot": 10,
+            "pts": 5,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 67
+              },
+              {
+                "z": 3,
+                "pct": 33
+              }
+            ],
+            "eff": -67,
+            "tot": 3,
+            "pts": 0,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 38
+              },
+              {
+                "z": 7,
+                "pct": 12
+              },
+              {
+                "z": 9,
+                "pct": 12
+              },
+              {
+                "z": 6,
+                "pct": 12
+              }
+            ],
+            "eff": 25,
+            "tot": 8,
+            "pts": 3,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 38
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 2,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 4,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "VP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -55745,6 +70555,76 @@ const PARTIDOS_INDIVIDUAL = [
             "pts": 0,
             "slash": 0,
             "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 4,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": -33,
+            "tot": 3,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
             "video": null,
             "pts_pct": 0
           }
@@ -56198,6 +71078,130 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 33
+              },
+              {
+                "z": 7,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -56219,6 +71223,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -56575,6 +71581,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -56710,6 +71718,134 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 33
+          },
+          {
+            "cod": "VP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 67
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": -33,
+            "tot": 3,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 60
+              },
+              {
+                "z": 9,
+                "pct": 20
+              },
+              {
+                "z": 6,
+                "pct": 20
+              }
+            ],
+            "eff": -20,
+            "tot": 5,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 67
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
           },
           {
             "cod": "VP",
@@ -58058,6 +73194,116 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 56
+              },
+              {
+                "z": 5,
+                "pct": 22
+              },
+              {
+                "z": 7,
+                "pct": 11
+              },
+              {
+                "z": 6,
+                "pct": 11
+              }
+            ],
+            "eff": 44,
+            "tot": 9,
+            "pts": 5,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 56
+          },
+          {
+            "cod": "X0",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -58599,6 +73845,248 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 42
+              },
+              {
+                "z": 1,
+                "pct": 42
+              },
+              {
+                "z": 4,
+                "pct": 8
+              },
+              {
+                "z": 7,
+                "pct": 8
+              }
+            ],
+            "eff": 17,
+            "tot": 12,
+            "pts": 4,
+            "slash": 2,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": 100,
+            "tot": 3,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XB",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 45
+              },
+              {
+                "z": 5,
+                "pct": 36
+              },
+              {
+                "z": 6,
+                "pct": 18
+              }
+            ],
+            "eff": 18,
+            "tot": 11,
+            "pts": 5,
+            "slash": 1,
+            "err": 2,
+            "video": null,
+            "pts_pct": 45
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 36
+              },
+              {
+                "z": 6,
+                "pct": 36
+              },
+              {
+                "z": 8,
+                "pct": 9
+              },
+              {
+                "z": 4,
+                "pct": 9
+              }
+            ],
+            "eff": 55,
+            "tot": 11,
+            "pts": 6,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 55
+          },
+          {
+            "cod": "X0",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -59034,6 +74522,108 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 67
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": -33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X2",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -59301,6 +74891,328 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 27
+              },
+              {
+                "z": 1,
+                "pct": 27
+              },
+              {
+                "z": 5,
+                "pct": 18
+              },
+              {
+                "z": 7,
+                "pct": 18
+              }
+            ],
+            "eff": 27,
+            "tot": 11,
+            "pts": 6,
+            "slash": 0,
+            "err": 3,
+            "video": null,
+            "pts_pct": 55
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 38
+              },
+              {
+                "z": 6,
+                "pct": 38
+              },
+              {
+                "z": 9,
+                "pct": 12
+              },
+              {
+                "z": 8,
+                "pct": 12
+              }
+            ],
+            "eff": 25,
+            "tot": 8,
+            "pts": 3,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 38
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 75
+              },
+              {
+                "z": 1,
+                "pct": 12
+              },
+              {
+                "z": 5,
+                "pct": 12
+              }
+            ],
+            "eff": 50,
+            "tot": 8,
+            "pts": 5,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 62
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 67
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 56
+              },
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 11
+              }
+            ],
+            "eff": -11,
+            "tot": 9,
+            "pts": 1,
+            "slash": 2,
+            "err": 0,
+            "video": null,
+            "pts_pct": 11
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 43
+              },
+              {
+                "z": 9,
+                "pct": 29
+              },
+              {
+                "z": 7,
+                "pct": 14
+              },
+              {
+                "z": 5,
+                "pct": 14
+              }
+            ],
+            "eff": 43,
+            "tot": 7,
+            "pts": 4,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 57
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 3,
+                "pct": 25
+              },
+              {
+                "z": 9,
+                "pct": 25
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 6,
+                "pct": 25
+              }
+            ],
+            "eff": -25,
+            "tot": 4,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -59382,6 +75294,64 @@ const PARTIDOS_INDIVIDUAL = [
             "video": null,
             "pts_pct": 0
           },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
           {
             "cod": "~~",
             "tipo": "",
@@ -59854,6 +75824,116 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 44
+              },
+              {
+                "z": 8,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 11
+              },
+              {
+                "z": 9,
+                "pct": 11
+              }
+            ],
+            "eff": 56,
+            "tot": 9,
+            "pts": 5,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 56
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -59875,6 +75955,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -60294,6 +76376,82 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -60665,6 +76823,27 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -60749,6 +76928,68 @@ const PARTIDOS_INDIVIDUAL = [
             "pts": 0,
             "slash": 1,
             "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 67
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": -67,
+            "tot": 3,
+            "pts": 0,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
             "video": null,
             "pts_pct": 0
           }
@@ -61098,6 +77339,27 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [],
+        "ataques_tr": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -61119,6 +77381,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       }
     ],
@@ -62344,6 +78608,50 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 50
+              },
+              {
+                "z": 4,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -62549,6 +78857,186 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 1,
             "video": null,
             "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 80
+              },
+              {
+                "z": 2,
+                "pct": 20
+              }
+            ],
+            "eff": 0,
+            "tot": 5,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 20
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 20
+              },
+              {
+                "z": 6,
+                "pct": 20
+              },
+              {
+                "z": 8,
+                "pct": 20
+              },
+              {
+                "z": 1,
+                "pct": 20
+              }
+            ],
+            "eff": -20,
+            "tot": 5,
+            "pts": 1,
+            "slash": 2,
+            "err": 0,
+            "video": null,
+            "pts_pct": 20
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 6,
+                "pct": 25
+              }
+            ],
+            "eff": 50,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 7,
+                "pct": 33
+              }
+            ],
+            "eff": -33,
+            "tot": 3,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
           },
           {
             "cod": "V6",
@@ -63000,6 +79488,71 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 3,
+                "pct": 25
+              },
+              {
+                "z": 5,
+                "pct": 25
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -63233,6 +79786,240 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 17
+              }
+            ],
+            "eff": 33,
+            "tot": 6,
+            "pts": 3,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 67
+              },
+              {
+                "z": 2,
+                "pct": 33
+              }
+            ],
+            "eff": -33,
+            "tot": 3,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 25
+              },
+              {
+                "z": 1,
+                "pct": 25
+              }
+            ],
+            "eff": 50,
+            "tot": 4,
+            "pts": 3,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 33
+              },
+              {
+                "z": 3,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 2,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": -33,
+            "tot": 3,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 3,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -63254,6 +80041,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -63681,6 +80470,110 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 20
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 40
+              },
+              {
+                "z": 6,
+                "pct": 20
+              },
+              {
+                "z": 5,
+                "pct": 20
+              },
+              {
+                "z": 4,
+                "pct": 20
+              }
+            ],
+            "eff": 20,
+            "tot": 5,
+            "pts": 3,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 60
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 9,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": -33,
+            "tot": 6,
+            "pts": 1,
+            "slash": 2,
+            "err": 1,
+            "video": null,
+            "pts_pct": 17
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
           }
         ],
         "recepcion": {
@@ -64146,6 +81039,108 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -64193,6 +81188,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -64236,6 +81233,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       }
     ],
@@ -65042,6 +82041,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -65168,6 +82169,75 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 20
+              },
+              {
+                "z": 3,
+                "pct": 20
+              },
+              {
+                "z": 1,
+                "pct": 20
+              },
+              {
+                "z": 8,
+                "pct": 20
+              }
+            ],
+            "eff": 40,
+            "tot": 5,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 40
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -65344,6 +82414,174 @@ const PARTIDOS_INDIVIDUAL = [
             "destinos": [
               {
                 "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 2,
+                "pct": 25
+              },
+              {
+                "z": 6,
+                "pct": 25
+              }
+            ],
+            "eff": 50,
+            "tot": 4,
+            "pts": 3,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
                 "pct": 100
               }
             ],
@@ -65916,6 +83154,214 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 8,
+                "pct": 25
+              }
+            ],
+            "eff": 75,
+            "tot": 4,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X4",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -66022,6 +83468,90 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 33
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 4,
+                "pct": 25
+              }
+            ],
+            "eff": -25,
+            "tot": 4,
+            "pts": 1,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
           }
         ],
         "recepcion": {
@@ -66369,6 +83899,27 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -66795,6 +84346,112 @@ const PARTIDOS_INDIVIDUAL = [
             "video": null,
             "pts_pct": 100
           },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X2",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
           {
             "cod": "~~",
             "tipo": "",
@@ -67263,6 +84920,86 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -67619,6 +85356,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -67685,6 +85424,31 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -68033,6 +85797,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       }
     ],
@@ -68862,6 +86628,50 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 4,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -68979,6 +86789,98 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 55
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X3",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 80
+              },
+              {
+                "z": 1,
+                "pct": 20
+              }
+            ],
+            "eff": 80,
+            "tot": 5,
+            "pts": 4,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 80
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 3,
+                "pct": 17
+              },
+              {
+                "z": 6,
+                "pct": 17
+              }
+            ],
+            "eff": 33,
+            "tot": 6,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
           },
           {
             "cod": "V5",
@@ -69550,6 +87452,260 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 40
+              },
+              {
+                "z": 8,
+                "pct": 40
+              },
+              {
+                "z": 6,
+                "pct": 20
+              }
+            ],
+            "eff": 60,
+            "tot": 5,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 60
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": 100,
+            "tot": 3,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 33
+              },
+              {
+                "z": 4,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 25
+              },
+              {
+                "z": 5,
+                "pct": 25
+              },
+              {
+                "z": 7,
+                "pct": 25
+              },
+              {
+                "z": 2,
+                "pct": 12
+              }
+            ],
+            "eff": 25,
+            "tot": 8,
+            "pts": 4,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 2,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -69708,6 +87864,172 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 100
+          },
+          {
+            "cod": "X9",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 75
+              },
+              {
+                "z": 9,
+                "pct": 25
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 25
+              },
+              {
+                "z": 2,
+                "pct": 25
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 5,
+                "pct": 25
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 20
+              },
+              {
+                "z": 5,
+                "pct": 20
+              },
+              {
+                "z": 1,
+                "pct": 20
+              },
+              {
+                "z": 6,
+                "pct": 20
+              }
+            ],
+            "eff": 40,
+            "tot": 5,
+            "pts": 3,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 60
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 5,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
           },
           {
             "cod": "X9",
@@ -70177,6 +88499,94 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 25
+              },
+              {
+                "z": 3,
+                "pct": 25
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "X2",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -70329,6 +88739,98 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 40
+              },
+              {
+                "z": 8,
+                "pct": 40
+              },
+              {
+                "z": 6,
+                "pct": 20
+              }
+            ],
+            "eff": 20,
+            "tot": 5,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 20
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 33
+              },
+              {
+                "z": 7,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X3",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -70350,6 +88852,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -70702,6 +89206,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       }
     ],
@@ -71590,6 +90096,27 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -71682,6 +90209,116 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 55
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "VB",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 43
+              },
+              {
+                "z": 6,
+                "pct": 43
+              },
+              {
+                "z": 7,
+                "pct": 14
+              }
+            ],
+            "eff": 71,
+            "tot": 7,
+            "pts": 5,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 71
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 25
+              },
+              {
+                "z": 1,
+                "pct": 25
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 25
           },
           {
             "cod": "V5",
@@ -72273,6 +90910,234 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 25
+              },
+              {
+                "z": 8,
+                "pct": 25
+              },
+              {
+                "z": 6,
+                "pct": 25
+              },
+              {
+                "z": 7,
+                "pct": 25
+              }
+            ],
+            "eff": 100,
+            "tot": 4,
+            "pts": 4,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 43
+              },
+              {
+                "z": 5,
+                "pct": 14
+              },
+              {
+                "z": 9,
+                "pct": 14
+              },
+              {
+                "z": 8,
+                "pct": 14
+              }
+            ],
+            "eff": 29,
+            "tot": 7,
+            "pts": 3,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 43
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 60
+              },
+              {
+                "z": 4,
+                "pct": 20
+              },
+              {
+                "z": 8,
+                "pct": 20
+              }
+            ],
+            "eff": 40,
+            "tot": 5,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 40
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 25
+              },
+              {
+                "z": 1,
+                "pct": 25
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 2,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -72433,6 +91298,136 @@ const PARTIDOS_INDIVIDUAL = [
             "destinos": [
               {
                 "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
                 "pct": 100
               }
             ],
@@ -72771,6 +91766,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -73238,6 +92235,130 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 40
+              },
+              {
+                "z": 7,
+                "pct": 20
+              },
+              {
+                "z": 5,
+                "pct": 20
+              },
+              {
+                "z": 9,
+                "pct": 20
+              }
+            ],
+            "eff": 40,
+            "tot": 5,
+            "pts": 3,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 60
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -73368,6 +92489,116 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 33
+              },
+              {
+                "z": 9,
+                "pct": 33
+              },
+              {
+                "z": 4,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 3,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -73462,6 +92693,64 @@ const PARTIDOS_INDIVIDUAL = [
             "destinos": [
               {
                 "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
                 "pct": 100
               }
             ],
@@ -73892,6 +93181,46 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -74248,6 +93577,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -74291,6 +93622,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       }
     ],
@@ -75079,6 +94412,27 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -75289,6 +94643,222 @@ const PARTIDOS_INDIVIDUAL = [
             "destinos": [
               {
                 "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 22
+              },
+              {
+                "z": 1,
+                "pct": 22
+              },
+              {
+                "z": 7,
+                "pct": 22
+              },
+              {
+                "z": 4,
+                "pct": 11
+              }
+            ],
+            "eff": 22,
+            "tot": 9,
+            "pts": 4,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 44
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 4,
+                "pct": 25
+              },
+              {
+                "z": 1,
+                "pct": 25
+              }
+            ],
+            "eff": 75,
+            "tot": 4,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XB",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 75
+              },
+              {
+                "z": 1,
+                "pct": 25
+              }
+            ],
+            "eff": 75,
+            "tot": 4,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 4,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
                 "pct": 100
               }
             ],
@@ -75703,6 +95273,132 @@ const PARTIDOS_INDIVIDUAL = [
             ],
             "eff": -20,
             "tot": 5,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 2,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 2,
+                "pct": 25
+              },
+              {
+                "z": 8,
+                "pct": 12
+              },
+              {
+                "z": 1,
+                "pct": 12
+              }
+            ],
+            "eff": 62,
+            "tot": 8,
+            "pts": 5,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 62
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 40
+              },
+              {
+                "z": 8,
+                "pct": 20
+              },
+              {
+                "z": 2,
+                "pct": 20
+              },
+              {
+                "z": 7,
+                "pct": 20
+              }
+            ],
+            "eff": 20,
+            "tot": 5,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 20
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 3,
+                "pct": 33
+              }
+            ],
+            "eff": -33,
+            "tot": 3,
             "pts": 0,
             "slash": 1,
             "err": 0,
@@ -76296,6 +95992,278 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 50
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 75
+              },
+              {
+                "z": 1,
+                "pct": 25
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 75
+              },
+              {
+                "z": 5,
+                "pct": 25
+              }
+            ],
+            "eff": 50,
+            "tot": 4,
+            "pts": 3,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 33
+              },
+              {
+                "z": 9,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 17
+              }
+            ],
+            "eff": 50,
+            "tot": 6,
+            "pts": 4,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 40
+              },
+              {
+                "z": 2,
+                "pct": 20
+              },
+              {
+                "z": 1,
+                "pct": 20
+              },
+              {
+                "z": 3,
+                "pct": 20
+              }
+            ],
+            "eff": -20,
+            "tot": 5,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 33
+              },
+              {
+                "z": 7,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": 100,
+            "tot": 3,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -76434,6 +96402,104 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 1,
             "video": null,
             "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XL",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 3,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
           }
         ],
         "recepcion": {
@@ -76859,6 +96925,76 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 40
+              },
+              {
+                "z": 6,
+                "pct": 20
+              },
+              {
+                "z": 1,
+                "pct": 20
+              },
+              {
+                "z": 7,
+                "pct": 20
+              }
+            ],
+            "eff": 60,
+            "tot": 5,
+            "pts": 4,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 80
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -77185,6 +97321,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -77533,6 +97671,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -77576,6 +97716,27 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [],
+        "ataques_tr": [
           {
             "cod": "X5",
             "tipo": "",
@@ -78703,6 +98864,68 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -79215,6 +99438,194 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 40
+              },
+              {
+                "z": 4,
+                "pct": 20
+              },
+              {
+                "z": 7,
+                "pct": 20
+              },
+              {
+                "z": 9,
+                "pct": 20
+              }
+            ],
+            "eff": 40,
+            "tot": 5,
+            "pts": 3,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 60
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 75
+              },
+              {
+                "z": 5,
+                "pct": 25
+              }
+            ],
+            "eff": -50,
+            "tot": 4,
+            "pts": 0,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 7,
+                "pct": 25
+              },
+              {
+                "z": 3,
+                "pct": 25
+              },
+              {
+                "z": 5,
+                "pct": 25
+              }
+            ],
+            "eff": 75,
+            "tot": 4,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 75
+              },
+              {
+                "z": 7,
+                "pct": 25
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -79646,6 +100057,71 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X2",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -79893,6 +100369,256 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 75
+              },
+              {
+                "z": 8,
+                "pct": 25
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 67
+              },
+              {
+                "z": 9,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 43
+              },
+              {
+                "z": 7,
+                "pct": 14
+              },
+              {
+                "z": 2,
+                "pct": 14
+              },
+              {
+                "z": 8,
+                "pct": 14
+              }
+            ],
+            "eff": 43,
+            "tot": 7,
+            "pts": 4,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 57
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 75
+              },
+              {
+                "z": 8,
+                "pct": 25
+              }
+            ],
+            "eff": 75,
+            "tot": 4,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 33
+              },
+              {
+                "z": 7,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 33
+              },
+              {
+                "z": 9,
+                "pct": 33
+              },
+              {
+                "z": 7,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -79914,6 +100640,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -80283,6 +101011,64 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
           },
           {
             "cod": "V5",
@@ -80714,6 +101500,104 @@ const PARTIDOS_INDIVIDUAL = [
             "destinos": [
               {
                 "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 67
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
                 "pct": 100
               }
             ],
@@ -81179,6 +102063,108 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 33
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": 0,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -81539,6 +102525,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       }
     ],
@@ -82425,6 +103413,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -82993,6 +103983,268 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 38
+              },
+              {
+                "z": 5,
+                "pct": 38
+              },
+              {
+                "z": 8,
+                "pct": 12
+              },
+              {
+                "z": 1,
+                "pct": 12
+              }
+            ],
+            "eff": 12,
+            "tot": 8,
+            "pts": 4,
+            "slash": 2,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 71
+              },
+              {
+                "z": 8,
+                "pct": 14
+              },
+              {
+                "z": 6,
+                "pct": 14
+              }
+            ],
+            "eff": 71,
+            "tot": 7,
+            "pts": 6,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 86
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 33
+              },
+              {
+                "z": 9,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": 100,
+            "tot": 3,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 9,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 17
+              },
+              {
+                "z": 1,
+                "pct": 17
+              },
+              {
+                "z": 5,
+                "pct": 17
+              }
+            ],
+            "eff": 33,
+            "tot": 6,
+            "pts": 4,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 75
+              },
+              {
+                "z": 9,
+                "pct": 25
+              }
+            ],
+            "eff": 50,
+            "tot": 4,
+            "pts": 3,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 75
+              },
+              {
+                "z": 2,
+                "pct": 25
+              }
+            ],
+            "eff": -25,
+            "tot": 4,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 67
+              },
+              {
+                "z": 5,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -83420,6 +104672,68 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -83558,6 +104872,104 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 1,
             "video": null,
             "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
           }
         ],
         "recepcion": {
@@ -84101,6 +105513,218 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 86
+              },
+              {
+                "z": 7,
+                "pct": 14
+              }
+            ],
+            "eff": 57,
+            "tot": 7,
+            "pts": 4,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 57
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 33
+              },
+              {
+                "z": 2,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 5,
+                "pct": 25
+              }
+            ],
+            "eff": 75,
+            "tot": 4,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 75
+          },
+          {
+            "cod": "XB",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -84554,6 +106178,112 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X9",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 4,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -84979,6 +106709,94 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 40
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 80
+              },
+              {
+                "z": 7,
+                "pct": 20
+              }
+            ],
+            "eff": 20,
+            "tot": 5,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 20
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -85331,6 +107149,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -85374,6 +107194,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       }
     ],
@@ -86347,6 +108169,106 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 40
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 17
+              },
+              {
+                "z": 8,
+                "pct": 17
+              },
+              {
+                "z": 1,
+                "pct": 17
+              }
+            ],
+            "eff": -17,
+            "tot": 6,
+            "pts": 2,
+            "slash": 1,
+            "err": 2,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 71
+              },
+              {
+                "z": 5,
+                "pct": 14
+              },
+              {
+                "z": 2,
+                "pct": 14
+              }
+            ],
+            "eff": 14,
+            "tot": 7,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 29
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 75
+              },
+              {
+                "z": 9,
+                "pct": 25
+              }
+            ],
+            "eff": -25,
+            "tot": 4,
+            "pts": 1,
+            "slash": 2,
+            "err": 0,
+            "video": null,
+            "pts_pct": 25
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -86918,6 +108840,266 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 56
+              },
+              {
+                "z": 9,
+                "pct": 22
+              },
+              {
+                "z": 6,
+                "pct": 11
+              },
+              {
+                "z": 7,
+                "pct": 11
+              }
+            ],
+            "eff": 56,
+            "tot": 9,
+            "pts": 6,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 5,
+                "pct": 25
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 2,
+                "pct": 25
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 38
+              },
+              {
+                "z": 6,
+                "pct": 15
+              },
+              {
+                "z": 9,
+                "pct": 15
+              },
+              {
+                "z": 5,
+                "pct": 15
+              }
+            ],
+            "eff": 15,
+            "tot": 13,
+            "pts": 3,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 23
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 83
+              },
+              {
+                "z": 6,
+                "pct": 17
+              }
+            ],
+            "eff": 50,
+            "tot": 6,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X3",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -87381,6 +109563,104 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 3,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X2",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -87798,6 +110078,58 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 50
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -87916,6 +110248,90 @@ const PARTIDOS_INDIVIDUAL = [
             "destinos": [
               {
                 "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 33
+              },
+              {
+                "z": 7,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": -67,
+            "tot": 3,
+            "pts": 0,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
                 "pct": 100
               }
             ],
@@ -88531,6 +110947,360 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 38
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 6,
+                "pct": 12
+              },
+              {
+                "z": 1,
+                "pct": 12
+              }
+            ],
+            "eff": 0,
+            "tot": 8,
+            "pts": 3,
+            "slash": 0,
+            "err": 3,
+            "video": null,
+            "pts_pct": 38
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 6,
+            "pts": 3,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 33
+              }
+            ],
+            "eff": 100,
+            "tot": 3,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "VB",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X4",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 29
+              },
+              {
+                "z": 5,
+                "pct": 29
+              },
+              {
+                "z": 1,
+                "pct": 14
+              },
+              {
+                "z": 6,
+                "pct": 14
+              }
+            ],
+            "eff": 29,
+            "tot": 7,
+            "pts": 3,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 43
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 67
+              },
+              {
+                "z": 9,
+                "pct": 17
+              },
+              {
+                "z": 5,
+                "pct": 17
+              }
+            ],
+            "eff": 83,
+            "tot": 6,
+            "pts": 5,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 83
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 20
+              },
+              {
+                "z": 1,
+                "pct": 20
+              },
+              {
+                "z": 7,
+                "pct": 20
+              },
+              {
+                "z": 6,
+                "pct": 20
+              }
+            ],
+            "eff": -20,
+            "tot": 5,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 80
+              },
+              {
+                "z": 7,
+                "pct": 20
+              }
+            ],
+            "eff": 60,
+            "tot": 5,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 60
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X4",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -88552,6 +111322,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -88983,6 +111755,112 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 33
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 25
+              },
+              {
+                "z": 9,
+                "pct": 25
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -89331,6 +112209,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -89374,6 +112254,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       }
     ],
@@ -90555,6 +113437,90 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -90753,6 +113719,188 @@ const PARTIDOS_INDIVIDUAL = [
             "destinos": [
               {
                 "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 25
+              },
+              {
+                "z": 2,
+                "pct": 25
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 25
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 7,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X9",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
                 "pct": 100
               }
             ],
@@ -91128,6 +114276,45 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X0",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V0",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -91221,6 +114408,58 @@ const PARTIDOS_INDIVIDUAL = [
             "video": null,
             "pts_pct": 29
           },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 57
+              },
+              {
+                "z": 5,
+                "pct": 14
+              },
+              {
+                "z": 4,
+                "pct": 14
+              },
+              {
+                "z": 9,
+                "pct": 14
+              }
+            ],
+            "eff": 0,
+            "tot": 7,
+            "pts": 2,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 29
+          }
+        ],
+        "ataques_tr": [
           {
             "cod": "V5",
             "tipo": "",
@@ -91770,6 +115009,200 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 56
+              },
+              {
+                "z": 9,
+                "pct": 22
+              },
+              {
+                "z": 1,
+                "pct": 11
+              },
+              {
+                "z": 5,
+                "pct": 11
+              }
+            ],
+            "eff": 33,
+            "tot": 9,
+            "pts": 4,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 44
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 67
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 6,
+                "pct": 25
+              }
+            ],
+            "eff": 50,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 75
+              },
+              {
+                "z": 3,
+                "pct": 25
+              }
+            ],
+            "eff": 25,
+            "tot": 4,
+            "pts": 2,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -91888,6 +115321,68 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 5,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X4",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -91987,6 +115482,94 @@ const PARTIDOS_INDIVIDUAL = [
             "cod": "XM",
             "tipo": "",
             "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 43
+              },
+              {
+                "z": 8,
+                "pct": 43
+              },
+              {
+                "z": 1,
+                "pct": 14
+              }
+            ],
+            "eff": 29,
+            "tot": 7,
+            "pts": 4,
+            "slash": 2,
+            "err": 0,
+            "video": null,
+            "pts_pct": 57
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 67
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": 100,
+            "tot": 3,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
             "destinos": [
               {
                 "z": 8,
@@ -92328,6 +115911,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -92695,6 +116280,27 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [],
+        "ataques_tr": [
+          {
+            "cod": "X0",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -92746,6 +116352,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -93102,6 +116710,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       }
     ],
@@ -93913,6 +117523,45 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [],
+        "ataques_tr": [
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -94239,6 +117888,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -94672,6 +118323,81 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X3",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X2",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -95185,6 +118911,222 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 17
+              },
+              {
+                "z": 6,
+                "pct": 17
+              }
+            ],
+            "eff": 33,
+            "tot": 6,
+            "pts": 3,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": -67,
+            "tot": 3,
+            "pts": 0,
+            "slash": 2,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XB",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 29
+              },
+              {
+                "z": 8,
+                "pct": 29
+              },
+              {
+                "z": 7,
+                "pct": 14
+              },
+              {
+                "z": 6,
+                "pct": 14
+              }
+            ],
+            "eff": -14,
+            "tot": 7,
+            "pts": 1,
+            "slash": 2,
+            "err": 0,
+            "video": null,
+            "pts_pct": 14
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
           }
         ],
         "recepcion": {
@@ -95740,6 +119682,288 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 60
+              },
+              {
+                "z": 6,
+                "pct": 20
+              },
+              {
+                "z": 8,
+                "pct": 20
+              }
+            ],
+            "eff": 60,
+            "tot": 5,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 60
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 67
+              },
+              {
+                "z": 6,
+                "pct": 33
+              }
+            ],
+            "eff": 67,
+            "tot": 3,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X4",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 43
+              },
+              {
+                "z": 5,
+                "pct": 29
+              },
+              {
+                "z": 1,
+                "pct": 14
+              },
+              {
+                "z": 8,
+                "pct": 14
+              }
+            ],
+            "eff": 0,
+            "tot": 7,
+            "pts": 2,
+            "slash": 2,
+            "err": 0,
+            "video": null,
+            "pts_pct": 29
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 67
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 2,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 9,
+                "pct": 33
+              }
+            ],
+            "eff": -33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XB",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X4",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -96189,6 +120413,93 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "XL",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -96576,6 +120887,31 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 0
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 67
+              },
+              {
+                "z": 5,
+                "pct": 33
+              }
+            ],
+            "eff": -33,
+            "tot": 3,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -96739,6 +121075,130 @@ const PARTIDOS_INDIVIDUAL = [
             "err": 0,
             "video": null,
             "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 9,
+                "pct": 17
+              }
+            ],
+            "eff": 17,
+            "tot": 6,
+            "pts": 3,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 50,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 2,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
           }
         ],
         "recepcion": {
@@ -97093,6 +121553,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       }
     ],
@@ -98254,6 +122716,144 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 33
+              },
+              {
+                "z": 5,
+                "pct": 17
+              }
+            ],
+            "eff": 17,
+            "tot": 6,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 17
+          },
+          {
+            "cod": "XL",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X3",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {}
       },
       {
@@ -98364,6 +122964,118 @@ const PARTIDOS_INDIVIDUAL = [
             "destinos": [
               {
                 "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X3",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "XM",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X7",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X1",
+            "tipo": "",
+            "orig": 3,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X9",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X9",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
                 "pct": 100
               }
             ],
@@ -98865,6 +123577,146 @@ const PARTIDOS_INDIVIDUAL = [
             "pts": 0,
             "slash": 0,
             "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 17
+              },
+              {
+                "z": 9,
+                "pct": 17
+              },
+              {
+                "z": 7,
+                "pct": 17
+              }
+            ],
+            "eff": 33,
+            "tot": 12,
+            "pts": 6,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 50,
+            "tot": 2,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "VR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 40
+              },
+              {
+                "z": 5,
+                "pct": 20
+              },
+              {
+                "z": 6,
+                "pct": 20
+              },
+              {
+                "z": 9,
+                "pct": 20
+              }
+            ],
+            "eff": -20,
+            "tot": 5,
+            "pts": 1,
+            "slash": 1,
+            "err": 1,
+            "video": null,
+            "pts_pct": 20
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 33,
+            "tot": 3,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 3,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
             "video": null,
             "pts_pct": 0
           }
@@ -99435,6 +124287,270 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 50
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 33
+              },
+              {
+                "z": 6,
+                "pct": 11
+              },
+              {
+                "z": 1,
+                "pct": 6
+              }
+            ],
+            "eff": 28,
+            "tot": 18,
+            "pts": 10,
+            "slash": 5,
+            "err": 0,
+            "video": null,
+            "pts_pct": 56
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 38
+              },
+              {
+                "z": 6,
+                "pct": 25
+              },
+              {
+                "z": 1,
+                "pct": 25
+              },
+              {
+                "z": 4,
+                "pct": 12
+              }
+            ],
+            "eff": 38,
+            "tot": 8,
+            "pts": 4,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 25
+              },
+              {
+                "z": 7,
+                "pct": 25
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 2,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 1,
+                "pct": 33
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": 100,
+            "tot": 3,
+            "pts": 3,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 33
+              },
+              {
+                "z": 9,
+                "pct": 22
+              },
+              {
+                "z": 8,
+                "pct": 22
+              },
+              {
+                "z": 6,
+                "pct": 11
+              }
+            ],
+            "eff": 56,
+            "tot": 9,
+            "pts": 6,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 67
+          },
+          {
+            "cod": "X8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 25
+              },
+              {
+                "z": 8,
+                "pct": 12
+              },
+              {
+                "z": 1,
+                "pct": 12
+              }
+            ],
+            "eff": 50,
+            "tot": 8,
+            "pts": 4,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 29
+              },
+              {
+                "z": 5,
+                "pct": 29
+              },
+              {
+                "z": 6,
+                "pct": 14
+              },
+              {
+                "z": 9,
+                "pct": 14
+              }
+            ],
+            "eff": 57,
+            "tot": 7,
+            "pts": 5,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 71
+          },
+          {
+            "cod": "V8",
+            "tipo": "",
+            "orig": 9,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 1,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -99761,6 +124877,8 @@ const PARTIDOS_INDIVIDUAL = [
         },
         "saques": [],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -100172,6 +125290,72 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 100,
             "tot": 2,
             "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_so": [
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 8,
+                "pct": 50
+              }
+            ],
+            "eff": 100,
+            "tot": 2,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "PP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 4,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -100701,6 +125885,222 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 6,
+                "pct": 33
+              },
+              {
+                "z": 9,
+                "pct": 17
+              }
+            ],
+            "eff": 33,
+            "tot": 6,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 33
+          },
+          {
+            "cod": "XP",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 2,
+                "pct": 50
+              }
+            ],
+            "eff": -50,
+            "tot": 2,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 50
+              },
+              {
+                "z": 3,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 9,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 43
+              },
+              {
+                "z": 6,
+                "pct": 29
+              },
+              {
+                "z": 9,
+                "pct": 14
+              },
+              {
+                "z": 5,
+                "pct": 14
+              }
+            ],
+            "eff": 29,
+            "tot": 7,
+            "pts": 3,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 43
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 67
+              },
+              {
+                "z": 8,
+                "pct": 33
+              }
+            ],
+            "eff": -33,
+            "tot": 3,
+            "pts": 0,
+            "slash": 0,
+            "err": 1,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 5,
+                "pct": 100
+              }
+            ],
+            "eff": 0,
+            "tot": 1,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "XR",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 7,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -101166,6 +126566,150 @@ const PARTIDOS_INDIVIDUAL = [
             "pts_pct": 100
           }
         ],
+        "ataques_so": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 43
+              },
+              {
+                "z": 6,
+                "pct": 29
+              },
+              {
+                "z": 7,
+                "pct": 14
+              },
+              {
+                "z": 5,
+                "pct": 14
+              }
+            ],
+            "eff": -29,
+            "tot": 7,
+            "pts": 1,
+            "slash": 2,
+            "err": 1,
+            "video": null,
+            "pts_pct": 14
+          },
+          {
+            "cod": "X6",
+            "tipo": "",
+            "orig": 2,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 100
+              }
+            ],
+            "eff": 100,
+            "tot": 1,
+            "pts": 1,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 100
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 8,
+                "pct": 100
+              }
+            ],
+            "eff": -100,
+            "tot": 1,
+            "pts": 0,
+            "slash": 1,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
+        "ataques_tr": [
+          {
+            "cod": "X5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 50
+              },
+              {
+                "z": 1,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 4,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          },
+          {
+            "cod": "V5",
+            "tipo": "",
+            "orig": 4,
+            "destinos": [
+              {
+                "z": 6,
+                "pct": 25
+              },
+              {
+                "z": 3,
+                "pct": 25
+              },
+              {
+                "z": 2,
+                "pct": 25
+              },
+              {
+                "z": 1,
+                "pct": 25
+              }
+            ],
+            "eff": 50,
+            "tot": 4,
+            "pts": 2,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 50
+          },
+          {
+            "cod": "~~",
+            "tipo": "",
+            "orig": 8,
+            "destinos": [
+              {
+                "z": 1,
+                "pct": 50
+              },
+              {
+                "z": 9,
+                "pct": 50
+              }
+            ],
+            "eff": 0,
+            "tot": 2,
+            "pts": 0,
+            "slash": 0,
+            "err": 0,
+            "video": null,
+            "pts_pct": 0
+          }
+        ],
         "recepcion": {
           "flotado": {
             "desde_z1": {
@@ -101522,6 +127066,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       },
       {
@@ -101565,6 +127111,8 @@ const PARTIDOS_INDIVIDUAL = [
           }
         ],
         "ataques": [],
+        "ataques_so": [],
+        "ataques_tr": [],
         "recepcion": {}
       }
     ],

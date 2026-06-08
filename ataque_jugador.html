@@ -52,6 +52,11 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
     <button class="fbtn active-partido" id="btn-partido" onclick="setFiltro('partido')">🏆 PARTIDO</button>
     <button class="fbtn" id="btn-entrenamiento" onclick="setFiltro('entrenamiento')">🏋️ ENTRENAMIENTO</button>
     <select class="subfiltro-select" id="subfiltro-select" style="display:none"></select>
+    <select class="subfiltro-select" id="fase-ataque-select" onchange="setFaseAtaque(this.value)" style="border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.08);color:#818cf8;min-width:auto">
+      <option value="todos">🏐 TODOS LOS ATAQUES</option>
+      <option value="so">🛡 SIDE-OUT (tras recepción)</option>
+      <option value="tr">🔄 TRANSICIÓN (juego corrido)</option>
+    </select>
   </div>
 </div>
 <div class="main">
@@ -161,19 +166,24 @@ function renderPanelAtaque(j,jIdx,grid){
   // Combos canónicos por posición (fusionados): solo estos aparecen
   var combosPos={'PUNTA':['X5','V5','X6','V6','XP','VP'],'CENTRAL':['X1','X2','XM','X7'],'OPUESTO':['X5','V5','X6','V6','X8','V8'],'ARMADOR':[],'LIBERO':[]};
   var pos=(j.pos||'').toUpperCase();
-  if(!pos&&j.ataques&&j.ataques.length){
-    var codes=j.ataques.map(function(a){return a.cod;});
+  // Lista de ataques según la fase seleccionada (todos / side-out / transición)
+  var faseAtk = (typeof currentFaseAtaque!=='undefined') ? currentFaseAtaque : 'todos';
+  var listaAtk = j.ataques||[];
+  if(faseAtk==='so' && j.ataques_so) listaAtk = j.ataques_so;
+  else if(faseAtk==='tr' && j.ataques_tr) listaAtk = j.ataques_tr;
+  if(!pos&&listaAtk&&listaAtk.length){
+    var codes=listaAtk.map(function(a){return a.cod;});
     if(codes.some(function(c){return['X8','V8'].indexOf(c)>=0;})) pos='OPUESTO';
     else if(codes.some(function(c){return['X1','X7','XM','X2'].indexOf(c)>=0;})) pos='CENTRAL';
     else if(codes.some(function(c){return['X5','V5','X6','V6','XP','VP'].indexOf(c)>=0;})) pos='PUNTA';
   }
   var ordenCombos=combosPos[pos]||[];
   var ataqueMap={};
-  j.ataques.forEach(function(a){ataqueMap[a.cod]=a;});
+  listaAtk.forEach(function(a){ataqueMap[a.cod]=a;});
   // Solo los combos de la posición (sin agregar otros)
   var ataquesMostrar=ordenCombos.length>0
     ? ordenCombos.map(function(cod){return ataqueMap[cod]||{cod:cod,orig:8,destinos:[],eff:null,tot:0,pts:null,slash:0,err:0,video:null};})
-    : j.ataques.slice();
+    : listaAtk.slice();
   ataquesMostrar.forEach(function(a,i){
     var card=buildCanchita(a,jIdx,i,'ma',200,155,drawAtaqueCourt,j.color||'#818cf8',j);
     grid.appendChild(card);
@@ -222,6 +232,8 @@ function buildFromHistorial(num){
 }
 
 var currentNum=0, currentFiltro='partido', currentPartido='acumulado';
+var currentFaseAtaque='todos';
+function setFaseAtaque(f){ currentFaseAtaque=f; renderPage(); }
 
 function buildSubfiltro(){
   var sel=document.getElementById('subfiltro-select');
