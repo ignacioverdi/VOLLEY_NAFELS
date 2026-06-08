@@ -1,5 +1,5 @@
-// datos_partidos.js — 08/06/2026, 09:59:45
-const PARTIDOS_GENERADO = "08/06/2026, 09:59:45";
+// datos_partidos.js — 08/06/2026, 13:56:29
+const PARTIDOS_GENERADO = "08/06/2026, 13:56:29";
 const PARTIDOS_TOTAL = 26;
 const PARTIDOS_META = [
   {
@@ -266,16 +266,15 @@ const PARTIDOS_META = [
 const PARTIDOS_JUGADORES = [
   {
     "num": 1,
-    "nombre": "1 Deecke",
-    "pos": "OTRO",
-    "color": "#64748b",
+    "nombre": "1 Deecke Linus",
+    "pos": "ARMADOR",
+    "color": "#a855f7",
     "info": {},
     "ataques": [
       {
         "cod": "PP",
-        "orig": 3,
-        "tot": 4,
-        "eff": 25,
+        "tipo": "",
+        "orig": 8,
         "destinos": [
           {
             "z": 6,
@@ -293,48 +292,61 @@ const PARTIDOS_JUGADORES = [
             "z": 5,
             "pct": 25
           }
-        ]
+        ],
+        "eff": 25,
+        "tot": 4,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 25
       }
     ],
     "saques": [
       {
         "cod": "SM",
-        "orig": 1,
-        "tot": 35,
-        "eff": 11,
+        "tipo": "FLOTADO",
+        "orig": 6,
         "destinos": [
           {
-            "z": 6,
-            "pct": 37
-          },
-          {
-            "z": 8,
-            "pct": 23
-          },
-          {
-            "z": 7,
+            "z": 1,
             "pct": 20
+          },
+          {
+            "z": 2,
+            "pct": 20
+          },
+          {
+            "z": 0,
+            "pct": 17
+          },
+          {
+            "z": 4,
+            "pct": 9
+          },
+          {
+            "z": 5,
+            "pct": 9
           },
           {
             "z": 9,
             "pct": 9
-          },
-          {
-            "z": 1,
-            "pct": 6
-          },
-          {
-            "z": 5,
-            "pct": 3
-          },
-          {
-            "z": 2,
-            "pct": 3
           }
-        ]
+        ],
+        "eff": 3,
+        "tot": 35,
+        "pts": 1,
+        "plus": 6,
+        "exc": 7,
+        "minus": 18,
+        "slash": 3,
+        "err": 0,
+        "video": null,
+        "pts_pct": 3
       }
     ],
     "recepciones": [],
+    "recepcion": {},
     "objetivos": {
       "sq": 11,
       "rec": null,
@@ -348,20 +360,87 @@ const PARTIDOS_JUGADORES = [
       "atqri": null,
       "atqrm": 33,
       "atqtr": 0
-    }
+    },
+    "tot_saques": 35,
+    "tot_recep": 0,
+    "tot_ataques": 0
+  },
+  {
+    "num": 2,
+    "nombre": "2 Feuz Nevin",
+    "pos": "CENTRAL",
+    "color": "#22c55e",
+    "info": {},
+    "ataques": [
+      {
+        "cod": "X0",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "V0",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "saques": [],
+    "recepciones": [],
+    "recepcion": {},
+    "objetivos": {
+      "sq": null,
+      "rec": null,
+      "bqpos": null,
+      "bqpt": null,
+      "atk": -50,
+      "atqq": null,
+      "atqhb": 0,
+      "atqx": null,
+      "atqrp": -100,
+      "atqri": null,
+      "atqrm": 0,
+      "atqtr": null
+    },
+    "tot_saques": 0,
+    "tot_recep": 0,
+    "tot_ataques": 1
   },
   {
     "num": 3,
-    "nombre": "3 Schwitter",
-    "pos": "OTRO",
-    "color": "#64748b",
+    "nombre": "3 Schwitter Tom",
+    "pos": "OPUESTO",
+    "color": "#ef4444",
     "info": {},
     "ataques": [
       {
         "cod": "X6",
+        "tipo": "",
         "orig": 2,
-        "tot": 4,
-        "eff": 25,
         "destinos": [
           {
             "z": 5,
@@ -371,40 +450,121 @@ const PARTIDOS_JUGADORES = [
             "z": 7,
             "pct": 25
           }
-        ]
+        ],
+        "eff": 25,
+        "tot": 4,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 25
       },
       {
         "cod": "X8",
+        "tipo": "",
         "orig": 9,
-        "tot": 2,
-        "eff": -50,
         "destinos": [
           {
             "z": 7,
             "pct": 100
           }
-        ]
+        ],
+        "eff": -50,
+        "tot": 2,
+        "pts": 0,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X5",
+        "tipo": "",
+        "orig": 4,
+        "destinos": [
+          {
+            "z": 2,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "V6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "V8",
+        "tipo": "",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
       }
     ],
     "saques": [
       {
         "cod": "SM",
-        "orig": 1,
-        "tot": 4,
-        "eff": 6,
+        "tipo": "FLOTADO",
+        "orig": 6,
         "destinos": [
           {
-            "z": 9,
+            "z": 8,
             "pct": 50
           },
           {
+            "z": 9,
+            "pct": 25
+          },
+          {
             "z": 7,
-            "pct": 50
+            "pct": 25
           }
-        ]
+        ],
+        "eff": 0,
+        "tot": 4,
+        "pts": 0,
+        "plus": 1,
+        "exc": 1,
+        "minus": 2,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
       }
     ],
     "recepciones": [],
+    "recepcion": {},
     "objetivos": {
       "sq": 6,
       "rec": null,
@@ -418,20 +578,22 @@ const PARTIDOS_JUGADORES = [
       "atqri": 0,
       "atqrm": -33,
       "atqtr": -100
-    }
+    },
+    "tot_saques": 4,
+    "tot_recep": 0,
+    "tot_ataques": 9
   },
   {
     "num": 4,
-    "nombre": "4 Vazquez",
-    "pos": "OTRO",
-    "color": "#64748b",
+    "nombre": "4 Vazquez Ezequiel",
+    "pos": "ARMADOR",
+    "color": "#a855f7",
     "info": {},
     "ataques": [
       {
         "cod": "PP",
-        "orig": 3,
-        "tot": 50,
-        "eff": 26,
+        "tipo": "",
+        "orig": 8,
         "destinos": [
           {
             "z": 6,
@@ -448,34 +610,50 @@ const PARTIDOS_JUGADORES = [
           {
             "z": 8,
             "pct": 6
-          },
-          {
-            "z": 7,
-            "pct": 6
-          },
-          {
-            "z": 9,
-            "pct": 6
-          },
+          }
+        ],
+        "eff": 29,
+        "tot": 48,
+        "pts": 19,
+        "slash": 5,
+        "err": 0,
+        "video": null,
+        "pts_pct": 40
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
           {
             "z": 5,
-            "pct": 6
+            "pct": 32
           },
           {
-            "z": 1,
-            "pct": 4
+            "z": 6,
+            "pct": 14
           },
           {
-            "z": 2,
-            "pct": 4
+            "z": 4,
+            "pct": 14
+          },
+          {
+            "z": 8,
+            "pct": 14
           }
-        ]
+        ],
+        "eff": 39,
+        "tot": 28,
+        "pts": 15,
+        "slash": 1,
+        "err": 3,
+        "video": null,
+        "pts_pct": 54
       },
       {
         "cod": "V6",
+        "tipo": "",
         "orig": 2,
-        "tot": 7,
-        "eff": 43,
         "destinos": [
           {
             "z": 5,
@@ -489,86 +667,137 @@ const PARTIDOS_JUGADORES = [
             "z": 7,
             "pct": 29
           }
-        ]
+        ],
+        "eff": 43,
+        "tot": 7,
+        "pts": 3,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 43
       },
       {
-        "cod": "PR",
-        "orig": 3,
-        "tot": 2,
-        "eff": -50,
+        "cod": "X6",
+        "tipo": "",
+        "orig": 2,
         "destinos": [
           {
-            "z": 8,
-            "pct": 50
-          },
-          {
-            "z": 2,
-            "pct": 50
+            "z": 7,
+            "pct": 100
           }
-        ]
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X8",
+        "tipo": "",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 100
+          }
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      },
+      {
+        "cod": "VB",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 4,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X4",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
       }
     ],
     "saques": [
       {
         "cod": "SM",
-        "orig": 7,
-        "tot": 415,
-        "eff": 4,
+        "tipo": "FLOTADO",
+        "orig": 6,
         "destinos": [
           {
-            "z": 7,
-            "pct": 24
+            "z": 1,
+            "pct": 25
           },
           {
-            "z": 9,
+            "z": 0,
             "pct": 19
           },
           {
-            "z": 6,
+            "z": 2,
             "pct": 17
           },
           {
-            "z": 8,
-            "pct": 15
-          },
-          {
-            "z": 5,
-            "pct": 11
-          },
-          {
-            "z": 1,
-            "pct": 11
-          },
-          {
             "z": 3,
-            "pct": 2
-          },
-          {
-            "z": 2,
-            "pct": 1
+            "pct": 12
           },
           {
             "z": 4,
-            "pct": 1
+            "pct": 9
+          },
+          {
+            "z": 5,
+            "pct": 7
           }
-        ]
+        ],
+        "eff": 0,
+        "tot": 380,
+        "pts": 14,
+        "plus": 39,
+        "exc": 76,
+        "minus": 228,
+        "slash": 8,
+        "err": 15,
+        "video": null,
+        "pts_pct": 4
       },
       {
         "cod": "SQ",
-        "orig": 5,
-        "tot": 25,
-        "eff": 12,
+        "tipo": "POTENCIA",
+        "orig": 6,
         "destinos": [
           {
-            "z": 6,
-            "pct": 32
-          },
-          {
-            "z": 9,
-            "pct": 20
-          },
-          {
-            "z": 7,
+            "z": 5,
             "pct": 20
           },
           {
@@ -576,54 +805,341 @@ const PARTIDOS_JUGADORES = [
             "pct": 16
           },
           {
-            "z": 5,
-            "pct": 8
-          },
-          {
-            "z": 8,
-            "pct": 4
-          }
-        ]
-      }
-    ],
-    "recepciones": [
-      {
-        "cod": "RM",
-        "orig": 5,
-        "tot": 3,
-        "eff": -17,
-        "destinos": [
-          {
-            "z": 9,
-            "pct": 33
-          },
-          {
-            "z": 3,
-            "pct": 33
-          },
-          {
-            "z": 2,
-            "pct": 33
-          }
-        ]
-      },
-      {
-        "cod": "RQ",
-        "orig": 6,
-        "tot": 2,
-        "eff": -50,
-        "destinos": [
-          {
-            "z": 8,
-            "pct": 50
-          },
-          {
             "z": 4,
-            "pct": 50
+            "pct": 16
+          },
+          {
+            "z": 6,
+            "pct": 12
+          },
+          {
+            "z": 7,
+            "pct": 12
+          },
+          {
+            "z": 0,
+            "pct": 8
           }
-        ]
+        ],
+        "eff": 8,
+        "tot": 25,
+        "pts": 2,
+        "plus": 4,
+        "exc": 6,
+        "minus": 13,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 8
       }
     ],
+    "recepciones": [],
+    "recepcion": {
+      "flotado": {
+        "desde_z1": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 1,
+            "eff": -100,
+            "pos": 0,
+            "neg": 100,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 1
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 1,
+            "eff": -100,
+            "pos": 0,
+            "neg": 100,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 1
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 2,
+            "eff": 25,
+            "pos": 50,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 2,
+            "eff": 25,
+            "pos": 50,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          }
+        }
+      },
+      "potencia": {
+        "desde_z1": {
+          "P5": {
+            "tot": 1,
+            "eff": -100,
+            "pos": 0,
+            "neg": 100,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 1
+          },
+          "P6": {
+            "tot": 1,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 1,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 2,
+            "eff": -50,
+            "pos": 0,
+            "neg": 50,
+            "pt": 0,
+            "mas": 0,
+            "neu": 1,
+            "med": 0,
+            "ovp": 0,
+            "err": 1
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        }
+      }
+    },
     "objetivos": {
       "sq": 4,
       "rec": -30,
@@ -637,24 +1153,26 @@ const PARTIDOS_JUGADORES = [
       "atqri": 20,
       "atqrm": 0,
       "atqtr": 36
-    }
+    },
+    "tot_saques": 405,
+    "tot_recep": 5,
+    "tot_ataques": 11
   },
   {
     "num": 5,
-    "nombre": "5 Hesselholt",
-    "pos": "OTRO",
-    "color": "#64748b",
+    "nombre": "5 Hesselholt Joachim",
+    "pos": "CENTRAL",
+    "color": "#22c55e",
     "info": {},
     "ataques": [
       {
         "cod": "X7",
+        "tipo": "",
         "orig": 3,
-        "tot": 100,
-        "eff": 30,
         "destinos": [
           {
             "z": 9,
-            "pct": 42
+            "pct": 45
           },
           {
             "z": 8,
@@ -662,43 +1180,29 @@ const PARTIDOS_JUGADORES = [
           },
           {
             "z": 1,
-            "pct": 8
+            "pct": 9
           },
           {
             "z": 6,
-            "pct": 7
-          },
-          {
-            "z": 7,
-            "pct": 4
-          },
-          {
-            "z": 2,
-            "pct": 3
-          },
-          {
-            "z": 4,
-            "pct": 3
-          },
-          {
-            "z": 3,
-            "pct": 2
-          },
-          {
-            "z": 5,
-            "pct": 2
+            "pct": 8
           }
-        ]
+        ],
+        "eff": 35,
+        "tot": 92,
+        "pts": 45,
+        "slash": 5,
+        "err": 8,
+        "video": null,
+        "pts_pct": 49
       },
       {
         "cod": "X1",
+        "tipo": "",
         "orig": 3,
-        "tot": 52,
-        "eff": 48,
         "destinos": [
           {
             "z": 8,
-            "pct": 47
+            "pct": 46
           },
           {
             "z": 7,
@@ -711,26 +1215,20 @@ const PARTIDOS_JUGADORES = [
           {
             "z": 6,
             "pct": 10
-          },
-          {
-            "z": 9,
-            "pct": 6
-          },
-          {
-            "z": 3,
-            "pct": 6
-          },
-          {
-            "z": 4,
-            "pct": 2
           }
-        ]
+        ],
+        "eff": 50,
+        "tot": 50,
+        "pts": 32,
+        "slash": 4,
+        "err": 3,
+        "video": null,
+        "pts_pct": 64
       },
       {
         "cod": "XM",
+        "tipo": "",
         "orig": 3,
-        "tot": 29,
-        "eff": 52,
         "destinos": [
           {
             "z": 9,
@@ -747,18 +1245,50 @@ const PARTIDOS_JUGADORES = [
           {
             "z": 7,
             "pct": 7
-          },
+          }
+        ],
+        "eff": 52,
+        "tot": 29,
+        "pts": 17,
+        "slash": 1,
+        "err": 1,
+        "video": null,
+        "pts_pct": 59
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
           {
             "z": 6,
-            "pct": 3
+            "pct": 36
+          },
+          {
+            "z": 8,
+            "pct": 27
+          },
+          {
+            "z": 1,
+            "pct": 18
+          },
+          {
+            "z": 9,
+            "pct": 9
           }
-        ]
+        ],
+        "eff": 45,
+        "tot": 11,
+        "pts": 6,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 55
       },
       {
         "cod": "X2",
+        "tipo": "",
         "orig": 3,
-        "tot": 6,
-        "eff": 17,
         "destinos": [
           {
             "z": 9,
@@ -776,13 +1306,19 @@ const PARTIDOS_JUGADORES = [
             "z": 8,
             "pct": 17
           }
-        ]
+        ],
+        "eff": 17,
+        "tot": 6,
+        "pts": 2,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 33
       },
       {
         "cod": "X5",
+        "tipo": "",
         "orig": 4,
-        "tot": 4,
-        "eff": 50,
         "destinos": [
           {
             "z": 9,
@@ -796,13 +1332,19 @@ const PARTIDOS_JUGADORES = [
             "z": 5,
             "pct": 25
           }
-        ]
+        ],
+        "eff": 50,
+        "tot": 4,
+        "pts": 2,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
       },
       {
         "cod": "X9",
-        "orig": 4,
-        "tot": 4,
-        "eff": 0,
+        "tipo": "",
+        "orig": 8,
         "destinos": [
           {
             "z": 6,
@@ -816,13 +1358,19 @@ const PARTIDOS_JUGADORES = [
             "z": 7,
             "pct": 25
           }
-        ]
+        ],
+        "eff": 0,
+        "tot": 4,
+        "pts": 1,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 25
       },
       {
         "cod": "X3",
-        "orig": 2,
-        "tot": 3,
-        "eff": 33,
+        "tipo": "",
+        "orig": 8,
         "destinos": [
           {
             "z": 5,
@@ -832,113 +1380,384 @@ const PARTIDOS_JUGADORES = [
             "z": 1,
             "pct": 33
           }
-        ]
+        ],
+        "eff": 33,
+        "tot": 3,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 33
+      },
+      {
+        "cod": "X6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 3,
+            "pct": 100
+          }
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
       }
     ],
     "saques": [
       {
         "cod": "SM",
-        "orig": 1,
-        "tot": 236,
-        "eff": -7,
+        "tipo": "FLOTADO",
+        "orig": 6,
         "destinos": [
           {
-            "z": 9,
-            "pct": 25
-          },
-          {
-            "z": 6,
-            "pct": 19
-          },
-          {
             "z": 1,
+            "pct": 27
+          },
+          {
+            "z": 2,
+            "pct": 16
+          },
+          {
+            "z": 0,
             "pct": 15
           },
           {
-            "z": 8,
-            "pct": 15
+            "z": 3,
+            "pct": 12
           },
           {
-            "z": 7,
-            "pct": 10
+            "z": 4,
+            "pct": 8
           },
           {
             "z": 5,
             "pct": 7
-          },
-          {
-            "z": 3,
-            "pct": 5
-          },
-          {
-            "z": 4,
-            "pct": 4
-          },
-          {
-            "z": 2,
-            "pct": 1
           }
-        ]
+        ],
+        "eff": -12,
+        "tot": 226,
+        "pts": 3,
+        "plus": 38,
+        "exc": 57,
+        "minus": 86,
+        "slash": 12,
+        "err": 30,
+        "video": null,
+        "pts_pct": 1
       }
     ],
-    "recepciones": [
-      {
-        "cod": "RQ",
-        "orig": 6,
-        "tot": 15,
-        "eff": 30,
-        "destinos": [
-          {
-            "z": 7,
-            "pct": 40
+    "recepciones": [],
+    "recepcion": {
+      "flotado": {
+        "desde_z1": {
+          "P5": {
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
           },
-          {
-            "z": 9,
-            "pct": 27
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
           },
-          {
-            "z": 4,
-            "pct": 20
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
           },
-          {
-            "z": 8,
-            "pct": 13
+          "total": {
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
           }
-        ]
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 3,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 2,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 1,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 1,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 4,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 3,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 3,
+            "eff": 33,
+            "pos": 67,
+            "neg": 0,
+            "pt": 0,
+            "mas": 2,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 2,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 2,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 2,
+            "eff": 100,
+            "pos": 100,
+            "neg": 0,
+            "pt": 2,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 7,
+            "eff": 57,
+            "pos": 86,
+            "neg": 0,
+            "pt": 2,
+            "mas": 4,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          }
+        }
       },
-      {
-        "cod": "RM",
-        "orig": 6,
-        "tot": 12,
-        "eff": 38,
-        "destinos": [
-          {
-            "z": 4,
-            "pct": 33
+      "potencia": {
+        "desde_z1": {
+          "P5": {
+            "tot": 6,
+            "eff": -17,
+            "pos": 17,
+            "neg": 33,
+            "pt": 1,
+            "mas": 0,
+            "neu": 1,
+            "med": 2,
+            "ovp": 0,
+            "err": 2
           },
-          {
-            "z": 3,
-            "pct": 17
+          "P6": {
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
           },
-          {
-            "z": 9,
-            "pct": 17
+          "P1": {
+            "tot": 2,
+            "eff": 50,
+            "pos": 50,
+            "neg": 0,
+            "pt": 1,
+            "mas": 0,
+            "neu": 1,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
           },
-          {
-            "z": 7,
-            "pct": 17
-          },
-          {
-            "z": 8,
-            "pct": 8
-          },
-          {
-            "z": 5,
-            "pct": 8
+          "total": {
+            "tot": 9,
+            "eff": 6,
+            "pos": 33,
+            "neg": 22,
+            "pt": 2,
+            "mas": 1,
+            "neu": 2,
+            "med": 2,
+            "ovp": 0,
+            "err": 2
           }
-        ]
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 1,
+            "eff": 100,
+            "pos": 100,
+            "neg": 0,
+            "pt": 1,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 2,
+            "eff": 75,
+            "pos": 100,
+            "neg": 0,
+            "pt": 1,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 3,
+            "eff": 83,
+            "pos": 100,
+            "neg": 0,
+            "pt": 2,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 2,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 2,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 3,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 3,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        }
       }
-    ],
+    },
     "objetivos": {
       "sq": -5,
       "rec": 33,
@@ -952,68 +1771,56 @@ const PARTIDOS_JUGADORES = [
       "atqri": 39,
       "atqrm": 30,
       "atqtr": 47
-    }
+    },
+    "tot_saques": 226,
+    "tot_recep": 27,
+    "tot_ataques": 183
   },
   {
     "num": 6,
-    "nombre": "6 Cabanaspablo",
-    "pos": "OTRO",
-    "color": "#64748b",
+    "nombre": "6 Cabanas Denis Pablo",
+    "pos": "OPUESTO",
+    "color": "#ef4444",
     "info": {},
     "ataques": [
       {
         "cod": "X8",
+        "tipo": "",
         "orig": 9,
-        "tot": 302,
-        "eff": 38,
         "destinos": [
           {
             "z": 7,
-            "pct": 36
+            "pct": 38
           },
           {
             "z": 1,
-            "pct": 16
-          },
-          {
-            "z": 5,
-            "pct": 13
+            "pct": 15
           },
           {
             "z": 9,
             "pct": 13
           },
           {
-            "z": 8,
-            "pct": 9
-          },
-          {
-            "z": 6,
-            "pct": 9
-          },
-          {
-            "z": 4,
-            "pct": 2
-          },
-          {
-            "z": 3,
-            "pct": 1
-          },
-          {
-            "z": 2,
-            "pct": 1
+            "z": 5,
+            "pct": 11
           }
-        ]
+        ],
+        "eff": 39,
+        "tot": 285,
+        "pts": 160,
+        "slash": 17,
+        "err": 31,
+        "video": null,
+        "pts_pct": 56
       },
       {
         "cod": "X6",
+        "tipo": "",
         "orig": 2,
-        "tot": 269,
-        "eff": 38,
         "destinos": [
           {
             "z": 5,
-            "pct": 37
+            "pct": 38
           },
           {
             "z": 6,
@@ -1021,83 +1828,55 @@ const PARTIDOS_JUGADORES = [
           },
           {
             "z": 9,
-            "pct": 14
+            "pct": 16
           },
           {
             "z": 1,
-            "pct": 12
-          },
-          {
-            "z": 7,
-            "pct": 7
-          },
-          {
-            "z": 8,
-            "pct": 5
-          },
-          {
-            "z": 4,
-            "pct": 4
-          },
-          {
-            "z": 3,
-            "pct": 2
-          },
-          {
-            "z": 2,
-            "pct": 1
+            "pct": 13
           }
-        ]
+        ],
+        "eff": 37,
+        "tot": 245,
+        "pts": 132,
+        "slash": 18,
+        "err": 23,
+        "video": null,
+        "pts_pct": 54
       },
       {
         "cod": "V6",
+        "tipo": "",
         "orig": 2,
-        "tot": 163,
-        "eff": 25,
         "destinos": [
           {
             "z": 5,
-            "pct": 39
-          },
-          {
-            "z": 6,
-            "pct": 13
+            "pct": 38
           },
           {
             "z": 8,
-            "pct": 13
+            "pct": 15
+          },
+          {
+            "z": 6,
+            "pct": 14
           },
           {
             "z": 9,
-            "pct": 13
-          },
-          {
-            "z": 1,
-            "pct": 7
-          },
-          {
-            "z": 7,
-            "pct": 6
-          },
-          {
-            "z": 2,
-            "pct": 4
-          },
-          {
-            "z": 3,
-            "pct": 3
-          },
-          {
-            "z": 4,
-            "pct": 2
+            "pct": 14
           }
-        ]
+        ],
+        "eff": 26,
+        "tot": 151,
+        "pts": 63,
+        "slash": 13,
+        "err": 10,
+        "video": null,
+        "pts_pct": 42
       },
       {
         "cod": "X5",
+        "tipo": "",
         "orig": 4,
-        "tot": 130,
-        "eff": 54,
         "destinos": [
           {
             "z": 1,
@@ -1105,91 +1884,67 @@ const PARTIDOS_JUGADORES = [
           },
           {
             "z": 6,
-            "pct": 27
+            "pct": 28
           },
           {
             "z": 9,
-            "pct": 9
+            "pct": 10
           },
           {
             "z": 5,
             "pct": 8
-          },
-          {
-            "z": 8,
-            "pct": 7
-          },
-          {
-            "z": 7,
-            "pct": 6
-          },
-          {
-            "z": 2,
-            "pct": 5
-          },
-          {
-            "z": 4,
-            "pct": 3
           }
-        ]
+        ],
+        "eff": 52,
+        "tot": 120,
+        "pts": 73,
+        "slash": 7,
+        "err": 4,
+        "video": null,
+        "pts_pct": 61
       },
       {
         "cod": "V8",
+        "tipo": "",
         "orig": 9,
-        "tot": 108,
-        "eff": 19,
         "destinos": [
           {
             "z": 7,
-            "pct": 38
+            "pct": 40
           },
           {
             "z": 9,
-            "pct": 15
+            "pct": 16
           },
           {
             "z": 8,
-            "pct": 13
-          },
-          {
-            "z": 5,
-            "pct": 9
+            "pct": 14
           },
           {
             "z": 1,
-            "pct": 8
-          },
-          {
-            "z": 2,
-            "pct": 6
-          },
-          {
-            "z": 6,
-            "pct": 6
-          },
-          {
-            "z": 3,
-            "pct": 4
-          },
-          {
-            "z": 4,
-            "pct": 1
+            "pct": 9
           }
-        ]
+        ],
+        "eff": 17,
+        "tot": 103,
+        "pts": 44,
+        "slash": 11,
+        "err": 16,
+        "video": null,
+        "pts_pct": 43
       },
       {
         "cod": "V5",
+        "tipo": "",
         "orig": 4,
-        "tot": 47,
-        "eff": 32,
         "destinos": [
           {
             "z": 1,
-            "pct": 43
+            "pct": 42
           },
           {
             "z": 6,
-            "pct": 19
+            "pct": 20
           },
           {
             "z": 5,
@@ -1197,35 +1952,51 @@ const PARTIDOS_JUGADORES = [
           },
           {
             "z": 2,
-            "pct": 6
-          },
-          {
-            "z": 9,
-            "pct": 6
-          },
+            "pct": 7
+          }
+        ],
+        "eff": 33,
+        "tot": 45,
+        "pts": 20,
+        "slash": 1,
+        "err": 4,
+        "video": null,
+        "pts_pct": 44
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
           {
             "z": 8,
-            "pct": 6
+            "pct": 24
           },
           {
             "z": 7,
-            "pct": 2
+            "pct": 18
           },
           {
-            "z": 4,
-            "pct": 2
+            "z": 1,
+            "pct": 18
           },
           {
-            "z": 3,
-            "pct": 2
+            "z": 6,
+            "pct": 12
           }
-        ]
+        ],
+        "eff": 65,
+        "tot": 17,
+        "pts": 12,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 71
       },
       {
         "cod": "X4",
-        "orig": 4,
-        "tot": 10,
-        "eff": 40,
+        "tipo": "",
+        "orig": 8,
         "destinos": [
           {
             "z": 6,
@@ -1242,22 +2013,20 @@ const PARTIDOS_JUGADORES = [
           {
             "z": 9,
             "pct": 10
-          },
-          {
-            "z": 5,
-            "pct": 10
-          },
-          {
-            "z": 7,
-            "pct": 10
           }
-        ]
+        ],
+        "eff": 40,
+        "tot": 10,
+        "pts": 6,
+        "slash": 1,
+        "err": 1,
+        "video": null,
+        "pts_pct": 60
       },
       {
         "cod": "VB",
+        "tipo": "",
         "orig": 8,
-        "tot": 3,
-        "eff": -33,
         "destinos": [
           {
             "z": 9,
@@ -1271,157 +2040,461 @@ const PARTIDOS_JUGADORES = [
             "z": 1,
             "pct": 33
           }
-        ]
+        ],
+        "eff": -33,
+        "tot": 3,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X9",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 100
+          }
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      },
+      {
+        "cod": "X3",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 100
+          }
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      },
+      {
+        "cod": "XB",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
       }
     ],
     "saques": [
       {
         "cod": "SQ",
-        "orig": 9,
-        "tot": 260,
-        "eff": -16,
+        "tipo": "POTENCIA",
+        "orig": 6,
         "destinos": [
           {
-            "z": 6,
-            "pct": 34
+            "z": 1,
+            "pct": 27
           },
           {
-            "z": 1,
+            "z": 2,
             "pct": 20
           },
           {
-            "z": 5,
-            "pct": 16
-          },
-          {
             "z": 3,
-            "pct": 8
-          },
-          {
-            "z": 7,
-            "pct": 6
-          },
-          {
-            "z": 9,
-            "pct": 5
-          },
-          {
-            "z": 8,
-            "pct": 5
-          },
-          {
-            "z": 2,
-            "pct": 4
+            "pct": 17
           },
           {
             "z": 4,
-            "pct": 1
-          }
-        ]
-      },
-      {
-        "cod": "SM",
-        "orig": 7,
-        "tot": 86,
-        "eff": 8,
-        "destinos": [
-          {
-            "z": 7,
-            "pct": 34
-          },
-          {
-            "z": 1,
-            "pct": 22
-          },
-          {
-            "z": 6,
-            "pct": 22
-          },
-          {
-            "z": 5,
             "pct": 10
           },
           {
-            "z": 9,
-            "pct": 6
-          },
-          {
-            "z": 3,
-            "pct": 3
-          },
-          {
-            "z": 4,
-            "pct": 1
-          },
-          {
-            "z": 8,
-            "pct": 1
-          }
-        ]
-      },
-      {
-        "cod": "SO",
-        "orig": 9,
-        "tot": 6,
-        "eff": 12,
-        "destinos": [
-          {
-            "z": 6,
-            "pct": 50
+            "z": 0,
+            "pct": 10
           },
           {
             "z": 5,
-            "pct": 33
-          },
-          {
-            "z": 1,
-            "pct": 17
+            "pct": 7
           }
-        ]
-      }
-    ],
-    "recepciones": [
-      {
-        "cod": "RQ",
-        "orig": 1,
-        "tot": 7,
-        "eff": 21,
-        "destinos": [
-          {
-            "z": 1,
-            "pct": 57
-          },
-          {
-            "z": 7,
-            "pct": 29
-          },
-          {
-            "z": 9,
-            "pct": 14
-          }
-        ]
+        ],
+        "eff": -23,
+        "tot": 255,
+        "pts": 21,
+        "plus": 41,
+        "exc": 41,
+        "minus": 61,
+        "slash": 12,
+        "err": 79,
+        "video": null,
+        "pts_pct": 8
       },
       {
-        "cod": "RM",
-        "orig": 5,
-        "tot": 6,
-        "eff": -25,
+        "cod": "SM",
+        "tipo": "FLOTADO",
+        "orig": 6,
         "destinos": [
           {
-            "z": 2,
-            "pct": 33
-          },
-          {
-            "z": 9,
-            "pct": 33
-          },
-          {
             "z": 1,
-            "pct": 33
+            "pct": 26
+          },
+          {
+            "z": 0,
+            "pct": 18
+          },
+          {
+            "z": 2,
+            "pct": 18
+          },
+          {
+            "z": 3,
+            "pct": 14
+          },
+          {
+            "z": 4,
+            "pct": 10
+          },
+          {
+            "z": 5,
+            "pct": 5
           }
-        ]
+        ],
+        "eff": 3,
+        "tot": 73,
+        "pts": 7,
+        "plus": 12,
+        "exc": 10,
+        "minus": 34,
+        "slash": 5,
+        "err": 5,
+        "video": null,
+        "pts_pct": 10
       }
     ],
+    "recepciones": [],
+    "recepcion": {
+      "flotado": {
+        "desde_z1": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 1,
+            "eff": -100,
+            "pos": 0,
+            "neg": 100,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 1
+          },
+          "total": {
+            "tot": 1,
+            "eff": -100,
+            "pos": 0,
+            "neg": 100,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 1
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 4,
+            "eff": -25,
+            "pos": 25,
+            "neg": 50,
+            "pt": 0,
+            "mas": 1,
+            "neu": 1,
+            "med": 0,
+            "ovp": 1,
+            "err": 1
+          },
+          "total": {
+            "tot": 4,
+            "eff": -25,
+            "pos": 25,
+            "neg": 50,
+            "pt": 0,
+            "mas": 1,
+            "neu": 1,
+            "med": 0,
+            "ovp": 1,
+            "err": 1
+          }
+        }
+      },
+      "potencia": {
+        "desde_z1": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 4,
+            "eff": 12,
+            "pos": 50,
+            "neg": 25,
+            "pt": 1,
+            "mas": 1,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 1
+          },
+          "total": {
+            "tot": 4,
+            "eff": 12,
+            "pos": 50,
+            "neg": 25,
+            "pt": 1,
+            "mas": 1,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 1
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 2,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 2,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 1,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 3,
+            "eff": 33,
+            "pos": 67,
+            "neg": 0,
+            "pt": 0,
+            "mas": 2,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        }
+      }
+    },
     "objetivos": {
       "sq": -10,
       "rec": 0,
@@ -1435,20 +2508,22 @@ const PARTIDOS_JUGADORES = [
       "atqri": 33,
       "atqrm": 30,
       "atqtr": 31
-    }
+    },
+    "tot_saques": 328,
+    "tot_recep": 13,
+    "tot_ataques": 952
   },
   {
     "num": 7,
-    "nombre": "7 Schmid",
-    "pos": "OTRO",
-    "color": "#64748b",
+    "nombre": "7 Schmid Roy",
+    "pos": "CENTRAL",
+    "color": "#22c55e",
     "info": {},
     "ataques": [
       {
         "cod": "X1",
+        "tipo": "",
         "orig": 3,
-        "tot": 15,
-        "eff": 40,
         "destinos": [
           {
             "z": 8,
@@ -1465,26 +2540,20 @@ const PARTIDOS_JUGADORES = [
           {
             "z": 6,
             "pct": 7
-          },
-          {
-            "z": 9,
-            "pct": 7
-          },
-          {
-            "z": 5,
-            "pct": 7
-          },
-          {
-            "z": 1,
-            "pct": 7
           }
-        ]
+        ],
+        "eff": 40,
+        "tot": 15,
+        "pts": 6,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 40
       },
       {
         "cod": "X7",
+        "tipo": "",
         "orig": 3,
-        "tot": 3,
-        "eff": -33,
         "destinos": [
           {
             "z": 5,
@@ -1498,97 +2567,471 @@ const PARTIDOS_JUGADORES = [
             "z": 1,
             "pct": 33
           }
-        ]
+        ],
+        "eff": -33,
+        "tot": 3,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 2,
+            "pct": 50
+          },
+          {
+            "z": 3,
+            "pct": 50
+          }
+        ],
+        "eff": 0,
+        "tot": 2,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "XM",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X2",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X0",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
       }
     ],
     "saques": [
       {
         "cod": "SM",
-        "orig": 5,
-        "tot": 87,
-        "eff": -12,
+        "tipo": "FLOTADO",
+        "orig": 6,
         "destinos": [
           {
-            "z": 6,
-            "pct": 20
+            "z": 2,
+            "pct": 17
           },
           {
-            "z": 5,
-            "pct": 18
+            "z": 3,
+            "pct": 14
+          },
+          {
+            "z": 4,
+            "pct": 14
           },
           {
             "z": 1,
-            "pct": 16
-          },
-          {
-            "z": 7,
-            "pct": 13
-          },
-          {
-            "z": 8,
-            "pct": 11
-          },
-          {
-            "z": 3,
-            "pct": 10
-          },
-          {
-            "z": 9,
-            "pct": 7
-          },
-          {
-            "z": 2,
-            "pct": 3
-          },
-          {
-            "z": 4,
-            "pct": 1
-          }
-        ]
-      },
-      {
-        "cod": "SQ",
-        "orig": 5,
-        "tot": 5,
-        "eff": -35,
-        "destinos": [
-          {
-            "z": 3,
-            "pct": 40
-          },
-          {
-            "z": 6,
-            "pct": 20
-          },
-          {
-            "z": 8,
-            "pct": 20
+            "pct": 12
           },
           {
             "z": 5,
-            "pct": 20
-          }
-        ]
-      }
-    ],
-    "recepciones": [
-      {
-        "cod": "RQ",
-        "orig": 1,
-        "tot": 2,
-        "eff": 25,
-        "destinos": [
-          {
-            "z": 4,
-            "pct": 50
+            "pct": 12
           },
           {
-            "z": 8,
-            "pct": 50
+            "z": 6,
+            "pct": 12
           }
-        ]
+        ],
+        "eff": -18,
+        "tot": 77,
+        "pts": 3,
+        "plus": 9,
+        "exc": 11,
+        "minus": 34,
+        "slash": 3,
+        "err": 17,
+        "video": null,
+        "pts_pct": 4
+      },
+      {
+        "cod": "SQ",
+        "tipo": "POTENCIA",
+        "orig": 6,
+        "destinos": [
+          {
+            "z": 0,
+            "pct": 40
+          },
+          {
+            "z": 1,
+            "pct": 40
+          },
+          {
+            "z": 4,
+            "pct": 20
+          }
+        ],
+        "eff": -40,
+        "tot": 5,
+        "pts": 0,
+        "plus": 1,
+        "exc": 0,
+        "minus": 2,
+        "slash": 0,
+        "err": 2,
+        "video": null,
+        "pts_pct": 0
       }
     ],
+    "recepciones": [],
+    "recepcion": {
+      "flotado": {
+        "desde_z1": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        }
+      },
+      "potencia": {
+        "desde_z1": {
+          "P5": {
+            "tot": 1,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 2,
+            "eff": 25,
+            "pos": 50,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        }
+      }
+    },
     "objetivos": {
       "sq": -15,
       "rec": 25,
@@ -1602,98 +3045,345 @@ const PARTIDOS_JUGADORES = [
       "atqri": 50,
       "atqrm": 0,
       "atqtr": 20
-    }
+    },
+    "tot_saques": 82,
+    "tot_recep": 2,
+    "tot_ataques": 20
   },
   {
     "num": 8,
-    "nombre": "8 Peter",
-    "pos": "OTRO",
-    "color": "#64748b",
+    "nombre": "8 Peter Jonas",
+    "pos": "LIBERO",
+    "color": "#f59e0b",
     "info": {},
-    "ataques": [],
-    "saques": [],
-    "recepciones": [
+    "ataques": [
       {
-        "cod": "RQ",
-        "orig": 5,
-        "tot": 261,
-        "eff": 20,
+        "cod": "X8",
+        "tipo": "",
+        "orig": 9,
         "destinos": [
-          {
-            "z": 6,
-            "pct": 58
-          },
-          {
-            "z": 1,
-            "pct": 17
-          },
-          {
-            "z": 8,
-            "pct": 12
-          },
-          {
-            "z": 5,
-            "pct": 7
-          },
           {
             "z": 9,
-            "pct": 4
-          },
-          {
-            "z": 7,
-            "pct": 1
+            "pct": 100
           }
-        ]
-      },
-      {
-        "cod": "RM",
-        "orig": 5,
-        "tot": 213,
-        "eff": 33,
-        "destinos": [
-          {
-            "z": 6,
-            "pct": 29
-          },
-          {
-            "z": 8,
-            "pct": 21
-          },
-          {
-            "z": 1,
-            "pct": 20
-          },
-          {
-            "z": 9,
-            "pct": 20
-          },
-          {
-            "z": 5,
-            "pct": 6
-          },
-          {
-            "z": 7,
-            "pct": 4
-          }
-        ]
-      },
-      {
-        "cod": "RO",
-        "orig": 5,
-        "tot": 3,
-        "eff": 50,
-        "destinos": [
-          {
-            "z": 6,
-            "pct": 67
-          },
-          {
-            "z": 5,
-            "pct": 33
-          }
-        ]
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
       }
     ],
+    "saques": [],
+    "recepciones": [],
+    "recepcion": {
+      "flotado": {
+        "desde_z1": {
+          "P5": {
+            "tot": 9,
+            "eff": 0,
+            "pos": 33,
+            "neg": 22,
+            "pt": 0,
+            "mas": 3,
+            "neu": 3,
+            "med": 1,
+            "ovp": 1,
+            "err": 1
+          },
+          "P6": {
+            "tot": 1,
+            "eff": 100,
+            "pos": 100,
+            "neg": 0,
+            "pt": 1,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 25,
+            "eff": 34,
+            "pos": 64,
+            "neg": 8,
+            "pt": 5,
+            "mas": 11,
+            "neu": 5,
+            "med": 2,
+            "ovp": 0,
+            "err": 2
+          },
+          "total": {
+            "tot": 1,
+            "eff": 100,
+            "pos": 100,
+            "neg": 0,
+            "pt": 1,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 5,
+            "eff": 50,
+            "pos": 60,
+            "neg": 0,
+            "pt": 2,
+            "mas": 1,
+            "neu": 1,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 2,
+            "eff": 25,
+            "pos": 50,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 7,
+            "eff": 43,
+            "pos": 57,
+            "neg": 0,
+            "pt": 2,
+            "mas": 2,
+            "neu": 1,
+            "med": 2,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 13,
+            "eff": 50,
+            "pos": 77,
+            "neg": 0,
+            "pt": 3,
+            "mas": 7,
+            "neu": 2,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 71,
+            "eff": 38,
+            "pos": 63,
+            "neg": 4,
+            "pt": 14,
+            "mas": 31,
+            "neu": 13,
+            "med": 10,
+            "ovp": 1,
+            "err": 2
+          },
+          "P1": {
+            "tot": 57,
+            "eff": 25,
+            "pos": 46,
+            "neg": 5,
+            "pt": 8,
+            "mas": 18,
+            "neu": 11,
+            "med": 17,
+            "ovp": 1,
+            "err": 2
+          },
+          "total": {
+            "tot": 141,
+            "eff": 34,
+            "pos": 57,
+            "neg": 4,
+            "pt": 25,
+            "mas": 56,
+            "neu": 26,
+            "med": 28,
+            "ovp": 2,
+            "err": 4
+          }
+        }
+      },
+      "potencia": {
+        "desde_z1": {
+          "P5": {
+            "tot": 13,
+            "eff": 12,
+            "pos": 54,
+            "neg": 23,
+            "pt": 2,
+            "mas": 5,
+            "neu": 1,
+            "med": 2,
+            "ovp": 0,
+            "err": 3
+          },
+          "P6": {
+            "tot": 131,
+            "eff": 25,
+            "pos": 53,
+            "neg": 11,
+            "pt": 25,
+            "mas": 44,
+            "neu": 27,
+            "med": 20,
+            "ovp": 2,
+            "err": 13
+          },
+          "P1": {
+            "tot": 42,
+            "eff": 1,
+            "pos": 38,
+            "neg": 29,
+            "pt": 6,
+            "mas": 10,
+            "neu": 8,
+            "med": 6,
+            "ovp": 3,
+            "err": 9
+          },
+          "total": {
+            "tot": 186,
+            "eff": 19,
+            "pos": 49,
+            "neg": 16,
+            "pt": 33,
+            "mas": 59,
+            "neu": 36,
+            "med": 28,
+            "ovp": 5,
+            "err": 25
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 3,
+            "eff": 33,
+            "pos": 67,
+            "neg": 33,
+            "pt": 1,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
+            "ovp": 1,
+            "err": 0
+          },
+          "P6": {
+            "tot": 19,
+            "eff": 13,
+            "pos": 42,
+            "neg": 16,
+            "pt": 2,
+            "mas": 6,
+            "neu": 1,
+            "med": 7,
+            "ovp": 1,
+            "err": 2
+          },
+          "P1": {
+            "tot": 7,
+            "eff": -7,
+            "pos": 14,
+            "neg": 14,
+            "pt": 0,
+            "mas": 1,
+            "neu": 4,
+            "med": 1,
+            "ovp": 0,
+            "err": 1
+          },
+          "total": {
+            "tot": 29,
+            "eff": 10,
+            "pos": 38,
+            "neg": 17,
+            "pt": 3,
+            "mas": 8,
+            "neu": 5,
+            "med": 8,
+            "ovp": 2,
+            "err": 3
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 5,
+            "eff": 0,
+            "pos": 40,
+            "neg": 20,
+            "pt": 0,
+            "mas": 2,
+            "neu": 2,
+            "med": 0,
+            "ovp": 0,
+            "err": 1
+          },
+          "P6": {
+            "tot": 23,
+            "eff": 33,
+            "pos": 65,
+            "neg": 4,
+            "pt": 2,
+            "mas": 13,
+            "neu": 5,
+            "med": 2,
+            "ovp": 0,
+            "err": 1
+          },
+          "P1": {
+            "tot": 6,
+            "eff": 17,
+            "pos": 50,
+            "neg": 17,
+            "pt": 1,
+            "mas": 2,
+            "neu": 0,
+            "med": 2,
+            "ovp": 0,
+            "err": 1
+          },
+          "total": {
+            "tot": 34,
+            "eff": 25,
+            "pos": 59,
+            "neg": 9,
+            "pt": 3,
+            "mas": 17,
+            "neu": 7,
+            "med": 4,
+            "ovp": 0,
+            "err": 3
+          }
+        }
+      }
+    },
     "objetivos": {
       "sq": null,
       "rec": 25,
@@ -1707,100 +3397,112 @@ const PARTIDOS_JUGADORES = [
       "atqri": -100,
       "atqrm": null,
       "atqtr": null
-    }
+    },
+    "tot_saques": 0,
+    "tot_recep": 462,
+    "tot_ataques": 1
   },
   {
     "num": 9,
-    "nombre": "9 Broch",
-    "pos": "OTRO",
-    "color": "#64748b",
+    "nombre": "9 Broch Nathan",
+    "pos": "PUNTA",
+    "color": "#3b82f6",
     "info": {},
     "ataques": [
       {
         "cod": "X5",
+        "tipo": "",
         "orig": 4,
-        "tot": 177,
-        "eff": 19,
         "destinos": [
           {
             "z": 1,
-            "pct": 50
+            "pct": 52
           },
           {
             "z": 6,
-            "pct": 14
+            "pct": 16
           },
           {
             "z": 5,
-            "pct": 10
+            "pct": 8
           },
           {
             "z": 9,
             "pct": 7
-          },
-          {
-            "z": 7,
-            "pct": 6
-          },
-          {
-            "z": 4,
-            "pct": 6
-          },
-          {
-            "z": 2,
-            "pct": 5
-          },
-          {
-            "z": 8,
-            "pct": 2
           }
-        ]
+        ],
+        "eff": 14,
+        "tot": 161,
+        "pts": 60,
+        "slash": 17,
+        "err": 21,
+        "video": null,
+        "pts_pct": 37
       },
       {
         "cod": "V5",
+        "tipo": "",
         "orig": 4,
-        "tot": 74,
-        "eff": 9,
         "destinos": [
           {
             "z": 1,
-            "pct": 48
+            "pct": 49
           },
           {
             "z": 6,
-            "pct": 21
+            "pct": 22
           },
           {
             "z": 9,
-            "pct": 12
+            "pct": 13
           },
           {
             "z": 7,
             "pct": 7
-          },
-          {
-            "z": 4,
-            "pct": 7
-          },
+          }
+        ],
+        "eff": 10,
+        "tot": 69,
+        "pts": 19,
+        "slash": 7,
+        "err": 5,
+        "video": null,
+        "pts_pct": 28
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
           {
             "z": 2,
-            "pct": 3
+            "pct": 23
           },
           {
-            "z": 8,
-            "pct": 1
+            "z": 1,
+            "pct": 23
           },
           {
-            "z": 5,
-            "pct": 1
+            "z": 7,
+            "pct": 15
+          },
+          {
+            "z": 6,
+            "pct": 15
           }
-        ]
+        ],
+        "eff": 31,
+        "tot": 13,
+        "pts": 7,
+        "slash": 1,
+        "err": 2,
+        "video": null,
+        "pts_pct": 54
       },
       {
         "cod": "X9",
-        "orig": 4,
-        "tot": 3,
-        "eff": 33,
+        "tipo": "",
+        "orig": 8,
         "destinos": [
           {
             "z": 6,
@@ -1814,13 +3516,19 @@ const PARTIDOS_JUGADORES = [
             "z": 1,
             "pct": 33
           }
-        ]
+        ],
+        "eff": 33,
+        "tot": 3,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 33
       },
       {
         "cod": "X8",
+        "tipo": "",
         "orig": 9,
-        "tot": 2,
-        "eff": 0,
         "destinos": [
           {
             "z": 5,
@@ -1830,145 +3538,459 @@ const PARTIDOS_JUGADORES = [
             "z": 7,
             "pct": 50
           }
-        ]
+        ],
+        "eff": 0,
+        "tot": 2,
+        "pts": 1,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
       },
       {
         "cod": "VP",
+        "tipo": "",
         "orig": 8,
-        "tot": 2,
-        "eff": 0,
         "destinos": [
           {
             "z": 1,
             "pct": 100
           }
-        ]
+        ],
+        "eff": 0,
+        "tot": 2,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "VB",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X0",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 4,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "VR",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 9,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
       }
     ],
     "saques": [
       {
         "cod": "SM",
-        "orig": 1,
-        "tot": 252,
-        "eff": 2,
+        "tipo": "FLOTADO",
+        "orig": 6,
         "destinos": [
           {
-            "z": 7,
+            "z": 1,
             "pct": 23
           },
           {
-            "z": 8,
+            "z": 3,
             "pct": 16
           },
           {
-            "z": 9,
-            "pct": 15
-          },
-          {
-            "z": 5,
-            "pct": 14
-          },
-          {
-            "z": 6,
-            "pct": 14
-          },
-          {
-            "z": 1,
-            "pct": 14
-          },
-          {
-            "z": 3,
-            "pct": 2
-          },
-          {
-            "z": 4,
-            "pct": 2
+            "z": 0,
+            "pct": 16
           },
           {
             "z": 2,
-            "pct": 2
-          }
-        ]
-      }
-    ],
-    "recepciones": [
-      {
-        "cod": "RM",
-        "orig": 5,
-        "tot": 248,
-        "eff": 28,
-        "destinos": [
+            "pct": 16
+          },
+          {
+            "z": 4,
+            "pct": 14
+          },
           {
             "z": 5,
-            "pct": 40
-          },
-          {
-            "z": 7,
-            "pct": 27
-          },
-          {
-            "z": 6,
-            "pct": 12
-          },
-          {
-            "z": 1,
-            "pct": 8
-          },
-          {
-            "z": 8,
             "pct": 7
-          },
-          {
-            "z": 9,
-            "pct": 5
           }
-        ]
+        ],
+        "eff": -3,
+        "tot": 238,
+        "pts": 6,
+        "plus": 28,
+        "exc": 48,
+        "minus": 139,
+        "slash": 5,
+        "err": 12,
+        "video": null,
+        "pts_pct": 3
       },
       {
-        "cod": "RQ",
-        "orig": 1,
-        "tot": 166,
-        "eff": 23,
+        "cod": "SQ",
+        "tipo": "POTENCIA",
+        "orig": 6,
         "destinos": [
-          {
-            "z": 5,
-            "pct": 39
-          },
-          {
-            "z": 7,
-            "pct": 20
-          },
-          {
-            "z": 6,
-            "pct": 17
-          },
-          {
-            "z": 1,
-            "pct": 15
-          },
           {
             "z": 9,
-            "pct": 4
-          },
-          {
-            "z": 8,
-            "pct": 4
-          }
-        ]
-      },
-      {
-        "cod": "RO",
-        "orig": 5,
-        "tot": 3,
-        "eff": 17,
-        "destinos": [
-          {
-            "z": 5,
             "pct": 100
           }
-        ]
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "plus": 0,
+        "exc": 0,
+        "minus": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
       }
     ],
+    "recepciones": [],
+    "recepcion": {
+      "flotado": {
+        "desde_z1": {
+          "P5": {
+            "tot": 33,
+            "eff": 36,
+            "pos": 64,
+            "neg": 9,
+            "pt": 7,
+            "mas": 14,
+            "neu": 2,
+            "med": 7,
+            "ovp": 2,
+            "err": 1
+          },
+          "P6": {
+            "tot": 9,
+            "eff": 22,
+            "pos": 44,
+            "neg": 11,
+            "pt": 1,
+            "mas": 3,
+            "neu": 3,
+            "med": 1,
+            "ovp": 1,
+            "err": 0
+          },
+          "P1": {
+            "tot": 12,
+            "eff": 38,
+            "pos": 50,
+            "neg": 8,
+            "pt": 4,
+            "mas": 2,
+            "neu": 3,
+            "med": 2,
+            "ovp": 1,
+            "err": 0
+          },
+          "total": {
+            "tot": 54,
+            "eff": 34,
+            "pos": 57,
+            "neg": 9,
+            "pt": 12,
+            "mas": 19,
+            "neu": 8,
+            "med": 10,
+            "ovp": 4,
+            "err": 1
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 109,
+            "eff": 28,
+            "pos": 56,
+            "neg": 11,
+            "pt": 17,
+            "mas": 44,
+            "neu": 16,
+            "med": 20,
+            "ovp": 6,
+            "err": 6
+          },
+          "P6": {
+            "tot": 32,
+            "eff": 27,
+            "pos": 47,
+            "neg": 9,
+            "pt": 5,
+            "mas": 10,
+            "neu": 8,
+            "med": 6,
+            "ovp": 3,
+            "err": 0
+          },
+          "P1": {
+            "tot": 15,
+            "eff": -3,
+            "pos": 20,
+            "neg": 13,
+            "pt": 0,
+            "mas": 3,
+            "neu": 4,
+            "med": 6,
+            "ovp": 0,
+            "err": 2
+          },
+          "total": {
+            "tot": 156,
+            "eff": 24,
+            "pos": 51,
+            "neg": 11,
+            "pt": 22,
+            "mas": 57,
+            "neu": 28,
+            "med": 32,
+            "ovp": 9,
+            "err": 8
+          }
+        }
+      },
+      "potencia": {
+        "desde_z1": {
+          "P5": {
+            "tot": 78,
+            "eff": 22,
+            "pos": 58,
+            "neg": 17,
+            "pt": 13,
+            "mas": 32,
+            "neu": 11,
+            "med": 9,
+            "ovp": 2,
+            "err": 11
+          },
+          "P6": {
+            "tot": 24,
+            "eff": 31,
+            "pos": 62,
+            "neg": 12,
+            "pt": 6,
+            "mas": 9,
+            "neu": 4,
+            "med": 2,
+            "ovp": 0,
+            "err": 3
+          },
+          "P1": {
+            "tot": 19,
+            "eff": 21,
+            "pos": 63,
+            "neg": 16,
+            "pt": 1,
+            "mas": 11,
+            "neu": 3,
+            "med": 1,
+            "ovp": 1,
+            "err": 2
+          },
+          "total": {
+            "tot": 121,
+            "eff": 24,
+            "pos": 60,
+            "neg": 16,
+            "pt": 20,
+            "mas": 52,
+            "neu": 18,
+            "med": 12,
+            "ovp": 3,
+            "err": 16
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 8,
+            "eff": 6,
+            "pos": 50,
+            "neg": 25,
+            "pt": 1,
+            "mas": 3,
+            "neu": 1,
+            "med": 1,
+            "ovp": 0,
+            "err": 2
+          },
+          "P6": {
+            "tot": 9,
+            "eff": 28,
+            "pos": 44,
+            "neg": 0,
+            "pt": 1,
+            "mas": 3,
+            "neu": 3,
+            "med": 2,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 7,
+            "eff": -14,
+            "pos": 29,
+            "neg": 29,
+            "pt": 0,
+            "mas": 2,
+            "neu": 1,
+            "med": 2,
+            "ovp": 0,
+            "err": 2
+          },
+          "total": {
+            "tot": 24,
+            "eff": 8,
+            "pos": 42,
+            "neg": 17,
+            "pt": 2,
+            "mas": 8,
+            "neu": 5,
+            "med": 5,
+            "ovp": 0,
+            "err": 4
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 11,
+            "eff": 27,
+            "pos": 45,
+            "neg": 0,
+            "pt": 1,
+            "mas": 4,
+            "neu": 3,
+            "med": 3,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 2,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 2,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 6,
+            "eff": 33,
+            "pos": 67,
+            "neg": 0,
+            "pt": 0,
+            "mas": 4,
+            "neu": 1,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 19,
+            "eff": 26,
+            "pos": 47,
+            "neg": 0,
+            "pt": 1,
+            "mas": 8,
+            "neu": 6,
+            "med": 4,
+            "ovp": 0,
+            "err": 0
+          }
+        }
+      }
+    },
     "objetivos": {
       "sq": 1,
       "rec": 25,
@@ -1982,20 +4004,22 @@ const PARTIDOS_JUGADORES = [
       "atqri": 47,
       "atqrm": 21,
       "atqtr": 7
-    }
+    },
+    "tot_saques": 239,
+    "tot_recep": 375,
+    "tot_ataques": 236
   },
   {
     "num": 10,
-    "nombre": "10 Bogdanovski",
-    "pos": "OTRO",
-    "color": "#64748b",
+    "nombre": "10 Bogdanovski Dejan",
+    "pos": "PUNTA",
+    "color": "#3b82f6",
     "info": {},
     "ataques": [
       {
         "cod": "V5",
+        "tipo": "",
         "orig": 4,
-        "tot": 16,
-        "eff": 25,
         "destinos": [
           {
             "z": 6,
@@ -2012,18 +4036,20 @@ const PARTIDOS_JUGADORES = [
           {
             "z": 9,
             "pct": 12
-          },
-          {
-            "z": 2,
-            "pct": 12
           }
-        ]
+        ],
+        "eff": 25,
+        "tot": 16,
+        "pts": 6,
+        "slash": 2,
+        "err": 0,
+        "video": null,
+        "pts_pct": 38
       },
       {
         "cod": "X5",
+        "tipo": "",
         "orig": 4,
-        "tot": 15,
-        "eff": 33,
         "destinos": [
           {
             "z": 1,
@@ -2040,118 +4066,428 @@ const PARTIDOS_JUGADORES = [
           {
             "z": 8,
             "pct": 13
-          },
-          {
-            "z": 2,
-            "pct": 7
-          },
-          {
-            "z": 9,
-            "pct": 7
           }
-        ]
+        ],
+        "eff": 33,
+        "tot": 15,
+        "pts": 7,
+        "slash": 2,
+        "err": 0,
+        "video": null,
+        "pts_pct": 47
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 7,
+            "pct": 67
+          },
+          {
+            "z": 8,
+            "pct": 33
+          }
+        ],
+        "eff": 0,
+        "tot": 3,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "XP",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
       }
     ],
     "saques": [
       {
         "cod": "SM",
-        "orig": 1,
-        "tot": 39,
-        "eff": -2,
+        "tipo": "FLOTADO",
+        "orig": 6,
         "destinos": [
           {
             "z": 6,
-            "pct": 31
-          },
-          {
-            "z": 7,
-            "pct": 26
-          },
-          {
-            "z": 8,
-            "pct": 18
-          },
-          {
-            "z": 5,
-            "pct": 10
-          },
-          {
-            "z": 1,
-            "pct": 10
+            "pct": 15
           },
           {
             "z": 3,
-            "pct": 3
-          },
-          {
-            "z": 2,
-            "pct": 3
-          }
-        ]
-      }
-    ],
-    "recepciones": [
-      {
-        "cod": "RM",
-        "orig": 1,
-        "tot": 47,
-        "eff": 17,
-        "destinos": [
-          {
-            "z": 5,
-            "pct": 36
+            "pct": 15
           },
           {
             "z": 7,
-            "pct": 26
+            "pct": 15
           },
           {
-            "z": 6,
-            "pct": 13
+            "z": 4,
+            "pct": 10
           },
           {
             "z": 1,
-            "pct": 11
+            "pct": 10
           },
           {
-            "z": 8,
-            "pct": 9
-          },
-          {
-            "z": 9,
-            "pct": 6
+            "z": 2,
+            "pct": 10
           }
-        ]
+        ],
+        "eff": -5,
+        "tot": 39,
+        "pts": 1,
+        "plus": 3,
+        "exc": 7,
+        "minus": 24,
+        "slash": 1,
+        "err": 3,
+        "video": null,
+        "pts_pct": 3
       },
       {
-        "cod": "RQ",
-        "orig": 1,
-        "tot": 10,
-        "eff": -5,
+        "cod": "ST",
+        "tipo": "POTENCIA",
+        "orig": 6,
         "destinos": [
           {
-            "z": 5,
-            "pct": 40
-          },
-          {
-            "z": 6,
-            "pct": 30
-          },
-          {
-            "z": 7,
-            "pct": 10
-          },
-          {
             "z": 9,
-            "pct": 10
-          },
-          {
-            "z": 8,
-            "pct": 10
+            "pct": 100
           }
-        ]
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "plus": 0,
+        "exc": 0,
+        "minus": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
       }
     ],
+    "recepciones": [],
+    "recepcion": {
+      "flotado": {
+        "desde_z1": {
+          "P5": {
+            "tot": 15,
+            "eff": 20,
+            "pos": 40,
+            "neg": 7,
+            "pt": 2,
+            "mas": 4,
+            "neu": 1,
+            "med": 7,
+            "ovp": 0,
+            "err": 1
+          },
+          "P6": {
+            "tot": 4,
+            "eff": 12,
+            "pos": 25,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 2,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 7,
+            "eff": 29,
+            "pos": 57,
+            "neg": 0,
+            "pt": 0,
+            "mas": 4,
+            "neu": 2,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 26,
+            "eff": 21,
+            "pos": 42,
+            "neg": 4,
+            "pt": 2,
+            "mas": 9,
+            "neu": 5,
+            "med": 9,
+            "ovp": 0,
+            "err": 1
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 2,
+            "eff": 50,
+            "pos": 50,
+            "neg": 0,
+            "pt": 1,
+            "mas": 0,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 2,
+            "eff": 50,
+            "pos": 50,
+            "neg": 0,
+            "pt": 1,
+            "mas": 0,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 12,
+            "eff": 8,
+            "pos": 25,
+            "neg": 17,
+            "pt": 2,
+            "mas": 1,
+            "neu": 1,
+            "med": 6,
+            "ovp": 1,
+            "err": 1
+          },
+          "P6": {
+            "tot": 6,
+            "eff": 8,
+            "pos": 33,
+            "neg": 17,
+            "pt": 1,
+            "mas": 1,
+            "neu": 1,
+            "med": 2,
+            "ovp": 0,
+            "err": 1
+          },
+          "P1": {
+            "tot": 1,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 1,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 19,
+            "eff": 8,
+            "pos": 26,
+            "neg": 16,
+            "pt": 3,
+            "mas": 2,
+            "neu": 3,
+            "med": 8,
+            "ovp": 1,
+            "err": 2
+          }
+        }
+      },
+      "potencia": {
+        "desde_z1": {
+          "P5": {
+            "tot": 3,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 2,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 4,
+            "eff": 0,
+            "pos": 25,
+            "neg": 25,
+            "pt": 1,
+            "mas": 0,
+            "neu": 1,
+            "med": 1,
+            "ovp": 0,
+            "err": 1
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 7,
+            "eff": 0,
+            "pos": 14,
+            "neg": 14,
+            "pt": 1,
+            "mas": 0,
+            "neu": 3,
+            "med": 2,
+            "ovp": 0,
+            "err": 1
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 1,
+            "eff": -50,
+            "pos": 0,
+            "neg": 100,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 1,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 1,
+            "eff": -50,
+            "pos": 0,
+            "neg": 100,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 1,
+            "err": 0
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 1,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 1,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 1,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 1,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 2,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 2,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        }
+      }
+    },
     "objetivos": {
       "sq": -2,
       "rec": 13,
@@ -2165,20 +4501,22 @@ const PARTIDOS_JUGADORES = [
       "atqri": 50,
       "atqrm": 36,
       "atqtr": 20
-    }
+    },
+    "tot_saques": 40,
+    "tot_recep": 57,
+    "tot_ataques": 31
   },
   {
     "num": 11,
-    "nombre": "11 Bartholet",
-    "pos": "OTRO",
-    "color": "#64748b",
+    "nombre": "11 Bartholet Christian",
+    "pos": "PUNTA",
+    "color": "#3b82f6",
     "info": {},
     "ataques": [
       {
         "cod": "X5",
+        "tipo": "",
         "orig": 4,
-        "tot": 122,
-        "eff": 30,
         "destinos": [
           {
             "z": 1,
@@ -2195,34 +4533,20 @@ const PARTIDOS_JUGADORES = [
           {
             "z": 7,
             "pct": 7
-          },
-          {
-            "z": 8,
-            "pct": 7
-          },
-          {
-            "z": 5,
-            "pct": 3
-          },
-          {
-            "z": 2,
-            "pct": 3
-          },
-          {
-            "z": 4,
-            "pct": 2
-          },
-          {
-            "z": 3,
-            "pct": 1
           }
-        ]
+        ],
+        "eff": 30,
+        "tot": 122,
+        "pts": 49,
+        "slash": 4,
+        "err": 8,
+        "video": null,
+        "pts_pct": 40
       },
       {
         "cod": "V5",
+        "tipo": "",
         "orig": 4,
-        "tot": 63,
-        "eff": 10,
         "destinos": [
           {
             "z": 1,
@@ -2239,30 +4563,50 @@ const PARTIDOS_JUGADORES = [
           {
             "z": 8,
             "pct": 10
+          }
+        ],
+        "eff": 10,
+        "tot": 63,
+        "pts": 14,
+        "slash": 6,
+        "err": 2,
+        "video": null,
+        "pts_pct": 22
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 47
+          },
+          {
+            "z": 1,
+            "pct": 20
           },
           {
             "z": 2,
-            "pct": 6
+            "pct": 20
           },
           {
-            "z": 5,
-            "pct": 5
-          },
-          {
-            "z": 7,
-            "pct": 3
-          },
-          {
-            "z": 3,
-            "pct": 3
+            "z": 8,
+            "pct": 7
           }
-        ]
+        ],
+        "eff": 27,
+        "tot": 15,
+        "pts": 4,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 27
       },
       {
         "cod": "X6",
+        "tipo": "",
         "orig": 2,
-        "tot": 4,
-        "eff": 50,
         "destinos": [
           {
             "z": 6,
@@ -2276,13 +4620,19 @@ const PARTIDOS_JUGADORES = [
             "z": 9,
             "pct": 25
           }
-        ]
+        ],
+        "eff": 50,
+        "tot": 4,
+        "pts": 2,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
       },
       {
         "cod": "XP",
+        "tipo": "",
         "orig": 8,
-        "tot": 3,
-        "eff": 67,
         "destinos": [
           {
             "z": 8,
@@ -2292,13 +4642,19 @@ const PARTIDOS_JUGADORES = [
             "z": 7,
             "pct": 33
           }
-        ]
+        ],
+        "eff": 67,
+        "tot": 3,
+        "pts": 2,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 67
       },
       {
         "cod": "XR",
+        "tipo": "",
         "orig": 8,
-        "tot": 3,
-        "eff": -67,
         "destinos": [
           {
             "z": 8,
@@ -2308,13 +4664,19 @@ const PARTIDOS_JUGADORES = [
             "z": 1,
             "pct": 33
           }
-        ]
+        ],
+        "eff": -67,
+        "tot": 3,
+        "pts": 0,
+        "slash": 2,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
       },
       {
         "cod": "VB",
+        "tipo": "",
         "orig": 8,
-        "tot": 3,
-        "eff": 33,
         "destinos": [
           {
             "z": 8,
@@ -2324,161 +4686,497 @@ const PARTIDOS_JUGADORES = [
             "z": 9,
             "pct": 33
           }
-        ]
+        ],
+        "eff": 33,
+        "tot": 3,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 33
+      },
+      {
+        "cod": "X1",
+        "tipo": "",
+        "orig": 3,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X8",
+        "tipo": "",
+        "orig": 9,
+        "destinos": [
+          {
+            "z": 5,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "V6",
+        "tipo": "",
+        "orig": 2,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "VP",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "X3",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
       }
     ],
     "saques": [
       {
         "cod": "SQ",
-        "orig": 9,
-        "tot": 101,
-        "eff": -1,
+        "tipo": "POTENCIA",
+        "orig": 6,
         "destinos": [
           {
-            "z": 6,
-            "pct": 28
-          },
-          {
-            "z": 7,
-            "pct": 23
-          },
-          {
-            "z": 5,
-            "pct": 22
-          },
-          {
             "z": 1,
-            "pct": 8
-          },
-          {
-            "z": 3,
-            "pct": 7
-          },
-          {
-            "z": 8,
-            "pct": 6
-          },
-          {
-            "z": 9,
-            "pct": 4
-          },
-          {
-            "z": 4,
-            "pct": 2
+            "pct": 21
           },
           {
             "z": 2,
-            "pct": 1
-          }
-        ]
-      },
-      {
-        "cod": "SM",
-        "orig": 9,
-        "tot": 44,
-        "eff": 16,
-        "destinos": [
-          {
-            "z": 8,
-            "pct": 27
+            "pct": 17
           },
           {
-            "z": 7,
-            "pct": 23
-          },
-          {
-            "z": 5,
-            "pct": 18
-          },
-          {
-            "z": 6,
-            "pct": 18
+            "z": 4,
+            "pct": 12
           },
           {
             "z": 3,
-            "pct": 7
-          },
-          {
-            "z": 4,
-            "pct": 5
-          },
-          {
-            "z": 1,
-            "pct": 2
-          }
-        ]
-      }
-    ],
-    "recepciones": [
-      {
-        "cod": "RM",
-        "orig": 5,
-        "tot": 132,
-        "eff": 21,
-        "destinos": [
-          {
-            "z": 7,
-            "pct": 37
+            "pct": 12
           },
           {
             "z": 5,
+            "pct": 11
+          },
+          {
+            "z": 6,
+            "pct": 11
+          }
+        ],
+        "eff": -7,
+        "tot": 101,
+        "pts": 9,
+        "plus": 18,
+        "exc": 5,
+        "minus": 51,
+        "slash": 2,
+        "err": 16,
+        "video": null,
+        "pts_pct": 9
+      },
+      {
+        "cod": "SM",
+        "tipo": "FLOTADO",
+        "orig": 6,
+        "destinos": [
+          {
+            "z": 1,
             "pct": 20
           },
           {
-            "z": 9,
-            "pct": 13
+            "z": 3,
+            "pct": 18
           },
           {
-            "z": 6,
-            "pct": 11
+            "z": 0,
+            "pct": 16
           },
           {
-            "z": 8,
-            "pct": 11
-          },
-          {
-            "z": 1,
-            "pct": 8
-          },
-          {
-            "z": 4,
-            "pct": 1
-          }
-        ]
-      },
-      {
-        "cod": "RQ",
-        "orig": 1,
-        "tot": 89,
-        "eff": 10,
-        "destinos": [
-          {
-            "z": 5,
-            "pct": 38
-          },
-          {
-            "z": 7,
-            "pct": 23
-          },
-          {
-            "z": 1,
+            "z": 2,
             "pct": 14
           },
           {
-            "z": 6,
-            "pct": 10
-          },
-          {
-            "z": 9,
+            "z": 4,
             "pct": 9
           },
           {
-            "z": 8,
-            "pct": 6
+            "z": 6,
+            "pct": 7
           }
-        ]
+        ],
+        "eff": 7,
+        "tot": 44,
+        "pts": 6,
+        "plus": 6,
+        "exc": 5,
+        "minus": 19,
+        "slash": 5,
+        "err": 3,
+        "video": null,
+        "pts_pct": 14
       }
     ],
+    "recepciones": [],
+    "recepcion": {
+      "flotado": {
+        "desde_z1": {
+          "P5": {
+            "tot": 24,
+            "eff": 33,
+            "pos": 50,
+            "neg": 4,
+            "pt": 6,
+            "mas": 6,
+            "neu": 3,
+            "med": 8,
+            "ovp": 0,
+            "err": 1
+          },
+          "P6": {
+            "tot": 9,
+            "eff": 17,
+            "pos": 44,
+            "neg": 11,
+            "pt": 1,
+            "mas": 3,
+            "neu": 2,
+            "med": 2,
+            "ovp": 0,
+            "err": 1
+          },
+          "P1": {
+            "tot": 13,
+            "eff": 8,
+            "pos": 15,
+            "neg": 8,
+            "pt": 1,
+            "mas": 1,
+            "neu": 4,
+            "med": 6,
+            "ovp": 1,
+            "err": 0
+          },
+          "total": {
+            "tot": 46,
+            "eff": 23,
+            "pos": 39,
+            "neg": 7,
+            "pt": 8,
+            "mas": 10,
+            "neu": 9,
+            "med": 16,
+            "ovp": 1,
+            "err": 2
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 1,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 2,
+            "eff": 25,
+            "pos": 50,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 51,
+            "eff": 15,
+            "pos": 37,
+            "neg": 12,
+            "pt": 5,
+            "mas": 14,
+            "neu": 10,
+            "med": 16,
+            "ovp": 3,
+            "err": 3
+          },
+          "P6": {
+            "tot": 19,
+            "eff": 32,
+            "pos": 53,
+            "neg": 5,
+            "pt": 4,
+            "mas": 6,
+            "neu": 4,
+            "med": 4,
+            "ovp": 0,
+            "err": 1
+          },
+          "P1": {
+            "tot": 14,
+            "eff": 25,
+            "pos": 36,
+            "neg": 0,
+            "pt": 2,
+            "mas": 3,
+            "neu": 4,
+            "med": 5,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 84,
+            "eff": 20,
+            "pos": 40,
+            "neg": 8,
+            "pt": 11,
+            "mas": 23,
+            "neu": 18,
+            "med": 25,
+            "ovp": 3,
+            "err": 4
+          }
+        }
+      },
+      "potencia": {
+        "desde_z1": {
+          "P5": {
+            "tot": 35,
+            "eff": 3,
+            "pos": 34,
+            "neg": 17,
+            "pt": 0,
+            "mas": 12,
+            "neu": 6,
+            "med": 11,
+            "ovp": 2,
+            "err": 4
+          },
+          "P6": {
+            "tot": 11,
+            "eff": 23,
+            "pos": 45,
+            "neg": 9,
+            "pt": 2,
+            "mas": 3,
+            "neu": 1,
+            "med": 4,
+            "ovp": 0,
+            "err": 1
+          },
+          "P1": {
+            "tot": 15,
+            "eff": 20,
+            "pos": 33,
+            "neg": 0,
+            "pt": 1,
+            "mas": 4,
+            "neu": 4,
+            "med": 6,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 61,
+            "eff": 11,
+            "pos": 36,
+            "neg": 11,
+            "pt": 3,
+            "mas": 19,
+            "neu": 11,
+            "med": 21,
+            "ovp": 2,
+            "err": 5
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 4,
+            "eff": 0,
+            "pos": 50,
+            "neg": 25,
+            "pt": 0,
+            "mas": 2,
+            "neu": 1,
+            "med": 0,
+            "ovp": 0,
+            "err": 1
+          },
+          "P6": {
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 5,
+            "eff": 10,
+            "pos": 60,
+            "neg": 20,
+            "pt": 0,
+            "mas": 3,
+            "neu": 1,
+            "med": 0,
+            "ovp": 0,
+            "err": 1
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 14,
+            "eff": 7,
+            "pos": 36,
+            "neg": 21,
+            "pt": 2,
+            "mas": 3,
+            "neu": 4,
+            "med": 2,
+            "ovp": 1,
+            "err": 2
+          },
+          "P6": {
+            "tot": 2,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 2,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 5,
+            "eff": 30,
+            "pos": 40,
+            "neg": 0,
+            "pt": 1,
+            "mas": 1,
+            "neu": 1,
+            "med": 2,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 21,
+            "eff": 12,
+            "pos": 33,
+            "neg": 14,
+            "pt": 3,
+            "mas": 4,
+            "neu": 5,
+            "med": 6,
+            "ovp": 1,
+            "err": 2
+          }
+        }
+      }
+    },
     "objetivos": {
       "sq": 4,
       "rec": 17,
@@ -2492,24 +5190,26 @@ const PARTIDOS_JUGADORES = [
       "atqri": 33,
       "atqrm": 7,
       "atqtr": 22
-    }
+    },
+    "tot_saques": 145,
+    "tot_recep": 221,
+    "tot_ataques": 196
   },
   {
     "num": 14,
-    "nombre": "14 Figueiredo",
-    "pos": "OTRO",
-    "color": "#64748b",
+    "nombre": "14 Figueiredo Manuel",
+    "pos": "PUNTA",
+    "color": "#3b82f6",
     "info": {},
     "ataques": [
       {
         "cod": "X5",
+        "tipo": "",
         "orig": 4,
-        "tot": 295,
-        "eff": 37,
         "destinos": [
           {
             "z": 1,
-            "pct": 44
+            "pct": 46
           },
           {
             "z": 6,
@@ -2522,30 +5222,20 @@ const PARTIDOS_JUGADORES = [
           {
             "z": 5,
             "pct": 8
-          },
-          {
-            "z": 4,
-            "pct": 6
-          },
-          {
-            "z": 9,
-            "pct": 4
-          },
-          {
-            "z": 2,
-            "pct": 4
-          },
-          {
-            "z": 8,
-            "pct": 2
           }
-        ]
+        ],
+        "eff": 36,
+        "tot": 278,
+        "pts": 138,
+        "slash": 24,
+        "err": 15,
+        "video": null,
+        "pts_pct": 50
       },
       {
         "cod": "V5",
+        "tipo": "",
         "orig": 4,
-        "tot": 136,
-        "eff": 11,
         "destinos": [
           {
             "z": 1,
@@ -2553,7 +5243,7 @@ const PARTIDOS_JUGADORES = [
           },
           {
             "z": 6,
-            "pct": 17
+            "pct": 18
           },
           {
             "z": 5,
@@ -2561,79 +5251,21 @@ const PARTIDOS_JUGADORES = [
           },
           {
             "z": 9,
-            "pct": 7
-          },
-          {
-            "z": 7,
-            "pct": 6
-          },
-          {
-            "z": 8,
-            "pct": 5
-          },
-          {
-            "z": 2,
-            "pct": 4
-          },
-          {
-            "z": 3,
-            "pct": 2
-          },
-          {
-            "z": 4,
-            "pct": 1
+            "pct": 8
           }
-        ]
-      },
-      {
-        "cod": "XP",
-        "orig": 8,
-        "tot": 63,
-        "eff": 46,
-        "destinos": [
-          {
-            "z": 8,
-            "pct": 19
-          },
-          {
-            "z": 5,
-            "pct": 16
-          },
-          {
-            "z": 6,
-            "pct": 14
-          },
-          {
-            "z": 7,
-            "pct": 11
-          },
-          {
-            "z": 9,
-            "pct": 11
-          },
-          {
-            "z": 1,
-            "pct": 10
-          },
-          {
-            "z": 3,
-            "pct": 10
-          },
-          {
-            "z": 2,
-            "pct": 6
-          },
-          {
-            "z": 4,
-            "pct": 3
-          }
-        ]
+        ],
+        "eff": 13,
+        "tot": 129,
+        "pts": 45,
+        "slash": 18,
+        "err": 10,
+        "video": null,
+        "pts_pct": 35
       },
       {
         "cod": "X6",
+        "tipo": "",
         "orig": 2,
-        "tot": 57,
-        "eff": 23,
         "destinos": [
           {
             "z": 5,
@@ -2650,34 +5282,80 @@ const PARTIDOS_JUGADORES = [
           {
             "z": 9,
             "pct": 9
+          }
+        ],
+        "eff": 23,
+        "tot": 57,
+        "pts": 25,
+        "slash": 2,
+        "err": 10,
+        "video": null,
+        "pts_pct": 44
+      },
+      {
+        "cod": "XP",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 22
+          },
+          {
+            "z": 5,
+            "pct": 18
+          },
+          {
+            "z": 6,
+            "pct": 15
           },
           {
             "z": 7,
-            "pct": 9
-          },
+            "pct": 13
+          }
+        ],
+        "eff": 42,
+        "tot": 55,
+        "pts": 33,
+        "slash": 3,
+        "err": 7,
+        "video": null,
+        "pts_pct": 60
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
           {
             "z": 8,
-            "pct": 7
+            "pct": 22
           },
           {
-            "z": 2,
-            "pct": 5
+            "z": 6,
+            "pct": 19
           },
           {
-            "z": 4,
-            "pct": 4
+            "z": 1,
+            "pct": 14
           },
           {
-            "z": 3,
-            "pct": 2
+            "z": 5,
+            "pct": 11
           }
-        ]
+        ],
+        "eff": 51,
+        "tot": 37,
+        "pts": 21,
+        "slash": 2,
+        "err": 0,
+        "video": null,
+        "pts_pct": 57
       },
       {
         "cod": "XR",
+        "tipo": "",
         "orig": 8,
-        "tot": 27,
-        "eff": 48,
         "destinos": [
           {
             "z": 9,
@@ -2694,30 +5372,20 @@ const PARTIDOS_JUGADORES = [
           {
             "z": 8,
             "pct": 11
-          },
-          {
-            "z": 7,
-            "pct": 7
-          },
-          {
-            "z": 3,
-            "pct": 4
-          },
-          {
-            "z": 2,
-            "pct": 4
-          },
-          {
-            "z": 4,
-            "pct": 4
           }
-        ]
+        ],
+        "eff": 48,
+        "tot": 27,
+        "pts": 16,
+        "slash": 1,
+        "err": 2,
+        "video": null,
+        "pts_pct": 59
       },
       {
         "cod": "V6",
+        "tipo": "",
         "orig": 2,
-        "tot": 23,
-        "eff": 13,
         "destinos": [
           {
             "z": 5,
@@ -2725,35 +5393,29 @@ const PARTIDOS_JUGADORES = [
           },
           {
             "z": 6,
-            "pct": 17
+            "pct": 20
           },
           {
             "z": 9,
-            "pct": 17
+            "pct": 20
           },
           {
             "z": 1,
-            "pct": 13
-          },
-          {
-            "z": 4,
-            "pct": 9
-          },
-          {
-            "z": 3,
-            "pct": 4
-          },
-          {
-            "z": 8,
-            "pct": 4
+            "pct": 15
           }
-        ]
+        ],
+        "eff": 20,
+        "tot": 20,
+        "pts": 9,
+        "slash": 2,
+        "err": 3,
+        "video": null,
+        "pts_pct": 45
       },
       {
         "cod": "X9",
-        "orig": 4,
-        "tot": 4,
-        "eff": 25,
+        "tipo": "",
+        "orig": 8,
         "destinos": [
           {
             "z": 6,
@@ -2771,13 +5433,19 @@ const PARTIDOS_JUGADORES = [
             "z": 8,
             "pct": 25
           }
-        ]
+        ],
+        "eff": 25,
+        "tot": 4,
+        "pts": 2,
+        "slash": 1,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
       },
       {
         "cod": "XB",
+        "tipo": "",
         "orig": 8,
-        "tot": 4,
-        "eff": 50,
         "destinos": [
           {
             "z": 3,
@@ -2795,33 +5463,19 @@ const PARTIDOS_JUGADORES = [
             "z": 5,
             "pct": 25
           }
-        ]
-      },
-      {
-        "cod": "X1",
-        "orig": 3,
-        "tot": 3,
-        "eff": 100,
-        "destinos": [
-          {
-            "z": 8,
-            "pct": 33
-          },
-          {
-            "z": 2,
-            "pct": 33
-          },
-          {
-            "z": 1,
-            "pct": 33
-          }
-        ]
+        ],
+        "eff": 50,
+        "tot": 4,
+        "pts": 2,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
       },
       {
         "cod": "VR",
+        "tipo": "",
         "orig": 8,
-        "tot": 2,
-        "eff": 0,
         "destinos": [
           {
             "z": 6,
@@ -2831,212 +5485,528 @@ const PARTIDOS_JUGADORES = [
             "z": 5,
             "pct": 50
           }
-        ]
+        ],
+        "eff": 0,
+        "tot": 2,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
       },
       {
         "cod": "X8",
+        "tipo": "",
         "orig": 9,
-        "tot": 2,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 50
+          },
+          {
+            "z": 4,
+            "pct": 50
+          }
+        ],
         "eff": 50,
-        "destinos": [
-          {
-            "z": 6,
-            "pct": 50
-          },
-          {
-            "z": 4,
-            "pct": 50
-          }
-        ]
+        "tot": 2,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 50
       },
       {
-        "cod": "PR",
+        "cod": "X1",
+        "tipo": "",
         "orig": 3,
-        "tot": 2,
-        "eff": 100,
-        "destinos": []
-      },
-      {
-        "cod": "PP",
-        "orig": 4,
-        "tot": 2,
-        "eff": 100,
         "destinos": [
-          {
-            "z": 5,
-            "pct": 50
-          },
-          {
-            "z": 1,
-            "pct": 50
-          }
-        ]
-      }
-    ],
-    "saques": [
-      {
-        "cod": "SQ",
-        "orig": 7,
-        "tot": 394,
-        "eff": -5,
-        "destinos": [
-          {
-            "z": 5,
-            "pct": 23
-          },
-          {
-            "z": 6,
-            "pct": 22
-          },
-          {
-            "z": 7,
-            "pct": 16
-          },
-          {
-            "z": 1,
-            "pct": 13
-          },
           {
             "z": 8,
-            "pct": 12
-          },
-          {
-            "z": 3,
-            "pct": 4
-          },
-          {
-            "z": 9,
-            "pct": 4
-          },
-          {
-            "z": 2,
-            "pct": 4
-          },
-          {
-            "z": 4,
-            "pct": 3
+            "pct": 100
           }
-        ]
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
       },
       {
-        "cod": "SM",
-        "orig": 6,
-        "tot": 3,
+        "cod": "VB",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 8,
+            "pct": 100
+          }
+        ],
         "eff": 0,
-        "destinos": [
-          {
-            "z": 5,
-            "pct": 33
-          },
-          {
-            "z": 8,
-            "pct": 33
-          },
-          {
-            "z": 6,
-            "pct": 33
-          }
-        ]
-      }
-    ],
-    "recepciones": [
-      {
-        "cod": "RM",
-        "orig": 1,
-        "tot": 261,
-        "eff": 42,
-        "destinos": [
-          {
-            "z": 7,
-            "pct": 25
-          },
-          {
-            "z": 8,
-            "pct": 19
-          },
-          {
-            "z": 9,
-            "pct": 17
-          },
-          {
-            "z": 6,
-            "pct": 16
-          },
-          {
-            "z": 5,
-            "pct": 13
-          },
-          {
-            "z": 1,
-            "pct": 10
-          },
-          {
-            "z": 3,
-            "pct": 1
-          }
-        ]
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
       },
       {
-        "cod": "RQ",
-        "orig": 6,
-        "tot": 258,
-        "eff": 22,
+        "cod": "VP",
+        "tipo": "",
+        "orig": 8,
         "destinos": [
           {
-            "z": 6,
-            "pct": 32
-          },
-          {
-            "z": 5,
-            "pct": 23
-          },
-          {
-            "z": 7,
-            "pct": 16
-          },
-          {
-            "z": 1,
-            "pct": 14
-          },
-          {
             "z": 8,
-            "pct": 9
-          },
-          {
-            "z": 9,
-            "pct": 7
+            "pct": 100
           }
-        ]
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
       },
       {
-        "cod": "RO",
-        "orig": 1,
-        "tot": 3,
-        "eff": 33,
+        "cod": "X0",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 100
+          }
+        ],
+        "eff": 100,
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
+      },
+      {
+        "cod": "X3",
+        "tipo": "",
+        "orig": 8,
         "destinos": [
           {
             "z": 6,
             "pct": 100
           }
-        ]
-      },
-      {
-        "cod": "RH",
-        "orig": 1,
-        "tot": 2,
-        "eff": 25,
-        "destinos": [
-          {
-            "z": 6,
-            "pct": 50
-          },
-          {
-            "z": 8,
-            "pct": 50
-          }
-        ]
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
       }
     ],
+    "saques": [
+      {
+        "cod": "SQ",
+        "tipo": "POTENCIA",
+        "orig": 6,
+        "destinos": [
+          {
+            "z": 1,
+            "pct": 26
+          },
+          {
+            "z": 0,
+            "pct": 17
+          },
+          {
+            "z": 2,
+            "pct": 17
+          },
+          {
+            "z": 3,
+            "pct": 12
+          },
+          {
+            "z": 4,
+            "pct": 9
+          },
+          {
+            "z": 5,
+            "pct": 6
+          }
+        ],
+        "eff": -10,
+        "tot": 362,
+        "pts": 24,
+        "plus": 47,
+        "exc": 63,
+        "minus": 156,
+        "slash": 12,
+        "err": 60,
+        "video": null,
+        "pts_pct": 7
+      },
+      {
+        "cod": "SM",
+        "tipo": "FLOTADO",
+        "orig": 6,
+        "destinos": [
+          {
+            "z": 0,
+            "pct": 33
+          },
+          {
+            "z": 1,
+            "pct": 33
+          },
+          {
+            "z": 2,
+            "pct": 33
+          }
+        ],
+        "eff": 0,
+        "tot": 3,
+        "pts": 0,
+        "plus": 0,
+        "exc": 1,
+        "minus": 2,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "ST",
+        "tipo": "POTENCIA",
+        "orig": 6,
+        "destinos": [
+          {
+            "z": 4,
+            "pct": 100
+          }
+        ],
+        "eff": 0,
+        "tot": 1,
+        "pts": 0,
+        "plus": 1,
+        "exc": 0,
+        "minus": 0,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
+      }
+    ],
+    "recepciones": [],
+    "recepcion": {
+      "flotado": {
+        "desde_z1": {
+          "P5": {
+            "tot": 27,
+            "eff": 48,
+            "pos": 78,
+            "neg": 7,
+            "pt": 7,
+            "mas": 14,
+            "neu": 1,
+            "med": 3,
+            "ovp": 2,
+            "err": 0
+          },
+          "P6": {
+            "tot": 2,
+            "eff": 25,
+            "pos": 50,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 10,
+            "eff": 30,
+            "pos": 40,
+            "neg": 0,
+            "pt": 2,
+            "mas": 2,
+            "neu": 1,
+            "med": 5,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 2,
+            "eff": 25,
+            "pos": 50,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 6,
+            "eff": 50,
+            "pos": 83,
+            "neg": 0,
+            "pt": 1,
+            "mas": 4,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 3,
+            "eff": 100,
+            "pos": 100,
+            "neg": 0,
+            "pt": 3,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 9,
+            "eff": 67,
+            "pos": 89,
+            "neg": 0,
+            "pt": 4,
+            "mas": 4,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 54,
+            "eff": 44,
+            "pos": 67,
+            "neg": 2,
+            "pt": 13,
+            "mas": 23,
+            "neu": 4,
+            "med": 13,
+            "ovp": 0,
+            "err": 1
+          },
+          "P6": {
+            "tot": 58,
+            "eff": 38,
+            "pos": 64,
+            "neg": 5,
+            "pt": 11,
+            "mas": 26,
+            "neu": 11,
+            "med": 7,
+            "ovp": 2,
+            "err": 1
+          },
+          "P1": {
+            "tot": 55,
+            "eff": 39,
+            "pos": 64,
+            "neg": 7,
+            "pt": 14,
+            "mas": 21,
+            "neu": 8,
+            "med": 8,
+            "ovp": 2,
+            "err": 2
+          },
+          "total": {
+            "tot": 167,
+            "eff": 40,
+            "pos": 65,
+            "neg": 5,
+            "pt": 38,
+            "mas": 70,
+            "neu": 23,
+            "med": 28,
+            "ovp": 4,
+            "err": 4
+          }
+        }
+      },
+      "potencia": {
+        "desde_z1": {
+          "P5": {
+            "tot": 68,
+            "eff": 23,
+            "pos": 54,
+            "neg": 13,
+            "pt": 12,
+            "mas": 25,
+            "neu": 14,
+            "med": 8,
+            "ovp": 0,
+            "err": 9
+          },
+          "P6": {
+            "tot": 64,
+            "eff": 25,
+            "pos": 55,
+            "neg": 9,
+            "pt": 7,
+            "mas": 28,
+            "neu": 11,
+            "med": 12,
+            "ovp": 2,
+            "err": 4
+          },
+          "P1": {
+            "tot": 28,
+            "eff": 7,
+            "pos": 46,
+            "neg": 18,
+            "pt": 1,
+            "mas": 12,
+            "neu": 7,
+            "med": 3,
+            "ovp": 0,
+            "err": 5
+          },
+          "total": {
+            "tot": 160,
+            "eff": 21,
+            "pos": 53,
+            "neg": 12,
+            "pt": 20,
+            "mas": 65,
+            "neu": 32,
+            "med": 23,
+            "ovp": 2,
+            "err": 18
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 12,
+            "eff": 33,
+            "pos": 50,
+            "neg": 0,
+            "pt": 2,
+            "mas": 4,
+            "neu": 2,
+            "med": 4,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 20,
+            "eff": 5,
+            "pos": 35,
+            "neg": 20,
+            "pt": 2,
+            "mas": 5,
+            "neu": 6,
+            "med": 3,
+            "ovp": 1,
+            "err": 3
+          },
+          "P1": {
+            "tot": 14,
+            "eff": 0,
+            "pos": 21,
+            "neg": 14,
+            "pt": 0,
+            "mas": 3,
+            "neu": 3,
+            "med": 6,
+            "ovp": 1,
+            "err": 1
+          },
+          "total": {
+            "tot": 46,
+            "eff": 11,
+            "pos": 35,
+            "neg": 13,
+            "pt": 4,
+            "mas": 12,
+            "neu": 11,
+            "med": 13,
+            "ovp": 2,
+            "err": 4
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 13,
+            "eff": 12,
+            "pos": 31,
+            "neg": 15,
+            "pt": 2,
+            "mas": 2,
+            "neu": 5,
+            "med": 2,
+            "ovp": 1,
+            "err": 1
+          },
+          "P6": {
+            "tot": 18,
+            "eff": 53,
+            "pos": 78,
+            "neg": 0,
+            "pt": 5,
+            "mas": 9,
+            "neu": 2,
+            "med": 2,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 11,
+            "eff": 41,
+            "pos": 55,
+            "neg": 9,
+            "pt": 4,
+            "mas": 2,
+            "neu": 3,
+            "med": 1,
+            "ovp": 1,
+            "err": 0
+          },
+          "total": {
+            "tot": 42,
+            "eff": 37,
+            "pos": 57,
+            "neg": 7,
+            "pt": 11,
+            "mas": 13,
+            "neu": 10,
+            "med": 5,
+            "ovp": 2,
+            "err": 1
+          }
+        }
+      }
+    },
     "objetivos": {
       "sq": -5,
       "rec": 31,
@@ -3050,28 +6020,30 @@ const PARTIDOS_JUGADORES = [
       "atqri": 27,
       "atqrm": -7,
       "atqtr": 36
-    }
+    },
+    "tot_saques": 366,
+    "tot_recep": 481,
+    "tot_ataques": 491
   },
   {
     "num": 15,
-    "nombre": "15 Nikolov",
-    "pos": "OTRO",
-    "color": "#64748b",
+    "nombre": "15 Nikolov Risto",
+    "pos": "CENTRAL",
+    "color": "#22c55e",
     "info": {},
     "ataques": [
       {
         "cod": "X1",
+        "tipo": "",
         "orig": 3,
-        "tot": 116,
-        "eff": 31,
         "destinos": [
           {
             "z": 8,
-            "pct": 30
+            "pct": 32
           },
           {
             "z": 7,
-            "pct": 26
+            "pct": 27
           },
           {
             "z": 5,
@@ -3079,75 +6051,51 @@ const PARTIDOS_JUGADORES = [
           },
           {
             "z": 9,
-            "pct": 11
-          },
-          {
-            "z": 3,
-            "pct": 6
-          },
-          {
-            "z": 6,
-            "pct": 6
-          },
-          {
-            "z": 1,
-            "pct": 5
-          },
-          {
-            "z": 4,
-            "pct": 2
+            "pct": 12
           }
-        ]
+        ],
+        "eff": 28,
+        "tot": 109,
+        "pts": 51,
+        "slash": 6,
+        "err": 14,
+        "video": null,
+        "pts_pct": 47
       },
       {
         "cod": "X7",
+        "tipo": "",
         "orig": 3,
-        "tot": 50,
-        "eff": 36,
         "destinos": [
           {
             "z": 8,
-            "pct": 22
+            "pct": 28
           },
           {
             "z": 9,
-            "pct": 20
+            "pct": 26
           },
           {
             "z": 7,
-            "pct": 14
+            "pct": 13
           },
           {
             "z": 5,
-            "pct": 12
-          },
-          {
-            "z": 1,
-            "pct": 10
-          },
-          {
-            "z": 3,
             "pct": 8
-          },
-          {
-            "z": 2,
-            "pct": 4
-          },
-          {
-            "z": 4,
-            "pct": 4
-          },
-          {
-            "z": 6,
-            "pct": 4
           }
-        ]
+        ],
+        "eff": 33,
+        "tot": 39,
+        "pts": 17,
+        "slash": 0,
+        "err": 4,
+        "video": null,
+        "pts_pct": 44
       },
       {
         "cod": "XM",
+        "tipo": "",
         "orig": 3,
-        "tot": 29,
-        "eff": 52,
         "destinos": [
           {
             "z": 8,
@@ -3164,22 +6112,50 @@ const PARTIDOS_JUGADORES = [
           {
             "z": 1,
             "pct": 7
-          },
+          }
+        ],
+        "eff": 52,
+        "tot": 29,
+        "pts": 18,
+        "slash": 0,
+        "err": 3,
+        "video": null,
+        "pts_pct": 62
+      },
+      {
+        "cod": "~~",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
           {
             "z": 3,
-            "pct": 7
+            "pct": 23
           },
           {
-            "z": 6,
-            "pct": 3
+            "z": 8,
+            "pct": 23
+          },
+          {
+            "z": 4,
+            "pct": 15
+          },
+          {
+            "z": 7,
+            "pct": 15
           }
-        ]
+        ],
+        "eff": 54,
+        "tot": 13,
+        "pts": 8,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 62
       },
       {
         "cod": "X2",
+        "tipo": "",
         "orig": 3,
-        "tot": 6,
-        "eff": 0,
         "destinos": [
           {
             "z": 8,
@@ -3197,13 +6173,19 @@ const PARTIDOS_JUGADORES = [
             "z": 9,
             "pct": 17
           }
-        ]
+        ],
+        "eff": 0,
+        "tot": 6,
+        "pts": 2,
+        "slash": 1,
+        "err": 1,
+        "video": null,
+        "pts_pct": 33
       },
       {
         "cod": "X3",
-        "orig": 2,
-        "tot": 5,
-        "eff": 100,
+        "tipo": "",
+        "orig": 8,
         "destinos": [
           {
             "z": 8,
@@ -3221,13 +6203,19 @@ const PARTIDOS_JUGADORES = [
             "z": 5,
             "pct": 20
           }
-        ]
+        ],
+        "eff": 100,
+        "tot": 5,
+        "pts": 5,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
       },
       {
         "cod": "XL",
-        "orig": 2,
-        "tot": 5,
-        "eff": 60,
+        "tipo": "",
+        "orig": 8,
         "destinos": [
           {
             "z": 8,
@@ -3241,13 +6229,19 @@ const PARTIDOS_JUGADORES = [
             "z": 4,
             "pct": 20
           }
-        ]
+        ],
+        "eff": 60,
+        "tot": 5,
+        "pts": 4,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 80
       },
       {
         "cod": "X5",
+        "tipo": "",
         "orig": 4,
-        "tot": 3,
-        "eff": 100,
         "destinos": [
           {
             "z": 6,
@@ -3257,153 +6251,427 @@ const PARTIDOS_JUGADORES = [
             "z": 1,
             "pct": 33
           }
-        ]
+        ],
+        "eff": 100,
+        "tot": 3,
+        "pts": 3,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
       },
       {
-        "cod": "PR",
-        "orig": 3,
-        "tot": 2,
-        "eff": 100,
+        "cod": "X9",
+        "tipo": "",
+        "orig": 8,
+        "destinos": [
+          {
+            "z": 6,
+            "pct": 100
+          }
+        ],
+        "eff": -100,
+        "tot": 1,
+        "pts": 0,
+        "slash": 0,
+        "err": 1,
+        "video": null,
+        "pts_pct": 0
+      },
+      {
+        "cod": "XP",
+        "tipo": "",
+        "orig": 8,
         "destinos": [
           {
             "z": 1,
             "pct": 100
           }
-        ]
-      },
-      {
-        "cod": "XD",
-        "orig": 3,
-        "tot": 2,
+        ],
         "eff": 100,
-        "destinos": [
-          {
-            "z": 5,
-            "pct": 50
-          },
-          {
-            "z": 1,
-            "pct": 50
-          }
-        ]
+        "tot": 1,
+        "pts": 1,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 100
       }
     ],
     "saques": [
       {
         "cod": "SM",
-        "orig": 5,
-        "tot": 331,
-        "eff": 0,
+        "tipo": "FLOTADO",
+        "orig": 6,
         "destinos": [
           {
-            "z": 7,
-            "pct": 22
-          },
-          {
-            "z": 6,
-            "pct": 17
-          },
-          {
-            "z": 8,
-            "pct": 15
-          },
-          {
-            "z": 5,
-            "pct": 15
-          },
-          {
-            "z": 9,
-            "pct": 14
-          },
-          {
             "z": 1,
-            "pct": 12
-          },
-          {
-            "z": 4,
-            "pct": 2
-          },
-          {
-            "z": 3,
-            "pct": 2
+            "pct": 26
           },
           {
             "z": 2,
-            "pct": 1
-          }
-        ]
-      },
-      {
-        "cod": "SQ",
-        "orig": 9,
-        "tot": 4,
-        "eff": 6,
-        "destinos": [
-          {
-            "z": 1,
-            "pct": 50
+            "pct": 18
           },
           {
-            "z": 6,
-            "pct": 50
-          }
-        ]
-      }
-    ],
-    "recepciones": [
-      {
-        "cod": "RQ",
-        "orig": 1,
-        "tot": 9,
-        "eff": 17,
-        "destinos": [
-          {
-            "z": 8,
-            "pct": 44
+            "z": 0,
+            "pct": 15
           },
           {
             "z": 3,
-            "pct": 22
+            "pct": 14
           },
           {
             "z": 4,
-            "pct": 22
-          },
-          {
-            "z": 9,
-            "pct": 11
-          }
-        ]
-      },
-      {
-        "cod": "RM",
-        "orig": 1,
-        "tot": 9,
-        "eff": 28,
-        "destinos": [
-          {
-            "z": 9,
-            "pct": 44
-          },
-          {
-            "z": 7,
-            "pct": 22
+            "pct": 10
           },
           {
             "z": 5,
-            "pct": 11
-          },
+            "pct": 6
+          }
+        ],
+        "eff": -5,
+        "tot": 311,
+        "pts": 9,
+        "plus": 52,
+        "exc": 52,
+        "minus": 165,
+        "slash": 9,
+        "err": 24,
+        "video": null,
+        "pts_pct": 3
+      },
+      {
+        "cod": "SQ",
+        "tipo": "POTENCIA",
+        "orig": 6,
+        "destinos": [
           {
-            "z": 1,
-            "pct": 11
+            "z": 2,
+            "pct": 50
           },
           {
             "z": 3,
-            "pct": 11
+            "pct": 50
           }
-        ]
+        ],
+        "eff": 0,
+        "tot": 4,
+        "pts": 0,
+        "plus": 1,
+        "exc": 1,
+        "minus": 2,
+        "slash": 0,
+        "err": 0,
+        "video": null,
+        "pts_pct": 0
       }
     ],
+    "recepciones": [],
+    "recepcion": {
+      "flotado": {
+        "desde_z1": {
+          "P5": {
+            "tot": 3,
+            "eff": 33,
+            "pos": 67,
+            "neg": 0,
+            "pt": 0,
+            "mas": 2,
+            "neu": 1,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 1,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 4,
+            "eff": 25,
+            "pos": 50,
+            "neg": 0,
+            "pt": 0,
+            "mas": 2,
+            "neu": 1,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 1,
+            "eff": 100,
+            "pos": 100,
+            "neg": 0,
+            "pt": 1,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 4,
+            "eff": 12,
+            "pos": 25,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 2,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 5,
+            "eff": 30,
+            "pos": 40,
+            "neg": 0,
+            "pt": 1,
+            "mas": 1,
+            "neu": 2,
+            "med": 1,
+            "ovp": 0,
+            "err": 0
+          }
+        }
+      },
+      "potencia": {
+        "desde_z1": {
+          "P5": {
+            "tot": 2,
+            "eff": 0,
+            "pos": 50,
+            "neg": 50,
+            "pt": 1,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 1
+          },
+          "P6": {
+            "tot": 5,
+            "eff": 20,
+            "pos": 20,
+            "neg": 0,
+            "pt": 1,
+            "mas": 0,
+            "neu": 1,
+            "med": 3,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 1,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 1,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 8,
+            "eff": 12,
+            "pos": 25,
+            "neg": 12,
+            "pt": 2,
+            "mas": 0,
+            "neu": 2,
+            "med": 3,
+            "ovp": 0,
+            "err": 1
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        },
+        "desde_z5": {
+          "P5": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          }
+        }
+      }
+    },
     "objetivos": {
       "sq": 1,
       "rec": 22,
@@ -3417,7 +6685,10 @@ const PARTIDOS_JUGADORES = [
       "atqri": 37,
       "atqrm": 100,
       "atqtr": 50
-    }
+    },
+    "tot_saques": 315,
+    "tot_recep": 18,
+    "tot_ataques": 192
   }
 ];
 const PARTIDOS_EQUIPO_OBJ = {"sq": -2, "rec": 25, "bqpos": 43, "bqpt": 18, "atk": 31, "atqq": 36, "atqhb": 17, "atqx": 34, "atqrp": 38, "atqri": 33, "atqrm": 19, "atqtr": 30};
@@ -3491,6 +6762,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 16,
             "pts": 0,
             "plus": 0,
+            "exc": 6,
+            "minus": 9,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -3510,6 +6783,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 1,
+            "minus": 0,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -3991,6 +7266,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 11,
             "pts": 1,
             "plus": 0,
+            "exc": 2,
+            "minus": 3,
             "slash": 0,
             "err": 5,
             "video": null,
@@ -4014,6 +7291,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 3,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 3,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -4522,7 +7801,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 19,
             "pts": 1,
-            "plus": 0,
+            "plus": 2,
+            "exc": 2,
+            "minus": 13,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -4610,7 +7891,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -6,
             "tot": 16,
             "pts": 0,
-            "plus": 0,
+            "plus": 2,
+            "exc": 6,
+            "minus": 7,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -5021,8 +8304,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 4,
             "tot": 25,
             "pts": 1,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 4,
+            "minus": 18,
+            "slash": 1,
             "err": 0,
             "video": null,
             "pts_pct": 4
@@ -5454,7 +8739,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -20,
             "tot": 10,
             "pts": 0,
-            "plus": 0,
+            "plus": 2,
+            "exc": 1,
+            "minus": 5,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -5909,6 +9196,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 4,
             "pts": 0,
             "plus": 0,
+            "exc": 1,
+            "minus": 3,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -7050,7 +10339,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 8,
             "tot": 13,
             "pts": 2,
-            "plus": 0,
+            "plus": 3,
+            "exc": 1,
+            "minus": 6,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -7148,7 +10439,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -9,
             "tot": 11,
             "pts": 0,
-            "plus": 0,
+            "plus": 4,
+            "exc": 3,
+            "minus": 3,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -7272,8 +10565,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -7,
             "tot": 14,
             "pts": 3,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 3,
+            "minus": 1,
+            "slash": 2,
             "err": 4,
             "video": null,
             "pts_pct": 21
@@ -7775,7 +11070,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 22,
             "tot": 9,
             "pts": 2,
-            "plus": 0,
+            "plus": 3,
+            "exc": 1,
+            "minus": 3,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -8563,6 +11860,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 4,
             "pts": 0,
             "plus": 0,
+            "exc": 2,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -8951,7 +12250,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -18,
             "tot": 11,
             "pts": 0,
-            "plus": 0,
+            "plus": 3,
+            "exc": 1,
+            "minus": 5,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -9054,6 +12355,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 6,
             "pts": 1,
             "plus": 0,
+            "exc": 0,
+            "minus": 2,
             "slash": 0,
             "err": 3,
             "video": null,
@@ -9475,6 +12778,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -9494,6 +12799,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -9973,6 +13280,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 4,
             "pts": 0,
             "plus": 0,
+            "exc": 1,
+            "minus": 2,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -10816,6 +14125,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 8,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 7,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -11292,7 +14603,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -8,
             "tot": 13,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 2,
+            "minus": 9,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -11416,7 +14729,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -6,
             "tot": 16,
             "pts": 2,
-            "plus": 0,
+            "plus": 1,
+            "exc": 4,
+            "minus": 6,
             "slash": 0,
             "err": 3,
             "video": null,
@@ -11907,7 +15222,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -7,
             "tot": 14,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 3,
+            "minus": 9,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -12335,8 +15652,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -25,
             "tot": 12,
             "pts": 1,
-            "plus": 0,
-            "slash": 0,
+            "plus": 4,
+            "exc": 1,
+            "minus": 1,
+            "slash": 1,
             "err": 4,
             "video": null,
             "pts_pct": 8
@@ -12527,7 +15846,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 9,
             "pts": 1,
-            "plus": 0,
+            "plus": 3,
+            "exc": 1,
+            "minus": 3,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -12636,6 +15957,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -13989,8 +17312,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -14,
             "tot": 14,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 2,
+            "exc": 0,
+            "minus": 9,
+            "slash": 1,
             "err": 2,
             "video": null,
             "pts_pct": 0
@@ -14492,7 +17817,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -18,
             "tot": 17,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 5,
+            "minus": 8,
             "slash": 0,
             "err": 3,
             "video": null,
@@ -14621,6 +17948,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 14,
             "pts": 0,
             "plus": 0,
+            "exc": 3,
+            "minus": 8,
             "slash": 0,
             "err": 3,
             "video": null,
@@ -15053,7 +18382,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -55,
             "tot": 11,
             "pts": 0,
-            "plus": 0,
+            "plus": 3,
+            "exc": 0,
+            "minus": 2,
             "slash": 0,
             "err": 6,
             "video": null,
@@ -15084,7 +18415,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 4,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 1,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -15628,7 +18961,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 12,
             "tot": 24,
             "pts": 4,
-            "plus": 0,
+            "plus": 3,
+            "exc": 6,
+            "minus": 10,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -15738,7 +19073,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -7,
             "tot": 15,
             "pts": 1,
-            "plus": 0,
+            "plus": 3,
+            "exc": 2,
+            "minus": 7,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -16160,6 +19497,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -17043,7 +20382,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -18,
             "tot": 11,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 4,
+            "minus": 4,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -17588,7 +20929,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 12,
             "pts": 0,
-            "plus": 0,
+            "plus": 3,
+            "exc": 2,
+            "minus": 7,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -18010,6 +21353,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 10,
             "pts": 0,
             "plus": 0,
+            "exc": 2,
+            "minus": 4,
             "slash": 0,
             "err": 4,
             "video": null,
@@ -18532,8 +21877,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -17,
             "tot": 6,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 1,
+            "minus": 2,
+            "slash": 1,
             "err": 1,
             "video": null,
             "pts_pct": 0
@@ -18949,7 +22296,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -11,
             "tot": 9,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 2,
+            "minus": 5,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -19074,7 +22423,9 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 13,
             "pts": 0,
             "plus": 0,
-            "slash": 0,
+            "exc": 3,
+            "minus": 9,
+            "slash": 1,
             "err": 0,
             "video": null,
             "pts_pct": 0
@@ -19504,6 +22855,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 2,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -19869,6 +23222,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -20760,7 +24115,9 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 17,
             "pts": 0,
             "plus": 0,
-            "slash": 0,
+            "exc": 3,
+            "minus": 11,
+            "slash": 2,
             "err": 1,
             "video": null,
             "pts_pct": 0
@@ -21176,7 +24533,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -25,
             "tot": 12,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 2,
+            "minus": 6,
             "slash": 0,
             "err": 3,
             "video": null,
@@ -21196,6 +24555,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -21728,8 +25089,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -20,
             "tot": 15,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 4,
+            "exc": 3,
+            "minus": 3,
+            "slash": 2,
             "err": 3,
             "video": null,
             "pts_pct": 0
@@ -22163,8 +25526,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -45,
             "tot": 11,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 2,
+            "exc": 3,
+            "minus": 0,
+            "slash": 1,
             "err": 5,
             "video": null,
             "pts_pct": 0
@@ -22190,7 +25555,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 3,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 1,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -22434,8 +25801,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 19,
             "pts": 1,
-            "plus": 0,
-            "slash": 0,
+            "plus": 2,
+            "exc": 3,
+            "minus": 11,
+            "slash": 1,
             "err": 1,
             "video": null,
             "pts_pct": 5
@@ -22890,6 +26259,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 17,
             "pts": 0,
             "plus": 0,
+            "exc": 5,
+            "minus": 12,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -23319,7 +26690,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -33,
             "tot": 3,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -23376,7 +26749,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 20,
             "tot": 5,
             "pts": 1,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 3,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -24745,7 +28120,9 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 13,
             "pts": 0,
             "plus": 0,
-            "slash": 0,
+            "exc": 5,
+            "minus": 7,
+            "slash": 1,
             "err": 0,
             "video": null,
             "pts_pct": 0
@@ -24764,6 +28141,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 1,
             "plus": 0,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -24875,8 +28254,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -15,
             "tot": 13,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 3,
+            "minus": 6,
+            "slash": 1,
             "err": 2,
             "video": null,
             "pts_pct": 0
@@ -25370,8 +28751,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 10,
             "pts": 1,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 2,
+            "minus": 4,
+            "slash": 1,
             "err": 1,
             "video": null,
             "pts_pct": 10
@@ -26125,7 +29508,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -6,
             "tot": 17,
             "pts": 0,
-            "plus": 0,
+            "plus": 3,
+            "exc": 6,
+            "minus": 7,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -26528,7 +29913,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -9,
             "tot": 11,
             "pts": 2,
-            "plus": 0,
+            "plus": 2,
+            "exc": 4,
+            "minus": 0,
             "slash": 0,
             "err": 3,
             "video": null,
@@ -26555,7 +29942,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 3,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -26761,7 +30150,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -12,
             "tot": 8,
             "pts": 0,
-            "plus": 0,
+            "plus": 2,
+            "exc": 3,
+            "minus": 2,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -27188,7 +30579,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 1,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -27208,6 +30601,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -28555,7 +31950,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 6,
             "tot": 17,
             "pts": 2,
-            "plus": 0,
+            "plus": 3,
+            "exc": 6,
+            "minus": 5,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -29079,7 +32476,9 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 17,
             "pts": 0,
             "plus": 0,
-            "slash": 0,
+            "exc": 4,
+            "minus": 9,
+            "slash": 2,
             "err": 2,
             "video": null,
             "pts_pct": 0
@@ -29511,8 +32910,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -5,
             "tot": 19,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 3,
+            "exc": 6,
+            "minus": 8,
+            "slash": 1,
             "err": 1,
             "video": null,
             "pts_pct": 0
@@ -29613,7 +33014,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -29,
             "tot": 17,
             "pts": 1,
-            "plus": 0,
+            "plus": 6,
+            "exc": 0,
+            "minus": 4,
             "slash": 0,
             "err": 6,
             "video": null,
@@ -29897,7 +33300,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -7,
             "tot": 15,
             "pts": 1,
-            "plus": 0,
+            "plus": 2,
+            "exc": 3,
+            "minus": 7,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -30344,8 +33749,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 11,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 2,
+            "exc": 2,
+            "minus": 6,
+            "slash": 1,
             "err": 0,
             "video": null,
             "pts_pct": 0
@@ -30765,7 +34172,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -50,
             "tot": 2,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -30814,7 +34223,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -25,
             "tot": 4,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 2,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -32339,8 +35750,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 4,
             "tot": 25,
             "pts": 1,
-            "plus": 0,
-            "slash": 0,
+            "plus": 3,
+            "exc": 5,
+            "minus": 14,
+            "slash": 2,
             "err": 0,
             "video": null,
             "pts_pct": 4
@@ -32431,7 +35844,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -21,
             "tot": 19,
             "pts": 0,
-            "plus": 0,
+            "plus": 3,
+            "exc": 3,
+            "minus": 9,
             "slash": 0,
             "err": 4,
             "video": null,
@@ -32929,7 +36344,9 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 17,
             "pts": 2,
             "plus": 0,
-            "slash": 0,
+            "exc": 4,
+            "minus": 8,
+            "slash": 1,
             "err": 2,
             "video": null,
             "pts_pct": 12
@@ -33132,8 +36549,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -11,
             "tot": 19,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 3,
+            "exc": 1,
+            "minus": 12,
+            "slash": 1,
             "err": 2,
             "video": null,
             "pts_pct": 0
@@ -33536,6 +36955,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 4,
             "pts": 0,
             "plus": 0,
+            "exc": 2,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -34265,6 +37686,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 3,
             "pts": 0,
             "plus": 0,
+            "exc": 1,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -34358,8 +37781,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -10,
             "tot": 10,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 3,
+            "exc": 0,
+            "minus": 5,
+            "slash": 1,
             "err": 1,
             "video": null,
             "pts_pct": 0
@@ -34381,7 +37806,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 2,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -34826,8 +38253,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 12,
             "pts": 1,
-            "plus": 0,
-            "slash": 0,
+            "plus": 3,
+            "exc": 3,
+            "minus": 3,
+            "slash": 1,
             "err": 1,
             "video": null,
             "pts_pct": 8
@@ -36189,7 +39618,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 7,
             "tot": 15,
             "pts": 1,
-            "plus": 0,
+            "plus": 1,
+            "exc": 5,
+            "minus": 8,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -36221,6 +39652,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 4,
             "pts": 1,
             "plus": 0,
+            "exc": 1,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -36350,8 +39783,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 7,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 1,
+            "minus": 3,
+            "slash": 2,
             "err": 0,
             "video": null,
             "pts_pct": 0
@@ -36370,6 +39805,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 2,
             "pts": 1,
             "plus": 0,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -36889,7 +40326,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 12,
             "tot": 8,
             "pts": 1,
-            "plus": 0,
+            "plus": 1,
+            "exc": 3,
+            "minus": 3,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -37358,8 +40797,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 9,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 2,
+            "exc": 2,
+            "minus": 4,
+            "slash": 1,
             "err": 0,
             "video": null,
             "pts_pct": 0
@@ -37438,7 +40879,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 17,
             "tot": 12,
             "pts": 3,
-            "plus": 0,
+            "plus": 3,
+            "exc": 0,
+            "minus": 5,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -37889,8 +41332,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 8,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 3,
+            "exc": 1,
+            "minus": 3,
+            "slash": 1,
             "err": 0,
             "video": null,
             "pts_pct": 0
@@ -37988,6 +41433,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 4,
             "pts": 1,
             "plus": 0,
+            "exc": 1,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -38356,7 +41803,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -25,
             "tot": 4,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 2,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -38375,7 +41824,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 1,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -39175,8 +42626,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 7,
             "tot": 28,
             "pts": 2,
-            "plus": 0,
-            "slash": 0,
+            "plus": 2,
+            "exc": 9,
+            "minus": 13,
+            "slash": 2,
             "err": 0,
             "video": null,
             "pts_pct": 7
@@ -39578,7 +43031,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 10,
             "pts": 0,
-            "plus": 0,
+            "plus": 2,
+            "exc": 3,
+            "minus": 5,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -39601,7 +43056,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 4,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 1,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -39742,7 +43199,9 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 13,
             "pts": 0,
             "plus": 0,
-            "slash": 0,
+            "exc": 2,
+            "minus": 7,
+            "slash": 1,
             "err": 3,
             "video": null,
             "pts_pct": 0
@@ -40566,7 +44025,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -33,
             "tot": 6,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 2,
+            "minus": 1,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -40594,6 +44055,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 3,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 3,
             "video": null,
@@ -40869,7 +44332,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 7,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 1,
+            "minus": 5,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -41273,6 +44738,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 9,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 8,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -41360,8 +44827,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -9,
             "tot": 11,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 2,
+            "exc": 0,
+            "minus": 7,
+            "slash": 1,
             "err": 1,
             "video": null,
             "pts_pct": 0
@@ -43201,6 +46670,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 11,
             "pts": 0,
             "plus": 0,
+            "exc": 2,
+            "minus": 8,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -43669,8 +47140,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -45,
             "tot": 11,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 1,
+            "minus": 3,
+            "slash": 1,
             "err": 5,
             "video": null,
             "pts_pct": 0
@@ -44227,7 +47700,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -13,
             "tot": 15,
             "pts": 0,
-            "plus": 0,
+            "plus": 4,
+            "exc": 1,
+            "minus": 8,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -44766,7 +48241,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -12,
             "tot": 8,
             "pts": 0,
-            "plus": 0,
+            "plus": 3,
+            "exc": 1,
+            "minus": 3,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -44886,7 +48363,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -10,
             "tot": 21,
             "pts": 1,
-            "plus": 0,
+            "plus": 1,
+            "exc": 4,
+            "minus": 12,
             "slash": 0,
             "err": 3,
             "video": null,
@@ -44988,7 +48467,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -6,
             "tot": 16,
             "pts": 1,
-            "plus": 0,
+            "plus": 2,
+            "exc": 1,
+            "minus": 10,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -45119,6 +48600,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -45503,8 +48986,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -10,
             "tot": 10,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 4,
+            "minus": 2,
+            "slash": 2,
             "err": 1,
             "video": null,
             "pts_pct": 0
@@ -46363,8 +49848,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 12,
             "tot": 8,
             "pts": 1,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 1,
+            "minus": 4,
+            "slash": 1,
             "err": 0,
             "video": null,
             "pts_pct": 12
@@ -46784,7 +50271,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 8,
             "pts": 1,
-            "plus": 0,
+            "plus": 1,
+            "exc": 1,
+            "minus": 4,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -46844,7 +50333,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 5,
             "pts": 0,
-            "plus": 0,
+            "plus": 2,
+            "exc": 1,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -47249,7 +50740,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 3,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -47421,7 +50914,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 9,
             "pts": 1,
-            "plus": 0,
+            "plus": 2,
+            "exc": 2,
+            "minus": 3,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -47448,8 +50943,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 5,
             "pts": 1,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 1,
+            "slash": 1,
             "err": 1,
             "video": null,
             "pts_pct": 20
@@ -47955,7 +51452,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -12,
             "tot": 8,
             "pts": 0,
-            "plus": 0,
+            "plus": 3,
+            "exc": 1,
+            "minus": 3,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -48380,8 +51879,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 7,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 2,
+            "exc": 2,
+            "minus": 2,
+            "slash": 1,
             "err": 0,
             "video": null,
             "pts_pct": 0
@@ -48429,7 +51930,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 4,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 1,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -48886,6 +52389,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 5,
             "pts": 0,
             "plus": 0,
+            "exc": 2,
+            "minus": 2,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -49309,6 +52814,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 11,
             "pts": 1,
             "plus": 0,
+            "exc": 2,
+            "minus": 6,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -50497,7 +54004,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -6,
             "tot": 17,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 3,
+            "minus": 12,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -50607,8 +54116,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -9,
             "tot": 11,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 3,
+            "exc": 2,
+            "minus": 4,
+            "slash": 1,
             "err": 1,
             "video": null,
             "pts_pct": 0
@@ -51062,8 +54573,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -8,
             "tot": 13,
             "pts": 2,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 2,
+            "minus": 4,
+            "slash": 1,
             "err": 3,
             "video": null,
             "pts_pct": 15
@@ -51085,8 +54598,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 2,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 0,
+            "slash": 1,
             "err": 0,
             "video": null,
             "pts_pct": 0
@@ -51630,7 +55145,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -5,
             "tot": 21,
             "pts": 2,
-            "plus": 0,
+            "plus": 3,
+            "exc": 7,
+            "minus": 6,
             "slash": 0,
             "err": 3,
             "video": null,
@@ -52174,6 +55691,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 6,
             "pts": 0,
             "plus": 0,
+            "exc": 2,
+            "minus": 4,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -52581,6 +56100,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 7,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 5,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -53045,6 +56566,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 4,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 3,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -53105,8 +56628,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 8,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 2,
+            "exc": 1,
+            "minus": 4,
+            "slash": 1,
             "err": 0,
             "video": null,
             "pts_pct": 0
@@ -53129,6 +56654,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 2,
             "pts": 1,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -54436,7 +57963,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -7,
             "tot": 14,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 1,
+            "minus": 11,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -54883,8 +58412,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -14,
             "tot": 22,
             "pts": 1,
-            "plus": 0,
-            "slash": 0,
+            "plus": 4,
+            "exc": 2,
+            "minus": 10,
+            "slash": 1,
             "err": 4,
             "video": null,
             "pts_pct": 5
@@ -55423,6 +58954,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 13,
             "pts": 1,
             "plus": 0,
+            "exc": 9,
+            "minus": 3,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -55554,7 +59087,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -11,
             "tot": 19,
             "pts": 3,
-            "plus": 0,
+            "plus": 3,
+            "exc": 3,
+            "minus": 5,
             "slash": 0,
             "err": 5,
             "video": null,
@@ -55573,7 +59108,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 1,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -55817,7 +59354,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 24,
             "pts": 1,
-            "plus": 0,
+            "plus": 3,
+            "exc": 2,
+            "minus": 17,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -56230,7 +59769,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -10,
             "tot": 10,
             "pts": 0,
-            "plus": 0,
+            "plus": 2,
+            "exc": 2,
+            "minus": 5,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -56684,7 +60225,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 5,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 4,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -57094,6 +60637,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 3,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -57154,6 +60699,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -58746,7 +62293,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 10,
             "pts": 1,
-            "plus": 0,
+            "plus": 1,
+            "exc": 3,
+            "minus": 4,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -58848,8 +62397,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -11,
             "tot": 19,
             "pts": 1,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 3,
+            "minus": 10,
+            "slash": 1,
             "err": 3,
             "video": null,
             "pts_pct": 5
@@ -58867,7 +62418,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 1,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -59374,7 +62927,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -10,
             "tot": 10,
             "pts": 0,
-            "plus": 0,
+            "plus": 2,
+            "exc": 1,
+            "minus": 6,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -59498,7 +63053,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -38,
             "tot": 8,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 4,
             "slash": 0,
             "err": 3,
             "video": null,
@@ -59518,6 +63075,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -60053,7 +63612,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 13,
             "pts": 1,
-            "plus": 0,
+            "plus": 3,
+            "exc": 2,
+            "minus": 6,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -60476,8 +64037,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 8,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 3,
+            "minus": 3,
+            "slash": 1,
             "err": 0,
             "video": null,
             "pts_pct": 0
@@ -60621,6 +64184,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 2,
             "pts": 1,
             "plus": 0,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -60662,7 +64227,9 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
-            "slash": 0,
+            "exc": 0,
+            "minus": 0,
+            "slash": 1,
             "err": 0,
             "video": null,
             "pts_pct": 0
@@ -61465,7 +65032,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -17,
             "tot": 12,
             "pts": 0,
-            "plus": 0,
+            "plus": 2,
+            "exc": 2,
+            "minus": 6,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -61522,7 +65091,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 10,
             "pts": 0,
-            "plus": 0,
+            "plus": 3,
+            "exc": 3,
+            "minus": 4,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -61650,8 +65221,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -15,
             "tot": 13,
             "pts": 1,
-            "plus": 0,
-            "slash": 0,
+            "plus": 2,
+            "exc": 3,
+            "minus": 3,
+            "slash": 1,
             "err": 3,
             "video": null,
             "pts_pct": 8
@@ -62133,8 +65706,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 14,
             "tot": 7,
             "pts": 2,
-            "plus": 0,
-            "slash": 0,
+            "plus": 2,
+            "exc": 0,
+            "minus": 1,
+            "slash": 1,
             "err": 1,
             "video": null,
             "pts_pct": 29
@@ -62168,7 +65743,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 6,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 3,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -62388,7 +65965,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -17,
             "tot": 6,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 2,
+            "minus": 2,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -63141,6 +66720,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 6,
             "pts": 0,
             "plus": 0,
+            "exc": 2,
+            "minus": 3,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -63609,7 +67190,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -22,
             "tot": 9,
             "pts": 1,
-            "plus": 0,
+            "plus": 1,
+            "exc": 1,
+            "minus": 3,
             "slash": 0,
             "err": 3,
             "video": null,
@@ -64027,6 +67610,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 3,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 2,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -64068,6 +67653,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -64437,6 +68024,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -65222,7 +68811,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 12,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 2,
+            "minus": 9,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -65325,7 +68916,9 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 14,
             "pts": 3,
             "plus": 0,
-            "slash": 0,
+            "exc": 2,
+            "minus": 6,
+            "slash": 2,
             "err": 1,
             "video": null,
             "pts_pct": 21
@@ -65352,6 +68945,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 4,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 3,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -65784,7 +69379,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -33,
             "tot": 9,
             "pts": 0,
-            "plus": 0,
+            "plus": 3,
+            "exc": 3,
+            "minus": 0,
             "slash": 0,
             "err": 3,
             "video": null,
@@ -66003,6 +69600,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 10,
             "pts": 0,
             "plus": 0,
+            "exc": 2,
+            "minus": 5,
             "slash": 0,
             "err": 3,
             "video": null,
@@ -66483,7 +70082,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 10,
             "tot": 10,
             "pts": 1,
-            "plus": 0,
+            "plus": 2,
+            "exc": 2,
+            "minus": 5,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -66629,8 +70230,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 14,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 3,
+            "exc": 4,
+            "minus": 4,
+            "slash": 3,
             "err": 0,
             "video": null,
             "pts_pct": 0
@@ -67090,6 +70693,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 2,
             "pts": 1,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -67957,6 +71562,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 17,
             "pts": 0,
             "plus": 0,
+            "exc": 5,
+            "minus": 11,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -68036,7 +71643,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 8,
             "pts": 1,
-            "plus": 0,
+            "plus": 1,
+            "exc": 2,
+            "minus": 3,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -68487,8 +72096,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -36,
             "tot": 11,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 2,
+            "exc": 2,
+            "minus": 1,
+            "slash": 2,
             "err": 4,
             "video": null,
             "pts_pct": 0
@@ -68716,6 +72327,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 8,
             "pts": 2,
             "plus": 0,
+            "exc": 1,
+            "minus": 4,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -69513,6 +73126,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 7,
             "pts": 0,
             "plus": 0,
+            "exc": 2,
+            "minus": 5,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -69676,8 +73291,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -22,
             "tot": 9,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 2,
+            "minus": 2,
+            "slash": 2,
             "err": 2,
             "video": null,
             "pts_pct": 0
@@ -69793,6 +73410,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 3,
             "pts": 0,
             "plus": 0,
+            "exc": 2,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -70206,6 +73825,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 5,
             "pts": 1,
             "plus": 0,
+            "exc": 1,
+            "minus": 3,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -70225,6 +73846,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -70616,6 +74239,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 3,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 2,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -70656,7 +74281,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 2,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -71423,7 +75050,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 14,
             "pts": 0,
-            "plus": 0,
+            "plus": 4,
+            "exc": 1,
+            "minus": 9,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -71499,8 +75128,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -6,
             "tot": 16,
             "pts": 2,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 1,
+            "minus": 7,
+            "slash": 2,
             "err": 3,
             "video": null,
             "pts_pct": 12
@@ -72017,7 +75648,9 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 8,
             "pts": 1,
             "plus": 0,
-            "slash": 0,
+            "exc": 2,
+            "minus": 3,
+            "slash": 1,
             "err": 1,
             "video": null,
             "pts_pct": 12
@@ -72449,8 +76082,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 12,
             "tot": 8,
             "pts": 1,
-            "plus": 0,
-            "slash": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 5,
+            "slash": 1,
             "err": 0,
             "video": null,
             "pts_pct": 12
@@ -72473,6 +76108,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 3,
             "pts": 1,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -72708,8 +76345,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 15,
             "pts": 2,
-            "plus": 0,
-            "slash": 0,
+            "plus": 3,
+            "exc": 0,
+            "minus": 6,
+            "slash": 2,
             "err": 2,
             "video": null,
             "pts_pct": 13
@@ -73143,7 +76782,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -12,
             "tot": 8,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 2,
+            "minus": 4,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -73883,6 +77524,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -73924,6 +77567,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -75003,8 +78648,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 13,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 2,
+            "exc": 0,
+            "minus": 10,
+            "slash": 1,
             "err": 0,
             "video": null,
             "pts_pct": 0
@@ -75410,7 +79057,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 14,
             "pts": 1,
-            "plus": 0,
+            "plus": 5,
+            "exc": 0,
+            "minus": 7,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -75430,6 +79079,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -75922,7 +79573,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 13,
             "pts": 1,
-            "plus": 0,
+            "plus": 3,
+            "exc": 1,
+            "minus": 7,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -76043,7 +79696,9 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 8,
             "pts": 1,
             "plus": 0,
-            "slash": 0,
+            "exc": 1,
+            "minus": 4,
+            "slash": 1,
             "err": 1,
             "video": null,
             "pts_pct": 12
@@ -76062,6 +79717,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -76599,7 +80256,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 50,
             "tot": 2,
             "pts": 1,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -76995,6 +80654,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 4,
             "pts": 0,
             "plus": 0,
+            "exc": 1,
+            "minus": 2,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -77441,7 +81102,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -14,
             "tot": 14,
             "pts": 0,
-            "plus": 0,
+            "plus": 4,
+            "exc": 1,
+            "minus": 7,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -77866,7 +81529,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 4,
             "pts": 0,
-            "plus": 0,
+            "plus": 2,
+            "exc": 0,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -79119,6 +82784,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 17,
             "pts": 2,
             "plus": 0,
+            "exc": 4,
+            "minus": 9,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -79138,6 +82805,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 2,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -79682,7 +83351,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 20,
             "pts": 0,
-            "plus": 0,
+            "plus": 3,
+            "exc": 6,
+            "minus": 11,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -79803,7 +83474,9 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 11,
             "pts": 0,
             "plus": 0,
-            "slash": 0,
+            "exc": 3,
+            "minus": 6,
+            "slash": 1,
             "err": 1,
             "video": null,
             "pts_pct": 0
@@ -80245,7 +83918,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -20,
             "tot": 20,
             "pts": 2,
-            "plus": 0,
+            "plus": 2,
+            "exc": 3,
+            "minus": 7,
             "slash": 0,
             "err": 6,
             "video": null,
@@ -80780,7 +84455,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -14,
             "tot": 7,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 3,
+            "minus": 2,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -81235,7 +84912,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 15,
             "pts": 0,
-            "plus": 0,
+            "plus": 4,
+            "exc": 5,
+            "minus": 6,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -81643,6 +85322,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 2,
             "pts": 0,
             "plus": 0,
+            "exc": 1,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -81683,7 +85364,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 1,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -82602,6 +86285,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 9,
             "pts": 0,
             "plus": 0,
+            "exc": 3,
+            "minus": 6,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -83020,7 +86705,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -30,
             "tot": 10,
             "pts": 0,
-            "plus": 0,
+            "plus": 4,
+            "exc": 1,
+            "minus": 2,
             "slash": 0,
             "err": 3,
             "video": null,
@@ -83589,7 +87276,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -22,
             "tot": 9,
             "pts": 0,
-            "plus": 0,
+            "plus": 2,
+            "exc": 3,
+            "minus": 2,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -84050,7 +87739,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 20,
             "pts": 0,
-            "plus": 0,
+            "plus": 4,
+            "exc": 5,
+            "minus": 11,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -84160,7 +87851,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -8,
             "tot": 13,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 2,
+            "minus": 9,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -84593,7 +88286,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -31,
             "tot": 13,
             "pts": 0,
-            "plus": 0,
+            "plus": 6,
+            "exc": 1,
+            "minus": 2,
             "slash": 0,
             "err": 4,
             "video": null,
@@ -85207,7 +88902,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 5,
             "pts": 0,
-            "plus": 0,
+            "plus": 3,
+            "exc": 0,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -85625,6 +89322,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -85666,6 +89365,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -86777,7 +90478,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 11,
             "tot": 9,
             "pts": 1,
-            "plus": 0,
+            "plus": 2,
+            "exc": 2,
+            "minus": 4,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -86905,7 +90608,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 9,
             "pts": 1,
-            "plus": 0,
+            "plus": 3,
+            "exc": 2,
+            "minus": 2,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -87476,7 +91181,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 9,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 3,
+            "minus": 5,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -87887,7 +91594,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 17,
             "tot": 6,
             "pts": 1,
-            "plus": 0,
+            "plus": 3,
+            "exc": 0,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -87907,6 +91616,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 2,
             "pts": 0,
             "plus": 0,
+            "exc": 1,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -88109,7 +91820,9 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 7,
             "pts": 0,
             "plus": 0,
-            "slash": 0,
+            "exc": 0,
+            "minus": 5,
+            "slash": 2,
             "err": 0,
             "video": null,
             "pts_pct": 0
@@ -88217,6 +91930,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 4,
             "pts": 0,
             "plus": 0,
+            "exc": 1,
+            "minus": 2,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -88952,6 +92667,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -89020,6 +92737,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 3,
             "pts": 0,
             "plus": 0,
+            "exc": 1,
+            "minus": 1,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -89374,6 +93093,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 3,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 2,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -90145,7 +93866,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 2,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 1,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -90866,7 +94589,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 7,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 3,
+            "minus": 3,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -91306,7 +95031,9 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 15,
             "pts": 1,
             "plus": 0,
-            "slash": 0,
+            "exc": 4,
+            "minus": 7,
+            "slash": 1,
             "err": 2,
             "video": null,
             "pts_pct": 7
@@ -91811,7 +95538,9 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 9,
             "pts": 0,
             "plus": 0,
-            "slash": 0,
+            "exc": 1,
+            "minus": 2,
+            "slash": 1,
             "err": 5,
             "video": null,
             "pts_pct": 0
@@ -92365,8 +96094,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 9,
             "pts": 0,
-            "plus": 0,
-            "slash": 0,
+            "plus": 2,
+            "exc": 0,
+            "minus": 6,
+            "slash": 1,
             "err": 0,
             "video": null,
             "pts_pct": 0
@@ -92812,7 +96543,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 12,
             "pts": 0,
-            "plus": 0,
+            "plus": 2,
+            "exc": 0,
+            "minus": 10,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -92884,7 +96617,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 3,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -92908,6 +96643,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 3,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 3,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -93347,6 +97084,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 2,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 2,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -94384,7 +98123,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -6,
             "tot": 17,
             "pts": 0,
-            "plus": 0,
+            "plus": 5,
+            "exc": 0,
+            "minus": 11,
             "slash": 0,
             "err": 1,
             "video": null,
@@ -94566,7 +98307,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -10,
             "tot": 10,
             "pts": 1,
-            "plus": 0,
+            "plus": 3,
+            "exc": 1,
+            "minus": 3,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -95024,7 +98767,9 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 11,
             "pts": 1,
             "plus": 0,
-            "slash": 0,
+            "exc": 2,
+            "minus": 6,
+            "slash": 1,
             "err": 1,
             "video": null,
             "pts_pct": 9
@@ -95479,7 +99224,9 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 14,
             "pts": 2,
             "plus": 0,
-            "slash": 0,
+            "exc": 3,
+            "minus": 6,
+            "slash": 1,
             "err": 2,
             "video": null,
             "pts_pct": 14
@@ -95513,7 +99260,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 25,
             "tot": 8,
             "pts": 2,
-            "plus": 0,
+            "plus": 2,
+            "exc": 0,
+            "minus": 4,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -96370,7 +100119,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 18,
             "pts": 0,
-            "plus": 0,
+            "plus": 3,
+            "exc": 2,
+            "minus": 13,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -96785,8 +100536,10 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": 0,
             "tot": 15,
             "pts": 2,
-            "plus": 0,
-            "slash": 0,
+            "plus": 2,
+            "exc": 0,
+            "minus": 7,
+            "slash": 2,
             "err": 2,
             "video": null,
             "pts_pct": 13
@@ -97302,7 +101055,9 @@ const PARTIDOS_INDIVIDUAL = [
             "eff": -22,
             "tot": 9,
             "pts": 0,
-            "plus": 0,
+            "plus": 1,
+            "exc": 0,
+            "minus": 6,
             "slash": 0,
             "err": 2,
             "video": null,
@@ -97758,6 +101513,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 3,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 3,
             "slash": 0,
             "err": 0,
             "video": null,
@@ -97799,6 +101556,8 @@ const PARTIDOS_INDIVIDUAL = [
             "tot": 1,
             "pts": 0,
             "plus": 0,
+            "exc": 0,
+            "minus": 0,
             "slash": 0,
             "err": 1,
             "video": null,

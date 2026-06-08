@@ -328,9 +328,18 @@ function renderComparativaRecepcion(j, cont, num){
   cont.appendChild(s1);
 
   // ── CUADRO 2: VS POSICIÓN (una fila por compañero, columnas flotado/potencia/total) ──
+  // En RECEPCIÓN, puntas y líberos se comparan juntos (todos los que reciben).
   var curInfo=JUG.find(function(c){return c.num===num;});
   var pos=curInfo?curInfo.pos:'';
-  var mismaPos=JUG.filter(function(c){var r=recEffByTipo(c);return c.pos===pos && r && r.total;});
+  var RECEPTORES=['PUNTA','LIBERO'];
+  var esReceptor=RECEPTORES.indexOf(pos)>=0;
+  var tituloGrupo=esReceptor?'RECEPTORES':(pos+'S');
+  var mismaPos=JUG.filter(function(c){
+    var r=recEffByTipo(c);
+    if(!(r && r.total)) return false;
+    if(esReceptor) return RECEPTORES.indexOf(c.pos)>=0;
+    return c.pos===pos;
+  });
   if(pos && mismaPos.length>1){
     mismaPos.sort(function(a,b){if(a.num===num)return -1;if(b.num===num)return 1;return a.num-b.num;});
     var rows2=mismaPos.map(function(c){
@@ -346,7 +355,7 @@ function renderComparativaRecepcion(j, cont, num){
     }).join('');
     var s2=document.createElement('div');
     s2.style.cssText='margin-top:12px;padding:14px 16px;background:rgba(13,14,26,.8);border:1px solid rgba(255,255,255,.06);border-radius:12px';
-    s2.innerHTML='<div style="font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#818cf8;margin-bottom:12px">VS '+pos+'S</div>'
+    s2.innerHTML='<div style="font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#818cf8;margin-bottom:12px">VS '+tituloGrupo+'</div>'
       +'<table style="width:100%;border-collapse:collapse;font-family:Barlow Condensed,sans-serif">'
       +'<thead><tr><th style="padding:6px 8px;font-size:9px;color:#64748b;letter-spacing:1.5px;text-transform:uppercase;text-align:left">Jugador</th>'
       +TIPOS.map(function(t){return '<th style="padding:6px 8px;font-size:9px;color:'+t.c+';letter-spacing:1.5px;text-transform:uppercase;text-align:center">'+t.l+'</th>';}).join('')

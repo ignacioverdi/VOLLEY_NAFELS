@@ -241,7 +241,7 @@ def parse_dvw_both(fpath, temporada):
     return result, date, home, away
 
 # ── UPDATE DATABASE ───────────────────────────────────────────────
-def update_database(dvw_dir, temporada, db_path='casla_players_db.json'):
+def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     # Load existing DB
     if os.path.exists(db_path):
         with open(db_path) as f: db = json.load(f)
@@ -827,10 +827,14 @@ def calc_baterias(scout, side):
                     if len(_d)>=2: _z=_d[-1]; break
                     elif len(_d)==1: _z=_d; break
                 _tp=body[3]  # tipo de saque (Q/M/T/H)
-                if _tp not in P['_sq_tipo']: P['_sq_tipo'][_tp]={'tot':0,'pt':0,'err':0,'dest':{}}
+                if _tp not in P['_sq_tipo']: P['_sq_tipo'][_tp]={'tot':0,'pt':0,'err':0,'plus':0,'exc':0,'minus':0,'slash':0,'dest':{}}
                 P['_sq_tipo'][_tp]['tot']+=1
                 if res=='#': P['_sq_tipo'][_tp]['pt']+=1
-                if res=='=': P['_sq_tipo'][_tp]['err']+=1
+                elif res=='=': P['_sq_tipo'][_tp]['err']+=1
+                elif res=='+': P['_sq_tipo'][_tp]['plus']+=1
+                elif res=='!': P['_sq_tipo'][_tp]['exc']+=1
+                elif res=='-': P['_sq_tipo'][_tp]['minus']+=1
+                elif res=='/': P['_sq_tipo'][_tp]['slash']+=1
                 if _z: P['_sq_tipo'][_tp]['dest'][_z]=P['_sq_tipo'][_tp]['dest'].get(_z,0)+1
         elif skill=='R' and pfx==side:
             last_rec=res; rec_valida=True
@@ -947,8 +951,8 @@ def merge_acum(lista_pl):
                     for z,n in P[sec].items(): A[sec][z]=A[sec].get(z,0)+n
                 elif sec=='_sq_tipo':
                     for tp,d in P[sec].items():
-                        if tp not in A[sec]: A[sec][tp]={'tot':0,'pt':0,'err':0,'dest':{}}
-                        for kk in ('tot','pt','err'): A[sec][tp][kk]+=d.get(kk,0)
+                        if tp not in A[sec]: A[sec][tp]={'tot':0,'pt':0,'err':0,'plus':0,'exc':0,'minus':0,'slash':0,'dest':{}}
+                        for kk in ('tot','pt','err','plus','exc','minus','slash'): A[sec][tp][kk]=A[sec][tp].get(kk,0)+d.get(kk,0)
                         for z,n in d.get('dest',{}).items(): A[sec][tp]['dest'][z]=A[sec][tp]['dest'].get(z,0)+n
                 elif sec=='_atk_combo':
                     for cb,d in P[sec].items():
@@ -985,7 +989,8 @@ def to_canchitas(P):
             eff=round((d['pt']-d['err'])/d['tot']*100) if d['tot'] else None
             saques.append({'cod':'S'+tp,'tipo':SQ_TIPO.get(tp,'SAQUE'),'orig':6,
                 'destinos':destinos,'eff':eff,'tot':d['tot'],'pts':d['pt'],
-                'plus':0,'slash':0,'err':d['err'],'video':None,
+                'plus':d.get('plus',0),'exc':d.get('exc',0),'minus':d.get('minus',0),
+                'slash':d.get('slash',0),'err':d['err'],'video':None,
                 'pts_pct':round(d['pt']/d['tot']*100) if d['tot'] else 0})
     # ── ATAQUE: fusionar combos equivalentes (mismo ataque, scout distinto) ──
     # mapa: cualquier código → código canónico
@@ -1312,29 +1317,6 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         if kind=='s': return round((k+0.5*sl+0.25*pp-e)/t*100)
         if kind=='r': return round((k+0.5*pp-0.5*sl-e)/t*100)
         return 0
-    def _dist(acts):
-        dc=Counter(a.get('dest',0) for a in acts if a.get('dest')); tot=sum(dc.values())
-        return [{'z':z,'pct':round(n/tot*100)} for z,n in dc.most_common() if z and tot]
-
-    partidos_jug=[]
-    for ns, pd in team_db.items():
-        num=int(ns); info=pd.get('info') or {}
-        atk=pd.get('atk',[]); srv=pd.get('srv',[]); rec=pd.get('rec',[])
-        if len(atk)+len(srv)+len(rec)<5: continue
-        pos_label=NAFELS_ROSTER.get(num,'OTRO')
-        name=NAFELS_NAMES.get(num, info.get('name','').split()[-1] if info.get('name') else str(num))
-        cg=defaultdict(list)
-        for a in atk:
-            if a.get('combo'): cg[a['combo']].append(a)
-        ataques=[{'cod':c,'orig':_combo_origin(c,acts[0].get('orig',0)),'tot':len(acts),'eff':_eff(acts,'a'),'destinos':_dist(acts)} for c,acts in sorted(cg.items(),key=lambda x:-len(x[1])) if len(acts)>=2]
-        sg=defaultdict(list)
-        for a in srv: sg['S'+a.get('stype','Q')].append(a)
-        saques=[{'cod':st,'orig':acts[0].get('orig',0),'tot':len(acts),'eff':_eff(acts,'s'),'destinos':_dist(acts)} for st,acts in sorted(sg.items(),key=lambda x:-len(x[1])) if len(acts)>=2]
-        rg=defaultdict(list)
-        for a in rec: rg['R'+a.get('stype','M')].append(a)
-        recepciones=[{'cod':rt,'orig':acts[0].get('orig',0),'tot':len(acts),'eff':_eff(acts,'r'),'destinos':_dist(acts)} for rt,acts in sorted(rg.items(),key=lambda x:-len(x[1])) if len(acts)>=2]
-        partidos_jug.append({'num':num,'nombre':f"{num} {name.title()}",'pos':pos_label,'color':POS_COLOR.get(pos_label,'#64748b'),'info':{},'ataques':ataques,'saques':saques,'recepciones':recepciones})
-    partidos_jug.sort(key=lambda x:x['num'])
 
     partidos_meta=[{'id':g['rival']+'__'+g['date'],'nombre':g['rival'],'rival':g['rival'],'fecha':'/'.join(reversed(g['date'].split('-'))),'torneo':f'NLA Suiza {temporada}','resultado':g['result'],'sets_nafels':str(g['tsets']),'sets_rival':str(g['rsets'])} for g in sorted(games,key=lambda x:x['date']) if g['date']]
 
@@ -1410,10 +1392,8 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
     for num,P in bat_acum.items():
         if num=='__EQUIPO__': continue
         obj_by_num[int(num)]=to_pcts(P)
-    for pj in partidos_jug:
-        pj['objetivos']=obj_by_num.get(pj['num'],{})
-    # Si partidos_jug quedó vacío (flujo no pobló desde team_db),
-    # construirlo desde el motor de baterías para tener nombre+objetivos.
+    partidos_jug=[]
+    # Construir partidos_jug desde el motor de baterías (= suma de los 26 partidos de liga).
     if not partidos_jug:
         nums_presentes=set(int(n) for n in bat_acum if n!='__EQUIPO__')
         # Mapa posición PT/PUNTA/etc → etiqueta del perfil
@@ -1461,17 +1441,17 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Update CASLA volleyball database from DVW files')
+    parser = argparse.ArgumentParser(description='Update NAFELS volleyball database from DVW files')
     parser.add_argument('--dvw_dir',    required=True,  help='Directory with new DVW files')
     parser.add_argument('--temporada',  default='2026', help='Season label (e.g. 2026)')
-    parser.add_argument('--db_path',    default='casla_players_db.json', help='Database file path')
+    parser.add_argument('--db_path',    default='nla_players_db.json', help='Database file path')
     parser.add_argument('--output_dir', default='.',    help='Output directory for HTML files')
-    parser.add_argument('--template_dir', default='.', help='Directory with CASLA template HTML files')
+    parser.add_argument('--template_dir', default='.', help='Directory with NAFELS template HTML files')
     parser.add_argument('--filter_temporada', default=None, help='Show only this season in stats (default: all)')
     args = parser.parse_args()
 
     print(f"\n{'='*60}")
-    print(f"CASLA DATABASE UPDATE — {args.temporada}")
+    print(f"NAFELS DATABASE UPDATE — {args.temporada}")
     print(f"{'='*60}\n")
 
     # Step 1: Update DB
@@ -1482,7 +1462,7 @@ if __name__ == '__main__':
     print("\n2. Calculating stats...")
     t_filter = args.filter_temporada  # None = mostrar todo lo que hay en la base
     players, teams = calculate_stats(teams_data, t_filter)
-    with open(os.path.join(args.output_dir,'casla_full_stats.json'),'w') as f:
+    with open(os.path.join(args.output_dir,'nla_full_stats.json'),'w') as f:
         json.dump({'players':players,'teams':teams,'temporada':t_filter}, f, ensure_ascii=False)
     print(f"   \u2713 {len(players)} players, {len(teams)} teams")
 
@@ -1522,8 +1502,8 @@ if __name__ == '__main__':
     # Step 5: Build stats table (protegido: si falta template, no tumba el proceso)
     print("\n5. Building stats table...")
     try:
-        build_stats_table(players, teams, os.path.join(args.output_dir,'casla_stats_table.html'))
-        print("   \u2713 casla_stats_table.html")
+        build_stats_table(players, teams, os.path.join(args.output_dir,'nla_stats_table.html'))
+        print("   \u2713 nla_stats_table.html")
     except Exception as e:
         print(f"   (stats table omitida: {e})")
 
@@ -1534,5 +1514,5 @@ if __name__ == '__main__':
 
     print(f"\n{'='*60}")
     print(f"\u2713 LISTO — {len(games_log)} partidos en la base")
-    print(f"  Subir a GitHub: liga_data.js, casla_stats_table.html, datos_partidos.js")
+    print(f"  Subir a GitHub: liga_data.js, nla_stats_table.html, datos_partidos.js")
     print(f"{'='*60}\n")
