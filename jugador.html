@@ -218,7 +218,7 @@ function objGetVals(nombre){
 
   // ── PARTIDO PUNTUAL ──
   if(partido!=='acumulado' && IND){
-    var pd = IND.find(function(p){ return p.nombre===partido; });
+    var pd = IND.find(function(p){ return (p.id||p.nombre)===partido; });
     if(pd){
       if(nombre){
         var pj = (pd.jugadores||[]).find(matchNombre);
@@ -348,9 +348,12 @@ function objBuildSubfiltro(){
     row.appendChild(b);
   }
   mkBtn('Acumulado','acumulado');
+  var __cuenta={};META.forEach(function(m){var r=m.rival||m.nombre;__cuenta[r]=(__cuenta[r]||0)+1;});
   META.forEach(function(m){
-    var label=(m.rival||m.nombre)+(m.resultado?' ('+m.resultado+')':'');
-    mkBtn(label, m.nombre);
+    var rival=m.rival||m.nombre;var label=rival;
+    if(__cuenta[rival]>1 && m.fecha) label+=' '+m.fecha;
+    if(m.resultado) label+=' ('+m.resultado+')';
+    mkBtn(label, m.id||m.nombre);
   });
 }
 

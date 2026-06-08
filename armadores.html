@@ -1172,15 +1172,16 @@ function buildArmSubfiltro(){
   var meta = currentArmTipo==='entrenamiento'
     ? (typeof ENTRENAMIENTOS_META!=='undefined' ? ENTRENAMIENTOS_META : [])
     : (typeof PARTIDOS_META!=='undefined' ? PARTIDOS_META : []);
+  var __cuenta={};meta.forEach(function(m){var r=m.rival||m.nombre;__cuenta[r]=(__cuenta[r]||0)+1;});
   meta.forEach(function(m){
     var btn = document.createElement('button');
     btn.className = 'sfbtn';
-    var label = currentArmTipo==='entrenamiento'
-      ? (m.fecha||m.nombre)
-      : (m.rival||m.nombre);
+    var rival = currentArmTipo==='entrenamiento' ? (m.fecha||m.nombre) : (m.rival||m.nombre);
+    var label = rival;
+    if(currentArmTipo==='partido' && __cuenta[m.rival||m.nombre]>1 && m.fecha) label += ' '+m.fecha;
     if(m.resultado && currentArmTipo==='partido') label += ' ('+m.resultado+')';
     btn.textContent = label;
-    btn.onclick = function(){ setArmPartido(m.nombre, btn); };
+    btn.onclick = function(){ setArmPartido(m.id||m.nombre, btn); };
     cont.appendChild(btn);
   });
 }
@@ -1225,7 +1226,7 @@ function renderArmadorConFiltro(){
       ? (typeof ENTRENAMIENTOS_INDIVIDUAL!=='undefined' ? ENTRENAMIENTOS_INDIVIDUAL : null)
       : (typeof PARTIDOS_INDIVIDUAL!=='undefined' ? PARTIDOS_INDIVIDUAL : null);
     if(!INDIVIDUAL_SRC) return;
-    var pd = INDIVIDUAL_SRC.find(function(p){return p.nombre===currentArmPartido;});
+    var pd = INDIVIDUAL_SRC.find(function(p){return (p.id||p.nombre)===currentArmPartido;});
     if(!pd || !pd.armadores) {
       var sec=document.getElementById('seccion-armador');
       if(sec) sec.innerHTML='<div style="padding:40px;text-align:center;color:#475569;font-size:12px;letter-spacing:1px">SIN DATOS DE ARMADOR PARA ESTE PARTIDO</div>';
