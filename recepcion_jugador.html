@@ -22,7 +22,7 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
 .subfiltro-row{width:100%;display:none;gap:5px;flex-wrap:wrap;padding:6px 0 0}
 .sfbtn{padding:4px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);color:#64748b;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
 .sfbtn.on{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.35);color:#e8192c}
-.main{max-width:960px;margin:0 auto;padding:20px 16px}
+.main{max-width:1280px;margin:0 auto;padding:20px 16px}
 .empty{text-align:center;padding:60px;color:#475569;font-size:13px;letter-spacing:1px}
 .info-note{font-size:10px;color:#475569;letter-spacing:1px;padding:10px 16px;background:rgba(255,255,255,.02);border-radius:6px;margin-bottom:14px;border:1px solid rgba(255,255,255,.04)}
 </style>
@@ -87,15 +87,15 @@ function renderPanelRecepcion(j, container){
   function zoneCard(d, label, maxTot, typeColor){
     var vol = maxTot>0 ? Math.round((d.tot||0)/maxTot*100) : 0;
     var e = d.eff||0, p = d.pos||0, n = d.neg||0, t = d.tot||0;
-    return '<div class="zone-card" style="background:'+bgc(e)+';border:1px solid '+bdc(e)+';border-radius:8px;padding:7px 5px">'
-      +'<div style="font-size:8px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;text-align:center;color:'+ec(e)+';margin-bottom:3px">'+label+'</div>'
-      +'<div style="font-family:Bebas Neue,sans-serif;font-size:18px;font-weight:900;text-align:center;line-height:1;color:'+ec(e)+';margin-bottom:1px">'+e+'%</div>'
-      +'<div style="font-size:8px;text-align:center;color:#475569;margin-bottom:3px">efectividad</div>'
-      +'<div style="height:3px;border-radius:2px;background:rgba(255,255,255,.08);margin:0 2px 4px"><div style="width:'+vol+'%;height:3px;border-radius:2px;background:'+typeColor+'"></div></div>'
-      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px">'
-      +'<div style="text-align:center"><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px">Total</div><div style="font-size:10px;font-weight:800;line-height:1.3;color:#e2e8f0">'+t+'</div></div>'
-      +'<div style="text-align:center"><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px"># +</div><div style="font-size:10px;font-weight:800;line-height:1.3;color:#22c55e">'+p+'%</div></div>'
-      +'<div style="text-align:center"><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px">/ =</div><div style="font-size:10px;font-weight:800;line-height:1.3;color:#ef4444">'+n+'%</div></div>'
+    return '<div class="zone-card" style="background:'+bgc(e)+';border:1px solid '+bdc(e)+';border-radius:9px;padding:10px 8px">'
+      +'<div style="font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;text-align:center;color:'+ec(e)+';margin-bottom:4px">'+label+'</div>'
+      +'<div style="font-family:Bebas Neue,sans-serif;font-size:24px;font-weight:900;text-align:center;line-height:1;color:'+ec(e)+';margin-bottom:2px">'+e+'%</div>'
+      +'<div style="font-size:8px;text-align:center;color:#475569;margin-bottom:5px">efectividad</div>'
+      +'<div style="height:4px;border-radius:2px;background:rgba(255,255,255,.08);margin:0 2px 6px"><div style="width:'+vol+'%;height:4px;border-radius:2px;background:'+typeColor+'"></div></div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px">'
+      +'<div style="text-align:center"><div style="font-size:8px;color:#475569;text-transform:uppercase;letter-spacing:.5px">Total</div><div style="font-size:12px;font-weight:800;line-height:1.3;color:#e2e8f0">'+t+'</div></div>'
+      +'<div style="text-align:center"><div style="font-size:8px;color:#475569;text-transform:uppercase;letter-spacing:.5px"># +</div><div style="font-size:12px;font-weight:800;line-height:1.3;color:#22c55e">'+p+'%</div></div>'
+      +'<div style="text-align:center"><div style="font-size:8px;color:#475569;text-transform:uppercase;letter-spacing:.5px">/ =</div><div style="font-size:12px;font-weight:800;line-height:1.3;color:#ef4444">'+n+'%</div></div>'
       +'</div></div>';
   }
   function makeZonePanel(desdeKey, desdeLabel, td, typeColor, esTotal){
@@ -110,7 +110,7 @@ function renderPanelRecepcion(j, container){
     el.innerHTML=
       '<div style="padding:7px 12px 6px;border-bottom:1px solid '+typeColor+'22">'
       +'<div style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:'+typeColor+'">'+desdeLabel+'</div></div>'
-      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;padding:7px">'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;padding:10px">'
       // ORIENTACIÓN destino: P5 - P6 - P1
       + zoneCard(desde.P5||{},'Pos 5',maxTot,typeColor)
       + zoneCard(desde.P6||{},'Pos 6',maxTot,typeColor)
@@ -160,7 +160,7 @@ function renderPanelRecepcion(j, container){
     secHdr.innerHTML='<div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:20px;background:'+t.color+'18;color:'+t.color+';border:0.5px solid '+t.color+'44">'+t.label+' — por zona de origen</div><div style="flex:1;height:.5px;background:rgba(255,255,255,.08)"></div>';
     wrapper.appendChild(secHdr);
     var row = document.createElement('div');
-    row.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:14px';
+    row.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;margin-bottom:18px';
     zones.forEach(function(z){row.appendChild(makeZonePanel(z.key, z.label, rec[t.key], t.color, false));});
     // 4ª cancha: TOTAL (todas las recepciones del tipo, sin importar origen)
     row.appendChild(makeZonePanel(null, 'TOTAL '+(t.key==='flotado'?'FLOTADO':'POTENCIA'), totalPorDestino(rec[t.key]), t.color, true));
