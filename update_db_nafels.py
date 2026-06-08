@@ -1134,6 +1134,63 @@ def build_armador_data(setters_rallies, setter_names):
     return res
 
 
+
+
+# ── TRANSICIÓN (replica gpAnalizarTransicion del game plan) ──
+def arm_cap_pos(c, orig, sp=0):
+    # Ataque de 2da del armador (PP) cuando está adelante → cuenta como POS 2
+    if c == 'PP' and sp in (4,3,2): return 'P2'
+    if c in ('X5','V5','C5'): return 'P4'
+    if c in ('X6','V6'): return 'P2'
+    if c in ('X1','X7','XM','X2','XG','XC','XD','XB','G3','W3'): return 'P3'
+    if c in ('PR','V3'): return 'P3' if orig==3 else 'P8'
+    if c in ('X8','V8','XP','X9','XR','XT','V0'): return 'P9' if orig in (9,1) else 'P8'
+    return None
+
+def build_transicion_one(rallies):
+    por_rot={}
+    for r in rallies:
+        por_rot.setdefault(r.get('setter_pos',0),[]).append(r)
+    rots=[]
+    for pos in [1,2,3,4,5,6]:
+        all_r=por_rot.get(pos,[])
+        tr=[r for r in all_r if r.get('rec_quality')=='?']
+        if len(tr)<3:
+            rots.append({'pos':pos,'n':len(tr),'vacio':True}); continue
+        dist={'P4':0,'P3':0,'P2':0,'P8':0,'P9':0}; pts={'P4':0,'P3':0,'P2':0,'P8':0,'P9':0}
+        kills=0; errs=0
+        for r in tr:
+            c=r.get('atk_combo','')
+            p=arm_cap_pos(c, r.get('atk_orig',0), pos)
+            res=r.get('atk_result','=')
+            if p:
+                dist[p]+=1
+                if res=='#': pts[p]+=1
+            if res=='#': kills+=1
+            elif res in ('=','/'): errs+=1
+        n=len(tr)
+        eff=round((kills-errs)/n*100) if n else 0
+        arr=[{'p':p,'n':dist[p],'pts':pts[p],'pct':round(dist[p]/n*100)} for p in ['P4','P3','P2','P8','P9'] if dist[p]>0]
+        arr.sort(key=lambda x:-x['n'])
+        concentrada=bool(arr) and arr[0]['pct']>=45
+        rots.append({'pos':pos,'n':n,'eff':eff,'dist':arr,'concentrada':concentrada})
+    con_data=[r for r in rots if not r.get('vacio') and r['n']>=8]
+    if not con_data: return None
+    sorted_e=sorted(con_data, key=lambda x:x['eff'])
+    return {'rots':rots,'debil':sorted_e[0],'fuerte':sorted_e[-1]}
+
+def build_transicion_data(setters_rallies, setter_names):
+    ranked=sorted(setters_rallies.items(), key=lambda x:-len(x[1]))[:2]
+    res={'titular':None,'suplente':None}
+    if len(ranked)>=1:
+        n,rl=ranked[0]; tr=build_transicion_one(rl)
+        if tr: tr['setter']=('%d %s'%(n,setter_names.get(n,str(n)))).strip(); res['titular']=tr
+    if len(ranked)>=2:
+        n,rl=ranked[1]; tr=build_transicion_one(rl)
+        if tr: tr['setter']=('%d %s'%(n,setter_names.get(n,str(n)))).strip(); res['suplente']=tr
+    return res
+
+
 def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025/26'):
     """Generate datos_historial.js + datos_partidos.js for a specific team from DVW."""
     from datetime import datetime
@@ -1311,10 +1368,11 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
                     _arm_acum_names[_sn]=_snames.get(_sn,str(_sn))
             if _sr:
                 _arm_pd=build_armador_data(_sr, _snames)
+            _trans_pd=build_transicion_data(_sr, _snames) if _sr else {}
         except Exception as _e:
             _arm_pd={}
         partidos_individual.append({'id':g['rival']+'__'+g['date'],'nombre':g['rival'],'rival':g['rival'],'fecha':'/'.join(reversed(g['date'].split('-'))),
-            'resultado':g['result'],'equipo_obj':to_pcts(bpl['__EQUIPO__']),'jugadores':jug_obj,'armadores':_arm_pd})
+            'resultado':g['result'],'equipo_obj':to_pcts(bpl['__EQUIPO__']),'jugadores':jug_obj,'armadores':_arm_pd,'transicion':_trans_pd})
 
     # Acumulado
     bat_acum=merge_acum(bat_all_pl)
@@ -1374,6 +1432,8 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
     # Armador acumulado (todos los partidos) — mismo formato que el de cada partido
     _arm_acum = build_armador_data(_arm_acum_rallies, _arm_acum_names) if _arm_acum_rallies else {'titular':None,'suplente':None}
     pjs += 'const PARTIDOS_ARMADOR = ' + json.dumps(_arm_acum, ensure_ascii=False) + ';\n'
+    _trans_acum = build_transicion_data(_arm_acum_rallies, _arm_acum_names) if _arm_acum_rallies else {'titular':None,'suplente':None}
+    pjs += 'const PARTIDOS_TRANSICION = ' + json.dumps(_trans_acum, ensure_ascii=False) + ';\n'
     with open(os.path.join(output_dir,'datos_partidos.js'),'w',encoding='utf-8') as f: f.write(pjs)
 
     return len(historial), len(games)
