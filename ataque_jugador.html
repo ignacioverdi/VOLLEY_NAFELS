@@ -33,6 +33,8 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
 .fbtn.active-partido{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:#e8192c}
 .fbtn.active-entrenamiento{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:#22c55e}
 .subfiltro-row{width:100%;display:none;gap:5px;flex-wrap:wrap;padding:6px 0 0}
+.subfiltro-select{padding:5px 12px;border-radius:7px;border:1px solid rgba(232,25,44,.4);background:rgba(232,25,44,.08);color:#e8192c;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;min-width:220px}
+.subfiltro-select option{color:#111;background:#fff}
 .sfbtn{padding:4px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);color:#64748b;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
 .sfbtn.on{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.35);color:#e8192c}
 .main{max-width:1100px;margin:0 auto;padding:20px 16px}
@@ -49,7 +51,7 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
   <div class="filter-row">
     <button class="fbtn active-partido" id="btn-partido" onclick="setFiltro('partido')">🏆 PARTIDO</button>
     <button class="fbtn" id="btn-entrenamiento" onclick="setFiltro('entrenamiento')">🏋️ ENTRENAMIENTO</button>
-    <div class="subfiltro-row" id="subfiltro-row"></div>
+    <select class="subfiltro-select" id="subfiltro-select" style="display:none"></select>
   </div>
 </div>
 <div class="main">
@@ -222,26 +224,27 @@ function buildFromHistorial(num){
 var currentNum=0, currentFiltro='partido', currentPartido='acumulado';
 
 function buildSubfiltro(){
-  var row=document.getElementById('subfiltro-row');row.innerHTML='';
-  if(currentFiltro!=='partido'){ row.style.display='none'; return; }
-  row.style.display='flex';
-  var b=document.createElement('button');b.className='sfbtn'+(currentPartido==='acumulado'?' on':'');b.textContent='Acumulado';
-  b.onclick=function(){ currentPartido='acumulado'; updateSfBtns(this); renderPage(); };row.appendChild(b);
+  var sel=document.getElementById('subfiltro-select');
+  if(!sel) return;
+  if(currentFiltro!=='partido'){sel.style.display='none';return;}
+  sel.style.display='inline-block';
+  sel.innerHTML='';
+  var o0=document.createElement('option');o0.value='acumulado';o0.textContent='ACUMULADO (todos los partidos)';sel.appendChild(o0);
   if(typeof PARTIDOS_META!=='undefined'){
-    // contar repeticiones de rival para mostrar fecha
-    var __cuenta={};PARTIDOS_META.forEach(function(m){var r=m.rival||m.nombre;__cuenta[r]=(__cuenta[r]||0)+1;});
+    var cuenta={};
+    PARTIDOS_META.forEach(function(m){var r=m.rival||m.nombre;cuenta[r]=(cuenta[r]||0)+1;});
     PARTIDOS_META.forEach(function(m){
       var pid=m.id||m.nombre;
-      var btn=document.createElement('button');
-      btn.className='sfbtn'+(currentPartido===pid?' on':'');
       var rival=m.rival||m.nombre;var label=rival;
-      if(__cuenta[rival]>1 && m.fecha) label+=' '+m.fecha;
+      if(cuenta[rival]>1 && m.fecha) label+=' \u00b7 '+m.fecha;
       if(m.resultado) label+=' ('+m.resultado+')';
-      btn.textContent=label;btn.dataset.nombre=pid;
-      btn.onclick=function(){currentPartido=pid;updateSfBtns(this);renderPage();};
-      row.appendChild(btn);
+      var opt=document.createElement('option');opt.value=pid;opt.textContent=label;
+      if(currentPartido===pid) opt.selected=true;
+      sel.appendChild(opt);
     });
   }
+  sel.value=currentPartido;
+  sel.onchange=function(){currentPartido=this.value;renderPage();};
 }
 function updateSfBtns(active){document.querySelectorAll('.sfbtn').forEach(function(b){ b.classList.remove('on'); });active.classList.add('on');}
 function setFiltro(filtro){

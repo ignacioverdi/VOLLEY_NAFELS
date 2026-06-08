@@ -322,7 +322,7 @@ function objRenderBaterias(){
   renderComparativaJugador();
 }
 
-// ── Subfiltro: Acumulado + un botón por partido ──
+// ── Subfiltro: desplegable Acumulado + un option por partido ──
 function objBuildSubfiltro(){
   var row = document.getElementById('obj-partido-row');
   if(!row) return;
@@ -332,29 +332,28 @@ function objBuildSubfiltro(){
   if(!META){ row.style.display='none'; return; }
   row.innerHTML=''; row.style.display='flex';
   var lbl=document.createElement('span');
-  lbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase;align-self:center;margin-right:4px';
+  lbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase;align-self:center;margin-right:6px';
   lbl.textContent='VER:';
   row.appendChild(lbl);
-  function mkBtn(texto, valor){
-    var b=document.createElement('button');
-    b.className='obj-sfbtn'+(window._objPartido===valor?' on':'');
-    b.textContent=texto;
-    b.onclick=function(){
-      window._objPartido=valor;
-      document.querySelectorAll('.obj-sfbtn').forEach(function(x){x.classList.remove('on');});
-      b.classList.add('on');
-      objRenderBaterias();
-    };
-    row.appendChild(b);
+  var sel=document.createElement('select');
+  sel.className='obj-sfselect';
+  sel.style.cssText='padding:5px 12px;border-radius:7px;border:1px solid rgba(232,25,44,.4);background:rgba(232,25,44,.08);color:#e8192c;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:Barlow Condensed,sans-serif;min-width:220px';
+  function addOpt(texto, valor){
+    var o=document.createElement('option');o.value=valor;o.textContent=texto;o.style.color='#111';o.style.background='#fff';
+    if(window._objPartido===valor) o.selected=true;
+    sel.appendChild(o);
   }
-  mkBtn('Acumulado','acumulado');
+  addOpt('ACUMULADO (todos)','acumulado');
   var __cuenta={};META.forEach(function(m){var r=m.rival||m.nombre;__cuenta[r]=(__cuenta[r]||0)+1;});
   META.forEach(function(m){
     var rival=m.rival||m.nombre;var label=rival;
-    if(__cuenta[rival]>1 && m.fecha) label+=' '+m.fecha;
+    if(__cuenta[rival]>1 && m.fecha) label+=' \u00b7 '+m.fecha;
     if(m.resultado) label+=' ('+m.resultado+')';
-    mkBtn(label, m.id||m.nombre);
+    addOpt(label, m.id||m.nombre);
   });
+  sel.value=window._objPartido||'acumulado';
+  sel.onchange=function(){ window._objPartido=this.value; objRenderBaterias(); };
+  row.appendChild(sel);
 }
 
 // ── Toggle Partido/Entrenamiento ──
