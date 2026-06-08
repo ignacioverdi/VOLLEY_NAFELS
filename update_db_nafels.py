@@ -802,7 +802,7 @@ def calc_baterias(scout, side):
     def get(num):
         if num not in pl: pl[num]=nuevo()
         return pl[num]
-    last_rec=None; rec_valida=False
+    last_rec=None; rec_valida=False; last_serve_orig=None
     for l in scout:
         l=l.strip()
         if len(l)<5: continue
@@ -811,6 +811,11 @@ def calc_baterias(scout, side):
         num=body[:2]; skill=body[2]; res=body[4]
         if skill=='S':
             last_rec=None; rec_valida=False
+            # origen del saque = PRIMER dígito del primer grupo de 2 dígitos de la línea del saque
+            last_serve_orig=None
+            for _so in body[3:].split('~'):
+                _sod=''.join(ch for ch in _so if ch.isdigit())
+                if len(_sod)>=2: last_serve_orig=_sod[0]; break
             if pfx==side:
                 P=get(num); P['S']['T']+=1
                 if res in P['S']: P['S'][res]+=1
@@ -831,20 +836,22 @@ def calc_baterias(scout, side):
             last_rec=res; rec_valida=True
             P=get(num); P['R']['T']+=1
             if res in P['R']: P['R'][res]+=1
-            # recepción por zona destino agrupada:
-            #   P1 = Z1+Z2+Z9 | P6 = Z6+Z3+Z8 | P5 = Z5+Z4+Z7
-            # tipo: M/H=flotado, Q/T=potencia
-            # PRIMER grupo de 2 díg tras el resultado = origen(saque) + destino(recepción)
-            _rtp=body[3]  # M=flotado, Q=potencia
+            # recepción: ORIGEN = zona del saque rival (línea de saque anterior)
+            #            DESTINO = 2º dígito del primer grupo de la recepción
+            #   Agrupación (origen y destino): P1=1,2,9 | P6=6,3,8 | P5=5,4,7
+            #   tipo: M/H=flotado, Q/T=potencia
+            _rtp=body[3]
             _rd=None
             for _s in body[3:].split('~'):
                 _dd=''.join(ch for ch in _s if ch.isdigit())
                 if len(_dd)>=2: _rd=_dd[:2]; break
-            if _rd:
-                _zorig=_rd[0]; _zdest=_rd[1]
-                _ZMAP={'1':'P1','2':'P1','9':'P1','6':'P6','3':'P6','8':'P6','5':'P5','4':'P5','7':'P5'}
-                _OMAP={'1':'Z1','2':'Z1','9':'Z1','6':'Z6','3':'Z6','8':'Z6','5':'Z5','4':'Z5','7':'Z5'}
-                _O=_OMAP.get(_zorig); _P=_ZMAP.get(_zdest)
+            if _rd and last_serve_orig:
+                _zdest=_rd[1]
+                _GMAP={'1':'P1','2':'P1','9':'P1','6':'P6','3':'P6','8':'P6','5':'P5','4':'P5','7':'P5'}
+                _OKEY={'P1':'Z1','P6':'Z6','P5':'Z5'}
+                _Praw=_GMAP.get(last_serve_orig)   # origen agrupado
+                _O=_OKEY.get(_Praw) if _Praw else None
+                _P=_GMAP.get(_zdest)               # destino agrupado
                 if _O and _P:
                     T=P['_rec'].setdefault(_rtp,{}).setdefault(_O,{}).setdefault(_P,{'tot':0,'#':0,'+':0,'!':0,'-':0,'/':0,'=':0})
                     T['tot']+=1

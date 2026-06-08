@@ -1,5 +1,5 @@
-// datos_partidos.js — 08/06/2026, 00:22:22
-const PARTIDOS_GENERADO = "08/06/2026, 00:22:22";
+// datos_partidos.js — 08/06/2026, 03:33:37
+const PARTIDOS_GENERADO = "08/06/2026, 03:33:37";
 const PARTIDOS_TOTAL = 26;
 const PARTIDOS_META = [
   {
@@ -968,13 +968,13 @@ const PARTIDOS_JUGADORES = [
             "err": 1
           },
           "P6": {
-            "tot": 0,
+            "tot": 1,
             "eff": 0,
             "pos": 0,
             "neg": 0,
             "pt": 0,
             "mas": 0,
-            "neu": 0,
+            "neu": 1,
             "med": 0,
             "ovp": 0,
             "err": 0
@@ -992,13 +992,13 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "total": {
-            "tot": 1,
-            "eff": -100,
+            "tot": 2,
+            "eff": -50,
             "pos": 0,
-            "neg": 100,
+            "neg": 50,
             "pt": 0,
             "mas": 0,
-            "neu": 0,
+            "neu": 1,
             "med": 0,
             "ovp": 0,
             "err": 1
@@ -1018,13 +1018,13 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "P6": {
-            "tot": 1,
+            "tot": 0,
             "eff": 0,
             "pos": 0,
             "neg": 0,
             "pt": 0,
             "mas": 0,
-            "neu": 1,
+            "neu": 0,
             "med": 0,
             "ovp": 0,
             "err": 0
@@ -1042,13 +1042,13 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "total": {
-            "tot": 1,
+            "tot": 0,
             "eff": 0,
             "pos": 0,
             "neg": 0,
             "pt": 0,
             "mas": 0,
-            "neu": 1,
+            "neu": 0,
             "med": 0,
             "ovp": 0,
             "err": 0
@@ -1420,12 +1420,12 @@ const PARTIDOS_JUGADORES = [
       "flotado": {
         "desde_z1": {
           "P5": {
-            "tot": 0,
-            "eff": 0,
-            "pos": 0,
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
             "neg": 0,
             "pt": 0,
-            "mas": 0,
+            "mas": 1,
             "neu": 0,
             "med": 0,
             "ovp": 0,
@@ -1456,12 +1456,12 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "total": {
-            "tot": 0,
-            "eff": 0,
-            "pos": 0,
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
             "neg": 0,
             "pt": 0,
-            "mas": 0,
+            "mas": 1,
             "neu": 0,
             "med": 0,
             "ovp": 0,
@@ -1470,12 +1470,12 @@ const PARTIDOS_JUGADORES = [
         },
         "desde_z6": {
           "P5": {
-            "tot": 4,
-            "eff": 12,
-            "pos": 25,
+            "tot": 3,
+            "eff": 0,
+            "pos": 0,
             "neg": 0,
             "pt": 0,
-            "mas": 1,
+            "mas": 0,
             "neu": 2,
             "med": 1,
             "ovp": 0,
@@ -1506,12 +1506,12 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "total": {
-            "tot": 5,
-            "eff": 10,
-            "pos": 20,
+            "tot": 4,
+            "eff": 0,
+            "pos": 0,
             "neg": 0,
             "pt": 0,
-            "mas": 1,
+            "mas": 0,
             "neu": 3,
             "med": 1,
             "ovp": 0,
@@ -1572,14 +1572,14 @@ const PARTIDOS_JUGADORES = [
       "potencia": {
         "desde_z1": {
           "P5": {
-            "tot": 5,
-            "eff": -20,
-            "pos": 20,
-            "neg": 40,
+            "tot": 6,
+            "eff": -17,
+            "pos": 17,
+            "neg": 33,
             "pt": 1,
             "mas": 0,
             "neu": 1,
-            "med": 1,
+            "med": 2,
             "ovp": 0,
             "err": 2
           },
@@ -1596,6 +1596,32 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "P1": {
+            "tot": 2,
+            "eff": 50,
+            "pos": 50,
+            "neg": 0,
+            "pt": 1,
+            "mas": 0,
+            "neu": 1,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "total": {
+            "tot": 9,
+            "eff": 6,
+            "pos": 33,
+            "neg": 22,
+            "pt": 2,
+            "mas": 1,
+            "neu": 2,
+            "med": 2,
+            "ovp": 0,
+            "err": 2
+          }
+        },
+        "desde_z6": {
+          "P5": {
             "tot": 1,
             "eff": 100,
             "pos": 100,
@@ -1604,32 +1630,6 @@ const PARTIDOS_JUGADORES = [
             "mas": 0,
             "neu": 0,
             "med": 0,
-            "ovp": 0,
-            "err": 0
-          },
-          "total": {
-            "tot": 7,
-            "eff": 7,
-            "pos": 43,
-            "neg": 29,
-            "pt": 2,
-            "mas": 1,
-            "neu": 1,
-            "med": 1,
-            "ovp": 0,
-            "err": 2
-          }
-        },
-        "desde_z6": {
-          "P5": {
-            "tot": 2,
-            "eff": 50,
-            "pos": 50,
-            "neg": 0,
-            "pt": 1,
-            "mas": 0,
-            "neu": 0,
-            "med": 1,
             "ovp": 0,
             "err": 0
           },
@@ -1646,26 +1646,26 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "P1": {
-            "tot": 3,
-            "eff": 50,
-            "pos": 67,
+            "tot": 2,
+            "eff": 75,
+            "pos": 100,
             "neg": 0,
             "pt": 1,
             "mas": 1,
-            "neu": 1,
+            "neu": 0,
             "med": 0,
             "ovp": 0,
             "err": 0
           },
           "total": {
-            "tot": 5,
-            "eff": 50,
-            "pos": 60,
+            "tot": 3,
+            "eff": 83,
+            "pos": 100,
             "neg": 0,
             "pt": 2,
             "mas": 1,
-            "neu": 1,
-            "med": 1,
+            "neu": 0,
+            "med": 0,
             "ovp": 0,
             "err": 0
           }
@@ -2329,28 +2329,28 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "P1": {
-            "tot": 3,
-            "eff": 50,
-            "pos": 67,
-            "neg": 0,
+            "tot": 4,
+            "eff": 12,
+            "pos": 50,
+            "neg": 25,
             "pt": 1,
             "mas": 1,
             "neu": 0,
             "med": 1,
             "ovp": 0,
-            "err": 0
+            "err": 1
           },
           "total": {
-            "tot": 3,
-            "eff": 50,
-            "pos": 67,
-            "neg": 0,
+            "tot": 4,
+            "eff": 12,
+            "pos": 50,
+            "neg": 25,
             "pt": 1,
             "mas": 1,
             "neu": 0,
             "med": 1,
             "ovp": 0,
-            "err": 0
+            "err": 1
           }
         },
         "desde_z6": {
@@ -2379,28 +2379,28 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "P1": {
-            "tot": 2,
-            "eff": -50,
+            "tot": 1,
+            "eff": 0,
             "pos": 0,
-            "neg": 50,
+            "neg": 0,
             "pt": 0,
             "mas": 0,
             "neu": 0,
             "med": 1,
             "ovp": 0,
-            "err": 1
+            "err": 0
           },
           "total": {
-            "tot": 4,
-            "eff": 0,
-            "pos": 50,
-            "neg": 25,
+            "tot": 3,
+            "eff": 33,
+            "pos": 67,
+            "neg": 0,
             "pt": 0,
             "mas": 2,
             "neu": 0,
             "med": 1,
             "ovp": 0,
-            "err": 1
+            "err": 0
           }
         },
         "desde_z5": {
@@ -3062,12 +3062,12 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "P1": {
-            "tot": 24,
-            "eff": 33,
-            "pos": 62,
+            "tot": 25,
+            "eff": 34,
+            "pos": 64,
             "neg": 8,
             "pt": 5,
-            "mas": 10,
+            "mas": 11,
             "neu": 5,
             "med": 2,
             "ovp": 0,
@@ -3100,36 +3100,36 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "P6": {
-            "tot": 7,
-            "eff": 57,
-            "pos": 71,
+            "tot": 5,
+            "eff": 50,
+            "pos": 60,
             "neg": 0,
-            "pt": 3,
-            "mas": 2,
+            "pt": 2,
+            "mas": 1,
             "neu": 1,
             "med": 1,
             "ovp": 0,
             "err": 0
           },
           "P1": {
-            "tot": 3,
-            "eff": 33,
-            "pos": 67,
+            "tot": 2,
+            "eff": 25,
+            "pos": 50,
             "neg": 0,
             "pt": 0,
-            "mas": 2,
+            "mas": 1,
             "neu": 0,
             "med": 1,
             "ovp": 0,
             "err": 0
           },
           "total": {
-            "tot": 10,
-            "eff": 50,
-            "pos": 70,
+            "tot": 7,
+            "eff": 43,
+            "pos": 57,
             "neg": 0,
-            "pt": 3,
-            "mas": 4,
+            "pt": 2,
+            "mas": 2,
             "neu": 1,
             "med": 2,
             "ovp": 0,
@@ -3150,12 +3150,12 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "P6": {
-            "tot": 69,
-            "eff": 37,
-            "pos": 62,
+            "tot": 71,
+            "eff": 38,
+            "pos": 63,
             "neg": 4,
-            "pt": 13,
-            "mas": 30,
+            "pt": 14,
+            "mas": 31,
             "neu": 13,
             "med": 10,
             "ovp": 1,
@@ -3174,12 +3174,12 @@ const PARTIDOS_JUGADORES = [
             "err": 2
           },
           "total": {
-            "tot": 139,
-            "eff": 33,
+            "tot": 141,
+            "eff": 34,
             "pos": 57,
             "neg": 4,
-            "pt": 24,
-            "mas": 55,
+            "pt": 25,
+            "mas": 56,
             "neu": 26,
             "med": 28,
             "ovp": 2,
@@ -3202,40 +3202,40 @@ const PARTIDOS_JUGADORES = [
             "err": 3
           },
           "P6": {
-            "tot": 108,
-            "eff": 31,
-            "pos": 56,
-            "neg": 9,
-            "pt": 24,
-            "mas": 36,
-            "neu": 22,
-            "med": 16,
+            "tot": 131,
+            "eff": 25,
+            "pos": 53,
+            "neg": 11,
+            "pt": 25,
+            "mas": 44,
+            "neu": 27,
+            "med": 20,
             "ovp": 2,
-            "err": 8
+            "err": 13
           },
           "P1": {
-            "tot": 38,
-            "eff": 0,
-            "pos": 37,
+            "tot": 42,
+            "eff": 1,
+            "pos": 38,
             "neg": 29,
-            "pt": 5,
-            "mas": 9,
-            "neu": 7,
+            "pt": 6,
+            "mas": 10,
+            "neu": 8,
             "med": 6,
             "ovp": 3,
-            "err": 8
+            "err": 9
           },
           "total": {
-            "tot": 159,
-            "eff": 22,
-            "pos": 51,
-            "neg": 15,
-            "pt": 31,
-            "mas": 50,
-            "neu": 30,
-            "med": 24,
+            "tot": 186,
+            "eff": 19,
+            "pos": 49,
+            "neg": 16,
+            "pt": 33,
+            "mas": 59,
+            "neu": 36,
+            "med": 28,
             "ovp": 5,
-            "err": 19
+            "err": 25
           }
         },
         "desde_z6": {
@@ -3252,40 +3252,40 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "P6": {
-            "tot": 47,
-            "eff": 9,
-            "pos": 43,
-            "neg": 17,
-            "pt": 3,
-            "mas": 17,
-            "neu": 8,
-            "med": 11,
+            "tot": 19,
+            "eff": 13,
+            "pos": 42,
+            "neg": 16,
+            "pt": 2,
+            "mas": 6,
+            "neu": 1,
+            "med": 7,
             "ovp": 1,
-            "err": 7
-          },
-          "P1": {
-            "tot": 11,
-            "eff": 0,
-            "pos": 27,
-            "neg": 18,
-            "pt": 1,
-            "mas": 2,
-            "neu": 5,
-            "med": 1,
-            "ovp": 0,
             "err": 2
           },
+          "P1": {
+            "tot": 7,
+            "eff": -7,
+            "pos": 14,
+            "neg": 14,
+            "pt": 0,
+            "mas": 1,
+            "neu": 4,
+            "med": 1,
+            "ovp": 0,
+            "err": 1
+          },
           "total": {
-            "tot": 61,
-            "eff": 8,
-            "pos": 41,
-            "neg": 18,
-            "pt": 5,
-            "mas": 20,
-            "neu": 13,
-            "med": 12,
+            "tot": 29,
+            "eff": 10,
+            "pos": 38,
+            "neg": 17,
+            "pt": 3,
+            "mas": 8,
+            "neu": 5,
+            "med": 8,
             "ovp": 2,
-            "err": 9
+            "err": 3
           }
         },
         "desde_z5": {
@@ -3302,13 +3302,13 @@ const PARTIDOS_JUGADORES = [
             "err": 1
           },
           "P6": {
-            "tot": 18,
+            "tot": 23,
             "eff": 33,
-            "pos": 67,
-            "neg": 6,
+            "pos": 65,
+            "neg": 4,
             "pt": 2,
-            "mas": 10,
-            "neu": 3,
+            "mas": 13,
+            "neu": 5,
             "med": 2,
             "ovp": 0,
             "err": 1
@@ -3326,13 +3326,13 @@ const PARTIDOS_JUGADORES = [
             "err": 1
           },
           "total": {
-            "tot": 29,
-            "eff": 24,
+            "tot": 34,
+            "eff": 25,
             "pos": 59,
-            "neg": 10,
+            "neg": 9,
             "pt": 3,
-            "mas": 14,
-            "neu": 5,
+            "mas": 17,
+            "neu": 7,
             "med": 4,
             "ovp": 0,
             "err": 3
@@ -3653,13 +3653,13 @@ const PARTIDOS_JUGADORES = [
             "err": 1
           },
           "P6": {
-            "tot": 8,
-            "eff": 25,
-            "pos": 50,
-            "neg": 12,
+            "tot": 9,
+            "eff": 22,
+            "pos": 44,
+            "neg": 11,
             "pt": 1,
             "mas": 3,
-            "neu": 2,
+            "neu": 3,
             "med": 1,
             "ovp": 1,
             "err": 0
@@ -3677,13 +3677,13 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "total": {
-            "tot": 53,
-            "eff": 35,
-            "pos": 58,
+            "tot": 54,
+            "eff": 34,
+            "pos": 57,
             "neg": 9,
             "pt": 12,
             "mas": 19,
-            "neu": 7,
+            "neu": 8,
             "med": 10,
             "ovp": 4,
             "err": 1
@@ -3691,25 +3691,25 @@ const PARTIDOS_JUGADORES = [
         },
         "desde_z6": {
           "P5": {
-            "tot": 8,
-            "eff": 6,
-            "pos": 50,
-            "neg": 25,
-            "pt": 1,
-            "mas": 3,
-            "neu": 1,
-            "med": 1,
-            "ovp": 0,
-            "err": 2
-          },
-          "P6": {
-            "tot": 4,
-            "eff": 25,
-            "pos": 50,
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
             "neg": 0,
             "pt": 0,
-            "mas": 2,
-            "neu": 2,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
+            "ovp": 0,
+            "err": 0
+          },
+          "P6": {
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
+            "neg": 0,
+            "pt": 0,
+            "mas": 0,
+            "neu": 0,
             "med": 0,
             "ovp": 0,
             "err": 0
@@ -3727,39 +3727,39 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "total": {
-            "tot": 13,
-            "eff": 15,
-            "pos": 54,
-            "neg": 15,
-            "pt": 1,
-            "mas": 6,
-            "neu": 3,
-            "med": 1,
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
+            "neg": 0,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
+            "med": 0,
             "ovp": 0,
-            "err": 2
+            "err": 0
           }
         },
         "desde_z5": {
           "P5": {
-            "tot": 101,
-            "eff": 29,
+            "tot": 109,
+            "eff": 28,
             "pos": 56,
-            "neg": 10,
-            "pt": 16,
-            "mas": 41,
-            "neu": 15,
-            "med": 19,
+            "neg": 11,
+            "pt": 17,
+            "mas": 44,
+            "neu": 16,
+            "med": 20,
             "ovp": 6,
-            "err": 4
+            "err": 6
           },
           "P6": {
-            "tot": 29,
-            "eff": 26,
-            "pos": 45,
-            "neg": 10,
+            "tot": 32,
+            "eff": 27,
+            "pos": 47,
+            "neg": 9,
             "pt": 5,
-            "mas": 8,
-            "neu": 7,
+            "mas": 10,
+            "neu": 8,
             "med": 6,
             "ovp": 3,
             "err": 0
@@ -3777,127 +3777,127 @@ const PARTIDOS_JUGADORES = [
             "err": 2
           },
           "total": {
-            "tot": 145,
-            "eff": 25,
-            "pos": 50,
-            "neg": 10,
-            "pt": 21,
-            "mas": 52,
-            "neu": 26,
-            "med": 31,
+            "tot": 156,
+            "eff": 24,
+            "pos": 51,
+            "neg": 11,
+            "pt": 22,
+            "mas": 57,
+            "neu": 28,
+            "med": 32,
             "ovp": 9,
-            "err": 6
+            "err": 8
           }
         }
       },
       "potencia": {
         "desde_z1": {
           "P5": {
-            "tot": 66,
-            "eff": 24,
-            "pos": 61,
+            "tot": 78,
+            "eff": 22,
+            "pos": 58,
             "neg": 17,
-            "pt": 12,
-            "mas": 28,
-            "neu": 8,
-            "med": 7,
+            "pt": 13,
+            "mas": 32,
+            "neu": 11,
+            "med": 9,
             "ovp": 2,
-            "err": 9
+            "err": 11
           },
           "P6": {
-            "tot": 16,
-            "eff": 25,
-            "pos": 50,
+            "tot": 24,
+            "eff": 31,
+            "pos": 62,
             "neg": 12,
-            "pt": 4,
-            "mas": 4,
+            "pt": 6,
+            "mas": 9,
             "neu": 4,
-            "med": 2,
-            "ovp": 0,
-            "err": 2
-          },
-          "P1": {
-            "tot": 12,
-            "eff": 17,
-            "pos": 50,
-            "neg": 17,
-            "pt": 1,
-            "mas": 5,
-            "neu": 3,
-            "med": 1,
-            "ovp": 1,
-            "err": 1
-          },
-          "total": {
-            "tot": 94,
-            "eff": 23,
-            "pos": 57,
-            "neg": 16,
-            "pt": 17,
-            "mas": 37,
-            "neu": 15,
-            "med": 10,
-            "ovp": 3,
-            "err": 12
-          }
-        },
-        "desde_z6": {
-          "P5": {
-            "tot": 21,
-            "eff": 12,
-            "pos": 48,
-            "neg": 19,
-            "pt": 3,
-            "mas": 7,
-            "neu": 4,
-            "med": 3,
-            "ovp": 0,
-            "err": 4
-          },
-          "P6": {
-            "tot": 18,
-            "eff": 33,
-            "pos": 61,
-            "neg": 6,
-            "pt": 3,
-            "mas": 8,
-            "neu": 4,
-            "med": 2,
-            "ovp": 0,
-            "err": 1
-          },
-          "P1": {
-            "tot": 14,
-            "eff": 7,
-            "pos": 57,
-            "neg": 21,
-            "pt": 0,
-            "mas": 8,
-            "neu": 1,
             "med": 2,
             "ovp": 0,
             "err": 3
           },
+          "P1": {
+            "tot": 19,
+            "eff": 21,
+            "pos": 63,
+            "neg": 16,
+            "pt": 1,
+            "mas": 11,
+            "neu": 3,
+            "med": 1,
+            "ovp": 1,
+            "err": 2
+          },
           "total": {
-            "tot": 53,
-            "eff": 18,
-            "pos": 55,
-            "neg": 15,
-            "pt": 6,
-            "mas": 23,
-            "neu": 9,
-            "med": 7,
+            "tot": 121,
+            "eff": 24,
+            "pos": 60,
+            "neg": 16,
+            "pt": 20,
+            "mas": 52,
+            "neu": 18,
+            "med": 12,
+            "ovp": 3,
+            "err": 16
+          }
+        },
+        "desde_z6": {
+          "P5": {
+            "tot": 8,
+            "eff": 6,
+            "pos": 50,
+            "neg": 25,
+            "pt": 1,
+            "mas": 3,
+            "neu": 1,
+            "med": 1,
             "ovp": 0,
-            "err": 8
+            "err": 2
+          },
+          "P6": {
+            "tot": 9,
+            "eff": 28,
+            "pos": 44,
+            "neg": 0,
+            "pt": 1,
+            "mas": 3,
+            "neu": 3,
+            "med": 2,
+            "ovp": 0,
+            "err": 0
+          },
+          "P1": {
+            "tot": 7,
+            "eff": -14,
+            "pos": 29,
+            "neg": 29,
+            "pt": 0,
+            "mas": 2,
+            "neu": 1,
+            "med": 2,
+            "ovp": 0,
+            "err": 2
+          },
+          "total": {
+            "tot": 24,
+            "eff": 8,
+            "pos": 42,
+            "neg": 17,
+            "pt": 2,
+            "mas": 8,
+            "neu": 5,
+            "med": 5,
+            "ovp": 0,
+            "err": 4
           }
         },
         "desde_z5": {
           "P5": {
-            "tot": 10,
-            "eff": 20,
-            "pos": 40,
+            "tot": 11,
+            "eff": 27,
+            "pos": 45,
             "neg": 0,
-            "pt": 0,
+            "pt": 1,
             "mas": 4,
             "neu": 3,
             "med": 3,
@@ -3905,13 +3905,13 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "P6": {
-            "tot": 1,
+            "tot": 2,
             "eff": 0,
             "pos": 0,
             "neg": 0,
             "pt": 0,
             "mas": 0,
-            "neu": 1,
+            "neu": 2,
             "med": 0,
             "ovp": 0,
             "err": 0
@@ -3929,13 +3929,13 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "total": {
-            "tot": 17,
-            "eff": 24,
+            "tot": 19,
+            "eff": 26,
             "pos": 47,
             "neg": 0,
-            "pt": 0,
+            "pt": 1,
             "mas": 8,
-            "neu": 5,
+            "neu": 6,
             "med": 4,
             "ovp": 0,
             "err": 0
@@ -4819,23 +4819,23 @@ const PARTIDOS_JUGADORES = [
       "flotado": {
         "desde_z1": {
           "P5": {
-            "tot": 23,
+            "tot": 24,
             "eff": 33,
-            "pos": 48,
+            "pos": 50,
             "neg": 4,
             "pt": 6,
-            "mas": 5,
+            "mas": 6,
             "neu": 3,
             "med": 8,
             "ovp": 0,
             "err": 1
           },
           "P6": {
-            "tot": 8,
-            "eff": 6,
-            "pos": 38,
-            "neg": 12,
-            "pt": 0,
+            "tot": 9,
+            "eff": 17,
+            "pos": 44,
+            "neg": 11,
+            "pt": 1,
             "mas": 3,
             "neu": 2,
             "med": 2,
@@ -4843,25 +4843,25 @@ const PARTIDOS_JUGADORES = [
             "err": 1
           },
           "P1": {
-            "tot": 12,
+            "tot": 13,
             "eff": 8,
-            "pos": 17,
+            "pos": 15,
             "neg": 8,
             "pt": 1,
             "mas": 1,
-            "neu": 3,
+            "neu": 4,
             "med": 6,
             "ovp": 1,
             "err": 0
           },
           "total": {
-            "tot": 43,
-            "eff": 21,
-            "pos": 37,
+            "tot": 46,
+            "eff": 23,
+            "pos": 39,
             "neg": 7,
-            "pt": 7,
-            "mas": 9,
-            "neu": 8,
+            "pt": 8,
+            "mas": 10,
+            "neu": 9,
             "med": 16,
             "ovp": 1,
             "err": 2
@@ -4869,23 +4869,23 @@ const PARTIDOS_JUGADORES = [
         },
         "desde_z6": {
           "P5": {
-            "tot": 3,
-            "eff": 33,
-            "pos": 67,
+            "tot": 1,
+            "eff": 0,
+            "pos": 0,
             "neg": 0,
             "pt": 0,
-            "mas": 2,
+            "mas": 0,
             "neu": 0,
             "med": 1,
             "ovp": 0,
             "err": 0
           },
           "P6": {
-            "tot": 2,
-            "eff": 75,
+            "tot": 1,
+            "eff": 50,
             "pos": 100,
             "neg": 0,
-            "pt": 1,
+            "pt": 0,
             "mas": 1,
             "neu": 0,
             "med": 0,
@@ -4893,25 +4893,25 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "P1": {
-            "tot": 1,
+            "tot": 0,
             "eff": 0,
             "pos": 0,
             "neg": 0,
             "pt": 0,
             "mas": 0,
-            "neu": 1,
+            "neu": 0,
             "med": 0,
             "ovp": 0,
             "err": 0
           },
           "total": {
-            "tot": 6,
-            "eff": 42,
-            "pos": 67,
+            "tot": 2,
+            "eff": 25,
+            "pos": 50,
             "neg": 0,
-            "pt": 1,
-            "mas": 3,
-            "neu": 1,
+            "pt": 0,
+            "mas": 1,
+            "neu": 0,
             "med": 1,
             "ovp": 0,
             "err": 0
@@ -4919,12 +4919,12 @@ const PARTIDOS_JUGADORES = [
         },
         "desde_z5": {
           "P5": {
-            "tot": 50,
-            "eff": 14,
-            "pos": 36,
+            "tot": 51,
+            "eff": 15,
+            "pos": 37,
             "neg": 12,
             "pt": 5,
-            "mas": 13,
+            "mas": 14,
             "neu": 10,
             "med": 16,
             "ovp": 3,
@@ -4955,12 +4955,12 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "total": {
-            "tot": 83,
+            "tot": 84,
             "eff": 20,
             "pos": 40,
             "neg": 8,
             "pt": 11,
-            "mas": 22,
+            "mas": 23,
             "neu": 18,
             "med": 25,
             "ovp": 3,
@@ -4971,112 +4971,112 @@ const PARTIDOS_JUGADORES = [
       "potencia": {
         "desde_z1": {
           "P5": {
-            "tot": 29,
-            "eff": 2,
+            "tot": 35,
+            "eff": 3,
             "pos": 34,
             "neg": 17,
             "pt": 0,
-            "mas": 10,
-            "neu": 4,
-            "med": 10,
-            "ovp": 1,
+            "mas": 12,
+            "neu": 6,
+            "med": 11,
+            "ovp": 2,
             "err": 4
           },
           "P6": {
-            "tot": 10,
-            "eff": 25,
-            "pos": 50,
-            "neg": 10,
+            "tot": 11,
+            "eff": 23,
+            "pos": 45,
+            "neg": 9,
             "pt": 2,
             "mas": 3,
             "neu": 1,
-            "med": 3,
+            "med": 4,
             "ovp": 0,
             "err": 1
           },
           "P1": {
-            "tot": 12,
-            "eff": 12,
-            "pos": 17,
+            "tot": 15,
+            "eff": 20,
+            "pos": 33,
             "neg": 0,
             "pt": 1,
-            "mas": 1,
+            "mas": 4,
             "neu": 4,
             "med": 6,
             "ovp": 0,
             "err": 0
           },
           "total": {
-            "tot": 51,
-            "eff": 9,
-            "pos": 33,
-            "neg": 12,
+            "tot": 61,
+            "eff": 11,
+            "pos": 36,
+            "neg": 11,
             "pt": 3,
-            "mas": 14,
-            "neu": 9,
-            "med": 19,
-            "ovp": 1,
+            "mas": 19,
+            "neu": 11,
+            "med": 21,
+            "ovp": 2,
             "err": 5
           }
         },
         "desde_z6": {
           "P5": {
-            "tot": 11,
-            "eff": 9,
-            "pos": 45,
-            "neg": 18,
+            "tot": 4,
+            "eff": 0,
+            "pos": 50,
+            "neg": 25,
             "pt": 0,
-            "mas": 5,
-            "neu": 3,
-            "med": 1,
-            "ovp": 1,
+            "mas": 2,
+            "neu": 1,
+            "med": 0,
+            "ovp": 0,
             "err": 1
           },
           "P6": {
-            "tot": 2,
-            "eff": 25,
-            "pos": 50,
+            "tot": 1,
+            "eff": 50,
+            "pos": 100,
             "neg": 0,
             "pt": 0,
             "mas": 1,
             "neu": 0,
-            "med": 1,
+            "med": 0,
             "ovp": 0,
             "err": 0
           },
           "P1": {
-            "tot": 4,
-            "eff": 38,
-            "pos": 75,
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
             "neg": 0,
             "pt": 0,
-            "mas": 3,
-            "neu": 1,
+            "mas": 0,
+            "neu": 0,
             "med": 0,
             "ovp": 0,
             "err": 0
           },
           "total": {
-            "tot": 17,
-            "eff": 18,
-            "pos": 53,
-            "neg": 12,
+            "tot": 5,
+            "eff": 10,
+            "pos": 60,
+            "neg": 20,
             "pt": 0,
-            "mas": 9,
-            "neu": 4,
-            "med": 2,
-            "ovp": 1,
+            "mas": 3,
+            "neu": 1,
+            "med": 0,
+            "ovp": 0,
             "err": 1
           }
         },
         "desde_z5": {
           "P5": {
-            "tot": 13,
-            "eff": 4,
-            "pos": 31,
-            "neg": 23,
+            "tot": 14,
+            "eff": 7,
+            "pos": 36,
+            "neg": 21,
             "pt": 2,
-            "mas": 2,
+            "mas": 3,
             "neu": 4,
             "med": 2,
             "ovp": 1,
@@ -5095,25 +5095,25 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "P1": {
-            "tot": 4,
-            "eff": 38,
-            "pos": 50,
+            "tot": 5,
+            "eff": 30,
+            "pos": 40,
             "neg": 0,
             "pt": 1,
             "mas": 1,
-            "neu": 0,
+            "neu": 1,
             "med": 2,
             "ovp": 0,
             "err": 0
           },
           "total": {
-            "tot": 19,
-            "eff": 11,
-            "pos": 32,
-            "neg": 16,
+            "tot": 21,
+            "eff": 12,
+            "pos": 33,
+            "neg": 14,
             "pt": 3,
-            "mas": 3,
-            "neu": 4,
+            "mas": 4,
+            "neu": 5,
             "med": 6,
             "ovp": 1,
             "err": 2
@@ -5655,12 +5655,12 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "P6": {
-            "tot": 1,
-            "eff": 0,
-            "pos": 0,
+            "tot": 2,
+            "eff": 25,
+            "pos": 50,
             "neg": 0,
             "pt": 0,
-            "mas": 0,
+            "mas": 1,
             "neu": 0,
             "med": 1,
             "ovp": 0,
@@ -5679,12 +5679,12 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "total": {
-            "tot": 1,
-            "eff": 0,
-            "pos": 0,
+            "tot": 2,
+            "eff": 25,
+            "pos": 50,
             "neg": 0,
             "pt": 0,
-            "mas": 0,
+            "mas": 1,
             "neu": 0,
             "med": 1,
             "ovp": 0,
@@ -5693,35 +5693,35 @@ const PARTIDOS_JUGADORES = [
         },
         "desde_z6": {
           "P5": {
-            "tot": 10,
+            "tot": 6,
             "eff": 50,
-            "pos": 80,
+            "pos": 83,
             "neg": 0,
-            "pt": 2,
-            "mas": 6,
+            "pt": 1,
+            "mas": 4,
             "neu": 0,
-            "med": 2,
+            "med": 1,
             "ovp": 0,
             "err": 0
           },
           "P6": {
-            "tot": 1,
-            "eff": 50,
+            "tot": 3,
+            "eff": 100,
             "pos": 100,
             "neg": 0,
-            "pt": 0,
-            "mas": 1,
+            "pt": 3,
+            "mas": 0,
             "neu": 0,
             "med": 0,
             "ovp": 0,
             "err": 0
           },
           "P1": {
-            "tot": 2,
-            "eff": 100,
-            "pos": 100,
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
             "neg": 0,
-            "pt": 2,
+            "pt": 0,
             "mas": 0,
             "neu": 0,
             "med": 0,
@@ -5729,49 +5729,49 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "total": {
-            "tot": 1,
-            "eff": 50,
-            "pos": 100,
+            "tot": 9,
+            "eff": 67,
+            "pos": 89,
             "neg": 0,
-            "pt": 0,
-            "mas": 1,
+            "pt": 4,
+            "mas": 4,
             "neu": 0,
-            "med": 0,
+            "med": 1,
             "ovp": 0,
             "err": 0
           }
         },
         "desde_z5": {
           "P5": {
-            "tot": 50,
-            "eff": 43,
-            "pos": 66,
+            "tot": 54,
+            "eff": 44,
+            "pos": 67,
             "neg": 2,
-            "pt": 12,
-            "mas": 21,
+            "pt": 13,
+            "mas": 23,
             "neu": 4,
-            "med": 12,
+            "med": 13,
             "ovp": 0,
             "err": 1
           },
           "P6": {
-            "tot": 54,
-            "eff": 37,
-            "pos": 63,
-            "neg": 6,
-            "pt": 10,
-            "mas": 24,
+            "tot": 58,
+            "eff": 38,
+            "pos": 64,
+            "neg": 5,
+            "pt": 11,
+            "mas": 26,
             "neu": 11,
-            "med": 6,
+            "med": 7,
             "ovp": 2,
             "err": 1
           },
           "P1": {
-            "tot": 53,
-            "eff": 37,
-            "pos": 62,
-            "neg": 8,
-            "pt": 12,
+            "tot": 55,
+            "eff": 39,
+            "pos": 64,
+            "neg": 7,
+            "pt": 14,
             "mas": 21,
             "neu": 8,
             "med": 8,
@@ -5779,14 +5779,14 @@ const PARTIDOS_JUGADORES = [
             "err": 2
           },
           "total": {
-            "tot": 157,
-            "eff": 39,
-            "pos": 64,
+            "tot": 167,
+            "eff": 40,
+            "pos": 65,
             "neg": 5,
-            "pt": 34,
-            "mas": 66,
+            "pt": 38,
+            "mas": 70,
             "neu": 23,
-            "med": 26,
+            "med": 28,
             "ovp": 4,
             "err": 4
           }
@@ -5795,102 +5795,102 @@ const PARTIDOS_JUGADORES = [
       "potencia": {
         "desde_z1": {
           "P5": {
-            "tot": 60,
-            "eff": 22,
-            "pos": 53,
+            "tot": 68,
+            "eff": 23,
+            "pos": 54,
             "neg": 13,
-            "pt": 10,
-            "mas": 22,
+            "pt": 12,
+            "mas": 25,
             "neu": 14,
-            "med": 6,
+            "med": 8,
             "ovp": 0,
-            "err": 8
+            "err": 9
           },
           "P6": {
-            "tot": 55,
+            "tot": 64,
             "eff": 25,
             "pos": 55,
             "neg": 9,
-            "pt": 5,
-            "mas": 25,
-            "neu": 10,
-            "med": 10,
+            "pt": 7,
+            "mas": 28,
+            "neu": 11,
+            "med": 12,
             "ovp": 2,
-            "err": 3
-          },
-          "P1": {
-            "tot": 21,
-            "eff": 5,
-            "pos": 43,
-            "neg": 19,
-            "pt": 1,
-            "mas": 8,
-            "neu": 5,
-            "med": 3,
-            "ovp": 0,
             "err": 4
           },
+          "P1": {
+            "tot": 28,
+            "eff": 7,
+            "pos": 46,
+            "neg": 18,
+            "pt": 1,
+            "mas": 12,
+            "neu": 7,
+            "med": 3,
+            "ovp": 0,
+            "err": 5
+          },
           "total": {
-            "tot": 136,
-            "eff": 20,
-            "pos": 52,
+            "tot": 160,
+            "eff": 21,
+            "pos": 53,
             "neg": 12,
-            "pt": 16,
-            "mas": 55,
-            "neu": 29,
-            "med": 19,
+            "pt": 20,
+            "mas": 65,
+            "neu": 32,
+            "med": 23,
             "ovp": 2,
-            "err": 15
+            "err": 18
           }
         },
         "desde_z6": {
           "P5": {
-            "tot": 20,
-            "eff": 32,
-            "pos": 55,
-            "neg": 5,
-            "pt": 4,
-            "mas": 7,
+            "tot": 12,
+            "eff": 33,
+            "pos": 50,
+            "neg": 0,
+            "pt": 2,
+            "mas": 4,
             "neu": 2,
-            "med": 6,
+            "med": 4,
             "ovp": 0,
-            "err": 1
+            "err": 0
           },
           "P6": {
-            "tot": 29,
-            "eff": 12,
-            "pos": 41,
-            "neg": 17,
-            "pt": 4,
-            "mas": 8,
-            "neu": 7,
-            "med": 5,
+            "tot": 20,
+            "eff": 5,
+            "pos": 35,
+            "neg": 20,
+            "pt": 2,
+            "mas": 5,
+            "neu": 6,
+            "med": 3,
             "ovp": 1,
-            "err": 4
+            "err": 3
           },
           "P1": {
-            "tot": 21,
-            "eff": 5,
-            "pos": 33,
+            "tot": 14,
+            "eff": 0,
+            "pos": 21,
             "neg": 14,
             "pt": 0,
-            "mas": 7,
-            "neu": 5,
+            "mas": 3,
+            "neu": 3,
             "med": 6,
             "ovp": 1,
-            "err": 2
+            "err": 1
           },
           "total": {
-            "tot": 70,
-            "eff": 16,
-            "pos": 43,
+            "tot": 46,
+            "eff": 11,
+            "pos": 35,
             "neg": 13,
-            "pt": 8,
-            "mas": 22,
-            "neu": 14,
-            "med": 17,
+            "pt": 4,
+            "mas": 12,
+            "neu": 11,
+            "med": 13,
             "ovp": 2,
-            "err": 7
+            "err": 4
           }
         },
         "desde_z5": {
@@ -6328,26 +6328,26 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "P1": {
-            "tot": 0,
+            "tot": 1,
             "eff": 0,
             "pos": 0,
             "neg": 0,
             "pt": 0,
             "mas": 0,
             "neu": 0,
-            "med": 0,
+            "med": 1,
             "ovp": 0,
             "err": 0
           },
           "total": {
-            "tot": 3,
-            "eff": 33,
-            "pos": 67,
+            "tot": 4,
+            "eff": 25,
+            "pos": 50,
             "neg": 0,
             "pt": 0,
             "mas": 2,
             "neu": 1,
-            "med": 0,
+            "med": 1,
             "ovp": 0,
             "err": 0
           }
@@ -6378,26 +6378,26 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "P1": {
-            "tot": 3,
-            "eff": 17,
-            "pos": 33,
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
             "neg": 0,
             "pt": 0,
-            "mas": 1,
-            "neu": 1,
-            "med": 1,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
             "ovp": 0,
             "err": 0
           },
           "total": {
-            "tot": 3,
-            "eff": 17,
-            "pos": 33,
+            "tot": 0,
+            "eff": 0,
+            "pos": 0,
             "neg": 0,
             "pt": 0,
-            "mas": 1,
-            "neu": 1,
-            "med": 1,
+            "mas": 0,
+            "neu": 0,
+            "med": 0,
             "ovp": 0,
             "err": 0
           }
@@ -6428,25 +6428,25 @@ const PARTIDOS_JUGADORES = [
             "err": 0
           },
           "P1": {
-            "tot": 2,
-            "eff": 0,
-            "pos": 0,
+            "tot": 4,
+            "eff": 12,
+            "pos": 25,
             "neg": 0,
             "pt": 0,
-            "mas": 0,
-            "neu": 1,
+            "mas": 1,
+            "neu": 2,
             "med": 1,
             "ovp": 0,
             "err": 0
           },
           "total": {
-            "tot": 3,
-            "eff": 33,
-            "pos": 33,
+            "tot": 5,
+            "eff": 30,
+            "pos": 40,
             "neg": 0,
             "pt": 1,
-            "mas": 0,
-            "neu": 1,
+            "mas": 1,
+            "neu": 2,
             "med": 1,
             "ovp": 0,
             "err": 0
@@ -6995,73 +6995,23 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
-                "neg": 0,
-                "pt": 0,
+                "tot": 3,
+                "eff": 17,
+                "pos": 67,
+                "neg": 33,
+                "pt": 1,
                 "mas": 1,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              },
-              "P6": {
-                "tot": 2,
-                "eff": 50,
-                "pos": 50,
-                "neg": 0,
-                "pt": 1,
-                "mas": 0,
-                "neu": 1,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              },
-              "P1": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
-                "neg": 0,
-                "pt": 0,
-                "mas": 1,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              },
-              "total": {
-                "tot": 4,
-                "eff": 50,
-                "pos": 75,
-                "neg": 0,
-                "pt": 1,
-                "mas": 2,
-                "neu": 1,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              }
-            },
-            "desde_z6": {
-              "P5": {
-                "tot": 2,
-                "eff": 0,
-                "pos": 50,
-                "neg": 50,
-                "pt": 1,
-                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 1
               },
               "P6": {
-                "tot": 3,
-                "eff": 17,
-                "pos": 33,
+                "tot": 4,
+                "eff": 38,
+                "pos": 50,
                 "neg": 0,
-                "pt": 0,
+                "pt": 1,
                 "mas": 1,
                 "neu": 2,
                 "med": 0,
@@ -7070,27 +7020,77 @@ const PARTIDOS_INDIVIDUAL = [
               },
               "P1": {
                 "tot": 3,
-                "eff": -17,
-                "pos": 33,
+                "eff": 0,
+                "pos": 67,
                 "neg": 33,
                 "pt": 0,
-                "mas": 1,
-                "neu": 1,
+                "mas": 2,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 1
               },
               "total": {
-                "tot": 8,
-                "eff": 0,
-                "pos": 38,
-                "neg": 25,
-                "pt": 1,
-                "mas": 2,
-                "neu": 3,
+                "tot": 10,
+                "eff": 20,
+                "pos": 60,
+                "neg": 20,
+                "pt": 2,
+                "mas": 4,
+                "neu": 2,
                 "med": 0,
                 "ovp": 0,
                 "err": 2
+              }
+            },
+            "desde_z6": {
+              "P5": {
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              },
+              "P6": {
+                "tot": 1,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 1,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              },
+              "P1": {
+                "tot": 1,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 1,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              },
+              "total": {
+                "tot": 2,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 2,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
               }
             },
             "desde_z5": {
@@ -8323,13 +8323,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 2,
-                "eff": 75,
-                "pos": 100,
+                "tot": 3,
+                "eff": 50,
+                "pos": 67,
                 "neg": 0,
                 "pt": 1,
                 "mas": 1,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -8347,13 +8347,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 6,
-                "eff": 67,
-                "pos": 83,
+                "tot": 7,
+                "eff": 57,
+                "pos": 71,
                 "neg": 0,
                 "pt": 3,
                 "mas": 2,
-                "neu": 1,
+                "neu": 2,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -8373,13 +8373,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -8397,13 +8397,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
                 "mas": 1,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -8463,13 +8463,13 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 3,
-                "eff": 33,
-                "pos": 67,
+                "tot": 5,
+                "eff": 30,
+                "pos": 60,
                 "neg": 0,
                 "pt": 0,
-                "mas": 2,
-                "neu": 0,
+                "mas": 3,
+                "neu": 1,
                 "med": 1,
                 "ovp": 0,
                 "err": 0
@@ -8487,25 +8487,25 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 1,
-                "eff": 100,
+                "tot": 3,
+                "eff": 67,
                 "pos": 100,
                 "neg": 0,
                 "pt": 1,
-                "mas": 0,
+                "mas": 2,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 4,
-                "eff": 50,
+                "tot": 8,
+                "eff": 44,
                 "pos": 75,
                 "neg": 0,
                 "pt": 1,
-                "mas": 2,
-                "neu": 0,
+                "mas": 5,
+                "neu": 1,
                 "med": 1,
                 "ovp": 0,
                 "err": 0
@@ -8513,13 +8513,13 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 3,
-                "eff": 33,
-                "pos": 67,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 2,
-                "neu": 1,
+                "mas": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -8537,25 +8537,25 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 2,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 2,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 5,
-                "eff": 40,
-                "pos": 80,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 4,
-                "neu": 1,
+                "mas": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -8933,40 +8933,40 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 7,
-                "eff": 64,
-                "pos": 100,
-                "neg": 0,
+                "tot": 10,
+                "eff": 40,
+                "pos": 80,
+                "neg": 10,
                 "pt": 2,
-                "mas": 5,
+                "mas": 6,
                 "neu": 0,
-                "med": 0,
+                "med": 1,
                 "ovp": 0,
-                "err": 0
+                "err": 1
               },
               "P1": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 2,
+                "eff": 50,
+                "pos": 50,
                 "neg": 0,
-                "pt": 0,
+                "pt": 1,
                 "mas": 0,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 7,
-                "eff": 64,
-                "pos": 100,
-                "neg": 0,
-                "pt": 2,
-                "mas": 5,
-                "neu": 0,
-                "med": 0,
+                "tot": 12,
+                "eff": 42,
+                "pos": 75,
+                "neg": 8,
+                "pt": 3,
+                "mas": 6,
+                "neu": 1,
+                "med": 1,
                 "ovp": 0,
-                "err": 0
+                "err": 1
               }
             },
             "desde_z6": {
@@ -8983,40 +8983,40 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 4,
-                "eff": -12,
-                "pos": 25,
-                "neg": 25,
+                "tot": 1,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
-                "med": 2,
+                "med": 1,
                 "ovp": 0,
-                "err": 1
+                "err": 0
               },
               "P1": {
-                "tot": 3,
-                "eff": 33,
-                "pos": 33,
+                "tot": 1,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
-                "pt": 1,
+                "pt": 0,
                 "mas": 0,
-                "neu": 2,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 8,
-                "eff": 12,
-                "pos": 38,
-                "neg": 12,
-                "pt": 1,
-                "mas": 2,
-                "neu": 2,
-                "med": 2,
+                "tot": 3,
+                "eff": 17,
+                "pos": 33,
+                "neg": 0,
+                "pt": 0,
+                "mas": 1,
+                "neu": 1,
+                "med": 1,
                 "ovp": 0,
-                "err": 1
+                "err": 0
               }
             },
             "desde_z5": {
@@ -12561,16 +12561,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
-                "neg": 0,
-                "pt": 0,
+                "tot": 3,
+                "eff": 33,
+                "pos": 67,
+                "neg": 33,
+                "pt": 2,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 0
+                "err": 1
               },
               "P1": {
                 "tot": 0,
@@ -12585,16 +12585,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
-                "neg": 0,
-                "pt": 0,
+                "tot": 3,
+                "eff": 33,
+                "pos": 67,
+                "neg": 33,
+                "pt": 2,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 0
+                "err": 1
               }
             },
             "desde_z6": {
@@ -12611,16 +12611,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 5,
-                "eff": 40,
-                "pos": 80,
-                "neg": 20,
-                "pt": 2,
+                "tot": 2,
+                "eff": 50,
+                "pos": 100,
+                "neg": 0,
+                "pt": 0,
                 "mas": 2,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 1
+                "err": 0
               },
               "P1": {
                 "tot": 0,
@@ -12635,16 +12635,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 5,
-                "eff": 40,
-                "pos": 80,
-                "neg": 20,
-                "pt": 2,
+                "tot": 2,
+                "eff": 50,
+                "pos": 100,
+                "neg": 0,
+                "pt": 0,
                 "mas": 2,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 1
+                "err": 0
               }
             },
             "desde_z5": {
@@ -13164,12 +13164,12 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -13200,12 +13200,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -13214,12 +13214,12 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -13250,12 +13250,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -14759,11 +14759,11 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 1,
-                "eff": 100,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
-                "pt": 1,
+                "pt": 0,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
@@ -14771,11 +14771,11 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
+                "tot": 1,
                 "eff": 100,
                 "pos": 100,
                 "neg": 0,
-                "pt": 2,
+                "pt": 1,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
@@ -14809,11 +14809,11 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 6,
-                "eff": 42,
-                "pos": 50,
+                "tot": 7,
+                "eff": 50,
+                "pos": 57,
                 "neg": 0,
-                "pt": 2,
+                "pt": 3,
                 "mas": 1,
                 "neu": 2,
                 "med": 1,
@@ -14821,11 +14821,11 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 13,
-                "eff": 35,
-                "pos": 54,
+                "tot": 14,
+                "eff": 39,
+                "pos": 57,
                 "neg": 0,
-                "pt": 2,
+                "pt": 3,
                 "mas": 5,
                 "neu": 4,
                 "med": 2,
@@ -14837,26 +14837,26 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 6,
-                "eff": -8,
-                "pos": 50,
-                "neg": 33,
+                "tot": 7,
+                "eff": 0,
+                "pos": 57,
+                "neg": 29,
                 "pt": 0,
-                "mas": 3,
+                "mas": 4,
                 "neu": 0,
                 "med": 1,
                 "ovp": 0,
                 "err": 2
               },
               "P6": {
-                "tot": 5,
+                "tot": 6,
                 "eff": 0,
-                "pos": 40,
-                "neg": 20,
+                "pos": 33,
+                "neg": 17,
                 "pt": 0,
                 "mas": 2,
                 "neu": 1,
-                "med": 1,
+                "med": 2,
                 "ovp": 0,
                 "err": 1
               },
@@ -14873,40 +14873,40 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 13,
-                "eff": 4,
-                "pos": 54,
-                "neg": 23,
+                "tot": 15,
+                "eff": 7,
+                "pos": 53,
+                "neg": 20,
                 "pt": 0,
-                "mas": 7,
+                "mas": 8,
                 "neu": 1,
-                "med": 2,
+                "med": 3,
                 "ovp": 0,
                 "err": 3
               }
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
-                "neg": 0,
-                "pt": 0,
-                "mas": 1,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              },
-              "P6": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              },
+              "P6": {
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               },
@@ -14923,14 +14923,14 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               }
@@ -15320,25 +15320,25 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -15370,25 +15370,25 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 0,
+                "tot": 1,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 0,
+                "tot": 1,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -15883,12 +15883,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 2,
+                "tot": 1,
                 "eff": 50,
                 "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 2,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -15907,12 +15907,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
+                "tot": 1,
                 "eff": 50,
                 "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 2,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -15933,12 +15933,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -15957,12 +15957,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -16422,16 +16422,16 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 5,
+                "tot": 0,
                 "eff": 0,
-                "pos": 60,
-                "neg": 40,
-                "pt": 1,
-                "mas": 2,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 2
+                "err": 0
               },
               "P6": {
                 "tot": 0,
@@ -16458,20 +16458,84 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 5,
+                "tot": 0,
                 "eff": 0,
-                "pos": 60,
-                "neg": 40,
-                "pt": 1,
-                "mas": 2,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 2
+                "err": 0
               }
             },
             "desde_z5": {
               "P5": {
+                "tot": 8,
+                "eff": 25,
+                "pos": 75,
+                "neg": 25,
+                "pt": 2,
+                "mas": 4,
+                "neu": 0,
+                "med": 0,
+                "ovp": 0,
+                "err": 2
+              },
+              "P6": {
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              },
+              "P1": {
+                "tot": 1,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 1,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              },
+              "total": {
+                "tot": 9,
+                "eff": 22,
+                "pos": 67,
+                "neg": 22,
+                "pt": 2,
+                "mas": 4,
+                "neu": 1,
+                "med": 0,
+                "ovp": 0,
+                "err": 2
+              }
+            }
+          },
+          "potencia": {
+            "desde_z1": {
+              "P5": {
+                "tot": 9,
+                "eff": 67,
+                "pos": 89,
+                "neg": 0,
+                "pt": 4,
+                "mas": 4,
+                "neu": 1,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              },
+              "P6": {
                 "tot": 3,
                 "eff": 67,
                 "pos": 100,
@@ -16483,70 +16547,6 @@ const PARTIDOS_INDIVIDUAL = [
                 "ovp": 0,
                 "err": 0
               },
-              "P6": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
-                "neg": 0,
-                "pt": 0,
-                "mas": 0,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              },
-              "P1": {
-                "tot": 1,
-                "eff": 0,
-                "pos": 0,
-                "neg": 0,
-                "pt": 0,
-                "mas": 0,
-                "neu": 1,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              },
-              "total": {
-                "tot": 4,
-                "eff": 50,
-                "pos": 75,
-                "neg": 0,
-                "pt": 1,
-                "mas": 2,
-                "neu": 1,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              }
-            }
-          },
-          "potencia": {
-            "desde_z1": {
-              "P5": {
-                "tot": 7,
-                "eff": 79,
-                "pos": 100,
-                "neg": 0,
-                "pt": 4,
-                "mas": 3,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              },
-              "P6": {
-                "tot": 2,
-                "eff": 75,
-                "pos": 100,
-                "neg": 0,
-                "pt": 1,
-                "mas": 1,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              },
               "P1": {
                 "tot": 0,
                 "eff": 0,
@@ -16560,13 +16560,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 9,
-                "eff": 78,
-                "pos": 100,
+                "tot": 12,
+                "eff": 67,
+                "pos": 92,
                 "neg": 0,
                 "pt": 5,
-                "mas": 4,
-                "neu": 0,
+                "mas": 6,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -16574,24 +16574,24 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
-                "neu": 1,
+                "mas": 0,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -16610,13 +16610,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 3,
-                "eff": 33,
-                "pos": 67,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 2,
-                "neu": 1,
+                "mas": 0,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -23052,12 +23052,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -23076,12 +23076,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -23102,12 +23102,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 5,
-                "eff": 40,
-                "pos": 40,
+                "tot": 6,
+                "eff": 42,
+                "pos": 50,
                 "neg": 0,
                 "pt": 2,
-                "mas": 0,
+                "mas": 1,
                 "neu": 3,
                 "med": 0,
                 "ovp": 0,
@@ -23126,12 +23126,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 6,
-                "eff": 33,
-                "pos": 33,
+                "tot": 7,
+                "eff": 36,
+                "pos": 43,
                 "neg": 0,
                 "pt": 2,
-                "mas": 0,
+                "mas": 1,
                 "neu": 4,
                 "med": 0,
                 "ovp": 0,
@@ -25840,12 +25840,12 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -25876,12 +25876,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -25890,12 +25890,12 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z5": {
               "P5": {
-                "tot": 1,
-                "eff": 100,
+                "tot": 2,
+                "eff": 75,
                 "pos": 100,
                 "neg": 0,
                 "pt": 1,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -25926,12 +25926,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 8,
+                "tot": 9,
                 "eff": 50,
-                "pos": 75,
-                "neg": 12,
+                "pos": 78,
+                "neg": 11,
                 "pt": 3,
-                "mas": 3,
+                "mas": 4,
                 "neu": 1,
                 "med": 0,
                 "ovp": 1,
@@ -25966,25 +25966,25 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 3,
-                "eff": -17,
-                "pos": 33,
-                "neg": 33,
+                "tot": 5,
+                "eff": 0,
+                "pos": 40,
+                "neg": 20,
                 "pt": 0,
-                "mas": 1,
-                "neu": 1,
+                "mas": 2,
+                "neu": 2,
                 "med": 0,
                 "ovp": 0,
                 "err": 1
               },
               "total": {
-                "tot": 15,
-                "eff": 20,
+                "tot": 17,
+                "eff": 21,
                 "pos": 53,
-                "neg": 20,
+                "neg": 18,
                 "pt": 3,
-                "mas": 5,
-                "neu": 2,
+                "mas": 6,
+                "neu": 3,
                 "med": 2,
                 "ovp": 1,
                 "err": 2
@@ -26016,25 +26016,25 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
-                "neu": 1,
+                "mas": 0,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 4,
-                "eff": 38,
-                "pos": 75,
+                "tot": 2,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 3,
-                "neu": 1,
+                "mas": 2,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -26375,14 +26375,14 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 0,
+                "tot": 1,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
-                "med": 0,
+                "med": 1,
                 "ovp": 0,
                 "err": 0
               },
@@ -26411,28 +26411,28 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 0,
+                "tot": 1,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
-                "med": 0,
+                "med": 1,
                 "ovp": 0,
                 "err": 0
               }
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               },
@@ -26461,14 +26461,14 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               }
@@ -27543,12 +27543,12 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -27579,12 +27579,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -27593,12 +27593,12 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z5": {
               "P5": {
-                "tot": 3,
-                "eff": 17,
-                "pos": 33,
+                "tot": 4,
+                "eff": 25,
+                "pos": 50,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 2,
                 "neu": 0,
                 "med": 2,
                 "ovp": 0,
@@ -27629,12 +27629,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 6,
-                "eff": 25,
-                "pos": 50,
+                "tot": 7,
+                "eff": 29,
+                "pos": 57,
                 "neg": 0,
                 "pt": 0,
-                "mas": 3,
+                "mas": 4,
                 "neu": 0,
                 "med": 3,
                 "ovp": 0,
@@ -27937,64 +27937,14 @@ const PARTIDOS_INDIVIDUAL = [
           "flotado": {
             "desde_z1": {
               "P5": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
-                "neg": 0,
-                "pt": 0,
-                "mas": 0,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              },
-              "P6": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
-                "neg": 0,
-                "pt": 0,
-                "mas": 0,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              },
-              "P1": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
-                "neg": 0,
-                "pt": 0,
-                "mas": 0,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              },
-              "total": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
-                "neg": 0,
-                "pt": 0,
-                "mas": 0,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              }
-            },
-            "desde_z6": {
-              "P5": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
                 "mas": 1,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               },
@@ -28023,12 +27973,62 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 3,
-                "eff": 50,
-                "pos": 67,
+                "tot": 2,
+                "eff": 75,
+                "pos": 100,
                 "neg": 0,
                 "pt": 1,
                 "mas": 1,
+                "neu": 0,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              }
+            },
+            "desde_z6": {
+              "P5": {
+                "tot": 1,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 0,
+                "med": 1,
+                "ovp": 0,
+                "err": 0
+              },
+              "P6": {
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              },
+              "P1": {
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              },
+              "total": {
+                "tot": 1,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
                 "neu": 0,
                 "med": 1,
                 "ovp": 0,
@@ -28089,15 +28089,15 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 2,
+                "tot": 4,
                 "eff": 0,
-                "pos": 0,
-                "neg": 0,
+                "pos": 25,
+                "neg": 25,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 1,
                 "med": 1,
-                "ovp": 0,
+                "ovp": 1,
                 "err": 0
               },
               "P6": {
@@ -28125,29 +28125,29 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 4,
+                "tot": 6,
                 "eff": 0,
-                "pos": 0,
-                "neg": 0,
+                "pos": 17,
+                "neg": 17,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 1,
                 "med": 3,
-                "ovp": 0,
+                "ovp": 1,
                 "err": 0
               }
             },
             "desde_z6": {
               "P5": {
-                "tot": 2,
+                "tot": 0,
                 "eff": 0,
-                "pos": 50,
-                "neg": 50,
+                "pos": 0,
+                "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
-                "ovp": 1,
+                "ovp": 0,
                 "err": 0
               },
               "P6": {
@@ -28175,15 +28175,15 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
+                "tot": 0,
                 "eff": 0,
-                "pos": 50,
-                "neg": 50,
+                "pos": 0,
+                "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
-                "ovp": 1,
+                "ovp": 0,
                 "err": 0
               }
             },
@@ -28715,12 +28715,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 1
               },
               "P6": {
-                "tot": 5,
-                "eff": 10,
-                "pos": 40,
-                "neg": 20,
+                "tot": 6,
+                "eff": 17,
+                "pos": 50,
+                "neg": 17,
                 "pt": 1,
-                "mas": 1,
+                "mas": 2,
                 "neu": 0,
                 "med": 2,
                 "ovp": 0,
@@ -28739,12 +28739,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 8,
-                "eff": 0,
-                "pos": 38,
-                "neg": 25,
+                "tot": 9,
+                "eff": 6,
+                "pos": 44,
+                "neg": 22,
                 "pt": 1,
-                "mas": 2,
+                "mas": 3,
                 "neu": 1,
                 "med": 2,
                 "ovp": 0,
@@ -28765,12 +28765,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -28789,12 +28789,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -29635,13 +29635,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
-                "neu": 1,
+                "mas": 0,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -29659,13 +29659,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
-                "neu": 1,
+                "mas": 0,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -29685,13 +29685,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 4,
-                "eff": 50,
-                "pos": 75,
-                "neg": 25,
+                "tot": 6,
+                "eff": 42,
+                "pos": 67,
+                "neg": 17,
                 "pt": 2,
-                "mas": 1,
-                "neu": 0,
+                "mas": 2,
+                "neu": 1,
                 "med": 0,
                 "ovp": 1,
                 "err": 0
@@ -29709,13 +29709,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 4,
-                "eff": 50,
-                "pos": 75,
-                "neg": 25,
+                "tot": 6,
+                "eff": 42,
+                "pos": 67,
+                "neg": 17,
                 "pt": 2,
-                "mas": 1,
-                "neu": 0,
+                "mas": 2,
+                "neu": 1,
                 "med": 0,
                 "ovp": 1,
                 "err": 0
@@ -30063,40 +30063,40 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 10,
+                "tot": 13,
                 "eff": 35,
-                "pos": 60,
-                "neg": 10,
-                "pt": 3,
+                "pos": 54,
+                "neg": 8,
+                "pt": 4,
                 "mas": 3,
-                "neu": 3,
-                "med": 0,
+                "neu": 4,
+                "med": 1,
                 "ovp": 0,
                 "err": 1
               },
               "P1": {
-                "tot": 3,
-                "eff": 33,
-                "pos": 67,
-                "neg": 0,
+                "tot": 4,
+                "eff": 0,
+                "pos": 50,
+                "neg": 25,
                 "pt": 0,
                 "mas": 2,
                 "neu": 0,
                 "med": 1,
                 "ovp": 0,
-                "err": 0
+                "err": 1
               },
               "total": {
-                "tot": 13,
-                "eff": 35,
-                "pos": 62,
-                "neg": 8,
-                "pt": 3,
+                "tot": 17,
+                "eff": 26,
+                "pos": 53,
+                "neg": 12,
+                "pt": 4,
                 "mas": 5,
-                "neu": 3,
-                "med": 1,
+                "neu": 4,
+                "med": 2,
                 "ovp": 0,
-                "err": 1
+                "err": 2
               }
             },
             "desde_z6": {
@@ -30113,40 +30113,40 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 4,
-                "eff": 25,
-                "pos": 25,
+                "tot": 1,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
-                "pt": 1,
+                "pt": 0,
                 "mas": 0,
-                "neu": 1,
-                "med": 2,
+                "neu": 0,
+                "med": 1,
                 "ovp": 0,
                 "err": 0
               },
               "P1": {
-                "tot": 1,
-                "eff": -100,
+                "tot": 0,
+                "eff": 0,
                 "pos": 0,
-                "neg": 100,
+                "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 1
+                "err": 0
               },
               "total": {
-                "tot": 5,
+                "tot": 1,
                 "eff": 0,
-                "pos": 20,
-                "neg": 20,
-                "pt": 1,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
                 "mas": 0,
-                "neu": 1,
-                "med": 2,
+                "neu": 0,
+                "med": 1,
                 "ovp": 0,
-                "err": 1
+                "err": 0
               }
             },
             "desde_z5": {
@@ -30621,24 +30621,24 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 2,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 2,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 4,
-                "eff": -25,
-                "pos": 0,
-                "neg": 25,
+                "tot": 6,
+                "eff": 0,
+                "pos": 33,
+                "neg": 17,
                 "pt": 0,
-                "mas": 0,
+                "mas": 2,
                 "neu": 1,
                 "med": 2,
                 "ovp": 0,
@@ -30671,24 +30671,24 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 2,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 2,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 2,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -31601,24 +31601,24 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 4,
-                "eff": 62,
-                "pos": 75,
+                "tot": 5,
+                "eff": 60,
+                "pos": 80,
                 "neg": 0,
                 "pt": 2,
-                "mas": 1,
+                "mas": 2,
                 "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 6,
-                "eff": 25,
-                "pos": 50,
-                "neg": 17,
+                "tot": 7,
+                "eff": 29,
+                "pos": 57,
+                "neg": 14,
                 "pt": 2,
-                "mas": 1,
+                "mas": 2,
                 "neu": 1,
                 "med": 1,
                 "ovp": 0,
@@ -31651,24 +31651,24 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -31741,12 +31741,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 100,
+                "tot": 2,
+                "eff": 75,
                 "pos": 100,
                 "neg": 0,
                 "pt": 1,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -31765,12 +31765,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
-                "neg": 50,
+                "tot": 3,
+                "eff": 33,
+                "pos": 67,
+                "neg": 33,
                 "pt": 1,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 1,
@@ -31791,12 +31791,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -31815,12 +31815,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -32222,25 +32222,25 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 0,
+                "tot": 1,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 2,
+                "tot": 3,
                 "eff": 0,
-                "pos": 50,
-                "neg": 50,
+                "pos": 33,
+                "neg": 33,
                 "pt": 0,
                 "mas": 1,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 1,
                 "err": 0
@@ -32272,25 +32272,25 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 2,
+                "tot": 1,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
+                "neu": 0,
                 "med": 1,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 2,
+                "tot": 1,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
+                "neu": 0,
                 "med": 1,
                 "ovp": 0,
                 "err": 0
@@ -32605,25 +32605,25 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 2,
+                "tot": 3,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 2,
+                "neu": 3,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 6,
-                "eff": -17,
+                "tot": 7,
+                "eff": -14,
                 "pos": 0,
-                "neg": 17,
+                "neg": 14,
                 "pt": 0,
                 "mas": 0,
-                "neu": 3,
+                "neu": 4,
                 "med": 2,
                 "ovp": 0,
                 "err": 1
@@ -32655,25 +32655,25 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -34409,24 +34409,24 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -34459,24 +34459,24 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 75,
+                "tot": 1,
+                "eff": 100,
                 "pos": 100,
                 "neg": 0,
                 "pt": 1,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -34723,16 +34723,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 4,
-                "eff": 50,
+                "tot": 6,
+                "eff": 25,
                 "pos": 50,
-                "neg": 0,
+                "neg": 17,
                 "pt": 2,
-                "mas": 0,
+                "mas": 1,
                 "neu": 1,
                 "med": 1,
                 "ovp": 0,
-                "err": 0
+                "err": 1
               },
               "P1": {
                 "tot": 0,
@@ -34747,16 +34747,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 4,
-                "eff": 50,
+                "tot": 6,
+                "eff": 25,
                 "pos": 50,
-                "neg": 0,
+                "neg": 17,
                 "pt": 2,
-                "mas": 0,
+                "mas": 1,
                 "neu": 1,
                 "med": 1,
                 "ovp": 0,
-                "err": 0
+                "err": 1
               }
             },
             "desde_z6": {
@@ -34773,16 +34773,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 4,
+                "tot": 2,
                 "eff": -25,
                 "pos": 50,
                 "neg": 50,
                 "pt": 0,
-                "mas": 2,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 2
+                "err": 1
               },
               "P1": {
                 "tot": 0,
@@ -34797,16 +34797,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 5,
-                "eff": 0,
-                "pos": 60,
-                "neg": 40,
+                "tot": 3,
+                "eff": 17,
+                "pos": 67,
+                "neg": 33,
                 "pt": 1,
-                "mas": 2,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 2
+                "err": 1
               }
             },
             "desde_z5": {
@@ -35417,12 +35417,12 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 1,
-                "eff": -100,
-                "pos": 0,
-                "neg": 100,
+                "tot": 2,
+                "eff": -25,
+                "pos": 50,
+                "neg": 50,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -35453,12 +35453,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": -100,
-                "pos": 0,
-                "neg": 100,
+                "tot": 2,
+                "eff": -25,
+                "pos": 50,
+                "neg": 50,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -35467,12 +35467,12 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -35503,12 +35503,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -35970,12 +35970,12 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 2,
-                "eff": -100,
-                "pos": 0,
-                "neg": 100,
+                "tot": 3,
+                "eff": -50,
+                "pos": 33,
+                "neg": 67,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -36006,12 +36006,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": -100,
-                "pos": 0,
-                "neg": 100,
+                "tot": 3,
+                "eff": -50,
+                "pos": 33,
+                "neg": 67,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -36020,12 +36020,12 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -36056,12 +36056,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -36813,12 +36813,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
+                "tot": 3,
                 "eff": 50,
                 "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 3,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -36837,12 +36837,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 3,
+                "tot": 5,
                 "eff": 50,
                 "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 3,
+                "mas": 5,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -36863,13 +36863,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 5,
-                "eff": 50,
-                "pos": 80,
+                "tot": 2,
+                "eff": 75,
+                "pos": 100,
                 "neg": 0,
                 "pt": 1,
-                "mas": 3,
-                "neu": 1,
+                "mas": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -36887,13 +36887,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 5,
-                "eff": 50,
-                "pos": 80,
+                "tot": 2,
+                "eff": 75,
+                "pos": 100,
                 "neg": 0,
                 "pt": 1,
-                "mas": 3,
-                "neu": 1,
+                "mas": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -36913,13 +36913,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 0,
+                "tot": 1,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -36937,13 +36937,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 50,
-                "pos": 100,
+                "tot": 3,
+                "eff": 33,
+                "pos": 67,
                 "neg": 0,
                 "pt": 0,
                 "mas": 2,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -37796,11 +37796,11 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
-                "eff": 100,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
-                "pt": 1,
+                "pt": 0,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
@@ -37832,11 +37832,11 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 100,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
-                "pt": 1,
+                "pt": 0,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
@@ -37846,11 +37846,11 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z5": {
               "P5": {
-                "tot": 1,
-                "eff": 0,
-                "pos": 0,
+                "tot": 2,
+                "eff": 50,
+                "pos": 50,
                 "neg": 0,
-                "pt": 0,
+                "pt": 1,
                 "mas": 0,
                 "neu": 0,
                 "med": 1,
@@ -37882,11 +37882,11 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 1
               },
               "total": {
-                "tot": 12,
-                "eff": 38,
-                "pos": 75,
+                "tot": 13,
+                "eff": 42,
+                "pos": 77,
                 "neg": 8,
-                "pt": 2,
+                "pt": 3,
                 "mas": 7,
                 "neu": 0,
                 "med": 2,
@@ -38659,24 +38659,24 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -38709,24 +38709,24 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -43501,23 +43501,23 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 4,
-                "eff": 50,
-                "pos": 50,
+                "tot": 5,
+                "eff": 40,
+                "pos": 40,
                 "neg": 0,
                 "pt": 2,
                 "mas": 0,
                 "neu": 2,
-                "med": 0,
+                "med": 1,
                 "ovp": 0,
                 "err": 0
               },
               "P6": {
-                "tot": 5,
-                "eff": 10,
-                "pos": 20,
+                "tot": 6,
+                "eff": 25,
+                "pos": 33,
                 "neg": 0,
-                "pt": 0,
+                "pt": 1,
                 "mas": 1,
                 "neu": 2,
                 "med": 2,
@@ -43537,37 +43537,37 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 1
               },
               "total": {
-                "tot": 15,
-                "eff": 20,
-                "pos": 33,
-                "neg": 7,
-                "pt": 3,
+                "tot": 17,
+                "eff": 24,
+                "pos": 35,
+                "neg": 6,
+                "pt": 4,
                 "mas": 2,
                 "neu": 6,
-                "med": 3,
+                "med": 4,
                 "ovp": 0,
                 "err": 1
               }
             },
             "desde_z6": {
               "P5": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
                 "mas": 1,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 100,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
-                "pt": 1,
+                "pt": 0,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
@@ -43587,14 +43587,14 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 3,
+                "tot": 1,
                 "eff": 50,
-                "pos": 67,
+                "pos": 100,
                 "neg": 0,
-                "pt": 1,
+                "pt": 0,
                 "mas": 1,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               }
@@ -43908,24 +43908,24 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 5,
-                "eff": -40,
-                "pos": 0,
-                "neg": 40,
+                "tot": 6,
+                "eff": -25,
+                "pos": 17,
+                "neg": 33,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 2,
                 "med": 1,
                 "ovp": 0,
                 "err": 2
               },
               "P6": {
-                "tot": 1,
-                "eff": 0,
-                "pos": 0,
+                "tot": 2,
+                "eff": 25,
+                "pos": 50,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 1,
                 "med": 0,
                 "ovp": 0,
@@ -43944,12 +43944,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 6,
-                "eff": -33,
-                "pos": 0,
-                "neg": 33,
+                "tot": 8,
+                "eff": -12,
+                "pos": 25,
+                "neg": 25,
                 "pt": 0,
-                "mas": 0,
+                "mas": 2,
                 "neu": 3,
                 "med": 1,
                 "ovp": 0,
@@ -43958,24 +43958,24 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -43994,12 +43994,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 2,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -44388,12 +44388,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 7,
-                "eff": -7,
-                "pos": 14,
-                "neg": 29,
+                "tot": 8,
+                "eff": 0,
+                "pos": 25,
+                "neg": 25,
                 "pt": 1,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 4,
                 "ovp": 1,
@@ -44412,12 +44412,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 1
               },
               "total": {
-                "tot": 8,
-                "eff": -19,
-                "pos": 12,
-                "neg": 38,
+                "tot": 9,
+                "eff": -11,
+                "pos": 22,
+                "neg": 33,
                 "pt": 1,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 4,
                 "ovp": 1,
@@ -44438,12 +44438,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -44462,12 +44462,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -45261,14 +45261,14 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               },
@@ -45297,28 +45297,28 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               }
             },
             "desde_z5": {
               "P5": {
-                "tot": 5,
-                "eff": 20,
-                "pos": 40,
+                "tot": 6,
+                "eff": 17,
+                "pos": 33,
                 "neg": 0,
                 "pt": 0,
                 "mas": 2,
                 "neu": 0,
-                "med": 3,
+                "med": 4,
                 "ovp": 0,
                 "err": 0
               },
@@ -45347,14 +45347,14 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 7,
-                "eff": 29,
-                "pos": 43,
+                "tot": 8,
+                "eff": 25,
+                "pos": 38,
                 "neg": 0,
                 "pt": 1,
                 "mas": 2,
                 "neu": 1,
-                "med": 3,
+                "med": 4,
                 "ovp": 0,
                 "err": 0
               }
@@ -45387,24 +45387,24 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 4,
-                "eff": 75,
+                "tot": 5,
+                "eff": 70,
                 "pos": 100,
                 "neg": 0,
                 "pt": 2,
-                "mas": 2,
+                "mas": 3,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -45437,24 +45437,24 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -45762,11 +45762,11 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 2,
-                "eff": 75,
+                "tot": 3,
+                "eff": 83,
                 "pos": 100,
                 "neg": 0,
-                "pt": 1,
+                "pt": 2,
                 "mas": 1,
                 "neu": 0,
                 "med": 0,
@@ -45786,11 +45786,11 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 75,
+                "tot": 3,
+                "eff": 83,
                 "pos": 100,
                 "neg": 0,
-                "pt": 1,
+                "pt": 2,
                 "mas": 1,
                 "neu": 0,
                 "med": 0,
@@ -45812,18 +45812,6 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 2,
-                "eff": 100,
-                "pos": 100,
-                "neg": 0,
-                "pt": 2,
-                "mas": 0,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              },
-              "P1": {
                 "tot": 1,
                 "eff": 100,
                 "pos": 100,
@@ -45835,12 +45823,24 @@ const PARTIDOS_INDIVIDUAL = [
                 "ovp": 0,
                 "err": 0
               },
+              "P1": {
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              },
               "total": {
-                "tot": 4,
+                "tot": 2,
                 "eff": 100,
                 "pos": 100,
                 "neg": 0,
-                "pt": 4,
+                "pt": 2,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
@@ -45874,11 +45874,11 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 100,
+                "pos": 100,
                 "neg": 0,
-                "pt": 0,
+                "pt": 1,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
@@ -45886,11 +45886,11 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 16,
-                "eff": 69,
-                "pos": 81,
+                "tot": 17,
+                "eff": 71,
+                "pos": 82,
                 "neg": 0,
-                "pt": 9,
+                "pt": 10,
                 "mas": 4,
                 "neu": 0,
                 "med": 3,
@@ -45902,66 +45902,16 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 2,
-                "eff": -50,
-                "pos": 0,
-                "neg": 50,
-                "pt": 0,
+                "tot": 3,
+                "eff": 0,
+                "pos": 33,
+                "neg": 33,
+                "pt": 1,
                 "mas": 0,
                 "neu": 0,
                 "med": 1,
                 "ovp": 0,
                 "err": 1
-              },
-              "P6": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
-                "neg": 0,
-                "pt": 0,
-                "mas": 0,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              },
-              "P1": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
-                "neg": 0,
-                "pt": 0,
-                "mas": 0,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              },
-              "total": {
-                "tot": 2,
-                "eff": -50,
-                "pos": 0,
-                "neg": 50,
-                "pt": 0,
-                "mas": 0,
-                "neu": 0,
-                "med": 1,
-                "ovp": 0,
-                "err": 1
-              }
-            },
-            "desde_z6": {
-              "P5": {
-                "tot": 2,
-                "eff": 100,
-                "pos": 100,
-                "neg": 0,
-                "pt": 2,
-                "mas": 0,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
               },
               "P6": {
                 "tot": 1,
@@ -45988,14 +45938,64 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 3,
-                "eff": 67,
-                "pos": 67,
-                "neg": 0,
-                "pt": 2,
+                "tot": 4,
+                "eff": 0,
+                "pos": 25,
+                "neg": 25,
+                "pt": 1,
                 "mas": 0,
                 "neu": 0,
-                "med": 1,
+                "med": 2,
+                "ovp": 0,
+                "err": 1
+              }
+            },
+            "desde_z6": {
+              "P5": {
+                "tot": 1,
+                "eff": 100,
+                "pos": 100,
+                "neg": 0,
+                "pt": 1,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              },
+              "P6": {
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              },
+              "P1": {
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              },
+              "total": {
+                "tot": 1,
+                "eff": 100,
+                "pos": 100,
+                "neg": 0,
+                "pt": 1,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               }
@@ -46726,13 +46726,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 0,
+                "tot": 1,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -46750,13 +46750,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 0,
+                "tot": 1,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -46776,13 +46776,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -46800,13 +46800,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -48603,11 +48603,11 @@ const PARTIDOS_INDIVIDUAL = [
               },
               "P6": {
                 "tot": 1,
-                "eff": 100,
+                "eff": 50,
                 "pos": 100,
                 "neg": 0,
-                "pt": 1,
-                "mas": 0,
+                "pt": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -48626,38 +48626,38 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
+                "tot": 1,
                 "eff": 50,
-                "pos": 50,
+                "pos": 100,
                 "neg": 0,
-                "pt": 1,
-                "mas": 0,
+                "pt": 0,
+                "mas": 1,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               }
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -48676,12 +48676,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -48690,12 +48690,12 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z5": {
               "P5": {
-                "tot": 2,
-                "eff": 0,
-                "pos": 0,
+                "tot": 3,
+                "eff": 17,
+                "pos": 33,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 2,
                 "ovp": 0,
@@ -48726,12 +48726,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 0,
-                "pos": 0,
+                "tot": 3,
+                "eff": 17,
+                "pos": 33,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 2,
                 "ovp": 0,
@@ -49848,14 +49848,14 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 5,
-                "eff": 60,
-                "pos": 80,
+                "tot": 7,
+                "eff": 57,
+                "pos": 71,
                 "neg": 0,
-                "pt": 2,
+                "pt": 3,
                 "mas": 2,
                 "neu": 0,
-                "med": 1,
+                "med": 2,
                 "ovp": 0,
                 "err": 0
               },
@@ -49884,28 +49884,28 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 5,
-                "eff": 60,
-                "pos": 80,
+                "tot": 7,
+                "eff": 57,
+                "pos": 71,
                 "neg": 0,
-                "pt": 2,
+                "pt": 3,
                 "mas": 2,
                 "neu": 0,
-                "med": 1,
+                "med": 2,
                 "ovp": 0,
                 "err": 0
               }
             },
             "desde_z6": {
               "P5": {
-                "tot": 6,
-                "eff": 33,
-                "pos": 67,
-                "neg": 17,
-                "pt": 2,
+                "tot": 4,
+                "eff": 25,
+                "pos": 75,
+                "neg": 25,
+                "pt": 1,
                 "mas": 2,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 1
               },
@@ -49934,14 +49934,14 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 6,
-                "eff": 33,
-                "pos": 67,
-                "neg": 17,
-                "pt": 2,
+                "tot": 4,
+                "eff": 25,
+                "pos": 75,
+                "neg": 25,
+                "pt": 1,
                 "mas": 2,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 1
               }
@@ -51449,13 +51449,13 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 2,
+                "eff": 25,
+                "pos": 50,
                 "neg": 0,
                 "pt": 0,
                 "mas": 1,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -51485,13 +51485,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 2,
+                "eff": 25,
+                "pos": 50,
                 "neg": 0,
                 "pt": 0,
                 "mas": 1,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -51499,13 +51499,13 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -51535,13 +51535,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -51704,11 +51704,11 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 100,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
-                "pt": 1,
+                "pt": 0,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
@@ -51728,11 +51728,11 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 100,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
-                "pt": 1,
+                "pt": 0,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
@@ -51754,11 +51754,11 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
+                "tot": 2,
                 "eff": 100,
                 "pos": 100,
                 "neg": 0,
-                "pt": 1,
+                "pt": 2,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
@@ -51778,11 +51778,11 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 8,
-                "eff": 56,
-                "pos": 75,
+                "tot": 9,
+                "eff": 61,
+                "pos": 78,
                 "neg": 0,
-                "pt": 3,
+                "pt": 4,
                 "mas": 3,
                 "neu": 1,
                 "med": 1,
@@ -51806,16 +51806,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
-                "neg": 0,
+                "tot": 3,
+                "eff": -17,
+                "pos": 33,
+                "neg": 33,
                 "pt": 0,
                 "mas": 1,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
-                "err": 0
+                "err": 1
               },
               "P1": {
                 "tot": 0,
@@ -51830,16 +51830,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
-                "neg": 0,
+                "tot": 4,
+                "eff": -12,
+                "pos": 25,
+                "neg": 25,
                 "pt": 0,
                 "mas": 1,
-                "neu": 0,
+                "neu": 1,
                 "med": 1,
                 "ovp": 0,
-                "err": 0
+                "err": 1
               }
             },
             "desde_z6": {
@@ -51856,16 +51856,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 2,
-                "eff": -50,
+                "tot": 0,
+                "eff": 0,
                 "pos": 0,
-                "neg": 50,
+                "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 1
+                "err": 0
               },
               "P1": {
                 "tot": 0,
@@ -51880,16 +51880,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": -50,
+                "tot": 0,
+                "eff": 0,
                 "pos": 0,
-                "neg": 50,
+                "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 1
+                "err": 0
               }
             },
             "desde_z5": {
@@ -53796,25 +53796,25 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
                 "mas": 1,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -53846,25 +53846,25 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 0,
+                "tot": 1,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 6,
+                "tot": 7,
                 "eff": 0,
-                "pos": 17,
-                "neg": 17,
+                "pos": 14,
+                "neg": 14,
                 "pt": 1,
                 "mas": 0,
-                "neu": 3,
+                "neu": 4,
                 "med": 1,
                 "ovp": 0,
                 "err": 1
@@ -54437,12 +54437,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -54461,12 +54461,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
+                "tot": 2,
                 "eff": 50,
                 "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 2,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -54487,12 +54487,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -54511,12 +54511,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -55105,12 +55105,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -55129,12 +55129,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -55155,12 +55155,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 3,
-                "eff": 33,
-                "pos": 67,
+                "tot": 4,
+                "eff": 38,
+                "pos": 75,
                 "neg": 0,
                 "pt": 0,
-                "mas": 2,
+                "mas": 3,
                 "neu": 0,
                 "med": 1,
                 "ovp": 0,
@@ -55179,12 +55179,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 4,
-                "eff": 25,
-                "pos": 50,
+                "tot": 5,
+                "eff": 30,
+                "pos": 60,
                 "neg": 0,
                 "pt": 0,
-                "mas": 2,
+                "mas": 3,
                 "neu": 1,
                 "med": 1,
                 "ovp": 0,
@@ -55640,13 +55640,13 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 0,
+                "tot": 1,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -55676,20 +55676,6 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
-                "neg": 0,
-                "pt": 0,
-                "mas": 0,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              }
-            },
-            "desde_z6": {
-              "P5": {
                 "tot": 1,
                 "eff": 0,
                 "pos": 0,
@@ -55697,6 +55683,20 @@ const PARTIDOS_INDIVIDUAL = [
                 "pt": 0,
                 "mas": 0,
                 "neu": 1,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              }
+            },
+            "desde_z6": {
+              "P5": {
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -55726,13 +55726,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
                 "mas": 1,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -56731,13 +56731,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 3,
-                "eff": 17,
-                "pos": 33,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
-                "neu": 2,
+                "mas": 0,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -56755,13 +56755,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 3,
-                "eff": 17,
-                "pos": 33,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
-                "neu": 2,
+                "mas": 0,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -56781,13 +56781,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 3,
-                "eff": 50,
-                "pos": 67,
+                "tot": 6,
+                "eff": 33,
+                "pos": 50,
                 "neg": 0,
                 "pt": 1,
-                "mas": 1,
-                "neu": 1,
+                "mas": 2,
+                "neu": 3,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -56805,13 +56805,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 3,
-                "eff": 50,
-                "pos": 67,
+                "tot": 6,
+                "eff": 33,
+                "pos": 50,
                 "neg": 0,
                 "pt": 1,
-                "mas": 1,
-                "neu": 1,
+                "mas": 2,
+                "neu": 3,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -58386,26 +58386,26 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "P6": {
-                "tot": 2,
-                "eff": 50,
-                "pos": 50,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
-                "pt": 1,
+                "pt": 0,
                 "mas": 0,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               },
@@ -58422,40 +58422,40 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 3,
-                "eff": 33,
-                "pos": 33,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
-                "pt": 1,
+                "pt": 0,
                 "mas": 0,
                 "neu": 0,
-                "med": 2,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               }
             },
             "desde_z5": {
               "P5": {
-                "tot": 3,
+                "tot": 4,
                 "eff": 0,
-                "pos": 67,
-                "neg": 33,
+                "pos": 50,
+                "neg": 25,
                 "pt": 0,
                 "mas": 2,
                 "neu": 0,
-                "med": 0,
+                "med": 1,
                 "ovp": 0,
                 "err": 1
               },
               "P6": {
-                "tot": 6,
-                "eff": 17,
+                "tot": 8,
+                "eff": 25,
                 "pos": 50,
-                "neg": 17,
-                "pt": 1,
+                "neg": 12,
+                "pt": 2,
                 "mas": 2,
                 "neu": 2,
-                "med": 0,
+                "med": 1,
                 "ovp": 0,
                 "err": 1
               },
@@ -58472,14 +58472,14 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 9,
-                "eff": 11,
-                "pos": 56,
-                "neg": 22,
-                "pt": 1,
+                "tot": 12,
+                "eff": 17,
+                "pos": 50,
+                "neg": 17,
+                "pt": 2,
                 "mas": 4,
                 "neu": 2,
-                "med": 0,
+                "med": 2,
                 "ovp": 0,
                 "err": 2
               }
@@ -58815,12 +58815,12 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -58851,12 +58851,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -58865,12 +58865,12 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z5": {
               "P5": {
-                "tot": 7,
-                "eff": -7,
-                "pos": 29,
-                "neg": 43,
+                "tot": 8,
+                "eff": 0,
+                "pos": 38,
+                "neg": 38,
                 "pt": 2,
-                "mas": 0,
+                "mas": 1,
                 "neu": 1,
                 "med": 1,
                 "ovp": 1,
@@ -58901,12 +58901,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 7,
-                "eff": -7,
-                "pos": 29,
-                "neg": 43,
+                "tot": 8,
+                "eff": 0,
+                "pos": 38,
+                "neg": 38,
                 "pt": 2,
-                "mas": 0,
+                "mas": 1,
                 "neu": 1,
                 "med": 1,
                 "ovp": 1,
@@ -59884,12 +59884,12 @@ const PARTIDOS_INDIVIDUAL = [
           "flotado": {
             "desde_z1": {
               "P5": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -59920,12 +59920,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -59934,12 +59934,12 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -59970,12 +59970,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -61403,12 +61403,12 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 3,
+                "eff": 33,
+                "pos": 67,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 2,
                 "neu": 0,
                 "med": 1,
                 "ovp": 0,
@@ -61439,12 +61439,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 3,
+                "eff": 33,
+                "pos": 67,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 2,
                 "neu": 0,
                 "med": 1,
                 "ovp": 0,
@@ -61453,12 +61453,12 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -61489,12 +61489,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -62108,14 +62108,14 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 3,
-                "eff": 0,
-                "pos": 0,
+                "tot": 6,
+                "eff": 8,
+                "pos": 17,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
-                "neu": 2,
-                "med": 1,
+                "mas": 1,
+                "neu": 3,
+                "med": 2,
                 "ovp": 0,
                 "err": 0
               },
@@ -62132,14 +62132,14 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 3,
-                "eff": 0,
-                "pos": 0,
+                "tot": 6,
+                "eff": 8,
+                "pos": 17,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
-                "neu": 2,
-                "med": 1,
+                "mas": 1,
+                "neu": 3,
+                "med": 2,
                 "ovp": 0,
                 "err": 0
               }
@@ -62158,14 +62158,14 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 3,
-                "eff": 17,
-                "pos": 33,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
-                "neu": 1,
-                "med": 1,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               },
@@ -62182,14 +62182,14 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 3,
-                "eff": 17,
-                "pos": 33,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
-                "neu": 1,
-                "med": 1,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               }
@@ -63253,13 +63253,13 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -63289,13 +63289,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -63303,13 +63303,13 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z5": {
               "P5": {
-                "tot": 10,
-                "eff": 40,
-                "pos": 60,
+                "tot": 11,
+                "eff": 36,
+                "pos": 55,
                 "neg": 0,
                 "pt": 2,
                 "mas": 4,
-                "neu": 3,
+                "neu": 4,
                 "med": 1,
                 "ovp": 0,
                 "err": 0
@@ -63339,13 +63339,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 12,
-                "eff": 38,
-                "pos": 58,
+                "tot": 13,
+                "eff": 35,
+                "pos": 54,
                 "neg": 0,
                 "pt": 2,
                 "mas": 5,
-                "neu": 3,
+                "neu": 4,
                 "med": 2,
                 "ovp": 0,
                 "err": 0
@@ -63355,8 +63355,8 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 1,
-                "eff": -50,
+                "tot": 2,
+                "eff": -75,
                 "pos": 0,
                 "neg": 100,
                 "pt": 0,
@@ -63364,7 +63364,7 @@ const PARTIDOS_INDIVIDUAL = [
                 "neu": 0,
                 "med": 0,
                 "ovp": 1,
-                "err": 0
+                "err": 1
               },
               "P6": {
                 "tot": 0,
@@ -63391,30 +63391,30 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 0,
-                "pos": 50,
-                "neg": 50,
+                "tot": 3,
+                "eff": -33,
+                "pos": 33,
+                "neg": 67,
                 "pt": 0,
                 "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 1,
-                "err": 0
+                "err": 1
               }
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
-                "eff": -100,
+                "tot": 0,
+                "eff": 0,
                 "pos": 0,
-                "neg": 100,
+                "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 1
+                "err": 0
               },
               "P6": {
                 "tot": 0,
@@ -63441,16 +63441,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": -100,
+                "tot": 0,
+                "eff": 0,
                 "pos": 0,
-                "neg": 100,
+                "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 1
+                "err": 0
               }
             },
             "desde_z5": {
@@ -64754,26 +64754,26 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 0,
+                "tot": 1,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
-                "med": 0,
+                "med": 1,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 0,
+                "tot": 1,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
-                "med": 0,
+                "med": 1,
                 "ovp": 0,
                 "err": 0
               }
@@ -64804,26 +64804,26 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               }
@@ -64854,24 +64854,24 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 1,
-                "eff": 0,
-                "pos": 0,
+                "tot": 2,
+                "eff": 25,
+                "pos": 50,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 0,
-                "pos": 0,
+                "tot": 2,
+                "eff": 25,
+                "pos": 50,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 1,
                 "med": 0,
                 "ovp": 0,
@@ -65331,12 +65331,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -65355,12 +65355,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
+                "tot": 1,
                 "eff": 50,
                 "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 2,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -65381,12 +65381,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 4,
-                "eff": 12,
-                "pos": 25,
+                "tot": 5,
+                "eff": 20,
+                "pos": 40,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 2,
                 "neu": 0,
                 "med": 3,
                 "ovp": 0,
@@ -65405,12 +65405,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 11,
-                "eff": 23,
-                "pos": 36,
+                "tot": 12,
+                "eff": 25,
+                "pos": 42,
                 "neg": 0,
                 "pt": 1,
-                "mas": 3,
+                "mas": 4,
                 "neu": 0,
                 "med": 7,
                 "ovp": 0,
@@ -66727,12 +66727,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -66751,12 +66751,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -66777,12 +66777,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 2,
-                "eff": -25,
-                "pos": 0,
-                "neg": 50,
+                "tot": 3,
+                "eff": 0,
+                "pos": 33,
+                "neg": 33,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 1,
                 "med": 0,
                 "ovp": 1,
@@ -66801,12 +66801,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 9,
-                "eff": 11,
-                "pos": 22,
-                "neg": 11,
+                "tot": 10,
+                "eff": 15,
+                "pos": 30,
+                "neg": 10,
                 "pt": 1,
-                "mas": 1,
+                "mas": 2,
                 "neu": 2,
                 "med": 4,
                 "ovp": 1,
@@ -67410,24 +67410,24 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 2,
-                "eff": -25,
-                "pos": 50,
-                "neg": 50,
+                "tot": 3,
+                "eff": 0,
+                "pos": 67,
+                "neg": 33,
                 "pt": 0,
-                "mas": 1,
+                "mas": 2,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 1
               },
               "total": {
-                "tot": 7,
-                "eff": 7,
-                "pos": 43,
-                "neg": 14,
+                "tot": 8,
+                "eff": 12,
+                "pos": 50,
+                "neg": 12,
                 "pt": 0,
-                "mas": 3,
+                "mas": 4,
                 "neu": 2,
                 "med": 1,
                 "ovp": 0,
@@ -67460,24 +67460,24 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 1
               },
               "P1": {
-                "tot": 6,
-                "eff": -17,
-                "pos": 17,
-                "neg": 33,
+                "tot": 5,
+                "eff": -30,
+                "pos": 0,
+                "neg": 40,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 1,
                 "med": 2,
                 "ovp": 1,
                 "err": 1
               },
               "total": {
-                "tot": 13,
-                "eff": -4,
-                "pos": 23,
-                "neg": 23,
+                "tot": 12,
+                "eff": -8,
+                "pos": 17,
+                "neg": 25,
                 "pt": 1,
-                "mas": 2,
+                "mas": 1,
                 "neu": 3,
                 "med": 4,
                 "ovp": 1,
@@ -69024,16 +69024,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 4,
-                "eff": 0,
-                "pos": 25,
-                "neg": 25,
+                "tot": 5,
+                "eff": -20,
+                "pos": 20,
+                "neg": 40,
                 "pt": 0,
                 "mas": 1,
                 "neu": 1,
                 "med": 1,
                 "ovp": 1,
-                "err": 0
+                "err": 1
               },
               "P1": {
                 "tot": 4,
@@ -69048,16 +69048,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 1
               },
               "total": {
-                "tot": 8,
-                "eff": 6,
-                "pos": 38,
-                "neg": 25,
+                "tot": 9,
+                "eff": -6,
+                "pos": 33,
+                "neg": 33,
                 "pt": 1,
                 "mas": 2,
                 "neu": 2,
                 "med": 1,
                 "ovp": 1,
-                "err": 1
+                "err": 2
               }
             },
             "desde_z6": {
@@ -69074,16 +69074,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 5,
-                "eff": -50,
+                "tot": 4,
+                "eff": -38,
                 "pos": 0,
-                "neg": 60,
+                "neg": 50,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
                 "med": 2,
                 "ovp": 1,
-                "err": 2
+                "err": 1
               },
               "P1": {
                 "tot": 2,
@@ -69098,16 +69098,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 7,
-                "eff": -29,
-                "pos": 14,
-                "neg": 43,
+                "tot": 6,
+                "eff": -17,
+                "pos": 17,
+                "neg": 33,
                 "pt": 0,
                 "mas": 1,
                 "neu": 1,
                 "med": 2,
                 "ovp": 1,
-                "err": 2
+                "err": 1
               }
             },
             "desde_z5": {
@@ -70193,16 +70193,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 2,
-                "eff": 50,
-                "pos": 100,
-                "neg": 0,
-                "pt": 0,
+                "tot": 4,
+                "eff": 25,
+                "pos": 75,
+                "neg": 25,
+                "pt": 1,
                 "mas": 2,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 0
+                "err": 1
               },
               "P1": {
                 "tot": 0,
@@ -70217,16 +70217,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 3,
-                "eff": 33,
-                "pos": 67,
-                "neg": 0,
-                "pt": 0,
+                "tot": 5,
+                "eff": 20,
+                "pos": 60,
+                "neg": 20,
+                "pt": 1,
                 "mas": 2,
                 "neu": 1,
                 "med": 0,
                 "ovp": 0,
-                "err": 0
+                "err": 1
               }
             },
             "desde_z6": {
@@ -70243,16 +70243,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 4,
-                "eff": -50,
-                "pos": 25,
-                "neg": 75,
-                "pt": 1,
+                "tot": 2,
+                "eff": -100,
+                "pos": 0,
+                "neg": 100,
+                "pt": 0,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 3
+                "err": 2
               },
               "P1": {
                 "tot": 0,
@@ -70267,16 +70267,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 4,
-                "eff": -50,
-                "pos": 25,
-                "neg": 75,
-                "pt": 1,
+                "tot": 2,
+                "eff": -100,
+                "pos": 0,
+                "neg": 100,
+                "pt": 0,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 3
+                "err": 2
               }
             },
             "desde_z5": {
@@ -70666,36 +70666,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 2
               },
               "P6": {
-                "tot": 2,
-                "eff": -50,
-                "pos": 0,
-                "neg": 50,
+                "tot": 3,
+                "eff": -17,
+                "pos": 33,
+                "neg": 33,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 1,
                 "ovp": 0,
                 "err": 1
               },
               "P1": {
-                "tot": 2,
-                "eff": -25,
-                "pos": 0,
-                "neg": 50,
+                "tot": 3,
+                "eff": 0,
+                "pos": 33,
+                "neg": 33,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 1,
                 "med": 0,
                 "ovp": 1,
                 "err": 0
               },
               "total": {
-                "tot": 9,
-                "eff": -17,
-                "pos": 33,
-                "neg": 44,
+                "tot": 11,
+                "eff": -5,
+                "pos": 45,
+                "neg": 36,
                 "pt": 1,
-                "mas": 2,
+                "mas": 4,
                 "neu": 1,
                 "med": 1,
                 "ovp": 1,
@@ -70716,36 +70716,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "P1": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 2,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -71746,36 +71746,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 1
               },
               "P6": {
-                "tot": 4,
-                "eff": -50,
-                "pos": 0,
-                "neg": 50,
+                "tot": 5,
+                "eff": -30,
+                "pos": 20,
+                "neg": 40,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 2,
                 "ovp": 0,
                 "err": 2
               },
               "P1": {
-                "tot": 6,
-                "eff": 58,
-                "pos": 83,
-                "neg": 17,
+                "tot": 7,
+                "eff": 57,
+                "pos": 86,
+                "neg": 14,
                 "pt": 3,
-                "mas": 2,
+                "mas": 3,
                 "neu": 0,
                 "med": 0,
                 "ovp": 1,
                 "err": 0
               },
               "total": {
-                "tot": 11,
-                "eff": 5,
-                "pos": 45,
-                "neg": 36,
+                "tot": 13,
+                "eff": 12,
+                "pos": 54,
+                "neg": 31,
                 "pt": 3,
-                "mas": 2,
+                "mas": 4,
                 "neu": 0,
                 "med": 2,
                 "ovp": 1,
@@ -71796,36 +71796,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 1,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "P1": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 3,
-                "eff": 33,
-                "pos": 67,
+                "tot": 1,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 2,
+                "mas": 0,
                 "neu": 1,
                 "med": 0,
                 "ovp": 0,
@@ -72993,12 +72993,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 1,
-                "eff": 50,
-                "pos": 100,
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
                 "neg": 0,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -73017,12 +73017,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 1
               },
               "total": {
-                "tot": 3,
-                "eff": -17,
-                "pos": 33,
-                "neg": 33,
+                "tot": 2,
+                "eff": -50,
+                "pos": 0,
+                "neg": 50,
                 "pt": 0,
-                "mas": 1,
+                "mas": 0,
                 "neu": 1,
                 "med": 0,
                 "ovp": 0,
@@ -73043,12 +73043,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -73067,12 +73067,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -73386,25 +73386,25 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 0,
+                "tot": 1,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 0,
+                "tot": 1,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 0,
+                "neu": 1,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -73436,25 +73436,25 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
                 "mas": 1,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
                 "mas": 1,
-                "neu": 1,
+                "neu": 0,
                 "med": 0,
                 "ovp": 0,
                 "err": 0
@@ -75469,12 +75469,12 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z6": {
               "P5": {
-                "tot": 4,
-                "eff": 0,
-                "pos": 50,
-                "neg": 25,
+                "tot": 3,
+                "eff": -17,
+                "pos": 33,
+                "neg": 33,
                 "pt": 0,
-                "mas": 2,
+                "mas": 1,
                 "neu": 1,
                 "med": 0,
                 "ovp": 0,
@@ -75505,12 +75505,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 4,
-                "eff": 0,
-                "pos": 50,
-                "neg": 25,
+                "tot": 3,
+                "eff": -17,
+                "pos": 33,
+                "neg": 33,
                 "pt": 0,
-                "mas": 2,
+                "mas": 1,
                 "neu": 1,
                 "med": 0,
                 "ovp": 0,
@@ -75519,12 +75519,12 @@ const PARTIDOS_INDIVIDUAL = [
             },
             "desde_z5": {
               "P5": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -75555,12 +75555,12 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
-                "mas": 0,
+                "mas": 1,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
@@ -76583,15 +76583,65 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 3,
-                "eff": 17,
-                "pos": 67,
-                "neg": 33,
+                "tot": 5,
+                "eff": -10,
+                "pos": 40,
+                "neg": 40,
                 "pt": 0,
                 "mas": 2,
                 "neu": 0,
-                "med": 0,
+                "med": 1,
                 "ovp": 1,
+                "err": 1
+              },
+              "P6": {
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              },
+              "P1": {
+                "tot": 4,
+                "eff": 12,
+                "pos": 75,
+                "neg": 25,
+                "pt": 0,
+                "mas": 3,
+                "neu": 0,
+                "med": 0,
+                "ovp": 0,
+                "err": 1
+              },
+              "total": {
+                "tot": 9,
+                "eff": 0,
+                "pos": 56,
+                "neg": 33,
+                "pt": 0,
+                "mas": 5,
+                "neu": 0,
+                "med": 1,
+                "ovp": 1,
+                "err": 2
+              }
+            },
+            "desde_z6": {
+              "P5": {
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
+                "ovp": 0,
                 "err": 0
               },
               "P6": {
@@ -76608,86 +76658,36 @@ const PARTIDOS_INDIVIDUAL = [
               },
               "P1": {
                 "tot": 1,
-                "eff": 50,
-                "pos": 100,
-                "neg": 0,
-                "pt": 0,
-                "mas": 1,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              },
-              "total": {
-                "tot": 4,
-                "eff": 25,
-                "pos": 75,
-                "neg": 25,
-                "pt": 0,
-                "mas": 3,
-                "neu": 0,
-                "med": 0,
-                "ovp": 1,
-                "err": 0
-              }
-            },
-            "desde_z6": {
-              "P5": {
-                "tot": 3,
-                "eff": 0,
-                "pos": 33,
-                "neg": 33,
-                "pt": 1,
-                "mas": 0,
-                "neu": 0,
-                "med": 1,
-                "ovp": 0,
-                "err": 1
-              },
-              "P6": {
-                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
-                "med": 0,
+                "med": 1,
                 "ovp": 0,
                 "err": 0
               },
-              "P1": {
-                "tot": 4,
+              "total": {
+                "tot": 1,
                 "eff": 0,
-                "pos": 50,
-                "neg": 25,
+                "pos": 0,
+                "neg": 0,
                 "pt": 0,
-                "mas": 2,
+                "mas": 0,
                 "neu": 0,
                 "med": 1,
                 "ovp": 0,
-                "err": 1
-              },
-              "total": {
-                "tot": 7,
-                "eff": 0,
-                "pos": 43,
-                "neg": 29,
-                "pt": 1,
-                "mas": 2,
-                "neu": 0,
-                "med": 2,
-                "ovp": 0,
-                "err": 2
+                "err": 0
               }
             },
             "desde_z5": {
               "P5": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 100,
+                "pos": 100,
                 "neg": 0,
-                "pt": 0,
+                "pt": 1,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
@@ -76719,11 +76719,11 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 0,
-                "eff": 0,
-                "pos": 0,
+                "tot": 1,
+                "eff": 100,
+                "pos": 100,
                 "neg": 0,
-                "pt": 0,
+                "pt": 1,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
@@ -77169,28 +77169,28 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 1,
-                "eff": 0,
+                "tot": 2,
+                "eff": -50,
                 "pos": 0,
-                "neg": 0,
+                "neg": 50,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
                 "med": 1,
                 "ovp": 0,
-                "err": 0
+                "err": 1
               },
               "total": {
-                "tot": 1,
-                "eff": 0,
+                "tot": 2,
+                "eff": -50,
                 "pos": 0,
-                "neg": 0,
+                "neg": 50,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
                 "med": 1,
                 "ovp": 0,
-                "err": 0
+                "err": 1
               }
             },
             "desde_z6": {
@@ -77219,28 +77219,28 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P1": {
-                "tot": 1,
-                "eff": -100,
+                "tot": 0,
+                "eff": 0,
                 "pos": 0,
-                "neg": 100,
+                "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 1
+                "err": 0
               },
               "total": {
-                "tot": 1,
-                "eff": -100,
+                "tot": 0,
+                "eff": 0,
                 "pos": 0,
-                "neg": 100,
+                "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
                 "med": 0,
                 "ovp": 0,
-                "err": 1
+                "err": 0
               }
             },
             "desde_z5": {
@@ -77483,16 +77483,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 4,
-                "eff": 25,
-                "pos": 50,
-                "neg": 0,
+                "tot": 10,
+                "eff": 10,
+                "pos": 40,
+                "neg": 10,
                 "pt": 0,
-                "mas": 2,
-                "neu": 1,
-                "med": 1,
+                "mas": 4,
+                "neu": 3,
+                "med": 2,
                 "ovp": 0,
-                "err": 0
+                "err": 1
               },
               "P1": {
                 "tot": 5,
@@ -77507,16 +77507,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 1
               },
               "total": {
-                "tot": 9,
-                "eff": 17,
-                "pos": 44,
-                "neg": 11,
+                "tot": 15,
+                "eff": 10,
+                "pos": 40,
+                "neg": 13,
                 "pt": 1,
-                "mas": 3,
-                "neu": 2,
-                "med": 2,
+                "mas": 5,
+                "neu": 4,
+                "med": 3,
                 "ovp": 0,
-                "err": 1
+                "err": 2
               }
             },
             "desde_z6": {
@@ -77533,16 +77533,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "P6": {
-                "tot": 7,
-                "eff": 14,
-                "pos": 43,
-                "neg": 14,
+                "tot": 1,
+                "eff": 100,
+                "pos": 100,
+                "neg": 0,
                 "pt": 1,
-                "mas": 2,
-                "neu": 2,
-                "med": 1,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
                 "ovp": 0,
-                "err": 1
+                "err": 0
               },
               "P1": {
                 "tot": 0,
@@ -77557,16 +77557,16 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 8,
-                "eff": 6,
-                "pos": 38,
-                "neg": 25,
+                "tot": 2,
+                "eff": 25,
+                "pos": 50,
+                "neg": 50,
                 "pt": 1,
-                "mas": 2,
-                "neu": 2,
-                "med": 1,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
                 "ovp": 1,
-                "err": 1
+                "err": 0
               }
             },
             "desde_z5": {
@@ -78407,14 +78407,14 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 3,
-                "eff": 50,
-                "pos": 100,
+                "tot": 4,
+                "eff": 38,
+                "pos": 75,
                 "neg": 0,
                 "pt": 0,
                 "mas": 3,
                 "neu": 0,
-                "med": 0,
+                "med": 1,
                 "ovp": 0,
                 "err": 0
               },
@@ -78443,28 +78443,28 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 4,
-                "eff": 50,
-                "pos": 100,
+                "tot": 5,
+                "eff": 40,
+                "pos": 80,
                 "neg": 0,
                 "pt": 0,
                 "mas": 4,
                 "neu": 0,
-                "med": 0,
+                "med": 1,
                 "ovp": 0,
                 "err": 0
               }
             },
             "desde_z6": {
               "P5": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               },
@@ -78493,14 +78493,14 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 2,
-                "eff": 25,
-                "pos": 50,
+                "tot": 1,
+                "eff": 50,
+                "pos": 100,
                 "neg": 0,
                 "pt": 0,
                 "mas": 1,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               }
@@ -78870,26 +78870,26 @@ const PARTIDOS_INDIVIDUAL = [
           "potencia": {
             "desde_z1": {
               "P5": {
-                "tot": 2,
-                "eff": 50,
-                "pos": 100,
-                "neg": 0,
-                "pt": 0,
-                "mas": 2,
-                "neu": 0,
-                "med": 0,
-                "ovp": 0,
-                "err": 0
-              },
-              "P6": {
-                "tot": 2,
+                "tot": 4,
                 "eff": 25,
                 "pos": 50,
                 "neg": 0,
                 "pt": 0,
+                "mas": 2,
+                "neu": 1,
+                "med": 1,
+                "ovp": 0,
+                "err": 0
+              },
+              "P6": {
+                "tot": 3,
+                "eff": 17,
+                "pos": 33,
+                "neg": 0,
+                "pt": 0,
                 "mas": 1,
                 "neu": 0,
-                "med": 1,
+                "med": 2,
                 "ovp": 0,
                 "err": 0
               },
@@ -78906,40 +78906,40 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 6,
-                "eff": 33,
-                "pos": 67,
+                "tot": 9,
+                "eff": 22,
+                "pos": 44,
                 "neg": 0,
                 "pt": 0,
                 "mas": 4,
-                "neu": 1,
-                "med": 1,
+                "neu": 2,
+                "med": 3,
                 "ovp": 0,
                 "err": 0
               }
             },
             "desde_z6": {
               "P5": {
-                "tot": 2,
-                "eff": 0,
-                "pos": 0,
-                "neg": 0,
-                "pt": 0,
-                "mas": 0,
-                "neu": 1,
-                "med": 1,
-                "ovp": 0,
-                "err": 0
-              },
-              "P6": {
-                "tot": 1,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
                 "neu": 0,
-                "med": 1,
+                "med": 0,
+                "ovp": 0,
+                "err": 0
+              },
+              "P6": {
+                "tot": 0,
+                "eff": 0,
+                "pos": 0,
+                "neg": 0,
+                "pt": 0,
+                "mas": 0,
+                "neu": 0,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               },
@@ -78956,14 +78956,14 @@ const PARTIDOS_INDIVIDUAL = [
                 "err": 0
               },
               "total": {
-                "tot": 3,
+                "tot": 0,
                 "eff": 0,
                 "pos": 0,
                 "neg": 0,
                 "pt": 0,
                 "mas": 0,
-                "neu": 1,
-                "med": 2,
+                "neu": 0,
+                "med": 0,
                 "ovp": 0,
                 "err": 0
               }
