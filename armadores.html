@@ -31,10 +31,11 @@ select,select option{color:#111!important;background-color:#fff!important}
 </header>
 
 <main class="main">
-  <div id="arm-filter-row" style="display:flex;gap:6px;flex-wrap:wrap;padding:0 0 16px;align-items:center">
-    <span style="font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase;margin-right:4px">VER:</span>
-    <button class="sfbtn on" id="arm-sf-acum" onclick="setArmPartido('acumulado',this)">Acumulado</button>
-    <div id="arm-sf-partidos" style="display:contents"></div>
+  <div id="arm-filter-row" style="display:flex;gap:10px;flex-wrap:wrap;padding:0 0 16px;align-items:center">
+    <span style="font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase">VER:</span>
+    <select id="arm-sf-select" onchange="setArmPartido(this.value)" style="padding:8px 14px;border-radius:8px;border:1px solid rgba(245,158,11,.4);background:rgba(245,158,11,.08);color:#f59e0b!important;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;cursor:pointer;min-width:240px">
+      <option value="acumulado">ACUMULADO (todos los partidos)</option>
+    </select>
   </div>
 
   <!-- SIDE-OUT (armador) -->
@@ -462,7 +463,7 @@ function abrirModalArmador(rot, color, pills){
   title.textContent=rot.pos+' — Distribución del armador';
   title.style.color=color;
   var sub=document.getElementById('modal-arm-sub');
-  var data=gpDistRotacionValidada(rot.pos);
+  var data=rot.modal||null;
   if(sub) sub.textContent='Adónde arma cuando el equipo rota en '+rot.pos+' · validado contra DataVolley';
   var body=document.getElementById('modal-arm-body');
   if(!data||(!data.sideout&&!data.transicion)){ body.innerHTML='<div style="color:#475569;padding:20px;text-align:center">Sin datos suficientes en esta rotación</div>'; return; }
@@ -808,10 +809,10 @@ function cargarAcumulado(){
     TRANSICION_DATA={titular:PARTIDOS_TRANSICION.titular||null,suplente:PARTIDOS_TRANSICION.suplente||null};
   }
 }
-function setArmPartido(pid, btn){
+function setArmPartido(pid){
   currentArmPartido=pid;
-  document.querySelectorAll('.sfbtn').forEach(function(b){b.classList.remove('on');});
-  if(btn) btn.classList.add('on');
+  var selEl=document.getElementById('arm-sf-select');
+  if(selEl && selEl.value!==pid) selEl.value=pid;
   if(pid==='acumulado'){
     cargarAcumulado();
   } else {
@@ -831,19 +832,18 @@ function setArmPartido(pid, btn){
   renderTransicion();
 }
 function buildArmSubfiltro(){
-  var cont=document.getElementById('arm-sf-partidos');
-  if(!cont || typeof PARTIDOS_META==='undefined') return;
-  cont.innerHTML='';
+  var sel=document.getElementById('arm-sf-select');
+  if(!sel || typeof PARTIDOS_META==='undefined') return;
+  // mantener la opción ACUMULADO, agregar los partidos
   var cuenta={};PARTIDOS_META.forEach(function(m){var r=m.rival||m.nombre;cuenta[r]=(cuenta[r]||0)+1;});
   PARTIDOS_META.forEach(function(m){
     var pid=m.id||m.nombre;
-    var btn=document.createElement('button');btn.className='sfbtn';
     var rival=m.rival||m.nombre;var label=rival;
-    if(cuenta[rival]>1 && m.fecha) label+=' '+m.fecha;
+    if(cuenta[rival]>1 && m.fecha) label+=' · '+m.fecha;
     if(m.resultado) label+=' ('+m.resultado+')';
-    btn.textContent=label;
-    btn.onclick=function(){ setArmPartido(pid, btn); };
-    cont.appendChild(btn);
+    var opt=document.createElement('option');
+    opt.value=pid; opt.textContent=label;
+    sel.appendChild(opt);
   });
 }
 (function(){

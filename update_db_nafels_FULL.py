@@ -1099,13 +1099,34 @@ def build_dist(subset):
         out.append({'zona':int(z),'tot':n,'pts':k,'pct':round(n/total*100),'pct_p':round(k/n*100) if n else 0})
     return sorted(out, key=lambda x:-x['tot'])
 
+def build_modal_rot(rallies, pos):
+    # Distribución validada de una rotación: SIDE-OUT (rec #/+) y TRANSICIÓN (sin recep)
+    # Clasificada en P4/P3/P2/P8/P9 (igual que gpDistRotacionValidada del game plan)
+    def calc(subset):
+        dist={'P4':0,'P3':0,'P2':0,'P8':0,'P9':0}; pts={'P4':0,'P3':0,'P2':0,'P8':0,'P9':0}; tot=0
+        for r in subset:
+            p=arm_cap_pos(r.get('atk_combo',''), r.get('atk_orig',0), pos)
+            if not p: continue
+            dist[p]+=1; tot+=1
+            if r.get('atk_result')=='#': pts[p]+=1
+        if not tot: return None
+        arr=[{'pos':p,'tot':dist[p],'pts':pts[p],'pct':round(dist[p]/tot*100),
+              'kill':round(pts[p]/dist[p]*100) if dist[p] else 0} for p in ['P4','P3','P2','P8','P9'] if dist[p]>0]
+        arr.sort(key=lambda x:-x['tot'])
+        return arr
+    rot_r=[r for r in rallies if r.get('setter_pos')==pos]
+    so=[r for r in rot_r if r.get('rec_quality') in ('#','+')]
+    tr=[r for r in rot_r if r.get('rec_quality')=='?']
+    return {'sideout':calc(so),'transicion':calc(tr),'soTot':len(so),'trTot':len(tr)}
+
 def build_one_setter(name, num, rallies):
     if not rallies: return None
     rotaciones=[]
     for pos in [4,3,2,5,6,1]:
         g=[r for r in rallies if r.get('setter_pos')==pos]
         k1=[r for r in g if r.get('rec_quality') in ('#','+')]
-        rotaciones.append({'pos':'P'+str(pos),'total':len(k1),'total_all':len(g),'dist':build_dist(g)})
+        rotaciones.append({'pos':'P'+str(pos),'total':len(k1),'total_all':len(g),
+                           'dist':build_dist(g),'modal':build_modal_rot(rallies,pos)})
     pills=[]
     for pos in [1,6,5,4,3,2]:
         g=[r for r in rallies if r.get('setter_pos')==pos]

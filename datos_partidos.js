@@ -1,5 +1,5 @@
-// datos_partidos.js — 08/06/2026, 09:43:26
-const PARTIDOS_GENERADO = "08/06/2026, 09:43:26";
+// datos_partidos.js — 08/06/2026, 09:59:45
+const PARTIDOS_GENERADO = "08/06/2026, 09:59:45";
 const PARTIDOS_TOTAL = 26;
 const PARTIDOS_META = [
   {
@@ -5983,7 +5983,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 75,
+                  "kill": 33
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 4,
+              "trTot": 1
+            }
           },
           {
             "pos": "P3",
@@ -6011,7 +6040,64 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 3,
+                  "pct": 40,
+                  "kill": 75
+                },
+                {
+                  "pos": "P3",
+                  "tot": 4,
+                  "pts": 3,
+                  "pct": 40,
+                  "kill": 75
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 50
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 29,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 29,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 29,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 14,
+                  "kill": 0
+                }
+              ],
+              "soTot": 10,
+              "trTot": 7
+            }
           },
           {
             "pos": "P2",
@@ -6046,7 +6132,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 10,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 3,
+                  "pct": 40,
+                  "kill": 75
+                },
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 30,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 10,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 80,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                }
+              ],
+              "soTot": 10,
+              "trTot": 5
+            }
           },
           {
             "pos": "P5",
@@ -6074,7 +6210,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 10,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 6,
+                  "pts": 3,
+                  "pct": 60,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 30,
+                  "kill": 67
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 10,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 8,
+                  "pts": 3,
+                  "pct": 62,
+                  "kill": 38
+                },
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 0,
+                  "pct": 23,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 15,
+                  "kill": 0
+                }
+              ],
+              "soTot": 10,
+              "trTot": 13
+            }
           },
           {
             "pos": "P6",
@@ -6109,7 +6295,64 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 6,
+                  "pts": 1,
+                  "pct": 60,
+                  "kill": 17
+                },
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 0,
+                  "pct": 30,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 10,
+                  "kill": 0
+                }
+              ],
+              "soTot": 6,
+              "trTot": 10
+            }
           },
           {
             "pos": "P1",
@@ -6137,7 +6380,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 12,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 38,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 38,
+                  "kill": 33
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 12,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 12,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 8,
+              "trTot": 2
+            }
           }
         ],
         "pills": [
@@ -6340,7 +6626,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 50,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P3",
@@ -6361,31 +6661,77 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 50,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 1,
+              "trTot": 1
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P1",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           }
         ],
         "pills": [
@@ -9709,7 +10055,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 67,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "soTot": 3,
+              "trTot": 3
+            }
           },
           {
             "pos": "P3",
@@ -9737,7 +10126,35 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "transicion": null,
+              "soTot": 3,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
@@ -9758,7 +10175,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 80,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 5,
+              "trTot": 3
+            }
           },
           {
             "pos": "P5",
@@ -9793,7 +10239,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 57,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 29,
+                  "kill": 50
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 14,
+                  "kill": 100
+                }
+              ],
+              "soTot": 5,
+              "trTot": 7
+            }
           },
           {
             "pos": "P6",
@@ -9807,7 +10303,29 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 67
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 100,
+                  "kill": 67
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 3,
+              "trTot": 1
+            }
           },
           {
             "pos": "P1",
@@ -9835,7 +10353,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 33
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "soTot": 1,
+              "trTot": 6
+            }
           }
         ],
         "pills": [
@@ -9996,7 +10550,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P3",
@@ -10010,7 +10570,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "transicion": null,
+              "soTot": 1,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
@@ -10031,25 +10605,72 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 2,
+              "trTot": 1
+            }
           },
           {
             "pos": "P5",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P1",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           }
         ],
         "pills": [
@@ -12416,7 +13037,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 3,
+                  "pct": 67,
+                  "kill": 75
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                }
+              ],
+              "soTot": 3,
+              "trTot": 6
+            }
           },
           {
             "pos": "P3",
@@ -12444,7 +13115,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 50
+                }
+              ],
+              "soTot": 4,
+              "trTot": 2
+            }
           },
           {
             "pos": "P2",
@@ -12472,7 +13179,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 6,
+                  "pts": 1,
+                  "pct": 86,
+                  "kill": 17
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 14,
+                  "kill": 0
+                }
+              ],
+              "soTot": 6,
+              "trTot": 7
+            }
           },
           {
             "pos": "P5",
@@ -12493,7 +13243,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 40,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 40,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 40,
+                  "kill": 0
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "soTot": 5,
+              "trTot": 4
+            }
           },
           {
             "pos": "P6",
@@ -12528,7 +13328,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 5,
+                  "pts": 3,
+                  "pct": 62,
+                  "kill": 60
+                },
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 38,
+                  "kill": 33
+                }
+              ],
+              "soTot": 6,
+              "trTot": 8
+            }
           },
           {
             "pos": "P1",
@@ -12556,7 +13406,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 100,
+                  "kill": 50
+                }
+              ],
+              "soTot": 6,
+              "trTot": 4
+            }
           }
         ],
         "pills": [
@@ -12701,19 +13587,37 @@ const PARTIDOS_INDIVIDUAL = [
             "pos": "P4",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
@@ -12727,13 +13631,33 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 2
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P1",
@@ -12747,7 +13671,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           }
         ],
         "pills": [
@@ -15263,7 +16201,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 12,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P9",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 38,
+                  "kill": 33
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 12,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 60,
+                  "kill": 100
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                }
+              ],
+              "soTot": 8,
+              "trTot": 5
+            }
           },
           {
             "pos": "P3",
@@ -15298,7 +16279,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 4,
+                  "pts": 3,
+                  "pct": 80,
+                  "kill": 75
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "soTot": 6,
+              "trTot": 5
+            }
           },
           {
             "pos": "P2",
@@ -15326,7 +16357,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 14,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 1,
+                  "pct": 57,
+                  "kill": 25
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 29,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 14,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 33
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                }
+              ],
+              "soTot": 7,
+              "trTot": 6
+            }
           },
           {
             "pos": "P5",
@@ -15354,7 +16435,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 40,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 75,
+                  "kill": 67
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "soTot": 5,
+              "trTot": 4
+            }
           },
           {
             "pos": "P6",
@@ -15389,7 +16513,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 14,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 4,
+                  "pts": 3,
+                  "pct": 57,
+                  "kill": 75
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 14,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 14,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 14,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 60,
+                  "kill": 33
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                }
+              ],
+              "soTot": 7,
+              "trTot": 6
+            }
           },
           {
             "pos": "P1",
@@ -15410,7 +16584,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 10,
+                  "pts": 5,
+                  "pct": 83,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 50
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 75,
+                  "kill": 33
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "soTot": 12,
+              "trTot": 5
+            }
           }
         ],
         "pills": [
@@ -15591,25 +16801,49 @@ const PARTIDOS_INDIVIDUAL = [
             "pos": "P4",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P6",
@@ -15623,7 +16857,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P1",
@@ -15644,7 +16892,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 50,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 2
+            }
           }
         ],
         "pills": [
@@ -18648,7 +19910,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 0,
+                  "pct": 60,
+                  "kill": 0
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 40,
+                  "kill": 0
+                }
+              ],
+              "soTot": 5,
+              "trTot": 6
+            }
           },
           {
             "pos": "P3",
@@ -18683,7 +19988,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "soTot": 6,
+              "trTot": 3
+            }
           },
           {
             "pos": "P2",
@@ -18711,7 +20066,28 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 3
+            }
           },
           {
             "pos": "P5",
@@ -18739,7 +20115,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 40,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 40,
+                  "kill": 100
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 50
+                }
+              ],
+              "soTot": 5,
+              "trTot": 2
+            }
           },
           {
             "pos": "P6",
@@ -18760,7 +20172,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 67,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "soTot": 3,
+              "trTot": 2
+            }
           },
           {
             "pos": "P1",
@@ -18788,7 +20236,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 12,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 4,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 25
+                },
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 38,
+                  "kill": 33
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 12,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 0,
+                  "pct": 75,
+                  "kill": 0
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "soTot": 8,
+              "trTot": 5
+            }
           }
         ],
         "pills": [
@@ -18998,7 +20489,28 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 50,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 3
+            }
           },
           {
             "pos": "P3",
@@ -19012,7 +20524,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
@@ -19026,7 +20544,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P5",
@@ -19040,19 +20572,45 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P1",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           }
         ],
         "pills": [
@@ -22177,7 +23735,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 75,
+                  "kill": 67
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "soTot": 3,
+              "trTot": 4
+            }
           },
           {
             "pos": "P3",
@@ -22205,7 +23799,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 30,
                 "pct_p": 33
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 40,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 30,
+                  "kill": 33
+                },
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 30,
+                  "kill": 33
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 75,
+                  "kill": 67
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "soTot": 10,
+              "trTot": 5
+            }
           },
           {
             "pos": "P2",
@@ -22240,7 +23877,64 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 40,
+                  "kill": 100
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 7,
+                  "pts": 4,
+                  "pct": 70,
+                  "kill": 57
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 10,
+                  "kill": 100
+                }
+              ],
+              "soTot": 5,
+              "trTot": 10
+            }
           },
           {
             "pos": "P5",
@@ -22268,7 +23962,35 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 60,
+                  "kill": 67
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": null,
+              "soTot": 5,
+              "trTot": 0
+            }
           },
           {
             "pos": "P6",
@@ -22289,7 +24011,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P2",
+                  "tot": 4,
+                  "pts": 3,
+                  "pct": 67,
+                  "kill": 75
+                },
+                {
+                  "pos": "P8",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "soTot": 6,
+              "trTot": 2
+            }
           },
           {
             "pos": "P1",
@@ -22317,7 +24075,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 14,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 3,
+                  "pct": 67,
+                  "kill": 75
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 6,
+                  "pts": 2,
+                  "pct": 100,
+                  "kill": 33
+                }
+              ],
+              "soTot": 7,
+              "trTot": 6
+            }
           }
         ],
         "pills": [
@@ -22542,13 +24336,33 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
@@ -22569,7 +24383,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 50,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 2
+            }
           },
           {
             "pos": "P5",
@@ -22583,19 +24411,45 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 50
+                }
+              ],
+              "soTot": 0,
+              "trTot": 2
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P1",
             "total": 0,
             "total_all": 1,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 1
+            }
           }
         ],
         "pills": [
@@ -25439,7 +27293,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 6,
+              "trTot": 1
+            }
           },
           {
             "pos": "P3",
@@ -25467,7 +27357,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 8,
+                  "pts": 3,
+                  "pct": 73,
+                  "kill": 38
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 18,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 9,
+                  "kill": 0
+                }
+              ],
+              "soTot": 6,
+              "trTot": 11
+            }
           },
           {
             "pos": "P2",
@@ -25495,7 +27435,35 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 60,
+                  "kill": 67
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": null,
+              "soTot": 5,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
@@ -25523,7 +27491,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 38,
+                  "kill": 33
+                },
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 38,
+                  "kill": 33
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 50
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 8,
+              "trTot": 1
+            }
           },
           {
             "pos": "P6",
@@ -25551,7 +27555,29 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 12,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 50
+                }
+              ],
+              "soTot": 1,
+              "trTot": 2
+            }
           },
           {
             "pos": "P1",
@@ -25579,7 +27605,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 23,
                 "pct_p": 67
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "soTot": 2,
+              "trTot": 5
+            }
           }
         ],
         "pills": [
@@ -25790,19 +27852,45 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
@@ -25816,7 +27904,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P6",
@@ -25830,13 +27932,33 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P1",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           }
         ],
         "pills": [
@@ -29084,7 +31206,64 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 29,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 43,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 29,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 29,
+                  "kill": 50
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "soTot": 7,
+              "trTot": 6
+            }
           },
           {
             "pos": "P3",
@@ -29112,7 +31291,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 29,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 43,
+                  "kill": 67
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 29,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 29,
+                  "kill": 50
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 43,
+                  "kill": 67
+                },
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 0,
+                  "pct": 43,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 14,
+                  "kill": 0
+                }
+              ],
+              "soTot": 7,
+              "trTot": 7
+            }
           },
           {
             "pos": "P2",
@@ -29140,7 +31369,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 60,
+                  "kill": 33
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 6,
+                  "pts": 6,
+                  "pct": 67,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 33,
+                  "kill": 67
+                }
+              ],
+              "soTot": 5,
+              "trTot": 9
+            }
           },
           {
             "pos": "P5",
@@ -29175,7 +31447,71 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "soTot": 6,
+              "trTot": 4
+            }
           },
           {
             "pos": "P6",
@@ -29203,7 +31539,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 50
+                },
+                {
+                  "pos": "P8",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 50
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "soTot": 8,
+              "trTot": 4
+            }
           },
           {
             "pos": "P1",
@@ -29231,7 +31617,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "soTot": 8,
+              "trTot": 5
+            }
           }
         ],
         "pills": [
@@ -29427,13 +31863,40 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 50,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 2
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
@@ -29447,7 +31910,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P5",
@@ -29461,13 +31938,33 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 50
+                }
+              ],
+              "soTot": 0,
+              "trTot": 2
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P1",
@@ -29481,7 +31978,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           }
         ],
         "pills": [
@@ -32711,7 +35214,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 33
+                },
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 33
+                }
+              ],
+              "soTot": 5,
+              "trTot": 6
+            }
           },
           {
             "pos": "P3",
@@ -32732,7 +35278,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 43,
                 "pct_p": 33
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 3,
+                  "pct": 57,
+                  "kill": 75
+                },
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 43,
+                  "kill": 33
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "soTot": 7,
+              "trTot": 6
+            }
           },
           {
             "pos": "P2",
@@ -32753,7 +35342,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 42,
                 "pct_p": 60
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 7,
+                  "pts": 4,
+                  "pct": 58,
+                  "kill": 57
+                },
+                {
+                  "pos": "P9",
+                  "tot": 5,
+                  "pts": 3,
+                  "pct": 42,
+                  "kill": 60
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 60,
+                  "kill": 33
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                }
+              ],
+              "soTot": 12,
+              "trTot": 5
+            }
           },
           {
             "pos": "P5",
@@ -32781,7 +35406,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 22,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 1,
+                  "pct": 44,
+                  "kill": 25
+                },
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 22,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 5,
+                  "pts": 0,
+                  "pct": 62,
+                  "kill": 0
+                },
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 38,
+                  "kill": 33
+                }
+              ],
+              "soTot": 9,
+              "trTot": 8
+            }
           },
           {
             "pos": "P6",
@@ -32809,7 +35477,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 67
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 7,
+                  "pts": 1,
+                  "pct": 58,
+                  "kill": 14
+                },
+                {
+                  "pos": "P2",
+                  "tot": 5,
+                  "pts": 4,
+                  "pct": 42,
+                  "kill": 80
+                }
+              ],
+              "soTot": 6,
+              "trTot": 12
+            }
           },
           {
             "pos": "P1",
@@ -32837,7 +35548,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 5,
+                  "pts": 3,
+                  "pct": 50,
+                  "kill": 60
+                },
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 30,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 50
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 5,
+                  "pts": 4,
+                  "pct": 71,
+                  "kill": 80
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 29,
+                  "kill": 0
+                }
+              ],
+              "soTot": 10,
+              "trTot": 7
+            }
           }
         ],
         "pills": [
@@ -33018,7 +35772,13 @@ const PARTIDOS_INDIVIDUAL = [
             "pos": "P4",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P3",
@@ -33032,7 +35792,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P2",
@@ -33046,25 +35820,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P5",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P1",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           }
         ],
         "pills": [
@@ -35630,7 +38436,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "soTot": 2,
+              "trTot": 3
+            }
           },
           {
             "pos": "P3",
@@ -35665,7 +38507,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 11,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P8",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "soTot": 1,
+              "trTot": 4
+            }
           },
           {
             "pos": "P2",
@@ -35686,7 +38564,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 75,
+                  "kill": 33
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 4,
+              "trTot": 1
+            }
           },
           {
             "pos": "P5",
@@ -35714,7 +38621,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "soTot": 3,
+              "trTot": 3
+            }
           },
           {
             "pos": "P6",
@@ -35749,7 +38699,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 2,
+              "trTot": 1
+            }
           },
           {
             "pos": "P1",
@@ -35770,7 +38749,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 40,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "soTot": 2,
+              "trTot": 2
+            }
           }
         ],
         "pills": [
@@ -35929,13 +38944,25 @@ const PARTIDOS_INDIVIDUAL = [
             "pos": "P4",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
@@ -35949,25 +38976,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P5",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P1",
             "total": 0,
             "total_all": 1,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 1
+            }
           }
         ],
         "pills": [
@@ -39107,7 +42166,64 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P8",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "soTot": 5,
+              "trTot": 4
+            }
           },
           {
             "pos": "P3",
@@ -39135,7 +42251,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 57,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 43,
+                  "kill": 67
+                }
+              ],
+              "soTot": 3,
+              "trTot": 7
+            }
           },
           {
             "pos": "P2",
@@ -39163,7 +42322,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 60,
+                  "kill": 33
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "soTot": 5,
+              "trTot": 3
+            }
           },
           {
             "pos": "P5",
@@ -39198,7 +42400,64 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 33
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 5,
+                  "pts": 1,
+                  "pct": 56,
+                  "kill": 20
+                },
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 11,
+                  "kill": 0
+                }
+              ],
+              "soTot": 6,
+              "trTot": 9
+            }
           },
           {
             "pos": "P6",
@@ -39226,7 +42485,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P2",
+                  "tot": 4,
+                  "pts": 3,
+                  "pct": 44,
+                  "kill": 75
+                },
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 22,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "soTot": 10,
+              "trTot": 3
+            }
           },
           {
             "pos": "P1",
@@ -39254,7 +42556,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 22,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 38,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 12,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 7,
+                  "pts": 3,
+                  "pct": 78,
+                  "kill": 43
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 22,
+                  "kill": 100
+                }
+              ],
+              "soTot": 9,
+              "trTot": 9
+            }
           }
         ],
         "pills": [
@@ -39414,19 +42759,45 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
@@ -39440,7 +42811,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P6",
@@ -39454,7 +42839,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P1",
@@ -39468,7 +42867,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 2
+            }
           }
         ],
         "pills": [
@@ -42147,7 +45552,64 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 3,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "soTot": 7,
+              "trTot": 4
+            }
           },
           {
             "pos": "P3",
@@ -42175,7 +45637,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P9",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "soTot": 8,
+              "trTot": 4
+            }
           },
           {
             "pos": "P2",
@@ -42196,7 +45701,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 38,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 5,
+                  "pts": 1,
+                  "pct": 62,
+                  "kill": 20
+                },
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 38,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 80,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "soTot": 8,
+              "trTot": 5
+            }
           },
           {
             "pos": "P5",
@@ -42217,7 +45758,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P2",
+                  "tot": 4,
+                  "pts": 3,
+                  "pct": 67,
+                  "kill": 75
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 80,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                }
+              ],
+              "soTot": 6,
+              "trTot": 5
+            }
           },
           {
             "pos": "P6",
@@ -42245,7 +45822,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 33
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 50
+                }
+              ],
+              "soTot": 6,
+              "trTot": 3
+            }
           },
           {
             "pos": "P1",
@@ -42273,7 +45886,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 8,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 6,
+                  "pts": 3,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 5,
+                  "pts": 4,
+                  "pct": 42,
+                  "kill": 80
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 8,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 5,
+                  "pts": 3,
+                  "pct": 83,
+                  "kill": 60
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "soTot": 13,
+              "trTot": 7
+            }
           }
         ],
         "pills": [
@@ -42468,7 +46124,13 @@ const PARTIDOS_INDIVIDUAL = [
             "pos": "P4",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P3",
@@ -42482,19 +46144,37 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
             "total": 0,
             "total_all": 1,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P6",
@@ -42508,13 +46188,33 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P1",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           }
         ],
         "pills": [
@@ -45713,7 +49413,29 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 67
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 100,
+                  "kill": 67
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 3,
+              "trTot": 2
+            }
           },
           {
             "pos": "P3",
@@ -45734,7 +49456,29 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 1,
+              "trTot": 1
+            }
           },
           {
             "pos": "P2",
@@ -45762,7 +49506,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "soTot": 2,
+              "trTot": 2
+            }
           },
           {
             "pos": "P5",
@@ -45783,7 +49563,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 3,
+              "trTot": 1
+            }
           },
           {
             "pos": "P6",
@@ -45811,7 +49620,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 43,
+                  "kill": 67
+                },
+                {
+                  "pos": "P8",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 43,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 14,
+                  "kill": 0
+                }
+              ],
+              "soTot": 3,
+              "trTot": 8
+            }
           },
           {
             "pos": "P1",
@@ -45839,7 +49698,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 11,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 75,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "soTot": 1,
+              "trTot": 4
+            }
           }
         ],
         "pills": [
@@ -45999,7 +49887,29 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 11,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 5,
+                  "pts": 2,
+                  "pct": 100,
+                  "kill": 40
+                }
+              ],
+              "soTot": 1,
+              "trTot": 5
+            }
           },
           {
             "pos": "P3",
@@ -46020,7 +49930,29 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 33
+                }
+              ],
+              "soTot": 1,
+              "trTot": 3
+            }
           },
           {
             "pos": "P2",
@@ -46048,7 +49980,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 29,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "soTot": 2,
+              "trTot": 2
+            }
           },
           {
             "pos": "P5",
@@ -46069,7 +50037,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P6",
@@ -46097,7 +50079,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P1",
@@ -46118,7 +50114,28 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 2
+            }
           }
         ],
         "pills": [
@@ -49550,7 +53567,71 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                }
+              ],
+              "soTot": 6,
+              "trTot": 5
+            }
           },
           {
             "pos": "P3",
@@ -49578,7 +53659,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 29,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 43,
+                  "kill": 33
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 29,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 29,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "soTot": 7,
+              "trTot": 5
+            }
           },
           {
             "pos": "P2",
@@ -49606,7 +53737,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 12,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 4,
+                  "pts": 3,
+                  "pct": 50,
+                  "kill": 75
+                },
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 38,
+                  "kill": 67
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 12,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "soTot": 8,
+              "trTot": 4
+            }
           },
           {
             "pos": "P5",
@@ -49627,7 +53808,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 50,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 33
+                },
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 33
+                }
+              ],
+              "soTot": 4,
+              "trTot": 7
+            }
           },
           {
             "pos": "P6",
@@ -49655,7 +53872,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                },
+                {
+                  "pos": "P8",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 40,
+                  "kill": 0
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                }
+              ],
+              "soTot": 6,
+              "trTot": 6
+            }
           },
           {
             "pos": "P1",
@@ -49683,7 +53950,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 12,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 5,
+                  "pts": 0,
+                  "pct": 62,
+                  "kill": 0
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 12,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 67
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                }
+              ],
+              "soTot": 8,
+              "trTot": 6
+            }
           }
         ],
         "pills": [
@@ -49872,7 +54189,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P3",
@@ -49886,19 +54217,37 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
             "total": 0,
             "total_all": 2,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 2
+            }
           },
           {
             "pos": "P6",
@@ -49912,7 +54261,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P1",
@@ -49926,7 +54289,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 1
+            }
           }
         ],
         "pills": [
@@ -53244,7 +57613,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 25
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 50
+                },
+                {
+                  "pos": "P8",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 20,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "soTot": 10,
+              "trTot": 3
+            }
           },
           {
             "pos": "P3",
@@ -53272,7 +57691,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 22,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 5,
+                  "pts": 1,
+                  "pct": 56,
+                  "kill": 20
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 22,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 22,
+                  "kill": 50
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 5,
+                  "pts": 3,
+                  "pct": 50,
+                  "kill": 60
+                },
+                {
+                  "pos": "P9",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 40,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 10,
+                  "kill": 100
+                }
+              ],
+              "soTot": 9,
+              "trTot": 10
+            }
           },
           {
             "pos": "P2",
@@ -53307,7 +57776,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 15,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 6,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 33
+                },
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 33
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 8,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 50
+                }
+              ],
+              "soTot": 14,
+              "trTot": 4
+            }
           },
           {
             "pos": "P5",
@@ -53342,7 +57861,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 12,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P2",
+                  "tot": 4,
+                  "pts": 3,
+                  "pct": 50,
+                  "kill": 75
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 25,
+                  "kill": 100
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 12,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 12,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "soTot": 8,
+              "trTot": 3
+            }
           },
           {
             "pos": "P6",
@@ -53377,7 +57946,64 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 11,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 33,
+                  "kill": 67
+                },
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 22,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 11,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 40,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "soTot": 9,
+              "trTot": 7
+            }
           },
           {
             "pos": "P1",
@@ -53398,7 +58024,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 6,
+                  "pts": 3,
+                  "pct": 75,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 50
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 10,
+                  "pts": 5,
+                  "pct": 62,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 4,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 12,
+                  "kill": 0
+                }
+              ],
+              "soTot": 9,
+              "trTot": 16
+            }
           }
         ],
         "pills": [
@@ -53608,13 +58277,25 @@ const PARTIDOS_INDIVIDUAL = [
             "pos": "P4",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
@@ -53635,25 +58316,79 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 0,
+                  "pct": 80,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "soTot": 5,
+              "trTot": 2
+            }
           },
           {
             "pos": "P5",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P1",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           }
         ],
         "pills": [
@@ -55975,7 +60710,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P8",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "soTot": 6,
+              "trTot": 4
+            }
           },
           {
             "pos": "P3",
@@ -56003,7 +60788,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 2,
+              "trTot": 1
+            }
           },
           {
             "pos": "P2",
@@ -56024,7 +60838,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 67,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                }
+              ],
+              "soTot": 3,
+              "trTot": 6
+            }
           },
           {
             "pos": "P5",
@@ -56045,7 +60895,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 67,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 60,
+                  "kill": 33
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                }
+              ],
+              "soTot": 3,
+              "trTot": 5
+            }
           },
           {
             "pos": "P6",
@@ -56073,7 +60959,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "soTot": 6,
+              "trTot": 4
+            }
           },
           {
             "pos": "P1",
@@ -56094,7 +61030,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 50,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "soTot": 4,
+              "trTot": 3
+            }
           }
         ],
         "pills": [
@@ -56254,19 +61226,45 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 2
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
@@ -56280,19 +61278,45 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 2
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P1",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           }
         ],
         "pills": [
@@ -59447,7 +64471,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 75,
+                  "kill": 67
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 75,
+                  "kill": 67
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "soTot": 4,
+              "trTot": 4
+            }
           },
           {
             "pos": "P3",
@@ -59482,7 +64542,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 12,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "soTot": 2,
+              "trTot": 5
+            }
           },
           {
             "pos": "P2",
@@ -59510,7 +64620,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 67
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "soTot": 6,
+              "trTot": 2
+            }
           },
           {
             "pos": "P5",
@@ -59531,7 +64684,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 67,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "soTot": 3,
+              "trTot": 2
+            }
           },
           {
             "pos": "P6",
@@ -59552,7 +64741,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "soTot": 3,
+              "trTot": 5
+            }
           },
           {
             "pos": "P1",
@@ -59587,7 +64812,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 12,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 2,
+              "trTot": 1
+            }
           }
         ],
         "pills": [
@@ -59733,19 +64987,45 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
@@ -59759,19 +65039,45 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 2,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P1",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           }
         ],
         "pills": [
@@ -61825,7 +67131,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 67,
+                  "kill": 100
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "soTot": 4,
+              "trTot": 3
+            }
           },
           {
             "pos": "P3",
@@ -61853,7 +67195,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 3,
+                  "pts": 0,
+                  "pct": 60,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 57,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 43,
+                  "kill": 67
+                }
+              ],
+              "soTot": 5,
+              "trTot": 7
+            }
           },
           {
             "pos": "P2",
@@ -61881,7 +67266,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 9,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 43,
+                  "kill": 67
+                },
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 43,
+                  "kill": 33
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 14,
+                  "kill": 100
+                }
+              ],
+              "soTot": 2,
+              "trTot": 7
+            }
           },
           {
             "pos": "P5",
@@ -61909,7 +67337,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 40,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 40,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 33
+                }
+              ],
+              "soTot": 5,
+              "trTot": 3
+            }
           },
           {
             "pos": "P6",
@@ -61944,7 +67408,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 11,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "soTot": 2,
+              "trTot": 3
+            }
           },
           {
             "pos": "P1",
@@ -61972,7 +67472,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 4,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 25
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 50
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 50
+                }
+              ],
+              "soTot": 8,
+              "trTot": 4
+            }
           }
         ],
         "pills": [
@@ -62182,19 +67725,37 @@ const PARTIDOS_INDIVIDUAL = [
             "pos": "P4",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 3,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
@@ -62208,19 +67769,45 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P1",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           }
         ],
         "pills": [
@@ -65125,7 +70712,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 10,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 33
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                }
+              ],
+              "soTot": 2,
+              "trTot": 6
+            }
           },
           {
             "pos": "P3",
@@ -65146,7 +70776,28 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 2
+            }
           },
           {
             "pos": "P2",
@@ -65167,7 +70818,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 50,
                 "pct_p": 67
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "soTot": 2,
+              "trTot": 2
+            }
           },
           {
             "pos": "P5",
@@ -65188,7 +70875,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 67
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 50
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 75,
+                  "kill": 33
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "soTot": 2,
+              "trTot": 4
+            }
           },
           {
             "pos": "P6",
@@ -65216,7 +70932,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "soTot": 3,
+              "trTot": 4
+            }
           },
           {
             "pos": "P1",
@@ -65230,7 +70996,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 50
+                }
+              ],
+              "soTot": 3,
+              "trTot": 5
+            }
           }
         ],
         "pills": [
@@ -65389,19 +71184,37 @@ const PARTIDOS_INDIVIDUAL = [
             "pos": "P4",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
@@ -65415,13 +71228,33 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P1",
@@ -65435,7 +71268,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           }
         ],
         "pills": [
@@ -68137,7 +73984,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 60,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "soTot": 5,
+              "trTot": 2
+            }
           },
           {
             "pos": "P3",
@@ -68165,7 +74055,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 4,
+              "trTot": 1
+            }
           },
           {
             "pos": "P2",
@@ -68193,7 +74119,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 40,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 40,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 5,
+              "trTot": 2
+            }
           },
           {
             "pos": "P5",
@@ -68228,7 +74190,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 14,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 4,
+                  "pts": 3,
+                  "pct": 57,
+                  "kill": 75
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 29,
+                  "kill": 0
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 14,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 60,
+                  "kill": 33
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 40,
+                  "kill": 100
+                }
+              ],
+              "soTot": 7,
+              "trTot": 5
+            }
           },
           {
             "pos": "P6",
@@ -68256,7 +74261,64 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 60,
+                  "kill": 33
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 0,
+                  "pct": 38,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 38,
+                  "kill": 67
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 12,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 12,
+                  "kill": 100
+                }
+              ],
+              "soTot": 5,
+              "trTot": 8
+            }
           },
           {
             "pos": "P1",
@@ -68277,7 +74339,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 40,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 60,
+                  "kill": 67
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 40,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "soTot": 5,
+              "trTot": 5
+            }
           }
         ],
         "pills": [
@@ -68466,19 +74571,45 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
@@ -68492,7 +74623,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P6",
@@ -68506,7 +74651,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P1",
@@ -68520,7 +74679,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           }
         ],
         "pills": [
@@ -71735,7 +77908,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 29,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P8",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 43,
+                  "kill": 100
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 29,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 29,
+                  "kill": 50
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "soTot": 7,
+              "trTot": 5
+            }
           },
           {
             "pos": "P3",
@@ -71763,7 +77986,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 11,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 50
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 67
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                }
+              ],
+              "soTot": 2,
+              "trTot": 6
+            }
           },
           {
             "pos": "P2",
@@ -71798,7 +78057,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 14,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 57,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 14,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 14,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 14,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 0,
+                  "pct": 75,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "soTot": 7,
+              "trTot": 4
+            }
           },
           {
             "pos": "P5",
@@ -71826,7 +78135,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "soTot": 3,
+              "trTot": 3
+            }
           },
           {
             "pos": "P6",
@@ -71854,7 +78206,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 9,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 60,
+                  "kill": 67
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 40,
+                  "kill": 0
+                }
+              ],
+              "soTot": 2,
+              "trTot": 5
+            }
           },
           {
             "pos": "P1",
@@ -71882,7 +78263,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "soTot": 4,
+              "trTot": 3
+            }
           }
         ],
         "pills": [
@@ -72121,19 +78545,45 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 2
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
@@ -72147,13 +78597,33 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 33
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 50
+                }
+              ],
+              "soTot": 0,
+              "trTot": 2
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P1",
@@ -72167,7 +78637,13 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           }
         ],
         "pills": [
@@ -75256,7 +81732,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 14,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 43,
+                  "kill": 67
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 29,
+                  "kill": 100
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 14,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 14,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 7,
+              "trTot": 2
+            }
           },
           {
             "pos": "P3",
@@ -75291,7 +81810,64 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 40,
+                  "kill": 100
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 60,
+                  "kill": 33
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                }
+              ],
+              "soTot": 5,
+              "trTot": 5
+            }
           },
           {
             "pos": "P2",
@@ -75312,7 +81888,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 40,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 60,
+                  "kill": 67
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 40,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 50
+                }
+              ],
+              "soTot": 5,
+              "trTot": 3
+            }
           },
           {
             "pos": "P5",
@@ -75347,7 +81952,71 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "soTot": 4,
+              "trTot": 6
+            }
           },
           {
             "pos": "P6",
@@ -75382,7 +82051,64 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 12,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P2",
+                  "tot": 4,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 25
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 12,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 12,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 4,
+                  "pts": 4,
+                  "pct": 57,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 29,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 14,
+                  "kill": 0
+                }
+              ],
+              "soTot": 9,
+              "trTot": 7
+            }
           },
           {
             "pos": "P1",
@@ -75410,7 +82136,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 17,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "soTot": 6,
+              "trTot": 2
+            }
           }
         ],
         "pills": [
@@ -75613,37 +82382,81 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 50
+                }
+              ],
+              "soTot": 0,
+              "trTot": 2
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P1",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           }
         ],
         "pills": [
@@ -78901,7 +85714,64 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 33
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 1,
+                  "pct": 57,
+                  "kill": 25
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 29,
+                  "kill": 50
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 14,
+                  "kill": 100
+                }
+              ],
+              "soTot": 6,
+              "trTot": 7
+            }
           },
           {
             "pos": "P3",
@@ -78929,7 +85799,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 40,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 5,
+                  "pts": 2,
+                  "pct": 62,
+                  "kill": 40
+                },
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 38,
+                  "kill": 33
+                }
+              ],
+              "soTot": 5,
+              "trTot": 8
+            }
           },
           {
             "pos": "P2",
@@ -78957,7 +85870,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 75,
+                  "kill": 33
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "soTot": 4,
+              "trTot": 4
+            }
           },
           {
             "pos": "P5",
@@ -78992,7 +85948,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 8,
+                  "pts": 1,
+                  "pct": 80,
+                  "kill": 12
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "soTot": 5,
+              "trTot": 11
+            }
           },
           {
             "pos": "P6",
@@ -79020,7 +86026,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 67,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "soTot": 5,
+              "trTot": 3
+            }
           },
           {
             "pos": "P1",
@@ -79041,7 +86083,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 67,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 38,
+                  "kill": 33
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 12,
+                  "kill": 100
+                }
+              ],
+              "soTot": 3,
+              "trTot": 9
+            }
           }
         ],
         "pills": [
@@ -79251,7 +86336,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P3",
@@ -79265,13 +86364,25 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
@@ -79285,13 +86396,33 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 50
+                }
+              ],
+              "soTot": 0,
+              "trTot": 2
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 1,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P1",
@@ -79305,7 +86436,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           }
         ],
         "pills": [
@@ -82263,7 +89408,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 67,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 3,
+              "trTot": 1
+            }
           },
           {
             "pos": "P3",
@@ -82284,7 +89458,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 75,
+                  "kill": 67
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 67
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "soTot": 4,
+              "trTot": 6
+            }
           },
           {
             "pos": "P2",
@@ -82312,7 +89529,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 14,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 4,
+                  "pts": 4,
+                  "pct": 57,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 29,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 14,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 7,
+              "trTot": 1
+            }
           },
           {
             "pos": "P5",
@@ -82340,7 +89593,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 60,
+                  "kill": 67
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                }
+              ],
+              "soTot": 6,
+              "trTot": 3
+            }
           },
           {
             "pos": "P6",
@@ -82368,7 +89664,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 0,
+                  "pct": 60,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "soTot": 5,
+              "trTot": 3
+            }
           },
           {
             "pos": "P1",
@@ -82389,7 +89735,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 40,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 60,
+                  "kill": 67
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "soTot": 5,
+              "trTot": 2
+            }
           }
         ],
         "pills": [
@@ -82556,13 +89938,25 @@ const PARTIDOS_INDIVIDUAL = [
             "pos": "P4",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 1,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P2",
@@ -82576,25 +89970,49 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P6",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P1",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           }
         ],
         "pills": [
@@ -85963,7 +93381,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 33,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P8",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 67,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 33,
+                  "kill": 0
+                }
+              ],
+              "soTot": 3,
+              "trTot": 3
+            }
           },
           {
             "pos": "P3",
@@ -85984,7 +93438,36 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 50,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 4,
+              "trTot": 3
+            }
           },
           {
             "pos": "P2",
@@ -86026,7 +93509,64 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 75,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "soTot": 5,
+              "trTot": 4
+            }
           },
           {
             "pos": "P5",
@@ -86054,7 +93594,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 67,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 3,
+                  "pts": 0,
+                  "pct": 60,
+                  "kill": 0
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 40,
+                  "kill": 50
+                }
+              ],
+              "soTot": 4,
+              "trTot": 5
+            }
           },
           {
             "pos": "P6",
@@ -86089,7 +93665,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 50
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "soTot": 5,
+              "trTot": 9
+            }
           },
           {
             "pos": "P1",
@@ -86117,7 +93743,43 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 60,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 2,
+                  "pct": 100,
+                  "kill": 50
+                }
+              ],
+              "soTot": 5,
+              "trTot": 5
+            }
           }
         ],
         "pills": [
@@ -86305,19 +93967,37 @@ const PARTIDOS_INDIVIDUAL = [
             "pos": "P4",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           },
           {
             "pos": "P5",
@@ -86331,7 +94011,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P6",
@@ -86345,13 +94039,33 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 100,
+                  "kill": 0
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P1",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           }
         ],
         "pills": [
@@ -90133,7 +97847,57 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 17,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 33,
+                  "kill": 50
+                },
+                {
+                  "pos": "P9",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 33,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 17,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P9",
+                  "tot": 6,
+                  "pts": 2,
+                  "pct": 55,
+                  "kill": 33
+                },
+                {
+                  "pos": "P4",
+                  "tot": 5,
+                  "pts": 1,
+                  "pct": 45,
+                  "kill": 20
+                }
+              ],
+              "soTot": 6,
+              "trTot": 12
+            }
           },
           {
             "pos": "P3",
@@ -90161,7 +97925,71 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 10,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P9",
+                  "tot": 5,
+                  "pts": 2,
+                  "pct": 50,
+                  "kill": 40
+                },
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 30,
+                  "kill": 33
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 10,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 10,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 7,
+                  "pts": 2,
+                  "pct": 70,
+                  "kill": 29
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 10,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 10,
+                  "kill": 100
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 10,
+                  "kill": 100
+                }
+              ],
+              "soTot": 10,
+              "trTot": 10
+            }
           },
           {
             "pos": "P2",
@@ -90189,7 +98017,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 25,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P9",
+                  "tot": 4,
+                  "pts": 3,
+                  "pct": 50,
+                  "kill": 75
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                },
+                {
+                  "pos": "P3",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 25,
+                  "kill": 100
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P9",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 50,
+                  "kill": 100
+                }
+              ],
+              "soTot": 8,
+              "trTot": 2
+            }
           },
           {
             "pos": "P5",
@@ -90224,7 +98095,64 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 8,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P2",
+                  "tot": 7,
+                  "pts": 3,
+                  "pct": 54,
+                  "kill": 43
+                },
+                {
+                  "pos": "P4",
+                  "tot": 4,
+                  "pts": 1,
+                  "pct": 31,
+                  "kill": 25
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 8,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 8,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 5,
+                  "pts": 4,
+                  "pct": 62,
+                  "kill": 80
+                },
+                {
+                  "pos": "P4",
+                  "tot": 2,
+                  "pts": 1,
+                  "pct": 25,
+                  "kill": 50
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 12,
+                  "kill": 0
+                }
+              ],
+              "soTot": 13,
+              "trTot": 8
+            }
           },
           {
             "pos": "P6",
@@ -90259,7 +98187,71 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 10,
                 "pct_p": 0
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P3",
+                  "tot": 5,
+                  "pts": 0,
+                  "pct": 50,
+                  "kill": 0
+                },
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 2,
+                  "pct": 30,
+                  "kill": 67
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 10,
+                  "kill": 100
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 10,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 0,
+                  "pct": 43,
+                  "kill": 0
+                },
+                {
+                  "pos": "P2",
+                  "tot": 2,
+                  "pts": 2,
+                  "pct": 29,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 14,
+                  "kill": 0
+                },
+                {
+                  "pos": "P8",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 14,
+                  "kill": 100
+                }
+              ],
+              "soTot": 10,
+              "trTot": 7
+            }
           },
           {
             "pos": "P1",
@@ -90287,7 +98279,50 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 20,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 3,
+                  "pct": 60,
+                  "kill": 100
+                },
+                {
+                  "pos": "P3",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 20,
+                  "kill": 100
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 20,
+                  "kill": 0
+                }
+              ],
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 3,
+                  "pts": 1,
+                  "pct": 75,
+                  "kill": 33
+                },
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 0,
+                  "pct": 25,
+                  "kill": 0
+                }
+              ],
+              "soTot": 5,
+              "trTot": 4
+            }
           }
         ],
         "pills": [
@@ -90476,19 +98511,45 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 50
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P4",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P3",
             "total": 0,
             "total_all": 1,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P2",
             "total": 0,
             "total_all": 1,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P5",
@@ -90502,7 +98563,21 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P6",
@@ -90516,13 +98591,33 @@ const PARTIDOS_INDIVIDUAL = [
                 "pct": 100,
                 "pct_p": 100
               }
-            ]
+            ],
+            "modal": {
+              "sideout": null,
+              "transicion": [
+                {
+                  "pos": "P2",
+                  "tot": 1,
+                  "pts": 1,
+                  "pct": 100,
+                  "kill": 100
+                }
+              ],
+              "soTot": 0,
+              "trTot": 1
+            }
           },
           {
             "pos": "P1",
             "total": 0,
             "total_all": 0,
-            "dist": []
+            "dist": [],
+            "modal": {
+              "sideout": null,
+              "transicion": null,
+              "soTot": 0,
+              "trTot": 0
+            }
           }
         ],
         "pills": [
@@ -90791,5 +98886,5 @@ const PARTIDOS_INDIVIDUAL = [
     }
   }
 ];
-const PARTIDOS_ARMADOR = {"titular": {"nombre": "4 Vazquez Ezequiel", "num": 4, "rotaciones": [{"pos": "P4", "total": 125, "total_all": 302, "dist": [{"zona": 3, "tot": 36, "pts": 20, "pct": 29, "pct_p": 56}, {"zona": 4, "tot": 31, "pts": 16, "pct": 25, "pct_p": 52}, {"zona": 9, "tot": 30, "pts": 17, "pct": 24, "pct_p": 57}, {"zona": 8, "tot": 19, "pts": 11, "pct": 15, "pct_p": 58}, {"zona": 2, "tot": 8, "pts": 3, "pct": 6, "pct_p": 38}]}, {"pos": "P3", "total": 124, "total_all": 338, "dist": [{"zona": 9, "tot": 43, "pts": 22, "pct": 35, "pct_p": 51}, {"zona": 4, "tot": 37, "pts": 20, "pct": 30, "pct_p": 54}, {"zona": 3, "tot": 33, "pts": 14, "pct": 27, "pct_p": 42}, {"zona": 2, "tot": 11, "pts": 4, "pct": 9, "pct_p": 36}]}, {"pos": "P2", "total": 138, "total_all": 318, "dist": [{"zona": 4, "tot": 44, "pts": 24, "pct": 32, "pct_p": 55}, {"zona": 3, "tot": 41, "pts": 20, "pct": 30, "pct_p": 49}, {"zona": 9, "tot": 36, "pts": 28, "pct": 26, "pct_p": 78}, {"zona": 2, "tot": 15, "pts": 6, "pct": 11, "pct_p": 40}, {"zona": 8, "tot": 1, "pts": 0, "pct": 1, "pct_p": 0}]}, {"pos": "P5", "total": 134, "total_all": 330, "dist": [{"zona": 2, "tot": 46, "pts": 28, "pct": 34, "pct_p": 61}, {"zona": 3, "tot": 40, "pts": 25, "pct": 30, "pct_p": 62}, {"zona": 4, "tot": 32, "pts": 16, "pct": 24, "pct_p": 50}, {"zona": 8, "tot": 15, "pts": 7, "pct": 11, "pct_p": 47}, {"zona": 9, "tot": 1, "pts": 1, "pct": 1, "pct_p": 100}]}, {"pos": "P6", "total": 131, "total_all": 328, "dist": [{"zona": 3, "tot": 39, "pts": 21, "pct": 30, "pct_p": 54}, {"zona": 4, "tot": 36, "pts": 13, "pct": 28, "pct_p": 36}, {"zona": 2, "tot": 32, "pts": 16, "pct": 25, "pct_p": 50}, {"zona": 8, "tot": 20, "pts": 13, "pct": 16, "pct_p": 65}, {"zona": 9, "tot": 1, "pts": 1, "pct": 1, "pct_p": 100}]}, {"pos": "P1", "total": 144, "total_all": 373, "dist": [{"zona": 4, "tot": 67, "pts": 43, "pct": 47, "pct_p": 64}, {"zona": 3, "tot": 50, "pts": 23, "pct": 35, "pct_p": 46}, {"zona": 2, "tot": 25, "pts": 14, "pct": 18, "pct_p": 56}]}], "pills": [{"label": "P1", "eff": 35, "tot": 373, "pts": 183, "pts_pct": 49}, {"label": "P6", "eff": 33, "tot": 328, "pts": 162, "pts_pct": 49}, {"label": "P5", "eff": 34, "tot": 330, "pts": 161, "pts_pct": 49}, {"label": "P4", "eff": 32, "tot": 302, "pts": 148, "pts_pct": 49}, {"label": "P3", "eff": 30, "tot": 338, "pts": 150, "pts_pct": 44}, {"label": "P2", "eff": 38, "tot": 318, "pts": 173, "pts_pct": 54}, {"label": "SO", "eff": 34, "tot": 1553, "pts": 776, "pts_pct": 50}, {"label": "TR", "eff": 31, "tot": 436, "pts": 201, "pts_pct": 46}], "llamadas": [{"call": "K1", "tot": 715, "eff": 38, "pts_pct": 54, "dist": [{"zona": 4, "tot": 142, "pts": 76, "pct": 32, "pct_p": 54}, {"zona": 3, "tot": 129, "pts": 63, "pct": 29, "pct_p": 49}, {"zona": 2, "tot": 69, "pts": 38, "pct": 16, "pct_p": 55}, {"zona": 9, "tot": 59, "pts": 37, "pct": 13, "pct_p": 63}, {"zona": 8, "tot": 46, "pts": 29, "pct": 10, "pct_p": 63}]}, {"call": "K7", "tot": 574, "eff": 35, "pts_pct": 50, "dist": [{"zona": 3, "tot": 90, "pts": 46, "pct": 34, "pct_p": 51}, {"zona": 4, "tot": 79, "pts": 44, "pct": 29, "pct_p": 56}, {"zona": 2, "tot": 52, "pts": 25, "pct": 19, "pct_p": 48}, {"zona": 9, "tot": 38, "pts": 24, "pct": 14, "pct_p": 63}, {"zona": 8, "tot": 9, "pts": 2, "pct": 3, "pct_p": 22}]}, {"call": "KM", "tot": 171, "eff": 26, "pts_pct": 46, "dist": [{"zona": 3, "tot": 17, "pts": 13, "pct": 31, "pct_p": 76}, {"zona": 4, "tot": 13, "pts": 6, "pct": 24, "pct_p": 46}, {"zona": 9, "tot": 13, "pts": 7, "pct": 24, "pct_p": 54}, {"zona": 2, "tot": 11, "pts": 6, "pct": 20, "pct_p": 55}]}, {"call": "K2", "tot": 74, "eff": 42, "pts_pct": 54, "dist": [{"zona": 4, "tot": 8, "pts": 5, "pct": 53, "pct_p": 62}, {"zona": 3, "tot": 3, "pts": 1, "pct": 20, "pct_p": 33}, {"zona": 2, "tot": 3, "pts": 2, "pct": 20, "pct_p": 67}, {"zona": 9, "tot": 1, "pts": 1, "pct": 7, "pct_p": 100}]}, {"call": "KB", "tot": 5, "eff": -20, "pts_pct": 20, "dist": [{"zona": 4, "tot": 3, "pts": 0, "pct": 75, "pct_p": 0}, {"zona": 2, "tot": 1, "pts": 1, "pct": 25, "pct_p": 100}]}], "so": {"eff": 34, "tot": 1553}, "tr": {"eff": 31, "tot": 436}}, "suplente": {"nombre": "1 Deecke Linus", "num": 1, "rotaciones": [{"pos": "P4", "total": 6, "total_all": 24, "dist": [{"zona": 9, "tot": 2, "pts": 1, "pct": 40, "pct_p": 50}, {"zona": 4, "tot": 2, "pts": 2, "pct": 40, "pct_p": 100}, {"zona": 3, "tot": 1, "pts": 0, "pct": 20, "pct_p": 0}]}, {"pos": "P3", "total": 10, "total_all": 24, "dist": [{"zona": 4, "tot": 6, "pts": 3, "pct": 60, "pct_p": 50}, {"zona": 9, "tot": 3, "pts": 1, "pct": 30, "pct_p": 33}, {"zona": 3, "tot": 1, "pts": 1, "pct": 10, "pct_p": 100}]}, {"pos": "P2", "total": 21, "total_all": 40, "dist": [{"zona": 4, "tot": 12, "pts": 4, "pct": 57, "pct_p": 33}, {"zona": 9, "tot": 5, "pts": 3, "pct": 24, "pct_p": 60}, {"zona": 2, "tot": 2, "pts": 0, "pct": 10, "pct_p": 0}, {"zona": 3, "tot": 2, "pts": 1, "pct": 10, "pct_p": 50}]}, {"pos": "P5", "total": 9, "total_all": 27, "dist": [{"zona": 4, "tot": 4, "pts": 1, "pct": 44, "pct_p": 25}, {"zona": 2, "tot": 3, "pts": 3, "pct": 33, "pct_p": 100}, {"zona": 3, "tot": 2, "pts": 0, "pct": 22, "pct_p": 0}]}, {"pos": "P6", "total": 6, "total_all": 29, "dist": [{"zona": 2, "tot": 3, "pts": 2, "pct": 50, "pct_p": 67}, {"zona": 3, "tot": 2, "pts": 0, "pct": 33, "pct_p": 0}, {"zona": 4, "tot": 1, "pts": 0, "pct": 17, "pct_p": 0}]}, {"pos": "P1", "total": 10, "total_all": 26, "dist": [{"zona": 4, "tot": 5, "pts": 3, "pct": 50, "pct_p": 60}, {"zona": 2, "tot": 3, "pts": 3, "pct": 30, "pct_p": 100}, {"zona": 3, "tot": 2, "pts": 1, "pct": 20, "pct_p": 50}]}], "pills": [{"label": "P1", "eff": 42, "tot": 26, "pts": 16, "pts_pct": 62}, {"label": "P6", "eff": 17, "tot": 29, "pts": 9, "pts_pct": 31}, {"label": "P5", "eff": 4, "tot": 27, "pts": 7, "pts_pct": 26}, {"label": "P4", "eff": 21, "tot": 24, "pts": 8, "pts_pct": 33}, {"label": "P3", "eff": 42, "tot": 24, "pts": 13, "pts_pct": 54}, {"label": "P2", "eff": 12, "tot": 40, "pts": 14, "pts_pct": 35}, {"label": "SO", "eff": 20, "tot": 131, "pts": 51, "pts_pct": 39}, {"label": "TR", "eff": 28, "tot": 39, "pts": 16, "pts_pct": 41}], "llamadas": [{"call": "K1", "tot": 65, "eff": 17, "pts_pct": 34, "dist": [{"zona": 4, "tot": 21, "pts": 7, "pct": 54, "pct_p": 33}, {"zona": 2, "tot": 9, "pts": 6, "pct": 23, "pct_p": 67}, {"zona": 3, "tot": 6, "pts": 1, "pct": 15, "pct_p": 17}, {"zona": 9, "tot": 3, "pts": 2, "pct": 8, "pct_p": 67}]}, {"call": "K7", "tot": 41, "eff": 32, "pts_pct": 49, "dist": [{"zona": 4, "tot": 6, "pts": 4, "pct": 38, "pct_p": 67}, {"zona": 9, "tot": 5, "pts": 2, "pct": 31, "pct_p": 40}, {"zona": 3, "tot": 3, "pts": 1, "pct": 19, "pct_p": 33}, {"zona": 2, "tot": 2, "pts": 2, "pct": 12, "pct_p": 100}]}, {"call": "KM", "tot": 12, "eff": 25, "pts_pct": 42, "dist": [{"zona": 4, "tot": 2, "pts": 1, "pct": 67, "pct_p": 50}, {"zona": 3, "tot": 1, "pts": 1, "pct": 33, "pct_p": 100}]}], "so": {"eff": 20, "tot": 131}, "tr": {"eff": 28, "tot": 39}}};
+const PARTIDOS_ARMADOR = {"titular": {"nombre": "4 Vazquez Ezequiel", "num": 4, "rotaciones": [{"pos": "P4", "total": 125, "total_all": 302, "dist": [{"zona": 3, "tot": 36, "pts": 20, "pct": 29, "pct_p": 56}, {"zona": 4, "tot": 31, "pts": 16, "pct": 25, "pct_p": 52}, {"zona": 9, "tot": 30, "pts": 17, "pct": 24, "pct_p": 57}, {"zona": 8, "tot": 19, "pts": 11, "pct": 15, "pct_p": 58}, {"zona": 2, "tot": 8, "pts": 3, "pct": 6, "pct_p": 38}], "modal": {"sideout": [{"pos": "P3", "tot": 36, "pts": 20, "pct": 29, "kill": 56}, {"pos": "P4", "tot": 31, "pts": 16, "pct": 25, "kill": 52}, {"pos": "P9", "tot": 30, "pts": 17, "pct": 24, "kill": 57}, {"pos": "P8", "tot": 19, "pts": 11, "pct": 15, "kill": 58}, {"pos": "P2", "tot": 7, "pts": 2, "pct": 6, "kill": 29}], "transicion": [{"pos": "P9", "tot": 45, "pts": 25, "pct": 46, "kill": 56}, {"pos": "P4", "tot": 33, "pts": 10, "pct": 34, "kill": 30}, {"pos": "P8", "tot": 8, "pts": 5, "pct": 8, "kill": 62}, {"pos": "P3", "tot": 7, "pts": 4, "pct": 7, "kill": 57}, {"pos": "P2", "tot": 5, "pts": 3, "pct": 5, "kill": 60}], "soTot": 125, "trTot": 102}}, {"pos": "P3", "total": 124, "total_all": 338, "dist": [{"zona": 9, "tot": 43, "pts": 22, "pct": 35, "pct_p": 51}, {"zona": 4, "tot": 37, "pts": 20, "pct": 30, "pct_p": 54}, {"zona": 3, "tot": 33, "pts": 14, "pct": 27, "pct_p": 42}, {"zona": 2, "tot": 11, "pts": 4, "pct": 9, "pct_p": 36}], "modal": {"sideout": [{"pos": "P9", "tot": 43, "pts": 22, "pct": 35, "kill": 51}, {"pos": "P4", "tot": 36, "pts": 19, "pct": 29, "kill": 53}, {"pos": "P3", "tot": 33, "pts": 14, "pct": 27, "kill": 42}, {"pos": "P2", "tot": 11, "pts": 4, "pct": 9, "kill": 36}, {"pos": "P8", "tot": 1, "pts": 1, "pct": 1, "kill": 100}], "transicion": [{"pos": "P4", "tot": 56, "pts": 27, "pct": 46, "kill": 48}, {"pos": "P9", "tot": 46, "pts": 22, "pct": 37, "kill": 48}, {"pos": "P3", "tot": 15, "pts": 8, "pct": 12, "kill": 53}, {"pos": "P2", "tot": 3, "pts": 1, "pct": 2, "kill": 33}, {"pos": "P8", "tot": 3, "pts": 1, "pct": 2, "kill": 33}], "soTot": 124, "trTot": 125}}, {"pos": "P2", "total": 138, "total_all": 318, "dist": [{"zona": 4, "tot": 44, "pts": 24, "pct": 32, "pct_p": 55}, {"zona": 3, "tot": 41, "pts": 20, "pct": 30, "pct_p": 49}, {"zona": 9, "tot": 36, "pts": 28, "pct": 26, "pct_p": 78}, {"zona": 2, "tot": 15, "pts": 6, "pct": 11, "pct_p": 40}, {"zona": 8, "tot": 1, "pts": 0, "pct": 1, "pct_p": 0}], "modal": {"sideout": [{"pos": "P4", "tot": 44, "pts": 24, "pct": 32, "kill": 55}, {"pos": "P3", "tot": 41, "pts": 20, "pct": 30, "kill": 49}, {"pos": "P9", "tot": 36, "pts": 28, "pct": 26, "kill": 78}, {"pos": "P2", "tot": 14, "pts": 6, "pct": 10, "kill": 43}, {"pos": "P8", "tot": 1, "pts": 0, "pct": 1, "kill": 0}], "transicion": [{"pos": "P4", "tot": 52, "pts": 25, "pct": 53, "kill": 48}, {"pos": "P9", "tot": 40, "pts": 23, "pct": 41, "kill": 57}, {"pos": "P8", "tot": 3, "pts": 2, "pct": 3, "kill": 67}, {"pos": "P3", "tot": 2, "pts": 0, "pct": 2, "kill": 0}, {"pos": "P2", "tot": 1, "pts": 1, "pct": 1, "kill": 100}], "soTot": 138, "trTot": 99}}, {"pos": "P5", "total": 134, "total_all": 330, "dist": [{"zona": 2, "tot": 46, "pts": 28, "pct": 34, "pct_p": 61}, {"zona": 3, "tot": 40, "pts": 25, "pct": 30, "pct_p": 62}, {"zona": 4, "tot": 32, "pts": 16, "pct": 24, "pct_p": 50}, {"zona": 8, "tot": 15, "pts": 7, "pct": 11, "pct_p": 47}, {"zona": 9, "tot": 1, "pts": 1, "pct": 1, "pct_p": 100}], "modal": {"sideout": [{"pos": "P2", "tot": 43, "pts": 27, "pct": 33, "kill": 63}, {"pos": "P3", "tot": 42, "pts": 26, "pct": 32, "kill": 62}, {"pos": "P4", "tot": 30, "pts": 16, "pct": 23, "kill": 53}, {"pos": "P8", "tot": 15, "pts": 6, "pct": 11, "kill": 40}, {"pos": "P9", "tot": 1, "pts": 1, "pct": 1, "kill": 100}], "transicion": [{"pos": "P4", "tot": 53, "pts": 16, "pct": 47, "kill": 30}, {"pos": "P2", "tot": 44, "pts": 25, "pct": 39, "kill": 57}, {"pos": "P3", "tot": 10, "pts": 5, "pct": 9, "kill": 50}, {"pos": "P8", "tot": 6, "pts": 2, "pct": 5, "kill": 33}], "soTot": 134, "trTot": 118}}, {"pos": "P6", "total": 131, "total_all": 328, "dist": [{"zona": 3, "tot": 39, "pts": 21, "pct": 30, "pct_p": 54}, {"zona": 4, "tot": 36, "pts": 13, "pct": 28, "pct_p": 36}, {"zona": 2, "tot": 32, "pts": 16, "pct": 25, "pct_p": 50}, {"zona": 8, "tot": 20, "pts": 13, "pct": 16, "pct_p": 65}, {"zona": 9, "tot": 1, "pts": 1, "pct": 1, "pct_p": 100}], "modal": {"sideout": [{"pos": "P3", "tot": 40, "pts": 22, "pct": 32, "kill": 55}, {"pos": "P4", "tot": 36, "pts": 13, "pct": 29, "kill": 36}, {"pos": "P2", "tot": 30, "pts": 15, "pct": 24, "kill": 50}, {"pos": "P8", "tot": 19, "pts": 12, "pct": 15, "kill": 63}, {"pos": "P9", "tot": 1, "pts": 1, "pct": 1, "kill": 100}], "transicion": [{"pos": "P2", "tot": 50, "pts": 29, "pct": 45, "kill": 58}, {"pos": "P4", "tot": 37, "pts": 8, "pct": 33, "kill": 22}, {"pos": "P8", "tot": 14, "pts": 11, "pct": 13, "kill": 79}, {"pos": "P3", "tot": 10, "pts": 5, "pct": 9, "kill": 50}], "soTot": 131, "trTot": 121}}, {"pos": "P1", "total": 144, "total_all": 373, "dist": [{"zona": 4, "tot": 67, "pts": 43, "pct": 47, "pct_p": 64}, {"zona": 3, "tot": 50, "pts": 23, "pct": 35, "pct_p": 46}, {"zona": 2, "tot": 25, "pts": 14, "pct": 18, "pct_p": 56}], "modal": {"sideout": [{"pos": "P4", "tot": 66, "pts": 43, "pct": 47, "kill": 65}, {"pos": "P3", "tot": 50, "pts": 23, "pct": 36, "kill": 46}, {"pos": "P2", "tot": 23, "pts": 12, "pct": 16, "kill": 52}, {"pos": "P8", "tot": 1, "pts": 0, "pct": 1, "kill": 0}], "transicion": [{"pos": "P4", "tot": 65, "pts": 33, "pct": 56, "kill": 51}, {"pos": "P2", "tot": 42, "pts": 16, "pct": 36, "kill": 38}, {"pos": "P3", "tot": 8, "pts": 5, "pct": 7, "kill": 62}, {"pos": "P8", "tot": 1, "pts": 0, "pct": 1, "kill": 0}], "soTot": 144, "trTot": 125}}], "pills": [{"label": "P1", "eff": 35, "tot": 373, "pts": 183, "pts_pct": 49}, {"label": "P6", "eff": 33, "tot": 328, "pts": 162, "pts_pct": 49}, {"label": "P5", "eff": 34, "tot": 330, "pts": 161, "pts_pct": 49}, {"label": "P4", "eff": 32, "tot": 302, "pts": 148, "pts_pct": 49}, {"label": "P3", "eff": 30, "tot": 338, "pts": 150, "pts_pct": 44}, {"label": "P2", "eff": 38, "tot": 318, "pts": 173, "pts_pct": 54}, {"label": "SO", "eff": 34, "tot": 1553, "pts": 776, "pts_pct": 50}, {"label": "TR", "eff": 31, "tot": 436, "pts": 201, "pts_pct": 46}], "llamadas": [{"call": "K1", "tot": 715, "eff": 38, "pts_pct": 54, "dist": [{"zona": 4, "tot": 142, "pts": 76, "pct": 32, "pct_p": 54}, {"zona": 3, "tot": 129, "pts": 63, "pct": 29, "pct_p": 49}, {"zona": 2, "tot": 69, "pts": 38, "pct": 16, "pct_p": 55}, {"zona": 9, "tot": 59, "pts": 37, "pct": 13, "pct_p": 63}, {"zona": 8, "tot": 46, "pts": 29, "pct": 10, "pct_p": 63}]}, {"call": "K7", "tot": 574, "eff": 35, "pts_pct": 50, "dist": [{"zona": 3, "tot": 90, "pts": 46, "pct": 34, "pct_p": 51}, {"zona": 4, "tot": 79, "pts": 44, "pct": 29, "pct_p": 56}, {"zona": 2, "tot": 52, "pts": 25, "pct": 19, "pct_p": 48}, {"zona": 9, "tot": 38, "pts": 24, "pct": 14, "pct_p": 63}, {"zona": 8, "tot": 9, "pts": 2, "pct": 3, "pct_p": 22}]}, {"call": "KM", "tot": 171, "eff": 26, "pts_pct": 46, "dist": [{"zona": 3, "tot": 17, "pts": 13, "pct": 31, "pct_p": 76}, {"zona": 4, "tot": 13, "pts": 6, "pct": 24, "pct_p": 46}, {"zona": 9, "tot": 13, "pts": 7, "pct": 24, "pct_p": 54}, {"zona": 2, "tot": 11, "pts": 6, "pct": 20, "pct_p": 55}]}, {"call": "K2", "tot": 74, "eff": 42, "pts_pct": 54, "dist": [{"zona": 4, "tot": 8, "pts": 5, "pct": 53, "pct_p": 62}, {"zona": 3, "tot": 3, "pts": 1, "pct": 20, "pct_p": 33}, {"zona": 2, "tot": 3, "pts": 2, "pct": 20, "pct_p": 67}, {"zona": 9, "tot": 1, "pts": 1, "pct": 7, "pct_p": 100}]}, {"call": "KB", "tot": 5, "eff": -20, "pts_pct": 20, "dist": [{"zona": 4, "tot": 3, "pts": 0, "pct": 75, "pct_p": 0}, {"zona": 2, "tot": 1, "pts": 1, "pct": 25, "pct_p": 100}]}], "so": {"eff": 34, "tot": 1553}, "tr": {"eff": 31, "tot": 436}}, "suplente": {"nombre": "1 Deecke Linus", "num": 1, "rotaciones": [{"pos": "P4", "total": 6, "total_all": 24, "dist": [{"zona": 9, "tot": 2, "pts": 1, "pct": 40, "pct_p": 50}, {"zona": 4, "tot": 2, "pts": 2, "pct": 40, "pct_p": 100}, {"zona": 3, "tot": 1, "pts": 0, "pct": 20, "pct_p": 0}], "modal": {"sideout": [{"pos": "P4", "tot": 2, "pts": 2, "pct": 40, "kill": 100}, {"pos": "P9", "tot": 2, "pts": 1, "pct": 40, "kill": 50}, {"pos": "P3", "tot": 1, "pts": 0, "pct": 20, "kill": 0}], "transicion": [{"pos": "P4", "tot": 9, "pts": 4, "pct": 75, "kill": 44}, {"pos": "P9", "tot": 3, "pts": 1, "pct": 25, "kill": 33}], "soTot": 6, "trTot": 12}}, {"pos": "P3", "total": 10, "total_all": 24, "dist": [{"zona": 4, "tot": 6, "pts": 3, "pct": 60, "pct_p": 50}, {"zona": 9, "tot": 3, "pts": 1, "pct": 30, "pct_p": 33}, {"zona": 3, "tot": 1, "pts": 1, "pct": 10, "pct_p": 100}], "modal": {"sideout": [{"pos": "P4", "tot": 6, "pts": 3, "pct": 60, "kill": 50}, {"pos": "P9", "tot": 3, "pts": 1, "pct": 30, "kill": 33}, {"pos": "P3", "tot": 1, "pts": 1, "pct": 10, "kill": 100}], "transicion": [{"pos": "P4", "tot": 5, "pts": 2, "pct": 50, "kill": 40}, {"pos": "P9", "tot": 4, "pts": 3, "pct": 40, "kill": 75}, {"pos": "P2", "tot": 1, "pts": 0, "pct": 10, "kill": 0}], "soTot": 10, "trTot": 10}}, {"pos": "P2", "total": 21, "total_all": 40, "dist": [{"zona": 4, "tot": 12, "pts": 4, "pct": 57, "pct_p": 33}, {"zona": 9, "tot": 5, "pts": 3, "pct": 24, "pct_p": 60}, {"zona": 2, "tot": 2, "pts": 0, "pct": 10, "pct_p": 0}, {"zona": 3, "tot": 2, "pts": 1, "pct": 10, "pct_p": 50}], "modal": {"sideout": [{"pos": "P4", "tot": 12, "pts": 4, "pct": 57, "kill": 33}, {"pos": "P9", "tot": 5, "pts": 3, "pct": 24, "kill": 60}, {"pos": "P3", "tot": 2, "pts": 1, "pct": 10, "kill": 50}, {"pos": "P2", "tot": 2, "pts": 0, "pct": 10, "kill": 0}], "transicion": [{"pos": "P4", "tot": 5, "pts": 3, "pct": 50, "kill": 60}, {"pos": "P9", "tot": 4, "pts": 1, "pct": 40, "kill": 25}, {"pos": "P3", "tot": 1, "pts": 0, "pct": 10, "kill": 0}], "soTot": 21, "trTot": 10}}, {"pos": "P5", "total": 9, "total_all": 27, "dist": [{"zona": 4, "tot": 4, "pts": 1, "pct": 44, "pct_p": 25}, {"zona": 2, "tot": 3, "pts": 3, "pct": 33, "pct_p": 100}, {"zona": 3, "tot": 2, "pts": 0, "pct": 22, "pct_p": 0}], "modal": {"sideout": [{"pos": "P4", "tot": 4, "pts": 1, "pct": 44, "kill": 25}, {"pos": "P2", "tot": 3, "pts": 3, "pct": 33, "kill": 100}, {"pos": "P3", "tot": 2, "pts": 0, "pct": 22, "kill": 0}], "transicion": [{"pos": "P2", "tot": 5, "pts": 0, "pct": 56, "kill": 0}, {"pos": "P4", "tot": 4, "pts": 2, "pct": 44, "kill": 50}], "soTot": 9, "trTot": 9}}, {"pos": "P6", "total": 6, "total_all": 29, "dist": [{"zona": 2, "tot": 3, "pts": 2, "pct": 50, "pct_p": 67}, {"zona": 3, "tot": 2, "pts": 0, "pct": 33, "pct_p": 0}, {"zona": 4, "tot": 1, "pts": 0, "pct": 17, "pct_p": 0}], "modal": {"sideout": [{"pos": "P2", "tot": 3, "pts": 2, "pct": 50, "kill": 67}, {"pos": "P3", "tot": 2, "pts": 0, "pct": 33, "kill": 0}, {"pos": "P4", "tot": 1, "pts": 0, "pct": 17, "kill": 0}], "transicion": [{"pos": "P4", "tot": 8, "pts": 1, "pct": 62, "kill": 12}, {"pos": "P2", "tot": 5, "pts": 4, "pct": 38, "kill": 80}], "soTot": 6, "trTot": 13}}, {"pos": "P1", "total": 10, "total_all": 26, "dist": [{"zona": 4, "tot": 5, "pts": 3, "pct": 50, "pct_p": 60}, {"zona": 2, "tot": 3, "pts": 3, "pct": 30, "pct_p": 100}, {"zona": 3, "tot": 2, "pts": 1, "pct": 20, "pct_p": 50}], "modal": {"sideout": [{"pos": "P4", "tot": 5, "pts": 3, "pct": 50, "kill": 60}, {"pos": "P2", "tot": 3, "pts": 3, "pct": 30, "kill": 100}, {"pos": "P3", "tot": 2, "pts": 1, "pct": 20, "kill": 50}], "transicion": [{"pos": "P2", "tot": 6, "pts": 5, "pct": 67, "kill": 83}, {"pos": "P4", "tot": 3, "pts": 1, "pct": 33, "kill": 33}], "soTot": 10, "trTot": 9}}], "pills": [{"label": "P1", "eff": 42, "tot": 26, "pts": 16, "pts_pct": 62}, {"label": "P6", "eff": 17, "tot": 29, "pts": 9, "pts_pct": 31}, {"label": "P5", "eff": 4, "tot": 27, "pts": 7, "pts_pct": 26}, {"label": "P4", "eff": 21, "tot": 24, "pts": 8, "pts_pct": 33}, {"label": "P3", "eff": 42, "tot": 24, "pts": 13, "pts_pct": 54}, {"label": "P2", "eff": 12, "tot": 40, "pts": 14, "pts_pct": 35}, {"label": "SO", "eff": 20, "tot": 131, "pts": 51, "pts_pct": 39}, {"label": "TR", "eff": 28, "tot": 39, "pts": 16, "pts_pct": 41}], "llamadas": [{"call": "K1", "tot": 65, "eff": 17, "pts_pct": 34, "dist": [{"zona": 4, "tot": 21, "pts": 7, "pct": 54, "pct_p": 33}, {"zona": 2, "tot": 9, "pts": 6, "pct": 23, "pct_p": 67}, {"zona": 3, "tot": 6, "pts": 1, "pct": 15, "pct_p": 17}, {"zona": 9, "tot": 3, "pts": 2, "pct": 8, "pct_p": 67}]}, {"call": "K7", "tot": 41, "eff": 32, "pts_pct": 49, "dist": [{"zona": 4, "tot": 6, "pts": 4, "pct": 38, "pct_p": 67}, {"zona": 9, "tot": 5, "pts": 2, "pct": 31, "pct_p": 40}, {"zona": 3, "tot": 3, "pts": 1, "pct": 19, "pct_p": 33}, {"zona": 2, "tot": 2, "pts": 2, "pct": 12, "pct_p": 100}]}, {"call": "KM", "tot": 12, "eff": 25, "pts_pct": 42, "dist": [{"zona": 4, "tot": 2, "pts": 1, "pct": 67, "pct_p": 50}, {"zona": 3, "tot": 1, "pts": 1, "pct": 33, "pct_p": 100}]}], "so": {"eff": 20, "tot": 131}, "tr": {"eff": 28, "tot": 39}}};
 const PARTIDOS_TRANSICION = {"titular": {"rots": [{"pos": 1, "n": 125, "eff": 32, "dist": [{"p": "P4", "n": 65, "pts": 33, "pct": 52}, {"p": "P2", "n": 42, "pts": 16, "pct": 34}, {"p": "P3", "n": 8, "pts": 5, "pct": 6}, {"p": "P8", "n": 1, "pts": 0, "pct": 1}], "concentrada": true}, {"pos": 2, "n": 99, "eff": 36, "dist": [{"p": "P4", "n": 52, "pts": 25, "pct": 53}, {"p": "P9", "n": 40, "pts": 23, "pct": 40}, {"p": "P8", "n": 3, "pts": 2, "pct": 3}, {"p": "P3", "n": 2, "pts": 0, "pct": 2}, {"p": "P2", "n": 1, "pts": 1, "pct": 1}], "concentrada": true}, {"pos": 3, "n": 125, "eff": 34, "dist": [{"p": "P4", "n": 56, "pts": 27, "pct": 45}, {"p": "P9", "n": 46, "pts": 22, "pct": 37}, {"p": "P3", "n": 15, "pts": 8, "pct": 12}, {"p": "P2", "n": 3, "pts": 1, "pct": 2}, {"p": "P8", "n": 3, "pts": 1, "pct": 2}], "concentrada": true}, {"pos": 4, "n": 102, "eff": 33, "dist": [{"p": "P9", "n": 45, "pts": 25, "pct": 44}, {"p": "P4", "n": 33, "pts": 10, "pct": 32}, {"p": "P8", "n": 8, "pts": 5, "pct": 8}, {"p": "P3", "n": 7, "pts": 4, "pct": 7}, {"p": "P2", "n": 5, "pts": 3, "pct": 5}], "concentrada": false}, {"pos": 5, "n": 118, "eff": 25, "dist": [{"p": "P4", "n": 53, "pts": 16, "pct": 45}, {"p": "P2", "n": 44, "pts": 25, "pct": 37}, {"p": "P3", "n": 10, "pts": 5, "pct": 8}, {"p": "P8", "n": 6, "pts": 2, "pct": 5}], "concentrada": true}, {"pos": 6, "n": 121, "eff": 33, "dist": [{"p": "P2", "n": 50, "pts": 29, "pct": 41}, {"p": "P4", "n": 37, "pts": 8, "pct": 31}, {"p": "P8", "n": 14, "pts": 11, "pct": 12}, {"p": "P3", "n": 10, "pts": 5, "pct": 8}], "concentrada": false}], "debil": {"pos": 5, "n": 118, "eff": 25, "dist": [{"p": "P4", "n": 53, "pts": 16, "pct": 45}, {"p": "P2", "n": 44, "pts": 25, "pct": 37}, {"p": "P3", "n": 10, "pts": 5, "pct": 8}, {"p": "P8", "n": 6, "pts": 2, "pct": 5}], "concentrada": true}, "fuerte": {"pos": 2, "n": 99, "eff": 36, "dist": [{"p": "P4", "n": 52, "pts": 25, "pct": 53}, {"p": "P9", "n": 40, "pts": 23, "pct": 40}, {"p": "P8", "n": 3, "pts": 2, "pct": 3}, {"p": "P3", "n": 2, "pts": 0, "pct": 2}, {"p": "P2", "n": 1, "pts": 1, "pct": 1}], "concentrada": true}, "setter": "4 Vazquez Ezequiel"}, "suplente": {"rots": [{"pos": 1, "n": 9, "eff": 44, "dist": [{"p": "P2", "n": 6, "pts": 5, "pct": 67}, {"p": "P4", "n": 3, "pts": 1, "pct": 33}], "concentrada": true}, {"pos": 2, "n": 10, "eff": 20, "dist": [{"p": "P4", "n": 5, "pts": 3, "pct": 50}, {"p": "P9", "n": 4, "pts": 1, "pct": 40}, {"p": "P3", "n": 1, "pts": 0, "pct": 10}], "concentrada": true}, {"pos": 3, "n": 10, "eff": 50, "dist": [{"p": "P4", "n": 5, "pts": 2, "pct": 50}, {"p": "P9", "n": 4, "pts": 3, "pct": 40}, {"p": "P2", "n": 1, "pts": 0, "pct": 10}], "concentrada": true}, {"pos": 4, "n": 12, "eff": 33, "dist": [{"p": "P4", "n": 9, "pts": 4, "pct": 75}, {"p": "P9", "n": 3, "pts": 1, "pct": 25}], "concentrada": true}, {"pos": 5, "n": 9, "eff": 0, "dist": [{"p": "P2", "n": 5, "pts": 0, "pct": 56}, {"p": "P4", "n": 4, "pts": 2, "pct": 44}], "concentrada": true}, {"pos": 6, "n": 13, "eff": 31, "dist": [{"p": "P4", "n": 8, "pts": 1, "pct": 62}, {"p": "P2", "n": 5, "pts": 4, "pct": 38}], "concentrada": true}], "debil": {"pos": 5, "n": 9, "eff": 0, "dist": [{"p": "P2", "n": 5, "pts": 0, "pct": 56}, {"p": "P4", "n": 4, "pts": 2, "pct": 44}], "concentrada": true}, "fuerte": {"pos": 3, "n": 10, "eff": 50, "dist": [{"p": "P4", "n": 5, "pts": 2, "pct": 50}, {"p": "P9", "n": 4, "pts": 3, "pct": 40}, {"p": "P2", "n": 1, "pts": 0, "pct": 10}], "concentrada": true}, "setter": "1 Deecke Linus"}};
