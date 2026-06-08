@@ -98,13 +98,15 @@ function renderPanelRecepcion(j, container){
       +'<div style="text-align:center"><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px">/ =</div><div style="font-size:10px;font-weight:800;line-height:1.3;color:#ef4444">'+n+'%</div></div>'
       +'</div></div>';
   }
-  function makeZonePanel(desdeKey, desdeLabel, td, typeColor){
-    var desde = td[desdeKey];
+  function makeZonePanel(desdeKey, desdeLabel, td, typeColor, esTotal){
+    // si esTotal: desdeKey es ignorado y se usa td directamente como {P5,P6,P1,total}
+    var desde = esTotal ? td : td[desdeKey];
     if(!desde) return document.createElement('div');
     var maxTot = Math.max((desde.P5||{}).tot||0,(desde.P6||{}).tot||0,(desde.P1||{}).tot||0,1);
     var total = desde.total||{};
+    var borde = esTotal ? typeColor : 'rgba(255,255,255,.07)';
     var el = document.createElement('div');
-    el.style.cssText='border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.07);background:#0d0e1a';
+    el.style.cssText='border-radius:12px;overflow:hidden;border:1px solid '+borde+';background:'+(esTotal?'#11131f':'#0d0e1a');
     el.innerHTML=
       '<div style="padding:7px 12px 6px;border-bottom:1px solid '+typeColor+'22">'
       +'<div style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:'+typeColor+'">'+desdeLabel+'</div></div>'
@@ -122,8 +124,31 @@ function renderPanelRecepcion(j, container){
       +'</div>';
     return el;
   }
+  // Suma todos los orígenes por destino (P5/P6/P1) → cancha "TOTAL" de un tipo
+  function totalPorDestino(td){
+    function suma(p){
+      var T={tot:0,eff:0,pos:0,neg:0,pt:0,mas:0,neu:0,med:0,ovp:0,err:0};
+      ['desde_z1','desde_z6','desde_z5'].forEach(function(z){
+        var c=td[z]&&td[z][p]; if(!c) return;
+        T.tot+=c.tot||0; T.pt+=c.pt||0; T.mas+=c.mas||0; T.neu+=c.neu||0;
+        T.med+=c.med||0; T.ovp+=c.ovp||0; T.err+=c.err||0;
+      });
+      if(T.tot>0){
+        T.eff=Math.round((T.pt*1+T.mas*0.5-T.ovp*0.5-T.err)/T.tot*100);
+        T.pos=Math.round((T.pt+T.mas)/T.tot*100);
+        T.neg=Math.round((T.ovp+T.err)/T.tot*100);
+      }
+      return T;
+    }
+    var P5=suma('P5'),P6=suma('P6'),P1=suma('P1');
+    var tot={tot:0,eff:0,pos:0,neg:0,pt:0,mas:0,neu:0,med:0,ovp:0,err:0};
+    [P5,P6,P1].forEach(function(c){tot.tot+=c.tot;tot.pt+=c.pt;tot.mas+=c.mas;tot.neu+=c.neu;tot.med+=c.med;tot.ovp+=c.ovp;tot.err+=c.err;});
+    if(tot.tot>0){tot.eff=Math.round((tot.pt*1+tot.mas*0.5-tot.ovp*0.5-tot.err)/tot.tot*100);tot.pos=Math.round((tot.pt+tot.mas)/tot.tot*100);tot.neg=Math.round((tot.ovp+tot.err)/tot.tot*100);}
+    return {P5:P5,P6:P6,P1:P1,total:tot};
+  }
   var types=[{key:'flotado', label:'SAQUE FLOTADO', color:'#818cf8'},{key:'potencia',label:'SAQUE POTENCIA', color:'#f97316'}];
-  var zones=[{key:'desde_z1',label:'Desde Zona 1'},{key:'desde_z6',label:'Desde Zona 6'},{key:'desde_z5',label:'Desde Zona 5'}];
+  // ORDEN de canchas: Z5 - Z6 - Z1 (+ TOTAL al final)
+  var zones=[{key:'desde_z5',label:'Desde Zona 5'},{key:'desde_z6',label:'Desde Zona 6'},{key:'desde_z1',label:'Desde Zona 1'}];
   var wrapper = document.createElement('div');
   wrapper.style.cssText = 'padding:14px 4px 4px';
   types.forEach(function(t){
@@ -135,8 +160,10 @@ function renderPanelRecepcion(j, container){
     secHdr.innerHTML='<div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:20px;background:'+t.color+'18;color:'+t.color+';border:0.5px solid '+t.color+'44">'+t.label+' — por zona de origen</div><div style="flex:1;height:.5px;background:rgba(255,255,255,.08)"></div>';
     wrapper.appendChild(secHdr);
     var row = document.createElement('div');
-    row.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px';
-    zones.forEach(function(z){row.appendChild(makeZonePanel(z.key, z.label, rec[t.key], t.color));});
+    row.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:14px';
+    zones.forEach(function(z){row.appendChild(makeZonePanel(z.key, z.label, rec[t.key], t.color, false));});
+    // 4ª cancha: TOTAL (todas las recepciones del tipo, sin importar origen)
+    row.appendChild(makeZonePanel(null, 'TOTAL '+(t.key==='flotado'?'FLOTADO':'POTENCIA'), totalPorDestino(rec[t.key]), t.color, true));
     wrapper.appendChild(row);
   });
   if(!wrapper.children.length){
