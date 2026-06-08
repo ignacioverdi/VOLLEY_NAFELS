@@ -726,7 +726,10 @@ function renderEqContent(){
   else if(EQ_TAB==='ataque')
     recepSelector=_mkSel([['total','TOTAL'],['so','SIDE-OUT'],['tr','TRANSICIÓN']],ATK_FASE,'setAtkFase','#818cf8','129,140,248');
   // accumulate totals
-  var tot={sT:0,sPunto:0,sPos:0,sOvp:0,sNeg:0,sVend:0,sErr:0,rT:0,rPunto:0,rPos:0,rOvp:0,rNeg:0,rVend:0,rErr:0,aT:0,aPunto:0,aPos:0,aOvp:0,aNeg:0,aVend:0,aErr:0,bT:0,bPt:0,bPtPos:0};
+  var tot={sT:0,sPunto:0,sPos:0,sOvp:0,sNeg:0,sVend:0,sErr:0,rT:0,rPunto:0,rPos:0,rOvp:0,rNeg:0,rVend:0,rErr:0,aT:0,aPunto:0,aPos:0,aOvp:0,aNeg:0,aVend:0,aErr:0,bT:0,bPt:0,bPtPos:0,bAdm:0,bVend:0,bNeg:0,bErr:0,
+    rFlo:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},rPot:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},
+    sFlo:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},sPot:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},
+    aSo:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},aTr:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0}};
   var html=recepSelector+'<div class="tabla-wrap"><table><thead><tr>'
     +'<th style="text-align:left">Jugador</th>'+(isAcum?'<th>Ses.</th>':'')
     +cfg.ths.map(function(t,i){return'<th style="color:'+cfg.color+';'+(i===0?'border-left:2px solid '+cfg.color+'33':'')+'">'+t+'</th>';}).join('')
@@ -735,7 +738,11 @@ function renderEqContent(){
   jugs.forEach(function(j,ri){
     var cells=cfg.getData(j); if(!cells)return;
     hasData=true;
-    Object.keys(tot).forEach(function(k){tot[k]+=(j[k]||0);});
+    Object.keys(tot).forEach(function(k){
+      if(typeof tot[k]==='object'){ // subconjunto anidado (rFlo, sPot, aSo, etc)
+        if(j[k]) Object.keys(tot[k]).forEach(function(kk){tot[k][kk]+=(j[k][kk]||0);});
+      } else tot[k]+=(j[k]||0);
+    });
     var bg=ri%2?'rgba(255,255,255,.015)':'transparent';
     html+='<tr style="background:'+bg+'">'
       +'<td><div class="t-name"><div class="t-cam">'+j.c+'</div><span style="font-weight:800;font-size:14px">'+j.n+'</span></div></td>'
