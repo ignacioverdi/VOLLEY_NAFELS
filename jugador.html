@@ -511,7 +511,7 @@ function renderNextMatch(){
   var wrap=document.getElementById('next-match-wrap');
   if(!window.GAMEPLAN_DATA) return;
   var gp=window.GAMEPLAN_DATA;
-  wrap.innerHTML='<a class="next-match" href="game_plan_dbanf.html"><div class="next-match-dot"></div>'+
+  wrap.innerHTML='<a class="next-match" href="game_plan.html"><div class="next-match-dot"></div>'+
     '<div class="next-match-info"><div class="next-match-label">Próximo partido · F'+(gp.fecha||'')+'</div>'+
     '<div class="next-match-rival">vs '+(gp.rival||'RIVAL')+'</div>'+
     '<div class="next-match-sub">'+(gp.torneo||'')+' · Ver plan de juego →</div></div><div style="font-size:20px">🎯</div></a>';
@@ -547,7 +547,7 @@ function renderAccesos(j){
   var items=[
     {icon:'📈',title:'Historial',desc:'Mis estadísticas',url:'historial_voley.html?player='+encodeURIComponent(j.nombre),color:'#818cf8'},
     {icon:'💪',title:'Rutina',desc:'Mi preparación física',url:'prep_fisica.html?player='+encodeURIComponent(j.nombre),color:'#e8192c'},
-    {icon:'🎯',title:'Game Plan',desc:'Plan del próximo partido',url:(typeof GAME_PLANS!=='undefined'&&GAME_PLANS.length?GAME_PLANS.slice().sort(function(a,b){return (b.fecha||'')>(a.fecha||'')?1:-1;})[0].archivo:'game_plan_lomas.html'),color:'#f59e0b'},
+    {icon:'🎯',title:'Game Plan',desc:'Plan del próximo partido',url:'game_plan.html',color:'#f59e0b'},
     {icon:'📊',title:'Panel en Vivo',desc:'Sesión actual',url:'panel_voley.html',color:'#22c55e'},
     {icon:'🔥',title:'Heat Maps',desc:'Ataque · Saque · Rec · Armado',url:'javascript:showHeatmapMenu()',color:'#F97316'},
     {icon:'🏆',title:'Ranking',desc:'Mi posición en el equipo',url:'ranking.html?num='+j.num,color:'#F59E0B'},

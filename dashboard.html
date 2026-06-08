@@ -360,6 +360,10 @@ var EQ_SESION    = -2;   // -2 = acumulado
 var EQ_TAB       = 'saque';
 var RECEP_TIPO   = 'total';  // total | flotado | potencia
 function setRecepTipo(t){ RECEP_TIPO=t; renderEqContent(); }
+var SAQUE_TIPO   = 'total';  // total | flotado | potencia
+function setSaqueTipo(t){ SAQUE_TIPO=t; renderEqContent(); }
+var ATK_FASE     = 'total';  // total | so | tr
+function setAtkFase(t){ ATK_FASE=t; renderEqContent(); }
 var AN_FILTRO    = 'todos';
 var AN_SESION    = null;
 var JUG_ACTUAL   = null;
@@ -439,6 +443,10 @@ function getJugadoresAcum(sesiones){
         rT:0,rPunto:0,rPos:0,rOvp:0,rNeg:0,rVend:0,rErr:0,
         rFlo:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},
         rPot:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},
+        sFlo:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},
+        sPot:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},
+        aSo:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},
+        aTr:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},
         aT:0,aPunto:0,aPos:0,aOvp:0,aNeg:0,aVend:0,aErr:0,
         bT:0,bPt:0,bPtPos:0,dv4:{}};
       var a=acum[j.c];
@@ -450,6 +458,10 @@ function getJugadoresAcum(sesiones){
       ['T','Punto','Pos','Adm','Neg','Vend','Err'].forEach(function(k){
         if(j.rFlo) a.rFlo[k]+=(j.rFlo[k]||0);
         if(j.rPot) a.rPot[k]+=(j.rPot[k]||0);
+        if(j.sFlo) a.sFlo[k]+=(j.sFlo[k]||0);
+        if(j.sPot) a.sPot[k]+=(j.sPot[k]||0);
+        if(j.aSo)  a.aSo[k] +=(j.aSo[k] ||0);
+        if(j.aTr)  a.aTr[k] +=(j.aTr[k] ||0);
       });
       if(j.dv4) Object.keys(j.dv4).forEach(function(cod){
         if(!a.dv4[cod]) a.dv4[cod]={tot:0,pt:0,err:0,orig:j.dv4[cod].orig||0};
@@ -608,11 +620,21 @@ function renderEqContent(){
   if(EQ_TAB==='dv4'){cont.innerHTML=renderDV4(ses);return;}
   var configs={
     saque:{color:'#f59e0b',ths:['EFF%','TOT','# Pto','/ Vnd','+ Pos','! Ntr','– Neg','= Err'],
-      getData:function(j){if(!j.sT)return null;
-        var e=Math.round((j.sPunto+0.5*j.sVend+0.25*j.sPos-j.sErr)/j.sT*100);
-        return[{v:fmt(e),c:effColor(e),b:true},{v:j.sT,c:'#f59e0b',b:true},{v:j.sPunto,c:'#22c55e'},{v:j.sVend,c:'#86efac'},{v:j.sPos,c:'#86efac'},{v:j.sOvp||0,c:'#94a3b8'},{v:j.sNeg,c:'#f97316'},{v:j.sErr,c:'#ef4444'}];},
-      getTot:function(a){var e=a.sT>0?Math.round((a.sPunto+0.5*a.sVend+0.25*a.sPos-a.sErr)/a.sT*100):null;
-        return[{v:e!==null?fmt(e):'—',c:effColor(e),b:true},{v:a.sT,c:'#f59e0b',b:true},{v:a.sPunto,c:'#22c55e'},{v:a.sVend,c:'#86efac'},{v:a.sPos,c:'#86efac'},{v:a.sOvp||0,c:'#94a3b8'},{v:a.sNeg,c:'#f97316'},{v:a.sErr,c:'#ef4444'}];}},
+      getData:function(j){
+        var src;
+        if(SAQUE_TIPO==='flotado'&&j.sFlo) src={T:j.sFlo.T,Punto:j.sFlo.Punto,Vend:j.sFlo.Vend,Pos:j.sFlo.Pos,Ovp:j.sFlo.Adm,Neg:j.sFlo.Neg,Err:j.sFlo.Err};
+        else if(SAQUE_TIPO==='potencia'&&j.sPot) src={T:j.sPot.T,Punto:j.sPot.Punto,Vend:j.sPot.Vend,Pos:j.sPot.Pos,Ovp:j.sPot.Adm,Neg:j.sPot.Neg,Err:j.sPot.Err};
+        else src={T:j.sT,Punto:j.sPunto,Vend:j.sVend,Pos:j.sPos,Ovp:j.sOvp||0,Neg:j.sNeg,Err:j.sErr};
+        if(!src.T)return null;
+        var e=Math.round((src.Punto+0.5*src.Vend+0.25*src.Pos-src.Err)/src.T*100);
+        return[{v:fmt(e),c:effColor(e),b:true},{v:src.T,c:'#f59e0b',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Vend,c:'#86efac'},{v:src.Pos,c:'#86efac'},{v:src.Ovp,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Err,c:'#ef4444'}];},
+      getTot:function(a){
+        var src;
+        if(SAQUE_TIPO==='flotado'&&a.sFlo) src={T:a.sFlo.T,Punto:a.sFlo.Punto,Vend:a.sFlo.Vend,Pos:a.sFlo.Pos,Ovp:a.sFlo.Adm,Neg:a.sFlo.Neg,Err:a.sFlo.Err};
+        else if(SAQUE_TIPO==='potencia'&&a.sPot) src={T:a.sPot.T,Punto:a.sPot.Punto,Vend:a.sPot.Vend,Pos:a.sPot.Pos,Ovp:a.sPot.Adm,Neg:a.sPot.Neg,Err:a.sPot.Err};
+        else src={T:a.sT,Punto:a.sPunto,Vend:a.sVend,Pos:a.sPos,Ovp:a.sOvp||0,Neg:a.sNeg,Err:a.sErr};
+        var e=src.T>0?Math.round((src.Punto+0.5*src.Vend+0.25*src.Pos-src.Err)/src.T*100):null;
+        return[{v:e!==null?fmt(e):'—',c:effColor(e),b:true},{v:src.T,c:'#f59e0b',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Vend,c:'#86efac'},{v:src.Pos,c:'#86efac'},{v:src.Ovp,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Err,c:'#ef4444'}];}},
     recepcion:{color:'#22c55e',ths:['EFF%','TOT','# Perf','+ Pos','! Ntr','– Neg','/ Vnd','= Err'],
       getData:function(j){
         var src; // elegir total / flotado / potencia
@@ -630,11 +652,21 @@ function renderEqContent(){
         var e=src.T>0?Math.round((src.Punto+0.5*src.Pos-0.5*src.Vend-src.Err)/src.T*100):null;
         return[{v:e!==null?fmt(e):'—',c:effColor(e),b:true},{v:src.T,c:'#22c55e',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Pos,c:'#86efac'},{v:src.Ovp,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Vend,c:'#fbbf24'},{v:src.Err,c:'#ef4444'}];}},
     ataque:{color:'#818cf8',ths:['EFF%','TOT','# Pto','+ Pos','! Ntr','– Neg','/ Blq','= Err'],
-      getData:function(j){if(!j.aT)return null;
-        var e=Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100);
-        return[{v:fmt(e),c:effColor(e),b:true},{v:j.aT,c:'#818cf8',b:true},{v:j.aPunto,c:'#22c55e'},{v:j.aPos,c:'#86efac'},{v:j.aOvp||0,c:'#94a3b8'},{v:j.aNeg,c:'#f97316'},{v:j.aVend,c:'#fbbf24'},{v:j.aErr,c:'#ef4444'}];},
-      getTot:function(a){var e=a.aT>0?Math.round((a.aPunto-a.aVend-a.aErr)/a.aT*100):null;
-        return[{v:e!==null?fmt(e):'—',c:effColor(e),b:true},{v:a.aT,c:'#818cf8',b:true},{v:a.aPunto,c:'#22c55e'},{v:a.aPos,c:'#86efac'},{v:a.aOvp||0,c:'#94a3b8'},{v:a.aNeg,c:'#f97316'},{v:a.aVend,c:'#fbbf24'},{v:a.aErr,c:'#ef4444'}];}},
+      getData:function(j){
+        var src;
+        if(ATK_FASE==='so'&&j.aSo) src={T:j.aSo.T,Punto:j.aSo.Punto,Pos:j.aSo.Pos,Ovp:j.aSo.Adm,Neg:j.aSo.Neg,Vend:j.aSo.Vend,Err:j.aSo.Err};
+        else if(ATK_FASE==='tr'&&j.aTr) src={T:j.aTr.T,Punto:j.aTr.Punto,Pos:j.aTr.Pos,Ovp:j.aTr.Adm,Neg:j.aTr.Neg,Vend:j.aTr.Vend,Err:j.aTr.Err};
+        else src={T:j.aT,Punto:j.aPunto,Pos:j.aPos,Ovp:j.aOvp||0,Neg:j.aNeg,Vend:j.aVend,Err:j.aErr};
+        if(!src.T)return null;
+        var e=Math.round((src.Punto-src.Vend-src.Err)/src.T*100);
+        return[{v:fmt(e),c:effColor(e),b:true},{v:src.T,c:'#818cf8',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Pos,c:'#86efac'},{v:src.Ovp,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Vend,c:'#fbbf24'},{v:src.Err,c:'#ef4444'}];},
+      getTot:function(a){
+        var src;
+        if(ATK_FASE==='so'&&a.aSo) src={T:a.aSo.T,Punto:a.aSo.Punto,Pos:a.aSo.Pos,Ovp:a.aSo.Adm,Neg:a.aSo.Neg,Vend:a.aSo.Vend,Err:a.aSo.Err};
+        else if(ATK_FASE==='tr'&&a.aTr) src={T:a.aTr.T,Punto:a.aTr.Punto,Pos:a.aTr.Pos,Ovp:a.aTr.Adm,Neg:a.aTr.Neg,Vend:a.aTr.Vend,Err:a.aTr.Err};
+        else src={T:a.aT,Punto:a.aPunto,Pos:a.aPos,Ovp:a.aOvp||0,Neg:a.aNeg,Vend:a.aVend,Err:a.aErr};
+        var e=src.T>0?Math.round((src.Punto-src.Vend-src.Err)/src.T*100):null;
+        return[{v:e!==null?fmt(e):'—',c:effColor(e),b:true},{v:src.T,c:'#818cf8',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Pos,c:'#86efac'},{v:src.Ovp,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Vend,c:'#fbbf24'},{v:src.Err,c:'#ef4444'}];}},
     bloqueo:{color:'#06b6d4',ths:['EFF%','TOT','# Pto','+ Pos'],
       getData:function(j){if(!j.bT)return null;
         var e=Math.round((j.bPt+j.bPtPos)/j.bT*100);
@@ -678,17 +710,21 @@ function renderEqContent(){
   }
 
   var cfg=configs[EQ_TAB]; if(!cfg||!cfg.getData)return;
-  // Selector Flotado/Potencia/Total (solo en recepción)
+  // Sub-selector de fase/tipo (recepción: flotado/potencia · saque: flotado/potencia · ataque: side-out/transición)
   var recepSelector='';
-  if(EQ_TAB==='recepcion'){
-    var opts=[['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']];
-    recepSelector='<div style="display:flex;gap:6px;margin-bottom:12px">'
+  function _mkSel(opts,cur,fn,col,colRGB){
+    return '<div style="display:flex;gap:6px;margin-bottom:12px">'
       +opts.map(function(o){
-        var on=RECEP_TIPO===o[0];
-        return '<button onclick="setRecepTipo(\''+o[0]+'\')" style="padding:6px 16px;border-radius:7px;border:1px solid '+(on?'#22c55e':'rgba(34,197,94,.3)')+';background:'+(on?'rgba(34,197,94,.18)':'rgba(34,197,94,.05)')+';color:'+(on?'#22c55e':'#94a3b8')+';font-size:11px;font-weight:800;letter-spacing:1px;cursor:pointer;font-family:inherit">'+o[1]+'</button>';
-      }).join('')
-      +'</div>';
+        var on=cur===o[0];
+        return '<button onclick="'+fn+'(\''+o[0]+'\')" style="padding:6px 16px;border-radius:7px;border:1px solid '+(on?col:'rgba('+colRGB+',.3)')+';background:'+(on?'rgba('+colRGB+',.18)':'rgba('+colRGB+',.05)')+';color:'+(on?col:'#94a3b8')+';font-size:11px;font-weight:800;letter-spacing:1px;cursor:pointer;font-family:inherit">'+o[1]+'</button>';
+      }).join('')+'</div>';
   }
+  if(EQ_TAB==='recepcion')
+    recepSelector=_mkSel([['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']],RECEP_TIPO,'setRecepTipo','#22c55e','34,197,94');
+  else if(EQ_TAB==='saque')
+    recepSelector=_mkSel([['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']],SAQUE_TIPO,'setSaqueTipo','#f59e0b','245,158,11');
+  else if(EQ_TAB==='ataque')
+    recepSelector=_mkSel([['total','TOTAL'],['so','SIDE-OUT'],['tr','TRANSICIÓN']],ATK_FASE,'setAtkFase','#818cf8','129,140,248');
   // accumulate totals
   var tot={sT:0,sPunto:0,sPos:0,sOvp:0,sNeg:0,sVend:0,sErr:0,rT:0,rPunto:0,rPos:0,rOvp:0,rNeg:0,rVend:0,rErr:0,aT:0,aPunto:0,aPos:0,aOvp:0,aNeg:0,aVend:0,aErr:0,bT:0,bPt:0,bPtPos:0};
   var html=recepSelector+'<div class="tabla-wrap"><table><thead><tr>'

@@ -1292,12 +1292,13 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
 
         idx = content.find('[3SCOUT]\n')
         scout = content[idx+9:content.find('\n[3',idx+9)].strip().split('\n')
-        pa = defaultdict(lambda: {'a':[],'s':[],'r':[],'b':[],'r_flo':[],'r_pot':[]})
+        pa = defaultdict(lambda: {'a':[],'s':[],'r':[],'b':[],'r_flo':[],'r_pot':[],'s_flo':[],'s_pot':[],'a_so':[],'a_tr':[]})
         _last_serve_tp=None
         for line in scout:
             l=line.strip()
             if len(l)<6: continue
-            _b=l[1:].split(';')[0]
+            _campos=l.split(';')
+            _b=_campos[0][1:] if _campos[0] else ''
             if len(_b)>=4 and _b[:2].isdigit() and _b[2]=='S':
                 _st=_b[3]
                 _last_serve_tp='flotado' if _st in('M','H') else 'potencia' if _st in('Q','T') else None
@@ -1307,8 +1308,16 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
             except: continue
             sk=code[2].upper() if len(code)>2 else ''
             ef=code[4] if len(code)>4 else ''
-            if sk=='A': pa[pn]['a'].append({'effect':ef})
-            elif sk=='S': pa[pn]['s'].append({'effect':ef})
+            _fase=_campos[2].strip() if len(_campos)>2 else ''  # 'r' = side-out
+            if sk=='A':
+                pa[pn]['a'].append({'effect':ef})
+                if _fase=='r': pa[pn]['a_so'].append({'effect':ef})
+                else: pa[pn]['a_tr'].append({'effect':ef})
+            elif sk=='S':
+                pa[pn]['s'].append({'effect':ef})
+                _styp=code[3] if len(code)>3 else ''
+                if _styp in('M','H'): pa[pn]['s_flo'].append({'effect':ef})
+                elif _styp in('Q','T'): pa[pn]['s_pot'].append({'effect':ef})
             elif sk=='R':
                 pa[pn]['r'].append({'effect':ef})
                 if _last_serve_tp=='flotado': pa[pn]['r_flo'].append({'effect':ef})
@@ -1319,17 +1328,21 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         for pn, acts in pa.items():
             s=calc_match_skill(acts['s'],'s'); r=calc_match_skill(acts['r'],'r'); a=calc_match_skill(acts['a'],'a')
             rflo=calc_match_skill(acts['r_flo'],'r'); rpot=calc_match_skill(acts['r_pot'],'r')
+            sflo=calc_match_skill(acts['s_flo'],'s'); spot=calc_match_skill(acts['s_pot'],'s')
+            aso=calc_match_skill(acts['a_so'],'a'); atr=calc_match_skill(acts['a_tr'],'a')
             bk=sum(1 for x in acts['b'] if x['effect']=='#'); bp=sum(1 for x in acts['b'] if x['effect']=='+')
             bT=len(acts['b']); bEff=round((bk+bp)/bT*100) if bT else 0
             if s['T']+r['T']+a['T']+bT<1: continue
             _p = players.get(pn,{})
             nm = NAFELS_NAMES.get(pn, _p.get('apellido') or (_p.get('name','').split()[0] if _p.get('name') else str(pn)))
+            def _blk(x): return {'T':x['T'],'Punto':x['Punto'],'Pos':x['Pos'],'Adm':x['Adm'],'Neg':x['Neg'],'Vend':x['Vend'],'Err':x['Err'],'Eff':x['Eff']}
             jugs.append({'c':pn,'n':nm,
                 's'+'T':s['T'],'sEff':s['Eff'],'sPunto':s['Punto'],'sPos':s['Pos'],'sNeg':s['Neg'],'sErr':s['Err'],'sAdm':s['Adm'],'sVend':s['Vend'],
+                'sFlo':_blk(sflo),'sPot':_blk(spot),
                 'rT':r['T'],'rEff':r['Eff'],'rPunto':r['Punto'],'rPos':r['Pos'],'rNeg':r['Neg'],'rErr':r['Err'],'rAdm':r['Adm'],'rVend':r['Vend'],
-                'rFlo':{'T':rflo['T'],'Punto':rflo['Punto'],'Pos':rflo['Pos'],'Adm':rflo['Adm'],'Neg':rflo['Neg'],'Vend':rflo['Vend'],'Err':rflo['Err'],'Eff':rflo['Eff']},
-                'rPot':{'T':rpot['T'],'Punto':rpot['Punto'],'Pos':rpot['Pos'],'Adm':rpot['Adm'],'Neg':rpot['Neg'],'Vend':rpot['Vend'],'Err':rpot['Err'],'Eff':rpot['Eff']},
+                'rFlo':_blk(rflo),'rPot':_blk(rpot),
                 'aT':a['T'],'aEff':a['Eff'],'aPunto':a['Punto'],'aPos':a['Pos'],'aNeg':a['Neg'],'aErr':a['Err'],'aAdm':a['Adm'],'aVend':a['Vend'],
+                'aSo':_blk(aso),'aTr':_blk(atr),
                 'bT':bT,'bPt':bk,'bPtPos':bp,'bEff':bEff})
         historial.append({'fecha':'/'.join(reversed(g['date'].split('-'))),'tipo':'P','rival':g['rival'],
             'resultado':{'nafels':g['tsets'],'rival':g['rsets'],'sets':g['set_strings']},'jugadores':jugs})
