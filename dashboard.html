@@ -448,13 +448,13 @@ function getJugadoresAcum(sesiones){
         aSo:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},
         aTr:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},
         aT:0,aPunto:0,aPos:0,aOvp:0,aNeg:0,aVend:0,aErr:0,
-        bT:0,bPt:0,bPtPos:0,dv4:{}};
+        bT:0,bPt:0,bPtPos:0,bAdm:0,bVend:0,bNeg:0,bErr:0,dv4:{}};
       var a=acum[j.c];
       if(j.sT+j.rT+j.aT+j.bT>0) a.PJ++;
       ['sT','sPunto','sPos','sOvp','sNeg','sVend','sErr',
        'rT','rPunto','rPos','rOvp','rNeg','rVend','rErr',
        'aT','aPunto','aPos','aOvp','aNeg','aVend','aErr',
-       'bT','bPt','bPtPos'].forEach(function(k){ a[k]+=(j[k]||0); });
+       'bT','bPt','bPtPos','bAdm','bVend','bNeg','bErr'].forEach(function(k){ a[k]+=(j[k]||0); });
       ['T','Punto','Pos','Adm','Neg','Vend','Err'].forEach(function(k){
         if(j.rFlo) a.rFlo[k]+=(j.rFlo[k]||0);
         if(j.rPot) a.rPot[k]+=(j.rPot[k]||0);
@@ -667,12 +667,12 @@ function renderEqContent(){
         else src={T:a.aT,Punto:a.aPunto,Pos:a.aPos,Ovp:a.aOvp||0,Neg:a.aNeg,Vend:a.aVend,Err:a.aErr};
         var e=src.T>0?Math.round((src.Punto-src.Vend-src.Err)/src.T*100):null;
         return[{v:e!==null?fmt(e):'—',c:effColor(e),b:true},{v:src.T,c:'#818cf8',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Pos,c:'#86efac'},{v:src.Ovp,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Vend,c:'#fbbf24'},{v:src.Err,c:'#ef4444'}];}},
-    bloqueo:{color:'#06b6d4',ths:['EFF%','TOT','# Pto','+ Pos'],
+    bloqueo:{color:'#06b6d4',ths:['EFF%','TOT','# Pto','/ Toq','– Neg','! Ntr','+ Pos','= Err'],
       getData:function(j){if(!j.bT)return null;
         var e=Math.round((j.bPt+j.bPtPos)/j.bT*100);
-        return[{v:fmt(e),c:effColor(e),b:true},{v:j.bT,c:'#06b6d4',b:true},{v:j.bPt,c:'#22c55e'},{v:j.bPtPos,c:'#86efac'}];},
+        return[{v:fmt(e),c:effColor(e),b:true},{v:j.bT,c:'#06b6d4',b:true},{v:j.bPt,c:'#22c55e'},{v:j.bVend||0,c:'#fbbf24'},{v:j.bNeg||0,c:'#f97316'},{v:j.bAdm||0,c:'#94a3b8'},{v:j.bPtPos,c:'#86efac'},{v:j.bErr||0,c:'#ef4444'}];},
       getTot:function(a){var e=a.bT>0?Math.round((a.bPt+a.bPtPos)/a.bT*100):null;
-        return[{v:e!==null?fmt(e):'—',c:effColor(e),b:true},{v:a.bT,c:'#06b6d4',b:true},{v:a.bPt,c:'#22c55e'},{v:a.bPtPos,c:'#86efac'}];}},
+        return[{v:e!==null?fmt(e):'—',c:effColor(e),b:true},{v:a.bT,c:'#06b6d4',b:true},{v:a.bPt,c:'#22c55e'},{v:a.bVend||0,c:'#fbbf24'},{v:a.bNeg||0,c:'#f97316'},{v:a.bAdm||0,c:'#94a3b8'},{v:a.bPtPos,c:'#86efac'},{v:a.bErr||0,c:'#ef4444'}];}},
     resumen:{color:'#818cf8',ths:null,getData:null,getTot:null},
   };
 

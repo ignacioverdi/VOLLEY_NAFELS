@@ -1,5 +1,5 @@
 window.HISTORIAL_DATA = {
-  "generado": "08/06/2026, 18:48:59",
+  "generado": "08/06/2026, 21:52:01",
   "entrenamientos": [
     {
       "fecha": "19/10/2025",
@@ -106,7 +106,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 0,
           "bPtPos": 2,
-          "bEff": 29
+          "bEff": 29,
+          "bAdm": 0,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 6,
@@ -198,7 +202,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 0,
           "bPtPos": 4,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 4,
@@ -290,7 +298,11 @@ window.HISTORIAL_DATA = {
           "bT": 15,
           "bPt": 2,
           "bPtPos": 2,
-          "bEff": 27
+          "bEff": 27,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 10
         },
         {
           "c": 15,
@@ -382,7 +394,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 25
+          "bEff": 25,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 1,
+          "bErr": 4
         },
         {
           "c": 9,
@@ -474,7 +490,11 @@ window.HISTORIAL_DATA = {
           "bT": 11,
           "bPt": 2,
           "bPtPos": 3,
-          "bEff": 45
+          "bEff": 45,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 5
         },
         {
           "c": 5,
@@ -566,7 +586,11 @@ window.HISTORIAL_DATA = {
           "bT": 17,
           "bPt": 5,
           "bPtPos": 4,
-          "bEff": 53
+          "bEff": 53,
+          "bAdm": 3,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 5
         },
         {
           "c": 8,
@@ -658,7 +682,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 7,
@@ -750,7 +778,11 @@ window.HISTORIAL_DATA = {
           "bT": 1,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 1,
@@ -842,7 +874,11 @@ window.HISTORIAL_DATA = {
           "bT": 1,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         }
       ]
     },
@@ -950,7 +986,11 @@ window.HISTORIAL_DATA = {
           "bT": 6,
           "bPt": 0,
           "bPtPos": 2,
-          "bEff": 33
+          "bEff": 33,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 15,
@@ -1042,7 +1082,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 1,
           "bPtPos": 4,
-          "bEff": 71
+          "bEff": 71,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 6,
@@ -1134,7 +1178,11 @@ window.HISTORIAL_DATA = {
           "bT": 4,
           "bPt": 1,
           "bPtPos": 2,
-          "bEff": 75
+          "bEff": 75,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 14,
@@ -1226,7 +1274,11 @@ window.HISTORIAL_DATA = {
           "bT": 4,
           "bPt": 2,
           "bPtPos": 0,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 1,
+          "bErr": 1
         },
         {
           "c": 8,
@@ -1318,7 +1370,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 9,
@@ -1410,7 +1466,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 5,
@@ -1502,7 +1562,11 @@ window.HISTORIAL_DATA = {
           "bT": 10,
           "bPt": 5,
           "bPtPos": 1,
-          "bEff": 60
+          "bEff": 60,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 11,
@@ -1594,7 +1658,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 67
+          "bEff": 67,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 10,
@@ -1686,7 +1754,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 1,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 3,
@@ -1778,7 +1850,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 7,
@@ -1870,7 +1946,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 29
+          "bEff": 29,
+          "bAdm": 1,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 3
         }
       ]
     },
@@ -1978,7 +2058,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 2,
           "bPtPos": 2,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 15,
@@ -2070,7 +2154,11 @@ window.HISTORIAL_DATA = {
           "bT": 15,
           "bPt": 2,
           "bPtPos": 4,
-          "bEff": 40
+          "bEff": 40,
+          "bAdm": 0,
+          "bVend": 6,
+          "bNeg": 2,
+          "bErr": 1
         },
         {
           "c": 14,
@@ -2162,7 +2250,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 3,
           "bPtPos": 0,
-          "bEff": 43
+          "bEff": 43,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 4,
@@ -2254,7 +2346,11 @@ window.HISTORIAL_DATA = {
           "bT": 6,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 17
+          "bEff": 17,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 2,
+          "bErr": 3
         },
         {
           "c": 8,
@@ -2346,7 +2442,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 6,
@@ -2438,7 +2538,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 0,
           "bPtPos": 2,
-          "bEff": 100
+          "bEff": 100,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 5,
@@ -2530,7 +2634,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 4,
           "bPtPos": 1,
-          "bEff": 62
+          "bEff": 62,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 11,
@@ -2622,7 +2730,11 @@ window.HISTORIAL_DATA = {
           "bT": 1,
           "bPt": 1,
           "bPtPos": 0,
-          "bEff": 100
+          "bEff": 100,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -2731,7 +2843,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 1,
           "bPtPos": 0,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 5,
@@ -2823,7 +2939,11 @@ window.HISTORIAL_DATA = {
           "bT": 14,
           "bPt": 4,
           "bPtPos": 4,
-          "bEff": 57
+          "bEff": 57,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 2,
+          "bErr": 4
         },
         {
           "c": 15,
@@ -2915,7 +3035,11 @@ window.HISTORIAL_DATA = {
           "bT": 17,
           "bPt": 5,
           "bPtPos": 5,
-          "bEff": 59
+          "bEff": 59,
+          "bAdm": 0,
+          "bVend": 3,
+          "bNeg": 1,
+          "bErr": 3
         },
         {
           "c": 6,
@@ -3007,7 +3131,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 1,
           "bPtPos": 2,
-          "bEff": 38
+          "bEff": 38,
+          "bAdm": 0,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 8,
@@ -3099,7 +3227,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 4,
@@ -3191,7 +3323,11 @@ window.HISTORIAL_DATA = {
           "bT": 11,
           "bPt": 1,
           "bPtPos": 6,
-          "bEff": 64
+          "bEff": 64,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 1,
+          "bErr": 2
         },
         {
           "c": 9,
@@ -3283,7 +3419,11 @@ window.HISTORIAL_DATA = {
           "bT": 4,
           "bPt": 1,
           "bPtPos": 2,
-          "bEff": 75
+          "bEff": 75,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 10,
@@ -3375,7 +3515,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -3483,7 +3627,11 @@ window.HISTORIAL_DATA = {
           "bT": 4,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 9,
@@ -3575,7 +3723,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 14,
@@ -3667,7 +3819,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 5,
@@ -3759,7 +3915,11 @@ window.HISTORIAL_DATA = {
           "bT": 9,
           "bPt": 2,
           "bPtPos": 1,
-          "bEff": 33
+          "bEff": 33,
+          "bAdm": 1,
+          "bVend": 3,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 15,
@@ -3851,7 +4011,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 2,
           "bPtPos": 2,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 4,
@@ -3943,7 +4107,11 @@ window.HISTORIAL_DATA = {
           "bT": 4,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 8,
@@ -4035,7 +4203,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 10,
@@ -4127,7 +4299,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 7,
@@ -4219,7 +4395,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -4328,7 +4508,11 @@ window.HISTORIAL_DATA = {
           "bT": 5,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 2,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 14,
@@ -4420,7 +4604,11 @@ window.HISTORIAL_DATA = {
           "bT": 9,
           "bPt": 0,
           "bPtPos": 2,
-          "bEff": 22
+          "bEff": 22,
+          "bAdm": 1,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 5,
@@ -4512,7 +4700,11 @@ window.HISTORIAL_DATA = {
           "bT": 10,
           "bPt": 3,
           "bPtPos": 2,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 1,
+          "bVend": 1,
+          "bNeg": 1,
+          "bErr": 2
         },
         {
           "c": 6,
@@ -4604,7 +4796,11 @@ window.HISTORIAL_DATA = {
           "bT": 5,
           "bPt": 1,
           "bPtPos": 2,
-          "bEff": 60
+          "bEff": 60,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 15,
@@ -4696,7 +4892,11 @@ window.HISTORIAL_DATA = {
           "bT": 13,
           "bPt": 1,
           "bPtPos": 4,
-          "bEff": 38
+          "bEff": 38,
+          "bAdm": 0,
+          "bVend": 3,
+          "bNeg": 0,
+          "bErr": 5
         },
         {
           "c": 4,
@@ -4788,7 +4988,11 @@ window.HISTORIAL_DATA = {
           "bT": 9,
           "bPt": 0,
           "bPtPos": 3,
-          "bEff": 33
+          "bEff": 33,
+          "bAdm": 1,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 8,
@@ -4880,7 +5084,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 7,
@@ -4972,7 +5180,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 11,
@@ -5064,7 +5276,11 @@ window.HISTORIAL_DATA = {
           "bT": 1,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 1,
+          "bErr": 0
         }
       ]
     },
@@ -5172,7 +5388,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 2,
           "bPtPos": 2,
-          "bEff": 57
+          "bEff": 57,
+          "bAdm": 0,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 14,
@@ -5264,7 +5484,11 @@ window.HISTORIAL_DATA = {
           "bT": 9,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 22
+          "bEff": 22,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 6
         },
         {
           "c": 15,
@@ -5356,7 +5580,11 @@ window.HISTORIAL_DATA = {
           "bT": 10,
           "bPt": 3,
           "bPtPos": 1,
-          "bEff": 40
+          "bEff": 40,
+          "bAdm": 0,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 8,
@@ -5448,7 +5676,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 9,
@@ -5540,7 +5772,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 6,
@@ -5632,7 +5868,11 @@ window.HISTORIAL_DATA = {
           "bT": 4,
           "bPt": 1,
           "bPtPos": 2,
-          "bEff": 75
+          "bEff": 75,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 5,
@@ -5724,7 +5964,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 14
+          "bEff": 14,
+          "bAdm": 2,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 7,
@@ -5816,7 +6060,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 11,
@@ -5908,7 +6156,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 2,
           "bPtPos": 0,
-          "bEff": 100
+          "bEff": 100,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -6018,7 +6270,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 14,
@@ -6110,7 +6366,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 3,
           "bPtPos": 2,
-          "bEff": 71
+          "bEff": 71,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 5,
@@ -6202,7 +6462,11 @@ window.HISTORIAL_DATA = {
           "bT": 21,
           "bPt": 4,
           "bPtPos": 5,
-          "bEff": 43
+          "bEff": 43,
+          "bAdm": 4,
+          "bVend": 3,
+          "bNeg": 0,
+          "bErr": 5
         },
         {
           "c": 4,
@@ -6294,7 +6558,11 @@ window.HISTORIAL_DATA = {
           "bT": 10,
           "bPt": 1,
           "bPtPos": 2,
-          "bEff": 30
+          "bEff": 30,
+          "bAdm": 1,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 6,
@@ -6386,7 +6654,11 @@ window.HISTORIAL_DATA = {
           "bT": 10,
           "bPt": 2,
           "bPtPos": 2,
-          "bEff": 40
+          "bEff": 40,
+          "bAdm": 2,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 15,
@@ -6478,7 +6750,11 @@ window.HISTORIAL_DATA = {
           "bT": 26,
           "bPt": 4,
           "bPtPos": 7,
-          "bEff": 42
+          "bEff": 42,
+          "bAdm": 2,
+          "bVend": 4,
+          "bNeg": 1,
+          "bErr": 8
         },
         {
           "c": 9,
@@ -6570,7 +6846,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 7,
@@ -6662,7 +6942,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 11,
@@ -6754,7 +7038,11 @@ window.HISTORIAL_DATA = {
           "bT": 1,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -6864,7 +7152,11 @@ window.HISTORIAL_DATA = {
           "bT": 11,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 18
+          "bEff": 18,
+          "bAdm": 0,
+          "bVend": 4,
+          "bNeg": 1,
+          "bErr": 4
         },
         {
           "c": 14,
@@ -6956,7 +7248,11 @@ window.HISTORIAL_DATA = {
           "bT": 6,
           "bPt": 1,
           "bPtPos": 3,
-          "bEff": 67
+          "bEff": 67,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 6,
@@ -7048,7 +7344,11 @@ window.HISTORIAL_DATA = {
           "bT": 15,
           "bPt": 0,
           "bPtPos": 4,
-          "bEff": 27
+          "bEff": 27,
+          "bAdm": 2,
+          "bVend": 3,
+          "bNeg": 0,
+          "bErr": 6
         },
         {
           "c": 15,
@@ -7140,7 +7440,11 @@ window.HISTORIAL_DATA = {
           "bT": 14,
           "bPt": 2,
           "bPtPos": 2,
-          "bEff": 29
+          "bEff": 29,
+          "bAdm": 2,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 8
         },
         {
           "c": 9,
@@ -7232,7 +7536,11 @@ window.HISTORIAL_DATA = {
           "bT": 5,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 20
+          "bEff": 20,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 8,
@@ -7324,7 +7632,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 5,
@@ -7416,7 +7728,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 0,
           "bPtPos": 3,
-          "bEff": 43
+          "bEff": 43,
+          "bAdm": 1,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 11,
@@ -7508,7 +7824,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 1,
           "bPtPos": 0,
-          "bEff": 33
+          "bEff": 33,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 7,
@@ -7600,7 +7920,11 @@ window.HISTORIAL_DATA = {
           "bT": 6,
           "bPt": 1,
           "bPtPos": 2,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 3
         }
       ]
     },
@@ -7708,7 +8032,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 2,
           "bPtPos": 1,
-          "bEff": 100
+          "bEff": 100,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 6,
@@ -7800,7 +8128,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 4,
           "bPtPos": 1,
-          "bEff": 62
+          "bEff": 62,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 8,
@@ -7892,7 +8224,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 14,
@@ -7984,7 +8320,11 @@ window.HISTORIAL_DATA = {
           "bT": 5,
           "bPt": 1,
           "bPtPos": 2,
-          "bEff": 60
+          "bEff": 60,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 15,
@@ -8076,7 +8416,11 @@ window.HISTORIAL_DATA = {
           "bT": 9,
           "bPt": 5,
           "bPtPos": 1,
-          "bEff": 67
+          "bEff": 67,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 11,
@@ -8168,7 +8512,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 1,
           "bPtPos": 0,
-          "bEff": 33
+          "bEff": 33,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 5,
@@ -8260,7 +8608,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 3,
           "bPtPos": 2,
-          "bEff": 62
+          "bEff": 62,
+          "bAdm": 1,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 10,
@@ -8352,7 +8704,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 7,
@@ -8444,7 +8800,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         }
       ]
     },
@@ -8553,7 +8913,11 @@ window.HISTORIAL_DATA = {
           "bT": 4,
           "bPt": 0,
           "bPtPos": 2,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 15,
@@ -8645,7 +9009,11 @@ window.HISTORIAL_DATA = {
           "bT": 17,
           "bPt": 3,
           "bPtPos": 4,
-          "bEff": 41
+          "bEff": 41,
+          "bAdm": 1,
+          "bVend": 3,
+          "bNeg": 0,
+          "bErr": 6
         },
         {
           "c": 14,
@@ -8737,7 +9105,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 4,
           "bPtPos": 1,
-          "bEff": 62
+          "bEff": 62,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 8,
@@ -8829,7 +9201,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 6,
@@ -8921,7 +9297,11 @@ window.HISTORIAL_DATA = {
           "bT": 9,
           "bPt": 0,
           "bPtPos": 4,
-          "bEff": 44
+          "bEff": 44,
+          "bAdm": 0,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 9,
@@ -9013,7 +9393,11 @@ window.HISTORIAL_DATA = {
           "bT": 1,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 7,
@@ -9105,7 +9489,11 @@ window.HISTORIAL_DATA = {
           "bT": 9,
           "bPt": 1,
           "bPtPos": 2,
-          "bEff": 33
+          "bEff": 33,
+          "bAdm": 1,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 11,
@@ -9197,7 +9585,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 2,
           "bPtPos": 0,
-          "bEff": 67
+          "bEff": 67,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 10,
@@ -9289,7 +9681,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -9398,7 +9794,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 2,
           "bPtPos": 0,
-          "bEff": 67
+          "bEff": 67,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 6,
@@ -9490,7 +9890,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 0,
           "bPtPos": 3,
-          "bEff": 43
+          "bEff": 43,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 1,
+          "bErr": 2
         },
         {
           "c": 8,
@@ -9582,7 +9986,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 14,
@@ -9674,7 +10082,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 4,
           "bPtPos": 1,
-          "bEff": 62
+          "bEff": 62,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 1,
+          "bErr": 1
         },
         {
           "c": 5,
@@ -9766,7 +10178,11 @@ window.HISTORIAL_DATA = {
           "bT": 12,
           "bPt": 1,
           "bPtPos": 2,
-          "bEff": 25
+          "bEff": 25,
+          "bAdm": 0,
+          "bVend": 5,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 4,
@@ -9858,7 +10274,11 @@ window.HISTORIAL_DATA = {
           "bT": 13,
           "bPt": 2,
           "bPtPos": 5,
-          "bEff": 54
+          "bEff": 54,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 1,
+          "bErr": 4
         },
         {
           "c": 15,
@@ -9950,7 +10370,11 @@ window.HISTORIAL_DATA = {
           "bT": 15,
           "bPt": 2,
           "bPtPos": 4,
-          "bEff": 40
+          "bEff": 40,
+          "bAdm": 3,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 11,
@@ -10042,7 +10466,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 7,
@@ -10134,7 +10562,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -10242,7 +10674,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 4,
@@ -10334,7 +10770,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 15,
@@ -10426,7 +10866,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 3,
           "bPtPos": 3,
-          "bEff": 86
+          "bEff": 86,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 6,
@@ -10518,7 +10962,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 67
+          "bEff": 67,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 11,
@@ -10610,7 +11058,11 @@ window.HISTORIAL_DATA = {
           "bT": 5,
           "bPt": 0,
           "bPtPos": 2,
-          "bEff": 40
+          "bEff": 40,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 5,
@@ -10702,7 +11154,11 @@ window.HISTORIAL_DATA = {
           "bT": 13,
           "bPt": 3,
           "bPtPos": 5,
-          "bEff": 62
+          "bEff": 62,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 1,
+          "bErr": 3
         },
         {
           "c": 1,
@@ -10794,7 +11250,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 3,
@@ -10886,7 +11346,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 2,
           "bPtPos": 0,
-          "bEff": 67
+          "bEff": 67,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 8,
@@ -10978,7 +11442,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 10,
@@ -11070,7 +11538,11 @@ window.HISTORIAL_DATA = {
           "bT": 6,
           "bPt": 1,
           "bPtPos": 0,
-          "bEff": 17
+          "bEff": 17,
+          "bAdm": 2,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 7,
@@ -11162,7 +11634,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 2,
           "bPtPos": 2,
-          "bEff": 57
+          "bEff": 57,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 2
         }
       ]
     },
@@ -11271,7 +11747,11 @@ window.HISTORIAL_DATA = {
           "bT": 6,
           "bPt": 3,
           "bPtPos": 1,
-          "bEff": 67
+          "bEff": 67,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 15,
@@ -11363,7 +11843,11 @@ window.HISTORIAL_DATA = {
           "bT": 19,
           "bPt": 2,
           "bPtPos": 9,
-          "bEff": 58
+          "bEff": 58,
+          "bAdm": 1,
+          "bVend": 2,
+          "bNeg": 1,
+          "bErr": 4
         },
         {
           "c": 6,
@@ -11455,7 +11939,11 @@ window.HISTORIAL_DATA = {
           "bT": 18,
           "bPt": 3,
           "bPtPos": 5,
-          "bEff": 44
+          "bEff": 44,
+          "bAdm": 0,
+          "bVend": 3,
+          "bNeg": 1,
+          "bErr": 6
         },
         {
           "c": 14,
@@ -11547,7 +12035,11 @@ window.HISTORIAL_DATA = {
           "bT": 10,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 20
+          "bEff": 20,
+          "bAdm": 1,
+          "bVend": 3,
+          "bNeg": 2,
+          "bErr": 2
         },
         {
           "c": 9,
@@ -11639,7 +12131,11 @@ window.HISTORIAL_DATA = {
           "bT": 1,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 100
+          "bEff": 100,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 5,
@@ -11731,7 +12227,11 @@ window.HISTORIAL_DATA = {
           "bT": 18,
           "bPt": 3,
           "bPtPos": 6,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 5,
+          "bVend": 1,
+          "bNeg": 1,
+          "bErr": 2
         },
         {
           "c": 8,
@@ -11823,7 +12323,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 7,
@@ -11915,7 +12419,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 11,
@@ -12007,7 +12515,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 33
+          "bEff": 33,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 1,
+          "bErr": 1
         }
       ]
     },
@@ -12117,7 +12629,11 @@ window.HISTORIAL_DATA = {
           "bT": 1,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 14,
@@ -12209,7 +12725,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 3,
           "bPtPos": 1,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 2,
+          "bNeg": 1,
+          "bErr": 1
         },
         {
           "c": 5,
@@ -12301,7 +12821,11 @@ window.HISTORIAL_DATA = {
           "bT": 17,
           "bPt": 3,
           "bPtPos": 4,
-          "bEff": 41
+          "bEff": 41,
+          "bAdm": 0,
+          "bVend": 3,
+          "bNeg": 3,
+          "bErr": 4
         },
         {
           "c": 6,
@@ -12393,7 +12917,11 @@ window.HISTORIAL_DATA = {
           "bT": 9,
           "bPt": 2,
           "bPtPos": 0,
-          "bEff": 22
+          "bEff": 22,
+          "bAdm": 0,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 5
         },
         {
           "c": 4,
@@ -12485,7 +13013,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 14
+          "bEff": 14,
+          "bAdm": 2,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 15,
@@ -12577,7 +13109,11 @@ window.HISTORIAL_DATA = {
           "bT": 20,
           "bPt": 3,
           "bPtPos": 7,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 1,
+          "bVend": 4,
+          "bNeg": 0,
+          "bErr": 5
         },
         {
           "c": 8,
@@ -12669,7 +13205,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 10,
@@ -12761,7 +13301,11 @@ window.HISTORIAL_DATA = {
           "bT": 1,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 7,
@@ -12853,7 +13397,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 11,
@@ -12945,7 +13493,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 3,
@@ -13037,7 +13589,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 1,
@@ -13129,7 +13685,11 @@ window.HISTORIAL_DATA = {
           "bT": 1,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 100
+          "bEff": 100,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -13237,7 +13797,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 100
+          "bEff": 100,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 14,
@@ -13329,7 +13893,11 @@ window.HISTORIAL_DATA = {
           "bT": 5,
           "bPt": 2,
           "bPtPos": 1,
-          "bEff": 60
+          "bEff": 60,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 15,
@@ -13421,7 +13989,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 3,
           "bPtPos": 1,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 6,
@@ -13513,7 +14085,11 @@ window.HISTORIAL_DATA = {
           "bT": 6,
           "bPt": 1,
           "bPtPos": 3,
-          "bEff": 67
+          "bEff": 67,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 8,
@@ -13605,7 +14181,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 9,
@@ -13697,7 +14277,11 @@ window.HISTORIAL_DATA = {
           "bT": 4,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 25
+          "bEff": 25,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 5,
@@ -13789,7 +14373,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 2,
           "bPtPos": 1,
-          "bEff": 38
+          "bEff": 38,
+          "bAdm": 1,
+          "bVend": 3,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 7,
@@ -13881,7 +14469,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 10,
@@ -13973,7 +14565,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -14081,7 +14677,11 @@ window.HISTORIAL_DATA = {
           "bT": 10,
           "bPt": 1,
           "bPtPos": 5,
-          "bEff": 60
+          "bEff": 60,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 1,
+          "bErr": 3
         },
         {
           "c": 15,
@@ -14173,7 +14773,11 @@ window.HISTORIAL_DATA = {
           "bT": 12,
           "bPt": 4,
           "bPtPos": 1,
-          "bEff": 42
+          "bEff": 42,
+          "bAdm": 1,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 5
         },
         {
           "c": 14,
@@ -14265,7 +14869,11 @@ window.HISTORIAL_DATA = {
           "bT": 1,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 6,
@@ -14357,7 +14965,11 @@ window.HISTORIAL_DATA = {
           "bT": 6,
           "bPt": 1,
           "bPtPos": 0,
-          "bEff": 17
+          "bEff": 17,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 9,
@@ -14449,7 +15061,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 33
+          "bEff": 33,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 8,
@@ -14541,7 +15157,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 5,
@@ -14633,7 +15253,11 @@ window.HISTORIAL_DATA = {
           "bT": 10,
           "bPt": 1,
           "bPtPos": 4,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 5
         },
         {
           "c": 11,
@@ -14725,7 +15349,11 @@ window.HISTORIAL_DATA = {
           "bT": 1,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 7,
@@ -14817,7 +15445,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 10,
@@ -14909,7 +15541,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 1,
@@ -15001,7 +15637,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -15109,7 +15749,11 @@ window.HISTORIAL_DATA = {
           "bT": 6,
           "bPt": 3,
           "bPtPos": 2,
-          "bEff": 83
+          "bEff": 83,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 11,
@@ -15201,7 +15845,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 6,
@@ -15293,7 +15941,11 @@ window.HISTORIAL_DATA = {
           "bT": 1,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 14,
@@ -15385,7 +16037,11 @@ window.HISTORIAL_DATA = {
           "bT": 6,
           "bPt": 2,
           "bPtPos": 1,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 1,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 15,
@@ -15477,7 +16133,11 @@ window.HISTORIAL_DATA = {
           "bT": 14,
           "bPt": 2,
           "bPtPos": 2,
-          "bEff": 29
+          "bEff": 29,
+          "bAdm": 2,
+          "bVend": 1,
+          "bNeg": 1,
+          "bErr": 6
         },
         {
           "c": 5,
@@ -15569,7 +16229,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 29
+          "bEff": 29,
+          "bAdm": 2,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 8,
@@ -15661,7 +16325,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 9,
@@ -15753,7 +16421,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -15861,7 +16533,11 @@ window.HISTORIAL_DATA = {
           "bT": 5,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 20
+          "bEff": 20,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 11,
@@ -15953,7 +16629,11 @@ window.HISTORIAL_DATA = {
           "bT": 4,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 6,
@@ -16045,7 +16725,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 1,
           "bPtPos": 3,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 1,
+          "bErr": 2
         },
         {
           "c": 14,
@@ -16137,7 +16821,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 1,
           "bPtPos": 0,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 1,
+          "bErr": 0
         },
         {
           "c": 8,
@@ -16229,7 +16917,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 15,
@@ -16321,7 +17013,11 @@ window.HISTORIAL_DATA = {
           "bT": 18,
           "bPt": 3,
           "bPtPos": 6,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 1,
+          "bVend": 2,
+          "bNeg": 1,
+          "bErr": 5
         },
         {
           "c": 5,
@@ -16413,7 +17109,11 @@ window.HISTORIAL_DATA = {
           "bT": 10,
           "bPt": 2,
           "bPtPos": 4,
-          "bEff": 60
+          "bEff": 60,
+          "bAdm": 3,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 10,
@@ -16505,7 +17205,11 @@ window.HISTORIAL_DATA = {
           "bT": 1,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 9,
@@ -16597,7 +17301,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 33
+          "bEff": 33,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 1,
+          "bErr": 0
         },
         {
           "c": 7,
@@ -16689,7 +17397,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 1,
@@ -16781,7 +17493,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -16889,7 +17605,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 33
+          "bEff": 33,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 1,
+          "bErr": 0
         },
         {
           "c": 14,
@@ -16981,7 +17701,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 33
+          "bEff": 33,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 1,
+          "bErr": 0
         },
         {
           "c": 11,
@@ -17073,7 +17797,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 2,
           "bPtPos": 0,
-          "bEff": 67
+          "bEff": 67,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 6,
@@ -17165,7 +17893,11 @@ window.HISTORIAL_DATA = {
           "bT": 5,
           "bPt": 1,
           "bPtPos": 0,
-          "bEff": 20
+          "bEff": 20,
+          "bAdm": 0,
+          "bVend": 2,
+          "bNeg": 1,
+          "bErr": 1
         },
         {
           "c": 15,
@@ -17257,7 +17989,11 @@ window.HISTORIAL_DATA = {
           "bT": 10,
           "bPt": 1,
           "bPtPos": 4,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 5,
@@ -17349,7 +18085,11 @@ window.HISTORIAL_DATA = {
           "bT": 5,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 40
+          "bEff": 40,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 8,
@@ -17441,7 +18181,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 10,
@@ -17533,7 +18277,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 9,
@@ -17625,7 +18373,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -17733,7 +18485,11 @@ window.HISTORIAL_DATA = {
           "bT": 6,
           "bPt": 1,
           "bPtPos": 3,
-          "bEff": 67
+          "bEff": 67,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 1,
+          "bErr": 1
         },
         {
           "c": 14,
@@ -17825,7 +18581,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 100
+          "bEff": 100,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 15,
@@ -17917,7 +18677,11 @@ window.HISTORIAL_DATA = {
           "bT": 16,
           "bPt": 5,
           "bPtPos": 4,
-          "bEff": 56
+          "bEff": 56,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 6
         },
         {
           "c": 6,
@@ -18009,7 +18773,11 @@ window.HISTORIAL_DATA = {
           "bT": 4,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 8,
@@ -18101,7 +18869,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 11,
@@ -18193,7 +18965,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 1,
           "bPtPos": 0,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 5,
@@ -18285,7 +19061,11 @@ window.HISTORIAL_DATA = {
           "bT": 9,
           "bPt": 2,
           "bPtPos": 2,
-          "bEff": 44
+          "bEff": 44,
+          "bAdm": 0,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 9,
@@ -18377,7 +19157,11 @@ window.HISTORIAL_DATA = {
           "bT": 5,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 40
+          "bEff": 40,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 10,
@@ -18469,7 +19253,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -18578,7 +19366,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 6,
@@ -18670,7 +19462,11 @@ window.HISTORIAL_DATA = {
           "bT": 6,
           "bPt": 2,
           "bPtPos": 0,
-          "bEff": 33
+          "bEff": 33,
+          "bAdm": 0,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 4,
@@ -18762,7 +19558,11 @@ window.HISTORIAL_DATA = {
           "bT": 5,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 20
+          "bEff": 20,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 15,
@@ -18854,7 +19654,11 @@ window.HISTORIAL_DATA = {
           "bT": 13,
           "bPt": 2,
           "bPtPos": 4,
-          "bEff": 46
+          "bEff": 46,
+          "bAdm": 2,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 14,
@@ -18946,7 +19750,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 29
+          "bEff": 29,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 5,
@@ -19038,7 +19846,11 @@ window.HISTORIAL_DATA = {
           "bT": 16,
           "bPt": 5,
           "bPtPos": 3,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 2,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 6
         },
         {
           "c": 9,
@@ -19130,7 +19942,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 33
+          "bEff": 33,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 10,
@@ -19222,7 +20038,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 7,
@@ -19314,7 +20134,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -19423,7 +20247,11 @@ window.HISTORIAL_DATA = {
           "bT": 5,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 20
+          "bEff": 20,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 14,
@@ -19515,7 +20343,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 14
+          "bEff": 14,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 5
         },
         {
           "c": 5,
@@ -19607,7 +20439,11 @@ window.HISTORIAL_DATA = {
           "bT": 13,
           "bPt": 0,
           "bPtPos": 7,
-          "bEff": 54
+          "bEff": 54,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 1,
+          "bErr": 5
         },
         {
           "c": 4,
@@ -19699,7 +20535,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 1,
           "bPtPos": 2,
-          "bEff": 43
+          "bEff": 43,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 15,
@@ -19791,7 +20631,11 @@ window.HISTORIAL_DATA = {
           "bT": 12,
           "bPt": 2,
           "bPtPos": 7,
-          "bEff": 75
+          "bEff": 75,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 6,
@@ -19883,7 +20727,11 @@ window.HISTORIAL_DATA = {
           "bT": 5,
           "bPt": 0,
           "bPtPos": 2,
-          "bEff": 40
+          "bEff": 40,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 8,
@@ -19975,7 +20823,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 11,
@@ -20067,7 +20919,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 7,
@@ -20159,7 +21015,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 10,
@@ -20251,7 +21111,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -20359,7 +21223,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 1,
           "bPtPos": 3,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 14,
@@ -20451,7 +21319,11 @@ window.HISTORIAL_DATA = {
           "bT": 4,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 2,
@@ -20543,7 +21415,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 9,
@@ -20635,7 +21511,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 6,
@@ -20727,7 +21607,11 @@ window.HISTORIAL_DATA = {
           "bT": 4,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 1,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 4,
@@ -20819,7 +21703,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 12
+          "bEff": 12,
+          "bAdm": 1,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 5,
@@ -20911,7 +21799,11 @@ window.HISTORIAL_DATA = {
           "bT": 10,
           "bPt": 2,
           "bPtPos": 3,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 8,
@@ -21003,7 +21895,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 7,
@@ -21095,7 +21991,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 10,
@@ -21187,7 +22087,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 11,
@@ -21279,7 +22183,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -21387,7 +22295,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 8,
@@ -21479,7 +22391,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 5,
@@ -21571,7 +22487,11 @@ window.HISTORIAL_DATA = {
           "bT": 6,
           "bPt": 2,
           "bPtPos": 2,
-          "bEff": 67
+          "bEff": 67,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 14,
@@ -21663,7 +22583,11 @@ window.HISTORIAL_DATA = {
           "bT": 4,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 25
+          "bEff": 25,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 2
         },
         {
           "c": 6,
@@ -21755,7 +22679,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 1,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 15,
@@ -21847,7 +22775,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 1,
           "bPtPos": 3,
-          "bEff": 50
+          "bEff": 50,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 4,
@@ -21939,7 +22871,11 @@ window.HISTORIAL_DATA = {
           "bT": 8,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 12
+          "bEff": 12,
+          "bAdm": 1,
+          "bVend": 0,
+          "bNeg": 1,
+          "bErr": 5
         },
         {
           "c": 11,
@@ -22031,7 +22967,11 @@ window.HISTORIAL_DATA = {
           "bT": 2,
           "bPt": 0,
           "bPtPos": 2,
-          "bEff": 100
+          "bEff": 100,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 10,
@@ -22123,7 +23063,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     },
@@ -22233,7 +23177,11 @@ window.HISTORIAL_DATA = {
           "bT": 15,
           "bPt": 4,
           "bPtPos": 1,
-          "bEff": 33
+          "bEff": 33,
+          "bAdm": 1,
+          "bVend": 2,
+          "bNeg": 0,
+          "bErr": 7
         },
         {
           "c": 5,
@@ -22325,7 +23273,11 @@ window.HISTORIAL_DATA = {
           "bT": 16,
           "bPt": 1,
           "bPtPos": 6,
-          "bEff": 44
+          "bEff": 44,
+          "bAdm": 2,
+          "bVend": 2,
+          "bNeg": 1,
+          "bErr": 4
         },
         {
           "c": 9,
@@ -22417,7 +23369,11 @@ window.HISTORIAL_DATA = {
           "bT": 3,
           "bPt": 0,
           "bPtPos": 2,
-          "bEff": 67
+          "bEff": 67,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 1
         },
         {
           "c": 6,
@@ -22509,7 +23465,11 @@ window.HISTORIAL_DATA = {
           "bT": 5,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 20
+          "bEff": 20,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 8,
@@ -22601,7 +23561,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 4,
@@ -22693,7 +23657,11 @@ window.HISTORIAL_DATA = {
           "bT": 12,
           "bPt": 0,
           "bPtPos": 5,
-          "bEff": 42
+          "bEff": 42,
+          "bAdm": 1,
+          "bVend": 3,
+          "bNeg": 0,
+          "bErr": 3
         },
         {
           "c": 14,
@@ -22785,7 +23753,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 1,
           "bPtPos": 1,
-          "bEff": 29
+          "bEff": 29,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 4
         },
         {
           "c": 11,
@@ -22877,7 +23849,11 @@ window.HISTORIAL_DATA = {
           "bT": 7,
           "bPt": 0,
           "bPtPos": 1,
-          "bEff": 14
+          "bEff": 14,
+          "bAdm": 0,
+          "bVend": 1,
+          "bNeg": 0,
+          "bErr": 5
         },
         {
           "c": 10,
@@ -22969,7 +23945,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         },
         {
           "c": 7,
@@ -23061,7 +24041,11 @@ window.HISTORIAL_DATA = {
           "bT": 0,
           "bPt": 0,
           "bPtPos": 0,
-          "bEff": 0
+          "bEff": 0,
+          "bAdm": 0,
+          "bVend": 0,
+          "bNeg": 0,
+          "bErr": 0
         }
       ]
     }
