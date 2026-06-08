@@ -831,21 +831,23 @@ def calc_baterias(scout, side):
             last_rec=res; rec_valida=True
             P=get(num); P['R']['T']+=1
             if res in P['R']: P['R'][res]+=1
-            # recepción por zona: tipo(M/Q) origen+pos (2 dígitos finales)
+            # recepción por zona destino agrupada:
+            #   P1 = Z1+Z2+Z9 | P6 = Z6+Z3+Z8 | P5 = Z5+Z4+Z7
+            # tipo: M/H=flotado, Q/T=potencia
+            # PRIMER grupo de 2 díg tras el resultado = origen(saque) + destino(recepción)
             _rtp=body[3]  # M=flotado, Q=potencia
             _rd=None
-            for _s in reversed(body[3:].split('~')):
+            for _s in body[3:].split('~'):
                 _dd=''.join(ch for ch in _s if ch.isdigit())
-                if len(_dd)>=2: _rd=_dd[-2:]; break
+                if len(_dd)>=2: _rd=_dd[:2]; break
             if _rd:
-                _orig=_rd[0]; _pos=_rd[1]
-                T=P['_rec'].setdefault(_rtp,{}).setdefault(_orig,{}).setdefault(_pos,{'tot':0,'pt':0,'pos':0,'neg':0,'err':0})
-                T['tot']+=1
-                if res=='#': T['pt']+=1
-                elif res=='+': T['pos']+=1
-                elif res=='/': T['neg']+=1
-                elif res=='=': T['err']+=1
-                elif res=='-': T['neg']+=1
+                _zdest=_rd[1]
+                _ZMAP={'1':'P1','2':'P1','9':'P1','6':'P6','3':'P6','8':'P6','5':'P5','4':'P5','7':'P5'}
+                _P=_ZMAP.get(_zdest)
+                if _P:
+                    T=P['_rec'].setdefault(_rtp,{}).setdefault(_P,{'tot':0,'#':0,'+':0,'!':0,'-':0,'/':0,'=':0})
+                    T['tot']+=1
+                    if res in T: T[res]+=1
         elif pfx!=side and skill in('A','D','E','B'):
             rec_valida=False
         elif skill=='B' and pfx==side:
@@ -949,11 +951,10 @@ def merge_acum(lista_pl):
                         if not ac['orig']: ac['orig']=d.get('orig',0)
                         for z,n in d.get('dest',{}).items(): ac['dest'][z]=ac['dest'].get(z,0)+n
                 elif sec=='_rec':
-                    for tp,od in P[sec].items():
-                        for orig,pd in od.items():
-                            for pos,d in pd.items():
-                                T=A[sec].setdefault(tp,{}).setdefault(orig,{}).setdefault(pos,{'tot':0,'pt':0,'pos':0,'neg':0,'err':0})
-                                for kk in ('tot','pt','pos','neg','err'): T[kk]+=d.get(kk,0)
+                    for tp,pd in P[sec].items():
+                        for Pp,d in pd.items():
+                            T=A[sec].setdefault(tp,{}).setdefault(Pp,{'tot':0,'#':0,'+':0,'!':0,'-':0,'/':0,'=':0})
+                            for kk in ('tot','#','+','!','-','/','='): T[kk]+=d.get(kk,0)
                 else:
                     for k in P[sec]: A[sec][k]+=P[sec][k]
     return acum
@@ -1003,39 +1004,38 @@ def to_canchitas(P):
         ataques.append({'cod':cb,'tipo':'','orig':ORIG.get(cb,8),'destinos':destinos,
             'eff':eff,'tot':d['tot'],'pts':d['#'],'slash':d['/'],'err':d['='],
             'video':None,'pts_pct':round(d['#']/d['tot']*100) if d['tot'] else 0})
-    # recepción por zona: estructura flotado/potencia × desde_zX × pX
+    # recepción por posición agrupada: flotado/potencia → P1/P6/P5
+    # P1=Z1+Z2+Z9, P6=Z6+Z3+Z8, P5=Z5+Z4+Z7 (ya agrupado en _rec)
     def _celda(d):
-        t=d['tot']
-        if not t: return {'tot':0,'eff':0,'pos':0,'neg':0}
-        eff=round((d['pt']*1+d['pos']*0.5-d['neg']*0.5-d['err'])/t*100)
-        pos=round((d['pt']+d['pos'])/t*100)
-        neg=round((d['neg']+d['err'])/t*100)
-        return {'tot':t,'eff':eff,'pos':pos,'neg':neg}
-    def _zona_vacia():
-        return {'total':{'tot':0,'eff':0,'pos':0,'neg':0},'p1':{'tot':0,'eff':0,'pos':0,'neg':0},
-                'p6':{'tot':0,'eff':0,'pos':0,'neg':0},'p5':{'tot':0,'eff':0,'pos':0,'neg':0}}
-    rec_struct={'flotado':{'desde_z1':_zona_vacia(),'desde_z6':_zona_vacia(),'desde_z5':_zona_vacia()},
-                'potencia':{'desde_z1':_zona_vacia(),'desde_z6':_zona_vacia(),'desde_z5':_zona_vacia()}}
+        t=d.get('tot',0)
+        if not t: return {'tot':0,'eff':0,'pos':0,'neg':0,'pt':0,'mas':0,'neu':0,'med':0,'err':0,'ovp':0}
+        # categorías DataVolley: # + ! - / =
+        npt=d.get('#',0); nmas=d.get('+',0); nneu=d.get('!',0)
+        nmed=d.get('-',0); novp=d.get('/',0); nerr=d.get('=',0)
+        eff=round((npt*1 + nmas*0.5 - novp*0.5 - nerr)/t*100)
+        pos=round((npt+nmas)/t*100)
+        neg=round((novp+nerr)/t*100)
+        return {'tot':t,'eff':eff,'pos':pos,'neg':neg,
+                'pt':npt,'mas':nmas,'neu':nneu,'med':nmed,'ovp':novp,'err':nerr}
+    def _tipo_vacio():
+        return {'P1':_celda({}),'P6':_celda({}),'P5':_celda({}),'total':_celda({})}
+    rec_struct={'flotado':_tipo_vacio(),'potencia':_tipo_vacio()}
     TIPO_MAP={'M':'flotado','H':'flotado','Q':'potencia','T':'potencia'}
-    ZMAP={'1':'desde_z1','6':'desde_z6','5':'desde_z5'}
-    PMAP={'1':'p1','6':'p6','5':'p5'}
     rec=P.get('_rec',{})
     tiene_rec=False
-    for tp,od in rec.items():
-        tkey=TIPO_MAP.get(tp); 
+    # acumuladores de total por tipo
+    _acc={'flotado':{'tot':0,'#':0,'+':0,'!':0,'-':0,'/':0,'=':0},
+          'potencia':{'tot':0,'#':0,'+':0,'!':0,'-':0,'/':0,'=':0}}
+    for tp,pd in rec.items():
+        tkey=TIPO_MAP.get(tp)
         if not tkey: continue
-        for orig,pd in od.items():
-            zkey=ZMAP.get(orig)
-            if not zkey: continue
-            # acumular total de la zona
-            ztot={'tot':0,'pt':0,'pos':0,'neg':0,'err':0}
-            for pos,d in pd.items():
-                pkey=PMAP.get(pos)
-                if pkey:
-                    rec_struct[tkey][zkey][pkey]=_celda(d)
-                    tiene_rec=True
-                for kk in ztot: ztot[kk]+=d.get(kk,0)
-            rec_struct[tkey][zkey]['total']=_celda(ztot)
+        for Pp,d in pd.items():
+            if Pp not in ('P1','P6','P5'): continue
+            rec_struct[tkey][Pp]=_celda(d)
+            tiene_rec=True
+            for kk in _acc[tkey]: _acc[tkey][kk]+=d.get(kk,0)
+    rec_struct['flotado']['total']=_celda(_acc['flotado'])
+    rec_struct['potencia']['total']=_celda(_acc['potencia'])
     return {'saques':saques,'ataques':ataques,'recepcion':rec_struct if tiene_rec else {}}
 
 def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025/26'):
