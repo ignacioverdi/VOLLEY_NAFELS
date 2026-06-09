@@ -1331,6 +1331,8 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
             sflo=calc_match_skill(acts['s_flo'],'s'); spot=calc_match_skill(acts['s_pot'],'s')
             aso=calc_match_skill(acts['a_so'],'a'); atr=calc_match_skill(acts['a_tr'],'a')
             bk=sum(1 for x in acts['b'] if x['effect']=='#'); bp=sum(1 for x in acts['b'] if x['effect']=='+')
+            bExc=sum(1 for x in acts['b'] if x['effect']=='!'); bSl=sum(1 for x in acts['b'] if x['effect']=='/')
+            bNeg=sum(1 for x in acts['b'] if x['effect']=='-'); bErr=sum(1 for x in acts['b'] if x['effect']=='=')
             bT=len(acts['b']); bEff=round((bk+bp)/bT*100) if bT else 0
             if s['T']+r['T']+a['T']+bT<1: continue
             _p = players.get(pn,{})
@@ -1343,7 +1345,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
                 'rFlo':_blk(rflo),'rPot':_blk(rpot),
                 'aT':a['T'],'aEff':a['Eff'],'aPunto':a['Punto'],'aPos':a['Pos'],'aNeg':a['Neg'],'aErr':a['Err'],'aAdm':a['Adm'],'aVend':a['Vend'],
                 'aSo':_blk(aso),'aTr':_blk(atr),
-                'bT':bT,'bPt':bk,'bPtPos':bp,'bEff':bEff})
+                'bT':bT,'bPt':bk,'bPtPos':bp,'bEff':bEff,'bAdm':bExc,'bVend':bSl,'bNeg':bNeg,'bErr':bErr})
         historial.append({'fecha':'/'.join(reversed(g['date'].split('-'))),'tipo':'P','rival':g['rival'],
             'resultado':{'nafels':g['tsets'],'rival':g['rsets'],'sets':g['set_strings']},'jugadores':jugs})
 
@@ -1489,6 +1491,32 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
     _trans_acum = build_transicion_data(_arm_acum_rallies, _arm_acum_names) if _arm_acum_rallies else {'titular':None,'suplente':None}
     pjs += 'const PARTIDOS_TRANSICION = ' + json.dumps(_trans_acum, ensure_ascii=False) + ';\n'
     with open(os.path.join(output_dir,'datos_partidos.js'),'w',encoding='utf-8') as f: f.write(pjs)
+
+    # ── datos_recepcion.js (para recepcion.html / heatmaps) — desde partidos_jug ──
+    # Solo receptores (puntas + líberos). Formato: {NOMBRE:{num,pos,acumulado:{flotado,potencia}}}
+    def _rc_celda(c):
+        # c tiene tot,eff,pos,neg,pt,mas,neu,med,ovp,err  →  formato recepcion.html
+        return {'tot':c.get('tot',0),'eff':c.get('eff',0),'pos':c.get('pos',0),
+                'neg':c.get('neg',0),'err':c.get('err',0),'perf':c.get('pt',0)}
+    def _rc_zona(z):
+        return {'p1':_rc_celda(z.get('P1',{})),'p6':_rc_celda(z.get('P6',{})),'p5':_rc_celda(z.get('P5',{}))}
+    def _rc_tipo(t):
+        return {'desde_z1':_rc_zona(t.get('desde_z1',{})),'desde_z6':_rc_zona(t.get('desde_z6',{})),'desde_z5':_rc_zona(t.get('desde_z5',{}))}
+    recep_data={}
+    for pj in partidos_jug:
+        rec=pj.get('recepcion') or {}
+        if not (rec.get('flotado') or rec.get('potencia')): continue
+        pos=(pj.get('pos') or '').upper()
+        if pos not in ('PUNTA','LIBERO'): continue  # solo receptores
+        nombre=pj['nombre'].split(' ',1)[-1].upper() if ' ' in pj['nombre'] else pj['nombre'].upper()
+        # quitar el numero inicial del nombre si lo tiene
+        partes=pj['nombre'].split()
+        nombre=(partes[1] if len(partes)>1 and partes[0].isdigit() else partes[0]).upper()
+        recep_data[nombre]={'num':pj['num'],'pos':pos,
+            'acumulado':{'flotado':_rc_tipo(rec.get('flotado',{})),'potencia':_rc_tipo(rec.get('potencia',{}))},
+            'por_rival':{}}
+    rjs='window.RECEPCION_RIVAL_DATA = '+json.dumps(recep_data,ensure_ascii=False,indent=2)+';\n'
+    with open(os.path.join(output_dir,'datos_recepcion.js'),'w',encoding='utf-8') as f: f.write(rjs)
 
     return len(historial), len(games)
 

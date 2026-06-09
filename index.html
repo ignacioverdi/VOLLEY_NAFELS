@@ -1033,7 +1033,8 @@ function buildFixture(){
         ? new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]), 21, 0, 0).getTime()
         : 0;
       var jugado = !!m.resultado || ts < Date.now();
-      var res = (m.sets_casla && m.sets_rival) ? m.sets_casla+'-'+m.sets_rival : (m.resultado||'');
+      var _sn=(m.sets_nafels!==undefined?m.sets_nafels:m.sets_casla);
+      var res = (_sn!==undefined && m.sets_rival!==undefined) ? _sn+'-'+m.sets_rival : (m.resultado||'');
       fixture.push({
         num: i+1,
         rival: m.rival,
@@ -1272,7 +1273,8 @@ function pinSkip(){
 function updateResultados(){
   if(typeof PARTIDOS_META === 'undefined') return;
   PARTIDOS_META.forEach(function(m){
-    if(!m.sets_casla || !m.sets_rival) return;
+    var _sn2=(m.sets_nafels!==undefined?m.sets_nafels:m.sets_casla);
+    if(_sn2===undefined || m.sets_rival===undefined) return;
     var rival = (m.rival||'').toUpperCase();
     // Find card by rival name
     var card = document.querySelector('[data-rival="'+rival+'"]');
@@ -1280,7 +1282,7 @@ function updateResultados(){
     // Check if result already shown
     if(card.querySelector('.auto-result')) return;
     // Build result
-    var casla = parseInt(m.sets_casla);
+    var casla = parseInt(m.sets_nafels!==undefined?m.sets_nafels:m.sets_casla);
     var riv   = parseInt(m.sets_rival);
     var win   = casla > riv;
     var color = win ? '#22c55e' : '#ef4444';
