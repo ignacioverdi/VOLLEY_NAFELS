@@ -613,9 +613,69 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
     return len(LIGA['teams'])
 
 
+def _build_armador_page(team, slug, display, rivals_list, SUBS, template_dir, output_dir):
+    """Genera armador_<slug>.html usando _tpl_armador.html y los rallies de setters del equipo."""
+    import os, re as re2
+    rallies = _ARM_RALLIES_BY_TEAM.get(team, {})
+    names   = _ARM_NAMES_BY_TEAM.get(team, {})
+    if not rallies: return
+    src_path = os.path.join(template_dir, '_tpl_armador.html')
+    if not os.path.exists(src_path):
+        for cand in ['armador_nafels.html','armador_amriswil.html']:
+            cp = os.path.join(output_dir, cand)
+            if os.path.exists(cp): src_path = cp; break
+        else: return
+    with open(src_path, encoding='utf-8') as f: html = f.read()
+
+    # Construir el RAW del armador con el mismo formato que la plantilla:
+    # s = [rival_idx, game_idx, set_num, moment, atype, call_idx, setter_pos, rec_quality, atk_combo_idx, atk_result, atk_dest, atk_pos]
+    ATK_C = ATK_COMBOS
+    ATK_CI = {c:i for i,c in enumerate(ATK_C)}
+    CALL_LIST = ['K1','K7','KM','K2','KC','KP','KE','KB','KO','KS']
+    CALL_I = {c:i for i,c in enumerate(CALL_LIST)}
+    RES_I  = {'#':0,'+':1,'-':2,'/':3,'=':4,'!':5}
+    REC_I  = {'#':0,'+':1,'!':2,'-':3,'/':4,'=':5}
+    rival_idx = {r:i for i,r in enumerate(rivals_list)}
+    def _mom(setn):
+        return 0  # 'early' por defecto (no usamos momento)
+    setters_raw = {}
+    # top-2 por volumen
+    ranked = sorted(rallies.items(), key=lambda x:-len(x[1]))[:2]
+    for sn, rl in ranked:
+        rows = []
+        for r in rl:
+            rows.append([
+                rival_idx.get(r.get('rival',''),0), 0, r.get('set_num',1), 0,
+                0 if r.get('atype')=='r' else 1,                       # atype: SO si rec, TR resto
+                CALL_I.get(r.get('call',''), -1),
+                r.get('setter_pos',0),
+                REC_I.get(r.get('rec_quality','?'), 6) if r.get('rec_quality') in REC_I else 6,
+                ATK_CI.get(r.get('atk_combo',''), -1),
+                RES_I.get(r.get('atk_result',''), -1) if r.get('atk_result') in RES_I else -1,
+                r.get('atk_dest',0) or 0,
+                0,
+            ])
+        setters_raw[str(sn)] = {'name': names.get(sn, str(sn)), 'num': sn, 's': rows}
+    raw_data = {'rivals': rivals_list, 'games': [], 'atk_combos': ATK_C, 'setters': setters_raw}
+
+    for old, new in SUBS: html = html.replace(old, new)
+    new_raw = 'var RAW=' + json.dumps(raw_data, ensure_ascii=False) + ';'
+    old_raw = re2.search(r'var RAW=\{.*?\};', html, re2.DOTALL)
+    if old_raw: html = html[:old_raw.start()] + new_raw + html[old_raw.end():]
+    html = apply_heatmap_safety_fixes(html)
+    with open(os.path.join(output_dir, f'armador_{slug}.html'), 'w', encoding='utf-8') as f:
+        f.write(html)
+
+
+# Globales para pasar rallies de armadores a build_heatmaps (se setean en main)
+_ARM_RALLIES_BY_TEAM = {}
+_ARM_NAMES_BY_TEAM = {}
+
 def build_heatmaps(teams_data, template_dir='.', output_dir='.', temporada_filter=None):
-    """Build ataque/saque/recepcion heatmaps for each NLA team."""
-    for team in NLA_TEAMS:
+    """Build ataque/saque/recepcion/armador heatmaps for each NLA team."""
+    # Procesar el equipo principal primero: sus páginas sirven de plantilla (fallback) para los demás
+    _orden = [MAIN_TEAM] + [t for t in NLA_TEAMS if t != MAIN_TEAM]
+    for team in _orden:
         td = teams_data.get(team, {})
         if not td: continue
 
@@ -663,23 +723,38 @@ def build_heatmaps(teams_data, template_dir='.', output_dir='.', temporada_filte
                 rec_players[num_str]={'name':name,'num':num,'rtypes':rt_list,'r':rows}
 
         display = team.upper()
+        cap = team  # nombre tal cual (ej. 'Chenois', 'St Gallen')
         SUBS=[('CASLA VOLEY',f'{display} VOLEY'),('CASLA Voley',f'{display} Voley'),
               ('San Lorenzo',display),('SAN LORENZO',display),
+              # La plantilla es de Nafels: reemplazar también esas menciones por el club destino
+              ('NAFELS — ANALISIS', f'{display} — ANALISIS'),
+              ('NÄFELS — ANALISIS', f'{display} — ANALISIS'),
+              ('— Nafels 2026', f'— {cap} 2026'),('— Näfels 2026', f'— {cap} 2026'),
+              ('NAFELS VOLEY', f'{display} VOLEY'),
               ('División de Honor 2026','NLA Suiza'),('División de Honor','NLA Suiza'),
               ('DHM 2026','NLA 2025/26'),('<script src="chat.js"></script>',''),
               ('ataque_casla.html',f'ataque_{slug}.html'),
               ('saque_casla.html',f'saque_{slug}.html'),
               ('recepcion_casla.html',f'recepcion_{slug}.html'),
               ('armador_casla.html',f'armador_{slug}.html'),
+              ('ataque_nafels.html',f'ataque_{slug}.html'),
+              ('saque_nafels.html',f'saque_{slug}.html'),
+              ('recepcion_nafels.html',f'recepcion_{slug}.html'),
+              ('armador_nafels.html',f'armador_{slug}.html'),
               ("'casla_role'","'liga_role'"),("'casla_pin_skip'","'liga_pin_skip'")]
 
         for skill, src, raw_data, out in [
-            ('ataque',    'casla_src_ataque_casla.html',    {**BASE,'players':atk_players}, f'ataque_{slug}.html'),
-            ('saque',     'casla_src_saque_casla.html',     {**BASE,'players':srv_players}, f'saque_{slug}.html'),
-            ('recepcion', 'casla_src_recepcion_casla.html', {**BASE,'players':rec_players}, f'recepcion_{slug}.html'),
+            ('ataque',    '_tpl_ataque.html',    {**BASE,'players':atk_players}, f'ataque_{slug}.html'),
+            ('saque',     '_tpl_saque.html',     {**BASE,'players':srv_players}, f'saque_{slug}.html'),
+            ('recepcion', '_tpl_recepcion.html', {**BASE,'players':rec_players}, f'recepcion_{slug}.html'),
         ]:
             src_path = os.path.join(template_dir, src)
-            if not os.path.exists(src_path): continue
+            if not os.path.exists(src_path):
+                # fallback: usar una página ya existente del mismo tipo como plantilla
+                for cand in ([f'{skill}_nafels.html', f'{skill}_amriswil.html']):
+                    cp = os.path.join(output_dir, cand)
+                    if os.path.exists(cp): src_path = cp; break
+                else: continue
             with open(src_path, encoding='utf-8') as f: html = f.read()
             for old, new in SUBS: html = html.replace(old, new)
             import re as re2
@@ -690,7 +765,10 @@ def build_heatmaps(teams_data, template_dir='.', output_dir='.', temporada_filte
             out_path = os.path.join(output_dir, out)
             with open(out_path, 'w', encoding='utf-8') as f: f.write(html)
 
-        print(f"  ✓ {team}: 3 heatmaps")
+        # ── ARMADOR por club (usa la plantilla _tpl_armador y los rallies de setters) ──
+        _build_armador_page(team, slug, display, rivals_list, SUBS, template_dir, output_dir)
+
+        print(f"  ✓ {team}: heatmaps (ataque/saque/recepción/armado)")
 
 # ── BUILD STATS TABLE ─────────────────────────────────────────────
 def build_stats_table(players, teams, output_path='nla_stats_table.html'):
@@ -1565,6 +1643,18 @@ if __name__ == '__main__':
     print("   └────────────────────────────────────────────────────┘")
     print("   Si algun armador/libero esta mal, avisa para ajustar.")
 
+    # Preparar datos de armadores por equipo para las páginas por club
+    _ARM_RALLIES_BY_TEAM.clear(); _ARM_NAMES_BY_TEAM.clear()
+    for t,sd in rallies.items():
+        _ARM_RALLIES_BY_TEAM[t] = {int(sn):rl for sn,rl in sd.items()}
+    for team, td in teams_data.items():
+        nm = {}
+        for ns, pd in td.items():
+            info = pd.get('info') or {}
+            try: nm[int(ns)] = info.get('name', ns)
+            except: pass
+        _ARM_NAMES_BY_TEAM[team] = nm
+
     # Step 4: Build liga_data.js (universal heatmaps + game plan)
     print("\n4. Building liga_data.js (sistema universal)...")
     # Canonical combos: collect all combos that appear, in canonical order
@@ -1592,6 +1682,16 @@ if __name__ == '__main__':
     print("\n6. Building datos_partidos.js...")
     generate_team_pages_data(args.dvw_dir, MAIN_TEAM, args.output_dir, args.temporada)
     print("   \u2713 datos_partidos.js")
+
+    # Step 7: Páginas por club (ataque/saque/recepción/armado) — para que NINGÚN botón de 404
+    print("\n7. Building club heatmap pages (ataque/saque/recepcion/armador por equipo)...")
+    try:
+        build_heatmaps(teams_data, template_dir=args.template_dir, output_dir=args.output_dir, temporada_filter=None)
+        print("   \u2713 páginas por club generadas")
+    except Exception as e:
+        import traceback
+        print(f"   (heatmaps por club: {e})")
+        traceback.print_exc()
 
     print(f"\n{'='*60}")
     print(f"\u2713 LISTO — {len(games_log)} partidos en la base")
