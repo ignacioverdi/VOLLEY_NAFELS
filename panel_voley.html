@@ -1334,6 +1334,7 @@ if(st&&st!=='all'){cT=st;['bt-all','bt-M','bt-Q','bt-F','bt-X','bt-V','bt-C','bt
 render();
 // Reload inteligente: pausa si TV o Podio estan activos
 function smartReload(){
+  if(window.__LIVE_SCOUT) return;  // scouteo en vivo en pagina: no recargar (borraria la sesion)
   const podioOpen=document.getElementById('podio').classList.contains('open');
   const tablaOpen=document.getElementById('tabla').classList.contains('open');
   const objOpen=document.getElementById('obj').style.display==='block';
@@ -1620,5 +1621,6 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
+<script src="scout_vivo.js" onerror="void 0"></script>
 </body>
 </html>
