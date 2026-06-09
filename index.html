@@ -1384,7 +1384,13 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
       var title=document.getElementById('gp-title');
       var desc=document.getElementById('gp-desc');
       var badge=document.getElementById('gp-badge');
-      if(card) card.href='game_plan.html?rival='+F.proximo.slug;
+      // Actualiza TODAS las tarjetas de game plan (hay mas de una con id card-gameplan):
+      // enlace al rival del PROXIMO partido + badge "vs XXX".
+      document.querySelectorAll('#card-gameplan').forEach(function(c){
+        if(c.tagName==='A') c.href='game_plan.html?rival='+F.proximo.slug;
+        var bb=c.querySelector('.card-badge');
+        if(bb && /^\s*vs\s+/i.test(bb.textContent)) bb.textContent='vs '+F.proximo.rival.toUpperCase();
+      });
       if(title) title.textContent='Game Plan vs '+F.proximo.rival;
       var f=F.proximo.fecha ? F.proximo.fecha.split('-').reverse().join('/') : '';
       var cond=F.proximo.cond?(' · '+F.proximo.cond):'';

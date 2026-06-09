@@ -5,31 +5,27 @@
    datos_entrenamientos.js (y de datos_historial_ent.js /
    datos_recepcion_ent.js si la pagina los usa).
 
-   En modo entrenamiento la pagina NO carga datos_partidos.js,
-   asi que aca exponemos las variables PARTIDOS_* (las que el
-   codigo de cada pagina ya usa) tomando los valores de las
-   ENTRENAMIENTOS_*. El codigo de las paginas no se toca:
-   simplemente "ve" los datos de entrenamiento bajo el nombre
-   que ya conoce.
-
-   Asignamos sobre el objeto global (window). Como en este modo
-   NO existe ninguna 'const PARTIDOS_*' (datos_partidos.js no se
-   cargo), las referencias sueltas a PARTIDOS_* de cada pagina
-   resuelven a estas propiedades globales.
+   datos_entrenamientos.js declara las variables como
+   'const ENTRENAMIENTOS_*' (alcance lexico global): se leen por
+   nombre suelto, NO como window.ENTRENAMIENTOS_* (una const NO
+   es propiedad de window). Por eso aca las leemos por nombre y
+   las exponemos como window.PARTIDOS_* (asi las referencias
+   sueltas a PARTIDOS_* de cada pagina resuelven a estos valores,
+   ya que en este modo datos_partidos.js no se cargo).
    ============================================================ */
-(function (G) {
-  function pick(name, def) { return (typeof G[name] !== 'undefined') ? G[name] : def; }
+(function () {
+  window.PARTIDOS_GENERADO   = (typeof ENTRENAMIENTOS_GENERADO   !== 'undefined') ? ENTRENAMIENTOS_GENERADO   : '';
+  window.PARTIDOS_TOTAL      = (typeof ENTRENAMIENTOS_TOTAL      !== 'undefined') ? ENTRENAMIENTOS_TOTAL      : 0;
+  window.PARTIDOS_META       = (typeof ENTRENAMIENTOS_META       !== 'undefined') ? ENTRENAMIENTOS_META       : [];
+  window.PARTIDOS_JUGADORES  = (typeof ENTRENAMIENTOS_JUGADORES  !== 'undefined') ? ENTRENAMIENTOS_JUGADORES  : [];
+  window.PARTIDOS_INDIVIDUAL = (typeof ENTRENAMIENTOS_INDIVIDUAL !== 'undefined') ? ENTRENAMIENTOS_INDIVIDUAL : [];
+  window.PARTIDOS_EQUIPO_OBJ = (typeof ENTRENAMIENTOS_EQUIPO_OBJ !== 'undefined') ? ENTRENAMIENTOS_EQUIPO_OBJ : {};
+  window.PARTIDOS_ARMADOR    = (typeof ENTRENAMIENTOS_ARMADOR    !== 'undefined') ? ENTRENAMIENTOS_ARMADOR    : {};
+  window.PARTIDOS_TRANSICION = (typeof ENTRENAMIENTOS_TRANSICION !== 'undefined') ? ENTRENAMIENTOS_TRANSICION : {};
+  window.PARTIDOS_VIDEOS     = (typeof ENTRENAMIENTOS_VIDEOS     !== 'undefined') ? ENTRENAMIENTOS_VIDEOS     : [];
 
-  G.PARTIDOS_GENERADO   = pick('ENTRENAMIENTOS_GENERADO',   '');
-  G.PARTIDOS_TOTAL      = pick('ENTRENAMIENTOS_TOTAL',      0);
-  G.PARTIDOS_META       = pick('ENTRENAMIENTOS_META',       []);
-  G.PARTIDOS_JUGADORES  = pick('ENTRENAMIENTOS_JUGADORES',  []);
-  G.PARTIDOS_INDIVIDUAL = pick('ENTRENAMIENTOS_INDIVIDUAL', []);
-  G.PARTIDOS_EQUIPO_OBJ = pick('ENTRENAMIENTOS_EQUIPO_OBJ', {});
-  G.PARTIDOS_ARMADOR    = pick('ENTRENAMIENTOS_ARMADOR',    {});
-  G.PARTIDOS_TRANSICION = pick('ENTRENAMIENTOS_TRANSICION', {});
-  G.PARTIDOS_VIDEOS     = pick('ENTRENAMIENTOS_VIDEOS',     []);
-
-  if (G.HISTORIAL_DATA_ENT)       G.HISTORIAL_DATA       = G.HISTORIAL_DATA_ENT;
-  if (G.RECEPCION_RIVAL_DATA_ENT) G.RECEPCION_RIVAL_DATA = G.RECEPCION_RIVAL_DATA_ENT;
-})(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));
+  try {
+    if (window.HISTORIAL_DATA_ENT)       window.HISTORIAL_DATA       = window.HISTORIAL_DATA_ENT;
+    if (window.RECEPCION_RIVAL_DATA_ENT) window.RECEPCION_RIVAL_DATA = window.RECEPCION_RIVAL_DATA_ENT;
+  } catch (e) {}
+})();

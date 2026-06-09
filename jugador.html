@@ -10,11 +10,16 @@
 <script src="game_plans.js" onerror="void 0"></script>
 <script src="datos_equipo.js" onerror="void 0"></script>
 <script src="objetivos_config.js" onerror="void 0"></script>
-<script src="datos_partidos.js" onerror="void 0"></script>
-<script src="datos_entrenamientos.js" onerror="void 0"></script>
+<!-- VB: selector PARTIDO/ENTRENAMIENTO - carga los datos segun el modo elegido -->
+<script>(function(){var ent=false;try{ent=(localStorage.getItem('vb_modo')||'partido')==='entrenamiento';}catch(e){}
+function w(s){document.write('<scr'+'ipt src="'+s+'" onerror="void 0"><\/scr'+'ipt>');}
+if(ent){ w('datos_entrenamientos.js'); w('datos_historial_ent.js'); w('adapter_entrenamiento.js'); }
+else   { w('datos_partidos.js'); w('datos_historial.js'); }
+})();</script>
+<script src="modo_toggle.js" onerror="void 0"></script>
 <script src="firebase.js" onerror="void 0"></script>
 <script src="lang.js" onerror="void 0"></script>
-<script src="datos_historial.js" onerror="window.HISTORIAL_DATA=null"></script>
+<!-- datos_historial.js: lo carga el selector de modo (arriba) -->
 <script src="datos_gameplan.js" onerror="window.GAMEPLAN_DATA=null"></script>
 <script src="datos_prep_fisica.js" onerror="window.PREP_DATA=null"></script>
 
@@ -167,7 +172,7 @@ window.OBJETIVOS_CONFIG = {metas:{
 }};
 
 // Estado global (una sola fuente de verdad)
-window._objTipo    = 'partido';      // 'partido' | 'entrenamiento'
+window._objTipo    = (function(){try{return localStorage.getItem('vb_modo')==='entrenamiento'?'entrenamiento':'partido';}catch(e){return 'partido';}})();  // sigue el modo global (vb_modo)
 window._objPartido = 'acumulado';    // 'acumulado' | nombre del partido
 window._objNombre  = '';             // nombre del jugador actual
 
@@ -633,8 +638,8 @@ function cambiarJugador(){
 // ── INIT ──
 if(jugador){
   renderHero(jugador);
-  window._objTipo='partido'; window._objPartido='acumulado'; window._objNombre=jugador.nombre;
-  var tipoRow=document.getElementById('obj-tipo-row'); if(tipoRow) tipoRow.style.display='flex';
+  window._objTipo=(function(){try{return localStorage.getItem('vb_modo')==='entrenamiento'?'entrenamiento':'partido';}catch(e){return 'partido';}})(); window._objPartido='acumulado'; window._objNombre=jugador.nombre;
+  var tipoRow=document.getElementById('obj-tipo-row'); if(tipoRow) tipoRow.style.display='none'; // modo lo controla la barra global
   objBuildSubfiltro();
   objRenderBaterias();
   renderQuickStats(jugador);
