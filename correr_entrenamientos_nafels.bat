@@ -63,8 +63,10 @@ echo  ==================================================
 echo     ARCHIVOS PARA SUBIR A GITHUB:
 echo  ==================================================
 echo.
-if exist liga_data_entrenamientos.js echo     - liga_data_entrenamientos.js  (datos para heatmaps)
-if exist stats_entrenamiento.js echo     - stats_entrenamiento.js  (datos para tabla de stats)
+if exist liga_data_entrenamientos.js echo     - liga_data_entrenamientos.js   (heatmaps hm_* en modo ENTRENAMIENTO)
+if exist datos_entrenamientos.js     echo     - datos_entrenamientos.js       (pagina del jugador - modo ENTRENAMIENTO)
+if exist datos_historial_ent.js      echo     - datos_historial_ent.js        (linea de tiempo)
+if exist datos_recepcion_ent.js      echo     - datos_recepcion_ent.js
 echo.
 echo     Subilos al repo junto a los heatmaps y la tabla.
 echo     El selector PARTIDO/ENTRENAMIENTO usa estos archivos.

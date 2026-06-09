@@ -6,8 +6,14 @@
 <title>Ataques — Nafels Voley</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="datos_equipo.js" onerror="void 0"></script>
-<script src="datos_partidos.js" onerror="void 0"></script>
-<script src="datos_historial.js" onerror="void 0"></script>
+<!-- VB: selector PARTIDO/ENTRENAMIENTO - carga los datos segun el modo elegido -->
+<script>(function(){var ent=false;try{ent=(localStorage.getItem('vb_modo')||'partido')==='entrenamiento';}catch(e){}
+function w(s){document.write('<scr'+'ipt src="'+s+'" onerror="void 0"><\/scr'+'ipt>');}
+if(ent){ w('datos_entrenamientos.js'); w('datos_historial_ent.js'); w('adapter_entrenamiento.js'); }
+else   { w('datos_partidos.js'); w('datos_historial.js'); }
+})();</script>
+<script src="modo_toggle.js" onerror="void 0"></script>
+<!-- datos_historial.js: lo carga el selector de modo (arriba) -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#07080f;--card:#0d0e1a;--card2:#111220;--border:rgba(255,255,255,.06);--amber:#f59e0b;--indigo:#818cf8;--green:#22c55e;--red:#ef4444;--orange:#f97316;--mut:#475569;--txt:#e2e8f0;}
