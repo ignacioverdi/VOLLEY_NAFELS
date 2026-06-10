@@ -81,6 +81,11 @@
   }
   function inc(arr, val){ if (val>=1 && val<=6){ arr[val-1]++; arr[6]++; } }
 
+  // ── Captura de acciones ya interpretadas (para exportar a DVW) ────────────
+  //    Sólo captura durante rebuild() (replay del log), no en la validación.
+  var ACCIONES = [], CAPTURAR = false;
+  function pushAccion(o){ if (CAPTURAR) ACCIONES.push(o); }
+
   // ── Procesar UNA entrada (puede traer varias acciones separadas por coma) ─
   //    Devuelve {estado:'OK'|'REVISAR', aplicadas:N}
   function procesarEntrada(VD, codigo){
@@ -112,6 +117,7 @@
             if (isNum(camErr)){
               var je = findOrCreate(VD, parseInt(camErr,10));
               inc(je['s'+sT], 6); inc(je.sT, 6);
+              pushAccion({c:parseInt(camErr,10),k:'S',t:sT,v:6,combo:'',orig:0,dest:0});
               aplicadas++;
             }
           } else {
@@ -140,6 +146,7 @@
             var js = findOrCreate(VD, parseInt(sk_cam,10));
             inc(js['s'+sk_tipo], sv); inc(js.sT, sv);
             if (sk_orig>0){ js.sOrig=String(sk_orig); js.sDest=String(sk_dest||''); }
+            pushAccion({c:parseInt(sk_cam,10),k:'S',t:sk_tipo,v:sv,combo:'',orig:sk_orig,dest:sk_dest});
             aplicadas++;
           }
           sk_hay=false; sk_orig=0; sk_dest=0;
@@ -167,6 +174,7 @@
     if (!isNum(num)) return false;
     var j = findOrCreate(VD, parseInt(num,10));
     inc(j['r'+tipo], val); inc(j.rT, val);
+    pushAccion({c:parseInt(num,10),k:'R',t:tipo,v:val,combo:'',orig:0,dest:0});
     return true;
   }
 
@@ -208,6 +216,7 @@
     if (toque && val===1){
       inc(j['a'+cat+'T'], 1); inc(j.aTT, 1);
     }
+    pushAccion({c:cam,k:'A',t:cat,v:val,combo:dv4,orig:zorig,dest:dest,toque:!!toque});
     return true;
   }
 
@@ -219,6 +228,7 @@
     if (!isNum(num)) return false;
     var j = findOrCreate(VD, parseInt(num,10));
     inc(j.bT, val);
+    pushAccion({c:parseInt(num,10),k:'B',t:'',v:val,combo:'',orig:0,dest:0});
     return true;
   }
 
@@ -232,7 +242,9 @@
 
   function rebuild(){
     var VD = freshVoley();
+    ACCIONES = []; CAPTURAR = true;
     SES.log.forEach(function(e){ procesarEntrada(VD, e.codigo); });
+    CAPTURAR = false;
     VD.ts = ahoraHHMM();
     window.VOLEY_DATA = VD;
   }
@@ -282,7 +294,9 @@
   }
   function descargarSesion(){
     rebuild();
-    var sesion = { fecha: SES.fecha, tipo: 'E', generado: new Date().toISOString(), log: SES.log, voley_data: window.VOLEY_DATA };
+    var roster = window.VOLEY_DATA.j.map(function(p){ return {c:p.c, n:p.n}; });
+    var sesion = { fecha: SES.fecha, tipo: 'E', generado: new Date().toISOString(),
+                   log: SES.log, acciones: ACCIONES, roster: roster, voley_data: window.VOLEY_DATA };
     descargar('entrenamiento_vivo_'+SES.fecha+'.json', JSON.stringify(sesion, null, 2));
     // además: datos_voley.js por si querés usarlo en el panel estático
     descargar('datos_voley.js', 'window.VOLEY_DATA='+JSON.stringify(window.VOLEY_DATA)+';');
@@ -373,15 +387,111 @@
     inp.focus();
   }
 
+  // ── UI: solapa GUÍA (botón en el header + panel a pantalla completa) ──────
+  function chipsDV4(cat){
+    return Object.keys(DV4_CAT).filter(function(k){return DV4_CAT[k]===cat;})
+      .map(function(k){return '<span class="sv-g-chip">'+k+'</span>';}).join('');
+  }
+  function cerrarGuia(){ var o=document.getElementById('sv-guia'); if(o) o.style.display='none'; var i=document.getElementById('sv-input'); if(i) i.focus(); }
+  function abrirGuia(){ var o=document.getElementById('sv-guia'); if(o) o.style.display='flex'; }
+  function construirGuia(){
+    if (document.getElementById('sv-guia-btn')) return;
+    var css=document.createElement('style');
+    css.textContent =
+      '#sv-guia{display:none;position:fixed;inset:0;z-index:100001;background:rgba(4,4,10,.86);'+
+      'align-items:flex-start;justify-content:center;overflow:auto;padding:24px 14px 120px;'+
+      "font-family:'Barlow Condensed',system-ui,sans-serif}"+
+      '#sv-guia .card{background:#0d0e1a;border:1px solid rgba(255,255,255,.1);border-top:3px solid #e8192c;'+
+      'border-radius:14px;max-width:920px;width:100%;margin:auto;box-shadow:0 20px 60px rgba(0,0,0,.6)}'+
+      '#sv-guia .ghead{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;'+
+      'border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;background:#0d0e1a;border-radius:14px 14px 0 0}'+
+      '#sv-guia .ghead h2{margin:0;color:#fff;font-size:22px;font-weight:800;letter-spacing:1px}'+
+      '#sv-guia .gclose{background:rgba(255,255,255,.08);color:#cbd5e1;border:none;border-radius:8px;cursor:pointer;font-size:15px;font-weight:800;padding:7px 13px}'+
+      '#sv-guia .gbody{padding:8px 20px 20px}'+
+      '#sv-guia .sec{margin-top:18px}'+
+      '#sv-guia .sec h3{color:#e8192c;font-size:15px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin:0 0 6px}'+
+      '#sv-guia .sec p{color:#cbd5e1;font-size:15px;margin:4px 0;line-height:1.5}'+
+      '#sv-guia code{font-family:ui-monospace,Menlo,Consolas,monospace;background:#070710;border:1px solid rgba(255,255,255,.12);color:#7dd3fc;padding:2px 7px;border-radius:6px;font-size:14px}'+
+      '#sv-guia .ej{font-family:ui-monospace,Menlo,Consolas,monospace;background:#070710;border:1px solid rgba(34,197,94,.3);color:#22c55e;padding:2px 7px;border-radius:6px;font-size:14px;font-weight:700}'+
+      '#sv-guia .vrow{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}'+
+      '#sv-guia .vchip{background:#11121f;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:6px 10px;font-size:14px;color:#cbd5e1}'+
+      '#sv-guia .vchip b{font-family:monospace;font-size:16px;margin-right:2px}'+
+      '#sv-guia .sv-g-chip{display:inline-block;font-family:monospace;font-size:13px;font-weight:700;background:#11121f;'+
+      'border:1px solid rgba(255,255,255,.12);color:#e2e8f0;border-radius:6px;padding:3px 8px;margin:3px}'+
+      '#sv-guia .note{background:rgba(232,25,44,.08);border:1px solid rgba(232,25,44,.3);border-radius:10px;'+
+      'padding:10px 14px;margin-top:8px;color:#fca5a5;font-size:14px;line-height:1.6}';
+    document.head.appendChild(css);
+
+    var hr=document.querySelector('header .hright')||document.querySelector('.hright');
+    if(hr){
+      var b=document.createElement('button');
+      b.className='hbtn'; b.id='sv-guia-btn';
+      b.innerHTML='&#128214; Guía';
+      b.style.cssText='background:rgba(168,85,247,.14);color:#c084fc;border-color:rgba(168,85,247,.4)';
+      b.addEventListener('click',abrirGuia);
+      var ref=hr.querySelector('button'); if(ref) hr.insertBefore(b,ref); else hr.appendChild(b);
+    }
+
+    var ov=document.createElement('div'); ov.id='sv-guia';
+    ov.innerHTML =
+      '<div class="card">'+
+        '<div class="ghead"><h2>&#128214; Guía de scouteo en vivo</h2>'+
+          '<button class="gclose" id="sv-guia-close">&#10005; Cerrar</button></div>'+
+        '<div class="gbody">'+
+        '<div class="sec"><h3>Cómo se arma un código</h3>'+
+          '<p><code>fundamento + tipo + camiseta + valoración</code></p>'+
+          '<p>Tipeás el código y apretás Enter. Una acción por código; si cargás varias juntas, separalas con coma.</p></div>'+
+        '<div class="sec"><h3>Valoración (la última letra)</h3>'+
+          '<div class="vrow">'+
+            '<span class="vchip"><b style="color:#22c55e">u</b> # perfecto / punto</span>'+
+            '<span class="vchip"><b style="color:#86efac">i</b> + positivo</span>'+
+            '<span class="vchip"><b style="color:#f59e0b">p</b> ! neutral</span>'+
+            '<span class="vchip"><b style="color:#fb923c">o</b> - negativo</span>'+
+            '<span class="vchip"><b style="color:#f87171">j</b> / vendida o bloqueada</span>'+
+            '<span class="vchip"><b style="color:#dc2626">k</b> = error</span>'+
+          '</div></div>'+
+        '<div class="sec"><h3>Saque</h3>'+
+          '<p><code>s + tipo + camiseta + zona-origen + zona-destino</code></p>'+
+          '<p>Tipo: <code>m</code> flotado · <code>q</code> potencia · <code>f</code> máquina. El saque se puntúa SOLO con la recepción que viene después (misma entrada, separada con coma). Si es error directo, terminá en <code>k</code>.</p>'+
+          '<p>Ej: <span class="ej">sm1415,rm14i</span> — saque flotado del 14 (zona 1&#8594;5) y el 14 recibió positivo.</p></div>'+
+        '<div class="sec"><h3>Recepción</h3>'+
+          '<p><code>r + tipo + camiseta + valoración</code></p>'+
+          '<p>Ej: <span class="ej">rm14i</span> — el 14 recibió flotado, positivo.</p></div>'+
+        '<div class="sec"><h3>Ataque — simple</h3>'+
+          '<p><code>a + tipo + camiseta + valoración</code> &nbsp; Tipo: <code>x</code> rápida · <code>v</code> alta · <code>c</code> central.</p>'+
+          '<p>Ej: <span class="ej">ax14u</span> rápida punto · <span class="ej">av7o</span> alta negativo · <span class="ej">ax14ut</span> con toque.</p></div>'+
+        '<div class="sec"><h3>Ataque — combinaciones DV4</h3>'+
+          '<p><code>a + código + camiseta + valoración + zona-destino</code> &nbsp;(+ <code>t</code> al final si fue toque).</p>'+
+          '<p>Ej: <span class="ej">aX114u7</span> — el 14, combinación X1 (central), punto, a la zona 7. Con toque: <span class="ej">aX114u7t</span>.</p>'+
+          '<p style="color:#94a3b8;margin-top:10px">Centrales:</p><div>'+chipsDV4('C')+'</div>'+
+          '<p style="color:#94a3b8;margin-top:8px">Altas:</p><div>'+chipsDV4('V')+'</div>'+
+          '<p style="color:#94a3b8;margin-top:8px">Rápidas:</p><div>'+chipsDV4('X')+'</div></div>'+
+        '<div class="sec"><h3>Bloqueo</h3>'+
+          '<p><code>b + camiseta + valoración</code></p>'+
+          '<p>Ej: <span class="ej">b12u</span> — bloqueo punto del 12.</p></div>'+
+        '<div class="sec"><h3>Teclas</h3>'+
+          '<p><code>Enter</code> carga la acción · escribí <code>z</code> + Enter para deshacer · <b style="color:#38bdf8">NUEVA</b> empieza una sesión limpia · <b style="color:#22c55e">GUARDAR</b> baja la sesión del día (con fecha).</p></div>'+
+        '<div class="sec"><h3>Importante</h3>'+
+          '<div class="note">El <b>toque</b> (<code>t</code>) va SIEMPRE al final, después de la zona destino: <span class="ej">aX114u7t</span> (no <code>aX114ut7</code>).<br>'+
+          'Las combinaciones DV4 necesitan camiseta de <b>2 dígitos</b> para reconocerse (igual que en el Excel). Para números de un dígito usá el formato simple <span class="ej">ax9u</span>.</div></div>'+
+        '</div>'+
+      '</div>';
+    document.body.appendChild(ov);
+    ov.addEventListener('click',function(ev){ if(ev.target===ov) cerrarGuia(); });
+    document.addEventListener('keydown',function(ev){ if(ev.key==='Escape') cerrarGuia(); });
+    var x=document.getElementById('sv-guia-close'); if(x) x.addEventListener('click',cerrarGuia);
+  }
+
   // ── Arranque ──────────────────────────────────────────────────────────────
   function iniciar(){
     window.__LIVE_SCOUT = true;            // frena el polling de datos_voley.js
     cargarLS(hoyISO());                    // retoma la sesión de hoy si existe
     construirUI();
+    construirGuia();
     refrescarPanel();
     renderLog();
     // expongo utilidades por si las querés desde consola / integración
-    window.SCOUT = { agregar:agregar, deshacer:deshacer, sesion:function(){return SES;}, rebuild:rebuild };
+    window.SCOUT = { agregar:agregar, deshacer:deshacer, sesion:function(){return SES;}, rebuild:rebuild, acciones:function(){return ACCIONES;} };
   }
   if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', iniciar);
   else iniciar();
