@@ -477,7 +477,7 @@ function renderObjetivosJugador(cid,nombre,extra){
   <div class="htit">Stats <span>Voley</span></div>
   <div style="display:flex;gap:6px">
     <a href="historial_voley.html" style="font-size:9px;color:#5a5a72;letter-spacing:1.5px;text-decoration:none;text-transform:uppercase;padding:4px 10px;border:1px solid rgba(255,255,255,.06);border-radius:6px;transition:all .15s" onmouseover="this.style.borderColor='rgba(255,255,255,.15)';this.style.color='#eeeef5'" onmouseout="this.style.borderColor='rgba(255,255,255,.06)';this.style.color='#5a5a72'">Historial</a>
-    <a href="game_plan_amriswil.html" style="font-size:9px;color:#5a5a72;letter-spacing:1.5px;text-decoration:none;text-transform:uppercase;padding:4px 10px;border:1px solid rgba(255,255,255,.06);border-radius:6px;transition:all .15s" onmouseover="this.style.borderColor='rgba(255,255,255,.15)';this.style.color='#eeeef5'" onmouseout="this.style.borderColor='rgba(255,255,255,.06)';this.style.color='#5a5a72'">Game Plan</a>
+    <a href="game_plan.html?rival=amriswil" style="font-size:9px;color:#5a5a72;letter-spacing:1.5px;text-decoration:none;text-transform:uppercase;padding:4px 10px;border:1px solid rgba(255,255,255,.06);border-radius:6px;transition:all .15s" onmouseover="this.style.borderColor='rgba(255,255,255,.15)';this.style.color='#eeeef5'" onmouseout="this.style.borderColor='rgba(255,255,255,.06)';this.style.color='#5a5a72'">Game Plan</a>
   </div>
   <div id="lang-wrap" style="display:flex;align-items:center;gap:4px;margin-left:8px"></div>
   <div class="live">En vivo</div>
@@ -507,9 +507,9 @@ function renderObjetivosJugador(cid,nombre,extra){
   <span class="flbl">Fund.</span>
   <button class="fb on" id="bf-all" onclick="setF('all',this)">Todos</button>
   <button class="fb" id="bf-R" onclick="setF('R',this)">Recepcion</button>
-  <button class="fb" id="bf-S" onclick="setF('S',this)">Saque</button>
-  <button class="fb" id="bf-A" onclick="setF('A',this)">Ataque</button>
-  <button class="fb" id="bf-B" onclick="setF('B',this)">Bloqueo</button>
+  <button class="fb" id="bf-S" onclick="setF('S',this)"><span data-t="fund_saque">Saque</span></button>
+  <button class="fb" id="bf-A" onclick="setF('A',this)"><span data-t="fund_ataque">Ataque</span></button>
+  <button class="fb" id="bf-B" onclick="setF('B',this)"><span data-t="fund_bloqueo">Bloqueo</span></button>
   <div class="fsep"></div>
   <span class="flbl">Tipo</span>
   <button class="fb on" id="bt-all" onclick="setT('all',this)">Todos</button>
@@ -518,7 +518,7 @@ function renderObjetivosJugador(cid,nombre,extra){
   <button class="fb" id="bt-F" onclick="setT('F',this)">Maquina</button>
   <button class="fb" id="bt-X" onclick="setT('X',this)">Rapida</button>
   <button class="fb" id="bt-V" onclick="setT('V',this)">Alta</button>
-  <button class="fb" id="bt-C" onclick="setT('C',this)">Central</button>
+  <button class="fb" id="bt-C" onclick="setT('C',this)"><span data-t="pos_central">Central</span></button>
   <div class="fsep"></div>
   <button class="fb tq" id="bt-T" onclick="setT('T',this)">&#x25CF; Toque</button>
 </div>
@@ -1484,7 +1484,7 @@ document.getElementById('cancha-modal').addEventListener('click',function(e){if(
   <div class="cancha-modal-legend">
     <div class="cml-item"><div class="cml-dot" style="background:#00bfff"></div>Rápida</div>
     <div class="cml-item"><div class="cml-dot" style="background:#ff3030"></div>Alta</div>
-    <div class="cml-item"><div class="cml-dot" style="background:#ff8c00"></div>Central</div>
+    <div class="cml-item"><div class="cml-dot" style="background:#ff8c00"></div><span data-t="pos_central">Central</span></div>
     <div class="cml-item"><div class="cml-dot" style="background:#ff8c00"></div>1° zona</div>
     <div class="cml-item"><div class="cml-dot" style="background:#a855f7"></div>2° zona</div>
   </div>
@@ -1622,5 +1622,6 @@ function closeJugDetail(){
   document.body.style.overflow = '';
 }</script>
 <script src="scout_vivo.js" onerror="void 0"></script>
+<script src="temporadas_menu.js"></script>
 </body>
 </html>

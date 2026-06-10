@@ -74,6 +74,8 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
 </style>
 </head>
 <body>
+<div class="header-right" style="position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
+
 <div class="header">
   <div>
     <div class="subtitle">Volley Nafels — Análisis Liga</div>
@@ -100,7 +102,7 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
     <select id="f-temporada"><option value="">Todas</option></select>
   </div>
   <div class="filter-group">
-    <span class="filter-label">Posición</span>
+    <span class="filter-label"><span data-t="g_posicion">Posición</span></span>
     <select id="f-pos">
       <option value="">Todas</option>
       <option>PUNTA</option><option>OPUESTO</option><option>CENTRAL</option>
@@ -130,7 +132,7 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
   <div class="table-wrap">
     <table id="players-table">
       <thead><tr>
-        <th data-col="name">Jugador</th>
+        <th data-col="name"><span data-t="g_jugador">Jugador</span></th>
         <th data-col="team">Equipo</th>
         <th data-col="pos_label">Pos</th>
         <th data-col="atk_tot" class="col-group-atk">ATK</th>
@@ -332,4 +334,6 @@ document.querySelectorAll('thead th[data-col]').forEach(function(th){
 
 function render(){renderTeams();renderPlayers();}
 render();
-</script></body></html>
+</script><script src="lang.js"></script>
+<script src="temporadas_menu.js"></script>
+</body></html>

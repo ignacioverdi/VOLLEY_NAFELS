@@ -343,7 +343,7 @@ select, select option {
 <div class="modal-overlay" id="modal">
   <div class="modal-box">
     <div class="modal-hdr">
-      <div class="modal-title" id="modal-title">Análisis</div>
+      <div class="modal-title" id="modal-title"><span data-t="g_analisis">Análisis</span></div>
       <button class="modal-close" onclick="closeModal()">✕ Cerrar</button>
     </div>
     <div class="modal-info" id="modal-info"></div>
@@ -3285,7 +3285,7 @@ document.addEventListener('click', function(e){
     <div style="width:5px;height:5px;border-radius:50%;background:#818cf8;flex-shrink:0"></div>
   </div>
   <div onclick="document.getElementById('seccion-armador').scrollIntoView({behavior:'smooth'})" style="display:flex;align-items:center;gap:7px;cursor:pointer;padding:5px 9px;border-radius:7px;background:rgba(13,14,26,.92);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(10px)">
-    <span style="font-size:8px;color:#f59e0b;letter-spacing:1.5px;font-weight:700;text-transform:uppercase">Armador</span>
+    <span style="font-size:8px;color:#f59e0b;letter-spacing:1.5px;font-weight:700;text-transform:uppercase"><span data-t="pos_armador">Armador</span></span>
     <div style="width:5px;height:5px;border-radius:50%;background:#f59e0b;flex-shrink:0"></div>
   </div>
   <div onclick="document.getElementById('anchor-juego').scrollIntoView({behavior:'smooth'})" style="display:flex;align-items:center;gap:7px;cursor:pointer;padding:5px 9px;border-radius:7px;background:rgba(13,14,26,.92);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(10px)">
@@ -3321,5 +3321,6 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
+<script src="temporadas_menu.js"></script>
 </body>
 </html>

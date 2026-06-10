@@ -105,6 +105,8 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 </style>
 </head>
 <body>
+<div class="header-right" style="position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
+
 <div class="page-header">
   <div style="display:flex;align-items:center;gap:8px;">
     <a href="dashboard.html" class="back-btn">← Dashboard</a>
@@ -131,15 +133,15 @@ select, select option{color:#111 !important;background-color:#fff !important;}
   <div id="obj-partido-row" style="display:none;gap:5px;flex-wrap:wrap;margin-bottom:10px;padding:0 4px"></div>
   <div id="objetivos-jugador" style="margin-bottom:20px"></div>
 
-  <div class="section-lbl" style="margin-bottom:12px;">Acceso rápido</div>
+  <div class="section-lbl" style="margin-bottom:12px;"><span data-t="acceso_rapido">Acceso rápido</span></div>
   <div class="accesos-grid" id="accesos-grid"></div>
 
   <div id="comparativa-section" style="display:none;padding:0 0 20px">
-    <div class="section-lbl" style="margin-bottom:12px">Comparativa vs Equipo y Posición</div>
+    <div class="section-lbl" style="margin-bottom:12px"><span data-t="j_comparativa">Comparativa vs Equipo y Posición</span></div>
     <div id="comparativa-content"></div>
   </div>
 
-  <div class="section-lbl">Estadísticas acumuladas</div>
+  <div class="section-lbl"><span data-t="j_stats_acum">Estadísticas acumuladas</span></div>
   <div class="stats-grid" id="stats-grid">
     <div style="grid-column:span 3" class="estado-msg">
       <div class="estado-msg-icon">📊</div>
@@ -147,7 +149,7 @@ select, select option{color:#111 !important;background-color:#fff !important;}
     </div>
   </div>
 
-  <div class="section-lbl">Próxima rutina</div>
+  <div class="section-lbl"><span data-t="j_prox_rutina">Próxima rutina</span></div>
   <div class="rutina-card" id="rutina-card">
     <div class="estado-msg"><div class="estado-msg-icon">💪</div><div class="estado-msg-txt">Sin rutina cargada</div></div>
   </div>
@@ -665,5 +667,6 @@ if(jugador){
     <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">División de Honor 2026</div>
   </div>
 </div>
+<script src="temporadas_menu.js"></script>
 </body>
 </html>

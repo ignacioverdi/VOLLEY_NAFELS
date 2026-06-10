@@ -58,6 +58,8 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 <script src="liga_data_entrenamientos.js"></script>
 </head>
 <body>
+<div class="header-right" style="position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
+
 <div class="hdr"><div><div class="hdr-t">SAN LORENZO — ANALISIS DE ARMADO 2026</div><div class="hdr-s">26 partidos NLA · EFF del ataque generado (# - / - =) / total · Todos los filtros son combinables</div></div>
 <div style="display:flex;align-items:center;gap:4px"><button id="lang-es" onclick="setLang('es')" style="background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;padding:3px 9px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;opacity:1">ES</button><button id="lang-en" onclick="setLang('en')" style="background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;padding:3px 9px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;opacity:0.4">EN</button><button id="lang-de" onclick="setLang('de')" style="background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;padding:3px 9px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;opacity:0.4">DE</button></div></div>
 <div class="layout">
@@ -67,12 +69,12 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
     <button id="modo-partido" onclick="setModo('partido')" style="flex:1;background:var(--accent,#e8192c);border:none;color:#fff;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">PARTIDO</button>
     <button id="modo-entrenamiento" onclick="setModo('entrenamiento')" style="flex:1;background:transparent;border:1px solid var(--border2,rgba(255,255,255,.15));color:#94a3b8;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">ENTRENAMIENTO</button>
   </div>
-  <div class="flabel" data-i18n="Jugador">Jugador</div>
+  <div class="flabel" data-i18n="Jugador"><span data-t="g_jugador">Jugador</span></div>
   <select class="psel" id="psel" onchange="onPlayerChange(this.value)"><option value="">Seleccionar...</option></select>
   <div class="active-filters" id="active-tags"></div>
-  <div class="acc-group"><div class="acc-header" id="acc-hdr-partido" onclick="accToggle('partido')"><span>Partido</span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
+  <div class="acc-group"><div class="acc-header" id="acc-hdr-partido" onclick="accToggle('partido')"><span><span data-t="g_partido">Partido</span></span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
   <div class="acc-body" id="acc-body-partido">
-    <div class="flabel" style="margin-top:0" data-i18n="Rival">Rival</div>
+    <div class="flabel" style="margin-top:0" data-i18n="Rival"><span data-t="g_rival">Rival</span></div>
     <select class="fsel" id="fsel-rival"><option value="all">Todos</option></select>
     <div class="flabel" data-i18n="Partido especifico">Partido específico</div>
     <select class="fsel" id="fsel-gi"><option value="all">Todos</option></select>
@@ -748,5 +750,7 @@ function _initModoBtns(){
 document.addEventListener('DOMContentLoaded', _initModoBtns);
 
 </script>
+<script src="lang.js"></script>
+<script src="temporadas_menu.js"></script>
 </body>
 </html>

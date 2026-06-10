@@ -199,6 +199,8 @@ window.OBJETIVOS_CONFIG={metas:{
 </script>
 </head>
 <body>
+<div class="header-right" style="position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
+
 
 <div class="header">
   <a href="dashboard.html" class="back-btn" style="text-decoration:none;padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-right:8px">← Dashboard</a>
@@ -242,7 +244,7 @@ window.OBJETIVOS_CONFIG={metas:{
   </div>
   <div id="vista-individual" style="display:none">
     <div class="player-select" id="player-select-new"></div>
-    <div id="ind-content-new"><div class="empty-msg">Seleccioná un jugador</div></div>
+    <div id="ind-content-new"><div class="empty-msg"><span data-t="selecciona_jugador">Seleccioná un jugador</span></div></div>
   </div>
   <div id="vista-comparar" style="display:none">
     <div style="display:flex;gap:12px;margin-bottom:1rem;flex-wrap:wrap">
@@ -272,7 +274,7 @@ window.OBJETIVOS_CONFIG={metas:{
   <div class="cancha-modal-legend">
     <div class="cml-item"><div class="cml-dot" style="background:#00bfff"></div>Rápida</div>
     <div class="cml-item"><div class="cml-dot" style="background:#ff3030"></div>Alta</div>
-    <div class="cml-item"><div class="cml-dot" style="background:#ff8c00"></div>Central</div>
+    <div class="cml-item"><div class="cml-dot" style="background:#ff8c00"></div><span data-t="pos_central">Central</span></div>
     <div class="cml-item"><div class="cml-dot" style="background:#ff8c00"></div>1° zona</div>
     <div class="cml-item"><div class="cml-dot" style="background:#a855f7"></div>2° zona</div>
   </div>
@@ -1451,5 +1453,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 </script>
 
 <script src="chat_nafels.js"></script>
+<script src="lang.js"></script>
+<script src="temporadas_menu.js"></script>
 </body>
 </html>

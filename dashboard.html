@@ -298,7 +298,7 @@ function dbatRender(cid, jugVals, eqVals){
   var rows=[{label:'Jugador',vals:jugVals,isJug:true},{label:'Equipo',vals:eqVals,isJug:false}];
   var html='<div style="font-family:Barlow Condensed,sans-serif;padding:4px 0 8px">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
-    +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">MI PERFORMANCE VS EQUIPO</div>'
+    +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b"><span data-t="d_mi_perf">MI PERFORMANCE VS EQUIPO</span></div>'
     +'<div style="display:flex;gap:10px;flex-wrap:wrap">'
     +[['#22c55e','Sobre equipo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Bajo equipo']].map(function(x){
       return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
@@ -375,6 +375,8 @@ function dbatBuildSubfiltro(){
 </script>
 </head>
 <body>
+<div class="header-right" style="position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
+
 
 <div class="hdr">
   <div style="display:flex;align-items:center;gap:14px">
@@ -408,7 +410,7 @@ function dbatBuildSubfiltro(){
 <!-- TAB: EQUIPO -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
 <div class="view on" id="view-equipo">
-  <div class="sec-lbl">Resumen del equipo</div>
+  <div class="sec-lbl"><span data-t="d_resumen">Resumen del equipo</span></div>
   <div class="stats-row" id="eq-stats-row" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
   <div class="sub-tabs">
     <button class="stab on" onclick="showEqTab('saque',this)"    >⚡ Saque</button>
@@ -479,7 +481,7 @@ function dbatBuildSubfiltro(){
 <div class="view" id="view-objetivos">
   <div class="sec-lbl">Objetivos del equipo · 2026</div>
   <div id="obj-equipo-panel"></div>
-  <div class="sec-lbl" style="margin-top:28px">Por jugador</div>
+  <div class="sec-lbl" style="margin-top:28px"><span data-t="d_por_jugador">Por jugador</span></div>
   <div class="player-grid" id="obj-jug-grid"></div>
   <div id="obj-jug-panel" style="display:none">
     <div id="obj-jug-hero" style="margin-bottom:12px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--indigo)"></div>
@@ -521,7 +523,7 @@ function dbatBuildSubfiltro(){
 <!-- TAB: GAME PLANS -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
 <div class="view" id="view-gameplans">
-  <div class="sec-lbl">Análisis de Rivales</div>
+  <div class="sec-lbl"><span data-t="d_analisis_rivales">Análisis de Rivales</span></div>
   <div id="gp-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px"></div>
 </div>
 
@@ -697,7 +699,7 @@ function rebuildEqDropdown(){
 }
 
 function renderEqTab(){
-  if(!DATA){document.getElementById('eq-tab-content').innerHTML='<div class="empty">Sin datos cargados</div>';renderEqObjetivos();return;}
+  if(!DATA){document.getElementById('eq-tab-content').innerHTML='<div class="empty"><span data-t="d_sin_datos">Sin datos cargados</span></div>';renderEqObjetivos();return;}
   rebuildEqDropdown();
   renderEqStats();
   renderEqContent();
@@ -929,7 +931,7 @@ function renderEqContent(){
   if(!hasData)html+='<tr><td colspan="20" class="empty">Sin datos</td></tr>';
   var tcells=hasData?cfg.getTot(tot):[];
   html+='<tr style="background:rgba(99,102,241,.06);border-top:2px solid rgba(99,102,241,.2)">'
-    +'<td style="font-size:12px;font-weight:800;letter-spacing:1px;color:var(--indigo)">TOTALES</td>'
+    +'<td style="font-size:12px;font-weight:800;letter-spacing:1px;color:var(--indigo)"><span data-t="d_totales">TOTALES</span></td>'
     +(isAcum?'<td></td>':'')
     +tcells.map(function(c,i){return'<td style="font-size:'+(c.b?'16':'13')+'px;font-weight:'+(c.b?900:700)+';color:'+c.c+';'+(i===0?'border-left:2px solid '+cfg.color+'44':'')+'">'+c.v+'</td>';}).join('')
     +'</tr>';
@@ -956,7 +958,7 @@ function renderDV4(sesiones){
   if(!sorted.length)return'<div class="empty">Sin datos DV4</div>';
   var max=sorted[0][1].tot;
   var html='<div class="tabla-wrap"><table><thead><tr>'
-    +'<th style="text-align:left">Combo</th><th>Distribución</th><th>TOT</th><th style="color:#22c55e">PTS</th><th style="color:#22c55e">PTS%</th><th style="color:#ef4444">ERR</th>'
+    +'<th style="text-align:left">Combo</th><th><span data-t="d_distribucion">Distribución</span></th><th>TOT</th><th style="color:#22c55e">PTS</th><th style="color:#22c55e">PTS%</th><th style="color:#ef4444">ERR</th>'
     +'</tr></thead><tbody>';
   sorted.forEach(function(x,ri){
     var cod=x[0],d=x[1];
@@ -1364,5 +1366,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 </script>
 
 <script src="chat_nafels.js"></script>
+<script src="lang.js"></script>
+<script src="temporadas_menu.js"></script>
 </body>
 </html>

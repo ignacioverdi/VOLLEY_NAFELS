@@ -134,7 +134,7 @@ select,select option{color:#111111!important;background-color:#ffffff!important;
 <div class="main">
   <div id="welcome-screen">
     <div class="welcome-icon">🏋️</div>
-    <div class="welcome-title" data-t="selecciona_jugador">Seleccioná un jugador</div>
+    <div class="welcome-title" data-t="selecciona_jugador"><span data-t="selecciona_jugador">Seleccioná un jugador</span></div>
     <div class="welcome-sub">Cada jugador tiene su rutina personalizada.<br>Registrá tus pesos en cada sesión para seguir tu progreso.</div>
   </div>
 
@@ -544,5 +544,6 @@ document.addEventListener('langChange', function(){
   if(jugadorActivo && semanaActiva) renderRutina(jugadorActivo, semanaActiva);
 });
 </script>
+<script src="temporadas_menu.js"></script>
 </body>
 </html>

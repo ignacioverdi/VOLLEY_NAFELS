@@ -48,6 +48,8 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
 </style>
 </head>
 <body>
+<div class="header-right" style="position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
+
 <div class="hdr">
   <a id="back-jug" href="jugador.html" class="back-btn">← Perfil</a>
   <div style="flex-shrink:0">
@@ -448,5 +450,7 @@ function renderComparativaPosicion(cont, currentNum, type){
   cont.appendChild(section);
 }
 </script>
+<script src="lang.js"></script>
+<script src="temporadas_menu.js"></script>
 </body>
 </html>

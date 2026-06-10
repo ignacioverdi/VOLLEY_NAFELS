@@ -59,6 +59,8 @@ select,select option{color:#111!important;background:#fff!important;}
 </style>
 </head>
 <body>
+<div class="header-right" style="position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
+
 
 <div class="page-header">
   <div style="display:flex;align-items:center;gap:14px;">
@@ -105,7 +107,7 @@ select,select option{color:#111!important;background:#fff!important;}
         </select>
       </div>
       <div class="opt-field">
-        <div class="opt-label">Rival</div>
+        <div class="opt-label"><span data-t="g_rival">Rival</span></div>
         <input type="text" class="opt-input" id="opt-rival" placeholder="Ej: Vélez Sarsfield">
       </div>
       <div class="opt-field">
@@ -131,7 +133,7 @@ select,select option{color:#111!important;background:#fff!important;}
     <table class="tabla-res">
       <thead>
         <tr>
-          <th>#</th><th>Jugador</th>
+          <th>#</th><th><span data-t="g_jugador">Jugador</span></th>
           <th>S Total</th><th>S Eff%</th>
           <th>R Total</th><th>R Eff%</th>
           <th>A Total</th><th>A Eff%</th>
@@ -572,5 +574,7 @@ function showToast(msg){
   setTimeout(function(){ t.classList.remove('show'); }, 2800);
 }
 </script>
+<script src="lang.js"></script>
+<script src="temporadas_menu.js"></script>
 </body>
 </html>
