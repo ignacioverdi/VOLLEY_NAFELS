@@ -19,7 +19,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 :root{--bg:#07080f;--card:#0d0e1a;--card2:#111220;--border:rgba(255,255,255,.06);--amber:#f59e0b;--indigo:#818cf8;--green:#22c55e;--red:#ef4444;--orange:#f97316;--mut:#475569;--txt:#e2e8f0;}
 body{background:#07080f;color:#e2e8f0;font-family:'Barlow Condensed',sans-serif;min-height:100vh;padding:0;margin:0}
 select, select option { color: #111111 !important; background-color: #ffffff !important; }
-.hdr{padding:12px 20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;background:rgba(7,8,15,.9);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);flex-wrap:wrap}
+.hdr{padding:12px 240px 12px 20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;background:rgba(7,8,15,.9);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);flex-wrap:wrap}
 .back-btn{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase;flex-shrink:0}
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
 .fbtn{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;transition:all .15s}
@@ -45,8 +45,6 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
     <div style="font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase">NAFELS VOLEY</div>
   </div>
   <div class="filter-row">
-    <button class="fbtn active-partido" id="btn-partido" onclick="setFiltro('partido')">🏆 PARTIDO</button>
-    <button class="fbtn" id="btn-entrenamiento" onclick="setFiltro('entrenamiento')">🏋️ ENTRENAMIENTO</button>
     <select class="subfiltro-select" id="subfiltro-select" style="display:none"></select>
   </div>
 </div>
@@ -211,8 +209,8 @@ function buildSubfiltro(){
 function updateSfBtns(active){document.querySelectorAll('.sfbtn').forEach(function(b){b.classList.remove('on');});active.classList.add('on');}
 function setFiltro(filtro){
   currentFiltro=filtro;if(filtro==='partido') currentPartido='acumulado';
-  document.getElementById('btn-partido').className='fbtn'+(filtro==='partido'?' active-partido':'');
-  document.getElementById('btn-entrenamiento').className='fbtn'+(filtro==='entrenamiento'?' active-entrenamiento':'');
+  (document.getElementById('btn-partido')||{}).className='fbtn'+(filtro==='partido'?' active-partido':'');
+  (document.getElementById('btn-entrenamiento')||{}).className='fbtn'+(filtro==='entrenamiento'?' active-entrenamiento':'');
   buildSubfiltro();renderPage();
 }
 

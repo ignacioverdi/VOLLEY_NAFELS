@@ -32,7 +32,7 @@ canvas { image-rendering: -webkit-optimize-contrast; }
 .cs-lbl{font-size:7px;color:var(--mut);letter-spacing:.8px;text-transform:uppercase;}
 .no-data-msg{padding:28px;text-align:center;color:var(--mut);font-size:11px;letter-spacing:1px;text-transform:uppercase;grid-column:1/-1;}
 select, select option { color: #111111 !important; background-color: #ffffff !important; }
-.hdr{padding:12px 20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;background:rgba(7,8,15,.9);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);flex-wrap:wrap}
+.hdr{padding:12px 240px 12px 20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;background:rgba(7,8,15,.9);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);flex-wrap:wrap}
 .back-btn{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase;flex-shrink:0}
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
 .fbtn{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;transition:all .15s}
@@ -57,8 +57,6 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
     <div style="font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase">NAFELS VOLEY</div>
   </div>
   <div class="filter-row">
-    <button class="fbtn active-partido" id="btn-partido" onclick="setFiltro('partido')">🏆 PARTIDO</button>
-    <button class="fbtn" id="btn-entrenamiento" onclick="setFiltro('entrenamiento')">🏋️ ENTRENAMIENTO</button>
     <select class="subfiltro-select" id="subfiltro-select" style="display:none"></select>
     <select class="subfiltro-select" id="fase-ataque-select" onchange="setFaseAtaque(this.value)" style="border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.08);color:#818cf8;min-width:auto">
       <option value="todos">🏐 TODOS LOS ATAQUES</option>
@@ -269,8 +267,8 @@ function buildSubfiltro(){
 function updateSfBtns(active){document.querySelectorAll('.sfbtn').forEach(function(b){ b.classList.remove('on'); });active.classList.add('on');}
 function setFiltro(filtro){
   currentFiltro=filtro;if(filtro==='partido') currentPartido='acumulado';
-  document.getElementById('btn-partido').className='fbtn'+(filtro==='partido'?' active-partido':'');
-  document.getElementById('btn-entrenamiento').className='fbtn'+(filtro==='entrenamiento'?' active-entrenamiento':'');
+  (document.getElementById('btn-partido')||{}).className='fbtn'+(filtro==='partido'?' active-partido':'');
+  (document.getElementById('btn-entrenamiento')||{}).className='fbtn'+(filtro==='entrenamiento'?' active-entrenamiento':'');
   buildSubfiltro();renderPage();
 }
 function getJugadorPartido(){
