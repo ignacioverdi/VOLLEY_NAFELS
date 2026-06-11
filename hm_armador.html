@@ -303,6 +303,7 @@ function setterCourtSVG(sets,accentColor,W,H){
   var maxPct=Math.max.apply(null,[2,3,4,5,8,9].map(function(p){return posData[p]?posData[p].pct:0;}))||1;
 
   var s="<svg viewBox='0 0 "+W+" "+H+"' xmlns='http://www.w3.org/2000/svg' style='width:100%;display:block'>";
+  s+="<style>text{pointer-events:none}</style>";
   s+="<rect width='"+W+"' height='"+H+"' fill='rgba(13,14,26,.97)' rx='5'/>";
   s+="<rect x='"+P+"' y='"+P+"' width='"+(W-P*2)+"' height='"+(H-P*2)+"' fill='rgba(184,116,40,.12)' rx='3'/>";
   // Net
@@ -327,7 +328,7 @@ function setterCourtSVG(sets,accentColor,W,H){
     var fillOp=d.pct>0?0.06+(d.pct/maxPct)*0.38:0.03;
     var posCol=POS_COLOR[String(pos)]||'#475569';
 
-    s+="<rect x='"+(x+1)+"' y='"+(y+1)+"' width='"+(w-2)+"' height='"+(h-2)+"' fill='"+posCol+"' opacity='"+fillOp+"' rx='2'/>";
+    s+="<rect x='"+(x+1)+"' y='"+(y+1)+"' width='"+(w-2)+"' height='"+(h-2)+"' fill='"+posCol+"' opacity='"+fillOp+"' rx='2'"+(d.pct>0?" onclick=\"verVideoZona("+pos+")\" style=\"cursor:pointer\"":"")+"/>";
 
     var cx=x+w/2,cy=y+h/2;
     // Pos label tiny top-left
@@ -401,6 +402,8 @@ function sc(label,color,val,sub){
 
 var VSK='Armado';
 function abrirVideo(){ if(typeof equipo!=='undefined'&&equipo&&equipo!=='nafels'){alert('Por ahora el video está disponible solo para Näfels.');return;} if(!F.player){alert('Elegí un armador primero.');return;} window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk='+encodeURIComponent(VSK),'_blank'); }
+function verVideoZona(pos){ if(typeof equipo!=='undefined'&&equipo&&equipo!=='nafels'){alert('Por ahora el video está disponible solo para Näfels.');return;} if(!F.player)return; window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Armado&apos='+pos,'_blank'); }
+function verVideoCall(call){ if(typeof equipo!=='undefined'&&equipo&&equipo!=='nafels'){alert('Por ahora el video está disponible solo para Näfels.');return;} if(!F.player)return; window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Armado&call='+encodeURIComponent(call),'_blank'); }
 // === MAIN RENDER ===
 function render(){
   var content=document.getElementById('content');
@@ -446,7 +449,7 @@ function render(){
   html+='</div>';
 
   // === DISTRIBUCION PRINCIPAL ===
-  html+="<div class='sec'>Distribucion en cancha</div>";
+  html+="<div class='sec'>Distribucion en cancha <span style='text-transform:none;letter-spacing:0;color:#F97316;font-weight:600'>· clickeá un casillero o una llamada para ver el video 🎬</span></div>";
   html+="<div style='background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:18px'>";
 
   // Call distribution bar
@@ -562,6 +565,7 @@ function render(){
       }
       html+="</div>";
 
+      html+="<button onclick=\"event.stopPropagation();verVideoCall('"+call+"')\" style='width:100%;margin-top:4px;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.4);color:#F97316;padding:7px;border-radius:8px;font-family:Barlow Condensed,sans-serif;font-weight:800;font-size:12px;letter-spacing:1px;cursor:pointer'>🎬 VER VIDEO DE "+call+"</button>";
       html+="</div>"; // call-card
     });
     html+="</div>";

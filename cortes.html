@@ -154,7 +154,7 @@
 
   // estado
   var selMatch={}, selPlayers={}, selAct={}, selEval={}, selSet={}, selected={};
-  var fDz=[], fOz=[], fPh="";
+  var fDz=[], fOz=[], fPh="", fCall=[], fApos=[];
   var filtered=[], current=-1, playing=false, looping=false, timer=null, player=null, ready=false, loadedVid='';
 
   // --------- partidos ---------
@@ -247,6 +247,8 @@
       if(fDz.length&&(a.sk!=="Ataque"||fDz.indexOf(a.dz)<0)) return false;
       if(fOz.length&&(a.sk!=="Ataque"||fOz.indexOf(a.oz)<0)) return false;
       if(fPh&&(a.sk!=="Ataque"||a.ph!==fPh)) return false;
+      if(fApos.length&&(a.sk!=="Armado"||fApos.indexOf(a.apos)<0)) return false;
+      if(fCall.length&&(a.sk!=="Armado"||fCall.indexOf(a.call)<0)) return false;
       if(evK.length&&evK.indexOf(a.ev)<0) return false;
       if(stK.length&&stK.indexOf(a.set)<0) return false;
       return true;
@@ -339,7 +341,7 @@
     $('fPlayers').addEventListener('click',function(e){var c=e.target.closest('[data-p]');if(!c)return;var n=c.dataset.p;selPlayers[n]=!selPlayers[n];rebuildAll();});
     $('fEval').addEventListener('click',function(e){var c=e.target.closest('[data-ev]');if(!c)return;var v=c.dataset.ev;if(selEval[v])delete selEval[v];else selEval[v]=1;c.classList.toggle('on');apply();});
     $('fSet').addEventListener('click',function(e){var c=e.target.closest('[data-set]');if(!c)return;var v=c.dataset.set;if(selSet[v])delete selSet[v];else selSet[v]=1;c.classList.toggle('on');apply();});
-    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';rebuildAll();});
+    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';fCall=[];fApos=[];rebuildAll();});
     $('btnPlay').addEventListener('click',togglePlay);
     $('btnNext').addEventListener('click',function(){if(ready)next();});
     $('btnPrev').addEventListener('click',prev);
@@ -377,11 +379,14 @@
     // preset desde URL (?num=6&sk=Ataque&combo=X5) — usado por el botón "Ver video" de los heatmaps
     var Q=new URLSearchParams(location.search);
     var pNum=Q.get('num'), pSk=Q.get('sk'), pCombo=Q.get('combo'), pEv=Q.get('ev');
-    var pDz=Q.get('dz'), pOz=Q.get('oz'), pPh=Q.get('ph');
+    var pDz=Q.get('dz'), pOz=Q.get('oz'), pPh=Q.get('ph'), pCall=Q.get('call'), pApos=Q.get('apos');
     if(pDz) fDz=pDz.split(',').map(Number);
     if(pOz) fOz=pOz.split(',').map(Number);
     if(pPh) fPh=pPh;
+    if(pApos) fApos=pApos.split(',').map(Number);
+    if(pCall) fCall=pCall.split(',');
     if((pDz||pOz||pPh)&&!pSk) pSk='Ataque';
+    if((pCall||pApos)&&!pSk) pSk='Armado';
     if(pNum){ pNum.split(',').forEach(function(x){x=(''+x).replace(/[^0-9]/g,'');if(x)selPlayers[x.padStart(2,'0')]=true;}); }
     if(pEv){ pEv.split(',').forEach(function(e){if(e)selEval[e]=1;}); }
     bind(); rebuildAll();
@@ -399,7 +404,7 @@
       var sk=skName[pSk.toUpperCase()]||pSk, any=false;
       Object.keys(selAct).forEach(function(k){var pp=k.split('|');var on=(pp[0]===sk)&&(!pCombo||pCombo.split(',').indexOf(pp[1])>=0);selAct[k]=on;if(on)any=true;});
       if(any){ buildActionTree(); $('ddPanel').classList.add('open'); apply(); }
-      var fl=[]; if(fDz.length)fl.push('zona destino '+fDz.join('/')); if(fOz.length)fl.push('zona origen '+fOz.join('/')); if(fPh)fl.push('fase '+(fPh==='SO'?'Side-Out':'Transición'));
+      var fl=[]; if(fDz.length)fl.push('zona destino '+fDz.join('/')); if(fOz.length)fl.push('zona origen '+fOz.join('/')); if(fPh)fl.push('fase '+(fPh==='SO'?'Side-Out':'Transición')); if(fApos.length)fl.push('armado a zona '+fApos.join('/')); if(fCall.length)fl.push('llamada '+fCall.join('/'));
       if(fl.length) $('sub').textContent='Filtrado por '+fl.join(' · ')+' · '+filtered.length+' clip(s)';
     }
     loadYT();

@@ -107,31 +107,31 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   function pct(n,t){ return t>0?Math.round(n/t*100):0; }
 
   function courtSVG(origZ,destZ,total){
-    var W=180,H=150,P=5,CW=(W-P*2)/3,CH=(H/2-P)/3;
+    var W=180,H=218,P=5,BAND=13,CH=32,CW=(W-P*2)/3;
     var RIVAL=[[1,6,5],[9,8,7],[2,3,4]], OWN=[[4,3,2],[7,8,9],[5,6,1]];
     var maxO=Math.max.apply(null,Object.values(origZ).concat([1])), maxD=Math.max.apply(null,Object.values(destZ).concat([1]));
     var s="<svg viewBox='0 0 "+W+" "+H+"' xmlns='http://www.w3.org/2000/svg' style='width:100%;display:block'>";
     s+="<style>text{pointer-events:none}</style>";
     s+="<rect width='"+W+"' height='"+H+"' fill='rgba(13,14,26,.97)' rx='8'/>";
-    s+="<rect x='"+P+"' y='"+P+"' width='"+(W-P*2)+"' height='"+(H/2-P)+"' fill='rgba(232,25,44,.04)' rx='3'/>";
-    s+="<rect x='"+P+"' y='"+(H/2)+"' width='"+(W-P*2)+"' height='"+(H/2-P)+"' fill='rgba(34,197,94,.04)' rx='3'/>";
+    s+="<rect x='"+P+"' y='"+BAND+"' width='"+(W-P*2)+"' height='"+(H/2-BAND)+"' fill='rgba(232,25,44,.04)' rx='3'/>";
+    s+="<rect x='"+P+"' y='"+(H/2)+"' width='"+(W-P*2)+"' height='"+(H/2-BAND)+"' fill='rgba(34,197,94,.04)' rx='3'/>";
     s+="<rect x='"+P+"' y='"+(H/2-1.5)+"' width='"+(W-P*2)+"' height='3' fill='rgba(255,255,255,.35)' rx='1.5'/>";
     RIVAL.forEach(function(row,ri){ row.forEach(function(zone,ci){
-      var cnt=origZ[zone]||0,x=P+ci*CW,y=P+ri*CH, op=cnt>0?0.12+(cnt/maxO)*0.78:0.03;
+      var cnt=origZ[zone]||0,x=P+ci*CW,y=BAND+ri*CH, op=cnt>0?0.12+(cnt/maxO)*0.78:0.03;
       s+="<rect x='"+(x+1.5)+"' y='"+(y+1.5)+"' width='"+(CW-3)+"' height='"+(CH-3)+"' fill='#E8192C' opacity='"+op+"' rx='3'"+(cnt>0?" onclick=\"verZona("+zone+",'oz')\" style=\"cursor:pointer\"":"")+"/>";
-      if(cnt>0){ s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+3)+"' font-family='Bebas Neue,sans-serif' font-size='13' fill='white' text-anchor='middle'>"+cnt+"</text>";
-        if(total>0)s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+12)+"' font-size='6' fill='rgba(255,255,255,.55)' text-anchor='middle'>"+pct(cnt,total)+"%</text>"; }
-      s+="<text x='"+(x+3.5)+"' y='"+(y+9)+"' font-size='6' fill='rgba(255,255,255,.22)'>"+zone+"</text>";
+      if(cnt>0){ s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+4)+"' font-family='Bebas Neue,sans-serif' font-size='15' fill='white' text-anchor='middle'>"+cnt+"</text>";
+        if(total>0)s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+13)+"' font-size='6.5' fill='rgba(255,255,255,.6)' text-anchor='middle'>"+pct(cnt,total)+"%</text>"; }
+      s+="<text x='"+(x+4)+"' y='"+(y+9)+"' font-size='6' fill='rgba(255,255,255,.22)'>"+zone+"</text>";
     }); });
     OWN.forEach(function(row,ri){ row.forEach(function(zone,ci){
       var cnt=destZ[zone]||0,x=P+ci*CW,y=H/2+ri*CH, op=cnt>0?0.12+(cnt/maxD)*0.78:0.03;
       s+="<rect x='"+(x+1.5)+"' y='"+(y+1.5)+"' width='"+(CW-3)+"' height='"+(CH-3)+"' fill='#22C55E' opacity='"+op+"' rx='3'"+(cnt>0?" onclick=\"verZona("+zone+",'dz')\" style=\"cursor:pointer\"":"")+"/>";
-      if(cnt>0){ s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+3)+"' font-family='Bebas Neue,sans-serif' font-size='13' fill='white' text-anchor='middle'>"+cnt+"</text>";
-        if(total>0)s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+12)+"' font-size='6' fill='rgba(255,255,255,.55)' text-anchor='middle'>"+pct(cnt,total)+"%</text>"; }
-      s+="<text x='"+(x+3.5)+"' y='"+(y+9)+"' font-size='6' fill='rgba(255,255,255,.18)'>"+zone+"</text>";
+      if(cnt>0){ s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+4)+"' font-family='Bebas Neue,sans-serif' font-size='15' fill='white' text-anchor='middle'>"+cnt+"</text>";
+        if(total>0)s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+13)+"' font-size='6.5' fill='rgba(255,255,255,.6)' text-anchor='middle'>"+pct(cnt,total)+"%</text>"; }
+      s+="<text x='"+(x+4)+"' y='"+(y+9)+"' font-size='6' fill='rgba(255,255,255,.18)'>"+zone+"</text>";
     }); });
-    s+="<text x='"+(W/2)+"' y='"+(P+8)+"' font-size='6' fill='rgba(232,25,44,.6)' text-anchor='middle' font-weight='800' letter-spacing='2'>ATAQUE RIVAL</text>";
-    s+="<text x='"+(W/2)+"' y='"+(H-3)+"' font-size='6' fill='rgba(34,197,94,.55)' text-anchor='middle' font-weight='800' letter-spacing='2'>DESTINO DEFENSA</text>";
+    s+="<text x='"+(W/2)+"' y='10' font-size='6.5' fill='rgba(232,25,44,.7)' text-anchor='middle' font-weight='800' letter-spacing='2'>ATAQUE RIVAL</text>";
+    s+="<text x='"+(W/2)+"' y='"+(H-4)+"' font-size='6.5' fill='rgba(34,197,94,.65)' text-anchor='middle' font-weight='800' letter-spacing='2'>DESTINO DEFENSA</text>";
     s+="</svg>"; return s;
   }
 
