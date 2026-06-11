@@ -586,6 +586,8 @@ function buildRivalSelector(){
     });
     rivals = rivals.concat(Object.keys(rset).sort());
   }
+  if(rivals.length<=1){ sel.style.display='none'; sel.innerHTML=''; return; }
+  sel.style.display='flex';
   sel.innerHTML = '';
   rivals.forEach(function(rv){
     var b = document.createElement('button');

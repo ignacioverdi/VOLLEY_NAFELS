@@ -401,6 +401,7 @@ function dbatBuildSubfiltro(){
   <button class="mtab"     onclick="showTab('prep',this)"       >💪 Prep. Física</button>
   <button class="mtab"     onclick="showTab('armadores',this)" >🎯 Armadores</button>
   <button class="mtab"     onclick="showTab('recepcion',this)" >🛡 Recepción</button>
+  <button class="mtab"     onclick="location.href='hm_ataque.html?equipo=nafels'" >💥 Ataque</button>
   <button class="mtab"     onclick="location.href='hm_defensa.html'" >🧤 Defensa</button>
   <button class="mtab"     onclick="showTab('ranking',this)"  >🏆 Ranking</button>
   <button class="mtab"     onclick="showTab('heatmaps',this)" >🔥 Heat Maps</button>
@@ -765,7 +766,13 @@ function renderEqStats(){
     return html;
   }
 
-  var rectHTML = '<div style="display:grid;grid-template-columns:28fr 28fr 28fr 16fr;gap:8px;margin-bottom:12px">';
+  // Defensa (de datos_video — solo partidos)
+  var dT=0,dPerf=0,dBuena=0,dMala=0,dErr=0;
+  if(window.VIDEO_DATA&&window.VIDEO_DATA.matches){var _M=window.VIDEO_DATA.matches;Object.keys(_M).forEach(function(c){(_M[c].actions||[]).forEach(function(a){if(a.sk!=='Defensa')return;dT++;if(a.ev==='#')dPerf++;else if(a.ev==='+')dBuena++;else if(a.ev==='-')dMala++;else if(a.ev==='=')dErr++;});});}
+  var dEff=dT>0?Math.round((dPerf+0.5*dBuena-0.5*dMala-dErr)/dT*100):null;
+  var dEff_str=dEff!==null?fmt(dEff):'—';
+
+  var rectHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:12px">';
   rectHTML += mkRect('#F59E0B','Saque',[
     {v:sEff_str, l:'EFF', c:'#F59E0B'},
     {v:sT,       l:'Total'},
@@ -787,6 +794,12 @@ function renderEqStats(){
   rectHTML += mkRect('#06B6D4','Bloqueo',[
     {v:bEff_str, l:'EFF #+', c:'#06B6D4'},
     {v:bT,       l:'Total'},
+  ]);
+  rectHTML += mkRect('#EF4444','Defensa',[
+    {v:dEff_str, l:'EFF', c:'#EF4444'},
+    {v:dT,       l:'Total'},
+    {v:dPerf||0, l:'Perfectas', c:'#22c55e'},
+    {v:dErr||0,  l:'Errores', c:'#ef4444'},
   ]);
   rectHTML += '</div>';
 

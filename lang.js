@@ -175,6 +175,154 @@
   }
   window.tr = tr;
 
+  // ═══ MOTOR DE TRADUCCIÓN POR TEXTO (sin necesidad de data-t) ═══════════════
+  //  Traduce cualquier texto en español que esté en este diccionario, incluso
+  //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
+  var PHRASES_EXTRA = {
+    // Generales / navegación
+    'Todos':{en:'All',de:'Alle'}, 'Todas':{en:'All',de:'Alle'},
+    'Total':{en:'Total',de:'Gesamt'}, 'Totales':{en:'Totals',de:'Gesamt'},
+    'Jugador':{en:'Player',de:'Spieler'}, 'Jugadores':{en:'Players',de:'Spieler'},
+    'Equipo':{en:'Team',de:'Mannschaft'}, 'Rival':{en:'Opponent',de:'Gegner'},
+    'Set':{en:'Set',de:'Satz'}, 'Partido':{en:'Match',de:'Spiel'},
+    'Partidos':{en:'Matches',de:'Spiele'}, 'Partido específico':{en:'Specific match',de:'Bestimmtes Spiel'},
+    'Entrenamiento':{en:'Training',de:'Training'}, 'Entrenamientos':{en:'Trainings',de:'Trainings'},
+    'Nombre':{en:'Name',de:'Name'}, 'Tipo':{en:'Type',de:'Typ'},
+    'Contexto':{en:'Context',de:'Kontext'}, 'Objetivo':{en:'Target',de:'Ziel'},
+    'Objetivos':{en:'Targets',de:'Ziele'}, 'Técnico':{en:'Coach',de:'Trainer'},
+    'Análisis':{en:'Analysis',de:'Analyse'}, 'Ranking':{en:'Ranking',de:'Rangliste'},
+    'Resumen':{en:'Summary',de:'Übersicht'}, 'Comparativa':{en:'Comparison',de:'Vergleich'},
+    'Comparar':{en:'Compare',de:'Vergleichen'}, 'Individual':{en:'Individual',de:'Einzeln'},
+    // Fundamentos
+    'Ataque':{en:'Attack',de:'Angriff'}, 'Saque':{en:'Serve',de:'Aufschlag'},
+    'Recepción':{en:'Reception',de:'Annahme'}, 'Recepcion':{en:'Reception',de:'Annahme'},
+    'Bloqueo':{en:'Block',de:'Block'}, 'Defensa':{en:'Defense',de:'Abwehr'},
+    'Armado':{en:'Setting',de:'Zuspiel'}, 'Armador':{en:'Setter',de:'Zuspieler'},
+    'Armadores':{en:'Setters',de:'Zuspieler'}, 'Freeball':{en:'Freeball',de:'Freeball'},
+    'Ataques':{en:'Attacks',de:'Angriffe'}, 'Saques':{en:'Serves',de:'Aufschläge'},
+    'Recepciones':{en:'Receptions',de:'Annahmen'}, 'Armadas':{en:'Sets',de:'Zuspiele'},
+    // Cancha / heatmap
+    'Origen':{en:'Origin',de:'Ursprung'}, 'Propio':{en:'Own',de:'Eigen'},
+    'Destino':{en:'Target',de:'Ziel'}, 'Red':{en:'Net',de:'Netz'}, 'Net':{en:'Net',de:'Netz'},
+    'Cancha':{en:'Court',de:'Feld'}, 'Zona':{en:'Zone',de:'Zone'},
+    'Origen propio':{en:'Own origin',de:'Eigener Ursprung'}, 'Ataque rival':{en:'Opp. attack',de:'Gegner-Angriff'},
+    'Destino defensa':{en:'Defense target',de:'Abwehrziel'}, 'Cancha propia':{en:'Own court',de:'Eigenes Feld'},
+    'Cancha rival':{en:'Opp. court',de:'Gegnerisches Feld'},
+    // Métricas / valoraciones
+    'Eficiencia':{en:'Efficiency',de:'Effizienz'}, 'Valoración':{en:'Rating',de:'Bewertung'},
+    'Puntos':{en:'Points',de:'Punkte'}, 'Punto':{en:'Point',de:'Punkt'},
+    'Errores':{en:'Errors',de:'Fehler'}, 'Error':{en:'Error',de:'Fehler'},
+    'Perfecta':{en:'Perfect',de:'Perfekt'}, 'Buena':{en:'Good',de:'Gut'},
+    'Regular':{en:'Fair',de:'Mittel'}, 'Mala':{en:'Poor',de:'Schwach'},
+    'Positivo':{en:'Positive',de:'Positiv'}, 'Negativo':{en:'Negative',de:'Negativ'},
+    'Neutro':{en:'Neutral',de:'Neutral'}, 'Vendida':{en:'Over',de:'Übergabe'},
+    'Vendidas':{en:'Over',de:'Übergaben'}, 'Kill':{en:'Kill',de:'Kill'},
+    'Flotado':{en:'Float',de:'Flatter'}, 'Potencia':{en:'Power',de:'Sprung'},
+    'Rápida':{en:'Quick',de:'Schnell'}, 'Alta':{en:'High',de:'Hoch'},
+    'Central':{en:'Middle',de:'Mitte'}, 'Cerca':{en:'Close',de:'Nah'},
+    'Side Out':{en:'Side Out',de:'Side Out'}, 'Transición':{en:'Transition',de:'Übergang'},
+    'Transicion':{en:'Transition',de:'Übergang'},
+    'Side Out':{en:'Side Out',de:'Side Out'},
+    // Posiciones
+    'ARMADOR':{en:'SETTER',de:'ZUSPIELER'}, 'OPUESTO':{en:'OPPOSITE',de:'DIAGONAL'},
+    'CENTRAL':{en:'MIDDLE',de:'MITTE'}, 'PUNTA':{en:'OUTSIDE',de:'AUSSEN'},
+    'LIBERO':{en:'LIBERO',de:'LIBERO'}, 'Opuesto':{en:'Opposite',de:'Diagonal'},
+    'Punta':{en:'Outside',de:'Außen'}, 'Líbero':{en:'Libero',de:'Libero'},
+    // Filtros / acciones
+    'Limpiar filtros':{en:'Clear filters',de:'Filter löschen'},
+    'Seleccionar…':{en:'Select…',de:'Auswählen…'}, 'Seleccionar...':{en:'Select...',de:'Auswählen...'},
+    'Seleccioná un jugador':{en:'Select a player',de:'Spieler auswählen'},
+    'Selecciona un jugador':{en:'Select a player',de:'Spieler auswählen'},
+    'Elegí un jugador primero.':{en:'Choose a player first.',de:'Zuerst Spieler wählen.'},
+    'Elegí un armador primero.':{en:'Choose a setter first.',de:'Zuerst Zuspieler wählen.'},
+    'Elegí un jugador para ver su defensa':{en:'Choose a player to see their defense',de:'Spieler wählen, um die Abwehr zu sehen'},
+    'Elegí un partido arriba':{en:'Choose a match above',de:'Spiel oben wählen'},
+    'Elegí dos jugadores para comparar':{en:'Choose two players to compare',de:'Zwei Spieler zum Vergleich wählen'},
+    'Elegí dos jugadores diferentes':{en:'Choose two different players',de:'Zwei verschiedene Spieler wählen'},
+    'Origen de datos':{en:'Data source',de:'Datenquelle'},
+    'Momento del set':{en:'Set moment',de:'Satzzeitpunkt'},
+    'Origen zona':{en:'Origin zone',de:'Ursprungszone'},
+    'Sin datos':{en:'No data',de:'Keine Daten'},
+    'Sin datos aun':{en:'No data yet',de:'Noch keine Daten'},
+    'Sin datos aún':{en:'No data yet',de:'Noch keine Daten'},
+    'Sin datos para los filtros seleccionados':{en:'No data for the selected filters',de:'Keine Daten für die gewählten Filter'},
+    'Sin datos para los filtros elegidos':{en:'No data for the chosen filters',de:'Keine Daten für die gewählten Filter'},
+    'Sin datos de entrenamiento':{en:'No training data',de:'Keine Trainingsdaten'},
+    'Top destinos:':{en:'Top destinations:',de:'Top-Ziele:'},
+    'Distribucion en cancha':{en:'Court distribution',de:'Feldverteilung'},
+    'Distribución en cancha':{en:'Court distribution',de:'Feldverteilung'},
+    'Analisis por llamada':{en:'Analysis by call',de:'Analyse nach Ruf'},
+    'Mapa de defensa':{en:'Defense map',de:'Abwehrkarte'},
+    'Eficiencia por rival':{en:'Efficiency by opponent',de:'Effizienz nach Gegner'},
+    'Evolucion partido a partido':{en:'Match-by-match trend',de:'Spielverlauf'},
+    'Llamadas del colocador':{en:'Setter calls',de:'Stellerrufe'},
+    'TOTALES EQUIPO':{en:'TEAM TOTALS',de:'TEAM GESAMT'},
+    'Sobre equipo':{en:'Above team',de:'Über Team'}, 'Bajo equipo':{en:'Below team',de:'Unter Team'},
+    'acciones filtradas':{en:'filtered actions',de:'gefilterte Aktionen'},
+    'armadas filtradas':{en:'filtered sets',de:'gefilterte Zuspiele'},
+    'defensas mostradas':{en:'shown defenses',de:'gezeigte Abwehren'},
+    'clips filtrados':{en:'filtered clips',de:'gefilterte Clips'},
+    'Inicio:':{en:'Start:',de:'Anfang:'}, 'Final:':{en:'End:',de:'Ende:'},
+    'Inicio':{en:'Start',de:'Anfang'}, 'Final':{en:'End',de:'Ende'},
+    'Velocidad':{en:'Speed',de:'Tempo'}, 'antes':{en:'before',de:'vorher'},
+    'después':{en:'after',de:'nachher'}, 'contacto':{en:'contact',de:'Kontakt'},
+    'Reproducir':{en:'Play',de:'Abspielen'}, 'Anterior':{en:'Previous',de:'Zurück'},
+    'Siguiente':{en:'Next',de:'Weiter'}, 'Marcar todos':{en:'Select all',de:'Alle wählen'},
+    'Limpiar':{en:'Clear',de:'Leeren'}, 'Compartir recorte':{en:'Share clip',de:'Clip teilen'},
+    'Elegir acciones':{en:'Choose actions',de:'Aktionen wählen'},
+    'Elegir partidos':{en:'Choose matches',de:'Spiele wählen'},
+    'Acciones a mostrar':{en:'Actions to show',de:'Anzuzeigende Aktionen'},
+    'Cortes de Video':{en:'Video Clips',de:'Video-Clips'}
+  };
+  var PHRASE_LC = {};
+  (function(){
+    Object.keys(T).forEach(function(k){ var e=T[k]; if(e&&e.es) PHRASE_LC[String(e.es).toLowerCase()]={en:e.en,de:e.de}; });
+    Object.keys(PHRASES_EXTRA).forEach(function(es){ PHRASE_LC[es.toLowerCase()]=PHRASES_EXTRA[es]; });
+  })();
+  function trPhrase(es, lang){
+    var raw=(es||'').trim(); if(!raw) return null;
+    var e=PHRASE_LC[raw.toLowerCase()]; if(!e) return null;
+    var out=e[lang]||raw;
+    if(raw===raw.toUpperCase() && raw!==raw.toLowerCase()) out=out.toUpperCase();
+    return out;
+  }
+  var SKIP_TAGS={SCRIPT:1,STYLE:1,NOSCRIPT:1,TEXTAREA:1,OPTION:0};
+  function translateTextNodes(lang){
+    if(!document.body) return;
+    var walker=document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode:function(n){
+        var p=n.parentNode; if(!p||!p.nodeName) return NodeFilter.FILTER_REJECT;
+        if(SKIP_TAGS[p.nodeName]) return NodeFilter.FILTER_REJECT;
+        if(p.hasAttribute&&p.hasAttribute('data-t')) return NodeFilter.FILTER_REJECT;
+        if(p.closest&&p.closest('#lang-wrap,[data-notr]')) return NodeFilter.FILTER_REJECT;
+        if(!n.nodeValue||!n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var nodes=[],n; while((n=walker.nextNode())) nodes.push(n);
+    nodes.forEach(function(node){
+      var src=(node.__es!=null)?node.__es:node.nodeValue;
+      var key=src.trim();
+      var t=trPhrase(key,lang);
+      if(t===null){ if(node.__es!=null&&node.nodeValue!==node.__es) node.nodeValue=node.__es; return; }
+      if(node.__es==null) node.__es=node.nodeValue;
+      node.nodeValue=(lang==='es')?node.__es:node.__es.replace(key,t);
+    });
+  }
+  window.translateTextNodes=translateTextNodes;
+  var _obs=null,_pend=null;
+  function startObserver(){
+    if(_obs||!window.MutationObserver||!document.body) return;
+    _obs=new MutationObserver(function(){
+      if(_pend) return;
+      _pend=setTimeout(function(){ _pend=null;
+        var lang=getLang(); if(lang==='es') return;
+        _obs.disconnect(); translateTextNodes(lang); _obs.observe(document.body,{childList:true,subtree:true});
+      },200);
+    });
+    _obs.observe(document.body,{childList:true,subtree:true});
+  }
+
   function applyLang(lang){
     document.documentElement.setAttribute('lang', lang);
     // textos
@@ -191,6 +339,8 @@
       var vp = tr(kp, lang);
       if (vp !== null) ph[j].setAttribute('placeholder', vp);
     }
+    // traducir TODO el texto en español (incluye contenido dinámico)
+    try { translateTextNodes(lang); } catch(e){}
     // avisar a otros scripts (ej. menú de temporadas) que cambió el idioma
     try { window.dispatchEvent(new CustomEvent('langchange', { detail:{ lang:lang } })); } catch(e){}
   }
@@ -227,6 +377,7 @@
     var lang = getLang();
     paintSelector(lang);
     applyLang(lang);
+    startObserver();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
