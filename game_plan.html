@@ -2022,11 +2022,13 @@ function renderArmador(){
     panel.appendChild(rotGrid);
 
     if(arm.llamadas&&arm.llamadas.length){
-      var llamLbl=document.createElement('div');llamLbl.style.cssText='font-size:8px;color:#475569;letter-spacing:3px;text-transform:uppercase;padding:10px 18px 5px';llamLbl.textContent='DISTRIBUCIÓN POR LLAMADA (REC # o +)';panel.appendChild(llamLbl);
+      var llamLbl=document.createElement('div');llamLbl.style.cssText='font-size:8px;color:#475569;letter-spacing:3px;text-transform:uppercase;padding:10px 18px 5px';llamLbl.textContent='DISTRIBUCIÓN POR LLAMADA (REC # o +) · TOCÁ UNA LLAMADA →';panel.appendChild(llamLbl);
       var llamGrid=document.createElement('div');llamGrid.style.cssText='display:flex;gap:6px;flex-wrap:wrap;padding:0 18px 14px';
       arm.llamadas.forEach(function(ll){
         var effC=ll.eff===null?'#475569':ll.eff>=50?'#22c55e':ll.eff>=25?'#fbbf24':ll.eff>=0?'#f97316':'#ef4444';
-        var card2=document.createElement('div');card2.style.cssText='background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px 12px;min-width:80px';
+        var card2=document.createElement('a');card2.href='hm_armador.html?equipo='+GP_RIVAL_SLUG+'&call='+ll.call;card2.target='_blank';card2.title='Ver cómo distribuye en '+ll.call+' →';card2.style.cssText='background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px 12px;min-width:80px;text-decoration:none;cursor:pointer;display:block;transition:border-color .15s,background .15s';
+        card2.onmouseover=function(){this.style.borderColor='rgba(232,25,44,.45)';this.style.background='rgba(232,25,44,.06)';};
+        card2.onmouseout=function(){this.style.borderColor='rgba(255,255,255,.08)';this.style.background='rgba(255,255,255,.03)';};
         var topRow=document.createElement('div');topRow.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:5px';
         var callLbl=document.createElement('div');callLbl.style.cssText='font-family:Bebas Neue,sans-serif;font-size:16px;color:'+color;callLbl.textContent=ll.call;
         var effDiv=document.createElement('div');effDiv.style.cssText='font-family:Bebas Neue,sans-serif;font-size:16px;color:'+effC;effDiv.textContent=(ll.eff!==null?ll.eff+'%':'—');

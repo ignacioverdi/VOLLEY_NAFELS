@@ -217,7 +217,7 @@
     'Positivo':{en:'Positive',de:'Positiv'}, 'Negativo':{en:'Negative',de:'Negativ'},
     'Neutro':{en:'Neutral',de:'Neutral'}, 'Vendida':{en:'Over',de:'Übergabe'},
     'Vendidas':{en:'Over',de:'Übergaben'}, 'Kill':{en:'Kill',de:'Kill'},
-    'Flotado':{en:'Float',de:'Flatter'}, 'Potencia':{en:'Power',de:'Sprung'},
+    'Flotado':{en:'Float',de:'Flatter'}, 'Potencia':{en:'Spin',de:'Sprung'},
     'Rápida':{en:'Quick',de:'Schnell'}, 'Alta':{en:'High',de:'Hoch'},
     'Central':{en:'Middle',de:'Mitte'}, 'Cerca':{en:'Close',de:'Nah'},
     'Side Out':{en:'Side Out',de:'Side Out'}, 'Transición':{en:'Transition',de:'Übergang'},

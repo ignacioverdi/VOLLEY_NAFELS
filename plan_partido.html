@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan de Partido — Näfels</title>
+<style>
+  :root{--bg:#07080F;--card:#11162a;--card2:#0d1322;--border:#1e2944;--text:#e8edf7;--mut:#64748b;--mut2:#94a3b8;
+        --saque:#F59E0B;--ataque:#F97316;--recep:#22C55E;--bloqueo:#06B6D4;--defensa:#EF4444;--armado:#818CF8}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',system-ui,sans-serif;padding:20px 16px;max-width:1000px;margin:0 auto}
+  .hdr{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+  .back-btn{color:var(--mut2);text-decoration:none;border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-weight:700;font-size:13px}
+  .ttl{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:1px;line-height:1}
+  .ttl span{color:var(--ataque)}
+  .sub{color:var(--mut2);font-size:13px}
+  .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+  select{background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:9px;padding:9px 13px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer}
+  .printbtn{background:var(--ataque);border:none;color:#1a1206;border-radius:9px;padding:9px 15px;font-family:inherit;font-weight:800;font-size:14px;cursor:pointer}
+  .sheet{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px}
+  .sheet-hd{display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--border);padding-bottom:10px;margin-bottom:14px}
+  .sheet-hd .rival{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px}
+  .sheet-hd .meta{color:var(--mut2);font-size:13px;font-weight:700}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:740px){.grid{grid-template-columns:1fr}}
+  .box{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:13px 15px}
+  .box.full{grid-column:1/-1}
+  .box-t{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.5px;display:flex;align-items:center;gap:7px;margin-bottom:9px}
+  .box-t .ic{width:9px;height:9px;border-radius:2px;display:inline-block}
+  .line{font-size:14px;line-height:1.6;margin:3px 0}
+  .line b{color:#fff}
+  .hl{font-weight:800}
+  .big{font-family:'Bebas Neue',sans-serif;font-size:21px;letter-spacing:.5px}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px}
+  th,td{padding:5px 7px;border-bottom:1px solid var(--border);text-align:center}
+  th{color:var(--mut);font-size:10px;letter-spacing:.5px;text-transform:uppercase;font-weight:700}
+  td.l,th.l{text-align:left}
+  .badge{font-size:10px;font-weight:800;padding:1px 6px;border-radius:5px;letter-spacing:.5px}
+  .b-op{background:rgba(249,115,22,.15);color:var(--ataque)} .b-pu{background:rgba(34,197,94,.15);color:var(--recep)}
+  .b-ce{background:rgba(6,182,212,.15);color:var(--bloqueo)} .b-ar{background:rgba(129,140,248,.15);color:var(--armado)}
+  .tag{display:inline-block;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:2px 7px;font-size:11px;font-weight:700;color:var(--mut2);margin:2px 3px 0 0}
+  .empty{text-align:center;color:var(--mut);padding:50px 20px;font-size:16px}
+  @media print{
+    body{background:#fff;padding:0;max-width:none}
+    .hdr,.toolbar,.back-btn,.printbtn,#sel{display:none!important}
+    .sheet{border:none;border-radius:0;padding:0}
+    .box,.sheet{break-inside:avoid;page-break-inside:avoid}
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  }
+</style>
+</head>
+<body>
+  <div class="hdr">
+    <a href="scouting_rival.html" class="back-btn">← Scouting</a>
+    <div>
+      <div class="ttl">PLAN DE <span>PARTIDO</span></div>
+      <div class="sub">Hoja de ruta del próximo rival — para imprimir y llevar al partido</div>
+    </div>
+  </div>
+  <div class="toolbar">
+    <select id="sel"></select>
+    <button class="printbtn" onclick="window.print()">🖨 Imprimir / PDF</button>
+  </div>
+  <div class="sheet" id="sheet"><div class="empty">Elegí un rival arriba.</div></div>
+
+  <script src="scouting_rival.js"></script>
+  <script>
+  (function(){
+    var S=window.SCOUTING_RIVAL||{};
+    var teams=Object.keys(S).filter(function(t){return S[t].matches>=5;}).sort(function(a,b){return S[b].matches-S[a].matches;});
+    var sel=document.getElementById('sel');
+    sel.innerHTML='<option value="">— Elegí un rival —</option>'+teams.map(function(t){return '<option value="'+t.replace(/"/g,'&quot;')+'">'+t+'</option>';}).join('');
+    sel.addEventListener('change',function(){render(this.value);});
+    function ec(v){return v>=35?'#22c55e':v>=25?'#84cc16':v>=15?'#fbbf24':v>=5?'#f97316':'#ef4444';}
+    function posCls(p){return p==='Opuesto'?'b-op':p==='Punta'?'b-pu':p==='Central'?'b-ce':p==='Armador'?'b-ar':'';}
+    function dirs(p){return (p.dirs||[]).slice(0,3).map(function(d){return 'Z'+d.k+' '+d.pct+'%';}).join(' · ')||'—';}
+    function pel(p){return (p.combos||[]).slice(0,2).map(function(c){return c.k+' '+c.pct+'%';}).join(' · ')||'—';}
+
+    function render(name){
+      var t=S[name], box=document.getElementById('sheet');
+      if(!t){box.innerHTML='<div class="empty">Elegí un rival arriba.</div>';return;}
+      var h='<div class="sheet-hd"><div class="rival">'+name+'</div><div class="meta">'+t.matches+' partidos analizados · NLA</div></div><div class="grid">';
+
+      // SAQUE: a quién y dónde
+      var weak=(t.recep.weak||[]).slice(0,2);
+      var rotsSO=(t.rotations||[]).filter(function(r){return r&&r.so_n>=10;}).sort(function(a,b){return a.so_eff-b.so_eff;});
+      h+='<div class="box"><div class="box-t"><span class="ic" style="background:var(--saque)"></span>SAQUE — a quién romperle</div>';
+      if(weak.length){
+        h+='<div class="line">Sacarle a: '+weak.map(function(w){return '<b>'+w.name+'</b> ('+w.pospct+'% pos)';}).join(' y ')+'</div>';
+      }
+      if(rotsSO.length){
+        var r=rotsSO[0];
+        h+='<div class="line">Rotación más débil en side-out: <b>S'+r.r+'</b> (<span class="hl" style="color:'+ec(r.so_eff)+'">'+r.so_eff+'%</span>)'+(r.front&&r.front.length?' — delante: '+r.front.join(', '):'')+'</div>';
+      }
+      h+='<div class="line" style="color:var(--mut2);font-size:12px">Reciben '+t.recep.pospct+'% positiva como equipo.</div></div>';
+
+      // FUERA DE SISTEMA: su derrumbe
+      var ins=(t.sistema&&t.sistema.insys)||{}, ou=(t.sistema&&t.sistema.outsys)||{};
+      h+='<div class="box"><div class="box-t"><span class="ic" style="background:var(--defensa)"></span>SI LES ROMPÉS LA RECEPCIÓN</div>';
+      if(ins.n&&ou.n){
+        var drop=ins.eff-ou.eff, o2=(ou.dist||[]).slice(0,2);
+        h+='<div class="line">Su eficacia cae <b style="color:#f87171">'+drop+' pts</b> ('+ins.eff+'% → '+ou.eff+'%).</div>';
+        h+='<div class="line">Fuera de sistema va a: '+o2.map(function(d){return '<b>'+d.name+'</b> '+d.pct+'%';}).join(' · ')+'</div>';
+        h+='<div class="line" style="color:var(--mut2);font-size:12px">Cargá el bloqueo a ellos.</div>';
+      } else h+='<div class="line" style="color:var(--mut)">Pocos datos.</div>';
+      h+='</div>';
+
+      // REMATADORES + DIRECCIONES (lo que el jugador tiene que recordar)
+      h+='<div class="box full"><div class="box-t"><span class="ic" style="background:var(--bloqueo)"></span>REMATADORES — cómo bloquearle y defenderle</div>';
+      h+='<table><thead><tr><th class="l">Jugador</th><th class="l">Pos</th><th>EFF</th><th class="l">Su pelota</th><th class="l">Clava en (direcciones)</th></tr></thead><tbody>';
+      (t.attack.players||[]).slice(0,6).forEach(function(p){
+        h+='<tr><td class="l"><b>'+p.name+'</b></td><td class="l"><span class="badge '+posCls(p.pos)+'">'+p.pos+'</span></td>'
+          +'<td style="font-weight:800;color:'+ec(p.eff)+'">'+p.eff+'%</td>'
+          +'<td class="l" style="color:var(--ataque);font-weight:700">'+pel(p)+'</td>'
+          +'<td class="l" style="color:var(--bloqueo);font-weight:700">'+dirs(p)+'</td></tr>';
+      });
+      h+='</tbody></table><div style="font-size:10px;color:var(--mut);margin-top:6px">«Clava en» = zonas de la cancha donde más remata. Z1 derecha · Z6 medio · Z5 izquierda (defensa). Acomodá bloqueo y zaga a esas direcciones.</div></div>';
+
+      // ARMADOR
+      var main=t.set.main||{}, calls=(t.set.calls||[]).slice(0,4);
+      h+='<div class="box full"><div class="box-t"><span class="ic" style="background:var(--armado)"></span>ARMADOR</div>';
+      h+='<div class="line"><b>'+(main.name||'—')+'</b> distribuye el '+(main.pct||0)+'% del juego.';
+      if(calls.length) h+=' Llamadas: '+calls.map(function(c){return '<span class="tag">'+c.k+' '+c.pct+'%</span>';}).join('');
+      h+='</div>';
+      // por zona de recepción (resumen)
+      var bz=t.sistema&&t.sistema.by_zone;
+      if(bz){
+        ['Z1','Z6','Z5'].forEach(function(z){
+          var b=bz[z]; if(!b||!b.n) return;
+          var lbl={Z1:'derecha',Z6:'medio',Z5:'izquierda'}[z];
+          h+='<div class="line" style="font-size:12.5px">Recibe por '+lbl+' ('+z+'): arma a '+(b.dist||[]).slice(0,2).map(function(d){return '<b>'+d.name+'</b> '+d.pct+'%';}).join(', ')+'</div>';
+        });
+      }
+      h+='</div>';
+
+      h+='</div>';
+      box.innerHTML=h;
+    }
+
+    // preset por URL
+    var q=new URLSearchParams(location.search).get('equipo');
+    if(q && S[q]){ sel.value=q; render(q); }
+  })();
+  </script>
+</body>
+</html>

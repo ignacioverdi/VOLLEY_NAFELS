@@ -43,6 +43,10 @@
   .empty-st .big{font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:3px;color:#1e293b;margin-bottom:8px}
 
   .dteam{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:8px 0 18px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+  .dteam-act{display:flex;gap:8px;flex-wrap:wrap}
+  .dact{text-decoration:none;background:var(--card2);border:1px solid var(--border);color:var(--mut2);border-radius:9px;padding:8px 13px;font-weight:700;font-size:13px;white-space:nowrap}
+  .dact:hover{border-color:var(--ataque);color:#fff}
+  @media print{.dteam-act{display:none!important}}
   .dteam-name{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:2px;line-height:.95}
   .dteam-sub{font-size:12px;color:var(--mut2);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
   .dteam-sub b{color:var(--red)}
@@ -340,12 +344,24 @@ function renderRecepFiltro(t){
 function pickReceiver(i){
   if(!CUR||!CUR.sistema) return;
   var r=(CUR.sistema.receivers||[])[i]; if(!r){return;}
-  var h='<div class="syscol" style="max-width:420px"><div class="syshd" style="color:var(--recep)">Recibe '+r.name+'</div>'
-    +'<div class="sysk"><b style="color:'+effColor(r.eff)+'">'+r.eff+'%</b> de eficacia · '+r.n+' jugadas</div>'
-    +'<div class="rotlb">El armador le arma a</div>'+distBars(r.dist,'var(--recep)');
-  h+='<div class="rotlb" style="margin-top:7px">Pelotas</div><div class="syscombos">';
-  (r.combos||[]).forEach(function(c){ h+='<span class="chip2">'+c.k+' '+c.pct+'%</span>'; });
-  h+='</div></div>';
+  var h='<div class="sysgrid" style="grid-template-columns:1fr 1fr 1fr">';
+  // global
+  h+='<div class="syscol"><div class="syshd" style="color:var(--recep)">Recibe '+r.name+'</div>'
+    +'<div class="sysk"><b style="color:'+effColor(r.eff)+'">'+r.eff+'%</b> · '+r.n+' jugadas</div>'
+    +'<div class="rotlb">Le arma a</div>'+distBars(r.dist,'var(--recep)')+'</div>';
+  // en sistema (cuando pasa bien)
+  var ins=r.insys||{n:0,eff:0,dist:[]};
+  h+='<div class="syscol"><div class="syshd" style="color:#22c55e">Cuando pasa bien</div>'
+    +(ins.n?('<div class="sysk"><b style="color:'+effColor(ins.eff)+'">'+ins.eff+'%</b> · '+ins.n+' jugadas</div><div class="rotlb">Le arma a</div>'+distBars(ins.dist,'#22c55e')):'<div class="sysk" style="color:var(--mut)">pocos datos</div>')+'</div>';
+  // fuera de sistema (cuando lo rompés)
+  var ou=r.outsys||{n:0,eff:0,dist:[]};
+  h+='<div class="syscol"><div class="syshd" style="color:#ef4444">Cuando lo rompés</div>'
+    +(ou.n?('<div class="sysk"><b style="color:'+effColor(ou.eff)+'">'+ou.eff+'%</b> · '+ou.n+' jugadas</div><div class="rotlb">Le arma a</div>'+distBars(ou.dist,'#ef4444')):'<div class="sysk" style="color:var(--mut)">pocos datos</div>')+'</div>';
+  h+='</div>';
+  if(ins.n && ou.n){
+    var drop=ins.eff-ou.eff, o1=(ou.dist||[])[0];
+    if(drop>=8 && o1) h+='<div class="sysnote">Sacándole fuerte a <b style="color:#fff">'+r.name+'</b>, su eficacia cae a <b style="color:#f87171">'+ou.eff+'%</b> y el armador va a <b style="color:#fff">'+o1.name+'</b> ('+o1.pct+'%). Ahí cargás el bloqueo.</div>';
+  }
   var el=document.getElementById('recvOut'); if(el) el.innerHTML=h;
 }
 function renderDossier(n){
@@ -355,8 +371,11 @@ function renderDossier(n){
   var h='';
 
   // header del equipo
+  var enc=encodeURIComponent(n);
   h+='<div class="dteam"><div><div class="dteam-name">'+n+'</div>'
-    +'<div class="dteam-sub"><b>'+t.matches+'</b> partidos analizados · scouting basado en datos reales</div></div></div>';
+    +'<div class="dteam-sub"><b>'+t.matches+'</b> partidos analizados · scouting basado en datos reales</div></div>'
+    +'<div class="dteam-act"><a href="plan_partido.html?equipo='+enc+'" class="dact">📋 Plan de partido</a>'
+    +'<a href="comparador.html?equipo='+enc+'" class="dact">⚖ Comparar con Näfels</a></div></div>';
 
   h+='<div class="grid">';
 
@@ -391,7 +410,7 @@ function renderDossier(n){
     +'<div class="kpi"><div class="v" style="color:#22c55e">'+t.attack.killpct+'%</div><div class="l">Punto</div></div>'
     +'<div class="kpi"><div class="v" style="color:#06b6d4">'+t.attack.blkpct+'%</div><div class="l">Bloqueados</div></div>'
     +'<div class="kpi"><div class="v" style="color:var(--ataque)">'+t.attack.tot+'</div><div class="l">Total</div></div></div>';
-  h+='<div style="overflow-x:auto"><table><thead><tr><th>Rematador</th><th style="text-align:left">Pos</th><th>Atq</th><th>Punto%</th><th>EFF</th><th>SO</th><th>TR</th><th style="text-align:left">Su pelota</th><th style="text-align:left">Desde</th></tr></thead><tbody>';
+  h+='<div style="overflow-x:auto"><table><thead><tr><th>Rematador</th><th style="text-align:left">Pos</th><th>Atq</th><th>Punto%</th><th>EFF</th><th>SO</th><th>TR</th><th style="text-align:left">Su pelota</th><th style="text-align:left">Desde</th><th style="text-align:left">Clava en</th></tr></thead><tbody>';
   (t.attack.players||[]).forEach(function(p,i){
     var pel=(p.combos||[]).slice(0,2).map(function(cc){return cc.k+' '+cc.pct+'%';}).join(' · ');
     var so=p.so_eff!=null?'<span style="color:'+effColor(p.so_eff)+'">'+p.so_eff+'%</span>':'<span style="color:#334155">—</span>';
@@ -404,10 +423,11 @@ function renderDossier(n){
       +'<td style="font-weight:700">'+so+'</td>'
       +'<td style="font-weight:700">'+tr+'</td>'
       +'<td style="text-align:left;color:var(--ataque);font-weight:700">'+(pel||'—')+'</td>'
-      +'<td style="text-align:left;color:var(--mut2);font-size:12px">'+(p.origen||'')+'</td></tr>';
+      +'<td style="text-align:left;color:var(--mut2);font-size:12px">'+(p.origen||'')+'</td>'
+      +'<td style="text-align:left;color:var(--bloqueo,#06B6D4);font-weight:700;font-size:12px">'+((p.dirs||[]).slice(0,3).map(function(d){return 'Z'+d.k+' '+d.pct+'%';}).join(' · ')||'—')+'</td></tr>';
   });
   h+='</tbody></table></div>';
-  h+='<div style="font-size:10px;color:var(--mut);margin-top:9px;line-height:1.5">★ principal · <b style="color:var(--mut2)">SO</b> = eficacia en side-out (con recepción) · <b style="color:var(--mut2)">TR</b> = en transición · <b style="color:var(--mut2)">Su pelota</b> = su combinación más usada · <b style="color:var(--mut2)">Desde</b> = zona de origen · posición inferida de sus zonas reales</div>';
+  h+='<div style="font-size:10px;color:var(--mut);margin-top:9px;line-height:1.5">★ principal · <b style="color:var(--mut2)">SO</b> = eficacia en side-out (con recepción) · <b style="color:var(--mut2)">TR</b> = en transición · <b style="color:var(--mut2)">Su pelota</b> = su combinación más usada · <b style="color:var(--mut2)">Desde</b> = zona de origen · <b style="color:var(--mut2)">Clava en</b> = zonas donde más remata (direcciones) · posición inferida de sus zonas reales</div>';
   h+='</div></div>';
 
   // ===== RECEPCIÓN =====

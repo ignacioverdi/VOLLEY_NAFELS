@@ -196,11 +196,12 @@ def build_team(disp, team):
         combos = top_zones(acts, 'combo', 3)
         ozs = top_zones(acts, 'orig', 3)
         origen = ', '.join('Z%s %d%%' % (z['k'], z['pct']) for z in ozs[:2])
+        dirs = top_zones(acts, 'dest', 3)   # a donde clava (direcciones)
         players.append({
             'name': apellido_of(num), 'pos': POS_ES.get(pos, pos),
             'tot': len(acts), 'eff': rint(eng.eff_atk(acts)),
             'killpct': ipct(sum(1 for a in acts if a['effect']=='#'), len(acts)),
-            'combos': combos, 'origen': origen,
+            'combos': combos, 'origen': origen, 'dirs': dirs,
             'so_eff': hit(so), 'so_n': len(so),
             'tr_eff': hit(tr), 'tr_n': len(tr),
         })
@@ -277,8 +278,11 @@ def build_team(disp, team):
     for num, sub in rec_groups.items():
         if len(sub) < MIN_REC_PLAYER: continue
         b = sysblock(sub)
+        sub_in  = [a for a in sub if a.get('rq') in ('#','+')]
+        sub_out = [a for a in sub if a.get('rq') in ('-','/')]
         receivers.append({'num':num,'name':apellido_of(num),'n':len(sub),
-                          'eff':b['eff'],'dist':b['dist'],'combos':b['combos']})
+                          'eff':b['eff'],'dist':b['dist'],'combos':b['combos'],
+                          'insys':sysblock(sub_in),'outsys':sysblock(sub_out)})
     receivers.sort(key=lambda x:-x['n'])
     sistema['receivers'] = receivers
 
