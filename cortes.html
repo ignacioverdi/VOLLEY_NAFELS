@@ -46,7 +46,8 @@
   .reset{width:100%;margin-top:10px;background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:9px;padding:9px;font-size:12px;font-weight:700;cursor:pointer}.reset:hover{border-color:var(--naf);color:var(--naf)}
   .player-box{position:relative;aspect-ratio:16/9;background:#000}
   #player,.player-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-  .empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:repeating-linear-gradient(45deg,#0d1623,#0d1623 12px,#0f1a2a 12px,#0f1a2a 24px)}
+  .ytguard{position:absolute;inset:0;z-index:2;cursor:pointer;background:transparent}
+  .empty{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:repeating-linear-gradient(45deg,#0d1623,#0d1623 12px,#0f1a2a 12px,#0f1a2a 24px)}
   .empty .ic{font-size:32px;margin-bottom:8px}.empty b{font-size:14px}.empty p{color:var(--muted);font-size:12px;margin-top:6px;max-width:340px;line-height:1.5}
   .empty code{background:#0b1320;border:1px solid var(--line);padding:1px 6px;border-radius:5px;color:var(--naf);font-size:11px}
   .nowbar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid var(--line);background:var(--card2);min-height:44px}
@@ -107,7 +108,7 @@
       <button class="reset" id="reset">Limpiar filtros</button>
     </div>
     <div class="card">
-      <div class="player-box" id="playerBox"><div id="player"></div>
+      <div class="player-box" id="playerBox"><div id="player"></div><div class="ytguard" id="ytguard" title="Click para pausar/reproducir"></div>
         <div class="empty" id="empty"><div class="ic">🎬</div><b>Sin video para reproducir</b>
         <p>Los clips de partidos sin video se listan igual con su minuto. Pegá el link en <code>mapa_videos.js</code> para verlos.</p></div>
       </div>
@@ -117,11 +118,13 @@
         <button class="ct" id="btnPrev" disabled>‹ Anterior</button>
         <button class="ct" id="btnNext" disabled>Siguiente ›</button>
         <button class="ct" id="btnLoop">↻ Loop</button>
+        <button class="ct" id="btnMute" title="Silenciar">🔊</button>
+        <button class="ct" id="btnFs" title="Pantalla completa">⛶</button>
         <div class="ct-spacer"></div>
         <div class="seg">Velocidad <select id="speed"><option>0.25</option><option>0.5</option><option>0.75</option><option selected>1</option><option>1.5</option><option>2</option></select></div>
       </div>
       <div class="offset">antes <input type="range" id="preoff" min="0" max="10" step="0.5" value="4"> <b><span id="prev">4</span>s</b> · contacto · <b><span id="postv">5</span>s</b> <input type="range" id="postoff" min="0" max="10" step="0.5" value="5"> después</div>
-      <div class="listhead"><h2>Clips</h2><div class="x"><button id="selAll">Marcar todos</button><button id="clearSel">Limpiar</button><button id="exp">⬇ CSV</button></div></div>
+      <div class="listhead"><h2>Clips <span style="font-weight:400;color:var(--muted);font-size:11px">— tildá para armar tu recorte</span></h2><div class="x"><button id="selAll">Marcar todos</button><button id="clearSel">Limpiar</button><button id="share">🔗 Compartir recorte</button></div></div>
       <div class="listwrap" id="list"></div>
     </div>
   </div>
@@ -265,7 +268,8 @@
     $('nowpos').textContent=(current+1)+' / '+filtered.length+' ('+mmss(a.t)+')';
     document.querySelectorAll('.row').forEach(function(r){r.classList.toggle('active',+r.dataset.i===current);});
     var act=document.querySelector('.row.active');if(act)act.scrollIntoView({block:'nearest'});}
-  function nextPlayable(from,dir){var i=from;while(i>=0&&i<filtered.length){if(filtered[i]._vid)return i;i+=dir;}return -1;}
+  function inReel(a){var sel=Object.keys(selected);return sel.length?!!selected[ckey(a)]:true;}
+  function nextPlayable(from,dir){var i=from;while(i>=0&&i<filtered.length){if(filtered[i]._vid&&inReel(filtered[i]))return i;i+=dir;}return -1;}
   function playClip(i){
     i=nextPlayable(i, i>=current?1:-1);
     if(i<0){stop(true);return;}
@@ -283,7 +287,7 @@
   function togglePlay(){if(!ready){toast('Cargá el link del video primero');return;}if(playing)stop();else playClip(current<0?nextPlayable(0,1):current);}
 
   var firstVid='';
-  window.onYouTubeIframeAPIReady=function(){if(!firstVid)return;player=new YT.Player('player',{videoId:firstVid,playerVars:{rel:0,modestbranding:1,playsinline:1},events:{onReady:function(){ready=true;loadedVid=firstVid;$('empty').style.display='none';}}});};
+  window.onYouTubeIframeAPIReady=function(){if(!firstVid)return;player=new YT.Player('player',{videoId:firstVid,playerVars:{rel:0,modestbranding:1,playsinline:1,controls:0,iv_load_policy:3,disablekb:1,fs:0},events:{onReady:function(){ready=true;loadedVid=firstVid;$('empty').style.display='none';}}});};
   function loadYT(){firstVid=(function(){var f=filtered.find(function(a){return a._vid;});return f?f._vid:'';})()||
       (function(){var c=selectedMatchCodes().find(function(c){return ytId(MAP[c]);});return c?ytId(MAP[c]):'';})();
     if(!firstVid){$('empty').style.display='flex';return;}
@@ -317,14 +321,30 @@
     $('btnNext').addEventListener('click',function(){if(ready)next();});
     $('btnPrev').addEventListener('click',prev);
     $('btnLoop').addEventListener('click',function(){looping=!looping;this.classList.toggle('on',looping);});
+    $('ytguard').addEventListener('click',togglePlay);
+    $('btnMute').addEventListener('click',function(){if(!player||!player.isMuted)return;if(player.isMuted()){player.unMute();this.textContent='🔊';}else{player.mute();this.textContent='🔇';}});
+    $('btnFs').addEventListener('click',function(){var b=$('playerBox');if(document.fullscreenElement){document.exitFullscreen();}else if(b.requestFullscreen){b.requestFullscreen();}});
     $('speed').addEventListener('change',function(){if(player&&player.setPlaybackRate)player.setPlaybackRate(parseFloat(this.value));});
     $('preoff').addEventListener('input',function(){$('prev').textContent=this.value;});
     $('postoff').addEventListener('input',function(){$('postv').textContent=this.value;});
-    $('exp').addEventListener('click',exportCSV);
+    $('share').addEventListener('click',function(){var url=buildShareLink();
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){toast('Link copiado ✓ — pegalo en WhatsApp');},function(){prompt('Copiá y compartí este link:',url);});}
+      else prompt('Copiá y compartí este link:',url);});
     $('selAll').addEventListener('click',function(){filtered.forEach(function(a){selected[ckey(a)]=1;});render(selectedMatchCodes().length>1);});
     $('clearSel').addEventListener('click',function(){selected={};render(selectedMatchCodes().length>1);});
     $('list').addEventListener('click',function(e){var ck=e.target.closest('[data-chk]');if(ck){var a=filtered[+ck.dataset.chk];if(selected[ckey(a)])delete selected[ckey(a)];else selected[ckey(a)]=1;render(selectedMatchCodes().length>1);return;}
       var r=e.target.closest('.row');if(r){var i=+r.dataset.i;if(ready&&filtered[i]._vid)playClip(i);else{current=i;setNow(filtered[i]);}}});
+  }
+  function buildShareLink(){
+    var base=location.origin+location.pathname, p=[];
+    var selK=Object.keys(selected).filter(function(k){return selected[k];});
+    if(selK.length){ return base+'?clips='+encodeURIComponent(selK.join(';')); }
+    var ps=selectedPlayers(); if(ps.length) p.push('num='+ps.join(','));
+    var atk=Object.keys(selAct).filter(function(k){return k.indexOf('Ataque|')===0;});
+    var atkOn=atk.filter(function(k){return selAct[k];});
+    if(atkOn.length && atkOn.length<atk.length){ p.push('sk=Ataque'); p.push('combo='+atkOn.map(function(k){return k.split('|')[1];}).join(',')); }
+    var evs=Object.keys(selEval); if(evs.length) p.push('ev='+encodeURIComponent(evs.join(',')));
+    return base+(p.length?'?'+p.join('&'):'');
   }
   function init(){
     if(!Object.keys(VD.matches).length){$('sub').textContent='No se encontró la planilla de datos.';return;}
@@ -333,10 +353,20 @@
     initMatches();
     // preset desde URL (?num=6&sk=Ataque&combo=X5) — usado por el botón "Ver video" de los heatmaps
     var Q=new URLSearchParams(location.search);
-    var pNum=Q.get('num'), pSk=Q.get('sk'), pCombo=Q.get('combo');
-    if(pNum){ pNum=(''+pNum).replace(/[^0-9]/g,''); if(pNum){pNum=pNum.padStart(2,'0'); selPlayers[pNum]=true;} }
+    var pNum=Q.get('num'), pSk=Q.get('sk'), pCombo=Q.get('combo'), pEv=Q.get('ev');
+    if(pNum){ pNum.split(',').forEach(function(x){x=(''+x).replace(/[^0-9]/g,'');if(x)selPlayers[x.padStart(2,'0')]=true;}); }
+    if(pEv){ pEv.split(',').forEach(function(e){if(e)selEval[e]=1;}); }
     bind(); rebuildAll();
-    if(pSk){
+    var pClips=Q.get('clips');
+    if(pClips){
+      var want=pClips.split(';').map(function(str){var x=str.split('-');return {mc:x[0],t:parseFloat(x[1]),num:x[2]};});
+      filtered=[];
+      want.forEach(function(w){var acts=(VD.matches[w.mc]||{}).actions||[];for(var k=0;k<acts.length;k++){if(acts[k].num===w.num&&Math.abs(acts[k].t-w.t)<0.05){var o={};for(var kk in acts[k])o[kk]=acts[k][kk];o.mc=w.mc;o._vid=ytId(MAP[w.mc]||'');filtered.push(o);break;}}});
+      filtered.forEach(function(a){selected[ckey(a)]=1;});
+      current=-1; render(true);
+      var pl=filtered.some(function(a){return a._vid;}); $('btnPlay').disabled=!pl; $('btnNext').disabled=!pl;
+      $('sub').textContent='Recorte compartido · '+filtered.length+' clip(s) · apretá Reproducir ▶';
+    } else if(pSk){
       var skName={ATAQUE:'Ataque',SAQUE:'Saque',RECEPCION:'Recepción','RECEPCIÓN':'Recepción',ARMADO:'Armado',BLOQUEO:'Bloqueo',DEFENSA:'Defensa',FREEBALL:'Freeball'};
       var sk=skName[pSk.toUpperCase()]||pSk, any=false;
       Object.keys(selAct).forEach(function(k){var pp=k.split('|');var on=(pp[0]===sk)&&(!pCombo||pCombo.split(',').indexOf(pp[1])>=0);selAct[k]=on;if(on)any=true;});
