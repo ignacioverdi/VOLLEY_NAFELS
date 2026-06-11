@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cargar Videos — Näfels</title>
+<style>
+  :root{--bg:#0a0e1a;--card:#11162a;--card2:#0d1322;--border:#1e2944;--text:#e8edf7;--muted:#8493b0;--naf:#F97316;--ok:#22C55E}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',system-ui,sans-serif;padding:24px 16px;max-width:820px;margin:0 auto}
+  h1{font-size:26px;font-weight:800;letter-spacing:.5px}
+  .sub{color:var(--muted);font-size:14px;margin:4px 0 18px}
+  .bar{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:16px;position:sticky;top:8px;z-index:5}
+  .bar .count{font-weight:800;font-size:15px}
+  .bar .count b{color:var(--ok)}
+  .btn{margin-left:auto;background:var(--naf);color:#1a1206;border:none;font-weight:800;font-family:inherit;font-size:14px;letter-spacing:.5px;padding:10px 16px;border-radius:8px;cursor:pointer}
+  .btn.sec{background:transparent;border:1px solid var(--border);color:var(--text);margin-left:8px}
+  .row{display:grid;grid-template-columns:90px 1fr 1.4fr 18px;gap:12px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:9px 14px;margin-bottom:7px}
+  .row .date{font-size:13px;color:var(--muted);font-weight:700}
+  .row .opp{font-weight:700;font-size:15px}
+  .row .opp small{color:var(--muted);font-weight:400;font-size:11px;display:block}
+  .row input{width:100%;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:7px;padding:8px 10px;font-family:inherit;font-size:13px}
+  .row input:focus{outline:none;border-color:var(--naf)}
+  .dot{width:10px;height:10px;border-radius:50%;background:#33405e;justify-self:center}
+  .dot.on{background:var(--ok)}
+  .hint{color:var(--muted);font-size:13px;line-height:1.5;background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:12px 14px;margin-bottom:16px}
+  .hint b{color:var(--text)}
+  #msg{color:var(--ok);font-size:13px;font-weight:700;margin-left:10px}
+  @media(max-width:640px){.row{grid-template-columns:1fr;gap:6px}.dot{justify-self:start}}
+</style>
+</head>
+<body>
+  <h1>🎬 Cargar videos de los partidos</h1>
+  <div class="sub">Pegá el link de YouTube de cada partido y generá el archivo. Sin descargar nada raro — el resto ya está hecho.</div>
+
+  <div class="hint">
+    <b>Cómo se usa:</b> 1) Subí el partido a YouTube (en <b>"No listado"</b>). 2) Copiá el link y pegalo en la fila del partido. 3) Apretá <b>"Generar mapa_videos.js"</b> y subí ese archivo al repositorio (reemplazando el anterior). Listo: ese partido ya reproduce video en todo el sistema.
+  </div>
+
+  <div class="bar">
+    <div class="count"><b id="nok">0</b> de <span id="ntot">0</span> partidos con video</div>
+    <button class="btn" onclick="generar()">⬇ Generar mapa_videos.js</button>
+    <button class="btn sec" onclick="copiar()">Copiar</button>
+    <span id="msg"></span>
+  </div>
+
+  <div id="list"></div>
+
+  <script src="datos_video.js"></script>
+  <script src="mapa_videos.js"></script>
+  <script>
+  (function(){
+    var VD = (window.VIDEO_DATA && window.VIDEO_DATA.matches) || {};
+    var MAP = window.MAPA_VIDEOS || {};
+    var codes = Object.keys(VD).sort(function(a,b){ return (VD[a].date||'') < (VD[b].date||'') ? -1 : 1; });
+    var list = document.getElementById('list');
+    document.getElementById('ntot').textContent = codes.length;
+
+    function fmtDate(d){ if(!d) return ''; var p=d.split('-'); return p.length===3? (p[2]+'/'+p[1]+'/'+p[0].slice(2)) : d; }
+
+    codes.forEach(function(c){
+      var m = VD[c], cur = MAP[c] || '';
+      var row = document.createElement('div'); row.className='row';
+      row.innerHTML =
+        "<div class='date'>"+fmtDate(m.date)+"</div>"+
+        "<div class='opp'>vs "+(m.opponent||'Rival')+"<small>cód "+c+" · "+(m.actions?m.actions.length:0)+" acciones</small></div>"+
+        "<input data-code='"+c+"' placeholder='Pegá el link de YouTube…' value='"+cur.replace(/'/g,'')+"'>"+
+        "<div class='dot"+(cur?' on':'')+"'></div>";
+      list.appendChild(row);
+    });
+
+    function refresh(){
+      var inputs = list.querySelectorAll('input'), n=0;
+      inputs.forEach(function(i){ var on=i.value.trim().length>0; i.parentElement.querySelector('.dot').classList.toggle('on',on); if(on)n++; });
+      document.getElementById('nok').textContent = n;
+    }
+    list.addEventListener('input', refresh); refresh();
+
+    function build(){
+      var obj={}; list.querySelectorAll('input').forEach(function(i){ obj[i.dataset.code]=i.value.trim(); });
+      var lines = Object.keys(obj).map(function(k){ return '  "'+k+'": "'+obj[k]+'"'; });
+      return "/* Links de YouTube por partido (código del dvw -> link). Generado en Cargar Videos. */\nwindow.MAPA_VIDEOS = {\n"+lines.join(',\n')+"\n};\n";
+    }
+    window.generar=function(){
+      var blob=new Blob([build()],{type:'text/javascript'});
+      var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='mapa_videos.js'; a.click();
+      document.getElementById('msg').textContent='✓ Descargado — subilo al repo';
+      setTimeout(function(){document.getElementById('msg').textContent='';},4000);
+    };
+    window.copiar=function(){
+      var t=build();
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(function(){ document.getElementById('msg').textContent='✓ Copiado'; setTimeout(function(){document.getElementById('msg').textContent='';},3000); }); }
+    };
+  })();
+  </script>
+</body>
+</html>
