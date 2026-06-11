@@ -114,11 +114,19 @@
   .syscombos{display:flex;flex-wrap:wrap;gap:5px}
   .syscombos .chip2{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:3px 8px;font-size:11px;font-weight:700;color:var(--mut2)}
   .sysnote{margin-top:11px;background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.25);border-radius:10px;padding:11px 13px;font-size:13px;line-height:1.55;color:var(--mut2)}
+  .printbtn{background:transparent;border:1px solid var(--border);color:var(--mut2);border-radius:8px;padding:7px 12px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer;margin-right:8px}
+  .printbtn:hover{border-color:var(--ataque);color:#fff}
+  @media print{
+    body{background:#fff}
+    .header-right,.back-btn,.teamsel,.printbtn,#lang-wrap{display:none!important}
+    .sec,.syscol,.rotcard,.claves,.kpi,table{break-inside:avoid;page-break-inside:avoid}
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
-<div class="header-right"><div id="lang-wrap"></div></div>
+<div class="header-right"><button class="printbtn" onclick="window.print()">🖨 Imprimir / PDF</button><div id="lang-wrap"></div></div>
 
 <div class="hdr">
   <a href="dashboard.html" class="back-btn">← Dashboard</a>

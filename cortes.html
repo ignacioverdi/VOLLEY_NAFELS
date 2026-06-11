@@ -61,6 +61,8 @@
   .ct-spacer{flex:1}.seg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
   .seg select{background:var(--card2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:6px 8px;font-size:12px}
   .offset{padding:9px 14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;font-size:11.5px;color:var(--muted)}
+  .kbhint{padding:7px 14px 9px;font-size:10.5px;color:var(--muted);line-height:1.6;border-top:1px solid var(--line)}
+  .kbhint b{color:var(--text,#e8edf7);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-weight:700;font-size:10px}
   .offset input[type=range]{flex:1;accent-color:var(--naf)}.offset b{color:var(--txt);font-variant-numeric:tabular-nums}
   .listhead{display:flex;align-items:center;padding:12px 14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
   .listhead h2{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
@@ -120,6 +122,7 @@
         <button class="ct primary" id="btnPlay" disabled>▶ Reproducir</button>
         <button class="ct" id="btnPrev" disabled>‹ Anterior</button>
         <button class="ct" id="btnNext" disabled>Siguiente ›</button>
+        <button class="ct" id="btnReplay" title="Repetir este clip (R)">↺ Repetir</button>
         <button class="ct" id="btnLoop">↻ Loop</button>
         <button class="ct" id="btnMute" title="Silenciar">🔊</button>
         <button class="ct" id="btnFs" title="Pantalla completa">⛶</button>
@@ -127,6 +130,7 @@
         <div class="seg">Velocidad <select id="speed"><option>0.25</option><option>0.5</option><option>0.75</option><option selected>1</option><option>1.5</option><option>2</option></select></div>
       </div>
       <div class="offset">antes <input type="range" id="preoff" min="0" max="10" step="0.5" value="4"> <b><span id="prev">4</span>s</b> · contacto · <b><span id="postv">5</span>s</b> <input type="range" id="postoff" min="0" max="10" step="0.5" value="5"> después</div>
+      <div class="kbhint">⌨ <b>Espacio</b> play/pausa · <b>← →</b> clip anterior/siguiente · <b>R</b> repetir · <b>↑ ↓</b> velocidad · <b>L</b> loop · <b>F</b> pantalla · <b>M</b> mute</div>
       <div class="listhead"><h2>Clips <span style="font-weight:400;color:var(--muted);font-size:11px">— tildá para armar tu recorte</span></h2><div class="x"><button id="selAll">Marcar todos</button><button id="clearSel">Limpiar</button><button id="share">🔗 Compartir recorte</button></div></div>
       <div class="listwrap" id="list"></div>
     </div>
@@ -305,6 +309,8 @@
   function prev(){var i=nextPlayable(current-1,-1);if(i>=0)playClip(i);}
   function stop(done){clearInterval(timer);playing=false;$('btnPlay').textContent='▶ Reproducir';if(player&&player.pauseVideo)player.pauseVideo();if(done)$('nowlbl').textContent='Fin de la lista';}
   function togglePlay(){if(!ready){toast('Cargá el link del video primero');return;}if(playing)stop();else playClip(current<0?nextPlayable(0,1):current);}
+  function replay(){if(!ready){toast('Cargá el link del video primero');return;}if(current<0){togglePlay();return;}var a=filtered[current];if(!a||!a._vid)return;var start=Math.max(0,a.t-preOff());player.seekTo(start,true);player.playVideo();player.setPlaybackRate(parseFloat($('speed').value));playing=true;$('btnPlay').textContent='⏸ Pausar';clearInterval(timer);var end=a.t+postOff();timer=setInterval(function(){if(player&&player.getCurrentTime&&player.getCurrentTime()>=end)next();},200);}
+  function bumpSpeed(dir){var s=$('speed');var i=s.selectedIndex+dir;if(i<0)i=0;if(i>=s.options.length)i=s.options.length-1;if(i===s.selectedIndex)return;s.selectedIndex=i;if(player&&player.setPlaybackRate)player.setPlaybackRate(parseFloat(s.value));toast('Velocidad '+s.value+'x');}
 
   var firstVid='';
   window.onYouTubeIframeAPIReady=function(){if(!firstVid)return;player=new YT.Player('player',{videoId:firstVid,playerVars:{rel:0,modestbranding:1,playsinline:1,controls:0,iv_load_policy:3,disablekb:1,fs:0},events:{onReady:function(){ready=true;loadedVid=firstVid;$('empty').style.display='none';}}});};
@@ -346,6 +352,22 @@
     $('btnNext').addEventListener('click',function(){if(ready)next();});
     $('btnPrev').addEventListener('click',prev);
     $('btnLoop').addEventListener('click',function(){looping=!looping;this.classList.toggle('on',looping);});
+    $('btnReplay').addEventListener('click',replay);
+    document.addEventListener('keydown',function(e){
+      var tag=(document.activeElement&&document.activeElement.tagName)||'';
+      if(/INPUT|SELECT|TEXTAREA/.test(tag))return;
+      switch(e.code){
+        case 'Space': e.preventDefault(); togglePlay(); break;
+        case 'ArrowRight': case 'KeyN': e.preventDefault(); if(ready)next(); break;
+        case 'ArrowLeft': case 'KeyP': e.preventDefault(); prev(); break;
+        case 'KeyR': e.preventDefault(); replay(); break;
+        case 'KeyL': e.preventDefault(); $('btnLoop').click(); break;
+        case 'KeyF': e.preventDefault(); $('btnFs').click(); break;
+        case 'KeyM': e.preventDefault(); $('btnMute').click(); break;
+        case 'ArrowUp': e.preventDefault(); bumpSpeed(1); break;
+        case 'ArrowDown': e.preventDefault(); bumpSpeed(-1); break;
+      }
+    });
     $('ytguard').addEventListener('click',togglePlay);
     $('btnMute').addEventListener('click',function(){if(!player||!player.isMuted)return;if(player.isMuted()){player.unMute();this.textContent='🔊';}else{player.mute();this.textContent='🔇';}});
     $('btnFs').addEventListener('click',function(){var b=$('playerBox');if(document.fullscreenElement){document.exitFullscreen();}else if(b.requestFullscreen){b.requestFullscreen();}});
