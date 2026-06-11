@@ -16,6 +16,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <script src="modo_toggle.js" onerror="void 0"></script>
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
 <script src="datos_equipo.js" onerror="void 0"></script>
+<script src="datos_video.js" onerror="void 0"></script>
 <script>window.PREP_FISICA_DATA=window.PREP_FISICA_DATA||{};</script>
 <script>window.firebase=window.firebase||null;</script>
 <script>window.LANG=window.LANG||{};</script>
@@ -421,6 +422,7 @@ function dbatBuildSubfiltro(){
     <button class="stab"    onclick="showEqTab('resumen',this)"  >📊 Resumen</button>
     <button class="stab" onclick="showEqTab('ranking',this)">🏆 Ranking</button>
     <button class="stab"    onclick="showEqTab('dv4',this)"      >🔀 DV4</button>
+    <button class="stab"    onclick="showEqTab('defensa',this)"  >🧤 Defensa</button>
   </div>
   <!-- Filter bar -->
   <div class="fbar">
@@ -797,6 +799,7 @@ function renderEqContent(){
   var cont=document.getElementById('eq-tab-content');
   var isAcum=EQ_SESION<0;
   if(EQ_TAB==='dv4'){cont.innerHTML=renderDV4(ses);return;}
+  if(EQ_TAB==='defensa'){cont.innerHTML=renderDefensaTabla();return;}
   var configs={
     saque:{color:'#f59e0b',ths:['EFF%','TOT','# Pto','/ Vnd','+ Pos','! Ntr','– Neg','= Err'],
       getData:function(j){
@@ -914,6 +917,8 @@ function renderEqContent(){
     +cfg.ths.map(function(t,i){return'<th style="color:'+cfg.color+';'+(i===0?'border-left:2px solid '+cfg.color+'33':'')+'">'+t+'</th>';}).join('')
     +'</tr></thead><tbody>';
   var hasData=false;
+  var SK_MAP={saque:'Saque',recepcion:'Recepción',ataque:'Ataque',bloqueo:'Bloqueo'};
+  var skVid=SK_MAP[EQ_TAB]||'';
   jugs.forEach(function(j,ri){
     var cells=cfg.getData(j); if(!cells)return;
     hasData=true;
@@ -923,8 +928,8 @@ function renderEqContent(){
       } else tot[k]+=(j[k]||0);
     });
     var bg=ri%2?'rgba(255,255,255,.015)':'transparent';
-    html+='<tr style="background:'+bg+'">'
-      +'<td><div class="t-name"><div class="t-cam">'+j.c+'</div><span style="font-weight:800;font-size:14px">'+j.n+'</span></div></td>'
+    html+='<tr style="background:'+bg+';cursor:pointer" title="Ver video de '+j.n+' 🎬" onclick="window.open(\'cortes.html?num='+encodeURIComponent(j.c)+(skVid?'&sk='+encodeURIComponent(skVid):'')+'\',\'_blank\')">'
+      +'<td><div class="t-name"><div class="t-cam">'+j.c+'</div><span style="font-weight:800;font-size:14px">'+j.n+'</span> <span style="opacity:.35;font-size:11px">🎬</span></div></td>'
       +(isAcum?'<td style="color:var(--mut)">'+j.PJ+'</td>':'')
       +cells.map(function(c,i){return'<td style="font-size:'+(c.b?'16':'13')+'px;font-weight:'+(c.b?900:700)+';color:'+c.c+';'+(i===0?'border-left:2px solid '+cfg.color+'22':'')+'">'+c.v+'</td>';}).join('')
       +'</tr>';
@@ -940,6 +945,48 @@ function renderEqContent(){
   cont.innerHTML=html;
 }
 
+function renderDefensaTabla(){
+  var VD = window.VIDEO_DATA && window.VIDEO_DATA.matches;
+  if(!VD) return '<div class="empty">Sin datos de defensa (falta subir datos_video.js)</div>';
+  var P={};
+  Object.keys(VD).forEach(function(c){ (VD[c].actions||[]).forEach(function(a){
+    if(a.sk!=='Defensa') return;
+    var k=a.num; if(!P[k]) P[k]={num:a.num,name:a.name,T:0,perf:0,buena:0,reg:0,mala:0,err:0};
+    P[k].T++;
+    if(a.ev==='#')P[k].perf++; else if(a.ev==='+')P[k].buena++; else if(a.ev==='!')P[k].reg++; else if(a.ev==='-')P[k].mala++; else if(a.ev==='=')P[k].err++;
+  }); });
+  var rows=Object.keys(P).map(function(k){return P[k];}).filter(function(p){return p.T>0;}).sort(function(a,b){return b.T-a.T;});
+  if(!rows.length) return '<div class="empty">Sin defensas registradas</div>';
+  function eff(p){ return Math.round((p.perf + 0.5*p.buena - 0.5*p.mala - p.err)/p.T*100); }
+  var tot={T:0,perf:0,buena:0,reg:0,mala:0,err:0};
+  rows.forEach(function(p){tot.T+=p.T;tot.perf+=p.perf;tot.buena+=p.buena;tot.reg+=p.reg;tot.mala+=p.mala;tot.err+=p.err;});
+  var ths=['EFF%','TOT','# Perf','+ Buena','! Reg','– Mala','= Err'];
+  var h='<div style="font-size:11px;color:var(--mut);margin:0 0 8px;letter-spacing:1px">🧤 DEFENSA · datos de partidos (NLA)</div>';
+  h+='<div class="tabla-wrap"><table><thead><tr><th>Jugador</th>';
+  ths.forEach(function(t){h+='<th>'+t+'</th>';});
+  h+='</tr></thead><tbody>';
+  rows.forEach(function(p){
+    var e=eff(p);
+    h+='<tr style="cursor:pointer" title="Ver defensas de '+p.name+' en video 🎬" onclick="window.open(\'cortes.html?num='+parseInt(p.num,10)+'&sk=Defensa\',\'_blank\')"><td style="font-weight:700">#'+parseInt(p.num,10)+' '+p.name+' <span style="opacity:.5">🎬</span></td>'
+      +'<td style="font-weight:800;color:'+effColor(e)+'">'+fmt(e)+'</td>'
+      +'<td style="font-weight:700;color:#06b6d4">'+p.T+'</td>'
+      +'<td style="color:#22c55e">'+p.perf+'</td>'
+      +'<td style="color:#86efac">'+p.buena+'</td>'
+      +'<td style="color:#94a3b8">'+p.reg+'</td>'
+      +'<td style="color:#f97316">'+p.mala+'</td>'
+      +'<td style="color:#ef4444">'+p.err+'</td></tr>';
+  });
+  var te=Math.round((tot.perf+0.5*tot.buena-0.5*tot.mala-tot.err)/tot.T*100);
+  h+='<tr style="border-top:2px solid rgba(255,255,255,.1)"><td style="font-weight:800;color:var(--mut)">TOTALES EQUIPO</td>'
+    +'<td style="font-weight:800;color:'+effColor(te)+'">'+fmt(te)+'</td>'
+    +'<td style="font-weight:800;color:#06b6d4">'+tot.T+'</td>'
+    +'<td style="color:#22c55e">'+tot.perf+'</td><td style="color:#86efac">'+tot.buena+'</td>'
+    +'<td style="color:#94a3b8">'+tot.reg+'</td><td style="color:#f97316">'+tot.mala+'</td>'
+    +'<td style="color:#ef4444">'+tot.err+'</td></tr>';
+  h+='</tbody></table></div>';
+  h+='<div style="text-align:center;margin-top:10px"><a href="hm_defensa.html" style="font-size:12px;color:#ef4444;text-decoration:none;font-weight:700">Ver heatmap de defensa con video →</a></div>';
+  return h;
+}
 function renderDV4(sesiones){
   var totals={};
   sesiones.forEach(function(s){

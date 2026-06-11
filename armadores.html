@@ -323,7 +323,9 @@ function renderArmador(){
       var llamGrid=document.createElement('div');llamGrid.style.cssText='display:flex;gap:6px;flex-wrap:wrap;padding:0 18px 14px';
       arm.llamadas.forEach(function(ll){
         var effC=ll.eff===null?'#475569':ll.eff>=50?'#22c55e':ll.eff>=25?'#fbbf24':ll.eff>=0?'#f97316':'#ef4444';
-        var card2=document.createElement('div');card2.style.cssText='background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px 12px;min-width:80px';
+        var card2=document.createElement('div');card2.style.cssText='background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px 12px;min-width:80px;cursor:pointer';
+        card2.title='Ver distribución de '+ll.call+' en el heatmap →';
+        card2.onclick=(function(c){return function(){window.open('hm_armador.html?call='+encodeURIComponent(c),'_blank');};})(ll.call);
         var topRow=document.createElement('div');topRow.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:5px';
         var callLbl=document.createElement('div');callLbl.style.cssText='font-family:Bebas Neue,sans-serif;font-size:16px;color:'+color;callLbl.textContent=ll.call;
         var effDiv=document.createElement('div');effDiv.style.cssText='font-family:Bebas Neue,sans-serif;font-size:16px;color:'+effC;effDiv.textContent=(ll.eff!==null?ll.eff+'%':'—');

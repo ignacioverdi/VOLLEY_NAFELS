@@ -732,9 +732,17 @@ pNums.forEach(function(n){
 });
 
 window.onload=function(){
+  var P=new URLSearchParams(location.search);
+  var pNum=P.get('num'), pCall=P.get('call');
   if(pNums.length){
-    document.getElementById('psel').value=pNums[0];
-    onPlayerChange(String(pNums[0]));
+    var sel=(pNum && SETTERS[pNum]) ? pNum : pNums[0];
+    document.getElementById('psel').value=sel;
+    onPlayerChange(String(sel));
+  }
+  if(pCall && F.call.indexOf(pCall)<0){
+    F.call.push(pCall);
+    if(typeof buildChips==='function') buildChips();
+    render();
   }
 };
 
