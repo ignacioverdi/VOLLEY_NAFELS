@@ -21,8 +21,11 @@
   'use strict';
 
   // ── Roster por defecto (hoja EQUIPO del Excel). Editable. ────────────────
-  // ── Plantel Axpo Volley Näfels — Temporada 2026/27 ───────────────────────
-  var ROSTER = [
+  // ── Plantel Axpo Volley Näfels — lee de plantel_nafels.js (fuente única) ──
+  //    Si ese archivo no está, usa esta lista como respaldo.
+  var ROSTER = (typeof window !== 'undefined' && window.PLANTEL_NAFELS && window.PLANTEL_NAFELS.lista)
+    ? window.PLANTEL_NAFELS.lista.map(function (j) { return { c: j.num, n: j.nombre, a: true }; })
+    : [
     {c:4,n:'VAZQUEZ',a:true},{c:13,n:'STEIMANN',a:true},
     {c:9,n:'NORRIS',a:true},{c:3,n:'SCHWITTER',a:true},
     {c:12,n:'JOHANSSON',a:true},{c:7,n:'SCHMID R',a:true},{c:5,n:'CLEMENT',a:true},

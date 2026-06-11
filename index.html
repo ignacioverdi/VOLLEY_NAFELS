@@ -254,6 +254,7 @@ select, select option {
 </style>
 <script src="firebase.js" onerror="void 0"></script>
 <script src="lang.js"></script>
+<script src="plantel_nafels.js"></script>
 
 <style>
 @media(max-width:768px){
@@ -1174,21 +1175,21 @@ var pinActual = '';
 var pinCorrecto = '';
 
 function initPin(){
-  // Cargar jugadores desde EQUIPO_DATA o default
-  var jugs = (window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores) ? window.EQUIPO_DATA.jugadores : [
-    {num:1,nombre:"DEECKE"},
-    {num:2,nombre:"CORZO"},
+  // Cargar jugadores desde el PLANTEL MAESTRO (plantel_nafels.js) o EQUIPO_DATA o default 2026-27
+  var jugs = (window.PLANTEL_NAFELS && window.PLANTEL_NAFELS.lista) ? window.PLANTEL_NAFELS.lista
+           : (window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores) ? window.EQUIPO_DATA.jugadores : [
+    {num:1,nombre:"DURDOS"},
     {num:3,nombre:"SCHWITTER"},
     {num:4,nombre:"VAZQUEZ"},
-    {num:5,nombre:"HESSELHOLT"},
-    {num:6,nombre:"DENIS CABANAS"},
-    {num:7,nombre:"SCHMID"},
-    {num:8,nombre:"PETER"},
-    {num:9,nombre:"BROCH"},
+    {num:5,nombre:"CLEMENT"},
+    {num:7,nombre:"SCHMID R"},
+    {num:9,nombre:"NORRIS"},
     {num:10,nombre:"BOGDANOVSKI"},
     {num:11,nombre:"BARTHOLET"},
-    {num:14,nombre:"FIGUEIREDO"},
-    {num:15,nombre:"NIKOLOV"},
+    {num:12,nombre:"JOHANSSON"},
+    {num:13,nombre:"STEIMANN"},
+    {num:17,nombre:"ROFFLER"},
+    {num:20,nombre:"SCHMID J"},
   ];
   PIN_JUGADORES = jugs;
 

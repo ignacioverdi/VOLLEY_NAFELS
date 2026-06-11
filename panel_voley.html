@@ -1513,8 +1513,10 @@ function showJugDetail(nombre, num){
   if(!jug) return;
 
   // Datos del jugador (posición) desde el PLANTEL
-  // Plantel Axpo Volley Näfels 2026/27 (num · apellido · posición)
-  var PLANTEL = [
+  // Plantel Näfels — lee de plantel_nafels.js (fuente única); respaldo abajo
+  var PLANTEL = (window.PLANTEL_NAFELS && window.PLANTEL_NAFELS.jugadores)
+    ? window.PLANTEL_NAFELS.jugadores.map(function(j){ return {num:j.num, nombre:j.ap, pos:j.pos}; })
+    : [
     {num:4,nombre:'VAZQUEZ',pos:'ARMADOR'},{num:13,nombre:'STEIMANN',pos:'ARMADOR'},
     {num:9,nombre:'NORRIS',pos:'OPUESTO'},{num:3,nombre:'SCHWITTER',pos:'OPUESTO'},
     {num:12,nombre:'JOHANSSON',pos:'CENTRAL'},{num:7,nombre:'SCHMID R',pos:'CENTRAL'},{num:5,nombre:'CLEMENT',pos:'CENTRAL'},
@@ -1629,6 +1631,7 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
+<script src="plantel_nafels.js" onerror="void 0"></script>
 <script src="scout_vivo.js" onerror="void 0"></script>
 <script src="temporadas_menu.js"></script>
 </body>
