@@ -101,6 +101,19 @@
   .clave:last-child{border-bottom:none}
   .clave .cn{flex-shrink:0;width:22px;height:22px;border-radius:7px;background:var(--red);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:1px}
   .clave b{color:#fff}.clave .hl{color:var(--ataque);font-weight:800}.clave .hl2{color:var(--armado);font-weight:800}.clave .hl3{color:var(--recep);font-weight:800}
+  .sysgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:620px){.sysgrid{grid-template-columns:1fr}}
+  .syscol{background:var(--card2);border:1px solid var(--border);border-radius:13px;padding:13px 14px}
+  .syshd{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.5px;margin-bottom:4px}
+  .sysk{font-size:12px;color:var(--mut2);margin-bottom:4px}
+  .sysk b{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px}
+  .sysbar{display:grid;grid-template-columns:84px 1fr 34px;align-items:center;gap:8px;margin:4px 0;font-size:12px;font-weight:700}
+  .sysbar .sysp{height:8px;border-radius:5px;background:#1e2944;overflow:hidden}
+  .sysbar .sysp i{display:block;height:100%;border-radius:5px}
+  .sysbar .sysv{text-align:right;color:var(--mut2);font-weight:800}
+  .syscombos{display:flex;flex-wrap:wrap;gap:5px}
+  .syscombos .chip2{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:3px 8px;font-size:11px;font-weight:700;color:var(--mut2)}
+  .sysnote{margin-top:11px;background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.25);border-radius:10px;padding:11px 13px;font-size:13px;line-height:1.55;color:var(--mut2)}
 </style>
 </head>
 <body>
@@ -209,6 +222,37 @@ function renderRotations(t){
   h+='</div></div>';
   return h;
 }
+function renderSistema(t){
+  var s=t.sistema; if(!s||(!s.insys.n && !s.outsys.n)) return '';
+  var inn=s.insys, out=s.outsys;
+  function col(title,c0,b){
+    var h='<div class="syscol"><div class="syshd" style="color:'+c0+'">'+title+'</div>';
+    h+='<div class="sysk"><b style="color:'+effColor(b.eff)+'">'+b.eff+'%</b> rendimiento · '+b.n+' ataques</div>';
+    h+='<div class="rotlb">A quién va</div>';
+    (b.dist||[]).forEach(function(d){
+      h+='<div class="sysbar"><span>'+d.name+'</span><span class="sysp"><i style="width:'+Math.min(100,d.pct)+'%;background:'+c0+'"></i></span><span class="sysv">'+d.pct+'%</span></div>';
+    });
+    h+='<div class="rotlb" style="margin-top:7px">Pelotas</div><div class="syscombos">';
+    (b.combos||[]).forEach(function(c){ h+='<span class="chip2">'+c.k+' '+c.pct+'%</span>'; });
+    h+='</div></div>';
+    return h;
+  }
+  var h='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">🎯</span><span class="sec-ti" style="color:var(--ataque)">En sistema vs fuera de sistema — qué pasa si les rompés la recepción</span></div><div class="sec-bd">';
+  h+='<div class="sysgrid">';
+  h+=col('🟢 EN SISTEMA','#22c55e',inn);
+  h+=col('🔴 FUERA DE SISTEMA','#ef4444',out);
+  h+='</div>';
+  var drop=(inn.n&&out.n)?(inn.eff-out.eff):null;
+  if(drop!=null && drop>=8){
+    var top2=(out.dist||[]).slice(0,2);
+    var names=top2.map(function(d){return d.name;}).join(' + ');
+    var sumpct=top2.reduce(function(a,d){return a+d.pct;},0);
+    h+='<div class="sysnote">Rompiéndoles la recepción, su eficacia cae <b style="color:#f87171">'+drop+' puntos</b> ('+inn.eff+'% → '+out.eff+'%) y el ataque se concentra en <b style="color:#fff">'+names+'</b> (~'+sumpct+'% entre los dos), casi todo pelota alta. <b>Sacar fuerte y cargar el bloqueo a ellos.</b></div>';
+  }
+  h+='<div style="font-size:10px;color:var(--mut);margin-top:9px;line-height:1.5">En sistema = recepción positiva (#/+), el armador tiene todas las opciones. Fuera de sistema = recepción rota (−//), el armador queda condicionado. Solo cuenta el ataque de side-out.</div>';
+  h+='</div></div>';
+  return h;
+}
 function buildClaves(t){
   var c=[];
   var ap=t.attack.players||[];
@@ -239,13 +283,66 @@ function buildClaves(t){
     var wr=rotsSO.slice().sort(function(a,b){return a.so_eff-b.so_eff;})[0];
     c.push('Rotación más débil en side-out: <b>S'+wr.r+'</b> (solo '+wr.so_eff+'%, armador en zona '+wr.r+'). <b>Apretar el saque cuando entren a esa rotación.</b>');
   }
+  if(t.sistema && t.sistema.insys.n && t.sistema.outsys.n){
+    var dr=t.sistema.insys.eff - t.sistema.outsys.eff;
+    if(dr>=8){
+      var o2=(t.sistema.outsys.dist||[]).slice(0,2);
+      var nm=o2.map(function(d){return d.name;}).join(' + ');
+      var sp=o2.reduce(function(a,d){return a+d.pct;},0);
+      c.push('Fuera de sistema su ataque se cae <b>'+dr+' puntos</b> (de '+t.sistema.insys.eff+'% a '+t.sistema.outsys.eff+'%) y va casi todo a <span class="hl">'+nm+'</span> (~'+sp+'%). <b>Romperles la recepción y cargar el bloqueo ahí.</b>');
+    }
+  }
   if(t.serve.acepct>=6) c.push('Sacan fuerte: <b>'+t.serve.acepct+'% de aces</b>. Reforzar la recepción y tener plan B de armado.');
   else if(t.serve.errpct>=16) c.push('Saque errático (<b>'+t.serve.errpct+'% de error</b>). Presionarlos a arriesgar el saque.');
   return c;
 }
 
+var CUR=null;
+function distBars(dist,color){
+  var h='';
+  (dist||[]).forEach(function(d){ h+='<div class="sysbar"><span>'+d.name+'</span><span class="sysp"><i style="width:'+Math.min(100,d.pct)+'%;background:'+color+'"></i></span><span class="sysv">'+d.pct+'%</span></div>'; });
+  return h;
+}
+function renderRecepZona(t){
+  var bz=t.sistema && t.sistema.by_zone; if(!bz) return '';
+  var zones=[['Z1','Zona 1','der · pos 1·2·9'],['Z6','Zona 6','medio · pos 6·3·8'],['Z5','Zona 5','izq · pos 5·4·7']];
+  if(!zones.some(function(z){return bz[z[0]] && bz[z[0]].n;})) return '';
+  var h='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">📍</span><span class="sec-ti" style="color:var(--armado)">Cómo arma según desde dónde le llega la recepción</span></div><div class="sec-bd"><div class="sysgrid" style="grid-template-columns:repeat(3,1fr)">';
+  zones.forEach(function(z){
+    var b=bz[z[0]]||{n:0,eff:0,dist:[],combos:[]};
+    h+='<div class="syscol"><div class="syshd" style="color:var(--armado)">'+z[1]+'</div><div style="font-size:10px;color:var(--mut);margin:-2px 0 5px">'+z[2]+'</div>';
+    if(b.n){
+      h+='<div class="sysk"><b style="color:'+effColor(b.eff)+'">'+b.eff+'%</b> · '+b.n+' atk</div><div class="rotlb">Arma a</div>'+distBars(b.dist,'var(--armado)');
+    } else h+='<div class="sysk" style="color:var(--mut)">sin datos</div>';
+    h+='</div>';
+  });
+  h+='</div><div style="font-size:10px;color:var(--mut);margin-top:9px;line-height:1.5">Zona 1 = recibe por la derecha · Zona 6 = por el medio · Zona 5 = por la izquierda. Muestra a qué rematador arma según de dónde le llega el pase (solo side-out).</div></div></div>';
+  return h;
+}
+function renderRecepFiltro(t){
+  var rs=t.sistema && t.sistema.receivers; if(!rs||!rs.length) return '';
+  var opts=rs.map(function(r,i){return '<option value="'+i+'">'+r.name+' — '+r.n+' recepciones</option>';}).join('');
+  var h='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">🎚</span><span class="sec-ti" style="color:var(--recep)">Cómo arma según QUIÉN recibe</span></div><div class="sec-bd">';
+  h+='<div style="font-size:12px;color:var(--mut2);margin-bottom:8px">Elegí un receptor y mirá a quién arma el armador rival cuando le llega el pase desde ese jugador:</div>';
+  h+='<select id="recvSel" onchange="pickReceiver(this.value)" style="width:100%;max-width:360px;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:9px;padding:10px 12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer">'+opts+'</select>';
+  h+='<div id="recvOut" style="margin-top:12px"></div>';
+  h+='</div></div>';
+  return h;
+}
+function pickReceiver(i){
+  if(!CUR||!CUR.sistema) return;
+  var r=(CUR.sistema.receivers||[])[i]; if(!r){return;}
+  var h='<div class="syscol" style="max-width:420px"><div class="syshd" style="color:var(--recep)">Recibe '+r.name+'</div>'
+    +'<div class="sysk"><b style="color:'+effColor(r.eff)+'">'+r.eff+'%</b> de eficacia · '+r.n+' jugadas</div>'
+    +'<div class="rotlb">El armador le arma a</div>'+distBars(r.dist,'var(--recep)');
+  h+='<div class="rotlb" style="margin-top:7px">Pelotas</div><div class="syscombos">';
+  (r.combos||[]).forEach(function(c){ h+='<span class="chip2">'+c.k+' '+c.pct+'%</span>'; });
+  h+='</div></div>';
+  var el=document.getElementById('recvOut'); if(el) el.innerHTML=h;
+}
 function renderDossier(n){
   var t=SC[n]; if(!t){return;}
+  CUR=t;
   var d=document.getElementById('dossier');
   var h='';
 
@@ -323,6 +420,9 @@ function renderDossier(n){
   h+='</div></div>';
 
   h+=renderRotations(t);
+  h+=renderSistema(t);
+  h+=renderRecepZona(t);
+  h+=renderRecepFiltro(t);
 
   h+='</div>'; // /grid
 
@@ -335,6 +435,7 @@ function renderDossier(n){
   }
 
   d.innerHTML=h;
+  if(t.sistema && t.sistema.receivers && t.sistema.receivers.length) pickReceiver(0);
 }
 
 buildTeams();
