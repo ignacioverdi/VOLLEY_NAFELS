@@ -360,7 +360,7 @@ function objCalcVals(nombreJugador){
   }
   var a={sT:0,sPunto:0,sPos:0,sVend:0,sErr:0,rT:0,rPunto:0,rPos:0,rVend:0,rErr:0,
          aT:0,aPunto:0,aVend:0,aErr:0,bT:0,bPt:0,bPtPos:0,mbT:0,mbPt:0,mbVnd:0,mbErr:0};
-  var CENT=[2,10,15,17];
+  var CENT=[12,7,5];
   D.entrenamientos.forEach(function(s){
     s.jugadores.forEach(function(j){
       if(j.n==='TOTALES EQUIPO') return;
@@ -1512,10 +1512,18 @@ function showJugDetail(nombre, num){
   var jug = D.j.find(function(p){ return p.n === nombre || p.c === num; });
   if(!jug) return;
 
-  // Find player info from CASLA_JUGADORES
+  // Datos del jugador (posición) desde el PLANTEL
+  // Plantel Axpo Volley Näfels 2026/27 (num · apellido · posición)
+  var PLANTEL = [
+    {num:4,nombre:'VAZQUEZ',pos:'ARMADOR'},{num:13,nombre:'STEIMANN',pos:'ARMADOR'},
+    {num:9,nombre:'NORRIS',pos:'OPUESTO'},{num:3,nombre:'SCHWITTER',pos:'OPUESTO'},
+    {num:12,nombre:'JOHANSSON',pos:'CENTRAL'},{num:7,nombre:'SCHMID R',pos:'CENTRAL'},{num:5,nombre:'CLEMENT',pos:'CENTRAL'},
+    {num:1,nombre:'DURDOS',pos:'PUNTA'},{num:11,nombre:'BARTHOLET',pos:'PUNTA'},{num:17,nombre:'ROFFLER',pos:'PUNTA'},{num:10,nombre:'BOGDANOVSKI',pos:'PUNTA'},
+    {num:20,nombre:'SCHMID J',pos:'LIBERO'}
+  ];
   var jugInfo = null;
-  if(typeof CASLA_JUGADORES !== 'undefined'){
-    jugInfo = CASLA_JUGADORES.find(function(j){ return j.num === num; });
+  if(typeof PLANTEL !== 'undefined'){
+    jugInfo = PLANTEL.find(function(j){ return j.num === num; });
   }
 
   var POS_COLOR = {ARMADOR:'#F59E0B',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};

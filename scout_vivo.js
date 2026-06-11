@@ -21,13 +21,13 @@
   'use strict';
 
   // ── Roster por defecto (hoja EQUIPO del Excel). Editable. ────────────────
+  // ── Plantel Axpo Volley Näfels — Temporada 2026/27 ───────────────────────
   var ROSTER = [
-    {c:2,n:'OJUEZ',a:true},{c:3,n:'WINER',a:true},{c:4,n:'VAZQUEZ',a:true},
-    {c:5,n:'RAMOS',a:true},{c:6,n:'VILLARRUEL',a:true},{c:9,n:'GODOY',a:true},
-    {c:10,n:'VIERA',a:true},{c:11,n:'DURDOS',a:true},{c:12,n:'ZANOTTI',a:true},
-    {c:13,n:'ROJAS CARUSO',a:true},{c:14,n:'NIELSON',a:true},{c:15,n:'ROTEZZI',a:true},
-    {c:17,n:'HERBSOMMER',a:true},{c:18,n:'ACOSTA',a:true},{c:19,n:'DIAZ BOLLI',a:true},
-    {c:20,n:'FREDDIE',a:false}
+    {c:4,n:'VAZQUEZ',a:true},{c:13,n:'STEIMANN',a:true},
+    {c:9,n:'NORRIS',a:true},{c:3,n:'SCHWITTER',a:true},
+    {c:12,n:'JOHANSSON',a:true},{c:7,n:'SCHMID R',a:true},{c:5,n:'CLEMENT',a:true},
+    {c:1,n:'DURDOS',a:true},{c:11,n:'BARTHOLET',a:true},{c:17,n:'ROFFLER',a:true},
+    {c:10,n:'BOGDANOVSKI',a:true},{c:20,n:'SCHMID J',a:true}
   ];
 
   // ── Mapas DV4 (port de MapearDV4 / ZonaOrigenDV4) ────────────────────────
