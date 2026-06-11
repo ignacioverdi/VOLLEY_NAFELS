@@ -149,6 +149,7 @@ function drawAtaqueCourt(ctx,W,H,ataque,color,pct){
 function openModal(){}
 function buildCanchita(item,jIdx,i,prefix,W,H,drawFn,color,j){
   var card=document.createElement('div');card.className='canchita-card';
+  if(item.tot>0){ card.title='Ver video de '+item.cod+' 🎬'; card.onclick=function(){ window.open('cortes.html?num='+currentNum+'&sk=Ataque&combo='+encodeURIComponent(item.cod),'_blank'); }; }
   var effC=effColor(item.eff);var hasDatos=item.tot>0;
   var hdr=document.createElement('div');hdr.className='canchita-hdr';
   var codWrap=document.createElement('div');codWrap.style.cssText='display:flex;align-items:center;gap:5px';
