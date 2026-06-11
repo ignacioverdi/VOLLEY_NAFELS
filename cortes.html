@@ -76,6 +76,9 @@
   .row .nm{font-weight:600;font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
   .row .det{flex:none;font-size:11px;color:var(--muted)}
   .row .ev{flex:none;margin-left:auto;font-weight:800;font-size:14px;width:18px;text-align:center}
+  .grphdr{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--card2);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);position:sticky;top:0;z-index:2}
+  .grphdr span:first-child{font-size:15px;font-weight:800}
+  .grcnt{margin-left:auto;color:var(--naf);font-weight:800}
   .listempty{padding:34px 20px;text-align:center;color:var(--muted);font-size:13px}
   .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--naf);color:#04210f;padding:11px 20px;border-radius:10px;font-weight:700;font-size:13px;opacity:0;transition:.3s;z-index:50}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
@@ -94,8 +97,8 @@
         <div class="dd-btn" id="ddBtn">Elegir acciones <span class="n" id="ddN">—</span></div>
         <div class="dd-panel" id="ddPanel"></div>
       </div>
-      <div class="flabel">Jugador</div>
-      <select id="fPlayer"><option value="">Todos</option></select>
+      <div class="flabel">Jugador <span style="color:var(--muted2);text-transform:none">(uno o varios · vacío = todos)</span></div>
+      <div class="chips" id="fPlayers"></div>
       <div class="flabel">Valoración</div>
       <div class="chips" id="fEval"></div>
       <div class="flabel">Set</div>
@@ -144,7 +147,7 @@
   function subName(sk,s){if(s==='*')return '';return sk==='Ataque'?((COMBOS[s]||s)+' ('+s+')'):(TYPE_NAME[s]||s);}
 
   // estado
-  var selMatch={}, selAct={}, selEval={}, selSet={}, selected={};
+  var selMatch={}, selPlayers={}, selAct={}, selEval={}, selSet={}, selected={};
   var filtered=[], current=-1, playing=false, looping=false, timer=null, player=null, ready=false, loadedVid='';
 
   // --------- partidos ---------
@@ -159,17 +162,28 @@
     var out=[];selectedMatchCodes().forEach(function(c){(VD.matches[c].actions||[]).forEach(function(a){var o={};for(var k in a)o[k]=a[k];o.mc=c;out.push(o);});});
     return out;
   }
+  function selectedPlayers(){return Object.keys(selPlayers).filter(function(n){return selPlayers[n];});}
+  function basePool(){var ps=selectedPlayers();var P=pool();return ps.length? P.filter(function(a){return ps.indexOf(a.num)>=0;}):P;}
+  function initPlayers(){
+    var P=pool(), pm={};P.forEach(function(a){pm[a.num]=a.name;});
+    var nums=Object.keys(pm).sort(function(a,b){return parseInt(a)-parseInt(b);});
+    Object.keys(selPlayers).forEach(function(n){if(nums.indexOf(n)<0)delete selPlayers[n];});
+    $('fPlayers').innerHTML=nums.map(function(n){return '<span class="chip'+(selPlayers[n]?' on':'')+'" data-p="'+n+'">#'+parseInt(n,10)+' '+pm[n]+'</span>';}).join('');
+  }
 
   // --------- árbol de acciones (checklist) ---------
   function buildActionTree(){
-    var P=pool(), tree={};
+    var P=basePool(), tree={};
     SKILL_ORDER.forEach(function(sk){tree[sk]={count:0,subs:{}};});
     P.forEach(function(a){
       if(!tree[a.sk])tree[a.sk]={count:0,subs:{}};
       tree[a.sk].count++;
       var s=sub(a); tree[a.sk].subs[s]=(tree[a.sk].subs[s]||0)+1;
     });
-    // armar HTML + estado (todo tildado por defecto, conservando lo que ya estaba)
+    // podar selAct al universo actual (preservando ticks; nuevos = tildados)
+    var _keys={};Object.keys(tree).forEach(function(sk){Object.keys(tree[sk].subs).forEach(function(ss){_keys[akey(sk,ss)]=true;});});
+    var _ns={};Object.keys(_keys).forEach(function(k){_ns[k]=(k in selAct)?selAct[k]:true;});selAct=_ns;
+    // armar HTML + estado
     var html='';
     SKILL_ORDER.forEach(function(sk){
       var node=tree[sk]; if(!node||!node.count) return;
@@ -197,28 +211,25 @@
 
   // --------- jugador / valoración / set (del pool) ---------
   function initSideFilters(){
-    var P=pool();
-    var pm={};P.forEach(function(a){pm[a.num]=a.name;});
-    var nums=Object.keys(pm).sort(function(a,b){return parseInt(a)-parseInt(b);});
-    var cur=$('fPlayer').value;
-    $('fPlayer').innerHTML='<option value="">Todos</option>'+nums.map(function(n){return '<option value="'+n+'"'+(n===cur?' selected':'')+'>#'+parseInt(n,10)+' · '+pm[n]+'</option>';}).join('');
+    var P=basePool();
     var evs=[];P.forEach(function(a){if(a.ev&&evs.indexOf(a.ev)<0)evs.push(a.ev);});evs.sort();
     $('fEval').innerHTML=evs.map(function(e){return '<span class="chip'+(selEval[e]?' on':'')+'" data-ev="'+e+'" style="color:var('+(EVAL_COLOR[e]||'--muted')+')">'+e+'</span>';}).join('');
     var sets=[];P.forEach(function(a){if(a.set&&sets.indexOf(a.set)<0)sets.push(a.set);});sets.sort();
     $('fSet').innerHTML=sets.map(function(s){return '<span class="chip'+(selSet[s]?' on':'')+'" data-set="'+s+'">Set '+s+'</span>';}).join('');
   }
 
+  var EVAL_ORDER=['#','+','!','-','/','='];
+  function evRank(e){var i=EVAL_ORDER.indexOf(e);return i<0?99:i;}
   // --------- aplicar ---------
   function apply(){
-    var pl=$('fPlayer').value, evK=Object.keys(selEval), stK=Object.keys(selSet);
+    var evK=Object.keys(selEval), stK=Object.keys(selSet);
     var multi=selectedMatchCodes().length>1;
-    filtered=pool().filter(function(a){
+    filtered=basePool().filter(function(a){
       if(!selAct[akey(a.sk,sub(a))]) return false;
-      if(pl&&a.num!==pl) return false;
       if(evK.length&&evK.indexOf(a.ev)<0) return false;
       if(stK.length&&stK.indexOf(a.set)<0) return false;
       return true;
-    }).sort(function(a,b){ if(a.mc!==b.mc)return a.mc<b.mc?-1:1; return a.t-b.t;});
+    }).sort(function(a,b){ var ra=evRank(a.ev),rb=evRank(b.ev); if(ra!==rb)return ra-rb; if(a.mc!==b.mc)return a.mc<b.mc?-1:1; return a.t-b.t;});
     filtered.forEach(function(a){a._vid=ytId(MAP[a.mc]||'');});
     current=-1; render(multi);
     var playable=filtered.some(function(a){return a._vid;});
@@ -228,16 +239,23 @@
     $('cnt').textContent=filtered.length;
     var L=$('list');
     if(!filtered.length){L.innerHTML='<div class="listempty">No hay acciones con esos filtros.</div>';return;}
-    L.innerHTML=filtered.map(function(a,i){
+    var html='', lastEv='__INIT__';
+    filtered.forEach(function(a,i){
+      if(a.ev!==lastEv){ lastEv=a.ev;
+        var gc=filtered.filter(function(x){return x.ev===a.ev;}).length;
+        var gec='var('+(EVAL_COLOR[a.ev]||'--muted')+')';
+        html+='<div class="grphdr" style="box-shadow:inset 3px 0 0 '+gec+'"><span style="color:'+gec+'">'+(a.ev||'·')+'</span>'+(EVAL_NAME[a.ev]||'Sin valoración')+'<span class="grcnt">'+gc+'</span></div>';
+      }
       var col='var('+(SKILL_COLOR[a.sk]||'--free')+')', ec='var('+(EVAL_COLOR[a.ev]||'--muted')+')';
       var det=a.sk==='Ataque'?(COMBOS[a.x]||''):((a.sk==='Saque'||a.sk==='Recepción')?(TYPE_NAME[a.x]||''):'');
       var sel=selected[a.mc+'-'+a.t+'-'+a.num]?' on':'';
       var mt=multi?'<div class="mt">'+(VD.matches[a.mc].date||'').slice(5)+'</div>':'';
-      return '<div class="row'+(a._vid?'':' novid')+'" data-i="'+i+'"><div class="chk'+sel+'" data-chk="'+i+'">'+(sel?'✓':'')+'</div>'+
+      html+='<div class="row'+(a._vid?'':' novid')+'" data-i="'+i+'"><div class="chk'+sel+'" data-chk="'+i+'">'+(sel?'✓':'')+'</div>'+
         '<div class="tc">'+mmss(a.t)+'</div>'+mt+'<div class="pill" style="background:'+col+'22;color:'+col+'">'+a.sk.slice(0,3)+'</div>'+
         '<div class="nm">#'+parseInt(a.num,10)+' '+a.name+'</div>'+(det?'<div class="det">'+det+'</div>':'')+
         '<div class="ev" style="color:'+ec+'">'+(a.ev||'·')+'</div></div>';
-    }).join('');
+    });
+    L.innerHTML=html;
   }
 
   // --------- reproductor (multi-video) ---------
@@ -278,10 +296,10 @@
       return [a.mc,VD.matches[a.mc].date,s,e,mmss(s),mmss(e),'"'+a.name+'"',parseInt(a.num,10),a.sk,'"'+det+'"',a.ev,a.set].join(',');}).join('\n');
     var b=new Blob([csv],{type:'text/csv'}),u=URL.createObjectURL(b),l=document.createElement('a');l.href=u;l.download='cortes.csv';l.click();URL.revokeObjectURL(u);toast(ch.length+' clips exportados');}
 
-  function rebuildAll(){buildActionTree();initSideFilters();apply();}
+  function rebuildAll(){initPlayers();buildActionTree();initSideFilters();apply();}
 
   function bind(){
-    $('fMatches').addEventListener('click',function(e){var c=e.target.closest('[data-m]');if(!c)return;var m=c.dataset.m;selMatch[m]=!selMatch[m];c.classList.toggle('on',selMatch[m]);selAct={};rebuildAll();});
+    $('fMatches').addEventListener('click',function(e){var c=e.target.closest('[data-m]');if(!c)return;var m=c.dataset.m;selMatch[m]=!selMatch[m];c.classList.toggle('on',selMatch[m]);rebuildAll();});
     $('ddBtn').addEventListener('click',function(){$('ddPanel').classList.toggle('open');});
     $('ddPanel').addEventListener('click',function(e){
       if(e.target.id==='ddAll'){Object.keys(selAct).forEach(function(k){selAct[k]=true;});buildActionTree();apply();return;}
@@ -291,10 +309,10 @@
       var ch=e.target.closest('.ck.child');
       if(ch){var k=ch.dataset.k;selAct[k]=!selAct[k];buildActionTree();apply();return;}
     });
-    $('fPlayer').addEventListener('change',apply);
+    $('fPlayers').addEventListener('click',function(e){var c=e.target.closest('[data-p]');if(!c)return;var n=c.dataset.p;selPlayers[n]=!selPlayers[n];rebuildAll();});
     $('fEval').addEventListener('click',function(e){var c=e.target.closest('[data-ev]');if(!c)return;var v=c.dataset.ev;if(selEval[v])delete selEval[v];else selEval[v]=1;c.classList.toggle('on');apply();});
     $('fSet').addEventListener('click',function(e){var c=e.target.closest('[data-set]');if(!c)return;var v=c.dataset.set;if(selSet[v])delete selSet[v];else selSet[v]=1;c.classList.toggle('on');apply();});
-    $('reset').addEventListener('click',function(){$('fPlayer').value='';selEval={};selSet={};Object.keys(selAct).forEach(function(k){selAct[k]=true;});rebuildAll();});
+    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};rebuildAll();});
     $('btnPlay').addEventListener('click',togglePlay);
     $('btnNext').addEventListener('click',function(){if(ready)next();});
     $('btnPrev').addEventListener('click',prev);
@@ -312,7 +330,19 @@
     if(!Object.keys(VD.matches).length){$('sub').textContent='No se encontró la planilla de datos.';return;}
     var n=Object.keys(VD.matches).length;
     $('sub').textContent=n+' partido(s) cargado(s) · tildá partidos y acciones, y armá tu reel';
-    initMatches();bind();rebuildAll();loadYT();
+    initMatches();
+    // preset desde URL (?num=6&sk=Ataque&combo=X5) — usado por el botón "Ver video" de los heatmaps
+    var Q=new URLSearchParams(location.search);
+    var pNum=Q.get('num'), pSk=Q.get('sk'), pCombo=Q.get('combo');
+    if(pNum){ pNum=(''+pNum).replace(/[^0-9]/g,''); if(pNum){pNum=pNum.padStart(2,'0'); selPlayers[pNum]=true;} }
+    bind(); rebuildAll();
+    if(pSk){
+      var skName={ATAQUE:'Ataque',SAQUE:'Saque',RECEPCION:'Recepción','RECEPCIÓN':'Recepción',ARMADO:'Armado',BLOQUEO:'Bloqueo',DEFENSA:'Defensa',FREEBALL:'Freeball'};
+      var sk=skName[pSk.toUpperCase()]||pSk, any=false;
+      Object.keys(selAct).forEach(function(k){var pp=k.split('|');var on=(pp[0]===sk)&&(!pCombo||pCombo.split(',').indexOf(pp[1])>=0);selAct[k]=on;if(on)any=true;});
+      if(any){ buildActionTree(); $('ddPanel').classList.add('open'); apply(); }
+    }
+    loadYT();
   }
   document.addEventListener('DOMContentLoaded',init);
 })();

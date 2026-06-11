@@ -85,6 +85,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   </div>
   <div class="flabel" data-i18n="Jugador"><span data-t="g_jugador">Jugador</span></div>
   <select class="psel" id="psel" onchange="onPlayerChange(this.value)"><option value="">Seleccionar...</option></select>
+  <button id="ver-video-btn" onclick="abrirVideo()" style="width:100%;margin-top:8px;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.45);color:#F97316;padding:9px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:1px;cursor:pointer">🎬 VER VIDEO DE ESTAS ACCIONES</button>
   <div class="active-filters" id="active-tags"></div>
   <div class="acc-group"><div class="acc-header" id="acc-hdr-partido" onclick="accToggle('partido')"><span><span data-t="g_partido">Partido</span></span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
   <div class="acc-body" id="acc-body-partido">
@@ -219,6 +220,18 @@ function calcEff(acts){
 
 function uniq(arr){var s={},r=[];arr.forEach(function(v){if(!s[v]){s[v]=1;r.push(v);}});return r;}
 function setF(key,val){ F[key]=val; if(key!=="player") buildChips(); render(); }
+function abrirVideo(){
+  if(typeof equipo!=='undefined' && equipo && equipo!=='nafels'){ alert('Por ahora el video está disponible solo para Näfels.'); return; }
+  if(!F.player){ alert('Elegí un jugador primero.'); return; }
+  var u='cortes.html?num='+encodeURIComponent(F.player)+'&sk=Ataque';
+  if(F.combo && F.combo!=='all') u+='&combo='+encodeURIComponent(F.combo);
+  window.open(u,'_blank');
+}
+function verVideoCombo(cod){
+  if(typeof equipo!=='undefined' && equipo && equipo!=='nafels'){ alert('Por ahora el video está disponible solo para Näfels.'); return; }
+  if(!F.player){ alert('Elegí un jugador primero.'); return; }
+  window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Ataque&combo='+encodeURIComponent(cod),'_blank');
+}
 function onPlayerChange(val){
   F.player=val; F.atype="all"; F.rival="all"; F.set="all";
   F.moment="all"; F.result="all"; F.combo="all";
@@ -483,7 +496,8 @@ function render(){
   Object.keys(cc).sort(function(a,b){return cc[b].tot-cc[a].tot;}).forEach(function(cod){
     var d=cc[cod],eff2=Math.round((d.k-d.e)/d.tot*100);
     var col=effColor(eff2,44),pos2=COMBO_POS[cod]||0,isSel=F.combo===cod;
-    html+="<div class='ccard"+(isSel?" sel":"")+"' data-cod='"+cod+"' onclick='toggleCombo(this)'>";
+    html+="<div class='ccard"+(isSel?" sel":"")+"' data-cod='"+cod+"' onclick='toggleCombo(this)' style='position:relative'>";
+    html+="<span onclick='event.stopPropagation();verVideoCombo(\""+cod+"\")' title='Ver video de estas acciones' style='position:absolute;top:2px;right:4px;font-size:14px;line-height:1;cursor:pointer;opacity:.9'>🎬</span>";
     html+="<div style='font-size:12px;font-weight:800;color:#94a3b8;margin-bottom:2px'>"+cod+"</div>";
     if(pos2) html+="<div class='pos-tag' style='color:"+(POS_COLOR[pos2]||"#475569")+"'>"+(POS_LABEL[pos2]||"").split("(")[0].trim()+"</div>";
     html+="<div style='font-family:Bebas Neue,sans-serif;font-size:22px;color:"+col+"'>"+eff2+"%</div>";
