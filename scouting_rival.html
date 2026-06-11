@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scouting Rival — Nafels Voley</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07080F;--card:#0d0e1a;--card2:#111324;--border:rgba(255,255,255,.07);
+    --txt:#e2e8f0;--mut:#64748b;--mut2:#94a3b8;
+    --red:#e8192c;--saque:#F59E0B;--ataque:#F97316;--recep:#22C55E;--armado:#818CF8;--defensa:#EF4444;--cyan:#06B6D4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',sans-serif;min-height:100vh}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(1200px 600px at 80% -10%,rgba(232,25,44,.06),transparent 60%),radial-gradient(900px 500px at -10% 110%,rgba(129,140,248,.05),transparent 60%);pointer-events:none;z-index:0}
+  .wrap{position:relative;z-index:1}
+
+  .header-right{position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px}
+  #lang-wrap{display:flex;gap:4px}
+
+  .hdr{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    padding:12px 210px 12px 22px;background:rgba(7,8,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  @media(max-width:760px){.hdr{padding-right:22px}}
+  .back-btn{padding:6px 13px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--mut2);font-size:11px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase;white-space:nowrap}
+  .back-btn:hover{border-color:rgba(255,255,255,.2);color:#fff}
+  .hdr-t{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;line-height:1}
+  .hdr-t span{color:var(--red)}
+  .hdr-s{font-size:10px;color:var(--mut);letter-spacing:2px;text-transform:uppercase}
+
+  .teamsel{display:flex;gap:8px;flex-wrap:wrap;padding:18px 22px 4px}
+  .tbtn{padding:9px 16px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--mut2);
+    font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;cursor:pointer;
+    transition:all .15s;display:flex;align-items:center;gap:8px;white-space:nowrap}
+  .tbtn:hover{border-color:rgba(255,255,255,.22);transform:translateY(-1px)}
+  .tbtn.on{border-color:var(--red);background:rgba(232,25,44,.12);color:#fff;box-shadow:0 4px 18px rgba(232,25,44,.18)}
+  .tbtn .mc{font-size:10px;color:var(--mut);font-weight:600}
+  .tbtn.on .mc{color:#fca5a5}
+
+  .dossier{padding:14px 22px 60px;max-width:1280px;margin:0 auto}
+  .empty-st{padding:80px 20px;text-align:center;color:var(--mut)}
+  .empty-st .big{font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:3px;color:#1e293b;margin-bottom:8px}
+
+  .dteam{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:8px 0 18px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+  .dteam-name{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:2px;line-height:.95}
+  .dteam-sub{font-size:12px;color:var(--mut2);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+  .dteam-sub b{color:var(--red)}
+
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+  .sec{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+  .sec-hd{display:flex;align-items:center;gap:9px;padding:13px 18px;border-bottom:1px solid var(--border)}
+  .sec-ic{font-size:17px}
+  .sec-ti{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px}
+  .sec-bd{padding:16px 18px}
+
+  .kpis{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .kpi{flex:1;min-width:74px;background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:11px 8px;text-align:center}
+  .kpi .v{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1}
+  .kpi .l{font-size:9px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase;margin-top:3px}
+
+  .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+  .bar-lb{font-size:12px;font-weight:700;width:60px;letter-spacing:.5px;color:var(--mut2);flex-shrink:0}
+  .bar-tr{flex:1;height:9px;background:rgba(255,255,255,.04);border-radius:6px;overflow:hidden}
+  .bar-fl{height:100%;border-radius:6px;transition:width .4s}
+  .bar-vl{font-size:11px;font-weight:800;width:54px;text-align:right;flex-shrink:0}
+
+  table{width:100%;border-collapse:collapse}
+  th{font-size:9px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;text-align:right;padding:6px 8px;border-bottom:1px solid var(--border)}
+  th:first-child{text-align:left}
+  td{font-size:13px;padding:8px;text-align:right;border-bottom:1px solid rgba(255,255,255,.03)}
+  td:first-child{text-align:left;font-weight:700}
+  tr:last-child td{border-bottom:none}
+  .star{color:var(--ataque)}
+  .posbadge{font-size:10px;font-weight:800;letter-spacing:.5px;padding:2px 8px;border-radius:6px;text-transform:uppercase}
+  .pb-pu{background:rgba(34,197,94,.15);color:#4ade80}
+  .pb-op{background:rgba(239,68,68,.15);color:#f87171}
+  .pb-ce{background:rgba(6,182,212,.15);color:#22d3ee}
+  .pb-x{background:rgba(148,163,184,.12);color:#94a3b8}
+  .rotgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(172px,1fr));gap:10px}
+  .rotcard{background:var(--card2);border:1px solid var(--border);border-radius:13px;padding:12px 13px}
+  .rothd{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;min-height:24px}
+  .rotnum{font-family:'Bebas Neue',sans-serif;font-size:23px;letter-spacing:2px;color:#f472b6}
+  .rottag{font-size:9px;font-weight:800;padding:2px 7px;border-radius:6px;letter-spacing:.5px}
+  .rotso{font-size:12px;color:var(--mut2);margin-bottom:8px}
+  .rotlb{font-size:9px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;margin:8px 0 3px}
+  .rotfr{font-size:13px;font-weight:700;color:var(--txt)}
+  .rotdist{display:flex;justify-content:space-between;font-size:13px;padding:2px 0}
+
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:7px 11px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:7px}
+  .chip b{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px}
+  .chip .p{font-size:11px;font-weight:800}
+
+  .court{width:100%;max-width:230px;margin:6px auto 0;display:block}
+
+  .claves{margin-top:16px;background:linear-gradient(135deg,rgba(232,25,44,.08),rgba(129,140,248,.06));border:1px solid rgba(232,25,44,.25);border-radius:16px;padding:16px 18px}
+  .claves-hd{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:#fff;display:flex;align-items:center;gap:9px;margin-bottom:12px}
+  .clave{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:14px;line-height:1.45}
+  .clave:last-child{border-bottom:none}
+  .clave .cn{flex-shrink:0;width:22px;height:22px;border-radius:7px;background:var(--red);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .clave b{color:#fff}.clave .hl{color:var(--ataque);font-weight:800}.clave .hl2{color:var(--armado);font-weight:800}.clave .hl3{color:var(--recep);font-weight:800}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="header-right"><div id="lang-wrap"></div></div>
+
+<div class="hdr">
+  <a href="dashboard.html" class="back-btn">← Dashboard</a>
+  <div>
+    <div class="hdr-t">SCOUTING <span>RIVAL</span></div>
+    <div class="hdr-s">Dossier del próximo rival · NLA Suiza</div>
+  </div>
+</div>
+
+<div class="teamsel" id="teamsel"></div>
+<div class="dossier" id="dossier">
+  <div class="empty-st"><div class="big">ELEGÍ UN RIVAL</div><div>Seleccioná un equipo arriba para ver su dossier completo de scouting.</div></div>
+</div>
+</div>
+
+<script src="scouting_rival.js" onerror="void 0"></script>
+<script>
+var SC = window.SCOUTING_RIVAL || {};
+var CUR = null;
+
+// === colores / helpers ===
+function effColor(v){ return v>=35?'#22c55e':v>=25?'#84cc16':v>=15?'#fbbf24':v>=5?'#f97316':'#ef4444'; }
+function pctColor(v){ return v>=55?'#22c55e':v>=40?'#fbbf24':v>=25?'#f97316':'#ef4444'; }
+function ZN(z){ return 'Z'+z; }
+
+// === selector de equipos (ordenados por partidos, mínimo 5) ===
+function buildTeams(){
+  var names = Object.keys(SC).filter(function(n){return SC[n].matches>=5;})
+    .sort(function(a,b){return SC[b].matches-SC[a].matches;});
+  var ts = document.getElementById('teamsel');
+  ts.innerHTML='';
+  names.forEach(function(n){
+    var b=document.createElement('button');
+    b.className='tbtn';
+    b.innerHTML='<span>'+n+'</span><span class="mc">'+SC[n].matches+' P</span>';
+    b.onclick=function(){ selectTeam(n,b); };
+    ts.appendChild(b);
+  });
+}
+function selectTeam(n,btn){
+  CUR=n;
+  document.querySelectorAll('.tbtn').forEach(function(x){x.classList.remove('on');});
+  if(btn) btn.classList.add('on');
+  renderDossier(n);
+}
+
+// === barra horizontal ===
+function bar(label,pct,color,valTxt){
+  return '<div class="bar-row"><div class="bar-lb">'+label+'</div>'
+    +'<div class="bar-tr"><div class="bar-fl" style="width:'+Math.min(100,pct)+'%;background:'+color+'"></div></div>'
+    +'<div class="bar-vl" style="color:'+color+'">'+(valTxt||pct+'%')+'</div></div>';
+}
+
+// === mini cancha de zonas de ataque (dónde caen sus ataques) ===
+function courtZones(zones){
+  // layout estándar de zonas en la cancha que defendemos
+  var grid=[[4,3,2],[7,8,9],[5,6,1]];
+  var map={}; zones.forEach(function(z){ map[z.k]=z.pct; });
+  var max=Math.max.apply(null,zones.map(function(z){return z.pct;}).concat([1]));
+  var W=230,H=150,cw=W/3,ch=H/3, svg='<svg class="court" viewBox="0 0 '+W+' '+H+'">';
+  svg+='<rect x="1" y="1" width="'+(W-2)+'" height="'+(H-2)+'" rx="6" fill="rgba(249,115,22,.04)" stroke="rgba(255,255,255,.12)"/>';
+  for(var r=0;r<3;r++)for(var c=0;c<3;c++){
+    var z=grid[r][c], p=map[z]||0, op=p/max*0.85;
+    var x=c*cw, y=r*ch;
+    svg+='<rect x="'+(x+2)+'" y="'+(y+2)+'" width="'+(cw-4)+'" height="'+(ch-4)+'" rx="4" fill="rgba(249,115,22,'+op.toFixed(2)+')" stroke="rgba(255,255,255,.06)"/>';
+    svg+='<text x="'+(x+cw/2)+'" y="'+(y+ch/2-3)+'" text-anchor="middle" font-family="Bebas Neue" font-size="15" fill="'+(p>0?'#fff':'#334155')+'">'+z+'</text>';
+    if(p>0) svg+='<text x="'+(x+cw/2)+'" y="'+(y+ch/2+13)+'" text-anchor="middle" font-size="10" font-weight="700" fill="#fdba74">'+p+'%</text>';
+  }
+  svg+='<line x1="0" y1="2" x2="'+W+'" y2="2" stroke="#e8192c" stroke-width="3"/>';
+  svg+='</svg><div style="text-align:center;font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;margin-top:4px">Destino de sus ataques</div>';
+  return svg;
+}
+
+// === claves del partido (insights automáticos) ===
+function posClass(p){ return p==='Opuesto'?'pb-op':p==='Central'?'pb-ce':p==='Punta'?'pb-pu':'pb-x'; }
+function renderRotations(t){
+  var rots=(t.rotations||[]).filter(function(r){return r;});
+  if(!rots.length) return '';
+  var withSO=rots.filter(function(r){return r.so_eff!=null;});
+  var weak=withSO.slice().sort(function(a,b){return a.so_eff-b.so_eff;})[0];
+  var strong=withSO.slice().sort(function(a,b){return b.so_eff-a.so_eff;})[0];
+  var h='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">🔄</span><span class="sec-ti" style="color:#f472b6">Por rotación — dónde apretar el saque</span></div><div class="sec-bd">';
+  h+='<div class="rotgrid">';
+  rots.forEach(function(r){
+    var isWeak=weak&&r.r===weak.r, isStrong=strong&&r.r===strong.r&&!isWeak;
+    var soTxt=r.so_eff!=null?r.so_eff+'%':'—';
+    var soCol=r.so_eff!=null?effColor(r.so_eff):'#475569';
+    var bd=isWeak?'border-color:rgba(239,68,68,.5)':isStrong?'border-color:rgba(34,197,94,.4)':'';
+    h+='<div class="rotcard" style="'+bd+'">';
+    h+='<div class="rothd"><span class="rotnum">S'+r.r+'</span>'
+      +(isWeak?'<span class="rottag" style="background:rgba(239,68,68,.18);color:#f87171">🎯 sacar acá</span>':'')
+      +(isStrong?'<span class="rottag" style="background:rgba(34,197,94,.15);color:#4ade80">fuerte</span>':'')+'</div>';
+    h+='<div class="rotso">Side-out <b style="color:'+soCol+'">'+soTxt+'</b> · eff ataque '+r.eff+'%</div>';
+    h+='<div class="rotlb">En red</div><div class="rotfr">'+(r.front||[]).join(' · ')+'</div>';
+    h+='<div class="rotlb">Armador distribuye a</div>';
+    (r.dist||[]).forEach(function(d){ h+='<div class="rotdist"><span>'+d.name+'</span><span style="color:#f472b6;font-weight:800">'+d.pct+'%</span></div>'; });
+    h+='</div>';
+  });
+  h+='</div>';
+  h+='<div style="font-size:10px;color:var(--mut);margin-top:10px;line-height:1.5">La rotación se define por la zona del armador (S1 = armador en zona 1, saca). <b style="color:#f87171">🎯 sacar acá</b> = su rotación más floja en side-out. "En red" = sus 3 jugadores en zona de ataque.</div>';
+  h+='</div></div>';
+  return h;
+}
+function buildClaves(t){
+  var c=[];
+  var ap=t.attack.players||[];
+  function pelOf(p){ return (p.combos&&p.combos.length)?p.combos.slice(0,2).map(function(x){return x.k+' ('+x.pct+'%)';}).join(' y '):'—'; }
+  function notaPos(p){
+    if(p.pos==='Opuesto') return 'Atención a su ataque por zona 2 y a la zaga.';
+    if(p.pos==='Central') return 'Lectura del primer tiempo y bloqueo central.';
+    if(p.pos==='Punta') return 'Bloqueo en zona 4 y defensa de línea/diagonal.';
+    return '';
+  }
+  if(ap.length){
+    var top=ap[0];
+    c.push('Rematador principal: <span class="hl">'+top.name+'</span> (<b>'+top.pos+'</b>, eff <b>'+top.eff+'%</b>, '+top.killpct+'% de punto). Su pelota: <b>'+pelOf(top)+'</b>, desde '+top.origen+'. '+notaPos(top));
+    if(ap[1]) c.push('Segunda opción: <span class="hl">'+ap[1].name+'</span> ('+ap[1].pos+', eff '+ap[1].eff+'%) — pelota '+pelOf(ap[1])+'.');
+    var centrales=ap.filter(function(p){return p.pos==='Central';}).sort(function(a,b){return b.eff-a.eff;});
+    if(centrales.length && centrales[0]!==top) c.push('Central peligroso: <span class="hl">'+centrales[0].name+'</span> (eff '+centrales[0].eff+'%, '+pelOf(centrales[0])+'). Cuidar el primer tiempo.');
+  }
+  if(t.set.main){
+    var ca=(t.set.calls&&t.set.calls.length)?' Llamada que más usa: <span class="hl2">'+t.set.calls[0].k+'</span> ('+t.set.calls[0].pct+'%).':'';
+    c.push('Armador: <span class="hl2">'+t.set.main.name+'</span> (distribuye el '+t.set.main.pct+'% del juego).'+ca);
+  }
+  if(t.recep.weak && t.recep.weak.length){
+    var w=t.recep.weak[0];
+    if(w.pospct<62) c.push('Receptor más vulnerable: <span class="hl3">'+w.name+'</span> ('+w.pospct+'% positiva, '+w.errpct+'% de error). <b>Sacarle a él</b> para romper su recepción.');
+  }
+  var rotsSO=(t.rotations||[]).filter(function(r){return r&&r.so_eff!=null;});
+  if(rotsSO.length){
+    var wr=rotsSO.slice().sort(function(a,b){return a.so_eff-b.so_eff;})[0];
+    c.push('Rotación más débil en side-out: <b>S'+wr.r+'</b> (solo '+wr.so_eff+'%, armador en zona '+wr.r+'). <b>Apretar el saque cuando entren a esa rotación.</b>');
+  }
+  if(t.serve.acepct>=6) c.push('Sacan fuerte: <b>'+t.serve.acepct+'% de aces</b>. Reforzar la recepción y tener plan B de armado.');
+  else if(t.serve.errpct>=16) c.push('Saque errático (<b>'+t.serve.errpct+'% de error</b>). Presionarlos a arriesgar el saque.');
+  return c;
+}
+
+function renderDossier(n){
+  var t=SC[n]; if(!t){return;}
+  var d=document.getElementById('dossier');
+  var h='';
+
+  // header del equipo
+  h+='<div class="dteam"><div><div class="dteam-name">'+n+'</div>'
+    +'<div class="dteam-sub"><b>'+t.matches+'</b> partidos analizados · scouting basado en datos reales</div></div></div>';
+
+  h+='<div class="grid">';
+
+  // ===== SAQUE =====
+  h+='<div class="sec"><div class="sec-hd"><span class="sec-ic">⚡</span><span class="sec-ti" style="color:var(--saque)">Saque</span></div><div class="sec-bd">';
+  h+='<div class="kpis">'
+    +'<div class="kpi"><div class="v" style="color:'+pctColor(t.serve.acepct*3)+'">'+t.serve.acepct+'%</div><div class="l">Aces</div></div>'
+    +'<div class="kpi"><div class="v" style="color:#ef4444">'+t.serve.errpct+'%</div><div class="l">Error</div></div>'
+    +'<div class="kpi"><div class="v" style="color:'+effColor(t.serve.eff+30)+'">'+t.serve.tot+'</div><div class="l">Total</div></div></div>';
+  h+='<div style="font-size:10px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Zonas desde donde sacan</div>';
+  t.serve.zones.forEach(function(z){ h+=bar(ZN(z.k),z.pct,'var(--saque)'); });
+  h+='</div></div>';
+
+  // ===== ARMADO =====
+  h+='<div class="sec"><div class="sec-hd"><span class="sec-ic">🎯</span><span class="sec-ti" style="color:var(--armado)">Armador</span></div><div class="sec-bd">';
+  if(t.set.main){
+    h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">'
+      +'<div style="font-family:Bebas Neue;font-size:30px;letter-spacing:1px">'+t.set.main.name+'</div>'
+      +'<div class="chip" style="border-color:rgba(129,140,248,.4)"><span class="p" style="color:var(--armado)">'+t.set.main.pct+'%</span> del juego</div></div>';
+  }
+  if(t.set.calls && t.set.calls.length){
+    h+='<div style="font-size:10px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px">Llamadas que usa</div><div class="chips">';
+    t.set.calls.forEach(function(k){ h+='<div class="chip"><b style="color:var(--armado)">'+k.k+'</b><span class="p" style="color:var(--armado)">'+k.pct+'%</span></div>'; });
+    h+='</div>';
+  }
+  h+='</div></div>';
+
+  // ===== ATAQUE (ancho completo) — análisis por jugador =====
+  h+='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">💥</span><span class="sec-ti" style="color:var(--ataque)">Ataque — por jugador</span></div><div class="sec-bd">';
+  h+='<div class="kpis" style="max-width:480px">'
+    +'<div class="kpi"><div class="v" style="color:'+effColor(t.attack.eff)+'">'+t.attack.eff+'%</div><div class="l">Eficiencia</div></div>'
+    +'<div class="kpi"><div class="v" style="color:#22c55e">'+t.attack.killpct+'%</div><div class="l">Punto</div></div>'
+    +'<div class="kpi"><div class="v" style="color:#06b6d4">'+t.attack.blkpct+'%</div><div class="l">Bloqueados</div></div>'
+    +'<div class="kpi"><div class="v" style="color:var(--ataque)">'+t.attack.tot+'</div><div class="l">Total</div></div></div>';
+  h+='<div style="overflow-x:auto"><table><thead><tr><th>Rematador</th><th style="text-align:left">Pos</th><th>Atq</th><th>Punto%</th><th>EFF</th><th>SO</th><th>TR</th><th style="text-align:left">Su pelota</th><th style="text-align:left">Desde</th></tr></thead><tbody>';
+  (t.attack.players||[]).forEach(function(p,i){
+    var pel=(p.combos||[]).slice(0,2).map(function(cc){return cc.k+' '+cc.pct+'%';}).join(' · ');
+    var so=p.so_eff!=null?'<span style="color:'+effColor(p.so_eff)+'">'+p.so_eff+'%</span>':'<span style="color:#334155">—</span>';
+    var tr=p.tr_eff!=null?'<span style="color:'+effColor(p.tr_eff)+'">'+p.tr_eff+'%</span>':'<span style="color:#334155">—</span>';
+    h+='<tr><td>'+(i===0?'<span class="star">★</span> ':'')+p.name+'</td>'
+      +'<td style="text-align:left"><span class="posbadge '+posClass(p.pos)+'">'+p.pos+'</span></td>'
+      +'<td style="color:var(--mut2)">'+p.tot+'</td>'
+      +'<td style="color:#22c55e;font-weight:700">'+p.killpct+'%</td>'
+      +'<td style="font-weight:800;color:'+effColor(p.eff)+'">'+p.eff+'%</td>'
+      +'<td style="font-weight:700">'+so+'</td>'
+      +'<td style="font-weight:700">'+tr+'</td>'
+      +'<td style="text-align:left;color:var(--ataque);font-weight:700">'+(pel||'—')+'</td>'
+      +'<td style="text-align:left;color:var(--mut2);font-size:12px">'+(p.origen||'')+'</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  h+='<div style="font-size:10px;color:var(--mut);margin-top:9px;line-height:1.5">★ principal · <b style="color:var(--mut2)">SO</b> = eficacia en side-out (con recepción) · <b style="color:var(--mut2)">TR</b> = en transición · <b style="color:var(--mut2)">Su pelota</b> = su combinación más usada · <b style="color:var(--mut2)">Desde</b> = zona de origen · posición inferida de sus zonas reales</div>';
+  h+='</div></div>';
+
+  // ===== RECEPCIÓN =====
+  h+='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">🛡</span><span class="sec-ti" style="color:var(--recep)">Recepción — dónde atacarlos con el saque</span></div><div class="sec-bd">';
+  h+='<div class="kpis" style="max-width:340px">'
+    +'<div class="kpi"><div class="v" style="color:'+pctColor(t.recep.pospct)+'">'+t.recep.pospct+'%</div><div class="l">Positiva (#+)</div></div>'
+    +'<div class="kpi"><div class="v" style="color:#ef4444">'+t.recep.errpct+'%</div><div class="l">Error</div></div>'
+    +'<div class="kpi"><div class="v" style="color:var(--mut2)">'+t.recep.tot+'</div><div class="l">Total</div></div></div>';
+  if(t.recep.weak && t.recep.weak.length){
+    h+='<table style="margin-top:6px"><thead><tr><th>Receptor (de + débil a + fuerte)</th><th>Rec.</th><th>Positiva%</th><th>Error%</th></tr></thead><tbody>';
+    t.recep.weak.forEach(function(w,i){
+      h+='<tr><td>'+(i===0?'<span style="color:var(--red)">🎯</span> ':'')+w.name+'</td><td style="color:var(--mut2)">'+w.tot+'</td>'
+        +'<td style="font-weight:800;color:'+pctColor(w.pospct)+'">'+w.pospct+'%</td>'
+        +'<td style="color:#f97316">'+w.errpct+'%</td></tr>';
+    });
+    h+='</tbody></table>';
+  }
+  h+='</div></div>';
+
+  h+=renderRotations(t);
+
+  h+='</div>'; // /grid
+
+  // ===== CLAVES DEL PARTIDO =====
+  var cl=buildClaves(t);
+  if(cl.length){
+    h+='<div class="claves"><div class="claves-hd">🔑 Claves del partido</div>';
+    cl.forEach(function(x,i){ h+='<div class="clave"><div class="cn">'+(i+1)+'</div><div>'+x+'</div></div>'; });
+    h+='</div>';
+  }
+
+  d.innerHTML=h;
+}
+
+buildTeams();
+</script>
+<script src="lang.js" onerror="void 0"></script>
+<script src="temporadas_menu.js" onerror="void 0"></script>
+</body>
+</html>
