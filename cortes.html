@@ -91,8 +91,11 @@
   <div class="sub" id="sub">—</div>
   <div class="grid">
     <div class="card filters">
-      <div class="flabel">Partidos <span style="color:var(--muted2);text-transform:none">(tildá los que quieras)</span></div>
-      <div class="chips" id="fMatches"></div>
+      <div class="flabel">Partidos <span style="color:var(--muted2);text-transform:none">(elegí cuáles)</span></div>
+      <div class="dd">
+        <div class="dd-btn" id="mBtn">Elegir partidos <span class="n" id="mN">—</span></div>
+        <div class="dd-panel" id="mPanel"></div>
+      </div>
       <div class="flabel">Acciones a mostrar</div>
       <div class="dd">
         <div class="dd-btn" id="ddBtn">Elegir acciones <span class="n" id="ddN">—</span></div>
@@ -157,9 +160,20 @@
   // --------- partidos ---------
   function initMatches(){
     var codes=Object.keys(VD.matches).sort(function(a,b){return (VD.matches[a].date||'').localeCompare(VD.matches[b].date||'');});
-    codes.forEach(function(c){selMatch[c]=true;});
-    $('fMatches').innerHTML=codes.map(function(c){var m=VD.matches[c];
-      return '<span class="chip on" data-m="'+c+'">'+m.date.slice(5)+' vs '+m.opponent+(ytId(MAP[c])?' 🎬':'')+'</span>';}).join('');
+    codes.forEach(function(c){if(!(c in selMatch))selMatch[c]=true;});
+    renderMatches();
+  }
+  function renderMatches(){
+    var codes=Object.keys(VD.matches).sort(function(a,b){return (VD.matches[a].date||'').localeCompare(VD.matches[b].date||'');});
+    var html='<div class="dd-tools"><button id="mAll">Todos</button><button id="mNone">Ninguno</button></div>';
+    codes.forEach(function(c){var m=VD.matches[c];var on=selMatch[c];
+      html+='<div class="ck'+(on?' on':'')+'" data-m="'+c+'"><span class="box">'+(on?'✓':'')+'</span>'+
+            '<span>'+m.date.slice(5)+' vs '+m.opponent+(ytId(MAP[c])?' 🎬':'')+'</span>'+
+            '<span class="cc">'+(m.actions?m.actions.length:0)+'</span></div>';
+    });
+    $('mPanel').innerHTML=html;
+    var n=codes.filter(function(c){return selMatch[c];}).length;
+    $('mN').textContent=(n===codes.length?'Todos ('+n+')':n+' de '+codes.length);
   }
   function selectedMatchCodes(){return Object.keys(selMatch).filter(function(c){return selMatch[c];});}
   function pool(){ // todas las acciones de los partidos tildados, con su código
@@ -307,7 +321,12 @@
   function rebuildAll(){initPlayers();buildActionTree();initSideFilters();apply();}
 
   function bind(){
-    $('fMatches').addEventListener('click',function(e){var c=e.target.closest('[data-m]');if(!c)return;var m=c.dataset.m;selMatch[m]=!selMatch[m];c.classList.toggle('on',selMatch[m]);rebuildAll();});
+    $('mBtn').addEventListener('click',function(){$('mPanel').classList.toggle('open');});
+    $('mPanel').addEventListener('click',function(e){
+      if(e.target.id==='mAll'){Object.keys(selMatch).forEach(function(c){selMatch[c]=true;});renderMatches();rebuildAll();return;}
+      if(e.target.id==='mNone'){Object.keys(selMatch).forEach(function(c){selMatch[c]=false;});renderMatches();rebuildAll();return;}
+      var row=e.target.closest('[data-m]');if(!row)return;var m=row.dataset.m;selMatch[m]=!selMatch[m];renderMatches();rebuildAll();
+    });
     $('ddBtn').addEventListener('click',function(){$('ddPanel').classList.toggle('open');});
     $('ddPanel').addEventListener('click',function(e){
       if(e.target.id==='ddAll'){Object.keys(selAct).forEach(function(k){selAct[k]=true;});buildActionTree();apply();return;}
