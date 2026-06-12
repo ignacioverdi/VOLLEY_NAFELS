@@ -73,28 +73,28 @@
     sel.addEventListener('change',function(){render(this.value);});
     function ec(v){return v>=35?'#22c55e':v>=25?'#84cc16':v>=15?'#fbbf24':v>=5?'#f97316':'#ef4444';}
     function posCls(p){return p==='Opuesto'?'b-op':p==='Punta'?'b-pu':p==='Central'?'b-ce':p==='Armador'?'b-ar':'';}
-    function dirs(p){return (p.dirs||[]).slice(0,3).map(function(d){return 'Z'+d.k+' '+d.pct+'%';}).join(' · ')||'—';}
-    function pel(p){return (p.combos||[]).slice(0,2).map(function(c){return c.k+' '+c.pct+'%';}).join(' · ')||'—';}
+    function juego(p){return (p.combos||[]).slice(0,3).map(function(c){var dz=(c.dest||[]).slice(0,2).map(function(d){return 'Z'+d.z;}).join('/');return c.k+' '+c.pct+'%→'+(dz||'?');}).join('  ·  ')||'—';}
 
     function render(name){
       var t=S[name], box=document.getElementById('sheet');
       if(!t){box.innerHTML='<div class="empty">Elegí un rival arriba.</div>';return;}
       var h='<div class="sheet-hd"><div class="rival">'+name+'</div><div class="meta">'+t.matches+' partidos analizados · NLA</div></div><div class="grid">';
 
-      // SAQUE: a quién y dónde
-      var weak=(t.recep.weak||[]).slice(0,2);
-      var rotsSO=(t.rotations||[]).filter(function(r){return r&&r.so_n>=10;}).sort(function(a,b){return a.so_eff-b.so_eff;});
-      h+='<div class="box"><div class="box-t"><span class="ic" style="background:var(--saque)"></span>SAQUE — a quién romperle</div>';
-      if(weak.length){
-        h+='<div class="line">Sacarle a: '+weak.map(function(w){return '<b>'+w.name+'</b> ('+w.pospct+'% pos)';}).join(' y ')+'</div>';
+      // SAQUE: a quién, cómo y dónde + prioridad por rotación
+      var rd=(t.recep.detail&&t.recep.detail.length)?t.recep.detail:null;
+      var rotsAll=(t.rotations||[]).filter(function(r){return r&&r.so_eff!=null;}).sort(function(a,b){return a.so_eff-b.so_eff;});
+      h+='<div class="box"><div class="box-t"><span class="ic" style="background:var(--saque)"></span>SAQUE — a quién, cómo y dónde</div>';
+      if(rd){
+        var w=rd[0], flo=w.float||{n:0}, sp=w.spin||{n:0}, tipo='';
+        if(flo.n>=15&&sp.n>=15) tipo=flo.pospct<sp.pospct?'flotado':'potencia';
+        var wz=(w.weakzones||[]).slice(0,1).map(function(z){return 'Z'+z.zone;}).join('');
+        h+='<div class="line">Objetivo: <b>'+w.name+'</b> ('+w.pospct+'% pos.)'+(tipo?' — sacarle <b>'+tipo+'</b>':'')+(wz?', a <b>'+wz+'</b>':'')+'.</div>';
+        if(rd[1]) h+='<div class="line" style="font-size:12.5px;color:var(--mut2)">2º objetivo: '+rd[1].name+' ('+rd[1].pospct+'%).</div>';
       }
-      if(rotsSO.length){
-        var r=rotsSO[0];
-        h+='<div class="line">Rotación más débil en side-out: <b>S'+r.r+'</b> (<span class="hl" style="color:'+ec(r.so_eff)+'">'+r.so_eff+'%</span>)'+(r.front&&r.front.length?' — delante: '+r.front.join(', '):'')+'</div>';
-      }
+      if(rotsAll.length) h+='<div class="line">Prioridad por rotación: '+rotsAll.slice(0,3).map(function(r,i){return (i+1)+'ª <b>P'+r.r+'</b> ('+r.so_eff+'%)';}).join(' · ')+'.</div>';
       h+='<div class="line" style="color:var(--mut2);font-size:12px">Reciben '+t.recep.pospct+'% positiva como equipo.</div></div>';
 
-      // FUERA DE SISTEMA: su derrumbe
+      // FUERA DE SISTEMA
       var ins=(t.sistema&&t.sistema.insys)||{}, ou=(t.sistema&&t.sistema.outsys)||{};
       h+='<div class="box"><div class="box-t"><span class="ic" style="background:var(--defensa)"></span>SI LES ROMPÉS LA RECEPCIÓN</div>';
       if(ins.n&&ou.n){
@@ -105,31 +105,32 @@
       } else h+='<div class="line" style="color:var(--mut)">Pocos datos.</div>';
       h+='</div>';
 
-      // REMATADORES + DIRECCIONES (lo que el jugador tiene que recordar)
+      // REMATADORES + DIRECCIONES POR COMBINACIÓN
       h+='<div class="box full"><div class="box-t"><span class="ic" style="background:var(--bloqueo)"></span>REMATADORES — cómo bloquearle y defenderle</div>';
-      h+='<table><thead><tr><th class="l">Jugador</th><th class="l">Pos</th><th>EFF</th><th class="l">Su pelota</th><th class="l">Clava en (direcciones)</th></tr></thead><tbody>';
-      (t.attack.players||[]).slice(0,6).forEach(function(p){
-        h+='<tr><td class="l"><b>'+p.name+'</b></td><td class="l"><span class="badge '+posCls(p.pos)+'">'+p.pos+'</span></td>'
+      h+='<table><thead><tr><th class="l">Jugador</th><th class="l">Pos</th><th>PJ</th><th>EFF</th><th>SO</th><th class="l">Combinación → dirección</th></tr></thead><tbody>';
+      (t.attack.players||[]).slice(0,7).forEach(function(p){
+        h+='<tr><td class="l"><b>'+p.name+'</b>'+(p.tot<60?' <span style="color:#64748b;font-size:9px">⚠ muestra chica</span>':'')+'</td>'
+          +'<td class="l"><span class="badge '+posCls(p.pos)+'">'+p.pos+'</span></td>'
+          +'<td style="color:var(--mut)">'+(p.matches||'')+'</td>'
           +'<td style="font-weight:800;color:'+ec(p.eff)+'">'+p.eff+'%</td>'
-          +'<td class="l" style="color:var(--ataque);font-weight:700">'+pel(p)+'</td>'
-          +'<td class="l" style="color:var(--bloqueo);font-weight:700">'+dirs(p)+'</td></tr>';
+          +'<td style="color:'+ec(p.so_eff)+'">'+(p.so_eff!=null?p.so_eff+'%':'—')+'</td>'
+          +'<td class="l" style="color:var(--ataque);font-weight:700;font-size:11px">'+juego(p)+'</td></tr>';
       });
-      h+='</tbody></table><div style="font-size:10px;color:var(--mut);margin-top:6px">«Clava en» = zonas de la cancha donde más remata. Z1 derecha · Z6 medio · Z5 izquierda (defensa). Acomodá bloqueo y zaga a esas direcciones.</div></div>';
+      h+='</tbody></table><div style="font-size:10px;color:var(--mut);margin-top:6px"><b>Combinación → dirección</b> = cada pelota con la zona a la que la manda (Z1 derecha · Z5 izq · Z6/7/8/9 fondo). <b>PJ</b> = partidos jugados. <b>SO</b> = eficacia en side-out. Acomodá bloqueo y zaga a esas direcciones.</div></div>';
 
-      // ARMADOR
-      var main=t.set.main||{}, calls=(t.set.calls||[]).slice(0,4);
+      // ARMADOR — distribución por llamada
+      var main=t.set.main||{};
       h+='<div class="box full"><div class="box-t"><span class="ic" style="background:var(--armado)"></span>ARMADOR</div>';
-      h+='<div class="line"><b>'+(main.name||'—')+'</b> distribuye el '+(main.pct||0)+'% del juego.';
-      if(calls.length) h+=' Llamadas: '+calls.map(function(c){return '<span class="tag">'+c.k+' '+c.pct+'%</span>';}).join('');
-      h+='</div>';
-      // por zona de recepción (resumen)
-      var bz=t.sistema&&t.sistema.by_zone;
-      if(bz){
-        ['Z1','Z6','Z5'].forEach(function(z){
-          var b=bz[z]; if(!b||!b.n) return;
-          var lbl={Z1:'derecha',Z6:'medio',Z5:'izquierda'}[z];
-          h+='<div class="line" style="font-size:12.5px">Recibe por '+lbl+' ('+z+'): arma a '+(b.dist||[]).slice(0,2).map(function(d){return '<b>'+d.name+'</b> '+d.pct+'%';}).join(', ')+'</div>';
+      h+='<div class="line"><b>'+(main.name||'—')+'</b> distribuye el '+(main.pct||0)+'% del juego.</div>';
+      if(t.set.calldist&&t.set.calldist.length){
+        h+='<table><thead><tr><th class="l">Llamada</th><th>Uso</th><th>EFF</th><th class="l">Termina en (rematador)</th><th class="l">Pelota</th></tr></thead><tbody>';
+        t.set.calldist.forEach(function(c){
+          h+='<tr><td class="l"><b style="color:var(--armado)">'+c.call+'</b></td><td style="color:var(--mut2)">'+c.pct+'%</td>'
+            +'<td style="color:'+ec(c.eff)+';font-weight:700">'+c.eff+'%</td>'
+            +'<td class="l">'+(c.dist||[]).slice(0,2).map(function(d){return d.name+' '+d.pct+'%';}).join(', ')+'</td>'
+            +'<td class="l" style="color:var(--ataque);font-weight:700">'+(c.combos||[]).map(function(x){return x.k+' '+x.pct+'%';}).join(' · ')+'</td></tr>';
         });
+        h+='</tbody></table><div style="font-size:10px;color:var(--mut);margin-top:6px">Qué produce cada llamada del armador: a qué rematador y con qué pelota termina.</div>';
       }
       h+='</div>';
 

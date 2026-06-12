@@ -207,22 +207,26 @@ function courtZones(zones){
 // === claves del partido (insights automáticos) ===
 function posClass(p){ return p==='Opuesto'?'pb-op':p==='Central'?'pb-ce':p==='Punta'?'pb-pu':'pb-x'; }
 function renderRotations(t){
-  var rots=(t.rotations||[]).filter(function(r){return r;});
+  var all=(t.rotations||[]);
+  var order=[1,6,5,4,3,2];   // orden real de rotación
+  var rots=order.map(function(rn){return all[rn-1];}).filter(function(r){return r;});
   if(!rots.length) return '';
   var withSO=rots.filter(function(r){return r.so_eff!=null;});
-  var weak=withSO.slice().sort(function(a,b){return a.so_eff-b.so_eff;})[0];
-  var strong=withSO.slice().sort(function(a,b){return b.so_eff-a.so_eff;})[0];
-  var h='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">🔄</span><span class="sec-ti" style="color:#f472b6">Por rotación — dónde apretar el saque</span></div><div class="sec-bd">';
+  // prioridad de saque: más flojo en side-out = 1ª prioridad
+  var ranked=withSO.slice().sort(function(a,b){return a.so_eff-b.so_eff;});
+  var prio={}; ranked.forEach(function(r,i){prio[r.r]=i+1;});
+  var h='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">🔄</span><span class="sec-ti" style="color:#f472b6">Por rotación — prioridad de saque (orden P1·P6·P5·P4·P3·P2)</span></div><div class="sec-bd">';
   h+='<div class="rotgrid">';
   rots.forEach(function(r){
-    var isWeak=weak&&r.r===weak.r, isStrong=strong&&r.r===strong.r&&!isWeak;
+    var p=prio[r.r]||null;
+    var pCol=!p?'#475569':p<=2?'#f87171':p<=4?'#fbbf24':'#4ade80';
+    var pLbl=!p?'':(p===1?'🎯 1ª · sacar acá':p+'ª prioridad');
     var soTxt=r.so_eff!=null?r.so_eff+'%':'—';
     var soCol=r.so_eff!=null?effColor(r.so_eff):'#475569';
-    var bd=isWeak?'border-color:rgba(239,68,68,.5)':isStrong?'border-color:rgba(34,197,94,.4)':'';
+    var bd=p===1?'border-color:rgba(239,68,68,.5)':p===ranked.length?'border-color:rgba(34,197,94,.35)':'';
     h+='<div class="rotcard" style="'+bd+'">';
-    h+='<div class="rothd"><span class="rotnum">S'+r.r+'</span>'
-      +(isWeak?'<span class="rottag" style="background:rgba(239,68,68,.18);color:#f87171">🎯 sacar acá</span>':'')
-      +(isStrong?'<span class="rottag" style="background:rgba(34,197,94,.15);color:#4ade80">fuerte</span>':'')+'</div>';
+    h+='<div class="rothd"><span class="rotnum">P'+r.r+'</span>'
+      +(pLbl?'<span class="rottag" style="background:'+pCol+'22;color:'+pCol+'">'+pLbl+'</span>':'')+'</div>';
     h+='<div class="rotso">Side-out <b style="color:'+soCol+'">'+soTxt+'</b> · eff ataque '+r.eff+'%</div>';
     h+='<div class="rotlb">En red</div><div class="rotfr">'+(r.front||[]).join(' · ')+'</div>';
     h+='<div class="rotlb">Armador distribuye a</div>';
@@ -230,7 +234,7 @@ function renderRotations(t){
     h+='</div>';
   });
   h+='</div>';
-  h+='<div style="font-size:10px;color:var(--mut);margin-top:10px;line-height:1.5">La rotación se define por la zona del armador (S1 = armador en zona 1, saca). <b style="color:#f87171">🎯 sacar acá</b> = su rotación más floja en side-out. "En red" = sus 3 jugadores en zona de ataque.</div>';
+  h+='<div style="font-size:10px;color:var(--mut);margin-top:10px;line-height:1.5">Orden de rotación real: <b style="color:var(--mut2)">P1·P6·P5·P4·P3·P2</b> (P = zona del armador). La <b style="color:#f87171">prioridad de saque</b> ordena las 6 rotaciones de la más floja en side-out (1ª) a la más fuerte: apretá el saque en las primeras. "En red" = sus 3 jugadores en zona de ataque.</div>';
   h+='</div></div>';
   return h;
 }
@@ -268,40 +272,59 @@ function renderSistema(t){
 function buildClaves(t){
   var c=[];
   var ap=t.attack.players||[];
-  function pelOf(p){ return (p.combos&&p.combos.length)?p.combos.slice(0,2).map(function(x){return x.k+' ('+x.pct+'%)';}).join(' y '):'—'; }
+  function dirOf(p){
+    return (p.combos||[]).slice(0,2).map(function(x){
+      var d=(x.dest||[]).slice(0,1).map(function(z){return 'Z'+z.z;}).join('');
+      return '<b>'+x.k+'</b> ('+x.pct+'%'+(d?' → '+d:'')+')';
+    }).join(' y ');
+  }
   function notaPos(p){
-    if(p.pos==='Opuesto') return 'Atención a su ataque por zona 2 y a la zaga.';
-    if(p.pos==='Central') return 'Lectura del primer tiempo y bloqueo central.';
-    if(p.pos==='Punta') return 'Bloqueo en zona 4 y defensa de línea/diagonal.';
+    if(p.pos==='Opuesto') return 'Bloqueo y defensa cargados por zona 2 y zaga derecha.';
+    if(p.pos==='Central') return 'Lectura del primer tiempo.';
+    if(p.pos==='Punta') return 'Bloqueo en zona 4, defensa de diagonal y paralela.';
     return '';
   }
   if(ap.length){
     var top=ap[0];
-    c.push('Rematador principal: <span class="hl">'+top.name+'</span> (<b>'+top.pos+'</b>, eff <b>'+top.eff+'%</b>, '+top.killpct+'% de punto). Su pelota: <b>'+pelOf(top)+'</b>, desde '+top.origen+'. '+notaPos(top));
-    if(ap[1]) c.push('Segunda opción: <span class="hl">'+ap[1].name+'</span> ('+ap[1].pos+', eff '+ap[1].eff+'%) — pelota '+pelOf(ap[1])+'.');
-    var centrales=ap.filter(function(p){return p.pos==='Central';}).sort(function(a,b){return b.eff-a.eff;});
-    if(centrales.length && centrales[0]!==top) c.push('Central peligroso: <span class="hl">'+centrales[0].name+'</span> (eff '+centrales[0].eff+'%, '+pelOf(centrales[0])+'). Cuidar el primer tiempo.');
+    c.push('Rematador principal: <span class="hl">'+top.name+'</span> (<b>'+top.pos+'</b>, '+top.matches+' PJ · '+top.tot+' bolas, eff <b>'+top.eff+'%</b>). Sus combinaciones: '+dirOf(top)+'. '+notaPos(top));
+    if(ap[1]) c.push('Segunda opción: <span class="hl">'+ap[1].name+'</span> ('+ap[1].pos+', '+ap[1].tot+' bolas, eff '+ap[1].eff+'%): '+dirOf(ap[1])+'.');
+    var centrales=ap.filter(function(p){return p.pos==='Central';}).sort(function(a,b){return b.tot-a.tot;});
+    if(centrales.length){
+      var cen=centrales[0], extra='';
+      var hiEff=ap.filter(function(p){return p.pos==='Central'&&p.tot<60&&p.eff>cen.eff+5;}).sort(function(a,b){return b.eff-a.eff;})[0];
+      if(hiEff) extra=' Ojo con '+hiEff.name+' ('+hiEff.eff+'% pero en solo '+hiEff.tot+' bolas / '+hiEff.matches+' PJ — muestra chica).';
+      c.push('Central de referencia: <span class="hl">'+cen.name+'</span> ('+cen.matches+' PJ · '+cen.tot+' bolas, eff '+cen.eff+'%): '+dirOf(cen)+'.'+extra);
+    }
   }
   if(t.set.main){
-    var ca=(t.set.calls&&t.set.calls.length)?' Llamada que más usa: <span class="hl2">'+t.set.calls[0].k+'</span> ('+t.set.calls[0].pct+'%).':'';
-    c.push('Armador: <span class="hl2">'+t.set.main.name+'</span> (distribuye el '+t.set.main.pct+'% del juego).'+ca);
+    var cd=(t.set.calldist&&t.set.calldist[0]); var ctxt='';
+    if(cd){ var d0=(cd.dist||[]).slice(0,2).map(function(d){return d.name+' '+d.pct+'%';}).join(', '); ctxt=' Su llamada principal <span class="hl2">'+cd.call+'</span> ('+cd.pct+'%) termina en '+d0+'.'; }
+    c.push('Armador: <span class="hl2">'+t.set.main.name+'</span> (distribuye el '+t.set.main.pct+'% del juego).'+ctxt);
   }
-  if(t.recep.weak && t.recep.weak.length){
-    var w=t.recep.weak[0];
-    if(w.pospct<62) c.push('Receptor más vulnerable: <span class="hl3">'+w.name+'</span> ('+w.pospct+'% positiva, '+w.errpct+'% de error). <b>Sacarle a él</b> para romper su recepción.');
+  var rd=(t.recep.detail&&t.recep.detail[0]);
+  if(rd && rd.pospct<62){
+    var flo=rd.float||{n:0}, sp=rd.spin||{n:0}, tipo='', dif=0;
+    if(flo.n>=15&&sp.n>=15){ if(flo.pospct<sp.pospct){tipo='flotado';dif=sp.pospct-flo.pospct;} else {tipo='potencia';dif=flo.pospct-sp.pospct;} }
+    var wz=(rd.weakzones||[]).slice(0,1).map(function(z){return 'Z'+z.zone;}).join('');
+    var rec='Receptor más vulnerable: <span class="hl3">'+rd.name+'</span> ('+rd.pospct+'% positiva). <b>Sacarle a él</b>';
+    if(tipo) rec+=' con saque <b>'+tipo+'</b> ('+dif+' pts más flojo ahí)';
+    if(wz) rec+=', apuntando a <b>'+wz+'</b>';
+    c.push(rec+'.');
   }
-  var rotsSO=(t.rotations||[]).filter(function(r){return r&&r.so_eff!=null;});
+  var rotsSO=(t.rotations||[]).filter(function(r){return r&&r.so_eff!=null;}).sort(function(a,b){return a.so_eff-b.so_eff;});
   if(rotsSO.length){
-    var wr=rotsSO.slice().sort(function(a,b){return a.so_eff-b.so_eff;})[0];
-    c.push('Rotación más débil en side-out: <b>S'+wr.r+'</b> (solo '+wr.so_eff+'%, armador en zona '+wr.r+'). <b>Apretar el saque cuando entren a esa rotación.</b>');
+    var p1=rotsSO[0], p2=rotsSO[1];
+    var txt='Prioridad de saque por rotación: 1ª <b>P'+p1.r+'</b> ('+p1.so_eff+'% en side-out)';
+    if(p2) txt+=', 2ª <b>P'+p2.r+'</b> ('+p2.so_eff+'%)';
+    c.push(txt+'. Son sus rotaciones más flojas para recibir — apretar el saque ahí.');
   }
   if(t.sistema && t.sistema.insys.n && t.sistema.outsys.n){
     var dr=t.sistema.insys.eff - t.sistema.outsys.eff;
     if(dr>=8){
       var o2=(t.sistema.outsys.dist||[]).slice(0,2);
       var nm=o2.map(function(d){return d.name;}).join(' + ');
-      var sp=o2.reduce(function(a,d){return a+d.pct;},0);
-      c.push('Fuera de sistema su ataque se cae <b>'+dr+' puntos</b> (de '+t.sistema.insys.eff+'% a '+t.sistema.outsys.eff+'%) y va casi todo a <span class="hl">'+nm+'</span> (~'+sp+'%). <b>Romperles la recepción y cargar el bloqueo ahí.</b>');
+      var spp=o2.reduce(function(a,d){return a+d.pct;},0);
+      c.push('Fuera de sistema su ataque cae <b>'+dr+' puntos</b> (de '+t.sistema.insys.eff+'% a '+t.sistema.outsys.eff+'%) y se concentra en <span class="hl">'+nm+'</span> (~'+spp+'%). Romperles la recepción y cargar el bloqueo ahí.');
     }
   }
   if(t.serve.acepct>=6) c.push('Sacan fuerte: <b>'+t.serve.acepct+'% de aces</b>. Reforzar la recepción y tener plan B de armado.');
@@ -396,7 +419,21 @@ function renderDossier(n){
       +'<div style="font-family:Bebas Neue;font-size:30px;letter-spacing:1px">'+t.set.main.name+'</div>'
       +'<div class="chip" style="border-color:rgba(129,140,248,.4)"><span class="p" style="color:var(--armado)">'+t.set.main.pct+'%</span> del juego</div></div>';
   }
-  if(t.set.calls && t.set.calls.length){
+  if(t.set.calldist && t.set.calldist.length){
+    h+='<div style="font-size:10px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Qué produce cada llamada</div>';
+    h+='<div style="overflow-x:auto"><table><thead><tr><th style="text-align:left">Llamada</th><th>Uso</th><th>EFF</th><th style="text-align:left">Termina en (rematador)</th><th style="text-align:left">Pelota</th></tr></thead><tbody>';
+    t.set.calldist.forEach(function(c){
+      var dist=(c.dist||[]).map(function(d){return d.name+' '+d.pct+'%';}).join(' · ');
+      var comb=(c.combos||[]).map(function(x){return x.k+' '+x.pct+'%';}).join(' · ');
+      h+='<tr><td style="text-align:left"><b style="color:var(--armado);font-size:15px">'+c.call+'</b></td>'
+        +'<td style="color:var(--mut2);font-weight:700">'+c.pct+'%</td>'
+        +'<td style="font-weight:800;color:'+effColor(c.eff)+'">'+c.eff+'%</td>'
+        +'<td style="text-align:left">'+dist+'</td>'
+        +'<td style="text-align:left;color:var(--ataque);font-weight:700">'+comb+'</td></tr>';
+    });
+    h+='</tbody></table></div>';
+    h+='<div style="font-size:10px;color:var(--mut);margin-top:8px;line-height:1.5">Cada llamada con cuánto la usa, su eficacia y a qué rematador termina yendo. Tocá una llamada en el Game Plan para ver el heatmap de distribución.</div>';
+  } else if(t.set.calls && t.set.calls.length){
     h+='<div style="font-size:10px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px">Llamadas que usa</div><div class="chips">';
     t.set.calls.forEach(function(k){ h+='<div class="chip"><b style="color:var(--armado)">'+k.k+'</b><span class="p" style="color:var(--armado)">'+k.pct+'%</span></div>'; });
     h+='</div>';
@@ -410,24 +447,27 @@ function renderDossier(n){
     +'<div class="kpi"><div class="v" style="color:#22c55e">'+t.attack.killpct+'%</div><div class="l">Punto</div></div>'
     +'<div class="kpi"><div class="v" style="color:#06b6d4">'+t.attack.blkpct+'%</div><div class="l">Bloqueados</div></div>'
     +'<div class="kpi"><div class="v" style="color:var(--ataque)">'+t.attack.tot+'</div><div class="l">Total</div></div></div>';
-  h+='<div style="overflow-x:auto"><table><thead><tr><th>Rematador</th><th style="text-align:left">Pos</th><th>Atq</th><th>Punto%</th><th>EFF</th><th>SO</th><th>TR</th><th style="text-align:left">Su pelota</th><th style="text-align:left">Desde</th><th style="text-align:left">Clava en</th></tr></thead><tbody>';
+  h+='<div style="overflow-x:auto"><table><thead><tr><th>Rematador</th><th style="text-align:left">Pos</th><th>PJ</th><th>Atq</th><th>Punto%</th><th>EFF</th><th>SO</th><th>TR</th><th style="text-align:left">Combinación → dirección (dónde la manda)</th></tr></thead><tbody>';
   (t.attack.players||[]).forEach(function(p,i){
-    var pel=(p.combos||[]).slice(0,2).map(function(cc){return cc.k+' '+cc.pct+'%';}).join(' · ');
     var so=p.so_eff!=null?'<span style="color:'+effColor(p.so_eff)+'">'+p.so_eff+'%</span>':'<span style="color:#334155">—</span>';
     var tr=p.tr_eff!=null?'<span style="color:'+effColor(p.tr_eff)+'">'+p.tr_eff+'%</span>':'<span style="color:#334155">—</span>';
+    var juego=(p.combos||[]).map(function(c){
+      var dz=(c.dest||[]).map(function(d){return 'Z'+d.z+' '+d.pct+'%';}).join(' · ');
+      return '<b style="color:var(--ataque)">'+c.k+'</b> <span style="color:var(--mut2)">'+c.pct+'%</span> <span style="color:#475569">→</span> <span style="color:var(--bloqueo,#06B6D4)">'+(dz||'—')+'</span>';
+    }).join('<br>')||'—';
+    var lowVol=p.tot<60;
     h+='<tr><td>'+(i===0?'<span class="star">★</span> ':'')+p.name+'</td>'
       +'<td style="text-align:left"><span class="posbadge '+posClass(p.pos)+'">'+p.pos+'</span></td>'
-      +'<td style="color:var(--mut2)">'+p.tot+'</td>'
+      +'<td style="color:var(--mut2)">'+(p.matches||'')+'</td>'
+      +'<td style="color:'+(lowVol?'#64748b':'var(--mut2)')+'">'+p.tot+(lowVol?' ⚠':'')+'</td>'
       +'<td style="color:#22c55e;font-weight:700">'+p.killpct+'%</td>'
       +'<td style="font-weight:800;color:'+effColor(p.eff)+'">'+p.eff+'%</td>'
       +'<td style="font-weight:700">'+so+'</td>'
       +'<td style="font-weight:700">'+tr+'</td>'
-      +'<td style="text-align:left;color:var(--ataque);font-weight:700">'+(pel||'—')+'</td>'
-      +'<td style="text-align:left;color:var(--mut2);font-size:12px">'+(p.origen||'')+'</td>'
-      +'<td style="text-align:left;color:var(--bloqueo,#06B6D4);font-weight:700;font-size:12px">'+((p.dirs||[]).slice(0,3).map(function(d){return 'Z'+d.k+' '+d.pct+'%';}).join(' · ')||'—')+'</td></tr>';
+      +'<td style="text-align:left;font-size:12px;line-height:1.7">'+juego+'</td></tr>';
   });
   h+='</tbody></table></div>';
-  h+='<div style="font-size:10px;color:var(--mut);margin-top:9px;line-height:1.5">★ principal · <b style="color:var(--mut2)">SO</b> = eficacia en side-out (con recepción) · <b style="color:var(--mut2)">TR</b> = en transición · <b style="color:var(--mut2)">Su pelota</b> = su combinación más usada · <b style="color:var(--mut2)">Desde</b> = zona de origen · <b style="color:var(--mut2)">Clava en</b> = zonas donde más remata (direcciones) · posición inferida de sus zonas reales</div>';
+  h+='<div style="font-size:10px;color:var(--mut);margin-top:9px;line-height:1.5"><b style="color:var(--mut2)">PJ</b> = partidos jugados (⚠ = pocas bolas, muestra chica) · <b style="color:var(--mut2)">SO</b> = rendimiento en side-out (con recepción) · <b style="color:var(--mut2)">TR</b> = en transición · <b style="color:var(--mut2)">Combinación → dirección</b> = cada pelota con las zonas a las que la manda (Z1 derecha · Z5 izquierda · Z6/Z7/Z8/Z9 fondo) · posición inferida de sus zonas reales</div>';
   h+='</div></div>';
 
   // ===== RECEPCIÓN =====
@@ -436,7 +476,25 @@ function renderDossier(n){
     +'<div class="kpi"><div class="v" style="color:'+pctColor(t.recep.pospct)+'">'+t.recep.pospct+'%</div><div class="l">Positiva (#+)</div></div>'
     +'<div class="kpi"><div class="v" style="color:#ef4444">'+t.recep.errpct+'%</div><div class="l">Error</div></div>'
     +'<div class="kpi"><div class="v" style="color:var(--mut2)">'+t.recep.tot+'</div><div class="l">Total</div></div></div>';
-  if(t.recep.weak && t.recep.weak.length){
+  var rd=(t.recep.detail && t.recep.detail.length)?t.recep.detail:null;
+  if(rd){
+    h+='<table style="margin-top:6px"><thead><tr><th>Receptor (peor → mejor)</th><th>Rec.</th><th>Positiva%</th><th>vs Flotado</th><th>vs Potencia</th><th style="text-align:left">Recibe peor en</th></tr></thead><tbody>';
+    rd.forEach(function(w,i){
+      var flo=w.float||{n:0,pospct:0}, spin=w.spin||{n:0,pospct:0};
+      var both=flo.n>=15&&spin.n>=15;
+      var serveType=both?(flo.pospct<spin.pospct?'flotado':'potencia'):'';
+      var floCell='<span style="color:'+pctColor(flo.pospct)+';font-weight:'+(serveType==='flotado'?'800':'400')+'">'+(flo.n?flo.pospct+'%':'—')+'</span>';
+      var spinCell='<span style="color:'+pctColor(spin.pospct)+';font-weight:'+(serveType==='potencia'?'800':'400')+'">'+(spin.n?spin.pospct+'%':'—')+'</span>';
+      var wz=(w.weakzones||[]).map(function(z){return 'Z'+z.zone+' ('+z.pospct+'%)';}).join(' · ');
+      h+='<tr><td>'+(i===0?'<span style="color:var(--red)">🎯</span> ':'')+w.name+'</td>'
+        +'<td style="color:var(--mut2)">'+w.n+'</td>'
+        +'<td style="font-weight:800;color:'+pctColor(w.pospct)+'">'+w.pospct+'%</td>'
+        +'<td>'+floCell+'</td><td>'+spinCell+'</td>'
+        +'<td style="text-align:left;color:var(--mut2);font-size:12px">'+(wz||'—')+'</td></tr>';
+    });
+    h+='</tbody></table>';
+    h+='<div style="font-size:10px;color:var(--mut);margin-top:9px;line-height:1.5">🎯 = receptor más vulnerable · <b style="color:var(--mut2)">vs Flotado / vs Potencia</b> = su positiva según el tipo de saque (en <b>negrita</b> el que más lo daña: sacarle ESE) · <b style="color:var(--mut2)">Recibe peor en</b> = zonas de su cancha donde recibe más flojo (apuntar el saque ahí)</div>';
+  } else if(t.recep.weak && t.recep.weak.length){
     h+='<table style="margin-top:6px"><thead><tr><th>Receptor (de + débil a + fuerte)</th><th>Rec.</th><th>Positiva%</th><th>Error%</th></tr></thead><tbody>';
     t.recep.weak.forEach(function(w,i){
       h+='<tr><td>'+(i===0?'<span style="color:var(--red)">🎯</span> ':'')+w.name+'</td><td style="color:var(--mut2)">'+w.tot+'</td>'
