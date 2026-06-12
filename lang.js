@@ -462,7 +462,44 @@
     'amenaza nueva':{en:'new threat',de:'neue Bedrohung'},
     'atacante habitual que no jugó las últimas fechas':{en:'regular attacker who did not play recently',de:'Stammangreifer, der zuletzt nicht spielte'},
     'pocas pelotas ese partido':{en:'few balls that match',de:'wenige Bälle in dem Spiel'},
-    'atenuado':{en:'dimmed',de:'abgeschwächt'}
+    'atenuado':{en:'dimmed',de:'abgeschwächt'},
+
+    // ════ Filtro de fundamentos (forma reciente) ════
+    'Bloqueo':{en:'Block',de:'Block'},
+    'Defensa':{en:'Defense',de:'Abwehr'},
+    'Lo hicieron en el último partido':{en:'Did it in the last match',de:'Im letzten Spiel gemacht'},
+    'Elegí un fundamento para ver quién lo está haciendo y en qué forma viene':{en:'Pick a skill to see who is doing it and in what form',de:'Wähle ein Element, um zu sehen, wer es macht und in welcher Form'},
+    'la cifra es':{en:'the figure is',de:'die Zahl ist'},
+    'Mostrando':{en:'Showing',de:'Zeige'},
+    'eficacia':{en:'efficiency',de:'Effizienz'},
+    'positiva%':{en:'positive%',de:'positiv%'},
+    'Pocos datos de este fundamento en las últimas fechas.':{en:'Little data for this skill in recent matches.',de:'Wenig Daten für dieses Element in den letzten Spielen.'},
+    'lo hizo en el último partido':{en:'did it in the last match',de:'machte es im letzten Spiel'},
+    'su número de las últimas fechas cambió':{en:'their recent figure changed',de:'ihre Zahl der letzten Spiele änderte sich um'},
+    'habitual que no jugó las últimas fechas':{en:'regular who did not play recently',de:'Stammspieler, der zuletzt nicht spielte'},
+    'poco volumen ese partido':{en:'low volume that match',de:'wenig Volumen in dem Spiel'},
+    'ahora':{en:'now',de:'jetzt'},
+    'Últimos':{en:'Last',de:'Letzte'},
+    'scouting basado en datos reales':{en:'scouting based on real data',de:'Scouting auf Basis echter Daten'},
+
+    // ════ Plan de partido ════
+    'Hoja de ruta del próximo rival — para imprimir y llevar al partido':{en:'Roadmap for the next opponent — to print and take to the match',de:'Fahrplan für den nächsten Gegner — zum Ausdrucken und Mitnehmen'},
+    'a quién, cómo y dónde':{en:'who, how and where',de:'wer, wie und wo'},
+    'Si les rompés la recepción':{en:'If you break their reception',de:'Wenn du ihre Annahme störst'},
+    'cómo bloquearle y defenderle':{en:'how to block and defend them',de:'wie blocken und verteidigen'},
+    'Qué produce cada llamada del armador: a qué rematador y con qué pelota termina.':{en:'What each setter call produces: which hitter and with what ball it ends.',de:'Was jeder Stellerruf erzeugt: welcher Angreifer und mit welchem Ball.'},
+    'Prioridad por rotación':{en:'Priority by rotation',de:'Priorität nach Rotation'},
+    'Al recibir, ojo con':{en:'When receiving, watch out for',de:'Bei der Annahme, Achtung bei'},
+    'Al recibir':{en:'When receiving',de:'Bei der Annahme'},
+    'Fuera de sistema va a':{en:'Out of system goes to',de:'Außerhalb des Systems geht zu'},
+    'Su eficacia cae':{en:'Their efficiency drops',de:'Ihre Effizienz fällt'},
+    'Cargá el bloqueo a ellos':{en:'Load the block on them',de:'Lade den Block auf sie'},
+    'Elegí un rival arriba.':{en:'Pick an opponent above.',de:'Wähle oben einen Gegner.'},
+    'Objetivo':{en:'Target',de:'Ziel'},
+    '2º objetivo':{en:'2nd target',de:'2. Ziel'},
+    'sacarle':{en:'serve at him',de:'auf ihn aufschlagen'},
+    'positiva como equipo':{en:'positive as a team',de:'positiv als Team'},
+    'como equipo':{en:'as a team',de:'als Team'}
   };
   var PHRASE_LC = {};
   (function(){
