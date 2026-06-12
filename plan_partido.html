@@ -56,6 +56,7 @@
       <div class="ttl">PLAN DE <span>PARTIDO</span></div>
       <div class="sub">Hoja de ruta del próximo rival — para imprimir y llevar al partido</div>
     </div>
+    <div id="lang-wrap" style="margin-left:auto;display:flex;gap:4px"></div>
   </div>
   <div class="toolbar">
     <select id="sel"></select>
@@ -147,5 +148,7 @@
     if(q && S[q]){ sel.value=q; render(q); }
   })();
   </script>
+<style>@media print{#lang-wrap{display:none!important}}</style>
+<script src="lang.js" onerror="void 0"></script>
 </body>
 </html>

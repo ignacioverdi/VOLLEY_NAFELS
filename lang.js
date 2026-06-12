@@ -272,7 +272,137 @@
     'Elegir acciones':{en:'Choose actions',de:'Aktionen wählen'},
     'Elegir partidos':{en:'Choose matches',de:'Spiele wählen'},
     'Acciones a mostrar':{en:'Actions to show',de:'Anzuzeigende Aktionen'},
-    'Cortes de Video':{en:'Video Clips',de:'Video-Clips'}
+    'Cortes de Video':{en:'Video Clips',de:'Video-Clips'},
+
+    // ════ SCOUTING DEL RIVAL — títulos de sección ════
+    'Scouting del Rival':{en:'Opponent Scouting',de:'Gegner-Scouting'},
+    'Saque — desde dónde y hacia dónde sacan':{en:'Serve — from where and where to',de:'Aufschlag — von wo und wohin'},
+    'Ataque — por jugador':{en:'Attack — by player',de:'Angriff — pro Spieler'},
+    'Cómo arma según desde dónde le llega la recepción':{en:'How they set by reception origin',de:'Zuspiel je nach Annahmeursprung'},
+    'Cómo arma según QUIÉN recibe':{en:'How they set by WHO receives',de:'Zuspiel je nach ANNEHMER'},
+    'Cómo arma según quién recibe':{en:'How they set by who receives',de:'Zuspiel je nach Annehmer'},
+    'En sistema vs fuera de sistema — qué pasa si les rompés la recepción':{en:'In-system vs out-of-system — what happens if you break their reception',de:'Im System vs. außerhalb — was passiert bei gestörter Annahme'},
+    'Por rotación — prioridad de saque (orden P1·P6·P5·P4·P3·P2)':{en:'By rotation — serving priority (order P1·P6·P5·P4·P3·P2)',de:'Nach Rotation — Aufschlagpriorität (Reihenfolge P1·P6·P5·P4·P3·P2)'},
+    'Recepción — dónde atacarlos con el saque':{en:'Reception — where to serve them',de:'Annahme — wohin aufschlagen'},
+    'Claves del partido':{en:'Match keys',de:'Spielschlüssel'},
+    'Claves':{en:'Keys',de:'Schlüssel'},
+
+    // ════ Headers de tabla ════
+    'Combinación → dirección (dónde la manda)':{en:'Combination → direction (where they send it)',de:'Kombination → Richtung (wohin)'},
+    'Combinación → dirección':{en:'Combination → direction',de:'Kombination → Richtung'},
+    'Hacia dónde lo pone':{en:'Where they place it',de:'Wohin platziert'},
+    'Termina en (rematador)':{en:'Ends in (hitter)',de:'Endet bei (Angreifer)'},
+    'Receptor (de + débil a + fuerte)':{en:'Receiver (weakest to strongest)',de:'Annehmer (schwächster zuerst)'},
+    'Receptor (por volumen)':{en:'Receiver (by volume)',de:'Annehmer (nach Volumen)'},
+    'Recibe peor en':{en:'Receives worst in',de:'Schwächste Annahme in'},
+    'Sacador':{en:'Server',de:'Aufschläger'},
+    'Desde':{en:'From',de:'Von'},
+    'Uso':{en:'Usage',de:'Nutzung'},
+    'Llamada':{en:'Call',de:'Ruf'},
+    'Pelota':{en:'Ball',de:'Ball'},
+    'Rematador':{en:'Hitter',de:'Angreifer'},
+    'Rematadores':{en:'Hitters',de:'Angreifer'},
+    'Receptor':{en:'Receiver',de:'Annehmer'},
+    'Positiva%':{en:'Positive%',de:'Positiv%'},
+    'Positiva (#+)':{en:'Positive (#+)',de:'Positiv (#+)'},
+    'Rec.':{en:'Rec.',de:'Ann.'},
+    'vs Flotado':{en:'vs Float',de:'vs Flatter'},
+    'vs Potencia':{en:'vs Spin',de:'vs Sprung'},
+    'Atq':{en:'Att',de:'Ang'},
+    'Error%':{en:'Error%',de:'Fehler%'},
+
+    // ════ KPI / pills ════
+    'Bloqueados':{en:'Blocked',de:'Geblockt'},
+    'Vendida (/)':{en:'Over (/)',de:'Übergabe (/)'},
+    'Aces':{en:'Aces',de:'Asse'},
+    'Ace':{en:'Ace',de:'Ass'},
+
+    // ════ Tabs ════
+    'Side-out (recepción +)':{en:'Side-out (reception +)',de:'Side-out (Annahme +)'},
+
+    // ════ Opciones de los desplegables ════
+    'Con recepción + (#/+)':{en:'With reception + (#/+)',de:'Mit Annahme + (#/+)'},
+    'Con recepción − (!/-)':{en:'With reception − (!/-)',de:'Mit Annahme − (!/-)'},
+    'Recepción + (#/+)':{en:'Reception + (#/+)',de:'Annahme + (#/+)'},
+    'Recepción − (!/-)':{en:'Reception − (!/-)',de:'Annahme − (!/-)'},
+    'Toda recepción':{en:'All reception',de:'Alle Annahmen'},
+    'Todo el set':{en:'Whole set',de:'Ganzer Satz'},
+    'Inicio (0-8)':{en:'Start (0-8)',de:'Anfang (0-8)'},
+    'Medio (9-16)':{en:'Middle (9-16)',de:'Mitte (9-16)'},
+    'Final (17+)':{en:'End (17+)',de:'Ende (17+)'},
+
+    // ════ Botones ════
+    'Comparar con Näfels':{en:'Compare with Näfels',de:'Mit Näfels vergleichen'},
+    'Plan de partido':{en:'Match plan',de:'Spielplan'},
+    'Imprimir':{en:'Print',de:'Drucken'},
+
+    // ════ Sección receptor / por zona ════
+    'Elegí un receptor y mirá a quién arma el armador rival cuando le llega el pase desde ese jugador:':{en:'Pick a receiver and see who the opposing setter sets to when the pass comes from that player:',de:'Wähle einen Annehmer und sieh, zu wem der gegnerische Zuspieler stellt, wenn der Pass von diesem Spieler kommt:'},
+    'Cuando pasa bien':{en:'When they pass well',de:'Bei guter Annahme'},
+    'Cuando lo rompés':{en:'When you break them',de:'Bei gestörter Annahme'},
+    'Le arma a':{en:'Sets to',de:'Stellt zu'},
+    'Arma a':{en:'Sets to',de:'Stellt zu'},
+    'Recibe':{en:'Receives',de:'Annahme'},
+    'Reciben':{en:'They receive',de:'Sie nehmen an'},
+    'recepciones':{en:'receptions',de:'Annahmen'},
+    'jugadas':{en:'plays',de:'Aktionen'},
+    'pocos datos':{en:'little data',de:'wenig Daten'},
+    'pocas bolas':{en:'few balls',de:'wenige Bälle'},
+    'muestra chica':{en:'small sample',de:'kleine Stichprobe'},
+    'partidos analizados':{en:'matches analyzed',de:'analysierte Spiele'},
+    'partidos jugados':{en:'matches played',de:'gespielte Spiele'},
+    'rendimiento en side-out':{en:'side-out performance',de:'Side-out-Leistung'},
+    'en transición':{en:'in transition',de:'im Übergang'},
+    'Ordenado por cantidad de saques':{en:'Sorted by number of serves',de:'Nach Anzahl der Aufschläge sortiert'},
+    'los primeros son los titulares':{en:'the first ones are the starters',de:'die ersten sind die Stammspieler'},
+
+    // ════ Claves del partido (fragmentos) — más largas primero ════
+    'Rematador principal':{en:'Main hitter',de:'Hauptangreifer'},
+    'Segunda opción':{en:'Second option',de:'Zweite Option'},
+    'Central de referencia':{en:'Reference middle',de:'Wichtigster Mittelblocker'},
+    'Su llamada principal':{en:'Their main call',de:'Ihr Hauptruf'},
+    'Receptor más vulnerable':{en:'Most vulnerable receiver',de:'Schwächster Annehmer'},
+    'Prioridad de saque por rotación':{en:'Serving priority by rotation',de:'Aufschlagpriorität nach Rotation'},
+    'Son sus rotaciones más flojas para recibir':{en:'These are their weakest receiving rotations',de:'Das sind ihre schwächsten Annahme-Rotationen'},
+    'apretar el saque ahí':{en:'press the serve there',de:'dort den Aufschlag forcieren'},
+    'Fuera de sistema su ataque cae':{en:'Out of system their attack drops',de:'Außerhalb des Systems fällt ihr Angriff'},
+    'Romperles la recepción y cargar el bloqueo ahí':{en:'Break their reception and load the block there',de:'Ihre Annahme stören und den Block dort verstärken'},
+    'Reforzar la recepción y tener plan B de armado':{en:'Reinforce reception and have a setting plan B',de:'Annahme verstärken und Zuspiel-Plan B haben'},
+    'Presionarlos a arriesgar el saque':{en:'Pressure them to risk the serve',de:'Sie zum riskanten Aufschlag zwingen'},
+    'Bloqueo y defensa cargados por zona 2 y zaga derecha':{en:'Block and defense loaded on zone 2 and right back',de:'Block und Abwehr auf Zone 2 und hinten rechts'},
+    'Bloqueo en zona 4, defensa de diagonal y paralela':{en:'Block on zone 4, defend cross and line',de:'Block auf Zone 4, Diagonal- und Longline-Abwehr'},
+    'Lectura del primer tiempo':{en:'Read the quick attack',de:'Schnellangriff lesen'},
+    'Sus combinaciones':{en:'Their combinations',de:'Ihre Kombinationen'},
+    'Sacarle a él':{en:'Serve at him',de:'Auf ihn aufschlagen'},
+    'Sacan fuerte':{en:'They serve hard',de:'Sie schlagen stark auf'},
+    'Saque errático':{en:'Erratic serve',de:'Unbeständiger Aufschlag'},
+    'más flojo ahí':{en:'weaker there',de:'dort schwächer'},
+    'se concentra en':{en:'concentrates on',de:'konzentriert sich auf'},
+    'Ojo con':{en:'Watch out for',de:'Achtung bei'},
+    'apuntando a':{en:'aiming at',de:'gezielt auf'},
+    'distribuye el':{en:'distributes',de:'verteilt'},
+    'termina en':{en:'ends in',de:'endet bei'},
+    'positiva en':{en:'positive in',de:'positiv in'},
+    'en side-out':{en:'in side-out',de:'im Side-out'},
+    'con saque':{en:'with serve',de:'mit Aufschlag'},
+    'de aces':{en:'aces',de:'Asse'},
+    'de error':{en:'error',de:'Fehler'},
+    'del juego':{en:'of the game',de:'des Spiels'},
+    'puntos':{en:'points',de:'Punkte'},
+    'bolas':{en:'balls',de:'Bälle'},
+    'derecha':{en:'right',de:'rechts'},
+    'izquierda':{en:'left',de:'links'},
+    'paralela':{en:'line',de:'Longline'},
+    'diagonal':{en:'cross',de:'Diagonal'},
+    'zaga':{en:'back row',de:'hintere Reihe'},
+    'primer tiempo':{en:'quick attack',de:'Schnellangriff'},
+    'ataque de zaga':{en:'back-row attack',de:'Angriff aus der hinteren Reihe'},
+    'titular':{en:'starter',de:'Stammspieler'},
+    'titulares':{en:'starters',de:'Stammspieler'},
+    'fuera de sistema':{en:'out of system',de:'außerhalb des Systems'},
+    'en sistema':{en:'in system',de:'im System'},
+    'prioridad de saque':{en:'serving priority',de:'Aufschlagpriorität'},
+    'PJ':{en:'MP',de:'Sp'}
   };
   var PHRASE_LC = {};
   (function(){
@@ -286,7 +416,39 @@
     if(raw===raw.toUpperCase() && raw!==raw.toLowerCase()) out=out.toUpperCase();
     return out;
   }
-  var SKIP_TAGS={SCRIPT:1,STYLE:1,NOSCRIPT:1,TEXTAREA:1,OPTION:0};
+  // ── Sustitución de frases conocidas DENTRO de un texto ────────────────────
+  //  Permite traducir frases que vienen mezcladas con datos (nombres, números),
+  //  ej: "Rematador principal: Schalch (Opuesto, 27 PJ)". Se reemplaza cada
+  //  frase del diccionario que aparezca, respetando límites de palabra y
+  //  priorizando las más largas. Esto es lo que hace la traducción automática:
+  //  alcanza con tener el término en el diccionario una vez.
+  var WORDCH='A-Za-z0-9ÁÉÍÓÚÜÑáéíóúüñ';
+  function escapeRe(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+  var PHRASE_MAP=null, PHRASE_LCMAP=null, BIG_RE=null;
+  function buildPhraseIndex(){
+    PHRASE_MAP={}; PHRASE_LCMAP={}; var keys=[];
+    function add(es,tr){ if(!es) return; es=String(es); if(!PHRASE_MAP[es]){ PHRASE_MAP[es]=tr; PHRASE_LCMAP[es.toLowerCase()]=tr; keys.push(es); } }
+    Object.keys(T).forEach(function(k){ var e=T[k]; if(e&&e.es) add(e.es,{en:e.en,de:e.de}); });
+    Object.keys(PHRASES_EXTRA).forEach(function(es){ add(es,PHRASES_EXTRA[es]); });
+    keys.sort(function(a,b){ return b.length-a.length; });   // frases más largas primero
+    try{ BIG_RE=new RegExp('(^|[^'+WORDCH+'])('+keys.map(escapeRe).join('|')+')(?!['+WORDCH+'])','gi'); }
+    catch(e){ BIG_RE=null; }
+  }
+  function translateString(text, lang){
+    if(lang==='es'||!text) return text;
+    var exact=trPhrase(text.trim(),lang);
+    if(exact!==null) return text.replace(text.trim(), exact);
+    if(!PHRASE_MAP) buildPhraseIndex();
+    if(!BIG_RE) return text;
+    return text.replace(BIG_RE, function(m,pre,ph){
+      var e=PHRASE_LCMAP[ph.toLowerCase()]; if(!e||!e[lang]) return m;
+      var t=e[lang];
+      if(ph===ph.toUpperCase() && ph!==ph.toLowerCase()) t=t.toUpperCase();
+      return pre+t;
+    });
+  }
+  window.translateString=translateString;
+  var SKIP_TAGS={SCRIPT:1,STYLE:1,NOSCRIPT:1,TEXTAREA:1};
   function translateTextNodes(lang){
     if(!document.body) return;
     var walker=document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
@@ -301,12 +463,9 @@
     });
     var nodes=[],n; while((n=walker.nextNode())) nodes.push(n);
     nodes.forEach(function(node){
-      var src=(node.__es!=null)?node.__es:node.nodeValue;
-      var key=src.trim();
-      var t=trPhrase(key,lang);
-      if(t===null){ if(node.__es!=null&&node.nodeValue!==node.__es) node.nodeValue=node.__es; return; }
       if(node.__es==null) node.__es=node.nodeValue;
-      node.nodeValue=(lang==='es')?node.__es:node.__es.replace(key,t);
+      var tr=translateString(node.__es, lang);
+      if(node.nodeValue!==tr) node.nodeValue=tr;
     });
   }
   window.translateTextNodes=translateTextNodes;

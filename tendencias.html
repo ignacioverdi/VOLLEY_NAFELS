@@ -39,6 +39,7 @@
       <div class="ttl">TENDENCIAS <span>NÄFELS</span></div>
       <div class="sub">Evolución del equipo partido a partido</div>
     </div>
+    <div id="lang-wrap" style="margin-left:auto;display:flex;gap:4px"></div>
   </div>
   <div id="strip" class="strip"></div>
   <div id="cards" class="cards"></div>
@@ -131,5 +132,7 @@
     }).join('');
   })();
   </script>
+<style>@media print{#lang-wrap{display:none!important}}</style>
+<script src="lang.js" onerror="void 0"></script>
 </body>
 </html>
