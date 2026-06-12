@@ -92,6 +92,8 @@
         if(rd[1]) h+='<div class="line" style="font-size:12.5px;color:var(--mut2)">2º objetivo: '+rd[1].name+' ('+rd[1].pospct+'%).</div>';
       }
       if(rotsAll.length) h+='<div class="line">Prioridad por rotación: '+rotsAll.slice(0,3).map(function(r,i){return (i+1)+'ª <b>P'+r.r+'</b> ('+r.so_eff+'%)';}).join(' · ')+'.</div>';
+      var srv=(t.serve.servers||[]).filter(function(s){return s.acepct>=7||s.n>=200;}).slice(0,3);
+      if(srv.length) h+='<div class="line" style="font-size:12.5px;color:var(--mut2)">Al recibir, ojo con: '+srv.map(function(s){return '<b>'+s.name+'</b> ('+(s.tipo.potencia>=s.tipo.flotado?'pot.':'flot.')+', '+s.acepct+'% ace)';}).join(' · ')+'.</div>';
       h+='<div class="line" style="color:var(--mut2);font-size:12px">Reciben '+t.recep.pospct+'% positiva como equipo.</div></div>';
 
       // FUERA DE SISTEMA
