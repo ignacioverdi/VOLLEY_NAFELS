@@ -142,7 +142,7 @@ def walk_receptions(content, pfx):
 # ── acumular acciones por NOMBRE DE EQUIPO tal cual aparece en el dvw ──
 def collect():
     teams = defaultdict(lambda: {'atk':[], 'srv':[], 'rec':[], 'sets':[], 'recdet':[],
-                                 'players':{}, 'files':set(), 'matchinfo':[],
+                                 'players':{}, 'files':set(), 'matchinfo':[], 'by_match':[],
                                  'pl_atk_files':defaultdict(set)})
     files = sorted(glob.glob(os.path.join(DVW_DIR, '*.dvw')))
     for fp in files:
@@ -175,6 +175,15 @@ def collect():
             patk = walk_attacks(content, pfx)
             T['atk'].extend(patk)
             for a in patk: T['pl_atk_files'][a['_pnum']].add(fn)   # partidos por rematador
+            # ── FORMA RECIENTE: stats de ataque por jugador en ESTE partido ──
+            mp = defaultdict(list)
+            for a in patk: mp[a['_pnum']].append(a)
+            matk = {}
+            for num, acts in mp.items():
+                k  = sum(1 for a in acts if a['effect']=='#')
+                er = sum(1 for a in acts if a['effect']=='=')
+                matk[num] = {'n':len(acts),'k':k,'err':er,'eff':rint(eng.eff_atk(acts))}
+            T['by_match'].append({'date':str(date),'fn':fn,'atk':matk})
             T['recdet'].extend(walk_receptions(content, pfx))      # recepciones detalladas
             T['matchinfo'].append({'fp':fp, 'pfx':pfx, 'home': pfx=='*'})
     return teams
@@ -302,6 +311,59 @@ def build_team(disp, team):
     players.sort(key=lambda x:-x['tot'])
     attack = {'tot':a_tot,'kill':a_kill,'killpct':ipct(a_kill,a_tot),'eff':rint(eng.eff_atk(atk)),
               'errpct':ipct(a_err,a_tot),'blkpct':ipct(a_blk,a_tot),'players':players}
+
+    # ── FORMA RECIENTE (corte por fecha: cómo viene jugando AHORA) ──
+    def pos_of(num):
+        acts = by_pl.get(num, [])
+        if not acts: return '?'
+        p = eng.infer_pos(acts)
+        if p == '?':
+            dp = (team['players'].get(num) or {}).get('pos','?'); p = dp if dp in POS_ES else '?'
+        return POS_ES.get(p, p)
+    bm = sorted(team.get('by_match', []), key=lambda m: m['date'])
+    recent = None
+    if bm:
+        RECENT_N = 4; STARTER_MIN = 5
+        rmatches = bm[-RECENT_N:]
+        last = bm[-1]
+        season = {}
+        for num, acts in by_pl.items():
+            season[num] = {'n':len(acts),'eff':rint(eng.eff_atk(acts))}
+        starter_nums = set(num for num, st in last['atk'].items() if st['n'] >= STARTER_MIN)
+        starters = [{'name':apellido_of(num),'pos':pos_of(num),'n':last['atk'][num]['n'],
+                     'eff':last['atk'][num]['eff']} for num in starter_nums]
+        starters.sort(key=lambda x:-x['n'])
+        cand = set()
+        for m in rmatches:
+            for num in m['atk']: cand.add(num)
+        for num, s in season.items():
+            if s['n'] >= 25: cand.add(num)
+        pf = []
+        for num in cand:
+            spark = []; rn=rk=rer=mr=0
+            for m in rmatches:
+                st = m['atk'].get(num)
+                if st:
+                    spark.append({'d':m['date'],'n':st['n'],'eff':st['eff']})
+                    rn += st['n']; rk += st['k']; rer += st['err']; mr += 1
+                else:
+                    spark.append({'d':m['date'],'n':0,'eff':None})
+            recent_eff = round((rk-rer)/rn*100) if rn>0 else None
+            s = season.get(num, {'n':0,'eff':None})
+            is_starter = num in starter_nums
+            flag = None
+            if recent_eff is not None and s['eff'] is not None and rn >= 15:
+                if recent_eff - s['eff'] >= 8: flag = 'alza'
+                elif recent_eff - s['eff'] <= -8: flag = 'baja'
+            if s['n'] >= 30 and mr == 0: flag = 'ausente'
+            if is_starter and s['n'] < 20: flag = 'nuevo'
+            pf.append({'name':apellido_of(num),'pos':pos_of(num),
+                       'season_eff':s['eff'],'season_n':s['n'],
+                       'recent_eff':recent_eff,'recent_n':rn,'mr':mr,
+                       'spark':spark,'flag':flag,'starter':is_starter})
+        pf.sort(key=lambda x:(0 if x['starter'] else 1, -x['recent_n']))
+        recent = {'n':len(rmatches),'total':len(bm),'last_date':bm[-1]['date'],
+                  'starters':starters,'players':pf}
 
     # ── ARMADO ──
     set_tot = len(sets)
@@ -461,7 +523,7 @@ def build_team(disp, team):
     sistema['receivers_f'] = receivers_f
 
     return {'matches':nfiles,'serve':serve,'attack':attack,'set':setd,'recep':recep,
-            'rotations':rotations,'sistema':sistema}
+            'rotations':rotations,'sistema':sistema,'recent':recent}
 
 def main():
     teams = collect()

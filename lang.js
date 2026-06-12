@@ -402,7 +402,67 @@
     'fuera de sistema':{en:'out of system',de:'außerhalb des Systems'},
     'en sistema':{en:'in system',de:'im System'},
     'prioridad de saque':{en:'serving priority',de:'Aufschlagpriorität'},
-    'PJ':{en:'MP',de:'Sp'}
+    'PJ':{en:'MP',de:'Sp'},
+
+    // ════ Header / vacíos / labels que faltaban ════
+    'Dossier del próximo rival':{en:'Next opponent dossier',de:'Dossier des nächsten Gegners'},
+    'NLA Suiza':{en:'Swiss NLA',de:'NLA Schweiz'},
+    'Suiza':{en:'Switzerland',de:'Schweiz'},
+    'Elegí un rival':{en:'Pick an opponent',de:'Wähle einen Gegner'},
+    'Seleccioná un equipo arriba para ver su dossier completo de scouting.':{en:'Select a team above to see their full scouting dossier.',de:'Wähle oben eine Mannschaft, um das vollständige Scouting-Dossier zu sehen.'},
+    'A quién va':{en:'Who gets it',de:'Wohin gespielt'},
+    'rendimiento':{en:'efficiency',de:'Leistung'},
+    'Pelotas':{en:'Balls',de:'Bälle'},
+    'En red':{en:'At net',de:'Am Netz'},
+    'Pocos datos para ese filtro.':{en:'Little data for that filter.',de:'Wenig Daten für diesen Filter.'},
+    'Ordenado por cantidad de saques (los primeros son los titulares).':{en:'Sorted by number of serves (the first ones are the starters).',de:'Nach Anzahl der Aufschläge sortiert (die ersten sind die Stammspieler).'},
+
+    // ════ Footnotes completos (traducen limpio) ════
+    'En sistema = recepción positiva (#/+), el armador tiene todas las opciones. Fuera de sistema = recepción rota (−//), el armador queda condicionado. Solo cuenta el ataque de side-out.':{en:'In system = positive reception (#/+), the setter has every option. Out of system = broken reception (−//), the setter is constrained. Only side-out attack counts.',de:'Im System = positive Annahme (#/+), der Zuspieler hat alle Optionen. Außerhalb = gestörte Annahme (−//), der Zuspieler ist eingeschränkt. Nur der Side-out-Angriff zählt.'},
+    'Filtrá por calidad de recepción y momento del set para ver cómo cambia su distribución. Ej: fuera de sistema (recepción −) suele simplificar a su rematador de confianza. Tocá una llamada en el Game Plan para el heatmap.':{en:'Filter by reception quality and set moment to see how their distribution changes. E.g.: out of system (reception −) they tend to simplify to their go-to hitter. Tap a call in the Game Plan for the heatmap.',de:'Filtere nach Annahmequalität und Satzzeitpunkt, um zu sehen, wie sich ihre Verteilung ändert. Z.B.: außerhalb des Systems (Annahme −) vereinfachen sie meist auf ihren Lieblingsangreifer. Tippe im Matchplan auf einen Ruf für die Heatmap.'},
+    'Zona 1 = recibe por la derecha · Zona 6 = por el medio · Zona 5 = por la izquierda. A qué rematador arma según de dónde le llega el pase (solo side-out). Filtrá por recepción y momento del set.':{en:'Zone 1 = receives on the right · Zone 6 = through the middle · Zone 5 = on the left. Which hitter they set by where the pass comes from (side-out only). Filter by reception and set moment.',de:'Zone 1 = Annahme rechts · Zone 6 = durch die Mitte · Zone 5 = links. Zu welchem Angreifer gestellt wird, je nach Passherkunft (nur Side-out). Filtere nach Annahme und Satzzeitpunkt.'},
+
+    // ════ Footnote de rotación (fragmentos) ════
+    'Orden de rotación real':{en:'Real rotation order',de:'Echte Rotationsreihenfolge'},
+    'Zona del SETTER':{en:'SETTER zone',de:'ZUSPIELER-Zone'},
+    'serving priority':{en:'serving priority',de:'Aufschlagpriorität'},
+    'ordena las 6 rotaciones de la más floja':{en:'sorts the 6 rotations from the weakest',de:'sortiert die 6 Rotationen von der schwächsten'},
+    'a la más fuerte':{en:'to the strongest',de:'zur stärksten'},
+    'apretá el saque en las primeras':{en:'press the serve on the first ones',de:'forciere den Aufschlag bei den ersten'},
+    'sus 3 jugadores en zona de ataque':{en:'their 3 players in the attack zone',de:'ihre 3 Spieler in der Angriffszone'},
+    'in side-out':{en:'in side-out',de:'im Side-out'},
+
+    // ════ Clave in/out system (fragmentos) ════
+    'Rompiéndoles la recepción, su eficacia cae':{en:'Break their reception and their efficiency drops',de:'Bei gestörter Annahme fällt ihre Effizienz um'},
+    'y el ataque se concentra en':{en:'and the attack concentrates on',de:'und der Angriff konzentriert sich auf'},
+    'el ataque se concentra en':{en:'the attack concentrates on',de:'der Angriff konzentriert sich auf'},
+    'entre los dos':{en:'between the two',de:'zwischen beiden'},
+    'casi todo pelota alta':{en:'almost all high ball',de:'fast nur hohe Bälle'},
+    'pelota alta':{en:'high ball',de:'hoher Ball'},
+    'Sacar fuerte y cargar el bloqueo a ellos':{en:'Serve hard and load the block on them',de:'Stark aufschlagen und den Block auf sie laden'},
+
+    // ════ FORMA RECIENTE ════
+    'Forma reciente — cómo viene jugando ahora':{en:'Recent form — how they are playing now',de:'Aktuelle Form — wie sie gerade spielen'},
+    'Forma reciente':{en:'Recent form',de:'Aktuelle Form'},
+    'Atacaron en el último partido (su 6 probable)':{en:'Attacked in the last match (their likely 6)',de:'Im letzten Spiel angegriffen (wahrscheinliche Sechs)'},
+    'El promedio de toda la temporada esconde cambios':{en:'The full-season average hides changes',de:'Der Saisondurchschnitt verbirgt Veränderungen'},
+    'acá ves quién está jugando y en qué forma':{en:'here you see who is playing and in what form',de:'hier siehst du, wer spielt und in welcher Form'},
+    'última fecha':{en:'last date',de:'letztes Datum'},
+    'Temporada':{en:'Season',de:'Saison'},
+    'Últimos 4':{en:'Last 4',de:'Letzte 4'},
+    'Partido a partido':{en:'Match by match',de:'Spiel für Spiel'},
+    'EN ALZA':{en:'RISING',de:'STEIGEND'},
+    'EN BAJA':{en:'FALLING',de:'FALLEND'},
+    'NUEVO TITULAR':{en:'NEW STARTER',de:'NEU IN DER STARTSECHS'},
+    'AUSENTE':{en:'ABSENT',de:'ABWESEND'},
+    'atacó en el último partido':{en:'attacked in the last match',de:'griff im letzten Spiel an'},
+    'su eficacia de las últimas fechas cambió':{en:'their recent efficiency changed',de:'ihre Effizienz der letzten Spiele änderte sich um'},
+    'vs su promedio de temporada':{en:'vs their season average',de:'gegenüber dem Saisondurchschnitt'},
+    'está jugando aunque no era regular':{en:'is playing although they were not a regular',de:'spielt, obwohl kein Stammspieler'},
+    'amenaza nueva':{en:'new threat',de:'neue Bedrohung'},
+    'atacante habitual que no jugó las últimas fechas':{en:'regular attacker who did not play recently',de:'Stammangreifer, der zuletzt nicht spielte'},
+    'pocas pelotas ese partido':{en:'few balls that match',de:'wenige Bälle in dem Spiel'},
+    'atenuado':{en:'dimmed',de:'abgeschwächt'}
   };
   var PHRASE_LC = {};
   (function(){
