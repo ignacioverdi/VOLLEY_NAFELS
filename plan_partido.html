@@ -82,14 +82,16 @@
 
       // SAQUE: a quién, cómo y dónde + prioridad por rotación
       var rd=(t.recep.detail&&t.recep.detail.length)?t.recep.detail:null;
+      var tgt=t.recep.target||(rd&&rd[0]);
       var rotsAll=(t.rotations||[]).filter(function(r){return r&&r.so_eff!=null;}).sort(function(a,b){return a.so_eff-b.so_eff;});
       h+='<div class="box"><div class="box-t"><span class="ic" style="background:var(--saque)"></span>SAQUE — a quién, cómo y dónde</div>';
-      if(rd){
-        var w=rd[0], flo=w.float||{n:0}, sp=w.spin||{n:0}, tipo='';
+      if(tgt){
+        var w=tgt, flo=w.float||{n:0}, sp=w.spin||{n:0}, tipo='';
         if(flo.n>=15&&sp.n>=15) tipo=flo.pospct<sp.pospct?'flotado':'potencia';
         var wz=(w.weakzones||[]).slice(0,1).map(function(z){return 'Z'+z.zone;}).join('');
-        h+='<div class="line">Objetivo: <b>'+w.name+'</b> ('+w.pospct+'% pos.)'+(tipo?' — sacarle <b>'+tipo+'</b>':'')+(wz?', a <b>'+wz+'</b>':'')+'.</div>';
-        if(rd[1]) h+='<div class="line" style="font-size:12.5px;color:var(--mut2)">2º objetivo: '+rd[1].name+' ('+rd[1].pospct+'%).</div>';
+        h+='<div class="line">Objetivo: <b>'+w.name+'</b> ('+w.pospct+'% pos. en '+w.n+' rec.)'+(tipo?' — sacarle <b>'+tipo+'</b>':'')+(wz?', a <b>'+wz+'</b>':'')+'.</div>';
+        var seg=(rd||[]).filter(function(x){return x.name!==w.name && x.n>=Math.max(40,(rd[0].n*0.35));}).sort(function(a,b){return a.pospct-b.pospct;})[0];
+        if(seg) h+='<div class="line" style="font-size:12.5px;color:var(--mut2)">2º objetivo: '+seg.name+' ('+seg.pospct+'% en '+seg.n+' rec.).</div>';
       }
       if(rotsAll.length) h+='<div class="line">Prioridad por rotación: '+rotsAll.slice(0,3).map(function(r,i){return (i+1)+'ª <b>P'+r.r+'</b> ('+r.so_eff+'%)';}).join(' · ')+'.</div>';
       var srv=(t.serve.servers||[]).filter(function(s){return s.acepct>=7||s.n>=200;}).slice(0,3);

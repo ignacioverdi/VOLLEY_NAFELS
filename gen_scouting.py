@@ -224,6 +224,7 @@ def build_team(disp, team):
     s_tot = len(srv)
     s_ace = sum(1 for a in srv if a['effect']=='#')
     s_err = sum(1 for a in srv if a['effect']=='=')
+    s_ven = sum(1 for a in srv if a['effect']=='/')
     # por sacador (ordenado por volumen = titulares primero), con direcciones desde→hacia
     srv_by = defaultdict(list)
     for a in srv: srv_by[a['_pnum']].append(a)
@@ -245,7 +246,7 @@ def build_team(disp, team):
                         'origen':origs,'destino':dests})
     servers.sort(key=lambda x:-x['n'])
     serve = {'tot':s_tot,'ace':s_ace,'acepct':ipct(s_ace,s_tot),'errpct':ipct(s_err,s_tot),
-             'eff':ipct(s_ace,s_tot)-ipct(s_err,s_tot),'zones':top_zones(srv,'dest',4),
+             'eff':ipct(s_ace,s_tot)-ipct(s_err,s_tot),'venpct':ipct(s_ven,s_tot),'zones':top_zones(srv,'dest',4),
              'servers':servers}
 
     # ── ATAQUE (equipo + por rematador) ──
@@ -378,8 +379,19 @@ def build_team(disp, team):
         zoneq.sort(key=lambda x:x['pospct'])
         detail.append({'name':apellido_of(num),'n':len(acts),'pospct':qblock(acts)['pospct'],
                        'float':qblock(flo),'spin':qblock(spin),'weakzones':zoneq[:2]})
-    detail.sort(key=lambda x:x['pospct'])
-    recep = {'tot':r_tot,'pospct':ipct(r_pos,r_tot),'errpct':ipct(r_err,r_tot),'weak':weak,'detail':detail}
+    detail.sort(key=lambda x:-x['n'])   # por volumen: los titulares primero
+    # receptor mas vulnerable SOLO entre los de volumen real (titulares), no un suplente
+    starters = sorted(detail, key=lambda x:-x['n'])[:5]
+    if starters:
+        cutoff = max(40, int(starters[0]['n'] * 0.35))   # umbral relativo al receptor con mas volumen
+        pool = [d for d in starters if d['n'] >= cutoff] or starters[:3]
+        target = sorted(pool, key=lambda x:x['pospct'])[0]
+        target = {'name':target['name'],'n':target['n'],'pospct':target['pospct'],
+                  'float':target['float'],'spin':target['spin'],'weakzones':target['weakzones']}
+    else:
+        target = None
+    recep = {'tot':r_tot,'pospct':ipct(r_pos,r_tot),'errpct':ipct(r_err,r_tot),
+             'weak':weak,'detail':detail,'target':target}
 
     # ── ROTACIONES (S1..S6) ──
     fronts = rotations_for(team, apellido_of)
@@ -404,32 +416,49 @@ def build_team(disp, team):
         dc = Counter(a['_pnum'] for a in subset)
         dist = [{'name':apellido_of(n),'pct':ipct(c,len(subset))} for n,c in dc.most_common(4)]
         return {'n':len(subset),'eff':hit(subset),'dist':dist,'combos':top_zones(subset,'combo',4)}
+    def litblock(subset):   # version liviana para las grillas filtradas
+        if not subset: return {'n':0,'eff':0,'dist':[]}
+        dc = Counter(a['_pnum'] for a in subset)
+        dist = [{'name':apellido_of(n),'pct':ipct(c,len(subset))} for n,c in dc.most_common(4)]
+        return {'n':len(subset),'eff':hit(subset),'dist':dist}
     so_atk = [a for a in atk if a.get('so')]
     insys  = [a for a in so_atk if a.get('rq') in ('#','+')]
     outsys = [a for a in so_atk if a.get('rq') in ('-','/')]
     sistema = {'insys':sysblock(insys),'outsys':sysblock(outsys)}
 
-    # ── DISTRIBUCION DEL ARMADOR SEGUN DESDE DONDE RECIBE (z1/z6/z5) ──
-    by_zone = {}
-    for z in ('Z1','Z6','Z5'):
-        by_zone[z] = sysblock([a for a in so_atk if a.get('rec_from')==z])
-    sistema['by_zone'] = by_zone
+    RQF = ('all','pos','neg'); PHF = ('all','e','m','l')
+    def filt(subset, rqf, phf):
+        def ok(a):
+            if rqf=='pos' and a.get('rq') not in ('#','+'): return False
+            if rqf=='neg' and a.get('rq') not in ('!','-','/'): return False
+            if phf!='all' and a.get('phase')!=phf: return False
+            return True
+        return [a for a in subset if ok(a)]
 
-    # ── DISTRIBUCION DEL ARMADOR SEGUN QUIEN RECIBE (filtro) ──
+    # ── DISTRIBUCION SEGUN DESDE DONDE RECIBE (z1/z6/z5), filtrable ──
+    by_zone_f = {}
+    for rqf in RQF:
+        for phf in PHF:
+            sub = filt(so_atk, rqf, phf)
+            by_zone_f['%s|%s'%(rqf,phf)] = {z: litblock([a for a in sub if a.get('rec_from')==z]) for z in ('Z1','Z6','Z5')}
+    sistema['by_zone'] = by_zone_f['all|all']      # compat (default sin filtro)
+    sistema['by_zone_f'] = by_zone_f
+
+    # ── DISTRIBUCION SEGUN QUIEN RECIBE (filtro de receptor + recepcion + momento) ──
     rec_groups = defaultdict(list)
     for a in so_atk:
         if a.get('rec_by'): rec_groups[a['rec_by']].append(a)
-    receivers = []
-    for num, sub in rec_groups.items():
-        if len(sub) < MIN_REC_PLAYER: continue
-        b = sysblock(sub)
-        sub_in  = [a for a in sub if a.get('rq') in ('#','+')]
-        sub_out = [a for a in sub if a.get('rq') in ('-','/')]
-        receivers.append({'num':num,'name':apellido_of(num),'n':len(sub),
-                          'eff':b['eff'],'dist':b['dist'],'combos':b['combos'],
-                          'insys':sysblock(sub_in),'outsys':sysblock(sub_out)})
-    receivers.sort(key=lambda x:-x['n'])
-    sistema['receivers'] = receivers
+    rec_nums = [num for num, sub in rec_groups.items() if len(sub) >= MIN_REC_PLAYER]
+    rec_nums.sort(key=lambda n:-len(rec_groups[n]))
+    sistema['receivers'] = [{'num':num,'name':apellido_of(num),'n':len(rec_groups[num])} for num in rec_nums]
+    receivers_f = {}
+    for num in rec_nums:
+        base = rec_groups[num]; g = {}
+        for rqf in RQF:
+            for phf in PHF:
+                g['%s|%s'%(rqf,phf)] = litblock(filt(base, rqf, phf))
+        receivers_f[apellido_of(num)] = g
+    sistema['receivers_f'] = receivers_f
 
     return {'matches':nfiles,'serve':serve,'attack':attack,'set':setd,'recep':recep,
             'rotations':rotations,'sistema':sistema}

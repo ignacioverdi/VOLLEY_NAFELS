@@ -305,12 +305,12 @@ function buildClaves(t){
     if(cd){ var d0=(cd.dist||[]).slice(0,2).map(function(d){return d.name+' '+d.pct+'%';}).join(', '); ctxt=' Su llamada principal <span class="hl2">'+cd.call+'</span> ('+cd.pct+'%) termina en '+d0+'.'; }
     c.push('Armador: <span class="hl2">'+t.set.main.name+'</span> (distribuye el '+t.set.main.pct+'% del juego).'+ctxt);
   }
-  var rd=(t.recep.detail&&t.recep.detail[0]);
+  var rd=(t.recep.target)||(t.recep.detail&&t.recep.detail[0]);
   if(rd && rd.pospct<62){
     var flo=rd.float||{n:0}, sp=rd.spin||{n:0}, tipo='', dif=0;
     if(flo.n>=15&&sp.n>=15){ if(flo.pospct<sp.pospct){tipo='flotado';dif=sp.pospct-flo.pospct;} else {tipo='potencia';dif=flo.pospct-sp.pospct;} }
     var wz=(rd.weakzones||[]).slice(0,1).map(function(z){return 'Z'+z.zone;}).join('');
-    var rec='Receptor más vulnerable: <span class="hl3">'+rd.name+'</span> ('+rd.pospct+'% positiva). <b>Sacarle a él</b>';
+    var rec='Receptor más vulnerable: <span class="hl3">'+rd.name+'</span> ('+rd.pospct+'% positiva en '+rd.n+' recepciones). <b>Sacarle a él</b>';
     if(tipo) rec+=' con saque <b>'+tipo+'</b> ('+dif+' pts más flojo ahí)';
     if(wz) rec+=', apuntando a <b>'+wz+'</b>';
     c.push(rec+'.');
@@ -369,15 +369,15 @@ function renderAtkTab(m){
     else {combos=p.combos;eff=p.eff;n=p.tot;}
     var juego=(combos||[]).map(function(c){
       var dz=(c.dest||[]).map(function(d){return 'Z'+d.z+' '+d.pct+'%';}).join(' · ');
-      return '<b style="color:var(--ataque);font-size:16px">'+c.k+'</b> <span style="color:var(--mut2);font-size:13px">'+c.pct+'%</span> <span style="color:#475569">→</span> <span style="color:var(--bloqueo,#06B6D4);font-size:13px">'+(dz||'—')+'</span>';
-    }).join('<br>')||'<span style="color:#475569">—</span>';
+      return '<span style="white-space:nowrap"><b style="color:var(--ataque);font-size:16px">'+c.k+'</b> <span style="color:var(--mut2);font-size:13px">'+c.pct+'%</span> <span style="color:#475569">→</span> <span style="color:var(--bloqueo,#06B6D4);font-size:13px">'+(dz||'—')+'</span></span>';
+    }).join('<span style="color:#334155;margin:0 9px">|</span>')||'<span style="color:#475569">—</span>';
     var low=n<25;
-    h+='<tr><td>'+(i===0?'<span class="star">★</span> ':'')+p.name+'</td>'
+    h+='<tr><td style="font-size:15px;font-weight:700">'+(i===0?'<span class="star">★</span> ':'')+p.name+'</td>'
       +'<td style="text-align:left"><span class="posbadge '+posClass(p.pos)+'">'+p.pos+'</span></td>'
-      +'<td style="color:var(--mut2)">'+(p.matches||'')+'</td>'
-      +'<td style="color:'+(low?'#64748b':'var(--mut2)')+'">'+n+(low?' ⚠':'')+'</td>'
+      +'<td style="color:var(--mut2);font-size:15px">'+(p.matches||'')+'</td>'
+      +'<td style="color:'+(low?'#64748b':'var(--mut2)')+';font-size:15px">'+n+(low?' ⚠':'')+'</td>'
       +'<td style="font-weight:800;font-size:22px;color:'+effColor(eff)+'">'+(n?eff+'%':'—')+'</td>'
-      +'<td style="text-align:left;line-height:1.9;padding:8px 7px">'+juego+'</td></tr>';
+      +'<td style="text-align:left;line-height:1.7;padding:9px 7px">'+juego+'</td></tr>';
   });
   h+='</tbody></table></div>';
   var el=document.getElementById('atkOut'); if(el) el.innerHTML=h;
@@ -388,51 +388,77 @@ function distBars(dist,color){
   return h;
 }
 function renderRecepZona(t){
-  var bz=t.sistema && t.sistema.by_zone; if(!bz) return '';
+  var bzf=t.sistema && t.sistema.by_zone_f; if(!bzf) return '';
+  var base=bzf['all|all']||{};
+  if(!['Z1','Z6','Z5'].some(function(z){return base[z] && base[z].n;})) return '';
+  var h='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">📍</span><span class="sec-ti" style="color:var(--armado)">Cómo arma según desde dónde le llega la recepción</span></div><div class="sec-bd">';
+  h+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">'
+    +'<select id="bzRq" onchange="renderByZone()" style="background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 10px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer"><option value="all">Toda recepción</option><option value="pos">Con recepción + (#/+)</option><option value="neg">Con recepción − (!/-)</option></select>'
+    +'<select id="bzPh" onchange="renderByZone()" style="background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 10px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer"><option value="all">Todo el set</option><option value="e">Inicio (0-8)</option><option value="m">Medio (9-16)</option><option value="l">Final (17+)</option></select>'
+    +'</div>';
+  h+='<div id="bzOut"></div>';
+  h+='<div style="font-size:10px;color:var(--mut);margin-top:9px;line-height:1.5">Zona 1 = recibe por la derecha · Zona 6 = por el medio · Zona 5 = por la izquierda. A qué rematador arma según de dónde le llega el pase (solo side-out). Filtrá por recepción y momento del set.</div></div></div>';
+  return h;
+}
+function renderByZone(){
+  if(!CUR||!CUR.sistema||!CUR.sistema.by_zone_f) return;
+  var rq=(document.getElementById('bzRq')||{}).value||'all';
+  var ph=(document.getElementById('bzPh')||{}).value||'all';
+  var bz=CUR.sistema.by_zone_f[rq+'|'+ph]||{};
   var zones=[['Z1','Zona 1','der · pos 1·2·9'],['Z6','Zona 6','medio · pos 6·3·8'],['Z5','Zona 5','izq · pos 5·4·7']];
-  if(!zones.some(function(z){return bz[z[0]] && bz[z[0]].n;})) return '';
-  var h='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">📍</span><span class="sec-ti" style="color:var(--armado)">Cómo arma según desde dónde le llega la recepción</span></div><div class="sec-bd"><div class="sysgrid" style="grid-template-columns:repeat(3,1fr)">';
+  var h='<div class="sysgrid" style="grid-template-columns:repeat(3,1fr)">';
   zones.forEach(function(z){
-    var b=bz[z[0]]||{n:0,eff:0,dist:[],combos:[]};
+    var b=bz[z[0]]||{n:0,eff:0,dist:[]};
     h+='<div class="syscol"><div class="syshd" style="color:var(--armado)">'+z[1]+'</div><div style="font-size:10px;color:var(--mut);margin:-2px 0 5px">'+z[2]+'</div>';
-    if(b.n){
-      h+='<div class="sysk"><b style="color:'+effColor(b.eff)+'">'+b.eff+'%</b> · '+b.n+' atk</div><div class="rotlb">Arma a</div>'+distBars(b.dist,'var(--armado)');
-    } else h+='<div class="sysk" style="color:var(--mut)">sin datos</div>';
+    if(b.n) h+='<div class="sysk"><b style="color:'+effColor(b.eff)+'">'+b.eff+'%</b> · '+b.n+' atk</div><div class="rotlb">Arma a</div>'+distBars(b.dist,'var(--armado)');
+    else h+='<div class="sysk" style="color:var(--mut)">pocos datos</div>';
     h+='</div>';
   });
-  h+='</div><div style="font-size:10px;color:var(--mut);margin-top:9px;line-height:1.5">Zona 1 = recibe por la derecha · Zona 6 = por el medio · Zona 5 = por la izquierda. Muestra a qué rematador arma según de dónde le llega el pase (solo side-out).</div></div></div>';
-  return h;
+  h+='</div>';
+  var el=document.getElementById('bzOut'); if(el) el.innerHTML=h;
 }
 function renderRecepFiltro(t){
   var rs=t.sistema && t.sistema.receivers; if(!rs||!rs.length) return '';
   var opts=rs.map(function(r,i){return '<option value="'+i+'">'+r.name+' — '+r.n+' recepciones</option>';}).join('');
   var h='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">🎚</span><span class="sec-ti" style="color:var(--recep)">Cómo arma según QUIÉN recibe</span></div><div class="sec-bd">';
   h+='<div style="font-size:12px;color:var(--mut2);margin-bottom:8px">Elegí un receptor y mirá a quién arma el armador rival cuando le llega el pase desde ese jugador:</div>';
-  h+='<select id="recvSel" onchange="pickReceiver(this.value)" style="width:100%;max-width:360px;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:9px;padding:10px 12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer">'+opts+'</select>';
-  h+='<div id="recvOut" style="margin-top:12px"></div>';
+  h+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">'
+    +'<select id="recvSel" onchange="pickReceiver()" style="flex:1;min-width:220px;max-width:360px;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:9px;padding:10px 12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer">'+opts+'</select>'
+    +'<select id="recvRq" onchange="pickReceiver()" style="background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:9px;padding:7px 10px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer"><option value="all">Toda recepción</option><option value="pos">Recepción + (#/+)</option><option value="neg">Recepción − (!/-)</option></select>'
+    +'<select id="recvPh" onchange="pickReceiver()" style="background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:9px;padding:7px 10px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer"><option value="all">Todo el set</option><option value="e">Inicio (0-8)</option><option value="m">Medio (9-16)</option><option value="l">Final (17+)</option></select>'
+    +'</div>';
+  h+='<div id="recvOut" style="margin-top:6px"></div>';
   h+='</div></div>';
   return h;
 }
 function pickReceiver(i){
   if(!CUR||!CUR.sistema) return;
-  var r=(CUR.sistema.receivers||[])[i]; if(!r){return;}
-  var h='<div class="sysgrid" style="grid-template-columns:1fr 1fr 1fr">';
-  // global
-  h+='<div class="syscol"><div class="syshd" style="color:var(--recep)">Recibe '+r.name+'</div>'
-    +'<div class="sysk"><b style="color:'+effColor(r.eff)+'">'+r.eff+'%</b> · '+r.n+' jugadas</div>'
-    +'<div class="rotlb">Le arma a</div>'+distBars(r.dist,'var(--recep)')+'</div>';
-  // en sistema (cuando pasa bien)
-  var ins=r.insys||{n:0,eff:0,dist:[]};
-  h+='<div class="syscol"><div class="syshd" style="color:#22c55e">Cuando pasa bien</div>'
-    +(ins.n?('<div class="sysk"><b style="color:'+effColor(ins.eff)+'">'+ins.eff+'%</b> · '+ins.n+' jugadas</div><div class="rotlb">Le arma a</div>'+distBars(ins.dist,'#22c55e')):'<div class="sysk" style="color:var(--mut)">pocos datos</div>')+'</div>';
-  // fuera de sistema (cuando lo rompés)
-  var ou=r.outsys||{n:0,eff:0,dist:[]};
-  h+='<div class="syscol"><div class="syshd" style="color:#ef4444">Cuando lo rompés</div>'
-    +(ou.n?('<div class="sysk"><b style="color:'+effColor(ou.eff)+'">'+ou.eff+'%</b> · '+ou.n+' jugadas</div><div class="rotlb">Le arma a</div>'+distBars(ou.dist,'#ef4444')):'<div class="sysk" style="color:var(--mut)">pocos datos</div>')+'</div>';
-  h+='</div>';
-  if(ins.n && ou.n){
-    var drop=ins.eff-ou.eff, o1=(ou.dist||[])[0];
-    if(drop>=8 && o1) h+='<div class="sysnote">Sacándole fuerte a <b style="color:#fff">'+r.name+'</b>, su eficacia cae a <b style="color:#f87171">'+ou.eff+'%</b> y el armador va a <b style="color:#fff">'+o1.name+'</b> ('+o1.pct+'%). Ahí cargás el bloqueo.</div>';
+  var sel=document.getElementById('recvSel');
+  if(i===undefined||i===null) i=sel?sel.value:0;
+  else if(sel) sel.value=i;
+  var r=(CUR.sistema.receivers||[])[i]; if(!r) return;
+  var rf=(CUR.sistema.receivers_f||{})[r.name]; if(!rf) return;
+  var rq=(document.getElementById('recvRq')||{}).value||'all';
+  var ph=(document.getElementById('recvPh')||{}).value||'all';
+  function col(title,b,color){
+    return '<div class="syscol"><div class="syshd" style="color:'+color+'">'+title+'</div>'
+      +(b&&b.n?('<div class="sysk"><b style="color:'+effColor(b.eff)+'">'+b.eff+'%</b> · '+b.n+' jugadas</div><div class="rotlb">Le arma a</div>'+distBars(b.dist,color)):'<div class="sysk" style="color:var(--mut)">pocos datos</div>')+'</div>';
+  }
+  var h='';
+  if(rq==='all'){
+    var all=rf['all|'+ph]||{n:0}, ins=rf['pos|'+ph]||{n:0}, ou=rf['neg|'+ph]||{n:0};
+    h+='<div class="sysgrid" style="grid-template-columns:1fr 1fr 1fr">'
+      +col('Recibe '+r.name, all, 'var(--recep)')
+      +col('Cuando pasa bien', ins, '#22c55e')
+      +col('Cuando lo rompés', ou, '#ef4444')+'</div>';
+    if(ins.n && ou.n){
+      var drop=ins.eff-ou.eff, o1=(ou.dist||[])[0];
+      if(drop>=8 && o1) h+='<div class="sysnote">Sacándole fuerte a <b style="color:#fff">'+r.name+'</b>, su eficacia cae a <b style="color:#f87171">'+ou.eff+'%</b> y el armador va a <b style="color:#fff">'+o1.name+'</b> ('+o1.pct+'%). Ahí cargás el bloqueo.</div>';
+    }
+  } else {
+    var b=rf[rq+'|'+ph]||{n:0};
+    var lbl=rq==='pos'?'Recibe '+r.name+' (recepción +)':'Recibe '+r.name+' (recepción −)';
+    h+='<div class="sysgrid" style="grid-template-columns:1fr">'+col(lbl, b, rq==='pos'?'#22c55e':'#ef4444')+'</div>';
   }
   var el=document.getElementById('recvOut'); if(el) el.innerHTML=h;
 }
@@ -453,12 +479,13 @@ function renderDossier(n){
 
   // ===== SAQUE =====
   h+='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">⚡</span><span class="sec-ti" style="color:var(--saque)">Saque — desde dónde y hacia dónde sacan</span></div><div class="sec-bd">';
-  h+='<div class="kpis" style="max-width:340px">'
+  h+='<div class="kpis" style="max-width:440px">'
     +'<div class="kpi"><div class="v" style="color:'+pctColor(t.serve.acepct*3)+'">'+t.serve.acepct+'%</div><div class="l">Aces</div></div>'
+    +'<div class="kpi"><div class="v" style="color:#84cc16">'+(t.serve.venpct||0)+'%</div><div class="l">Vendida (/)</div></div>'
     +'<div class="kpi"><div class="v" style="color:#ef4444">'+t.serve.errpct+'%</div><div class="l">Error</div></div>'
     +'<div class="kpi"><div class="v" style="color:var(--mut2)">'+t.serve.tot+'</div><div class="l">Total</div></div></div>';
   if(t.serve.servers && t.serve.servers.length){
-    h+='<div style="overflow-x:auto"><table><thead><tr><th>Sacador</th><th>Saques</th><th>Ace%</th><th>Err%</th><th style="text-align:left">Tipo</th><th style="text-align:left">Desde</th><th style="text-align:left">Hacia dónde lo pone</th></tr></thead><tbody>';
+    h+='<div style="overflow-x:auto;display:flex;justify-content:center"><table style="width:auto;min-width:90%;margin:0 auto"><thead><tr><th>Sacador</th><th>Saques</th><th>Ace%</th><th>Err%</th><th style="text-align:left">Tipo</th><th style="text-align:left">Desde</th><th style="text-align:left">Hacia dónde lo pone</th></tr></thead><tbody>';
     t.serve.servers.forEach(function(s){
       var tipo=s.tipo.potencia>=s.tipo.flotado?('Potencia '+s.tipo.potencia+'%'):('Flotado '+s.tipo.flotado+'%');
       var desde=(s.origen||[]).map(function(o){return o.z;}).join(' / ')||'—';
@@ -507,6 +534,7 @@ function renderDossier(n){
     +'<div class="kpi"><div class="v" style="font-size:34px;color:'+effColor(t.attack.eff)+'">'+t.attack.eff+'%</div><div class="l">Eficiencia</div></div>'
     +'<div class="kpi"><div class="v" style="font-size:34px;color:#22c55e">'+t.attack.killpct+'%</div><div class="l">Punto</div></div>'
     +'<div class="kpi"><div class="v" style="font-size:34px;color:#06b6d4">'+t.attack.blkpct+'%</div><div class="l">Bloqueados</div></div>'
+    +'<div class="kpi"><div class="v" style="font-size:34px;color:#ef4444">'+t.attack.errpct+'%</div><div class="l">Error</div></div>'
     +'<div class="kpi"><div class="v" style="font-size:34px;color:var(--ataque)">'+t.attack.tot+'</div><div class="l">Total</div></div></div>';
   h+='<div class="atktabs"><button class="atktab on" data-m="gen" onclick="renderAtkTab(\'gen\')">General</button>'
     +'<button class="atktab" data-m="so" onclick="renderAtkTab(\'so\')">Side-out (recepción +)</button>'
@@ -522,8 +550,9 @@ function renderDossier(n){
     +'<div class="kpi"><div class="v" style="color:#ef4444">'+t.recep.errpct+'%</div><div class="l">Error</div></div>'
     +'<div class="kpi"><div class="v" style="color:var(--mut2)">'+t.recep.tot+'</div><div class="l">Total</div></div></div>';
   var rd=(t.recep.detail && t.recep.detail.length)?t.recep.detail:null;
+  var tgtName=(t.recep.target&&t.recep.target.name)||'';
   if(rd){
-    h+='<table style="margin-top:6px"><thead><tr><th>Receptor (peor → mejor)</th><th>Rec.</th><th>Positiva%</th><th>vs Flotado</th><th>vs Potencia</th><th style="text-align:left">Recibe peor en</th></tr></thead><tbody>';
+    h+='<table style="margin-top:6px"><thead><tr><th>Receptor (por volumen)</th><th>Rec.</th><th>Positiva%</th><th>vs Flotado</th><th>vs Potencia</th><th style="text-align:left">Recibe peor en</th></tr></thead><tbody>';
     rd.forEach(function(w,i){
       var flo=w.float||{n:0,pospct:0}, spin=w.spin||{n:0,pospct:0};
       var both=flo.n>=15&&spin.n>=15;
@@ -531,7 +560,8 @@ function renderDossier(n){
       var floCell='<span style="color:'+pctColor(flo.pospct)+';font-weight:'+(serveType==='flotado'?'800':'400')+'">'+(flo.n?flo.pospct+'%':'—')+'</span>';
       var spinCell='<span style="color:'+pctColor(spin.pospct)+';font-weight:'+(serveType==='potencia'?'800':'400')+'">'+(spin.n?spin.pospct+'%':'—')+'</span>';
       var wz=(w.weakzones||[]).map(function(z){return 'Z'+z.zone+' ('+z.pospct+'%)';}).join(' · ');
-      h+='<tr><td>'+(i===0?'<span style="color:var(--red)">🎯</span> ':'')+w.name+'</td>'
+      var isTgt=w.name===tgtName;
+      h+='<tr'+(isTgt?' style="background:rgba(239,68,68,.07)"':'')+'><td>'+(isTgt?'<span style="color:var(--red)">🎯</span> ':'')+w.name+'</td>'
         +'<td style="color:var(--mut2)">'+w.n+'</td>'
         +'<td style="font-weight:800;color:'+pctColor(w.pospct)+'">'+w.pospct+'%</td>'
         +'<td>'+floCell+'</td><td>'+spinCell+'</td>'
@@ -568,6 +598,7 @@ function renderDossier(n){
   d.innerHTML=h;
   if(t.attack && t.attack.players) renderAtkTab('gen');
   if(t.set && t.set.calldist_f) renderCalldist();
+  if(t.sistema && t.sistema.by_zone_f) renderByZone();
   if(t.sistema && t.sistema.receivers && t.sistema.receivers.length) pickReceiver(0);
 }
 
