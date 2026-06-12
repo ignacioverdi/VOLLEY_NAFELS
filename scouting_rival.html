@@ -126,6 +126,10 @@
     .sec,.syscol,.rotcard,.claves,.kpi,table{break-inside:avoid;page-break-inside:avoid}
     *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   }
+  .atktabs{display:flex;gap:6px;margin-bottom:13px;flex-wrap:wrap}
+  .atktab{background:var(--card2);border:1px solid var(--border);color:var(--mut2);border-radius:9px;padding:8px 14px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;transition:all .15s}
+  .atktab:hover{color:#fff}
+  .atktab.on{background:rgba(249,115,22,.14);border-color:rgba(249,115,22,.5);color:var(--ataque)}
 </style>
 </head>
 <body>
@@ -333,6 +337,51 @@ function buildClaves(t){
 }
 
 var CUR=null;
+function renderCalldist(){
+  if(!CUR||!CUR.set||!CUR.set.calldist_f) return;
+  var rq=(document.getElementById('cdRq')||{}).value||'all';
+  var ph=(document.getElementById('cdPh')||{}).value||'all';
+  var rows=CUR.set.calldist_f[rq+'|'+ph]||[];
+  var el=document.getElementById('cdOut'); if(!el) return;
+  if(!rows.length){ el.innerHTML='<div style="color:var(--mut);font-size:12px;padding:10px 0">Pocos datos para ese filtro.</div>'; return; }
+  var h='<div style="overflow-x:auto"><table><thead><tr><th style="text-align:left">Llamada</th><th>Uso</th><th>EFF</th><th style="text-align:left">Termina en (rematador)</th><th style="text-align:left">Pelota</th></tr></thead><tbody>';
+  rows.forEach(function(c){
+    var dist=(c.dist||[]).map(function(d){return d.name+' '+d.pct+'%';}).join(' · ');
+    var comb=(c.combos||[]).map(function(x){return x.k+' '+x.pct+'%';}).join(' · ');
+    h+='<tr><td style="text-align:left"><b style="color:var(--armado);font-size:15px">'+c.call+'</b></td>'
+      +'<td style="color:var(--mut2);font-weight:700">'+c.pct+'%</td>'
+      +'<td style="font-weight:800;color:'+effColor(c.eff)+'">'+c.eff+'%</td>'
+      +'<td style="text-align:left">'+dist+'</td>'
+      +'<td style="text-align:left;color:var(--ataque);font-weight:700">'+comb+'</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  el.innerHTML=h;
+}
+function renderAtkTab(m){
+  if(!CUR||!CUR.attack) return;
+  document.querySelectorAll('.atktab').forEach(function(b){b.classList.toggle('on', b.dataset.m===m);});
+  var players=CUR.attack.players||[];
+  var h='<div style="overflow-x:auto"><table><thead><tr><th>Rematador</th><th style="text-align:left">Pos</th><th>PJ</th><th>Atq</th><th>EFF</th><th style="text-align:left">Combinación → dirección (dónde la manda)</th></tr></thead><tbody>';
+  players.forEach(function(p,i){
+    var combos,eff,n;
+    if(m==='so'){combos=p.so_combos;eff=p.so_pos_eff;n=p.so_pos_n;}
+    else if(m==='tr'){combos=p.tr_combos;eff=p.tr_eff;n=p.tr_n;}
+    else {combos=p.combos;eff=p.eff;n=p.tot;}
+    var juego=(combos||[]).map(function(c){
+      var dz=(c.dest||[]).map(function(d){return 'Z'+d.z+' '+d.pct+'%';}).join(' · ');
+      return '<b style="color:var(--ataque);font-size:16px">'+c.k+'</b> <span style="color:var(--mut2);font-size:13px">'+c.pct+'%</span> <span style="color:#475569">→</span> <span style="color:var(--bloqueo,#06B6D4);font-size:13px">'+(dz||'—')+'</span>';
+    }).join('<br>')||'<span style="color:#475569">—</span>';
+    var low=n<25;
+    h+='<tr><td>'+(i===0?'<span class="star">★</span> ':'')+p.name+'</td>'
+      +'<td style="text-align:left"><span class="posbadge '+posClass(p.pos)+'">'+p.pos+'</span></td>'
+      +'<td style="color:var(--mut2)">'+(p.matches||'')+'</td>'
+      +'<td style="color:'+(low?'#64748b':'var(--mut2)')+'">'+n+(low?' ⚠':'')+'</td>'
+      +'<td style="font-weight:800;font-size:22px;color:'+effColor(eff)+'">'+(n?eff+'%':'—')+'</td>'
+      +'<td style="text-align:left;line-height:1.9;padding:8px 7px">'+juego+'</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  var el=document.getElementById('atkOut'); if(el) el.innerHTML=h;
+}
 function distBars(dist,color){
   var h='';
   (dist||[]).forEach(function(d){ h+='<div class="sysbar"><span>'+d.name+'</span><span class="sysp"><i style="width:'+Math.min(100,d.pct)+'%;background:'+color+'"></i></span><span class="sysv">'+d.pct+'%</span></div>'; });
@@ -403,13 +452,31 @@ function renderDossier(n){
   h+='<div class="grid">';
 
   // ===== SAQUE =====
-  h+='<div class="sec"><div class="sec-hd"><span class="sec-ic">⚡</span><span class="sec-ti" style="color:var(--saque)">Saque</span></div><div class="sec-bd">';
-  h+='<div class="kpis">'
+  h+='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">⚡</span><span class="sec-ti" style="color:var(--saque)">Saque — desde dónde y hacia dónde sacan</span></div><div class="sec-bd">';
+  h+='<div class="kpis" style="max-width:340px">'
     +'<div class="kpi"><div class="v" style="color:'+pctColor(t.serve.acepct*3)+'">'+t.serve.acepct+'%</div><div class="l">Aces</div></div>'
     +'<div class="kpi"><div class="v" style="color:#ef4444">'+t.serve.errpct+'%</div><div class="l">Error</div></div>'
-    +'<div class="kpi"><div class="v" style="color:'+effColor(t.serve.eff+30)+'">'+t.serve.tot+'</div><div class="l">Total</div></div></div>';
-  h+='<div style="font-size:10px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Zonas desde donde sacan</div>';
-  t.serve.zones.forEach(function(z){ h+=bar(ZN(z.k),z.pct,'var(--saque)'); });
+    +'<div class="kpi"><div class="v" style="color:var(--mut2)">'+t.serve.tot+'</div><div class="l">Total</div></div></div>';
+  if(t.serve.servers && t.serve.servers.length){
+    h+='<div style="overflow-x:auto"><table><thead><tr><th>Sacador</th><th>Saques</th><th>Ace%</th><th>Err%</th><th style="text-align:left">Tipo</th><th style="text-align:left">Desde</th><th style="text-align:left">Hacia dónde lo pone</th></tr></thead><tbody>';
+    t.serve.servers.forEach(function(s){
+      var tipo=s.tipo.potencia>=s.tipo.flotado?('Potencia '+s.tipo.potencia+'%'):('Flotado '+s.tipo.flotado+'%');
+      var desde=(s.origen||[]).map(function(o){return o.z;}).join(' / ')||'—';
+      var hacia=(s.destino||[]).map(function(d){return 'Z'+d.z+' '+d.pct+'%';}).join(' · ')||'—';
+      h+='<tr><td><b>'+s.name+'</b></td>'
+        +'<td style="color:var(--mut2);font-weight:700">'+s.n+'</td>'
+        +'<td style="color:'+pctColor(s.acepct*4)+';font-weight:700">'+s.acepct+'%</td>'
+        +'<td style="color:'+(s.errpct>=18?'#ef4444':'#f97316')+'">'+s.errpct+'%</td>'
+        +'<td style="text-align:left;color:var(--saque);font-weight:700">'+tipo+'</td>'
+        +'<td style="text-align:left;color:var(--mut2)">'+desde+'</td>'
+        +'<td style="text-align:left;color:var(--bloqueo,#06B6D4);font-weight:700">'+hacia+'</td></tr>';
+    });
+    h+='</tbody></table></div>';
+    h+='<div style="font-size:10px;color:var(--mut);margin-top:9px;line-height:1.5">Ordenado por cantidad de saques (los primeros son los titulares). <b style="color:var(--mut2)">Desde</b> = zona de la cancha desde la que saca (Z1 derecha · Z6 medio · Z5 izq). <b style="color:var(--mut2)">Hacia dónde</b> = zonas donde más lo pone — preparar la recepción ahí.</div>';
+  } else {
+    h+='<div style="font-size:10px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Zonas desde donde sacan</div>';
+    t.serve.zones.forEach(function(z){ h+=bar(ZN(z.k),z.pct,'var(--saque)'); });
+  }
   h+='</div></div>';
 
   // ===== ARMADO =====
@@ -419,20 +486,14 @@ function renderDossier(n){
       +'<div style="font-family:Bebas Neue;font-size:30px;letter-spacing:1px">'+t.set.main.name+'</div>'
       +'<div class="chip" style="border-color:rgba(129,140,248,.4)"><span class="p" style="color:var(--armado)">'+t.set.main.pct+'%</span> del juego</div></div>';
   }
-  if(t.set.calldist && t.set.calldist.length){
+  if(t.set.calldist_f){
     h+='<div style="font-size:10px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Qué produce cada llamada</div>';
-    h+='<div style="overflow-x:auto"><table><thead><tr><th style="text-align:left">Llamada</th><th>Uso</th><th>EFF</th><th style="text-align:left">Termina en (rematador)</th><th style="text-align:left">Pelota</th></tr></thead><tbody>';
-    t.set.calldist.forEach(function(c){
-      var dist=(c.dist||[]).map(function(d){return d.name+' '+d.pct+'%';}).join(' · ');
-      var comb=(c.combos||[]).map(function(x){return x.k+' '+x.pct+'%';}).join(' · ');
-      h+='<tr><td style="text-align:left"><b style="color:var(--armado);font-size:15px">'+c.call+'</b></td>'
-        +'<td style="color:var(--mut2);font-weight:700">'+c.pct+'%</td>'
-        +'<td style="font-weight:800;color:'+effColor(c.eff)+'">'+c.eff+'%</td>'
-        +'<td style="text-align:left">'+dist+'</td>'
-        +'<td style="text-align:left;color:var(--ataque);font-weight:700">'+comb+'</td></tr>';
-    });
-    h+='</tbody></table></div>';
-    h+='<div style="font-size:10px;color:var(--mut);margin-top:8px;line-height:1.5">Cada llamada con cuánto la usa, su eficacia y a qué rematador termina yendo. Tocá una llamada en el Game Plan para ver el heatmap de distribución.</div>';
+    h+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">'
+      +'<select id="cdRq" onchange="renderCalldist()" style="background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 10px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer"><option value="all">Toda recepción</option><option value="pos">Con recepción + (#/+)</option><option value="neg">Con recepción − (!/-)</option></select>'
+      +'<select id="cdPh" onchange="renderCalldist()" style="background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 10px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer"><option value="all">Todo el set</option><option value="e">Inicio (0-8)</option><option value="m">Medio (9-16)</option><option value="l">Final (17+)</option></select>'
+      +'</div>';
+    h+='<div id="cdOut"></div>';
+    h+='<div style="font-size:10px;color:var(--mut);margin-top:8px;line-height:1.5">Filtrá por calidad de recepción y momento del set para ver cómo cambia su distribución. Ej: fuera de sistema (recepción −) suele simplificar a su rematador de confianza. Tocá una llamada en el Game Plan para el heatmap.</div>';
   } else if(t.set.calls && t.set.calls.length){
     h+='<div style="font-size:10px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px">Llamadas que usa</div><div class="chips">';
     t.set.calls.forEach(function(k){ h+='<div class="chip"><b style="color:var(--armado)">'+k.k+'</b><span class="p" style="color:var(--armado)">'+k.pct+'%</span></div>'; });
@@ -442,32 +503,16 @@ function renderDossier(n){
 
   // ===== ATAQUE (ancho completo) — análisis por jugador =====
   h+='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">💥</span><span class="sec-ti" style="color:var(--ataque)">Ataque — por jugador</span></div><div class="sec-bd">';
-  h+='<div class="kpis" style="max-width:480px">'
-    +'<div class="kpi"><div class="v" style="color:'+effColor(t.attack.eff)+'">'+t.attack.eff+'%</div><div class="l">Eficiencia</div></div>'
-    +'<div class="kpi"><div class="v" style="color:#22c55e">'+t.attack.killpct+'%</div><div class="l">Punto</div></div>'
-    +'<div class="kpi"><div class="v" style="color:#06b6d4">'+t.attack.blkpct+'%</div><div class="l">Bloqueados</div></div>'
-    +'<div class="kpi"><div class="v" style="color:var(--ataque)">'+t.attack.tot+'</div><div class="l">Total</div></div></div>';
-  h+='<div style="overflow-x:auto"><table><thead><tr><th>Rematador</th><th style="text-align:left">Pos</th><th>PJ</th><th>Atq</th><th>Punto%</th><th>EFF</th><th>SO</th><th>TR</th><th style="text-align:left">Combinación → dirección (dónde la manda)</th></tr></thead><tbody>';
-  (t.attack.players||[]).forEach(function(p,i){
-    var so=p.so_eff!=null?'<span style="color:'+effColor(p.so_eff)+'">'+p.so_eff+'%</span>':'<span style="color:#334155">—</span>';
-    var tr=p.tr_eff!=null?'<span style="color:'+effColor(p.tr_eff)+'">'+p.tr_eff+'%</span>':'<span style="color:#334155">—</span>';
-    var juego=(p.combos||[]).map(function(c){
-      var dz=(c.dest||[]).map(function(d){return 'Z'+d.z+' '+d.pct+'%';}).join(' · ');
-      return '<b style="color:var(--ataque)">'+c.k+'</b> <span style="color:var(--mut2)">'+c.pct+'%</span> <span style="color:#475569">→</span> <span style="color:var(--bloqueo,#06B6D4)">'+(dz||'—')+'</span>';
-    }).join('<br>')||'—';
-    var lowVol=p.tot<60;
-    h+='<tr><td>'+(i===0?'<span class="star">★</span> ':'')+p.name+'</td>'
-      +'<td style="text-align:left"><span class="posbadge '+posClass(p.pos)+'">'+p.pos+'</span></td>'
-      +'<td style="color:var(--mut2)">'+(p.matches||'')+'</td>'
-      +'<td style="color:'+(lowVol?'#64748b':'var(--mut2)')+'">'+p.tot+(lowVol?' ⚠':'')+'</td>'
-      +'<td style="color:#22c55e;font-weight:700">'+p.killpct+'%</td>'
-      +'<td style="font-weight:800;color:'+effColor(p.eff)+'">'+p.eff+'%</td>'
-      +'<td style="font-weight:700">'+so+'</td>'
-      +'<td style="font-weight:700">'+tr+'</td>'
-      +'<td style="text-align:left;font-size:12px;line-height:1.7">'+juego+'</td></tr>';
-  });
-  h+='</tbody></table></div>';
-  h+='<div style="font-size:10px;color:var(--mut);margin-top:9px;line-height:1.5"><b style="color:var(--mut2)">PJ</b> = partidos jugados (⚠ = pocas bolas, muestra chica) · <b style="color:var(--mut2)">SO</b> = rendimiento en side-out (con recepción) · <b style="color:var(--mut2)">TR</b> = en transición · <b style="color:var(--mut2)">Combinación → dirección</b> = cada pelota con las zonas a las que la manda (Z1 derecha · Z5 izquierda · Z6/Z7/Z8/Z9 fondo) · posición inferida de sus zonas reales</div>';
+  h+='<div class="kpis" style="max-width:520px">'
+    +'<div class="kpi"><div class="v" style="font-size:34px;color:'+effColor(t.attack.eff)+'">'+t.attack.eff+'%</div><div class="l">Eficiencia</div></div>'
+    +'<div class="kpi"><div class="v" style="font-size:34px;color:#22c55e">'+t.attack.killpct+'%</div><div class="l">Punto</div></div>'
+    +'<div class="kpi"><div class="v" style="font-size:34px;color:#06b6d4">'+t.attack.blkpct+'%</div><div class="l">Bloqueados</div></div>'
+    +'<div class="kpi"><div class="v" style="font-size:34px;color:var(--ataque)">'+t.attack.tot+'</div><div class="l">Total</div></div></div>';
+  h+='<div class="atktabs"><button class="atktab on" data-m="gen" onclick="renderAtkTab(\'gen\')">General</button>'
+    +'<button class="atktab" data-m="so" onclick="renderAtkTab(\'so\')">Side-out (recepción +)</button>'
+    +'<button class="atktab" data-m="tr" onclick="renderAtkTab(\'tr\')">Transición</button></div>';
+  h+='<div id="atkOut"></div>';
+  h+='<div style="font-size:10px;color:var(--mut);margin-top:9px;line-height:1.5"><b style="color:var(--mut2)">General</b> = todos los ataques · <b style="color:var(--mut2)">Side-out</b> = con recepción positiva (#/+), su juego armado · <b style="color:var(--mut2)">Transición</b> = tras defensa, otro tipo de pelota. <b style="color:var(--mut2)">PJ</b> = partidos jugados · ⚠ = muestra chica · Combinación → dirección: Z1 derecha · Z5 izq · Z6/7/8/9 fondo.</div>';
   h+='</div></div>';
 
   // ===== RECEPCIÓN =====
@@ -521,6 +566,8 @@ function renderDossier(n){
   }
 
   d.innerHTML=h;
+  if(t.attack && t.attack.players) renderAtkTab('gen');
+  if(t.set && t.set.calldist_f) renderCalldist();
   if(t.sistema && t.sistema.receivers && t.sistema.receivers.length) pickReceiver(0);
 }
 

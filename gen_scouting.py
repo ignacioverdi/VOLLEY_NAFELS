@@ -50,8 +50,19 @@ def walk_attacks(content, pfx):
     if idx < 0: return []
     scout = content[idx+9:content.find('\n[3', idx+9)].strip().split('\n')
     out = []; rec_valida = False; last_rq = ''; last_orig = ''; last_by = 0; last_call = ''
+    cur_h = 0; cur_v = 0
     for line in scout:
         l = line.strip()
+        if len(l) < 4: continue
+        # linea de punto: actualiza el marcador (viene DESPUES del rally)
+        if l[0] in '*a' and len(l) > 1 and l[1] == 'p' and ':' in l[:9]:
+            mscore = l[2:].split(';')[0]
+            if ':' in mscore:
+                try:
+                    hh, vv = mscore.split(':')[0:2]
+                    cur_h = int(hh); cur_v = int(vv)
+                except: pass
+            continue
         if len(l) < 6: continue
         t = l[0]; code = l[1:]
         try: pnum = int(code[:2])
@@ -92,10 +103,12 @@ def walk_attacks(content, pfx):
         rq = last_rq if rec_valida else ''
         rfrom = GZONE.get(last_orig, '') if rec_valida else ''
         rby = last_by if rec_valida else 0
+        mx = cur_h if cur_h >= cur_v else cur_v
+        phase = 'e' if mx <= 8 else ('m' if mx <= 16 else 'l')
         rec_valida = False
         out.append({'_pnum':pnum,'effect':effect,'combo':eng.normalize_combo(combo),
                     'orig':orig,'dest':dest,'setter_pos':spos,'so':so,'rq':rq,
-                    'rec_from':rfrom,'rec_by':rby,'call':last_call})
+                    'rec_from':rfrom,'rec_by':rby,'call':last_call,'phase':phase})
     return out
 
 def walk_receptions(content, pfx):
@@ -211,8 +224,29 @@ def build_team(disp, team):
     s_tot = len(srv)
     s_ace = sum(1 for a in srv if a['effect']=='#')
     s_err = sum(1 for a in srv if a['effect']=='=')
+    # por sacador (ordenado por volumen = titulares primero), con direcciones desde→hacia
+    srv_by = defaultdict(list)
+    for a in srv: srv_by[a['_pnum']].append(a)
+    servers = []
+    for num, acts in srv_by.items():
+        if len(acts) < 12: continue
+        ace = sum(1 for a in acts if a['effect']=='#')
+        err = sum(1 for a in acts if a['effect']=='=')
+        flo = sum(1 for a in acts if a.get('stype') in ('M','H'))
+        spin= sum(1 for a in acts if a.get('stype') in ('Q','T'))
+        og = Counter(GZONE.get(str(a.get('srv_orig') or a.get('orig') or ''),'') for a in acts)
+        og.pop('', None)
+        origs = [{'z':k,'pct':ipct(v,len(acts))} for k,v in og.most_common(2)]
+        dests = [{'z':z['k'],'pct':z['pct']} for z in top_zones(acts,'dest',3)]
+        servers.append({'name':apellido_of(num),'n':len(acts),
+                        'acepct':ipct(ace,len(acts)),'errpct':ipct(err,len(acts)),
+                        'eff':ipct(ace,len(acts))-ipct(err,len(acts)),
+                        'tipo':{'flotado':ipct(flo,len(acts)),'potencia':ipct(spin,len(acts))},
+                        'origen':origs,'destino':dests})
+    servers.sort(key=lambda x:-x['n'])
     serve = {'tot':s_tot,'ace':s_ace,'acepct':ipct(s_ace,s_tot),'errpct':ipct(s_err,s_tot),
-             'eff':ipct(s_ace,s_tot)-ipct(s_err,s_tot),'zones':top_zones(srv,'dest',4)}
+             'eff':ipct(s_ace,s_tot)-ipct(s_err,s_tot),'zones':top_zones(srv,'dest',4),
+             'servers':servers}
 
     # ── ATAQUE (equipo + por rematador) ──
     a_tot = len(atk)
@@ -242,6 +276,18 @@ def build_team(disp, team):
         ozs = top_zones(acts, 'orig', 3)
         origen = ', '.join('Z%s %d%%' % (z['k'], z['pct']) for z in ozs[:2])
         nm = len(team['pl_atk_files'].get(num, set()))   # partidos en los que atacó
+        def combos_of(subset):
+            if not subset: return []
+            g = defaultdict(list)
+            for a in subset: g[a['combo']].append(a)
+            out = []
+            for ck, cn in Counter(a['combo'] for a in subset).most_common(3):
+                if not ck: continue
+                ca = g[ck]
+                dz = [{'z':z['k'],'pct':z['pct']} for z in top_zones(ca,'dest',2)]
+                out.append({'k':ck,'n':len(ca),'pct':ipct(len(ca),len(subset)),'dest':dz})
+            return out
+        so_pos = [a for a in so if a.get('rq') in ('#','+')]   # side-out con recepcion positiva
         players.append({
             'name': apellido_of(num), 'pos': POS_ES.get(pos, pos),
             'tot': len(acts), 'matches': nm, 'eff': rint(eng.eff_atk(acts)),
@@ -249,6 +295,8 @@ def build_team(disp, team):
             'combos': combos, 'origen': origen,
             'so_eff': hit(so), 'so_n': len(so),
             'tr_eff': hit(tr), 'tr_n': len(tr),
+            'so_combos': combos_of(so_pos), 'so_pos_eff': hit(so_pos), 'so_pos_n': len(so_pos),
+            'tr_combos': combos_of(tr),
         })
     players.sort(key=lambda x:-x['tot'])
     attack = {'tot':a_tot,'kill':a_kill,'killpct':ipct(a_kill,a_tot),'eff':rint(eng.eff_atk(atk)),
@@ -263,20 +311,34 @@ def build_team(disp, team):
         main = {'name':apellido_of(mnum),'tot':mcnt,'pct':ipct(mcnt,set_tot)}
     calls = top_zones(sets, 'combo', 6)
     set_zones = top_zones(sets, 'dest', 4)
-    # distribucion por llamada: que produce cada llamada (a quien y que pelota)
-    callg = defaultdict(list)
-    for a in atk:
-        if a.get('call'): callg[a['call']].append(a)
-    n_called = sum(len(v) for v in callg.values())
-    calldist = []
-    for ck, ca in sorted(callg.items(), key=lambda kv:-len(kv[1])):
-        if len(ca) < 8: continue
-        dc = Counter(a['_pnum'] for a in ca)
-        dist = [{'name':apellido_of(n),'pct':ipct(c,len(ca))} for n,c in dc.most_common(3)]
-        combs = [{'k':z['k'],'pct':z['pct']} for z in top_zones(ca,'combo',2)]
-        calldist.append({'call':ck,'n':len(ca),'pct':ipct(len(ca),n_called),
+    # distribucion por llamada, precalculada para cada combinacion de filtros:
+    #   recepcion: all / pos(#+) / neg(!-) ; momento: all / e(0-8) / m(9-16) / l(17+)
+    def calldist_of(subset):
+        cg = defaultdict(list)
+        for a in subset:
+            if a.get('call'): cg[a['call']].append(a)
+        nc = sum(len(v) for v in cg.values())
+        rows = []
+        for ck, ca in sorted(cg.items(), key=lambda kv:-len(kv[1])):
+            if len(ca) < 6: continue
+            dc = Counter(a['_pnum'] for a in ca)
+            dist = [{'name':apellido_of(n),'pct':ipct(c,len(ca))} for n,c in dc.most_common(3)]
+            combs = [{'k':z['k'],'pct':z['pct']} for z in top_zones(ca,'combo',2)]
+            rows.append({'call':ck,'n':len(ca),'pct':ipct(len(ca),nc),
                          'eff':rint(eng.eff_atk(ca)),'dist':dist,'combos':combs})
-    setd = {'tot':set_tot,'main':main,'calls':calls,'zones':set_zones,'calldist':calldist}
+        return rows
+    def rqmatch(a, rqf):
+        if rqf == 'all': return True
+        if rqf == 'pos': return a.get('rq') in ('#','+')
+        if rqf == 'neg': return a.get('rq') in ('!','-','/')
+        return True
+    calldist_f = {}
+    for rqf in ('all','pos','neg'):
+        for phf in ('all','e','m','l'):
+            sub = [a for a in atk if rqmatch(a, rqf) and (phf=='all' or a.get('phase')==phf)]
+            calldist_f['%s|%s' % (rqf, phf)] = calldist_of(sub)
+    setd = {'tot':set_tot,'main':main,'calls':calls,'zones':set_zones,
+            'calldist':calldist_f.get('all|all',[]),'calldist_f':calldist_f}
 
     # ── RECEPCION ──
     r_tot = len(rec)
