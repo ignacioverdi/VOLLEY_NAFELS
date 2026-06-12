@@ -49,7 +49,7 @@ def walk_attacks(content, pfx):
     idx = content.find('[3SCOUT]\n')
     if idx < 0: return []
     scout = content[idx+9:content.find('\n[3', idx+9)].strip().split('\n')
-    out = []; rec_valida = False; last_rq = ''; last_orig = ''; last_by = 0
+    out = []; rec_valida = False; last_rq = ''; last_orig = ''; last_by = 0; last_call = ''
     for line in scout:
         l = line.strip()
         if len(l) < 6: continue
@@ -58,7 +58,7 @@ def walk_attacks(content, pfx):
         except: continue
         skill = code[2].upper() if len(code) > 2 else ''
         if skill == 'S':
-            rec_valida = False; last_rq = ''; last_orig = ''; last_by = 0; continue
+            rec_valida = False; last_rq = ''; last_orig = ''; last_by = 0; last_call = ''; continue
         if t == pfx and skill == 'R':
             rec_valida = True
             last_rq = code[4] if len(code) > 4 else ''
@@ -67,6 +67,10 @@ def walk_attacks(content, pfx):
             rtraj = rtp[3] if len(rtp) > 3 else ''
             last_orig = rtraj[0] if rtraj and rtraj[0].isdigit() else ''
             last_by = pnum
+            continue
+        if t == pfx and skill == 'E':
+            cc = code[5:7] if len(code) > 6 else ''
+            if cc and cc[0] in ('K','C','P'): last_call = cc
             continue
         if t != pfx and skill in ('A','D','E','B'):
             rec_valida = False; continue
@@ -91,13 +95,42 @@ def walk_attacks(content, pfx):
         rec_valida = False
         out.append({'_pnum':pnum,'effect':effect,'combo':eng.normalize_combo(combo),
                     'orig':orig,'dest':dest,'setter_pos':spos,'so':so,'rq':rq,
-                    'rec_from':rfrom,'rec_by':rby})
+                    'rec_from':rfrom,'rec_by':rby,'call':last_call})
+    return out
+
+def walk_receptions(content, pfx):
+    """Recepciones del equipo, cada una con el tipo de saque rival y la zona donde cayo.
+    Sirve para saber como y donde sacarle a cada receptor."""
+    content = content.replace('\r\n','\n')
+    idx = content.find('[3SCOUT]\n')
+    if idx < 0: return []
+    scout = content[idx+9:content.find('\n[3', idx+9)].strip().split('\n')
+    out = []; s_type = ''; s_dest = ''
+    for line in scout:
+        l = line.strip()
+        if len(l) < 6: continue
+        t = l[0]; code = l[1:]
+        try: pnum = int(code[:2])
+        except: continue
+        skill = code[2].upper() if len(code) > 2 else ''
+        if skill == 'S' and t != pfx:          # el rival nos saca
+            s_type = code[3].upper() if len(code) > 3 else ''
+            srest = code[5:] if len(code) > 5 else ''
+            stp = srest.split('~')
+            straj = stp[3] if len(stp) > 3 else ''
+            s_dest = straj[1] if len(straj) > 1 and straj[1].isdigit() else ''
+            continue
+        if t == pfx and skill == 'R':
+            out.append({'_pnum':pnum,'effect':code[4] if len(code) > 4 else '',
+                        'stype':s_type,'sdest':s_dest})
+            s_type=''; s_dest=''
     return out
 
 # ── acumular acciones por NOMBRE DE EQUIPO tal cual aparece en el dvw ──
 def collect():
-    teams = defaultdict(lambda: {'atk':[], 'srv':[], 'rec':[], 'sets':[],
-                                 'players':{}, 'files':set(), 'matchinfo':[]})
+    teams = defaultdict(lambda: {'atk':[], 'srv':[], 'rec':[], 'sets':[], 'recdet':[],
+                                 'players':{}, 'files':set(), 'matchinfo':[],
+                                 'pl_atk_files':defaultdict(set)})
     files = sorted(glob.glob(os.path.join(DVW_DIR, '*.dvw')))
     for fp in files:
         with open(fp, encoding='utf-8', errors='ignore') as f:
@@ -114,7 +147,8 @@ def collect():
         for nteam, data in result.items():
             disp = norm2disp.get(nteam, nteam)
             T = teams[disp]
-            T['files'].add(os.path.basename(fp))
+            fn = os.path.basename(fp)
+            T['files'].add(fn)
             for num, p in data['players'].items():
                 T['players'][num] = p
             for sk in ('srv','rec','sets'):
@@ -125,7 +159,10 @@ def collect():
                     T[sk].extend(acts)
             pfx = '*' if eng.norm(rh)==nteam else 'a'
             # ataque: walker propio con side-out preciso
-            T['atk'].extend(walk_attacks(content, pfx))
+            patk = walk_attacks(content, pfx)
+            T['atk'].extend(patk)
+            for a in patk: T['pl_atk_files'][a['_pnum']].add(fn)   # partidos por rematador
+            T['recdet'].extend(walk_receptions(content, pfx))      # recepciones detalladas
             T['matchinfo'].append({'fp':fp, 'pfx':pfx, 'home': pfx=='*'})
     return teams
 
@@ -193,15 +230,23 @@ def build_team(disp, team):
             pos = dp if dp in POS_ES else '?'
         so = [a for a in acts if a.get('so')]
         tr = [a for a in acts if not a.get('so')]
-        combos = top_zones(acts, 'combo', 3)
+        # combinaciones, cada una con su direccion (a donde la manda)
+        cg = defaultdict(list)
+        for a in acts: cg[a['combo']].append(a)
+        combos = []
+        for ck, cn in Counter(a['combo'] for a in acts).most_common(3):
+            if not ck: continue
+            ca = cg[ck]
+            dz = [{'z':z['k'],'pct':z['pct']} for z in top_zones(ca,'dest',2)]
+            combos.append({'k':ck,'n':len(ca),'pct':ipct(len(ca),len(acts)),'dest':dz})
         ozs = top_zones(acts, 'orig', 3)
         origen = ', '.join('Z%s %d%%' % (z['k'], z['pct']) for z in ozs[:2])
-        dirs = top_zones(acts, 'dest', 3)   # a donde clava (direcciones)
+        nm = len(team['pl_atk_files'].get(num, set()))   # partidos en los que atacó
         players.append({
             'name': apellido_of(num), 'pos': POS_ES.get(pos, pos),
-            'tot': len(acts), 'eff': rint(eng.eff_atk(acts)),
+            'tot': len(acts), 'matches': nm, 'eff': rint(eng.eff_atk(acts)),
             'killpct': ipct(sum(1 for a in acts if a['effect']=='#'), len(acts)),
-            'combos': combos, 'origen': origen, 'dirs': dirs,
+            'combos': combos, 'origen': origen,
             'so_eff': hit(so), 'so_n': len(so),
             'tr_eff': hit(tr), 'tr_n': len(tr),
         })
@@ -218,7 +263,20 @@ def build_team(disp, team):
         main = {'name':apellido_of(mnum),'tot':mcnt,'pct':ipct(mcnt,set_tot)}
     calls = top_zones(sets, 'combo', 6)
     set_zones = top_zones(sets, 'dest', 4)
-    setd = {'tot':set_tot,'main':main,'calls':calls,'zones':set_zones}
+    # distribucion por llamada: que produce cada llamada (a quien y que pelota)
+    callg = defaultdict(list)
+    for a in atk:
+        if a.get('call'): callg[a['call']].append(a)
+    n_called = sum(len(v) for v in callg.values())
+    calldist = []
+    for ck, ca in sorted(callg.items(), key=lambda kv:-len(kv[1])):
+        if len(ca) < 8: continue
+        dc = Counter(a['_pnum'] for a in ca)
+        dist = [{'name':apellido_of(n),'pct':ipct(c,len(ca))} for n,c in dc.most_common(3)]
+        combs = [{'k':z['k'],'pct':z['pct']} for z in top_zones(ca,'combo',2)]
+        calldist.append({'call':ck,'n':len(ca),'pct':ipct(len(ca),n_called),
+                         'eff':rint(eng.eff_atk(ca)),'dist':dist,'combos':combs})
+    setd = {'tot':set_tot,'main':main,'calls':calls,'zones':set_zones,'calldist':calldist}
 
     # ── RECEPCION ──
     r_tot = len(rec)
@@ -234,7 +292,32 @@ def build_team(disp, team):
         weak.append({'name':apellido_of(num),'tot':len(acts),
                      'pospct':ipct(pos,len(acts)),'errpct':ipct(err,len(acts))})
     weak.sort(key=lambda x:(x['pospct'], -x['errpct']))   # peores primero
-    recep = {'tot':r_tot,'pospct':ipct(r_pos,r_tot),'errpct':ipct(r_err,r_tot),'weak':weak}
+    # detalle por receptor: como (flotado/potencia) y donde (zona) recibe peor
+    recdet = team.get('recdet', [])
+    dg = defaultdict(list)
+    for a in recdet: dg[a['_pnum']].append(a)
+    def qblock(sub):
+        if not sub: return {'n':0,'pospct':0}
+        p = sum(1 for x in sub if x['effect'] in ('#','+'))
+        return {'n':len(sub),'pospct':ipct(p,len(sub))}
+    detail = []
+    for num, acts in dg.items():
+        if len(acts) < MIN_REC_PLAYER: continue
+        flo  = [a for a in acts if a['stype'] in ('M','H')]
+        spin = [a for a in acts if a['stype'] in ('Q','T')]
+        # zonas (destino del saque = donde cae en su cancha) donde recibe peor
+        zc = defaultdict(list)
+        for a in acts:
+            if a['sdest']: zc[a['sdest']].append(a)
+        zoneq = []
+        for z, sub in zc.items():
+            if len(sub) >= 8:
+                zoneq.append({'zone':z,**qblock(sub)})
+        zoneq.sort(key=lambda x:x['pospct'])
+        detail.append({'name':apellido_of(num),'n':len(acts),'pospct':qblock(acts)['pospct'],
+                       'float':qblock(flo),'spin':qblock(spin),'weakzones':zoneq[:2]})
+    detail.sort(key=lambda x:x['pospct'])
+    recep = {'tot':r_tot,'pospct':ipct(r_pos,r_tot),'errpct':ipct(r_err,r_tot),'weak':weak,'detail':detail}
 
     # ── ROTACIONES (S1..S6) ──
     fronts = rotations_for(team, apellido_of)
