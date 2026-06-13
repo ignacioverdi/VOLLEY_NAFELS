@@ -499,7 +499,66 @@
     '2º objetivo':{en:'2nd target',de:'2. Ziel'},
     'sacarle':{en:'serve at him',de:'auf ihn aufschlagen'},
     'positiva como equipo':{en:'positive as a team',de:'positiv als Team'},
-    'como equipo':{en:'as a team',de:'als Team'}
+    'como equipo':{en:'as a team',de:'als Team'},
+
+    // ════ Páginas internas (filtros, defensa, ranking, video) ════
+    'Todos':{en:'All',de:'Alle'},
+    'Todas':{en:'All',de:'Alle'},
+    'Ninguno':{en:'None',de:'Keiner'},
+    'Ninguna':{en:'None',de:'Keine'},
+    'Limpiar filtros':{en:'Clear filters',de:'Filter zurücksetzen'},
+    'Marcar todos':{en:'Select all',de:'Alle markieren'},
+    'Seleccionar...':{en:'Select...',de:'Auswählen...'},
+    'Seleccionar…':{en:'Select…',de:'Auswählen…'},
+    'Selecciona un jugador para comenzar':{en:'Select a player to start',de:'Spieler auswählen zum Starten'},
+    'Selecciona un jugador':{en:'Select a player',de:'Spieler auswählen'},
+    'Elegí un jugador para ver su defensa':{en:'Pick a player to see their defense',de:'Wähle einen Spieler für seine Abwehr'},
+    'acciones filtradas':{en:'filtered actions',de:'gefilterte Aktionen'},
+    'clips filtrados':{en:'filtered clips',de:'gefilterte Clips'},
+    'defensas mostradas':{en:'defenses shown',de:'gezeigte Abwehraktionen'},
+    'Sin datos para los filtros seleccionados':{en:'No data for the selected filters',de:'Keine Daten für die gewählten Filter'},
+    'Sin defensas para los filtros elegidos':{en:'No defenses for the chosen filters',de:'Keine Abwehr für die gewählten Filter'},
+    'Sin datos suficientes en esta rotación':{en:'Not enough data in this rotation',de:'Nicht genug Daten in dieser Rotation'},
+    'Sin datos de transición':{en:'No transition data',de:'Keine Übergangsdaten'},
+    'No hay acciones con esos filtros.':{en:'No actions with those filters.',de:'Keine Aktionen mit diesen Filtern.'},
+    'Sin video para reproducir':{en:'No video to play',de:'Kein Video abspielbar'},
+    'Sin datos':{en:'No data',de:'Keine Daten'},
+    'Partido específico':{en:'Specific match',de:'Bestimmtes Spiel'},
+    'Momento del set':{en:'Set moment',de:'Satzzeitpunkt'},
+    'Evolucion partido a partido':{en:'Match-by-match evolution',de:'Entwicklung Spiel für Spiel'},
+    'Evolución partido a partido':{en:'Match-by-match evolution',de:'Entwicklung Spiel für Spiel'},
+    'Mapa de cancha':{en:'Court map',de:'Spielfeldkarte'},
+    'Origen del ataque ↔ destino de la defensa':{en:'Attack origin ↔ defense destination',de:'Angriffsursprung ↔ Abwehrziel'},
+    'Zona origen (saque rival)':{en:'Origin zone (opponent serve)',de:'Ursprungszone (Gegner-Aufschlag)'},
+    'Zona origen':{en:'Origin zone',de:'Ursprungszone'},
+    'Tipo de saque':{en:'Serve type',de:'Aufschlagart'},
+    'Tipo de recepción':{en:'Reception type',de:'Annahmeart'},
+    'Tipo de ataque':{en:'Attack type',de:'Angriffsart'},
+    'Quién recibió':{en:'Who received',de:'Wer angenommen hat'},
+    'EFF por rival':{en:'EFF by opponent',de:'EFF pro Gegner'},
+    'Perfectas (#)':{en:'Perfect (#)',de:'Perfekt (#)'},
+    'Perfectas':{en:'Perfect',de:'Perfekt'},
+    'Mayor riesgo':{en:'Highest risk',de:'Höchstes Risiko'},
+    'Pegá los links de YouTube':{en:'Paste the YouTube links',de:'YouTube-Links einfügen'},
+    'Se guarda solo':{en:'Saves automatically',de:'Speichert automatisch'},
+    'Siguiente':{en:'Next',de:'Weiter'},
+    'Valoración':{en:'Rating',de:'Bewertung'},
+    'Contexto':{en:'Context',de:'Kontext'},
+    'Posición':{en:'Position',de:'Position'},
+    'Velocidad':{en:'Speed',de:'Geschwindigkeit'},
+    'Métrica':{en:'Metric',de:'Metrik'},
+    'Origen':{en:'Origin',de:'Ursprung'},
+    'Destino':{en:'Destination',de:'Ziel'},
+    'Partidos':{en:'Matches',de:'Spiele'},
+    'Partido':{en:'Match',de:'Spiel'},
+    'Técnico':{en:'Coach',de:'Trainer'},
+    'Inicio':{en:'Start',de:'Anfang'},
+    'Transicion':{en:'Transition',de:'Übergang'},
+    'pelotas / puntos':{en:'balls / points',de:'Bälle / Punkte'},
+    'en orden de fecha':{en:'in date order',de:'nach Datum sortiert'},
+    'concentrada':{en:'concentrated',de:'konzentriert'},
+    'repartida':{en:'spread out',de:'verteilt'},
+    'miniatura':{en:'thumbnail',de:'Vorschaubild'}
   };
   var PHRASE_LC = {};
   (function(){
@@ -612,7 +671,22 @@
 
   function paintSelector(active){
     var wrap = document.getElementById('lang-wrap');
-    if (!wrap) return;
+    if (!wrap) {
+      // si la página no tiene su propio selector, creamos uno flotante
+      wrap = document.createElement('div');
+      wrap.id = 'lang-wrap';
+      wrap.setAttribute('data-notr','');
+      wrap.style.cssText = 'position:fixed;top:10px;right:12px;z-index:99999;display:flex;gap:4px;'+
+        'background:rgba(15,18,28,.85);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);'+
+        'padding:4px 6px;border-radius:9px;border:1px solid rgba(255,255,255,.12)';
+      (document.body || document.documentElement).appendChild(wrap);
+      if (!document.getElementById('lang-wrap-print-css')) {
+        var st = document.createElement('style');
+        st.id = 'lang-wrap-print-css';
+        st.textContent = '@media print{#lang-wrap{display:none!important}}';
+        document.head.appendChild(st);
+      }
+    }
     wrap.innerHTML = '';
     LANGS.forEach(function(l){
       var b = document.createElement('button');
