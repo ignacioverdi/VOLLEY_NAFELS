@@ -530,6 +530,40 @@ function renderRecentFund(fk){
   h+='<div style="font-size:10px;color:var(--mut);margin-top:10px;line-height:1.6">★ = lo hizo en el último partido. <b style="color:#22c55e">EN ALZA</b> / <b style="color:#ef4444">EN BAJA</b> = su número de las últimas fechas cambió ±8 pts vs su promedio de temporada (▲▼). <b style="color:#f59e0b">NUEVO TITULAR</b> = está jugando aunque no era regular. <b style="color:#94a3b8">AUSENTE</b> = habitual que no jugó las últimas fechas (lesión/banco). Partido a partido: atenuado = poco volumen ese partido. /N = volumen.</div>';
   var out=document.getElementById('recentOut'); if(out) out.innerHTML=h;
 }
+var CUR_ROT='so';
+function buildRotDist(t){
+  if(!t.rotations) return '';
+  var any=t.rotations.some(function(r){return r&&((r.dist_so&&r.dist_so.length)||(r.dist_tr&&r.dist_tr.length));});
+  if(!any) return '';
+  var btn=function(m,lbl){return '<button class="rdtab" data-m="'+m+'" onclick="renderRotDist(\''+m+'\')" style="font-family:Barlow Condensed,sans-serif;font-size:12px;letter-spacing:.5px;padding:6px 13px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--mut2);cursor:pointer;text-transform:uppercase">'+lbl+'</button>';};
+  var h='<div class="sec"><div class="sec-hd"><span class="sec-ic">🔀</span><span class="sec-ti" style="color:var(--armado)">Distribución por rotación</span></div><div class="sec-bd">';
+  h+='<div style="font-size:10px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">A quién le arma en cada rotación</div>';
+  h+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">'+btn('so','Side-out (rec #+)')+btn('tr','Transición')+'</div>';
+  h+='<div id="rdOut"></div>';
+  h+='<div style="font-size:10px;color:var(--mut);margin-top:8px;line-height:1.5">% = cuántas pelotas le da a cada rematador en esa rotación · (k%) = su eficacia ahí. Orden P1·P6·P5·P4·P3·P2.</div>';
+  h+='</div></div>';
+  return h;
+}
+function renderRotDist(mode){
+  if(!CUR||!CUR.rotations) return; CUR_ROT=mode;
+  document.querySelectorAll('.rdtab').forEach(function(b){
+    var on=b.getAttribute('data-m')===mode;
+    b.style.background=on?'rgba(129,140,248,.18)':'var(--card2)';
+    b.style.color=on?'var(--armado)':'var(--mut2)';
+    b.style.borderColor=on?'rgba(129,140,248,.45)':'var(--border)';
+  });
+  var key=mode==='tr'?'dist_tr':'dist_so', nkey=mode==='tr'?'dist_tr_n':'dist_so_n';
+  var h='<div style="overflow-x:auto"><table style="width:100%"><thead><tr><th>Rot</th><th>Bolas</th><th style="text-align:left">A quién le arma — % (kill%)</th></tr></thead><tbody>';
+  [1,6,5,4,3,2].forEach(function(r){
+    var rot=CUR.rotations[r-1];
+    if(!rot){ h+='<tr><td><b style="color:var(--armado)">P'+r+'</b></td><td colspan="2" style="color:var(--mut);text-align:left;font-size:11px">pocos datos</td></tr>'; return; }
+    var d=rot[key]||[], n=rot[nkey]||0;
+    var dd=d.length?d.map(function(x){return '<b>'+x.name+'</b> '+x.pct+'% <span style="color:var(--mut)">(k'+x.k+'%)</span>';}).join('<span style="color:var(--mut);opacity:.4"> · </span>'):'<span style="color:var(--mut);font-size:11px">pocos datos</span>';
+    h+='<tr><td><b style="color:var(--armado);font-size:15px">P'+r+'</b></td><td style="color:var(--mut2)">'+n+'</td><td style="text-align:left;line-height:1.5">'+dd+'</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  var out=document.getElementById('rdOut'); if(out) out.innerHTML=h;
+}
 function renderDossier(n){
   var t=SC[n]; if(!t){return;}
   CUR=t;
@@ -598,6 +632,9 @@ function renderDossier(n){
     h+='</div>';
   }
   h+='</div></div>';
+
+  // ===== DISTRIBUCIÓN POR ROTACIÓN (al lado del armador) =====
+  h+=buildRotDist(t);
 
   // ===== ATAQUE (ancho completo) — análisis por jugador =====
   h+='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">💥</span><span class="sec-ti" style="color:var(--ataque)">Ataque — por jugador</span></div><div class="sec-bd">';
@@ -670,6 +707,7 @@ function renderDossier(n){
   if(t.recent && t.recent.funds) renderRecentFund(CUR_FUND);
   if(t.attack && t.attack.players) renderAtkTab('gen');
   if(t.set && t.set.calldist_f) renderCalldist();
+  if(t.rotations) renderRotDist(CUR_ROT);
   if(t.sistema && t.sistema.by_zone_f) renderByZone();
   if(t.sistema && t.sistema.receivers && t.sistema.receivers.length) pickReceiver(0);
 }

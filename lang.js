@@ -558,7 +558,13 @@
     'en orden de fecha':{en:'in date order',de:'nach Datum sortiert'},
     'concentrada':{en:'concentrated',de:'konzentriert'},
     'repartida':{en:'spread out',de:'verteilt'},
-    'miniatura':{en:'thumbnail',de:'Vorschaubild'}
+    'miniatura':{en:'thumbnail',de:'Vorschaubild'},
+    'Distribución por rotación':{en:'Distribution by rotation',de:'Verteilung nach Rotation'},
+    'A quién le arma en cada rotación':{en:'Who they set in each rotation',de:'Wen sie in jeder Rotation anspielen'},
+    'Side-out (rec #+)':{en:'Side-out (rec #+)',de:'Side-out (Ann. #+)'},
+    'Bolas':{en:'Balls',de:'Bälle'},
+    'A quién le arma — % (kill%)':{en:'Who they set — % (kill%)',de:'Wen sie anspielen — % (Kill%)'},
+    '% = cuántas pelotas le da a cada rematador en esa rotación · (k%) = su eficacia ahí. Orden P1·P6·P5·P4·P3·P2.':{en:'% = how many balls each hitter gets in that rotation · (k%) = their efficiency there. Order P1·P6·P5·P4·P3·P2.',de:'% = wie viele Bälle jeder Angreifer in dieser Rotation bekommt · (k%) = seine Effizienz dort. Reihenfolge P1·P6·P5·P4·P3·P2.'}
   };
   var PHRASE_LC = {};
   (function(){

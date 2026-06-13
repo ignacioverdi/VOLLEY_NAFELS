@@ -533,10 +533,24 @@ def build_team(disp, team):
         so = [a for a in ra if a.get('so')]
         dc = Counter(a['_pnum'] for a in ra)
         dist = [{'name':apellido_of(n),'pct':ipct(c,len(ra))} for n,c in dc.most_common(3)]
+        # distribución por jugador con % y kill%, sobre un subconjunto
+        def dist_pl(subset, top=3):
+            if not subset: return []
+            cc = Counter(a['_pnum'] for a in subset)
+            res = []
+            for n, c in cc.most_common(top):
+                pa = [a for a in subset if a['_pnum']==n]
+                k = sum(1 for a in pa if a['effect']=='#')
+                res.append({'name':apellido_of(n),'pct':ipct(c,len(subset)),'k':ipct(k,len(pa))})
+            return res
+        ra_so = [a for a in ra if a.get('so') and a.get('rq') in ('#','+')]   # side-out con recepción +
+        ra_tr = [a for a in ra if not a.get('so')]                            # transición
         rotations.append({
             'r': r, 'atk': len(ra), 'eff': rint(eng.eff_atk(ra)),
             'so_eff': hit(so), 'so_n': len(so),
             'dist': dist, 'front': fronts.get(r, []),
+            'dist_so': dist_pl(ra_so), 'dist_so_n': len(ra_so),
+            'dist_tr': dist_pl(ra_tr), 'dist_tr_n': len(ra_tr),
         })
 
     # ── EN SISTEMA vs FUERA DE SISTEMA (sobre el ataque de side-out) ──
