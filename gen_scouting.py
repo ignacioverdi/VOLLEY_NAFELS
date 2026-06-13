@@ -41,6 +41,17 @@ def top_zones(actions, key, n=4):
     tot = sum(c.values()) or 1
     return [{'k':str(z),'n':cnt,'pct':ipct(cnt,tot)} for z,cnt in c.most_common(n)]
 
+# Destinos de la fila de adelante del rival (2,3,4): una pelota DRIVEADA que cae ahí
+# casi siempre pegó en el bloqueo y cayó corta — NO es una dirección elegida por el
+# atacante. Las direcciones reales caen al fondo (1,5,6,7,8,9). Por eso, para la
+# "dirección preferida" de un ataque, descartamos esos rebotes.
+FRONT_DEST = {2, 3, 4}
+def atk_dirs(actions, n=2):
+    clean = [a for a in actions if a.get('dest') and a['dest'] not in FRONT_DEST]
+    c = Counter(a['dest'] for a in clean)
+    tot = sum(c.values()) or 1
+    return [{'k':str(z),'n':cnt,'pct':ipct(cnt,tot)} for z,cnt in c.most_common(n)]
+
 def walk_attacks(content, pfx):
     """Lista de ataques del equipo (en orden), cada uno con 'so' (side-out real):
     side-out = primer ataque tras NUESTRA recepcion, sin que el rival intervenga
@@ -318,7 +329,7 @@ def build_team(disp, team):
         for ck, cn in Counter(a['combo'] for a in acts).most_common(3):
             if not ck: continue
             ca = cg[ck]
-            dz = [{'z':z['k'],'pct':z['pct']} for z in top_zones(ca,'dest',2)]
+            dz = [{'z':z['k'],'pct':z['pct']} for z in atk_dirs(ca,2)]
             combos.append({'k':ck,'n':len(ca),'pct':ipct(len(ca),len(acts)),'dest':dz})
         ozs = top_zones(acts, 'orig', 3)
         origen = ', '.join('Z%s %d%%' % (z['k'], z['pct']) for z in ozs[:2])
@@ -331,7 +342,7 @@ def build_team(disp, team):
             for ck, cn in Counter(a['combo'] for a in subset).most_common(3):
                 if not ck: continue
                 ca = g[ck]
-                dz = [{'z':z['k'],'pct':z['pct']} for z in top_zones(ca,'dest',2)]
+                dz = [{'z':z['k'],'pct':z['pct']} for z in atk_dirs(ca,2)]
                 out.append({'k':ck,'n':len(ca),'pct':ipct(len(ca),len(subset)),'dest':dz})
             return out
         so_pos = [a for a in so if a.get('rq') in ('#','+')]   # side-out con recepcion positiva
