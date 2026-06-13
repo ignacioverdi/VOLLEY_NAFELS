@@ -42,12 +42,14 @@ def top_zones(actions, key, n=4):
     return [{'k':str(z),'n':cnt,'pct':ipct(cnt,tot)} for z,cnt in c.most_common(n)]
 
 # Destinos de la fila de adelante del rival (2,3,4): una pelota DRIVEADA que cae ahí
-# casi siempre pegó en el bloqueo y cayó corta — NO es una dirección elegida por el
-# atacante. Las direcciones reales caen al fondo (1,5,6,7,8,9). Por eso, para la
-# "dirección preferida" de un ataque, descartamos esos rebotes.
+# casi siempre pegó en el bloqueo y cayó corta al lado OPUESTO (4→2, 2→4) — eso es
+# rebote, no dirección elegida. PERO una paralela corta a la MISMA banda (4→4, 2→2,
+# 3→3) sí puede pasar: no hay carom de bloqueo de por medio. Por eso descartamos los
+# destinos de adelante solo cuando NO coinciden con la zona de origen.
 FRONT_DEST = {2, 3, 4}
 def atk_dirs(actions, n=2):
-    clean = [a for a in actions if a.get('dest') and a['dest'] not in FRONT_DEST]
+    clean = [a for a in actions if a.get('dest')
+             and (a['dest'] not in FRONT_DEST or a['dest'] == a.get('orig'))]
     c = Counter(a['dest'] for a in clean)
     tot = sum(c.values()) or 1
     return [{'k':str(z),'n':cnt,'pct':ipct(cnt,tot)} for z,cnt in c.most_common(n)]
