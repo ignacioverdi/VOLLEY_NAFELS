@@ -2,6 +2,8 @@
 chcp 65001 >nul
 setlocal
 cd /d "%~dp0"
+set PYTHONUTF8=1
+set PYTHONIOENCODING=utf-8
 echo ==================================================
 echo     NAFELS VOLEY - ACTUALIZACION COMPLETA (TODO EN 1)
 echo ==================================================
@@ -1596,7 +1598,7 @@ if errorlevel 1 (
 )
 
 echo [2/3] Generando videos y proximo rival desde el Excel...
-if exist "gen_videos.py" python gen_videos.py
+if exist "build_videos.py" python build_videos.py videos_nafels.xlsx
 
 echo [3/3] Verificando que datos_partidos.js quedo COMPLETO...
 findstr /C:"PARTIDOS_ARMADOR" datos_partidos.js >nul && (echo   OK: armador presente) || (echo   FALTA armador - avisa)

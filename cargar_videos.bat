@@ -1,4 +1,6 @@
 @echo off
+set PYTHONUTF8=1
+set PYTHONIOENCODING=utf-8
 REM ============================================
 REM   CARGAR VIDEOS - Convierte el Excel a videos.js
 REM ============================================

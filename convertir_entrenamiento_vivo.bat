@@ -1,4 +1,6 @@
 @echo off
+set PYTHONUTF8=1
+set PYTHONIOENCODING=utf-8
 chcp 65001 >nul
 title CONVERTIR ENTRENAMIENTO EN VIVO
 color 0A
