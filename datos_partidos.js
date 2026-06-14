@@ -1,5 +1,5 @@
-// datos_partidos.js — 14/06/2026, 10:45:32
-const PARTIDOS_GENERADO = "14/06/2026, 10:45:32";
+// datos_partidos.js — 14/06/2026, 20:46:17
+const PARTIDOS_GENERADO = "14/06/2026, 20:46:17";
 const PARTIDOS_TOTAL = 26;
 const PARTIDOS_META = [
   {

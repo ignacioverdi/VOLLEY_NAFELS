@@ -60,6 +60,9 @@ echo  [1/1] Procesando entrenamientos y regenerando el sistema...
 echo.
 python update_db_entrenamientos_nafels.py --dvw_dir "!TEMPORADA_DIR!" --temporada !ANIO_MAX!
 echo.
+echo  Cortes de video del entrenamiento (segundos del DVW)...
+python build_video.py "!TEMPORADA_DIR!" datos_video_ent.js VIDEO_DATA_ENT ent
+echo.
 
 echo  ==================================================
 echo     ARCHIVOS PARA SUBIR A GITHUB:
@@ -69,6 +72,7 @@ if exist liga_data_entrenamientos.js echo     - liga_data_entrenamientos.js   (h
 if exist datos_entrenamientos.js     echo     - datos_entrenamientos.js       (pagina del jugador - modo ENTRENAMIENTO)
 if exist datos_historial_ent.js      echo     - datos_historial_ent.js        (linea de tiempo)
 if exist datos_recepcion_ent.js      echo     - datos_recepcion_ent.js
+if exist datos_video_ent.js          echo     - datos_video_ent.js            (cortes de video del jugador - ENTRENAMIENTO)
 echo.
 echo     Subilos al repo junto a los heatmaps y la tabla.
 echo     El selector PARTIDO/ENTRENAMIENTO usa estos archivos.

@@ -41,10 +41,7 @@ var CSS = [
   '#vb-send:disabled{opacity:.38;cursor:not-allowed;transform:none}'
 ].join('\n');
 
-var CONTEXT = {"team": "Biogas Voley Nafels", "season": "NLA Suiza 2025/26", "games_played": 26, "rivals": ["Lausanne UC", "STV St Gallen", "Colombier Volley", "TSV Jona Volleyball", "Volley Amriswil", "Volley Schonenwerd", "Chenois Geneve Volleyball", "VBC Sursee"], "players": {"1": {"name": "Linus Deecke", "pos": "L", "num": 1, "atk": {"total": 4, "eff": 25}, "srv": {"total": 35, "eff": 11}, "rec": {"total": 0, "eff": null}}, "2": {"name": "Mathias Corzo", "pos": "OH", "num": 2, "atk": {"total": 2, "eff": -50}, "srv": {"total": 0, "eff": null}, "rec": {"total": 0, "eff": null}}, "3": {"name": "Tom Schwitter", "pos": "OH", "num": 3, "atk": {"total": 9, "eff": -22}, "srv": {"total": 4, "eff": 6}, "rec": {"total": 0, "eff": null}}, "4": {"name": "Ezequiel Vazquez", "pos": "S", "num": 4, "atk": {"total": 87, "eff": 33}, "srv": {"total": 405, "eff": 4}, "rec": {"total": 5, "eff": -30}}, "5": {"name": "Joachim Hesselholt", "pos": "OH", "num": 5, "atk": {"total": 200, "eff": 41}, "srv": {"total": 226, "eff": -5}, "rec": {"total": 27, "eff": 33}}, "6": {"name": "Pablo Denis Cabanas", "pos": "OPP", "num": 6, "atk": {"total": 982, "eff": 36}, "srv": {"total": 328, "eff": -10}, "rec": {"total": 13, "eff": 0}}, "7": {"name": "Roy Schmid", "pos": "MB", "num": 7, "atk": {"total": 23, "eff": 17}, "srv": {"total": 82, "eff": -15}, "rec": {"total": 2, "eff": 25}}, "8": {"name": "Jonas Peter", "pos": "L", "num": 8, "atk": {"total": 1, "eff": -100}, "srv": {"total": 0, "eff": null}, "rec": {"total": 462, "eff": 25}}, "9": {"name": "Nathan Broch", "pos": "OH", "num": 9, "atk": {"total": 253, "eff": 13}, "srv": {"total": 239, "eff": 1}, "rec": {"total": 375, "eff": 25}}, "10": {"name": "Dejan Bogdanovski", "pos": "MB", "num": 10, "atk": {"total": 35, "eff": 29}, "srv": {"total": 40, "eff": -2}, "rec": {"total": 57, "eff": 13}}, "11": {"name": "Christian Bartholet", "pos": "OH", "num": 11, "atk": {"total": 218, "eff": 22}, "srv": {"total": 145, "eff": 4}, "rec": {"total": 221, "eff": 17}}, "14": {"name": "Manuel Figueiredo", "pos": "OPP", "num": 14, "atk": {"total": 620, "eff": 31}, "srv": {"total": 366, "eff": -5}, "rec": {"total": 481, "eff": 31}}, "15": {"name": "Risto Nikolov", "pos": "MB", "num": 15, "atk": {"total": 211, "eff": 36}, "srv": {"total": 315, "eff": 1}, "rec": {"total": 18, "eff": 22}}}};
-
-var SYSTEM_BASE = "You are the assistant for the volleyball analysis & training system of Biogas/Axpo Volley Naefels (Swiss NLA 2025/26). You help the coaching staff and players use the system and read their stats.\n\nCRITICAL: Always respond in the same language the user writes in (Spanish / English / German). Be concise (2-3 short paragraphs max). If asked HOW to do something, give short numbered steps.\n\n=== WHAT THE SYSTEM DOES (point users to the right section) ===\n- SCOUTING RIVAL (scouting_rival.html): full dossier per rival - serve, attack directions, setter distribution by call and BY ROTATION (side-out with positive reception vs transition), reception, recent form.\n- GAME PLAN (game_plan.html?rival=...): how to play a rival - how they attack, where/how to serve, their weak rotations.\n- WELLNESS (wellness.html): players answer a daily 1-10 survey (sleep, energy, legs, body, mood, stress) plus session RPE, after Pelota/Pesas/Partido. Gives a readiness % per player, personal history, and a team table for the coach. Syncs in the cloud.\n- PREPARACION FISICA (prep_fisica.html): each player sees their gym routine by MONTH, logs the weight of every set (auto-saved), uses the 1RM calculator, and sees their wellness readiness on top.\n- ARMAR RUTINAS (prep_builder.html): the Preparador Fisico builds routines - choose player + month, add days, add blocks, pick exercises from the 123-exercise catalog, set series/reps/rest/note; saved to the cloud, players see it instantly.\n- PIZARRON (pizarron.html): team board of the daily routine - choose month + day + which players to show; everyone sees what to do and logs weights there too (synced with Prep Fisica).\n- VIDEO / CORTES (cortes.html, importar_video.html), plus comparador, tendencias, ranking, equipo (roster).\n\n=== ACCESS (PIN on the home page) ===\nPlayer: pick name, PIN = jersey number as 4 digits (e.g. #17 -> 0017). Coach/Staff: 1009. Preparador Fisico (PF): 0000 -> opens Armar Rutinas. Asistente Tecnico (AT): 9999 -> full access to load data. PF and AT have free write access.\n\n=== STATS CONCEPTS ===\nEFF Attack=(kills - errors - blocked)/total x100. Green>=44%, Yellow>=36%, Red<36%. SO=Side Out, TR=Transition. K1=Front Quick, K7=Seven, KM=Shifted, K2=Back Quick. Attack DIRECTION: only deep landing zones (1,5,6,7,8,9) are real directions; front-row landings are block deflections and are filtered out (except a same-pin short line, 2->2 or 4->4). Readiness % = average of the 6 wellness items x10. SM=Float serve, SQ=Jump serve, RM=Float reception, RQ=Jump reception.\n\nUse the CONTEXT data for specific player stats.";
-var SYSTEM = SYSTEM_BASE + '\n\nSEASON DATA: ' + JSON.stringify(CONTEXT);
+// (datos en vivo: ver vbLoadData mas abajo)
 
 
 var vbOpen=false, vbLoading=false, vbHistory=[];
@@ -136,25 +133,178 @@ function vbLang(txt){
   return 'es';
 }
 
-async function vbCall(msg){
-  vbLoading=true;
-  document.getElementById('vb-send').disabled=true;
+// ── CEREBRO LOCAL — sin API, lee los datos EN VIVO (nunca se desactualiza) ──
+var DATA={players:null,teams:null,fixture:null,loaded:false,loading:null};
+function vbLoadData(){
+  if(DATA.loaded)return Promise.resolve();
+  if(DATA.loading)return DATA.loading;
+  DATA.loading=Promise.all([
+    fetch('nla_full_stats.json').then(function(r){return r.json();}).then(function(j){DATA.players=(j&&j.players)||[];DATA.teams=(j&&j.teams)||[];}).catch(function(){DATA.players=DATA.players||[];DATA.teams=DATA.teams||[];}),
+    fetch('proximo_rival.js').then(function(r){return r.text();}).then(function(tx){var m=tx.match(/=\s*(\{[\s\S]*\})\s*;/);if(m){try{DATA.fixture=JSON.parse(m[1]);}catch(e){}}}).catch(function(){})
+  ]).then(function(){DATA.loaded=true;});
+  return DATA.loading;
+}
+function vbNorm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
+function vbFmt(n){return (n===null||n===undefined)?'-':(Math.round(n*10)/10);}
+
+var KB={
+ help:{
+  es:'Te puedo ayudar con:\n• 📊 Stats de un jugador — escribí su apellido (ej. "¿cómo viene Cabañas?")\n• 🏐 Mejores del equipo — "mejor sacador", "quién ataca mejor", "mejor receptor"\n• 📅 Próximo rival\n• 🏆 Tabla de la liga\n• ❓ Cómo usar: wellness, rutinas, pizarrón, scouting, game plan, video, PIN de acceso, qué es el EFF.',
+  en:'I can help with:\n• 📊 A player\'s stats — type their surname (e.g. "how is Cabañas doing?")\n• 🏐 Team leaders — "best server", "who attacks best", "best receiver"\n• 📅 Next rival\n• 🏆 League table\n• ❓ How to use: wellness, routines, board, scouting, game plan, video, access PIN, what EFF means.',
+  de:'Ich helfe bei:\n• 📊 Stats eines Spielers — Nachname eingeben (z.B. "wie spielt Cabañas?")\n• 🏐 Team-Beste — "bester Aufschläger", "wer greift am besten an", "beste Annahme"\n• 📅 Nächster Gegner\n• 🏆 Liga-Tabelle\n• ❓ Bedienung: Wellness, Trainingspläne, Tafel, Scouting, Game Plan, Video, Zugang-PIN, was EFF bedeutet.'
+ },
+ rutina:{
+  es:'Armar una rutina (Preparador Físico):\n1. Entrá con PIN 0000.\n2. Elegí Jugador + Mes y tocá "Cargar".\n3. "+ Agregar día/sesión" → "+ Bloque" → "+ Ejercicio" (series/reps/descanso/nota).\n4. 💾 GUARDAR RUTINA. El jugador la ve al instante en Prep Física y en el Pizarrón.',
+  en:'Build a routine (Physical Trainer):\n1. Log in with PIN 0000.\n2. Pick Player + Month and tap "Load".\n3. "+ Add day/session" → "+ Block" → "+ Exercise" (series/reps/rest/note).\n4. 💾 SAVE ROUTINE. The player sees it instantly in Prep Física and the Board.',
+  de:'Trainingsplan erstellen (Athletiktrainer):\n1. Mit PIN 0000 einloggen.\n2. Spieler + Monat wählen, "Laden" tippen.\n3. "+ Tag/Einheit" → "+ Block" → "+ Übung" (Sätze/Wdh./Pause/Notiz).\n4. 💾 PLAN SPEICHERN. Der Spieler sieht ihn sofort in Prep Física und auf der Tafel.'
+ },
+ wellness:{
+  es:'Wellness (lo carga cada jugador):\n1. Entrá con tu PIN (tu número de camiseta en 4 dígitos, ej. #17 → 0017).\n2. Abrí Wellness y respondé la encuesta diaria del 1 al 10 (sueño, energía, piernas, cuerpo, ánimo, estrés) + el RPE de la sesión.\n3. Se guarda solo en la nube. El cuerpo técnico ve la tabla del equipo y el % de readiness.',
+  en:'Wellness (each player fills it):\n1. Log in with your PIN (jersey number as 4 digits, e.g. #17 → 0017).\n2. Open Wellness and answer the daily 1–10 survey (sleep, energy, legs, body, mood, stress) + session RPE.\n3. It auto-saves to the cloud. Staff sees the team table and each readiness %.',
+  de:'Wellness (jeder Spieler):\n1. Mit deinem PIN einloggen (Trikotnummer 4-stellig, z.B. #17 → 0017).\n2. Wellness öffnen und die tägliche 1–10 Umfrage ausfüllen (Schlaf, Energie, Beine, Körper, Stimmung, Stress) + Session-RPE.\n3. Speichert automatisch in der Cloud. Das Trainerteam sieht die Tabelle und das Readiness-%.'
+ },
+ pizarron:{
+  es:'Pizarrón:\n1. Elegí Mes + Día y qué jugadores mostrar.\n2. Todos ven la rutina del día y pueden anotar los pesos ahí (se sincroniza con Prep Física).\nIdeal para mostrar en la tablet o TV del gimnasio.',
+  en:'Board (Pizarrón):\n1. Pick Month + Day and which players to show.\n2. Everyone sees the day\'s routine and can log weights there (syncs with Prep Física).\nGreat for the gym tablet/TV.',
+  de:'Tafel (Pizarrón):\n1. Monat + Tag wählen und welche Spieler angezeigt werden.\n2. Alle sehen den Tagesplan und können dort Gewichte eintragen (synchron mit Prep Física).\nIdeal für Tablet/TV im Kraftraum.'
+ },
+ scouting:{
+  es:'Scouting Rival: dossier completo de cada rival — saque, direcciones de ataque por rematador, distribución del armador por llamada y POR ROTACIÓN (side-out con recepción positiva vs transición), recepción y forma reciente. Hub → Scouting.',
+  en:'Rival Scouting: full dossier per rival — serve, attack directions per hitter, setter distribution by call and BY ROTATION (side-out with positive reception vs transition), reception and recent form. Hub → Scouting.',
+  de:'Gegner-Scouting: komplettes Dossier pro Gegner — Aufschlag, Angriffsrichtungen pro Angreifer, Zuspieler-Verteilung nach Zuspiel und NACH ROTATION (Side-out mit positiver Annahme vs Transition), Annahme und aktuelle Form. Hub → Scouting.'
+ },
+ gameplan:{
+  es:'Game Plan: cómo jugarle a un rival — cómo atacan, dónde y cómo sacarles, y sus rotaciones débiles. Se abre desde Scouting o con game_plan.html?rival=NOMBRE. Sale de los datos de la liga.',
+  en:'Game Plan: how to play a rival — how they attack, where/how to serve them, and their weak rotations. Open it from Scouting or game_plan.html?rival=NAME. Built from league data.',
+  de:'Game Plan: wie man gegen einen Gegner spielt — wie sie angreifen, wohin/wie aufschlagen, und ihre schwachen Rotationen. Über Scouting oder game_plan.html?rival=NAME. Aus den Liga-Daten.'
+ },
+ video:{
+  es:'Video / Cortes: ver y organizar cortes de video del equipo y de rivales. Entrá desde el Hub (Cortes / Video). Los videos se cargan desde un Excel y se publican junto con el resto.',
+  en:'Video / Clips: view and organize video clips of the team and rivals. Open from the Hub (Cortes / Video). Clips are loaded from an Excel and published with the rest.',
+  de:'Video / Clips: Videoclips vom Team und Gegnern ansehen und ordnen. Über das Hub (Cortes / Video). Clips werden aus einer Excel geladen und mitveröffentlicht.'
+ },
+ acceso:{
+  es:'Acceso (PIN en la página de inicio):\n• Jugador: elegí tu nombre, PIN = tu número de camiseta en 4 dígitos (#17 → 0017).\n• Entrenador/Staff: 1009.\n• Preparador Físico: 0000 (abre Armar Rutinas).\n• Asistente Técnico: 9999 (acceso completo para cargar datos).',
+  en:'Access (PIN on the home page):\n• Player: pick your name, PIN = jersey number as 4 digits (#17 → 0017).\n• Coach/Staff: 1009.\n• Physical Trainer: 0000 (opens Build Routines).\n• Technical Assistant: 9999 (full access to load data).',
+  de:'Zugang (PIN auf der Startseite):\n• Spieler: Namen wählen, PIN = Trikotnummer 4-stellig (#17 → 0017).\n• Trainer/Staff: 1009.\n• Athletiktrainer: 0000 (öffnet Trainingspläne).\n• Co-Trainer: 9999 (Vollzugriff zum Daten laden).'
+ },
+ prepfisica:{
+  es:'Prep Física (cada jugador): ves tu rutina del mes, anotás el peso de cada serie (se guarda solo), usás la calculadora de 1RM y ves tu readiness del wellness arriba. La rutina la arma el Preparador Físico.',
+  en:'Prep Física (each player): see your monthly routine, log the weight of every set (auto-saved), use the 1RM calculator, and see your wellness readiness on top. The Physical Trainer builds the routine.',
+  de:'Prep Física (jeder Spieler): deinen Monatsplan sehen, Gewicht jedes Satzes eintragen (speichert automatisch), 1RM-Rechner nutzen und oben dein Wellness-Readiness sehen. Den Plan erstellt der Athletiktrainer.'
+ },
+ eff:{
+  es:'Conceptos de stats:\n• EFF de Ataque = (kills − errores − bloqueados) / total × 100. 🟢 ≥44%, 🟡 ≥36%, 🔴 <36%.\n• SO = Side Out (con recepción), TR = Transición.\n• Llamadas: K1 corta adelante, K7 seven, KM corrida, K2 corta atrás.\n• Dirección de ataque: solo cuentan las zonas profundas (1,5,6,7,8,9); los toques de bloque cortos se filtran.\n• Readiness = promedio de los 6 ítems del wellness × 10.',
+  en:'Stats concepts:\n• Attack EFF = (kills − errors − blocked) / total × 100. 🟢 ≥44%, 🟡 ≥36%, 🔴 <36%.\n• SO = Side Out (off reception), TR = Transition.\n• Calls: K1 front quick, K7 seven, KM shifted, K2 back quick.\n• Attack direction: only deep zones count (1,5,6,7,8,9); short block touches are filtered out.\n• Readiness = average of the 6 wellness items × 10.',
+  de:'Stat-Begriffe:\n• Angriff-EFF = (Punkte − Fehler − geblockt) / total × 100. 🟢 ≥44%, 🟡 ≥36%, 🔴 <36%.\n• SO = Side Out (nach Annahme), TR = Transition.\n• Zuspiele: K1 kurz vorne, K7 Seven, KM verschoben, K2 kurz hinten.\n• Angriffsrichtung: nur tiefe Zonen zählen (1,5,6,7,8,9); kurze Blockberührungen werden gefiltert.\n• Readiness = Durchschnitt der 6 Wellness-Werte × 10.'
+ },
+ fallback:{
+  es:'No estoy seguro de eso 🤔. Puedo darte: stats de un jugador (escribí su apellido), los mejores del equipo (sacador/atacante/receptor), el próximo rival, la tabla de la liga, o cómo usar wellness / rutinas / pizarrón / scouting / game plan. Probá una sugerencia 👇',
+  en:'Not sure about that 🤔. I can give you: a player\'s stats (type a surname), team leaders (server/attacker/receiver), the next rival, the league table, or how to use wellness / routines / board / scouting / game plan. Try a suggestion 👇',
+  de:'Da bin ich nicht sicher 🤔. Ich kann: Stats eines Spielers (Nachname), Team-Beste (Aufschlag/Angriff/Annahme), nächster Gegner, Liga-Tabelle, oder Bedienung von Wellness / Plänen / Tafel / Scouting / Game Plan. Probier einen Vorschlag 👇'
+ }
+};
+
+function vbFindPlayer(t){
+  if(!DATA.players)return null;
+  var toks=t.split(/[^a-z0-9]+/).filter(function(x){return x.length>=4;});
+  if(!toks.length)return null;
+  var cands=[];
+  for(var i=0;i<DATA.players.length;i++){
+    var p=DATA.players[i]; var words=vbNorm(p.name).split(/\s+/); var hit=false;
+    for(var w=0;w<words.length&&!hit;w++){ var nw=words[w]; if(nw.length<4)continue;
+      for(var x=0;x<toks.length;x++){ var tk=toks[x]; if(nw.indexOf(tk)===0||tk.indexOf(nw)===0){hit=true;break;} } }
+    if(hit)cands.push(p);
+  }
+  if(!cands.length)return null;
+  var naf=cands.filter(function(p){return p.team==='Nafels';});
+  return (naf.length?naf:cands)[0];
+}
+
+function vbPlayerAnswer(p,lang){
+  var L={es:{atk:'Ataque',srv:'Saque',rec:'Recepción',blk:'Bloqueo',ace:'aces',acc:'acc.',see:'Mirá el detalle en su ficha (Jugador) o en el Dashboard.'},
+         en:{atk:'Attack',srv:'Serve',rec:'Reception',blk:'Block',ace:'aces',acc:'act.',see:'See the detail in their player card or the Dashboard.'},
+         de:{atk:'Angriff',srv:'Aufschlag',rec:'Annahme',blk:'Block',ace:'Asse',acc:'Akt.',see:'Details in der Spielerkarte oder im Dashboard.'}}[lang];
+  var lines=['📊 '+p.name+' (#'+p.num+(p.pos_label?', '+p.pos_label:'')+')'+(p.team!=='Nafels'?' — '+p.team:'')+':'];
+  if(p.atk_tot>0){var c=p.atk_eff>=44?'🟢':(p.atk_eff>=36?'🟡':'🔴');lines.push('• '+L.atk+': '+vbFmt(p.atk_eff)+'% EFF '+c+' ('+p.atk_tot+')');}
+  if(p.srv_tot>0){lines.push('• '+L.srv+': '+vbFmt(p.srv_eff)+'% EFF ('+p.srv_tot+', '+vbFmt(p.srv_ace)+'% '+L.ace+')');}
+  if(p.rec_tot>0){lines.push('• '+L.rec+': '+vbFmt(p.rec_eff)+'% ('+p.rec_tot+')');}
+  if(p.blk_tot>0){lines.push('• '+L.blk+': '+vbFmt(p.blk_eff)+'% ('+p.blk_tot+' '+L.acc+')');}
+  lines.push(L.see);
+  return lines.join('\n');
+}
+
+function vbRanking(t,lang){
+  if(!DATA.players)return KB.fallback[lang];
+  var liga=/liga|league/.test(t);
+  var pool=DATA.players.filter(function(p){return liga?true:p.team==='Nafels';});
+  var skill='atk',key='atk_eff',totk='atk_tot',min=50;
+  if(/saque|serve|aufschlag|sacador|aufschlager/.test(t)){skill='srv';key='srv_eff';totk='srv_tot';}
+  else if(/recep|reception|annahme|receptor/.test(t)){skill='rec';key='rec_eff';totk='rec_tot';}
+  else if(/bloq|block/.test(t)){skill='blk';key='blk_eff';totk='blk_tot';min=20;}
+  var arr=pool.filter(function(p){return p[totk]>=min && p[key]!=null;}).sort(function(a,b){return b[key]-a[key];}).slice(0,3);
+  if(!arr.length)return KB.fallback[lang];
+  var head={es:{atk:'Mejores en ataque',srv:'Mejores al saque',rec:'Mejores en recepción',blk:'Mejores en bloqueo'},
+            en:{atk:'Best attackers',srv:'Best servers',rec:'Best receivers',blk:'Best blockers'},
+            de:{atk:'Beste Angreifer',srv:'Beste Aufschläger',rec:'Beste Annahme',blk:'Beste Blocker'}}[lang][skill];
+  var scope=liga?(lang==='es'?' (toda la liga)':lang==='de'?' (ganze Liga)':' (whole league)'):' (Näfels)';
+  var out=['🏐 '+head+scope+':'];
+  for(var i=0;i<arr.length;i++){var p=arr[i];out.push((i+1)+'. '+p.name+(p.team!=='Nafels'?' ('+p.team+')':'')+' — '+vbFmt(p[key])+'% ('+p[totk]+')');}
+  return out.join('\n');
+}
+
+function vbNextRival(lang){
+  var f=DATA.fixture&&DATA.fixture.proximo;
+  if(!f)return {es:'No tengo el próximo rival cargado todavía.',en:'No next rival loaded yet.',de:'Noch kein nächster Gegner geladen.'}[lang];
+  var c=f.cond||'';
+  return {es:'📅 Próximo partido: vs '+f.rival+' ('+c+'), el '+f.fecha+'.\nPara prepararlo, entrá a Scouting Rival y al Game Plan de '+f.rival+'.',
+          en:'📅 Next match: vs '+f.rival+' ('+c+'), on '+f.fecha+'.\nTo prepare, open Rival Scouting and the Game Plan for '+f.rival+'.',
+          de:'📅 Nächstes Spiel: vs '+f.rival+' ('+c+'), am '+f.fecha+'.\nVorbereitung: Gegner-Scouting und Game Plan für '+f.rival+' öffnen.'}[lang];
+}
+
+function vbLeague(lang){
+  var top=null;
+  if(DATA.teams&&DATA.teams.length){top=DATA.teams.slice().filter(function(x){return x.atk_eff!=null;}).sort(function(a,b){return b.atk_eff-a.atk_eff;})[0];}
+  var base={es:'🏆 La tabla completa está en "Estadísticas Liga" (botón del Hub): ranking por equipo y stats de todos los jugadores.',
+            en:'🏆 The full table is in "Estadísticas Liga" (Hub button): team ranking and all players\' stats.',
+            de:'🏆 Die komplette Tabelle ist unter "Estadísticas Liga" (Hub-Button): Team-Ranking und Stats aller Spieler.'}[lang];
+  if(top){base+={es:'\nMejor EFF de ataque ahora: '+top.team+' ('+vbFmt(top.atk_eff)+'%).',
+                 en:'\nBest attack EFF right now: '+top.team+' ('+vbFmt(top.atk_eff)+'%).',
+                 de:'\nBeste Angriff-EFF aktuell: '+top.team+' ('+vbFmt(top.atk_eff)+'%).'}[lang];}
+  return base;
+}
+
+function vbAnswer(raw){
+  var lang=vbLang(raw); var t=vbNorm(raw);
+  if(/\b(hola|buenas|hi|hello|hey|hallo|ayuda|help|hilfe|menu)\b/.test(t)||/que podes|que puedes|what can you|was kannst/.test(t))return KB.help[lang];
+  if(/proximo|next|naechst|nachst|rival|gegner|contra quien|cuando jugamos|when do we play|wann spielen/.test(t))return vbNextRival(lang);
+  if(/mejor|best|beste|top|quien ataca|quien saca|quien recibe|who attacks|who serves|goleador|ranking|wer greift|wer schlagt/.test(t))return vbRanking(t,lang);
+  if(/rutina|routine|trainingsplan/.test(t))return KB.rutina[lang];
+  if(/wellness|bienestar|befinden/.test(t))return KB.wellness[lang];
+  if(/pizarr|board|tafel/.test(t))return KB.pizarron[lang];
+  if(/scouting|scout|dossier/.test(t))return KB.scouting[lang];
+  if(/game ?plan|plan de partido|plan del partido|spielplan/.test(t))return KB.gameplan[lang];
+  if(/video|corte|clip/.test(t))return KB.video[lang];
+  if(/\bpin\b|acceso|login|entrar|contrasena|password|passwort|zugang/.test(t))return KB.acceso[lang];
+  if(/prep fisica|preparacion fisica|gimnasio|pesas|\bgym\b|1rm|kraftraum/.test(t))return KB.prepfisica[lang];
+  if(/\beff\b|eficiencia|efficiency|effizienz|side ?out|\bso\b|\btr\b|transicion|transition|\bzona/.test(t))return KB.eff[lang];
+  var p=vbFindPlayer(t); if(p)return vbPlayerAnswer(p,lang);
+  if(/tabla|liga|league|tabelle|equipo|team|mannschaft|standing|clasificacion/.test(t))return vbLeague(lang);
+  return KB.fallback[lang];
+}
+
+function vbCall(msg){
+  vbLoading=true; var sb=document.getElementById('vb-send'); if(sb)sb.disabled=true;
   vbHistory.push({role:'user',content:msg});
   var tid=vbTyping();
-  try{
-    var r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:SYSTEM,messages:vbHistory.slice(-8)})
-    });
-    var d=await r.json();
-    vbRmTyping(tid);
-    var reply=d.content&&d.content[0]?d.content[0].text:'Error al conectar.';
-    vbHistory.push({role:'assistant',content:reply});
-    vbAdd('bot',reply); vbSuggs(msg);
-  }catch(e){vbRmTyping(tid);vbAdd('bot','\u26a0\ufe0f Error de conexi\u00f3n. Intentá de nuevo.');}
-  vbLoading=false;
-  document.getElementById('vb-send').disabled=false;
+  vbLoadData().then(function(){
+    var reply; try{reply=vbAnswer(msg);}catch(e){reply=KB.fallback[vbLang(msg)]||KB.fallback.es;}
+    vbHistory.push({role:'bot',content:reply});
+    setTimeout(function(){
+      vbRmTyping(tid); vbAdd('bot',reply); vbSuggs(msg);
+      vbLoading=false; if(sb)sb.disabled=false;
+    },300);
+  });
 }
 
 function vbAdd(role,text){
