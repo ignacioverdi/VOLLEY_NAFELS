@@ -1275,6 +1275,12 @@ function initPin(){
   var oCoach = document.createElement('option');
   oCoach.value = 'coach'; oCoach.textContent = '👨‍💼 Entrenador (Staff)';
   sel.appendChild(oCoach);
+  var oPF = document.createElement('option');
+  oPF.value = 'pf'; oPF.textContent = '🏋️ Preparador Físico (PF)';
+  sel.appendChild(oPF);
+  var oAT = document.createElement('option');
+  oAT.value = 'at'; oAT.textContent = '📋 Asistente Técnico (AT)';
+  sel.appendChild(oAT);
   jugs.forEach(function(j){
     var o = document.createElement('option');
     o.value = j.num;
@@ -1335,6 +1341,35 @@ function pinEnter(){
       return;
     } else {
       document.getElementById('pin-error').textContent = 'PIN de entrenador incorrecto ⚠️';
+      pinActual=''; updatePinDisplay(); return;
+    }
+  }
+
+  // ── PREPARADOR FÍSICO (carga libre) ───────────────────────
+  if(num === 'pf'){
+    if(pinActual === '0000'){
+      localStorage.setItem('casla_role','pf');
+      sessionStorage.setItem('casla_pin_skip','1');
+      document.getElementById('pin-overlay').style.display='none';
+      showToastLogin('🏋️ Bienvenido, Preparador Físico');
+      window.location.href = 'prep_builder.html';   // va directo a armar rutinas
+      return;
+    } else {
+      document.getElementById('pin-error').textContent = 'PIN de PF incorrecto ⚠️';
+      pinActual=''; updatePinDisplay(); return;
+    }
+  }
+
+  // ── ASISTENTE TÉCNICO (carga libre) ───────────────────────
+  if(num === 'at'){
+    if(pinActual === '9999'){
+      localStorage.setItem('casla_role','at');
+      sessionStorage.setItem('casla_pin_skip','1');
+      document.getElementById('pin-overlay').style.display='none';
+      showToastLogin('📋 Bienvenido, Asistente Técnico');
+      return;   // se queda en el Hub con acceso completo a la carga
+    } else {
+      document.getElementById('pin-error').textContent = 'PIN de AT incorrecto ⚠️';
       pinActual=''; updatePinDisplay(); return;
     }
   }
