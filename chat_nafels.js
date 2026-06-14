@@ -1,6 +1,6 @@
 (function(){
 
-// ── CHAT IA CASLA VOLEY — Self-contained widget ──────────────────
+// ── CHAT IA VOLLEY NÄFELS — Self-contained widget ──────────────────
 var CSS = [
   '#vb-chat-btn{position:fixed;bottom:24px;right:24px;width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;z-index:9000;background:transparent;padding:0;filter:drop-shadow(0 4px 18px rgba(37,99,235,.55));transition:transform .2s,filter .2s}',
   '#vb-chat-btn:hover{transform:scale(1.1) rotate(-8deg);filter:drop-shadow(0 6px 28px rgba(37,99,235,.8))}',
@@ -43,7 +43,7 @@ var CSS = [
 
 var CONTEXT = {"team": "Biogas Voley Nafels", "season": "NLA Suiza 2025/26", "games_played": 26, "rivals": ["Lausanne UC", "STV St Gallen", "Colombier Volley", "TSV Jona Volleyball", "Volley Amriswil", "Volley Schonenwerd", "Chenois Geneve Volleyball", "VBC Sursee"], "players": {"1": {"name": "Linus Deecke", "pos": "L", "num": 1, "atk": {"total": 4, "eff": 25}, "srv": {"total": 35, "eff": 11}, "rec": {"total": 0, "eff": null}}, "2": {"name": "Mathias Corzo", "pos": "OH", "num": 2, "atk": {"total": 2, "eff": -50}, "srv": {"total": 0, "eff": null}, "rec": {"total": 0, "eff": null}}, "3": {"name": "Tom Schwitter", "pos": "OH", "num": 3, "atk": {"total": 9, "eff": -22}, "srv": {"total": 4, "eff": 6}, "rec": {"total": 0, "eff": null}}, "4": {"name": "Ezequiel Vazquez", "pos": "S", "num": 4, "atk": {"total": 87, "eff": 33}, "srv": {"total": 405, "eff": 4}, "rec": {"total": 5, "eff": -30}}, "5": {"name": "Joachim Hesselholt", "pos": "OH", "num": 5, "atk": {"total": 200, "eff": 41}, "srv": {"total": 226, "eff": -5}, "rec": {"total": 27, "eff": 33}}, "6": {"name": "Pablo Denis Cabanas", "pos": "OPP", "num": 6, "atk": {"total": 982, "eff": 36}, "srv": {"total": 328, "eff": -10}, "rec": {"total": 13, "eff": 0}}, "7": {"name": "Roy Schmid", "pos": "MB", "num": 7, "atk": {"total": 23, "eff": 17}, "srv": {"total": 82, "eff": -15}, "rec": {"total": 2, "eff": 25}}, "8": {"name": "Jonas Peter", "pos": "L", "num": 8, "atk": {"total": 1, "eff": -100}, "srv": {"total": 0, "eff": null}, "rec": {"total": 462, "eff": 25}}, "9": {"name": "Nathan Broch", "pos": "OH", "num": 9, "atk": {"total": 253, "eff": 13}, "srv": {"total": 239, "eff": 1}, "rec": {"total": 375, "eff": 25}}, "10": {"name": "Dejan Bogdanovski", "pos": "MB", "num": 10, "atk": {"total": 35, "eff": 29}, "srv": {"total": 40, "eff": -2}, "rec": {"total": 57, "eff": 13}}, "11": {"name": "Christian Bartholet", "pos": "OH", "num": 11, "atk": {"total": 218, "eff": 22}, "srv": {"total": 145, "eff": 4}, "rec": {"total": 221, "eff": 17}}, "14": {"name": "Manuel Figueiredo", "pos": "OPP", "num": 14, "atk": {"total": 620, "eff": 31}, "srv": {"total": 366, "eff": -5}, "rec": {"total": 481, "eff": 31}}, "15": {"name": "Risto Nikolov", "pos": "MB", "num": 15, "atk": {"total": 211, "eff": 36}, "srv": {"total": 315, "eff": 1}, "rec": {"total": 18, "eff": 22}}}};
 
-var SYSTEM_BASE = "You are the volleyball analysis assistant for Club Atletico San Lorenzo de Almagro (CASLA), Division de Honor Masculina Argentina 2026.\n\nCRITICAL: Always respond in the same language the user writes in.\n- Spanish message respond in Spanish\n- English message respond in English\n- German message respond in German\n\nUse the CONTEXT data for specific player stats. Be concise (2-3 paragraphs max).\n\nKEY CONCEPTS: EFF Attack=(#-/-=)/total x100. Green>=44%, Yellow>=36%, Red<36%. SO=Side Out (attack after receiving). TR=Transition (attack without own reception). K1=Front Quick, K7=Seven, KM=Shifted, K2=Back Quick. Zones 1-9 court. SM=Float serve, SQ=Jump serve, RM=Float reception, RQ=Jump reception.";
+var SYSTEM_BASE = "You are the assistant for the volleyball analysis & training system of Biogas/Axpo Volley Naefels (Swiss NLA 2025/26). You help the coaching staff and players use the system and read their stats.\n\nCRITICAL: Always respond in the same language the user writes in (Spanish / English / German). Be concise (2-3 short paragraphs max). If asked HOW to do something, give short numbered steps.\n\n=== WHAT THE SYSTEM DOES (point users to the right section) ===\n- SCOUTING RIVAL (scouting_rival.html): full dossier per rival - serve, attack directions, setter distribution by call and BY ROTATION (side-out with positive reception vs transition), reception, recent form.\n- GAME PLAN (game_plan.html?rival=...): how to play a rival - how they attack, where/how to serve, their weak rotations.\n- WELLNESS (wellness.html): players answer a daily 1-10 survey (sleep, energy, legs, body, mood, stress) plus session RPE, after Pelota/Pesas/Partido. Gives a readiness % per player, personal history, and a team table for the coach. Syncs in the cloud.\n- PREPARACION FISICA (prep_fisica.html): each player sees their gym routine by MONTH, logs the weight of every set (auto-saved), uses the 1RM calculator, and sees their wellness readiness on top.\n- ARMAR RUTINAS (prep_builder.html): the Preparador Fisico builds routines - choose player + month, add days, add blocks, pick exercises from the 123-exercise catalog, set series/reps/rest/note; saved to the cloud, players see it instantly.\n- PIZARRON (pizarron.html): team board of the daily routine - choose month + day + which players to show; everyone sees what to do and logs weights there too (synced with Prep Fisica).\n- VIDEO / CORTES (cortes.html, importar_video.html), plus comparador, tendencias, ranking, equipo (roster).\n\n=== ACCESS (PIN on the home page) ===\nPlayer: pick name, PIN = jersey number as 4 digits (e.g. #17 -> 0017). Coach/Staff: 1009. Preparador Fisico (PF): 0000 -> opens Armar Rutinas. Asistente Tecnico (AT): 9999 -> full access to load data. PF and AT have free write access.\n\n=== STATS CONCEPTS ===\nEFF Attack=(kills - errors - blocked)/total x100. Green>=44%, Yellow>=36%, Red<36%. SO=Side Out, TR=Transition. K1=Front Quick, K7=Seven, KM=Shifted, K2=Back Quick. Attack DIRECTION: only deep landing zones (1,5,6,7,8,9) are real directions; front-row landings are block deflections and are filtered out (except a same-pin short line, 2->2 or 4->4). Readiness % = average of the 6 wellness items x10. SM=Float serve, SQ=Jump serve, RM=Float reception, RQ=Jump reception.\n\nUse the CONTEXT data for specific player stats.";
 var SYSTEM = SYSTEM_BASE + '\n\nSEASON DATA: ' + JSON.stringify(CONTEXT);
 
 
@@ -79,9 +79,9 @@ wrapEl.innerHTML=[
   '</div>',
   '<div id="vb-chat-msgs"></div>',
   '<div id="vb-suggestions">',
+  '<button class="vb-sugg" onclick="vbSugg(this)">\u00bfC\u00f3mo armo una rutina?</button>',
+  '<button class="vb-sugg" onclick="vbSugg(this)">\u00bfC\u00f3mo cargo el wellness?</button>',
   '<button class="vb-sugg" onclick="vbSugg(this)">\u00bfQu\u00e9 es el EFF?</button>',
-  '<button class="vb-sugg" onclick="vbSugg(this)">Stats del equipo</button>',
-  '<button class="vb-sugg" onclick="vbSugg(this)">\u00bfC\u00f3mo uso los heatmaps?</button>',
   '</div>',
   '<div class="vb-input-row">',
   '<textarea id="vb-input" placeholder="Pregunt\u00e1 sobre stats, t\u00e1ctica..." onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();vbSend()}" oninput="vbResize(this)"></textarea>',
@@ -109,9 +109,9 @@ function vbToggle(){
 }
 
 function vbWelcome(){
-  var w={es:'\u00a1Hola! Soy el asistente de **CASLA Voley**. Tengo los datos de la temporada DHM 2026. \u00bfEn qu\u00e9 te puedo ayudar?',
-         en:'Hi! I\'m the **CASLA Voley** assistant. I have access to the NLA 2025/26 season data. How can I help?',
-         de:'Hallo! Ich bin der **CASLA Voley** Assistent mit Zugriff auf DHM-2026-Daten. Wie kann ich helfen?'};
+  var w={es:'\u00a1Hola! Soy el asistente de **Volley N\u00e4fels**. Te ayudo con stats, scouting y a usar el sistema (wellness, rutinas, pizarr\u00f3n...). \u00bfEn qu\u00e9 te doy una mano?',
+         en:'Hi! I\'m the **Volley N\u00e4fels** assistant. I help with stats, scouting and using the system (wellness, routines, board...). How can I help?',
+         de:'Hallo! Ich bin der **Volley N\u00e4fels** Assistent. Ich helfe bei Stats, Scouting und der Bedienung des Systems (Wellness, Pl\u00e4ne, Board...). Wie kann ich helfen?'};
   vbAdd('bot', w[LANG]||w.es);
 }
 

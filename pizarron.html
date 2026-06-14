@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>PIZARRÓN — CASL VOLEY</title>
+<title>PIZARRÓN — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="utils.js" onerror="void 0"></script>
+<script src="plantel_nafels.js" onerror="void 0"></script>
 <script src="datos_equipo.js" onerror="void 0"></script>
 <script src="datos_prep_fisica.js" onerror="void 0"></script>
 <script src="firebase.js" onerror="void 0"></script>
@@ -32,6 +33,9 @@ select,select option{color:#111!important;background:#fff!important;}
 .ctrl-label{font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;}
 .ctrl-sel{padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:var(--card);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;cursor:pointer;outline:none;}
 .ctrl-sel:focus{border-color:rgba(232,25,44,.4);}
+.jchip{padding:6px 11px;border-radius:9px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--mut);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.4px;cursor:pointer;transition:.12s;}
+.jchip:hover{color:#fff;}
+.jchip.on{background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.4);color:#4ade80;}
 .btn-fullscreen{padding:7px 16px;border-radius:8px;border:1px solid rgba(129,140,248,.3);background:rgba(129,140,248,.08);color:#818cf8;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .15s;}
 .btn-fullscreen:hover{background:rgba(129,140,248,.2);}
 .live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(34,197,94,.5);animation:pulse 2s infinite;}
@@ -130,22 +134,23 @@ body.fullscreen{background:#000;}
 
 <!-- CONTROLES -->
 <div class="controles">
+  <div id="mes-wrap" style="display:none">
+    <div class="ctrl-label">Mes</div>
+    <select class="ctrl-sel" id="sel-mes" onchange="onMesChange()"></select>
+  </div>
   <div>
     <div class="ctrl-label">Día de rutina</div>
     <select class="ctrl-sel" id="sel-dia" onchange="renderPizarron()">
       <option value="">— Elegí el día —</option>
     </select>
   </div>
-  <div>
-    <div class="ctrl-label"><span data-t="g_posicion">Posición</span></div>
-    <select class="ctrl-sel" id="sel-pos" onchange="renderPizarron()">
-      <option value="TODOS">Todas las posiciones</option>
-      <option value="CENTRAL">Centrales</option>
-      <option value="PUNTA">Puntas</option>
-      <option value="ARMADOR">Armadores</option>
-      <option value="OPUESTO">Opuestos</option>
-      <option value="LIBERO">Liberos</option>
-    </select>
+  <div style="flex:1;min-width:200px">
+    <div class="ctrl-label" style="display:flex;align-items:center;gap:10px">
+      <span>Jugadores a mostrar</span>
+      <span onclick="jugTodos(true)" style="cursor:pointer;color:#4ade80;font-size:10px;text-transform:none;letter-spacing:0">todos</span>
+      <span onclick="jugTodos(false)" style="cursor:pointer;color:var(--mut);font-size:10px;text-transform:none;letter-spacing:0">ninguno</span>
+    </div>
+    <div id="jug-chips" style="display:flex;flex-wrap:wrap;gap:6px;padding-top:2px"></div>
   </div>
   <div style="font-size:10px;color:var(--mut);margin-left:auto;letter-spacing:.5px;" id="last-update"></div>
 </div>
@@ -162,6 +167,84 @@ body.fullscreen{background:#000;}
 <script>
 var PREP_DATA_LOCAL = window.PREP_DATA || null;
 var EQUIPO_DATA_LOCAL = window.EQUIPO_DATA || null;
+
+// ── Rutinas del equipo desde Firebase (las que arma el PF en el builder) ──
+var RUTINAS_RAW = {};   // num -> { mesKey -> rutina }
+var MES_ACTUAL = null;
+var MESES_PZ = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+function mesLabelFromKey(k){ var p=String(k).split('-'); return (MESES_PZ[(+p[1])-1]||'')+' '+(p[0]||''); }
+
+function armarPrep(mes){
+  var roster = (window.PLANTEL_NAFELS && window.PLANTEL_NAFELS.jugadores) || [];
+  var jugs = roster.map(function(j){
+    var r = RUTINAS_RAW[j.num] && RUTINAS_RAW[j.num][mes];
+    return { num:j.num, nombre:(j.ap||j.nombre||('#'+j.num)), pos:j.pos||'', semanas:(r&&r.semanas)?r.semanas:[] };
+  }).filter(function(j){ return j.semanas.length; });   // solo los que tienen rutina ese mes
+  PREP_DATA_LOCAL = { jugadores: jugs };
+  JUG_SEL = null;   // reinicia selección (todos visibles) al cambiar de mes/datos
+}
+
+// ── Selector de jugadores a mostrar ───────────────────────────────
+var JUG_SEL = null;   // null => todos; si no, {num:true/false}
+function pintarJugSelector(){
+  var cont = document.getElementById('jug-chips');
+  if(!cont) return;
+  var jugs = (PREP_DATA_LOCAL && PREP_DATA_LOCAL.jugadores) || [];
+  if(!jugs.length){ cont.innerHTML = '<span style="font-size:11px;color:var(--mut)">— sin jugadores con rutina este mes —</span>'; return; }
+  if(!JUG_SEL){ JUG_SEL = {}; jugs.forEach(function(j){ JUG_SEL[j.num] = true; }); }
+  jugs.forEach(function(j){ if(!(j.num in JUG_SEL)) JUG_SEL[j.num] = true; });
+  cont.innerHTML = jugs.map(function(j){
+    var on = JUG_SEL[j.num] !== false;
+    return '<button class="jchip'+(on?' on':'')+'" onclick="toggleJug('+j.num+')">#'+j.num+' '+j.nombre+'</button>';
+  }).join('');
+}
+function toggleJug(num){ JUG_SEL[num] = (JUG_SEL[num] === false); pintarJugSelector(); renderPizarron(); }
+function jugTodos(v){
+  var jugs = (PREP_DATA_LOCAL && PREP_DATA_LOCAL.jugadores) || [];
+  JUG_SEL = {}; jugs.forEach(function(j){ JUG_SEL[j.num] = v; });
+  pintarJugSelector(); renderPizarron();
+}
+function poblarMeses(){
+  var set={};
+  Object.keys(RUTINAS_RAW).forEach(function(num){
+    var byMes=RUTINAS_RAW[num];
+    if(byMes && typeof byMes==='object') Object.keys(byMes).forEach(function(m){
+      if(byMes[m] && byMes[m].semanas && byMes[m].semanas.length) set[m]=1;
+    });
+  });
+  var meses=Object.keys(set).sort().reverse();
+  if(!meses.length){ usarFallback(); return; }
+  var sel=document.getElementById('sel-mes');
+  sel.innerHTML = meses.map(function(m){ return '<option value="'+m+'">'+mesLabelFromKey(m)+'</option>'; }).join('');
+  document.getElementById('mes-wrap').style.display='';
+  MES_ACTUAL=meses[0]; sel.value=MES_ACTUAL;
+  armarPrep(MES_ACTUAL); pintarJugSelector(); poblarDias();
+}
+function onMesChange(){ MES_ACTUAL=document.getElementById('sel-mes').value; armarPrep(MES_ACTUAL); pintarJugSelector(); poblarDias(); }
+function usarFallback(){
+  document.getElementById('mes-wrap').style.display='none';
+  PREP_DATA_LOCAL = window.PREP_DATA || null;   // datos viejos si existieran
+  pintarJugSelector(); poblarDias();
+}
+function cargarEquipo(){
+  if(typeof fbGet !== 'undefined'){
+    fbGet('prep_rutinas', function(data){
+      RUTINAS_RAW = (data && typeof data==='object') ? data : {};
+      if(Object.keys(RUTINAS_RAW).length) poblarMeses();
+      else usarFallback();
+    });
+  } else {
+    // sin Firebase: intentar localStorage (rutinas guardadas en este dispositivo)
+    RUTINAS_RAW = {};
+    var roster=(window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||[];
+    try{
+      roster.forEach(function(j){ var pre='prep_rutina_'+j.num+'_';
+        for(var i=0;i<localStorage.length;i++){ var key=localStorage.key(i);
+          if(key&&key.indexOf(pre)===0){ (RUTINAS_RAW[j.num]=RUTINAS_RAW[j.num]||{})[key.slice(pre.length)]=JSON.parse(localStorage.getItem(key)); } } });
+    }catch(e){}
+    if(Object.keys(RUTINAS_RAW).length) poblarMeses(); else usarFallback();
+  }
+}
 
 // ── Construir mapa de días únicos ─────────────────────────────────
 function getDias(){
@@ -215,7 +298,6 @@ function fbSk(jugNum, ejId, serie){ return 'pesos/prep_'+jugNum+'_'+ejId+'_s'+se
 // ── Render principal ──────────────────────────────────────────────
 function renderPizarron(){
   var diaLabel = document.getElementById('sel-dia').value;
-  var posFilter = document.getElementById('sel-pos').value;
   var cont = document.getElementById('main-content');
 
   if(!diaLabel || !PREP_DATA_LOCAL){
@@ -223,9 +305,9 @@ function renderPizarron(){
     return;
   }
 
-  // Filtrar jugadores por posición
+  // Filtrar por jugadores elegidos
   var jugadores = PREP_DATA_LOCAL.jugadores.filter(function(j){
-    return posFilter === 'TODOS' || j.pos === posFilter;
+    return !JUG_SEL || JUG_SEL[j.num] !== false;
   });
 
   // Recolectar bloques y ejercicios del día
@@ -419,9 +501,8 @@ function listenFirebase(){
 // ── Init ──────────────────────────────────────────────────────────
 window.addEventListener('load', function(){
   setTimeout(function(){
-    PREP_DATA_LOCAL = window.PREP_DATA || null;
     EQUIPO_DATA_LOCAL = window.EQUIPO_DATA || null;
-    poblarDias();
+    cargarEquipo();        // arma el pizarrón desde las rutinas de la nube (por mes)
     listenFirebase();
   }, 200);
 });
