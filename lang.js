@@ -604,7 +604,23 @@
     '🔴 Alerta — posible fatiga, priorizar recuperación.':{en:'🔴 Alert — possible fatigue, prioritize recovery.',de:'🔴 Achtung — mögliche Ermüdung, Erholung priorisieren.'},
     'Nivel':{en:'Level',de:'Niveau'},
     'Día':{en:'Day',de:'Tag'},
-    'Todas':{en:'All',de:'Alle'}
+    'Todas':{en:'All',de:'Alle'},
+    'Ver tu preparación física':{en:'See your physical preparation',de:'Deine Athletikvorbereitung ansehen'},
+    'ver wellness':{en:'see wellness',de:'Wellness ansehen'},
+    'Llegó con readiness bajo':{en:'Came in with low readiness',de:'Kam mit niedriger Readiness'},
+    'Considerá bajar volumen o intensidad y priorizar técnica.':{en:'Consider lowering volume or intensity and prioritizing technique.',de:'Erwäge weniger Umfang oder Intensität und Technikfokus.'},
+    'Readiness moderado':{en:'Moderate readiness',de:'Mäßige Readiness'},
+    'Ajustá la carga si lo notás cansado.':{en:'Adjust the load if you notice they are tired.',de:'Passe die Belastung an, wenn er müde wirkt.'},
+    'Llegó en buen estado':{en:'Came in in good shape',de:'Kam in gutem Zustand'},
+    'Listo para la carga planificada.':{en:'Ready for the planned load.',de:'Bereit für die geplante Belastung.'},
+    'RPE último:':{en:'last RPE:',de:'letzter RPE:'},
+    'readiness':{en:'readiness',de:'Readiness'},
+    'hoy':{en:'today',de:'heute'},
+    'Tus pesos y notas se guardan y':{en:'Your weights and notes are saved and',de:'Deine Gewichte und Notizen werden gespeichert und'},
+    'sincronizan automáticamente':{en:'sync automatically',de:'synchronisieren automatisch'},
+    'con tu cuenta.':{en:'with your account.',de:'mit deinem Konto.'},
+    'respondieron':{en:'responded',de:'antworteten'},
+    'en alerta':{en:'in alert',de:'im Alarm'}
   };
   var PHRASE_LC = {};
   (function(){

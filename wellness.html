@@ -2,6 +2,7 @@
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>WELLNESS — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="firebase.js" onerror="void 0"></script>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   :root{--bg:#0a0f1a;--surface:#111827;--card:#0f1020;--card2:#151b2e;--border:rgba(255,255,255,.08);--b2:rgba(255,255,255,.13);
@@ -102,6 +103,7 @@
         <div class="muted" style="font-size:11px;letter-spacing:2px;text-transform:uppercase">Tu wellness de hoy</div>
         <div class="big" id="resPct">—</div>
         <div class="fb" id="resFb"></div>
+        <div style="margin-top:12px"><a href="prep_fisica.html" style="color:var(--acc);font-size:13px;font-weight:700;text-decoration:none">Ver tu preparación física →</a></div>
       </div>
     </div>
 
@@ -132,25 +134,52 @@
 <script src="plantel_nafels.js" onerror="void 0"></script>
 <script>
 /* ============================================================================
-   CAPA DE DATOS  —  pieza intercambiable.
-   v1 (ahora): guarda en este dispositivo (localStorage). Sirve para que vos y
-   yo validemos el flujo y el diseño YA, sin depender de nada externo.
-   v2 (próximo paso): se reemplazan estos 4 métodos por llamadas a la nube
-   (Firebase) con la MISMA firma → cada jugador carga desde su celu y la tabla
-   de Equipo se llena con todos. No cambia nada más de la página.
+   CAPA DE DATOS  —  local + nube (Firebase) usando el mismo fbSet/fbGet que ya
+   usa el resto de la app (prep_fisica, baggerone, pizarrón).
+   - Guarda SIEMPRE en este dispositivo (offline) Y en la nube si firebase.js está.
+   - Al abrir: muestra lo local al instante y, cuando llega la nube, fusiona y
+     re-dibuja → así ves a TODO el equipo, no solo lo de este celular.
+   - Si firebase.js no estuviera disponible, sigue andando solo con lo local.
    ========================================================================== */
 var WStore = {
   KEY: 'wellness_naf_v1',
-  _all: function(){ try { return JSON.parse(localStorage.getItem(this.KEY) || '[]'); } catch(e){ return []; } },
-  _write: function(a){ try { localStorage.setItem(this.KEY, JSON.stringify(a)); } catch(e){} },
-  save: function(entry){                       // upsert: una por jugador+fecha+sesión
-    var a = this._all();
-    var i = a.findIndex(function(e){ return e.num===entry.num && e.date===entry.date && e.sesion===entry.sesion; });
-    if (i>=0) a[i]=entry; else a.push(entry);
-    this._write(a); return entry;
+  _cache: [],
+  _eid: function(e){ return e.num + '_' + e.date + '_' + e.sesion; },
+  _local: function(){ try { return JSON.parse(localStorage.getItem(this.KEY) || '[]'); } catch(e){ return []; } },
+  _writeLocal: function(a){ try { localStorage.setItem(this.KEY, JSON.stringify(a)); } catch(e){} },
+  _merge: function(a, b){                    // fusiona por id; gana el más nuevo (ts)
+    var m = {}, self = this;
+    a.concat(b).forEach(function(e){ var id = self._eid(e); if(!m[id] || (e.ts||0) >= (m[id].ts||0)) m[id] = e; });
+    return Object.keys(m).map(function(k){ return m[k]; });
   },
-  listAll: function(){ return this._all(); },
-  listByPlayer: function(num){ return this._all().filter(function(e){ return e.num===num; })
+  init: function(cb){
+    this._cache = this._local();
+    if(cb) cb();
+    if(typeof fbGet !== 'undefined'){
+      var self = this;
+      fbGet('wellness', function(data){
+        if(!data) return;
+        var arr = [];
+        Object.keys(data).forEach(function(num){
+          var byKey = data[num]; if(!byKey || typeof byKey !== 'object') return;
+          Object.keys(byKey).forEach(function(k){ if(byKey[k]) arr.push(byKey[k]); });
+        });
+        self._cache = self._merge(self._cache, arr);
+        self._writeLocal(self._cache);
+        if(cb) cb();
+      });
+    }
+  },
+  save: function(entry){                     // upsert local + push a la nube
+    var a = this._cache.slice(), id = this._eid(entry), self = this;
+    var i = a.findIndex(function(e){ return self._eid(e) === id; });
+    if(i>=0) a[i]=entry; else a.push(entry);
+    this._cache = a; this._writeLocal(a);
+    if(typeof fbSet !== 'undefined') fbSet('wellness/' + entry.num + '/' + entry.date + '_' + entry.sesion, entry);
+    return entry;
+  },
+  listAll: function(){ return this._cache; },
+  listByPlayer: function(num){ return this._cache.filter(function(e){ return e.num===num; })
                                    .sort(function(x,y){ return x.date<y.date?1:-1; }); }
 };
 
@@ -326,7 +355,10 @@ function showTab(t){
   document.getElementById('selFecha').onchange=maybeLoadExisting;
   document.getElementById('eqFecha').onchange=renderTeam;
   document.getElementById('eqSes').onchange=renderTeam;
-  renderHist(); maybeLoadExisting();
+  WStore.init(function(){                     // local primero; cuando llega la nube, vuelve a entrar y re-dibuja
+    renderHist(); maybeLoadExisting();
+    if(document.getElementById('view-eq').style.display!=='none') renderTeam();
+  });
 })();
 </script>
 <script src="lang.js" onerror="void 0"></script>
