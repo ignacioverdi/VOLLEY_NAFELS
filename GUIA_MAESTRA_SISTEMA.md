@@ -39,15 +39,14 @@ Los `.bat` son los botones que corrés en tu compu (doble clic) para procesar lo
 
 | `.bat` | Qué corre por dentro | Qué genera | Cuándo usarlo |
 |---|---|---|---|
-| **`ACTUALIZAR_TODO.bat`** ⭐ | stats + scouting + videos | **TODO** (datos de partidos, scouting de rival y videos) | **El botón maestro. Usá este casi siempre.** |
+| **`ACTUALIZAR_FACIL.bat`** ⭐ | stats + scouting + **cortes de video** | **TODO** (datos de partidos, scouting de rival y cortes de video) | **El botón maestro. Usá este casi siempre.** |
 | `ACTUALIZAR_NAFELS.bat` | solo stats de Näfels | datos de partidos | Si solo agregaste partidos y no querés tocar videos/scouting |
 | `cargar_videos.bat` | solo videos | `videos.js`, `proximo_rival.js` | Si solo cargaste videos nuevos |
-| `correr_entrenamientos_nafels.bat` | stats de entrenamientos | datos de entrenamientos | Para procesar entrenamientos (no partidos) |
+| `correr_entrenamientos_nafels.bat` | stats + **cortes de video** de entrenamientos | datos y cortes de entrenamientos | Para procesar entrenamientos (no partidos) |
 | `convertir_entrenamiento_vivo.bat` | conversor | un `.dvw` desde un scout en vivo | Para pasar un entrenamiento scouteado en vivo a formato `.dvw` |
 | `ARCHIVAR_TEMPORADA.bat` | archivador | `temporadas.js` | Al cerrar una temporada, para guardarla en el histórico |
 
-> **Recomendación:** para el día a día, **`ACTUALIZAR_TODO.bat`** hace todo de una. Los otros son para casos puntuales.
-> ⚠️ `ACTUALIZAR_NAFELS.bat` tiene una línea que apunta a un script con nombre viejo (`gen_videos.py`); por eso conviene usar `ACTUALIZAR_TODO.bat`, que está sano.
+> **Recomendación:** para el día a día, **`ACTUALIZAR_FACIL.bat`** hace todo de una (stats + scouting + cortes de video de partidos). Es el botón maestro y el que siempre conviene usar. Después corrés `PUBLICAR_EN_GITHUB.bat` para subir todo.
 
 **El flujo completo de una actualización, siempre es el mismo:**
 1. Ponés los archivos nuevos (`.dvw`) en su carpeta.
@@ -80,16 +79,22 @@ Hay **dos caminos**:
 ### 3.2 — Cargar el SCOUTING de un rival
 El scouting de un rival sale de **sus** archivos `.dvw` (partidos de ese rival). Los ponés en la carpeta y corrés **`ACTUALIZAR_TODO.bat`** (incluye el armado del scouting). Subís `scouting_rival.js` a GitHub.
 
-### 3.3 — Cargar VIDEOS de partidos
-Desde **`importar_video.html`**:
+### 3.3 — Cargar VIDEOS de partidos (cortes automáticos)
+El sistema **corta los videos solo**, usando el segundo de cada acción que ya viene dentro del `.dvw`. Vos solo cargás **un link de YouTube por partido**.
 1. Subís el partido a YouTube como **"No listado"**.
-2. Pegás el link en la fila del partido — aparece la **miniatura** para confirmar que es el correcto. (Hay pegado masivo: todos los links de una, en orden de fecha.)
-3. Apretás **"Generar"** y subís el archivo de videos al repo.
+2. Abrís **Cargar Videos** (botón del Hub → `importar_video.html`) → solapa **🏐 Partidos**.
+3. Pegás el link en la fila del partido — aparece la **miniatura** para confirmar. (Hay pegado masivo: todos los links de una, en orden de fecha.)
+4. Apretás **"Generar archivo de links"** → se descarga **`mapa_videos.js`** → lo subís al repo y `PUBLICAR`.
 
-*(También se puede generar desde un Excel con `cargar_videos.bat`, pero la web es más cómoda.)*
+Los cortes los arma el `.bat`: `ACTUALIZAR_FACIL.bat` corre por dentro `build_video.py`, que saca el segundo de cada acción del `.dvw` y arma `datos_video.js`. El jugador entra a **Cortes de Video** (Hub), se elige a sí mismo, y cada acción abre el video justo en su segundo.
+> Paso a paso completo en **`VIDEOS_COMO_USAR.md`**.
 
-### 3.4 — Cargar ENTRENAMIENTOS
-Igual que partidos pero con su propio botón: ponés los `.dvw` de entrenamiento y corrés **`correr_entrenamientos_nafels.bat`**.
+### 3.4 — Cargar ENTRENAMIENTOS (stats y video, idéntico a partidos)
+Misma lógica que partidos, con su propia carpeta y botón:
+- **Stats:** ponés los `.dvw` del entreno en `DVW ENTRENAMIENTOS NAFELS <año>` y corrés **`correr_entrenamientos_nafels.bat`**.
+- **Video (cortes):** mismo botón. **Para que tenga cortes, el entreno tiene que estar scouteado en DataVolley con el video cargado** (así cada acción tiene su segundo, igual que un partido). Si lo scouteás "en vivo" con el panel, tenés las stats pero **no** los cortes.
+- Después, en **Cargar Videos → solapa 🏋️ Entrenamientos**, pegás el link del video del entreno → **Generar archivo** → se descarga **`mapa_videos_ent.js`** → lo subís.
+- El jugador ve los cortes en **Cortes de Video → solapa 🏋️ Entrenamientos**, igual que partidos.
 
 ### 3.5 — Cargar WELLNESS, RUTINAS, PESOS, PIZARRÓN → **NO se cargan con `.bat`**
 Esto es lo lindo: se cargan **desde el navegador** y van directo a la nube. **No ejecutás nada, no subís nada, aparece al instante.**

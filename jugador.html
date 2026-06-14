@@ -567,10 +567,7 @@ function renderAccesos(j){
   items.splice(items.length-1,0,{icon:'⚡',title:'Saque',desc:'Mis saques por zona',url:'saque_jugador.html?num='+j.num,color:'#f97316'});
   var ATK_POS=['PUNTA','OPUESTO','CENTRAL'];
   if(ATK_POS.indexOf((j.pos||'').toUpperCase())>=0) items.splice(items.length-1,0,{icon:'💥',title:'Ataque',desc:'Mis ataques por zona',url:'ataque_jugador.html?num='+j.num,color:'#818cf8'});
-  if(typeof PARTIDOS_VIDEOS!=='undefined'){
-    var myVideos=PARTIDOS_VIDEOS.filter(function(v){ return v.jugador && v.jugador.toUpperCase()===(j.nombre||'').replace(/^\d+\s*/,'').split(' ')[0].toUpperCase(); });
-    if(myVideos.length>0) items.splice(1,0,{icon:'🎬',title:'Mis Videos',desc:myVideos.length+' acciones grabadas',url:'videos.html?num='+j.num,color:'#EF4444'});
-  }
+  items.splice(1,0,{icon:'🎬',title:'Mis Cortes',desc:'Mis acciones en video',url:'cortes.html?num='+j.num,color:'#EF4444'});
   grid.innerHTML=items.map(function(a){
     return '<a class="acceso-card'+(a.full?' full':'')+'" href="'+a.url+'" style="border-color:'+a.color+'18">'+
       '<div class="acceso-left" style="background:'+a.color+'12;border-color:'+a.color+'25;color:'+a.color+'">'+a.icon+'</div>'+

@@ -24,11 +24,15 @@ echo.
 echo  [3/3] Videos (si hay Excel)...
 if exist "videos_nafels.xlsx" python build_videos.py videos_nafels.xlsx
 echo.
+echo  Cortes de video (saca el segundo de cada accion del DVW)...
+python build_video.py "%DVW_DIR%" datos_video.js VIDEO_DATA
+echo.
 echo  ==================================================
 echo     Verificacion:
 if exist "datos_partidos.js" (echo     OK datos_partidos.js) else (echo     FALTA datos_partidos.js)
 if exist "liga_data.js" (echo     OK liga_data.js) else (echo     FALTA liga_data.js)
 if exist "scouting_rival.js" (echo     OK scouting_rival.js) else (echo     FALTA scouting_rival.js)
+if exist "datos_video.js" (echo     OK datos_video.js) else (echo     FALTA datos_video.js)
 echo  ==================================================
 echo.
 echo     LISTO. Si ves los "OK" de arriba, salio todo bien.

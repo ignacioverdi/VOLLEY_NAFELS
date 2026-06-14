@@ -38,12 +38,21 @@
   .icell input:focus{outline:none;border-color:var(--naf)}
   .icell .vlink{font-size:11px;color:var(--naf);text-decoration:none;display:inline-block;margin-top:3px}
   .dot{font-size:15px;justify-self:center}
+  .vtabs{display:flex;gap:8px;margin:0 0 14px}
+  .vtab{flex:1;background:var(--card);border:1px solid var(--border);color:var(--muted);font-family:inherit;font-weight:800;font-size:14px;letter-spacing:.5px;padding:10px 12px;border-radius:9px;cursor:pointer}
+  .vtab.on{background:var(--naf);color:#1a1206;border-color:var(--naf)}
   @media(max-width:680px){.row{grid-template-columns:1fr 70px;gap:8px}.thumb{order:-1}}
 </style>
 </head>
 <body>
   <h1>🎬 Cargar videos de los partidos</h1>
   <div class="sub">Pegá el link de YouTube de cada partido. La miniatura te confirma que es el correcto. El resto es automático.</div>
+
+  <div class="vtabs">
+    <button class="vtab" id="vtab-p" onclick="vbSetModo('partido')">🏐 Partidos</button>
+    <button class="vtab" id="vtab-e" onclick="vbSetModo('ent')">🏋️ Entrenamientos</button>
+  </div>
+  <script>function vbSetModo(m){try{localStorage.setItem('cargar_video_modo',m);}catch(e){}location.reload();}(function(){var m=(localStorage.getItem('cargar_video_modo')==='ent')?'e':'p';var b=document.getElementById('vtab-'+m);if(b)b.classList.add('on');})();</script>
 
   <div class="hint">
     <b>Cómo se usa:</b> 1) Subí el partido a YouTube (en <b>"No listado"</b>). 2) Pegá el link en la fila del partido — aparece la <b>miniatura</b> para que confirmes que es ese. 3) Apretá <b>"Generar mapa_videos.js"</b> y subí ese archivo al repo. Listo. <b>Se guarda solo</b> mientras cargás, no perdés nada si cerrás.
@@ -61,7 +70,7 @@
   <div class="bar">
     <div class="count"><b id="nok">0</b> de <span id="ntot">0</span></div>
     <div class="prog"><i id="progbar"></i></div>
-    <button class="btn" onclick="generar()">⬇ Generar mapa_videos.js</button>
+    <button class="btn" onclick="generar()">⬇ Generar archivo de links</button>
     <button class="btn sec" onclick="copiar()">Copiar</button>
     <span id="msg"></span>
   </div>
@@ -70,11 +79,16 @@
 
   <script src="datos_video.js"></script>
   <script src="mapa_videos.js"></script>
+  <script src="datos_video_ent.js" onerror="void 0"></script>
+  <script src="mapa_videos_ent.js" onerror="void 0"></script>
   <script>
   (function(){
-    var VD = (window.VIDEO_DATA && window.VIDEO_DATA.matches) || {};
-    var MAP = window.MAPA_VIDEOS || {};
-    var LSK = 'nafels_video_map_draft';
+    var MODO = (localStorage.getItem('cargar_video_modo')==='ent') ? 'ent' : 'partido';
+    var VD = MODO==='ent' ? ((window.VIDEO_DATA_ENT && window.VIDEO_DATA_ENT.matches)||{}) : ((window.VIDEO_DATA && window.VIDEO_DATA.matches) || {});
+    var MAP = MODO==='ent' ? (window.MAPA_VIDEOS_ENT||{}) : (window.MAPA_VIDEOS || {});
+    var OUTFILE = MODO==='ent' ? 'mapa_videos_ent.js' : 'mapa_videos.js';
+    var OUTGLOB = MODO==='ent' ? 'MAPA_VIDEOS_ENT' : 'MAPA_VIDEOS';
+    var LSK = 'nafels_video_map_draft_'+MODO;
     var draft = {};
     try{ draft = JSON.parse(localStorage.getItem(LSK)||'{}'); }catch(e){}
     var codes = Object.keys(VD).sort(function(a,b){ return (VD[a].date||'') < (VD[b].date||'') ? -1 : 1; });
@@ -157,11 +171,11 @@
     function build(){
       var obj={}; list.querySelectorAll('input').forEach(function(i){ obj[i.dataset.code]=cleanUrl(i.value.trim()); });
       var lines = Object.keys(obj).map(function(k){ return '  "'+k+'": "'+obj[k]+'"'; });
-      return "/* Links de YouTube por partido (c\u00f3digo del dvw -> link). Generado en Cargar Videos. */\nwindow.MAPA_VIDEOS = {\n"+lines.join(',\n')+"\n};\n";
+      return "/* Links de YouTube (codigo del dvw -> link). Generado en Cargar Videos. */\nwindow."+OUTGLOB+" = {\n"+lines.join(',\n')+"\n};\n";
     }
     window.generar=function(){
       var blob=new Blob([build()],{type:'text/javascript'});
-      var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='mapa_videos.js'; a.click();
+      var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=OUTFILE; a.click();
       document.getElementById('msg').textContent='\u2713 Descargado \u2014 subilo al repo';
       setTimeout(function(){document.getElementById('msg').textContent='';},4000);
     };

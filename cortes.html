@@ -6,6 +6,8 @@
 <title>Cortes de Video · NAFELS VOLEY</title>
 <script src="mapa_videos.js" onerror="void 0"></script>
 <script src="datos_video.js" onerror="void 0"></script>
+<script src="datos_video_ent.js" onerror="void 0"></script>
+<script src="mapa_videos_ent.js" onerror="void 0"></script>
 <style>
   :root{--bg:#0b1017;--bg2:#0f172a;--card:#111a27;--card2:#16212f;--line:#1f2c3d;--txt:#e2e8f0;--muted:#7689a1;--muted2:#475569;--naf:#22c55e;--naf-dim:rgba(34,197,94,.12);--atk:#F97316;--srv:#22C55E;--rec:#818CF8;--set:#F59E0B;--blk:#ef4444;--def:#06b6d4;--free:#94a3b8;--ev-pos:#22c55e;--ev-plus:#84cc16;--ev-excl:#eab308;--ev-neg:#f97316;--ev-slash:#f59e0b;--ev-err:#ef4444;}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -13,6 +15,9 @@
   .wrap{max-width:1200px;margin:0 auto}
   .brand{font-weight:800;letter-spacing:1px;font-size:13px;color:var(--naf)}.brand span{color:var(--muted)}
   h1{font-size:22px;font-weight:800;margin-top:2px}.sub{color:var(--muted);font-size:12px;margin:2px 0 16px}
+  .vtabs{display:flex;gap:8px;margin:10px 0 14px}
+  .vtab{flex:1;background:var(--card);border:1px solid var(--line);color:var(--muted);font-family:inherit;font-weight:800;font-size:13px;letter-spacing:.5px;padding:9px 12px;border-radius:9px;cursor:pointer}
+  .vtab.on{background:var(--naf);color:#06210f;border-color:var(--naf)}
   .grid{display:grid;grid-template-columns:310px 1fr;gap:16px}@media(max-width:880px){.grid{grid-template-columns:1fr}}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
   .filters{padding:14px}
@@ -94,6 +99,11 @@
 <div class="wrap">
   <div class="brand">NAFELS <span>VOLEY</span></div>
   <h1>Cortes de Video</h1>
+  <div class="vtabs">
+    <button class="vtab" id="vtab-p" onclick="vbSetModo('partido')">🏐 Partidos</button>
+    <button class="vtab" id="vtab-e" onclick="vbSetModo('ent')">🏋️ Entrenamientos</button>
+  </div>
+  <script>function vbSetModo(m){try{localStorage.setItem('cortes_modo',m);}catch(e){}location.reload();}(function(){var m=(localStorage.getItem('cortes_modo')==='ent')?'e':'p';var b=document.getElementById('vtab-'+m);if(b)b.classList.add('on');})();</script>
   <div class="sub" id="sub">—</div>
   <div class="grid">
     <div class="card filters">
@@ -152,7 +162,8 @@
 <script>
 (function(){
   "use strict";
-  var VD=window.VIDEO_DATA||{combos:{},matches:{}}, MAP=window.MAPA_VIDEOS||{}, COMBOS=VD.combos||{};
+  var MODO=(localStorage.getItem('cortes_modo')==='ent')?'ent':'partido';
+  var VD=(MODO==='ent'?window.VIDEO_DATA_ENT:window.VIDEO_DATA)||{combos:{},matches:{}}, MAP=(MODO==='ent'?window.MAPA_VIDEOS_ENT:window.MAPA_VIDEOS)||{}, COMBOS=VD.combos||{};
   var SKILL_COLOR={Saque:'--srv',Recepción:'--rec',Ataque:'--atk',Armado:'--set',Bloqueo:'--blk',Defensa:'--def',Freeball:'--free'};
   var SKILL_ORDER=['Ataque','Saque','Recepción','Armado','Bloqueo','Defensa','Freeball'];
   var TYPE_NAME={Q:'Potencia (salto)',M:'Flotado',T:'Flotado bajo',O:'Otro',H:'Híbrido',N:'Slide',U:'Súper rápido'};
