@@ -140,10 +140,11 @@ select,select option{color:#111!important;background-color:#fff!important}
     <a href="index.html" class="back-btn">← Inicio</a>
     <div>
       <div class="page-title">💪 <span data-t="prep_fisica">Preparación Física</span></div>
-      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;">NAFELS VOLEY · NLA Suiza 2025/26</div>
+      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;">AXPO VOLLEY NÄFELS · NLA Suiza 2025/26</div>
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:12px;">
+    <a href="prep_builder.html" class="back-btn" style="border-color:rgba(239,39,64,.4);color:#ff5870">✏️ Armar rutinas</a>
     <div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div>
     <div style="font-size:9px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase;" id="fecha-hoy"></div>
   </div>
@@ -180,6 +181,7 @@ select,select option{color:#111!important;background-color:#fff!important}
         <div class="jug-stat"><div class="jug-stat-val" id="stat-registros">0</div><div class="jug-stat-lbl">Registros</div></div>
       </div>
     </div>
+    <div id="mes-selector" style="display:none;gap:8px;margin-bottom:14px;align-items:center"></div>
     <div class="semanas-tabs" id="semanas-tabs"></div>
     <div id="rutina-content"></div>
     <div class="calc-section">
@@ -456,7 +458,48 @@ function selectJugador(j, btn){
   document.getElementById('stat-ejercicios').textContent = totalEj;
   document.getElementById('stat-registros').textContent = countRegistros(j.num);
   renderReadiness(j.num);
+  loadRutinas(j);
+}
+
+// ── Rutinas desde la nube (las que arma el PF en prep_builder), por mes ──
+var RUTINAS_MES = {};
+var MESES_PREP = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+function mesLabelFromKey(k){ var p=String(k).split('-'); return (MESES_PREP[(+p[1])-1]||'')+' '+(p[0]||''); }
+function aplicarMes(j, mesKey){
+  var r = RUTINAS_MES[mesKey];
+  j.semanas = (r && r.semanas) ? r.semanas : [];
+  var totalEj = 0;
+  j.semanas.forEach(function(s){ (s.bloques||[]).forEach(function(b){ totalEj += (b.ejercicios||[]).length; }); });
+  document.getElementById('stat-sesiones').textContent = j.semanas.length;
+  document.getElementById('stat-ejercicios').textContent = totalEj;
   renderSemanas(j);
+}
+function pintarMesSelector(j, keys, sel){
+  var box = document.getElementById('mes-selector');
+  if(!keys.length){ box.style.display='none'; box.innerHTML=''; return; }
+  box.style.display='flex';
+  box.innerHTML = '<span style="font-size:10px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase">Mes</span>'
+    + '<select id="mesSel" style="background:var(--card2);color:var(--txt);border:1px solid var(--border);border-radius:9px;padding:7px 12px;font-family:\'Barlow Condensed\';font-weight:700;font-size:14px">'
+    + keys.map(function(k){ return '<option value="'+k+'"'+(k===sel?' selected':'')+'>'+mesLabelFromKey(k)+'</option>'; }).join('')
+    + '</select>';
+  document.getElementById('mesSel').onchange = function(){ aplicarMes(j, this.value); };
+}
+function loadRutinas(j){
+  var fin = function(data){
+    RUTINAS_MES = (data && typeof data === 'object') ? data : {};
+    var keys = Object.keys(RUTINAS_MES).filter(function(k){ return RUTINAS_MES[k] && RUTINAS_MES[k].semanas && RUTINAS_MES[k].semanas.length; }).sort().reverse();
+    if(keys.length){ pintarMesSelector(j, keys, keys[0]); aplicarMes(j, keys[0]); }
+    else { pintarMesSelector(j, [], null); renderSemanas(j); }   // fallback: lo que traiga construirData
+  };
+  if(typeof fbGet !== 'undefined'){ fbGet('prep_rutinas/'+j.num, fin); }
+  else {
+    var data = {};
+    try { var pre='prep_rutina_'+j.num+'_';
+      for(var i=0;i<localStorage.length;i++){ var key=localStorage.key(i);
+        if(key && key.indexOf(pre)===0){ data[key.slice(pre.length)] = JSON.parse(localStorage.getItem(key)); } }
+    } catch(e){}
+    fin(data);
+  }
 }
 
 // ── Render semanas ────────────────────────────────────────────────
