@@ -182,6 +182,33 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    // ===== Calendario =====
+    "Calendario":{en:"Calendar",de:"Kalender"},
+    "Editable":{en:"Editable",de:"Bearbeitbar"},
+    "Partidos y entrenamientos del equipo. Fecha, hora, lugar y tipo — editable en la misma página.":{en:"Team matches and trainings. Date, time, place and type — editable on the same page.",de:"Spiele und Trainings des Teams. Datum, Uhrzeit, Ort und Typ — auf derselben Seite bearbeitbar."},
+    "Agregar":{en:"Add",de:"Hinzufügen"},
+    "+ Agregar":{en:"+ Add",de:"+ Hinzufügen"},
+    "Editar":{en:"Edit",de:"Bearbeiten"},
+    "Eliminar":{en:"Delete",de:"Löschen"},
+    "Cancelar":{en:"Cancel",de:"Abbrechen"},
+    "Condición":{en:"Home/Away",de:"Heim/Auswärts"},
+    "Local":{en:"Home",de:"Heim"},
+    "Visita":{en:"Away",de:"Auswärts"},
+    "Tipo de entrenamiento":{en:"Training type",de:"Trainingsart"},
+    "Nuevo partido":{en:"New match",de:"Neues Spiel"},
+    "Nuevo entrenamiento":{en:"New training",de:"Neues Training"},
+    "Editar partido":{en:"Edit match",de:"Spiel bearbeiten"},
+    "Editar entrenamiento":{en:"Edit training",de:"Training bearbeiten"},
+    "No hay partidos cargados":{en:"No matches added",de:"Keine Spiele eingetragen"},
+    "No hay entrenamientos cargados":{en:"No trainings added",de:"Keine Trainings eingetragen"},
+    "Técnica":{en:"Technical",de:"Technik"},
+    "Táctica":{en:"Tactical",de:"Taktik"},
+    "Físico":{en:"Physical",de:"Athletik"},
+    "Gimnasio":{en:"Gym",de:"Kraftraum"},
+    "Amistoso":{en:"Friendly",de:"Freundschaftsspiel"},
+    "Recuperación":{en:"Recovery",de:"Regeneration"},
+    "Libre":{en:"Free",de:"Frei"},
+    "Otro":{en:"Other",de:"Andere"},
     // ===== Wellness restante =====
     "(no se cargó el plantel)":{en:"(roster not loaded)",de:"(Kader nicht geladen)"},
     "Elegí un jugador.":{en:"Pick a player.",de:"Wähle einen Spieler."},
