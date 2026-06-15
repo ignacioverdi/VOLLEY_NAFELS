@@ -6,7 +6,7 @@ window.EQUIPO_DATA = {
       "nombre": "DEECKE",
       "pos": "ARMADOR",
       "foto": null,
-      "pais": "🇩🇪",
+      "pais": "🇨🇭",
       "altura": "",
       "edad": 0
     },
@@ -69,7 +69,7 @@ window.EQUIPO_DATA = {
       "nombre": "PETER",
       "pos": "LIBERO",
       "foto": null,
-      "pais": "🇩🇪",
+      "pais": "🇨🇭",
       "altura": "",
       "edad": 0
     },
@@ -78,7 +78,7 @@ window.EQUIPO_DATA = {
       "nombre": "BROCH",
       "pos": "PUNTA",
       "foto": null,
-      "pais": "🇫🇷",
+      "pais": "🇨🇭",
       "altura": "",
       "edad": 0
     },
