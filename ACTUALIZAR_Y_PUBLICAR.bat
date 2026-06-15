@@ -28,8 +28,10 @@ echo  [4/4] Publicando en GitHub...
 git --version >nul 2>&1
 if errorlevel 1 goto NOGIT
 if not exist ".git" goto NOREPO
+set GIT_MERGE_AUTOEDIT=no
 git add -A
 git commit -m "Actualizacion %DATE%"
+git pull --no-rebase --no-edit -X ours
 git push
 goto FIN
 :NOGIT

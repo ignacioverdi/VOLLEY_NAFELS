@@ -1,6 +1,7 @@
 @echo off
 chcp 65001 >nul
 cd /d "%~dp0"
+set GIT_MERGE_AUTOEDIT=no
 echo.
 echo  ==================================================
 echo     PUBLICAR EN GITHUB
@@ -15,6 +16,7 @@ echo  (La PRIMERA vez puede abrirse el navegador para iniciar sesion en GitHub.)
 echo.
 git add -A
 git commit -m "Actualizacion %DATE%"
+git pull --no-rebase --no-edit -X ours
 git push
 echo.
 echo  ==================================================
