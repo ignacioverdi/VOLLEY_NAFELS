@@ -1292,7 +1292,7 @@ function initPin(){
   var oAT = document.createElement('option');
   oAT.value = 'at'; oAT.textContent = '📋 Asistente Técnico (AT)';
   sel.appendChild(oAT);
-  jugs.forEach(function(j){
+  jugs.slice().sort(function(a,b){ return (a.num||0)-(b.num||0); }).forEach(function(j){
     var o = document.createElement('option');
     o.value = j.num;
     o.textContent = '#'+j.num+' '+j.nombre;
