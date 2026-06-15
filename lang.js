@@ -777,3 +777,21 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
+
+/* ===== Escudo del club en todas las páginas (abajo-izquierda, va a Inicio) ===== */
+(function(){
+  function addEscudo(){
+    try{
+      if(document.getElementById('club-escudo')) return;
+      var a=document.createElement('a');
+      a.id='club-escudo'; a.href='index.html'; a.title='Inicio · Volley Näfels';
+      a.style.cssText='position:fixed;left:12px;bottom:12px;z-index:99990;width:46px;height:46px;border-radius:50%;overflow:hidden;background:#000;border:1px solid rgba(255,255,255,.18);box-shadow:0 2px 12px rgba(0,0,0,.55);display:block;';
+      var img=document.createElement('img');
+      img.src='escudo.png'; img.alt='Volley Näfels';
+      img.style.cssText='width:100%;height:100%;object-fit:cover;display:block;';
+      a.appendChild(img); document.body.appendChild(a);
+    }catch(e){}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',addEscudo);
+  else addEscudo();
+})();
