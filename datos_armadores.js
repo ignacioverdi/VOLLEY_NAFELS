@@ -865,3 +865,5 @@ window.NAFELS_ARMADOR = {
   }
 };
 var NAFELS_ARMADOR = window.NAFELS_ARMADOR;
+
+/* © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados */

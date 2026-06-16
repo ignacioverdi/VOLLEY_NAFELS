@@ -293,3 +293,5 @@ def to_canchitas(P):
     return {'saques':saques,'ataques':ataques,'recepcion':rec_struct if tiene_rec else {}}
 
 print("✓ Motor de baterías grabado en baterias_engine.py")
+
+# © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados

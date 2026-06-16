@@ -41,3 +41,5 @@ window.PLANTEL_NAFELS = {
 window.PLANTEL_NAFELS.lista = window.PLANTEL_NAFELS.jugadores.map(function (j) {
   return { num: j.num, nombre: j.ap, pos: j.pos };
 });
+
+/* © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados */

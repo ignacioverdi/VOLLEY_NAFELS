@@ -632,3 +632,5 @@ if __name__ == '__main__':
         print('  [ATENCION] No hay .dvw en "%s"' % DVW_DIR); sys.exit(1)
     print('Generando scouting desde %s ...' % DVW_DIR)
     main()
+
+# © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados

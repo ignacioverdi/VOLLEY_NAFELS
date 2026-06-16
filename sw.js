@@ -9,3 +9,5 @@ self.addEventListener('fetch', function(e){
     e.respondWith(fetch(e.request).catch(function(){ return caches.match(e.request); }));
   }
 });
+
+/* © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados */

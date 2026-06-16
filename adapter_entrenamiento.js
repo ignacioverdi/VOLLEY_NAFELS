@@ -29,3 +29,5 @@
     if (window.RECEPCION_RIVAL_DATA_ENT) window.RECEPCION_RIVAL_DATA = window.RECEPCION_RIVAL_DATA_ENT;
   } catch (e) {}
 })();
+
+/* © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados */

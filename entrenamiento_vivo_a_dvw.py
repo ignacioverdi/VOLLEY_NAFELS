@@ -238,3 +238,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados

@@ -42,3 +42,5 @@ if not inserted:
 
 io.open(F, 'w', encoding='utf-8').write(''.join(out))
 print(f"   Temporada {sid} registrada en el menú (temporadas.js).")
+
+# © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados

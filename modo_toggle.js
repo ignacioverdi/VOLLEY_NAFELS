@@ -40,3 +40,5 @@
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', build);
   else build();
 })();
+
+/* © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados */

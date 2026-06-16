@@ -10,3 +10,5 @@ window.TEMPORADAS = [
   // { id:"20XX-XX", label:"20XX/XX" },
   // <<TEMPORADAS>>  (no borres esta línea: acá se agregan las temporadas archivadas)
 ];
+
+/* © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados */

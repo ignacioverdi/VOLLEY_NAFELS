@@ -1695,3 +1695,5 @@ if __name__ == '__main__':
     print(f"\u2713 LISTO — {len(games_log)} sesiones de entrenamiento en la base")
     print(f"  Subir a GitHub: liga_data_entrenamientos.js, datos_entrenamientos.js, datos_historial_ent.js, datos_recepcion_ent.js")
     print(f"{'='*60}\n")
+
+# © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados

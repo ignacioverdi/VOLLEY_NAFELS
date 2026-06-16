@@ -378,3 +378,5 @@ if __name__ == "__main__":
         template_path=args.template,
         n_games_label=args.label,
     )
+
+# © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados

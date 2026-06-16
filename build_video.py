@@ -100,3 +100,5 @@ if __name__=='__main__':
         f.write('window.'+glob_name+' = '+json.dumps(data,ensure_ascii=False)+';\n')
     tot=sum(len(m['actions']) for m in existentes.values())
     print('  '+out+': '+str(len(existentes))+' total ('+str(agregados)+' nuevos), '+str(tot)+' acciones con su segundo')
+
+# © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados

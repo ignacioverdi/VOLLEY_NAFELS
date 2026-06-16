@@ -27,3 +27,5 @@ window.MAPA_VIDEOS = {
   "751236": "",
   "751238": "https://youtu.be/1hi9AA9sHKs"
 };
+
+/* © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados */

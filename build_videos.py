@@ -89,3 +89,5 @@ if __name__ == '__main__':
         print("Uso: python3 build_videos.py videos_casla.xlsx")
         sys.exit(1)
     build(sys.argv[1])
+
+# © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados
