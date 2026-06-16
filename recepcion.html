@@ -307,6 +307,7 @@ function w(s){document.write('<scr'+'ipt src="'+s+'" onerror="void 0"><\/scr'+'i
 if(ent){ w('datos_entrenamientos.js'); w('datos_recepcion_ent.js'); w('adapter_entrenamiento.js'); }
 else   { w('datos_partidos.js'); w('datos_recepcion.js'); }
 })();</script>
+<script src="datos_equipo.js" onerror="void 0"></script>
 <script src="modo_toggle.js" onerror="void 0"></script>
 <!-- datos_recepcion.js: lo carga el selector de modo (arriba) -->
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
@@ -418,12 +419,23 @@ window._recPartido = 'acumulado';
 
 
 
+function defaultReceptores(){
+  try{
+    if(window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores){
+      var r = window.EQUIPO_DATA.jugadores
+        .filter(function(j){ return j.pos==='PUNTA' || j.pos==='LIBERO'; })
+        .map(function(j){ return j.nombre; });
+      if(r.length) return r;
+    }
+  }catch(e){}
+  return ["DURDOS", "BARTHOLET", "ROFFLER", "BOGDANOVSKI", "SCHMID J"];
+}
 function initReceptores(){
   cargarRecepcionNafels();
   RECEPTORES = Object.keys(window.RECEPCION_DATA);
   if(typeof buildRivalSelector==='function') buildRivalSelector();
   if(RECEPTORES.length === 0){
-    RECEPTORES = ["FIGUEIREDO", "BROCH", "PETER", "BARTHOLET", "BOGDANOVSKI"];
+    RECEPTORES = defaultReceptores();
   }
   CUR = 'EQUIPO';
   var jbtns=document.getElementById('jbtns');
@@ -809,7 +821,7 @@ function recLoadEnt(nombre){
 }
 
 function recBuildJbtns(receptores){
-  if(!receptores || !receptores.length) receptores = ["FIGUEIREDO", "BROCH", "PETER", "BARTHOLET", "BOGDANOVSKI"];
+  if(!receptores || !receptores.length) receptores = defaultReceptores();
   CUR = 'EQUIPO';
   var jbtns = document.getElementById('jbtns');
   if(!jbtns) return;
