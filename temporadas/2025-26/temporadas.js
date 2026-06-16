@@ -8,7 +8,6 @@
 window.TEMPORADAS = [
   // Ejemplo de cómo queda cada temporada archivada:
   // { id:"20XX-XX", label:"20XX/XX" },
-  { id:"2025-26", label:"2025/26" },
   // <<TEMPORADAS>>  (no borres esta línea: acá se agregan las temporadas archivadas)
 ];
 

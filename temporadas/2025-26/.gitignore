@@ -1,0 +1,6 @@
+# Archivos temporales que NO se suben
+__pycache__/
+*.pyc
+diagnostico.txt
+_gen_nafels.b64
+*.log
