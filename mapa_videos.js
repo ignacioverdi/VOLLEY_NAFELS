@@ -1,31 +1,4 @@
-/* Links de YouTube por partido (código del dvw -> link). Editable desde importar_video.html */
-window.MAPA_VIDEOS = {
-  "636595": "",
-  "636600": "",
-  "636601": "",
-  "707439": "",
-  "636605": "",
-  "636609": "",
-  "636614": "",
-  "636619": "",
-  "636624": "",
-  "636625": "",
-  "636631": "",
-  "636633": "",
-  "717553": "",
-  "636639": "",
-  "636643": "",
-  "734573": "",
-  "734630": "",
-  "734631": "",
-  "734633": "",
-  "743523": "",
-  "743524": "",
-  "743525": "",
-  "753801": "",
-  "751235": "",
-  "751236": "",
-  "751238": "https://youtu.be/1hi9AA9sHKs"
-};
+/* Links de YouTube por partido (codigo del dvw -> link). Editable desde importar_video.html */
+window.MAPA_VIDEOS = {};
 
 /* © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados */
