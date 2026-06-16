@@ -48,7 +48,7 @@ window.EQUIPO_DATA = {
     },
     {
       "num": 6,
-      "nombre": "DENIS CABANAS",
+      "nombre": "CABAÑAS",
       "pos": "OPUESTO",
       "foto": "fotos/06.jpg",
       "pais": "🇦🇷",
