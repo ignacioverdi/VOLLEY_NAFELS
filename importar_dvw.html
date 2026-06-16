@@ -152,10 +152,9 @@ select,select option{color:#111!important;background:#fff!important;}
 <script>
 // ── Plantel NAFELS ─────────────────────────────────────────────
 var NOMBRES = {
-  '01':'DEECKE','02':'CORZO','03':'SCHWITTER','04':'VAZQUEZ',
-  '05':'HESSELHOLT','06':'DENIS CABANAS','07':'SCHMID','08':'PETER',
-  '09':'BROCH','10':'BOGDANOVSKI','11':'BARTHOLET',
-  '14':'FIGUEIREDO','15':'NIKOLOV'
+  '01':'DURDOS','03':'SCHWITTER','04':'VAZQUEZ','05':'CLEMENT',
+  '07':'SCHMID R','09':'NORRIS','10':'BOGDANOVSKI','11':'BARTHOLET',
+  '12':'JOHANSSON','13':'STEIMANN','17':'ROFFLER','20':'SCHMID J'
 };
 
 var VAL_MAP = {
@@ -247,9 +246,9 @@ function procesarDVW(){
   setTimeout(function(){
     try {
       // Detectar NAFELS por nombres
-      var APEBIO = new Set(['DEECKE','CORZO','SCHWITTER','VAZQUEZ',
-        'HESSELHOLT','DENIS CABANAS','SCHMID','PETER','BROCH',
-        'BOGDANOVSKI','BARTHOLET','FIGUEIREDO','NIKOLOV']);
+      var APEBIO = new Set(['DURDOS','SCHWITTER','VAZQUEZ','CLEMENT',
+        'SCHMID','SCHMID R','SCHMID J','NORRIS','BOGDANOVSKI','BARTHOLET',
+        'JOHANSSON','STEIMANN','ROFFLER']);
       function cntCasla(sec){
         return getSeccion(lines,sec).filter(function(l){
           var p=l.split(';'); if(p.length<10) return false;
