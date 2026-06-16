@@ -33,6 +33,15 @@
   .btn-ghost:hover{color:var(--txt)}
   .btn-teal{background:linear-gradient(135deg,var(--teal),#14b8a6);color:#06231d}
   .btn-sm{font-size:12px;letter-spacing:1px;padding:6px 11px;border-radius:8px}
+  .cp-ov{position:fixed;inset:0;z-index:99995;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px}
+  .cp-ov.on{display:flex}
+  .cp-box{background:#0e1018;border:1px solid var(--border);border-radius:16px;max-width:480px;width:100%;max-height:86vh;overflow:auto;padding:22px;box-shadow:0 18px 60px rgba(0,0,0,.6)}
+  .cp-box h3{font-family:'Bebas Neue';letter-spacing:2px;font-size:23px;margin:0 0 4px}
+  .cp-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+  .cp-item{display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,.03);cursor:pointer;font-size:13px;user-select:none}
+  .cp-item input{width:16px;height:16px;accent-color:var(--teal);cursor:pointer}
+  .cp-item.sel{border-color:var(--teal);background:rgba(45,212,191,.12)}
+  .cp-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
   .ses{border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden;background:var(--card)}
   .ses-hd{display:flex;align-items:center;gap:10px;padding:12px 14px;background:linear-gradient(180deg,var(--elev),var(--card))}
   .ses-hd input{background:rgba(255,255,255,.05);color:var(--txt);border:1px solid var(--border);font-family:'Bebas Neue';font-size:18px;letter-spacing:1px}
@@ -80,8 +89,22 @@
   </div>
 </div>
 
+<div class="cp-ov" id="cpOv">
+  <div class="cp-box">
+    <h3>📋 Copiar rutina a…</h3>
+    <div class="hint" id="cpHint">Se copiará la rutina actual a los jugadores que elijas.</div>
+    <div style="text-align:right;margin-top:12px"><button class="btn btn-ghost btn-sm" id="cpAllBtn" onclick="cpToggleAll()">Seleccionar todos</button></div>
+    <div class="cp-list" id="cpList"></div>
+    <div class="cp-actions">
+      <button class="btn btn-ghost" onclick="cpClose()">Cancelar</button>
+      <button class="btn btn-teal" onclick="cpConfirm()">Copiar</button>
+    </div>
+  </div>
+</div>
+
 <div class="savebar">
   <span class="st" id="savest">—</span>
+  <button class="btn btn-ghost" onclick="cpOpen()">📋 COPIAR A…</button>
   <button class="btn btn-teal" onclick="guardar()">💾 GUARDAR RUTINA</button>
 </div>
 
@@ -230,6 +253,48 @@ function guardar(){
   else { document.getElementById('savest').textContent='Guardado en este dispositivo ✓ (sin conexión a la nube)'; }
   setDirty(false);
 }
+/* ---------- copiar rutina a varios jugadores ---------- */
+function cpOpen(){
+  if(!R || !R.semanas.length){ alert('Primero armá la rutina (al menos un día con ejercicios).'); return; }
+  var curNum=+document.getElementById('selJug').value;
+  var lbl=R.mesLabel||R.mes;
+  document.getElementById('cpHint').textContent='Se copiará la rutina de '+lbl+' a los jugadores que elijas. Después podés ajustarla en cada uno por separado.';
+  var list=document.getElementById('cpList'); list.innerHTML='';
+  roster().forEach(function(j){
+    if(+j.num===curNum) return; // el jugador actual ya la tiene (se guarda con GUARDAR)
+    var lab=document.createElement('label'); lab.className='cp-item';
+    lab.innerHTML='<input type="checkbox" value="'+j.num+'"><span>#'+j.num+' '+(j.ap||j.nombre||'')+'</span>';
+    lab.querySelector('input').onchange=function(){ lab.classList.toggle('sel', this.checked); };
+    list.appendChild(lab);
+  });
+  document.getElementById('cpAllBtn').textContent='Seleccionar todos';
+  document.getElementById('cpOv').classList.add('on');
+}
+function cpClose(){ document.getElementById('cpOv').classList.remove('on'); }
+function cpToggleAll(){
+  var boxes=document.querySelectorAll('#cpList input[type=checkbox]');
+  var anyOff=Array.prototype.some.call(boxes, function(b){ return !b.checked; });
+  Array.prototype.forEach.call(boxes, function(b){ b.checked=anyOff; b.dispatchEvent(new Event('change')); });
+  document.getElementById('cpAllBtn').textContent=anyOff?'Quitar todos':'Seleccionar todos';
+}
+function cpConfirm(){
+  var sel=Array.prototype.map.call(document.querySelectorAll('#cpList input:checked'), function(b){ return +b.value; });
+  if(!sel.length){ alert('Elegí al menos un jugador.'); return; }
+  // limpiar ejercicios sin elegir (igual que guardar)
+  R.semanas.forEach(function(s){ s.bloques.forEach(function(b){ b.ejercicios=b.ejercicios.filter(function(e){ return e.id; }); }); });
+  var copiados=0;
+  sel.forEach(function(num){
+    var copia=JSON.parse(JSON.stringify(R));
+    copia.actualizado=new Date().toISOString();
+    var path='prep_rutinas/'+num+'/'+copia.mes;
+    try{ localStorage.setItem('prep_rutina_'+num+'_'+copia.mes, JSON.stringify(copia)); }catch(e){}
+    if(typeof fbSet!=='undefined'){ fbSet(path, copia); }
+    copiados++;
+  });
+  cpClose();
+  document.getElementById('savest').textContent='Rutina copiada a '+copiados+' jugador'+(copiados>1?'es':'')+' ✓';
+}
+
 window.addEventListener('beforeunload', function(e){ if(DIRTY){ e.preventDefault(); e.returnValue=''; } });
 </script>
 <script>
