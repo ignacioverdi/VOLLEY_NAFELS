@@ -1359,7 +1359,7 @@ function pinEnter(){
   // ── ENTRENADOR ───────────────────────────────────────────
   if(num === 'coach'){
     if(pinActual === '1009'){
-      localStorage.setItem('casla_role','coach');
+      localStorage.setItem('casla_role','coach'); localStorage.removeItem('casla_player_num');
       sessionStorage.setItem('casla_pin_skip','1');
       document.getElementById('pin-overlay').style.display='none';
       showToastLogin('👨‍💼 Welcome Coach!');
@@ -1373,7 +1373,7 @@ function pinEnter(){
   // ── PREPARADOR FÍSICO (carga libre) ───────────────────────
   if(num === 'pf'){
     if(pinActual === '0000'){
-      localStorage.setItem('casla_role','pf');
+      localStorage.setItem('casla_role','pf'); localStorage.removeItem('casla_player_num');
       sessionStorage.setItem('casla_pin_skip','1');
       document.getElementById('pin-overlay').style.display='none';
       showToastLogin('🏋️ Bienvenido, Preparador Físico');
@@ -1388,7 +1388,7 @@ function pinEnter(){
   // ── ASISTENTE TÉCNICO (carga libre) ───────────────────────
   if(num === 'at'){
     if(pinActual === '9999'){
-      localStorage.setItem('casla_role','at');
+      localStorage.setItem('casla_role','at'); localStorage.removeItem('casla_player_num');
       sessionStorage.setItem('casla_pin_skip','1');
       document.getElementById('pin-overlay').style.display='none';
       showToastLogin('📋 Bienvenido, Asistente Técnico');
@@ -1580,6 +1580,22 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
     var role = (localStorage.getItem('casla_role')||'').toLowerCase();
     if(role !== 'player') return;                       // coach/pf/at o sin login → ven todo
     var num = localStorage.getItem('casla_player_num')||'';
+
+    // Cartel claro de "vista de jugador" + salida (por si un staff quedó con sesión de jugador)
+    (function(){
+      var host = document.querySelector('main') || document.body; if(!host) return;
+      var bar = document.createElement('div');
+      bar.style.cssText = 'display:flex;align-items:center;gap:10px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);border-radius:12px;padding:10px 14px;margin:14px 16px 0;';
+      bar.innerHTML = '<span style="font-size:18px">👤</span>'+
+        '<span style="flex:1;color:#22c55e;font-family:Bebas Neue,sans-serif;letter-spacing:1px;font-size:14px">Estás viendo la app como JUGADOR</span>'+
+        '<button id="vbSalirJug" style="background:rgba(232,25,44,.15);border:1px solid rgba(232,25,44,.35);color:#e8192c;border-radius:8px;padding:6px 14px;font-family:Bebas Neue,sans-serif;letter-spacing:1px;font-size:13px;cursor:pointer">SALIR</button>';
+      host.insertBefore(bar, host.firstChild);
+      var b = document.getElementById('vbSalirJug');
+      if(b) b.onclick = function(){
+        try{ localStorage.removeItem('casla_role'); localStorage.removeItem('casla_player_num'); sessionStorage.removeItem('casla_pin_skip'); }catch(e){}
+        location.reload();
+      };
+    })();
 
     // Tarjetas que SÍ ve el jugador (lo demás se oculta)
     var SHOW = ['calendario.html','historial_voley.html','prep_fisica.html','wellness.html',
