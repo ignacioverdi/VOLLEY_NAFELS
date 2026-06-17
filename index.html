@@ -1566,13 +1566,9 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 })();
 </script>
 <script src="temporadas_menu.js"></script>
-<script>
-if('serviceWorker' in navigator){
-  window.addEventListener('load',function(){
-    navigator.serviceWorker.register('sw.js').catch(function(){});
-  });
-}
-</script>
+<!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
+     usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
+     (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
 <script src="onesignal_push.js" defer></script>
 </body>

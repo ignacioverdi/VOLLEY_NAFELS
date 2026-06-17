@@ -60,13 +60,11 @@
     try {
       await OneSignal.init({
         appId: APP_ID,
-        // worker aislado para no pisar el sw.js de la PWA
-        serviceWorkerParam: { scope: "/onesignal/" },
-        serviceWorkerPath: "onesignal/OneSignalSDKWorker.js",
+        // El worker vive en la RAÍZ (lo registra OneSignal por ser "Typical Site").
+        // Ese worker (OneSignalSDKWorker.js) ya incluye la lógica PWA.
         autoResubscribe: true,
-        // usamos NUESTRO botón, no el campanita ni el auto-prompt de OneSignal
-        notifyButton: { enable: false },
-        promptOptions: { autoPrompt: false }
+        // usamos NUESTRO botón, no el campanita de OneSignal
+        notifyButton: { enable: false }
       });
     } catch(e){ console.warn('[OneSignal] init falló:', e); return; }
 
