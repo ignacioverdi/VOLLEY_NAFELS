@@ -146,6 +146,8 @@ select, select option{color:#111 !important;background-color:#fff !important;}
     <div id="comparativa-content"></div>
   </div>
 
+  <div id="lectura-card"></div>
+
   <div class="section-lbl"><span data-t="j_stats_acum">Estadísticas acumuladas</span></div>
   <div class="stats-grid" id="stats-grid">
     <div style="grid-column:span 3" class="estado-msg">
@@ -153,6 +155,8 @@ select, select option{color:#111 !important;background-color:#fff !important;}
       <div class="estado-msg-txt">Sin datos de historial</div>
     </div>
   </div>
+
+  <div id="records-card"></div>
 
   <div class="section-lbl"><span data-t="j_prox_rutina">Próxima rutina</span></div>
   <div class="rutina-card" id="rutina-card">
@@ -657,6 +661,11 @@ function todayISO(){ var d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezone
 function renderHoy(j){
   var host=document.getElementById('hoy-card'); if(!host||!j) return;
   var prepUrl='prep_fisica.html'+(j.nombre?('?player='+encodeURIComponent(j.nombre)):'');
+  var gp=window.GAMEPLAN_DATA;
+  var rivalChip = gp ? ('<a href="scouting_rival.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.25);border-radius:10px;padding:11px 12px">'
+    +'<span style="font-size:18px">🔍</span>'
+    +'<span style="flex:1;color:#818cf8;font-family:Bebas Neue,sans-serif;letter-spacing:1px;font-size:14px">Próximo rival'+(gp.rival?(': '+gp.rival):'')+'</span>'
+    +'<span style="color:#818cf8">→</span></a>') : '';
   host.innerHTML =
     '<div style="background:#0d0e1a;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px 16px;margin-bottom:16px">'+
       '<div style="font-family:Bebas Neue,sans-serif;letter-spacing:2px;font-size:13px;color:#64748b;margin-bottom:10px">HOY</div>'+
@@ -669,6 +678,7 @@ function renderHoy(j){
           '<span style="font-size:18px">💪</span>'+
           '<span style="flex:1;color:#e8192c;font-family:Bebas Neue,sans-serif;letter-spacing:1px;font-size:14px">Mi rutina</span>'+
           '<span style="color:#e8192c">→</span></a>'+
+        rivalChip+
       '</div></div>';
   // ¿ya hizo el wellness hoy? (marca ✅ si sí)
   try{
@@ -685,6 +695,73 @@ function renderHoy(j){
   }catch(e){}
 }
 
+function renderLectura(j){
+  var host=document.getElementById('lectura-card'); if(!host||!j) return;
+  if(!window.HISTORIAL_DATA||!window.HISTORIAL_DATA.entrenamientos||!window.HISTORIAL_DATA.entrenamientos.length){ host.innerHTML=''; return; }
+  var nmC=(j.nombre||'').replace(/^\d+\s*/,'').toLowerCase().split(' ')[0];
+  var series={s:[],r:[],a:[]};
+  window.HISTORIAL_DATA.entrenamientos.forEach(function(e){
+    if((e.tipo||'P')!=='P') return;
+    (e.jugadores||[]).forEach(function(jh){
+      var jn=(jh.n||'').replace(/^\d+\s*/,'').toLowerCase().split(' ')[0]; if(jn!==nmC) return;
+      if(jh.sT>0) series.s.push(jh.sEff||0);
+      if(jh.rT>0) series.r.push(jh.rEff||0);
+      if(jh.aT>0) series.a.push(jh.aEff||0);
+    });
+  });
+  function avg(arr){ return arr.length?Math.round(arr.reduce(function(a,b){return a+b;},0)/arr.length):null; }
+  function trend(arr){ if(arr.length<2) return null; var h=Math.ceil(arr.length/2); var f=arr.slice(0,h),l=arr.slice(-h); var av=function(x){return x.reduce(function(a,b){return a+b;},0)/x.length;}; return Math.round(av(l)-av(f)); }
+  var items=[
+    {k:'r',ic:'🛡',lbl:'Recepción',c:'#22c55e'},
+    {k:'a',ic:'⚡',lbl:'Ataque',c:'#818cf8'},
+    {k:'s',ic:'⬆️',lbl:'Saque',c:(typeof POS_COLOR!=='undefined'&&POS_COLOR[j.pos])||'#f59e0b'}
+  ];
+  var rows=items.map(function(it){
+    var arr=series[it.k]; if(!arr.length) return '';
+    var cur=avg(arr), tr=trend(arr);
+    var arrow = tr===null?'':(tr>=3?'<span style="color:#22c55e">▲ +'+tr+'</span>':tr<=-3?'<span style="color:#ef4444">▼ '+tr+'</span>':'<span style="color:#94a3b8">→</span>');
+    var frase = tr===null?'Necesitás más partidos para ver la tendencia.':(tr>=3?'Venís subiendo 📈 — seguí así.':tr<=-3?'Bajó un poco — buen tema para charlar con el CT.':'Te mantenés parejo.');
+    return '<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)">'
+      +'<span style="font-size:16px">'+it.ic+'</span>'
+      +'<div style="flex:1"><div style="font-family:Bebas Neue,sans-serif;letter-spacing:1px;font-size:13px;color:'+it.c+'">'+it.lbl+' · EFF '+cur+'% '+arrow+'</div>'
+      +'<div style="font-size:11px;color:#94a3b8;margin-top:2px">'+frase+'</div></div></div>';
+  }).join('');
+  if(!rows){ host.innerHTML=''; return; }
+  host.innerHTML='<div class="section-lbl" style="margin-bottom:8px"><span>📊 Tu lectura rápida</span></div>'
+    +'<div style="background:#0d0e1a;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:4px 16px 8px;margin-bottom:20px">'+rows+'</div>';
+}
+
+function renderRecords(j){
+  var host=document.getElementById('records-card'); if(!host||!j) return;
+  if(!window.HISTORIAL_DATA||!window.HISTORIAL_DATA.entrenamientos||!window.HISTORIAL_DATA.entrenamientos.length){ host.innerHTML=''; return; }
+  var nmC=(j.nombre||'').replace(/^\d+\s*/,'').toLowerCase().split(' ')[0];
+  var bestPts={v:0,rival:''}, bestAtk={v:0,rival:''}, totPts=0, partidos=0;
+  window.HISTORIAL_DATA.entrenamientos.forEach(function(e){
+    if((e.tipo||'P')!=='P') return;
+    (e.jugadores||[]).forEach(function(jh){
+      var jn=(jh.n||'').replace(/^\d+\s*/,'').toLowerCase().split(' ')[0]; if(jn!==nmC) return;
+      partidos++;
+      var pts=jh.aPunto||0; totPts+=pts;
+      if(pts>bestPts.v) bestPts={v:pts,rival:e.rival||''};
+      var ae=(jh.aT>=5)?Math.round(jh.aEff||0):0;
+      if(ae>bestAtk.v) bestAtk={v:ae,rival:e.rival||''};
+    });
+  });
+  if(!partidos){ host.innerHTML=''; return; }
+  var recs=[];
+  if(bestPts.v>0) recs.push({ic:'🏆',lbl:'Tu mejor partido',val:bestPts.v+' pts'+(bestPts.rival?(' · vs '+bestPts.rival):'')});
+  if(bestAtk.v>0) recs.push({ic:'⚡',lbl:'Mejor EFF de ataque',val:bestAtk.v+'%'+(bestAtk.rival?(' · vs '+bestAtk.rival):'')});
+  if(totPts>0) recs.push({ic:'🔥',lbl:'Puntos en la temporada',val:totPts+' pts'});
+  if(!recs.length){ host.innerHTML=''; return; }
+  host.innerHTML='<div class="section-lbl" style="margin-bottom:8px"><span>🏅 Tus récords</span></div>'
+    +'<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">'
+    +recs.map(function(r){ return '<div style="display:flex;align-items:center;gap:12px;background:#0d0e1a;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 14px">'
+      +'<span style="font-size:20px">'+r.ic+'</span>'
+      +'<div style="flex:1"><div style="font-size:10px;color:#64748b;letter-spacing:1px;text-transform:uppercase">'+r.lbl+'</div>'
+      +'<div style="font-family:Bebas Neue,sans-serif;letter-spacing:1px;font-size:18px;color:#e2e8f0;margin-top:2px">'+r.val+'</div></div></div>'; }).join('')
+    +'</div>';
+}
+
 // ── INIT ──
 if(jugador){
   renderHero(jugador);
@@ -697,6 +774,8 @@ if(jugador){
   renderNextMatch();
   renderAccesos(jugador);
   renderStats(jugador);
+  renderLectura(jugador);
+  renderRecords(jugador);
   renderRutina(jugador);
   document.getElementById('main-content').style.display='block';
   document.title=jugador.nombre+' — NAFELS VOLEY';

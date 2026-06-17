@@ -8,6 +8,7 @@
 <script src="datos_video.js" onerror="void 0"></script>
 <script src="datos_video_ent.js" onerror="void 0"></script>
 <script src="mapa_videos_ent.js" onerror="void 0"></script>
+<script src="firebase.js" onerror="void 0"></script>
 <style>
   :root{--bg:#0b1017;--bg2:#0f172a;--card:#111a27;--card2:#16212f;--line:#1f2c3d;--txt:#e2e8f0;--muted:#7689a1;--muted2:#475569;--naf:#22c55e;--naf-dim:rgba(34,197,94,.12);--atk:#F97316;--srv:#22C55E;--rec:#818CF8;--set:#F59E0B;--blk:#ef4444;--def:#06b6d4;--free:#94a3b8;--ev-pos:#22c55e;--ev-plus:#84cc16;--ev-excl:#eab308;--ev-neg:#f97316;--ev-slash:#f59e0b;--ev-err:#ef4444;}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -132,6 +133,14 @@
         <p>Los clips de partidos sin video se listan igual con su minuto. Pegá el link en <code>mapa_videos.js</code> para verlos.</p></div>
       </div>
       <div class="nowbar" id="nowbar"><span class="dot"></span><span class="lbl" id="nowlbl">Elegí acciones y apretá Reproducir</span><span class="pos" id="nowpos"></span></div>
+      <div id="coachNote" style="display:none;padding:10px 14px;border-top:1px solid var(--line);background:var(--card2)">
+        <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);margin-bottom:6px">💬 Comentario del coach</div>
+        <div id="coachNoteView" style="font-size:13px;color:var(--txt);line-height:1.5;white-space:pre-wrap"></div>
+        <div id="coachNoteEdit" style="display:none;margin-top:6px">
+          <textarea id="coachNoteText" rows="2" placeholder="Nota para este clip (la ven los jugadores)…" style="width:100%;box-sizing:border-box;background:var(--card);border:1px solid var(--line);border-radius:8px;color:var(--txt);padding:8px;font-size:13px;font-family:inherit;resize:vertical"></textarea>
+          <button id="coachNoteSave" style="margin-top:6px;background:var(--naf);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;cursor:pointer">Guardar nota</button>
+        </div>
+      </div>
       <div class="ctrls">
         <button class="ct primary" id="btnPlay" disabled>▶ Reproducir</button>
         <button class="ct" id="btnPrev" disabled>‹ Anterior</button>
@@ -309,12 +318,13 @@
   }
 
   // --------- reproductor (multi-video) ---------
-  function setNow(a){var b=$('nowbar');if(!a){b.classList.remove('live');$('nowlbl').textContent='Elegí acciones y apretá Reproducir';$('nowpos').textContent='';return;}
+  function setNow(a){var b=$('nowbar');if(!a){b.classList.remove('live');$('nowlbl').textContent='Elegí acciones y apretá Reproducir';$('nowpos').textContent='';var _cn=$('coachNote');if(_cn)_cn.style.display='none';return;}
     b.classList.add('live');var det=a.sk==='Ataque'?(COMBOS[a.x]||''):(TYPE_NAME[a.x]||'');
     $('nowlbl').innerHTML='<b>#'+parseInt(a.num,10)+' '+a.name+'</b> · '+a.sk+(det?' '+det:'')+' · '+(EVAL_NAME[a.ev]||a.ev||'')+' · '+(VD.matches[a.mc].date||'')+' S'+a.set;
     $('nowpos').textContent=(current+1)+' / '+filtered.length+' ('+mmss(a.t)+')';
     document.querySelectorAll('.row').forEach(function(r){r.classList.toggle('active',+r.dataset.i===current);});
-    var act=document.querySelector('.row.active');if(act)act.scrollIntoView({block:'nearest'});}
+    var act=document.querySelector('.row.active');if(act)act.scrollIntoView({block:'nearest'});
+    loadCoachNote(a);}
   function inReel(a){var sel=Object.keys(selected);return sel.length?!!selected[ckey(a)]:true;}
   function nextPlayable(from,dir){var i=from;while(i>=0&&i<filtered.length){if(filtered[i]._vid&&inReel(filtered[i]))return i;i+=dir;}return -1;}
   function playClip(i){
@@ -352,6 +362,33 @@
     var t=document.createElement('script');t.src='https://www.youtube.com/iframe_api';document.head.appendChild(t);}
 
   function ckey(a){return a.mc+'-'+a.t+'-'+a.num;}
+  // ── Comentario del coach por clip (#8) ──
+  function vbIsCoach(){ try{ return (localStorage.getItem('vb_role')||'')!=='player'; }catch(e){ return true; } }
+  function noteKey(a){ return ('clip_notas/'+MODO+'_'+a.mc+'_'+a.t+'_'+a.num).replace(/[.#$\[\]]/g,'_'); }
+  var _curNoteKey='';
+  function loadCoachNote(a){
+    var box=$('coachNote'); if(!box||!a) return;
+    var view=$('coachNoteView'), edit=$('coachNoteEdit'), ta=$('coachNoteText'), coach=vbIsCoach();
+    if(edit) edit.style.display = coach?'block':'none';
+    if(typeof fbGet==='undefined'){ box.style.display=coach?'block':'none'; if(view)view.textContent=''; if(ta)ta.value=''; return; }
+    var key=noteKey(a); _curNoteKey=key;
+    fbGet(key, function(txt){
+      if(_curNoteKey!==key) return;
+      var t=(typeof txt==='string')?txt:(txt&&txt.txt?txt.txt:'');
+      if(ta) ta.value=t;
+      if(view){ if(t){ view.textContent=t; view.style.display='block'; } else { view.textContent=coach?'(sin nota — escribí abajo)':''; view.style.display=coach?'block':'none'; } }
+      box.style.display=(coach||t)?'block':'none';
+    });
+  }
+  function saveCoachNote(){
+    if(typeof fbSet==='undefined'){ toast('Sin conexión'); return; }
+    var ta=$('coachNoteText'); if(!ta||!_curNoteKey) return;
+    var t=ta.value.trim();
+    fbSet(_curNoteKey, t);
+    var view=$('coachNoteView'); if(view){ view.textContent=t||'(sin nota — escribí abajo)'; view.style.display='block'; }
+    toast('Nota guardada ✓');
+  }
+  (function(){ var b=$('coachNoteSave'); if(b) b.onclick=saveCoachNote; })();
   function exportCSV(){var ch=Object.keys(selected).length?filtered.filter(function(a){return selected[ckey(a)];}):filtered;
     if(!ch.length){toast('No hay clips');return;}var pre=preOff(),post=postOff();
     var csv='partido,fecha,inicio_seg,fin_seg,inicio,fin,jugador,numero,accion,detalle,valoracion,set\n'+ch.map(function(a){var s=Math.max(0,a.t-pre),e=a.t+post;var det=a.sk==='Ataque'?(COMBOS[a.x]||''):(TYPE_NAME[a.x]||'');
@@ -470,5 +507,3 @@
 <script src="lang.js" onerror="void 0"></script>
 </body>
 </html>
-
-<!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
