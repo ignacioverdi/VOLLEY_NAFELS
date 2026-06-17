@@ -2,6 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
+<script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>GAME PLAN — AMRISWIL · NAFELS</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
@@ -1460,7 +1462,7 @@ function renderJugador(j,idx){
   var lapiz=document.createElement('span');
   lapiz.style.cssText='color:#f59e0b;font-size:11px;';
   lapiz.textContent='✎';
-  var storageKey='casla_jug_'+j.num+'_nota_ct';
+  var storageKey='vb_jug_'+j.num+'_nota_ct';
   var inp=document.createElement('input');inp.type='text';
   inp.placeholder='Agregá tu observación...';
   inp.style.cssText='flex:1;background:transparent;border:none;border-bottom:1px dashed rgba(245,158,11,.35);color:#f8d77a;font-family:inherit;font-size:12px;outline:none;padding:3px 0;cursor:text;';
@@ -2422,7 +2424,7 @@ function renderTransicion(){
       html+='<span style="font-size:10px;color:#cbd5e1;width:48px;text-align:right">'+x.n+'/'+x.pts+'</span></div>';
     });
     html+='<div style="font-size:9px;color:#64748b;margin-top:5px">'+r.n+' pelotas · '+r.eff+'% ef · '+(r.concentrada?'<span style="color:#fbbf24">concentrada</span>':'<span style="color:#22c55e">repartida</span>')+'</div>';
-    var keyRot='casla_trans_'+(data.setter||'x').replace(/[^a-zA-Z0-9]/g,'')+'_P'+r.pos;
+    var keyRot='vb_trans_'+(data.setter||'x').replace(/[^a-zA-Z0-9]/g,'')+'_P'+r.pos;
     html+='<div style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:5px;align-items:center">'
       +'<span style="color:#f59e0b;font-size:10px">\u270e</span>'
       +'<input type="text" data-rotkey="'+keyRot+'" placeholder="Tu lectura t\u00e1ctica..." '

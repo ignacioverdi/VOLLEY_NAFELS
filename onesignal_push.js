@@ -3,7 +3,7 @@
    ----------------------------------------------------------------
    - Carga el SDK de OneSignal y lo inicializa.
    - Usa el NÚMERO DE CAMISETA del jugador (que la app ya guarda en
-     localStorage['casla_player_num'] al hacer login) como "External ID".
+     localStorage['vb_player_num'] al hacer login) como "External ID".
      -> Permite mandar aviso a UN jugador puntual o a TODO el equipo.
    - Worker en /onesignal/ (scope propio) para NO pisar el sw.js de la PWA.
    - Dibuja un botón flotante "Activar avisos" (se oculta solo al activarse).
@@ -19,8 +19,8 @@
   /* ── Identidad: quién es el que está usando la app ─────────────── */
   function identity(){
     var num = null, rol = null;
-    try { num = localStorage.getItem('casla_player_num'); } catch(e){}
-    try { rol = localStorage.getItem('casla_role'); } catch(e){}
+    try { num = localStorage.getItem('vb_player_num'); } catch(e){}
+    try { rol = localStorage.getItem('vb_role'); } catch(e){}
     // fallback: jugador.html trae ?num= en la URL
     if(!num){
       try { var p = new URLSearchParams(location.search); if(p.get('num')) num = p.get('num'); } catch(e){}
