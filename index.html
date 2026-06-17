@@ -1571,6 +1571,55 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
 <script src="onesignal_push.js" defer></script>
+<!-- ════════ VISTA POR ROL ════════
+     El jugador ve SOLO lo suyo + Game Plan + Cortes de video (visor completo).
+     El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
+<script>
+(function(){
+  try{
+    var role = (localStorage.getItem('casla_role')||'').toLowerCase();
+    if(role !== 'player') return;                       // coach/pf/at o sin login → ven todo
+    var num = localStorage.getItem('casla_player_num')||'';
+
+    // Tarjetas que SÍ ve el jugador (lo demás se oculta)
+    var SHOW = ['calendario.html','historial_voley.html','prep_fisica.html','wellness.html',
+                'equipo.html','nla_stats_table.html','game_plan.html','cortes.html'];
+    function keep(card){
+      var oc = (card.getAttribute('onclick')||'');
+      if(oc.indexOf('showHeatmapMenu')>=0) return true;  // Heat Maps: sí
+      var href = (card.getAttribute('href')||'').split('?')[0].split('#')[0];
+      return SHOW.indexOf(href) >= 0;
+    }
+    document.querySelectorAll('a.card').forEach(function(c){ if(!keep(c)) c.style.display='none'; });
+
+    // Ocultar secciones que quedaron sin tarjetas visibles (ej: "Scouting del Rival")
+    document.querySelectorAll('.cards-grid').forEach(function(grid){
+      var anyVisible = Array.prototype.some.call(grid.querySelectorAll('a.card'), function(c){ return c.style.display!=='none'; });
+      if(!anyVisible){ var sec = grid.closest('.section') || grid.parentElement; if(sec) sec.style.display='none'; }
+    });
+
+    // Inyectar tarjeta "Mi Perfil" arriba de todo
+    var firstGrid = document.querySelector('.cards-grid');
+    if(firstGrid && num){
+      var a = document.createElement('a');
+      a.className = 'card'; a.href = 'jugador.html?num='+encodeURIComponent(num);
+      a.style.cssText = '--card-color:#22c55e;grid-column:1/-1';
+      a.innerHTML =
+        '<div class="card-glow"></div>'+
+        '<div class="card-top">'+
+          '<div class="card-icon" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2)">👤</div>'+
+          '<div class="card-badge" style="background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2)">Tu vista</div>'+
+        '</div>'+
+        '<div class="card-body">'+
+          '<div class="card-title" style="color:#22c55e">Mi Perfil</div>'+
+          '<div class="card-desc">Tus stats, tu rutina, tu wellness y tus cortes — todo en un solo lugar.</div>'+
+        '</div>'+
+        '<div class="card-arrow" style="color:#22c55e">→</div>';
+      firstGrid.insertBefore(a, firstGrid.firstChild);
+    }
+  }catch(e){}
+})();
+</script>
 </body>
 </html>
 
