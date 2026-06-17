@@ -24,6 +24,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- datos_historial.js: lo carga el selector de modo (arriba) -->
 <script src="datos_gameplan.js" onerror="window.GAMEPLAN_DATA=null"></script>
 <script src="datos_prep_fisica.js" onerror="window.PREP_DATA=null"></script>
+<script src="datos_video.js" defer onload="window.VIDEO_READY&&window.VIDEO_READY()"></script>
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -548,28 +549,49 @@ function renderNextMatch(){
 
 // PILLS — leen totales de PARTIDOS_JUGADORES (datos actuales con baterías)
 function renderQuickStats(j){
-  var qs=document.getElementById('quick-stats');
-  var color=POS_COLOR[j.pos]||'#64748b';
-  var totSaque=0,totRecep=0,totAtaque=0,effAtq=null;
-  if(typeof PARTIDOS_JUGADORES!=='undefined'){
-    var nmC=(j.nombre||'').replace(/^\d+\s*/,'').toLowerCase().split(' ')[0];
-    var pj=PARTIDOS_JUGADORES.find(function(x){ return x.nombre && x.nombre.replace(/^\d+\s*/,'').toLowerCase().split(' ')[0]===nmC; });
-    if(pj){
-      totSaque=pj.tot_saques||0; totRecep=pj.tot_recep||0; totAtaque=pj.tot_ataques||0;
-      if(pj.objetivos){
-        var o=pj.objetivos, vals=[o.atqq,o.atqhb,o.atqx].filter(function(v){return v!==null&&v!==undefined;});
-        if(vals.length) effAtq=Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length);
-      }
-    }
+  var qs=document.getElementById('quick-stats'); if(!qs||!j) return;
+  window._curJug=j;
+  function nm1(x){return (x||'').replace(/^\d+\s*/,'').toLowerCase().split(' ')[0];}
+  function fmtE(v){ return v===null?'—':(v<0?'-':'')+Math.abs(v)+'%'; }
+  function effC(v){ if(v===null) return '#64748b'; if(v>=40) return '#22c55e'; if(v>=20) return '#86efac'; if(v>=0) return '#e2e8f0'; if(v>=-15) return '#f97316'; return '#ef4444'; }
+  function mkRect(color,title,stats){
+    var h='<div style="background:#0d0e1a;border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden">'
+      +'<div style="padding:7px 14px;background:'+color+'14;border-bottom:1px solid '+color+'2a;display:flex;align-items:center;gap:6px">'
+      +'<div style="width:5px;height:5px;border-radius:50%;background:'+color+'"></div>'
+      +'<span style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:'+color+'">'+title+'</span></div>'
+      +'<div style="padding:11px 10px;display:flex;gap:14px;align-items:center;justify-content:center">';
+    stats.forEach(function(s){ h+='<div style="display:flex;flex-direction:column;align-items:center;gap:2px">'
+      +'<div style="font-family:Bebas Neue,sans-serif;font-size:23px;line-height:1;color:'+(s.c||'#e2e8f0')+'">'+s.v+'</div>'
+      +'<div style="font-size:9px;color:#64748b;letter-spacing:.5px;white-space:nowrap">'+s.l+'</div></div>'; });
+    return h+'</div></div>';
   }
-  qs.style.display='grid';
-  qs.innerHTML=[
-    {lbl:'Saques',val:totSaque||'—',c:color},
-    {lbl:'Recepciones',val:totRecep||'—',c:'#22c55e'},
-    {lbl:'Ataques',val:totAtaque||'—',c:'#818cf8'},
-    {lbl:'Eff. Ataque',val:effAtq!==null?effAtq+'%':'—',c:'#f59e0b'}
-  ].map(function(s){ return '<div class="qs-item"><div class="qs-val" style="color:'+s.c+'">'+s.val+'</div><div class="qs-lbl">'+s.lbl+'</div></div>'; }).join('');
+  if(!window.HISTORIAL_DATA||!window.HISTORIAL_DATA.entrenamientos||!window.HISTORIAL_DATA.entrenamientos.length){ qs.style.display='none'; return; }
+  var nmC=nm1(j.nombre), found=false;
+  var t={sT:0,sPunto:0,sVend:0,sPos:0,sErr:0,rT:0,rPunto:0,rPos:0,rVend:0,rErr:0,aT:0,aPunto:0,aVend:0,aErr:0,bT:0,bPt:0,bPtPos:0};
+  var KS=['sT','sPunto','sVend','sPos','sErr','rT','rPunto','rPos','rVend','rErr','aT','aPunto','aVend','aErr','bT','bPt','bPtPos'];
+  window.HISTORIAL_DATA.entrenamientos.forEach(function(e){ (e.jugadores||[]).forEach(function(jh){ if(nm1(jh.n)!==nmC) return; found=true; KS.forEach(function(k){ t[k]+=jh[k]||0; }); }); });
+  if(!found){ qs.style.display='none'; return; }
+  // Defensa desde VIDEO_DATA (si está cargada), filtrando por número de jugador
+  var dT=0,dPerf=0,dBuena=0,dMala=0,dErr=0,hasD=false;
+  if(window.VIDEO_DATA&&window.VIDEO_DATA.matches){ var M=window.VIDEO_DATA.matches; Object.keys(M).forEach(function(c){ (M[c].actions||[]).forEach(function(a){ if(a.sk!=='Defensa') return; if(parseInt(a.num,10)!==parseInt(j.num,10)) return; hasD=true; dT++; if(a.ev==='#')dPerf++; else if(a.ev==='+')dBuena++; else if(a.ev==='-')dMala++; else if(a.ev==='=')dErr++; }); }); }
+  var sEff=t.sT>0?Math.round((t.sPunto+0.5*t.sVend+0.25*t.sPos-t.sErr)/t.sT*100):null;
+  var rEff=t.rT>0?Math.round((t.rPunto+0.5*t.rPos-0.5*t.rVend-t.rErr)/t.rT*100):null;
+  var aEff=t.aT>0?Math.round((t.aPunto-t.aVend-t.aErr)/t.aT*100):null;
+  var bEff=t.bT>0?Math.round((t.bPt+t.bPtPos)/t.bT*100):null;
+  var rPos=t.rT>0?Math.round((t.rPunto+t.rPos)/t.rT*100):null;
+  var rNeg=t.rT>0?Math.round((t.rVend+t.rErr)/t.rT*100):null;
+  var dEff=dT>0?Math.round((dPerf+0.5*dBuena-0.5*dMala-dErr)/dT*100):null;
+  var html='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px">';
+  html+=mkRect('#F59E0B','Saque',[{v:fmtE(sEff),l:'EFF',c:effC(sEff)},{v:t.sT,l:'Total'},{v:t.sPunto,l:'Puntos'},{v:t.sErr,l:'Errores'}]);
+  html+=mkRect('#F97316','Ataque',[{v:fmtE(aEff),l:'EFF',c:effC(aEff)},{v:t.aPunto,l:'Puntos'},{v:t.aVend,l:'Bloqueados'},{v:t.aErr,l:'Errores'}]);
+  html+=mkRect('#22C55E','Recepción',[{v:fmtE(rEff),l:'EFF',c:effC(rEff)},{v:t.rT,l:'Total'},{v:fmtE(rPos),l:'Rec. #+'},{v:fmtE(rNeg),l:'Rec. /='}]);
+  html+=mkRect('#06B6D4','Bloqueo',[{v:fmtE(bEff),l:'EFF #+',c:effC(bEff)},{v:t.bT,l:'Total'}]);
+  if(hasD) html+=mkRect('#EF4444','Defensa',[{v:fmtE(dEff),l:'EFF',c:effC(dEff)},{v:dT,l:'Total'},{v:dPerf,l:'Perfectas',c:'#22c55e'},{v:dErr,l:'Errores',c:'#ef4444'}]);
+  html+='</div>';
+  qs.className=''; qs.style.cssText='display:block;padding:12px 12px 2px;background:transparent;border:0';
+  qs.innerHTML=html;
 }
+window.VIDEO_READY=function(){ try{ if(window._curJug) renderQuickStats(window._curJug); }catch(e){} };
 
 function renderAccesos(j){
   var grid=document.getElementById('accesos-grid');
