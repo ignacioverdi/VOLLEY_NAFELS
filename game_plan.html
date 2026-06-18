@@ -1476,7 +1476,7 @@ function renderJugador(j,idx){
   var lapiz=document.createElement('span');
   lapiz.style.cssText='color:#f59e0b;font-size:11px;';
   lapiz.textContent='✎';
-  var storageKey='vb_jug_'+j.num+'_nota_ct';
+  var storageKey='vb_jug_'+GP_RIVAL_SLUG+'_'+j.num+'_nota_ct';
   var inp=document.createElement('input');inp.type='text';
   inp.placeholder='Agregá tu observación...';
   inp.style.cssText='flex:1;background:transparent;border:none;border-bottom:1px dashed rgba(245,158,11,.35);color:#f8d77a;font-family:inherit;font-size:12px;outline:none;padding:3px 0;cursor:text;';
@@ -2639,7 +2639,7 @@ function renderJuego(){
         bullet.style.cssText='color:'+b.col+';font-size:13px;line-height:1.5;flex-shrink:0';
         bullet.textContent='▸';
         var span=document.createElement('div');
-        var k=cardKey+'_'+idx;
+        var k=GP_RIVAL_SLUG+'_jc_'+cardKey+'_'+idx;
         span.contentEditable='true';
         span.style.cssText='font-size:15px;color:#dbe4f0;line-height:1.5;flex:1;outline:none;border-radius:4px;padding:2px 4px;transition:background .15s';
         span.addEventListener('focus',function(){this.style.background='rgba(255,255,255,.06)';});
@@ -2656,7 +2656,7 @@ function renderJuego(){
     freeRow.style.cssText='display:flex;gap:8px;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06)';
     var lapiz=document.createElement('span');lapiz.style.cssText='color:#f59e0b;font-size:14px;flex-shrink:0';lapiz.textContent='✎';
     var freeInp=document.createElement('div');
-    var fk=cardKey+'_libre';
+    var fk=GP_RIVAL_SLUG+'_jc_'+cardKey+'_libre';
     freeInp.contentEditable='true';
     freeInp.style.cssText='font-size:15px;color:#f8d77a;line-height:1.5;flex:1;outline:none;min-height:20px';
     var fsv=null;try{fsv=localStorage.getItem(fk);}catch(e){}
