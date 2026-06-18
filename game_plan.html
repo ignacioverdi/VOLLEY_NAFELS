@@ -579,6 +579,20 @@ function gpCapPos(c, orig){
   }
   return null;
 }
+// Híbrido: usa el combo cuando existe (clasifica bien slides como X2), y si el
+// combo falta (atk_combo vacío → índice -1), cae a la ZONA DE ORIGEN del ataque
+// r[11] (atk_orig). Recupera las pelotas que antes se descartaban → coincide con DataVolley.
+function gpZonaAtaque(c, orig){
+  var p = gpCapPos(c, orig);
+  if(p) return p;
+  if(orig===4) return 'P4';
+  if(orig===3) return 'P3';
+  if(orig===2) return 'P2';
+  if(orig===8) return 'P8';
+  if(orig===9 || orig===1) return 'P9';
+  if(orig===6 || orig===5 || orig===7) return 'P8';
+  return null;
+}
 // ── Distribución del armador en TRANSICIÓN (rq=? = sin recepción) por rotación ──
 function gpAnalizarTransicion(filtroExcluir){
   var setters=GP_TD.setters||[];
@@ -596,7 +610,7 @@ function gpAnalizarTransicion(filtroExcluir){
     if(filtroExcluir){
       tr=tr.filter(function(r){
         var c=(r[8]>=0&&r[8]<GP_COMBOS.length)?GP_COMBOS[r[8]]:'?';
-        return gpCapPos(c,r[11])!==filtroExcluir;
+        return gpZonaAtaque(c,r[11])!==filtroExcluir;
       });
     }
     if(tr.length<3){ rots.push({pos:pos,n:tr.length,vacio:true}); return; }
@@ -604,7 +618,7 @@ function gpAnalizarTransicion(filtroExcluir){
     var kills=0,errs=0;
     tr.forEach(function(r){
       var c=(r[8]>=0&&r[8]<GP_COMBOS.length)?GP_COMBOS[r[8]]:'?';
-      var p=gpCapPos(c,r[11]);
+      var p=gpZonaAtaque(c,r[11]);
       var res=RES[r[9]];
       if(p){ dist[p]++; if(res==='#')pts[p]++; }
       if(res==='#')kills++; else if(res==='='||res==='/')errs++;
@@ -2803,19 +2817,22 @@ function gpDistRotacionValidada(rotPos){
     var dist={P4:0,P3:0,P2:0,P8:0,P9:0}, pts={P4:0,P3:0,P2:0,P8:0,P9:0}, tot=0;
     rallies.forEach(function(r){
       var c=(r[8]>=0&&r[8]<GP_COMBOS.length)?GP_COMBOS[r[8]]:'?';
-      var p=gpCapPos(c,r[11]); if(!p) return;
+      var p=gpZonaAtaque(c,r[11]); if(!p) return;
       dist[p]++; tot++;
       if(RES[r[9]]==='#') pts[p]++;
     });
     if(!tot) return null;
-    return ['P4','P3','P2','P8','P9'].map(function(p){
+    var rows=['P4','P3','P2','P8','P9'].map(function(p){
       return {pos:p,tot:dist[p],pts:pts[p],pct:Math.round(dist[p]/tot*100),kill:dist[p]?Math.round(pts[p]/dist[p]*100):0};
     }).filter(function(x){return x.tot>0;}).sort(function(a,b){return b.tot-a.tot;});
+    rows.totClasif=tot;
+    return rows;
   }
   var rotRallies=s0.s.filter(function(r){return r[6]===posNum;});
   var so=rotRallies.filter(function(r){return r[7]===0||r[7]===2;});
   var tr=rotRallies.filter(function(r){return r[7]===9;});
-  return {sideout:calc(so), transicion:calc(tr), soTot:so.length, trTot:tr.length};
+  var soR=calc(so), trR=calc(tr);
+  return {sideout:soR, transicion:trR, soTot:(soR?soR.totClasif:0), trTot:(trR?trR.totClasif:0)};
 }
 
 function abrirModalArmador(rot, color, pills){
