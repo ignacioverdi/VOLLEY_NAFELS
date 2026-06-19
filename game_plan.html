@@ -2131,26 +2131,32 @@ function redrawArmadorCourt(canvas,rot,color,blqData){
   };
   var distMap={};
   if(rot.dist) rot.dist.forEach(function(d){ distMap[d.zona]=d; });
-  var fs1=Math.round(OWN*0.155);
-  var fs2=Math.round(OWN*0.105);
+  // 4 números por zona en layout 2×2:
+  //   [n° ataques]   [% distribución]
+  //   [n° puntos]    [% puntos]
+  var fsPct=Math.round(OWN*0.097);
+  var fsCnt=Math.round(OWN*0.075);
+  function gpNum(txt,x,y,col,fs,weight){
+    ctx.save();
+    ctx.font=weight+' '+fs+'px Inter,system-ui,sans-serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.lineWidth=2.6; ctx.strokeStyle='rgba(0,0,0,.9)';
+    ctx.shadowColor='rgba(0,0,0,1)'; ctx.shadowBlur=4;
+    ctx.strokeText(txt,x,y);
+    ctx.fillStyle=col; ctx.shadowBlur=2;
+    ctx.fillText(txt,x,y);
+    ctx.restore();
+  }
   [4,3,2,7,8,9].forEach(function(z){
     var d=distMap[z]; if(!d||d.pct<=0||d.tot<=0) return;
     var zp=zonePosMap[z]; if(!zp) return;
-    ctx.save();
-    ctx.font='bold '+fs1+'px "Bebas Neue",Impact,sans-serif';
-    ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.lineWidth=3; ctx.strokeStyle='rgba(0,0,0,.85)';
-    ctx.shadowColor='rgba(0,0,0,1)'; ctx.shadowBlur=5;
-    ctx.strokeText(d.pct+'%', zp.x, zp.y-fs1*0.35);
-    ctx.fillStyle='#fff'; ctx.shadowBlur=2;
-    ctx.fillText(d.pct+'%', zp.x, zp.y-fs1*0.35);
+    var dx=Math.min(CW/3*0.25, 15);
+    var dy=Math.round(fsPct*0.64);
     var ptCol=d.pct_p>=60?'#22c55e':d.pct_p>=40?'#fbbf24':d.pct_p>=20?'#f97316':'#ef4444';
-    ctx.font='800 '+fs2+'px Inter,system-ui,sans-serif';
-    ctx.lineWidth=2.5; ctx.strokeStyle='rgba(0,0,0,.9)'; ctx.shadowBlur=4;
-    ctx.strokeText(d.pct_p+'%', zp.x, zp.y+fs1*0.52);
-    ctx.fillStyle=ptCol; ctx.shadowBlur=2;
-    ctx.fillText(d.pct_p+'%', zp.x, zp.y+fs1*0.52);
-    ctx.restore();
+    gpNum(String(d.tot), zp.x-dx, zp.y-dy, '#cbd5e1', fsCnt, '700');   // n° ataques (izq-arriba)
+    gpNum(d.pct+'%',     zp.x+dx, zp.y-dy, '#ffffff', fsPct, '800');   // % distribución (der-arriba)
+    gpNum(String(d.pts), zp.x-dx, zp.y+dy, '#94a3b8', fsCnt, '700');   // n° puntos (izq-abajo)
+    gpNum(d.pct_p+'%',   zp.x+dx, zp.y+dy, ptCol,     fsPct, '800');   // % puntos (der-abajo)
   });
 }
 

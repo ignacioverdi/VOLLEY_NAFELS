@@ -36,10 +36,12 @@
   .ses{ display:flex; align-items:center; gap:11px; padding:9px 12px; background:rgba(255,255,255,.025); border-radius:9px; margin-bottom:7px; }
   .ses:last-child{ margin-bottom:0; }
   .ses-ic{ font-size:17px; }
-  .ses-time{ flex:1; font-size:15px; font-weight:600; letter-spacing:.5px; }
+  .ses-time{ font-size:15px; font-weight:600; letter-spacing:.5px; white-space:nowrap; }
+  .ses-lugar{ flex:1; min-width:0; font-size:12.5px; color:var(--mut); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .ses-tipo{ font-family:'Bebas Neue',sans-serif; letter-spacing:1.5px; font-size:13px; }
   .ses-edit{ display:flex; align-items:center; gap:6px; padding:7px 0; flex-wrap:wrap; }
-  .ses-edit input[type=time], .ses-edit select{ background:#11131f; border:1px solid var(--line); color:var(--txt); border-radius:7px; padding:6px 8px; font-size:13px; font-family:inherit; }
+  .ses-edit input[type=time], .ses-edit input[type=text], .ses-edit select{ background:#11131f; border:1px solid var(--line); color:var(--txt); border-radius:7px; padding:6px 8px; font-size:13px; font-family:inherit; }
+  .ses-edit input[type=text]{ flex:1 1 110px; min-width:90px; }
   .ses-edit .dash{ color:var(--mut); }
   .del{ background:rgba(232,25,44,.12); border:1px solid rgba(232,25,44,.3); color:var(--red); border-radius:7px; width:28px; height:28px; font-size:13px; }
   .add{ background:transparent; border:1px dashed var(--line); color:var(--mut); border-radius:9px; padding:7px 12px; font-size:12px; width:100%; margin-top:4px; }
@@ -88,19 +90,19 @@
       editar:'✏️ Editar', cerrar:'✕ Cerrar', voley:'Vóley', pesas:'Pesas', libre:'— libre —',
       agregar:'+ agregar sesión', guardar:'💾 Guardar cambios', cancelar:'Cancelar', reset:'↺ Volver a plantilla base',
       esta:'● Esta semana', base:'Plantilla base — guardá para personalizar esta semana', perso:'Semana personalizada ✓',
-      guardado:'Guardado en la nube ✓', sincon:'Sin conexión — no se pudo guardar', semanaDel:'Semana del', al:'al',
+      guardado:'Guardado en la nube ✓', sincon:'Sin conexión — no se pudo guardar', semanaDel:'Semana del', al:'al', lugarPh:'📍 ¿Dónde?',
       dias:['LUNES','MARTES','MIÉRCOLES','JUEVES','VIERNES','SÁBADO','DOMINGO'] },
     en:{ titulo:'WEEKLY SCHEDULE', sub:'Syncs automatically across all devices. Only staff can edit.',
       editar:'✏️ Edit', cerrar:'✕ Close', voley:'Volleyball', pesas:'Gym', libre:'— off —',
       agregar:'+ add session', guardar:'💾 Save changes', cancelar:'Cancel', reset:'↺ Reset to base template',
       esta:'● This week', base:'Base template — save to customize this week', perso:'Custom week ✓',
-      guardado:'Saved to cloud ✓', sincon:'Offline — could not save', semanaDel:'Week of', al:'to',
+      guardado:'Saved to cloud ✓', sincon:'Offline — could not save', semanaDel:'Week of', al:'to', lugarPh:'📍 Where?',
       dias:['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY'] },
     de:{ titulo:'WOCHENPLAN', sub:'Wird automatisch auf allen Geräten synchronisiert. Nur das Trainerteam kann bearbeiten.',
       editar:'✏️ Bearbeiten', cerrar:'✕ Schließen', voley:'Volleyball', pesas:'Kraftraum', libre:'— frei —',
       agregar:'+ Einheit hinzufügen', guardar:'💾 Speichern', cancelar:'Abbrechen', reset:'↺ Auf Basisvorlage zurücksetzen',
       esta:'● Diese Woche', base:'Basisvorlage — speichern, um diese Woche anzupassen', perso:'Angepasste Woche ✓',
-      guardado:'In der Cloud gespeichert ✓', sincon:'Offline — konnte nicht speichern', semanaDel:'Woche vom', al:'bis',
+      guardado:'In der Cloud gespeichert ✓', sincon:'Offline — konnte nicht speichern', semanaDel:'Woche vom', al:'bis', lugarPh:'📍 Wo?',
       dias:['MONTAG','DIENSTAG','MITTWOCH','DONNERSTAG','FREITAG','SAMSTAG','SONNTAG'] }
   };
   function L(){ try{ var l=(window.getLang&&window.getLang()); return I18N[l]?l:'es'; }catch(e){ return 'es'; } }
@@ -114,6 +116,7 @@
   function dm(d){ return pad(d.getDate())+'/'+pad(d.getMonth()+1); }
 
   function clone(o){ return JSON.parse(JSON.stringify(o)); }
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function norm(d){ var o={}; DIAS.forEach(function(x){ o[x[0]]=Array.isArray(d[x[0]])?d[x[0]].filter(Boolean):[]; }); return o; }
   function tipoInfo(tp){ return tp==='pesas' ? {ic:'🏋️',c:'#f59e0b',lk:'pesas'} : {ic:'🏐',c:'#e8192c',lk:'voley'}; }
 
@@ -132,6 +135,7 @@
       +'<input type="time" value="'+(s.de||'')+'" data-k="'+key+'" data-i="'+i+'" data-f="de">'
       +'<span class="dash">–</span>'
       +'<input type="time" value="'+(s.a||'')+'" data-k="'+key+'" data-i="'+i+'" data-f="a">'
+      +'<input type="text" value="'+esc(s.lugar||'')+'" placeholder="'+t('lugarPh')+'" data-k="'+key+'" data-i="'+i+'" data-f="lugar">'
       +'<select data-k="'+key+'" data-i="'+i+'" data-f="tipo">'
         +'<option value="voley"'+(s.tipo!=='pesas'?' selected':'')+'>🏐 '+t('voley')+'</option>'
         +'<option value="pesas"'+(s.tipo==='pesas'?' selected':'')+'>🏋️ '+t('pesas')+'</option>'
@@ -167,7 +171,7 @@
       if(!ses.length){ h+='<div class="empty">'+t('libre')+'</div>'; }
       ses.forEach(function(s,i){
         if(editing){ h+=editRow(key,s,i); }
-        else{ var ti=tipoInfo(s.tipo); h+='<div class="ses" style="border-left:3px solid '+ti.c+'"><span class="ses-ic">'+ti.ic+'</span><span class="ses-time">'+s.de+' – '+s.a+'</span><span class="ses-tipo" style="color:'+ti.c+'">'+t(ti.lk)+'</span></div>'; }
+        else{ var ti=tipoInfo(s.tipo); var lug=(s.lugar||'').trim(); h+='<div class="ses" style="border-left:3px solid '+ti.c+'"><span class="ses-ic">'+ti.ic+'</span><span class="ses-time">'+s.de+' – '+s.a+'</span><span class="ses-lugar">'+(lug?'📍 '+esc(lug):'')+'</span><span class="ses-tipo" style="color:'+ti.c+'">'+t(ti.lk)+'</span></div>'; }
       });
       if(editing){ h+='<button class="add" data-add="'+key+'">'+t('agregar')+'</button>'; }
       h+='</div>';
@@ -193,7 +197,7 @@
       b.addEventListener('click',function(){ data[this.dataset.del].splice(+this.dataset.i,1); render(); });
     });
     $('week').querySelectorAll('[data-add]').forEach(function(b){
-      b.addEventListener('click',function(){ data[this.dataset.add].push({de:'17:00',a:'19:00',tipo:'voley'}); render(); });
+      b.addEventListener('click',function(){ data[this.dataset.add].push({de:'17:00',a:'19:00',lugar:'',tipo:'voley'}); render(); });
     });
   }
 
