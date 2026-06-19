@@ -2136,10 +2136,10 @@ function redrawArmadorCourt(canvas,rot,color,blqData){
   //   [n° puntos]    [% puntos]
   var fsPct=Math.round(OWN*0.097);
   var fsCnt=Math.round(OWN*0.075);
-  function gpNum(txt,x,y,col,fs,weight){
+  function gpNum(txt,x,y,col,fs,weight,align){
     ctx.save();
     ctx.font=weight+' '+fs+'px Inter,system-ui,sans-serif';
-    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.textAlign=align||'center'; ctx.textBaseline='middle';
     ctx.lineWidth=2.6; ctx.strokeStyle='rgba(0,0,0,.9)';
     ctx.shadowColor='rgba(0,0,0,1)'; ctx.shadowBlur=4;
     ctx.strokeText(txt,x,y);
@@ -2147,16 +2147,24 @@ function redrawArmadorCourt(canvas,rot,color,blqData){
     ctx.fillText(txt,x,y);
     ctx.restore();
   }
+  // Dibuja el par "conteo %" centrado en (cx,y): conteo gris a la izq + % destacado a la der
+  function gpPar(cnt,pct,cx,y,pctCol){
+    ctx.save();
+    ctx.font='700 '+fsCnt+'px Inter,system-ui,sans-serif'; var wc=ctx.measureText(cnt).width;
+    ctx.font='800 '+fsPct+'px Inter,system-ui,sans-serif'; var wp=ctx.measureText(pct).width;
+    ctx.restore();
+    var gap=Math.round(fsPct*0.22);
+    var startX=cx-(wc+gap+wp)/2;
+    gpNum(cnt, startX,        y, '#9ca3af', fsCnt, '700', 'left');
+    gpNum(pct, startX+wc+gap, y, pctCol,    fsPct, '800', 'left');
+  }
   [4,3,2,7,8,9].forEach(function(z){
     var d=distMap[z]; if(!d||d.pct<=0||d.tot<=0) return;
     var zp=zonePosMap[z]; if(!zp) return;
-    var dx=Math.min(CW/3*0.25, 15);
-    var dy=Math.round(fsPct*0.64);
+    var dy=Math.round(fsPct*0.62);
     var ptCol=d.pct_p>=60?'#22c55e':d.pct_p>=40?'#fbbf24':d.pct_p>=20?'#f97316':'#ef4444';
-    gpNum(String(d.tot), zp.x-dx, zp.y-dy, '#cbd5e1', fsCnt, '700');   // n° ataques (izq-arriba)
-    gpNum(d.pct+'%',     zp.x+dx, zp.y-dy, '#ffffff', fsPct, '800');   // % distribución (der-arriba)
-    gpNum(String(d.pts), zp.x-dx, zp.y+dy, '#94a3b8', fsCnt, '700');   // n° puntos (izq-abajo)
-    gpNum(d.pct_p+'%',   zp.x+dx, zp.y+dy, ptCol,     fsPct, '800');   // % puntos (der-abajo)
+    gpPar(String(d.tot), d.pct+'%',   zp.x, zp.y-dy, '#ffffff'); // distribución (fila arriba)
+    gpPar(String(d.pts), d.pct_p+'%', zp.x, zp.y+dy, ptCol);     // puntos (fila abajo)
   });
 }
 
