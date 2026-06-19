@@ -1550,6 +1550,11 @@ function renderJugador(j,idx){
   var gridS=document.createElement('div');gridS.className='canchitas-grid';panelS.appendChild(gridS);
   var panelR=document.createElement('div');panelR.className='tab-panel';panelR.dataset.panel='recepcion';
   wrap.appendChild(panelA);wrap.appendChild(panelS);wrap.appendChild(panelR);
+  // Líbero: la tarjeta abre por defecto en RECEPCIÓN (ataque y saque están vacíos para un líbero)
+  if(j.pos==='LIBERO'){
+    btnAtaque.className='tab-btn'; panelA.className='tab-panel';
+    btnRec.className='tab-btn active-recepcion'; panelR.className='tab-panel active';
+  }
   sec.appendChild(wrap);
 
   // Click header → toggle open + render
