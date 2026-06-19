@@ -359,6 +359,19 @@ select, select option {
         <div class="card-arrow" style="color:#2dd4bf">→</div>
       </a>
 
+      <a href="horarios.html" class="card" style="--card-color:#f59e0b">
+        <div class="card-glow"></div>
+        <div class="card-top">
+          <div class="card-icon" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2)">🗓️</div>
+          <div class="card-badge" style="background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2)">Editable</div>
+        </div>
+        <div class="card-body">
+          <div class="card-title" style="color:#f59e0b">Horarios</div>
+          <div class="card-desc">Horarios de entrenamiento de la semana. Pesas y vóley, día por día — sincronizado y editable.</div>
+        </div>
+        <div class="card-arrow" style="color:#f59e0b">→</div>
+      </a>
+
       <a href="historial_voley.html" class="card" style="--card-color:#818cf8">
         <div class="card-glow"></div>
         <div class="card-top">
@@ -1600,7 +1613,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
     })();
 
     // Tarjetas que SÍ ve el jugador (lo demás se oculta)
-    var SHOW = ['calendario.html','historial_voley.html','prep_fisica.html','wellness.html',
+    var SHOW = ['calendario.html','horarios.html','historial_voley.html','prep_fisica.html','wellness.html',
                 'equipo.html','nla_stats_table.html','game_plan.html','cortes.html','scouting_rival.html'];
     function keep(card){
       var oc = (card.getAttribute('onclick')||'');

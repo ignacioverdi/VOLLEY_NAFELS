@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Horarios — Näfels Volley</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<script src="firebase.js" onerror="void 0"></script>
+<style>
+  :root{ --bg:#0a0b14; --card:#0d0e1a; --line:rgba(255,255,255,.08); --txt:#e2e8f0; --mut:#64748b; --red:#e8192c; --amber:#f59e0b; }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--txt); font-family:system-ui,-apple-system,sans-serif; padding:16px 14px 40px; }
+  .wrap{ max-width:640px; margin:0 auto; }
+  .head{ display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+  h1{ font-family:'Bebas Neue',sans-serif; letter-spacing:2px; font-size:27px; margin:0; flex:1; }
+  .sub{ color:var(--mut); font-size:12px; margin:0 0 18px; }
+  button{ font-family:inherit; cursor:pointer; }
+  #editBtn{ background:var(--card); border:1px solid var(--line); color:var(--txt); border-radius:10px; padding:8px 13px; font-size:13px; font-weight:600; }
+  #status{ font-size:12px; color:#22c55e; height:16px; opacity:0; transition:opacity .3s; margin-bottom:8px; }
+  .day{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:13px 15px; margin-bottom:10px; }
+  .day-lbl{ font-family:'Bebas Neue',sans-serif; letter-spacing:2px; font-size:15px; color:var(--mut); margin-bottom:9px; }
+  .empty{ color:#3f4860; font-size:13px; font-style:italic; }
+  .ses{ display:flex; align-items:center; gap:11px; padding:9px 12px; background:rgba(255,255,255,.025); border-radius:9px; margin-bottom:7px; }
+  .ses:last-child{ margin-bottom:0; }
+  .ses-ic{ font-size:17px; }
+  .ses-time{ flex:1; font-size:15px; font-weight:600; letter-spacing:.5px; }
+  .ses-tipo{ font-family:'Bebas Neue',sans-serif; letter-spacing:1.5px; font-size:13px; }
+  .ses-edit{ display:flex; align-items:center; gap:6px; padding:7px 0; flex-wrap:wrap; }
+  .ses-edit input[type=time], .ses-edit select{ background:#11131f; border:1px solid var(--line); color:var(--txt); border-radius:7px; padding:6px 8px; font-size:13px; font-family:inherit; }
+  .ses-edit .dash{ color:var(--mut); }
+  .del{ background:rgba(232,25,44,.12); border:1px solid rgba(232,25,44,.3); color:var(--red); border-radius:7px; width:28px; height:28px; font-size:13px; }
+  .add{ background:transparent; border:1px dashed var(--line); color:var(--mut); border-radius:9px; padding:7px 12px; font-size:12px; width:100%; margin-top:4px; }
+  #editActions{ display:none; gap:10px; position:sticky; bottom:12px; margin-top:14px; }
+  #saveBtn{ flex:1; background:var(--red); color:#fff; border:none; border-radius:11px; padding:13px; font-size:14px; font-weight:700; letter-spacing:.5px; }
+  #cancelBtn{ background:var(--card); border:1px solid var(--line); color:var(--mut); border-radius:11px; padding:13px 18px; font-size:14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>🗓️ HORARIOS DE LA SEMANA</h1>
+    <button id="editBtn">✏️ Editar</button>
+  </div>
+  <p class="sub">Se sincroniza solo entre todos los dispositivos. Sólo el cuerpo técnico puede editar.</p>
+  <div id="status"></div>
+  <div id="week"></div>
+  <div id="editActions">
+    <button id="saveBtn">💾 Guardar cambios</button>
+    <button id="cancelBtn">Cancelar</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var DIAS=[['lunes','LUNES'],['martes','MARTES'],['miercoles','MIÉRCOLES'],['jueves','JUEVES'],['viernes','VIERNES'],['sabado','SÁBADO'],['domingo','DOMINGO']];
+  var DEFAULT={
+    lunes:[{de:'10:00',a:'11:30',tipo:'pesas'},{de:'17:00',a:'19:00',tipo:'voley'}],
+    martes:[{de:'10:00',a:'11:30',tipo:'voley'},{de:'18:30',a:'20:30',tipo:'voley'}],
+    miercoles:[{de:'10:00',a:'11:30',tipo:'pesas'},{de:'17:00',a:'19:00',tipo:'voley'}],
+    jueves:[{de:'10:00',a:'11:30',tipo:'voley'},{de:'18:00',a:'20:00',tipo:'voley'}],
+    viernes:[{de:'10:00',a:'11:30',tipo:'pesas'},{de:'17:00',a:'18:30',tipo:'voley'}],
+    sabado:[], domingo:[]
+  };
+  var data=JSON.parse(JSON.stringify(DEFAULT));
+  var editing=false;
+  var isCoach=(function(){ try{ return (localStorage.getItem('vb_role')||'')!=='player'; }catch(e){ return true; } })();
+  var $=function(id){return document.getElementById(id);};
+
+  function tipoInfo(t){ return t==='pesas' ? {ic:'🏋️',lbl:'Pesas',c:'#f59e0b'} : {ic:'🏐',lbl:'Vóley',c:'#e8192c'}; }
+  function norm(d){ var o={}; DIAS.forEach(function(x){ o[x[0]]=Array.isArray(d[x[0]])?d[x[0]].filter(Boolean):[]; }); return o; }
+  function status(msg,col){ var s=$('status'); s.textContent=msg; s.style.color=col||'#22c55e'; s.style.opacity=1; setTimeout(function(){ s.style.opacity=0; },2600); }
+
+  function editRow(key,s,i){
+    return '<div class="ses-edit">'
+      +'<input type="time" value="'+(s.de||'')+'" data-k="'+key+'" data-i="'+i+'" data-f="de">'
+      +'<span class="dash">–</span>'
+      +'<input type="time" value="'+(s.a||'')+'" data-k="'+key+'" data-i="'+i+'" data-f="a">'
+      +'<select data-k="'+key+'" data-i="'+i+'" data-f="tipo">'
+        +'<option value="voley"'+(s.tipo!=='pesas'?' selected':'')+'>🏐 Vóley</option>'
+        +'<option value="pesas"'+(s.tipo==='pesas'?' selected':'')+'>🏋️ Pesas</option>'
+      +'</select>'
+      +'<button class="del" data-del="'+key+'" data-i="'+i+'">✕</button>'
+    +'</div>';
+  }
+
+  function render(){
+    var h='';
+    DIAS.forEach(function(x){
+      var key=x[0], sesiones=data[key]||[];
+      h+='<div class="day"><div class="day-lbl">'+x[1]+'</div>';
+      if(!sesiones.length && !editing){ h+='<div class="empty">— libre —</div>'; }
+      sesiones.forEach(function(s,i){
+        if(editing){ h+=editRow(key,s,i); }
+        else{ var ti=tipoInfo(s.tipo); h+='<div class="ses" style="border-left:3px solid '+ti.c+'"><span class="ses-ic">'+ti.ic+'</span><span class="ses-time">'+s.de+' – '+s.a+'</span><span class="ses-tipo" style="color:'+ti.c+'">'+ti.lbl+'</span></div>'; }
+      });
+      if(editing){ h+='<button class="add" data-add="'+key+'">+ agregar sesión</button>'; }
+      h+='</div>';
+    });
+    $('week').innerHTML=h;
+    if(editing) bindEdit();
+  }
+
+  function bindEdit(){
+    $('week').querySelectorAll('input[data-f],select[data-f]').forEach(function(el){
+      el.addEventListener('change',function(){ data[this.dataset.k][+this.dataset.i][this.dataset.f]=this.value; });
+    });
+    $('week').querySelectorAll('[data-del]').forEach(function(b){
+      b.addEventListener('click',function(){ data[this.dataset.del].splice(+this.dataset.i,1); render(); });
+    });
+    $('week').querySelectorAll('[data-add]').forEach(function(b){
+      b.addEventListener('click',function(){ data[this.dataset.add].push({de:'17:00',a:'19:00',tipo:'voley'}); render(); });
+    });
+  }
+
+  function setEditing(on){
+    editing=on;
+    $('editBtn').textContent = on?'✕ Cerrar':'✏️ Editar';
+    $('editActions').style.display = on?'flex':'none';
+    render();
+  }
+
+  $('editBtn').onclick=function(){ if(!isCoach) return; setEditing(!editing); };
+  $('cancelBtn').onclick=function(){ load(); setEditing(false); };
+  $('saveBtn').onclick=function(){
+    data=norm(data);
+    if(typeof fbSet!=='undefined'){ fbSet('horarios/semana', data); status('Guardado en la nube ✓'); }
+    else{ status('Sin conexión — no se pudo guardar','#ef4444'); }
+    setEditing(false);
+  };
+
+  if(!isCoach){ $('editBtn').style.display='none'; }
+
+  function load(){
+    if(typeof fbGet!=='undefined'){
+      fbGet('horarios/semana', function(d){ if(d && typeof d==='object'){ data=norm(d); } render(); });
+    } else { render(); }
+  }
+  load();
+})();
+</script>
+</body>
+</html>
