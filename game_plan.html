@@ -2820,16 +2820,19 @@ function gpDistRotacionValidada(rotPos){
   var RES=['#','/','+','!','=','-'];
   var posNum=parseInt(rotPos.replace('P',''));
   function calc(rallies){
-    var dist={P4:0,P3:0,P2:0,P8:0,P9:0}, pts={P4:0,P3:0,P2:0,P8:0,P9:0}, tot=0;
+    // MISMO criterio que la canchita: gpGetZone(combo, origen, setterPos) → zona REAL
+    // (incluye PP = segunda del armador, que va a zona 2 cuando el armador es delantero)
+    var dist={}, pts={}, tot=0;
     rallies.forEach(function(r){
-      var c=(r[8]>=0&&r[8]<GP_COMBOS.length)?GP_COMBOS[r[8]]:'?';
-      var p=gpZonaAtaque(c,r[11]); if(!p) return;
-      dist[p]++; tot++;
-      if(RES[r[9]]==='#') pts[p]++;
+      var c=(r[8]>=0&&r[8]<GP_COMBOS.length)?GP_COMBOS[r[8]]:'';
+      var z=gpGetZone(c,r[11],r[6]); if(!(z>0)) return;
+      if(dist[z]===undefined){ dist[z]=0; pts[z]=0; }
+      dist[z]++; tot++;
+      if(RES[r[9]]==='#') pts[z]++;
     });
     if(!tot) return null;
-    var rows=['P4','P3','P2','P8','P9'].map(function(p){
-      return {pos:p,tot:dist[p],pts:pts[p],pct:Math.round(dist[p]/tot*100),kill:dist[p]?Math.round(pts[p]/dist[p]*100):0};
+    var rows=[4,3,2,8,9,7,6,5,1].map(function(z){
+      return {pos:z,tot:dist[z]||0,pts:pts[z]||0,pct:dist[z]?Math.round(dist[z]/tot*100):0,kill:dist[z]?Math.round(pts[z]/dist[z]*100):0};
     }).filter(function(x){return x.tot>0;}).sort(function(a,b){return b.tot-a.tot;});
     rows.totClasif=tot;
     return rows;
@@ -2856,7 +2859,7 @@ function abrirModalArmador(rot, color, pills){
 
   function vista(titulo, subt, dist, total, col){
     if(!dist||!dist.length) return '';
-    var POSNOM={P4:'Punta (z4)',P3:'Central (z3)',P2:'Opuesto (z2)',P8:'Pipe (centro)',P9:'Zaguero (z9)'};
+    // etiquetas por número de zona (sin nombre de puesto)
     var h='<div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:15px;margin-bottom:14px">';
     h+='<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px">';
     h+='<div style="font-family:Bebas Neue,sans-serif;font-size:16px;letter-spacing:2px;color:'+col+'">'+titulo+'</div>';
@@ -2867,7 +2870,7 @@ function abrirModalArmador(rot, color, pills){
       var esTop=d.pct>=Math.max.apply(null,dist.map(function(x){return x.pct;}));
       h+='<div style="margin-bottom:10px">';
       h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">';
-      h+='<span style="font-size:13px;color:'+(esTop?'#fff':'#cbd5e1')+';font-weight:'+(esTop?'700':'500')+'">'+POSNOM[d.pos]+(esTop?' ◀':'')+'</span>';
+      h+='<span style="font-size:13px;color:'+(esTop?'#fff':'#cbd5e1')+';font-weight:'+(esTop?'700':'500')+'">'+('Zona '+d.pos)+(esTop?' ◀':'')+'</span>';
       h+='<span style="font-size:11px;color:#94a3b8">'+d.tot+' ataques · '+d.pts+' pts</span></div>';
       // barra de distribución
       h+='<div style="display:flex;align-items:center;gap:8px">';
