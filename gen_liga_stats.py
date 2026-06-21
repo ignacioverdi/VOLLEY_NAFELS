@@ -117,14 +117,33 @@ def main():
         if filas:
             seasons_con_datos.append(label)
             all_teams.extend(filas)
+
+    # ── Sección 8: PLAYERS por temporada (recepción flot/pot + defensa) ──
+    # Reúsa el pipeline validado de update_db_nafels (mismo motor que generó los
+    # 99 jugadores horneados → 0 drift) + los campos nuevos.
+    all_players = []
+    try:
+        from update_db_nafels import build_teams_data_fresh, calculate_stats
+        print("Generando PLAYERS por temporada...")
+        for label in seasons_con_datos:
+            carpeta = dict(SEASONS)[label]
+            td = build_teams_data_fresh([(label, carpeta)])
+            players, _ = calculate_stats(td, label)   # filtra por temporada → label correcto
+            all_players.extend(players)
+            print(f"  [{label}] {len(players)} jugadores")
+    except Exception as e:
+        print(f"  AVISO: no se pudieron generar PLAYERS ({e}). Se emite solo teams.")
+
     payload = {
         'updated': datetime.datetime.now().isoformat(timespec='seconds'),
         'seasons': seasons_con_datos,
         'teams': all_teams,
+        'players': all_players,
     }
     with open('nla_stats.json', 'w', encoding='utf-8') as f:
         json.dump(payload, f, ensure_ascii=False)
-    print(f"\n✓ nla_stats.json escrito: {len(all_teams)} filas, temporadas {seasons_con_datos}")
+    print(f"\n✓ nla_stats.json escrito: {len(all_teams)} filas equipo, "
+          f"{len(all_players)} jugadores, temporadas {seasons_con_datos}")
 
 if __name__ == '__main__':
     main()

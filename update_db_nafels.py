@@ -110,7 +110,7 @@ def get_players(lines, section):
                 pc=parts[13].strip() if len(parts)>13 else ''
                 pm={'1':'OH','2':'OPP','3':'MB','4':'S','L':'L','5':'OH','':'?'}
                 pos='L' if role=='L' else pm.get(pc,'?')
-                players[num]={'name':f"{last} {first}".strip(),'apellido':last,'pos':pos,'num':num}
+                players[num]={'name':f"{first} {last}".strip(),'apellido':last,'nombre':first,'pos':pos,'num':num}
             except: pass
     return players
 
@@ -184,6 +184,7 @@ def parse_dvw_both(fpath, temporada):
 
         atk=defaultdict(list); srv=defaultdict(list)
         rec=defaultdict(list); sets=defaultdict(list); blk=defaultdict(list)
+        dfn=defaultdict(list)   # defensa (skill 'D' del lado propio) — sección 8
         prev_srv_orig=0; current_atype=0
 
         for line in scout:
@@ -237,9 +238,10 @@ def parse_dvw_both(fpath, temporada):
             elif skill=='R': rec[pnum].append(action)
             elif skill=='E': sets[pnum].append(action)
             elif skill=='B': blk[pnum].append(action)
+            elif skill=='D': dfn[pnum].append(action)   # sección 8: defensa
 
         result[team]={'players':players,'atk':dict(atk),'srv':dict(srv),
-                      'rec':dict(rec),'sets':dict(sets),'blk':dict(blk)}
+                      'rec':dict(rec),'sets':dict(sets),'blk':dict(blk),'dfn':dict(dfn)}
     return result, date, home, away
 
 # ── UPDATE DATABASE ───────────────────────────────────────────────
@@ -273,21 +275,14 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
             for num, p in data['players'].items():
                 ns = str(num)
                 if ns not in teams_data[team]:
-                    teams_data[team][ns] = {'info':None,'atk':[],'srv':[],'rec':[],'sets':[],'blk':[]}
+                    teams_data[team][ns] = {'info':None,'atk':[],'srv':[],'rec':[],'sets':[],'blk':[],'dfn':[]}
                 if teams_data[team][ns]['info'] is None:
                     teams_data[team][ns]['info'] = {**p, 'team':team}
-            for num, acts in data['atk'].items():
-                teams_data[team].setdefault(str(num),{'info':None,'atk':[],'srv':[],'rec':[],'sets':[],'blk':[]})
-                teams_data[team][str(num)]['atk'].extend(acts)
-            for num, acts in data['srv'].items():
-                teams_data[team].setdefault(str(num),{'info':None,'atk':[],'srv':[],'rec':[],'sets':[],'blk':[]})
-                teams_data[team][str(num)]['srv'].extend(acts)
-            for num, acts in data['rec'].items():
-                teams_data[team].setdefault(str(num),{'info':None,'atk':[],'srv':[],'rec':[],'sets':[],'blk':[]})
-                teams_data[team][str(num)]['rec'].extend(acts)
-            for num, acts in data['blk'].items():
-                teams_data[team].setdefault(str(num),{'info':None,'atk':[],'srv':[],'rec':[],'sets':[],'blk':[]})
-                teams_data[team][str(num)]['blk'].extend(acts)
+            for sk in ('atk','srv','rec','blk','dfn'):
+                for num, acts in data.get(sk,{}).items():
+                    teams_data[team].setdefault(str(num),{'info':None,'atk':[],'srv':[],'rec':[],'sets':[],'blk':[],'dfn':[]})
+                    teams_data[team][str(num)].setdefault(sk,[])
+                    teams_data[team][str(num)][sk].extend(acts)
 
         games_log.append({'file':fname,'date':date,'home':home,'away':away,'temporada':temporada})
         added += 1
@@ -301,6 +296,53 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     return teams_data, games_log
 
 # ── CALCULATE STATS ───────────────────────────────────────────────
+def eff_def(acts):
+    """Defensa: (Perf + 0.5·Buena − 0.5·Mala − Error)/T  (misma fórmula que jugador.html).
+    Códigos: # perfecta, + buena, ! ok(neutra), - mala, = error."""
+    if not acts: return None
+    t=len(acts); k=sum(1 for a in acts if a['effect']=='#')
+    pp=sum(1 for a in acts if a['effect']=='+'); ml=sum(1 for a in acts if a['effect']=='-')
+    e=sum(1 for a in acts if a['effect']=='=')
+    return round((k+0.5*pp-0.5*ml-e)/t*100,1)
+
+# Mapeo de tipo de recepción (igual que baterias_engine): M/H=flotado, Q/T=potencia
+REC_FLOT={'M','H'}; REC_POT={'Q','T'}
+
+def build_teams_data_fresh(season_dirs):
+    """Construye teams_data desde cero parseando TODOS los DVW de las carpetas dadas.
+    season_dirs: lista de (label_temporada, carpeta). Robusto: saltea carpetas vacías/inexistentes.
+    No persiste ni depende de estado previo → ideal para CI (gen_liga_stats / GitHub Action)."""
+    teams_data={}
+    for temporada, carpeta in season_dirs:
+        if not os.path.isdir(carpeta):
+            print(f"  [{temporada}] carpeta '{carpeta}' no existe → se saltea"); continue
+        dvw=sorted(f for f in os.listdir(carpeta) if f.endswith('.dvw'))
+        if not dvw:
+            print(f"  [{temporada}] carpeta '{carpeta}' sin .dvw → se saltea"); continue
+        usados=0
+        for fname in dvw:
+            fpath=os.path.join(carpeta,fname)
+            if os.path.getsize(fpath)<1000: continue
+            try: result,_,_,_=parse_dvw_both(fpath, temporada)
+            except Exception as e: print(f"  ERR {fname}: {e}"); continue
+            for team,data in result.items():
+                if team not in NLA_TEAMS: continue
+                teams_data.setdefault(team,{})
+                for num,p in data['players'].items():
+                    ns=str(num)
+                    teams_data[team].setdefault(ns,{'info':None,'atk':[],'srv':[],'rec':[],'sets':[],'blk':[],'dfn':[]})
+                    if teams_data[team][ns]['info'] is None:
+                        teams_data[team][ns]['info']={**p,'team':team}
+                for sk in ('atk','srv','rec','blk','dfn'):
+                    for num,acts in data.get(sk,{}).items():
+                        ns=str(num)
+                        teams_data[team].setdefault(ns,{'info':None,'atk':[],'srv':[],'rec':[],'sets':[],'blk':[],'dfn':[]})
+                        teams_data[team][ns].setdefault(sk,[])
+                        teams_data[team][ns][sk].extend(acts)
+            usados+=1
+        print(f"  [{temporada}] {usados} DVW procesados")
+    return teams_data
+
 def calculate_stats(teams_data, temporada_filter=None):
     players = []
     team_stats_out = []
@@ -333,12 +375,18 @@ def calculate_stats(teams_data, temporada_filter=None):
             atk_tr=[a for a in atk if a.get('atype',0)==1]
             srv_q=[a for a in srv if a.get('stype','')=='Q']
             srv_m=[a for a in srv if a.get('stype','')=='M']
+            # Sección 8 — recepción flotado/potencia (M/H=flotado, Q/T=potencia)
+            rec_m=[a for a in rec if a.get('stype','') in REC_FLOT]
+            rec_q=[a for a in rec if a.get('stype','') in REC_POT]
+            # Sección 8 — defensa (skill 'D' del lado propio)
+            dfn=[a for a in pd.get('dfn',[]) if not temporada_filter or a.get('temporada')==temporada_filter]
 
             players.append({
                 'team':team,'num':int(num_str),'name':info.get('name','').strip(),
                 'pos':pos,'pos_label':pos_label,'temporada':temporada_filter or 'all',
                 'atk_tot':len(atk),'atk_eff':eff_atk(atk),
                 'atk_so_eff':eff_atk(atk_so),'atk_tr_eff':eff_atk(atk_tr),
+                'atk_so_tot':len(atk_so),'atk_tr_tot':len(atk_tr),
                 'atk_k':pct_val(atk,'#'),'atk_e':pct_val(atk,'='),'atk_bl':pct_val(atk,'/'),
                 'srv_tot':len(srv),'srv_eff':eff_srv(srv),
                 'srv_q_eff':eff_srv(srv_q),'srv_m_eff':eff_srv(srv_m),
@@ -347,8 +395,13 @@ def calculate_stats(teams_data, temporada_filter=None):
                 'rec_tot':len(rec),'rec_eff':eff_rec(rec),
                 'rec_perf':pct_val(rec,'#'),'rec_pos':pct_val(rec,'+'),
                 'rec_neg':pct_val(rec,'/'),'rec_e':pct_val(rec,'='),
+                'rec_m_eff':eff_rec(rec_m),'rec_m_tot':len(rec_m),
+                'rec_q_eff':eff_rec(rec_q),'rec_q_tot':len(rec_q),
                 'blk_tot':len(blk_acts),'blk_eff':eff_blk(blk_acts),
                 'blk_k':pct_val(blk_acts,'#'),'blk_pos':pct_val(blk_acts,'+'),
+                'def_tot':len(dfn),'def_eff':eff_def(dfn),
+                'def_perf':pct_val(dfn,'#'),'def_pos':(round((sum(1 for a in dfn if a['effect'] in('#','+')))/len(dfn)*100,1) if dfn else None),
+                'def_e':pct_val(dfn,'='),
             })
 
         team_stats_out.append({

@@ -96,3 +96,35 @@ Para bugs de datos/UI: (1) reproducir el bug EN VIVO con el navegador y medirlo 
 
 ### Recordatorio clave
 La página `nla_stats_table.html` la genera hoy `update_db_nafels.py`. Si Nacho regenera con el pipeline viejo (septiembre), PISA el rebuild. Por eso la Pieza 1 (separar datos) es obligatoria ANTES de septiembre, y hay que asegurarse de que el pipeline viejo no sobrescriba el HTML nuevo (o migrar la generación al nuevo flujo JSON).
+
+---
+
+## 8. 🔜 PRÓXIMO: DASHBOARD DE JUGADORES DE LIGA (rankeable, formato game-plan) — ESPECIFICADO con Nacho
+
+**Objetivo:** en `nla_stats_table.html` tab Jugadores, replicar el formato del dashboard del game plan (separado por skill con subfiltros y color por valoración) PERO para TODOS los jugadores de la liga y con el SISTEMA DE RANKING como la tabla de equipos.
+
+### Estructura pedida por Nacho (exacta, vista en game_plan.html)
+5 botones de skill: **SAQUE · RECEPCIÓN · ATAQUE · BLOQUEO · DEFENSA**
+- SAQUE → subfiltros: Flotado / Potencia / Total
+- RECEPCIÓN → subfiltros: Flotado / Potencia / Total
+- ATAQUE → subfiltros: Side-out / Transición / Total
+- BLOQUEO → sin subfiltros
+- DEFENSA → sin subfiltros
+Tocás skill+subfiltro → la tabla RANKEA por ese fundamento, resalta ese grupo, color por ranking (verde mejor→rojo peor), nº de ranking, Näfels resaltado. Filtros: Posición (comparar like-with-like), Equipo, Temporada, Buscar, Mínimo de acciones.
+
+### Disponibilidad de datos (verificado en los 99 PLAYERS horneados, temporada "all")
+Schema PLAYERS: team,num,name,pos,pos_label,temporada, atk_(tot,eff,so_eff,tr_eff,k,e,bl), srv_(tot,eff,q_eff,m_eff,ace,e,q_tot,m_tot), rec_(tot,eff,perf,pos,neg,e), blk_(tot,eff,k,pos).
+- ✅ SAQUE Flotado=srv_m / Potencia=srv_q / Total=srv  (mapeo SQ_TIPO: Q=POTENCIA, M=FLOTADO)
+- ✅ ATAQUE Side-out=atk_so_eff / Transición=atk_tr_eff / Total=atk_eff (+kill atk_k, error atk_e, bloq atk_bl)
+- ✅ BLOQUEO blk_eff (+blk_k, blk_pos)
+- ⚠️ RECEPCIÓN: solo Total (rec_eff,perf,pos,neg,e). **Falta el split Flotado/Potencia** → regenerar.
+- ❌ DEFENSA: no existe en el schema → regenerar (el motor baterias_engine NO acumula 'D' por jugador del lado propio; hay que agregarlo: parsear skill 'D' del lado propio, contar digs por resultado).
+
+### Conclusión de alcance
+- El motor baterias_engine YA tiene `_sq_tipo` (saque flotado/potencia) y `_rec` (recepción flotado/potencia, mapeo M/H=flotado Q/T=potencia) por jugador → la recepción flot/pot SÍ se puede generar (no está en el schema horneado, pero el motor la calcula).
+- DEFENSA hay que agregarla al motor/generador.
+- Plan: (1) extender gen_liga_stats.py para emitir PLAYERS al JSON por temporada con TODOS los cortes (incl. recepción flot/pot via _rec y defensa nueva); (2) rebuild del tab Jugadores con los 5 botones + subfiltros + ranking (columnas que cambian según skill activo); (3) decouplear PLAYERS al JSON (hoy horneados); (4) verificar en vivo.
+- Frontend-only sobre datos actuales podría dar ya: Saque(flot/pot/total), Ataque(SO/TR/total), Bloqueo, Recepción(total). Recepción flot/pot + Defensa requieren el paso de generador.
+
+### Bug arreglado este chat
+Tab Jugadores quedaba vacío por defecto: el filtro de temporada (línea ~230 renderPlayers) excluía los PLAYERS horneados (temporada "all") cuando el selector quedaba en "25-26". Fix: `if(f.temporada&&p.temporada!==f.temporada&&p.temporada!=='all')return false;`. Hay que RE-PUBLICAR nla_stats_table.html.
