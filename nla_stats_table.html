@@ -18,8 +18,10 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-
 .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 .tab:hover:not(.active){color:var(--text)}
 .filters{display:flex;gap:12px;padding:14px 24px;background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center}
-.filter-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
-select,input[type=text]{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:13px;outline:none;cursor:pointer;min-width:120px}
+.filter-label{font-size:10px;color:#cbd5e1;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+select,input[type=text]{background:#1e293b;border:1px solid var(--border);color:#f1f5f9;padding:6px 10px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:13px;outline:none;cursor:pointer;min-width:120px}
+select option{background:#1e293b;color:#f1f5f9}
+input[type=text]::placeholder{color:#94a3b8}
 select:focus,input:focus{border-color:var(--accent)}
 .filter-group{display:flex;align-items:center;gap:6px}
 .reset-btn{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#fca5a5;padding:6px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:1px;font-family:'Barlow Condensed',sans-serif}
