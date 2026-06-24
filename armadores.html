@@ -1790,46 +1790,7 @@ document.getElementById('match-info').textContent=RIVAL.info;
 var main=document.getElementById('main-content');
 var dots=document.getElementById('nav-dots');
 
-JUGADORES.forEach(function(j,i){
-  main.appendChild(renderJugador(j,i));
-  var dot=document.createElement('div');
-  dot.className='nav-dot'+(i===0?' on':'');
-  dot.addEventListener('click',function(){
-    document.getElementById('jug-'+i).scrollIntoView({behavior:'smooth'});
-    dots.querySelectorAll('.nav-dot').forEach(function(d){d.classList.remove('on');});
-    dot.classList.add('on');
-  });
-  dots.appendChild(dot);
-});
-
-// Abrir primero por defecto
-setTimeout(function(){
-  var first=document.getElementById('jug-0');
-  if(first){
-    first.classList.add('open');
-    var wrap=first.querySelector('.canchitas-wrap');
-    if(!wrap.dataset.rendered){
-      wrap.dataset.rendered='1';
-      renderPanelAtaque(JUGADORES[0],0,first.querySelector('[data-panel="ataque"] .canchitas-grid'));
-      renderPanelSaque(JUGADORES[0],0,first.querySelector('[data-panel="saque"] .canchitas-grid'));
-      renderPanelRecepcion(JUGADORES[0],first.querySelector('[data-panel="recepcion"]'));
-    }
-  }
-},100);
-
-// Nav dots con IntersectionObserver
-var obs=(typeof IntersectionObserver==="undefined")?{observe:function(){},disconnect:function(){}}:new IntersectionObserver(function(entries){
-  entries.forEach(function(e){
-    if(e.isIntersecting){
-      var i=e.target.id.split('-')[1];
-      dots.querySelectorAll('.nav-dot').forEach(function(d,di){d.classList.toggle('on',di==i);});
-    }
-  });
-},{threshold:0.3});
-JUGADORES.forEach(function(_,i){
-  var el=document.getElementById('jug-'+i);
-  if(el) obs.observe(el);
-});
+// (panel por jugador eliminado — solo distribución de armado)
 
 var BLQ_OPCIONES=[
   {v:"",      label:"— Sin definir —"},
