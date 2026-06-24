@@ -675,7 +675,8 @@ function gpBuildArmador(){
     });
     var pills=[];
     [1,6,5,4,3,2].forEach(function(pos){
-      var g=rallies.filter(function(r){return r.sp===pos;});
+      // EFF de la rotación en side-out con recepción #+ (rq índice 0 o 2)
+      var g=rallies.filter(function(r){return r.sp===pos && r.atype===0 && (r.rq===0||r.rq===2);});
       pills.push({label:'P'+pos,eff:gpEffAtk(g),tot:g.length,pts:g.filter(function(r){return r.res==='#';}).length,pts_pct:gpPtsPct(g),err_pct:gpErrPct(g)});
     });
     var so=rallies.filter(function(r){return r.atype===0;}), tr=rallies.filter(function(r){return r.atype===1;});
@@ -1861,6 +1862,9 @@ var BLQ_OPCIONES=[
 var GP_ARM_PHASE='SO';   // 'SO' | 'TR'
 var GP_ARM_REC='pos';    // 'pos' (#+) | 'neg' (!-)
 var GP_ARM_MATCHES=null; // null = todos los partidos ; Set de índices = filtrar
+var GP_ARM_RECZONE=null; // null = todas ; 'r1'|'r6'|'r5' = banda de zona de recepción
+var GP_ARM_RECNUM=null;  // null = todos ; número = filtrar por receptor
+var GP_RECBANDS={r1:[1,9,2],r6:[6,8,3],r5:[5,7,4]};
 var GP_ARM_SYNCS=[];     // funciones de re-render de cada panel de armador
 function gpArmSyncAll(){ GP_ARM_SYNCS.forEach(function(f){ try{f();}catch(e){} }); }
 function gpComputeRotDist(setterObj,pos,phase,rec){
@@ -1877,6 +1881,8 @@ function gpComputeRotDist(setterObj,pos,phase,rec){
       if(rec==='neg'&&!(rq===3||rq===5)) return false;
     }
     if(GP_ARM_MATCHES&&GP_ARM_MATCHES.size){ if(r.length<13||!GP_ARM_MATCHES.has(r[12])) return false; }
+    if(GP_ARM_RECZONE){ var _b=GP_RECBANDS[GP_ARM_RECZONE]; if(!_b||_b.indexOf(r[15])<0) return false; }
+    if(GP_ARM_RECNUM!=null){ if(r[16]!==GP_ARM_RECNUM) return false; }
     return true;
   });
   var linked=[],kills=0,errs=0;
@@ -1956,6 +1962,8 @@ function gpZoneClips(setterObj,pos,phase,rec,zone){
       if(rec==='pos'&&!(rq===0||rq===2)) return;
       if(rec==='neg'&&!(rq===3||rq===5)) return; }
     if(GP_ARM_MATCHES&&GP_ARM_MATCHES.size){ if(r.length<13||!GP_ARM_MATCHES.has(r[12])) return; }
+    if(GP_ARM_RECZONE){ var _b=GP_RECBANDS[GP_ARM_RECZONE]; if(!_b||_b.indexOf(r[15])<0) return ; }
+    if(GP_ARM_RECNUM!=null){ if(r[16]!==GP_ARM_RECNUM) return ; }
     var z=gpGetZone(GP_COMBOS[r[8]]||'',r[11],r[6]);
     if(z!==zone) return;
     var mc=matches[r[12]]||null, code=mc?(mc.code||''):'';
@@ -2092,7 +2100,7 @@ function renderArmador(){
   var sec=document.getElementById('seccion-armador');
   if(!sec||!ARMADOR_DATA) return;
   sec.innerHTML='';
-  GP_ARM_SYNCS=[];
+  GP_ARM_SYNCS=[]; GP_ARM_RECZONE=null; GP_ARM_RECNUM=null;
   var tipos=['titular','suplente'];
   var tabsEl=document.createElement('div');
   tabsEl.style.cssText='display:flex;gap:2px;margin-bottom:0';
@@ -2222,6 +2230,26 @@ function renderArmador(){
       b.addEventListener('click',function(){ if(GP_ARM_PHASE!=='SO')return; GP_ARM_REC=o[0]; gpArmSyncAll(); });
       recWrap.appendChild(b); recBtns[o[0]]=b;
     });
+    // ── Recepción desde (banda de zona: Z1=1+9+2 / Z6=6+8+3 / Z5=5+7+4) ──
+    var rzLbl=document.createElement('span'); rzLbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase'; rzLbl.textContent='Recep. desde';
+    var rzWrap=document.createElement('div'); rzWrap.style.cssText='display:inline-flex;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:2px;gap:2px;margin-left:5px';
+    var rzBtns={};
+    [['','Todas'],['r1','Z1'],['r6','Z6'],['r5','Z5']].forEach(function(o){
+      var b=document.createElement('button'); b.textContent=o[1];
+      b.style.cssText='border:none;background:transparent;color:#94a3b8;font-family:Barlow Condensed,sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;padding:5px 11px;border-radius:6px;cursor:pointer';
+      b.addEventListener('click',function(){ GP_ARM_RECZONE=o[0]||null; gpArmSyncAll(); });
+      rzWrap.appendChild(b); rzBtns[o[0]||'all']=b;
+    });
+    // ── Receptor (jugador que recibe) ──
+    var rnLbl=document.createElement('span'); rnLbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase'; rnLbl.textContent='Receptor';
+    var rnSel=document.createElement('select'); rnSel.style.cssText='margin-left:5px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);color:#cbd5e1;font-family:Barlow Condensed,sans-serif;font-size:12px;font-weight:700;padding:6px 10px;border-radius:8px;cursor:pointer';
+    (function(){
+      var recv={}; ((setterRaw&&setterRaw.s)||[]).forEach(function(r){ if(r[16]>0) recv[r[16]]=(recv[r[16]]||0)+1; });
+      var nums=Object.keys(recv).map(Number).sort(function(a,b){return recv[b]-recv[a];});
+      var o0=document.createElement('option'); o0.value=''; o0.textContent='Todos'; rnSel.appendChild(o0);
+      nums.forEach(function(n){ var o=document.createElement('option'); o.value=n; o.textContent='#'+n+' ('+recv[n]+')'; rnSel.appendChild(o); });
+      rnSel.addEventListener('change',function(){ GP_ARM_RECNUM=this.value?parseInt(this.value,10):null; gpArmSyncAll(); });
+    })();
     function gpPaintFilters(){
       gpStyleBtn(phaseBtns.SO, GP_ARM_PHASE==='SO', '#3b82f6');
       gpStyleBtn(phaseBtns.TR, GP_ARM_PHASE==='TR', '#a855f7');
@@ -2229,6 +2257,9 @@ function renderArmador(){
       recWrap.style.opacity=so?'1':'.35'; recWrap.style.pointerEvents=so?'auto':'none'; recLbl.style.opacity=so?'1':'.35';
       gpStyleBtn(recBtns.pos, so&&GP_ARM_REC==='pos', '#22c55e');
       gpStyleBtn(recBtns.neg, so&&GP_ARM_REC==='neg', '#ef4444');
+      Object.keys(rzBtns).forEach(function(k){ var on=(k==='all'&&!GP_ARM_RECZONE)||(k===GP_ARM_RECZONE); gpStyleBtn(rzBtns[k], on, '#06b6d4'); });
+      var _has=false; for(var _i=0;_i<rnSel.options.length;_i++){ if(rnSel.options[_i].value===String(GP_ARM_RECNUM||'')) _has=true; }
+      if(!_has) GP_ARM_RECNUM=null; rnSel.value=GP_ARM_RECNUM?String(GP_ARM_RECNUM):'';
     }
     // ── Selector de partidos (multiselect) ──
     var gpMatches=(GP_TD.matches||[]);
@@ -2280,6 +2311,7 @@ function renderArmador(){
     }
 
     fbar.appendChild(phaseLbl); fbar.appendChild(phaseWrap); fbar.appendChild(recLbl); fbar.appendChild(recWrap);
+    fbar.appendChild(rzLbl); fbar.appendChild(rzWrap); fbar.appendChild(rnLbl); fbar.appendChild(rnSel);
     if(matchLbl){ fbar.appendChild(matchLbl); fbar.appendChild(matchBox); }
     panel.appendChild(fbar);
 

@@ -448,7 +448,7 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
     idx = content.find('[3SCOUT]\n')
     if idx < 0: return []
     scout = content[idx+9:content.find('\n[3', idx+9)].strip().split('\n')
-    rallies = []; pending = None; last_skill = ''; last_rq = '?'; atype = 0; last_serve_t = 0; last_rec_t = 0
+    rallies = []; pending = None; last_skill = ''; last_rq = '?'; atype = 0; last_serve_t = 0; last_rec_t = 0; last_rec_zone = 0; last_rec_num = 0
     for line in scout:
         l = line.strip()
         if len(l) < 6: continue
@@ -472,17 +472,20 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
         if skill == 'S':
             if pending: rallies.append(pending); pending = None
             last_skill = ''; last_rq = '?'; atype = 0 if t == rival_pfx else 1
-            last_serve_t = vt
+            last_serve_t = vt; last_rec_zone = 0; last_rec_num = 0
             continue
         if t != pfx: continue
-        if skill == 'R': last_rq = effect; last_skill = 'R'; last_rec_t = vt
+        if skill == 'R':
+            last_rq = effect; last_skill = 'R'; last_rec_t = vt; last_rec_num = pnum
+            last_rec_zone = int(tp[3][0]) if len(tp) > 3 and tp[3] and tp[3][0].isdigit() else 0
         elif skill == 'E' and pnum == setter_num:
             if pending: rallies.append(pending)
             rq = last_rq if last_skill == 'R' else '?'
             raw = tp[0] if tp else ''; call = raw[:2] if len(raw) >= 2 else raw
             pending = {'setter_pos': spos, 'set_num': setn, 'call': call, 'rec_quality': rq, 'atype': atype,
                        'atk_combo': '', 'atk_result': '', 'atk_dest': 0, 'atk_orig': 0, 'date': date, 'rival': rival,
-                       'code': mcode, 't_start': (last_serve_t or last_rec_t or vt), 't_atk': 0}
+                       'code': mcode, 't_start': (last_serve_t or last_rec_t or vt), 't_atk': 0,
+                       'rec_zone': last_rec_zone, 'rec_num': last_rec_num}
             last_skill = 'E'
         elif skill == 'A':
             if pending:
@@ -592,7 +595,7 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
             rl = team_rallies.get(str(sn), []) if isinstance(team_rallies, dict) else []
             if not rl: continue
             sname = td.get(str(sn),{}).get('info',{}).get('name',f'#{sn}')
-            arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1),r.get('t_start',0),r.get('t_atk',0)] for r in rl]
+            arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1),r.get('t_start',0),r.get('t_atk',0),r.get('rec_zone',0),r.get('rec_num',0)] for r in rl]
             setters_list.append({'num':sn,'name':sname,'s':arm,'total':len(rl)})
         setters_list.sort(key=lambda x:-x['total'])
         # Roster de posiciones (profesional) — jerarquía: setter→libero→central→outside/opposite
