@@ -253,6 +253,9 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     else:
         teams_data = {}; games_log = []; existing_dates = set()
 
+    # firma por PARTIDO (fecha + equipos) para evitar contar dos veces archivos duplicados/copias
+    existing_sigs = {(g.get('date'), tuple(sorted([g.get('home',''), g.get('away','')]))) for g in games_log}
+
     dvw_files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
     added = 0; skipped = 0
 
@@ -267,6 +270,13 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
             result, date, home, away = parse_dvw_both(fpath, temporada)
         except Exception as e:
             print(f"  ERROR {fname}: {e}"); continue
+
+        # mismo partido ya cargado desde otro archivo (copia "(1)", re-scout, etc.) → no contar doble
+        sig = (date, tuple(sorted([home, away])))
+        if date and sig in existing_sigs:
+            print(f"  ⚠ DUPLICADO omitido: {fname} (mismo partido que uno ya cargado)")
+            skipped += 1; continue
+        existing_sigs.add(sig)
 
         for team, data in result.items():
             if team not in teams_data: teams_data[team] = {}
@@ -531,6 +541,7 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
             liberos_by_team[tm] = libs
     rallies_both = defaultdict(lambda: defaultdict(list))
     setters_detected = {}
+    seen_sigs = set()  # evitar contar dos veces archivos del mismo partido (copias/duplicados)
     files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
     for fname in files:
         with open(os.path.join(dvw_dir, fname), encoding='utf-8', errors='ignore') as f:
@@ -542,6 +553,10 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
         date = m.group(1) if m else ''
         mc = re.search(r'\d{4}-\d{2}-\d{2}\s+(\d{3,})', fname)
         code = mc.group(1) if mc else ''
+        sig = (date, tuple(sorted([home, away])))
+        if date and sig in seen_sigs:
+            continue  # mismo partido ya procesado (copia "(1)", re-scout) → no contar doble
+        seen_sigs.add(sig)
         for team, pfx, rpfx, ishome, rival in [(home, '*', 'a', True, away), (away, 'a', '*', False, home)]:
             if team not in main_teams: continue
             team_libs = liberos_by_team.get(team, set())
@@ -579,6 +594,7 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         atk_p,srv_p,rec_p={},{},{}
         for ns,pd in td.items():
             info=pd.get('info') or {}; name=info.get('name',ns); num=int(ns)
+            ape=info.get('apellido','') or (name.rsplit(' ',1)[0] if ' ' in name else name)
             atk,srv,rec=pd.get('atk',[]),pd.get('srv',[]),pd.get('rec',[])
             if atk: atk_p[ns]={'name':name,'num':num,'a':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,a.get('atype',0),COMBO_IDX.get(a.get('combo',''),-1),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),6,-1] for a in atk]}
             if srv:
@@ -586,7 +602,7 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
                 srv_p[ns]={'name':name,'num':num,'stypes':stl,'s':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,sidx.get('S'+a.get('stype','Q'),0),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0)] for a in srv]}
             if rec:
                 rtl=list(dict.fromkeys('R'+a.get('stype','M') for a in rec)) or ['RM']; rtidx={r:i for i,r in enumerate(rtl)}
-                rec_p[ns]={'name':name,'num':num,'rtypes':rtl,'r':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,rtidx.get('R'+a.get('stype','M'),0),REC_IDX.get(a.get('effect','-'),3),a.get('orig',0),a.get('dest',0)] for a in rec]}
+                rec_p[ns]={'name':name,'apellido':ape,'num':num,'rtypes':rtl,'r':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,rtidx.get('R'+a.get('stype','M'),0),REC_IDX.get(a.get('effect','-'),3),a.get('orig',0),a.get('dest',0)] for a in rec]}
         # Armar AMBOS armadores (estructura setters array que usa el game plan)
         team_setters = setters.get(team, [])
         if not isinstance(team_setters, list): team_setters = [team_setters]

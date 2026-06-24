@@ -2248,7 +2248,10 @@ function renderArmador(){
       var recv={}; ((setterRaw&&setterRaw.s)||[]).forEach(function(r){ if(r[16]>0) recv[r[16]]=(recv[r[16]]||0)+1; });
       var nums=Object.keys(recv).map(Number).sort(function(a,b){return recv[b]-recv[a];});
       var o0=document.createElement('option'); o0.value=''; o0.textContent='Todos'; rnSel.appendChild(o0);
-      nums.forEach(function(n){ var o=document.createElement('option'); o.value=n; o.textContent='#'+n+' ('+recv[n]+')'; rnSel.appendChild(o); });
+      nums.forEach(function(n){ var o=document.createElement('option'); o.value=n;
+        var _r=(GP_TD.rec&&GP_TD.rec[n])||null; var _ape=(_r&&_r.apellido)||'';
+        if(!_ape&&_r&&_r.name){ var _pp=_r.name.trim().split(/\s+/); _ape=_pp.length>1?_pp.slice(0,-1).join(' '):(_pp[0]||''); }
+        o.textContent='#'+n+(_ape?' '+_ape:'')+' ('+recv[n]+')'; rnSel.appendChild(o); });
       rnSel.addEventListener('change',function(){ GP_ARM_RECNUM=this.value?parseInt(this.value,10):null; gpArmSyncAll(); });
     })();
     function gpPaintFilters(){
