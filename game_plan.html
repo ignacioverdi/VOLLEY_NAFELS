@@ -2046,7 +2046,7 @@ function gpVidRender(){
     var _tm=c.t_atk>0?(gpMmss(c.t_start)+'→'+gpMmss(c.t_atk)):'—';
     row.style.opacity=_play?'1':'.5';
     row.innerHTML=chk+'<span style="font-weight:900;width:16px;text-align:center;color:'+gpEvColor(c.ev)+'">'+c.ev+'</span><span style="flex:1">'+(_who?'<b style="color:#f1f5f9">'+_who+'</b> · ':'')+c.combo+' · '+c.orig+'→'+c.dest+'<span style="color:#52617a;font-size:11px"> · '+(c.date||'')+'</span></span><span style="color:#7689a1;font-size:12px;font-variant-numeric:tabular-nums">'+_tm+'</span>'+_tag;
-    if(!gpV.readonly){ var cb=row.querySelector('input'); cb.onclick=function(e){ e.stopPropagation(); c._sel=this.checked; }; }
+    if(!gpV.readonly){ var cb=row.querySelector('input'); if(cb){ cb.onclick=function(e){ e.stopPropagation(); c._sel=this.checked; }; } }
     row.onclick=function(){ gpVidPlayAt(i); }; L.appendChild(row); });
   document.getElementById('gpVidNow').textContent=vis.length+' clips';
   document.getElementById('gpVidSave').style.display=gpV.coach?'block':'none';
