@@ -5,7 +5,7 @@
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>GAME PLAN — AMRISWIL · NAFELS</title>
+<title>GAME PLAN — CASLA</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -265,8 +265,6 @@ select, select option {
 </style>
 <script src="lang.js" onerror="void 0"></script>
 <script src="liga_data.js"></script>
-<script src="firebase.js" onerror="void 0"></script>
-<script src="mapa_videos.js" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script src="videos.js" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 </head>
 <body>
@@ -276,7 +274,7 @@ select, select option {
   <button onclick="descargarPDF()" class="pdf-btn" id="pdf-btn">📄 Descargar PDF</button>
   <div>
     <div class="page-title"><span data-t="game_plan">Plan de Juego</span></div>
-    <div style="font-size:10px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;margin-top:1px">Análisis táctico de rivales — Volley Näfels</div>
+    <div style="font-size:10px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;margin-top:1px">Análisis táctico de rivales — CASLA</div>
   </div>
   <div>
     <div class="rival-name" id="rival-nombre">AMRISWIL</div>
@@ -296,6 +294,27 @@ select, select option {
     <div id="seccion-armador"></div>
   </div>
 
+  <!-- TRANSICIÓN DEL ARMADOR -->
+  <div style="margin-top:32px" id="seccion-transicion">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:#e2e8f0;margin-bottom:6px">
+      DISTRIBUCIÓN EN TRANSICIÓN
+      <span style="font-size:11px;font-family:'Barlow Condensed',sans-serif;color:#475569;letter-spacing:1px;margin-left:12px;font-weight:400">Juego corrido · sin recepción · armado por el setter</span>
+    </div>
+    <div id="trans-content">
+      <div style="color:#475569;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:1px;padding:24px;border:1px solid rgba(255,255,255,.06);border-radius:12px;text-align:center">
+        Sin datos de transición
+      </div>
+    </div>
+  </div>
+
+  <!-- SI NEUTRALIZAMOS A X -->
+  <div style="margin-top:32px" id="seccion-neutralizar">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:#e2e8f0;margin-bottom:6px">
+      SI NEUTRALIZAMOS UNA POSICIÓN
+      <span style="font-size:11px;font-family:'Barlow Condensed',sans-serif;color:#475569;letter-spacing:1px;margin-left:12px;font-weight:400">Cómo redistribuye el armador su juego (dato histórico)</span>
+    </div>
+    <div id="neutralizar-content"></div>
+  </div>
 
   <!-- RECEPCIÓN RIVAL -->
   <div style="margin-top:32px" id="seccion-recepcion">
@@ -503,7 +522,7 @@ var GP_L = window.LIGA_DATA;
 
 // Si no hay rival especificado, tomar el primero que no sea el equipo propio
 if (!GP_RIVAL_SLUG || !GP_L.teams[GP_RIVAL_SLUG]) {
-  var _keys = Object.keys(GP_L.teams);
+  var _keys = Object.keys(GP_L.teams).filter(function(k){return k!=='casla';});
   GP_RIVAL_SLUG = _keys[0];
 }
 var GP_TD = GP_L.teams[GP_RIVAL_SLUG];
@@ -547,11 +566,6 @@ function gpPtsPct(arr){
   if(!arr.length) return null;
   var k=0; arr.forEach(function(r){if(r.res==='#')k++;});
   return Math.round(k/arr.length*100);
-}
-function gpErrPct(arr){
-  if(!arr.length) return null;
-  var bl=0,e=0; arr.forEach(function(r){ if(r.res==='/')bl++; else if(r.res==='=')e++; });
-  return Math.round((bl+e)/arr.length*100);
 }
 
 // ── Clasificar combo+origen a posición de ataque (P4/P3/P2/P8/P9) ──
@@ -654,28 +668,19 @@ function gpBuildArmador(){
     });
     var pills=[];
     [1,6,5,4,3,2].forEach(function(pos){
-      // EFF de la rotación en side-out con recepción #+ (rq índice 0 o 2)
-      var g=rallies.filter(function(r){return r.sp===pos && r.atype===0 && (r.rq===0||r.rq===2);});
-      pills.push({label:'P'+pos,eff:gpEffAtk(g),tot:g.length,pts:g.filter(function(r){return r.res==='#';}).length,pts_pct:gpPtsPct(g),err_pct:gpErrPct(g)});
+      var g=rallies.filter(function(r){return r.sp===pos;});
+      pills.push({label:'P'+pos,eff:gpEffAtk(g),tot:g.length,pts:g.filter(function(r){return r.res==='#';}).length,pts_pct:gpPtsPct(g)});
     });
     var so=rallies.filter(function(r){return r.atype===0;}), tr=rallies.filter(function(r){return r.atype===1;});
-    pills.push({label:'SO',eff:gpEffAtk(so),tot:so.length,pts:so.filter(function(r){return r.res==='#';}).length,pts_pct:gpPtsPct(so),err_pct:gpErrPct(so)});
-    pills.push({label:'TR',eff:gpEffAtk(tr),tot:tr.length,pts:tr.filter(function(r){return r.res==='#';}).length,pts_pct:gpPtsPct(tr),err_pct:gpErrPct(tr)});
-    // Por rotación, SEPARADO por fase (para los modales SO / TR)
-    var pillsSO=[], pillsTR=[];
-    [4,3,2,5,6,1].forEach(function(pos){
-      var gSO=rallies.filter(function(r){return r.sp===pos && r.atype===0;});
-      var gTR=rallies.filter(function(r){return r.sp===pos && r.atype===1;});
-      pillsSO.push({label:'P'+pos,eff:gpEffAtk(gSO),tot:gSO.length,pts:gSO.filter(function(r){return r.res==='#';}).length,pts_pct:gpPtsPct(gSO),err_pct:gpErrPct(gSO)});
-      pillsTR.push({label:'P'+pos,eff:gpEffAtk(gTR),tot:gTR.length,pts:gTR.filter(function(r){return r.res==='#';}).length,pts_pct:gpPtsPct(gTR),err_pct:gpErrPct(gTR)});
-    });
+    pills.push({label:'SO',eff:gpEffAtk(so),tot:so.length,pts:so.filter(function(r){return r.res==='#';}).length,pts_pct:gpPtsPct(so)});
+    pills.push({label:'TR',eff:gpEffAtk(tr),tot:tr.length,pts:tr.filter(function(r){return r.res==='#';}).length,pts_pct:gpPtsPct(tr)});
     var calls=['K1','K7','KM','K2','KC','KP','KE','KB'];
     var llamadas=[];
     calls.forEach(function(call){
       var subset=rallies.filter(function(r){return r.call===call;});
       if(subset.length>=5) llamadas.push({call:call,tot:subset.length,eff:gpEffAtk(subset),pts_pct:gpPtsPct(subset),dist:buildDist(subset)});
     });
-    return {nombre:setterObj.name,num:setterObj.num,rotaciones:rotaciones,pills:pills,pillsSO:pillsSO,pillsTR:pillsTR,llamadas:llamadas,
+    return {nombre:setterObj.name,num:setterObj.num,rotaciones:rotaciones,pills:pills,llamadas:llamadas,
             so:{eff:gpEffAtk(so),tot:so.length},tr:{eff:gpEffAtk(tr),tot:tr.length}};
   }
   return { titular: buildOne(setters[0]), suplente: setters.length>1?buildOne(setters[1]):null };
@@ -1545,11 +1550,6 @@ function renderJugador(j,idx){
   var gridS=document.createElement('div');gridS.className='canchitas-grid';panelS.appendChild(gridS);
   var panelR=document.createElement('div');panelR.className='tab-panel';panelR.dataset.panel='recepcion';
   wrap.appendChild(panelA);wrap.appendChild(panelS);wrap.appendChild(panelR);
-  // Líbero: la tarjeta abre por defecto en RECEPCIÓN (ataque y saque están vacíos para un líbero)
-  if(j.pos==='LIBERO'){
-    btnAtaque.className='tab-btn'; panelA.className='tab-panel';
-    btnRec.className='tab-btn active-recepcion'; panelR.className='tab-panel active';
-  }
   sec.appendChild(wrap);
 
   // Click header → toggle open + render
@@ -1806,7 +1806,6 @@ setTimeout(function(){
       wrap.dataset.rendered='1';
       renderPanelAtaque(JUGADORES[0],0,first.querySelector('[data-panel="ataque"] .canchitas-grid'));
       renderPanelSaque(JUGADORES[0],0,first.querySelector('[data-panel="saque"] .canchitas-grid'));
-      renderPanelRecepcion(JUGADORES[0],first.querySelector('[data-panel="recepcion"]'));
     }
   }
 },100);
@@ -1882,24 +1881,25 @@ function gpComputeRotDist(setterObj,pos,phase,rec){
   var nAll=rows.length;
   return {total:total,dist:dist,eff:nAll?Math.round((kills-errs)/nAll*100):0,pts_pct:nAll?Math.round(kills/nAll*100):0};
 }
-function gpCourtSVG(distObj,blqData,rot){
-  var W=200,H=150, cw=W/3;
-  var stripH=15, netY=stripH, fY=netY+5, fH=58, bY=fY+fH+5, bH=58;
+function gpCourtSVG(distObj,blqData){
+  var W=200,H=144, cw=W/3;
+  var stripH=17, netY=stripH, fY=netY+5, fH=55, bY=fY+fH+4, bH=55;
   var dist=distObj.dist||{};
-  var ZCOL={4:'#f59e0b',3:'#a855f7',2:'#3b82f6',8:'#06b6d4',9:'#ec4899'};
+  var ZC={'4':'#f59e0b','3':'#a855f7','2':'#3b82f6','8':'#06b6d4','9':'#ec4899'};
   function cell(z,c,y,h){
     var x=c*cw+2, w=cw-4, info=dist[z];
     var count=info?info.tot:0, pct=info?info.pct:0, ptp=info?info.pct_p:0;
-    var col=ZCOL[z]||'#7c8694';
-    var op=count>0?Math.max(0.14,pct/100*0.55+0.14):0.05;
-    var s='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="6" fill="'+col+'" opacity="'+op+'" stroke="'+col+'" stroke-width="1.4" stroke-opacity="'+(count>0?0.8:0.18)+'"/>';
-    s+='<text x="'+(x+6)+'" y="'+(y+12)+'" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="800" fill="'+col+'" opacity="'+(count>0?0.95:0.4)+'">Z'+z+'</text>';
+    var zc=ZC[z]||'#7c8694';
+    var op=count>0?Math.max(0.13,pct/100*0.55+0.13):0.045;
+    var s='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="5" fill="'+zc+'" opacity="'+op+'" stroke="'+zc+'" stroke-width="1" stroke-opacity="0.5"/>';
+    s+='<text x="'+(x+5)+'" y="'+(y+11)+'" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="800" fill="'+zc+'" opacity="0.95">Z'+z+'</text>';
     if(count>0){
-      s+='<text x="'+(x+w/2)+'" y="'+(y+h/2+2)+'" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="900" font-size="18" fill="#f1f5f9">'+count+'</text>';
-      s+='<text x="'+(x+w/2)+'" y="'+(y+h/2+13)+'" text-anchor="middle" font-family="Barlow,sans-serif" font-size="9" fill="#cbd5e1">'+pct+'%</text>';
-      s+='<text x="'+(x+w/2)+'" y="'+(y+h/2+24)+'" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="9" fill="#22c55e"># '+ptp+'%</text>';
+      s+='<text x="'+(x+w/2)+'" y="'+(y+h/2-3)+'" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="900" font-size="18" fill="#f8fafc">'+count+'</text>';
+      s+='<text x="'+(x+w/2)+'" y="'+(y+h/2+8)+'" text-anchor="middle" font-family="Barlow,sans-serif" font-size="9" fill="#cbd5e1">'+pct+'%</text>';
+      s+='<text x="'+(x+w/2)+'" y="'+(y+h/2+18)+'" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="9" fill="#22c55e"># '+ptp+'%</text>';
+    } else {
+      s+='<text x="'+(x+w/2)+'" y="'+(y+h/2+3)+'" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="11" fill="'+zc+'" opacity="0.22">Z'+z+'</text>';
     }
-    if(count>0 && typeof rot!=='undefined'){ return '<g style="cursor:pointer" ondblclick="gpOpenVideo('+rot+','+z+')"><title>Doble clic: ver video de estos ataques</title>'+s+'</g>'; }
     return s;
   }
   var cells=cell(4,0,fY,fH)+cell(3,1,fY,fH)+cell(2,2,fY,fH)+cell(8,1,bY,bH)+cell(9,2,bY,bH);
@@ -1909,183 +1909,15 @@ function gpCourtSVG(distObj,blqData,rot){
     [['izq',0],['cen',1],['der',2]].forEach(function(p){
       var v=blqData[p[0]]; if(!v) return;
       var col=bc[v]||'#94a3b8', cx=p[1]*cw+cw/2;
-      blk+='<circle cx="'+cx+'" cy="'+(stripH/2)+'" r="5.5" fill="'+col+'" opacity="0.25" stroke="'+col+'" stroke-width="1.2"/>';
+      blk+='<circle cx="'+cx+'" cy="'+(stripH/2)+'" r="6" fill="'+col+'" opacity="0.3" stroke="'+col+'" stroke-width="1.2"/>';
     });
   }
-  var net='<rect x="'+(W/2-15)+'" y="'+(netY-8)+'" width="30" height="11" rx="3" fill="#0e131c"/>'
-    +'<line x1="2" y1="'+netY+'" x2="'+(W-2)+'" y2="'+netY+'" stroke="#f0b429" stroke-width="2.5" stroke-dasharray="5 3" opacity="0.7"/>'
-    +'<text x="'+(W/2)+'" y="'+(netY)+'" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="800" fill="#f0b429" opacity="0.85">RED</text>';
+  var net='<line x1="2" y1="'+netY+'" x2="'+(W-2)+'" y2="'+netY+'" stroke="#f0b429" stroke-width="2.5" stroke-dasharray="5 3" opacity="0.75"/>'
+    +'<rect x="'+(W/2-13)+'" y="'+(netY-6)+'" width="26" height="12" rx="2" fill="#0e131c"/>'
+    +'<text x="'+(W/2)+'" y="'+(netY+0.5)+'" text-anchor="middle" dominant-baseline="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="800" fill="#f0b429">RED</text>';
   var l3='<line x1="2" y1="'+(fY+fH+2)+'" x2="'+(W-2)+'" y2="'+(fY+fH+2)+'" stroke="#7c8694" stroke-width="1" stroke-dasharray="2 3" opacity="0.18"/>';
-  return '<svg viewBox="0 0 '+W+' '+H+'" style="display:block;width:100%;height:auto"><rect width="'+W+'" height="'+H+'" rx="7" fill="#11161f" stroke="#262c38" stroke-width="1"/>'+blk+net+l3+cells+'</svg>';
+  return '<svg viewBox="0 0 '+W+' '+H+'" style="display:block;width:100%;height:auto"><rect width="'+W+'" height="'+H+'" rx="6" fill="#0e131c" stroke="#262c38" stroke-width="1"/>'+blk+net+l3+cells+'</svg>';
 }
-
-
-// ════════════════ VIDEO: doble clic en zona → reproductor embebido ════════════════
-var GP_ARM_CURSETTER=null;                 // setter actual (lo setea renderRotGrid)
-var GP_VID_FALLBACK={'751238':'1hi9AA9sHKs'}; // links de prueba mientras se completa mapa_videos.js
-var gpV={player:null,ready:false,timer:null,list:[],idx:-1,playing:false,ev:null,key:'',coach:true,readonly:false,PRE:2,POST:4};
-
-function gpYtId(u){ if(!u) return ''; u=String(u); var m=u.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/); return m?m[1]:(u.length===11?u:''); }
-function gpVidUrl(code){ var M=window.MAPA_VIDEOS||{}; return gpYtId(M[code]||GP_VID_FALLBACK[code]||''); }
-function gpEvColor(e){ return {'#':'#22c55e','+':'#84cc16','!':'#eab308','-':'#f97316','=':'#ef4444','/':'#f59e0b'}[e]||'#94a3b8'; }
-function gpMmss(s){ s=Math.max(0,Math.round(s||0)); var m=Math.floor(s/60),x=s%60; return m+':'+(x<10?'0':'')+x; }
-
-// recolecta los clips de un cuadrante con EL MISMO filtro que la canchita
-function gpPlayerName(num){ if(!num) return ''; var a=(GP_TD&&GP_TD.atk)||{}; var p=a[String(num)]; if(p&&p.name){ var pp=String(p.name).trim().split(' '); return pp[pp.length-1]; } return ''; }
-function gpZoneClips(setterObj,pos,phase,rec,zone){
-  var RES=['#','/','+','!','=','-'];
-  if(!setterObj||!setterObj.s) return [];
-  var matches=(GP_TD&&GP_TD.matches)||[];
-  var out=[];
-  setterObj.s.forEach(function(r){
-    if(r[6]!==pos) return;
-    var at=r[4];
-    if(phase==='SO'&&at!==0) return;
-    if(phase==='TR'&&at!==1) return;
-    if(phase==='SO'&&rec){ var rq=r[7];
-      if(rec==='pos'&&!(rq===0||rq===2)) return;
-      if(rec==='neg'&&!(rq===3||rq===5)) return; }
-    if(GP_ARM_MATCHES&&GP_ARM_MATCHES.size){ if(r.length<13||!GP_ARM_MATCHES.has(r[12])) return; }
-    if(GP_ARM_RECZONE){ var _b=GP_RECBANDS[GP_ARM_RECZONE]; if(!_b||_b.indexOf(r[15])<0) return ; }
-    if(GP_ARM_RECNUM!=null){ if(r[16]!==GP_ARM_RECNUM) return ; }
-    if(GP_ARM_SERVETYPE&&phase==='SO'){ if((r[18]||'')!==GP_ARM_SERVETYPE) return ; }
-    var z=gpGetZone(GP_COMBOS[r[8]]||'',r[11],r[6]);
-    if(z!==zone) return;
-    var mc=matches[r[12]]||null, code=mc?(mc.code||''):'';
-    out.push({code:code,t_start:r[13]||0,t_atk:r[14]||0,ev:RES[r[9]]||'=',combo:GP_COMBOS[r[8]]||'',orig:r[11],dest:r[10],date:mc?mc.date:'',rival:mc?mc.rival:'',num:r[17]||0});
-  });
-  return out;
-}
-
-function gpVidDom(){
-  if(document.getElementById('gpVidOverlay')) return;
-  var d=document.createElement('div'); d.id='gpVidOverlay';
-  d.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(4,8,14,.86);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:14px';
-  d.innerHTML=''
-   +'<div id="gpVidBox" style="background:#0e151f;border:1px solid #243044;border-radius:16px;width:min(960px,96vw);max-height:94vh;overflow:auto;padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.6)">'
-   +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
-   +'<b id="gpVidTitle" style="font-size:16px;color:#e2e8f0;font-family:Barlow,sans-serif">Reproductor</b>'
-   +'<div style="display:flex;gap:6px"><button id="gpVidMax" style="border:1px solid #243044;background:transparent;color:#94a3b8;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer">⛶ Maximizar</button>'
-   +'<button id="gpVidClose" style="border:1px solid #243044;background:transparent;color:#94a3b8;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer">✕</button></div></div>'
-   +'<div id="gpVidWrap" style="position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:11px;overflow:hidden;margin-bottom:10px"><div id="gpVidPlayer" style="width:100%;height:100%"></div></div>'
-   +'<div id="gpVidChips" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>'
-   +'<div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap">'
-   +'<button id="gpVidPlay" style="background:#22c55e;color:#04210f;border:none;font-weight:800;padding:8px 14px;border-radius:9px;cursor:pointer;font-family:inherit">▶ Reproducir</button>'
-   +'<button id="gpVidPrev" style="border:1px solid #243044;background:#16212f;color:#e2e8f0;font-weight:700;padding:8px 12px;border-radius:8px;cursor:pointer">◀</button>'
-   +'<button id="gpVidNext" style="border:1px solid #243044;background:#16212f;color:#e2e8f0;font-weight:700;padding:8px 12px;border-radius:8px;cursor:pointer">▶</button>'
-   +'<span id="gpVidNow" style="color:#7689a1;font-size:12px"></span></div>'
-   +'<div id="gpVidList" style="max-height:240px;overflow:auto;border-top:1px solid #1f2c3d"></div>'
-   +'<button id="gpVidSave" style="margin-top:10px;width:100%;background:#3b82f6;color:#fff;border:none;padding:11px;border-radius:9px;font-weight:800;cursor:pointer;font-family:inherit">💾 Guardar esta secuencia para el equipo</button>'
-   +'<div id="gpVidHint" style="font-size:11px;color:#7689a1;margin-top:8px;line-height:1.5"></div>'
-   +'</div>';
-  document.body.appendChild(d);
-  d.addEventListener('click',function(e){ if(e.target===d) gpVidCloseFn(); });
-  document.getElementById('gpVidClose').onclick=gpVidCloseFn;
-  document.getElementById('gpVidMax').onclick=function(){ var w=document.getElementById('gpVidWrap'); if(!document.fullscreenElement){ w.requestFullscreen&&w.requestFullscreen(); } else { document.exitFullscreen&&document.exitFullscreen(); } };
-  document.getElementById('gpVidPlay').onclick=gpVidToggle;
-  document.getElementById('gpVidPrev').onclick=function(){ gpVidNav(-1); };
-  document.getElementById('gpVidNext').onclick=function(){ gpVidNav(1); };
-  document.getElementById('gpVidSave').onclick=gpVidSaveFn;
-  // cargar YouTube API una sola vez
-  if(!window.YT){ var s=document.createElement('script'); s.src='https://www.youtube.com/iframe_api'; document.head.appendChild(s); }
-}
-function gpVidEnsurePlayer(cb){
-  if(gpV.player&&gpV.ready){ cb(); return; }
-  function mk(){ gpV.player=new YT.Player('gpVidPlayer',{playerVars:{rel:0,modestbranding:1,playsinline:1,controls:0,disablekb:1,fs:0,iv_load_policy:3},events:{onReady:function(){ gpV.ready=true; cb(); },onError:function(e){ gpVidErr(e.data); }}}); }
-  if(window.YT&&window.YT.Player){ if(!gpV.player) mk(); else cb(); }
-  else { var iv=setInterval(function(){ if(window.YT&&window.YT.Player){ clearInterval(iv); if(!gpV.player) mk(); else cb(); } },120); }
-}
-function gpVidErr(code){
-  var local=(location.protocol==='file:');
-  var w=document.getElementById('gpVidWrap');
-  w.innerHTML='<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;color:#e2e8f0;font-size:14px;line-height:1.6">'+(local?'<b style="color:#f59e0b">Abrilo desde tu sitio en vivo (https)</b>, no como archivo local — YouTube no reproduce localmente.':'No hay video para este partido todavía. Cargá el link en <b>mapa_videos.js</b> (código '+(gpV.list[gpV.idx]?gpV.list[gpV.idx].code:'?')+').')+'</div>';
-}
-
-function gpOpenVideo(rot,zone){
-  if(!GP_ARM_CURSETTER){ return; }
-  gpVidDom();
-  var rec=GP_ARM_PHASE==='SO'?GP_ARM_REC:null;
-  var clips=gpZoneClips(GP_ARM_CURSETTER,rot,GP_ARM_PHASE,rec,zone);
-  gpV.coach=(typeof vbIsCoach==='function')?vbIsCoach():true;
-  gpV.key=(GP_RIVAL_SLUG||'rival')+'__r'+rot+'_'+GP_ARM_PHASE+(GP_ARM_PHASE==='SO'?('_'+GP_ARM_REC):'')+'_z'+zone;
-  var faseLbl=GP_ARM_PHASE==='SO'?('Side-out '+(GP_ARM_REC==='pos'?'#+':GP_ARM_REC==='neg'?'!-':'todas')):'Transición';
-  document.getElementById('gpVidTitle').textContent='P'+rot+' · Zona '+zone+' · '+faseLbl+' — '+clips.length+' ataques';
-  document.getElementById('gpVidOverlay').style.display='flex';
-  clips.forEach(function(c){ c._key=c.code+'_'+c.t_atk; });
-  // cargar selección guardada del entrenador
-  var path='gp_video_sel/'+gpV.key.replace(/[^a-zA-Z0-9_]/g,'_');
-  var apply=function(saved){
-    var set=(saved&&saved.length)?new Set(saved):null;
-    clips.forEach(function(c){ c._sel = set? set.has(c._key) : true; });
-    gpV.readonly=false;
-    if(!gpV.coach && set){ clips=clips.filter(function(c){return c._sel;}); gpV.readonly=true; } // jugador con secuencia guardada → solo eso
-    gpV.list=clips.slice().sort(function(a,b){return a.t_atk-b.t_atk;}); gpV.ev=null; gpV.idx=-1;
-    gpVidRender();
-  };
-  if(typeof fbGet==='function'){ fbGet(path,apply); } else { apply(null); }
-}
-
-function gpVidVisible(){ return gpV.list.filter(function(c){ return !gpV.ev || c.ev===gpV.ev; }); }
-function gpVidRender(){
-  // chips de valoración
-  var box=document.getElementById('gpVidChips'); box.style.display=gpV.readonly?'none':'flex'; box.innerHTML='';
-  var order=['#','+','!','-','=','/'], lbl={'#':'# punto','+':'+ bueno','!':'! neutro','-':'- malo','=':'= error','/':'/ bloq'};
-  var counts={}; gpV.list.forEach(function(c){ counts[c.ev]=(counts[c.ev]||0)+1; });
-  order.forEach(function(ev){ if(!counts[ev]) return; var b=document.createElement('button'); var on=gpV.ev===ev;
-    b.style.cssText='border:1px solid '+(on?gpEvColor(ev):'#243044')+';background:'+(on?gpEvColor(ev)+'22':'transparent')+';color:'+(on?'#fff':'#94a3b8')+';font-weight:800;font-size:13px;padding:5px 12px;border-radius:7px;cursor:pointer;font-family:inherit';
-    b.textContent=lbl[ev]+' ('+counts[ev]+')'; b.onclick=function(){ gpV.ev=(gpV.ev===ev?null:ev); gpVidRender(); }; box.appendChild(b); });
-  // lista
-  var L=document.getElementById('gpVidList'); L.innerHTML=''; var vis=gpVidVisible();
-  vis.forEach(function(c){ var i=gpV.list.indexOf(c);
-    var row=document.createElement('div'); row.style.cssText='display:flex;gap:9px;align-items:center;padding:8px 4px;border-bottom:1px solid #16212f;cursor:pointer;font-size:13px;color:#e2e8f0'+(i===gpV.idx?';background:rgba(34,197,94,.10)':'');
-    var _vid=gpVidUrl(c.code), _play=(c.t_atk>0&&!!_vid);
-    var chk=(gpV.readonly||!_play)?'<span style="width:16px;display:inline-block;flex:none"></span>':'<input type="checkbox" '+(c._sel?'checked':'')+' style="width:16px;height:16px;accent-color:#22c55e">';
-    var _nm=gpPlayerName(c.num), _who=c.num?('#'+c.num+(_nm?' '+_nm:'')):'';
-    var _tag=_play?'<span style="color:#22c55e;font-size:11px;margin-left:4px">▶ video</span>':(c.t_atk>0?'<span style="color:#64748b;font-size:10px;margin-left:4px">sin link</span>':'<span style="color:#475569;font-size:10px;margin-left:4px">sin sync</span>');
-    var _tm=c.t_atk>0?(gpMmss(c.t_start)+'→'+gpMmss(c.t_atk)):'—';
-    row.style.opacity=_play?'1':'.5';
-    row.innerHTML=chk+'<span style="font-weight:900;width:16px;text-align:center;color:'+gpEvColor(c.ev)+'">'+c.ev+'</span><span style="flex:1">'+(_who?'<b style="color:#f1f5f9">'+_who+'</b> · ':'')+c.combo+' · '+c.orig+'→'+c.dest+'<span style="color:#52617a;font-size:11px"> · '+(c.date||'')+'</span></span><span style="color:#7689a1;font-size:12px;font-variant-numeric:tabular-nums">'+_tm+'</span>'+_tag;
-    if(!gpV.readonly){ var cb=row.querySelector('input'); cb.onclick=function(e){ e.stopPropagation(); c._sel=this.checked; }; }
-    row.onclick=function(){ gpVidPlayAt(i); }; L.appendChild(row); });
-  document.getElementById('gpVidNow').textContent=vis.length+' clips';
-  document.getElementById('gpVidSave').style.display=gpV.coach?'block':'none';
-  var hint=document.getElementById('gpVidHint');
-  hint.textContent=gpV.coach?'Tildá los ataques que querés y guardá: el equipo verá solo esos. (El jugador, si no guardaste nada, ve todos.)':(gpV.readonly?'Secuencia preparada por el entrenador.':'El entrenador todavía no preparó esta zona — los ves todos.');
-}
-function gpVidSelected(){ return gpV.list.filter(function(c){ return c._sel; }); }
-function gpVidToggle(){ if(gpV.playing){ gpVidStop(); } else { var s=(gpV.readonly?gpV.list:gpVidSelected()).filter(function(c){return c.t_atk>0 && !!gpVidUrl(c.code);}); if(!s.length){ alert('Estos ataques todavia no tienen video cargado. Agrega el link del partido en mapa_videos.js.'); return; } gpVidPlayAt(gpV.list.indexOf(s[0])); } }
-function gpVidPlayAt(i){
-  if(i<0||i>=gpV.list.length) return; gpV.idx=i; var c=gpV.list[i];
-  var vid=gpVidUrl(c.code);
-  document.getElementById('gpVidWrap').innerHTML='<div id="gpVidPlayer" style="width:100%;height:100%"></div>';
-  gpV.player=null; gpV.ready=false;
-  if(!vid){ gpVidErr(0); gpVidRender(); return; }
-  gpVidEnsurePlayer(function(){
-    var start=Math.max(0,c.t_start-gpV.PRE), end=c.t_atk+gpV.POST;
-    gpV.player.loadVideoById({videoId:vid,startSeconds:start});
-    gpV.playing=true; document.getElementById('gpVidPlay').textContent='⏸ Pausar';
-    clearInterval(gpV.timer);
-    gpV.timer=setInterval(function(){ if(gpV.player&&gpV.player.getCurrentTime&&gpV.player.getCurrentTime()>=end){ gpVidNext(); } },150);
-    gpVidRender();
-  });
-}
-function gpVidNext(){
-  var pool=(gpV.readonly?gpV.list:gpVidSelected()).filter(function(c){return c.t_atk>0 && !!gpVidUrl(c.code);}); var cur=gpV.list[gpV.idx]; var k=pool.indexOf(cur);
-  if(k>=0&&k+1<pool.length){ gpVidPlayAt(gpV.list.indexOf(pool[k+1])); } else { gpVidStop(true); }
-}
-function gpVidNav(d){ var vis=gpVidVisible(); var cur=gpV.list[gpV.idx]; var k=vis.indexOf(cur); var n=k+d; if(n<0||n>=vis.length) return; gpVidPlayAt(gpV.list.indexOf(vis[n])); }
-function gpVidStop(done){ clearInterval(gpV.timer); gpV.playing=false; var p=document.getElementById('gpVidPlay'); if(p)p.textContent='▶ Reproducir'; if(gpV.player&&gpV.player.pauseVideo) gpV.player.pauseVideo(); if(done){ var n=document.getElementById('gpVidNow'); if(n)n.textContent='Fin de la secuencia'; } }
-function gpVidCloseFn(){ gpVidStop(); var o=document.getElementById('gpVidOverlay'); if(o)o.style.display='none'; if(gpV.player&&gpV.player.stopVideo) gpV.player.stopVideo(); }
-function gpVidSaveFn(){
-  var sel=gpVidSelected();
-  var path='gp_video_sel/'+gpV.key.replace(/[^a-zA-Z0-9_]/g,'_');
-  var keys=sel.map(function(c){ return c._key; });
-  if(typeof fbSet==='function'){ fbSet(path,keys); }
-  var btn=document.getElementById('gpVidSave'); var t=btn.textContent;
-  btn.textContent='✓ Guardado ('+sel.length+' clips) — el equipo verá solo estos'; btn.style.background='#22c55e';
-  setTimeout(function(){ btn.textContent=t; btn.style.background='#3b82f6'; },2200);
-}
-
 function renderArmador(){
   var sec=document.getElementById('seccion-armador');
   if(!sec||!ARMADOR_DATA) return;
@@ -2329,7 +2161,6 @@ function renderArmador(){
 
     function renderRotGrid(){
       rotGrid.innerHTML='';
-      GP_ARM_CURSETTER=setterRaw;
       [4,3,2,5,6,1].forEach(function(pos){
         var key='P'+pos;
         if(!blqState[key]) blqState[key]={izq:'',cen:'',der:''};
@@ -2342,7 +2173,7 @@ function renderArmador(){
         card.appendChild(rh);
         var cvW=document.createElement('div');
         cvW.style.cssText='padding:5px;background:rgba(0,0,0,.2)';
-        cvW.innerHTML=gpCourtSVG(dd,blqState[key],pos);
+        cvW.innerHTML=gpCourtSVG(dd,blqState[key]);
         card.appendChild(cvW);
         var blqRow=document.createElement('div');
         blqRow.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(129,140,248,.08);border-top:1px solid rgba(129,140,248,.12)';
@@ -2355,7 +2186,7 @@ function renderArmador(){
           sel.style.cssText='background:rgba(255,255,255,.03);border:1px solid rgba(129,140,248,.12);border-radius:4px;color:#e2e8f0;font-family:Barlow Condensed,sans-serif;font-size:8px;padding:2px 1px;width:100%;cursor:pointer';
           var BLQ_OPTS=[{v:'',l:'— Sin definir —'},{v:'1BLQ',l:'\u261d Opción 1'},{v:'2BLQ',l:'\u270c Opción 2'},{v:'CIERRE',l:'\u270a Colgado'},{v:'LECTURA',l:'\ud83d\udd90 Lectura'},{v:'CUERNO',l:'\ud83e\udd18 Punta y Punta'},{v:'6-5',l:'6-5'},{v:'6-1',l:'6-1'}];
           BLQ_OPTS.forEach(function(op){ var o=document.createElement('option');o.value=op.v;o.textContent=op.l; if(op.v===blqState[key][side.k])o.selected=true; sel.appendChild(o); });
-          sel.addEventListener('change',function(){ blqState[key][side.k]=sel.value; cvW.innerHTML=gpCourtSVG(dd,blqState[key],pos); });
+          sel.addEventListener('change',function(){ blqState[key][side.k]=sel.value; cvW.innerHTML=gpCourtSVG(dd,blqState[key]); });
           col2.appendChild(sl); col2.appendChild(sel); blqRow.appendChild(col2);
         });
         card.appendChild(blqRow);
@@ -2470,40 +2301,26 @@ function redrawArmadorCourt(canvas,rot,color,blqData){
   };
   var distMap={};
   if(rot.dist) rot.dist.forEach(function(d){ distMap[d.zona]=d; });
-  // 4 números por zona en layout 2×2:
-  //   [n° ataques]   [% distribución]
-  //   [n° puntos]    [% puntos]
-  var fsPct=Math.round(OWN*0.097);
-  var fsCnt=Math.round(OWN*0.075);
-  function gpNum(txt,x,y,col,fs,weight,align){
-    ctx.save();
-    ctx.font=weight+' '+fs+'px Inter,system-ui,sans-serif';
-    ctx.textAlign=align||'center'; ctx.textBaseline='middle';
-    ctx.lineWidth=2.6; ctx.strokeStyle='rgba(0,0,0,.9)';
-    ctx.shadowColor='rgba(0,0,0,1)'; ctx.shadowBlur=4;
-    ctx.strokeText(txt,x,y);
-    ctx.fillStyle=col; ctx.shadowBlur=2;
-    ctx.fillText(txt,x,y);
-    ctx.restore();
-  }
-  // Dibuja el par "conteo %" centrado en (cx,y): conteo gris a la izq + % destacado a la der
-  function gpPar(cnt,pct,cx,y,pctCol){
-    ctx.save();
-    ctx.font='700 '+fsCnt+'px Inter,system-ui,sans-serif'; var wc=ctx.measureText(cnt).width;
-    ctx.font='800 '+fsPct+'px Inter,system-ui,sans-serif'; var wp=ctx.measureText(pct).width;
-    ctx.restore();
-    var gap=Math.round(fsPct*0.22);
-    var startX=cx-(wc+gap+wp)/2;
-    gpNum(cnt, startX,        y, '#9ca3af', fsCnt, '700', 'left');
-    gpNum(pct, startX+wc+gap, y, pctCol,    fsPct, '800', 'left');
-  }
+  var fs1=Math.round(OWN*0.155);
+  var fs2=Math.round(OWN*0.105);
   [4,3,2,7,8,9].forEach(function(z){
     var d=distMap[z]; if(!d||d.pct<=0||d.tot<=0) return;
     var zp=zonePosMap[z]; if(!zp) return;
-    var dy=Math.round(fsPct*0.62);
+    ctx.save();
+    ctx.font='bold '+fs1+'px "Bebas Neue",Impact,sans-serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.lineWidth=3; ctx.strokeStyle='rgba(0,0,0,.85)';
+    ctx.shadowColor='rgba(0,0,0,1)'; ctx.shadowBlur=5;
+    ctx.strokeText(d.pct+'%', zp.x, zp.y-fs1*0.35);
+    ctx.fillStyle='#fff'; ctx.shadowBlur=2;
+    ctx.fillText(d.pct+'%', zp.x, zp.y-fs1*0.35);
     var ptCol=d.pct_p>=60?'#22c55e':d.pct_p>=40?'#fbbf24':d.pct_p>=20?'#f97316':'#ef4444';
-    gpPar(String(d.tot), d.pct+'%',   zp.x, zp.y-dy, '#ffffff'); // distribución (fila arriba)
-    gpPar(String(d.pts), d.pct_p+'%', zp.x, zp.y+dy, ptCol);     // puntos (fila abajo)
+    ctx.font='800 '+fs2+'px Inter,system-ui,sans-serif';
+    ctx.lineWidth=2.5; ctx.strokeStyle='rgba(0,0,0,.9)'; ctx.shadowBlur=4;
+    ctx.strokeText(d.pct_p+'%', zp.x, zp.y+fs1*0.52);
+    ctx.fillStyle=ptCol; ctx.shadowBlur=2;
+    ctx.fillText(d.pct_p+'%', zp.x, zp.y+fs1*0.52);
+    ctx.restore();
   });
 }
 
@@ -2627,6 +2444,187 @@ function gpRecomTransicion(dist, eff){
   return 'Prioriza '+NOM[top.p]+' ('+top.pct+'%)';
 }
 
+// ═══════════════════════════════════════════════════════════════
+// FILTRO "SI NEUTRALIZAMOS A X" — redistribución del armador
+// Muestra cómo cambia la distribución (side-out + transición) si
+// se neutraliza una posición de ataque. Dato histórico, no predicción.
+// ═══════════════════════════════════════════════════════════════
+function gpJugadoresPorPosicion(){
+  // Devuelve {opuesto:{jugador, num}, punta:[...], central:[...], zaguero:'—'}
+  var RES=['#','/','+','!','=','-'];
+  var atk=GP_TD.atk||{}, roster=GP_TD.roster||{};
+  function ape(n){
+    n=(n||'').replace(/^\d+\s*/,'').trim(); if(!n) return '';
+    var p=n.split(/\s+/),pre=['DE','DEL','DI','LA','LE','VAN','VON','DER','DEN','MC','DA'];
+    var a=p[p.length-1]||'';
+    if(p.length>=3&&pre.indexOf(p[p.length-2].toUpperCase())>=0)a=p[p.length-2]+' '+a;
+    return a.split(' ').map(function(w){return w.charAt(0).toUpperCase()+w.slice(1).toLowerCase();}).join(' ');
+  }
+  var porPos={punta:[],opuesto:[],central:[]};
+  Object.keys(atk).forEach(function(ns){
+    var a=atk[ns].a||[]; if(a.length<15) return;
+    var k=a.filter(function(x){return RES[x[6]]==='#';}).length;
+    var pos=roster[ns]||'';
+    var grupo = pos==='OPPOSITE'?'opuesto':pos==='OUTSIDE'?'punta':pos==='MIDDLE'?'central':null;
+    if(grupo) porPos[grupo].push({num:ns,name:ape(atk[ns].name),kills:k,tot:a.length});
+  });
+  Object.keys(porPos).forEach(function(g){porPos[g].sort(function(a,b){return b.kills-a.kills;});});
+  return porPos;
+}
+
+function gpRedistribucion(posExcluir){
+  // posExcluir: 'punta'|'opuesto'|'central'|'zaguero'
+  var RES=['#','/','+','!','=','-'];
+  var setters=GP_TD.setters||[];
+  if(!setters.length||!setters[0].s) return null;
+  var s0=setters[0];
+  function cap(c){
+    if(c==='X5'||c==='V5'||c==='C5')return'punta';
+    if(c==='X6'||c==='V6')return'opuesto';
+    if(c==='X1'||c==='X7'||c==='XM'||c==='X2'||c==='XG'||c==='XC'||c==='XD'||c==='XB'||c==='PR')return'central';
+    if(c==='X8'||c==='V8'||c==='XP')return'zaguero';
+    return null;
+  }
+  // Distribución NORMAL (todo el juego: side-out + transición) y SIN la posición
+  function distrib(filtrarPos){
+    var dist={punta:0,opuesto:0,central:0,zaguero:0}, tot=0;
+    s0.s.forEach(function(r){
+      var p=cap((r[8]>=0&&r[8]<GP_COMBOS.length)?GP_COMBOS[r[8]]:'?');
+      if(!p) return;
+      if(filtrarPos && p===filtrarPos) return; // excluir esa posición
+      dist[p]++; tot++;
+    });
+    return {dist:dist,tot:tot};
+  }
+  var normal=distrib(null);
+  var sinX=distrib(posExcluir);
+  if(!sinX.tot) return null;
+  var resultado=[];
+  ['central','punta','opuesto','zaguero'].forEach(function(p){
+    if(p===posExcluir) return;
+    var pn=normal.tot?Math.round(normal.dist[p]/normal.tot*100):0;
+    var ps=Math.round(sinX.dist[p]/sinX.tot*100);
+    resultado.push({pos:p,normal:pn,sin:ps,delta:ps-pn});
+  });
+  resultado.sort(function(a,b){return b.sin-a.sin;});
+  return {resultado:resultado, posExcluir:posExcluir};
+}
+
+
+function renderNeutralizar(){
+  var cont=document.getElementById('neutralizar-content');
+  if(!cont) return;
+  var jugadores=gpJugadoresPorPosicion();
+  // Opciones: solo posiciones con jugador identificado
+  var opciones=[];
+  if(jugadores.opuesto.length) opciones.push({pos:'opuesto',lbl:'OPUESTO',jug:jugadores.opuesto[0],col:'#818cf8'});
+  if(jugadores.punta.length) opciones.push({pos:'punta',lbl:'PUNTAS',jug:jugadores.punta[0],col:'#22c55e'});
+  if(jugadores.central.length) opciones.push({pos:'central',lbl:'CENTRAL',jug:jugadores.central[0],col:'#f59e0b'});
+  if(!opciones.length){ cont.innerHTML='<div style="color:#475569;font-size:13px;padding:20px;text-align:center;border:1px solid rgba(255,255,255,.06);border-radius:12px">Sin datos suficientes</div>'; return; }
+
+  var POSLBL={punta:'puntas',opuesto:'opuesto',central:'central',zaguero:'zaguero'};
+  var html='';
+  // Botones selectores
+  html+='<div style="font-size:11px;color:#94a3b8;margin-bottom:12px;font-family:Barlow Condensed,sans-serif;letter-spacing:.5px">Elegí qué posición neutralizar para ver hacia dónde se vuelca el armador:</div>';
+  html+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px" id="neut-botones">';
+  opciones.forEach(function(op,i){
+    var jugTxt = op.jug?(' #'+op.jug.num+' '+op.jug.name):'';
+    html+='<button data-neut="'+op.pos+'" style="cursor:pointer;background:'+(i===0?'rgba(232,25,44,.15)':'transparent')+';border:1px solid '+(i===0?'#e8192c':'rgba(255,255,255,.12)')+';border-radius:9px;padding:8px 14px;color:'+(i===0?'#fff':'#94a3b8')+';font-family:Barlow Condensed,sans-serif;font-size:13px;font-weight:600;letter-spacing:.5px;transition:all .15s">'+op.lbl+jugTxt+'</button>';
+  });
+  html+='</div>';
+  html+='<div id="neut-resultado"></div>';
+  cont.innerHTML=html;
+
+  function pintar(pos){
+    var data=gpRedistribucion(pos);
+    var op=opciones.filter(function(o){return o.pos===pos;})[0];
+    var rdiv=document.getElementById('neut-resultado');
+    if(!data||!op){ rdiv.innerHTML=''; return; }
+    var jugTxt = op.jug?('#'+op.jug.num+' '+op.jug.name):('el '+POSLBL[pos]);
+    var h='<div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:16px">';
+    h+='<div style="font-size:13px;color:#e2e8f0;margin-bottom:14px;line-height:1.5">Si neutralizamos a <b style="color:'+op.col+'">'+jugTxt+'</b> ('+POSLBL[pos]+'), el armador se vuelca a:</div>';
+    data.resultado.forEach(function(r){
+      var arrow = r.delta>0?('<span style="color:#22c55e;font-weight:700">+'+r.delta+'</span>'):r.delta<0?('<span style="color:#ef4444">'+r.delta+'</span>'):'<span style="color:#64748b">=</span>';
+      var barW=Math.min(r.sin,100);
+      var destaca = r.delta>=5;
+      h+='<div style="margin-bottom:11px">';
+      h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">';
+      h+='<span style="font-size:13px;color:'+(destaca?'#fff':'#cbd5e1')+';font-weight:'+(destaca?'700':'400')+';text-transform:capitalize">'+POSLBL[r.pos]+(destaca?' ◀ plan B':'')+'</span>';
+      h+='<span style="font-size:12px;color:#94a3b8">'+r.normal+'% → <b style="color:#e2e8f0">'+r.sin+'%</b> ('+arrow+')</span>';
+      h+='</div>';
+      h+='<div style="height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden"><div style="width:'+barW+'%;height:100%;background:'+(destaca?op.col:'rgba(255,255,255,.2)')+';transition:width .3s"></div></div>';
+      h+='</div>';
+    });
+    h+='<div style="font-size:10px;color:#475569;margin-top:8px;font-style:italic">Basado en cómo distribuyó históricamente en las pelotas que NO fueron a esa posición.</div>';
+    h+='</div>';
+    rdiv.innerHTML=h;
+  }
+
+  // Eventos de los botones
+  var btns=cont.querySelectorAll('button[data-neut]');
+  btns.forEach(function(b){
+    b.addEventListener('click',function(){
+      btns.forEach(function(x){x.style.background='transparent';x.style.borderColor='rgba(255,255,255,.12)';x.style.color='#94a3b8';});
+      this.style.background='rgba(232,25,44,.15)';this.style.borderColor='#e8192c';this.style.color='#fff';
+      pintar(this.getAttribute('data-neut'));
+    });
+  });
+  pintar(opciones[0].pos);
+}
+
+function renderTransicion(){
+  var cont=document.getElementById('trans-content');
+  if(!cont) return;
+  var data=gpAnalizarTransicion();
+  if(!data){ return; }
+  var POSCOL={P4:'#22c55e',P3:'#f59e0b',P2:'#818cf8',P8:'#06b6d4',P9:'#ec4899'};
+  var POSLBL={P4:'POS 4',P3:'POS 3',P2:'POS 2',P8:'POS 8',P9:'POS 9'};
+  var html='<div style="font-size:11px;color:#94a3b8;margin-bottom:14px;font-family:Barlow Condensed,sans-serif;letter-spacing:.5px">Armador: <b style="color:#fbbf24">'+data.setter+'</b> · cómo distribuye en juego corrido (defensa/contraataque) · <span style="color:#64748b">pelotas / puntos</span></div>';
+  html+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">';
+  // Orden cancha: P4-P3-P2 / P5-P6-P1
+  var orden=[4,3,2,5,6,1];
+  orden.forEach(function(pos){
+    var r=data.rots.find(function(x){return x.pos===pos;});
+    if(!r) return;
+    if(r.vacio){
+      html+='<div style="border:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.01);border-radius:11px;padding:12px;opacity:.45"><div style="font-family:Bebas Neue,sans-serif;font-size:20px;color:#64748b">P'+r.pos+'</div><div style="font-size:10px;color:#475569">pocos datos</div></div>';
+      return;
+    }
+    var esDebil=(data.debil&&r.pos===data.debil.pos);
+    var esFuerte=(data.fuerte&&r.pos===data.fuerte.pos);
+    var borde=esFuerte?'#ef4444':esDebil?'#22c55e':'rgba(255,255,255,.08)';
+    var bg=esFuerte?'rgba(239,68,68,.06)':esDebil?'rgba(34,197,94,.06)':'rgba(255,255,255,.02)';
+    html+='<div style="border:1px solid '+borde+';background:'+bg+';border-radius:11px;padding:12px">';
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">';
+    html+='<div style="font-family:Bebas Neue,sans-serif;font-size:20px;letter-spacing:1px;color:#e2e8f0">P'+r.pos+'</div>';
+    if(esFuerte) html+='<div style="font-size:8px;font-weight:700;letter-spacing:1px;color:#ef4444;background:rgba(239,68,68,.12);padding:2px 6px;border-radius:4px">+ EFECTIVA</div>';
+    else if(esDebil) html+='<div style="font-size:8px;font-weight:700;letter-spacing:1px;color:#22c55e;background:rgba(34,197,94,.15);padding:2px 6px;border-radius:4px">- EFECTIVA</div>';
+    html+='</div>';
+    r.dist.forEach(function(x){
+      var col=POSCOL[x.p]||'#64748b';
+      html+='<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">';
+      html+='<span style="font-size:10px;font-weight:700;color:'+col+';width:38px">'+POSLBL[x.p]+'</span>';
+      html+='<div style="flex:1;height:7px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden"><div style="width:'+x.pct+'%;height:100%;background:'+col+'"></div></div>';
+      html+='<span style="font-size:10px;color:#cbd5e1;width:48px;text-align:right">'+x.n+'/'+x.pts+'</span></div>';
+    });
+    html+='<div style="font-size:9px;color:#64748b;margin-top:5px">'+r.n+' pelotas · '+r.eff+'% ef · '+(r.concentrada?'<span style="color:#fbbf24">concentrada</span>':'<span style="color:#22c55e">repartida</span>')+'</div>';
+    var keyRot='vb_trans_'+(data.setter||'x').replace(/[^a-zA-Z0-9]/g,'')+'_P'+r.pos;
+    html+='<div style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:5px;align-items:center">'
+      +'<span style="color:#f59e0b;font-size:10px">\u270e</span>'
+      +'<input type="text" data-rotkey="'+keyRot+'" placeholder="Tu lectura t\u00e1ctica..." '
+      +'style="flex:1;background:transparent;border:none;border-bottom:1px dashed rgba(245,158,11,.3);color:#f8d77a;font-family:inherit;font-size:10px;outline:none;padding:2px 0" '
+      +'onclick="event.stopPropagation()"/></div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  cont.innerHTML=html;
+  // Enganchar inputs editables de lectura táctica (persisten en localStorage)
+  cont.querySelectorAll('input[data-rotkey]').forEach(function(inp){
+    var k=inp.getAttribute('data-rotkey');
+    try{ var sv=localStorage.getItem(k); if(sv!==null) inp.value=sv; }catch(e){}
+    inp.addEventListener('input',function(){ try{localStorage.setItem(k,this.value);}catch(e){} });
+  });
+}
 
 // ═══════════════════════════════════════════════════════════════
 // SCOUTING REPORT — claves del partido. Datos reales, sin toques de bloqueo.
@@ -2688,10 +2686,12 @@ function gpScoutingReport(){
   var roster=GP_TD.roster||{};
   var medias=gpMediasLiga();
   function ape(n){
+    // CASLA: los nombres vienen como "Apellido Nombre" (apellido primero).
+    // El apellido es todo MENOS la última palabra (que es el nombre de pila),
+    // contemplando apellidos compuestos (ej: "Requejo Borghese Felipe" → "Requejo Borghese").
     n=(n||'').replace(/^\d+\s*/,'').trim();
-    var p=n.split(/\s+/), pre=['DE','DEL','DI','LA','LE','VAN','VON','DER','DEN','MC','DA','SAN','SANTA'];
-    var a=p[p.length-1]||'';
-    if(p.length>=3&&pre.indexOf(p[p.length-2].toUpperCase())>=0)a=p[p.length-2]+' '+a;
+    var p=n.split(/\s+/);
+    var a=(p.length<=1)?(p[0]||''):p.slice(0,p.length-1).join(' ');
     return a.split(' ').map(function(w){return w.charAt(0).toUpperCase()+w.slice(1).toLowerCase();}).join(' ');
   }
   function sig(p){return {OUTSIDE:'OH',MIDDLE:'MB',OPPOSITE:'OP',SETTER:'S',LIBERO:'L'}[p]||'';}
@@ -2974,7 +2974,7 @@ function renderRecepcionRival(){
 // Llamar armador y juego
 (function(){var _f=function(){
   setTimeout(function(){renderArmador();
-  renderRecepcionRival();renderJuego();},100);
+  renderRecepcionRival();renderTransicion();renderNeutralizar();renderJuego();},100);
 };if(document.fonts&&document.fonts.ready){document.fonts.ready.then(_f).catch(_f);}else{setTimeout(_f,80);}})();
 
 function gpDistRotacionValidada(rotPos){
@@ -2986,19 +2986,16 @@ function gpDistRotacionValidada(rotPos){
   var RES=['#','/','+','!','=','-'];
   var posNum=parseInt(rotPos.replace('P',''));
   function calc(rallies){
-    // MISMO criterio que la canchita: gpGetZone(combo, origen, setterPos) → zona REAL
-    // (incluye PP = segunda del armador, que va a zona 2 cuando el armador es delantero)
-    var dist={}, pts={}, tot=0;
+    var dist={P4:0,P3:0,P2:0,P8:0,P9:0}, pts={P4:0,P3:0,P2:0,P8:0,P9:0}, tot=0;
     rallies.forEach(function(r){
-      var c=(r[8]>=0&&r[8]<GP_COMBOS.length)?GP_COMBOS[r[8]]:'';
-      var z=gpGetZone(c,r[11],r[6]); if(!(z>0)) return;
-      if(dist[z]===undefined){ dist[z]=0; pts[z]=0; }
-      dist[z]++; tot++;
-      if(RES[r[9]]==='#') pts[z]++;
+      var c=(r[8]>=0&&r[8]<GP_COMBOS.length)?GP_COMBOS[r[8]]:'?';
+      var p=gpZonaAtaque(c,r[11]); if(!p) return;
+      dist[p]++; tot++;
+      if(RES[r[9]]==='#') pts[p]++;
     });
     if(!tot) return null;
-    var rows=[4,3,2,8,9,7,6,5,1].map(function(z){
-      return {pos:z,tot:dist[z]||0,pts:pts[z]||0,pct:dist[z]?Math.round(dist[z]/tot*100):0,kill:dist[z]?Math.round(pts[z]/dist[z]*100):0};
+    var rows=['P4','P3','P2','P8','P9'].map(function(p){
+      return {pos:p,tot:dist[p],pts:pts[p],pct:Math.round(dist[p]/tot*100),kill:dist[p]?Math.round(pts[p]/dist[p]*100):0};
     }).filter(function(x){return x.tot>0;}).sort(function(a,b){return b.tot-a.tot;});
     rows.totClasif=tot;
     return rows;
@@ -3025,7 +3022,7 @@ function abrirModalArmador(rot, color, pills){
 
   function vista(titulo, subt, dist, total, col){
     if(!dist||!dist.length) return '';
-    // etiquetas por número de zona (sin nombre de puesto)
+    var POSNOM={P4:'Punta (z4)',P3:'Central (z3)',P2:'Opuesto (z2)',P8:'Pipe (centro)',P9:'Zaguero (z9)'};
     var h='<div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:15px;margin-bottom:14px">';
     h+='<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px">';
     h+='<div style="font-family:Bebas Neue,sans-serif;font-size:16px;letter-spacing:2px;color:'+col+'">'+titulo+'</div>';
@@ -3036,7 +3033,7 @@ function abrirModalArmador(rot, color, pills){
       var esTop=d.pct>=Math.max.apply(null,dist.map(function(x){return x.pct;}));
       h+='<div style="margin-bottom:10px">';
       h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">';
-      h+='<span style="font-size:13px;color:'+(esTop?'#fff':'#cbd5e1')+';font-weight:'+(esTop?'700':'500')+'">'+('Zona '+d.pos)+(esTop?' ◀':'')+'</span>';
+      h+='<span style="font-size:13px;color:'+(esTop?'#fff':'#cbd5e1')+';font-weight:'+(esTop?'700':'500')+'">'+POSNOM[d.pos]+(esTop?' ◀':'')+'</span>';
       h+='<span style="font-size:11px;color:#94a3b8">'+d.tot+' ataques · '+d.pts+' pts</span></div>';
       // barra de distribución
       h+='<div style="display:flex;align-items:center;gap:8px">';
@@ -3425,9 +3422,8 @@ function abrirModalSOTR(tipo, arm, color){
   var grid = document.createElement('div');
   grid.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:8px';
 
-  var rotPills = (tipo==='SO' ? (arm.pillsSO||pills) : (arm.pillsTR||pills));
   pos_labels.forEach(function(pos){
-    var p = rotPills.find(function(x){ return x.label===pos; }) || {};
+    var p = pills.find(function(x){ return x.label===pos; }) || {};
     var eff = p.eff !== undefined ? p.eff : null;
     var effC = eff===null?'#475569':eff>=50?'#22c55e':eff>=25?'#fbbf24':eff>=0?'#f97316':'#ef4444';
     var bgC  = eff===null?'rgba(255,255,255,.02)':eff>=50?'rgba(34,197,94,.08)':eff>=25?'rgba(251,191,36,.06)':eff>=0?'rgba(249,115,22,.08)':'rgba(239,68,68,.1)';
@@ -3524,4 +3520,4 @@ document.addEventListener('click', function(e){
 </body>
 </html>
 
-<!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
+<!-- © 2025-2026 Ignacio Verdi · CASLA · Software propietario - Todos los derechos reservados -->
