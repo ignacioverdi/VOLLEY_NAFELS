@@ -581,12 +581,19 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         team_setters = setters.get(team, [])
         if not isinstance(team_setters, list): team_setters = [team_setters]
         team_rallies = rallies.get(team, {})  # dict {str(num): [rallies]}
+        # ── Lista de partidos del equipo (para el filtro de partidos del game plan) ──
+        _all_rl = []
+        for _sn in team_setters:
+            _all_rl.extend(team_rallies.get(str(_sn), []) if isinstance(team_rallies, dict) else [])
+        _seen = sorted(set((r.get('date',''), r.get('rival','')) for r in _all_rl))
+        match_idx = {dk: i for i, dk in enumerate(_seen)}
+        matches = [{'i': i, 'date': d, 'rival': rv} for i, (d, rv) in enumerate(_seen)]
         setters_list = []
         for sn in team_setters:
             rl = team_rallies.get(str(sn), []) if isinstance(team_rallies, dict) else []
             if not rl: continue
             sname = td.get(str(sn),{}).get('info',{}).get('name',f'#{sn}')
-            arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig']] for r in rl]
+            arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1)] for r in rl]
             setters_list.append({'num':sn,'name':sname,'s':arm,'total':len(rl)})
         setters_list.sort(key=lambda x:-x['total'])
         # Roster de posiciones — jerarquía: setter→libero→central→outside/opposite
@@ -607,7 +614,7 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
             if rec0 >= 20: roster[nser]='OUTSIDE'
             elif rec0 <= 8: roster[nser]=('OUTSIDE' if punta>opp else 'OPPOSITE')
             else: roster[nser]=('OUTSIDE' if punta>=opp else 'OPPOSITE')
-        LIGA['teams'][team.lower().replace(' ','_')]={'name':team,'rivals':rivals,'atk':atk_p,'srv':srv_p,'rec':rec_p,'setters':setters_list,'setter':setters_list[0] if setters_list else None,'roster':roster}
+        LIGA['teams'][team.lower().replace(' ','_')]={'name':team,'rivals':rivals,'atk':atk_p,'srv':srv_p,'rec':rec_p,'setters':setters_list,'setter':setters_list[0] if setters_list else None,'roster':roster,'matches':matches}
     with open(os.path.join(output_dir,'liga_data.js'),'w',encoding='utf-8') as f:
         f.write('window.LIGA_DATA = '+json.dumps(LIGA,ensure_ascii=False)+';\n')
     return len(LIGA['teams'])
