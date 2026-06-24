@@ -494,7 +494,7 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
             pending = {'setter_pos': spos, 'set_num': setn, 'call': call, 'rec_quality': rq, 'atype': atype,
                        'atk_combo': '', 'atk_result': '', 'atk_dest': 0, 'atk_orig': 0, 'date': date, 'rival': rival,
                        'code': mcode, 't_start': (last_serve_t or last_rec_t or vt), 't_atk': 0,
-                       'rec_zone': last_rec_zone, 'rec_num': last_rec_num}
+                       'rec_zone': last_rec_zone, 'rec_num': last_rec_num, 'atk_num': 0}
             last_skill = 'E'
         elif skill == 'A':
             if pending:
@@ -502,7 +502,7 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
                 pending['atk_combo'] = combo; pending['atk_result'] = effect
                 pending['atk_dest'] = int(traj[1]) if traj and len(traj) > 1 and traj[1].isdigit() else 0
                 pending['atk_orig'] = int(traj[0]) if traj and traj[0].isdigit() else 0
-                pending['t_atk'] = vt
+                pending['t_atk'] = vt; pending['atk_num'] = pnum
                 rallies.append(pending); pending = None
             last_skill = 'A'
         elif skill in ('B', 'D', 'F'):
@@ -604,7 +604,7 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
             rl = team_rallies.get(str(sn), []) if isinstance(team_rallies, dict) else []
             if not rl: continue
             sname = td.get(str(sn),{}).get('info',{}).get('name',f'#{sn}')
-            arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1),r.get('t_start',0),r.get('t_atk',0),r.get('rec_zone',0),r.get('rec_num',0)] for r in rl]
+            arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1),r.get('t_start',0),r.get('t_atk',0),r.get('rec_zone',0),r.get('rec_num',0),r.get('atk_num',0)] for r in rl]
             setters_list.append({'num':sn,'name':sname,'s':arm,'total':len(rl)})
         setters_list.sort(key=lambda x:-x['total'])
         # Roster de posiciones — jerarquía: setter→libero→central→outside/opposite

@@ -1950,6 +1950,7 @@ function gpEvColor(e){ return {'#':'#22c55e','+':'#84cc16','!':'#eab308','-':'#f
 function gpMmss(s){ s=Math.max(0,Math.round(s||0)); var m=Math.floor(s/60),x=s%60; return m+':'+(x<10?'0':'')+x; }
 
 // recolecta los clips de un cuadrante con EL MISMO filtro que la canchita
+function gpPlayerName(num){ if(!num) return ''; var a=(GP_TD&&GP_TD.atk)||{}; var p=a[String(num)]; if(p&&p.name){ var pp=String(p.name).trim().split(' '); return pp[pp.length-1]; } return ''; }
 function gpZoneClips(setterObj,pos,phase,rec,zone){
   var RES=['#','/','+','!','=','-'];
   if(!setterObj||!setterObj.s) return [];
@@ -1969,7 +1970,7 @@ function gpZoneClips(setterObj,pos,phase,rec,zone){
     var z=gpGetZone(GP_COMBOS[r[8]]||'',r[11],r[6]);
     if(z!==zone) return;
     var mc=matches[r[12]]||null, code=mc?(mc.code||''):'';
-    out.push({code:code,t_start:r[13]||0,t_atk:r[14]||0,ev:RES[r[9]]||'=',combo:GP_COMBOS[r[8]]||'',orig:r[11],dest:r[10],date:mc?mc.date:'',rival:mc?mc.rival:''});
+    out.push({code:code,t_start:r[13]||0,t_atk:r[14]||0,ev:RES[r[9]]||'=',combo:GP_COMBOS[r[8]]||'',orig:r[11],dest:r[10],date:mc?mc.date:'',rival:mc?mc.rival:'',num:r[17]||0});
   });
   return out;
 }
@@ -2022,7 +2023,7 @@ function gpOpenVideo(rot,zone){
   if(!GP_ARM_CURSETTER){ return; }
   gpVidDom();
   var rec=GP_ARM_PHASE==='SO'?GP_ARM_REC:null;
-  var clips=gpZoneClips(GP_ARM_CURSETTER,rot,GP_ARM_PHASE,rec,zone).filter(function(c){return c.t_atk>0;});
+  var clips=gpZoneClips(GP_ARM_CURSETTER,rot,GP_ARM_PHASE,rec,zone);
   gpV.coach=(typeof vbIsCoach==='function')?vbIsCoach():true;
   gpV.key=(GP_RIVAL_SLUG||'rival')+'__r'+rot+'_'+GP_ARM_PHASE+(GP_ARM_PHASE==='SO'?('_'+GP_ARM_REC):'')+'_z'+zone;
   var faseLbl=GP_ARM_PHASE==='SO'?('Side-out '+(GP_ARM_REC==='pos'?'#+':'!-')):'Transición';
@@ -2055,8 +2056,13 @@ function gpVidRender(){
   var L=document.getElementById('gpVidList'); L.innerHTML=''; var vis=gpVidVisible();
   vis.forEach(function(c){ var i=gpV.list.indexOf(c);
     var row=document.createElement('div'); row.style.cssText='display:flex;gap:9px;align-items:center;padding:8px 4px;border-bottom:1px solid #16212f;cursor:pointer;font-size:13px;color:#e2e8f0'+(i===gpV.idx?';background:rgba(34,197,94,.10)':'');
-    var chk=gpV.readonly?'':'<input type="checkbox" '+(c._sel?'checked':'')+' style="width:16px;height:16px;accent-color:#22c55e">';
-    row.innerHTML=chk+'<span style="font-weight:900;width:16px;text-align:center;color:'+gpEvColor(c.ev)+'">'+c.ev+'</span><span style="flex:1">'+c.combo+' · '+c.orig+'→'+c.dest+'<span style="color:#52617a;font-size:11px"> · '+(c.date||'')+'</span></span><span style="color:#7689a1;font-size:12px;font-variant-numeric:tabular-nums">'+gpMmss(c.t_start)+'→'+gpMmss(c.t_atk)+'</span>'+(gpVidUrl(c.code)?'<span title="con video" style="color:#22c55e;font-size:11px;margin-left:4px">video</span>':'<span title="sin link" style="color:#475569;font-size:10px;margin-left:4px">sin video</span>');
+    var _vid=gpVidUrl(c.code), _play=(c.t_atk>0&&!!_vid);
+    var chk=(gpV.readonly||!_play)?'<span style="width:16px;display:inline-block;flex:none"></span>':'<input type="checkbox" '+(c._sel?'checked':'')+' style="width:16px;height:16px;accent-color:#22c55e">';
+    var _nm=gpPlayerName(c.num), _who=c.num?('#'+c.num+(_nm?' '+_nm:'')):'';
+    var _tag=_play?'<span style="color:#22c55e;font-size:11px;margin-left:4px">▶ video</span>':(c.t_atk>0?'<span style="color:#64748b;font-size:10px;margin-left:4px">sin link</span>':'<span style="color:#475569;font-size:10px;margin-left:4px">sin sync</span>');
+    var _tm=c.t_atk>0?(gpMmss(c.t_start)+'→'+gpMmss(c.t_atk)):'—';
+    row.style.opacity=_play?'1':'.5';
+    row.innerHTML=chk+'<span style="font-weight:900;width:16px;text-align:center;color:'+gpEvColor(c.ev)+'">'+c.ev+'</span><span style="flex:1">'+(_who?'<b style="color:#f1f5f9">'+_who+'</b> · ':'')+c.combo+' · '+c.orig+'→'+c.dest+'<span style="color:#52617a;font-size:11px"> · '+(c.date||'')+'</span></span><span style="color:#7689a1;font-size:12px;font-variant-numeric:tabular-nums">'+_tm+'</span>'+_tag;
     if(!gpV.readonly){ var cb=row.querySelector('input'); cb.onclick=function(e){ e.stopPropagation(); c._sel=this.checked; }; }
     row.onclick=function(){ gpVidPlayAt(i); }; L.appendChild(row); });
   document.getElementById('gpVidNow').textContent=vis.length+' clips';
@@ -2065,7 +2071,7 @@ function gpVidRender(){
   hint.textContent=gpV.coach?'Tildá los ataques que querés y guardá: el equipo verá solo esos. (El jugador, si no guardaste nada, ve todos.)':(gpV.readonly?'Secuencia preparada por el entrenador.':'El entrenador todavía no preparó esta zona — los ves todos.');
 }
 function gpVidSelected(){ return gpV.list.filter(function(c){ return c._sel; }); }
-function gpVidToggle(){ if(gpV.playing){ gpVidStop(); } else { var s=(gpV.readonly?gpV.list:gpVidSelected()).filter(function(c){return !!gpVidUrl(c.code);}); if(!s.length){ alert('Estos ataques todavia no tienen video cargado. Agrega el link del partido en mapa_videos.js.'); return; } gpVidPlayAt(gpV.list.indexOf(s[0])); } }
+function gpVidToggle(){ if(gpV.playing){ gpVidStop(); } else { var s=(gpV.readonly?gpV.list:gpVidSelected()).filter(function(c){return c.t_atk>0 && !!gpVidUrl(c.code);}); if(!s.length){ alert('Estos ataques todavia no tienen video cargado. Agrega el link del partido en mapa_videos.js.'); return; } gpVidPlayAt(gpV.list.indexOf(s[0])); } }
 function gpVidPlayAt(i){
   if(i<0||i>=gpV.list.length) return; gpV.idx=i; var c=gpV.list[i];
   var vid=gpVidUrl(c.code);
@@ -2082,7 +2088,7 @@ function gpVidPlayAt(i){
   });
 }
 function gpVidNext(){
-  var pool=(gpV.readonly?gpV.list:gpVidSelected()).filter(function(c){return !!gpVidUrl(c.code);}); var cur=gpV.list[gpV.idx]; var k=pool.indexOf(cur);
+  var pool=(gpV.readonly?gpV.list:gpVidSelected()).filter(function(c){return c.t_atk>0 && !!gpVidUrl(c.code);}); var cur=gpV.list[gpV.idx]; var k=pool.indexOf(cur);
   if(k>=0&&k+1<pool.length){ gpVidPlayAt(gpV.list.indexOf(pool[k+1])); } else { gpVidStop(true); }
 }
 function gpVidNav(d){ var vis=gpVidVisible(); var cur=gpV.list[gpV.idx]; var k=vis.indexOf(cur); var n=k+d; if(n<0||n>=vis.length) return; gpVidPlayAt(gpV.list.indexOf(vis[n])); }
