@@ -544,7 +544,7 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
             if pending: rallies.append(pending)
             rq = last_rq if last_skill == 'R' else '?'
             raw = tp[0] if tp else ''; call = raw[:2] if len(raw) >= 2 else raw
-            pending = {'setter_pos': spos, 'set_num': setn, 'call': call, 'rec_quality': rq, 'atype': atype,
+            pending = {'setter_pos': spos, 'set_num': setn, 'call': call, 'rec_quality': rq, 'atype': (0 if last_skill == 'R' else 1),
                        'atk_combo': '', 'atk_result': '', 'atk_dest': 0, 'atk_orig': 0, 'date': date, 'rival': rival,
                        'code': mcode, 't_start': (last_serve_t or last_rec_t or vt), 't_atk': 0,
                        'rec_zone': last_rec_zone, 'rec_num': last_rec_num, 'atk_num': 0}
