@@ -457,7 +457,7 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
     idx = content.find('[3SCOUT]\n')
     if idx < 0: return []
     scout = content[idx+9:content.find('\n[3', idx+9)].strip().split('\n')
-    rallies = []; pending = None; last_skill = ''; last_rq = '?'; atype = 0
+    rallies = []; pending = None; last_skill = ''; last_rq = '?'; atype = 0; last_serve_t = 0; last_rec_t = 0; last_rec_zone = 0; last_rec_num = 0; last_rec_type = ''
     for line in scout:
         l = line.strip()
         if len(l) < 6: continue
@@ -476,18 +476,25 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
         except: spos = 0
         try: setn = int(sc[8].strip()) if len(sc) > 8 and sc[8].strip().isdigit() else 1
         except: setn = 1
+        try: vt = int(sc[12].strip()) if len(sc) > 12 and sc[12].strip().isdigit() else 0
+        except: vt = 0
         if skill == 'S':
             if pending: rallies.append(pending); pending = None
             last_skill = ''; last_rq = '?'; atype = 0 if t == rival_pfx else 1
+            last_serve_t = vt; last_rec_zone = (int(tp[3][1]) if len(tp) > 3 and tp[3] and len(tp[3]) > 1 and tp[3][1].isdigit() else 0); last_rec_num = 0; last_rec_type = ''
             continue
         if t != pfx: continue
-        if skill == 'R': last_rq = effect; last_skill = 'R'
+        if skill == 'R':
+            last_rq = effect; last_skill = 'R'; last_rec_t = vt; last_rec_num = pnum
+            last_rec_type = code[3].upper() if len(code) > 3 else ''
         elif skill == 'E' and pnum == setter_num:
             if pending: rallies.append(pending)
             rq = last_rq if last_skill == 'R' else '?'
             raw = tp[0] if tp else ''; call = raw[:2] if len(raw) >= 2 else raw
-            pending = {'setter_pos': spos, 'set_num': setn, 'call': call, 'rec_quality': rq, 'atype': atype,
-                       'atk_combo': '', 'atk_result': '', 'atk_dest': 0, 'atk_orig': 0, 'date': date, 'rival': rival}
+            pending = {'setter_pos': spos, 'set_num': setn, 'call': call, 'rec_quality': rq, 'atype': (0 if last_skill == 'R' else 1),
+                       'atk_combo': '', 'atk_result': '', 'atk_dest': 0, 'atk_orig': 0, 'date': date, 'rival': rival,
+                       't_start': (last_serve_t or last_rec_t or vt), 't_atk': 0,
+                       'rec_zone': last_rec_zone, 'rec_num': last_rec_num, 'atk_num': 0, 'rec_type': last_rec_type}
             last_skill = 'E'
         elif skill == 'A':
             if pending:
@@ -495,6 +502,7 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
                 pending['atk_combo'] = combo; pending['atk_result'] = effect
                 pending['atk_dest'] = int(traj[1]) if traj and len(traj) > 1 and traj[1].isdigit() else 0
                 pending['atk_orig'] = int(traj[0]) if traj and traj[0].isdigit() else 0
+                pending['t_atk'] = vt; pending['atk_num'] = pnum
                 rallies.append(pending); pending = None
             last_skill = 'A'
         elif skill in ('B', 'D', 'F'):
@@ -569,6 +577,7 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         atk_p,srv_p,rec_p={},{},{}
         for ns,pd in td.items():
             info=pd.get('info') or {}; name=info.get('name',ns); num=int(ns)
+            ape=info.get('apellido','') or (name.rsplit(' ',1)[0] if ' ' in name else name)
             atk,srv,rec=pd.get('atk',[]),pd.get('srv',[]),pd.get('rec',[])
             if atk: atk_p[ns]={'name':name,'num':num,'a':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,a.get('atype',0),COMBO_IDX.get(a.get('combo',''),-1),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),6,-1] for a in atk]}
             if srv:
@@ -576,17 +585,24 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
                 srv_p[ns]={'name':name,'num':num,'stypes':stl,'s':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,sidx.get('S'+a.get('stype','Q'),0),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0)] for a in srv]}
             if rec:
                 rtl=list(dict.fromkeys('R'+a.get('stype','M') for a in rec)) or ['RM']; rtidx={r:i for i,r in enumerate(rtl)}
-                rec_p[ns]={'name':name,'num':num,'rtypes':rtl,'r':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,rtidx.get('R'+a.get('stype','M'),0),REC_IDX.get(a.get('effect','-'),3),a.get('orig',0),a.get('dest',0)] for a in rec]}
+                rec_p[ns]={'name':name,'apellido':ape,'num':num,'rtypes':rtl,'r':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,rtidx.get('R'+a.get('stype','M'),0),REC_IDX.get(a.get('effect','-'),3),a.get('orig',0),a.get('dest',0)] for a in rec]}
         # Armar AMBOS armadores (estructura setters array que usa el game plan)
         team_setters = setters.get(team, [])
         if not isinstance(team_setters, list): team_setters = [team_setters]
         team_rallies = rallies.get(team, {})  # dict {str(num): [rallies]}
+        # ── Lista de sesiones de entrenamiento (para el filtro de partidos del game plan) ──
+        _all_rl = []
+        for _sn in team_setters:
+            _all_rl.extend(team_rallies.get(str(_sn), []) if isinstance(team_rallies, dict) else [])
+        _seen = sorted(set((r.get('date',''), r.get('rival','')) for r in _all_rl))
+        match_idx = {dk: i for i, dk in enumerate(_seen)}
+        matches = [{'i': i, 'date': d, 'rival': (rv or 'Entrenamiento'), 'code': ''} for i, (d, rv) in enumerate(_seen)]
         setters_list = []
         for sn in team_setters:
             rl = team_rallies.get(str(sn), []) if isinstance(team_rallies, dict) else []
             if not rl: continue
             sname = td.get(str(sn),{}).get('info',{}).get('name',f'#{sn}')
-            arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig']] for r in rl]
+            arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1),r.get('t_start',0),r.get('t_atk',0),r.get('rec_zone',0),r.get('rec_num',0),r.get('atk_num',0),r.get('rec_type','')] for r in rl]
             setters_list.append({'num':sn,'name':sname,'s':arm,'total':len(rl)})
         setters_list.sort(key=lambda x:-x['total'])
         # Roster de posiciones — jerarquía: setter→libero→central→outside/opposite
@@ -607,7 +623,7 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
             if rec0 >= 20: roster[nser]='OUTSIDE'
             elif rec0 <= 8: roster[nser]=('OUTSIDE' if punta>opp else 'OPPOSITE')
             else: roster[nser]=('OUTSIDE' if punta>=opp else 'OPPOSITE')
-        LIGA['teams'][team.lower().replace(' ','_')]={'name':team,'rivals':rivals,'atk':atk_p,'srv':srv_p,'rec':rec_p,'setters':setters_list,'setter':setters_list[0] if setters_list else None,'roster':roster}
+        LIGA['teams'][team.lower().replace(' ','_')]={'name':team,'rivals':rivals,'atk':atk_p,'srv':srv_p,'rec':rec_p,'setters':setters_list,'setter':setters_list[0] if setters_list else None,'roster':roster,'matches':matches}
     with open(os.path.join(output_dir,'liga_data_entrenamientos.js'),'w',encoding='utf-8') as f:
         f.write('window.LIGA_DATA_ENT = '+json.dumps(LIGA,ensure_ascii=False)+';\n')
     return len(LIGA['teams'])
