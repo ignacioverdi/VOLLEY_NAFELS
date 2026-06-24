@@ -8,10 +8,11 @@ echo  ==================================================
 echo     NAFELS - ACTUALIZAR Y PUBLICAR (con respaldo)
 echo  ==================================================
 echo.
-set "DVW_DIR=DVW NAFELS 2026"
-set "ANIO=2026"
-if exist "DVW NAFELS 2027\*.dvw" set "DVW_DIR=DVW NAFELS 2027"
-if exist "DVW NAFELS 2027\*.dvw" set "ANIO=2027"
+REM -- Temporada ACTUAL = 2027 (26-27). La 2026 (=25-26) ya quedo
+REM    archivada en la capsula; NO se procesa para no re-llenar el sitio.
+set "DVW_DIR=DVW NAFELS 2027"
+set "ANIO=2027"
+if not exist "DVW NAFELS 2027\*.dvw" goto SIN_PARTIDOS_NUEVOS
 echo  Carpeta de partidos: "%DVW_DIR%"   (temporada %ANIO%)
 echo.
 
@@ -135,6 +136,23 @@ goto FIN_ERR
 :NOREPO
 echo  [ERROR] Esta carpeta no es el repo (falta .git).
 goto FIN_ERR
+
+:SIN_PARTIDOS_NUEVOS
+echo.
+echo  ============================================================
+echo    La carpeta "DVW NAFELS 2027" esta VACIA.
+echo    La temporada 26-27 todavia no tiene partidos cargados.
+echo.
+echo    NO se actualiza nada (a proposito), para no volver a llenar
+echo    el sitio con los datos viejos de la 25-26, que ya estan
+echo    guardados en su capsula (menu "Temporadas").
+echo.
+echo    Cuando tengas los primeros DVW de la 26-27, ponelos en la
+echo    carpeta "DVW NAFELS 2027" y volve a correr este .bat.
+echo  ============================================================
+echo.
+pause
+exit /b 0
 
 :FIN_OK
 echo.
