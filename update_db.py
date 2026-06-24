@@ -442,13 +442,13 @@ def detectar_armadores(content, pfx, setter_count=2, extra_liberos=None, positio
             result.append(n)
         if len(result) >= setter_count: break
     return result[:setter_count]
-def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, rival):
+def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, rival, mcode=''):
     """Extrae los rallies de armado de un setter específico."""
     content = content.replace('\r\n','\n')
     idx = content.find('[3SCOUT]\n')
     if idx < 0: return []
     scout = content[idx+9:content.find('\n[3', idx+9)].strip().split('\n')
-    rallies = []; pending = None; last_skill = ''; last_rq = '?'; atype = 0
+    rallies = []; pending = None; last_skill = ''; last_rq = '?'; atype = 0; last_serve_t = 0; last_rec_t = 0
     for line in scout:
         l = line.strip()
         if len(l) < 6: continue
@@ -467,18 +467,22 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
         except: spos = 0
         try: setn = int(sc[8].strip()) if len(sc) > 8 and sc[8].strip().isdigit() else 1
         except: setn = 1
+        try: vt = int(sc[12].strip()) if len(sc) > 12 and sc[12].strip().isdigit() else 0
+        except: vt = 0
         if skill == 'S':
             if pending: rallies.append(pending); pending = None
             last_skill = ''; last_rq = '?'; atype = 0 if t == rival_pfx else 1
+            last_serve_t = vt
             continue
         if t != pfx: continue
-        if skill == 'R': last_rq = effect; last_skill = 'R'
+        if skill == 'R': last_rq = effect; last_skill = 'R'; last_rec_t = vt
         elif skill == 'E' and pnum == setter_num:
             if pending: rallies.append(pending)
             rq = last_rq if last_skill == 'R' else '?'
             raw = tp[0] if tp else ''; call = raw[:2] if len(raw) >= 2 else raw
             pending = {'setter_pos': spos, 'set_num': setn, 'call': call, 'rec_quality': rq, 'atype': atype,
-                       'atk_combo': '', 'atk_result': '', 'atk_dest': 0, 'atk_orig': 0, 'date': date, 'rival': rival}
+                       'atk_combo': '', 'atk_result': '', 'atk_dest': 0, 'atk_orig': 0, 'date': date, 'rival': rival,
+                       'code': mcode, 't_start': (last_serve_t or last_rec_t or vt), 't_atk': 0}
             last_skill = 'E'
         elif skill == 'A':
             if pending:
@@ -486,6 +490,7 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
                 pending['atk_combo'] = combo; pending['atk_result'] = effect
                 pending['atk_dest'] = int(traj[1]) if traj and len(traj) > 1 and traj[1].isdigit() else 0
                 pending['atk_orig'] = int(traj[0]) if traj and traj[0].isdigit() else 0
+                pending['t_atk'] = vt
                 rallies.append(pending); pending = None
             last_skill = 'A'
         elif skill in ('B', 'D', 'F'):
@@ -523,6 +528,8 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
         home = norm(h_raw); away = norm(a_raw)
         m = re.search(r'(\d{4}-\d{2}-\d{2})', fname)
         date = m.group(1) if m else ''
+        mc = re.search(r'\d{4}-\d{2}-\d{2}\s+(\d{3,})', fname)
+        code = mc.group(1) if mc else ''
         for team, pfx, rpfx, ishome, rival in [(home, '*', 'a', True, away), (away, 'a', '*', False, home)]:
             if team not in main_teams: continue
             team_libs = liberos_by_team.get(team, set())
@@ -531,7 +538,7 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
             setters = detectar_armadores(content, pfx, 2, team_libs, team_pos)
             for sn in setters:
                 setters_detected.setdefault(team, set()).add(sn)
-                r = parse_setter_rallies(content, pfx, rpfx, ishome, sn, date, rival)
+                r = parse_setter_rallies(content, pfx, rpfx, ishome, sn, date, rival, code)
                 if r: rallies_both[team][sn].extend(r)
     # Keep top-2 setters per team by volume
     setters_map = {}
@@ -578,13 +585,14 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
             _all_rl.extend(team_rallies.get(str(_sn), []) if isinstance(team_rallies, dict) else [])
         _seen = sorted(set((r.get('date',''), r.get('rival','')) for r in _all_rl))
         match_idx = {dk: i for i, dk in enumerate(_seen)}
-        matches = [{'i': i, 'date': d, 'rival': rv} for i, (d, rv) in enumerate(_seen)]
+        _code_map = {(r.get('date',''), r.get('rival','')): r.get('code','') for r in _all_rl}
+        matches = [{'i': i, 'date': d, 'rival': rv, 'code': _code_map.get((d, rv), '')} for i, (d, rv) in enumerate(_seen)]
         setters_list = []
         for sn in team_setters:
             rl = team_rallies.get(str(sn), []) if isinstance(team_rallies, dict) else []
             if not rl: continue
             sname = td.get(str(sn),{}).get('info',{}).get('name',f'#{sn}')
-            arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1)] for r in rl]
+            arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1),r.get('t_start',0),r.get('t_atk',0)] for r in rl]
             setters_list.append({'num':sn,'name':sname,'s':arm,'total':len(rl)})
         setters_list.sort(key=lambda x:-x['total'])
         # Roster de posiciones (profesional) — jerarquía: setter→libero→central→outside/opposite
