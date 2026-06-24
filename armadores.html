@@ -265,6 +265,7 @@ select, select option {
 </style>
 <script src="lang.js" onerror="void 0"></script>
 <script src="liga_data.js"></script>
+<script src="liga_data_entrenamientos.js" onerror="void 0"></script>
 <script src="firebase.js" onerror="void 0"></script>
 <script src="mapa_videos.js" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script src="videos.js" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
@@ -287,6 +288,11 @@ select, select option {
 </header>
 
 <main class="main" id="main-content">
+  <!-- Toggle Partido / Entrenamiento -->
+  <div style="display:flex;gap:6px;max-width:360px;margin:4px 0 4px" id="modo-toggle">
+    <button id="modo-partido" onclick="setModo('partido')" style="flex:1;background:#e8192c;border:none;color:#fff;padding:9px;border-radius:9px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">PARTIDO</button>
+    <button id="modo-entrenamiento" onclick="setModo('entrenamiento')" style="flex:1;background:transparent;border:1px solid rgba(255,255,255,.15);color:#94a3b8;padding:9px;border-radius:9px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">ENTRENAMIENTO</button>
+  </div>
   <!-- ARMADOR -->
   <div style="margin-top:40px;padding-top:28px;border-top:1px solid rgba(255,255,255,.06)">
     <div style="font-size:10px;color:#475569;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px">
@@ -498,12 +504,13 @@ function gpDefensa(combo, origen, destinos){
 // GAME PLAN UNIVERSAL — carga el rival desde liga_data.js (?rival=X)
 // ═══════════════════════════════════════════════════════════════
 var GP_PARAMS = new URLSearchParams(window.location.search);
+window.__MODO=(function(){try{return localStorage.getItem('vb_modo')||'partido';}catch(e){return 'partido';}})();
 var GP_RIVAL_SLUG = (GP_PARAMS.get('rival') || GP_PARAMS.get('team') || 'nafels').toLowerCase();
-var GP_L = window.LIGA_DATA;
+var GP_L = (window.__MODO==='entrenamiento' && window.LIGA_DATA_ENT) ? window.LIGA_DATA_ENT : window.LIGA_DATA;
 
-// Perfil del armador propio: equipo fijo = Näfels (salvo override por ?team=)
+// Perfil del armador propio: equipo fijo = Näfels (en entrenamiento puede llamarse 'entrenamiento')
 if (!GP_L.teams[GP_RIVAL_SLUG]) {
-  GP_RIVAL_SLUG = GP_L.teams['nafels'] ? 'nafels' : Object.keys(GP_L.teams)[0];
+  GP_RIVAL_SLUG = GP_L.teams['nafels'] ? 'nafels' : (GP_L.teams['entrenamiento'] ? 'entrenamiento' : Object.keys(GP_L.teams)[0]);
 }
 var GP_TD = GP_L.teams[GP_RIVAL_SLUG];
 var GP_COMBOS = GP_L.combos;
@@ -3522,6 +3529,19 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
+<script>
+function setModo(modo){ try{ localStorage.setItem('vb_modo', modo); }catch(e){} location.reload(); }
+function _initModoBtns(){
+  var m=(function(){try{return localStorage.getItem('vb_modo')||'partido';}catch(e){return 'partido';}})();
+  var bp=document.getElementById('modo-partido'), be=document.getElementById('modo-entrenamiento');
+  if(!bp||!be) return;
+  function on(b){b.style.background='#e8192c';b.style.color='#fff';b.style.border='none';}
+  function off(b){b.style.background='transparent';b.style.color='#94a3b8';b.style.border='1px solid rgba(255,255,255,.15)';}
+  if(m==='entrenamiento'){on(be);off(bp);} else {on(bp);off(be);}
+  if(!window.LIGA_DATA_ENT){ be.style.opacity='.4'; be.title='Sin datos de entrenamiento cargados'; }
+}
+document.addEventListener('DOMContentLoaded', _initModoBtns);
+</script>
 <script src="temporadas_menu.js"></script>
 </body>
 </html>
