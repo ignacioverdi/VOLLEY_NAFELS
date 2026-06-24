@@ -472,12 +472,11 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
         if skill == 'S':
             if pending: rallies.append(pending); pending = None
             last_skill = ''; last_rq = '?'; atype = 0 if t == rival_pfx else 1
-            last_serve_t = vt; last_rec_zone = 0; last_rec_num = 0; last_rec_type = ''
+            last_serve_t = vt; last_rec_zone = (int(tp[3][1]) if len(tp) > 3 and tp[3] and len(tp[3]) > 1 and tp[3][1].isdigit() else 0); last_rec_num = 0; last_rec_type = ''
             continue
         if t != pfx: continue
         if skill == 'R':
             last_rq = effect; last_skill = 'R'; last_rec_t = vt; last_rec_num = pnum
-            last_rec_zone = int(tp[3][0]) if len(tp) > 3 and tp[3] and tp[3][0].isdigit() else 0
             last_rec_type = code[3].upper() if len(code) > 3 else ''
         elif skill == 'E' and pnum == setter_num:
             if pending: rallies.append(pending)
