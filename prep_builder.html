@@ -35,6 +35,23 @@
   .btn-sm{font-size:12px;letter-spacing:1px;padding:6px 11px;border-radius:8px}
   .chip{border-color:rgba(45,212,191,.45)!important;color:#2dd4bf!important;font-family:'Barlow Condensed',sans-serif;font-weight:700}
   .chip:hover{background:rgba(45,212,191,.14)!important;color:#5eead4!important}
+  .fb-card{border:1px solid rgba(45,212,191,.22);background:linear-gradient(180deg,rgba(45,212,191,.05),var(--card))}
+  .fb-head{font-size:15px;font-weight:800;font-family:'Barlow Condensed',sans-serif;letter-spacing:.4px;color:var(--txt);margin-bottom:12px;display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+  .fb-badge{font-size:11px;font-weight:700;letter-spacing:.3px;padding:4px 10px;border-radius:999px;font-family:'Inter',sans-serif}
+  .fb-ok{background:rgba(34,197,94,.13);color:#22c55e;border:1px solid rgba(34,197,94,.25)}
+  .fb-warn{background:rgba(245,158,11,.13);color:#f59e0b;border:1px solid rgba(245,158,11,.25)}
+  .fb-tag{font-weight:700;color:var(--mut2,#9aa6c0)}
+  .fb-well{font-size:12.5px;color:var(--txt);background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.16);border-radius:9px;padding:8px 11px;margin-bottom:8px;line-height:1.5}
+  .fb-nota{font-size:13px;color:#fbbf24;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.16);border-radius:9px;padding:9px 12px;margin-bottom:10px;line-height:1.55}
+  .fb-list{display:flex;flex-direction:column;gap:8px}
+  .fb-ej{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:9px 12px}
+  .fb-ej-nom{font-size:13px;font-weight:700;color:var(--txt);font-family:'Barlow Condensed',sans-serif;letter-spacing:.3px;margin-bottom:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .fb-rm{font-size:11px;font-weight:700;color:#2dd4bf;background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.22);border-radius:7px;padding:2px 8px;font-family:'Inter',sans-serif}
+  .fb-ej-pesos{display:flex;flex-wrap:wrap;gap:6px}
+  .fb-serie{font-size:12px;color:var(--txt);background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:7px;padding:3px 9px;font-weight:600}
+  .fb-na{font-size:12px;color:var(--mut)}
+  .fb-obs{font-size:12.5px;color:#cbd5e1;margin-top:7px;line-height:1.5;font-style:italic}
+  .fb-empty{font-size:12.5px;color:var(--mut);text-align:center;padding:6px}
   .cp-ov{position:fixed;inset:0;z-index:99995;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px}
   .cp-ov.on{display:flex}
   .cp-box{background:#0e1018;border:1px solid var(--border);border-radius:16px;max-width:480px;width:100%;max-height:86vh;overflow:auto;padding:22px;box-shadow:0 18px 60px rgba(0,0,0,.6)}
@@ -84,6 +101,8 @@
     <div class="hint" style="margin-top:10px" id="estado">Elegí jugador y mes. Si ya hay una rutina cargada para ese mes, se abre para editar; si no, empezás una nueva.</div>
     <div id="saved-chips" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center"></div>
   </div>
+
+  <div id="feedback-jugador"></div>
 
   <div id="editor"></div>
 
@@ -179,7 +198,7 @@ function cargar(){
     if(data && data.semanas){ R=data; var o=document.getElementById('selMes').options[document.getElementById('selMes').selectedIndex]; R.mesLabel=(o?o.getAttribute('data-lbl'):null)||R.mesLabel||mes; R.mes=mes;
       document.getElementById('estado').textContent='✓ Rutina de '+R.mesLabel+' cargada — editá lo que quieras.'; }
     else { R=nuevaRutina(); document.getElementById('estado').textContent='No había rutina para ese mes. Empezás una nueva.'; }
-    render(); setDirty(false);
+    render(); setDirty(false); renderFeedback(num, mes);
   };
   if(typeof fbGet!=='undefined'){ fbGet('prep_rutinas/'+num+'/'+mes, done); }
   else { try{ var loc=JSON.parse(localStorage.getItem('prep_rutina_'+num+'_'+mes)||'null'); }catch(e){loc=null;} done(loc); }
@@ -218,6 +237,57 @@ function abrirMes(mes){
     var o=document.createElement('option'); o.value=mes; o.setAttribute('data-lbl',mesLabelFromKey(mes)); o.textContent=mesLabelFromKey(mes); sm.appendChild(o);
   }
   sm.value=mes; cargar();
+}
+
+/* ---------- Panel: lo que hizo el jugador (pesos, 1RM, observaciones, wellness, nota) ---------- */
+function fbEsc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function renderFeedback(num, mes){
+  var box=document.getElementById('feedback-jugador');
+  if(!box) return;
+  if(!num){ box.innerHTML=''; return; }
+  if(typeof fbGet==='undefined'){ box.innerHTML='<div class="card fb-card"><div class="fb-empty">Necesitás conexión para ver lo que hizo el jugador.</div></div>'; return; }
+  box.innerHTML='<div class="card fb-card"><div class="fb-empty">Cargando lo que hizo el jugador…</div></div>';
+
+  var ejs=[], seen={};
+  (R.semanas||[]).forEach(function(s){ (s.bloques||[]).forEach(function(b){ (b.ejercicios||[]).forEach(function(e){ if(e.id && !seen[e.id]){ seen[e.id]=1; ejs.push({id:e.id, nombre:e.nombre||e.id}); } }); }); });
+
+  var D={wellness:null, nota:null, pesos:{}, obs:{}, rm:{}}, pending=5;
+  function ready(){ if(--pending<=0) paint(); }
+  fbGet('wellness/'+num, function(d){ D.wellness=d; ready(); });
+  fbGet('notas/'+num+'/'+mes, function(d){ D.nota=d; ready(); });
+  fbGet('pesos', function(d){ if(d&&typeof d==='object'){ var pf='prep_'+num+'_'; Object.keys(d).forEach(function(k){ if(k.indexOf(pf)===0){ var m=k.match(/^prep_\d+_(.+)_s(\d+)$/); if(m){ (D.pesos[m[1]]=D.pesos[m[1]]||{})[+m[2]]=d[k]; } } }); } ready(); });
+  fbGet('obs', function(d){ if(d&&typeof d==='object'){ var pf='prep_obs_'+num+'_'; Object.keys(d).forEach(function(k){ if(k.indexOf(pf)===0){ if(d[k]) D.obs[k.substring(pf.length)]=d[k]; } }); } ready(); });
+  fbGet('rm', function(d){ if(d&&typeof d==='object'){ var pf='prep_rm_'+num+'_'; Object.keys(d).forEach(function(k){ if(k.indexOf(pf)===0){ if(d[k]) D.rm[k.substring(pf.length)]=d[k]; } }); } ready(); });
+
+  function paint(){
+    var sj=document.getElementById('selJug'), o=sj.options[sj.selectedIndex], nombreJug=o?o.textContent:('#'+num);
+    var conPeso=ejs.filter(function(e){ return D.pesos[e.id] && Object.keys(D.pesos[e.id]).length; }).length, totalEj=ejs.length;
+    var adh = totalEj ? (conPeso>0 ? '<span class="fb-badge fb-ok">✓ Registró pesos en '+conPeso+' de '+totalEj+' ejercicios</span>' : '<span class="fb-badge fb-warn">⚠ Sin registros de esta rutina todavía</span>') : '';
+
+    var wHtml='';
+    if(D.wellness && typeof D.wellness==='object'){
+      var wk=Object.keys(D.wellness).sort(), w=wk.length?D.wellness[wk[wk.length-1]]:null;
+      if(w){
+        var q=w.q||{}, pares=[], qmap=[['sueno','😴 Sueño'],['energia','⚡ Energía'],['piernas','🦵 Piernas'],['cuerpo','💪 Cuerpo'],['animo','🙂 Ánimo'],['estres','🧘 Calma']];
+        qmap.forEach(function(p){ if(q[p[0]]!=null) pares.push(p[1]+' '+fbEsc(q[p[0]])); });
+        if(w.rpe!=null) pares.push('🔥 RPE '+fbEsc(w.rpe));
+        var pct=(w.pct!=null)?'<b style="color:#2dd4bf">Readiness '+fbEsc(w.pct)+'%</b>':'', fecha=w.date?fbEsc(w.date):'';
+        if(pct||pares.length) wHtml='<div class="fb-well"><span class="fb-tag">🩺 Wellness'+(fecha?' '+fecha:'')+':</span> '+pct+(pct&&pares.length?' · ':'')+pares.join(' · ')+'</div>';
+      }
+    }
+    var notaHtml=(D.nota && String(D.nota).trim()) ? '<div class="fb-nota"><span class="fb-tag">💬 Nota del jugador:</span> '+fbEsc(D.nota)+'</div>' : '';
+
+    var filas=ejs.filter(function(e){ return D.pesos[e.id]||D.rm[e.id]||D.obs[e.id]; }).map(function(e){
+      var po=D.pesos[e.id]||{}, series=Object.keys(po).map(Number).sort(function(a,b){return a-b;});
+      var pesosTxt=series.length ? series.map(function(s){ return '<span class="fb-serie">S'+s+': '+fbEsc(po[s])+'</span>'; }).join('') : '<span class="fb-na">— sin pesos</span>';
+      var rmTxt=D.rm[e.id] ? '<span class="fb-rm">1RM '+fbEsc(D.rm[e.id])+' kg</span>' : '';
+      var obsTxt=D.obs[e.id] ? '<div class="fb-obs">💬 '+fbEsc(D.obs[e.id])+'</div>' : '';
+      return '<div class="fb-ej"><div class="fb-ej-nom">'+fbEsc(e.nombre)+' '+rmTxt+'</div><div class="fb-ej-pesos">'+pesosTxt+'</div>'+obsTxt+'</div>';
+    }).join('');
+    if(!filas) filas='<div class="fb-empty">El jugador todavía no registró pesos ni observaciones en esta rutina.</div>';
+
+    box.innerHTML='<div class="card fb-card"><div class="fb-head">📊 Lo que hizo '+fbEsc(nombreJug)+' '+adh+'</div>'+wHtml+notaHtml+'<div class="fb-list">'+filas+'</div></div>';
+  }
 }
 
 /* ---------- edición de estado ---------- */
