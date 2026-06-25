@@ -77,10 +77,10 @@
 
   <div id="list"></div>
 
-  <script>
-  /* Rompe-cache: siempre la ultima version de datos y links */
-  (function(){var v='?t='+Date.now();['datos_video.js','mapa_videos.js','datos_video_ent.js','mapa_videos_ent.js'].forEach(function(f){document.write('<scr'+'ipt src="'+f+v+'" onerror="void 0"><\/scr'+'ipt>');});})();
-  </script>
+  <script src="datos_video.js"></script>
+  <script src="mapa_videos.js"></script>
+  <script src="datos_video_ent.js" onerror="void 0"></script>
+  <script src="mapa_videos_ent.js" onerror="void 0"></script>
   <script>
   (function(){
     var MODO = (localStorage.getItem('cargar_video_modo')==='ent') ? 'ent' : 'partido';
