@@ -119,20 +119,21 @@
 
 <div class="cp-ov" id="cpOv">
   <div class="cp-box">
-    <h3>📋 Copiar rutina a…</h3>
+    <h3 id="cpTitle">📋 Copiar rutina a…</h3>
     <div class="hint" id="cpHint">Se copiará la rutina actual a los jugadores que elijas.</div>
     <div style="text-align:right;margin-top:12px"><button class="btn btn-ghost btn-sm" id="cpAllBtn" onclick="cpToggleAll()">Seleccionar todos</button></div>
     <div class="cp-list" id="cpList"></div>
     <div class="cp-actions">
       <button class="btn btn-ghost" onclick="cpClose()">Cancelar</button>
-      <button class="btn btn-teal" onclick="cpConfirm()">Copiar</button>
+      <button class="btn btn-teal" id="cpConfirmBtn" onclick="cpConfirm()">Copiar</button>
     </div>
   </div>
 </div>
 
 <div class="savebar">
   <span class="st" id="savest">—</span>
-  <button class="btn btn-ghost" onclick="cpOpen()">📋 COPIAR A…</button>
+  <button class="btn btn-ghost" onclick="cpOpen('copiar')">📋 COPIAR A…</button>
+  <button class="btn btn-ghost" onclick="cpOpen('vaciar')">🧹 VACIAR EN…</button>
   <button class="btn btn-teal" onclick="guardar()">💾 GUARDAR RUTINA</button>
 </div>
 
@@ -457,14 +458,25 @@ function guardar(){
   refreshSavedChips();
 }
 /* ---------- copiar rutina a varios jugadores ---------- */
-function cpOpen(){
-  if(!R || !R.semanas.length){ alert('Primero armá la rutina (al menos un día con ejercicios).'); return; }
+var cpMode='copiar';
+function cpOpen(mode){
+  cpMode = (mode==='vaciar') ? 'vaciar' : 'copiar';
   var curNum=+document.getElementById('selJug').value;
-  var lbl=R.mesLabel||R.mes;
-  document.getElementById('cpHint').textContent='Se copiará la rutina de '+lbl+' a los jugadores que elijas. Después podés ajustarla en cada uno por separado.';
+  if(!curNum){ alert('Elegí un jugador.'); return; }
+  if(cpMode==='copiar' && (!R || !rutinaTieneEjercicios(R))){ alert('Primero armá la rutina (al menos un día con ejercicios).'); return; }
+  var mo=document.getElementById('selMes').options[document.getElementById('selMes').selectedIndex], mesLbl=mo?mo.textContent:((R&&R.mesLabel)||'');
+  if(cpMode==='vaciar'){
+    document.getElementById('cpTitle').textContent='🧹 Vaciar rutina en…';
+    document.getElementById('cpHint').textContent='Se vaciará la rutina de '+mesLbl+' en los jugadores que elijas. Ese mes les queda SIN ejercicios.';
+    document.getElementById('cpConfirmBtn').textContent='Vaciar';
+  } else {
+    document.getElementById('cpTitle').textContent='📋 Copiar rutina a…';
+    document.getElementById('cpHint').textContent='Se copiará la rutina de '+mesLbl+' a los jugadores que elijas. Después podés ajustarla en cada uno por separado.';
+    document.getElementById('cpConfirmBtn').textContent='Copiar';
+  }
   var list=document.getElementById('cpList'); list.innerHTML='';
   roster().forEach(function(j){
-    if(+j.num===curNum) return; // el jugador actual ya la tiene (se guarda con GUARDAR)
+    if(cpMode==='copiar' && +j.num===curNum) return; // en copiar, el actual ya la tiene (se guarda con GUARDAR)
     var lab=document.createElement('label'); lab.className='cp-item';
     lab.innerHTML='<input type="checkbox" value="'+j.num+'"><span>#'+j.num+' '+(j.ap||j.nombre||'')+'</span>';
     lab.querySelector('input').onchange=function(){ lab.classList.toggle('sel', this.checked); };
@@ -483,8 +495,32 @@ function cpToggleAll(){
 function cpConfirm(){
   var sel=Array.prototype.map.call(document.querySelectorAll('#cpList input:checked'), function(b){ return +b.value; });
   if(!sel.length){ alert('Elegí al menos un jugador.'); return; }
-  // limpiar ejercicios sin elegir (igual que guardar)
-  R.semanas.forEach(function(s){ s.bloques.forEach(function(b){ b.ejercicios=b.ejercicios.filter(function(e){ return e.id; }); }); });
+  if(cpMode==='vaciar'){
+    var mes=document.getElementById('selMes').value, target=normMes(mes);
+    var mo=document.getElementById('selMes').options[document.getElementById('selMes').selectedIndex], mesLbl=mo?mo.textContent:mes;
+    if(!confirm('Vas a VACIAR la rutina de '+mesLbl+' en '+sel.length+' jugador'+(sel.length>1?'es':'')+'.\nEse mes les queda sin ejercicios. ¿Seguro?')) return;
+    function clearKey(num, k){
+      var vacia={mes:k, mesLabel:mesLabelFromKey(k), semanas:[], actualizado:new Date().toISOString()};
+      try{ localStorage.setItem('prep_rutina_'+num+'_'+k, JSON.stringify(vacia)); }catch(e){}
+      if(typeof fbSet!=='undefined') fbSet('prep_rutinas/'+num+'/'+k, vacia);
+    }
+    sel.forEach(function(num){
+      if(typeof fbGet!=='undefined'){
+        fbGet('prep_rutinas/'+num, function(all){
+          var keys=[]; if(all&&typeof all==='object'&&!all.error){ Object.keys(all).forEach(function(k){ if(normMes(k)===target) keys.push(k); }); }
+          if(!keys.length) keys.push(mes);
+          keys.forEach(function(k){ clearKey(num, k); });
+        });
+      } else { clearKey(num, mes); clearKey(num, target); }
+    });
+    cpClose();
+    document.getElementById('savest').textContent='Rutina vaciada en '+sel.length+' jugador'+(sel.length>1?'es':'')+' ✓';
+    if(sel.indexOf(+document.getElementById('selJug').value)>=0){ setTimeout(cargar, 500); }
+    refreshSavedChips();
+    return;
+  }
+  // ---- modo copiar ----
+  (R.semanas||[]).forEach(function(s){ (s.bloques||[]).forEach(function(b){ b.ejercicios=(b.ejercicios||[]).filter(function(e){ return e.id; }); }); });
   var copiados=0;
   sel.forEach(function(num){
     var copia=JSON.parse(JSON.stringify(R));
