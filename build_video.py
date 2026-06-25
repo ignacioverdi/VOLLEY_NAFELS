@@ -64,7 +64,10 @@ def parse_dvw(path, ent=False):
         a={'t':t,'num':num,'name':pmap[num],'skill':sk,'sk':SK.get(sk,sk),'ev':ev,'set':c[8] if len(c)>8 else ''}
         if sk=='A':
             cb=code0[6:8]
-            if cb and cb[0] in 'XVPC' and '~' not in cb: a['acomb']=cb
+            if cb and cb[0] in 'XVPC' and '~' not in cb: a['x']=cb
+        elif sk in ('S','R'):
+            tp=code0[4] if len(code0)>4 else ''
+            if tp and tp.isalpha(): a['x']=tp
         actions.append(a)
     if ent: opp='Entrenamiento'
     return code,{'opponent':opp,'date':date,'side':side,'players':players,'actions':actions}
