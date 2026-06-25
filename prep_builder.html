@@ -183,25 +183,31 @@ function onPick(){
   }
   cargar();
 }
+function normMes(k){ var p=String(k).split('-'); return p[0]+'-'+String(parseInt(p[1]||'0',10)); }
 function cargar(){
   var num=+document.getElementById('selJug').value, mes=document.getElementById('selMes').value;
   loadedNum=document.getElementById('selJug').value; loadedMes=mes;
   refreshSavedChips();
   if(!num){ R=nuevaRutina(); render(); return; }
   document.getElementById('estado').textContent='Buscando rutina guardada…';
-  var done=function(data){
-    // si la nube no trajo nada válido, probar la copia local de este dispositivo
-    if(!(data && data.semanas)){
-      try{ var loc=JSON.parse(localStorage.getItem('prep_rutina_'+num+'_'+mes)||'null'); }catch(e){ loc=null; }
-      if(loc && loc.semanas) data=loc;
-    }
-    if(data && data.semanas){ R=data; var o=document.getElementById('selMes').options[document.getElementById('selMes').selectedIndex]; R.mesLabel=(o?o.getAttribute('data-lbl'):null)||R.mesLabel||mes; R.mes=mes;
+  var target=normMes(mes);
+  function pick(obj){
+    if(!obj || typeof obj!=='object' || obj.error) return null;
+    if(obj[mes] && obj[mes].semanas) return {r:obj[mes], k:mes};               // match exacto
+    var hit=null; Object.keys(obj).forEach(function(k){ if(!hit && normMes(k)===target && obj[k] && obj[k].semanas) hit={r:obj[k], k:k}; }); // match flexible (2026-6 == 2026-06)
+    return hit;
+  }
+  // copia local: todas las variantes de mes de este jugador en este dispositivo
+  var localObj={};
+  try{ var pre='prep_rutina_'+num+'_'; for(var i=0;i<localStorage.length;i++){ var lk=localStorage.key(i); if(lk && lk.indexOf(pre)===0){ try{ localObj[lk.substring(pre.length)]=JSON.parse(localStorage.getItem(lk)); }catch(e){} } } }catch(e){}
+  function aplicar(found){
+    if(found && found.r && found.r.semanas){ R=found.r; R.mes=found.k; R.mesLabel=mesLabelFromKey(found.k);
       document.getElementById('estado').textContent = rutinaTieneEjercicios(R) ? ('✓ Rutina de '+R.mesLabel+' cargada — editá lo que quieras.') : ('Este jugador no tiene ejercicios cargados en '+R.mesLabel+'. Agregá días/ejercicios o elegí otro jugador.'); }
     else { R=nuevaRutina(); document.getElementById('estado').textContent='No había rutina para ese mes. Empezás una nueva.'; }
-    render(); setDirty(false); renderFeedback(num, mes);
-  };
-  if(typeof fbGet!=='undefined'){ fbGet('prep_rutinas/'+num+'/'+mes, done); }
-  else { try{ var loc=JSON.parse(localStorage.getItem('prep_rutina_'+num+'_'+mes)||'null'); }catch(e){loc=null;} done(loc); }
+    render(); setDirty(false); renderFeedback(num, R.mes);
+  }
+  if(typeof fbGet!=='undefined'){ fbGet('prep_rutinas/'+num, function(all){ aplicar( pick(all) || pick(localObj) ); }); }
+  else { aplicar( pick(localObj) ); }
 }
 
 /* ---------- chips de meses con rutina guardada (para no adivinar el mes) ---------- */
