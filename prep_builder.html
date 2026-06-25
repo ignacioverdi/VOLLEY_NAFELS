@@ -196,7 +196,7 @@ function cargar(){
       if(loc && loc.semanas) data=loc;
     }
     if(data && data.semanas){ R=data; var o=document.getElementById('selMes').options[document.getElementById('selMes').selectedIndex]; R.mesLabel=(o?o.getAttribute('data-lbl'):null)||R.mesLabel||mes; R.mes=mes;
-      document.getElementById('estado').textContent='✓ Rutina de '+R.mesLabel+' cargada — editá lo que quieras.'; }
+      document.getElementById('estado').textContent = rutinaTieneEjercicios(R) ? ('✓ Rutina de '+R.mesLabel+' cargada — editá lo que quieras.') : ('Este jugador no tiene ejercicios cargados en '+R.mesLabel+'. Agregá días/ejercicios o elegí otro jugador.'); }
     else { R=nuevaRutina(); document.getElementById('estado').textContent='No había rutina para ese mes. Empezás una nueva.'; }
     render(); setDirty(false); renderFeedback(num, mes);
   };
@@ -206,15 +206,20 @@ function cargar(){
 
 /* ---------- chips de meses con rutina guardada (para no adivinar el mes) ---------- */
 function mesLabelFromKey(mes){ var p=String(mes).split('-'); var y=+p[0], mo=(+p[1])-1; return (MESES[mo]||mes)+' '+y; }
+function rutinaTieneEjercicios(r){
+  if(!r || !r.semanas || !r.semanas.length) return false;
+  for(var i=0;i<r.semanas.length;i++){ var bs=r.semanas[i].bloques||[]; for(var j=0;j<bs.length;j++){ if((bs[j].ejercicios||[]).length) return true; } }
+  return false;
+}
 function listSavedMonths(num, cb){
   var found={};
   try{
     var pref='prep_rutina_'+num+'_';
-    for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(k && k.indexOf(pref)===0){ var mz=k.substring(pref.length); if(/^\d{4}-\d{2}$/.test(mz)) found[mz]=true; } }
+    for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(k && k.indexOf(pref)===0){ var mz=k.substring(pref.length); if(/^\d{4}-\d{2}$/.test(mz)){ try{ var r=JSON.parse(localStorage.getItem(k)||'null'); if(rutinaTieneEjercicios(r)) found[mz]=true; }catch(e){} } } }
   }catch(e){}
   if(typeof fbGet!=='undefined'){
     fbGet('prep_rutinas/'+num, function(data){
-      if(data && typeof data==='object' && !data.error){ Object.keys(data).forEach(function(mz){ if(data[mz] && data[mz].semanas && data[mz].semanas.length) found[mz]=true; }); }
+      if(data && typeof data==='object' && !data.error){ Object.keys(data).forEach(function(mz){ if(rutinaTieneEjercicios(data[mz])) found[mz]=true; }); }
       cb(Object.keys(found));
     });
   } else { cb(Object.keys(found)); }
