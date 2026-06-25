@@ -102,7 +102,20 @@ if __name__=='__main__':
     for code,m in nuevos.items():
         if code not in existentes:
             existentes[code]=m; agregados+=1
-    data={'combos':COMBOS,'matches':existentes}
+    # Hornear los links de mapa_videos(.js/_ent.js) ADENTRO (a prueba de cache)
+    mapa_file = 'mapa_videos_ent.js' if ent else 'mapa_videos.js'
+    mapa_glob = 'MAPA_VIDEOS_ENT' if ent else 'MAPA_VIDEOS'
+    links = {}
+    if os.path.isfile(mapa_file):
+        try:
+            mt = open(mapa_file, encoding='utf-8').read()
+            mm = re.search(r'window\.'+mapa_glob+r'\s*=\s*(\{.*?\})\s*;', mt, re.S)
+            if mm:
+                for k, v in json.loads(mm.group(1)).items():
+                    if v: links[k] = v
+        except Exception as e:
+            print('  (aviso: no pude leer '+mapa_file+':', e, ')')
+    data={'combos':COMBOS,'matches':existentes,'links':links}
     with open(out,'w',encoding='utf-8') as f:
         f.write('window.'+glob_name+' = '+json.dumps(data,ensure_ascii=False)+';\n')
     tot=sum(len(m['actions']) for m in existentes.values())
