@@ -52,6 +52,12 @@
   .fb-na{font-size:12px;color:var(--mut)}
   .fb-obs{font-size:12.5px;color:#cbd5e1;margin-top:7px;line-height:1.5;font-style:italic}
   .fb-empty{font-size:12.5px;color:var(--mut);text-align:center;padding:6px}
+  .trad-btn{font-size:10px;font-weight:700;letter-spacing:.3px;color:var(--teal);background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.28);border-radius:7px;padding:3px 9px;cursor:pointer;font-family:'Inter',sans-serif;vertical-align:middle}
+  .trad-btn:hover{background:rgba(45,212,191,.18)}
+  .fb-reply{margin:4px 0 12px;padding:11px 12px;background:rgba(45,212,191,.05);border:1px solid rgba(45,212,191,.16);border-radius:11px}
+  .fb-reply-lbl{font-size:10px;color:var(--teal);letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:8px}
+  .fb-reply-txt{width:100%;min-height:58px;resize:vertical;background:#fff;color:#111;border:1px solid var(--b2);border-radius:9px;padding:10px 12px;font-size:13.5px;font-family:'Inter',sans-serif;line-height:1.5;outline:none;box-sizing:border-box}
+  .fb-reply-status{font-size:11px;color:var(--teal);margin-top:6px;min-height:13px}
   .cp-ov{position:fixed;inset:0;z-index:99995;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px}
   .cp-ov.on{display:flex}
   .cp-box{background:#0e1018;border:1px solid var(--border);border-radius:16px;max-width:480px;width:100%;max-height:86vh;overflow:auto;padding:22px;box-shadow:0 18px 60px rgba(0,0,0,.6)}
@@ -263,6 +269,27 @@ function abrirMes(mes){
   sm.value=mes; cargar();
 }
 
+/* ---------- traducción (servicio gratuito; sl=auto detecta el idioma de origen) ---------- */
+function traducirTexto(texto, target, cb){
+  if(!texto){ cb(''); return; }
+  var t=encodeURIComponent(texto), tl=encodeURIComponent(target);
+  fetch('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl='+tl+'&dt=t&q='+t)
+    .then(function(r){ return r.json(); })
+    .then(function(d){ var out=(d&&d[0]&&d[0].map)?d[0].map(function(s){return s[0];}).join(''):null; cb(out||null); })
+    .catch(function(){ cb(null); });
+}
+function attachTranslate(btn, txtEl, getTarget){
+  if(!btn || !txtEl) return;
+  btn.addEventListener('click', function(){
+    var orig=txtEl.getAttribute('data-orig'); if(orig==null){ orig=txtEl.textContent; txtEl.setAttribute('data-orig', orig); }
+    if(txtEl.getAttribute('data-trad')==='1'){ txtEl.textContent=orig; txtEl.setAttribute('data-trad','0'); btn.textContent='🌐 Traducir'; return; }
+    var target=getTarget()||'es'; var self=this; self.textContent='⏳…';
+    traducirTexto(orig, target, function(out){
+      if(out){ txtEl.textContent=out; txtEl.setAttribute('data-trad','1'); self.textContent='↩ Ver original'; }
+      else { self.textContent='🌐 Traducir'; alert('No se pudo traducir en este momento. Probá de nuevo en un ratito.'); }
+    });
+  });
+}
 /* ---------- Panel: lo que hizo el jugador (pesos, 1RM, observaciones, wellness, nota) ---------- */
 function fbEsc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function renderFeedback(num, mes){
@@ -299,7 +326,13 @@ function renderFeedback(num, mes){
         if(pct||pares.length) wHtml='<div class="fb-well"><span class="fb-tag">🩺 Wellness'+(fecha?' '+fecha:'')+':</span> '+pct+(pct&&pares.length?' · ':'')+pares.join(' · ')+'</div>';
       }
     }
-    var notaHtml=(D.nota && String(D.nota).trim()) ? '<div class="fb-nota"><span class="fb-tag">💬 Nota del jugador:</span> '+fbEsc(D.nota)+'</div>' : '';
+    var notaHtml=(D.nota && String(D.nota).trim()) ? '<div class="fb-nota"><span class="fb-tag">💬 Nota del jugador:</span> <span id="fbNotaTxt">'+fbEsc(D.nota)+'</span> <button type="button" class="trad-btn" id="fbNotaTrad">🌐 Traducir</button></div>' : '';
+    var replyVal=''; try{ replyVal=localStorage.getItem('prep_notapf_'+num+'_'+mes)||''; }catch(e){}
+    var replyHtml='<div class="fb-reply">'+
+        '<div class="fb-reply-lbl">✍️ Responderle al jugador <span style="color:var(--mut);font-weight:400;text-transform:none;letter-spacing:0">(lo ve en su rutina)</span></div>'+
+        '<textarea id="pfReplyInput" class="fb-reply-txt" placeholder="Escribile una respuesta o indicación…"></textarea>'+
+        '<div class="fb-reply-status" id="pfReplyStatus"></div>'+
+      '</div>';
 
     var filas=ejs.filter(function(e){ return D.pesos[e.id]||D.rm[e.id]||D.obs[e.id]; }).map(function(e){
       var po=D.pesos[e.id]||{}, series=Object.keys(po).map(Number).sort(function(a,b){return a-b;});
@@ -310,7 +343,22 @@ function renderFeedback(num, mes){
     }).join('');
     if(!filas) filas='<div class="fb-empty">El jugador todavía no registró pesos ni observaciones en esta rutina.</div>';
 
-    box.innerHTML='<div class="card fb-card"><div class="fb-head">📊 Lo que hizo '+fbEsc(nombreJug)+' '+adh+'</div>'+wHtml+notaHtml+'<div class="fb-list">'+filas+'</div></div>';
+    box.innerHTML='<div class="card fb-card"><div class="fb-head">📊 Lo que hizo '+fbEsc(nombreJug)+' '+adh+'</div>'+wHtml+notaHtml+replyHtml+'<div class="fb-list">'+filas+'</div></div>';
+
+    // traducir la nota del jugador (al español)
+    attachTranslate(document.getElementById('fbNotaTrad'), document.getElementById('fbNotaTxt'), function(){ return 'es'; });
+    // respuesta del profe (se guarda en notas_pf y la ve el jugador)
+    var rin=document.getElementById('pfReplyInput'), rst=document.getElementById('pfReplyStatus'), rtmr=null;
+    if(rin){
+      rin.value=replyVal;
+      rin.addEventListener('input', function(){
+        var v=this.value; try{ localStorage.setItem('prep_notapf_'+num+'_'+mes, v); }catch(e){}
+        if(rst) rst.textContent='Guardando…';
+        clearTimeout(rtmr);
+        rtmr=setTimeout(function(){ if(typeof fbSet!=='undefined') fbSet('notas_pf/'+num+'/'+mes, v); if(rst) rst.textContent='✓ El jugador puede verlo'; }, 600);
+      });
+      if(typeof fbGet!=='undefined'){ fbGet('notas_pf/'+num+'/'+mes, function(d){ if(d!==null && d!==undefined && document.getElementById('pfReplyInput')){ rin.value=d; try{ localStorage.setItem('prep_notapf_'+num+'_'+mes, d); }catch(e){} } }); }
+    }
   }
 }
 

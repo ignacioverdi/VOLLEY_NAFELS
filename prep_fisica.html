@@ -107,6 +107,11 @@ select,select option{color:#111!important;background-color:#fff!important}
 .nota-card-lbl{font-size:10px;color:var(--amber);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:9px;font-weight:700}
 .nota-card-txt{width:100%;min-height:70px;resize:vertical;background:#fff;color:#111;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:11px 13px;font-size:14px;font-family:'Inter',sans-serif;line-height:1.5;outline:none;box-sizing:border-box}
 .nota-card-status{font-size:11px;color:var(--teal);margin-top:7px;min-height:14px}
+.pf-reply-box{margin-top:12px;padding-top:12px;border-top:1px dashed var(--border)}
+.pf-reply-lbl{font-size:10px;color:var(--teal);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-weight:700;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pf-reply-txt{font-size:14px;color:#cfeede;background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.18);border-radius:10px;padding:11px 13px;line-height:1.55;white-space:pre-wrap}
+.trad-btn{font-size:10px;font-weight:700;letter-spacing:.3px;color:var(--teal);background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.28);border-radius:7px;padding:3px 9px;cursor:pointer;font-family:'Inter',sans-serif}
+.trad-btn:hover{background:rgba(45,212,191,.18)}
 .pesos-section{padding:11px 16px 14px;border-top:1px solid var(--border);background:rgba(255,255,255,.012)}
 .pesos-label{font-size:9px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:9px}
 .pesos-grid{display:flex;flex-wrap:wrap;gap:8px}
@@ -501,6 +506,27 @@ function aplicarMes(j, mesKey){
 
 /* ---------- Nota general del jugador para el profe (por mes) ---------- */
 function notaKey(num, mes){ return 'prep_nota_'+num+'_'+mes; }
+/* ---------- traducción (servicio gratuito; sl=auto detecta el idioma de origen) ---------- */
+function traducirTexto(texto, target, cb){
+  if(!texto){ cb(''); return; }
+  var t=encodeURIComponent(texto), tl=encodeURIComponent(target);
+  fetch('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl='+tl+'&dt=t&q='+t)
+    .then(function(r){ return r.json(); })
+    .then(function(d){ var out=(d&&d[0]&&d[0].map)?d[0].map(function(s){return s[0];}).join(''):null; cb(out||null); })
+    .catch(function(){ cb(null); });
+}
+function attachTranslate(btn, txtEl, getTarget){
+  if(!btn || !txtEl) return;
+  btn.addEventListener('click', function(){
+    var orig=txtEl.getAttribute('data-orig'); if(orig==null){ orig=txtEl.textContent; txtEl.setAttribute('data-orig', orig); }
+    if(txtEl.getAttribute('data-trad')==='1'){ txtEl.textContent=orig; txtEl.setAttribute('data-trad','0'); btn.textContent='🌐 Traducir'; return; }
+    var target=getTarget()||'es'; var self=this; self.textContent='⏳…';
+    traducirTexto(orig, target, function(out){
+      if(out){ txtEl.textContent=out; txtEl.setAttribute('data-trad','1'); self.textContent='↩ Ver original'; }
+      else { self.textContent='🌐 Traducir'; alert('No se pudo traducir en este momento. Probá de nuevo en un ratito.'); }
+    });
+  });
+}
 function renderNotaProfe(num, mes){
   var box = document.getElementById('nota-al-profe');
   if(!box || !num || !mes){ if(box) box.innerHTML=''; return; }
@@ -511,6 +537,10 @@ function renderNotaProfe(num, mes){
       '<div class="nota-card-lbl">💬 Nota para el profe <span style="opacity:.6;font-weight:400">(esta rutina)</span></div>' +
       '<textarea id="notaProfeTxt" class="nota-card-txt" placeholder="Contale al profe cómo venís: cansancio, alguna molestia, cómo te sentiste con las cargas…"></textarea>' +
       '<div class="nota-card-status" id="notaProfeStatus"></div>' +
+      '<div id="pfReplyBox" class="pf-reply-box" style="display:none">' +
+        '<div class="pf-reply-lbl">📣 Respuesta del profe <button type="button" class="trad-btn" id="pfReplyTrad">🌐 Traducir</button></div>' +
+        '<div class="pf-reply-txt" id="pfReplyTxt"></div>' +
+      '</div>' +
     '</div>';
   var ta = document.getElementById('notaProfeTxt'); ta.value = val;
   var st = document.getElementById('notaProfeStatus'), t = null;
@@ -524,6 +554,17 @@ function renderNotaProfe(num, mes){
   if(typeof fbGet !== 'undefined'){
     fbGet('notas/'+num+'/'+mes, function(d){ if(d !== null && d !== undefined && d !== '' && document.getElementById('notaProfeTxt')){ ta.value = d; try{ localStorage.setItem(lk, d); }catch(e){} } });
   }
+  // Respuesta del profe (lo que escribe el PF desde el builder)
+  var rlk = 'prep_notapf_'+num+'_'+mes;
+  function pintarReply(txt){
+    var rb=document.getElementById('pfReplyBox'), rt=document.getElementById('pfReplyTxt');
+    if(!rb||!rt) return;
+    if(txt && String(txt).trim()){ rb.style.display='block'; rt.textContent=txt; rt.removeAttribute('data-orig'); rt.removeAttribute('data-trad'); }
+    else { rb.style.display='none'; }
+  }
+  try{ pintarReply(localStorage.getItem(rlk)||''); }catch(e){}
+  if(typeof fbGet !== 'undefined'){ fbGet('notas_pf/'+num+'/'+mes, function(d){ if(d!==null && d!==undefined){ try{ localStorage.setItem(rlk, d); }catch(e){} pintarReply(d); } }); }
+  attachTranslate(document.getElementById('pfReplyTrad'), document.getElementById('pfReplyTxt'), function(){ return (typeof getLang==='function')?getLang():'es'; });
 }
 function pintarMesSelector(j, keys, sel){
   var box = document.getElementById('mes-selector');
