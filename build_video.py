@@ -11,13 +11,20 @@ Uso:
 """
 import os,re,sys,json,glob
 
+def fix_enc(x):
+    # Los DVW pueden venir en UTF-8 leido como latin-1 (mojibake "NÃ¤fels"). Lo corrige.
+    if x and 'Ã' in x:
+        try: return x.encode('latin-1').decode('utf-8')
+        except: return x
+    return x
+
 COMBOS = json.loads(r'''{"PP":"Setter tip","V0":"High set in 5","V5":"High set in 4","V6":"High set in 2","V8":"High set in 1","VB":"High Pipe set to 6-1","VP":"High Pipe","VR":"High Pipe set to 6-5","X0":"Shoot in 5","X1":"Quick","X2":"X2","X3":"Mezza da posto 2","X4":"Mezza dietro","X5":"Shoot in 4","X6":"Shoot in 2","X7":"Quick lower set","X8":"Shoot in 1","X9":"Mezza davanti dopo 7","XB":"Pipe set to 6-1","XL":"XL","XM":"Quick in 3","XP":"Pipe","XR":"Pipe set to 6-5"}''')
 SK={'S':'Saque','R':'Recepción','A':'Ataque','B':'Bloqueo','D':'Defensa','E':'Armado','F':'Freeball'}
 
 def is_naf(n): return bool(re.search(r'n[aä]fels|biogas',n or '',re.I))
 def clean_team(n):
     n=re.sub(r'\(NLA[^)]*\)','',n or ''); n=re.sub(r'\b(Volley|Volleyball|TSV|VBC|TV)\b','',n,flags=re.I)
-    return re.sub(r'\s+',' ',n).strip()
+    return fix_enc(re.sub(r'\s+',' ',n).strip())
 
 def parse_dvw(path, ent=False):
     txt=open(path,encoding='latin-1',errors='ignore').read()
@@ -34,7 +41,7 @@ def parse_dvw(path, ent=False):
     for l in psec.strip().splitlines():
         p=l.split(';')
         if len(p)>9 and p[1].strip().isdigit():
-            num='%02d'%int(p[1]); name=(p[9] or '').strip().split()[0] if p[9].strip() else num
+            num='%02d'%int(p[1]); name=fix_enc((p[9] or '').strip().split()[0]) if p[9].strip() else num
             if num not in pmap: pmap[num]=name; players.append([num,name])
     base=os.path.basename(path)
     mcode=re.search(r'(\d{6})',base); mdate=re.search(r'(\d{4}-\d{2}-\d{2})',base)
