@@ -191,17 +191,20 @@ function cargar(){
   if(!num){ R=nuevaRutina(); render(); return; }
   document.getElementById('estado').textContent='Buscando rutina guardada…';
   var target=normMes(mes);
+  function scoreRut(r){ return rutinaTieneEjercicios(r) ? 2 : ((r && r.semanas && r.semanas.length) ? 1 : 0); }
   function pick(obj){
     if(!obj || typeof obj!=='object' || obj.error) return null;
-    if(obj[mes] && obj[mes].semanas) return {r:obj[mes], k:mes};               // match exacto
-    var hit=null; Object.keys(obj).forEach(function(k){ if(!hit && normMes(k)===target && obj[k] && obj[k].semanas) hit={r:obj[k], k:k}; }); // match flexible (2026-6 == 2026-06)
-    return hit;
+    var cands=[];
+    Object.keys(obj).forEach(function(k){ if(normMes(k)===target && obj[k] && obj[k].semanas) cands.push({r:obj[k], k:k}); });  // todas las del mes (cualquier formato)
+    if(!cands.length) return null;
+    cands.sort(function(a,b){ return scoreRut(b.r)-scoreRut(a.r); });  // primero la que tenga EJERCICIOS, no la vacía
+    return cands[0];
   }
   // copia local: todas las variantes de mes de este jugador en este dispositivo
   var localObj={};
   try{ var pre='prep_rutina_'+num+'_'; for(var i=0;i<localStorage.length;i++){ var lk=localStorage.key(i); if(lk && lk.indexOf(pre)===0){ try{ localObj[lk.substring(pre.length)]=JSON.parse(localStorage.getItem(lk)); }catch(e){} } } }catch(e){}
   function aplicar(found){
-    if(found && found.r && found.r.semanas){ R=found.r; R.mes=found.k; R.mesLabel=mesLabelFromKey(found.k);
+    if(found && found.r && found.r.semanas){ R=normalizarRutina(found.r); R.mes=found.k; R.mesLabel=mesLabelFromKey(found.k);
       document.getElementById('estado').textContent = rutinaTieneEjercicios(R) ? ('✓ Rutina de '+R.mesLabel+' cargada — editá lo que quieras.') : ('Este jugador no tiene ejercicios cargados en '+R.mesLabel+'. Agregá días/ejercicios o elegí otro jugador.'); }
     else { R=nuevaRutina(); document.getElementById('estado').textContent='No había rutina para ese mes. Empezás una nueva.'; }
     render(); setDirty(false); renderFeedback(num, R.mes);
@@ -216,6 +219,16 @@ function rutinaTieneEjercicios(r){
   if(!r || !r.semanas || !r.semanas.length) return false;
   for(var i=0;i<r.semanas.length;i++){ var bs=r.semanas[i].bloques||[]; for(var j=0;j<bs.length;j++){ if((bs[j].ejercicios||[]).length) return true; } }
   return false;
+}
+function normalizarRutina(r){
+  // Firebase borra los arrays vacíos: hay que reponerlos para que el editor no explote
+  if(!r || typeof r!=='object') return r;
+  if(!Array.isArray(r.semanas)) r.semanas = [];
+  r.semanas.forEach(function(s){
+    if(!Array.isArray(s.bloques)) s.bloques = [];
+    s.bloques.forEach(function(b){ if(!Array.isArray(b.ejercicios)) b.ejercicios = []; });
+  });
+  return r;
 }
 function listSavedMonths(num, cb){
   var found={};
@@ -346,7 +359,8 @@ function render(){
       +'<input type="text" value="'+(s.label||'').replace(/"/g,'&quot;')+'" oninput="onSesLabel('+si+',this.value)" style="flex:1">'
       +'<button class="x" title="Eliminar sesión" onclick="delSesion('+si+')">🗑</button></div>';
     h+='<div class="ses-bd">';
-    s.bloques.forEach(function(b,bi){
+    (s.bloques||[]).forEach(function(b,bi){
+      if(!Array.isArray(b.ejercicios)) b.ejercicios=[];
       h+='<div class="blo"><div class="blo-hd"><span class="blo-ic">'+b.icon+'</span>'
         +'<select onchange="onBloque('+si+','+bi+',this.value)">'+bloqueOptions(b.nombre)+'</select>'
         +'<span style="width:14px;height:14px;border-radius:4px;background:'+b.color+'"></span>'
