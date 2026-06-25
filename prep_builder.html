@@ -33,6 +33,8 @@
   .btn-ghost:hover{color:var(--txt)}
   .btn-teal{background:linear-gradient(135deg,var(--teal),#14b8a6);color:#06231d}
   .btn-sm{font-size:12px;letter-spacing:1px;padding:6px 11px;border-radius:8px}
+  .chip{border-color:rgba(45,212,191,.45)!important;color:#2dd4bf!important;font-family:'Barlow Condensed',sans-serif;font-weight:700}
+  .chip:hover{background:rgba(45,212,191,.14)!important;color:#5eead4!important}
   .cp-ov{position:fixed;inset:0;z-index:99995;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px}
   .cp-ov.on{display:flex}
   .cp-box{background:#0e1018;border:1px solid var(--border);border-radius:16px;max-width:480px;width:100%;max-height:86vh;overflow:auto;padding:22px;box-shadow:0 18px 60px rgba(0,0,0,.6)}
@@ -80,6 +82,7 @@
       <button class="btn btn-ghost" onclick="onPick()">Cargar</button>
     </div>
     <div class="hint" style="margin-top:10px" id="estado">Elegí jugador y mes. Si ya hay una rutina cargada para ese mes, se abre para editar; si no, empezás una nueva.</div>
+    <div id="saved-chips" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center"></div>
   </div>
 
   <div id="editor"></div>
@@ -164,16 +167,57 @@ function onPick(){
 function cargar(){
   var num=+document.getElementById('selJug').value, mes=document.getElementById('selMes').value;
   loadedNum=document.getElementById('selJug').value; loadedMes=mes;
+  refreshSavedChips();
   if(!num){ R=nuevaRutina(); render(); return; }
   document.getElementById('estado').textContent='Buscando rutina guardada…';
   var done=function(data){
-    if(data && data.semanas){ R=data; if(!R.mesLabel){var o=document.getElementById('selMes').options[document.getElementById('selMes').selectedIndex];R.mesLabel=o?o.getAttribute('data-lbl'):mes;} R.mes=mes;
-      document.getElementById('estado').textContent='Rutina de '+R.mesLabel+' cargada — editá lo que quieras.'; }
+    // si la nube no trajo nada válido, probar la copia local de este dispositivo
+    if(!(data && data.semanas)){
+      try{ var loc=JSON.parse(localStorage.getItem('prep_rutina_'+num+'_'+mes)||'null'); }catch(e){ loc=null; }
+      if(loc && loc.semanas) data=loc;
+    }
+    if(data && data.semanas){ R=data; var o=document.getElementById('selMes').options[document.getElementById('selMes').selectedIndex]; R.mesLabel=(o?o.getAttribute('data-lbl'):null)||R.mesLabel||mes; R.mes=mes;
+      document.getElementById('estado').textContent='✓ Rutina de '+R.mesLabel+' cargada — editá lo que quieras.'; }
     else { R=nuevaRutina(); document.getElementById('estado').textContent='No había rutina para ese mes. Empezás una nueva.'; }
     render(); setDirty(false);
   };
   if(typeof fbGet!=='undefined'){ fbGet('prep_rutinas/'+num+'/'+mes, done); }
   else { try{ var loc=JSON.parse(localStorage.getItem('prep_rutina_'+num+'_'+mes)||'null'); }catch(e){loc=null;} done(loc); }
+}
+
+/* ---------- chips de meses con rutina guardada (para no adivinar el mes) ---------- */
+function mesLabelFromKey(mes){ var p=String(mes).split('-'); var y=+p[0], mo=(+p[1])-1; return (MESES[mo]||mes)+' '+y; }
+function listSavedMonths(num, cb){
+  var found={};
+  try{
+    var pref='prep_rutina_'+num+'_';
+    for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(k && k.indexOf(pref)===0){ var mz=k.substring(pref.length); if(/^\d{4}-\d{2}$/.test(mz)) found[mz]=true; } }
+  }catch(e){}
+  if(typeof fbGet!=='undefined'){
+    fbGet('prep_rutinas/'+num, function(data){
+      if(data && typeof data==='object' && !data.error){ Object.keys(data).forEach(function(mz){ if(data[mz] && data[mz].semanas && data[mz].semanas.length) found[mz]=true; }); }
+      cb(Object.keys(found));
+    });
+  } else { cb(Object.keys(found)); }
+}
+function refreshSavedChips(){
+  var box=document.getElementById('saved-chips'); if(!box) return;
+  var num=+document.getElementById('selJug').value;
+  if(!num){ box.innerHTML=''; return; }
+  listSavedMonths(num, function(meses){
+    if(!meses.length){ box.innerHTML='<span class="hint">Este jugador todavía no tiene rutinas guardadas.</span>'; return; }
+    meses.sort().reverse();
+    box.innerHTML='<span class="hint" style="margin-right:4px">📋 Tiene rutinas en:</span>'+
+      meses.map(function(m){ return '<button type="button" class="btn btn-ghost btn-sm chip" onclick="abrirMes(\''+m+'\')">'+mesLabelFromKey(m)+'</button>'; }).join(' ');
+  });
+}
+function abrirMes(mes){
+  if(DIRTY && !confirm('Tenés cambios sin guardar.\n¿Descartarlos y abrir esa rutina?')) return;
+  var sm=document.getElementById('selMes');
+  if(!Array.prototype.some.call(sm.options,function(o){return o.value===mes;})){
+    var o=document.createElement('option'); o.value=mes; o.setAttribute('data-lbl',mesLabelFromKey(mes)); o.textContent=mesLabelFromKey(mes); sm.appendChild(o);
+  }
+  sm.value=mes; cargar();
 }
 
 /* ---------- edición de estado ---------- */

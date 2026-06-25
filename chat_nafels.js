@@ -149,9 +149,9 @@ function vbFmt(n){return (n===null||n===undefined)?'-':(Math.round(n*10)/10);}
 
 var KB={
  help:{
-  es:'Te puedo ayudar con:\n• 📊 Stats de un jugador — escribí su apellido (ej. "¿cómo viene Cabañas?")\n• 🏐 Mejores del equipo — "mejor sacador", "quién ataca mejor", "mejor receptor"\n• 📅 Próximo rival\n• 🏆 Tabla de la liga\n• ❓ Cómo usar: wellness, rutinas, pizarrón, scouting, game plan, video, PIN de acceso, qué es el EFF.',
-  en:'I can help with:\n• 📊 A player\'s stats — type their surname (e.g. "how is Cabañas doing?")\n• 🏐 Team leaders — "best server", "who attacks best", "best receiver"\n• 📅 Next rival\n• 🏆 League table\n• ❓ How to use: wellness, routines, board, scouting, game plan, video, access PIN, what EFF means.',
-  de:'Ich helfe bei:\n• 📊 Stats eines Spielers — Nachname eingeben (z.B. "wie spielt Cabañas?")\n• 🏐 Team-Beste — "bester Aufschläger", "wer greift am besten an", "beste Annahme"\n• 📅 Nächster Gegner\n• 🏆 Liga-Tabelle\n• ❓ Bedienung: Wellness, Trainingspläne, Tafel, Scouting, Game Plan, Video, Zugang-PIN, was EFF bedeutet.'
+  es:'Te puedo ayudar con:\n• 📊 Stats de un jugador — escribí su apellido (ej. "¿cómo viene Durdos?")\n• 🏐 Mejores del equipo — "mejor sacador", "quién ataca mejor", "mejor receptor"\n• 📅 Próximo rival\n• 🏆 Tabla de la liga\n• ❓ Cómo usar: wellness, rutinas, pizarrón, scouting, game plan, video, PIN de acceso, qué es el EFF.',
+  en:'I can help with:\n• 📊 A player\'s stats — type their surname (e.g. "how is Durdos doing?")\n• 🏐 Team leaders — "best server", "who attacks best", "best receiver"\n• 📅 Next rival\n• 🏆 League table\n• ❓ How to use: wellness, routines, board, scouting, game plan, video, access PIN, what EFF means.',
+  de:'Ich helfe bei:\n• 📊 Stats eines Spielers — Nachname eingeben (z.B. "wie spielt Durdos?")\n• 🏐 Team-Beste — "bester Aufschläger", "wer greift am besten an", "beste Annahme"\n• 📅 Nächster Gegner\n• 🏆 Liga-Tabelle\n• ❓ Bedienung: Wellness, Trainingspläne, Tafel, Scouting, Game Plan, Video, Zugang-PIN, was EFF bedeutet.'
  },
  rutina:{
   es:'Armar una rutina (Preparador Físico):\n1. Entrá con PIN 0000.\n2. Elegí Jugador + Mes y tocá "Cargar".\n3. "+ Agregar día/sesión" → "+ Bloque" → "+ Ejercicio" (series/reps/descanso/nota).\n4. 💾 GUARDAR RUTINA. El jugador la ve al instante en Prep Física y en el Pizarrón.',

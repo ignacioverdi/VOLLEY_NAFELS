@@ -502,19 +502,18 @@ var numJug = parseInt(params.get('num')) || 0;
 var POS_COLOR = {'ARMADOR':'#f59e0b','CENTRAL':'#f97316','PUNTA':'#22c55e','OPUESTO':'#818cf8','LIBERO':'#06b6d4'};
 
 var EQUIPO_DEMO = { jugadores: [
-  {num:1,nombre:"DEECKE",pos:"ARMADOR",pais:"🇩🇪"},
-  {num:2,nombre:"FEUZ",pos:"CENTRAL",pais:"🇨🇭"},
+  {num:1,nombre:"DURDOS",pos:"PUNTA",pais:"🇦🇷"},
   {num:3,nombre:"SCHWITTER",pos:"OPUESTO",pais:"🇨🇭"},
   {num:4,nombre:"VAZQUEZ",pos:"ARMADOR",pais:"🇦🇷"},
-  {num:5,nombre:"HESSELHOLT",pos:"CENTRAL",pais:"🇩🇰"},
-  {num:6,nombre:"DENIS CABANAS",pos:"OPUESTO",pais:"🇦🇷"},
-  {num:7,nombre:"SCHMID",pos:"CENTRAL",pais:"🇨🇭"},
-  {num:8,nombre:"PETER",pos:"LIBERO",pais:"🇩🇪"},
-  {num:9,nombre:"BROCH",pos:"PUNTA",pais:"🇫🇷"},
-  {num:10,nombre:"BOGDANOVSKI",pos:"PUNTA",pais:"🇲🇰"},
+  {num:5,nombre:"CLEMENT",pos:"CENTRAL",pais:"🇨🇭"},
+  {num:7,nombre:"SCHMID R",pos:"CENTRAL",pais:"🇨🇭"},
+  {num:9,nombre:"NORRIS",pos:"OPUESTO",pais:"🇺🇸"},
+  {num:10,nombre:"BOGDANOVSKI",pos:"PUNTA",pais:"🇨🇭"},
   {num:11,nombre:"BARTHOLET",pos:"PUNTA",pais:"🇨🇭"},
-  {num:14,nombre:"FIGUEIREDO",pos:"PUNTA",pais:"🇧🇷"},
-  {num:15,nombre:"NIKOLOV",pos:"CENTRAL",pais:"🇲🇰"}
+  {num:12,nombre:"JOHANSSON",pos:"CENTRAL",pais:"🇸🇪"},
+  {num:13,nombre:"STEIMANN",pos:"ARMADOR",pais:"🇨🇭"},
+  {num:17,nombre:"ROFFLER",pos:"PUNTA",pais:"🇨🇭"},
+  {num:20,nombre:"SCHMID J",pos:"LIBERO",pais:"🇨🇭"}
 ]};
 var eqData = window.EQUIPO_DATA || EQUIPO_DEMO;
 var jugador = eqData.jugadores.find(function(j){ return j.num === numJug; });
