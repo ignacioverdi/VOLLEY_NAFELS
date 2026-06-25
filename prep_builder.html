@@ -227,7 +227,7 @@ function render(){
         +'<span style="width:14px;height:14px;border-radius:4px;background:'+b.color+'"></span>'
         +'<button class="x" style="margin-left:auto" title="Eliminar bloque" onclick="delBloque('+si+','+bi+')">✕</button></div>';
       if(b.ejercicios.length){
-        h+='<div class="colhdr"><span>Ejercicio</span><span>Series</span><span>Reps</span><span>Descanso</span><span>Carga %</span><span>Nota</span><span></span></div>';
+        h+='<div class="colhdr"><span>Ejercicio</span><span>Series</span><span>Reps</span><span>Descanso</span><span>Carga</span><span>Nota</span><span></span></div>';
       }
       b.ejercicios.forEach(function(e,ei){
         h+='<div class="ej-row">'
@@ -235,7 +235,7 @@ function render(){
           +'<input type="number" min="1" placeholder="ser." value="'+(e.series||'')+'" oninput="onEj('+si+','+bi+','+ei+',\'series\',this.value)">'
           +'<input type="text" placeholder="reps" value="'+(e.reps||'').replace(/"/g,'&quot;')+'" oninput="onEj('+si+','+bi+','+ei+',\'reps\',this.value)">'
           +'<input type="text" placeholder="desc." value="'+(e.descanso||'').replace(/"/g,'&quot;')+'" oninput="onEj('+si+','+bi+','+ei+',\'descanso\',this.value)">'
-          +'<input type="text" placeholder="ej: 70%" value="'+(e.carga||'').replace(/"/g,'&quot;')+'" oninput="onEj('+si+','+bi+','+ei+',\'carga\',this.value)">'
+          +'<input type="text" placeholder="80% o 60kg" value="'+(e.carga||'').replace(/"/g,'&quot;')+'" oninput="onEj('+si+','+bi+','+ei+',\'carga\',this.value)">'
           +'<input type="text" placeholder="indicación…" value="'+(e.nota||'').replace(/"/g,'&quot;')+'" oninput="onEj('+si+','+bi+','+ei+',\'nota\',this.value)">'
           +'<span style="display:flex;align-items:center;gap:8px;justify-content:flex-end">'
             +(e.video?'<a class="vbtn" href="'+e.video+'" target="_blank">▶ video</a>':'')
