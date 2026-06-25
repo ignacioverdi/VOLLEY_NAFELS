@@ -443,15 +443,18 @@ function render(){
 function guardar(){
   var num=+document.getElementById('selJug').value;
   if(!num){ alert('Elegí un jugador.'); return; }
-  if(!R || !R.semanas.length){ alert('Agregá al menos un día con ejercicios.'); return; }
+  if(!R) R=nuevaRutina();
   // limpiar ejercicios sin elegir
-  R.semanas.forEach(function(s){ s.bloques.forEach(function(b){ b.ejercicios=b.ejercicios.filter(function(e){return e.id;}); }); });
+  (R.semanas||[]).forEach(function(s){ (s.bloques||[]).forEach(function(b){ b.ejercicios=(b.ejercicios||[]).filter(function(e){return e.id;}); }); });
+  var vacia = !rutinaTieneEjercicios(R);
+  if(vacia && !confirm('Esta rutina va a quedar SIN ejercicios.\n¿Guardar igual y dejarla limpia? El jugador no verá ejercicios para este mes.')) return;
   R.actualizado = new Date().toISOString();
   var path='prep_rutinas/'+num+'/'+R.mes;
   try{ localStorage.setItem('prep_rutina_'+num+'_'+R.mes, JSON.stringify(R)); }catch(e){}
-  if(typeof fbSet!=='undefined'){ fbSet(path, R); document.getElementById('savest').textContent='Guardado en la nube ✓'; }
-  else { document.getElementById('savest').textContent='Guardado en este dispositivo ✓ (sin conexión a la nube)'; }
+  if(typeof fbSet!=='undefined'){ fbSet(path, R); document.getElementById('savest').textContent = vacia ? 'Rutina vaciada ✓' : 'Guardado en la nube ✓'; }
+  else { document.getElementById('savest').textContent = (vacia?'Rutina vaciada':'Guardado')+' en este dispositivo ✓ (sin conexión a la nube)'; }
   setDirty(false);
+  refreshSavedChips();
 }
 /* ---------- copiar rutina a varios jugadores ---------- */
 function cpOpen(){
