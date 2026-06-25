@@ -88,6 +88,7 @@ select,select option{color:#111!important;background-color:#fff!important}
 .badge-series{background:rgba(129,140,248,.12);color:#818cf8;border:1px solid rgba(129,140,248,.22)}
 .badge-reps{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.22)}
 .badge-descanso{background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.22)}
+.badge-carga{background:rgba(45,212,191,.14);color:#2dd4bf;border:1px solid rgba(45,212,191,.26)}
 .ej-video-btn{padding:6px 11px;border-radius:8px;border:1px solid rgba(129,140,248,.25);background:rgba(129,140,248,.1);color:#818cf8;
   font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:.15s;flex-shrink:0}
 .ej-video-btn:hover{background:rgba(129,140,248,.22)}
@@ -589,6 +590,7 @@ function buildEjercicio(j, ej, num){
       '<span class="ej-badge badge-series">' + ej.series + ' SERIES</span>' +
       '<span class="ej-badge badge-reps">' + ej.reps + ' REPS</span>' +
       (ej.descanso ? '<span class="ej-badge badge-descanso">⏱ ' + ej.descanso + '</span>' : '') +
+      (ej.carga ? '<span class="ej-badge badge-carga">🏋 ' + ej.carga + '</span>' : '') +
     '</div>' +
     videoBtn;
   card.appendChild(hdr);

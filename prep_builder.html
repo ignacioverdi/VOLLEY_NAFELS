@@ -50,7 +50,7 @@
   .blo-hd{display:flex;align-items:center;gap:8px;padding:9px 12px}
   .blo-hd select{max-width:230px;background:var(--card2);color:var(--txt);border-color:var(--border)}
   .blo-ic{font-size:17px}
-  .ej-row{display:grid;grid-template-columns:1fr 64px 78px 96px 1.2fr auto;gap:7px;align-items:center;padding:7px 12px;border-top:1px solid var(--border)}
+  .ej-row{display:grid;grid-template-columns:1fr 56px 62px 78px 68px 1fr auto;gap:7px;align-items:center;padding:7px 12px;border-top:1px solid var(--border)}
   .ej-row select,.ej-row input{background:var(--card2);color:var(--txt);border-color:var(--border);font-size:13px;padding:7px 8px}
   .ej-row .vbtn{color:var(--indigo);font-size:11px;text-decoration:none;white-space:nowrap}
   .x{background:none;border:none;color:var(--mut);font-size:17px;cursor:pointer;padding:2px 6px}
@@ -61,7 +61,7 @@
     padding:12px 16px;display:flex;align-items:center;gap:12px;justify-content:center;z-index:50}
   .savebar .st{font-size:12px;color:var(--mut2)}
   .empty{color:var(--mut);text-align:center;padding:30px;font-size:14px}
-  .colhdr{display:grid;grid-template-columns:1fr 64px 78px 96px 1.2fr auto;gap:7px;padding:2px 12px 4px;font-size:9px;color:var(--mut);letter-spacing:1px;text-transform:uppercase}
+  .colhdr{display:grid;grid-template-columns:1fr 56px 62px 78px 68px 1fr auto;gap:7px;padding:2px 12px 4px;font-size:9px;color:var(--mut);letter-spacing:1px;text-transform:uppercase}
   @media(max-width:640px){.ctrl-grid{grid-template-columns:1fr}.ej-row,.colhdr{grid-template-columns:1fr 1fr;}.ej-row .vbtn{grid-column:1/-1}}
 </style></head>
 <body>
@@ -75,9 +75,9 @@
 
   <div class="card">
     <div class="ctrl-grid">
-      <div><label class="fld">Jugador</label><select id="selJug"></select></div>
-      <div><label class="fld">Mes de uso</label><select id="selMes"></select></div>
-      <button class="btn btn-ghost" onclick="cargar()">Cargar</button>
+      <div><label class="fld">Jugador</label><select id="selJug" onchange="onPick()"></select></div>
+      <div><label class="fld">Mes de uso</label><select id="selMes" onchange="onPick()"></select></div>
+      <button class="btn btn-ghost" onclick="onPick()">Cargar</button>
     </div>
     <div class="hint" style="margin-top:10px" id="estado">Elegí jugador y mes. Si ya hay una rutina cargada para ese mes, se abre para editar; si no, empezás una nueva.</div>
   </div>
@@ -137,7 +137,7 @@ function setDirty(d){ DIRTY=d; document.getElementById('savest').textContent = d
   sj.innerHTML = roster().length ? roster().map(function(j){return '<option value="'+j.num+'">'+pname(j)+'</option>';}).join('')
                                  : '<option value="">(no se cargó el plantel)</option>';
   var sm=document.getElementById('selMes'), now=new Date(), opts='';
-  for(var d=-1; d<=4; d++){                          // mes anterior + actual + 4 siguientes
+  for(var d=-11; d<=4; d++){                          // hasta 11 meses atras + actual + 4 siguientes
     var dt=new Date(now.getFullYear(), now.getMonth()+d, 1);
     var key=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0');
     var lbl=MESES[dt.getMonth()]+' '+dt.getFullYear();
@@ -152,8 +152,18 @@ function nuevaRutina(){
   var sm=document.getElementById('selMes'), opt=sm.options[sm.selectedIndex];
   return { mes: sm.value, mesLabel: opt?opt.getAttribute('data-lbl'):sm.value, semanas: [] };
 }
+var loadedNum=null, loadedMes=null;
+function onPick(){
+  if(DIRTY && !confirm('Tenés cambios sin guardar.\n¿Descartarlos y cargar la otra rutina?')){
+    if(loadedNum!=null) document.getElementById('selJug').value=loadedNum;
+    if(loadedMes!=null) document.getElementById('selMes').value=loadedMes;
+    return;
+  }
+  cargar();
+}
 function cargar(){
   var num=+document.getElementById('selJug').value, mes=document.getElementById('selMes').value;
+  loadedNum=document.getElementById('selJug').value; loadedMes=mes;
   if(!num){ R=nuevaRutina(); render(); return; }
   document.getElementById('estado').textContent='Buscando rutina guardada…';
   var done=function(data){
@@ -175,7 +185,7 @@ function addSesion(){
 function delSesion(si){ R.semanas.splice(si,1); setDirty(true); render(); }
 function addBloque(si){ R.semanas[si].bloques.push({nombre:BLOQUES[2].nombre,icon:BLOQUES[2].icon,color:BLOQUES[2].color,ejercicios:[]}); setDirty(true); render(); }
 function delBloque(si,bi){ R.semanas[si].bloques.splice(bi,1); setDirty(true); render(); }
-function addEj(si,bi){ R.semanas[si].bloques[bi].ejercicios.push({id:'',nombre:'',series:4,reps:'8-10',descanso:'90 s',nota:'',video:null}); setDirty(true); render(); }
+function addEj(si,bi){ R.semanas[si].bloques[bi].ejercicios.push({id:'',nombre:'',series:4,reps:'8-10',descanso:'90 s',carga:'',nota:'',video:null}); setDirty(true); render(); }
 function delEj(si,bi,ei){ R.semanas[si].bloques[bi].ejercicios.splice(ei,1); setDirty(true); render(); }
 
 function onSesLabel(si,v){ R.semanas[si].label=v; setDirty(true); }
@@ -217,18 +227,21 @@ function render(){
         +'<span style="width:14px;height:14px;border-radius:4px;background:'+b.color+'"></span>'
         +'<button class="x" style="margin-left:auto" title="Eliminar bloque" onclick="delBloque('+si+','+bi+')">✕</button></div>';
       if(b.ejercicios.length){
-        h+='<div class="colhdr"><span>Ejercicio</span><span>Series</span><span>Reps</span><span>Descanso</span><span>Nota</span><span></span></div>';
+        h+='<div class="colhdr"><span>Ejercicio</span><span>Series</span><span>Reps</span><span>Descanso</span><span>Carga %</span><span>Nota</span><span></span></div>';
       }
       b.ejercicios.forEach(function(e,ei){
         h+='<div class="ej-row">'
           +'<select onchange="onEj('+si+','+bi+','+ei+',\'id\',this.value)">'+catOptions(e.id)+'</select>'
-          +'<input type="number" min="1" value="'+(e.series||'')+'" oninput="onEj('+si+','+bi+','+ei+',\'series\',this.value)">'
-          +'<input type="text" value="'+(e.reps||'').replace(/"/g,'&quot;')+'" oninput="onEj('+si+','+bi+','+ei+',\'reps\',this.value)">'
-          +'<input type="text" value="'+(e.descanso||'').replace(/"/g,'&quot;')+'" oninput="onEj('+si+','+bi+','+ei+',\'descanso\',this.value)">'
+          +'<input type="number" min="1" placeholder="ser." value="'+(e.series||'')+'" oninput="onEj('+si+','+bi+','+ei+',\'series\',this.value)">'
+          +'<input type="text" placeholder="reps" value="'+(e.reps||'').replace(/"/g,'&quot;')+'" oninput="onEj('+si+','+bi+','+ei+',\'reps\',this.value)">'
+          +'<input type="text" placeholder="desc." value="'+(e.descanso||'').replace(/"/g,'&quot;')+'" oninput="onEj('+si+','+bi+','+ei+',\'descanso\',this.value)">'
+          +'<input type="text" placeholder="ej: 70%" value="'+(e.carga||'').replace(/"/g,'&quot;')+'" oninput="onEj('+si+','+bi+','+ei+',\'carga\',this.value)">'
           +'<input type="text" placeholder="indicación…" value="'+(e.nota||'').replace(/"/g,'&quot;')+'" oninput="onEj('+si+','+bi+','+ei+',\'nota\',this.value)">'
-          +(e.video?'<a class="vbtn" href="'+e.video+'" target="_blank">▶ video</a>':'<button class="x" onclick="delEj('+si+','+bi+','+ei+')">✕</button>');
-        if(e.video) h+='';
-        h+='</div>';
+          +'<span style="display:flex;align-items:center;gap:8px;justify-content:flex-end">'
+            +(e.video?'<a class="vbtn" href="'+e.video+'" target="_blank">▶ video</a>':'')
+            +'<button class="x" title="Eliminar ejercicio" onclick="delEj('+si+','+bi+','+ei+')">✕</button>'
+          +'</span>'
+          +'</div>';
       });
       h+='<div class="addrow"><button class="btn btn-ghost btn-sm" onclick="addEj('+si+','+bi+')">+ Ejercicio</button></div>';
       h+='</div>';

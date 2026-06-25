@@ -62,6 +62,7 @@ select,select option{color:#111!important;background:#fff!important;}
 .badge-s{background:rgba(129,140,248,.1);color:#818cf8;border:1px solid rgba(129,140,248,.2);}
 .badge-r{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2);}
 .badge-d{background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2);}
+.badge-c{background:rgba(45,212,191,.12);color:#2dd4bf;border:1px solid rgba(45,212,191,.24);}
 .ej-video-btn{padding:4px 10px;border-radius:6px;border:1px solid rgba(129,140,248,.2);background:rgba(129,140,248,.08);color:#818cf8;font-size:10px;font-weight:700;cursor:pointer;transition:all .15s;text-decoration:none;}
 .ej-video-btn:hover{background:rgba(129,140,248,.2);}
 .ej-video-btn.off{opacity:.3;pointer-events:none;}
@@ -263,7 +264,7 @@ function getDias(){
           if(!dias[s.label].bloques[b.nombre].ejercicios[e.id]){
             dias[s.label].bloques[b.nombre].ejercicios[e.id] = {
               id:e.id, nombre:e.nombre, series:e.series,
-              reps:e.reps, descanso:e.descanso, video:e.video
+              reps:e.reps, descanso:e.descanso, carga:e.carga, video:e.video
             };
           }
         });
@@ -319,7 +320,7 @@ function renderPizarron(){
         if(!bloques[b.nombre]) bloques[b.nombre]={nombre:b.nombre,icon:b.icon,color:b.color,ejercicios:{}};
         (b.ejercicios||[]).forEach(function(e){
           if(!bloques[b.nombre].ejercicios[e.id])
-            bloques[b.nombre].ejercicios[e.id]={id:e.id,nombre:e.nombre,series:e.series,reps:e.reps,descanso:e.descanso,video:e.video};
+            bloques[b.nombre].ejercicios[e.id]={id:e.id,nombre:e.nombre,series:e.series,reps:e.reps,descanso:e.descanso,carga:e.carga,video:e.video};
         });
       });
     });
@@ -365,6 +366,7 @@ function renderPizarron(){
           '<span class="ej-badge badge-s">' + ej.series + ' SERIES</span>' +
           '<span class="ej-badge badge-r">' + ej.reps + ' REPS</span>' +
           (ej.descanso ? '<span class="ej-badge badge-d">⏱ ' + ej.descanso + '</span>' : '') +
+          (ej.carga ? '<span class="ej-badge badge-c">🏋 ' + ej.carga + '</span>' : '') +
         '</div>' +
         (tieneVideo ? '<button class="ej-video-btn" onclick="window.open(\''+ej.video+'\',\'_blank\')" type="button">🎬 VIDEO</button>' : '<button class="ej-video-btn off" disabled>🎬 VIDEO</button>');
       ejWrap.appendChild(ejTit);
