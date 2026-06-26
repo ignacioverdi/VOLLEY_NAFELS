@@ -77,10 +77,10 @@
 
   <div id="list"></div>
 
-  <script src="datos_video.js?v=1"></script>
-  <script src="mapa_videos.js?v=1"></script>
-  <script src="datos_video_ent.js?v=1" onerror="void 0"></script>
-  <script src="mapa_videos_ent.js?v=1" onerror="void 0"></script>
+  <script src="datos_video.js?v=2"></script>
+  <script src="mapa_videos.js?v=2"></script>
+  <script src="datos_video_ent.js?v=2" onerror="void 0"></script>
+  <script src="mapa_videos_ent.js?v=2" onerror="void 0"></script>
   <script>
   (function(){
     var MODO = (localStorage.getItem('cargar_video_modo')==='ent') ? 'ent' : 'partido';
@@ -109,12 +109,12 @@
     codes.forEach(function(c){
       var m = VD[c];
       var cur = (draft[c]!==undefined ? draft[c] : (MAP[c]||''));
-      var side = m.side==='home' ? 'local' : (m.side==='visiting'?'visita':'');
+      var label = (m.homeName||'?')+" vs "+(m.awayName||'?');
       var row = document.createElement('div'); row.className='row'; row.dataset.code=c;
       row.innerHTML =
         "<div class='date'>"+fmtDate(m.date)+"</div>"+
         "<div class='thumbwrap'></div>"+
-        "<div class='opp'>vs "+(m.opponent||'Rival')+(side?"<span class='side'>"+side+"</span>":"")+
+        "<div class='opp'>"+label+
           "<small>c\u00f3d "+c+" \u00b7 "+(m.actions?m.actions.length:0)+" acciones</small></div>"+
         "<div class='icell'><input data-code='"+c+"' placeholder='Peg\u00e1 el link de YouTube\u2026' value=\""+String(cur).replace(/"/g,'')+"\"><div class='vshow'></div></div>"+
         "<div class='dot'></div>";

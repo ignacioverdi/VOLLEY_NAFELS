@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cortes de Video · NAFELS VOLEY</title>
-<script src="mapa_videos.js?v=1" onerror="void 0"></script>
-<script src="datos_video.js?v=1" onerror="void 0"></script>
-<script src="datos_video_ent.js?v=1" onerror="void 0"></script>
-<script src="mapa_videos_ent.js?v=1" onerror="void 0"></script>
+<script src="mapa_videos.js?v=2" onerror="void 0"></script>
+<script src="datos_video.js?v=2" onerror="void 0"></script>
+<script src="datos_video_ent.js?v=2" onerror="void 0"></script>
+<script src="mapa_videos_ent.js?v=2" onerror="void 0"></script>
 <script src="firebase.js" onerror="void 0"></script>
 <style>
   :root{--bg:#0b1017;--bg2:#0f172a;--card:#111a27;--card2:#16212f;--line:#1f2c3d;--txt:#e2e8f0;--muted:#7689a1;--muted2:#475569;--naf:#22c55e;--naf-dim:rgba(34,197,94,.12);--atk:#F97316;--srv:#22C55E;--rec:#818CF8;--set:#F59E0B;--blk:#ef4444;--def:#06b6d4;--free:#94a3b8;--ev-pos:#22c55e;--ev-plus:#84cc16;--ev-excl:#eab308;--ev-neg:#f97316;--ev-slash:#f59e0b;--ev-err:#ef4444;}
@@ -108,6 +108,8 @@
   <div class="sub" id="sub">—</div>
   <div class="grid">
     <div class="card filters">
+      <div class="flabel">Equipo</div>
+      <select id="teamSel" style="margin-bottom:12px"></select>
       <div class="flabel">Temporada</div>
       <select id="seasonSel" style="margin-bottom:12px"></select>
       <div class="flabel">Partidos <span style="color:var(--muted2);text-transform:none">(elegí cuáles)</span></div>
@@ -179,10 +181,27 @@
   // --------- temporada (oct→abr): 25-26 = oct2025→abr2026 ---------
   function seasonOf(d){if(!d)return '';var p=(''+d).split('-');var y=parseInt(p[0],10),mo=parseInt(p[1],10);if(isNaN(y)||isNaN(mo))return '';var s=(mo>=8)?y:y-1;return String(s%100).padStart(2,'0')+'-'+String((s+1)%100).padStart(2,'0');}
   var selSeason='';
-  function allSeasons(){var s={};Object.keys(VD.matches).forEach(function(c){var se=seasonOf(VD.matches[c].date);if(se)s[se]=true;});return Object.keys(s).sort();}
-  function seasonCodes(){return Object.keys(VD.matches).filter(function(c){var se=seasonOf(VD.matches[c].date);return !selSeason||!se||se===selSeason;});}
+  function allSeasons(){var s={};Object.keys(VD.matches).forEach(function(c){if(!teamPlayed(c))return;var se=seasonOf(VD.matches[c].date);if(se)s[se]=true;});return Object.keys(s).sort();}
+  function seasonCodes(){return Object.keys(VD.matches).filter(function(c){if(!teamPlayed(c))return false;var se=seasonOf(VD.matches[c].date);return !selSeason||!se||se===selSeason;});}
   function initSeasonSel(){var ss=allSeasons();var el=$('seasonSel');if(!el)return;if(ss.length<=0){el.style.display='none';return;}if(!selSeason||ss.indexOf(selSeason)<0)selSeason=ss[ss.length-1];el.innerHTML=ss.map(function(se){return '<option value="'+se+'"'+(se===selSeason?' selected':'')+'>Temporada '+se+'</option>';}).join('');}
   function applySeason(){selMatch={};seasonCodes().forEach(function(c){selMatch[c]=true;});renderMatches();rebuildAll();}
+  // --------- abanico de equipos ---------
+  var selTeam='nafels';
+  function teamsAvailable(){
+    var t={};Object.keys(VD.matches).forEach(function(c){var tm=VD.matches[c].teams||{};for(var s in tm)t[s]=tm[s];});
+    var arr=Object.keys(t);
+    arr.sort(function(a,b){if(a==='nafels')return -1;if(b==='nafels')return 1;return (t[a]||a).localeCompare(t[b]||b);});
+    return arr.map(function(s){return {slug:s,name:t[s]};});
+  }
+  function initTeamSel(){
+    var ts=teamsAvailable(),el=$('teamSel');if(!el)return;
+    if(ts.length<=0){el.style.display='none';return;}
+    if(!ts.some(function(t){return t.slug===selTeam;}))selTeam=ts[0].slug;
+    el.innerHTML=ts.map(function(t){return '<option value="'+t.slug+'"'+(t.slug===selTeam?' selected':'')+'>'+t.name+'</option>';}).join('');
+  }
+  function oppName(c){var m=VD.matches[c]||{};var tm=m.teams||{};var o=Object.keys(tm).filter(function(s){return s!==selTeam;});return o.length?tm[o[0]]:(m.awayName||'');}
+  function teamPlayed(c){var m=VD.matches[c]||{};return !!(m.teams&&m.teams[selTeam]);}
+  function applyTeam(){selPlayers={};selMatch={};seasonCodes().forEach(function(c){selMatch[c]=true;});renderMatches();rebuildAll();}
   var SKILL_COLOR={Saque:'--srv',Recepción:'--rec',Ataque:'--atk',Armado:'--set',Bloqueo:'--blk',Defensa:'--def',Freeball:'--free'};
   var SKILL_ORDER=['Ataque','Saque','Recepción','Armado','Bloqueo','Defensa','Freeball'];
   var TYPE_NAME={Q:'Potencia (salto)',M:'Flotado',T:'Flotado bajo',O:'Otro',H:'Híbrido',N:'Slide',U:'Súper rápido'};
@@ -214,7 +233,7 @@
     var html='<div class="dd-tools"><button id="mAll">Todos</button><button id="mNone">Ninguno</button></div>';
     codes.forEach(function(c){var m=VD.matches[c];var on=selMatch[c];
       html+='<div class="ck'+(on?' on':'')+'" data-m="'+c+'"><span class="box">'+(on?'✓':'')+'</span>'+
-            '<span>'+(m.date||'').slice(5)+' vs '+m.opponent+(ytId(MAP[c])?' 🎬':'')+'</span>'+
+            '<span>'+(m.date||'').slice(5)+' vs '+oppName(c)+(ytId(MAP[c])?' 🎬':'')+'</span>'+
             '<span class="cc">'+(m.actions?m.actions.length:0)+'</span></div>';
     });
     $('mPanel').innerHTML=html;
@@ -222,8 +241,8 @@
     $('mN').textContent=(n===codes.length?'Todos ('+n+')':n+' de '+codes.length);
   }
   function selectedMatchCodes(){return Object.keys(selMatch).filter(function(c){return selMatch[c];});}
-  function pool(){ // todas las acciones de los partidos tildados, con su código
-    var out=[];selectedMatchCodes().forEach(function(c){(VD.matches[c].actions||[]).forEach(function(a){var o={};for(var k in a)o[k]=a[k];o.mc=c;out.push(o);});});
+  function pool(){ // acciones del equipo elegido, en los partidos tildados
+    var out=[];selectedMatchCodes().forEach(function(c){(VD.matches[c].actions||[]).forEach(function(a){if(a.tm!==selTeam)return;var o={};for(var k in a)o[k]=a[k];o.mc=c;out.push(o);});});
     return out;
   }
   function selectedPlayers(){return Object.keys(selPlayers).filter(function(n){return selPlayers[n];});}
@@ -409,6 +428,7 @@
   function rebuildAll(){initPlayers();buildActionTree();initSideFilters();apply();}
 
   function bind(){
+    $('teamSel').addEventListener('change',function(){selTeam=this.value;initSeasonSel();applyTeam();loadYT();});
     $('seasonSel').addEventListener('change',function(){selSeason=this.value;applySeason();loadYT();});
     $('mBtn').addEventListener('click',function(){$('mPanel').classList.toggle('open');});
     $('mPanel').addEventListener('click',function(e){
@@ -479,10 +499,15 @@
     if(!Object.keys(VD.matches).length){$('sub').textContent='No se encontró la planilla de datos.';return;}
     var n=Object.keys(VD.matches).length;
     $('sub').textContent=n+' partido(s) cargado(s) · tildá partidos y acciones, y armá tu reel';
-    // si vienen clips por URL (botón "Ver video" de los mapas), posicionar la temporada de ese partido
     var Q=new URLSearchParams(location.search);
+    // equipo por URL (?team=) o, si vienen clips, el equipo de ese partido
+    var _pt=Q.get('team');
     var _pc=Q.get('clips');
-    if(_pc){var _fm=_pc.split(';')[0].split('-')[0];if(VD.matches[_fm]){var _se=seasonOf(VD.matches[_fm].date);if(_se)selSeason=_se;}}
+    var _fm=_pc?_pc.split(';')[0].split('-')[0]:'';
+    if(_pt){selTeam=_pt;}
+    else if(_fm&&VD.matches[_fm]){var _tm=VD.matches[_fm].teams||{};if(!_tm[selTeam]){var _k=Object.keys(_tm);if(_k.length)selTeam=_k[0];}}
+    if(_fm&&VD.matches[_fm]){var _se=seasonOf(VD.matches[_fm].date);if(_se)selSeason=_se;}
+    initTeamSel();
     initSeasonSel();
     initMatches();
     // preset desde URL (?num=6&sk=Ataque&combo=X5) — usado por el botón "Ver video" de los heatmaps
