@@ -46,6 +46,30 @@ en el que pasó. El sistema toma ese segundo + el **link de YouTube** del partid
 
 ---
 
+## 📅 Temporadas (NUEVO)
+
+Los cortes ahora se **agrupan por temporada** para que **no se mezclen** partidos de años distintos.
+
+- Una temporada va de **octubre a abril**. Ejemplo: **25-26** = octubre 2025 → abril 2026. La siguiente, **26-27** = octubre 2026 → abril 2027.
+- Arriba del visor (**Cortes de Video**) hay un selector **Temporada**. Elegís una y el listado muestra **solo los partidos de esa temporada**.
+- **No tenés que hacer nada manual:** cada partido se ubica en su temporada **solo por la fecha** que ya viene adentro del `.dvw`.
+- Cuando carguen los partidos de **octubre 2026 en adelante**, aparece **sola** una temporada nueva (**26-27**) y el selector te deja elegir entre las dos.
+- Hoy **todos** los videos cargados están en la temporada **25-26** (es lo correcto).
+
+---
+
+## 🔄 Si ves algo "viejo" (caché del navegador)
+
+A veces el navegador guarda una copia vieja de los datos y te muestra algo desactualizado (por ejemplo: no aparece un partido nuevo, o un filtro nuevo que ya agregamos). **No es un error del sistema — son los datos guardados en caché.**
+
+- **Solución rápida:** parado en la página, apretá **Ctrl + Shift + R** una vez (refresco forzado). Listo.
+- El sistema ya tiene un archivo `vercel.json` que le ordena al navegador **revisar la versión actual en cada carga**, así que esto pasa cada vez menos.
+- La **primera vez** que abras el sitio en el **celular** o en la notebook de **otro DT**, hacé ese refresco forzado una vez en ese dispositivo. Después queda andando solo.
+
+> 💡 Las dos veces que algo "se rompió" durante el armado, fue siempre esto: caché vieja. Los datos en GitHub siempre estuvieron bien. Con el `vercel.json` puesto, ya no debería volver a pasar.
+
+---
+
 ## 📁 Qué archivo hace qué (por si hay que tocar algo)
 
 | Archivo | Para qué sirve |
@@ -56,7 +80,8 @@ en el que pasó. El sistema toma ese segundo + el **link de YouTube** del partid
 | `mapa_videos.js` | Los **links** de YouTube de partidos. Lo generás en *Cargar Videos -> Partidos*. |
 | `mapa_videos_ent.js` | Los **links** de YouTube de entrenamientos. Lo generás en *Cargar Videos -> Entrenamientos*. |
 | `importar_video.html` | La página **Cargar Videos** (donde pegás los links; tiene las 2 solapas). |
-| `cortes.html` | El **visor** donde el jugador mira sus cortes (tiene las 2 solapas). |
+| `cortes.html` | El **visor** donde el jugador mira sus cortes (tiene las 2 solapas y el selector de temporada). |
+| `vercel.json` | Le dice al servidor que **no cachee** los archivos de datos, para que siempre veas la versión actual. **No lo toques.** |
 
 ---
 
@@ -68,3 +93,21 @@ estadísticas, pero los cortes no pueden saltar al momento de cada acción.
 ## Formato de los links
 Cualquier link de YouTube sirve: `https://youtu.be/abc123` o `https://youtube.com/watch?v=abc123`.
 Los videos viven en YouTube (no ocupan espacio en el repo).
+
+---
+
+## ✅ Checklist para probar ANTES de septiembre
+
+Probá esto de punta a punta, con tiempo, sin apuro:
+
+1. **Abrir Cortes de Video** (Hub) → que cargue el listado de partidos.
+2. **Elegir un jugador** → que aparezcan sus acciones en la lista.
+3. **Reproducir ▶** → que el video arranque justo en el segundo de la acción.
+4. **Pasar de una acción a la siguiente** → que **la pantalla NO se baje sola** (el reproductor queda fijo arriba). ✅ *(esto lo arreglamos)*
+5. **Filtro de combinaciones de ataque** (X5, X6, X8...) → que filtre los clips. ✅ *(esto lo arreglamos)*
+6. **Selector de Temporada** → hoy hay una sola (25-26); que se vea y filtre bien.
+7. **Cargar un link de prueba** en *Cargar Videos* → *Generar archivo de links* → poner el `mapa_videos.js` en el repo → `PUBLICAR_EN_GITHUB.bat` → volver a *Cortes* y ver que ese partido ahora reproduce.
+8. **Probar en el celular** (y en la notebook de otro DT): la primera vez, **Ctrl+Shift+R** una vez en cada dispositivo.
+9. **Modo Entrenamientos** (solapa 🏋️): repetir 1-3 con un entreno scouteado con video.
+
+> Si algo se ve raro o "viejo": **Ctrl+Shift+R** una vez. El 95% de los problemas son eso.
