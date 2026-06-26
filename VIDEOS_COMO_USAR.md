@@ -17,6 +17,22 @@ en el que pasó. El sistema toma ese segundo + el **link de YouTube** del partid
 
 ---
 
+## ⚡ Lo más fácil de todo: `HACER_TODO.bat`
+
+Un **solo doble-clic** que hace TODO lo automatizable de una:
+1. Procesa los **partidos** (stats + scouting + cortes).
+2. Procesa los **entrenamientos** (si hay carpeta; si no, lo saltea solo, sin romperse).
+3. Te recuerda cargar los **links** si subiste videos nuevos.
+4. Te pregunta **¿Publicar? (S/N)** y sube todo a GitHub.
+
+Si una carpeta no existe o un paso da error, **el bat NO se cuelga**: te avisa y sigue con lo que pueda.
+
+> El único paso que un .bat **no puede** hacer solo es **pegar los links de YouTube** (eso es en el navegador, en *Cargar Videos*). Por eso, cuando el bat te lo recuerde, abrís *Cargar Videos*, generás el `mapa_videos.js`, lo ponés en la carpeta, y recién ahí escribís **S** para publicar. La ventana te espera.
+
+Los bats viejos (`ACTUALIZAR_FACIL.bat`, `correr_entrenamientos_nafels.bat`, `PUBLICAR_EN_GITHUB.bat`) siguen andando si alguna vez los querés por separado. El que **conviene borrar** es `ACTUALIZAR_Y_PUBLICAR.bat` — ese es el que se colgaba.
+
+---
+
 ## 🏐 PARTIDOS — paso a paso
 
 1. **Scouteás el partido en DataVolley con el video cargado.** (Es lo de siempre; es lo que pone el segundo a cada acción.)
