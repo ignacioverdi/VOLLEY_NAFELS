@@ -127,15 +127,24 @@ def parse_dvw(path, ent=False):
     return code,{'home':home_slug,'away':away_slug,'homeName':home_name,'awayName':away_name,
                  'date':date,'teams':teams_meta,'players':players,'actions':actions}
 
-def load_existing(path, glob_name):
+def season_of(date):
+    # Temporada oct->abr. 2025-10 -> "25-26"; 2026-04 -> "25-26"; 2026-10 -> "26-27".
+    if not date or len(date)<7: return 'sin-fecha'
+    try: y=int(date[:4]); mo=int(date[5:7])
+    except: return 'sin-fecha'
+    s = y if mo>=8 else y-1
+    return '%02d-%02d'%(s%100,(s+1)%100)
+
+def load_existing_season(path):
+    # Lee un archivo por-temporada (formato auto-fusion: var D = {...};)
     if not os.path.isfile(path): return {}
     try:
         t=open(path,encoding='utf-8').read()
-        m=re.search(r'window\.'+glob_name+r'\s*=\s*(\{.*\})\s*;?\s*$',t,re.S)
+        m=re.search(r'var D\s*=\s*(\{.*\})\s*;\s*var T=',t,re.S)
         if not m: return {}
         d=json.loads(m.group(1))
         if d.get('v')!=DATA_VERSION:
-            print('  (archivo previo de version vieja: regenero todo para el abanico)')
+            print('  (temporada previa de version vieja: la regenero)')
             return {}
         return d.get('matches') or {}
     except Exception as e:
@@ -149,6 +158,21 @@ def build(folder, ent=False):
         if r and r[0] and r[0] not in matches: matches[r[0]]=r[1]
     return matches
 
+def read_mapa_links(ent=False):
+    mapa_file = 'mapa_videos_ent.js' if ent else 'mapa_videos.js'
+    mapa_glob = 'MAPA_VIDEOS_ENT' if ent else 'MAPA_VIDEOS'
+    links={}
+    if os.path.isfile(mapa_file):
+        try:
+            mt=open(mapa_file,encoding='utf-8').read()
+            mm=re.search(r'window\.'+mapa_glob+r'\s*=\s*(\{.*?\})\s*;',mt,re.S)
+            if mm:
+                for k,v in json.loads(mm.group(1)).items():
+                    if v: links[k]=v
+        except Exception as e:
+            print('  (aviso: no pude leer '+mapa_file+':',e,')')
+    return links
+
 if __name__=='__main__':
     if len(sys.argv)<2:
         print('Uso: python build_video.py "CARPETA" [salida.js] [GLOBAL] [ent]'); sys.exit(1)
@@ -156,31 +180,41 @@ if __name__=='__main__':
     out=sys.argv[2] if len(sys.argv)>2 else 'datos_video.js'
     glob_name=sys.argv[3] if len(sys.argv)>3 else 'VIDEO_DATA'
     ent=('ent' in sys.argv[4:]) if len(sys.argv)>4 else False
+    # prefijo de salida: "datos_video.js" -> "datos_video" ; "datos_video_ent.js" -> "datos_video_ent"
+    prefix=re.sub(r'\.js$','',out)
     if not os.path.isdir(folder):
-        print('  (no existe la carpeta '+folder+', no genero '+out+')'); sys.exit(0)
+        print('  (no existe la carpeta '+folder+', no genero los archivos de '+prefix+')'); sys.exit(0)
+
     nuevos=build(folder, ent=ent)
-    existentes=load_existing(out, glob_name)
-    agregados=0
+    # agrupar por temporada (calculada desde la fecha)
+    por_temp={}
     for code,m in nuevos.items():
-        if code not in existentes:
-            existentes[code]=m; agregados+=1
-    # Hornear los links de mapa_videos(.js/_ent.js) ADENTRO (a prueba de cache)
-    mapa_file = 'mapa_videos_ent.js' if ent else 'mapa_videos.js'
-    mapa_glob = 'MAPA_VIDEOS_ENT' if ent else 'MAPA_VIDEOS'
-    links = {}
-    if os.path.isfile(mapa_file):
-        try:
-            mt = open(mapa_file, encoding='utf-8').read()
-            mm = re.search(r'window\.'+mapa_glob+r'\s*=\s*(\{.*?\})\s*;', mt, re.S)
-            if mm:
-                for k, v in json.loads(mm.group(1)).items():
-                    if v: links[k] = v
-        except Exception as e:
-            print('  (aviso: no pude leer '+mapa_file+':', e, ')')
-    data={'v':DATA_VERSION,'combos':COMBOS,'matches':existentes,'links':links}
-    with open(out,'w',encoding='utf-8') as f:
-        f.write('window.'+glob_name+' = '+json.dumps(data,ensure_ascii=False)+';\n')
-    tot=sum(len(m['actions']) for m in existentes.values())
-    print('  '+out+': '+str(len(existentes))+' total ('+str(agregados)+' nuevos), '+str(tot)+' acciones con su segundo')
+        s=season_of(m.get('date',''))
+        por_temp.setdefault(s,{})[code]=m
+
+    all_links=read_mapa_links(ent=ent)
+
+    for season in sorted(por_temp.keys()):
+        season_out=prefix+'_'+season+'.js'
+        existentes=load_existing_season(season_out)
+        agregados=0
+        for code,m in por_temp[season].items():
+            if code not in existentes:
+                existentes[code]=m; agregados+=1
+        # hornear SOLO los links de los partidos de esta temporada
+        links={k:all_links[k] for k in existentes if k in all_links}
+        D={'v':DATA_VERSION,'season':season,'combos':COMBOS,'matches':existentes,'links':links}
+        body=('/* '+prefix+' '+season+' — generado automaticamente, no editar a mano */\n'
+              '(function(){\n'
+              'var D = '+json.dumps(D,ensure_ascii=False)+';\n'
+              'var T=(window.'+glob_name+'=window.'+glob_name+'||{"v":'+str(DATA_VERSION)+',"combos":{},"matches":{},"links":{}});\n'
+              'T.v=D.v;for(var _c in D.combos)T.combos[_c]=D.combos[_c];'
+              'for(var _m in D.matches)T.matches[_m]=D.matches[_m];'
+              'for(var _l in D.links)T.links[_l]=D.links[_l];\n'
+              '})();\n')
+        with open(season_out,'w',encoding='utf-8') as f:
+            f.write(body)
+        tot=sum(len(m['actions']) for m in existentes.values())
+        print('  '+season_out+': '+str(len(existentes))+' partidos ('+str(agregados)+' nuevos), '+str(tot)+' acciones')
 
 # © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados
