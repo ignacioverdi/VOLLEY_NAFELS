@@ -128,11 +128,17 @@
         <div class="dd-panel" id="ddPanel"></div>
       </div>
       <div class="flabel">Jugador <span style="color:var(--muted2);text-transform:none">(uno o varios · vacío = todos)</span></div>
-      <div class="chips" id="fPlayers"></div>
+      <div class="dd">
+        <div class="dd-btn" id="pBtn">Elegir jugadores <span class="n" id="pN">—</span></div>
+        <div class="dd-panel" id="pPanel"></div>
+      </div>
       <div class="flabel">Valoración</div>
       <div class="chips" id="fEval"></div>
       <div class="flabel">Set</div>
-      <div class="chips" id="fSet"></div>
+      <div class="dd">
+        <div class="dd-btn" id="sBtn">Elegir sets <span class="n" id="sN">—</span></div>
+        <div class="dd-panel" id="sPanel"></div>
+      </div>
       <div class="counter"><b id="cnt">0</b><span>clips filtrados</span></div>
       <button class="reset" id="reset">Limpiar filtros</button>
     </div>
@@ -256,8 +262,12 @@
     var P=pool(), pm={};P.forEach(function(a){pm[a.num]=a.name;});
     var nums=Object.keys(pm).sort(function(a,b){return parseInt(a)-parseInt(b);});
     Object.keys(selPlayers).forEach(function(n){if(nums.indexOf(n)<0)delete selPlayers[n];});
-    $('fPlayers').innerHTML=nums.map(function(n){return '<span class="chip'+(selPlayers[n]?' on':'')+'" data-p="'+n+'">#'+parseInt(n,10)+' '+pm[n]+'</span>';}).join('');
+    $('pPanel').innerHTML=nums.map(function(n){var on=selPlayers[n];
+      return '<div class="ck'+(on?' on':'')+'" data-p="'+n+'"><span class="box">'+(on?'✓':'')+'</span><span>#'+parseInt(n,10)+' '+pm[n]+'</span></div>';
+    }).join('');
+    updatePN();
   }
+  function updatePN(){var n=selectedPlayers().length;var t=$('pPanel')?$('pPanel').querySelectorAll('[data-p]').length:0;$('pN').textContent=(n===0?'Todos':n+' de '+t);}
 
   // --------- árbol de acciones (checklist) ---------
   function buildActionTree(){
@@ -300,11 +310,15 @@
   // --------- jugador / valoración / set (del pool) ---------
   function initSideFilters(){
     var P=basePool();
-    var evs=[];P.forEach(function(a){if(a.ev&&evs.indexOf(a.ev)<0)evs.push(a.ev);});evs.sort();
+    var evs=[];P.forEach(function(a){if(a.ev&&evs.indexOf(a.ev)<0)evs.push(a.ev);});evs.sort(function(a,b){return evRank(a)-evRank(b);});
     $('fEval').innerHTML=evs.map(function(e){return '<span class="chip'+(selEval[e]?' on':'')+'" data-ev="'+e+'" style="color:var('+(EVAL_COLOR[e]||'--muted')+')">'+e+'</span>';}).join('');
     var sets=[];P.forEach(function(a){if(a.set&&sets.indexOf(a.set)<0)sets.push(a.set);});sets.sort();
-    $('fSet').innerHTML=sets.map(function(s){return '<span class="chip'+(selSet[s]?' on':'')+'" data-set="'+s+'">Set '+s+'</span>';}).join('');
+    $('sPanel').innerHTML=sets.map(function(s){var on=selSet[s];
+      return '<div class="ck'+(on?' on':'')+'" data-set="'+s+'"><span class="box">'+(on?'✓':'')+'</span><span>Set '+s+'</span></div>';
+    }).join('');
+    updateSN();
   }
+  function updateSN(){var n=Object.keys(selSet).filter(function(k){return selSet[k];}).length;var t=$('sPanel')?$('sPanel').querySelectorAll('[data-set]').length:0;$('sN').textContent=(n===0?'Todos':n+' de '+t);}
 
   var EVAL_ORDER=['#','+','!','-','/','='];
   function evRank(e){var i=EVAL_ORDER.indexOf(e);return i<0?99:i;}
@@ -450,9 +464,11 @@
       var ch=e.target.closest('.ck.child');
       if(ch){var k=ch.dataset.k;selAct[k]=!selAct[k];buildActionTree();apply();return;}
     });
-    $('fPlayers').addEventListener('click',function(e){var c=e.target.closest('[data-p]');if(!c)return;var n=c.dataset.p;selPlayers[n]=!selPlayers[n];rebuildAll();});
+    $('pBtn').addEventListener('click',function(){$('pPanel').classList.toggle('open');});
+    $('pPanel').addEventListener('click',function(e){var c=e.target.closest('[data-p]');if(!c)return;var n=c.dataset.p;selPlayers[n]=!selPlayers[n];rebuildAll();});
     $('fEval').addEventListener('click',function(e){var c=e.target.closest('[data-ev]');if(!c)return;var v=c.dataset.ev;if(selEval[v])delete selEval[v];else selEval[v]=1;c.classList.toggle('on');apply();});
-    $('fSet').addEventListener('click',function(e){var c=e.target.closest('[data-set]');if(!c)return;var v=c.dataset.set;if(selSet[v])delete selSet[v];else selSet[v]=1;c.classList.toggle('on');apply();});
+    $('sBtn').addEventListener('click',function(){$('sPanel').classList.toggle('open');});
+    $('sPanel').addEventListener('click',function(e){var c=e.target.closest('[data-set]');if(!c)return;var v=c.dataset.set;if(selSet[v])delete selSet[v];else selSet[v]=1;var bx=c.querySelector('.box');if(bx)bx.textContent=selSet[v]?'✓':'';c.classList.toggle('on',!!selSet[v]);updateSN();apply();});
     $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';fCall=[];fApos=[];rebuildAll();});
     $('btnPlay').addEventListener('click',togglePlay);
     $('btnNext').addEventListener('click',function(){if(ready)next();});
