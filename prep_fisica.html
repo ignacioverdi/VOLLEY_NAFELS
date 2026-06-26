@@ -149,6 +149,26 @@ select,select option{color:#111!important;background-color:#fff!important}
   .calc-grid{grid-template-columns:1fr 1fr}.jug-stats-row{width:100%;margin-left:0;margin-top:6px}
   .readiness{margin-left:auto}
 }
+/* ── Panel Mi Progreso ───────────────────────────────────── */
+.prog-card{background:linear-gradient(150deg,var(--card),#0b1422);border:1px solid var(--elev);border-radius:16px;padding:18px;margin-bottom:16px}
+.prog-head{display:flex;align-items:center;gap:8px;font-family:'Bebas Neue',sans-serif;letter-spacing:3px;font-size:19px;color:var(--txt);margin-bottom:4px}
+.prog-sub{font-size:11px;color:var(--mut);margin-bottom:14px}
+.prog-empty{text-align:center;color:var(--mut);font-size:12.5px;padding:18px 10px;line-height:1.6}
+.pr-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.pr-name{flex:none;width:128px;font-size:12px;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pr-track{flex:1;height:22px;background:#0a0f1c;border-radius:7px;overflow:hidden;position:relative}
+.pr-fill{height:100%;border-radius:7px;background:linear-gradient(90deg,var(--teal),var(--green));min-width:3px;transition:width .5s ease}
+.pr-kg{flex:none;width:62px;text-align:right;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;color:var(--green)}
+.pr-kg small{font-size:10px;color:var(--mut);letter-spacing:0}
+.evo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.evo-grid{grid-template-columns:1fr}.pr-name{width:96px}}
+.evo-item{background:#0a0f1c;border:1px solid var(--elev);border-radius:11px;padding:12px}
+.evo-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px}
+.evo-name{font-size:12px;color:var(--txt);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.evo-delta{flex:none;font-size:11px;font-weight:700;margin-left:8px}
+.evo-up{color:var(--green)}.evo-flat{color:var(--mut)}
+.evo-svg{display:block;width:100%;height:46px}
+.evo-foot{display:flex;justify-content:space-between;font-size:10px;color:var(--mut);margin-top:5px}
 </style>
 </head>
 <body>
@@ -198,6 +218,7 @@ select,select option{color:#111!important;background-color:#fff!important}
         <div class="jug-stat"><div class="jug-stat-val" id="stat-registros">0</div><div class="jug-stat-lbl">Registros</div></div>
       </div>
     </div>
+    <div id="progreso-panel"></div>
     <div id="mes-selector" style="display:none;gap:8px;margin-bottom:14px;align-items:center"></div>
     <div class="semanas-tabs" id="semanas-tabs"></div>
     <div id="rutina-content"></div>
@@ -447,6 +468,85 @@ function renderReadiness(num){
 }
 
 
+// ── Mi Progreso: récords + evolución ──────────────────────────────
+function histKey(num, ejid){ return 'prep_hist_'+num+'_'+ejid; }
+function getHist(num, ejid){ try{ return JSON.parse(localStorage.getItem(histKey(num,ejid))||'[]'); }catch(e){ return []; } }
+function pushHist(num, ejid, kg){
+  kg=parseFloat(kg); if(!kg||kg<=0||!ejid) return;
+  var arr=getHist(num,ejid), d=todayISO(), found=false;
+  for(var i=0;i<arr.length;i++){ if(arr[i].d===d){ if(kg>arr[i].kg) arr[i].kg=kg; found=true; break; } }
+  if(!found) arr.push({d:d,kg:kg});
+  arr.sort(function(a,b){ return a.d<b.d?-1:1; });
+  if(arr.length>90) arr=arr.slice(arr.length-90);
+  try{ localStorage.setItem(histKey(num,ejid), JSON.stringify(arr)); }catch(e){}
+  if(typeof fbSet!=='undefined') fbSet('prep_hist/'+num+'/'+ejid, arr);
+}
+var _histT={};
+function pushHistDebounced(num,ejid,kg){ var k=num+'_'+ejid; clearTimeout(_histT[k]); _histT[k]=setTimeout(function(){ pushHist(num,ejid,kg); if(jugadorActivo&&jugadorActivo.num===num) renderProgreso(jugadorActivo); },1300); }
+function exNameMap(){
+  var m={};
+  Object.keys(RUTINAS_MES||{}).forEach(function(mk){ var r=RUTINAS_MES[mk]; if(!r||!r.semanas) return;
+    r.semanas.forEach(function(s){ (s.bloques||[]).forEach(function(b){ (b.ejercicios||[]).forEach(function(e){ if(e&&e.id&&e.nombre&&!m[e.id]) m[e.id]=e.nombre; }); }); }); });
+  if(window.EJERCICIOS_DATA){ (window.EJERCICIOS_DATA||[]).forEach(function(e){ if(e&&e.id&&e.nombre&&!m[e.id]) m[e.id]=e.nombre; }); }
+  return m;
+}
+function bestWeights(num){
+  var best={}, pre='prep_'+num+'_', rmpre='prep_rm_'+num+'_';
+  try{
+    for(var i=0;i<localStorage.length;i++){
+      var k=localStorage.key(i); if(!k) continue; var v=parseFloat(localStorage.getItem(k)); if(!v||v<=0) continue;
+      if(k.indexOf(rmpre)===0){ var id=k.slice(rmpre.length); best[id]=Math.max(best[id]||0,v); }
+      else if(k.indexOf(pre)===0 && k.indexOf('prep_obs_')!==0 && k.indexOf('prep_rm_')!==0 && k.indexOf('prep_nota')!==0 && k.indexOf('prep_hist_')!==0 && k.indexOf('prep_rutina')!==0){
+        var mm=k.slice(pre.length).match(/^(.+)_s\d+$/); if(mm){ best[mm[1]]=Math.max(best[mm[1]]||0,v); }
+      }
+    }
+  }catch(e){}
+  return best;
+}
+function seedHist(num){ var best=bestWeights(num); Object.keys(best).forEach(function(eid){ if(getHist(num,eid).length===0) pushHist(num,eid,best[eid]); }); }
+function loadProgresoData(num, cb){
+  if(typeof fbGet==='undefined'){ cb(); return; }
+  var pending=3, done=function(){ if(--pending===0) cb(); };
+  fbGet('pesos', function(data){ if(data) Object.keys(data).forEach(function(k){ if(k.indexOf('prep_'+num+'_')===0 && data[k]!=='' && data[k]!=null){ try{localStorage.setItem(k,data[k]);}catch(e){} } }); done(); });
+  fbGet('rm', function(data){ if(data) Object.keys(data).forEach(function(k){ if(k.indexOf('prep_rm_'+num+'_')===0 && data[k]!=='' && data[k]!=null){ try{localStorage.setItem(k,data[k]);}catch(e){} } }); done(); });
+  fbGet('prep_hist/'+num, function(data){ if(data) Object.keys(data).forEach(function(eid){ try{ localStorage.setItem(histKey(num,eid), JSON.stringify(data[eid])); }catch(e){} }); done(); });
+}
+function sparkline(arr){
+  var w=200,h=46,pad=5;
+  var ys=arr.map(function(p){return p.kg;}); var mn=Math.min.apply(null,ys),mx=Math.max.apply(null,ys); if(mx===mn)mx=mn+1;
+  var pts=arr.map(function(p,i){ var x=pad+(w-2*pad)*(i/(arr.length-1)); var y=h-pad-(h-2*pad)*((p.kg-mn)/(mx-mn)); return x.toFixed(1)+','+y.toFixed(1); });
+  var last=pts[pts.length-1].split(',');
+  return '<svg class="evo-svg" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none">'
+    +'<polyline fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="'+pts.join(' ')+'"/>'
+    +'<circle cx="'+last[0]+'" cy="'+last[1]+'" r="3.2" fill="#22c55e"/></svg>';
+}
+function renderProgreso(j){
+  var box=document.getElementById('progreso-panel'); if(!box||!j) return;
+  var num=j.num, names=exNameMap(), best=bestWeights(num);
+  var prs=Object.keys(best).filter(function(id){return best[id]>0;}).map(function(id){return {id:id,nombre:names[id]||'Ejercicio',kg:best[id]};}).sort(function(a,b){return b.kg-a.kg;});
+  if(!prs.length){
+    box.innerHTML='<div class="prog-card"><div class="prog-head">📈 Mi progreso</div><div class="prog-empty">Registrá tus pesos en cada sesión y acá vas a ver tus <b>récords</b> y cómo vas <b>progresando</b> 💪</div></div>';
+    return;
+  }
+  var top=prs.slice(0,8), maxKg=top[0].kg;
+  var prHtml=top.map(function(p){ var w=Math.max(3,Math.round(p.kg/maxKg*100));
+    return '<div class="pr-row"><div class="pr-name" title="'+p.nombre+'">'+p.nombre+'</div>'
+      +'<div class="pr-track"><div class="pr-fill" style="width:'+w+'%"></div></div>'
+      +'<div class="pr-kg">'+p.kg+'<small> kg</small></div></div>';
+  }).join('');
+  var evo=prs.map(function(p){ return {p:p,h:getHist(num,p.id)}; }).filter(function(x){return x.h.length>=2;}).slice(0,4);
+  var evoHtml='';
+  if(evo.length){
+    evoHtml='<div class="prog-card"><div class="prog-head">🚀 Tu evolución</div><div class="prog-sub">Cómo fueron subiendo tus cargas</div><div class="evo-grid">'
+      +evo.map(function(x){ var h=x.h, first=h[0].kg, last=h[h.length-1].kg, dd=Math.round((last-first)*10)/10, pct=first>0?Math.round((last-first)/first*100):0;
+        var delta=dd>0?('<span class="evo-delta evo-up">▲ +'+dd+' kg'+(pct>0?' ('+pct+'%)':'')+'</span>'):'<span class="evo-delta evo-flat">—</span>';
+        return '<div class="evo-item"><div class="evo-top"><span class="evo-name" title="'+x.p.nombre+'">'+x.p.nombre+'</span>'+delta+'</div>'
+          +sparkline(h)+'<div class="evo-foot"><span>'+h[0].d.slice(5)+'</span><span>'+h[h.length-1].d.slice(5)+'</span></div></div>';
+      }).join('')+'</div></div>';
+  }
+  box.innerHTML='<div class="prog-card"><div class="prog-head">🏆 Tus récords</div><div class="prog-sub">Tu mejor peso en cada ejercicio</div>'+prHtml+'</div>'+evoHtml;
+}
+
 // ── Init ──────────────────────────────────────────────────────────
 function init(){
   var d = new Date();
@@ -469,6 +569,7 @@ function init(){
 // ── Seleccionar jugador ───────────────────────────────────────────
 function selectJugador(j, btn){
   jugadorActivo = j;
+  var _pp=document.getElementById('progreso-panel'); if(_pp) _pp.innerHTML='';
   document.querySelectorAll('.player-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
   document.getElementById('welcome-screen').style.display = 'none';
@@ -582,6 +683,7 @@ function loadRutinas(j){
     var keys = Object.keys(RUTINAS_MES).filter(function(k){ return RUTINAS_MES[k] && RUTINAS_MES[k].semanas && RUTINAS_MES[k].semanas.length; }).sort().reverse();
     if(keys.length){ pintarMesSelector(j, keys, keys[0]); aplicarMes(j, keys[0]); }
     else { pintarMesSelector(j, [], null); renderSemanas(j); }   // fallback: lo que traiga construirData
+    loadProgresoData(j.num, function(){ seedHist(j.num); renderProgreso(j); });
   };
   if(typeof fbGet !== 'undefined'){ fbGet('prep_rutinas/'+j.num, fin); }
   else {
@@ -723,6 +825,7 @@ function buildEjercicio(j, ej, num){
         var v = this.value;
         localStorage.setItem(rmk, v);
         if(typeof fbSet !== 'undefined') fbSet('rm/' + rmk, v);
+        pushHistDebounced(j.num, ej.id, v);
         resultDiv.innerHTML = calcLine(v);
       });
       if(typeof fbGet !== 'undefined'){
@@ -751,12 +854,13 @@ function buildEjercicio(j, ej, num){
     var inp = document.createElement('input');
     inp.type = 'number'; inp.className = 'peso-input';
     inp.placeholder = '— kg'; inp.value = saved; inp.min = 0; inp.max = 500; inp.step = 0.5;
-    inp.addEventListener('input', (function(k){
+    inp.addEventListener('input', (function(k,nm,eid){
       return function(){
         localStorage.setItem(k, this.value);
         if(typeof fbSet !== 'undefined') fbSet('pesos/' + k, this.value);
+        pushHistDebounced(nm, eid, this.value);
       };
-    })(sk));
+    })(sk, j.num, ej.id));
     if(typeof fbGet !== 'undefined'){
       (function(k, input){ fbGet('pesos/'+k, function(val){ if(val !== null && val !== '') input.value = val; }); })(sk, inp);
     }

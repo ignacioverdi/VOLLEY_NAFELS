@@ -200,6 +200,7 @@
       <li><a href="#finde"><span class="n">9</span><span>Fin de temporada</span></a></li>
       <li><a href="#problemas"><span class="n">10</span><span>Si algo sale mal</span></a></li>
       <li><a href="#botones"><span class="n">11</span><span>Los botones que importan</span></a></li>
+      <li><a href="#avisos"><span class="n">12</span><span>Avisar a los jugadores (push)</span></a></li>
     </ol>
   </nav>
 </div>
@@ -470,6 +471,31 @@
       </tbody>
     </table>
     <div class="callout"><b>Guardá en una carpeta aparte</b> (no los uses): <code>ACTUALIZAR_FACIL</code>, <code>ACTUALIZAR_NAFELS</code>, <code>ACTUALIZAR_TODO</code>, <code>correr_nafels</code> (duplicados peligrosos) y los de instalación que ya corriste una vez: <code>CONECTAR_GITHUB</code>, <code>CONFIGURAR_IDENTIDAD</code>, <code>INSTALAR_ROBOT</code>, <code>LIMPIAR_REPO</code>, <code>FIRMAR_COPYRIGHT</code>.</div>
+  </section>
+
+  <!-- 12 -->
+  <section id="avisos">
+    <div class="eyebrow"><span class="num">12</span><span class="kicker">Notificaciones</span></div>
+    <h2 class="title">Avisar a los jugadores (push)</h2>
+    <p class="lead">Los avisos se mandan desde <b>OneSignal</b> (panel web o la app del celular). Llegan aunque el jugador tenga la app cerrada.</p>
+    <div class="brain">
+      El jugador toca <b>“🔔 Activar avisos”</b> una vez (abajo a la izquierda en la web) y queda suscripto.
+      <b>iPhone:</b> solo recibe si instaló la app (Compartir → “Agregar a inicio”) — es regla de Apple. <b>Android/PC:</b> directo.
+    </div>
+    <p class="lead" style="margin-top:18px">Mandar un aviso a todo el equipo:</p>
+    <ol class="steps">
+      <li><b>Entrá a <code>app.onesignal.com</code></b><small>O la app de OneSignal en el celular.</small></li>
+      <li><b>Messages → New Push</b><small>Escribí el Título y el Mensaje.</small></li>
+      <li><b>⚠️ El texto va en el campo del idioma “English”</b><small>Aunque lo escribas en español. Si ese campo queda vacío, da error. (Es el error que tuviste la primera vez.)</small></li>
+      <li><b>Audiencia: “Subscribed Users” / “Total Subscriptions”</b><small>= todos. Después → <b>Send</b>.</small></li>
+    </ol>
+    <p class="lead" style="margin-top:18px">Otras opciones:</p>
+    <ol class="steps">
+      <li><b>A un jugador puntual</b><small>En audiencia filtrás por <b>External ID = número de camiseta</b> (ej: 17).</small></li>
+      <li><b>Programar para un día/hora</b><small>En “When to send” elegí <b>Specific time</b> → fecha y hora → <b>Schedule</b>. (Uno por vez.)</small></li>
+      <li><b>Plantillas en 1 clic</b><small>Messages → Templates → elegís Wellness o Estadísticas → audiencia → Send. Sin reescribir nada.</small></li>
+    </ol>
+    <div class="callout"><b>La clave secreta (REST API Key) no se comparte ni va en la app</b> — solo la usás vos desde el panel. Los avisos automáticos recurrentes (atados a los entrenamientos) quedan para activar cuando definas días y horarios.</div>
   </section>
 
 </div>
