@@ -227,7 +227,7 @@
     <h2 class="title">Las 3 reglas de oro</h2>
     <p class="lead">Si solo te acordás de esto, ya no se rompe nada.</p>
     <div class="rules">
-      <div class="rule do"><span class="ic">✅</span><div><b>Para actualizar, usá siempre un solo botón:</b> <code>ACTUALIZAR_Y_PUBLICAR</code>. Ese genera los datos y los publica online, todo junto.</div></div>
+      <div class="rule do"><span class="ic">✅</span><div><b>Para actualizar, usá siempre un solo botón:</b> <code>HACER_TODO</code>. Ese genera los datos y los publica online, todo junto.</div></div>
       <div class="rule do"><span class="ic">✅</span><div><b>Los .dvw de la temporada actual van en una sola carpeta:</b> <code>DVW NAFELS 2027</code>. Nada de partidos nuevos en otra carpeta.</div></div>
       <div class="rule dont"><span class="ic">⛔</span><div><b>No corras los botones viejos de “actualizar”:</b> <code>ACTUALIZAR_FACIL</code>, <code>ACTUALIZAR_NAFELS</code>, <code>ACTUALIZAR_TODO</code> ni <code>correr_nafels</code>. Esos cargan datos viejos y ensucian la temporada nueva. Guardalos en una carpeta aparte.</div></div>
     </div>
@@ -241,7 +241,7 @@
     <ol class="steps">
       <li><b>Scouteá el partido en DataVolley</b><small>Cuando terminás, te queda un archivo que termina en <b>.dvw</b>.</small></li>
       <li><b>Copiá ese .dvw a la carpeta <code>DVW NAFELS 2027</code></b><small>Es la carpeta de la temporada actual. Ahí van todos los partidos nuevos.</small></li>
-      <li><b>Doble clic en <code>ACTUALIZAR_Y_PUBLICAR</code></b><small>Se abre una ventana negra. Dejala trabajar hasta que diga <b>“LISTO”</b>. No la cierres antes.</small></li>
+      <li><b>Doble clic en <code>HACER_TODO</code></b><small>Se abre una ventana negra. Dejala trabajar hasta que diga <b>“LISTO”</b>. No la cierres antes.</small></li>
       <li><b>Abrí la web y refrescá con <code>Ctrl + F5</code></b><small>Esperá 1 o 2 minutos después del “LISTO” para que se publique online.</small></li>
     </ol>
     <div class="done">🏐 Listo: los números nuevos ya aparecen en el dashboard, los perfiles, el game plan y todo lo demás.</div>
@@ -328,7 +328,7 @@
       <li><b>Scouteá el entreno en DataVolley</b><small>Te queda un archivo .dvw del entrenamiento.</small></li>
       <li><b>Ponelo en la carpeta <code>DVW ENTRENAMIENTOS NAFELS 2026</code></b><small>Es la carpeta de los entrenamientos (ojo: distinta de la de los partidos).</small></li>
       <li><b>(Si tenés video) cargá el link primero</b><small>Mirá el paso de <a href="#videos" style="color:var(--court-deep);font-weight:600">Videos</a>: el video va a YouTube y el link se pega en “Cargar Videos”, modo Entrenamiento.</small></li>
-      <li><b>Doble clic en <code>correr_entrenamientos_nafels</code></b><small>Genera los datos del entreno. No toca nada de los partidos ni de la cápsula. Esperá el “LISTO”.</small></li>
+      <li><b>Doble clic en <code>HACER_TODO</code></b><small>Procesa los entrenamientos (y también los partidos) y publica, todo junto. Esperá el “LISTO”.</small></li>
       <li><b>Doble clic en <code>PUBLICAR_EN_GITHUB</code></b><small>Este botón <b>no publica solo</b>, así que este paso es obligatorio para que se vea online.</small></li>
       <li><b>Ctrl + F5 y poné el switch en <code>ENTRENAMIENTO</code></b><small>El switch aparece arriba en las páginas de análisis.</small></li>
     </ol>
@@ -358,7 +358,7 @@
     <ol class="steps">
       <li><b>Subí el video a YouTube</b><small>Cuando termina de procesarse, copiás el link del video.</small></li>
       <li><b>Abrí “Cargar Videos” (la tarjeta violeta del menú)</b><small>Ahí elegís el modo — <b>Partido</b> o <b>Entrenamiento</b> — y pegás el link.</small></li>
-      <li><b>Corré el botón que corresponda</b><small>Partidos → <code>cargar_videos</code> (o <code>ACTUALIZAR_Y_PUBLICAR</code>). Entrenamientos → <code>correr_entrenamientos_nafels</code>.</small></li>
+      <li><b>Corré <code>HACER_TODO</code></b><small>Procesa los videos junto con los partidos y entrenamientos, todo en un solo botón.</small></li>
       <li><b>Publicá y refrescá</b><small><code>PUBLICAR_EN_GITHUB</code> + Ctrl+F5. Los clips aparecen al lado de cada jugada, igual que en los partidos.</small></li>
     </ol>
   </section>
@@ -378,7 +378,7 @@
     <div class="callout" style="background:#eef6f1;border-color:#bfe3cf;border-left-color:var(--go)">
       <b style="color:#1f6e4b">Lo que tenés que tener claro:</b> el robot SOLO actualiza el <b>ranking de la liga</b>.
       No toca el dashboard, los perfiles, el game plan ni los heatmaps. Para actualizar todo eso seguís
-      usando <code>ACTUALIZAR_Y_PUBLICAR</code>. El robot es un extra, no lo reemplaza.
+      usando <code>HACER_TODO</code>. El robot es un extra, no lo reemplaza.
     </div>
     <p class="lead" style="margin-top:18px">El circuito completo (cuando arranque la 26-27):</p>
     <ol class="steps">
@@ -434,7 +434,7 @@
       <li><b>Creá la carpeta de la temporada nueva</b><small>Por ejemplo <code>DVW NAFELS 2028</code> para los partidos del año que viene.</small></li>
       <li><b>A partir de ahí, los .dvw nuevos van en esa carpeta</b><small>El sitio principal arranca en cero, esperando los partidos nuevos.</small></li>
     </ol>
-    <div class="callout">Mientras la carpeta de la temporada actual esté <b>vacía</b>, <code>ACTUALIZAR_Y_PUBLICAR</code> se detiene solo y no toca nada. Es tu seguro para no cargar datos viejos por error.</div>
+    <div class="callout">Mientras la carpeta de la temporada actual esté <b>vacía</b>, <code>HACER_TODO</code> se detiene solo y no toca nada. Es tu seguro para no cargar datos viejos por error.</div>
   </section>
 
   <!-- 10 -->
@@ -458,19 +458,17 @@
     <table class="bats">
       <thead><tr><th>Botón</th><th>Para qué</th><th>Cuándo</th></tr></thead>
       <tbody>
-        <tr><td><code>ACTUALIZAR_Y_PUBLICAR</code></td><td>Genera datos de los partidos y los publica.</td><td><span class="tag main">El principal</span></td></tr>
-        <tr><td><code>correr_entrenamientos_nafels</code></td><td>Igual, pero para los entrenamientos.</td><td><span class="tag some">Entrenos</span></td></tr>
-        <tr><td><code>convertir_entrenamiento_vivo</code></td><td>Entreno scouteado en vivo (llama al de arriba).</td><td><span class="tag some">Entrenos</span></td></tr>
-        <tr><td><code>cargar_videos</code></td><td>Suma los videos al game plan.</td><td><span class="tag some">Videos</span></td></tr>
+        <tr><td><code>HACER_TODO</code></td><td>Hace <b>todo</b>: procesa los partidos + los entrenamientos y publica. Tu botón de siempre.</td><td><span class="tag main">El principal</span></td></tr>
+        <tr><td><code>PUBLICAR_EN_GITHUB</code></td><td>Sube a la web los archivos que te paso yo (cortes.html, etc.).</td><td><span class="tag some">A veces</span></td></tr>
+        <tr><td><code>convertir_entrenamiento_vivo</code></td><td>Entreno scouteado en vivo (después corré HACER_TODO).</td><td><span class="tag some">Entrenos</span></td></tr>
         <tr><td><code>VIGILAR_PARTIDOS</code></td><td>Vigila la carpeta y sube los .dvw nuevos solos (despierta al robot).</td><td><span class="tag some">Robot</span></td></tr>
         <tr><td><code>SUBIR_PARTIDO</code></td><td>Sube un .dvw a GitHub (despierta al robot).</td><td><span class="tag some">Robot</span></td></tr>
         <tr><td><code>ARCHIVAR_TEMPORADA</code></td><td>Guarda la temporada en la cápsula.</td><td><span class="tag some">1 vez al año</span></td></tr>
-        <tr><td><code>PUBLICAR_EN_GITHUB</code></td><td>Sube cambios hechos a mano.</td><td><span class="tag some">A veces</span></td></tr>
         <tr><td><code>SUBIR_AHORA</code></td><td>Arregla el “rejected” del push.</td><td><span class="tag emerg">Emergencia</span></td></tr>
         <tr><td><code>VER_ERROR</code></td><td>Muestra qué falló.</td><td><span class="tag emerg">Emergencia</span></td></tr>
       </tbody>
     </table>
-    <div class="callout"><b>Guardá en una carpeta aparte</b> (no los uses): <code>ACTUALIZAR_FACIL</code>, <code>ACTUALIZAR_NAFELS</code>, <code>ACTUALIZAR_TODO</code>, <code>correr_nafels</code> (duplicados peligrosos) y los de instalación que ya corriste una vez: <code>CONECTAR_GITHUB</code>, <code>CONFIGURAR_IDENTIDAD</code>, <code>INSTALAR_ROBOT</code>, <code>LIMPIAR_REPO</code>, <code>FIRMAR_COPYRIGHT</code>.</div>
+    <div class="callout"><b>Guardá en una carpeta aparte</b> (ya no los uses, los reemplaza <code>HACER_TODO</code>): <code>ACTUALIZAR_Y_PUBLICAR</code>, <code>correr_entrenamientos_nafels</code>, <code>cargar_videos</code>, <code>ACTUALIZAR_FACIL</code>, <code>ACTUALIZAR_NAFELS</code>, <code>ACTUALIZAR_TODO</code>, <code>correr_nafels</code>. Y los de instalación que ya corriste una vez: <code>CONECTAR_GITHUB</code>, <code>CONFIGURAR_IDENTIDAD</code>, <code>INSTALAR_ROBOT</code>, <code>LIMPIAR_REPO</code>, <code>FIRMAR_COPYRIGHT</code>.</div>
   </section>
 
   <!-- 12 -->

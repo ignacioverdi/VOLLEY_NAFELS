@@ -45,6 +45,14 @@
 
     // --- Selección de jugador ---
     selecciona_jugador:      { es:'Seleccioná un jugador',  en:'Select a player',  de:'Spieler auswählen' },
+    // --- Login / PIN ---
+    pin_ingresar:     { es:'Ingresar',              en:'Sign in',                    de:'Anmelden' },
+    pin_sel_nombre:   { es:'Seleccioná tu nombre',  en:'Select your name',           de:'Wähle deinen Namen' },
+    pin_num_camiseta: { es:'número de camiseta',    en:'jersey number',              de:'Trikotnummer' },
+    pin_ej_camiseta:  { es:'Ej: camiseta',          en:'E.g. jersey',                de:'z.B. Trikot' },
+    pin_elegi_nombre: { es:'— Elegí tu nombre —',   en:'— Select your name —',       de:'— Wähle deinen Namen —' },
+    pin_entrar:       { es:'ENTRAR',                en:'ENTER',                      de:'EINTRETEN' },
+    pin_continuar:    { es:'Continuar sin ingresar',en:'Continue without signing in',de:'Ohne Anmeldung fortfahren' },
     selecciona_jugador_rut:  { es:'Seleccioná tu nombre para ver tu rutina personalizada',
                                en:'Select your name to see your personalized routine',
                                de:'Wähle deinen Namen, um dein persönliches Programm zu sehen' },

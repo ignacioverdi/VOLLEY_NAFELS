@@ -16,7 +16,9 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <script src="modo_toggle.js" onerror="void 0"></script>
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
 <script src="datos_equipo.js" onerror="void 0"></script>
-<script src="datos_video.js" onerror="void 0"></script>
+<script src="datos_video_25-26.js" onerror="void 0"></script>
+<script src="datos_video_26-27.js" onerror="void 0"></script>
+<script src="datos_video_27-28.js" onerror="void 0"></script>
 <script>window.PREP_FISICA_DATA=window.PREP_FISICA_DATA||{};</script>
 <script>window.firebase=window.firebase||null;</script>
 <script>window.LANG=window.LANG||{};</script>
@@ -960,7 +962,7 @@ function renderEqContent(){
 
 function renderDefensaTabla(){
   var VD = window.VIDEO_DATA && window.VIDEO_DATA.matches;
-  if(!VD) return '<div class="empty">Sin datos de defensa (falta subir datos_video.js)</div>';
+  if(!VD) return '<div class="empty">Sin datos de defensa todavía</div>';
   var P={};
   Object.keys(VD).forEach(function(c){ (VD[c].actions||[]).forEach(function(a){
     if(a.sk!=='Defensa') return;

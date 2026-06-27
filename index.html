@@ -282,16 +282,16 @@ select, select option {
     <span style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:6px;background:linear-gradient(120deg,#e8192c,#fff 50%,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">NAFELS VOLEY</span>
   </div>
   <div class="pin-box">
-    <div class="pin-title">Ingresar</div>
-    <div class="pin-sub">Seleccioná tu nombre · PIN = <strong style="color:var(--red)">00</strong> + número de camiseta<br><span style="font-size:10px;opacity:.6">Ej: camiseta #17 → PIN: 0017</span></div>
+    <div class="pin-title" data-t="pin_ingresar">Ingresar</div>
+    <div class="pin-sub"><span data-t="pin_sel_nombre">Seleccioná tu nombre</span> · PIN = <strong style="color:var(--red)">00</strong> + <span data-t="pin_num_camiseta">número de camiseta</span><br><span style="font-size:10px;opacity:.6"><span data-t="pin_ej_camiseta">Ej: camiseta</span> #17 → PIN: 0017</span></div>
     <select class="pin-jugador-sel" id="pin-jugador">
-      <option value="">— Elegí tu nombre —</option>
+      <option value="" data-t="pin_elegi_nombre">— Elegí tu nombre —</option>
     </select>
     <div class="pin-display" id="pin-display">····</div>
     <div class="pin-grid" id="pin-grid"></div>
-    <button class="pin-enter" onclick="pinEnter()">ENTRAR →</button>
+    <button class="pin-enter" onclick="pinEnter()"><span data-t="pin_entrar">ENTRAR</span> →</button>
     <div class="pin-error" id="pin-error"></div>
-    <div class="pin-skip" onclick="pinSkip()">Continuar sin ingresar</div>
+    <div class="pin-skip" onclick="pinSkip()" data-t="pin_continuar">Continuar sin ingresar</div>
   </div>
 </div>
 
