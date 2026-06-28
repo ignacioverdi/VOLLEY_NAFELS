@@ -770,7 +770,7 @@ function renderEqStats(){
 
   // Defensa (de datos_video — solo partidos)
   var dT=0,dPerf=0,dBuena=0,dMala=0,dErr=0;
-  if(window.VIDEO_DATA&&window.VIDEO_DATA.matches){var _M=window.VIDEO_DATA.matches;Object.keys(_M).forEach(function(c){(_M[c].actions||[]).forEach(function(a){if(a.sk!=='Defensa')return;dT++;if(a.ev==='#')dPerf++;else if(a.ev==='+')dBuena++;else if(a.ev==='-')dMala++;else if(a.ev==='=')dErr++;});});}
+  if(window.VIDEO_DATA&&window.VIDEO_DATA.matches){var _M=window.VIDEO_DATA.matches;Object.keys(_M).forEach(function(c){(_M[c].actions||[]).forEach(function(a){if(a.sk!=='Defensa')return;if(a.tm!=='nafels')return;dT++;if(a.ev==='#')dPerf++;else if(a.ev==='+')dBuena++;else if(a.ev==='-')dMala++;else if(a.ev==='=')dErr++;});});}
   var dEff=dT>0?Math.round((dPerf+0.5*dBuena-0.5*dMala-dErr)/dT*100):null;
   var dEff_str=dEff!==null?fmt(dEff):'—';
 
@@ -966,6 +966,7 @@ function renderDefensaTabla(){
   var P={};
   Object.keys(VD).forEach(function(c){ (VD[c].actions||[]).forEach(function(a){
     if(a.sk!=='Defensa') return;
+    if(a.tm!=='nafels') return;
     var k=a.num; if(!P[k]) P[k]={num:a.num,name:a.name,T:0,perf:0,buena:0,reg:0,mala:0,err:0};
     P[k].T++;
     if(a.ev==='#')P[k].perf++; else if(a.ev==='+')P[k].buena++; else if(a.ev==='!')P[k].reg++; else if(a.ev==='-')P[k].mala++; else if(a.ev==='=')P[k].err++;

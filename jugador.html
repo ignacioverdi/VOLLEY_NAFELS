@@ -595,7 +595,7 @@ function renderQuickStats(j){
   if(!found){ qs.style.display='none'; return; }
   // Defensa desde VIDEO_DATA (si está cargada), filtrando por número de jugador
   var dT=0,dPerf=0,dBuena=0,dMala=0,dErr=0,hasD=false;
-  if(window.VIDEO_DATA&&window.VIDEO_DATA.matches){ var M=window.VIDEO_DATA.matches; Object.keys(M).forEach(function(c){ (M[c].actions||[]).forEach(function(a){ if(a.sk!=='Defensa') return; if(parseInt(a.num,10)!==parseInt(j.num,10)) return; hasD=true; dT++; if(a.ev==='#')dPerf++; else if(a.ev==='+')dBuena++; else if(a.ev==='-')dMala++; else if(a.ev==='=')dErr++; }); }); }
+  if(window.VIDEO_DATA&&window.VIDEO_DATA.matches){ var M=window.VIDEO_DATA.matches; Object.keys(M).forEach(function(c){ (M[c].actions||[]).forEach(function(a){ if(a.sk!=='Defensa') return; if(a.tm!=='nafels') return; if(parseInt(a.num,10)!==parseInt(j.num,10)) return; hasD=true; dT++; if(a.ev==='#')dPerf++; else if(a.ev==='+')dBuena++; else if(a.ev==='-')dMala++; else if(a.ev==='=')dErr++; }); }); }
   var sEff=t.sT>0?Math.round((t.sPunto+0.5*t.sVend+0.25*t.sPos-t.sErr)/t.sT*100):null;
   var rEff=t.rT>0?Math.round((t.rPunto+0.5*t.rPos-0.5*t.rVend-t.rErr)/t.rT*100):null;
   var aEff=t.aT>0?Math.round((t.aPunto-t.aVend-t.aErr)/t.aT*100):null;
