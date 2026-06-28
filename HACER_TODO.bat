@@ -49,9 +49,31 @@ echo.
 echo  [3/4] Videos destacados (si hay Excel)...
 if exist "videos_nafels.xlsx" python build_videos.py videos_nafels.xlsx
 echo.
+
+REM ---- RECORDATORIO DE VIDEOS *ANTES* DE HORNEAR (este es el orden correcto) ----
+echo  --------------------------------------------------------
+echo   VIDEOS DE PARTIDOS
+echo   Si subiste videos NUEVOS a YouTube, HACELO AHORA (antes de seguir):
+echo     1) Abri "Cargar Videos", pega los links y genera mapa_videos.js
+echo     2) Copia ese mapa_videos.js a ESTA carpeta (reemplaza el viejo)
+echo.
+echo   Si NO subiste videos nuevos, no toques nada.
+echo  --------------------------------------------------------
+echo   Cuando este listo, apreta una tecla para generar los cortes...
+pause >nul
+echo.
 echo  [4/4] Cortes de video de partidos...
 python build_video.py "!DVW_DIR!" datos_video.js VIDEO_DATA
 if errorlevel 1 echo      [aviso] Hubo un problema en los cortes de partidos. Sigo igual.
+
+REM ---- contar cuantos videos quedaron cargados (mensaje claro) ----
+set "NVID=0"
+if exist "mapa_videos.js" for /f %%C in ('find /c "youtu" ^< mapa_videos.js') do set "NVID=%%C"
+echo.
+echo      ====================================
+echo        VIDEOS CARGADOS EN LA APP:  !NVID!
+echo      ====================================
+echo      (si esperabas mas, revisa que el mapa_videos.js nuevo este en esta carpeta)
 echo.
 
 REM ================= ENTRENAMIENTOS =================
@@ -93,21 +115,15 @@ python build_video.py "!ENT_DIR!" datos_video_ent.js VIDEO_DATA_ENT ent
 if errorlevel 1 echo      [aviso] Hubo un problema en los cortes de entrenamiento. Sigo igual.
 echo.
 
-REM ================= VERIFICACION + LINKS =================
+REM ================= VERIFICACION =================
 :LINKS
 echo  ==================================================
 echo      VERIFICACION (archivos clave):
-if exist "datos_partidos.js" (echo      OK  datos_partidos.js) else (echo      --  falta datos_partidos.js)
-if exist "liga_data.js"      (echo      OK  liga_data.js)      else (echo      --  falta liga_data.js)
-if exist "scouting_rival.js" (echo      OK  scouting_rival.js) else (echo      --  falta scouting_rival.js)
-if exist "datos_video.js"    (echo      OK  datos_video.js)    else (echo      --  falta datos_video.js)
+if exist "datos_partidos.js"     (echo      OK  datos_partidos.js)            else (echo      --  falta datos_partidos.js)
+if exist "liga_data.js"          (echo      OK  liga_data.js)                 else (echo      --  falta liga_data.js)
+if exist "scouting_rival.js"     (echo      OK  scouting_rival.js)            else (echo      --  falta scouting_rival.js)
+if exist "datos_video_*.js"      (echo      OK  datos_video [por temporada])  else (echo      --  falta datos_video)
 echo  ==================================================
-echo.
-echo  RECORDATORIO IMPORTANTE:
-echo  Si subiste VIDEOS NUEVOS a YouTube, HACELO AHORA:
-echo    1) Abri "Cargar Videos", pega los links y genera mapa_videos.js
-echo    2) Pone ese mapa_videos.js en esta carpeta
-echo  (La ventana espera. Si NO subiste videos nuevos, segui de largo.)
 echo.
 
 REM ================= PUBLICAR =================
@@ -135,6 +151,7 @@ echo.
 echo  ==================================================
 echo      Si arriba NO hay errores en rojo, se publico OK.
 echo      En 1-2 minutos la web queda actualizada.
+echo      Para verla: abri la web y apreta Ctrl+Shift+R
 echo  ==================================================
 echo.
 pause

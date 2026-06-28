@@ -498,6 +498,27 @@ function renderComparativaJugador(){
 </script>
 
 <script>
+// ── Filtro por temporada actual (la liga va de Octubre a Abril). Muestra SOLO la temporada en curso. ──
+function _ssStart(y,m){ return (m<=4)?y-1:y; }                               // año de inicio de la temporada
+function _curSeason(){
+  var am=location.pathname.match(/\/temporadas\/(\d{4})-\d{2}\//);            // si estás viendo una temporada archivada
+  if(am) return +am[1];                                                      // → usar el año de esa temporada
+  var d=new Date(); return _ssStart(d.getFullYear(), d.getMonth()+1);        // si no, la temporada actual por fecha
+}
+function _seasonOf(ds){ if(!ds) return null; var y,m;
+  if(String(ds).indexOf('-')>0){ var p=ds.split('-'); y=+p[0]; m=+p[1]; }    // ISO  2025-10-11
+  else if(String(ds).indexOf('/')>0){ var q=ds.split('/'); y=+q[2]; m=+q[1]; } // DMY  19/10/2025
+  else return null;
+  return _ssStart(y,m); }
+var _filtHist=false,_filtVid=false;
+function _filtrarTemporada(){ var cs=_curSeason();
+  if(!_filtHist && window.HISTORIAL_DATA && window.HISTORIAL_DATA.entrenamientos){
+    window.HISTORIAL_DATA.entrenamientos=window.HISTORIAL_DATA.entrenamientos.filter(function(e){ return _seasonOf(e.fecha)===cs; });
+    _filtHist=true; }
+  if(!_filtVid && window.VIDEO_DATA && window.VIDEO_DATA.matches){
+    var M=window.VIDEO_DATA.matches,F={}; Object.keys(M).forEach(function(c){ if(_seasonOf(M[c].date)===cs) F[c]=M[c]; });
+    window.VIDEO_DATA.matches=F; _filtVid=true; }
+}
 var params = new URLSearchParams(window.location.search);
 var numJug = parseInt(params.get('num')) || 0;
 
@@ -529,7 +550,7 @@ function renderHero(j){
     '<div class="hero-info">'+
       '<div class="pos-tag" style="background:'+color+'12;color:'+color+';border-color:'+color+'33">'+j.pos+'</div>'+
       '<div class="hero-nombre">'+j.nombre+'</div>'+
-      '<div class="hero-sub">'+(j.pais||'🇦🇷')+' NAFELS VOLEY · Temporada 2026/27'+(j.altura?' · 📏 '+j.altura:'')+'</div>'+
+      '<div class="hero-sub">'+(j.pais||'🇦🇷')+' NAFELS VOLEY · Temporada '+_curSeason()+'/'+String(_curSeason()+1).slice(2)+(j.altura?' · 📏 '+j.altura:'')+'</div>'+
       '<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">'+
         '<a href="historial_voley.html" style="padding:6px 14px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;text-decoration:none;">📈 STATS</a>'+
         '<a href="prep_fisica.html" style="padding:6px 14px;border-radius:8px;background:rgba(232,25,44,.12);border:1px solid rgba(232,25,44,.25);color:#e8192c;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;text-decoration:none;">💪 RUTINA</a>'+
@@ -592,7 +613,7 @@ function renderQuickStats(j){
   qs.className=''; qs.style.cssText='display:block;padding:12px 12px 2px;background:transparent;border:0';
   qs.innerHTML=html;
 }
-window.VIDEO_READY=function(){ try{ if(window._curJug) renderQuickStats(window._curJug); }catch(e){} };
+window.VIDEO_READY=function(){ try{ _filtrarTemporada(); if(window._curJug) renderQuickStats(window._curJug); }catch(e){} };
 
 function renderAccesos(j){
   var grid=document.getElementById('accesos-grid');
@@ -787,6 +808,7 @@ function renderRecords(j){
 
 // ── INIT ──
 if(jugador){
+  _filtrarTemporada();
   renderHero(jugador);
   renderHoy(jugador);
   window._objTipo=(function(){try{return localStorage.getItem('vb_modo')==='entrenamiento'?'entrenamiento':'partido';}catch(e){return 'partido';}})(); window._objPartido='acumulado'; window._objNombre=jugador.nombre;
