@@ -53,6 +53,20 @@ Pensalo como una caja con cajones:
 🔁 Repetí A–B–C las veces que necesites.
 🗑️ Para **borrar** un ejercicio, un bloque o un día, tocá la **✕** (o 🗑) que está al costado de cada uno.
 
+### Paso D — COMBINAR DOS EJERCICIOS EN UNA LÍNEA (superserie) 🔗 *opcional*
+
+Si querés que el jugador haga **dos ejercicios juntos** (ej: *pecho plano + flexiones de brazos*), no hace falta cargar dos líneas:
+
+- En la línea del ejercicio, tocá **"+ combinar"** (está al lado de la ✕).
+- Aparece una **segunda fila** con un **＋** y otro selector. Elegí el segundo ejercicio.
+- Ese segundo ejercicio tiene **su propia casilla de Reps** (porque en una superserie suelen ser distintas, ej: *pecho 8-10 + flexiones 15*).
+- **Series, Descanso y Carga se comparten** para los dos (es una sola línea / superserie).
+- ¿Te arrepentiste? Tocá la **✕** de la fila combinada y vuelve a ser un ejercicio **simple**.
+
+> 💡 Cada línea arranca **simple**. Vos decidís en cuáles combinar — el resto quedan normales.
+
+**El jugador lo ve así:** *"Pecho plano + Flexiones de brazos"* con una etiqueta **SUPERSERIE**, las reps de cada uno (*8-10 + 15 REPS*) y un botón de **video para cada ejercicio**.
+
 ---
 
 ## 3.1) LA CARGA: PESO (kg) O PORCENTAJE (%) 💪
