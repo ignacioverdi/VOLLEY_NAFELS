@@ -31,12 +31,23 @@ if exist "DVW NAFELS 2027\*.dvw" set "DVW_DIR=DVW NAFELS 2027"
 if exist "DVW NAFELS 2027\*.dvw" set "ANIO=2027"
 
 REM ===================================================================
-REM   TEMPORADA QUE SE MUESTRA EN LA WEB
-REM   La liga 2026/27 se etiqueta "2027".  La 2025/26 era "2026".
-REM   Como todavia no hay partidos 2026/27, esto deja TODO en 0.
-REM   Cuando arranque la proxima temporada (2027/28), cambia a 2028.
+REM   ETIQUETA DE TEMPORADA  (formato AAAA/AA, con barra)
+REM   Los datos se guardan asi:  la 2025/26 = "2025/26",
+REM   la 2026/27 = "2026/27".  De la carpeta DVW (ANIO) sale solo.
+REM   TEMP_TAG  = etiqueta de la carpeta que se esta procesando.
+REM   2026 -> "2025/26"   |   2027 -> "2026/27"
 REM ===================================================================
-set "TEMPORADA_ACTUAL=2027"
+set /a PREV=ANIO-1
+set "YY=!ANIO:~2!"
+set "TEMP_TAG=!PREV!/!YY!"
+
+REM ===================================================================
+REM   TEMPORADA QUE SE MUESTRA EN LA WEB
+REM   Hoy la liga en curso es la 2026/27.  Como todavia no hay
+REM   partidos cargados, esto deja TODO en 0 (correcto).
+REM   Cuando arranque la 2027/28, cambia a "2027/28".
+REM ===================================================================
+set "TEMPORADA_ACTUAL=2026/27"
 
 if not exist "!DVW_DIR!\*.dvw" (
     echo  [ATENCION] No hay .dvw en "!DVW_DIR!".  SALTEO partidos.
@@ -47,7 +58,7 @@ if not exist "!DVW_DIR!\*.dvw" (
 echo  Carpeta: "!DVW_DIR!"   ^(temporada !ANIO!^)
 echo.
 echo  [1/4] Procesando partidos... (puede tardar, NO la cierres)
-python update_db_nafels_FULL.py --dvw_dir "!DVW_DIR!" --temporada !ANIO! --output_dir . --filter_temporada !TEMPORADA_ACTUAL!
+python update_db_nafels_FULL.py --dvw_dir "!DVW_DIR!" --temporada "!TEMP_TAG!" --output_dir . --filter_temporada "!TEMPORADA_ACTUAL!"
 if errorlevel 1 echo      [aviso] Hubo un problema en partidos. Mira el detalle de arriba; sigo igual.
 echo.
 echo  [2/4] Scouting de rivales...

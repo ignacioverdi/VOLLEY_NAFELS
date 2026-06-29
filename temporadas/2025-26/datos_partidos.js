@@ -1,5 +1,5 @@
-// datos_partidos.js — 28/06/2026, 22:18:14
-const PARTIDOS_GENERADO = "28/06/2026, 22:18:14";
+// datos_partidos.js — 28/06/2026, 22:41:31
+const PARTIDOS_GENERADO = "28/06/2026, 22:41:31";
 const PARTIDOS_TOTAL = 26;
 const PARTIDOS_META = [
   {
@@ -7,7 +7,7 @@ const PARTIDOS_META = [
     "nombre": "Lausanne",
     "rival": "Lausanne",
     "fecha": "19/10/2025",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "1"
@@ -17,7 +17,7 @@ const PARTIDOS_META = [
     "nombre": "St Gallen",
     "rival": "St Gallen",
     "fecha": "25/10/2025",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "0"
@@ -27,7 +27,7 @@ const PARTIDOS_META = [
     "nombre": "Colombier",
     "rival": "Colombier",
     "fecha": "01/11/2025",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "0"
@@ -37,7 +37,7 @@ const PARTIDOS_META = [
     "nombre": "Jona",
     "rival": "Jona",
     "fecha": "05/11/2025",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "1"
@@ -47,7 +47,7 @@ const PARTIDOS_META = [
     "nombre": "Amriswil",
     "rival": "Amriswil",
     "fecha": "08/11/2025",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "D",
     "sets_nafels": "0",
     "sets_rival": "3"
@@ -57,7 +57,7 @@ const PARTIDOS_META = [
     "nombre": "Schonenwerd",
     "rival": "Schonenwerd",
     "fecha": "15/11/2025",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "1"
@@ -67,7 +67,7 @@ const PARTIDOS_META = [
     "nombre": "Chenois",
     "rival": "Chenois",
     "fecha": "22/11/2025",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "0"
@@ -77,7 +77,7 @@ const PARTIDOS_META = [
     "nombre": "Jona",
     "rival": "Jona",
     "fecha": "29/11/2025",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "2"
@@ -87,7 +87,7 @@ const PARTIDOS_META = [
     "nombre": "Lausanne",
     "rival": "Lausanne",
     "fecha": "07/12/2025",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "2"
@@ -97,7 +97,7 @@ const PARTIDOS_META = [
     "nombre": "St Gallen",
     "rival": "St Gallen",
     "fecha": "13/12/2025",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "0"
@@ -107,7 +107,7 @@ const PARTIDOS_META = [
     "nombre": "Colombier",
     "rival": "Colombier",
     "fecha": "20/12/2025",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "1"
@@ -117,7 +117,7 @@ const PARTIDOS_META = [
     "nombre": "Amriswil",
     "rival": "Amriswil",
     "fecha": "03/01/2026",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "1"
@@ -127,7 +127,7 @@ const PARTIDOS_META = [
     "nombre": "Sursee",
     "rival": "Sursee",
     "fecha": "11/01/2026",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "0"
@@ -137,7 +137,7 @@ const PARTIDOS_META = [
     "nombre": "Schonenwerd",
     "rival": "Schonenwerd",
     "fecha": "17/01/2026",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "D",
     "sets_nafels": "1",
     "sets_rival": "3"
@@ -147,7 +147,7 @@ const PARTIDOS_META = [
     "nombre": "Chenois",
     "rival": "Chenois",
     "fecha": "31/01/2026",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "2"
@@ -157,7 +157,7 @@ const PARTIDOS_META = [
     "nombre": "Jona",
     "rival": "Jona",
     "fecha": "08/02/2026",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "0"
@@ -167,7 +167,7 @@ const PARTIDOS_META = [
     "nombre": "Colombier",
     "rival": "Colombier",
     "fecha": "14/02/2026",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "0"
@@ -177,7 +177,7 @@ const PARTIDOS_META = [
     "nombre": "Colombier",
     "rival": "Colombier",
     "fecha": "21/02/2026",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "0"
@@ -187,7 +187,7 @@ const PARTIDOS_META = [
     "nombre": "Colombier",
     "rival": "Colombier",
     "fecha": "25/02/2026",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "0"
@@ -197,7 +197,7 @@ const PARTIDOS_META = [
     "nombre": "Chenois",
     "rival": "Chenois",
     "fecha": "07/03/2026",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "0"
@@ -207,7 +207,7 @@ const PARTIDOS_META = [
     "nombre": "Chenois",
     "rival": "Chenois",
     "fecha": "14/03/2026",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "0"
@@ -217,7 +217,7 @@ const PARTIDOS_META = [
     "nombre": "Chenois",
     "rival": "Chenois",
     "fecha": "17/03/2026",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "V",
     "sets_nafels": "3",
     "sets_rival": "1"
@@ -227,7 +227,7 @@ const PARTIDOS_META = [
     "nombre": "Amriswil",
     "rival": "Amriswil",
     "fecha": "28/03/2026",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "D",
     "sets_nafels": "1",
     "sets_rival": "3"
@@ -237,7 +237,7 @@ const PARTIDOS_META = [
     "nombre": "Amriswil",
     "rival": "Amriswil",
     "fecha": "04/04/2026",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "D",
     "sets_nafels": "0",
     "sets_rival": "3"
@@ -247,7 +247,7 @@ const PARTIDOS_META = [
     "nombre": "Amriswil",
     "rival": "Amriswil",
     "fecha": "09/04/2026",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "D",
     "sets_nafels": "0",
     "sets_rival": "3"
@@ -257,7 +257,7 @@ const PARTIDOS_META = [
     "nombre": "Amriswil",
     "rival": "Amriswil",
     "fecha": "12/04/2026",
-    "torneo": "NLA Suiza 2026",
+    "torneo": "NLA Suiza 2025/26",
     "resultado": "D",
     "sets_nafels": "2",
     "sets_rival": "3"

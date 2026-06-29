@@ -33,11 +33,14 @@ for /f "tokens=1,2 delims=-" %%a in ("!SEASON!") do (
 set "ANIO_DATO=20!Y2!"
 set "DVW_ARCH=DVW NAFELS !ANIO_DATO!"
 
+REM ===== Etiqueta REAL de los datos: 2025-26 -> "2025/26" (con barra) =====
+set "TAG_ARCH=!SEASON:-=/!"
+
 REM ===== Leer la temporada en curso desde HACER_TODO.bat (para volver al final) =====
 set "VIVA="
 for /f "usebackq tokens=2 delims==" %%T in (`findstr /c:"TEMPORADA_ACTUAL=" HACER_TODO.bat`) do set "VIVA=%%T"
 set "VIVA=!VIVA:"=!"
-if not defined VIVA set "VIVA=2027"
+if not defined VIVA set "VIVA=2026/27"
 
 echo.
 echo  Voy a hacer esto:
@@ -56,7 +59,7 @@ REM   1) GENERAR la temporada a archivar (con el codigo nuevo)
 REM ============================================================
 echo.
 echo  [1/3] Generando la temporada !SEASON! ...
-python update_db_nafels_FULL.py --dvw_dir "!DVW_ARCH!" --temporada !ANIO_DATO! --output_dir . --filter_temporada !ANIO_DATO!
+python update_db_nafels_FULL.py --dvw_dir "!DVW_ARCH!" --temporada "!TAG_ARCH!" --output_dir . --filter_temporada "!TAG_ARCH!"
 if errorlevel 1 echo      [aviso] update_db dio un problema; reviso arriba. Sigo.
 python gen_scouting.py --dvw_dir "!DVW_ARCH!" --output_dir . >nul 2>&1
 python build_video.py "!DVW_ARCH!" datos_video.js VIDEO_DATA >nul 2>&1
@@ -79,7 +82,7 @@ REM   3) RESTAURAR la temporada en curso (la web vuelve a !VIVA!)
 REM ============================================================
 echo.
 echo  [3/3] Volviendo la web a la temporada en curso (!VIVA!) ...
-python update_db_nafels_FULL.py --dvw_dir "!DVW_ARCH!" --temporada !ANIO_DATO! --output_dir . --filter_temporada !VIVA!
+python update_db_nafels_FULL.py --dvw_dir "!DVW_ARCH!" --temporada "!TAG_ARCH!" --output_dir . --filter_temporada "!VIVA!"
 if errorlevel 1 echo      [aviso] al restaurar hubo un problema. Si la web quedo en !SEASON!, corre HACER_TODO.bat y vuelve sola.
 echo      OK.
 
