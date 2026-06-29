@@ -1,0 +1,11 @@
+# ============================================================
+#  MOTOR PRIVADO — estos archivos NO se suben a GitHub
+#  (la web solo necesita los .js y .html generados)
+# ============================================================
+*.py
+__pycache__/
+*_db.json
+nla_full_stats.json
+*.dvw
+DVW NAFELS */
+DVW*/

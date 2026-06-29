@@ -117,6 +117,10 @@ def parse_dvw(path, ent=False):
             if sk=='A':
                 cb=code0[6:8]
                 if cb and cb[0] in 'XVPC' and '~' not in cb: a['x']=cb
+                # zona origen (oz) / destino (dz) — mismo criterio que el parser de stats
+                _rest=code0[6:]; _tp=_rest.split('~'); _traj=_tp[1] if len(_tp)>1 else ''
+                if _traj and len(_traj)>0 and _traj[0].isdigit(): a['oz']=int(_traj[0])
+                if _traj and len(_traj)>1 and _traj[1].isdigit(): a['dz']=int(_traj[1])
             elif sk in ('S','R'):
                 tp=code0[4] if len(code0)>4 else ''
                 if tp and tp.isalpha(): a['x']=tp

@@ -536,6 +536,18 @@ function dbatBuildSubfiltro(){
 </div><!-- /main -->
 
 <script>
+// ── Filtro por temporada actual (Oct→Abr). Mismo criterio que jugador.html. ──
+function _ssStart(y,m){ return (m<=4)?y-1:y; }
+function _curSeason(){
+  var am=location.pathname.match(/\/temporadas\/(\d{4})-\d{2}\//);
+  if(am) return +am[1];
+  var d=new Date(); return _ssStart(d.getFullYear(), d.getMonth()+1);
+}
+function _seasonOf(ds){ if(!ds) return null; var y,m;
+  if(String(ds).indexOf('-')>0){ var p=ds.split('-'); y=+p[0]; m=+p[1]; }
+  else if(String(ds).indexOf('/')>0){ var q=ds.split('/'); y=+q[2]; m=+q[1]; }
+  else return null;
+  return _ssStart(y,m); }
 // ════════════════════════════════════════════════════════════
 // ESTADO GLOBAL
 // ════════════════════════════════════════════════════════════
@@ -770,7 +782,7 @@ function renderEqStats(){
 
   // Defensa (de datos_video — solo partidos)
   var dT=0,dPerf=0,dBuena=0,dMala=0,dErr=0;
-  if(window.VIDEO_DATA&&window.VIDEO_DATA.matches){var _M=window.VIDEO_DATA.matches;Object.keys(_M).forEach(function(c){(_M[c].actions||[]).forEach(function(a){if(a.sk!=='Defensa')return;if(a.tm!=='nafels')return;dT++;if(a.ev==='#')dPerf++;else if(a.ev==='+')dBuena++;else if(a.ev==='-')dMala++;else if(a.ev==='=')dErr++;});});}
+  if(window.VIDEO_DATA&&window.VIDEO_DATA.matches){var _M=window.VIDEO_DATA.matches;Object.keys(_M).forEach(function(c){if(_seasonOf(_M[c].date)!==_curSeason())return;(_M[c].actions||[]).forEach(function(a){if(a.sk!=='Defensa')return;if(a.tm!=='nafels')return;dT++;if(a.ev==='#')dPerf++;else if(a.ev==='+')dBuena++;else if(a.ev==='-')dMala++;else if(a.ev==='=')dErr++;});});}
   var dEff=dT>0?Math.round((dPerf+0.5*dBuena-0.5*dMala-dErr)/dT*100):null;
   var dEff_str=dEff!==null?fmt(dEff):'—';
 
@@ -964,7 +976,7 @@ function renderDefensaTabla(){
   var VD = window.VIDEO_DATA && window.VIDEO_DATA.matches;
   if(!VD) return '<div class="empty">Sin datos de defensa todavía</div>';
   var P={};
-  Object.keys(VD).forEach(function(c){ (VD[c].actions||[]).forEach(function(a){
+  Object.keys(VD).forEach(function(c){ if(_seasonOf(VD[c].date)!==_curSeason())return; (VD[c].actions||[]).forEach(function(a){
     if(a.sk!=='Defensa') return;
     if(a.tm!=='nafels') return;
     var k=a.num; if(!P[k]) P[k]={num:a.num,name:a.name,T:0,perf:0,buena:0,reg:0,mala:0,err:0};
