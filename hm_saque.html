@@ -296,6 +296,7 @@ function _vchk(){ if(typeof equipo!=='undefined'&&equipo&&equipo!=='nafels'){ale
 function verVideoDest(zone,extra){ if(!_vchk())return; window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk='+encodeURIComponent(VSK)+'&dz='+zone+(extra||''),'_blank'); }
 function verVideoOrig(zone,extra){ if(!_vchk())return; window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk='+encodeURIComponent(VSK)+'&oz='+zone+(extra||''),'_blank'); }
 function abrirVideo(){ if(!_vchk())return; window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk='+encodeURIComponent(VSK),'_blank'); }
+function accToggle(id){ var hdr=document.getElementById('acc-hdr-'+id); if(!hdr) return; hdr.classList.toggle('active'); }
 function render(){
   var content=document.getElementById('content');
   var acts=getFiltered();

@@ -259,7 +259,8 @@
 
   // estado
   var selMatch={}, selPlayers={}, selAct={}, selEval={}, selSet={}, selected={};
-  var fDz=[], fOz=[], fPh="", fCall=[], fApos=[];
+  var fDz=[], fOz=[], fPh="", fCall=[], fApos=[], fRival="", fDate="";
+  function _rnorm(s){return (''+(s||'')).toLowerCase().split(' ').pop();}
   var filtered=[], current=-1, playing=false, looping=false, timer=null, player=null, ready=false, loadedVid='';
 
   // --------- partidos ---------
@@ -360,6 +361,8 @@
       if(fDz.length&&(a.sk!=="Ataque"||fDz.indexOf(a.dz)<0)) return false;
       if(fOz.length&&(a.sk!=="Ataque"||fOz.indexOf(a.oz)<0)) return false;
       if(fPh&&(a.sk!=="Ataque"||a.ph!==fPh)) return false;
+      if(fDate && (VD.matches[a.mc]||{}).date!==fDate) return false;
+      if(fRival && _rnorm(oppName(a.mc))!==_rnorm(fRival)) return false;
       if(fApos.length&&(a.sk!=="Armado"||fApos.indexOf(a.apos)<0)) return false;
       if(fCall.length&&(a.sk!=="Armado"||fCall.indexOf(a.call)<0)) return false;
       if(evK.length&&evK.indexOf(a.ev)<0) return false;
@@ -430,7 +433,7 @@
   function quickReel(sk,evs){
     Object.keys(selAct).forEach(function(k){selAct[k]=(k.split('|')[0]===sk);});
     selEval={}; (evs||[]).forEach(function(e){if(e)selEval[e]=1;});
-    selPlayers={}; selSet={}; fDz=[];fOz=[];fPh='';fCall=[];fApos=[];
+    selPlayers={}; selSet={}; fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';fDate='';
     buildActionTree();
     document.querySelectorAll('#fEval [data-ev]').forEach(function(c){c.classList.toggle('on',!!selEval[c.dataset.ev]);});
     apply();
@@ -504,7 +507,7 @@
     $('fEval').addEventListener('click',function(e){var c=e.target.closest('[data-ev]');if(!c)return;var v=c.dataset.ev;if(selEval[v])delete selEval[v];else selEval[v]=1;c.classList.toggle('on');apply();});
     $('sBtn').addEventListener('click',function(){$('sPanel').classList.toggle('open');});
     $('sPanel').addEventListener('click',function(e){var c=e.target.closest('[data-set]');if(!c)return;var v=c.dataset.set;if(selSet[v])delete selSet[v];else selSet[v]=1;var bx=c.querySelector('.box');if(bx)bx.textContent=selSet[v]?'✓':'';c.classList.toggle('on',!!selSet[v]);updateSN();apply();});
-    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';fCall=[];fApos=[];rebuildAll();});
+    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';fDate='';rebuildAll();});
     $('btnPlay').addEventListener('click',togglePlay);
     $('btnNext').addEventListener('click',function(){if(ready)next();});
     $('btnPrev').addEventListener('click',prev);
@@ -582,6 +585,9 @@
     // preset desde URL (?num=6&sk=Ataque&combo=X5) — usado por el botón "Ver video" de los heatmaps
     var pNum=Q.get('num'), pSk=Q.get('sk'), pCombo=Q.get('combo'), pEv=Q.get('ev');
     var pDz=Q.get('dz'), pOz=Q.get('oz'), pPh=Q.get('ph'), pCall=Q.get('call'), pApos=Q.get('apos');
+    var pRival=Q.get('rival'), pDate=Q.get('date');
+    if(pRival) fRival=pRival;
+    if(pDate) fDate=pDate;
     if(pDz) fDz=pDz.split(',').map(Number);
     if(pOz) fOz=pOz.split(',').map(Number);
     if(pPh) fPh=pPh;

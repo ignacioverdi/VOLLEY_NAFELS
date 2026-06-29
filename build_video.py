@@ -17,7 +17,7 @@ Uso:
 """
 import os,re,sys,json,glob,unicodedata
 
-DATA_VERSION = 2
+DATA_VERSION = 3
 
 def fix_enc(x):
     # Los DVW pueden venir en UTF-8 leido como latin-1 (mojibake "NÃ¤fels"). Lo corrige.
@@ -82,6 +82,15 @@ def parse_dvw(path, ent=False):
     scout=txt.split('[3SCOUT]')[-1]
     scout_lines=scout.strip().splitlines()
 
+    # Pasada previa: quien saco en cada jugada (para deducir SO/TR de cada ataque).
+    # SO = el rival saco (este equipo recibe) ; TR = este equipo saco.
+    _srv_side=[]; _cur=''
+    for _l in scout_lines:
+        _c0=_l.split(';')[0]
+        _mm=re.match(r'^([*a])(\d{2})([SRABDEF])',_c0)
+        if _mm and _mm.group(3)=='S': _cur=_mm.group(1)
+        _srv_side.append(_cur)
+
     # Los dos lados del partido: home (codigo '*') y visiting (codigo 'a')
     sides=[('*', sec('3PLAYERS-H','3PLAYERS-V'), home_slug, home_name),
            ('a', sec('3PLAYERS-V','3ATTACKCOMBINATION'), away_slug, away_name)]
@@ -103,7 +112,7 @@ def parse_dvw(path, ent=False):
         players.setdefault(tslug,[])
         for n in plist:
             if n[0] not in seen: players[tslug].append(n); seen.add(n[0])
-        for l in scout_lines:
+        for _li,l in enumerate(scout_lines):
             c=l.split(';'); code0=c[0]
             m=re.match(r'^%s(\d{2})([SRABDEF])'%re.escape(sidech),code0)
             if not m: continue
@@ -121,6 +130,9 @@ def parse_dvw(path, ent=False):
                 _rest=code0[6:]; _tp=_rest.split('~'); _traj=_tp[1] if len(_tp)>1 else ''
                 if _traj and len(_traj)>0 and _traj[0].isdigit(): a['oz']=int(_traj[0])
                 if _traj and len(_traj)>1 and _traj[1].isdigit(): a['dz']=int(_traj[1])
+                # fase: SO si saco el rival, TR si sacamos nosotros
+                _ss=_srv_side[_li] if _li<len(_srv_side) else ''
+                if _ss: a['ph']='SO' if _ss!=sidech else 'TR'
             elif sk in ('S','R'):
                 tp=code0[4] if len(code0)>4 else ''
                 if tp and tp.isalpha(): a['x']=tp

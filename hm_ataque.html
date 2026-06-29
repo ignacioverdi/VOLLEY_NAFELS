@@ -220,27 +220,33 @@ function calcEff(acts){
 
 function uniq(arr){var s={},r=[];arr.forEach(function(v){if(!s[v]){s[v]=1;r.push(v);}});return r;}
 function setF(key,val){ F[key]=val; if(key!=="player") buildChips(); render(); }
+function _vfilt(){
+  var s='';
+  if(F.rival && F.rival!=='all') s+='&rival='+encodeURIComponent(F.rival);
+  if(F.gi && F.gi!=='all'){ var g=GAMES[F.gi]; if(g && g.date) s+='&date='+encodeURIComponent(g.date); }
+  return s;
+}
 function abrirVideo(){
   if(typeof equipo!=='undefined' && equipo && equipo!=='nafels'){ alert('Por ahora el video está disponible solo para Näfels.'); return; }
   if(!F.player){ alert('Elegí un jugador primero.'); return; }
   var u='cortes.html?num='+encodeURIComponent(F.player)+'&sk=Ataque';
   if(F.combo && F.combo!=='all') u+='&combo='+encodeURIComponent(F.combo);
-  window.open(u,'_blank');
+  window.open(u+_vfilt(),'_blank');
 }
 function verVideoDest(zone,extra){
   if(typeof equipo!=='undefined' && equipo && equipo!=='nafels'){ alert('Por ahora el video está disponible solo para Näfels.'); return; }
   if(!F.player){ alert('Elegí un jugador primero.'); return; }
-  window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Ataque&dz='+zone+(extra||''),'_blank');
+  window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Ataque&dz='+zone+(extra||'')+_vfilt(),'_blank');
 }
 function verVideoOrig(zone,extra){
   if(typeof equipo!=='undefined' && equipo && equipo!=='nafels'){ alert('Por ahora el video está disponible solo para Näfels.'); return; }
   if(!F.player){ alert('Elegí un jugador primero.'); return; }
-  window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Ataque&oz='+zone+(extra||''),'_blank');
+  window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Ataque&oz='+zone+(extra||'')+_vfilt(),'_blank');
 }
 function verVideoCombo(cod){
   if(typeof equipo!=='undefined' && equipo && equipo!=='nafels'){ alert('Por ahora el video está disponible solo para Näfels.'); return; }
   if(!F.player){ alert('Elegí un jugador primero.'); return; }
-  window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Ataque&combo='+encodeURIComponent(cod),'_blank');
+  window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Ataque&combo='+encodeURIComponent(cod)+_vfilt(),'_blank');
 }
 function onPlayerChange(val){
   F.player=val; F.atype="all"; F.rival="all"; F.set="all";
