@@ -1,5 +1,5 @@
 window.HISTORIAL_DATA = {
-  "generado": "14/06/2026, 20:46:17",
+  "generado": "28/06/2026, 11:21:27",
   "entrenamientos": [
     {
       "fecha": "19/10/2025",
@@ -24051,5 +24051,3 @@ window.HISTORIAL_DATA = {
     }
   ]
 };
-
-/* © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados */

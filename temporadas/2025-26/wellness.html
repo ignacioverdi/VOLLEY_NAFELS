@@ -270,6 +270,20 @@ function renderHist(){
   var h='<div class="teamavg"><div><div class="muted" style="font-size:10px;letter-spacing:1px;text-transform:uppercase">Tu promedio</div>'
     +'<div class="n" style="color:'+colFor(prom)+'">'+prom+'%</div></div>'
     +'<div class="muted" style="font-size:12px">Sobre '+rows.length+' registros</div></div>';
+  // Tira de tendencia: últimos 7 (viejo→nuevo) con flecha
+  var l7=rows.slice(0,7).reverse();
+  if(l7.length){
+    var trendTxt='';
+    if(l7.length>=2){ var dd=l7[l7.length-1].pct-l7[0].pct;
+      trendTxt = dd>=5?' · <span style="color:var(--green)">▲ +'+dd+'</span>' : dd<=-5?' · <span style="color:var(--red)">▼ '+dd+'</span>' : ' · <span style="color:var(--mut2)">→ estable</span>'; }
+    h+='<div style="margin-bottom:16px"><div class="muted" style="font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Tu tendencia (últimos '+l7.length+')'+trendTxt+'</div>'
+      +'<div style="display:flex;align-items:flex-end;gap:6px;height:70px">'
+      +l7.map(function(r){ var c=colFor(r.pct); return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;justify-content:flex-end">'
+        +'<div style="font-size:9px;color:'+c+';font-weight:700">'+r.pct+'</div>'
+        +'<div style="width:100%;max-width:34px;height:'+Math.max(8,Math.round(r.pct*0.45))+'px;background:'+c+';border-radius:4px"></div>'
+        +'<div style="font-size:9px;color:#64748b">'+r.date.slice(5)+'</div></div>'; }).join('')
+      +'</div></div>';
+  }
   h+='<table><thead><tr><th>Fecha</th><th>Sesión</th><th>RPE</th><th>Wellness</th><th style="min-width:64px">Nivel</th></tr></thead><tbody>';
   rows.slice(0,16).forEach(function(r){
     var c=colFor(r.pct);
@@ -362,6 +376,7 @@ function showTab(t){
 })();
 </script>
 <script src="lang.js" onerror="void 0"></script>
+<script src="onesignal_push.js" defer></script>
 </body></html>
 
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->

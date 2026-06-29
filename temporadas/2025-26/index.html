@@ -2,6 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
+<script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a0a12">
@@ -280,16 +282,16 @@ select, select option {
     <span style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:6px;background:linear-gradient(120deg,#e8192c,#fff 50%,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">NAFELS VOLEY</span>
   </div>
   <div class="pin-box">
-    <div class="pin-title">Ingresar</div>
-    <div class="pin-sub">Seleccioná tu nombre · PIN = <strong style="color:var(--red)">00</strong> + número de camiseta<br><span style="font-size:10px;opacity:.6">Ej: camiseta #17 → PIN: 0017</span></div>
+    <div class="pin-title" data-t="pin_ingresar">Ingresar</div>
+    <div class="pin-sub"><span data-t="pin_sel_nombre">Seleccioná tu nombre</span> · PIN = <strong style="color:var(--red)">00</strong> + <span data-t="pin_num_camiseta">número de camiseta</span><br><span style="font-size:10px;opacity:.6"><span data-t="pin_ej_camiseta">Ej: camiseta</span> #17 → PIN: 0017</span></div>
     <select class="pin-jugador-sel" id="pin-jugador">
-      <option value="">— Elegí tu nombre —</option>
+      <option value="" data-t="pin_elegi_nombre">— Elegí tu nombre —</option>
     </select>
     <div class="pin-display" id="pin-display">····</div>
     <div class="pin-grid" id="pin-grid"></div>
-    <button class="pin-enter" onclick="pinEnter()">ENTRAR →</button>
+    <button class="pin-enter" onclick="pinEnter()"><span data-t="pin_entrar">ENTRAR</span> →</button>
     <div class="pin-error" id="pin-error"></div>
-    <div class="pin-skip" onclick="pinSkip()">Continuar sin ingresar</div>
+    <div class="pin-skip" onclick="pinSkip()" data-t="pin_continuar">Continuar sin ingresar</div>
   </div>
 </div>
 
@@ -301,7 +303,7 @@ select, select option {
   </div>
   <div class="header-text">
     <div class="club-name">NAFELS VOLEY</div>
-    <div class="club-sub"><span data-t="club_sub">Sistema de Análisis · NLA Suiza 2025/26</span></div>
+    <div class="club-sub"><span data-t="club_sub">Sistema de Análisis · NLA Suiza 2026/27</span></div>
   </div>
   <div class="header-right">
     <div id="lang-wrap" style="display:flex;align-items:center;gap:4px;margin-left:8px"></div>
@@ -355,6 +357,19 @@ select, select option {
           <div class="card-desc">Partidos y entrenamientos del equipo. Fecha, hora, lugar y tipo — editable en la misma página.</div>
         </div>
         <div class="card-arrow" style="color:#2dd4bf">→</div>
+      </a>
+
+      <a href="horarios.html" class="card" style="--card-color:#f59e0b">
+        <div class="card-glow"></div>
+        <div class="card-top">
+          <div class="card-icon" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2)">🗓️</div>
+          <div class="card-badge" style="background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2)">Editable</div>
+        </div>
+        <div class="card-body">
+          <div class="card-title" style="color:#f59e0b">Horarios</div>
+          <div class="card-desc">Horarios de entrenamiento de la semana. Pesas y vóley, día por día — sincronizado y editable.</div>
+        </div>
+        <div class="card-arrow" style="color:#f59e0b">→</div>
       </a>
 
       <a href="historial_voley.html" class="card" style="--card-color:#818cf8">
@@ -450,7 +465,7 @@ select, select option {
         </div>
         <div class="card-body">
           <div class="card-title" style="color:#3b82f6"><span data-t="c_stats_liga">Estadísticas Liga</span></div>
-          <div class="card-desc"><span data-t="d_stats_liga">Base de datos completa NLA 2025/26. Ranking por equipo y stats individuales de toda la liga. Ataque, saque, recepción y bloqueo.</span></div>
+          <div class="card-desc"><span data-t="d_stats_liga">Base de datos completa NLA 2026/27. Ranking por equipo y stats individuales de toda la liga. Ataque, saque, recepción y bloqueo.</span></div>
         </div>
         <div class="card-arrow">→</div>
       </a>
@@ -559,7 +574,7 @@ select, select option {
         <div class="card-body">
           <div class="card-title" style="color:#f59e0b">Plan de Juego</div>
           <div class="card-desc"><span data-t="d_planjuego">Analisis tactico del rival. Ataques, saques y zonas preferidas por jugador.</span></div>
-          <div style="margin-top:10px;font-size:11px;color:var(--mut)">NLA Suiza 2025/26 . Fecha 6</div>
+          <div style="margin-top:10px;font-size:11px;color:var(--mut)">NLA Suiza 2026/27</div>
         </div>
         <div class="card-arrow">&#8594;</div>
       </a>
@@ -650,7 +665,7 @@ select, select option {
 
   <!-- CALENDARIO -->
     <div class="cal-section" style="display:none">
-    <div class="section-lbl"><span data-t="sec_fixture">📅 Fixture · NLA Suiza 2025/26 · 26 partidos</span></div>
+    <div class="section-lbl"><span data-t="sec_fixture">📅 Fixture · NLA Suiza 2026/27</span></div>
     <div class="cal-grid">
       <div style="position:relative;opacity:1;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;">
         <div style="display:flex;align-items:stretch;">
@@ -1066,54 +1081,6 @@ select, select option {
     </div>
   </div>
 
-    <div style="font-size:10px;color:var(--mut);letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px">
-      <span data-t="estado_sistema">Estado del sistema</span>
-      <div style="flex:1;height:1px;background:var(--border)"></div>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px">
-        <div style="width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.5);flex-shrink:0"></div>
-        <div>
-          <div style="font-size:12px;font-weight:700;letter-spacing:.5px"><span data-t="panel_vivo">Panel en Vivo</span></div>
-          <div style="font-size:10px;color:var(--mut);margin-top:1px"><span data-t="operativo">Operativo</span></div>
-        </div>
-      </div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px">
-        <div style="width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.5);flex-shrink:0"></div>
-        <div>
-          <div style="font-size:12px;font-weight:700;letter-spacing:.5px"><span data-t="historial">Historial</span></div>
-          <div style="font-size:10px;color:var(--mut);margin-top:1px">Operativo · Filtros activos</div>
-        </div>
-      </div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px">
-        <div style="width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.5);flex-shrink:0"></div>
-        <div>
-          <div style="font-size:12px;font-weight:700;letter-spacing:.5px"><span data-t="game_plan">Game Plan</span></div>
-          <div style="font-size:10px;color:var(--mut);margin-top:1px">vs UBA · F8 · 09 Jun</div>
-        </div>
-      </div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px">
-        <div style="width:8px;height:8px;border-radius:50%;background:#f59e0b;box-shadow:0 0 8px rgba(245,158,11,.4);flex-shrink:0;animation:pulse 2s infinite"></div>
-        <div>
-          <div style="font-size:12px;font-weight:700;letter-spacing:.5px">Videos</div>
-          <div style="font-size:10px;color:var(--mut);margin-top:1px"><span data-t="en_desarrollo">En desarrollo</span></div>
-        </div>
-      </div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px">
-        <div style="width:8px;height:8px;border-radius:50%;background:#818cf8;box-shadow:0 0 8px rgba(129,140,248,.4);flex-shrink:0"></div>
-        <div>
-          <div style="font-size:12px;font-weight:700;letter-spacing:.5px">Excel Stats</div>
-          <div style="font-size:10px;color:var(--mut);margin-top:1px">Stats_Entrenamiento.xlsm</div>
-        </div>
-      </div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px">
-        <div style="width:8px;height:8px;border-radius:50%;background:#818cf8;box-shadow:0 0 8px rgba(129,140,248,.4);flex-shrink:0"></div>
-        <div>
-          <div style="font-size:12px;font-weight:700;letter-spacing:.5px">Excel GamePlan</div>
-          <div style="font-size:10px;color:var(--mut);margin-top:1px">CASL_GamePlan.xlsx</div>
-        </div>
-      </div>
-    </div>
   </div>
 
 <footer>
@@ -1148,7 +1115,7 @@ if(window.GAMEPLAN_DATA){
 // FIXTURE generado automáticamente desde PARTIDOS_META (datos_partidos.js)
 // + próximos partidos hardcodeados que aún no están en el Excel
 var FIXTURE_PROXIMOS = [
-  // Nafels NLA 2025/26 season completed - 26 matches played
+  // Nafels NLA 2026/27 season completed - 26 matches played
 ];
 
 function buildFixture(){
@@ -1193,7 +1160,7 @@ function buildFixture(){
         num: (fixture.length||0)+i+1,
         rival: p.rival,
         fecha: p.fecha,
-        torneo: 'NLA Suiza 2025/26',
+        torneo: 'NLA Suiza 2026/27',
         ts: ts,
         jugado: ts < Date.now(),
         res: '',
@@ -1330,15 +1297,15 @@ function initPin(){
   });
 
   // Ver si hay sesión guardada
-  var savedNum = localStorage.getItem('casla_player_num');
-  var savedPin = localStorage.getItem('casla_player_pin_'+savedNum);
+  var savedNum = localStorage.getItem('vb_player_num');
+  var savedPin = localStorage.getItem('vb_player_pin_'+savedNum);
   if(savedNum && savedPin){
     // Auto-login silencioso
     return;
   }
 
   // Mostrar overlay solo si no hay sesión
-  var visto = sessionStorage.getItem('casla_pin_skip');
+  var visto = sessionStorage.getItem('vb_pin_skip');
   if(!visto){
     document.getElementById('pin-overlay').style.display='flex';
   }
@@ -1359,8 +1326,8 @@ function pinEnter(){
   // ── ENTRENADOR ───────────────────────────────────────────
   if(num === 'coach'){
     if(pinActual === '1009'){
-      localStorage.setItem('casla_role','coach');
-      sessionStorage.setItem('casla_pin_skip','1');
+      localStorage.setItem('vb_role','coach'); localStorage.removeItem('vb_player_num');
+      sessionStorage.setItem('vb_pin_skip','1');
       document.getElementById('pin-overlay').style.display='none';
       showToastLogin('👨‍💼 Welcome Coach!');
       return;
@@ -1373,8 +1340,8 @@ function pinEnter(){
   // ── PREPARADOR FÍSICO (carga libre) ───────────────────────
   if(num === 'pf'){
     if(pinActual === '0000'){
-      localStorage.setItem('casla_role','pf');
-      sessionStorage.setItem('casla_pin_skip','1');
+      localStorage.setItem('vb_role','pf'); localStorage.removeItem('vb_player_num');
+      sessionStorage.setItem('vb_pin_skip','1');
       document.getElementById('pin-overlay').style.display='none';
       showToastLogin('🏋️ Bienvenido, Preparador Físico');
       window.location.href = 'prep_builder.html';   // va directo a armar rutinas
@@ -1388,8 +1355,8 @@ function pinEnter(){
   // ── ASISTENTE TÉCNICO (carga libre) ───────────────────────
   if(num === 'at'){
     if(pinActual === '9999'){
-      localStorage.setItem('casla_role','at');
-      sessionStorage.setItem('casla_pin_skip','1');
+      localStorage.setItem('vb_role','at'); localStorage.removeItem('vb_player_num');
+      sessionStorage.setItem('vb_pin_skip','1');
       document.getElementById('pin-overlay').style.display='none';
       showToastLogin('📋 Bienvenido, Asistente Técnico');
       return;   // se queda en el Hub con acceso completo a la carga
@@ -1407,9 +1374,9 @@ function pinEnter(){
   pinCorrecto = String(num).padStart(4,'0'); // ej: num=2→0002, num=20→0020
 
   if(pinActual === pinCorrecto){
-    localStorage.setItem('casla_player_num', num);
-    localStorage.setItem('casla_role','player');
-    sessionStorage.setItem('casla_pin_skip','1');
+    localStorage.setItem('vb_player_num', num);
+    localStorage.setItem('vb_role','player');
+    sessionStorage.setItem('vb_pin_skip','1');
     document.getElementById('pin-overlay').style.display='none';
     window.location.href = 'jugador.html?num='+num;
   } else {
@@ -1427,7 +1394,7 @@ function showToastLogin(msg){
 }
 
 function pinSkip(){
-  sessionStorage.setItem('casla_pin_skip','1');
+  sessionStorage.setItem('vb_pin_skip','1');
   document.getElementById('pin-overlay').style.display='none';
 }
 
@@ -1529,7 +1496,7 @@ function highlightNextMatch(){
       <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
       <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">NLA Suiza 2025/26 · 26 partidos analizados</div>
+    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">NLA Suiza 2026/27 · temporada en curso</div>
   </div>
 </div>
 <script>
@@ -1566,12 +1533,75 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 })();
 </script>
 <script src="temporadas_menu.js"></script>
+<!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
+     usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
+     (evita el conflicto de dos workers en el mismo scope "/"). -->
+<!-- Notificaciones push (OneSignal) -->
+<script src="onesignal_push.js" defer></script>
+<!-- ════════ VISTA POR ROL ════════
+     El jugador ve SOLO lo suyo + Game Plan + Cortes de video (visor completo).
+     El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
 <script>
-if('serviceWorker' in navigator){
-  window.addEventListener('load',function(){
-    navigator.serviceWorker.register('sw.js').catch(function(){});
-  });
-}
+(function(){
+  try{
+    var role = (localStorage.getItem('vb_role')||'').toLowerCase();
+    if(role !== 'player') return;                       // coach/pf/at o sin login → ven todo
+    var num = localStorage.getItem('vb_player_num')||'';
+
+    // Cartel claro de "vista de jugador" + salida (por si un staff quedó con sesión de jugador)
+    (function(){
+      var host = document.querySelector('main') || document.body; if(!host) return;
+      var bar = document.createElement('div');
+      bar.style.cssText = 'display:flex;align-items:center;gap:10px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);border-radius:12px;padding:10px 14px;margin:14px 16px 0;';
+      bar.innerHTML = '<span style="font-size:18px">👤</span>'+
+        '<span style="flex:1;color:#22c55e;font-family:Bebas Neue,sans-serif;letter-spacing:1px;font-size:14px">Estás viendo la app como JUGADOR</span>'+
+        '<button id="vbSalirJug" style="background:rgba(232,25,44,.15);border:1px solid rgba(232,25,44,.35);color:#e8192c;border-radius:8px;padding:6px 14px;font-family:Bebas Neue,sans-serif;letter-spacing:1px;font-size:13px;cursor:pointer">SALIR</button>';
+      host.insertBefore(bar, host.firstChild);
+      var b = document.getElementById('vbSalirJug');
+      if(b) b.onclick = function(){
+        try{ localStorage.removeItem('vb_role'); localStorage.removeItem('vb_player_num'); sessionStorage.removeItem('vb_pin_skip'); }catch(e){}
+        location.reload();
+      };
+    })();
+
+    // Tarjetas que SÍ ve el jugador (lo demás se oculta)
+    var SHOW = ['calendario.html','horarios.html','historial_voley.html','prep_fisica.html','wellness.html',
+                'equipo.html','nla_stats_table.html','game_plan.html','cortes.html','scouting_rival.html'];
+    function keep(card){
+      var oc = (card.getAttribute('onclick')||'');
+      if(oc.indexOf('showHeatmapMenu')>=0) return true;  // Heat Maps: sí
+      var href = (card.getAttribute('href')||'').split('?')[0].split('#')[0];
+      return SHOW.indexOf(href) >= 0;
+    }
+    document.querySelectorAll('a.card').forEach(function(c){ if(!keep(c)) c.style.display='none'; });
+
+    // Ocultar secciones que quedaron sin tarjetas visibles (ej: "Scouting del Rival")
+    document.querySelectorAll('.cards-grid').forEach(function(grid){
+      var anyVisible = Array.prototype.some.call(grid.querySelectorAll('a.card'), function(c){ return c.style.display!=='none'; });
+      if(!anyVisible){ var sec = grid.closest('.section') || grid.parentElement; if(sec) sec.style.display='none'; }
+    });
+
+    // Inyectar tarjeta "Mi Perfil" arriba de todo
+    var firstGrid = document.querySelector('.cards-grid');
+    if(firstGrid && num){
+      var a = document.createElement('a');
+      a.className = 'card'; a.href = 'jugador.html?num='+encodeURIComponent(num);
+      a.style.cssText = '--card-color:#22c55e;grid-column:1/-1';
+      a.innerHTML =
+        '<div class="card-glow"></div>'+
+        '<div class="card-top">'+
+          '<div class="card-icon" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2)">👤</div>'+
+          '<div class="card-badge" style="background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2)">Tu vista</div>'+
+        '</div>'+
+        '<div class="card-body">'+
+          '<div class="card-title" style="color:#22c55e">Mi Perfil</div>'+
+          '<div class="card-desc">Tus stats, tu rutina, tu wellness y tus cortes — todo en un solo lugar.</div>'+
+        '</div>'+
+        '<div class="card-arrow" style="color:#22c55e">→</div>';
+      firstGrid.insertBefore(a, firstGrid.firstChild);
+    }
+  }catch(e){}
+})();
 </script>
 </body>
 </html>

@@ -88,6 +88,14 @@ select,select option{color:#111!important;background-color:#fff!important}
 .badge-series{background:rgba(129,140,248,.12);color:#818cf8;border:1px solid rgba(129,140,248,.22)}
 .badge-reps{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.22)}
 .badge-descanso{background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.22)}
+.badge-carga{background:rgba(45,212,191,.14);color:#2dd4bf;border:1px solid rgba(45,212,191,.26)}
+.carga-section{padding:11px 16px;border-top:1px solid var(--border);background:rgba(45,212,191,.045)}
+.carga-lbl{font-size:9px;color:#2dd4bf;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:9px;opacity:.9;font-weight:700}
+.carga-row{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:wrap}
+.carga-rm-lbl{font-size:12px;color:var(--mut2);font-weight:600}
+.carga-rm-input{width:96px;background:#fff;color:#111;border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:8px 11px;font-size:15px;font-weight:700;font-family:'Barlow Condensed',sans-serif;outline:none}
+.carga-rm-unit{font-size:12px;color:var(--mut)}
+.carga-result{font-size:14px;color:var(--txt);padding:9px 12px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.18);border-radius:9px;line-height:1.5}
 .ej-video-btn{padding:6px 11px;border-radius:8px;border:1px solid rgba(129,140,248,.25);background:rgba(129,140,248,.1);color:#818cf8;
   font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:.15s;flex-shrink:0}
 .ej-video-btn:hover{background:rgba(129,140,248,.22)}
@@ -95,6 +103,15 @@ select,select option{color:#111!important;background-color:#fff!important}
 .nota-profe{padding:9px 16px 12px;border-top:1px solid var(--border)}
 .nota-profe-lbl{font-size:8px;color:var(--amber);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;opacity:.75}
 .nota-profe-txt{font-size:12px;color:#fbbf24;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.13);border-radius:9px;padding:9px 12px;line-height:1.5}
+.nota-card{margin:14px 0 4px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:14px}
+.nota-card-lbl{font-size:10px;color:var(--amber);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:9px;font-weight:700}
+.nota-card-txt{width:100%;min-height:70px;resize:vertical;background:#fff;color:#111;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:11px 13px;font-size:14px;font-family:'Inter',sans-serif;line-height:1.5;outline:none;box-sizing:border-box}
+.nota-card-status{font-size:11px;color:var(--teal);margin-top:7px;min-height:14px}
+.pf-reply-box{margin-top:12px;padding-top:12px;border-top:1px dashed var(--border)}
+.pf-reply-lbl{font-size:10px;color:var(--teal);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-weight:700;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pf-reply-txt{font-size:14px;color:#cfeede;background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.18);border-radius:10px;padding:11px 13px;line-height:1.55;white-space:pre-wrap}
+.trad-btn{font-size:10px;font-weight:700;letter-spacing:.3px;color:var(--teal);background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.28);border-radius:7px;padding:3px 9px;cursor:pointer;font-family:'Inter',sans-serif}
+.trad-btn:hover{background:rgba(45,212,191,.18)}
 .pesos-section{padding:11px 16px 14px;border-top:1px solid var(--border);background:rgba(255,255,255,.012)}
 .pesos-label{font-size:9px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:9px}
 .pesos-grid{display:flex;flex-wrap:wrap;gap:8px}
@@ -132,6 +149,26 @@ select,select option{color:#111!important;background-color:#fff!important}
   .calc-grid{grid-template-columns:1fr 1fr}.jug-stats-row{width:100%;margin-left:0;margin-top:6px}
   .readiness{margin-left:auto}
 }
+/* ── Panel Mi Progreso ───────────────────────────────────── */
+.prog-card{background:linear-gradient(150deg,var(--card),#0b1422);border:1px solid var(--elev);border-radius:16px;padding:18px;margin-bottom:16px}
+.prog-head{display:flex;align-items:center;gap:8px;font-family:'Bebas Neue',sans-serif;letter-spacing:3px;font-size:19px;color:var(--txt);margin-bottom:4px}
+.prog-sub{font-size:11px;color:var(--mut);margin-bottom:14px}
+.prog-empty{text-align:center;color:var(--mut);font-size:12.5px;padding:18px 10px;line-height:1.6}
+.pr-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.pr-name{flex:none;width:128px;font-size:12px;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pr-track{flex:1;height:22px;background:#0a0f1c;border-radius:7px;overflow:hidden;position:relative}
+.pr-fill{height:100%;border-radius:7px;background:linear-gradient(90deg,var(--teal),var(--green));min-width:3px;transition:width .5s ease}
+.pr-kg{flex:none;width:62px;text-align:right;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;color:var(--green)}
+.pr-kg small{font-size:10px;color:var(--mut);letter-spacing:0}
+.evo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.evo-grid{grid-template-columns:1fr}.pr-name{width:96px}}
+.evo-item{background:#0a0f1c;border:1px solid var(--elev);border-radius:11px;padding:12px}
+.evo-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px}
+.evo-name{font-size:12px;color:var(--txt);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.evo-delta{flex:none;font-size:11px;font-weight:700;margin-left:8px}
+.evo-up{color:var(--green)}.evo-flat{color:var(--mut)}
+.evo-svg{display:block;width:100%;height:46px}
+.evo-foot{display:flex;justify-content:space-between;font-size:10px;color:var(--mut);margin-top:5px}
 </style>
 </head>
 <body>
@@ -140,7 +177,7 @@ select,select option{color:#111!important;background-color:#fff!important}
     <a href="index.html" class="back-btn">← Inicio</a>
     <div>
       <div class="page-title">💪 <span data-t="prep_fisica">Preparación Física</span></div>
-      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;">AXPO VOLLEY NÄFELS · NLA Suiza 2025/26</div>
+      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;">AXPO VOLLEY NÄFELS · NLA Suiza 2026/27</div>
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:12px;">
@@ -181,9 +218,11 @@ select,select option{color:#111!important;background-color:#fff!important}
         <div class="jug-stat"><div class="jug-stat-val" id="stat-registros">0</div><div class="jug-stat-lbl">Registros</div></div>
       </div>
     </div>
+    <div id="progreso-panel"></div>
     <div id="mes-selector" style="display:none;gap:8px;margin-bottom:14px;align-items:center"></div>
     <div class="semanas-tabs" id="semanas-tabs"></div>
     <div id="rutina-content"></div>
+    <div id="nota-al-profe"></div>
     <div class="calc-section">
       <div class="calc-header">
         <span style="font-size:20px;">🧮</span>
@@ -225,20 +264,14 @@ var PREP_DEMO = {
   "jugadores": [
     {
       "num": 1,
-      "nombre": "DEECKE",
-      "pos": "LIBERO",
-      "semanas": []
-    },
-    {
-      "num": 2,
-      "nombre": "CORZO",
+      "nombre": "DURDOS",
       "pos": "PUNTA",
       "semanas": []
     },
     {
       "num": 3,
       "nombre": "SCHWITTER",
-      "pos": "PUNTA",
+      "pos": "OPUESTO",
       "semanas": []
     },
     {
@@ -249,38 +282,26 @@ var PREP_DEMO = {
     },
     {
       "num": 5,
-      "nombre": "HESSELHOLT",
-      "pos": "PUNTA",
-      "semanas": []
-    },
-    {
-      "num": 6,
-      "nombre": "DENIS CABANAS",
-      "pos": "OPUESTO",
-      "semanas": []
-    },
-    {
-      "num": 7,
-      "nombre": "SCHMID",
+      "nombre": "CLEMENT",
       "pos": "CENTRAL",
       "semanas": []
     },
     {
-      "num": 8,
-      "nombre": "PETER",
-      "pos": "LIBERO",
+      "num": 7,
+      "nombre": "SCHMID R",
+      "pos": "CENTRAL",
       "semanas": []
     },
     {
       "num": 9,
-      "nombre": "BROCH",
-      "pos": "PUNTA",
+      "nombre": "NORRIS",
+      "pos": "OPUESTO",
       "semanas": []
     },
     {
       "num": 10,
       "nombre": "BOGDANOVSKI",
-      "pos": "CENTRAL",
+      "pos": "PUNTA",
       "semanas": []
     },
     {
@@ -290,15 +311,27 @@ var PREP_DEMO = {
       "semanas": []
     },
     {
-      "num": 14,
-      "nombre": "FIGUEIREDO",
-      "pos": "OPUESTO",
+      "num": 12,
+      "nombre": "JOHANSSON",
+      "pos": "CENTRAL",
       "semanas": []
     },
     {
-      "num": 15,
-      "nombre": "NIKOLOV",
-      "pos": "CENTRAL",
+      "num": 13,
+      "nombre": "STEIMANN",
+      "pos": "ARMADOR",
+      "semanas": []
+    },
+    {
+      "num": 17,
+      "nombre": "ROFFLER",
+      "pos": "PUNTA",
+      "semanas": []
+    },
+    {
+      "num": 20,
+      "nombre": "SCHMID J",
+      "pos": "LIBERO",
       "semanas": []
     }
   ]
@@ -354,6 +387,20 @@ function construirData(){
 // ── Storage ───────────────────────────────────────────────────────
 function storageKey(num, ejId, serie){ return 'prep_'+num+'_'+ejId+'_s'+serie; }
 function storageKeyObs(num, ejId){ return 'prep_obs_'+num+'_'+ejId; }
+function rmKey(num, ejId){ return 'prep_rm_'+num+'_'+ejId; }
+function round25(x){ return Math.round(x/2.5)*2.5; }
+function parseCarga(c){
+  if(!c) return {type:'none'};
+  var s = String(c).trim();
+  if(s.indexOf('%') >= 0){
+    var mp = s.match(/(\d+(?:[.,]\d+)?)/);
+    if(mp) return {type:'pct', val: parseFloat(mp[1].replace(',','.'))};
+  }
+  var mk = s.match(/(\d+(?:[.,]\d+)?)\s*k/i);
+  if(mk) return {type:'kg', val: parseFloat(mk[1].replace(',','.'))};
+  if(/^\d+(?:[.,]\d+)?$/.test(s)) return {type:'kg', val: parseFloat(s.replace(',','.'))};
+  return {type:'text', raw:s};
+}
 
 // cuántos pesos cargó este jugador (registros reales, no observaciones)
 function countRegistros(num){
@@ -421,6 +468,85 @@ function renderReadiness(num){
 }
 
 
+// ── Mi Progreso: récords + evolución ──────────────────────────────
+function histKey(num, ejid){ return 'prep_hist_'+num+'_'+ejid; }
+function getHist(num, ejid){ try{ return JSON.parse(localStorage.getItem(histKey(num,ejid))||'[]'); }catch(e){ return []; } }
+function pushHist(num, ejid, kg){
+  kg=parseFloat(kg); if(!kg||kg<=0||!ejid) return;
+  var arr=getHist(num,ejid), d=todayISO(), found=false;
+  for(var i=0;i<arr.length;i++){ if(arr[i].d===d){ if(kg>arr[i].kg) arr[i].kg=kg; found=true; break; } }
+  if(!found) arr.push({d:d,kg:kg});
+  arr.sort(function(a,b){ return a.d<b.d?-1:1; });
+  if(arr.length>90) arr=arr.slice(arr.length-90);
+  try{ localStorage.setItem(histKey(num,ejid), JSON.stringify(arr)); }catch(e){}
+  if(typeof fbSet!=='undefined') fbSet('prep_hist/'+num+'/'+ejid, arr);
+}
+var _histT={};
+function pushHistDebounced(num,ejid,kg){ var k=num+'_'+ejid; clearTimeout(_histT[k]); _histT[k]=setTimeout(function(){ pushHist(num,ejid,kg); if(jugadorActivo&&jugadorActivo.num===num) renderProgreso(jugadorActivo); },1300); }
+function exNameMap(){
+  var m={};
+  Object.keys(RUTINAS_MES||{}).forEach(function(mk){ var r=RUTINAS_MES[mk]; if(!r||!r.semanas) return;
+    r.semanas.forEach(function(s){ (s.bloques||[]).forEach(function(b){ (b.ejercicios||[]).forEach(function(e){ if(e&&e.id&&e.nombre&&!m[e.id]) m[e.id]=e.nombre; }); }); }); });
+  if(window.EJERCICIOS_DATA){ (window.EJERCICIOS_DATA||[]).forEach(function(e){ if(e&&e.id&&e.nombre&&!m[e.id]) m[e.id]=e.nombre; }); }
+  return m;
+}
+function bestWeights(num){
+  var best={}, pre='prep_'+num+'_', rmpre='prep_rm_'+num+'_';
+  try{
+    for(var i=0;i<localStorage.length;i++){
+      var k=localStorage.key(i); if(!k) continue; var v=parseFloat(localStorage.getItem(k)); if(!v||v<=0) continue;
+      if(k.indexOf(rmpre)===0){ var id=k.slice(rmpre.length); best[id]=Math.max(best[id]||0,v); }
+      else if(k.indexOf(pre)===0 && k.indexOf('prep_obs_')!==0 && k.indexOf('prep_rm_')!==0 && k.indexOf('prep_nota')!==0 && k.indexOf('prep_hist_')!==0 && k.indexOf('prep_rutina')!==0){
+        var mm=k.slice(pre.length).match(/^(.+)_s\d+$/); if(mm){ best[mm[1]]=Math.max(best[mm[1]]||0,v); }
+      }
+    }
+  }catch(e){}
+  return best;
+}
+function seedHist(num){ var best=bestWeights(num); Object.keys(best).forEach(function(eid){ if(getHist(num,eid).length===0) pushHist(num,eid,best[eid]); }); }
+function loadProgresoData(num, cb){
+  if(typeof fbGet==='undefined'){ cb(); return; }
+  var pending=3, done=function(){ if(--pending===0) cb(); };
+  fbGet('pesos', function(data){ if(data) Object.keys(data).forEach(function(k){ if(k.indexOf('prep_'+num+'_')===0 && data[k]!=='' && data[k]!=null){ try{localStorage.setItem(k,data[k]);}catch(e){} } }); done(); });
+  fbGet('rm', function(data){ if(data) Object.keys(data).forEach(function(k){ if(k.indexOf('prep_rm_'+num+'_')===0 && data[k]!=='' && data[k]!=null){ try{localStorage.setItem(k,data[k]);}catch(e){} } }); done(); });
+  fbGet('prep_hist/'+num, function(data){ if(data) Object.keys(data).forEach(function(eid){ try{ localStorage.setItem(histKey(num,eid), JSON.stringify(data[eid])); }catch(e){} }); done(); });
+}
+function sparkline(arr){
+  var w=200,h=46,pad=5;
+  var ys=arr.map(function(p){return p.kg;}); var mn=Math.min.apply(null,ys),mx=Math.max.apply(null,ys); if(mx===mn)mx=mn+1;
+  var pts=arr.map(function(p,i){ var x=pad+(w-2*pad)*(i/(arr.length-1)); var y=h-pad-(h-2*pad)*((p.kg-mn)/(mx-mn)); return x.toFixed(1)+','+y.toFixed(1); });
+  var last=pts[pts.length-1].split(',');
+  return '<svg class="evo-svg" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none">'
+    +'<polyline fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="'+pts.join(' ')+'"/>'
+    +'<circle cx="'+last[0]+'" cy="'+last[1]+'" r="3.2" fill="#22c55e"/></svg>';
+}
+function renderProgreso(j){
+  var box=document.getElementById('progreso-panel'); if(!box||!j) return;
+  var num=j.num, names=exNameMap(), best=bestWeights(num);
+  var prs=Object.keys(best).filter(function(id){return best[id]>0;}).map(function(id){return {id:id,nombre:names[id]||'Ejercicio',kg:best[id]};}).sort(function(a,b){return b.kg-a.kg;});
+  if(!prs.length){
+    box.innerHTML='<div class="prog-card"><div class="prog-head">📈 Mi progreso</div><div class="prog-empty">Registrá tus pesos en cada sesión y acá vas a ver tus <b>récords</b> y cómo vas <b>progresando</b> 💪</div></div>';
+    return;
+  }
+  var top=prs.slice(0,8), maxKg=top[0].kg;
+  var prHtml=top.map(function(p){ var w=Math.max(3,Math.round(p.kg/maxKg*100));
+    return '<div class="pr-row"><div class="pr-name" title="'+p.nombre+'">'+p.nombre+'</div>'
+      +'<div class="pr-track"><div class="pr-fill" style="width:'+w+'%"></div></div>'
+      +'<div class="pr-kg">'+p.kg+'<small> kg</small></div></div>';
+  }).join('');
+  var evo=prs.map(function(p){ return {p:p,h:getHist(num,p.id)}; }).filter(function(x){return x.h.length>=2;}).slice(0,4);
+  var evoHtml='';
+  if(evo.length){
+    evoHtml='<div class="prog-card"><div class="prog-head">🚀 Tu evolución</div><div class="prog-sub">Cómo fueron subiendo tus cargas</div><div class="evo-grid">'
+      +evo.map(function(x){ var h=x.h, first=h[0].kg, last=h[h.length-1].kg, dd=Math.round((last-first)*10)/10, pct=first>0?Math.round((last-first)/first*100):0;
+        var delta=dd>0?('<span class="evo-delta evo-up">▲ +'+dd+' kg'+(pct>0?' ('+pct+'%)':'')+'</span>'):'<span class="evo-delta evo-flat">—</span>';
+        return '<div class="evo-item"><div class="evo-top"><span class="evo-name" title="'+x.p.nombre+'">'+x.p.nombre+'</span>'+delta+'</div>'
+          +sparkline(h)+'<div class="evo-foot"><span>'+h[0].d.slice(5)+'</span><span>'+h[h.length-1].d.slice(5)+'</span></div></div>';
+      }).join('')+'</div></div>';
+  }
+  box.innerHTML='<div class="prog-card"><div class="prog-head">🏆 Tus récords</div><div class="prog-sub">Tu mejor peso en cada ejercicio</div>'+prHtml+'</div>'+evoHtml;
+}
+
 // ── Init ──────────────────────────────────────────────────────────
 function init(){
   var d = new Date();
@@ -443,6 +569,7 @@ function init(){
 // ── Seleccionar jugador ───────────────────────────────────────────
 function selectJugador(j, btn){
   jugadorActivo = j;
+  var _pp=document.getElementById('progreso-panel'); if(_pp) _pp.innerHTML='';
   document.querySelectorAll('.player-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
   document.getElementById('welcome-screen').style.display = 'none';
@@ -465,7 +592,9 @@ function selectJugador(j, btn){
 var RUTINAS_MES = {};
 var MESES_PREP = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 function mesLabelFromKey(k){ var p=String(k).split('-'); return (MESES_PREP[(+p[1])-1]||'')+' '+(p[0]||''); }
+var MES_ACTIVO = null;
 function aplicarMes(j, mesKey){
+  MES_ACTIVO = mesKey;
   var r = RUTINAS_MES[mesKey];
   j.semanas = (r && r.semanas) ? r.semanas : [];
   var totalEj = 0;
@@ -473,6 +602,70 @@ function aplicarMes(j, mesKey){
   document.getElementById('stat-sesiones').textContent = j.semanas.length;
   document.getElementById('stat-ejercicios').textContent = totalEj;
   renderSemanas(j);
+  renderNotaProfe(j.num, mesKey);
+}
+
+/* ---------- Nota general del jugador para el profe (por mes) ---------- */
+function notaKey(num, mes){ return 'prep_nota_'+num+'_'+mes; }
+/* ---------- traducción (servicio gratuito; sl=auto detecta el idioma de origen) ---------- */
+function traducirTexto(texto, target, cb){
+  if(!texto){ cb(''); return; }
+  var t=encodeURIComponent(texto), tl=encodeURIComponent(target);
+  fetch('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl='+tl+'&dt=t&q='+t)
+    .then(function(r){ return r.json(); })
+    .then(function(d){ var out=(d&&d[0]&&d[0].map)?d[0].map(function(s){return s[0];}).join(''):null; cb(out||null); })
+    .catch(function(){ cb(null); });
+}
+function attachTranslate(btn, txtEl, getTarget){
+  if(!btn || !txtEl) return;
+  btn.addEventListener('click', function(){
+    var orig=txtEl.getAttribute('data-orig'); if(orig==null){ orig=txtEl.textContent; txtEl.setAttribute('data-orig', orig); }
+    if(txtEl.getAttribute('data-trad')==='1'){ txtEl.textContent=orig; txtEl.setAttribute('data-trad','0'); btn.textContent='🌐 Traducir'; return; }
+    var target=getTarget()||'es'; var self=this; self.textContent='⏳…';
+    traducirTexto(orig, target, function(out){
+      if(out){ txtEl.textContent=out; txtEl.setAttribute('data-trad','1'); self.textContent='↩ Ver original'; }
+      else { self.textContent='🌐 Traducir'; alert('No se pudo traducir en este momento. Probá de nuevo en un ratito.'); }
+    });
+  });
+}
+function renderNotaProfe(num, mes){
+  var box = document.getElementById('nota-al-profe');
+  if(!box || !num || !mes){ if(box) box.innerHTML=''; return; }
+  var lk = notaKey(num, mes), val = '';
+  try{ val = localStorage.getItem(lk) || ''; }catch(e){}
+  box.innerHTML =
+    '<div class="nota-card">' +
+      '<div class="nota-card-lbl">💬 Nota para el profe <span style="opacity:.6;font-weight:400">(esta rutina)</span></div>' +
+      '<textarea id="notaProfeTxt" class="nota-card-txt" placeholder="Contale al profe cómo venís: cansancio, alguna molestia, cómo te sentiste con las cargas…"></textarea>' +
+      '<div class="nota-card-status" id="notaProfeStatus"></div>' +
+      '<div id="pfReplyBox" class="pf-reply-box" style="display:none">' +
+        '<div class="pf-reply-lbl">📣 Respuesta del profe <button type="button" class="trad-btn" id="pfReplyTrad">🌐 Traducir</button></div>' +
+        '<div class="pf-reply-txt" id="pfReplyTxt"></div>' +
+      '</div>' +
+    '</div>';
+  var ta = document.getElementById('notaProfeTxt'); ta.value = val;
+  var st = document.getElementById('notaProfeStatus'), t = null;
+  ta.addEventListener('input', function(){
+    var v = this.value;
+    try{ localStorage.setItem(lk, v); }catch(e){}
+    if(st) st.textContent = 'Guardando…';
+    clearTimeout(t);
+    t = setTimeout(function(){ if(typeof fbSet !== 'undefined') fbSet('notas/'+num+'/'+mes, v); if(st) st.textContent = '✓ El profe puede verlo'; }, 600);
+  });
+  if(typeof fbGet !== 'undefined'){
+    fbGet('notas/'+num+'/'+mes, function(d){ if(d !== null && d !== undefined && d !== '' && document.getElementById('notaProfeTxt')){ ta.value = d; try{ localStorage.setItem(lk, d); }catch(e){} } });
+  }
+  // Respuesta del profe (lo que escribe el PF desde el builder)
+  var rlk = 'prep_notapf_'+num+'_'+mes;
+  function pintarReply(txt){
+    var rb=document.getElementById('pfReplyBox'), rt=document.getElementById('pfReplyTxt');
+    if(!rb||!rt) return;
+    if(txt && String(txt).trim()){ rb.style.display='block'; rt.textContent=txt; rt.removeAttribute('data-orig'); rt.removeAttribute('data-trad'); }
+    else { rb.style.display='none'; }
+  }
+  try{ pintarReply(localStorage.getItem(rlk)||''); }catch(e){}
+  if(typeof fbGet !== 'undefined'){ fbGet('notas_pf/'+num+'/'+mes, function(d){ if(d!==null && d!==undefined){ try{ localStorage.setItem(rlk, d); }catch(e){} pintarReply(d); } }); }
+  attachTranslate(document.getElementById('pfReplyTrad'), document.getElementById('pfReplyTxt'), function(){ return (typeof getLang==='function')?getLang():'es'; });
 }
 function pintarMesSelector(j, keys, sel){
   var box = document.getElementById('mes-selector');
@@ -490,6 +683,7 @@ function loadRutinas(j){
     var keys = Object.keys(RUTINAS_MES).filter(function(k){ return RUTINAS_MES[k] && RUTINAS_MES[k].semanas && RUTINAS_MES[k].semanas.length; }).sort().reverse();
     if(keys.length){ pintarMesSelector(j, keys, keys[0]); aplicarMes(j, keys[0]); }
     else { pintarMesSelector(j, [], null); renderSemanas(j); }   // fallback: lo que traiga construirData
+    loadProgresoData(j.num, function(){ seedHist(j.num); renderProgreso(j); });
   };
   if(typeof fbGet !== 'undefined'){ fbGet('prep_rutinas/'+j.num, fin); }
   else {
@@ -589,6 +783,7 @@ function buildEjercicio(j, ej, num){
       '<span class="ej-badge badge-series">' + ej.series + ' SERIES</span>' +
       '<span class="ej-badge badge-reps">' + ej.reps + ' REPS</span>' +
       (ej.descanso ? '<span class="ej-badge badge-descanso">⏱ ' + ej.descanso + '</span>' : '') +
+      (ej.carga ? '<span class="ej-badge badge-carga">🏋 ' + ej.carga + '</span>' : '') +
     '</div>' +
     videoBtn;
   card.appendChild(hdr);
@@ -599,6 +794,44 @@ function buildEjercicio(j, ej, num){
     notaDiv.className = 'nota-profe';
     notaDiv.innerHTML = '<div class="nota-profe-lbl">📋 Indicación del profe</div><div class="nota-profe-txt">' + ej.nota + '</div>';
     card.appendChild(notaDiv);
+  }
+
+  // Carga sugerida: si el profe prescribió un %, calcular el peso con el 1RM del jugador
+  var cg = parseCarga(ej.carga);
+  if(cg.type === 'pct'){
+    var cargaDiv = document.createElement('div');
+    cargaDiv.className = 'carga-section';
+    var rmk = rmKey(j.num, ej.id);
+    var savedRm = localStorage.getItem(rmk) || '';
+    var calcLine = function(rm){
+      rm = parseFloat(rm);
+      if(!rm || rm <= 0) return '<span style="color:var(--mut)">Ingresá tu 1RM para ver el peso a usar</span>';
+      var w = round25(rm * cg.val / 100);
+      return '👉 Trabajá con <strong style="color:#2dd4bf;font-size:17px">' + w + ' kg</strong> <span style="color:var(--mut);font-size:11px">(' + cg.val + '% de ' + rm + ' kg)</span>';
+    };
+    cargaDiv.innerHTML =
+      '<div class="carga-lbl">🏋 Prescripción: ' + cg.val + '% de tu máximo</div>' +
+      '<div class="carga-row">' +
+        '<span class="carga-rm-lbl">Tu 1RM en este ejercicio:</span>' +
+        '<input type="number" class="carga-rm-input" placeholder="— kg" value="' + savedRm + '" min="0" max="500" step="0.5">' +
+        '<span class="carga-rm-unit">kg</span>' +
+      '</div>' +
+      '<div class="carga-result">' + calcLine(savedRm) + '</div>';
+    card.appendChild(cargaDiv);
+    (function(){
+      var rmInput = cargaDiv.querySelector('.carga-rm-input');
+      var resultDiv = cargaDiv.querySelector('.carga-result');
+      rmInput.addEventListener('input', function(){
+        var v = this.value;
+        localStorage.setItem(rmk, v);
+        if(typeof fbSet !== 'undefined') fbSet('rm/' + rmk, v);
+        pushHistDebounced(j.num, ej.id, v);
+        resultDiv.innerHTML = calcLine(v);
+      });
+      if(typeof fbGet !== 'undefined'){
+        fbGet('rm/' + rmk, function(val){ if(val !== null && val !== ''){ rmInput.value = val; resultDiv.innerHTML = calcLine(val); } });
+      }
+    })();
   }
 
   // Pesos por serie
@@ -621,12 +854,13 @@ function buildEjercicio(j, ej, num){
     var inp = document.createElement('input');
     inp.type = 'number'; inp.className = 'peso-input';
     inp.placeholder = '— kg'; inp.value = saved; inp.min = 0; inp.max = 500; inp.step = 0.5;
-    inp.addEventListener('input', (function(k){
+    inp.addEventListener('input', (function(k,nm,eid){
       return function(){
         localStorage.setItem(k, this.value);
         if(typeof fbSet !== 'undefined') fbSet('pesos/' + k, this.value);
+        pushHistDebounced(nm, eid, this.value);
       };
-    })(sk));
+    })(sk, j.num, ej.id));
     if(typeof fbGet !== 'undefined'){
       (function(k, input){ fbGet('pesos/'+k, function(val){ if(val !== null && val !== '') input.value = val; }); })(sk, inp);
     }

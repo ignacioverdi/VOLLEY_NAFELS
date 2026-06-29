@@ -16,7 +16,9 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <script src="modo_toggle.js" onerror="void 0"></script>
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
 <script src="datos_equipo.js" onerror="void 0"></script>
-<script src="datos_video.js" onerror="void 0"></script>
+<script src="datos_video_25-26.js" onerror="void 0"></script>
+<script src="datos_video_26-27.js" onerror="void 0"></script>
+<script src="datos_video_27-28.js" onerror="void 0"></script>
 <script>window.PREP_FISICA_DATA=window.PREP_FISICA_DATA||{};</script>
 <script>window.firebase=window.firebase||null;</script>
 <script>window.LANG=window.LANG||{};</script>
@@ -384,7 +386,7 @@ function dbatBuildSubfiltro(){
     <a href="index.html" class="back-btn">← Hub</a>
     <div>
       <div class="hdr-title">📊 Dashboard Entrenador</div>
-      <div style="font-size:9px;color:var(--mut);letter-spacing:2px">NAFELS VOLEY · NLA Suiza 2025/26</div>
+      <div style="font-size:9px;color:var(--mut);letter-spacing:2px">NAFELS VOLEY · NLA Suiza 2026/27</div>
     </div>
   </div>
   <div id="nav-gen" style="font-size:10px;color:var(--mut);letter-spacing:1px"></div>
@@ -768,7 +770,7 @@ function renderEqStats(){
 
   // Defensa (de datos_video — solo partidos)
   var dT=0,dPerf=0,dBuena=0,dMala=0,dErr=0;
-  if(window.VIDEO_DATA&&window.VIDEO_DATA.matches){var _M=window.VIDEO_DATA.matches;Object.keys(_M).forEach(function(c){(_M[c].actions||[]).forEach(function(a){if(a.sk!=='Defensa')return;dT++;if(a.ev==='#')dPerf++;else if(a.ev==='+')dBuena++;else if(a.ev==='-')dMala++;else if(a.ev==='=')dErr++;});});}
+  if(window.VIDEO_DATA&&window.VIDEO_DATA.matches){var _M=window.VIDEO_DATA.matches;Object.keys(_M).forEach(function(c){(_M[c].actions||[]).forEach(function(a){if(a.sk!=='Defensa')return;if(a.tm!=='nafels')return;dT++;if(a.ev==='#')dPerf++;else if(a.ev==='+')dBuena++;else if(a.ev==='-')dMala++;else if(a.ev==='=')dErr++;});});}
   var dEff=dT>0?Math.round((dPerf+0.5*dBuena-0.5*dMala-dErr)/dT*100):null;
   var dEff_str=dEff!==null?fmt(dEff):'—';
 
@@ -960,10 +962,11 @@ function renderEqContent(){
 
 function renderDefensaTabla(){
   var VD = window.VIDEO_DATA && window.VIDEO_DATA.matches;
-  if(!VD) return '<div class="empty">Sin datos de defensa (falta subir datos_video.js)</div>';
+  if(!VD) return '<div class="empty">Sin datos de defensa todavía</div>';
   var P={};
   Object.keys(VD).forEach(function(c){ (VD[c].actions||[]).forEach(function(a){
     if(a.sk!=='Defensa') return;
+    if(a.tm!=='nafels') return;
     var k=a.num; if(!P[k]) P[k]={num:a.num,name:a.name,T:0,perf:0,buena:0,reg:0,mala:0,err:0};
     P[k].T++;
     if(a.ev==='#')P[k].perf++; else if(a.ev==='+')P[k].buena++; else if(a.ev==='!')P[k].reg++; else if(a.ev==='-')P[k].mala++; else if(a.ev==='=')P[k].err++;
@@ -1419,7 +1422,7 @@ function renderNovedades(){
       <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
       <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">NLA Suiza 2025/26 · 7 partidos analizados</div>
+    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">NLA Suiza 2026/27 · temporada en curso</div>
   </div>
 </div>
 <script>
@@ -1429,6 +1432,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 
 <script src="chat_nafels.js"></script>
 <script src="lang.js"></script>
+<script src="onesignal_push.js" defer></script>
 <script src="temporadas_menu.js"></script>
 </body>
 </html>

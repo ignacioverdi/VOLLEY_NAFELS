@@ -310,6 +310,24 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     print(f"✓ DB updated: {added} added, {skipped} skipped")
     return teams_data, games_log
 
+# ── FILTRO POR TEMPORADA ──────────────────────────────────────────
+def filter_teams_data(teams_data, season):
+    """Devuelve una copia de teams_data con SOLO las acciones de la temporada dada.
+    Mantiene la estructura completa (equipos/jugadores/info) para no romper nada;
+    solo vacia las acciones que no son de esa temporada."""
+    if not season:
+        return teams_data
+    season = str(season)
+    out = {}
+    for team, players in teams_data.items():
+        out[team] = {}
+        for num, pd in players.items():
+            npd = {'info': pd.get('info')}
+            for key in ('atk', 'srv', 'rec', 'sets', 'blk'):
+                npd[key] = [a for a in pd.get(key, []) if str(a.get('temporada')) == season]
+            out[team][num] = npd
+    return out
+
 # ── CALCULATE STATS ───────────────────────────────────────────────
 def calculate_stats(teams_data, temporada_filter=None):
     players = []
@@ -1357,7 +1375,7 @@ def build_transicion_data(setters_rallies, setter_names):
     return res
 
 
-def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025/26'):
+def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025/26', t_filter=None):
     """Generate datos_historial.js + datos_partidos.js for a specific team from DVW."""
     from datetime import datetime
     files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
@@ -1388,6 +1406,10 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         games.append({'file':fname,'date':date,'rival':rival,'team_home':team_home,
                        'tsets':tsets,'rsets':rsets,'result':'V' if tsets>rsets else 'D',
                        'set_strings':set_strings,'content_path':os.path.join(dvw_dir,fname)})
+
+    # Si esta carpeta DVW no es la temporada que se muestra, no mostramos sus partidos.
+    if t_filter and str(temporada) != str(t_filter):
+        games = []
 
     # HISTORIAL entries (per match player stats)
     historial = []
@@ -1471,6 +1493,8 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
     else:
         _db = {'teams':{}}
     team_db = _db['teams'].get(team_name, {})
+    if t_filter:
+        team_db = filter_teams_data({team_name: team_db}, t_filter)[team_name]
 
     def _combo_origin(combo, orig):
         M={'X5':4,'V5':4,'X6':2,'V6':2,'X8':9,'V8':9,'X1':3,'X7':3,'XM':3,'X2':3,'XP':8,'X4':4,'X3':2}
@@ -1546,7 +1570,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
 
     # Acumulado
     bat_acum=merge_acum(bat_all_pl)
-    equipo_obj_acum=to_pcts(bat_acum['__EQUIPO__'])
+    equipo_obj_acum=to_pcts(bat_acum['__EQUIPO__']) if '__EQUIPO__' in bat_acum else {}
     # Mapa de nombres acumulado (último partido disponible)
     acum_names={}
     for g in sorted(games,key=lambda x:x['date']):
@@ -1651,9 +1675,17 @@ if __name__ == '__main__':
     print("1. Parsing DVW files...")
     teams_data, games_log = update_database(args.dvw_dir, args.temporada, args.db_path)
 
+    # ── FILTRO POR TEMPORADA: deja SOLO la temporada que se muestra en la web ──
+    # Se aplica una sola vez aca, asi liga_data.js, datos_partidos.js, heatmaps y
+    # stats salen TODOS filtrados a la temporada actual (lo demas queda en la base).
+    t_filter = args.filter_temporada  # None = mostrar todo lo que hay en la base
+    if t_filter:
+        teams_data = filter_teams_data(teams_data, t_filter)
+        games_log  = [g for g in games_log if str(g.get('temporada')) == str(t_filter)]
+        print(f"   (mostrando SOLO temporada {t_filter})")
+
     # Step 2: Calculate stats
     print("\n2. Calculating stats...")
-    t_filter = args.filter_temporada  # None = mostrar todo lo que hay en la base
     players, teams = calculate_stats(teams_data, t_filter)
     with open(os.path.join(args.output_dir,'nla_full_stats.json'),'w') as f:
         json.dump({'players':players,'teams':teams,'temporada':t_filter}, f, ensure_ascii=False)
@@ -1662,6 +1694,9 @@ if __name__ == '__main__':
     # Step 3: Detect setters + collect rallies (both setters per team)
     print("\n3. Detecting setters and collecting rallies...")
     setters_map, rallies = collect_setter_rallies(args.dvw_dir, TEAM_NORM, NLA_TEAMS, teams_data)
+    # Si la carpeta procesada no es la temporada que se muestra, no usamos sus rallies (game plan en 0).
+    if t_filter and str(args.temporada) != str(t_filter):
+        rallies = {}
     # Detectar líberos por patrón (0 ataques + recibe) para el chequeo
     liberos_map = {}
     for team in NLA_TEAMS:
@@ -1714,7 +1749,7 @@ if __name__ == '__main__':
 
     # Step 6: datos_partidos.js (para el equipo principal) — CRÍTICO, mostrar errores
     print("\n6. Building datos_partidos.js...")
-    generate_team_pages_data(args.dvw_dir, MAIN_TEAM, args.output_dir, args.temporada)
+    generate_team_pages_data(args.dvw_dir, MAIN_TEAM, args.output_dir, args.temporada, args.filter_temporada)
     print("   \u2713 datos_partidos.js")
 
     # Step 7: Páginas por club (ataque/saque/recepción/armado) — para que NINGÚN botón de 404

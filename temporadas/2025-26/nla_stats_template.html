@@ -18,9 +18,13 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-
 .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 .tab:hover:not(.active){color:var(--text)}
 .filters{display:flex;gap:12px;padding:14px 24px;background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center}
-.filter-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
-select,input[type=text]{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:13px;outline:none;cursor:pointer;min-width:120px}
+.filter-label{font-size:10px;color:#cbd5e1;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+select,input[type=text]{background:#1e293b;border:1px solid var(--border);color:#f1f5f9;padding:6px 10px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:13px;outline:none;cursor:pointer;min-width:120px}
+select option{background:#1e293b;color:#f1f5f9}
+input[type=text]::placeholder{color:#94a3b8}
 select:focus,input:focus{border-color:var(--accent)}
+.gp-btn{display:inline-flex;align-items:center;gap:3px;margin-left:8px;padding:2px 8px;border-radius:5px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35);color:#f87171;text-decoration:none;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;white-space:nowrap;transition:all .15s}
+.gp-btn:hover{background:rgba(239,68,68,.22);border-color:rgba(239,68,68,.6);color:#fca5a5}
 .filter-group{display:flex;align-items:center;gap:6px}
 .reset-btn{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#fca5a5;padding:6px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:1px;font-family:'Barlow Condensed',sans-serif}
 .reset-btn:hover{background:rgba(239,68,68,.2)}
@@ -65,12 +69,47 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
 .pos-ARMADOR{background:rgba(245,158,11,.15);color:#fcd34d}
 .pos-LIBERO{background:rgba(6,182,212,.15);color:#22d3ee}
 .pos-OTRO{background:rgba(100,116,139,.15);color:#94a3b8}
+.pos-OUTSIDE{background:rgba(249,115,22,.15);color:#fb923c}
+.pos-OPPOSITE{background:rgba(34,197,94,.15);color:#4ade80}
+.pos-MIDDLE{background:rgba(129,140,248,.15);color:#a5b4fc}
+.pos-SETTER{background:rgba(245,158,11,.15);color:#fcd34d}
 .eff-val{font-family:'Bebas Neue',sans-serif;font-size:14px}
 .pos-eff{color:#22c55e}.neg-eff{color:#ef4444}.neu-eff{color:#64748b}
 .no-data{text-align:center;padding:48px;color:var(--muted);font-size:13px;letter-spacing:1px}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:rgba(255,255,255,.02)}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
+/* SKILL RANKING TABLE */
+.skill-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.skill-pill{padding:8px 15px;border-radius:9px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .15s;white-space:nowrap}
+.skill-pill:hover{color:var(--text);border-color:rgba(255,255,255,.22)}
+.skill-pill.active{background:#3b82f6;color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(59,130,246,.35)}
+#teams-table th,#teams-table td{text-align:center}
+#teams-table th:nth-child(2),#teams-table td:nth-child(2){text-align:left}
+#teams-table td.active-col,#teams-table th.active-col{background:rgba(59,130,246,.12)}
+#teams-table th.active-col{color:#93c5fd}
+#teams-table tbody tr.is-nafels{background:rgba(34,197,94,.09)}
+#teams-table tbody tr.is-nafels:hover{background:rgba(34,197,94,.14)}
+#teams-table tbody tr.is-nafels td{border-top:1px solid rgba(34,197,94,.25);border-bottom:1px solid rgba(34,197,94,.25)}
+.t-name{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.5px;text-decoration:none}
+.t-rank{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#475569}
+.t-rank.r1{color:#fcd34d}
+.tval{font-family:'Bebas Neue',sans-serif;font-size:21px;line-height:1}
+.ttot{font-size:10px;color:#64748b;margin-left:4px}
+.rank-legend{margin-top:12px;font-size:11px;color:#64748b;letter-spacing:.3px}
+.rank-legend .lg-tot{color:#475569}
+/* PLAYERS RANKING (sección 8) */
+.sub-pills{margin-top:-6px;margin-bottom:18px}
+.sub-pills .skill-pill{padding:5px 12px;font-size:11px;border-radius:7px}
+.sub-pills .skill-pill.active{background:#6366f1;box-shadow:0 3px 10px rgba(99,102,241,.35)}
+#players-table th,#players-table td{text-align:center;white-space:nowrap}
+#players-table th:nth-child(2),#players-table td:nth-child(2){text-align:left}
+#players-table td.active-col,#players-table th.active-col{background:rgba(99,102,241,.12)}
+#players-table th.active-col{color:#a5b4fc}
+#players-table tbody tr.is-nafels{background:rgba(34,197,94,.09)}
+#players-table tbody tr.is-nafels:hover{background:rgba(34,197,94,.14)}
+#players-table tbody tr.is-nafels td{border-top:1px solid rgba(34,197,94,.22);border-bottom:1px solid rgba(34,197,94,.22)}
+#players-table tbody tr:hover{background:rgba(255,255,255,.025)}
 </style>
 </head>
 <body>
@@ -103,8 +142,11 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
     <span class="filter-label">Posición</span>
     <select id="f-pos">
       <option value="">Todas</option>
-      <option>PUNTA</option><option>OPUESTO</option><option>CENTRAL</option>
-      <option>ARMADOR</option><option>LIBERO</option>
+      <option value="OUTSIDE">Punta</option>
+      <option value="OPPOSITE">Opuesto</option>
+      <option value="MIDDLE">Central</option>
+      <option value="SETTER">Armador</option>
+      <option value="LIBERO">Líbero</option>
     </select>
   </div>
   <div class="filter-group">
@@ -112,8 +154,9 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
     <input type="text" id="f-search" placeholder="Nombre..." style="min-width:140px">
   </div>
   <div class="filter-group">
-    <span class="filter-label">Mín. ataques</span>
+    <span class="filter-label">Mín. acciones</span>
     <select id="f-min-atk">
+      <option value="20">20+</option>
       <option value="0">Sin mínimo</option>
       <option value="50">50+</option><option value="100">100+</option>
       <option value="200">200+</option><option value="300">300+</option>
@@ -123,39 +166,32 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
   <span class="results-count" id="results-count"></span>
 </div>
 <div class="panel active" id="panel-equipos">
-  <div class="section-title">RANKING EQUIPOS NLA 2025/26</div>
-  <div class="ranking-grid" id="team-ranking"></div>
+  <div class="section-title">RANKING EQUIPOS NLA — ELEGÍ UN FUNDAMENTO PARA ORDENAR</div>
+  <div class="skill-pills" id="skill-pills"></div>
+  <div class="table-wrap">
+    <table id="teams-table">
+      <thead id="teams-thead"></thead>
+      <tbody id="teams-tbody"></tbody>
+    </table>
+  </div>
+  <div class="rank-legend">Cada celda: <b>EFF%</b> <span class="lg-tot">(total de acciones)</span> · color = ranking en ese fundamento (<span style="color:#22c55e">verde</span> mejor → <span style="color:#ef4444">rojo</span> peor) · <span style="color:#22c55e;font-weight:700">Näfels</span> resaltado. <span id="updated-label" style="color:#475569"></span></div>
 </div>
 <div class="panel" id="panel-jugadores">
+  <div class="section-title">RANKING JUGADORES NLA — ELEGÍ UN FUNDAMENTO</div>
+  <div class="skill-pills" id="player-skills"></div>
+  <div class="skill-pills sub-pills" id="player-subs"></div>
   <div class="table-wrap">
     <table id="players-table">
-      <thead><tr>
-        <th data-col="name">Jugador</th>
-        <th data-col="team">Equipo</th>
-        <th data-col="pos_label">Pos</th>
-        <th data-col="atk_tot" class="col-group-atk">ATK</th>
-        <th data-col="atk_eff" class="col-group-atk">EFF%</th>
-        <th data-col="atk_k" class="col-group-atk">%Kill</th>
-        <th data-col="atk_e" class="col-group-atk">%Err</th>
-        <th data-col="atk_so_eff" class="col-group-atk">SO%</th>
-        <th data-col="atk_tr_eff" class="col-group-atk">TR%</th>
-        <th data-col="srv_tot" class="col-group-srv">SRV</th>
-        <th data-col="srv_eff" class="col-group-srv">EFF%</th>
-        <th data-col="srv_ace" class="col-group-srv">%Ace</th>
-        <th data-col="srv_q_eff" class="col-group-srv">SQ%</th>
-        <th data-col="srv_m_eff" class="col-group-srv">SM%</th>
-        <th data-col="rec_tot" class="col-group-rec">REC</th>
-        <th data-col="rec_eff" class="col-group-rec">EFF%</th>
-        <th data-col="rec_perf" class="col-group-rec">%Perf</th>
-        <th data-col="blk_tot" class="col-group-blk">BLK</th>
-        <th data-col="blk_eff" class="col-group-blk">EFF%</th>
-      </tr></thead>
+      <thead id="players-thead"></thead>
       <tbody id="players-tbody"></tbody>
     </table>
   </div>
+  <div class="rank-legend">La columna <b>EFF%</b> manda el ranking <span class="lg-tot">(entre paréntesis: total de acciones del fundamento elegido)</span> · color = ranking en ese corte (<span style="color:#22c55e">verde</span> mejor → <span style="color:#ef4444">rojo</span> peor) · <span style="color:#22c55e;font-weight:700">Näfels</span> resaltado · filtrá por posición para comparar like-with-like.</div>
 </div>
 <script>
 /*__DATA_PLACEHOLDER__*/
+var SEASONS=[];
+
 
 var TEAM_COLORS={
   'Nafels':'#22c55e','Amriswil':'#3b82f6','Schonenwerd':'#f97316',
@@ -189,7 +225,9 @@ function getF(){
   el.addEventListener('input',render);el.addEventListener('change',render);
 });
 document.getElementById('reset-btn').addEventListener('click',function(){
-  ['f-team','f-pos','f-min-atk'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('f-team').value='';
+  document.getElementById('f-pos').value='';
+  document.getElementById('f-min-atk').value='20';
   document.getElementById('f-search').value='';
   render();
 });
@@ -198,10 +236,9 @@ function filterP(data){
   var f=getF();
   return data.filter(function(p){
     if(f.team&&p.team!==f.team)return false;
-    if(f.temporada&&p.temporada!==f.temporada)return false;
+    if(f.temporada&&p.temporada!==f.temporada&&p.temporada!=='all')return false;
     if(f.pos&&p.pos_label!==f.pos)return false;
     if(f.search&&!p.name.toLowerCase().includes(f.search)&&!p.team.toLowerCase().includes(f.search))return false;
-    if(f.minAtk&&(p.atk_tot||0)<f.minAtk)return false;
     return true;
   });
 }
@@ -227,109 +264,204 @@ function fmtN(v){
   return '<span style="color:#cbd5e1;font-weight:600">'+v+'</span>';
 }
 
-// TEAM RANKING
-function renderTeams(){
-  var f=getF();
-  var sorted=TEAMS.slice().sort(function(a,b){return(b.atk_eff||0)-(a.atk_eff||0);});
-  var cont=document.getElementById('team-ranking');
+// TEAM RANKING (tabla rankeada por fundamento)
+var METRICS=[
+  {key:'srv',  eff:'srv_eff', tot:'srv_tot', label:'Saque'},
+  {key:'rec',  eff:'rec_eff', tot:'rec_tot', label:'Recepción'},
+  {key:'blk',  eff:'blk_pt',  tot:'blk_tot', label:'Bloqueo #'},
+  {key:'alta', eff:'atk_alta',tot:'alta_tot',label:'Atq Alta'},
+  {key:'cent', eff:'atk_cent',tot:'cent_tot',label:'Atq Central'},
+  {key:'rap',  eff:'atk_rap', tot:'rap_tot', label:'Atq Rápida'},
+  {key:'so',   eff:'atk_so',  tot:'so_tot',  label:'Side-out #+'},
+  {key:'tr',   eff:'atk_tr',  tot:'tr_tot',  label:'Transición'}
+];
+var activeMetric='so';
+function _hexc(h){return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];}
+function _lerpc(a,b,t){var A=_hexc(a),B=_hexc(b);return 'rgb('+A.map(function(x,i){return Math.round(x+(B[i]-x)*t);}).join(',')+')';}
+function rankColor(frac){return frac<=0.5?_lerpc('#22c55e','#fbbf24',frac*2):_lerpc('#fbbf24','#ef4444',(frac-0.5)*2);}
+
+function buildSkillPills(){
+  var cont=document.getElementById('skill-pills'); if(!cont) return;
   cont.innerHTML='';
-  sorted.forEach(function(t,i){
-    if(f.team&&t.team!==f.team)return;
-    var c=TEAM_COLORS[t.team]||'#3b82f6';
-    var metrics=[
-      {l:'ATK EFF',v:t.atk_eff,r:false},{l:'SRV EFF',v:t.srv_eff,r:false},
-      {l:'REC EFF',v:t.rec_eff,r:true},{l:'BLK EFF',v:t.blk_eff,r:true},
-    ].map(function(m){
-      var vc=effC(m.v,m.r);
-      var fmt=m.v!=null?(m.v>=0?'+':'')+m.v.toFixed(1)+'%':'—';
-      return '<div class="metric"><div class="metric-label">'+m.l+'</div>'
-            +'<div class="metric-val eff-val" style="color:'+vc+'">'+fmt+'</div></div>';
-    }).join('');
-    var totals=[
-      {l:'ATK tot',v:t.atk_tot},{l:'SRV tot',v:t.srv_tot},
-      {l:'REC tot',v:t.rec_tot},{l:'BLK tot',v:t.blk_tot},
-    ].map(function(m){
-      return '<div class="metric"><div class="metric-label">'+m.l+'</div>'
-            +'<div class="metric-val eff-val" style="color:#94a3b8">'+(m.v||0)+'</div></div>';
-    }).join('');
-    var card=document.createElement('div');
-    card.className='team-card';
-    card.style.setProperty('--tc',c);
-    var slug=t.team.toLowerCase().replace(/ /g,'_');
-    var hmLinks='<div style="display:flex;gap:5px;margin-top:12px;flex-wrap:wrap">'
-      +'<a href="hm_ataque.html?equipo='+slug+'" style="flex:1;text-align:center;padding:6px;border-radius:6px;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.25);color:#fb923c;text-decoration:none;font-size:10px;font-weight:700;letter-spacing:.5px">⚡ ATK</a>'
-      +'<a href="hm_saque.html?equipo='+slug+'" style="flex:1;text-align:center;padding:6px;border-radius:6px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#4ade80;text-decoration:none;font-size:10px;font-weight:700;letter-spacing:.5px">🎯 SAQ</a>'
-      +'<a href="hm_recepcion.html?equipo='+slug+'" style="flex:1;text-align:center;padding:6px;border-radius:6px;background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.25);color:#a5b4fc;text-decoration:none;font-size:10px;font-weight:700;letter-spacing:.5px">🛡️ REC</a>'
-      +'<a href="hm_armador.html?equipo='+slug+'" style="flex:1;text-align:center;padding:6px;border-radius:6px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:#fcd34d;text-decoration:none;font-size:10px;font-weight:700;letter-spacing:.5px">🎱 ARM</a>'
-      +'<a href="game_plan.html?rival='+slug+'" style="flex:1;text-align:center;padding:6px;border-radius:6px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:#f87171;text-decoration:none;font-size:10px;font-weight:700;letter-spacing:.5px">📋 PLAN</a>'
-      +'</div>';
-    card.innerHTML='<div class="team-rank">'+(i+1)+'</div>'
-      +'<div class="team-name" style="color:'+c+'">'+t.team.toUpperCase()+'</div>'
-      +'<div class="metrics-grid">'+metrics+totals+'</div>'
-      +hmLinks;
-    cont.appendChild(card);
+  METRICS.forEach(function(m){
+    var b=document.createElement('div');
+    b.className='skill-pill'+(m.key===activeMetric?' active':'');
+    b.textContent=m.label;
+    b.addEventListener('click',function(){activeMetric=m.key;buildSkillPills();renderTeams();});
+    cont.appendChild(b);
   });
 }
 
-// PLAYER TABLE
-function renderPlayers(){
-  var data=filterP(PLAYERS);
-  data.sort(function(a,b){
-    var av=a[sortState.col],bv=b[sortState.col];
-    if(av==null&&bv==null)return 0;
-    if(av==null)return 1;if(bv==null)return -1;
-    return sortState.dir*(typeof av==='string'?av.localeCompare(bv):av-bv);
+function teamSeason(){var el=document.getElementById('f-temporada');var v=el?el.value:'';return v||SEASONS[SEASONS.length-1]||'';}
+function renderTeams(){
+  var f=getF();
+  var season=teamSeason();
+  var seasonTeams=TEAMS.filter(function(t){return t.temporada===season;});
+  var rows=seasonTeams.filter(function(t){return !f.team||t.team===f.team;});
+  // ranking-frac por columna (dentro de la temporada)
+  var fracByMetric={};
+  METRICS.forEach(function(m){
+    var vals=seasonTeams.map(function(t){return t[m.eff];}).filter(function(v){return v!=null;}).slice().sort(function(a,b){return b-a;});
+    var fr={};
+    seasonTeams.forEach(function(t){
+      var v=t[m.eff];
+      if(v==null){fr[t.team]=null;return;}
+      var idx=vals.indexOf(v);
+      fr[t.team]=vals.length>1?idx/(vals.length-1):0;
+    });
+    fracByMetric[m.key]=fr;
   });
-  document.getElementById('results-count').textContent=data.length+' jugadores';
-  var tbody=document.getElementById('players-tbody');
-  if(!data.length){
-    tbody.innerHTML='<tr><td colspan="19" class="no-data">Sin resultados con los filtros actuales</td></tr>';
+  var am=METRICS.filter(function(m){return m.key===activeMetric;})[0]||METRICS[0];
+  rows.sort(function(a,b){var av=a[am.eff],bv=b[am.eff];if(av==null)return 1;if(bv==null)return -1;return bv-av;});
+
+  var thead=document.getElementById('teams-thead');
+  thead.innerHTML='<tr><th>#</th><th>Equipo</th>'+METRICS.map(function(m){
+    return '<th class="'+(m.key===activeMetric?'active-col':'')+'">'+m.label+'</th>';
+  }).join('')+'</tr>';
+
+  var tbody=document.getElementById('teams-tbody');
+  if(!rows.length){
+    tbody.innerHTML='<tr><td colspan="10" class="no-data">Todavía no hay partidos cargados en la temporada '+season+'. Apenas se cargue el primer DVW, aparece acá automáticamente.</td></tr>';
     return;
   }
-  tbody.innerHTML=data.map(function(p){
-    var tc=TEAM_COLORS[p.team]||'#64748b';
-    var g=['col-group-atk','col-group-atk','col-group-atk','col-group-atk','col-group-atk','col-group-atk',
-           'col-group-srv','col-group-srv','col-group-srv','col-group-srv','col-group-srv',
-           'col-group-rec','col-group-rec','col-group-rec',
-           'col-group-blk','col-group-blk'];
-    return '<tr>'
-      +'<td><span style="font-weight:700">#'+p.num+'</span> <span style="color:#e2e8f0">'+p.name+'</span></td>'
-      +'<td><span style="display:inline-block;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;background:'+tc+'22;color:'+tc+'">'+p.team+'</span></td>'
-      +'<td><span class="pos-badge pos-'+p.pos_label+'">'+p.pos_label+'</span></td>'
-      +'<td class="col-group-atk">'+fmtN(p.atk_tot)+'</td>'
-      +'<td class="col-group-atk">'+fmtEff(p.atk_eff,false)+'</td>'
-      +'<td class="col-group-atk">'+fmtPct(p.atk_k)+'</td>'
-      +'<td class="col-group-atk">'+fmtPct(p.atk_e)+'</td>'
-      +'<td class="col-group-atk">'+fmtEff(p.atk_so_eff,false)+'</td>'
-      +'<td class="col-group-atk">'+fmtEff(p.atk_tr_eff,false)+'</td>'
-      +'<td class="col-group-srv">'+fmtN(p.srv_tot)+'</td>'
-      +'<td class="col-group-srv">'+fmtEff(p.srv_eff,false)+'</td>'
-      +'<td class="col-group-srv">'+fmtPct(p.srv_ace)+'</td>'
-      +'<td class="col-group-srv">'+fmtEff(p.srv_q_eff,false)+'</td>'
-      +'<td class="col-group-srv">'+fmtEff(p.srv_m_eff,false)+'</td>'
-      +'<td class="col-group-rec">'+fmtN(p.rec_tot)+'</td>'
-      +'<td class="col-group-rec">'+fmtEff(p.rec_eff,true)+'</td>'
-      +'<td class="col-group-rec">'+fmtPct(p.rec_perf)+'</td>'
-      +'<td class="col-group-blk">'+fmtN(p.blk_tot)+'</td>'
-      +'<td class="col-group-blk">'+(p.blk_eff!=null?'<span class="eff-val" style="color:'+effC(p.blk_eff,true)+'">'+p.blk_eff.toFixed(1)+'%</span>':'<span style="color:#334155">—</span>')+'</td>'
-      +'</tr>';
+  tbody.innerHTML=rows.map(function(t,i){
+    var c=TEAM_COLORS[t.team]||'#3b82f6';
+    var slug=t.team.toLowerCase().replace(/ /g,'_');
+    var isNaf=t.team==='Nafels';
+    var cells=METRICS.map(function(m){
+      var v=t[m.eff], tot=t[m.tot]||0;
+      var col=v==null?'#475569':rankColor(fracByMetric[m.key][t.team]);
+      var val=v==null?'—':((v>0&&m.key==='srv')?'+':'')+v+'%';
+      return '<td class="'+(m.key===activeMetric?'active-col':'')+'">'
+        +'<span class="tval" style="color:'+col+'">'+val+'</span>'
+        +'<span class="ttot">('+tot+')</span></td>';
+    }).join('');
+    return '<tr class="'+(isNaf?'is-nafels':'')+'">'
+      +'<td><span class="t-rank'+(i===0?' r1':'')+'">'+(i+1)+'</span></td>'
+      +'<td><span class="t-name" style="color:'+c+'">'+t.team.toUpperCase()+'</span><a class="gp-btn" href="game_plan.html?rival='+slug+'" title="Abrir game plan de '+t.team+'">📋 Plan</a></td>'
+      +cells+'</tr>';
   }).join('');
 }
 
-// Sort headers
-document.querySelectorAll('thead th[data-col]').forEach(function(th){
-  th.addEventListener('click',function(){
-    var col=th.dataset.col;
-    if(sortState.col===col){sortState.dir*=-1;}
-    else{sortState.col=col;sortState.dir=-1;}
-    document.querySelectorAll('thead th').forEach(function(h){h.classList.remove('sort-asc','sort-desc');});
-    th.classList.add(sortState.dir===-1?'sort-desc':'sort-asc');
-    renderPlayers();
+// PLAYER SKILL RANKING (sección 8)
+var PSKILLS=[
+  {key:'srv',label:'Saque',rec:false,subs:[
+    {key:'m',  label:'Flotado', eff:'srv_m_eff',tot:'srv_m_tot'},
+    {key:'q',  label:'Potencia',eff:'srv_q_eff',tot:'srv_q_tot'},
+    {key:'all',label:'Total',   eff:'srv_eff',  tot:'srv_tot'}
+  ],cols:[{h:'Ace%',k:'srv_ace'},{h:'Err%',k:'srv_e'}]},
+  {key:'rec',label:'Recepción',rec:true,subs:[
+    {key:'m',  label:'Flotado', eff:'rec_m_eff',tot:'rec_m_tot'},
+    {key:'q',  label:'Potencia',eff:'rec_q_eff',tot:'rec_q_tot'},
+    {key:'all',label:'Total',   eff:'rec_eff',  tot:'rec_tot'}
+  ],cols:[{h:'Perf%',k:'rec_perf'},{h:'Pos%',k:'rec_pos'},{h:'Err%',k:'rec_e'}]},
+  {key:'atk',label:'Ataque',rec:false,subs:[
+    {key:'so', label:'Side-out',  eff:'atk_so_eff',tot:'atk_so_tot'},
+    {key:'tr', label:'Transición',eff:'atk_tr_eff',tot:'atk_tr_tot'},
+    {key:'all',label:'Total',     eff:'atk_eff',   tot:'atk_tot'}
+  ],cols:[{h:'Kill%',k:'atk_k'},{h:'Err%',k:'atk_e'},{h:'Bloq%',k:'atk_bl'}]},
+  {key:'blk',label:'Bloqueo',rec:true,subs:null,eff:'blk_eff',tot:'blk_tot',
+   cols:[{h:'Punto%',k:'blk_k'},{h:'Pos%',k:'blk_pos'}]},
+  {key:'def',label:'Defensa',rec:true,subs:null,eff:'def_eff',tot:'def_tot',
+   cols:[{h:'Perf%',k:'def_perf'},{h:'Pos%',k:'def_pos'},{h:'Err%',k:'def_e'}]}
+];
+var pSkill='atk', pSub={srv:'all',rec:'all',atk:'all'};
+function curSkill(){return PSKILLS.filter(function(s){return s.key===pSkill;})[0];}
+function curMetric(){
+  var s=curSkill();
+  if(!s.subs) return {eff:s.eff,tot:s.tot,rec:s.rec};
+  var sub=s.subs.filter(function(x){return x.key===(pSub[s.key]||'all');})[0]||s.subs[s.subs.length-1];
+  return {eff:sub.eff,tot:sub.tot,rec:s.rec};
+}
+
+function buildPlayerPills(){
+  var sc=document.getElementById('player-skills'); if(!sc)return;
+  sc.innerHTML='';
+  PSKILLS.forEach(function(s){
+    var b=document.createElement('div');
+    b.className='skill-pill'+(s.key===pSkill?' active':'');
+    b.textContent=s.label;
+    b.addEventListener('click',function(){pSkill=s.key;buildPlayerPills();renderPlayers();});
+    sc.appendChild(b);
   });
-});
+  var sub=document.getElementById('player-subs'); sub.innerHTML='';
+  var cs=curSkill();
+  if(cs.subs){
+    sub.style.display='flex';
+    cs.subs.forEach(function(x){
+      var b=document.createElement('div');
+      b.className='skill-pill'+((pSub[cs.key]||'all')===x.key?' active':'');
+      b.textContent=x.label;
+      b.addEventListener('click',function(){pSub[cs.key]=x.key;buildPlayerPills();renderPlayers();});
+      sub.appendChild(b);
+    });
+  } else { sub.style.display='none'; }
+}
+
+// PLAYER TABLE — rankeada por el fundamento activo
+function renderPlayers(){
+  var s=curSkill(), m=curMetric(), f=getF();
+  var minA=parseInt(document.getElementById('f-min-atk').value)||0;
+  // solo jugadores con datos en este fundamento (compara like-with-like)
+  var data=filterP(PLAYERS).filter(function(p){
+    return p[m.eff]!=null && (p[m.tot]||0)>=Math.max(minA,1);
+  });
+  data.sort(function(a,b){return (b[m.eff]) - (a[m.eff]);});
+  document.getElementById('results-count').textContent=data.length+' jugadores · '+s.label+(s.subs?' ('+(curSkill().subs.filter(function(x){return x.key===(pSub[s.key]||'all');})[0].label)+')':'');
+
+  // header dinámico
+  var thead=document.getElementById('players-thead');
+  thead.innerHTML='<tr><th>#</th><th>Jugador</th><th>Equipo</th><th>Pos</th>'
+    +'<th class="active-col">EFF%</th><th>Acc.</th>'
+    +s.cols.map(function(c){return '<th>'+c.h+'</th>';}).join('')+'</tr>';
+
+  var tbody=document.getElementById('players-tbody');
+  if(!data.length){
+    tbody.innerHTML='<tr><td colspan="'+(6+s.cols.length)+'" class="no-data">Sin jugadores con datos de '+s.label.toLowerCase()+' para estos filtros. Probá bajar el mínimo de acciones o cambiar la posición.</td></tr>';
+    return;
+  }
+  var n=data.length;
+  tbody.innerHTML=data.map(function(p,i){
+    var tc=TEAM_COLORS[p.team]||'#64748b';
+    var pslug=p.team.toLowerCase().replace(/ /g,'_');
+    var frac=n>1?i/(n-1):0;
+    var col=rankColor(frac);
+    var ev=p[m.eff];
+    var evs=((ev>0&&!m.rec)?'+':'')+ev.toFixed(1)+'%';
+    var isNaf=p.team==='Nafels';
+    var rank=i+1;
+    var sec=s.cols.map(function(c){return '<td>'+fmtPct(p[c.k])+'</td>';}).join('');
+    return '<tr class="'+(isNaf?'is-nafels':'')+'">'
+      +'<td><span class="t-rank'+(i===0?' r1':'')+'">'+rank+'</span></td>'
+      +'<td><span style="font-weight:700;color:#64748b">#'+p.num+'</span> <span style="color:#e2e8f0">'+p.name+'</span></td>'
+      +'<td><a href="game_plan.html?rival='+pslug+'" title="Abrir game plan de '+p.team+'" style="text-decoration:none;display:inline-block;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;background:'+tc+'22;color:'+tc+'">'+p.team+'</a><a class="gp-btn" href="game_plan.html?rival='+pslug+'" title="Abrir game plan de '+p.team+'">📋</a></td>'
+      +'<td><span class="pos-badge pos-'+p.pos_label+'">'+p.pos_label+'</span></td>'
+      +'<td class="active-col"><span class="tval" style="color:'+col+'">'+evs+'</span></td>'
+      +'<td><span class="ttot">'+(p[m.tot]||0)+'</span></td>'
+      +sec+'</tr>';
+  }).join('');
+}
 
 function render(){renderTeams();renderPlayers();}
-render();
+function populateSeasons(){
+  var sel=document.getElementById('f-temporada'); if(!sel) return;
+  sel.innerHTML='<option value="">Todas</option>'+SEASONS.map(function(s){return '<option value="'+s+'">'+s+'</option>';}).join('');
+  if(SEASONS.length) sel.value=SEASONS[SEASONS.length-1]; // default: temporada más reciente
+}
+function loadStats(){
+  fetch('nla_stats.json?v='+Date.now()).then(function(r){return r.json();}).then(function(d){
+    TEAMS=d.teams||[]; SEASONS=d.seasons||[];
+    if(d.players&&d.players.length) PLAYERS=d.players;   // sección 8: PLAYERS desacoplados al JSON
+    var lbl=document.getElementById('updated-label');
+    if(lbl&&d.updated) lbl.textContent='· datos actualizados: '+d.updated.replace('T',' ');
+    populateSeasons(); buildSkillPills(); buildPlayerPills(); render();
+  }).catch(function(e){
+    var tb=document.getElementById('teams-tbody');
+    if(tb) tb.innerHTML='<tr><td colspan="10" class="no-data">No se pudo cargar nla_stats.json — verificá que esté publicado en la raíz del sitio.</td></tr>';
+    buildSkillPills(); buildPlayerPills(); renderPlayers();
+  });
+}
+loadStats();
 </script><script src="lang.js" onerror="void 0"></script>
 </body></html>
 

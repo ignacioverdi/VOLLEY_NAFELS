@@ -61,9 +61,9 @@
   <details>
     <summary>⚡ Pegado masivo — cargar todos los links de una</summary>
     <div class="batch">
-      <p>Pegá los links de YouTube <b>en orden de fecha</b> (uno por línea, del más viejo al más nuevo). Se asignan automáticamente a cada partido en orden. Después revisá las miniaturas.</p>
-      <textarea id="batchtxt" placeholder="https://youtu.be/aaaa&#10;https://youtu.be/bbbb&#10;https://youtu.be/cccc"></textarea>
-      <div style="margin-top:8px"><button class="btn" onclick="aplicarBatch()">Asignar por orden de fecha</button></div>
+      <p>Pegá un link de YouTube por línea. Si la línea trae el <b>código del partido</b> (tus títulos de YouTube lo tienen, ej. <b>636595</b>), se empareja solo con ese partido — no importa el orden. Los links sin código se reparten por fecha entre los partidos que estén vacíos. Después <b>revisá las miniaturas</b>.</p>
+      <textarea id="batchtxt" placeholder="2025 10 22 03 28 636595  https://youtu.be/aaaa&#10;636588  https://youtu.be/bbbb&#10;https://youtu.be/cccc  (sin código → va por orden)"></textarea>
+      <div style="margin-top:8px"><button class="btn" onclick="aplicarBatch()">🔗 Emparejar automáticamente</button></div>
     </div>
   </details>
 
@@ -77,10 +77,15 @@
 
   <div id="list"></div>
 
-  <script src="datos_video.js"></script>
-  <script src="mapa_videos.js"></script>
-  <script src="datos_video_ent.js" onerror="void 0"></script>
-  <script src="mapa_videos_ent.js" onerror="void 0"></script>
+  <script src="datos_video_25-26.js?v=3" onerror="void 0"></script>
+  <script src="datos_video_26-27.js?v=3" onerror="void 0"></script>
+  <script src="datos_video_27-28.js?v=3" onerror="void 0"></script>
+  <script src="datos_video_28-29.js?v=3" onerror="void 0"></script>
+  <script src="datos_video_ent_25-26.js?v=3" onerror="void 0"></script>
+  <script src="datos_video_ent_26-27.js?v=3" onerror="void 0"></script>
+  <script src="datos_video_ent_27-28.js?v=3" onerror="void 0"></script>
+  <script src="mapa_videos.js?v=3" onerror="void 0"></script>
+  <script src="mapa_videos_ent.js?v=3" onerror="void 0"></script>
   <script>
   (function(){
     var MODO = (localStorage.getItem('cargar_video_modo')==='ent') ? 'ent' : 'partido';
@@ -109,12 +114,12 @@
     codes.forEach(function(c){
       var m = VD[c];
       var cur = (draft[c]!==undefined ? draft[c] : (MAP[c]||''));
-      var side = m.side==='home' ? 'local' : (m.side==='visiting'?'visita':'');
+      var label = (m.homeName||'?')+" vs "+(m.awayName||'?');
       var row = document.createElement('div'); row.className='row'; row.dataset.code=c;
       row.innerHTML =
         "<div class='date'>"+fmtDate(m.date)+"</div>"+
         "<div class='thumbwrap'></div>"+
-        "<div class='opp'>vs "+(m.opponent||'Rival')+(side?"<span class='side'>"+side+"</span>":"")+
+        "<div class='opp'>"+label+
           "<small>c\u00f3d "+c+" \u00b7 "+(m.actions?m.actions.length:0)+" acciones</small></div>"+
         "<div class='icell'><input data-code='"+c+"' placeholder='Peg\u00e1 el link de YouTube\u2026' value=\""+String(cur).replace(/"/g,'')+"\"><div class='vshow'></div></div>"+
         "<div class='dot'></div>";
@@ -160,12 +165,36 @@
     refresh();
 
     window.aplicarBatch=function(){
-      var links = document.getElementById('batchtxt').value.split(/\n+/).map(function(s){return s.trim();}).filter(Boolean);
-      var rows = list.querySelectorAll('.row');
-      links.forEach(function(lk,idx){ if(rows[idx]){ var inp=rows[idx].querySelector('input'); inp.value=lk; renderRow(rows[idx]); } });
+      var lines = document.getElementById('batchtxt').value.split(/\n+/).map(function(s){return s.trim();}).filter(Boolean);
+      var rows = Array.prototype.slice.call(list.querySelectorAll('.row'));
+      var byCode={}, valid={};
+      rows.forEach(function(r){ byCode[r.dataset.code]=r; valid[r.dataset.code]=true; });
+      var nCode=0, nOrden=0, pend=[], sinLink=0;
+      // 1) por código: busco un número de 6 dígitos que sea un partido válido en cada línea
+      lines.forEach(function(ln){
+        var id=ytId(ln);
+        if(!id){ sinLink++; return; }
+        var nums=(ln.match(/\d{6}/g)||[]); var hit=null;
+        nums.forEach(function(num){ if(!hit && valid[num]) hit=num; });
+        if(hit){ var inp=byCode[hit].querySelector('input'); inp.value='https://youtu.be/'+id; renderRow(byCode[hit]); nCode++; }
+        else pend.push('https://youtu.be/'+id);
+      });
+      // 2) los que no traían código -> filas vacías, en orden de fecha
+      if(pend.length){
+        rows.forEach(function(r){
+          if(!pend.length) return;
+          var inp=r.querySelector('input');
+          if(!ytId(inp.value.trim())){ inp.value=pend.shift(); renderRow(r); nOrden++; }
+        });
+      }
       refresh(); saveDraft();
-      document.getElementById('msg').textContent='\u2713 '+links.length+' links asignados por fecha';
-      setTimeout(function(){document.getElementById('msg').textContent='';},4000);
+      var msg='\u2713 '+nCode+' por c\u00f3digo';
+      if(nOrden) msg+=' \u00b7 '+nOrden+' por orden (filas vac\u00edas)';
+      if(pend.length) msg+=' \u00b7 \u26a0\ufe0f sobraron '+pend.length+' links (no entraron)';
+      if(sinLink) msg+=' \u00b7 '+sinLink+' l\u00edneas sin link v\u00e1lido';
+      msg+='. Revis\u00e1 las miniaturas \u2193';
+      document.getElementById('msg').textContent=msg;
+      setTimeout(function(){document.getElementById('msg').textContent='';},9000);
     };
 
     function build(){
