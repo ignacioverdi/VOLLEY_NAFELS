@@ -17,7 +17,7 @@ Uso:
 """
 import os,re,sys,json,glob,unicodedata
 
-DATA_VERSION = 3
+DATA_VERSION = 4
 
 def fix_enc(x):
     # Los DVW pueden venir en UTF-8 leido como latin-1 (mojibake "NÃ¤fels"). Lo corrige.
@@ -123,13 +123,14 @@ def parse_dvw(path, ent=False):
             ev=code0[5] if len(code0)>5 else ''
             a={'t':t,'num':num,'name':pmap[num],'skill':sk,'sk':SK.get(sk,sk),
                'ev':ev,'set':c[8] if len(c)>8 else '','tm':tslug}
-            if sk=='A':
-                cb=code0[6:8]
-                if cb and cb[0] in 'XVPC' and '~' not in cb: a['x']=cb
-                # zona origen (oz) / destino (dz) — mismo criterio que el parser de stats
+            # zonas origen/destino (oz/dz): ataque, defensa, bloqueo, freeball
+            if sk in ('A','D','B','F'):
                 _rest=code0[6:]; _tp=_rest.split('~'); _traj=_tp[1] if len(_tp)>1 else ''
                 if _traj and len(_traj)>0 and _traj[0].isdigit(): a['oz']=int(_traj[0])
                 if _traj and len(_traj)>1 and _traj[1].isdigit(): a['dz']=int(_traj[1])
+            if sk=='A':
+                cb=code0[6:8]
+                if cb and cb[0] in 'XVPC' and '~' not in cb: a['x']=cb
                 # fase: SO si saco el rival, TR si sacamos nosotros
                 _ss=_srv_side[_li] if _li<len(_srv_side) else ''
                 if _ss: a['ph']='SO' if _ss!=sidech else 'TR'

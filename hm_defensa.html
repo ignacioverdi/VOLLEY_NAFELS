@@ -41,6 +41,21 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 .leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
 .nodata{color:var(--muted);font-size:13px;padding:50px 20px;text-align:center}
 .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.acc-group{border:1px solid var(--border);border-radius:10px;margin-bottom:6px;margin-top:6px;overflow:hidden}
+.acc-header{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;cursor:pointer;user-select:none;background:rgba(255,255,255,.02);transition:background .12s;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.acc-header:hover{background:rgba(255,255,255,.05);color:var(--text)}
+.acc-header.active{color:var(--text)}
+.acc-arrow{font-size:12px;transition:transform .2s;flex-shrink:0}
+.acc-header.active .acc-arrow{transform:rotate(90deg)}
+.acc-dot{width:6px;height:6px;border-radius:50%;background:var(--red);margin-left:4px;display:none;flex-shrink:0}
+.acc-header.has-filter .acc-dot{display:inline-block}
+.acc-body{display:none;padding:10px 10px 12px;background:rgba(0,0,0,.15)}
+.acc-header.active+.acc-body{display:block}
+.fsel{width:100%;background:var(--card2);border:1px solid var(--border2);color:var(--text);padding:7px 10px;border-radius:8px;font-family:"Barlow Condensed",sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:6px}
+.fsel:last-child{margin-bottom:0}
+.fsel option{background:#0D0E1A}
+.reset-btn{width:100%;margin-top:10px;background:rgba(232,25,44,.08);border:1px solid rgba(232,25,44,.3);color:var(--red);padding:9px;border-radius:8px;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:12px;letter-spacing:1px;cursor:pointer;text-transform:uppercase}
+.reset-btn:hover{background:rgba(232,25,44,.14)}
 @media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{position:static;height:auto}.g4{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
@@ -51,14 +66,25 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 </div>
 <div class="layout">
   <div class="sidebar">
-    <div class="flabel">Jugador</div>
+    <div class="flabel" style="margin-top:0">Jugador</div>
     <select class="psel" id="psel" onchange="onPlayer(this.value)"><option value="">Seleccionar…</option></select>
     <button id="ver-video-btn" class="vbtn" onclick="abrirVideo()">🎬 VER VIDEO DE ESTAS DEFENSAS</button>
-    <div class="flabel">Rival</div><div class="chips" id="f-rival"></div>
-    <div class="flabel">Partido específico</div><div class="chips" id="f-gi"></div>
-    <div class="flabel">Set</div><div class="chips" id="f-set"></div>
-    <div class="flabel">Valoración</div><div class="chips" id="f-res"></div>
+    <div class="acc-group"><div class="acc-header" id="acc-hdr-partido" onclick="accToggle('partido')"><span>Partido</span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
+    <div class="acc-body" id="acc-body-partido">
+      <div class="flabel" style="margin-top:0">Rival</div>
+      <select class="fsel" id="fsel-rival"><option value="all">Todos</option></select>
+      <div class="flabel">Partido específico</div>
+      <select class="fsel" id="fsel-gi"><option value="all">Todos</option></select>
+    </div></div>
+    <div class="acc-group"><div class="acc-header" id="acc-hdr-contexto" onclick="accToggle('contexto')"><span>Contexto</span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
+    <div class="acc-body" id="acc-body-contexto">
+      <div class="flabel" style="margin-top:0">Set</div>
+      <select class="fsel" id="fsel-set"><option value="all">Todos</option></select>
+      <div class="flabel">Valoración</div>
+      <select class="fsel" id="fsel-res"><option value="all">Todas</option></select>
+    </div></div>
     <div class="counter"><div class="counter-n" id="cnt">0</div><div class="counter-l">defensas mostradas</div></div>
+    <button class="reset-btn" onclick="resetF()">Limpiar filtros</button>
   </div>
   <div class="content" id="content"><div class="nodata">Elegí un jugador para ver su defensa</div></div>
 </div>
@@ -93,10 +119,13 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   Object.values(PLAYERS).sort(function(a,b){return b.acts.length-a.acts.length;}).forEach(function(p){
     var o=document.createElement('option'); o.value=p.num; o.textContent='#'+parseInt(p.num,10)+' · '+p.name+' ('+p.acts.length+')'; psel.appendChild(o);
   });
-  function chipset(el,items,key){
-    var box=$(el);
-    box.innerHTML=items.map(function(it){ return "<span class='chip"+(F[key]===it[0]?' on':'')+"' data-v='"+it[0]+"'>"+it[1]+"</span>"; }).join('');
-    box.onclick=function(e){ var c=e.target.closest('[data-v]'); if(!c)return; F[key]=c.dataset.v; if(key==='rival'){ F.gi='all'; buildPartidoChips(); } chipset(el,items,key); render(); };
+  function accToggle(id){ var h=$('acc-hdr-'+id); if(!h) return; h.classList.toggle('active'); }
+  window.accToggle=accToggle;
+  function buildSelect(id,opts,key){
+    var el=$(id); if(!el) return;
+    var cur=String(F[key]);
+    el.innerHTML=opts.map(function(o){return '<option value="'+o[0]+'"'+(String(o[0])===cur?' selected':'')+'>'+o[1]+'</option>';}).join('');
+    el.onchange=function(){ F[key]=this.value; if(key==='rival'){ F.gi='all'; } buildFilters(); render(); };
   }
   var _MO=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
   function gamesFor(){
@@ -108,13 +137,18 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
     return list;
   }
   function gLabel(g){ var rs=(g.opp||'').split(' ').slice(-1)[0].substring(0,9); var dl=''; if(g.date){var p=g.date.split('-');try{dl=' ('+parseInt(p[2])+' '+_MO[parseInt(p[1])]+')';}catch(e){}} return rs+dl; }
-  function buildPartidoChips(){ chipset('f-gi',[['all','Todos']].concat(gamesFor().map(function(g){return [g.code,gLabel(g)];})),'gi'); }
-  chipset('f-rival',[['all','Todos']].concat(RIVALS.map(function(r){return [r,r];})),'rival');
-  buildPartidoChips();
-  chipset('f-set',[['all','Todos'],['1','S1'],['2','S2'],['3','S3'],['4','S4'],['5','S5']],'set');
-  chipset('f-res',[['all','Todas']].concat(RES_ORDER.map(function(r){return [r,RES_LABEL[r]];})),'res');
+  function buildFilters(){
+    buildSelect('fsel-rival',[['all','Todos']].concat(RIVALS.map(function(r){return [r,r];})),'rival');
+    buildSelect('fsel-gi',[['all','Todos']].concat(gamesFor().map(function(g){return [g.code,gLabel(g)];})),'gi');
+    buildSelect('fsel-set',[['all','Todos'],['1','S1'],['2','S2'],['3','S3'],['4','S4'],['5','S5']],'set');
+    buildSelect('fsel-res',[['all','Todas']].concat(RES_ORDER.map(function(r){return [r,RES_LABEL[r]];})),'res');
+    var pd=$('acc-hdr-partido'); if(pd) pd.classList.toggle('has-filter', F.rival!=='all'||F.gi!=='all');
+    var cd=$('acc-hdr-contexto'); if(cd) cd.classList.toggle('has-filter', F.set!=='all'||F.res!=='all');
+  }
+  window.resetF=function(){ F.rival='all';F.gi='all';F.set='all';F.res='all'; buildFilters(); render(); };
+  buildFilters();
 
-  window.onPlayer=function(v){ F.player=v; F.gi='all'; buildPartidoChips(); render(); };
+  window.onPlayer=function(v){ F.player=v; F.gi='all'; buildFilters(); render(); };
   function filtered(){
     if(!F.player||!PLAYERS[F.player])return [];
     return PLAYERS[F.player].acts.filter(function(a){
@@ -158,8 +192,9 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
     s+="</svg>"; return s;
   }
 
-  window.verZona=function(zone,which){ if(!F.player)return; window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Defensa&'+which+'='+zone,'_blank'); };
-  window.abrirVideo=function(){ if(!F.player){alert('Elegí un jugador primero.');return;} window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Defensa','_blank'); };
+  function _vf(){ var s=''; if(F.rival&&F.rival!=='all')s+='&rival='+encodeURIComponent(F.rival); if(F.gi&&F.gi!=='all'){ var m=VD[F.gi]; if(m&&m.date)s+='&date='+encodeURIComponent(m.date); } return s; }
+  window.verZona=function(zone,which){ if(!F.player)return; window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Defensa&'+which+'='+zone+_vf(),'_blank'); };
+  window.abrirVideo=function(){ if(!F.player){alert('Elegí un jugador primero.');return;} window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Defensa'+_vf(),'_blank'); };
 
   function render(){
     var c=$('content'), acts=filtered();
