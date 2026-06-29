@@ -55,6 +55,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
     <select class="psel" id="psel" onchange="onPlayer(this.value)"><option value="">Seleccionar…</option></select>
     <button id="ver-video-btn" class="vbtn" onclick="abrirVideo()">🎬 VER VIDEO DE ESTAS DEFENSAS</button>
     <div class="flabel">Rival</div><div class="chips" id="f-rival"></div>
+    <div class="flabel">Partido específico</div><div class="chips" id="f-gi"></div>
     <div class="flabel">Set</div><div class="chips" id="f-set"></div>
     <div class="flabel">Valoración</div><div class="chips" id="f-res"></div>
     <div class="counter"><div class="counter-n" id="cnt">0</div><div class="counter-l">defensas mostradas</div></div>
@@ -72,13 +73,20 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   var RES_LABEL={'#':'Perfecta','+':'Buena','!':'Regular','-':'Mala','=':'Error'};
   var RES_HEX={'#':'#22C55E','+':'#84CC16','!':'#EAB308','-':'#F97316','=':'#EF4444'};
 
+  function rivalOf(m){
+    if(!m) return 'Rival';
+    var home=m.home||'', away=m.away||'';
+    if(home==='nafels') return m.awayName||away||'Rival';
+    if(away==='nafels') return m.homeName||home||'Rival';
+    return m.awayName||m.homeName||away||home||'Rival';
+  }
   var ALL=[];
-  Object.keys(VD).forEach(function(c){ (VD[c].actions||[]).forEach(function(a){ if(a.sk==='Defensa'){ var o={}; for(var k in a)o[k]=a[k]; o.opp=VD[c].opponent||'Rival'; o.code=c; ALL.push(o); } }); });
+  Object.keys(VD).forEach(function(c){ var m=VD[c]; (m.actions||[]).forEach(function(a){ if(a.sk==='Defensa' && a.tm==='nafels'){ var o={}; for(var k in a)o[k]=a[k]; o.opp=rivalOf(m); o.code=c; o.date=m.date||''; ALL.push(o); } }); });
   var PLAYERS={};
   ALL.forEach(function(a){ if(!PLAYERS[a.num])PLAYERS[a.num]={num:a.num,name:a.name,acts:[]}; PLAYERS[a.num].acts.push(a); });
   var RIVALS=[]; ALL.forEach(function(a){ if(RIVALS.indexOf(a.opp)<0)RIVALS.push(a.opp); }); RIVALS.sort();
 
-  var F={player:'',rival:'all',set:'all',res:'all'};
+  var F={player:'',rival:'all',gi:'all',set:'all',res:'all'};
   var $=function(id){return document.getElementById(id);};
 
   var psel=$('psel');
@@ -88,17 +96,30 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   function chipset(el,items,key){
     var box=$(el);
     box.innerHTML=items.map(function(it){ return "<span class='chip"+(F[key]===it[0]?' on':'')+"' data-v='"+it[0]+"'>"+it[1]+"</span>"; }).join('');
-    box.onclick=function(e){ var c=e.target.closest('[data-v]'); if(!c)return; F[key]=c.dataset.v; chipset(el,items,key); render(); };
+    box.onclick=function(e){ var c=e.target.closest('[data-v]'); if(!c)return; F[key]=c.dataset.v; if(key==='rival'){ F.gi='all'; buildPartidoChips(); } chipset(el,items,key); render(); };
   }
+  var _MO=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  function gamesFor(){
+    var src=(F.player&&PLAYERS[F.player])?PLAYERS[F.player].acts:ALL;
+    if(F.rival!=='all') src=src.filter(function(a){return a.opp===F.rival;});
+    var seen={},list=[];
+    src.forEach(function(a){ if(!seen[a.code]){ seen[a.code]=1; list.push({code:a.code,date:a.date,opp:a.opp}); } });
+    list.sort(function(x,y){return (x.date||'').localeCompare(y.date||'');});
+    return list;
+  }
+  function gLabel(g){ var rs=(g.opp||'').split(' ').slice(-1)[0].substring(0,9); var dl=''; if(g.date){var p=g.date.split('-');try{dl=' ('+parseInt(p[2])+' '+_MO[parseInt(p[1])]+')';}catch(e){}} return rs+dl; }
+  function buildPartidoChips(){ chipset('f-gi',[['all','Todos']].concat(gamesFor().map(function(g){return [g.code,gLabel(g)];})),'gi'); }
   chipset('f-rival',[['all','Todos']].concat(RIVALS.map(function(r){return [r,r];})),'rival');
+  buildPartidoChips();
   chipset('f-set',[['all','Todos'],['1','S1'],['2','S2'],['3','S3'],['4','S4'],['5','S5']],'set');
   chipset('f-res',[['all','Todas']].concat(RES_ORDER.map(function(r){return [r,RES_LABEL[r]];})),'res');
 
-  window.onPlayer=function(v){ F.player=v; render(); };
+  window.onPlayer=function(v){ F.player=v; F.gi='all'; buildPartidoChips(); render(); };
   function filtered(){
     if(!F.player||!PLAYERS[F.player])return [];
     return PLAYERS[F.player].acts.filter(function(a){
       if(F.rival!=='all'&&a.opp!==F.rival)return false;
+      if(F.gi!=='all'&&a.code!==F.gi)return false;
       if(F.set!=='all'&&String(a.set)!==F.set)return false;
       if(F.res!=='all'&&a.ev!==F.res)return false;
       return true;

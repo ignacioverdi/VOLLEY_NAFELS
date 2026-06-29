@@ -117,7 +117,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   window.__TEAM_NAME=td.name; window.__TEAM_SLUG=equipo;
   var setters={};
   if(td.setter && td.setter.num){ setters[String(td.setter.num)]={name:td.setter.name,num:td.setter.num,s:td.setter.s}; }
-  return { rivals:td.rivals, games:td.rivals.map(function(r,i){return {idx:i,rival:r,date:''};}), atk_combos:L.combos, setters:setters };
+  return { rivals:td.rivals, games:(td.games||td.rivals.map(function(r,i){return {idx:i,rival:r,date:''};})), atk_combos:L.combos, setters:setters };
 })();
 
 // ── I18N ENGINE ──────────────────────────────────────────────────
@@ -169,6 +169,8 @@ Object.keys(RAW.setters).forEach(function(num){
 // Multi-select filters
 var F={
   player:'',
+  rival:'all',      // single: rival
+  gi:'all',         // single: partido especifico
   atype:[],         // multi: SO, TR
   call:[],          // multi: K1, K7...
   atk_combo:[],     // multi: X5, X6...
@@ -185,6 +187,8 @@ function getFiltered(){
   if(!F.player) return [];
   var p=SETTERS[F.player]; if(!p) return [];
   return p.sets.filter(function(s){
+    if(F.rival!=='all' && s.rival!==F.rival) return false;
+    if(F.gi!=='all' && String(s.gi)!==String(F.gi)) return false;
     if(!isIn(s.atype,F.atype)) return false;
     if(!isIn(s.call,F.call)) return false;
     if(!isIn(s.atk_combo,F.atk_combo)) return false;
@@ -206,11 +210,11 @@ function toggleF(key,val){
 function clearF(key){F[key]=[];buildChips();render();}
 function onPlayerChange(val){
   F.player=val;
-  Object.keys(F).forEach(function(k){if(k!=='player') F[k]=[];});
+  Object.keys(F).forEach(function(k){if(k!=='player') F[k]=(k==='rival'||k==='gi')?'all':[];});
   buildChips();render();
 }
 function resetFilters(){
-  Object.keys(F).forEach(function(k){if(k!=='player') F[k]=[];});
+  Object.keys(F).forEach(function(k){if(k!=='player') F[k]=(k==='rival'||k==='gi')?'all':[];});
   buildChips();render();
 }
 
@@ -234,9 +238,23 @@ function calcKill(sets){
 }
 
 // Build filter chip groups
+function armFillSel(id,opts,key){
+  var el=document.getElementById(id); if(!el) return;
+  var cur=String(F[key]);
+  el.innerHTML=opts.map(function(o){return '<option value="'+o[0]+'"'+(String(o[0])===cur?' selected':'')+'>'+o[1]+'</option>';}).join('');
+  el.onchange=function(){ F[key]=this.value; if(key==='rival'){ F.gi='all'; } buildChips(); render(); };
+}
 function buildChips(){
   if(!F.player) return;
   var sets=SETTERS[F.player].sets;
+
+  // Rival + Partido especifico (selects que se filtran entre si)
+  var _MO=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var urv=uniq(sets.map(function(s){return s.rival;})).filter(Boolean).sort();
+  armFillSel('fsel-rival',[['all','Todos']].concat(urv.map(function(r){return [r,r.split(' ').slice(-1)[0].substring(0,12)];})),'rival');
+  var setsGi=(F.rival!=='all')?sets.filter(function(s){return s.rival===F.rival;}):sets;
+  var ugi=uniq(setsGi.map(function(s){return s.gi;})).sort(function(a,b){return a-b;});
+  armFillSel('fsel-gi',[['all','Todos']].concat(ugi.map(function(gi){var g=GAMES[gi];var rs=g?g.rival.split(' ').slice(-1)[0].substring(0,9):('P'+gi);var dl='';if(g&&g.date){var pp=g.date.split('-');try{dl=' ('+parseInt(pp[2])+' '+_MO[parseInt(pp[1])]+')';}catch(e){}}return [gi,rs+dl];})),'gi');
 
   // Atype
   buildMC('f-atype',[['SO','Side Out'],['TR','Transicion']],'atype','on');
