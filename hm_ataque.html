@@ -137,7 +137,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   window.__TEAM_SLUG=equipo;
   return {
     rivals: td.rivals,
-    games: td.rivals.map(function(r,i){return {idx:i,rival:r,date:''};}),
+    games: (td.games||td.rivals.map(function(r,i){return {idx:i,rival:r,date:''};})),
     combos: L.combos,
     players: td.atk
   };
@@ -260,6 +260,7 @@ function getFiltered(){
   return p.actions.filter(function(a){
     if(F.atype!=="all" && a.atype!==F.atype) return false;
     if(F.rival!=="all" && a.rival!==F.rival) return false;
+    if(F.gi!=="all" && String(a.gi)!==String(F.gi)) return false;
     if(F.set!=="all" && a.set!==parseInt(F.set)) return false;
     if(F.moment!=="all" && a.moment!==F.moment) return false;
     if(F.result!=="all" && a.result!==F.result) return false;

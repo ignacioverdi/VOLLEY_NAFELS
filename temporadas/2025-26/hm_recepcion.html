@@ -113,7 +113,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   var td=L.teams[equipo];
   try{ document.title='Recepción — '+td.name; }catch(e){}
   window.__TEAM_NAME=td.name; window.__TEAM_SLUG=equipo;
-  return { rivals:td.rivals, games:td.rivals.map(function(r,i){return {idx:i,rival:r,date:''};}), players:td.rec };
+  return { rivals:td.rivals, games:(td.games||td.rivals.map(function(r,i){return {idx:i,rival:r,date:''};})), players:td.rec };
 })();
 
 // ── I18N ENGINE ──────────────────────────────────────────────────

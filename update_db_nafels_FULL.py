@@ -609,18 +609,23 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         if not td: continue
         rivals=sorted(set(a.get('rival','') for pd in td.values() for sk in ['atk','srv','rec'] for a in pd.get(sk,[]) if a.get('rival')))
         ridx={r:i for i,r in enumerate(rivals)}
+        # ── Indice de PARTIDO real (date,rival) — para el filtro "partido especifico" ──
+        _gseen=sorted(set((a.get('date',''),a.get('rival','')) for pd in td.values() for sk in ['atk','srv','rec'] for a in pd.get(sk,[]) if a.get('rival')))
+        _gidx={dk:i for i,dk in enumerate(_gseen)}
+        _games_list=[{'i':i,'date':d,'rival':rv} for i,(d,rv) in enumerate(_gseen)]
+        def _gi(a): return _gidx.get((a.get('date',''),a.get('rival','')),0)
         atk_p,srv_p,rec_p={},{},{}
         for ns,pd in td.items():
             info=pd.get('info') or {}; name=info.get('name',ns); num=int(ns)
             ape=info.get('apellido','') or (name.rsplit(' ',1)[0] if ' ' in name else name)
             atk,srv,rec=pd.get('atk',[]),pd.get('srv',[]),pd.get('rec',[])
-            if atk: atk_p[ns]={'name':name,'num':num,'a':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,a.get('atype',0),COMBO_IDX.get(a.get('combo',''),-1),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),6,-1] for a in atk]}
+            if atk: atk_p[ns]={'name':name,'num':num,'a':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,a.get('atype',0),COMBO_IDX.get(a.get('combo',''),-1),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),6,-1] for a in atk]}
             if srv:
                 stl=list(dict.fromkeys('S'+a.get('stype','Q') for a in srv)) or ['SQ']; sidx={s:i for i,s in enumerate(stl)}
-                srv_p[ns]={'name':name,'num':num,'stypes':stl,'s':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,sidx.get('S'+a.get('stype','Q'),0),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0)] for a in srv]}
+                srv_p[ns]={'name':name,'num':num,'stypes':stl,'s':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,sidx.get('S'+a.get('stype','Q'),0),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0)] for a in srv]}
             if rec:
                 rtl=list(dict.fromkeys('R'+a.get('stype','M') for a in rec)) or ['RM']; rtidx={r:i for i,r in enumerate(rtl)}
-                rec_p[ns]={'name':name,'apellido':ape,'num':num,'rtypes':rtl,'r':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,rtidx.get('R'+a.get('stype','M'),0),REC_IDX.get(a.get('effect','-'),3),a.get('orig',0),a.get('dest',0)] for a in rec]}
+                rec_p[ns]={'name':name,'apellido':ape,'num':num,'rtypes':rtl,'r':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,rtidx.get('R'+a.get('stype','M'),0),REC_IDX.get(a.get('effect','-'),3),a.get('orig',0),a.get('dest',0)] for a in rec]}
         # Armar AMBOS armadores (estructura setters array que usa el game plan)
         team_setters = setters.get(team, [])
         if not isinstance(team_setters, list): team_setters = [team_setters]
@@ -659,7 +664,7 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
             if rec0 >= 20: roster[nser]='OUTSIDE'
             elif rec0 <= 8: roster[nser]=('OUTSIDE' if punta>opp else 'OPPOSITE')
             else: roster[nser]=('OUTSIDE' if punta>=opp else 'OPPOSITE')
-        LIGA['teams'][team.lower().replace(' ','_')]={'name':team,'rivals':rivals,'atk':atk_p,'srv':srv_p,'rec':rec_p,'setters':setters_list,'setter':setters_list[0] if setters_list else None,'roster':roster,'matches':matches}
+        LIGA['teams'][team.lower().replace(' ','_')]={'name':team,'rivals':rivals,'games':_games_list,'atk':atk_p,'srv':srv_p,'rec':rec_p,'setters':setters_list,'setter':setters_list[0] if setters_list else None,'roster':roster,'matches':matches}
     with open(os.path.join(output_dir,'liga_data.js'),'w',encoding='utf-8') as f:
         f.write('window.LIGA_DATA = '+json.dumps(LIGA,ensure_ascii=False)+';\n')
     return len(LIGA['teams'])
