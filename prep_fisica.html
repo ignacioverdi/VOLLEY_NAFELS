@@ -770,18 +770,31 @@ function buildEjercicio(j, ej, num){
   }
   var tieneVideo = !!videoUrl;
   if(tieneVideo) ej.video = videoUrl;
+  // ── Segundo ejercicio (superserie / combinado) ──
+  var nombre2 = ej.nombre2 || '';
+  var video2Url = (ej.video2 && ej.video2 !== 'null' && ej.video2 !== '') ? ej.video2 : null;
+  if(nombre2 && !video2Url && ej.id2 && window.EJERCICIOS_DATA){
+    window.EJERCICIOS_DATA.grupos.forEach(function(g){
+      g.ejercicios.forEach(function(e){ if(e.id === ej.id2 && e.video) video2Url = e.video; });
+    });
+  }
+  var nombreFull = ej.nombre + (nombre2 ? ' <span style="color:var(--mut)">+</span> ' + nombre2 : '');
+  var repsFull = ej.reps + (nombre2 && ej.reps2 ? ' + ' + ej.reps2 : '');
   var videoBtn = tieneVideo
     ? '<button class="ej-video-btn" onclick="window.open(this.dataset.url,&quot;_blank&quot;)" data-url="' + ej.video + '" type="button">🎬 VIDEO</button>'
     : '<button class="ej-video-btn sin-video" disabled type="button">🎬 VIDEO</button>';
+  if(nombre2 && video2Url){
+    videoBtn += '<button class="ej-video-btn" onclick="window.open(this.dataset.url,&quot;_blank&quot;)" data-url="' + video2Url + '" type="button">🎬 VIDEO 2</button>';
+  }
   hdr.innerHTML =
     '<div class="ej-num">' + num + '</div>' +
     '<div class="ej-info">' +
-      '<div class="ej-nombre">' + ej.nombre + '</div>' +
+      '<div class="ej-nombre">' + nombreFull + (nombre2 ? ' <span class="ej-badge" style="background:rgba(99,102,241,.18);color:#a5b4fc;border:none;font-size:9px;vertical-align:middle">SUPERSERIE</span>' : '') + '</div>' +
       '<div class="ej-desc">' + (ej.desc||'') + '</div>' +
     '</div>' +
     '<div class="ej-badges">' +
       '<span class="ej-badge badge-series">' + ej.series + ' SERIES</span>' +
-      '<span class="ej-badge badge-reps">' + ej.reps + ' REPS</span>' +
+      '<span class="ej-badge badge-reps">' + repsFull + ' REPS</span>' +
       (ej.descanso ? '<span class="ej-badge badge-descanso">⏱ ' + ej.descanso + '</span>' : '') +
       (ej.carga ? '<span class="ej-badge badge-carga">🏋 ' + ej.carga + '</span>' : '') +
     '</div>' +

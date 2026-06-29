@@ -78,6 +78,13 @@
   .ej-row{display:grid;grid-template-columns:1fr 56px 62px 78px 68px 1fr auto;gap:7px;align-items:center;padding:7px 12px;border-top:1px solid var(--border)}
   .ej-row select,.ej-row input{background:var(--card2);color:var(--txt);border-color:var(--border);font-size:13px;padding:7px 8px}
   .ej-row .vbtn{color:var(--indigo);font-size:11px;text-decoration:none;white-space:nowrap}
+  .ej-combo{display:flex;align-items:center;gap:7px;padding:0 12px 8px 30px}
+  .ej-combo .cmb-plus{color:var(--indigo);font-weight:800;font-size:15px;flex-shrink:0}
+  .ej-combo select{flex:1;min-width:0;background:var(--card2);color:var(--txt);border-color:var(--border);font-size:13px;padding:7px 8px}
+  .ej-combo input{width:62px;background:var(--card2);color:var(--txt);border-color:var(--border);font-size:13px;padding:7px 8px}
+  .ej-combo .vbtn{color:var(--indigo);font-size:11px;text-decoration:none;white-space:nowrap}
+  .btn-combinar{background:none;border:none;color:var(--indigo);font-size:11px;cursor:pointer;white-space:nowrap;padding:2px 4px}
+  .btn-combinar:hover{text-decoration:underline}
   .x{background:none;border:none;color:var(--mut);font-size:17px;cursor:pointer;padding:2px 6px}
   .x:hover{color:var(--red)}
   .addrow{display:flex;gap:8px;padding:9px 12px;flex-wrap:wrap}
@@ -374,15 +381,18 @@ function addBloque(si){ R.semanas[si].bloques.push({nombre:BLOQUES[2].nombre,ico
 function delBloque(si,bi){ R.semanas[si].bloques.splice(bi,1); setDirty(true); render(); }
 function addEj(si,bi){ R.semanas[si].bloques[bi].ejercicios.push({id:'',nombre:'',series:4,reps:'8-10',descanso:'90 s',carga:'',nota:'',video:null}); setDirty(true); render(); }
 function delEj(si,bi,ei){ R.semanas[si].bloques[bi].ejercicios.splice(ei,1); setDirty(true); render(); }
+function addCombo(si,bi,ei){ var e=R.semanas[si].bloques[bi].ejercicios[ei]; e.id2=''; e.nombre2=''; e.reps2=''; e.video2=null; setDirty(true); render(); }
+function delCombo(si,bi,ei){ var e=R.semanas[si].bloques[bi].ejercicios[ei]; delete e.id2; delete e.nombre2; delete e.reps2; delete e.video2; setDirty(true); render(); }
 
 function onSesLabel(si,v){ R.semanas[si].label=v; setDirty(true); }
 function onBloque(si,bi,v){ var b=bloqueByName(v); R.semanas[si].bloques[bi].nombre=b.nombre; R.semanas[si].bloques[bi].icon=b.icon; R.semanas[si].bloques[bi].color=b.color; setDirty(true); render(); }
 function onEj(si,bi,ei,field,v){
   var e=R.semanas[si].bloques[bi].ejercicios[ei];
   if(field==='id'){ var cat=ejById(v); e.id=v; e.nombre=cat?cat.es:''; e.video=cat?cat.video:null; }
+  else if(field==='id2'){ var cat2=ejById(v); e.id2=v; e.nombre2=cat2?cat2.es:''; e.video2=cat2?cat2.video:null; }
   else e[field]=v;
   setDirty(true);
-  if(field==='id') render();
+  if(field==='id'||field==='id2') render();
 }
 
 /* ---------- render ---------- */
@@ -418,6 +428,7 @@ function render(){
         h+='<div class="colhdr"><span>Ejercicio</span><span>Series</span><span>Reps</span><span>Descanso</span><span>Carga</span><span>Nota</span><span></span></div>';
       }
       b.ejercicios.forEach(function(e,ei){
+        var hasCombo = (e.id2!==undefined);
         h+='<div class="ej-row">'
           +'<select onchange="onEj('+si+','+bi+','+ei+',\'id\',this.value)">'+catOptions(e.id)+'</select>'
           +'<input type="number" min="1" placeholder="ser." value="'+(e.series||'')+'" oninput="onEj('+si+','+bi+','+ei+',\'series\',this.value)">'
@@ -427,9 +438,19 @@ function render(){
           +'<input type="text" placeholder="indicación…" value="'+(e.nota||'').replace(/"/g,'&quot;')+'" oninput="onEj('+si+','+bi+','+ei+',\'nota\',this.value)">'
           +'<span style="display:flex;align-items:center;gap:8px;justify-content:flex-end">'
             +(e.video?'<a class="vbtn" href="'+e.video+'" target="_blank">▶ video</a>':'')
+            +(hasCombo?'':'<button class="btn-combinar" title="Combinar con otro ejercicio (superserie)" onclick="addCombo('+si+','+bi+','+ei+')">+ combinar</button>')
             +'<button class="x" title="Eliminar ejercicio" onclick="delEj('+si+','+bi+','+ei+')">✕</button>'
           +'</span>'
           +'</div>';
+        if(hasCombo){
+          h+='<div class="ej-combo">'
+            +'<span class="cmb-plus" title="Superserie">＋</span>'
+            +'<select onchange="onEj('+si+','+bi+','+ei+',\'id2\',this.value)">'+catOptions(e.id2)+'</select>'
+            +'<input type="text" placeholder="reps" value="'+(e.reps2||'').replace(/"/g,'&quot;')+'" oninput="onEj('+si+','+bi+','+ei+',\'reps2\',this.value)">'
+            +(e.video2?'<a class="vbtn" href="'+e.video2+'" target="_blank">▶ video</a>':'')
+            +'<button class="x" title="Quitar el ejercicio combinado" onclick="delCombo('+si+','+bi+','+ei+')">✕</button>'
+          +'</div>';
+        }
       });
       h+='<div class="addrow"><button class="btn btn-ghost btn-sm" onclick="addEj('+si+','+bi+')">+ Ejercicio</button></div>';
       h+='</div>';
