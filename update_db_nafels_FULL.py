@@ -243,6 +243,24 @@ def parse_dvw_both(fpath, temporada):
     return result, date, home, away
 
 # ── UPDATE DATABASE ───────────────────────────────────────────────
+def _parse_set_result(txt):
+    """(sets_local, sets_visitante) desde [3SET]."""
+    import re as _re
+    m=_re.search(r'\[3SET\](.*?)(?:\n\[3|\Z)',txt,_re.S)
+    if not m: return None
+    hs=as_=0
+    for line in m.group(1).strip().splitlines():
+        f=line.split(';')
+        scs=[x for x in f[1:5] if x.strip()]
+        if not scs: continue
+        sc=scs[-1].replace(' ','').split('-')
+        if len(sc)==2:
+            try: h=int(sc[0]); a=int(sc[1])
+            except: continue
+            if h>a: hs+=1
+            elif a>h: as_+=1
+    return [hs,as_] if (hs or as_) else None
+
 def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     # Load existing DB
     if os.path.exists(db_path):
@@ -302,6 +320,15 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
         games_log.append({'file':fname,'date':date,'home':home,'away':away,'temporada':temporada})
         added += 1
         if added % 10 == 0: print(f"  Parsed {added} files...")
+
+    # resultado final (sets) de cada partido — leido de [3SET] del DVW
+    for g in games_log:
+        if 'result' in g: continue
+        g['result']=None
+        fp=os.path.join(dvw_dir, g.get('file','') or '')
+        if g.get('file') and os.path.isfile(fp):
+            try: g['result']=_parse_set_result(open(fp,encoding='latin-1',errors='ignore').read())
+            except: pass
 
     db_out = {'teams': teams_data, 'games': games_log}
     with open(db_path, 'w', encoding='utf-8') as f:
@@ -595,7 +622,7 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
     return setters_map, rallies_final
 
 
-def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=None):
+def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=None, games_log=None):
     """Genera liga_data.js con TODA la liga para los heatmaps universales."""
     COMBO_IDX={c:i for i,c in enumerate(combos)}
     RES_IDX={'#':0,'/':1,'+':2,'!':3,'=':4,'-':5}
@@ -603,6 +630,17 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
     CALL_LIST=['K1','K7','KM','K2','KC','KP','KE','KB','KO','KS']
     CALL_IDX={c:i for i,c in enumerate(CALL_LIST)}
     setters=setters or {}; rallies=rallies or {}
+    # Lookup de resultados (sets) por partido, para el dropdown "partido especifico"
+    _RESULTS={}
+    for g in (games_log or []):
+        r=g.get('result')
+        if r and g.get('date'): _RESULTS[(g['date'],g.get('home',''),g.get('away',''))]=r
+    def _res_for(date,team,rival):
+        r=_RESULTS.get((date,team,rival))
+        if r: return '%d-%d'%(r[0],r[1])
+        r=_RESULTS.get((date,rival,team))
+        if r: return '%d-%d'%(r[1],r[0])
+        return ''
     LIGA={'combos':combos,'calls':CALL_LIST,'teams':{}}
     for team in NLA_TEAMS:
         td = teams_data.get(team, {})
@@ -612,7 +650,7 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         # ── Indice de PARTIDO real (date,rival) — para el filtro "partido especifico" ──
         _gseen=sorted(set((a.get('date',''),a.get('rival','')) for pd in td.values() for sk in ['atk','srv','rec'] for a in pd.get(sk,[]) if a.get('rival')))
         _gidx={dk:i for i,dk in enumerate(_gseen)}
-        _games_list=[{'i':i,'date':d,'rival':rv} for i,(d,rv) in enumerate(_gseen)]
+        _games_list=[{'i':i,'date':d,'rival':rv,'r':_res_for(d,team,rv)} for i,(d,rv) in enumerate(_gseen)]
         def _gi(a): return _gidx.get((a.get('date',''),a.get('rival','')),0)
         atk_p,srv_p,rec_p={},{},{}
         for ns,pd in td.items():
@@ -1741,7 +1779,7 @@ if __name__ == '__main__':
     canon_order = ['X5','V5','C5','V4','X1','XM','XG','XC','XD','X2','X7','CB','CD','CF','V3',
                    'X6','V6','V2','X8','V8','XB','XR','XP','VB','VR','VP']
     combos = [c for c in canon_order if c in all_combos] + sorted(c for c in all_combos if c not in canon_order)
-    build_liga_data(teams_data, combos, args.output_dir, setters_map, rallies)
+    build_liga_data(teams_data, combos, args.output_dir, setters_map, rallies, games_log)
     print(f"   \u2713 liga_data.js ({len(combos)} combos, {len(setters_map)} equipos con armadores)")
 
     # Step 5: Build stats table (protegido: si falta template, no tumba el proceso)

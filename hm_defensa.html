@@ -136,7 +136,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
     list.sort(function(x,y){return (x.date||'').localeCompare(y.date||'');});
     return list;
   }
-  function gLabel(g){ var rs=(g.opp||'').split(' ').slice(-1)[0].substring(0,9); var dl=''; if(g.date){var p=g.date.split('-');try{dl=' ('+parseInt(p[2])+' '+_MO[parseInt(p[1])]+')';}catch(e){}} return rs+dl; }
+  function gLabel(g){ var rs=(g.opp||'').split(' ').slice(-1)[0].substring(0,9); var dl=''; if(g.date){var p=g.date.split('-');try{dl=' ('+parseInt(p[2])+' '+_MO[parseInt(p[1])]+')';}catch(e){}} var rr=''; var m=VD[g.code]; if(m&&m.result){ var hs=m.result[0],as=m.result[1]; rr=' · '+(m.home==='nafels'?hs+'-'+as:as+'-'+hs); } return rs+dl+rr; }
   function buildFilters(){
     buildSelect('fsel-rival',[['all','Todos']].concat(RIVALS.map(function(r){return [r,r];})),'rival');
     buildSelect('fsel-gi',[['all','Todos']].concat(gamesFor().map(function(g){return [g.code,gLabel(g)];})),'gi');

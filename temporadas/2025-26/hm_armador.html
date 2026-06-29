@@ -254,7 +254,7 @@ function buildChips(){
   armFillSel('fsel-rival',[['all','Todos']].concat(urv.map(function(r){return [r,r.split(' ').slice(-1)[0].substring(0,12)];})),'rival');
   var setsGi=(F.rival!=='all')?sets.filter(function(s){return s.rival===F.rival;}):sets;
   var ugi=uniq(setsGi.map(function(s){return s.gi;})).sort(function(a,b){return a-b;});
-  armFillSel('fsel-gi',[['all','Todos']].concat(ugi.map(function(gi){var g=GAMES[gi];var rs=g?g.rival.split(' ').slice(-1)[0].substring(0,9):('P'+gi);var dl='';if(g&&g.date){var pp=g.date.split('-');try{dl=' ('+parseInt(pp[2])+' '+_MO[parseInt(pp[1])]+')';}catch(e){}}return [gi,rs+dl];})),'gi');
+  armFillSel('fsel-gi',[['all','Todos']].concat(ugi.map(function(gi){var g=GAMES[gi];var rs=g?g.rival.split(' ').slice(-1)[0].substring(0,9):('P'+gi);var dl='';if(g&&g.date){var pp=g.date.split('-');try{dl=' ('+parseInt(pp[2])+' '+_MO[parseInt(pp[1])]+')';}catch(e){}}return [gi,rs+dl+(g&&g.r?' · '+g.r:'')];})),'gi');
 
   // Atype
   buildMC('f-atype',[['SO','Side Out'],['TR','Transicion']],'atype','on');

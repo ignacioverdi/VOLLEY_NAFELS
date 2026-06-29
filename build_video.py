@@ -17,7 +17,7 @@ Uso:
 """
 import os,re,sys,json,glob,unicodedata
 
-DATA_VERSION = 4
+DATA_VERSION = 5
 
 def fix_enc(x):
     # Los DVW pueden venir en UTF-8 leido como latin-1 (mojibake "NÃ¤fels"). Lo corrige.
@@ -61,6 +61,23 @@ def norm_team(name):
 def slugify(name):
     n=unicodedata.normalize('NFKD',name or '').encode('ascii','ignore').decode('ascii')
     return re.sub(r'\s+','_',n.lower().strip())
+
+def parse_set_result(txt):
+    """Devuelve (sets_local, sets_visitante) leyendo [3SET]."""
+    m=re.search(r'\[3SET\](.*?)(?:\n\[3|\Z)',txt,re.S)
+    if not m: return None
+    hs=as_=0
+    for line in m.group(1).strip().splitlines():
+        f=line.split(';')
+        scs=[x for x in f[1:5] if x.strip()]
+        if not scs: continue
+        sc=scs[-1].replace(' ','').split('-')
+        if len(sc)==2:
+            try: h=int(sc[0]); a=int(sc[1])
+            except: continue
+            if h>a: hs+=1
+            elif a>h: as_+=1
+    return (hs,as_) if (hs or as_) else None
 
 def parse_dvw(path, ent=False):
     txt=open(path,encoding='latin-1',errors='ignore').read()
@@ -123,9 +140,10 @@ def parse_dvw(path, ent=False):
             ev=code0[5] if len(code0)>5 else ''
             a={'t':t,'num':num,'name':pmap[num],'skill':sk,'sk':SK.get(sk,sk),
                'ev':ev,'set':c[8] if len(c)>8 else '','tm':tslug}
-            # zonas origen/destino (oz/dz): ataque, defensa, bloqueo, freeball
-            if sk in ('A','D','B','F'):
-                _rest=code0[6:]; _tp=_rest.split('~'); _traj=_tp[1] if len(_tp)>1 else ''
+            # zonas origen/destino (oz/dz): ataque usa tp[1] ; defensa usa tp[3] (como saque/recepcion)
+            if sk in ('A','D'):
+                _rest=code0[6:]; _tp=_rest.split('~'); _ti=1 if sk=='A' else 3
+                _traj=_tp[_ti] if len(_tp)>_ti else ''
                 if _traj and len(_traj)>0 and _traj[0].isdigit(): a['oz']=int(_traj[0])
                 if _traj and len(_traj)>1 and _traj[1].isdigit(): a['dz']=int(_traj[1])
             if sk=='A':
@@ -141,8 +159,9 @@ def parse_dvw(path, ent=False):
 
     if not actions: return None  # partido sin acciones con segundo -> se ignora
 
+    _res=parse_set_result(txt)
     return code,{'home':home_slug,'away':away_slug,'homeName':home_name,'awayName':away_name,
-                 'date':date,'teams':teams_meta,'players':players,'actions':actions}
+                 'date':date,'result':_res,'teams':teams_meta,'players':players,'actions':actions}
 
 def season_of(date):
     # Temporada oct->abr. 2025-10 -> "25-26"; 2026-04 -> "25-26"; 2026-10 -> "26-27".

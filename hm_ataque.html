@@ -193,7 +193,7 @@ var POS_COLOR = {2:"#818CF8",3:"#F59E0B",4:"#F97316",8:"#22C55E",5:"#06B6D4",9:"
 var RES_LABEL = {"#":"Kill","+":"Positivo","-":"Negativo","/":"Bloqueado","=":"Error","!":"Exclamativo"};
 var RES_COLOR = {"#":"#22c55e","+":"#86efac","-":"#f59e0b","/":"#ef4444","=":"#dc2626"};
 var MOMENT_LABEL = {early:"0-8 pts",mid:"9-16 pts",late:"17+ pts"};
-var F = {player:"",atype:"all",rival:"all",set:"all",moment:"all",result:"all",combo:"all",rec_quality:"all",rec_player:"all"};
+var F = {player:"",atype:"all",rival:"all",gi:"all",set:"all",moment:"all",result:"all",combo:"all",rec_quality:"all",rec_player:"all"};
 
 // Build player selector
 var pNums = Object.keys(PLAYERS).map(Number).sort(function(a,b){
@@ -249,13 +249,13 @@ function verVideoCombo(cod){
   window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Ataque&combo='+encodeURIComponent(cod)+_vfilt(),'_blank');
 }
 function onPlayerChange(val){
-  F.player=val; F.atype="all"; F.rival="all"; F.set="all";
+  F.player=val; F.atype="all"; F.rival="all"; F.gi="all"; F.set="all";
   F.moment="all"; F.result="all"; F.combo="all";
   F.rec_quality="all"; F.rec_player="all";
   buildChips(); render();
 }
 function resetFilters(){
-  F.atype="all"; F.rival="all"; F.set="all";
+  F.atype="all"; F.rival="all"; F.gi="all"; F.set="all";
   F.moment="all"; F.result="all"; F.combo="all";
   F.rec_quality="all"; F.rec_player="all";
   buildChips(); render();
@@ -284,7 +284,7 @@ function buildChips(){
   buildSelect('fsel-rival',[['all',t('Todos')]].concat(ur.map(function(r){return [r,r.split(' ').slice(-1)[0].substring(0,12)];})),'rival',fChange);
   var actsGi=(F.rival&&F.rival!=='all')?acts.filter(function(a){return a.rival===F.rival;}):acts;
   var ug=uniq(actsGi.map(function(a){return a.gi;})).sort(function(a,b){return a-b;});
-  buildSelect('fsel-gi',[['all',t('Todos')]].concat(ug.map(function(gi){var g=GA[gi];if(!g)return[gi,'P'+gi];var rs=g.rival.split(' ').slice(-1)[0].substring(0,9);var dl='';if(g.date){var pts=g.date.split('-');try{dl=' ('+parseInt(pts[2])+' '+MO[parseInt(pts[1])]+')'}catch(e){}}return[gi,rs+dl];})),'gi',fChange);
+  buildSelect('fsel-gi',[['all',t('Todos')]].concat(ug.map(function(gi){var g=GA[gi];if(!g)return[gi,'P'+gi];var rs=g.rival.split(' ').slice(-1)[0].substring(0,9);var dl='';if(g.date){var pts=g.date.split('-');try{dl=' ('+parseInt(pts[2])+' '+MO[parseInt(pts[1])]+')'}catch(e){}}return[gi,rs+dl+(g.r?' · '+g.r:'')];})),'gi',fChange);
   buildSelect('fsel-atype',[['all',t('Todos')],['SO','Side Out'],['TR',t('Transicion')]],'atype',fChange);
   var sets=['all'].concat(uniq(acts.map(function(a){return a.set;})).sort(function(a,b){return a-b;}));
   buildSelect('fsel-set',sets.map(function(s){return[s,s==='all'?t('Todos'):'S'+s];}),'set',fChange);
