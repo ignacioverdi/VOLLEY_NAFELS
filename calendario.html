@@ -57,10 +57,56 @@
   .btn.save{background:var(--acc);color:#06231f}
   .btn.cancel{background:var(--card2);color:var(--mut2);border:1px solid var(--border)}
   @media(max-width:520px){.entry .info .t1{font-size:17px}.header h1{font-size:26px}}
+
+  /* ── Vista Planificación (grilla en 1 hoja) ───────────────── */
+  .wrap.wide{max-width:1100px}
+  .view-toggle{display:flex;gap:8px;margin-bottom:16px}
+  .view-toggle .vt{flex:1;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--card2);
+    color:var(--mut2);font-family:'Barlow Condensed';font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;text-align:center}
+  .view-toggle .vt.on{background:linear-gradient(180deg,rgba(45,212,191,.18),rgba(45,212,191,.05));border-color:rgba(45,212,191,.4);color:var(--acc)}
+  .plan-ctrl{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .range-toggle{display:flex;gap:6px}
+  .range-toggle .rg{padding:9px 14px;border-radius:10px;border:1px solid var(--border);background:var(--card2);
+    color:var(--mut2);font-weight:700;font-size:13px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;font-family:'Barlow Condensed'}
+  .range-toggle .rg.on{background:rgba(45,212,191,.15);border-color:rgba(45,212,191,.4);color:var(--acc)}
+  .plan-nav{display:flex;align-items:center;gap:8px;margin-left:auto}
+  .nav-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--card2);color:var(--text);cursor:pointer;font-size:18px;line-height:1}
+  .nav-btn:hover{border-color:var(--acc)}
+  .plan-label{font-family:'Bebas Neue';font-size:20px;letter-spacing:1px;color:var(--text);min-width:150px;text-align:center;text-transform:capitalize}
+  .today-btn{padding:8px 13px;border-radius:10px;border:1px solid var(--border);background:var(--card2);color:var(--mut2);
+    font-family:'Barlow Condensed';font-weight:700;font-size:12px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer}
+  .today-btn:hover{border-color:var(--acc);color:var(--acc)}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .cal-dow{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;text-align:center;padding:4px 0;font-weight:700}
+  .cal-cell{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:6px 6px 7px;min-height:80px;
+    display:flex;flex-direction:column;gap:3px;overflow:hidden}
+  .cal-grid.r-semana .cal-cell{min-height:155px}
+  .cal-grid.r-quincena .cal-cell{min-height:110px}
+  .cal-cell.out{opacity:.34}
+  .cal-cell.today{border-color:var(--acc);box-shadow:inset 0 0 0 1px rgba(45,212,191,.45)}
+  .cal-daynum{font-family:'Bebas Neue';font-size:15px;color:var(--mut2);line-height:1.1}
+  .cal-cell.today .cal-daynum{color:var(--acc)}
+  .cal-ev{font-size:11px;line-height:1.25;padding:3px 6px;border-radius:6px;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .cal-ev.p{background:rgba(249,115,22,.16);border:1px solid rgba(249,115,22,.32);color:#fdba74}
+  .cal-ev.e{background:rgba(45,212,191,.13);border:1px solid rgba(45,212,191,.28);color:#5eead4}
+  .cal-ev .eh{opacity:.7;font-size:10px}
+  .plan-legend{display:flex;gap:18px;margin-top:14px;font-size:12px;color:var(--mut2);flex-wrap:wrap}
+  .plan-legend .lg{display:flex;align-items:center;gap:6px}
+  .plan-legend .dot{width:11px;height:11px;border-radius:3px}
+  @media(max-width:680px){
+    .cal-cell{min-height:60px;padding:4px;gap:2px}
+    .cal-grid.r-semana .cal-cell{min-height:96px}
+    .cal-grid.r-quincena .cal-cell{min-height:74px}
+    .cal-ev{font-size:9px;padding:2px 4px}
+    .cal-daynum{font-size:13px}
+    .cal-dow{font-size:9px}
+    .plan-label{font-size:16px;min-width:auto}
+    .plan-nav{margin-left:0;width:100%;justify-content:center}
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="wrap">
   <div class="header">
     <a href="index.html" class="back-btn">← Hub</a>
     <div>
@@ -69,14 +115,44 @@
     </div>
   </div>
 
-  <div class="tabs">
-    <button class="tab on" id="tab-partidos" onclick="setTab('partidos')">🏆 Partidos</button>
-    <button class="tab" id="tab-entrenamientos" onclick="setTab('entrenamientos')">🏋️ Entrenamientos</button>
+  <div class="view-toggle">
+    <button class="vt on" id="vt-lista" onclick="setView('lista')">📋 Lista</button>
+    <button class="vt" id="vt-plan" onclick="setView('plan')">🗓️ Planificación</button>
   </div>
 
-  <button class="add-btn" id="add-btn" onclick="openForm()">+ Agregar</button>
-  <div id="form-wrap"></div>
-  <div id="list"></div>
+  <!-- ── VISTA LISTA ── -->
+  <div id="lista-view">
+    <div class="tabs">
+      <button class="tab on" id="tab-partidos" onclick="setTab('partidos')">🏆 Partidos</button>
+      <button class="tab" id="tab-entrenamientos" onclick="setTab('entrenamientos')">🏋️ Entrenamientos</button>
+    </div>
+    <button class="add-btn" id="add-btn" onclick="openForm()">+ Agregar</button>
+    <div id="form-wrap"></div>
+    <div id="list"></div>
+  </div>
+
+  <!-- ── VISTA PLANIFICACIÓN ── -->
+  <div id="plan-view" style="display:none">
+    <div class="plan-ctrl">
+      <div class="range-toggle">
+        <button class="rg on" id="rg-semana" onclick="setRange('semana')">Semana</button>
+        <button class="rg" id="rg-quincena" onclick="setRange('quincena')">Quincena</button>
+        <button class="rg" id="rg-mes" onclick="setRange('mes')">Mes</button>
+      </div>
+      <div class="plan-nav">
+        <button class="today-btn" onclick="goToday()">Hoy</button>
+        <button class="nav-btn" onclick="navPlan(-1)" title="Anterior">‹</button>
+        <div class="plan-label" id="plan-label"></div>
+        <button class="nav-btn" onclick="navPlan(1)" title="Siguiente">›</button>
+      </div>
+    </div>
+    <div id="plan-grid"></div>
+    <div class="plan-legend">
+      <div class="lg"><span class="dot" style="background:#f97316"></span> Partido</div>
+      <div class="lg"><span class="dot" style="background:#2dd4bf"></span> Entrenamiento</div>
+      <div class="lg" style="color:var(--muted)">Tocá un evento para editarlo</div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -84,10 +160,11 @@
   var TIPOS=['Técnica','Táctica','Físico','Gimnasio','Recepción','Saque','Amistoso','Recuperación','Libre','Otro'];
   var data={partidos:[],entrenamientos:[]};
   var tab='partidos', editId=null, formCond='Local';
+  var viewMode='lista', planRange='semana', anchor=new Date();
 
   function load(){
-    fbGet('calendario/partidos',function(d){ data.partidos=Array.isArray(d)?d:[]; if(tab==='partidos') render(); });
-    fbGet('calendario/entrenamientos',function(d){ data.entrenamientos=Array.isArray(d)?d:[]; if(tab==='entrenamientos') render(); });
+    fbGet('calendario/partidos',function(d){ data.partidos=Array.isArray(d)?d:[]; render(); });
+    fbGet('calendario/entrenamientos',function(d){ data.entrenamientos=Array.isArray(d)?d:[]; render(); });
   }
   function setTab(t){
     tab=t; editId=null;
@@ -104,6 +181,11 @@
   function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
 
   function render(){
+    if(viewMode==='plan'){ renderPlan(); return; }
+    renderList();
+  }
+
+  function renderList(){
     var list=document.getElementById('list');
     var arr=(data[tab]||[]).slice().sort(function(a,b){
       var ka=(a.fecha||'')+(a.hora||''), kb=(b.fecha||'')+(b.hora||'');
@@ -134,6 +216,92 @@
     });
     list.innerHTML=h;
     retranslate();
+  }
+
+  // ── Vista Planificación (grilla) ──────────────────────────
+  function setView(v){
+    viewMode=v;
+    document.getElementById('vt-lista').classList.toggle('on',v==='lista');
+    document.getElementById('vt-plan').classList.toggle('on',v==='plan');
+    document.getElementById('lista-view').style.display=(v==='lista')?'':'none';
+    document.getElementById('plan-view').style.display=(v==='plan')?'':'none';
+    document.getElementById('wrap').classList.toggle('wide',v==='plan');
+    render();
+  }
+  function setRange(r){
+    planRange=r;
+    ['semana','quincena','mes'].forEach(function(x){ document.getElementById('rg-'+x).classList.toggle('on',x===r); });
+    renderPlan();
+  }
+  function navPlan(dir){
+    if(planRange==='mes'){ anchor=new Date(anchor.getFullYear(), anchor.getMonth()+dir, 1); }
+    else { anchor=addDays(anchor, dir*(planRange==='quincena'?14:7)); }
+    renderPlan();
+  }
+  function goToday(){ anchor=new Date(); renderPlan(); }
+
+  function pad2(n){ return (n<10?'0':'')+n; }
+  function ymd(dt){ return dt.getFullYear()+'-'+pad2(dt.getMonth()+1)+'-'+pad2(dt.getDate()); }
+  function addDays(dt,n){ var d=new Date(dt); d.setHours(0,0,0,0); d.setDate(d.getDate()+n); return d; }
+  function startOfWeek(dt){ var d=new Date(dt); d.setHours(0,0,0,0); var wd=(d.getDay()+6)%7; d.setDate(d.getDate()-wd); return d; }
+
+  function buildEventsMap(){
+    var map={};
+    (data.partidos||[]).forEach(function(e){ if(!e.fecha)return; (map[e.fecha]=map[e.fecha]||[]).push({type:'p',e:e}); });
+    (data.entrenamientos||[]).forEach(function(e){ if(!e.fecha)return; (map[e.fecha]=map[e.fecha]||[]).push({type:'e',e:e}); });
+    Object.keys(map).forEach(function(k){ map[k].sort(function(a,b){ return (a.e.hora||'')<(b.e.hora||'')?-1:1; }); });
+    return map;
+  }
+  function planCells(){
+    var cells=[];
+    if(planRange==='mes'){
+      var first=new Date(anchor.getFullYear(), anchor.getMonth(), 1);
+      var start=startOfWeek(first);
+      var monthEnd=new Date(anchor.getFullYear(), anchor.getMonth()+1, 0);
+      var end=addDays(startOfWeek(monthEnd),6);
+      for(var d=new Date(start); d<=end; d=addDays(d,1)){ cells.push({date:new Date(d), out:d.getMonth()!==anchor.getMonth()}); }
+    } else {
+      var n=(planRange==='quincena')?14:7, s=startOfWeek(anchor);
+      for(var i=0;i<n;i++){ cells.push({date:addDays(s,i), out:false}); }
+    }
+    return cells;
+  }
+  function planLabel(){
+    var MM=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    if(planRange==='mes'){ return MM[anchor.getMonth()]+' '+anchor.getFullYear(); }
+    var s=startOfWeek(anchor), e=addDays(s,(planRange==='quincena')?13:6);
+    return s.getDate()+' '+MESES[s.getMonth()]+' – '+e.getDate()+' '+MESES[e.getMonth()];
+  }
+  function renderPlan(){
+    document.getElementById('plan-label').textContent=planLabel();
+    var grid=document.getElementById('plan-grid');
+    var map=buildEventsMap(), cells=planCells(), todayY=ymd(new Date());
+    var DOW=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+    var h='<div class="cal-grid r-'+planRange+'">';
+    DOW.forEach(function(d){ h+='<div class="cal-dow">'+d+'</div>'; });
+    cells.forEach(function(c){
+      var y=ymd(c.date), evs=map[y]||[];
+      var cls='cal-cell'+(c.out?' out':'')+(y===todayY?' today':'');
+      h+='<div class="'+cls+'">';
+      h+='<div class="cal-daynum">'+c.date.getDate()+(c.date.getDate()===1?'<span style="font-size:10px;color:var(--muted)"> '+MESES[c.date.getMonth()]+'</span>':'')+'</div>';
+      evs.forEach(function(ev){
+        var label, cl;
+        if(ev.type==='p'){ cl='p'; label=((ev.e.condicion==='Visita')?'@ ':'vs ')+esc(ev.e.rival||'—'); }
+        else { cl='e'; label=esc(ev.e.tipo||'Entren.'); }
+        var hora=ev.e.hora?'<span class="eh">'+esc(ev.e.hora)+'</span> ':'';
+        h+='<div class="cal-ev '+cl+'" title="'+label+'" onclick="planEdit(\''+ev.type+'\','+ev.e.id+')">'+hora+label+'</div>';
+      });
+      h+='</div>';
+    });
+    h+='</div>';
+    grid.innerHTML=h;
+    retranslate();
+  }
+  function planEdit(type,id){
+    var t=(type==='p')?'partidos':'entrenamientos';
+    setView('lista'); setTab(t);
+    var arr=data[t]||[];
+    for(var i=0;i<arr.length;i++){ if(arr[i].id===id){ openForm(arr[i]); return; } }
   }
 
   function openForm(entry){
