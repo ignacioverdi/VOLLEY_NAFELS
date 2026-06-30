@@ -148,6 +148,21 @@ select,select option{color:#111!important;background-color:#fff!important}
   .page-header{padding:12px 16px}.player-selector{padding:14px 16px}.main{padding:16px}
   .calc-grid{grid-template-columns:1fr 1fr}.jug-stats-row{width:100%;margin-left:0;margin-top:6px}
   .readiness{margin-left:auto}
+  /* Tarjeta de ejercicio: todo apilado y ordenado en celular */
+  .ejercicio-header{flex-wrap:wrap;align-items:flex-start;gap:8px 10px;padding:12px 14px}
+  .ej-num{order:1;margin-top:1px}
+  .ej-info{order:2;flex:1 1 0;min-width:0}
+  .ej-nombre{font-size:15px;letter-spacing:.5px;white-space:normal;line-height:1.28;word-break:break-word}
+  .ej-badges{order:3;flex-basis:100%;width:100%;gap:6px}
+  .ej-badge{font-size:9px;padding:3px 8px}
+  .ej-video-btn{order:4;flex:1 1 130px;justify-content:center;text-align:center;padding:8px 10px}
+  .carga-section,.pesos-section,.obs-section,.nota-profe{padding-left:14px;padding-right:14px}
+  .carga-row{flex-wrap:wrap;gap:8px}
+  .carga-rm-input{flex:1 1 90px;min-width:0;width:auto}
+  .carga-result{font-size:13px;line-height:1.45}
+  .pesos-grid{gap:7px}
+  .peso-input{width:58px;font-size:16px}
+  .calc-results{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}
 }
 /* ── Panel Mi Progreso ───────────────────────────────────── */
 .prog-card{background:linear-gradient(150deg,var(--card),#0b1422);border:1px solid var(--elev);border-radius:16px;padding:18px;margin-bottom:16px}
@@ -751,6 +766,30 @@ function renderRutina(j, semana){
   });
 }
 
+// ── Traducir nombre de ejercicio según idioma (es/en, de->en->es) ──
+function ejNombre(id, fallback){
+  var lang = (typeof getLang==='function') ? getLang() : 'es';
+  if(!window.EJERCICIOS_DATA) return fallback || '';
+  var found=null;
+  // 1) buscar por id (rutinas nuevas)
+  if(id){
+    window.EJERCICIOS_DATA.grupos.forEach(function(g){
+      g.ejercicios.forEach(function(e){ if(e.id===id) found=e; });
+    });
+  }
+  // 2) si no matcheo por id, buscar por nombre en español (rutinas viejas sin id)
+  if(!found && fallback){
+    var fl = (''+fallback).trim().toLowerCase();
+    window.EJERCICIOS_DATA.grupos.forEach(function(g){
+      g.ejercicios.forEach(function(e){
+        if(!found && e.es && (''+e.es).trim().toLowerCase()===fl) found=e;
+      });
+    });
+  }
+  if(found) return found[lang] || found.en || found.es || fallback || '';
+  return fallback || '';
+}
+
 // ── Build ejercicio ───────────────────────────────────────────────
 function buildEjercicio(j, ej, num){
   var card = document.createElement('div');
@@ -771,14 +810,16 @@ function buildEjercicio(j, ej, num){
   var tieneVideo = !!videoUrl;
   if(tieneVideo) ej.video = videoUrl;
   // ── Segundo ejercicio (superserie / combinado) ──
-  var nombre2 = ej.nombre2 || '';
+  var hasCombo = !!(ej.id2 || ej.nombre2);
   var video2Url = (ej.video2 && ej.video2 !== 'null' && ej.video2 !== '') ? ej.video2 : null;
-  if(nombre2 && !video2Url && ej.id2 && window.EJERCICIOS_DATA){
+  if(hasCombo && !video2Url && ej.id2 && window.EJERCICIOS_DATA){
     window.EJERCICIOS_DATA.grupos.forEach(function(g){
       g.ejercicios.forEach(function(e){ if(e.id === ej.id2 && e.video) video2Url = e.video; });
     });
   }
-  var nombreFull = ej.nombre + (nombre2 ? ' <span style="color:var(--mut)">+</span> ' + nombre2 : '');
+  var nombre1 = ejNombre(ej.id, ej.nombre);
+  var nombre2 = hasCombo ? ejNombre(ej.id2, ej.nombre2) : '';
+  var nombreFull = nombre1 + (nombre2 ? ' <span style="color:var(--mut)">+</span> ' + nombre2 : '');
   var repsFull = ej.reps + (nombre2 && ej.reps2 ? ' + ' + ej.reps2 : '');
   var videoBtn = tieneVideo
     ? '<button class="ej-video-btn" onclick="window.open(this.dataset.url,&quot;_blank&quot;)" data-url="' + ej.video + '" type="button">🎬 VIDEO</button>'
