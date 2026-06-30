@@ -140,7 +140,7 @@
         <button class="rg" id="rg-mes" onclick="setRange('mes')">Mes</button>
       </div>
       <div class="plan-nav">
-        <button class="today-btn" onclick="goToday()">Hoy</button>
+        <button class="today-btn" id="btn-hoy" onclick="goToday()">Hoy</button>
         <button class="nav-btn" onclick="navPlan(-1)" title="Anterior">‹</button>
         <div class="plan-label" id="plan-label"></div>
         <button class="nav-btn" onclick="navPlan(1)" title="Siguiente">›</button>
@@ -148,9 +148,9 @@
     </div>
     <div id="plan-grid"></div>
     <div class="plan-legend">
-      <div class="lg"><span class="dot" style="background:#f97316"></span> Partido</div>
-      <div class="lg"><span class="dot" style="background:#2dd4bf"></span> Entrenamiento</div>
-      <div class="lg" style="color:var(--muted)">Tocá un evento para editarlo</div>
+      <div class="lg"><span class="dot" style="background:#f97316"></span> <span id="lg-partido">Partido</span></div>
+      <div class="lg"><span class="dot" style="background:#2dd4bf"></span> <span id="lg-entren">Entrenamiento</span></div>
+      <div class="lg" style="color:var(--muted)" id="lg-tap">Tocá un evento para editarlo</div>
     </div>
   </div>
 </div>
@@ -158,6 +158,28 @@
 <script>
   var MESES=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
   var TIPOS=['Técnica','Táctica','Físico','Gimnasio','Recepción','Saque','Amistoso','Recuperación','Libre','Otro'];
+
+  // ── Traducción de la vista (es/en/de) ──
+  var CAL_I18N={
+    es:{lista:'📋 Lista',plan:'🗓️ Planificación',semana:'Semana',quincena:'Quincena',mes:'Mes',hoy:'Hoy',partido:'Partido',entren:'Entrenamiento',tap:'Tocá un evento para editarlo',
+        dow:['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'],mc:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+        ml:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']},
+    en:{lista:'📋 List',plan:'🗓️ Planning',semana:'Week',quincena:'Fortnight',mes:'Month',hoy:'Today',partido:'Match',entren:'Training',tap:'Tap an event to edit it',
+        dow:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],mc:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        ml:['January','February','March','April','May','June','July','August','September','October','November','December']},
+    de:{lista:'📋 Liste',plan:'🗓️ Planung',semana:'Woche',quincena:'Zwei Wochen',mes:'Monat',hoy:'Heute',partido:'Spiel',entren:'Training',tap:'Tippe auf ein Ereignis zum Bearbeiten',
+        dow:['Mo','Di','Mi','Do','Fr','Sa','So'],mc:['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'],
+        ml:['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember']}
+  };
+  function calT(){ var l=(typeof getLang==='function')?getLang():'es'; return CAL_I18N[l]||CAL_I18N.es; }
+  function setTxt(id,s){ var el=document.getElementById(id); if(el) el.textContent=s; }
+  function applyCalLang(){
+    var t=calT();
+    setTxt('vt-lista',t.lista); setTxt('vt-plan',t.plan);
+    setTxt('rg-semana',t.semana); setTxt('rg-quincena',t.quincena); setTxt('rg-mes',t.mes);
+    setTxt('btn-hoy',t.hoy);
+    setTxt('lg-partido',t.partido); setTxt('lg-entren',t.entren); setTxt('lg-tap',t.tap);
+  }
   var data={partidos:[],entrenamientos:[]};
   var tab='partidos', editId=null, formCond='Local';
   var viewMode='lista', planRange='semana', anchor=new Date();
@@ -176,7 +198,7 @@
   function fmtDate(f){
     if(!f) return {d:'--',m:''};
     var p=f.split('-');
-    return {d:p[2]||'--', m:MESES[parseInt(p[1],10)-1]||''};
+    return {d:p[2]||'--', m:(calT().mc[parseInt(p[1],10)-1]||'')};
   }
   function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
 
@@ -267,23 +289,23 @@
     return cells;
   }
   function planLabel(){
-    var MM=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-    if(planRange==='mes'){ return MM[anchor.getMonth()]+' '+anchor.getFullYear(); }
+    var t=calT();
+    if(planRange==='mes'){ return t.ml[anchor.getMonth()]+' '+anchor.getFullYear(); }
     var s=startOfWeek(anchor), e=addDays(s,(planRange==='quincena')?13:6);
-    return s.getDate()+' '+MESES[s.getMonth()]+' – '+e.getDate()+' '+MESES[e.getMonth()];
+    return s.getDate()+' '+t.mc[s.getMonth()]+' – '+e.getDate()+' '+t.mc[e.getMonth()];
   }
   function renderPlan(){
     document.getElementById('plan-label').textContent=planLabel();
     var grid=document.getElementById('plan-grid');
-    var map=buildEventsMap(), cells=planCells(), todayY=ymd(new Date());
-    var DOW=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+    var map=buildEventsMap(), cells=planCells(), todayY=ymd(new Date()), T=calT();
+    var DOW=T.dow;
     var h='<div class="cal-grid r-'+planRange+'">';
     DOW.forEach(function(d){ h+='<div class="cal-dow">'+d+'</div>'; });
     cells.forEach(function(c){
       var y=ymd(c.date), evs=map[y]||[];
       var cls='cal-cell'+(c.out?' out':'')+(y===todayY?' today':'');
       h+='<div class="'+cls+'">';
-      h+='<div class="cal-daynum">'+c.date.getDate()+(c.date.getDate()===1?'<span style="font-size:10px;color:var(--muted)"> '+MESES[c.date.getMonth()]+'</span>':'')+'</div>';
+      h+='<div class="cal-daynum">'+c.date.getDate()+(c.date.getDate()===1?'<span style="font-size:10px;color:var(--muted)"> '+T.mc[c.date.getMonth()]+'</span>':'')+'</div>';
       evs.forEach(function(ev){
         var label, cl;
         if(ev.type==='p'){ cl='p'; label=((ev.e.condicion==='Visita')?'@ ':'vs ')+esc(ev.e.rival||'—'); }
@@ -362,6 +384,9 @@
   }
   function retranslate(){ if(window.translateTextNodes){ try{ window.translateTextNodes(); }catch(e){} } }
 
+  window.addEventListener('langchange', function(){ applyCalLang(); render(); });
+
+  applyCalLang();
   load(); render();
 </script>
 <script src="lang.js" onerror="void 0"></script>
