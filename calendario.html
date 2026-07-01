@@ -173,8 +173,8 @@
       <button class="tab on" id="tab-partidos" onclick="setTab('partidos')">🏆 Partidos</button>
       <button class="tab" id="tab-entrenamientos" onclick="setTab('entrenamientos')">🏋️ Entrenamientos</button>
     </div>
-    <button class="add-btn" id="add-btn" onclick="openForm()">+ Agregar</button>
-    <button class="import-btn" id="import-btn" onclick="importFixture()">⬇️ Importar fixture 2026/27 (14 partidos)</button>
+    <button class="add-btn" id="add-btn" onclick="openForm()" data-solo-editor>+ Agregar</button>
+    <button class="import-btn" id="import-btn" onclick="importFixture()" data-solo-editor>⬇️ Importar fixture 2026/27 (14 partidos)</button>
     <div id="form-wrap"></div>
     <div id="list"></div>
   </div>
@@ -313,7 +313,7 @@
     {fecha:'2027-01-30',hora:'17:00',rival:'Amriswil',condicion:'Visitante',lugar:'Amriswil',mapa:'https://www.google.com/maps/search/?api=1&query=8FVFG7XQ%2BCP'},
     {fecha:'2027-02-13',hora:'17:30',rival:'Colombier',condicion:'Visitante',lugar:'Colombier',mapa:'https://www.google.com/maps/search/?api=1&query=8FV83W73%2B5G'}
   ];
-  function importFixture(){
+  function importFixture(){ if(window.VB_esEditor&&!VB_esEditor())return;
     if(!confirm('¿Agregar los 14 partidos del fixture 2026/27 al calendario?')) return;
     var arr=(data.partidos||[]).slice(), added=0;
     FIXTURE.forEach(function(m){
@@ -361,8 +361,9 @@
              '<div class="fx-away'+(away==='Näfels'?' us':'')+'">'+tName(away)+'</div>'+
              '<div class="fx-meta"><span class="fx-time">'+esc(e.hora||'')+'</span><span class="fx-place">'+(e.lugar?'<span class="fx-venue">'+esc(e.lugar)+'</span>':'')+(e.mapa?'<a class="fx-map" href="'+esc(e.mapa)+'" target="_blank" rel="noopener" title="Abrir en Google Maps">📍</a>':'')+'</span></div>'+
              '<div class="fx-acts">'+
-               '<button class="icon-btn" title="Editar" onclick="editEntry('+e.id+')">✏️</button>'+
-               '<button class="icon-btn del" title="Eliminar" onclick="delEntry('+e.id+')">🗑️</button>'+
+               ((window.VB_esEditor&&!VB_esEditor())?'':
+                 '<button class="icon-btn" title="Editar" onclick="editEntry('+e.id+')">✏️</button>'+
+                 '<button class="icon-btn del" title="Eliminar" onclick="delEntry('+e.id+')">🗑️</button>')+
              '</div>'+
            '</div>';
       } else {
@@ -373,8 +374,9 @@
           '<div class="date"><div class="d">'+dt.d+'</div><div class="m">'+dt.m+'</div></div>'+
           '<div class="info"><div class="t1">'+t1+'</div><div class="t2">'+t2+'</div></div>'+
           '<div class="acts">'+
-            '<button class="icon-btn" title="Editar" onclick="editEntry('+e.id+')">✏️</button>'+
-            '<button class="icon-btn del" title="Eliminar" onclick="delEntry('+e.id+')">🗑️</button>'+
+            ((window.VB_esEditor&&!VB_esEditor())?'':
+              '<button class="icon-btn" title="Editar" onclick="editEntry('+e.id+')">✏️</button>'+
+              '<button class="icon-btn del" title="Eliminar" onclick="delEntry('+e.id+')">🗑️</button>')+
           '</div>'+
         '</div>';
       }
@@ -469,7 +471,7 @@
     for(var i=0;i<arr.length;i++){ if(arr[i].id===id){ openForm(arr[i]); return; } }
   }
 
-  function openForm(entry){
+  function openForm(entry){ if(window.VB_esEditor&&!VB_esEditor())return;
     editId=entry?entry.id:null;
     formCond=(entry&&entry.condicion)?entry.condicion:'Local';
     var isP=(tab==='partidos');
@@ -503,7 +505,7 @@
   }
   function closeForm(){ document.getElementById('form-wrap').innerHTML=''; editId=null; }
 
-  function saveEntry(){
+  function saveEntry(){ if(window.VB_esEditor&&!VB_esEditor())return;
     var fecha=document.getElementById('f-fecha').value;
     if(!fecha){ alert('Poné una fecha'); return; }
     var e={ id: editId||Date.now(), fecha:fecha, hora:document.getElementById('f-hora').value, lugar:document.getElementById('f-lugar').value.trim() };
@@ -515,11 +517,11 @@
     fbSet('calendario/'+tab, arr);
     closeForm(); render();
   }
-  function editEntry(id){
+  function editEntry(id){ if(window.VB_esEditor&&!VB_esEditor())return;
     var arr=data[tab]||[];
     for(var i=0;i<arr.length;i++){ if(arr[i].id===id){ openForm(arr[i]); return; } }
   }
-  function delEntry(id){
+  function delEntry(id){ if(window.VB_esEditor&&!VB_esEditor())return;
     if(!confirm('¿Eliminar esta entrada?')) return;
     data[tab]=(data[tab]||[]).filter(function(x){ return x.id!==id; });
     fbSet('calendario/'+tab, data[tab]);
