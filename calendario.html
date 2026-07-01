@@ -57,6 +57,19 @@
   .btn.save{background:var(--acc);color:#06231f}
   .btn.cancel{background:var(--card2);color:var(--mut2);border:1px solid var(--border)}
   @media(max-width:520px){.entry .info .t1{font-size:17px}.header h1{font-size:26px}}
+  /* ── escudos + fixture ── */
+  .entry .info .t1{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .crest{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;
+    font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.5px;color:#fff;background:var(--cc,#555);
+    position:relative;overflow:hidden;flex:none;box-shadow:0 1px 2px rgba(0,0,0,.28)}
+  .crest img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff}
+  .t1 .vs{color:var(--muted);font-size:12px;letter-spacing:.5px;opacity:.7}
+  .t1 .nm{white-space:nowrap}
+  .import-btn{width:100%;padding:11px;border-radius:12px;border:1px solid rgba(45,212,191,.5);
+    background:rgba(45,212,191,.12);color:var(--acc);font-weight:700;font-size:13px;letter-spacing:.5px;
+    cursor:pointer;margin-bottom:14px}
+  .import-btn:active{transform:scale(.99)}
+  .t2 a{color:var(--acc);text-decoration:none}
 
   /* ── Vista Planificación (grilla en 1 hoja) ───────────────── */
   .wrap.wide{max-width:1100px}
@@ -127,6 +140,7 @@
       <button class="tab" id="tab-entrenamientos" onclick="setTab('entrenamientos')">🏋️ Entrenamientos</button>
     </div>
     <button class="add-btn" id="add-btn" onclick="openForm()">+ Agregar</button>
+    <button class="import-btn" id="import-btn" onclick="importFixture()">⬇️ Importar fixture 2026/27 (14 partidos)</button>
     <div id="form-wrap"></div>
     <div id="list"></div>
   </div>
@@ -192,6 +206,7 @@
     tab=t; editId=null;
     document.getElementById('tab-partidos').classList.toggle('on',t==='partidos');
     document.getElementById('tab-entrenamientos').classList.toggle('on',t==='entrenamientos');
+    var ib=document.getElementById('import-btn'); if(ib) ib.style.display=(t==='partidos')?'':'none';
     document.getElementById('form-wrap').innerHTML='';
     render();
   }
@@ -201,6 +216,68 @@
     return {d:p[2]||'--', m:(calT().mc[parseInt(p[1],10)-1]||'')};
   }
   function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+
+  // ── Escudos de los clubes (monograma con color real; reemplazable por logo real vía ESCUDOS) ──
+  var CLUBS={
+    'Näfels':{ab:'NÄF',c:'#d81e28'}, 'Nafels':{ab:'NÄF',c:'#d81e28'},
+    'Lausanne':{ab:'LUC',c:'#00397a'},
+    'St. Gallen':{ab:'SG',c:'#0a7a37'}, 'St Gallen':{ab:'SG',c:'#0a7a37'},
+    'Jona':{ab:'JON',c:'#1d4f91'},
+    'Chênois':{ab:'CHE',c:'#1e7a46'}, 'Chenois':{ab:'CHE',c:'#1e7a46'},
+    'Schönenwerd':{ab:'SCH',c:'#b3121f'}, 'Schonenwerd':{ab:'SCH',c:'#b3121f'},
+    'Amriswil':{ab:'AMR',c:'#005bac'},
+    'Colombier':{ab:'COL',c:'#d0361f'}
+  };
+  // Logos reales: dejá los 8 archivos PNG en una carpeta "escudos/" junto a este archivo.
+  // Si el archivo existe, se muestra el logo; si falta, queda el monograma. Nunca se rompe.
+  var ESCUDOS={
+    'Näfels':'escudos/nafels.png', 'Nafels':'escudos/nafels.png',
+    'Lausanne':'escudos/lausanne.png',
+    'St. Gallen':'escudos/stgallen.png', 'St Gallen':'escudos/stgallen.png',
+    'Jona':'escudos/jona.png',
+    'Chênois':'escudos/chenois.png', 'Chenois':'escudos/chenois.png',
+    'Schönenwerd':'escudos/schoenenwerd.png', 'Schonenwerd':'escudos/schoenenwerd.png',
+    'Amriswil':'escudos/amriswil.png',
+    'Colombier':'escudos/colombier.png'
+  };
+  function crestHTML(name){
+    var k=name||'', c=CLUBS[k]||{ab:(k.substr(0,3)||'?').toUpperCase(),c:'#555'};
+    var url=ESCUDOS[k]||'';
+    var img=url?'<img src="'+url+'" alt="" onerror="this.remove()">':'';
+    return '<span class="crest" style="--cc:'+c.c+'" title="'+esc(k)+'">'+img+c.ab+'</span>';
+  }
+
+  // ── Fixture NLA 2026/27 (temporada regular) ──
+  var FIXTURE=[
+    {fecha:'2026-10-18',hora:'17:00',rival:'Lausanne',condicion:'Local',lugar:'Lintharena, Näfels',mapa:'https://www.google.com/maps/search/?api=1&query=8FVF4358%2B77'},
+    {fecha:'2026-10-24',hora:'18:00',rival:'St. Gallen',condicion:'Visitante',lugar:'St. Gallen',mapa:'https://www.google.com/maps/search/?api=1&query=8FVFC88X%2BRW'},
+    {fecha:'2026-10-31',hora:'17:00',rival:'Jona',condicion:'Local',lugar:'Lintharena, Näfels',mapa:'https://www.google.com/maps/search/?api=1&query=8FVF4358%2B77'},
+    {fecha:'2026-11-07',hora:'18:00',rival:'Chênois',condicion:'Visitante',lugar:'Genève',mapa:'https://www.google.com/maps/search/?api=1&query=8FR855QV%2BF3'},
+    {fecha:'2026-11-14',hora:'17:30',rival:'Schönenwerd',condicion:'Visitante',lugar:'Schönenwerd',mapa:'https://www.google.com/maps/search/?api=1&query=8FVC92H3%2BVH'},
+    {fecha:'2026-11-21',hora:'17:00',rival:'Amriswil',condicion:'Local',lugar:'Lintharena, Näfels',mapa:'https://www.google.com/maps/search/?api=1&query=8FVF4358%2B77'},
+    {fecha:'2026-11-28',hora:'17:00',rival:'Colombier',condicion:'Local',lugar:'Lintharena, Näfels',mapa:'https://www.google.com/maps/search/?api=1&query=8FVF4358%2B77'},
+    {fecha:'2026-12-05',hora:'17:30',rival:'Lausanne',condicion:'Visitante',lugar:'Lausanne',mapa:'https://www.google.com/maps/search/?api=1&query=8FR8GH9H%2BPM'},
+    {fecha:'2026-12-13',hora:'17:00',rival:'St. Gallen',condicion:'Local',lugar:'Lintharena, Näfels',mapa:'https://www.google.com/maps/search/?api=1&query=8FVF4358%2B77'},
+    {fecha:'2026-12-19',hora:'17:00',rival:'Jona',condicion:'Visitante',lugar:'Jona',mapa:'https://www.google.com/maps/search/?api=1&query=8FVC6RCV%2BRJ'},
+    {fecha:'2027-01-03',hora:'17:00',rival:'Chênois',condicion:'Local',lugar:'Lintharena, Näfels',mapa:'https://www.google.com/maps/search/?api=1&query=8FVF4358%2B77'},
+    {fecha:'2027-01-16',hora:'17:00',rival:'Schönenwerd',condicion:'Local',lugar:'Lintharena, Näfels',mapa:'https://www.google.com/maps/search/?api=1&query=8FVF4358%2B77'},
+    {fecha:'2027-01-30',hora:'17:00',rival:'Amriswil',condicion:'Visitante',lugar:'Amriswil',mapa:'https://www.google.com/maps/search/?api=1&query=8FVFG7XQ%2BCP'},
+    {fecha:'2027-02-13',hora:'17:30',rival:'Colombier',condicion:'Visitante',lugar:'Colombier',mapa:'https://www.google.com/maps/search/?api=1&query=8FV83W73%2B5G'}
+  ];
+  function importFixture(){
+    if(!confirm('¿Agregar los 14 partidos del fixture 2026/27 al calendario?')) return;
+    var arr=(data.partidos||[]).slice(), added=0;
+    FIXTURE.forEach(function(m){
+      var dup=arr.some(function(x){ return x.fecha===m.fecha && (x.rival||'')===m.rival && (x.condicion||'')===m.condicion; });
+      if(dup) return;
+      arr.push({ id:Date.now()+Math.floor(Math.random()*100000), fecha:m.fecha, hora:m.hora, lugar:m.lugar, rival:m.rival, condicion:m.condicion, mapa:m.mapa });
+      added++;
+    });
+    data.partidos=arr;
+    fbSet('calendario/partidos', arr);
+    render();
+    alert(added+' partido(s) agregado(s)'+(added<FIXTURE.length?'. '+(FIXTURE.length-added)+' ya estaban cargados.':'.'));
+  }
 
   function render(){
     if(viewMode==='plan'){ renderPlan(); return; }
@@ -221,8 +298,14 @@
     arr.forEach(function(e){
       var dt=fmtDate(e.fecha), t1, t2;
       if(tab==='partidos'){
-        t1='NÄFELS vs '+esc(e.rival||'—');
-        t2=(e.hora?e.hora+' · ':'')+(e.condicion||'')+(e.lugar?' · '+esc(e.lugar):'');
+        var rival=e.rival||'—';
+        var home=(e.condicion==='Visitante')?rival:'Näfels';
+        var away=(e.condicion==='Visitante')?'Näfels':rival;
+        function tName(x){ return (x==='Näfels'||x==='Nafels')?'NÄFELS':esc(x); }
+        t1=crestHTML(home)+'<span class="nm">'+tName(home)+'</span>'+
+           '<span class="vs">vs</span>'+crestHTML(away)+'<span class="nm">'+tName(away)+'</span>';
+        t2=(e.hora?e.hora+' · ':'')+(e.condicion||'')+(e.lugar?' · '+esc(e.lugar):'')+
+           (e.mapa?' · <a href="'+esc(e.mapa)+'" target="_blank" rel="noopener">📍 mapa</a>':'');
       } else {
         t1=esc(e.tipo||'Entrenamiento');
         t2=(e.hora?e.hora+' · ':'')+esc(e.lugar||'');
