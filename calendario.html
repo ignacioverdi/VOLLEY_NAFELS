@@ -70,6 +70,40 @@
     cursor:pointer;margin-bottom:14px}
   .import-btn:active{transform:scale(.99)}
   .t2 a{color:var(--acc);text-decoration:none}
+  /* ── fixture pro en una línea ── */
+  #list .fx{display:grid;grid-template-columns:52px 1fr 30px 22px 30px 1fr minmax(76px,auto) auto;align-items:center;gap:9px;
+    background:linear-gradient(180deg,var(--surface),var(--card));border:1px solid var(--line,#243040);border-left:3px solid var(--line,#243040);
+    border-radius:13px;padding:8px 12px;margin-bottom:8px;transition:transform .12s,border-color .12s,box-shadow .12s}
+  #list .fx:hover{transform:translateY(-1px);border-color:#33475e;box-shadow:0 6px 16px rgba(0,0,0,.32)}
+  #list .fx[data-cond="Local"]{border-left-color:var(--acc)}
+  #list .fx[data-cond="Visitante"]{border-left-color:#f59e0b}
+  .fx-date{display:flex;flex-direction:column;align-items:center;line-height:1;border-right:1px solid var(--line,#243040);padding-right:7px}
+  .fx-date .d{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--text)}
+  .fx-date .mo{font-size:9px;font-weight:700;letter-spacing:1.3px;color:var(--acc)}
+  .fx-date .dow{font-size:8px;letter-spacing:1px;color:var(--muted);margin-top:1px}
+  .fx-home,.fx-away{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.6px;color:var(--text);min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .fx-home{text-align:right} .fx-away{text-align:left}
+  .fx-home.us,.fx-away.us{color:var(--acc)}
+  .fx .ta{display:none}
+  .fx-cr{width:30px;height:30px;border-radius:7px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+  .fx-cr img{width:100%;height:100%;object-fit:contain;padding:2px}
+  .fx-cr.mono{background:var(--cc,#555);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.5px}
+  .fx-vs{font-family:'Bebas Neue',sans-serif;font-size:12px;color:var(--muted);text-align:center;letter-spacing:1px}
+  .fx-meta{display:flex;flex-direction:column;align-items:flex-end;line-height:1.15;padding-left:7px;border-left:1px solid var(--line,#243040)}
+  .fx-time{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--acc);letter-spacing:1px}
+  .fx-place{display:flex;align-items:center;gap:5px;max-width:150px}
+  .fx-venue{font-size:10px;color:var(--muted);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .fx-map{text-decoration:none;font-size:13px;line-height:1;flex:none}
+  .fx-acts{display:flex;gap:2px}
+  @media(max-width:600px){
+    #list .fx{grid-template-columns:38px 1fr 24px 15px 24px 1fr auto auto;gap:5px;padding:7px 8px}
+    .fx-home,.fx-away{font-size:15px;letter-spacing:.3px}
+    .fx-cr{width:24px;height:24px}
+    .fx-venue{display:none}
+    .fx-meta{border-left:none;padding-left:3px}
+    .fx-time{font-size:15px}
+    .fx-map{font-size:16px}
+  }
 
   /* ── Vista Planificación (grilla en 1 hoja) ───────────────── */
   .wrap.wide{max-width:1100px}
@@ -246,6 +280,19 @@
     var img=url?'<img src="'+url+'" alt="" onerror="this.remove()">':'';
     return '<span class="crest" style="--cc:'+c.c+'" title="'+esc(k)+'">'+img+c.ab+'</span>';
   }
+  var DOW_ES=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  function fxDate(f){
+    var p=(f||'').split('-'); if(p.length<3) return {d:'--',mo:'',dow:''};
+    var dt=new Date(+p[0],(+p[1])-1,+p[2]);
+    var mc=(calT().mc||[]), dw=(calT().dow||DOW_ES);
+    return {d:p[2], mo:(mc[(+p[1])-1]||'').toUpperCase(), dow:(dw[(dt.getDay()+6)%7]||'').toUpperCase()};
+  }
+  function fxCrest(name){
+    var k=name||'', c=CLUBS[k]||{ab:((k.substr(0,3))||'?').toUpperCase(),c:'#555'};
+    var url=ESCUDOS[k]||'';
+    if(!url) return '<div class="fx-cr mono" style="--cc:'+c.c+'">'+c.ab+'</div>';
+    return '<div class="fx-cr"><img src="'+url+'" alt="" onerror="var p=this.parentNode;p.classList.add(\'mono\');p.style.setProperty(\'--cc\',\''+c.c+'\');p.textContent=\''+c.ab+'\';"></div>';
+  }
 
   // ── Fixture NLA 2026/27 (temporada regular) ──
   var FIXTURE=[
@@ -296,28 +343,39 @@
     }
     var h='';
     arr.forEach(function(e){
-      var dt=fmtDate(e.fecha), t1, t2;
       if(tab==='partidos'){
         var rival=e.rival||'—';
         var home=(e.condicion==='Visitante')?rival:'Näfels';
         var away=(e.condicion==='Visitante')?'Näfels':rival;
+        var dd=fxDate(e.fecha);
         function tName(x){ return (x==='Näfels'||x==='Nafels')?'NÄFELS':esc(x); }
-        t1=crestHTML(home)+'<span class="nm">'+tName(home)+'</span>'+
-           '<span class="vs">vs</span>'+crestHTML(away)+'<span class="nm">'+tName(away)+'</span>';
-        t2=(e.hora?e.hora+' · ':'')+(e.condicion||'')+(e.lugar?' · '+esc(e.lugar):'')+
-           (e.mapa?' · <a href="'+esc(e.mapa)+'" target="_blank" rel="noopener">📍 mapa</a>':'');
+        function tAbbr(x){ var c=CLUBS[x]; return c?c.ab:esc((x||'').substr(0,3).toUpperCase()); }
+        h+='<div class="fx" data-cond="'+esc(e.condicion||'')+'">'+
+             '<div class="fx-date"><span class="d">'+dd.d+'</span><span class="mo">'+dd.mo+'</span><span class="dow">'+dd.dow+'</span></div>'+
+             '<div class="fx-home'+(home==='Näfels'?' us':'')+'">'+tName(home)+'</div>'+
+             fxCrest(home)+
+             '<div class="fx-vs">vs</div>'+
+             fxCrest(away)+
+             '<div class="fx-away'+(away==='Näfels'?' us':'')+'">'+tName(away)+'</div>'+
+             '<div class="fx-meta"><span class="fx-time">'+esc(e.hora||'')+'</span><span class="fx-place">'+(e.lugar?'<span class="fx-venue">'+esc(e.lugar)+'</span>':'')+(e.mapa?'<a class="fx-map" href="'+esc(e.mapa)+'" target="_blank" rel="noopener" title="Abrir en Google Maps">📍</a>':'')+'</span></div>'+
+             '<div class="fx-acts">'+
+               '<button class="icon-btn" title="Editar" onclick="editEntry('+e.id+')">✏️</button>'+
+               '<button class="icon-btn del" title="Eliminar" onclick="delEntry('+e.id+')">🗑️</button>'+
+             '</div>'+
+           '</div>';
       } else {
-        t1=esc(e.tipo||'Entrenamiento');
-        t2=(e.hora?e.hora+' · ':'')+esc(e.lugar||'');
+        var dt=fmtDate(e.fecha);
+        var t1=esc(e.tipo||'Entrenamiento');
+        var t2=(e.hora?e.hora+' · ':'')+esc(e.lugar||'');
+        h+='<div class="entry">'+
+          '<div class="date"><div class="d">'+dt.d+'</div><div class="m">'+dt.m+'</div></div>'+
+          '<div class="info"><div class="t1">'+t1+'</div><div class="t2">'+t2+'</div></div>'+
+          '<div class="acts">'+
+            '<button class="icon-btn" title="Editar" onclick="editEntry('+e.id+')">✏️</button>'+
+            '<button class="icon-btn del" title="Eliminar" onclick="delEntry('+e.id+')">🗑️</button>'+
+          '</div>'+
+        '</div>';
       }
-      h+='<div class="entry">'+
-        '<div class="date"><div class="d">'+dt.d+'</div><div class="m">'+dt.m+'</div></div>'+
-        '<div class="info"><div class="t1">'+t1+'</div><div class="t2">'+t2+'</div></div>'+
-        '<div class="acts">'+
-          '<button class="icon-btn" title="Editar" onclick="editEntry('+e.id+')">✏️</button>'+
-          '<button class="icon-btn del" title="Eliminar" onclick="delEntry('+e.id+')">🗑️</button>'+
-        '</div>'+
-      '</div>';
     });
     list.innerHTML=h;
     retranslate();
