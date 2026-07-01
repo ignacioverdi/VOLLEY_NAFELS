@@ -291,7 +291,9 @@
     var k=name||'', c=CLUBS[k]||{ab:((k.substr(0,3))||'?').toUpperCase(),c:'#555'};
     var url=ESCUDOS[k]||'';
     if(!url) return '<div class="fx-cr mono" style="--cc:'+c.c+'">'+c.ab+'</div>';
-    return '<div class="fx-cr"><img src="'+url+'" alt="" onerror="var p=this.parentNode;p.classList.add(\'mono\');p.style.setProperty(\'--cc\',\''+c.c+'\');p.textContent=\''+c.ab+'\';"></div>';
+    var alt=(url.indexOf('escudos/')===0)?('escudos/'+url):'';  // respaldo si la carpeta quedó anidada (escudos/escudos/)
+    var oe="var i=this,p=i.parentNode;if(i.getAttribute('data-alt')){i.src=i.getAttribute('data-alt');i.removeAttribute('data-alt');return;}p.classList.add('mono');p.style.setProperty('--cc','"+c.c+"');p.textContent='"+c.ab+"';";
+    return '<div class="fx-cr"><img src="'+url+'"'+(alt?' data-alt="'+alt+'"':'')+' alt="" onerror="'+oe+'"></div>';
   }
 
   // ── Fixture NLA 2026/27 (temporada regular) ──
