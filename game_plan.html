@@ -2354,15 +2354,25 @@ function renderArmador(){
           var col2=document.createElement('div');
           col2.style.cssText='background:var(--card);padding:4px 2px;display:flex;flex-direction:column;align-items:center;gap:2px';
           var sl=document.createElement('div');
-          sl.style.cssText='font-size:6px;color:rgba(129,140,248,.5);letter-spacing:1px;text-transform:uppercase'; sl.textContent=side.l;
+          sl.style.cssText='font-size:8px;color:rgba(129,140,248,.6);letter-spacing:1px;text-transform:uppercase'; sl.textContent=side.l;
           var sel=document.createElement('select');
-          sel.style.cssText='background:rgba(255,255,255,.03);border:1px solid rgba(129,140,248,.12);border-radius:4px;color:#e2e8f0;font-family:Barlow Condensed,sans-serif;font-size:8px;padding:2px 1px;width:100%;cursor:pointer';
+          sel.style.cssText='background:rgba(255,255,255,.03);border:1px solid rgba(129,140,248,.12);border-radius:4px;color:#e2e8f0;font-family:Barlow Condensed,sans-serif;font-size:12px;font-weight:700;padding:4px 2px;width:100%;cursor:pointer;text-align:center;text-align-last:center';
           var BLQ_OPTS=[{v:'',l:'— Sin definir —'},{v:'1BLQ',l:'\u261d Opción 1'},{v:'2BLQ',l:'\u270c Opción 2'},{v:'CIERRE',l:'\u270a Colgado'},{v:'LECTURA',l:'\ud83d\udd90 Lectura'},{v:'CUERNO',l:'\ud83e\udd18 Punta y Punta'},{v:'6-5',l:'6-5'},{v:'6-1',l:'6-1'}];
           BLQ_OPTS.forEach(function(op){ var o=document.createElement('option');o.value=op.v;o.textContent=op.l; if(op.v===blqState[key][side.k])o.selected=true; sel.appendChild(o); });
           sel.addEventListener('change',function(){ blqState[key][side.k]=sel.value; cvW.innerHTML=gpCourtSVG(dd,blqState[key],pos,setterIdx); });
           col2.appendChild(sl); col2.appendChild(sel); blqRow.appendChild(col2);
         });
         card.appendChild(blqRow);
+        // ── Línea para escribir (nota por rotación · se guarda) ──
+        var notaKey='vb_gp_nota_'+GP_RIVAL_SLUG+'_'+key;
+        var notaWrap=document.createElement('div');
+        notaWrap.style.cssText='border-top:1px solid rgba(129,140,248,.12);background:rgba(129,140,248,.05)';
+        var notaInp=document.createElement('input');
+        notaInp.type='text'; notaInp.placeholder='✍️ Anotá algo…';
+        try{ notaInp.value=localStorage.getItem(notaKey)||''; }catch(e){}
+        notaInp.style.cssText='width:100%;box-sizing:border-box;background:transparent;border:none;color:#e2e8f0;font-family:Barlow Condensed,sans-serif;font-size:12px;font-weight:700;padding:6px 8px;text-align:center;outline:none';
+        notaInp.addEventListener('input',function(){ try{ localStorage.setItem(notaKey,this.value); }catch(e){} });
+        notaWrap.appendChild(notaInp); card.appendChild(notaWrap);
         var stRow=document.createElement('div');
         stRow.style.cssText='display:flex;border-top:1px solid var(--border)';
         var ec3=dd.eff>=50?'#22c55e':dd.eff>=25?'#fbbf24':dd.eff>=0?'#f97316':'#ef4444';
