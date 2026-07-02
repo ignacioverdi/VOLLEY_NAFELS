@@ -98,7 +98,7 @@ select:hover{border-color:var(--red)}select:focus{outline:none;border-color:var(
 .read b{color:var(--red);font-weight:600}
 footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:var(--faint)}
 .vmodal{display:none;position:fixed;inset:0;background:rgba(4,5,9,.8);z-index:99;align-items:center;justify-content:center;padding:16px}
-.vpanel{background:var(--card);border:1px solid var(--border);border-radius:12px;width:min(880px,100%);max-height:95vh;overflow:auto}
+.vpanel{background:var(--card);border:1px solid var(--border);border-radius:12px;width:min(1060px,100%);max-height:95vh;overflow:auto}
 .vhead{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)}
 .vtitle{font-family:'Bebas Neue',sans-serif;font-size:20px;flex:1;letter-spacing:.02em}
 .vclose{background:var(--card2);color:var(--txt);border:1px solid var(--border);border-radius:7px;width:32px;height:32px;font-size:15px;cursor:pointer}
@@ -111,10 +111,23 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 .vctrls .vcount{font-weight:700;color:var(--txt);min-width:52px;text-align:center}
 .vctrls label{display:flex;align-items:center;gap:4px;color:var(--faint)}
 .vctrls input{width:46px;background:var(--card2);color:var(--txt);border:1px solid var(--border);border-radius:6px;padding:4px 6px;font-size:12px}
-.vlist{display:flex;flex-wrap:wrap;gap:5px;padding:0 14px 14px}
-.vitem{font-size:11px;padding:4px 8px;border-radius:12px;background:var(--card2);color:var(--mut);cursor:pointer;border:1px solid var(--border)}
-.vitem.on{background:var(--red);color:#fff;border-color:var(--red)}
-.r-pt{color:#4ade80}.r-er{color:#f87171}.r-bl{color:#e879a9}.vitem.on .r-pt,.vitem.on .r-er,.vitem.on .r-bl{color:#fff}
+.vbody{display:flex;align-items:stretch}
+.vmain{flex:1;min-width:0}
+.vside{width:290px;border-left:1px solid var(--border);display:flex;flex-direction:column;max-height:72vh}
+.vside-head{display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid var(--border)}
+.vside-head b{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.03em;flex:1}
+.vside-head #vselcount{font-size:12px;color:var(--faint);margin-right:4px}
+.vside-head button{font-size:10px;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--mut);cursor:pointer}
+.vside-head button:hover{border-color:var(--red);color:var(--txt)}
+.vlist{display:flex;flex-direction:column;gap:2px;padding:8px;overflow:auto}
+.vitem{display:flex;align-items:center;gap:8px;font-size:12px;padding:5px 7px;border-radius:6px;color:var(--mut)}
+.vitem:hover{background:var(--card2)}
+.vitem input{accent-color:var(--red);cursor:pointer;flex-shrink:0}
+.vitem .vlbl{cursor:pointer;flex:1}
+.vitem.playing{background:var(--red);color:#fff}
+.vitem.off{opacity:.42}
+.r-pt{color:#4ade80}.r-er{color:#f87171}.r-bl{color:#e879a9}.vitem.playing .r-pt,.vitem.playing .r-er,.vitem.playing .r-bl{color:#fff}
+@media(max-width:760px){.vbody{flex-direction:column}.vside{width:auto;border-left:none;border-top:1px solid var(--border);max-height:230px}}
 @media(max-width:1000px){.grid3{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:680px){.grid3,.grid2{grid-template-columns:1fr}header.masthead h1{font-size:36px}}
 @media print{body{background:#fff;color:#111}.player{background:#fff;border-color:#ccc}.filters,.vmodal{display:none!important}.cell.has::after{display:none}}
@@ -165,17 +178,24 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
   <div class="vpanel">
     <div class="vhead"><div id="vtitle" class="vtitle"></div><button class="vclose" onclick="closeV()">✕</button></div>
     <div class="vfilters" id="vfilters"></div>
-    <div class="vplayer"><div id="ytplayer"></div></div>
-    <div class="vctrls">
-      <button class="sec" onclick="prevClip()">◀</button>
-      <button onclick="replayCur()">↻ Repetir</button>
-      <button class="sec" onclick="nextClip()">▶</button>
-      <span class="vcount" id="vcount"></span>
-      <label>Vel <select id="vspeed" onchange="setSpeed(this.value)" style="width:auto"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
-      <label>Antes <input id="vpre" type="number" value="7" min="0" max="20" onchange="pre=+this.value||7"></label>
-      <label>Después <input id="vpost" type="number" value="3" min="0" max="20" onchange="post=+this.value||3"></label>
+    <div class="vbody">
+      <div class="vmain">
+        <div class="vplayer"><div id="ytplayer"></div></div>
+        <div class="vctrls">
+          <button class="sec" onclick="prevClip()">◀</button>
+          <button onclick="replayCur()">↻ Repetir</button>
+          <button class="sec" onclick="nextClip()">▶</button>
+          <span class="vcount" id="vcount"></span>
+          <label>Vel <select id="vspeed" onchange="setSpeed(this.value)" style="width:auto"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
+          <label>Antes <input id="vpre" type="number" value="7" min="0" max="20" onchange="pre=+this.value||7"></label>
+          <label>Después <input id="vpost" type="number" value="3" min="0" max="20" onchange="post=+this.value||3"></label>
+        </div>
+      </div>
+      <div class="vside">
+        <div class="vside-head"><b>Acciones</b><span id="vselcount"></span><button onclick="clipAll(1)">Todas</button><button onclick="clipAll(0)">Ninguna</button></div>
+        <div id="vlist" class="vlist"></div>
+      </div>
     </div>
-    <div id="vlist" class="vlist"></div>
   </div>
 </div>
 
@@ -289,8 +309,8 @@ function openArmZone(pos,zn){
   var setter=armTeam.setters[armSetIdx]||armTeam.setters[0];
   var rows=armRallies(setter,pos).filter(function(r){return String(gpGetZone(GP_COMBOS[r[8]]||"",r[11],r[6]))===zn;});
   var mt=(armTeam.matches||[]);
-  clips=rows.map(function(r){var mm=mt[r[12]]||{},mid=mm.code||"",yt=(INFO[mid]||{}).yt||"";return {tag:GP_COMBOS[r[8]]||"",ev:RESARM[r[9]]||"",t:r[14]||r[13],vid:yt};}).filter(function(c){return c.vid&&c.t;});
-  curP=null;curZn=zn;cur=0;
+  clips=rows.map(function(r){var mm=mt[r[12]]||{},mid=mm.code||"",yt=(INFO[mid]||{}).yt||"";return {tag:GP_COMBOS[r[8]]||"",ev:RESARM[r[9]]||"",t:r[14]||r[13],vid:yt,sel:true};}).filter(function(c){return c.vid&&c.t;});
+  curP=null;curZn=zn;cur=firstSel();
   document.getElementById("vfilters").innerHTML="";
   document.getElementById("vtitle").textContent=setter.name+" · P"+pos+" · zona "+zn+" · "+rows.length+" armados"+(clips.length<rows.length?" ("+clips.length+" c/video)":"");
   document.getElementById("vmodal").style.display="flex";renderList();
@@ -368,15 +388,20 @@ function openZone(pid,zn){curP=PLAYERS.find(function(x){return x.id===pid;});cur
 function recompute(){if(!curP)return;var cfg=ROLECFG[curP.role];
   var vals=cfg.filters.map(function(_,i){return g('vf'+i);});
   var all=curP.data.filter(function(a){return String(a[cfg.court])===curZn&&MSEL.has(a[cfg.vIdx])&&passes(a,cfg,vals);});
-  clips=all.map(function(a){return {tag:a[cfg.tagIdx],ev:a[cfg.evIdx],t:a[cfg.tIdx],vid:(INFO[a[cfg.vIdx]]||{}).yt||''};}).filter(function(c){return c.vid;});
-  cur=0;document.getElementById("vtitle").textContent=curP.name+" · zona "+curZn+" · "+all.length+U(curP.role)+(clips.length<all.length?' ('+clips.length+' c/video)':'');renderList();
+  clips=all.map(function(a){return {tag:a[cfg.tagIdx],ev:a[cfg.evIdx],t:a[cfg.tIdx],vid:(INFO[a[cfg.vIdx]]||{}).yt||'',sel:true};}).filter(function(c){return c.vid;});
+  cur=firstSel();document.getElementById("vtitle").textContent=curP.name+" · zona "+curZn+" · "+all.length+U(curP.role)+(clips.length<all.length?' ('+clips.length+' c/video)':'');renderList();
   if(!clips.length){document.getElementById("vcount").textContent="sin video";return;}
   ensureYT(function(){if(!YTP){YTP=new YT.Player("ytplayer",{playerVars:{rel:0,modestbranding:1,controls:1,playsinline:1},events:{onReady:function(){YTReady=true;playCur();}}});}else{playCur();}});}
-function renderList(){document.getElementById("vlist").innerHTML=clips.map(function(c,i){return '<span class="vitem'+(i===cur?' on':'')+'" onclick="jump('+i+')">'+(i+1)+'. '+(TAGFMT[c.tag]||c.tag)+' '+evLabel(c.ev)+'</span>';}).join("");}
-function playCur(){if(!YTReady||!clips.length)return;var a=clips[cur],start=Math.max(0,a.t-pre);if(a.vid!==loadedVid){loadedVid=a.vid;YTP.loadVideoById({videoId:a.vid,startSeconds:start});}else{YTP.seekTo(start,true);}YTP.playVideo();try{YTP.setPlaybackRate(speed);}catch(e){}document.getElementById("vcount").textContent=(cur+1)+" / "+clips.length;renderList();clearInterval(vtimer);var end=a.t+post;vtimer=setInterval(function(){if(YTP&&YTP.getCurrentTime&&YTP.getCurrentTime()>=end){if(cur<clips.length-1){cur++;playCur();}else{clearInterval(vtimer);}}},200);}
+function nextSel(from,dir){var i=from;for(var k=0;k<clips.length;k++){i+=dir;if(i<0||i>=clips.length)return -1;if(clips[i].sel)return i;}return -1;}
+function firstSel(){for(var i=0;i<clips.length;i++)if(clips[i].sel)return i;return 0;}
+function toggleClip(i){if(clips[i]){clips[i].sel=!clips[i].sel;renderList();}}
+function clipAll(on){for(var i=0;i<clips.length;i++)clips[i].sel=!!on;renderList();}
+function renderList(){var sel=0;for(var k=0;k<clips.length;k++)if(clips[k].sel)sel++;var sc=document.getElementById("vselcount");if(sc)sc.textContent=sel+"/"+clips.length;
+  document.getElementById("vlist").innerHTML=clips.map(function(c,i){return '<label class="vitem'+(i===cur?" playing":"")+(c.sel?"":" off")+'"><input type="checkbox" '+(c.sel?"checked":"")+' onclick="event.stopPropagation();toggleClip('+i+')"><span class="vlbl" onclick="jump('+i+')">'+(i+1)+". "+(TAGFMT[c.tag]||c.tag)+" "+evLabel(c.ev)+'</span></label>';}).join("");}
+function playCur(){if(!YTReady||!clips.length)return;var a=clips[cur],start=Math.max(0,a.t-pre);if(a.vid!==loadedVid){loadedVid=a.vid;YTP.loadVideoById({videoId:a.vid,startSeconds:start});}else{YTP.seekTo(start,true);}YTP.playVideo();try{YTP.setPlaybackRate(speed);}catch(e){}document.getElementById("vcount").textContent=(cur+1)+" / "+clips.length;renderList();clearInterval(vtimer);var end=a.t+post;vtimer=setInterval(function(){if(YTP&&YTP.getCurrentTime&&YTP.getCurrentTime()>=end){var n=nextSel(cur,1);if(n>=0){cur=n;playCur();}else{clearInterval(vtimer);}}},200);}
 function jump(i){cur=i;playCur();}
-function nextClip(){if(cur<clips.length-1){cur++;playCur();}}
-function prevClip(){if(cur>0){cur--;playCur();}}
+function nextClip(){var n=nextSel(cur,1);if(n>=0){cur=n;playCur();}}
+function prevClip(){var n=nextSel(cur,-1);if(n>=0){cur=n;playCur();}}
 function replayCur(){playCur();}
 function setSpeed(v){speed=parseFloat(v);if(YTP&&YTP.setPlaybackRate){try{YTP.setPlaybackRate(speed);}catch(e){}}}
 function closeV(){document.getElementById("vmodal").style.display="none";clearInterval(vtimer);if(YTP&&YTP.pauseVideo)YTP.pauseVideo();}
