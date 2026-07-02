@@ -119,6 +119,11 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 .vside-head #vselcount{font-size:12px;color:var(--faint);margin-right:4px}
 .vside-head button{font-size:10px;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--mut);cursor:pointer}
 .vside-head button:hover{border-color:var(--red);color:var(--txt)}
+.vside-head2{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border)}
+#vsavebtn{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;padding:5px 12px;border-radius:7px;border:1px solid #7c3aed;background:#7c3aed;color:#fff;cursor:pointer}
+#vsavebtn.saved{background:#16a34a;border-color:#16a34a}
+.vonly{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mut);cursor:pointer}
+.vonly input{accent-color:var(--red);cursor:pointer}
 .vlist{display:flex;flex-direction:column;gap:2px;padding:8px;overflow:auto}
 .vitem{display:flex;align-items:center;gap:8px;font-size:12px;padding:5px 7px;border-radius:6px;color:var(--mut)}
 .vitem:hover{background:var(--card2)}
@@ -193,6 +198,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
       </div>
       <div class="vside">
         <div class="vside-head"><b>Acciones</b><span id="vselcount"></span><button onclick="clipAll(1)">Todas</button><button onclick="clipAll(0)">Ninguna</button></div>
+        <div class="vside-head2"><button id="vsavebtn" onclick="saveSel()">💾 Guardar</button><label class="vonly"><input type="checkbox" id="vonly" onchange="toggleOnly()"> Solo seleccionadas</label></div>
         <div id="vlist" class="vlist"></div>
       </div>
     </div>
@@ -310,7 +316,7 @@ function openArmZone(pos,zn){
   var rows=armRallies(setter,pos).filter(function(r){return String(gpGetZone(GP_COMBOS[r[8]]||"",r[11],r[6]))===zn;});
   var mt=(armTeam.matches||[]);
   clips=rows.map(function(r){var mm=mt[r[12]]||{},mid=mm.code||"",yt=(INFO[mid]||{}).yt||"";return {tag:GP_COMBOS[r[8]]||"",ev:RESARM[r[9]]||"",t:r[14]||r[13],vid:yt,sel:true};}).filter(function(c){return c.vid&&c.t;});
-  curP=null;curZn=zn;cur=firstSel();
+  curP=null;curZn=zn;curKey=TEAM+"|arm"+armSetIdx+"|P"+pos+"|"+zn;onlyShow=false;var _vo=document.getElementById("vonly");if(_vo)_vo.checked=false;applySavedSel();cur=firstSel();
   document.getElementById("vfilters").innerHTML="";
   document.getElementById("vtitle").textContent=setter.name+" · P"+pos+" · zona "+zn+" · "+rows.length+" armados"+(clips.length<rows.length?" ("+clips.length+" c/video)":"");
   document.getElementById("vmodal").style.display="flex";renderList();
@@ -380,8 +386,9 @@ buildTeam();
 
 /* ---- Video ---- */
 let YTP=null,YTReady=false,clips=[],cur=0,loadedVid="",vtimer=null,pre=7,post=3,speed=1,curP=null,curZn="";
+var VSEL={};try{VSEL=JSON.parse(localStorage.getItem("pp_vsel")||"{}")||{};}catch(e){VSEL={};}var onlyShow=false,curKey="";
 function ensureYT(cb){if(window.YT&&window.YT.Player){cb();return;}window.onYouTubeIframeAPIReady=cb;if(!document.getElementById("ytapi")){var s=document.createElement("script");s.id="ytapi";s.src="https://www.youtube.com/iframe_api";document.head.appendChild(s);}}
-function openZone(pid,zn){curP=PLAYERS.find(function(x){return x.id===pid;});curZn=zn;var cfg=ROLECFG[curP.role];
+function openZone(pid,zn){curP=PLAYERS.find(function(x){return x.id===pid;});curZn=zn;curKey=TEAM+"|"+pid+"|"+zn;onlyShow=false;var _vo=document.getElementById("vonly");if(_vo)_vo.checked=false;var cfg=ROLECFG[curP.role];
   document.getElementById('vfilters').innerHTML=cfg.filters.map(function(fl,i){return '<div class="fgroup"><label>'+fl.lab+'</label><select id="vf'+i+'" onchange="recompute()">'+opts(fl.opts)+'</select></div>';}).join('');
   cfg.filters.forEach(function(_,i){document.getElementById('vf'+i).value=g(pid+'-f'+i);});
   document.getElementById("vmodal").style.display="flex";recompute();}
@@ -389,15 +396,19 @@ function recompute(){if(!curP)return;var cfg=ROLECFG[curP.role];
   var vals=cfg.filters.map(function(_,i){return g('vf'+i);});
   var all=curP.data.filter(function(a){return String(a[cfg.court])===curZn&&MSEL.has(a[cfg.vIdx])&&passes(a,cfg,vals);});
   clips=all.map(function(a){return {tag:a[cfg.tagIdx],ev:a[cfg.evIdx],t:a[cfg.tIdx],vid:(INFO[a[cfg.vIdx]]||{}).yt||'',sel:true};}).filter(function(c){return c.vid;});
-  cur=firstSel();document.getElementById("vtitle").textContent=curP.name+" · zona "+curZn+" · "+all.length+U(curP.role)+(clips.length<all.length?' ('+clips.length+' c/video)':'');renderList();
+  applySavedSel();cur=firstSel();document.getElementById("vtitle").textContent=curP.name+" · zona "+curZn+" · "+all.length+U(curP.role)+(clips.length<all.length?' ('+clips.length+' c/video)':'');renderList();
   if(!clips.length){document.getElementById("vcount").textContent="sin video";return;}
   ensureYT(function(){if(!YTP){YTP=new YT.Player("ytplayer",{playerVars:{rel:0,modestbranding:1,controls:1,playsinline:1},events:{onReady:function(){YTReady=true;playCur();}}});}else{playCur();}});}
 function nextSel(from,dir){var i=from;for(var k=0;k<clips.length;k++){i+=dir;if(i<0||i>=clips.length)return -1;if(clips[i].sel)return i;}return -1;}
 function firstSel(){for(var i=0;i<clips.length;i++)if(clips[i].sel)return i;return 0;}
 function toggleClip(i){if(clips[i]){clips[i].sel=!clips[i].sel;renderList();}}
 function clipAll(on){for(var i=0;i<clips.length;i++)clips[i].sel=!!on;renderList();}
+function clipId(c){return c.vid+"_"+Math.round(c.t);}
+function applySavedSel(){var s=VSEL[curKey];if(s&&s.length){var set={};for(var i=0;i<s.length;i++)set[s[i]]=1;for(var j=0;j<clips.length;j++)clips[j].sel=!!set[clipId(clips[j])];}}
+function saveSel(){if(!clips.length)return;var a=[];for(var i=0;i<clips.length;i++)if(clips[i].sel)a.push(clipId(clips[i]));VSEL[curKey]=a;try{localStorage.setItem("pp_vsel",JSON.stringify(VSEL));}catch(e){}var b=document.getElementById("vsavebtn");if(b){b.textContent="✓ Guardado";b.classList.add("saved");setTimeout(function(){b.textContent="💾 Guardar";b.classList.remove("saved");},1500);}}
+function toggleOnly(){var vo=document.getElementById("vonly");onlyShow=vo?vo.checked:false;renderList();}
 function renderList(){var sel=0;for(var k=0;k<clips.length;k++)if(clips[k].sel)sel++;var sc=document.getElementById("vselcount");if(sc)sc.textContent=sel+"/"+clips.length;
-  document.getElementById("vlist").innerHTML=clips.map(function(c,i){return '<label class="vitem'+(i===cur?" playing":"")+(c.sel?"":" off")+'"><input type="checkbox" '+(c.sel?"checked":"")+' onclick="event.stopPropagation();toggleClip('+i+')"><span class="vlbl" onclick="jump('+i+')">'+(i+1)+". "+(TAGFMT[c.tag]||c.tag)+" "+evLabel(c.ev)+'</span></label>';}).join("");}
+  document.getElementById("vlist").innerHTML=clips.map(function(c,i){if(onlyShow&&!c.sel)return "";return '<label class="vitem'+(i===cur?" playing":"")+(c.sel?"":" off")+'"><input type="checkbox" '+(c.sel?"checked":"")+' onclick="event.stopPropagation();toggleClip('+i+')"><span class="vlbl" onclick="jump('+i+')">'+(i+1)+". "+(TAGFMT[c.tag]||c.tag)+" "+evLabel(c.ev)+'</span></label>';}).join("");}
 function playCur(){if(!YTReady||!clips.length)return;var a=clips[cur],start=Math.max(0,a.t-pre);if(a.vid!==loadedVid){loadedVid=a.vid;YTP.loadVideoById({videoId:a.vid,startSeconds:start});}else{YTP.seekTo(start,true);}YTP.playVideo();try{YTP.setPlaybackRate(speed);}catch(e){}document.getElementById("vcount").textContent=(cur+1)+" / "+clips.length;renderList();clearInterval(vtimer);var end=a.t+post;vtimer=setInterval(function(){if(YTP&&YTP.getCurrentTime&&YTP.getCurrentTime()>=end){var n=nextSel(cur,1);if(n>=0){cur=n;playCur();}else{clearInterval(vtimer);}}},200);}
 function jump(i){cur=i;playCur();}
 function nextClip(){var n=nextSel(cur,1);if(n>=0){cur=n;playCur();}}
