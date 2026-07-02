@@ -56,9 +56,9 @@ header.masthead .sub{color:var(--mut);font-size:13.5px}
 .armrot .rt b{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.03em;color:var(--txt)}
 .armrot .rt span{font-size:12px;color:var(--faint)}
 .armcourt{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
-.armcourt .cell{height:40px;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.armcourt .cell .zn{font-size:9px;opacity:.75;line-height:1}
-.armcourt .cell .cn{font-family:'Bebas Neue',sans-serif;font-size:13px;line-height:1.05;margin-top:1px}
+.armcourt .cell{height:48px;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.armcourt .cell .cn-n{font-family:'Bebas Neue',sans-serif;font-size:20px;line-height:.9}
+.armcourt .cell .cn-p{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;line-height:1;opacity:.95;white-space:nowrap}
 .armcourt .cell.has{cursor:pointer}
 .armnote{font-size:12px;color:var(--faint);margin-top:12px}
 .rolehead{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.04em;color:var(--red);margin:22px 0 10px;padding-bottom:4px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:10px}
@@ -164,7 +164,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
     <div class="grp" id="armrecgrp"><label>Recepción</label><button data-r="all" class="on" onclick="setArmRec('all')">Toda</button><button data-r="pos" onclick="setArmRec('pos')">#+</button><button data-r="neg" onclick="setArmRec('neg')">!−</button></div>
   </div>
   <div class="armgrid" id="armgrid"></div>
-  <div class="armnote">Cancha espejada (vista del rival). Fila superior <b>4·3·2</b> (ataque de red), fila media <b>7·8·9</b> (zaga/pipe). El número = armados · % de esa rotación. Doble-click en una zona = video.</div>
+  <div class="armnote">Por zona: <b>pelotas armadas</b> (arriba) y abajo <b>% distribución · % punto (#)</b>. Cancha espejada (vista del rival). Doble-click en una zona = video.</div>
 </div>
 <div class="rolehead">Puntas <span>ataque · espejo pos. 4 · línea = z1/z9/z2</span></div>
 <div class="grid3" id="row-punta"></div>
@@ -301,10 +301,10 @@ function renderArmador(){
   var grid=document.getElementById("armgrid");grid.innerHTML="";
   [4,3,2,5,6,1].forEach(function(pos){
     var rows=armRallies(setter,pos),tot=rows.length,zc={};
-    rows.forEach(function(r){var z=gpGetZone(GP_COMBOS[r[8]]||"",r[11],r[6]);if(z>0)zc[z]=(zc[z]||0)+1;});
+    var zp={};rows.forEach(function(r){var z=gpGetZone(GP_COMBOS[r[8]]||"",r[11],r[6]);if(z>0){zc[z]=(zc[z]||0)+1;if(r[9]===0)zp[z]=(zp[z]||0)+1;}});
     var mx=1;ARMZ.forEach(function(z){if((zc[z]||0)>mx)mx=zc[z];});
-    var cells=ARMZ.map(function(z){var v=zc[z]||0,h=heat(v,mx,"arm"),has=v>0,pct=tot?Math.round(v/tot*100):0;
-      return '<div class="cell'+(has?" has":"")+'" style="background:'+h[0]+';border:'+h[2]+'"'+(has?' ondblclick="openArmZone('+pos+",'"+z+"')\"":"")+'><div class="zn" style="color:'+h[1]+'">z'+z+'</div><div class="cn" style="color:'+h[1]+'">'+(v?v+" · "+pct+"%":"")+'</div></div>';}).join("");
+    var cells=ARMZ.map(function(z){var v=zc[z]||0,h=heat(v,mx,"arm"),has=v>0,pct=tot?Math.round(v/tot*100):0,kp=v?Math.round((zp[z]||0)/v*100):0;
+      return '<div class="cell'+(has?" has":"")+'" style="background:'+h[0]+';border:'+h[2]+'"'+(has?' ondblclick="openArmZone('+pos+",'"+z+"')\"":"")+'>'+(has?'<div class="cn-n" style="color:'+h[1]+'">'+v+'</div><div class="cn-p" style="color:'+h[1]+'">'+pct+'% · '+kp+'%</div>':"")+'</div>';}).join("");
     grid.insertAdjacentHTML("beforeend",'<div class="armrot"><div class="rt"><b>Rotación P'+pos+'</b><span>'+tot+' armados</span></div><div class="armcourt">'+cells+'</div></div>');
   });
 }
