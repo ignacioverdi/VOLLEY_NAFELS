@@ -48,6 +48,7 @@ header.masthead .sub{color:var(--mut);font-size:13.5px}
 .armctrl label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin-right:2px}
 .armctrl button{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:var(--card2);color:var(--mut);cursor:pointer}
 .armctrl button.on{background:#7c3aed;color:#fff;border-color:#7c3aed}
+.armsel{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;padding:5px 10px;border-radius:7px;border:1px solid var(--border);background:var(--card2);color:var(--txt);cursor:pointer}
 .armgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 @media(max-width:900px){.armgrid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.armgrid{grid-template-columns:1fr}}
@@ -97,7 +98,7 @@ select:hover{border-color:var(--red)}select:focus{outline:none;border-color:var(
 .read{margin-top:10px;padding:8px 11px;background:var(--card2);border-left:2px solid var(--red);border-radius:0 7px 7px 0;font-size:13.5px;color:var(--txt);line-height:1.35}
 .read b{color:var(--red);font-weight:600}
 footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:var(--faint)}
-.vmodal{display:none;position:fixed;inset:0;background:rgba(4,5,9,.8);z-index:99;align-items:center;justify-content:center;padding:16px}
+.vmodal{display:none;position:fixed;inset:0;background:rgba(4,5,9,.8);z-index:99998;align-items:center;justify-content:center;padding:16px}
 .vpanel{background:var(--card);border:1px solid var(--border);border-radius:12px;width:min(1060px,100%);max-height:95vh;overflow:auto}
 .vhead{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)}
 .vtitle{font-family:'Bebas Neue',sans-serif;font-size:20px;flex:1;letter-spacing:.02em}
@@ -162,6 +163,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
     <div class="grp" id="armsetsel"></div>
     <div class="grp"><label>Fase</label><button data-f="SO" class="on" onclick="setArmPhase('SO')">Side-out</button><button data-f="TR" onclick="setArmPhase('TR')">Transición</button><button data-f="all" onclick="setArmPhase('all')">Todo</button></div>
     <div class="grp" id="armrecgrp"><label>Recepción</label><button data-r="all" class="on" onclick="setArmRec('all')">Toda</button><button data-r="pos" onclick="setArmRec('pos')">#+</button><button data-r="neg" onclick="setArmRec('neg')">!−</button></div>
+    <div class="grp"><label>Llamada</label><select id="armcall" class="armsel" onchange="setArmCall(this.value)"></select></div>
   </div>
   <div class="armgrid" id="armgrid"></div>
   <div class="armnote">Por zona: <b>pelotas armadas</b> (arriba) y abajo <b>% distribución · % punto (#)</b>. Cancha espejada (vista del rival). Doble-click en una zona = video.</div>
@@ -263,7 +265,7 @@ var GP_FRONT_POS=[4,3,2];
 var RESARM=["#","/","+","!","=","-"];
 var ARM_SLUG={amriswil:"amriswil",nafels:"nafels",schonenwerd:"schonenwerd",chenois:"chenois",jona:"jona",colombier:"colombier",stgallen:"st_gallen",lausanne:"lausanne",orion:null};
 var ARMZ=["4","3","2","7","8","9","5","6","1"];
-var armSetIdx=0,armPhase="SO",armRec="all",armTeam=null;
+var armSetIdx=0,armPhase="SO",armRec="all",armCall="all",armTeam=null;
 function gpGetZone(c,orig,sp){
   if(c==="X6"||c==="V6")return 2;
   if(c==="X8"||c==="V8"||c==="X0"||c==="V0")return(orig===9||orig===8)?9:2;
@@ -281,6 +283,7 @@ function armDates(){var d={};MATCHES.forEach(function(m){if(MSEL.has(m.mid))d[m.
 function armRallies(setter,pos){var dates=armDates(),mt=(armTeam.matches||[]);
   return setter.s.filter(function(r){
     if(r[6]!==pos)return false;
+    if(armCall!=="all"&&r[5]!==armCall)return false;
     if(armPhase==="SO"&&r[4]!==0)return false;
     if(armPhase==="TR"&&r[4]!==1)return false;
     if(armPhase==="SO"&&armRec!=="all"){var rq=r[7];if(armRec==="pos"&&!(rq===0||rq===2))return false;if(armRec==="neg"&&!(rq===3||rq===5))return false;}
@@ -297,6 +300,11 @@ function renderArmador(){
   document.getElementById("armsetsel").innerHTML='<label>Armador</label>'+armTeam.setters.map(function(s,i){return '<button class="'+(i===armSetIdx?"on":"")+'" onclick="setArmSetter('+i+')">#'+s.num+" "+apellidoJS(s.name)+'</button>';}).join("");
   var setter=armTeam.setters[armSetIdx]||armTeam.setters[0];
   document.getElementById("armname").textContent=setter.name+" · "+setter.s.length+" armados";
+  var callCount={};setter.s.forEach(function(r){if(r[5]>=0)callCount[r[5]]=(callCount[r[5]]||0)+1;});
+  var callIdxs=Object.keys(callCount).map(Number).sort(function(a,b){return callCount[b]-callCount[a];});
+  if(armCall!=="all"&&callIdxs.indexOf(armCall)<0)armCall="all";
+  var CALLS=GPL.calls||[];
+  document.getElementById("armcall").innerHTML='<option value="all">Todas</option>'+callIdxs.map(function(ci){return '<option value="'+ci+'"'+(armCall===ci?" selected":"")+'>'+(CALLS[ci]||("K?"+ci))+" ("+callCount[ci]+")</option>";}).join("");
   document.getElementById("armrecgrp").style.opacity=(armPhase==="SO")?"1":".35";
   var grid=document.getElementById("armgrid");grid.innerHTML="";
   [4,3,2,5,6,1].forEach(function(pos){
@@ -311,6 +319,7 @@ function renderArmador(){
 function setArmSetter(i){armSetIdx=i;renderArmador();}
 function setArmPhase(f){armPhase=f;var bs=document.querySelectorAll("#armsec [data-f]");for(var i=0;i<bs.length;i++)bs[i].classList.toggle("on",bs[i].getAttribute("data-f")===f);renderArmador();}
 function setArmRec(r){armRec=r;var bs=document.querySelectorAll("#armsec [data-r]");for(var i=0;i<bs.length;i++)bs[i].classList.toggle("on",bs[i].getAttribute("data-r")===r);renderArmador();}
+function setArmCall(v){armCall=(v==="all")?"all":parseInt(v,10);renderArmador();}
 function openArmZone(pos,zn){
   var setter=armTeam.setters[armSetIdx]||armTeam.setters[0];
   var rows=armRallies(setter,pos).filter(function(r){return String(gpGetZone(GP_COMBOS[r[8]]||"",r[11],r[6]))===zn;});
@@ -418,5 +427,7 @@ function setSpeed(v){speed=parseFloat(v);if(YTP&&YTP.setPlaybackRate){try{YTP.se
 function closeV(){document.getElementById("vmodal").style.display="none";clearInterval(vtimer);if(YTP&&YTP.pauseVideo)YTP.pauseVideo();}
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="Escape")closeV();if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();});
 </script>
+<script src="chat_nafels.js" onerror="void 0"></script>
+<script src="lang.js" onerror="void 0"></script>
 </body>
 </html>
