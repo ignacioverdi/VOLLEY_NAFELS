@@ -17,7 +17,7 @@ Uso:
 """
 import os,re,sys,json,glob,unicodedata
 
-DATA_VERSION = 5
+DATA_VERSION = 6
 
 def fix_enc(x):
     # Los DVW pueden venir en UTF-8 leido como latin-1 (mojibake "NÃ¤fels"). Lo corrige.
@@ -141,7 +141,7 @@ def parse_dvw(path, ent=False):
             a={'t':t,'num':num,'name':pmap[num],'skill':sk,'sk':SK.get(sk,sk),
                'ev':ev,'set':c[8] if len(c)>8 else '','tm':tslug}
             # zonas origen/destino (oz/dz): ataque usa tp[1] ; defensa usa tp[3] (como saque/recepcion)
-            if sk in ('A','D'):
+            if sk in ('A','D','S','R'):
                 _rest=code0[6:]; _tp=_rest.split('~'); _ti=1 if sk=='A' else 3
                 _traj=_tp[_ti] if len(_tp)>_ti else ''
                 if _traj and len(_traj)>0 and _traj[0].isdigit(): a['oz']=int(_traj[0])
@@ -155,6 +155,12 @@ def parse_dvw(path, ent=False):
             elif sk in ('S','R'):
                 tp=code0[4] if len(code0)>4 else ''
                 if tp and tp.isalpha(): a['x']=tp
+            elif sk=='E':
+                # Armado: apos = zona destino (primer digito de la trayectoria); call = 2 primeras letras del combo (KMC->KM)
+                _seg=code0[6:].split('~')
+                if _seg and _seg[0] and _seg[0][0].isalpha(): a['call']=_seg[0][:2]
+                for _s in _seg:
+                    if _s and _s[0].isdigit(): a['apos']=int(_s[0]); break
             actions.append(a)
 
     if not actions: return None  # partido sin acciones con segundo -> se ignora
