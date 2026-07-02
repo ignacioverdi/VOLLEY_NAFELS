@@ -273,7 +273,7 @@ function renderArmador(){
   document.getElementById("armname").textContent=setter.name+" · "+setter.s.length+" armados";
   document.getElementById("armrecgrp").style.opacity=(armPhase==="SO")?"1":".35";
   var grid=document.getElementById("armgrid");grid.innerHTML="";
-  [1,2,3,4,5,6].forEach(function(pos){
+  [4,3,2,5,6,1].forEach(function(pos){
     var rows=armRallies(setter,pos),tot=rows.length,zc={};
     rows.forEach(function(r){var z=gpGetZone(GP_COMBOS[r[8]]||"",r[11],r[6]);if(z>0)zc[z]=(zc[z]||0)+1;});
     var mx=1;ARMZ.forEach(function(z){if((zc[z]||0)>mx)mx=zc[z];});
