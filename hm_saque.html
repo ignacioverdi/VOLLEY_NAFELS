@@ -209,7 +209,14 @@ function buildChips(){
   buildCG('f-origin',origs.map(function(o){return [o,o==='all'?'Todas':'Zona '+o];}),'origin','on-c');
 }
 function buildCG(id,opts,key,cls){
-  var el=document.getElementById(id); if(!el) return;
+  var _M={'f-type':'fsel-stype','f-rival':'fsel-rival','f-set':'fsel-set','f-moment':'fsel-moment','f-result':'fsel-result','f-origin':'fsel-origin'};
+  var el=document.getElementById(_M[id]||id); if(!el) return;
+  if(el.tagName==='SELECT'){
+    el.innerHTML='';
+    opts.forEach(function(opt){var op=document.createElement('option');op.value=opt[0];op.textContent=opt[1];if(F[key]===opt[0]||F[key]===String(opt[0]))op.selected=true;el.appendChild(op);});
+    el.onchange=function(){setF(key,el.value);};
+    return;
+  }
   el.innerHTML='';
   opts.forEach(function(opt){
     var val=opt[0],lbl=opt[1];

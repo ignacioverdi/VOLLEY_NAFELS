@@ -280,6 +280,14 @@ function buildChips(){
 }
 
 function buildMC(id,opts,key,cls){
+  var ARMMAP={'f-atype':'fsel-atype','f-call':'fsel-call','f-atk-combo':'fsel-atk_combo','f-spos':'fsel-setter_pos','f-rec':'fsel-rec_quality','f-set':'fsel-set','f-moment':'fsel-moment'};
+  var _sel=document.getElementById(ARMMAP[id]||'');
+  if(_sel&&_sel.tagName==='SELECT'){
+    var _cur=(F[key]&&F[key].length)?String(F[key][0]):'all';
+    _sel.innerHTML=[['all','Todos']].concat(opts).map(function(op){return '<option value="'+op[0]+'"'+(String(op[0])===_cur?' selected':'')+'>'+op[1]+'</option>';}).join('');
+    _sel.onchange=function(){var v=this.value;F[key]=(v==='all')?[]:[v];buildChips();render();};
+    return;
+  }
   var el=document.getElementById(id); if(!el) return;
   el.innerHTML='';
   opts.forEach(function(opt){
