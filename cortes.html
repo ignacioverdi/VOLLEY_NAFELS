@@ -253,9 +253,9 @@
   function mmss(s){s=Math.max(0,Math.round(s));return Math.floor(s/60)+":"+String(s%60).padStart(2,'0');}
   function toast(t){var e=$('toast');e.textContent=t;e.classList.add('show');setTimeout(function(){e.classList.remove('show');},1900);}
   function preOff(){return parseFloat($('preoff').value);}function postOff(){return parseFloat($('postoff').value);}
-  function sub(a){return (a.sk==='Ataque'||a.sk==='Saque'||a.sk==='Recepción')?(a.x||'*'):'*';}
+  function sub(a){return (a.sk==='Ataque'||a.sk==='Saque'||a.sk==='Recepción')?(a.x||'*'):(a.sk==='Armado'?(a.call||'*'):'*');}
   function akey(sk,s){return sk+'|'+s;}
-  function subName(sk,s){if(s==='*')return '';return sk==='Ataque'?((COMBOS[s]||s)+' ('+s+')'):(TYPE_NAME[s]||s);}
+  function subName(sk,s){if(s==='*')return '';return sk==='Ataque'?((COMBOS[s]||s)+' ('+s+')'):(sk==='Armado'?s:(TYPE_NAME[s]||s));}
 
   // estado
   var selMatch={}, selPlayers={}, selAct={}, selEval={}, selSet={}, selected={};
@@ -592,7 +592,7 @@
     if(pOz) fOz=pOz.split(',').map(Number);
     if(pPh) fPh=pPh;
     if(pApos) fApos=pApos.split(',').map(Number);
-    if(pCall) fCall=pCall.split(',');
+    // la llamada se filtra por el árbol de acciones (selAct), no por fCall
     if((pDz||pOz||pPh)&&!pSk) pSk='Ataque';
     if((pCall||pApos)&&!pSk) pSk='Armado';
     if(pSk) fSk=pSk;
@@ -611,9 +611,9 @@
     } else if(pSk){
       var skName={ATAQUE:'Ataque',SAQUE:'Saque',RECEPCION:'Recepción','RECEPCIÓN':'Recepción',ARMADO:'Armado',BLOQUEO:'Bloqueo',DEFENSA:'Defensa',FREEBALL:'Freeball'};
       var sk=skName[pSk.toUpperCase()]||pSk, any=false;
-      Object.keys(selAct).forEach(function(k){var pp=k.split('|');var on=(pp[0]===sk)&&(!pCombo||pCombo.split(',').indexOf(pp[1])>=0);selAct[k]=on;if(on)any=true;});
+      var pSub=pCombo||pCall; Object.keys(selAct).forEach(function(k){var pp=k.split('|');var on=(pp[0]===sk)&&(!pSub||pSub.split(',').indexOf(pp[1])>=0);selAct[k]=on;if(on)any=true;});
       if(any){ buildActionTree(); $('ddPanel').classList.add('open'); apply(); }
-      var fl=[]; if(fDz.length)fl.push('zona destino '+fDz.join('/')); if(fOz.length)fl.push('zona origen '+fOz.join('/')); if(fPh)fl.push('fase '+(fPh==='SO'?'Side-Out':'Transición')); if(fApos.length)fl.push('armado a zona '+fApos.join('/')); if(fCall.length)fl.push('llamada '+fCall.join('/'));
+      var fl=[]; if(fDz.length)fl.push('zona destino '+fDz.join('/')); if(fOz.length)fl.push('zona origen '+fOz.join('/')); if(fPh)fl.push('fase '+(fPh==='SO'?'Side-Out':'Transición')); if(fApos.length)fl.push('armado a zona '+fApos.join('/')); if(pCall)fl.push('llamada '+pCall.split(',').join('/'));
       if(fl.length) $('sub').textContent='Filtrado por '+fl.join(' · ')+' · '+filtered.length+' clip(s)';
     }
     loadYT();
