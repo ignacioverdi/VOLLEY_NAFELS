@@ -113,7 +113,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   var td=L.teams[equipo];
   try{ document.title='Recepción — '+td.name; }catch(e){}
   window.__TEAM_NAME=td.name; window.__TEAM_SLUG=equipo;
-  return { rivals:td.rivals, games:(td.games||td.rivals.map(function(r,i){return {idx:i,rival:r,date:''};})), players:td.rec };
+  return { rivals:td.rivals, games:(td.matches||td.games||td.rivals.map(function(r,i){return {idx:i,rival:r,date:''};})), players:td.rec };
 })();
 
 // ── I18N ENGINE ──────────────────────────────────────────────────
@@ -207,6 +207,8 @@ function buildChips(){
   buildCG('f-result',ress.map(function(r){return [r,r==='all'?'Todos':(RES_LABEL[r]||r)];}),'result','on-g');
   var origs=['all'].concat(uniq(acts.map(function(a){return a.origin;})).filter(Boolean).sort(function(a,b){return a-b;}));
   buildCG('f-origin',origs.map(function(o){return [o,o==='all'?'Todas':'Zona '+o];}),'origin','on-c');
+  var ugi=uniq(acts.map(function(a){return a.gi;})).filter(function(g){return g>=0;}).sort(function(a,b){return a-b;});
+  buildCG('fsel-gi',[['all','Todos']].concat(ugi.map(function(g){var G=GAMES[g];var rs=G?String(G.rival).split(' ').pop().substring(0,10):('P'+g);var dl='';if(G&&G.date){var pp=String(G.date).split('-');if(pp.length===3){dl=' '+parseInt(pp[2])+'/'+parseInt(pp[1]);}}return [g,rs+dl];})),'gi','on-i');
 }
 function buildCG(id,opts,key,cls){
   var _M={'f-type':'fsel-rtype','f-rival':'fsel-rival','f-set':'fsel-set','f-moment':'fsel-moment','f-result':'fsel-result','f-origin':'fsel-origin'};

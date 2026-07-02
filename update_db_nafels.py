@@ -629,17 +629,22 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         if not td: continue
         rivals=sorted(set(a.get('rival','') for pd in td.values() for sk in ['atk','srv','rec'] for a in pd.get(sk,[]) if a.get('rival')))
         ridx={r:i for i,r in enumerate(rivals)}
+        _ts0=setters.get(team,[])
+        if not isinstance(_ts0,list): _ts0=[_ts0]
+        _tr0=rallies.get(team,{}); _arl0=[]
+        for _sn0 in _ts0: _arl0.extend(_tr0.get(str(_sn0),[]) if isinstance(_tr0,dict) else [])
+        _midx={dk:i for i,dk in enumerate(sorted(set((r.get('date',''),r.get('rival','')) for r in _arl0)))}
         atk_p,srv_p,rec_p={},{},{}
         for ns,pd in td.items():
             info=pd.get('info') or {}; name=info.get('name',ns); num=int(ns)
             atk,srv,rec=pd.get('atk',[]),pd.get('srv',[]),pd.get('rec',[])
-            if atk: atk_p[ns]={'name':name,'num':num,'a':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,a.get('atype',0),COMBO_IDX.get(a.get('combo',''),-1),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),6,-1] for a in atk]}
+            if atk: atk_p[ns]={'name':name,'num':num,'a':[[ridx.get(a.get('rival',''),0),_midx.get((a.get('date',''),a.get('rival','')),-1),a.get('set_num',1),1,a.get('atype',0),COMBO_IDX.get(a.get('combo',''),-1),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),6,-1] for a in atk]}
             if srv:
                 stl=list(dict.fromkeys('S'+a.get('stype','Q') for a in srv)) or ['SQ']; sidx={s:i for i,s in enumerate(stl)}
-                srv_p[ns]={'name':name,'num':num,'stypes':stl,'s':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,sidx.get('S'+a.get('stype','Q'),0),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0)] for a in srv]}
+                srv_p[ns]={'name':name,'num':num,'stypes':stl,'s':[[ridx.get(a.get('rival',''),0),_midx.get((a.get('date',''),a.get('rival','')),-1),a.get('set_num',1),1,sidx.get('S'+a.get('stype','Q'),0),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0)] for a in srv]}
             if rec:
                 rtl=list(dict.fromkeys('R'+a.get('stype','M') for a in rec)) or ['RM']; rtidx={r:i for i,r in enumerate(rtl)}
-                rec_p[ns]={'name':name,'num':num,'rtypes':rtl,'r':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,rtidx.get('R'+a.get('stype','M'),0),REC_IDX.get(a.get('effect','-'),3),a.get('orig',0),a.get('dest',0)] for a in rec]}
+                rec_p[ns]={'name':name,'num':num,'rtypes':rtl,'r':[[ridx.get(a.get('rival',''),0),_midx.get((a.get('date',''),a.get('rival','')),-1),a.get('set_num',1),1,rtidx.get('R'+a.get('stype','M'),0),REC_IDX.get(a.get('effect','-'),3),a.get('orig',0),a.get('dest',0)] for a in rec]}
         # Armar AMBOS armadores (estructura setters array que usa el game plan)
         team_setters = setters.get(team, [])
         if not isinstance(team_setters, list): team_setters = [team_setters]

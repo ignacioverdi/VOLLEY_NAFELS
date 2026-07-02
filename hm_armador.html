@@ -117,7 +117,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   window.__TEAM_NAME=td.name; window.__TEAM_SLUG=equipo;
   var setters={};
   if(td.setter && td.setter.num){ setters[String(td.setter.num)]={name:td.setter.name,num:td.setter.num,s:td.setter.s}; }
-  return { rivals:td.rivals, games:(td.games||td.rivals.map(function(r,i){return {idx:i,rival:r,date:''};})), atk_combos:L.combos, setters:setters };
+  return { rivals:td.rivals, games:(td.matches||td.games||td.rivals.map(function(r,i){return {idx:i,rival:r,date:''};})), atk_combos:L.combos, setters:setters };
 })();
 
 // ── I18N ENGINE ──────────────────────────────────────────────────
@@ -152,7 +152,7 @@ Object.keys(RAW.setters).forEach(function(num){
   var p=RAW.setters[num],types=p.s||[];
   SETTERS[num]={name:p.name,num:p.num,sets:types.map(function(r){
     return {
-      rival:RIVALS[r[0]],gi:r[1],set_num:r[2],moment:MOM_D[r[3]],
+      rival:RIVALS[r[0]],gi:r[12],set_num:r[2],moment:MOM_D[r[3]],
       atype:ATYPE_D[r[4]],
       call:r[5]>=0?ALL_CALLS[r[5]]:'',
       setter_pos:r[6]||0,
@@ -161,7 +161,7 @@ Object.keys(RAW.setters).forEach(function(num){
       atk_result:r[9]>=0?RES_D[r[9]]:null,
       atk_dest:r[10]||null,
       atk_pos:r[11]||0,
-      date:GAMES[r[1]]?GAMES[r[1]].date:''
+      date:GAMES[r[12]]?GAMES[r[12]].date:''
     };
   })};
 });
