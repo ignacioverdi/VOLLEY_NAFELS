@@ -157,7 +157,6 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
   <span class="mlab" style="margin-left:6px">Filtrar</span>
   <div class="msel"><button class="mbtn" onclick="togglePanel('r')">Rival <b id="rc"></b> ▾</button><div class="mpanel" id="rpanel"></div></div>
   <div class="msel"><button class="mbtn" onclick="togglePanel('m')">Partido <b id="mc"></b> ▾</button><div class="mpanel" id="mpanel"></div></div>
-  <span class="mlab" style="margin-left:10px">Mín. pelotas</span><input id="minballs" type="number" min="0" value="0" title="Oculta las zonas con menos pelotas que este número (solo saque y ataque)" style="width:58px;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 8px;font-family:inherit;font-weight:700;font-size:14px" oninput="setMinBalls(this.value)">
   <span class="mhint" id="mhint"></span></div>
 <div class="armsec" id="armsec">
   <div class="armhead"><h2>Distribución del armador</h2><span class="sub" id="armname">—</span></div>
@@ -340,6 +339,7 @@ function tiles3(p,cfg){var t=cfg.tiles.map(function(lb,i){var hl=cfg.hl.indexOf(
 function U(role){return role==='saque'?' saques':role==='reception'?' recep.':' ataques';}
 function buildSection(p){var cfg=ROLECFG[p.role];
   var fh=cfg.filters.map(function(fl,i){return '<div class="fgroup"><label>'+fl.lab+'</label><select id="'+p.id+'-f'+i+'">'+opts(fl.opts)+'</select></div>';}).join('');
+  if(cfg.stats==='atk'||cfg.stats==='srv'){fh+='<div class="fgroup"><label>Mín. pelotas</label><input type="number" min="0" value="0" id="'+p.id+'-min" style="width:54px;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:7px;padding:5px 7px;font-family:inherit;font-weight:700;font-size:13px"></div>';}
   return '<div class="player"><div class="phead"><div class="pnum">'+p.num+'</div><div class="pname">'+p.name+'</div><div class="prole">'+(p.pos||p.role)+'</div><div class="pmeta">'+p.total+U(p.role)+'</div></div>'
    +'<div class="filters">'+fh+'</div><div class="natt" id="'+p.id+'-n"></div>'
    +'<div class="body"><div class="courtwrap"><div class="court" id="'+p.id+'-court"></div><div class="cnote">Doble-click en zona con ▶ → video (partidos con 🎥)</div></div>'
@@ -366,13 +366,12 @@ function render(p){var cfg=ROLECFG[p.role];
   document.getElementById(p.id+'-n').textContent=n+U(p.role);
   var mx=Math.max(1,z["1"],z["2"],z["3"],z["4"],z["5"],z["6"],z["7"],z["8"],z["9"]);
   var _useMin=(cfg.stats==='atk'||cfg.stats==='srv');
+  var _min=0; if(_useMin){var _me=document.getElementById(p.id+'-min'); _min=_me?(parseInt(_me.value,10)||0):0;}
   document.getElementById(p.id+'-court').innerHTML=ORDER.map(function(zn){var val=z[zn];
-    if(_useMin&&MINBALLS>0&&val<MINBALLS){return '<div class="cell" style="background:var(--h0);border:1px solid var(--border)"><div class="zn" style="color:#3a4358;opacity:.4">z'+zn+'</div></div>';}
+    if(_useMin&&_min>0&&val<_min){return '<div class="cell" style="background:var(--h0);border:1px solid var(--border)"><div class="zn" style="color:#3a4358;opacity:.4">z'+zn+'</div></div>';}
     var h=heat(val,mx,cfg.pal),hasVid=(vz[zn]||0)>0;
     return '<div class="cell'+(hasVid?' has vid':'')+'" style="background:'+h[0]+';border:'+h[2]+'"'+(hasVid?' ondblclick="openZone(\''+p.id+'\',\''+zn+'\')"':'')+'><div class="zn" style="color:'+h[1]+'">z'+zn+'</div><div class="cn" style="color:'+h[1]+'">'+val+'</div></div>';}).join('');
 }
-var MINBALLS=0;
-function setMinBalls(v){MINBALLS=Math.max(0,parseInt(v,10)||0);renderAll();}
 function renderAll(){PLAYERS.forEach(render);}
 function fmtDate(d){if(!d||d==='?')return'?';var p=d.split('-');return p.length===3?p[2]+'/'+p[1]:d;}
 function togglePanel(w){var p=document.getElementById(w==='r'?'rpanel':'mpanel');var o=p.classList.contains('open');document.querySelectorAll('.mpanel').forEach(function(x){x.classList.remove('open');});if(!o)p.classList.add('open');}
@@ -389,7 +388,7 @@ function buildTeam(){
   ['punta','central','opuesto','saque','reception'].forEach(function(r){var el=document.getElementById('row-'+r);if(el)el.innerHTML='';});
   PLAYERS=TEAMS[TEAM].players;INFO=TEAMS[TEAM].info;computeMatchMeta();
   PLAYERS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('beforeend',buildSection(p));});
-  PLAYERS.forEach(function(p){ROLECFG[p.role].filters.forEach(function(_,i){var fe=document.getElementById(p.id+'-f'+i);if(fe)fe.addEventListener('change',function(){render(p);});});render(p);});
+  PLAYERS.forEach(function(p){ROLECFG[p.role].filters.forEach(function(_,i){var fe=document.getElementById(p.id+'-f'+i);if(fe)fe.addEventListener('change',function(){render(p);});});var me=document.getElementById(p.id+'-min');if(me)me.addEventListener('input',function(){render(p);});render(p);});
   buildRivalPanel();buildMatchPanel();updateCounts();
   document.getElementById('teamname').textContent=TEAMS[TEAM].name;
   renderArmador();
