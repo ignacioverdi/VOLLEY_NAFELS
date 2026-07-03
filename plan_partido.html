@@ -101,6 +101,10 @@ select:hover{border-color:var(--red)}select:focus{outline:none;border-color:var(
 .tile.hl .l,.tile.hl .v{color:var(--red)}
 .read{margin-top:10px;padding:8px 11px;background:var(--card2);border-left:2px solid var(--red);border-radius:0 7px 7px 0;font-size:13.5px;color:var(--txt);line-height:1.35}
 .read b{color:var(--red);font-weight:600}
+.read{cursor:text}
+.read:empty::before{content:attr(data-ph);color:var(--faint);font-style:italic}
+.read:focus{outline:2px solid var(--red);background:var(--card)}
+
 footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:var(--faint)}
 .vmodal{display:none;position:fixed;inset:0;background:rgba(4,5,9,.8);z-index:99998;align-items:center;justify-content:center;padding:16px}
 .vpanel{background:var(--card);border:1px solid var(--border);border-radius:12px;width:min(1060px,100%);max-height:95vh;overflow:auto}
@@ -370,13 +374,16 @@ function readFilt(id,fl){var el=document.getElementById(id);if(!el)return "all";
   if(_isMulti(fl)){var bx=[].slice.call(el.querySelectorAll("input"));var ch=bx.filter(function(c){return c.checked;}).map(function(c){return c.value;});
     var sm=el.querySelector("summary");var allsel=(ch.length===0||ch.length===bx.length);if(sm)sm.textContent=allsel?"Todas":(ch.length+" sel");return allsel?"all":ch;}
   return el.value;}
+function readKey(pid){return "ppread:"+(typeof TEAM!=="undefined"?TEAM:"")+":"+pid;}
+function readVal(p){try{var v=localStorage.getItem(readKey(p.id));if(v!==null)return v;}catch(e){}return p.read||"";}
+function saveRead(el){try{localStorage.setItem(readKey(el.getAttribute("data-pid")),el.innerHTML);}catch(e){}}
 function buildSection(p){var cfg=ROLECFG[p.role];
   var fh=cfg.filters.map(function(fl,i){return filtCtrl(p.id+'-f'+i,fl,'',filterOpts(p,fl));}).join('');
   if(cfg.stats==='atk'||cfg.stats==='srv'){fh+='<div class="fgroup"><label title="Mín. pelotas">Mín.</label><input type="number" min="0" value="0" id="'+p.id+'-min" style="background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:7px;font-family:inherit;font-weight:700"></div>';}
   return '<div class="player"><div class="phead"><div class="pnum">'+p.num+'</div><div class="pname">'+p.name+'</div><div class="prole">'+(p.pos||p.role)+'</div><div class="pmeta">'+p.total+U(p.role)+'</div></div>'
    +'<div class="filters">'+fh+'</div><div class="natt" id="'+p.id+'-n"></div>'
    +'<div class="body"><div class="courtwrap"><div class="court" id="'+p.id+'-court"></div><div class="cnote">Doble-click en zona con ▶ → video (partidos con 🎥)</div></div>'
-   +'<div class="stats">'+tiles3(p,cfg)+'</div></div>'+(p.read?'<div class="read">'+p.read+'</div>':'')+'</div>';
+   +'<div class="stats">'+tiles3(p,cfg)+'</div></div>'+'<div class="read" contenteditable="true" spellcheck="false" data-pid="'+p.id+'" data-ph="Escribí tu análisis…" title="Click para editar" oninput="saveRead(this)">'+readVal(p)+'</div>'+'</div>';
 }
 function render(p){var cfg=ROLECFG[p.role];
   var vals=cfg.filters.map(function(fl,i){return readFilt(p.id+'-f'+i,fl);});

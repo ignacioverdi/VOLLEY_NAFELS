@@ -1566,7 +1566,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 
     // Tarjetas que SÍ ve el jugador (lo demás se oculta)
     var SHOW = ['calendario.html','horarios.html','historial_voley.html','prep_fisica.html','wellness.html',
-                'equipo.html','nla_stats_table.html','game_plan.html','cortes.html','scouting_rival.html'];
+                'equipo.html','nla_stats_table.html','game_plan.html','cortes.html','scouting_rival.html','plan_partido.html'];
     function keep(card){
       var oc = (card.getAttribute('onclick')||'');
       if(oc.indexOf('showHeatmapMenu')>=0) return true;  // Heat Maps: sí
