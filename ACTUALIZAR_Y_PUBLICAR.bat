@@ -40,6 +40,7 @@ REM  [2/5] Scouting de rivales
 REM ============================================================
 echo  [2/5] Scouting de rivales...
 python gen_scouting.py --dvw_dir "%DVW_DIR%" --output_dir .
+python gen_plan_partido.py --dvw_dir "%DVW_DIR%" --output_dir .
 if errorlevel 1 goto ERROR_PROCESO
 echo.
 
