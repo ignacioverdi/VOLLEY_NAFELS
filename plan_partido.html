@@ -139,6 +139,13 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 @media(max-width:1000px){.grid3{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:680px){.grid3,.grid2{grid-template-columns:1fr}header.masthead h1{font-size:36px}}
 @media print{body{background:#fff;color:#111}.player{background:#fff;border-color:#ccc}.filters,.vmodal{display:none!important}.cell.vid::after{display:none}}
+.mdd{width:100%}
+.msum{list-style:none;cursor:pointer;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:5px 6px;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box}
+.msum::-webkit-details-marker{display:none}
+.mpop{position:absolute;z-index:40;margin-top:3px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:7px;display:flex;flex-direction:column;gap:4px;min-width:130px;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+.mopt{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text)}
+.mopt input{width:auto;min-width:0;margin:0;padding:0}
+.msel{position:relative}
 </style>
 </head>
 <body>
@@ -165,6 +172,8 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
     <div class="grp" id="armsetsel"></div>
     <div class="grp"><label>Fase</label><button data-f="SO" class="on" onclick="setArmPhase('SO')">Side-out</button><button data-f="TR" onclick="setArmPhase('TR')">Transición</button><button data-f="all" onclick="setArmPhase('all')">Todo</button></div>
     <div class="grp" id="armrecgrp"><label>Recepción</label><button data-r="all" class="on" onclick="setArmRec('all')">Toda</button><button data-r="pos" onclick="setArmRec('pos')">#+</button><button data-r="neg" onclick="setArmRec('neg')">!−</button></div>
+    <div class="grp" id="armreczgrp"><label>Recep. desde</label><button data-rz="all" class="on" onclick="setArmRecZone('all')">Todas</button><button data-rz="r1" onclick="setArmRecZone('r1')">Z1</button><button data-rz="r6" onclick="setArmRecZone('r6')">Z6</button><button data-rz="r5" onclick="setArmRecZone('r5')">Z5</button></div>
+    <div class="grp"><label>Recibe</label><select id="armrecnum" class="armsel" onchange="setArmRecNum(this.value)"></select></div>
     <div class="grp"><label>Llamada</label><select id="armcall" class="armsel" onchange="setArmCall(this.value)"></select></div>
   </div>
   <div class="armgrid" id="armgrid"></div>
@@ -237,7 +246,7 @@ const SRS=[["all","Todas"],["#","Ace (#)"],["/","Vendido (/)"],["+","+ (rompe)"]
 const RCS=[["all","Todas"],["#","Perfecta (#)"],["+","Buena (+)"],["!","Ok (!)"],["/","Pasada (/)"],["-","Mala (−)"],["=","Error (=)"]];
 const ROLECFG={
  punta:{court:4,evIdx:5,subIdx:6,tIdx:7,vIdx:8,tagIdx:0,stats:'atk',pal:'red',
-   filters:[{lab:'Combo',idx:0,opts:CB_P},{lab:'Recepción',idx:1,opts:RECS},{lab:'Recibe',idx:2,opts:OWN},{lab:'Resultado',idx:5,opts:RESS}],
+   filters:[{lab:'Combo',idx:0,opts:CB_P},{lab:'Recepción',idx:1,opts:RECS},{lab:'Recibe',idx:9,opts:OWN},{lab:'Resultado',idx:5,opts:RESS}],
    dir:{L:["1","9","2"],C:["6","8","3"],D:["5","7","4"]},tiles:['Efic','Kill','Bloq','Línea','Centro','Diag','Hard','Soft','Tip'],hl:[0,3]},
  central:{court:4,evIdx:5,subIdx:6,tIdx:7,vIdx:8,tagIdx:0,stats:'atk',pal:'red',
    filters:[{lab:'Combo',idx:0,opts:CB_C},{lab:'Recepción',idx:1,opts:RECS},{lab:'Recep. desde',idx:3,opts:RECZ},{lab:'Resultado',idx:5,opts:RESS}],
@@ -259,7 +268,7 @@ function g(id){return document.getElementById(id).value;}
 const PAL={red:{c:["#5c2531","#a02335","#e8192c"],t:["#f0c6cd","#ffdfe4","#fff"]},blue:{c:["#1e3356","#245aa6","#2f7ff0"],t:["#c3d4f2","#dbe8ff","#fff"]},orange:{c:["#4a3218","#a3611b","#f6851b"],t:["#f0d3ac","#ffe6c9","#fff"]},arm:{c:["#2e2450","#5b3aa6","#8b5cf6"],t:["#d6cbf2","#e9e2ff","#fff"]}};
 function heat(v,mx,pal){if(v<=0)return["var(--h0)","#6b7280","1px solid var(--border)"];var p=PAL[pal||'red'],r=v/mx,i=r<0.34?0:(r<0.67?1:2);return[p.c[i],p.t[i],"none"];}
 function bkt(m){return m<=8?'b1':(m<=16?'b2':'b3');}
-function passes(a,cfg,vals){for(var i=0;i<cfg.filters.length;i++){var fl=cfg.filters[i],v=vals[i];if(v==='all')continue;if(fl.range){if(bkt(a[fl.idx])!==v)return false;}else if(String(a[fl.idx])!==v)return false;}return true;}
+function passes(a,cfg,vals){for(var i=0;i<cfg.filters.length;i++){var fl=cfg.filters[i],v=vals[i];if(v==='all')continue;if(Array.isArray(v)){if(v.indexOf(String(a[fl.idx]))<0)return false;continue;}if(fl.range){if(bkt(a[fl.idx])!==v)return false;}else if(String(a[fl.idx])!==v)return false;}return true;}
 /* ===== ARMADOR (distribución — lógica exacta del Game Plan) ===== */
 var GPL=window.LIGA_DATA||{teams:{},combos:[],calls:[]};
 var GP_COMBOS=GPL.combos||[];
@@ -267,7 +276,7 @@ var GP_FRONT_POS=[4,3,2];
 var RESARM=["#","/","+","!","=","-"];
 var ARM_SLUG={amriswil:"amriswil",nafels:"nafels",schonenwerd:"schonenwerd",chenois:"chenois",jona:"jona",colombier:"colombier",stgallen:"st_gallen",lausanne:"lausanne",orion:null};
 var ARMZ=["4","3","2","7","8","9","5","6","1"];
-var armSetIdx=0,armPhase="SO",armRec="all",armCall="all",armTeam=null;
+var armSetIdx=0,armPhase="SO",armRec="all",armRecZone=null,armRecNum=null,armCall="all",armTeam=null;var ARM_RECBANDS={r1:[1,9,2],r6:[6,8,3],r5:[5,7,4]};
 function gpGetZone(c,orig,sp){
   if(c==="X6"||c==="V6")return 2;
   if(c==="X8"||c==="V8"||c==="X0"||c==="V0")return(orig===9||orig===8)?9:2;
@@ -289,6 +298,8 @@ function armRallies(setter,pos){var dates=armDates(),mt=(armTeam.matches||[]);
     if(armPhase==="SO"&&r[4]!==0)return false;
     if(armPhase==="TR"&&r[4]!==1)return false;
     if(armPhase==="SO"&&armRec!=="all"){var rq=r[7];if(armRec==="pos"&&!(rq===0||rq===2))return false;if(armRec==="neg"&&!(rq===3||rq===5))return false;}
+    if(armRecZone){var _b=ARM_RECBANDS[armRecZone];if(!_b||_b.indexOf(r[15])<0)return false;}
+    if(armRecNum!=null&&r[16]!==armRecNum)return false;
     var mm=mt[r[12]];if(mm&&mm.date&&!dates[mm.date])return false;
     return true;});
 }
@@ -307,7 +318,12 @@ function renderArmador(){
   if(armCall!=="all"&&callIdxs.indexOf(armCall)<0)armCall="all";
   var CALLS=GPL.calls||[];
   document.getElementById("armcall").innerHTML='<option value="all">Todas</option>'+callIdxs.map(function(ci){return '<option value="'+ci+'"'+(armCall===ci?" selected":"")+'>'+(CALLS[ci]||("K?"+ci))+" ("+callCount[ci]+")</option>";}).join("");
-  document.getElementById("armrecgrp").style.opacity=(armPhase==="SO")?"1":".35";
+  var NBYNUM={};((window.PP_DATA&&window.PP_DATA[TEAM]&&window.PP_DATA[TEAM].players)||[]).forEach(function(p){NBYNUM[p.num]=p.name;});
+  var recvCount={};setter.s.forEach(function(r){if(r[16]>0)recvCount[r[16]]=(recvCount[r[16]]||0)+1;});
+  var recvNums=Object.keys(recvCount).map(Number).sort(function(a,b){return recvCount[b]-recvCount[a];});
+  if(armRecNum!=null&&recvNums.indexOf(armRecNum)<0)armRecNum=null;
+  document.getElementById("armrecnum").innerHTML='<option value="">Todos</option>'+recvNums.map(function(n){return '<option value="'+n+'"'+(armRecNum===n?" selected":"")+'>#'+n+" "+(NBYNUM[n]?apellidoJS(NBYNUM[n]):"")+" ("+recvCount[n]+")</option>";}).join("");
+  document.getElementById("armrecgrp").style.opacity=(armPhase==="SO")?"1":".35";document.getElementById("armreczgrp").style.opacity=(armPhase==="SO")?"1":".35";
   var grid=document.getElementById("armgrid");grid.innerHTML="";
   [4,3,2,5,6,1].forEach(function(pos){
     var rows=armRallies(setter,pos),tot=rows.length,zc={};
@@ -321,6 +337,8 @@ function renderArmador(){
 function setArmSetter(i){armSetIdx=i;renderArmador();}
 function setArmPhase(f){armPhase=f;var bs=document.querySelectorAll("#armsec [data-f]");for(var i=0;i<bs.length;i++)bs[i].classList.toggle("on",bs[i].getAttribute("data-f")===f);renderArmador();}
 function setArmRec(r){armRec=r;var bs=document.querySelectorAll("#armsec [data-r]");for(var i=0;i<bs.length;i++)bs[i].classList.toggle("on",bs[i].getAttribute("data-r")===r);renderArmador();}
+function setArmRecZone(z){armRecZone=(z==="all")?null:z;var bs=document.querySelectorAll("#armreczgrp [data-rz]");for(var i=0;i<bs.length;i++)bs[i].classList.toggle("on",bs[i].getAttribute("data-rz")===z);renderArmador();}
+function setArmRecNum(v){armRecNum=v?parseInt(v,10):null;renderArmador();}
 function setArmCall(v){armCall=(v==="all")?"all":parseInt(v,10);renderArmador();}
 function openArmZone(pos,zn){
   var setter=armTeam.setters[armSetIdx]||armTeam.setters[0];
@@ -338,8 +356,19 @@ function openArmZone(pos,zn){
 function evLabel(ev){if(ev==="#")return'<span class="r-pt">punto</span>';if(ev==="/")return'<span class="r-bl">bloq</span>';if(ev==="=")return'<span class="r-er">error</span>';return ev;}
 function tiles3(p,cfg){var t=cfg.tiles.map(function(lb,i){var hl=cfg.hl.indexOf(i)>=0?' hl':'';return '<div class="tile'+hl+'"><div class="l">'+lb+'</div><div class="v" id="'+p.id+'-s'+i+'"></div></div>';});return '<div class="row3">'+t.slice(0,3).join('')+'</div><div class="row3">'+t.slice(3,6).join('')+'</div><div class="row3">'+t.slice(6,9).join('')+'</div>';}
 function U(role){return role==='saque'?' saques':role==='reception'?' recep.':' ataques';}
+function _isMulti(fl){return fl.multi||fl.lab==="Resultado";}
+function filterOpts(p,fl){if(fl.lab==="Recibe"&&fl.idx===9){var NB={};((window.PP_DATA&&window.PP_DATA[TEAM]&&window.PP_DATA[TEAM].players)||[]).forEach(function(pp){NB[pp.num]=pp.name;});var rc={};(p&&p.data||[]).forEach(function(a){var rn=a[9];if(rn>0)rc[rn]=1;});return [["all","Todas"]].concat(Object.keys(rc).map(Number).sort(function(x,y){return x-y;}).map(function(n){return [String(n),"#"+n+" "+(NB[n]?apellidoJS(NB[n]):"")];}));}return fl.opts;}
+function filtCtrl(id,fl,onchg,op){op=op||fl.opts;
+  if(_isMulti(fl)){var boxes=op.filter(function(o){return o[0]!=="all";}).map(function(o){return '<label class="mopt"><input type="checkbox" value="'+o[0]+'" checked'+(onchg?' onchange="'+onchg+'"':"")+'>'+o[1]+'</label>';}).join("");
+    return '<div class="fgroup msel"><label>'+fl.lab+'</label><details class="mdd" id="'+id+'"><summary class="msum">Todas</summary><div class="mpop">'+boxes+'</div></details></div>';}
+  return '<div class="fgroup"><label>'+fl.lab+'</label><select id="'+id+'"'+(onchg?' onchange="'+onchg+'"':"")+'>'+opts(op)+'</select></div>';
+}
+function readFilt(id,fl){var el=document.getElementById(id);if(!el)return "all";
+  if(_isMulti(fl)){var bx=[].slice.call(el.querySelectorAll("input"));var ch=bx.filter(function(c){return c.checked;}).map(function(c){return c.value;});
+    var sm=el.querySelector("summary");var allsel=(ch.length===0||ch.length===bx.length);if(sm)sm.textContent=allsel?"Todas":(ch.length+" sel");return allsel?"all":ch;}
+  return el.value;}
 function buildSection(p){var cfg=ROLECFG[p.role];
-  var fh=cfg.filters.map(function(fl,i){return '<div class="fgroup"><label>'+fl.lab+'</label><select id="'+p.id+'-f'+i+'">'+opts(fl.opts)+'</select></div>';}).join('');
+  var fh=cfg.filters.map(function(fl,i){return filtCtrl(p.id+'-f'+i,fl,'',filterOpts(p,fl));}).join('');
   if(cfg.stats==='atk'||cfg.stats==='srv'){fh+='<div class="fgroup"><label title="Mín. pelotas">Mín.</label><input type="number" min="0" value="0" id="'+p.id+'-min" style="background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:7px;font-family:inherit;font-weight:700"></div>';}
   return '<div class="player"><div class="phead"><div class="pnum">'+p.num+'</div><div class="pname">'+p.name+'</div><div class="prole">'+(p.pos||p.role)+'</div><div class="pmeta">'+p.total+U(p.role)+'</div></div>'
    +'<div class="filters">'+fh+'</div><div class="natt" id="'+p.id+'-n"></div>'
@@ -347,7 +376,7 @@ function buildSection(p){var cfg=ROLECFG[p.role];
    +'<div class="stats">'+tiles3(p,cfg)+'</div></div>'+(p.read?'<div class="read">'+p.read+'</div>':'')+'</div>';
 }
 function render(p){var cfg=ROLECFG[p.role];
-  var vals=cfg.filters.map(function(_,i){return g(p.id+'-f'+i);});
+  var vals=cfg.filters.map(function(fl,i){return readFilt(p.id+'-f'+i,fl);});
   var f=p.data.filter(function(a){return MSEL.has(a[cfg.vIdx])&&passes(a,cfg,vals);}),n=f.length;
   var z={"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0},vz={};
   f.forEach(function(a){if(z[a[cfg.court]]!==undefined)z[a[cfg.court]]++;if((INFO[a[cfg.vIdx]]||{}).yt){vz[a[cfg.court]]=(vz[a[cfg.court]]||0)+1;}});
@@ -405,11 +434,11 @@ let YTP=null,YTReady=false,clips=[],cur=0,loadedVid="",vtimer=null,pre=7,post=3,
 var VSEL={};try{VSEL=JSON.parse(localStorage.getItem("pp_vsel")||"{}")||{};}catch(e){VSEL={};}var onlyShow=false,curKey="";
 function ensureYT(cb){if(window.YT&&window.YT.Player){cb();return;}window.onYouTubeIframeAPIReady=cb;if(!document.getElementById("ytapi")){var s=document.createElement("script");s.id="ytapi";s.src="https://www.youtube.com/iframe_api";document.head.appendChild(s);}}
 function openZone(pid,zn){curP=PLAYERS.find(function(x){return x.id===pid;});curZn=zn;curKey=TEAM+"|"+pid+"|"+zn;onlyShow=false;var _vo=document.getElementById("vonly");if(_vo)_vo.checked=false;var cfg=ROLECFG[curP.role];
-  document.getElementById('vfilters').innerHTML=cfg.filters.map(function(fl,i){return '<div class="fgroup"><label>'+fl.lab+'</label><select id="vf'+i+'" onchange="recompute()">'+opts(fl.opts)+'</select></div>';}).join('');
-  cfg.filters.forEach(function(_,i){document.getElementById('vf'+i).value=g(pid+'-f'+i);});
+  document.getElementById('vfilters').innerHTML=cfg.filters.map(function(fl,i){return filtCtrl('vf'+i,fl,'recompute()',filterOpts(curP,fl));}).join('');
+  cfg.filters.forEach(function(fl,i){var src=document.getElementById(pid+'-f'+i),dst=document.getElementById('vf'+i);if(!src||!dst)return;if(_isMulti(fl)){var sc={};src.querySelectorAll('input').forEach(function(c){sc[c.value]=c.checked;});dst.querySelectorAll('input').forEach(function(c){c.checked=sc[c.value]!==false;});}else{dst.value=src.value;}});
   document.getElementById("vmodal").style.display="flex";recompute();}
 function recompute(){if(!curP)return;var cfg=ROLECFG[curP.role];
-  var vals=cfg.filters.map(function(_,i){return g('vf'+i);});
+  var vals=cfg.filters.map(function(fl,i){return readFilt('vf'+i,fl);});
   var all=curP.data.filter(function(a){return String(a[cfg.court])===curZn&&MSEL.has(a[cfg.vIdx])&&passes(a,cfg,vals);});
   clips=all.map(function(a){return {tag:a[cfg.tagIdx],ev:a[cfg.evIdx],t:a[cfg.tIdx],vid:(INFO[a[cfg.vIdx]]||{}).yt||'',sel:true};}).filter(function(c){return c.vid;});
   applySavedSel();cur=firstSel();document.getElementById("vtitle").textContent=curP.name+" · zona "+curZn+" · "+all.length+U(curP.role)+(clips.length<all.length?' ('+clips.length+' c/video)':'');renderList();
