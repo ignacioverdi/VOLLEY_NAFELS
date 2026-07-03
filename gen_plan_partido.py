@@ -39,7 +39,27 @@ def read_dvw(fp):
     t=b.decode('utf-8','replace')   # Naefels: DVW en UTF-8 (tolerante a bytes sueltos)
     return t.replace('\r\n','\n').replace('\r','\n')
 
-def build(dvw_dir, out_dir):
+def load_season_map(db_path, out_dir):
+    """Mapa archivo->temporada leido del mismo nla_players_db.json que usa update_db."""
+    cands=[]
+    if db_path: cands.append(db_path)
+    cands += [os.path.join(out_dir,'nla_players_db.json'), 'nla_players_db.json']
+    for p in cands:
+        try:
+            if os.path.exists(p):
+                db=json.load(open(p,encoding='utf-8'))
+                return {g.get('file'):g.get('temporada') for g in db.get('games',[]) if g.get('file')}
+        except Exception: pass
+    return {}
+
+def season_from_date(date):
+    """Fallback: deduce temporada 'YYYY/YY' desde la fecha (arranca en agosto)."""
+    try:
+        p=date.split('-'); y=int(p[0]); m=int(p[1]); st=y if m>=8 else y-1
+        return "%d/%02d"%(st,(st+1)%100)
+    except Exception: return None
+
+def build(dvw_dir, out_dir, filter_temp=None, db_path=None):
     NAMES_T=DISP_BY_SLUG
 
     # videos (opcional; el plan de partido igual los lee en vivo)
@@ -107,7 +127,8 @@ def build(dvw_dir, out_dir):
                 recv=False
 
     files=sorted(glob.glob(os.path.join(dvw_dir,'*.dvw')))
-    nf=0
+    season_map = load_season_map(db_path, out_dir) if filter_temp else {}
+    nf=0; skipped_season=0
     for fp in files:
         fn=os.path.basename(fp); m=re.search(r'\b(\d{6})\b',fn) or re.search(r'\b(\d{5})\b',fn)
         if not m: continue
@@ -121,6 +142,10 @@ def build(dvw_dir, out_dir):
         hname=home[1].strip() if len(home)>1 else ''; aname=away[1].strip() if len(away)>1 else ''
         hslug=name_to_slug(hname); aslug=name_to_slug(aname)
         dm=re.search(r'(20\d\d-\d\d-\d\d)',fn); date=dm.group(1) if dm else '?'
+        if filter_temp:
+            temp = season_map.get(fn) or season_from_date(date)
+            if temp != filter_temp:
+                skipped_season+=1; continue
         try: hs,as_=int(home[2]),int(away[2])
         except: hs,as_=0,0
         def oppname(sl,raw):
@@ -191,8 +216,9 @@ def build(dvw_dir, out_dir):
 
     outp=os.path.join(out_dir,'plan_partido_data.js')
     open(outp,'w',encoding='utf-8').write('window.PP_DATA='+json.dumps(PP,ensure_ascii=False,separators=(',',':'))+';')
-    print("[plan_partido] %d DVW -> %s (%d equipos, %.1f KB)" % (
-        nf, outp, len(PP), os.path.getsize(outp)/1024))
+    ftxt = (" | temporada %s (%d fuera)"%(filter_temp,skipped_season)) if filter_temp else ""
+    print("[plan_partido] %d DVW -> %s (%d equipos, %.1f KB)%s" % (
+        nf, outp, len(PP), os.path.getsize(outp)/1024, ftxt))
 
 def autodetect_dvw():
     dirs=[d for d in glob.glob('DVW*') if os.path.isdir(d) and glob.glob(os.path.join(d,'*.dvw'))]
@@ -202,8 +228,10 @@ if __name__=='__main__':
     ap=argparse.ArgumentParser()
     ap.add_argument('--dvw_dir',default=None)
     ap.add_argument('--output_dir',default='.')
+    ap.add_argument('--filter_temporada',default=None)
+    ap.add_argument('--db',default=None)
     a=ap.parse_args()
     dvw=a.dvw_dir or autodetect_dvw()
     if not dvw or not os.path.isdir(dvw):
         print("[plan_partido] ERROR: no encontre la carpeta de DVW"); sys.exit(1)
-    build(dvw, a.output_dir)
+    build(dvw, a.output_dir, a.filter_temporada or None, a.db)

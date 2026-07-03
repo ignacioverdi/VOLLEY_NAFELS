@@ -63,7 +63,7 @@ if errorlevel 1 echo      [aviso] Hubo un problema en partidos. Mira el detalle 
 echo.
 echo  [2/4] Scouting de rivales...
 python gen_scouting.py --dvw_dir "!DVW_DIR!" --output_dir .
-python gen_plan_partido.py --dvw_dir "!DVW_DIR!" --output_dir .
+python gen_plan_partido.py --dvw_dir "!DVW_DIR!" --output_dir . --filter_temporada "!TEMPORADA_ACTUAL!"
 if errorlevel 1 echo      [aviso] Hubo un problema en el scouting. Sigo igual.
 echo.
 echo  [3/4] Videos destacados (si hay Excel)...
