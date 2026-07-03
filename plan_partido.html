@@ -23,6 +23,8 @@ header.masthead .sub{color:var(--mut);font-size:13.5px}
 .matchbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 4px;padding:10px 12px;background:var(--card);border:1px solid var(--border);border-radius:10px}
 .matchbar .mlab{font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:var(--faint)}
 .mhint{font-size:12px;color:var(--faint);margin-left:auto}
+.mall{display:flex;gap:5px;border-bottom:1px solid var(--border);padding-bottom:5px;margin-bottom:2px}
+.mall button{flex:1;font-size:11px;font-weight:700;padding:3px 6px;border-radius:6px;border:1px solid var(--border);background:var(--card2);color:var(--txt);cursor:pointer;text-transform:uppercase;letter-spacing:.03em}
 .msel{position:relative}
 .teamsel{font-family:'Bebas Neue',sans-serif;letter-spacing:.04em;font-size:18px;padding:5px 12px;border-radius:8px;border:1px solid var(--red);background:var(--card2);color:var(--txt);cursor:pointer}
 .teamsel:hover{background:#1a1030}
@@ -43,12 +45,12 @@ header.masthead .sub{color:var(--mut);font-size:13.5px}
 .armhead{display:flex;align-items:baseline;gap:12px;margin-bottom:10px;flex-wrap:wrap}
 .armhead h2{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.04em;color:#a78bfa;margin:0}
 .armhead .sub{font-size:14px;color:var(--mut)}
-.armctrl{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
-.armctrl .grp{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.armctrl{display:flex;gap:9px;flex-wrap:nowrap;align-items:center;margin-bottom:14px;overflow-x:auto}
+.armctrl .grp{display:flex;gap:4px;align-items:center;flex-wrap:nowrap;flex:0 0 auto}
 .armctrl label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin-right:2px}
 .armctrl button{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:var(--card2);color:var(--mut);cursor:pointer}
 .armctrl button.on{background:#7c3aed;color:#fff;border-color:#7c3aed}
-.armsel{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;padding:5px 10px;border-radius:7px;border:1px solid var(--border);background:var(--card2);color:var(--txt);cursor:pointer}
+.armsel{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;padding:4px 7px;border-radius:7px;border:1px solid var(--border);background:var(--card2);color:var(--txt);cursor:pointer}
 .armgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 @media(max-width:900px){.armgrid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.armgrid{grid-template-columns:1fr}}
@@ -170,9 +172,9 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
   <div class="armhead"><h2>Distribución del armador</h2><span class="sub" id="armname">—</span></div>
   <div class="armctrl">
     <div class="grp" id="armsetsel"></div>
-    <div class="grp"><label>Fase</label><button data-f="SO" class="on" onclick="setArmPhase('SO')">Side-out</button><button data-f="TR" onclick="setArmPhase('TR')">Transición</button><button data-f="all" onclick="setArmPhase('all')">Todo</button></div>
-    <div class="grp" id="armrecgrp"><label>Recepción</label><button data-r="all" class="on" onclick="setArmRec('all')">Toda</button><button data-r="pos" onclick="setArmRec('pos')">#+</button><button data-r="neg" onclick="setArmRec('neg')">!−</button></div>
-    <div class="grp" id="armreczgrp"><label>Recep. desde</label><button data-rz="all" class="on" onclick="setArmRecZone('all')">Todas</button><button data-rz="r1" onclick="setArmRecZone('r1')">Z1</button><button data-rz="r6" onclick="setArmRecZone('r6')">Z6</button><button data-rz="r5" onclick="setArmRecZone('r5')">Z5</button></div>
+    <div class="grp"><label>Fase</label><select id="armfase" class="armsel" onchange="setArmPhase(this.value)"><option value="SO">Side-out</option><option value="TR">Transición</option><option value="all">Todo</option></select></div>
+    <div class="grp" id="armrecgrp"><label>Recepción</label><select id="armrecsel" class="armsel" onchange="setArmRec(this.value)"><option value="all">Toda</option><option value="pos">#+</option><option value="neg">!−</option></select></div>
+    <div class="grp" id="armreczgrp"><label>Recep. desde</label><select id="armreczsel" class="armsel" onchange="setArmRecZone(this.value)"><option value="all">Todas</option><option value="r1">Z1</option><option value="r6">Z6</option><option value="r5">Z5</option></select></div>
     <div class="grp"><label>Recibe</label><select id="armrecnum" class="armsel" onchange="setArmRecNum(this.value)"></select></div>
     <div class="grp"><label>Llamada</label><select id="armcall" class="armsel" onchange="setArmCall(this.value)"></select></div>
   </div>
@@ -242,7 +244,7 @@ const CB_O=[["all","Todos"],["X5","X5"],["V5","V5"],["X6","X6"],["V6","V6"],["X8
 const STY=[["all","Todos"],["pot","Potencia"],["flo","Flotado"]];
 const SDZ=[["all","Todas"],["1","z1"],["9","z9"],["6","z6"],["7","z7"],["5","z5"]];
 const SMO=[["all","Todo"],["b1","0-8"],["b2","9-16"],["b3","17-40"]];
-const SRS=[["all","Todas"],["#","Ace (#)"],["/","Vendido (/)"],["+","+ (rompe)"],["!","Neutra (!)"],["-","Fácil (−)"],["=","Error (=)"]];
+const SRS=[["all","Todas"],["#","Ace (#)"],["/","Vendido (/)"],["+","Positivo (+)"],["!","Neutra (!)"],["-","Fácil (−)"],["=","Error (=)"]];
 const RCS=[["all","Todas"],["#","Perfecta (#)"],["+","Buena (+)"],["!","Ok (!)"],["/","Pasada (/)"],["-","Mala (−)"],["=","Error (=)"]];
 const ROLECFG={
  punta:{court:4,evIdx:5,subIdx:6,tIdx:7,vIdx:8,tagIdx:0,stats:'atk',pal:'red',
@@ -335,9 +337,9 @@ function renderArmador(){
   });
 }
 function setArmSetter(i){armSetIdx=i;renderArmador();}
-function setArmPhase(f){armPhase=f;var bs=document.querySelectorAll("#armsec [data-f]");for(var i=0;i<bs.length;i++)bs[i].classList.toggle("on",bs[i].getAttribute("data-f")===f);renderArmador();}
-function setArmRec(r){armRec=r;var bs=document.querySelectorAll("#armsec [data-r]");for(var i=0;i<bs.length;i++)bs[i].classList.toggle("on",bs[i].getAttribute("data-r")===r);renderArmador();}
-function setArmRecZone(z){armRecZone=(z==="all")?null:z;var bs=document.querySelectorAll("#armreczgrp [data-rz]");for(var i=0;i<bs.length;i++)bs[i].classList.toggle("on",bs[i].getAttribute("data-rz")===z);renderArmador();}
+function setArmPhase(f){armPhase=f;renderArmador();}
+function setArmRec(r){armRec=r;renderArmador();}
+function setArmRecZone(z){armRecZone=(z==="all")?null:z;renderArmador();}
 function setArmRecNum(v){armRecNum=v?parseInt(v,10):null;renderArmador();}
 function setArmCall(v){armCall=(v==="all")?"all":parseInt(v,10);renderArmador();}
 function openArmZone(pos,zn){
@@ -356,11 +358,12 @@ function openArmZone(pos,zn){
 function evLabel(ev){if(ev==="#")return'<span class="r-pt">punto</span>';if(ev==="/")return'<span class="r-bl">bloq</span>';if(ev==="=")return'<span class="r-er">error</span>';return ev;}
 function tiles3(p,cfg){var t=cfg.tiles.map(function(lb,i){var hl=cfg.hl.indexOf(i)>=0?' hl':'';return '<div class="tile'+hl+'"><div class="l">'+lb+'</div><div class="v" id="'+p.id+'-s'+i+'"></div></div>';});return '<div class="row3">'+t.slice(0,3).join('')+'</div><div class="row3">'+t.slice(3,6).join('')+'</div><div class="row3">'+t.slice(6,9).join('')+'</div>';}
 function U(role){return role==='saque'?' saques':role==='reception'?' recep.':' ataques';}
+function mAll(btn,val){var pop=btn.closest(".mpop");var cbs=pop.querySelectorAll('input[type=checkbox]');cbs.forEach(function(c){c.checked=!!val;});if(cbs[0])cbs[0].dispatchEvent(new Event("change",{bubbles:true}));}
 function _isMulti(fl){return fl.multi||fl.lab==="Resultado";}
 function filterOpts(p,fl){if(fl.lab==="Recibe"&&fl.idx===9){var NB={};((window.PP_DATA&&window.PP_DATA[TEAM]&&window.PP_DATA[TEAM].players)||[]).forEach(function(pp){NB[pp.num]=pp.name;});var rc={};(p&&p.data||[]).forEach(function(a){var rn=a[9];if(rn>0)rc[rn]=1;});return [["all","Todas"]].concat(Object.keys(rc).map(Number).sort(function(x,y){return x-y;}).map(function(n){return [String(n),"#"+n+" "+(NB[n]?apellidoJS(NB[n]):"")];}));}return fl.opts;}
 function filtCtrl(id,fl,onchg,op){op=op||fl.opts;
   if(_isMulti(fl)){var boxes=op.filter(function(o){return o[0]!=="all";}).map(function(o){return '<label class="mopt"><input type="checkbox" value="'+o[0]+'" checked'+(onchg?' onchange="'+onchg+'"':"")+'>'+o[1]+'</label>';}).join("");
-    return '<div class="fgroup msel"><label>'+fl.lab+'</label><details class="mdd" id="'+id+'"><summary class="msum">Todas</summary><div class="mpop">'+boxes+'</div></details></div>';}
+    return '<div class="fgroup msel"><label>'+fl.lab+'</label><details class="mdd" id="'+id+'"><summary class="msum">Todas</summary><div class="mpop"><div class="mall"><button type="button" onclick="mAll(this,1)">Todos</button><button type="button" onclick="mAll(this,0)">Ninguno</button></div>'+boxes+'</div></details></div>';}
   return '<div class="fgroup"><label>'+fl.lab+'</label><select id="'+id+'"'+(onchg?' onchange="'+onchg+'"':"")+'>'+opts(op)+'</select></div>';
 }
 function readFilt(id,fl){var el=document.getElementById(id);if(!el)return "all";
