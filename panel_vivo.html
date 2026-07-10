@@ -68,6 +68,9 @@ button{font-family:inherit;cursor:pointer}
 .rowbtns{display:flex;gap:5px;margin-top:8px}
 .rowbtns button{flex:1;background:var(--card2);border:1px solid var(--b);color:var(--mut);border-radius:7px;padding:2px;font-size:9px;font-weight:600}
 .rowbtns button:hover{color:var(--txt);border-color:var(--b2)}
+.vrow{display:flex;gap:10px;align-items:baseline;padding:7px 8px;border-bottom:1px solid var(--b);cursor:pointer}
+.vrow:hover{background:var(--card2)}
+.vmsg{color:var(--warn,#fbbf24);font-size:12px}
 .atrow{display:grid;grid-template-columns:60px 90px 1fr 34px;gap:6px;margin-bottom:6px;align-items:center}
 .hsel{float:right;margin-left:6px;background:var(--card2);border:1px solid var(--b);color:var(--mut);
   border-radius:6px;padding:2px 5px;font-size:10px;font-weight:600}
@@ -331,6 +334,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         <option value="640">Alta</option>
         <option value="900">Máxima</option>
       </select>
+      <button class="hbtn" onclick="abrirVerificacion()" title="Verificar todos los códigos (Ctrl+V)">Verificar</button>
       <button class="hbtn" onclick="undoRally()" title="Deshace el punto (Ctrl+Shift+Z)">Deshacer punto</button>
       <button class="hbtn" onclick="undoLast()" title="Borra el último código (Ctrl+Z)">Deshacer código</button></h3>
     <div class="codes" id="codes"></div>
@@ -361,6 +365,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div>
 
 <!-- ====== MODAL: CONFIG ====== -->
+<div class="modal" id="m-verif"><div class="sheet" style="max-width:560px">
+  <h2 id="v-tit">Verificación</h2>
+  <div class="sub">Manual 4.5.3. Tocá un código para ir a buscarlo en la lista.</div>
+  <div id="v-lista" style="margin-top:12px;max-height:44vh;overflow:auto"></div>
+  <div class="brow"><button class="tbtn" onclick="closeModal('m-verif')">Cerrar</button></div>
+</div></div>
+
 <div class="modal" id="m-config"><div class="sheet">
   <h2>Teclado y códigos</h2>
   <div class="sub">Se guarda en este dispositivo. Es tu configuración personal: no afecta a nadie más.</div>
@@ -617,6 +628,7 @@ if(CFG.cursorEfecto===undefined) CFG.cursorEfecto = false;
 if(CFG.autoServe===undefined) CFG.autoServe = 'num_s';
 if(!CFG.verif) CFG.verif = {marcador:true,combo:true,bloqueo:true,zona:true,recBarra:true,liberoSaca:true};
 if(CFG.verif.marcador===undefined) CFG.verif.marcador = true;
+if(CFG.verif.zonaSaque===undefined) CFG.verif.zonaSaque = true;
 /* Atajos propios (manual 2.6, botón [Add]): una tecla escribe un texto en la barra.
    Sirve para dorsales de dos cifras, combinaciones de ataque, o un código completo.
    El manual permite Ctrl+tecla y Alt+tecla; una tecla sola para códigos de scout. */
@@ -833,6 +845,7 @@ function signOf(skill,ev){
    ============================================================ */
 const VERIF_LBL={
   marcador:'El marcador salta puntos (ej: *p01:00 -> *p03:00)',
+  zonaSaque:'Saque desde una zona que no es 1, 9, 6, 7 ni 5 (manual 13.2)',
   combo:'Ataque sin combinación',
   bloqueo:'Bloqueo desde zaga',
   zona:'La combinación no coincide con la posición del atacante',
@@ -889,14 +902,58 @@ function renderAtajos(){
 }
 function agregarAtajo(){ CFG.atajos.push({k:'',mod:'',txt:''}); renderAtajos(); }
 
+/* Manual 4.5.3: el botón Verify / el comando VER / Ctrl+V revisan TODA la lista.
+   Incluye el ejemplo del manual: el saque siguiente debe ser del equipo que ganó el punto. */
+function verifTodo(){
+  const fallos=[];
+  verifMarcador().forEach(m=>fallos.push({i:m.i, c:m.c, msg:'El marcador debería ser '+m.esperado}));
+
+  let ganador=null;
+  M.codes.forEach((row,i)=>{
+    const c=row.c;
+    const mp = c.match(/^([*a])p\d\d:\d\d$/);
+    if(mp){ ganador = mp[1]==='*' ? '*' : 'a'; return; }
+    if(/^\*\*\dset$/.test(c)){ ganador=null; return; }
+    if(row.k!=='play') return;
+
+    /* ¿es un código que el panel entiende? */
+    if(!/^[*a](-1|\d\d)[SRABDEF]/.test(c) && !c.includes('$$')){
+      fallos.push({i, c, msg:'Código desconocido'}); return;
+    }
+    /* el saque que sigue a un punto lo hace el equipo que ganó */
+    if(c.length>3 && c[3]==='S' && ganador && c[0]!==ganador){
+      fallos.push({i, c, msg:'Saca '+(c[0]==='*'?'el local':'el visitante')+' pero el punto lo ganó '+(ganador==='*'?'el local':'el visitante')});
+    }
+    if(c.length>3 && c[3]==='S') ganador=null;   /* ya se verificó este saque */
+
+    /* zona de saque fuera de las cinco del manual */
+    if(CFG.verif.zonaSaque!==false && c.length>9 && c[3]==='S' && c[9]!=='~' && ZONAS_SAQUE.indexOf(c[9])<0){
+      fallos.push({i, c, msg:'Saque desde la zona '+c[9]+' (el manual usa 1, 9, 6, 7 o 5)'});
+    }
+  });
+  return fallos;
+}
+function abrirVerificacion(){
+  const f = verifTodo();
+  const box = document.getElementById('v-lista');
+  box.innerHTML = f.length
+    ? f.map(x=>'<div class="vrow" onclick="seleccionar('+x.i+');closeModal(\'m-verif\')"><span class="mono">'+x.c+'</span><span class="vmsg">'+x.msg+'</span></div>').join('')
+    : '<div class="sub" style="padding:14px 0">Sin errores. Los '+M.codes.length+' códigos son coherentes.</div>';
+  document.getElementById('v-tit').textContent = f.length ? f.length+' cosa'+(f.length>1?'s':'')+' para revisar' : 'Todo en orden';
+  document.getElementById('m-verif').classList.add('open');
+}
+
 function avisarMarcador(){
   if(CFG.verif.marcador===false) return;
   const m = verifMarcador();
   if(m.length) toast('Marcador: '+m[0].c+' debería ser '+m[0].esperado+(m.length>1?' (+'+(m.length-1)+' más)':''), true);
 }
 
+const ZONAS_SAQUE = ['1','9','6','7','5'];   /* manual 13.2 */
 function verificar(a){
   const av=[], d=merged(a), V=CFG.verif||{};
+  if(V.zonaSaque!==false && a.skill==='S' && d.sz && ZONAS_SAQUE.indexOf(String(d.sz))<0)
+    av.push('El saque sale de la zona '+d.sz+' (el manual usa 1, 9, 6, 7 o 5)');
   if(V.combo!==false && a.skill==='A' && !d.combo)
     av.push('Ataque sin combinación');
   if(V.bloqueo!==false && a.skill==='B'){
@@ -1132,6 +1189,8 @@ function parseCommand(raw){
   /* punto indefinido (manual 4.5.1, "green codes"): es la ACCIÓN, no el punto.
      Acepta $$& suelto o con tipo y evaluación: $$&H=  ·  a$$&H#
      El punto lo asigna después el End Rally, como en los archivos reales. */
+  if(c.toUpperCase()==='VER'){ document.getElementById('code').value=''; abrirVerificacion(); return true; }   /* manual 4.5.3 */
+
   const mu = c.match(/^\$\$&([HMQTUNO]?)([#+!\-\/=]?)$/);
   if(mu){
     const tipo = mu[1] || '', ev = mu[2] || '';
@@ -1540,6 +1599,9 @@ document.addEventListener('keydown', e=>{
   }
   if(document.querySelector('.modal.open')) return;
   const k = keyName(e), K = CFG.keys;
+
+  /* manual 4.5.3: Ctrl+V abre la verificación completa */
+  if((e.ctrlKey||e.metaKey) && (e.key==='v'||e.key==='V')){ e.preventDefault(); abrirVerificacion(); return; }
 
   /* manual 2.6 [Add]: atajos propios. Tienen prioridad sobre todo lo demás. */
   const at = atajoDe(e);
