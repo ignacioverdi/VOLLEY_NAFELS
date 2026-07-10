@@ -142,6 +142,13 @@ select.mini2{background:var(--card2);border:1px solid var(--b);color:var(--txt);
 .twin{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .twin[hidden]{display:none}
 th,td{padding:3px 5px}
+tr.fund td{font-weight:700;border-top:1px solid var(--b2)}
+tr.fund td.k{text-transform:uppercase;letter-spacing:.5px;font-size:10px}
+tr.jug td{opacity:.78}
+tr.jug td.k{padding-left:16px;font-size:10.5px;font-weight:500;color:var(--mut)}
+tr.jug:hover td{opacity:1;background:var(--card2)}
+.dor{display:inline-block;min-width:19px;text-align:center;background:var(--card2);border:1px solid var(--b);
+  border-radius:4px;font-family:'JetBrains Mono';font-size:9px;font-weight:700;color:var(--txt);padding:0 2px;margin-right:5px}
 table{width:100%;border-collapse:collapse;font-size:12.5px}
 th,td{padding:5px 7px;text-align:right;border-bottom:1px solid var(--b)}
 th:first-child,td:first-child{text-align:left}
@@ -295,7 +302,8 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
       <button class="hbtn" onclick="ciclarAnalisis()" id="anbtn">Local</button></h3>
     <div id="mini-an" class="minian"></div>
 
-    <h3 style="margin-top:12px">Acciones del set <button class="hbtn" onclick="undoLast()">Deshacer</button></h3>
+    <h3 style="margin-top:12px">Acciones del set <button class="hbtn" onclick="undoRally()" title="Deshace el punto (Ctrl+Shift+Z)">Deshacer punto</button>
+      <button class="hbtn" onclick="undoLast()" title="Borra el último código (Ctrl+Z)">Deshacer código</button></h3>
     <div class="codes" id="codes"></div>
   </div>
 </div>
@@ -833,6 +841,7 @@ function pushCode(code, kind){ M.codes.push({c:code, k:kind||'play', set:M.set})
    · el tipo y el destino del armado salen de la tabla de combinaciones
    · si el ataque lleva el especial "X", el armado se evalúa "#"
    · NO se inserta si el que ataca es el armador                     */
+let CALL_PEND = '';    /* llamada (K#) tipeada durante la recepción */
 function autoSet(a){
   if(!CFG.autoSet) return null;
   if(a.skill!=='A') return null;
@@ -845,7 +854,9 @@ function autoSet(a){
   const ev   = (d.spec==='X') ? '#' : (CFG.defEval.E || '+');
   const tgt  = info.tg || '';
   const pre  = a.team==='home'?'*':'a';
-  let cola = '~~' + (tgt||'~');
+  const call = CALL_PEND || '';        /* manual: la llamada se asigna al armado */
+  CALL_PEND = '';
+  let cola = (call ? call : '~~') + (tgt||'~');
   cola = cola.replace(/~+$/,'');
   return pre + String(setter).padStart(2,'0') + 'E' + tipo + ev + cola;
 }
@@ -896,14 +907,84 @@ function drawPickers(){
   sp.onchange=e=>{PICK.spec=e.target.value; drawDecoder();};
 }
 
+/* ============================================================
+   COMANDOS TIPEADOS (manual 4.6)
+   T/aT tiempo · C6.7/aC6.7 cambio (doble: "C6.7 3.2") ·
+   P5/aP5 armador en cancha · S/aS saque inicial ·
+   *$$&/a$$& punto indefinido · **Nset cierre de set
+   ============================================================ */
+function hacerCambio(side,sale,entra){
+  const i = M[side].lineup.indexOf(sale);
+  if(i<0){ toast('El '+sale+' no está en cancha',true); return false; }
+  M[side].lineup[i]=entra; M[side].subs++;
+  if(M[side].setter===sale) M[side].setter=entra;
+  const P2=n=>String(n).padStart(2,'0');
+  pushCode((side==='home'?'*':'a')+'c'+P2(sale)+':'+P2(entra),'auto');
+  return true;
+}
+function parseCommand(raw){
+  let t = raw.trim();
+  if(!t) return false;
+  const side = /^a/i.test(t) && !/^a\d/.test(t) ? 'away' : 'home';
+  let c = side==='away' ? t.slice(1) : t;
+  const pre = side==='home' ? '*' : 'a';
+
+  /* punto indefinido: no se puede modificar (manual 4.5.1) */
+  if(c==='$$&'){
+    document.getElementById('code').value='';   /* si no, endRally vuelve a leer el comando */
+    pushCode(pre+'$$&','auto'); endRally(side); return true;
+  }
+
+  /* cierre de set: **Nset */
+  const ms = t.match(/^\*\*(\d)set$/i);
+  if(ms){ closeSet(); return true; }
+
+  /* llamada del armador escrita suelta (manual 4.7) */
+  if(/^K[0-9A-Z]$/i.test(t) && CALLS[t.toUpperCase()]){
+    CALL_PEND = t.toUpperCase(); toast('Llamada '+CALL_PEND+' anotada para el armado'); return true;
+  }
+
+  /* tiempo muerto */
+  if(/^T$/i.test(c)){ timeout(side); toast('Tiempo de '+M[side].name); return true; }
+
+  /* saque inicial */
+  if(/^S$/i.test(c)){ M.serving=side; renderAll(); persist(); toast('Saca '+M[side].name); return true; }
+
+  /* armador en cancha */
+  const mp = c.match(/^P(\d{1,2})$/i);
+  if(mp){
+    const n=parseInt(mp[1],10);
+    if(M[side].lineup.indexOf(n)<0){ toast('El '+n+' no está en cancha',true); return true; }
+    M[side].setter=n; pushCode(pre+'P'+n,'auto'); renderAll(); persist();
+    toast('Arma el '+n); return true;
+  }
+
+  /* cambio, simple o doble: C6.7  /  C6.7 3.2 */
+  if(/^C\d/i.test(c)){
+    const pares = c.slice(1).trim().split(/\s+/);
+    let hechos=0;
+    for(const p of pares){
+      const m = p.match(/^(\d{1,2})\.(\d{1,2})$/);
+      if(!m){ toast('Cambio mal escrito: usá C6.7',true); return true; }
+      if(hacerCambio(side, parseInt(m[1],10), parseInt(m[2],10))) hechos++;
+    }
+    if(hechos){ renderAll(); persist(); toast(hechos===2?'Doble cambio':'Cambio hecho'); }
+    return true;
+  }
+  return false;
+}
 function commit(){
   const inp = document.getElementById('code');
+  /* primero: ¿es un comando y no una acción? */
+  if(parseCommand(inp.value)){ inp.value=''; clearPick(); drawDecoder(); renderCodes(); renderMiniAn(); return true; }
   const parts = parseInput(inp.value);
   if(!parts.length) return false;
   if(parts[0].err){ toast(parts[0].err,true); marcarBarraMal(); return false; }
   const av=[]; parts.forEach(p=>verificar(p).forEach(x=>av.push(x)));
   if(av.length) toast('⚠ '+av[0]);
   parts.forEach(a=>{
+    /* manual 4.7: la llamada (K1) se tipea en la recepción, pero se asigna al armado */
+    if(a.skill==='R' && a.d && a.d.combo && CALLS[a.d.combo]){ CALL_PEND = a.d.combo; a.d.combo=''; }
     const es = autoSet(a);
     if(es) pushCode(es,'play');       /* el armado va antes del ataque */
     pushCode(fmt(a),'play');
@@ -913,7 +994,21 @@ function commit(){
 }
 
 /* Fin de jugada: asigna el punto, rota si hubo side out, deja al próximo sacador */
+/* pila para deshacer el fin de jugada (manual 4.8.1) */
+let RALLY_UNDO = [];
+function snapshotRally(){
+  RALLY_UNDO.push(JSON.stringify({h:M.home,a:M.away,s:M.serving,set:M.set,n:M.codes.length}));
+  if(RALLY_UNDO.length>40) RALLY_UNDO.shift();
+}
+function undoRally(){
+  if(!RALLY_UNDO.length){ toast('No hay jugada para deshacer',true); return; }
+  const st = JSON.parse(RALLY_UNDO.pop());
+  M.home=st.h; M.away=st.a; M.serving=st.s; M.set=st.set;
+  M.codes = M.codes.slice(0, st.n);
+  renderAll(); persist(); toast('Fin de jugada deshecho');
+}
 function endRally(winner){
+  snapshotRally();
   const inp = document.getElementById('code');
   /* el manual (4.5) dice: End Rally mueve y normaliza los códigos, y recién ahí asigna el punto.
      Si el código no se puede normalizar, no cerramos el punto: sería marcador adelantado con código colgado. */
@@ -1078,24 +1173,42 @@ function renderStats(){
     const rows = M.codes.filter(c=>c.k==='play' && c.c[0]===pre);
     const body = document.getElementById(side==='home'?'st-h':'st-a');
     const out=[];
-    Object.keys(SKILLS).forEach(sk=>{
-      const acts = rows.filter(c=>c.c[3]===sk);
-      if(!acts.length) return;
+
+    /* una fila con los seis símbolos + positividad / eficiencia (manual 2.2.5.2) */
+    function fila(nombre, acts, clase, sk){
       const n=acts.length, cnt={};
       EVALS.forEach(e=>cnt[e]=acts.filter(c=>c.c[5]===e).length);
-      /* manual 2.2.5.2: positividad en saque, recepción, defensa y freeball; eficiencia en ataque, bloqueo y armado */
       const usaPos = 'SRDF'.indexOf(sk)>=0;
-      const pos = (cnt['#']+cnt['+']+ (sk==='S'?cnt['/']:0));
+      const pos  = cnt['#']+cnt['+']+(sk==='S'?cnt['/']:0);
       const posP = Math.round(pos/n*100);
       const errs = cnt['='] + (['A','B'].indexOf(sk)>=0?cnt['/']:0);
       const efP  = Math.round((cnt['#']-errs)/n*100);
-      out.push('<tr><td class="k">'+SKILLS[sk]+'</td><td><span class="num">'+n+'</span></td>'+
+      return '<tr class="'+clase+'"><td class="k">'+nombre+'</td><td><span class="num">'+n+'</span></td>'+
         EVALS.map(e=>'<td><span class="num">'+(cnt[e]||'·')+'</span></td>').join('')+
         '<td><span class="num pos">'+(usaPos?posP+'%':'·')+'</span></td>'+
-        '<td><span class="num '+(efP<0?'neg':'pos')+'">'+(usaPos?'·':efP+'%')+'</span></td></tr>');
+        '<td><span class="num '+(efP<0?'neg':'pos')+'">'+(usaPos?'·':efP+'%')+'</span></td></tr>';
+    }
+
+    Object.keys(SKILLS).forEach(sk=>{
+      const acts = rows.filter(c=>c.c[3]===sk);
+      if(!acts.length) return;
+      out.push(fila(SKILLS[sk], acts, 'fund', sk));
+      /* desglose por jugador: quién está rindiendo y quién no */
+      const nums=[...new Set(acts.map(c=>parseInt(c.c.slice(1,3),10)))];
+      nums.map(n=>({n, acts:acts.filter(c=>parseInt(c.c.slice(1,3),10)===n)}))
+          .sort((a,b)=>b.acts.length-a.acts.length)
+          .forEach(p=>out.push(fila('<span class="dor">'+p.n+'</span> '+nombreJug(side,p.n), p.acts, 'jug', sk)));
     });
     body.innerHTML = out.length? out.join('') : '<tr><td colspan="10" style="color:var(--dim);text-align:center;padding:18px">Sin acciones todavía</td></tr>';
   });
+}
+/* nombre del jugador, si lo tenemos en el plantel */
+function nombreJug(side,num){
+  if(side==='home' && window.PLANTEL_NAFELS){
+    const j=window.PLANTEL_NAFELS.find(p=>String(p.c)===String(num));
+    if(j) return j.n;
+  }
+  return '';
 }
 
 function renderAll(){
@@ -1125,6 +1238,11 @@ function keyName(e){
   return e.key;
 }
 document.addEventListener('keydown', e=>{
+  if((e.ctrlKey||e.metaKey) && (e.key==='z'||e.key==='Z')){
+    e.preventDefault();
+    if(e.shiftKey) undoRally(); else undoLast();
+    return;
+  }
   if(document.querySelector('.modal.open')) return;
   const k = keyName(e), K = CFG.keys;
 
