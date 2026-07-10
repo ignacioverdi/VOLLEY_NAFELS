@@ -330,6 +330,12 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         <option value="0">No</option></select>
         <div style="font-size:11px;color:var(--mut);margin-top:5px">Saque↔recepción, ataque↔bloqueo, ataque↔defensa y ataque↔armado previo.</div>
       </div>
+      <div><label class="f">Después de cerrar el punto</label><select class="f" id="d-autoserve">
+        <option value="num_s">Escribe el número del próximo sacador y la S</option>
+        <option value="num">Escribe sólo el número del próximo sacador</option>
+        <option value="no">Deja la barra vacía</option></select>
+        <div style="font-size:11px;color:var(--mut);margin-top:5px">La barra se limpia siempre; esto define qué queda escrito.</div>
+      </div>
       <div><label class="f">Al editar, el cursor va</label><select class="f" id="d-cursor">
         <option value="0">Al final del código (completar)</option>
         <option value="1">Sobre el símbolo de evaluación (corregir)</option></select></div>
@@ -502,11 +508,11 @@ const FACTORY = {
          endR:',', endL:'<',
          ptHup:'F2', ptHdn:'F3', ptAup:'F6', ptAdn:'F7',
          rotHup:'F4', rotHdn:'F5', rotAup:'F8', rotAdn:'F9' },
-  defSkill:'A', defCombo:'X5', customAuto:false, fichasTeam:'home', publicarVivo:true, autoSet:true, autoCompound:true, fichasTeam:'home',
+  defSkill:'A', defCombo:'X5', customAuto:false, fichasTeam:'home', publicarVivo:true, autoSet:true, autoCompound:true, autoServe:'num_s', fichasTeam:'home',
   defType:{S:'Q',R:'Q',A:'H',B:'H',D:'H',E:'T',F:'H'},
   defEval:{S:'+',R:'+',A:'+',B:'+',D:'+',E:'+',F:'+'},
 };
-const PRESET_ES = {'=':'x','-':'-','/':'ñ','+':'+','#':'p','!':'i', endR:',', endL:'.',
+const PRESET_ES = {'=':'x','-':'-','/':'ñ','+':'+','#':'p','!':'i', endR:',', endL:'<',   /* ojo: el '.' es el separador del dot coding, no puede ser fin de jugada */
   ptHup:'F2',ptHdn:'F3',ptAup:'F6',ptAdn:'F7',rotHup:'F4',rotHdn:'F5',rotAup:'F8',rotAdn:'F9'};
 let CFG = load('pv_cfg', JSON.parse(JSON.stringify(FACTORY)));
 if(!CFG.defCombo) CFG.defCombo = FACTORY.defCombo;
@@ -514,6 +520,8 @@ if(CFG.customAuto===undefined) CFG.customAuto = false;
 if(CFG.autoSet===undefined) CFG.autoSet = true;
 if(CFG.autoCompound===undefined) CFG.autoCompound = true;
 if(CFG.cursorEfecto===undefined) CFG.cursorEfecto = false;
+if(CFG.autoServe===undefined) CFG.autoServe = 'num_s';
+if(CFG.keys.endL==='.') CFG.keys.endL='<';   /* el '.' es del dot coding */
 let PICK = {combo:'',sz:'',ez:'',subz:'',hit:'',blk:'',spec:''};
 
 const CMD_LABELS = {endL:'Fin jugada · izquierda',endR:'Fin jugada · derecha',
@@ -805,7 +813,9 @@ function commit(){
 /* Fin de jugada: asigna el punto, rota si hubo side out, deja al próximo sacador */
 function endRally(winner){
   const inp = document.getElementById('code');
-  if(inp.value.trim()) commit();
+  /* el manual (4.5) dice: End Rally mueve y normaliza los códigos, y recién ahí asigna el punto.
+     Si el código no se puede normalizar, no cerramos el punto: sería marcador adelantado con código colgado. */
+  if(inp.value.trim() && !commit()){ inp.focus(); return; }
 
   const t = M[winner];
   t.pts++;
@@ -816,7 +826,29 @@ function endRally(winner){
     rotate(winner,1,true);
   }
   renderAll(); persist();
+  autoServe();          /* manual 2.5.2 · 4 */
   inp.focus();
+}
+
+/* ── AUTOMATIC SERVE ──────────────────────────────────────────
+   Después de cerrar el punto, el programa deja escrito el próximo sacador.
+   Tres opciones, como en DataVolley:
+     'no'    -> la barra queda vacía
+     'num'   -> sólo el número del jugador
+     'num_s' -> el número y el código de saque (S)                */
+function autoServe(){
+  const inp = document.getElementById('code');
+  inp.value = '';                       /* la barra SIEMPRE queda limpia */
+  clearPick();
+  const modo = CFG.autoServe || 'no';
+  if(modo !== 'no'){
+    const sac = M[M.serving].lineup[0];              /* el sacador está en zona 1 */
+    if(sac){
+      const pre = M.serving==='home' ? '' : 'a';
+      inp.value = pre + sac + (modo==='num_s' ? 'S' : '');
+    }
+  }
+  drawDecoder(); drawPickers();
 }
 
 function undoLast(){
@@ -987,6 +1019,7 @@ function openConfig(){
   document.getElementById('d-autoset').value  = CFG.autoSet ? '1' : '0';
   document.getElementById('d-autocomp').value = CFG.autoCompound ? '1' : '0';
   document.getElementById('d-cursor').value   = CFG.cursorEfecto ? '1' : '0';
+  document.getElementById('d-autoserve').value = CFG.autoServe || 'no';
   const df = document.getElementById('cfg-def');
   df.innerHTML = Object.keys(SKILLS).map(s=>
     '<div><label class="f">'+SKILLS[s]+'</label><div style="display:flex;gap:5px">'+
@@ -1003,15 +1036,20 @@ function listen(el){
   document.addEventListener('keydown',h,true);
 }
 function saveConfig(){
+  let choque=false;
   document.querySelectorAll('#cfg-eval .keycap, #cfg-cmd .keycap').forEach(el=>{
-    const t=el.textContent.trim(); if(t && t!=='…' && t!=='—') CFG.keys[el.dataset.key]=t;
+    const t=el.textContent.trim();
+    if(t==='.'){ choque=true; return; }     /* el punto une dos acciones (dot coding): no puede ser tecla */
+    if(t && t!=='…' && t!=='—') CFG.keys[el.dataset.key]=t;
   });
+  if(choque) toast('El punto ( . ) une dos acciones, no puede usarse como tecla',true);
   CFG.defSkill = document.getElementById('d-skill').value;
   CFG.defCombo = document.getElementById('d-combo').value;
   CFG.customAuto   = document.getElementById('d-auto').value==='1';
   CFG.autoSet      = document.getElementById('d-autoset').value==='1';
   CFG.autoCompound = document.getElementById('d-autocomp').value==='1';
   CFG.cursorEfecto = document.getElementById('d-cursor').value==='1';
+  CFG.autoServe    = document.getElementById('d-autoserve').value;
   Object.keys(SKILLS).forEach(s=>{
     CFG.defType[s] = document.getElementById('dt-'+s).value;
     CFG.defEval[s] = document.getElementById('de-'+s).value;
