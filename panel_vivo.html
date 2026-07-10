@@ -1103,6 +1103,12 @@ function hacerCambio(side,sale,entra){
   if(M[side].lineup.indexOf(entra)>=0){ toast('El '+entra+' ya está en cancha',true); return false; }
   if(!(entra>=1 && entra<=99)){ toast('Dorsal inválido: '+entra,true); return false; }
   if(M[side].subs >= CFG.regl.cambios){ toast(M[side].name+' ya hizo sus '+CFG.regl.cambios+' cambios de este set',true); return false; }
+  /* El reemplazo del líbero no es una sustitución: no gasta cambios, no se codifica con *c
+     y el líbero nunca figura en la rotación (verificado en los 97 DVW oficiales). */
+  if(M[side].libero && (entra===M[side].libero || sale===M[side].libero)){
+    toast('El líbero no entra por cambio: escribí sus acciones directamente (ej: '+M[side].libero+'D#)',true);
+    return false;
+  }
   const primero = levantarEstado();      /* el cambio va antes del bloque de estado */
   M[side].lineup[i]=entra; M[side].subs++;
   if(M[side].setter===sale) M[side].setter=entra;
@@ -1335,17 +1341,13 @@ function timeout(side){
   renderAll(); persist();
 }
 
+/* El botón de cambio usa EXACTAMENTE el mismo camino que el comando C6.7:
+   así valida el límite de cambios, el dorsal, el armador que sale, y reubica
+   el bloque de estado. Antes eran dos caminos distintos y no coincidían. */
 function subst(side){
   const out = prompt('¿Qué número sale?'); if(!out) return;
   const inn = prompt('¿Qué número entra?'); if(!inn) return;
-  const i = M[side].lineup.indexOf(parseInt(out,10));
-  if(i<0){ toast('El '+out+' no está en cancha',true); return; }
-  if(M[side].lineup.indexOf(parseInt(inn,10))>=0){ toast('El '+inn+' ya está en cancha',true); return; }
-  M[side].lineup[i] = parseInt(inn,10);
-  M[side].subs++;
-  const P2=n=>String(parseInt(n,10)).padStart(2,'0');
-  pushCode((side==='home'?'*':'a')+'c'+P2(out)+':'+P2(inn),'auto');
-  renderAll(); persist();
+  hacerCambio(side, parseInt(out,10), parseInt(inn,10));
 }
 
 function closeSet(){
@@ -1367,6 +1369,8 @@ function closeSet(){
   /* manual: cada set arranca con su formación inicial. Data Volley propone la del set anterior. */
   ['home','away'].forEach(side=>{
     if(M[side].six && M[side].six.length===6) M[side].lineup = M[side].six.slice();
+    if(!M[side].sixHist) M[side].sixHist={};
+    M[side].sixHist[M.set] = M[side].lineup.slice();   /* propuesto para el set nuevo */
     M[side].subs = 0; M[side].to = 0;
   });
   renderAll(); persist();
@@ -1697,6 +1701,8 @@ function saveSetup(){
   M.home.code=(G('s-cdh')||'LOC').toUpperCase();   M.away.code=(G('s-cda')||'VIS').toUpperCase();
   M.home.lineup=lh; M.away.lineup=la;
   M.home.six=lh.slice(); M.away.six=la.slice();   /* el seis con el que arranca este set */
+  if(!M.home.sixHist) M.home.sixHist={}; if(!M.away.sixHist) M.away.sixHist={};
+  M.home.sixHist[M.set]=lh.slice(); M.away.sixHist[M.set]=la.slice();
   M.home.setter=LU.home.setter; M.away.setter=LU.away.setter;
   M.home.libero=parseInt(G('s-libh'),10)||0; M.away.libero=parseInt(G('s-liba'),10)||0;
   /* el líbero no puede estar en el seis inicial */
@@ -2000,11 +2006,25 @@ function exportDVW(){
     if(M[sd].six) M[sd].six.filter(Boolean).forEach(n=>nums.add(n));
     if(M[sd].libero) nums.add(M[sd].libero);
     M.codes.forEach(c=>{ if(c.k==='play' && c.c[0]===pre){ const n=parseInt(c.c.slice(1,3),10); if(n>=1) nums.add(n); } });
+    /* Formato real, verificado contra los DVW oficiales:
+       [1] dorsal · [2] orden · [3..7] posición inicial en cada set
+       ('' si no jugó, '*' si entró después, 1-6 si arrancó)
+       [9] apellido · [12] 'L' si es líbero · [13] número de líbero · [14] False */
+    const jugóEn = (num,st) => M.codes.some(c=>c.k==='play' && c.set===st && c.c[0]===pre && parseInt(c.c.slice(1,3),10)===num);
     [...nums].sort((a,b)=>a-b).forEach((n,i)=>{
       const nom = (sd==='home' && window.PLANTEL_NAFELS) ? (window.PLANTEL_NAFELS.find(p=>String(p.c)===String(n))||{}).n || '' : '';
-      const lib = (n===M[sd].libero) ? 'L' : '';
-      /* 0 ; dorsal ; orden ; ... ; apellido ; nombre ; ... ; libero */
-      L.push('0;'+n+';'+(i+1)+';;;;;;;'+nom+';;;;;False;;;'+lib+';');
+      const esLib = (n===M[sd].libero);
+      const pos = [];
+      for(let st=1; st<=5; st++){
+        const six = (M[sd].sixHist||{})[st];
+        if(!six){ pos.push(''); continue; }
+        const k = six.indexOf(n);
+        if(k>=0) pos.push(String(k+1));            /* arrancó, en esa posición */
+        else if(esLib || jugóEn(n,st)) pos.push('*');  /* entró después */
+        else pos.push('');                          /* no jugó ese set */
+      }
+      const row = ['0', n, i+1, ...pos, '', nom, '', '', esLib?'L':'', esLib?'1':'', 'False', '', '', '', '', '', '', '', ''];
+      L.push(row.join(';'));
     });
   });
 
