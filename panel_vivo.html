@@ -75,6 +75,12 @@ button{font-family:inherit;cursor:pointer}
 .scoutbar{background:var(--card2);border:1px solid var(--b2);border-radius:12px;padding:14px}
 #code{width:100%;background:transparent;border:none;outline:none;color:var(--txt);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:30px;letter-spacing:2px;text-align:center}
 #code::placeholder{color:var(--dim)}
+#code.bad{color:var(--bad)}
+#code.warn{color:var(--warn)}
+.scoutbar:has(#code.bad){border-color:rgba(248,113,113,.55);background:rgba(248,113,113,.05)}
+.scoutbar:has(#code.warn){border-color:rgba(251,146,60,.45)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+#code.shake{animation:shake .3s}
 .decoder{display:flex;justify-content:center;gap:3px;margin-top:12px;min-height:52px}
 .seg{border:1px solid var(--b);border-radius:8px;padding:5px 10px;text-align:center;min-width:46px;background:rgba(255,255,255,.02)}
 .seg .sv{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:19px;line-height:1.1}
@@ -317,6 +323,12 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   </div>
 
   <div class="sec">
+    <h4>Verificación de datos</h4>
+    <p>El programa revisa cada acción y te avisa en la barra. Si el código no se entiende, se pone <b style="color:var(--bad)">rojo</b>; si hay algo raro, <b style="color:var(--warn)">ámbar</b>.</p>
+    <div class="fgrid" id="cfg-verif"></div>
+  </div>
+
+  <div class="sec">
     <h4>Completar códigos automáticamente</h4>
     <p>Como el DataVolley: lo que no llegás a cargar, lo escribe el programa.</p>
     <div class="fgrid">
@@ -521,6 +533,7 @@ if(CFG.autoSet===undefined) CFG.autoSet = true;
 if(CFG.autoCompound===undefined) CFG.autoCompound = true;
 if(CFG.cursorEfecto===undefined) CFG.cursorEfecto = false;
 if(CFG.autoServe===undefined) CFG.autoServe = 'num_s';
+if(!CFG.verif) CFG.verif = {combo:true,bloqueo:true,zona:true,recBarra:true,liberoSaca:true};
 if(CFG.keys.endL==='.') CFG.keys.endL='<';   /* el '.' es del dot coding */
 let PICK = {combo:'',sz:'',ez:'',subz:'',hit:'',blk:'',spec:''};
 
@@ -687,17 +700,70 @@ function signOf(skill,ev){
 }
 
 /* ============================================================
+   DATA VERIFICATION (manual 2.5.7)
+   Seis chequeos: combinación de ataque, coherencia del bloqueo,
+   zona de ataque, coherencia de R/, saque del líbero y progresión
+   del marcador. Devuelven avisos; no bloquean la carga.
+   ============================================================ */
+const VERIF_LBL={
+  combo:'Ataque sin combinación',
+  bloqueo:'Bloqueo desde zaga',
+  zona:'La combinación no coincide con la posición del atacante',
+  recBarra:'Después de R/ debe venir un punto del rival',
+  liberoSaca:'El líbero no puede sacar'
+};
+const FRONT=[2,3,4];
+function zonaDe(team,num){ const i=M[team].lineup.indexOf(num); return i<0?0:i+1; }
+function esDelantero(team,num){ return FRONT.indexOf(zonaDe(team,num))>=0; }
+
+function verificar(a){
+  const av=[], d=merged(a), V=CFG.verif||{};
+  if(V.combo!==false && a.skill==='A' && !d.combo)
+    av.push('Ataque sin combinación');
+  if(V.bloqueo!==false && a.skill==='B'){
+    const z=zonaDe(a.team,a.num);
+    if(z && FRONT.indexOf(z)<0) av.push('El '+a.num+' bloquea desde zaga (zona '+z+')');
+  }
+  if(V.zona!==false && a.skill==='A' && d.combo && COMBOS[d.combo]){
+    const zc=parseInt(COMBOS[d.combo].z,10);
+    const del=esDelantero(a.team,a.num), zj=zonaDe(a.team,a.num);
+    if(zj){
+      const comboAdelante = FRONT.indexOf(zc)>=0;
+      if(comboAdelante && !del) av.push(d.combo+' es de red y el '+a.num+' está en zaga');
+      if(!comboAdelante && del) av.push(d.combo+' es de zaga y el '+a.num+' está en la red');
+    }
+  }
+  if(V.recBarra!==false){
+    const ult = ultimaJugada();
+    if(ult && ult.c[3]==='R' && ult.c[5]==='/'){
+      const rival = ult.c[0]==='*' ? 'away':'home';
+      const esMate = (a.skill==='A'||a.skill==='B') && a.ev==='#' && a.team===rival;
+      if(!esMate) av.push('Después de una R/ tiene que venir un punto del rival');
+    }
+  }
+  if(V.liberoSaca!==false && a.skill==='S' && M[a.team].libero===a.num)
+    av.push('El líbero no puede sacar');
+  return av;
+}
+function ultimaJugada(){
+  for(let i=M.codes.length-1;i>=0;i--) if(M.codes[i].k==='play') return M.codes[i];
+  return null;
+}
+
+/* ============================================================
    DECODIFICADOR EN VIVO — el código, desarmado por posición
    ============================================================ */
 function drawDecoder(){
   const raw = document.getElementById('code').value;
   const dec = document.getElementById('dec');
   const hint= document.getElementById('hint');
-  if(!raw.trim()){ dec.innerHTML=''; hint.textContent=''; return; }
+  const inp = document.getElementById('code');
+  if(!raw.trim()){ dec.innerHTML=''; hint.textContent=''; inp.classList.remove('bad','warn'); return; }
 
   const parts = parseInput(raw);
   if(parts.length && parts[0] && parts[0].err){
-    dec.innerHTML=''; hint.innerHTML='<b style="color:var(--bad)">'+parts[0].err+'</b>'; return;
+    inp.classList.add('bad'); inp.classList.remove('warn');
+    dec.innerHTML=''; hint.innerHTML='<b style="color:var(--bad)">✕ '+parts[0].err+'</b>'; return;
   }
   const a = parts[0], d = merged(a);
   const cls = {p:'evalp',m:'evalm',n:'evaln'}[signOf(a.skill,a.ev)];
@@ -719,14 +785,23 @@ function drawDecoder(){
   const _cu = customFor(d,a);
   if(_cu) segs.push(['spec',_cu,'Personalizado']);
   dec.innerHTML = segs.map(([c,v,l])=>'<div class="seg '+c+'"><div class="sv">'+v+'</div><div class="sl">'+l+'</div></div>').join('');
+  inp.classList.remove('bad');
   let h = 'Se registra <b>'+parts.map(fmt).join(' </b>·<b> ')+'</b>';
-  if(parts.length===2) h += ' — saque y recepción encadenados';
+  if(parts.length===2) h += ' — saque y recepción';
+  const avisos=[]; parts.forEach(p=>verificar(p).forEach(x=>avisos.push(x)));
+  if(avisos.length){ inp.classList.add('warn'); h += '<br><span style="color:var(--warn)">⚠ '+avisos.join(' · ')+'</span>'; }
+  else inp.classList.remove('warn');
   hint.innerHTML = h;
 }
 
 /* ============================================================
    REGISTRO DE ACCIONES
    ============================================================ */
+function marcarBarraMal(){
+  const inp=document.getElementById('code');
+  inp.classList.add('bad','shake');
+  setTimeout(()=>inp.classList.remove('shake'),400);
+}
 function pushCode(code, kind){ M.codes.push({c:code, k:kind||'play', set:M.set}); }
 
 /* ── AUTOMATIC SET (manual 2.5.2 · 5) ─────────────────────────
@@ -800,7 +875,9 @@ function commit(){
   const inp = document.getElementById('code');
   const parts = parseInput(inp.value);
   if(!parts.length) return false;
-  if(parts[0].err){ toast(parts[0].err,true); return false; }
+  if(parts[0].err){ toast(parts[0].err,true); marcarBarraMal(); return false; }
+  const av=[]; parts.forEach(p=>verificar(p).forEach(x=>av.push(x)));
+  if(av.length) toast('⚠ '+av[0]);
   parts.forEach(a=>{
     const es = autoSet(a);
     if(es) pushCode(es,'play');       /* el armado va antes del ataque */
@@ -1020,6 +1097,10 @@ function openConfig(){
   document.getElementById('d-autocomp').value = CFG.autoCompound ? '1' : '0';
   document.getElementById('d-cursor').value   = CFG.cursorEfecto ? '1' : '0';
   document.getElementById('d-autoserve').value = CFG.autoServe || 'no';
+  document.getElementById('cfg-verif').innerHTML = Object.keys(VERIF_LBL).map(k=>
+    '<div><label class="f">'+VERIF_LBL[k]+'</label><select class="f" id="vf-'+k+'">'+
+    '<option value="1"'+(CFG.verif[k]!==false?' selected':'')+'>Avisar</option>'+
+    '<option value="0"'+(CFG.verif[k]===false?' selected':'')+'>Ignorar</option></select></div>').join('');
   const df = document.getElementById('cfg-def');
   df.innerHTML = Object.keys(SKILLS).map(s=>
     '<div><label class="f">'+SKILLS[s]+'</label><div style="display:flex;gap:5px">'+
@@ -1050,6 +1131,7 @@ function saveConfig(){
   CFG.autoCompound = document.getElementById('d-autocomp').value==='1';
   CFG.cursorEfecto = document.getElementById('d-cursor').value==='1';
   CFG.autoServe    = document.getElementById('d-autoserve').value;
+  Object.keys(VERIF_LBL).forEach(k=>{ const el=document.getElementById('vf-'+k); if(el) CFG.verif[k]= el.value==='1'; });
   Object.keys(SKILLS).forEach(s=>{
     CFG.defType[s] = document.getElementById('dt-'+s).value;
     CFG.defEval[s] = document.getElementById('de-'+s).value;
