@@ -582,15 +582,17 @@ const REC_TO_SERVE = {'=':'#','/':'/','-':'+','!':'!','+':'-','#':'-'};
    ============================================================ */
 const FACTORY = {
   /* teclas de fábrica: las del manual (1.10.10). ì è ù no existen en teclado español -> ver "Preset español" */
-  keys:{ '=':'ì', '-':"'", '/':'è', '+':'+', '#':'ù',
+  keys:{ '=':'ì', '-':"'", '/':'è', '+':'+', '#':'ù', '!':'!',
          endR:',', endL:'<',
+         prefA:'\\', prefH:'ò',                 /* manual 2.6: prefijo de visitante y local */
          ptHup:'F2', ptHdn:'F3', ptAup:'F6', ptAdn:'F7',
          rotHup:'F4', rotHdn:'F5', rotAup:'F8', rotAdn:'F9' },
-  defSkill:'A', defCombo:'X5', customAuto:false, fichasTeam:'home', publicarVivo:true, autoSet:true, autoCompound:true, autoServe:'num_s', fichasTeam:'home',
+  defSkill:'A', defCombo:'X5', customAuto:false, fichasTeam:'home', publicarVivo:true, autoSet:true, autoCompound:true, autoServe:'num_s',
   defType:{S:'Q',R:'Q',A:'H',B:'H',D:'H',E:'T',F:'H'},
   defEval:{S:'+',R:'+',A:'+',B:'+',D:'+',E:'+',F:'+'},
 };
 const PRESET_ES = {'=':'x','-':'-','/':'ñ','+':'+','#':'p','!':'i', endR:',', endL:'<',   /* ojo: el '.' es el separador del dot coding, no puede ser fin de jugada */
+  prefA:'q', prefH:'w',                       /* la 'ò' del manual no existe en teclado español */
   ptHup:'F2',ptHdn:'F3',ptAup:'F6',ptAdn:'F7',rotHup:'F4',rotHdn:'F5',rotAup:'F8',rotAdn:'F9'};
 let CFG = load('pv_cfg', JSON.parse(JSON.stringify(FACTORY)));
 if(!CFG.defCombo) CFG.defCombo = FACTORY.defCombo;
@@ -601,9 +603,14 @@ if(CFG.cursorEfecto===undefined) CFG.cursorEfecto = false;
 if(CFG.autoServe===undefined) CFG.autoServe = 'num_s';
 if(!CFG.verif) CFG.verif = {combo:true,bloqueo:true,zona:true,recBarra:true,liberoSaca:true};
 if(CFG.keys.endL==='.') CFG.keys.endL='<';   /* el '.' es del dot coding */
+if(!CFG.keys.prefA) CFG.keys.prefA = FACTORY.keys.prefA;
+if(!CFG.keys.prefH) CFG.keys.prefH = FACTORY.keys.prefH;
+if(!CFG.keys['!'])  CFG.keys['!']  = '!';
 let PICK = {combo:'',sz:'',ez:'',subz:'',hit:'',blk:'',spec:''};
 
-const CMD_LABELS = {endL:'Fin jugada · izquierda',endR:'Fin jugada · derecha',
+const CMD_LABELS = {
+  prefA:'Prefijo Visitante ( a )', prefH:'Prefijo Local ( * )',
+  endL:'Fin jugada · izquierda',endR:'Fin jugada · derecha',
   ptHup:'Punto + Local',ptHdn:'Punto − Local',ptAup:'Punto + Visitante',ptAdn:'Punto − Visitante',
   rotHup:'Rotar + Local',rotHdn:'Rotar − Local',rotAup:'Rotar + Visitante',rotAdn:'Rotar − Visitante'};
 
@@ -1382,6 +1389,16 @@ document.addEventListener('keydown', e=>{
   if(document.querySelector('.modal.open')) return;
   const k = keyName(e), K = CFG.keys;
 
+  /* manual 2.6: teclas de prefijo. Alternan la 'a' del visitante / el '*' del local */
+  if(k===K.prefA || k===K.prefH){
+    e.preventDefault();
+    const inp=document.getElementById('code');
+    let v=inp.value;
+    if(k===K.prefA){ v = (v[0]==='a') ? v.slice(1) : 'a'+v.replace(/^\*/,''); }
+    else           { v = (v[0]==='*') ? v.slice(1) : '*'+v.replace(/^a/,''); }
+    inp.value=v; drawDecoder(); inp.focus();
+    return;
+  }
   if(k===K.endL){ e.preventDefault(); endRally('home'); return; }
   if(k===K.endR){ e.preventDefault(); endRally('away'); return; }
   const adj = {[K.ptHup]:['home','pts',1],[K.ptHdn]:['home','pts',-1],[K.ptAup]:['away','pts',1],[K.ptAdn]:['away','pts',-1]};
