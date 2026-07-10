@@ -908,8 +908,10 @@ function marcarBarraMal(){
   setTimeout(()=>inp.classList.remove('shake'),400);
 }
 function pushCode(code, kind){
+  const zh = M.home.lineup.indexOf(M.home.setter), za = M.away.lineup.indexOf(M.away.setter);
   M.codes.push({c:code, k:kind||'play', set:M.set,
-    hl:M.home.lineup.slice(), al:M.away.lineup.slice()});   /* rotación del momento */
+    hl:M.home.lineup.slice(), al:M.away.lineup.slice(),   /* rotación del momento */
+    zh:(zh>=0?zh+1:0), za:(za>=0?za+1:0)});               /* zona de cada armador (cols. 9 y 10) */
 }
 
 /* ── AUTOMATIC SET (manual 2.5.2 · 5) ─────────────────────────
@@ -1901,7 +1903,12 @@ function exportDVW(){
   M.codes.forEach(c=>{
     const hl = (c.hl && c.hl.length===6) ? c.hl : M.home.lineup;
     const al = (c.al && c.al.length===6) ? c.al : M.away.lineup;
-    L.push([c.c,'','','','','','','',c.set,'','','','','',...hl,...al,''].join(';'));
+    /* columnas: 0 código · 8 set · 9 zona armador local · 10 zona armador visitante · 14-25 rotaciones
+       Las columnas 1,2 (fase) y 4,5,6,12 (coordenadas y tiempo de video) quedan vacías:
+       no las podemos deducir con certeza y preferimos un campo en blanco a un dato falso. */
+    const zh = c.zh || (M.home.lineup.indexOf(M.home.setter)+1) || '';
+    const za = c.za || (M.away.lineup.indexOf(M.away.setter)+1) || '';
+    L.push([c.c,'','','','','','','',c.set,zh,za,'','','',...hl,...al,''].join(';'));
   });
 
   const blob = new Blob([L.join('\r\n')],{type:'text/plain'});
