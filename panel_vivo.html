@@ -621,6 +621,8 @@ const BLANK = {
 };
 let M = load('pv_match', JSON.parse(JSON.stringify(BLANK)));
 if(!M.setFirstServer) M.setFirstServer = M.serving || 'home';   /* quién sacó primero en este set */
+if(!M.home.six) M.home.six = M.home.lineup.slice();   /* formación con la que arrancó el set */
+if(!M.away.six) M.away.six = M.away.lineup.slice();
 function persist(){ save('pv_match', M); if(typeof publicarVivo==='function') publicarVivo(); }
 
 /* ============================================================
@@ -1004,9 +1006,16 @@ function parseCommand(raw){
   const pre = side==='home' ? '*' : 'a';
 
   /* punto indefinido: no se puede modificar (manual 4.5.1) */
-  if(c==='$$&'){
-    document.getElementById('code').value='';   /* si no, endRally vuelve a leer el comando */
-    pushCode(pre+'$$&','auto'); endRally(side); return true;
+  /* punto indefinido (manual 4.5.1, "green codes"): es la ACCIÓN, no el punto.
+     Acepta $$& suelto o con tipo y evaluación: $$&H=  ·  a$$&H#
+     El punto lo asigna después el End Rally, como en los archivos reales. */
+  const mu = c.match(/^\$\$&([HMQTUNO]?)([#+!\-\/=]?)$/);
+  if(mu){
+    const tipo = mu[1] || '', ev = mu[2] || '';
+    pushCode(pre+'$$&'+tipo+ev,'auto');
+    document.getElementById('code').value='';
+    renderAll(); persist(); toast('Punto indefinido anotado');
+    return true;
   }
 
   /* cierre de set: **Nset */
@@ -1192,8 +1201,14 @@ function closeSet(){
   M.serving = (M.setFirstServer==='home') ? 'away' : 'home';
   M.setFirstServer = M.serving;
   M.set++; M.home.pts=0; M.away.pts=0;
+  /* manual: cada set arranca con su formación inicial. Data Volley propone la del set anterior. */
+  ['home','away'].forEach(side=>{
+    if(M[side].six && M[side].six.length===6) M[side].lineup = M[side].six.slice();
+    M[side].subs = 0; M[side].to = 0;
+  });
   renderAll(); persist();
-  toast('Set cerrado. Va el set '+M.set);
+  toast('Set cerrado. Va el set '+M.set+' — revisá la formación');
+  if(typeof openSetup==='function') openSetup();   /* proponer / modificar el seis inicial */
 }
 
 /* ============================================================
@@ -1496,6 +1511,7 @@ function saveSetup(){
   M.home.name=(G('s-nmh')||'LOCAL').toUpperCase(); M.away.name=(G('s-nma')||'VISITANTE').toUpperCase();
   M.home.code=(G('s-cdh')||'LOC').toUpperCase();   M.away.code=(G('s-cda')||'VIS').toUpperCase();
   M.home.lineup=lh; M.away.lineup=la;
+  M.home.six=lh.slice(); M.away.six=la.slice();   /* el seis con el que arranca este set */
   M.home.setter=LU.home.setter; M.away.setter=LU.away.setter;
   M.home.libero=parseInt(G('s-libh'),10)||0; M.away.libero=parseInt(G('s-liba'),10)||0;
   M.serving=G('s-serve');
