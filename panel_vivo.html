@@ -603,6 +603,9 @@ if(CFG.autoCompound===undefined) CFG.autoCompound = true;
 if(CFG.cursorEfecto===undefined) CFG.cursorEfecto = false;
 if(CFG.autoServe===undefined) CFG.autoServe = 'num_s';
 if(!CFG.verif) CFG.verif = {combo:true,bloqueo:true,zona:true,recBarra:true,liberoSaca:true};
+/* Reglamento. Por defecto FIVB: al mejor de 5, sets a 25 (el último a 15) con 2 de
+   diferencia, 6 cambios y 2 tiempos por set. Cambialo si tu liga usa otro formato. */
+if(!CFG.regl) CFG.regl = {setsGanar:3, ptsSet:25, ptsUltimo:15, dif:2, cambios:6, tiempos:2};
 if(CFG.keys.endL==='.') CFG.keys.endL='<';   /* el '.' es del dot coding */
 if(!CFG.keys.prefA) CFG.keys.prefA = FACTORY.keys.prefA;
 if(!CFG.keys.prefH) CFG.keys.prefH = FACTORY.keys.prefH;
@@ -1032,6 +1035,7 @@ function hacerCambio(side,sale,entra){
   if(sale===entra){ toast('Sale y entra el mismo jugador',true); return false; }
   if(M[side].lineup.indexOf(entra)>=0){ toast('El '+entra+' ya está en cancha',true); return false; }
   if(!(entra>=1 && entra<=99)){ toast('Dorsal inválido: '+entra,true); return false; }
+  if(M[side].subs >= CFG.regl.cambios){ toast(M[side].name+' ya hizo sus '+CFG.regl.cambios+' cambios de este set',true); return false; }
   M[side].lineup[i]=entra; M[side].subs++;
   if(M[side].setter===sale) M[side].setter=entra;
   const P2=n=>String(n).padStart(2,'0');
@@ -1117,7 +1121,7 @@ function commit(){
     /* manual 4.7: la llamada (K1) se tipea en la recepción, pero se asigna al armado */
     if(a.skill==='R' && a.d && a.d.combo && CALLS[a.d.combo]){ CALL_PEND = a.d.combo; a.d.combo=''; }
     const es = autoSet(a);
-    if(es) pushCode(es,'play');       /* el armado va antes del ataque */
+    if(es){ pushCode(es,'play'); M.codes[M.codes.length-1].auto = true; }   /* armado escrito por el programa */
     pushCode(fmt(a),'play');
   });
   inp.value=''; clearPick(); drawDecoder(); renderCodes(); renderStats(); renderMiniAn(); persist();
@@ -1151,6 +1155,7 @@ function escribirEstado(sufijo){
   });
 }
 function endRally(winner){
+  if(partidoTerminado()){ toast('El partido ya terminó: '+M.home.sets+'-'+M.away.sets,true); return; }
   snapshotRally();
   const inp = document.getElementById('code');
   /* el manual (4.5) dice: End Rally mueve y normaliza los códigos, y recién ahí asigna el punto.
@@ -1181,10 +1186,12 @@ function endRally(winner){
 }
 /* ¿está terminado el set? 25 (15 en el quinto) con 2 de diferencia */
 function setTerminado(){
-  const objetivo = (M.set===5) ? 15 : 25;
+  const R=CFG.regl, ultimo = R.setsGanar*2 - 1;
+  const objetivo = (M.set===ultimo) ? R.ptsUltimo : R.ptsSet;
   const h=M.home.pts, a=M.away.pts, mx=Math.max(h,a);
-  return mx>=objetivo && Math.abs(h-a)>=2;
+  return mx>=objetivo && Math.abs(h-a)>=R.dif;
 }
+function partidoTerminado(){ return M.home.sets>=CFG.regl.setsGanar || M.away.sets>=CFG.regl.setsGanar; }
 
 /* ── AUTOMATIC SERVE ──────────────────────────────────────────
    Después de cerrar el punto, el programa deja escrito el próximo sacador.
@@ -1208,14 +1215,18 @@ function autoServe(){
 }
 
 function undoLast(){
-  if(!M.codes.length) return;
-  const last = M.codes[M.codes.length-1];
-  if(last.k==='auto' && /p\d/.test(last.c)){        // deshacer un punto
-    const who = last.c[0]==='*'?'home':'away';
-    if(M[who].pts>0) M[who].pts--;
-  }
-  M.codes.pop(); renderAll(); persist();
+  if(!M.codes.length){ toast('No hay nada para deshacer',true); return; }
+  const ult = M.codes[M.codes.length-1];
+  /* los códigos automáticos del fin de jugada (*p, *P, *z, aP, az) se deshacen con el punto */
+  if(ult.k==='auto'){ toast('Eso lo escribió el programa: usá «Deshacer punto» (Ctrl+Shift+Z)',true); return; }
+  M.codes.pop();
+  /* si el ataque arrastraba un armado automático, se va con él */
+  const prev = M.codes[M.codes.length-1];
+  if(prev && prev.auto){ M.codes.pop(); }
+  SEL_I = -1;
+  renderAll(); persist();
 }
+
 
 /* ============================================================
    ROTACIÓN — el sacador siempre está en zona 1
@@ -1232,7 +1243,10 @@ function rotate(side,dir,silent){
   }
 }
 
-function timeout(side){ M[side].to++; pushCode((side==='home'?'*':'a')+'T','auto'); renderAll(); persist(); }
+function timeout(side){
+  if(M[side].to >= CFG.regl.tiempos){ toast(M[side].name+' ya usó sus '+CFG.regl.tiempos+' tiempos de este set',true); return; }
+  M[side].to++; pushCode((side==='home'?'*':'a')+'T','auto'); renderAll(); persist();
+}
 
 function subst(side){
   const out = prompt('¿Qué número sale?'); if(!out) return;
@@ -1248,6 +1262,7 @@ function subst(side){
 }
 
 function closeSet(){
+  if(partidoTerminado()){ toast('El partido ya terminó: '+M.home.sets+'-'+M.away.sets,true); return; }
   const h=M.home.pts, a=M.away.pts;
   if(h===a){ toast('El set no puede cerrar empatado',true); return; }
   (h>a?M.home:M.away).sets++;
@@ -1255,6 +1270,12 @@ function closeSet(){
   /* manual 4.6 (S/aS): al final de cada set el saque pasa al otro equipo */
   M.serving = (M.setFirstServer==='home') ? 'away' : 'home';
   M.setFirstServer = M.serving;
+  if(partidoTerminado()){
+    M.home.pts=0; M.away.pts=0;
+    renderAll(); persist();
+    toast('¡Partido terminado! '+M.home.sets+'-'+M.away.sets);
+    return;
+  }
   M.set++; M.home.pts=0; M.away.pts=0;
   /* manual: cada set arranca con su formación inicial. Data Volley propone la del set anterior. */
   ['home','away'].forEach(side=>{
