@@ -68,6 +68,20 @@ button{font-family:inherit;cursor:pointer}
 .rowbtns{display:flex;gap:5px;margin-top:8px}
 .rowbtns button{flex:1;background:var(--card2);border:1px solid var(--b);color:var(--mut);border-radius:7px;padding:2px;font-size:9px;font-weight:600}
 .rowbtns button:hover{color:var(--txt);border-color:var(--b2)}
+.lrow{display:grid;grid-template-columns:38px 1fr 96px;gap:8px;padding:6px 4px;border-bottom:1px solid var(--b);align-items:center}
+.lhead{color:var(--mut);font-size:11px;font-weight:700;border-bottom:1px solid var(--b)}
+.lpos{letter-spacing:2px;text-align:right;color:var(--mut)}
+.rot.vert{transform:rotate(90deg);transform-origin:center}
+.eqrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px solid var(--b)}
+.eqnm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.eqbt{display:flex;gap:5px;flex-shrink:0}
+.jrow{display:grid;grid-template-columns:52px 1.3fr 1.1fr 110px 66px 32px;gap:6px;margin-bottom:6px;align-items:center}
+.jcod{font-family:var(--mono,monospace);font-size:11px;color:var(--mut);text-align:center}
+.jcod.bad{color:#f87171;font-weight:700}
+.sqbox{display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.sqbtn{cursor:pointer;background:var(--card2);border:1px solid var(--b);color:var(--fg);
+  border-radius:7px;padding:5px 10px;font-size:11px;font-weight:600}
+.sqbtn:hover{border-color:var(--k-zone)}
 .vrow{display:flex;gap:10px;align-items:baseline;padding:7px 8px;border-bottom:1px solid var(--b);cursor:pointer}
 .vrow:hover{background:var(--card2)}
 .vmsg{color:var(--warn,#fbbf24);font-size:12px}
@@ -240,6 +254,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <span class="live" style="color:var(--vis);border-color:rgba(34,211,238,.35);background:rgba(34,211,238,.08)"><span class="pubdot" id="pubdot"></span>EN VIVO</span>
   <div class="spacer"></div>
   <button class="tbtn" onclick="openSetup()">Partido</button>
+  <button class="tbtn" onclick="abrirEquipos()" title="Base de equipos (nuevo · importar · exportar)">👥 Equipos</button>
   <button class="tbtn" onclick="openConfig()">Teclado y códigos</button>
   <button class="tbtn" onclick="exportDVW()">Exportar .dvw</button>
   <button class="tbtn" onclick="descargarSesion()">Bajar fichas</button>
@@ -366,6 +381,62 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div>
 
 <!-- ====== MODAL: CONFIG ====== -->
+<div class="modal" id="m-lista"><div class="sheet" style="max-width:520px">
+  <h2 id="l-tit">Jugadores</h2>
+  <div class="sub">Posición con la que arrancó cada set · <b>*</b> entró después · <b>·</b> no jugó</div>
+  <div id="l-lista" style="margin-top:12px;max-height:52vh;overflow:auto"></div>
+  <div class="brow"><button class="tbtn" onclick="closeModal('m-lista')">Cerrar</button></div>
+</div></div>
+
+<div class="modal" id="m-notas"><div class="sheet" style="max-width:560px">
+  <h2>Datos del partido</h2>
+  <div class="sub">Comando NOTES. Van a la cabecera del archivo .dvw.</div>
+  <div class="fgrid" style="grid-template-columns:1fr 1fr;margin-top:12px">
+    <div><label class="f">Fecha</label><input class="f mono" id="n-fecha" placeholder="31/01/2026"></div>
+    <div><label class="f">Hora</label><input class="f mono" id="n-hora" placeholder="19.30.00"></div>
+    <div><label class="f">Temporada</label><input class="f" id="n-temporada" placeholder="2025/2026"></div>
+    <div><label class="f">N° de partido</label><input class="f mono" id="n-codigo" placeholder="636643"></div>
+    <div style="grid-column:1/-1"><label class="f">Competencia</label><input class="f" id="n-competencia" placeholder="NLA Volleyball League Men"></div>
+    <div style="grid-column:1/-1"><label class="f">Fase</label><input class="f" id="n-fase" placeholder="8th Finals"></div>
+    <div style="grid-column:1/-1"><label class="f">Comentario</label><input class="f" id="n-comentario"></div>
+  </div>
+  <div class="brow">
+    <button class="tbtn" onclick="guardarNotas()">Guardar</button>
+    <button class="tbtn" onclick="closeModal('m-notas')">Cancelar</button>
+  </div>
+</div></div>
+
+<div class="modal" id="m-equipos"><div class="sheet" style="max-width:660px">
+  <h2>Equipos</h2>
+  <div class="sub">Tu base de equipos. Se guarda en este dispositivo.</div>
+  <div class="brow" style="margin:12px 0">
+    <button class="tbtn" onclick="nuevoEquipo()">+ Nuevo</button>
+    <label class="sqbtn">Importar .sq
+      <input type="file" accept=".sq,.vis" multiple onchange="importarEquipos(this)" hidden>
+    </label>
+    <button class="tbtn" onclick="exportarTodo()">Exportar todo</button>
+  </div>
+  <div id="eq-lista" style="max-height:46vh;overflow:auto"></div>
+  <div class="brow"><button class="tbtn" onclick="closeModal('m-equipos')">Cerrar</button></div>
+</div></div>
+
+<div class="modal" id="m-equipo"><div class="sheet" style="max-width:720px">
+  <h2>Ficha del equipo</h2>
+  <div class="fgrid" style="grid-template-columns:2fr 90px 110px">
+    <div><label class="f">Nombre</label><input class="f" id="eq-nm" placeholder="Biogas Volley Näfels"></div>
+    <div><label class="f">Sigla</label><input class="f mono" id="eq-sg" maxlength="3" placeholder="BIO"></div>
+    <div><label class="f">Id Data Volley</label><input class="f mono" id="eq-id" placeholder="4370"></div>
+  </div>
+  <div class="sub" style="margin-top:10px">Jugadores. El código de la derecha lo arma el programa con 3 letras del apellido y 3 del nombre; si se repite, avisa.</div>
+  <div id="eq-jug" style="margin-top:8px;max-height:40vh;overflow:auto"></div>
+  <div class="sub" id="eq-dup" style="color:#f87171"></div>
+  <div class="brow">
+    <button class="tbtn" onclick="agregarJug()">+ Agregar jugador</button>
+    <button class="tbtn" onclick="guardarEquipo()">Guardar</button>
+    <button class="tbtn" onclick="closeModal('m-equipo')">Cancelar</button>
+  </div>
+</div></div>
+
 <div class="modal" id="m-verif"><div class="sheet" style="max-width:560px">
   <h2 id="v-tit">Verificación</h2>
   <div class="sub">Manual 4.5.3. Tocá un código para ir a buscarlo en la lista.</div>
@@ -486,9 +557,21 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <div class="sub">Cargá los dos equipos, el seis inicial y quién saca.</div>
   <div class="fgrid">
     <div><label class="f">Local — nombre</label><input class="f" id="s-nmh" placeholder="San Lorenzo"></div>
-    <div><label class="f">Local — sigla</label><input class="f" id="s-cdh" maxlength="3" placeholder="SLO"></div>
+    <div><label class="f">Local — sigla</label><input class="f" id="s-cdh" maxlength="3" placeholder="SLO">
+      <div class="sqbox">
+        <label class="sqbtn">Importar equipo (.sq)
+          <input type="file" accept=".sq,.vis" onchange="importarSQ(this,'home')" hidden>
+        </label>
+        <span class="sub" id="sq-info-h"></span>
+      </div></div>
     <div><label class="f">Visitante — nombre</label><input class="f" id="s-nma" placeholder="Boca"></div>
-    <div><label class="f">Visitante — sigla</label><input class="f" id="s-cda" maxlength="3" placeholder="BOC"></div>
+    <div><label class="f">Visitante — sigla</label><input class="f" id="s-cda" maxlength="3" placeholder="BOC">
+      <div class="sqbox">
+        <label class="sqbtn">Importar equipo (.sq)
+          <input type="file" accept=".sq,.vis" onchange="importarSQ(this,'away')" hidden>
+        </label>
+        <span class="sub" id="sq-info-a"></span>
+      </div></div>
   </div>
 
   <div class="sec">
@@ -673,6 +756,9 @@ const BLANK = {
   codes:[]
 };
 let M = load('pv_match', JSON.parse(JSON.stringify(BLANK)));
+if(!M.notas) M.notas = {fecha:'', hora:'', temporada:'', competencia:'', fase:'', codigo:'', comentario:''};
+if(M.inv===undefined) M.inv = false;      /* comando INV: qué equipo está a la izquierda */
+if(M.vert===undefined) M.vert = false;    /* comando ROT: canchas verticales u horizontales */
 if(!M.setFirstServer) M.setFirstServer = M.serving || 'home';   /* quién sacó primero en este set */
 if(!M.home.six) M.home.six = M.home.lineup.slice();   /* formación con la que arrancó el set */
 if(!M.away.six) M.away.six = M.away.lineup.slice();
@@ -1008,6 +1094,72 @@ function anotarSacador(side, num){
   }
 }
 
+/* manual 4.6 INV: invierte los equipos en pantalla. Cambia también qué lado
+   asignan las teclas de fin de jugada izquierda y derecha. */
+function invertirCancha(){
+  M.inv = !M.inv;
+  const col = document.querySelector('.wrap > .col');
+  if(col) col.style.flexDirection = '';
+  renderAll(); persist();
+  toast('A la izquierda: '+(ladoIzquierda()==='home'?M.home.name:M.away.name));
+}
+function ladoIzquierda(){ return M.inv ? 'away' : 'home'; }
+function ladoDerecha(){ return M.inv ? 'home' : 'away'; }
+
+/* manual 4.6 ROT: canchas horizontales o verticales */
+function rotarCancha(){
+  M.vert = !M.vert;
+  document.querySelectorAll('.rot').forEach(el=>el.classList.toggle('vert', M.vert));
+  persist();
+  toast('Canchas '+(M.vert?'verticales':'horizontales'));
+}
+
+/* manual 4.6 LIST / aLIST: lista de jugadores con su posición en cada set */
+function abrirLista(side){
+  const pre = side==='home' ? '*' : 'a';
+  const t = M[side];
+  const nums = new Set([...(t.lineup||[]), ...(t.six||[])].filter(Boolean));
+  if(t.libero) nums.add(t.libero);
+  Object.values(t.sixHist||{}).forEach(six=>six.forEach(n=>n&&nums.add(n)));
+  M.codes.forEach(c=>{ if(c.k==='play' && c.c[0]===pre){ const n=parseInt(c.c.slice(1,3),10); if(n>=1) nums.add(n); }});
+
+  const filas = [...nums].sort((a,b)=>a-b).map(n=>{
+    const pos = [];
+    for(let st=1; st<=5; st++){
+      const six=(t.sixHist||{})[st];
+      if(!six){ pos.push('·'); continue; }
+      const k=six.indexOf(n);
+      if(k>=0) pos.push(String(k+1));
+      else if(M.codes.some(c=>c.k==='play'&&c.set===st&&c.c[0]===pre&&parseInt(c.c.slice(1,3),10)===n)) pos.push('*');
+      else pos.push('·');
+    }
+    const lib = n===t.libero ? ' <span class="tag">L</span>' : '';
+    return '<div class="lrow"><span class="mono">'+String(n).padStart(2,'0')+'</span>'+
+      '<span>'+esc(nombreDe(n,side))+lib+'</span>'+
+      '<span class="mono lpos">'+pos.join(' ')+'</span></div>';
+  }).join('');
+
+  document.getElementById('l-tit').textContent = 'Jugadores · '+t.name;
+  document.getElementById('l-lista').innerHTML =
+    '<div class="lrow lhead"><span>N°</span><span>Jugador</span><span class="lpos">1 2 3 4 5</span></div>' + filas;
+  document.getElementById('m-lista').classList.add('open');
+}
+
+/* manual 4.6 NOTES: los datos del partido */
+function abrirNotas(){
+  const n = M.notas;
+  ['fecha','hora','temporada','competencia','fase','codigo','comentario'].forEach(k=>{
+    const el=document.getElementById('n-'+k); if(el) el.value = n[k]||'';
+  });
+  document.getElementById('m-notas').classList.add('open');
+}
+function guardarNotas(){
+  ['fecha','hora','temporada','competencia','fase','codigo','comentario'].forEach(k=>{
+    const el=document.getElementById('n-'+k); if(el) M.notas[k]=el.value.trim();
+  });
+  closeModal('m-notas'); persist(); toast('Datos del partido guardados');
+}
+
 function actualizarTablas(){
   renderStats(); renderMiniAn(); renderAll();
   toast('Tablas actualizadas');
@@ -1282,9 +1434,20 @@ function parseCommand(raw){
   /* punto indefinido (manual 4.5.1, "green codes"): es la ACCIÓN, no el punto.
      Acepta $$& suelto o con tipo y evaluación: $$&H=  ·  a$$&H#
      El punto lo asigna después el End Rally, como en los archivos reales. */
+  /* ══ comandos de la ventana de comandos (manual 4.6) ══ */
   const CMD = c.toUpperCase();
-  if(CMD==='VER'){ document.getElementById('code').value=''; abrirVerificacion(); return true; }      /* manual 4.5.3 */
-  if(CMD==='UPDATE'){ document.getElementById('code').value=''; actualizarTablas(); return true; }    /* manual 2.6.1 */
+  const limpiar = ()=>{ document.getElementById('code').value=''; };
+  if(CMD==='VER'){ limpiar(); abrirVerificacion(); return true; }
+  if(CMD==='UPDATE'){ limpiar(); actualizarTablas(); return true; }
+  if(CMD==='LINEUP'){ limpiar(); openSetup(); return true; }
+  /* el prefijo ya se consumió: aLIST llega como LIST con pre='a' */
+  if(CMD==='LIST'){ limpiar(); abrirLista(side); return true; }
+  if(CMD==='NOTES'){ limpiar(); abrirNotas(); return true; }
+  if(CMD==='INV'){ limpiar(); invertirCancha(); return true; }
+  if(CMD==='ROT'){ limpiar(); rotarCancha(); return true; }
+  if(CMD==='END'){ limpiar(); cerrarScouting(); return true; }
+  if(/^REPORT\d?$/.test(CMD)){ limpiar(); toast('El informe está en el Panel en Vivo (Tablas y análisis)'); return true; }
+  if(CMD==='STOP'){ limpiar(); toast('STOP pausa el reloj del video. Este panel no maneja video.'); return true; }
 
   const mu = c.match(/^\$\$&([HMQTUNO]?)([#+!\-\/=]?)$/);
   if(mu){
@@ -1696,6 +1859,13 @@ document.addEventListener('keydown', e=>{
   if(document.querySelector('.modal.open')) return;
   const k = keyName(e), K = CFG.keys;
 
+  /* manual 4.6: Esc lleva el foco a la barra de comandos */
+  if(e.key==='Escape' && !document.querySelector('.modal.open')){
+    e.preventDefault();
+    const inp=document.getElementById('code'); inp.value=''; inp.focus(); drawDecoder();
+    return;
+  }
+
   /* manual 2.6.1: atajos de fábrica de Data Volley */
   if((e.ctrlKey||e.metaKey) && (e.key==='v'||e.key==='V')){ e.preventDefault(); abrirVerificacion(); return; }   /* = VER */
   if((e.ctrlKey||e.metaKey) && (e.key==='a'||e.key==='A')){ e.preventDefault(); undoEndRally(); return; }        /* UNDO END RALLY */
@@ -1716,8 +1886,8 @@ document.addEventListener('keydown', e=>{
     inp.value=v; drawDecoder(); inp.focus();
     return;
   }
-  if(k===K.endL){ e.preventDefault(); endRally('home'); return; }
-  if(k===K.endR){ e.preventDefault(); endRally('away'); return; }
+  if(k===K.endL){ e.preventDefault(); endRally(ladoIzquierda()); return; }
+  if(k===K.endR){ e.preventDefault(); endRally(ladoDerecha()); return; }
   const adj = {[K.ptHup]:['home','pts',1],[K.ptHdn]:['home','pts',-1],[K.ptAup]:['away','pts',1],[K.ptAdn]:['away','pts',-1]};
   if(adj[k]){ e.preventDefault(); const [s,f,d]=adj[k]; M[s][f]=Math.max(0,M[s][f]+d); renderAll(); persist(); return; }
   const rots = {[K.rotHup]:['home',1],[K.rotHdn]:['home',-1],[K.rotAup]:['away',1],[K.rotAdn]:['away',-1]};
@@ -2035,7 +2205,292 @@ function nuevoJugador(c,n){
     fT:z7(),   /* freeball */
     dv4:{}};
 }
-function nombreDe(num){
+/* ══ IMPORTAR EQUIPO DESDE .sq (manual 2.3.3.2) ══
+   Formato verificado sobre un archivo real de Data Volley:
+     · cabecera 'DV-Team-2', líneas separadas por CRLF, campos por TABULADOR, texto en latin-1
+     · línea 2 = equipo:   [0] id · [1] nombre · [4] sigla · [5] codepage · [6] nombre en hexadecimal
+     · líneas siguientes = jugadores:
+         [0] dorsal · [1] id · [2] apellido · [8] nombre · [9] rol
+     · roles (deducidos cruzando el .sq con los DVW del mismo equipo):
+         1 líbero · 2 punta · 3 opuesto · 4 central · 5 armador                                   */
+const SQ_ROLES = {'1':'Líbero','2':'Punta','3':'Opuesto','4':'Central','5':'Armador'};
+
+function parseSQ(texto){
+  const lineas = texto.replace(/\r\n/g,'\n').split('\n').filter(l=>l.length);
+  if(!lineas.length || !/^DV-Team/.test(lineas[0]))
+    return {err:'No parece un archivo de equipo de Data Volley (falta la cabecera DV-Team)'};
+  if(lineas.length<2) return {err:'El archivo no tiene la línea del equipo'};
+  const te = lineas[1].split('\t');
+  const eq = { id:te[0]||'', nombre:(te[1]||'').trim(), sigla:(te[4]||'').trim(), jugadores:[] };
+  if(!eq.nombre) return {err:'El archivo no trae el nombre del equipo'};
+  for(let i=2;i<lineas.length;i++){
+    const f = lineas[i].split('\t');
+    if(f.length<10) continue;
+    const dor = parseInt(f[0],10);
+    if(!(dor>=1 && dor<=99)) continue;
+    /* el líbero se marca con 'L' en el campo 6 (el «Id box» del manual 2.3.3.1)
+       y con rol 1 en el campo 9. Los tres archivos reales traen las dos marcas. */
+    const esLib = (f[6]||'').trim().toUpperCase()==='L' || (f[9]||'').trim()==='1';
+    eq.jugadores.push({
+      c: dor,
+      id: (f[1]||'').trim(),
+      apellido: (f[2]||'').trim().replace(/\u00a0/g,''),
+      nombre: (f[8]||'').trim(),
+      rol: esLib ? '1' : (f[9]||'').trim(),
+      lib: esLib
+    });
+  }
+  if(!eq.jugadores.length) return {err:'El archivo no trae jugadores'};
+  return eq;
+}
+
+/* ══ ESCRIBIR un .sq ══
+   Misma estructura que los archivos reales: cabecera, CRLF, campos por tabulador,
+   cada línea termina en tabulador, y los textos repetidos en hexadecimal con prefijo \x0f2.
+   Grabamos en UTF-8 (como los archivos suizos), así que el hex son los bytes UTF-8.  */
+function hexSQ(txt){
+  if(!txt) return '\x0f2';
+  const b = new TextEncoder().encode(txt);
+  let h=''; for(const x of b) h += x.toString(16).toUpperCase().padStart(2,'0');
+  return '\x0f2' + h;
+}
+function escribirSQ(eq){
+  const L=[];
+  L.push('DV-Team-2');
+  L.push([eq.id||'', eq.nombre, '', '', eq.sigla||'', '1252',
+          hexSQ(eq.nombre), '\x0f2', '\x0f2', eq.sigla?hexSQ(eq.sigla):'', ''].join('\t'));
+  eq.jugadores.forEach(j=>{
+    const lib = (j.lib || j.rol==='1');
+    L.push([ String(j.c), j.id||'', j.apellido, '', '', '',
+             lib?'L':'', '', j.nombre||'', j.rol||'', j.apellido, '', 'False', '',
+             hexSQ(j.apellido), hexSQ(j.nombre||''), hexSQ(j.apellido), '' ].join('\t'));
+  });
+  return L.join('\r\n') + '\r\n';
+}
+function bajarSQ(eq){
+  const txt = escribirSQ(eq);
+  const bytes = new TextEncoder().encode(txt);
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([bytes],{type:'application/octet-stream'}));
+  a.download = (eq.id || eq.sigla || eq.nombre.slice(0,6)) + '.sq';
+  a.click();
+}
+
+/* ══ BASE DE EQUIPOS (manual 2.3.3) ══ */
+function equipos(){ try{ return JSON.parse(localStorage.getItem('pv_equipos')||'[]'); }catch(e){ return []; } }
+function guardarEquipos(list){ try{ localStorage.setItem('pv_equipos', JSON.stringify(list)); }catch(e){ toast('No se pudo guardar',true); } }
+
+/* manual 2.3.3.1: el código del jugador son 3 letras del apellido y 3 del nombre */
+function codigoJugador(j){
+  const l = (s)=> (s||'').replace(/[^A-Za-zÀ-ÿ]/g,'').slice(0,3).toUpperCase();
+  return l(j.apellido) + l(j.nombre);
+}
+function duplicados(js){
+  const vistos={}, dup=new Set();
+  js.forEach(j=>{ const k=codigoJugador(j); if(!k) return; if(vistos[k]) dup.add(k); vistos[k]=1; });
+  return dup;
+}
+
+/* ══ VENTANA DE EQUIPOS ══ */
+let EQ_EDIT = null;   /* el equipo que se está editando */
+
+function abrirEquipos(){ renderEquipos(); document.getElementById('m-equipos').classList.add('open'); }
+
+function renderEquipos(){
+  const list = equipos();
+  const box = document.getElementById('eq-lista');
+  if(!list.length){
+    box.innerHTML = '<div class="sub" style="padding:16px 0">Todavía no hay equipos. Creá uno nuevo o importá un archivo .sq de Data Volley.</div>';
+    return;
+  }
+  box.innerHTML = list.map((e,i)=>{
+    const libs = e.jugadores.filter(j=>j.lib||j.rol==='1').length;
+    return '<div class="eqrow">'+
+      '<div class="eqnm"><b>'+esc(e.nombre)+'</b><span class="sub"> '+esc(e.sigla||'')+' · '+e.jugadores.length+' jugadores'+(libs?' · '+libs+' líbero'+(libs>1?'s':''):'')+'</span></div>'+
+      '<div class="eqbt">'+
+        '<button class="tbtn" onclick="usarEquipo('+i+',\'home\')" title="Cargarlo como local">Local</button>'+
+        '<button class="tbtn" onclick="usarEquipo('+i+',\'away\')" title="Cargarlo como visitante">Visit.</button>'+
+        '<button class="tbtn" onclick="editarEquipo('+i+')">Editar</button>'+
+        '<button class="tbtn" onclick="bajarSQ(equipos()['+i+'])" title="Bajarlo como .sq">.sq</button>'+
+        '<button class="tbtn" onclick="borrarEquipo('+i+')">✕</button>'+
+      '</div></div>';
+  }).join('');
+}
+function esc(t){ return String(t).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function nuevoEquipo(){ EQ_EDIT = {idx:-1, eq:{id:'', nombre:'', sigla:'', jugadores:[]}}; abrirEditorEquipo(); }
+function editarEquipo(i){ EQ_EDIT = {idx:i, eq:JSON.parse(JSON.stringify(equipos()[i]))}; abrirEditorEquipo(); }
+function borrarEquipo(i){
+  const list=equipos();
+  if(!confirm('¿Borrar '+list[i].nombre+'?')) return;
+  list.splice(i,1); guardarEquipos(list); renderEquipos(); toast('Equipo borrado');
+}
+function usarEquipo(i, side){
+  const eq = equipos()[i];
+  if(!document.getElementById('m-setup').classList.contains('open')) openSetup();
+  aplicarEquipo(eq, side);
+  closeModal('m-equipos');
+}
+
+function abrirEditorEquipo(){
+  document.getElementById('eq-nm').value = EQ_EDIT.eq.nombre||'';
+  document.getElementById('eq-sg').value = EQ_EDIT.eq.sigla||'';
+  document.getElementById('eq-id').value = EQ_EDIT.eq.id||'';
+  renderJugadores();
+  document.getElementById('m-equipo').classList.add('open');
+}
+function renderJugadores(){
+  const js = EQ_EDIT.eq.jugadores;
+  const dup = duplicados(js);
+  const box = document.getElementById('eq-jug');
+  box.innerHTML = js.map((j,i)=>{
+    const cod = codigoJugador(j);
+    const mal = cod && dup.has(cod);
+    return '<div class="jrow">'+
+      '<input class="f mono" style="width:52px" value="'+esc(j.c||'')+'" onchange="setJug('+i+',\'c\',this.value)" placeholder="N°">'+
+      '<input class="f" value="'+esc(j.apellido||'')+'" onchange="setJug('+i+',\'apellido\',this.value)" placeholder="Apellido">'+
+      '<input class="f" value="'+esc(j.nombre||'')+'" onchange="setJug('+i+',\'nombre\',this.value)" placeholder="Nombre">'+
+      '<select class="f" onchange="setJug('+i+',\'rol\',this.value)">'+
+        ['','1','2','3','4','5'].map(r=>'<option value="'+r+'"'+((j.rol||'')===r?' selected':'')+'>'+(r?SQ_ROLES[r]:'—')+'</option>').join('')+
+      '</select>'+
+      '<span class="jcod'+(mal?' bad':'')+'" title="'+(mal?'Código repetido: corregí un nombre':'Código del jugador')+'">'+cod+'</span>'+
+      '<button class="tbtn" onclick="quitarJug('+i+')">✕</button>'+
+    '</div>';
+  }).join('') || '<div class="sub">Sin jugadores. Agregá el primero.</div>';
+  const d = document.getElementById('eq-dup');
+  d.textContent = dup.size ? 'Hay '+dup.size+' código'+(dup.size>1?'s':'')+' repetido'+(dup.size>1?'s':'')+': corregí los nombres.' : '';
+}
+function setJug(i, campo, val){
+  const j = EQ_EDIT.eq.jugadores[i];
+  if(campo==='c'){ const n=parseInt(val,10); j.c = (n>=1&&n<=99)?n:''; }
+  else j[campo] = val.trim();
+  if(campo==='rol') j.lib = (val==='1');
+  renderJugadores();
+}
+function agregarJug(){ EQ_EDIT.eq.jugadores.push({c:'',apellido:'',nombre:'',rol:'',lib:false}); renderJugadores(); }
+function quitarJug(i){ EQ_EDIT.eq.jugadores.splice(i,1); renderJugadores(); }
+
+function guardarEquipo(){
+  const eq = EQ_EDIT.eq;
+  eq.nombre = document.getElementById('eq-nm').value.trim();
+  eq.sigla  = document.getElementById('eq-sg').value.trim().toUpperCase();
+  eq.id     = document.getElementById('eq-id').value.trim();
+  if(!eq.nombre){ toast('Falta el nombre del equipo',true); return; }
+  if(eq.sigla.length!==3){ toast('La sigla tiene que ser de 3 letras (manual 2.3.3.1)',true); return; }
+  const list = equipos();
+  /* manual 2.3.3.1: no puede haber dos equipos con la misma sigla */
+  const choca = list.some((e,i)=> i!==EQ_EDIT.idx && (e.sigla||'').toUpperCase()===eq.sigla);
+  if(choca){ toast('Ya hay un equipo con la sigla '+eq.sigla,true); return; }
+  const js = eq.jugadores.filter(j=>j.c && j.apellido);
+  if(!js.length){ toast('Cargá al menos un jugador con número y apellido',true); return; }
+  const dors = js.map(j=>j.c);
+  if(new Set(dors).size!==dors.length){ toast('Hay dorsales repetidos',true); return; }
+  eq.jugadores = js;
+  if(EQ_EDIT.idx>=0) list[EQ_EDIT.idx]=eq; else list.push(eq);
+  guardarEquipos(list);
+  closeModal('m-equipo'); renderEquipos();
+  toast(eq.nombre+' guardado ('+js.length+' jugadores)');
+}
+
+/* importar uno o varios .sq a la base */
+function importarEquipos(input){
+  const files = [...(input.files||[])];
+  if(!files.length) return;
+  let hechos=0, fallos=0;
+  files.forEach(file=>{
+    const fr = new FileReader();
+    fr.onload = () => {
+      const bytes = new Uint8Array(fr.result);
+      let txt;
+      try{ txt = new TextDecoder('utf-8',{fatal:true}).decode(bytes); }
+      catch(err){ txt=''; for(let i=0;i<bytes.length;i++) txt += String.fromCharCode(bytes[i]); }
+      const eq = parseSQ(txt);
+      if(eq.err){ fallos++; toast(file.name+': '+eq.err, true); }
+      else{
+        if(!eq.sigla) eq.sigla = eq.nombre.replace(/[^A-Za-zÀ-ÿ ]/g,'').trim().split(/\s+/)[0].slice(0,3).toUpperCase();
+        const list = equipos();
+        const k = list.findIndex(e=>String(e.id)===String(eq.id) && eq.id);
+        if(k>=0) list[k]=eq; else list.push(eq);
+        guardarEquipos(list); hechos++;
+      }
+      if(hechos+fallos===files.length){
+        renderEquipos();
+        if(hechos) toast(hechos+' equipo'+(hechos>1?'s':'')+' importado'+(hechos>1?'s':''));
+        input.value='';
+      }
+    };
+    fr.readAsArrayBuffer(file);
+  });
+}
+
+/* exportar todos: un .sq por equipo */
+function exportarTodo(){
+  const list = equipos();
+  if(!list.length){ toast('No hay equipos para exportar',true); return; }
+  list.forEach((eq,i)=> setTimeout(()=>bajarSQ(eq), i*350));
+  toast('Bajando '+list.length+' archivo'+(list.length>1?'s':'')+' .sq');
+}
+
+function importarSQ(input, side){
+  const file = input.files && input.files[0];
+  if(!file) return;
+  const fr = new FileReader();
+  fr.onload = () => {
+    /* La codificación cambia según el archivo: los de Näfels y Schönenwerd vienen en UTF-8,
+       el de Vélez en latin-1. Probamos UTF-8 estricto y, si falla, latin-1. */
+    const bytes = new Uint8Array(fr.result);
+    let txt;
+    try{ txt = new TextDecoder('utf-8',{fatal:true}).decode(bytes); }
+    catch(err){ txt=''; for(let i=0;i<bytes.length;i++) txt += String.fromCharCode(bytes[i]); }
+    const eq = parseSQ(txt);
+    if(eq.err){ toast(eq.err, true); input.value=''; return; }
+    aplicarEquipo(eq, side);
+    input.value='';
+  };
+  fr.onerror = () => toast('No se pudo leer el archivo', true);
+  fr.readAsArrayBuffer(file);
+}
+
+function aplicarEquipo(eq, side){
+  const suf = side==='home' ? 'h' : 'a';
+  const nm = document.getElementById('s-nm'+suf), cd = document.getElementById('s-cd'+suf);
+  /* si el archivo no trae sigla (los suizos no la traen), armamos una con la primera palabra */
+  const sigla = eq.sigla || eq.nombre.replace(/[^A-Za-zÀ-ÿ ]/g,'').trim().split(/\s+/)[0].slice(0,3).toUpperCase();
+  if(nm) nm.value = eq.nombre;
+  if(cd) cd.value = sigla;
+  /* también al estado, por si se exporta sin pasar por Guardar */
+  M[side].name = eq.nombre;
+  M[side].code = sigla;
+  M[side].plantel = eq.jugadores.map(j=>({c:j.c, n:(j.apellido+(j.nombre?' '+j.nombre:'')).trim(), rol:j.rol}));
+  M[side].id = eq.id || '';   /* el id de Data Volley: va en [3TEAMS] */
+
+  /* el líbero (rol 1). Puede haber dos: se propone el primero y se avisa. */
+  const libs = eq.jugadores.filter(j=>j.rol==='1');
+  const lib = document.getElementById('s-lib'+suf);
+  if(lib && libs.length) lib.value = libs[0].c;
+  if(libs.length>1) toast('Hay '+libs.length+' líberos ('+libs.map(j=>j.c).join(' y ')+'): elegí cuál juega',true);
+
+  /* el armador: si hay uno solo con rol 5, se propone */
+  const arms = eq.jugadores.filter(j=>j.rol==='5');
+  if(arms.length===1 && typeof LU!=='undefined') LU[side].setter = arms[0].c;
+
+  const resumen = Object.keys(SQ_ROLES)
+    .map(r=>{ const n=eq.jugadores.filter(j=>j.rol===r).length; return n? n+' '+SQ_ROLES[r].toLowerCase()+(n>1?'s':'') : ''; })
+    .filter(Boolean).join(' · ');
+  const box = document.getElementById('sq-info-'+suf);
+  if(box) box.textContent = eq.nombre+' — '+eq.jugadores.length+' jugadores'+(resumen?' ('+resumen+')':'');
+  toast(eq.nombre+': '+eq.jugadores.length+' jugadores importados');
+  persist();
+}
+
+function nombreDe(num, side){
+  if(side && M[side] && M[side].plantel){
+    const j = M[side].plantel.find(x=>String(x.c)===String(num));
+    if(j) return j.n;
+  }
+  for(const sd of ['home','away']){
+    if(M[sd] && M[sd].plantel){ const j=M[sd].plantel.find(x=>String(x.c)===String(num)); if(j) return j.n; }
+  }
   const P = window.PLANTEL_NAFELS;
   if(P && P.length){ const j=P.find(x=>String(x.c)===String(num)); if(j) return j.n; }
   return String(num);
@@ -2144,12 +2599,19 @@ function exportDVW(){
   const fecha = pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear();
   const L=[];
   L.push('[3DATAVOLLEYSCOUT]','FILEFORMAT: 2.0','GENERATOR-DAY: '+fecha+' '+pad(d.getHours())+'.'+pad(d.getMinutes())+'.'+pad(d.getSeconds()));
-  L.push('[3MATCH]', fecha+';;;;;;;;;;;');
+  /* [3MATCH]: [0] fecha · [1] hora · [2] temporada · [3] competencia · [4] fase
+     [7] n° de partido · [8] codepage (65001 = UTF-8, que es como grabamos)
+     [12] y [13] = competencia y fase en hexadecimal                            */
+  const N = M.notas || {};
+  L.push('[3MATCH]', [N.fecha||fecha, N.hora||'', N.temporada||'', N.competencia||'', N.fase||'',
+                      '', '', N.codigo||'', '65001', '1', 'Z', '0',
+                      hexSQ(N.competencia||''), hexSQ(N.fase||''), '\x0f2', ''].join(';'));
+  /* Formato real: [0] id del equipo · [1] nombre · [2] sets ganados */
   L.push('[3TEAMS]');
-  L.push('1;'+M.home.code+';'+M.home.name+';'+M.home.sets+';;;;;;');
-  L.push('2;'+M.away.code+';'+M.away.name+';'+M.away.sets+';;;;;;');
+  L.push([M.home.id||'', M.home.name, M.home.sets, '', '', '', '', '', '', ''].join(';'));
+  L.push([M.away.id||'', M.away.name, M.away.sets, '', '', '', '', '', '', ''].join(';'));
   L.push('[3MORE]',';;;;;Panel en Vivo;;;;');
-  L.push('[3COMMENTS]','');
+  L.push('[3COMMENTS]', (M.notas && M.notas.comentario) ? M.notas.comentario+';;;;' : ';;;;');
 
   /* [3SET]: parciales a los 8, 16 y 21 puntos, y el resultado final.
      Se calculan de los códigos *pNN:NN — nada inventado. */
@@ -2181,7 +2643,10 @@ function exportDVW(){
        [9] apellido · [12] 'L' si es líbero · [13] número de líbero · [14] False */
     const jugóEn = (num,st) => M.codes.some(c=>c.k==='play' && c.set===st && c.c[0]===pre && parseInt(c.c.slice(1,3),10)===num);
     [...nums].sort((a,b)=>a-b).forEach((n,i)=>{
-      const nom = (sd==='home' && window.PLANTEL_NAFELS) ? (window.PLANTEL_NAFELS.find(p=>String(p.c)===String(n))||{}).n || '' : '';
+      let nom = '';
+      const pl = M[sd].plantel;
+      if(pl){ const j=pl.find(x=>String(x.c)===String(n)); if(j) nom = j.n; }
+      if(!nom && sd==='home' && window.PLANTEL_NAFELS){ const j=window.PLANTEL_NAFELS.find(p=>String(p.c)===String(n)); if(j) nom=j.n; }
       const esLib = (n===M[sd].libero);
       const pos = [];
       for(let st=1; st<=5; st++){
@@ -2192,7 +2657,9 @@ function exportDVW(){
         else if(esLib || jugóEn(n,st)) pos.push('*');  /* entró después */
         else pos.push('');                          /* no jugó ese set */
       }
-      const row = ['0', n, i+1, ...pos, '', nom, '', '', esLib?'L':'', esLib?'1':'', 'False', '', '', '', '', '', '', '', ''];
+      const pj = (M[sd].plantel||[]).find(x=>String(x.c)===String(n));
+      const rol = esLib ? '1' : ((pj && pj.rol) || '');   /* col 13: rol; el líbero que juega va con 1 */
+      const row = ['0', n, i+1, ...pos, '', nom, '', '', esLib?'L':'', rol, 'False', '', '', '', '', '', '', '', ''];
       L.push(row.join(';'));
     });
   });
