@@ -671,14 +671,31 @@ function parseTail(s,skill,ev){
   let i=0;
   const head=s.slice(0,2).toUpperCase();
   if(COMBOS[head]||CALLS[head]){ d.combo=head; i=2; }
+  /* Verificado contra 1366 códigos reales de Näfels:
+     · armado (E) y bloqueo (B) NUNCA llevan zona de origen -> un dígito = destino
+     · recepción (R) con un solo dígito -> destino
+     · saque, ataque, defensa y freeball: primer dígito = origen, segundo = destino  */
+  const sinOrigen = (skill==='E' || skill==='B');
+  const zonas=[];
   for(;i<s.length;i++){
     const c=s[i], C=c.toUpperCase();
-    if(/[0-9]/.test(c)){ if(!d.hit){ if(!d.sz)d.sz=c; else if(!d.ez)d.ez=c; else d.blk=c; } else d.blk=c; }
-    else if(SUBZ.indexOf(C)>=0 && d.ez && !d.subz && !d.hit) d.subz=C;
+    if(/[0-9]/.test(c)){
+      if(d.hit) d.blk=c;                        /* tras el sub-tipo, el dígito son los bloqueadores */
+      else if(zonas.length<2) zonas.push(c);
+      else d.blk=c;
+    }
+    else if(SUBZ.indexOf(C)>=0 && zonas.length && !d.subz && !d.hit) d.subz=C;
     else if(!d.hit && SUBTYPE[skill] && SUBTYPE[skill][C]) d.hit=C;
     else if(skill==='E' && SETTGT[C] && !d.target) d.target=C;
     else if(!d.spec && specialsFor(skill, ev||'=')[C]) d.spec=C;
     else if(d.custom.length<5) d.custom += c;   /* lo que el programa no interpreta -> personalizado (DV4 4.1.4) */
+  }
+  if(zonas.length===1){
+    if(sinOrigen || skill==='R') d.ez = zonas[0];   /* una sola zona = dónde cayó */
+    else d.sz = zonas[0];                            /* saque/ataque: de dónde salió */
+  } else if(zonas.length>=2){
+    if(sinOrigen){ d.ez = zonas[0]; d.blk = d.blk || zonas[1]; }
+    else { d.sz = zonas[0]; d.ez = zonas[1]; }
   }
   return d;
 }
