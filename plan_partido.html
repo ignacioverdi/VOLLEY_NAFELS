@@ -157,13 +157,27 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 .mopt input{width:auto;min-width:0;margin:0;padding:0}
 .msel{position:relative}
 </style>
+<style>
+.tabsbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 12px 0;align-items:center}
+.tabteam{font-weight:800;font-size:15px;color:var(--red,#e0384f);margin-right:6px;padding:6px 10px;background:rgba(224,56,79,.1);border-radius:8px;letter-spacing:.3px}
+.ptab{background:var(--card,#151521);color:var(--mut,#8a8aa0);border:1px solid var(--b,#2a2a3a);
+  border-radius:9px;padding:9px 15px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;letter-spacing:.3px}
+.ptab.active{background:var(--red,#e0384f);color:#fff;border-color:var(--red,#e0384f)}
+.teambtns{display:inline-flex;gap:6px;margin-right:8px}
+.teambtn{background:var(--card,#151521);color:var(--mut,#8a8aa0);border:1px solid var(--b,#2a2a3a);
+  border-radius:8px;padding:6px 12px;font:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.teambtn.active{background:#2563eb;color:#fff;border-color:#2563eb}
+.tabgroup{display:none}
+.tabgroup.show{display:block}
+#armsec.tabhide{display:none}
+</style>
 </head>
 <body>
 <div class="wrap">
 <header class="masthead">
   <div class="eyebrow">Näfels Voley · DataVolley 4</div>
   <h1>Plan de partido</h1>
-  <div class="sub">Análisis del rival: <b id="teamname" style="color:var(--red)">—</b></div>
+  <div class="sub">Análisis de: <b id="teamname" style="color:var(--red)">—</b></div>
   <div class="legend">
     <span><span class="sw" style="background:var(--h1)"></span>poco <span class="sw" style="background:var(--h2);margin-left:5px"></span>medio <span class="sw" style="background:var(--h3);margin-left:5px"></span>mucho</span>
     <span><b style="color:var(--red)">▶ doble-click</b> en una zona = video</span>
@@ -171,11 +185,19 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
   </div>
 </header>
 <div class="matchbar"><span class="mlab">Equipo</span>
+  <span id="teambtns" class="teambtns"></span>
   <select id="teamsel" class="teamsel"></select>
   <span class="mlab" style="margin-left:6px">Filtrar</span>
   <div class="msel"><button class="mbtn" onclick="togglePanel('r')">Rival <b id="rc"></b> ▾</button><div class="mpanel" id="rpanel"></div></div>
   <div class="msel"><button class="mbtn" onclick="togglePanel('m')">Partido <b id="mc"></b> ▾</button><div class="mpanel" id="mpanel"></div></div>
   <span class="mhint" id="mhint"></span></div>
+<div class="tabsbar" id="tabsbar">
+  <span class="tabteam" id="tabteam">—</span>
+  <button class="ptab active" data-tab="armador" onclick="setTab('armador')">Distribución armador</button>
+  <button class="ptab" data-tab="ataque" onclick="setTab('ataque')">Direcciones ataque</button>
+  <button class="ptab" data-tab="saque" onclick="setTab('saque')">Direcciones saque</button>
+  <button class="ptab" data-tab="recepcion" onclick="setTab('recepcion')">Zonas recepción</button>
+</div>
 <div class="armsec" id="armsec">
   <div class="armhead"><h2>Distribución del armador</h2><span class="sub" id="armname">—</span></div>
   <div class="armctrl">
@@ -189,17 +211,17 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
   <div class="armgrid" id="armgrid"></div>
   <div class="armnote">Por zona: <b>pelotas armadas</b> (arriba) y abajo <b>% distribución · % punto (#)</b>. Cancha espejada (vista del rival). Doble-click en zona con ▶ = video (partidos con 🎥).</div>
 </div>
-<div class="rolehead">Puntas <span>ataque · espejo pos. 4 · línea = z1/z9/z2</span></div>
+<div class="tabgroup" id="tab-ataque"><div class="rolehead">Puntas <span>ataque · espejo pos. 4 · línea = z1/z9/z2</span></div>
 <div class="grid3" id="row-punta"></div>
 <div class="rolehead">Centrales <span>ataque · primer tiempo · izq/recto/der (a confirmar)</span></div>
 <div class="grid3" id="row-central"></div>
 <div class="rolehead">Opuestos <span>ataque · espejo invertido pos. 2 · línea = z5/z7/z4</span></div>
 <div class="grid2" id="row-opuesto"></div>
-<div class="rolehead">Saque <span>dónde y cómo saca · azul · fuerza = fuerte/medio/fácil</span></div>
+</div><div class="tabgroup" id="tab-saque"><div class="rolehead">Saque <span>dónde y cómo saca · azul · fuerza = fuerte/medio/fácil</span></div>
 <div class="grid3" id="row-saque"></div>
-<div class="rolehead">Recepción <span>cómo recibe según el saque rival · naranja · zona donde recibe</span></div>
+</div><div class="tabgroup" id="tab-recepcion"><div class="rolehead">Recepción <span>cómo recibe según el saque rival · naranja · zona donde recibe</span></div>
 <div class="grid3" id="row-reception"></div>
-<footer>Ataque (rojo): dirección según recepción. Saque (azul): tipo, zona de origen, momento (puntos del set) y fuerza sobre la recepción; / = vendido (2ª mejor). Recepción (naranja): según tipo/zona del saque rival; zona real de caída de la pelota (todas las zonas). Video por timestamp (reproduce en partidos publicados en la app Näfels). Muestras chicas = tomar con cuidado.</footer>
+</div><footer>Ataque (rojo): dirección según recepción. Saque (azul): tipo, zona de origen, momento (puntos del set) y fuerza sobre la recepción; / = vendido (2ª mejor). Recepción (naranja): según tipo/zona del saque rival; zona real de caída de la pelota (todas las zonas). Video por timestamp (reproduce en partidos publicados en la app Näfels). Muestras chicas = tomar con cuidado.</footer>
 </div>
 
 <div id="vmodal" class="vmodal" onclick="if(event.target===this)closeV()">
@@ -230,11 +252,18 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 
 <script src="liga_data.js" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
 <script src="firebase.js"></script>
-<script src="plan_partido_data.js"></script>
+<script src="plan_partido_data.js" onerror="void 0"></script>
+<script src="plan_partido_vivo.js" onerror="void 0"></script>
 <script>
-const TEAMS=window.PP_DATA||{};
-let TEAM=(new URLSearchParams(location.search).get('rival')||'').toLowerCase();
-if(!TEAMS[TEAM])TEAM=Object.keys(TEAMS)[0];
+/* MODO VIVO: si la URL trae ?vivo=1, el plan NO usa plan_partido_data.js;
+   se llena con los datos que publica el Scout en Vivo (voley_codes de Firebase). */
+const QP=new URLSearchParams(location.search);
+const VIVO=QP.get('vivo')==='1';
+let TEAMS = VIVO ? {} : (window.PP_DATA||{});
+let TEAM=(QP.get('rival')||QP.get('equipo')||'').toLowerCase();
+if(VIVO){ TEAM = TEAM || 'home'; }              /* en vivo: home=nuestro, away=rival */
+if(!TEAMS[TEAM]) TEAM=Object.keys(TEAMS)[0]||'home';
+if(!TEAMS[TEAM]) TEAMS[TEAM]={name:'—',players:[],info:{}};
 let PLAYERS=TEAMS[TEAM].players;
 let INFO=TEAMS[TEAM].info;
 let RIVALS=[],MATCHES=[],RSEL=new Set(),MSEL=new Set();
@@ -440,12 +469,61 @@ function buildTeam(){
   PLAYERS.forEach(function(p){ROLECFG[p.role].filters.forEach(function(_,i){var fe=document.getElementById(p.id+'-f'+i);if(fe)fe.addEventListener('change',function(){render(p);});});var me=document.getElementById(p.id+'-min');if(me)me.addEventListener('input',function(){render(p);});render(p);});
   buildRivalPanel();buildMatchPanel();updateCounts();
   document.getElementById('teamname').textContent=TEAMS[TEAM].name;
+  var tt=document.getElementById('tabteam'); if(tt) tt.textContent=TEAMS[TEAM].name;
   renderArmador();
 }
-function setTeam(slug){TEAM=slug;document.querySelectorAll('.mpanel').forEach(function(x){x.classList.remove('open');});buildTeam();}
+function setTeam(slug){TEAM=slug;document.querySelectorAll('.mpanel').forEach(function(x){x.classList.remove('open');});pintarBotonesEquipo();buildTeam();}
+/* ── SOLAPAS: armador / ataque / recepción ── */
+function setTab(t){
+  document.querySelectorAll('.ptab').forEach(function(b){ b.classList.toggle('active', b.dataset.tab===t); });
+  document.getElementById('armsec').classList.toggle('tabhide', t!=='armador');
+  document.getElementById('tab-ataque').classList.toggle('show', t==='ataque');
+  document.getElementById('tab-saque').classList.toggle('show', t==='saque');
+  document.getElementById('tab-recepcion').classList.toggle('show', t==='recepcion');
+  try{ location.hash=t; }catch(e){}
+}
+
+/* ── BOTONES DE EQUIPO (nuestro / rival) ── */
+function pintarBotonesEquipo(){
+  var cont=document.getElementById('teambtns'); if(!cont) return;
+  var slugs=Object.keys(TEAMS);
+  /* en vivo mostramos etiquetas claras; fuera de vivo, botón por equipo */
+  cont.innerHTML = slugs.map(function(sl){
+    var etq = VIVO ? (sl==='home'?'Nuestro equipo':'Rival') : (TEAMS[sl].name||sl);
+    return '<button class="teambtn'+(sl===TEAM?' active':'')+'" onclick="setTeam(\''+sl+'\')">'+etq+'</button>';
+  }).join('');
+}
+
+/* ── MODO VIVO: leer del scout y refrescar solo ── */
+var _vivoTS='';
+function cargarVivo(primera){
+  if(typeof fbGet!=='function' || typeof window.buildPlanVivo!=='function') return;
+  fbGet('voley_codes', function(D){
+    if(!D || !D.codes) return;
+    if(D.ts===_vivoTS && !primera) return;
+    _vivoTS=D.ts;
+    var pp=window.buildPlanVivo(D);
+    if(!pp) return;
+    TEAMS=pp;
+    if(!TEAMS[TEAM]) TEAM=Object.keys(TEAMS)[0]||'home';
+    pintarBotonesEquipo();
+    buildTeam();
+  });
+}
+
 document.getElementById('teamsel').innerHTML=Object.keys(TEAMS).map(function(s){return '<option value="'+s+'">'+TEAMS[s].name+'</option>';}).join('');
 document.getElementById('teamsel').value=TEAM;
 document.getElementById('teamsel').addEventListener('change',function(){setTeam(this.value);});
+/* en vivo escondemos el <select> viejo y usamos los botones */
+if(VIVO){ var ts=document.getElementById('teamsel'); if(ts) ts.style.display='none'; }
+pintarBotonesEquipo();
+
+/* solapa inicial: por hash (#ataque) o armador por defecto */
+var _h=(location.hash||'').replace('#','');
+setTab(['armador','ataque','saque','recepcion'].indexOf(_h)>=0?_h:'armador');
+
+/* arrancar el modo vivo */
+if(VIVO){ cargarVivo(true); setInterval(function(){ cargarVivo(false); }, 2000); }
 buildTeam();
 
 /* ---- Video ---- */
