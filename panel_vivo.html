@@ -68,6 +68,9 @@ button{font-family:inherit;cursor:pointer}
 .rowbtns{display:flex;gap:5px;margin-top:8px}
 .rowbtns button{flex:1;background:var(--card2);border:1px solid var(--b);color:var(--mut);border-radius:7px;padding:2px;font-size:9px;font-weight:600}
 .rowbtns button:hover{color:var(--txt);border-color:var(--b2)}
+.cbrow{display:grid;grid-template-columns:52px 70px 62px 130px 62px 1fr 32px;gap:6px;align-items:center;margin-bottom:5px}
+.cbhead{color:var(--mut);font-size:11px;font-weight:700}
+.cbcod{font-weight:700;color:var(--k-zone,#8ab4f8)}
 .lrow{display:grid;grid-template-columns:38px 1fr 96px;gap:8px;padding:6px 4px;border-bottom:1px solid var(--b);align-items:center}
 .lhead{color:var(--mut);font-size:11px;font-weight:700;border-bottom:1px solid var(--b)}
 .lpos{letter-spacing:2px;text-align:right;color:var(--mut)}
@@ -254,6 +257,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <span class="live" style="color:var(--vis);border-color:rgba(34,211,238,.35);background:rgba(34,211,238,.08)"><span class="pubdot" id="pubdot"></span>EN VIVO</span>
   <div class="spacer"></div>
   <button class="tbtn" onclick="openSetup()">Partido</button>
+  <button class="tbtn" onclick="abrirCombos()" title="Editar combinaciones y llamadas (manual 12.2)">Combinaciones</button>
   <button class="tbtn" onclick="abrirEquipos()" title="Base de equipos (nuevo · importar · exportar)">👥 Equipos</button>
   <button class="tbtn" onclick="openConfig()">Teclado y códigos</button>
   <button class="tbtn" onclick="exportDVW()">Exportar .dvw</button>
@@ -381,6 +385,22 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div>
 
 <!-- ====== MODAL: CONFIG ====== -->
+<div class="modal" id="m-combos"><div class="sheet" style="max-width:820px">
+  <h2>Combinaciones y llamadas</h2>
+  <div class="sub">Manual 12.2. Cada combinación son 2 caracteres, un tipo de pelota, la zona de origen y el atacante destino.</div>
+  <div class="cbrow cbhead" style="margin-top:12px"><span>Cód</span><span>Tipo</span><span>Zona</span><span>Destino</span><span>Lado</span><span>Nombre</span><span></span></div>
+  <div id="cb-lista" style="max-height:34vh;overflow:auto"></div>
+  <div class="brow"><button class="tbtn" onclick="nuevoCombo()">+ Combinación</button></div>
+  <div class="sub" style="margin-top:10px"><b>Llamadas del armador</b></div>
+  <div id="cl-lista" style="max-height:20vh;overflow:auto"></div>
+  <div class="brow">
+    <button class="tbtn" onclick="nuevaCall()">+ Llamada</button>
+    <button class="tbtn" onclick="guardarCombos()">Guardar</button>
+    <button class="tbtn" onclick="restaurarCombos()">Restaurar original</button>
+    <button class="tbtn" onclick="closeModal('m-combos')">Cerrar</button>
+  </div>
+</div></div>
+
 <div class="modal" id="m-lista"><div class="sheet" style="max-width:520px">
   <h2 id="l-tit">Jugadores</h2>
   <div class="sub">Posición con la que arrancó cada set · <b>*</b> entró después · <b>·</b> no jugó</div>
@@ -784,6 +804,21 @@ function parseOne(raw){
   if(!mDesc && (num < 1 || num > 99)) return {err:'Dorsal inválido: '+num};
   s = s.slice(mDesc ? 2 : m[1].length);
 
+  /* ══ Manual 4.1.2 y 13.3 (nivel avanzado) ══
+     La combinación de ataque puede ir pegada al número, reemplazando el fundamento,
+     el tipo de golpe y la zona de origen. Ej: 14X5#5 = el 14 ataca un X5 (tipo T,
+     desde zona 4) con evaluación # a la zona 5.
+     Verificado en los 97 DVW: la combinación fija el tipo y la zona de origen
+     en 21 de 21 combinaciones. Ninguna combinación empieza con una letra de
+     fundamento (SRABDEF) ni de tipo (HMQTUNO), así que no hay ambigüedad. */
+  let comboIni='', zonaIni='';
+  const cand = s.slice(0,2).toUpperCase();
+  if(cand.length===2 && COMBOS[cand] && !SKILLS[cand[0]] && !TYPES[cand[0]]){
+    comboIni = cand;
+    zonaIni  = COMBOS[cand].z || '';
+    s = s.slice(2);
+  }
+
   let skill='', type='', ev='', rest='', raros='';
   for(let i=0;i<s.length;i++){
     const ch=s[i], u=ch.toUpperCase();
@@ -799,10 +834,29 @@ function parseOne(raw){
     rest = s.slice(i); break;
   }
   if(raros) rest = rest + raros;
+  if(comboIni){
+    skill = 'A';                                  /* la combinación implica ataque */
+    if(!type) type = COMBOS[comboIni].et || '';   /* y el tipo de golpe */
+  }
   if(!skill) skill = CFG.defSkill;
   if(!type && num!==-1)  type = CFG.defType[skill] || 'H';   /* el jugador desconocido va sin tipo */
   if(!ev)    ev    = CFG.defEval[skill] || '+';
-  return {team,num,skill,type,ev,d:parseTail(rest,skill,ev)};
+  const d = parseTail(rest,skill,ev);
+  if(comboIni){
+    d.combo = comboIni;
+    /* la zona que se tipeó después de la evaluación es la de LLEGADA:
+       la de origen la pone la combinación */
+    if(d.sz && !d.ez){ d.ez = d.sz; }
+    d.sz = zonaIni;
+  }
+  /* Aunque la combinación se escriba al final (forma larga: 14AT#X55), la zona de
+     origen la fija la combinación, así que el dígito tipeado es la de LLEGADA.
+     En los 97 DVW: 16591 ataques con combinación, 0 sin zona de origen. */
+  else if(!d.norm && d.combo && COMBOS[d.combo] && COMBOS[d.combo].z){
+    if(d.sz && !d.ez){ d.ez = d.sz; d.sz = ''; }
+    if(!d.sz) d.sz = COMBOS[d.combo].z;
+  }
+  return {team,num,skill,type,ev,d};
 }
 
 /* --- cola extendida: combo(2) destinatario zonaIni zonaFin subzona golpe bloqueadores especial --- */
@@ -813,6 +867,7 @@ function parseTail(s,skill,ev){
     const g=i=>{const c=s[i]||''; return c==='~'?'':c;};
     d.combo=(s.slice(0,2)==='~~')?'':s.slice(0,2).toUpperCase();
     d.target=g(2); d.sz=g(3); d.ez=g(4); d.subz=g(5); d.hit=g(6); d.blk=g(7); d.spec=g(8);
+    d.norm = true;   /* ya viene posicional: no hay que deducir nada */
     d.custom = s.slice(9).replace(/~+$/,'').slice(0,5);   /* personalizados (DV4 4.1.4) */
     return d;
   }
@@ -1295,7 +1350,16 @@ function pushCode(code, kind){
    · el tipo y el destino del armado salen de la tabla de combinaciones
    · si el ataque lleva el especial "X", el armado se evalúa "#"
    · NO se inserta si el que ataca es el armador                     */
-let CALL_PEND = '';    /* llamada (K#) tipeada durante la recepción */
+/* Manual 13.5: la llamada del armador es K+carácter, y se le pueden pegar hasta
+   3 caracteres más: evaluación (K1#), zona de ejecución 1-9 (K12 o K1#2) y
+   subzona A-D (K12A). Se puede tipear en cualquier punto de la acción. */
+let CALL_PEND = null;
+const RE_LLAMADA = /^(K[0-9A-Z])([#+!\-\/=])?([1-9])?([A-D])?$/i;
+function leerLlamada(t){
+  const m = (t||'').match(RE_LLAMADA);
+  if(!m || !CALLS[m[1].toUpperCase()]) return null;
+  return { c:m[1].toUpperCase(), ev:m[2]||'', z:m[3]||'', sz:(m[4]||'').toUpperCase() };
+}
 function autoSet(a){
   if(!CFG.autoSet) return null;
   if(a.skill!=='A') return null;
@@ -1308,11 +1372,16 @@ function autoSet(a){
   const ev   = (d.spec==='X') ? '#' : (CFG.defEval.E || '+');
   const tgt  = info.tg || '';
   const pre  = a.team==='home'?'*':'a';
-  const call = CALL_PEND || '';        /* manual: la llamada se asigna al armado */
-  CALL_PEND = '';
-  let cola = (call ? call : '~~') + (tgt||'~');
+  /* manual 13.5: la llamada se asigna al armado, y el destino del atacante sale
+     de la combinación del ataque (verificado: 192/192 en un partido oficial).
+     La evaluación, la zona y la subzona de la llamada se respetan si se tipearon. */
+  const L = CALL_PEND; CALL_PEND = null;
+  const evF = (L && L.ev) ? L.ev : ev;
+  /* posiciones: [6][7]=llamada · [8]=destino · [9]=zona de origen (el armado no tiene) ·
+     [10]=zona de ejecución · [11]=subzona.   Verificado: *08EM#KMP~2C en los DVW reales. */
+  let cola = (L ? L.c : '~~') + (tgt||'~') + '~' + (L&&L.z ? L.z : '~') + (L&&L.sz ? L.sz : '~');
   cola = cola.replace(/~+$/,'');
-  return pre + String(setter).padStart(2,'0') + 'E' + tipo + ev + cola;
+  return pre + String(setter).padStart(2,'0') + 'E' + tipo + evF + cola;
 }
 function clearPick(){ PICK={combo:'',sz:'',ez:'',subz:'',hit:'',blk:'',spec:''}; drawPickers(); }
 function curEval(){
@@ -1462,10 +1531,9 @@ function parseCommand(raw){
   const ms = t.match(/^\*\*(\d)set$/i);
   if(ms){ closeSet(); return true; }
 
-  /* llamada del armador escrita suelta (manual 4.7) */
-  if(/^K[0-9A-Z]$/i.test(t) && CALLS[t.toUpperCase()]){
-    CALL_PEND = t.toUpperCase(); toast('Llamada '+CALL_PEND+' anotada para el armado'); return true;
-  }
+  /* llamada del armador escrita sola (manual 13.5) */
+  const L0 = leerLlamada(t);
+  if(L0){ CALL_PEND = L0; toast('Llamada '+L0.c+' anotada para el armado'); return true; }
 
   /* tiempo muerto */
   if(/^T$/i.test(c)){ timeout(side); toast('Tiempo de '+M[side].name); return true; }
@@ -1502,10 +1570,17 @@ function commit(){
   if(parseCommand(inp.value)){ inp.value=''; clearPick(); drawDecoder(); renderCodes(); renderMiniAn(); return true; }
   /* manual 4.7: la llamada (K1) se tipea junto a la recepción, en cualquier posición.
      La sacamos del código antes de parsear: va al armado, no a la recepción. */
+  /* manual 13.5: la llamada puede ir en CUALQUIER punto de la acción, suelta
+     («K1 2SQ1.65C# a6AT41#») o pegada a la recepción («8R#K1»).
+     La sacamos del renglón antes de parsear: pertenece al armado. */
   let bruto = inp.value;
-  bruto = bruto.split(/\s+/).map(ch=>{
-    const m = ch.match(/^(a?\d{1,2}R.*?)(K[0-9A-Z])$/i);
-    if(m && CALLS[m[2].toUpperCase()]){ CALL_PEND = m[2].toUpperCase(); return m[1]; }
+  bruto = bruto.split(/\s+/).filter(ch=>{
+    const L = leerLlamada(ch);
+    if(L){ CALL_PEND = L; return false; }     /* token suelto: se lo lleva el armado */
+    return true;
+  }).map(ch=>{
+    const m = ch.match(/^(a?\d{1,2}R.*?)(K[0-9A-Z][#+!\-\/=]?[1-9]?[A-D]?)$/i);
+    if(m){ const L=leerLlamada(m[2]); if(L){ CALL_PEND=L; return m[1]; } }
     return ch;
   }).join(' ');
   const parts = parseInput(bruto);
@@ -1515,7 +1590,7 @@ function commit(){
   if(av.length) toast('⚠ '+av[0]);
   parts.forEach(a=>{
     /* manual 4.7: la llamada (K1) se tipea en la recepción, pero se asigna al armado */
-    if(a.skill==='R' && a.d && a.d.combo && CALLS[a.d.combo]){ CALL_PEND = a.d.combo; a.d.combo=''; }
+    if(a.skill==='R' && a.d && a.d.combo && CALLS[a.d.combo]){ CALL_PEND = {c:a.d.combo, ev:'', z:'', sz:''}; a.d.combo=''; }
     const es = autoSet(a);
     if(es){ pushCode(es,'play'); M.codes[M.codes.length-1].auto = true; }   /* armado escrito por el programa */
     pushCode(fmt(a),'play');
@@ -2481,6 +2556,96 @@ function aplicarEquipo(eq, side){
   if(box) box.textContent = eq.nombre+' — '+eq.jugadores.length+' jugadores'+(resumen?' ('+resumen+')':'');
   toast(eq.nombre+': '+eq.jugadores.length+' jugadores importados');
   persist();
+}
+
+/* ══ Manual 12.2 y 13.5: editar la tabla de combinaciones y llamadas ══
+   Cada combinación son 2 caracteres, un tipo de pelota, una zona de origen
+   y un atacante destino (front, back, center, pipe, setter). */
+const FABRICA_COMBOS = JSON.parse(JSON.stringify(COMBOS));
+const FABRICA_CALLS  = JSON.parse(JSON.stringify(CALLS));
+const FABRICA_LADO   = JSON.parse(JSON.stringify(COMBO_LADO));
+const FABRICA_DESC   = JSON.parse(JSON.stringify(CALL_DESC));
+const DESTINOS = {F:'Front (zona 4)', B:'Back (zona 2)', C:'Center (zona 3)', P:'Pipe (zona 6-8)', S:'Armador'};
+
+(function cargarTablas(){
+  try{
+    const g = JSON.parse(localStorage.getItem('pv_tablas')||'null');
+    if(!g) return;
+    if(g.combos){ Object.keys(COMBOS).forEach(k=>delete COMBOS[k]); Object.assign(COMBOS, g.combos); }
+    if(g.lado)  Object.assign(COMBO_LADO, g.lado);
+    if(g.calls){ Object.keys(CALLS).forEach(k=>delete CALLS[k]); Object.assign(CALLS, g.calls); }
+    if(g.desc)  Object.assign(CALL_DESC, g.desc);
+  }catch(e){}
+})();
+function guardarTablas(){
+  try{ localStorage.setItem('pv_tablas', JSON.stringify({combos:COMBOS, lado:COMBO_LADO, calls:CALLS, desc:CALL_DESC})); }
+  catch(e){ toast('No se pudo guardar la tabla',true); }
+}
+/* El parser distingue la combinación pegada al número porque ninguna empieza con
+   una letra de fundamento ni de tipo. Hay que mantener esa regla. */
+function comboValido(cod){
+  cod = (cod||'').toUpperCase();
+  if(!/^[A-Z0-9]{2}$/.test(cod)) return 'El código debe ser de 2 caracteres';
+  if(SKILLS[cod[0]]) return 'No puede empezar con '+cod[0]+': es un fundamento';
+  if(TYPES[cod[0]])  return 'No puede empezar con '+cod[0]+': es un tipo de golpe';
+  if(cod[0]==='K')   return 'La K está reservada para las llamadas del armador';
+  return '';
+}
+
+function abrirCombos(){ renderCombos(); document.getElementById('m-combos').classList.add('open'); }
+function renderCombos(){
+  const opt=(v,sel,txt)=>'<option value="'+v+'"'+(sel===v?' selected':'')+'>'+txt+'</option>';
+  document.getElementById('cb-lista').innerHTML = Object.keys(COMBOS).sort().map(c=>{
+    const k=COMBOS[c];
+    return '<div class="cbrow">'+
+      '<span class="mono cbcod">'+c+'</span>'+
+      '<select class="f" onchange="setCombo(\''+c+'\',\'et\',this.value)">'+
+        Object.keys(TYPES).map(t=>opt(t,k.et,t)).join('')+'</select>'+
+      '<select class="f" onchange="setCombo(\''+c+'\',\'z\',this.value)">'+
+        '123456789'.split('').map(z=>opt(z,k.z,z)).join('')+'</select>'+
+      '<select class="f" onchange="setCombo(\''+c+'\',\'tg\',this.value)">'+
+        Object.keys(DESTINOS).map(d=>opt(d,k.tg,DESTINOS[d])).join('')+'</select>'+
+      '<select class="f" onchange="setLado(\''+c+'\',this.value)">'+
+        ['R','L','C'].map(l=>opt(l,COMBO_LADO[c]||'',l)).join('')+'</select>'+
+      '<input class="f" value="'+esc(k.d||'')+'" onchange="setCombo(\''+c+'\',\'d\',this.value)">'+
+      '<button class="tbtn" onclick="borrarCombo(\''+c+'\')">✕</button>'+
+    '</div>';
+  }).join('');
+  document.getElementById('cl-lista').innerHTML = Object.keys(CALLS).sort().map(c=>
+    '<div class="cbrow" style="grid-template-columns:52px 1fr 32px">'+
+      '<span class="mono cbcod">'+c+'</span>'+
+      '<input class="f" value="'+esc(CALL_DESC[c]||'')+'" onchange="CALL_DESC[\''+c+'\']=this.value">'+
+      '<button class="tbtn" onclick="borrarCall(\''+c+'\')">✕</button>'+
+    '</div>').join('');
+}
+function setCombo(c,campo,v){ COMBOS[c][campo]=v; }
+function setLado(c,v){ COMBO_LADO[c]=v; }
+function borrarCombo(c){ if(!confirm('¿Borrar la combinación '+c+'?')) return; delete COMBOS[c]; delete COMBO_LADO[c]; renderCombos(); }
+function borrarCall(c){ if(!confirm('¿Borrar la llamada '+c+'?')) return; delete CALLS[c]; delete CALL_DESC[c]; renderCombos(); }
+function nuevoCombo(){
+  const cod = (prompt('Código de 2 caracteres (ej: X5, PP):')||'').toUpperCase().trim();
+  if(!cod) return;
+  const err = comboValido(cod);
+  if(err){ toast(err,true); return; }
+  if(COMBOS[cod]){ toast('Ya existe la combinación '+cod,true); return; }
+  COMBOS[cod] = {d:'', z:'4', et:'H', tg:'F'}; COMBO_LADO[cod]='C';
+  renderCombos();
+}
+function nuevaCall(){
+  const cod = (prompt('Código de la llamada (ej: K1):')||'').toUpperCase().trim();
+  if(!/^K[0-9A-Z]$/.test(cod)){ toast('La llamada es K + un carácter',true); return; }
+  if(CALLS[cod]){ toast('Ya existe la llamada '+cod,true); return; }
+  CALLS[cod]=cod; CALL_DESC[cod]='';
+  renderCombos();
+}
+function guardarCombos(){ guardarTablas(); closeModal('m-combos'); toast('Tablas guardadas'); }
+function restaurarCombos(){
+  if(!confirm('¿Volver a la tabla original de Data Volley?')) return;
+  Object.keys(COMBOS).forEach(k=>delete COMBOS[k]); Object.assign(COMBOS, JSON.parse(JSON.stringify(FABRICA_COMBOS)));
+  Object.keys(CALLS).forEach(k=>delete CALLS[k]);   Object.assign(CALLS,  JSON.parse(JSON.stringify(FABRICA_CALLS)));
+  Object.assign(COMBO_LADO, FABRICA_LADO); Object.assign(CALL_DESC, FABRICA_DESC);
+  try{ localStorage.removeItem('pv_tablas'); }catch(e){}
+  renderCombos(); toast('Tabla original restaurada');
 }
 
 function nombreDe(num, side){
