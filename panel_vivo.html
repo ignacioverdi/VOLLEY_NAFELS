@@ -50,7 +50,7 @@ button{font-family:inherit;cursor:pointer}
 .sets{font-family:'Barlow Condensed';font-weight:900;font-size:19px;letter-spacing:2px}
 
 /* ---------- grilla principal ---------- */
-.wrap{display:grid;grid-template-columns:minmax(124px,.46fr) minmax(380px,1.85fr) minmax(200px,.8fr);gap:9px;padding:0 12px 10px;align-items:start}
+.wrap{display:grid;grid-template-columns:minmax(120px,.4fr) minmax(340px,1.35fr) minmax(240px,1.05fr);gap:9px;padding:0 12px 10px;align-items:start}
 .pane{background:var(--card);border:1px solid var(--b);border-radius:10px;padding:9px}
 .col{display:flex;flex-direction:column;gap:9px}
 .pane h3{font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.6px;font-size:10.5px;text-transform:uppercase;color:var(--mut);margin:0 0 7px}
@@ -68,6 +68,8 @@ button{font-family:inherit;cursor:pointer}
 .rowbtns{display:flex;gap:5px;margin-top:8px}
 .rowbtns button{flex:1;background:var(--card2);border:1px solid var(--b);color:var(--mut);border-radius:7px;padding:2px;font-size:9px;font-weight:600}
 .rowbtns button:hover{color:var(--txt);border-color:var(--b2)}
+.hsel{float:right;margin-left:6px;background:var(--card2);border:1px solid var(--b);color:var(--mut);
+  border-radius:6px;padding:2px 5px;font-size:10px;font-weight:600}
 .hbtn{float:right;background:var(--card2);border:1px solid var(--b);color:var(--mut);border-radius:6px;padding:2px 8px;font-size:10.5px;font-weight:600;letter-spacing:.4px}
 .hbtn:hover{color:var(--txt);border-color:var(--b2)}
 .sec > .tbtn{margin-bottom:12px}
@@ -140,7 +142,7 @@ select.mini2{background:var(--card2);border:1px solid var(--b);color:var(--txt);
 .antop .r{display:flex;justify-content:space-between;padding:1.5px 0;font-size:10.5px}
 .antop .r b{font-weight:600}
 .antop .r span{font-family:'JetBrains Mono';color:var(--mut)}
-.codes{max-height:190px;overflow:auto;font-family:'JetBrains Mono',monospace;font-size:12.5px}
+.codes{scrollbar-width:thin;max-height:440px;overflow:auto;font-family:'JetBrains Mono',monospace;font-size:12.5px;resize:vertical;min-height:120px}
 .crow{display:flex;gap:8px;padding:3px 6px;border-radius:5px}
 .crow:hover{background:var(--card2)}
 .crow .cc{flex:1}
@@ -153,6 +155,8 @@ select.mini2{background:var(--card2);border:1px solid var(--b);color:var(--txt);
 /* tablas de stats — idénticas para ambos equipos */
 .stats{padding:0 12px 16px}
 .stats h3{font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.6px;font-size:12px;text-transform:uppercase;color:var(--mut);margin:0 0 10px}
+.anwrap{display:grid;grid-template-columns:minmax(190px,.5fr) 2.4fr;gap:10px;align-items:start}
+.anwrap[hidden]{display:none}
 .twin{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .twin[hidden]{display:none}
 th,td{padding:3px 5px}
@@ -258,6 +262,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 
 <div class="wrap">
   <!-- LOCAL -->
+  <div class="col">
   <div class="pane">
     <h3 style="color:var(--loc)">Local · rotación</h3>
     <div class="rot home-c" id="rot-h"></div>
@@ -268,6 +273,18 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
       <button onclick="timeout('home')">Tiempo</button>
       <button onclick="subst('home')">Cambio</button>
     </div>
+  </div>
+<div class="pane">
+    <h3 style="color:var(--vis)">Visitante · rotación</h3>
+    <div class="rot away-c" id="rot-a"></div>
+    <div class="libero" id="lb-a"></div>
+    <div class="rowbtns">
+      <button onclick="rotate('away',1)">Rotar ▸</button>
+      <button onclick="rotate('away',-1)">◂ Rotar</button>
+      <button onclick="timeout('away')">Tiempo</button>
+      <button onclick="subst('away')">Cambio</button>
+    </div>
+  </div>
   </div>
 
   <!-- CENTRO -->
@@ -304,39 +321,31 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   </div>
 
   <!-- VISITANTE + códigos -->
-  <div class="col">
   <div class="pane">
-    <h3 style="color:var(--vis)">Visitante · rotación</h3>
-    <div class="rot away-c" id="rot-a"></div>
-    <div class="libero" id="lb-a"></div>
-    <div class="rowbtns">
-      <button onclick="rotate('away',1)">Rotar ▸</button>
-      <button onclick="rotate('away',-1)">◂ Rotar</button>
-      <button onclick="timeout('away')">Tiempo</button>
-      <button onclick="subst('away')">Cambio</button>
-    </div>
-  </div>
-
-  <!-- panel aparte: análisis + codificación -->
-  <div class="pane">
-    <h3>Análisis en vivo
-      <button class="hbtn" onclick="ciclarAnalisis()" id="anbtn">Local</button></h3>
-    <div id="mini-an" class="minian"></div>
-  </div>
-
-  <div class="pane">
-    <h3>Acciones del set <button class="hbtn" onclick="undoRally()" title="Deshace el punto (Ctrl+Shift+Z)">Deshacer punto</button>
+    <h3>Acciones del set
+      <select class="hsel" id="codes-h" onchange="altoCodigos(this.value)" title="Cuántos códigos ver">
+        <option value="240">Chica</option>
+        <option value="440" selected>Media</option>
+        <option value="640">Alta</option>
+        <option value="900">Máxima</option>
+      </select>
+      <button class="hbtn" onclick="undoRally()" title="Deshace el punto (Ctrl+Shift+Z)">Deshacer punto</button>
       <button class="hbtn" onclick="undoLast()" title="Borra el último código (Ctrl+Z)">Deshacer código</button></h3>
     <div class="codes" id="codes"></div>
-  </div>
   </div>
 </div>
 
 <div class="stats">
   <h3 style="cursor:pointer" onclick="toggleTablas()">
-    <span id="tabarrow">▸</span> Tablas completas — mismas referencias para los dos equipos
+    <span id="tabarrow">▸</span> Tablas y análisis — mismas referencias para los dos equipos
   </h3>
-  <div class="twin" id="twin" hidden>
+  <div class="anwrap" id="twin" hidden>
+  <div class="pane" id="pane-an">
+    <h3>Análisis en vivo
+      <button class="hbtn" onclick="ciclarAnalisis()" id="anbtn">Local</button></h3>
+    <div id="mini-an" class="minian"></div>
+  </div>
+  <div class="twin">
     <div class="pane">
       <div class="tbl-head"><span class="tag" style="color:var(--loc)" id="st-nm-h">LOCAL</span></div>
       <table><thead><tr><th>Fund.</th><th>Tot</th><th>#</th><th>+</th><th>!</th><th>−</th><th>/</th><th>=</th><th>Pos%</th><th>Ef%</th></tr></thead><tbody id="st-h"></tbody></table>
@@ -345,6 +354,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
       <div class="tbl-head"><span class="tag" style="color:var(--vis)" id="st-nm-a">VISITANTE</span></div>
       <table><thead><tr><th>Fund.</th><th>Tot</th><th>#</th><th>+</th><th>!</th><th>−</th><th>/</th><th>=</th><th>Pos%</th><th>Ef%</th></tr></thead><tbody id="st-a"></tbody></table>
     </div>
+  </div>
   </div>
 </div>
 
@@ -1229,6 +1239,7 @@ function efDe(sk,cnt,n){
 }
 function renderMiniAn(){
   const el=document.getElementById('mini-an'); if(!el) return;
+  const tw=document.getElementById('twin'); if(tw && tw.hasAttribute('hidden')) return;
   const pre = AN_SIDE==='home'?'*':'a';
   const col = AN_SIDE==='home'?'var(--loc)':'var(--vis)';
   const rows = M.codes.filter(c=>c.k==='play' && c.c[0]===pre);
@@ -1766,10 +1777,15 @@ function toggleDetalle(){
   try{ localStorage.setItem('pv_det', abrir?'1':'0'); }catch(e){}
   document.getElementById('code').focus();
 }
+function altoCodigos(px){
+  const el=document.getElementById('codes');
+  el.style.height = px+'px';
+  try{ localStorage.setItem('pv_codesh', px); }catch(e){}
+}
 function toggleTablas(){
   const t=document.getElementById('twin'), a=document.getElementById('tabarrow');
   const abrir = t.hasAttribute('hidden');
-  if(abrir){ t.removeAttribute('hidden'); a.textContent='▾'; renderStats(); }
+  if(abrir){ t.removeAttribute('hidden'); a.textContent='▾'; renderStats(); renderMiniAn(); }
   else { t.setAttribute('hidden',''); a.textContent='▸'; }
   try{ localStorage.setItem('pv_tab', abrir?'1':'0'); }catch(e){}
 }
@@ -1783,6 +1799,7 @@ function toast(msg,err){
 renderAll();
 try{ if(localStorage.getItem('pv_det')==='1') toggleDetalle(); }catch(e){}
 try{ if(localStorage.getItem('pv_tab')==='1') toggleTablas(); }catch(e){}
+try{ const hh=localStorage.getItem('pv_codesh'); if(hh){ document.getElementById('codes-h').value=hh; altoCodigos(hh); } }catch(e){}
 document.getElementById('code').focus();
 if(M.home.lineup.every(x=>!x)) openSetup();
 </script>
