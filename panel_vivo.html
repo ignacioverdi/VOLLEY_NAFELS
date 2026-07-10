@@ -334,6 +334,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         <option value="640">Alta</option>
         <option value="900">Máxima</option>
       </select>
+      <button class="hbtn" onclick="buscarCodigo()" title="Buscar un código (Ctrl+R)">Buscar</button>
       <button class="hbtn" onclick="abrirVerificacion()" title="Verificar todos los códigos (Ctrl+V)">Verificar</button>
       <button class="hbtn" onclick="undoRally()" title="Deshace el punto (Ctrl+Shift+Z)">Deshacer punto</button>
       <button class="hbtn" onclick="undoLast()" title="Borra el último código (Ctrl+Z)">Deshacer código</button></h3>
@@ -405,6 +406,14 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <h4>Verificación de datos</h4>
     <p>El programa revisa cada acción y te avisa en la barra. Si el código no se entiende, se pone <b style="color:var(--bad)">rojo</b>; si hay algo raro, <b style="color:var(--warn)">ámbar</b>.</p>
     <div class="fgrid" id="cfg-verif"></div>
+    <div class="f" style="margin-top:10px">
+      <label class="f">Formación automática (manual 2.5.3)</label>
+      <select class="f" id="cfg-autolineup">
+        <option value="0">No — cargo la formación yo</option>
+        <option value="1">Sí — reconstruila mirando quién saca</option>
+      </select>
+      <div class="sub">Si arrancás sin saber la formación del rival, el panel la arma sola a las seis rotaciones.</div>
+    </div>
   </div>
 
   <div class="sec">
@@ -629,6 +638,9 @@ if(CFG.autoServe===undefined) CFG.autoServe = 'num_s';
 if(!CFG.verif) CFG.verif = {marcador:true,combo:true,bloqueo:true,zona:true,recBarra:true,liberoSaca:true};
 if(CFG.verif.marcador===undefined) CFG.verif.marcador = true;
 if(CFG.verif.zonaSaque===undefined) CFG.verif.zonaSaque = true;
+/* Manual 2.5.3 «Automatic Line Up»: si arrancás sin la formación, el programa anota
+   quién saca después de cada side out y la reconstruye a las seis rotaciones. */
+if(CFG.autoLineup===undefined) CFG.autoLineup = false;
 /* Atajos propios (manual 2.6, botón [Add]): una tecla escribe un texto en la barra.
    Sirve para dorsales de dos cifras, combinaciones de ataque, o un código completo.
    El manual permite Ctrl+tecla y Alt+tecla; una tecla sola para códigos de scout. */
@@ -933,6 +945,87 @@ function verifTodo(){
   });
   return fallos;
 }
+/* Manual 2.6.1: Ctrl+A deshace el fin de jugada, y SÓLO si no se cargó ningún
+   código después. Si ya cargaste una acción nueva, no se puede. */
+function puedeDeshacerPunto(){
+  for(let i=M.codes.length-1;i>=0;i--){
+    const c=M.codes[i];
+    if(c.k==='auto' && /^[*a][pPz]/.test(c.c)) return true;   /* el bloque del punto está al final */
+    if(c.k==='play') return false;                             /* hay una acción posterior */
+  }
+  return false;
+}
+function undoEndRally(){
+  if(!puedeDeshacerPunto()){ toast('Ya cargaste una acción después del punto: no se puede deshacer el fin de jugada',true); return; }
+  undoRally();
+}
+
+/* Manual 2.6.1: Ctrl+R busca un código en la lista */
+function buscarCodigo(){
+  const q = prompt('Buscar en la lista de acciones (ej: 14A, RQ#, *p):');
+  if(!q) return;
+  const t = q.trim().toUpperCase();
+  const desde = (SEL_I>=0 ? SEL_I+1 : 0);
+  for(let k=0;k<M.codes.length;k++){
+    const i=(desde+k)%M.codes.length;
+    if(M.codes[i].c.toUpperCase().includes(t)){
+      SEL_I=i; renderCodes();
+      const el=document.querySelector('.crow.sel'); if(el && el.scrollIntoView) el.scrollIntoView({block:'center'});
+      toast('Encontrado en la acción '+(i+1)+' de '+M.codes.length);
+      return;
+    }
+  }
+  toast('No hay ninguna acción con «'+q+'»',true);
+}
+
+/* Manual 2.6.1: Ctrl+U (comando UPDATE) recalcula las tablas */
+/* Manual 2.5.3: reconstrucción de la formación a partir de los sacadores.
+   En el momento en que saca el jugador s_k, ese jugador está en zona 1 y el que
+   sacará después está en zona 2. Con seis sacadores distintos queda toda la rotación. */
+function anotarSacador(side, num){
+  if(!CFG.autoLineup || num<1) return;
+  const t = M[side];
+  if(t.lineup && t.lineup.filter(Boolean).length===6) return;   /* ya la tenemos */
+  if(!t.servOrder) t.servOrder = [];
+  if(t.servFirst===undefined) t.servFirst = (M.setFirstServer===side);
+  if(t.servOrder.indexOf(num)>=0){
+    if(t.servOrder[t.servOrder.length-1]!==num) t.servOrder = [];   /* rotación rota: reiniciar */
+    return;
+  }
+  t.servOrder.push(num);
+  if(t.servOrder.length===6){
+    const s = t.servOrder;
+    /* al sacar el sexto, él está en zona 1 */
+    t.lineup = [s[5], s[0], s[1], s[2], s[3], s[4]];
+    /* la formación INICIAL del set: retroceder las rotaciones ya hechas */
+    t.six = t.servFirst ? s.slice() : [s[5], s[0], s[1], s[2], s[3], s[4]];
+    if(!t.servFirst) t.six = [s[5], s[0], s[1], s[2], s[3], s[4]];
+    else t.six = s.slice();
+    if(!t.sixHist) t.sixHist={};
+    t.sixHist[M.set] = t.six.slice();
+    toast('Formación de '+t.name+' reconstruida: '+t.lineup.join(' · '));
+    renderAll(); persist();
+  }
+}
+
+function actualizarTablas(){
+  renderStats(); renderMiniAn(); renderAll();
+  toast('Tablas actualizadas');
+}
+
+/* Manual 4.11: antes de cerrar, el programa verifica. Si hay errores, los muestra. */
+function cerrarScouting(){
+  const f = verifTodo();
+  if(f.length){
+    abrirVerificacion();
+    toast('Hay '+f.length+' cosa'+(f.length>1?'s':'')+' para revisar antes de cerrar',true);
+    return false;
+  }
+  if(!confirm('El scouting no tiene errores. ¿Descargar el archivo .dvw y cerrar?')) return false;
+  exportDVW();
+  return true;
+}
+
 function abrirVerificacion(){
   const f = verifTodo();
   const box = document.getElementById('v-lista');
@@ -1189,7 +1282,9 @@ function parseCommand(raw){
   /* punto indefinido (manual 4.5.1, "green codes"): es la ACCIÓN, no el punto.
      Acepta $$& suelto o con tipo y evaluación: $$&H=  ·  a$$&H#
      El punto lo asigna después el End Rally, como en los archivos reales. */
-  if(c.toUpperCase()==='VER'){ document.getElementById('code').value=''; abrirVerificacion(); return true; }   /* manual 4.5.3 */
+  const CMD = c.toUpperCase();
+  if(CMD==='VER'){ document.getElementById('code').value=''; abrirVerificacion(); return true; }      /* manual 4.5.3 */
+  if(CMD==='UPDATE'){ document.getElementById('code').value=''; actualizarTablas(); return true; }    /* manual 2.6.1 */
 
   const mu = c.match(/^\$\$&([HMQTUNO]?)([#+!\-\/=]?)$/);
   if(mu){
@@ -1261,6 +1356,7 @@ function commit(){
     const es = autoSet(a);
     if(es){ pushCode(es,'play'); M.codes[M.codes.length-1].auto = true; }   /* armado escrito por el programa */
     pushCode(fmt(a),'play');
+    if(a.skill==='S') anotarSacador(a.team, a.num);   /* manual 2.5.3: formación automática */
   });
   inp.value=''; clearPick(); drawDecoder(); renderCodes(); renderStats(); renderMiniAn(); persist();
   return true;
@@ -1600,8 +1696,11 @@ document.addEventListener('keydown', e=>{
   if(document.querySelector('.modal.open')) return;
   const k = keyName(e), K = CFG.keys;
 
-  /* manual 4.5.3: Ctrl+V abre la verificación completa */
-  if((e.ctrlKey||e.metaKey) && (e.key==='v'||e.key==='V')){ e.preventDefault(); abrirVerificacion(); return; }
+  /* manual 2.6.1: atajos de fábrica de Data Volley */
+  if((e.ctrlKey||e.metaKey) && (e.key==='v'||e.key==='V')){ e.preventDefault(); abrirVerificacion(); return; }   /* = VER */
+  if((e.ctrlKey||e.metaKey) && (e.key==='a'||e.key==='A')){ e.preventDefault(); undoEndRally(); return; }        /* UNDO END RALLY */
+  if((e.ctrlKey||e.metaKey) && (e.key==='r'||e.key==='R')){ e.preventDefault(); buscarCodigo(); return; }        /* buscar */
+  if((e.ctrlKey||e.metaKey) && (e.key==='u'||e.key==='U')){ e.preventDefault(); actualizarTablas(); return; }    /* = UPDATE */
 
   /* manual 2.6 [Add]: atajos propios. Tienen prioridad sobre todo lo demás. */
   const at = atajoDe(e);
@@ -1656,6 +1755,7 @@ function openConfig(){
   document.getElementById('d-cursor').value   = CFG.cursorEfecto ? '1' : '0';
   document.getElementById('d-autoserve').value = CFG.autoServe || 'no';
   renderAtajos();
+  const al2=document.getElementById('cfg-autolineup'); if(al2) al2.value = CFG.autoLineup?'1':'0';
   document.getElementById('cfg-verif').innerHTML = Object.keys(VERIF_LBL).map(k=>
     '<div><label class="f">'+VERIF_LBL[k]+'</label><select class="f" id="vf-'+k+'">'+
     '<option value="1"'+(CFG.verif[k]!==false?' selected':'')+'>Avisar</option>'+
@@ -1692,6 +1792,7 @@ function saveConfig(){
   CFG.cursorEfecto = document.getElementById('d-cursor').value==='1';
   CFG.autoServe    = document.getElementById('d-autoserve').value;
   Object.keys(VERIF_LBL).forEach(k=>{ const el=document.getElementById('vf-'+k); if(el) CFG.verif[k]= el.value==='1'; });
+  const al=document.getElementById('cfg-autolineup'); if(al) CFG.autoLineup = al.value==='1';
   CFG.atajos = (CFG.atajos||[]).filter(a=>a.k && a.txt);   /* los incompletos no se guardan */
   Object.keys(SKILLS).forEach(s=>{
     CFG.defType[s] = document.getElementById('dt-'+s).value;
