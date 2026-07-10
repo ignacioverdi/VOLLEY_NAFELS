@@ -82,8 +82,13 @@ button{font-family:inherit;cursor:pointer}
 .scoutbar:has(#code.warn){border-color:rgba(251,146,60,.45)}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 #code.shake{animation:shake .3s}
-.extmenu{display:none;margin-top:8px;background:var(--card2);border:1px solid var(--b2);border-radius:9px;padding:8px}
+.scoutbar{position:relative}
+.extmenu{display:none;position:absolute;left:8px;right:8px;top:calc(100% - 4px);z-index:40;
+  background:var(--card2);border:1px solid var(--b2);border-radius:10px;padding:9px;
+  box-shadow:0 12px 34px rgba(0,0,0,.5)}
 .extmenu.open{display:block}
+.exthint{text-align:center;font-size:9.5px;color:var(--dim);margin-top:5px;letter-spacing:.3px}
+.exthint kbd{background:var(--card2);border:1px solid var(--b);border-radius:4px;padding:0 4px;font-family:'JetBrains Mono';font-size:9px;color:var(--mut)}
 .exg{margin-bottom:7px}
 .exg:last-child{margin-bottom:0}
 .exg b{display:block;font-size:8.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--mut);margin-bottom:4px}
@@ -272,6 +277,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
       <input id="code" class="mono" placeholder="7#" autocomplete="off" spellcheck="false">
       <div class="decoder" id="dec"></div>
       <div class="extmenu" id="extmenu"></div>
+      <div class="exthint"><kbd>Ctrl</kbd> + <kbd>Espacio</kbd> para las extensiones</div>
       <div class="hint" id="hint"></div>
       <button class="detbtn" id="detbtn" onclick="toggleDetalle()">Detalle de la jugada ▾</button>
       <div class="detail" id="detail" hidden>
@@ -286,8 +292,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         </div>
       </div>
       <div class="endrow">
-        <button class="tbtn" style="width:100%;margin-top:6px" onclick="abrirExtensiones()">Extensiones (Ctrl + Espacio)</button>
-      <button class="endbtn h" onclick="endRally('home')">Punto Local</button>
+        <button class="endbtn h" onclick="endRally('home')">Punto Local</button>
         <button class="endbtn a" onclick="endRally('away')">Punto Visitante</button>
       </div>
     </div>
@@ -605,6 +610,7 @@ const BLANK = {
   codes:[]
 };
 let M = load('pv_match', JSON.parse(JSON.stringify(BLANK)));
+if(!M.setFirstServer) M.setFirstServer = M.serving || 'home';   /* quién sacó primero en este set */
 function persist(){ save('pv_match', M); if(typeof publicarVivo==='function') publicarVivo(); }
 
 /* ============================================================
@@ -622,6 +628,7 @@ function parseOne(raw){
   const m = s.match(/^(\d{1,2})/);
   if(!m) return {err:'Falta el número del jugador'};
   const num = parseInt(m[1],10);
+  if(num < 1 || num > 99) return {err:'Dorsal inválido: '+num};
   s = s.slice(m[1].length);
 
   let skill='', type='', ev='', rest='';
@@ -951,6 +958,10 @@ function abrirExtensiones(){
   box.classList.add('open');
 }
 function cerrarExtensiones(){ document.getElementById('extmenu').classList.remove('open'); }
+document.addEventListener('click', e=>{
+  const m=document.getElementById('extmenu');
+  if(m && m.classList.contains('open') && !m.contains(e.target) && e.target.id!=='code') cerrarExtensiones();
+});
 function ponerExt(ch){
   const inp=document.getElementById('code');
   inp.value += ch;
@@ -966,6 +977,9 @@ function ponerExt(ch){
 function hacerCambio(side,sale,entra){
   const i = M[side].lineup.indexOf(sale);
   if(i<0){ toast('El '+sale+' no está en cancha',true); return false; }
+  if(sale===entra){ toast('Sale y entra el mismo jugador',true); return false; }
+  if(M[side].lineup.indexOf(entra)>=0){ toast('El '+entra+' ya está en cancha',true); return false; }
+  if(!(entra>=1 && entra<=99)){ toast('Dorsal inválido: '+entra,true); return false; }
   M[side].lineup[i]=entra; M[side].subs++;
   if(M[side].setter===sale) M[side].setter=entra;
   const P2=n=>String(n).padStart(2,'0');
@@ -1081,8 +1095,23 @@ function endRally(winner){
     rotate(winner,1,true);
   }
   renderAll(); persist();
+
+  /* manual 4.10: al asignarse el último punto del set, el programa pregunta.
+     Si decís que no, se cancela el End Rally anterior. */
+  if(setTerminado()){
+    const objetivo = M.set===5 ? 15 : 25;
+    if(confirm('¿Cerramos el set '+M.set+'?  ('+M.home.pts+'-'+M.away.pts+')')) closeSet();
+    else { undoRally(); toast('Fin de jugada cancelado'); return; }
+  }
+
   autoServe();          /* manual 2.5.2 · 4 */
   inp.focus();
+}
+/* ¿está terminado el set? 25 (15 en el quinto) con 2 de diferencia */
+function setTerminado(){
+  const objetivo = (M.set===5) ? 15 : 25;
+  const h=M.home.pts, a=M.away.pts, mx=Math.max(h,a);
+  return mx>=objetivo && Math.abs(h-a)>=2;
 }
 
 /* ── AUTOMATIC SERVE ──────────────────────────────────────────
@@ -1136,6 +1165,7 @@ function subst(side){
   const inn = prompt('¿Qué número entra?'); if(!inn) return;
   const i = M[side].lineup.indexOf(parseInt(out,10));
   if(i<0){ toast('El '+out+' no está en cancha',true); return; }
+  if(M[side].lineup.indexOf(parseInt(inn,10))>=0){ toast('El '+inn+' ya está en cancha',true); return; }
   M[side].lineup[i] = parseInt(inn,10);
   M[side].subs++;
   const P2=n=>String(parseInt(n,10)).padStart(2,'0');
@@ -1148,6 +1178,9 @@ function closeSet(){
   if(h===a){ toast('El set no puede cerrar empatado',true); return; }
   (h>a?M.home:M.away).sets++;
   pushCode('**'+M.set+'set','auto');
+  /* manual 4.6 (S/aS): al final de cada set el saque pasa al otro equipo */
+  M.serving = (M.setFirstServer==='home') ? 'away' : 'home';
+  M.setFirstServer = M.serving;
   M.set++; M.home.pts=0; M.away.pts=0;
   renderAll(); persist();
   toast('Set cerrado. Va el set '+M.set);
