@@ -496,6 +496,10 @@ function pintarBotonesEquipo(){
 
 /* ── MODO VIVO: leer del scout y refrescar solo ── */
 var _vivoTS='';
+function solapaActiva(){
+  var b=document.querySelector('.ptab.active');
+  return b?b.dataset.tab:'armador';
+}
 function cargarVivo(primera){
   if(typeof fbGet!=='function' || typeof window.buildPlanVivo!=='function') return;
   fbGet('voley_codes', function(D){
@@ -504,10 +508,17 @@ function cargarVivo(primera){
     _vivoTS=D.ts;
     var pp=window.buildPlanVivo(D);
     if(!pp) return;
+    /* GUARDAR dónde está mirando el usuario, para NO sacarlo de ahí al refrescar */
+    var tabPrevia = solapaActiva();
+    var scrollY = window.scrollY || window.pageYOffset || 0;
+    var equipoPrevio = TEAM;
     TEAMS=pp;
     if(!TEAMS[TEAM]) TEAM=Object.keys(TEAMS)[0]||'home';
     pintarBotonesEquipo();
     buildTeam();
+    /* RESTAURAR la solapa y la posición: el análisis se actualiza pero no se mueve */
+    setTab(tabPrevia);
+    window.scrollTo(0, scrollY);
   });
 }
 
