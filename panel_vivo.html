@@ -217,6 +217,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 .netline{height:3px;background:linear-gradient(90deg,transparent,var(--b2),transparent);margin:2px 0 6px;border-radius:2px}
 .lutitle{font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.2px;font-size:13px;margin:0 0 6px;text-transform:uppercase}
 .crow{cursor:pointer}
+.crow.sel{outline:1px solid var(--k-zone);background:rgba(56,189,248,.09)}
 .edec{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
 .eseg{background:var(--card2);border:1px solid var(--b);border-radius:8px;padding:6px 10px;min-width:84px}
 .eseg b{display:block;font-size:8.5px;letter-spacing:.7px;text-transform:uppercase;color:var(--mut);font-weight:600}
@@ -495,7 +496,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 
 
 <div class="modal" id="m-edit"><div class="sheet" style="max-width:600px">
-  <h2>Corregir código</h2>
+  <h2 id="e-titulo">Corregir código</h2>
   <div class="sub">En vivo siempre se escapa algo. Completá lo que falte: la pareja del código se ajusta sola.</div>
   <div class="ref" style="margin-bottom:14px">Original: <span class="mono" id="e-orig"></span></div>
   <input id="e-code" class="mono" oninput="drawEditDec()" spellcheck="false"
@@ -650,14 +651,21 @@ function parseOne(raw){
   if(num < 1 || num > 99) return {err:'Dorsal inválido: '+num};
   s = s.slice(m[1].length);
 
-  let skill='', type='', ev='', rest='';
+  let skill='', type='', ev='', rest='', raros='';
   for(let i=0;i<s.length;i++){
     const ch=s[i], u=ch.toUpperCase();
     if(!skill && SKILLS[u]){ skill=u; continue; }
     if(!type && TYPES[u]){ type=u; continue; }        /* manual 1.10.4: 7Q -> 07AQ+ aunque no se escriba el fundamento */
     if(!ev && EVALS.indexOf(ch)>=0){ ev=ch; continue; }
+    /* Una letra que no es tipo ni evaluación, justo donde iría el tipo, no debe
+       tapar la evaluación que viene después: se guarda como carácter personalizado
+       (manual 4.1.4) y seguimos leyendo. Si no, un error de tipeo pierde el dato. */
+    if(!ev && !type && /[A-Za-z]/.test(ch) && i+1<s.length && EVALS.indexOf(s[i+1])>=0){
+      raros += ch; continue;
+    }
     rest = s.slice(i); break;
   }
+  if(raros) rest = rest + raros;
   if(!skill) skill = CFG.defSkill;
   if(!type)  type  = CFG.defType[skill] || 'H';
   if(!ev)    ev    = CFG.defEval[skill] || '+';
@@ -1062,7 +1070,7 @@ function parseCommand(raw){
   if(mp){
     const n=parseInt(mp[1],10);
     if(M[side].lineup.indexOf(n)<0){ toast('El '+n+' no está en cancha',true); return true; }
-    M[side].setter=n; pushCode(pre+'P'+n,'auto'); renderAll(); persist();
+    M[side].setter=n; pushCode(pre+'P'+String(n).padStart(2,'0'),'auto'); renderAll(); persist();
     toast('Arma el '+n); return true;
   }
 
@@ -1122,6 +1130,18 @@ function undoRally(){
   M.codes = M.codes.slice(0, st.n);
   renderAll(); persist(); toast('Fin de jugada deshecho');
 }
+/* Los DVW oficiales escriben, después de cada punto, el armador y su zona
+   para los dos equipos:   *p01:00  *P08  *z5  aP04  az3                 */
+function escribirEstado(sufijo){
+  ['home','away'].forEach(side=>{
+    const pre = side==='home'?'*':'a';
+    const st = M[side].setter;
+    if(!st) return;
+    pushCode(pre+'P'+String(st).padStart(2,'0')+(sufijo||''),'auto');
+    const z = M[side].lineup.indexOf(st);
+    if(z>=0) pushCode(pre+'z'+(z+1)+(sufijo||''),'auto');
+  });
+}
 function endRally(winner){
   snapshotRally();
   const inp = document.getElementById('code');
@@ -1137,6 +1157,7 @@ function endRally(winner){
     M.serving = winner;
     rotate(winner,1,true);
   }
+  escribirEstado();          /* *P y *z de los dos equipos, como el DVW oficial */
   renderAll(); persist();
 
   /* manual 4.10: al asignarse el último punto del set, el programa pregunta.
@@ -1196,9 +1217,11 @@ function rotate(side,dir,silent){
   if(L.every(x=>!x)) { if(!silent) toast('Cargá primero el seis inicial',true); return; }
   if(dir>0) M[side].lineup = [L[1],L[2],L[3],L[4],L[5],L[0]];
   else      M[side].lineup = [L[5],L[0],L[1],L[2],L[3],L[4]];
-  const z = M[side].lineup.indexOf(M[side].setter);
-  if(z>=0) pushCode((side==='home'?'*':'a')+'z'+(z+1),'auto');
-  if(!silent){ renderAll(); persist(); }
+  if(!silent){
+    const z = M[side].lineup.indexOf(M[side].setter);
+    if(z>=0) pushCode((side==='home'?'*':'a')+'z'+(z+1),'auto');
+    renderAll(); persist();
+  }
 }
 
 function timeout(side){ M[side].to++; pushCode((side==='home'?'*':'a')+'T','auto'); renderAll(); persist(); }
@@ -1259,7 +1282,8 @@ function renderCodes(){
   el.innerHTML = rows.slice(-90).reverse().map(c=>{
     const cls = c.k==='auto' ? 'auto' : (c.c[0]==='*'?'hteam':'ateam');
     const i = M.codes.indexOf(c);
-    return '<div class="crow '+cls+'" ondblclick="editCode('+i+')" title="Doble clic para corregir o completar"><span class="cc">'+c.c+'</span></div>';
+    const sel = (i===SEL_I) ? ' sel' : '';
+    return '<div class="crow '+cls+sel+'" onclick="seleccionar('+i+')" ondblclick="editCode('+i+')" title="Clic para seleccionar · Doble clic o Enter para corregir · Ins para insertar · Supr para borrar"><span class="cc">'+c.c+'</span></div>';
   }).join('');
 }
 
@@ -1379,6 +1403,10 @@ function keyName(e){
   return e.key;
 }
 document.addEventListener('keydown', e=>{
+  /* manual 4.5.2: sobre la lista de códigos */
+  if(e.key==='Insert'){ e.preventDefault(); insertarEn(SEL_I); return; }
+  if(e.key==='Delete'){ e.preventDefault(); borrarEn(SEL_I); return; }
+  if(e.key==='Enter' && SEL_I>=0 && !document.getElementById('code').value.trim()){ e.preventDefault(); editCode(SEL_I); return; }
   if((e.ctrlKey||e.metaKey) && e.code==='Space'){ e.preventDefault(); abrirExtensiones(); return; }
   if(e.key==='Escape'){ cerrarExtensiones(); }
   if((e.ctrlKey||e.metaKey) && (e.key==='z'||e.key==='Z')){
@@ -1549,11 +1577,7 @@ function saveSetup(){
   M.home.setter=LU.home.setter; M.away.setter=LU.away.setter;
   M.home.libero=parseInt(G('s-libh'),10)||0; M.away.libero=parseInt(G('s-liba'),10)||0;
   M.serving=G('s-serve');
-  ['home','away'].forEach(sd=>{
-    const pre = sd==='home'?'*':'a';
-    if(M[sd].setter) pushCode(pre+'P'+String(M[sd].setter).padStart(2,'0'),'auto');
-    const z=M[sd].lineup.indexOf(M[sd].setter); if(z>=0) pushCode(pre+'z'+(z+1),'auto');
-  });
+  escribirEstado('>LUp');   /* los DVW oficiales marcan la formación inicial con >LUp */
   closeModal('m-setup'); renderAll(); persist(); toast('Listo, a scoutear');
 }
 
@@ -1565,10 +1589,29 @@ function saveSetup(){
    de códigos compuestos: saque↔recepción rival, ataque↔bloqueo rival,
    ataque↔defensa rival, ataque↔armado previo.
    ============================================================ */
-let EDIT_I = -1;
+let EDIT_I = -1, EDIT_MODE = 'edit', SEL_I = -1;
+function seleccionar(i){ SEL_I = (SEL_I===i) ? -1 : i; renderCodes(); }
+
+/* manual 4.5.2: INS inserta un código en cualquier punto de la lista */
+function insertarEn(i){
+  if(i<0){ toast('Elegí primero un código de la lista',true); return; }
+  EDIT_MODE='insert'; EDIT_I=i;
+  document.getElementById('e-orig').textContent = 'se insertará antes de: ' + M.codes[i].c;
+  document.getElementById('e-titulo').textContent = 'Insertar código';
+  const inp=document.getElementById('e-code');
+  inp.value=''; document.getElementById('e-dec').innerHTML='';
+  document.getElementById('m-edit').classList.add('open');
+  inp.focus();
+}
+function borrarEn(i){
+  if(i<0){ toast('Elegí primero un código de la lista',true); return; }
+  if(!confirm('¿Borrar el código '+M.codes[i].c+'?')) return;
+  M.codes.splice(i,1); SEL_I=-1; renderAll(); persist(); toast('Código borrado');
+}
 function editCode(i){
   const row = M.codes[i]; if(!row) return;
-  EDIT_I = i;
+  EDIT_MODE='edit'; EDIT_I = i; SEL_I = i;
+  document.getElementById('e-titulo').textContent = 'Corregir código';
   document.getElementById('e-orig').textContent = row.c;
   const inp = document.getElementById('e-code');
   inp.value = row.c;
@@ -1617,8 +1660,13 @@ function saveEdit(){
   const nuevo = document.getElementById('e-code').value.trim();
   const p = parseInput(nuevo);
   if(!p.length || p[0].err){ toast((p[0]&&p[0].err)||'Código inválido',true); return; }
-  const viejo = M.codes[EDIT_I].c;
   const cod = fmt(p[0]);
+  if(EDIT_MODE==='insert'){
+    M.codes.splice(EDIT_I, 0, {c:cod, k:'play', set:M.codes[EDIT_I].set || M.set});
+    closeModal('m-edit'); SEL_I=-1; renderAll(); persist(); toast('Código insertado');
+    return;
+  }
+  const viejo = M.codes[EDIT_I].c;
   M.codes[EDIT_I].c = cod;
 
   if(CFG.autoCompound){
