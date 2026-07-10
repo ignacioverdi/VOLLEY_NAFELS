@@ -168,6 +168,11 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 .lulib input{width:100%;background:transparent;border:none;outline:none;color:var(--txt);text-align:center;font-family:'Barlow Condensed';font-weight:900;font-size:24px;padding:6px 0 0}
 .netline{height:3px;background:linear-gradient(90deg,transparent,var(--b2),transparent);margin:2px 0 6px;border-radius:2px}
 .lutitle{font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.2px;font-size:13px;margin:0 0 6px;text-transform:uppercase}
+.crow{cursor:pointer}
+.edec{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.eseg{background:var(--card2);border:1px solid var(--b);border-radius:8px;padding:6px 10px;min-width:84px}
+.eseg b{display:block;font-size:8.5px;letter-spacing:.7px;text-transform:uppercase;color:var(--mut);font-weight:600}
+.eseg span{font-size:13px;color:var(--txt)}
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--card2);border:1px solid var(--b2);border-radius:10px;padding:10px 18px;font-size:13px;z-index:80;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.show{opacity:1}
 .toast.err{border-color:rgba(248,113,113,.5);color:var(--bad)}
@@ -312,6 +317,26 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   </div>
 
   <div class="sec">
+    <h4>Completar códigos automáticamente</h4>
+    <p>Como el DataVolley: lo que no llegás a cargar, lo escribe el programa.</p>
+    <div class="fgrid">
+      <div><label class="f">Armado automático</label><select class="f" id="d-autoset">
+        <option value="1">Sí — al cargar un ataque con combinación, escribe el armado</option>
+        <option value="0">No</option></select>
+        <div style="font-size:11px;color:var(--mut);margin-top:5px">El tipo y el destino salen de la combinación. No lo escribe si ataca el armador. Con el especial «X», el armado se evalúa «#».</div>
+      </div>
+      <div><label class="f">Corrección del código compuesto</label><select class="f" id="d-autocomp">
+        <option value="1">Sí — al corregir un código, se ajusta su pareja</option>
+        <option value="0">No</option></select>
+        <div style="font-size:11px;color:var(--mut);margin-top:5px">Saque↔recepción, ataque↔bloqueo, ataque↔defensa y ataque↔armado previo.</div>
+      </div>
+      <div><label class="f">Al editar, el cursor va</label><select class="f" id="d-cursor">
+        <option value="0">Al final del código (completar)</option>
+        <option value="1">Sobre el símbolo de evaluación (corregir)</option></select></div>
+    </div>
+  </div>
+
+  <div class="sec">
     <h4>Caracteres personalizados</h4>
     <p>El manual permite hasta 5 caracteres libres al final del código (4.1.4). Los códigos especiales ya vienen
        definidos por DataVolley según el fundamento y la evaluación, así que no hace falta editarlos.</p>
@@ -384,6 +409,21 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   </div>
 </div></div>
 
+
+<div class="modal" id="m-edit"><div class="sheet" style="max-width:600px">
+  <h2>Corregir código</h2>
+  <div class="sub">En vivo siempre se escapa algo. Completá lo que falte: la pareja del código se ajusta sola.</div>
+  <div class="ref" style="margin-bottom:14px">Original: <span class="mono" id="e-orig"></span></div>
+  <input id="e-code" class="mono" oninput="drawEditDec()" spellcheck="false"
+    style="width:100%;background:var(--card2);border:1px solid var(--b2);color:var(--txt);border-radius:10px;padding:12px;font-size:20px;font-weight:700;text-align:center;outline:none">
+  <div id="e-dec" class="edec"></div>
+  <div class="actions">
+    <button class="tbtn" onclick="deleteEdit()">Borrar</button>
+    <button class="tbtn" onclick="closeModal('m-edit')">Cancelar</button>
+    <button class="tbtn pri" onclick="saveEdit()">Guardar</button>
+  </div>
+</div></div>
+
 <div class="toast" id="toast"></div>
 
 <script src="firebase.js" onerror="void 0"></script>
@@ -399,7 +439,8 @@ const HITS  = {H:'Potente',P:'Colocada',T:'Finta'};   /* ataque; ver SUBTYPE par
 const SUBZ  = ['A','B','C','D'];
 const ZGRID = [4,3,2,7,8,9,5,6,1];   /* red arriba, fondo abajo */
 /* Tablas oficiales, extraidas de los DVW de Näfels (76) + CASLA (1 extra) */
-const COMBOS={C0:"Shoot set in 5",C2:"Semi 2",C4:"Semi 4",C5:"Shoot set in 4",C6:"Shoot set in 2",C7:"Semi 5",C8:"Shoot set in 1",C9:"Semi 9",CB:"Slide near S",CD:"Slide away from setter",CF:"Slide moved from S",CS:"Slide far from S",G2:"Alta en 2",G3:"Alta en 3",G4:"Alta en 4",G5:"ALTA X 5",G8:"Alta en 6",G9:"Alta en 1",J1:"Corta",J2:"B",J3:"Corta Atras",J4:"Hatu",J5:"Caminada Atras",J7:"Zero one leg",J9:"Toque de 2 de Zaguer",JJ:"Toque de Armador",JY:"Toque de Segunda de",L1:"COMBINACION",P2:"Second hit to opponent court",PO:"Dump ball in 2",PP:"Setter Dump",PR:"Attack on opponent freeball",V0:"High A",V2:"Vendida en 2",V3:"High set to 3",V4:"Vendida en 4",V5:"Hut",V6:"Red",V8:"High D",V9:"High minus",VB:"High C",VP:"Pipe",VR:"High B",W1:"Interna 3 - 2",W2:"Rapida en 2",W3:"Internal 4 - 3",W4:"Rapida en 4",X0:"A (fast ball area 5)",X1:"Quick in front (4)",X2:"Quick ball back(5)",X3:"O hits in middle",X4:"O hits a 2nd step 4",X5:"Go",X6:"X",X7:"2",X8:"D",X9:"OH hits a 10",XA:"Pipe set to 6-5",XB:"C Quick Ball",XC:"4- hitter jumps away",XD:"2- hitter jumps away",XF:"Quick lower set behind",XG:"7-1 Gun",XL:"4-setter in area 2",XM:"Quick in Center",XO:"5 by the opposite",XP:"Bic",XQ:"5 by O with MB back",XR:"B Quick Ball",XS:"Slide by the opposite",XT:"OH hits in middle",Y1:"Internal 1 C",Y7:"Rapida en 5",Y8:"Pipe",Y9:"Rapida en 1",YD:"PIPE RED",YI:"PIPE BLUE"};
+/* d=descripción · z=zona · et=tipo de armado · tg=destino del armado (col. 3 y 8 de [3ATTACKCOMBINATION]) */
+const COMBOS={C0:{d:"Shoot set in 5",z:'7',et:'U',tg:'F'},C2:{d:"Semi 2",z:'2',et:'M',tg:'B'},C4:{d:"Semi 4",z:'4',et:'M',tg:'F'},C5:{d:"Shoot set in 4",z:'4',et:'U',tg:'F'},C6:{d:"Shoot set in 2",z:'2',et:'U',tg:'B'},C7:{d:"Semi 5",z:'7',et:'M',tg:'F'},C8:{d:"Shoot set in 1",z:'9',et:'U',tg:'B'},C9:{d:"Semi 9",z:'9',et:'M',tg:'B'},CB:{d:"Slide near S",z:'2',et:'N',tg:'C'},CD:{d:"Slide away from setter",z:'2',et:'N',tg:'C'},CF:{d:"Slide moved from S",z:'2',et:'N',tg:'C'},CS:{d:"Slide far from S",z:'2',et:'N',tg:'C'},G2:{d:"Alta en 2",z:'2',et:'H',tg:'B'},G3:{d:"Alta en 3",z:'3',et:'H',tg:'C'},G4:{d:"Alta en 4",z:'4',et:'H',tg:'F'},G5:{d:"ALTA X 5",z:'7',et:'H',tg:'F'},G8:{d:"Alta en 6",z:'8',et:'H',tg:'P'},G9:{d:"Alta en 1",z:'9',et:'H',tg:'B'},J1:{d:"Corta",z:'3',et:'Q',tg:'C'},J2:{d:"B",z:'3',et:'Q',tg:'C'},J3:{d:"Corta Atras",z:'3',et:'Q',tg:'C'},J4:{d:"Hatu",z:'3',et:'Q',tg:'C'},J5:{d:"Caminada Atras",z:'2',et:'Q',tg:'B'},J7:{d:"Zero one leg",z:'2',et:'Q',tg:'B'},J9:{d:"Toque de 2 de Zaguer",z:'8',et:'O',tg:'S'},JJ:{d:"Toque de Armador",z:'2',et:'M',tg:'S'},JY:{d:"Toque de Segunda de",z:'9',et:'O',tg:'-'},L1:{d:"COMBINACION",z:'3',et:'M',tg:'C'},P2:{d:"Second hit to opponent court",z:'3',et:'O',tg:'-'},PO:{d:"Dump ball in 2",z:'2',et:'O',tg:'B'},PP:{d:"Setter Dump",z:'3',et:'O',tg:'S'},PR:{d:"Attack on opponent freeball",z:'3',et:'O',tg:'-'},V0:{d:"High A",z:'7',et:'H',tg:'F'},V2:{d:"Vendida en 2",z:'2',et:'O',tg:'B'},V3:{d:"High set to 3",z:'3',et:'O',tg:'-'},V4:{d:"Vendida en 4",z:'4',et:'O',tg:'F'},V5:{d:"Hut",z:'4',et:'H',tg:'F'},V6:{d:"Red",z:'2',et:'H',tg:'B'},V8:{d:"High D",z:'9',et:'H',tg:'B'},V9:{d:"High minus",z:'9',et:'H',tg:'B'},VB:{d:"High C",z:'8',et:'H',tg:'P'},VP:{d:"Pipe",z:'8',et:'H',tg:'P'},VR:{d:"High B",z:'8',et:'H',tg:'P'},W1:{d:"Interna 3 - 2",z:'2',et:'T',tg:'B'},W2:{d:"Rapida en 2",z:'2',et:'T',tg:'B'},W3:{d:"Internal 4 - 3",z:'4',et:'T',tg:'F'},W4:{d:"Rapida en 4",z:'4',et:'T',tg:'F'},X0:{d:"A (fast ball area 5)",z:'7',et:'U',tg:'F'},X1:{d:"Quick in front (4)",z:'3',et:'Q',tg:'C'},X2:{d:"Quick ball back(5)",z:'2',et:'Q',tg:'C'},X3:{d:"O hits in middle",z:'3',et:'M',tg:'B'},X4:{d:"O hits a 2nd step 4",z:'2',et:'M',tg:'B'},X5:{d:"Go",z:'4',et:'T',tg:'F'},X6:{d:"X",z:'2',et:'T',tg:'B'},X7:{d:"2",z:'4',et:'Q',tg:'C'},X8:{d:"D",z:'9',et:'T',tg:'B'},X9:{d:"OH hits a 10",z:'4',et:'M',tg:'F'},XA:{d:"Pipe set to 6-5",z:'8',et:'M',tg:'P'},XB:{d:"C Quick Ball",z:'8',et:'U',tg:'P'},XC:{d:"4- hitter jumps away",z:'3',et:'Q',tg:'C'},XD:{d:"2- hitter jumps away",z:'3',et:'Q',tg:'C'},XF:{d:"Quick lower set behind",z:'2',et:'Q',tg:'C'},XG:{d:"7-1 Gun",z:'3',et:'Q',tg:'C'},XL:{d:"4-setter in area 2",z:'2',et:'Q',tg:'C'},XM:{d:"Quick in Center",z:'3',et:'Q',tg:'C'},XO:{d:"5 by the opposite",z:'2',et:'Q',tg:'B'},XP:{d:"Bic",z:'8',et:'U',tg:'P'},XQ:{d:"5 by O with MB back",z:'2',et:'Q',tg:'B'},XR:{d:"B Quick Ball",z:'8',et:'U',tg:'P'},XS:{d:"Slide by the opposite",z:'2',et:'N',tg:'B'},XT:{d:"OH hits in middle",z:'3',et:'M',tg:'F'},Y1:{d:"Internal 1 C",z:'9',et:'T',tg:'B'},Y7:{d:"Rapida en 5",z:'7',et:'T',tg:'F'},Y8:{d:"Pipe",z:'8',et:'T',tg:'P'},Y9:{d:"Rapida en 1",z:'9',et:'T',tg:'B'},YD:{d:"PIPE RED",z:'8',et:'T',tg:'P'},YI:{d:"PIPE BLUE",z:'8',et:'T',tg:'P'}};
 const CALLS={K1:"K1",K2:"K2",K3:"K3",K4:"K4",K5:"K5",K6:"K6",K7:"K7",K8:"K8",K9:"K9",KB:"KB",KC:"KC",KD:"KD",KE:"KE",KF:"KF",KK:"KK",KM:"KM",KP:"KP",KS:"KS"};
 /* código EXTENDIDO (DV4 4.1.3): sub-tipo, jugadores, código especial */
 const SUBTYPE={
@@ -461,7 +502,7 @@ const FACTORY = {
          endR:',', endL:'<',
          ptHup:'F2', ptHdn:'F3', ptAup:'F6', ptAdn:'F7',
          rotHup:'F4', rotHdn:'F5', rotAup:'F8', rotAdn:'F9' },
-  defSkill:'A', defCombo:'X5', customAuto:false, fichasTeam:'home', publicarVivo:true, fichasTeam:'home',
+  defSkill:'A', defCombo:'X5', customAuto:false, fichasTeam:'home', publicarVivo:true, autoSet:true, autoCompound:true, fichasTeam:'home',
   defType:{S:'Q',R:'Q',A:'H',B:'H',D:'H',E:'T',F:'H'},
   defEval:{S:'+',R:'+',A:'+',B:'+',D:'+',E:'+',F:'+'},
 };
@@ -470,6 +511,9 @@ const PRESET_ES = {'=':'x','-':'-','/':'ñ','+':'+','#':'p','!':'i', endR:',', e
 let CFG = load('pv_cfg', JSON.parse(JSON.stringify(FACTORY)));
 if(!CFG.defCombo) CFG.defCombo = FACTORY.defCombo;
 if(CFG.customAuto===undefined) CFG.customAuto = false;
+if(CFG.autoSet===undefined) CFG.autoSet = true;
+if(CFG.autoCompound===undefined) CFG.autoCompound = true;
+if(CFG.cursorEfecto===undefined) CFG.cursorEfecto = false;
 let PICK = {combo:'',sz:'',ez:'',subz:'',hit:'',blk:'',spec:''};
 
 const CMD_LABELS = {endL:'Fin jugada · izquierda',endR:'Fin jugada · derecha',
@@ -656,7 +700,7 @@ function drawDecoder(){
     ['type', a.type,  TYPES[a.type]],
     [cls,    a.ev,    EVAL_MEAN[a.skill][a.ev]]
   ];
-  if(d.combo)  segs.push(['combo',d.combo, COMBOS[d.combo]||CALLS[d.combo]||'Combinación']);
+  if(d.combo)  segs.push(['combo',d.combo, (COMBOS[d.combo]&&COMBOS[d.combo].d)||CALLS[d.combo]||'Combinación']);
   if(d.target) segs.push(['combo',d.target, SETTGT[d.target]||'Destino']);
   if(d.sz)     segs.push(['zone',d.sz,'Desde']);
   if(d.ez)     segs.push(['zone',d.ez,'Hacia']);
@@ -676,6 +720,28 @@ function drawDecoder(){
    REGISTRO DE ACCIONES
    ============================================================ */
 function pushCode(code, kind){ M.codes.push({c:code, k:kind||'play', set:M.set}); }
+
+/* ── AUTOMATIC SET (manual 2.5.2 · 5) ─────────────────────────
+   Cuando cargás un ataque con combinación, el armado se escribe solo.
+   · el tipo y el destino del armado salen de la tabla de combinaciones
+   · si el ataque lleva el especial "X", el armado se evalúa "#"
+   · NO se inserta si el que ataca es el armador                     */
+function autoSet(a){
+  if(!CFG.autoSet) return null;
+  if(a.skill!=='A') return null;
+  const d = merged(a);
+  if(!d.combo || !COMBOS[d.combo]) return null;     /* sin combinación no se puede deducir */
+  const setter = M[a.team].setter;
+  if(!setter || setter===a.num) return null;        /* el armador ataca: no hay armado */
+  const info = COMBOS[d.combo];
+  const tipo = info.et || CFG.defType.E || 'T';
+  const ev   = (d.spec==='X') ? '#' : (CFG.defEval.E || '+');
+  const tgt  = info.tg || '';
+  const pre  = a.team==='home'?'*':'a';
+  let cola = '~~' + (tgt||'~');
+  cola = cola.replace(/~+$/,'');
+  return pre + String(setter).padStart(2,'0') + 'E' + tipo + ev + cola;
+}
 function clearPick(){ PICK={combo:'',sz:'',ez:'',subz:'',hit:'',blk:'',spec:''}; drawPickers(); }
 function curEval(){
   const el=document.getElementById('code');
@@ -709,7 +775,7 @@ function drawPickers(){
     : '<span style="color:var(--dim);font-size:11px">no aplica</span>';
   const sc=document.getElementById('sel-combo');
   if(!sc.options.length){
-    sc.innerHTML='<option value="">— combinación —</option>'+Object.keys(COMBOS).sort().map(c=>'<option value="'+c+'">'+c+' · '+COMBOS[c]+'</option>').join('')
+    sc.innerHTML='<option value="">— combinación —</option>'+Object.keys(COMBOS).sort().map(c=>'<option value="'+c+'">'+c+' · '+COMBOS[c].d+'</option>').join('')
       +'<optgroup label="Llamada de armador">'+Object.keys(CALLS).map(c=>'<option value="'+c+'">'+c+'</option>').join('')+'</optgroup>';
     sc.onchange=e=>{PICK.combo=e.target.value; drawDecoder();};
   }
@@ -727,7 +793,11 @@ function commit(){
   const parts = parseInput(inp.value);
   if(!parts.length) return false;
   if(parts[0].err){ toast(parts[0].err,true); return false; }
-  parts.forEach(a=>pushCode(fmt(a),'play'));
+  parts.forEach(a=>{
+    const es = autoSet(a);
+    if(es) pushCode(es,'play');       /* el armado va antes del ataque */
+    pushCode(fmt(a),'play');
+  });
   inp.value=''; clearPick(); drawDecoder(); renderCodes(); renderStats(); persist();
   return true;
 }
@@ -817,9 +887,10 @@ function renderCodes(){
   const el = document.getElementById('codes');
   const rows = M.codes.filter(c=>c.set===M.set);
   if(!rows.length){ el.innerHTML='<div class="empty-note">Todavía no cargaste ninguna acción.<br>Escribí un número y apretá Enter.</div>'; return; }
-  el.innerHTML = rows.slice(-90).reverse().map((c,i)=>{
+  el.innerHTML = rows.slice(-90).reverse().map(c=>{
     const cls = c.k==='auto' ? 'auto' : (c.c[0]==='*'?'hteam':'ateam');
-    return '<div class="crow '+cls+'"><span class="cc">'+c.c+'</span></div>';
+    const i = M.codes.indexOf(c);
+    return '<div class="crow '+cls+'" ondblclick="editCode('+i+')" title="Doble clic para corregir o completar"><span class="cc">'+c.c+'</span></div>';
   }).join('');
 }
 
@@ -894,6 +965,7 @@ document.addEventListener('keydown', e=>{
   for(const ev of EVALS){ if(k===CFG.keys[ev]){ e.preventDefault(); inp.value+=ev; drawDecoder(); return; } }
 });
 document.getElementById('code').addEventListener('input', function(){ drawDecoder(); drawPickers(); });
+document.getElementById('e-code').addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); saveEdit(); } });
 
 /* ============================================================
    MODALES
@@ -910,8 +982,11 @@ function openConfig(){
       '<div class="keycap" data-key="'+k+'" onclick="listen(this)">'+(CFG.keys[k]||'—')+'</div></div>').join('');
   const ds = document.getElementById('d-skill');
   ds.innerHTML = Object.keys(SKILLS).map(s=>'<option value="'+s+'"'+(CFG.defSkill===s?' selected':'')+'>'+SKILLS[s]+'</option>').join('');
-  document.getElementById('d-combo').innerHTML = Object.keys(COMBOS).sort().map(c=>'<option value="'+c+'"'+(CFG.defCombo===c?' selected':'')+'>'+c+' · '+COMBOS[c]+'</option>').join('');
+  document.getElementById('d-combo').innerHTML = Object.keys(COMBOS).sort().map(c=>'<option value="'+c+'"'+(CFG.defCombo===c?' selected':'')+'>'+c+' · '+COMBOS[c].d+'</option>').join('');
   document.getElementById('d-auto').value = CFG.customAuto ? '1' : '0';
+  document.getElementById('d-autoset').value  = CFG.autoSet ? '1' : '0';
+  document.getElementById('d-autocomp').value = CFG.autoCompound ? '1' : '0';
+  document.getElementById('d-cursor').value   = CFG.cursorEfecto ? '1' : '0';
   const df = document.getElementById('cfg-def');
   df.innerHTML = Object.keys(SKILLS).map(s=>
     '<div><label class="f">'+SKILLS[s]+'</label><div style="display:flex;gap:5px">'+
@@ -933,7 +1008,10 @@ function saveConfig(){
   });
   CFG.defSkill = document.getElementById('d-skill').value;
   CFG.defCombo = document.getElementById('d-combo').value;
-  CFG.customAuto = document.getElementById('d-auto').value==='1';
+  CFG.customAuto   = document.getElementById('d-auto').value==='1';
+  CFG.autoSet      = document.getElementById('d-autoset').value==='1';
+  CFG.autoCompound = document.getElementById('d-autocomp').value==='1';
+  CFG.cursorEfecto = document.getElementById('d-cursor').value==='1';
   Object.keys(SKILLS).forEach(s=>{
     CFG.defType[s] = document.getElementById('dt-'+s).value;
     CFG.defEval[s] = document.getElementById('de-'+s).value;
@@ -1018,6 +1096,102 @@ function saveSetup(){
   closeModal('m-setup'); renderAll(); persist(); toast('Listo, a scoutear');
 }
 
+
+/* ============================================================
+   MODIFY CODE (manual 2.5.2 · 2)
+   Doble clic sobre un código cargado para completarlo o corregirlo.
+   Al guardar, el código correlacionado se ajusta solo, según la tabla
+   de códigos compuestos: saque↔recepción rival, ataque↔bloqueo rival,
+   ataque↔defensa rival, ataque↔armado previo.
+   ============================================================ */
+let EDIT_I = -1;
+function editCode(i){
+  const row = M.codes[i]; if(!row) return;
+  EDIT_I = i;
+  document.getElementById('e-orig').textContent = row.c;
+  const inp = document.getElementById('e-code');
+  inp.value = row.c;
+  document.getElementById('m-edit').classList.add('open');
+  drawEditDec();
+  inp.focus();
+  if(CFG.cursorEfecto && row.c.length>5) inp.setSelectionRange(5,6);   /* cursor sobre el símbolo */
+  else inp.setSelectionRange(inp.value.length, inp.value.length);      /* cursor al final */
+}
+function drawEditDec(){
+  const raw = document.getElementById('e-code').value.trim();
+  const box = document.getElementById('e-dec');
+  if(!raw){ box.innerHTML=''; return; }
+  const p = parseInput(raw);
+  if(!p.length || p[0].err){ box.innerHTML='<span style="color:var(--bad);font-size:12px">'+((p[0]&&p[0].err)||'Código vacío')+'</span>'; return; }
+  const a=p[0], d=merged(a);
+  const seg=[['Equipo',a.team==='home'?'Local':'Visitante'],['Jugador',a.num],['Fundamento',SKILLS[a.skill]],
+             ['Tipo',TYPES[a.type]],['Evaluación',EVAL_MEAN[a.skill][a.ev]]];
+  if(d.combo) seg.push(['Combinación',(COMBOS[d.combo]&&COMBOS[d.combo].d)||d.combo]);
+  if(d.sz||d.ez) seg.push(['Dirección',(d.sz||'?')+' → '+(d.ez||'?')]);
+  box.innerHTML = seg.map(x=>'<div class="eseg"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('');
+}
+/* qué código es la pareja del que estoy editando */
+function parejaDe(i){
+  const c = M.codes[i]; if(!c || c.k!=='play') return -1;
+  const sk = c.c[3], team = c.c[0];
+  const otro = team==='*' ? 'a' : '*';
+  /* saque -> recepción rival (el siguiente) */
+  if(sk==='S'){ for(let k=i+1;k<M.codes.length && k<=i+3;k++){ const x=M.codes[k]; if(x.k==='play'&&x.c[0]===otro&&x.c[3]==='R') return k; } }
+  /* recepción -> saque rival (el anterior) */
+  if(sk==='R'){ for(let k=i-1;k>=0 && k>=i-3;k--){ const x=M.codes[k]; if(x.k==='play'&&x.c[0]===otro&&x.c[3]==='S') return k; } }
+  /* ataque -> bloqueo o defensa rival (el siguiente) */
+  if(sk==='A'){ for(let k=i+1;k<M.codes.length && k<=i+3;k++){ const x=M.codes[k]; if(x.k==='play'&&x.c[0]===otro&&(x.c[3]==='B'||x.c[3]==='D')) return k; } }
+  if(sk==='B'||sk==='D'){ for(let k=i-1;k>=0 && k>=i-3;k--){ const x=M.codes[k]; if(x.k==='play'&&x.c[0]===otro&&x.c[3]==='A') return k; } }
+  return -1;
+}
+/* armado previo del mismo equipo (para ataque↔armado) */
+function armadoPrevio(i){
+  const c=M.codes[i];
+  for(let k=i-1;k>=0 && k>=i-3;k--){ const x=M.codes[k]; if(x.k==='play'&&x.c[0]===c.c[0]&&x.c[3]==='E') return k; }
+  return -1;
+}
+function setChar(str,pos,ch){ return str.length<=pos ? str : str.slice(0,pos)+ch+str.slice(pos+1); }
+
+function saveEdit(){
+  const nuevo = document.getElementById('e-code').value.trim();
+  const p = parseInput(nuevo);
+  if(!p.length || p[0].err){ toast((p[0]&&p[0].err)||'Código inválido',true); return; }
+  const viejo = M.codes[EDIT_I].c;
+  const cod = fmt(p[0]);
+  M.codes[EDIT_I].c = cod;
+
+  if(CFG.autoCompound){
+    const a = p[0], d = merged(a);
+    /* a) pareja correlacionada: tipo, efecto y dirección */
+    const j = parejaDe(EDIT_I);
+    if(j>=0){
+      let o = M.codes[j].c;
+      o = setChar(o,4,a.type);                                  /* mismo tipo de pelota */
+      if(a.skill==='S') o = setChar(o,5, invRec(a.ev));         /* saque -> recepción  */
+      if(a.skill==='R') M.codes[j].c = setChar(M.codes[j].c,5, REC_TO_SERVE[a.ev]||M.codes[j].c[5]);
+      if(d.sz && o.length>10){ o = setChar(o,9,d.sz); o = setChar(o,10,d.ez||o[10]); }
+      if(a.skill!=='R') M.codes[j].c = o; else M.codes[j].c = setChar(M.codes[j].c,4,a.type);
+    }
+    /* b) ataque -> armado previo: tipo y destino salen de la combinación */
+    if(a.skill==='A' && d.combo && COMBOS[d.combo]){
+      const e = armadoPrevio(EDIT_I);
+      if(e>=0){
+        let o = M.codes[e].c;
+        o = setChar(o,4, COMBOS[d.combo].et || o[4]);
+        if(o.length>8) o = setChar(o,8, COMBOS[d.combo].tg || o[8]);
+        M.codes[e].c = o;
+      }
+    }
+  }
+  closeModal('m-edit'); renderAll(); persist();
+  toast(viejo===cod ? 'Sin cambios' : 'Código corregido');
+}
+function invRec(evSaque){ for(const k in REC_TO_SERVE) if(REC_TO_SERVE[k]===evSaque) return k; return '+'; }
+function deleteEdit(){
+  if(EDIT_I<0) return;
+  M.codes.splice(EDIT_I,1);
+  closeModal('m-edit'); renderAll(); persist(); toast('Código borrado');
+}
 
 /* ============================================================
    FICHAS — compatibilidad con el panel de Näfels
@@ -1171,7 +1345,7 @@ function exportDVW(){
     M[s].lineup.filter(Boolean).forEach((n,i)=>L.push('0;'+(i+1)+';'+n+';;;;;;;;;;'+(n===M[s].libero?'L':'')+';'));
   });
   L.push('[3ATTACKCOMBINATION]');
-  Object.keys(COMBOS).sort().forEach(c=>L.push(c+';;;;'+COMBOS[c]+';'));
+  Object.keys(COMBOS).sort().forEach(c=>L.push(c+';'+COMBOS[c].z+';;'+COMBOS[c].et+';'+COMBOS[c].d+';;;;'+COMBOS[c].tg+';'));
   L.push('[3SETTERCALL]');
   Object.keys(CALLS).forEach(c=>L.push(c+';;'));
   L.push('[3SCOUT]');
