@@ -68,6 +68,7 @@ button{font-family:inherit;cursor:pointer}
 .rowbtns{display:flex;gap:5px;margin-top:8px}
 .rowbtns button{flex:1;background:var(--card2);border:1px solid var(--b);color:var(--mut);border-radius:7px;padding:2px;font-size:9px;font-weight:600}
 .rowbtns button:hover{color:var(--txt);border-color:var(--b2)}
+.atrow{display:grid;grid-template-columns:60px 90px 1fr 34px;gap:6px;margin-bottom:6px;align-items:center}
 .hsel{float:right;margin-left:6px;background:var(--card2);border:1px solid var(--b);color:var(--mut);
   border-radius:6px;padding:2px 5px;font-size:10px;font-weight:600}
 .hbtn{float:right;background:var(--card2);border:1px solid var(--b);color:var(--mut);border-radius:6px;padding:2px 8px;font-size:10.5px;font-weight:600;letter-spacing:.4px}
@@ -396,6 +397,14 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   </div>
 
   <div class="sec">
+    <h4>Atajos propios</h4>
+    <p>Una tecla que escribe lo que vos quieras en la barra: un dorsal de dos cifras, una combinación como «X5»,
+       o un código entero. El manual los llama <em>shortcut keys</em>. Podés usar la tecla sola, o con Ctrl o Alt.</p>
+    <div id="cfg-atajos"></div>
+    <button class="tbtn" onclick="agregarAtajo()" style="margin-top:8px">+ Agregar atajo</button>
+  </div>
+
+  <div class="sec">
     <h4>Completar códigos automáticamente</h4>
     <p>Como el DataVolley: lo que no llegás a cargar, lo escribe el programa.</p>
     <div class="fgrid">
@@ -602,7 +611,12 @@ if(CFG.autoSet===undefined) CFG.autoSet = true;
 if(CFG.autoCompound===undefined) CFG.autoCompound = true;
 if(CFG.cursorEfecto===undefined) CFG.cursorEfecto = false;
 if(CFG.autoServe===undefined) CFG.autoServe = 'num_s';
-if(!CFG.verif) CFG.verif = {combo:true,bloqueo:true,zona:true,recBarra:true,liberoSaca:true};
+if(!CFG.verif) CFG.verif = {marcador:true,combo:true,bloqueo:true,zona:true,recBarra:true,liberoSaca:true};
+if(CFG.verif.marcador===undefined) CFG.verif.marcador = true;
+/* Atajos propios (manual 2.6, botón [Add]): una tecla escribe un texto en la barra.
+   Sirve para dorsales de dos cifras, combinaciones de ataque, o un código completo.
+   El manual permite Ctrl+tecla y Alt+tecla; una tecla sola para códigos de scout. */
+if(!CFG.atajos) CFG.atajos = [];
 /* Reglamento. Por defecto FIVB: al mejor de 5, sets a 25 (el último a 15) con 2 de
    diferencia, 6 cambios y 2 tiempos por set. Cambialo si tu liga usa otro formato. */
 if(!CFG.regl) CFG.regl = {setsGanar:3, ptsSet:25, ptsUltimo:15, dif:2, cambios:6, tiempos:2};
@@ -814,6 +828,7 @@ function signOf(skill,ev){
    del marcador. Devuelven avisos; no bloquean la carga.
    ============================================================ */
 const VERIF_LBL={
+  marcador:'El marcador salta puntos (ej: *p01:00 -> *p03:00)',
   combo:'Ataque sin combinación',
   bloqueo:'Bloqueo desde zaga',
   zona:'La combinación no coincide con la posición del atacante',
@@ -823,6 +838,58 @@ const VERIF_LBL={
 const FRONT=[2,3,4];
 function zonaDe(team,num){ const i=M[team].lineup.indexOf(num); return i<0?0:i+1; }
 function esDelantero(team,num){ return FRONT.indexOf(zonaDe(team,num))>=0; }
+
+/* Manual 2.5.7 «Check progression of Scores»: cada punto debe subir de a uno,
+   y sólo al equipo que lo ganó. Se corre cuando se edita la lista a mano. */
+function verifMarcador(){
+  const malos=[];
+  const porSet={};
+  M.codes.forEach((c,i)=>{
+    const m = c.c.match(/^([*a])p(\d\d):(\d\d)$/);
+    if(!m) return;
+    const st = c.set||1;
+    if(!porSet[st]) porSet[st]=[0,0];
+    const gana = m[1]==='*' ? 0 : 1;
+    const esp = porSet[st].slice(); esp[gana]++;
+    const dado = [parseInt(m[2],10), parseInt(m[3],10)];
+    if(dado[0]!==esp[0] || dado[1]!==esp[1]){
+      malos.push({i, c:c.c, esperado:String(esp[0]).padStart(2,'0')+':'+String(esp[1]).padStart(2,'0')});
+    }
+    porSet[st]=dado;   /* seguimos desde lo que dice el código, para no encadenar el error */
+  });
+  return malos;
+}
+/* --- atajos personalizados --- */
+function atajoDe(e){
+  const mod = e.ctrlKey||e.metaKey ? 'ctrl' : (e.altKey ? 'alt' : '');
+  return (CFG.atajos||[]).find(a => a.k && a.k.toLowerCase()===e.key.toLowerCase() && (a.mod||'')===mod);
+}
+function aplicarAtajo(a){
+  const inp = document.getElementById('code');
+  const p = inp.selectionStart ?? inp.value.length;
+  inp.value = inp.value.slice(0,p) + a.txt + inp.value.slice(inp.selectionEnd ?? p);
+  const np = p + a.txt.length;
+  try{ inp.setSelectionRange(np,np); }catch(err){}
+  drawDecoder(); inp.focus();
+}
+function renderAtajos(){
+  const box=document.getElementById('cfg-atajos'); if(!box) return;
+  box.innerHTML = (CFG.atajos||[]).map((a,i)=>
+    '<div class="atrow"><input class="f mono" style="width:60px" value="'+(a.k||'')+'" maxlength="1" onchange="CFG.atajos['+i+'].k=this.value" title="Tecla">'+
+    '<select class="f" onchange="CFG.atajos['+i+'].mod=this.value">'+
+      ['','ctrl','alt'].map(m=>'<option value="'+m+'"'+((a.mod||'')===m?' selected':'')+'>'+(m||'sola')+'</option>').join('')+
+    '</select>'+
+    '<input class="f mono" value="'+(a.txt||'').replace(/"/g,'&quot;')+'" onchange="CFG.atajos['+i+'].txt=this.value" placeholder="lo que escribe" title="Texto que inserta">'+
+    '<button class="tbtn" onclick="CFG.atajos.splice('+i+',1);renderAtajos()">✕</button></div>').join('')
+    || '<div class="sub">Todavía no hay atajos. Ejemplos: la tecla «l» escribe el dorsal del líbero; Ctrl+q escribe «X5».</div>';
+}
+function agregarAtajo(){ CFG.atajos.push({k:'',mod:'',txt:''}); renderAtajos(); }
+
+function avisarMarcador(){
+  if(CFG.verif.marcador===false) return;
+  const m = verifMarcador();
+  if(m.length) toast('Marcador: '+m[0].c+' debería ser '+m[0].esperado+(m.length>1?' (+'+(m.length-1)+' más)':''), true);
+}
 
 function verificar(a){
   const av=[], d=merged(a), V=CFG.verif||{};
@@ -1036,10 +1103,12 @@ function hacerCambio(side,sale,entra){
   if(M[side].lineup.indexOf(entra)>=0){ toast('El '+entra+' ya está en cancha',true); return false; }
   if(!(entra>=1 && entra<=99)){ toast('Dorsal inválido: '+entra,true); return false; }
   if(M[side].subs >= CFG.regl.cambios){ toast(M[side].name+' ya hizo sus '+CFG.regl.cambios+' cambios de este set',true); return false; }
+  const primero = levantarEstado();      /* el cambio va antes del bloque de estado */
   M[side].lineup[i]=entra; M[side].subs++;
   if(M[side].setter===sale) M[side].setter=entra;
   const P2=n=>String(n).padStart(2,'0');
   pushCode((side==='home'?'*':'a')+'c'+P2(sale)+':'+P2(entra),'auto');
+  if(primero) escribirEstado('', primero);   /* se reescribe, ya con el cambio hecho */
   return true;
 }
 function parseCommand(raw){
@@ -1144,8 +1213,12 @@ function undoRally(){
 }
 /* Los DVW oficiales escriben, después de cada punto, el armador y su zona
    para los dos equipos:   *p01:00  *P08  *z5  aP04  az3                 */
-function escribirEstado(sufijo){
-  ['home','away'].forEach(side=>{
+/* Verificado en los DVW oficiales (193/193): el bloque va DESPUÉS de los cambios
+   y tiempos que siguen al punto, y arranca por el equipo que ganó el punto
+   (o, al empezar un set, por el que va a sacar). */
+function escribirEstado(sufijo, primero){
+  const orden = (primero==='away') ? ['away','home'] : ['home','away'];
+  orden.forEach(side=>{
     const pre = side==='home'?'*':'a';
     const st = M[side].setter;
     if(!st) return;
@@ -1153,6 +1226,16 @@ function escribirEstado(sufijo){
     const z = M[side].lineup.indexOf(st);
     if(z>=0) pushCode(pre+'z'+(z+1)+(sufijo||''),'auto');
   });
+}
+/* Un cambio o un tiempo se anotan ANTES del bloque: lo levantamos y lo volvemos a escribir. */
+function levantarEstado(){
+  const quitados=[];
+  while(M.codes.length){
+    const u=M.codes[M.codes.length-1];
+    if(u.k==='auto' && /^[*a][Pz]\d/.test(u.c) && !u.c.includes('>LUp')) quitados.unshift(M.codes.pop());
+    else break;
+  }
+  return quitados.length ? (quitados[0].c[0]==='*' ? 'home' : 'away') : null;
 }
 function endRally(winner){
   if(partidoTerminado()){ toast('El partido ya terminó: '+M.home.sets+'-'+M.away.sets,true); return; }
@@ -1170,7 +1253,8 @@ function endRally(winner){
     M.serving = winner;
     rotate(winner,1,true);
   }
-  escribirEstado();          /* *P y *z de los dos equipos, como el DVW oficial */
+  /* si el set se cierra, el DVW no escribe el bloque: va directo el **Nset */
+  if(!setTerminado()) escribirEstado('', winner);
   renderAll(); persist();
 
   /* manual 4.10: al asignarse el último punto del set, el programa pregunta.
@@ -1245,7 +1329,10 @@ function rotate(side,dir,silent){
 
 function timeout(side){
   if(M[side].to >= CFG.regl.tiempos){ toast(M[side].name+' ya usó sus '+CFG.regl.tiempos+' tiempos de este set',true); return; }
-  M[side].to++; pushCode((side==='home'?'*':'a')+'T','auto'); renderAll(); persist();
+  const primero = levantarEstado();
+  M[side].to++; pushCode((side==='home'?'*':'a')+'T','auto');
+  if(primero) escribirEstado('', primero);
+  renderAll(); persist();
 }
 
 function subst(side){
@@ -1446,6 +1533,10 @@ document.addEventListener('keydown', e=>{
   if(document.querySelector('.modal.open')) return;
   const k = keyName(e), K = CFG.keys;
 
+  /* manual 2.6 [Add]: atajos propios. Tienen prioridad sobre todo lo demás. */
+  const at = atajoDe(e);
+  if(at){ e.preventDefault(); aplicarAtajo(at); return; }
+
   /* manual 2.6: teclas de prefijo. Alternan la 'a' del visitante / el '*' del local */
   if(k===K.prefA || k===K.prefH){
     e.preventDefault();
@@ -1494,6 +1585,7 @@ function openConfig(){
   document.getElementById('d-autocomp').value = CFG.autoCompound ? '1' : '0';
   document.getElementById('d-cursor').value   = CFG.cursorEfecto ? '1' : '0';
   document.getElementById('d-autoserve').value = CFG.autoServe || 'no';
+  renderAtajos();
   document.getElementById('cfg-verif').innerHTML = Object.keys(VERIF_LBL).map(k=>
     '<div><label class="f">'+VERIF_LBL[k]+'</label><select class="f" id="vf-'+k+'">'+
     '<option value="1"'+(CFG.verif[k]!==false?' selected':'')+'>Avisar</option>'+
@@ -1514,6 +1606,7 @@ function listen(el){
   document.addEventListener('keydown',h,true);
 }
 function saveConfig(){
+  if(!document.getElementById('m-config') || !document.getElementById('cfg-def')) return;   /* sin la ventana abierta no hay nada que leer */
   let choque=false;
   document.querySelectorAll('#cfg-eval .keycap, #cfg-cmd .keycap').forEach(el=>{
     const t=el.textContent.trim();
@@ -1529,6 +1622,7 @@ function saveConfig(){
   CFG.cursorEfecto = document.getElementById('d-cursor').value==='1';
   CFG.autoServe    = document.getElementById('d-autoserve').value;
   Object.keys(VERIF_LBL).forEach(k=>{ const el=document.getElementById('vf-'+k); if(el) CFG.verif[k]= el.value==='1'; });
+  CFG.atajos = (CFG.atajos||[]).filter(a=>a.k && a.txt);   /* los incompletos no se guardan */
   Object.keys(SKILLS).forEach(s=>{
     CFG.defType[s] = document.getElementById('dt-'+s).value;
     CFG.defEval[s] = document.getElementById('de-'+s).value;
@@ -1605,8 +1699,11 @@ function saveSetup(){
   M.home.six=lh.slice(); M.away.six=la.slice();   /* el seis con el que arranca este set */
   M.home.setter=LU.home.setter; M.away.setter=LU.away.setter;
   M.home.libero=parseInt(G('s-libh'),10)||0; M.away.libero=parseInt(G('s-liba'),10)||0;
+  /* el líbero no puede estar en el seis inicial */
+  if(M.home.libero && lh.includes(M.home.libero)){ toast('El líbero '+M.home.libero+' no puede estar en el seis inicial del local',true); return; }
+  if(M.away.libero && la.includes(M.away.libero)){ toast('El líbero '+M.away.libero+' no puede estar en el seis inicial del visitante',true); return; }
   M.serving=G('s-serve');
-  escribirEstado('>LUp');   /* los DVW oficiales marcan la formación inicial con >LUp */
+  escribirEstado('>LUp', M.serving);   /* >LUp, empezando por el equipo que saca (verificado en los DVW) */
   closeModal('m-setup'); renderAll(); persist(); toast('Listo, a scoutear');
 }
 
@@ -1635,7 +1732,7 @@ function insertarEn(i){
 function borrarEn(i){
   if(i<0){ toast('Elegí primero un código de la lista',true); return; }
   if(!confirm('¿Borrar el código '+M.codes[i].c+'?')) return;
-  M.codes.splice(i,1); SEL_I=-1; renderAll(); persist(); toast('Código borrado');
+  M.codes.splice(i,1); SEL_I=-1; renderAll(); persist(); avisarMarcador(); toast('Código borrado');
 }
 function editCode(i){
   const row = M.codes[i]; if(!row) return;
@@ -1692,7 +1789,7 @@ function saveEdit(){
   const cod = fmt(p[0]);
   if(EDIT_MODE==='insert'){
     M.codes.splice(EDIT_I, 0, {c:cod, k:'play', set:M.codes[EDIT_I].set || M.set});
-    closeModal('m-edit'); SEL_I=-1; renderAll(); persist(); toast('Código insertado');
+    closeModal('m-edit'); SEL_I=-1; renderAll(); persist(); avisarMarcador(); toast('Código insertado');
     return;
   }
   const viejo = M.codes[EDIT_I].c;
