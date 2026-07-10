@@ -280,6 +280,7 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
 </style>
 <script src="firebase.js" onerror="void 0"></script>
 <script src="lang.js"></script>
+<script src="objetivos.js" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -510,6 +511,7 @@ function renderObjetivosJugador(cid,nombre,extra){
     <span class="ts-lbl"><span id="ts">--</span></span>
     <button class="hbtn podio-btn" onclick="togglePodio()">&#9733; Podio</button>
     <button class="hbtn" id="obj-btn" onclick="toggleObj()" style="background:rgba(34,197,94,.1);color:#22c55e;border-color:rgba(34,197,94,.3)">&#9679; Objetivos</button>
+<button class="hbtn" id="bat-btn" onclick="toggleBat()" style="background:rgba(129,140,248,.12);color:#818cf8;border-color:rgba(129,140,248,.3)">&#128267; Baterías</button>
     <button class="hbtn" id="tabla-btn" onclick="toggleTabla()" style="background:rgba(56,189,248,.1);color:#38bdf8;border-color:rgba(56,189,248,.3)">&#9776; Tabla</button>
     <button class="hbtn tv-btn" id="tv-btn" onclick="toggleTV()">&#9654; TV</button>
     <button class="hbtn" onclick="abrirPlan('armador')" title="Distribución del armador — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">&#128203; Distribución armador</button>
@@ -517,6 +519,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <button class="hbtn" onclick="abrirPlan('saque')" title="Direcciones de saque — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">&#127934; Direcciones saque</button>
 <button class="hbtn" onclick="abrirPlan('recepcion')" title="Zonas de recepción — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">&#128993; Zonas recepción</button>
 <button class="hbtn" onclick="abrirPlanPreparado()" title="Plan de partido que preparamos (para comparar con lo que pasa en vivo)" style="background:rgba(129,140,248,.12);color:#818cf8;border-color:rgba(129,140,248,.3)">&#128214; Plan de partido</button>
+<button class="hbtn" onclick="abrirBaterias()" title="Baterías del partido en vivo" style="background:rgba(34,197,94,.12);color:#22c55e;border-color:rgba(34,197,94,.3)">&#128267; Baterías</button>
 <button class="hbtn reset-btn" onclick="confirmReset()">&#x25CF; Reset</button>
   </div>
 </header>
@@ -574,6 +577,24 @@ function renderObjetivosJugador(cid,nombre,extra){
 
 <!-- PODIO OVERLAY -->
 <!-- OBJETIVOS OVERLAY -->
+<div id="bat" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(8,8,16,.97);backdrop-filter:blur(20px);overflow-y:auto;padding:2rem">
+  <div style="max-width:1100px;margin:0 auto">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+      <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:26px;letter-spacing:2px;color:#818cf8;text-transform:uppercase">🔋 Baterías <span style="font-size:13px;color:#64748b">en vivo</span></h2>
+      <button onclick="toggleBat()" style="padding:8px 18px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#e2e8f0;font-weight:700;cursor:pointer">Cerrar</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+      <span id="bat-equipos" style="display:inline-flex;gap:6px"></span>
+      <div style="flex:1"></div>
+      <label style="font-size:12px;color:#94a3b8">Jugador
+        <select id="bat-jug" onchange="renderBatV()" style="margin-left:6px;padding:6px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.15);background:#0f1020;color:#e2e8f0;font-family:'Barlow Condensed',sans-serif"></select>
+      </label>
+    </div>
+    <div id="bat-cont" style="overflow-x:auto"></div>
+    <div style="font-size:11px;color:#475569;margin-top:10px">Las 11 baterías salen de los códigos que carga el scout en vivo. Con pocas acciones, tomar con cuidado.</div>
+  </div>
+</div>
+
 <div id="obj" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(8,8,16,.97);backdrop-filter:blur(20px);overflow-y:auto;padding:2rem">
   <div style="max-width:860px;margin:0 auto;padding:2.5rem 0">
 
@@ -1124,6 +1145,46 @@ function renderTabla(){
   document.getElementById('tabla-content').innerHTML=html;
 }
 
+/* ══ BATERÍAS EN VIVO (tablet) — calcula desde los códigos del scout ══ */
+var _batSideV='home';
+function toggleBat(){
+  var b=document.getElementById('bat');
+  var isOpen=b.style.display!=='none' && b.style.display!=='';
+  b.style.display=isOpen?'none':'block';
+  if(!isOpen){ _batSideV='home'; pintarBatEqV(); cargarBatJugV(); renderBatV(); }
+}
+function batEstilo(a){ return 'padding:6px 12px;border-radius:8px;border:1px solid '+(a?'#2563eb':'rgba(255,255,255,.15)')+';background:'+(a?'#2563eb':'rgba(255,255,255,.05)')+';color:'+(a?'#fff':'#94a3b8')+';font-weight:700;font-family:Barlow Condensed,sans-serif;font-size:13px;cursor:pointer'; }
+function pintarBatEqV(){
+  var c=document.getElementById('bat-equipos'); if(!c) return;
+  c.innerHTML=[['home','Nuestro equipo'],['away','Rival']].map(function(x){
+    return '<button onclick="setBatSideV(\''+x[0]+'\')" style="'+batEstilo(x[0]===_batSideV)+'">'+x[1]+'</button>';
+  }).join('');
+}
+function setBatSideV(side){ _batSideV=side; pintarBatEqV(); cargarBatJugV(); renderBatV(); }
+function batCodesV(){ return (window.VOLEY_CODES && window.VOLEY_CODES.codes) ? window.VOLEY_CODES.codes : []; }
+function batNombreV(side, num){
+  var C=window.VOLEY_CODES; if(!C) return '';
+  var m=C[side]; if(m && m.names && m.names[num]) return m.names[num];
+  return '';
+}
+function cargarBatJugV(){
+  var pre=_batSideV==='home'?'*':'a';
+  var nums={};
+  batCodesV().forEach(function(c){ if(c.c && c.c[0]===pre && /^\d\d/.test(c.c.slice(1))){ var n=parseInt(c.c.slice(1,3),10); if(n>0) nums[n]=true; } });
+  var sel=document.getElementById('bat-jug');
+  var lista=Object.keys(nums).map(Number).sort(function(a,b){return a-b;});
+  sel.innerHTML='<option value="">— elegí un jugador —</option>'+
+    lista.map(function(n){ var nm=batNombreV(_batSideV,n); return '<option value="'+n+'">#'+n+(nm?' '+nm:'')+'</option>'; }).join('');
+}
+function renderBatV(){
+  if(typeof window.bateriasVivo!=='function'){ document.getElementById('bat-cont').innerHTML='<div style="color:#64748b;padding:20px">Faltan las baterías (objetivos.js).</div>'; return; }
+  var pre=_batSideV==='home'?'*':'a';
+  var res=window.bateriasVivo(batCodesV(), pre);
+  var jn=document.getElementById('bat-jug').value;
+  var jugVals=jn?(res.jugadores[jn]||{}):{};
+  renderBaterias('bat-cont', jugVals, res.equipo||{}, 'BATERÍAS'+(jn?' · #'+jn:''));
+}
+
 function toggleObj(){
   const o=document.getElementById('obj');
   const isOpen=o.style.display!=='none'&&o.style.display!=='';
@@ -1334,7 +1395,57 @@ function traerEnVivo(primera){
     var el=document.getElementById('live-score'); if(!el||!L) return;
     el.textContent = L.local.n+' '+L.local.pts+' — '+L.visitante.pts+' '+L.visitante.n+'  ·  set '+L.set;
   });
+  /* códigos crudos para las baterías en vivo */
+  fbGet('voley_codes', function(C){ if(C && C.codes) window.VOLEY_CODES=C; });
 }
+/* ── BATERÍAS EN VIVO (usa los códigos que llegan por Firebase) ── */
+var _batLado='home';
+function _batCodes(){ return (window.VOLEY_CODES && window.VOLEY_CODES.codes) ? window.VOLEY_CODES.codes : []; }
+function _batNombre(num){
+  var vc=window.VOLEY_CODES; if(!vc||!vc[_batLado]||!vc[_batLado].names) return String(num);
+  return vc[_batLado].names[num] || String(num);
+}
+function _batNombreEquipo(lado){
+  var vc=window.VOLEY_CODES;
+  return (vc&&vc[lado]&&vc[lado].name) ? vc[lado].name : (lado==='home'?'Nosotros':'Rival');
+}
+function abrirBaterias(){
+  if(typeof window.bateriasVivo!=='function'){ alert('Faltan las baterías (objetivos.js)'); return; }
+  if(!_batCodes().length){ alert('Todavía no llegan datos del scout en vivo.'); return; }
+  _batLado='home';
+  pintarBatBotonesEquipo(); llenarBatJugadores(); renderBateriasPanel();
+  document.getElementById('m-baterias').style.display='block';
+}
+function cerrarBaterias(){ document.getElementById('m-baterias').style.display='none'; }
+function pintarBatBotonesEquipo(){
+  var cont=document.getElementById('bat-teambtns'); if(!cont) return;
+  cont.innerHTML=[['home',_batNombreEquipo('home')],['away',_batNombreEquipo('away')]].map(function(x){
+    var on=x[0]===_batLado;
+    return '<button onclick="setBatLado(\''+x[0]+'\')" style="background:'+(on?'#2563eb':'#12132a')+';color:'+(on?'#fff':'#8a8aa0')+';border:1px solid '+(on?'#2563eb':'rgba(255,255,255,.12)')+';border-radius:8px;padding:6px 14px;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-weight:700;font-size:13px">'+x[1]+'</button>';
+  }).join('');
+}
+function setBatLado(l){ _batLado=l; pintarBatBotonesEquipo(); llenarBatJugadores(); renderBateriasPanel(); }
+function llenarBatJugadores(){
+  var side=_batLado==='home'?'*':'a';
+  var res=window.bateriasVivo(_batCodes(), side);
+  var sel=document.getElementById('bat-jugsel');
+  var nums=Object.keys(res.jugadores).sort(function(a,b){return (+a)-(+b);});
+  var prev=sel.value;
+  sel.innerHTML='<option value="">— Equipo completo —</option>'+nums.map(function(n){
+    var nn=parseInt(n,10); return '<option value="'+nn+'">#'+nn+' '+_batNombre(nn)+'</option>';
+  }).join('');
+  if(prev && sel.querySelector('option[value="'+prev+'"]')) sel.value=prev;
+}
+function renderBateriasPanel(){
+  var side=_batLado==='home'?'*':'a';
+  var res=window.bateriasVivo(_batCodes(), side);
+  var sel=document.getElementById('bat-jugsel');
+  var jn=sel.value?parseInt(sel.value,10):null;
+  var jugVals=jn!==null?(res.jugadores[jn]||{}):res.equipo;
+  var titulo=jn!==null?('#'+jn+' '+_batNombre(jn)+' vs equipo'):'Equipo completo';
+  renderBaterias('bat-cont', jugVals, res.equipo, titulo);
+}
+
 function iniciarEnVivo(){
   traerEnVivo(true);
   setInterval(function(){ traerEnVivo(false); }, 2000);   /* refresco cada 2 s */
@@ -1705,6 +1816,23 @@ function closeJugDetail(){
 }</script>
 <script src="plantel_nafels.js" onerror="void 0"></script>
 <script src="temporadas_menu.js"></script>
+<div id="m-baterias" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.75);padding:20px;overflow:auto" onclick="if(event.target===this)cerrarBaterias()">
+  <div style="max-width:980px;margin:20px auto;background:#0d0e1a;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:22px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:6px">
+      <h2 style="font-family:Barlow Condensed,sans-serif;color:#e2e8f0;margin:0;font-size:22px">🔋 Baterías del partido</h2>
+      <button onclick="cerrarBaterias()" style="background:rgba(255,255,255,.06);color:#94a3b8;border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:6px 14px;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-weight:700">Cerrar</button>
+    </div>
+    <div style="font-size:12px;color:#64748b;margin-bottom:12px">Calculado en vivo con lo scouteado. La marca blanca es el objetivo.</div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+      <span id="bat-teambtns" style="display:inline-flex;gap:6px"></span>
+      <div style="flex:1"></div>
+      <label style="display:flex;align-items:center;gap:6px;color:#94a3b8;font-family:Barlow Condensed,sans-serif;font-size:13px">Jugador
+        <select id="bat-jugsel" onchange="renderBateriasPanel()" style="min-width:170px;padding:6px 10px;border-radius:7px;border:1px solid rgba(255,255,255,.15);background:#12132a;color:#e2e8f0;font-family:Barlow Condensed,sans-serif"></select>
+      </label>
+    </div>
+    <div id="bat-cont" style="overflow-x:auto"></div>
+  </div>
+</div>
 </body>
 </html>
 

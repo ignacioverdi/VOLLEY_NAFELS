@@ -44,6 +44,9 @@ button{font-family:inherit;cursor:pointer}
 .pubdot.on{background:var(--vis);animation:pulse 1.2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
 .spacer{flex:1}
+.bat-teambtns{display:inline-flex;gap:6px}
+.teambtn{background:var(--card,#151521);color:var(--mut,#8a8aa0);border:1px solid var(--b2);border-radius:8px;padding:6px 14px;font:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.teambtn.active{background:#2563eb;color:#fff;border-color:#2563eb}
 .tbtn2l{line-height:1.05;padding-top:5px;padding-bottom:5px;text-align:center}
 .tbtn{background:var(--card2);border:1px solid var(--b2);color:var(--txt);padding:4px 9px;border-radius:8px;font-weight:600;font-size:11.5px}
 .tbtn:hover{border-color:var(--mut)}
@@ -277,6 +280,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <button class="tbtn" onclick="openConfig()">Teclado y códigos</button>
   <button class="tbtn" onclick="exportDVW()">Exportar .dvw</button>
   <button class="tbtn" onclick="descargarSesion()">Bajar fichas</button>
+  <button class="tbtn" onclick="abrirBaterias()" title="Las 11 baterías calculadas de lo scouteado en vivo">🔋 Baterías</button>
   <span class="tbsep" style="width:1px;background:var(--b2);margin:0 4px"></span>
   <button class="tbtn" onclick="abrirPlan('armador')" title="Distribución del armador — en vivo">📋 Distribución armador</button>
   <button class="tbtn" onclick="abrirPlan('ataque')" title="Direcciones de ataque por zona — en vivo">🎯 Direcciones ataque</button>
@@ -284,6 +288,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <button class="tbtn" onclick="abrirPlan('recepcion')" title="Zonas de recepción — en vivo">🟠 Zonas recepción</button>
   <span class="tbsep" style="width:1px;background:var(--b2);margin:0 4px"></span>
   <button class="tbtn" onclick="abrirPlanPreparado()" title="Plan de partido que preparamos (para comparar con lo que pasa en vivo)">📖 Plan de partido</button>
+  <button class="tbtn" onclick="abrirBaterias()" title="Baterías del partido en vivo (rendimiento por batería)">🔋 Baterías</button>
   <button class="tbtn pri" onclick="closeSet()">Cerrar set</button>
 </div>
 
@@ -407,6 +412,20 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div>
 
 <!-- ====== MODAL: CONFIG ====== -->
+<div class="modal" id="m-bat"><div class="sheet" style="max-width:1050px">
+  <h2>Baterías <span style="font-size:13px;color:var(--mut);font-weight:400">— calculadas en vivo</span></h2>
+  <div class="brow" style="margin:8px 0 4px">
+    <span id="bat-equipos" class="teambtns"></span>
+    <div class="spacer" style="flex:1"></div>
+    <label style="font-size:12px;color:var(--mut)">Jugador
+      <select id="bat-jug" class="f" style="margin-left:6px" onchange="renderBat()"></select>
+    </label>
+  </div>
+  <div id="bat-cont" style="overflow-x:auto"></div>
+  <div class="sub" style="margin-top:6px">Las 11 baterías salen de los códigos cargados. Con pocas acciones, tomar con cuidado.</div>
+  <div class="brow"><button class="tbtn" onclick="closeModal('m-bat')">Cerrar</button></div>
+</div></div>
+
 <div class="modal" id="m-roster"><div class="sheet" style="max-width:520px">
   <h2 id="rv-tit">Validación de plantel</h2>
   <div class="sub">Manual 12.3. Compara los jugadores del partido con el plantel oficial guardado en Equipos.</div>
@@ -415,6 +434,22 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <button class="tbtn" onclick="abrirValidacion('home')">Revisar local</button>
     <button class="tbtn" onclick="abrirValidacion('away')">Revisar visitante</button>
     <button class="tbtn" onclick="closeModal('m-roster')">Cerrar</button>
+  </div>
+</div></div>
+
+<div class="modal" id="m-baterias"><div class="sheet" style="max-width:960px">
+  <h2>🔋 Baterías del partido</h2>
+  <div class="sub">Rendimiento por batería, calculado en vivo con lo que se scoutea. La marca blanca es el objetivo.</div>
+  <div class="brow" style="margin:10px 0;align-items:center;gap:10px">
+    <span id="bat-teambtns" class="bat-teambtns"></span>
+    <div style="flex:1"></div>
+    <label class="f" style="display:flex;align-items:center;gap:6px">Jugador
+      <select class="f" id="bat-jugsel" onchange="renderBateriasPanel()" style="min-width:160px"></select>
+    </label>
+  </div>
+  <div id="bat-cont" style="overflow-x:auto"></div>
+  <div class="brow" style="margin-top:10px">
+    <button class="tbtn" onclick="closeModal('m-baterias')">Cerrar</button>
   </div>
 </div></div>
 
@@ -704,6 +739,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 
 <script src="firebase.js" onerror="void 0"></script>
 <script src="plantel_nafels.js" onerror="void 0"></script>
+<script src="objetivos.js" onerror="void 0"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -1426,6 +1462,41 @@ function hhmmss(s){
   s = Math.max(0, Math.round(s||0));
   const h=Math.floor(s/3600), m=Math.floor((s%3600)/60), g=s%60;
   return (h?String(h)+':':'') + String(m).padStart(h?2:1,'0') + ':' + String(g).padStart(2,'0');
+}
+
+/* ══ BATERÍAS EN VIVO (manual: 11 baterías del motor oficial) ══ */
+var _batSide='home';
+function abrirBaterias(){
+  if(typeof window.bateriasVivo!=='function'){ toast('Faltan las baterías (objetivos.js)',true); return; }
+  _batSide='home';
+  pintarBotonesBatEquipo();
+  cargarSelectorJug();
+  renderBat();
+  document.getElementById('m-bat').classList.add('open');
+}
+function pintarBotonesBatEquipo(){
+  var c=document.getElementById('bat-equipos'); if(!c) return;
+  c.innerHTML=[['home','Nuestro equipo'],['away','Rival']].map(function(x){
+    return '<button class="teambtn'+(x[0]===_batSide?' active':'')+'" onclick="setBatSide(\''+x[0]+'\')">'+x[1]+'</button>';
+  }).join('');
+}
+function setBatSide(side){ _batSide=side; pintarBotonesBatEquipo(); cargarSelectorJug(); renderBat(); }
+function cargarSelectorJug(){
+  var pre=_batSide==='home'?'*':'a';
+  var nums={};
+  M.codes.filter(function(c){return c.k==='play' && c.c[0]===pre && /^\d\d/.test(c.c.slice(1));})
+    .forEach(function(c){ var n=parseInt(c.c.slice(1,3),10); if(n>0) nums[n]=true; });
+  var sel=document.getElementById('bat-jug');
+  var lista=Object.keys(nums).map(Number).sort(function(a,b){return a-b;});
+  sel.innerHTML='<option value="">— elegí un jugador —</option>'+
+    lista.map(function(n){ return '<option value="'+n+'">#'+n+' '+esc(nombreDe(n,_batSide)||'')+'</option>'; }).join('');
+}
+function renderBat(){
+  var pre=_batSide==='home'?'*':'a';
+  var res=window.bateriasVivo(M.codes.filter(function(c){return c.k==='play';}), pre);
+  var jn=document.getElementById('bat-jug').value;
+  var jugVals = jn ? (res.jugadores[jn]||{}) : {};
+  renderBaterias('bat-cont', jugVals, res.equipo||{}, 'BATERÍAS'+(jn?' · #'+jn:''));
 }
 
 function abrirVideo(){
@@ -2984,6 +3055,45 @@ function publicarVivo(){
 }
 /* accesos directos al Plan de Partido, en vivo y en la solapa elegida */
 /* abre el PLAN PREPARADO (datos del pasado) para comparar con lo que pasa en vivo */
+/* ── BATERÍAS EN VIVO ── */
+var _batLado = 'home';   /* home = nuestro equipo, away = rival */
+function abrirBaterias(){
+  if(typeof window.bateriasVivo!=='function'){ toast('Faltan las baterías (objetivos.js)',true); return; }
+  _batLado = 'home';
+  pintarBatBotonesEquipo();
+  llenarBatJugadores();
+  renderBateriasPanel();
+  document.getElementById('m-baterias').classList.add('open');
+}
+function pintarBatBotonesEquipo(){
+  var cont=document.getElementById('bat-teambtns'); if(!cont) return;
+  cont.innerHTML = [['home', M.home.name||'Nosotros'],['away', M.away.name||'Rival']].map(function(x){
+    return '<button class="teambtn'+(x[0]===_batLado?' active':'')+'" onclick="setBatLado(\''+x[0]+'\')">'+x[1]+'</button>';
+  }).join('');
+}
+function setBatLado(lado){ _batLado=lado; pintarBatBotonesEquipo(); llenarBatJugadores(); renderBateriasPanel(); }
+function llenarBatJugadores(){
+  var side = _batLado==='home' ? '*' : 'a';
+  var res = window.bateriasVivo(M.codes.filter(function(c){return c.k==='play';}), side);
+  var sel = document.getElementById('bat-jugsel');
+  var nums = Object.keys(res.jugadores).sort(function(a,b){return (+a)-(+b);});
+  var prev = sel.value;
+  sel.innerHTML = '<option value="">— Equipo completo —</option>' + nums.map(function(n){
+    var nn = parseInt(n,10);
+    return '<option value="'+nn+'">#'+nn+' '+nombreDe(nn,_batLado)+'</option>';
+  }).join('');
+  if(prev && sel.querySelector('option[value="'+prev+'"]')) sel.value=prev;
+}
+function renderBateriasPanel(){
+  var side = _batLado==='home' ? '*' : 'a';
+  var res = window.bateriasVivo(M.codes.filter(function(c){return c.k==='play';}), side);
+  var sel = document.getElementById('bat-jugsel');
+  var jugNum = sel.value ? parseInt(sel.value,10) : null;
+  var jugVals = jugNum!==null ? (res.jugadores[jugNum]||{}) : res.equipo;
+  var titulo = jugNum!==null ? ('#'+jugNum+' '+nombreDe(jugNum,_batLado)+' vs equipo') : 'Equipo completo';
+  renderBaterias('bat-cont', jugVals, res.equipo, titulo);
+}
+
 function abrirPlanPreparado(){
   window.open('plan_partido.html', '_blank');
 }
