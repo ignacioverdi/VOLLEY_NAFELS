@@ -281,6 +281,8 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <button class="tbtn" onclick="abrirPlan('ataque')" title="Direcciones de ataque por zona — en vivo">🎯 Direcciones ataque</button>
   <button class="tbtn" onclick="abrirPlan('saque')" title="Direcciones de saque — en vivo">🎾 Direcciones saque</button>
   <button class="tbtn" onclick="abrirPlan('recepcion')" title="Zonas de recepción — en vivo">🟠 Zonas recepción</button>
+  <span class="tbsep" style="width:1px;background:var(--b2);margin:0 4px"></span>
+  <button class="tbtn" onclick="abrirPlanPreparado()" title="Plan de partido que preparamos (para comparar con lo que pasa en vivo)">📖 Plan de partido</button>
   <button class="tbtn pri" onclick="closeSet()">Cerrar set</button>
 </div>
 
@@ -2980,6 +2982,11 @@ function publicarVivo(){
   }, 250);   /* pequeño retardo para no publicar en cada tecla, pero casi instantáneo */
 }
 /* accesos directos al Plan de Partido, en vivo y en la solapa elegida */
+/* abre el PLAN PREPARADO (datos del pasado) para comparar con lo que pasa en vivo */
+function abrirPlanPreparado(){
+  window.open('plan_partido.html', '_blank');
+}
+
 function abrirPlan(tab){
   const lado = (CFG.fichasTeam==='away') ? 'away' : 'home';
   const url = 'plan_partido.html?vivo=1&rival='+lado+'#'+tab;

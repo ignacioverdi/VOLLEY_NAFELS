@@ -516,6 +516,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <button class="hbtn" onclick="abrirPlan('ataque')" title="Direcciones de ataque — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">&#127919; Direcciones ataque</button>
 <button class="hbtn" onclick="abrirPlan('saque')" title="Direcciones de saque — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">&#127934; Direcciones saque</button>
 <button class="hbtn" onclick="abrirPlan('recepcion')" title="Zonas de recepción — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">&#128993; Zonas recepción</button>
+<button class="hbtn" onclick="abrirPlanPreparado()" title="Plan de partido que preparamos (para comparar con lo que pasa en vivo)" style="background:rgba(129,140,248,.12);color:#818cf8;border-color:rgba(129,140,248,.3)">&#128214; Plan de partido</button>
 <button class="hbtn reset-btn" onclick="confirmReset()">&#x25CF; Reset</button>
   </div>
 </header>
@@ -1311,6 +1312,9 @@ function renderTeamDV4(act){
    El panel de scouting publica VOLEY_DATA en Firebase en cada acción.
    Acá lo leemos y refrescamos solo. Si no hay Firebase, seguimos usando datos_voley.js */
 var _liveTS='';
+function abrirPlanPreparado(){
+  window.open('plan_partido.html', '_blank');
+}
 function abrirPlan(tab){
   // desde la tablet: abre el plan en vivo, en la solapa elegida (arranca en "nuestro equipo")
   window.open('plan_partido.html?vivo=1&rival=home#'+tab, '_blank');
