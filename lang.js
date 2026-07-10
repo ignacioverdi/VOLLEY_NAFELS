@@ -71,6 +71,7 @@
     fund_recepcion: { es:'Recepción',    en:'Reception',       de:'Annahme' },
     fund_bloqueo:   { es:'Bloqueo',      en:'Block',           de:'Block' },
     fund_armado:    { es:'Armado',       en:'Set',             de:'Zuspiel' },
+  fund_freeball: { es:'Freeball', de:'Freeball', en:'Freeball' },
     fund_defensa:   { es:'Defensa',      en:'Dig',             de:'Abwehr' },
 
     // --- Posiciones — alemán según VBL-Wiki / refs alemanas ---

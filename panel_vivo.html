@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panel en Vivo — Scouting de partido</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080810; --sur:#0f0f1a; --card:#13131f; --card2:#16162a;
+  --b:rgba(255,255,255,.07); --b2:rgba(255,255,255,.14);
+  --txt:#eeeef5; --mut:#6b6b84; --dim:#2a2a3a;
+  --loc:#fbbf24;      /* equipo local  */
+  --vis:#22d3ee;      /* equipo visitante */
+  --ok:#4ade80; --bad:#f87171; --warn:#fb923c;
+  --k-team:#a78bfa; --k-num:#f8fafc; --k-skill:#22d3ee; --k-type:#fbbf24;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:'Barlow',sans-serif;font-size:14px}
+button{font-family:inherit;cursor:pointer}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.cond{font-family:'Barlow Condensed',sans-serif}
+
+/* ---------- barra superior ---------- */
+.top{display:flex;align-items:center;gap:14px;padding:10px 16px;background:var(--sur);border-bottom:1px solid var(--b);position:sticky;top:0;z-index:20}
+.top h1{font-family:'Barlow Condensed';font-weight:800;letter-spacing:2px;font-size:19px;margin:0;text-transform:uppercase}
+.live{display:flex;align-items:center;gap:6px;font-family:'Barlow Condensed';font-weight:700;letter-spacing:1.5px;font-size:11px;color:var(--ok);border:1px solid rgba(74,222,128,.35);background:rgba(74,222,128,.08);padding:3px 9px;border-radius:20px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--ok);animation:pulse 1.6s infinite}
+.pubdot{width:6px;height:6px;border-radius:50%;background:var(--dim)}
+.pubdot.on{background:var(--vis);animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.spacer{flex:1}
+.tbtn{background:var(--card2);border:1px solid var(--b2);color:var(--txt);padding:7px 13px;border-radius:8px;font-weight:600;font-size:13px}
+.tbtn:hover{border-color:var(--mut)}
+.tbtn.pri{background:var(--ok);color:#06210f;border-color:transparent;font-weight:700}
+
+/* ---------- marcador ---------- */
+.board{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;padding:14px 16px;background:linear-gradient(180deg,var(--sur),transparent)}
+.tside{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--card);border:1px solid var(--b);border-radius:12px}
+.tside.away{flex-direction:row-reverse;text-align:right}
+.tname{font-family:'Barlow Condensed';font-weight:800;font-size:22px;letter-spacing:1px;line-height:1}
+.tside.home .tname{color:var(--loc)} .tside.away .tname{color:var(--vis)}
+.tmeta{font-size:11px;color:var(--mut);letter-spacing:.5px;margin-top:2px}
+.pts{font-family:'Barlow Condensed';font-weight:900;font-size:54px;line-height:.8;min-width:76px;text-align:center}
+.tside.home .pts{color:var(--loc)} .tside.away .pts{color:var(--vis)}
+.serveball{width:13px;height:13px;border-radius:50%;background:var(--dim);flex:0 0 auto}
+.serveball.on{background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.18)}
+.setbox{text-align:center;padding:6px 16px}
+.setnum{font-family:'Barlow Condensed';font-weight:800;letter-spacing:2px;font-size:12px;color:var(--mut)}
+.sets{font-family:'Barlow Condensed';font-weight:900;font-size:30px;letter-spacing:2px}
+
+/* ---------- grilla principal ---------- */
+.wrap{display:grid;grid-template-columns:minmax(240px,1fr) minmax(420px,1.5fr) minmax(280px,1fr);gap:12px;padding:0 16px 24px;align-items:start}
+.pane{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:12px}
+.pane h3{font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.6px;font-size:12px;text-transform:uppercase;color:var(--mut);margin:0 0 10px}
+
+/* rotación */
+.rot{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.zone{aspect-ratio:1;background:var(--card2);border:1px solid var(--b);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.zone .zn{position:absolute;top:3px;left:5px;font-size:9px;color:var(--dim);font-weight:700}
+.zone .pn{font-family:'Barlow Condensed';font-weight:900;font-size:24px;line-height:1}
+.zone.setter{border-color:currentColor}
+.zone.setter .pn{color:inherit}
+.home-c{color:var(--loc)} .away-c{color:var(--vis)}
+.zone.serving{box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+.libero{margin-top:6px;font-size:11px;color:var(--mut);text-align:center}
+.rowbtns{display:flex;gap:5px;margin-top:8px}
+.rowbtns button{flex:1;background:var(--card2);border:1px solid var(--b);color:var(--mut);border-radius:7px;padding:5px;font-size:11px;font-weight:600}
+.rowbtns button:hover{color:var(--txt);border-color:var(--b2)}
+.hbtn{float:right;background:var(--card2);border:1px solid var(--b);color:var(--mut);border-radius:6px;padding:2px 8px;font-size:10.5px;font-weight:600;letter-spacing:.4px}
+.hbtn:hover{color:var(--txt);border-color:var(--b2)}
+.sec > .tbtn{margin-bottom:12px}
+
+/* barra de scouting — el elemento firma */
+.scoutbar{background:var(--card2);border:1px solid var(--b2);border-radius:12px;padding:14px}
+#code{width:100%;background:transparent;border:none;outline:none;color:var(--txt);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:30px;letter-spacing:2px;text-align:center}
+#code::placeholder{color:var(--dim)}
+.decoder{display:flex;justify-content:center;gap:3px;margin-top:12px;min-height:52px}
+.seg{border:1px solid var(--b);border-radius:8px;padding:5px 10px;text-align:center;min-width:46px;background:rgba(255,255,255,.02)}
+.seg .sv{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:19px;line-height:1.1}
+.seg .sl{font-size:8.5px;letter-spacing:.8px;color:var(--mut);text-transform:uppercase;margin-top:3px}
+.seg.empty{opacity:.28}
+.seg.team .sv{color:var(--k-team)} .seg.num .sv{color:var(--k-num)}
+.seg.skill .sv{color:var(--k-skill)} .seg.type .sv{color:var(--k-type)}
+.seg.evalp .sv{color:var(--ok)} .seg.evaln .sv{color:var(--bad)} .seg.evalm .sv{color:var(--warn)}
+.seg.combo .sv{color:#f472b6} .seg.zone .sv{color:#38bdf8} .seg.hit .sv{color:#a3e635}
+.seg.blk .sv{color:#fb923c} .seg.spec .sv{color:#c084fc}
+.detail{margin-top:12px;display:grid;grid-template-columns:auto auto 1fr;gap:14px;align-items:start}
+.dcol label,.dstack label{display:block;font-size:9.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--mut);margin-bottom:5px;font-weight:600}
+.mini{display:grid;grid-template-columns:repeat(3,30px);gap:3px}
+.mini button{height:26px;background:var(--card2);border:1px solid var(--b);color:var(--mut);border-radius:5px;font-family:'JetBrains Mono';font-size:11px;font-weight:700;padding:0}
+.mini button:hover{border-color:var(--b2);color:var(--txt)}
+.mini button.on{background:#38bdf8;border-color:transparent;color:#04121f}
+.pills{display:flex;gap:4px;flex-wrap:wrap}
+.pills button{background:var(--card2);border:1px solid var(--b);color:var(--mut);border-radius:6px;padding:4px 9px;font-size:11.5px;font-weight:600}
+.pills button:hover{color:var(--txt)}
+.pills button.on{background:var(--txt);color:#0b0b14;border-color:transparent}
+select.mini2{background:var(--card2);border:1px solid var(--b);color:var(--txt);border-radius:6px;padding:5px 6px;font-family:inherit;font-size:12px;width:100%;outline:none}
+.dstack{display:flex;flex-direction:column;gap:9px;min-width:170px}
+.hint{text-align:center;font-size:11.5px;color:var(--mut);margin-top:8px;min-height:16px}
+.hint b{color:var(--txt);font-weight:600}
+.endrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.endbtn{padding:11px;border-radius:9px;border:1px solid var(--b2);font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.4px;font-size:14px;background:var(--card)}
+.endbtn.h{color:var(--loc);border-color:rgba(251,191,36,.35)} .endbtn.h:hover{background:rgba(251,191,36,.1)}
+.endbtn.a{color:var(--vis);border-color:rgba(34,211,238,.35)} .endbtn.a:hover{background:rgba(34,211,238,.1)}
+
+/* lista de códigos */
+.codes{max-height:340px;overflow:auto;font-family:'JetBrains Mono',monospace;font-size:12.5px}
+.crow{display:flex;gap:8px;padding:3px 6px;border-radius:5px}
+.crow:hover{background:var(--card2)}
+.crow .cc{flex:1}
+.crow.hteam .cc{color:var(--loc)} .crow.ateam .cc{color:var(--vis)}
+.crow.auto .cc{color:var(--warn);opacity:.85}
+.crow .del{color:var(--dim);border:none;background:none;font-size:13px;padding:0 3px}
+.crow .del:hover{color:var(--bad)}
+.empty-note{color:var(--dim);font-size:12px;text-align:center;padding:22px 8px;line-height:1.6;font-family:'Barlow'}
+
+/* tablas de stats — idénticas para ambos equipos */
+.stats{padding:0 16px 40px}
+.stats h3{font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.6px;font-size:12px;text-transform:uppercase;color:var(--mut);margin:0 0 10px}
+.twin{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{padding:5px 7px;text-align:right;border-bottom:1px solid var(--b)}
+th:first-child,td:first-child{text-align:left}
+th{font-family:'Barlow Condensed';font-weight:700;letter-spacing:1px;font-size:10.5px;text-transform:uppercase;color:var(--mut)}
+td.k{font-weight:600}
+td .num{font-family:'JetBrains Mono',monospace;font-size:12px}
+.pos{color:var(--ok)} .neg{color:var(--bad)}
+.tbl-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.tbl-head .tag{font-family:'Barlow Condensed';font-weight:800;letter-spacing:1px;font-size:15px}
+
+/* modales */
+.modal{position:fixed;inset:0;background:rgba(4,4,10,.82);display:none;align-items:center;justify-content:center;z-index:60;padding:20px}
+.modal.open{display:flex}
+.sheet{background:var(--sur);border:1px solid var(--b2);border-radius:16px;padding:22px;width:100%;max-width:860px;max-height:88vh;overflow:auto}
+.sheet h2{font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.5px;font-size:20px;margin:0 0 4px;text-transform:uppercase}
+.sheet .sub{color:var(--mut);font-size:12.5px;margin-bottom:18px}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+label.f{display:block;font-size:11px;letter-spacing:.7px;text-transform:uppercase;color:var(--mut);margin-bottom:4px;font-weight:600}
+input.f,select.f{width:100%;background:var(--card2);border:1px solid var(--b);color:var(--txt);border-radius:8px;padding:8px 10px;font-family:inherit;font-size:13px;outline:none}
+input.f:focus,select.f:focus{border-color:var(--b2)}
+.keycap{width:100%;background:var(--card2);border:1px solid var(--b);color:var(--txt);border-radius:8px;padding:8px;font-family:'JetBrains Mono',monospace;font-weight:700;text-align:center;cursor:pointer;font-size:13px}
+.keycap.listening{border-color:var(--ok);color:var(--ok);animation:pulse 1s infinite}
+.sec{margin-top:22px}
+.sec h4{font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.4px;font-size:13px;text-transform:uppercase;color:var(--txt);margin:0 0 3px}
+.sec p{color:var(--mut);font-size:12px;margin:0 0 12px;line-height:1.5}
+.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:24px;position:sticky;bottom:-22px;background:var(--sur);padding:14px 0 0}
+.ref{background:var(--card);border:1px solid var(--b);border-radius:10px;padding:12px;font-size:12px;color:var(--mut);line-height:1.7}
+.ref b{color:var(--txt)}
+.ref .mono{color:var(--k-skill)}
+.roster{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.chip{background:var(--card2);border:1px solid var(--b);border-radius:7px;padding:4px 9px;font-family:'JetBrains Mono',monospace;font-size:12px}
+.chip button{background:none;border:none;color:var(--dim);margin-left:5px;font-size:12px}
+.chip button:hover{color:var(--bad)}
+/* mini cancha del sexteto inicial */
+.lucourt{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--card2);border:1px solid var(--b);border-radius:10px;padding:8px}
+.lucell{position:relative;background:var(--card);border:1px solid var(--b);border-radius:8px;padding:14px 4px 6px;text-align:center}
+.lucell .zl{position:absolute;top:3px;left:6px;font-size:9px;font-weight:700;color:var(--dim)}
+.lucell .net{position:absolute;top:3px;right:6px;font-size:8px;color:var(--dim);letter-spacing:.5px}
+.lucell input{width:100%;background:transparent;border:none;outline:none;color:var(--txt);text-align:center;
+  font-family:'Barlow Condensed';font-weight:900;font-size:24px;padding:0}
+.lucell.isSetter{border-color:currentColor}
+.lucell .sbtn{display:block;margin:3px auto 0;background:none;border:none;color:var(--dim);font-size:8.5px;letter-spacing:.6px;cursor:pointer}
+.lucell.isSetter .sbtn{color:inherit;font-weight:700}
+.luwrap{display:flex;gap:8px;align-items:stretch}
+.lulib{flex:0 0 74px;background:var(--card2);border:1px dashed var(--b2);border-radius:10px;padding:8px 6px;text-align:center}
+.lulib .zl{font-size:9px;font-weight:700;color:var(--dim);letter-spacing:.5px}
+.lulib input{width:100%;background:transparent;border:none;outline:none;color:var(--txt);text-align:center;font-family:'Barlow Condensed';font-weight:900;font-size:24px;padding:6px 0 0}
+.netline{height:3px;background:linear-gradient(90deg,transparent,var(--b2),transparent);margin:2px 0 6px;border-radius:2px}
+.lutitle{font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.2px;font-size:13px;margin:0 0 6px;text-transform:uppercase}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--card2);border:1px solid var(--b2);border-radius:10px;padding:10px 18px;font-size:13px;z-index:80;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+.toast.err{border-color:rgba(248,113,113,.5);color:var(--bad)}
+@media(max-width:1100px){.wrap{grid-template-columns:1fr}.twin{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h1>Panel en Vivo</h1>
+  <span class="live"><span class="dot"></span>SCOUTING</span>
+  <span class="live" style="color:var(--vis);border-color:rgba(34,211,238,.35);background:rgba(34,211,238,.08)"><span class="pubdot" id="pubdot"></span>EN VIVO</span>
+  <div class="spacer"></div>
+  <button class="tbtn" onclick="openSetup()">Partido</button>
+  <button class="tbtn" onclick="openConfig()">Teclado y códigos</button>
+  <button class="tbtn" onclick="exportDVW()">Exportar .dvw</button>
+  <button class="tbtn" onclick="descargarSesion()">Bajar fichas</button>
+  <button class="tbtn pri" onclick="closeSet()">Cerrar set</button>
+</div>
+
+<div class="board">
+  <div class="tside home">
+    <span class="serveball" id="sb-h"></span>
+    <div><div class="tname" id="nm-h">LOCAL</div><div class="tmeta"><span id="to-h">0</span> TO · <span id="sub-h">0</span> cambios</div></div>
+    <div class="spacer"></div>
+    <div class="pts" id="pt-h">0</div>
+  </div>
+  <div class="setbox">
+    <div class="setnum">SET <span id="setno">1</span></div>
+    <div class="sets"><span id="sw-h">0</span>–<span id="sw-a">0</span></div>
+  </div>
+  <div class="tside away">
+    <span class="serveball" id="sb-a"></span>
+    <div><div class="tname" id="nm-a">VISITANTE</div><div class="tmeta"><span id="to-a">0</span> TO · <span id="sub-a">0</span> cambios</div></div>
+    <div class="spacer"></div>
+    <div class="pts" id="pt-a">0</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <!-- LOCAL -->
+  <div class="pane">
+    <h3 style="color:var(--loc)">Local · rotación</h3>
+    <div class="rot home-c" id="rot-h"></div>
+    <div class="libero" id="lb-h"></div>
+    <div class="rowbtns">
+      <button onclick="rotate('home',1)">Rotar ▸</button>
+      <button onclick="rotate('home',-1)">◂ Rotar</button>
+      <button onclick="timeout('home')">Tiempo</button>
+      <button onclick="subst('home')">Cambio</button>
+    </div>
+  </div>
+
+  <!-- CENTRO -->
+  <div class="pane">
+    <h3>Código de la jugada</h3>
+    <div class="scoutbar">
+      <input id="code" class="mono" placeholder="7#" autocomplete="off" spellcheck="false">
+      <div class="decoder" id="dec"></div>
+      <div class="hint" id="hint"></div>
+      <div class="detail">
+        <div class="dcol"><label>Desde — zona de inicio</label><div class="mini" id="mini-sz"></div></div>
+        <div class="dcol"><label>Hacia — zona de destino</label><div class="mini" id="mini-ez"></div></div>
+        <div class="dstack">
+          <div><label>Combinación</label><select class="mini2" id="sel-combo"></select></div>
+          <div><label>Subzona</label><div class="pills" id="pl-subz"></div></div>
+          <div><label id="lb-hit">Golpe</label><div class="pills" id="pl-hit"></div></div>
+          <div><label id="lb-blk">Bloqueadores</label><div class="pills" id="pl-blk"></div></div>
+          <div><label>Especial</label><select class="mini2" id="sel-spec"></select></div>
+        </div>
+      </div>
+      <div class="endrow">
+        <button class="endbtn h" onclick="endRally('home')">Punto Local</button>
+        <button class="endbtn a" onclick="endRally('away')">Punto Visitante</button>
+      </div>
+    </div>
+    <div style="margin-top:12px" class="ref">
+      Escribí el número y soltá <b>Enter</b>. Lo que falte lo completa con tus valores por defecto.
+      Para el visitante, empezá con <span class="mono">a</span> (ej. <span class="mono">a7#</span>).
+      Podés encadenar saque y recepción con un punto: <span class="mono">5S.8#</span>.
+    </div>
+  </div>
+
+  <!-- VISITANTE + códigos -->
+  <div class="pane">
+    <h3 style="color:var(--vis)">Visitante · rotación</h3>
+    <div class="rot away-c" id="rot-a"></div>
+    <div class="libero" id="lb-a"></div>
+    <div class="rowbtns">
+      <button onclick="rotate('away',1)">Rotar ▸</button>
+      <button onclick="rotate('away',-1)">◂ Rotar</button>
+      <button onclick="timeout('away')">Tiempo</button>
+      <button onclick="subst('away')">Cambio</button>
+    </div>
+    <h3 style="margin-top:16px">Acciones del set <button class="hbtn" onclick="undoLast()">Deshacer</button></h3>
+    <div class="codes" id="codes"></div>
+  </div>
+</div>
+
+<div class="stats">
+  <h3>Rendimiento en vivo — mismas referencias para los dos equipos</h3>
+  <div class="twin">
+    <div class="pane">
+      <div class="tbl-head"><span class="tag" style="color:var(--loc)" id="st-nm-h">LOCAL</span></div>
+      <table><thead><tr><th>Fund.</th><th>Tot</th><th>#</th><th>+</th><th>!</th><th>−</th><th>/</th><th>=</th><th>Pos%</th><th>Ef%</th></tr></thead><tbody id="st-h"></tbody></table>
+    </div>
+    <div class="pane">
+      <div class="tbl-head"><span class="tag" style="color:var(--vis)" id="st-nm-a">VISITANTE</span></div>
+      <table><thead><tr><th>Fund.</th><th>Tot</th><th>#</th><th>+</th><th>!</th><th>−</th><th>/</th><th>=</th><th>Pos%</th><th>Ef%</th></tr></thead><tbody id="st-a"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ====== MODAL: CONFIG ====== -->
+<div class="modal" id="m-config"><div class="sheet">
+  <h2>Teclado y códigos</h2>
+  <div class="sub">Se guarda en este dispositivo. Es tu configuración personal: no afecta a nadie más.</div>
+
+  <div class="sec">
+    <h4>Teclas de evaluación</h4>
+    <p>Hacé clic en una tecla y apretá la que quieras usar. Poné las seis juntas, de un lado del teclado.
+       De fábrica vienen las del manual de DataVolley, pero <b>ì è ù no existen en el teclado español</b>:
+       usá el preset de abajo y después ajustá lo que quieras.</p>
+    <button class="tbtn" onclick="applyPresetES()">Usar preset para teclado español</button>
+    <div class="fgrid" id="cfg-eval"></div>
+  </div>
+
+  <div class="sec">
+    <h4>Fin de jugada, puntos y rotación</h4>
+    <p>Fin de jugada asigna el punto, rota al equipo que hace side out y deja listo al próximo sacador.</p>
+    <div class="fgrid" id="cfg-cmd"></div>
+  </div>
+
+  <div class="sec">
+    <h4>Valores por defecto</h4>
+    <p>Lo que no escribas, se completa con esto. Con <span class="mono">Ataque / Alto / +</span>, escribir <span class="mono">7</span> registra <span class="mono">*07AH+</span>.</p>
+    <div class="fgrid">
+      <div><label class="f">Fundamento por defecto</label><select class="f" id="d-skill"></select></div>
+      <div><label class="f">Combinación por defecto (ataque)</label><select class="f" id="d-combo"></select></div>
+    </div>
+    <div style="margin-top:12px" class="fgrid" id="cfg-def"></div>
+  </div>
+
+  <div class="sec">
+    <h4>Caracteres personalizados</h4>
+    <p>El manual permite hasta 5 caracteres libres al final del código (4.1.4). Los códigos especiales ya vienen
+       definidos por DataVolley según el fundamento y la evaluación, así que no hace falta editarlos.</p>
+    <div class="fgrid">
+      <div><label class="f">Completar automáticamente</label><select class="f" id="d-auto">
+        <option value="0">No (código estándar de DataVolley)</option>
+        <option value="1">Sí — como los archivos de Näfels: diferencia de puntos + fila del jugador</option></select></div>
+    </div>
+    <div class="ref" style="margin-top:10px">La opción de Näfels <b>no es un estándar de DataVolley</b>: la dedujimos de sus
+      archivos (coincide en el 98% de las acciones). Dejala en "No" si querés el código puro del manual.</div>
+  </div>
+
+  <div class="sec">
+    <h4>Referencia del código</h4>
+    <div class="ref">
+      <b>Estructura:</b> <span class="mono">equipo · nº · fundamento · tipo · evaluación</span> → <span class="mono">*04AH#</span><br>
+      <b>Fundamentos:</b> <span class="mono">S</span> saque · <span class="mono">R</span> recepción · <span class="mono">A</span> ataque · <span class="mono">B</span> bloqueo · <span class="mono">D</span> defensa · <span class="mono">E</span> armado · <span class="mono">F</span> freeball<br>
+      <b>Tipos:</b> <span class="mono">H</span> alto · <span class="mono">M</span> medio · <span class="mono">Q</span> rápido · <span class="mono">T</span> tenso · <span class="mono">U</span> súper · <span class="mono">N</span> fast · <span class="mono">O</span> otro<br>
+      <b>Evaluaciones:</b> el símbolo es el mismo, pero significa distinto en cada fundamento. En ataque <span class="mono">/</span> es bloqueado; en bloqueo, invasión.
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="tbtn" onclick="resetConfig()">Volver a los valores de fábrica</button>
+    <button class="tbtn" onclick="closeModal('m-config')">Cancelar</button>
+    <button class="tbtn pri" onclick="saveConfig()">Guardar</button>
+  </div>
+</div></div>
+
+<!-- ====== MODAL: SETUP ====== -->
+<div class="modal" id="m-setup"><div class="sheet">
+  <h2>Partido</h2>
+  <div class="sub">Cargá los dos equipos, el seis inicial y quién saca.</div>
+  <div class="fgrid">
+    <div><label class="f">Local — nombre</label><input class="f" id="s-nmh" placeholder="San Lorenzo"></div>
+    <div><label class="f">Local — sigla</label><input class="f" id="s-cdh" maxlength="3" placeholder="SLO"></div>
+    <div><label class="f">Visitante — nombre</label><input class="f" id="s-nma" placeholder="Boca"></div>
+    <div><label class="f">Visitante — sigla</label><input class="f" id="s-cda" maxlength="3" placeholder="BOC"></div>
+  </div>
+
+  <div class="sec">
+    <h4>Seis inicial</h4>
+    <p>Poné el número de cada jugador en su casillero. La red está arriba, la zona 1 abajo a la derecha (quien saca).
+       Marcá el armador con «armador». El líbero va al costado.</p>
+    <div class="fgrid" style="grid-template-columns:1fr 1fr">
+      <div>
+        <div class="lutitle" style="color:var(--loc)">Local</div>
+        <div class="netline"></div>
+        <div class="luwrap">
+          <div class="lucourt home-c" id="lu-h"></div>
+          <div class="lulib"><div class="zl">LÍBERO</div><input class="mono" id="s-libh" inputmode="numeric"></div>
+        </div>
+      </div>
+      <div>
+        <div class="lutitle" style="color:var(--vis)">Visitante</div>
+        <div class="netline"></div>
+        <div class="luwrap">
+          <div class="lucourt away-c" id="lu-a"></div>
+          <div class="lulib"><div class="zl">LÍBERO</div><input class="mono" id="s-liba" inputmode="numeric"></div>
+        </div>
+      </div>
+    </div>
+    <div class="fgrid" style="margin-top:14px">
+      <div><label class="f">Saca</label><select class="f" id="s-serve"><option value="home">Local</option><option value="away">Visitante</option></select></div>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="tbtn" onclick="closeModal('m-setup')">Cancelar</button>
+    <button class="tbtn pri" onclick="saveSetup()">Empezar</button>
+  </div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script src="firebase.js" onerror="void 0"></script>
+<script src="plantel_nafels.js" onerror="void 0"></script>
+<script>
+/* ============================================================
+   CÓDIGO DATA VOLLEY — definiciones del manual
+   ============================================================ */
+const SKILLS = {S:'Saque',R:'Recepción',A:'Ataque',B:'Bloqueo',D:'Defensa',E:'Armado',F:'Freeball'};
+const TYPES  = {H:'Alto',M:'Medio',Q:'Rápido',T:'Tenso',U:'Súper',N:'Fast',O:'Otro'};  /* DV4 4.1.1 */
+const EVALS  = ['#','+','!','-','/','='];
+const HITS  = {H:'Potente',P:'Colocada',T:'Finta'};   /* ataque; ver SUBTYPE para el resto */
+const SUBZ  = ['A','B','C','D'];
+const ZGRID = [4,3,2,7,8,9,5,6,1];   /* red arriba, fondo abajo */
+/* Tablas oficiales, extraidas de los DVW de Näfels (76) + CASLA (1 extra) */
+const COMBOS={C0:"Shoot set in 5",C2:"Semi 2",C4:"Semi 4",C5:"Shoot set in 4",C6:"Shoot set in 2",C7:"Semi 5",C8:"Shoot set in 1",C9:"Semi 9",CB:"Slide near S",CD:"Slide away from setter",CF:"Slide moved from S",CS:"Slide far from S",G2:"Alta en 2",G3:"Alta en 3",G4:"Alta en 4",G5:"ALTA X 5",G8:"Alta en 6",G9:"Alta en 1",J1:"Corta",J2:"B",J3:"Corta Atras",J4:"Hatu",J5:"Caminada Atras",J7:"Zero one leg",J9:"Toque de 2 de Zaguer",JJ:"Toque de Armador",JY:"Toque de Segunda de",L1:"COMBINACION",P2:"Second hit to opponent court",PO:"Dump ball in 2",PP:"Setter Dump",PR:"Attack on opponent freeball",V0:"High A",V2:"Vendida en 2",V3:"High set to 3",V4:"Vendida en 4",V5:"Hut",V6:"Red",V8:"High D",V9:"High minus",VB:"High C",VP:"Pipe",VR:"High B",W1:"Interna 3 - 2",W2:"Rapida en 2",W3:"Internal 4 - 3",W4:"Rapida en 4",X0:"A (fast ball area 5)",X1:"Quick in front (4)",X2:"Quick ball back(5)",X3:"O hits in middle",X4:"O hits a 2nd step 4",X5:"Go",X6:"X",X7:"2",X8:"D",X9:"OH hits a 10",XA:"Pipe set to 6-5",XB:"C Quick Ball",XC:"4- hitter jumps away",XD:"2- hitter jumps away",XF:"Quick lower set behind",XG:"7-1 Gun",XL:"4-setter in area 2",XM:"Quick in Center",XO:"5 by the opposite",XP:"Bic",XQ:"5 by O with MB back",XR:"B Quick Ball",XS:"Slide by the opposite",XT:"OH hits in middle",Y1:"Internal 1 C",Y7:"Rapida en 5",Y8:"Pipe",Y9:"Rapida en 1",YD:"PIPE RED",YI:"PIPE BLUE"};
+const CALLS={K1:"K1",K2:"K2",K3:"K3",K4:"K4",K5:"K5",K6:"K6",K7:"K7",K8:"K8",K9:"K9",KB:"KB",KC:"KC",KD:"KD",KE:"KE",KF:"KF",KK:"KK",KM:"KM",KP:"KP",KS:"KS"};
+/* código EXTENDIDO (DV4 4.1.3): sub-tipo, jugadores, código especial */
+const SUBTYPE={
+ A:{H:'Remate potente',P:'Colocada / top spin',T:'Finta'},
+ B:{A:'Asistencia',T:'Intento'},
+ R:{L:'Por izquierda',R:'Por derecha',W:'Baja',O:'De arriba',M:'Línea media'},
+ D:{S:'Sobre remate',C:'Cobertura de remate',B:'Después del bloqueo',E:'Emergencia'}
+};
+/* "jugadores" (pos 13): significa otra cosa segun el fundamento */
+const PLAYERS={
+ A:{'0':'Sin bloqueo','1':'Bloqueo de 1','2':'Bloqueo de 2','3':'Bloqueo de 3'},
+ B:{'0':'Sin bloqueo','1':'Bloqueo de 1','2':'Bloqueo de 2','3':'Bloqueo de 3','4':'Bloqueo con hueco'},
+ R:{'1':'2 receptores, recibe el de izquierda','2':'2 receptores, recibe el de derecha','3':'3 receptores, recibe el de izquierda','4':'3 receptores, recibe el del centro','5':'3 receptores, recibe el de derecha','6':'4 receptores, recibe el de izquierda','7':'4 receptores, recibe el de centro-izquierda','8':'4 receptores, recibe el de centro-derecha','9':'4 receptores, recibe el de derecha'}
+};
+/* códigos especiales (DV4 4.1.3): dependen del fundamento Y de la evaluación */
+const SPECIALS={
+ A:{'#':{S:'Bloqueo afuera - lateral',O:'Bloqueo afuera - largo',F:'Bloqueo al piso',X:'Directo al piso',N:'Toca la red (let)'},
+    '=':{S:'Ataque afuera - lateral',O:'Ataque afuera - largo',N:'Ataque a la red',I:'Toque de red',Z:'Decisión del árbitro'},
+    '*':{C:'Bloqueo control',N:'Let'}},
+ B:{'=':{S:'Bloqueo afuera - lateral',O:'Bloqueo afuera - largo',F:'Pelota al piso',X:'Pelota entre las manos',N:'Manos - red',I:'Toque de red',P:'Sin salto',Z:'Decisión del árbitro'}},
+ R:{'=':{U:'Injugable',X:'Error de cuerpo',P:'Error de posición',Z:'Decisión del árbitro'}},
+ D:{'=':{U:'Injugable',X:'Error de cuerpo',P:'Error de posición',Z:'Decisión del árbitro'}},
+ F:{'=':{U:'Injugable',X:'Error de cuerpo',P:'Error de posición',Z:'Decisión del árbitro'}},
+ E:{'=':{U:'No se puede golpear',I:'Toque de red',Z:'Decisión del árbitro'}},
+ S:{'#':{N:'Let'},'=':{O:'Afuera - largo',L:'Afuera - izquierda',R:'Afuera - derecha',N:'A la red',Z:'Decisión del árbitro'},'*':{N:'Let'}}
+};
+function specialsFor(skill,ev){
+  const t=SPECIALS[skill]||{};
+  if(ev==='#'&&t['#']) return t['#'];
+  if(ev==='='&&t['=']) return t['='];
+  return t['*']||t['=']||{};
+}
+const SETTGT={F:'Adelante',B:'Atrás',C:'Centro',P:'Pipe',S:'Armador'};
+
+/* qué significa cada evaluación en cada fundamento (manual, cap. 3.1.1) */
+const EVAL_MEAN = {   /* DV4 4.1.1 — texto del manual */
+ S:{'=':'Error — red, afuera, pisada o falta de rotación','/':'Muy positivo — la recepción rival es muy pobre','-':'Flojo — el rival recibe positivo o perfecto','!':'Insuficiente — el rival recibe bien','+':'Positivo — la recepción rival es pobre','#':'Punto — el rival no recibe o pierde la pelota'},
+ R:{'=':'Error — no recibe, la pierde en el segundo toque o falta de rotación','/':'Muy pobre — la pelota va al campo rival o quedan en free ball','-':'Pobre — un solo ataque obligado','!':'Buena — fuera de los 3 m, varias combinaciones pero no todas','+':'Positiva — dentro de los 3 m, varias combinaciones pero no todas','#':'Perfecta — todas las combinaciones'},
+ A:{'=':'Error — afuera, red o invasión','/':'Bloqueado — el rival hace el punto','-':'Flojo — el rival defiende fácil y puede atacar','!':'Cubierto — bloqueado pero cubierto por su equipo','+':'Positivo — el rival defiende con dificultad y no puede atacar','#':'Punto'},
+ B:{'=':'Error — bloqueo afuera, red o pelota al campo propio','/':'Invasión — antena, red o pisada','-':'Flojo — no permite una defensa fácil','!':'Insuficiente — cubierto por el rival','+':'Positivo — permite una defensa positiva','#':'Punto'},
+ D:{'=':'Error — no defiende o termina el rally','/':'Muy pobre — la pelota va directo al campo rival','-':'Pobre — no permite construir ataque','!':'Cobertura positiva — permite atacar','+':'Positiva — defensa fácil que permite atacar','#':'Perfecta — defensa muy difícil o tras finta, permite atacar'},
+ E:{'=':'Error — red, afuera, dobles o invasión al armar','/':'Muy pobre — la pelota va al campo rival','-':'Pobre — armado impreciso, no facilita el ataque','!':'Personalizable por el usuario','+':'Positivo — el ataque va con bloqueo de 2 o 3','#':'Perfecto — el ataque va sin bloqueo o con 1'},
+ F:{'=':'Error — al piso o afuera','/':'Muy pobre — va al campo rival o los deja en free ball','-':'Pobre — un solo ataque obligado','!':'Suficiente — fuera de los 3 m, varias combinaciones pero no todas','+':'Positiva — dentro de los 3 m, varias combinaciones pero no todas','#':'Perfecta — todas las combinaciones'}
+};
+/* signo de la evaluación, para el color */
+const EVAL_SIGN = {'#':'p','+':'p','!':'m','-':'m','/':'n','=':'n'};
+/* en ataque y bloqueo, "/" es negativo; en saque y recepción "/" cambia de signo */
+const SIGN_OVERRIDE = {S:{'/':'p','+':'p','-':'m'}, R:{'/':'n'}, A:{'/':'n','!':'m'}, B:{'/':'n'}, D:{'/':'n'}};
+
+/* recepción → saque (manual: la evaluación del saque depende de la recepción rival) */
+const REC_TO_SERVE = {'=':'#','/':'/','-':'+','!':'!','+':'-','#':'-'};
+
+/* ============================================================
+   CONFIGURACIÓN PERSONAL (teclado + valores por defecto)
+   ============================================================ */
+const FACTORY = {
+  /* teclas de fábrica: las del manual (1.10.10). ì è ù no existen en teclado español -> ver "Preset español" */
+  keys:{ '=':'ì', '-':"'", '/':'è', '+':'+', '#':'ù',
+         endR:',', endL:'<',
+         ptHup:'F2', ptHdn:'F3', ptAup:'F6', ptAdn:'F7',
+         rotHup:'F4', rotHdn:'F5', rotAup:'F8', rotAdn:'F9' },
+  defSkill:'A', defCombo:'X5', customAuto:false, fichasTeam:'home', publicarVivo:true, fichasTeam:'home',
+  defType:{S:'Q',R:'Q',A:'H',B:'H',D:'H',E:'T',F:'H'},
+  defEval:{S:'+',R:'+',A:'+',B:'+',D:'+',E:'+',F:'+'},
+};
+const PRESET_ES = {'=':'x','-':'-','/':'ñ','+':'+','#':'p','!':'i', endR:',', endL:'.',
+  ptHup:'F2',ptHdn:'F3',ptAup:'F6',ptAdn:'F7',rotHup:'F4',rotHdn:'F5',rotAup:'F8',rotAdn:'F9'};
+let CFG = load('pv_cfg', JSON.parse(JSON.stringify(FACTORY)));
+if(!CFG.defCombo) CFG.defCombo = FACTORY.defCombo;
+if(CFG.customAuto===undefined) CFG.customAuto = false;
+let PICK = {combo:'',sz:'',ez:'',subz:'',hit:'',blk:'',spec:''};
+
+const CMD_LABELS = {endL:'Fin jugada · izquierda',endR:'Fin jugada · derecha',
+  ptHup:'Punto + Local',ptHdn:'Punto − Local',ptAup:'Punto + Visitante',ptAdn:'Punto − Visitante',
+  rotHup:'Rotar + Local',rotHdn:'Rotar − Local',rotAup:'Rotar + Visitante',rotAdn:'Rotar − Visitante'};
+
+function load(k,def){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):def; }catch(e){ return def; } }
+function save(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+
+/* ============================================================
+   ESTADO DEL PARTIDO
+   ============================================================ */
+const BLANK = {
+  set:1, serving:'home',
+  home:{name:'LOCAL',code:'LOC',lineup:[0,0,0,0,0,0],setter:0,libero:0,pts:0,sets:0,to:0,subs:0},
+  away:{name:'VISITANTE',code:'VIS',lineup:[0,0,0,0,0,0],setter:0,libero:0,pts:0,sets:0,to:0,subs:0},
+  codes:[]
+};
+let M = load('pv_match', JSON.parse(JSON.stringify(BLANK)));
+function persist(){ save('pv_match', M); if(typeof publicarVivo==='function') publicarVivo(); }
+
+/* ============================================================
+   PARSEO Y NORMALIZACIÓN DEL CÓDIGO
+   El código es posicional: equipo, número, fundamento, tipo, evaluación.
+   Lo que falta se completa con los valores por defecto (manual, 2.5.1).
+   ============================================================ */
+function parseOne(raw){
+  let s = (raw||'').trim();
+  if(!s) return null;
+  let team = 'home';
+  if(s[0]==='a' || s[0]==='A'){ team='away'; s=s.slice(1); }
+  else if(s[0]==='*'){ team='home'; s=s.slice(1); }
+
+  const m = s.match(/^(\d{1,2})/);
+  if(!m) return {err:'Falta el número del jugador'};
+  const num = parseInt(m[1],10);
+  s = s.slice(m[1].length);
+
+  let skill='', type='', ev='', rest='';
+  for(let i=0;i<s.length;i++){
+    const ch=s[i], u=ch.toUpperCase();
+    if(!skill && SKILLS[u]){ skill=u; continue; }
+    if(!type && TYPES[u]){ type=u; continue; }        /* manual 1.10.4: 7Q -> 07AQ+ aunque no se escriba el fundamento */
+    if(!ev && EVALS.indexOf(ch)>=0){ ev=ch; continue; }
+    rest = s.slice(i); break;
+  }
+  if(!skill) skill = CFG.defSkill;
+  if(!type)  type  = CFG.defType[skill] || 'H';
+  if(!ev)    ev    = CFG.defEval[skill] || '+';
+  return {team,num,skill,type,ev,d:parseTail(rest,skill,ev)};
+}
+
+/* --- cola extendida: combo(2) destinatario zonaIni zonaFin subzona golpe bloqueadores especial --- */
+function parseTail(s,skill,ev){
+  const d={combo:'',target:'',sz:'',ez:'',subz:'',hit:'',blk:'',spec:'',custom:''};
+  if(!s) return d;
+  if(s.indexOf('~')>=0){                       /* forma normalizada, posicional */
+    const g=i=>{const c=s[i]||''; return c==='~'?'':c;};
+    d.combo=(s.slice(0,2)==='~~')?'':s.slice(0,2).toUpperCase();
+    d.target=g(2); d.sz=g(3); d.ez=g(4); d.subz=g(5); d.hit=g(6); d.blk=g(7); d.spec=g(8);
+    d.custom = s.slice(9).replace(/~+$/,'').slice(0,5);   /* personalizados (DV4 4.1.4) */
+    return d;
+  }
+  let i=0;
+  const head=s.slice(0,2).toUpperCase();
+  if(COMBOS[head]||CALLS[head]){ d.combo=head; i=2; }
+  for(;i<s.length;i++){
+    const c=s[i], C=c.toUpperCase();
+    if(/[0-9]/.test(c)){ if(!d.hit){ if(!d.sz)d.sz=c; else if(!d.ez)d.ez=c; else d.blk=c; } else d.blk=c; }
+    else if(SUBZ.indexOf(C)>=0 && d.ez && !d.subz && !d.hit) d.subz=C;
+    else if(!d.hit && SUBTYPE[skill] && SUBTYPE[skill][C]) d.hit=C;
+    else if(skill==='E' && SETTGT[C] && !d.target) d.target=C;
+    else if(!d.spec && specialsFor(skill, ev||'=')[C]) d.spec=C;
+    else if(d.custom.length<5) d.custom += c;   /* lo que el programa no interpreta -> personalizado (DV4 4.1.4) */
+  }
+  return d;
+}
+function buildTail(d,a){
+  /* avanzado (combo, destinatario, zonas, subzona) + extendido (sub-tipo, jugadores, especial) */
+  const core=(d.combo||'~~')+(d.target||'~')+(d.sz||'~')+(d.ez||'~')+(d.subz||'~')+(d.hit||'~')+(d.blk||'~')+(d.spec||'~');
+  const cust = customFor(d,a);
+  if(!cust) return core.replace(/~+$/,'');
+  return core + cust;      /* los personalizados van siempre al final (DV4 4.1.4) */
+}
+/* CARACTERES PERSONALIZADOS (DV4 4.1.4): hasta 5, los define el usuario.
+   Lo que el programa no interpreta se guarda acá.
+   'convención Näfels' = lo que hace el scout de la liga suiza: diferencia de puntos + fila del jugador.
+   NO es un estándar de DataVolley: lo dedujimos de los archivos. */
+function customFor(d,a){
+  if(d.custom) return d.custom.slice(0,5);
+  if(!CFG.customAuto || !a) return '';
+  return scoreDiff(a.team) + rowOf(a);
+}
+function scoreDiff(team){
+  const mine=M[team].pts, theirs=M[team==='home'?'away':'home'].pts, d=mine-theirs;
+  if(d===0) return '00';
+  return (d>0?'+':'-') + Math.min(Math.abs(d),9);
+}
+function rowOf(a){
+  if('RADF'.indexOf(a.skill)<0) return '';
+  const z=M[a.team].lineup.indexOf(a.num)+1;
+  if(!z) return 'B';                       /* fuera de las seis = líbero */
+  return (z===2||z===3||z===4)?'F':'B';
+}
+/* lo tipeado + lo elegido con los botones */
+function merged(a){
+  const d=Object.assign({},a.d);
+  ['combo','sz','ez','subz','hit','blk','spec'].forEach(k=>{ if(!d[k]&&PICK[k]) d[k]=PICK[k]; });
+  if(a.skill==='A' && !d.combo) d.combo=CFG.defCombo;
+  return d;
+}
+
+/* saque.recepción encadenados con punto — manual 2.3.4.3 */
+function parseInput(raw){
+  const s=(raw||'').trim();
+  if(!s) return [];
+  /* manual 1.10.5: varios codigos en una linea, separados por espacio */
+  const chunks = s.split(/\s+/).filter(Boolean);
+  if(chunks.length>1){
+    let out=[];
+    for(const ch of chunks){ const r=parseChunk(ch); if(r.length && r[0].err) return r; out=out.concat(r); }
+    return out;
+  }
+  return parseChunk(s);
+}
+/* dot coding (DV4 2.3.4.3): une dos fundamentos correlacionados.
+   Pares que define el manual: Saque/Recepción, Ataque/Bloqueo, Ataque/Defensa. */
+const ATK_TO_BLK={'/':'#','=':'~','#':'=','+':'-','-':'+','!':'!'};   /* espejo ataque -> bloqueo */
+function parseChunk(s){
+  if(s.indexOf('.')>0){
+    const p=s.split('.');
+    if(p.length!==2) return [{err:'El punto une exactamente dos acciones'}];
+    const a=parseOne(p[0]); if(!a||a.err) return [a||{err:'Código vacío'}];
+    const rt = a.team==='home' ? 'a' : '*';
+    const b=parseOne(rt+p[1]); if(!b||b.err) return [b||{err:'Código vacío'}];
+
+    if(a.skill==='S' || (!b.skill_explicit && b.skill==='R')){        /* saque . recepción */
+      a.skill='S'; b.skill='R'; b.type=a.type;
+      a.ev = REC_TO_SERVE[b.ev] || a.ev;
+      const sz=a.d.sz||'', ez=b.d.sz||b.d.ez||'';
+      a.d.sz=sz; a.d.ez=ez; b.d.sz=sz; b.d.ez=ez;
+      return [a,b];
+    }
+    if(a.skill==='A'){                                                /* ataque . bloqueo o defensa */
+      if(b.skill!=='B' && b.skill!=='D') b.skill='B';
+      b.type=a.type;
+      if(b.skill==='B' && ATK_TO_BLK[a.ev] && ATK_TO_BLK[a.ev]!=='~') b.ev = b.ev || ATK_TO_BLK[a.ev];
+      if(a.d.ez && !b.d.ez) b.d.ez=a.d.ez;
+      return [a,b];
+    }
+    return [a,b];
+  }
+  const one=parseOne(s);
+  return one?[one]:[];
+}
+
+function fmt(a){
+  const pre = a.team==='home'?'*':'a';
+  return pre + String(a.num).padStart(2,'0') + a.skill + a.type + a.ev + buildTail(merged(a), a);
+}
+function signOf(skill,ev){
+  return (SIGN_OVERRIDE[skill] && SIGN_OVERRIDE[skill][ev]) || EVAL_SIGN[ev] || 'm';
+}
+
+/* ============================================================
+   DECODIFICADOR EN VIVO — el código, desarmado por posición
+   ============================================================ */
+function drawDecoder(){
+  const raw = document.getElementById('code').value;
+  const dec = document.getElementById('dec');
+  const hint= document.getElementById('hint');
+  if(!raw.trim()){ dec.innerHTML=''; hint.textContent=''; return; }
+
+  const parts = parseInput(raw);
+  if(parts.length && parts[0] && parts[0].err){
+    dec.innerHTML=''; hint.innerHTML='<b style="color:var(--bad)">'+parts[0].err+'</b>'; return;
+  }
+  const a = parts[0], d = merged(a);
+  const cls = {p:'evalp',m:'evalm',n:'evaln'}[signOf(a.skill,a.ev)];
+  const segs = [
+    ['team', a.team==='home'?'*':'a', a.team==='home'?'Local':'Visita'],
+    ['num',  String(a.num).padStart(2,'0'), 'Jugador'],
+    ['skill',a.skill, SKILLS[a.skill]],
+    ['type', a.type,  TYPES[a.type]],
+    [cls,    a.ev,    EVAL_MEAN[a.skill][a.ev]]
+  ];
+  if(d.combo)  segs.push(['combo',d.combo, COMBOS[d.combo]||CALLS[d.combo]||'Combinación']);
+  if(d.target) segs.push(['combo',d.target, SETTGT[d.target]||'Destino']);
+  if(d.sz)     segs.push(['zone',d.sz,'Desde']);
+  if(d.ez)     segs.push(['zone',d.ez,'Hacia']);
+  if(d.subz)   segs.push(['zone',d.subz,'Subzona']);
+  if(d.hit)    segs.push(['hit',d.hit,(SUBTYPE[a.skill]&&SUBTYPE[a.skill][d.hit])||HITS[d.hit]||'Sub-tipo']);
+  if(d.blk)    segs.push(['blk',d.blk,(PLAYERS[a.skill]&&PLAYERS[a.skill][d.blk])||'Jugadores']);
+  if(d.spec)   segs.push(['spec',d.spec,specialsFor(a.skill,a.ev)[d.spec]||'Especial']);
+  const _cu = customFor(d,a);
+  if(_cu) segs.push(['spec',_cu,'Personalizado']);
+  dec.innerHTML = segs.map(([c,v,l])=>'<div class="seg '+c+'"><div class="sv">'+v+'</div><div class="sl">'+l+'</div></div>').join('');
+  let h = 'Se registra <b>'+parts.map(fmt).join(' </b>·<b> ')+'</b>';
+  if(parts.length===2) h += ' — saque y recepción encadenados';
+  hint.innerHTML = h;
+}
+
+/* ============================================================
+   REGISTRO DE ACCIONES
+   ============================================================ */
+function pushCode(code, kind){ M.codes.push({c:code, k:kind||'play', set:M.set}); }
+function clearPick(){ PICK={combo:'',sz:'',ez:'',subz:'',hit:'',blk:'',spec:''}; drawPickers(); }
+function curEval(){
+  const el=document.getElementById('code');
+  const raw=el?el.value.trim():'';
+  if(raw){ const p=parseOne(raw); if(p&&!p.err) return p.ev; }
+  return CFG.defEval[CFG.defSkill]||'+';
+}
+function curSkill(){
+  const el=document.getElementById('code');
+  const raw = el? el.value.trim() : '';
+  if(raw){ const p=parseOne(raw); if(p && !p.err) return p.skill; }
+  return CFG.defSkill;
+}
+function pick(k,v){ PICK[k]=(PICK[k]===v)?'':v; drawPickers(); drawDecoder(); document.getElementById('code').focus(); }
+function drawPickers(){
+  const mk=(id,key)=>{ document.getElementById(id).innerHTML = ZGRID.map(z=>
+      '<button class="'+(PICK[key]==String(z)?'on':'')+'" onclick="pick(\''+key+'\',\''+z+'\')">'+z+'</button>').join(''); };
+  mk('mini-sz','sz'); mk('mini-ez','ez');
+  document.getElementById('pl-subz').innerHTML = SUBZ.map(z=>
+    '<button class="'+(PICK.subz===z?'on':'')+'" onclick="pick(\'subz\',\''+z+'\')">'+z+'</button>').join('');
+  const cs = curSkill();
+  const tbl = SUBTYPE[cs] || {};
+  document.getElementById('lb-hit').textContent = cs==='A'?'Golpe':(cs==='R'?'Tipo de recepción':(cs==='D'?'Tipo de defensa':'Sub-tipo'));
+  document.getElementById('pl-hit').innerHTML = Object.keys(tbl).length
+    ? Object.keys(tbl).map(h=>'<button class="'+(PICK.hit===h?'on':'')+'" onclick="pick(\'hit\',\''+h+'\')">'+tbl[h]+'</button>').join('')
+    : '<span style="color:var(--dim);font-size:11px">no aplica</span>';
+  const pl = PLAYERS[cs] || {};
+  document.getElementById('lb-blk').textContent = cs==='R' ? 'Quién recibe' : 'Bloqueadores';
+  document.getElementById('pl-blk').innerHTML = Object.keys(pl).length
+    ? Object.keys(pl).map(b=>'<button title="'+pl[b]+'" class="'+(PICK.blk===b?'on':'')+'" onclick="pick(\'blk\',\''+b+'\')">'+b+'</button>').join('')
+    : '<span style="color:var(--dim);font-size:11px">no aplica</span>';
+  const sc=document.getElementById('sel-combo');
+  if(!sc.options.length){
+    sc.innerHTML='<option value="">— combinación —</option>'+Object.keys(COMBOS).sort().map(c=>'<option value="'+c+'">'+c+' · '+COMBOS[c]+'</option>').join('')
+      +'<optgroup label="Llamada de armador">'+Object.keys(CALLS).map(c=>'<option value="'+c+'">'+c+'</option>').join('')+'</optgroup>';
+    sc.onchange=e=>{PICK.combo=e.target.value; drawDecoder();};
+  }
+  sc.value=PICK.combo;
+  const sp=document.getElementById('sel-spec');
+  const ce = curEval();
+  const tblS = specialsFor(cs,ce);
+  sp.innerHTML='<option value="">— ninguno —</option>'+Object.keys(tblS).map(k=>
+    '<option value="'+k+'"'+(PICK.spec===k?' selected':'')+'>'+k+' · '+tblS[k]+'</option>').join('');
+  sp.onchange=e=>{PICK.spec=e.target.value; drawDecoder();};
+}
+
+function commit(){
+  const inp = document.getElementById('code');
+  const parts = parseInput(inp.value);
+  if(!parts.length) return false;
+  if(parts[0].err){ toast(parts[0].err,true); return false; }
+  parts.forEach(a=>pushCode(fmt(a),'play'));
+  inp.value=''; clearPick(); drawDecoder(); renderCodes(); renderStats(); persist();
+  return true;
+}
+
+/* Fin de jugada: asigna el punto, rota si hubo side out, deja al próximo sacador */
+function endRally(winner){
+  const inp = document.getElementById('code');
+  if(inp.value.trim()) commit();
+
+  const t = M[winner];
+  t.pts++;
+  pushCode((winner==='home'?'*':'a')+'p'+String(M.home.pts).padStart(2,'0')+':'+String(M.away.pts).padStart(2,'0'),'auto');
+
+  if(M.serving !== winner){          // side out: gana quien recibía → rota y pasa a sacar
+    M.serving = winner;
+    rotate(winner,1,true);
+  }
+  renderAll(); persist();
+  inp.focus();
+}
+
+function undoLast(){
+  if(!M.codes.length) return;
+  const last = M.codes[M.codes.length-1];
+  if(last.k==='auto' && /p\d/.test(last.c)){        // deshacer un punto
+    const who = last.c[0]==='*'?'home':'away';
+    if(M[who].pts>0) M[who].pts--;
+  }
+  M.codes.pop(); renderAll(); persist();
+}
+
+/* ============================================================
+   ROTACIÓN — el sacador siempre está en zona 1
+   ============================================================ */
+function rotate(side,dir,silent){
+  const L = M[side].lineup;
+  if(L.every(x=>!x)) { if(!silent) toast('Cargá primero el seis inicial',true); return; }
+  if(dir>0) M[side].lineup = [L[1],L[2],L[3],L[4],L[5],L[0]];
+  else      M[side].lineup = [L[5],L[0],L[1],L[2],L[3],L[4]];
+  const z = M[side].lineup.indexOf(M[side].setter);
+  if(z>=0) pushCode((side==='home'?'*':'a')+'z'+(z+1),'auto');
+  if(!silent){ renderAll(); persist(); }
+}
+
+function timeout(side){ M[side].to++; pushCode((side==='home'?'*':'a')+'T','auto'); renderAll(); persist(); }
+
+function subst(side){
+  const out = prompt('¿Qué número sale?'); if(!out) return;
+  const inn = prompt('¿Qué número entra?'); if(!inn) return;
+  const i = M[side].lineup.indexOf(parseInt(out,10));
+  if(i<0){ toast('El '+out+' no está en cancha',true); return; }
+  M[side].lineup[i] = parseInt(inn,10);
+  M[side].subs++;
+  const P2=n=>String(parseInt(n,10)).padStart(2,'0');
+  pushCode((side==='home'?'*':'a')+'c'+P2(out)+':'+P2(inn),'auto');
+  renderAll(); persist();
+}
+
+function closeSet(){
+  const h=M.home.pts, a=M.away.pts;
+  if(h===a){ toast('El set no puede cerrar empatado',true); return; }
+  (h>a?M.home:M.away).sets++;
+  pushCode('**'+M.set+'set','auto');
+  M.set++; M.home.pts=0; M.away.pts=0;
+  renderAll(); persist();
+  toast('Set cerrado. Va el set '+M.set);
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+const ZONE_ORDER = [3,2,1,4,5,0];   // dibujo: fila de red (4,3,2) arriba, fondo (5,6,1) abajo
+function renderRot(side){
+  const el = document.getElementById(side==='home'?'rot-h':'rot-a');
+  const t = M[side];
+  el.innerHTML = ZONE_ORDER.map(i=>{
+    const zn=i+1, n=t.lineup[i];
+    const isSetter = n && n===t.setter;
+    const serving = (zn===1 && M.serving===side);
+    return '<div class="zone'+(isSetter?' setter':'')+(serving?' serving':'')+'">'+
+           '<span class="zn">'+zn+'</span><span class="pn">'+(n||'·')+'</span></div>';
+  }).join('');
+  document.getElementById(side==='home'?'lb-h':'lb-a').textContent = t.libero? ('Líbero '+t.libero) : '';
+}
+
+function renderCodes(){
+  const el = document.getElementById('codes');
+  const rows = M.codes.filter(c=>c.set===M.set);
+  if(!rows.length){ el.innerHTML='<div class="empty-note">Todavía no cargaste ninguna acción.<br>Escribí un número y apretá Enter.</div>'; return; }
+  el.innerHTML = rows.slice(-90).reverse().map((c,i)=>{
+    const cls = c.k==='auto' ? 'auto' : (c.c[0]==='*'?'hteam':'ateam');
+    return '<div class="crow '+cls+'"><span class="cc">'+c.c+'</span></div>';
+  }).join('');
+}
+
+function renderStats(){
+  ['home','away'].forEach(side=>{
+    const pre = side==='home'?'*':'a';
+    const rows = M.codes.filter(c=>c.k==='play' && c.c[0]===pre);
+    const body = document.getElementById(side==='home'?'st-h':'st-a');
+    const out=[];
+    Object.keys(SKILLS).forEach(sk=>{
+      const acts = rows.filter(c=>c.c[3]===sk);
+      if(!acts.length) return;
+      const n=acts.length, cnt={};
+      EVALS.forEach(e=>cnt[e]=acts.filter(c=>c.c[5]===e).length);
+      /* manual 2.2.5.2: positividad en saque, recepción, defensa y freeball; eficiencia en ataque, bloqueo y armado */
+      const usaPos = 'SRDF'.indexOf(sk)>=0;
+      const pos = (cnt['#']+cnt['+']+ (sk==='S'?cnt['/']:0));
+      const posP = Math.round(pos/n*100);
+      const errs = cnt['='] + (['A','B'].indexOf(sk)>=0?cnt['/']:0);
+      const efP  = Math.round((cnt['#']-errs)/n*100);
+      out.push('<tr><td class="k">'+SKILLS[sk]+'</td><td><span class="num">'+n+'</span></td>'+
+        EVALS.map(e=>'<td><span class="num">'+(cnt[e]||'·')+'</span></td>').join('')+
+        '<td><span class="num pos">'+(usaPos?posP+'%':'·')+'</span></td>'+
+        '<td><span class="num '+(efP<0?'neg':'pos')+'">'+(usaPos?'·':efP+'%')+'</span></td></tr>');
+    });
+    body.innerHTML = out.length? out.join('') : '<tr><td colspan="10" style="color:var(--dim);text-align:center;padding:18px">Sin acciones todavía</td></tr>';
+  });
+}
+
+function renderAll(){
+  document.getElementById('nm-h').textContent = M.home.name;
+  document.getElementById('nm-a').textContent = M.away.name;
+  document.getElementById('st-nm-h').textContent = M.home.name;
+  document.getElementById('st-nm-a').textContent = M.away.name;
+  document.getElementById('pt-h').textContent = M.home.pts;
+  document.getElementById('pt-a').textContent = M.away.pts;
+  document.getElementById('sw-h').textContent = M.home.sets;
+  document.getElementById('sw-a').textContent = M.away.sets;
+  document.getElementById('setno').textContent = M.set;
+  document.getElementById('to-h').textContent = M.home.to;
+  document.getElementById('to-a').textContent = M.away.to;
+  document.getElementById('sub-h').textContent = M.home.subs;
+  document.getElementById('sub-a').textContent = M.away.subs;
+  document.getElementById('sb-h').className = 'serveball'+(M.serving==='home'?' on':'');
+  document.getElementById('sb-a').className = 'serveball'+(M.serving==='away'?' on':'');
+  renderRot('home'); renderRot('away'); renderCodes(); renderStats(); drawPickers();
+}
+
+/* ============================================================
+   TECLADO
+   ============================================================ */
+function keyName(e){
+  if(e.key.startsWith('F') && e.key.length<=3) return e.key;
+  return e.key;
+}
+document.addEventListener('keydown', e=>{
+  if(document.querySelector('.modal.open')) return;
+  const k = keyName(e), K = CFG.keys;
+
+  if(k===K.endL){ e.preventDefault(); endRally('home'); return; }
+  if(k===K.endR){ e.preventDefault(); endRally('away'); return; }
+  const adj = {[K.ptHup]:['home','pts',1],[K.ptHdn]:['home','pts',-1],[K.ptAup]:['away','pts',1],[K.ptAdn]:['away','pts',-1]};
+  if(adj[k]){ e.preventDefault(); const [s,f,d]=adj[k]; M[s][f]=Math.max(0,M[s][f]+d); renderAll(); persist(); return; }
+  const rots = {[K.rotHup]:['home',1],[K.rotHdn]:['home',-1],[K.rotAup]:['away',1],[K.rotAdn]:['away',-1]};
+  if(rots[k]){ e.preventDefault(); rotate(...rots[k]); return; }
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='a'){ e.preventDefault(); undoLast(); return; }   /* manual 1.10.7 */
+
+  const inp = document.getElementById('code');
+  if(document.activeElement!==inp) return;
+  if(e.key==='Enter'){ e.preventDefault(); commit(); return; }
+  // teclas remapeadas de evaluación
+  for(const ev of EVALS){ if(k===CFG.keys[ev]){ e.preventDefault(); inp.value+=ev; drawDecoder(); return; } }
+});
+document.getElementById('code').addEventListener('input', function(){ drawDecoder(); drawPickers(); });
+
+/* ============================================================
+   MODALES
+   ============================================================ */
+function closeModal(id){ document.getElementById(id).classList.remove('open'); document.getElementById('code').focus(); }
+let listening=null;
+
+function openConfig(){
+  const ev = document.getElementById('cfg-eval');
+  ev.innerHTML = EVALS.map(e=>'<div><label class="f">'+e+' &nbsp;<span style="color:var(--dim)">'+EVAL_MEAN.A[e]+' en ataque</span></label>'+
+      '<div class="keycap" data-key="'+e+'" onclick="listen(this)">'+(CFG.keys[e]||'—')+'</div></div>').join('');
+  const cm = document.getElementById('cfg-cmd');
+  cm.innerHTML = Object.keys(CMD_LABELS).map(k=>'<div><label class="f">'+CMD_LABELS[k]+'</label>'+
+      '<div class="keycap" data-key="'+k+'" onclick="listen(this)">'+(CFG.keys[k]||'—')+'</div></div>').join('');
+  const ds = document.getElementById('d-skill');
+  ds.innerHTML = Object.keys(SKILLS).map(s=>'<option value="'+s+'"'+(CFG.defSkill===s?' selected':'')+'>'+SKILLS[s]+'</option>').join('');
+  document.getElementById('d-combo').innerHTML = Object.keys(COMBOS).sort().map(c=>'<option value="'+c+'"'+(CFG.defCombo===c?' selected':'')+'>'+c+' · '+COMBOS[c]+'</option>').join('');
+  document.getElementById('d-auto').value = CFG.customAuto ? '1' : '0';
+  const df = document.getElementById('cfg-def');
+  df.innerHTML = Object.keys(SKILLS).map(s=>
+    '<div><label class="f">'+SKILLS[s]+'</label><div style="display:flex;gap:5px">'+
+    '<select class="f" id="dt-'+s+'">'+Object.keys(TYPES).map(t=>'<option value="'+t+'"'+(CFG.defType[s]===t?' selected':'')+'>'+TYPES[t]+'</option>').join('')+'</select>'+
+    '<select class="f" id="de-'+s+'" style="max-width:70px">'+EVALS.map(e=>'<option value="'+e+'"'+(CFG.defEval[s]===e?' selected':'')+'>'+e+'</option>').join('')+'</select>'+
+    '</div></div>').join('');
+  document.getElementById('m-config').classList.add('open');
+}
+function listen(el){
+  if(listening) listening.classList.remove('listening');
+  listening = el; el.classList.add('listening'); el.textContent='…';
+  const h = e=>{ e.preventDefault(); el.textContent = keyName(e); el.classList.remove('listening');
+                 document.removeEventListener('keydown',h,true); listening=null; };
+  document.addEventListener('keydown',h,true);
+}
+function saveConfig(){
+  document.querySelectorAll('#cfg-eval .keycap, #cfg-cmd .keycap').forEach(el=>{
+    const t=el.textContent.trim(); if(t && t!=='…' && t!=='—') CFG.keys[el.dataset.key]=t;
+  });
+  CFG.defSkill = document.getElementById('d-skill').value;
+  CFG.defCombo = document.getElementById('d-combo').value;
+  CFG.customAuto = document.getElementById('d-auto').value==='1';
+  Object.keys(SKILLS).forEach(s=>{
+    CFG.defType[s] = document.getElementById('dt-'+s).value;
+    CFG.defEval[s] = document.getElementById('de-'+s).value;
+  });
+  save('pv_cfg',CFG); closeModal('m-config'); drawPickers(); drawDecoder(); toast('Configuración guardada');
+}
+function applyPresetES(){
+  Object.keys(PRESET_ES).forEach(k=>CFG.keys[k]=PRESET_ES[k]);
+  save('pv_cfg',CFG); closeModal('m-config'); openConfig(); toast('Teclas listas para teclado español');
+}
+function resetConfig(){ CFG = JSON.parse(JSON.stringify(FACTORY)); save('pv_cfg',CFG); closeModal('m-config'); openConfig(); toast('Volvió a los valores de fábrica'); }
+
+/* la mini cancha: red arriba (zonas 4-3-2), fondo abajo (5-6-1). Zona 1 = quien saca. */
+const LU_GRID=[4,3,2,5,6,1];
+let LU={home:{n:{},setter:0}, away:{n:{},setter:0}};
+
+function drawLineup(side){
+  const el=document.getElementById(side==='home'?'lu-h':'lu-a');
+  el.innerHTML = LU_GRID.map(z=>{
+    const val = LU[side].n[z]||'';
+    const isS = val && String(val)===String(LU[side].setter);
+    return '<div class="lucell'+(isS?' isSetter':'')+'" id="lc-'+side+'-'+z+'">'+
+      '<span class="zl">'+z+'</span>'+((z===4||z===3||z===2)?'<span class="net">RED</span>':'')+
+      '<input inputmode="numeric" value="'+val+'" oninput="luSet(\''+side+'\','+z+',this.value)">'+
+      '<button class="sbtn" onclick="luSetter(\''+side+'\','+z+')">'+(isS?'ARMADOR':'armador')+'</button>'+
+      '</div>';
+  }).join('');
+}
+function luSet(side,z,v){
+  v=(v||'').replace(/\D/g,'').slice(0,2);
+  LU[side].n[z]=v;
+  const cell=document.getElementById('lc-'+side+'-'+z);
+  const inp=cell.querySelector('input'); if(inp.value!==v) inp.value=v;
+  const isS = v && String(v)===String(LU[side].setter);
+  cell.classList.toggle('isSetter', !!isS);
+}
+function luSetter(side,z){
+  const v=LU[side].n[z];
+  if(!v){ toast('Primero poné el número en esa zona',true); return; }
+  LU[side].setter = (String(LU[side].setter)===String(v)) ? 0 : parseInt(v,10);
+  drawLineup(side);
+}
+
+function openSetup(){
+  const V=(id,v)=>document.getElementById(id).value=v;
+  V('s-nmh',M.home.name==='LOCAL'?'':M.home.name); V('s-nma',M.away.name==='VISITANTE'?'':M.away.name);
+  V('s-cdh',M.home.code); V('s-cda',M.away.code);
+  V('s-libh',M.home.libero||''); V('s-liba',M.away.libero||'');
+  V('s-serve',M.serving);
+  ['home','away'].forEach(side=>{
+    LU[side]={n:{},setter:M[side].setter||0};
+    M[side].lineup.forEach((num,i)=>{ if(num) LU[side].n[i+1]=String(num); });
+    drawLineup(side);
+  });
+  document.getElementById('m-setup').classList.add('open');
+}
+
+function saveSetup(){
+  const G=id=>document.getElementById(id).value;
+  const read=side=>{
+    const arr=[];
+    for(let z=1; z<=6; z++){ const v=parseInt(LU[side].n[z],10); if(!v) return null; arr.push(v); }
+    return arr;   /* arr[0] = zona 1, arr[1] = zona 2, ... */
+  };
+  const lh=read('home'), la=read('away');
+  if(!lh||!la){ toast('Faltan jugadores: cada equipo necesita los 6 casilleros',true); return; }
+  const dup=a=>new Set(a).size!==a.length;
+  if(dup(lh)||dup(la)){ toast('Hay un número repetido en la cancha',true); return; }
+  if(!LU.home.setter||!LU.away.setter){ toast('Marcá el armador de cada equipo',true); return; }
+
+  M.home.name=(G('s-nmh')||'LOCAL').toUpperCase(); M.away.name=(G('s-nma')||'VISITANTE').toUpperCase();
+  M.home.code=(G('s-cdh')||'LOC').toUpperCase();   M.away.code=(G('s-cda')||'VIS').toUpperCase();
+  M.home.lineup=lh; M.away.lineup=la;
+  M.home.setter=LU.home.setter; M.away.setter=LU.away.setter;
+  M.home.libero=parseInt(G('s-libh'),10)||0; M.away.libero=parseInt(G('s-liba'),10)||0;
+  M.serving=G('s-serve');
+  ['home','away'].forEach(sd=>{
+    const pre = sd==='home'?'*':'a';
+    if(M[sd].setter) pushCode(pre+'P'+String(M[sd].setter).padStart(2,'0'),'auto');
+    const z=M[sd].lineup.indexOf(M[sd].setter); if(z>=0) pushCode(pre+'z'+(z+1),'auto');
+  });
+  closeModal('m-setup'); renderAll(); persist(); toast('Listo, a scoutear');
+}
+
+
+/* ============================================================
+   FICHAS — compatibilidad con el panel de Näfels
+   Genera window.VOLEY_DATA con la MISMA estructura que scout_vivo.js,
+   para que panel_voley.html siga dibujando fichas, tablas y gráficos.
+   Escala de valores: 1=#  2=+  3=!  4=-  5=/  6==   (igual que DataVolley)
+   ============================================================ */
+const DV4_CAT={}, DV4_ORIG={};
+(function(){
+  ['X1','XM','XG','XC','XD','X7','CB','CF','CD','J1','J4','J2','J3','J5'].forEach(k=>DV4_CAT[k]='C');
+  ['G4','G2','G8','G9','V5','V0','V6','V8','VB','VP','VR','V4','V3','V2'].forEach(k=>DV4_CAT[k]='V');
+  ['W4','W2','Y9','Y8','PR','JJ','PP','C5','C0','C6','C8','X5','X0','X6','X8','XB','XP','XR','XT','X3','X4'].forEach(k=>DV4_CAT[k]='X');
+  ['X1','XM','XG','XC','XD','X7','CB','CF','CD','J1','J4','J2','J3','J5'].forEach(k=>DV4_ORIG[k]=3);
+  ['G4','V5','W4','X9','X2','X5','X0','C5','V0','V4'].forEach(k=>DV4_ORIG[k]=4);
+  ['XB','XP','XR','VB','VP','VR','Y8','G8'].forEach(k=>DV4_ORIG[k]=8);
+  ['X3','X4','X6','C6','V6','W2','G2','V2'].forEach(k=>DV4_ORIG[k]=2);
+  ['X8','C8','V8','Y9','G9'].forEach(k=>DV4_ORIG[k]=9);
+})();
+/* tipo de saque/recepción: DataVolley -> el bucket de las fichas */
+const SRV_BUCKET={H:'F',M:'M',Q:'Q'};
+function z7(){return [0,0,0,0,0,0,0];}
+function inc7(a,v){ if(v>=1&&v<=6){ a[v-1]++; a[6]++; } }
+function evVal(ev){ const i=EVALS.indexOf(ev); return i<0?0:i+1; }   /* # + ! - / =  ->  1..6 */
+function nuevoJugador(c,n){
+  return {c:c,n:(n||String(c)),a:true,
+    rM:z7(),rQ:z7(),rF:z7(),rT:z7(),
+    sM:z7(),sQ:z7(),sF:z7(),sT:z7(),sOrig:'',sDest:'',
+    aC:z7(),aCT:z7(),aV:z7(),aVT:z7(),aX:z7(),aXT:z7(),aT:z7(),aTT:z7(),
+    bT:z7(),
+    /* nuevos: el scout viejo no los registraba */
+    dT:z7(),   /* defensa  */
+    eT:z7(),   /* armado   */
+    fT:z7(),   /* freeball */
+    dv4:{}};
+}
+function nombreDe(num){
+  const P = window.PLANTEL_NAFELS;
+  if(P && P.length){ const j=P.find(x=>String(x.c)===String(num)); if(j) return j.n; }
+  return String(num);
+}
+/* desarma un código normalizado en sus campos */
+function splitCode(c){
+  const g=i=>{const ch=c[i]||''; return ch==='~'?'':ch;};
+  return {team:c[0]==='*'?'home':'away', num:parseInt(c.slice(1,3),10),
+    skill:c[3], type:c[4], ev:c[5],
+    combo:(c.slice(6,8)==='~~'||c.length<8)?'':c.slice(6,8),
+    sz:g(9), ez:g(10), subz:g(11), hit:g(12), blk:g(13), spec:g(14)};
+}
+function buildVoleyData(side){
+  const pre = side==='home'?'*':'a';
+  const VD = {ts:new Date().toTimeString().slice(0,5), j:[]};
+  const P = window.PLANTEL_NAFELS;
+  if(P && P.length) P.forEach(p=>VD.j.push(nuevoJugador(p.c,p.n)));
+  const find=num=>{ let j=VD.j.find(x=>x.c===num); if(!j){ j=nuevoJugador(num,nombreDe(num)); VD.j.push(j); } return j; };
+
+  M.codes.filter(c=>c.k==='play' && c.c[0]===pre).forEach(row=>{
+    const a=splitCode(row.c), v=evVal(a.ev);
+    if(!v || !a.num) return;
+    const j=find(a.num);
+    if(a.skill==='R'){
+      const b=SRV_BUCKET[a.type]; if(b) inc7(j['r'+b],v);
+      inc7(j.rT,v);
+    } else if(a.skill==='S'){
+      const b=SRV_BUCKET[a.type]; if(b) inc7(j['s'+b],v);
+      inc7(j.sT,v);
+      if(a.sz){ j.sOrig=String(a.sz); j.sDest=String(a.ez||''); }
+    } else if(a.skill==='A'){
+      const cat = DV4_CAT[a.combo] || '';
+      if(cat) inc7(j['a'+cat],v);
+      inc7(j.aT,v);
+      if(a.combo){
+        if(!j.dv4[a.combo]) j.dv4[a.combo]={v:z7(),orig:0,dest:''};
+        inc7(j.dv4[a.combo].v,v);
+        const zo = a.sz? parseInt(a.sz,10) : (DV4_ORIG[a.combo]||0);
+        if(zo) j.dv4[a.combo].orig=zo;
+        if(a.ez) j.dv4[a.combo].dest = (j.dv4[a.combo].dest? j.dv4[a.combo].dest+'-' : '') + a.ez;
+      }
+      if(a.hit==='T' && v===1){ if(cat) inc7(j['a'+cat+'T'],1); inc7(j.aTT,1); }   /* finta ganadora */
+    } else if(a.skill==='B'){
+      inc7(j.bT,v);
+    } else if(a.skill==='D'){
+      inc7(j.dT,v);
+    } else if(a.skill==='E'){
+      inc7(j.eT,v);
+    } else if(a.skill==='F'){
+      inc7(j.fT,v);
+    }
+  });
+  return VD;
+}
+/* ── PUBLICACIÓN EN VIVO ──────────────────────────────────────
+   Cada acción actualiza VOLEY_DATA en Firebase. El panel de análisis
+   lo lee y se refresca solo: no hay que bajar ni publicar nada. */
+let _pubT=null, _pubUlt=0;
+function publicarVivo(){
+  if(CFG.publicarVivo===false) return;
+  if(typeof fbSet!=='function') return;
+  clearTimeout(_pubT);
+  _pubT=setTimeout(function(){
+    try{
+      const VD=buildVoleyData(CFG.fichasTeam||'home');
+      window.VOLEY_DATA=VD;
+      fbSet('voley_data', VD);
+      fbSet('voley_live', {
+        ts:new Date().toISOString(),
+        set:M.set, serving:M.serving,
+        local:{n:M.home.name, pts:M.home.pts, sets:M.home.sets},
+        visitante:{n:M.away.name, pts:M.away.pts, sets:M.away.sets},
+        acciones:M.codes.filter(c=>c.k==='play').length
+      });
+      _pubUlt=Date.now();
+      const el=document.getElementById('pubdot'); if(el) el.className='pubdot on';
+    }catch(e){}
+  }, 800);   /* no golpeamos Firebase en cada tecla */
+}
+function bajar(nombre,contenido){
+  const b=new Blob([contenido],{type:'text/plain'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(b); a.download=nombre;
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{document.body.removeChild(a); URL.revokeObjectURL(a.href);},100);
+}
+function descargarSesion(){
+  const side = CFG.fichasTeam || 'home';
+  const VD = buildVoleyData(side);
+  window.VOLEY_DATA = VD;
+  const fecha = new Date().toISOString().slice(0,10);
+  bajar('datos_voley.js','window.VOLEY_DATA='+JSON.stringify(VD)+';');
+  const sesion = {fecha:fecha, tipo:'P', generado:new Date().toISOString(),
+    marcador:{sets:[M.home.sets,M.away.sets], puntos:[M.home.pts,M.away.pts]},
+    equipos:{local:M.home.name, visitante:M.away.name},
+    log:M.codes, roster:VD.j.map(p=>({c:p.c,n:p.n})), voley_data:VD};
+  bajar('partido_vivo_'+fecha+'.json', JSON.stringify(sesion,null,2));
+  toast('Bajé datos_voley.js y el .json de la sesión');
+}
+
+/* ============================================================
+   EXPORTAR .dvw
+   ============================================================ */
+function exportDVW(){
+  const d=new Date(), pad=n=>String(n).padStart(2,'0');
+  const fecha = pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear();
+  const L=[];
+  L.push('[3DATAVOLLEYSCOUT]','Panel en Vivo;;;;;;;;');
+  L.push('[3MATCH]', fecha+';;;;;;;;;');
+  L.push('[3TEAMS]');
+  L.push('1;'+M.home.code+';'+M.home.name+';'+M.home.sets+';;;;;;;;');
+  L.push('2;'+M.away.code+';'+M.away.name+';'+M.away.sets+';;;;;;;;');
+  ['home','away'].forEach(s=>{
+    L.push(s==='home'?'[3PLAYERS-H]':'[3PLAYERS-V]');
+    M[s].lineup.filter(Boolean).forEach((n,i)=>L.push('0;'+(i+1)+';'+n+';;;;;;;;;;'+(n===M[s].libero?'L':'')+';'));
+  });
+  L.push('[3ATTACKCOMBINATION]');
+  Object.keys(COMBOS).sort().forEach(c=>L.push(c+';;;;'+COMBOS[c]+';'));
+  L.push('[3SETTERCALL]');
+  Object.keys(CALLS).forEach(c=>L.push(c+';;'));
+  L.push('[3SCOUT]');
+  M.codes.forEach(c=>L.push(c.c+';;;;;;;;'+c.set+';;;;;;;;;;;;'));
+  const blob = new Blob([L.join('\r\n')],{type:'text/plain'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='&'+M.home.code+'-'+M.away.code+'.dvw';
+  a.click();
+  toast('Archivo descargado');
+}
+
+function toast(msg,err){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast show'+(err?' err':'');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.className='toast',2200);
+}
+
+/* arranque */
+renderAll();
+document.getElementById('code').focus();
+if(M.home.lineup.every(x=>!x)) openSetup();
+</script>
+</body>
+</html>
