@@ -52,6 +52,7 @@ button{font-family:inherit;cursor:pointer}
 /* ---------- grilla principal ---------- */
 .wrap{display:grid;grid-template-columns:minmax(124px,.46fr) minmax(380px,1.85fr) minmax(200px,.8fr);gap:9px;padding:0 12px 10px;align-items:start}
 .pane{background:var(--card);border:1px solid var(--b);border-radius:10px;padding:9px}
+.col{display:flex;flex-direction:column;gap:9px}
 .pane h3{font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.6px;font-size:10.5px;text-transform:uppercase;color:var(--mut);margin:0 0 7px}
 
 /* rotación */
@@ -81,6 +82,14 @@ button{font-family:inherit;cursor:pointer}
 .scoutbar:has(#code.warn){border-color:rgba(251,146,60,.45)}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 #code.shake{animation:shake .3s}
+.extmenu{display:none;margin-top:8px;background:var(--card2);border:1px solid var(--b2);border-radius:9px;padding:8px}
+.extmenu.open{display:block}
+.exg{margin-bottom:7px}
+.exg:last-child{margin-bottom:0}
+.exg b{display:block;font-size:8.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--mut);margin-bottom:4px}
+.exg button{background:var(--card);border:1px solid var(--b);color:var(--txt);border-radius:6px;padding:3px 7px;margin:0 4px 4px 0;font-size:10.5px}
+.exg button:hover{border-color:var(--k-zone);color:var(--k-zone)}
+.exg .ek{font-family:'JetBrains Mono';font-weight:700;color:var(--bad);margin-right:5px}
 .decoder{display:flex;justify-content:center;gap:3px;margin-top:8px;min-height:40px}
 .seg{border:1px solid var(--b);border-radius:8px;padding:3px 6px;text-align:center;min-width:34px;background:rgba(255,255,255,.02)}
 .seg .sv{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;line-height:1.1}
@@ -262,6 +271,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <div class="scoutbar">
       <input id="code" class="mono" placeholder="7#" autocomplete="off" spellcheck="false">
       <div class="decoder" id="dec"></div>
+      <div class="extmenu" id="extmenu"></div>
       <div class="hint" id="hint"></div>
       <button class="detbtn" id="detbtn" onclick="toggleDetalle()">Detalle de la jugada ▾</button>
       <div class="detail" id="detail" hidden>
@@ -276,7 +286,8 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         </div>
       </div>
       <div class="endrow">
-        <button class="endbtn h" onclick="endRally('home')">Punto Local</button>
+        <button class="tbtn" style="width:100%;margin-top:6px" onclick="abrirExtensiones()">Extensiones (Ctrl + Espacio)</button>
+      <button class="endbtn h" onclick="endRally('home')">Punto Local</button>
         <button class="endbtn a" onclick="endRally('away')">Punto Visitante</button>
       </div>
     </div>
@@ -288,6 +299,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   </div>
 
   <!-- VISITANTE + códigos -->
+  <div class="col">
   <div class="pane">
     <h3 style="color:var(--vis)">Visitante · rotación</h3>
     <div class="rot away-c" id="rot-a"></div>
@@ -298,13 +310,20 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
       <button onclick="timeout('away')">Tiempo</button>
       <button onclick="subst('away')">Cambio</button>
     </div>
-    <h3 style="margin-top:12px">Análisis en vivo
+  </div>
+
+  <!-- panel aparte: análisis + codificación -->
+  <div class="pane">
+    <h3>Análisis en vivo
       <button class="hbtn" onclick="ciclarAnalisis()" id="anbtn">Local</button></h3>
     <div id="mini-an" class="minian"></div>
+  </div>
 
-    <h3 style="margin-top:12px">Acciones del set <button class="hbtn" onclick="undoRally()" title="Deshace el punto (Ctrl+Shift+Z)">Deshacer punto</button>
+  <div class="pane">
+    <h3>Acciones del set <button class="hbtn" onclick="undoRally()" title="Deshace el punto (Ctrl+Shift+Z)">Deshacer punto</button>
       <button class="hbtn" onclick="undoLast()" title="Borra el último código (Ctrl+Z)">Deshacer código</button></h3>
     <div class="codes" id="codes"></div>
+  </div>
   </div>
 </div>
 
@@ -908,6 +927,37 @@ function drawPickers(){
 }
 
 /* ============================================================
+   MENÚ DE EXTENSIONES — Ctrl+Espacio (manual 2.5.3 · 2)
+   Muestra los códigos posibles que pueden seguir al recién escrito.
+   ============================================================ */
+function extensionesPosibles(){
+  const raw=document.getElementById('code').value;
+  const p=parseInput(raw);
+  if(!p.length || p[0].err) return null;
+  const a=p[p.length-1], d=merged(a);
+  const grupos=[];
+  if(!d.hit && SUBTYPE[a.skill]) grupos.push({t:'Tipo de golpe', o:SUBTYPE[a.skill]});
+  if(!d.blk && PLAYERS[a.skill]) grupos.push({t:a.skill==='R'?'Quién recibe':'Jugadores en bloqueo', o:PLAYERS[a.skill]});
+  if(!d.spec){ const sp=specialsFor(a.skill,a.ev); if(sp && Object.keys(sp).length) grupos.push({t:'Cómo terminó', o:sp}); }
+  return grupos.length? grupos : null;
+}
+function abrirExtensiones(){
+  const g=extensionesPosibles();
+  const box=document.getElementById('extmenu');
+  if(!g){ toast('Escribí primero el código principal (ej. 14A#)',true); return; }
+  box.innerHTML = g.map(x=>'<div class="exg"><b>'+x.t+'</b>'+
+    Object.keys(x.o).map(k=>'<button onclick="ponerExt(\''+k+'\')"><span class="ek">'+k+'</span>'+x.o[k]+'</button>').join('')+
+    '</div>').join('');
+  box.classList.add('open');
+}
+function cerrarExtensiones(){ document.getElementById('extmenu').classList.remove('open'); }
+function ponerExt(ch){
+  const inp=document.getElementById('code');
+  inp.value += ch;
+  cerrarExtensiones(); drawDecoder(); inp.focus();
+}
+
+/* ============================================================
    COMANDOS TIPEADOS (manual 4.6)
    T/aT tiempo · C6.7/aC6.7 cambio (doble: "C6.7 3.2") ·
    P5/aP5 armador en cancha · S/aS saque inicial ·
@@ -977,7 +1027,15 @@ function commit(){
   const inp = document.getElementById('code');
   /* primero: ¿es un comando y no una acción? */
   if(parseCommand(inp.value)){ inp.value=''; clearPick(); drawDecoder(); renderCodes(); renderMiniAn(); return true; }
-  const parts = parseInput(inp.value);
+  /* manual 4.7: la llamada (K1) se tipea junto a la recepción, en cualquier posición.
+     La sacamos del código antes de parsear: va al armado, no a la recepción. */
+  let bruto = inp.value;
+  bruto = bruto.split(/\s+/).map(ch=>{
+    const m = ch.match(/^(a?\d{1,2}R.*?)(K[0-9A-Z])$/i);
+    if(m && CALLS[m[2].toUpperCase()]){ CALL_PEND = m[2].toUpperCase(); return m[1]; }
+    return ch;
+  }).join(' ');
+  const parts = parseInput(bruto);
   if(!parts.length) return false;
   if(parts[0].err){ toast(parts[0].err,true); marcarBarraMal(); return false; }
   const av=[]; parts.forEach(p=>verificar(p).forEach(x=>av.push(x)));
@@ -1238,6 +1296,8 @@ function keyName(e){
   return e.key;
 }
 document.addEventListener('keydown', e=>{
+  if((e.ctrlKey||e.metaKey) && e.code==='Space'){ e.preventDefault(); abrirExtensiones(); return; }
+  if(e.key==='Escape'){ cerrarExtensiones(); }
   if((e.ctrlKey||e.metaKey) && (e.key==='z'||e.key==='Z')){
     e.preventDefault();
     if(e.shiftKey) undoRally(); else undoLast();
