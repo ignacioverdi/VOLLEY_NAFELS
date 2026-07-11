@@ -1736,7 +1736,7 @@ function canchaDrawSaque(ctx,origZone,destinos,pct){
 }
 
 function closeCanchaModal(){document.getElementById('cancha-modal').classList.remove('open');document.body.style.overflow='';if(canchaAnimFrame)cancelAnimationFrame(canchaAnimFrame);const sw=document.getElementById('cancha-stats-wrap');if(sw)sw.style.display='none';}
-document.getElementById('cancha-modal').addEventListener('click',function(e){if(e.target===this)closeCanchaModal();});
+(function(){var cm=document.getElementById('cancha-modal'); if(cm) cm.addEventListener('click',function(e){if(e.target===this)closeCanchaModal();});})();
 
 </script>
 
