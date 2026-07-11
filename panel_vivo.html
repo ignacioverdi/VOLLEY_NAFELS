@@ -724,6 +724,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     </div>
   </div>
   <div class="actions">
+    <button class="tbtn" onclick="borrarPartido()" style="background:rgba(239,68,68,.12);color:#f87171;border-color:rgba(239,68,68,.3);margin-right:auto">🗑️ Borrar partido</button>
     <button class="tbtn" onclick="closeModal('m-setup')">Cancelar</button>
     <button class="tbtn pri" onclick="saveSetup()">Empezar</button>
   </div>
@@ -2195,11 +2196,16 @@ document.addEventListener('keydown', e=>{
   /* manual 4.5.2: sobre la lista de códigos */
   if(e.key==='Insert'){ e.preventDefault(); insertarEn(SEL_I); return; }
   if(e.key==='Delete'){ e.preventDefault(); borrarEn(SEL_I); return; }
-  /* La tecla Borrar/Backspace normal también borra el código seleccionado,
-     PERO sólo si la barra de escritura está vacía (si estás escribiendo un
-     código, Backspace sigue borrando letras como siempre). */
-  if(e.key==='Backspace' && SEL_I>=0 && !document.getElementById('code').value.trim()){
-    e.preventDefault(); borrarEn(SEL_I); return;
+  /* BORRAR RÁPIDO durante el punto: la tecla Backspace (arriba del Enter),
+     con la barra de escritura vacía, borra al instante.
+       · si hay un código seleccionado del medio -> borra ése
+       · si no hay nada seleccionado -> borra el ÚLTIMO (deshacer rápido)
+     Si estás escribiendo un código, Backspace sigue borrando letras normal. */
+  if(e.key==='Backspace' && !document.getElementById('code').value.trim() && M.codes.length){
+    e.preventDefault();
+    if(SEL_I>=0) borrarEn(SEL_I, true);  /* el que elegiste del medio, sin preguntar */
+    else undoLast();                   /* el último, sin seleccionar nada */
+    return;
   }
   if(e.key==='Enter' && SEL_I>=0 && !document.getElementById('code').value.trim()){ e.preventDefault(); editCode(SEL_I); return; }
   if((e.ctrlKey||e.metaKey) && e.code==='Space'){ e.preventDefault(); abrirExtensiones(); return; }
@@ -2387,6 +2393,21 @@ function openSetup(){
   document.getElementById('m-setup').classList.add('open');
 }
 
+/* Borra el partido entero: todos los códigos, el marcador y los sets.
+   Pide confirmación porque no se puede deshacer. */
+function borrarPartido(){
+  if(!confirm('¿Borrar TODO el partido? Se pierden todos los códigos, el marcador y los sets. Esto no se puede deshacer.')) return;
+  if(!confirm('Última confirmación: ¿seguro que querés empezar de cero?')) return;
+  M.codes = [];
+  M.home.pts=0; M.home.sets=0; M.away.pts=0; M.away.sets=0;
+  M.set=1; SEL_I=-1; CALL_PEND=null;
+  if(M.setsHist) M.setsHist=[];
+  document.getElementById('code').value='';
+  renderAll(); persist(); avisarMarcador();
+  toast('Partido borrado. Podés empezar de cero.');
+  closeModal('m-setup');
+}
+
 function saveSetup(){
   const G=id=>document.getElementById(id).value;
   const read=side=>{
@@ -2438,9 +2459,10 @@ function insertarEn(i){
   document.getElementById('m-edit').classList.add('open');
   inp.focus();
 }
-function borrarEn(i){
+function borrarEn(i, rapido){
   if(i<0){ toast('Elegí primero un código de la lista',true); return; }
-  if(!confirm('¿Borrar el código '+M.codes[i].c+'?')) return;
+  /* durante el punto (rapido=true) no preguntamos: hay que ser inmediato */
+  if(!rapido && !confirm('¿Borrar el código '+M.codes[i].c+'?')) return;
   M.codes.splice(i,1); SEL_I=-1; renderAll(); persist(); avisarMarcador(); toast('Código borrado');
 }
 function editCode(i){
