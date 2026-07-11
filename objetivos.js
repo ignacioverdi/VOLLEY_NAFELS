@@ -182,7 +182,7 @@ function renderBaterias(containerId, jugVals, eqVals, titulo, rivalVals){
     +'<div style="display:flex;gap:8px;width:100%;margin-bottom:4px">'
     +'<div style="width:64px;flex-shrink:0"></div>'
     +Object.keys(metas).map(function(id){
-      return '<div style="flex:1;min-width:60px;text-align:center;padding:4px 2px">'
+      return '<div style="flex:1;min-width:60px;max-width:110px;text-align:center;padding:0 5px">'
         +'<div style="font-size:10px;font-weight:800;color:#e2e8f0;letter-spacing:0.5px;text-transform:uppercase;line-height:1.3;word-break:break-word">'+metas[id].label+'</div>'
         +'<div style="font-size:10px;color:#22c55e;font-weight:700;margin-top:3px">'+metas[id].obj+'%</div>'
         +'</div>';
