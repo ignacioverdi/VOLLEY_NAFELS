@@ -72,7 +72,7 @@
     var combos = {}; atk.forEach(function(a){ combos[a[0]]=(combos[a[0]]||0)+1; });
     var tot = atk.length, sets = D.set[num]||0;
     if(sets>tot && sets>20) return 'Armador';
-    if(tot<5) return 'Sub';
+    if(tot<2) return 'Sub';   /* en vivo: con 2+ ataques ya se clasifica (antes 5, para partidos completos) */
     var sum=function(ks){ var s=0; ks.forEach(function(c){ s+=combos[c]||0; }); return s; };
     var quick=sum(['X1','X2','X7','XM','X3','X4']);
     var pos2 =sum(['X6','X8','V6','V8']);
@@ -117,7 +117,11 @@
     opues.slice(0,2).forEach(function(n){ var d=D.atk[String(n)]||[]; if(d.length) add('a',n,'opuesto',d,'Combo principal: '+domcombo(D,n)+'.'); });
     servers.forEach(function(n){ add('s',n,'saque',D.srv[String(n)]||[],'Saque '+domserve(D,n)+'.'); });
     receiv.forEach(function(n){ add('r',n,'reception',D.rec[String(n)]||[], pos[n]==='Líbero'?'Líbero.':'Receptor.'); });
-    return {name:teamName||'En vivo', players:players, info:{}};
+    /* info con la entrada del partido en vivo, para que MATCHES/MSEL la incluyan
+       (si no, el filtro de partidos rechaza toda la data en vivo → canchitas en 0) */
+    var info = {};
+    info[mid] = {opp:(teamName||'En vivo'), date:'', res:'', yt:false};
+    return {name:teamName||'En vivo', players:players, info:info};
   }
 
 
