@@ -708,8 +708,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 
 <!-- ====== MODAL: SETUP ====== -->
 <div class="modal" id="m-setup"><div class="sheet">
-  <h2>Partido</h2>
-  <div class="sub">Cargá los dos equipos, el seis inicial y quién saca.</div>
+  <h2 id="setup-titulo">Partido</h2>
+  <div class="sub" id="setup-sub">Cargá los dos equipos, el seis inicial y quién saca.</div>
+  <!-- Manual 4.12: elegir modo Partido o Entrenamiento -->
+  <div style="display:flex;gap:8px;margin-bottom:14px">
+    <button type="button" id="modo-partido" class="tbtn" onclick="setModo('partido')" style="flex:1;background:#2563eb;color:#fff;border-color:#2563eb">🏐 Partido</button>
+    <button type="button" id="modo-entrenamiento" class="tbtn" onclick="setModo('entrenamiento')" style="flex:1">🏋️ Entrenamiento</button>
+  </div>
   <div class="fgrid">
     <div><label class="f">Local — nombre</label><input class="f" id="s-nmh" placeholder="San Lorenzo"></div>
     <div><label class="f">Local — sigla</label><input class="f" id="s-cdh" maxlength="3" placeholder="SLO">
@@ -768,9 +773,29 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <h2 id="e-titulo">Corregir código</h2>
   <div class="sub">En vivo siempre se escapa algo. Completá lo que falte: la pareja del código se ajusta sola.</div>
   <div class="ref" style="margin-bottom:14px">Original: <span class="mono" id="e-orig"></span></div>
-  <input id="e-code" class="mono" oninput="drawEditDec()" spellcheck="false"
+  <input id="e-code" class="mono" oninput="drawEditDec();syncExtendido()" spellcheck="false"
     style="width:100%;background:var(--card2);border:1px solid var(--b2);color:var(--txt);border-radius:10px;padding:12px;font-size:20px;font-weight:700;text-align:center;outline:none">
   <div id="e-dec" class="edec"></div>
+
+  <!-- Manual 4.1.3 · Código extendido: tipo de golpe + jugadores/bloqueo + código especial.
+       Aparece en azul, con opciones que dependen de la skill y la evaluación del código. -->
+  <div id="e-extendido" style="margin-top:14px;padding:12px;background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.25);border-radius:10px">
+    <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#60a5fa;margin-bottom:10px">Código extendido</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+      <div>
+        <label style="font-size:11px;color:var(--mut);display:block;margin-bottom:4px">Tipo de golpe</label>
+        <select id="ext-hit" onchange="aplicarExtendido()" style="width:100%;background:var(--card2);border:1px solid var(--b2);color:var(--txt);border-radius:8px;padding:8px;font-family:inherit"></select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--mut);display:block;margin-bottom:4px" id="ext-plr-lbl">Bloqueadores</label>
+        <select id="ext-plr" onchange="aplicarExtendido()" style="width:100%;background:var(--card2);border:1px solid var(--b2);color:var(--txt);border-radius:8px;padding:8px;font-family:inherit"></select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--mut);display:block;margin-bottom:4px">Cómo terminó</label>
+        <select id="ext-spec" onchange="aplicarExtendido()" style="width:100%;background:var(--card2);border:1px solid var(--b2);color:var(--txt);border-radius:8px;padding:8px;font-family:inherit"></select>
+      </div>
+    </div>
+  </div>
   <div class="actions">
     <button class="tbtn" onclick="deleteEdit()">Borrar</button>
     <button class="tbtn" onclick="closeModal('m-edit')">Cancelar</button>
@@ -2576,6 +2601,58 @@ function luSetter(side,z){
   drawLineup(side);
 }
 
+/* Manual 4.12 · Modo de scouteo: partido (dos equipos) o entrenamiento (tu equipo).
+   En entrenamiento el rival puede ser genérico y se pueden hacer "drills". */
+/* Muestra un indicador de modo entrenamiento y el botón «Nuevo drill» (manual 4.12). */
+function reflejarModo(){
+  var barra=document.getElementById('modo-indicador');
+  var esEntr = (M.modo==='entrenamiento');
+  if(!barra && esEntr){
+    barra=document.createElement('div');
+    barra.id='modo-indicador';
+    barra.style.cssText='display:inline-flex;align-items:center;gap:8px;margin-left:10px;padding:4px 12px;background:rgba(22,163,74,.15);border:1px solid rgba(22,163,74,.4);border-radius:8px;color:#22c55e;font-weight:800;font-size:13px';
+    barra.innerHTML='🏋️ ENTRENAMIENTO <button class="tbtn" onclick="nuevoDrill()" style="padding:3px 10px;font-size:12px;margin-left:4px">+ Nuevo drill</button>';
+    var cont=document.querySelector('.topbar')||document.querySelector('header')||document.body;
+    var ref=document.querySelector('[onclick="openSetup()"]');
+    if(ref&&ref.parentNode) ref.parentNode.insertBefore(barra, ref.nextSibling);
+    else cont.appendChild(barra);
+  } else if(barra && !esEntr){
+    barra.remove();
+  }
+}
+
+/* Manual 4.12 · Nuevo drill: reinicia el marcador del ejercicio con un score inicial. */
+function nuevoDrill(){
+  var ini=prompt('Marcador inicial del drill (ej: 0-0, o 15-15 para practicar finales):','0-0');
+  if(ini===null) return;
+  var m=/(\d+)\s*-\s*(\d+)/.exec(ini);
+  var h=m?parseInt(m[1],10):0, a=m?parseInt(m[2],10):0;
+  M.home.pts=h; M.away.pts=a;
+  /* el drill es una unidad dentro del entrenamiento: marcamos su inicio con un código de nota */
+  if(!M.drills) M.drills=[];
+  M.drills.push({inicio:h+'-'+a, desde:M.codes.length});
+  renderAll(); persist(); avisarMarcador&&avisarMarcador();
+  toast('Nuevo drill · empieza '+h+'-'+a);
+}
+
+function setModo(modo){
+  M.modo = modo;
+  var bp=document.getElementById('modo-partido'), be=document.getElementById('modo-entrenamiento');
+  var tit=document.getElementById('setup-titulo'), sub=document.getElementById('setup-sub');
+  if(modo==='entrenamiento'){
+    if(bp){ bp.style.background=''; bp.style.color=''; bp.style.borderColor=''; }
+    if(be){ be.style.background='#16a34a'; be.style.color='#fff'; be.style.borderColor='#16a34a'; }
+    if(tit) tit.textContent='Entrenamiento';
+    if(sub) sub.textContent='Cargá tu equipo y el seis. El rival puede ser genérico. Después podés hacer ejercicios (drills).';
+  } else {
+    M.modo='partido';
+    if(be){ be.style.background=''; be.style.color=''; be.style.borderColor=''; }
+    if(bp){ bp.style.background='#2563eb'; bp.style.color='#fff'; bp.style.borderColor='#2563eb'; }
+    if(tit) tit.textContent='Partido';
+    if(sub) sub.textContent='Cargá los dos equipos, el seis inicial y quién saca.';
+  }
+}
+
 function openSetup(){
   const V=(id,v)=>document.getElementById(id).value=v;
   V('s-nmh',M.home.name==='LOCAL'?'':M.home.name); V('s-nma',M.away.name==='VISITANTE'?'':M.away.name);
@@ -2587,6 +2664,7 @@ function openSetup(){
     M[side].lineup.forEach((num,i)=>{ if(num) LU[side].n[i+1]=String(num); });
     drawLineup(side);
   });
+  setModo(M.modo||'partido');   /* reflejar el modo actual */
   document.getElementById('m-setup').classList.add('open');
 }
 
@@ -2656,7 +2734,10 @@ function saveSetup(){
   if(M.away.libero && la.includes(M.away.libero)){ toast('El líbero '+M.away.libero+' no puede estar en el seis inicial del visitante',true); return; }
   M.serving=G('s-serve');
   escribirEstado('>LUp', M.serving);   /* >LUp, empezando por el equipo que saca (verificado en los DVW) */
-  closeModal('m-setup'); renderAll(); persist(); toast('Listo, a scoutear');
+  if(!M.modo) M.modo='partido';
+  closeModal('m-setup'); renderAll(); persist();
+  toast(M.modo==='entrenamiento' ? 'Entrenamiento iniciado' : 'Listo, a scoutear');
+  if(typeof reflejarModo==='function') reflejarModo();
 }
 
 
@@ -2687,6 +2768,64 @@ function borrarEn(i, rapido){
   if(!rapido && !confirm('¿Borrar el código '+M.codes[i].c+'?')) return;
   M.codes.splice(i,1); SEL_I=-1; renderAll(); persist(); avisarMarcador(); toast('Código borrado');
 }
+/* Manual 4.1.3 · llena los 3 selectores del código extendido según la skill y
+   evaluación del código que estás editando, y marca lo que ya tiene. */
+function syncExtendido(){
+  var box=document.getElementById('e-extendido'); if(!box) return;
+  var cod=document.getElementById('e-code').value.trim();
+  var parts=parseInput(cod);
+  if(!parts.length || parts[0].err || !parts[0].skill){ box.style.display='none'; return; }
+  var a=parts[0], skill=a.skill, ev=a.ev, d=merged(a);
+  box.style.display='block';
+
+  /* Tipo de golpe (SUBTYPE) */
+  var hitSel=document.getElementById('ext-hit');
+  var hits=SUBTYPE[skill]||{};
+  hitSel.innerHTML='<option value="">—</option>'+Object.keys(hits).map(function(k){
+    return '<option value="'+k+'"'+(d.hit===k?' selected':'')+'>'+k+' · '+hits[k]+'</option>';
+  }).join('');
+  hitSel.parentNode.style.display = Object.keys(hits).length? 'block':'none';
+
+  /* Jugadores / bloqueadores (PLAYERS) */
+  var plrSel=document.getElementById('ext-plr'), plrLbl=document.getElementById('ext-plr-lbl');
+  var plrs=PLAYERS[skill]||{};
+  if(skill==='R'){ plrLbl.textContent='Receptores'; } else { plrLbl.textContent='Bloqueadores'; }
+  plrSel.innerHTML='<option value="">—</option>'+Object.keys(plrs).map(function(k){
+    return '<option value="'+k+'"'+(d.blk===k?' selected':'')+'>'+k+' · '+plrs[k]+'</option>';
+  }).join('');
+  plrSel.parentNode.style.display = Object.keys(plrs).length? 'block':'none';
+
+  /* Código especial / cómo terminó (SPECIALS según evaluación) */
+  var spSel=document.getElementById('ext-spec');
+  var sps=specialsFor(skill, ev)||{};
+  spSel.innerHTML='<option value="">—</option>'+Object.keys(sps).map(function(k){
+    return '<option value="'+k+'"'+(d.spec===k?' selected':'')+'>'+k+' · '+sps[k]+'</option>';
+  }).join('');
+  spSel.parentNode.style.display = Object.keys(sps).length? 'block':'none';
+}
+
+/* aplica lo elegido en los selectores al código de la barra de edición */
+function aplicarExtendido(){
+  var cod=document.getElementById('e-code').value.trim();
+  var parts=parseInput(cod);
+  if(!parts.length || parts[0].err) return;
+  var a=parts[0], d=merged(a);
+  d.hit = document.getElementById('ext-hit').value || '';
+  d.blk = document.getElementById('ext-plr').value || '';
+  d.spec = document.getElementById('ext-spec').value || '';
+  /* reconstruir el código con la cola extendida nueva */
+  var nuevo = fmtConTail(a, d);
+  document.getElementById('e-code').value = nuevo;
+  drawEditDec();
+}
+
+/* reconstruye el código completo con la cola extendida modificada (mismo formato que fmt) */
+function fmtConTail(a, d){
+  var pre = a.team==='home'?'*':'a';
+  var nn = a.num===-1 ? '-1' : String(a.num).padStart(2,'0');
+  return pre + nn + a.skill + a.type + a.ev + buildTail(d, a);
+}
+
 function editCode(i){
   const row = M.codes[i]; if(!row) return;
   EDIT_MODE='edit'; EDIT_I = i; SEL_I = i;
@@ -2696,6 +2835,7 @@ function editCode(i){
   inp.value = row.c;
   document.getElementById('m-edit').classList.add('open');
   drawEditDec();
+  syncExtendido();
   inp.focus();
   if(CFG.cursorEfecto && row.c.length>5) inp.setSelectionRange(5,6);   /* cursor sobre el símbolo */
   else inp.setSelectionRange(inp.value.length, inp.value.length);      /* cursor al final */
