@@ -167,7 +167,9 @@ window.bateriasVivo = function(codes, side){
 function renderBaterias(containerId, jugVals, eqVals, titulo, rivalVals){
   var el=document.getElementById(containerId); if(!el) return;
   var metas=window.OBJETIVOS_CONFIG.metas;
-  var rows=[{label:'Jugador',vals:jugVals||{},isJug:true},{label:'Equipo',vals:eqVals||{},isJug:false}];
+  var rows=[];
+  if(jugVals) rows.push({label:'Jugador',vals:jugVals,isJug:true});   /* solo si hay jugador elegido */
+  rows.push({label:'Equipo',vals:eqVals||{},isJug:false});
   /* si viene el rival, se agrega una línea abajo para comparar (se clasifica sobre sus propios objetivos) */
   if(rivalVals){ rows.push({label:'__SEP__',vals:{},isJug:false,sep:true}); rows.push({label:'Rival',vals:rivalVals||{},isJug:false,esRival:true}); }
   var html='<div style="font-family:Barlow Condensed,sans-serif;padding:4px 0 8px">'

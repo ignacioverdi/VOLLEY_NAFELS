@@ -423,24 +423,19 @@ function objSingleBat(id,val,meta,cls,objLine){
 
 function renderObjetivos(cid,extra){
   var el=document.getElementById(cid); if(!el) return;
-  var metas=window.OBJETIVOS_CONFIG.metas;
-  var vals=Object.assign({},objCalcVals(null),extra||{});
-  var html='<div style="font-family:Barlow Condensed,sans-serif;padding:4px 0 8px">'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
-    +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">OBJETIVOS DEL EQUIPO · 2026</div>'
-    +'<div style="display:flex;gap:10px;flex-wrap:wrap">'
-    +[['#22c55e','Objetivo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Lejos']].map(function(x){
-      return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
-    }).join('')+'</div></div>'
-    +'<div style="display:flex;gap:8px;width:100%;margin-bottom:4px">'
-    +Object.keys(metas).map(function(id){return'<div style="flex:1;min-width:60px;max-width:110px;text-align:center;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#64748b">'+metas[id].label+'</div>';}).join('')
-    +'</div><div style="display:flex;gap:8px;width:100%">'
-    +Object.keys(metas).map(function(id){
-      var m=metas[id],val=vals[id]!==undefined?vals[id]:null;
-      var cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
-      return objSingleBat(id,val,m,cls,m.obj);
-    }).join('')+'</div></div>';
-  el.innerHTML=html;
+  /* Baterías del equipo EN VIVO, con el mismo formato que las del filtro Baterías
+     (objetivo pequeño en verde + batería). Se calcula con lo scouteado, no con demo. */
+  var eqVals = {};
+  try{
+    if(typeof bateriasVivo==='function' && typeof _batCodes==='function'){
+      var res = bateriasVivo(_batCodes(), '*');   /* nuestro equipo */
+      eqVals = res.equipo || {};
+    }
+  }catch(e){}
+  if(extra) eqVals = Object.assign({}, eqVals, extra);
+  /* renderBaterias dibuja: leyenda arriba, objetivo en verde, y la fila del equipo.
+     Le pasamos eqVals como "equipo" (una sola línea, sin jugador ni rival acá). */
+  renderBaterias(cid, null, eqVals, 'OBJETIVOS DE EQUIPO');
 }
 
 function renderObjetivosJugador(cid,nombre,extra){
@@ -482,17 +477,20 @@ function renderObjetivosJugador(cid,nombre,extra){
 }
 
 </script>
+<style>
+.hbtn2{ text-align:center; line-height:1.15; font-size:11px; padding:5px 10px; white-space:normal; }
+</style>
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase">← Dashboard</a></div>
 
 <header class="hdr">
   <a href="index.html" style="font-size:9px;color:#5a5a72;letter-spacing:1.5px;text-decoration:none;text-transform:uppercase;padding:4px 10px;border:1px solid rgba(255,255,255,.06);border-radius:6px;transition:all .15s;white-space:nowrap" onmouseover="this.style.borderColor='rgba(255,255,255,.15)';this.style.color='#eeeef5'" onmouseout="this.style.borderColor='rgba(255,255,255,.06)';this.style.color='#5a5a72'">← HUB</a>
+  <div id="lang-wrap" style="display:flex;align-items:center;gap:4px;margin-left:6px"></div>
   <div class="htit">Stats <span>Voley</span></div>
   <div style="display:flex;gap:6px">
 
   </div>
-  <div id="lang-wrap" style="display:flex;align-items:center;gap:4px;margin-left:8px"></div>
   <div class="live" id="hdr-live" style="display:none">● En vivo</div>
   <div class="pts-badge" id="hdr-score" style="display:flex;align-items:center;gap:8px;white-space:nowrap">
     <span id="hs-hn" style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;color:#e6a743">LOC</span>
@@ -503,14 +501,7 @@ function renderObjetivosJugador(cid,nombre,extra){
     <span id="hs-set" style="font-family:'Barlow Condensed',sans-serif;font-size:10px;color:#64748b;letter-spacing:1px;margin-left:2px">S1</span>
   </div>
   <span id="pts-total" style="display:none">0</span>
-  <div class="leg">
-    <div class="li"><div class="ld" style="background:var(--green)"></div># Punto</div>
-    <div class="li"><div class="ld" style="background:var(--lgreen)"></div>+ Positivo</div>
-    <div class="li"><div class="ld" style="background:var(--amber)"></div>! Admiracion</div>
-    <div class="li"><div class="ld" style="background:var(--orange)"></div>- Negativo</div>
-    <div class="li"><div class="ld" style="background:var(--red)"></div>/ Vendida</div>
-    <div class="li"><div class="ld" style="background:var(--dred)"></div>= Error</div>
-  </div>
+
   <div class="hright">
     <span class="ts-lbl"><span id="ts">--</span></span>
     <button class="hbtn podio-btn" onclick="togglePodio()">&#9733; Podio</button>
@@ -519,11 +510,11 @@ function renderObjetivosJugador(cid,nombre,extra){
     <button class="hbtn" id="tabla-btn" onclick="toggleTabla()" style="background:rgba(56,189,248,.1);color:#38bdf8;border-color:rgba(56,189,248,.3)">&#9776; Tabla</button>
     <button class="hbtn tv-btn" id="tv-btn" onclick="toggleTV()">&#9654; TV</button>
     <span style="width:1px;height:24px;background:rgba(255,255,255,.12);margin:0 4px"></span>
-    <button class="hbtn" onclick="abrirPlan('armador')" title="Distribución del armador — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">&#128203; Distribución armador</button>
-    <button class="hbtn" onclick="abrirPlan('ataque')" title="Direcciones de ataque — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">&#127919; Direcciones ataque</button>
-    <button class="hbtn" onclick="abrirPlan('saque')" title="Direcciones de saque — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">&#127934; Direcciones saque</button>
-    <button class="hbtn" onclick="abrirPlan('recepcion')" title="Zonas de recepción — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">&#128993; Zonas recepción</button>
-    <button class="hbtn" onclick="abrirPlanPreparado()" title="Plan de partido que preparamos (para comparar con lo que pasa en vivo)" style="background:rgba(129,140,248,.12);color:#818cf8;border-color:rgba(129,140,248,.3)">&#128214; Plan de partido</button>
+    <button class="hbtn hbtn2" onclick="abrirPlan('armador')" title="Distribución del armador — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">Distribución<br>armador</button>
+    <button class="hbtn hbtn2" onclick="abrirPlan('ataque')" title="Direcciones de ataque — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">Direcciones<br>ataque</button>
+    <button class="hbtn hbtn2" onclick="abrirPlan('saque')" title="Direcciones de saque — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">Direcciones<br>saque</button>
+    <button class="hbtn hbtn2" onclick="abrirPlan('recepcion')" title="Zonas de recepción — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">Zonas<br>recepción</button>
+    <button class="hbtn hbtn2" onclick="abrirPlanPreparadoModal()" title="Plan de partido que preparamos (para comparar con lo que pasa en vivo)" style="background:rgba(129,140,248,.12);color:#818cf8;border-color:rgba(129,140,248,.3)">Plan de<br>partido</button>
   </div>
 </header>
 
@@ -572,7 +563,7 @@ function renderObjetivosJugador(cid,nombre,extra){
     <span class="mk-dot" title="En vivo" style="width:9px;height:9px;border-radius:50%;background:#22d3ee;display:inline-block;flex-shrink:0;box-shadow:0 0 8px #22d3ee"></span>
     <div style="display:flex;align-items:center;gap:14px;font-family:'Barlow Condensed',sans-serif">
       <div style="text-align:right;min-width:130px">
-        <div id="mk-hn" style="font-size:17px;font-weight:800;color:#e8e8f0;letter-spacing:.5px;line-height:1">LOCAL</div>
+        <div id="mk-hn" style="font-size:17px;font-weight:800;color:#e8e8f0;letter-spacing:.5px;line-height:1">---</div>
         <div id="mk-hs" style="font-size:10px;color:#64748b;letter-spacing:2px;margin-top:2px">0 SETS</div>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
@@ -581,7 +572,7 @@ function renderObjetivosJugador(cid,nombre,extra){
         <span id="mk-ap" style="font-size:38px;font-weight:900;color:#22d3ee;line-height:1;min-width:52px;text-align:center">0</span>
       </div>
       <div style="text-align:left;min-width:130px">
-        <div id="mk-an" style="font-size:17px;font-weight:800;color:#e8e8f0;letter-spacing:.5px;line-height:1">VISITANTE</div>
+        <div id="mk-an" style="font-size:17px;font-weight:800;color:#e8e8f0;letter-spacing:.5px;line-height:1">---</div>
         <div id="mk-as" style="font-size:10px;color:#64748b;letter-spacing:2px;margin-top:2px">0 SETS</div>
       </div>
     </div>
@@ -1430,6 +1421,8 @@ function refrescarVista(D){
     if(obj && obj.style.display==='block' && typeof updateObj==='function') updateObj();
     var bat=document.getElementById('m-baterias');
     if(bat && bat.style.display==='block' && typeof renderBateriasPanel==='function') renderBateriasPanel();
+    /* baterías del inicio (Objetivos de equipo): se llenan en vivo con el scout */
+    if(document.getElementById('objetivos-panel') && typeof renderObjetivos==='function') renderObjetivos('objetivos-panel');
   }catch(e){}
 }
 function traerEnVivo(primera){
@@ -1440,8 +1433,9 @@ function traerEnVivo(primera){
     if(!L) return;
     try{
       var g=function(id){return document.getElementById(id);};
-      if(g('mk-hn')) g('mk-hn').textContent = L.local.n||'LOCAL';
-      if(g('mk-an')) g('mk-an').textContent = L.visitante.n||'VISITANTE';
+      var abr3=function(n){ n=(n||'').trim(); return n?n.substring(0,3).toUpperCase():'---'; };
+      if(g('mk-hn')) g('mk-hn').textContent = abr3(L.local.n);
+      if(g('mk-an')) g('mk-an').textContent = abr3(L.visitante.n);
       if(g('mk-hp')) g('mk-hp').textContent = L.local.pts||0;
       if(g('mk-ap')) g('mk-ap').textContent = L.visitante.pts||0;
       if(g('mk-hs')) g('mk-hs').textContent = (L.local.sets||0)+' SETS';
