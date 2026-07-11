@@ -384,6 +384,15 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
       <button class="hbtn" onclick="abrirVerificacion()" title="Verificar todos los códigos (Ctrl+V)">Verificar</button>
       <button class="hbtn" onclick="undoRally()" title="Deshace el punto (Ctrl+Shift+Z)">Deshacer punto</button>
       <button class="hbtn" onclick="undoLast()" title="Borra el último código (Ctrl+Z)">Deshacer código</button></h3>
+    <div id="selbar" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;margin-bottom:8px;background:rgba(230,167,67,.08);border:1px solid rgba(230,167,67,.25);border-radius:10px">
+      <span style="font-size:12px;color:var(--mut);font-weight:700">Seleccionado:</span>
+      <span class="mono" id="selbar-cod" style="font-weight:800;color:#e6a743">—</span>
+      <div style="flex:1"></div>
+      <button class="hbtn" onclick="editCode(SEL_I)" style="background:rgba(37,99,235,.15);color:#60a5fa;border-color:rgba(37,99,235,.35)">✏️ Corregir</button>
+      <button class="hbtn" onclick="insertarEn(SEL_I)" title="Insertar un código antes de éste">➕ Insertar antes</button>
+      <button class="hbtn" onclick="borrarEn(SEL_I)" style="background:rgba(239,68,68,.12);color:#f87171;border-color:rgba(239,68,68,.3)">🗑️ Borrar</button>
+      <button class="hbtn" onclick="seleccionar(-1)">✕</button>
+    </div>
     <div class="codes" id="codes"></div>
   </div>
 </div>
@@ -2048,13 +2057,23 @@ function renderRot(side){
 function renderCodes(){
   const el = document.getElementById('codes');
   const rows = M.codes.filter(c=>c.set===M.set);
-  if(!rows.length){ el.innerHTML='<div class="empty-note">Todavía no cargaste ninguna acción.<br>Escribí un número y apretá Enter.</div>'; return; }
+  const bar = document.getElementById('selbar');
+  if(!rows.length){ el.innerHTML='<div class="empty-note">Todavía no cargaste ninguna acción.<br>Escribí un número y apretá Enter.</div>'; if(bar) bar.style.display='none'; return; }
   el.innerHTML = rows.slice(-90).reverse().map(c=>{
     const cls = c.k==='auto' ? 'auto' : (c.c[0]==='*'?'hteam':'ateam');
     const i = M.codes.indexOf(c);
     const sel = (i===SEL_I) ? ' sel' : '';
-    return '<div class="crow '+cls+sel+'" onclick="seleccionar('+i+')" ondblclick="editCode('+i+')" title="Clic para seleccionar · Doble clic o Enter para corregir · Ins para insertar · Supr para borrar"><span class="cc">'+c.c+'</span></div>';
+    return '<div class="crow '+cls+sel+'" onclick="seleccionar('+i+')" title="Tocá para seleccionar y corregir"><span class="cc">'+c.c+'</span></div>';
   }).join('');
+  /* Barra de acciones táctiles: aparece al seleccionar un código (para tablet, sin teclas Supr/Ins) */
+  if(bar){
+    if(SEL_I>=0 && M.codes[SEL_I]){
+      bar.style.display='flex';
+      document.getElementById('selbar-cod').textContent = M.codes[SEL_I].c;
+    } else {
+      bar.style.display='none';
+    }
+  }
 }
 
 /* ── ANÁLISIS EN VIVO, al costado de la carga ──────────────── */
@@ -2176,6 +2195,12 @@ document.addEventListener('keydown', e=>{
   /* manual 4.5.2: sobre la lista de códigos */
   if(e.key==='Insert'){ e.preventDefault(); insertarEn(SEL_I); return; }
   if(e.key==='Delete'){ e.preventDefault(); borrarEn(SEL_I); return; }
+  /* La tecla Borrar/Backspace normal también borra el código seleccionado,
+     PERO sólo si la barra de escritura está vacía (si estás escribiendo un
+     código, Backspace sigue borrando letras como siempre). */
+  if(e.key==='Backspace' && SEL_I>=0 && !document.getElementById('code').value.trim()){
+    e.preventDefault(); borrarEn(SEL_I); return;
+  }
   if(e.key==='Enter' && SEL_I>=0 && !document.getElementById('code').value.trim()){ e.preventDefault(); editCode(SEL_I); return; }
   if((e.ctrlKey||e.metaKey) && e.code==='Space'){ e.preventDefault(); abrirExtensiones(); return; }
   if(e.key==='Escape'){ cerrarExtensiones(); }
@@ -2207,14 +2232,24 @@ document.addEventListener('keydown', e=>{
   const at = atajoDe(e);
   if(at){ e.preventDefault(); aplicarAtajo(at); return; }
 
-  /* manual 2.6: teclas de prefijo. Alternan la 'a' del visitante / el '*' del local */
-  if(k===K.prefA || k===K.prefH){
+  /* Teclas de prefijo (manual 2.6). SOLO actúan cuando la tecla configurada
+     NO es una letra/número que forme parte del código: si el prefijo del
+     visitante fuera la propia 'a', dejamos que se escriba como texto normal
+     (así el scoutman siempre puede tipear a6AH#, a7RM#, etc.).
+     Cuando el prefijo es una tecla dedicada (\\ o q), PONE el prefijo sin
+     alternarlo: nunca borra una 'a'/'*' ya escrita. */
+  const inp0=document.getElementById('code');
+  /* La 'a' y el '*' son parte del código: si el prefijo configurado es una de
+     esas dos, NO lo capturamos (dejamos que se escriban como texto, para poder
+     tipear a6AH#, *14AT#, etc.). Con cualquier otra tecla dedicada (\\, q, w…)
+     el prefijo funciona, y PONE el signo sin alternarlo (nunca borra lo escrito). */
+  const prefEsSignoCodigo = (K.prefA==='a' || K.prefA==='A' || K.prefH==='*');
+  if((k===K.prefA || k===K.prefH) && document.activeElement===inp0 && !prefEsSignoCodigo){
     e.preventDefault();
-    const inp=document.getElementById('code');
-    let v=inp.value;
-    if(k===K.prefA){ v = (v[0]==='a') ? v.slice(1) : 'a'+v.replace(/^\*/,''); }
-    else           { v = (v[0]==='*') ? v.slice(1) : '*'+v.replace(/^a/,''); }
-    inp.value=v; drawDecoder(); inp.focus();
+    let v=inp0.value;
+    if(k===K.prefA){ if(v[0]!=='a') v='a'+v.replace(/^\*/,''); }
+    else           { if(v[0]!=='*') v='*'+v.replace(/^a/,''); }
+    inp0.value=v; drawDecoder(); inp0.focus();
     return;
   }
   if(k===K.endL){ e.preventDefault(); endRally(ladoIzquierda()); return; }
