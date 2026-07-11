@@ -3353,7 +3353,7 @@ function ladoVivo(side){
     if(n>0) nums.add(n);
   });
   nums.forEach(n=>{ names[n] = nombreDe(n, side); });
-  return { name:t.name, names:names, lib:(t.libero?[t.libero]:[]) };
+  return { name:t.name, names:names, lib:(t.libero?[t.libero]:[]), setter:(t.setter||0) };
 }
 
 function buildVoleyData(side){
@@ -3425,7 +3425,7 @@ function publicarVivo(){
       fbSet('voley_codes', {
         ts:new Date().toISOString(),
         mid:'vivo',
-        codes:M.codes.filter(c=>c.k==='play').map(c=>({c:c.c, set:c.set, t:(c.t||0)})),
+        codes:M.codes.filter(c=>c.k==='play').map(c=>({c:c.c, set:c.set, t:(c.t||0), zh:(c.zh||0), za:(c.za||0)})),
         home:ladoVivo('home'),
         away:ladoVivo('away')
       });

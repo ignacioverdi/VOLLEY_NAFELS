@@ -348,8 +348,10 @@ function armRallies(setter,pos){var dates=armDates(),mt=(armTeam.matches||[]);
 }
 function renderArmador(){
   var sec=document.getElementById("armsec");
-  var slug=ARM_SLUG[TEAM];
-  armTeam=(slug&&GPL.teams[slug])?GPL.teams[slug]:null;
+  /* En vivo TEAM es 'home'/'away' y GPL.teams tiene esas claves (buildPlanVivo las llena).
+     Fuera de vivo, se mapea por ARM_SLUG a los equipos de la liga. */
+  var slug=(typeof VIVO!=='undefined'&&VIVO)?TEAM:ARM_SLUG[TEAM];
+  armTeam=(slug&&GPL.teams&&GPL.teams[slug])?GPL.teams[slug]:null;
   if(!armTeam||!(armTeam.setters&&armTeam.setters.length)){sec.classList.add("hidden");return;}
   sec.classList.remove("hidden");
   if(armSetIdx>=armTeam.setters.length)armSetIdx=0;

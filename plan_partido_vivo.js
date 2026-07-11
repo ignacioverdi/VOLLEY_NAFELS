@@ -120,17 +120,149 @@
     return {name:teamName||'En vivo', players:players, info:{}};
   }
 
+
+  /* ============================================================================
+     ARMADOR EN VIVO — portado 1:1 de update_db.py (parse_setter_rallies +
+     serialización del array .s de 19 campos + detectar_armadores).
+     Alimenta GPL.teams[home/away].setters para que la solapa "Distribución
+     armador" se llene en vivo, igual que las otras solapas.
+     ========================================================================== */
+  var CALL_LIST = ['K1','K7','KM','K2','KC','KP','KE','KB','KO','KS'];
+  var CALL_IDX  = {}; CALL_LIST.forEach(function(c,i){ CALL_IDX[c]=i; });
+  var RES_IDX   = {'#':0,'/':1,'+':2,'!':3,'=':4,'-':5};
+  var GP_COMBO_LIST = ["X5","V5","X1","XM","XC","XD","X2","X7","CB","CF","V3","X6","V6","X8","V8","XB","XR","XP","VB","VR","VP","JJ","P2","PP","PR","V0","X0","X3","X4","X9","XA","XL","XO","XT"];
+  var GP_COMBO_IDX = {}; GP_COMBO_LIST.forEach(function(c,i){ GP_COMBO_IDX[c]=i; });
+
+  /* detectar los armadores de un lado: los que más arman (skill E), excluye líberos */
+  function detectarArmadoresVivo(codes, pfx, libSet, count, setterConf){
+    count = count || 2;
+    var sets = {};
+    for(var i=0;i<codes.length;i++){
+      var c=(codes[i].c||'').trim(); if(c.length<4) continue;
+      if(c[0]!==pfx) continue;
+      var pnum=parseInt(c.slice(1,3),10); if(isNaN(pnum)) continue;
+      if(libSet && libSet[pnum]) continue;
+      if((c[3]||'').toUpperCase()==='E') sets[pnum]=(sets[pnum]||0)+1;
+    }
+    var ranked=Object.keys(sets).map(Number).sort(function(a,b){return sets[b]-sets[a];});
+    /* el armador titular configurado va primero (como el rol '5' del Python) */
+    if(setterConf && ranked.indexOf(setterConf)>=0){
+      ranked=[setterConf].concat(ranked.filter(function(n){return n!==setterConf;}));
+    }
+    return ranked.slice(0,count);
+  }
+
+  /* parse_setter_rallies: extrae los rallies de armado de un setter (1:1 del Python) */
+  function parseSetterRalliesVivo(codes, pfx, rivalPfx, setterNum){
+    var rallies=[], pending=null, last_skill='', last_rq='?';
+    var last_serve_t=0, last_rec_t=0, last_rec_zone=0, last_rec_num=0, last_rec_type='';
+    for(var i=0;i<codes.length;i++){
+      var row=codes[i]; var l=(row.c||'').trim();
+      if(l.length<4) continue;
+      var t=l[0], code=l.slice(1);
+      var pnum=parseInt(code.slice(0,2),10); if(isNaN(pnum)) continue;
+      var skill=(code[2]||'').toUpperCase();
+      var effect=code.length>4?code[4]:'';
+      var rest=code.length>5?code.slice(5):'';
+      var tp=rest.split('~');
+      var spos=(pfx==='*' ? (row.zh||0) : (row.za||0));   /* setter_pos: zh=local, za=rival (publicado por el scout) */
+      var setn=(row.set!=null?(parseInt(row.set,10)||1):1);
+      var vt=(row.t!=null && !isNaN(row.t))?(row.t|0):0;
+
+      if(skill==='S'){
+        if(pending){ rallies.push(pending); pending=null; }
+        last_skill=''; last_rq='?';
+        last_serve_t=vt;
+        last_rec_zone=(tp.length>3 && tp[3] && tp[3].length>1 && /[0-9]/.test(tp[3][1]))?parseInt(tp[3][1],10):0;
+        last_rec_num=0; last_rec_type='';
+        continue;
+      }
+      if(t!==pfx) continue;
+      if(skill==='R'){
+        last_rq=effect; last_skill='R'; last_rec_t=vt; last_rec_num=pnum;
+        last_rec_type=(code[3]||'').toUpperCase();
+      } else if(skill==='E' && pnum===setterNum){
+        if(pending) rallies.push(pending);
+        var rq = (last_skill==='R') ? last_rq : '?';
+        var raw = tp.length?tp[0]:''; var call = raw.length>=2?raw.slice(0,2):raw;
+        pending={setter_pos:spos, set_num:setn, call:call, rec_quality:rq,
+                 atype:(last_skill==='R'?0:1),
+                 atk_combo:'', atk_result:'', atk_dest:0, atk_orig:0,
+                 t_start:(last_serve_t||last_rec_t||vt), t_atk:0,
+                 rec_zone:last_rec_zone, rec_num:last_rec_num, atk_num:0, rec_type:last_rec_type};
+        last_skill='E';
+      } else if(skill==='A'){
+        if(pending){
+          var combo=tp.length?tp[0]:''; var traj=tp.length>1?tp[1]:'';
+          pending.atk_combo=combo; pending.atk_result=effect;
+          pending.atk_dest=(traj && traj.length>1 && /[0-9]/.test(traj[1]))?parseInt(traj[1],10):0;
+          pending.atk_orig=(traj && /[0-9]/.test(traj[0]))?parseInt(traj[0],10):0;
+          pending.t_atk=vt; pending.atk_num=pnum;
+          rallies.push(pending); pending=null;
+        }
+        last_skill='A';
+      } else if(skill==='B'||skill==='D'||skill==='F'){
+        if(pending){ rallies.push(pending); pending=null; }
+        last_skill=skill;
+      }
+    }
+    if(pending) rallies.push(pending);
+    return rallies;
+  }
+
+  /* serializa un rally al array .s de 19 campos (1:1 del Python) */
+  function ralllyToS(r){
+    return [0, 0, r.set_num||1, 1, r.atype,
+            (CALL_IDX[r.call]!=null?CALL_IDX[r.call]:-1),
+            r.setter_pos,
+            (RES_IDX[r.rec_quality]!=null?RES_IDX[r.rec_quality]:9),
+            (GP_COMBO_IDX[r.atk_combo]!=null?GP_COMBO_IDX[r.atk_combo]:-1),
+            (RES_IDX[r.atk_result]!=null?RES_IDX[r.atk_result]:4),
+            r.atk_dest, r.atk_orig,
+            0,                     /* match_idx: en vivo siempre 0 (un solo partido) */
+            r.t_start||0, r.t_atk||0,
+            r.rec_zone||0, r.rec_num||0, r.atk_num||0, r.rec_type||''];
+  }
+
+  /* construye la estructura de setters de un lado para GPL.teams[side] */
+  function buildSettersVivo(codes, pfx, names, libSet, setterConf){
+    var rivalPfx = pfx==='*' ? 'a' : '*';
+    var setterNums = detectarArmadoresVivo(codes, pfx, libSet, 2, setterConf);
+    var setters=[];
+    setterNums.forEach(function(sn){
+      var rl = parseSetterRalliesVivo(codes, pfx, rivalPfx, sn);
+      if(!rl.length) return;
+      var arm = rl.map(ralllyToS);
+      setters.push({num:sn, name:(names&&names[sn])||String(sn), s:arm, total:rl.length});
+    });
+    setters.sort(function(a,b){return b.total-a.total;});
+    return setters;
+  }
+
   /* API pública: arma PP_DATA desde los datos publicados por el Scout en Vivo.
      liveData = { codes:[{c,set,t}], mid, home:{name,names,lib}, away:{...}, scoutedSide } */
   window.buildPlanVivo = function(liveData){
     if(!liveData || !liveData.codes) return null;
     var mid = liveData.mid || 'vivo';
     var PP = {};
+    /* Asegura GPL para la solapa Armador (que lee GPL.teams[side].setters). */
+    var GPL = window.LIGA_DATA = window.LIGA_DATA || {teams:{}, combos:GP_COMBO_LIST, calls:CALL_LIST};
+    if(!GPL.teams) GPL.teams = {};
     ['home','away'].forEach(function(side){
       var meta = liveData[side]; if(!meta) return;
       var pfx = side==='home' ? '*' : 'a';
       var slug = side; /* clave estable */
       PP[slug] = buildTeam(liveData.codes, pfx, mid, meta.names||{}, meta.lib||[], meta.name);
+      /* setters en vivo → GPL.teams[side] para la solapa Distribución armador */
+      var libSet={}; (meta.lib||[]).forEach(function(n){ libSet[n]=true; });
+      var setters = buildSettersVivo(liveData.codes, pfx, meta.names||{}, libSet, meta.setter||0);
+      GPL.teams[slug] = {
+        name: meta.name || (side==='home'?'Nosotros':'Rival'),
+        setters: setters,
+        setter: setters.length?setters[0].num:null,
+        matches: [{i:0, date:'', rival:'', code:mid}],
+        atk:{}, srv:{}, rec:{}, roster:{}, rivals:[], games:[]
+      };
     });
     return PP;
   };
