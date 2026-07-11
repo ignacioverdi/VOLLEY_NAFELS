@@ -418,19 +418,6 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div>
 
 <!-- ====== MODAL: CONFIG ====== -->
-<div class="modal" id="m-bat"><div class="sheet" style="max-width:1050px">
-  <h2>Baterías <span style="font-size:13px;color:var(--mut);font-weight:400">— calculadas en vivo</span></h2>
-  <div class="brow" style="margin:8px 0 4px">
-    <span id="bat-equipos" class="teambtns"></span>
-    <div class="spacer" style="flex:1"></div>
-    <label style="font-size:12px;color:var(--mut)">Jugador
-      <select id="bat-jug" class="f" style="margin-left:6px" onchange="renderBat()"></select>
-    </label>
-  </div>
-  <div id="bat-cont" style="overflow-x:auto"></div>
-  <div class="sub" style="margin-top:6px">Las 11 baterías salen de los códigos cargados. Con pocas acciones, tomar con cuidado.</div>
-  <div class="brow"><button class="tbtn" onclick="closeModal('m-bat')">Cerrar</button></div>
-</div></div>
 
 <div class="modal" id="m-roster"><div class="sheet" style="max-width:520px">
   <h2 id="rv-tit">Validación de plantel</h2>
@@ -1640,39 +1627,6 @@ function hhmmss(s){
 }
 
 /* ══ BATERÍAS EN VIVO (manual: 11 baterías del motor oficial) ══ */
-var _batSide='home';
-function abrirBaterias(){
-  if(typeof window.bateriasVivo!=='function'){ toast('Faltan las baterías (objetivos.js)',true); return; }
-  _batSide='home';
-  pintarBotonesBatEquipo();
-  cargarSelectorJug();
-  renderBat();
-  document.getElementById('m-bat').classList.add('open');
-}
-function pintarBotonesBatEquipo(){
-  var c=document.getElementById('bat-equipos'); if(!c) return;
-  c.innerHTML=[['home','Nuestro equipo'],['away','Rival']].map(function(x){
-    return '<button class="teambtn'+(x[0]===_batSide?' active':'')+'" onclick="setBatSide(\''+x[0]+'\')">'+x[1]+'</button>';
-  }).join('');
-}
-function setBatSide(side){ _batSide=side; pintarBotonesBatEquipo(); cargarSelectorJug(); renderBat(); }
-function cargarSelectorJug(){
-  var pre=_batSide==='home'?'*':'a';
-  var nums={};
-  M.codes.filter(function(c){return c.k==='play' && c.c[0]===pre && /^\d\d/.test(c.c.slice(1));})
-    .forEach(function(c){ var n=parseInt(c.c.slice(1,3),10); if(n>0) nums[n]=true; });
-  var sel=document.getElementById('bat-jug');
-  var lista=Object.keys(nums).map(Number).sort(function(a,b){return a-b;});
-  sel.innerHTML='<option value="">— elegí un jugador —</option>'+
-    lista.map(function(n){ return '<option value="'+n+'">#'+n+' '+esc(nombreDe(n,_batSide)||'')+'</option>'; }).join('');
-}
-function renderBat(){
-  var pre=_batSide==='home'?'*':'a';
-  var res=window.bateriasVivo(M.codes.filter(function(c){return c.k==='play';}), pre);
-  var jn=document.getElementById('bat-jug').value;
-  var jugVals = jn ? (res.jugadores[jn]||{}) : {};
-  renderBaterias('bat-cont', jugVals, res.equipo||{}, 'BATERÍAS'+(jn?' · #'+jn:''));
-}
 
 function abrirVideo(){
   document.getElementById('v-ruta').value = M.video.ruta||'';
