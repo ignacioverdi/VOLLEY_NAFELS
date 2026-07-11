@@ -2073,6 +2073,7 @@ function endRally(winner){
   }
   /* si el set se cierra, el DVW no escribe el bloque: va directo el **Nset */
   if(!setTerminado()) escribirEstado('', winner);
+  _rallyN++;               /* punto cerrado: la tablet refrescará al detectar este cambio */
   renderAll(); persist();
 
   /* manual 4.10: al asignarse el último punto del set, el programa pregunta.
@@ -3307,6 +3308,7 @@ function buildVoleyData(side){
    Cada acción actualiza VOLEY_DATA en Firebase. El panel de análisis
    lo lee y se refresca solo: no hay que bajar ni publicar nada. */
 let _pubT=null, _pubUlt=0;
+let _rallyN = 0;   /* cuenta los puntos cerrados; la tablet refresca cuando cambia */
 function publicarVivo(){
   if(CFG.publicarVivo===false) return;
   if(typeof fbSet!=='function') return;
@@ -3321,7 +3323,8 @@ function publicarVivo(){
         set:M.set, serving:M.serving,
         local:{n:M.home.name, pts:M.home.pts, sets:M.home.sets},
         visitante:{n:M.away.name, pts:M.away.pts, sets:M.away.sets},
-        acciones:M.codes.filter(c=>c.k==='play').length
+        acciones:M.codes.filter(c=>c.k==='play').length,
+        rally:_rallyN          /* nº de puntos cerrados; la tablet refresca cuando sube */
       });
       /* Códigos crudos + nombres/líberos, para que el Plan de Partido se llene
          en vivo (lo consume plan_partido_vivo.js). Uno por cada equipo. */

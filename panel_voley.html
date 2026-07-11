@@ -1380,22 +1380,56 @@ function abrirPlan(tab){
   // desde la tablet: abre el plan en vivo, en la solapa elegida (arranca en "nuestro equipo")
   window.open('plan_partido.html?vivo=1&rival=home#'+tab, '_blank');
 }
+var _lastRally = -1;   /* último punto cerrado que ya mostramos */
+function refrescarVista(D){
+  window.VOLEY_DATA=D;
+  try{ render(); }catch(e){}
+  try{ if(typeof buildDV4Buttons==='function') buildDV4Buttons(); }catch(e){}
+  /* refrescar los segmentos ABIERTOS sin cerrarlos ni volver al inicio */
+  try{
+    var podio=document.getElementById('podio');
+    if(podio && podio.classList.contains('open') && typeof renderPodio==='function') renderPodio();
+    var tabla=document.getElementById('tabla');
+    if(tabla && tabla.classList.contains('open') && typeof renderTabla==='function') renderTabla();
+    var obj=document.getElementById('obj');
+    if(obj && obj.style.display==='block' && typeof updateObj==='function') updateObj();
+    var bat=document.getElementById('bat');
+    if(bat && bat.style.display==='block' && typeof renderBatV==='function') renderBatV();
+  }catch(e){}
+}
 function traerEnVivo(primera){
   if(typeof fbGet!=='function') return;
-  fbGet('voley_data', function(D){
-    if(!D || !D.j || !D.j.length) return;
-    if(D.ts===_liveTS && !primera) return;
-    _liveTS=D.ts;
-    window.VOLEY_DATA=D;
-    try{ render(); }catch(e){}
-    try{ if(typeof buildDV4Buttons==='function') buildDV4Buttons(); }catch(e){}
-    var el=document.getElementById('live-badge'); if(el) el.style.display='inline-flex';
-  });
+  /* El marcador se lee siempre (liviano). El nº de rally decide si hay que
+     refrescar la vista pesada: solo cuando el scout CIERRA un punto. */
   fbGet('voley_live', function(L){
-    var el=document.getElementById('live-score'); if(!el||!L) return;
-    el.textContent = L.local.n+' '+L.local.pts+' — '+L.visitante.pts+' '+L.visitante.n+'  ·  set '+L.set;
+    if(!L) return;
+    var el=document.getElementById('live-score');
+    if(el) el.textContent = L.local.n+' '+L.local.pts+' — '+L.visitante.pts+' '+L.visitante.n+'  ·  set '+L.set;
+    var rally = (typeof L.rally==='number') ? L.rally : null;
+    /* si viene el contador de rally, refrescamos SOLO cuando cambió (punto cerrado).
+       Si no viene (compatibilidad), caemos al modo por timestamp. */
+    if(rally!==null){
+      if(rally!==_lastRally || primera){
+        _lastRally = rally;
+        fbGet('voley_data', function(D){
+          if(!D || !D.j || !D.j.length) return;
+          _liveTS=D.ts;
+          refrescarVista(D);
+          var b=document.getElementById('live-badge'); if(b) b.style.display='inline-flex';
+        });
+      }
+    } else {
+      /* modo viejo por timestamp */
+      fbGet('voley_data', function(D){
+        if(!D || !D.j || !D.j.length) return;
+        if(D.ts===_liveTS && !primera) return;
+        _liveTS=D.ts;
+        refrescarVista(D);
+        var b=document.getElementById('live-badge'); if(b) b.style.display='inline-flex';
+      });
+    }
   });
-  /* códigos crudos para las baterías en vivo */
+  /* códigos crudos para las baterías en vivo (siempre al día) */
   fbGet('voley_codes', function(C){ if(C && C.codes) window.VOLEY_CODES=C; });
 }
 /* ── BATERÍAS EN VIVO (usa los códigos que llegan por Firebase) ── */
@@ -1517,7 +1551,12 @@ if(st&&st!=='all'){cT=st;['bt-all','bt-M','bt-Q','bt-F','bt-X','bt-V','bt-C','bt
 render();
 // Reload inteligente: pausa si TV o Podio estan activos
 function smartReload(){
-  if(window.__LIVE_SCOUT) return;  // scouteo en vivo en pagina: no recargar (borraria la sesion)
+  /* DESACTIVADO: el refresco en vivo lo maneja traerEnVivo() (Firebase, cada 2s)
+     sin recargar la página. smartReload hacía location.reload() y cerraba lo que
+     estabas viendo (Baterías, Objetivos, Tabla, etc.), tirándote al inicio. */
+  return;
+  /* (código viejo del modo archivo, ya no se usa)
+  if(window.__LIVE_SCOUT) return;
   const podioOpen=document.getElementById('podio').classList.contains('open');
   const tablaOpen=document.getElementById('tabla').classList.contains('open');
   const objOpen=document.getElementById('obj').style.display==='block';
@@ -1532,6 +1571,7 @@ function smartReload(){
     document.head.appendChild(script);
     setTimeout(smartReload, 4000);
   }
+  */
 }
 setTimeout(smartReload, 4000);
 
