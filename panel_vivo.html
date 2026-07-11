@@ -390,15 +390,6 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
       <button class="hbtn" onclick="abrirVerificacion()" title="Verificar todos los códigos (Ctrl+V)">Verificar</button>
       <button class="hbtn" onclick="undoRally()" title="Deshace el punto (Ctrl+Shift+Z)">Deshacer punto</button>
       <button class="hbtn" onclick="undoLast()" title="Borra el último código (Ctrl+Z)">Deshacer código</button></h3>
-    <div id="selbar" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;margin-bottom:8px;background:rgba(230,167,67,.08);border:1px solid rgba(230,167,67,.25);border-radius:10px">
-      <span style="font-size:12px;color:var(--mut);font-weight:700">Seleccionado:</span>
-      <span class="mono" id="selbar-cod" style="font-weight:800;color:#e6a743">—</span>
-      <div style="flex:1"></div>
-      <button class="hbtn" onclick="editCode(SEL_I)" style="background:rgba(37,99,235,.15);color:#60a5fa;border-color:rgba(37,99,235,.35)">✏️ Corregir</button>
-      <button class="hbtn" onclick="insertarEn(SEL_I)" title="Insertar un código antes de éste">➕ Insertar antes</button>
-      <button class="hbtn" onclick="borrarEn(SEL_I)" style="background:rgba(239,68,68,.12);color:#f87171;border-color:rgba(239,68,68,.3)">🗑️ Borrar</button>
-      <button class="hbtn" onclick="seleccionar(-1)">✕</button>
-    </div>
     <div class="codes" id="codes"></div>
   </div>
 </div>
@@ -765,8 +756,8 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     </div>
   </div>
   <div class="actions">
-    <button class="tbtn" onclick="nuevoPartido()" style="background:rgba(34,197,94,.12);color:#22c55e;border-color:rgba(34,197,94,.3);margin-right:auto">✨ Nuevo partido</button>
-    <button class="tbtn" onclick="borrarPartido()" style="background:rgba(239,68,68,.12);color:#f87171;border-color:rgba(239,68,68,.3)">🗑️ Borrar partido</button>
+    <button class="tbtn" onclick="nuevoPartido()" style="background:rgba(34,197,94,.12);color:#22c55e;border-color:rgba(34,197,94,.3);margin-right:auto">Nuevo partido</button>
+    <button class="tbtn" onclick="cerrarPartidoActual()" title="Guarda el partido en «Partidos» y cierra (como Close Scouting del Data)">Cerrar</button>
     <button class="tbtn" onclick="closeModal('m-setup')">Cancelar</button>
     <button class="tbtn pri" onclick="saveSetup()">Empezar</button>
   </div>
@@ -2273,23 +2264,13 @@ function renderRot(side){
 function renderCodes(){
   const el = document.getElementById('codes');
   const rows = M.codes.filter(c=>c.set===M.set);
-  const bar = document.getElementById('selbar');
-  if(!rows.length){ el.innerHTML='<div class="empty-note">Todavía no cargaste ninguna acción.<br>Escribí un número y apretá Enter.</div>'; if(bar) bar.style.display='none'; return; }
+  if(!rows.length){ el.innerHTML='<div class="empty-note">Todavía no cargaste ninguna acción.<br>Escribí un número y apretá Enter.</div>'; return; }
   el.innerHTML = rows.slice(-90).reverse().map(c=>{
     const cls = c.k==='auto' ? 'auto' : (c.c[0]==='*'?'hteam':'ateam');
     const i = M.codes.indexOf(c);
     const sel = (i===SEL_I) ? ' sel' : '';
-    return '<div class="crow '+cls+sel+'" onclick="seleccionar('+i+')" ondblclick="editCode('+i+')" title="Tocá para seleccionar · doble clic (o Enter) para corregir"><span class="cc">'+c.c+'</span></div>';
+    return '<div class="crow '+cls+sel+'" onclick="seleccionar('+i+')" ondblclick="editCode('+i+')" title="Clic para seleccionar · Enter o doble clic para corregir · Ins para insertar · Supr para borrar"><span class="cc">'+c.c+'</span></div>';
   }).join('');
-  /* Barra de acciones táctiles: aparece al seleccionar un código (para tablet, sin teclas Supr/Ins) */
-  if(bar){
-    if(SEL_I>=0 && M.codes[SEL_I]){
-      bar.style.display='flex';
-      document.getElementById('selbar-cod').textContent = M.codes[SEL_I].c;
-    } else {
-      bar.style.display='none';
-    }
-  }
 }
 
 /* ── ANÁLISIS EN VIVO, al costado de la carga ──────────────── */
@@ -2610,17 +2591,23 @@ function openSetup(){
 
 /* Borra el partido entero: todos los códigos, el marcador y los sets.
    Pide confirmación porque no se puede deshacer. */
-function borrarPartido(){
-  if(!confirm('¿Borrar TODO el partido? Se pierden todos los códigos, el marcador y los sets. Esto no se puede deshacer.')) return;
-  if(!confirm('Última confirmación: ¿seguro que querés empezar de cero?')) return;
+/* Cerrar el partido (como «Close Scouting» del Data 4.11): lo GUARDA en la
+   lista de Partidos y limpia la pantalla. No destruye nada. */
+function cerrarPartidoActual(){
+  const acc = (M.codes||[]).filter(c=>c.k!=='auto').length;
+  if(acc>0){
+    guardarPartidoEnLista(M);
+    toast('Partido guardado en «Partidos» y cerrado');
+  } else {
+    toast('Partido cerrado');
+  }
   M.codes = [];
   M.home.pts=0; M.home.sets=0; M.away.pts=0; M.away.sets=0;
   M.set=1; SEL_I=-1; CALL_PEND=null;
   if(M.setsHist) M.setsHist=[];
-  delete M._id;                         /* deja de estar ligado al de la lista */
+  delete M._id;
   document.getElementById('code').value='';
   renderAll(); persist(); avisarMarcador();
-  toast('Partido borrado. Podés empezar de cero.');
   closeModal('m-setup');
 }
 
