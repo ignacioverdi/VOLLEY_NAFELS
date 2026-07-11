@@ -266,6 +266,11 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 .toast.err{border-color:rgba(248,113,113,.5);color:var(--bad)}
 @media(max-width:1100px){.wrap{grid-template-columns:1fr}.twin{grid-template-columns:1fr}}
 </style>
+<style>
+.subcol{display:flex;flex-direction:column;gap:6px;max-height:44vh;overflow:auto}
+.subitem{background:var(--card,#151521);color:var(--tx,#e8e8f0);border:1px solid var(--b,#2a2a3a);border-radius:9px;padding:11px 14px;font:inherit;font-weight:800;font-size:17px;cursor:pointer;text-align:left}
+.subitem.sel{background:#2563eb;color:#fff;border-color:#2563eb}
+</style>
 </head>
 <body>
 
@@ -274,6 +279,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <span class="live livemin" title="Se pone celeste cuando está transmitiendo a la tablet" style="color:var(--vis);border-color:rgba(34,211,238,.35);background:rgba(34,211,238,.08)"><span class="pubdot" id="pubdot"></span></span>
   <div class="spacer"></div>
   <button class="tbtn" onclick="openSetup()">Partido</button>
+  <button class="tbtn" onclick="abrirPartidos()" title="Lista de partidos guardados (ver o borrar)">📂 Partidos</button>
   <button class="tbtn" onclick="abrirVideo()" title="Video y sincronización (manual 2.5.6)">🎬 Video</button>
   <button class="tbtn tbtn2l" onclick="abrirCombos()" title="Combinaciones de ataque y llamadas (manual 12.2)">Comb<br>ataque</button>
   <button class="tbtn" onclick="abrirEquipos()" title="Base de equipos (nuevo · importar · exportar)">👥 Equipos</button>
@@ -443,6 +449,41 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <button class="tbtn" onclick="abrirValidacion('home')">Revisar local</button>
     <button class="tbtn" onclick="abrirValidacion('away')">Revisar visitante</button>
     <button class="tbtn" onclick="closeModal('m-roster')">Cerrar</button>
+  </div>
+</div></div>
+
+<div class="modal" id="m-subs"><div class="sheet" style="max-width:560px">
+  <h2>Cambio · <span id="subs-team">Equipo</span></h2>
+  <div class="sub">Elegí quién sale (izquierda) y quién entra (derecha). Cambios restantes: <b id="subs-restantes">6</b>.</div>
+  <div style="display:flex;gap:14px;margin-top:12px">
+    <div style="flex:1">
+      <div class="lutitle" style="margin-bottom:6px">Sale (en cancha)</div>
+      <div id="subs-sale" class="subcol"></div>
+    </div>
+    <div style="display:flex;align-items:center;font-size:22px;color:var(--mut)">→</div>
+    <div style="flex:1">
+      <div class="lutitle" style="margin-bottom:6px">Entra (banco)</div>
+      <div id="subs-entra" class="subcol"></div>
+    </div>
+  </div>
+  <div id="subs-resumen" style="margin-top:12px;text-align:center;font-weight:700;color:#e6a743">Elegí quién sale y quién entra</div>
+  <div class="brow" style="margin-top:12px;gap:8px;flex-wrap:wrap">
+    <button class="tbtn" onclick="cerrarSubs()">Cerrar</button>
+    <div style="flex:1"></div>
+    <button class="tbtn" onclick="confirmarCambio(true)" title="Hacer este cambio y seguir para un doble cambio">+ Otro cambio</button>
+    <button class="tbtn pri" onclick="confirmarCambio(false)">Confirmar</button>
+  </div>
+</div></div>
+
+<div class="modal" id="m-partidos"><div class="sheet" style="max-width:900px">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+    <h2>📂 Partidos guardados</h2>
+    <button id="partidos-trash" onclick="borrarPartidosSel()" style="display:none;align-items:center;gap:6px;background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.4);border-radius:8px;padding:7px 14px;cursor:pointer;font:inherit;font-weight:700">🗑️ Borrar (<span id="partidos-trash-n">0</span>)</button>
+  </div>
+  <div class="sub">Tocá un partido para abrirlo. Tildá los que quieras borrar y usá el botón rojo.</div>
+  <div id="partidos-cont" style="margin-top:12px;max-height:60vh;overflow:auto"></div>
+  <div class="brow" style="margin-top:12px">
+    <button class="tbtn" onclick="cerrarPartidos()">Cerrar</button>
   </div>
 </div></div>
 
@@ -724,7 +765,8 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     </div>
   </div>
   <div class="actions">
-    <button class="tbtn" onclick="borrarPartido()" style="background:rgba(239,68,68,.12);color:#f87171;border-color:rgba(239,68,68,.3);margin-right:auto">🗑️ Borrar partido</button>
+    <button class="tbtn" onclick="nuevoPartido()" style="background:rgba(34,197,94,.12);color:#22c55e;border-color:rgba(34,197,94,.3);margin-right:auto">✨ Nuevo partido</button>
+    <button class="tbtn" onclick="borrarPartido()" style="background:rgba(239,68,68,.12);color:#f87171;border-color:rgba(239,68,68,.3)">🗑️ Borrar partido</button>
     <button class="tbtn" onclick="closeModal('m-setup')">Cancelar</button>
     <button class="tbtn pri" onclick="saveSetup()">Empezar</button>
   </div>
@@ -893,7 +935,114 @@ if(M.vert===undefined) M.vert = false;    /* comando ROT: canchas verticales u h
 if(!M.setFirstServer) M.setFirstServer = M.serving || 'home';   /* quién sacó primero en este set */
 if(!M.home.six) M.home.six = M.home.lineup.slice();   /* formación con la que arrancó el set */
 if(!M.away.six) M.away.six = M.away.lineup.slice();
-function persist(){ save('pv_match', M); if(typeof publicarVivo==='function') publicarVivo(); }
+function persist(){
+  save('pv_match', M);
+  /* si este partido ya está en la lista, mantener su copia al día */
+  if(M._id && (M.codes||[]).length){ try{ guardarPartidoEnLista(M); }catch(e){} }
+  if(typeof publicarVivo==='function') publicarVivo();
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TABLA DE PARTIDOS (modelo DataVolley, manual 9)
+   Guarda varios partidos sin pisarlos. Cada uno con id, nombre, fecha,
+   equipos, resultado y su M completo. Se puede abrir o borrar.
+   ════════════════════════════════════════════════════════════════ */
+function partidos(){ try{ return JSON.parse(localStorage.getItem('pv_partidos')||'[]'); }catch(e){ return []; } }
+function guardarPartidos(list){ try{ localStorage.setItem('pv_partidos', JSON.stringify(list)); }catch(e){ toast('No se pudo guardar la lista',true); } }
+
+/* resumen liviano de un partido, para la fila de la tabla */
+function resumenPartido(m){
+  const setsH = m.home.sets||0, setsA = m.away.sets||0;
+  const acc = (m.codes||[]).filter(c=>c.k!=='auto').length;
+  return {
+    home: m.home.name||'Local', away: m.away.name||'Visitante',
+    res: setsH+'-'+setsA, ptsH:m.home.pts||0, ptsA:m.away.pts||0,
+    acciones: acc,
+    fecha: (m.notas&&m.notas.fecha) ? m.notas.fecha : '',
+    competencia: (m.notas&&m.notas.competencia) ? m.notas.competencia : ''
+  };
+}
+
+/* Guarda el partido actual en la lista (si tiene contenido). Si ya existe
+   (mismo id), lo actualiza; si no, lo agrega. Devuelve el id. */
+function guardarPartidoEnLista(m){
+  if(!m || !(m.codes||[]).length) return null;   /* nada que guardar */
+  const list = partidos();
+  if(!m._id) m._id = 'p'+Date.now()+Math.floor(Math.random()*1000);
+  const entrada = { id:m._id, guardado:Date.now(), resumen:resumenPartido(m), M:m };
+  const i = list.findIndex(x=>x.id===m._id);
+  if(i>=0) list[i]=entrada; else list.push(entrada);
+  guardarPartidos(list);
+  return m._id;
+}
+
+/* Abre un partido de la lista: guarda el actual primero, luego carga el elegido. */
+function abrirPartido(id){
+  guardarPartidoEnLista(M);           /* no perder el actual */
+  const list = partidos();
+  const p = list.find(x=>x.id===id);
+  if(!p){ toast('No encontré ese partido',true); return; }
+  M = p.M;
+  if(!M._id) M._id = id;
+  SEL_I=-1; CALL_PEND=null;
+  document.getElementById('code').value='';
+  renderAll(); persist(); avisarMarcador();
+  cerrarPartidos();
+  toast('Partido abierto: '+p.resumen.home+' vs '+p.resumen.away);
+}
+
+/* Borra los partidos tildados (borrado directo con confirmación, manual 9.3). */
+function borrarPartidosSel(){
+  const marc = Array.from(document.querySelectorAll('.pcheck:checked')).map(c=>c.value);
+  if(!marc.length){ toast('Tildá al menos un partido',true); return; }
+  if(!confirm('¿Borrar '+marc.length+' partido'+(marc.length>1?'s':'')+'? No se puede deshacer.')) return;
+  const list = partidos().filter(p=>!marc.includes(p.id));
+  guardarPartidos(list);
+  renderTablaPartidos();
+  toast(marc.length+' partido'+(marc.length>1?'s':'')+' borrado'+(marc.length>1?'s':''));
+}
+
+function abrirPartidos(){
+  guardarPartidoEnLista(M);          /* guardar el actual antes de mostrar la lista */
+  renderTablaPartidos();
+  document.getElementById('m-partidos').classList.add('open');
+}
+function cerrarPartidos(){ const el=document.getElementById('m-partidos'); if(el) el.classList.remove('open'); }
+
+function renderTablaPartidos(){
+  const cont = document.getElementById('partidos-cont');
+  const list = partidos().slice().sort((a,b)=>(b.guardado||0)-(a.guardado||0));
+  if(!list.length){ cont.innerHTML='<div class="empty-note">Todavía no hay partidos guardados.<br>Cuando scoutees uno, va a aparecer acá.</div>'; return; }
+  let html = '<table style="width:100%;border-collapse:collapse;font-size:14px">'
+    + '<thead><tr style="text-align:left;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:1px">'
+    + '<th style="padding:8px 6px;width:32px"></th><th style="padding:8px 6px">Fecha</th><th style="padding:8px 6px">Partido</th>'
+    + '<th style="padding:8px 6px;text-align:center">Resultado</th><th style="padding:8px 6px;text-align:center">Acciones</th>'
+    + '<th style="padding:8px 6px;width:70px"></th></tr></thead><tbody>';
+  list.forEach(p=>{
+    const r=p.resumen, actual = (p.id===M._id);
+    html += '<tr style="border-top:1px solid var(--b)'+(actual?';background:rgba(230,167,67,.06)':'')+'">'
+      + '<td style="padding:8px 6px"><input type="checkbox" class="pcheck" value="'+p.id+'" onchange="pintarTrash()"></td>'
+      + '<td style="padding:8px 6px;color:var(--mut)">'+(r.fecha||'—')+(r.competencia?'<br><span style="font-size:11px">'+r.competencia+'</span>':'')+'</td>'
+      + '<td style="padding:8px 6px;font-weight:700">'+r.home+' <span style="color:var(--mut)">vs</span> '+r.away+(actual?' <span style="font-size:10px;color:#e6a743">● actual</span>':'')+'</td>'
+      + '<td style="padding:8px 6px;text-align:center;font-weight:800">'+r.res+'</td>'
+      + '<td style="padding:8px 6px;text-align:center;color:var(--mut)">'+r.acciones+'</td>'
+      + '<td style="padding:8px 6px"><button class="tbtn" onclick="abrirPartido(\''+p.id+'\')" style="padding:5px 12px">Abrir</button></td>'
+      + '</tr>';
+  });
+  html += '</tbody></table>';
+  cont.innerHTML = html;
+  pintarTrash();
+}
+/* el botón rojo del tacho aparece/actualiza el número cuando hay tildados (manual 9.3) */
+function pintarTrash(){
+  const n = document.querySelectorAll('.pcheck:checked').length;
+  const btn = document.getElementById('partidos-trash');
+  if(!btn) return;
+  btn.style.display = n>0 ? 'inline-flex' : 'none';
+  document.getElementById('partidos-trash-n').textContent = n;
+}
+
+
 
 /* ============================================================
    PARSEO Y NORMALIZACIÓN DEL CÓDIGO
@@ -1849,6 +1998,18 @@ function commit(){
   const parts = parseInput(bruto);
   if(!parts.length) return false;
   if(parts[0].err){ toast(parts[0].err,true); marcarBarraMal(); return false; }
+
+  /* MANUAL 4.5.2 · modificar desde la barra: si hay un código seleccionado en la
+     lista y escribo UN código nuevo, REEMPLAZO el seleccionado (no lo agrego al
+     final). Igual que DataVolley: te parás sobre el código y lo reescribís. */
+  if(SEL_I>=0 && parts.length===1 && !CALL_PEND && M.codes[SEL_I]){
+    const nuevoCod = fmt(parts[0]);
+    editarCodigoEn(SEL_I, nuevoCod, parts[0]);   /* reemplaza y ajusta la pareja */
+    inp.value=''; clearPick(); drawDecoder(); renderCodes(); renderStats(); renderMiniAn(); persist();
+    toast('Código '+(SEL_I+1)+' corregido');
+    SEL_I=-1; renderCodes();
+    return true;
+  }
   const av=[]; parts.forEach(p=>verificar(p).forEach(x=>av.push(x)));
   if(av.length) toast('⚠ '+av[0]);
   parts.forEach(a=>{
@@ -2004,10 +2165,64 @@ function timeout(side){
 /* El botón de cambio usa EXACTAMENTE el mismo camino que el comando C6.7:
    así valida el límite de cambios, el dorsal, el armador que sale, y reubica
    el bloque de estado. Antes eran dos caminos distintos y no coincidían. */
+/* Sustitución al estilo DataVolley (manual 4.9): dos listas, el que sale y el
+   que entra. Se pueden encadenar varias antes de cerrar (doble cambio). */
+let SUBS_SIDE='home', SUBS_SALE=null, SUBS_ENTRA=null;
 function subst(side){
-  const out = prompt('¿Qué número sale?'); if(!out) return;
-  const inn = prompt('¿Qué número entra?'); if(!inn) return;
-  hacerCambio(side, parseInt(out,10), parseInt(inn,10));
+  SUBS_SIDE=side; SUBS_SALE=null; SUBS_ENTRA=null;
+  renderSubs();
+  document.getElementById('m-subs').classList.add('open');
+}
+function cerrarSubs(){ document.getElementById('m-subs').classList.remove('open'); }
+/* elenco del banco: los jugadores del equipo (pv_equipos o plantel) que NO están en cancha */
+function bancoDe(side){
+  const enCancha = M[side].lineup.slice();
+  if(M[side].libero) enCancha.push(M[side].libero);
+  let roster = [];
+  try{
+    const eqs = (typeof equipos==='function') ? equipos() : [];
+    const nombre = (M[side].name||'').toUpperCase();
+    const eq = eqs.find(e=>(e.nombre||'').toUpperCase()===nombre);
+    if(eq && eq.jugadores) roster = eq.jugadores.map(j=>parseInt(j.num,10)).filter(Boolean);
+  }catch(e){}
+  /* si no hay roster cargado, permitimos escribir un número a mano */
+  return roster.filter(n=>!enCancha.includes(n));
+}
+function renderSubs(){
+  const side=SUBS_SIDE;
+  document.getElementById('subs-team').textContent = M[side].name || (side==='home'?'Local':'Visitante');
+  document.getElementById('subs-restantes').textContent = Math.max(0, (CFG.regl.cambios||6) - (M[side].subs||0));
+  /* columna IZQUIERDA: los 6 en cancha (el que sale) */
+  const enCancha = M[side].lineup.slice();
+  document.getElementById('subs-sale').innerHTML = enCancha.map(n=>
+    '<button class="subitem'+(n===SUBS_SALE?' sel':'')+'" onclick="pickSale('+n+')">'+n+(n===M[side].setter?' ⚙':'')+'</button>'
+  ).join('');
+  /* columna DERECHA: el banco (el que entra) + opción de escribir a mano */
+  const banco = bancoDe(side);
+  let der = banco.map(n=>'<button class="subitem'+(n===SUBS_ENTRA?' sel':'')+'" onclick="pickEntra('+n+')">'+n+'</button>').join('');
+  der += '<div style="margin-top:8px;display:flex;gap:6px;align-items:center"><input id="subs-manual" class="mono" inputmode="numeric" placeholder="Nº" style="width:70px" oninput="pickEntraManual(this.value)"><span style="font-size:12px;color:var(--mut)">o escribí el número</span></div>';
+  document.getElementById('subs-entra').innerHTML = der;
+  /* resumen */
+  const rs=document.getElementById('subs-resumen');
+  if(SUBS_SALE!==null && SUBS_ENTRA!==null){ rs.textContent='Sale '+SUBS_SALE+' → Entra '+SUBS_ENTRA; rs.style.opacity=1; }
+  else { rs.textContent='Elegí quién sale y quién entra'; rs.style.opacity=.6; }
+}
+function pickSale(n){ SUBS_SALE=(SUBS_SALE===n?null:n); renderSubs(); }
+function pickEntra(n){ SUBS_ENTRA=(SUBS_ENTRA===n?null:n); const m=document.getElementById('subs-manual'); if(m) m.value=''; renderSubs(); }
+function pickEntraManual(v){ const n=parseInt(v,10); SUBS_ENTRA = (n>=1&&n<=99)?n:null;
+  document.querySelectorAll('#subs-entra .subitem').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('subs-resumen').textContent = (SUBS_SALE!==null&&SUBS_ENTRA!==null)?('Sale '+SUBS_SALE+' → Entra '+SUBS_ENTRA):'Elegí quién sale y quién entra';
+  document.getElementById('subs-resumen').style.opacity = (SUBS_SALE!==null&&SUBS_ENTRA!==null)?1:.6;
+}
+/* confirmar UN cambio y seguir en la ventana (para encadenar doble cambio) */
+function confirmarCambio(seguir){
+  if(SUBS_SALE===null || SUBS_ENTRA===null){ toast('Elegí quién sale y quién entra',true); return; }
+  const okc = hacerCambio(SUBS_SIDE, SUBS_SALE, SUBS_ENTRA);
+  if(!okc) return;
+  renderAll(); persist();
+  SUBS_SALE=null; SUBS_ENTRA=null;
+  if(seguir){ renderSubs(); toast('Cambio hecho. Podés hacer otro.'); }
+  else { cerrarSubs(); toast('Cambio hecho'); }
 }
 
 function closeSet(){
@@ -2064,7 +2279,7 @@ function renderCodes(){
     const cls = c.k==='auto' ? 'auto' : (c.c[0]==='*'?'hteam':'ateam');
     const i = M.codes.indexOf(c);
     const sel = (i===SEL_I) ? ' sel' : '';
-    return '<div class="crow '+cls+sel+'" onclick="seleccionar('+i+')" title="Tocá para seleccionar y corregir"><span class="cc">'+c.c+'</span></div>';
+    return '<div class="crow '+cls+sel+'" onclick="seleccionar('+i+')" ondblclick="editCode('+i+')" title="Tocá para seleccionar · doble clic (o Enter) para corregir"><span class="cc">'+c.c+'</span></div>';
   }).join('');
   /* Barra de acciones táctiles: aparece al seleccionar un código (para tablet, sin teclas Supr/Ins) */
   if(bar){
@@ -2402,10 +2617,29 @@ function borrarPartido(){
   M.home.pts=0; M.home.sets=0; M.away.pts=0; M.away.sets=0;
   M.set=1; SEL_I=-1; CALL_PEND=null;
   if(M.setsHist) M.setsHist=[];
+  delete M._id;                         /* deja de estar ligado al de la lista */
   document.getElementById('code').value='';
   renderAll(); persist(); avisarMarcador();
   toast('Partido borrado. Podés empezar de cero.');
   closeModal('m-setup');
+}
+
+/* Empezar un partido NUEVO: guarda el actual en la lista y deja todo limpio
+   para cargar los datos del próximo. El anterior NO se pierde (queda en Partidos). */
+function nuevoPartido(){
+  const acc = (M.codes||[]).filter(c=>c.k!=='auto').length;
+  if(acc>0){
+    guardarPartidoEnLista(M);
+    toast('Partido anterior guardado en «Partidos»');
+  }
+  M.codes = [];
+  M.home.pts=0; M.home.sets=0; M.away.pts=0; M.away.sets=0;
+  M.set=1; SEL_I=-1; CALL_PEND=null;
+  if(M.setsHist) M.setsHist=[];
+  delete M._id;                         /* el nuevo tendrá su propio id al guardarse */
+  document.getElementById('code').value='';
+  renderAll(); persist(); avisarMarcador();
+  openSetup();                          /* que cargue los equipos del nuevo */
 }
 
 function saveSetup(){
@@ -2524,23 +2758,31 @@ function saveEdit(){
     return;
   }
   const viejo = M.codes[EDIT_I].c;
-  M.codes[EDIT_I].c = cod;
+  editarCodigoEn(EDIT_I, cod, p[0]);
+  closeModal('m-edit'); renderAll(); persist();
+  toast(viejo===cod ? 'Sin cambios' : 'Código corregido');
+}
 
-  if(CFG.autoCompound){
-    const a = p[0], d = merged(a);
-    /* a) pareja correlacionada: tipo, efecto y dirección */
-    const j = parejaDe(EDIT_I);
+/* Reemplaza el código en la posición i y, si está activo el auto-compound,
+   ajusta el código pareja (manual: MODIFY CODE · Automatic Modification of
+   Compound Code). Una sola fuente de verdad para editar desde la ventana o
+   desde la barra. */
+function editarCodigoEn(i, cod, a){
+  if(!M.codes[i]) return;
+  M.codes[i].c = cod;
+  if(CFG.autoCompound && a){
+    const d = merged(a);
+    const j = parejaDe(i);
     if(j>=0){
       let o = M.codes[j].c;
-      o = setChar(o,4,a.type);                                  /* mismo tipo de pelota */
-      if(a.skill==='S') o = setChar(o,5, invRec(a.ev));         /* saque -> recepción  */
+      o = setChar(o,4,a.type);
+      if(a.skill==='S') o = setChar(o,5, invRec(a.ev));
       if(a.skill==='R') M.codes[j].c = setChar(M.codes[j].c,5, REC_TO_SERVE[a.ev]||M.codes[j].c[5]);
       if(d.sz && o.length>10){ o = setChar(o,9,d.sz); o = setChar(o,10,d.ez||o[10]); }
       if(a.skill!=='R') M.codes[j].c = o; else M.codes[j].c = setChar(M.codes[j].c,4,a.type);
     }
-    /* b) ataque -> armado previo: tipo y destino salen de la combinación */
     if(a.skill==='A' && d.combo && COMBOS[d.combo]){
-      const e = armadoPrevio(EDIT_I);
+      const e = armadoPrevio(i);
       if(e>=0){
         let o = M.codes[e].c;
         o = setChar(o,4, COMBOS[d.combo].et || o[4]);
@@ -2549,8 +2791,6 @@ function saveEdit(){
       }
     }
   }
-  closeModal('m-edit'); renderAll(); persist();
-  toast(viejo===cod ? 'Sin cambios' : 'Código corregido');
 }
 function invRec(evSaque){ for(const k in REC_TO_SERVE) if(REC_TO_SERVE[k]===evSaque) return k; return '+'; }
 function deleteEdit(){
