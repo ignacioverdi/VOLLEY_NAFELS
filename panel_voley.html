@@ -493,11 +493,16 @@ function renderObjetivosJugador(cid,nombre,extra){
 
   </div>
   <div id="lang-wrap" style="display:flex;align-items:center;gap:4px;margin-left:8px"></div>
-  <div class="live">En vivo</div>
-  <div class="pts-badge">
-    <div class="pts-n" id="pts-total">0</div>
-    <div class="pts-l">puntos<br>equipo</div>
+  <div class="live" id="hdr-live" style="display:none">● En vivo</div>
+  <div class="pts-badge" id="hdr-score" style="display:flex;align-items:center;gap:8px;white-space:nowrap">
+    <span id="hs-hn" style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;color:#e6a743">LOC</span>
+    <span id="hs-hp" style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;color:#e8e8f0">0</span>
+    <span style="color:#3a3a4a;font-size:13px">-</span>
+    <span id="hs-ap" style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;color:#e8e8f0">0</span>
+    <span id="hs-an" style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;color:#22d3ee">VIS</span>
+    <span id="hs-set" style="font-family:'Barlow Condensed',sans-serif;font-size:10px;color:#64748b;letter-spacing:1px;margin-left:2px">S1</span>
   </div>
+  <span id="pts-total" style="display:none">0</span>
   <div class="leg">
     <div class="li"><div class="ld" style="background:var(--green)"></div># Punto</div>
     <div class="li"><div class="ld" style="background:var(--lgreen)"></div>+ Positivo</div>
@@ -1442,6 +1447,14 @@ function traerEnVivo(primera){
       if(g('mk-hs')) g('mk-hs').textContent = (L.local.sets||0)+' SETS';
       if(g('mk-as')) g('mk-as').textContent = (L.visitante.sets||0)+' SETS';
       if(g('mk-set')) g('mk-set').textContent = 'SET '+(L.set||1);
+      /* marcador compacto del header (siempre visible) */
+      var abr=function(n){ n=(n||'').trim(); return n?n.substring(0,3).toUpperCase():'---'; };
+      if(g('hs-hn')) g('hs-hn').textContent = abr(L.local.n);
+      if(g('hs-an')) g('hs-an').textContent = abr(L.visitante.n);
+      if(g('hs-hp')) g('hs-hp').textContent = L.local.pts||0;
+      if(g('hs-ap')) g('hs-ap').textContent = L.visitante.pts||0;
+      if(g('hs-set')) g('hs-set').textContent = 'S'+(L.set||1);
+      if(g('hdr-live')) g('hdr-live').style.display='block';
     }catch(e){}
     var rally = (typeof L.rally==='number') ? L.rally : null;
     /* si viene el contador de rally, refrescamos SOLO cuando cambió (punto cerrado).
@@ -1510,12 +1523,15 @@ function llenarBatJugadores(){
 }
 function renderBateriasPanel(){
   var side=_batLado==='home'?'*':'a';
+  var ladoRival = side==='*' ? 'a' : '*';
   var res=window.bateriasVivo(_batCodes(), side);
+  var resRival=window.bateriasVivo(_batCodes(), ladoRival);   /* baterías del equipo rival, en vivo */
   var sel=document.getElementById('bat-jugsel');
   var jn=sel.value?parseInt(sel.value,10):null;
   var jugVals=jn!==null?(res.jugadores[jn]||{}):res.equipo;
   var titulo=jn!==null?('#'+jn+' '+_batNombre(jn)+' vs equipo'):'Equipo completo';
-  renderBaterias('bat-cont', jugVals, res.equipo, titulo);
+  /* arriba: jugador elegido + nuestro equipo · abajo: equipo rival (para comparar sin tocar filtros) */
+  renderBaterias('bat-cont', jugVals, res.equipo, titulo, resRival.equipo);
 }
 
 function iniciarEnVivo(){

@@ -164,10 +164,12 @@ window.bateriasVivo = function(codes, side){
 };
 
 /* ── Render de las baterías: fila Jugador vs fila Equipo (diseño del dashboard) ── */
-function renderBaterias(containerId, jugVals, eqVals, titulo){
+function renderBaterias(containerId, jugVals, eqVals, titulo, rivalVals){
   var el=document.getElementById(containerId); if(!el) return;
   var metas=window.OBJETIVOS_CONFIG.metas;
   var rows=[{label:'Jugador',vals:jugVals||{},isJug:true},{label:'Equipo',vals:eqVals||{},isJug:false}];
+  /* si viene el rival, se agrega una línea abajo para comparar (se clasifica sobre sus propios objetivos) */
+  if(rivalVals){ rows.push({label:'__SEP__',vals:{},isJug:false,sep:true}); rows.push({label:'Rival',vals:rivalVals||{},isJug:false,esRival:true}); }
   var html='<div style="font-family:Barlow Condensed,sans-serif;padding:4px 0 8px">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
     +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">'+(titulo||'BATERÍAS')+'</div>'
@@ -185,8 +187,10 @@ function renderBaterias(containerId, jugVals, eqVals, titulo){
     }).join('')
     +'</div>';
   rows.forEach(function(row){
+    if(row.sep){ html+='<div style="height:1px;background:rgba(255,255,255,.1);margin:10px 0 12px"></div>'; return; }
+    var lblColor = row.esRival ? '#f87171' : '#94a3b8';
     html+='<div style="display:flex;align-items:center;gap:8px;width:100%;margin-bottom:8px">'
-      +'<div style="width:64px;flex-shrink:0;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#94a3b8;text-align:right;padding-right:8px">'+row.label+'</div>'
+      +'<div style="width:64px;flex-shrink:0;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:'+lblColor+';text-align:right;padding-right:8px">'+row.label+'</div>'
       +Object.keys(metas).map(function(id){
         var m=metas[id], val=row.vals[id]!==undefined && row.vals[id]!==null ? row.vals[id] : null;
         var cls, objLine;
