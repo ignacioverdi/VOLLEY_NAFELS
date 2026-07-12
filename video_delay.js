@@ -17,7 +17,7 @@
   var recorder = null;          /* MediaRecorder para el buffer con delay */
   var chunks = [];              /* {t, blob} buffer rodante */
   var BUFFER_MAX_MS = 40000;    /* guardamos hasta 40 s hacia atrás */
-  var delayMs = 8000;           /* delay actual (8 s por defecto, tipo DataVolley) */
+  var delayMs = 0;              /* delay actual: arranca en 0 (vivo directo) para ver imagen al instante */
   var playTimer = null;
   var connected = false;
 
@@ -72,7 +72,17 @@
   /* ── al recibir el stream: arrancar el buffer con delay ── */
   function onStreamRecibido(stream){
     var vLive = $('vd-live');
-    if(vLive){ vLive.srcObject = stream; vLive.play().catch(function(){}); }
+    var vDelay = $('vd-delay');
+    /* mostrar el VIVO al instante → nunca pantalla negra */
+    if(vLive){
+      vLive.srcObject = stream;
+      vLive.muted = true;
+      vLive.setAttribute('playsinline','');
+      vLive.play().catch(function(){});
+      vLive.style.display = 'block';
+    }
+    if(vDelay){ vDelay.style.display = 'none'; }
+    setEstado('Conectado · en vivo', 'ok');
 
     /* grabamos en pedacitos para poder reproducir con retraso */
     chunks = [];

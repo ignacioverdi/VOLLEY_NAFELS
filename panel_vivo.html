@@ -3670,14 +3670,14 @@ if(M.home.lineup.every(x=>!x)) openSetup();
         <video id="vd-live" autoplay muted playsinline style="width:100%;height:100%;object-fit:contain;display:none"></video>
         <video id="vd-delay" autoplay muted playsinline style="width:100%;height:100%;object-fit:contain;display:block"></video>
         <div id="vd-estado-replay" style="display:none;position:absolute;top:12px;left:12px;padding:6px 14px;border-radius:20px;background:rgba(230,167,67,.9);color:#1a1200;font-weight:800;font-size:12px;letter-spacing:1px">ULTIMO PUNTO</div>
-        <div style="position:absolute;top:12px;right:12px;padding:6px 14px;border-radius:20px;background:rgba(0,0,0,.6);color:#22d3ee;font-weight:800;font-size:12px;letter-spacing:1px;backdrop-filter:blur(6px)">DELAY <span id="vd-delay-lbl">8 s</span></div>
+        <div style="position:absolute;top:12px;right:12px;padding:6px 14px;border-radius:20px;background:rgba(0,0,0,.6);color:#22d3ee;font-weight:800;font-size:12px;letter-spacing:1px;backdrop-filter:blur(6px)">DELAY <span id="vd-delay-lbl">0 s</span></div>
       </div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <button onclick="vdReplay()" style="width:100%;background:#e6a743;color:#1a1200;border:0;border-radius:12px;padding:16px;font-size:17px;font-weight:800;cursor:pointer;font-family:inherit">Ver ultimo punto</button>
         <div style="display:flex;align-items:center;gap:12px;background:#12131f;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 16px">
           <span style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8a8ba0;white-space:nowrap">Delay</span>
-          <input type="range" id="vd-slider" min="0" max="25" step="1" value="8" oninput="vdSlider(this.value)" style="flex:1;accent-color:#22d3ee">
-          <span id="vd-slider-val" style="font-family:Barlow Condensed,monospace;font-size:18px;font-weight:800;color:#22d3ee;min-width:44px;text-align:right">8 s</span>
+          <input type="range" id="vd-slider" min="0" max="25" step="1" value="0" oninput="vdSlider(this.value)" style="flex:1;accent-color:#22d3ee">
+          <span id="vd-slider-val" style="font-family:Barlow Condensed,monospace;font-size:18px;font-weight:800;color:#22d3ee;min-width:44px;text-align:right">0 s</span>
         </div>
       </div>
     </div>
@@ -3686,7 +3686,7 @@ if(M.home.lineup.every(x=>!x)) openSetup();
 <script>
 function abrirVideoVivo(){ document.getElementById('m-videovivo').style.display='block'; var inp=document.getElementById('vd-sala'); if(inp) setTimeout(function(){inp.focus();},100); }
 function cerrarVideoVivo(){ if(window.VideoDelay) VideoDelay.desconectar(); document.getElementById('m-videovivo').style.display='none'; document.getElementById('vdv-player').style.display='none'; document.getElementById('vdv-conectar').style.display='flex'; }
-function vdConectar(){ var sala=(document.getElementById('vd-sala').value||'').trim(); if(sala.length<4){ document.getElementById('vd-estado').textContent='Escribí el código de 4 dígitos.'; return; } if(!window.VideoDelay){ document.getElementById('vd-estado').textContent='Falta video_delay.js'; return; } VideoDelay.conectar(sala); VideoDelay.setDelay(8); document.getElementById('vdv-conectar').style.display='none'; document.getElementById('vdv-player').style.display='flex'; }
+function vdConectar(){ var sala=(document.getElementById('vd-sala').value||'').trim(); if(sala.length<4){ document.getElementById('vd-estado').textContent='Escribí el código de 4 dígitos.'; return; } if(!window.VideoDelay){ document.getElementById('vd-estado').textContent='Falta video_delay.js'; return; } VideoDelay.conectar(sala); VideoDelay.setDelay(0); document.getElementById('vdv-conectar').style.display='none'; document.getElementById('vdv-player').style.display='flex'; }
 function vdSlider(v){ document.getElementById('vd-slider-val').textContent=v+' s'; if(window.VideoDelay) VideoDelay.setDelay(parseInt(v,10)); }
 function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 </script>
