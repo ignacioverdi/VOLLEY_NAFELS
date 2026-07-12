@@ -8,6 +8,15 @@
 (function(){
   'use strict';
 
+  /* escritura/lectura de video SIN candado de permisos por rol */
+  function videoSet(path, value){
+    try{ var u=(typeof FB_URL!=='undefined'?FB_URL:'https://nafels-voley-default-rtdb.firebaseio.com'); fetch(u+'/'+path+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(value)}).catch(function(){}); }catch(e){}
+  }
+  function videoGet(path, cb){
+    try{ var u=(typeof FB_URL!=='undefined'?FB_URL:'https://nafels-voley-default-rtdb.firebaseio.com'); fetch(u+'/'+path+'.json').then(function(r){return r.json();}).then(function(d){cb(d);}).catch(function(){cb(null);}); }catch(e){ cb(null); }
+  }
+
+
   var ICE = { iceServers:[ {urls:'stun:stun.l.google.com:19302'}, {urls:'stun:stun1.l.google.com:19302'} ] };
 
   var pc = null;
@@ -31,12 +40,12 @@
     setEstado('Conectando a la sala '+salaId+'…', 'wait');
 
     /* avisar al emisor que queremos conectarnos */
-    fbSet('video_signal/'+salaId+'/requests/'+viewerId, { ts:Date.now() });
+    videoSet('video_signal/'+salaId+'/requests/'+viewerId, { ts:Date.now() });
 
     pc = new RTCPeerConnection(ICE);
     var myCands = [];
     pc.onicecandidate = function(ev){
-      if(ev.candidate){ myCands.push(ev.candidate.toJSON()); fbSet('video_signal/'+salaId+'/offer_cand/'+viewerId, myCands); }
+      if(ev.candidate){ myCands.push(ev.candidate.toJSON()); videoSet('video_signal/'+salaId+'/offer_cand/'+viewerId, myCands); }
     };
     pc.ontrack = function(ev){
       liveStream = ev.streams[0];
@@ -52,16 +61,16 @@
     var wait = setInterval(function(){
       tries++;
       if(tries>40 || connected){ clearInterval(wait); if(!connected && tries>40) setEstado('El emisor no respondió. ¿La cámara está transmitiendo?', 'err'); return; }
-      fbGet('video_signal/'+salaId+'/offer/'+viewerId, function(offer){
+      videoGet('video_signal/'+salaId+'/offer/'+viewerId, function(offer){
         if(offer && offer.sdp && !pc.currentRemoteDescription){
           pc.setRemoteDescription(new RTCSessionDescription(offer))
             .then(function(){ return pc.createAnswer(); })
             .then(function(ans){ return pc.setLocalDescription(ans).then(function(){ return ans; }); })
-            .then(function(ans){ fbSet('video_signal/'+salaId+'/answer/'+viewerId, {type:ans.type, sdp:ans.sdp}); })
+            .then(function(ans){ videoSet('video_signal/'+salaId+'/answer/'+viewerId, {type:ans.type, sdp:ans.sdp}); })
             .catch(function(e){ setEstado('Error al conectar: '+e.message, 'err'); });
         }
       });
-      fbGet('video_signal/'+salaId+'/answer_cand/'+viewerId, function(cands){
+      videoGet('video_signal/'+salaId+'/answer_cand/'+viewerId, function(cands){
         if(cands && Array.isArray(cands)){
           cands.forEach(function(c){ try{ pc.addIceCandidate(new RTCIceCandidate(c)); }catch(e){} });
         }
@@ -105,27 +114,47 @@
     }
   }
 
-  /* ── reproducir el buffer con el delay elegido ── */
+  /* ── reproducir el buffer con el delay elegido ──
+     Enfoque robusto: arma un solo blob con TODO lo grabado hasta 'ahora - delay'
+     y lo reproduce. Mientras el blob no tenga imagen, se sigue viendo el VIVO
+     (nunca pantalla negra). El cambio a la vista con delay recién ocurre cuando
+     el video atrasado ya está reproduciendo de verdad. */
   function arrancarReproduccionConDelay(){
     var vDelay = $('vd-delay');
+    var vLive = $('vd-live');
     if(!vDelay) return;
     if(playTimer) clearInterval(playTimer);
-    var ultimoServido = 0;
+
     playTimer = setInterval(function(){
-      if(delayMs<=0){ return; }  /* delay 0 = se ve el vivo directo (otro elemento) */
-      var objetivo = Date.now() - delayMs;
-      /* juntar los chunks hasta el momento objetivo y reproducirlos */
-      var relevantes = chunks.filter(function(c){ return c.t <= objetivo && c.t > ultimoServido; });
-      if(relevantes.length){
-        var blob = new Blob(relevantes.map(function(c){return c.blob;}), {type:'video/webm'});
-        var url = URL.createObjectURL(blob);
-        var prev = vDelay.src;
-        vDelay.src = url;
-        vDelay.play().catch(function(){});
-        ultimoServido = relevantes[relevantes.length-1].t;
-        if(prev) setTimeout(function(){ URL.revokeObjectURL(prev); }, 2000);
+      if(delayMs<=0){
+        if(vLive && vLive.style.display==='none'){ vLive.style.display='block'; }
+        if(vDelay && vDelay.style.display!=='none'){ vDelay.style.display='none'; }
+        return;
       }
-    }, 1000);
+      if(!chunks.length) return;
+      var objetivo = Date.now() - delayMs;
+      var hasta = chunks.filter(function(c){ return c.t <= objetivo; });
+      if(!hasta.length){ return; }   /* aún sin buffer: seguir viendo el vivo */
+      var blob = new Blob(hasta.map(function(c){return c.blob;}), {type:'video/webm'});
+      var url = URL.createObjectURL(blob);
+      var prev = vDelay.src;
+      vDelay.src = url;
+      vDelay.onloadedmetadata = function(){
+        try{ var dur=vDelay.duration; if(isFinite(dur)&&dur>4){ vDelay.currentTime=Math.max(0,dur-4); } }catch(e){}
+      };
+      var p = vDelay.play();
+      if(p && p.then){
+        p.then(function(){
+          if(vLive) vLive.style.display='none';
+          vDelay.style.display='block';
+          setEstado('Delay '+(delayMs/1000)+' s', 'ok');
+        }).catch(function(){});
+      } else {
+        if(vLive) vLive.style.display='none';
+        vDelay.style.display='block';
+      }
+      if(prev && prev.indexOf('blob:')===0) setTimeout(function(){ URL.revokeObjectURL(prev); }, 3000);
+    }, 3000);
   }
 
   /* ── cambiar el delay ── */
@@ -133,13 +162,14 @@
     delayMs = Math.max(0, seg*1000);
     var lbl = $('vd-delay-lbl'); if(lbl) lbl.textContent = seg+' s';
     var vLive = $('vd-live'), vDelay = $('vd-delay');
-    /* con delay 0 mostramos el vivo directo; con delay>0, el buffer */
     if(seg<=0){
-      if(vLive) vLive.style.display='block';
-      if(vDelay) vDelay.style.display='none';
-    }else{
-      if(vLive) vLive.style.display='none';
-      if(vDelay) vDelay.style.display='block';
+      if(vLive){ vLive.style.display='block'; }
+      if(vDelay){ vDelay.style.display='none'; }
+      setEstado('En vivo', 'ok');
+    } else {
+      /* NO ocultamos el vivo todavía: el loop hace el cambio cuando el delay
+         tenga imagen. Así al mover el slider nunca queda la pantalla en negro. */
+      setEstado('Delay '+seg+' s · preparando…', 'wait');
     }
   }
 
@@ -175,7 +205,7 @@
     if(playTimer) clearInterval(playTimer);
     if(recorder && recorder.state!=='inactive'){ try{ recorder.stop(); }catch(e){} }
     if(pc){ try{ pc.close(); }catch(e){} pc=null; }
-    if(salaId && viewerId){ fbSet('video_signal/'+salaId+'/requests/'+viewerId, null); }
+    if(salaId && viewerId){ videoSet('video_signal/'+salaId+'/requests/'+viewerId, null); }
     chunks=[]; liveStream=null;
     var vLive=$('vd-live'), vDelay=$('vd-delay');
     if(vLive) vLive.srcObject=null;
