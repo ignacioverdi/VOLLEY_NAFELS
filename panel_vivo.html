@@ -3665,8 +3665,8 @@ if(M.home.lineup.every(x=>!x)) openSetup();
       <button onclick="vdConectar()" style="background:#22d3ee;color:#04212a;border:0;border-radius:12px;padding:14px 30px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit">Conectar</button>
       <div id="vd-estado" class="vd-estado" style="font-size:13px;color:#8a8ba0;min-height:20px"></div>
     </div>
-    <div id="vdv-player" style="display:none;flex:1;flex-direction:column;padding:14px;gap:12px">
-      <div style="position:relative;background:#000;border-radius:14px;overflow:hidden;flex:1;min-height:0">
+    <div id="vdv-player" style="display:none;flex-direction:column;padding:14px;gap:12px;overflow-y:auto;flex:1">
+      <div id="vd-videowrap" style="position:relative;background:#000;border-radius:14px;overflow:hidden;width:100%;max-height:45vh;aspect-ratio:16/9;flex-shrink:0">
         <video id="vd-live" autoplay muted playsinline style="width:100%;height:100%;object-fit:contain;display:none"></video>
         <video id="vd-delay" autoplay muted playsinline style="width:100%;height:100%;object-fit:contain;display:block"></video>
         <div id="vd-estado-replay" style="display:none;position:absolute;top:12px;left:12px;padding:6px 14px;border-radius:20px;background:rgba(230,167,67,.9);color:#1a1200;font-weight:800;font-size:12px;letter-spacing:1px">ULTIMO PUNTO</div>
@@ -3689,6 +3689,7 @@ function cerrarVideoVivo(){ if(window.VideoDelay) VideoDelay.desconectar(); docu
 function vdConectar(){ var sala=(document.getElementById('vd-sala').value||'').trim(); if(sala.length<4){ document.getElementById('vd-estado').textContent='Escribí el código de 4 dígitos.'; return; } if(!window.VideoDelay){ document.getElementById('vd-estado').textContent='Falta video_delay.js'; return; } VideoDelay.conectar(sala); VideoDelay.setDelay(0); document.getElementById('vdv-conectar').style.display='none'; document.getElementById('vdv-player').style.display='flex'; }
 function vdSlider(v){ document.getElementById('vd-slider-val').textContent=v+' s'; if(window.VideoDelay) VideoDelay.setDelay(parseInt(v,10)); }
 function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
+function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
 </body>
