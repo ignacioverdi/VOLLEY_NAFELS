@@ -201,10 +201,22 @@
     var vDelay=$('vd-delay');
     if(!vDelay) return;
     vDelay.srcObject=null;
-    vDelay.src=url;
     vDelay.muted=true;
-    vDelay.play().catch(function(){});
+    vDelay.setAttribute('playsinline','');
     vDelay.onended = function(){ if(onended) try{ onended(); }catch(e){} };
+    /* reproducir recién cuando el video esté listo (evita quedar pausado en frame 0) */
+    var intentado=false;
+    function arrancar(){
+      if(intentado) return; intentado=true;
+      var p = vDelay.play();
+      if(p && p.catch) p.catch(function(){ /* reintento tras un toque/tiempo */ intentado=false; setTimeout(function(){ if(vDelay.paused) vDelay.play().catch(function(){}); }, 300); });
+    }
+    vDelay.oncanplay = arrancar;
+    vDelay.onloadeddata = arrancar;
+    vDelay.src=url;
+    vDelay.load();
+    /* fallback: si en 500ms no arrancó, forzar */
+    setTimeout(function(){ if(vDelay.paused) arrancar(); }, 500);
   }
 
   /* ── ÚLTIMO PUNTO: reproducir el clip que contiene el último rally cerrado ── */
