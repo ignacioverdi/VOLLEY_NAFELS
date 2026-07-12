@@ -78,138 +78,173 @@
     }, 800);
   }
 
-  /* ── al recibir el stream: arrancar el buffer con delay ── */
+  /* ═══════════════════════════════════════════════════════════════════
+     GRABACIÓN EN CICLOS CERRADOS (para que cada clip sea REPRODUCIBLE).
+     El MediaRecorder graba de a un ciclo completo (CICLO_MS). Al cerrarse,
+     queda un video WebM válido con su encabezado → se puede reproducir fluido.
+     Guardamos los últimos ciclos para delay y para "último punto".
+     ═══════════════════════════════════════════════════════════════════ */
+  var CICLO_MS = 12000;          /* cada clip dura 12 s */
+  var MAX_CICLOS = 5;            /* guardamos los últimos 5 (~60 s hacia atrás) */
+  var ciclos = [];              /* [{ini, fin, url, blob}] clips cerrados y reproducibles */
+  var cicloBuf = [];            /* pedazos del ciclo en curso */
+  var cicloIni = 0;
+  var recTimer = null;
+  var rallyMarks = [];          /* timestamps de fin de cada punto (del scout) */
+  var _lastRally = -1;
+
   function onStreamRecibido(stream){
-    var vLive = $('vd-live');
-    var vDelay = $('vd-delay');
-    /* mostrar el VIVO al instante → nunca pantalla negra */
+    var vLive = $('vd-live'), vDelay = $('vd-delay');
     if(vLive){
-      vLive.srcObject = stream;
-      vLive.muted = true;
-      vLive.setAttribute('playsinline','');
-      vLive.play().catch(function(){});
-      vLive.style.display = 'block';
+      vLive.srcObject = stream; vLive.muted = true; vLive.setAttribute('playsinline','');
+      vLive.play().catch(function(){}); vLive.style.display='block';
     }
-    if(vDelay){ vDelay.style.display = 'none'; }
+    if(vDelay){ vDelay.style.display='none'; }
     setEstado('Conectado · en vivo', 'ok');
+    iniciarGrabacionEnCiclos(stream);
+    escucharCierreDeRally();
+  }
 
-    /* grabamos en pedacitos para poder reproducir con retraso */
-    chunks = [];
-    try{
-      var mime = MediaRecorder.isTypeSupported('video/webm;codecs=vp8') ? 'video/webm;codecs=vp8' : 'video/webm';
-      recorder = new MediaRecorder(stream, { mimeType:mime, videoBitsPerSecond: 2500000 });
-      recorder.ondataavailable = function(e){
-        if(e.data && e.data.size>0){
-          chunks.push({ t:Date.now(), blob:e.data });
-          /* podar lo viejo */
-          var lim = Date.now() - BUFFER_MAX_MS;
-          while(chunks.length && chunks[0].t < lim) chunks.shift();
+  /* graba de a ciclos completos; cada ciclo cerrado es un video reproducible */
+  function iniciarGrabacionEnCiclos(stream){
+    ciclos = []; cicloBuf = [];
+    var mime = (window.MediaRecorder && MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) ? 'video/webm;codecs=vp8'
+             : (window.MediaRecorder && MediaRecorder.isTypeSupported('video/webm') ? 'video/webm' : '');
+    function nuevoCiclo(){
+      if(!stream || !stream.active) return;
+      cicloBuf = []; cicloIni = Date.now();
+      var rec;
+      try{ rec = new MediaRecorder(stream, mime?{mimeType:mime}:undefined); }
+      catch(e){ return; }
+      rec.ondataavailable = function(e){ if(e.data && e.data.size>0) cicloBuf.push(e.data); };
+      rec.onstop = function(){
+        if(cicloBuf.length){
+          var blob = new Blob(cicloBuf, {type:'video/webm'});
+          var url = URL.createObjectURL(blob);
+          ciclos.push({ ini:cicloIni, fin:Date.now(), url:url, blob:blob });
+          while(ciclos.length>MAX_CICLOS){ var viejo=ciclos.shift(); try{ URL.revokeObjectURL(viejo.url); }catch(e){} }
         }
+        /* arrancar el siguiente ciclo enseguida */
+        if(connected) nuevoCiclo();
       };
-      recorder.start(500);   /* un chunk cada 0.5 s */
-      arrancarReproduccionConDelay();
-    }catch(e){
-      /* si MediaRecorder falla, al menos mostramos el vivo directo */
-      setEstado('Conectado (sin delay: este navegador no soporta buffer).', 'ok');
+      rec.start();
+      recorder = rec;
+      /* cerrar este ciclo a los CICLO_MS */
+      recTimer = setTimeout(function(){ try{ if(rec.state!=='inactive') rec.stop(); }catch(e){} }, CICLO_MS);
     }
+    nuevoCiclo();
   }
 
-  /* ── reproducir el buffer con el delay elegido ──
-     Enfoque robusto: arma un solo blob con TODO lo grabado hasta 'ahora - delay'
-     y lo reproduce. Mientras el blob no tenga imagen, se sigue viendo el VIVO
-     (nunca pantalla negra). El cambio a la vista con delay recién ocurre cuando
-     el video atrasado ya está reproduciendo de verdad. */
-  function arrancarReproduccionConDelay(){
-    var vDelay = $('vd-delay');
-    var vLive = $('vd-live');
-    if(!vDelay) return;
-    if(playTimer) clearInterval(playTimer);
-
-    playTimer = setInterval(function(){
-      if(delayMs<=0){
-        if(vLive && vLive.style.display==='none'){ vLive.style.display='block'; }
-        if(vDelay && vDelay.style.display!=='none'){ vDelay.style.display='none'; }
-        return;
-      }
-      if(!chunks.length) return;
-      var objetivo = Date.now() - delayMs;
-      var hasta = chunks.filter(function(c){ return c.t <= objetivo; });
-      if(!hasta.length){ return; }   /* aún sin buffer: seguir viendo el vivo */
-      var blob = new Blob(hasta.map(function(c){return c.blob;}), {type:'video/webm'});
-      var url = URL.createObjectURL(blob);
-      var prev = vDelay.src;
-      vDelay.src = url;
-      vDelay.onloadedmetadata = function(){
-        try{ var dur=vDelay.duration; if(isFinite(dur)&&dur>4){ vDelay.currentTime=Math.max(0,dur-4); } }catch(e){}
-      };
-      var p = vDelay.play();
-      if(p && p.then){
-        p.then(function(){
-          if(vLive) vLive.style.display='none';
-          vDelay.style.display='block';
-          setEstado('Delay '+(delayMs/1000)+' s', 'ok');
-        }).catch(function(){});
-      } else {
-        if(vLive) vLive.style.display='none';
-        vDelay.style.display='block';
-      }
-      if(prev && prev.indexOf('blob:')===0) setTimeout(function(){ URL.revokeObjectURL(prev); }, 3000);
-    }, 3000);
+  /* escuchar cuándo el scout cierra un punto (voley_live.rally sube) */
+  function escucharCierreDeRally(){
+    if(_ralloTimer) clearInterval(_ralloTimer);
+    _ralloTimer = setInterval(function(){
+      videoGet('voley_live', function(d){
+        if(d && typeof d.rally==='number'){
+          if(_lastRally<0){ _lastRally=d.rally; return; }
+          if(d.rally>_lastRally){
+            _lastRally = d.rally;
+            rallyMarks.push(Date.now());   /* acá terminó un punto */
+            if(rallyMarks.length>20) rallyMarks.shift();
+            var b=$('vd-replay-hint'); if(b){ b.style.display='block'; setTimeout(function(){ b.style.display='none'; },3000); }
+          }
+        }
+      });
+    }, 1500);
   }
+  var _ralloTimer = null;
 
-  /* ── cambiar el delay ── */
+  /* ── DELAY CONTINUO: reproducir el ciclo anterior (ya cerrado y fluido) ── */
   function setDelay(seg){
     delayMs = Math.max(0, seg*1000);
     var lbl = $('vd-delay-lbl'); if(lbl) lbl.textContent = seg+' s';
-    var vLive = $('vd-live'), vDelay = $('vd-delay');
+    var vLive=$('vd-live'), vDelay=$('vd-delay');
     if(seg<=0){
-      if(vLive){ vLive.style.display='block'; }
-      if(vDelay){ vDelay.style.display='none'; }
+      if(playTimer){ clearInterval(playTimer); playTimer=null; }
+      if(vLive) vLive.style.display='block';
+      if(vDelay){ vDelay.style.display='none'; vDelay.onended=null; }
       setEstado('En vivo', 'ok');
-    } else {
-      /* NO ocultamos el vivo todavía: el loop hace el cambio cuando el delay
-         tenga imagen. Así al mover el slider nunca queda la pantalla en negro. */
-      setEstado('Delay '+seg+' s · preparando…', 'wait');
+      return;
     }
+    setEstado('Delay '+seg+' s · preparando…', 'wait');
+    if(playTimer) clearInterval(playTimer);
+    /* reproducir en cadena los ciclos ya cerrados, con el atraso pedido */
+    playTimer = setInterval(reproducirDelay, 1500);
   }
 
-  /* ── replay del último punto: reproduce los últimos N segundos ── */
-  function replayUltimoPunto(segAntes){
-    segAntes = segAntes || 12;
-    var vDelay = $('vd-delay');
-    if(!vDelay || !chunks.length){ return; }
-    var desde = Date.now() - (segAntes*1000);
-    var relevantes = chunks.filter(function(c){ return c.t >= desde; });
-    if(!relevantes.length) return;
-    var blob = new Blob(relevantes.map(function(c){return c.blob;}), {type:'video/webm'});
-    var url = URL.createObjectURL(blob);
-    /* pausar la reproducción con delay mientras vemos el replay */
-    var eraDelay = delayMs;
-    delayMs = -1;   /* frenar el loop de delay */
-    if($('vd-live')) $('vd-live').style.display='none';
+  function reproducirDelay(){
+    if(delayMs<=0) return;
+    var vDelay=$('vd-delay'), vLive=$('vd-live');
+    if(!vDelay || !ciclos.length) return;
+    /* si ya está reproduciendo un ciclo, no interrumpir (fluidez) */
+    if(vDelay.style.display==='block' && !vDelay.paused && !vDelay.ended) return;
+    var objetivo = Date.now() - delayMs;
+    /* elegir el ciclo cerrado que contiene el momento objetivo (o el más viejo disponible) */
+    var elegido = null;
+    for(var i=0;i<ciclos.length;i++){ if(ciclos[i].ini<=objetivo && ciclos[i].fin>=objetivo){ elegido=ciclos[i]; break; } }
+    if(!elegido) elegido = ciclos[0];
+    if(!elegido) return;
+    /* encadenar ciclos: al terminar uno, seguir con el siguiente para no cortar */
+    function encadenar(clip){
+      reproducirClip(clip.url, function(){
+        var idx = ciclos.indexOf(clip);
+        if(idx>=0 && idx<ciclos.length-1){ encadenar(ciclos[idx+1]); }
+      });
+    }
+    encadenar(elegido);
+    if(vLive) vLive.style.display='none';
     vDelay.style.display='block';
-    vDelay.src = url;
-    vDelay.currentTime = 0;
+    setEstado('Delay '+(delayMs/1000)+' s', 'ok');
+  }
+
+  function reproducirClip(url, onended){
+    var vDelay=$('vd-delay');
+    if(!vDelay) return;
+    vDelay.srcObject=null;
+    vDelay.src=url;
+    vDelay.muted=true;
     vDelay.play().catch(function(){});
-    var lbl=$('vd-estado-replay'); if(lbl){ lbl.style.display='block'; }
-    vDelay.onended = function(){
+    vDelay.onended = function(){ if(onended) try{ onended(); }catch(e){} };
+  }
+
+  /* ── ÚLTIMO PUNTO: reproducir el clip que contiene el último rally cerrado ── */
+  function replayUltimoPunto(segAntes){
+    var vDelay=$('vd-delay'), vLive=$('vd-live');
+    if(!ciclos.length){ setEstado('Todavía no hay video grabado.', 'wait'); return; }
+    /* momento del último punto (si el scout lo marcó); si no, "ahora - 10s" */
+    var momento = rallyMarks.length ? rallyMarks[rallyMarks.length-1] : (Date.now()-10000);
+    /* buscar el ciclo que contiene ese momento */
+    var elegido=null;
+    for(var i=0;i<ciclos.length;i++){ if(ciclos[i].ini<=momento && ciclos[i].fin>=momento){ elegido=ciclos[i]; break; } }
+    if(!elegido) elegido = ciclos[ciclos.length-1];   /* el más reciente cerrado */
+    if(!elegido){ setEstado('El punto todavía se está grabando, probá en un segundo.', 'wait'); return; }
+
+    if(playTimer){ clearInterval(playTimer); playTimer=null; }   /* pausar el delay mientras vemos el replay */
+    var lbl=$('vd-estado-replay'); if(lbl) lbl.style.display='block';
+    if(vLive) vLive.style.display='none';
+    vDelay.style.display='block';
+    reproducirClip(elegido.url, function(){
       if(lbl) lbl.style.display='none';
-      delayMs = (eraDelay>0?eraDelay:8000);   /* volver al modo delay */
-      URL.revokeObjectURL(url);
-      vDelay.onended = null;
-    };
+      /* volver a vivo tras el replay */
+      if(vLive) vLive.style.display='block';
+      vDelay.style.display='none';
+    });
   }
 
   function desconectar(){
     connected=false;
-    if(playTimer) clearInterval(playTimer);
+    if(playTimer){ clearInterval(playTimer); playTimer=null; }
+    if(recTimer){ clearTimeout(recTimer); recTimer=null; }
+    if(_ralloTimer){ clearInterval(_ralloTimer); _ralloTimer=null; }
     if(recorder && recorder.state!=='inactive'){ try{ recorder.stop(); }catch(e){} }
+    recorder=null;
     if(pc){ try{ pc.close(); }catch(e){} pc=null; }
     if(salaId && viewerId){ videoSet('video_signal/'+salaId+'/requests/'+viewerId, null); }
-    chunks=[]; liveStream=null;
+    ciclos.forEach(function(c){ try{ URL.revokeObjectURL(c.url); }catch(e){} });
+    ciclos=[]; cicloBuf=[]; rallyMarks=[]; _lastRally=-1; liveStream=null;
     var vLive=$('vd-live'), vDelay=$('vd-delay');
-    if(vLive) vLive.srcObject=null;
-    if(vDelay) vDelay.src='';
+    if(vLive){ vLive.srcObject=null; vLive.style.display='none'; }
+    if(vDelay){ vDelay.src=''; vDelay.srcObject=null; vDelay.style.display='none'; }
     setEstado('Desconectado.', '');
   }
 
@@ -218,7 +253,6 @@
     el.textContent=msg; el.className='vd-estado'+(cls?' '+cls:'');
   }
 
-  /* API pública */
   window.VideoDelay = {
     conectar: conectar,
     desconectar: desconectar,
