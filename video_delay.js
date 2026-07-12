@@ -172,29 +172,56 @@
     playTimer = setInterval(reproducirDelay, 1500);
   }
 
+  /* ── DELAY CONTINUO fluido, sin salto entre ciclos ──
+     Un solo video visible. El truco anti-salto: precargamos el siguiente clip
+     en un elemento oculto (queda en caché del navegador), así cuando el visible
+     termina, el siguiente carga al instante (ya está en memoria). */
+  var vdPrecarga = null;
+
+  function _precargar(url){
+    if(!url) return;
+    if(!vdPrecarga){ vdPrecarga = document.createElement('video'); vdPrecarga.muted=true; vdPrecarga.preload='auto'; vdPrecarga.style.display='none'; }
+    if(vdPrecarga.src !== url){ vdPrecarga.src = url; vdPrecarga.load(); }
+  }
+
   function reproducirDelay(){
     if(delayMs<=0) return;
     var vDelay=$('vd-delay'), vLive=$('vd-live');
     if(!vDelay || !ciclos.length) return;
-    /* si ya está reproduciendo un ciclo, no interrumpir (fluidez) */
+    /* si ya está reproduciendo, no interrumpir */
     if(vDelay.style.display==='block' && !vDelay.paused && !vDelay.ended) return;
     var objetivo = Date.now() - delayMs;
-    /* elegir el ciclo cerrado que contiene el momento objetivo (o el más viejo disponible) */
-    var elegido = null;
-    for(var i=0;i<ciclos.length;i++){ if(ciclos[i].ini<=objetivo && ciclos[i].fin>=objetivo){ elegido=ciclos[i]; break; } }
-    if(!elegido) elegido = ciclos[0];
-    if(!elegido) return;
-    /* encadenar ciclos: al terminar uno, seguir con el siguiente para no cortar */
-    function encadenar(clip){
-      reproducirClip(clip.url, function(){
-        var idx = ciclos.indexOf(clip);
-        if(idx>=0 && idx<ciclos.length-1){ encadenar(ciclos[idx+1]); }
-      });
-    }
-    encadenar(elegido);
+    var idx = -1;
+    for(var i=0;i<ciclos.length;i++){ if(ciclos[i].ini<=objetivo && ciclos[i].fin>=objetivo){ idx=i; break; } }
+    if(idx<0) idx = 0;
+    if(!ciclos[idx]) return;
     if(vLive) vLive.style.display='none';
     vDelay.style.display='block';
+    _reproducirCiclo(idx);
+  }
+
+  /* reproduce el ciclo idx y encadena con el siguiente al terminar */
+  function _reproducirCiclo(idx){
+    var v = $('vd-delay');
+    if(!v || !ciclos[idx]) return;
+    v.srcObject=null;
+    v.muted=true; v.setAttribute('playsinline','');
+    v.oncanplay = function(){ var p=v.play(); if(p&&p.catch) p.catch(function(){ setTimeout(function(){ if(v.paused) v.play().catch(function(){}); },200); }); };
+    v.src = ciclos[idx].url;
+    v.load();
     setEstado('Delay '+(delayMs/1000)+' s', 'ok');
+    /* precargar el siguiente para que el cambio sea instantáneo */
+    if(ciclos[idx+1]) _precargar(ciclos[idx+1].url);
+    v.onended = function(){
+      if(ciclos[idx+1]){ _reproducirCiclo(idx+1); }
+      else {
+        /* alcanzamos el presente: seguir con el ciclo más nuevo que aparezca */
+        var espera = setInterval(function(){
+          if(ciclos[idx+1]){ clearInterval(espera); _reproducirCiclo(idx+1); }
+          else if(delayMs<=0){ clearInterval(espera); }
+        }, 500);
+      }
+    };
   }
 
   function reproducirClip(url, onended){
@@ -204,18 +231,16 @@
     vDelay.muted=true;
     vDelay.setAttribute('playsinline','');
     vDelay.onended = function(){ if(onended) try{ onended(); }catch(e){} };
-    /* reproducir recién cuando el video esté listo (evita quedar pausado en frame 0) */
     var intentado=false;
     function arrancar(){
       if(intentado) return; intentado=true;
       var p = vDelay.play();
-      if(p && p.catch) p.catch(function(){ /* reintento tras un toque/tiempo */ intentado=false; setTimeout(function(){ if(vDelay.paused) vDelay.play().catch(function(){}); }, 300); });
+      if(p && p.catch) p.catch(function(){ intentado=false; setTimeout(function(){ if(vDelay.paused) vDelay.play().catch(function(){}); }, 300); });
     }
     vDelay.oncanplay = arrancar;
     vDelay.onloadeddata = arrancar;
     vDelay.src=url;
     vDelay.load();
-    /* fallback: si en 500ms no arrancó, forzar */
     setTimeout(function(){ if(vDelay.paused) arrancar(); }, 500);
   }
 
