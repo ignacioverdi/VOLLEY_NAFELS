@@ -657,6 +657,10 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         <option value="num_s">Escribe el número del próximo sacador y la S</option>
         <option value="num">Escribe sólo el número del próximo sacador</option>
         <option value="no">Deja la barra vacía</option></select>
+      </div>
+      <div><label class="f">Fin de jugada automático (estilo Data)</label><select class="f" id="d-autofin">
+        <option value="1">Sí — un código terminal (#, =, ataque bloqueado) cierra la jugada y da el punto solo</option>
+        <option value="0">No — el punto se carga a mano (botones «Punto Local/Visitante»)</option></select>
         <div style="font-size:11px;color:var(--mut);margin-top:5px">La barra se limpia siempre; esto define qué queda escrito.</div>
       </div>
       <div><label class="f">Al editar, el cursor va</label><select class="f" id="d-cursor">
@@ -891,6 +895,10 @@ if(CFG.autoSet===undefined) CFG.autoSet = true;
 if(CFG.autoCompound===undefined) CFG.autoCompound = true;
 if(CFG.cursorEfecto===undefined) CFG.cursorEfecto = false;
 if(CFG.autoServe===undefined) CFG.autoServe = 'num_s';
+/* Estilo Data Volley: un código terminal (#, =, ataque bloqueado) cierra la
+   jugada y asigna el punto solo. Por defecto ACTIVADO. Se puede apagar en
+   Configuración para cargar el fin de jugada a mano. */
+if(CFG.autoFin===undefined) CFG.autoFin = true;
 if(!CFG.verif) CFG.verif = {marcador:true,combo:true,bloqueo:true,zona:true,recBarra:true,liberoSaca:true};
 if(CFG.verif.marcador===undefined) CFG.verif.marcador = true;
 if(CFG.verif.zonaSaque===undefined) CFG.verif.zonaSaque = true;
@@ -2064,6 +2072,34 @@ function levantarEstado(){
   }
   return quitados.length ? (quitados[0].c[0]==='*' ? 'home' : 'away') : null;
 }
+/* ── AUTO FIN DE JUGADA (estilo Data Volley) ──────────────────
+   Un código TERMINAL cierra la jugada y asigna el punto solo, según la tabla
+   del Data. Todo lo demás (corregir, reabrir con Ctrl+A, deshacer, o marcar
+   el punto a mano con los botones) sigue funcionando igual. */
+function ganadorCodigo(cod){
+  const a = splitCode(cod);
+  if(!a || !a.skill) return null;
+  const otro = a.team==='home' ? 'away' : 'home';
+  /* error (=) de cualquier fundamento -> punto al rival */
+  if(a.ev==='=') return otro;
+  /* punto ganado (#) sólo cierra en ataque, saque y bloqueo */
+  if(a.ev==='#' && (a.skill==='A' || a.skill==='S' || a.skill==='B')) return a.team;
+  /* ataque bloqueado (/) -> punto al que bloquea (el rival) */
+  if(a.ev==='/' && a.skill==='A') return otro;
+  return null;   /* no es terminal: la jugada sigue */
+}
+/* mira el último código de juego recién cargado; si es terminal, cierra la jugada */
+function autoFinDeJugada(desde){
+  if(CFG.autoFin===false) return;
+  if(partidoTerminado()) return;
+  let last=null;
+  for(let i=M.codes.length-1; i>=desde; i--){
+    if(M.codes[i].k==='play' && !M.codes[i].auto){ last=M.codes[i]; break; }
+  }
+  if(!last) return;
+  const w = ganadorCodigo(last.c);
+  if(w) endRally(w);
+}
 function endRally(winner){
   if(partidoTerminado()){ toast('El partido ya terminó: '+M.home.sets+'-'+M.away.sets,true); return; }
   snapshotRally();
@@ -2491,7 +2527,16 @@ document.addEventListener('keydown', e=>{
 
   const inp = document.getElementById('code');
   if(document.activeElement!==inp) return;
-  if(e.key==='Enter'){ e.preventDefault(); commit(); return; }
+  if(e.key==='Enter'){
+    e.preventDefault();
+    const eraEdit = (SEL_I>=0);
+    const nAntes = M.codes.length;
+    const ok = commit();
+    /* si se cargó una acción nueva (no una edición ni un comando) y el último
+       código es terminal, cerramos la jugada solo — como el Data */
+    if(ok && !eraEdit && M.codes.length>nAntes) autoFinDeJugada(nAntes);
+    return;
+  }
   // teclas remapeadas de evaluación
   for(const ev of EVALS){ if(k===CFG.keys[ev]){ e.preventDefault(); inp.value+=ev; drawDecoder(); return; } }
 });
@@ -2522,6 +2567,7 @@ function openConfig(){
   document.getElementById('d-autocomp').value = CFG.autoCompound ? '1' : '0';
   document.getElementById('d-cursor').value   = CFG.cursorEfecto ? '1' : '0';
   document.getElementById('d-autoserve').value = CFG.autoServe || 'no';
+  document.getElementById('d-autofin').value = (CFG.autoFin===false) ? '0' : '1';
   renderAtajos();
   const al2=document.getElementById('cfg-autolineup'); if(al2) al2.value = CFG.autoLineup?'1':'0';
   document.getElementById('cfg-verif').innerHTML = Object.keys(VERIF_LBL).map(k=>
@@ -2559,6 +2605,7 @@ function saveConfig(){
   CFG.autoCompound = document.getElementById('d-autocomp').value==='1';
   CFG.cursorEfecto = document.getElementById('d-cursor').value==='1';
   CFG.autoServe    = document.getElementById('d-autoserve').value;
+  CFG.autoFin      = document.getElementById('d-autofin').value==='1';
   Object.keys(VERIF_LBL).forEach(k=>{ const el=document.getElementById('vf-'+k); if(el) CFG.verif[k]= el.value==='1'; });
   const al=document.getElementById('cfg-autolineup'); if(al) CFG.autoLineup = al.value==='1';
   CFG.atajos = (CFG.atajos||[]).filter(a=>a.k && a.txt);   /* los incompletos no se guardan */
