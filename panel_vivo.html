@@ -284,6 +284,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <button class="tbtn tbtn2l" onclick="abrirCombos()" title="Combinaciones de ataque y llamadas (manual 12.2)">Comb<br>ataque</button>
   <button class="tbtn" onclick="abrirEquipos()" title="Base de equipos (nuevo · importar · exportar)">👥 Equipos</button>
   <button class="tbtn" onclick="openConfig()">Teclado y códigos</button>
+  <button class="tbtn" onclick="abrirAyuda()" title="Cómo usar el scout — guía paso a paso">❓ Cómo se usa</button>
   <button class="tbtn" onclick="exportDVW()">Exportar .dvw</button>
   <button class="tbtn" onclick="descargarSesion()">Bajar fichas</button>
   <button class="tbtn" onclick="abrirBaterias()" title="Las 11 baterías calculadas de lo scouteado en vivo">🔋 Baterías</button>
@@ -3860,5 +3861,156 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',poner); else poner();
 })();
 </script>
+<!-- ══ GUÍA EMBEBIDA: cómo usar el Scout en Vivo ══ -->
+<style>
+  #m-ayuda .sheet{max-width:840px}
+  #m-ayuda h2.tit{font-size:22px;margin:0}
+  #m-ayuda .ay-sec{border-top:1px solid var(--b2);padding-top:14px;margin-top:18px}
+  #m-ayuda .ay-sec:first-of-type{border-top:0;margin-top:8px}
+  #m-ayuda h3{font-size:16px;margin:0 0 6px;color:var(--txt);display:flex;gap:9px;align-items:baseline}
+  #m-ayuda h3 .n{color:var(--vis);font-weight:800}
+  #m-ayuda h4{font-size:13px;margin:14px 0 4px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+  #m-ayuda p{margin:7px 0;color:#cfd2e0;font-size:14.5px;line-height:1.55}
+  #m-ayuda ol,#m-ayuda ul{margin:7px 0;padding-left:20px;color:#cfd2e0;font-size:14.5px}
+  #m-ayuda li{margin:4px 0}
+  #m-ayuda table{border-collapse:collapse;width:100%;margin:8px 0;font-size:13.5px}
+  #m-ayuda th,#m-ayuda td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--b)}
+  #m-ayuda th{color:var(--mut);font-weight:700;text-transform:uppercase;font-size:11.5px;letter-spacing:.05em}
+  #m-ayuda td.c{font-family:'Barlow Condensed',monospace;font-weight:700;color:var(--loc);white-space:nowrap}
+  #m-ayuda .k{display:inline-block;background:var(--card2);border:1px solid var(--b2);color:var(--txt);font-family:'Barlow Condensed',monospace;font-weight:700;font-size:12.5px;padding:1px 7px;border-radius:5px;white-space:nowrap}
+  #m-ayuda .m{font-family:'Barlow Condensed',monospace;font-weight:700;background:#000;color:var(--vis);padding:1px 7px;border-radius:5px;letter-spacing:.5px}
+  #m-ayuda .b{display:inline-block;background:var(--card2);border:1px solid var(--b2);color:var(--txt);border-radius:5px;padding:0 7px;font-size:13px;font-weight:600}
+  #m-ayuda .note{background:var(--card);border:1px solid var(--b2);border-left:3px solid var(--ok);border-radius:0 8px 8px 0;padding:8px 13px;margin:9px 0;font-size:13.5px;color:#bfe6cf}
+  #m-ayuda .fml{text-align:center;font-size:16px;margin:12px 0;color:var(--txt)}
+</style>
+<div class="modal" id="m-ayuda"><div class="sheet">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:6px">
+    <h2 class="tit">❓ Cómo usar el Scout en Vivo</h2>
+    <button class="tbtn" onclick="closeModal('m-ayuda')">Cerrar</button>
+  </div>
+  <div class="sub">Guía paso a paso para cargar un partido en tiempo real. Se usa en una computadora con teclado.</div>
+
+  <div class="ay-sec">
+    <h3><span class="n">1</span> Antes de empezar: equipos y formación</h3>
+    <ol>
+      <li>Con <span class="b">👥 Equipos</span> creás o editás los planteles (número, apellido, nombre y rol). También podés importar un equipo desde un archivo <span class="m">.sq</span>.</li>
+      <li>Con <span class="b">Partido</span> cargás el <b>seis inicial</b> de cada equipo, el armador, el líbero y quién saca primero.</li>
+      <li>Confirmás con <span class="b">Empezar</span> y ya podés tipear.</li>
+    </ol>
+  </div>
+
+  <div class="ay-sec">
+    <h3><span class="n">2</span> El código de la jugada</h3>
+    <p>Cada acción se escribe como un código corto (la notación estándar del scouting de vóley):</p>
+    <div class="fml"><span class="m">equipo</span> + <span class="m">número</span> + <span class="m">gesto</span> + <span class="m">evaluación</span></div>
+    <p><b>Equipo:</b> el local va con el número directo (o con <span class="m">*</span>); el visitante empieza con <span class="m">a</span>. Ej.: <span class="m">7#</span> local nº 7, <span class="m">a7#</span> visitante nº 7.</p>
+    <h4>Gesto</h4>
+    <table>
+      <tr><th>Letra</th><th>Gesto</th><th>Letra</th><th>Gesto</th></tr>
+      <tr><td class="c">S</td><td>Saque</td><td class="c">D</td><td>Defensa</td></tr>
+      <tr><td class="c">R</td><td>Recepción</td><td class="c">E</td><td>Armado</td></tr>
+      <tr><td class="c">A</td><td>Ataque</td><td class="c">F</td><td>Freeball</td></tr>
+      <tr><td class="c">B</td><td>Bloqueo</td><td></td><td></td></tr>
+    </table>
+    <h4>Evaluación</h4>
+    <table>
+      <tr><th>Signo</th><th>Significado</th></tr>
+      <tr><td class="c">#</td><td>Punto / perfecto</td></tr>
+      <tr><td class="c">+</td><td>Positivo</td></tr>
+      <tr><td class="c">!</td><td>Insuficiente / justo</td></tr>
+      <tr><td class="c">/</td><td>Muy positivo o muy pobre (según el gesto)</td></tr>
+      <tr><td class="c">-</td><td>Flojo</td></tr>
+      <tr><td class="c">=</td><td>Error</td></tr>
+    </table>
+    <h4>Ejemplos</h4>
+    <table>
+      <tr><td class="c">6S#</td><td>Local nº 6, ace de saque</td></tr>
+      <tr><td class="c">a11A#</td><td>Visitante nº 11, remate ganador</td></tr>
+      <tr><td class="c">4A=</td><td>Local nº 4, error de ataque</td></tr>
+      <tr><td class="c">5B#</td><td>Local nº 5, bloqueo punto</td></tr>
+    </table>
+    <div class="note">Lo que no escribís, el sistema lo completa con tus valores por defecto. El <b>decodificador en vivo</b> te muestra el código en palabras mientras escribís. Podés encadenar saque y recepción con un punto: <span class="m">5S.8#</span>.</div>
+  </div>
+
+  <div class="ay-sec">
+    <h3><span class="n">3</span> Cargar en vivo y el fin de jugada automático</h3>
+    <ol>
+      <li>Escribís el código y apretás <span class="k">Enter</span>. La acción entra en la lista.</li>
+      <li>Si el código es <b>terminal</b>, el punto se asigna solo y la jugada cierra. Son terminales: remate, saque o bloqueo con <span class="m">#</span>; el ataque bloqueado <span class="m">/</span>; y cualquier error <span class="m">=</span> (punto al rival).</li>
+      <li>El marcador, la rotación y el sacador los lleva el sistema.</li>
+    </ol>
+    <div class="note">Los positivos que no son punto (armado <span class="m">#</span>, defensa <span class="m">#</span>, saque <span class="m">+</span>) no cierran la jugada. Podés cargar el punto a mano con <span class="b">Punto Local</span> / <span class="b">Punto Visitante</span>, o apagar el fin de jugada automático en <span class="b">Teclado y códigos</span>.</div>
+  </div>
+
+  <div class="ay-sec">
+    <h3><span class="n">4</span> Cambios, tiempos y doble cambio</h3>
+    <ul>
+      <li>Cada equipo tiene sus botones <span class="b">Tiempo</span> y <span class="b">Cambio</span>.</li>
+      <li>En <span class="b">Cambio</span> elegís quién sale y quién entra.</li>
+      <li><b>Doble cambio:</b> el primero con <span class="b">Confirmar y seguir</span> (la ventana queda abierta), el segundo con <span class="b">Confirmar</span>. El sistema controla el límite por set.</li>
+    </ul>
+  </div>
+
+  <div class="ay-sec">
+    <h3><span class="n">5</span> Corregir sin romper nada</h3>
+    <table>
+      <tr><th>Para</th><th>Cómo</th></tr>
+      <tr><td>Reabrir el último punto para corregir</td><td><span class="k">Ctrl+A</span> · <span class="b">Reabrir punto</span></td></tr>
+      <tr><td>Insertar un código en el medio</td><td>Seleccionar + <span class="k">Insert</span></td></tr>
+      <tr><td>Editar un código</td><td>Doble clic (o seleccionar + <span class="k">Enter</span>)</td></tr>
+      <tr><td>Borrar un código</td><td><span class="k">Delete</span> · rápido el último: <span class="k">Backspace</span></td></tr>
+      <tr><td>Deshacer el último código</td><td><span class="k">Ctrl+Z</span></td></tr>
+      <tr><td>Deshacer el punto entero</td><td><span class="k">Ctrl+Shift+Z</span></td></tr>
+      <tr><td>Buscar / Verificar</td><td><span class="k">Ctrl+R</span> · <span class="k">Ctrl+V</span></td></tr>
+    </table>
+    <div class="note">Al reabrir un punto (Ctrl+A), los códigos quedan en la lista con el último seleccionado, listos para editar. Corregís y volvés a cerrar la jugada.</div>
+  </div>
+
+  <div class="ay-sec">
+    <h3><span class="n">6</span> Cierre de set y formación del siguiente</h3>
+    <ol>
+      <li>Al llegar a <b>25 con 2 de diferencia</b> (15 en el quinto), el set se cierra solo.</li>
+      <li>Se abre sola la formación del set siguiente, y es <b>obligatoria</b>: propone el seis anterior, lo ajustás y confirmás con <span class="b">Empezar set</span>. No te deja seguir sin cargarla.</li>
+    </ol>
+  </div>
+
+  <div class="ay-sec">
+    <h3><span class="n">7</span> Video en vivo con delay</h3>
+    <ol>
+      <li>En el celular que filma la cancha (misma red/WiFi) abrís la cámara y tocás <b>Transmitir</b>: te da un <b>código de sala de 4 dígitos</b>.</li>
+      <li>En el scout tocás <span class="b">📹 Video</span> (la cámara), escribís el código y <span class="b">Conectar</span>.</li>
+      <li>Atrasás el video con la barra de <b>delay</b> (0–25 s) y podés ver el <b>último punto</b>.</li>
+      <li>Con <span class="b">⧉ Acoplar</span> el video se achica a un costado y tipeás mientras lo ves; con <span class="b">⛶ Grande</span> volvés a pantalla completa.</li>
+    </ol>
+    <div class="note">El botón <span class="b">🎬 Video</span> (claqueta) es otra cosa: es el visor de un video por archivo/URL. El del delay es el de la <b>cámara 📹</b>.</div>
+  </div>
+
+  <div class="ay-sec">
+    <h3><span class="n">8</span> Tablas y análisis en vivo</h3>
+    <p>Debajo de la lista de códigos, <span class="b">▸ Tablas y análisis</span> despliega el análisis del partido en tiempo real (eficiencias por fundamento y quiénes más puntúan), para los dos equipos.</p>
+  </div>
+
+  <div class="ay-sec">
+    <h3><span class="n">9</span> Guardar y exportar</h3>
+    <ul>
+      <li>El partido se guarda solo. Con <span class="b">📂 Partidos</span> ves y reabrís los guardados.</li>
+      <li>Con <span class="b">Exportar .dvw</span> generás el archivo del partido en formato estándar, para compartirlo con otras herramientas de análisis.</li>
+    </ul>
+  </div>
+
+  <div class="ay-sec">
+    <h3><span class="n">10</span> Atajos de teclado</h3>
+    <table>
+      <tr><td class="c">Enter</td><td>Cargar el código</td><td class="c">Ctrl+Z</td><td>Deshacer código</td></tr>
+      <tr><td class="c">Insert</td><td>Insertar antes del seleccionado</td><td class="c">Ctrl+Shift+Z</td><td>Deshacer punto</td></tr>
+      <tr><td class="c">Delete</td><td>Borrar seleccionado</td><td class="c">Ctrl+A</td><td>Reabrir punto</td></tr>
+      <tr><td class="c">Backspace</td><td>Borrar rápido el último</td><td class="c">Ctrl+R</td><td>Buscar</td></tr>
+      <tr><td class="c">Ctrl+V</td><td>Verificar</td><td></td><td></td></tr>
+    </table>
+  </div>
+
+</div></div>
+<script>function abrirAyuda(){ document.getElementById('m-ayuda').classList.add('open'); }</script>
+
 </body>
 </html>
