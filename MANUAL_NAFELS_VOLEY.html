@@ -194,6 +194,7 @@
       <li><a href="#rutina"><span class="n">3</span><span>Tu rutina cuando juega el equipo</span></a></li>
       <li><a href="#mapa"><span class="n">4</span><span>Qué hay en la app y para qué sirve</span></a></li>
       <li><a href="#plandepartido"><span class="n">★</span><span>Plan de Partido (nuevo)</span></a></li>
+      <li><a href="#videovivo"><span class="n">★</span><span>Video en vivo con delay (nuevo)</span></a></li>
       <li><a href="#entrenos"><span class="n">5</span><span>Entrenamientos</span></a></li>
       <li><a href="#videos"><span class="n">6</span><span>Videos</span></a></li>
       <li><a href="#calendario"><span class="n">7</span><span>Calendario y fixture</span></a></li>
@@ -253,6 +254,7 @@
     <div class="eyebrow"><span class="num">4</span><span class="kicker">El mapa</span></div>
     <h2 class="title">Qué hay en la app y para qué sirve</h2>
     <p class="lead">Todo está agrupado por para qué lo usás. Entrás desde el menú principal.</p>
+    <div class="rule do"><span class="ic">👥</span><div><b>Dos vistas según quién entra:</b> el <b>jugador</b> ve lo suyo (el próximo rival, su rendimiento, físico y bienestar, agenda, video); el <b>cuerpo técnico</b> ve además las herramientas de gestión (Panel en Vivo, Scouting del rival, Comparador, Tendencias, Cargar Videos, Pizarrón). Abajo van todas las secciones agrupadas por tema.</div></div>
     <div class="map">
 
       <div class="group">
@@ -311,6 +313,7 @@
       <div class="group">
         <h3>⬛ Video y táctica</h3>
         <ul>
+          <li><span class="name">Panel en Vivo</span><span class="desc">Para scoutear <b>durante el partido</b>, punto por punto, en tiempo real, con las teclas de DataVolley. Trae marcador tipo tablero, las <b>11 baterías</b> calculadas al instante, edición de códigos, modo partido/entrenamiento, y ahora también el <b>video en vivo con delay</b>. Es una tarjeta del cuerpo técnico (los jugadores no la ven).</span></li>
           <li><span class="name">Cargar Videos</span><span class="desc">Vincula los videos a las jugadas del game plan.</span></li>
           <li><span class="name">Cortes de Video</span><span class="desc">Clips recortados de jugadas puntuales.</span></li>
           <li><span class="name">Pizarrón</span><span class="desc">Pizarra táctica editable.</span></li>
@@ -340,6 +343,15 @@
       <ul>
         <li><span class="name">Todos los filtros en una línea</span><span class="desc">Quedaron en desplegables compactos: <b>Fase</b> (side-out / transición / todo), <b>Recepción</b> (#+ / !−), <b>Recep. desde</b> por zona (Z1 = 1·9·2, Z6 = 6·8·3, Z5 = 5·7·4), <b>Recibe</b> (por jugador) y <b>Llamada</b>. Se combinan entre sí.</span></li>
         <li><span class="name">Video del armado</span><span class="desc">Doble clic en una zona de la rotación abre el clip del armado, igual que en las canchas de jugador.</span></li>
+        <li><span class="name">Cada zona con su color</span><span class="desc">La cancha del armador pinta <b>cada zona con su propio color</b> y la intensidad sube según cuánto reparte ahí — se lee de un vistazo a dónde arma, igual que en el game plan.</span></li>
+      </ul>
+    </div>
+    <div class="group">
+      <h3>🔴 En vivo, durante el partido (nuevo)</h3>
+      <ul>
+        <li><span class="name">Se llena solo mientras scouteás</span><span class="desc">Cuando estás cargando el partido en el <b>Panel en Vivo</b>, el Plan de Partido se va llenando en <b>tiempo real</b> con lo que scouteás. Las cuatro canchas — <b>Distribución del armador, Direcciones de ataque, Direcciones de saque y Zonas de recepción</b> — se actualizan punto a punto, para vos y para el rival.</span></li>
+        <li><span class="name">Los dos equipos</span><span class="desc">Cambiás entre <b>tu equipo</b> y el <b>rival</b> con un botón, y ves las tendencias de cada uno con lo que va pasando en la cancha.</span></li>
+        <li><span class="name">Mismos números que DataVolley</span><span class="desc">La distribución del armador se calcula igual que el sistema oficial — verificado jugada por jugada. Lo que ves en vivo es fiel, no una aproximación.</span></li>
       </ul>
     </div>
     <div class="group">
@@ -349,6 +361,31 @@
       </ul>
     </div>
     <div class="done">👥 El Plan de Partido ahora también aparece en la vista de los jugadores, no solo en la del entrenador.</div>
+    <div class="done">🔄 <b>Se actualiza solo</b> con el botón de siempre (ya no hay que generarlo aparte), y muestra la <b>temporada activa</b>: si la temporada nueva todavía no tiene partidos cargados, aparece vacío hasta que sumes los primeros. Cuando querés ver otra temporada, se cambia en el bat y sale todo parejo.</div>
+  </section>
+
+  <!-- ★ Video en vivo con delay -->
+  <section id="videovivo">
+    <div class="eyebrow"><span class="num">★</span><span class="kicker">Lo nuevo</span></div>
+    <h2 class="title">Video en vivo con delay</h2>
+    <p class="lead">Ver la jugada de nuevo, en el momento, sin depender de nada externo. Todo por la misma red.</p>
+    <div class="group">
+      <h3>📹 Para qué sirve</h3>
+      <ul>
+        <li><span class="name">Revisar la última acción</span><span class="desc">En pleno partido, tocás un botón y volvés a ver el punto que se acaba de jugar — para chequear un error o una jugada dudosa sin sacarte del scouteo.</span></li>
+        <li><span class="name">Corregir en el entrenamiento</span><span class="desc">Le mostrás al jugador su gesto técnico con unos segundos de <b>delay</b>: “mirá, recién hiciste esto”. La imagen va atrasada los segundos que elijas.</span></li>
+      </ul>
+    </div>
+    <div class="group">
+      <h3>🔌 Cómo se arma (fácil)</h3>
+      <ul>
+        <li><span class="name">1 · La cámara</span><span class="desc">Abrís <b>camara.html</b> en un celular apuntando a la cancha (o la webcam de la PC, o cámara por OBS). Tocás <b>Transmitir</b> y te da un <b>código de 4 dígitos</b>.</span></li>
+        <li><span class="name">2 · La tablet o el scout</span><span class="desc">Tocás el botón <b>📹 Video</b>, escribís el código y listo. Aparece el video en vivo.</span></li>
+        <li><span class="name">3 · El delay y el replay</span><span class="desc">Un deslizador para elegir cuántos segundos de atraso (0 a 25), y un botón <b>“Ver último punto”</b> que reproduce el rally que se acaba de cerrar. Botón ⛶ para pantalla completa.</span></li>
+      </ul>
+    </div>
+    <div class="rule do"><span class="ic">📶</span><div><b>Todos en la misma red:</b> la cámara, la tablet y el scout tienen que estar en el <b>mismo WiFi</b>. Si el gimnasio no tiene WiFi, compartís internet desde tu celu (hotspot) y conectás todo ahí. El video entre los dispositivos no gasta datos.</div></div>
+    <div class="done">🎬 El “último punto” está conectado al scout: sabe exactamente cuándo terminó el rally, así te muestra la jugada justa.</div>
   </section>
 
   <section id="entrenos">
