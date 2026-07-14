@@ -3593,13 +3593,13 @@ function renderBateriasPanel(){
 }
 
 function abrirPlanPreparado(){
-  window.open('plan_partido.html', '_blank');
+  location.href = 'plan_partido.html?back=scout';
 }
 
 function abrirPlan(tab){
   const lado = (CFG.fichasTeam==='away') ? 'away' : 'home';
-  const url = 'plan_partido.html?vivo=1&rival='+lado+'#'+tab;
-  window.open(url, '_blank');
+  const url = 'plan_partido.html?vivo=1&rival='+lado+'&back=scout#'+tab;
+  location.href = url;
 }
 
 function bajar(nombre,contenido){
