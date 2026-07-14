@@ -539,4 +539,8 @@ document.querySelectorAll('.vlink').forEach(function(a){
   else { a.setAttribute('target','_blank'); a.setAttribute('rel','noopener'); }
 });
 </script>
+<!-- Botón escudo: volver al inicio de la app -->
+<a id="club-escudo" href="index.html" title="Inicio · Volley Näfels" style="position:fixed;left:14px;bottom:14px;z-index:99990;width:46px;height:46px;border-radius:50%;overflow:hidden;background:#000;border:1px solid rgba(255,255,255,.18);box-shadow:0 2px 12px rgba(0,0,0,.55);display:block">
+  <img src="escudo.png" alt="Volley Näfels" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none';this.parentElement.style.background='#111'">
+</a>
 </body></html>
