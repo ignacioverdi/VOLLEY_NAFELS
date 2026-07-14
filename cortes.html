@@ -165,6 +165,44 @@
         <div class="dd-btn" id="sBtn">Elegir sets <span class="n" id="sN">—</span></div>
         <div class="dd-panel" id="sPanel"></div>
       </div>
+      <div class="flabel">Situación <span style="text-transform:none">(secuencia de la jugada)</span></div>
+      <div class="dd">
+        <div class="dd-btn" id="sitBtn">Elegir situación <span class="n" id="sitN">—</span></div>
+        <div class="dd-panel" id="sitPanel" style="padding:9px 10px">
+          <style>
+            #sitPanel .sitrow{display:flex;gap:6px;align-items:center;margin-bottom:7px;flex-wrap:wrap}
+            #sitPanel .sitsk{background:var(--card2);border:1px solid var(--line);color:var(--txt);border-radius:7px;padding:5px 7px;font-size:12px;font-weight:600}
+            #sitPanel .sev{background:var(--card2);border:1px solid var(--line);color:var(--muted);border-radius:6px;width:24px;height:24px;font-size:12px;font-weight:800;cursor:pointer;padding:0}
+            #sitPanel .sev.on{background:var(--naf);border-color:var(--naf);color:#fff}
+            #sitPanel .sithint{font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.4}
+          </style>
+          <div class="sithint">Mostrá solo las jugadas que tengan TODO esto (elegí fundamento y su valoración; dejá la valoración vacía para «cualquiera»):</div>
+          <div class="sitrow">
+            <select class="sitsk">
+              <option value="">— fundamento —</option>
+              <option>Saque</option><option>Recepción</option><option>Ataque</option>
+              <option>Bloqueo</option><option>Defensa</option><option>Armado</option><option>Freeball</option>
+            </select>
+            <span class="seval"><button class="sev" data-ev="#">#</button><button class="sev" data-ev="+">+</button><button class="sev" data-ev="!">!</button><button class="sev" data-ev="/">/</button><button class="sev" data-ev="-">-</button><button class="sev" data-ev="=">=</button></span>
+          </div>
+          <div class="sitrow">
+            <select class="sitsk">
+              <option value="">— fundamento —</option>
+              <option>Saque</option><option>Recepción</option><option>Ataque</option>
+              <option>Bloqueo</option><option>Defensa</option><option>Armado</option><option>Freeball</option>
+            </select>
+            <span class="seval"><button class="sev" data-ev="#">#</button><button class="sev" data-ev="+">+</button><button class="sev" data-ev="!">!</button><button class="sev" data-ev="/">/</button><button class="sev" data-ev="-">-</button><button class="sev" data-ev="=">=</button></span>
+          </div>
+          <div class="sitrow">
+            <select class="sitsk">
+              <option value="">— fundamento —</option>
+              <option>Saque</option><option>Recepción</option><option>Ataque</option>
+              <option>Bloqueo</option><option>Defensa</option><option>Armado</option><option>Freeball</option>
+            </select>
+            <span class="seval"><button class="sev" data-ev="#">#</button><button class="sev" data-ev="+">+</button><button class="sev" data-ev="!">!</button><button class="sev" data-ev="/">/</button><button class="sev" data-ev="-">-</button><button class="sev" data-ev="=">=</button></span>
+          </div>
+        </div>
+      </div>
       <div class="counter"><b id="cnt">0</b><span>clips filtrados</span></div>
       <button class="reset" id="reset">Limpiar filtros</button>
     </div>
@@ -353,9 +391,44 @@
   var EVAL_ORDER=['#','+','!','-','/','='];
   function evRank(e){var i=EVAL_ORDER.indexOf(e);return i<0?99:i;}
   // --------- aplicar ---------
+  function contextualize(P){
+    var groups={}, ctx={}, rallies={}, rid=0;
+    function ckey(a){ return a.mc+'|'+a.t+'|'+a.num+'|'+a.sk; }
+    P.forEach(function(a){ var g=a.mc+'|'+a.set; (groups[g]=groups[g]||[]).push(a); });
+    Object.keys(groups).forEach(function(g){
+      var arr=groups[g].slice().sort(function(x,y){return x.t-y.t;});
+      var cur=null;
+      arr.forEach(function(a){
+        if(cur===null || a.sk==='Saque' || a.sk==='Recepción'){ cur='r'+(rid++); rallies[cur]=[]; }
+        ctx[ckey(a)]=cur; rallies[cur].push({sk:a.sk, ev:a.ev});
+      });
+    });
+    return {ctx:ctx, rallies:rallies, key:ckey};
+  }
+  function sitConds(){
+    var out=[]; var rows=document.querySelectorAll('#sitPanel .sitrow');
+    Array.prototype.forEach.call(rows,function(row){
+      var sk=row.querySelector('.sitsk').value; if(!sk) return;
+      var evs=[]; Array.prototype.forEach.call(row.querySelectorAll('.sev.on'),function(b){evs.push(b.dataset.ev);});
+      out.push({sk:sk, evs:evs});
+    });
+    return out;
+  }
+  function matchConds(a,C,conds){
+    var rid=C.ctx[C.key(a)]; if(rid==null) return false;
+    var acts=C.rallies[rid]||[];
+    return conds.every(function(cd){ return acts.some(function(x){ return x.sk===cd.sk && (!cd.evs.length || cd.evs.indexOf(x.ev)>=0); }); });
+  }
+  function resetSit(){
+    Array.prototype.forEach.call(document.querySelectorAll('#sitPanel .sitsk'),function(s){s.value='';});
+    Array.prototype.forEach.call(document.querySelectorAll('#sitPanel .sev.on'),function(b){b.classList.remove('on');});
+  }
   function apply(){
     var evK=Object.keys(selEval), stK=Object.keys(selSet);
     var multi=selectedMatchCodes().length>1;
+    var CONDS = sitConds();
+    var CTX = CONDS.length ? contextualize(pool()) : null;
+    var _sl=document.getElementById('sitN'); if(_sl)_sl.textContent=(CONDS.length===0?'—':CONDS.length+(CONDS.length===1?' condición':' condiciones'));
     filtered=basePool().filter(function(a){
       if(!selAct[akey(a.sk,sub(a))]) return false;
       if(fDz.length&&(a.sk!==(fSk||"Ataque")||fDz.indexOf(a.dz)<0)) return false;
@@ -367,6 +440,7 @@
       if(fCall.length&&(a.sk!=="Armado"||fCall.indexOf(a.call)<0)) return false;
       if(evK.length&&evK.indexOf(a.ev)<0) return false;
       if(stK.length&&stK.indexOf(a.set)<0) return false;
+      if(CONDS.length && !matchConds(a,CTX,CONDS)) return false;
       return true;
     }).sort(function(a,b){ var ra=evRank(a.ev),rb=evRank(b.ev); if(ra!==rb)return ra-rb; if(a.mc!==b.mc)return a.mc<b.mc?-1:1; return a.t-b.t;});
     filtered.forEach(function(a){a._vid=ytId(MAP[a.mc]||'');});
@@ -433,7 +507,7 @@
   function quickReel(sk,evs){
     Object.keys(selAct).forEach(function(k){selAct[k]=(k.split('|')[0]===sk);});
     selEval={}; (evs||[]).forEach(function(e){if(e)selEval[e]=1;});
-    selPlayers={}; selSet={}; fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';fDate='';fSk='';
+    selPlayers={}; selSet={}; fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';fDate='';fSk='';resetSit();
     buildActionTree();
     document.querySelectorAll('#fEval [data-ev]').forEach(function(c){c.classList.toggle('on',!!selEval[c.dataset.ev]);});
     apply();
@@ -505,9 +579,12 @@
     $('pBtn').addEventListener('click',function(){$('pPanel').classList.toggle('open');});
     $('pPanel').addEventListener('click',function(e){var c=e.target.closest('[data-p]');if(!c)return;var n=c.dataset.p;selPlayers[n]=!selPlayers[n];rebuildAll();});
     $('fEval').addEventListener('click',function(e){var c=e.target.closest('[data-ev]');if(!c)return;var v=c.dataset.ev;if(selEval[v])delete selEval[v];else selEval[v]=1;c.classList.toggle('on');apply();});
+    $('sitBtn').addEventListener('click',function(){$('sitPanel').classList.toggle('open');});
+    $('sitPanel').addEventListener('click',function(e){var b=e.target.closest('.sev');if(!b)return;b.classList.toggle('on');apply();});
+    $('sitPanel').addEventListener('change',function(e){if(e.target.classList&&e.target.classList.contains('sitsk'))apply();});
     $('sBtn').addEventListener('click',function(){$('sPanel').classList.toggle('open');});
     $('sPanel').addEventListener('click',function(e){var c=e.target.closest('[data-set]');if(!c)return;var v=c.dataset.set;if(selSet[v])delete selSet[v];else selSet[v]=1;var bx=c.querySelector('.box');if(bx)bx.textContent=selSet[v]?'✓':'';c.classList.toggle('on',!!selSet[v]);updateSN();apply();});
-    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';fDate='';fSk='';rebuildAll();});
+    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';fDate='';fSk='';resetSit();rebuildAll();});
     $('btnPlay').addEventListener('click',togglePlay);
     $('btnNext').addEventListener('click',function(){if(ready)next();});
     $('btnPrev').addEventListener('click',prev);

@@ -96,7 +96,7 @@ button{font-family:inherit;cursor:pointer}
 .eqrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px solid var(--b)}
 .eqnm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .eqbt{display:flex;gap:5px;flex-shrink:0}
-.jrow{display:grid;grid-template-columns:52px 1.3fr 1.1fr 110px 66px 32px;gap:6px;margin-bottom:6px;align-items:center}
+.jrow{display:grid;grid-template-columns:48px 1.1fr 1fr 96px 140px 54px 28px;gap:6px;margin-bottom:6px;align-items:center}
 .jcod{font-family:var(--mono,monospace);font-size:11px;color:var(--mut);text-align:center}
 .jcod.bad{color:#f87171;font-weight:700}
 .sqbox{display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap}
@@ -219,6 +219,10 @@ td .num{font-family:'JetBrains Mono',monospace;font-size:12px}
 /* modales */
 .modal{position:fixed;inset:0;background:rgba(4,4,10,.82);display:none;align-items:center;justify-content:center;z-index:60;padding:20px}
 .modal.open{display:flex}
+.modal.vdock{background:transparent;display:block;inset:auto;right:14px;bottom:14px;padding:0;z-index:9000;width:400px;align-items:initial;justify-content:initial}
+.modal.vdock .sheet{max-width:400px;max-height:none;padding:12px;border-radius:14px;box-shadow:0 14px 44px rgba(0,0,0,.6);border:1px solid var(--b2)}
+.modal.vdock #vid{max-height:210px}
+.modal.vdock .vhide{display:none!important}
 .sheet{background:var(--sur);border:1px solid var(--b2);border-radius:16px;padding:22px;width:100%;max-width:860px;max-height:88vh;overflow:auto}
 .sheet h2{font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.5px;font-size:20px;margin:0 0 4px;text-transform:uppercase}
 .sheet .sub{color:var(--mut);font-size:12.5px;margin-bottom:18px}
@@ -422,7 +426,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 
 <!-- ====== MODAL: CONFIG ====== -->
 
-<div class="modal" id="m-roster"><div class="sheet" style="max-width:520px">
+<div class="modal" id="m-roster"><div class="sheet" style="max-width:660px">
   <h2 id="rv-tit">Validación de plantel</h2>
   <div class="sub">Manual 12.3. Compara los jugadores del partido con el plantel oficial guardado en Equipos.</div>
   <div id="rv-lista" style="margin-top:12px;max-height:44vh;overflow:auto"></div>
@@ -435,7 +439,8 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 
 <div class="modal" id="m-subs"><div class="sheet" style="max-width:560px">
   <h2>Cambio · <span id="subs-team">Equipo</span></h2>
-  <div class="sub">Elegí quién sale (izquierda) y quién entra (derecha). Cambios restantes: <b id="subs-restantes">6</b>.</div>
+  <div class="brow" style="gap:6px;margin:8px 0"><button class="tbtn" id="subs-th" onclick="substLado('home')">Local</button><button class="tbtn" id="subs-ta" onclick="substLado('away')">Visitante</button></div>
+  <div class="sub">Elegí quién sale (izquierda) y quién entra (derecha). Podés hacer dos seguidos con «+ Otro cambio». Cambios restantes: <b id="subs-restantes">6</b>.</div>
   <div style="display:flex;gap:14px;margin-top:12px">
     <div style="flex:1">
       <div class="lutitle" style="margin-bottom:6px">Sale (en cancha)</div>
@@ -485,9 +490,9 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="modal" id="m-video"><div class="sheet" style="max-width:720px">
-  <h2>Video</h2>
-  <div class="sub">El .dvw guarda el segundo del video de cada código (columna 12) y la ruta en [3VIDEO].</div>
-  <div class="brow" style="margin:10px 0">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0;font-size:20px">Video</h2><div style="display:flex;gap:6px"><button class="tbtn" id="vid-dock-btn" onclick="vidDock()" title="Achicá el video a un costado para tipear y verlo a la vez">⧉ Acoplar</button><button class="tbtn" onclick="cerrarVideoArchivo()">Cerrar</button></div></div>
+  <div class="sub vhide">El .dvw guarda el segundo del video de cada código (columna 12) y la ruta en [3VIDEO].</div>
+  <div class="brow vhide" style="margin:10px 0">
     <label class="sqbtn">Abrir archivo
       <input type="file" accept="video/*" onchange="cargarVideoArchivo(this)" hidden>
     </label>
@@ -495,18 +500,18 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <button class="tbtn" onclick="cargarVideoURL()">Cargar</button>
   </div>
   <video id="vid" controls style="width:100%;border-radius:8px;background:#000;max-height:38vh" ontimeupdate="refrescarVideo()"></video>
-  <div class="sub" id="v-estado" style="margin-top:6px"></div>
-  <div class="fgrid" style="grid-template-columns:1fr;margin-top:10px">
+  <div class="sub vhide" id="v-estado" style="margin-top:6px"></div>
+  <div class="fgrid vhide" style="grid-template-columns:1fr;margin-top:10px">
     <div><label class="f">Ruta que va al archivo (Camera0)</label>
       <input class="f mono" id="v-ruta" placeholder="D:\VIDEOS\2026-01-31.mp4" onchange="guardarRutaVideo()"></div>
   </div>
-  <div class="brow" style="margin-top:10px">
+  <div class="brow vhide" style="margin-top:10px">
     <button class="tbtn" onclick="alinearCodigo()" title="Tecla F2">Alinear código elegido</button>
     <button class="tbtn" onclick="smartTime()">Smart Time</button>
     <button class="tbtn" onclick="arrancarReloj()">Reloj en cero (sin video)</button>
     <button class="tbtn" onclick="closeModal('m-video')">Cerrar</button>
   </div>
-  <div class="sub" style="margin-top:8px">Smart Time: 3 s del saque al ataque rival · 3,2 s entre ataques · 3 s del último golpe al punto.</div>
+  <div class="sub vhide" style="margin-top:8px">Smart Time: 3 s del saque al ataque rival · 3,2 s entre ataques · 3 s del último golpe al punto.</div>
 </div></div>
 
 <div class="modal" id="m-combos"><div class="sheet" style="max-width:820px">
@@ -710,7 +715,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <button type="button" id="modo-entrenamiento" class="tbtn" onclick="setModo('entrenamiento')" style="flex:1">🏋️ Entrenamiento</button>
   </div>
   <div class="fgrid">
-    <div><label class="f">Local — nombre</label><input class="f" id="s-nmh" placeholder="San Lorenzo"></div>
+    <div><label class="f">Local — equipo</label><select class="f" id="s-eqh" onchange="elegirEquipoSetup('home',this.value)" style="margin-bottom:5px"><option value="">— elegí un equipo guardado —</option></select><input class="f" id="s-nmh" placeholder="…o escribí el nombre"></div>
     <div><label class="f">Local — sigla</label><input class="f" id="s-cdh" maxlength="3" placeholder="SLO">
       <div class="sqbox">
         <label class="sqbtn">Importar equipo (.sq)
@@ -718,7 +723,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         </label>
         <span class="sub" id="sq-info-h"></span>
       </div></div>
-    <div><label class="f">Visitante — nombre</label><input class="f" id="s-nma" placeholder="Boca"></div>
+    <div><label class="f">Visitante — equipo</label><select class="f" id="s-eqa" onchange="elegirEquipoSetup('away',this.value)" style="margin-bottom:5px"><option value="">— elegí un equipo guardado —</option></select><input class="f" id="s-nma" placeholder="…o escribí el nombre"></div>
     <div><label class="f">Visitante — sigla</label><input class="f" id="s-cda" maxlength="3" placeholder="BOC">
       <div class="sqbox">
         <label class="sqbtn">Importar equipo (.sq)
@@ -1646,6 +1651,19 @@ function abrirVideo(){
   document.getElementById('m-video').classList.add('open');
   refrescarVideo();
 }
+function vidDock(){
+  const m=document.getElementById('m-video');
+  const d=m.classList.toggle('vdock');
+  const b=document.getElementById('vid-dock-btn');
+  if(b){ b.textContent = d?'⛶ Grande':'⧉ Acoplar'; b.title = d?'Volver a pantalla completa':'Achicá el video a un costado para tipear y verlo a la vez'; }
+  if(d){ const c=document.getElementById('code'); if(c) setTimeout(function(){c.focus();},60); }
+}
+function cerrarVideoArchivo(){
+  const m=document.getElementById('m-video');
+  m.classList.remove('vdock');
+  const b=document.getElementById('vid-dock-btn'); if(b) b.textContent='⧉ Acoplar';
+  closeModal('m-video');
+}
 function cargarVideoArchivo(input){
   const f = input.files && input.files[0];
   if(!f) return;
@@ -2211,6 +2229,7 @@ function subst(side){
   renderSubs();
   document.getElementById('m-subs').classList.add('open');
 }
+function substLado(side){ SUBS_SIDE=side; SUBS_SALE=null; SUBS_ENTRA=null; renderSubs(); }
 function cerrarSubs(){ document.getElementById('m-subs').classList.remove('open'); }
 /* elenco del banco: los jugadores del equipo (pv_equipos o plantel) que NO están en cancha */
 function bancoDe(side){
@@ -2229,6 +2248,8 @@ function bancoDe(side){
 function renderSubs(){
   const side=SUBS_SIDE;
   document.getElementById('subs-team').textContent = M[side].name || (side==='home'?'Local':'Visitante');
+  var _th=document.getElementById('subs-th'), _ta=document.getElementById('subs-ta');
+  if(_th) _th.classList.toggle('pri', side==='home'); if(_ta) _ta.classList.toggle('pri', side==='away');
   document.getElementById('subs-restantes').textContent = Math.max(0, (CFG.regl.cambios||6) - (M[side].subs||0));
   /* columna IZQUIERDA: los 6 en cancha (el que sale) */
   const enCancha = M[side].lineup.slice();
@@ -2481,10 +2502,12 @@ document.addEventListener('keydown', e=>{
   /* manual 2.5.6: la tecla de alineación pega el código elegido al frame del video */
   if(e.key===CFG.keys.sync){ e.preventDefault(); alinearCodigo(); return; }
 
-  /* manual 4.6: Esc lleva el foco a la barra de comandos */
-  if(e.key==='Escape' && !document.querySelector('.modal.open')){
+  /* Esc abre el panel de cambios (o lo cierra si ya está abierto), estilo Data Volley */
+  if(e.key==='Escape'){
+    const om=document.querySelector('.modal.open');
+    if(om){ if(om.id==='m-subs'){ e.preventDefault(); cerrarSubs(); } return; }
     e.preventDefault();
-    const inp=document.getElementById('code'); inp.value=''; inp.focus(); drawDecoder();
+    subst(SUBS_SIDE||'home');
     return;
   }
 
@@ -2633,7 +2656,7 @@ function drawLineup(side){
     const isS = val && String(val)===String(LU[side].setter);
     return '<div class="lucell'+(isS?' isSetter':'')+'" id="lc-'+side+'-'+z+'">'+
       '<span class="zl">'+z+'</span>'+((z===4||z===3||z===2)?'<span class="net">RED</span>':'')+
-      '<input inputmode="numeric" value="'+val+'" oninput="luSet(\''+side+'\','+z+',this.value)">'+
+      '<input inputmode="numeric" value="'+val+'" oninput="luSet(\''+side+'\','+z+',this.value)" onkeydown="luKey(event,\''+side+'\','+z+')">'+
       '<button class="sbtn" onclick="luSetter(\''+side+'\','+z+')">'+(isS?'ARMADOR':'armador')+'</button>'+
       '</div>';
   }).join('');
@@ -2645,6 +2668,16 @@ function luSet(side,z,v){
   const inp=cell.querySelector('input'); if(inp.value!==v) inp.value=v;
   const isS = v && String(v)===String(LU[side].setter);
   cell.classList.toggle('isSetter', !!isS);
+}
+function luKey(e,side,z){
+  if(e.key!=='Enter' && e.key!=='Tab') return;
+  e.preventDefault();
+  const i=LU_GRID.indexOf(z);
+  let tgt;
+  if(i < LU_GRID.length-1){ tgt=document.getElementById('lc-'+side+'-'+LU_GRID[i+1]); }
+  else { const other=side==='home'?'away':'home'; tgt=document.getElementById('lc-'+other+'-'+LU_GRID[0]); }
+  const inp=tgt && tgt.querySelector('input');
+  if(inp){ inp.focus(); if(inp.select) inp.select(); }
 }
 function luSetter(side,z){
   const v=LU[side].n[z];
@@ -2708,6 +2741,7 @@ function setModo(modo){
 let SETUP_OBLIGATORIO = false;
 function openSetup(obligatorio){
   SETUP_OBLIGATORIO = !!obligatorio;
+  poblarSelectEquipos();
   const V=(id,v)=>document.getElementById(id).value=v;
   V('s-nmh',M.home.name==='LOCAL'?'':M.home.name); V('s-nma',M.away.name==='VISITANTE'?'':M.away.name);
   V('s-cdh',M.home.code); V('s-cda',M.away.code);
@@ -3180,6 +3214,7 @@ function renderJugadores(){
       '<select class="f" onchange="setJug('+i+',\'rol\',this.value)">'+
         ['','1','2','3','4','5'].map(r=>'<option value="'+r+'"'+((j.rol||'')===r?' selected':'')+'>'+(r?SQ_ROLES[r]:'—')+'</option>').join('')+
       '</select>'+
+      '<input class="f" type="date" title="Fecha de nacimiento" value="'+esc(j.nacim||'')+'" onchange="setJug('+i+',\'nacim\',this.value)">'+
       '<span class="jcod'+(mal?' bad':'')+'" title="'+(mal?'Código repetido: corregí un nombre':'Código del jugador')+'">'+cod+'</span>'+
       '<button class="tbtn" onclick="quitarJug('+i+')">✕</button>'+
     '</div>';
@@ -3194,7 +3229,7 @@ function setJug(i, campo, val){
   if(campo==='rol') j.lib = (val==='1');
   renderJugadores();
 }
-function agregarJug(){ EQ_EDIT.eq.jugadores.push({c:'',apellido:'',nombre:'',rol:'',lib:false}); renderJugadores(); }
+function agregarJug(){ EQ_EDIT.eq.jugadores.push({c:'',apellido:'',nombre:'',nacim:'',rol:'',lib:false}); renderJugadores(); }
 function quitarJug(i){ EQ_EDIT.eq.jugadores.splice(i,1); renderJugadores(); }
 
 function guardarEquipo(){
@@ -3278,6 +3313,19 @@ function importarSQ(input, side){
   fr.readAsArrayBuffer(file);
 }
 
+function poblarSelectEquipos(){
+  const list = equipos();
+  ['h','a'].forEach(suf=>{
+    const sel=document.getElementById('s-eq'+suf); if(!sel) return;
+    sel.innerHTML='<option value="">— elegí un equipo guardado —</option>'+
+      list.map((e,i)=>'<option value="'+i+'">'+esc(e.nombre)+(e.sigla?' ('+esc(e.sigla)+')':'')+' · '+e.jugadores.length+' jug.</option>').join('');
+  });
+}
+function elegirEquipoSetup(side, idx){
+  if(idx==='') return;
+  const eq=equipos()[parseInt(idx,10)]; if(!eq) return;
+  aplicarEquipo(eq, side);
+}
 function aplicarEquipo(eq, side){
   const suf = side==='home' ? 'h' : 'a';
   const nm = document.getElementById('s-nm'+suf), cd = document.getElementById('s-cd'+suf);
