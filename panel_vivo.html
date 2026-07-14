@@ -219,10 +219,17 @@ td .num{font-family:'JetBrains Mono',monospace;font-size:12px}
 /* modales */
 .modal{position:fixed;inset:0;background:rgba(4,4,10,.82);display:none;align-items:center;justify-content:center;z-index:60;padding:20px}
 .modal.open{display:flex}
-.modal.vdock{background:transparent;display:block;inset:auto;right:14px;bottom:14px;padding:0;z-index:9000;width:400px;align-items:initial;justify-content:initial}
-.modal.vdock .sheet{max-width:400px;max-height:none;padding:12px;border-radius:14px;box-shadow:0 14px 44px rgba(0,0,0,.6);border:1px solid var(--b2)}
-.modal.vdock #vid{max-height:210px}
+.modal.vdock{background:transparent;display:block;inset:auto;right:14px;bottom:14px;padding:0;z-index:9000;width:400px;height:265px;align-items:initial;justify-content:initial}
+.modal.vdock .sheet{width:100%;height:100%;max-width:none;max-height:none;padding:8px;border-radius:14px;box-shadow:0 14px 44px rgba(0,0,0,.6);border:1px solid var(--b2);display:flex;flex-direction:column;position:relative;overflow:hidden}
+.modal.vdock .vhdr{flex:none;cursor:move}
+.modal.vdock #vid{flex:1;width:100%;height:auto;min-height:0;max-height:none!important;object-fit:contain;margin-top:6px}
 .modal.vdock .vhide{display:none!important}
+.modal.vdock .vres{position:absolute;width:18px;height:18px;z-index:6}
+.modal.vdock .vres-nw{left:-4px;top:-4px;cursor:nwse-resize}
+.modal.vdock .vres-ne{right:-4px;top:-4px;cursor:nesw-resize}
+.modal.vdock .vres-sw{left:-4px;bottom:-4px;cursor:nesw-resize}
+.modal.vdock .vres-se{right:-4px;bottom:-4px;cursor:nwse-resize}
+.modal:not(.vdock) .vres{display:none}
 .sheet{background:var(--sur);border:1px solid var(--b2);border-radius:16px;padding:22px;width:100%;max-width:860px;max-height:88vh;overflow:auto}
 .sheet h2{font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.5px;font-size:20px;margin:0 0 4px;text-transform:uppercase}
 .sheet .sub{color:var(--mut);font-size:12.5px;margin-bottom:18px}
@@ -490,7 +497,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="modal" id="m-video"><div class="sheet" style="max-width:720px">
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0;font-size:20px">Video</h2><div style="display:flex;gap:6px"><button class="tbtn" id="vid-dock-btn" onclick="vidDock()" title="Achicá el video a un costado para tipear y verlo a la vez">⧉ Acoplar</button><button class="tbtn" onclick="cerrarVideoArchivo()">Cerrar</button></div></div>
+  <div class="vhdr" style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0;font-size:20px">Video</h2><div style="display:flex;gap:6px"><button class="tbtn" id="vid-dock-btn" onclick="vidDock()" title="Achicá el video a un costado para tipear y verlo a la vez">⧉ Acoplar</button><button class="tbtn" onclick="cerrarVideoArchivo()">Cerrar</button></div></div>
   <div class="sub vhide">El .dvw guarda el segundo del video de cada código (columna 12) y la ruta en [3VIDEO].</div>
   <div class="brow vhide" style="margin:10px 0">
     <label class="sqbtn">Abrir archivo
@@ -668,6 +675,11 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         <option value="1">Sí — un código terminal (#, =, ataque bloqueado) cierra la jugada y da el punto solo</option>
         <option value="0">No — el punto se carga a mano (botones «Punto Local/Visitante»)</option></select>
         <div style="font-size:11px;color:var(--mut);margin-top:5px">La barra se limpia siempre; esto define qué queda escrito.</div>
+      </div>
+      <div><label class="f">Modo entrenamiento (solo tu equipo)</label><select class="f" id="d-entren">
+        <option value="0">No — partido normal (local y visitante)</option>
+        <option value="1">Sí — todo se carga como local (*), sin adversario · práctica o amistoso</option></select>
+        <div style="font-size:11px;color:var(--mut);margin-top:5px">En entrenamiento, aunque tipees «a», el código va a tu equipo.</div>
       </div>
       <div><label class="f">Al editar, el cursor va</label><select class="f" id="d-cursor">
         <option value="0">Al final del código (completar)</option>
@@ -905,6 +917,7 @@ if(CFG.autoServe===undefined) CFG.autoServe = 'num_s';
    jugada y asigna el punto solo. Por defecto ACTIVADO. Se puede apagar en
    Configuración para cargar el fin de jugada a mano. */
 if(CFG.autoFin===undefined) CFG.autoFin = true;
+if(CFG.entrenamiento===undefined) CFG.entrenamiento = false;
 if(!CFG.verif) CFG.verif = {marcador:true,combo:true,bloqueo:true,zona:true,recBarra:true,liberoSaca:true};
 if(CFG.verif.marcador===undefined) CFG.verif.marcador = true;
 if(CFG.verif.zonaSaque===undefined) CFG.verif.zonaSaque = true;
@@ -1073,7 +1086,7 @@ function parseOne(raw){
   let s = (raw||'').trim();
   if(!s) return null;
   let team = 'home';
-  if(s[0]==='a' || s[0]==='A'){ team='away'; s=s.slice(1); }
+  if(s[0]==='a' || s[0]==='A'){ if(!CFG.entrenamiento) team='away'; s=s.slice(1); }
   else if(s[0]==='*'){ team='home'; s=s.slice(1); }
 
   /* '-1' = jugador desconocido. Aparece en los DVW oficiales (153 casos en 97 archivos) */
@@ -1651,16 +1664,57 @@ function abrirVideo(){
   document.getElementById('m-video').classList.add('open');
   refrescarVideo();
 }
+function vidDockInit(){
+  const m=document.getElementById('m-video'); if(m.__di) return; m.__di=true;
+  const sheet=m.querySelector('.sheet'); const hdr=m.querySelector('.vhdr');
+  ['nw','ne','sw','se'].forEach(function(c){ var el=document.createElement('div'); el.className='vres vres-'+c; el.dataset.c=c; sheet.appendChild(el); });
+  var mode=null,corner=null,sx=0,sy=0,R=null;
+  function pt(e){ return (e.touches&&e.touches[0])?e.touches[0]:e; }
+  function down(e,md,cn){
+    if(!m.classList.contains('vdock')) return;
+    mode=md; corner=cn; var p=pt(e); sx=p.clientX; sy=p.clientY;
+    var r=m.getBoundingClientRect(); R={l:r.left,t:r.top,w:r.width,h:r.height};
+    m.style.right='auto'; m.style.bottom='auto'; m.style.left=r.left+'px'; m.style.top=r.top+'px'; m.style.width=r.width+'px'; m.style.height=r.height+'px';
+    document.addEventListener('mousemove',move); document.addEventListener('mouseup',up);
+    document.addEventListener('touchmove',move,{passive:false}); document.addEventListener('touchend',up);
+    e.preventDefault(); e.stopPropagation();
+  }
+  function move(e){
+    if(!mode) return; var p=pt(e); var dx=p.clientX-sx, dy=p.clientY-sy;
+    if(mode==='drag'){ m.style.left=(R.l+dx)+'px'; m.style.top=(R.t+dy)+'px'; }
+    else{
+      var l=R.l,t=R.t,w=R.w,ht=R.h;
+      if(corner.indexOf('e')>=0) w=R.w+dx;
+      if(corner.indexOf('w')>=0){ w=R.w-dx; l=R.l+dx; }
+      if(corner.indexOf('s')>=0) ht=R.h+dy;
+      if(corner.indexOf('n')>=0){ ht=R.h-dy; t=R.t+dy; }
+      if(w<240){ if(corner.indexOf('w')>=0) l=R.l+R.w-240; w=240; }
+      if(ht<150){ if(corner.indexOf('n')>=0) t=R.t+R.h-150; ht=150; }
+      m.style.width=w+'px'; m.style.height=ht+'px'; m.style.left=l+'px'; m.style.top=t+'px';
+    }
+    e.preventDefault();
+  }
+  function up(){ mode=null; document.removeEventListener('mousemove',move); document.removeEventListener('mouseup',up); document.removeEventListener('touchmove',move); document.removeEventListener('touchend',up); }
+  if(hdr){ hdr.addEventListener('mousedown',function(e){ if(e.target.closest('button'))return; down(e,'drag'); });
+           hdr.addEventListener('touchstart',function(e){ if(e.target.closest('button'))return; down(e,'drag'); },{passive:false}); }
+  sheet.querySelectorAll('.vres').forEach(function(el){
+    el.addEventListener('mousedown',function(e){ down(e,'resize',el.dataset.c); });
+    el.addEventListener('touchstart',function(e){ down(e,'resize',el.dataset.c); },{passive:false});
+  });
+}
 function vidDock(){
+  vidDockInit();
   const m=document.getElementById('m-video');
   const d=m.classList.toggle('vdock');
   const b=document.getElementById('vid-dock-btn');
-  if(b){ b.textContent = d?'⛶ Grande':'⧉ Acoplar'; b.title = d?'Volver a pantalla completa':'Achicá el video a un costado para tipear y verlo a la vez'; }
+  if(b){ b.textContent = d?'⛶ Grande':'⧉ Acoplar'; b.title = d?'Volver a pantalla completa':'Arrastrá la barra para mover · las esquinas para agrandar/achicar'; }
+  if(!d){ ['left','top','right','bottom','width','height'].forEach(function(p){ m.style[p]=''; }); }
   if(d){ const c=document.getElementById('code'); if(c) setTimeout(function(){c.focus();},60); }
 }
 function cerrarVideoArchivo(){
   const m=document.getElementById('m-video');
   m.classList.remove('vdock');
+  ['left','top','right','bottom','width','height'].forEach(function(p){ m.style[p]=''; });
   const b=document.getElementById('vid-dock-btn'); if(b) b.textContent='⧉ Acoplar';
   closeModal('m-video');
 }
@@ -2592,6 +2646,7 @@ function openConfig(){
   document.getElementById('d-cursor').value   = CFG.cursorEfecto ? '1' : '0';
   document.getElementById('d-autoserve').value = CFG.autoServe || 'no';
   document.getElementById('d-autofin').value = (CFG.autoFin===false) ? '0' : '1';
+  document.getElementById('d-entren').value = CFG.entrenamiento ? '1' : '0';
   renderAtajos();
   const al2=document.getElementById('cfg-autolineup'); if(al2) al2.value = CFG.autoLineup?'1':'0';
   document.getElementById('cfg-verif').innerHTML = Object.keys(VERIF_LBL).map(k=>
@@ -2630,6 +2685,7 @@ function saveConfig(){
   CFG.cursorEfecto = document.getElementById('d-cursor').value==='1';
   CFG.autoServe    = document.getElementById('d-autoserve').value;
   CFG.autoFin      = document.getElementById('d-autofin').value==='1';
+  CFG.entrenamiento = document.getElementById('d-entren').value==='1';
   Object.keys(VERIF_LBL).forEach(k=>{ const el=document.getElementById('vf-'+k); if(el) CFG.verif[k]= el.value==='1'; });
   const al=document.getElementById('cfg-autolineup'); if(al) CFG.autoLineup = al.value==='1';
   CFG.atajos = (CFG.atajos||[]).filter(a=>a.k && a.txt);   /* los incompletos no se guardan */
