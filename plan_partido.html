@@ -185,7 +185,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
   </div>
 </header>
 <div class="matchbar"><span class="mlab">Equipo</span>
-  <span id="teambtns" class="teambtns"></span>
+  <span id="teambtns" class="teambtns" style="display:none"></span>
   <select id="teamsel" class="teamsel"></select>
   <span class="mlab" style="margin-left:6px">Filtrar</span>
   <div class="msel"><button class="mbtn" onclick="togglePanel('r')">Rival <b id="rc"></b> ▾</button><div class="mpanel" id="rpanel"></div></div>
@@ -487,13 +487,20 @@ function setTab(t){
 
 /* ── BOTONES DE EQUIPO (nuestro / rival) ── */
 function pintarBotonesEquipo(){
-  var cont=document.getElementById('teambtns'); if(!cont) return;
   var slugs=Object.keys(TEAMS);
-  /* en vivo mostramos etiquetas claras; fuera de vivo, botón por equipo */
-  cont.innerHTML = slugs.map(function(sl){
-    var etq = VIVO ? (sl==='home'?'Nuestro equipo':'Rival') : (TEAMS[sl].name||sl);
-    return '<button class="teambtn'+(sl===TEAM?' active':'')+'" onclick="setTeam(\''+sl+'\')">'+etq+'</button>';
+  var etqDe=function(sl){ return VIVO ? (sl==='home'?'Nuestro equipo':'Rival') : (TEAMS[sl].name||sl); };
+  var cont=document.getElementById('teambtns');
+  if(cont) cont.innerHTML = slugs.map(function(sl){
+    return '<button class="teambtn'+(sl===TEAM?' active':'')+'" onclick="setTeam(\''+sl+'\')">'+etqDe(sl)+'</button>';
   }).join('');
+  /* desplegable de equipo (el que queda activo) */
+  var sel=document.getElementById('teamsel');
+  if(sel){
+    sel.innerHTML = slugs.map(function(sl){
+      return '<option value="'+sl+'"'+(sl===TEAM?' selected':'')+'>'+etqDe(sl)+'</option>';
+    }).join('');
+    sel.value=TEAM;
+  }
 }
 
 /* ── MODO VIVO: leer del scout y refrescar solo ── */
@@ -527,8 +534,7 @@ function cargarVivo(primera){
 document.getElementById('teamsel').innerHTML=Object.keys(TEAMS).map(function(s){return '<option value="'+s+'">'+TEAMS[s].name+'</option>';}).join('');
 document.getElementById('teamsel').value=TEAM;
 document.getElementById('teamsel').addEventListener('change',function(){setTeam(this.value);});
-/* en vivo escondemos el <select> viejo y usamos los botones */
-if(VIVO){ var ts=document.getElementById('teamsel'); if(ts) ts.style.display='none'; }
+/* el desplegable de equipo queda siempre visible (se sacó la fila de botones) */
 pintarBotonesEquipo();
 
 /* solapa inicial: por hash (#ataque) o armador por defecto */

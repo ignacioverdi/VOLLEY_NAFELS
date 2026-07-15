@@ -237,7 +237,7 @@
       var rl = parseSetterRalliesVivo(codes, pfx, rivalPfx, sn);
       if(!rl.length) return;
       var arm = rl.map(ralllyToS);
-      setters.push({num:sn, name:(names&&names[sn])||String(sn), s:arm, total:rl.length});
+      setters.push({num:sn, name:apellido((names&&names[sn])||String(sn)), s:arm, total:rl.length});
     });
     setters.sort(function(a,b){return b.total-a.total;});
     return setters;

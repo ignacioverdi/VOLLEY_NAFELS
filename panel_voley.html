@@ -1230,6 +1230,42 @@ function calcObjetivos(D){
   return {effS,effR,effB,effA,tcq,mya};
 }
 
+/* ── KPIs POR FASE (side out / transición) desde los códigos crudos del scout en vivo ──
+   Reconstruye la jugada igual que las baterías: recepción #/+ -> side out; defensa/saque -> transición.
+   Código: team=c[0], num=c[1..2], skill=c[3], type=c[4], ev=c[5], combo=c[6..7]. */
+function calcFaseKPIs(codes, side){
+  side = side || '*';
+  var ROL={};
+  try{
+    var P=window.PLANTEL_NAFELS;
+    var arr=(P&&P.jugadores)?P.jugadores:(P&&P.lista)?P.lista:(Array.isArray(P)?P:[]);
+    arr.forEach(function(j){ var n=(j.num!=null?j.num:j.c); var pos=((j.pos||j.rol||'')+'').toUpperCase(); if(n!=null) ROL[parseInt(n,10)]=pos; });
+  }catch(e){}
+  function esCentral(num,tipo){ var pos=ROL[parseInt(num,10)]||''; return pos.indexOf('CENTRAL')>=0 || tipo==='Q'; }
+  var PIPE={XP:1,XR:1,XB:1};
+  var so={k:0,e:0,b:0,t:0}, tr={k:0,e:0,b:0,t:0}, mbTr=0, pipeSD=0, pipeTR=0;
+  var last_rec=null, rec_valida=false;
+  for(var i=0;i<codes.length;i++){
+    var l=((codes[i]&&codes[i].c)||'').trim(); if(l.length<6) continue;
+    var pfx=l[0], num=l.slice(1,3), skill=l[3], tipo=l[4], ev=l[5];
+    if(!/^\d\d$/.test(num)) continue;
+    var combo=l.slice(6,8); if(combo.indexOf('~')>=0) combo='';
+    if(skill==='S'){ last_rec=null; rec_valida=false; }
+    else if(skill==='R' && pfx===side){ last_rec=ev; rec_valida=true; }
+    else if(pfx!==side && (skill==='A'||skill==='D'||skill==='E'||skill==='B')){ rec_valida=false; }
+    else if(skill==='A' && pfx===side){
+      var esSO=(last_rec!==null && rec_valida);
+      var recBuena=esSO && (last_rec==='#'||last_rec==='+');
+      if(esSO) rec_valida=false;
+      var K=(ev==='#'), E=(ev==='='), B=(ev==='/');
+      if(recBuena){ so.t++; if(K)so.k++; if(E)so.e++; if(B)so.b++; if(K&&PIPE[combo])pipeSD++; }
+      if(!esSO){ tr.t++; if(K)tr.k++; if(E)tr.e++; if(B)tr.b++; if(K&&PIPE[combo])pipeTR++; if(K&&esCentral(num,tipo))mbTr++; }
+    }
+  }
+  var pct=function(o){ return o.t>0 ? Math.round((o.k-o.e-o.b)/o.t*100) : null; };
+  return { sideout:pct(so), transition:pct(tr), mbTr:mbTr, pipeSD:pipeSD, pipeTR:pipeTR };
+}
+
 function resultIcon(actual,goal,higherIsBetter=true){
   if(actual===null||goal===null||goal==='')return null;
   const a=parseFloat(actual),g=parseFloat(goal);
@@ -1244,6 +1280,8 @@ function resultIcon(actual,goal,higherIsBetter=true){
 function updateObj(){
   const D=window.VOLEY_DATA;
   const kpis=calcObjetivos(D);
+  const _codes=(window.VOLEY_CODES&&window.VOLEY_CODES.codes)?window.VOLEY_CODES.codes:[];
+  const fase=calcFaseKPIs(_codes,'*');
 
   const KPIS=[
     {id:'saque',label:'Eficiencia Saque',    color:'#fbbf24',val:kpis?kpis.effS:null,unit:'%'},
@@ -1252,6 +1290,11 @@ function updateObj(){
     {id:'alta', label:'Eficiencia Ataque Alta',color:'#38bdf8',val:kpis?kpis.effA:null,unit:'%'},
     {id:'tcq',  label:'# Toques',          color:'#a78bfa',val:kpis?kpis.tcq:null, unit:''},
     {id:'mya',  label:'# Block Out',      color:'#ef4444',val:kpis?kpis.mya:null, unit:''},
+    {id:'sideout',   label:'% Side Out (rec #/+)', color:'#22c55e',val:fase.sideout,   unit:'%'},
+    {id:'transition',label:'% Transition',        color:'#38bdf8',val:fase.transition,unit:'%'},
+    {id:'mbtr',      label:'# MB en Transición',  color:'#a78bfa',val:fase.mbTr,      unit:''},
+    {id:'pipesd',    label:'# Pipe en Side Out',  color:'#fbbf24',val:fase.pipeSD,    unit:''},
+    {id:'pipetr',    label:'# Pipe en Transición',color:'#ef4444',val:fase.pipeTR,    unit:''},
   ];
 
   const container=document.getElementById('obj-cards');
