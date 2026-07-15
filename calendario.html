@@ -274,9 +274,32 @@
     'Amriswil':'escudos/amriswil.png',
     'Colombier':'escudos/colombier.png'
   };
+  // ── Escudo del rival subido a mano (por partido): se guarda con el partido y se reutiliza por nombre de rival ──
+  var FORM_ESCUDO='';
+  var ESCUDOS_CUSTOM={};
+  function buildCustomEscudos(){ ESCUDOS_CUSTOM={}; try{ (data.partidos||[]).forEach(function(e){ if(e && e.escudo && e.rival){ ESCUDOS_CUSTOM[e.rival]=e.escudo; } }); }catch(_){} }
+  function escudoQuitar(){ FORM_ESCUDO=''; var p=document.getElementById('f-esc-prev'); if(p) p.innerHTML='<span style="opacity:.5;font-size:12px">— sin escudo —</span>'; }
+  function escudoUpload(inp){
+    var file=inp.files&&inp.files[0]; if(!file) return;
+    var rd=new FileReader();
+    rd.onload=function(){
+      var img=new Image();
+      img.onload=function(){
+        var max=140, sc=Math.min(1, max/Math.max(img.width,img.height));
+        var w=Math.max(1,Math.round(img.width*sc)), hh=Math.max(1,Math.round(img.height*sc));
+        var cv=document.createElement('canvas'); cv.width=w; cv.height=hh;
+        cv.getContext('2d').drawImage(img,0,0,w,hh);
+        try{ FORM_ESCUDO=cv.toDataURL('image/png'); }catch(_){ FORM_ESCUDO=rd.result; }
+        var p=document.getElementById('f-esc-prev'); if(p) p.innerHTML='<img src="'+FORM_ESCUDO+'" style="width:44px;height:44px;object-fit:contain;border-radius:8px;background:#fff;padding:2px">';
+      };
+      img.onerror=function(){ alert('No pude leer esa imagen, probá con otra.'); };
+      img.src=rd.result;
+    };
+    rd.readAsDataURL(file);
+  }
   function crestHTML(name){
     var k=name||'', c=CLUBS[k]||{ab:(k.substr(0,3)||'?').toUpperCase(),c:'#555'};
-    var url=ESCUDOS[k]||'';
+    var url=ESCUDOS_CUSTOM[k]||ESCUDOS[k]||'';
     var img=url?'<img src="'+url+'" alt="" onerror="this.remove()">':'';
     return '<span class="crest" style="--cc:'+c.c+'" title="'+esc(k)+'">'+img+c.ab+'</span>';
   }
@@ -289,7 +312,7 @@
   }
   function fxCrest(name){
     var k=name||'', c=CLUBS[k]||{ab:((k.substr(0,3))||'?').toUpperCase(),c:'#555'};
-    var url=ESCUDOS[k]||'';
+    var url=ESCUDOS_CUSTOM[k]||ESCUDOS[k]||'';
     if(!url) return '<div class="fx-cr mono" style="--cc:'+c.c+'">'+c.ab+'</div>';
     var alt=(url.indexOf('escudos/')===0)?('escudos/'+url):'';  // respaldo si la carpeta quedó anidada (escudos/escudos/)
     var oe="var i=this,p=i.parentNode;if(i.getAttribute('data-alt')){i.src=i.getAttribute('data-alt');i.removeAttribute('data-alt');return;}p.classList.add('mono');p.style.setProperty('--cc','"+c.c+"');p.textContent='"+c.ab+"';";
@@ -328,7 +351,7 @@
     alert(added+' partido(s) agregado(s)'+(added<FIXTURE.length?'. '+(FIXTURE.length-added)+' ya estaban cargados.':'.'));
   }
 
-  function render(){
+  function render(){ buildCustomEscudos();
     if(viewMode==='plan'){ renderPlan(); return; }
     renderList();
   }
@@ -473,6 +496,7 @@
 
   function openForm(entry){ if(window.VB_esEditor&&!VB_esEditor())return;
     editId=entry?entry.id:null;
+    FORM_ESCUDO=(entry&&entry.escudo)?entry.escudo:'';
     formCond=(entry&&entry.condicion)?entry.condicion:'Local';
     var isP=(tab==='partidos');
     var h='<div class="form"><div class="form-ti">'+
@@ -481,6 +505,12 @@
     h+='<div class="frow"><label class="fld">Hora</label><input type="time" id="f-hora" value="'+esc(entry?entry.hora:'')+'"></div>';
     if(isP){
       h+='<div class="frow"><label class="fld">Rival</label><input type="text" id="f-rival" placeholder="Ej: Jona" value="'+esc(entry?entry.rival:'')+'"></div>';
+      h+='<div class="frow"><label class="fld">Escudo del rival</label><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'+
+         '<div id="f-esc-prev">'+(FORM_ESCUDO?'<img src="'+FORM_ESCUDO+'" style="width:44px;height:44px;object-fit:contain;border-radius:8px;background:#fff;padding:2px">':'<span style="opacity:.5;font-size:12px">— sin escudo —</span>')+'</div>'+
+         '<label class="btn save" style="cursor:pointer;margin:0">Subir foto<input type="file" accept="image/*" onchange="escudoUpload(this)" style="display:none"></label>'+
+         '<button type="button" class="btn cancel" onclick="escudoQuitar()">Quitar</button>'+
+         '</div></div>';
+      h+='<div class="frow"><label class="fld"></label><div style="font-size:11px;opacity:.6">Opcional. Si no ponés, se muestra el monograma con las iniciales. Se guarda con el partido y se reutiliza para ese rival.</div></div>';
       h+='<div class="frow"><label class="fld">Condición</label><div class="cond" id="f-cond">'+
           '<div class="chip'+(formCond==='Local'?' on':'')+'" data-c="Local" onclick="setCond(\'Local\')">Local</div>'+
           '<div class="chip'+(formCond==='Visita'?' on':'')+'" data-c="Visita" onclick="setCond(\'Visita\')">Visita</div>'+
@@ -509,7 +539,7 @@
     var fecha=document.getElementById('f-fecha').value;
     if(!fecha){ alert('Poné una fecha'); return; }
     var e={ id: editId||Date.now(), fecha:fecha, hora:document.getElementById('f-hora').value, lugar:document.getElementById('f-lugar').value.trim() };
-    if(tab==='partidos'){ e.rival=document.getElementById('f-rival').value.trim(); e.condicion=formCond; }
+    if(tab==='partidos'){ e.rival=document.getElementById('f-rival').value.trim(); e.condicion=formCond; e.escudo=FORM_ESCUDO||''; }
     else { e.tipo=document.getElementById('f-tipo').value; }
     var arr=data[tab], found=false;
     for(var i=0;i<arr.length;i++){ if(arr[i].id===e.id){ arr[i]=e; found=true; break; } }
