@@ -351,6 +351,31 @@
     alert(added+' partido(s) agregado(s)'+(added<FIXTURE.length?'. '+(FIXTURE.length-added)+' ya estaban cargados.':'.'));
   }
 
+  // ── Lugar inteligente: si es un link de Google Maps, muestra 📍 y saca el nombre del lugar ──
+  function parseMapUrl(s){
+    s=(s||'').trim(); if(!s) return null;
+    var looks=/^https?:\/\//i.test(s) || /^(maps\.app\.goo\.gl|goo\.gl\/maps|maps\.google)/i.test(s);
+    if(!looks) return null;
+    var u = /^https?:\/\//i.test(s) ? s : ('https://'+s);
+    var isMap=/google\.[^\/]*\/maps|maps\.google|goo\.gl\/maps|maps\.app\.goo\.gl/i.test(u);
+    if(!isMap) return null;
+    var name='';
+    var m=u.match(/\/place\/([^\/@?]+)/); if(m){ try{ name=decodeURIComponent(m[1].replace(/\+/g,' ')).trim(); }catch(_){ name=m[1].replace(/\+/g,' ').trim(); } }
+    if(!name){ var q=u.match(/[?&](?:q|query|destination|daddr)=([^&]+)/); if(q){ try{ name=decodeURIComponent(q[1].replace(/\+/g,' ')).trim(); }catch(_){ name=q[1]; } } }
+    if(/^[-\d.,\s]+$/.test(name)) name='';   // si es solo coordenadas, sin nombre
+    return { url:u, name:name };
+  }
+  function venueBits(e){
+    var mp=parseMapUrl(e&&e.lugar);
+    if(mp) return { name:mp.name, mapUrl:mp.url };       // link en Lugar -> nombre extraído + mapa
+    return { name:(e&&e.lugar)||'', mapUrl:(e&&e.mapa)||'' };  // texto normal + mapa aparte si hay
+  }
+  function venueRender(e){
+    var v=venueBits(e), out='';
+    if(v.name) out+='<span class="fx-venue">'+esc(v.name)+'</span>';
+    if(v.mapUrl) out+='<a class="fx-map" href="'+esc(v.mapUrl)+'" target="_blank" rel="noopener" title="Abrir en Google Maps">📍</a>';
+    return out;
+  }
   function render(){ buildCustomEscudos();
     if(viewMode==='plan'){ renderPlan(); return; }
     renderList();
@@ -382,7 +407,7 @@
              '<div class="fx-vs">vs</div>'+
              fxCrest(away)+
              '<div class="fx-away'+(away==='Näfels'?' us':'')+'">'+tName(away)+'</div>'+
-             '<div class="fx-meta"><span class="fx-time">'+esc(e.hora||'')+'</span><span class="fx-place">'+(e.lugar?'<span class="fx-venue">'+esc(e.lugar)+'</span>':'')+(e.mapa?'<a class="fx-map" href="'+esc(e.mapa)+'" target="_blank" rel="noopener" title="Abrir en Google Maps">📍</a>':'')+'</span></div>'+
+             '<div class="fx-meta"><span class="fx-time">'+esc(e.hora||'')+'</span><span class="fx-place">'+venueRender(e)+'</span></div>'+
              '<div class="fx-acts">'+
                ((window.VB_esEditor&&!VB_esEditor())?'':
                  '<button class="icon-btn" title="Editar" onclick="editEntry('+e.id+')">✏️</button>'+
@@ -392,7 +417,7 @@
       } else {
         var dt=fmtDate(e.fecha);
         var t1=esc(e.tipo||'Entrenamiento');
-        var t2=(e.hora?e.hora+' · ':'')+esc(e.lugar||'');
+        var t2=(e.hora?e.hora+' · ':'')+esc(venueBits(e).name||'');
         h+='<div class="entry">'+
           '<div class="date"><div class="d">'+dt.d+'</div><div class="m">'+dt.m+'</div></div>'+
           '<div class="info"><div class="t1">'+t1+'</div><div class="t2">'+t2+'</div></div>'+
@@ -515,12 +540,12 @@
           '<div class="chip'+(formCond==='Local'?' on':'')+'" data-c="Local" onclick="setCond(\'Local\')">Local</div>'+
           '<div class="chip'+(formCond==='Visita'?' on':'')+'" data-c="Visita" onclick="setCond(\'Visita\')">Visita</div>'+
         '</div></div>';
-      h+='<div class="frow"><label class="fld">Lugar</label><input type="text" id="f-lugar" placeholder="Ej: Lintharena, Näfels" value="'+esc(entry?entry.lugar:'')+'"></div>';
+      h+='<div class="frow"><label class="fld">Lugar</label><input type="text" id="f-lugar" placeholder="Nombre del lugar, o pegá el link de Google Maps" value="'+esc(entry?entry.lugar:'')+'"></div>';
     } else {
       h+='<div class="frow"><label class="fld">Tipo de entrenamiento</label><select id="f-tipo">'+
           TIPOS.map(function(t){ return '<option value="'+t+'"'+((entry&&entry.tipo===t)?' selected':'')+'>'+t+'</option>'; }).join('')+
         '</select></div>';
-      h+='<div class="frow"><label class="fld">Lugar</label><input type="text" id="f-lugar" placeholder="Ej: Lintharena, Näfels" value="'+esc(entry?entry.lugar:'')+'"></div>';
+      h+='<div class="frow"><label class="fld">Lugar</label><input type="text" id="f-lugar" placeholder="Nombre del lugar, o pegá el link de Google Maps" value="'+esc(entry?entry.lugar:'')+'"></div>';
     }
     h+='<div class="form-acts"><button class="btn cancel" onclick="closeForm()">Cancelar</button>'+
        '<button class="btn save" onclick="saveEntry()">Guardar</button></div></div>';
