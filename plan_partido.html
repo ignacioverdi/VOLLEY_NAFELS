@@ -333,6 +333,7 @@ function gpGetZone(c,orig,sp){
   return orig;
 }
 function apellidoJS(n){n=(n||"").trim();return n?n.split(" ").pop():"";}
+function apeArm(n){n=(n||"").trim();return n?n.split(/\s+/)[0]:"";}
 function armDates(){var d={};MATCHES.forEach(function(m){if(MSEL.has(m.mid))d[m.date]=1;});return d;}
 function armRallies(setter,pos){var dates=armDates(),mt=(armTeam.matches||[]);
   return setter.s.filter(function(r){
@@ -355,9 +356,9 @@ function renderArmador(){
   if(!armTeam||!(armTeam.setters&&armTeam.setters.length)){sec.classList.add("hidden");return;}
   sec.classList.remove("hidden");
   if(armSetIdx>=armTeam.setters.length)armSetIdx=0;
-  document.getElementById("armsetsel").innerHTML='<label>Armador</label>'+armTeam.setters.map(function(s,i){return '<button class="'+(i===armSetIdx?"on":"")+'" onclick="setArmSetter('+i+')">#'+s.num+" "+apellidoJS(s.name)+'</button>';}).join("");
+  document.getElementById("armsetsel").innerHTML='<label>Armador</label>'+armTeam.setters.map(function(s,i){return '<button class="'+(i===armSetIdx?"on":"")+'" onclick="setArmSetter('+i+')">#'+s.num+" "+apeArm(s.name)+'</button>';}).join("");
   var setter=armTeam.setters[armSetIdx]||armTeam.setters[0];
-  document.getElementById("armname").textContent=setter.name+" · "+setter.s.length+" armados";
+  document.getElementById("armname").textContent=apeArm(setter.name)+" · "+setter.s.length+" armados";
   var callCount={};setter.s.forEach(function(r){if(r[5]>=0)callCount[r[5]]=(callCount[r[5]]||0)+1;});
   var callIdxs=Object.keys(callCount).map(Number).sort(function(a,b){return callCount[b]-callCount[a];});
   if(armCall!=="all"&&callIdxs.indexOf(armCall)<0)armCall="all";
