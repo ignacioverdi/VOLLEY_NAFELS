@@ -395,8 +395,8 @@
     arr.forEach(function(e){
       if(tab==='partidos'){
         var rival=e.rival||'—';
-        var home=(e.condicion==='Visitante')?rival:'Näfels';
-        var away=(e.condicion==='Visitante')?'Näfels':rival;
+        var home=((e.condicion||'').indexOf('Visit')===0)?rival:'Näfels';
+        var away=((e.condicion||'').indexOf('Visit')===0)?'Näfels':rival;
         var dd=fxDate(e.fecha);
         function tName(x){ return (x==='Näfels'||x==='Nafels')?'NÄFELS':esc(x); }
         function tAbbr(x){ var c=CLUBS[x]; return c?c.ab:esc((x||'').substr(0,3).toUpperCase()); }
@@ -501,7 +501,7 @@
       h+='<div class="cal-daynum">'+c.date.getDate()+(c.date.getDate()===1?'<span style="font-size:10px;color:var(--muted)"> '+T.mc[c.date.getMonth()]+'</span>':'')+'</div>';
       evs.forEach(function(ev){
         var label, cl;
-        if(ev.type==='p'){ cl='p'; label=((ev.e.condicion==='Visita')?'@ ':'vs ')+esc(ev.e.rival||'—'); }
+        if(ev.type==='p'){ cl='p'; label=(((ev.e.condicion||'').indexOf('Visit')===0)?'@ ':'vs ')+esc(ev.e.rival||'—'); }
         else { cl='e'; label=esc(ev.e.tipo||'Entren.'); }
         var hora=ev.e.hora?'<span class="eh">'+esc(ev.e.hora)+'</span> ':'';
         h+='<div class="cal-ev '+cl+'" title="'+label+'" onclick="planEdit(\''+ev.type+'\','+ev.e.id+')">'+hora+label+'</div>';
