@@ -307,7 +307,7 @@ const ROLECFG={
    filters:[{lab:'Tipo',idx:0,opts:STY},{lab:'Desde',idx:1,opts:SDZ},{lab:'Momento',idx:4,opts:SMO,range:true},{lab:'Resultado',idx:3,opts:RCS}],
    dir:null,tiles:['Efic','#+','/=','Potencia','Flotado','N','Perfecta','Ok','Mala'],hl:[0,1]},
  defense:{court:2,evIdx:3,tIdx:5,vIdx:6,tagIdx:0,stats:'dig',pal:'green',
-   filters:[{lab:'Tipo',idx:0,opts:STY},{lab:'Ataque desde',idx:1,opts:DAZ},{lab:'Momento',idx:4,opts:SMO,range:true},{lab:'Resultado',idx:3,opts:DGS}],
+   filters:[{lab:'Tipo',idx:7,opts:[["all","Todas"]],dyn:'combo'},{lab:'Ataque desde',idx:1,opts:DAZ},{lab:'Momento',idx:4,opts:SMO,range:true},{lab:'Resultado',idx:3,opts:DGS}],
    dir:null,tiles:['Efic','#+','/=','Potencia','Flotado','N','Perfecta','Cubre','Mala'],hl:[0,1]}
 };
 const TAGFMT={pot:'Pot',flo:'Flot'};
@@ -412,7 +412,8 @@ function tiles3(p,cfg){var t=cfg.tiles.map(function(lb,i){var hl=cfg.hl.indexOf(
 function U(role){return role==='saque'?' saques':role==='reception'?' recep.':role==='defense'?' defensas':' ataques';}
 function mAll(btn,val){var pop=btn.closest(".mpop");var cbs=pop.querySelectorAll('input[type=checkbox]');cbs.forEach(function(c){c.checked=!!val;});if(cbs[0])cbs[0].dispatchEvent(new Event("change",{bubbles:true}));}
 function _isMulti(fl){return fl.multi||fl.lab==="Resultado";}
-function filterOpts(p,fl){if(fl.lab==="Recibe"&&fl.idx===9){var NB={};((window.PP_DATA&&window.PP_DATA[TEAM]&&window.PP_DATA[TEAM].players)||[]).forEach(function(pp){NB[pp.num]=pp.name;});var rc={};(p&&p.data||[]).forEach(function(a){var rn=a[9];if(rn>0)rc[rn]=1;});return [["all","Todas"]].concat(Object.keys(rc).map(Number).sort(function(x,y){return x-y;}).map(function(n){return [String(n),"#"+n+" "+(NB[n]?apellidoJS(NB[n]):"")];}));}return fl.opts;}
+function filterOpts(p,fl){if(fl.lab==="Recibe"&&fl.idx===9){var NB={};((window.PP_DATA&&window.PP_DATA[TEAM]&&window.PP_DATA[TEAM].players)||[]).forEach(function(pp){NB[pp.num]=pp.name;});var rc={};(p&&p.data||[]).forEach(function(a){var rn=a[9];if(rn>0)rc[rn]=1;});return [["all","Todas"]].concat(Object.keys(rc).map(Number).sort(function(x,y){return x-y;}).map(function(n){return [String(n),"#"+n+" "+(NB[n]?apellidoJS(NB[n]):"")];}));}if(fl.dyn==='combo'){var cc={};(p&&p.data||[]).forEach(function(a){var cb=a[fl.idx]||'';if(cb)cc[cb]=(cc[cb]||0)+1;});return [["all","Todas"]].concat(Object.keys(cc).sort(function(x,y){return cc[y]-cc[x];}).map(function(c){return [c,c+" ("+cc[c]+")"];}));}return fl.opts;}
+function defRefreshTipo(p){var tsel=document.getElementById(p.id+'-f0'),zsel=document.getElementById(p.id+'-f1');if(!tsel||!zsel)return;var zv=zsel.value,prev=tsel.value,cc={};p.data.forEach(function(a){if(zv!=='all'&&String(a[1])!==zv)return;var cb=a[7]||'';if(cb)cc[cb]=(cc[cb]||0)+1;});var op=[["all","Todas"]].concat(Object.keys(cc).sort(function(x,y){return cc[y]-cc[x];}).map(function(c){return [c,c+" ("+cc[c]+")"];}));tsel.innerHTML=op.map(function(o){return '<option value="'+o[0]+'">'+o[1]+'</option>';}).join('');tsel.value=op.some(function(o){return o[0]===prev;})?prev:'all';}
 function filtCtrl(id,fl,onchg,op){op=op||fl.opts;
   if(_isMulti(fl)){var boxes=op.filter(function(o){return o[0]!=="all";}).map(function(o){return '<label class="mopt"><input type="checkbox" value="'+o[0]+'" checked'+(onchg?' onchange="'+onchg+'"':"")+'>'+o[1]+'</label>';}).join("");
     return '<div class="fgroup msel"><label>'+fl.lab+'</label><details class="mdd" id="'+id+'"><summary class="msum">Todas</summary><div class="mpop"><div class="mall"><button type="button" onclick="mAll(this,1)">Todos</button><button type="button" onclick="mAll(this,0)">Ninguno</button></div>'+boxes+'</div></details></div>';}
@@ -477,7 +478,7 @@ function buildTeam(){
   ['punta','central','opuesto','saque','reception','defense'].forEach(function(r){var el=document.getElementById('row-'+r);if(el)el.innerHTML='';});
   PLAYERS=TEAMS[TEAM].players;INFO=TEAMS[TEAM].info;computeMatchMeta();
   PLAYERS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('beforeend',buildSection(p));});
-  PLAYERS.forEach(function(p){ROLECFG[p.role].filters.forEach(function(_,i){var fe=document.getElementById(p.id+'-f'+i);if(fe)fe.addEventListener('change',function(){render(p);});});var me=document.getElementById(p.id+'-min');if(me)me.addEventListener('input',function(){render(p);});render(p);});
+  PLAYERS.forEach(function(p){ROLECFG[p.role].filters.forEach(function(fl,i){var fe=document.getElementById(p.id+'-f'+i);if(fe)fe.addEventListener('change',function(){if(ROLECFG[p.role].stats==='dig'&&fl.lab==='Ataque desde'){defRefreshTipo(p);}render(p);});});var me=document.getElementById(p.id+'-min');if(me)me.addEventListener('input',function(){render(p);});render(p);});
   buildRivalPanel();buildMatchPanel();updateCounts();
   document.getElementById('teamname').textContent=TEAMS[TEAM].name;
   var tt=document.getElementById('tabteam'); if(tt) tt.textContent=TEAMS[TEAM].name;

@@ -88,7 +88,7 @@ def build(dvw_dir, out_dir, filter_temp=None, db_path=None):
                 D['names'][num]=f[9]
                 if f[12].strip()=='L': D['lib'].add(num)
         i=t.find('[3SCOUT]\n'); scout=t[i+9:t.find('\n[3',i+9)].strip().split('\n')
-        curset=None; lastsv=('',''); recv=False; rq=''; rby=0; recz=''; rally=0
+        curset=None; lastsv=('',''); recv=False; rq=''; rby=0; recz=''; rally=0; last_opp_atk=''
         for line in scout:
             f=line.split(';'); c=f[0].strip()
             if len(c)<4: continue
@@ -108,7 +108,7 @@ def build(dvw_dir, out_dir, filter_temp=None, db_path=None):
                 lastsv=(TYPE.get(code[3],'otro'),oz)
                 if team==pfx and pnum>=0:
                     D['srv'][pnum].append([TYPE.get(code[3],'otro'),oz,dz,code[4] if len(code)>4 else '',rally-1,tsv,mid])
-                recv=False; rq=''; rby=0; recz=''
+                recv=False; rq=''; rby=0; recz=''; last_opp_atk=''
                 continue
             if sk=='E' and team==pfx and pnum>=0: D['set'][pnum]+=1
             if sk=='R' and team==pfx:
@@ -123,9 +123,12 @@ def build(dvw_dir, out_dir, filter_temp=None, db_path=None):
                 tp=code[5:].split('~'); traj=tp[3] if len(tp)>3 else ''
                 doz=traj[0] if traj and traj[0].isdigit() else ''
                 dlz=traj[1] if len(traj)>1 and traj[1].isdigit() else ''
-                D['dig'][pnum].append([TYPE.get(code[3],'otro'),doz,dlz,dq,rally-1,tsv,mid])
+                D['dig'][pnum].append([TYPE.get(code[3],'otro'),doz,dlz,dq,rally-1,tsv,mid,last_opp_atk])
                 continue
-            if team!=pfx and sk in ('A','D','E','B'): recv=False; continue
+            if team!=pfx and sk=='A':
+                tpo=code[5:].split('~'); last_opp_atk=tpo[0] if tpo else ''
+                recv=False; continue
+            if team!=pfx and sk in ('D','E','B'): recv=False; continue
             if team==pfx and sk=='A':
                 tp=code[5:].split('~'); tr=tp[1] if len(tp)>1 else ''
                 D['atk'][pnum].append([tp[0],('g' if(recv and rq in '#+') else 'b' if(recv and rq in '!-') else 'o'),

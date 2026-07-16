@@ -16,7 +16,7 @@
   function walk(codes, pfx, mid, names, libSet){
     var D = {atk:{}, srv:{}, rec:{}, dig:{}, set:{}, app:{}};
     var push = function(o,k,v){ (o[k]=o[k]||[]).push(v); };
-    var curset=null, lastsv=['',''], recv=false, rq='', rby=0, recz='', rally=0;
+    var curset=null, lastsv=['',''], recv=false, rq='', rby=0, recz='', rally=0, lastOppAtk='';
     for(var i=0;i<codes.length;i++){
       var row = codes[i];
       var c = (row.c||'').trim();
@@ -36,7 +36,7 @@
         lastsv = [TYPE[code[3]]||'otro', oz];
         if(team===pfx && pnum>=0)
           push(D.srv, pnum, [TYPE[code[3]]||'otro', oz, dz, code.length>4?code[4]:'', rally-1, tsv, mid]);
-        recv=false; rq=''; rby=0; recz='';
+        recv=false; rq=''; rby=0; recz=''; lastOppAtk='';
         continue;
       }
       if(sk==='E' && team===pfx && pnum>=0) D.set[pnum]=(D.set[pnum]||0)+1;
@@ -53,10 +53,11 @@
         var tpD = code.slice(5).split('~'); var trajD = tpD.length>3?tpD[3]:'';
         var doz = (trajD && /[0-9]/.test(trajD[0]))?trajD[0]:'';
         var dlz = (trajD.length>1 && /[0-9]/.test(trajD[1]))?trajD[1]:'';
-        push(D.dig, pnum, [TYPE[code[3]]||'otro', doz, dlz, dq, rally-1, tsv, mid]);
+        push(D.dig, pnum, [TYPE[code[3]]||'otro', doz, dlz, dq, rally-1, tsv, mid, lastOppAtk]);
         continue;
       }
-      if(team!==pfx && (sk==='A'||sk==='D'||sk==='E'||sk==='B')){ recv=false; continue; }
+      if(team!==pfx && sk==='A'){ var tpO=code.slice(5).split('~'); lastOppAtk=canonCombo(tpO[0]||''); recv=false; continue; }
+      if(team!==pfx && (sk==='D'||sk==='E'||sk==='B')){ recv=false; continue; }
       if(team===pfx && sk==='A'){
         var tpA = code.slice(5).split('~'); var tr = tpA.length>1?tpA[1]:'';
         push(D.atk, pnum, [ canonCombo(tpA[0]),
