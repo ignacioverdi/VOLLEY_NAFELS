@@ -51,7 +51,7 @@
       if(team!==pfx && (sk==='A'||sk==='D'||sk==='E'||sk==='B')){ recv=false; continue; }
       if(team===pfx && sk==='A'){
         var tpA = code.slice(5).split('~'); var tr = tpA.length>1?tpA[1]:'';
-        push(D.atk, pnum, [ tpA[0],
+        push(D.atk, pnum, [ canonCombo(tpA[0]),
           (recv && (rq==='#'||rq==='+'))?'g':(recv && (rq==='!'||rq==='-'))?'b':'o',
           (recv && rby===pnum)?1:0, recv?recz:'', tr.length>1?tr[1]:'',
           code.length>4?code[4]:'', tr.length>3?tr[3]:'', tsv, mid, recv?rby:0 ]);
@@ -81,6 +81,16 @@
     return m===quick?'Central':m===pos2?'Opuesto':'Punta';
   }
   function apellido(nm){ nm=(nm||'').trim(); var p=nm?nm.split(/\s+/).pop():'?'; return p.slice(0,14); }
+  /* ── Equivalencias de combos (pelotas que significan lo mismo): la izquierda se cuenta como la derecha.
+     Ampliá esta lista cuando cargues las que faltan. ── */
+  var ALIAS_COMBO = {
+    J1:'X1', J2:'X7', J3:'X2', J4:'XM', J5:'CB', J6:'CD',
+    JJ:'PP',
+    W4:'X5', W2:'X6',
+    Y9:'X8', Y8:'XP', Y7:'XA',
+    G4:'V5', G2:'V6', G3:'V3', G8:'VP', G9:'V8', G7:'V0'
+  };
+  function canonCombo(c){ var u=(c||'').toUpperCase(); return ALIAS_COMBO[u] || c; }
   function domcombo(D,num){
     var atk=D.atk[String(num)]||[]; var c={},best='',bn=0;
     atk.forEach(function(a){ c[a[0]]=(c[a[0]]||0)+1; if(c[a[0]]>bn){bn=c[a[0]];best=a[0];} });
@@ -197,7 +207,7 @@
         last_skill='E';
       } else if(skill==='A'){
         if(pending){
-          var combo=tp.length?tp[0]:''; var traj=tp.length>1?tp[1]:'';
+          var combo=canonCombo(tp.length?tp[0]:''); var traj=tp.length>1?tp[1]:'';
           pending.atk_combo=combo; pending.atk_result=effect;
           pending.atk_dest=(traj && traj.length>1 && /[0-9]/.test(traj[1]))?parseInt(traj[1],10):0;
           pending.atk_orig=(traj && /[0-9]/.test(traj[0]))?parseInt(traj[0],10):0;
