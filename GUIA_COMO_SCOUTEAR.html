@@ -122,6 +122,7 @@
     <tr><td>Reabrir el último punto para corregirlo</td><td><span class="key">Ctrl+A</span> o <span class="btn">Reabrir punto</span></td></tr>
     <tr><td>Insertar un código en el medio de la lista</td><td>Seleccioná el código y apretá <span class="key">Insert</span></td></tr>
     <tr><td>Editar un código</td><td>Doble clic sobre el código (o seleccionar + <span class="key">Enter</span>)</td></tr>
+    <tr><td>Corregir un valor <strong>en el lugar</strong></td><td>Poné el cursor sobre el valor (o seleccionalo) y apretá la tecla del valor nuevo: se reemplaza ahí mismo, sin saltar al final</td></tr>
     <tr><td>Borrar un código</td><td>Seleccioná y apretá <span class="key">Delete</span>. Con <span class="key">Backspace</span> borrás rápido el último</td></tr>
     <tr><td>Deshacer el último código</td><td><span class="key">Ctrl+Z</span> o <span class="btn">Deshacer código</span></td></tr>
     <tr><td>Deshacer el punto entero</td><td><span class="key">Ctrl+Shift+Z</span> o <span class="btn">Deshacer punto</span></td></tr>
@@ -129,32 +130,37 @@
     <tr><td>Verificar coherencia</td><td><span class="key">Ctrl+V</span> o <span class="btn">Verificar</span></td></tr>
   </table>
   <p class="tip">Cuando reabrís un punto (Ctrl+A), los códigos de la jugada <strong>quedan en la lista</strong> con el último seleccionado, listos para editar. Corregís y volvés a cerrar la jugada normalmente.</p>
+  <p class="tip">Las teclas de <strong>evaluación</strong> (<span class="mono">#</span> <span class="mono">+</span> <span class="mono">!</span> …) y la tecla de <strong>adversario</strong> ahora insertan <strong>donde está el cursor</strong>, no al final. Ejemplo: en <span class="mono">4A+</span> seleccionás el <span class="mono">+</span>, apretás la tecla de <span class="mono">!</span> y queda <span class="mono">4A!</span>. En códigos compuestos podés meter la <span class="mono">a</span> del visitante justo en el medio, donde estás escribiendo.</p>
 
   <h2><span class="n">6</span> Cierre de set y formación del set siguiente</h2>
   <ol>
     <li>Cuando un equipo llega a <strong>25 con 2 de diferencia</strong> (15 en el quinto set), al cerrarse ese punto el <strong>set se cierra solo</strong>.</li>
     <li>Enseguida se abre <strong>sola</strong> la formación del set siguiente, y es <strong>obligatoria</strong>: el sistema propone el seis del set anterior, lo ajustás si hubo cambios y confirmás con <span class="btn">Empezar set</span>. No te deja seguir hasta cargar la formación.</li>
+    <li><strong>¿Amistoso?</strong> Si el partido ya terminó (un equipo ganó los sets) y querés seguir jugando, al cerrar el set final te pregunta si es un amistoso para arrancar otro set. También tenés el botón <span class="btn">Set amistoso</span>, que aparece cuando el partido está terminado.</li>
   </ol>
 
-  <h2><span class="n">7</span> Video en vivo con delay</h2>
+  <h2><span class="n">7</span> Modo entrenamiento (un solo equipo)</h2>
+  <p>Si vas a scoutear una <strong>práctica</strong> y no un partido con rival, activá el <strong>modo entrenamiento</strong> en <span class="btn">Configuración</span>. En ese modo cargás <strong>un solo equipo</strong>: todos los códigos se registran como <strong>locales</strong> (con <span class="mono">*</span>), aunque escribas la <span class="mono">a</span> o uses códigos compuestos. Así te concentrás en las acciones de tu equipo sin pensar en el lado.</p>
+
+  <h2><span class="n">8</span> Video en vivo con delay</h2>
   <ol>
     <li>En el celular que apunta a la cancha abrís la cámara (misma red / WiFi) y tocás <strong>Transmitir</strong>: te da un <strong>código de sala de 4 dígitos</strong>.</li>
-    <li>En el scout tocás el botón <span class="btn">📹 Video</span> (el de la cámara), escribís ese código y <span class="btn">Conectar</span>.</li>
+    <li>En el scout tocás el botón <span class="btn">Video delay</span> (el de la cámara, en dos líneas), escribís ese código y <span class="btn">Conectar</span>.</li>
     <li>Podés atrasar el video con la barra de <strong>delay</strong> (0 a 25 s) y volver a ver el <strong>último punto</strong>.</li>
     <li>Con <span class="btn">⧉ Acoplar</span> el video se achica a un costado y podés <strong>tipear y ver el video a la vez</strong>. Con <span class="btn">⛶ Grande</span> volvés a pantalla completa.</li>
   </ol>
-  <p class="tip">Ojo: el botón <span class="btn">🎬 Video</span> (claqueta) es otra cosa — es el visor de un video por archivo/URL. El del delay con código de sala es el de la <strong>cámara 📹</strong>.</p>
+  <p class="tip">Ojo: hay <strong>dos</strong> botones de video. <span class="btn">Video</span> es el visor de un video por archivo/URL (sincronización). <span class="btn">Video delay</span> (en dos líneas) es el de la <strong>cámara en vivo con delay</strong>, el que usa el código de sala.</p>
 
-  <h2><span class="n">8</span> Tablas y análisis en vivo</h2>
+  <h2><span class="n">9</span> Tablas y análisis en vivo</h2>
   <p>Debajo de la lista de códigos, el título <span class="btn">▸ Tablas y análisis</span> despliega el análisis del partido en tiempo real: eficiencias por fundamento y los jugadores que más puntúan, para los dos equipos. Se va llenando con lo que vas cargando.</p>
 
-  <h2><span class="n">9</span> Guardar y exportar</h2>
+  <h2><span class="n">10</span> Guardar y exportar</h2>
   <ul>
     <li>El partido se guarda solo mientras cargás. Con <span class="btn">Partidos</span> ves y reabrís los partidos guardados.</li>
     <li>Con <span class="btn">Exportar .dvw</span> generás el archivo del partido en formato estándar, para abrirlo o compartirlo con otras herramientas de análisis de vóley.</li>
   </ul>
 
-  <h2><span class="n">10</span> Atajos de teclado (resumen)</h2>
+  <h2><span class="n">11</span> Atajos de teclado (resumen)</h2>
   <table>
     <tr><th>Atajo</th><th>Para qué</th></tr>
     <tr><td><span class="key">Enter</span></td><td>Cargar el código escrito</td></tr>
