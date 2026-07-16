@@ -268,6 +268,7 @@ if(VIVO){ TEAM = TEAM || 'home'; }              /* en vivo: home=nuestro, away=r
 if(!TEAMS[TEAM]) TEAM=Object.keys(TEAMS)[0]||'home';
 if(!TEAMS[TEAM]) TEAMS[TEAM]={name:'—',players:[],info:{}};
 let PLAYERS=TEAMS[TEAM].players;
+let TEAMCARDS=[];
 let INFO=TEAMS[TEAM].info;
 let RIVALS=[],MATCHES=[],RSEL=new Set(),MSEL=new Set();
 function computeMatchMeta(){
@@ -462,7 +463,7 @@ function render(p){var cfg=ROLECFG[p.role];
     var h=heat(val,mx,cfg.pal),hasVid=(vz[zn]||0)>0;
     return '<div class="cell'+(hasVid?' has vid':'')+'" style="background:'+h[0]+';border:'+h[2]+'"'+(hasVid?' ondblclick="openZone(\''+p.id+'\',\''+zn+'\')"':'')+'><div class="zn" style="color:'+h[1]+'">z'+zn+'</div><div class="cn" style="color:'+h[1]+'">'+val+'</div></div>';}).join('');
 }
-function renderAll(){PLAYERS.forEach(render);}
+function renderAll(){PLAYERS.concat(TEAMCARDS).forEach(render);}
 function fmtDate(d){if(!d||d==='?')return'?';var p=d.split('-');return p.length===3?p[2]+'/'+p[1]:d;}
 function togglePanel(w){var p=document.getElementById(w==='r'?'rpanel':'mpanel');var o=p.classList.contains('open');document.querySelectorAll('.mpanel').forEach(function(x){x.classList.remove('open');});if(!o)p.classList.add('open');}
 document.addEventListener('click',function(e){if(!e.target.closest('.msel'))document.querySelectorAll('.mpanel').forEach(function(x){x.classList.remove('open');});});
@@ -482,7 +483,7 @@ function makeTeamPlayer(role){
 function buildTeam(){
   ['punta','central','opuesto','saque','reception','defense'].forEach(function(r){var el=document.getElementById('row-'+r);if(el)el.innerHTML='';});
   PLAYERS=TEAMS[TEAM].players;INFO=TEAMS[TEAM].info;computeMatchMeta();
-  var TEAMCARDS=[]; ['reception','defense'].forEach(function(role){var tp=makeTeamPlayer(role); if(tp) TEAMCARDS.push(tp);});
+  TEAMCARDS=[]; ['reception','defense'].forEach(function(role){var tp=makeTeamPlayer(role); if(tp) TEAMCARDS.push(tp);});
   TEAMCARDS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('afterbegin',buildSection(p));});
   PLAYERS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('beforeend',buildSection(p));});
   TEAMCARDS.concat(PLAYERS).forEach(function(p){ROLECFG[p.role].filters.forEach(function(fl,i){var fe=document.getElementById(p.id+'-f'+i);if(fe)fe.addEventListener('change',function(){if(ROLECFG[p.role].stats==='dig'&&fl.lab==='Ataque desde'){defRefreshTipo(p);}render(p);});});var me=document.getElementById(p.id+'-min');if(me)me.addEventListener('input',function(){render(p);});render(p);});
@@ -569,7 +570,7 @@ var VSEL={};try{VSEL=JSON.parse(localStorage.getItem("pp_vsel")||"{}")||{};}catc
 /* pp_vsel_sync: selección de clips compartida (Firebase) */
 if(typeof fbGet==="function"){fbGet("pp_vsel",function(d){if(d&&typeof d==="object"){VSEL=d;try{localStorage.setItem("pp_vsel",JSON.stringify(VSEL));}catch(e){}if(curKey&&VSEL[curKey]&&VSEL[curKey].length&&typeof applySavedSel==="function"){applySavedSel();onlyShow=true;var _v=document.getElementById("vonly");if(_v)_v.checked=true;if(typeof renderList==="function")renderList();}}});}
 function ensureYT(cb){if(window.YT&&window.YT.Player){cb();return;}window.onYouTubeIframeAPIReady=cb;if(!document.getElementById("ytapi")){var s=document.createElement("script");s.id="ytapi";s.src="https://www.youtube.com/iframe_api";document.head.appendChild(s);}}
-function openZone(pid,zn){curP=PLAYERS.find(function(x){return x.id===pid;});curZn=zn;curKey=TEAM+"|"+pid+"|"+zn;onlyShow=!!(VSEL[curKey]&&VSEL[curKey].length);var _vo=document.getElementById("vonly");if(_vo)_vo.checked=onlyShow;var cfg=ROLECFG[curP.role];
+function openZone(pid,zn){curP=PLAYERS.concat(TEAMCARDS).find(function(x){return x.id===pid;});curZn=zn;curKey=TEAM+"|"+pid+"|"+zn;onlyShow=!!(VSEL[curKey]&&VSEL[curKey].length);var _vo=document.getElementById("vonly");if(_vo)_vo.checked=onlyShow;var cfg=ROLECFG[curP.role];
   document.getElementById('vfilters').innerHTML=cfg.filters.map(function(fl,i){return filtCtrl('vf'+i,fl,'recompute()',filterOpts(curP,fl));}).join('');
   cfg.filters.forEach(function(fl,i){var src=document.getElementById(pid+'-f'+i),dst=document.getElementById('vf'+i);if(!src||!dst)return;if(_isMulti(fl)){var sc={};src.querySelectorAll('input').forEach(function(c){sc[c.value]=c.checked;});dst.querySelectorAll('input').forEach(function(c){c.checked=sc[c.value]!==false;});}else{dst.value=src.value;}});
   document.getElementById("vmodal").style.display="flex";recompute();}
