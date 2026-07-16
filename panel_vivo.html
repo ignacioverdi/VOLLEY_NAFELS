@@ -35,7 +35,7 @@ button{font-family:inherit;cursor:pointer}
 .cond{font-family:'Barlow Condensed',sans-serif}
 
 /* ---------- barra superior ---------- */
-.top{display:flex;align-items:center;gap:5px;padding:6px 12px;background:var(--sur);border-bottom:1px solid var(--b);position:sticky;top:0;z-index:20}
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:5px;row-gap:6px;padding:6px 12px;background:var(--sur);border-bottom:1px solid var(--b);position:sticky;top:0;z-index:20}.top .spacer{display:none}
 .top h1{font-family:'Barlow Condensed';font-weight:800;letter-spacing:2px;font-size:15px;margin:0;text-transform:uppercase}
 .live{display:flex;align-items:center;gap:6px;font-family:'Barlow Condensed';font-weight:700;letter-spacing:1.5px;font-size:11px;color:var(--ok);border:1px solid rgba(74,222,128,.35);background:rgba(74,222,128,.08);padding:3px 9px;border-radius:20px}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--ok);animation:pulse 1.6s infinite}
@@ -48,7 +48,7 @@ button{font-family:inherit;cursor:pointer}
 .teambtn{background:var(--card,#151521);color:var(--mut,#8a8aa0);border:1px solid var(--b2);border-radius:8px;padding:6px 14px;font:inherit;font-weight:700;font-size:13px;cursor:pointer}
 .teambtn.active{background:#2563eb;color:#fff;border-color:#2563eb}
 .tbtn2l{line-height:1.05;padding-top:5px;padding-bottom:5px;text-align:center}
-.tbtn{background:var(--card2);border:1px solid var(--b2);color:var(--txt);padding:5px 9px;border-radius:8px;font-weight:600;font-size:11.5px;white-space:nowrap;text-align:center;min-width:58px}
+.tbtn{background:var(--card2);border:1px solid var(--b2);color:var(--txt);border-radius:8px;font-weight:600;font-size:11px;width:100px;min-width:100px;height:38px;white-space:normal;line-height:1.12;display:inline-flex;align-items:center;justify-content:center;text-align:center;padding:3px 5px}
 .tbtn:hover{border-color:var(--mut)}
 .tbtn.pri{background:var(--ok);color:#06210f;border-color:transparent;font-weight:700}
 
