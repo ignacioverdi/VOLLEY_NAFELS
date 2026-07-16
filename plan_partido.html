@@ -577,7 +577,7 @@ function openZone(pid,zn){curP=PLAYERS.concat(TEAMCARDS).find(function(x){return
 function recompute(){if(!curP)return;var cfg=ROLECFG[curP.role];
   var vals=cfg.filters.map(function(fl,i){return readFilt('vf'+i,fl);});
   var all=curP.data.filter(function(a){return String(a[cfg.court])===curZn&&MSEL.has(a[cfg.vIdx])&&passes(a,cfg,vals);});
-  clips=all.map(function(a){return {tag:a[cfg.tagIdx],ev:a[cfg.evIdx],t:a[cfg.tIdx],vid:(INFO[a[cfg.vIdx]]||{}).yt||'',sel:true};}).filter(function(c){return c.vid;});
+  clips=all.map(function(a){return {tag:(cfg.stats==='dig'?(a[7]||a[cfg.tagIdx]):a[cfg.tagIdx]),ev:a[cfg.evIdx],t:a[cfg.tIdx],vid:(INFO[a[cfg.vIdx]]||{}).yt||'',sel:true};}).filter(function(c){return c.vid;});
   applySavedSel();cur=firstSel();document.getElementById("vtitle").textContent=curP.name+" · zona "+curZn+" · "+all.length+U(curP.role)+(clips.length<all.length?' ('+clips.length+' c/video)':'');renderList();
   if(!clips.length){document.getElementById("vcount").textContent="sin video";document.getElementById("vlist").innerHTML='<div class="novid">No hay video de esta zona en los partidos seleccionados con 🎥. Probá una zona con ▶ o cambiá el filtro de Partido.</div>';return;}
   ensureYT(function(){if(!YTP){YTP=new YT.Player("ytplayer",{playerVars:{rel:0,modestbranding:1,controls:1,playsinline:1},events:{onReady:function(){YTReady=true;playCur();}}});}else{playCur();}});}
