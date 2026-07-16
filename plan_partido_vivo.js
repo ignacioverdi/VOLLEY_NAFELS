@@ -14,7 +14,7 @@
 
   /* parsea la lista de códigos [{c, set, t}] de un lado y arma D (atk/srv/rec) */
   function walk(codes, pfx, mid, names, libSet){
-    var D = {atk:{}, srv:{}, rec:{}, set:{}, app:{}};
+    var D = {atk:{}, srv:{}, rec:{}, dig:{}, set:{}, app:{}};
     var push = function(o,k,v){ (o[k]=o[k]||[]).push(v); };
     var curset=null, lastsv=['',''], recv=false, rq='', rby=0, recz='', rally=0;
     for(var i=0;i<codes.length;i++){
@@ -48,6 +48,14 @@
         push(D.rec, pnum, [lastsv[0], lastsv[1], landz, rq, rally-1, tsv, mid]);
         continue;
       }
+      if(team===pfx && sk==='D'){
+        var dq = code.length>4?code[4]:'';
+        var tpD = code.slice(5).split('~'); var trajD = tpD.length>3?tpD[3]:'';
+        var doz = (trajD && /[0-9]/.test(trajD[0]))?trajD[0]:'';
+        var dlz = (trajD.length>1 && /[0-9]/.test(trajD[1]))?trajD[1]:'';
+        push(D.dig, pnum, [TYPE[code[3]]||'otro', doz, dlz, dq, rally-1, tsv, mid]);
+        continue;
+      }
       if(team!==pfx && (sk==='A'||sk==='D'||sk==='E'||sk==='B')){ recv=false; continue; }
       if(team===pfx && sk==='A'){
         var tpA = code.slice(5).split('~'); var tr = tpA.length>1?tpA[1]:'';
@@ -59,7 +67,7 @@
       }
     }
     /* pasar claves a string, como el python */
-    ['atk','srv','rec'].forEach(function(k){
+    ['atk','srv','rec','dig'].forEach(function(k){
       var o={}; Object.keys(D[k]).forEach(function(n){ o[String(n)]=D[k][n]; }); D[k]=o;
     });
     D.names = names; D.lib_set = libSet;
@@ -117,6 +125,8 @@
                  .sort(function(a,b){return cnt('srv',b)-cnt('srv',a);}).slice(0,12);
     var receiv =Object.keys(pos).map(Number).filter(function(n){return cnt('rec',n)>=1;})
                  .sort(function(a,b){return cnt('rec',b)-cnt('rec',a);}).slice(0,6);
+    var defen  =Object.keys(pos).map(Number).filter(function(n){return cnt('dig',n)>=1;})
+                 .sort(function(a,b){return cnt('dig',b)-cnt('dig',a);}).slice(0,6);
     var players=[];
     var add=function(prefix,num,role,data,read){
       players.push({id:prefix+num, num:num, name:apellido(names[num]||''),
@@ -127,6 +137,7 @@
     opues.slice(0,2).forEach(function(n){ var d=D.atk[String(n)]||[]; if(d.length) add('a',n,'opuesto',d,'Combo principal: '+domcombo(D,n)+'.'); });
     servers.forEach(function(n){ add('s',n,'saque',D.srv[String(n)]||[],'Saque '+domserve(D,n)+'.'); });
     receiv.forEach(function(n){ add('r',n,'reception',D.rec[String(n)]||[], pos[n]==='Líbero'?'Líbero.':'Receptor.'); });
+    defen.forEach(function(n){ add('d',n,'defense',D.dig[String(n)]||[], 'Defensa.'); });
     /* info con la entrada del partido en vivo, para que MATCHES/MSEL la incluyan
        (si no, el filtro de partidos rechaza toda la data en vivo → canchitas en 0) */
     var info = {};

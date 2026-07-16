@@ -73,7 +73,7 @@ def build(dvw_dir, out_dir, filter_temp=None, db_path=None):
                 if g: yt[m.group(1)]=g.group(1)
         except: pass
 
-    DATA={s:{'name':NAMES_T[s],'atk':defaultdict(list),'srv':defaultdict(list),'rec':defaultdict(list),
+    DATA={s:{'name':NAMES_T[s],'atk':defaultdict(list),'srv':defaultdict(list),'rec':defaultdict(list),'dig':defaultdict(list),
              'info':{},'names':{},'lib':set(),'set':Counter(),'app':Counter()} for s in DISP_BY_SLUG}
 
     def walk(t,pfx,mid,D):
@@ -117,6 +117,13 @@ def build(dvw_dir, out_dir, filter_temp=None, db_path=None):
                 recz=traj[0] if traj and traj[0].isdigit() else ''
                 landz=traj[1] if len(traj)>1 and traj[1].isdigit() else ''
                 D['rec'][pnum].append([lastsv[0],lastsv[1],landz,rq,rally-1,tsv,mid])
+                continue
+            if sk=='D' and team==pfx:
+                dq=code[4] if len(code)>4 else ''
+                tp=code[5:].split('~'); traj=tp[3] if len(tp)>3 else ''
+                doz=traj[0] if traj and traj[0].isdigit() else ''
+                dlz=traj[1] if len(traj)>1 and traj[1].isdigit() else ''
+                D['dig'][pnum].append([TYPE.get(code[3],'otro'),doz,dlz,dq,rally-1,tsv,mid])
                 continue
             if team!=pfx and sk in ('A','D','E','B'): recv=False; continue
             if team==pfx and sk=='A':
@@ -162,6 +169,7 @@ def build(dvw_dir, out_dir, filter_temp=None, db_path=None):
         D['atk']={str(k):v for k,v in D['atk'].items()}
         D['srv']={str(k):v for k,v in D['srv'].items()}
         D['rec']={str(k):v for k,v in D['rec'].items()}
+        D['dig']={str(k):v for k,v in D['dig'].items()}
         D['names']={str(k):v for k,v in D['names'].items()}
         D['set']={str(k):v for k,v in dict(D['set']).items()}
 
@@ -195,6 +203,7 @@ def build(dvw_dir, out_dir, filter_temp=None, db_path=None):
         opues =sorted([n for n in pos if pos[n]=='Opuesto'],key=lambda n:-cnt('atk',n))
         servers=sorted([n for n in pos if pos[n]!='L\u00edbero' and cnt('srv',n)>=30],key=lambda n:-cnt('srv',n))[:12]
         receiv =sorted([n for n in pos if cnt('rec',n)>=30],key=lambda n:-cnt('rec',n))[:6]
+        defen  =sorted([n for n in pos if cnt('dig',n)>=15],key=lambda n:-cnt('dig',n))[:6]
         players=[]
         def add(pfx,num,role,data,read):
             players.append({"id":pfx+str(num),"num":num,"name":apellido(D['names'].get(str(num),'')),
@@ -212,6 +221,8 @@ def build(dvw_dir, out_dir, filter_temp=None, db_path=None):
             add("s",n,"saque",D['srv'].get(str(n),[]),"Saque "+domserve(D,n)+".")
         for n in receiv:
             add("r",n,"reception",D['rec'].get(str(n),[]),("L\u00edbero." if pos.get(n)=='L\u00edbero' else "Receptor."))
+        for n in defen:
+            add("d",n,"defense",D['dig'].get(str(n),[]),"Defensa.")
         PP[slug]={"name":D['name'],"players":players,"info":D['info']}
 
     outp=os.path.join(out_dir,'plan_partido_data.js')
