@@ -175,6 +175,7 @@
     </div>
     <button class="add-btn" id="add-btn" onclick="openForm()" data-solo-editor>+ Agregar</button>
     <button class="import-btn" id="import-btn" onclick="importFixture()" data-solo-editor>⬇️ Importar fixture 2026/27 (14 partidos)</button>
+    <button class="import-btn" id="import-gym-btn" onclick="importGym()" data-solo-editor style="display:none">🏋️ Importar gimnasio (Lun/Mié/Vie · sep–dic)</button>
     <div id="form-wrap"></div>
     <div id="list"></div>
   </div>
@@ -205,7 +206,7 @@
 
 <script>
   var MESES=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
-  var TIPOS=['Técnica','Táctica','Físico','Gimnasio','Recepción','Saque','Amistoso','Recuperación','Libre','Otro'];
+  var TIPOS=['LIFTING SESSION','Técnica','Táctica','Físico','Gimnasio','Recepción','Saque','Amistoso','Recuperación','Libre','Otro'];
 
   // ── Traducción de la vista (es/en/de) ──
   var CAL_I18N={
@@ -241,6 +242,7 @@
     document.getElementById('tab-partidos').classList.toggle('on',t==='partidos');
     document.getElementById('tab-entrenamientos').classList.toggle('on',t==='entrenamientos');
     var ib=document.getElementById('import-btn'); if(ib) ib.style.display=(t==='partidos')?'':'none';
+    var ig=document.getElementById('import-gym-btn'); if(ig) ig.style.display=(t==='entrenamientos')?'':'none';
     document.getElementById('form-wrap').innerHTML='';
     render();
   }
@@ -350,6 +352,29 @@
     render();
     alert(added+' partido(s) agregado(s)'+(added<FIXTURE.length?'. '+(FIXTURE.length-added)+' ya estaban cargados.':'.'));
   }
+  // ── Importar sesiones de gimnasio: Lun/Mié/Vie de sep–dic 2026, 10:00–11:45, Welcome Fitness ──
+  function importGym(){ if(window.VB_esEditor&&!VB_esEditor())return;
+    if(!confirm('¿Agregar las sesiones de gimnasio (Lun/Mié/Vie de sep–dic 2026, 10:00–11:45) al calendario?')) return;
+    var arr=(data.entrenamientos||[]).slice(), added=0;
+    var lugar='Welcome Fitness';
+    var mapa='https://maps.app.goo.gl/AmbXHh34SnPQbBja8?g_st=iw';
+    for(var mes=8; mes<=11; mes++){            // 8=septiembre ... 11=diciembre (0-index)
+      var d=new Date(2026, mes, 1);
+      while(d.getMonth()===mes){
+        var wd=d.getDay();                     // 1=lunes 3=miércoles 5=viernes
+        if(wd===1||wd===3||wd===5){
+          var fecha=d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
+          var dup=arr.some(function(x){ return x.fecha===fecha && (x.tipo||'')==='LIFTING SESSION'; });
+          if(!dup){ arr.push({ id:Date.now()+Math.floor(Math.random()*1000000), fecha:fecha, hora:'10:00', horaFin:'11:45', tipo:'LIFTING SESSION', lugar:lugar, mapa:mapa }); added++; }
+        }
+        d.setDate(d.getDate()+1);
+      }
+    }
+    data.entrenamientos=arr;
+    fbSet('calendario/entrenamientos', arr);
+    setTab('entrenamientos'); render();
+    alert(added+' sesión(es) de gimnasio agregada(s).');
+  }
 
   // ── Lugar inteligente: si es un link de Google Maps, muestra 📍 y saca el nombre del lugar ──
   function parseMapUrl(s){
@@ -417,7 +442,7 @@
       } else {
         var dt=fmtDate(e.fecha);
         var t1=esc(e.tipo||'Entrenamiento');
-        var t2=(e.hora?e.hora+' · ':'')+esc(venueBits(e).name||'');
+        var _vb=venueBits(e); var _hr=e.hora?(e.horaFin?e.hora+'–'+e.horaFin:e.hora):''; var t2=(_hr?_hr+' · ':'')+esc(_vb.name||'')+(_vb.mapUrl?' <a href="'+esc(_vb.mapUrl)+'" target="_blank" rel="noopener" title="Abrir en Google Maps" style="text-decoration:none">📍</a>':'');
         h+='<div class="entry">'+
           '<div class="date"><div class="d">'+dt.d+'</div><div class="m">'+dt.m+'</div></div>'+
           '<div class="info"><div class="t1">'+t1+'</div><div class="t2">'+t2+'</div></div>'+
@@ -542,6 +567,7 @@
         '</div></div>';
       h+='<div class="frow"><label class="fld">Lugar</label><input type="text" id="f-lugar" placeholder="Nombre del lugar, o pegá el link de Google Maps" value="'+esc(entry?entry.lugar:'')+'"></div>';
     } else {
+      h+='<div class="frow"><label class="fld">Hora fin</label><input type="time" id="f-horafin" value="'+esc(entry?entry.horaFin:'')+'"></div>';
       h+='<div class="frow"><label class="fld">Tipo de entrenamiento</label><select id="f-tipo">'+
           TIPOS.map(function(t){ return '<option value="'+t+'"'+((entry&&entry.tipo===t)?' selected':'')+'>'+t+'</option>'; }).join('')+
         '</select></div>';
@@ -565,7 +591,7 @@
     if(!fecha){ alert('Poné una fecha'); return; }
     var e={ id: editId||Date.now(), fecha:fecha, hora:document.getElementById('f-hora').value, lugar:document.getElementById('f-lugar').value.trim() };
     if(tab==='partidos'){ e.rival=document.getElementById('f-rival').value.trim(); e.condicion=formCond; e.escudo=FORM_ESCUDO||''; }
-    else { e.tipo=document.getElementById('f-tipo').value; }
+    else { e.tipo=document.getElementById('f-tipo').value; var _hf=document.getElementById('f-horafin'); if(_hf) e.horaFin=_hf.value; }
     var arr=data[tab], found=false;
     for(var i=0;i<arr.length;i++){ if(arr[i].id===e.id){ arr[i]=e; found=true; break; } }
     if(!found) arr.push(e);

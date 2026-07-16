@@ -296,7 +296,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <button class="tbtn" onclick="abrirEquipos()" title="Base de equipos (nuevo · importar · exportar)">Equipos</button>
   <button class="tbtn" onclick="openConfig()">Teclado y códigos</button>
   <button class="tbtn" onclick="abrirAyuda()" title="Cómo usar el scout — guía paso a paso">Cómo se usa</button>
-  <button class="tbtn" onclick="exportDVW()">Exportar .dvw</button>
+  <button class="tbtn" onclick="abrirExportMode()">Exportar .dvw</button>
   <button class="tbtn" onclick="descargarSesion()">Bajar fichas</button>
   <button class="tbtn" onclick="abrirBaterias()" title="Las 11 baterías calculadas de lo scouteado en vivo">Baterías</button>
   <button class="tbtn" onclick="abrirVideoVivo()" title="Video en vivo con delay para revisar acciones">Video<br>delay</button>
@@ -3774,7 +3774,25 @@ function descargarSesion(){
 /* ============================================================
    EXPORTAR .dvw
    ============================================================ */
-function exportDVW(){
+/* ── Codificación de combos al exportar (estilo DataVolley: mantener/convertir/ignorar) ──
+   Convertir usa estas equivalencias combo-propio -> combo estándar de DataVolley.
+   Es fácil de ampliar: agregá pares "TUYO":"ESTANDAR". */
+const ALIAS_COMBO={J1:'X1',J2:'X7',J3:'X2',J4:'XM',J5:'CB',J6:'CD',JJ:'PP',W4:'X5',W2:'X6',Y9:'X8',Y8:'XP',Y7:'XA',G4:'V5',G2:'V6',G3:'V3',G8:'VP',G9:'V8',G7:'V0'};
+function applyComboMode(codeStr, modo){
+  if(modo==='keep' || !codeStr) return codeStr;
+  if(codeStr[3]!=='A') return codeStr;                 /* solo los ataques llevan combo */
+  const combo = codeStr.slice(6,8);
+  if(combo.length<2 || combo[0]==='~' || combo[1]==='~') return codeStr;  /* no hay combo real */
+  let nuevo;
+  if(modo==='ignore'){ nuevo='~~'; }
+  else { nuevo = ALIAS_COMBO[combo] || combo; }        /* convertir a estándar (si hay equivalencia) */
+  let out = codeStr.slice(0,6)+nuevo+codeStr.slice(8);
+  if(modo==='ignore') out = out.replace(/~+$/,'');     /* limpia tildes finales si el combo estaba al final */
+  return out;
+}
+function abrirExportMode(){ document.getElementById('m-exportmode').classList.add('open'); }
+function exportDVW(modo){
+  modo = modo || 'keep';
   const d=new Date(), pad=n=>String(n).padStart(2,'0');
   const fecha = pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear();
   const L=[];
@@ -3869,7 +3887,7 @@ function exportDVW(){
     const zh = c.zh || (M.home.lineup.indexOf(M.home.setter)+1) || '';
     const za = c.za || (M.away.lineup.indexOf(M.away.setter)+1) || '';
     const tv = (c.t===undefined || c.t===null) ? '' : String(Math.max(0,Math.round(c.t)));
-    L.push([c.c,'','','','','','','',c.set,zh,za,'',tv,'',...hl,...al,''].join(';'));
+    L.push([applyComboMode(c.c,modo),'','','','','','','',c.set,zh,za,'',tv,'',...hl,...al,''].join(';'));
   });
 
   const blob = new Blob([L.join('\r\n')],{type:'text/plain'});
@@ -4165,6 +4183,18 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
     </table>
   </div>
 
+</div></div>
+<div class="modal" id="m-exportmode"><div class="sheet" style="max-width:520px">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px">
+    <h2 class="tit">Exportar .dvw — codificación de combos</h2>
+    <button class="tbtn" onclick="closeModal('m-exportmode')">Cerrar</button>
+  </div>
+  <p style="font-size:13px;color:#9aa4b2;margin:4px 0 12px">Elegí cómo exportar las combinaciones de ataque (como el DataVolley al abrir un partido con otra tabla de combos):</p>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <button class="tbtn" style="text-align:left;padding:10px 12px" onclick="closeModal('m-exportmode');exportDVW('keep')"><b>Mantener</b> — exporta los combos tal como los scouteaste.</button>
+    <button class="tbtn" style="text-align:left;padding:10px 12px" onclick="closeModal('m-exportmode');exportDVW('convert')"><b>Convertir</b> — los pasa a su combo estándar de DataVolley (según equivalencias).</button>
+    <button class="tbtn" style="text-align:left;padding:10px 12px" onclick="closeModal('m-exportmode');exportDVW('ignore')"><b>Ignorar</b> — quita el combo del código (queda el ataque sin combinación).</button>
+  </div>
 </div></div>
 <script>function abrirAyuda(){ document.getElementById('m-ayuda').classList.add('open'); }</script>
 
