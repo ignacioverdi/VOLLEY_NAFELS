@@ -474,11 +474,18 @@ function allRivals(on){RSEL=on?new Set(RIVALS):new Set();syncMatches();buildRiva
 function toggleMatchSel(mid){if(MSEL.has(mid))MSEL.delete(mid);else MSEL.add(mid);updateCounts();renderAll();}
 function allMatchesSel(on){MATCHES.filter(function(m){return RSEL.has(m.opp);}).forEach(function(m){if(on)MSEL.add(m.mid);else MSEL.delete(m.mid);});buildMatchPanel();updateCounts();renderAll();}
 function updateCounts(){document.getElementById('rc').textContent='('+RSEL.size+')';document.getElementById('mc').textContent='('+MSEL.size+')';document.getElementById('mhint').textContent=MSEL.size+' partido'+(MSEL.size===1?'':'s');}
+function makeTeamPlayer(role){
+  var rows=[]; PLAYERS.forEach(function(p){ if(p.role===role && p.data && p.data.length) rows=rows.concat(p.data); });
+  if(!rows.length) return null;
+  return {id:role.charAt(0)+'-equipo', num:'\u03a3', name:'EQUIPO', pos:'Acumulado', role:role, total:rows.length, read:'', data:rows, isTeam:true};
+}
 function buildTeam(){
   ['punta','central','opuesto','saque','reception','defense'].forEach(function(r){var el=document.getElementById('row-'+r);if(el)el.innerHTML='';});
   PLAYERS=TEAMS[TEAM].players;INFO=TEAMS[TEAM].info;computeMatchMeta();
+  var TEAMCARDS=[]; ['reception','defense'].forEach(function(role){var tp=makeTeamPlayer(role); if(tp) TEAMCARDS.push(tp);});
+  TEAMCARDS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('afterbegin',buildSection(p));});
   PLAYERS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('beforeend',buildSection(p));});
-  PLAYERS.forEach(function(p){ROLECFG[p.role].filters.forEach(function(fl,i){var fe=document.getElementById(p.id+'-f'+i);if(fe)fe.addEventListener('change',function(){if(ROLECFG[p.role].stats==='dig'&&fl.lab==='Ataque desde'){defRefreshTipo(p);}render(p);});});var me=document.getElementById(p.id+'-min');if(me)me.addEventListener('input',function(){render(p);});render(p);});
+  TEAMCARDS.concat(PLAYERS).forEach(function(p){ROLECFG[p.role].filters.forEach(function(fl,i){var fe=document.getElementById(p.id+'-f'+i);if(fe)fe.addEventListener('change',function(){if(ROLECFG[p.role].stats==='dig'&&fl.lab==='Ataque desde'){defRefreshTipo(p);}render(p);});});var me=document.getElementById(p.id+'-min');if(me)me.addEventListener('input',function(){render(p);});render(p);});
   buildRivalPanel();buildMatchPanel();updateCounts();
   document.getElementById('teamname').textContent=TEAMS[TEAM].name;
   var tt=document.getElementById('tabteam'); if(tt) tt.textContent=TEAMS[TEAM].name;
