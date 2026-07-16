@@ -309,6 +309,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <button class="tbtn" onclick="abrirPlanPreparado()" title="Plan de partido que preparamos (para comparar con lo que pasa en vivo)">📖 Plan de partido</button>
   <button class="tbtn" onclick="abrirBaterias()" title="Baterías del partido en vivo (rendimiento por batería)">🔋 Baterías</button>
   <button class="tbtn pri" onclick="closeSet()">Cerrar set</button>
+  <button class="tbtn" id="btn-amistoso" style="display:none" onclick="nuevoSetAmistoso()" title="Partido terminado: empezar un set nuevo (amistoso)">➕ Set amistoso</button>
 </div>
 
 <div class="board">
@@ -1927,7 +1928,9 @@ document.addEventListener('click', e=>{
 });
 function ponerExt(ch){
   const inp=document.getElementById('code');
-  inp.value += ch;
+  const pv=inp.selectionStart ?? inp.value.length, pve=inp.selectionEnd ?? pv;
+  inp.value = inp.value.slice(0,pv) + ch + inp.value.slice(pve);
+  const np=pv+ch.length; try{ inp.setSelectionRange(np,np); }catch(_){}
   cerrarExtensiones(); drawDecoder(); inp.focus();
 }
 
@@ -1961,7 +1964,7 @@ function hacerCambio(side,sale,entra){
 function parseCommand(raw){
   let t = raw.trim();
   if(!t) return false;
-  const side = /^a/i.test(t) && !/^a\d/.test(t) ? 'away' : 'home';
+  const side = CFG.entrenamiento ? 'home' : (/^a/i.test(t) && !/^a\d/.test(t) ? 'away' : 'home');
   let c = side==='away' ? t.slice(1) : t;
   const pre = side==='home' ? '*' : 'a';
 
@@ -2212,7 +2215,7 @@ function setTerminado(){
   const h=M.home.pts, a=M.away.pts, mx=Math.max(h,a);
   return mx>=objetivo && Math.abs(h-a)>=R.dif;
 }
-function partidoTerminado(){ return M.home.sets>=CFG.regl.setsGanar || M.away.sets>=CFG.regl.setsGanar; }
+function partidoTerminado(){ return !M.amistoso && (M.home.sets>=CFG.regl.setsGanar || M.away.sets>=CFG.regl.setsGanar); }
 
 /* ── AUTOMATIC SERVE ──────────────────────────────────────────
    Después de cerrar el punto, el programa deja escrito el próximo sacador.
@@ -2350,7 +2353,11 @@ function closeSet(){
   if(partidoTerminado()){
     M.home.pts=0; M.away.pts=0;
     renderAll(); persist();
-    toast('¡Partido terminado! '+M.home.sets+'-'+M.away.sets);
+    if(confirm('¡Partido terminado! '+M.home.sets+'-'+M.away.sets+'\n\n¿Es un amistoso y querés jugar otro set?')){
+      nuevoSetAmistoso(true);
+    } else {
+      toast('¡Partido terminado! '+M.home.sets+'-'+M.away.sets);
+    }
     return;
   }
   M.set++; M.home.pts=0; M.away.pts=0;
@@ -2364,6 +2371,28 @@ function closeSet(){
   renderAll(); persist();
   toast('Set cerrado. Va el set '+M.set+' — revisá la formación');
   if(typeof openSetup==='function') openSetup(true);   /* formación del set nuevo: OBLIGATORIA (estilo Data Volley) */
+}
+/* ── SET AMISTOSO ──────────────────────────────────────────────
+   Cuando el partido ya está terminado (alguien llegó a los sets para ganar),
+   permite seguir jugando sets sueltos, como un amistoso. Habilita M.amistoso
+   para que partidoTerminado() deje de bloquear el End Rally / cierre de set. */
+function nuevoSetAmistoso(saltarConfirm){
+  const yaGanado = (M.home.sets>=CFG.regl.setsGanar || M.away.sets>=CFG.regl.setsGanar);
+  if(!yaGanado && !M.amistoso){ toast('El partido sigue en juego'); return; }
+  if(!saltarConfirm && !confirm('¿Empezar un set nuevo en modo amistoso? El partido ya estaba terminado.')) return;
+  M.amistoso = true;
+  M.set++; M.home.pts=0; M.away.pts=0;
+  M.serving = (M.setFirstServer==='home') ? 'away' : 'home';
+  M.setFirstServer = M.serving;
+  ['home','away'].forEach(side=>{
+    if(M[side].six && M[side].six.length===6) M[side].lineup = M[side].six.slice();
+    if(!M[side].sixHist) M[side].sixHist={};
+    M[side].sixHist[M.set] = M[side].lineup.slice();
+    M[side].subs = 0; M[side].to = 0;
+  });
+  renderAll(); persist();
+  toast('Modo amistoso: set '+M.set+' iniciado — revisá la formación');
+  if(typeof openSetup==='function') openSetup(true);
 }
 
 /* ============================================================
@@ -2518,6 +2547,7 @@ function renderAll(){
   document.getElementById('sb-h').className = 'serveball'+(M.serving==='home'?' on':'');
   document.getElementById('sb-a').className = 'serveball'+(M.serving==='away'?' on':'');
   renderRot('home'); renderRot('away'); renderCodes(); renderStats(); renderMiniAn(); drawPickers();
+  var _ba=document.getElementById('btn-amistoso'); if(_ba) _ba.style.display = (M.home.sets>=CFG.regl.setsGanar||M.away.sets>=CFG.regl.setsGanar) ? 'inline-flex' : 'none';
 }
 
 /* ============================================================
@@ -2589,10 +2619,21 @@ document.addEventListener('keydown', e=>{
   const prefEsSignoCodigo = (K.prefA==='a' || K.prefA==='A' || K.prefH==='*');
   if((k===K.prefA || k===K.prefH) && document.activeElement===inp0 && !prefEsSignoCodigo){
     e.preventDefault();
-    let v=inp0.value;
-    if(k===K.prefA){ if(v[0]!=='a') v='a'+v.replace(/^\*/,''); }
-    else           { if(v[0]!=='*') v='*'+v.replace(/^a/,''); }
-    inp0.value=v; drawDecoder(); inp0.focus();
+    const chPref = (k===K.prefA) ? 'a' : '*';
+    const pp  = inp0.selectionStart ?? inp0.value.length;
+    const ppe = inp0.selectionEnd   ?? pp;
+    if(pp===0 && ppe===0){
+      /* al inicio: prefijo de siempre (no duplica, alterna a/*) */
+      let v=inp0.value;
+      if(chPref==='a'){ if(v[0]!=='a') v='a'+v.replace(/^\*/,''); }
+      else            { if(v[0]!=='*') v='*'+v.replace(/^a/,''); }
+      inp0.value=v; try{ inp0.setSelectionRange(1,1); }catch(_){}
+    } else {
+      /* en el medio: inserta el prefijo donde está el cursor (códigos compuestos) */
+      inp0.value = inp0.value.slice(0,pp) + chPref + inp0.value.slice(ppe);
+      const np = pp + 1; try{ inp0.setSelectionRange(np,np); }catch(_){}
+    }
+    drawDecoder(); inp0.focus();
     return;
   }
   if(k===K.endL){ e.preventDefault(); endRally(ladoIzquierda()); return; }
@@ -2616,7 +2657,11 @@ document.addEventListener('keydown', e=>{
     return;
   }
   // teclas remapeadas de evaluación
-  for(const ev of EVALS){ if(k===CFG.keys[ev]){ e.preventDefault(); inp.value+=ev; drawDecoder(); return; } }
+  for(const ev of EVALS){ if(k===CFG.keys[ev]){ e.preventDefault();
+      const pv=inp.selectionStart ?? inp.value.length, pve=inp.selectionEnd ?? pv;
+      inp.value = inp.value.slice(0,pv) + ev + inp.value.slice(pve);
+      const np=pv+ev.length; try{ inp.setSelectionRange(np,np); }catch(_){}
+      drawDecoder(); return; } }
 });
 document.getElementById('code').addEventListener('input', function(){ drawDecoder(); drawPickers(); });
 document.getElementById('e-code').addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); saveEdit(); } });
