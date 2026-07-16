@@ -203,7 +203,7 @@ def build(dvw_dir, out_dir, filter_temp=None, db_path=None):
         opues =sorted([n for n in pos if pos[n]=='Opuesto'],key=lambda n:-cnt('atk',n))
         servers=sorted([n for n in pos if pos[n]!='L\u00edbero' and cnt('srv',n)>=30],key=lambda n:-cnt('srv',n))[:12]
         receiv =sorted([n for n in pos if cnt('rec',n)>=30],key=lambda n:-cnt('rec',n))[:6]
-        defen  =sorted([n for n in pos if cnt('dig',n)>=15],key=lambda n:-cnt('dig',n))[:6]
+        defen  =sorted([n for n in pos if cnt('dig',n)>=1],key=lambda n:-cnt('dig',n))[:8]
         players=[]
         def add(pfx,num,role,data,read):
             players.append({"id":pfx+str(num),"num":num,"name":apellido(D['names'].get(str(num),'')),

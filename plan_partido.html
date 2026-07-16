@@ -428,7 +428,7 @@ function readVal(p){try{var v=localStorage.getItem(readKey(p.id));if(v!==null)re
 function saveRead(el){try{localStorage.setItem(readKey(el.getAttribute("data-pid")),el.innerHTML);}catch(e){}}
 function buildSection(p){var cfg=ROLECFG[p.role];
   var fh=cfg.filters.map(function(fl,i){return filtCtrl(p.id+'-f'+i,fl,'',filterOpts(p,fl));}).join('');
-  if(cfg.stats==='atk'||cfg.stats==='srv'){fh+='<div class="fgroup"><label title="Mín. pelotas">Mín.</label><input type="number" min="0" value="0" id="'+p.id+'-min" style="background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:7px;font-family:inherit;font-weight:700"></div>';}
+  if(cfg.stats==='atk'||cfg.stats==='srv'||cfg.stats==='dig'){fh+='<div class="fgroup"><label title="Mín. pelotas">Mín.</label><input type="number" min="0" value="0" id="'+p.id+'-min" style="background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:7px;font-family:inherit;font-weight:700"></div>';}
   return '<div class="player"><div class="phead"><div class="pnum">'+p.num+'</div><div class="pname">'+p.name+'</div><div class="prole">'+(p.pos||p.role)+'</div><div class="pmeta">'+p.total+U(p.role)+'</div></div>'
    +'<div class="filters">'+fh+'</div><div class="natt" id="'+p.id+'-n"></div>'
    +'<div class="body"><div class="courtwrap"><div class="court" id="'+p.id+'-court"></div><div class="cnote">Doble-click en zona con ▶ → video (partidos con 🎥)</div></div>'
@@ -454,7 +454,7 @@ function render(p){var cfg=ROLECFG[p.role];
   for(var i=0;i<9;i++)document.getElementById(p.id+'-s'+i).textContent=v[i];
   document.getElementById(p.id+'-n').textContent=n+U(p.role);
   var mx=Math.max(1,z["1"],z["2"],z["3"],z["4"],z["5"],z["6"],z["7"],z["8"],z["9"]);
-  var _useMin=(cfg.stats==='atk'||cfg.stats==='srv');
+  var _useMin=(cfg.stats==='atk'||cfg.stats==='srv'||cfg.stats==='dig');
   var _min=0; if(_useMin){var _me=document.getElementById(p.id+'-min'); _min=_me?(parseInt(_me.value,10)||0):0;}
   document.getElementById(p.id+'-court').innerHTML=ORDER.map(function(zn){var val=z[zn];
     if(_useMin&&_min>0&&val<_min){return '<div class="cell" style="background:var(--h0);border:1px solid var(--border)"><div class="zn" style="color:#3a4358;opacity:.4">z'+zn+'</div></div>';}
