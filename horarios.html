@@ -86,22 +86,22 @@
 
   // ── Traducción propia (es / en / de) ─────────────────────────────
   var I18N={
-    es:{ titulo:'HORARIOS DE LA SEMANA', sub:'Se sincroniza solo entre todos los dispositivos. Sólo el cuerpo técnico puede editar.',
-      editar:'✏️ Editar', cerrar:'✕ Cerrar', voley:'Vóley', pesas:'Pesas', libre:'— libre —',
+    es:{ titulo:'HORARIOS DE LA SEMANA', sub:'Se sincroniza con el Calendario — se edita desde ahí.',
+      editar:'✏️ Editar', cerrar:'✕ Cerrar', voley:'Vóley', pesas:'Pesas', video:'Video', holiday:'Vacaciones', libre:'— libre —',
       agregar:'+ agregar sesión', guardar:'💾 Guardar cambios', cancelar:'Cancelar', reset:'↺ Volver a plantilla base',
-      esta:'● Esta semana', base:'Plantilla base — guardá para personalizar esta semana', perso:'Semana personalizada ✓',
+      esta:'● Esta semana', base:'🔄 Sincronizado con el Calendario', perso:'Semana personalizada ✓',
       guardado:'Guardado en la nube ✓', sincon:'Sin conexión — no se pudo guardar', semanaDel:'Semana del', al:'al', lugarPh:'📍 ¿Dónde?',
       dias:['LUNES','MARTES','MIÉRCOLES','JUEVES','VIERNES','SÁBADO','DOMINGO'] },
-    en:{ titulo:'WEEKLY SCHEDULE', sub:'Syncs automatically across all devices. Only staff can edit.',
-      editar:'✏️ Edit', cerrar:'✕ Close', voley:'Volleyball', pesas:'Gym', libre:'— off —',
+    en:{ titulo:'WEEKLY SCHEDULE', sub:'Synced from the Calendar — edit it there.',
+      editar:'✏️ Edit', cerrar:'✕ Close', voley:'Volleyball', pesas:'Gym', video:'Video', holiday:'Holidays', libre:'— off —',
       agregar:'+ add session', guardar:'💾 Save changes', cancelar:'Cancel', reset:'↺ Reset to base template',
-      esta:'● This week', base:'Base template — save to customize this week', perso:'Custom week ✓',
+      esta:'● This week', base:'🔄 Synced from the Calendar', perso:'Custom week ✓',
       guardado:'Saved to cloud ✓', sincon:'Offline — could not save', semanaDel:'Week of', al:'to', lugarPh:'📍 Where?',
       dias:['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY'] },
-    de:{ titulo:'WOCHENPLAN', sub:'Wird automatisch auf allen Geräten synchronisiert. Nur das Trainerteam kann bearbeiten.',
-      editar:'✏️ Bearbeiten', cerrar:'✕ Schließen', voley:'Volleyball', pesas:'Kraftraum', libre:'— frei —',
+    de:{ titulo:'WOCHENPLAN', sub:'Mit dem Kalender synchronisiert — dort bearbeiten.',
+      editar:'✏️ Bearbeiten', cerrar:'✕ Schließen', voley:'Volleyball', pesas:'Kraftraum', video:'Video', holiday:'Ferien', libre:'— frei —',
       agregar:'+ Einheit hinzufügen', guardar:'💾 Speichern', cancelar:'Abbrechen', reset:'↺ Auf Basisvorlage zurücksetzen',
-      esta:'● Diese Woche', base:'Basisvorlage — speichern, um diese Woche anzupassen', perso:'Angepasste Woche ✓',
+      esta:'● Diese Woche', base:'🔄 Mit dem Kalender synchronisiert', perso:'Angepasste Woche ✓',
       guardado:'In der Cloud gespeichert ✓', sincon:'Offline — konnte nicht speichern', semanaDel:'Woche vom', al:'bis', lugarPh:'📍 Wo?',
       dias:['MONTAG','DIENSTAG','MITTWOCH','DONNERSTAG','FREITAG','SAMSTAG','SONNTAG'] }
   };
@@ -118,7 +118,12 @@
   function clone(o){ return JSON.parse(JSON.stringify(o)); }
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function norm(d){ var o={}; DIAS.forEach(function(x){ o[x[0]]=Array.isArray(d[x[0]])?d[x[0]].filter(Boolean):[]; }); return o; }
-  function tipoInfo(tp){ return tp==='pesas' ? {ic:'🏋️',c:'#f59e0b',lk:'pesas'} : {ic:'🏐',c:'#e8192c',lk:'voley'}; }
+  function tipoInfo(tp){
+    if(tp==='pesas') return {ic:'🏋️',c:'#f59e0b',lk:'pesas'};
+    if(tp==='video') return {ic:'🎥',c:'#3b82f6',lk:'video'};
+    if(tp==='holiday') return {ic:'🎄',c:'#22c55e',lk:'holiday'};
+    return {ic:'🏐',c:'#e8192c',lk:'voley'};
+  }
 
   var curMonday=mondayOf(new Date());
   var data=clone(DEFAULT);
@@ -171,7 +176,7 @@
       if(!ses.length){ h+='<div class="empty">'+t('libre')+'</div>'; }
       ses.forEach(function(s,i){
         if(editing){ h+=editRow(key,s,i); }
-        else{ var ti=tipoInfo(s.tipo); var lug=(s.lugar||'').trim(); h+='<div class="ses" style="border-left:3px solid '+ti.c+'"><span class="ses-ic">'+ti.ic+'</span><span class="ses-time">'+s.de+' – '+s.a+'</span><span class="ses-lugar">'+(lug?'📍 '+esc(lug):'')+'</span><span class="ses-tipo" style="color:'+ti.c+'">'+t(ti.lk)+'</span></div>'; }
+        else{ var ti=tipoInfo(s.tipo); var lug=(s.lugar||'').trim(); var _tm=(s.tipo==='holiday')?(s.titulo||t(ti.lk)):(s.de?(s.a?s.de+' – '+s.a:s.de):''); h+='<div class="ses" style="border-left:3px solid '+ti.c+'"><span class="ses-ic">'+ti.ic+'</span><span class="ses-time">'+esc(_tm)+'</span><span class="ses-lugar">'+(lug?'📍 '+esc(lug):'')+'</span><span class="ses-tipo" style="color:'+ti.c+'">'+t(ti.lk)+'</span></div>'; }
       });
       if(editing){ h+='<button class="add" data-add="'+key+'">'+t('agregar')+'</button>'; }
       h+='</div>';
@@ -213,16 +218,29 @@
     else{ status(t('sincon'),'#ef4444'); }
     exitEdit(); render();
   };
-  if(!isCoach){ $('editBtn').style.display='none'; }
+  $('editBtn').style.display='none';
 
   function loadWeek(){
-    var key=weekKey();
-    if(typeof fbGet!=='undefined'){
-      fbGet('horarios/semanas/'+key, function(d){
-        if(d && typeof d==='object'){ data=norm(d); isSaved=true; }
-        else { data=clone(DEFAULT); isSaved=false; }
-        render();
+    var monday=curMonday;
+    function build(entr){
+      var wk={lunes:[],martes:[],miercoles:[],jueves:[],viernes:[],sabado:[],domingo:[]};
+      var idx=['lunes','martes','miercoles','jueves','viernes','sabado','domingo'];
+      (entr||[]).forEach(function(e){
+        if(!e.fecha) return;
+        var f0=e.fecha, f1=e.fechaFin||e.fecha;
+        for(var di=0; di<7; di++){
+          var dayIso=isoOf(addDays(monday,di));
+          if(dayIso>=f0 && dayIso<=f1){
+            var tp = /LIFTING/i.test(e.tipo||'') ? 'pesas' : (/VIDEO/i.test(e.tipo||'') ? 'video' : (/HOLIDAY|VACACION/i.test(e.tipo||'') ? 'holiday' : 'voley'));
+            wk[idx[di]].push({ de:e.hora||'', a:e.horaFin||'', tipo:tp, lugar:e.lugar||'', titulo:e.tipo||'' });
+          }
+        }
       });
+      idx.forEach(function(k){ wk[k].sort(function(a,b){ return (a.de||'')<(b.de||'')?-1:1; }); });
+      return wk;
+    }
+    if(typeof fbGet!=='undefined'){
+      fbGet('calendario/entrenamientos', function(d){ data=build(Array.isArray(d)?d:[]); isSaved=false; render(); });
     } else { data=clone(DEFAULT); isSaved=false; render(); }
   }
 
