@@ -198,6 +198,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
   <button class="ptab" data-tab="saque" onclick="setTab('saque')">Direcciones saque</button>
   <button class="ptab" data-tab="recepcion" onclick="setTab('recepcion')">Zonas recepción</button>
   <button class="ptab" data-tab="defensa" onclick="setTab('defensa')">Zonas defensa</button>
+  <button class="ptab" data-tab="bloqueo" onclick="setTab('bloqueo')">Acciones de bloqueo</button>
 </div>
 <div class="armsec" id="armsec">
   <div class="armhead"><h2>Distribución del armador</h2><span class="sub" id="armname">—</span></div>
@@ -224,6 +225,8 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <div class="grid3" id="row-reception"></div>
 </div><div class="tabgroup" id="tab-defensa"><div class="rolehead">Defensa <span>dónde y cómo defiende · verde · zona donde levanta la pelota</span></div>
 <div class="grid3" id="row-defense"></div>
+</div><div class="tabgroup" id="tab-bloqueo"><div class="rolehead">Bloqueo <span>dónde bloquea según la zona de origen del ataque rival · celeste</span></div>
+<div class="grid3" id="row-bloqueo"></div>
 </div><footer>Ataque (rojo): dirección según recepción. Saque (azul): tipo, zona de origen, momento (puntos del set) y fuerza sobre la recepción; / = vendido (2ª mejor). Recepción (naranja): según tipo/zona del saque rival; zona real de caída de la pelota (todas las zonas). Video por timestamp (reproduce en partidos publicados en la app Näfels). Muestras chicas = tomar con cuidado.</footer>
 </div>
 
@@ -256,6 +259,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <script src="liga_data.js" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
 <script src="firebase.js"></script>
 <script src="plan_partido_data.js" onerror="void 0"></script>
+<script src="datos_bloqueo.js" onerror="void 0"></script>
 <script src="plan_partido_vivo.js" onerror="void 0"></script>
 <script>
 /* MODO VIVO: si la URL trae ?vivo=1, el plan NO usa plan_partido_data.js;
@@ -291,6 +295,7 @@ const SRS=[["all","Todas"],["#","Ace (#)"],["/","Vendido (/)"],["+","Positivo (+
 const RCS=[["all","Todas"],["#","Perfecta (#)"],["+","Buena (+)"],["!","Ok (!)"],["/","Pasada (/)"],["-","Mala (−)"],["=","Error (=)"]];
 const DGS=[["all","Todas"],["#","Perfecta (#)"],["+","Buena (+)"],["!","Cubre (!)"],["/","Pasada (/)"],["-","Mala (−)"],["=","Error (=)"]];
 const DAZ=[["all","Todas"],["4","z4"],["3","z3"],["2","z2"],["6","z6"],["1","z1"],["5","z5"]];
+const BLS=[["all","Todas"],["#","Kill (#)"],["+","Bueno (+)"],["!","Toque (!)"],["-","Malo (\u2212)"],["=","Error (=)"]];
 const ROLECFG={
  punta:{court:4,evIdx:5,subIdx:6,tIdx:7,vIdx:8,tagIdx:0,stats:'atk',pal:'red',
    filters:[{lab:'Combo',idx:0,opts:CB_P},{lab:'Fase',idx:1,opts:FASE},{lab:'Recepción',idx:1,opts:RECS},{lab:'Recibe',idx:9,opts:OWN},{lab:'Resultado',idx:5,opts:RESS}],
@@ -309,7 +314,10 @@ const ROLECFG={
    dir:null,tiles:['Efic','#+','/=','Potencia','Flotado','N','Perfecta','Ok','Mala'],hl:[0,1]},
  defense:{court:2,evIdx:3,tIdx:5,vIdx:6,tagIdx:0,stats:'dig',pal:'green',
    filters:[{lab:'Tipo',idx:7,opts:[["all","Todas"]],dyn:'combo'},{lab:'Ataque desde',idx:1,opts:DAZ},{lab:'Momento',idx:4,opts:SMO,range:true},{lab:'Resultado',idx:3,opts:DGS}],
-   dir:null,tiles:['Efic','#+','/=','Potencia','Flotado','N','Perfecta','Cubre','Mala'],hl:[0,1]}
+   dir:null,tiles:['Efic','#+','/=','Potencia','Flotado','N','Perfecta','Cubre','Mala'],hl:[0,1]},
+ bloqueo:{court:1,evIdx:2,tIdx:3,vIdx:4,tagIdx:0,stats:'blk',pal:'blue',
+   filters:[{lab:"Combo",idx:0,opts:[["all","Todas"]],dyn:"combo"},{lab:"Fase",idx:5,opts:FASE},{lab:"Zona",idx:1,opts:[["all","Todas"],["4","z4 (punta)"],["3","z3 (central)"],["2","z2 (opuesto)"],["8","z8 (pipe)"],["9","z9 (zaguero)"]]},{lab:"Resultado",idx:2,opts:BLS}],
+   dir:null,tiles:['Efic','Positivos','Err/Tocado','\u2014','\u2014','Bloqueos','Kills','Toques','Malos'],hl:[0,5]}
 };
 const TAGFMT={pot:'Pot',flo:'Flot'};
 const ORDER=["4","3","2","7","8","9","5","6","1"];
@@ -410,7 +418,7 @@ function openArmZone(pos,zn){
 
 function evLabel(ev){if(ev==="#")return'<span class="r-pt">punto</span>';if(ev==="/")return'<span class="r-bl">bloq</span>';if(ev==="=")return'<span class="r-er">error</span>';return ev;}
 function tiles3(p,cfg){var t=cfg.tiles.map(function(lb,i){var hl=cfg.hl.indexOf(i)>=0?' hl':'';return '<div class="tile'+hl+'"><div class="l">'+lb+'</div><div class="v" id="'+p.id+'-s'+i+'"></div></div>';});return '<div class="row3">'+t.slice(0,3).join('')+'</div><div class="row3">'+t.slice(3,6).join('')+'</div><div class="row3">'+t.slice(6,9).join('')+'</div>';}
-function U(role){return role==='saque'?' saques':role==='reception'?' recep.':role==='defense'?' defensas':' ataques';}
+function U(role){return role==='saque'?' saques':role==='reception'?' recep.':role==='defense'?' defensas':role==='bloqueo'?' bloqueos':' ataques';}
 function mAll(btn,val){var pop=btn.closest(".mpop");var cbs=pop.querySelectorAll('input[type=checkbox]');cbs.forEach(function(c){c.checked=!!val;});if(cbs[0])cbs[0].dispatchEvent(new Event("change",{bubbles:true}));}
 function _isMulti(fl){return fl.multi||fl.lab==="Resultado";}
 function filterOpts(p,fl){if(fl.lab==="Recibe"&&fl.idx===9){var NB={};((window.PP_DATA&&window.PP_DATA[TEAM]&&window.PP_DATA[TEAM].players)||[]).forEach(function(pp){NB[pp.num]=pp.name;});var rc={};(p&&p.data||[]).forEach(function(a){var rn=a[9];if(rn>0)rc[rn]=1;});return [["all","Todas"]].concat(Object.keys(rc).map(Number).sort(function(x,y){return x-y;}).map(function(n){return [String(n),"#"+n+" "+(NB[n]?apellidoJS(NB[n]):"")];}));}if(fl.dyn==='combo'){var cc={};(p&&p.data||[]).forEach(function(a){var cb=a[fl.idx]||'';if(cb)cc[cb]=(cc[cb]||0)+1;});return [["all","Todas"]].concat(Object.keys(cc).sort(function(x,y){return cc[y]-cc[x];}).map(function(c){return [c,c+" ("+cc[c]+")"];}));}return fl.opts;}
@@ -481,8 +489,9 @@ function makeTeamPlayer(role){
   return {id:role.charAt(0)+'-equipo', num:'\u03a3', name:'EQUIPO', pos:'Acumulado', role:role, total:rows.length, read:'', data:rows, isTeam:true};
 }
 function buildTeam(){
-  ['punta','central','opuesto','saque','reception','defense'].forEach(function(r){var el=document.getElementById('row-'+r);if(el)el.innerHTML='';});
+  ['punta','central','opuesto','saque','reception','defense','bloqueo'].forEach(function(r){var el=document.getElementById('row-'+r);if(el)el.innerHTML='';});
   PLAYERS=TEAMS[TEAM].players;INFO=TEAMS[TEAM].info;computeMatchMeta();
+  var _bk=(window.PP_BLOCK&&window.PP_BLOCK[TEAM])||[];_bk.forEach(function(bp){if(!bp.id)bp.id='blk'+bp.num;});PLAYERS=PLAYERS.concat(_bk);
   TEAMCARDS=[]; ['reception','defense'].forEach(function(role){var tp=makeTeamPlayer(role); if(tp) TEAMCARDS.push(tp);});
   TEAMCARDS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('afterbegin',buildSection(p));});
   PLAYERS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('beforeend',buildSection(p));});
@@ -501,6 +510,7 @@ function setTab(t){
   document.getElementById('tab-saque').classList.toggle('show', t==='saque');
   document.getElementById('tab-recepcion').classList.toggle('show', t==='recepcion');
   document.getElementById('tab-defensa').classList.toggle('show', t==='defensa');
+  document.getElementById('tab-bloqueo').classList.toggle('show', t==='bloqueo');
   try{ location.hash=t; }catch(e){}
 }
 
@@ -558,7 +568,7 @@ pintarBotonesEquipo();
 
 /* solapa inicial: por hash (#ataque) o armador por defecto */
 var _h=(location.hash||'').replace('#','');
-setTab(['armador','ataque','saque','recepcion','defensa'].indexOf(_h)>=0?_h:'armador');
+setTab(['armador','ataque','saque','recepcion','defensa','bloqueo'].indexOf(_h)>=0?_h:'armador');
 
 /* arrancar el modo vivo */
 if(VIVO){ cargarVivo(true); setInterval(function(){ cargarVivo(false); }, 2000); }
