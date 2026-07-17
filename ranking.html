@@ -19,7 +19,8 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-
 .metric-selector{display:flex;gap:6px;flex-wrap:wrap}
 .msel{padding:8px 14px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:12px;font-weight:700;letter-spacing:1px;font-family:'Barlow Condensed',sans-serif}
 .msel.active{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:#4ade80}
-select{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:13px;cursor:pointer;min-width:140px}
+select{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;cursor:pointer;min-width:140px}
+select option{color:#111 !important;background:#fff !important;font-weight:700 !important}
 .rank-list{display:flex;flex-direction:column;gap:8px}
 .rank-row{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px;transition:transform .1s}
 .rank-row:hover{transform:translateX(4px)}
@@ -48,6 +49,7 @@ select{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var
         <div class="msel" data-m="srv_eff">🎯 SAQUE</div>
         <div class="msel" data-m="rec_eff">🛡️ RECEPCIÓN</div>
         <div class="msel" data-m="blk_eff">🧱 BLOQUEO</div>
+        <div class="msel" data-m="def_eff">🤲 DEFENSA</div>
       </div>
     </div>
     <div class="ctrl-group">
@@ -64,8 +66,8 @@ select{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var
 <script>
 var PLAYERS = [];
 var currentMetric = 'atk_eff';
-var MC = {atk_eff:'#f97316',srv_eff:'#22c55e',rec_eff:'#818cf8',blk_eff:'#fbbf24'};
-var MR = {atk_eff:false,srv_eff:false,rec_eff:true,blk_eff:true};
+var MC = {atk_eff:'#f97316',srv_eff:'#22c55e',rec_eff:'#818cf8',blk_eff:'#fbbf24',def_eff:'#ec4899'};
+var MR = {atk_eff:false,srv_eff:false,rec_eff:true,blk_eff:true,def_eff:true};
 function effColor(v,r){if(v==null)return '#475569';if(r)return v>=40?'#22c55e':v>=25?'#fbbf24':v>=10?'#f97316':'#ef4444';return v>=40?'#22c55e':v>=20?'#fbbf24':v>=0?'#f97316':'#ef4444';}
 function render(){
   var color=MC[currentMetric], isRec=MR[currentMetric];

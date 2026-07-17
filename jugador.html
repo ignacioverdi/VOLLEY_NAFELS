@@ -37,7 +37,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
   --indigo:#818cf8;--orange:#f97316;--mut:#475569;--txt:#e2e8f0;
 }
 body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--txt);min-height:100vh;}
-.page-header{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(7,8,15,.9);backdrop-filter:blur(20px);position:sticky;top:0;z-index:100;}
+.page-header{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;background:rgba(7,8,15,.9);backdrop-filter:blur(20px);position:sticky;top:0;z-index:100;}
 .back-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--mut);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase;transition:all .15s;}
 .back-btn:hover{color:var(--txt);border-color:var(--border2);}
 .hero{position:relative;overflow:hidden;padding:28px 20px 0;}
@@ -112,14 +112,16 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 <script src="onesignal_push.js" defer></script>
 </head>
 <body>
-<div class="header-right" style="position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
 
 <div class="page-header">
   <div style="display:flex;align-items:center;gap:8px;">
     <a href="dashboard.html" class="back-btn">← Dashboard</a>
     <a href="index.html" class="back-btn">🏠 Hub</a>
   </div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end">
   <button onclick="cambiarJugador()" style="padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--mut);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;">👤 Cambiar</button>
+    <div class="header-right" style="display:flex;align-items:center;gap:8px"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
+  </div>
 </div>
 
 <div class="hero" id="hero">
@@ -620,7 +622,7 @@ function renderAccesos(j){
   var items=[
     {icon:'📈',title:'Historial',desc:'Mis estadísticas',url:'historial_voley.html?player='+encodeURIComponent(j.nombre),color:'#818cf8'},
     {icon:'💪',title:'Rutina',desc:'Mi preparación física',url:'prep_fisica.html?player='+encodeURIComponent(j.nombre),color:'#e8192c'},
-    {icon:'🎯',title:'Game Plan',desc:'Plan del próximo partido',url:'game_plan.html',color:'#f59e0b'},
+    {icon:'🎯',title:'Plan de Partido',desc:'Plan del próximo partido',url:'plan_partido.html',color:'#f59e0b'},
     {icon:'📊',title:'Panel en Vivo',desc:'Sesión actual',url:'panel_voley.html',color:'#22c55e'},
     {icon:'🔥',title:'Heat Maps',desc:'Ataque · Saque · Rec · Armado',url:'javascript:showHeatmapMenu()',color:'#F97316'},
     {icon:'🏆',title:'Ranking',desc:'Mi posición en el equipo',url:'ranking.html?num='+j.num,color:'#F59E0B'},
@@ -633,6 +635,7 @@ function renderAccesos(j){
   items.splice(items.length-1,0,{icon:'⚡',title:'Saque',desc:'Mis saques por zona',url:'saque_jugador.html?num='+j.num,color:'#f97316'});
   var ATK_POS=['PUNTA','OPUESTO','CENTRAL'];
   if(ATK_POS.indexOf((j.pos||'').toUpperCase())>=0) items.splice(items.length-1,0,{icon:'💥',title:'Ataque',desc:'Mis ataques por zona',url:'ataque_jugador.html?num='+j.num,color:'#818cf8'});
+  items.splice(items.length-1,0,{icon:'🤲',title:'Defensa',desc:'Mi mapa de defensa',url:'hm_defensa.html?equipo=nafels&num='+j.num,color:'#ef4444'});
   items.splice(1,0,{icon:'🎬',title:'Mis Cortes',desc:'Mis acciones en video',url:'cortes.html?num='+j.num,color:'#EF4444'});
   grid.innerHTML=items.map(function(a){
     return '<a class="acceso-card'+(a.full?' full':'')+'" href="'+a.url+'" style="border-color:'+a.color+'18">'+
@@ -836,6 +839,7 @@ if(jugador){
       <a class="hm-card" href="hm_saque.html?equipo=nafels"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Flotado/Potencia<br>Zonas origen/destino</span></a>
       <a class="hm-card" href="hm_recepcion.html?equipo=nafels" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
       <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
+      <a class="hm-card" href="hm_defensa.html?equipo=nafels"  style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🤲</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Origen/Destino</span></a>
     </div>
     <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">División de Honor 2026</div>
   </div>
