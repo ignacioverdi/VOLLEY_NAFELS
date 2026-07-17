@@ -85,6 +85,10 @@ echo.
 echo  [4/4] Cortes de video de partidos...
 python build_video.py "!DVW_DIR!" datos_video.js VIDEO_DATA
 if errorlevel 1 echo      [aviso] Hubo un problema en los cortes de partidos. Sigo igual.
+echo.
+echo  [4b/4] Acciones de bloqueo...
+python gen_bloqueo.py
+if errorlevel 1 echo      [aviso] Problema en bloqueo. Sigo igual.
 
 REM ---- contar cuantos videos quedaron cargados (mensaje claro) ----
 set "NVID=0"
