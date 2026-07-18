@@ -191,6 +191,39 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    "Ranking equipos NLA \u2014 eleg\u00ed un fundamento para ordenar":{en:"NLA team ranking \u2014 pick a skill to sort",de:"NLA-Teamrangliste \u2014 Element zum Sortieren w\u00e4hlen"},
+    "d\u00f3nde y c\u00f3mo saca \u00b7 azul \u00b7 fuerza = fuerte/medio/f\u00e1cil":{en:"where & how they serve \u00b7 blue \u00b7 power = hard/medium/easy",de:"wo & wie er aufschl\u00e4gt \u00b7 blau \u00b7 Kraft = hart/mittel/leicht"},
+    "re-ver":{en:"replay",de:"nochmal"},
+
+    // ===== AGREGADOS player-facing (index, perfil, calendario, horarios, heatmaps, standings, cortes, game plan) =====
+    "Plan de Desarrollo":{en:"Development Plan",de:"Entwicklungsplan"},
+    "Plan de Desarrollo Individual":{en:"Individual Development Plan",de:"Individueller Entwicklungsplan"},
+    "Mi Perfil":{en:"My Profile",de:"Mein Profil"},
+    "Horarios":{en:"Schedule",de:"Stundenplan"},
+    "C\u00e1mara":{en:"Camera",de:"Kamera"},
+    "Tu vista":{en:"Your view",de:"Deine Ansicht"},
+    "Video y juego":{en:"Video & game",de:"Video & Spiel"},
+    "Cu\u00e1ndo y d\u00f3nde":{en:"When & where",de:"Wann & wo"},
+    "Clips y un poco de joda":{en:"Clips and a bit of fun",de:"Clips und etwas Spa\u00df"},
+    "Fichas, tablas y gr\u00e1ficos que se actualizan solos mientras scoute\u00e1s.":{en:"Cards, tables and charts that update automatically while you scout.",de:"Datenbl\u00e4tter, Tabellen und Grafiken, die sich beim Scouten automatisch aktualisieren."},
+    "Agenda":{en:"Agenda",de:"Kalender"},
+    "Planificaci\u00f3n":{en:"Planning",de:"Planung"},
+    "Toc\u00e1 un evento para editarlo":{en:"Tap an event to edit it",de:"Tippe auf ein Ereignis, um es zu bearbeiten"},
+    "Horarios de la semana":{en:"Weekly schedule",de:"Wochenplan"},
+    "Mi performance":{en:"My performance",de:"Meine Leistung"},
+    "\u00bfQu\u00e9 significan estos n\u00fameros?":{en:"What do these numbers mean?",de:"Was bedeuten diese Zahlen?"},
+    "C\u00f3mo vamos a jugar":{en:"How we'll play",de:"Wie wir spielen"},
+    "Tabla de posiciones":{en:"Standings",de:"Tabelle"},
+    "La columna":{en:"The column",de:"Die Spalte"},
+    "Ver video de estas defensas":{en:"Watch video of these digs",de:"Video dieser Abwehraktionen ansehen"},
+    "Ver video de los sets":{en:"Watch video of the sets",de:"Video der Zuspiele ansehen"},
+    "Elegir situaci\u00f3n":{en:"Choose situation",de:"Situation w\u00e4hlen"},
+    "Situaci\u00f3n":{en:"Situation",de:"Situation"},
+    "Comentario del coach":{en:"Coach's comment",de:"Kommentar des Trainers"},
+    "secuencia de la jugada":{en:"play sequence",de:"Spielsequenz"},
+    "V\u00f3ley":{en:"Volleyball",de:"Volleyball"},
+    "sin vacaciones":{en:"no holidays",de:"ohne Ferien"},
+
     // ===== PLAN DE PARTIDO (scouting interactivo) =====
     "Distribución del armador":{en:"Setter distribution",de:"Zuspielerverteilung"},
     "Análisis del rival":{en:"Opponent analysis",de:"Gegneranalyse"},
