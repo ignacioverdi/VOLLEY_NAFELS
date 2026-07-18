@@ -29,7 +29,8 @@ window.PLANTEL_NAFELS = {
     { num: 11, ap: "BARTHOLET",   nombre: "Christian",pos: "PUNTA",   nac: "Suiza",     nacim: "11/04/2004", altura: 187 },
     { num: 17, ap: "ROFFLER",     nombre: "Pascal",   pos: "PUNTA",   nac: "Suiza",     nacim: "16/12/2004", altura: 192 },
     { num: 10, ap: "BOGDANOVSKI", nombre: "Dejan",    pos: "PUNTA",   nac: "Suiza",     nacim: "22/05/2006", altura: 196 },
-    { num: 20, ap: "SCHMID J",    nombre: "Jonas",    pos: "LIBERO",  nac: "Suiza",     nacim: "25/03/2003", altura: 178 }
+    { num: 20, ap: "SCHMID J",    nombre: "Jonas",    pos: "LIBERO",  nac: "Suiza",     nacim: "25/03/2003", altura: 178 },
+    { num: 2,  ap: "BRUDERER",    nombre: "Gian",     pos: "LIBERO",  nac: "Suiza",     nacim: "17/10/2008", altura: null }
   ],
   staff: [
     { rol: "HC", ap: "VERDI",    nombre: "Ignacio",   nac: "Argentina / Italia", nacim: "09/01/1990" },
