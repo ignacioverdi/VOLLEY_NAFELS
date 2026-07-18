@@ -88,14 +88,15 @@
   var ORDER=['r','a','v'];
   var CORR=window.CORRECCIONES||{};
   function roster(){
-    var r=(typeof PLANTEL_NAFELS!=='undefined'&&PLANTEL_NAFELS)||(typeof CASLA_JUGADORES!=='undefined'&&CASLA_JUGADORES)||window.PLANTEL_NAFELS||window.CASLA_JUGADORES||[];
+    var raw=(typeof PLANTEL_NAFELS!=='undefined'&&PLANTEL_NAFELS)||window.PLANTEL_NAFELS||(typeof CASLA_JUGADORES!=='undefined'&&CASLA_JUGADORES)||window.CASLA_JUGADORES||null;
+    var r=Array.isArray(raw)?raw:((raw&&(raw.jugadores||raw.lista))||[]);
     return (r||[]).map(function(p){
       var num=p.num!=null?String(p.num):String(((String(p.nombre||'').match(/^\d+/))||[''])[0]);
       var nom = p.ap ? (p.ap+' '+(p.nombre||'')).trim() : (p.nombre||'').replace(/^\d+\s*/,'').trim();
       nom=nom||('#'+num); return {num:num,nombre:nom};
     }).filter(function(p){return p.num;});
   }
-  var ED=(typeof VB_esEditor==='function')?!!VB_esEditor():false;
+  var ED=false; try{ ED=((localStorage.getItem('vb_role')||'').toLowerCase()==='coach'); }catch(e){}
   var QP=new URLSearchParams(location.search);
   var NUM=(QP.get('num')||'').trim();
   var NOM=QP.get('n')||'';

@@ -34,7 +34,15 @@ window.CORRECCIONES = {
     {t:"Saque corto para sacar al armador de la red y romper el K1 rival.", c:"Táctica"},
     {t:"Variar ritmo, altura y zona para no volverse predecible.", c:"Táctica"},
     {t:"Rutina previa fija (respiración + botar la pelota) para estabilizar bajo presión.", c:"Mental"},
-    {t:"Bajo presión: priorizar consistencia y zona antes que potencia máxima.", c:"Mental"}
+    {t:"Bajo presión: priorizar consistencia y zona antes que potencia máxima.", c:"Mental"},
+    /* ---- ERRORES COMUNES · QUÉ NO HACER ---- */
+    {t:"Lanzamiento inconsistente: distinta altura/posición cada vez.", c:"Errores comunes"},
+    {t:"Acompañar el golpe en el flotado → la pelota rota y no flota.", c:"Errores comunes"},
+    {t:"Contactar la pelota descentrada → sale con efecto y previsible.", c:"Errores comunes"},
+    {t:"Frenar la carrera antes de saltar (en salto) → pierde potencia.", c:"Errores comunes"},
+    {t:"No lanzar la pelota atrás ni encima de la cabeza.", c:"Qué NO hacer"},
+    {t:"No sacar siempre a la misma zona o al mismo receptor.", c:"Qué NO hacer"},
+    {t:"No arriesgar potencia máxima en los momentos de presión.", c:"Qué NO hacer"}
   ],
 
   "recepcion": [
@@ -62,7 +70,15 @@ window.CORRECCIONES = {
     {t:"Reconocer flotado vs. potencia por el approach del sacador y ajustar la base.", c:"Lectura"},
     {t:"Llamar la pelota temprano y fuerte; dividir el campo con el compañero.", c:"Táctica"},
     {t:"Definir zonas de responsabilidad según la rotación (quién toma el centro).", c:"Táctica"},
-    {t:"Contra un buen sacador, achicar el objetivo: pase seguro y alto al centro.", c:"Mental"}
+    {t:"Contra un buen sacador, achicar el objetivo: pase seguro y alto al centro.", c:"Mental"},
+    /* ---- ERRORES COMUNES · QUÉ NO HACER ---- */
+    {t:"Formar la plataforma tarde, con la pelota ya encima.", c:"Errores comunes"},
+    {t:"Recibir con los brazos en vez de meter el cuerpo detrás.", c:"Errores comunes"},
+    {t:"Plataforma muy alta (contacto sobre la cintura) → descontrol.", c:"Errores comunes"},
+    {t:"Quedarse plantado sin el primer paso de ajuste.", c:"Errores comunes"},
+    {t:"No recibir con los brazos estirados al costado.", c:"Qué NO hacer"},
+    {t:"No juntar las manos recién en el momento del contacto.", c:"Qué NO hacer"},
+    {t:"No retroceder para recibir: siempre listo para avanzar.", c:"Qué NO hacer"}
   ],
 
   "armado": [
@@ -92,7 +108,15 @@ window.CORRECCIONES = {
     {t:"Reconocer la calidad de recepción y decidir el tempo en consecuencia.", c:"Lectura"},
     {t:"Recepción perfecta: activar el rápido o la segunda intención al central.", c:"Táctica"},
     {t:"Distribuir para romper el bloqueo: alternar tempos y zonas.", c:"Táctica"},
-    {t:"Bajo presión: asegurar un balón atacable antes de arriesgar el rápido.", c:"Mental"}
+    {t:"Bajo presión: asegurar un balón atacable antes de arriesgar el rápido.", c:"Mental"},
+    /* ---- ERRORES COMUNES · QUÉ NO HACER ---- */
+    {t:"Armar solo de brazos, sin llevar los pies al balón.", c:"Errores comunes"},
+    {t:"Contactar delante de la cara en vez de sobre la frente.", c:"Errores comunes"},
+    {t:"Empujar más con una mano → el pase se va de dirección.", c:"Errores comunes"},
+    {t:"Delatar la dirección del pase con los hombros.", c:"Errores comunes"},
+    {t:"No contactar con las palmas (retención).", c:"Qué NO hacer"},
+    {t:"No forzar el rápido con recepción mala.", c:"Qué NO hacer"},
+    {t:"No armar desequilibrado si se puede llegar en balance.", c:"Qué NO hacer"}
   ],
 
   "ataque": [
@@ -122,7 +146,16 @@ window.CORRECCIONES = {
     {t:"Ajustar el approach a la calidad del pase (pase separado: esperar y potencia).", c:"Lectura"},
     {t:"Usar el bloqueo (mano afuera) cuando está bien armado.", c:"Táctica"},
     {t:"Cambio de ritmo: rodada o finta cuando el bloqueo salta bien.", c:"Táctica"},
-    {t:"Repetir el approach siempre igual para no delatar el tiempo.", c:"Mental"}
+    {t:"Repetir el approach siempre igual para no delatar el tiempo.", c:"Mental"},
+    /* ---- ERRORES COMUNES · QUÉ NO HACER ---- */
+    {t:"Esperar la pelota en vez de ir hacia ella.", c:"Errores comunes"},
+    {t:"Brazo bajo / codo caído en el armado.", c:"Errores comunes"},
+    {t:"Llegar frenado al salto (sin paso de freno).", c:"Errores comunes"},
+    {t:"Contactar la pelota atrás de la cabeza.", c:"Errores comunes"},
+    {t:"Saltar hacia adelante e invadir la red.", c:"Errores comunes"},
+    {t:"No pegarle siempre a la misma zona.", c:"Qué NO hacer"},
+    {t:"No golpear de frente al bloqueo bien armado (mano fuera o finta).", c:"Qué NO hacer"},
+    {t:"No forzar potencia con un pase separado de la red.", c:"Qué NO hacer"}
   ],
 
   "bloqueo": [
@@ -147,7 +180,15 @@ window.CORRECCIONES = {
     {t:"Leer la zona y las manos del armador antes que la pelota.", c:"Lectura"},
     {t:"No saltar al primer engaño: leer el brazo del atacante.", c:"Lectura"},
     {t:"Tomar diagonal o línea según el sistema defensivo acordado.", c:"Táctica"},
-    {t:"Tapar la mano/zona fuerte del atacante según el scouting.", c:"Táctica"}
+    {t:"Tapar la mano/zona fuerte del atacante según el scouting.", c:"Táctica"},
+    /* ---- ERRORES COMUNES · QUÉ NO HACER ---- */
+    {t:"Saltar antes que el atacante (mal timing).", c:"Errores comunes"},
+    {t:"Bloquear vertical sin penetrar las manos.", c:"Errores comunes"},
+    {t:"Dejar hueco entre los dos bloqueadores.", c:"Errores comunes"},
+    {t:"Bajar los brazos hacia atrás al caer.", c:"Errores comunes"},
+    {t:"No saltar al primer amague del atacante.", c:"Qué NO hacer"},
+    {t:"No bloquear con los dedos flojos o juntos.", c:"Qué NO hacer"},
+    {t:"No abrir el bloqueo dejando hueco al centro.", c:"Qué NO hacer"}
   ],
 
   "defensa": [
@@ -171,6 +212,14 @@ window.CORRECCIONES = {
     {t:"Posicionarse según lo que deja libre el bloqueo (defender el hueco).", c:"Lectura"},
     {t:"Cubrir al bloqueo en los rebotes cortos (coberturas).", c:"Táctica"},
     {t:"Convertir la defensa en contraataque: primer pase jugable al armador.", c:"Táctica"},
-    {t:"Comunicar en voz alta antes y durante la jugada (\u201ctoco\u201d, \u201cmía\u201d, \u201cfuera\u201d).", c:"Mental"}
+    {t:"Comunicar en voz alta antes y durante la jugada (\u201ctoco\u201d, \u201cmía\u201d, \u201cfuera\u201d).", c:"Mental"},
+    /* ---- ERRORES COMUNES · QUÉ NO HACER ---- */
+    {t:"Caer al piso antes de leer el golpe.", c:"Errores comunes"},
+    {t:"Base alta o peso en los talones.", c:"Errores comunes"},
+    {t:"Defender al costado del cuerpo, no al frente.", c:"Errores comunes"},
+    {t:"Armar la plataforma antes de tiempo, sin leer.", c:"Errores comunes"},
+    {t:"No quedarse plantado esperando la pelota.", c:"Qué NO hacer"},
+    {t:"No empujar la pelota potente (dejar que rebote en la plataforma).", c:"Qué NO hacer"},
+    {t:"No defender sin mirar qué zona tapa el bloqueo.", c:"Qué NO hacer"}
   ]
 };
