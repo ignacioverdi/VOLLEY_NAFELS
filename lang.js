@@ -191,6 +191,23 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    // ===== descripciones de tarjetas + textos largos (completos) =====
+    "Nuestra identidad, principios y sistemas de juego. Cómo jugamos — para todo el equipo.":{en:"Our identity, principles and systems of play. How we play — for the whole team.",de:"Unsere Identität, Prinzipien und Spielsysteme. Wie wir spielen — für das ganze Team."},
+    "Hoja de 1 página para imprimir y llevar al partido: a quién sacarle, rotación más débil, derrumbe fuera de sistema y direcciones de ataque de cada rematador.":{en:"One-page sheet to print and bring to the match: who to serve, weakest rotation, out-of-system breakdown and each hitter's attack directions.",de:"Einseitiges Blatt zum Ausdrucken und Mitnehmen zum Spiel: wen anspielen, schwächste Rotation, Out-of-System-Zusammenbruch und Angriffsrichtungen jedes Angreifers."},
+    "Objetivos técnico-tácticos a mejorar por jugador, con seguimiento del progreso. Elegí tu nombre para ver el tuyo.":{en:"Technical-tactical goals to improve per player, with progress tracking. Choose your name to see yours.",de:"Technisch-taktische Ziele zur Verbesserung pro Spieler, mit Fortschrittsverfolgung. Wähle deinen Namen, um deine zu sehen."},
+    "Transmití desde el celular al scout con delay. Te da un código de sala.":{en:"Stream from your phone to the scout with delay. It gives you a room code.",de:"Übertrage vom Handy zum Scout mit Verzögerung. Du bekommst einen Raumcode."},
+    "— De todo lo que hiciste, cuánto terminó bien descontando los errores. Más alto = mejor.":{en:"— Of everything you did, how much ended well after subtracting errors. Higher = better.",de:"— Von allem, was du gemacht hast, wie viel gut endete nach Abzug der Fehler. Höher = besser."},
+    "— Qué tan dura sentiste la sesión, del 1 al 10. Mide tu carga; no entra en el % de readiness.":{en:"— How hard the session felt, from 1 to 10. It measures your load; it doesn't count toward the readiness %.",de:"— Wie hart sich die Einheit anfühlte, von 1 bis 10. Misst deine Belastung; zählt nicht zum Readiness-%."},
+    "— Tu nivel de \"estoy listo\" (sueño, piernas, ánimo…). 🟢 alto = a full · 🔴 bajo = cuidá la recuperación.":{en:"— Your \"I'm ready\" level (sleep, legs, mood…). 🟢 high = full go · 🔴 low = mind your recovery.",de:"— Dein \"Ich bin bereit\"-Level (Schlaf, Beine, Stimmung…). 🟢 hoch = voll dabei · 🔴 niedrig = achte auf die Erholung."},
+    "— Tus números separados: cómo rendís en partido oficial y cómo en la semana.":{en:"— Your numbers split out: how you perform in official matches and how during the week.",de:"— Deine Zahlen getrennt: wie du im offiziellen Spiel abschneidest und wie unter der Woche."},
+    "Los clips de partidos sin video se listan igual con su minuto. Pegá el link en":{en:"Clips from matches without video are still listed with their minute. Paste the link in",de:"Clips von Spielen ohne Video werden trotzdem mit ihrer Minute aufgelistet. Füge den Link ein in"},
+    "Mostrá solo las jugadas que tengan TODO esto (elegí fundamento y su valoración; dejá la valoración vacía para «cualquiera»):":{en:"Show only the plays that have ALL of this (pick a skill and its rating; leave the rating empty for «any»):",de:"Zeige nur die Spielzüge, die ALL dies haben (Element und Bewertung wählen; Bewertung leer lassen für «beliebig»):"},
+    "(entre paréntesis: total de acciones del fundamento elegido)":{en:"(in parentheses: total actions of the chosen skill)",de:"(in Klammern: Gesamtaktionen des gewählten Elements)"},
+    "Mín. acciones":{en:"Min. actions",de:"Min. Aktionen"},
+    "NLA Suiza — Estadísticas":{en:"Swiss NLA — statistics",de:"NLA Schweiz — Statistiken"},
+    "Ranking jugadores NLA — elegí un fundamento":{en:"NLA player ranking — pick a skill",de:"NLA-Spielerrangliste — Element wählen"},
+    "resaltado · filtrá por posición para comparar like-with-like.":{en:"highlighted · filter by position to compare like-with-like.",de:"hervorgehoben · nach Position filtern, um Gleiches mit Gleichem zu vergleichen."},
+
     // ===== FIX traducciones parciales (perfil, plan de partido, calendario) =====
     "Gimnasio (Lun/Mi\u00e9/Vie \u00b7 sep\u2013abr)":{en:"Gym (Mon/Wed/Fri \u00b7 Sep\u2013Apr)",de:"Fitness (Mo/Mi/Fr \u00b7 Sep\u2013Apr)"},
     "Carg\u00e1 el partido punto por punto con el c\u00f3digo de DataVolley.":{en:"Load the match point by point with the DataVolley code.",de:"Lade das Spiel Punkt f\u00fcr Punkt mit dem DataVolley-Code."},
