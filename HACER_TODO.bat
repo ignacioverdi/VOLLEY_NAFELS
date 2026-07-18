@@ -70,17 +70,6 @@ echo  [3/4] Videos destacados (si hay Excel)...
 if exist "videos_nafels.xlsx" python build_videos.py videos_nafels.xlsx
 echo.
 
-REM ---- RECORDATORIO DE VIDEOS *ANTES* DE HORNEAR (este es el orden correcto) ----
-echo  --------------------------------------------------------
-echo   VIDEOS DE PARTIDOS
-echo   Si subiste videos NUEVOS a YouTube, HACELO AHORA (antes de seguir):
-echo     1) Abri "Cargar Videos", pega los links y genera mapa_videos.js
-echo     2) Copia ese mapa_videos.js a ESTA carpeta (reemplaza el viejo)
-echo.
-echo   Si NO subiste videos nuevos, no toques nada.
-echo  --------------------------------------------------------
-echo   Cuando este listo, apreta una tecla para generar los cortes...
-pause >nul
 echo.
 echo  [4/4] Cortes de video de partidos...
 python build_video.py "!DVW_DIR!" datos_video.js VIDEO_DATA

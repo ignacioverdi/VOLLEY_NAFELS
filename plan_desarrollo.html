@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Plan de Desarrollo Individual</title>
+<style>
+  :root{--bg:#07080f;--card:#0d0e1a;--card2:#12131f;--border:rgba(255,255,255,.07);--txt:#e2e8f0;--mut:#64748b;--r:#ef4444;--a:#f59e0b;--v:#22c55e;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding-bottom:60px}
+  .wrap{max-width:820px;margin:0 auto;padding:16px}
+  a{color:inherit;text-decoration:none}
+  .top{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  .back{font-size:22px;color:var(--mut);padding:4px 8px}
+  h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.3px}
+  .sub{color:var(--mut);font-size:12px;margin:2px 0 16px 42px}
+  .selrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+  select,input[type=text]{background:#fff;color:#111;border:1px solid var(--border);border-radius:9px;padding:9px 11px;font-family:inherit;font-size:13px;font-weight:600}
+  .prog{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:18px}
+  .prog-bar{height:9px;border-radius:6px;background:#1e2130;overflow:hidden;display:flex;margin-top:8px}
+  .prog-bar span{display:block;height:100%}
+  .prog-lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--mut)}
+  .skill{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:14px;overflow:hidden}
+  .skill-head{padding:13px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);font-weight:800;font-size:15px}
+  .skill-ic{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+  .skill-count{margin-left:auto;font-size:11px;color:var(--mut);font-weight:600}
+  .items{padding:6px 12px 12px}
+  .item{display:flex;gap:10px;align-items:flex-start;padding:11px 4px;border-bottom:1px solid var(--border)}
+  .item:last-child{border-bottom:none}
+  .state{flex-shrink:0;width:26px;height:26px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:default;background:transparent}
+  .state.ed{cursor:pointer}
+  .item-body{flex:1;min-width:0}
+  .item-txt{font-size:13.5px;line-height:1.4}
+  .item-meta{display:flex;gap:8px;align-items:center;margin-top:5px;flex-wrap:wrap}
+  .cat{font-size:9px;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border-radius:20px;font-weight:700;background:rgba(255,255,255,.05);color:var(--mut)}
+  .hist{display:flex;gap:3px;align-items:center}
+  .hdot{width:7px;height:7px;border-radius:50%}
+  .hist-lbl{font-size:9px;color:var(--mut)}
+  .del{color:var(--mut);font-size:15px;padding:2px 6px;cursor:pointer;flex-shrink:0}
+  .add{padding:10px 12px 4px;display:flex;flex-direction:column;gap:8px}
+  .add-row{display:flex;gap:8px;flex-wrap:wrap}
+  .add-row select,.add-row input{flex:1;min-width:120px}
+  .btn{background:#1e2130;border:1px solid var(--border);color:var(--txt);border-radius:9px;padding:9px 13px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer}
+  .btn.p{background:#22c55e;color:#04120a;border-color:#22c55e}
+  .empty{color:var(--mut);font-size:12.5px;padding:10px 4px;font-style:italic}
+  .roview{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:20px;padding:4px 11px;font-size:10px;color:var(--mut);display:inline-flex;gap:5px;align-items:center}
+  .legend{display:flex;gap:14px;font-size:11px;color:var(--mut);margin:0 0 16px 2px;flex-wrap:wrap}
+  .legend span{display:inline-flex;gap:5px;align-items:center}
+  .ldot{width:11px;height:11px;border-radius:50%;border:2px solid}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><a href="index.html" class="back">‹</a><h1>Plan de Desarrollo Individual</h1></div>
+  <div class="sub" id="subt">Objetivos técnico-tácticos y progreso</div>
+
+  <div class="selrow">
+    <select id="jugSel" onchange="if(this.value)location.href='plan_desarrollo.html?num='+this.value"></select>
+    <span id="roChip"></span>
+  </div>
+
+  <div class="legend">
+    <span><i class="ldot" style="border-color:var(--r)"></i> A trabajar</span>
+    <span><i class="ldot" style="border-color:var(--a)"></i> En progreso</span>
+    <span><i class="ldot" style="border-color:var(--v)"></i> Consolidado</span>
+  </div>
+
+  <div id="prog"></div>
+  <div id="skills"></div>
+</div>
+
+<script src="firebase.js" onerror="void 0"></script>
+<script src="lang.js" onerror="void 0"></script>
+<script src="correcciones_tecnicas.js" onerror="void 0"></script>
+<script src="plantel_nafels.js" onerror="void 0"></script>
+<script src="datos_casla.js" onerror="void 0"></script>
+<script>
+(function(){
+  var SKILLS=[
+    {k:'saque',label:'Saque',ic:'🎯',col:'#f97316'},
+    {k:'recepcion',label:'Recepción',ic:'🛡',col:'#818cf8'},
+    {k:'armado',label:'Armado',ic:'🎽',col:'#22c55e'},
+    {k:'ataque',label:'Ataque',ic:'💥',col:'#ef4444'},
+    {k:'bloqueo',label:'Bloqueo',ic:'🧱',col:'#2dd4bf'},
+    {k:'defensa',label:'Defensa',ic:'🤲',col:'#f59e0b'}
+  ];
+  var ST={r:{lbl:'A trabajar',col:'#ef4444'},a:{lbl:'En progreso',col:'#f59e0b'},v:{lbl:'Consolidado',col:'#22c55e'}};
+  var ORDER=['r','a','v'];
+  var CORR=window.CORRECCIONES||{};
+  function roster(){
+    var r=(typeof PLANTEL_NAFELS!=='undefined'&&PLANTEL_NAFELS)||(typeof CASLA_JUGADORES!=='undefined'&&CASLA_JUGADORES)||window.PLANTEL_NAFELS||window.CASLA_JUGADORES||[];
+    return (r||[]).map(function(p){
+      var num=p.num!=null?String(p.num):String(((String(p.nombre||'').match(/^\d+/))||[''])[0]);
+      var nom = p.ap ? (p.ap+' '+(p.nombre||'')).trim() : (p.nombre||'').replace(/^\d+\s*/,'').trim();
+      nom=nom||('#'+num); return {num:num,nombre:nom};
+    }).filter(function(p){return p.num;});
+  }
+  var ED=(typeof VB_esEditor==='function')?!!VB_esEditor():false;
+  var QP=new URLSearchParams(location.search);
+  var NUM=(QP.get('num')||'').trim();
+  var NOM=QP.get('n')||'';
+  var PATH='plan_desarrollo/'+NUM;
+  var DATA={items:[]};
+
+  function today(){ var d=new Date(); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+  function esc(s){ return (s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function uid(){ return 'i'+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+  function save(){ if(typeof fbSet==='function') fbSet(PATH, DATA); }
+
+  function buildSel(){
+    var sel=document.getElementById('jugSel'); var R=roster();
+    var opts='<option value="">— Elegí tu jugador —</option>';
+    R.sort(function(a,b){return (+a.num)-(+b.num);}).forEach(function(p){
+      opts+='<option value="'+p.num+'"'+(p.num===NUM?' selected':'')+'>#'+p.num+'  '+esc(p.nombre)+'</option>';
+    });
+    sel.innerHTML=opts;
+    if(NUM && !NOM){ var f=R.filter(function(p){return p.num===NUM;})[0]; if(f) NOM=f.nombre; }
+  }
+
+  function progress(){
+    var all=DATA.items, n=all.length;
+    var v=all.filter(function(i){return i.estado==='v';}).length;
+    var a=all.filter(function(i){return i.estado==='a';}).length;
+    var r=n-v-a;
+    var pct=n?Math.round(v/n*100):0;
+    var last='';
+    all.forEach(function(i){(i.hist||[]).forEach(function(h){ if(h.f>last)last=h.f; });});
+    document.getElementById('prog').innerHTML = n? (
+      '<div class="prog"><div class="prog-lbl"><b style="color:var(--txt)">Progreso general</b><span>'+v+'/'+n+' consolidados · '+pct+'%</span></div>'+
+      '<div class="prog-bar"><span style="width:'+(v/n*100)+'%;background:var(--v)"></span><span style="width:'+(a/n*100)+'%;background:var(--a)"></span><span style="width:'+(r/n*100)+'%;background:var(--r)"></span></div>'+
+      (last?'<div style="margin-top:8px"><span class="roview">🕑 última actualización: '+last+'</span></div>':'')+'</div>'
+    ) : '';
+  }
+
+  function histDots(i){
+    var h=(i.hist||[]).slice(-8);
+    if(!h.length) return '';
+    return '<span class="hist"><span class="hist-lbl">progreso:</span>'+h.map(function(x){return '<i class="hdot" style="background:'+(ST[x.e]||ST.r).col+'" title="'+x.f+'"></i>';}).join('')+'</span>';
+  }
+
+  function render(){
+    document.getElementById('subt').textContent = NUM ? ('Jugador · '+(NOM||('#'+NUM))+(ED?'  ·  modo editor':'')) : 'Elegí un jugador para ver o cargar su plan';
+    progress();
+    var host=document.getElementById('skills');
+    if(!NUM){ host.innerHTML=''; return; }
+    host.innerHTML = SKILLS.map(function(s){
+      var items=DATA.items.filter(function(i){return i.skill===s.k;});
+      var body = items.length ? items.map(function(i){
+        var st=ST[i.estado]||ST.r;
+        return '<div class="item">'+
+          '<div class="state'+(ED?' ed':'')+'" style="border-color:'+st.col+';color:'+st.col+'"'+(ED?' onclick="PD.cycle(\''+i.id+'\')"':'')+' title="'+st.lbl+'">'+(i.estado==='v'?'✓':'')+'</div>'+
+          '<div class="item-body"><div class="item-txt">'+esc(i.texto)+'</div>'+
+            '<div class="item-meta">'+(i.cat?'<span class="cat">'+esc(i.cat)+'</span>':'')+'<span style="font-size:10px;color:'+st.col+';font-weight:700">'+st.lbl+'</span>'+histDots(i)+'</div>'+
+          '</div>'+
+          (ED?'<span class="del" onclick="PD.del(\''+i.id+'\')" title="Quitar">✕</span>':'')+
+        '</div>';
+      }).join('') : '<div class="empty">Sin objetivos cargados todavía.</div>';
+
+      var addBox='';
+      if(ED){
+        var lib=(CORR[s.k]||[]);
+        var opts='<option value="">+ Agregar de la biblioteca…</option>'+lib.map(function(c,ix){return '<option value="'+ix+'">['+c.c+'] '+esc(c.t).slice(0,70)+'</option>';}).join('');
+        addBox='<div class="add">'+
+          '<div class="add-row"><select onchange="PD.fromLib(\''+s.k+'\',this)">'+opts+'</select></div>'+
+          '<div class="add-row"><input type="text" id="cust-'+s.k+'" placeholder="…o escribí un objetivo a mano"><button class="btn p" onclick="PD.custom(\''+s.k+'\')">Agregar</button></div>'+
+        '</div>';
+      }
+      return '<div class="skill"><div class="skill-head"><div class="skill-ic" style="background:'+s.col+'22;color:'+s.col+'">'+s.ic+'</div>'+s.label+'<span class="skill-count">'+items.length+' objetivo'+(items.length===1?'':'s')+'</span></div>'+
+        '<div class="items">'+body+'</div>'+addBox+'</div>';
+    }).join('');
+  }
+
+  window.PD={
+    fromLib:function(skill,selEl){ var ix=selEl.value; if(ix==='')return; var c=(CORR[skill]||[])[+ix]; if(!c)return;
+      selEl.value=''; if(DATA.items.some(function(i){return i.skill===skill&&i.texto===c.t;})){ alert('Ese objetivo ya está cargado.'); return; }
+      DATA.items.push({id:uid(),skill:skill,texto:c.t,cat:c.c,estado:'r',hist:[{f:today(),e:'r'}]}); save(); render(); },
+    custom:function(skill){ var inp=document.getElementById('cust-'+skill); var t=(inp.value||'').trim(); if(!t)return;
+      inp.value=''; DATA.items.push({id:uid(),skill:skill,texto:t,cat:'',estado:'r',hist:[{f:today(),e:'r'}]}); save(); render(); },
+    cycle:function(id){ var i=DATA.items.filter(function(x){return x.id===id;})[0]; if(!i)return;
+      var ni=(ORDER.indexOf(i.estado)+1)%3; i.estado=ORDER[ni]; (i.hist=i.hist||[]).push({f:today(),e:i.estado}); save(); render(); },
+    del:function(id){ if(!confirm('¿Quitar este objetivo?'))return; DATA.items=DATA.items.filter(function(x){return x.id!==id;}); save(); render(); }
+  };
+
+  buildSel();
+  var chip=document.getElementById('roChip');
+  if(chip) chip.innerHTML = ED ? '<span class="roview" style="color:#22c55e">✎ modo editor</span>' : '<span class="roview">👁 solo lectura</span>';
+
+  if(NUM && typeof fbGet==='function'){
+    fbGet(PATH, function(d){ if(d && d.items) DATA=d; else if(Array.isArray(d)) DATA={items:d}; render(); });
+    setTimeout(render,50);
+  } else { render(); }
+  if(typeof VB_aplicarPermisos==='function'){ try{ VB_aplicarPermisos(document); }catch(e){} }
+})();
+</script>
+</body>
+</html>
