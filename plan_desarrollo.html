@@ -47,6 +47,16 @@
   .legend{display:flex;gap:14px;font-size:11px;color:var(--mut);margin:0 0 16px 2px;flex-wrap:wrap}
   .legend span{display:inline-flex;gap:5px;align-items:center}
   .ldot{width:11px;height:11px;border-radius:50%;border:2px solid}
+  .lib-toggle{width:100%;text-align:left;background:#1a1d2b}
+  .lib-panel{max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:10px;margin-top:8px;background:var(--card2)}
+  .lib-row{display:flex;gap:9px;align-items:flex-start;padding:10px 11px;border-bottom:1px solid var(--border);cursor:pointer;font-size:12.5px;line-height:1.4}
+  .lib-row:last-child{border-bottom:none}
+  .lib-row:active,.lib-row:hover{background:rgba(255,255,255,.05)}
+  .lib-row .lib-txt{flex:1;min-width:0}
+  .lib-row .lib-add{color:#22c55e;font-weight:800;font-size:16px;flex-shrink:0;line-height:1}
+  .lib-row.dup{opacity:.42;cursor:default}
+  .lib-row.dup .lib-add{color:var(--mut)}
+  .lib-row .cat{flex-shrink:0;align-self:flex-start;margin-top:1px}
 </style>
 </head>
 <body>
@@ -102,6 +112,7 @@
   var NOM=QP.get('n')||'';
   var PATH='plan_desarrollo/'+NUM;
   var DATA={items:[]};
+  var OPEN={};
 
   function today(){ var d=new Date(); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
   function esc(s){ return (s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
@@ -160,9 +171,16 @@
       var addBox='';
       if(ED){
         var lib=(CORR[s.k]||[]);
-        var opts='<option value="">+ Agregar de la biblioteca…</option>'+lib.map(function(c,ix){return '<option value="'+ix+'">['+c.c+'] '+esc(c.t).slice(0,70)+'</option>';}).join('');
+        var already={}; items.forEach(function(i){already[i.texto]=1;});
+        var rows=lib.map(function(c,ix){
+          var dup=already[c.t];
+          return '<div class="lib-row'+(dup?' dup':'')+'"'+(dup?'':' onclick="PD.addLib(\''+s.k+'\','+ix+')"')+'>'+
+            '<span class="cat">'+esc(c.c)+'</span><span class="lib-txt">'+esc(c.t)+'</span>'+
+            '<span class="lib-add">'+(dup?'✓':'+')+'</span></div>';
+        }).join('');
         addBox='<div class="add">'+
-          '<div class="add-row"><select onchange="PD.fromLib(\''+s.k+'\',this)">'+opts+'</select></div>'+
+          '<button class="btn lib-toggle" onclick="PD.toggleLib(\''+s.k+'\')">📚 '+(OPEN[s.k]?'Ocultar':'Elegir de la')+' biblioteca ('+lib.length+')</button>'+
+          '<div class="lib-panel" id="lib-'+s.k+'" style="display:'+(OPEN[s.k]?'block':'none')+'">'+rows+'</div>'+
           '<div class="add-row"><input type="text" id="cust-'+s.k+'" placeholder="…o escribí un objetivo a mano"><button class="btn p" onclick="PD.custom(\''+s.k+'\')">Agregar</button></div>'+
         '</div>';
       }
@@ -172,9 +190,10 @@
   }
 
   window.PD={
-    fromLib:function(skill,selEl){ var ix=selEl.value; if(ix==='')return; var c=(CORR[skill]||[])[+ix]; if(!c)return;
-      selEl.value=''; if(DATA.items.some(function(i){return i.skill===skill&&i.texto===c.t;})){ alert('Ese objetivo ya está cargado.'); return; }
-      DATA.items.push({id:uid(),skill:skill,texto:c.t,cat:c.c,estado:'r',hist:[{f:today(),e:'r'}]}); save(); render(); },
+    toggleLib:function(skill){ OPEN[skill]=!OPEN[skill]; render(); },
+    addLib:function(skill,ix){ var c=(CORR[skill]||[])[ix]; if(!c)return;
+      if(DATA.items.some(function(i){return i.skill===skill&&i.texto===c.t;})) return;
+      DATA.items.push({id:uid(),skill:skill,texto:c.t,cat:c.c,estado:'r',hist:[{f:today(),e:'r'}]}); OPEN[skill]=true; save(); render(); },
     custom:function(skill){ var inp=document.getElementById('cust-'+skill); var t=(inp.value||'').trim(); if(!t)return;
       inp.value=''; DATA.items.push({id:uid(),skill:skill,texto:t,cat:'',estado:'r',hist:[{f:today(),e:'r'}]}); save(); render(); },
     cycle:function(id){ var i=DATA.items.filter(function(x){return x.id===id;})[0]; if(!i)return;
