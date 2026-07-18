@@ -191,6 +191,28 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    // ===== FIX traducciones parciales (perfil, plan de partido, calendario) =====
+    "Gimnasio (Lun/Mi\u00e9/Vie \u00b7 sep\u2013abr)":{en:"Gym (Mon/Wed/Fri \u00b7 Sep\u2013Apr)",de:"Fitness (Mo/Mi/Fr \u00b7 Sep\u2013Apr)"},
+    "Carg\u00e1 el partido punto por punto con el c\u00f3digo de DataVolley.":{en:"Load the match point by point with the DataVolley code.",de:"Lade das Spiel Punkt f\u00fcr Punkt mit dem DataVolley-Code."},
+    "\u2014 Cu\u00e1ntas veces hiciste esa acci\u00f3n (saques, recepciones, ataques).":{en:"\u2014 How many times you did that action (serves, receptions, attacks).",de:"\u2014 Wie oft du diese Aktion gemacht hast (Aufschl\u00e4ge, Annahmen, Angriffe)."},
+    "\u2014 Cu\u00e1ntos de tus ataques terminaron en punto directo.":{en:"\u2014 How many of your attacks ended in a direct point.",de:"\u2014 Wie viele deiner Angriffe direkt zum Punkt f\u00fchrten."},
+    "ataque \u00b7 espejo invertido pos. 2 \u00b7 l\u00ednea = z5/z7/z4":{en:"attack \u00b7 inverted mirror pos. 2 \u00b7 line = z5/z7/z4",de:"Angriff \u00b7 gespiegelt invertiert Pos. 2 \u00b7 Linie = z5/z7/z4"},
+    "ataque \u00b7 espejo pos. 4 \u00b7 l\u00ednea = z1/z9/z2":{en:"attack \u00b7 mirror pos. 4 \u00b7 line = z1/z9/z2",de:"Angriff \u00b7 gespiegelt Pos. 4 \u00b7 Linie = z1/z9/z2"},
+    "c\u00f3mo recibe seg\u00fan el saque rival \u00b7 naranja \u00b7 zona donde recibe":{en:"how they pass vs the opponent's serve \u00b7 orange \u00b7 zone where they pass",de:"wie er annimmt je nach gegnerischem Aufschlag \u00b7 orange \u00b7 Zone der Annahme"},
+    "d\u00f3nde bloquea seg\u00fan la zona de origen del ataque rival \u00b7 celeste":{en:"where they block vs the opponent's attack origin zone \u00b7 light blue",de:"wo er blockt je nach Ursprungszone des gegnerischen Angriffs \u00b7 hellblau"},
+    "d\u00f3nde y c\u00f3mo defiende \u00b7 verde \u00b7 zona donde levanta la pelota":{en:"where & how they defend \u00b7 green \u00b7 zone where they dig the ball",de:"wo & wie er verteidigt \u00b7 gr\u00fcn \u00b7 Zone der Abwehr"},
+    "el n\u00famero = golpes/saques, no puntos":{en:"the number = swings/serves, not points",de:"die Zahl = Schl\u00e4ge/Aufschl\u00e4ge, nicht Punkte"},
+
+    // ===== TÍTULOS Y SUBTÍTULOS DE SECCIÓN (index) =====
+    "El pr\u00f3ximo rival":{en:"The next opponent",de:"Der n\u00e4chste Gegner"},
+    "Todo para llegar preparado al partido":{en:"Everything to arrive ready for the match",de:"Alles, um bereit ins Spiel zu gehen"},
+    "Mi rendimiento":{en:"My performance",de:"Meine Leistung"},
+    "Tus n\u00fameros y los del equipo":{en:"Your numbers and the team's",de:"Deine Zahlen und die des Teams"},
+    "F\u00edsico y bienestar":{en:"Fitness & wellbeing",de:"Physis & Wohlbefinden"},
+    "Tu cuerpo, d\u00eda a d\u00eda":{en:"Your body, day by day",de:"Dein K\u00f6rper, Tag f\u00fcr Tag"},
+    "Herramientas del entrenador":{en:"Coach's tools",de:"Trainer-Werkzeuge"},
+    "Solo lo ve el cuerpo t\u00e9cnico":{en:"Only the coaching staff sees it",de:"Nur das Trainerteam sieht es"},
+
     "Ranking equipos NLA \u2014 eleg\u00ed un fundamento para ordenar":{en:"NLA team ranking \u2014 pick a skill to sort",de:"NLA-Teamrangliste \u2014 Element zum Sortieren w\u00e4hlen"},
     "d\u00f3nde y c\u00f3mo saca \u00b7 azul \u00b7 fuerza = fuerte/medio/f\u00e1cil":{en:"where & how they serve \u00b7 blue \u00b7 power = hard/medium/easy",de:"wo & wie er aufschl\u00e4gt \u00b7 blau \u00b7 Kraft = hart/mittel/leicht"},
     "re-ver":{en:"replay",de:"nochmal"},
