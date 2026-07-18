@@ -69,13 +69,17 @@ def autodetect_video():
         if load_video(c): return c
     return None
 
-def pp_team_keys():
+def pp_team_info():
+    # {team: set(mids)} desde plan_partido_data.js (ya viene filtrado por temporada).
+    # None si no existe el archivo -> no se filtra (se incluye todo).
     if not os.path.isfile('plan_partido_data.js'): return None
     txt=open('plan_partido_data.js',encoding='utf-8',errors='replace').read()
     m=re.search(r'PP_DATA\s*=\s*(\{)', txt)
     if not m: return None
     obj=_balance(txt, m.start(1))
-    try: return set(json.loads(obj).keys())
+    try:
+        d=json.loads(obj)
+        return {k:set((d[k].get('info') or {}).keys()) for k in d}
     except Exception: return None
 
 def map_team(tm, keys):
@@ -90,7 +94,9 @@ def build(video_path, out='datos_bloqueo.js'):
     VD=load_video(video_path)
     if not VD:
         print('[bloqueo] ERROR: no pude leer VIDEO_DATA de', video_path); sys.exit(1)
-    keys=pp_team_keys()
+    info_map=pp_team_info()
+    keys=set(info_map.keys()) if info_map else None
+    fuera_temp=0
     matches=VD['matches']
     BLOCK={}; sinmap={}; so=tr=amb=0
 
@@ -132,6 +138,9 @@ def build(video_path, out='datos_bloqueo.js'):
             elif gD<=12 and (gR>12 or gD<gR): ph='o'; tr+=1
             else: ph=''; amb+=1
             key=map_team(a.get('tm'), keys)
+            if info_map is not None:
+                _al=info_map.get(key)
+                if _al is None or mid not in _al: fuera_temp+=1; continue  # fuera de la temporada actual / equipo no seguido
             num=str(a.get('num') or '').lstrip('0') or str(a.get('num'))
             BLOCK.setdefault(key,{}).setdefault(num,{'name':a.get('name'),'data':[]})['data'].append(
                 [atk.get('x'), rz, a.get('ev'), t, mid, ph])
@@ -143,7 +152,7 @@ def build(video_path, out='datos_bloqueo.js'):
         OUT[team]=pl
     open(out,'w',encoding='utf-8').write('window.PP_BLOCK='+json.dumps(OUT,ensure_ascii=False,separators=(',',':'))+';')
     print('[bloqueo] video: %s -> %s (%d equipos)' % (os.path.basename(video_path), out, len(OUT)))
-    print('[bloqueo] fase SO=%d TR=%d amb=%d | combos sin mapear: %s' % (so,tr,amb, sinmap or 'ninguno'))
+    print('[bloqueo] fase SO=%d TR=%d amb=%d | fuera de temporada: %d | combos sin mapear: %s' % (so,tr,amb, fuera_temp, sinmap or 'ninguno'))
 
 if __name__=='__main__':
     vp = sys.argv[1] if len(sys.argv)>1 else autodetect_video()
