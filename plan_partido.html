@@ -119,8 +119,6 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 .vplayer{position:relative;width:100%;aspect-ratio:16/9;background:#000}
 .vplayer iframe,.vplayer>div{position:absolute;inset:0;width:100%;height:100%}
 .vshield{position:absolute;inset:0;width:100%;height:100%;z-index:5;cursor:pointer;background:transparent}
-.vcover{position:absolute;inset:0;z-index:6;background:#000;opacity:0;pointer-events:none;transition:opacity .12s ease}
-.vcover.on{opacity:1}
 .vctrls{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:11px 14px;color:var(--mut);font-size:12.5px}
 .vctrls button{background:var(--red);color:#fff;border:none;border-radius:7px;padding:7px 11px;font-family:'Barlow Condensed';font-weight:600;font-size:13px;cursor:pointer}
 .vctrls button.sec{background:var(--card2);color:var(--txt);border:1px solid var(--border)}
@@ -239,7 +237,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
     <div class="vfilters" id="vfilters"></div>
     <div class="vbody">
       <div class="vmain">
-        <div class="vplayer"><div id="ytplayer"></div><div class="vshield" id="vshield" onclick="togglePlay()" title="Click o barra espaciadora: play/pausa"></div><div class="vcover" id="vcover"></div></div>
+        <div class="vplayer"><div id="ytplayer"></div><div class="vshield" id="vshield" onclick="togglePlay()" title="Click o barra espaciadora: play/pausa"></div></div>
         <div class="vctrls">
           <button class="sec" onclick="prevClip()">◀</button>
           <button onclick="replayCur()">↻ Repetir</button>
@@ -416,7 +414,7 @@ function openArmZone(pos,zn){
   document.getElementById("vtitle").textContent=setter.name+" · P"+pos+" · zona "+zn+" · "+rows.length+" armados"+(clips.length<rows.length?" ("+clips.length+" c/video)":"");
   document.getElementById("vmodal").style.display="flex";renderList();
   if(!clips.length){document.getElementById("vcount").textContent="sin video";document.getElementById("vlist").innerHTML='<div class="novid">No hay video de esta zona/rotación en los partidos con 🎥. Probá una celda con ▶ o cambiá el filtro.</div>';return;}
-  ensureYT(function(){if(!YTP){YTP=new YT.Player("ytplayer",{playerVars:{rel:0,modestbranding:1,controls:0,playsinline:1},events:{onReady:function(){YTReady=true;playCur();},onStateChange:onYTState}});}else{playCur();}});
+  ensureYT(function(){if(!YTP){YTP=new YT.Player("ytplayer",{playerVars:{rel:0,modestbranding:1,controls:0,playsinline:1},events:{onReady:function(){YTReady=true;playCur();}}});}else{playCur();}});
 }
 
 function evLabel(ev){if(ev==="#")return'<span class="r-pt">punto</span>';if(ev==="/")return'<span class="r-bl">bloq</span>';if(ev==="=")return'<span class="r-er">error</span>';return ev;}
@@ -578,7 +576,7 @@ if(VIVO){ cargarVivo(true); setInterval(function(){ cargarVivo(false); }, 2000);
 buildTeam();
 
 /* ---- Video ---- */
-let YTP=null,YTReady=false,clips=[],cur=0,loadedVid="",vtimer=null,pre=7,post=3,speed=1,curP=null,curZn="",coverT=null;
+let YTP=null,YTReady=false,clips=[],cur=0,loadedVid="",vtimer=null,pre=7,post=3,speed=1,curP=null
 var VSEL={};try{VSEL=JSON.parse(localStorage.getItem("pp_vsel")||"{}")||{};}catch(e){VSEL={};}var onlyShow=false,curKey="";
 /* pp_vsel_sync: selección de clips compartida (Firebase) */
 if(typeof fbGet==="function"){fbGet("pp_vsel",function(d){if(d&&typeof d==="object"){VSEL=d;try{localStorage.setItem("pp_vsel",JSON.stringify(VSEL));}catch(e){}if(curKey&&VSEL[curKey]&&VSEL[curKey].length&&typeof applySavedSel==="function"){applySavedSel();onlyShow=true;var _v=document.getElementById("vonly");if(_v)_v.checked=true;if(typeof renderList==="function")renderList();}}});}
@@ -593,7 +591,7 @@ function recompute(){if(!curP)return;var cfg=ROLECFG[curP.role];
   clips=all.map(function(a){return {tag:(cfg.stats==='dig'?(a[7]||a[cfg.tagIdx]):a[cfg.tagIdx]),ev:a[cfg.evIdx],t:a[cfg.tIdx],vid:(INFO[a[cfg.vIdx]]||{}).yt||'',sel:true};}).filter(function(c){return c.vid;});
   applySavedSel();cur=firstSel();document.getElementById("vtitle").textContent=curP.name+" · zona "+curZn+" · "+all.length+U(curP.role)+(clips.length<all.length?' ('+clips.length+' c/video)':'');renderList();
   if(!clips.length){document.getElementById("vcount").textContent="sin video";document.getElementById("vlist").innerHTML='<div class="novid">No hay video de esta zona en los partidos seleccionados con 🎥. Probá una zona con ▶ o cambiá el filtro de Partido.</div>';return;}
-  ensureYT(function(){if(!YTP){YTP=new YT.Player("ytplayer",{playerVars:{rel:0,modestbranding:1,controls:0,playsinline:1},events:{onReady:function(){YTReady=true;playCur();},onStateChange:onYTState}});}else{playCur();}});}
+  ensureYT(function(){if(!YTP){YTP=new YT.Player("ytplayer",{playerVars:{rel:0,modestbranding:1,controls:0,playsinline:1},events:{onReady:function(){YTReady=true;playCur();}}});}else{playCur();}});}
 function nextSel(from,dir){var i=from;for(var k=0;k<clips.length;k++){i+=dir;if(i<0||i>=clips.length)return -1;if(clips[i].sel)return i;}return -1;}
 function firstSel(){for(var i=0;i<clips.length;i++)if(clips[i].sel)return i;return 0;}
 function toggleClip(i){if(clips[i]){clips[i].sel=!clips[i].sel;renderList();}}
@@ -604,15 +602,12 @@ function saveSel(){if(!clips.length)return;var a=[];for(var i=0;i<clips.length;i
 function toggleOnly(){var vo=document.getElementById("vonly");onlyShow=vo?vo.checked:false;renderList();}
 function renderList(){var sel=0;for(var k=0;k<clips.length;k++)if(clips[k].sel)sel++;var sc=document.getElementById("vselcount");if(sc)sc.textContent=sel+"/"+clips.length;
   document.getElementById("vlist").innerHTML=clips.map(function(c,i){if(onlyShow&&!c.sel)return "";return '<label class="vitem'+(i===cur?" playing":"")+(c.sel?"":" off")+'"><input type="checkbox" '+(c.sel?"checked":"")+' onclick="event.stopPropagation();toggleClip('+i+')"><span class="vlbl" onclick="jump('+i+')">'+(i+1)+". "+(TAGFMT[c.tag]||c.tag)+" "+evLabel(c.ev)+'</span></label>';}).join("");}
-function playCur(){if(!YTReady||!clips.length)return;var a=clips[cur],start=Math.max(0,a.t-pre);if(a.vid!==loadedVid){loadedVid=a.vid;showCover();clearTimeout(coverT);coverT=setTimeout(hideCover,2500);YTP.loadVideoById({videoId:a.vid,startSeconds:start});}else{YTP.seekTo(start,true);}YTP.playVideo();try{YTP.setPlaybackRate(speed);}catch(e){}document.getElementById("vcount").textContent=(cur+1)+" / "+clips.length;renderList();clearInterval(vtimer);var end=a.t+post;vtimer=setInterval(function(){if(YTP&&YTP.getCurrentTime&&YTP.getCurrentTime()>=end){var n=nextSel(cur,1);if(n>=0){cur=n;playCur();}else{clearInterval(vtimer);try{YTP.pauseVideo();}catch(e){}}}},200);}
+function playCur(){if(!YTReady||!clips.length)return;var a=clips[cur],start=Math.max(0,a.t-pre);if(a.vid!==loadedVid){loadedVid=a.vid;YTP.loadVideoById({videoId:a.vid,startSeconds:start});}else{YTP.seekTo(start,true);var _st=(YTP.getPlayerState?YTP.getPlayerState():-1);if(_st!==1&&_st!==3)YTP.playVideo();}try{YTP.setPlaybackRate(speed);}catch(e){}document.getElementById("vcount").textContent=(cur+1)+" / "+clips.length;renderList();clearInterval(vtimer);var end=a.t+post;vtimer=setInterval(function(){if(YTP&&YTP.getCurrentTime&&YTP.getCurrentTime()>=end){var n=nextSel(cur,1);if(n>=0){cur=n;playCur();}else{clearInterval(vtimer);try{YTP.pauseVideo();}catch(e){}}}},200);}
 function jump(i){cur=i;playCur();}
 function nextClip(){var n=nextSel(cur,1);if(n>=0){cur=n;playCur();}}
 function prevClip(){var n=nextSel(cur,-1);if(n>=0){cur=n;playCur();}}
 function replayCur(){playCur();}
 function setSpeed(v){speed=parseFloat(v);if(YTP&&YTP.setPlaybackRate){try{YTP.setPlaybackRate(speed);}catch(e){}}}
-function showCover(){var c=document.getElementById("vcover");if(c)c.classList.add("on");}
-function hideCover(){var c=document.getElementById("vcover");if(c)c.classList.remove("on");}
-function onYTState(e){if(e&&e.data===1){clearTimeout(coverT);setTimeout(hideCover,70);}}
 function togglePlay(){if(!YTP||!YTP.getPlayerState)return;var st=YTP.getPlayerState();if(st===1)YTP.pauseVideo();else YTP.playVideo();}
 function closeV(){document.getElementById("vmodal").style.display="none";clearInterval(vtimer);if(YTP&&YTP.pauseVideo)YTP.pauseVideo();}
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="Escape")closeV();if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
