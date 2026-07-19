@@ -118,6 +118,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 .vfilters{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--border)}
 .vplayer{position:relative;width:100%;aspect-ratio:16/9;background:#000}
 .vplayer iframe,.vplayer>div{position:absolute;inset:0;width:100%;height:100%}
+.vshield{position:absolute;inset:0;width:100%;height:100%;z-index:5;cursor:pointer;background:transparent}
 .vctrls{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:11px 14px;color:var(--mut);font-size:12.5px}
 .vctrls button{background:var(--red);color:#fff;border:none;border-radius:7px;padding:7px 11px;font-family:'Barlow Condensed';font-weight:600;font-size:13px;cursor:pointer}
 .vctrls button.sec{background:var(--card2);color:var(--txt);border:1px solid var(--border)}
@@ -236,7 +237,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
     <div class="vfilters" id="vfilters"></div>
     <div class="vbody">
       <div class="vmain">
-        <div class="vplayer"><div id="ytplayer"></div></div>
+        <div class="vplayer"><div id="ytplayer"></div><div class="vshield" id="vshield" onclick="togglePlay()" title="Click o barra espaciadora: play/pausa"></div></div>
         <div class="vctrls">
           <button class="sec" onclick="prevClip()">◀</button>
           <button onclick="replayCur()">↻ Repetir</button>
@@ -607,8 +608,9 @@ function nextClip(){var n=nextSel(cur,1);if(n>=0){cur=n;playCur();}}
 function prevClip(){var n=nextSel(cur,-1);if(n>=0){cur=n;playCur();}}
 function replayCur(){playCur();}
 function setSpeed(v){speed=parseFloat(v);if(YTP&&YTP.setPlaybackRate){try{YTP.setPlaybackRate(speed);}catch(e){}}}
+function togglePlay(){if(!YTP||!YTP.getPlayerState)return;var st=YTP.getPlayerState();if(st===1)YTP.pauseVideo();else YTP.playVideo();}
 function closeV(){document.getElementById("vmodal").style.display="none";clearInterval(vtimer);if(YTP&&YTP.pauseVideo)YTP.pauseVideo();}
-document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="Escape")closeV();if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();});
+document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="Escape")closeV();if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
 <script src="chat_nafels.js" onerror="void 0"></script>
 <script src="lang.js" onerror="void 0"></script>
