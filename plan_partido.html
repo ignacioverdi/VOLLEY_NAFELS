@@ -413,7 +413,7 @@ function openArmZone(pos,zn){
   document.getElementById("vtitle").textContent=setter.name+" · P"+pos+" · zona "+zn+" · "+rows.length+" armados"+(clips.length<rows.length?" ("+clips.length+" c/video)":"");
   document.getElementById("vmodal").style.display="flex";renderList();
   if(!clips.length){document.getElementById("vcount").textContent="sin video";document.getElementById("vlist").innerHTML='<div class="novid">No hay video de esta zona/rotación en los partidos con 🎥. Probá una celda con ▶ o cambiá el filtro.</div>';return;}
-  ensureYT(function(){if(!YTP){YTP=new YT.Player("ytplayer",{playerVars:{rel:0,modestbranding:1,controls:1,playsinline:1},events:{onReady:function(){YTReady=true;playCur();}}});}else{playCur();}});
+  ensureYT(function(){if(!YTP){YTP=new YT.Player("ytplayer",{playerVars:{rel:0,modestbranding:1,controls:0,playsinline:1},events:{onReady:function(){YTReady=true;playCur();}}});}else{playCur();}});
 }
 
 function evLabel(ev){if(ev==="#")return'<span class="r-pt">punto</span>';if(ev==="/")return'<span class="r-bl">bloq</span>';if(ev==="=")return'<span class="r-er">error</span>';return ev;}
@@ -590,7 +590,7 @@ function recompute(){if(!curP)return;var cfg=ROLECFG[curP.role];
   clips=all.map(function(a){return {tag:(cfg.stats==='dig'?(a[7]||a[cfg.tagIdx]):a[cfg.tagIdx]),ev:a[cfg.evIdx],t:a[cfg.tIdx],vid:(INFO[a[cfg.vIdx]]||{}).yt||'',sel:true};}).filter(function(c){return c.vid;});
   applySavedSel();cur=firstSel();document.getElementById("vtitle").textContent=curP.name+" · zona "+curZn+" · "+all.length+U(curP.role)+(clips.length<all.length?' ('+clips.length+' c/video)':'');renderList();
   if(!clips.length){document.getElementById("vcount").textContent="sin video";document.getElementById("vlist").innerHTML='<div class="novid">No hay video de esta zona en los partidos seleccionados con 🎥. Probá una zona con ▶ o cambiá el filtro de Partido.</div>';return;}
-  ensureYT(function(){if(!YTP){YTP=new YT.Player("ytplayer",{playerVars:{rel:0,modestbranding:1,controls:1,playsinline:1},events:{onReady:function(){YTReady=true;playCur();}}});}else{playCur();}});}
+  ensureYT(function(){if(!YTP){YTP=new YT.Player("ytplayer",{playerVars:{rel:0,modestbranding:1,controls:0,playsinline:1},events:{onReady:function(){YTReady=true;playCur();}}});}else{playCur();}});}
 function nextSel(from,dir){var i=from;for(var k=0;k<clips.length;k++){i+=dir;if(i<0||i>=clips.length)return -1;if(clips[i].sel)return i;}return -1;}
 function firstSel(){for(var i=0;i<clips.length;i++)if(clips[i].sel)return i;return 0;}
 function toggleClip(i){if(clips[i]){clips[i].sel=!clips[i].sel;renderList();}}
