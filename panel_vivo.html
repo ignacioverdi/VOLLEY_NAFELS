@@ -50,6 +50,7 @@ button{font-family:inherit;cursor:pointer}
 .tbtn2l{line-height:1.05;padding-top:5px;padding-bottom:5px;text-align:center}
 .tbtn{background:var(--card2);border:1px solid var(--b2);color:var(--txt);border-radius:8px;font-weight:600;font-size:11px;max-width:84px;height:36px;white-space:normal;line-height:1.1;display:inline-flex;align-items:center;justify-content:center;text-align:center;padding:2px 6px}
 .tbtn:hover{border-color:var(--mut)}
+.sheet .tbtn{max-width:none;height:auto;min-height:34px;padding:8px 12px;font-size:12.5px;white-space:normal;line-height:1.25}
 .tbtn.pri{background:var(--ok);color:#06210f;border-color:transparent;font-weight:700}
 
 /* ---------- marcador ---------- */
@@ -136,7 +137,7 @@ button{font-family:inherit;cursor:pointer}
 .exg button{background:var(--card);border:1px solid var(--b);color:var(--txt);border-radius:6px;padding:3px 7px;margin:0 4px 4px 0;font-size:10.5px}
 .exg button:hover{border-color:var(--k-zone);color:var(--k-zone)}
 .exg .ek{font-family:'JetBrains Mono';font-weight:700;color:var(--bad);margin-right:5px}
-.decoder{display:flex;justify-content:center;gap:3px;margin-top:8px;min-height:40px}
+.decoder{display:flex;flex-wrap:wrap;justify-content:center;gap:3px 6px;margin-top:8px;min-height:40px;max-height:120px;overflow-y:auto}
 .seg{border:1px solid var(--b);border-radius:8px;padding:3px 6px;text-align:center;min-width:34px;background:rgba(255,255,255,.02)}
 .seg .sv{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;line-height:1.1}
 .seg .sl{font-size:8.5px;letter-spacing:.8px;color:var(--mut);text-transform:uppercase;margin-top:3px}
@@ -1245,7 +1246,11 @@ function parseInput(raw){
 }
 /* dot coding (DV4 2.3.4.3): une dos fundamentos correlacionados.
    Pares que define el manual: Saque/Recepción, Ataque/Bloqueo, Ataque/Defensa. */
-const ATK_TO_BLK={'/':'#','=':'~','#':'=','+':'-','-':'+','!':'!'};   /* espejo ataque -> bloqueo */
+/* Tablas de correlación del código compuesto — según la tabla del cuerpo técnico (DataVolley). */
+const ATK_TO_BLK={'/':'#','-':'+','!':'!','+':'-','#':'='};   /* ataque -> bloqueo */
+const ATK_TO_DEF={'-':'+#','+':'-','#':'='};                 /* ataque -> defensa */
+const SRV_TO_REC={'/':'/','+':'-','-':'+#','#':'='};         /* saque -> recepción */
+function setEval(str,val){ return str.slice(0,5)+val+str.slice(6); }   /* escribe la evaluación (1 o 2 caracteres) */
 function parseChunk(s){
   if(s.indexOf('.')>0 && s.indexOf('~')<0){   /* un código ya normalizado lleva ~ : el '.' ahí es un carácter personalizado */
     const p=s.split('.');
@@ -1264,7 +1269,8 @@ function parseChunk(s){
     if(a.skill==='A'){                                                /* ataque . bloqueo o defensa */
       if(b.skill!=='B' && b.skill!=='D') b.skill='B';
       b.type=a.type;
-      if(b.skill==='B' && ATK_TO_BLK[a.ev] && ATK_TO_BLK[a.ev]!=='~') b.ev = b.ev || ATK_TO_BLK[a.ev];
+      if(b.skill==='B' && ATK_TO_BLK[a.ev]) b.ev = b.ev || ATK_TO_BLK[a.ev];
+      if(b.skill==='D' && ATK_TO_DEF[a.ev]) b.ev = b.ev || ATK_TO_DEF[a.ev];
       if(a.d.ez && !b.d.ez) b.d.ez=a.d.ez;
       return [a,b];
     }
@@ -2416,6 +2422,7 @@ function renderCodes(){
   const rows = M.codes.filter(c=>c.set===M.set);
   if(!rows.length){ el.innerHTML='<div class="empty-note">Todavía no cargaste ninguna acción.<br>Escribí un número y apretá Enter.</div>'; return; }
   el.innerHTML = rows.slice(-90).reverse().map(c=>{
+    if(c.k==='drill'){ const di=M.codes.indexOf(c); return '<div class=\"crow\" onclick=\"seleccionar('+di+')\" style=\"justify-content:center;color:#22c55e;font-weight:800;background:rgba(34,197,94,.08);border:1px dashed rgba(34,197,94,.45)\"><span class=\"cc\">'+(c.c||'DRILL')+'</span></div>'; }
     const cls = c.k==='auto' ? 'auto' : (c.c[0]==='*'?'hteam':'ateam');
     const i = M.codes.indexOf(c);
     const sel = (i===SEL_I) ? ' sel' : '';
@@ -2815,6 +2822,7 @@ function nuevoDrill(){
   M.home.pts=h; M.away.pts=a;
   /* el drill es una unidad dentro del entrenamiento: marcamos su inicio con un código de nota */
   if(!M.drills) M.drills=[];
+  M.codes.push({k:'drill', c:'▪ DRILL '+(M.drills.length+1)+' · '+h+'-'+a, set:M.set, t:0});
   M.drills.push({inicio:h+'-'+a, desde:M.codes.length});
   renderAll(); persist(); avisarMarcador&&avisarMarcador();
   toast('Nuevo drill · empieza '+h+'-'+a);
@@ -3109,9 +3117,10 @@ function editarCodigoEn(i, cod, a){
     if(j>=0){
       let o = M.codes[j].c;
       o = setChar(o,4,a.type);
-      if(a.skill==='S') o = setChar(o,5, invRec(a.ev));
+      if(a.skill==='S' && SRV_TO_REC[a.ev]) o = setEval(o, SRV_TO_REC[a.ev]);
       if(a.skill==='R') M.codes[j].c = setChar(M.codes[j].c,5, REC_TO_SERVE[a.ev]||M.codes[j].c[5]);
       if(d.sz && o.length>10){ o = setChar(o,9,d.sz); o = setChar(o,10,d.ez||o[10]); }
+      if(a.skill==='A'){ const _pk=M.codes[j].c[3]; const _map=(_pk==='D')?ATK_TO_DEF:ATK_TO_BLK; if(_map[a.ev]) o=setEval(o,_map[a.ev]); }
       if(a.skill!=='R') M.codes[j].c = o; else M.codes[j].c = setChar(M.codes[j].c,4,a.type);
     }
     if(a.skill==='A' && d.combo && COMBOS[d.combo]){
@@ -3877,9 +3886,11 @@ function exportDVW(modo){
 
   /* [3SCOUT]: 27 columnas. La 8 es el set; de la 14 a la 25, las dos rotaciones. */
   L.push('[3SCOUT]');
+  const pad6 = arr => { const a=(arr||[]).slice(0,6); while(a.length<6) a.push(''); return a.map(x=>(x==null?'':x)); };
   M.codes.forEach(c=>{
-    const hl = (c.hl && c.hl.length===6) ? c.hl : M.home.lineup;
-    const al = (c.al && c.al.length===6) ? c.al : M.away.lineup;
+    if(c.k==='drill' || !c.c) return;   /* los marcadores de drill y códigos vacíos NO van al .dvw */
+    const hl = pad6((c.hl && c.hl.length===6) ? c.hl : M.home.lineup);
+    const al = pad6((c.al && c.al.length===6) ? c.al : M.away.lineup);
     /* columnas: 0 código · 8 set · 9 zona armador local · 10 zona armador visitante
        12 segundo del video · 14-25 rotaciones
        Las columnas 1,2 (fase) y 4,5,6 (coordenadas) quedan vacías: no las podemos
