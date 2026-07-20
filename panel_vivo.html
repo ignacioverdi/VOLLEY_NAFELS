@@ -3805,14 +3805,20 @@ function exportDVW(modo){
   const d=new Date(), pad=n=>String(n).padStart(2,'0');
   const fecha = pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear();
   const L=[];
-  L.push('[3DATAVOLLEYSCOUT]','FILEFORMAT: 2.0','GENERATOR-DAY: '+fecha+' '+pad(d.getHours())+'.'+pad(d.getMinutes())+'.'+pad(d.getSeconds()));
+  const _hms = fecha+' '+pad(d.getHours())+'.'+pad(d.getMinutes())+'.'+pad(d.getSeconds());
+  /* Cabecera completa: DataVolley lee estas líneas por posición. Si faltan, se cuelga. */
+  L.push('[3DATAVOLLEYSCOUT]','FILEFORMAT: 2.0','GENERATOR-DAY: '+_hms,
+         'GENERATOR-IDP: ','GENERATOR-PRG: ','GENERATOR-REL: ','GENERATOR-VER: ',
+         'GENERATOR-NAM: Panel en Vivo','LASTCHANGE-DAY: '+_hms,
+         'LASTCHANGE-IDP: ','LASTCHANGE-PRG: ','LASTCHANGE-REL: ','LASTCHANGE-VER: ','LASTCHANGE-NAM: ');
   /* [3MATCH]: [0] fecha · [1] hora · [2] temporada · [3] competencia · [4] fase
      [7] n° de partido · [8] codepage (65001 = UTF-8, que es como grabamos)
      [12] y [13] = competencia y fase en hexadecimal                            */
   const N = M.notas || {};
   L.push('[3MATCH]', [N.fecha||fecha, N.hora||'', N.temporada||'', N.competencia||'', N.fase||'',
                       '', '', N.codigo||'', '65001', '1', 'Z', '0',
-                      hexSQ(N.competencia||''), hexSQ(N.fase||''), '\x0f2', ''].join(';'));
+                      hexSQ(N.competencia||''), hexSQ(N.fase||''), '\x0f2', ''].join(';'),
+                     ';;0;;;;;;;0;');   /* segunda línea de [3MATCH]: sin ella DataVolley tira "list index out of bounds (1)" */
   /* Formato real: [0] id del equipo · [1] nombre · [2] sets ganados */
   L.push('[3TEAMS]');
   L.push([M.home.id||'', M.home.name, M.home.sets, '', '', '', '', '', '', ''].join(';'));
@@ -3866,7 +3872,15 @@ function exportDVW(modo){
       }
       const pj = (M[sd].plantel||[]).find(x=>String(x.c)===String(n));
       const rol = esLib ? '1' : ((pj && pj.rol) || '');   /* col 13: rol; el líbero que juega va con 1 */
-      const row = ['0', n, i+1, ...pos, '', nom, '', '', esLib?'L':'', rol, 'False', '', '', '', '', '', '', '', ''];
+      /* DataVolley necesita apellido, nombre y apodo en columnas separadas (+ versiones en hex),
+         si no, muestra "AUTO1, AUTO2...". Apellido = todo menos la última palabra; nombre = la última. */
+      const _pn = String(nom||'').trim().split(/\s+/).filter(Boolean);
+      let _ape='', _nom='';
+      if(_pn.length>=2){ _nom=_pn[_pn.length-1]; _ape=_pn.slice(0,-1).join(' '); }
+      else if(_pn.length===1){ _ape=_pn[0]; }
+      const _idInt = _ape ? String(-(1000+i)) : '';   /* col 8: id interno negativo */
+      const row = ['0', n, i+1, ...pos, _idInt, _ape, _nom, _ape, esLib?'L':'', rol, 'False', '', '',
+                   _ape?hexSQ(_ape):'', _nom?hexSQ(_nom):'', _ape?hexSQ(_ape):'', '', '', ''];
       L.push(row.join(';'));
     });
   });
