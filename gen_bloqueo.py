@@ -24,6 +24,17 @@ COMBO_ZONE = {
     "XP":"8","VP":"8","XR":"8","XB":"8","VB":"8","VR":"8",                   # pipe (zona 8)
 }
 
+def zone_of(combo):
+    """Zona del combo; si no está en el mapa, la deduce por prefijo (fallback robusto)."""
+    combo = str(combo or "").upper()
+    if combo in COMBO_ZONE: return COMBO_ZONE[combo]
+    p = combo[:2]
+    if p in ("X5","V5","X0","V0","C5"): return "4"
+    if p in ("X6","V6","X4","XO","XQ"): return "2"
+    if p in ("X8","V8"): return "9"
+    if p in ("XP","VP","XB","XR","VB","VR"): return "8"
+    return "3"   # central por defecto
+
 RENAME_TEAM = {"casla":"sanlorenzo"}  # slug de video -> slug de PP_DATA (casos especiales)
 
 def _balance(txt, start):
@@ -110,12 +121,12 @@ def build(video_path, out='datos_bloqueo.js'):
 
     for mid,mt in matches.items():
         acts=mt.get('actions',[])
-        atk_by_t={}; rec={}; dfn={}
+        atks=[]; rec={}; dfn={}
         for a in acts:
             t=a.get('t')
             if not isinstance(t,(int,float)): continue
             sk=a.get('sk')
-            if sk=='Ataque': atk_by_t.setdefault(t,[]).append(a)
+            if sk=='Ataque': atks.append(a)
             elif sk=='Recepción': rec.setdefault(a.get('tm'),[]).append(t)
             elif sk=='Defensa': dfn.setdefault(a.get('tm'),[]).append(t)
         for k in rec: rec[k].sort()
@@ -124,15 +135,21 @@ def build(video_path, out='datos_bloqueo.js'):
             if a.get('sk')!='Bloqueo': continue
             t=a.get('t')
             if not isinstance(t,(int,float)): continue
-            atk=None
-            for pa in atk_by_t.get(t,[]):
-                if pa.get('tm')!=a.get('tm'): atk=pa; break
-            if not atk: continue
-            rz=COMBO_ZONE.get(str(atk.get('x') or '').upper())
-            if not rz:
-                if atk.get('x'): sinmap[atk['x']]=sinmap.get(atk['x'],0)+1
-                continue
-            Y=atk.get('tm')
+            # ataque rival mas cercano en el tiempo (dt<=3s). NO se descarta el bloqueo
+            # si no hay match claro: se cuenta igual (combo vacio, zona central por defecto).
+            atk=None; bestdt=999
+            for pa in atks:
+                if pa.get('tm')==a.get('tm'): continue
+                pt=pa.get('t')
+                if not isinstance(pt,(int,float)): continue
+                dt=abs(pt-t)
+                if dt<bestdt: bestdt=dt; atk=pa
+            if atk and bestdt<=3 and atk.get('x'):
+                combo=str(atk.get('x')).upper(); rz=zone_of(combo)
+            else:
+                combo=''; rz='3'                       # bloqueo sin ataque claro
+            # fase (SO/TR) por contexto del rally del equipo atacado
+            Y=atk.get('tm') if atk else None
             gR=near(rec.get(Y,[]),t); gD=near(dfn.get(Y,[]),t)
             if gR<=12 and (gD>12 or gR<=gD): ph='g'; so+=1
             elif gD<=12 and (gR>12 or gD<gR): ph='o'; tr+=1
@@ -143,7 +160,7 @@ def build(video_path, out='datos_bloqueo.js'):
                 if _al is None or mid not in _al: fuera_temp+=1; continue  # fuera de la temporada actual / equipo no seguido
             num=str(a.get('num') or '').lstrip('0') or str(a.get('num'))
             BLOCK.setdefault(key,{}).setdefault(num,{'name':a.get('name'),'data':[]})['data'].append(
-                [atk.get('x'), rz, a.get('ev'), t, mid, ph])
+                [combo, rz, a.get('ev'), t, mid, ph])
 
     OUT={}
     for team,ps in BLOCK.items():
