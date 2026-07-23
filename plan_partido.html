@@ -620,7 +620,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
     if(new URLSearchParams(location.search).get('back')!=='scout') return;
     if(document.getElementById('volver-scout')) return;
     var a=document.createElement('a');
-    a.id='volver-scout'; a.href='panel_vivo.html'; a.textContent='← Volver al scout';
+    a.id='volver-scout'; a.href='panel_vivo.html?scout=1'; a.textContent='← Volver al scout';
     a.style.cssText='position:fixed;left:14px;top:14px;z-index:99990;background:#27495b;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:9px 15px;border-radius:9px;box-shadow:0 3px 14px rgba(0,0,0,.45);font-family:inherit;border:1px solid rgba(255,255,255,.15)';
     document.body.appendChild(a);
   }catch(e){}

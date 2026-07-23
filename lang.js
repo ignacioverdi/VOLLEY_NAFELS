@@ -1694,22 +1694,10 @@
 
   function paintSelector(active){
     var wrap = document.getElementById('lang-wrap');
-    if (!wrap) {
-      // si la página no tiene su propio selector, creamos uno flotante
-      wrap = document.createElement('div');
-      wrap.id = 'lang-wrap';
-      wrap.setAttribute('data-notr','');
-      wrap.style.cssText = 'position:fixed;top:10px;right:12px;z-index:99999;display:flex;gap:4px;'+
-        'background:rgba(15,18,28,.85);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);'+
-        'padding:4px 6px;border-radius:9px;border:1px solid rgba(255,255,255,.12)';
-      (document.body || document.documentElement).appendChild(wrap);
-      if (!document.getElementById('lang-wrap-print-css')) {
-        var st = document.createElement('style');
-        st.id = 'lang-wrap-print-css';
-        st.textContent = '@media print{#lang-wrap{display:none!important}}';
-        document.head.appendChild(st);
-      }
-    }
+    // El idioma se elige UNA vez en el inicio y queda guardado para todo el sitio.
+    // Las demás páginas se traducen igual, pero sin mostrar el selector: antes se
+    // creaba uno flotante arriba a la derecha y tapaba botones (ej. CERRAR SET).
+    if (!wrap) return;
     wrap.innerHTML = '';
     LANGS.forEach(function(l){
       var b = document.createElement('button');

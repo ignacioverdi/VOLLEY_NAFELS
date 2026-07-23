@@ -1414,9 +1414,9 @@ function parseInput(raw){
 /* dot coding (DV4 2.3.4.3): une dos fundamentos correlacionados.
    Pares que define el manual: Saque/Recepción, Ataque/Bloqueo, Ataque/Defensa. */
 /* Tablas de correlación del código compuesto — según la tabla del cuerpo técnico (DataVolley). */
-const ATK_TO_BLK={'/':'#','-':'+','!':'!','+':'-','#':'='};   /* ataque -> bloqueo */
+const ATK_TO_BLK={'/':'#','-':'+','!':'/','+':'-','#':'='};   /* ataque -> bloqueo */
 const ATK_TO_DEF={'-':'+#','+':'-','#':'='};                 /* ataque -> defensa */
-const SRV_TO_REC={'/':'/','+':'-','-':'+#','#':'='};         /* saque -> recepción */
+const SRV_TO_REC={'/':'/','+':'-','-':'+#','!':'!','#':'='}; /* saque -> recepción */
 function setEval(str,val){ return str.slice(0,5)+val+str.slice(6); }   /* escribe la evaluación (1 o 2 caracteres) */
 function parseChunk(s){
   if(s.indexOf('.')>0 && s.indexOf('~')<0){   /* un código ya normalizado lleva ~ : el '.' ahí es un carácter personalizado */
@@ -3953,6 +3953,7 @@ function renderBateriasPanel(){
 }
 
 function abrirPlanPreparado(){
+  try{ sessionStorage.setItem('pv_volver','1'); }catch(e){}
   location.href = 'plan_partido.html?back=scout';
 }
 
@@ -4341,7 +4342,10 @@ function ventCerrar(id){
   var st=FLOT[id]; if(st) st.abierta=false;
   flotGuardar(); v.remove();
 }
-function ventGrande(tab){ location.href = planURL(tab); }   /* a pantalla completa, como antes */
+function ventGrande(tab){
+  try{ sessionStorage.setItem('pv_volver','1'); }catch(e){}   /* al volver, entra derecho al scout */
+  location.href = planURL(tab);
+}
 
 function abrirPlan(tab){
   var id='vent-'+tab, v=document.getElementById(id);
@@ -4623,8 +4627,23 @@ function objRefrescar(){
   if(m && m.classList.contains('open')) updateObj();
 }
 
-/* Se abre siempre al entrar al panel (manual 2.1: es la pantalla que te recibe). */
-try{ setTimeout(abrirInicio, 250); }catch(e){}
+/* Se abre siempre al entrar al panel (manual 2.1: es la pantalla que te recibe),
+   SALVO cuando estás volviendo de ver un análisis a pantalla completa: ahí se
+   entra derecho al scout que quedó abierto, para no cortar el trabajo en vivo. */
+try{
+  var _volviendo = false;
+  try{
+    _volviendo = (sessionStorage.getItem('pv_volver')==='1') ||
+                 (new URLSearchParams(location.search).get('scout')==='1');
+    sessionStorage.removeItem('pv_volver');
+  }catch(e){}
+  if(_volviendo){
+    if(history.replaceState) history.replaceState(null,'',location.pathname);
+    var _c=document.getElementById('code'); if(_c) setTimeout(function(){ _c.focus(); },200);
+  } else {
+    setTimeout(abrirInicio, 250);
+  }
+}catch(e){}
 
 
 
