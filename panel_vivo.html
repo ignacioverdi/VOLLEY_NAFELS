@@ -231,6 +231,27 @@ td .num{font-family:'JetBrains Mono',monospace;font-size:12px}
 .modal.vdock .vres-sw{left:-4px;bottom:-4px;cursor:nesw-resize}
 .modal.vdock .vres-se{right:-4px;bottom:-4px;cursor:nwse-resize}
 .modal:not(.vdock) .vres{display:none}
+/* ── VENTANAS FLOTANTES (manual DV4 9.5.12 «Screen Composition») ──
+   Cualquier panel de la pantalla y cualquier análisis se puede soltar de su
+   lugar, moverlo, agrandarlo y dejarlo abierto mientras seguís tipeando.
+   La disposición se guarda sola. */
+.fbtn{margin-left:auto;background:transparent;border:1px solid var(--b);color:var(--mut);
+      border-radius:6px;font-size:11px;line-height:1;padding:3px 7px;cursor:pointer;flex:none}
+.fbtn:hover{color:#fff;border-color:var(--b2)}
+.pane>h3,.pane>.tbl-head{display:flex;align-items:center;gap:6px}
+.sheet>h2{display:flex;align-items:center;gap:8px}
+.pane.flt{position:fixed;z-index:70;overflow:auto;box-shadow:0 18px 50px rgba(0,0,0,.6);border-color:var(--b2)}
+.pane.flt>h3,.pane.flt>.tbl-head{cursor:move}
+.modal.open.suelto{position:static;background:transparent;display:block;inset:auto;padding:0;pointer-events:none;z-index:70}
+.modal.open.suelto .sheet{pointer-events:auto;position:fixed;max-width:none;max-height:none;
+      overflow:auto;box-shadow:0 18px 50px rgba(0,0,0,.6)}
+.modal.open.suelto .sheet>h2{cursor:move}
+.fres{position:absolute;width:16px;height:16px;z-index:8;display:none}
+.pane.flt>.fres,.modal.open.suelto .sheet>.fres{display:block}
+.fres-nw{left:-3px;top:-3px;cursor:nwse-resize}
+.fres-ne{right:-3px;top:-3px;cursor:nesw-resize}
+.fres-sw{left:-3px;bottom:-3px;cursor:nesw-resize}
+.fres-se{right:-3px;bottom:-3px;cursor:nwse-resize}
 .sheet{background:var(--sur);border:1px solid var(--b2);border-radius:16px;padding:22px;width:100%;max-width:860px;max-height:88vh;overflow:auto}
 .sheet h2{font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.5px;font-size:20px;margin:0 0 4px;text-transform:uppercase}
 .sheet .sub{color:var(--mut);font-size:12.5px;margin-bottom:18px}
@@ -295,6 +316,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <button class="tbtn" onclick="abrirVideo()" title="Video y sincronización (manual 2.5.6)">Video</button>
   <button class="tbtn" onclick="abrirCombos()" title="Combinaciones de ataque y llamadas (manual 12.2)">Comb ataque</button>
   <button class="tbtn" onclick="abrirEquipos()" title="Base de equipos (nuevo · importar · exportar)">Equipos</button>
+  <button class="tbtn" onclick="flotReset()" title="Vuelve todos los paneles y análisis a su lugar original">⧉ Ventanas</button>
   <button class="tbtn" onclick="openConfig()">Teclado y códigos</button>
   <button class="tbtn" onclick="abrirAyuda()" title="Cómo usar el scout — guía paso a paso">Cómo se usa</button>
   <button class="tbtn" onclick="abrirExportMode()">Exportar .dvw</button>
@@ -736,8 +758,8 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         </label>
         <span class="sub" id="sq-info-h"></span>
       </div></div>
-    <div><label class="f">Visitante — equipo</label><select class="f" id="s-eqa" onchange="elegirEquipoSetup('away',this.value)" style="margin-bottom:5px"><option value="">— elegí un equipo guardado —</option></select><input class="f" id="s-nma" placeholder="…o escribí el nombre"></div>
-    <div><label class="f">Visitante — sigla</label><input class="f" id="s-cda" maxlength="3" placeholder="BOC">
+    <div id="setup-vis-eq"><label class="f">Visitante — equipo</label><select class="f" id="s-eqa" onchange="elegirEquipoSetup('away',this.value)" style="margin-bottom:5px"><option value="">— elegí un equipo guardado —</option></select><input class="f" id="s-nma" placeholder="…o escribí el nombre"></div>
+    <div id="setup-vis-sg"><label class="f">Visitante — sigla</label><input class="f" id="s-cda" maxlength="3" placeholder="BOC">
       <div class="sqbox">
         <label class="sqbtn">Importar equipo (.sq)
           <input type="file" accept=".sq,.vis" onchange="importarSQ(this,'away')" hidden>
@@ -759,7 +781,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
           <div class="lulib"><div class="zl">LÍBERO</div><input class="mono" id="s-libh" inputmode="numeric"></div>
         </div>
       </div>
-      <div>
+      <div id="setup-vis-lu">
         <div class="lutitle" style="color:var(--vis)">Visitante</div>
         <div class="netline"></div>
         <div class="luwrap">
@@ -769,7 +791,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
       </div>
     </div>
     <div class="fgrid" style="margin-top:14px">
-      <div><label class="f">Saca</label><select class="f" id="s-serve"><option value="home">Local</option><option value="away">Visitante</option></select></div>
+      <div id="setup-saca"><label class="f">Saca</label><select class="f" id="s-serve"><option value="home">Local</option><option value="away">Visitante</option></select></div>
     </div>
   </div>
   <div class="actions">
@@ -919,6 +941,14 @@ if(CFG.autoServe===undefined) CFG.autoServe = 'num_s';
    Configuración para cargar el fin de jugada a mano. */
 if(CFG.autoFin===undefined) CFG.autoFin = true;
 if(CFG.entrenamiento===undefined) CFG.entrenamiento = false;
+/* UN SOLO EQUIPO (manual DV4 13.3 + modo entrenamiento):
+   todas las acciones de jugador se cargan como locales (*), aunque se escriba
+   la 'a' o se use un código compuesto. El marcador conserva los dos lados,
+   porque los drills se juegan con tanteador (el manual usa ap/az para eso). */
+function unSoloEquipo(){
+  try{ return !!(CFG.entrenamiento || (M && M.modo==='entrenamiento')); }
+  catch(e){ return !!CFG.entrenamiento; }
+}
 if(!CFG.verif) CFG.verif = {marcador:true,combo:true,bloqueo:true,zona:true,recBarra:true,liberoSaca:true};
 if(CFG.verif.marcador===undefined) CFG.verif.marcador = true;
 if(CFG.verif.zonaSaque===undefined) CFG.verif.zonaSaque = true;
@@ -1087,7 +1117,7 @@ function parseOne(raw){
   let s = (raw||'').trim();
   if(!s) return null;
   let team = 'home';
-  if(s[0]==='a' || s[0]==='A'){ if(!CFG.entrenamiento) team='away'; s=s.slice(1); }
+  if(s[0]==='a' || s[0]==='A'){ if(!unSoloEquipo()) team='away'; s=s.slice(1); }
   else if(s[0]==='*'){ team='home'; s=s.slice(1); }
 
   /* '-1' = jugador desconocido. Aparece en los DVW oficiales (153 casos en 97 archivos) */
@@ -1257,8 +1287,12 @@ function parseChunk(s){
     const p=s.split('.');
     if(p.length!==2) return [{err:'El punto une exactamente dos acciones'}];
     const a=parseOne(p[0]); if(!a||a.err) return [a||{err:'Código vacío'}];
-    const rt = a.team==='home' ? 'a' : '*';
-    const b=parseOne(rt+p[1]); if(!b||b.err) return [b||{err:'Código vacío'}];
+    /* La 2ª mitad puede venir con su propio prefijo de equipo ('*' o 'a'):
+       se respeta en partido, y con un solo equipo siempre queda en local. */
+    let seg = p[1], rt;
+    if(/^[*aA]/.test(seg)){ rt = unSoloEquipo() ? '*' : seg[0]; seg = seg.slice(1); }
+    else                  { rt = unSoloEquipo() ? '*' : (a.team==='home' ? 'a' : '*'); }
+    const b=parseOne(rt+seg); if(!b||b.err) return [b||{err:'Código vacío'}];
 
     /* La mitad que el scout NO tipeó se completa con la tabla de códigos compuestos.
        Si la evaluación viene ambigua ('+#', '-/'), se toma la primera. */
@@ -2844,7 +2878,7 @@ function setModo(modo){
     if(bp){ bp.style.background=''; bp.style.color=''; bp.style.borderColor=''; }
     if(be){ be.style.background='#16a34a'; be.style.color='#fff'; be.style.borderColor='#16a34a'; }
     if(tit) tit.textContent='Entrenamiento';
-    if(sub) sub.textContent='Cargá tu equipo y el seis. El rival puede ser genérico. Después podés hacer ejercicios (drills).';
+    if(sub) sub.textContent='Un solo equipo: cargá tu plantel y el seis. Todas las acciones se anotan a tus jugadores (*), aunque escribas la «a» o uses códigos compuestos.';
   } else {
     M.modo='partido';
     if(be){ be.style.background=''; be.style.color=''; be.style.borderColor=''; }
@@ -2852,6 +2886,18 @@ function setModo(modo){
     if(tit) tit.textContent='Partido';
     if(sub) sub.textContent='Cargá los dos equipos, el seis inicial y quién saca.';
   }
+  reflejarUnEquipo();
+}
+
+/* Con un solo equipo no hace falta cargar el visitante: se esconde su bloque. */
+function reflejarUnEquipo(){
+  var uno = (M.modo==='entrenamiento');
+  ['setup-vis-eq','setup-vis-sg','setup-vis-lu','setup-saca'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el) el.style.display = uno ? 'none' : '';
+  });
+  var col=document.getElementById('setup-vis-lu');
+  if(col && col.parentNode) col.parentNode.style.gridTemplateColumns = uno ? '1fr' : '1fr 1fr';
 }
 
 let SETUP_OBLIGATORIO = false;
@@ -2868,7 +2914,7 @@ function openSetup(obligatorio){
     M[side].lineup.forEach((num,i)=>{ if(num) LU[side].n[i+1]=String(num); });
     drawLineup(side);
   });
-  setModo(M.modo||'partido');   /* reflejar el modo actual */
+  setModo(M.modo||'partido');   /* reflejar el modo actual (ya llama a reflejarUnEquipo) */
   /* Estilo Data Volley: al cerrar un set, la formación del set nuevo es OBLIGATORIA.
      Se ocultan Cancelar/Cerrar/Nuevo y sólo se sale confirmando el seis con «Empezar». */
   const tit=document.getElementById('setup-titulo'), sub=document.getElementById('setup-sub');
@@ -2935,14 +2981,25 @@ function saveSetup(){
     for(let z=1; z<=6; z++){ const v=parseInt(LU[side].n[z],10); if(!v) return null; arr.push(v); }
     return arr;   /* arr[0] = zona 1, arr[1] = zona 2, ... */
   };
-  const lh=read('home'), la=read('away');
-  if(!lh||!la){ toast('Faltan jugadores: cada equipo necesita los 6 casilleros',true); return; }
+  const UNO = (M.modo==='entrenamiento');   /* entrenamiento = un solo equipo */
+  const lh=read('home');
+  let la=read('away');
+  if(!lh){ toast('Faltan jugadores: cargá los 6 casilleros de tu equipo',true); return; }
+  if(!la){
+    if(!UNO){ toast('Faltan jugadores: cada equipo necesita los 6 casilleros',true); return; }
+    la=[1,2,3,4,5,6];                       /* rival genérico: no se le carga ninguna acción */
+    LU.away.setter = LU.away.setter || 1;
+  }
   const dup=a=>new Set(a).size!==a.length;
-  if(dup(lh)||dup(la)){ toast('Hay un número repetido en la cancha',true); return; }
-  if(!LU.home.setter||!LU.away.setter){ toast('Marcá el armador de cada equipo',true); return; }
+  if(dup(lh)||(!UNO&&dup(la))){ toast('Hay un número repetido en la cancha',true); return; }
+  if(!LU.home.setter){ toast('Marcá el armador de tu equipo',true); return; }
+  if(!UNO && !LU.away.setter){ toast('Marcá el armador de cada equipo',true); return; }
+  if(UNO && !LU.away.setter) LU.away.setter = la[0];
 
-  M.home.name=(G('s-nmh')||'LOCAL').toUpperCase(); M.away.name=(G('s-nma')||'VISITANTE').toUpperCase();
-  M.home.code=(G('s-cdh')||'LOC').toUpperCase();   M.away.code=(G('s-cda')||'VIS').toUpperCase();
+  M.home.name=(G('s-nmh')||'LOCAL').toUpperCase();
+  M.away.name=(G('s-nma')||(UNO?'ENTRENAMIENTO':'VISITANTE')).toUpperCase();
+  M.home.code=(G('s-cdh')||'LOC').toUpperCase();
+  M.away.code=(G('s-cda')||(UNO?'ENT':'VIS')).toUpperCase();
   M.home.lineup=lh; M.away.lineup=la;
   M.home.six=lh.slice(); M.away.six=la.slice();   /* el seis con el que arranca este set */
   if(!M.home.sixHist) M.home.sixHist={}; if(!M.away.sixHist) M.away.sixHist={};
@@ -2952,7 +3009,7 @@ function saveSetup(){
   /* el líbero no puede estar en el seis inicial */
   if(M.home.libero && lh.includes(M.home.libero)){ toast('El líbero '+M.home.libero+' no puede estar en el seis inicial del local',true); return; }
   if(M.away.libero && la.includes(M.away.libero)){ toast('El líbero '+M.away.libero+' no puede estar en el seis inicial del visitante',true); return; }
-  M.serving=G('s-serve');
+  M.serving = UNO ? 'home' : G('s-serve');   /* con un solo equipo, siempre sacás vos */
   escribirEstado('>LUp', M.serving);   /* >LUp, empezando por el equipo que saca (verificado en los DVW) */
   if(!M.modo) M.modo='partido';
   SETUP_OBLIGATORIO = false;   /* formación cargada: ya se puede cerrar el modal */
@@ -3961,6 +4018,155 @@ function toast(msg,err){
 renderAll();
 try{ if(localStorage.getItem('pv_det')==='1') toggleDetalle(); }catch(e){}
 try{ if(localStorage.getItem('pv_tab')==='1') toggleTablas(); }catch(e){}
+
+/* ============================================================
+   VENTANAS FLOTANTES  ·  manual DV4 9.5.12 «Screen Composition»
+   Igual que en Data Volley: cualquier panel de la pantalla y cualquier
+   análisis se puede SOLTAR de su lugar, moverlo arrastrando su título,
+   agrandarlo de las esquinas y dejarlo abierto mientras seguís tipeando
+   códigos. Se actualiza solo y no tapa el scouting.
+   La disposición queda guardada y se recupera al volver a entrar.
+   ============================================================ */
+let FLOT = load('pv_flot', {});
+function flotGuardar(){ save('pv_flot', FLOT); }
+
+/* Motor de arrastre y redimensión (el mismo que ya usa el video acoplado). */
+function flotMotor(box, hdr, key){
+  if(box.__fm) return; box.__fm = true;
+  ['nw','ne','sw','se'].forEach(function(c){
+    var el=document.createElement('div'); el.className='fres fres-'+c; el.dataset.c=c; box.appendChild(el);
+  });
+  var mode=null, corner=null, sx=0, sy=0, R=null;
+  function pt(e){ return (e.touches && e.touches[0]) ? e.touches[0] : e; }
+  function activo(){ return box.classList.contains('flt') || !!box.closest('.modal.suelto'); }
+  function down(e, md, cn){
+    if(!activo()) return;
+    mode=md; corner=cn; var p=pt(e); sx=p.clientX; sy=p.clientY;
+    var r=box.getBoundingClientRect(); R={l:r.left,t:r.top,w:r.width,h:r.height};
+    box.style.right='auto'; box.style.bottom='auto';
+    box.style.left=r.left+'px'; box.style.top=r.top+'px';
+    box.style.width=r.width+'px'; box.style.height=r.height+'px';
+    document.addEventListener('mousemove',move); document.addEventListener('mouseup',up);
+    document.addEventListener('touchmove',move,{passive:false}); document.addEventListener('touchend',up);
+    e.preventDefault(); e.stopPropagation();
+  }
+  function move(e){
+    if(!mode) return; var p=pt(e), dx=p.clientX-sx, dy=p.clientY-sy;
+    if(mode==='drag'){
+      box.style.left=Math.max(0, R.l+dx)+'px';
+      box.style.top =Math.max(0, R.t+dy)+'px';
+    } else {
+      var l=R.l, t=R.t, w=R.w, h=R.h;
+      if(corner.indexOf('e')>=0) w=R.w+dx;
+      if(corner.indexOf('w')>=0){ w=R.w-dx; l=R.l+dx; }
+      if(corner.indexOf('s')>=0) h=R.h+dy;
+      if(corner.indexOf('n')>=0){ h=R.h-dy; t=R.t+dy; }
+      if(w<220){ if(corner.indexOf('w')>=0) l=R.l+R.w-220; w=220; }
+      if(h<120){ if(corner.indexOf('n')>=0) t=R.t+R.h-120; h=120; }
+      box.style.width=w+'px'; box.style.height=h+'px'; box.style.left=l+'px'; box.style.top=t+'px';
+    }
+    e.preventDefault();
+  }
+  function up(){
+    mode=null;
+    document.removeEventListener('mousemove',move); document.removeEventListener('mouseup',up);
+    document.removeEventListener('touchmove',move); document.removeEventListener('touchend',up);
+    var r=box.getBoundingClientRect();
+    FLOT[key]=Object.assign(FLOT[key]||{}, {x:r.left, y:r.top, w:r.width, h:r.height});
+    flotGuardar();
+  }
+  if(hdr){
+    hdr.addEventListener('mousedown', function(e){ if(e.target.closest('button')) return; down(e,'drag'); });
+    hdr.addEventListener('touchstart',function(e){ if(e.target.closest('button')) return; down(e,'drag'); },{passive:false});
+  }
+  box.querySelectorAll('.fres').forEach(function(el){
+    if(el.parentNode!==box) return;
+    el.addEventListener('mousedown', function(e){ down(e,'resize',el.dataset.c); });
+    el.addEventListener('touchstart',function(e){ down(e,'resize',el.dataset.c); },{passive:false});
+  });
+}
+
+/* Soltar / acoplar un panel de la pantalla principal. */
+function flotPanel(id){
+  var p=document.getElementById(id); if(!p) return;
+  var h=p.querySelector(':scope > h3') || p.querySelector(':scope > .tbl-head');
+  var r=p.getBoundingClientRect();               /* medir ANTES de sacarlo de la grilla */
+  var on=p.classList.toggle('flt');
+  var st=FLOT[id]=FLOT[id]||{}; st.flt=on;
+  if(on){
+    flotMotor(p, h, id);
+    p.style.left  =(st.x!=null?st.x:r.left)+'px';
+    p.style.top   =(st.y!=null?st.y:r.top)+'px';
+    p.style.width =(st.w!=null?st.w:Math.max(260,r.width))+'px';
+    p.style.height=(st.h!=null?st.h:Math.max(160,r.height))+'px';
+  } else {
+    ['left','top','width','height','right','bottom'].forEach(function(k){ p.style[k]=''; });
+  }
+  var b=p.querySelector('.fbtn');
+  if(b){ b.textContent = on?'⤡':'⧉'; b.title = on?'Devolver el panel a su lugar':'Soltar el panel: moverlo y agrandarlo a gusto'; }
+  flotGuardar();
+}
+
+/* Soltar / acoplar un análisis: deja de tapar la pantalla y podés seguir tipeando. */
+function flotModal(id){
+  var m=document.getElementById(id); if(!m) return;
+  var sh=m.querySelector('.sheet'); if(!sh) return;
+  var r=sh.getBoundingClientRect();
+  var on=m.classList.toggle('suelto');
+  var key='modal:'+id, st=FLOT[key]=FLOT[key]||{}; st.flt=on;
+  if(on){
+    flotMotor(sh, sh.querySelector('h2'), key);
+    sh.style.left  =(st.x!=null?st.x:Math.max(10,r.left))+'px';
+    sh.style.top   =(st.y!=null?st.y:Math.max(10,r.top))+'px';
+    sh.style.width =(st.w!=null?st.w:r.width)+'px';
+    sh.style.height=(st.h!=null?st.h:Math.min(r.height, Math.round(window.innerHeight*0.7)))+'px';
+    var c=document.getElementById('code'); if(c) setTimeout(function(){ c.focus(); },60);
+  } else {
+    ['left','top','width','height','right','bottom'].forEach(function(k){ sh.style[k]=''; });
+  }
+  var b=m.querySelector('.fbtn');
+  if(b){ b.textContent = on?'⤡ Acoplar':'⧉ Soltar'; b.title = on?'Volver a pantalla completa':'Dejalo flotando y seguí scouteando: se actualiza solo'; }
+  flotGuardar();
+}
+
+/* Vuelve todo a su lugar de fábrica. */
+function flotReset(){
+  Array.prototype.slice.call(document.querySelectorAll('.pane.flt')).forEach(function(p){ flotPanel(p.id); });
+  Array.prototype.slice.call(document.querySelectorAll('.modal.suelto')).forEach(function(m){ flotModal(m.id); });
+  FLOT={}; flotGuardar();
+  if(typeof toast==='function') toast('Los paneles volvieron a su lugar');
+}
+
+/* Pone el botón ⧉ en cada panel y en cada análisis, y restaura la disposición. */
+function flotInit(){
+  document.querySelectorAll('.pane').forEach(function(p,i){
+    if(p.closest('.modal')) return;                 /* los de adentro de un análisis no */
+    if(!p.id) p.id='pane-f'+i;
+    /* manija: el título del panel, o la cabecera de la tabla si no tiene título */
+    var h=p.querySelector(':scope > h3') || p.querySelector(':scope > .tbl-head');
+    if(!h || h.querySelector('.fbtn')) return;
+    var b=document.createElement('button');
+    b.className='fbtn'; b.type='button'; b.textContent='⧉';
+    b.title='Soltar el panel: moverlo y agrandarlo a gusto';
+    b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); flotPanel(p.id); });
+    h.appendChild(b);
+    if(FLOT[p.id] && FLOT[p.id].flt) flotPanel(p.id);
+  });
+  var NO=['m-setup','m-video','m-videovivo','m-exportmode'];   /* el video ya tiene su propio acople */
+  document.querySelectorAll('.modal').forEach(function(m){
+    if(!m.id || NO.indexOf(m.id)>=0) return;
+    var sh=m.querySelector('.sheet'); if(!sh) return;
+    var h=sh.querySelector('h2'); if(!h || h.querySelector('.fbtn')) return;
+    var b=document.createElement('button');
+    b.className='fbtn'; b.type='button'; b.textContent='⧉ Soltar';
+    b.title='Dejalo flotando y seguí scouteando: se actualiza solo';
+    b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); flotModal(m.id); });
+    h.appendChild(b);
+    if(FLOT['modal:'+m.id] && FLOT['modal:'+m.id].flt && m.classList.contains('open')) flotModal(m.id);
+  });
+}
+try{ flotInit(); }catch(e){}
+
 try{ const hh=localStorage.getItem('pv_codesh'); if(hh){ document.getElementById('codes-h').value=hh; altoCodigos(hh); } }catch(e){}
 document.getElementById('code').focus();
 if(M.home.lineup.every(x=>!x)) openSetup();
