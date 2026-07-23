@@ -294,9 +294,17 @@ body.arrastrando iframe{pointer-events:none}
 .ini-pie a:hover{color:#fff}
 .ini-vacio{padding:26px;text-align:center;color:var(--mut)}
 /* Objetivos del día */
-.obj-head{display:grid;grid-template-columns:1fr 120px 120px 150px;gap:0;padding:10px 16px 4px;
-      font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--mut)}
-.obj-cards{display:flex;flex-direction:column;gap:6px;max-height:62vh;overflow:auto}
+.obj-scroll{max-height:62vh;overflow:auto;padding-top:2px}
+/* El encabezado usa EXACTAMENTE la misma grilla y la misma caja que las filas
+   (mismo borde, sin márgenes laterales) y va dentro del mismo contenedor que
+   scrollea: así las columnas quedan siempre alineadas con sus valores. */
+.obj-head{display:grid;grid-template-columns:1fr 120px 120px 150px;
+      border:1px solid transparent;padding:4px 0 7px;position:sticky;top:0;z-index:2;
+      background:var(--card);font-size:10px;font-weight:700;letter-spacing:1.6px;
+      text-transform:uppercase;color:var(--mut)}
+.obj-head>span{text-align:center;align-self:end}
+.obj-head>span:first-child{text-align:left;padding-left:17px}
+.obj-cards{display:flex;flex-direction:column;gap:6px}
 .obj-row{display:grid;grid-template-columns:1fr 120px 120px 150px;align-items:center;
       background:rgba(255,255,255,.025);border:1px solid var(--b);border-radius:11px;overflow:hidden}
 .obj-row:hover{border-color:var(--b2)}
@@ -304,16 +312,20 @@ body.arrastrando iframe{pointer-events:none}
 .obj-lab .t{font-size:14px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
 .obj-bar{margin-top:9px;height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
 .obj-bar>i{display:block;height:100%;border-radius:2px;transition:width .5s ease}
-.obj-act{padding:14px;text-align:center;border-right:1px solid var(--b);font-size:28px;font-weight:900;line-height:1}
-.obj-meta{padding:10px 12px;text-align:center;border-right:1px solid var(--b)}
+.obj-act{padding:14px 8px;border-right:1px solid var(--b);font-size:28px;font-weight:900;line-height:1;
+      display:flex;align-items:center;justify-content:center;height:100%;font-variant-numeric:tabular-nums}
+.obj-meta{padding:10px 8px;border-right:1px solid var(--b);
+      display:flex;align-items:center;justify-content:center;height:100%}
 .obj-meta input{width:84px;background:rgba(255,255,255,.06);border:1px solid var(--b2);border-radius:8px;
       padding:8px 0;color:#fff;font-size:20px;font-weight:800;text-align:center;outline:none}
-.obj-res{padding:12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px}
+.obj-res{padding:12px 8px;text-align:center;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:3px;height:100%}
 .obj-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;
       font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
 .obj-sub{font-size:10px;color:var(--mut);letter-spacing:.4px}
 .obj-nada{font-size:11px;color:var(--mut);letter-spacing:1px;text-transform:uppercase}
-@media (max-width:720px){ .obj-head,.obj-row{grid-template-columns:1fr 80px 90px} .obj-res{display:none} }
+@media (max-width:720px){ .obj-head,.obj-row{grid-template-columns:1fr 80px 90px}
+  .obj-res,.obj-head>span:nth-child(4){display:none} }
 
 @media (max-width:820px){ .ini-body{grid-template-columns:1fr} .ini-side{display:none}
   .ini-row,.ini-head{grid-template-columns:70px 1fr 58px 1fr} .ini-row .cp,.ini-head span:nth-child(5){display:none} }
@@ -818,11 +830,12 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <button class="x" onclick="closeModal('m-objetivos')">Cerrar</button>
   </h2>
   <div class="sub">Se calculan en vivo con lo que vas scouteando. Escribí la meta de cada indicador y queda guardada.</div>
-  <div class="obj-head">
-    <span>Indicador</span><span style="text-align:center">Actual</span>
-    <span style="text-align:center">Objetivo</span><span style="text-align:center">Resultado</span>
+  <div class="obj-scroll">
+    <div class="obj-head">
+      <span>Indicador</span><span>Actual</span><span>Objetivo</span><span>Resultado</span>
+    </div>
+    <div id="obj-cards" class="obj-cards"></div>
   </div>
-  <div id="obj-cards" class="obj-cards"></div>
 </div></div>
 
 <div class="modal inicio" id="m-inicio"><div class="sheet">
