@@ -67,6 +67,27 @@ function _fbSincronizarRol(){
     }
   }catch(e){}
 }
+/* El rol (coach / at / pf / player) vive en la base, atado al UID.
+   Se lee al entrar, así no depende de lo que haya quedado en el navegador. */
+function _fbCargarRol(){
+  if(!FB_SES || !FB_SES.uid) return Promise.resolve();
+  return _fbSufijo().then(function(q){
+    return fetch(FB_URL + '/roles/' + FB_SES.uid + '.json' + q)
+      .then(function(r){ return r.json(); })
+      .then(function(rol){
+        if(typeof rol === 'string' && rol){
+          try{
+            localStorage.setItem('vb_role', rol);
+            if(rol !== 'player') localStorage.removeItem('vb_player_num');
+          }catch(e){}
+          /* si la pantalla ya se dibujó, vuelvo a aplicar los permisos visuales */
+          try{ if(typeof window.VB_refrescarPermisos === 'function') window.VB_refrescarPermisos(); }catch(e){}
+        }
+      })
+      .catch(function(){});
+  });
+}
+
 function fbUser(){
   return FB_SES ? {email:FB_SES.email, uid:FB_SES.uid,
                    staff:(FB_SES.email||'').indexOf('@'+FB_DOM)<0} : null;
@@ -195,11 +216,14 @@ function _fbArrancar(){
   _fbListo = new Promise(function(resolve){
     function pedir(){
       if(document.readyState === 'loading')
-        document.addEventListener('DOMContentLoaded', function(){ _fbPantalla().then(resolve); });
-      else _fbPantalla().then(resolve);
+        document.addEventListener('DOMContentLoaded', function(){
+          _fbPantalla().then(function(){ return _fbCargarRol(); }).then(resolve);
+        });
+      else _fbPantalla().then(function(){ return _fbCargarRol(); }).then(resolve);
     }
     if(FB_SES && FB_SES.refreshToken){
       _fbRefrescar()
+        .then(function(){ return _fbCargarRol(); })
         .then(function(){ resolve(true); })
         .catch(function(){
           if(!navigator.onLine){ FB_OFF = true; resolve(true); }   /* sin internet: seguimos con lo guardado */
@@ -296,6 +320,7 @@ function fbPush(path, value){
     }catch(e){}
   }
   function init(){ window.VB_aplicarPermisos(document); chip(); }
+  window.VB_refrescarPermisos = init;   /* se vuelve a llamar cuando llega el rol desde la base */
   if(document.readyState!=='loading') init();
   else document.addEventListener('DOMContentLoaded', init);
 })();
