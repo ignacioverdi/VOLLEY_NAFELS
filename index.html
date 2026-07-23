@@ -240,22 +240,6 @@ footer{
 .bag-name{font-size:10px;color:var(--mut);font-weight:600;}
 .bag-pts{font-size:10px;color:var(--txt);}
 
-/* ── LOGIN PIN ───────────────────────────────────────── */
-.pin-overlay{position:fixed;inset:0;background:rgba(7,8,15,.95);backdrop-filter:blur(20px);z-index:1000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px;}
-.pin-box{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:32px;width:320px;text-align:center;}
-.pin-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;margin-bottom:4px;}
-.pin-sub{font-size:11px;color:var(--mut);margin-bottom:24px;letter-spacing:.5px;}
-.pin-jugador-sel{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:10px;color:var(--txt);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;padding:10px 12px;outline:none;margin-bottom:16px;}
-.pin-display{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:12px;height:52px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border2);border-radius:10px;margin-bottom:16px;background:rgba(255,255,255,.02);color:var(--red);}
-.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
-.pin-btn{padding:14px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--txt);font-family:'Bebas Neue',sans-serif;font-size:20px;cursor:pointer;transition:all .15s;}
-.pin-btn:hover{background:rgba(255,255,255,.1);border-color:var(--border2);}
-.pin-btn:active{transform:scale(.95);}
-.pin-enter{width:100%;padding:12px;border-radius:10px;border:none;background:var(--red);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;cursor:pointer;transition:all .2s;}
-.pin-enter:hover{background:#c5101f;transform:translateY(-1px);}
-.pin-skip{font-size:10px;color:var(--mut);cursor:pointer;text-decoration:underline;margin-top:8px;}
-.pin-error{color:var(--red);font-size:11px;margin-top:4px;height:16px;}
-
 /* ── DROPDOWNS — texto siempre negro ── */
 select, select option {
   color: #111111 !important;
@@ -318,25 +302,6 @@ select, select option {
 </head>
 <body>
 <div id="fx"><div class="grid"></div><div class="sweep"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="vig"></div></div>
-<!-- PIN LOGIN OVERLAY -->
-<div class="pin-overlay" id="pin-overlay" style="display:none;">
-  <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:4px;">
-    <img src="escudo.png" alt="Volley Näfels" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex:none;">
-    <span style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:6px;background:linear-gradient(120deg,#e8192c,#fff 50%,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">NAFELS VOLEY</span>
-  </div>
-  <div class="pin-box">
-    <div class="pin-title" data-t="pin_ingresar">Ingresar</div>
-    <div class="pin-sub"><span data-t="pin_sel_nombre">Seleccioná tu nombre</span> · PIN = <strong style="color:var(--red)">00</strong> + <span data-t="pin_num_camiseta">número de camiseta</span><br><span style="font-size:10px;opacity:.6"><span data-t="pin_ej_camiseta">Ej: camiseta</span> #17 → PIN: 0017</span></div>
-    <select class="pin-jugador-sel" id="pin-jugador">
-      <option value="" data-t="pin_elegi_nombre">— Elegí tu nombre —</option>
-    </select>
-    <div class="pin-display" id="pin-display">····</div>
-    <div class="pin-grid" id="pin-grid"></div>
-    <button class="pin-enter" onclick="pinEnter()"><span data-t="pin_entrar">ENTRAR</span> →</button>
-    <div class="pin-error" id="pin-error"></div>
-    <div class="pin-skip" onclick="pinSkip()" data-t="pin_continuar">Continuar sin ingresar</div>
-  </div>
-</div>
 
 
 
@@ -1141,167 +1106,6 @@ function initBaggeroneTop3(){
   }
 }
 
-// ── PIN LOGIN ─────────────────────────────────────────────────
-var PIN_JUGADORES = [];
-var pinActual = '';
-var pinCorrecto = '';
-
-function initPin(){
-  // Cargar jugadores desde el PLANTEL MAESTRO (plantel_nafels.js) o EQUIPO_DATA o default 2026-27
-  var jugs = (window.PLANTEL_NAFELS && window.PLANTEL_NAFELS.lista) ? window.PLANTEL_NAFELS.lista
-           : (window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores) ? window.EQUIPO_DATA.jugadores : [
-    {num:1,nombre:"DURDOS"},
-    {num:3,nombre:"SCHWITTER"},
-    {num:4,nombre:"VAZQUEZ"},
-    {num:5,nombre:"CLEMENT"},
-    {num:7,nombre:"SCHMID R"},
-    {num:9,nombre:"NORRIS"},
-    {num:10,nombre:"BOGDANOVSKI"},
-    {num:11,nombre:"BARTHOLET"},
-    {num:12,nombre:"JOHANSSON"},
-    {num:13,nombre:"STEIMANN"},
-    {num:17,nombre:"ROFFLER"},
-    {num:20,nombre:"SCHMID J"},
-  ];
-  PIN_JUGADORES = jugs;
-
-  var sel = document.getElementById('pin-jugador');
-  sel.innerHTML = '<option value="">— Elegí tu nombre —</option>';
-  // Opción entrenador
-  var oCoach = document.createElement('option');
-  oCoach.value = 'coach'; oCoach.textContent = '👨‍💼 Entrenador (Staff)';
-  sel.appendChild(oCoach);
-  var oPF = document.createElement('option');
-  oPF.value = 'pf'; oPF.textContent = '🏋️ Preparador Físico (PF)';
-  sel.appendChild(oPF);
-  var oAT = document.createElement('option');
-  oAT.value = 'at'; oAT.textContent = '📋 Asistente Técnico (AT)';
-  sel.appendChild(oAT);
-  jugs.slice().sort(function(a,b){ return (a.num||0)-(b.num||0); }).forEach(function(j){
-    var o = document.createElement('option');
-    o.value = j.num;
-    o.textContent = '#'+j.num+' '+j.nombre;
-    sel.appendChild(o);
-  });
-
-  // Teclado numérico
-  var grid = document.getElementById('pin-grid');
-  grid.innerHTML = '';
-  [1,2,3,4,5,6,7,8,9,'⌫',0,'✓'].forEach(function(n){
-    var btn = document.createElement('button');
-    btn.className = 'pin-btn';
-    btn.textContent = n;
-    btn.onclick = function(){
-      if(n==='⌫'){ pinActual=pinActual.slice(0,-1); }
-      else if(n==='✓'){ pinEnter(); return; }
-      else if(pinActual.length<4){ pinActual+=n; }
-      updatePinDisplay();
-    };
-    grid.appendChild(btn);
-  });
-
-  // Ver si hay sesión guardada
-  var savedNum = localStorage.getItem('vb_player_num');
-  var savedPin = localStorage.getItem('vb_player_pin_'+savedNum);
-  if(savedNum && savedPin){
-    // Auto-login silencioso
-    return;
-  }
-
-  // Mostrar overlay solo si no hay sesión
-  var visto = sessionStorage.getItem('vb_pin_skip');
-  if(!visto){
-    document.getElementById('pin-overlay').style.display='flex';
-  }
-}
-
-function updatePinDisplay(){
-  var dots = pinActual.split('').map(function(){ return '●'; }).join('');
-  while(dots.length<4) dots += '·';
-  document.getElementById('pin-display').textContent = dots;
-  document.getElementById('pin-error').textContent = '';
-}
-
-function pinEnter(){
-  var num = document.getElementById('pin-jugador').value;
-  if(!num){ document.getElementById('pin-error').textContent = 'Elegí tu nombre primero'; return; }
-  if(pinActual.length < 4){ document.getElementById('pin-error').textContent = 'Ingresá los 4 dígitos'; return; }
-
-  // ── ENTRENADOR ───────────────────────────────────────────
-  if(num === 'coach'){
-    if(pinActual === '1009'){
-      localStorage.setItem('vb_role','coach'); localStorage.removeItem('vb_player_num');
-      sessionStorage.setItem('vb_pin_skip','1');
-      document.getElementById('pin-overlay').style.display='none';
-      showToastLogin('👨‍💼 Welcome Coach!');
-      return;
-    } else {
-      document.getElementById('pin-error').textContent = 'PIN de entrenador incorrecto ⚠️';
-      pinActual=''; updatePinDisplay(); return;
-    }
-  }
-
-  // ── PREPARADOR FÍSICO (carga libre) ───────────────────────
-  if(num === 'pf'){
-    if(pinActual === '0000'){
-      localStorage.setItem('vb_role','pf'); localStorage.removeItem('vb_player_num');
-      sessionStorage.setItem('vb_pin_skip','1');
-      document.getElementById('pin-overlay').style.display='none';
-      showToastLogin('🏋️ Bienvenido, Preparador Físico');
-      window.location.href = 'prep_builder.html';   // va directo a armar rutinas
-      return;
-    } else {
-      document.getElementById('pin-error').textContent = 'PIN de PF incorrecto ⚠️';
-      pinActual=''; updatePinDisplay(); return;
-    }
-  }
-
-  // ── ASISTENTE TÉCNICO (carga libre) ───────────────────────
-  if(num === 'at'){
-    if(pinActual === '9999'){
-      localStorage.setItem('vb_role','at'); localStorage.removeItem('vb_player_num');
-      sessionStorage.setItem('vb_pin_skip','1');
-      document.getElementById('pin-overlay').style.display='none';
-      showToastLogin('📋 Bienvenido, Asistente Técnico');
-      return;   // se queda en el Hub con acceso completo a la carga
-    } else {
-      document.getElementById('pin-error').textContent = 'PIN de AT incorrecto ⚠️';
-      pinActual=''; updatePinDisplay(); return;
-    }
-  }
-
-  // ── JUGADOR — PIN = 00 + número de camiseta ───────────────
-  var pinCorrecto = '00' + String(num).padStart(2,'0');
-  // Números de 2 dígitos ya quedan bien: 00+02=0002, 00+17=0017
-  // Para camiseta 20: pin=0020, para camiseta 2: pin=0002
-  // Normalizar: siempre son 4 dígitos
-  pinCorrecto = String(num).padStart(4,'0'); // ej: num=2→0002, num=20→0020
-
-  if(pinActual === pinCorrecto){
-    localStorage.setItem('vb_player_num', num);
-    localStorage.setItem('vb_role','player');
-    sessionStorage.setItem('vb_pin_skip','1');
-    document.getElementById('pin-overlay').style.display='none';
-    window.location.href = 'jugador.html?num='+num;
-  } else {
-    document.getElementById('pin-error').textContent = 'PIN incorrecto ⚠️';
-    pinActual=''; updatePinDisplay();
-  }
-}
-
-function showToastLogin(msg){
-  var t=document.createElement('div');
-  t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#22c55e;color:#fff;padding:10px 20px;border-radius:10px;font-family:Bebas Neue,sans-serif;font-size:15px;letter-spacing:2px;z-index:9999;';
-  t.textContent=msg;
-  document.body.appendChild(t);
-  setTimeout(function(){t.remove();},2500);
-}
-
-function pinSkip(){
-  sessionStorage.setItem('vb_pin_skip','1');
-  document.getElementById('pin-overlay').style.display='none';
-}
-
 // ── INIT ──────────────────────────────────────────────────────
 
 // ── AUTO-RESULTADOS desde PARTIDOS_META ─────────────────────────────
@@ -1340,7 +1144,7 @@ function updateResultados(){
 document.addEventListener('DOMContentLoaded', function(){
   initCountdown();
   initBaggeroneTop3();
-  initPin();
+  /* el PIN ya no se usa: el ingreso lo maneja firebase.js con cuentas reales */
   highlightNextMatch();
   updateResultados();
 });
@@ -1463,7 +1267,10 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
       host.insertBefore(bar, host.firstChild);
       var b = document.getElementById('vbSalirJug');
       if(b) b.onclick = function(){
-        try{ localStorage.removeItem('vb_role'); localStorage.removeItem('vb_player_num'); sessionStorage.removeItem('vb_pin_skip'); }catch(e){}
+        /* Cierra la sesion de verdad. Antes solo borraba el rol del navegador,
+           pero ahora el rol viene de la base y volveria a aparecer al recargar. */
+        if(typeof fbLogout === 'function'){ fbLogout(); return; }
+        try{ localStorage.removeItem('vb_role'); localStorage.removeItem('vb_player_num'); }catch(e){}
         location.reload();
       };
     })();
