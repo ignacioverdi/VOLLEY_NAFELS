@@ -72,19 +72,23 @@ function _fbSincronizarRol(){
 function _fbCargarRol(){
   if(!FB_SES || !FB_SES.uid) return Promise.resolve();
   return _fbSufijo().then(function(q){
-    return fetch(FB_URL + '/roles/' + FB_SES.uid + '.json' + q)
-      .then(function(r){ return r.json(); })
-      .then(function(rol){
-        if(typeof rol === 'string' && rol){
-          try{
-            localStorage.setItem('vb_role', rol);
-            if(rol !== 'player') localStorage.removeItem('vb_player_num');
-          }catch(e){}
-          /* si la pantalla ya se dibujó, vuelvo a aplicar los permisos visuales */
-          try{ if(typeof window.VB_refrescarPermisos === 'function') window.VB_refrescarPermisos(); }catch(e){}
-        }
-      })
-      .catch(function(){});
+    /* Rol (coach/at/pf/player) y numero de camiseta, los dos atados al UID.
+       El numero lo necesitan la vista por jugador y los avisos personales. */
+    var pRol = fetch(FB_URL + '/roles/' + FB_SES.uid + '.json' + q).then(function(r){ return r.json(); });
+    var pNum = fetch(FB_URL + '/jugador_num/' + FB_SES.uid + '.json' + q).then(function(r){ return r.json(); });
+    return Promise.all([pRol, pNum]).then(function(res){
+      var rol = res[0], num = res[1];
+      try{
+        if(typeof rol === 'string' && rol) localStorage.setItem('vb_role', rol);
+        if(num !== null && num !== undefined && String(num) !== '')
+          localStorage.setItem('vb_player_num', String(num));
+        else if(rol && rol !== 'player')
+          localStorage.removeItem('vb_player_num');
+      }catch(e){}
+      try{ if(typeof window.VB_refrescarPermisos === 'function') window.VB_refrescarPermisos(); }catch(e){}
+      /* avisar a quien dependa del numero (avisos personales, vista por jugador) */
+      try{ window.dispatchEvent(new CustomEvent('vb-rol-listo', {detail:{rol:rol, num:num}})); }catch(e){}
+    }).catch(function(){});
   });
 }
 
