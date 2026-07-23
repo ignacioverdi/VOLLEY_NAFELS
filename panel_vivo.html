@@ -293,6 +293,28 @@ body.arrastrando iframe{pointer-events:none}
 .ini-pie a{color:var(--mut);text-decoration:none;border-bottom:1px dotted var(--b2);cursor:pointer}
 .ini-pie a:hover{color:#fff}
 .ini-vacio{padding:26px;text-align:center;color:var(--mut)}
+/* Objetivos del día */
+.obj-head{display:grid;grid-template-columns:1fr 120px 120px 150px;gap:0;padding:10px 16px 4px;
+      font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--mut)}
+.obj-cards{display:flex;flex-direction:column;gap:6px;max-height:62vh;overflow:auto}
+.obj-row{display:grid;grid-template-columns:1fr 120px 120px 150px;align-items:center;
+      background:rgba(255,255,255,.025);border:1px solid var(--b);border-radius:11px;overflow:hidden}
+.obj-row:hover{border-color:var(--b2)}
+.obj-lab{padding:14px 16px;border-right:1px solid var(--b)}
+.obj-lab .t{font-size:14px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
+.obj-bar{margin-top:9px;height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
+.obj-bar>i{display:block;height:100%;border-radius:2px;transition:width .5s ease}
+.obj-act{padding:14px;text-align:center;border-right:1px solid var(--b);font-size:28px;font-weight:900;line-height:1}
+.obj-meta{padding:10px 12px;text-align:center;border-right:1px solid var(--b)}
+.obj-meta input{width:84px;background:rgba(255,255,255,.06);border:1px solid var(--b2);border-radius:8px;
+      padding:8px 0;color:#fff;font-size:20px;font-weight:800;text-align:center;outline:none}
+.obj-res{padding:12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px}
+.obj-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;
+      font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
+.obj-sub{font-size:10px;color:var(--mut);letter-spacing:.4px}
+.obj-nada{font-size:11px;color:var(--mut);letter-spacing:1px;text-transform:uppercase}
+@media (max-width:720px){ .obj-head,.obj-row{grid-template-columns:1fr 80px 90px} .obj-res{display:none} }
+
 @media (max-width:820px){ .ini-body{grid-template-columns:1fr} .ini-side{display:none}
   .ini-row,.ini-head{grid-template-columns:70px 1fr 58px 1fr} .ini-row .cp,.ini-head span:nth-child(5){display:none} }
 
@@ -364,6 +386,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <button class="tbtn" onclick="abrirVideo()" title="Video y sincronización (manual 2.5.6)">Video</button>
   <button class="tbtn" onclick="abrirCombos()" title="Combinaciones de ataque y llamadas (manual 12.2)">Comb ataque</button>
   <button class="tbtn" onclick="abrirEquipos()" title="Base de equipos (nuevo · importar · exportar)">Equipos</button>
+  <button class="tbtn" onclick="toggleObj()" style="color:#4ade80;border-color:rgba(74,222,128,.35)">&#9679; Objetivos</button>
   <button class="tbtn" onclick="flotReset()" title="Vuelve todos los paneles y análisis a su lugar original">⧉ Ventanas</button>
   <button class="tbtn" onclick="openConfig()">Teclado y códigos</button>
   <button class="tbtn" onclick="abrirAyuda()" title="Cómo usar el scout — guía paso a paso">Cómo se usa</button>
@@ -789,6 +812,19 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 
 <!-- ====== MODAL: SETUP ====== -->
 <!-- PANTALLA DE INICIO — calcada de la Homepage de Data Volley (manual 2.1) -->
+<!-- OBJETIVOS DEL DÍA — mismo tablero que el panel voley, calculado en vivo -->
+<div class="modal" id="m-objetivos"><div class="sheet" style="width:min(980px,96vw)">
+  <h2>Objetivos del día
+    <button class="x" onclick="closeModal('m-objetivos')">Cerrar</button>
+  </h2>
+  <div class="sub">Se calculan en vivo con lo que vas scouteando. Escribí la meta de cada indicador y queda guardada.</div>
+  <div class="obj-head">
+    <span>Indicador</span><span style="text-align:center">Actual</span>
+    <span style="text-align:center">Objetivo</span><span style="text-align:center">Resultado</span>
+  </div>
+  <div id="obj-cards" class="obj-cards"></div>
+</div></div>
+
 <div class="modal inicio" id="m-inicio"><div class="sheet">
   <div class="ini-top">
     <h2><span class="hb">≡</span> <span id="ini-temp">Temporada</span></h2>
@@ -2667,6 +2703,7 @@ function nombreJug(side,num){
 }
 
 function renderAll(){
+  try{ objRefrescar(); }catch(e){}   /* objetivos: se actualizan solos si están abiertos */
   document.getElementById('nm-h').textContent = M.home.name;
   document.getElementById('nm-a').textContent = M.away.name;
   document.getElementById('st-nm-h').textContent = M.home.name;
@@ -4433,6 +4470,145 @@ function iniSeguir(){ closeModal('m-inicio'); }
 function iniAbrir(id){ abrirPartido(id); closeModal('m-inicio'); }
 function iniNuevo(){ closeModal('m-inicio'); nuevoPartido(); }
 function iniImportar(){ window.open('importar_dvw.html','_blank'); }
+
+
+/* ============================================================
+   OBJETIVOS DEL DÍA
+   El mismo tablero que el panel voley, pero calculado en vivo con los
+   códigos que se van cargando acá (no hace falta bajar ningún archivo).
+   Las metas se guardan con las mismas claves que el panel voley, así que
+   si ya las cargaste allá, aparecen acá igual.
+   ============================================================ */
+function calcObjetivos(D){
+  if(!D)return null;
+  const act=D.j.filter(p=>p.a);
+  // Team totals
+  const sT=[0,0,0,0,0,0,0],rT=[0,0,0,0,0,0,0],aT=[0,0,0,0,0,0,0];
+  const aV=[0,0,0,0,0,0,0],bT=[0,0,0,0,0,0,0],aTT=[0,0,0,0,0,0,0];
+  act.forEach(p=>{
+    for(let i=0;i<7;i++){
+      sT[i]+=p.sT[i];rT[i]+=p.rT[i];
+      aT[i]+=p.aT[i];aV[i]+=p.aV[i];
+      bT[i]+=p.bT[i];aTT[i]+=p.aTT[i];
+    }
+  });
+  // Eff Saque: (1×# + 0.5×/ + 0.25×+ - 1×=) / total
+  const effS=sT[6]?Math.round((sT[0]*1+sT[4]*0.5+sT[1]*0.25-sT[5]*1)/sT[6]*100):null;
+  // Eff Rec: (1×# + 0.5×+ - 0.5×/ - 1×=) / total
+  const effR=rT[6]?Math.round((rT[0]*1+rT[1]*0.5-rT[4]*0.5-rT[5]*1)/rT[6]*100):null;
+  // Bloqueo #+%: (# + +) / total
+  const effB=bT[6]?Math.round((bT[0]+bT[1])/bT[6]*100):null;
+  // Eff Ataque Alta: (# - / - =) / total altas
+  const effA=aV[6]?Math.round((aV[0]-aV[4]-aV[5])/aV[6]*100):null;
+  // Toques
+  const tcq=aTT[6]||0;
+  // Manos y afuera: bloqueos = del equipo rival = bT[5]
+  const mya=bT[5]||0;
+  return {effS,effR,effB,effA,tcq,mya};
+}
+
+/* ── KPIs POR FASE (side out / transición) desde los códigos crudos del scout en vivo ── */
+
+function calcFaseKPIs(codes, side){
+  side = side || '*';
+  var ROL={};
+  try{
+    var P=window.PLANTEL_NAFELS;
+    var arr=(P&&P.jugadores)?P.jugadores:(P&&P.lista)?P.lista:(Array.isArray(P)?P:[]);
+    arr.forEach(function(j){ var n=(j.num!=null?j.num:j.c); var pos=((j.pos||j.rol||'')+'').toUpperCase(); if(n!=null) ROL[parseInt(n,10)]=pos; });
+  }catch(e){}
+  function esCentral(num,tipo){ var pos=ROL[parseInt(num,10)]||''; return pos.indexOf('CENTRAL')>=0 || tipo==='Q'; }
+  var PIPE={XP:1,XR:1,XB:1};
+  var so={k:0,e:0,b:0,t:0}, tr={k:0,e:0,b:0,t:0}, mbTr=0, pipeSD=0, pipeTR=0;
+  var last_rec=null, rec_valida=false;
+  for(var i=0;i<codes.length;i++){
+    var l=((codes[i]&&codes[i].c)||'').trim(); if(l.length<6) continue;
+    var pfx=l[0], num=l.slice(1,3), skill=l[3], tipo=l[4], ev=l[5];
+    if(!/^\d\d$/.test(num)) continue;
+    var combo=l.slice(6,8); if(combo.indexOf('~')>=0) combo='';
+    if(skill==='S'){ last_rec=null; rec_valida=false; }
+    else if(skill==='R' && pfx===side){ last_rec=ev; rec_valida=true; }
+    else if(pfx!==side && (skill==='A'||skill==='D'||skill==='E'||skill==='B')){ rec_valida=false; }
+    else if(skill==='A' && pfx===side){
+      var esSO=(last_rec!==null && rec_valida);
+      var recBuena=esSO && (last_rec==='#'||last_rec==='+');
+      if(esSO) rec_valida=false;
+      var K=(ev==='#'), E=(ev==='='), B=(ev==='/');
+      if(recBuena){ so.t++; if(K)so.k++; if(E)so.e++; if(B)so.b++; if(K&&PIPE[combo])pipeSD++; }
+      if(!esSO){ tr.t++; if(K)tr.k++; if(E)tr.e++; if(B)tr.b++; if(K&&PIPE[combo])pipeTR++; if(K&&esCentral(num,tipo))mbTr++; }
+    }
+  }
+  var pct=function(o){ return o.t>0 ? Math.round((o.k-o.e-o.b)/o.t*100) : null; };
+  return { sideout:pct(so), transition:pct(tr), mbTr:mbTr, pipeSD:pipeSD, pipeTR:pipeTR };
+}
+function objKPIS(){
+  var side = (CFG.fichasTeam==='away') ? 'away' : 'home';
+  var D=null, fase={};
+  try{ D = buildVoleyData(side); }catch(e){}
+  try{ fase = calcFaseKPIs(M.codes||[], side==='home'?'*':'a') || {}; }catch(e){ fase={}; }
+  var k=null; try{ k = calcObjetivos(D); }catch(e){}
+  return [
+    {id:'saque',      label:'Eficiencia saque',      color:'#fbbf24', val:k?k.effS:null, unit:'%'},
+    {id:'rec',        label:'Eficiencia recepción',  color:'#4ade80', val:k?k.effR:null, unit:'%'},
+    {id:'blq',        label:'Bloqueo # + %',         color:'#a78bfa', val:k?k.effB:null, unit:'%'},
+    {id:'alta',       label:'Eficiencia ataque alta',color:'#38bdf8', val:k?k.effA:null, unit:'%'},
+    {id:'tcq',        label:'# Toques',              color:'#a78bfa', val:k?k.tcq:null,  unit:''},
+    {id:'mya',        label:'# Block out',           color:'#f87171', val:k?k.mya:null,  unit:''},
+    {id:'sideout',    label:'% Side out (rec #/+)',  color:'#4ade80', val:fase.sideout,   unit:'%'},
+    {id:'transition', label:'% Transición',          color:'#38bdf8', val:fase.transition,unit:'%'},
+    {id:'mbtr',       label:'# Central en transición',color:'#a78bfa',val:fase.mbTr,     unit:''},
+    {id:'pipesd',     label:'# Pipe en side out',    color:'#fbbf24', val:fase.pipeSD,   unit:''},
+    {id:'pipetr',     label:'# Pipe en transición',  color:'#f87171', val:fase.pipeTR,   unit:''}
+  ];
+}
+
+function updateObj(){
+  var cont=document.getElementById('obj-cards'); if(!cont) return;
+  cont.innerHTML='';
+  objKPIS().forEach(function(k){
+    var saved=''; try{ saved=localStorage.getItem('goal-'+k.id)||''; }catch(e){}
+    var goal=parseFloat(saved), actual=k.val;
+    var hayMeta=(saved!=='' && !isNaN(goal)), hayDato=(actual!==null && actual!==undefined);
+    var pct=(hayMeta&&hayDato&&goal>0)?Math.min(100,Math.round(actual/goal*100)):0;
+
+    var badge;
+    if(!hayMeta)        badge='<div class="obj-nada">Poné la meta</div>';
+    else if(!hayDato)   badge='<div class="obj-nada">Sin datos aún</div>';
+    else if(actual>=goal) badge='<div class="obj-badge" style="background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.4);color:#4ade80">&#10003; Logrado</div>';
+    else if(pct>=75)      badge='<div class="obj-badge" style="background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.4);color:#fbbf24">&#9650; Cerca</div>';
+    else                  badge='<div class="obj-badge" style="background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.35);color:#f87171">&#9660; En proceso</div>';
+    var sub=(hayMeta&&hayDato)?'<div class="obj-sub">'+Math.round(actual)+k.unit+' de '+Math.round(goal)+k.unit+'</div>':'';
+
+    var row=document.createElement('div');
+    row.className='obj-row';
+    row.innerHTML=
+      '<div class="obj-lab"><div class="t" style="color:'+k.color+'">'+k.label+'</div>'
+        +'<div class="obj-bar"><i style="width:'+pct+'%;background:'+k.color+'"></i></div></div>'
+      +'<div class="obj-act" style="color:'+(hayDato?k.color:'rgba(255,255,255,.2)')+'">'
+        +(hayDato?(Math.round(actual)+k.unit):'--')+'</div>'
+      +'<div class="obj-meta"><input type="number" placeholder="'+(k.unit==='%'?'%':'N°')+'" value="'+saved
+        +'" data-goal="'+k.id+'"></div>'
+      +'<div class="obj-res">'+badge+sub+'</div>';
+    var inp=row.querySelector('input');
+    inp.addEventListener('input', function(){
+      try{ localStorage.setItem('goal-'+k.id, this.value); }catch(e){}
+      clearTimeout(window.__objT);
+      window.__objT=setTimeout(updateObj,400);      /* sin perder el foco mientras escribís */
+    });
+    cont.appendChild(row);
+  });
+}
+
+function toggleObj(){
+  var m=document.getElementById('m-objetivos'); if(!m) return;
+  if(m.classList.contains('open') && !m.classList.contains('suelto')){ closeModal('m-objetivos'); return; }
+  updateObj(); m.classList.add('open');
+}
+/* Se refresca solo mientras scouteás, si lo dejaste abierto o flotando. */
+function objRefrescar(){
+  var m=document.getElementById('m-objetivos');
+  if(m && m.classList.contains('open')) updateObj();
+}
 
 /* Se abre siempre al entrar al panel (manual 2.1: es la pantalla que te recibe). */
 try{ setTimeout(abrirInicio, 250); }catch(e){}
