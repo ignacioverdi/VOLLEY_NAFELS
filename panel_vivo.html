@@ -240,14 +240,15 @@ td .num{font-family:'JetBrains Mono',monospace;font-size:12px}
 .fbtn:hover{color:#fff;border-color:var(--b2)}
 .pane>h3,.pane>.tbl-head{display:flex;align-items:center;gap:6px}
 .sheet>h2{display:flex;align-items:center;gap:8px}
-.pane.flt{position:fixed;z-index:70;overflow:auto;box-shadow:0 18px 50px rgba(0,0,0,.6);border-color:var(--b2)}
+.pane.flt{position:fixed;z-index:70;overflow:auto;resize:both;min-width:200px;min-height:110px;
+      padding-bottom:18px;box-shadow:0 18px 50px rgba(0,0,0,.6);border-color:var(--b2)}
 .pane.flt>h3,.pane.flt>.tbl-head{cursor:move}
 .modal.open.suelto{position:static;background:transparent;display:block;inset:auto;padding:0;pointer-events:none;z-index:70}
 .modal.open.suelto .sheet{pointer-events:auto;position:fixed;max-width:none;max-height:none;
-      overflow:auto;box-shadow:0 18px 50px rgba(0,0,0,.6)}
+      overflow:auto;resize:both;min-width:240px;min-height:140px;padding-bottom:22px;
+      box-shadow:0 18px 50px rgba(0,0,0,.6)}
 .modal.open.suelto .sheet>h2{cursor:move}
-.fres{position:absolute;width:16px;height:16px;z-index:8;display:none}
-.pane.flt>.fres,.modal.open.suelto .sheet>.fres{display:block}
+.fres{display:none}   /* reemplazadas por el agarre nativo de la esquina (resize) */
 .fres-nw{left:-3px;top:-3px;cursor:nwse-resize}
 .fres-ne{right:-3px;top:-3px;cursor:nesw-resize}
 .fres-sw{left:-3px;bottom:-3px;cursor:nesw-resize}
@@ -4033,9 +4034,20 @@ function flotGuardar(){ save('pv_flot', FLOT); }
 /* Motor de arrastre y redimensión (el mismo que ya usa el video acoplado). */
 function flotMotor(box, hdr, key){
   if(box.__fm) return; box.__fm = true;
-  ['nw','ne','sw','se'].forEach(function(c){
-    var el=document.createElement('div'); el.className='fres fres-'+c; el.dataset.c=c; box.appendChild(el);
-  });
+  /* El tamaño se cambia con el agarre nativo de la esquina (CSS resize).
+     Acá sólo escuchamos para guardar el tamaño que elegiste. */
+  if(window.ResizeObserver){
+    var tmr=null;
+    new ResizeObserver(function(){
+      clearTimeout(tmr);
+      tmr=setTimeout(function(){
+        if(!box.classList.contains('flt') && !box.closest('.modal.suelto')) return;
+        var r=box.getBoundingClientRect();
+        FLOT[key]=Object.assign(FLOT[key]||{}, {w:r.width, h:r.height});
+        flotGuardar();
+      },260);
+    }).observe(box);
+  }
   var mode=null, corner=null, sx=0, sy=0, R=null;
   function pt(e){ return (e.touches && e.touches[0]) ? e.touches[0] : e; }
   function activo(){ return box.classList.contains('flt') || !!box.closest('.modal.suelto'); }
@@ -4079,11 +4091,7 @@ function flotMotor(box, hdr, key){
     hdr.addEventListener('mousedown', function(e){ if(e.target.closest('button')) return; down(e,'drag'); });
     hdr.addEventListener('touchstart',function(e){ if(e.target.closest('button')) return; down(e,'drag'); },{passive:false});
   }
-  box.querySelectorAll('.fres').forEach(function(el){
-    if(el.parentNode!==box) return;
-    el.addEventListener('mousedown', function(e){ down(e,'resize',el.dataset.c); });
-    el.addEventListener('touchstart',function(e){ down(e,'resize',el.dataset.c); },{passive:false});
-  });
+
 }
 
 /* Soltar / acoplar un panel de la pantalla principal. */
@@ -4137,6 +4145,19 @@ function flotReset(){
   if(typeof toast==='function') toast('Los paneles volvieron a su lugar');
 }
 
+/* Si un análisis quedó flotando, la próxima vez se abre ya flotando,
+   con la posición y el tamaño que le dejaste. */
+function flotVigilar(m){
+  if(m.__fo || !window.MutationObserver) return; m.__fo=true;
+  new MutationObserver(function(){
+    var st=FLOT['modal:'+m.id];
+    if(!st || !st.flt) return;
+    if(m.classList.contains('open') && !m.classList.contains('suelto')){
+      try{ flotModal(m.id); }catch(e){}
+    }
+  }).observe(m,{attributes:true, attributeFilter:['class']});
+}
+
 /* Pone el botón ⧉ en cada panel y en cada análisis, y restaura la disposición. */
 function flotInit(){
   document.querySelectorAll('.pane').forEach(function(p,i){
@@ -4162,6 +4183,7 @@ function flotInit(){
     b.title='Dejalo flotando y seguí scouteando: se actualiza solo';
     b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); flotModal(m.id); });
     h.appendChild(b);
+    flotVigilar(m);
     if(FLOT['modal:'+m.id] && FLOT['modal:'+m.id].flt && m.classList.contains('open')) flotModal(m.id);
   });
 }
