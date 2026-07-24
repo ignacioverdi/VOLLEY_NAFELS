@@ -334,10 +334,20 @@ body.arrastrando iframe{pointer-events:none}
       font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
 .obj-sub{font-size:10px;color:var(--mut);letter-spacing:.4px}
 .obj-nada{font-size:11px;color:var(--mut);letter-spacing:1px;text-transform:uppercase}
+/* elegir armador */
+.armlista{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px}
+.armbtn{background:var(--card2);border:1px solid var(--b);border-radius:11px;padding:13px 8px;
+  cursor:pointer;color:var(--txt);font:inherit;text-align:center;transition:.15s}
+.armbtn:hover{border-color:var(--b2);background:rgba(255,255,255,.06)}
+.armbtn .n{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:800;line-height:1}
+.armbtn .nm{font-size:11px;color:var(--mut);margin-top:4px;min-height:14px}
+.armbtn.sug{border-color:var(--ok)}
+.armbtn.sug .n{color:var(--ok)}
 /* ── ASISTENTE PARA CORREGIR CODIGOS (manual DV4: «Modify code») ──
    Columnas con las opciones posibles y su explicacion al lado. Solo se
    ofrecen las compatibles con lo ya elegido, como en Data Volley. */
-.wiz{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}
+.wiz{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:12px}
+@media (max-width:1100px){ .wiz{grid-template-columns:repeat(4,1fr)} }
 .wcol{border:1px solid var(--b);border-radius:9px;overflow:hidden;background:var(--card2)}
 .wcol h4{margin:0;padding:7px 9px;font-size:10px;font-weight:800;letter-spacing:1.2px;
       text-transform:uppercase;color:var(--mut);background:rgba(255,255,255,.04);
@@ -856,6 +866,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 
 <!-- ====== MODAL: SETUP ====== -->
 <!-- PANTALLA DE INICIO — calcada de la Homepage de Data Volley (manual 2.1) -->
+<!-- QUIEN ARMA AHORA: aparece cuando sale el armador y no se puede saltear -->
+<div class="modal" id="m-armador"><div class="sheet" style="width:min(460px,94vw)">
+  <h2 id="arm-tit">&iquest;Qui&eacute;n arma ahora?</h2>
+  <div class="sub" id="arm-sub"></div>
+  <div id="arm-lista" class="armlista"></div>
+  <div class="sub" style="margin-top:12px;color:var(--warn)">
+    Hay que elegir uno: de esto dependen las rotaciones y todo el an&aacute;lisis del armador.
+  </div>
+</div></div>
+
 <!-- OBJETIVOS DEL DÍA — mismo tablero que el panel voley, calculado en vivo -->
 <div class="modal" id="m-objetivos"><div class="sheet" style="width:min(980px,96vw)">
   <h2>Objetivos del día
@@ -985,6 +1005,8 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
       <div class="wcol"><h4>Acci&oacute;n</h4><div class="wlist" id="w-skill"></div></div>
       <div class="wcol"><h4>Tipo</h4><div class="wlist" id="w-type"></div></div>
       <div class="wcol"><h4>Evaluaci&oacute;n</h4><div class="wlist" id="w-ev"></div></div>
+      <div class="wcol"><h4>Combinaci&oacute;n</h4><div class="wlist" id="w-combo"></div></div>
+      <div class="wcol"><h4>Zona destino</h4><div class="wlist" id="w-ez"></div></div>
     </div>
   </div>
 
@@ -2194,12 +2216,49 @@ function hacerCambio(side,sale,entra){
   }
   const primero = levantarEstado();      /* el cambio va antes del bloque de estado */
   M[side].lineup[i]=entra; M[side].subs++;
-  if(M[side].setter===sale) M[side].setter=entra;
+  var saleElArmador = (M[side].setter===sale);
   const P2=n=>String(n).padStart(2,'0');
   pushCode((side==='home'?'*':'a')+'c'+P2(sale)+':'+P2(entra),'auto');
   if(primero) escribirEstado('', primero);   /* se reescribe, ya con el cambio hecho */
+  if(saleElArmador) preguntarArmador(side, entra);
   return true;
 }
+
+/* ── quien arma ahora ──────────────────────────────────────────────────────
+   Cuando sale el armador, el sistema NO adivina: pregunta. Muchas veces entra
+   un punta y el armador pasa a ser otro de los que ya estaban en cancha. Si se
+   equivoca acá, se equivocan las rotaciones y todo el analisis del armador. */
+function preguntarArmador(side, sugerido){
+  var m=document.getElementById('m-armador'); if(!m) return;
+  var lado = (side==='home') ? (M.home.name||'Local') : (M.away.name||'Visitante');
+  var t=document.getElementById('arm-tit');
+  var sub=document.getElementById('arm-sub');
+  if(t) t.textContent='¿Quién arma ahora en ' + lado + '?';
+  if(sub) sub.textContent='Salió el armador. Elegí quién arma de acá en adelante.';
+
+  var cont=document.getElementById('arm-lista');
+  cont.innerHTML='';
+  (M[side].lineup||[]).forEach(function(n){
+    if(!n) return;
+    var b=document.createElement('button');
+    b.type='button';
+    b.className='armbtn' + (n===sugerido ? ' sug' : '');
+    var nom='';
+    try{ nom = (typeof nombreDe==='function') ? (nombreDe(n, side)||'') : ''; }catch(e){}
+    b.innerHTML='<div class="n">'+n+'</div><div class="nm">'+nom+'</div>';
+    b.addEventListener('click', function(){
+      M[side].setter=n;
+      m.classList.remove('open');
+      try{ renderAll(); persist(); }catch(e){}
+      toast('Arma el '+n+(nom?' · '+nom:''));
+    });
+    cont.appendChild(b);
+  });
+  m.classList.add('open');
+}
+
+/* tambien se puede cambiar a mano cuando haga falta */
+function cambiarArmador(side){ preguntarArmador(side, M[side].setter); }
 function parseCommand(raw){
   let t = raw.trim();
   if(!t) return false;
@@ -2911,6 +2970,7 @@ document.getElementById('e-code').addEventListener('keydown', function(e){ if(e.
    MODALES
    ============================================================ */
 function closeModal(id){
+  if(id==='m-armador'){ toast('Elegí quién arma para poder seguir',true); return; }
   if(id==='m-setup' && SETUP_OBLIGATORIO){ toast('Cargá la formación del set '+M.set+' para seguir',true); return; }
   document.getElementById(id).classList.remove('open'); document.getElementById('code').focus();
 }
@@ -4031,7 +4091,7 @@ function _wizTipos(skill){
 function dibujarWizard(){
   var w=document.getElementById('e-wizard'); if(!w) return;
   var a=_wizActual();
-  var ids=['w-team','w-num','w-skill','w-type','w-ev'];
+  var ids=['w-team','w-num','w-skill','w-type','w-ev','w-combo','w-ez'];
   ids.forEach(function(id){ var c=document.getElementById(id); if(c) c.innerHTML=''; });
   if(!a){
     ids.forEach(function(id){
@@ -4070,6 +4130,42 @@ function dibujarWizard(){
   EVALS.forEach(function(e){
     _wizOpt(cE, e, EV_LBL[e]||'', a.ev===e, function(){ _wizSet('ev', e); });
   });
+
+  /* combinacion de ataque: todas las que conoce el panel, con su descripcion */
+  var cC=document.getElementById('w-combo');
+  if(a.skill==='A' || a.skill==='E'){
+    _wizOpt(cC, '--', 'sin combinación', !a.d || !a.d.combo, function(){ _wizCola('combo',''); });
+    Object.keys(COMBOS).sort().forEach(function(k){
+      var c=COMBOS[k];
+      _wizOpt(cC, k, (c.d||'') + (c.z ? ' · z'+c.z : ''),
+              !!(a.d && a.d.combo===k), function(){ _wizCola('combo', k); });
+    });
+  } else {
+    cC.innerHTML='<div class="wiz-vacio">Solo para ataque o armado</div>';
+  }
+
+  /* zona de destino: donde cae la pelota */
+  var cZ=document.getElementById('w-ez');
+  _wizOpt(cZ, '--', 'sin definir', !a.d || !a.d.ez, function(){ _wizCola('ez',''); });
+  /* las 9 zonas de la cancha, en el orden en que se leen en el papel */
+  ['4','3','2','7','8','9','5','6','1'].forEach(function(z){
+    _wizOpt(cZ, z, 'zona '+z, !!(a.d && a.d.ez===z), function(){ _wizCola('ez', z); });
+  });
+}
+
+/* cambia una parte de la cola (combinacion, zonas, etc.) y reescribe el codigo */
+function _wizCola(campo, valor){
+  var a=_wizActual(); if(!a) return;
+  a.d = a.d || {};
+  a.d[campo] = valor;
+  a.d.norm = true;                       /* ya no se deduce: lo elegimos a mano */
+  if(campo==='combo' && valor && COMBOS[valor]){
+    if(!a.d.sz) a.d.sz = COMBOS[valor].z || '';   /* la zona de origen la sugiere el combo */
+    if(COMBOS[valor].et) a.type = COMBOS[valor].et;
+  }
+  var inp=document.getElementById('e-code');
+  inp.value = fmt(a);
+  drawEditDec(); syncExtendido(); dibujarWizard();
 }
 function toggleWizard(){
   var w=document.getElementById('e-wizard'), b=document.getElementById('e-wizbtn');

@@ -73,6 +73,9 @@ header.masthead .sub{color:var(--mut);font-size:13.5px}
 .pnum{font-family:'Bebas Neue',sans-serif;font-size:19px;background:var(--red);color:#fff;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center}
 .pname{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;letter-spacing:.02em}
 .prole{font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:10px;color:var(--red);border:1px solid var(--red);padding:3px 8px;border-radius:20px}
+.vtodo{margin-left:8px;background:rgba(37,99,235,.14);border:1px solid rgba(37,99,235,.45);
+  color:#93c5fd;border-radius:20px;padding:3px 10px;font:inherit;font-size:11px;font-weight:700;cursor:pointer}
+.vtodo:hover{background:rgba(37,99,235,.28);color:#fff}
 .pmeta{margin-left:auto;color:var(--faint);font-size:11px;text-align:right;line-height:1.3}
 .filters{display:flex;gap:4px;flex-wrap:nowrap;margin:12px 0 10px;padding:10px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .fgroup{display:flex;flex-direction:column;gap:3px;flex:1 1 0;min-width:0}
@@ -451,7 +454,7 @@ function saveRead(el){try{localStorage.setItem(readKey(el.getAttribute("data-pid
 function buildSection(p){var cfg=ROLECFG[p.role];
   var fh=cfg.filters.map(function(fl,i){return filtCtrl(p.id+'-f'+i,fl,'',filterOpts(p,fl));}).join('');
   if(cfg.stats==='atk'||cfg.stats==='srv'||cfg.stats==='dig'){fh+='<div class="fgroup"><label title="Mín. pelotas">Mín.</label><input type="number" min="0" value="0" id="'+p.id+'-min" style="background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:7px;font-family:inherit;font-weight:700"></div>';}
-  return '<div class="player"><div class="phead"><div class="pnum">'+p.num+'</div><div class="pname">'+p.name+'</div><div class="prole">'+(p.pos||p.role)+'</div><div class="pmeta">'+p.total+U(p.role)+'</div></div>'
+  return '<div class="player"><div class="phead"><div class="pnum">'+p.num+'</div><div class="pname">'+p.name+'</div><div class="prole">'+(p.pos||p.role)+'</div><div class="pmeta">'+p.total+U(p.role)+'</div><button class="vtodo" onclick="openZone(\''+p.id+'\',\'*\')" title="Ver todos los videos juntos, de todas las zonas">&#9654; Ver todo</button></div>'
    +'<div class="filters">'+fh+'</div><div class="natt" id="'+p.id+'-n"></div>'
    +'<div class="body"><div class="courtwrap"><div class="court" id="'+p.id+'-court"></div><div class="cnote">Doble-click en zona con ▶ → video (partidos con 🎥)</div></div>'
    +'<div class="stats">'+tiles3(p,cfg)+'</div></div>'+'<div class="read" contenteditable="true" spellcheck="false" data-pid="'+p.id+'" data-ph="Escribí tu análisis…" title="Click para editar" oninput="saveRead(this)">'+readVal(p)+'</div>'+'</div>';
@@ -592,16 +595,29 @@ var VSEL={};try{VSEL=JSON.parse(localStorage.getItem("pp_vsel")||"{}")||{};}catc
 /* pp_vsel_sync: selección de clips compartida (Firebase) */
 if(typeof fbGet==="function"){fbGet("pp_vsel",function(d){if(d&&typeof d==="object"){VSEL=d;try{localStorage.setItem("pp_vsel",JSON.stringify(VSEL));}catch(e){}if(curKey&&VSEL[curKey]&&VSEL[curKey].length&&typeof applySavedSel==="function"){applySavedSel();onlyShow=true;var _v=document.getElementById("vonly");if(_v)_v.checked=true;if(typeof renderList==="function")renderList();}}});}
 function ensureYT(cb){if(window.YT&&window.YT.Player){cb();return;}window.onYouTubeIframeAPIReady=cb;if(!document.getElementById("ytapi")){var s=document.createElement("script");s.id="ytapi";s.src="https://www.youtube.com/iframe_api";document.head.appendChild(s);}}
-function openZone(pid,zn){curP=PLAYERS.concat(TEAMCARDS).find(function(x){return x.id===pid;});curZn=zn;curKey=TEAM+"|"+pid+"|"+zn;onlyShow=!!(VSEL[curKey]&&VSEL[curKey].length);var _vo=document.getElementById("vonly");if(_vo)_vo.checked=onlyShow;var cfg=ROLECFG[curP.role];
-  document.getElementById('vfilters').innerHTML=cfg.filters.map(function(fl,i){return filtCtrl('vf'+i,fl,'recompute()',filterOpts(curP,fl));}).join('');
+function openZone(pid,zn){curP=PLAYERS.concat(TEAMCARDS).find(function(x){return x.id===pid;});curZn=zn;curZnOrig=(zn==="*"?null:zn);curKey=TEAM+"|"+pid+"|"+zn;onlyShow=!!(VSEL[curKey]&&VSEL[curKey].length);var _vo=document.getElementById("vonly");if(_vo)_vo.checked=onlyShow;var cfg=ROLECFG[curP.role];
+  document.getElementById('vfilters').innerHTML=
+      '<div class="fgroup" style="align-items:center"><label style="cursor:pointer;display:flex;align-items:center;gap:5px">'
+    + '<input type="checkbox" id="vzona" '+(zn==='*'?'':'checked')+' onchange="cambiarZona(this.checked)"> Solo esta zona</label></div>'
+    + cfg.filters.map(function(fl,i){return filtCtrl('vf'+i,fl,'recompute()',filterOpts(curP,fl));}).join('');
   cfg.filters.forEach(function(fl,i){var src=document.getElementById(pid+'-f'+i),dst=document.getElementById('vf'+i);if(!src||!dst)return;if(_isMulti(fl)){var sc={};src.querySelectorAll('input').forEach(function(c){sc[c.value]=c.checked;});dst.querySelectorAll('input').forEach(function(c){c.checked=sc[c.value]!==false;});}else{dst.value=src.value;}});
   document.getElementById("vmodal").style.display="flex";recompute();}
+var curZnOrig=null;
+/* Alterna entre ver solo la zona elegida o todas juntas. Los filtros de arriba
+   (combo, fase, resultado...) siguen valiendo: podes ver todo y desde ahi recortar. */
+function cambiarZona(soloEsta){
+  if(soloEsta){ curZn = curZnOrig || curZn; }
+  else { if(curZn!=='*') curZnOrig=curZn; curZn='*'; }
+  curKey = TEAM+"|"+(curP?curP.id:'')+"|"+curZn;
+  recompute();
+}
 function recompute(){if(!curP)return;var cfg=ROLECFG[curP.role];
   var vals=cfg.filters.map(function(fl,i){return readFilt('vf'+i,fl);});
-  var all=curP.data.filter(function(a){return String(a[cfg.court])===curZn&&MSEL.has(a[cfg.vIdx])&&passes(a,cfg,vals);});
+  var todas=(curZn==='*');
+  var all=curP.data.filter(function(a){return (todas||String(a[cfg.court])===curZn)&&MSEL.has(a[cfg.vIdx])&&passes(a,cfg,vals);});
   clips=all.map(function(a){return {tag:(cfg.stats==='dig'?(a[7]||a[cfg.tagIdx]):a[cfg.tagIdx]),ev:a[cfg.evIdx],t:a[cfg.tIdx],vid:(INFO[a[cfg.vIdx]]||{}).yt||'',sel:true};}).filter(function(c){return c.vid;});
-  applySavedSel();cur=firstSel();document.getElementById("vtitle").textContent=curP.name+" · zona "+curZn+" · "+all.length+U(curP.role)+(clips.length<all.length?' ('+clips.length+' c/video)':'');renderList();
-  if(!clips.length){document.getElementById("vcount").textContent="sin video";document.getElementById("vlist").innerHTML='<div class="novid">No hay video de esta zona en los partidos seleccionados con 🎥. Probá una zona con ▶ o cambiá el filtro de Partido.</div>';return;}
+  applySavedSel();cur=firstSel();document.getElementById("vtitle").textContent=curP.name+" · "+(todas?"todas las zonas":"zona "+curZn)+" · "+all.length+U(curP.role)+(clips.length<all.length?' ('+clips.length+' c/video)':'');renderList();
+  if(!clips.length){document.getElementById("vcount").textContent="sin video";document.getElementById("vlist").innerHTML='<div class="novid">No hay video en los partidos seleccionados con 🎥. Probá otra zona, destildá «Solo esta zona» o cambiá el filtro de Partido.</div>';return;}
   ensureYT(function(){if(!YTP){YTP=new YT.Player("ytplayer",{playerVars:{rel:0,modestbranding:1,controls:0,playsinline:1},events:{onReady:function(){YTReady=true;playCur();}}});}else{playCur();}});}
 function nextSel(from,dir){var i=from;for(var k=0;k<clips.length;k++){i+=dir;if(i<0||i>=clips.length)return -1;if(clips[i].sel)return i;}return -1;}
 function firstSel(){for(var i=0;i<clips.length;i++)if(clips[i].sel)return i;return 0;}
