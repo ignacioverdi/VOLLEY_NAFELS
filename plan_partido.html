@@ -119,6 +119,16 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 .vplayer{position:relative;width:100%;aspect-ratio:16/9;background:#000}
 .vplayer iframe,.vplayer>div{position:absolute;inset:0;width:100%;height:100%}
 .vshield{position:absolute;inset:0;width:100%;height:100%;z-index:5;cursor:pointer;background:transparent}
+/* Pantalla completa del video: se agranda la zona del reproductor junto con sus
+   controles, para poder seguir pasando de jugada sin salir. */
+.vmain:fullscreen{background:#000;display:flex;flex-direction:column;justify-content:center}
+.vmain:fullscreen .vplayer{flex:1;min-height:0;aspect-ratio:auto}
+.vmain:fullscreen #ytplayer,.vmain:fullscreen #ytplayer iframe{width:100%!important;height:100%!important}
+.vmain:fullscreen .vctrls{flex:none;background:#0b0e14}
+.vmain:-webkit-full-screen{background:#000;display:flex;flex-direction:column;justify-content:center}
+.vmain:-webkit-full-screen .vplayer{flex:1;min-height:0;aspect-ratio:auto}
+.vmain:-webkit-full-screen #ytplayer,.vmain:-webkit-full-screen #ytplayer iframe{width:100%!important;height:100%!important}
+.vmain:-webkit-full-screen .vctrls{flex:none;background:#0b0e14}
 .vctrls{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:11px 14px;color:var(--mut);font-size:12.5px}
 .vctrls button{background:var(--red);color:#fff;border:none;border-radius:7px;padding:7px 11px;font-family:'Barlow Condensed';font-weight:600;font-size:13px;cursor:pointer}
 .vctrls button.sec{background:var(--card2);color:var(--txt);border:1px solid var(--border)}
@@ -242,6 +252,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
           <button class="sec" onclick="prevClip()">◀</button>
           <button onclick="replayCur()">↻ Repetir</button>
           <button class="sec" onclick="nextClip()">▶</button>
+          <button class="sec" id="vfsbtn" onclick="toggleFullV()" title="Pantalla completa (tecla F)">⛶ Pantalla completa</button>
           <span class="vcount" id="vcount"></span>
           <label>Vel <select id="vspeed" onchange="setSpeed(this.value)" style="width:auto"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
           <label>Antes <input id="vpre" type="number" value="7" min="0" max="20" onchange="pre=+this.value||7"></label>
@@ -610,7 +621,17 @@ function replayCur(){playCur();}
 function setSpeed(v){speed=parseFloat(v);if(YTP&&YTP.setPlaybackRate){try{YTP.setPlaybackRate(speed);}catch(e){}}}
 function togglePlay(){if(!YTP||!YTP.getPlayerState)return;var st=YTP.getPlayerState();if(st===1)YTP.pauseVideo();else YTP.playVideo();}
 function closeV(){document.getElementById("vmodal").style.display="none";clearInterval(vtimer);if(YTP&&YTP.pauseVideo)YTP.pauseVideo();}
-document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="Escape")closeV();if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
+function enPantallaCompleta(){return !!(document.fullscreenElement||document.webkitFullscreenElement);}
+function toggleFullV(){
+  var el=document.querySelector(".vmain"); if(!el) return;
+  if(enPantallaCompleta()){ (document.exitFullscreen||document.webkitExitFullscreen).call(document); }
+  else { var f=el.requestFullscreen||el.webkitRequestFullscreen; if(f) f.call(el); }
+}
+document.addEventListener("fullscreenchange",function(){
+  var b=document.getElementById("vfsbtn");
+  if(b) b.textContent = enPantallaCompleta() ? "⛶ Salir de pantalla completa" : "⛶ Pantalla completa";
+});
+document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
 <script src="chat_nafels.js" onerror="void 0"></script>
 <script src="lang.js" onerror="void 0"></script>

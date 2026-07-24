@@ -399,6 +399,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <button class="tbtn" onclick="abrirCombos()" title="Combinaciones de ataque y llamadas (manual 12.2)">Comb ataque</button>
   <button class="tbtn" onclick="abrirEquipos()" title="Base de equipos (nuevo · importar · exportar)">Equipos</button>
   <button class="tbtn" onclick="toggleObj()" style="color:#4ade80;border-color:rgba(74,222,128,.35)">&#9679; Objetivos</button>
+  <button class="tbtn" onclick="traerSesion()" title="Traer lo que se scouteo en el otro dispositivo">&#8681; Traer</button>
   <button class="tbtn" onclick="flotReset()" title="Vuelve todos los paneles y análisis a su lugar original">⧉ Ventanas</button>
   <button class="tbtn" onclick="openConfig()">Teclado y códigos</button>
   <button class="tbtn" onclick="abrirAyuda()" title="Cómo usar el scout — guía paso a paso">Cómo se usa</button>
@@ -3906,11 +3907,70 @@ function publicarVivo(){
         home:ladoVivo('home'),
         away:ladoVivo('away')
       });
+      publicarSesion();          /* la sesion completa, para poder traerla desde otra maquina */
       _pubUlt=Date.now();
       const el=document.getElementById('pubdot'); if(el) el.className='pubdot on';
     }catch(e){}
   }, 250);   /* pequeño retardo para no publicar en cada tecla, pero casi instantáneo */
 }
+
+/* ============================================================
+   TRAER LA SESION DE OTRO DISPOSITIVO
+   El panel guarda lo scouteado en la maquina donde se trabaja. Con esto,
+   quien scoutea publica su sesion completa cada tanto, y el otro se la
+   trae con un boton. No hay sincronizacion automatica a proposito: si los
+   dos cargaran a la vez se pisarian entre ellos.
+   ============================================================ */
+let _sesT=null, _sesUlt=0;
+function publicarSesion(){
+  if(CFG.publicarVivo===false) return;
+  if(typeof fbSet!=='function') return;
+  clearTimeout(_sesT);
+  _sesT=setTimeout(function(){
+    if(Date.now()-_sesUlt < 10000) return;      /* como mucho cada 10 segundos */
+    try{
+      var acc=(M.codes||[]).filter(function(c){return c.k!=='auto';}).length;
+      if(!acc) return;                           /* nada que compartir */
+      var quien='';
+      try{ if(typeof fbUser==='function' && fbUser()) quien=fbUser().email||''; }catch(e){}
+      fbSet('pv_sesion', {
+        ts: new Date().toISOString(),
+        por: quien,
+        acciones: acc,
+        set: M.set,
+        marcador: (M.home.name||'Local')+' '+(M.home.sets||0)+'-'+(M.away.sets||0)+' '+(M.away.name||'Visitante'),
+        M: M
+      });
+      _sesUlt=Date.now();
+    }catch(e){}
+  }, 1200);
+}
+
+function traerSesion(){
+  if(typeof fbGet!=='function'){ toast('Sin conexion',true); return; }
+  toast('Buscando...');
+  fbGet('pv_sesion', function(d){
+    if(!d || !d.M || !(d.M.codes||[]).length){ toast('No hay ninguna sesion publicada todavia',true); return; }
+    var f=new Date(d.ts||Date.now());
+    var hora=String(f.getHours()).padStart(2,'0')+':'+String(f.getMinutes()).padStart(2,'0');
+    var quien=d.por ? ('\n' + d.por) : '';
+    var mias=(M.codes||[]).filter(function(c){return c.k!=='auto';}).length;
+    var aviso='Traer esta sesion:\n\n'
+      + (d.marcador||'') + '\n'
+      + (d.acciones||0) + ' acciones  ·  set ' + (d.set||1) + '  ·  ultima carga ' + hora
+      + quien + '\n\n'
+      + (mias ? ('OJO: se reemplaza lo que tenes abierto (' + mias + ' acciones).\nLo guardo en «Partidos» antes de reemplazar.\n\n') : '')
+      + 'Continuar?';
+    if(!confirm(aviso)) return;
+    try{ if(mias) guardarPartidoEnLista(M); }catch(e){}
+    M = d.M;
+    SEL_I=-1; CALL_PEND=null;
+    var c=document.getElementById('code'); if(c) c.value='';
+    renderAll(); persist();
+    toast('Listo: ' + (d.acciones||0) + ' acciones traidas');
+  });
+}
+
 /* accesos directos al Plan de Partido, en vivo y en la solapa elegida */
 /* abre el PLAN PREPARADO (datos del pasado) para comparar con lo que pasa en vivo */
 /* ── BATERÍAS EN VIVO ── */
