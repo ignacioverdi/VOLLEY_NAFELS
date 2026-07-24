@@ -116,7 +116,17 @@ button{font-family:inherit;cursor:pointer}
 
 /* barra de scouting — el elemento firma */
 .scoutbar{background:var(--card2);border:1px solid var(--b2);border-radius:10px;padding:10px}
-#code{width:100%;background:transparent;border:none;outline:none;color:var(--txt);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:21px;letter-spacing:2px;text-align:center}
+#code{width:100%;background:transparent;border:none;outline:none;color:transparent;caret-color:var(--txt);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:21px;letter-spacing:2px;text-align:center;position:relative;z-index:2}
+/* Espejo del texto tipeado: pinta la parte extendida en otro color, como hace
+   Data Volley (manual: los caracteres extendidos se ven en azul). El input real
+   queda encima con el texto transparente, asi no cambia nada de su manejo. */
+.codewrap{position:relative}
+#code-espejo{position:absolute;inset:0;pointer-events:none;z-index:1;
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:21px;letter-spacing:2px;
+  text-align:center;white-space:pre;display:flex;align-items:center;justify-content:center;
+  color:var(--txt)}
+#code-espejo .ext{color:#60a5fa}
+#code-espejo .malo{color:var(--bad)}
 #code::placeholder{color:var(--dim)}
 #code.bad{color:var(--bad)}
 #code.warn{color:var(--warn)}
@@ -324,6 +334,27 @@ body.arrastrando iframe{pointer-events:none}
       font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
 .obj-sub{font-size:10px;color:var(--mut);letter-spacing:.4px}
 .obj-nada{font-size:11px;color:var(--mut);letter-spacing:1px;text-transform:uppercase}
+/* ── ASISTENTE PARA CORREGIR CODIGOS (manual DV4: «Modify code») ──
+   Columnas con las opciones posibles y su explicacion al lado. Solo se
+   ofrecen las compatibles con lo ya elegido, como en Data Volley. */
+.wiz{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}
+.wcol{border:1px solid var(--b);border-radius:9px;overflow:hidden;background:var(--card2)}
+.wcol h4{margin:0;padding:7px 9px;font-size:10px;font-weight:800;letter-spacing:1.2px;
+      text-transform:uppercase;color:var(--mut);background:rgba(255,255,255,.04);
+      border-bottom:1px solid var(--b)}
+.wlist{max-height:186px;overflow:auto}
+.wopt{display:flex;align-items:baseline;gap:7px;width:100%;text-align:left;background:transparent;
+      border:0;border-bottom:1px solid rgba(255,255,255,.05);color:var(--txt);
+      padding:6px 9px;font:inherit;font-size:12px;cursor:pointer}
+.wopt:last-child{border-bottom:0}
+.wopt:hover{background:rgba(255,255,255,.07)}
+.wopt.on{background:rgba(37,99,235,.22);font-weight:700}
+.wopt b{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;min-width:20px;color:#93c5fd}
+.wopt span{color:var(--mut);font-size:11px;line-height:1.25}
+.wopt.on span{color:var(--txt)}
+.wiz-vacio{padding:12px 9px;font-size:11px;color:var(--mut)}
+@media (max-width:760px){ .wiz{grid-template-columns:repeat(2,1fr)} }
+
 @media (max-width:720px){ .obj-head,.obj-row{grid-template-columns:1fr 80px 90px}
   .obj-res,.obj-head>span:nth-child(4){display:none} }
 
@@ -467,7 +498,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <div class="pane">
     <h3>Código de la jugada</h3>
     <div class="scoutbar">
-      <input id="code" class="mono" placeholder="7#" autocomplete="off" spellcheck="false">
+      <div class="codewrap"><div id="code-espejo" aria-hidden="true"></div><input id="code" class="mono" placeholder="7#" autocomplete="off" spellcheck="false"></div>
       <div class="decoder" id="dec"></div>
       <div class="extmenu" id="extmenu"></div>
       <div class="exthint"><kbd>Ctrl</kbd> + <kbd>Espacio</kbd> para las extensiones</div>
@@ -944,9 +975,18 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <h2 id="e-titulo">Corregir código</h2>
   <div class="sub">En vivo siempre se escapa algo. Completá lo que falte: la pareja del código se ajusta sola.</div>
   <div class="ref" style="margin-bottom:14px">Original: <span class="mono" id="e-orig"></span></div>
-  <input id="e-code" class="mono" oninput="drawEditDec();syncExtendido()" spellcheck="false"
+  <input id="e-code" class="mono" oninput="drawEditDec();syncExtendido();dibujarWizard()" spellcheck="false"
     style="width:100%;background:var(--card2);border:1px solid var(--b2);color:var(--txt);border-radius:10px;padding:12px;font-size:20px;font-weight:700;text-align:center;outline:none">
   <div id="e-dec" class="edec"></div>
+  <div id="e-wizard">
+    <div class="wiz">
+      <div class="wcol"><h4>Equipo</h4><div class="wlist" id="w-team"></div></div>
+      <div class="wcol"><h4>Jugador</h4><div class="wlist" id="w-num"></div></div>
+      <div class="wcol"><h4>Acci&oacute;n</h4><div class="wlist" id="w-skill"></div></div>
+      <div class="wcol"><h4>Tipo</h4><div class="wlist" id="w-type"></div></div>
+      <div class="wcol"><h4>Evaluaci&oacute;n</h4><div class="wlist" id="w-ev"></div></div>
+    </div>
+  </div>
 
   <!-- Manual 4.1.3 · Código extendido: tipo de golpe + jugadores/bloqueo + código especial.
        Aparece en azul, con opciones que dependen de la skill y la evaluación del código. -->
@@ -968,6 +1008,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     </div>
   </div>
   <div class="actions">
+    <button class="tbtn" id="e-wizbtn" onclick="toggleWizard()">Modo cl&aacute;sico</button>
     <button class="tbtn" onclick="deleteEdit()">Borrar</button>
     <button class="tbtn" onclick="closeModal('m-edit')">Cancelar</button>
     <button class="tbtn pri" onclick="saveEdit()">Guardar</button>
@@ -1767,6 +1808,18 @@ function ultimaJugada(){
 /* ============================================================
    DECODIFICADOR EN VIVO — el código, desarmado por posición
    ============================================================ */
+/* Pinta el espejo: los primeros 6 caracteres son el codigo base
+   (equipo + numero + accion + tipo + evaluacion) y el resto es el extendido. */
+function pintarEspejo(){
+  var e=document.getElementById('code-espejo'); if(!e) return;
+  var inp=document.getElementById('code'), raw=inp.value;
+  if(!raw){ e.innerHTML=''; return; }
+  function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  var malo = inp.classList.contains('bad');
+  var base = esc(raw.slice(0,6)), ext = esc(raw.slice(6));
+  e.innerHTML = '<span class="'+(malo?'malo':'')+'">'+base+'</span>'
+              + (ext ? '<span class="ext">'+ext+'</span>' : '');
+}
 function drawDecoder(){
   const raw = document.getElementById('code').value;
   const dec = document.getElementById('dec');
@@ -2050,6 +2103,7 @@ function curSkill(){
 }
 function pick(k,v){ PICK[k]=(PICK[k]===v)?'':v; drawPickers(); drawDecoder(); document.getElementById('code').focus(); }
 function drawPickers(){
+  try{ pintarEspejo(); }catch(e){}
   if(document.getElementById('detail') && document.getElementById('detail').hasAttribute('hidden')) return;
   const mk=(id,key)=>{ document.getElementById(id).innerHTML = ZGRID.map(z=>
       '<button class="'+(PICK[key]==String(z)?'on':'')+'" onclick="pick(\''+key+'\',\''+z+'\')">'+z+'</button>').join(''); };
@@ -2850,7 +2904,7 @@ document.addEventListener('keydown', e=>{
       const np=pv+ev.length; try{ inp.setSelectionRange(np,np); }catch(_){}
       drawDecoder(); return; } }
 });
-document.getElementById('code').addEventListener('input', function(){ drawDecoder(); drawPickers(); });
+document.getElementById('code').addEventListener('input', function(){ drawDecoder(); drawPickers(); pintarEspejo(); });
 document.getElementById('e-code').addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); saveEdit(); } });
 
 /* ============================================================
@@ -3253,6 +3307,7 @@ function editCode(i){
   document.getElementById('m-edit').classList.add('open');
   drawEditDec();
   syncExtendido();
+  dibujarWizard();
   inp.focus();
   if(CFG.cursorEfecto && row.c.length>5) inp.setSelectionRange(5,6);   /* cursor sobre el símbolo */
   else inp.setSelectionRange(inp.value.length, inp.value.length);      /* cursor al final */
@@ -3912,6 +3967,118 @@ function publicarVivo(){
       const el=document.getElementById('pubdot'); if(el) el.className='pubdot on';
     }catch(e){}
   }, 250);   /* pequeño retardo para no publicar en cada tecla, pero casi instantáneo */
+}
+
+
+/* ============================================================
+   ASISTENTE PARA CORREGIR CODIGOS  ·  manual DV4 «Modify code»
+   Cinco columnas (equipo, jugador, accion, tipo, evaluacion). Al elegir en
+   una, se reescribe el codigo y se recalculan las demas: solo se ofrecen las
+   opciones compatibles. El campo de texto de arriba sigue siendo el «modo
+   clasico» del manual, y los dos se mantienen sincronizados.
+   ============================================================ */
+var EV_LBL = {'#':'Punto','+':'Positivo','!':'Regular','-':'Negativo','/':'Bloqueado','=':'Error'};
+var SK_ORD = ['S','R','E','A','B','D','F'];
+
+function _wizActual(){
+  try{
+    var p = parseInput(document.getElementById('e-code').value.trim());
+    return (p && p.length && !p[0].err) ? p[0] : null;
+  }catch(e){ return null; }
+}
+function _wizJugadores(team){
+  var lado = M[team] || {}, seis = (lado.six||lado.lineup||[]).slice();
+  var lst = [];
+  seis.forEach(function(n){ if(n) lst.push(Number(n)); });
+  if(lado.libero && lst.indexOf(Number(lado.libero))<0) lst.push(Number(lado.libero));
+  (lado.plantel||[]).forEach(function(j){ var n=Number(j.c||j.num); if(n && lst.indexOf(n)<0) lst.push(n); });
+  return lst;
+}
+function _wizOpt(cont, val, etiqueta, activo, alClic){
+  var b=document.createElement('button');
+  b.type='button'; b.className='wopt'+(activo?' on':'');
+  b.innerHTML='<b>'+val+'</b><span>'+etiqueta+'</span>';
+  b.addEventListener('click', alClic);
+  cont.appendChild(b);
+}
+/* reescribe el codigo cambiando una sola parte y refresca todo */
+function _wizSet(campo, valor){
+  var a=_wizActual(); if(!a) return;
+  a[campo]=valor;
+  if(campo==='skill'){                       /* al cambiar de accion, el tipo puede no existir */
+    var permitidos=_wizTipos(valor);
+    if(permitidos.indexOf(a.type)<0) a.type=permitidos[0]||'H';
+  }
+  if(campo==='team'){                        /* al cambiar de equipo, el numero puede no existir alli */
+    var jug=_wizJugadores(valor);
+    if(jug.length && jug.indexOf(Number(a.num))<0) a.num=jug[0];
+  }
+  var inp=document.getElementById('e-code');
+  inp.value = fmt(a);
+  drawEditDec(); syncExtendido(); dibujarWizard();
+}
+function _wizTipos(skill){
+  /* manual 4.1.1: el tipo depende del fundamento */
+  if(skill==='S') return ['H','M','Q','T'];
+  if(skill==='R') return ['H','M','Q','T'];
+  if(skill==='A') return ['H','M','Q','T','U','N','O'];
+  if(skill==='B') return ['H','M','Q','T'];
+  if(skill==='D') return ['H','M','Q','T'];
+  if(skill==='E') return ['H','M','Q','T','U','O'];
+  return ['H','M','Q','T','O'];
+}
+
+function dibujarWizard(){
+  var w=document.getElementById('e-wizard'); if(!w) return;
+  var a=_wizActual();
+  var ids=['w-team','w-num','w-skill','w-type','w-ev'];
+  ids.forEach(function(id){ var c=document.getElementById(id); if(c) c.innerHTML=''; });
+  if(!a){
+    ids.forEach(function(id){
+      var c=document.getElementById(id);
+      if(c) c.innerHTML='<div class="wiz-vacio">Escrib&iacute; un c&oacute;digo v&aacute;lido arriba</div>';
+    });
+    return;
+  }
+  /* equipo */
+  var cT=document.getElementById('w-team');
+  _wizOpt(cT,'*',(M.home.name||'Local'),   a.team==='home', function(){ _wizSet('team','home'); });
+  _wizOpt(cT,'a',(M.away.name||'Visitante'),a.team==='away', function(){ _wizSet('team','away'); });
+
+  /* jugador */
+  var cN=document.getElementById('w-num');
+  _wizJugadores(a.team).forEach(function(n){
+    _wizOpt(cN, String(n), (typeof nombreDe==='function'? (nombreDe(n,a.team)||'') : ''),
+            Number(a.num)===n, function(){ _wizSet('num', n); });
+  });
+
+  /* accion */
+  var cS=document.getElementById('w-skill');
+  SK_ORD.forEach(function(k){
+    if(!SKILLS[k]) return;
+    _wizOpt(cS, k, SKILLS[k], a.skill===k, function(){ _wizSet('skill', k); });
+  });
+
+  /* tipo (solo los compatibles con la accion elegida) */
+  var cY=document.getElementById('w-type');
+  _wizTipos(a.skill).forEach(function(k){
+    _wizOpt(cY, k, TYPES[k]||k, a.type===k, function(){ _wizSet('type', k); });
+  });
+
+  /* evaluacion */
+  var cE=document.getElementById('w-ev');
+  EVALS.forEach(function(e){
+    _wizOpt(cE, e, EV_LBL[e]||'', a.ev===e, function(){ _wizSet('ev', e); });
+  });
+}
+function toggleWizard(){
+  var w=document.getElementById('e-wizard'), b=document.getElementById('e-wizbtn');
+  if(!w) return;
+  var oculto = (w.style.display==='none');
+  w.style.display = oculto ? '' : 'none';
+  if(b) b.textContent = oculto ? 'Modo cl&aacute;sico' : 'Asistente';
+  if(b) b.innerHTML   = oculto ? 'Modo cl&aacute;sico' : 'Asistente';
+  if(oculto) dibujarWizard();
 }
 
 /* ============================================================
