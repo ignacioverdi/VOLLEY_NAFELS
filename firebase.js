@@ -120,8 +120,14 @@ function _fbDispId(){
 
 /* Cierra la sesión en ESTE dispositivo y borra todo lo sensible. */
 function fbCerrarSesionLocal(motivo){
+  /* Cada app guarda la sesión con SU propio nombre (nla_sesion en NÄFELS,
+     casla_sesion en CASLA). Por eso no borramos la clave a mano: usamos la
+     función de la propia app, que sabe cuál es. Si se borra la equivocada,
+     la sesión sobrevive y el aviso vuelve a salir en bucle. */
+  try{ _fbGuardarSes(null); }catch(e){}
   try{
-    localStorage.removeItem('nla_sesion');
+    localStorage.removeItem('nla_sesion');      /* por las dudas, las dos variantes */
+    localStorage.removeItem('casla_sesion');
     localStorage.removeItem('club_llave');      /* la llave de los datos también */
     localStorage.removeItem('vb_role');
     localStorage.removeItem('vb_player_num');
