@@ -23,6 +23,22 @@ if errorlevel 1 (
     goto LINKS
 )
 
+REM ================= ABRIR LOS DATOS =================
+REM  Los datos estan cifrados en el repo. El motor necesita leerlos,
+REM  asi que los abrimos antes de procesar y los volvemos a cerrar al final.
+if exist "LLAVE.txt" (
+    echo  Abriendo los datos del club...
+    python descifrar_datos.py
+    if errorlevel 1 (
+        echo.
+        echo  [ERROR] No pude abrir los datos. FRENO aca para no romper nada.
+        echo          Revisa el detalle de arriba y avisa antes de seguir.
+        echo.
+        pause & exit /b 1
+    )
+    echo.
+)
+
 REM ================= PARTIDOS =================
 echo  ===================== PARTIDOS =====================
 set "DVW_DIR=DVW NAFELS 2026"
@@ -138,6 +154,22 @@ if exist "scouting_rival.js"     (echo      OK  scouting_rival.js)            el
 if exist "datos_video_*.js"      (echo      OK  datos_video [por temporada])  else (echo      --  falta datos_video)
 echo  ==================================================
 echo.
+
+REM ================= CERRAR LOS DATOS =================
+if exist "LLAVE.txt" (
+    echo  Protegiendo los datos antes de publicar...
+    python cifrar_datos.py
+    if errorlevel 1 (
+        echo.
+        echo  [ERROR] No pude cifrar. NO PUBLIQUES: los datos irian en claro.
+        echo.
+        pause & exit /b 1
+    )
+    echo.
+) else (
+    echo  [ATENCION] No encuentro LLAVE.txt: los datos se publicarian SIN cifrar.
+    echo.
+)
 
 REM ================= PUBLICAR =================
 set "RESP="

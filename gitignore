@@ -7,7 +7,7 @@
 # de los archivos cifrados.
 LLAVE.txt
 
-# ── Copias que dejan los scripts al proteger las páginas ────────────────────
+# ── Copias de respaldo que dejan los scripts ────────────────────────────────
 *.antes
 
 # ── Archivos temporales que NO se suben ─────────────────────────────────────
