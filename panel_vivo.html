@@ -127,9 +127,14 @@ button{font-family:inherit;cursor:pointer}
   color:var(--txt)}
 #code-espejo .ext{color:#60a5fa}
 #code-espejo .malo{color:var(--bad)}
+  #code-espejo .aviso{color:var(--warn)}
 #code::placeholder{color:var(--dim)}
-#code.bad{color:var(--bad)}
-#code.warn{color:var(--warn)}
+/* El texto del campo TIENE que quedar siempre transparente: lo dibuja el
+   espejo. Si acá se le pone color, se ven las dos capas encima y el
+   código aparece duplicado (pasaba con avisos o errores, típico de los
+   códigos largos de un rally largo). El color va al espejo. */
+  #code.bad{color:transparent;caret-color:var(--bad)}
+#code.warn{color:transparent;caret-color:var(--warn)}
 .scoutbar:has(#code.bad){border-color:rgba(248,113,113,.55);background:rgba(248,113,113,.05)}
 .scoutbar:has(#code.warn){border-color:rgba(251,146,60,.45)}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
@@ -1973,10 +1978,13 @@ function pintarEspejo(){
   var inp=document.getElementById('code'), raw=inp.value;
   if(!raw){ e.innerHTML=''; return; }
   function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  var malo = inp.classList.contains('bad');
+  /* El estado (error / aviso) se pinta ACÁ, en el espejo. El campo de texto
+     queda siempre transparente para que no se vean las dos capas superpuestas. */
+  var cls = inp.classList.contains('bad')  ? 'malo'
+          : inp.classList.contains('warn') ? 'aviso' : '';
   var base = esc(raw.slice(0,6)), ext = esc(raw.slice(6));
-  e.innerHTML = '<span class="'+(malo?'malo':'')+'">'+base+'</span>'
-              + (ext ? '<span class="ext">'+ext+'</span>' : '');
+  e.innerHTML = '<span class="'+cls+'">'+base+'</span>'
+              + (ext ? '<span class="'+(cls||'ext')+'">'+ext+'</span>' : '');
 }
 function drawDecoder(){
   const raw = document.getElementById('code').value;
