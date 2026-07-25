@@ -407,7 +407,10 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 .lucell.isSetter .sbtn{color:inherit;font-weight:700}
 .luwrap{display:flex;gap:8px;align-items:stretch}
 .lulib{flex:0 0 74px;background:var(--card2);border:1px dashed var(--b2);border-radius:10px;padding:8px 6px;text-align:center}
-.lulib .zl{font-size:9px;font-weight:700;color:var(--dim);letter-spacing:.5px}
+  .lurot{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+  .lurot button{background:var(--card2);border:1px solid var(--b2);color:var(--dim);border-radius:7px;height:26px;width:100%;font-size:12px;cursor:pointer;padding:0;line-height:1;transition:.15s}
+  .lurot button:hover{color:var(--txt);border-color:var(--ok);background:var(--card)}
+  .lulib .zl{font-size:9px;font-weight:700;color:var(--dim);letter-spacing:.5px}
 .lulib input{width:100%;background:transparent;border:none;outline:none;color:var(--txt);text-align:center;font-family:'Barlow Condensed';font-weight:900;font-size:24px;padding:6px 0 0}
 .netline{height:3px;background:linear-gradient(90deg,transparent,var(--b2),transparent);margin:2px 0 6px;border-radius:2px}
 .lutitle{font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.2px;font-size:13px;margin:0 0 6px;text-transform:uppercase}
@@ -966,18 +969,14 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         <div class="netline"></div>
         <div class="luwrap">
           <div class="lucourt home-c" id="lu-h"></div>
-          <div class="lulib"><div class="zl">LÍBERO</div><input class="mono" id="s-libh" inputmode="numeric"></div>
-          <div class="rowbtns" style="justify-content:center;margin-top:6px"><button type="button" onclick="girarSeis('home',-1)" title="Girar las posiciones a la izquierda">&#9666; Girar</button><button type="button" onclick="girarSeis('home',1)" title="Girar las posiciones a la derecha">Girar &#9656;</button></div>
-        </div>
+          <div class="lulib"><div class="zl">LÍBERO</div><input class="mono" id="s-libh" inputmode="numeric"><div class="lurot"><button type="button" onclick="girarSeis('home',-1)" title="Girar las posiciones a la izquierda">&#9666;</button><button type="button" onclick="girarSeis('home',1)" title="Girar las posiciones a la derecha">&#9656;</button></div></div></div>
       </div>
       <div id="setup-vis-lu">
         <div class="lutitle" style="color:var(--vis)">Visitante</div>
         <div class="netline"></div>
         <div class="luwrap">
           <div class="lucourt away-c" id="lu-a"></div>
-          <div class="lulib"><div class="zl">LÍBERO</div><input class="mono" id="s-liba" inputmode="numeric"></div>
-          <div class="rowbtns" style="justify-content:center;margin-top:6px"><button type="button" onclick="girarSeis('away',-1)" title="Girar las posiciones a la izquierda">&#9666; Girar</button><button type="button" onclick="girarSeis('away',1)" title="Girar las posiciones a la derecha">Girar &#9656;</button></div>
-        </div>
+          <div class="lulib"><div class="zl">LÍBERO</div><input class="mono" id="s-liba" inputmode="numeric"><div class="lurot"><button type="button" onclick="girarSeis('away',-1)" title="Girar las posiciones a la izquierda">&#9666;</button><button type="button" onclick="girarSeis('away',1)" title="Girar las posiciones a la derecha">&#9656;</button></div></div></div>
       </div>
     </div>
     <div class="fgrid" style="margin-top:14px">
