@@ -64,15 +64,25 @@ def main():
         if not usados:
             continue
 
-        # el lector va antes del primer dato, y la apertura despues del ultimo
-        primer = nuevo.find('.enc"')
+        # el lector va antes del primer dato, y la apertura despues del ultimo.
+        # OJO: el src puede traer ?v=3 al final -> hay que contemplarlo,
+        # si no la insercion cae en cualquier lado (rompe el DOCTYPE).
+        marcas = [m.start() for m in re.finditer(r'\.enc(\?[^"]*)?"', nuevo)]
+        if not marcas:
+            print('    [salteo] %-32s no ubique los datos' % archivo); continue
+        primer = marcas[0]
         ini = nuevo.rfind('<script', 0, primer)
+        if ini < 0:
+            print('    [salteo] %-32s no ubique donde abrir' % archivo); continue
         prof = os.path.relpath(carpeta, os.path.dirname(ruta)).replace('\\', '/')
         ruta_loader = LOADER if prof == '.' else (prof + '/' + LOADER)
         nuevo = nuevo[:ini] + '<script src="%s"></script>\n  ' % ruta_loader + nuevo[ini:]
 
-        ultimo = nuevo.rfind('.enc"')
-        fin = nuevo.find('</script>', ultimo) + len('</script>')
+        marcas = [m.start() for m in re.finditer(r'\.enc(\?[^"]*)?"', nuevo)]
+        cierre = nuevo.find('</script>', marcas[-1])
+        if cierre < 0:
+            print('    [salteo] %-32s no encontre el cierre' % archivo); continue
+        fin = cierre + len('</script>')
         nuevo = nuevo[:fin] + '\n  <script>abrirDatos();</script>' + nuevo[fin:]
 
         # respaldo antes de tocar
