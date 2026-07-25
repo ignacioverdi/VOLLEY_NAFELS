@@ -67,6 +67,22 @@ function _fbSincronizarRol(){
     }
   }catch(e){}
 }
+
+/* ── llave de los datos ────────────────────────────────────────────────────
+   Los archivos de datos del club estan cifrados en el servidor. La llave vive
+   aca adentro y solo la recibe quien inicio sesion. La guardamos en el
+   dispositivo para que las paginas puedan abrir los datos al arrancar. */
+function _fbTraerLlave(){
+  if(typeof guardarLlave !== 'function') return Promise.resolve();
+  try{ if(localStorage.getItem('club_llave')) return Promise.resolve(); }catch(e){}
+  return _fbSufijo().then(function(q){
+    return fetch(FB_URL + '/' + (typeof fbRuta === 'function' ? fbRuta('llave') : 'llave') + '.json' + q)
+      .then(function(r){ return r.json(); })
+      .then(function(k){ if(typeof k === 'string' && k.length >= 32) guardarLlave(k); })
+      .catch(function(){});
+  });
+}
+
 /* El rol (coach / at / pf / player) vive en la base, atado al UID.
    Se lee al entrar, así no depende de lo que haya quedado en el navegador. */
 function _fbCargarRol(){
@@ -221,13 +237,16 @@ function _fbArrancar(){
     function pedir(){
       if(document.readyState === 'loading')
         document.addEventListener('DOMContentLoaded', function(){
-          _fbPantalla().then(function(){ return _fbCargarRol(); }).then(resolve);
+          _fbPantalla().then(function(){ return _fbCargarRol(); })
+        .then(function(){ return _fbTraerLlave(); }).then(resolve);
         });
-      else _fbPantalla().then(function(){ return _fbCargarRol(); }).then(resolve);
+      else _fbPantalla().then(function(){ return _fbCargarRol(); })
+        .then(function(){ return _fbTraerLlave(); }).then(resolve);
     }
     if(FB_SES && FB_SES.refreshToken){
       _fbRefrescar()
         .then(function(){ return _fbCargarRol(); })
+        .then(function(){ return _fbTraerLlave(); })
         .then(function(){ resolve(true); })
         .catch(function(){
           if(!navigator.onLine){ FB_OFF = true; resolve(true); }   /* sin internet: seguimos con lo guardado */

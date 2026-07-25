@@ -307,7 +307,9 @@ function w(s){document.write('<scr'+'ipt src="'+s+'" onerror="void 0"><\/scr'+'i
 if(ent){ w('datos_entrenamientos.js'); w('datos_recepcion_ent.js'); w('adapter_entrenamiento.js'); }
 else   { w('datos_partidos.js'); w('datos_recepcion.js'); }
 })();</script>
-<script src="datos_equipo.js" onerror="void 0"></script>
+<script src="../../datos_seguros.js"></script>
+  <script src="datos_equipo.js.enc" onerror="void 0"></script>
+  <script>abrirDatos();</script>
 <script src="modo_toggle.js" onerror="void 0"></script>
 <!-- datos_recepcion.js: lo carga el selector de modo (arriba) -->
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>

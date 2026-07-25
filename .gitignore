@@ -4,3 +4,8 @@ __pycache__/
 diagnostico.txt
 _gen_nafels.b64
 *.log
+
+# NUNCA subir la llave de los datos
+LLAVE.txt
+# copias de respaldo que dejan los scripts
+*.antes
