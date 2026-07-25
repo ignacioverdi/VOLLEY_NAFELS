@@ -967,6 +967,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         <div class="luwrap">
           <div class="lucourt home-c" id="lu-h"></div>
           <div class="lulib"><div class="zl">LÍBERO</div><input class="mono" id="s-libh" inputmode="numeric"></div>
+          <div class="rowbtns" style="justify-content:center;margin-top:6px"><button type="button" onclick="girarSeis('home',-1)" title="Girar las posiciones a la izquierda">&#9666; Girar</button><button type="button" onclick="girarSeis('home',1)" title="Girar las posiciones a la derecha">Girar &#9656;</button></div>
         </div>
       </div>
       <div id="setup-vis-lu">
@@ -975,6 +976,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         <div class="luwrap">
           <div class="lucourt away-c" id="lu-a"></div>
           <div class="lulib"><div class="zl">LÍBERO</div><input class="mono" id="s-liba" inputmode="numeric"></div>
+          <div class="rowbtns" style="justify-content:center;margin-top:6px"><button type="button" onclick="girarSeis('away',-1)" title="Girar las posiciones a la izquierda">&#9666; Girar</button><button type="button" onclick="girarSeis('away',1)" title="Girar las posiciones a la derecha">Girar &#9656;</button></div>
         </div>
       </div>
     </div>
@@ -1230,6 +1232,95 @@ function resumenPartido(m){
 
 /* Guarda el partido actual en la lista (si tiene contenido). Si ya existe
    (mismo id), lo actualiza; si no, lo agrega. Devuelve el id. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   TRABAJO EN CURSO EN LA NUBE
+   --------------------------------------------------------------------------
+   El flujo normal es: scouteás -> exportás el .dvw -> listo. Lo que fallaba
+   era el partido que queda A MEDIAS, sin exportar: vivía solo en el navegador
+   de esa computadora. Si el que scouteó no volvía a esa máquina, o si lo
+   quería seguir otro del cuerpo técnico, no había forma de llegar.
+
+   Ahora el partido en curso se guarda solo en la nube, con el nombre de quien
+   lo está scouteando. Cualquiera del cuerpo técnico lo puede retomar desde
+   su PC. Al exportar el .dvw se marca terminado y deja de aparecer.
+
+   Se usa fetch directo y NO fbSet, porque fbSet deja una copia en el
+   navegador y es justamente eso lo que llenaba el espacio.
+   ══════════════════════════════════════════════════════════════════════════ */
+var PV_CURSO = 'pv_encurso';
+
+function _nubeOk(){
+  return (typeof FB_URL !== 'undefined') && (typeof _fbSufijo === 'function');
+}
+function nubeGuardar(path, valor, cb){
+  if(!_nubeOk()){ if(cb) cb(false,'sin conexión'); return; }
+  if(typeof vbEdicionBloqueada === 'function' && vbEdicionBloqueada(path)){
+    if(cb) cb(false,'tu usuario no tiene permiso'); return;
+  }
+  _fbSufijo().then(function(q){
+    return fetch(FB_URL + '/' + path + '.json' + q,
+                 {method:'PUT', headers:{'Content-Type':'application/json'},
+                  body: JSON.stringify(valor)});
+  }).then(function(r){ if(cb) cb(!!(r && r.ok), (r && r.ok) ? '' : 'rechazado'); })
+    .catch(function(){ if(cb) cb(false,'no pude conectar'); });
+}
+function nubeLeer(path, cb){
+  if(!_nubeOk()){ cb(null); return; }
+  _fbSufijo().then(function(q){ return fetch(FB_URL + '/' + path + '.json' + q); })
+    .then(function(r){ return r.json(); })
+    .then(function(d){ cb((d && !d.error) ? d : null); })
+    .catch(function(){ cb(null); });
+}
+
+function _miId(){
+  try{
+    var u = (typeof fbUser === 'function') ? fbUser() : null;
+    var s = (u && (u.uid || u.email)) ? String(u.uid || u.email) : 'local';
+    return s.replace(/[.#$\/\[\]]/g,'_');
+  }catch(e){ return 'local'; }
+}
+function _miNombre(){
+  try{ var u = (typeof fbUser === 'function') ? fbUser() : null;
+       return (u && (u.email || u.uid)) || ''; }catch(e){ return ''; }
+}
+
+/* Guarda el partido en curso. Lo llama el mismo temporizador que ya publica
+   el marcador en vivo, así no agrega tráfico extra. */
+function guardarEnCurso(){
+  if(!M || !(M.codes||[]).length) return;
+  if(!M._id) M._id = 'p'+Date.now()+Math.floor(Math.random()*1000);
+  nubeGuardar(PV_CURSO + '/' + _miId(), {
+    actualizado: Date.now(),
+    autor:  _miNombre(),
+    id:     M._id,
+    resumen: resumenPartido(M),
+    M: M
+  });
+}
+/* Al exportar el .dvw el trabajo está terminado: se saca de la nube. */
+function terminarEnCurso(){ nubeGuardar(PV_CURSO + '/' + _miId(), null); }
+
+/* Trae los trabajos en curso (el tuyo y los de los demás) y los suma a la
+   lista de partidos, para poder abrirlos desde la misma pantalla. */
+function sincronizarEnCurso(cb){
+  nubeLeer(PV_CURSO, function(todos){
+    if(!todos){ if(cb) cb(0); return; }
+    var list = partidos(), porId = {}, nuevos = 0;
+    list.forEach(function(p){ porId[p.id] = p; });
+    Object.keys(todos).forEach(function(uid){
+      var t = todos[uid];
+      if(!t || !t.id || uid === _miId()) return;      /* el mío ya está local */
+      if(porId[t.id]) { porId[t.id].autor = t.autor||''; return; }
+      list.push({ id:t.id, guardado:t.actualizado||0, resumen:t.resumen||{},
+                  autor:t.autor||'', enNube:true, uid:uid });
+      nuevos++;
+    });
+    if(nuevos) guardarPartidos(list);
+    if(cb) cb(nuevos);
+  });
+}
+
 function guardarPartidoEnLista(m){
   if(!m || !(m.codes||[]).length) return null;   /* nada que guardar */
   const list = partidos();
@@ -1247,6 +1338,15 @@ function abrirPartido(id){
   const list = partidos();
   const p = list.find(x=>x.id===id);
   if(!p){ toast('No encontré ese partido',true); return; }
+  if(!p.M && p.uid){                  /* está en la nube: lo bajamos */
+    toast('Bajando el partido...');
+    nubeLeer(PV_CURSO+'/'+p.uid, function(t){
+      if(!t || !t.M || !t.M.codes){ toast('No pude bajarlo. ¿Tenés internet?',true); return; }
+      p.M = t.M; abrirPartido(id);
+    });
+    return;
+  }
+  if(!p.M){ toast('Ese partido no está en esta PC ni en la nube',true); return; }
   M = p.M;
   if(!M._id) M._id = id;
   SEL_I=-1; CALL_PEND=null;
@@ -1270,6 +1370,7 @@ function borrarPartidosSel(){
 function abrirPartidos(){
   guardarPartidoEnLista(M);          /* guardar el actual antes de mostrar la lista */
   renderTablaPartidos();
+  sincronizarEnCurso(function(n){ if(n){ renderTablaPartidos(); toast(n+' partido(s) en curso de tu equipo'); } });
   document.getElementById('m-partidos').classList.add('open');
 }
 function cerrarPartidos(){ const el=document.getElementById('m-partidos'); if(el) el.classList.remove('open'); }
@@ -1359,6 +1460,23 @@ function parseOne(raw){
     rest = s.slice(i); break;
   }
   if(raros) rest = rest + raros;
+
+  /* ══ Evaluación tipeada DESPUÉS de las zonas (4SQ15# = 4SQ#15) ══
+     No es el orden del manual, pero es el que se usa scouteando en vivo:
+     escribís la dirección mientras ves la jugada y el resultado recién al
+     final, sin frenar la mano. Ninguno de los campos de la cola (subzona,
+     sub-tipo, especial, bloqueadores) usa los caracteres de evaluación,
+     así que tomarlo de ahí no puede pisar ningún otro dato.
+     El código se sigue GUARDANDO en la forma estándar de DataVolley. */
+  if(!ev && rest && rest.indexOf('~')<0){
+    for(let q=0;q<rest.length;q++){
+      if(EVALS.indexOf(rest[q])>=0){
+        ev   = rest[q];
+        rest = rest.slice(0,q) + rest.slice(q+1);
+        break;
+      }
+    }
+  }
   if(comboIni){
     skill = 'A';                                  /* la combinación implica ataque */
     if(!type) type = COMBOS[comboIni].et || '';   /* y el tipo de golpe */
@@ -2402,7 +2520,20 @@ function undoRally(){
    (no cargaste nada después). */
 function reabrirPunto(){
   if(!RALLY_UNDO.length){ toast('No hay ningún punto cerrado para reabrir',true); return; }
-  if(!puedeDeshacerPunto()){ toast('Cargaste una acción después del punto: no se puede reabrir',true); return; }
+  if(!puedeDeshacerPunto()){
+    /* Antes acá se cortaba y listo. Ahora te decimos cuántas acciones se
+       cargaron después del punto y decidís vos si las borrás para reabrirlo. */
+    var _tope = -1;
+    for(var _q=M.codes.length-1; _q>=0; _q--){
+      var _c = M.codes[_q];
+      if(_c.k==='auto' && /^[*a][pPz]/.test(_c.c)){ _tope=_q; break; }
+    }
+    if(_tope < 0){ toast('No encuentro el cierre del punto',true); return; }
+    var _sueltas = M.codes.length - 1 - _tope;
+    if(!confirm('Ya cargaste '+_sueltas+' acción(es) después del punto.\n\n¿Las borro y reabro el punto?')) return;
+    M.codes = M.codes.slice(0, _tope+1);
+    toast('Borré '+_sueltas+' acción(es) y reabrí el punto');
+  }
   const st = JSON.parse(RALLY_UNDO.pop());
   M.home=st.h; M.away=st.a; M.serving=st.s; M.set=st.set;
   /* quitar SÓLO los códigos automáticos del cierre (*p, *P, *z, aP, az) que van
@@ -2535,6 +2666,26 @@ function autoServe(){
     }
   }
   drawDecoder(); drawPickers();
+}
+
+
+/* ══ Girar el seis inicial mientras se carga (no es una rotación del juego) ══
+   Los botones «Rotar» de la cancha grande escriben un código automático de
+   rotación en el partido, porque ahí el equipo SÍ rotó. Esto es otra cosa:
+   acomodar los números en las casillas mientras cargás la formación, sin
+   tocar el partido. Puramente visual. */
+function girarSeis(side, dir){
+  if(typeof LU==='undefined' || !LU[side]) return;
+  var n = LU[side].n || {}, vacio = true;
+  for(var i=1;i<=6;i++){ if(n[i]) { vacio=false; break; } }
+  if(vacio){ toast('Cargá primero los números del seis',true); return; }
+  var nuevo = {};
+  for(var i=1;i<=6;i++){
+    var origen = (dir>0) ? ((i%6)+1) : (((i+4)%6)+1);
+    if(n[origen]) nuevo[i] = n[origen];
+  }
+  LU[side].n = nuevo;
+  drawLineup(side);
 }
 
 function undoLast(){
@@ -4006,6 +4157,7 @@ function publicarVivo(){
       const VD=buildVoleyData(CFG.fichasTeam||'home');
       window.VOLEY_DATA=VD;
       fbSet('voley_data', VD);
+      guardarEnCurso();          /* el partido sin exportar, a la nube */
       fbSet('voley_live', {
         ts:new Date().toISOString(),
         set:M.set, serving:M.serving,
@@ -4444,6 +4596,8 @@ function exportDVW(modo){
   a.download='&'+M.home.code+'-'+M.away.code+'.dvw';
   a.click();
   toast('Archivo descargado');
+
+  terminarEnCurso();   /* ya exportado: sale de la nube */
 }
 
 function toggleDetalle(){
