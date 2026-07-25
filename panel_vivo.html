@@ -1395,10 +1395,18 @@ function renderTablaPartidos(){
     + '<th style="padding:8px 6px;width:70px"></th></tr></thead><tbody>';
   list.forEach(p=>{
     const r=p.resumen, actual = (p.id===M._id);
+    /* Quién lo scouteó: mostramos lo que va antes del @ del mail, en mayúscula
+       (at@... -> AT). Y marcamos con ☁ los que están en la nube y no en esta
+       PC: ésos son los que está scouteando otro ahora mismo. */
+    const autor = p.autor ? String(p.autor).split('@')[0].toUpperCase().slice(0,10) : '';
+    const deOtro = !!p.uid;
+    const etiqueta = (autor ? ' <span style="font-size:10px;font-weight:700;color:'+(deOtro?'var(--ok)':'var(--mut)')
+        +';border:1px solid '+(deOtro?'var(--ok)':'var(--b2)')+';border-radius:5px;padding:1px 5px;margin-left:5px;letter-spacing:.5px">'
+        +(deOtro?'☁ ':'')+autor+'</span>' : '');
     html += '<tr style="border-top:1px solid var(--b)'+(actual?';background:rgba(230,167,67,.06)':'')+'">'
       + '<td style="padding:8px 6px"><input type="checkbox" class="pcheck" value="'+p.id+'" onchange="pintarTrash()"></td>'
       + '<td style="padding:8px 6px;color:var(--mut)">'+(r.fecha||'—')+(r.competencia?'<br><span style="font-size:11px">'+r.competencia+'</span>':'')+'</td>'
-      + '<td style="padding:8px 6px;font-weight:700">'+r.home+' <span style="color:var(--mut)">vs</span> '+r.away+(actual?' <span style="font-size:10px;color:#e6a743">● actual</span>':'')+'</td>'
+      + '<td style="padding:8px 6px;font-weight:700">'+r.home+' <span style="color:var(--mut)">vs</span> '+r.away+(actual?' <span style="font-size:10px;color:#e6a743">● actual</span>':'')+etiqueta+'</td>'
       + '<td style="padding:8px 6px;text-align:center;font-weight:800">'+r.res+'</td>'
       + '<td style="padding:8px 6px;text-align:center;color:var(--mut)">'+r.acciones+'</td>'
       + '<td style="padding:8px 6px"><button class="tbtn" onclick="abrirPartido(\''+p.id+'\')" style="padding:5px 12px">Abrir</button></td>'

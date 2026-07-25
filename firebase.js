@@ -85,6 +85,91 @@ function _fbTraerLlave(){
 
 /* El rol (coach / at / pf / player) vive en la base, atado al UID.
    Se lee al entrar, así no depende de lo que haya quedado en el navegador. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CONTROL DE SESIONES
+   --------------------------------------------------------------------------
+   La sesión se abre UNA vez por dispositivo y se renueva sola para siempre.
+   Eso es cómodo, pero significaba que si una sesión quedaba abierta en una
+   máquina ajena no había forma de cerrarla salvo cambiarle la contraseña a
+   la persona (y eso echa a todos sus dispositivos, incluidos los propios).
+
+   Ahora cada sesión guarda CUÁNDO se creó, y en la base hay una "fecha de
+   corte". Si la sesión es anterior al corte, el dispositivo se cierra solo la
+   próxima vez que abre la app — y borra también la llave de los datos, que si
+   no quedaba guardada y permitía seguir leyendo los archivos cifrados.
+
+   En la base de datos:
+     sesiones/corte                    -> cierra TODAS las sesiones del club
+     sesiones/corte_uid/<uid>          -> cierra las de un usuario
+     sesiones/corte_disp/<uid>/<disp>  -> cierra un dispositivo puntual
+     sesiones/dispositivos/<uid>/<disp> -> qué hay conectado (para poder verlo)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Identificador del dispositivo. Se inventa una vez y queda guardado acá. */
+function _fbDispId(){
+  try{
+    var d = localStorage.getItem('nla_disp');
+    if(!d){
+      d = 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+      localStorage.setItem('nla_disp', d);
+    }
+    return d;
+  }catch(e){ return 'd0'; }
+}
+
+/* Cierra la sesión en ESTE dispositivo y borra todo lo sensible. */
+function fbCerrarSesionLocal(motivo){
+  try{
+    localStorage.removeItem('nla_sesion');
+    localStorage.removeItem('club_llave');      /* la llave de los datos también */
+    localStorage.removeItem('vb_role');
+    localStorage.removeItem('vb_player_num');
+  }catch(e){}
+  FB_SES = null;
+  if(motivo){ try{ alert(motivo); }catch(e){} }
+  try{ location.reload(); }catch(e){}
+}
+
+/* Deja constancia de este dispositivo, para poder verlos y elegir cuál cerrar. */
+function _fbRegistrarDisp(){
+  if(!FB_SES || !FB_SES.uid) return Promise.resolve();
+  var ua = '';
+  try{ ua = navigator.userAgent || ''; }catch(e){}
+  var tipo = /iPad|Tablet/i.test(ua) ? 'Tablet'
+           : /Android|iPhone|Mobile/i.test(ua) ? 'Celular' : 'Computadora';
+  return _fbSufijo().then(function(q){
+    return fetch(FB_URL + '/sesiones/dispositivos/' + FB_SES.uid + '/' + _fbDispId() + '.json' + q, {
+      method:'PATCH', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ tipo:tipo, mail:FB_SES.email||'',
+                             desde:(FB_SES.emitido||Date.now()), ultimo:Date.now() })
+    });
+  }).catch(function(){});
+}
+
+/* Se corre en cada arranque: mira si esta sesión fue dada de baja. */
+function _fbControlSesion(){
+  if(!FB_SES || !FB_SES.uid) return Promise.resolve();
+  return _fbSufijo().then(function(q){
+    return fetch(FB_URL + '/sesiones.json' + q).then(function(r){ return r.json(); });
+  }).then(function(d){
+    if(!d || d.error) return _fbRegistrarDisp();
+    var emitido = FB_SES.emitido || 0;
+    var disp    = _fbDispId();
+    var corte   = parseInt(d.corte, 10) || 0;
+    if(d.corte_uid && d.corte_uid[FB_SES.uid])
+      corte = Math.max(corte, parseInt(d.corte_uid[FB_SES.uid], 10) || 0);
+    if(d.corte_disp && d.corte_disp[FB_SES.uid] && d.corte_disp[FB_SES.uid][disp])
+      corte = Math.max(corte, parseInt(d.corte_disp[FB_SES.uid][disp], 10) || 0);
+
+    if(emitido < corte){
+      fbCerrarSesionLocal('Tu sesión fue cerrada desde el club.\n\nVolvé a ingresar con tu usuario y tu clave.');
+      return;
+    }
+    return _fbRegistrarDisp();
+  }).catch(function(){});   /* sin internet no echamos a nadie */
+}
+
 function _fbCargarRol(){
   if(!FB_SES || !FB_SES.uid) return Promise.resolve();
   return _fbSufijo().then(function(q){
@@ -104,7 +189,8 @@ function _fbCargarRol(){
       try{ if(typeof window.VB_refrescarPermisos === 'function') window.VB_refrescarPermisos(); }catch(e){}
       /* avisar a quien dependa del numero (avisos personales, vista por jugador) */
       try{ window.dispatchEvent(new CustomEvent('vb-rol-listo', {detail:{rol:rol, num:num}})); }catch(e){}
-    }).catch(function(){});
+    }).catch(function(){})
+      .then(function(){ return _fbControlSesion(); });   /* ¿esta sesión sigue vigente? */
   });
 }
 
@@ -162,6 +248,7 @@ function _fbEntrar(usuario, clave){
       }
       _fbGuardarSes({idToken:d.idToken, refreshToken:d.refreshToken,
                      vence:Date.now() + (parseInt(d.expiresIn,10)||3600)*1000 - 60000,
+                     emitido:Date.now(),          /* cuándo se abrió: lo usa el control de sesiones */
                      email:mail, uid:d.localId});
       return true;
     });
