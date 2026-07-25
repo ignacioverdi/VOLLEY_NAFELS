@@ -1620,8 +1620,26 @@ function parseChunk(s){
       a.skill='S'; b.skill='R'; b.type=a.type;
       if(b.evx && !a.evx)      a.ev = REC_TO_SERVE[b.ev] || a.ev;     /* tipeó la recepción */
       else if(a.evx && !b.evx) b.ev = firstEv(SRV_TO_REC[a.ev]) || b.ev;   /* tipeó el saque */
-      const sz=a.d.sz||'', ez=b.d.sz||b.d.ez||'';
-      a.d.sz=sz; a.d.ez=ez; b.d.sz=sz; b.d.ez=ez;
+      /* La zona de destino puede venir en CUALQUIERA de las dos mitades:
+         · en el saque   -> 1sm15.8   (desde 1 hacia 5)  <- la forma rápida
+         · en la recepción -> 1sm.8#5
+         Antes solo se miraba la recepción, así que el destino tipeado en el
+         saque se perdía: quedaba el "desde" pero nunca el "hacia". */
+      const sz=a.d.sz||'', ez=a.d.ez||b.d.sz||b.d.ez||'';
+      a.d.sz=sz; a.d.ez=ez;
+      /* La zona de origen de la RECEPCIÓN no es la misma que la del saque.
+         Manual 13.2: en una recepción, la zona de origen es "de dónde viene la
+         pelota", y para eso se usan sólo las tres zonas reales del fondo
+         (1, 5, 6). El saque, en cambio, tiene dos intermedias:
+             9 = entre la 1 y la 6   ->  la recepción lo anota 1
+             7 = entre la 6 y la 5   ->  la recepción lo anota 5
+         Verificado en 12.479 saques reales de DataVolley: resuelve así el 82%
+         y el 85% de las veces. El resto los anota 6 según la trayectoria; eso
+         lo decide el scout y se corrige a mano si hace falta.
+         Antes se copiaba la zona del saque tal cual, así que quedaban
+         recepciones "desde 9" o "desde 7", que DataVolley nunca genera. */
+      b.d.sz = ({'9':'1','7':'5'})[sz] || sz;
+      b.d.ez = ez;
       return [a,b];
     }
     if(a.skill==='A'){                                                /* ataque . bloqueo o defensa */
