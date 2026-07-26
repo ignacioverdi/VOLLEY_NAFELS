@@ -154,6 +154,25 @@ function _fbRegistrarDisp(){
 }
 
 /* Se corre en cada arranque: mira si esta sesión fue dada de baja. */
+
+/* Deja registrado cada INGRESO (cuando alguien pone mail y clave).
+   No se anota cada vez que abre la app —eso sería un diluvio—, sólo cuando
+   se crea una sesión nueva. Para "¿quién entró y cuándo?" es lo que importa. */
+function _fbRegistrarAcceso(){
+  if(!FB_SES || !FB_SES.uid) return;
+  var ua = ''; try{ ua = navigator.userAgent || ''; }catch(e){}
+  var tipo = /iPad|Tablet/i.test(ua) ? 'Tablet'
+           : /Android|iPhone|Mobile/i.test(ua) ? 'Celular' : 'Computadora';
+  var id = 'a' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+  _fbSufijo().then(function(q){
+    return fetch(FB_URL + '/sesiones/accesos/' + id + '.json' + q, {
+      method:'PUT', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ uid:FB_SES.uid, mail:FB_SES.email||'',
+                             cuando:Date.now(), tipo:tipo, disp:_fbDispId() })
+    });
+  }).catch(function(){});
+}
+
 function _fbControlSesion(){
   if(!FB_SES || !FB_SES.uid) return Promise.resolve();
   return _fbSufijo().then(function(q){
@@ -256,6 +275,7 @@ function _fbEntrar(usuario, clave){
                      vence:Date.now() + (parseInt(d.expiresIn,10)||3600)*1000 - 60000,
                      emitido:Date.now(),          /* cuándo se abrió: lo usa el control de sesiones */
                      email:mail, uid:d.localId});
+      _fbRegistrarAcceso();   /* queda registrado quién entró y cuándo */
       return true;
     });
 }

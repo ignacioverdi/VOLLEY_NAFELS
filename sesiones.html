@@ -58,6 +58,15 @@ button.peligro:hover{background:var(--bad);color:#fff}
 
   <div id="lista"><div class="vacio">Cargando…</div></div>
 
+  <h2 style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);margin:30px 0 12px">Últimos ingresos</h2>
+  <div id="accesos"><div class="vacio">—</div></div>
+
+  <div class="pie" style="margin-top:20px">
+    <b>Tu identificador de usuario (UID):</b>
+    <code id="miuid" style="color:var(--ok);user-select:all;font-size:12px">—</code><br>
+    Copialo y pegalo en Firebase, en el nodo <code>admins</code>, para poder cerrar sesiones.
+  </div>
+
   <div class="pie">
     <b>Cerrar TODAS</b> echa a todo el mundo, incluido vos: todos vuelven a entrar con su usuario y clave.
     Usalo cuando no sepas bien dónde quedó abierta una sesión.<br>
@@ -105,6 +114,8 @@ function cargar(){
     var ses = res[0] || {}, roles = res[1] || {};
     ROLES = roles;
     pintar(ses.dispositivos || {}, ses);
+    pintarAccesos();
+    mostrarUid();
   }).catch(function(){
     document.getElementById('lista').innerHTML =
       '<div class="vacio">No pude leer la base. ¿Estás con tu sesión iniciada?</div>';
@@ -148,6 +159,36 @@ function pintar(disp, ses){
     html += '</div>';
   });
   document.getElementById('lista').innerHTML = html;
+}
+
+
+/* Historial de ingresos: cada vez que alguien pone mail y clave queda anotado. */
+
+/* Mostramos el UID propio: hace falta para cargarse en 'admins' de Firebase. */
+function mostrarUid(){
+  try{
+    var e = document.getElementById('miuid');
+    if(e && typeof FB_SES !== 'undefined' && FB_SES && FB_SES.uid) e.textContent = FB_SES.uid;
+  }catch(e){}
+}
+
+function pintarAccesos(){
+  leer('sesiones/accesos').then(function(a){
+    var cont = document.getElementById('accesos');
+    if(!a){ cont.innerHTML = '<div class="vacio">Todavía no hay ingresos registrados.<br>'
+          + 'Se van a anotar a partir de ahora, cada vez que alguien entre con su mail y clave.</div>'; return; }
+    var filas = Object.keys(a).map(function(k){ return a[k]; })
+                  .filter(function(x){ return x && x.cuando; })
+                  .sort(function(x,y){ return y.cuando - x.cuando; })
+                  .slice(0, 60);
+    var h = '<div class="usuario">';
+    filas.forEach(function(f){
+      h += '<div class="disp"><div><span class="dtipo">' + esc(f.mail || f.uid) + '</span>'
+         + '<div class="dtxt">' + esc(f.tipo || '') + ' · ' + fecha(f.cuando) + '</div></div></div>';
+    });
+    h += '</div>';
+    cont.innerHTML = h;
+  }).catch(function(){});
 }
 
 function cerrarTodas(){
