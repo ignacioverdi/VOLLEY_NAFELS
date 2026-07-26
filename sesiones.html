@@ -93,6 +93,12 @@ function escribir(ruta, valor){
   });
 }
 
+function borrar(ruta){
+  return _fbSufijo().then(function(q){
+    return fetch(FB_URL + '/' + ruta + '.json' + q, {method:'DELETE'});
+  });
+}
+
 function cargar(){
   document.getElementById('lista').innerHTML = '<div class="vacio">Cargando…</div>';
   Promise.all([leer('sesiones'), leer('roles')]).then(function(res){
@@ -147,7 +153,9 @@ function pintar(disp, ses){
 function cerrarTodas(){
   if(!confirm('Esto cierra la sesión de TODOS, vos incluido.\n\n'
             + 'Cada uno va a tener que volver a entrar con su usuario y su clave.\n\n¿Seguimos?')) return;
-  escribir('sesiones/corte', Date.now()).then(function(){
+  escribir('sesiones/corte', Date.now())
+    .then(function(){ return borrar('sesiones/dispositivos'); })
+    .then(function(){
     alert('Listo. Todas las sesiones quedaron cerradas.\n\n'
         + 'Puede tardar hasta una hora en hacerse efectivo en cada dispositivo.');
     cargar();
@@ -156,18 +164,25 @@ function cerrarTodas(){
 
 function cerrarUsuario(uid, mail){
   if(!confirm('Cerrar todas las sesiones de ' + mail + '?')) return;
-  escribir('sesiones/corte_uid/' + uid, Date.now()).then(function(){
-    alert('Listo. ' + mail + ' va a tener que volver a ingresar.');
-    cargar();
-  }).catch(function(){ alert('No pude guardar el corte.'); });
+  escribir('sesiones/corte_uid/' + uid, Date.now())
+    .then(function(){ return borrar('sesiones/dispositivos/' + uid); })
+    .then(function(){
+      alert('Listo. ' + mail + ' va a tener que volver a ingresar.');
+      cargar();
+    }).catch(function(){ alert('No pude guardar el corte.'); });
 }
 
 function cerrarDisp(uid, id){
   if(!confirm('Cerrar la sesión de ese dispositivo?')) return;
-  escribir('sesiones/corte_disp/' + uid + '/' + id, Date.now()).then(function(){
-    alert('Listo. Ese dispositivo va a pedir usuario y clave la próxima vez.');
-    cargar();
-  }).catch(function(){ alert('No pude guardar el corte.'); });
+  /* Dos cosas: marcamos el corte (para que quede afuera) y borramos el
+     registro, para que desaparezca de la lista. Si sólo marcáramos el corte,
+     el dispositivo seguiría figurando y parecería que no pasó nada. */
+  escribir('sesiones/corte_disp/' + uid + '/' + id, Date.now())
+    .then(function(){ return borrar('sesiones/dispositivos/' + uid + '/' + id); })
+    .then(function(){
+      alert('Listo. Ese dispositivo va a pedir usuario y clave la próxima vez.');
+      cargar();
+    }).catch(function(){ alert('No pude guardar el corte.'); });
 }
 
 /* Sólo cuerpo técnico */
