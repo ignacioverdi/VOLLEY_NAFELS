@@ -922,7 +922,8 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <div class="ini-main">
       <div class="ini-btns">
         <button class="tbtn pri2" onclick="iniNuevo()">+ Nuevo partido</button>
-        <button class="tbtn" onclick="iniImportar()" title="Abrir el importador de .dvw en otra pestaña">Importar .dvw</button>
+        <button class="tbtn" onclick="abrirDVW()" title="Abrir un scout .dvw para corregirlo o seguir cargándolo (manual 9.1.1)">Abrir .dvw</button>
+    <button class="tbtn" onclick="iniImportar()" title="Sumar las estadísticas de un .dvw al historial (no lo abre para editar)">Sumar al historial</button>
         <button class="tbtn" id="ini-seguir" onclick="iniSeguir()" style="display:none"></button>
       </div>
       <div class="ini-head">
@@ -4533,6 +4534,144 @@ function applyComboMode(codeStr, modo){
   return out;
 }
 function abrirExportMode(){ document.getElementById('m-exportmode').classList.add('open'); }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ABRIR UN .dvw PARA EDITARLO   (manual 9.2 «Import a match» + 9.1.1 «Modify scout»)
+   --------------------------------------------------------------------------
+   DataVolley importa un scout y después lo abre para corregirlo. Acá se hace
+   en un solo paso: elegís el archivo y el partido queda cargado en el panel,
+   con todos sus códigos, listo para editar, seguir scouteando o reexportar.
+
+   Es el camino inverso de exportDVW(): mismas columnas, mismo orden.
+   No confundir con «Sumar al historial», que sólo carga las estadísticas.
+   ══════════════════════════════════════════════════════════════════════════ */
+function dvwAPartido(txt){
+  const lin = txt.split(/\r?\n/);
+  const bloque = (nom) => {
+    const i = lin.findIndex(l => l.trim().toUpperCase() === nom);
+    if(i < 0) return [];
+    const out = [];
+    for(let j = i+1; j < lin.length; j++){
+      if(/^\[3?[A-Z\-]+\]/.test(lin[j].trim())) break;
+      if(lin[j].trim()) out.push(lin[j]);
+    }
+    return out;
+  };
+  const mt = (bloque('[3MATCH]')[0] || '').split(';');
+  const eq = bloque('[3TEAMS]');
+  const h  = (eq[0] || '').split(';');
+  const a  = (eq[1] || '').split(';');
+
+  function plantel(nom){
+    const P = {};
+    bloque(nom).forEach(l => {
+      const c = l.split(';');
+      const n = parseInt(c[1], 10);
+      if(!n && n !== 0) return;
+      P[n] = { num:n, nombre:(c[9]||'').trim(), libero:(c[12]||'').trim().toUpperCase()==='L' };
+    });
+    return P;
+  }
+  const pH = plantel('[3PLAYERS-H]'), pA = plantel('[3PLAYERS-V]');
+
+  /* [3SCOUT]: 0 código · 8 set · 9 zh · 10 za · 12 segundo · 14-19 rot local · 20-25 visita */
+  const codes = [];
+  bloque('[3SCOUT]').forEach(l => {
+    const c = l.split(';');
+    const cod = (c[0] || '').trim();
+    if(!cod) return;
+    codes.push({ c:cod,
+                 k: /^[*a]\d{2}[SRABDEF]/.test(cod) ? 'play' : 'auto',
+                 set: parseInt(c[8],10) || 1,
+                 hl: c.slice(14,20).map(x => parseInt(x,10) || 0),
+                 al: c.slice(20,26).map(x => parseInt(x,10) || 0),
+                 zh: parseInt(c[9],10) || 0,
+                 za: parseInt(c[10],10) || 0,
+                 vid: c[12] ? (parseInt(c[12],10) || undefined) : undefined });
+  });
+  if(!codes.length) return null;
+
+  let maxSet = 1;
+  codes.forEach(c => { if(c.k === 'play' && c.set > maxSet) maxSet = c.set; });
+
+  function ptsDe(st){
+    let hp=0, ap=0;
+    codes.forEach(c => { if(c.set!==st) return;
+      const m = c.c.match(/^[*a]p(\d\d):(\d\d)$/);
+      if(m){ hp=parseInt(m[1],10); ap=parseInt(m[2],10); } });
+    return [hp,ap];
+  }
+  let sH=0, sA=0; const parc=[];
+  for(let st=1; st<=maxSet; st++){
+    const r = ptsDe(st);
+    if(r[0]||r[1]) parc.push(r[0]+'-'+r[1]);
+    const obj = st===5 ? 15 : 25;
+    if(r[0]>=obj && r[0]-r[1]>=2) sH++;
+    else if(r[1]>=obj && r[1]-r[0]>=2) sA++;
+  }
+  const act = ptsDe(maxSet);
+  const ult = codes.slice().reverse().find(c => c.hl && c.hl.some(Boolean));
+  const luH = ult ? ult.hl : [0,0,0,0,0,0];
+  const luA = ult ? ult.al : [0,0,0,0,0,0];
+  const lib = P => { const k = Object.keys(P).find(n => P[n].libero); return k ? Number(k) : 0; };
+  const arm = (lu,z) => (z>=1 && z<=6) ? (lu[z-1] || 0) : 0;
+
+  return {
+    set: maxSet, serving: 'home',
+    home:{ id:(h[0]||'').trim(), name:(h[1]||'LOCAL').trim(),
+           code:(h[1]||'LOC').trim().slice(0,3).toUpperCase(),
+           lineup:luH, setter:arm(luH, ult?ult.zh:0), libero:lib(pH),
+           pts:act[0], sets:sH, to:0, subs:0 },
+    away:{ id:(a[0]||'').trim(), name:(a[1]||'VISITANTE').trim(),
+           code:(a[1]||'VIS').trim().slice(0,3).toUpperCase(),
+           lineup:luA, setter:arm(luA, ult?ult.za:0), libero:lib(pA),
+           pts:act[1], sets:sA, to:0, subs:0 },
+    codes: codes, parciales: parc,
+    notas:{ fecha:(mt[0]||'').trim(), hora:(mt[1]||'').trim(), temporada:(mt[2]||'').trim(),
+            competencia:(mt[3]||'').trim(), fase:(mt[4]||'').trim(), codigo:(mt[7]||'').trim(),
+            comentario:'' },
+    _plantel:{ home:pH, away:pA }
+  };
+}
+
+function abrirDVW(){
+  const inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = '.dvw,.txt';
+  inp.onchange = function(){
+    const f = inp.files && inp.files[0];
+    if(!f) return;
+    const fr = new FileReader();
+    fr.onload = function(){
+      let P = null;
+      try{ P = dvwAPartido(String(fr.result)); }
+      catch(e){ toast('No pude leer ese archivo: '+e.message, true); return; }
+      if(!P || !P.codes.length){ toast('Ese .dvw no tiene acciones cargadas', true); return; }
+
+      const cuantas = P.codes.filter(c => c.k==='play').length;
+      const ok = confirm(
+        'Abrir este partido para editarlo?\n\n' +
+        P.home.name + '  ' + P.home.sets + '-' + P.away.sets + '  ' + P.away.name + '\n' +
+        (P.parciales.length ? '(' + P.parciales.join('  ') + ')\n' : '') +
+        cuantas + ' acciones · ' + P.set + ' set(s)\n\n' +
+        'El partido que tenés abierto se guarda en la lista antes de cambiar.');
+      if(!ok) return;
+
+      guardarPartidoEnLista(M);          /* no perder lo que estaba */
+      M = P;
+      M._id = 'imp' + Date.now();
+      SEL_I = -1; CALL_PEND = null;
+      document.getElementById('code').value = '';
+      renderAll(); persist(); avisarMarcador();
+      toast('Partido abierto: ' + M.home.name + ' vs ' + M.away.name + ' · ' + cuantas + ' acciones');
+    };
+    fr.onerror = function(){ toast('No pude abrir el archivo', true); };
+    /* Los .dvw de DataVolley vienen en codificación de Windows, no en UTF-8:
+       si se leen mal, los apellidos con acento quedan rotos. */
+    fr.readAsText(f, 'windows-1252');
+  };
+  inp.click();
+}
+
 function exportDVW(modo){
   modo = modo || 'keep';
   const d=new Date(), pad=n=>String(n).padStart(2,'0');
