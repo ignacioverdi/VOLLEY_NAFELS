@@ -41,7 +41,25 @@ th{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:var(--mut);
 thead tr.grupos th{background:var(--card);color:var(--dim);border-bottom:2px solid var(--b2);font-size:10.5px}
 td.jug{text-align:left;font-weight:700;white-space:nowrap}
 td.num{color:var(--dim);font-family:ui-monospace,monospace}
+tbody tr:nth-child(even){background:rgba(255,255,255,.018)}
 tbody tr:hover{background:var(--card)}
+/* la nota, como ficha de color según el valor */
+.chip{display:inline-block;min-width:38px;padding:2px 8px;border-radius:20px;font-weight:800;font-size:12px}
+.chip.a{background:rgba(61,220,132,.16);color:var(--ok);border:1px solid rgba(61,220,132,.34)}
+.chip.b{background:rgba(230,167,67,.14);color:var(--warn);border:1px solid rgba(230,167,67,.32)}
+.chip.c{background:rgba(255,95,109,.13);color:var(--bad);border:1px solid rgba(255,95,109,.3)}
+/* barrita detrás de los porcentajes */
+.bar{position:relative;display:inline-block;min-width:44px}
+.bar i{position:absolute;left:0;bottom:-3px;height:2px;background:currentColor;opacity:.45;border-radius:2px}
+/* baterías */
+.bat{margin:10px 0 4px;border:1px solid var(--b);border-radius:12px;overflow:hidden}
+.bat table{font-size:11.5px}
+.bat th{background:var(--card);font-size:9.5px;letter-spacing:.4px;padding:5px 4px}
+.bat td{padding:7px 4px;font-weight:700;border-bottom:none}
+.bat .obj{display:block;font-size:9.5px;font-weight:600;color:var(--dim);margin-top:1px}
+.bat .ok{color:var(--ok)} .bat .mid{color:var(--warn)} .bat .no{color:var(--bad)}
+.bat-tit{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--mut);
+         padding:7px 10px;background:var(--card2);border-bottom:1px solid var(--b)}
 tr.tot td{border-top:2px solid var(--b2);font-weight:800;background:var(--card2)}
 .g{color:var(--ok)} .r{color:var(--bad)} .m{color:var(--dim)}
 .nota{font-weight:800}
@@ -58,6 +76,15 @@ tr.tot td{border-top:2px solid var(--b2);font-weight:800;background:var(--card2)
   tr.tot td{background:#f4f4f4!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   td,th{border-bottom:1px solid #ccc}
   .g{color:#0a7d3c!important} .r{color:#b3261e!important} .m{color:#777!important}
+  tbody tr:nth-child(even){background:#fafafa!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .chip{border:1px solid #999!important;background:#fff!important;color:#000!important}
+  .chip.a{color:#0a7d3c!important;border-color:#0a7d3c!important}
+  .chip.c{color:#b3261e!important;border-color:#b3261e!important}
+  .bar i{display:none}
+  .bat{border-color:#bbb}
+  .bat-tit{background:#eee!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .bat .ok{color:#0a7d3c!important} .bat .mid{color:#8a6100!important} .bat .no{color:#b3261e!important}
+  .bat .obj{color:#666!important}
   h2.eq{border-left-color:#000}
   @page{size:A4 landscape;margin:12mm}
 }
@@ -68,6 +95,7 @@ tr.tot td{border-top:2px solid var(--b2);font-weight:800;background:var(--card2)
 <div class="top">
   <h1>Informe de partido</h1>
   <select id="fset" onchange="pintar()"><option value="">Partido completo</option></select>
+  <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mut);cursor:pointer"><input type="checkbox" id="ftodos" onchange="pintar()"> Todo el plantel</label>
   <div class="crece"></div>
   <span id="estado"></span>
   <button onclick="traerDeLaNube()">Traer de la nube</button>
@@ -80,6 +108,7 @@ tr.tot td{border-top:2px solid var(--b2);font-weight:800;background:var(--card2)
 </div>
 
 <script src="datos_seguros.js" onerror="void 0"></script>
+<script src="objetivos.js" onerror="void 0"></script>
 <script src="firebase.js" onerror="void 0"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
@@ -206,12 +235,82 @@ function calcular(setSel){
 }
 
 /* ── dibujo ────────────────────────────────────────────────────────────── */
-function pct(a,b){ return b ? Math.round(a*100/b) + '%' : '—'; }
+function pct(a,b){
+  if(!b) return '—';
+  var v = Math.round(a*100/b);
+  /* una barrita finita debajo del número: se lee el porcentaje de un vistazo */
+  return '<span class="bar">' + v + '%<i style="width:' + Math.min(100,v) + '%"></i></span>';
+}
+function fichaNota(v){
+  if(v == null) return '<span class="m">—</span>';
+  var c = v >= 7 ? 'a' : (v >= 6 ? 'b' : 'c');
+  return '<span class="chip ' + c + '">' + v.toFixed(1) + '</span>';
+}
+
+/* ── BATERÍAS DEL EQUIPO ───────────────────────────────────────────────────
+   Reusa el motor de objetivos.js (el mismo port de baterias_engine.py que ya
+   está validado contra DataVolley). Se muestran en una tabla horizontal, con
+   el valor alcanzado y el objetivo entre paréntesis, para ver de un vistazo
+   si el equipo estuvo cerca o lejos. */
+function baterias(lado){
+  try{
+    if(typeof calcBaterias !== 'function' || !window.OBJETIVOS_CONFIG) return '';
+    var metas = window.OBJETIVOS_CONFIG.metas;
+    var pre = (lado === 'home') ? '*' : 'a';
+    var P = calcBaterias(M.codes || [], pre);
+    var eq = _batNuevo();
+    Object.keys(P).forEach(function(n){
+      ['S','R','B','cent','alta','rap','rp','ri','rm','tr'].forEach(function(g){
+        if(!P[n][g] || !eq[g]) return;
+        Object.keys(P[n][g]).forEach(function(k){ eq[g][k] = (eq[g][k]||0) + P[n][g][k]; });
+      });
+    });
+    var v = batToPcts(eq), ids = Object.keys(metas), hay = false;
+    var th = '', td = '';
+    ids.forEach(function(id){
+      var m = metas[id], val = v[id];
+      if(val != null) hay = true;
+      var cls = 'm';
+      if(val != null) cls = (val >= m.g2) ? 'ok' : (val >= m.g1 ? 'mid' : 'no');
+      th += '<th>' + m.label + '</th>';
+      td += '<td class="' + cls + '">' + (val == null ? '—' : val)
+          + '<span class="obj">(' + m.obj + ')</span></td>';
+    });
+    if(!hay) return '';
+    return '<div class="bat"><div class="bat-tit">Baterías del equipo · alcanzado (objetivo)</div>'
+         + '<table><thead><tr>' + th + '</tr></thead><tbody><tr>' + td + '</tr></tbody></table></div>';
+  }catch(e){ return ''; }
+}
 function n1(v){ return v==null ? '—' : v.toFixed(1); }
 
 function tabla(lado, datos, nSets, nombre){
-  var t = datos.eq[lado], nums = Object.keys(t).map(Number).sort(function(a,b){return a-b;});
-  if(!nums.length) return '<div class="vacio">Sin acciones cargadas para ' + esc(nombre) + '.</div>';
+  var t = datos.eq[lado];
+  var todos = document.getElementById('ftodos') && document.getElementById('ftodos').checked;
+  var set = {};
+  /* Quién va en la lista. Por defecto, los que PARTICIPARON del partido, que es
+     el criterio de DataVolley: el .dvw marca por jugador si jugó cada set.
+     Sumamos también a cualquiera con acciones y a los que estuvieron en cancha,
+     porque un jugador puede entrar y no tocar la pelota.
+     Con «Todo el plantel» se listan todos, jueguen o no. */
+  Object.keys(t).forEach(function(n){ set[n] = 1; });
+  try{
+    var P = M && M._plantel && M._plantel[lado];
+    if(P) Object.keys(P).forEach(function(n){ if(todos || P[n].jugo) set[n] = 1; });
+  }catch(e){}
+  (M.codes || []).forEach(function(c){
+    var r = (lado === 'home') ? c.hl : c.al;
+    if(r) r.forEach(function(n){ if(n >= 1) set[n] = 1; });
+  });
+  try{ if(M[lado].libero) set[M[lado].libero] = 1; }catch(e){}
+
+  var nums = Object.keys(set).map(Number).filter(function(n){ return n >= 1; })
+                   .sort(function(a,b){ return a-b; });
+  nums.forEach(function(n){
+    if(!t[n]) t[n] = {num:n, s_tot:0,s_err:0,s_pt:0,s_pos:0,s_med:0,s_mal:0,
+                      r_tot:0,r_err:0,r_perf:0,r_pos:0,r_med:0,r_mal:0,
+                      a_tot:0,a_err:0,a_blo:0,a_pt:0,a_pos:0,a_mal:0, b_pt:0,b_err:0};
+  });
+  if(!nums.length) return '<div class="vacio">Sin datos para ' + esc(nombre) + '.</div>';
 
   var T = {s_tot:0,s_err:0,s_pt:0,r_tot:0,r_err:0,r_perf:0,r_pos:0,
            a_tot:0,a_err:0,a_blo:0,a_pt:0,b_pt:0,pts:0};
@@ -238,7 +337,7 @@ function tabla(lado, datos, nSets, nombre){
       + '<td class="r">' + (f.a_blo||'—') + '</td><td class="g">' + (f.a_pt||'—') + '</td>'
       + '<td>' + pct(f.a_pt, f.a_tot) + '</td>'
       + '<td class="sep g">' + (f.b_pt||'—') + '</td>'
-      + '<td class="sep nota">' + n1(final) + '</td>'
+      + '<td class="sep">' + fichaNota(final) + '</td>'
       + '</tr>';
   }).join('');
 
@@ -316,7 +415,9 @@ function pintar(){
     +   '<div class="parc">' + esc(parciales) + '</div></div></div>'
 
     + '<h2 class="eq">' + esc(M.home.name) + '</h2>'   + tabla('home', d, d.nSets, M.home.name)
+    + baterias('home')
     + '<h2 class="eq v">' + esc(M.away.name) + '</h2>' + tabla('away', d, d.nSets, M.away.name)
+    + baterias('away')
 
     + '<div class="pie">'
     +   '<b>Cómo se calcula la nota</b> (manual DataVolley 9.7.1.1) — '

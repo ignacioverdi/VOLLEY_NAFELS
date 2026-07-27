@@ -4568,7 +4568,14 @@ function dvwAPartido(txt){
       const c = l.split(';');
       const n = parseInt(c[1], 10);
       if(!n && n !== 0) return;
-      P[n] = { num:n, nombre:(c[9]||'').trim(), libero:(c[12]||'').trim().toUpperCase()==='L' };
+      /* Las columnas 3 a 7 dicen si jugó cada set: vacío = no jugó,
+         '*' = entró después, 1-6 = arrancó en esa zona. Es el criterio que
+         usa DataVolley para saber quién participó del partido. */
+      const porSet = c.slice(3,8).map(x => (x||'').trim());
+      P[n] = { num:n, nombre:(c[9]||'').trim(),
+               libero:(c[12]||'').trim().toUpperCase()==='L',
+               jugo: porSet.some(x => x !== ''),
+               sets: porSet };
     });
     return P;
   }
