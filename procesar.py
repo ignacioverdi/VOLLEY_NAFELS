@@ -47,10 +47,16 @@ def carpeta_dvw(pedida=None):
     """La carpeta de partidos del año más alto: DVW <CLUB> 2027 gana sobre 2026."""
     if pedida:
         return pedida if os.path.isabs(pedida) else os.path.join(AQUI, pedida)
-    cands = [d for d in glob.glob(os.path.join(AQUI, 'DVW*'))
-             if os.path.isdir(d) and re.search(r'\d{4}\s*$', d)]
+    # Ojo: puede haber dos carpetas del mismo año, una de partidos y otra de
+    # entrenamientos ("DVW CASLA 2026" y "DVW ENTRENAMIENTOS 2026"). La de
+    # entrenamientos NO es la de partidos: se procesa aparte, con --entrenamientos.
+    def es_entrenamiento(d):
+        return 'ENTREN' in os.path.basename(d).upper()
+    todas = [d for d in glob.glob(os.path.join(AQUI, 'DVW*'))
+             if os.path.isdir(d) and not es_entrenamiento(d)]
+    cands = [d for d in todas if re.search(r'\d{4}\s*$', d)]
     if not cands:
-        cands = [d for d in glob.glob(os.path.join(AQUI, 'DVW*')) if os.path.isdir(d)]
+        cands = todas
     if not cands:
         return None
     return sorted(cands, key=lambda d: re.findall(r'(\d{4})', d)[-1] if re.findall(r'(\d{4})', d) else '0')[-1]
@@ -161,8 +167,9 @@ def main():
 
     # 6) entrenamientos, si se pidieron
     if args.entrenamientos:
-        ent = [d for d in glob.glob(os.path.join(AQUI, '*')) if os.path.isdir(d)
-               and 'ENTREN' in os.path.basename(d).upper()]
+        ent = sorted([d for d in glob.glob(os.path.join(AQUI, '*')) if os.path.isdir(d)
+                      and 'ENTREN' in os.path.basename(d).upper()],
+                     key=lambda d: (re.findall(r'(\d{4})', d) or ['0'])[-1])
         upd_e = buscar_script('update_db_entrenamientos*.py')
         if ent and upd_e:
             c.paso('Entrenamientos', [sys.executable, upd_e, '--dvw_dir', ent[0],

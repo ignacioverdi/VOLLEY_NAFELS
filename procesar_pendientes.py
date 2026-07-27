@@ -144,7 +144,14 @@ def main():
 
     print()
     print('  Procesando...')
-    r = subprocess.run([sys.executable, os.path.join(AQUI, 'procesar.py'), '--json'],
+    # Si el club tiene carpeta de entrenamientos, se procesan también: para el
+    # entrenador es lo mismo, sube un archivo y espera.
+    import glob as _g
+    cmd = [sys.executable, os.path.join(AQUI, 'procesar.py'), '--json']
+    if [d for d in _g.glob(os.path.join(AQUI, '*'))
+        if os.path.isdir(d) and 'ENTREN' in os.path.basename(d).upper()]:
+        cmd.append('--entrenamientos')
+    r = subprocess.run(cmd,
                        cwd=AQUI, capture_output=True, text=True, timeout=3000)
     salida = (r.stdout or '').strip().splitlines()
     resumen = {}
