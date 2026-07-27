@@ -265,10 +265,19 @@ function tabla(lado, datos, nSets, nombre){
 }
 
 function plantel(lado, num){
+  /* El apellido sale, por orden de preferencia:
+       1) del plantel que trae el propio .dvw ([3PLAYERS-H] / [3PLAYERS-V])
+       2) del plantel maestro del club, si la página lo tiene cargado
+       3) si no hay ninguno, el número */
   try{
-    var P = window.PLANTEL || window.PLANTEL_DATA || null;
-    if(P && P.length){
-      for(var i=0;i<P.length;i++) if(Number(P[i].num)===Number(num)) return P[i].nombre || ('#'+num);
+    var P = M && M._plantel && M._plantel[lado];
+    if(P && P[num] && P[num].nombre) return P[num].nombre;
+  }catch(e){}
+  try{
+    var L = window.PLANTEL || window.PLANTEL_DATA || window.PLANTEL_NAFELS || null;
+    if(L && L.length){
+      for(var i=0;i<L.length;i++)
+        if(Number(L[i].num)===Number(num)) return L[i].nombre || L[i].apellido || ('#'+num);
     }
   }catch(e){}
   return '#' + num;
@@ -278,7 +287,11 @@ function armarSets(){
   var sel = document.getElementById('fset'), sets = {};
   (M.codes||[]).forEach(function(c){ if(c.set) sets[c.set]=1; });
   sel.innerHTML = '<option value="">Partido completo</option>'
-    + Object.keys(sets).sort().map(function(s){ return '<option value="'+s+'">Set '+s+'</option>'; }).join('');
+    + Object.keys(sets).sort().map(function(s){
+        /* En vóley se juegan 5 sets como mucho. El sexto es el «golden set»,
+           que sólo se juega en situaciones especiales (desempate de una serie). */
+        var nom = Number(s) >= 6 ? 'Golden set' : ('Set ' + s);
+        return '<option value="'+s+'">'+nom+'</option>'; }).join('');
 }
 
 function pintar(){
@@ -297,7 +310,7 @@ function pintar(){
       '<div class="cab"><div>'
     +   '<div class="tit">' + esc(M.home.name) + '  <span class="m">vs</span>  ' + esc(M.away.name) + '</div>'
     +   '<div class="sub">' + [n.competencia, n.fase, n.fecha, n.hora].filter(Boolean).map(esc).join(' · ')
-    +   (setSel ? '  ·  <b>Set ' + esc(setSel) + '</b>' : '  ·  Partido completo') + '</div>'
+    +   (setSel ? ('  ·  <b>' + (Number(setSel)>=6 ? 'Golden set' : 'Set '+esc(setSel)) + '</b>') : '  ·  Partido completo') + '</div>'
     + '</div>'
     + '<div class="marc"><div class="res">' + M.home.sets + ' – ' + M.away.sets + '</div>'
     +   '<div class="parc">' + esc(parciales) + '</div></div></div>'

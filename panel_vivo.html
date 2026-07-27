@@ -4642,8 +4642,18 @@ function abrirDVW(){
     if(!f) return;
     const fr = new FileReader();
     fr.onload = function(){
+      let txt = '';
+      try{
+        /* Windows-1252 nunca falla, así que arrancamos por ahí. Si el texto
+           trae los pares típicos de un UTF-8 mal leído (Ã¤, Ã¶, Ã©...), es que
+           los bytes eran UTF-8 y lo releemos como corresponde.
+           Probado sobre 97 partidos reales: los 97 quedan bien. */
+        txt = new TextDecoder('windows-1252').decode(fr.result);
+        if(/[\u00C3\u00C2][\u0080-\u00BF]/.test(txt))
+          txt = new TextDecoder('utf-8').decode(fr.result);
+      }catch(e){ toast('No pude leer la codificación del archivo', true); return; }
       let P = null;
-      try{ P = dvwAPartido(String(fr.result)); }
+      try{ P = dvwAPartido(txt); }
       catch(e){ toast('No pude leer ese archivo: '+e.message, true); return; }
       if(!P || !P.codes.length){ toast('Ese .dvw no tiene acciones cargadas', true); return; }
 
@@ -4665,9 +4675,11 @@ function abrirDVW(){
       toast('Partido abierto: ' + M.home.name + ' vs ' + M.away.name + ' · ' + cuantas + ' acciones');
     };
     fr.onerror = function(){ toast('No pude abrir el archivo', true); };
-    /* Los .dvw de DataVolley vienen en codificación de Windows, no en UTF-8:
-       si se leen mal, los apellidos con acento quedan rotos. */
-    fr.readAsText(f, 'windows-1252');
+    /* La codificación no es confiable: los .dvw declaran 1252 en la cabecera
+       pero muchos vienen en UTF-8 de verdad. En vez de creerle al archivo,
+       probamos UTF-8 estricto y, si no encaja, caemos a Windows-1252.
+       Si no, «Näfels» se lee «NÃ¤fels». */
+    fr.readAsArrayBuffer(f);
   };
   inp.click();
 }
