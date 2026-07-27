@@ -1974,6 +1974,18 @@ function verificar(a){
   }
   if(V.liberoSaca!==false && a.skill==='S' && M[a.team].libero===a.num)
     av.push('El líbero no puede sacar');
+  /* Manual 4.5: el programa verifica que el jugador que saca sea el correcto.
+     En vóley saca SIEMPRE el de zona 1 del equipo que tiene el saque. Si el
+     número no coincide, o la rotación quedó corrida, o se tipeó mal el número:
+     las dos cosas arruinan el partido entero y no se notan hasta el otro día.
+     Es un aviso, no un bloqueo: puede haber un cambio raro o un seis mal cargado. */
+  if(V.ordenSaque!==false && a.skill==='S'){
+    const propio = M[a.team].lineup && M[a.team].lineup[0];
+    if(propio && Number(a.num) !== Number(propio))
+      av.push('Debería sacar el ' + propio + ' (está en zona 1), no el ' + a.num);
+    if(M.serving && a.team !== M.serving)
+      av.push('El saque le toca a ' + (M.serving==='home' ? M.home.name : M.away.name));
+  }
   return av;
 }
 function ultimaJugada(){
@@ -2897,7 +2909,14 @@ function renderRot(side){
     return '<div class="zone'+(isSetter?' setter':'')+(serving?' serving':'')+'">'+
            '<span class="zn">'+zn+'</span><span class="pn">'+(n||'·')+'</span></div>';
   }).join('');
-  document.getElementById(side==='home'?'lb-h':'lb-a').textContent = t.libero? ('Líbero '+t.libero) : '';
+  /* La rotación en la que está el equipo: es la zona del armador, que es como
+     habla el cuerpo técnico ("estamos en P3"). El dato ya se calculaba para el
+     código; acá sólo se muestra. */
+  const zs = (t.setter && t.lineup) ? t.lineup.indexOf(t.setter) : -1;
+  const rot = zs >= 0 ? ('P' + (zs + 1)) : '';
+  const lb  = document.getElementById(side==='home'?'lb-h':'lb-a');
+  lb.innerHTML = (rot ? '<b class="rotnum">' + rot + '</b>' : '') +
+                 (t.libero ? ' Líbero ' + t.libero : '');
 }
 
 function renderCodes(){
