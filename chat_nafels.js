@@ -148,6 +148,62 @@ function vbNorm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[\u030
 function vbFmt(n){return (n===null||n===undefined)?'-':(Math.round(n*10)/10);}
 
 var KB={
+ playbook:{
+  es:'📘 **Team Playbook** — Es cómo juega el equipo, escrito. Está en el Hub.\n\nAdentro vas a encontrar: nuestra identidad y valores, los principios de juego, el sistema de ataque y de defensa, el bloqueo, qué buscamos con el saque y con la recepción, cómo manejamos el error, y el lenguaje común (los llamados y las señas).\n\nLo escribe el cuerpo técnico y lo lee todo el plantel. Si sos jugador lo ves pero no lo podés editar.\n\n💡 Si sos nuevo en el equipo, empezá por *Identidad* y *Lenguaje común*.',
+  en:'📘 **Team Playbook** — How the team plays, written down. You will find it on the Hub.\n\nInside: our identity and values, playing principles, offensive and defensive systems, blocking, what we look for on serve and reception, how we handle errors, and the common language (calls and signals).\n\nThe coaching staff writes it, the whole squad reads it. As a player you can read it but not edit it.\n\n💡 New to the team? Start with *Identity* and *Common language*.',
+  de:'📘 **Team Playbook** — Wie die Mannschaft spielt, schriftlich. Du findest es im Hub.\n\nInhalt: unsere Identität und Werte, Spielprinzipien, Angriffs- und Abwehrsystem, Block, was wir bei Aufschlag und Annahme suchen, Fehlermanagement und die gemeinsame Sprache (Rufe und Zeichen).\n\nDas Trainerteam schreibt es, das ganze Team liest es.\n\n💡 Neu im Team? Fang mit *Identität* und *Gemeinsame Sprache* an.'
+ },
+ calendario:{
+  es:'📅 **Calendario** — Todos los partidos de la temporada, con fecha, hora, rival y si jugamos de local o visitante.\n\nTenés dos vistas: *Lista* (uno abajo del otro) y *Planificación* (en grilla por semana, quincena o mes).\n\nCada partido muestra el escudo del rival, y tocando el 📍 se abre la dirección en el mapa.\n\n💡 Los horarios de entrenamiento están aparte, en **Horarios**.',
+  en:'📅 **Calendar** — Every match of the season: date, time, opponent and home/away.\n\nTwo views: *List* and *Planning* (grid by week, fortnight or month).\n\nEach match shows the opponent badge, and tapping 📍 opens the address on the map.\n\n💡 Training times are separate, under **Schedule**.',
+  de:'📅 **Kalender** — Alle Spiele der Saison: Datum, Uhrzeit, Gegner und Heim/Auswärts.\n\nZwei Ansichten: *Liste* und *Planung* (Raster nach Woche, zwei Wochen oder Monat).\n\nJedes Spiel zeigt das Gegnerwappen; mit 📍 öffnet sich die Adresse auf der Karte.\n\n💡 Trainingszeiten stehen separat unter **Zeiten**.'
+ },
+ cortes:{
+  es:'🎬 **Cortes de Video** — Mirás tus jugadas sin buscarlas en el video entero.\n\nElegís el equipo, el partido, la acción (saque, ataque, recepción…) y el jugador, y te arma la lista de clips. Apretás *Reproducir* y salta directo al segundo exacto de cada jugada.\n\nTenés *Loop* para repetir, y los botones de 2s para adelantar o retroceder.\n\n💡 Filtrá por valoración (por ejemplo sólo los `#`) para ver únicamente los puntos.',
+  en:'🎬 **Video Clips** — Watch your actions without scrubbing the full video.\n\nPick team, match, action (serve, attack, reception…) and player, and it builds the clip list. Hit *Play* and it jumps to the exact second of each rally.\n\nThere is *Loop* to repeat, and 2s buttons to step back and forward.\n\n💡 Filter by evaluation (e.g. only `#`) to watch just the points.',
+  de:'🎬 **Video-Clips** — Schau deine Aktionen, ohne das ganze Video zu durchsuchen.\n\nWähle Team, Spiel, Aktion (Aufschlag, Angriff, Annahme…) und Spieler — die Clip-Liste wird erstellt. *Play* springt direkt zur genauen Sekunde.\n\n*Loop* zum Wiederholen, 2s-Tasten zum Vor- und Zurückspringen.\n\n💡 Nach Bewertung filtern (z. B. nur `#`), um nur die Punkte zu sehen.'
+ },
+ heatmap:{
+  es:'🔥 **Heat Maps** — La cancha pintada según dónde caen las pelotas.\n\nHay uno por fundamento: ataque, saque, recepción, defensa y distribución del armador. Cuanto más fuerte el color, más acciones en esa zona.\n\nSe pueden filtrar por jugador, por rival y por partido.\n\n💡 Sirven para ver tendencias: si siempre atacás a la misma zona, el rival lo va a leer.',
+  en:'🔥 **Heat Maps** — The court coloured by where the ball lands.\n\nOne per skill: attack, serve, reception, defence and setter distribution. The stronger the colour, the more actions in that zone.\n\nFilterable by player, opponent and match.\n\n💡 Great for spotting patterns: if you always hit the same zone, the opponent will read it.',
+  de:'🔥 **Heat Maps** — Das Feld eingefärbt nach Ballaufkommen.\n\nEine pro Element: Angriff, Aufschlag, Annahme, Abwehr und Zuspielverteilung. Je kräftiger die Farbe, desto mehr Aktionen in dieser Zone.\n\nFilterbar nach Spieler, Gegner und Spiel.\n\n💡 Ideal für Muster: Wer immer dieselbe Zone angreift, wird gelesen.'
+ },
+ baterias:{
+  es:'⚡ **Baterías** — Series de trabajo para entrenar un fundamento puntual.\n\nSe arman desde el sistema y quedan guardadas. Cada una tiene su objetivo y su forma de puntuar, así podés ver si vas mejorando de una a otra.\n\n💡 Preguntale al cuerpo técnico cuál te toca esta semana.',
+  en:'⚡ **Batteries** — Work series to train one specific skill.\n\nThey are built in the system and saved. Each has its goal and scoring, so you can see whether you improve from one to the next.\n\n💡 Ask the coaching staff which one is yours this week.',
+  de:'⚡ **Batterien** — Übungsserien für ein bestimmtes Element.\n\nSie werden im System erstellt und gespeichert. Jede hat ihr Ziel und ihre Wertung, damit du den Fortschritt siehst.\n\n💡 Frag das Trainerteam, welche diese Woche dran ist.'
+ },
+ miperfil:{
+  es:'📊 **Mi rendimiento** — Tus números, partido a partido y acumulados.\n\nVas a ver tu eficiencia en cada fundamento, comparada con el promedio del equipo. Verde es que estás por encima, rojo por debajo.\n\nEntrás desde el Hub o desde *Equipo* → tu tarjeta → *Stats*.\n\n💡 No mires un solo partido: la tendencia de varios dice mucho más.',
+  en:'📊 **My performance** — Your numbers, per match and cumulative.\n\nYou see your efficiency in each skill compared to the team average. Green means above, red means below.\n\nOpen it from the Hub or from *Team* → your card → *Stats*.\n\n💡 Do not read one match alone: the trend across several says much more.',
+  de:'📊 **Meine Leistung** — Deine Zahlen, pro Spiel und kumuliert.\n\nDu siehst deine Effizienz je Element im Vergleich zum Teamschnitt. Grün heisst darüber, Rot darunter.\n\nÜber den Hub oder *Team* → deine Karte → *Stats*.\n\n💡 Nicht ein einzelnes Spiel lesen: der Trend über mehrere sagt mehr.'
+ },
+ avisos:{
+  es:'🔔 **Avisos** — El sistema te manda notificaciones al celular: convocatorias, cambios de horario, cuando hay video nuevo o cuando falta tu wellness.\n\nPara activarlos, entrá al Hub desde el celular y aceptá cuando te pregunte si querés recibir avisos. Si dijiste que no y te arrepentiste, hay que habilitarlos desde la configuración del navegador.\n\n💡 Llegan aunque tengas la app cerrada.',
+  en:'🔔 **Alerts** — The system sends notifications to your phone: call-ups, schedule changes, new video, or a missing wellness entry.\n\nTo turn them on, open the Hub on your phone and accept when asked. If you declined and changed your mind, enable them in your browser settings.\n\n💡 They arrive even with the app closed.',
+  de:'🔔 **Benachrichtigungen** — Das System schickt Meldungen aufs Handy: Aufgebote, Zeitänderungen, neue Videos oder fehlendes Wellness.\n\nZum Aktivieren den Hub auf dem Handy öffnen und zustimmen. Falls abgelehnt, in den Browser-Einstellungen erlauben.\n\n💡 Sie kommen auch bei geschlossener App an.'
+ },
+ sesion:{
+  es:'🔐 **Ingreso** — Se entra una sola vez por dispositivo y después ya no te vuelve a pedir la clave.\n\nSi de golpe te la pide otra vez, es normal: el club puede cerrar las sesiones (por ejemplo si se perdió un celular). Entrás de nuevo con tu mail y tu clave y listo.\n\n💡 Si no te acordás la clave, pedísela al cuerpo técnico.',
+  en:'🔐 **Access** — You log in once per device and it will not ask again.\n\nIf it suddenly asks again, that is normal: the club can close sessions (for example if a phone was lost). Just log in again with your email and password.\n\n💡 Forgot your password? Ask the coaching staff.',
+  de:'🔐 **Zugang** — Einmal pro Gerät anmelden, danach fragt es nicht mehr.\n\nWenn plötzlich doch gefragt wird, ist das normal: der Club kann Sitzungen schliessen (z. B. bei verlorenem Handy). Einfach neu anmelden.\n\n💡 Passwort vergessen? Frag das Trainerteam.'
+ },
+ idioma:{
+  es:'🌐 **Idioma** — Arriba a la derecha de cada pantalla tenés **ES · EN · DE**. Tocás el que quieras y toda la app cambia, incluido este chat.',
+  en:'🌐 **Language** — Top right of every screen you have **ES · EN · DE**. Tap one and the whole app switches, including this chat.',
+  de:'🌐 **Sprache** — Oben rechts auf jedem Bildschirm: **ES · EN · DE**. Antippen und die ganze App wechselt, auch dieser Chat.'
+ },
+ celular:{
+  es:'📱 **En el celular** — Se usa desde el navegador, no hace falta bajar nada.\n\nPara tenerla como una app: abrila en el celular y usá *Agregar a pantalla de inicio* (en iPhone está en el botón de compartir; en Android, en el menú de los tres puntos).\n\n💡 Así te queda el ícono como cualquier otra app y arranca a pantalla completa.',
+  en:'📱 **On your phone** — It runs in the browser, nothing to download.\n\nTo keep it like an app: open it on your phone and use *Add to Home Screen* (iPhone: share button; Android: three-dot menu).\n\n💡 You get an icon like any other app and it opens full screen.',
+  de:'📱 **Auf dem Handy** — Läuft im Browser, nichts herunterzuladen.\n\nWie eine App: im Handy öffnen und *Zum Home-Bildschirm* nutzen (iPhone: Teilen-Button; Android: Drei-Punkte-Menü).\n\n💡 Du bekommst ein Icon wie bei jeder App, Start im Vollbild.'
+ },
+ historial:{
+  es:'📈 **Historial** — Todo lo acumulado: tu evolución y la del equipo a lo largo de la temporada.\n\nPodés comparar períodos y ver si un fundamento mejoró o se cayó. Se puede filtrar por partido o por entrenamiento.\n\n💡 Es donde mejor se ve si el trabajo de las últimas semanas dio resultado.',
+  en:'📈 **History** — Everything accumulated: your progression and the team\'s across the season.\n\nCompare periods and see whether a skill improved or dropped. Filter by match or training.\n\n💡 The best place to see whether recent work paid off.',
+  de:'📈 **Verlauf** — Alles Kumulierte: deine Entwicklung und die des Teams über die Saison.\n\nZeiträume vergleichen und sehen, ob ein Element besser oder schlechter wurde. Filter nach Spiel oder Training.\n\n💡 Hier sieht man am besten, ob die Arbeit der letzten Wochen gewirkt hat.'
+ },
+
  help:{
   es:'Te puedo ayudar con:\n• 📊 Stats de un jugador — escribí su apellido (ej. "¿cómo viene Durdos?")\n• 🏐 Mejores del equipo — "mejor sacador", "quién ataca mejor", "mejor receptor"\n• 📅 Próximo rival\n• 🏆 Tabla de la liga\n• ❓ Cómo usar: wellness, rutinas, pizarrón, scouting, game plan, video, PIN de acceso, qué es el EFF.',
   en:'I can help with:\n• 📊 A player\'s stats — type their surname (e.g. "how is Durdos doing?")\n• 🏐 Team leaders — "best server", "who attacks best", "best receiver"\n• 📅 Next rival\n• 🏆 League table\n• ❓ How to use: wellness, routines, board, scouting, game plan, video, access PIN, what EFF means.',
@@ -279,6 +335,17 @@ function vbAnswer(raw){
   if(/\b(hola|buenas|hi|hello|hey|hallo|ayuda|help|hilfe|menu)\b/.test(t)||/que podes|que puedes|what can you|was kannst/.test(t))return KB.help[lang];
   if(/proximo|next|naechst|nachst|rival|gegner|contra quien|cuando jugamos|when do we play|wann spielen/.test(t))return vbNextRival(lang);
   if(/mejor|best|beste|top|quien ataca|quien saca|quien recibe|who attacks|who serves|goleador|ranking|wer greift|wer schlagt/.test(t))return vbRanking(t,lang);
+  if(/playbook|play ?book|libro de juego|spielbuch/.test(t))return KB.playbook[lang];
+  if(/calendario|fixture|partidos|calendar|kalender|cuando jugamos|when do we play|wann spielen/.test(t))return KB.calendario[lang];
+  if(/corte|clip|mis jugadas|my clips|video ?clips/.test(t))return KB.cortes[lang];
+  if(/heat ?map|mapa de calor|zonas|waermebild|warmebild/.test(t))return KB.heatmap[lang];
+  if(/bateria|baterias|battery|batterie/.test(t))return KB.baterias[lang];
+  if(/mi rendimiento|mis stats|mis numeros|my stats|my performance|meine stats|meine leistung/.test(t))return KB.miperfil[lang];
+  if(/aviso|notificacion|notification|push|benachrichtigung|alerta/.test(t))return KB.avisos[lang];
+  if(/me pide.*clave|volvio a pedir|sesion|session|anmeldung|cerraron/.test(t))return KB.sesion[lang];
+  if(/idioma|language|sprache|ingles|aleman|english|deutsch/.test(t))return KB.idioma[lang];
+  if(/celular|movil|telefono|phone|handy|instalar|install|app en el/.test(t))return KB.celular[lang];
+  if(/historial|evolucion|progreso|history|progress|verlauf|entwicklung/.test(t))return KB.historial[lang];
   if(/rutina|routine|trainingsplan/.test(t))return KB.rutina[lang];
   if(/wellness|bienestar|befinden/.test(t))return KB.wellness[lang];
   if(/pizarr|board|tafel/.test(t))return KB.pizarron[lang];

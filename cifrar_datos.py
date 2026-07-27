@@ -34,7 +34,11 @@ PATRONES = [
 #                         no intercepta. Si se cifra, la tabla de liga queda rota
 #                         (y ademas el robot de GitHub lo regenera en claro).
 #  - datos_historial.js-> importar_dvw.html lo pide con fetch(), mismo caso.
-NUNCA = {'datos_seguros.js', 'nla_stats.json', 'datos_historial.js'}
+NUNCA = {'datos_seguros.js', 'nla_stats.json', 'datos_historial.js',
+         'nla_full_stats.json', 'proximo_rival.js'}
+#  nla_full_stats.json y proximo_rival.js los pide el CHAT con fetch(), que el
+#  lector no intercepta. Si se cifran, el chat se queda mudo para los jugadores.
+#  Son estadísticas agregadas de la liga: lo menos sensible del sistema.
 
 def es_dato(nombre):
     if nombre.lower() in NUNCA:
