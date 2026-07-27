@@ -9,8 +9,8 @@
 #    · cuando se sube un .dvw     (por si alguien lo pone directo)
 #    · a mano desde la pestaña Actions
 #
-#  Un partido tarda unos segundos en procesarse, así que el gasto de minutos
-#  es mínimo: los repos privados tienen 2.000 minutos gratis por mes.
+#  Sirve igual para un club con los datos cifrados y para uno sin cifrar:
+#  si no hay llave configurada, esos pasos no hacen nada.
 # =============================================================================
 name: Procesar partidos
 
@@ -43,12 +43,27 @@ jobs:
         with:
           python-version: '3.11'
 
-      # Los motores no usan librerías externas, pero si algún día hicieran
-      # falta, este paso las instala sin romper nada cuando no hay archivo.
       - name: Dependencias (si hicieran falta)
         run: |
           if [ -f requirements.txt ]; then
             pip install --quiet -r requirements.txt
+          else
+            echo "Sin dependencias externas."
+          fi
+
+      # La llave del cifrado nunca vive en el repositorio: se escribe acá desde
+      # un secreto, se usa, y se borra antes de publicar.
+      # El club que no cifra simplemente no tiene ese secreto, y este paso lo
+      # dice y sigue de largo.
+      - name: Preparar la llave de los datos
+        env:
+          LLAVE_DATOS: ${{ secrets.LLAVE_DATOS }}
+        run: |
+          if [ -n "$LLAVE_DATOS" ]; then
+            printf '%s' "$LLAVE_DATOS" > LLAVE.txt
+            echo "Llave puesta."
+          else
+            echo "Este club no usa cifrado."
           fi
 
       - name: Recoger los partidos subidos desde la app y procesarlos
@@ -60,16 +75,7 @@ jobs:
           CLUB_ID:     ${{ secrets.CLUB_ID }}
         run: python procesar_pendientes.py
 
-      # La llave del cifrado nunca vive en el repositorio: se pone acá, se usa,
-      # y se borra antes de publicar. Sin esto, el motor no puede leer sus
-      # propios datos y el ciclo se rompe.
-      - name: Preparar la llave de los datos
-        if: ${{ secrets.LLAVE_DATOS != '' }}
-        env:
-          LLAVE_DATOS: ${{ secrets.LLAVE_DATOS }}
-        run: printf '%s' "$LLAVE_DATOS" > LLAVE.txt
-
-      - name: Guardar la llave fuera del alcance
+      - name: Sacar la llave de en medio
         if: always()
         run: rm -f LLAVE.txt
 
@@ -77,12 +83,12 @@ jobs:
         run: |
           git config user.name  "Asistente del club"
           git config user.email "actions@users.noreply.github.com"
-          if [ -n "$(git status --porcelain -- . ':!LLAVE.txt')" ]; then
-            git add -A
-            git reset -- LLAVE.txt 2>/dev/null || true
-            git commit -m "Partido procesado automáticamente"
-            git push
-            echo "Publicado."
-          else
+          rm -f LLAVE.txt
+          if [ -z "$(git status --porcelain)" ]; then
             echo "No hubo cambios para publicar."
+            exit 0
           fi
+          git add -A
+          git commit -m "Partido procesado automáticamente"
+          git push
+          echo "Publicado."
