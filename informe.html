@@ -217,6 +217,36 @@ function calcular(setSel){
                       b_pt:0, b_err:0};
     return t[n];
   }
+  /* ── PUNTOS: quién ganó cada jugada ──────────────────────────────────
+     No alcanza con sumar los '#': una jugada puede tener varios (un armado
+     perfecto también lleva '#', y no es un punto). DataVolley atribuye el
+     punto a la ÚLTIMA acción ganadora del rally, y sólo cuentan saque,
+     ataque y bloqueo. Lo verificamos contra un informe oficial. */
+  var puntos = {};
+  (function(){
+    var rally = [], ant = [0,0];
+    (M.codes || []).forEach(function(c){
+      var cod = c.c || '';
+      if(setSel && String(c.set) !== String(setSel)){ return; }
+      var m = cod.match(/^([*a])p(\d\d):(\d\d)$/);
+      if(m){
+        var hp = parseInt(m[2],10), ap = parseInt(m[3],10);
+        var gano = (hp > ant[0]) ? '*' : 'a';
+        ant = [hp, ap];
+        for(var i = rally.length - 1; i >= 0; i--){
+          var x = rally[i];
+          if(x.length > 5 && x[0] === gano && 'SAB'.indexOf(x[3]) >= 0 && x[5] === '#'){
+            var lado = gano === '*' ? 'home' : 'away';
+            var num  = parseInt(x.slice(1,3), 10);
+            puntos[lado + '#' + num] = (puntos[lado + '#' + num] || 0) + 1;
+            break;
+          }
+        }
+        rally = [];
+      } else if(/^[*a]\d\d[SRABDEF]/.test(cod)) rally.push(cod);
+    });
+  })();
+
   J.forEach(function(a){
     if(!a.num && a.num!==0) return;
     var f = ficha(a.lado, a.num);
@@ -230,6 +260,9 @@ function calcular(setSel){
       if(a.ev==='=') f.a_err++; else if(a.ev==='/') f.a_blo++;
       else if(a.ev==='#') f.a_pt++; else if(a.ev==='+') f.a_pos++; else f.a_mal++; }
     if(a.sk==='B'){ if(a.ev==='#') f.b_pt++; if(a.ev==='=') f.b_err++; }
+  });
+  ['home','away'].forEach(function(l){
+    Object.keys(eq[l]).forEach(function(n){ eq[l][n].pts = puntos[l + '#' + n] || 0; });
   });
   return {eq:eq, nSets:nSets};
 }
@@ -273,8 +306,8 @@ function baterias(lado){
       var cls = 'm';
       if(val != null) cls = (val >= m.g2) ? 'ok' : (val >= m.g1 ? 'mid' : 'no');
       th += '<th>' + m.label + '</th>';
-      td += '<td class="' + cls + '">' + (val == null ? '—' : val)
-          + '<span class="obj">(' + m.obj + ')</span></td>';
+      td += '<td class="' + cls + '">' + (val == null ? '—' : (val + '%'))
+          + '<span class="obj">(' + m.obj + '%)</span></td>';
     });
     if(!hay) return '';
     return '<div class="bat"><div class="bat-tit">Baterías del equipo · alcanzado (objetivo)</div>'
@@ -316,7 +349,7 @@ function tabla(lado, datos, nSets, nombre){
            a_tot:0,a_err:0,a_blo:0,a_pt:0,b_pt:0,pts:0};
   var filas = nums.map(function(n){
     var f = t[n];
-    var pts = f.s_pt + f.a_pt + f.b_pt;
+    var pts = (f.pts != null) ? f.pts : (f.s_pt + f.a_pt + f.b_pt);
     ['s_tot','s_err','s_pt','r_tot','r_err','r_perf','r_pos','a_tot','a_err','a_blo','a_pt','b_pt']
       .forEach(function(k){ T[k]+=f[k]; });
     T.pts += pts;
