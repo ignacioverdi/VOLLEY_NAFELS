@@ -1740,10 +1740,17 @@ function parseChunk(s){
          La defensa y el bloqueo se hacen CONTRA un ataque, así que hay dos
          datos que no hace falta tipear: se deducen del ataque anterior.
 
-         DEFENSA · el origen es el del ataque.
-           Verificado sobre 9.880 pares de partidos oficiales: coincide el
-           93% de las veces. El destino no se hereda: es dónde se levantó la
-           pelota y eso lo escribe el scout.
+         DEFENSA · hereda el ORIGEN, el DESTINO y la SUBZONA del ataque.
+           Medido sobre los 97 partidos, separando la defensa del ataque rival
+           (7.874 pares) de la cobertura del propio equipo (1.888):
+             · origen   92,3%   · destino 70,1%   · subzona 75,3%
+           y en el destino los nueve pares más frecuentes son todos idénticos
+           (9→9, 7→7, 6→6, 8→8, 1→1, 5→5, 2→2, 3→3, 4→4).
+           Antes acá decía que el destino no se heredaba. Es cierto SÓLO para la
+           cobertura: cuando el mismo equipo levanta su propio ataque bloqueado
+           la pelota cae en cualquier lado y el destino coincide apenas el 2,8%.
+           Por eso el destino y la subzona se copian únicamente cuando la defensa
+           es del equipo contrario al que atacó.
 
          BLOQUEO · la zona es dónde saltó el bloqueador, que es el espejo de
            la del atacante: el 4 de uno es el 2 del otro.
@@ -1756,6 +1763,14 @@ function parseChunk(s){
         b.d.ez = b.d.sz; b.d.sz = '';
       }
       if(b.skill==='D' && a.d.sz && !b.d.sz) b.d.sz = a.d.sz;
+      /* el destino y la subzona, sólo contra el ataque rival (no en cobertura).
+         Lo que el scout escribió siempre manda: por eso el !b.d.ez. Y la
+         subzona va atada al destino: si el scout escribió otra zona, la
+         subzona del ataque ya no aplica (una C de la 1 no es una C de la 5). */
+      if(b.skill==='D' && b.team !== a.team && a.d.ez && !b.d.ez){
+        b.d.ez = a.d.ez;
+        if(a.d.subz && !b.d.subz) b.d.subz = a.d.subz;
+      }
       if(b.skill==='B' && a.d.sz && !b.d.ez) b.d.ez = ESPEJO_BLOQUEO[a.d.sz] || '';
       return [a,b];
     }
