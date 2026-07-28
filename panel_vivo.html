@@ -1276,6 +1276,10 @@ if(!M.home.six) M.home.six = M.home.lineup.slice();   /* formación con la que a
 if(!M.away.six) M.away.six = M.away.lineup.slice();
 function persist(){
   save('pv_match', M);
+  /* el try es por el orden de declaración: persist() está escrita antes que
+     RALLY_UNDO, así que si llegara a llamarse durante la carga inicial todavía
+     no existe. Después de cargar la página siempre está. */
+  try{ save('pv_undo', RALLY_UNDO); }catch(e){}
   /* si este partido ya está en la lista, mantener su copia al día */
   if(M._id && (M.codes||[]).length){ try{ guardarPartidoEnLista(M); }catch(e){} }
   if(typeof publicarVivo==='function') publicarVivo();
@@ -2931,8 +2935,12 @@ function commit(){
 }
 
 /* Fin de jugada: asigna el punto, rota si hubo side out, deja al próximo sacador */
-/* pila para deshacer el fin de jugada (manual 4.8.1) */
-let RALLY_UNDO = [];
+/* pila para deshacer el fin de jugada (manual 4.8.1).
+   Se guarda junto con el partido: antes vivía sólo en memoria, así que
+   cualquier recarga de la página dejaba los códigos y el marcador intactos
+   pero borraba la posibilidad de reabrir el punto, y Ctrl+A contestaba «no hay
+   ningún punto cerrado para reabrir» con el punto ahí a la vista. */
+let RALLY_UNDO = load('pv_undo', []);
 function snapshotRally(){
   RALLY_UNDO.push(JSON.stringify({h:M.home,a:M.away,s:M.serving,set:M.set,n:M.codes.length}));
   if(RALLY_UNDO.length>40) RALLY_UNDO.shift();
@@ -3882,6 +3890,9 @@ function nuevoPartido(){
   M.home.pts=0; M.home.sets=0; M.away.pts=0; M.away.sets=0;
   M.set=1; SEL_I=-1; CALL_PEND=null;
   if(M.setsHist) M.setsHist=[];
+  /* la pila de reabrir punto es del partido que se cierra: si quedara, Ctrl+A
+     restauraría el marcador de un partido que ya no existe */
+  RALLY_UNDO.length = 0;
   delete M._id;                         /* el nuevo tendrá su propio id al guardarse */
   document.getElementById('code').value='';
   renderAll(); persist(); avisarMarcador();
