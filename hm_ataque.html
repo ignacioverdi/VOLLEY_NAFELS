@@ -144,7 +144,19 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   window.__TEAM_SLUG=equipo;
   return {
     rivals: td.rivals,
-    games: (td.games||td.rivals.map(function(r,i){return {idx:i,rival:r,date:''};})),
+    /* ══ Los partidos, en orden de preferencia ══════════════════════════
+       1) td.games, si el motor lo generó
+       2) td.matches, que es donde viven los partidos con su fecha
+       3) y como último recurso, la lista de rivales — que NO son partidos:
+          con eso el selector «Partido específico» mostraba nombres sueltos
+          sin fecha, y elegir uno no filtraba nada. */
+    games: (td.games
+            || (td.matches && td.matches.length
+                ? td.matches.map(function(m,i){
+                    return {idx:(m.i!=null?m.i:i), rival:m.rival||'', date:m.date||'', r:m.r||''};
+                  })
+                : null)
+            || td.rivals.map(function(r,i){return {idx:i,rival:r,date:''};})),
     combos: L.combos,
     players: td.atk
   };
