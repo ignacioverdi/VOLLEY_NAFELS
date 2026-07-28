@@ -5943,9 +5943,10 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
   <div class="ay-sec">
     <h3><span class="n">1</span> Antes de empezar: equipos y formación</h3>
     <ol>
-      <li>Con <span class="b">👥 Equipos</span> creás o editás los planteles (número, apellido, nombre y rol). También podés importar un equipo desde un archivo <span class="m">.sq</span>.</li>
+      <li>Con <span class="b">👥 Equipos</span> creás o editás los planteles (número, apellido, nombre y rol). También podés importar equipos desde archivos <span class="m">.sq</span> de DataVolley: podés soltar varios de una vez y traen el rol de cada jugador.</li>
       <li>Con <span class="b">Partido</span> cargás el <b>seis inicial</b> de cada equipo, el armador, el líbero y quién saca primero.</li>
-      <li>Confirmás con <span class="b">Empezar</span> y ya podés tipear.</li>
+      <li>Al tocar <span class="b">Empezar</span> se abre la <b>pantalla de planteles</b>: número, apellido y rol de cada jugador, como la tabla de DataVolley. Lo que corrijas ahí queda guardado para la próxima vez.</li>
+      <li>Confirmás y ya podés tipear.</li>
     </ol>
   </div>
 
@@ -5983,7 +5984,29 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
   </div>
 
   <div class="ay-sec">
-    <h3><span class="n">3</span> Cargar en vivo y el fin de jugada automático</h3>
+    <h3><span class="n">3</span> Zonas y direcciones</h3>
+    <p>Después de la evaluación podés indicar <b>desde dónde</b> y <b>hacia dónde</b> fue la pelota. Van pegados: primero el origen, después el destino, y si querés la subzona.</p>
+    <div class="fml"><span class="m">a17A-</span> · <span class="m">2</span> desde · <span class="m">1</span> hacia · <span class="m">C</span> subzona</div>
+    <p>El <b>saque</b> usa cinco zonas de origen, dos de ellas intermedias (manual 13.2):</p>
+    <table>
+      <tr><td class="c">1</td><td>desde la zona 1</td><td class="c">9</td><td>entre la 1 y la 6</td></tr>
+      <tr><td class="c">6</td><td>desde el centro</td><td class="c">7</td><td>entre la 6 y la 5</td></tr>
+      <tr><td class="c">5</td><td>desde la zona 5</td><td></td><td></td></tr>
+    </table>
+    <h4>Lo que el sistema completa solo</h4>
+    <p>Cuando encadenás dos acciones con un punto, la segunda hereda las direcciones de la primera, igual que DataVolley:</p>
+    <table>
+      <tr><th>Si encadenás</th><th>La segunda hereda</th></tr>
+      <tr><td>Ataque + <b>defensa del rival</b></td><td>el origen, el destino y la subzona</td></tr>
+      <tr><td>Ataque + <b>cobertura</b> del mismo equipo</td><td>sólo el origen: la pelota levantada cae en cualquier lado</td></tr>
+      <tr><td>Ataque + <b>bloqueo</b></td><td>la zona espejada — el 4 de uno es el 2 del otro</td></tr>
+      <tr><td>Saque + <b>recepción</b></td><td>el destino siempre; el origen pasa 9→1 y 7→5</td></tr>
+    </table>
+    <div class="note"><b>Lo que escribís siempre manda.</b> Si ponés una zona a mano, el sistema no la pisa. Ej.: <span class="m">a17G2-1C.2D</span> registra <span class="m">a17AH-G2~21C</span> y <span class="m">*02DH+~~~21C</span>; en cambio <span class="m">a17G2-1C.2D5</span> deja la defensa en la zona 5, la que vos escribiste.</div>
+  </div>
+
+  <div class="ay-sec">
+    <h3><span class="n">4</span> Cargar en vivo y el fin de jugada automático</h3>
     <ol>
       <li>Escribís el código y apretás <span class="k">Enter</span>. La acción entra en la lista.</li>
       <li>Si el código es <b>terminal</b>, el punto se asigna solo y la jugada cierra. Son terminales: remate, saque o bloqueo con <span class="m">#</span>; el ataque bloqueado <span class="m">/</span>; y cualquier error <span class="m">=</span> (punto al rival).</li>
@@ -5993,16 +6016,16 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
   </div>
 
   <div class="ay-sec">
-    <h3><span class="n">4</span> Cambios, tiempos y doble cambio</h3>
+    <h3><span class="n">5</span> Cambios, tiempos y doble cambio</h3>
     <ul>
       <li>Cada equipo tiene sus botones <span class="b">Tiempo</span> y <span class="b">Cambio</span>.</li>
-      <li>En <span class="b">Cambio</span> elegís quién sale y quién entra.</li>
+      <li>En <span class="b">Cambio</span> vas a ver la <b>formación del momento</b> y elegís quién sale y quién entra.</li>
       <li><b>Doble cambio:</b> el primero con <span class="b">Confirmar y seguir</span> (la ventana queda abierta), el segundo con <span class="b">Confirmar</span>. El sistema controla el límite por set.</li>
     </ul>
   </div>
 
   <div class="ay-sec">
-    <h3><span class="n">5</span> Corregir sin romper nada</h3>
+    <h3><span class="n">6</span> Corregir sin romper nada</h3>
     <table>
       <tr><th>Para</th><th>Cómo</th></tr>
       <tr><td>Reabrir el último punto para corregir</td><td><span class="k">Ctrl+A</span> · <span class="b">Reabrir punto</span></td></tr>
@@ -6014,12 +6037,13 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
       <tr><td>Deshacer el punto entero</td><td><span class="k">Ctrl+Shift+Z</span></td></tr>
       <tr><td>Buscar / Verificar</td><td><span class="k">Ctrl+R</span> · <span class="k">Ctrl+V</span></td></tr>
     </table>
-    <div class="note">Al reabrir un punto (Ctrl+A), los códigos quedan en la lista con el último seleccionado, listos para editar. Corregís y volvés a cerrar la jugada.</div>
+    <div class="note">Al reabrir un punto (<span class="k">Ctrl+A</span>) el <b>último código vuelve al campo de tipeo</b> para que lo corrijas ahí mismo: sale de la lista, lo editás y lo cargás de nuevo con <span class="k">Enter</span>. Es lo que hace DataVolley al deshacer el fin de jugada (manual 4.8.1). Si ese ataque arrastraba un armado automático, se va con él.</div>
+    <div class="note">Casi todas las ventanas tienen <span class="b">⧉ Soltar</span>: la dejás flotando a un costado, se sigue actualizando sola y <b>podés seguir tipeando con los atajos funcionando</b>.</div>
     <div class="note">Las teclas de evaluación (# + ! …) y la de adversario insertan donde está el cursor, no al final. Ej.: en <b>4A+</b> seleccionás el <b>+</b>, apretás <b>!</b> y queda <b>4A!</b>. En compuestos podés meter la <b>a</b> del visitante en el medio.</div>
   </div>
 
   <div class="ay-sec">
-    <h3><span class="n">6</span> Cierre de set y formación del siguiente</h3>
+    <h3><span class="n">7</span> Cierre de set y formación del siguiente</h3>
     <ol>
       <li>Al llegar a <b>25 con 2 de diferencia</b> (15 en el quinto), el set se cierra solo.</li>
       <li>Se abre sola la formación del set siguiente, y es <b>obligatoria</b>: propone el seis anterior, lo ajustás y confirmás con <span class="b">Empezar set</span>. No te deja seguir sin cargarla.</li>
@@ -6028,12 +6052,12 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
   </div>
 
   <div class="ay-sec">
-    <h3><span class="n">7</span> Modo entrenamiento (un solo equipo)</h3>
+    <h3><span class="n">8</span> Modo entrenamiento (un solo equipo)</h3>
     <p>Para prácticas: activá el modo entrenamiento en <span class="b">Configuración</span>. Cargás un solo equipo y todos los códigos quedan como locales (con <b>*</b>), aunque escribas la <b>a</b> o uses compuestos.</p>
   </div>
 
   <div class="ay-sec">
-    <h3><span class="n">8</span> Video en vivo con delay</h3>
+    <h3><span class="n">9</span> Video en vivo con delay</h3>
     <ol>
       <li>En el celular que filma la cancha (misma red/WiFi) abrís la cámara y tocás <b>Transmitir</b>: te da un <b>código de sala de 4 dígitos</b>.</li>
       <li>En el scout tocás <span class="b">Video delay</span> (la cámara, en dos líneas), escribís el código y <span class="b">Conectar</span>.</li>
@@ -6044,20 +6068,23 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
   </div>
 
   <div class="ay-sec">
-    <h3><span class="n">9</span> Tablas y análisis en vivo</h3>
+    <h3><span class="n">10</span> Tablas y análisis en vivo</h3>
     <p>Debajo de la lista de códigos, <span class="b">▸ Tablas y análisis</span> despliega el análisis del partido en tiempo real (eficiencias por fundamento y quiénes más puntúan), para los dos equipos.</p>
   </div>
 
   <div class="ay-sec">
-    <h3><span class="n">10</span> Guardar y exportar</h3>
+    <h3><span class="n">11</span> Guardar y exportar</h3>
     <ul>
       <li>El partido se guarda solo. Con <span class="b">📂 Partidos</span> ves y reabrís los guardados.</li>
       <li>Con <span class="b">Exportar .dvw</span> generás el archivo del partido en formato estándar, para compartirlo con otras herramientas de análisis.</li>
+      <li>Con <span class="b">Abrir .dvw</span> cargás un scout ya hecho, con todos sus códigos, para corregirlo, seguir cargándolo o volver a exportarlo (manual 9.1.1).</li>
+      <li><span class="b">Sumar al historial</span> es otra cosa: suma las estadísticas de un <span class="m">.dvw</span> al historial del club, sin abrirlo para editar.</li>
+      <li>Con <span class="b">Informe</span> sacás el informe del partido —estadísticas por jugador y nota— por set o completo, listo para PDF.</li>
     </ul>
   </div>
 
   <div class="ay-sec">
-    <h3><span class="n">11</span> Atajos de teclado</h3>
+    <h3><span class="n">12</span> Atajos de teclado</h3>
     <table>
       <tr><td class="c">Enter</td><td>Cargar el código</td><td class="c">Ctrl+Z</td><td>Deshacer código</td></tr>
       <tr><td class="c">Insert</td><td>Insertar antes del seleccionado</td><td class="c">Ctrl+Shift+Z</td><td>Deshacer punto</td></tr>
