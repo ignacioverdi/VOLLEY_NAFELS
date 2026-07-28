@@ -36,6 +36,14 @@ FB_KEY      =  os.environ.get('FB_KEY')     or ''
 ROBOT_MAIL  =  os.environ.get('ROBOT_MAIL') or ''
 ROBOT_CLAVE =  os.environ.get('ROBOT_CLAVE') or ''
 CLUB_ID     = (os.environ.get('CLUB_ID')    or '').strip()
+# La clave del proyecto suele estar restringida a los dominios de la web, para
+# que nadie la use desde otro lado. El robot no navega desde ninguna página, así
+# que Google lo rechaza con "Requests from referer <empty> are blocked".
+# Se resuelve diciéndole desde qué dominio viene: el de la propia app del club.
+FB_REFERER  = (os.environ.get('FB_REFERER') or '').strip()
+# Con esto se vuelve a procesar todo aunque nadie haya subido nada. Sirve
+# cuando se corrige un motor y hay que regenerar los datos ya publicados.
+FORZAR      = (os.environ.get('FORZAR') or '').strip().lower() in ('1','true','yes','si','sí')
 
 RAIZ = ('clubes/%s/' % CLUB_ID) if CLUB_ID else ''
 MAX  = 10          # cuántos partidos se procesan por corrida
@@ -43,8 +51,10 @@ MAX  = 10          # cuántos partidos se procesan por corrida
 
 def llamar(url, datos=None, metodo='GET'):
     cuerpo = json.dumps(datos).encode('utf-8') if datos is not None else None
-    pedido = urllib.request.Request(url, data=cuerpo, method=metodo,
-                                    headers={'Content-Type': 'application/json'})
+    cabeceras = {'Content-Type': 'application/json'}
+    if FB_REFERER:
+        cabeceras['Referer'] = FB_REFERER
+    pedido = urllib.request.Request(url, data=cuerpo, method=metodo, headers=cabeceras)
     try:
         with urllib.request.urlopen(pedido, timeout=60) as r:
             t = r.read().decode('utf-8')
@@ -81,16 +91,44 @@ def borrar(ruta, tok):
     return llamar('%s/%s%s.json?auth=%s' % (FB_URL, RAIZ, ruta, tok), None, 'DELETE')
 
 
-def carpeta_del_anio():
-    """La misma que usa procesar.py: la del año más alto."""
+def carpeta_para(tipo):
+    """Un partido y un entrenamiento van a carpetas distintas y se procesan
+       distinto. Si se mezclan, los números salen mal: por eso el entrenador
+       elige qué está subiendo y acá lo respetamos."""
     import glob, re
-    c = [d for d in glob.glob(os.path.join(AQUI, 'DVW*')) if os.path.isdir(d)]
-    if not c:
+    todas = [d for d in glob.glob(os.path.join(AQUI, 'DVW*')) if os.path.isdir(d)]
+    if not todas:
         return None
-    return sorted(c, key=lambda d: (re.findall(r'(\d{4})', d) or ['0'])[-1])[-1]
+    es_ent = lambda d: 'ENTREN' in os.path.basename(d).upper()
+    grupo = [d for d in todas if es_ent(d)] if tipo == 'entrenamiento' \
+            else [d for d in todas if not es_ent(d)]
+    if not grupo:
+        grupo = todas          # el club no separa: va todo a la misma
+    # dentro del grupo, la del año más alto
+    return sorted(grupo, key=lambda d: (re.findall(r'(\d{4})', d) or ['0'])[-1])[-1]
+
+
+def reprocesar_todo():
+    """Vuelve a generar los datos desde los .dvw que ya están en el repo, sin
+       esperar a que alguien suba nada. Se usa cuando se corrige un motor."""
+    ok = True
+    for modo in ('partidos', 'entrenamientos'):
+        print()
+        print('  Regenerando %s...' % modo)
+        r = subprocess.run([sys.executable, os.path.join(AQUI, 'procesar.py'),
+                            '--solo', modo, '--json'],
+                           cwd=AQUI, capture_output=True, text=True, timeout=3000)
+        print(r.stdout[-1500:] if r.stdout else '')
+        if r.returncode != 0:
+            ok = False
+    return 0 if ok else 1
 
 
 def main():
+    if FORZAR:
+        print('  Reproceso forzado: no espero a que suban nada.')
+        return reprocesar_todo()
+
     if not (FB_URL and FB_KEY and ROBOT_MAIL and ROBOT_CLAVE):
         print('  Faltan los datos de acceso a la base. Nada que hacer.')
         return 0                      # no es un error: el robot simplemente no está configurado
@@ -98,6 +136,9 @@ def main():
     tok = entrar()
     if not tok:
         print('  No pude entrar a la base con la cuenta del robot.')
+        if not FB_REFERER:
+            print('  Si el error de arriba dice "referer", falta el secreto FB_REFERER')
+            print('  con la dirección de la web del club (ej: https://tuclub.vercel.app).')
         return 1
 
     pend = leer('pendientes', tok)
@@ -113,18 +154,21 @@ def main():
 
     ids.sort(key=lambda k: pend[k].get('subido', 0))
     ids = ids[:MAX]
-    destino = carpeta_del_anio()
-    if not destino:
-        print('  No encuentro la carpeta de partidos.')
-        return 1
 
-    print('  %d partido(s) en espera' % len(ids))
+    print('  %d archivo(s) en espera' % len(ids))
     guardados = []
     for k in ids:
         p = pend[k]
         nombre = (p.get('nombre') or (k + '.dvw')).replace('/', '_').replace('\\', '_')
         if not nombre.lower().endswith('.dvw'):
             nombre += '.dvw'
+        tipo = (p.get('tipo') or 'partido').lower()
+        destino = carpeta_para(tipo)
+        if not destino:
+            escribir('pendientes/%s/estado' % k, 'error', tok)
+            escribir('pendientes/%s/detalle' % k, 'no encuentro la carpeta', tok)
+            print('     [error] no hay carpeta para %s' % tipo)
+            continue
         try:
             crudo = base64.b64decode(p.get('datos') or '')
             if not crudo:
@@ -133,7 +177,8 @@ def main():
                 f.write(crudo)
             guardados.append((k, nombre))
             escribir('pendientes/%s/estado' % k, 'procesando', tok)
-            print('     guardado: %-44s %6.0f KB' % (nombre[:44], len(crudo)/1024))
+            print('     %-13s %-40s %6.0f KB  →  %s'
+                  % (tipo + ':', nombre[:40], len(crudo)/1024, os.path.basename(destino)))
         except Exception as e:
             escribir('pendientes/%s/estado' % k, 'error', tok)
             escribir('pendientes/%s/detalle' % k, 'no pude leer el archivo', tok)
@@ -142,25 +187,33 @@ def main():
     if not guardados:
         return 0
 
-    print()
-    print('  Procesando...')
-    # Si el club tiene carpeta de entrenamientos, se procesan también: para el
-    # entrenador es lo mismo, sube un archivo y espera.
-    import glob as _g
-    cmd = [sys.executable, os.path.join(AQUI, 'procesar.py'), '--json']
-    if [d for d in _g.glob(os.path.join(AQUI, '*'))
-        if os.path.isdir(d) and 'ENTREN' in os.path.basename(d).upper()]:
-        cmd.append('--entrenamientos')
-    r = subprocess.run(cmd,
-                       cwd=AQUI, capture_output=True, text=True, timeout=3000)
-    salida = (r.stdout or '').strip().splitlines()
+    # Una pasada por tipo, nunca las dos juntas: el motor de partidos y el de
+    # entrenamientos escriben los mismos archivos, así que mezclarlos en una
+    # sola corrida pisa datos. Es el mismo criterio que los dos .bat de siempre.
+    tipos = []
+    for k, _n in guardados:
+        t = (pend[k].get('tipo') or 'partido').lower()
+        if t not in tipos:
+            tipos.append(t)
+    if 'partido' in tipos:                      # primero los partidos
+        tipos = ['partido'] + [t for t in tipos if t != 'partido']
+
+    ok = True
     resumen = {}
-    for l in reversed(salida):
-        if l.startswith('{'):
-            try: resumen = json.loads(l); break
-            except Exception: pass
-    print(r.stdout[-1800:] if r.stdout else '')
-    ok = (r.returncode == 0) and resumen.get('ok', r.returncode == 0)
+    for t in tipos:
+        modo = 'entrenamientos' if t == 'entrenamiento' else 'partidos'
+        print()
+        print('  Procesando %s...' % modo)
+        r = subprocess.run([sys.executable, os.path.join(AQUI, 'procesar.py'),
+                            '--solo', modo, '--json'],
+                           cwd=AQUI, capture_output=True, text=True, timeout=3000)
+        print(r.stdout[-1500:] if r.stdout else '')
+        for l in reversed((r.stdout or '').strip().splitlines()):
+            if l.startswith('{'):
+                try: resumen = json.loads(l); break
+                except Exception: pass
+        if r.returncode != 0 or not resumen.get('ok', r.returncode == 0):
+            ok = False
 
     for k, nombre in guardados:
         if ok:

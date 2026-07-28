@@ -13,6 +13,13 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
 .top h1{margin:0;font-size:15px;letter-spacing:1.5px;text-transform:uppercase}
 .wrap{max-width:760px;margin:0 auto;padding:30px 20px 70px}
 
+.tipo{display:flex;gap:10px;margin-bottom:16px;justify-content:center}
+.tipo label{flex:0 0 auto;display:flex;align-items:center;gap:7px;background:var(--card);
+            border:1px solid var(--b);border-radius:10px;padding:9px 18px;cursor:pointer;
+            font-size:13.5px;font-weight:600;transition:.15s}
+.tipo label:hover{border-color:var(--b2)}
+.tipo input{accent-color:var(--ok);cursor:pointer}
+.tipo label:has(input:checked){border-color:var(--ok);background:#1c2530;color:var(--ok)}
 .zona{border:2px dashed var(--b2);border-radius:18px;padding:52px 26px;text-align:center;
       background:var(--card);transition:.18s;cursor:pointer}
 .zona:hover,.zona.encima{border-color:var(--ok);background:#1c2530}
@@ -51,11 +58,16 @@ input[type=file]{display:none}
 
 <div class="wrap">
 
+  <div class="tipo">
+    <label><input type="radio" name="tipo" value="partido" checked> Partido</label>
+    <label><input type="radio" name="tipo" value="entrenamiento"> Entrenamiento</label>
+  </div>
+
   <div class="zona" id="zona" onclick="document.getElementById('sel').click()">
     <div class="ic">🏐</div>
     <div class="t">Arrastrá acá el archivo del partido</div>
     <div class="s">
-      Es el archivo <b>.dvw</b> que exportás de DataVolley.<br>
+      Es el archivo <b>.dvw</b> que exportás de DataVolley.<br>Sirve tanto para partidos como para entrenamientos.<br>
       También podés hacer clic para buscarlo.
     </div>
   </div>
@@ -103,7 +115,8 @@ function pintar(){
   document.getElementById('lista').innerHTML = ks.map(function(k){
     var p = MIOS[k], t = TEXTO[p.estado] || TEXTO.pendiente;
     return '<div class="item"><div class="nom"><b>' + esc(p.nombre) + '</b>'
-         + '<span>' + kb(p.peso||0) + (p.detalle ? ' · ' + esc(p.detalle) : '') + '</span></div>'
+         + '<span>' + (p.tipo === 'entrenamiento' ? 'Entrenamiento · ' : 'Partido · ')
+         + kb(p.peso||0) + (p.detalle ? ' · ' + esc(p.detalle) : '') + '</span></div>'
          + '<div class="est ' + t[0] + '">' + t[1] + '</div></div>';
   }).join('');
 }
@@ -118,7 +131,12 @@ function subir(archivo){
     return;
   }
   var id = 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
-  MIOS[id] = { nombre: archivo.name, peso: archivo.size, estado: 'pendiente', subido: Date.now() };
+  /* Partido y entrenamiento van a carpetas distintas y se procesan distinto.
+     Si se mezclan, los números salen mal. */
+  var elegido = document.querySelector('input[name=tipo]:checked');
+  var tipo = elegido ? elegido.value : 'partido';
+  MIOS[id] = { nombre: archivo.name, peso: archivo.size, estado: 'pendiente',
+               subido: Date.now(), tipo: tipo };
   pintar();
 
   var fr = new FileReader();
@@ -128,7 +146,8 @@ function subir(archivo){
     try{ quien = (typeof fbUser==='function' && fbUser()) ? (fbUser().email||'') : ''; }catch(e){}
     try{
       fbSet('pendientes/' + id, { nombre: archivo.name, datos: b64, peso: archivo.size,
-                                  subido: Date.now(), autor: quien, estado: 'pendiente' });
+                                  subido: Date.now(), autor: quien, estado: 'pendiente',
+                                  tipo: tipo });
       vigilar(id);
     }catch(e){
       MIOS[id].estado = 'error';

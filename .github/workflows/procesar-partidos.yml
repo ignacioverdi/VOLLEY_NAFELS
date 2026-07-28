@@ -20,13 +20,18 @@ on:
   push:
     paths:
       - '**/*.dvw'
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      forzar:
+        description: 'Volver a procesar todo aunque no haya nada nuevo'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
 
 concurrency:
-  group: procesar-partidos
+  group: motores-del-club   # el mismo que el robot de la liga: así nunca se pisan al publicar
   cancel-in-progress: false
 
 jobs:
@@ -73,6 +78,8 @@ jobs:
           ROBOT_MAIL:  ${{ secrets.ROBOT_MAIL }}
           ROBOT_CLAVE: ${{ secrets.ROBOT_CLAVE }}
           CLUB_ID:     ${{ secrets.CLUB_ID }}
+          FB_REFERER:  ${{ secrets.FB_REFERER }}
+          FORZAR:      ${{ inputs.forzar }}
         run: python procesar_pendientes.py
 
       - name: Sacar la llave de en medio
