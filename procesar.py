@@ -114,6 +114,8 @@ def main():
     ap = argparse.ArgumentParser(description='Procesa los partidos y deja todo listo para publicar')
     ap.add_argument('--dvw', help='carpeta de los .dvw (por defecto, la del año más alto)')
     ap.add_argument('--entrenamientos', action='store_true', help='procesar también los entrenamientos')
+    ap.add_argument('--solo', choices=['partidos', 'entrenamientos'],
+                    help='procesar sólo una de las dos cosas')
     ap.add_argument('--json', action='store_true', help='resumen en JSON al final')
     args = ap.parse_args()
 
@@ -138,44 +140,64 @@ def main():
     print()
 
     c = Corrida()
+    solo_ent = (args.solo == 'entrenamientos')
+    solo_par = (args.solo == 'partidos')
 
     # 1) los datos están cifrados: hay que abrirlos para que el motor los lea
     if hay('descifrar_datos.py') and hay('LLAVE.txt'):
         c.paso('Abriendo los datos', [sys.executable, 'descifrar_datos.py'])
 
     # 2) la base de jugadores
-    upd = buscar_script('update_db_*_FULL.py') or buscar_script('update_db_*.py')
-    if upd:
+    #    OJO: el motor de partidos y el de entrenamientos escriben los MISMOS
+    #    archivos (datos_partidos.js, datos_historial.js, la base de jugadores).
+    #    Por eso nunca se corren los dos en la misma pasada sin querer: el
+    #    robot manda una pasada por tipo, igual que los dos .bat de siempre.
+    upd = buscar_script('update_db_*_FULL.py')
+    if not upd:
+        upd = next((os.path.basename(f) for f in sorted(glob.glob(os.path.join(AQUI, 'update_db_*.py')))
+                    if 'entrenamiento' not in os.path.basename(f).lower()), None)
+    if upd and not solo_ent:
         c.paso('Base de jugadores',
                [sys.executable, upd, '--dvw_dir', dvw, '--temporada', temporada,
                 '--output_dir', AQUI, '--filter_temporada', temporada])
 
     # 3) el scouting del rival y el plan de partido
-    c.paso('Scouting del rival', [sys.executable, 'gen_scouting.py',
-                                  '--dvw_dir', dvw, '--output_dir', AQUI], False)
-    c.paso('Plan de partido', [sys.executable, 'gen_plan_partido.py',
-                               '--dvw_dir', dvw, '--output_dir', AQUI,
-                               '--filter_temporada', temporada], False)
+    if not solo_ent:
+        c.paso('Scouting del rival', [sys.executable, 'gen_scouting.py',
+                                      '--dvw_dir', dvw, '--output_dir', AQUI], False)
+    if not solo_ent:
+        c.paso('Plan de partido', [sys.executable, 'gen_plan_partido.py',
+                                   '--dvw_dir', dvw, '--output_dir', AQUI,
+                                   '--filter_temporada', temporada], False)
 
     # 4) los cortes de video (los segundos salen de adentro del .dvw)
-    c.paso('Cortes de video', [sys.executable, 'build_video.py', dvw,
-                               'datos_video.js', 'VIDEO_DATA'], False)
+    if not solo_ent:
+        c.paso('Cortes de video', [sys.executable, 'build_video.py', dvw,
+                                   'datos_video.js', 'VIDEO_DATA'], False)
 
     # 5) bloqueo y tabla de liga
-    c.paso('Bloqueo', [sys.executable, 'gen_bloqueo.py'], False)
-    c.paso('Tabla de la liga', [sys.executable, 'gen_liga_stats.py'], False)
+    if not solo_ent:
+        c.paso('Bloqueo', [sys.executable, 'gen_bloqueo.py'], False)
+        c.paso('Tabla de la liga', [sys.executable, 'gen_liga_stats.py'], False)
 
     # 6) entrenamientos, si se pidieron
-    if args.entrenamientos:
+    if args.entrenamientos or solo_ent:
         ent = sorted([d for d in glob.glob(os.path.join(AQUI, '*')) if os.path.isdir(d)
                       and 'ENTREN' in os.path.basename(d).upper()],
                      key=lambda d: (re.findall(r'(\d{4})', d) or ['0'])[-1])
         upd_e = buscar_script('update_db_entrenamientos*.py')
         if ent and upd_e:
-            c.paso('Entrenamientos', [sys.executable, upd_e, '--dvw_dir', ent[0],
+            c.paso('Entrenamientos', [sys.executable, upd_e, '--dvw_dir', ent[-1],
                                       '--temporada', temporada.split('/')[0]], False)
-            c.paso('Video de entrenamientos', [sys.executable, 'build_video.py', ent[0],
+            c.paso('Video de entrenamientos', [sys.executable, 'build_video.py', ent[-1],
                                                'datos_video_ent.js', 'VIDEO_DATA_ENT', 'ent'], False)
+            # El plan de partido también sirve para el entrenamiento: si el scout
+            # está bien detallado, salen las mismas canchitas y distribuciones.
+            c.paso('Plan del entrenamiento', [sys.executable, 'gen_plan_partido.py',
+                                              '--dvw_dir', ent[-1], '--output_dir', AQUI], False)
+        # Este es el que arma el archivo que lee el dashboard. Sin él, la pantalla
+        # de entrenamientos queda en cero por más que todo lo demás haya corrido.
+        c.paso('Datos para el dashboard', [sys.executable, 'generar_datos_entrenamientos.py'], False)
 
     # 7) volver a cerrar los datos antes de publicar
     if hay('cifrar_datos.py') and hay('LLAVE.txt'):
