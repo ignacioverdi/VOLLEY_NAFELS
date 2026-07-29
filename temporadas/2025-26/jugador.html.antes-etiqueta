@@ -500,7 +500,7 @@ function renderComparativaJugador(){
 </script>
 
 <script>
-// ── Filtro por temporada actual (la liga va de Octubre a Abril). Muestra SOLO la temporada archivada. ──
+// ── Filtro por temporada actual (la liga va de Octubre a Abril). Muestra SOLO la temporada en curso. ──
 function _ssStart(y,m){ return (m<=4)?y-1:y; }                               // año de inicio de la temporada
 function _curSeason(){
   var am=location.pathname.match(/\/temporadas\/(\d{4})-\d{2}\//);            // si estás viendo una temporada archivada

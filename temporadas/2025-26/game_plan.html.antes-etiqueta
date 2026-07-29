@@ -282,7 +282,7 @@ select, select option {
   </div>
   <div>
     <div class="rival-name" id="rival-nombre">AMRISWIL</div>
-    <div class="match-info" id="match-info">NLA Suiza 2025/26 · temporada archivada</div>
+    <div class="match-info" id="match-info">NLA Suiza 2026/27 · temporada en curso</div>
   </div>
   <div id="lang-wrap" style="display:flex;align-items:center;gap:4px;margin-right:8px"></div>
   <div class="nav-dots" id="nav-dots"></div>

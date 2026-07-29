@@ -266,6 +266,7 @@ select, select option {
 <script src="lang.js" onerror="void 0"></script>
 <script src="../../datos_seguros.js"></script>
   <script src="liga_data.js.enc"></script>
+<script src="liga_data_entrenamientos.js" onerror="void 0"></script>
 <script src="firebase.js" onerror="void 0"></script>
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
   <script>abrirDatos();</script>
@@ -274,25 +275,30 @@ select, select option {
 <body>
 
 <header class="page-header">
-  <a href="index.html" class="back-btn">← Inicio</a>
+  <a href="jugador.html" class="back-btn">← Volver</a>
   <button onclick="descargarPDF()" class="pdf-btn" id="pdf-btn">📄 Descargar PDF</button>
   <div>
-    <div class="page-title"><span data-t="game_plan">Plan de Juego</span></div>
-    <div style="font-size:10px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;margin-top:1px">Análisis táctico de rivales — Volley Näfels</div>
+    <div class="page-title"><span>Distribución de Armado</span></div>
+    <div style="font-size:10px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;margin-top:1px">Mi performance en partidos — Volley Näfels</div>
   </div>
   <div>
-    <div class="rival-name" id="rival-nombre">AMRISWIL</div>
-    <div class="match-info" id="match-info">NLA Suiza 2025/26 · temporada archivada</div>
+    <div class="rival-name" id="rival-nombre">NÄFELS</div>
+    <div class="match-info" id="match-info">NLA Suiza 2026/27 · temporada en curso</div>
   </div>
   <div id="lang-wrap" style="display:flex;align-items:center;gap:4px;margin-right:8px"></div>
   <div class="nav-dots" id="nav-dots"></div>
 </header>
 
 <main class="main" id="main-content">
+  <!-- Toggle Partido / Entrenamiento -->
+  <div style="display:flex;gap:6px;max-width:360px;margin:4px 0 4px" id="modo-toggle">
+    <button id="modo-partido" onclick="setModo('partido')" style="flex:1;background:#e8192c;border:none;color:#fff;padding:9px;border-radius:9px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">PARTIDO</button>
+    <button id="modo-entrenamiento" onclick="setModo('entrenamiento')" style="flex:1;background:transparent;border:1px solid rgba(255,255,255,.15);color:#94a3b8;padding:9px;border-radius:9px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">ENTRENAMIENTO</button>
+  </div>
   <!-- ARMADOR -->
   <div style="margin-top:40px;padding-top:28px;border-top:1px solid rgba(255,255,255,.06)">
     <div style="font-size:10px;color:#475569;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px">
-      ANÁLISIS DEL ARMADOR RIVAL
+      DISTRIBUCIÓN DE ARMADO
       <div style="flex:1;height:1px;background:rgba(255,255,255,.06)"></div>
     </div>
     <div id="seccion-armador"></div>
@@ -300,7 +306,7 @@ select, select option {
 
 
   <!-- RECEPCIÓN RIVAL -->
-  <div style="margin-top:32px" id="seccion-recepcion">
+  <div style="margin-top:32px;display:none" id="seccion-recepcion">
     <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:#e2e8f0;margin-bottom:16px">
       RECEPCIÓN DEL RIVAL
       <span style="font-size:11px;font-family:'Barlow Condensed',sans-serif;color:#475569;letter-spacing:1px;margin-left:12px;font-weight:400">Cómo reciben · dónde atacar</span>
@@ -313,7 +319,7 @@ select, select option {
   </div>
 
   <!-- COMO VAMOS A JUGAR -->
-  <div style="margin-top:40px;padding-top:28px;border-top:2px solid rgba(232,25,44,.15)" id="anchor-juego">
+  <div style="margin-top:40px;padding-top:28px;border-top:2px solid rgba(232,25,44,.15);display:none" id="anchor-juego">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
       <div style="width:4px;height:28px;background:linear-gradient(180deg,#e8192c,transparent);border-radius:2px;flex-shrink:0"></div>
       <div>
@@ -500,13 +506,13 @@ function gpDefensa(combo, origen, destinos){
 // GAME PLAN UNIVERSAL — carga el rival desde liga_data.js (?rival=X)
 // ═══════════════════════════════════════════════════════════════
 var GP_PARAMS = new URLSearchParams(window.location.search);
-var GP_RIVAL_SLUG = (GP_PARAMS.get('rival') || '').toLowerCase();
-var GP_L = window.LIGA_DATA;
+window.__MODO=(function(){try{return localStorage.getItem('vb_modo')||'partido';}catch(e){return 'partido';}})();
+var GP_RIVAL_SLUG = (GP_PARAMS.get('rival') || GP_PARAMS.get('team') || 'nafels').toLowerCase();
+var GP_L = (window.__MODO==='entrenamiento' && window.LIGA_DATA_ENT) ? window.LIGA_DATA_ENT : window.LIGA_DATA;
 
-// Si no hay rival especificado, tomar el primero que no sea el equipo propio
-if (!GP_RIVAL_SLUG || !GP_L.teams[GP_RIVAL_SLUG]) {
-  var _keys = Object.keys(GP_L.teams);
-  GP_RIVAL_SLUG = _keys[0];
+// Perfil del armador propio: equipo fijo = Näfels (en entrenamiento puede llamarse 'entrenamiento')
+if (!GP_L.teams[GP_RIVAL_SLUG]) {
+  GP_RIVAL_SLUG = GP_L.teams['nafels'] ? 'nafels' : (GP_L.teams['entrenamiento'] ? 'entrenamiento' : Object.keys(GP_L.teams)[0]);
 }
 var GP_TD = GP_L.teams[GP_RIVAL_SLUG];
 var GP_COMBOS = GP_L.combos;
@@ -1786,46 +1792,7 @@ document.getElementById('match-info').textContent=RIVAL.info;
 var main=document.getElementById('main-content');
 var dots=document.getElementById('nav-dots');
 
-JUGADORES.forEach(function(j,i){
-  main.appendChild(renderJugador(j,i));
-  var dot=document.createElement('div');
-  dot.className='nav-dot'+(i===0?' on':'');
-  dot.addEventListener('click',function(){
-    document.getElementById('jug-'+i).scrollIntoView({behavior:'smooth'});
-    dots.querySelectorAll('.nav-dot').forEach(function(d){d.classList.remove('on');});
-    dot.classList.add('on');
-  });
-  dots.appendChild(dot);
-});
-
-// Abrir primero por defecto
-setTimeout(function(){
-  var first=document.getElementById('jug-0');
-  if(first){
-    first.classList.add('open');
-    var wrap=first.querySelector('.canchitas-wrap');
-    if(!wrap.dataset.rendered){
-      wrap.dataset.rendered='1';
-      renderPanelAtaque(JUGADORES[0],0,first.querySelector('[data-panel="ataque"] .canchitas-grid'));
-      renderPanelSaque(JUGADORES[0],0,first.querySelector('[data-panel="saque"] .canchitas-grid'));
-      renderPanelRecepcion(JUGADORES[0],first.querySelector('[data-panel="recepcion"]'));
-    }
-  }
-},100);
-
-// Nav dots con IntersectionObserver
-var obs=(typeof IntersectionObserver==="undefined")?{observe:function(){},disconnect:function(){}}:new IntersectionObserver(function(entries){
-  entries.forEach(function(e){
-    if(e.isIntersecting){
-      var i=e.target.id.split('-')[1];
-      dots.querySelectorAll('.nav-dot').forEach(function(d,di){d.classList.toggle('on',di==i);});
-    }
-  });
-},{threshold:0.3});
-JUGADORES.forEach(function(_,i){
-  var el=document.getElementById('jug-'+i);
-  if(el) obs.observe(el);
-});
+// (panel por jugador eliminado — solo distribución de armado)
 
 var BLQ_OPCIONES=[
   {v:"",      label:"— Sin definir —"},
@@ -2979,8 +2946,7 @@ function renderRecepcionRival(){
 
 // Llamar armador y juego
 (function(){var _f=function(){
-  setTimeout(function(){renderArmador();
-  renderRecepcionRival();renderJuego();},100);
+  setTimeout(function(){renderArmador();},100);
 };if(document.fonts&&document.fonts.ready){document.fonts.ready.then(_f).catch(_f);}else{setTimeout(_f,80);}})();
 
 function gpDistRotacionValidada(rotPos){
@@ -3484,7 +3450,7 @@ document.addEventListener('click', function(e){
 
 </script>
 
-<div style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:150;display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+<div style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:150;display:none;flex-direction:column;gap:6px;align-items:flex-end">
   <div onclick="window.scrollTo({top:0,behavior:'smooth'})" style="display:flex;align-items:center;gap:7px;cursor:pointer;padding:5px 9px;border-radius:7px;background:rgba(13,14,26,.92);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(10px)">
     <span style="font-size:8px;color:#818cf8;letter-spacing:1.5px;font-weight:700;text-transform:uppercase">Jugadores</span>
     <div style="width:5px;height:5px;border-radius:50%;background:#818cf8;flex-shrink:0"></div>
@@ -3500,7 +3466,7 @@ document.addEventListener('click', function(e){
 </div>
 
 <button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="position:fixed;bottom:20px;right:20px;z-index:200;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.1);background:rgba(13,14,26,.95);backdrop-filter:blur(10px);color:#64748b;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.5)" title="Volver al inicio">↑</button>
-      <button onclick="document.getElementById('seccion-recepcion').scrollIntoView({behavior:'smooth'})" style="display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#64748b;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer">🛡 RECEPCIÓN RIVAL</button>
+      <button onclick="document.getElementById('seccion-recepcion').scrollIntoView({behavior:'smooth'})" style="display:none;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#64748b;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer">🛡 RECEPCIÓN RIVAL</button>
 
 <!-- MODAL ARMADOR -->
 <div id="modal-armador" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.92);backdrop-filter:blur(20px);align-items:center;justify-content:center">
@@ -3526,6 +3492,19 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
+<script>
+function setModo(modo){ try{ localStorage.setItem('vb_modo', modo); }catch(e){} location.reload(); }
+function _initModoBtns(){
+  var m=(function(){try{return localStorage.getItem('vb_modo')||'partido';}catch(e){return 'partido';}})();
+  var bp=document.getElementById('modo-partido'), be=document.getElementById('modo-entrenamiento');
+  if(!bp||!be) return;
+  function on(b){b.style.background='#e8192c';b.style.color='#fff';b.style.border='none';}
+  function off(b){b.style.background='transparent';b.style.color='#94a3b8';b.style.border='1px solid rgba(255,255,255,.15)';}
+  if(m==='entrenamiento'){on(be);off(bp);} else {on(bp);off(be);}
+  if(!window.LIGA_DATA_ENT){ be.style.opacity='.4'; be.title='Sin datos de entrenamiento cargados'; }
+}
+document.addEventListener('DOMContentLoaded', _initModoBtns);
+</script>
 <script src="temporadas_menu.js"></script>
 </body>
 </html>

@@ -304,7 +304,7 @@ select, select option {
   </div>
   <div class="header-text">
     <div class="club-name">NAFELS VOLEY</div>
-    <div class="club-sub"><span data-t="club_sub">Sistema de Análisis · NLA Suiza 2025/26</span></div>
+    <div class="club-sub"><span data-t="club_sub">Sistema de Análisis · NLA Suiza 2026/27</span></div>
   </div>
   <div class="header-right">
     <div id="lang-wrap" style="display:flex;align-items:center;gap:4px;margin-left:8px"></div>
@@ -466,7 +466,7 @@ select, select option {
         </div>
         <div class="card-body">
           <div class="card-title" style="color:#3b82f6"><span data-t="c_stats_liga">Estadísticas Liga</span></div>
-          <div class="card-desc"><span data-t="d_stats_liga">Base de datos completa NLA 2025/26. Ranking por equipo y stats individuales de toda la liga. Ataque, saque, recepción y bloqueo.</span></div>
+          <div class="card-desc"><span data-t="d_stats_liga">Base de datos completa NLA 2026/27. Ranking por equipo y stats individuales de toda la liga. Ataque, saque, recepción y bloqueo.</span></div>
         </div>
         <div class="card-arrow">→</div>
       </a>
@@ -575,7 +575,7 @@ select, select option {
         <div class="card-body">
           <div class="card-title" style="color:#f59e0b">Plan de Juego</div>
           <div class="card-desc"><span data-t="d_planjuego">Analisis tactico del rival. Ataques, saques y zonas preferidas por jugador.</span></div>
-          <div style="margin-top:10px;font-size:11px;color:var(--mut)">NLA Suiza 2025/26</div>
+          <div style="margin-top:10px;font-size:11px;color:var(--mut)">NLA Suiza 2026/27</div>
         </div>
         <div class="card-arrow">&#8594;</div>
       </a>
@@ -666,7 +666,7 @@ select, select option {
 
   <!-- CALENDARIO -->
     <div class="cal-section" style="display:none">
-    <div class="section-lbl"><span data-t="sec_fixture">📅 Fixture · NLA Suiza 2025/26</span></div>
+    <div class="section-lbl"><span data-t="sec_fixture">📅 Fixture · NLA Suiza 2026/27</span></div>
     <div class="cal-grid">
       <div style="position:relative;opacity:1;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;">
         <div style="display:flex;align-items:stretch;">
@@ -1116,7 +1116,7 @@ if(window.GAMEPLAN_DATA){
 // FIXTURE generado automáticamente desde PARTIDOS_META (datos_partidos.js)
 // + próximos partidos hardcodeados que aún no están en el Excel
 var FIXTURE_PROXIMOS = [
-  // Nafels NLA 2025/26 season completed - 26 matches played
+  // Nafels NLA 2026/27 season completed - 26 matches played
 ];
 
 function buildFixture(){
@@ -1161,7 +1161,7 @@ function buildFixture(){
         num: (fixture.length||0)+i+1,
         rival: p.rival,
         fecha: p.fecha,
-        torneo: 'NLA Suiza 2025/26',
+        torneo: 'NLA Suiza 2026/27',
         ts: ts,
         jugado: ts < Date.now(),
         res: '',
@@ -1497,7 +1497,7 @@ function highlightNextMatch(){
       <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
       <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">NLA Suiza 2025/26 · temporada archivada</div>
+    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">NLA Suiza 2026/27 · temporada en curso</div>
   </div>
 </div>
 <script>

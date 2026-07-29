@@ -37,7 +37,7 @@ select{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var
 <div class="header">
   <a href="index.html" class="back-btn">← Hub</a>
   <div><div class="subtitle">Nafels Voley</div><h1>RANKING EQUIPO</h1></div>
-  <div class="season-badge">NLA 2025/26</div>
+  <div class="season-badge">NLA 2026/27</div>
 </div>
 <div class="wrap">
   <div class="controls">

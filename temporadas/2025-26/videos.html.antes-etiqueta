@@ -125,7 +125,7 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
     <a href="index.html" class="back-btn">← <span data-tv="vinicio">Inicio</span></a>
     <div>
       <div class="title">🎬 <span data-tv="vvideos">Videos</span></div>
-      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase">NAFELS VOLEY · NLA Suiza 2025/26</div>
+      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase">NAFELS VOLEY · NLA Suiza 2026/27</div>
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:14px">
