@@ -21,44 +21,8 @@ ESTRUCTURA DE ARCHIVOS:
   recepcion_{equipo}.html — heatmap recepción por equipo (se regenera)
 """
 
-import re
 import os, re, json, argparse, shutil
 from collections import defaultdict, Counter
-
-def _fecha_del_dvw(ruta):
-    """La fecha del partido, leida de adentro del archivo.
-
-       Los .dvw que descarga la liga traen la fecha en el nombre; los que se
-       exportan del panel, no —"_NAF-VIS.dvw"—. Pero todos la traen adentro,
-       en el bloque [3MATCH], escrita como 30/07/2026.
-
-       Se devuelve como 2026-07-30, que es el formato que usa el resto."""
-    try:
-        with open(ruta, 'rb') as f:
-            crudo = f.read()
-        txt = crudo.decode('windows-1252', errors='replace')
-        if re.search(r'[\u00C3\u00C2][\u0080-\u00BF]', txt):
-            try:
-                txt = crudo.decode('utf-8', errors='replace')
-            except Exception:
-                pass
-        lin = txt.split('\n')
-        i = [k for k, l in enumerate(lin) if l.strip().upper() == '[3MATCH]']
-        if not i:
-            return ''
-        col = lin[i[0] + 1].split(';')
-        f0 = (col[0] or '').strip()
-        m = re.match(r'^(\d{1,2})[/.-](\d{1,2})[/.-](\d{4})$', f0)
-        if m:
-            return '%s-%02d-%02d' % (m.group(3), int(m.group(2)), int(m.group(1)))
-        m = re.match(r'^(\d{4})[/.-](\d{1,2})[/.-](\d{1,2})$', f0)
-        if m:
-            return '%s-%02d-%02d' % (m.group(1), int(m.group(2)), int(m.group(3)))
-    except Exception:
-        pass
-    return ''
-
-
 
 # ── NORMALIZACIÓN DE COMBOS AL CANÓNICO MUNDIAL ──────────────────────
 # Equivalencias argentino → canónico (mismo ataque, distinto idioma de scout)
@@ -96,10 +60,6 @@ TEAM_NORM = {
 }
 MAIN_TEAM = 'Nafels'
 
-# Este motor procesa entrenamientos: no hay rival, el local siempre es el
-# club. Los motores de partidos no llevan esta bandera.
-MODO_ENTRENAMIENTO = True
-
 # Posiciones oficiales del plantel CASLA (por número de camiseta).
 # Fuente única de verdad — coincide con EQUIPO_DEMO de jugador.html.
 CASLA_POS_OFICIAL = {
@@ -122,57 +82,8 @@ RES_D  = ['#','+','-','/','=','!']; RES_IDX = {r:i for i,r in enumerate(RES_D)}
 REC_D  = ['#','+','!','-','/','=','?']; REC_IDX = {r:i for i,r in enumerate(REC_D)}
 
 # ── HELPERS ───────────────────────────────────────────────────────
-def _plano(t):
-    """El nombre sin acentos, sin mayusculas y sin nada que no sea letra o
-       numero. Sirve para comparar 'Näfels' con 'NAFELS'."""
-    import unicodedata
-    t = unicodedata.normalize('NFKD', t or '').encode('ascii', 'ignore').decode()
-    return re.sub(r'[^a-z0-9]', '', t.lower())
-
-
-_NORM_CACHE = {}
-
-
 def norm(name):
-    """De un nombre largo al nombre corto del equipo.
-
-       Antes esto era una busqueda exacta en la tabla. Funcionaba mientras el
-       nombre en los .dvw no cambiara nunca, y cambia todos los anos: los
-       clubes cambian de patrocinador —"Biogas Volley Nafels" paso a ser "AXPO
-       VOLLEY NAFELS"— y el scout a veces lo escribe a mano.
-
-       Cuando no coincidia exacto, el equipo quedaba afuera y la app aparecia
-       vacia sin decir por que.
-
-       Ahora, si el nombre exacto no esta, se busca un equipo conocido cuyo
-       nombre aparezca adentro del que vino. Y si tampoco, se devuelve el
-       nombre limpio como antes: nunca se pierde nada."""
-    if not name:
-        return ''
-    if name in TEAM_NORM:
-        return TEAM_NORM[name]
-    if name in _NORM_CACHE:
-        return _NORM_CACHE[name]
-
-    p = _plano(name)
-    if p:
-        # el nombre corto de cada equipo conocido, del mas largo al mas corto,
-        # para que "St Gallen" gane sobre "Gallen" si los dos estuvieran
-        for corto in sorted(set(TEAM_NORM.values()), key=len, reverse=True):
-            c = _plano(corto)
-            if len(c) >= 4 and c in p:
-                _NORM_CACHE[name] = corto
-                return corto
-        # y tambien al reves: por si el .dvw trae el nombre abreviado
-        for largo, corto in TEAM_NORM.items():
-            l = _plano(largo)
-            if len(p) >= 4 and p in l:
-                _NORM_CACHE[name] = corto
-                return corto
-
-    limpio = name.split('(')[0].strip()
-    _NORM_CACHE[name] = limpio
-    return limpio
+    return TEAM_NORM.get(name, name.split('(')[0].strip())
 
 def get_teams(lines):
     in_t=False; tl=[]
@@ -259,8 +170,7 @@ def parse_dvw_both(fpath, temporada):
     home_raw, away_raw = get_teams(lines)
     home = norm(home_raw); away = norm(away_raw)
     m = re.search(r'(\d{4}-\d{2}-\d{2})', os.path.basename(fpath))
-    # Si el nombre no la trae, se lee de adentro del archivo.
-    date = m.group(1) if m else _fecha_del_dvw(fpath)
+    date = m.group(1) if m else ''
     result = {}
 
     for team, pfx, section in [(home,'*','[3PLAYERS-H]'),(away,'a','[3PLAYERS-V]')]:
@@ -629,9 +539,7 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
         h_raw, a_raw = get_teams(lines)
         home = norm(h_raw); away = norm(a_raw)
         m = re.search(r'(\d{4}-\d{2}-\d{2})', fname)
-        # Si el nombre no la trae —los entrenamientos del panel no la traen—
-        # se lee de adentro del archivo, que siempre la tiene.
-        date = m.group(1) if m else _fecha_del_dvw(os.path.join(dvw_dir, fname))
+        date = m.group(1) if m else ''
         for team, pfx, rpfx, ishome, rival in [(home, '*', 'a', True, away), (away, 'a', '*', False, home)]:
             if team not in main_teams: continue
             team_libs = liberos_by_team.get(team, set())
@@ -1443,27 +1351,12 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         lines = content.split('\n')
         home_raw, away_raw = get_teams(lines)
         home = norm(home_raw); away = norm(away_raw)
-        # Se avisa el nombre tal como viene, para ver de una si el problema era
-        # que no coincidia con el del club.
-        try:
-            if MODO_ENTRENAMIENTO:
-                print('   el archivo dice: local="%s"  visitante="%s"'
-                      % (home_raw.strip()[:34], away_raw.strip()[:34]))
-        except Exception:
-            pass
         if team_name not in (home, away): continue
 
         sets = parse_set_scores(content)
         m = re.search(r'(\d{4}-\d{2}-\d{2})', fname)
-        # Si el nombre no la trae —los entrenamientos del panel no la traen—
-        # se lee de adentro del archivo, que siempre la tiene.
-        date = m.group(1) if m else _fecha_del_dvw(os.path.join(dvw_dir, fname))
-        # En un entrenamiento no hay rival: se entrena contra uno mismo. El
-        # scout escribe en el archivo lo que se le ocurre —"Entrenamiento",
-        # "Practica", el nombre largo del club— y si no coincide exacto, el
-        # motor decidia que el partido no era nuestro y descartaba a todos los
-        # jugadores. Aca el local siempre somos nosotros.
-        team_home = True if MODO_ENTRENAMIENTO else (home == team_name)
+        date = m.group(1) if m else ''
+        team_home = home == team_name
         rival = away if team_home else home
 
         tsets=0; rsets=0; set_strings=[]
@@ -1631,25 +1524,11 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         except Exception as _e:
             _arm_pd={}
         partidos_individual.append({'id':g['rival']+'__'+g['date'],'nombre':g['rival'],'rival':g['rival'],'fecha':'/'.join(reversed(g['date'].split('-'))),
-            'resultado':g['result'],'equipo_obj':(to_pcts(bpl['__EQUIPO__']) if '__EQUIPO__' in bpl else {}),'jugadores':jug_obj,'armadores':_arm_pd,'transicion':_trans_pd})
+            'resultado':g['result'],'equipo_obj':to_pcts(bpl['__EQUIPO__']),'jugadores':jug_obj,'armadores':_arm_pd,'transicion':_trans_pd})
 
     # Acumulado
     bat_acum=merge_acum(bat_all_pl)
-    # Si no se reconocio ningun jugador, tampoco hay total del equipo. Antes
-    # esto cortaba todo el proceso; ahora se sigue sin esa parte y se avisa,
-    # asi los cortes de video y el resto de los datos se generan igual.
-    SIN_EQUIPO_AVISADO = False
-    if '__EQUIPO__' not in bat_acum:
-        print()
-        print('   [aviso] No se reconocio ningun jugador de este club.')
-        print('           El motor busca al equipo por su nombre corto y lo')
-        print('           compara con el que trae el archivo. En un')
-        print('           entrenamiento el scout suele escribir otra cosa.')
-        print('           Se siguen generando los cortes de video y el resto.')
-        print()
-        equipo_obj_acum = {}
-    else:
-        equipo_obj_acum = to_pcts(bat_acum['__EQUIPO__'])
+    equipo_obj_acum=to_pcts(bat_acum['__EQUIPO__'])
     # Mapa de nombres acumulado (último partido disponible)
     acum_names={}
     for g in sorted(games,key=lambda x:x['date']):

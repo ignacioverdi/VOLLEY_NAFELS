@@ -5582,6 +5582,50 @@ function abrirDVW(){
   inp.click();
 }
 
+
+/* ══════════════════════════════════════════════════════════════════════════
+   EL NOMBRE DEL ARCHIVO AL EXPORTAR
+   --------------------------------------------------------------------------
+   Los motores buscan la fecha del partido EN EL NOMBRE del archivo. Los que
+   descarga la liga la traen:
+
+       &2025-10-11 636587 AMRI-LUC(VM).dvw
+       &10100 2026-04-24 DHM Uba-Hacoaj (3-0).dvw
+
+   El panel exportaba "_NAF-VIS.dvw", sin fecha. Y sin fecha el motor descarta
+   la sesión entera: no queda ningún jugador y el proceso corta con un error
+   que no dice nada de esto. Costó horas encontrarlo.
+
+   Ahora se usa la misma forma que los archivos de la liga.
+   ══════════════════════════════════════════════════════════════════════════ */
+function _nombreDVW(){
+  var f = '';
+  try{
+    /* la fecha del partido, si está cargada */
+    var d = (M && (M.fecha || M.date)) || '';
+    var m = String(d).match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if(m) f = m[0];
+    else {
+      m = String(d).match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})/);
+      if(m) f = m[3] + '-' + ('0'+m[2]).slice(-2) + '-' + ('0'+m[1]).slice(-2);
+    }
+  }catch(_){}
+  if(!f){
+    /* si no está, la de hoy: un entrenamiento se scoutea el día que pasa */
+    var h = new Date();
+    f = h.getFullYear() + '-' + ('0'+(h.getMonth()+1)).slice(-2) + '-' + ('0'+h.getDate()).slice(-2);
+  }
+  var loc = '', vis = '';
+  try{ loc = (M.home.code || M.home.name || 'LOC'); }catch(_){ loc = 'LOC'; }
+  try{ vis = (M.away.code || M.away.name || 'VIS'); }catch(_){ vis = 'VIS'; }
+  try{ if(typeof unSoloEquipo === 'function' && unSoloEquipo()) vis = 'ENTRENAMIENTO'; }catch(_){}
+
+  var limpio = function(t){
+    return String(t).replace(/[\\/:*?"<>|]/g, '').trim().slice(0, 20);
+  };
+  return '&' + f + ' ' + limpio(loc) + '-' + limpio(vis) + '.dvw';
+}
+
 function exportDVW(modo){
   modo = modo || 'keep';
   const d=new Date(), pad=n=>String(n).padStart(2,'0');
@@ -5700,7 +5744,7 @@ function exportDVW(modo){
   const blob = new Blob([L.join('\r\n')],{type:'text/plain'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
-  a.download='&'+M.home.code+'-'+M.away.code+'.dvw';
+  a.download=_nombreDVW();
   a.click();
   toast('Archivo descargado');
 

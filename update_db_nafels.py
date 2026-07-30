@@ -21,8 +21,44 @@ ESTRUCTURA DE ARCHIVOS:
   recepcion_{equipo}.html — heatmap recepción por equipo (se regenera)
 """
 
+import re
 import os, re, json, argparse, shutil
 from collections import defaultdict, Counter
+
+def _fecha_del_dvw(ruta):
+    """La fecha del partido, leida de adentro del archivo.
+
+       Los .dvw que descarga la liga traen la fecha en el nombre; los que se
+       exportan del panel, no —"_NAF-VIS.dvw"—. Pero todos la traen adentro,
+       en el bloque [3MATCH], escrita como 30/07/2026.
+
+       Se devuelve como 2026-07-30, que es el formato que usa el resto."""
+    try:
+        with open(ruta, 'rb') as f:
+            crudo = f.read()
+        txt = crudo.decode('windows-1252', errors='replace')
+        if re.search(r'[\u00C3\u00C2][\u0080-\u00BF]', txt):
+            try:
+                txt = crudo.decode('utf-8', errors='replace')
+            except Exception:
+                pass
+        lin = txt.split('\n')
+        i = [k for k, l in enumerate(lin) if l.strip().upper() == '[3MATCH]']
+        if not i:
+            return ''
+        col = lin[i[0] + 1].split(';')
+        f0 = (col[0] or '').strip()
+        m = re.match(r'^(\d{1,2})[/.-](\d{1,2})[/.-](\d{4})$', f0)
+        if m:
+            return '%s-%02d-%02d' % (m.group(3), int(m.group(2)), int(m.group(1)))
+        m = re.match(r'^(\d{4})[/.-](\d{1,2})[/.-](\d{1,2})$', f0)
+        if m:
+            return '%s-%02d-%02d' % (m.group(1), int(m.group(2)), int(m.group(3)))
+    except Exception:
+        pass
+    return ''
+
+
 
 # ── NORMALIZACIÓN DE COMBOS AL CANÓNICO MUNDIAL ──────────────────────
 # Equivalencias argentino → canónico (mismo ataque, distinto idioma de scout)
@@ -82,8 +118,57 @@ RES_D  = ['#','+','-','/','=','!']; RES_IDX = {r:i for i,r in enumerate(RES_D)}
 REC_D  = ['#','+','!','-','/','=','?']; REC_IDX = {r:i for i,r in enumerate(REC_D)}
 
 # ── HELPERS ───────────────────────────────────────────────────────
+def _plano(t):
+    """El nombre sin acentos, sin mayusculas y sin nada que no sea letra o
+       numero. Sirve para comparar 'Näfels' con 'NAFELS'."""
+    import unicodedata
+    t = unicodedata.normalize('NFKD', t or '').encode('ascii', 'ignore').decode()
+    return re.sub(r'[^a-z0-9]', '', t.lower())
+
+
+_NORM_CACHE = {}
+
+
 def norm(name):
-    return TEAM_NORM.get(name, name.split('(')[0].strip())
+    """De un nombre largo al nombre corto del equipo.
+
+       Antes esto era una busqueda exacta en la tabla. Funcionaba mientras el
+       nombre en los .dvw no cambiara nunca, y cambia todos los anos: los
+       clubes cambian de patrocinador —"Biogas Volley Nafels" paso a ser "AXPO
+       VOLLEY NAFELS"— y el scout a veces lo escribe a mano.
+
+       Cuando no coincidia exacto, el equipo quedaba afuera y la app aparecia
+       vacia sin decir por que.
+
+       Ahora, si el nombre exacto no esta, se busca un equipo conocido cuyo
+       nombre aparezca adentro del que vino. Y si tampoco, se devuelve el
+       nombre limpio como antes: nunca se pierde nada."""
+    if not name:
+        return ''
+    if name in TEAM_NORM:
+        return TEAM_NORM[name]
+    if name in _NORM_CACHE:
+        return _NORM_CACHE[name]
+
+    p = _plano(name)
+    if p:
+        # el nombre corto de cada equipo conocido, del mas largo al mas corto,
+        # para que "St Gallen" gane sobre "Gallen" si los dos estuvieran
+        for corto in sorted(set(TEAM_NORM.values()), key=len, reverse=True):
+            c = _plano(corto)
+            if len(c) >= 4 and c in p:
+                _NORM_CACHE[name] = corto
+                return corto
+        # y tambien al reves: por si el .dvw trae el nombre abreviado
+        for largo, corto in TEAM_NORM.items():
+            l = _plano(largo)
+            if len(p) >= 4 and p in l:
+                _NORM_CACHE[name] = corto
+                return corto
+
+    limpio = name.split('(')[0].strip()
+    _NORM_CACHE[name] = limpio
+    return limpio
 
 def get_teams(lines):
     in_t=False; tl=[]
@@ -170,7 +255,8 @@ def parse_dvw_both(fpath, temporada):
     home_raw, away_raw = get_teams(lines)
     home = norm(home_raw); away = norm(away_raw)
     m = re.search(r'(\d{4}-\d{2}-\d{2})', os.path.basename(fpath))
-    date = m.group(1) if m else ''
+    # Si el nombre no la trae, se lee de adentro del archivo.
+    date = m.group(1) if m else _fecha_del_dvw(fpath)
     result = {}
 
     for team, pfx, section in [(home,'*','[3PLAYERS-H]'),(away,'a','[3PLAYERS-V]')]:
@@ -592,7 +678,9 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
         h_raw, a_raw = get_teams(lines)
         home = norm(h_raw); away = norm(a_raw)
         m = re.search(r'(\d{4}-\d{2}-\d{2})', fname)
-        date = m.group(1) if m else ''
+        # Si el nombre no la trae —los entrenamientos del panel no la traen—
+        # se lee de adentro del archivo, que siempre la tiene.
+        date = m.group(1) if m else _fecha_del_dvw(os.path.join(dvw_dir, fname))
         mc = re.search(r'\d{4}-\d{2}-\d{2}\s+(\d{3,})', fname)
         code = mc.group(1) if mc else ''
         for team, pfx, rpfx, ishome, rival in [(home, '*', 'a', True, away), (away, 'a', '*', False, home)]:
@@ -1415,7 +1503,9 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
 
         sets = parse_set_scores(content)
         m = re.search(r'(\d{4}-\d{2}-\d{2})', fname)
-        date = m.group(1) if m else ''
+        # Si el nombre no la trae —los entrenamientos del panel no la traen—
+        # se lee de adentro del archivo, que siempre la tiene.
+        date = m.group(1) if m else _fecha_del_dvw(os.path.join(dvw_dir, fname))
         team_home = home == team_name
         rival = away if team_home else home
 

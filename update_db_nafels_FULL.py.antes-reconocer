@@ -21,44 +21,8 @@ ESTRUCTURA DE ARCHIVOS:
   recepcion_{equipo}.html — heatmap recepción por equipo (se regenera)
 """
 
-import re
 import os, re, json, argparse, shutil
 from collections import defaultdict, Counter
-
-def _fecha_del_dvw(ruta):
-    """La fecha del partido, leida de adentro del archivo.
-
-       Los .dvw que descarga la liga traen la fecha en el nombre; los que se
-       exportan del panel, no —"_NAF-VIS.dvw"—. Pero todos la traen adentro,
-       en el bloque [3MATCH], escrita como 30/07/2026.
-
-       Se devuelve como 2026-07-30, que es el formato que usa el resto."""
-    try:
-        with open(ruta, 'rb') as f:
-            crudo = f.read()
-        txt = crudo.decode('windows-1252', errors='replace')
-        if re.search(r'[\u00C3\u00C2][\u0080-\u00BF]', txt):
-            try:
-                txt = crudo.decode('utf-8', errors='replace')
-            except Exception:
-                pass
-        lin = txt.split('\n')
-        i = [k for k, l in enumerate(lin) if l.strip().upper() == '[3MATCH]']
-        if not i:
-            return ''
-        col = lin[i[0] + 1].split(';')
-        f0 = (col[0] or '').strip()
-        m = re.match(r'^(\d{1,2})[/.-](\d{1,2})[/.-](\d{4})$', f0)
-        if m:
-            return '%s-%02d-%02d' % (m.group(3), int(m.group(2)), int(m.group(1)))
-        m = re.match(r'^(\d{4})[/.-](\d{1,2})[/.-](\d{1,2})$', f0)
-        if m:
-            return '%s-%02d-%02d' % (m.group(1), int(m.group(2)), int(m.group(3)))
-    except Exception:
-        pass
-    return ''
-
-
 
 # ── NORMALIZACIÓN DE COMBOS AL CANÓNICO MUNDIAL ──────────────────────
 # Equivalencias argentino → canónico (mismo ataque, distinto idioma de scout)
@@ -96,10 +60,6 @@ TEAM_NORM = {
 }
 MAIN_TEAM = 'Nafels'
 
-# Este motor procesa entrenamientos: no hay rival, el local siempre es el
-# club. Los motores de partidos no llevan esta bandera.
-MODO_ENTRENAMIENTO = True
-
 # Posiciones oficiales del plantel CASLA (por número de camiseta).
 # Fuente única de verdad — coincide con EQUIPO_DEMO de jugador.html.
 CASLA_POS_OFICIAL = {
@@ -122,57 +82,8 @@ RES_D  = ['#','+','-','/','=','!']; RES_IDX = {r:i for i,r in enumerate(RES_D)}
 REC_D  = ['#','+','!','-','/','=','?']; REC_IDX = {r:i for i,r in enumerate(REC_D)}
 
 # ── HELPERS ───────────────────────────────────────────────────────
-def _plano(t):
-    """El nombre sin acentos, sin mayusculas y sin nada que no sea letra o
-       numero. Sirve para comparar 'Näfels' con 'NAFELS'."""
-    import unicodedata
-    t = unicodedata.normalize('NFKD', t or '').encode('ascii', 'ignore').decode()
-    return re.sub(r'[^a-z0-9]', '', t.lower())
-
-
-_NORM_CACHE = {}
-
-
 def norm(name):
-    """De un nombre largo al nombre corto del equipo.
-
-       Antes esto era una busqueda exacta en la tabla. Funcionaba mientras el
-       nombre en los .dvw no cambiara nunca, y cambia todos los anos: los
-       clubes cambian de patrocinador —"Biogas Volley Nafels" paso a ser "AXPO
-       VOLLEY NAFELS"— y el scout a veces lo escribe a mano.
-
-       Cuando no coincidia exacto, el equipo quedaba afuera y la app aparecia
-       vacia sin decir por que.
-
-       Ahora, si el nombre exacto no esta, se busca un equipo conocido cuyo
-       nombre aparezca adentro del que vino. Y si tampoco, se devuelve el
-       nombre limpio como antes: nunca se pierde nada."""
-    if not name:
-        return ''
-    if name in TEAM_NORM:
-        return TEAM_NORM[name]
-    if name in _NORM_CACHE:
-        return _NORM_CACHE[name]
-
-    p = _plano(name)
-    if p:
-        # el nombre corto de cada equipo conocido, del mas largo al mas corto,
-        # para que "St Gallen" gane sobre "Gallen" si los dos estuvieran
-        for corto in sorted(set(TEAM_NORM.values()), key=len, reverse=True):
-            c = _plano(corto)
-            if len(c) >= 4 and c in p:
-                _NORM_CACHE[name] = corto
-                return corto
-        # y tambien al reves: por si el .dvw trae el nombre abreviado
-        for largo, corto in TEAM_NORM.items():
-            l = _plano(largo)
-            if len(p) >= 4 and p in l:
-                _NORM_CACHE[name] = corto
-                return corto
-
-    limpio = name.split('(')[0].strip()
-    _NORM_CACHE[name] = limpio
-    return limpio
+    return TEAM_NORM.get(name, name.split('(')[0].strip())
 
 def get_teams(lines):
     in_t=False; tl=[]
@@ -259,8 +170,7 @@ def parse_dvw_both(fpath, temporada):
     home_raw, away_raw = get_teams(lines)
     home = norm(home_raw); away = norm(away_raw)
     m = re.search(r'(\d{4}-\d{2}-\d{2})', os.path.basename(fpath))
-    # Si el nombre no la trae, se lee de adentro del archivo.
-    date = m.group(1) if m else _fecha_del_dvw(fpath)
+    date = m.group(1) if m else ''
     result = {}
 
     for team, pfx, section in [(home,'*','[3PLAYERS-H]'),(away,'a','[3PLAYERS-V]')]:
@@ -333,7 +243,25 @@ def parse_dvw_both(fpath, temporada):
     return result, date, home, away
 
 # ── UPDATE DATABASE ───────────────────────────────────────────────
-def update_database(dvw_dir, temporada, db_path='entrenamientos_nafels_db.json'):
+def _parse_set_result(txt):
+    """(sets_local, sets_visitante) desde [3SET]."""
+    import re as _re
+    m=_re.search(r'\[3SET\](.*?)(?:\n\[3|\Z)',txt,_re.S)
+    if not m: return None
+    hs=as_=0
+    for line in m.group(1).strip().splitlines():
+        f=line.split(';')
+        scs=[x for x in f[1:5] if x.strip()]
+        if not scs: continue
+        sc=scs[-1].replace(' ','').split('-')
+        if len(sc)==2:
+            try: h=int(sc[0]); a=int(sc[1])
+            except: continue
+            if h>a: hs+=1
+            elif a>h: as_+=1
+    return [hs,as_] if (hs or as_) else None
+
+def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     # Load existing DB
     if os.path.exists(db_path):
         with open(db_path) as f: db = json.load(f)
@@ -342,6 +270,9 @@ def update_database(dvw_dir, temporada, db_path='entrenamientos_nafels_db.json')
         existing_dates = {g['file'] for g in games_log}
     else:
         teams_data = {}; games_log = []; existing_dates = set()
+
+    # firma por PARTIDO (fecha + equipos) para evitar contar dos veces archivos duplicados/copias
+    existing_sigs = {(g.get('date'), tuple(sorted([g.get('home',''), g.get('away','')]))) for g in games_log}
 
     dvw_files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
     added = 0; skipped = 0
@@ -357,6 +288,13 @@ def update_database(dvw_dir, temporada, db_path='entrenamientos_nafels_db.json')
             result, date, home, away = parse_dvw_both(fpath, temporada)
         except Exception as e:
             print(f"  ERROR {fname}: {e}"); continue
+
+        # mismo partido ya cargado desde otro archivo (copia "(1)", re-scout, etc.) → no contar doble
+        sig = (date, tuple(sorted([home, away])))
+        if date and sig in existing_sigs:
+            print(f"  ⚠ DUPLICADO omitido: {fname} (mismo partido que uno ya cargado)")
+            skipped += 1; continue
+        existing_sigs.add(sig)
 
         for team, data in result.items():
             if team not in teams_data: teams_data[team] = {}
@@ -383,12 +321,39 @@ def update_database(dvw_dir, temporada, db_path='entrenamientos_nafels_db.json')
         added += 1
         if added % 10 == 0: print(f"  Parsed {added} files...")
 
+    # resultado final (sets) de cada partido — leido de [3SET] del DVW
+    for g in games_log:
+        if 'result' in g: continue
+        g['result']=None
+        fp=os.path.join(dvw_dir, g.get('file','') or '')
+        if g.get('file') and os.path.isfile(fp):
+            try: g['result']=_parse_set_result(open(fp,encoding='latin-1',errors='ignore').read())
+            except: pass
+
     db_out = {'teams': teams_data, 'games': games_log}
     with open(db_path, 'w', encoding='utf-8') as f:
         json.dump(db_out, f, ensure_ascii=False)
 
     print(f"✓ DB updated: {added} added, {skipped} skipped")
     return teams_data, games_log
+
+# ── FILTRO POR TEMPORADA ──────────────────────────────────────────
+def filter_teams_data(teams_data, season):
+    """Devuelve una copia de teams_data con SOLO las acciones de la temporada dada.
+    Mantiene la estructura completa (equipos/jugadores/info) para no romper nada;
+    solo vacia las acciones que no son de esa temporada."""
+    if not season:
+        return teams_data
+    season = str(season)
+    out = {}
+    for team, players in teams_data.items():
+        out[team] = {}
+        for num, pd in players.items():
+            npd = {'info': pd.get('info')}
+            for key in ('atk', 'srv', 'rec', 'sets', 'blk'):
+                npd[key] = [a for a in pd.get(key, []) if str(a.get('temporada')) == season]
+            out[team][num] = npd
+    return out
 
 # ── CALCULATE STATS ───────────────────────────────────────────────
 def calculate_stats(teams_data, temporada_filter=None):
@@ -541,7 +506,7 @@ def detectar_armadores(content, pfx, setter_count=2, extra_liberos=None, positio
             result.append(n)
         if len(result) >= setter_count: break
     return result[:setter_count]
-def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, rival):
+def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, rival, mcode=''):
     """Extrae los rallies de armado de un setter específico."""
     content = content.replace('\r\n','\n')
     idx = content.find('[3SCOUT]\n')
@@ -583,7 +548,7 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
             raw = tp[0] if tp else ''; call = raw[:2] if len(raw) >= 2 else raw
             pending = {'setter_pos': spos, 'set_num': setn, 'call': call, 'rec_quality': rq, 'atype': (0 if last_skill == 'R' else 1),
                        'atk_combo': '', 'atk_result': '', 'atk_dest': 0, 'atk_orig': 0, 'date': date, 'rival': rival,
-                       't_start': (last_serve_t or last_rec_t or vt), 't_atk': 0,
+                       'code': mcode, 't_start': (last_serve_t or last_rec_t or vt), 't_atk': 0,
                        'rec_zone': last_rec_zone, 'rec_num': last_rec_num, 'atk_num': 0, 'rec_type': last_rec_type}
             last_skill = 'E'
         elif skill == 'A':
@@ -621,6 +586,7 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
             liberos_by_team[tm] = libs
     rallies_both = defaultdict(lambda: defaultdict(list))
     setters_detected = {}
+    seen_sigs = set()  # evitar contar dos veces archivos del mismo partido (copias/duplicados)
     files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
     for fname in files:
         with open(os.path.join(dvw_dir, fname), encoding='utf-8', errors='ignore') as f:
@@ -629,9 +595,13 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
         h_raw, a_raw = get_teams(lines)
         home = norm(h_raw); away = norm(a_raw)
         m = re.search(r'(\d{4}-\d{2}-\d{2})', fname)
-        # Si el nombre no la trae —los entrenamientos del panel no la traen—
-        # se lee de adentro del archivo, que siempre la tiene.
-        date = m.group(1) if m else _fecha_del_dvw(os.path.join(dvw_dir, fname))
+        date = m.group(1) if m else ''
+        mc = re.search(r'\d{4}-\d{2}-\d{2}\s+(\d{3,})', fname)
+        code = mc.group(1) if mc else ''
+        sig = (date, tuple(sorted([home, away])))
+        if date and sig in seen_sigs:
+            continue  # mismo partido ya procesado (copia "(1)", re-scout) → no contar doble
+        seen_sigs.add(sig)
         for team, pfx, rpfx, ishome, rival in [(home, '*', 'a', True, away), (away, 'a', '*', False, home)]:
             if team not in main_teams: continue
             team_libs = liberos_by_team.get(team, set())
@@ -640,7 +610,7 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
             setters = detectar_armadores(content, pfx, 2, team_libs, team_pos)
             for sn in setters:
                 setters_detected.setdefault(team, set()).add(sn)
-                r = parse_setter_rallies(content, pfx, rpfx, ishome, sn, date, rival)
+                r = parse_setter_rallies(content, pfx, rpfx, ishome, sn, date, rival, code)
                 if r: rallies_both[team][sn].extend(r)
     # Keep top-2 setters per team by volume
     setters_map = {}
@@ -652,7 +622,7 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
     return setters_map, rallies_final
 
 
-def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=None):
+def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=None, games_log=None):
     """Genera liga_data.js con TODA la liga para los heatmaps universales."""
     COMBO_IDX={c:i for i,c in enumerate(combos)}
     RES_IDX={'#':0,'/':1,'+':2,'!':3,'=':4,'-':5}
@@ -660,41 +630,58 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
     CALL_LIST=['K1','K7','KM','K2','KC','KP','KE','KB','KO','KS']
     CALL_IDX={c:i for i,c in enumerate(CALL_LIST)}
     setters=setters or {}; rallies=rallies or {}
+    # Lookup de resultados (sets) por partido, para el dropdown "partido especifico"
+    _RESULTS={}
+    for g in (games_log or []):
+        r=g.get('result')
+        if r and g.get('date'): _RESULTS[(g['date'],g.get('home',''),g.get('away',''))]=r
+    def _res_for(date,team,rival):
+        r=_RESULTS.get((date,team,rival))
+        if r: return '%d-%d'%(r[0],r[1])
+        r=_RESULTS.get((date,rival,team))
+        if r: return '%d-%d'%(r[1],r[0])
+        return ''
     LIGA={'combos':combos,'calls':CALL_LIST,'teams':{}}
     for team in NLA_TEAMS:
         td = teams_data.get(team, {})
         if not td: continue
         rivals=sorted(set(a.get('rival','') for pd in td.values() for sk in ['atk','srv','rec'] for a in pd.get(sk,[]) if a.get('rival')))
         ridx={r:i for i,r in enumerate(rivals)}
+        # ── Indice de PARTIDO real (date,rival) — para el filtro "partido especifico" ──
+        _gseen=sorted(set((a.get('date',''),a.get('rival','')) for pd in td.values() for sk in ['atk','srv','rec'] for a in pd.get(sk,[]) if a.get('rival')))
+        _gidx={dk:i for i,dk in enumerate(_gseen)}
+        _games_list=[{'i':i,'date':d,'rival':rv,'r':_res_for(d,team,rv)} for i,(d,rv) in enumerate(_gseen)]
+        def _gi(a): return _gidx.get((a.get('date',''),a.get('rival','')),0)
         atk_p,srv_p,rec_p={},{},{}
         for ns,pd in td.items():
             info=pd.get('info') or {}; name=info.get('name',ns); num=int(ns)
             ape=info.get('apellido','') or (name.rsplit(' ',1)[0] if ' ' in name else name)
             atk,srv,rec=pd.get('atk',[]),pd.get('srv',[]),pd.get('rec',[])
-            if atk: atk_p[ns]={'name':name,'num':num,'a':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,a.get('atype',0),COMBO_IDX.get(a.get('combo',''),-1),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),6,-1] for a in atk]}
+            if atk: atk_p[ns]={'name':name,'num':num,'a':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,a.get('atype',0),COMBO_IDX.get(a.get('combo',''),-1),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),6,-1] for a in atk]}
             if srv:
                 stl=list(dict.fromkeys('S'+a.get('stype','Q') for a in srv)) or ['SQ']; sidx={s:i for i,s in enumerate(stl)}
-                srv_p[ns]={'name':name,'num':num,'stypes':stl,'s':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,sidx.get('S'+a.get('stype','Q'),0),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0)] for a in srv]}
+                srv_p[ns]={'name':name,'num':num,'stypes':stl,'s':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,sidx.get('S'+a.get('stype','Q'),0),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0)] for a in srv]}
             if rec:
                 rtl=list(dict.fromkeys('R'+a.get('stype','M') for a in rec)) or ['RM']; rtidx={r:i for i,r in enumerate(rtl)}
-                rec_p[ns]={'name':name,'apellido':ape,'num':num,'rtypes':rtl,'r':[[ridx.get(a.get('rival',''),0),0,a.get('set_num',1),1,rtidx.get('R'+a.get('stype','M'),0),REC_IDX.get(a.get('effect','-'),3),a.get('orig',0),a.get('dest',0)] for a in rec]}
+                rec_p[ns]={'name':name,'apellido':ape,'num':num,'rtypes':rtl,'r':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,rtidx.get('R'+a.get('stype','M'),0),REC_IDX.get(a.get('effect','-'),3),a.get('orig',0),a.get('dest',0)] for a in rec]}
         # Armar AMBOS armadores (estructura setters array que usa el game plan)
         team_setters = setters.get(team, [])
         if not isinstance(team_setters, list): team_setters = [team_setters]
         team_rallies = rallies.get(team, {})  # dict {str(num): [rallies]}
-        # ── Lista de sesiones de entrenamiento (para el filtro de partidos del game plan) ──
+        # ── Lista de partidos del equipo (para el filtro de partidos del game plan) ──
         _all_rl = []
         for _sn in team_setters:
             _all_rl.extend(team_rallies.get(str(_sn), []) if isinstance(team_rallies, dict) else [])
         _seen = sorted(set((r.get('date',''), r.get('rival','')) for r in _all_rl))
         match_idx = {dk: i for i, dk in enumerate(_seen)}
-        matches = [{'i': i, 'date': d, 'rival': (rv or 'Entrenamiento'), 'code': ''} for i, (d, rv) in enumerate(_seen)]
+        _code_map = {(r.get('date',''), r.get('rival','')): r.get('code','') for r in _all_rl}
+        matches = [{'i': i, 'date': d, 'rival': rv, 'code': _code_map.get((d, rv), '')} for i, (d, rv) in enumerate(_seen)]
         setters_list = []
         for sn in team_setters:
             rl = team_rallies.get(str(sn), []) if isinstance(team_rallies, dict) else []
             if not rl: continue
             sname = td.get(str(sn),{}).get('info',{}).get('name',f'#{sn}')
-            arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1),r.get('t_start',0),r.get('t_atk',0),r.get('rec_zone',0),r.get('rec_num',0),r.get('atk_num',0),r.get('rec_type','')] for r in rl]
+            arm = [[ridx.get(r['rival'],0),_gidx.get((r.get('date',''),r.get('rival','')),0),r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1),r.get('t_start',0),r.get('t_atk',0),r.get('rec_zone',0),r.get('rec_num',0),r.get('atk_num',0),r.get('rec_type','')] for r in rl]
             setters_list.append({'num':sn,'name':sname,'s':arm,'total':len(rl)})
         setters_list.sort(key=lambda x:-x['total'])
         # Roster de posiciones — jerarquía: setter→libero→central→outside/opposite
@@ -715,9 +702,9 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
             if rec0 >= 20: roster[nser]='OUTSIDE'
             elif rec0 <= 8: roster[nser]=('OUTSIDE' if punta>opp else 'OPPOSITE')
             else: roster[nser]=('OUTSIDE' if punta>=opp else 'OPPOSITE')
-        LIGA['teams'][team.lower().replace(' ','_')]={'name':team,'rivals':rivals,'atk':atk_p,'srv':srv_p,'rec':rec_p,'setters':setters_list,'setter':setters_list[0] if setters_list else None,'roster':roster,'matches':matches}
-    with open(os.path.join(output_dir,'liga_data_entrenamientos.js'),'w',encoding='utf-8') as f:
-        f.write('window.LIGA_DATA_ENT = '+json.dumps(LIGA,ensure_ascii=False)+';\n')
+        LIGA['teams'][team.lower().replace(' ','_')]={'name':team,'rivals':rivals,'games':_games_list,'atk':atk_p,'srv':srv_p,'rec':rec_p,'setters':setters_list,'setter':setters_list[0] if setters_list else None,'roster':roster,'matches':matches}
+    with open(os.path.join(output_dir,'liga_data.js'),'w',encoding='utf-8') as f:
+        f.write('window.LIGA_DATA = '+json.dumps(LIGA,ensure_ascii=False)+';\n')
     return len(LIGA['teams'])
 
 
@@ -1431,7 +1418,7 @@ def build_transicion_data(setters_rallies, setter_names):
     return res
 
 
-def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025/26'):
+def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025/26', t_filter=None):
     """Generate datos_historial.js + datos_partidos.js for a specific team from DVW."""
     from datetime import datetime
     files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
@@ -1443,27 +1430,12 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         lines = content.split('\n')
         home_raw, away_raw = get_teams(lines)
         home = norm(home_raw); away = norm(away_raw)
-        # Se avisa el nombre tal como viene, para ver de una si el problema era
-        # que no coincidia con el del club.
-        try:
-            if MODO_ENTRENAMIENTO:
-                print('   el archivo dice: local="%s"  visitante="%s"'
-                      % (home_raw.strip()[:34], away_raw.strip()[:34]))
-        except Exception:
-            pass
         if team_name not in (home, away): continue
 
         sets = parse_set_scores(content)
         m = re.search(r'(\d{4}-\d{2}-\d{2})', fname)
-        # Si el nombre no la trae —los entrenamientos del panel no la traen—
-        # se lee de adentro del archivo, que siempre la tiene.
-        date = m.group(1) if m else _fecha_del_dvw(os.path.join(dvw_dir, fname))
-        # En un entrenamiento no hay rival: se entrena contra uno mismo. El
-        # scout escribe en el archivo lo que se le ocurre —"Entrenamiento",
-        # "Practica", el nombre largo del club— y si no coincide exacto, el
-        # motor decidia que el partido no era nuestro y descartaba a todos los
-        # jugadores. Aca el local siempre somos nosotros.
-        team_home = True if MODO_ENTRENAMIENTO else (home == team_name)
+        date = m.group(1) if m else ''
+        team_home = home == team_name
         rival = away if team_home else home
 
         tsets=0; rsets=0; set_strings=[]
@@ -1477,6 +1449,10 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         games.append({'file':fname,'date':date,'rival':rival,'team_home':team_home,
                        'tsets':tsets,'rsets':rsets,'result':'V' if tsets>rsets else 'D',
                        'set_strings':set_strings,'content_path':os.path.join(dvw_dir,fname)})
+
+    # Si esta carpeta DVW no es la temporada que se muestra, no mostramos sus partidos.
+    if t_filter and str(temporada) != str(t_filter):
+        games = []
 
     # HISTORIAL entries (per match player stats)
     historial = []
@@ -1547,19 +1523,21 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
                 'aT':a['T'],'aEff':a['Eff'],'aPunto':a['Punto'],'aPos':a['Pos'],'aNeg':a['Neg'],'aErr':a['Err'],'aAdm':a['Adm'],'aVend':a['Vend'],
                 'aSo':_blk(aso),'aTr':_blk(atr),
                 'bT':bT,'bPt':bk,'bPtPos':bp,'bEff':bEff,'bAdm':bExc,'bVend':bSl,'bNeg':bNeg,'bErr':bErr})
-        historial.append({'fecha':'/'.join(reversed(g['date'].split('-'))),'tipo':'E','rival':g['rival'],
+        historial.append({'fecha':'/'.join(reversed(g['date'].split('-'))),'tipo':'P','rival':g['rival'],
             'resultado':{'nafels':g['tsets'],'rival':g['rsets'],'sets':g['set_strings']},'jugadores':jugs})
 
     now = datetime.now().strftime('%d/%m/%Y, %H:%M:%S')
-    hist_js = 'window.HISTORIAL_DATA_ENT = ' + json.dumps({'generado':now,'entrenamientos':historial}, ensure_ascii=False, indent=2) + ';\n'
-    with open(os.path.join(output_dir,'datos_historial_ent.js'),'w',encoding='utf-8') as f: f.write(hist_js)
+    hist_js = 'window.HISTORIAL_DATA = ' + json.dumps({'generado':now,'entrenamientos':historial}, ensure_ascii=False, indent=2) + ';\n'
+    with open(os.path.join(output_dir,'datos_historial.js'),'w',encoding='utf-8') as f: f.write(hist_js)
 
     # ── DATOS_PARTIDOS.JS (ataques, saques, recepciones por jugador acumulado) ──
-    if os.path.exists('entrenamientos_nafels_db.json'):
-        with open('entrenamientos_nafels_db.json') as f: _db = json.load(f)
+    if os.path.exists('nla_players_db.json'):
+        with open('nla_players_db.json') as f: _db = json.load(f)
     else:
         _db = {'teams':{}}
     team_db = _db['teams'].get(team_name, {})
+    if t_filter:
+        team_db = filter_teams_data({team_name: team_db}, t_filter)[team_name]
 
     def _combo_origin(combo, orig):
         M={'X5':4,'V5':4,'X6':2,'V6':2,'X8':9,'V8':9,'X1':3,'X7':3,'XM':3,'X2':3,'XP':8,'X4':4,'X3':2}
@@ -1631,25 +1609,11 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         except Exception as _e:
             _arm_pd={}
         partidos_individual.append({'id':g['rival']+'__'+g['date'],'nombre':g['rival'],'rival':g['rival'],'fecha':'/'.join(reversed(g['date'].split('-'))),
-            'resultado':g['result'],'equipo_obj':(to_pcts(bpl['__EQUIPO__']) if '__EQUIPO__' in bpl else {}),'jugadores':jug_obj,'armadores':_arm_pd,'transicion':_trans_pd})
+            'resultado':g['result'],'equipo_obj':to_pcts(bpl['__EQUIPO__']),'jugadores':jug_obj,'armadores':_arm_pd,'transicion':_trans_pd})
 
     # Acumulado
     bat_acum=merge_acum(bat_all_pl)
-    # Si no se reconocio ningun jugador, tampoco hay total del equipo. Antes
-    # esto cortaba todo el proceso; ahora se sigue sin esa parte y se avisa,
-    # asi los cortes de video y el resto de los datos se generan igual.
-    SIN_EQUIPO_AVISADO = False
-    if '__EQUIPO__' not in bat_acum:
-        print()
-        print('   [aviso] No se reconocio ningun jugador de este club.')
-        print('           El motor busca al equipo por su nombre corto y lo')
-        print('           compara con el que trae el archivo. En un')
-        print('           entrenamiento el scout suele escribir otra cosa.')
-        print('           Se siguen generando los cortes de video y el resto.')
-        print()
-        equipo_obj_acum = {}
-    else:
-        equipo_obj_acum = to_pcts(bat_acum['__EQUIPO__'])
+    equipo_obj_acum=to_pcts(bat_acum['__EQUIPO__']) if '__EQUIPO__' in bat_acum else {}
     # Mapa de nombres acumulado (último partido disponible)
     acum_names={}
     for g in sorted(games,key=lambda x:x['date']):
@@ -1693,19 +1657,19 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
                 'objetivos':obj_by_num.get(num,{}),
                 'tot_saques':sT,'tot_recep':rT,'tot_ataques':aT})
 
-    pjs = f'// datos_entrenamientos.js — {now}\n'
-    pjs += f'const ENTRENAMIENTOS_GENERADO = "{now}";\n'
-    pjs += f'const ENTRENAMIENTOS_TOTAL = {len(partidos_meta)};\n'
-    pjs += 'const ENTRENAMIENTOS_META = ' + json.dumps(partidos_meta, ensure_ascii=False, indent=2) + ';\n'
-    pjs += 'const ENTRENAMIENTOS_JUGADORES = ' + json.dumps(partidos_jug, ensure_ascii=False, indent=2) + ';\n'
-    pjs += 'const ENTRENAMIENTOS_EQUIPO_OBJ = ' + json.dumps(equipo_obj_acum, ensure_ascii=False) + ';\n'
-    pjs += 'const ENTRENAMIENTOS_INDIVIDUAL = ' + json.dumps(partidos_individual, ensure_ascii=False, indent=2) + ';\n'
+    pjs = f'// datos_partidos.js — {now}\n'
+    pjs += f'const PARTIDOS_GENERADO = "{now}";\n'
+    pjs += f'const PARTIDOS_TOTAL = {len(partidos_meta)};\n'
+    pjs += 'const PARTIDOS_META = ' + json.dumps(partidos_meta, ensure_ascii=False, indent=2) + ';\n'
+    pjs += 'const PARTIDOS_JUGADORES = ' + json.dumps(partidos_jug, ensure_ascii=False, indent=2) + ';\n'
+    pjs += 'const PARTIDOS_EQUIPO_OBJ = ' + json.dumps(equipo_obj_acum, ensure_ascii=False) + ';\n'
+    pjs += 'const PARTIDOS_INDIVIDUAL = ' + json.dumps(partidos_individual, ensure_ascii=False, indent=2) + ';\n'
     # Armador acumulado (todos los partidos) — mismo formato que el de cada partido
     _arm_acum = build_armador_data(_arm_acum_rallies, _arm_acum_names) if _arm_acum_rallies else {'titular':None,'suplente':None}
-    pjs += 'const ENTRENAMIENTOS_ARMADOR = ' + json.dumps(_arm_acum, ensure_ascii=False) + ';\n'
+    pjs += 'const PARTIDOS_ARMADOR = ' + json.dumps(_arm_acum, ensure_ascii=False) + ';\n'
     _trans_acum = build_transicion_data(_arm_acum_rallies, _arm_acum_names) if _arm_acum_rallies else {'titular':None,'suplente':None}
-    pjs += 'const ENTRENAMIENTOS_TRANSICION = ' + json.dumps(_trans_acum, ensure_ascii=False) + ';\n'
-    with open(os.path.join(output_dir,'datos_entrenamientos.js'),'w',encoding='utf-8') as f: f.write(pjs)
+    pjs += 'const PARTIDOS_TRANSICION = ' + json.dumps(_trans_acum, ensure_ascii=False) + ';\n'
+    with open(os.path.join(output_dir,'datos_partidos.js'),'w',encoding='utf-8') as f: f.write(pjs)
 
     # ── datos_recepcion.js (para recepcion.html / heatmaps) — desde partidos_jug ──
     # Solo receptores (puntas + líberos). Formato: {NOMBRE:{num,pos,acumulado:{flotado,potencia}}}
@@ -1730,8 +1694,8 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         recep_data[nombre]={'num':pj['num'],'pos':pos,
             'acumulado':{'flotado':_rc_tipo(rec.get('flotado',{})),'potencia':_rc_tipo(rec.get('potencia',{}))},
             'por_rival':{}}
-    rjs='window.RECEPCION_RIVAL_DATA_ENT = '+json.dumps(recep_data,ensure_ascii=False,indent=2)+';\n'
-    with open(os.path.join(output_dir,'datos_recepcion_ent.js'),'w',encoding='utf-8') as f: f.write(rjs)
+    rjs='window.RECEPCION_RIVAL_DATA = '+json.dumps(recep_data,ensure_ascii=False,indent=2)+';\n'
+    with open(os.path.join(output_dir,'datos_recepcion.js'),'w',encoding='utf-8') as f: f.write(rjs)
 
     return len(historial), len(games)
 
@@ -1740,31 +1704,42 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Update NAFELS volleyball database from DVW files')
     parser.add_argument('--dvw_dir',    required=True,  help='Directory with new DVW files')
     parser.add_argument('--temporada',  default='2026', help='Season label (e.g. 2026)')
-    parser.add_argument('--db_path',    default='entrenamientos_nafels_db.json', help='Database file path')
+    parser.add_argument('--db_path',    default='nla_players_db.json', help='Database file path')
     parser.add_argument('--output_dir', default='.',    help='Output directory for HTML files')
     parser.add_argument('--template_dir', default='.', help='Directory with NAFELS template HTML files')
     parser.add_argument('--filter_temporada', default=None, help='Show only this season in stats (default: all)')
     args = parser.parse_args()
 
     print(f"\n{'='*60}")
-    print(f"NAFELS ENTRENAMIENTOS UPDATE — {args.temporada}")
+    print(f"NAFELS DATABASE UPDATE — {args.temporada}")
     print(f"{'='*60}\n")
 
     # Step 1: Update DB
     print("1. Parsing DVW files...")
     teams_data, games_log = update_database(args.dvw_dir, args.temporada, args.db_path)
 
+    # ── FILTRO POR TEMPORADA: deja SOLO la temporada que se muestra en la web ──
+    # Se aplica una sola vez aca, asi liga_data.js, datos_partidos.js, heatmaps y
+    # stats salen TODOS filtrados a la temporada actual (lo demas queda en la base).
+    t_filter = args.filter_temporada  # None = mostrar todo lo que hay en la base
+    if t_filter:
+        teams_data = filter_teams_data(teams_data, t_filter)
+        games_log  = [g for g in games_log if str(g.get('temporada')) == str(t_filter)]
+        print(f"   (mostrando SOLO temporada {t_filter})")
+
     # Step 2: Calculate stats
     print("\n2. Calculating stats...")
-    t_filter = args.filter_temporada  # None = mostrar todo lo que hay en la base
     players, teams = calculate_stats(teams_data, t_filter)
-    with open(os.path.join(args.output_dir,'entrenamientos_full_stats.json'),'w') as f:
+    with open(os.path.join(args.output_dir,'nla_full_stats.json'),'w') as f:
         json.dump({'players':players,'teams':teams,'temporada':t_filter}, f, ensure_ascii=False)
     print(f"   \u2713 {len(players)} players, {len(teams)} teams")
 
     # Step 3: Detect setters + collect rallies (both setters per team)
     print("\n3. Detecting setters and collecting rallies...")
     setters_map, rallies = collect_setter_rallies(args.dvw_dir, TEAM_NORM, NLA_TEAMS, teams_data)
+    # Si la carpeta procesada no es la temporada que se muestra, no usamos sus rallies (game plan en 0).
+    if t_filter and str(args.temporada) != str(t_filter):
+        rallies = {}
     # Detectar líberos por patrón (0 ataques + recibe) para el chequeo
     liberos_map = {}
     for team in NLA_TEAMS:
@@ -1793,7 +1768,7 @@ if __name__ == '__main__':
         _ARM_NAMES_BY_TEAM[team] = nm
 
     # Step 4: Build liga_data.js (universal heatmaps + game plan)
-    print("\n4. Building liga_data_entrenamientos.js (modo entrenamiento)...")
+    print("\n4. Building liga_data.js (sistema universal)...")
     # Canonical combos: collect all combos that appear, in canonical order
     all_combos = set()
     for td in teams_data.values():
@@ -1804,33 +1779,35 @@ if __name__ == '__main__':
     canon_order = ['X5','V5','C5','V4','X1','XM','XG','XC','XD','X2','X7','CB','CD','CF','V3',
                    'X6','V6','V2','X8','V8','XB','XR','XP','VB','VR','VP']
     combos = [c for c in canon_order if c in all_combos] + sorted(c for c in all_combos if c not in canon_order)
-    build_liga_data(teams_data, combos, args.output_dir, setters_map, rallies)
-    print(f"   \u2713 liga_data_entrenamientos.js ({len(combos)} combos, {len(setters_map)} equipos con armadores)")
+    build_liga_data(teams_data, combos, args.output_dir, setters_map, rallies, games_log)
+    print(f"   \u2713 liga_data.js ({len(combos)} combos, {len(setters_map)} equipos con armadores)")
 
     # Step 5: Build stats table (protegido: si falta template, no tumba el proceso)
     print("\n5. Building stats table...")
     try:
-        print("   (tabla de liga NLA: NO se regenera en modo entrenamiento)")
+        build_stats_table(players, teams, os.path.join(args.output_dir,'nla_stats_table.html'))
+        print("   \u2713 nla_stats_table.html")
     except Exception as e:
         print(f"   (stats table omitida: {e})")
 
     # Step 6: datos_partidos.js (para el equipo principal) — CRÍTICO, mostrar errores
-    print("\n6. Building datos_entrenamientos.js...")
-    generate_team_pages_data(args.dvw_dir, MAIN_TEAM, args.output_dir, args.temporada)
-    print("   \u2713 datos_entrenamientos.js")
+    print("\n6. Building datos_partidos.js...")
+    generate_team_pages_data(args.dvw_dir, MAIN_TEAM, args.output_dir, args.temporada, args.filter_temporada)
+    print("   \u2713 datos_partidos.js")
 
-    # Step 7: (DESACTIVADO) Antes generaba 32 paginas por club
-    # (ataque_/saque_/recepcion_/armador_<equipo>.html, una por equipo x 4 tipos).
-    # Ahora se usan 4 paginas universales (ataque.html / saque.html / recepcion.html /
-    # armador.html) que leen TODO de liga_data.js via ?team=<slug>. No hace falta
-    # generar una hoja por equipo: con liga_data.js (paso 4) alcanza.
-    print("\n7. Paginas por club: DESACTIVADO (sistema universal lee de liga_data.js).")
-    # Para reactivar el sistema viejo de 32 hojas, descomentar la linea siguiente:
-    # build_heatmaps(teams_data, template_dir=args.template_dir, output_dir=args.output_dir, temporada_filter=None)
+    # Step 7: Páginas por club (ataque/saque/recepción/armado) — para que NINGÚN botón de 404
+    print("\n7. Building club heatmap pages (ataque/saque/recepcion/armador por equipo)...")
+    try:
+        build_heatmaps(teams_data, template_dir=args.template_dir, output_dir=args.output_dir, temporada_filter=None)
+        print("   \u2713 páginas por club generadas")
+    except Exception as e:
+        import traceback
+        print(f"   (heatmaps por club: {e})")
+        traceback.print_exc()
 
     print(f"\n{'='*60}")
-    print(f"\u2713 LISTO — {len(games_log)} sesiones de entrenamiento en la base")
-    print(f"  Subir a GitHub: liga_data_entrenamientos.js, datos_entrenamientos.js, datos_historial_ent.js, datos_recepcion_ent.js")
+    print(f"\u2713 LISTO — {len(games_log)} partidos en la base")
+    print(f"  Subir a GitHub: liga_data.js, nla_stats_table.html, datos_partidos.js")
     print(f"{'='*60}\n")
 
 # © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados
