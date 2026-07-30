@@ -2946,7 +2946,13 @@ function ponerExt(ch){
 
   inp.value = p.map(fmt).join('.');
   try{ inp.setSelectionRange(inp.value.length, inp.value.length); }catch(_){}
-  cerrarExtensiones(); drawDecoder(); inp.focus();
+  /* pintarEspejo() vuelve a colorear la barra. Sin esto, el valor que se acaba
+     de elegir no se ve hasta apretar Enter: el texto cambia pero nadie lo
+     vuelve a dibujar, y da la sensacion de que no se guardo nada. */
+  cerrarExtensiones(); drawDecoder();
+  try{ pintarEspejo(); }catch(_){}
+  try{ drawPickers(); }catch(_){}
+  inp.focus();
 }
 
 /* ============================================================
