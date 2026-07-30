@@ -2862,13 +2862,14 @@ function abrirExtensiones(){
 var EXT_TECLADO = true;
 
 function _extAbierto(){
-  var b = document.getElementById('extbox') ||
-          document.querySelector('.extbox, #ext-box, .extensiones');
+  /* El panel ya lleva una variable que dice si el menu esta abierto: es mas
+     confiable que mirar el HTML, porque no depende de como se llame el cuadro
+     ni de si el navegador ya lo dibujo. */
+  try{ if(typeof EXT_MODO !== 'undefined' && !EXT_MODO) return null; }catch(e){}
+  var b = document.getElementById('extmenu');
   if(!b) return null;
-  var v = window.getComputedStyle ? window.getComputedStyle(b) : null;
-  var visible = b.offsetParent !== null &&
-                (!v || (v.display !== 'none' && v.visibility !== 'hidden'));
-  return visible ? b : null;
+  if(b.classList && !b.classList.contains('open')) return null;
+  return b;
 }
 
 document.addEventListener('keydown', function(e){
