@@ -270,8 +270,6 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 </div>
 
 <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
-<script src="liga_data_2025-26.js" onerror="void 0"></script>
-
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script src="firebase.js"></script>
 <script src="plan_partido_data.js" onerror="void 0"></script>
