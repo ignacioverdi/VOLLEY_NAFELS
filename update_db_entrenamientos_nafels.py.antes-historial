@@ -25,60 +25,6 @@ import re
 import os, re, json, argparse, shutil
 from collections import defaultdict, Counter
 
-def _sumar_al_historial(entrenamientos, output_dir='.'):
-    """Suma las sesiones al historial que leen las pantallas.
-
-       El motor guarda los entrenamientos en datos_historial_ent.js, y las
-       pantallas —dashboard, historial, perfil del jugador— leen
-       datos_historial.js. Nadie lee el primero, asi que el entrenamiento se
-       procesaba bien y no aparecia en ningun lado.
-
-       Aca se suman al archivo que si se lee. Se respeta lo que ya estaba: si
-       hay partidos cargados quedan, y una sesion que ya figuraba se reemplaza
-       en vez de duplicarse."""
-    import json as _json
-    from datetime import datetime as _dt
-    destino = os.path.join(output_dir, 'datos_historial.js')
-
-    previo = {'generado': '', 'entrenamientos': []}
-    try:
-        with open(destino, encoding='utf-8') as f:
-            txt = f.read()
-        m = re.search(r'window\.HISTORIAL_DATA\s*=\s*(\{.*\})\s*;?\s*$', txt, re.S)
-        if m:
-            previo = _json.loads(m.group(1))
-    except Exception:
-        pass
-
-    lista = list(previo.get('entrenamientos') or [])
-    # la clave de cada sesion: fecha + rival. Si ya estaba, se reemplaza.
-    def clave(x):
-        return (str(x.get('fecha') or ''), str(x.get('rival') or ''))
-    ya = {clave(x): i for i, x in enumerate(lista)}
-    nuevas = 0
-    for e in (entrenamientos or []):
-        k = clave(e)
-        if k in ya:
-            lista[ya[k]] = e
-        else:
-            lista.append(e)
-            nuevas += 1
-
-    lista.sort(key=lambda x: str(x.get('fecha') or ''))
-    salida = {'generado': _dt.now().strftime('%Y-%m-%d %H:%M'),
-              'entrenamientos': lista}
-    try:
-        with open(destino, 'w', encoding='utf-8') as f:
-            f.write('window.HISTORIAL_DATA = ')
-            _json.dump(salida, f, ensure_ascii=False)
-            f.write(';\n')
-        print('   ✓ datos_historial.js  (%d sesiones, %d nueva(s))'
-              % (len(lista), nuevas))
-    except Exception as e:
-        print('   [aviso] no pude escribir datos_historial.js (%s)' % e)
-
-
-
 def _fecha_del_dvw(ruta):
     """La fecha del partido, leida de adentro del archivo.
 
@@ -1607,9 +1553,6 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
     now = datetime.now().strftime('%d/%m/%Y, %H:%M:%S')
     hist_js = 'window.HISTORIAL_DATA_ENT = ' + json.dumps({'generado':now,'entrenamientos':historial}, ensure_ascii=False, indent=2) + ';\n'
     with open(os.path.join(output_dir,'datos_historial_ent.js'),'w',encoding='utf-8') as f: f.write(hist_js)
-    # Y ahora al historial que leen las pantallas: el dashboard,
-    # el historial y el perfil del jugador miran datos_historial.js
-    _sumar_al_historial(historial, output_dir)
 
     # ── DATOS_PARTIDOS.JS (ataques, saques, recepciones por jugador acumulado) ──
     if os.path.exists('entrenamientos_nafels_db.json'):
