@@ -734,7 +734,7 @@ function renderEqObjetivos(){
 // ════════════════════════════════════════════════════════════
 function renderJugGrid(){
   var grid=document.getElementById('jug-grid');
-  var jugs = typeof ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[])!=='undefined' ? ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]) :
+  var jugs = typeof CASLA_JUGADORES!=='undefined' ? CASLA_JUGADORES :
              (EQUIPO ? EQUIPO.jugadores : []);
   if(!jugs||!jugs.length){grid.innerHTML='<div class="empty">Sin datos de equipo</div>';return;}
   grid.innerHTML=jugs.map(function(j){
@@ -946,7 +946,7 @@ function renderGamePlans(){
 function buildRankingData(){
   var D = window.HISTORIAL_DATA;
   if(!D) return null;
-  var casla = typeof ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]) !== 'undefined' ? ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]) : [];
+  var casla = typeof CASLA_JUGADORES !== 'undefined' ? CASLA_JUGADORES : [];
   var POS_COLOR = {ARMADOR:'#F59E0B',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};
 
   // Aggregate from historial partidos only

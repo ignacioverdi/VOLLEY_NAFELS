@@ -133,7 +133,7 @@
   var DATA={items:[]};
 
   function roster(){
-    var raw=(typeof PLANTEL_NAFELS!=='undefined'&&PLANTEL_NAFELS)||window.PLANTEL_NAFELS||(typeof ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[])!=='undefined'&&((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]))||((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[])||null;
+    var raw=(typeof PLANTEL_NAFELS!=='undefined'&&PLANTEL_NAFELS)||window.PLANTEL_NAFELS||(typeof CASLA_JUGADORES!=='undefined'&&CASLA_JUGADORES)||window.CASLA_JUGADORES||null;
     var r=Array.isArray(raw)?raw:((raw&&(raw.jugadores||raw.lista))||[]);
     return (r||[]).map(function(p){
       var num=p.num!=null?String(p.num):String(((String(p.nombre||'').match(/^\d+/))||[''])[0]);
