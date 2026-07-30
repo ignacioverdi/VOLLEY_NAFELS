@@ -345,32 +345,7 @@ var GPL=window.LIGA_DATA||{teams:{},combos:[],calls:[]};
 var GP_COMBOS=GPL.combos||[];
 var GP_FRONT_POS=[4,3,2];
 var RESARM=["#","/","+","!","=","-"];
-var ARM_SLUG = (function(){
-  /* Con qué nombre figura cada equipo en los datos del armador.
-     Antes iba una tabla escrita a mano, y al traer esta pantalla de otro club
-     el reemplazo de nombres la dejó apuntando a equipos que acá no existen.
-     Ahora sale de los propios datos: la clave y el valor son el mismo nombre. */
-  var m = {};
-  try {
-    var t = (window.LIGA_DATA && window.LIGA_DATA.teams) || {};
-    Object.keys(t).forEach(function(k){ m[k] = k; });
-  } catch(e) {}
-  try {
-    var p = window.PP_DATA || {};
-    Object.keys(p).forEach(function(k){
-      if(m[k]) return;
-      /* si el plan lo llama distinto, se busca la clave que le corresponde */
-      var lk = String(k).toLowerCase().replace(/[^a-z0-9]/g, '');
-      var t2 = (window.LIGA_DATA && window.LIGA_DATA.teams) || {};
-      var enc = Object.keys(t2).filter(function(x){
-        var xk = String(x).toLowerCase().replace(/[^a-z0-9]/g, '');
-        return xk === lk || xk.indexOf(lk) >= 0 || lk.indexOf(xk) >= 0;
-      })[0];
-      m[k] = enc || k;
-    });
-  } catch(e) {}
-  return m;
-})();
+var ARM_SLUG={defensores:"defensores",river:"river",hacoaj:"hacoaj",campana:"campana",lomas:"lomas",boca:"boca",ciudad:"ciudad",nafels:"casla",untref:"untref",ferro:"ferro",uba:"uba",velez:"velez"};
 var ARMZ=["4","3","2","7","8","9","5","6","1"];
 var ARM_ZCOL={"4":"245,158,11","3":"168,85,247","2":"59,130,246","7":"20,184,166","8":"6,182,212","9":"236,72,153","5":"239,68,68","6":"234,179,8","1":"249,115,22"};
 function armHeat(z,v,pct){if(v<=0)return["var(--h0)","#6b7280","1px solid var(--border)"];var rgb=ARM_ZCOL[z]||"124,134,148",op=Math.max(0.18,pct/100*0.6+0.18);return["rgba("+rgb+","+op.toFixed(2)+")","#f1f5f9","1px solid rgba("+rgb+",.8)"];}

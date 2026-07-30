@@ -569,7 +569,7 @@ function renderAccesos(j){
     {icon:'🏠',title:'Hub',desc:'Todo el sistema',url:'index.html',color:'#64748b',full:true}
   ];
   var SETTER_NUMS=[4,9,19];
-  if(SETTER_NUMS.indexOf(parseInt(j.num))>=0) items.splice(items.length-1,0,{icon:'🎯',title:'Armado',desc:'Mi armado de juego',url:'plan_partido.html?equipo=nafels&jug='+j.num+'#armador',color:'#f59e0b'});
+  if(SETTER_NUMS.indexOf(parseInt(j.num))>=0) items.splice(items.length-1,0,{icon:'🎯',title:'Distribución',desc:'Mi armado de juego',url:'plan_partido.html?equipo=nafels&jug='+j.num+'#armador',color:'#f59e0b'});
   var _ppRec=(window.PP_DATA&&window.PP_DATA['nafels']&&(window.PP_DATA['nafels'].players||[]))||[];
   if(_ppRec.some(function(p){return parseInt(p.num)===parseInt(j.num)&&p.role==='reception';})) items.splice(items.length-1,0,{icon:'🛡',title:'Recepción',desc:'Mi recepción por zona',url:'plan_partido.html?equipo=nafels&jug='+j.num+'#recepcion',color:'#22c55e'});
   items.splice(items.length-1,0,{icon:'⚡',title:'Saque',desc:'Mis saques por zona',url:'plan_partido.html?equipo=nafels&jug='+j.num+'#saque',color:'#f97316'});
