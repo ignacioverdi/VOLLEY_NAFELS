@@ -211,15 +211,50 @@ def build(dvw_dir, out_dir, filter_temp=None, db_path=None):
         def add(pfx,num,role,data,read):
             players.append({"id":pfx+str(num),"num":num,"name":apellido(D['names'].get(str(num),'')),
                             "pos":pos.get(num,'\u2014'),"role":role,"total":len(data),"read":read,"data":data})
+        # ── QUIÉN ENTRA EN LA PARTE DE ATAQUE ─────────────────────────────
+        #    Se toman los que más atacan de cada puesto: cuatro puntas, tres
+        #    centrales y dos opuestos. Es lo que le sirve al plan de partido,
+        #    que se arma para preparar a quién hay que frenar.
+        #
+        #    Pero eso dejaba afuera a los armadores y a los líberos que atacan
+        #    de vez en cuando. Un armador con cincuenta ataques en la temporada
+        #    no es el que decide el partido, pero su perfil quedaba vacío al
+        #    entrar desde el acceso de Ataque.
+        #
+        #    Ahora entra también cualquiera que tenga MINIMO_ATAQUES o más, sin
+        #    importar el puesto. No cambia el orden ni desplaza a nadie: se
+        #    agrega al final.
+        MINIMO_ATAQUES = 20
+
+        ya = set()
         for n in puntas[:4]:
             d=D['atk'].get(str(n),[])
-            if d: add("a",n,"punta",d,"Combo principal: "+domcombo(D,n)+".")
+            if d: add("a",n,"punta",d,"Combo principal: "+domcombo(D,n)+"."); ya.add(n)
         for n in centr[:3]:
             d=D['atk'].get(str(n),[])
-            if d: add("a",n,"central",d,"Primer tiempo: "+domcombo(D,n)+".")
+            if d: add("a",n,"central",d,"Primer tiempo: "+domcombo(D,n)+"."); ya.add(n)
         for n in opues[:2]:
             d=D['atk'].get(str(n),[])
-            if d: add("a",n,"opuesto",d,"Combo principal: "+domcombo(D,n)+".")
+            if d: add("a",n,"opuesto",d,"Combo principal: "+domcombo(D,n)+"."); ya.add(n)
+
+        # los que atacan poco pero atacan: para que su perfil no salga vacío
+        otros = sorted([n for n in pos if n not in ya and cnt('atk',n) >= MINIMO_ATAQUES],
+                       key=lambda n: -cnt('atk',n))
+        for n in otros:
+            d = D['atk'].get(str(n), [])
+            if not d: continue
+            # El rol tiene que ser uno de los tres que la pantalla sabe dibujar:
+            # punta, central u opuesto. Si se le pone otro —"armador", por
+            # ejemplo— la pantalla no encuentra su configuracion y se rompe
+            # entera: dejan de funcionar TODAS las solapas, no solo esa.
+            #
+            # Un armador que remata lo hace desde zona 2, igual que un opuesto,
+            # asi que ese es el que corresponde. Es lo mismo que hace la app de
+            # CASLA, donde Vazquez figura como opuesto y no como armador.
+            rol = (pos.get(n) or '').lower().replace('\u00ed', 'i')
+            if rol not in ('punta', 'central', 'opuesto'):
+                rol = 'opuesto'
+            add("a", n, rol, d, "Ataca poco: %d en la temporada." % len(d))
         for n in servers:
             add("s",n,"saque",D['srv'].get(str(n),[]),"Saque "+domserve(D,n)+".")
         for n in receiv:
