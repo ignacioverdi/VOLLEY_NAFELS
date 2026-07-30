@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Plan de Partido — NAFELS</title>
+<title>Plan de Partido — CASLA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -186,7 +186,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <body>
 <div class="wrap">
 <header class="masthead">
-  <div class="eyebrow">NAFELS · DataVolley 4</div>
+  <div class="eyebrow">CASLA · DataVolley 4</div>
   <h1>Plan de partido</h1>
   <div class="sub">Análisis de: <b id="teamname" style="color:var(--red)">—</b></div>
   <div class="legend">
@@ -239,7 +239,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <div class="grid3" id="row-defense"></div>
 </div><div class="tabgroup" id="tab-bloqueo"><div class="rolehead">Bloqueo <span>dónde bloquea según la zona de origen del ataque rival · celeste</span></div>
 <div class="grid3" id="row-bloqueo"></div>
-</div><footer>Ataque (rojo): dirección según recepción. Saque (azul): tipo, zona de origen, momento (puntos del set) y fuerza sobre la recepción; / = vendido (2ª mejor). Recepción (naranja): según tipo/zona del saque rival; zona real de caída de la pelota (todas las zonas). Video por timestamp (reproduce en partidos publicados en la app NAFELS). Muestras chicas = tomar con cuidado.</footer>
+</div><footer>Ataque (rojo): dirección según recepción. Saque (azul): tipo, zona de origen, momento (puntos del set) y fuerza sobre la recepción; / = vendido (2ª mejor). Recepción (naranja): según tipo/zona del saque rival; zona real de caída de la pelota (todas las zonas). Video por timestamp (reproduce en partidos publicados en la app CASLA). Muestras chicas = tomar con cuidado.</footer>
 </div>
 
 <div id="vmodal" class="vmodal" onclick="if(event.target===this)closeV()">

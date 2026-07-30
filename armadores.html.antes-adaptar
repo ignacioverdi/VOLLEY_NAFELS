@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Armadores NAFELS</title>
+<title>Armadores CASLA</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&family=Barlow:wght@400;500;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -26,7 +26,7 @@ select,select option{color:#111!important;background-color:#fff!important}
 
 <header class="page-header">
   <a href="jugador.html" class="back-btn">← Volver</a>
-  <div class="arm-title">ARMADORES <span>NAFELS</span></div>
+  <div class="arm-title">ARMADORES <span>CASLA</span></div>
   <div style="font-size:10px;color:var(--mut);letter-spacing:2px;text-transform:uppercase">Distribución del juego</div>
 </header>
 

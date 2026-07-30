@@ -187,7 +187,7 @@ function loadFile(file){
     document.getElementById('file-name').textContent = '📄 ' + file.name;
     document.getElementById('btn-procesar').disabled = false;
     // Auto-detectar rival del nombre del archivo
-    var m = file.name.match(/Nafels[-_]([^.]+)/i);
+    var m = file.name.match(/Casla[-_]([^.]+)/i);
     if(m && !document.getElementById('opt-rival').value){
       document.getElementById('opt-rival').value = m[1].replace(/[-_]/g,' ');
     }

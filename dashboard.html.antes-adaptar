@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Dashboard Entrenador — NAFELS Voley</title>
+<title>Dashboard Entrenador — CASLA Voley</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="datos_historial.js"  onerror="void 0"></script>
 <script src="objetivos_config.js" onerror="void 0"></script>
@@ -106,12 +106,8 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 0%,rgb
 .empty{text-align:center;padding:40px;color:var(--mut);font-size:13px;letter-spacing:1px;}
 </style>
 <script>
-/* Con que clave viene el resultado del partido. Antes iba escrita la del
-   club de origen y el marcador salia vacio. */
-var RES_CLAVE = 'nafels';
-
 // ================================================================
-// NAFELS VOLEY — Utils compartidos
+// CASLA VOLEY — Utils compartidos
 // Cargado por todas las páginas
 // ================================================================
 
@@ -210,7 +206,7 @@ window.OBJETIVOS_CONFIG={metas:{
     <a href="index.html" class="back-btn">← Hub</a>
     <div>
       <div class="hdr-title">📊 Dashboard Entrenador</div>
-      <div style="font-size:9px;color:var(--mut);letter-spacing:2px">NAFELS VOLEY · División de Honor 2026</div>
+      <div style="font-size:9px;color:var(--mut);letter-spacing:2px">CASLA VOLEY · División de Honor 2026</div>
     </div>
   </div>
   <div id="nav-gen" style="font-size:10px;color:var(--mut);letter-spacing:1px"></div>
@@ -917,10 +913,10 @@ function renderGamePlans(){
 
     var resHtml = '';
     if(gp.resultado){
-      var win = gp.resultado[RES_CLAVE] > gp.resultado.rival;
+      var win = gp.resultado.casla > gp.resultado.rival;
       var col = win ? '#22c55e' : '#ef4444';
       resHtml = '<div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,.03);border-radius:7px;margin-bottom:10px">'
-        +'<div style="font-family:Bebas Neue,sans-serif;font-size:20px;color:'+col+'">'+gp.resultado[RES_CLAVE]+' — '+gp.resultado.rival+'</div>'
+        +'<div style="font-family:Bebas Neue,sans-serif;font-size:20px;color:'+col+'">'+gp.resultado.casla+' — '+gp.resultado.rival+'</div>'
         +'<div style="font-size:8px;color:#475569;text-transform:uppercase;letter-spacing:1px">'+(win?'✓ Victoria':'✗ Derrota')+'</div>'
         +'</div>';
     }

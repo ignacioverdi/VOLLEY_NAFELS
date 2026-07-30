@@ -489,9 +489,24 @@ var numJug = parseInt(params.get('num')) || 0;
 
 var POS_COLOR = {'ARMADOR':'#f59e0b','CENTRAL':'#f97316','PUNTA':'#22c55e','OPUESTO':'#818cf8','LIBERO':'#06b6d4'};
 
-var EQUIPO_DEMO = {
-  /* vacia: antes traia el plantel del club de origen */
-  jugadores: []};
+var EQUIPO_DEMO = { jugadores: [
+  {num:2,nombre:"OJUEZ",pos:"CENTRAL",pais:"🇦🇷"},
+  {num:3,nombre:"ROMEO WINER",pos:"LIBERO",pais:"🇦🇷"},
+  {num:4,nombre:"VAZQUEZ",pos:"ARMADOR",pais:"🇦🇷"},
+  {num:5,nombre:"RAMOS",pos:"OPUESTO",pais:"🇦🇷"},
+  {num:6,nombre:"VILLARRUEL",pos:"PUNTA",pais:"🇦🇷"},
+  {num:9,nombre:"GODOY",pos:"ARMADOR",pais:"🇦🇷"},
+  {num:10,nombre:"VIERA",pos:"CENTRAL",pais:"🇦🇷"},
+  {num:11,nombre:"DURDOS",pos:"PUNTA",pais:"🇦🇷"},
+  {num:12,nombre:"ZANOTTI",pos:"LIBERO",pais:"🇦🇷"},
+  {num:13,nombre:"ROJAS CARUSO",pos:"PUNTA",pais:"🇦🇷"},
+  {num:14,nombre:"NIELSON",pos:"PUNTA",pais:"🇦🇷"},
+  {num:15,nombre:"ROTEZZI",pos:"CENTRAL",pais:"🇦🇷"},
+  {num:17,nombre:"HERBSOMMER",pos:"CENTRAL",pais:"🇩🇪"},
+  {num:18,nombre:"ACOSTA",pos:"OPUESTO",pais:"🇦🇷"},
+  {num:19,nombre:"DIAZ BOLLI",pos:"ARMADOR",pais:"🇦🇷"},
+  {num:20,nombre:"FREDDIE",pos:"PUNTA",pais:"🇦🇷"}
+]};
 var eqData = window.EQUIPO_DATA || EQUIPO_DEMO;
 var jugador = eqData.jugadores.find(function(j){ return j.num === numJug; });
 if(!jugador && eqData.jugadores.length>0) jugador = eqData.jugadores[0];
@@ -504,7 +519,7 @@ function renderHero(j){
     '<div class="hero-info">'+
       '<div class="pos-tag" style="background:'+color+'12;color:'+color+';border-color:'+color+'33">'+j.pos+'</div>'+
       '<div class="hero-nombre">'+j.nombre+'</div>'+
-      '<div class="hero-sub">'+(j.pais||'🇦🇷')+' NAFELS VOLEY · Temporada 2026'+(j.altura?' · 📏 '+j.altura:'')+'</div>'+
+      '<div class="hero-sub">'+(j.pais||'🇦🇷')+' CASLA VOLEY · Temporada 2026'+(j.altura?' · 📏 '+j.altura:'')+'</div>'+
       '<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">'+
         '<a href="historial_voley.html" style="padding:6px 14px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;text-decoration:none;">📈 STATS</a>'+
         '<a href="prep_fisica.html" style="padding:6px 14px;border-radius:8px;background:rgba(232,25,44,.12);border:1px solid rgba(232,25,44,.25);color:#e8192c;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;text-decoration:none;">💪 RUTINA</a>'+
