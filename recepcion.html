@@ -411,7 +411,10 @@ function initReceptores(){
   cargarRecepcionCasla();
   RECEPTORES = Object.keys(window.RECEPCION_DATA);
   if(RECEPTORES.length === 0){
-    RECEPTORES = ['NIELSON','DURDOS','RAMOS','WINER','ACOSTA','ZANOTTI'];
+    /* Antes iba una lista de apellidos escrita a mano, del club de origen.
+       En otro club mostraba gente que no existe en el equipo. Vacia, la
+       pantalla dice "sin datos", que es la verdad. */
+    RECEPTORES = [];
   }
   CUR = 'EQUIPO';
   var jbtns=document.getElementById('jbtns');
@@ -719,7 +722,8 @@ function recLoadEnt(nombre){
 }
 
 function recBuildJbtns(receptores){
-  if(!receptores || !receptores.length) receptores = ['NIELSON','DURDOS','ZANOTTI','RAMOS'];
+  /* idem: sin datos, no se inventan receptores de otro club */
+  if(!receptores) receptores = [];
   CUR = 'EQUIPO';
   var jbtns = document.getElementById('jbtns');
   if(!jbtns) return;
