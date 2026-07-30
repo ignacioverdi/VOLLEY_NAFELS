@@ -496,6 +496,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 .subitem{background:var(--card,#151521);color:var(--tx,#e8e8f0);border:1px solid var(--b,#2a2a3a);border-radius:9px;padding:11px 14px;font:inherit;font-weight:800;font-size:17px;cursor:pointer;text-align:left}
 .subitem.sel{background:#2563eb;color:#fff;border-color:#2563eb}
 </style>
+<link rel="manifest" href="./manifest.json">
 </head>
 <body>
 
@@ -6385,9 +6386,143 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
     <button class="tbtn" style="text-align:left;padding:10px 12px" onclick="closeModal('m-exportmode');exportDVW('convert')"><b>Convertir</b> — los pasa a su combo estándar de DataVolley (según equivalencias).</button>
     <button class="tbtn" style="text-align:left;padding:10px 12px" onclick="closeModal('m-exportmode');exportDVW('ignore')"><b>Ignorar</b> — quita el combo del código (queda el ataque sin combinación).</button>
   </div>
+
+<!-- ═══ Scoutear sin internet ═══════════════════════════════════════════ -->
+<div id="guia-sin-senal" style="margin-top:22px;padding-top:18px;border-top:1px solid var(--b2)">
+  <h3 style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+    <span>&#128246;</span> Scoutear sin internet
+  </h3>
+  <div class="sub" style="margin-bottom:14px">
+    Un partido se juega donde se juega, y en muchos clubes ah&iacute; no hay se&ntilde;al.
+    El panel funciona igual &mdash; s&oacute;lo hay que prepararlo antes de salir.
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px">
+
+    <div style="background:var(--card2);border:1px solid var(--b2);border-radius:10px;padding:13px">
+      <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#22c55e;margin-bottom:8px">
+        1 &middot; Antes de ir</div>
+      <div style="font-size:12px;line-height:1.65;color:var(--txt)">
+        <b>Con se&ntilde;al</b>, abr&iacute; el panel en la computadora que vas a llevar y
+        esper&aacute; unos diez segundos.<br><br>
+        Ah&iacute; se guarda solo. No vas a ver ning&uacute;n aviso: pasa de fondo.<br><br>
+        <span style="color:var(--mut)">Una vez por computadora. Si el scout usa la
+        suya, tiene que hacerlo en la suya.</span>
+      </div>
+    </div>
+
+    <div style="background:var(--card2);border:1px solid var(--b2);border-radius:10px;padding:13px">
+      <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#f59e0b;margin-bottom:8px">
+        2 &middot; En el partido</div>
+      <div style="font-size:12px;line-height:1.65;color:var(--txt)">
+        Abr&iacute; la misma direcci&oacute;n de siempre. El panel abre normal.<br><br>
+        Arriba aparece un cartel amarillo que dice
+        <b style="color:#f59e0b">Sin se&ntilde;al &middot; se guarda igual</b>.<br><br>
+        Scoute&aacute; como siempre: no cambia nada.
+      </div>
+    </div>
+
+    <div style="background:var(--card2);border:1px solid var(--b2);border-radius:10px;padding:13px">
+      <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#60a5fa;margin-bottom:8px">
+        3 &middot; Al volver</div>
+      <div style="font-size:12px;line-height:1.65;color:var(--txt)">
+        Con se&ntilde;al, el cartel desaparece solo.<br><br>
+        Export&aacute; con <b>Exportar .dvw</b> y sub&iacute; el archivo desde
+        <b>Subir partido</b>, como siempre.<br><br>
+        <span style="color:var(--mut)">De ah&iacute; en adelante el sistema hace
+        el resto.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top:14px;background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.25);border-radius:10px;padding:13px">
+    <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#60a5fa;margin-bottom:8px">
+      Para que quede como una aplicaci&oacute;n</div>
+    <div style="font-size:12px;line-height:1.7;color:var(--txt)">
+      No es obligatorio, pero es m&aacute;s c&oacute;modo: abre en su propia ventana,
+      sin la barra del navegador, y queda como un &iacute;cono m&aacute;s.<br><br>
+      <b>En la computadora</b> &mdash; con el panel abierto, mir&aacute; el final de la
+      barra de direcciones: aparece un &iacute;cono de pantallita con una flecha.
+      Clic ah&iacute; y <b>Instalar</b>.<br>
+      <span style="color:var(--mut)">Si no lo ves: men&uacute; de tres puntos &rarr;
+      Enviar, guardar y compartir &rarr; Instalar p&aacute;gina como aplicaci&oacute;n.</span><br><br>
+      <b>En el celular</b> &mdash; Android: tres puntos &rarr; Agregar a pantalla
+      principal. iPhone: compartir &rarr; Agregar a inicio.
+    </div>
+  </div>
+
+  <div style="margin-top:14px;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:13px">
+    <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#f59e0b;margin-bottom:8px">
+      Lo que conviene saber</div>
+    <div style="font-size:12px;line-height:1.75;color:var(--txt)">
+      <b>La primera vez s&iacute; hace falta se&ntilde;al.</b> Es cuando se guarda.
+      Despu&eacute;s no.<br>
+      <b>Si publicamos una correcci&oacute;n, se actualiza sola</b> la pr&oacute;xima vez
+      que abras con se&ntilde;al. No hay que borrar nada.<br>
+      <b>No borres los datos del navegador.</b> Ah&iacute; queda lo que scouteaste:
+      limpiar el historial con la opci&oacute;n de datos de sitios se lleva lo que no
+      hayas exportado.<br>
+      <b>Export&aacute; apenas puedas.</b> El .dvw en tu carpeta es el respaldo de
+      verdad.<br>
+      <b>Una computadora, un partido.</b> Lo guardado vive en esa m&aacute;quina. Si
+      empez&aacute;s en una y quer&eacute;s seguir en otra, export&aacute; y abr&iacute; el .dvw.
+    </div>
+  </div>
+</div>
 </div></div>
 <script>function abrirAyuda(){ document.getElementById('m-ayuda').classList.add('open'); }</script>
 
 <script src="lang.js"></script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   SCOUTEAR SIN SEÑAL
+   --------------------------------------------------------------------------
+   El panel es una pagina web, asi que hasta ahora hacia falta conexion para
+   abrirlo. Un partido se scoutea donde se juega, y en muchos clubes ahi no
+   hay señal.
+
+   Esto le pide al navegador que guarde la pagina en el dispositivo. La primera
+   vez que se abre con señal se guarda; de ahi en adelante abre siempre.
+
+   Lo que se scoutea sin conexion queda guardado igual que antes: se sube
+   cuando vuelve la señal.
+   ══════════════════════════════════════════════════════════════════════════ */
+var MODO_SIN_SENAL = false;
+
+(function(){
+  if(!('serviceWorker' in navigator)) return;
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('./sw.js').catch(function(){ /* sin drama */ });
+  });
+})();
+
+/* El cartel de "sin señal". No molesta ni tapa nada: es para que el scout
+   sepa que esta trabajando sin conexion y que sus datos estan a salvo. */
+(function(){
+  function cartel(){
+    var d = document.getElementById('sin-senal');
+    if(!d){
+      d = document.createElement('div');
+      d.id = 'sin-senal';
+      d.style.cssText = 'position:fixed;top:8px;left:50%;transform:translateX(-50%);'+
+        'z-index:9999;background:rgba(245,158,11,.14);border:1px solid rgba(245,158,11,.45);'+
+        'color:#f59e0b;border-radius:20px;padding:5px 16px;font-family:inherit;'+
+        'font-size:11px;font-weight:700;letter-spacing:.5px;pointer-events:none;'+
+        'backdrop-filter:blur(6px)';
+      d.textContent = 'Sin se\u00f1al \u00b7 se guarda igual';
+      document.body.appendChild(d);
+    }
+    d.style.display = navigator.onLine ? 'none' : 'block';
+    MODO_SIN_SENAL = !navigator.onLine;
+  }
+  window.addEventListener('online',  cartel);
+  window.addEventListener('offline', cartel);
+  if(document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', cartel);
+  else cartel();
+})();
+</script>
 </body>
 </html>
