@@ -569,6 +569,8 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
       <div class="extmenu" id="extmenu"></div>
       <div class="exthint"><kbd>Ctrl</kbd> + <kbd>Espacio</kbd> para las extensiones</div>
       <div class="hint" id="hint"></div>
+      <button class="detbtn" id="descbtn" onclick="toggleDescripcion()"
+              style="margin-top:4px;opacity:.7;font-size:11px">Ocultar la descripción</button>
       <button class="detbtn" id="detbtn" onclick="toggleDetalle()">Detalle de la jugada ▾</button>
       <div class="detail" id="detail" hidden>
         <div class="dcol"><label>Desde — zona de inicio</label><div class="mini" id="mini-sz"></div></div>
@@ -1500,10 +1502,12 @@ function pintarTrash(){
    Lo que falta se completa con los valores por defecto (manual, 2.5.1).
    ============================================================ */
 function parseOne(raw){
-  let s = (raw||'').trim();
+  /* Todo en mayúsculas. Scouteando se tipea rápido y sale mezclado: "11w4" y
+     "11W4" son lo mismo, y antes uno de los dos no se reconocía. */
+  let s = (raw||'').trim().toUpperCase();
   if(!s) return null;
   let team = 'home';
-  if(s[0]==='a' || s[0]==='A'){ if(!unSoloEquipo()) team='away'; s=s.slice(1); }
+  if(s[0]==='A' && /^A\d/.test(s)){ if(!unSoloEquipo()) team='away'; s=s.slice(1); }
   else if(s[0]==='*'){ team='home'; s=s.slice(1); }
 
   /* '-1' = jugador desconocido. Aparece en los DVW oficiales (153 casos en 97 archivos) */
@@ -1771,7 +1775,12 @@ function parseChunk(s){
          Lo que el scout escribió siempre manda: por eso el !b.d.ez. Y la
          subzona va atada al destino: si el scout escribió otra zona, la
          subzona del ataque ya no aplica (una C de la 1 no es una C de la 5). */
-      if(b.skill==='D' && b.team !== a.team && a.d.ez && !b.d.ez){
+      /* En un entrenamiento hay un solo equipo, así que las dos mitades quedan
+         en local y esto parecía cobertura. Pero un ataque seguido de una
+         defensa en la práctica es lo mismo que en un partido: el que defiende
+         está del otro lado de la red. Por eso, con un solo equipo, se hereda
+         igual. */
+      if(b.skill==='D' && (b.team !== a.team || unSoloEquipo()) && a.d.ez && !b.d.ez){
         b.d.ez = a.d.ez;
         if(a.d.subz && !b.d.subz) b.d.subz = a.d.subz;
       }
@@ -2230,11 +2239,41 @@ function plRol(j){
 /* El plantel del club sí tiene los roles cargados: se usa para completar los
    huecos del equipo propio. Nunca pisa un dato que ya vino de la base. */
 function plDelClub(){
+  /* El plantel del club, venga de donde venga.
+
+     Antes buscaba una sola variable con el nombre del club escrito adentro. Si
+     el club no tenía ese archivo, la pantalla de planteles salía vacía y había
+     que cargar los jugadores a mano en cada partido. */
+  const sacar = P => {
+    if(!P) return [];
+    if(Array.isArray(P)) return P;
+    return P.jugadores || P.roster || [];
+  };
   try{
-    const P = window.PLANTEL_NAFELS;
-    if(!P || Array.isArray(P)) return [];
-    return P.jugadores || [];
-  }catch(e){ return []; }
+    for(const k in window){
+      if(k.indexOf('PLANTEL_') === 0){
+        const l = sacar(window[k]);
+        if(l.length) return l;
+      }
+    }
+    const e = sacar(window.EQUIPO_DATA);
+    if(e.length) return e;
+    const L = window.LIGA_DATA && window.LIGA_DATA.teams;
+    if(L){
+      for(const k in L){
+        const r = L[k] && L[k].roster;
+        if(r && Object.keys(r).length){
+          return Object.keys(r).map(n => ({
+            num: n,
+            apellido: ((L[k].atk||{})[n]||{}).name ||
+                      ((L[k].srv||{})[n]||{}).name || ('#' + n),
+            pos: r[n]
+          }));
+        }
+      }
+    }
+  }catch(e){}
+  return [];
 }
 
 function plCargar(side){
@@ -2408,7 +2447,10 @@ function drawDecoder(){
   dec.innerHTML = parts.filter(p=>p && !p.err).map(fichasDe)
                        .join('<div class="seg punto"><div class="sv">·</div><div class="sl">y</div></div>');
   inp.classList.remove('bad');
-  let h = 'Se registra <b>'+parts.map(fmt).join(' </b>·<b> ')+'</b>';
+  /* Los ~ son separadores internos del formato DataVolley: adentro del código
+     hacen falta, pero en el cartel de abajo sólo estorban. */
+  const limpio = c => String(c).replace(/~+$/,'').replace(/~+/g,'');
+  let h = 'Se registra <b>'+parts.map(p=>limpio(fmt(p))).join(' </b>·<b> ')+'</b>';
   if(parts.length===2) h += ' — saque y recepción';
   const avisos=[]; parts.forEach(p=>verificar(p).forEach(x=>avisos.push(x)));
   if(avisos.length){ inp.classList.add('warn'); h += '<br><span style="color:var(--warn)">⚠ '+avisos.join(' · ')+'</span>'; }
@@ -2696,10 +2738,21 @@ function drawPickers(){
    Muestra los códigos posibles que pueden seguir al recién escrito.
    ============================================================ */
 function extensionesPosibles(){
-  const raw=document.getElementById('code').value;
+  /* En un código encadenado hay dos acciones, y las extensiones tienen que
+     aplicarse a la que está tocando el cursor, no siempre a la última. El
+     punto separa las mitades: antes manda la primera, después la segunda. */
+  const inp=document.getElementById('code');
+  const raw=inp.value;
   const p=parseInput(raw);
   if(!p.length || p[0].err) return null;
-  const a=p[p.length-1], d=merged(a);
+  let idx = p.length - 1;
+  if(p.length > 1){
+    const punto = raw.indexOf('.');
+    const cur = (inp.selectionStart == null) ? raw.length : inp.selectionStart;
+    if(punto > 0 && cur <= punto) idx = 0;
+  }
+  EXT_IDX = idx;
+  const a=p[idx], d=merged(a);
   const grupos=[];
   if(!d.hit && SUBTYPE[a.skill]) grupos.push({t:'Tipo de golpe', o:SUBTYPE[a.skill]});
   if(!d.blk && PLAYERS[a.skill]) grupos.push({t:a.skill==='R'?'Quién recibe':'Jugadores en bloqueo', o:PLAYERS[a.skill]});
@@ -2714,6 +2767,7 @@ function extensionesPosibles(){
    el campo se pone de otro color y lo decís de un vistazo.
    ══════════════════════════════════════════════════════════════════════════ */
 let EXT_MODO = false;
+let EXT_IDX = -1;   /* a qué mitad del código encadenado se aplica la extensión */
 
 function abrirExtensiones(){
   const g=extensionesPosibles();
@@ -2743,10 +2797,33 @@ document.addEventListener('click', e=>{
   if(m && m.classList.contains('open') && !m.contains(e.target) && e.target.id!=='code') cerrarExtensiones();
 });
 function ponerExt(ch){
+  /* Antes esto pegaba la letra donde estuviera el cursor. Con las letras no
+     había problema, pero los BLOQUEADORES son dígitos (0 a 4) y las zonas
+     también: al tipear un 2 con una sola zona cargada, el parser lo tomaba
+     como la segunda zona y se perdía la dirección.
+
+     Ahora se identifica a qué campo pertenece la opción y el código se
+     reescribe entero en la forma canónica. */
   const inp=document.getElementById('code');
-  const pv=inp.selectionStart ?? inp.value.length, pve=inp.selectionEnd ?? pv;
-  inp.value = inp.value.slice(0,pv) + ch + inp.value.slice(pve);
-  const np=pv+ch.length; try{ inp.setSelectionRange(np,np); }catch(_){}
+  const p=parseInput(inp.value);
+  const idx = (typeof EXT_IDX !== 'undefined' && EXT_IDX >= 0 && EXT_IDX < p.length)
+              ? EXT_IDX : p.length - 1;
+
+  if(!p.length || p[idx].err){
+    const pv=inp.selectionStart ?? inp.value.length;
+    inp.value = inp.value.slice(0,pv) + ch + inp.value.slice(pv);
+    cerrarExtensiones(); drawDecoder(); inp.focus();
+    return;
+  }
+
+  const a = p[idx], d = a.d;
+  if(SUBTYPE[a.skill] && SUBTYPE[a.skill][ch] && !d.hit)            d.hit  = ch;
+  else if(PLAYERS[a.skill] && PLAYERS[a.skill][ch] && !d.blk)       d.blk  = ch;
+  else if(specialsFor(a.skill, a.ev)[ch] && !d.spec)                d.spec = ch;
+  else d.custom = (d.custom||'') + ch;
+
+  inp.value = p.map(fmt).join('.');
+  try{ inp.setSelectionRange(inp.value.length, inp.value.length); }catch(_){}
   cerrarExtensiones(); drawDecoder(); inp.focus();
 }
 
@@ -3509,10 +3586,11 @@ document.addEventListener('keydown', e=>{
        · si hay un código seleccionado del medio -> borra ése
        · si no hay nada seleccionado -> borra el ÚLTIMO (deshacer rápido)
      Si estás escribiendo un código, Backspace sigue borrando letras normal. */
+    /* Backspace con el campo vacío borraba el último código sin preguntar, y
+     scouteando se aprieta sin querer todo el tiempo. Ahora sólo borra el que
+     esté seleccionado. Para el último sigue estando Ctrl+Z. */
   if(e.key==='Backspace' && !document.getElementById('code').value.trim() && M.codes.length){
-    e.preventDefault();
-    if(SEL_I>=0) borrarEn(SEL_I, true);  /* el que elegiste del medio, sin preguntar */
-    else undoLast();                   /* el último, sin seleccionar nada */
+    if(SEL_I>=0){ e.preventDefault(); borrarEn(SEL_I, true); }
     return;
   }
   if(e.key==='Enter' && SEL_I>=0 && !document.getElementById('code').value.trim()){ e.preventDefault(); editCode(SEL_I); return; }
@@ -3628,7 +3706,13 @@ document.addEventListener('keydown', e=>{
       const np=pv+ev.length; try{ inp.setSelectionRange(np,np); }catch(_){}
       drawDecoder(); return; } }
 });
-document.getElementById('code').addEventListener('input', function(){ drawDecoder(); drawPickers(); pintarEspejo(); });
+document.getElementById('code').addEventListener('input', function(){
+  /* Elegir la extensión tipeando la letra tiene que cerrar el menú, igual que
+     hacer clic en el botón. */
+  if(typeof EXT_MODO !== 'undefined' && EXT_MODO) cerrarExtensiones();
+  drawDecoder(); drawPickers(); pintarEspejo();
+  if(typeof aplicarDescripcion === 'function') aplicarDescripcion();
+});
 document.getElementById('e-code').addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); saveEdit(); } });
 
 /* ============================================================
@@ -5285,6 +5369,30 @@ function exportDVW(modo){
   toast('Archivo descargado');
 
   terminarEnCurso();   /* ya exportado: sale de la nube */
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MOSTRAR O NO LA DESCRIPCIÓN DE LA JUGADA
+   Las fichas de colores ayudan al que recién empieza y le tapan pantalla al
+   que ya scoutea. Se puede apagar, y queda apagado para la próxima vez.
+   ══════════════════════════════════════════════════════════════════════════ */
+let DESC_VISIBLE = true;
+try{ DESC_VISIBLE = localStorage.getItem('pv_desc') !== '0'; }catch(_){}
+
+function aplicarDescripcion(){
+  const d = document.getElementById('dec');
+  const h = document.getElementById('hint');
+  const b = document.getElementById('descbtn');
+  if(d) d.style.display = DESC_VISIBLE ? '' : 'none';
+  if(h) h.style.display = DESC_VISIBLE ? '' : 'none';
+  if(b) b.textContent = DESC_VISIBLE ? 'Ocultar la descripción' : 'Mostrar la descripción';
+}
+
+function toggleDescripcion(){
+  DESC_VISIBLE = !DESC_VISIBLE;
+  try{ localStorage.setItem('pv_desc', DESC_VISIBLE ? '1' : '0'); }catch(_){}
+  aplicarDescripcion();
+  if(typeof volverAlTipeo === 'function') volverAlTipeo();
 }
 
 function toggleDetalle(){
