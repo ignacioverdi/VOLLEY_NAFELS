@@ -2390,10 +2390,36 @@ function plQuitar(side, i){
   plPintar(side);
 }
 
+/* En un entrenamiento no hay rival: se entrena contra uno mismo. La columna
+   del visitante aparecia igual, con el nombre del ultimo rival cargado y seis
+   casilleros vacios, y confunde justo cuando hay que revisar rapido que esten
+   todos con su puesto.
+
+   El panel ya sabe cuando es un entrenamiento —lo usa para cargar todas las
+   acciones como locales— asi que alcanza con preguntarselo.
+
+   Se esconde, no se borra: los datos del rival quedan intactos. */
+var PLANTEL_SOLO_LOCAL = true;
+
+function _plSoloLocal(){
+  try{ return PLANTEL_SOLO_LOCAL && unSoloEquipo(); }catch(e){ return false; }
+}
+
 function abrirPlanteles(){
-  ['home','away'].forEach(s => { plCargar(s); plPintar(s); });
+  const solo = _plSoloLocal();
+  (solo ? ['home'] : ['home','away']).forEach(s => { plCargar(s); plPintar(s); });
+
+  /* La columna del visitante. El titulo vive adentro de un .pl-col junto con
+     su lista y su boton, asi que escondiendo esa caja se va todo junto. */
+  try{
+    const tit = document.getElementById('pl-ta');
+    const caja = tit ? (tit.closest('.pl-col') || tit.parentElement) : null;
+    if(caja) caja.style.display = solo ? 'none' : '';
+  }catch(e){}
+
   const th = document.getElementById('pl-th'), ta = document.getElementById('pl-ta');
-  if(th) th.textContent = M.home.name || 'Local';
+  if(th) th.textContent = solo ? (M.home.name || 'Plantel')
+                               : (M.home.name || 'Local');
   if(ta) ta.textContent = M.away.name || 'Visitante';
   document.getElementById('m-planteles').classList.add('open');
 }
