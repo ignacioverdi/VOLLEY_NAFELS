@@ -67,6 +67,10 @@
 .crow .lc-ev { width:16px; font-size:14px; }
 .crow .lc-cb { width:30px; color:#a78bfa; font-weight:600; text-align:left; padding-left:4px; }
 .crow .lc-zn { width:46px; color:#60a5fa; font-weight:600; text-align:left; }
+
+/* El extendido, al final de cada linea y en otro color: se distingue del
+   codigo base sin tener que leerlo entero. */
+.crow .lc-ex { width:34px; color:#f59e0b; font-weight:700; text-align:left; padding-left:4px; }
 </style>
 <style>
 :root{
@@ -2812,6 +2816,69 @@ function abrirExtensiones(){
   if(e) e.classList.add('ext');
   volverAlTipeo();
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   EL MENU EXTENDIDO ESCUCHA EL TECLADO
+   --------------------------------------------------------------------------
+   Con Ctrl+Espacio se abre el menu de extensiones. Hasta ahora, la tecla que
+   se apretaba para elegir no llegaba al menu: la agarraba antes el panel, que
+   la tomaba como parte del codigo.
+
+   Escribiendo  11W4-7  Ctrl+Espacio  3  el "3" entraba como zona y pisaba la
+   direccion del ataque. Y al elegir "O" para una recepcion de arriba, la tecla
+   caia en el atajo de evaluacion y ponia "+".
+
+   Con el mouse andaba bien porque el clic si pasa por ponerExt(), que sabe a
+   que campo va cada valor. Esto hace que el teclado haga lo mismo.
+
+   Se engancha ANTES que el resto —en la fase de captura— para llegar primero.
+   ══════════════════════════════════════════════════════════════════════════ */
+var EXT_TECLADO = true;
+
+function _extAbierto(){
+  var b = document.getElementById('extbox') ||
+          document.querySelector('.extbox, #ext-box, .extensiones');
+  if(!b) return null;
+  var v = window.getComputedStyle ? window.getComputedStyle(b) : null;
+  var visible = b.offsetParent !== null &&
+                (!v || (v.display !== 'none' && v.visibility !== 'hidden'));
+  return visible ? b : null;
+}
+
+document.addEventListener('keydown', function(e){
+  if(!EXT_TECLADO) return;
+  var caja = _extAbierto();
+  if(!caja) return;
+
+  /* Escape cierra, como en cualquier menu */
+  if(e.key === 'Escape'){
+    e.preventDefault(); e.stopPropagation();
+    cerrarExtensiones();
+    var inp = document.getElementById('code'); if(inp) inp.focus();
+    return;
+  }
+
+  /* una sola tecla, sin Ctrl ni Alt */
+  if(e.ctrlKey || e.altKey || e.metaKey) return;
+  if(!e.key || e.key.length !== 1) return;
+
+  /* ¿esa tecla es una de las opciones que ofrece el menu? */
+  var letra = e.key.toUpperCase();
+  var botones = caja.querySelectorAll('button');
+  for(var i = 0; i < botones.length; i++){
+    var k = botones[i].querySelector('.ek');
+    if(!k) continue;
+    if(String(k.textContent).trim().toUpperCase() === letra){
+      e.preventDefault();
+      e.stopPropagation();
+      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+      botones[i].click();          /* el mismo camino que el mouse */
+      return;
+    }
+  }
+  /* si no es ninguna, el menu la deja pasar: puede ser una correccion */
+}, true);   /* true = en captura, para llegar antes que los atajos del panel */
+
 function cerrarExtensiones(){
   document.getElementById('extmenu').classList.remove('open');
   EXT_MODO = false;
@@ -3469,18 +3536,26 @@ function renderRot(side){
    Los ~ no se muestran. Son separadores del archivo, no informacion.
    ══════════════════════════════════════════════════════════════════════════ */
 function partirCodigo(cod){
+  /* Cada dato vive en un lugar fijo de la cola:
+
+         combinacion(2) destinatario desde hacia subzona golpe bloqueo final
+
+     Antes se leian solo las zonas y el extendido quedaba invisible: el tipo de
+     golpe, cuantos bloqueadores habia y como termino la jugada no aparecian en
+     ninguna parte, asi que no habia forma de revisar si quedaron bien. */
   var c = String(cod || '');
   var m = c.match(/^([*a])(\d\d|-1)([SRABDEF])(.)(.)(.*)$/);
   if(!m) return null;
   var cola = m[6] || '';
-  var combo = cola.slice(0,2).replace(/~/g,'');
-  var sz    = (cola.charAt(3) || '').replace('~','');
-  var ez    = (cola.charAt(4) || '').replace('~','');
+  var en = function(i){ return (cola.charAt(i) || '').replace('~',''); };
   return {
     eq: m[1], num: m[2], skill: m[3],
     tipo: (m[4]||'').replace('~',''),
     ev: (m[5]||'').replace('~',''),
-    combo: combo, sz: sz, ez: ez
+    combo: cola.slice(0,2).replace(/~/g,''),
+    dest: en(2),
+    sz: en(3), ez: en(4), subz: en(5),
+    hit: en(6), blk: en(7), spec: en(8)
   };
 }
 
@@ -3502,6 +3577,13 @@ function codigoEnColumnas(cod){
   if(p.sz && p.ez)      zonas = p.sz + '\u2192' + p.ez;
   else if(p.ez)         zonas = '\u2192' + p.ez;
   else if(p.sz)         zonas = p.sz;
+  /* El extendido, en una columna aparte y con su propio color: es lo que se
+     carga despues del codigo base y conviene distinguirlo de un vistazo.
+
+         H P T     como pego              (o L R W O en recepcion)
+         0 1 2 3   cuantos bloqueadores
+         B N C ..  como termino la jugada  */
+  var ext = [p.hit, p.blk, p.spec].filter(Boolean).join('');
   return '' +
     '<span class="lc lc-eq">'    + p.eq    + '</span>' +
     '<span class="lc lc-num">'   + p.num   + '</span>' +
@@ -3509,7 +3591,9 @@ function codigoEnColumnas(cod){
     '<span class="lc lc-tp">'    + p.tipo  + '</span>' +
     '<span class="lc lc-ev" style="color:' + col + '">' + p.ev + '</span>' +
     '<span class="lc lc-cb">'    + p.combo + '</span>' +
-    '<span class="lc lc-zn">'    + zonas   + '</span>';
+    '<span class="lc lc-zn">'    + zonas   + '</span>' +
+    '<span class="lc lc-ex" title="tipo de golpe · bloqueadores · como termino">'
+      + ext + '</span>';
 }
 
 function renderCodes(){
