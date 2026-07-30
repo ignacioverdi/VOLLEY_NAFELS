@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Dashboard Entrenador — NAFELS Voley</title>
+<title>Dashboard Entrenador — CASLA Voley</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="datos_historial.js"  onerror="void 0"></script>
 <script src="objetivos_config.js" onerror="void 0"></script>
@@ -107,7 +107,7 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 0%,rgb
 </style>
 <script>
 // ================================================================
-// NAFELS VOLEY — Utils compartidos
+// CASLA VOLEY — Utils compartidos
 // Cargado por todas las páginas
 // ================================================================
 
@@ -206,7 +206,7 @@ window.OBJETIVOS_CONFIG={metas:{
     <a href="index.html" class="back-btn">← Hub</a>
     <div>
       <div class="hdr-title">📊 Dashboard Entrenador</div>
-      <div style="font-size:9px;color:var(--mut);letter-spacing:2px">NAFELS VOLEY · División de Honor 2026</div>
+      <div style="font-size:9px;color:var(--mut);letter-spacing:2px">CASLA VOLEY · División de Honor 2026</div>
     </div>
   </div>
   <div id="nav-gen" style="font-size:10px;color:var(--mut);letter-spacing:1px"></div>
