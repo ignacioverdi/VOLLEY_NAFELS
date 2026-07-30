@@ -71,6 +71,9 @@
 /* El extendido, al final de cada linea y en otro color: se distingue del
    codigo base sin tener que leerlo entero. */
 .crow .lc-ex { width:34px; color:#f59e0b; font-weight:700; text-align:left; padding-left:4px; }
+
+/* Los separadores del formato interno, apagados: estan pero no distraen. */
+#code-espejo .sep{ color:rgba(148,163,184,.22); }
 </style>
 <style>
 :root{
@@ -2179,9 +2182,17 @@ function pintarEspejo(){
      queda siempre transparente para que no se vean las dos capas superpuestas. */
   var cls = inp.classList.contains('bad')  ? 'malo'
           : inp.classList.contains('warn') ? 'aviso' : '';
-  var base = esc(raw.slice(0,6)), ext = esc(raw.slice(6));
-  e.innerHTML = '<span class="'+cls+'">'+base+'</span>'
-              + (ext ? '<span class="'+(cls||'ext')+'">'+ext+'</span>' : '');
+  /* Los tildes son los separadores del formato interno: marcan los casilleros
+     que quedaron vacios. Adentro del archivo hacen falta, pero en la barra solo
+     ensucian —"*11AT-W4~47~~3" cuesta leerlo de un vistazo mientras se
+     scoutea—. Se muestran como un espacio finito y apagado: la alineacion se
+     mantiene, y el ojo va directo a lo que importa. */
+  function pintar(t){
+    return esc(t).replace(/~/g, '<span class="sep">~</span>');
+  }
+  var base = raw.slice(0,6), ext = raw.slice(6);
+  e.innerHTML = '<span class="'+cls+'">'+pintar(base)+'</span>'
+              + (ext ? '<span class="'+(cls||'ext')+'">'+pintar(ext)+'</span>' : '');
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
