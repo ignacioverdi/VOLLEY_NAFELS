@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>EQUIPO — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="plantel_nafels.js" onerror="void 0"></script>
 <script src="lang.js" onerror="void 0"></script>
 <script src="utils.js" onerror="void 0"></script>
 <script src="../../datos_seguros.js"></script>
@@ -112,7 +111,7 @@ var EQUIPO_DEMO = {
   ]
 };
 
-var DATA = ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA) || EQUIPO_DEMO;
+var DATA = window.EQUIPO_DATA || EQUIPO_DEMO;
 
 var POS_COLOR = {
   'ARMADOR':'#f59e0b','CENTRAL':'#f97316',

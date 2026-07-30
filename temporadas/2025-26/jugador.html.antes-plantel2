@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 
 <!-- Datos (cada uno se carga si existe; si no, el onerror lo deja en null) -->
-<script src="plantel_nafels.js" onerror="void 0"></script>
 <script src="game_plans.js" onerror="void 0"></script>
 <script src="datos_casla.js" onerror="void 0"></script>
 <script src="objetivos_config.js" onerror="void 0"></script>
@@ -405,7 +404,7 @@ function renderComparativaJugador(){
   var eqv=objGetVals(null);
   var pos=(jugador&&jugador.pos)||cur.pos||'';
 
-  // Mapa número→posición oficial (del EQUIPO_DEMO/((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA))
+  // Mapa número→posición oficial (del EQUIPO_DEMO/EQUIPO_DATA)
   var POS_BY_NUM={};
   (eqData.jugadores||[]).forEach(function(p){ POS_BY_NUM[p.num]=p.pos; });
   function posDe(x){ return POS_BY_NUM[x.num] || x.pos || ''; }
@@ -508,7 +507,7 @@ var EQUIPO_DEMO = { jugadores: [
   {num:19,nombre:"DIAZ BOLLI",pos:"ARMADOR",pais:"🇦🇷"},
   {num:20,nombre:"FREDDIE",pos:"PUNTA",pais:"🇦🇷"}
 ]};
-var eqData = ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA) || EQUIPO_DEMO;
+var eqData = window.EQUIPO_DATA || EQUIPO_DEMO;
 var jugador = eqData.jugadores.find(function(j){ return j.num === numJug; });
 if(!jugador && eqData.jugadores.length>0) jugador = eqData.jugadores[0];
 

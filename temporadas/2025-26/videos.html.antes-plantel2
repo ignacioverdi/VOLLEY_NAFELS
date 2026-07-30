@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Videos — NAFELS VOLEY</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="plantel_nafels.js" onerror="void 0"></script>
 <script src="datos_videos.js" onerror="void 0"></script>
 <script src="../../datos_seguros.js"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
@@ -214,7 +213,7 @@ var CATS = [
    esta página se actualiza sola — no hay que tocar nada acá. */
 var PLANTEL = {}, POSICIONES = {};
 (function(){
-  var roster = (((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA) && ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA).jugadores) ? ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA).jugadores : [];
+  var roster = (window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores) ? window.EQUIPO_DATA.jugadores : [];
   roster.forEach(function(j){
     if(j && j.num != null){
       PLANTEL[j.num]    = j.nombre || ('Jugador #'+j.num);
