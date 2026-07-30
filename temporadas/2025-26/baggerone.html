@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>BAGGERONE — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="plantel_nafels.js" onerror="void 0"></script>
 <script src="lang.js" onerror="void 0"></script>
 <script src="../../datos_seguros.js"></script>
   <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
@@ -284,8 +283,8 @@ var JUGADORES_DEFAULT = [
     {num:20,nombre:"SCHMID J"}];
 
 function getJugadores(){
-  if(((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA) && ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA).jugadores){
-    return ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA).jugadores.map(function(j){
+  if(window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores){
+    return window.EQUIPO_DATA.jugadores.map(function(j){
       return {num:j.num, nombre:j.nombre, foto:j.foto||null};
     });
   }
@@ -435,7 +434,7 @@ function renderPodio(){
     // Avatar
     var av = document.createElement('div');
     av.className = 'podio-avatar';
-    // Actualizar foto desde ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA)
+    // Actualizar foto desde EQUIPO_DATA
     var jugEq = JUGADORES.find(function(jj){ return jj.nombre===j.nombre; });
     var fotoUrl = jugEq && jugEq.foto ? jugEq.foto : null;
     if(fotoUrl){
@@ -642,8 +641,8 @@ renderTabla();
 renderPodio();
 renderHistorial();
 
-// Actualizar fotos si llegan de ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA)
-if(((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA)){
+// Actualizar fotos si llegan de EQUIPO_DATA
+if(window.EQUIPO_DATA){
   JUGADORES = getJugadores();
   standings.forEach(function(s){
     var j = JUGADORES.find(function(jj){ return jj.nombre===s.nombre; });

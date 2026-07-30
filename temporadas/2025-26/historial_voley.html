@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Mi Performance — Nafels Voley</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="plantel_nafels.js" onerror="void 0"></script>
 <script src="../../datos_seguros.js"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
@@ -174,7 +173,7 @@ var POS_COLOR={ARMADOR:'#F59E0B',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97
 
 // ── INIT ──────────────────────────────────────────────────────────────
 function tryInit(n){
-  var ready = (typeof Nafels_JUGADORES!=='undefined') || (typeof PARTIDOS_JUGADORES!=='undefined') || (((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA)&&((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA).jugadores);
+  var ready = (typeof Nafels_JUGADORES!=='undefined') || (typeof PARTIDOS_JUGADORES!=='undefined') || (window.EQUIPO_DATA&&window.EQUIPO_DATA.jugadores);
   if(ready){
     buildSelector();
     var p=new URLSearchParams(window.location.search);
@@ -182,7 +181,7 @@ function tryInit(n){
     if(n2){ selectJug(n2); }
     else {
       // auto-select first player with match data
-      var jugs=(typeof PARTIDOS_JUGADORES!=='undefined')?PARTIDOS_JUGADORES:(((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA)?((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA).jugadores:[]);
+      var jugs=(typeof PARTIDOS_JUGADORES!=='undefined')?PARTIDOS_JUGADORES:(window.EQUIPO_DATA?window.EQUIPO_DATA.jugadores:[]);
       if(jugs && jugs.length) selectJug(jugs[0].num);
     }
   }
@@ -207,7 +206,7 @@ function buildSelector(){
   var jugs=[];
   if(typeof Nafels_JUGADORES!=='undefined') jugs=Nafels_JUGADORES;
   else if(typeof PARTIDOS_JUGADORES!=='undefined') jugs=PARTIDOS_JUGADORES;
-  else if(((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA)&&((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA).jugadores) jugs=((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA).jugadores;
+  else if(window.EQUIPO_DATA&&window.EQUIPO_DATA.jugadores) jugs=window.EQUIPO_DATA.jugadores;
   el.innerHTML=jugs.map(function(j){
     var nm=j.nombre?j.nombre.replace(/^\d+\s*/,'').split(' ')[0]:'#'+j.num;
     return '<button class="jbtn" onclick="selectJug('+j.num+')">#'+j.num+' '+nm+'</button>';
@@ -216,7 +215,7 @@ function buildSelector(){
 
 function selectJug(num){
   G.num = num;
-  var jugs=(typeof PARTIDOS_JUGADORES!=='undefined')?PARTIDOS_JUGADORES:(((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA)?((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores&&window.PLANTEL_NAFELS)||window.EQUIPO_DATA).jugadores:[]);
+  var jugs=(typeof PARTIDOS_JUGADORES!=='undefined')?PARTIDOS_JUGADORES:(window.EQUIPO_DATA?window.EQUIPO_DATA.jugadores:[]);
   G.jug = jugs.find(function(j){return j.num===num;}) || {num:num,nombre:'#'+num};
   // Set accumulated data for ataque/saque/recepcion tabs
   G.partJug = (typeof PARTIDOS_JUGADORES!=='undefined') ? PARTIDOS_JUGADORES.find(function(j){return j.num===num;}) : null;
@@ -958,7 +957,7 @@ function setObjTipo(tipo, btn){
       <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
       <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">NLA Suiza 2025/26 · temporada archivada</div>
+    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">NLA Suiza 2026/27 · temporada en curso</div>
   </div>
 </div>
 <script>
