@@ -1,5 +1,3 @@
-/* game_plans.js — vacio.
-   Esta temporada no genero estos datos: es anterior a esa pantalla,
-   o depende de un motor que este club todavia no tiene.
-   El archivo existe para que la pantalla abra sin error. */
-window.GAME_PLANS = {};
+/* game_plans.js — los game plans guardados.
+   Vacío, pero con la forma que espera la app. */
+window.GAME_PLANS = { generado: "", planes: [] };
