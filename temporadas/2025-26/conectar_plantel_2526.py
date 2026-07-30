@@ -70,14 +70,21 @@ for p in sorted(glob.glob(os.path.join(AQUI, '*.html'))):
 
     if DATOS in s:
         continue                      # ya la tiene
-    if 'EQUIPO_DATA' not in s:
+    # Las paginas que vienen de otra app buscan el plantel con otro nombre
+    # —CASLA_JUGADORES— asi que hay que contemplarlo o quedan sin plantel.
+    import re as _re
+    if not _re.search(r'EQUIPO_DATA|[A-Z]+_JUGADORES|PLANTEL_[A-Z]+', s):
         continue                      # no muestra el plantel
 
-    # el ancla: justo después de abrirDatos()
+    # El ancla: justo despues de abrirDatos(), que es donde el archivo cifrado
+    # deja su contenido. Si la pagina no lo tiene —las que vienen de una app
+    # sin cifrado— se pone despues del ultimo archivo de datos que cargue.
     m = re.search(r'<script>\s*abrirDatos\(\)\s*;?\s*</script>', s)
     if not m:
-        # si no está, después del archivo cifrado
         m = re.search(r'<script src="datos_equipo\.js(?:\.enc)?"[^>]*></script>', s)
+    if not m:
+        todos = list(re.finditer(r'<script src="[^"]+\.js(?:\.enc)?"[^>]*></script>', s))
+        m = todos[-1] if todos else None
     if not m:
         print('     %-26s no encontre donde ponerla' % nombre[:26])
         continue

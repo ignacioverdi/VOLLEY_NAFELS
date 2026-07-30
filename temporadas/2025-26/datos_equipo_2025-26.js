@@ -45,6 +45,18 @@ window.EQUIPO_DATA = {
   ]
 };
 
+/* ── EL MISMO PLANTEL, CON LOS OTROS NOMBRES ────────────────────────────────
+   Las pantallas que vienen de la app de CASLA buscan el plantel como
+   CASLA_JUGADORES, y las de este club como PLANTEL_NAFELS. Es la misma lista:
+   se publica con los tres nombres para que la encuentre cualquiera de las dos,
+   sin tener que tocar el código de ninguna pantalla.
+
+   Es lo que evita el problema de la vez pasada: reescribir referencias adentro
+   de las páginas rompió cinco de ellas. Acá no se toca ni una línea suya. */
+window.CASLA_JUGADORES  = window.EQUIPO_DATA.jugadores;
+window.NAFELS_JUGADORES = window.EQUIPO_DATA.jugadores;
+window.PLANTEL_NAFELS   = window.EQUIPO_DATA;
+
 /* Los nombres de pila, por si alguna pantalla los quiere:
    1 Linus · 3 Tom · 4 Ezequiel · 5 Joachim · 6 Denis · 7 Roy
    8 Jonas · 9 Nathan · 10 Dejan · 11 Christian · 14 Manuel · 15 Risto */

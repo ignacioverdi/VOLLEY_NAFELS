@@ -9,8 +9,6 @@
 <script src="datos_partidos.js.enc" onerror="void 0"></script>
 <script src="datos_historial.js" onerror="void 0"></script>
 <script src="objetivos_config.js" onerror="void 0"></script>
-<script src="datos_equipo_2025-26.js" onerror="void 0"></script>
-
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#07080F;--card:#0D0E1A;--b:rgba(255,255,255,.06);--b2:rgba(255,255,255,.12);

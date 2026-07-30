@@ -1539,8 +1539,6 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
 <script src="onesignal_push.js" defer></script>
-<script src="datos_equipo_2025-26.js" onerror="void 0"></script>
-
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Game Plan + Cortes de video (visor completo).
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
