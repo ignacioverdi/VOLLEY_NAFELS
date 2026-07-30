@@ -2172,9 +2172,29 @@ function ajustarTamCodigo(raw){
 
 /* Pinta el espejo: los primeros 6 caracteres son el codigo base
    (equipo + numero + accion + tipo + evaluacion) y el resto es el extendido. */
+/* Lo que el scout venia escribiendo, antes de que el menu extendido reescriba
+   el campo en su forma completa. Se usa solo para mostrar: el codigo que se
+   guarda es siempre el completo. */
+var EXT_TIPEADO = null;
+
 function pintarEspejo(){
   var e=document.getElementById('code-espejo'); if(!e) return;
   var inp=document.getElementById('code'), raw=inp.value;
+
+  /* Si el campo tiene la forma completa que dejo el menu extendido, se muestra
+     lo que se habia tipeado mas el valor elegido. Asi la barra se lee igual que
+     siempre y el codigo guardado sigue siendo el correcto. */
+  if(EXT_TIPEADO && EXT_TIPEADO.completo === raw){
+    var esc0 = function(t){ return String(t).replace(/&/g,'&amp;')
+                              .replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
+    var cls0 = inp.classList.contains('bad')  ? 'malo'
+             : inp.classList.contains('warn') ? 'aviso' : '';
+    ajustarTamCodigo(EXT_TIPEADO.texto + EXT_TIPEADO.extra);
+    e.innerHTML = '<span class="'+cls0+'">' + esc0(EXT_TIPEADO.texto) + '</span>'
+                + '<span class="'+(cls0||'ext')+'">' + esc0(EXT_TIPEADO.extra) + '</span>';
+    return;
+  }
+  EXT_TIPEADO = null;
   ajustarTamCodigo(raw);
   if(!raw){ e.innerHTML=''; return; }
   function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -2955,7 +2975,14 @@ function ponerExt(ch){
   else if(specialsFor(a.skill, a.ev)[ch] && !d.spec)                d.spec = ch;
   else d.custom = (d.custom||'') + ch;
 
+  /* Se guarda lo que venia escrito y lo que se acaba de elegir. El campo pasa a
+     tener la forma completa —hace falta para que cada valor caiga en su
+     casillero— pero la barra sigue mostrando lo corto, que es lo que se lee
+     mientras se scoutea. En un punto largo la forma completa es ilegible. */
+  EXT_TIPEADO = { texto: inp.value, extra: (EXT_TIPEADO && EXT_TIPEADO.texto === inp.value
+                                           ? (EXT_TIPEADO.extra || '') : '') + ch };
   inp.value = p.map(fmt).join('.');
+  EXT_TIPEADO.completo = inp.value;
   try{ inp.setSelectionRange(inp.value.length, inp.value.length); }catch(_){}
   /* pintarEspejo() vuelve a colorear la barra. Sin esto, el valor que se acaba
      de elegir no se ve hasta apretar Enter: el texto cambia pero nadie lo
