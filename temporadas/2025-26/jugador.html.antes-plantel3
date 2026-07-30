@@ -27,8 +27,6 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <script src="datos_prep_fisica.js" onerror="window.PREP_DATA=null"></script>
 <script src="datos_video_25-26.js.enc" defer onerror="void 0" onload="window.VIDEO_READY&&window.VIDEO_READY()"></script>
   <script>abrirDatos();</script>
-<script src="datos_equipo_2025-26.js" onerror="void 0"></script>
-
 <script src="datos_video_26-27.js" defer onerror="void 0"></script>
 <script src="datos_video_27-28.js" defer onerror="void 0"></script>
 

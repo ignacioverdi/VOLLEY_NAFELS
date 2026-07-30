@@ -310,8 +310,6 @@ else   { w('datos_partidos.js'); w('datos_recepcion.js'); }
 <script src="../../datos_seguros.js"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="datos_equipo_2025-26.js" onerror="void 0"></script>
-
 <script src="modo_toggle.js" onerror="void 0"></script>
 <!-- datos_recepcion.js: lo carga el selector de modo (arriba) -->
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
