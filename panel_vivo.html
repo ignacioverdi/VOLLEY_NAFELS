@@ -2903,34 +2903,10 @@ function _extAbierto(){
   return b;
 }
 
-/* ── AVISO TEMPORAL ────────────────────────────────────────────────────────
-   Muestra en pantalla que hace el menu con cada tecla. Es para encontrar un
-   problema puntual: cuando este resuelto se saca. */
-function _avisoExt(t){
-  try{
-    var d=document.getElementById('aviso-ext');
-    if(!d){
-      d=document.createElement('div'); d.id='aviso-ext';
-      d.style.cssText='position:fixed;bottom:12px;left:12px;z-index:99999;'+
-        'background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.5);'+
-        'color:#f59e0b;border-radius:8px;padding:6px 12px;font-family:monospace;'+
-        'font-size:11px;font-weight:700;pointer-events:none;max-width:60vw';
-      document.body.appendChild(d);
-    }
-    d.textContent = t;
-    clearTimeout(d._t); d._t=setTimeout(function(){ d.textContent=''; }, 4000);
-  }catch(_){}
-}
-
 document.addEventListener('keydown', function(e){
   if(!EXT_TECLADO) return;
   var caja = _extAbierto();
-  if(!caja){
-    if(e.key && e.key.length===1 && !e.ctrlKey && !e.altKey)
-      _avisoExt('tecla "'+e.key+'" · el menu esta CERRADO');
-    return;
-  }
-  _avisoExt('tecla "'+e.key+'" · el menu esta abierto');
+  if(!caja) return;
 
   /* Escape cierra, como en cualquier menu */
   if(e.key === 'Escape'){
@@ -2951,19 +2927,13 @@ document.addEventListener('keydown', function(e){
     var k = botones[i].querySelector('.ek');
     if(!k) continue;
     if(String(k.textContent).trim().toUpperCase() === letra){
-      _avisoExt('tecla "'+e.key+'" · encontre el boton, lo aprieto');
       e.preventDefault();
       e.stopPropagation();
       if(e.stopImmediatePropagation) e.stopImmediatePropagation();
       botones[i].click();          /* el mismo camino que el mouse */
-      setTimeout(function(){
-        var c=document.getElementById('code');
-        _avisoExt('quedo: ' + (c ? c.value : '?'));
-      }, 60);
       return;
     }
   }
-  _avisoExt('tecla "'+e.key+'" · NO es ninguna de las '+botones.length+' opciones');
   /* si no es ninguna, el menu la deja pasar: puede ser una correccion */
 }, true);   /* true = en captura, para llegar antes que los atajos del panel */
 
@@ -3924,8 +3894,17 @@ document.addEventListener('keydown', e=>{
   if((e.ctrlKey||e.metaKey) && (e.key==='r'||e.key==='R')){ e.preventDefault(); buscarCodigo(); return; }        /* buscar */
   if((e.ctrlKey||e.metaKey) && (e.key==='u'||e.key==='U')){ e.preventDefault(); actualizarTablas(); return; }    /* = UPDATE */
 
-  /* manual 2.6 [Add]: atajos propios. Tienen prioridad sobre todo lo demás. */
-  const at = atajoDe(e);
+  /* manual 2.6 [Add]: atajos propios. Tienen prioridad sobre todo lo demás...
+     salvo cuando el menú extendido está abierto.
+
+     Si el scout abrió el menú es porque quiere elegir una de SUS opciones, y
+     esas tienen que ganar. Con un atajo en la misma tecla —por ejemplo la "O",
+     que en el menú es "recepción de arriba"— el atajo se la quedaba y el valor
+     nunca se guardaba. */
+  const menuExt = document.getElementById('extmenu');
+  const extAbierto = (typeof EXT_MODO !== 'undefined' && EXT_MODO) ||
+                     (menuExt && menuExt.classList.contains('open'));
+  const at = extAbierto ? null : atajoDe(e);
   if(at){ e.preventDefault(); aplicarAtajo(at); return; }
 
   /* Teclas de prefijo (manual 2.6). SOLO actúan cuando la tecla configurada
