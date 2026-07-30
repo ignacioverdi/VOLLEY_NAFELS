@@ -2903,10 +2903,34 @@ function _extAbierto(){
   return b;
 }
 
+/* ── AVISO TEMPORAL ────────────────────────────────────────────────────────
+   Muestra en pantalla que hace el menu con cada tecla. Es para encontrar un
+   problema puntual: cuando este resuelto se saca. */
+function _avisoExt(t){
+  try{
+    var d=document.getElementById('aviso-ext');
+    if(!d){
+      d=document.createElement('div'); d.id='aviso-ext';
+      d.style.cssText='position:fixed;bottom:12px;left:12px;z-index:99999;'+
+        'background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.5);'+
+        'color:#f59e0b;border-radius:8px;padding:6px 12px;font-family:monospace;'+
+        'font-size:11px;font-weight:700;pointer-events:none;max-width:60vw';
+      document.body.appendChild(d);
+    }
+    d.textContent = t;
+    clearTimeout(d._t); d._t=setTimeout(function(){ d.textContent=''; }, 4000);
+  }catch(_){}
+}
+
 document.addEventListener('keydown', function(e){
   if(!EXT_TECLADO) return;
   var caja = _extAbierto();
-  if(!caja) return;
+  if(!caja){
+    if(e.key && e.key.length===1 && !e.ctrlKey && !e.altKey)
+      _avisoExt('tecla "'+e.key+'" · el menu esta CERRADO');
+    return;
+  }
+  _avisoExt('tecla "'+e.key+'" · el menu esta abierto');
 
   /* Escape cierra, como en cualquier menu */
   if(e.key === 'Escape'){
@@ -2927,13 +2951,19 @@ document.addEventListener('keydown', function(e){
     var k = botones[i].querySelector('.ek');
     if(!k) continue;
     if(String(k.textContent).trim().toUpperCase() === letra){
+      _avisoExt('tecla "'+e.key+'" · encontre el boton, lo aprieto');
       e.preventDefault();
       e.stopPropagation();
       if(e.stopImmediatePropagation) e.stopImmediatePropagation();
       botones[i].click();          /* el mismo camino que el mouse */
+      setTimeout(function(){
+        var c=document.getElementById('code');
+        _avisoExt('quedo: ' + (c ? c.value : '?'));
+      }, 60);
       return;
     }
   }
+  _avisoExt('tecla "'+e.key+'" · NO es ninguna de las '+botones.length+' opciones');
   /* si no es ninguna, el menu la deja pasar: puede ser una correccion */
 }, true);   /* true = en captura, para llegar antes que los atajos del panel */
 
