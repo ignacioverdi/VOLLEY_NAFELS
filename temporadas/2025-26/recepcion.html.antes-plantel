@@ -316,8 +316,8 @@ canvas.panel-court{position:absolute;inset:0;width:100%;height:100%;opacity:.28;
 window.RECEPCION_DATA = {};
 
 function cargarRecepcionCasla(){
-  if(typeof ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]) === 'undefined') return;
-  ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]).forEach(function(j){
+  if(typeof CASLA_JUGADORES === 'undefined') return;
+  CASLA_JUGADORES.forEach(function(j){
     if(!j.recepcion || !j.recepcion.flotado) return;
     var apellido = j.nombre.replace(/^\d+\s*/,'').split(' ')[0].toUpperCase();
     var rec = j.recepcion;
@@ -386,10 +386,10 @@ function cargarRecepcionFromSource(jugadores){
     if(!j.recepcion || !j.recepcion.flotado) return;
     var apellido = j.nombre.replace(/^\d+\s*/,'').split(' ')[0].toUpperCase();
     var rec = j.recepcion;
-    // Copy structure from ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]) format
+    // Copy structure from CASLA_JUGADORES format
     if(typeof RECEPCION_DATA !== 'undefined'){
       // Use existing conversion
-      var temp_CASLA = ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]);
+      var temp_CASLA = window.CASLA_JUGADORES;
       window.CASLA_JUGADORES = [j];
       cargarRecepcionCasla();
       window.CASLA_JUGADORES = temp_CASLA;
@@ -708,8 +708,8 @@ function recLoadEnt(nombre){
   if(!src && typeof ENTRENAMIENTOS_JUGADORES !== 'undefined') src = ENTRENAMIENTOS_JUGADORES;
   if(!src) return;
   
-  // Swap ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]), load, restore
-  var orig = ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]);
+  // Swap CASLA_JUGADORES, load, restore
+  var orig = window.CASLA_JUGADORES;
   window.CASLA_JUGADORES = src;
   window.RECEPCION_DATA = {};
   cargarRecepcionCasla();
