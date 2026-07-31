@@ -6951,12 +6951,13 @@ function _filaPintar(){
   if(!c.v){
     h += '';
   } else {
-    /* Con muchas opciones —las combinaciones son 78— la lista va en vertical y
-       con su propia barra: en horizontal ocupa media pantalla y no se lee. */
-    var vert = (c.v.length > 14);
-    h += vert
-      ? '<div id="e-fila-lista" style="display:flex;flex-direction:column;gap:2px;max-height:190px;overflow-y:auto;border:1px solid var(--b2);border-radius:8px;padding:4px">'
-      : '<div style="display:flex;gap:4px;flex-wrap:wrap">';
+    /* Siempre en vertical, como en DataVolley: el codigo a la izquierda y la
+       descripcion al lado, uno abajo del otro. Se lee de un vistazo y no
+       ocupa el ancho de la pantalla. Con muchas opciones aparece la barra. */
+    var vert = true;
+    var alto = (c.v.length > 8) ? 'max-height:190px;overflow-y:auto;' : '';
+    h += '<div id="e-fila-lista" style="display:flex;flex-direction:column;gap:2px;' + alto +
+         'border:1px solid var(--b2);border-radius:8px;padding:4px;width:max-content;min-width:190px;max-width:100%">';
     c.v.forEach(function(o){
       var on = ((d[c.k]||'') === o[0]);
       h += '<button type="button" data-v="' + o[0] + '" onclick="_filaElegir(\'' + o[0] + '\')" style="' +
