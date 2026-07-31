@@ -1673,10 +1673,21 @@ function objBuildSubfiltro(){
 }
 
 function objRenderBaterias(){
-  var jugVals = objGetVals(window._objNombre);
-  var eqVals  = objGetVals(null);
-  renderObjetivosJugador('objetivos-jugador', jugVals, eqVals);
-  /* la comparativa es del perfil del jugador: aca no aplica */
+  /* En el perfil del jugador las baterias van en un contenedor que se llama
+     'objetivos-jugador'. En el analisis el contenedor se llama
+     'objetivos-panel': dibujar en el otro es dibujar en un lugar que no
+     existe, y no aparece nada.
+
+     Se prueba el del analisis primero y, si no esta, el del perfil. Asi la
+     misma funcion sirve en las dos pantallas. */
+  var destino = document.getElementById('objetivos-panel') ? 'objetivos-panel'
+              : (document.getElementById('objetivos-jugador') ? 'objetivos-jugador' : null);
+  if(!destino) return;
+
+  /* en el analisis no hay un jugador elegido: se muestran los del equipo */
+  var eqVals = objGetVals(null);
+  var jugVals = window._objNombre ? objGetVals(window._objNombre) : eqVals;
+  renderObjetivosJugador(destino, jugVals, eqVals);
 }
 
 /* El analisis guarda el partido elegido como la posicion en su lista
