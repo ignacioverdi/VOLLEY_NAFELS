@@ -6973,12 +6973,14 @@ function _filaPintar(){
   h += '</div>';
   caja.innerHTML = h;
 
-  /* si la lista es larga, se desplaza sola hasta el elegido */
+  /* La lista sigue al elegido: al moverse con las flechas, el recuadro verde
+     tiene que quedar siempre a la vista. Antes se calculaba a mano la posicion
+     y con la lista adentro de otra caja el numero salia mal. */
   try{
     var L = document.getElementById('e-fila-lista');
     if(L){
       var b = L.querySelector('button[data-v="' + (d[c.k]||'') + '"]');
-      if(b) L.scrollTop = Math.max(0, b.offsetTop - L.clientHeight/2);
+      if(b && b.scrollIntoView) b.scrollIntoView({block:'nearest', inline:'nearest'});
     }
   }catch(e){}
 }
