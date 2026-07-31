@@ -572,7 +572,11 @@ var AN_SESION    = null;
 var JUG_ACTUAL   = null;
 var JUG_TAB      = 'acum';
 var DATA         = window.HISTORIAL_DATA || null;
-var EQUIPO       = window.EQUIPO_DATA    || null;
+/* El plantel de la temporada manda sobre el del archivo cifrado, que quedo
+   congelado con los jugadores de la temporada siguiente. */
+var EQUIPO       = (window.PLANTEL_NAFELS && (window.PLANTEL_NAFELS.jugadores||[]).length)
+                     ? window.PLANTEL_NAFELS
+                     : (window.EQUIPO_DATA || null);
 
 var POS_COLOR = {
   'ARMADOR':'#f59e0b','CENTRAL':'#f97316',

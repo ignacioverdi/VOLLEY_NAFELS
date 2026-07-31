@@ -490,9 +490,14 @@ var SAQUE_TIPO = 'total';
 var RECEP_TIPO = 'total';
 var ATK_FASE   = 'total';
 
-function setSaqueTipo(t){ SAQUE_TIPO = t; renderTab(); }
-function setRecepTipo(t){ RECEP_TIPO = t; renderTab(); }
-function setAtkFase(t){   ATK_FASE   = t; renderTab(); }
+/* renderTab necesita que le digan que solapa dibujar. Llamarla sin eso no
+   hace nada, y era por lo que los botones no respondian. */
+function _redibujar(){
+  try{ renderTab(typeof TAB_ACTIVO !== 'undefined' ? TAB_ACTIVO : 'saque'); }catch(e){}
+}
+function setSaqueTipo(t){ SAQUE_TIPO = t; _redibujar(); }
+function setRecepTipo(t){ RECEP_TIPO = t; _redibujar(); }
+function setAtkFase(t){   ATK_FASE   = t; _redibujar(); }
 
 function _aplicarSubfiltros(jugs){
   if(SAQUE_TIPO==='total' && RECEP_TIPO==='total' && ATK_FASE==='total') return jugs;
@@ -1681,7 +1686,9 @@ function objGetVals(nombre){
 function renderObjetivosJugador(cid, jugVals, eqVals){
   var el=document.getElementById(cid); if(!el) return;
   var metas=window.OBJETIVOS_CONFIG.metas;
-  var rows=[{label:'Jugador',vals:jugVals,isJug:true},{label:'Equipo',vals:eqVals,isJug:false}];
+  /* En el analisis no hay un jugador elegido: la fila de "Jugador" mostraba lo
+     mismo que la de "Equipo". Se deja una sola. */
+  var rows=[{label:'Equipo',vals:eqVals,isJug:false}];
   var html='<div style="font-family:Barlow Condensed,sans-serif;padding:4px 0 8px">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
     +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">MI PERFORMANCE VS OBJETIVO</div>'
