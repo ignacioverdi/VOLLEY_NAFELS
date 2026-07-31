@@ -423,6 +423,18 @@ window._recPartido = 'acumulado';
 
 
 function defaultReceptores(){
+  /* Los que reciben: las puntas y el libero. Manda el plantel de la temporada
+     —plantel_nafels.js— sobre el archivo cifrado, que quedo congelado con los
+     jugadores de la temporada siguiente. Por eso aparecian Durdos, Roffler y
+     Schmid J, que no jugaron esta. */
+  try{
+    var P = window.PLANTEL_NAFELS && (window.PLANTEL_NAFELS.jugadores || []);
+    if(P && P.length){
+      var q = P.filter(function(j){ return j.pos==='PUNTA' || j.pos==='LIBERO'; })
+               .map(function(j){ return (j.ap || j.nombre || '').toUpperCase(); });
+      if(q.length) return q;
+    }
+  }catch(e){}
   try{
     if(window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores){
       var r = window.EQUIPO_DATA.jugadores
@@ -865,6 +877,7 @@ function recBtnOff(b){ b.classList.remove('on'); }
 
 <script src="lang.js"></script>
 <script src="temporadas_menu.js"></script>
+  <script src="plantel_nafels.js" onerror="void 0"></script>
 </body>
 </html>
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
