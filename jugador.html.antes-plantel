@@ -500,24 +500,8 @@ var numJug = parseInt(params.get('num')) || 0;
 var POS_COLOR = {'ARMADOR':'#f59e0b','CENTRAL':'#f97316','PUNTA':'#22c55e','OPUESTO':'#818cf8','LIBERO':'#06b6d4'};
 
 var EQUIPO_DEMO = {
-  /* El plantel del club. De aca sacan los nombres las pantallas cuando los
-     datos estan cifrados y no se abren: no es una lista de ejemplo. */
-  jugadores: [
-    {num:1, nombre:"DURDOS", pos:"PUNTA", foto:null, pais:"", altura:"", edad:0},
-    {num:2, nombre:"BRUDERER", pos:"LIBERO", foto:null, pais:"", altura:"", edad:0},
-    {num:3, nombre:"SCHWITTER", pos:"OPUESTO", foto:null, pais:"", altura:"", edad:0},
-    {num:4, nombre:"VAZQUEZ", pos:"ARMADOR", foto:null, pais:"", altura:"", edad:0},
-    {num:5, nombre:"CLEMENT", pos:"CENTRAL", foto:null, pais:"", altura:"", edad:0},
-    {num:7, nombre:"SCHMID R", pos:"CENTRAL", foto:null, pais:"", altura:"", edad:0},
-    {num:9, nombre:"NORRIS", pos:"OPUESTO", foto:null, pais:"", altura:"", edad:0},
-    {num:10, nombre:"BOGDANOVSKI", pos:"PUNTA", foto:null, pais:"", altura:"", edad:0},
-    {num:11, nombre:"BARTHOLET", pos:"PUNTA", foto:null, pais:"", altura:"", edad:0},
-    {num:12, nombre:"JOHANSSON", pos:"CENTRAL", foto:null, pais:"", altura:"", edad:0},
-    {num:13, nombre:"STEIMANN", pos:"ARMADOR", foto:null, pais:"", altura:"", edad:0},
-    {num:17, nombre:"ROFFLER", pos:"PUNTA", foto:null, pais:"", altura:"", edad:0},
-    {num:20, nombre:"SCHMID J", pos:"LIBERO", foto:null, pais:"", altura:"", edad:0}
-  ]
-};
+  /* vacia: antes traia el plantel del club de origen */
+  jugadores: []};
 var eqData = window.EQUIPO_DATA || EQUIPO_DEMO;
 var jugador = eqData.jugadores.find(function(j){ return j.num === numJug; });
 if(!jugador && eqData.jugadores.length>0) jugador = eqData.jugadores[0];
