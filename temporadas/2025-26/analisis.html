@@ -475,86 +475,9 @@ function jugadorTd(j,showPJ){
 }
 function thSec(txt,cols,color){ return '<th colspan="'+cols+'" class="sec" style="color:'+color+';border-left:1px solid rgba(255,255,255,.06);padding:10px 8px">'+txt+'</th>'; }
 
-
-/* ══════════════════════════════════════════════════════════════════════════
-   LOS SUBFILTROS DE SAQUE, RECEPCION Y ATAQUE
-   --------------------------------------------------------------------------
-   Los mismos que el dashboard. Los datos ya traen el detalle —sFlo, sPot,
-   rFlo, rPot, aSo, aTr—: no hay que cambiar las tablas, alcanza con darles
-   los numeros del subfiltro elegido en lugar de los totales.
-
-   Se hace asi a proposito: tocar las tablas por dentro es lo que rompio las
-   baterias el intento anterior.
-   ══════════════════════════════════════════════════════════════════════════ */
-var SAQUE_TIPO = 'total';   /* total | flotado | potencia */
-var RECEP_TIPO = 'total';   /* total | flotado | potencia */
-var ATK_FASE   = 'total';   /* total | so | tr */
-
-function setSaqueTipo(t){ SAQUE_TIPO = t; renderTab(); }
-function setRecepTipo(t){ RECEP_TIPO = t; renderTab(); }
-function setAtkFase(t){   ATK_FASE   = t; renderTab(); }
-
-/* Copia el jugador con los numeros del subfiltro puestos donde la tabla los
-   busca. No se toca el original. */
-function _aplicarSubfiltros(jugs){
-  if(SAQUE_TIPO==='total' && RECEP_TIPO==='total' && ATK_FASE==='total') return jugs;
-  return (jugs||[]).map(function(j){
-    var c = {}; for(var k in j) c[k] = j[k];
-
-    if(SAQUE_TIPO!=='total'){
-      var S = (SAQUE_TIPO==='flotado') ? j.sFlo : j.sPot;
-      if(S){ c.sT=S.T||0; c.sPunto=S.Punto||0; c.sPos=S.Pos||0; c.sAdm=S.Adm||0;
-             c.sOvp=S.Adm||0; c.sNeg=S.Neg||0; c.sErr=S.Err||0; c.sVend=S.Vend||0;
-             c.sEff = c.sT ? Math.round((c.sPunto - c.sErr)/c.sT*100) : null; }
-      else { c.sT=0; c.sEff=null; }
-    }
-    if(RECEP_TIPO!=='total'){
-      var R = (RECEP_TIPO==='flotado') ? j.rFlo : j.rPot;
-      if(R){ c.rT=R.T||0; c.rPunto=R.Punto||0; c.rPos=R.Pos||0; c.rAdm=R.Adm||0;
-             c.rOvp=R.Adm||0; c.rNeg=R.Neg||0; c.rErr=R.Err||0; c.rVend=R.Vend||0;
-             c.rEff = c.rT ? Math.round((c.rPunto - c.rErr)/c.rT*100) : null; }
-      else { c.rT=0; c.rEff=null; }
-    }
-    if(ATK_FASE!=='total'){
-      var A = (ATK_FASE==='so') ? j.aSo : j.aTr;
-      if(A){ c.aT=A.T||0; c.aPunto=A.Punto||0; c.aPos=A.Pos||0; c.aAdm=A.Adm||0;
-             c.aOvp=A.Adm||0; c.aNeg=A.Neg||0; c.aErr=A.Err||0; c.aVend=A.Vend||0;
-             c.aEff = c.aT ? Math.round((c.aPunto - c.aErr)/c.aT*100) : null; }
-      else { c.aT=0; c.aEff=null; }
-    }
-    return c;
-  });
-}
-
-/* La fila de botones, con el elegido resaltado. */
-function _subFiltros(cual){
-  var defs = {
-    saque:     {v:SAQUE_TIPO, f:'setSaqueTipo', c:'#f59e0b',
-                o:[['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']]},
-    recepcion: {v:RECEP_TIPO, f:'setRecepTipo', c:'#22c55e',
-                o:[['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']]},
-    ataque:    {v:ATK_FASE,   f:'setAtkFase',   c:'#818cf8',
-                o:[['total','TOTAL'],['so','SIDE-OUT'],['tr','TRANSICION']]}
-  };
-  var d = defs[cual];
-  if(!d) return '';
-  var h = '<div style="display:flex;gap:6px;margin:0 0 10px 2px;flex-wrap:wrap">';
-  for(var i=0;i<d.o.length;i++){
-    var on = (d.v === d.o[i][0]);
-    h += '<button type="button" onclick="' + d.f + '(\'' + d.o[i][0] + '\')" style="' +
-         'padding:5px 12px;border-radius:7px;cursor:pointer;' +
-         'font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;' +
-         (on ? ('background:' + d.c + '22;border:1px solid ' + d.c + '66;color:' + d.c)
-             : 'background:transparent;border:1px solid rgba(255,255,255,.08);color:#64748b') +
-         '">' + d.o[i][1] + '</button>';
-  }
-  return h + '</div>';
-}
-
 function tablaSaque(jugs){
-  jugs = _aplicarSubfiltros(jugs);   /* los numeros del subfiltro elegido */
   var isAcum=PARTIDO_IDX===-1||PARTIDO_IDX===-2;
-  var h=_subFiltros('saque')+'<div class="tabla-wrap"><table class="tabla"><thead><tr>';
+  var h='<div class="tabla-wrap"><table class="tabla"><thead><tr>';
   h+='<th class="left sec">JUGADOR</th>';
   if(isAcum) h+='<th style="color:var(--mut)">PJ</th>';
   h+=thSec('── SAQUE ──',7,'#f59e0b');
@@ -582,9 +505,8 @@ function tablaSaque(jugs){
 }
 
 function tablaRecepcion(jugs){
-  jugs = _aplicarSubfiltros(jugs);   /* los numeros del subfiltro elegido */
   var isAcum=PARTIDO_IDX===-1||PARTIDO_IDX===-2;
-  var h=_subFiltros('recepcion')+'<div class="tabla-wrap"><table class="tabla"><thead><tr>';
+  var h='<div class="tabla-wrap"><table class="tabla"><thead><tr>';
   h+='<th class="left sec">JUGADOR</th>';
   if(isAcum) h+='<th style="color:var(--mut)">PJ</th>';
   h+=thSec('── RECEPCIÓN ──',7,'#22c55e');
@@ -612,9 +534,8 @@ function tablaRecepcion(jugs){
 }
 
 function tablaAtaque(jugs){
-  jugs = _aplicarSubfiltros(jugs);   /* los numeros del subfiltro elegido */
   var isAcum=PARTIDO_IDX===-1||PARTIDO_IDX===-2;
-  var h=_subFiltros('ataque')+'<div class="tabla-wrap"><table class="tabla"><thead><tr>';
+  var h='<div class="tabla-wrap"><table class="tabla"><thead><tr>';
   h+='<th class="left sec">JUGADOR</th>';
   if(isAcum) h+='<th style="color:var(--mut)">PJ</th>';
   h+=thSec('── ATAQUE ──',8,'#818cf8');
@@ -1535,7 +1456,7 @@ function tablaRanking(jugs){
       <a class="hm-card" href="hm_saque.html?equipo=nafels"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Zonas origen/destino</span></a>
       <a class="hm-card" href="hm_recepcion.html?equipo=nafels" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
       <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
-      <a class="hm-card" href="hm_defensa.html?equipo=nafels" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a>
+      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a>
     </div>
     <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">NLA Suiza 2025/26 · temporada archivada</div>
   </div>
@@ -1685,9 +1606,7 @@ function objGetVals(nombre){
 function renderObjetivosJugador(cid, jugVals, eqVals){
   var el=document.getElementById(cid); if(!el) return;
   var metas=window.OBJETIVOS_CONFIG.metas;
-  /* En el analisis no hay un jugador elegido: la fila de "Jugador" mostraba lo
-     mismo que la de "Equipo" y solo ocupaba lugar. Se deja una sola. */
-  var rows=[{label:'Equipo',vals:eqVals,isJug:false}];
+  var rows=[{label:'Jugador',vals:jugVals,isJug:true},{label:'Equipo',vals:eqVals,isJug:false}];
   var html='<div style="font-family:Barlow Condensed,sans-serif;padding:4px 0 8px">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
     +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">MI PERFORMANCE VS OBJETIVO</div>'
@@ -1754,10 +1673,21 @@ function objBuildSubfiltro(){
 }
 
 function objRenderBaterias(){
-  var jugVals = objGetVals(window._objNombre);
-  var eqVals  = objGetVals(null);
-  renderObjetivosJugador('objetivos-jugador', jugVals, eqVals);
-  /* la comparativa es del perfil del jugador: aca no aplica */
+  /* En el perfil del jugador las baterias van en un contenedor que se llama
+     'objetivos-jugador'. En el analisis el contenedor se llama
+     'objetivos-panel': dibujar en el otro es dibujar en un lugar que no
+     existe, y no aparece nada.
+
+     Se prueba el del analisis primero y, si no esta, el del perfil. Asi la
+     misma funcion sirve en las dos pantallas. */
+  var destino = document.getElementById('objetivos-panel') ? 'objetivos-panel'
+              : (document.getElementById('objetivos-jugador') ? 'objetivos-jugador' : null);
+  if(!destino) return;
+
+  /* en el analisis no hay un jugador elegido: se muestran los del equipo */
+  var eqVals = objGetVals(null);
+  var jugVals = window._objNombre ? objGetVals(window._objNombre) : eqVals;
+  renderObjetivosJugador(destino, jugVals, eqVals);
 }
 
 /* El analisis guarda el partido elegido como la posicion en su lista
