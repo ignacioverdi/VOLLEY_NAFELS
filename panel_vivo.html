@@ -3970,6 +3970,20 @@ document.addEventListener('keydown', e=>{
       drawDecoder(); return; } }
 });
 document.getElementById('code').addEventListener('input', function(){
+  /* ── SIEMPRE EN MAYUSCULA ─────────────────────────────────────────────────
+     Como en DataVolley: el codigo se escribe en mayuscula sin importar si el
+     Caps Lock esta puesto o no. Asi la mano queda libre y no hay que estar
+     mirando la tecla mientras se scoutea.
+
+     Se respeta donde estaba el cursor: si no, cada letra lo manda al final y
+     no se puede corregir en el medio. */
+  var _pos = this.selectionStart, _fin = this.selectionEnd;
+  var _may = this.value.toUpperCase();
+  if(_may !== this.value){
+    this.value = _may;
+    try{ this.setSelectionRange(_pos, _fin); }catch(_){}
+  }
+
   /* Elegir la extensión tipeando la letra tiene que cerrar el menú, igual que
      hacer clic en el botón. */
   if(typeof EXT_MODO !== 'undefined' && EXT_MODO) cerrarExtensiones();
