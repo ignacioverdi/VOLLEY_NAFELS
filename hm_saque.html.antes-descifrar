@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ANALISIS DE RECEPCION — Nafels 2026</title>
+<title>ANALISIS DE SAQUE — Nafels 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>*{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#E8192C;--amber:#F59E0B;--green:#22C55E;--cyan:#06B6D4;--indigo:#818CF8;--text:#E2E8F0;--muted:#64748B;--subtle:#475569}
@@ -65,13 +65,11 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 .cc-cell .cn{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;color:#fff}
 .cc-cell .pc{position:absolute;bottom:3px;right:5px;font-size:9px;opacity:.8;color:#fff}
 </style>
-<script src="datos_seguros.js"></script>
-  <script src="liga_data.js.enc"></script>
-  <script>abrirDatos();</script>
+<script src="liga_data.js.enc"></script>
 <script src="liga_data_entrenamientos.js"></script>
 </head>
 <body>
-<div class="hdr"><div><div class="hdr-t">SAN LORENZO — ANALISIS DE RECEPCION 2026</div><div class="hdr-s">7 partidos DHM Argentina · EFF = (1x# + 0.5x+ - 0.5x/ - 1x=) / total</div></div>
+<div class="hdr"><div><div class="hdr-t">SAN LORENZO — ANALISIS DE SAQUE 2026</div><div class="hdr-s">7 partidos DHM Argentina · EFF = (1x# + 0.5x/ + 0.25x+ - 1x=) / total</div></div>
 <div style="display:flex;align-items:center;gap:4px"><button id="lang-es" onclick="setLang('es')" style="background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;padding:3px 9px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;opacity:1">ES</button><button id="lang-en" onclick="setLang('en')" style="background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;padding:3px 9px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;opacity:0.4">EN</button><button id="lang-de" onclick="setLang('de')" style="background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;padding:3px 9px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;opacity:0.4">DE</button></div></div>
 <div class="layout">
 <div class="sidebar">
@@ -92,8 +90,8 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   </div></div>
   <div class="acc-group"><div class="acc-header" id="acc-hdr-contexto" onclick="accToggle('contexto')"><span>Contexto</span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
   <div class="acc-body" id="acc-body-contexto">
-    <div class="flabel" style="margin-top:0" data-i18n="Tipo de recepcion">Tipo de recepción</div>
-    <select class="fsel" id="fsel-rtype"><option value="all">Todos</option></select>
+    <div class="flabel" style="margin-top:0" data-i18n="Tipo de saque">Tipo de saque</div>
+    <select class="fsel" id="fsel-stype"><option value="all">Todos</option></select>
     <div class="flabel" data-i18n="Set">Set</div>
     <select class="fsel" id="fsel-set"><option value="all">Todos</option></select>
     <div class="flabel" data-i18n="Momento del set">Momento del set</div>
@@ -103,7 +101,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   <div class="acc-body" id="acc-body-tecnico">
     <div class="flabel" style="margin-top:0" data-i18n="Valoracion">Valoración</div>
     <select class="fsel" id="fsel-result"><option value="all">Todos</option></select>
-    <div class="flabel" data-i18n="Zona origen (saque rival)">Zona origen (saque rival)</div>
+    <div class="flabel" data-i18n="Zona origen">Zona origen</div>
     <select class="fsel" id="fsel-origin"><option value="all">Todos</option></select>
   </div></div>
   <div class="counter"><div class="counter-n" id="cnt">0</div><div class="counter-l">acciones filtradas</div></div>
@@ -119,9 +117,9 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   if(window.__MODO==='entrenamiento' && L && L.teams && L.teams['entrenamiento']) equipo='entrenamiento';
   if(!L||!L.teams[equipo]){ var _k=Object.keys(L.teams); equipo=_k[0]; }
   var td=L.teams[equipo];
-  try{ document.title='Recepción — '+td.name; }catch(e){}
+  try{ document.title='Saque — '+td.name; }catch(e){}
   window.__TEAM_NAME=td.name; window.__TEAM_SLUG=equipo;
-  return { rivals:td.rivals, games:td.rivals.map(function(r,i){return {idx:i,rival:r,date:''};}), players:td.rec };
+  return { rivals:td.rivals, games:td.rivals.map(function(r,i){return {idx:i,rival:r,date:''};}), players:td.srv };
 })();
 
 // ── I18N ENGINE ──────────────────────────────────────────────────
@@ -134,11 +132,11 @@ function translatePage(){document.querySelectorAll('[data-i18n]').forEach(functi
 
 var RIVALS=RAW.rivals,GAMES=RAW.games;
 var RES_D=['#','+','-','/','=','!'],MOM_D=['early','mid','late'];
-var OBJ_VAL=50;
-var T1K='RM',T2K='RQ';
-var TKEY='r',TYPESKEY='rtypes';
-var ORIG_SIDE='rival',DEST_SIDE='own';
-var RES_LABEL={"#": "Perfecta", "+": "Positiva", "-": "Negativa", "/": "Vendida", "=": "Error", "!": "Exclamativa"};
+var OBJ_VAL=20;
+var T1K='SM',T2K='SQ';
+var TKEY='s',TYPESKEY='stypes';
+var ORIG_SIDE='own',DEST_SIDE='rival';
+var RES_LABEL={"#": "Punto", "+": "Positivo", "-": "Negativo", "/": "Vendido", "=": "Error", "!": "Exclamativo"};
 var RES_COLOR={"#": "#22c55e", "+": "#a3e635", "-": "#f59e0b", "/": "#86efac", "=": "#ef4444", "!": "#fbbf24"};
 var F={player:'',stype:'all',rival:'all',set:'all',moment:'all',result:'all',origin:'all'};
 var PLAYERS={};
@@ -160,7 +158,7 @@ function calcEff(acts){
     else if(a.result=='+') p++;
     else if(a.result=='=') e++;
   });
-  return Math.round(((k+0.5*p-0.5*sl-e)/t)*100);
+  return Math.round(((k+0.5*sl+0.25*p-e)/t)*100);
 }
 function effColor(v){
   if(v===null||v===undefined) return '#475569';
