@@ -1106,7 +1106,14 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <input id="e-code" class="mono" oninput="drawEditDec();syncExtendido();dibujarWizard()" spellcheck="false"
       style="width:100%;background:var(--card2);border:1px solid var(--b2);color:var(--txt);border-radius:10px;padding:12px;font-size:20px;font-weight:700;text-align:center;outline:none">
   </div>
-  <div id="e-dec" class="edec"></div>
+  
+  <!-- Los doce campos del codigo, en una fila. Se maneja con las flechas y
+       se guarda con Enter, como en DataVolley. -->
+  <div id="e-fila" style="margin-bottom:10px"></div>
+  <div style="display:flex;gap:14px;margin-bottom:12px;font-size:11px;color:var(--mut)">
+    <span>&larr; &rarr; casillero</span><span>&uarr; &darr; valor</span><span>Enter guarda</span>
+  </div>
+<div id="e-dec" class="edec"></div>
   <div id="e-wizard">
     <div class="wiz">
       <div class="wcol"><h4>Equipo</h4><div class="wlist" id="w-team"></div></div>
@@ -4368,6 +4375,7 @@ function insertarEn(i){
   const inp=document.getElementById('e-code');
   inp.value=''; document.getElementById('e-dec').innerHTML='';
   document.getElementById('m-edit').classList.add('open');
+  FILA_I = 0; _filaPintar();   /* la fila, al abrir */
   inp.focus();
 }
 function borrarEn(i, rapido){
@@ -6783,6 +6791,133 @@ var MODO_SIN_SENAL = false;
     document.addEventListener('DOMContentLoaded', cartel);
   else cartel();
 })();
+</script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   LA FILA DE CORRECCION
+   --------------------------------------------------------------------------
+   Los doce campos del codigo, uno al lado del otro. Como en DataVolley:
+
+       ← →   moverse entre casilleros
+       ↑ ↓   cambiar el valor del casillero
+       Enter guardar
+
+   No reemplaza nada: escribe en el mismo campo de siempre —e-code— asi que
+   guardar, validar y el resto de la ventana siguen funcionando igual.
+   ══════════════════════════════════════════════════════════════════════════ */
+var FILA_I = 0;
+
+/* Cada casillero: donde vive en el codigo y que valores acepta. */
+function _filaCampos(sk){
+  var op = function(o){ return [''].concat(o); };
+  var zonas = op(['1','2','3','4','5','6','7','8','9']);
+  return [
+    {k:'eq',   t:'Eq',   v:['*','a']},
+    {k:'num',  t:'N\u00ba',  v:null},          /* null = se escribe */
+    {k:'skill',t:'Fun',  v:['S','R','A','B','D','E','F']},
+    {k:'tipo', t:'Tip',  v:op(['H','M','Q','T','N','O','U'])},
+    {k:'ev',   t:'Val',  v:['#','+','!','-','/','=']},
+    {k:'combo',t:'Comb', v:null},
+    {k:'sz',   t:'Des',  v:zonas},
+    {k:'ez',   t:'Hac',  v:zonas},
+    {k:'subz', t:'Sub',  v:op(['A','B','C','D'])},
+    {k:'hit',  t:'Gol',  v:op(Object.keys((typeof SUBTYPE!=='undefined' && SUBTYPE[sk])||{}))},
+    {k:'blk',  t:'Blq',  v:op(Object.keys((typeof PLAYERS!=='undefined' && PLAYERS[sk])||{}))},
+    {k:'spec', t:'Fin',  v:op(Object.keys((typeof specialsFor==='function' ? specialsFor(sk,'') : {})||{}))}
+  ];
+}
+
+/* Lee el codigo del campo y lo parte en sus doce pedazos. */
+function _filaLeer(){
+  var c = String((document.getElementById('e-code')||{}).value || '');
+  var m = c.match(/^([*a])(\d\d|-1)([SRABDEF])(.)(.)(.*)$/);
+  if(!m) return null;
+  var cola = m[6] || '';
+  var en = function(i){ var x = cola.charAt(i) || ''; return x === '~' ? '' : x; };
+  return {eq:m[1], num:m[2], skill:m[3],
+          tipo:(m[4]==='~'?'':m[4]), ev:(m[5]==='~'?'':m[5]),
+          combo:cola.slice(0,2).replace(/~/g,''),
+          dest:en(2), sz:en(3), ez:en(4), subz:en(5),
+          hit:en(6), blk:en(7), spec:en(8)};
+}
+
+/* Vuelve a armar el codigo con los pedazos y lo escribe donde siempre. */
+function _filaEscribir(d){
+  var t = function(x){ return x || '~'; };
+  var cola = (d.combo || '~~').padEnd(2,'~').slice(0,2)
+           + t(d.dest) + t(d.sz) + t(d.ez) + t(d.subz)
+           + t(d.hit) + t(d.blk) + t(d.spec);
+  cola = cola.replace(/~+$/,'');
+  var cod = d.eq + d.num + d.skill + t(d.tipo) + t(d.ev) + cola;
+  var inp = document.getElementById('e-code');
+  if(inp){
+    inp.value = cod;
+    try{ drawEditDec(); syncExtendido(); dibujarWizard(); }catch(e){}
+  }
+  _filaPintar();
+}
+
+function _filaPintar(){
+  var caja = document.getElementById('e-fila');
+  if(!caja) return;
+  var d = _filaLeer();
+  if(!d){ caja.innerHTML = ''; return; }
+  var campos = _filaCampos(d.skill);
+  var h = '<div style="display:flex;gap:4px">';
+  campos.forEach(function(c, i){
+    var on = (i === FILA_I);
+    var val = d[c.k] || '\u2014';
+    h += '<div onclick="FILA_I=' + i + ';_filaPintar()" style="flex:' +
+         (c.k==='num'||c.k==='combo' ? '1.3' : '1') + ';min-width:0;cursor:pointer;text-align:center;' +
+         'border-radius:8px;padding:4px 2px;' +
+         (on ? 'border:2px solid var(--ok);background:rgba(34,197,94,.10)'
+             : 'border:1px solid var(--b2)') + '">' +
+         '<div style="font-size:10px;color:' + (on?'var(--ok)':'var(--mut)') + '">' + c.t + '</div>' +
+         '<div class="mono" style="font-size:14px;color:' +
+           (d[c.k] ? (on?'var(--ok)':'var(--txt)') : 'var(--mut)') + '">' + val + '</div>' +
+         '</div>';
+  });
+  caja.innerHTML = h + '</div>';
+}
+
+/* Las flechas y el Enter. */
+function _filaTecla(e){
+  var caja = document.getElementById('e-fila');
+  var modal = document.getElementById('m-edit');
+  if(!caja || !modal || !modal.classList.contains('open')) return;
+
+  /* si esta escribiendo en el codigo crudo, no se interfiere */
+  var act = document.activeElement;
+  if(act && (act.id === 'e-code' || act.tagName === 'INPUT') && e.key !== 'Enter') return;
+
+  var d = _filaLeer();
+  if(!d) return;
+  var campos = _filaCampos(d.skill);
+
+  if(e.key === 'ArrowRight'){ e.preventDefault(); FILA_I = Math.min(FILA_I+1, campos.length-1); _filaPintar(); return; }
+  if(e.key === 'ArrowLeft'){  e.preventDefault(); FILA_I = Math.max(FILA_I-1, 0); _filaPintar(); return; }
+
+  if(e.key === 'ArrowUp' || e.key === 'ArrowDown'){
+    var c = campos[FILA_I];
+    if(!c || !c.v) return;             /* numero y combinacion se escriben */
+    e.preventDefault();
+    var i = c.v.indexOf(d[c.k] || '');
+    if(i < 0) i = 0;
+    i += (e.key === 'ArrowUp' ? -1 : 1);
+    if(i < 0) i = c.v.length - 1;
+    if(i >= c.v.length) i = 0;
+    d[c.k] = c.v[i];
+    _filaEscribir(d);
+    return;
+  }
+
+  if(e.key === 'Enter'){
+    e.preventDefault();
+    try{ saveEdit(); }catch(err){}
+  }
+}
+document.addEventListener('keydown', _filaTecla, true);
 </script>
 </body>
 </html>
