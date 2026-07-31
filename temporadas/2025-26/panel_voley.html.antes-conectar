@@ -4,9 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stats Entrenamiento</title>
-<script src="objetivos_config.js" onerror="void 0"></script>
-  <script src="datos_historial.js" onerror="void 0"></script>
-  <script src="datos_voley.js" onerror="void 0"></script>
+<script src="datos_voley.js" onerror="void 0"></script>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -1637,7 +1635,6 @@ function closeJugDetail(){
 <script src="scout_vivo.js" onerror="void 0"></script>
 <script src="temporadas_menu.js"></script>
 <script src="datos_equipo_2025-26.js.enc" onerror="void 0"></script>
-  <script>abrirDatos();</script>
   <script src="plantel_nafels.js" onerror="void 0"></script>
 
 </body>

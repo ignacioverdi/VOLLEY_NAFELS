@@ -262,9 +262,7 @@ select, select option {
   background-color: #ffffff !important;
 }
 </style>
-<script src="datos_gameplan.js.enc" onerror="void 0"></script>
-  <script src="datos_equipo.js.enc" onerror="void 0"></script>
-  <script src="../../datos_seguros.js"></script>
+<script src="../../datos_seguros.js"></script>
 <script src="firebase.js" onerror="void 0"></script>
 <script src="lang.js"></script>
 
@@ -1541,7 +1539,6 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 <!-- Notificaciones push (OneSignal) -->
 <script src="onesignal_push.js" defer></script>
 <script src="datos_equipo_2025-26.js.enc" onerror="void 0"></script>
-  <script>abrirDatos();</script>
   <script src="plantel_nafels.js" onerror="void 0"></script>
 
 <!-- ════════ VISTA POR ROL ════════
