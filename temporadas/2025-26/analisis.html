@@ -475,9 +475,70 @@ function jugadorTd(j,showPJ){
 }
 function thSec(txt,cols,color){ return '<th colspan="'+cols+'" class="sec" style="color:'+color+';border-left:1px solid rgba(255,255,255,.06);padding:10px 8px">'+txt+'</th>'; }
 
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LOS SUBFILTROS DE SAQUE, RECEPCION Y ATAQUE
+   --------------------------------------------------------------------------
+   Los mismos que el dashboard. Los datos ya traen el detalle —sFlo, sPot,
+   rFlo, rPot, aSo, aTr— asi que solo hace falta elegir cual mostrar.
+
+       saque y recepcion    total · flotado · potencia
+       ataque               total · side-out · transicion
+   ══════════════════════════════════════════════════════════════════════════ */
+var SAQUE_TIPO = 'total';   /* total | flotado | potencia */
+var RECEP_TIPO = 'total';   /* total | flotado | potencia */
+var ATK_FASE   = 'total';   /* total | so | tr */
+
+function setSaqueTipo(t){ SAQUE_TIPO=t; renderTab(); }
+function setRecepTipo(t){ RECEP_TIPO=t; renderTab(); }
+function setAtkFase(t){   ATK_FASE=t;   renderTab(); }
+
+/* La fila de botones. Se dibuja arriba de la tabla, con el elegido resaltado. */
+function _subFiltros(cual){
+  var defs = {
+    saque:     {v:SAQUE_TIPO, f:'setSaqueTipo', c:'#f59e0b',
+                o:[['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']]},
+    recepcion: {v:RECEP_TIPO, f:'setRecepTipo', c:'#22c55e',
+                o:[['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']]},
+    ataque:    {v:ATK_FASE,   f:'setAtkFase',   c:'#818cf8',
+                o:[['total','TOTAL'],['so','SIDE-OUT'],['tr','TRANSICION']]}
+  };
+  var d = defs[cual];
+  if(!d) return '';
+  var h = '<div style="display:flex;gap:6px;margin:0 0 10px 2px;flex-wrap:wrap">';
+  d.o.forEach(function(x){
+    var on = (d.v === x[0]);
+    h += '<button onclick="' + d.f + "('" + x[0] + "')" + '" style="' +
+         'padding:5px 12px;border-radius:7px;cursor:pointer;' +
+         'font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;' +
+         (on ? ('background:' + d.c + '22;border:1px solid ' + d.c + '66;color:' + d.c)
+             : 'background:transparent;border:1px solid rgba(255,255,255,.08);color:#64748b') +
+         '">' + x[1] + '</button>';
+  });
+  return h + '</div>';
+}
+
+/* De donde salen los numeros segun el subfiltro elegido. Si el jugador no
+   tiene el detalle —no saco de ese tipo en ese partido— se usa el total. */
+function _srcSaque(j){
+  if(SAQUE_TIPO==='flotado' && j.sFlo) return j.sFlo;
+  if(SAQUE_TIPO==='potencia' && j.sPot) return j.sPot;
+  return {T:j.sT,Punto:j.sPunto,Pos:j.sPos,Adm:j.sAdm,Neg:j.sNeg,Err:j.sErr,Vend:j.sVend};
+}
+function _srcRecep(j){
+  if(RECEP_TIPO==='flotado' && j.rFlo) return j.rFlo;
+  if(RECEP_TIPO==='potencia' && j.rPot) return j.rPot;
+  return {T:j.rT,Punto:j.rPunto,Pos:j.rPos,Adm:j.rAdm,Neg:j.rNeg,Err:j.rErr,Vend:j.rVend};
+}
+function _srcAtaque(j){
+  if(ATK_FASE==='so' && j.aSo) return j.aSo;
+  if(ATK_FASE==='tr' && j.aTr) return j.aTr;
+  return {T:j.aT,Punto:j.aPunto,Pos:j.aPos,Adm:j.aAdm,Neg:j.aNeg,Err:j.aErr,Vend:j.aVend};
+}
+
 function tablaSaque(jugs){
   var isAcum=PARTIDO_IDX===-1||PARTIDO_IDX===-2;
-  var h='<div class="tabla-wrap"><table class="tabla"><thead><tr>';
+  var h=_subFiltros('saque')+'<div class="tabla-wrap"><table class="tabla"><thead><tr>';
   h+='<th class="left sec">JUGADOR</th>';
   if(isAcum) h+='<th style="color:var(--mut)">PJ</th>';
   h+=thSec('── SAQUE ──',7,'#f59e0b');
@@ -488,13 +549,15 @@ function tablaSaque(jugs){
   h+='</tr></thead><tbody>';
   var tT=0,tPt=0,tPos=0,tAdm=0,tNeg=0,tVend=0,tErr=0;
   jugs.forEach(function(j,ri){
-    if(j.sT===0) return;
-    var e=sEff(j);
-    tT+=j.sT;tPt+=j.sPunto;tPos+=j.sPos;tAdm+=j.sOvp;tNeg+=j.sNeg;tVend+=j.sVend;tErr+=j.sErr;
+    /* los numeros segun el subfiltro elegido: total, flotado o potencia */
+    var S=_srcSaque(j);
+    if(!S.T) return;
+    var e=(S.T? Math.round(((S.Punto||0)-(S.Err||0))/S.T*100) : null);
+    tT+=S.T||0;tPt+=S.Punto||0;tPos+=S.Pos||0;tAdm+=(S.Adm||0);tNeg+=S.Neg||0;tVend+=S.Vend||0;tErr+=S.Err||0;
     var bg=ri%2===0?'transparent':'rgba(255,255,255,.015)';
     h+='<tr style="background:'+bg+'">'+jugadorTd(j,isAcum);
     if(isAcum) h+=td(j.PJ,'val-mut');
-    h+=effTd(e)+td(j.sT,'val-tot')+td(j.sPunto,'val-perf')+td(j.sPos,'val-pos')+td(j.sOvp,'val-adm')+td(j.sNeg,'val-neg')+td(j.sErr,'val-err')+'</tr>';
+    h+=effTd(e)+td(S.T,'val-tot')+td(S.Punto,'val-perf')+td(S.Pos,'val-pos')+td((S.Adm||0),'val-adm')+td(S.Neg,'val-neg')+td(S.Err,'val-err')+'</tr>';
   });
   var tE=tT>0?Math.round((tPt*1+tVend*0.5+tPos*0.25-tErr*1)/tT*100):null;
   h+='<tr class="total-row"><td class="left" style="padding:8px 12px">TOTALES EQUIPO</td>';
@@ -506,7 +569,7 @@ function tablaSaque(jugs){
 
 function tablaRecepcion(jugs){
   var isAcum=PARTIDO_IDX===-1||PARTIDO_IDX===-2;
-  var h='<div class="tabla-wrap"><table class="tabla"><thead><tr>';
+  var h=_subFiltros('recepcion')+'<div class="tabla-wrap"><table class="tabla"><thead><tr>';
   h+='<th class="left sec">JUGADOR</th>';
   if(isAcum) h+='<th style="color:var(--mut)">PJ</th>';
   h+=thSec('── RECEPCIÓN ──',7,'#22c55e');
@@ -517,13 +580,18 @@ function tablaRecepcion(jugs){
   h+='</tr></thead><tbody>';
   var tT=0,tPt=0,tPos=0,tAdm=0,tNeg=0,tVend=0,tErr=0;
   jugs.forEach(function(j,ri){
-    if(j.rT===0) return;
-    var e=rEff(j);
-    tT+=j.rT;tPt+=j.rPunto;tPos+=j.rPos;tAdm+=j.rOvp;tNeg+=j.rNeg;tVend+=j.rVend;tErr+=j.rErr;
+
+    /* los numeros segun el subfiltro elegido */
+
+    var S=_srcRecep(j);
+
+    if(!S.T) return;
+    var e=(S.T? Math.round(((S.Punto||0)-(S.Err||0))/S.T*100) : null);
+    tT+=S.T;tPt+=S.Punto;tPos+=S.Pos;tAdm+=S.Adm||0;tNeg+=S.Neg;tVend+=S.Vend||0;tErr+=S.Err;
     var bg=ri%2===0?'transparent':'rgba(255,255,255,.015)';
     h+='<tr style="background:'+bg+'">'+jugadorTd(j,isAcum);
     if(isAcum) h+=td(j.PJ,'val-mut');
-    h+=effTd(e)+td(j.rT,'val-tot')+td(j.rPunto,'val-perf')+td(j.rPos,'val-pos')+td(j.rOvp,'val-adm')+td(j.rNeg,'val-neg')+td(j.rVend,'val-vend')+td(j.rErr,'val-err')+'</tr>';
+    h+=effTd(e)+td(S.T,'val-tot')+td(S.Punto,'val-perf')+td(S.Pos,'val-pos')+td(S.Adm||0,'val-adm')+td(S.Neg,'val-neg')+td(S.Vend||0,'val-vend')+td(S.Err,'val-err')+'</tr>';
   });
   var tE=tT>0?Math.round((tPt*1+tPos*0.5-tVend*0.5-tErr*1)/tT*100):null;
   h+='<tr class="total-row"><td class="left" style="padding:8px 12px">TOTALES EQUIPO</td>';
@@ -535,7 +603,7 @@ function tablaRecepcion(jugs){
 
 function tablaAtaque(jugs){
   var isAcum=PARTIDO_IDX===-1||PARTIDO_IDX===-2;
-  var h='<div class="tabla-wrap"><table class="tabla"><thead><tr>';
+  var h=_subFiltros('ataque')+'<div class="tabla-wrap"><table class="tabla"><thead><tr>';
   h+='<th class="left sec">JUGADOR</th>';
   if(isAcum) h+='<th style="color:var(--mut)">PJ</th>';
   h+=thSec('── ATAQUE ──',8,'#818cf8');
@@ -546,13 +614,18 @@ function tablaAtaque(jugs){
   h+='</tr></thead><tbody>';
   var tT=0,tPt=0,tPos=0,tAdm=0,tNeg=0,tVend=0,tErr=0;
   jugs.forEach(function(j,ri){
-    if(j.aT===0) return;
-    var e=aEff(j);
-    tT+=j.aT;tPt+=j.aPunto;tPos+=j.aPos;tAdm+=j.aOvp;tNeg+=j.aNeg;tVend+=j.aVend;tErr+=j.aErr;
+
+    /* los numeros segun el subfiltro elegido */
+
+    var S=_srcAtaque(j);
+
+    if(!S.T) return;
+    var e=(S.T? Math.round(((S.Punto||0)-(S.Err||0))/S.T*100) : null);
+    tT+=S.T;tPt+=S.Punto;tPos+=S.Pos;tAdm+=S.Adm||0;tNeg+=S.Neg;tVend+=S.Vend||0;tErr+=S.Err;
     var bg=ri%2===0?'transparent':'rgba(255,255,255,.015)';
     h+='<tr style="background:'+bg+'">'+jugadorTd(j,isAcum);
     if(isAcum) h+=td(j.PJ,'val-mut');
-    h+=effTd(e)+td(j.aT,'val-tot')+td(j.aPunto,'val-perf')+td(j.aPos,'val-pos')+td(j.aOvp,'val-adm')+td(j.aNeg,'val-neg')+td(j.aVend,'val-vend')+td(j.aErr,'val-err')+'</tr>';
+    h+=effTd(e)+td(S.T,'val-tot')+td(S.Punto,'val-perf')+td(S.Pos,'val-pos')+td(S.Adm||0,'val-adm')+td(S.Neg,'val-neg')+td(S.Vend||0,'val-vend')+td(S.Err,'val-err')+'</tr>';
   });
   var tE=tT>0?Math.round((tPt-tVend-tErr)/tT*100):null;
   h+='<tr class="total-row"><td class="left" style="padding:8px 12px">TOTALES EQUIPO</td>';
@@ -1456,7 +1529,7 @@ function tablaRanking(jugs){
       <a class="hm-card" href="hm_saque.html?equipo=nafels"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Zonas origen/destino</span></a>
       <a class="hm-card" href="hm_recepcion.html?equipo=nafels" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
       <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
-      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a>
+      <a class="hm-card" href="hm_defensa.html?equipo=nafels" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a>
     </div>
     <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">NLA Suiza 2025/26 · temporada archivada</div>
   </div>
@@ -1606,7 +1679,9 @@ function objGetVals(nombre){
 function renderObjetivosJugador(cid, jugVals, eqVals){
   var el=document.getElementById(cid); if(!el) return;
   var metas=window.OBJETIVOS_CONFIG.metas;
-  var rows=[{label:'Jugador',vals:jugVals,isJug:true},{label:'Equipo',vals:eqVals,isJug:false}];
+  /* En el analisis no hay un jugador elegido: la fila de "Jugador" mostraba lo
+     mismo que la de "Equipo" y solo ocupaba lugar. Se deja una sola. */
+  var rows=[{label:'Equipo',vals:eqVals,isJug:false}];
   var html='<div style="font-family:Barlow Condensed,sans-serif;padding:4px 0 8px">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
     +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">MI PERFORMANCE VS OBJETIVO</div>'
@@ -1673,21 +1748,10 @@ function objBuildSubfiltro(){
 }
 
 function objRenderBaterias(){
-  /* En el perfil del jugador las baterias van en un contenedor que se llama
-     'objetivos-jugador'. En el analisis el contenedor se llama
-     'objetivos-panel': dibujar en el otro es dibujar en un lugar que no
-     existe, y no aparece nada.
-
-     Se prueba el del analisis primero y, si no esta, el del perfil. Asi la
-     misma funcion sirve en las dos pantallas. */
-  var destino = document.getElementById('objetivos-panel') ? 'objetivos-panel'
-              : (document.getElementById('objetivos-jugador') ? 'objetivos-jugador' : null);
-  if(!destino) return;
-
-  /* en el analisis no hay un jugador elegido: se muestran los del equipo */
-  var eqVals = objGetVals(null);
-  var jugVals = window._objNombre ? objGetVals(window._objNombre) : eqVals;
-  renderObjetivosJugador(destino, jugVals, eqVals);
+  var jugVals = objGetVals(window._objNombre);
+  var eqVals  = objGetVals(null);
+  renderObjetivosJugador('objetivos-jugador', jugVals, eqVals);
+  /* la comparativa es del perfil del jugador: aca no aplica */
 }
 
 /* El analisis guarda el partido elegido como la posicion en su lista

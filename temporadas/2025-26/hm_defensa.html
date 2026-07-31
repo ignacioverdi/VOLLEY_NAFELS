@@ -93,7 +93,9 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 <script>
 (function(){
   var VD=(window.VIDEO_DATA&&window.VIDEO_DATA.matches)||{};
-  var EQ=(new URLSearchParams(location.search).get('equipo')||'casla').toLowerCase();
+  /* El club por defecto, cuando la direccion no lo dice. Antes era el del club
+     de origen y por eso la pantalla salia con datos de otro equipo. */
+  var EQ=(new URLSearchParams(location.search).get('equipo')||'nafels').toLowerCase();
   var RES_ORDER=['#','+','!','-','='];
   var RES_LABEL={'#':'Perfecta','+':'Buena','!':'Regular','-':'Mala','=':'Error'};
   var RES_HEX={'#':'#22C55E','+':'#84CC16','!':'#EAB308','-':'#F97316','=':'#EF4444'};
@@ -257,4 +259,4 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 </body>
 </html>
 
-<!-- © 2025-2026 Ignacio Verdi · CASLA · Software propietario - Todos los derechos reservados -->
+<!-- © 2025-2026 Ignacio Verdi · NAFELS · Software propietario - Todos los derechos reservados -->
