@@ -227,50 +227,35 @@ function objClassifyVsTeam(val,teamVal){
 
 var _OBJ_NULOS = {sq:null,rec:null,bqpos:null,bqpt:null,atqq:null,atqhb:null,atqx:null,atqrp:null,atqri:null,atqrm:null,atqtr:null};
 
+
+/* Las baterias salen de datos_baterias.js, que trae el detalle partido por
+   partido. Antes se buscaban en un archivo que en esta temporada no lo
+   tiene, y por eso quedaban vacias. Es el mismo sistema que usa el perfil
+   del jugador, donde si funcionan. */
+function _batMatchName(nombre, keys){
+  var b=(nombre||'').replace(/^\d+\s*/,'').toLowerCase().trim(); var bs=b.split(' ')[0];
+  for(var i=0;i<keys.length;i++){ if(keys[i].toLowerCase().replace(/^\d+\s*/,'').trim()===b) return keys[i]; }
+  for(var i=0;i<keys.length;i++){ var k=keys[i].toLowerCase().replace(/^\d+\s*/,'').trim(); if(k.split(' ')[0]===bs || (bs.length>2&&k.indexOf(bs)>=0)) return keys[i]; }
+  return null;
+}
+
+function batGet(nombre, partido){
+  var B=window.BAT_PARTIDOS; if(!B) return null;
+  if(partido && partido!=='acumulado'){
+    var m=(B.ind||[]).find(function(x){return String(x.id)===String(partido);});
+    if(!m) return _OBJ_NULOS;
+    if(nombre){ var k=_batMatchName(nombre, Object.keys(m.jug||{})); return (k&&m.jug[k])?m.jug[k]:_OBJ_NULOS; }
+    return m.eq||_OBJ_NULOS;
+  }
+  if(nombre){ var k2=_batMatchName(nombre, Object.keys(B.jug||{})); return (k2&&B.jug[k2])?B.jug[k2]:_OBJ_NULOS; }
+  return B.eq||_OBJ_NULOS;
+}
+
 function objGetVals(nombre){
-  var tipo    = 'partido';
-  var partido = window._dbatPartido;
-  var ent     = (tipo==='entrenamiento');
-
-  var JUG = ent ? (typeof ENTRENAMIENTOS_JUGADORES!=='undefined'?ENTRENAMIENTOS_JUGADORES:null)
-                : (typeof PARTIDOS_JUGADORES!=='undefined'?PARTIDOS_JUGADORES:null);
-  var IND = ent ? (typeof ENTRENAMIENTOS_INDIVIDUAL!=='undefined'?ENTRENAMIENTOS_INDIVIDUAL:null)
-                : (typeof PARTIDOS_INDIVIDUAL!=='undefined'?PARTIDOS_INDIVIDUAL:null);
-  var EQ  = ent ? (typeof ENTRENAMIENTOS_EQUIPO_OBJ!=='undefined'?ENTRENAMIENTOS_EQUIPO_OBJ:null)
-                : (typeof PARTIDOS_EQUIPO_OBJ!=='undefined'?PARTIDOS_EQUIPO_OBJ:null);
-
-  function matchNombre(x){
-    if(!x.nombre) return false;
-    var a=x.nombre.replace(/^\d+\s*/,'').toLowerCase();
-    var b=(nombre||'').replace(/^\d+\s*/,'').toLowerCase();
-    return a===b || a.split(' ')[0]===b.split(' ')[0];
-  }
-
-  // ── PARTIDO PUNTUAL ──
-  if(partido!=='acumulado' && IND){
-    var pd = IND.find(function(p){ return (p.id||p.nombre)===partido; });
-    if(pd){
-      if(nombre){
-        var pj = (pd.jugadores||[]).find(matchNombre);
-        if(pj && pj.objetivos && Object.keys(pj.objetivos).length) return pj.objetivos;
-      } else if(pd.equipo_obj && Object.keys(pd.equipo_obj).length){
-        return pd.equipo_obj;   // ← equipo del partido puntual
-      }
-    }
-    return _OBJ_NULOS; // partido seleccionado sin datos para ese sujeto
-  }
-
-  // ── ACUMULADO ──
-  if(nombre){
-    if(JUG){
-      var pj2 = JUG.find(matchNombre);
-      if(pj2 && pj2.objetivos && Object.keys(pj2.objetivos).length) return pj2.objetivos;
-    }
-    return _OBJ_NULOS;
-  } else {
-    if(EQ && Object.keys(EQ).length) return EQ;
-    return _OBJ_NULOS;
-  }
+  /* De donde salen los numeros: del archivo de baterias, que trae el acumulado
+     y tambien cada partido por separado. */
+  if(window.BAT_PARTIDOS) return batGet(nombre, window._dbatPartido);
+  return (typeof _OBJ_NULOS !== 'undefined') ? _OBJ_NULOS : {};
 }
 
 // ── Helpers de dibujo de las baterías ──
