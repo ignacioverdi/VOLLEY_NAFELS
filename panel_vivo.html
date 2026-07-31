@@ -2591,6 +2591,19 @@ function abrirVideo(){
   document.getElementById('v-url').value  = M.video.url||'';
   document.getElementById('m-video').classList.add('open');
   refrescarVideo();
+
+  /* Con el video abierto se sigue scouteando: el foco vuelve al campo del
+     codigo apenas se termina de escribir la ruta o la direccion. Antes se
+     quedaba en esos casilleros y las teclas de las valoraciones no hacian
+     nada, que es lo que pasaba al mirar un video y querer cargar. */
+  setTimeout(function(){
+    try{
+      var c = document.getElementById('code');
+      if(c && document.activeElement &&
+         document.activeElement.id !== 'v-ruta' &&
+         document.activeElement.id !== 'v-url') c.focus();
+    }catch(_){}
+  }, 120);
 }
 function vidDockInit(){
   const m=document.getElementById('m-video'); if(m.__di) return; m.__di=true;
@@ -3242,10 +3255,31 @@ function reabrirPunto(){
   }
   let devuelto = '';
   if(iUlt >= 0 && iUlt === M.codes.length-1){
-    devuelto = M.codes[iUlt].c || '';
-    M.codes.pop();
-    /* si ese ataque arrastraba un armado automático se va con él: si no, al
-       volver a cerrar la jugada el armado quedaría escrito dos veces */
+    /* Vuelve TODA la jugada, no solo la ultima accion. Es como funciona en el
+       DataVolley: al reabrir el punto se recupera lo que se venia tipeando
+       para corregirlo entero, encadenado con puntos.
+
+       Se toman las acciones de jugador que quedaron al final —las automaticas
+       del cierre ya se sacaron antes— y se paran en la anterior al saque, que
+       es donde arranca la jugada. */
+    var _cad = [];
+    for(var _i = M.codes.length - 1; _i >= 0; _i--){
+      var _c = M.codes[_i];
+      if(!_c || _c.auto) break;
+      var _t = String(_c.c || '');
+      if(!/^[*a]\d\d[SRABDEF]/.test(_t)) break;
+      _cad.unshift(_t);
+      if(/^[*a]\d\dS/.test(_t)) break;      /* el saque abre la jugada */
+    }
+    if(_cad.length){
+      devuelto = _cad.join('.');
+      M.codes = M.codes.slice(0, M.codes.length - _cad.length);
+    } else {
+      devuelto = M.codes[iUlt].c || '';
+      M.codes.pop();
+    }
+    /* si arrastraba un armado automático se va con él: si no, al volver a
+       cerrar la jugada el armado quedaría escrito dos veces */
     const prev = M.codes[M.codes.length-1];
     if(prev && prev.auto) M.codes.pop();
   } else {
