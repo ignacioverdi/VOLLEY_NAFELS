@@ -38,22 +38,31 @@ print('     EL PLANTEL QUE JUGO, EN LA CAPSULA')
 print('  ' + '=' * 62)
 print()
 
-if not os.path.exists(os.path.join(AQUI, DATOS)):
+# El archivo puede estar cifrado —termina en .enc— o no, segun el club. Se
+# busca de las dos formas.
+CIFRADO = os.path.exists(os.path.join(AQUI, DATOS + '.enc'))
+if not os.path.exists(os.path.join(AQUI, DATOS)) and not CIFRADO:
     print('  Falta %s en esta carpeta.' % DATOS)
     print('  Copialo primero y volve a correr esto.')
     print()
     input('  Enter para cerrar...')
     sys.exit(1)
+if CIFRADO:
+    print('  El archivo esta cifrado (%s.enc): se carga asi.' % DATOS)
+    DATOS = DATOS + '.enc'
 
 # cuántos jugadores trae, para que se vea antes de tocar nada
 try:
     t = open(os.path.join(AQUI, DATOS), encoding='utf-8', errors='replace').read()
     n = len(re.findall(r'num:\s*\d+', t))
     temp = re.search(r'temporada:\s*"([^"]+)"', t)
-    print('  El plantel a usar:  %s  ·  %d jugadores'
-          % (temp.group(1) if temp else '?', n))
+    if n:
+        print('  El plantel a usar:  %s  ·  %d jugadores'
+              % (temp.group(1) if temp else '?', n))
+    else:
+        print('  El plantel a usar: esta cifrado, no lo puedo leer desde aca.')
 except Exception:
-    print('  El plantel a usar: (no lo pude leer)')
+    print('  El plantel a usar: esta cifrado, no lo puedo leer desde aca.')
 print()
 
 # La línea que se agrega. Va DESPUÉS de abrirDatos(), que es donde el archivo

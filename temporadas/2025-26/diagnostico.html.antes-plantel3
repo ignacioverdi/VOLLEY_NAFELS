@@ -49,8 +49,6 @@
 <script src="datos_bloqueo.js" onerror="void 0"></script>
 <script src="datos_equipo_2025-26.js" onerror="void 0"></script>
 <script src="datos_equipo.js" onerror="void 0"></script>
-<script src="datos_equipo_2025-26.js.enc" onerror="void 0"></script>
-
 <script src="datos_baterias.js" onerror="void 0"></script>
 
 <script>
