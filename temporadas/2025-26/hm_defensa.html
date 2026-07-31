@@ -89,7 +89,11 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   <div class="content" id="content"><div class="nodata">Elegí un jugador para ver su defensa</div></div>
 </div>
 
-<script src="datos_video.js.enc" onerror="void 0"></script>
+<!-- Los datos vienen cifrados: este es el que sabe abrirlos. Sin el, la
+     pantalla carga los archivos y no puede leer ni uno. -->
+  <script src="datos_seguros.js"></script>
+  <script src="datos_video.js.enc" onerror="void 0"></script>
+  <script>abrirDatos();</script>
 <script>
 (function(){
   var VD=(window.VIDEO_DATA&&window.VIDEO_DATA.matches)||{};
