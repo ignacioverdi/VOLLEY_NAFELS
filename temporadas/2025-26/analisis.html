@@ -14,6 +14,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 })();</script>
 <script src="objetivos_config.js" onerror="void 0"></script>
   <script src="datos_historial.js" onerror="void 0"></script>
+  <script src="utils.js" onerror="void 0"></script>
   <script src="modo_toggle.js" onerror="void 0"></script>
 <script src="../../datos_seguros.js"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
@@ -225,7 +226,35 @@ window.OBJETIVOS_CONFIG={metas:{
     <button class="tab-btn" id="filtro-entrenamientos" onclick="setFiltroTipo('E',this)">🏋️ ENTRENAMIENTOS</button>
   </div>
   <div id="objetivos-panel" style="margin-bottom:20px"></div>
-<script>setTimeout(function(){if(typeof renderObjetivos!=="undefined")renderObjetivos("objetivos-panel");},100);</script>
+<script>
+/* Las baterias del analisis. Antes se dibujaban una sola vez al abrir y
+   quedaban con el acumulado: al elegir un partido de la lista no cambiaban.
+
+   Ahora se vuelven a dibujar cada vez que cambia lo que se esta mirando —el
+   partido elegido, el filtro de partidos o entrenamientos— igual que en el
+   perfil del jugador. */
+function _refrescarBaterias(){
+  try{
+    if(typeof renderObjetivos === 'function') renderObjetivos('objetivos-panel');
+  }catch(e){}
+}
+
+/* la primera vez, cuando ya cargaron los datos */
+setTimeout(_refrescarBaterias, 150);
+
+/* y cada vez que se elige un partido o se cambia el filtro */
+(function(){
+  ['setFiltroTipo','seleccionarPartido','setPartido','setVista'].forEach(function(nom){
+    var orig = window[nom];
+    if(typeof orig !== 'function') return;
+    window[nom] = function(){
+      var r = orig.apply(this, arguments);
+      setTimeout(_refrescarBaterias, 60);
+      return r;
+    };
+  });
+})();
+</script>
 <div class="partidos-grid" id="partidos-grid">
     <div class="empty"><div class="empty-icon">📋</div><div class="empty-txt">Cargando...</div></div>
   </div>
@@ -1461,7 +1490,6 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 <script src="chat_nafels.js"></script>
 <script src="lang.js"></script>
 <script src="temporadas_menu.js"></script>
-  <script src="plantel_nafels.js" onerror="void 0"></script>
 </body>
 </html>
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
