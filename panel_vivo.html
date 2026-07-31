@@ -6824,6 +6824,29 @@ function _filaOpc(o){
   return r;
 }
 
+/* Los numeros del plantel, para poder cambiarlos con las flechas. Si no hay
+   plantel cargado se ofrecen del 1 al 20, que es lo que suele usarse. */
+function _filaNumeros(){
+  var r = [];
+  try{
+    var d = _filaLeer();
+    var lado = (d && d.eq === 'a') ? 'away' : 'home';
+    var pl = [];
+    try{ pl = (typeof plCargar === 'function' && PL_CACHE && PL_CACHE[lado]) || []; }catch(e){}
+    if(!pl.length && typeof M !== 'undefined' && M[lado] && M[lado].lineup){
+      M[lado].lineup.forEach(function(n){ if(n) pl.push({num:n}); });
+    }
+    pl.forEach(function(j){
+      var n = String(j.num || j).replace(/\D/g,'');
+      if(n) r.push([n.padStart(2,'0'), (j.nombre || j.ap || ('#'+n))]);
+    });
+  }catch(e){}
+  if(!r.length){
+    for(var i = 1; i <= 20; i++) r.push([String(i).padStart(2,'0'), '#' + i]);
+  }
+  return r;
+}
+
 function _filaCampos(sk){
   var zonas = [['','\u2014']];
   ['1','2','3','4','5','6','7','8','9'].forEach(function(z){ zonas.push([z, 'Zona ' + z]); });
@@ -6839,7 +6862,7 @@ function _filaCampos(sk){
 
   return [
     {k:'eq',   t:'Eq',   n:'Equipo',        v:[['*','Local'],['a','Visitante']]},
-    {k:'num',  t:'N\u00ba', n:'N\u00famero',  v:null, esc:2},
+    {k:'num',  t:'N\u00ba', n:'N\u00famero',  v:_filaNumeros(), esc:2},
     {k:'skill',t:'Fun',  n:'Fundamento',    v:[['S','Saque'],['R','Recepci\u00f3n'],['A','Ataque'],
                                                ['B','Bloqueo'],['D','Defensa'],['E','Armado'],['F','Falta']]},
     {k:'tipo', t:'Tip',  n:'Tipo',          v:_filaOpc({H:'Alto',M:'Medio',Q:'R\u00e1pido',T:'Tenso',N:'Sper',O:'Otro',U:'Super'})},
@@ -6912,12 +6935,18 @@ function _filaPintar(){
   var c = campos[FILA_I];
   h += '<div style="border-top:1px solid var(--b2);padding-top:8px">';
   h += '<div style="font-size:11px;color:var(--mut);margin-bottom:6px">' + c.n + '</div>';
-  if(!c.v){
-    h += '<input id="e-fila-esc" class="mono" maxlength="' + (c.esc||2) + '" value="' +
+  /* Los que ademas se pueden escribir llevan su casillero arriba de las
+     opciones: con las flechas se cicla, y si sabes el valor lo tipeas. */
+  if(c.esc){
+    h += '<input id="e-fila-esc" class="mono" maxlength="' + c.esc + '" value="' +
          (d[c.k]||'') + '" oninput="_filaEscrito(this.value)" ' +
-         'style="width:80px;background:var(--card2);border:1px solid var(--b2);color:var(--txt);' +
-         'border-radius:8px;padding:6px 10px;font-size:16px;text-align:center;outline:none">' +
-         '<span style="font-size:11px;color:var(--mut);margin-left:10px">se escribe</span>';
+         'style="width:74px;background:var(--card2);border:1px solid var(--b2);color:var(--txt);' +
+         'border-radius:8px;padding:5px 9px;font-size:15px;text-align:center;outline:none;margin-bottom:7px">' +
+         '<span style="font-size:11px;color:var(--mut);margin-left:9px">o con las flechas</span>' +
+         '<div style="height:7px"></div>';
+  }
+  if(!c.v){
+    h += '';
   } else {
     h += '<div style="display:flex;gap:4px;flex-wrap:wrap">';
     c.v.forEach(function(o){
