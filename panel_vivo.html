@@ -1114,7 +1114,10 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <span>&larr; &rarr; casillero</span><span>&uarr; &darr; valor</span><span>Enter guarda</span>
   </div>
 <div id="e-dec" class="edec"></div>
-  <div id="e-wizard">
+  <!-- El asistente viejo queda escondido: ahora se corrige con la fila de
+     arriba, que es mas rapida. Sigue en el archivo por si hace falta
+     volver: alcanza con sacarle el display:none. -->
+  <div id="e-wizard" style="display:none">
     <div class="wiz">
       <div class="wcol"><h4>Equipo</h4><div class="wlist" id="w-team"></div></div>
       <div class="wcol"><h4>Jugador</h4><div class="wlist" id="w-num"></div></div>
