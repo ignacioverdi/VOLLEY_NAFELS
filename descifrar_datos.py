@@ -1,127 +1,136 @@
-"""
-===============================================================================
-  descifrar_datos.py — QUE TODAS LAS PANTALLAS PUEDAN LEER LOS DATOS
--------------------------------------------------------------------------------
-  Doble clic. Se corre en la carpeta del club.
-
-  ── QUÉ PASÓ ────────────────────────────────────────────────────────────────
-  Los datos del club están cifrados: los archivos terminan en .enc y el
-  navegador no puede leerlos directamente. Para abrirlos hacen falta dos cosas:
-
-      <script src="datos_seguros.js"></script>     el que sabe abrirlos
-      <script>abrirDatos();</script>               el que los abre
-
-  Quince pantallas lo hacen. Treinta y tres, no. Y esas cargan el archivo
-  cifrado, el navegador intenta leerlo como si fuera codigo, falla en silencio,
-  y la pantalla se queda sin datos.
-
-  De ahi venian casi todos los sintomas juntos:
-
-      "Jugador no encontrado"
-      la pestaña de Jugadores vacia
-      Recepcion vacia
-      Ranking vacio
-      los mapas de calor sin nada
-      Analisis que no ve el entrenamiento
-
-  Una sola causa. Y no es de ahora: esas pantallas nunca pudieron leer datos
-  cifrados. En la temporada archivada funcionaban porque ahi les agregamos
-  archivos sin cifrar.
-
-  ── QUÉ HACE ────────────────────────────────────────────────────────────────
-  A cada pantalla que cargue algo cifrado y no sepa abrirlo, se le agregan esas
-  dos lineas, en el mismo orden que usan las que ya funcionan: el lector antes
-  de los datos, y la apertura despues.
-
-  Queda una copia .antes-descifrar de cada una.
-===============================================================================
-"""
-import os
-import re
-import glob
-import shutil
-import sys
+# -*- coding: utf-8 -*-
+# ============================================================================
+#  descifrar_datos.py — vuelve a dejar los datos legibles EN TU PC
+#
+#  Hace falta porque tus motores (update_db_nafels_FULL.py y compania) LEEN
+#  esos archivos para acumular. Si estan cifrados, el motor no puede trabajar.
+#
+#  El ciclo correcto es:   descifrar -> procesar -> cifrar -> publicar
+#  (HACER_TODO.bat ya lo hace solo; esto es por si necesitas correrlo aparte)
+#
+#  Uso:  python descifrar_datos.py
+# ============================================================================
+import os, sys, hashlib, base64, json, argparse, secrets
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 
-print()
-print('  ' + '=' * 66)
-print('     QUE TODAS LAS PANTALLAS PUEDAN LEER LOS DATOS')
-print('  ' + '=' * 66)
-print()
+import re as _re
+# patrones de archivos que contienen informacion del club
+PATRONES = [
+    _re.compile(r'^datos_.*\.js$', _re.I),          # datos_video_25-26.js, datos_equipo.js, ...
+    _re.compile(r'^liga_data.*\.js$', _re.I),
+    _re.compile(r'^mapa_videos.*\.js$', _re.I),
+    _re.compile(r'^plan_partido_data.*\.js$', _re.I),
+    _re.compile(r'^scouting_rival.*\.js$', _re.I),
+    _re.compile(r'.*_players_db\.json$', _re.I),
+    _re.compile(r'^nla_.*stats.*\.json$', _re.I),
+    _re.compile(r'^entrenamientos_db\.json$', _re.I),
+]
+# archivos que EMPIEZAN con "datos_" pero son programa, no datos
+# NUNCA se cifran:
+#  - datos_seguros.js  -> es el lector, tiene que poder leerse
+#  - nla_stats.json    -> nla_stats_table.html lo pide con fetch(), que el lector
+#                         no intercepta. Si se cifra, la tabla de liga queda rota
+#                         (y ademas el robot de GitHub lo regenera en claro).
+#  - datos_historial.js-> importar_dvw.html lo pide con fetch(), mismo caso.
+NUNCA = {'datos_seguros.js', 'nla_stats.json', 'datos_historial.js'}
 
-if not os.path.exists(os.path.join(AQUI, 'datos_seguros.js')):
-    print('  Falta datos_seguros.js en esta carpeta.')
-    print('  Es el archivo que sabe abrir los datos cifrados.')
-    print()
-    input('  Enter para cerrar...')
-    sys.exit(1)
+def es_dato(nombre):
+    if nombre.lower() in NUNCA:
+        return False
+    return any(p.match(nombre) for p in PATRONES)
 
-paginas = sorted(glob.glob(os.path.join(AQUI, '*.html')))
-tocadas = 0
-ya = 0
-sin_cifrado = 0
+# los archivos que contienen informacion del club
+DATOS = [
+    'plan_partido_data.js', 'datos_bloqueo.js', 'scouting_rival.js',
+    'liga_data.js', 'datos_video.js', 'mapa_videos.js',
+    'datos_equipo.js', 'datos_partidos.js', 'datos_historial.js',
+    'datos_armadores.js', 'datos_recepcion.js', 'datos_ejercicios.js',
+    'datos_nla.js', 'nla_stats.json',
+]
+# tambien las bases grandes
+def bases(carpeta):
+    return [a for a in os.listdir(carpeta) if a.endswith('_players_db.json')]
 
-for p in paginas:
-    nombre = os.path.basename(p)
-    try:
-        s = open(p, encoding='utf-8', errors='replace').read()
-    except Exception:
-        continue
+def flujo(llave_bytes, largo):
+    """Genera la corriente de bytes con la que se mezcla el archivo.
+       Es SHA-256 en modo contador: cada bloque depende de la llave y del numero
+       de bloque, asi que nunca se repite."""
+    salida = bytearray()
+    n = 0
+    while len(salida) < largo:
+        salida += hashlib.sha256(llave_bytes + n.to_bytes(8, 'big')).digest()
+        n += 1
+    return salida[:largo]
 
-    # ¿carga algo cifrado?
-    cifrados = re.findall(r'<script src="([^"]+\.enc)"[^>]*></script>', s)
-    if not cifrados:
-        sin_cifrado += 1
-        continue
+def clave_archivo(llave_hex, nombre):
+    """Cada archivo se cifra con una llave propia, derivada de la llave del club
+       y del nombre del archivo. Asi dos archivos nunca comparten la misma
+       corriente de bytes (que es lo que permitiria descifrar uno con otro)."""
+    return hashlib.sha256(bytes.fromhex(llave_hex) + b'|' + nombre.encode('utf-8')).digest()
 
-    tiene_lector = 'datos_seguros.js' in s
-    tiene_apertura = re.search(r'abrirDatos\s*\(\s*\)', s) is not None
-    if tiene_lector and tiene_apertura:
-        ya += 1
-        continue
+def cifrar(texto, llave_hex, nombre):
+    datos = texto.encode('utf-8')
+    k = clave_archivo(llave_hex, nombre)
+    f = flujo(k, len(datos))
+    mezcla = bytes(a ^ b for a, b in zip(datos, f))
+    return base64.b64encode(mezcla).decode('ascii')
 
-    original = s
+def descifrar(b64, llave_hex, nombre):
+    mezcla = base64.b64decode(b64)
+    k = clave_archivo(llave_hex, nombre)
+    f = flujo(k, len(mezcla))
+    return bytes(a ^ b for a, b in zip(mezcla, f)).decode('utf-8')
 
-    # ── 1 · el lector, ANTES del primer archivo cifrado ───────────────────
-    if not tiene_lector:
-        m = re.search(r'<script src="[^"]+\.enc"[^>]*></script>', s)
-        if m:
-            s = (s[:m.start()] +
-                 '<script src="datos_seguros.js"></script>\n  ' +
-                 s[m.start():])
 
-    # ── 2 · la apertura, DESPUÉS del último ───────────────────────────────
-    if not tiene_apertura:
-        todos = list(re.finditer(r'<script src="[^"]+\.enc"[^>]*></script>', s))
-        if todos:
-            fin = todos[-1].end()
-            s = (s[:fin] +
-                 '\n  <script>abrirDatos();</script>' +
-                 s[fin:])
+def llave_guardada(carpeta):
+    ruta = os.path.join(carpeta, 'LLAVE.txt')
+    if not os.path.exists(ruta):
+        return None
+    t = open(ruta, encoding='utf-8').read().strip()
+    return t if len(t) == 64 else None
 
-    if s != original:
-        if not os.path.exists(p + '.antes-descifrar'):
-            shutil.copy2(p, p + '.antes-descifrar')
-        open(p, 'w', encoding='utf-8').write(s)
-        tocadas += 1
-        falta = []
-        if not tiene_lector:
-            falta.append('el lector')
-        if not tiene_apertura:
-            falta.append('la apertura')
-        print('     %-26s %d archivo(s) cifrado(s) · le faltaba %s'
-              % (nombre[:26], len(cifrados), ' y '.join(falta)))
+def main():
+    carpeta = AQUI
+    k = llave_guardada(carpeta)
+    if not k:
+        print('\n  No encuentro LLAVE.txt (o esta incompleta).')
+        print('  Sin la llave no se pueden abrir los datos.\n')
+        return 1
 
-print()
-print('  ' + '-' * 66)
-print('     arregladas: %d   ·   ya estaban: %d   ·   sin datos cifrados: %d'
-      % (tocadas, ya, sin_cifrado))
-print('  ' + '-' * 66)
-print()
-if tocadas:
-    print('  Ahora todas las pantallas pueden leer los datos del club.')
-    print()
-    print('  Publica y proba el dashboard, el perfil del jugador y los mapas.')
-print()
-input('  Enter para cerrar...')
+    lista = []
+    for raiz, dirs, archivos in os.walk(carpeta):
+        dirs[:] = [d for d in dirs if d.lower() not in {'.git','__pycache__','node_modules','fotos','escudos','imagenes'}
+                   and not d.lower().startswith('dvw ')]
+        for a in archivos:
+            if a.endswith('.enc'):
+                lista.append(os.path.relpath(os.path.join(raiz, a), carpeta).replace(os.sep, '/'))
+    if not lista:
+        print('\n  No hay archivos cifrados. Los datos ya estan legibles.\n')
+        return 0
+
+    print('\n  Abriendo los datos para que el motor pueda trabajar...\n')
+    total = fallos = 0
+    for enc in sorted(lista):
+        original = enc[:-4]                      # saco el .enc
+        ruta_enc = os.path.join(carpeta, *enc.split('/'))
+        try:
+            txt = open(ruta_enc, encoding='utf-8').read()
+            b64 = txt[txt.index('"]="') + 4 : txt.rindex('";')]
+            claro = descifrar(b64, k, original)
+        except Exception as e:
+            print('    [ERROR] %-38s %s' % (original, e)); fallos += 1; continue
+        open(os.path.join(carpeta, *original.split('/')), 'w', encoding='utf-8').write(claro)
+        os.remove(ruta_enc)
+        total += 1
+        print('    %-40s legible' % original)
+
+    print('\n  Listos: %d archivos.' % total)
+    if fallos:
+        print('  [ATENCION] %d no se pudieron abrir. NO publiques hasta revisarlo.' % fallos)
+        return 1
+    print('  Acordate de volver a cifrar antes de publicar (HACER_TODO lo hace solo).\n')
+    return 0
+
+if __name__ == '__main__':
+    sys.exit(main())

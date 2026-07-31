@@ -7,20 +7,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 
 <!-- Datos (cada uno se carga si existe; si no, el onerror lo deja en null) -->
-<script src="plan_partido_data.js" onerror="void 0"></script>
-  <script src="datos_bloqueo.js" onerror="void 0"></script>
-  <script src="datos_equipo.js" onerror="void 0"></script>
-  <script src="plan_partido_data.js.enc" onerror="void 0"></script>
-  <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
-  <script src="datos_equipo.js.enc" onerror="void 0"></script>
-  <script src="objetivos.js" onerror="void 0"></script>
-  <script src="adapter_entrenamiento.js" onerror="void 0"></script>
-  <script src="game_plans.js" onerror="void 0"></script>
+<script src="game_plans.js" onerror="void 0"></script>
 <script src="datos_casla.js" onerror="void 0"></script>
 <script src="objetivos_config.js" onerror="void 0"></script>
-<script src="datos_seguros.js"></script>
-  <script src="datos_partidos.js.enc" onerror="void 0"></script>
-<script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
+<script src="datos_partidos.js.enc" onerror="void 0"></script>
+<script src="datos_entrenamientos.js" onerror="void 0"></script>
 <script src="firebase.js" onerror="void 0"></script>
 <script src="lang.js" onerror="void 0"></script>
 <script src="datos_historial.js" onerror="window.HISTORIAL_DATA=null"></script>
@@ -28,7 +19,6 @@
 <script src="datos_baterias.js" onerror="void 0"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
-  <script>abrirDatos();</script>
 <script src="datos_prep_fisica.js" onerror="window.PREP_DATA=null"></script>
 
 <style>
@@ -499,25 +489,24 @@ var numJug = parseInt(params.get('num')) || 0;
 
 var POS_COLOR = {'ARMADOR':'#f59e0b','CENTRAL':'#f97316','PUNTA':'#22c55e','OPUESTO':'#818cf8','LIBERO':'#06b6d4'};
 
-var EQUIPO_DEMO = {
-  /* El plantel del club. De aca sacan los nombres las pantallas cuando los
-     datos estan cifrados y no se abren: no es una lista de ejemplo. */
-  jugadores: [
-    {num:1, nombre:"DURDOS", pos:"PUNTA", foto:null, pais:"", altura:"", edad:0},
-    {num:2, nombre:"BRUDERER", pos:"LIBERO", foto:null, pais:"", altura:"", edad:0},
-    {num:3, nombre:"SCHWITTER", pos:"OPUESTO", foto:null, pais:"", altura:"", edad:0},
-    {num:4, nombre:"VAZQUEZ", pos:"ARMADOR", foto:null, pais:"", altura:"", edad:0},
-    {num:5, nombre:"CLEMENT", pos:"CENTRAL", foto:null, pais:"", altura:"", edad:0},
-    {num:7, nombre:"SCHMID R", pos:"CENTRAL", foto:null, pais:"", altura:"", edad:0},
-    {num:9, nombre:"NORRIS", pos:"OPUESTO", foto:null, pais:"", altura:"", edad:0},
-    {num:10, nombre:"BOGDANOVSKI", pos:"PUNTA", foto:null, pais:"", altura:"", edad:0},
-    {num:11, nombre:"BARTHOLET", pos:"PUNTA", foto:null, pais:"", altura:"", edad:0},
-    {num:12, nombre:"JOHANSSON", pos:"CENTRAL", foto:null, pais:"", altura:"", edad:0},
-    {num:13, nombre:"STEIMANN", pos:"ARMADOR", foto:null, pais:"", altura:"", edad:0},
-    {num:17, nombre:"ROFFLER", pos:"PUNTA", foto:null, pais:"", altura:"", edad:0},
-    {num:20, nombre:"SCHMID J", pos:"LIBERO", foto:null, pais:"", altura:"", edad:0}
-  ]
-};
+var EQUIPO_DEMO = { jugadores: [
+  {num:2,nombre:"OJUEZ",pos:"CENTRAL",pais:"🇦🇷"},
+  {num:3,nombre:"ROMEO WINER",pos:"LIBERO",pais:"🇦🇷"},
+  {num:4,nombre:"VAZQUEZ",pos:"ARMADOR",pais:"🇦🇷"},
+  {num:5,nombre:"RAMOS",pos:"OPUESTO",pais:"🇦🇷"},
+  {num:6,nombre:"VILLARRUEL",pos:"PUNTA",pais:"🇦🇷"},
+  {num:9,nombre:"GODOY",pos:"ARMADOR",pais:"🇦🇷"},
+  {num:10,nombre:"VIERA",pos:"CENTRAL",pais:"🇦🇷"},
+  {num:11,nombre:"DURDOS",pos:"PUNTA",pais:"🇦🇷"},
+  {num:12,nombre:"ZANOTTI",pos:"LIBERO",pais:"🇦🇷"},
+  {num:13,nombre:"ROJAS CARUSO",pos:"PUNTA",pais:"🇦🇷"},
+  {num:14,nombre:"NIELSON",pos:"PUNTA",pais:"🇦🇷"},
+  {num:15,nombre:"ROTEZZI",pos:"CENTRAL",pais:"🇦🇷"},
+  {num:17,nombre:"HERBSOMMER",pos:"CENTRAL",pais:"🇩🇪"},
+  {num:18,nombre:"ACOSTA",pos:"OPUESTO",pais:"🇦🇷"},
+  {num:19,nombre:"DIAZ BOLLI",pos:"ARMADOR",pais:"🇦🇷"},
+  {num:20,nombre:"FREDDIE",pos:"PUNTA",pais:"🇦🇷"}
+]};
 var eqData = window.EQUIPO_DATA || EQUIPO_DEMO;
 var jugador = eqData.jugadores.find(function(j){ return j.num === numJug; });
 if(!jugador && eqData.jugadores.length>0) jugador = eqData.jugadores[0];
@@ -530,7 +519,7 @@ function renderHero(j){
     '<div class="hero-info">'+
       '<div class="pos-tag" style="background:'+color+'12;color:'+color+';border-color:'+color+'33">'+j.pos+'</div>'+
       '<div class="hero-nombre">'+j.nombre+'</div>'+
-      '<div class="hero-sub">'+(j.pais||'🇦🇷')+' NAFELS VOLEY · Temporada 2026'+(j.altura?' · 📏 '+j.altura:'')+'</div>'+
+      '<div class="hero-sub">'+(j.pais||'🇦🇷')+' CASLA VOLEY · Temporada 2026'+(j.altura?' · 📏 '+j.altura:'')+'</div>'+
       '<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">'+
         '<a href="historial_voley.html" style="padding:6px 14px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;text-decoration:none;">📈 STATS</a>'+
         '<a href="prep_fisica.html" style="padding:6px 14px;border-radius:8px;background:rgba(232,25,44,.12);border:1px solid rgba(232,25,44,.25);color:#e8192c;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;text-decoration:none;">💪 RUTINA</a>'+

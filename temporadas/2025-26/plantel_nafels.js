@@ -1,45 +1,49 @@
 /* ============================================================================
-   plantel_nafels.js — PLANTEL MAESTRO Axpo Volley Näfels
+   plantel_nafels.js — PLANTEL DE LA TEMPORADA 2025-26
    ----------------------------------------------------------------------------
-   FUENTE ÚNICA del plantel actual. Editá SOLO este archivo cuando cambien
-   los jugadores y se actualiza en todo el sitio (login por PIN, panel, etc.).
+   ESTE ARCHIVO ES DE UNA TEMPORADA ARCHIVADA. No se edita para el equipo
+   actual: el plantel en uso vive en el plantel_nafels.js de la carpeta
+   principal del club.
 
-   Cómo editar:
-     - num    : número de camiseta
-     - ap     : apellido (en MAYÚSCULAS, como se muestra en los botones)
-     - nombre : nombre de pila
-     - pos    : ARMADOR | OPUESTO | CENTRAL | PUNTA | LIBERO
-     - nac    : nacionalidad
-     - nacim  : fecha de nacimiento
-     - altura : en cm
-   Si hay dos jugadores con el mismo apellido, distinguilos en "ap"
-   (ej: "SCHMID R" y "SCHMID J").
-   ========================================================================== */
+   ── DE DÓNDE SALE ──────────────────────────────────────────────────────────
+   De los propios partidos de la temporada. Los números, los apellidos y quién
+   fue líbero salen del bloque de jugadores de cada .dvw; el puesto se dedujo
+   de lo que hizo cada uno en la cancha, sobre 14 partidos:
+
+       más del 30% de armados          -> ARMADOR
+       mucha recepción y casi sin ataque -> LIBERO
+       mucho bloqueo y poca recepción  -> CENTRAL
+       recepción alta                  -> PUNTA
+       el resto, con ataque alto       -> OPUESTO
+
+   ── POR QUÉ HIZO FALTA ─────────────────────────────────────────────────────
+   Al archivar la temporada se copió el plantel que estaba en uso ese día, no
+   el que jugó. Por eso la cápsula mostraba los jugadores de la temporada
+   siguiente sobre los datos de esta.
+
+   Los nombres de pila, la nacionalidad, la fecha de nacimiento y la altura no
+   están en los .dvw: se completan a mano si hacen falta.
+   ============================================================================ */
 window.PLANTEL_NAFELS = {
-  temporada: "2026-27",
+  temporada: "2025-26",
   jugadores: [
     { num: 4,  ap: "VAZQUEZ",     nombre: "Ezequiel", pos: "ARMADOR", nac: "Argentina", nacim: "07/03/2004", altura: 182 },
-    { num: 13, ap: "STEIMANN",    nombre: "Yannik",   pos: "ARMADOR", nac: "Suiza",     nacim: "16/12/2004", altura: 182 },
-    { num: 9,  ap: "NORRIS",      nombre: "James",    pos: "OPUESTO", nac: "EE.UU.",    nacim: "13/11/1999", altura: 195 },
-    { num: 3,  ap: "SCHWITTER",   nombre: "Tom",      pos: "OPUESTO", nac: "Suiza",     nacim: "30/07/2005", altura: 188 },
-    { num: 12, ap: "JOHANSSON",   nombre: "Patrik",   pos: "CENTRAL", nac: "Suecia",    nacim: "12/03/1998", altura: 204 },
-    { num: 7,  ap: "SCHMID R",    nombre: "Roy",      pos: "CENTRAL", nac: "Suiza",     nacim: "17/05/2002", altura: 198 },
-    { num: 5,  ap: "CLEMENT",     nombre: "Olivier",  pos: "CENTRAL", nac: "Suiza",     nacim: "18/06/2005", altura: 203 },
-    { num: 1,  ap: "DURDOS",      nombre: "Valentin", pos: "PUNTA",   nac: "Argentina", nacim: "29/03/2004", altura: 184 },
-    { num: 11, ap: "BARTHOLET",   nombre: "Christian",pos: "PUNTA",   nac: "Suiza",     nacim: "11/04/2004", altura: 187 },
-    { num: 17, ap: "ROFFLER",     nombre: "Pascal",   pos: "PUNTA",   nac: "Suiza",     nacim: "16/12/2004", altura: 192 },
-    { num: 10, ap: "BOGDANOVSKI", nombre: "Dejan",    pos: "PUNTA",   nac: "Suiza",     nacim: "22/05/2006", altura: 196 },
-    { num: 20, ap: "SCHMID J",    nombre: "Jonas",    pos: "LIBERO",  nac: "Suiza",     nacim: "25/03/2003", altura: 178 }
-  ],
-  staff: [
-    { rol: "HC", ap: "VERDI",    nombre: "Ignacio",   nac: "Argentina / Italia", nacim: "09/01/1990" },
-    { rol: "AC", ap: "AZCOITIA", nombre: "Sebastian", nac: "Argentina / España", nacim: "20/03/2000" }
+    { num: 1,  ap: "DEECKE",      nombre: "Linus",         pos: "ARMADOR", nac: "", nacim: "", altura: 0 },
+    { num: 6,  ap: "CABANAS",     nombre: "Denis",    pos: "OPUESTO", nac: "", nacim: "", altura: 0 },
+    { num: 5,  ap: "HESSELHOLT",  nombre: "Joachim",         pos: "CENTRAL", nac: "", nacim: "", altura: 0 },
+    { num: 15, ap: "NIKOLOV",     nombre: "Risto",         pos: "CENTRAL", nac: "", nacim: "", altura: 0 },
+    { num: 7,  ap: "SCHMID R",    nombre: "Roy",      pos: "CENTRAL", nac: "Suiza", nacim: "17/05/2002", altura: 198 },
+    { num: 14, ap: "FIGUEIREDO",  nombre: "Manuel",         pos: "PUNTA",   nac: "", nacim: "", altura: 0 },
+    { num: 9,  ap: "BROCH",       nombre: "Nathan",         pos: "PUNTA",   nac: "", nacim: "", altura: 0 },
+    { num: 11, ap: "BARTHOLET",   nombre: "Christian",pos: "PUNTA",   nac: "Suiza", nacim: "", altura: 0 },
+    { num: 10, ap: "BOGDANOVSKI", nombre: "Dejan",    pos: "PUNTA",   nac: "Suiza", nacim: "", altura: 0 },
+    { num: 3,  ap: "SCHWITTER",   nombre: "Tom",      pos: "OPUESTO", nac: "Suiza", nacim: "30/07/2005", altura: 188 },
+    { num: 8,  ap: "PETER",       nombre: "Jonas",         pos: "LIBERO",  nac: "", nacim: "", altura: 0 }
   ]
 };
 
-/* Helpers: lista lista para login/botones (num + nombre en mayúsculas) */
-window.PLANTEL_NAFELS.lista = window.PLANTEL_NAFELS.jugadores.map(function (j) {
-  return { num: j.num, nombre: j.ap, pos: j.pos };
-});
-
-/* © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados */
+/* Los que estuvieron en la lista pero casi no jugaron esa temporada:
+   #2 Feuz · #12 Mathias · #13 Bruderer · #17 Campbell · #21 Gabriel
+   #22 Giustiniano · #98 Corzo · #99 Jucker
+   No se incluyen porque no tienen foto ni minutos suficientes. Si hiciera
+   falta que aparezcan, se agregan a la lista de arriba. */

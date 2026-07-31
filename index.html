@@ -246,9 +246,7 @@ select, select option {
   background-color: #ffffff !important;
 }
 </style>
-<script src="adapter_entrenamiento.js" onerror="void 0"></script>
-  <script src="datos_gameplan.js" onerror="void 0"></script>
-  <script src="datos_seguros.js"></script>
+<script src="datos_seguros.js"></script>
 <script src="firebase.js" onerror="void 0"></script>
 <script src="lang.js"></script>
 <script src="plantel_nafels.js"></script>
@@ -1133,7 +1131,7 @@ function updateResultados(){
     div.className = 'auto-result';
     div.style.cssText = "font-family:'Bebas Neue',sans-serif;font-size:16px;color:"+color+";letter-spacing:2px;";
     div.innerHTML = casla+' — '+riv+' <span style="font-size:9px;color:#64748b;letter-spacing:1px;">'+tipo+'</span>';
-    // Insert after the NAFELS vs RIVAL line
+    // Insert after the CASLA vs RIVAL line
     var rivalDiv = card.querySelector('[style*="font-size:17px"]');
     if(rivalDiv && rivalDiv.nextSibling){
       // Only add if not already there

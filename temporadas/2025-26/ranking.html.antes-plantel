@@ -68,7 +68,7 @@ var SK = [
 ];
 
 function tryInit(n){
-  if(typeof ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[])!=='undefined' && typeof objCalcVals!=='undefined'){ init(); }
+  if(typeof CASLA_JUGADORES!=='undefined' && typeof objCalcVals!=='undefined'){ init(); }
   else if(n>0){ setTimeout(function(){ tryInit(n-1); }, 300); }
   else { document.getElementById('grid').innerHTML='<div style="grid-column:span 3;text-align:center;padding:40px;color:#ef4444">Error: verificar objetivos_config.js y datos_partidos.js en GitHub.</div>'; }
 }
@@ -131,7 +131,7 @@ function getActionCount(pjug, sk){
 }
 
 function getData(){
-  var casla=typeof ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[])!=='undefined'?((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]):[];
+  var casla=typeof CASLA_JUGADORES!=='undefined'?CASLA_JUGADORES:[];
   var pjugs=typeof PARTIDOS_JUGADORES!=='undefined'?PARTIDOS_JUGADORES:[];
   return casla.filter(function(j){return j.num;}).map(function(j){
     var v=objCalcVals(j.nombre)||{};

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Recepción — NAFELS Voley</title>
+<title>Recepción — CASLA Voley</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -288,7 +288,7 @@ canvas.panel-court{position:absolute;inset:0;width:100%;height:100%;opacity:.28;
 <body>
 <div class="hdr">
   <a href="dashboard.html" class="back-btn">← Dashboard</a>
-  <div class="hdr-title">RECEPCIÓN <span>NAFELS</span></div>
+  <div class="hdr-title">RECEPCIÓN <span>CASLA</span></div>
   
   <div style="display:flex;gap:6px;margin-left:auto">
     <button id="rec-tbtn-p" onclick="recSetTipo('partido',this)" style="padding:5px 12px;border-radius:8px;border:1px solid rgba(232,25,44,.4);background:rgba(232,25,44,.12);color:#e8192c;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase">🏆 PARTIDO</button>
@@ -302,14 +302,12 @@ canvas.panel-court{position:absolute;inset:0;width:100%;height:100%;opacity:.28;
 
 <script src="datos_casla.js" onerror="void 0"></script>
 <script src="datos_entrenamientos.js" onerror="void 0"></script>
-<script src="datos_equipo_2025-26.js" onerror="void 0"></script>
-
 
 
 
 <script>
 // ================================================================
-// NAFELS VOLEY — Datos de recepción
+// CASLA VOLEY — Datos de recepción
 // Estructura: jugador → tipo_saque → desde_zona → posicion_receptor
 // Cargado por: recepcion.html, jugador.html
 // ================================================================
@@ -318,8 +316,8 @@ canvas.panel-court{position:absolute;inset:0;width:100%;height:100%;opacity:.28;
 window.RECEPCION_DATA = {};
 
 function cargarRecepcionCasla(){
-  if(typeof CASLA_JUGADORES === 'undefined') return;
-  CASLA_JUGADORES.forEach(function(j){
+  if(typeof ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]) === 'undefined') return;
+  ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]).forEach(function(j){
     if(!j.recepcion || !j.recepcion.flotado) return;
     var apellido = j.nombre.replace(/^\d+\s*/,'').split(' ')[0].toUpperCase();
     var rec = j.recepcion;
@@ -388,10 +386,10 @@ function cargarRecepcionFromSource(jugadores){
     if(!j.recepcion || !j.recepcion.flotado) return;
     var apellido = j.nombre.replace(/^\d+\s*/,'').split(' ')[0].toUpperCase();
     var rec = j.recepcion;
-    // Copy structure from CASLA_JUGADORES format
+    // Copy structure from ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]) format
     if(typeof RECEPCION_DATA !== 'undefined'){
       // Use existing conversion
-      var temp_CASLA = window.CASLA_JUGADORES;
+      var temp_CASLA = ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]);
       window.CASLA_JUGADORES = [j];
       cargarRecepcionCasla();
       window.CASLA_JUGADORES = temp_CASLA;
@@ -661,7 +659,7 @@ function recSetTipo(tipo, btn){
     : "padding:5px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase";
 
   if(tipo === 'partido'){
-    // Restore original NAFELS data
+    // Restore original CASLA data
     window.RECEPCION_DATA = {};
     cargarRecepcionCasla();
     recBuildJbtns(Object.keys(window.RECEPCION_DATA));
@@ -710,8 +708,8 @@ function recLoadEnt(nombre){
   if(!src && typeof ENTRENAMIENTOS_JUGADORES !== 'undefined') src = ENTRENAMIENTOS_JUGADORES;
   if(!src) return;
   
-  // Swap CASLA_JUGADORES, load, restore
-  var orig = window.CASLA_JUGADORES;
+  // Swap ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]), load, restore
+  var orig = ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]);
   window.CASLA_JUGADORES = src;
   window.RECEPCION_DATA = {};
   cargarRecepcionCasla();

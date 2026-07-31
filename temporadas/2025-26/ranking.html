@@ -3,14 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ranking — NAFELS Voley</title>
+<title>Ranking — CASLA Voley</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="datos_casla.js" onerror="void 0"></script>
 <script src="datos_partidos.js.enc" onerror="void 0"></script>
 <script src="datos_historial.js" onerror="void 0"></script>
 <script src="objetivos_config.js" onerror="void 0"></script>
-<script src="datos_equipo_2025-26.js" onerror="void 0"></script>
-
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#07080F;--card:#0D0E1A;--b:rgba(255,255,255,.06);--b2:rgba(255,255,255,.12);
@@ -70,7 +68,7 @@ var SK = [
 ];
 
 function tryInit(n){
-  if(typeof CASLA_JUGADORES!=='undefined' && typeof objCalcVals!=='undefined'){ init(); }
+  if(typeof ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[])!=='undefined' && typeof objCalcVals!=='undefined'){ init(); }
   else if(n>0){ setTimeout(function(){ tryInit(n-1); }, 300); }
   else { document.getElementById('grid').innerHTML='<div style="grid-column:span 3;text-align:center;padding:40px;color:#ef4444">Error: verificar objetivos_config.js y datos_partidos.js en GitHub.</div>'; }
 }
@@ -133,7 +131,7 @@ function getActionCount(pjug, sk){
 }
 
 function getData(){
-  var casla=typeof CASLA_JUGADORES!=='undefined'?CASLA_JUGADORES:[];
+  var casla=typeof ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[])!=='undefined'?((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]):[];
   var pjugs=typeof PARTIDOS_JUGADORES!=='undefined'?PARTIDOS_JUGADORES:[];
   return casla.filter(function(j){return j.num;}).map(function(j){
     var v=objCalcVals(j.nombre)||{};

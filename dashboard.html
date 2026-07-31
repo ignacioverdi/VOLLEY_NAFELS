@@ -3,20 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Dashboard Entrenador — NAFELS Voley</title>
+<title>Dashboard Entrenador — CASLA Voley</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="datos_equipo.js" onerror="void 0"></script>
-  <script src="datos_equipo.js.enc" onerror="void 0"></script>
-  <script src="plantel_nafels.js" onerror="void 0"></script>
-  <script src="objetivos.js" onerror="void 0"></script>
-  <script src="adapter_entrenamiento.js" onerror="void 0"></script>
-  <script src="game_plans.js" onerror="void 0"></script>
-  <script src="datos_historial.js"  onerror="void 0"></script>
+<script src="datos_historial.js"  onerror="void 0"></script>
 <script src="objetivos_config.js" onerror="void 0"></script>
-<script src="datos_seguros.js"></script>
-  <script src="datos_partidos.js.enc" onerror="void 0"></script>
-  <script>abrirDatos();</script>
-<script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
+<script src="datos_partidos.js.enc" onerror="void 0"></script>
+<script src="datos_entrenamientos.js" onerror="void 0"></script>
 <script src="datos_casla.js" onerror="void 0"></script>
 <script src="datos_prep_fisica.js" onerror="void 0"></script>
 <script src="firebase.js"         onerror="void 0"></script>
@@ -114,12 +106,8 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 0%,rgb
 .empty{text-align:center;padding:40px;color:var(--mut);font-size:13px;letter-spacing:1px;}
 </style>
 <script>
-/* Con que clave viene el resultado del partido. Antes iba escrita la del
-   club de origen y el marcador salia vacio. */
-var RES_CLAVE = 'nafels';
-
 // ================================================================
-// NAFELS VOLEY — Utils compartidos
+// CASLA VOLEY — Utils compartidos
 // Cargado por todas las páginas
 // ================================================================
 
@@ -218,7 +206,7 @@ window.OBJETIVOS_CONFIG={metas:{
     <a href="index.html" class="back-btn">← Hub</a>
     <div>
       <div class="hdr-title">📊 Dashboard Entrenador</div>
-      <div style="font-size:9px;color:var(--mut);letter-spacing:2px">NAFELS VOLEY · División de Honor 2026</div>
+      <div style="font-size:9px;color:var(--mut);letter-spacing:2px">CASLA VOLEY · División de Honor 2026</div>
     </div>
   </div>
   <div id="nav-gen" style="font-size:10px;color:var(--mut);letter-spacing:1px"></div>
@@ -925,10 +913,10 @@ function renderGamePlans(){
 
     var resHtml = '';
     if(gp.resultado){
-      var win = gp.resultado[RES_CLAVE] > gp.resultado.rival;
+      var win = gp.resultado.casla > gp.resultado.rival;
       var col = win ? '#22c55e' : '#ef4444';
       resHtml = '<div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,.03);border-radius:7px;margin-bottom:10px">'
-        +'<div style="font-family:Bebas Neue,sans-serif;font-size:20px;color:'+col+'">'+gp.resultado[RES_CLAVE]+' — '+gp.resultado.rival+'</div>'
+        +'<div style="font-family:Bebas Neue,sans-serif;font-size:20px;color:'+col+'">'+gp.resultado.casla+' — '+gp.resultado.rival+'</div>'
         +'<div style="font-size:8px;color:#475569;text-transform:uppercase;letter-spacing:1px">'+(win?'✓ Victoria':'✗ Derrota')+'</div>'
         +'</div>';
     }
@@ -1105,11 +1093,10 @@ function renderNovedades(){
   <div class="hm-box">
     <div class="hm-title"><span>🔥 HEAT MAPS</span><button class="hm-close" onclick="closeHeatmapMenu()">✕</button></div>
     <div class="hm-grid">
-      <a class="hm-card" href="hm_ataque.html?equipo=nafels"    style="background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#F97316">ATAQUE</span><span class="hm-sub">EFF · SO/TR · Zonas<br>Combos · Calidad rec.</span></a>
-      <a class="hm-card" href="hm_saque.html?equipo=nafels"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Flotado/Potencia<br>Zonas origen/destino</span></a>
-      <a class="hm-card" href="hm_recepcion.html?equipo=nafels" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
-      <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
-      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a>
+      <a class="hm-card" href="ataque_casla.html"    style="background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#F97316">ATAQUE</span><span class="hm-sub">EFF · SO/TR · Zonas<br>Combos · Calidad rec.</span></a>
+      <a class="hm-card" href="saque_casla.html"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Flotado/Potencia<br>Zonas origen/destino</span></a>
+      <a class="hm-card" href="recepcion_casla.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
+      <a class="hm-card" href="armador_casla.html"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
     </div>
     <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">División de Honor 2026 · 7 partidos analizados</div>
   </div>
