@@ -12,10 +12,7 @@ function w(s){document.write('<scr'+'ipt src="'+s+'" onerror="void 0"><\/scr'+'i
 if(ent){ w('datos_entrenamientos.js'); w('datos_historial_ent.js'); w('adapter_entrenamiento.js'); }
 else   { w('datos_partidos.js'); w('datos_historial.js'); }
 })();</script>
-<script src="datos_baterias.js.enc" onerror="void 0"></script>
-  <!-- Sin cifrar, para poder verificar que trae el detalle por partido.
-       Carga despues, asi que reemplaza al cifrado sin tocarlo. -->
-  <script src="datos_baterias_2025-26.js" onerror="void 0"></script>
+<script src="datos_baterias_2025-26.js" onerror="void 0"></script>
   <script src="objetivos_config.js" onerror="void 0"></script>
   <script src="datos_historial.js" onerror="void 0"></script>
   <script src="utils.js" onerror="void 0"></script>
@@ -1471,20 +1468,17 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 
 <script src="chat_nafels.js"></script>
 <script src="lang.js"></script>
-<script src="temporadas_menu.js">
-/* ══════════════════════════════════════════════════════════════════════════
-   LAS BATERIAS DEL ANALISIS
-   --------------------------------------------------------------------------
-   Antes usaban otro sistema, que lee de un archivo vacio en esta temporada:
-   mostraban una sola bateria con el acumulado y no cambiaban al elegir un
-   partido.
+<script src="temporadas_menu.js"></script>
 
-   Estas son las funciones del perfil del jugador, que sacan los numeros de
-   datos_baterias.js —el que trae el detalle partido por partido—. Estan todas
-   las de la cadena, incluida la constante _OBJ_NULOS: si falta una sola, la
-   primera se cae y no se dibuja nada.
-   ══════════════════════════════════════════════════════════════════════════ */
+<!-- ════════════════════════════════════════════════════════════════════════
+     LAS BATERIAS DEL ANALISIS
 
+     Va en su PROPIA etiqueta, al final del cuerpo. Antes esto quedaba adentro
+     de un <script src="..."> y el navegador ignora por completo lo que hay
+     adentro de una etiqueta que carga un archivo: el codigo estaba bien pero
+     nunca se ejecutaba.
+     ════════════════════════════════════════════════════════════════════════ -->
+<script>
 var _OBJ_NULOS = {sq:null,rec:null,bqpos:null,bqpt:null,atqq:null,atqhb:null,atqx:null,atqrp:null,atqri:null,atqrm:null,atqtr:null};
 
 function _batMatchName(nombre, keys){
@@ -1685,38 +1679,22 @@ function objRenderBaterias(){
   /* la comparativa es del perfil del jugador: aca no aplica */
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   EL PUENTE CON EL PARTIDO ELEGIDO
-   --------------------------------------------------------------------------
-   El analisis guarda el partido elegido como la posicion en su lista
-   —PARTIDO_IDX—. Las baterias lo buscan por su CODIGO:
-
-       B.ind.find(x => x.id === partido)
-
-   Las dos listas van en el mismo orden, asi que la posicion sirve para sacar
-   el codigo. Pasarle el nombre en vez del codigo devuelve todo vacio.
-   ══════════════════════════════════════════════════════════════════════════ */
+/* El analisis guarda el partido elegido como la posicion en su lista
+   —PARTIDO_IDX—. Las baterias lo buscan por su CODIGO. Las dos listas van en
+   el mismo orden, asi que la posicion sirve para sacarlo. */
 function _sincronizarBaterias(){
   try{
     var ent = (typeof FILTRO_TIPO !== 'undefined' && FILTRO_TIPO === 'E');
     window._objTipo = ent ? 'entrenamiento' : 'partido';
-
     var META = (window.BAT_PARTIDOS && window.BAT_PARTIDOS.meta) || null;
     var idx  = (typeof PARTIDO_IDX !== 'undefined') ? PARTIDO_IDX : null;
-
-    /* -1 y -2 son el acumulado y el acumulado filtrado */
-    if(idx === null || idx < 0 || !META || !META[idx]){
-      window._objPartido = 'acumulado';
-    } else {
-      window._objPartido = META[idx].id;
-    }
+    if(idx === null || idx < 0 || !META || !META[idx]) window._objPartido = 'acumulado';
+    else window._objPartido = META[idx].id;
     if(typeof objRenderBaterias === 'function') objRenderBaterias();
   }catch(e){}
 }
 
-/* Se engancha a las funciones que de verdad cambian el partido. Los nombres
-   importan: con uno equivocado el puente nunca se dispara y las baterias
-   quedan siempre en el acumulado. */
+/* enganchado a las funciones que de verdad cambian el partido */
 (function(){
   ['selectPartido','selectPartidoFiltrado','setFiltroTipo','setTab','setVista','renderTab']
   .forEach(function(nom){
@@ -1729,70 +1707,7 @@ function _sincronizarBaterias(){
     };
   });
 })();
-
-/* la primera vez, cuando ya cargaron los datos */
 setTimeout(_sincronizarBaterias, 300);
-
-/* ══════════════════════════════════════════════════════════════════════════
-   CARTEL DE DIAGNOSTICO — temporal
-   --------------------------------------------------------------------------
-   Muestra abajo a la izquierda que esta encontrando el sistema de baterias.
-   Es para ver donde se corta sin tener que abrir la consola. Cuando esto
-   funcione se saca.
-   ══════════════════════════════════════════════════════════════════════════ */
-(function(){
-  function poner(){
-    var d = document.getElementById('_diag_bat');
-    if(!d){
-      d = document.createElement('div');
-      d.id = '_diag_bat';
-      d.style.cssText = 'position:fixed;bottom:10px;left:10px;z-index:99999;'+
-        'background:rgba(15,23,42,.96);border:1px solid rgba(245,158,11,.5);'+
-        'color:#e2e8f0;border-radius:10px;padding:10px 14px;'+
-        'font-family:ui-monospace,monospace;font-size:11px;line-height:1.7;'+
-        'max-width:70vw;white-space:pre-wrap';
-      document.body.appendChild(d);
-    }
-    var L = [];
-    function di(k, v){ L.push(k + ': ' + v); }
-
-    var B = window.BAT_PARTIDOS;
-    di('BAT_PARTIDOS', B ? 'SI' : 'NO LLEGO');
-    if(B){
-      di('  partidos', (B.meta||[]).length);
-      di('  detalle por partido', (B.ind||[]).length);
-      di('  jugadores', Object.keys(B.jug||{}).length);
-    }
-    di('OBJETIVOS_CONFIG', window.OBJETIVOS_CONFIG ? 'SI' : 'NO LLEGO');
-    di('objGetVals', (typeof objGetVals === 'function') ? 'SI' : 'NO ESTA');
-    di('batGet', (typeof batGet === 'function') ? 'SI' : 'NO ESTA');
-    di('objRenderBaterias', (typeof objRenderBaterias === 'function') ? 'SI' : 'NO ESTA');
-    di('selectPartido', (typeof selectPartido === 'function') ? 'SI' : 'NO ESTA');
-    di('PARTIDO_IDX', (typeof PARTIDO_IDX !== 'undefined') ? PARTIDO_IDX : 'NO EXISTE');
-    di('_objPartido', window._objPartido);
-    di('_objTipo', window._objTipo);
-
-    /* donde se dibujan */
-    var conts = ['objetivos-panel','obj-equipo-panel','objetivos-jugador','obj-partido-row'];
-    var hay = conts.filter(function(c){ return document.getElementById(c); });
-    di('el lugar donde dibujar', hay.length ? hay.join(', ') : 'NINGUNO DE LOS ESPERADOS');
-
-    /* que devuelve el calculo ahora */
-    try{
-      var v = (typeof objGetVals === 'function') ? objGetVals(null) : null;
-      if(!v) di('los numeros', 'devuelve nada');
-      else {
-        var todosNull = Object.keys(v).every(function(k){ return v[k]===null; });
-        di('los numeros', todosNull ? 'TODOS VACIOS' : JSON.stringify(v).slice(0,70));
-      }
-    }catch(e){ di('los numeros', 'ERROR: ' + e.message); }
-
-    d.textContent = L.join('\n');
-  }
-  window._diagBat = poner;
-  setTimeout(poner, 500);
-  setInterval(poner, 1500);
-})();
 </script>
 </body>
 </html>
