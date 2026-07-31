@@ -6897,7 +6897,10 @@ function _filaEscribir(d){
            + t(d.dest) + t(d.sz) + t(d.ez) + t(d.subz)
            + t(d.hit) + t(d.blk) + t(d.spec);
   cola = cola.replace(/~+$/,'');
-  var cod = d.eq + d.num + d.skill + t(d.tipo) + t(d.ev) + cola;
+  /* el numero va con dos digitos siempre */
+  var num = String(d.num || '').replace(/\D/g,'');
+  num = num ? num.padStart(2,'0').slice(-2) : '00';
+  var cod = d.eq + num + d.skill + t(d.tipo) + t(d.ev) + cola;
   var inp = document.getElementById('e-code');
   if(inp){
     inp.value = cod;
@@ -6948,19 +6951,35 @@ function _filaPintar(){
   if(!c.v){
     h += '';
   } else {
-    h += '<div style="display:flex;gap:4px;flex-wrap:wrap">';
+    /* Con muchas opciones —las combinaciones son 78— la lista va en vertical y
+       con su propia barra: en horizontal ocupa media pantalla y no se lee. */
+    var vert = (c.v.length > 14);
+    h += vert
+      ? '<div id="e-fila-lista" style="display:flex;flex-direction:column;gap:2px;max-height:190px;overflow-y:auto;border:1px solid var(--b2);border-radius:8px;padding:4px">'
+      : '<div style="display:flex;gap:4px;flex-wrap:wrap">';
     c.v.forEach(function(o){
       var on = ((d[c.k]||'') === o[0]);
-      h += '<button type="button" onclick="_filaElegir(\'' + o[0] + '\')" style="' +
-           'padding:4px 9px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:11px;' +
+      h += '<button type="button" data-v="' + o[0] + '" onclick="_filaElegir(\'' + o[0] + '\')" style="' +
+           (vert ? 'text-align:left;padding:4px 8px;' : 'padding:4px 9px;') +
+           'border-radius:6px;cursor:pointer;font-family:inherit;font-size:11px;' +
            (on ? 'background:rgba(34,197,94,.16);border:1px solid var(--ok);color:var(--ok)'
                : 'background:transparent;border:1px solid var(--b2);color:var(--mut)') + '">' +
-           '<span class="mono" style="font-size:13px">' + (o[0]||'\u2014') + '</span> ' + o[1] + '</button>';
+           '<span class="mono" style="font-size:13px;display:inline-block;min-width:22px">' +
+           (o[0]||'\u2014') + '</span> ' + o[1] + '</button>';
     });
     h += '</div>';
   }
   h += '</div>';
   caja.innerHTML = h;
+
+  /* si la lista es larga, se desplaza sola hasta el elegido */
+  try{
+    var L = document.getElementById('e-fila-lista');
+    if(L){
+      var b = L.querySelector('button[data-v="' + (d[c.k]||'') + '"]');
+      if(b) L.scrollTop = Math.max(0, b.offsetTop - L.clientHeight/2);
+    }
+  }catch(e){}
 }
 
 function _filaElegir(v){
@@ -6973,8 +6992,11 @@ function _filaElegir(v){
 function _filaEscrito(v){
   var d = _filaLeer(); if(!d) return;
   var c = _filaCampos(d.skill)[FILA_I]; if(!c) return;
+  /* Mientras se escribe se deja tal cual: rellenar con cero al primer digito
+     mueve el cursor y no se puede seguir tipeando. El relleno se hace al
+     armar el codigo, no en el casillero. */
   d[c.k] = String(v||'').toUpperCase();
-  if(c.k === 'num') d.num = (d.num || '').replace(/\D/g,'').padStart(2,'0').slice(-2);
+  if(c.k === 'num') d.num = String(v||'').replace(/\D/g,'').slice(0,2);
   var caja = document.getElementById('e-fila');
   var foco = document.activeElement && document.activeElement.id === 'e-fila-esc';
   _filaEscribir(d);
