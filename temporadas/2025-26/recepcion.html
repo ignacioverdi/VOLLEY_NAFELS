@@ -313,7 +313,6 @@ else   { w('datos_partidos.js'); w('datos_recepcion.js'); }
   <script src="datos_equipo_2025-26.js.enc" onerror="void 0"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="modo_toggle.js" onerror="void 0"></script>
 <!-- datos_recepcion.js: lo carga el selector de modo (arriba) -->
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
 
@@ -426,14 +425,22 @@ window._recPartido = 'acumulado';
 
 function defaultReceptores(){
   try{
-    if(window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores){
-      var r = window.EQUIPO_DATA.jugadores
+    /* Primero el plantel de la temporada, que es el verificado. Si no esta,
+       el general del club. */
+    var _fuente = (window.PLANTEL_NAFELS && window.PLANTEL_NAFELS.jugadores)
+                  ? window.PLANTEL_NAFELS
+                  : window.EQUIPO_DATA;
+    if(_fuente && _fuente.jugadores){
+      var r = _fuente.jugadores
         .filter(function(j){ return j.pos==='PUNTA' || j.pos==='LIBERO'; })
-        .map(function(j){ return j.nombre; });
+        .map(function(j){ return j.nombre || j.ap; });
       if(r.length) return r;
     }
   }catch(e){}
-  return ["DURDOS", "BARTHOLET", "ROFFLER", "BOGDANOVSKI", "SCHMID J"];
+  /* Los que recibieron esta temporada: las puntas y el libero. Antes iba una
+     lista de la temporada SIGUIENTE, y por eso aparecian nombres de gente que
+     no jugo esta. */
+  return ["BROCH", "BOGDANOVSKI", "BARTHOLET", "FIGUEIREDO", "PETER"];
 }
 function initReceptores(){
   cargarRecepcionNafels();
