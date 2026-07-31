@@ -272,10 +272,7 @@ select, select option {
 }
 
 </style>
-<script src="datos_videos.js" onerror="void 0"></script>
-  <script src="adapter_entrenamiento.js" onerror="void 0"></script>
-  <script src="plan_partido_vivo.js" onerror="void 0"></script>
-  <script src="lang.js" onerror="void 0"></script>
+<script src="lang.js" onerror="void 0"></script>
 <script src="datos_seguros.js"></script>
   <script src="liga_data.js.enc"></script>
 <script src="firebase.js" onerror="void 0"></script>

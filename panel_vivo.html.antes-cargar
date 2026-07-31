@@ -1150,9 +1150,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 
 <div class="toast" id="toast"></div>
 
-<script src="datos_voley.js" onerror="void 0"></script>
-  <script src="plan_partido_vivo.js" onerror="void 0"></script>
-  <script src="datos_seguros.js"></script>
+<script src="datos_seguros.js"></script>
 <script src="firebase.js" onerror="void 0"></script>
 <script src="plantel_nafels.js" onerror="void 0"></script>
 <script src="objetivos.js" onerror="void 0"></script>

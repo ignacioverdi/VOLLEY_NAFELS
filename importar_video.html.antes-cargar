@@ -77,7 +77,6 @@
 
   <div id="list"></div>
 
-  <script src="datos_video.js" onerror="void 0"></script>
   <script src="datos_seguros.js"></script>
   <script src="datos_video_25-26.js.enc?v=3" onerror="void 0"></script>
   <script src="datos_video_26-27.js?v=3" onerror="void 0"></script>

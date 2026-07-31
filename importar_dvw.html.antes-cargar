@@ -573,8 +573,7 @@ function showToast(msg){
   setTimeout(function(){ t.classList.remove('show'); }, 2800);
 }
 </script>
-<script src="adapter_entrenamiento.js" onerror="void 0"></script>
-  <script src="lang.js"></script>
+<script src="lang.js"></script>
 <script src="temporadas_menu.js"></script>
 </body>
 </html>

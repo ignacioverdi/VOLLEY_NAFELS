@@ -300,9 +300,8 @@ canvas.panel-court{position:absolute;inset:0;width:100%;height:100%;opacity:.28;
 </div>
 <div class="content" id="content"></div>
 
-<script src="plantel_nafels.js" onerror="void 0"></script>
-  <script src="datos_casla.js" onerror="void 0"></script>
-<script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
+<script src="datos_casla.js" onerror="void 0"></script>
+<script src="datos_entrenamientos.js" onerror="void 0"></script>
 
 
 
