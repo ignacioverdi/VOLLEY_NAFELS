@@ -84,8 +84,8 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 </head>
 <body>
 <div class="hdr">
-  <div><div class="hdr-t">SAN LORENZO — ANALISIS DE ATAQUE 2026</div>
-  <div class="hdr-s">7 partidos DHM Argentina · Selecciona jugador y filtros</div></div>
+  <div><div class="hdr-t">AXPO VOLLEY NAFELS — ANALISIS DE ATAQUE 2026</div>
+  <div class="hdr-s">26 partidos NLA · Selecciona jugador y filtros</div></div>
 <div style="display:flex;align-items:center;gap:4px"><button id="lang-es" onclick="setLang('es')" style="background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;padding:3px 9px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;opacity:1">ES</button><button id="lang-en" onclick="setLang('en')" style="background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;padding:3px 9px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;opacity:0.4">EN</button><button id="lang-de" onclick="setLang('de')" style="background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;padding:3px 9px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;opacity:0.4">DE</button></div>
 </div>
 <div class="layout">
@@ -134,7 +134,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 
 <script>var RAW=(function(){
   var params=new URLSearchParams(window.location.search);
-  var equipo=(params.get('equipo')||'casla').toLowerCase();
+  var equipo=(params.get('equipo')||'nafels').toLowerCase();
   window.__MODO=(function(){try{return localStorage.getItem('vb_modo')||'partido';}catch(e){return 'partido';}})();
   var L = window.__MODO==='entrenamiento' ? (window.LIGA_DATA_ENT||window.LIGA_DATA) : window.LIGA_DATA;
   if(window.__MODO==='entrenamiento' && L && L.teams && L.teams['entrenamiento']) equipo='entrenamiento';
