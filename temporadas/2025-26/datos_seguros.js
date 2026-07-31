@@ -92,6 +92,33 @@
     return new TextDecoder('utf-8').decode(datos);
   }
 
+  /* Los archivos declaran sus datos con const:
+
+         const PARTIDOS_JUGADORES = [ ... ];
+
+     y una declaracion con const adentro de un eval NO sale de ahi: queda
+     encerrada y ninguna pantalla la ve. Por eso todo lo que dependia de
+     datos_partidos.js aparecia vacio aunque el archivo llegara bien.
+
+     Esto arma, para cada archivo, una linea por variable que la deja en
+     window, que es donde las pantallas la buscan. Se agrega AL FINAL del mismo
+     texto, asi que corre adentro del mismo eval y ve las declaraciones.
+
+     Cada una va con su propia red: si alguna falla, las demas siguen. Y a las
+     que ya se publicaban solas no les cambia nada. */
+  function publicarEnWindow(txt){
+    var nombres = {};
+    var re = /(?:^|[\r\n])\s*(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=/g;
+    var m;
+    while((m = re.exec(txt))) nombres[m[1]] = 1;
+    var salida = '';
+    for(var n in nombres){
+      salida += '\ntry{ if(typeof ' + n + ' !== "undefined") window[' +
+                JSON.stringify(n) + '] = ' + n + '; }catch(e){}';
+    }
+    return salida;
+  }
+
   /* abre todo lo que haya llegado cifrado */
   window.abrirDatos = function(){
     var llave = llaveLocal();
@@ -99,7 +126,8 @@
     var abiertos = 0;
     for(var nombre in window.__D){
       try{
-        (0, eval)(descifrar(window.__D[nombre], claveArchivo(llave, nombre)));
+        var txt = descifrar(window.__D[nombre], claveArchivo(llave, nombre));
+        (0, eval)(txt + publicarEnWindow(txt));
         abiertos++;
       }catch(e){
         try{ console.warn('[datos] no pude abrir', nombre); }catch(_){}
