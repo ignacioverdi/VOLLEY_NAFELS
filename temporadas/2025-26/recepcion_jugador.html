@@ -17,7 +17,8 @@ function w(s){document.write('<scr'+'ipt src="'+s+'" onerror="void 0"><\/scr'+'i
 if(ent){ w('datos_entrenamientos.js'); w('datos_historial_ent.js'); w('adapter_entrenamiento.js'); }
 else   { w('datos_partidos.js'); w('datos_historial.js'); }
 })();</script>
-<script src="modo_toggle.js" onerror="void 0"></script>
+  <!-- modo_toggle.js sacado: agregaba una barrita flotante que se superponia
+       con el selector de idioma. En la app de CASLA no existe. -->
 <!-- datos_historial.js: lo carga el selector de modo (arriba) -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
