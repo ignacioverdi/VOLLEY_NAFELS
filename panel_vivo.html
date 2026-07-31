@@ -4511,6 +4511,9 @@ function editCode(i){
   drawEditDec();
   syncExtendido();
   dibujarWizard();
+  /* La fila de los doce campos. Sin esto el hueco queda vacio: el HTML esta
+     puesto pero nadie lo dibuja al abrir la correccion. */
+  try{ FILA_I = 0; _filaPintar(); }catch(e){}
   inp.focus();
   if(CFG.cursorEfecto && row.c.length>5) inp.setSelectionRange(5,6);   /* cursor sobre el símbolo */
   else inp.setSelectionRange(inp.value.length, inp.value.length);      /* cursor al final */
