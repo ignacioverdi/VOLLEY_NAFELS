@@ -519,6 +519,40 @@ var eqData = EQUIPO_DEMO;
 var jugador = eqData.jugadores.find(function(j){ return j.num === numJug; });
 if(!jugador && eqData.jugadores.length>0) jugador = eqData.jugadores[0];
 
+
+/* ── LA TEMPORADA EN EL ENCABEZADO ────────────────────────────────────────
+   El encabezado muestra a que temporada corresponde lo que se esta viendo.
+   Antes iba escrita a mano —"Temporada 2026"— y en una capsula archivada
+   quedaba mal. Estas funciones la calculan. */
+function _ssStart(y,m){ return (m<=4)?y-1:y; }
+
+function _seasonOf(ds){ if(!ds) return null; var y,m;
+  if(String(ds).indexOf('-')>0){ var p=ds.split('-'); y=+p[0]; m=+p[1]; }    // ISO  2025-10-11
+  else if(String(ds).indexOf('/')>0){ var q=ds.split('/'); y=+q[2]; m=+q[1]; } // DMY  19/10/2025
+  else return null;
+  return _ssStart(y,m); }
+
+function _curSeason(){
+  var am=location.pathname.match(/\/temporadas\/(\d{4})-\d{2}\//);            // si estás viendo una temporada archivada
+  if(am) return +am[1];                                                      // → usar el año de esa temporada
+  var d=new Date(); return _ssStart(d.getFullYear(), d.getMonth()+1);        // si no, la temporada actual por fecha
+}
+
+function addOpt(texto, valor){
+    var o=document.createElement('option');o.value=valor;o.textContent=texto;o.style.color='#111';o.style.background='#fff';
+    if(window._objPartido===valor) o.selected=true;
+    sel.appendChild(o);
+  }
+
+function _filtrarTemporada(){ var cs=_curSeason();
+  if(!_filtHist && window.HISTORIAL_DATA && window.HISTORIAL_DATA.entrenamientos){
+    window.HISTORIAL_DATA.entrenamientos=window.HISTORIAL_DATA.entrenamientos.filter(function(e){ return _seasonOf(e.fecha)===cs; });
+    _filtHist=true; }
+  if(!_filtVid && window.VIDEO_DATA && window.VIDEO_DATA.matches){
+    var M=window.VIDEO_DATA.matches,F={}; Object.keys(M).forEach(function(c){ if(_seasonOf(M[c].date)===cs) F[c]=M[c]; });
+    window.VIDEO_DATA.matches=F; _filtVid=true; }
+}
+
 function renderHero(j){
   var color=POS_COLOR[j.pos]||'#64748b';
   var numDec=document.getElementById('hero-num-dec'); if(numDec) numDec.textContent=j.num;
@@ -527,12 +561,13 @@ function renderHero(j){
     '<div class="hero-info">'+
       '<div class="pos-tag" style="background:'+color+'12;color:'+color+';border-color:'+color+'33">'+j.pos+'</div>'+
       '<div class="hero-nombre">'+j.nombre+'</div>'+
-      '<div class="hero-sub">'+(j.pais||'🇦🇷')+' NAFELS VOLEY · Temporada 2026'+(j.altura?' · 📏 '+j.altura:'')+'</div>'+
+      '<div class="hero-sub">'+(j.pais||'🇦🇷')+' NAFELS VOLEY · Temporada '+_curSeason()+'/'+String(_curSeason()+1).slice(2)+(j.altura?' · 📏 '+j.altura:'')+'</div>'+
       '<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">'+
         '<a href="historial_voley.html" style="padding:6px 14px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;text-decoration:none;">📈 STATS</a>'+
         '<a href="prep_fisica.html" style="padding:6px 14px;border-radius:8px;background:rgba(232,25,44,.12);border:1px solid rgba(232,25,44,.25);color:#e8192c;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;text-decoration:none;">💪 RUTINA</a>'+
       '</div>'+
-    '</div>';
+    '</div>'+
+    (j.foto?'<img src="'+j.foto+'" alt="'+j.nombre+'" onerror="this.style.display=\'none\'" style="width:72px;height:94px;object-fit:cover;object-position:top;border-radius:12px;flex-shrink:0;border:2px solid '+color+'40;box-shadow:0 4px 14px rgba(0,0,0,.45)">':'');
 }
 
 function renderNextMatch(){
