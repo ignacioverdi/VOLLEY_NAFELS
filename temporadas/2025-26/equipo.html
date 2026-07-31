@@ -93,27 +93,32 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 20%,rg
 <script>
 // ── DATOS POR DEFECTO (reemplazados por datos_equipo.js) ─────────
 var EQUIPO_DEMO = {
+  /* El plantel que jugo la temporada 2025-26, verificado sobre los 97
+     partidos. Los doce tienen su foto en la carpeta. */
   jugadores: [
-    {num:1, nombre:"DURDOS", pos:"PUNTA", foto:null, pais:"🇦🇷", altura:"", edad:0},
-    {num:3, nombre:"SCHWITTER", pos:"OPUESTO", foto:null, pais:"🇨🇭", altura:"", edad:0},
-    {num:4, nombre:"VAZQUEZ", pos:"ARMADOR", foto:null, pais:"🇦🇷", altura:"", edad:0},
-    {num:5, nombre:"CLEMENT", pos:"CENTRAL", foto:null, pais:"🇨🇭", altura:"", edad:0},
-    {num:7, nombre:"SCHMID R", pos:"CENTRAL", foto:null, pais:"🇨🇭", altura:"", edad:0},
-    {num:9, nombre:"NORRIS", pos:"OPUESTO", foto:null, pais:"🇺🇸", altura:"", edad:0},
-    {num:10, nombre:"BOGDANOVSKI", pos:"PUNTA", foto:null, pais:"🇨🇭", altura:"", edad:0},
-    {num:11, nombre:"BARTHOLET", pos:"PUNTA", foto:null, pais:"🇨🇭", altura:"", edad:0},
-    {num:12, nombre:"JOHANSSON", pos:"CENTRAL", foto:null, pais:"🇸🇪", altura:"", edad:0},
-    {num:13, nombre:"STEIMANN", pos:"ARMADOR", foto:null, pais:"🇨🇭", altura:"", edad:0},
-    {num:17, nombre:"ROFFLER", pos:"PUNTA", foto:null, pais:"🇨🇭", altura:"", edad:0},
-    {num:20, nombre:"SCHMID J", pos:"LIBERO", foto:null, pais:"🇨🇭", altura:"", edad:0}
+    {num:1, nombre:"DEECKE", pos:"ARMADOR", foto:"fotos/01.jpg", pais:"", altura:"", edad:0},
+    {num:3, nombre:"SCHWITTER", pos:"OPUESTO", foto:"fotos/03.jpg", pais:"🇨🇭", altura:"188", edad:0},
+    {num:4, nombre:"VAZQUEZ", pos:"ARMADOR", foto:"fotos/04.jpg", pais:"🇦🇷", altura:"182", edad:0},
+    {num:5, nombre:"HESSELHOLT", pos:"CENTRAL", foto:"fotos/05.jpg", pais:"", altura:"", edad:0},
+    {num:6, nombre:"CABANAS", pos:"OPUESTO", foto:"fotos/06.jpg", pais:"", altura:"", edad:0},
+    {num:7, nombre:"SCHMID R", pos:"CENTRAL", foto:"fotos/07.jpg", pais:"🇨🇭", altura:"198", edad:0},
+    {num:8, nombre:"PETER", pos:"LIBERO", foto:"fotos/08.jpg", pais:"", altura:"", edad:0},
+    {num:9, nombre:"BROCH", pos:"PUNTA", foto:"fotos/09.jpg", pais:"", altura:"", edad:0},
+    {num:10, nombre:"BOGDANOVSKI", pos:"PUNTA", foto:"fotos/10.jpg", pais:"🇨🇭", altura:"196", edad:0},
+    {num:11, nombre:"BARTHOLET", pos:"PUNTA", foto:"fotos/11.jpg", pais:"🇨🇭", altura:"187", edad:0},
+    {num:14, nombre:"FIGUEIREDO", pos:"PUNTA", foto:"fotos/14.jpg", pais:"", altura:"", edad:0},
+    {num:15, nombre:"NIKOLOV", pos:"CENTRAL", foto:"fotos/15.jpg", pais:"", altura:"", edad:0}
   ],
   staff: [
-    {nombre:"IGNACIO VERDI", rol:"Head Coach", icon:"📋"},
-    {nombre:"PREP. FISICO", rol:"Strength & Conditioning", icon:"💪"}
+    {nombre:"IGNACIO VERDI", rol:"Head Coach", icon:"\uD83D\uDCCB"}
   ]
 };
 
-var DATA = window.EQUIPO_DATA || EQUIPO_DEMO;
+/* En una temporada archivada el plantel es el de abajo, verificado sobre los
+   97 partidos que se jugaron. Antes esta linea preferia el archivo cifrado, que
+   quedo congelado con los jugadores de la temporada SIGUIENTE: por eso la
+   capsula mostraba gente que nunca jugo esta. */
+var DATA = EQUIPO_DEMO;
 
 var POS_COLOR = {
   'ARMADOR':'#f59e0b','CENTRAL':'#f97316',
@@ -219,7 +224,6 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 
 <script src="chat_nafels.js"></script>
 <script src="temporadas_menu.js"></script>
-  <script src="plantel_nafels.js" onerror="void 0"></script>
 </body>
 </html>
 
