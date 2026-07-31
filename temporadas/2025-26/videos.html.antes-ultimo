@@ -449,7 +449,6 @@ function esc(s){ return String(s||'').replace(/'/g,"&#39;").replace(/"/g,"&quot;
 function escHtml(s){ return String(s||'').replace(/'/g,"&#39;"); }
 </script>
 <script src="temporadas_menu.js"></script>
-  <script src="plantel_nafels.js" onerror="void 0"></script>
 <script>
 /* i18n local de esta página (auto-contenido, no depende del diccionario de lang.js) */
 (function(){

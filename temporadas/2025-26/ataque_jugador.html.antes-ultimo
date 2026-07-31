@@ -455,7 +455,6 @@ function renderComparativaPosicion(cont, currentNum, type){
 </script>
 <script src="lang.js"></script>
 <script src="temporadas_menu.js"></script>
-  <script src="plantel_nafels.js" onerror="void 0"></script>
 </body>
 </html>
 

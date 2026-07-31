@@ -1632,10 +1632,10 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
+<script src="plantel_nafels.js" onerror="void 0"></script>
 <script src="scout_vivo.js" onerror="void 0"></script>
 <script src="temporadas_menu.js"></script>
 <script src="datos_equipo_2025-26.js.enc" onerror="void 0"></script>
-  <script src="plantel_nafels.js" onerror="void 0"></script>
 
 </body>
 </html>
