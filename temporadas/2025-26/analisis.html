@@ -13,6 +13,9 @@ if(ent){ w('datos_entrenamientos.js'); w('datos_historial_ent.js'); w('adapter_e
 else   { w('datos_partidos.js'); w('datos_historial.js'); }
 })();</script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
+  <!-- Sin cifrar, para poder verificar que trae el detalle por partido.
+       Carga despues, asi que reemplaza al cifrado sin tocarlo. -->
+  <script src="datos_baterias_2025-26.js" onerror="void 0"></script>
   <script src="objetivos_config.js" onerror="void 0"></script>
   <script src="datos_historial.js" onerror="void 0"></script>
   <script src="utils.js" onerror="void 0"></script>
