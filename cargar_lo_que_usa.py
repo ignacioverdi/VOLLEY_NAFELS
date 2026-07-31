@@ -55,10 +55,35 @@ for p in glob.glob(os.path.join(AQUI, '*.js')):
     for v in set(re.findall(r'window\.([A-Z_][A-Z0-9_]{2,})\s*=', s)):
         define.setdefault(v, nombre)
 
-# los cifrados también cuentan: el nombre sin .enc es el que se busca
-for p in glob.glob(os.path.join(AQUI, '*.js.enc')):
-    base = os.path.basename(p)[:-4]
-    # no se puede leer adentro, pero el nombre alcanza para el segundo arreglo
+# ── LOS ARCHIVOS CIFRADOS ──────────────────────────────────────────────────
+#    No se puede leer adentro para ver qué definen, así que se usa la
+#    correspondencia de siempre: cada archivo de datos guarda su variable con
+#    un nombre fijo. Es la que usan todos los clubes.
+CONOCIDOS = {
+    'datos_equipo.js':                'EQUIPO_DATA',
+    'datos_partidos.js':              'PARTIDOS_DATA',
+    'datos_historial.js':             'HISTORIAL_DATA',
+    'datos_armadores.js':             'ARMADORES_DATA',
+    'datos_recepcion.js':             'RECEPCION_RIVAL_DATA',
+    'datos_bloqueo.js':               'PP_BLOCK',
+    'datos_nla.js':                   'NLA_DATA',
+    'datos_ejercicios.js':            'EJERCICIOS_DATA',
+    'liga_data.js':                   'LIGA_DATA',
+    'liga_data_entrenamientos.js':    'LIGA_DATA_ENT',
+    'plan_partido_data.js':           'PP_DATA',
+    'mapa_videos.js':                 'MAPA_VIDEOS',
+    'mapa_videos_ent.js':             'MAPA_VIDEOS_ENT',
+    'datos_entrenamientos.js':        'ENTRENAMIENTOS_DATA',
+    'datos_historial_ent.js':         'HISTORIAL_DATA_ENT',
+    'datos_recepcion_ent.js':         'RECEPCION_DATA_ENT',
+    'datos_baterias.js':              'BAT_PARTIDOS',
+    'scouting_rival.js':              'SCOUTING_RIVAL',
+}
+for arch, var in CONOCIDOS.items():
+    existe = (os.path.exists(os.path.join(AQUI, arch)) or
+              os.path.exists(os.path.join(AQUI, arch + '.enc')))
+    if existe and var not in define:
+        define[var] = arch
 
 print('  Variables que se pueden resolver: %d' % len(define))
 print()
