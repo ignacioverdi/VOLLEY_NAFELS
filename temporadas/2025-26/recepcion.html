@@ -6,10 +6,6 @@
 <title>Recepción — Nafels Voley</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* Los rotulos y los numeros de las celdas estaban en 7 a 12 pixeles y no se
-   leian, sobre todo proyectando en la cancha. Se subieron unos puntos cada
-   uno, sin tocar el tamano de los cuadrantes. */
-
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#07080f;--card:#0d0e1a;--card2:#111220;
@@ -311,12 +307,11 @@ function w(s){document.write('<scr'+'ipt src="'+s+'" onerror="void 0"><\/scr'+'i
 if(ent){ w('datos_entrenamientos.js'); w('datos_recepcion_ent.js'); w('adapter_entrenamiento.js'); }
 else   { w('datos_partidos.js'); w('datos_recepcion.js'); }
 })();</script>
-<script src="datos_recepcion.js.enc" onerror="void 0"></script>
-  <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
-  <script src="datos_seguros.js"></script>
+<script src="datos_seguros.js"></script>
   <script src="datos_equipo_2025-26.js.enc" onerror="void 0"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
+<script src="modo_toggle.js" onerror="void 0"></script>
 <!-- datos_recepcion.js: lo carga el selector de modo (arriba) -->
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
 
@@ -429,21 +424,15 @@ window._recPartido = 'acumulado';
 
 function defaultReceptores(){
   try{
-    /* Primero el plantel de la temporada, que es el verificado. Si no esta,
-       el general del club. */
-    var _fuente = (window.PLANTEL_NAFELS && window.PLANTEL_NAFELS.jugadores)
-                  ? window.PLANTEL_NAFELS
-                  : window.EQUIPO_DATA;
-    if(_fuente && _fuente.jugadores){
-      var r = _fuente.jugadores
+    if(window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores){
+      var r = window.EQUIPO_DATA.jugadores
         .filter(function(j){ return j.pos==='PUNTA' || j.pos==='LIBERO'; })
-        .map(function(j){ return j.nombre || j.ap; });
+        .map(function(j){ return j.nombre; });
       if(r.length) return r;
     }
   }catch(e){}
-  /* Los que recibieron esta temporada: las puntas y el libero. Antes iba una
-     lista de la temporada SIGUIENTE, y por eso aparecian nombres de gente que
-     no jugo esta. */
+  /* Los que recibieron esta temporada. Antes iba la lista de la temporada
+     siguiente. */
   return ["BROCH", "BOGDANOVSKI", "BARTHOLET", "FIGUEIREDO", "PETER"];
 }
 function initReceptores(){
@@ -876,7 +865,6 @@ function recBtnOff(b){ b.classList.remove('on'); }
 
 <script src="lang.js"></script>
 <script src="temporadas_menu.js"></script>
-  <script src="plantel_nafels.js" onerror="void 0"></script>
 </body>
 </html>
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
