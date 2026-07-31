@@ -578,8 +578,12 @@ function renderNextMatch(){
 function renderQuickStats(j){
   var qs=document.getElementById('quick-stats');
   var num=parseInt(j.num);
-  var PP=(window.PP_DATA&&window.PP_DATA['sanlorenzo'])||{players:[]};
-  var BLK=(window.PP_BLOCK&&window.PP_BLOCK['sanlorenzo'])||[];
+  /* Con que nombre figura nuestro equipo en los datos. Antes iba escrito el
+     del club de origen —'nafels'— y en otro club no lo encontraba: los
+     numeros de arriba salian todos en guion. */
+  var _MI = 'nafels';
+  var PP=(window.PP_DATA&&(window.PP_DATA[_MI]||window.PP_DATA['home']))||{players:[]};
+  var BLK=(window.PP_BLOCK&&(window.PP_BLOCK[_MI]||window.PP_BLOCK['home']))||[];
   function card(roles){return (PP.players||[]).filter(function(p){return parseInt(p.num)===num && roles.indexOf(p.role)>=0;})[0];}
   function eff(data,ei,kind){ if(!data||!data.length)return null; var n=data.length,k=0,e=0,b=0,pos=0;
     data.forEach(function(a){var ev=a[ei]; if(ev==='#'){k++;pos++;} else if(ev==='+')pos++; else if(ev==='=')e++; else if(ev==='/')b++;});
@@ -611,7 +615,7 @@ function renderAccesos(j){
   ];
   var SETTER_NUMS=[4,9,19];
   if(SETTER_NUMS.indexOf(parseInt(j.num))>=0) items.splice(items.length-1,0,{icon:'🎯',title:'Distribución',desc:'Mi armado de juego',url:'plan_partido.html?equipo=nafels&jug='+j.num+'#armador',color:'#f59e0b'});
-  var _ppRec=(window.PP_DATA&&window.PP_DATA['sanlorenzo']&&(window.PP_DATA['sanlorenzo'].players||[]))||[];
+  var _ppRec=(window.PP_DATA&&window.PP_DATA['nafels']&&(window.PP_DATA['nafels'].players||[]))||[];
   if(_ppRec.some(function(p){return parseInt(p.num)===parseInt(j.num)&&p.role==='reception';})) items.splice(items.length-1,0,{icon:'🛡',title:'Recepción',desc:'Mi recepción por zona',url:'plan_partido.html?equipo=nafels&jug='+j.num+'#recepcion',color:'#22c55e'});
   items.splice(items.length-1,0,{icon:'⚡',title:'Saque',desc:'Mis saques por zona',url:'plan_partido.html?equipo=nafels&jug='+j.num+'#saque',color:'#f97316'});
   var ATK_POS=['PUNTA','OPUESTO','CENTRAL'];
