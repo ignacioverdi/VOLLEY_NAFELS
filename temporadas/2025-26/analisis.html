@@ -1470,17 +1470,18 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 <script src="lang.js"></script>
 <script src="temporadas_menu.js">
 /* ══════════════════════════════════════════════════════════════════════════
-   LAS BATERIAS — el mismo sistema que el perfil del jugador
+   LAS BATERIAS DEL ANALISIS
    --------------------------------------------------------------------------
-   El analisis usaba otro sistema, que lee de un archivo vacio en esta
-   temporada: mostraba una sola bateria con el acumulado y no cambiaba al
-   elegir un partido.
+   Antes usaban otro sistema, que lee de un archivo vacio en esta temporada:
+   mostraban una sola bateria con el acumulado y no cambiaban al elegir un
+   partido.
 
-   Estas son las funciones del perfil, que sacan los numeros de
-   datos_baterias.js —el que trae el detalle partido por partido—. Estan TODAS
+   Estas son las funciones del perfil del jugador, que sacan los numeros de
+   datos_baterias.js —el que trae el detalle partido por partido—. Estan todas
    las de la cadena, incluida la constante _OBJ_NULOS: si falta una sola, la
    primera se cae y no se dibuja nada.
    ══════════════════════════════════════════════════════════════════════════ */
+
 var _OBJ_NULOS = {sq:null,rec:null,bqpos:null,bqpt:null,atqq:null,atqhb:null,atqx:null,atqrp:null,atqri:null,atqrm:null,atqtr:null};
 
 function _batMatchName(nombre, keys){
@@ -1684,14 +1685,13 @@ function objRenderBaterias(){
 /* ══════════════════════════════════════════════════════════════════════════
    EL PUENTE CON EL PARTIDO ELEGIDO
    --------------------------------------------------------------------------
-   El analisis guarda el partido elegido como un numero —PARTIDO_IDX, la
-   posicion en la lista—. Las baterias lo buscan por su CODIGO, no por su
-   nombre ni por su posicion:
+   El analisis guarda el partido elegido como la posicion en su lista
+   —PARTIDO_IDX—. Las baterias lo buscan por su CODIGO:
 
        B.ind.find(x => x.id === partido)
 
-   Pasarle el nombre devuelve todo vacio, que es lo que pasaba. Aca se traduce
-   la posicion al codigo y se vuelven a dibujar en cada clic.
+   Las dos listas van en el mismo orden, asi que la posicion sirve para sacar
+   el codigo. Pasarle el nombre en vez del codigo devuelve todo vacio.
    ══════════════════════════════════════════════════════════════════════════ */
 function _sincronizarBaterias(){
   try{
@@ -1701,30 +1701,34 @@ function _sincronizarBaterias(){
     var META = (window.BAT_PARTIDOS && window.BAT_PARTIDOS.meta) || null;
     var idx  = (typeof PARTIDO_IDX !== 'undefined') ? PARTIDO_IDX : null;
 
+    /* -1 y -2 son el acumulado y el acumulado filtrado */
     if(idx === null || idx < 0 || !META || !META[idx]){
       window._objPartido = 'acumulado';
     } else {
-      window._objPartido = META[idx].id;      /* el codigo, no el nombre */
+      window._objPartido = META[idx].id;
     }
     if(typeof objRenderBaterias === 'function') objRenderBaterias();
   }catch(e){}
 }
 
-/* la primera vez, cuando ya cargaron los datos */
-setTimeout(_sincronizarBaterias, 250);
-
-/* y cada vez que se elige otro partido o se cambia el filtro */
+/* Se engancha a las funciones que de verdad cambian el partido. Los nombres
+   importan: con uno equivocado el puente nunca se dispara y las baterias
+   quedan siempre en el acumulado. */
 (function(){
-  ['setTab','setFiltroTipo','setVista','seleccionarPartido'].forEach(function(nom){
+  ['selectPartido','selectPartidoFiltrado','setFiltroTipo','setTab','setVista','renderTab']
+  .forEach(function(nom){
     var orig = window[nom];
     if(typeof orig !== 'function') return;
     window[nom] = function(){
       var r = orig.apply(this, arguments);
-      setTimeout(_sincronizarBaterias, 60);
+      setTimeout(_sincronizarBaterias, 50);
       return r;
     };
   });
 })();
+
+/* la primera vez, cuando ya cargaron los datos */
+setTimeout(_sincronizarBaterias, 300);
 </script>
 </body>
 </html>
