@@ -1732,6 +1732,67 @@ function _sincronizarBaterias(){
 
 /* la primera vez, cuando ya cargaron los datos */
 setTimeout(_sincronizarBaterias, 300);
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CARTEL DE DIAGNOSTICO — temporal
+   --------------------------------------------------------------------------
+   Muestra abajo a la izquierda que esta encontrando el sistema de baterias.
+   Es para ver donde se corta sin tener que abrir la consola. Cuando esto
+   funcione se saca.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  function poner(){
+    var d = document.getElementById('_diag_bat');
+    if(!d){
+      d = document.createElement('div');
+      d.id = '_diag_bat';
+      d.style.cssText = 'position:fixed;bottom:10px;left:10px;z-index:99999;'+
+        'background:rgba(15,23,42,.96);border:1px solid rgba(245,158,11,.5);'+
+        'color:#e2e8f0;border-radius:10px;padding:10px 14px;'+
+        'font-family:ui-monospace,monospace;font-size:11px;line-height:1.7;'+
+        'max-width:70vw;white-space:pre-wrap';
+      document.body.appendChild(d);
+    }
+    var L = [];
+    function di(k, v){ L.push(k + ': ' + v); }
+
+    var B = window.BAT_PARTIDOS;
+    di('BAT_PARTIDOS', B ? 'SI' : 'NO LLEGO');
+    if(B){
+      di('  partidos', (B.meta||[]).length);
+      di('  detalle por partido', (B.ind||[]).length);
+      di('  jugadores', Object.keys(B.jug||{}).length);
+    }
+    di('OBJETIVOS_CONFIG', window.OBJETIVOS_CONFIG ? 'SI' : 'NO LLEGO');
+    di('objGetVals', (typeof objGetVals === 'function') ? 'SI' : 'NO ESTA');
+    di('batGet', (typeof batGet === 'function') ? 'SI' : 'NO ESTA');
+    di('objRenderBaterias', (typeof objRenderBaterias === 'function') ? 'SI' : 'NO ESTA');
+    di('selectPartido', (typeof selectPartido === 'function') ? 'SI' : 'NO ESTA');
+    di('PARTIDO_IDX', (typeof PARTIDO_IDX !== 'undefined') ? PARTIDO_IDX : 'NO EXISTE');
+    di('_objPartido', window._objPartido);
+    di('_objTipo', window._objTipo);
+
+    /* donde se dibujan */
+    var conts = ['objetivos-panel','obj-equipo-panel','objetivos-jugador','obj-partido-row'];
+    var hay = conts.filter(function(c){ return document.getElementById(c); });
+    di('el lugar donde dibujar', hay.length ? hay.join(', ') : 'NINGUNO DE LOS ESPERADOS');
+
+    /* que devuelve el calculo ahora */
+    try{
+      var v = (typeof objGetVals === 'function') ? objGetVals(null) : null;
+      if(!v) di('los numeros', 'devuelve nada');
+      else {
+        var todosNull = Object.keys(v).every(function(k){ return v[k]===null; });
+        di('los numeros', todosNull ? 'TODOS VACIOS' : JSON.stringify(v).slice(0,70));
+      }
+    }catch(e){ di('los numeros', 'ERROR: ' + e.message); }
+
+    d.textContent = L.join('\n');
+  }
+  window._diagBat = poner;
+  setTimeout(poner, 500);
+  setInterval(poner, 1500);
+})();
 </script>
 </body>
 </html>
