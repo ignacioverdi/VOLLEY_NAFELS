@@ -379,7 +379,23 @@ function calcEquipoData(){
                 desde_z6:{p1:{tot:0,eff:0,pos:0,neg:0},p6:{tot:0,eff:0,pos:0,neg:0},p5:{tot:0,eff:0,pos:0,neg:0}},
                 desde_z5:{p1:{tot:0,eff:0,pos:0,neg:0},p6:{tot:0,eff:0,pos:0,neg:0},p5:{tot:0,eff:0,pos:0,neg:0}} }
   };
-  Object.values(window.RECEPCION_DATA).forEach(function(jug){
+  /* De donde salen los numeros de cada jugador. La lista que se arma desde
+     PARTIDOS_JUGADORES viene vacia —ese archivo no trae el detalle de
+     recepcion— asi que se usa la misma fuente que usan los paneles de cada
+     jugador, que si tiene datos. */
+  var _fuente = [];
+  try{
+    var _keys = Object.keys(window.RECEPCION_DATA || {});
+    if(!_keys.length && typeof RECEPTORES !== 'undefined') _keys = RECEPTORES.slice();
+    _keys.forEach(function(k){
+      var d = null;
+      try{ if(typeof getPlayerRecData === 'function') d = getPlayerRecData(k); }catch(e){}
+      if(!d && window.RECEPCION_DATA) d = window.RECEPCION_DATA[k];
+      if(d) _fuente.push(d);
+    });
+  }catch(e){}
+
+  _fuente.forEach(function(jug){
     ['flotado','potencia'].forEach(function(tipo){
       ['desde_z1','desde_z6','desde_z5'].forEach(function(zona){
         ['p1','p6','p5'].forEach(function(pos){
