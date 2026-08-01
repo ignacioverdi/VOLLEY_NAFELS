@@ -436,6 +436,9 @@
       if(fDz.length&&(a.sk!==(fSk||"Ataque")||fDz.indexOf(a.dz)<0)) return false;
       if(fOz.length&&(a.sk!==(fSk||"Ataque")||fOz.indexOf(a.oz)<0)) return false;
       if(fPh&&(a.sk!=="Ataque"||a.ph!==fPh)) return false;
+      /* El filtro de valoracion. Los botones estaban en pantalla pero nunca se
+         aplicaban: al pedir los ataques bloqueados venian todos mezclados. */
+      if(evK.length && !selEval[a.ev]) return false;
       if(fDate && (VD.matches[a.mc]||{}).date!==fDate) return false;
       if(fRival && _rnorm(oppName(a.mc))!==_rnorm(fRival)) return false;
       if(fApos.length&&(a.sk!=="Armado"||fApos.indexOf(a.apos)<0)) return false;
