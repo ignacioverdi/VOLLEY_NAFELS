@@ -446,7 +446,9 @@ function courtSVGOrigin(originZones,total,color,title){
      del mismo alto, si no esta arranca más arriba y queda desalineada. */
   h+="<div class='cc-origin' style='visibility:hidden'>&nbsp;</div>";
   h+="<div class='cc-lbl' style='color:rgba(239,68,68,.6)'>"+title+"</div>";
-  h+=ccGrid(originZones,OWN,color,total,{minN:CC_MIN});
+  /* Sin minimo: los bloqueados son pocos repartidos en nueve zonas, y con el
+     minimo de dos casi ninguna llegaba y la cancha quedaba en blanco. */
+  h+=ccGrid(originZones,OWN,color,total,{minN:0});
   return h+"</div>";
 }
 
