@@ -181,7 +181,21 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
     /* La cancha del rival, como se ve desde el banco: la red arriba y la
      fila delantera 4-3-2. Antes estaba invertida en los dos ejes, así que
      los números caían en el lugar equivocado de la cancha. */
-  var RIVAL=[[4,3,2],[7,8,9],[5,6,1]], OWN=[[4,3,2],[7,8,9],[5,6,1]];
+  /* La cancha del rival va en ESPEJO: esta del otro lado de la red, asi que se
+     ve al reves. Su fila delantera —2-3-4— queda pegada a la red, que en el
+     dibujo esta abajo:
+
+         1 6 5
+         9 8 7      de donde ataco el rival
+         2 3 4
+       ─────────    la red
+         4 3 2
+         7 8 9      donde defendimos nosotros
+         5 6 1
+
+     Antes las dos estaban iguales y los numeros del ataque rival caian en la
+     zona espejada de la que correspondia. */
+  var RIVAL=[[1,6,5],[9,8,7],[2,3,4]], OWN=[[4,3,2],[7,8,9],[5,6,1]];
     var maxO=Math.max.apply(null,Object.values(origZ).concat([1])), maxD=Math.max.apply(null,Object.values(destZ).concat([1]));
     var s="<svg viewBox='0 0 "+W+" "+H+"' xmlns='http://www.w3.org/2000/svg' style='width:100%;display:block'>";
     s+="<style>text{pointer-events:none}</style>";
