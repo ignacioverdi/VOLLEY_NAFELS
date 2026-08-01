@@ -293,7 +293,27 @@ function buildChips(){
      fecha y su resultado. (Igual que en NÄFELS, de donde se copió.) */
   var actsGi=(F.rival&&F.rival!=='all')?acts.filter(function(a){return a.rival===F.rival;}):acts;
   var ug=uniq(actsGi.map(function(a){return a.gi;})).sort(function(a,b){return a-b;});
-  buildSelect('fsel-gi',[['all',t('Todos')]].concat(ug.map(function(gi){var g=GA[gi];if(!g)return[gi,'P'+gi];var rs=g.rival.split(' ').slice(-1)[0].substring(0,9);var dl='';if(g.date){var pts=g.date.split('-');try{dl=' ('+parseInt(pts[2])+' '+MO[parseInt(pts[1])]+')'}catch(e){}}return[gi,rs+dl+(g.r?' · '+g.r:'')];})),'gi',fChange);
+  /* Cada partido de la lista: rival, fecha y resultado. El resultado ayuda a
+     ubicarlo de un vistazo —"Amriswil (12 nov) 2-3"— sin tener que abrirlo.
+
+     Se busca en los campos donde puede venir, porque no siempre llega con el
+     mismo nombre. Si no esta, se muestra rival y fecha como antes. */
+  function _etiquetaPartido(gi){
+    var g = GA[gi];
+    if(!g) return 'P' + gi;
+    var rs = String(g.rival || '').split(' ').slice(-1)[0].substring(0, 9);
+    var dl = '';
+    if(g.date){
+      var pts = String(g.date).split('-');
+      try{ dl = ' (' + parseInt(pts[2]) + ' ' + MO[parseInt(pts[1])] + ')'; }catch(e){}
+    }
+    var rr = g.r || g.res || g.resultado || g.score || g.sets || '';
+    if(!rr && g.sw !== undefined && g.sl !== undefined) rr = g.sw + '-' + g.sl;
+    return rs + dl + (rr ? '  ' + rr : '');
+  }
+  buildSelect('fsel-gi',[['all',t('Todos')]].concat(ug.map(function(gi){
+    return [gi, _etiquetaPartido(gi)];
+  })),'gi',fChange);
   /* Las zonas desde donde de verdad se ataco, no las nueve fijas: asi no se
      ofrecen opciones que no tienen ni una accion. */
   var zonas=uniq(acts.map(function(a){return a.origin;}).filter(Boolean)).sort();
