@@ -186,7 +186,11 @@ function translatePage(){document.querySelectorAll('[data-i18n]').forEach(functi
 var RIVALS = RAW.rivals;
 var COMBOS = RAW.combos;
 var GAMES  = RAW.games;
-var RES_DECODE  = ['#','+','-','/','=','!'];
+/* El orden tiene que ser EXACTAMENTE el que usa el motor al guardar
+   —RES_IDX en update_db— o los resultados salen cambiados de lugar: los
+   bloqueados aparecian como positivos y por eso la cancha de bloqueos
+   mostraba uno solo en toda la temporada. */
+var RES_DECODE  = ['#','/','+','!','=','-'];
 var MOM_DECODE  = ['early','mid','late'];
 var ATYPE_DECODE= ['SO','TR'];
 
