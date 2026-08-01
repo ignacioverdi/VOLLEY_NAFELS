@@ -458,10 +458,23 @@ function ccOriginLine(zones,total){var arr=[];for(var z in zones){if(zones[z]>0)
    video: hacés clic en la zona donde te bloquean y ves las jugadas.
    ══════════════════════════════════════════════════════════════════════════ */
 function _vfilt(){
+  /* Los filtros que se le pasan al reproductor. Antes iban solo el rival y el
+     set: si estabas mirando los bloqueados de la zona 2, el video traia TODOS
+     los ataques del jugador y no coincidia con lo que se veia en la cancha.
+
+     cortes.html entiende ev (resultado), oz (zona de origen), dz (destino) y
+     ph (la fase), asi que ahora se le mandan todos. */
   var u = '';
   try{
-    if(F.rival && F.rival !== 'all') u += '&rival=' + encodeURIComponent(F.rival);
-    if(F.set   && F.set   !== 'all') u += '&set='   + encodeURIComponent(F.set);
+    if(F.rival  && F.rival  !== 'all') u += '&rival=' + encodeURIComponent(F.rival);
+    if(F.set    && F.set    !== 'all') u += '&set='   + encodeURIComponent(F.set);
+    if(F.result && F.result !== 'all') u += '&ev='    + encodeURIComponent(F.result);
+    if(F.origin && F.origin !== 'all') u += '&oz='    + encodeURIComponent(F.origin);
+    if(F.atype  && F.atype  !== 'all') u += '&ph='    + encodeURIComponent(F.atype);
+    if(F.gi     && F.gi     !== 'all'){
+      var g = GA[F.gi];
+      if(g && g.date) u += '&date=' + encodeURIComponent(g.date);
+    }
   }catch(e){}
   return u;
 }
