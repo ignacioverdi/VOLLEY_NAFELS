@@ -111,7 +111,13 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   </div></div>
   <div class="acc-group"><div class="acc-header" id="acc-hdr-contexto" onclick="accToggle('contexto')"><span>Contexto</span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
   <div class="acc-body" id="acc-body-contexto">
-    <div class="flabel" style="margin-top:0" data-i18n="Tipo de ataque">Tipo de ataque</div>
+    <!-- Desde que zona salio el ataque. Con esto se ve, por ejemplo, adonde
+         van los remates cuando se ataca desde la 4. -->
+    <div class="flabel" style="margin-top:0" data-i18n="Zona de origen">Zona de origen</div>
+    <select class="fsel" id="fsel-origin"><option value="all">Todas</option></select>
+    <div class="flabel" data-i18n="Combinacion">Combinación</div>
+    <select class="fsel" id="fsel-combo"><option value="all">Todas</option></select>
+    <div class="flabel" data-i18n="Tipo de ataque">Tipo de ataque</div>
     <select class="fsel" id="fsel-atype"><option value="all">Todos</option></select>
     <div class="flabel" data-i18n="Set">Set</div>
     <select class="fsel" id="fsel-set"><option value="all">Todos</option></select>
@@ -217,7 +223,7 @@ var POS_COLOR = {2:"#818CF8",3:"#F59E0B",4:"#F97316",8:"#22C55E",5:"#06B6D4",9:"
 var RES_LABEL = {"#":"Kill","+":"Positivo","-":"Negativo","/":"Bloqueado","=":"Error","!":"Exclamativo"};
 var RES_COLOR = {"#":"#22c55e","+":"#86efac","-":"#f59e0b","/":"#ef4444","=":"#dc2626"};
 var MOMENT_LABEL = {early:"0-8 pts",mid:"9-16 pts",late:"17+ pts"};
-var F = {player:"",atype:"all",rival:"all",set:"all",moment:"all",result:"all",combo:"all",rec_quality:"all",rec_player:"all"};
+var F = {player:"",atype:"all",rival:"all",set:"all",moment:"all",result:"all",combo:"all",rec_quality:"all",rec_player:"all",origin:"all"};
 
 // Build player selector
 var pNums = Object.keys(PLAYERS).map(Number).sort(function(a,b){
@@ -246,13 +252,13 @@ function uniq(arr){var s={},r=[];arr.forEach(function(v){if(!s[v]){s[v]=1;r.push
 function setF(key,val){ F[key]=val; if(key!=="player") buildChips(); render(); }
 function onPlayerChange(val){
   F.player=val; F.atype="all"; F.rival="all"; F.set="all";
-  F.moment="all"; F.result="all"; F.combo="all";
+  F.moment="all"; F.result="all"; F.combo="all"; F.origin="all";
   F.rec_quality="all"; F.rec_player="all";
   buildChips(); render();
 }
 function resetFilters(){
   F.atype="all"; F.rival="all"; F.set="all";
-  F.moment="all"; F.result="all"; F.combo="all";
+  F.moment="all"; F.result="all"; F.combo="all"; F.origin="all";
   F.rec_quality="all"; F.rec_player="all";
   buildChips(); render();
 }
@@ -260,7 +266,9 @@ function getFiltered(){
   if(!F.player) return [];
   var p=PLAYERS[F.player]; if(!p) return [];
   return p.actions.filter(function(a){
-    if(F.atype!=="all" && a.atype!==F.atype) return false;
+    if(F.origin!=="all" && String(a.origin)!==String(F.origin)) return false;
+      if(F.combo!=="all" && a.combo!==F.combo) return false;
+      if(F.atype!=="all" && a.atype!==F.atype) return false;
     if(F.rival!=="all" && a.rival!==F.rival) return false;
     if(F.set!=="all" && a.set!==parseInt(F.set)) return false;
     if(F.moment!=="all" && a.moment!==F.moment) return false;
@@ -285,6 +293,19 @@ function buildChips(){
   var actsGi=(F.rival&&F.rival!=='all')?acts.filter(function(a){return a.rival===F.rival;}):acts;
   var ug=uniq(actsGi.map(function(a){return a.gi;})).sort(function(a,b){return a-b;});
   buildSelect('fsel-gi',[['all',t('Todos')]].concat(ug.map(function(gi){var g=GA[gi];if(!g)return[gi,'P'+gi];var rs=g.rival.split(' ').slice(-1)[0].substring(0,9);var dl='';if(g.date){var pts=g.date.split('-');try{dl=' ('+parseInt(pts[2])+' '+MO[parseInt(pts[1])]+')'}catch(e){}}return[gi,rs+dl+(g.r?' · '+g.r:'')];})),'gi',fChange);
+  /* Las zonas desde donde de verdad se ataco, no las nueve fijas: asi no se
+     ofrecen opciones que no tienen ni una accion. */
+  var zonas=uniq(acts.map(function(a){return a.origin;}).filter(Boolean)).sort();
+  buildSelect('fsel-origin',[['all',t('Todas')]].concat(zonas.map(function(z){
+    return [String(z), t('Zona')+' '+z]; })),'origin',fChange);
+
+  /* Las combinaciones que se usaron, ordenadas por cuantas veces. */
+  var cbc={};
+  acts.forEach(function(a){ if(a.combo) cbc[a.combo]=(cbc[a.combo]||0)+1; });
+  var cbs=Object.keys(cbc).sort(function(a,b){ return cbc[b]-cbc[a]; });
+  buildSelect('fsel-combo',[['all',t('Todas')]].concat(cbs.map(function(c){
+    return [c, c+' ('+cbc[c]+')']; })),'combo',fChange);
+
   buildSelect('fsel-atype',[['all',t('Todos')],['SO','Side Out'],['TR',t('Transicion')]],'atype',fChange);
   var sets=['all'].concat(uniq(acts.map(function(a){return a.set;})).sort(function(a,b){return a-b;}));
   buildSelect('fsel-set',sets.map(function(s){return[s,s==='all'?t('Todos'):'S'+s];}),'set',fChange);
