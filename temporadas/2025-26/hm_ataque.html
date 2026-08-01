@@ -541,11 +541,23 @@ function render(){
   var killWD=acts.filter(function(a){return a.result=="#"&&a.dest;});
   if(killWD.length>0) html+="<div class='court-block'><div class='court-title' style='color:#22c55e'>Kills ("+kills+")</div>"+courtSVG(buildDestZones(killWD),orig,killWD.length,"#22c55e","▲ RIVAL")+"</div>";
   // Blocked attacks - show ORIGIN zones (where they were attacking from when blocked)
-  var bloqO=acts.filter(function(a){return a.result=="/"&&a.origin;});
-  if(bloqO.length>0){
-    var bz={1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0};
-    bloqO.forEach(function(a){if(a.origin) bz[a.origin]=(bz[a.origin]||0)+1;});
-    html+="<div class='court-block'><div class='court-title' style='color:#ef4444'>Bloqueados - Origen ("+bloq+")</div>"+courtSVGOrigin(bz,bloqO.length,"#ef4444","▼ ORIGEN")+"</div>";
+  /* Los ataques bloqueados. Antes esta canchita se armaba con la zona de
+     ORIGEN, y ese dato llega vacio en los datos generados aunque los .dvw lo
+     tengan: por eso quedaba en blanco mientras el numero de arriba decia 29.
+
+     Ahora usa la zona de DESTINO, igual que las otras tres canchitas, que es
+     el dato que si llega. Si algun dia vuelve el origen, se prueba primero el
+     destino y se cae al origen. */
+  var bloqWD=acts.filter(function(a){return a.result=="/"&&a.dest;});
+  if(bloqWD.length>0){
+    html+="<div class='court-block'><div class='court-title' style='color:#ef4444'>Bloqueados ("+bloq+")</div>"+courtSVG(buildDestZones(bloqWD),getMainOrigin(bloqWD),bloqWD.length,"#ef4444","▲ RIVAL")+"</div>";
+  } else {
+    var bloqO=acts.filter(function(a){return a.result=="/"&&a.origin;});
+    if(bloqO.length>0){
+      var bz={1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0};
+      bloqO.forEach(function(a){if(a.origin) bz[a.origin]=(bz[a.origin]||0)+1;});
+      html+="<div class='court-block'><div class='court-title' style='color:#ef4444'>Bloqueados - Origen ("+bloq+")</div>"+courtSVGOrigin(bz,bloqO.length,"#ef4444","▼ ORIGEN")+"</div>";
+    }
   }
   html+="</div>";
 
