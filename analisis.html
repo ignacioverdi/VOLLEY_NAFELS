@@ -220,7 +220,10 @@ window.OBJETIVOS_CONFIG={metas:{
 </div>
 
 <div class="main">
-  <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+  <!-- El selector de idioma flota fijo arriba a la derecha. Esta fila de
+       botones llegaba justo hasta esa esquina y quedaban encimados: se le deja
+       lugar libre a la derecha para que no se pisen. -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;padding-right:120px">
     <button class="tab-btn activo" id="filtro-todos" onclick="setFiltroTipo('todos',this)">📋 TODOS</button>
     <button class="tab-btn" id="filtro-partidos" onclick="setFiltroTipo('P',this)">🏆 PARTIDOS</button>
     <button class="tab-btn" id="filtro-entrenamientos" onclick="setFiltroTipo('E',this)">🏋️ ENTRENAMIENTOS</button>
