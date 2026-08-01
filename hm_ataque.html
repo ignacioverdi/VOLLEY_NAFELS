@@ -413,11 +413,17 @@ function buildDestZones(acts){
   return z;
 }
 function getMainOrigin(acts){
+  /* La zona desde donde se ataco. Solo se muestra si de verdad hay UNA: antes
+     se ponia la mas frecuente y parecia que los 1052 ataques salieron todos de
+     la zona 2, cuando salieron de varias.
+
+     Si hay mas de una zona, no se muestra ninguna: para eso esta el filtro de
+     "Zona de origen" en la barra de la izquierda. */
   var oc={};
   acts.forEach(function(a){if(a.origin) oc[a.origin]=(oc[a.origin]||0)+1;});
-  var best=null,bestN=0;
-  Object.keys(oc).forEach(function(k){if(oc[k]>bestN){bestN=oc[k];best=parseInt(k);}});
-  return best;
+  var zonas=Object.keys(oc);
+  if(zonas.length!==1) return null;
+  return parseInt(zonas[0]);
 }
 
 
@@ -583,23 +589,27 @@ function render(){
   var killWD=acts.filter(function(a){return a.result=="#"&&a.dest;});
   if(killWD.length>0) html+="<div class='court-block'><div class='court-title' style='color:#22c55e'>Kills ("+kills+")</div>"+courtSVG(buildDestZones(killWD),orig,killWD.length,"#22c55e","▲ RIVAL")+"</div>";
   // Blocked attacks - show ORIGIN zones (where they were attacking from when blocked)
-  /* Los ataques bloqueados. Antes esta canchita se armaba con la zona de
-     ORIGEN, y ese dato llega vacio en los datos generados aunque los .dvw lo
-     tengan: por eso quedaba en blanco mientras el numero de arriba decia 29.
+  /* Los ataques bloqueados, por la zona DESDE DONDE se atacaba: en que zona lo
+     bloquean mas. Un ataque bloqueado no tiene destino —la pelota nunca paso—,
+     por eso esta cancha muestra el origen y no el destino como las otras.
 
-     Ahora usa la zona de DESTINO, igual que las otras tres canchitas, que es
-     el dato que si llega. Si algun dia vuelve el origen, se prueba primero el
-     destino y se cae al origen. */
-  var bloqWD=acts.filter(function(a){return a.result=="/"&&a.dest;});
-  if(bloqWD.length>0){
-    html+="<div class='court-block'><div class='court-title' style='color:#ef4444'>Bloqueados ("+bloq+")</div>"+courtSVG(buildDestZones(bloqWD),getMainOrigin(bloqWD),bloqWD.length,"#ef4444","▲ RIVAL")+"</div>";
-  } else {
-    var bloqO=acts.filter(function(a){return a.result=="/"&&a.origin;});
-    if(bloqO.length>0){
-      var bz={1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0};
-      bloqO.forEach(function(a){if(a.origin) bz[a.origin]=(bz[a.origin]||0)+1;});
-      html+="<div class='court-block'><div class='court-title' style='color:#ef4444'>Bloqueados - Origen ("+bloq+")</div>"+courtSVGOrigin(bz,bloqO.length,"#ef4444","▼ ORIGEN")+"</div>";
-    }
+     Se arma igual que en el plan de partido: se cuenta cada bloqueo en su zona
+     y se pinta la cancha propia, sin exigir un minimo de acciones. */
+  var bloqO = acts.filter(function(a){ return a.result === "/"; });
+  if(bloqO.length > 0){
+    var bz = {1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0};
+    var conZona = 0;
+    bloqO.forEach(function(a){
+      var z = a.origin;
+      if(z && bz[z] !== undefined){ bz[z]++; conZona++; }
+    });
+    var titulo = conZona
+      ? "Bloqueados - Origen (" + conZona + ")"
+      : "Bloqueados (" + bloqO.length + ") - sin zona";
+    html += "<div class='court-block'><div class='court-title' style='color:#ef4444'>" +
+            titulo + "</div>" +
+            courtSVGOrigin(bz, conZona || bloqO.length, "#ef4444", "\u25bc ORIGEN") +
+            "</div>";
   }
   html+="</div>";
 
