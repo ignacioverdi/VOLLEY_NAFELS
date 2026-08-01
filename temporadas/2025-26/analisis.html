@@ -326,7 +326,16 @@ function setFiltroTipo(tipo, btn){
   FILTRO_TIPO = tipo;
   document.querySelectorAll('#filtro-todos,#filtro-partidos,#filtro-entrenamientos').forEach(function(b){ b.classList.remove('activo'); });
   btn.classList.add('activo');
+
+  /* Al cambiar de partidos a entrenamientos, el partido que estaba elegido ya
+     no pertenece a lo que se esta mirando: la tabla de abajo seguia mostrando
+     sus numeros. Se vuelve al acumulado del grupo nuevo. */
+  PARTIDO_IDX = -2;
+  FILTRO_INDICES = null;
+
   renderPartidosGrid();
+  try{ renderTab(typeof TAB_ACTIVO !== 'undefined' ? TAB_ACTIVO : 'saque'); }catch(e){}
+  try{ _sincronizarBaterias(); }catch(e){}
 }
 
 function renderPartidosGrid(){
