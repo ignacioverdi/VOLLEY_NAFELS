@@ -1509,7 +1509,15 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 
 <script src="chat_nafels.js"></script>
 <script src="lang.js"></script>
-<script src="temporadas_menu.js">
+<script src="temporadas_menu.js"></script>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     Este codigo estaba adentro de <script src="temporadas_menu.js">, y el
+     navegador ignora por completo lo que hay adentro de una etiqueta que
+     carga un archivo: las funciones nunca se definian y las tablas de
+     saque, recepcion y ataque fallaban al llamarlas.
+     ════════════════════════════════════════════════════════════════════════ -->
+<script>
 /* ══════════════════════════════════════════════════════════════════════════
    LAS BATERIAS Y LOS SUBFILTROS
    --------------------------------------------------------------------------
@@ -1768,7 +1776,6 @@ function setSaqueTipo(t){ SAQUE_TIPO = t; _redibujar(); }
 function setRecepTipo(t){ RECEP_TIPO = t; _redibujar(); }
 
 function setAtkFase(t){   ATK_FASE   = t; _redibujar(); }
-
 </script>
 </body>
 </html>
