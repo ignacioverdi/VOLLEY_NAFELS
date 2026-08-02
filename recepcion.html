@@ -663,11 +663,17 @@ function buildRivalSelector(){
 }
 
 function getPlayerRecData(playerKey){
-  // Returns reception structure filtered by CUR_RIVAL
+  /* Los numeros de un receptor, segun el rival elegido.
+
+     Los ENTRENAMIENTOS no se guardan por rival —no lo tienen— asi que
+     "por_rival" viene vacio y esto devolvia null: los nombres aparecian pero
+     las canchas quedaban en blanco. Cuando no hay nada para ese rival se usa
+     el acumulado, que es todo lo que hay. */
   if(!window.RECEPCION_RIVAL_DATA || !window.RECEPCION_RIVAL_DATA[playerKey]) return null;
   var pd = window.RECEPCION_RIVAL_DATA[playerKey];
   if(CUR_RIVAL === 'TODOS') return pd.acumulado;
-  return pd.por_rival[CUR_RIVAL] || null;
+  var porRival = (pd.por_rival && pd.por_rival[CUR_RIVAL]) || null;
+  return porRival || pd.acumulado || null;
 }
 
 
