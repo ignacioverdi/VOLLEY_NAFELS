@@ -1617,7 +1617,25 @@ function parseTail(s,skill,ev){
 }
 function buildTail(d,a){
   /* avanzado (combo, destinatario, zonas, subzona) + extendido (sub-tipo, jugadores, especial) */
-  const core=(d.combo||'~~')+(d.target||'~')+(d.sz||'~')+(d.ez||'~')+(d.subz||'~')+(d.hit||'~')+(d.blk||'~')+(d.spec||'~');
+  /* La cola, con la MISMA forma que escribe DataVolley. Verificado sobre 4.980
+     codigos de los .dvw reales:
+
+         [0-1] combinacion      X5, V6, P1
+         [2]   destinatario     siempre vacio
+         [3]   desde            zona 1-9
+         [4]   hacia            zona 1-9
+         [5]   subzona          A B C D
+         [6]   tipo de golpe    H S M R B   ← el extendido
+         [7]   bloqueadores     0-4
+         [8]   (siempre vacio)
+         [9-10] personalizados
+         [11]  como termino     F B M       ← el extendido
+
+     Antes se armaba con 9 posiciones y el bloqueo con una sola: el tipo de
+     golpe caia dos lugares corrido y las pantallas lo leian en el sitio
+     equivocado, o directamente no lo veian. */
+  const core=(d.combo||'~~')+(d.target||'~')+(d.sz||'~')+(d.ez||'~')+(d.subz||'~')
+            +(d.hit||'~')+(d.blk||'~')+'~'+'~~'+(d.spec||'~');
   const cust = customFor(d,a);
   if(!cust) return core.replace(/~+$/,'');
   return core + cust;      /* los personalizados van siempre al final (DV4 4.1.4) */
@@ -3525,6 +3543,9 @@ function partirCodigo(cod){
   if(!m) return null;
   var cola = m[6] || '';
   var en = function(i){ return (cola.charAt(i) || '').replace('~',''); };
+  /* Las posiciones son las que usa DataVolley, verificadas sobre los .dvw:
+     el tipo de golpe en la 6, los bloqueadores en la 7, y como termino la
+     jugada en la 11 —al final, despues de los personalizados—. */
   return {
     eq: m[1], num: m[2], skill: m[3],
     tipo: (m[4]||'').replace('~',''),
@@ -3532,7 +3553,8 @@ function partirCodigo(cod){
     combo: cola.slice(0,2).replace(/~/g,''),
     dest: en(2),
     sz: en(3), ez: en(4), subz: en(5),
-    hit: en(6), blk: en(7), spec: en(8)
+    hit: en(6), blk: en(7),
+    spec: en(11) || en(8)
   };
 }
 
