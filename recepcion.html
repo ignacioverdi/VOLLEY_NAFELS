@@ -669,8 +669,26 @@ function getPlayerRecData(playerKey){
      "por_rival" viene vacio y esto devolvia null: los nombres aparecian pero
      las canchas quedaban en blanco. Cuando no hay nada para ese rival se usa
      el acumulado, que es todo lo que hay. */
-  if(!window.RECEPCION_RIVAL_DATA || !window.RECEPCION_RIVAL_DATA[playerKey]) return null;
-  var pd = window.RECEPCION_RIVAL_DATA[playerKey];
+  var TODO = window.RECEPCION_RIVAL_DATA;
+  if(!TODO) return null;
+
+  /* El nombre no siempre coincide: la lista dice "SCHMID J" y el motor guarda
+     "SCHMID", porque toma solo la primera palabra. Se prueba tal cual, despues
+     la primera palabra, y por ultimo cualquiera que empiece igual. */
+  var pd = TODO[playerKey];
+  if(!pd){
+    var corto = String(playerKey).split(' ')[0];
+    pd = TODO[corto];
+  }
+  if(!pd){
+    var buscado = String(playerKey).split(' ')[0].toUpperCase();
+    var k = Object.keys(TODO).filter(function(x){
+      var xs = String(x).toUpperCase();
+      return xs === buscado || xs.indexOf(buscado) === 0 || buscado.indexOf(xs) === 0;
+    })[0];
+    if(k) pd = TODO[k];
+  }
+  if(!pd) return null;
   if(CUR_RIVAL === 'TODOS') return pd.acumulado;
   var porRival = (pd.por_rival && pd.por_rival[CUR_RIVAL]) || null;
   return porRival || pd.acumulado || null;

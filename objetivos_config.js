@@ -144,7 +144,12 @@ function objCalcVals(nombreJugador){
 function renderObjetivos(cid,extra){
   var el=document.getElementById(cid); if(!el) return;
   var metas=window.OBJETIVOS_CONFIG.metas;
-  var vals=Object.assign({},objCalcVals(null),extra||{});
+  /* Los numeros del equipo. Se usa objGetVals —que lee del archivo de
+     baterias, con el detalle partido por partido— y solo se cae a objCalcVals
+     si esa no esta. Antes se usaba siempre la vieja, y el dashboard mostraba
+     valores distintos a los del analisis para la misma sesion. */
+  var base = (typeof objGetVals === 'function') ? objGetVals(null) : objCalcVals(null);
+  var vals = Object.assign({}, base, extra||{});
   var html='<div style="font-family:Barlow Condensed,sans-serif;padding:4px 0 8px">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
     +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">OBJETIVOS DEL EQUIPO · 2026</div>'
@@ -222,8 +227,10 @@ function renderObjetivos(cid,extra){
 function renderObjetivosJugador(cid,nombre,extra){
   var el=document.getElementById(cid); if(!el) return;
   var metas=window.OBJETIVOS_CONFIG.metas;
-  var jugVals=Object.assign({},objCalcVals(nombre),extra||{});
-  var eqVals=objCalcVals(null);
+  /* Los numeros del jugador, de la misma fuente que el resto. */
+  var _bj = (typeof objGetVals === 'function') ? objGetVals(nombre) : objCalcVals(nombre);
+  var jugVals=Object.assign({},_bj,extra||{});
+  var eqVals=(typeof objGetVals === 'function') ? objGetVals(null) : objCalcVals(null);
   var rows=[{label:'Jugador',vals:jugVals,isJug:true},{label:'Equipo',vals:eqVals,isJug:false}];
   var html='<div style="font-family:Barlow Condensed,sans-serif;padding:4px 0 8px">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
