@@ -509,9 +509,13 @@ function render(p){var cfg=ROLECFG[p.role];
     if(_blk && !_viendoBlq) return;
     /* El campo [4] es el DESTINO —a donde fue la pelota—. Un ataque bloqueado
        no tiene destino, asi que se lo cuenta en su zona de ORIGEN, que viene
-       en [10]. Si ese campo todavia no esta —datos sin regenerar— se usa el
-       destino, que es lo que habia antes. */
-    var _zona = (_blk && a[10]) ? a[10] : a[cfg.court];
+       en [10].
+
+       Si ese campo no esta —los datos todavia no se regeneraron— el ataque NO
+       se cuenta. Antes se caia al destino, y eso pintaba zonas donde la pelota
+       nunca estuvo: es peor mostrar un dato falso que no mostrar nada. */
+    if(_blk && !a[10]) return;
+    var _zona = _blk ? a[10] : a[cfg.court];
     if(z[_zona]!==undefined)z[_zona]++;if(ppVid(a[cfg.vIdx])){vz[_zona]=(vz[_zona]||0)+1;}});
   var P=function(x){return n?Math.round(x/n*100)+'%':'–';};
   var v;
