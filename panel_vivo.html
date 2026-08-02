@@ -1513,11 +1513,19 @@ function parseOne(raw){
     s = s.slice(2);
   }
 
-  let skill='', type='', ev='', rest='', raros='';
+  let skill='', type='', ev='', rest='', raros='', skillChar='';
   for(let i=0;i<s.length;i++){
     const ch=s[i], u=ch.toUpperCase();
-    if(!skill && SKILLS[u]){ skill=u; continue; }
-    if(!type && TYPES[u]){ type=u; continue; }        /* manual 1.10.4: 7Q -> 07AQ+ aunque no se escriba el fundamento */
+    /* El orden del codigo es fijo (manual 4.1.1): fundamento, tipo, EVALUACION,
+       y recien despues la cola. Por eso una letra que aparece DESPUES de la
+       evaluacion no puede ser ni fundamento ni tipo: es del codigo extendido.
+
+       Sin esta guarda se perdian tres de los cinco golpes de recepcion, porque
+       chocan con letras del codigo: la R de "por derecha" se leia como el
+       fundamento Recepcion, y la M de "linea media" y la O de "de arriba" como
+       tipos de golpe. Se las comia el parser y no llegaban nunca a la cola. */
+    if(!ev && !skill && SKILLS[u]){ skill=u; skillChar=u; continue; }
+    if(!ev && !type && TYPES[u]){ type=u; continue; }  /* manual 1.10.4: 7Q -> 07AQ+ aunque no se escriba el fundamento */
     if(!ev && EVALS.indexOf(ch)>=0){ ev=ch; continue; }
     /* Una letra que no es tipo ni evaluación, justo donde iría el tipo, no debe
        tapar la evaluación que viene después: se guarda como carácter personalizado
@@ -1580,7 +1588,9 @@ function parseOne(raw){
      campo de llegada; el de origen es de dónde vino el ataque, y ese lo
      completa solo el código del ataque anterior. */
   if(skill==='D' && d.sz && !d.ez){ d.ez = d.sz; d.sz = ''; }
-  return {team,num,skill,type,ev,evx,d};
+  /* La cola cruda viaja con la accion: si mas abajo la tabla de codigos
+     compuestos corrige el fundamento, hay que poder volver a leerla. */
+  return {team,num,skill,type,ev,evx,d,_tail:rest,_skillChar:skillChar};
 }
 
 /* --- cola extendida: combo(2) destinatario zonaIni zonaFin subzona golpe bloqueadores especial --- */
@@ -1687,6 +1697,59 @@ function merged(a){
   return d;
 }
 
+/* ══ El fundamento se corrige DESPUÉS de haber leído la cola ══════════════
+   Cuando el scout no escribe la letra del fundamento, parseOne completa con
+   el de por defecto (ataque) y con ÉSE lee la cola. Recién más abajo, con la
+   tabla de códigos compuestos, se sabe que era una recepción, un bloqueo o
+   una defensa — pero para entonces la cola ya se leyó con el equivocado.
+
+   Y el código extendido DEPENDE del fundamento (manual 4.1.3): la L de
+   "recibe por izquierda" existe en recepción y no en ataque, así que leída
+   como ataque no coincidía con nada y caía en los caracteres personalizados
+   (4.1.4). Por eso 8SM15.8#L terminaba con la L colgando al final del código
+   en vez de en su posición. Lo mismo le pasaba a la S de "defensa sobre
+   remate" y a la X de "error de cuerpo".
+
+   La solución es releer la cola con el fundamento ya corregido:
+
+     · si aparece un tipo de golpe válido, la cola entera cambia de forma
+       —los dígitos que siguen al tipo son "jugadores", no zonas (4.1.3)—
+       así que se toma completa;
+     · si no aparece, se conservan las zonas ya leídas, porque de ellas se
+       ocupan los bloques de abajo que contemplan cada caso, y se corrigen
+       sólo los campos del extendido.
+
+   La combinación no se toca: la fija el ataque y no depende del fundamento. */
+/* ══ Una letra del extendido leida como fundamento ════════════════════════
+   El punto une SOLO los pares que define el manual (2.3.4.3): saque con
+   recepcion, y ataque con bloqueo o defensa. Asi que despues de un ataque, la
+   letra de la segunda mitad solo puede ser B o D; cualquier otra no era el
+   fundamento y hay que devolverla a la cola, o se pierde sin dejar rastro.
+
+   Pasaba con tres de los cuatro golpes de defensa: la S de "sobre remate" se
+   leia como Saque, la B de "despues del bloqueo" como Bloqueo y la E de
+   "emergencia" como Armado. El parser se las comia y el codigo salia sin
+   extendido. */
+function devolverLetra(x, permitidas){
+  if(!x || !x._skillChar) return;
+  if(permitidas.indexOf(x._skillChar)>=0) return;   /* era el fundamento de verdad */
+  x._tail = x._skillChar + (x._tail||'');
+  x._skillChar = '';
+}
+
+function releerCola(x, skillPrevio){
+  if(!x || !x.d || x.skill===skillPrevio) return;   /* no cambió: nada que rehacer */
+  const t = x._tail;
+  if(!t || t.indexOf('~')>=0) return;               /* sin cola, o ya posicional */
+  const nd = parseTail(t, x.skill, x.ev);
+  const combo=x.d.combo, sz=x.d.sz, ez=x.d.ez;
+  x.d.target = nd.target;  x.d.subz = nd.subz;
+  x.d.hit    = nd.hit;     x.d.spec = nd.spec;   x.d.custom = nd.custom;
+  x.d.combo  = combo;
+  if(nd.hit){ x.d.sz = nd.sz; x.d.ez = nd.ez; x.d.blk = nd.blk; }
+  else      { x.d.sz = sz;    x.d.ez = ez; }
+}
+
 /* saque.recepción encadenados con punto — manual 2.3.4.3 */
 function parseInput(raw){
   const s=(raw||'').trim();
@@ -1724,9 +1787,15 @@ function parseChunk(s){
     const firstEv = function(v){ return v ? v[0] : v; };
 
     if(a.skill==='S' || (!b.skill_explicit && b.skill==='R')){        /* saque . recepción */
+      const aSkill0=a.skill, bSkill0=b.skill;
       a.skill='S'; b.skill='R'; b.type=a.type;
       if(b.evx && !a.evx)      a.ev = REC_TO_SERVE[b.ev] || a.ev;     /* tipeó la recepción */
       else if(a.evx && !b.evx) b.ev = firstEv(SRV_TO_REC[a.ev]) || b.ev;   /* tipeó el saque */
+      /* Con el fundamento y la evaluación ya definitivos, se relee la cola:
+         acá es donde la L de recepción vuelve a su lugar. Va antes de las
+         zonas, que se resuelven justo abajo. */
+      devolverLetra(b,'R');
+      releerCola(a, aSkill0);  releerCola(b, bSkill0);
       /* La zona de destino puede venir en CUALQUIERA de las dos mitades:
          · en el saque   -> 1sm15.8   (desde 1 hacia 5)  <- la forma rápida
          · en la recepción -> 1sm.8#5
@@ -1750,12 +1819,18 @@ function parseChunk(s){
       return [a,b];
     }
     if(a.skill==='A'){                                                /* ataque . bloqueo o defensa */
+      const bSkill0=b.skill;
       if(b.skill!=='B' && b.skill!=='D') b.skill='B';
       b.type=a.type;
       if(!b.evx){                                                     /* no tipeó la 2ª mitad: la deduce */
         const map = (b.skill==='D') ? ATK_TO_DEF : ATK_TO_BLK;
         if(map[a.ev]) b.ev = firstEv(map[a.ev]);
       }
+      /* Mismo caso que en la recepción: la S de "sobre remate" o la C de
+         "cobertura" sólo existen en defensa, y hasta esta línea la cola
+         estaba leída como ataque. */
+      devolverLetra(b,'BD');
+      releerCola(b, bSkill0);
       /* ══ De dónde vino el ataque ══════════════════════════════════════
          La defensa y el bloqueo se hacen CONTRA un ataque, así que hay dos
          datos que no hace falta tipear: se deducen del ataque anterior.
