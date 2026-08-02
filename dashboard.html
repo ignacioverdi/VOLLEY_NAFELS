@@ -982,15 +982,29 @@ function renderDefensaTabla(){
   }catch(e){}
   if(!Object.keys(VD).length) return '<div class="empty">Sin datos de defensa todavía</div>';
   var P={};
-  /* Antes se descartaba todo lo que no fuera de la temporada en curso, y la
-     temporada arranca en agosto: un entrenamiento del 30 de julio caia en la
-     anterior y se perdia por un dia.
+  /* Cada corte tiene que ser de esta temporada.
 
-     Ahora entra tambien lo de la temporada pasada, que es donde caen los de
-     pretemporada, y lo que no trae fecha. */
+     Los ENTRENAMIENTOS son la excepcion: la temporada arranca en agosto y una
+     practica de julio cae en la anterior aunque sea de la pretemporada nueva.
+     Para esos se acepta tambien la temporada pasada.
+
+     Los PARTIDOS van con el filtro estricto: si no, se mezclan los de la
+     temporada pasada con los de esta. */
+  var _idsEnt = {};
+  try{
+    var _ME = window.VIDEO_DATA_ENT && window.VIDEO_DATA_ENT.matches;
+    if(_ME) Object.keys(_ME).forEach(function(k){ _idsEnt[k] = 1; });
+  }catch(e){}
+
   Object.keys(VD).forEach(function(c){
     var _t = _seasonOf(VD[c].date);
-    if(_t !== null && _t !== _curSeason() && _t !== _curSeason()-1) return;
+    if(_t !== null){
+      if(_idsEnt[c]){
+        if(_t !== _curSeason() && _t !== _curSeason()-1) return;
+      } else {
+        if(_t !== _curSeason()) return;
+      }
+    }
     (VD[c].actions||[]).forEach(function(a){
     if(a.sk!=='Defensa') return;
     if(a.tm!=='nafels') return;
