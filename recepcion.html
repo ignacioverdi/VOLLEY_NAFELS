@@ -921,48 +921,6 @@ function recBtnOff(b){ b.classList.remove('on'); }
 <script>
 </script>
 <script>
-/* Cartel de diagnostico — temporal. Cuando esto funcione se saca. */
-(function(){
-  function poner(){
-    var d=document.getElementById('_diag_rec');
-    if(!d){
-      d=document.createElement('div'); d.id='_diag_rec';
-      d.style.cssText='position:fixed;bottom:10px;left:10px;z-index:99999;'+
-        'background:rgba(15,23,42,.96);border:1px solid rgba(34,197,94,.5);color:#e2e8f0;'+
-        'border-radius:10px;padding:10px 14px;font-family:ui-monospace,monospace;'+
-        'font-size:11px;line-height:1.7;max-width:78vw;white-space:pre-wrap';
-      document.body.appendChild(d);
-    }
-    var L=[];
-    var A=window.RECEPCION_RIVAL_DATA||{}, B=window.RECEPCION_RIVAL_DATA_ENT||{};
-    L.push('PARTIDOS: '+Object.keys(A).length+'  '+Object.keys(A).join(', ').slice(0,50));
-    L.push('ENTREN.:  '+Object.keys(B).length+'  '+Object.keys(B).join(', ').slice(0,50));
-    try{
-      var lista=(typeof RECEPTORES!=='undefined')?RECEPTORES:defaultReceptores();
-      L.push('la pantalla pide: '+lista.join(', '));
-      lista.forEach(function(n){
-        var r=null; try{ r=getPlayerRecData(n); }catch(e){}
-        var q='nada';
-        if(r){
-          var t=0;
-          try{ ['flotado','potencia'].forEach(function(tp){
-            var z=r[tp]||{};
-            Object.keys(z).forEach(function(o){
-              var pp=z[o]||{};
-              Object.keys(pp).forEach(function(k){ if(pp[k] && pp[k].tot) t+=pp[k].tot; });
-            });
-          }); }catch(e){}
-          q = t ? ('ENCUENTRA · '+t+' recepciones') : 'lo encuentra pero VACIO';
-        }
-        L.push('  '+n+': '+q);
-      });
-    }catch(e){ L.push('error: '+e.message); }
-    d.textContent=L.join('\n');
-  }
-  setTimeout(poner,900); setInterval(poner,2500);
-})();
-</script>
-<script>
 /* ══════════════════════════════════════════════════════════════════════════
    LA RECEPCION SEGUN EL MODO
    --------------------------------------------------------------------------
