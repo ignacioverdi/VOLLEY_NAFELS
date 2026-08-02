@@ -919,42 +919,6 @@ function recBtnOff(b){ b.classList.remove('on'); }
 <script src="lang.js"></script>
 <script src="temporadas_menu.js"></script>
 <script>
-/* ══════════════════════════════════════════════════════════════════════════
-   LA RECEPCION, DE LAS DOS FUENTES
-   --------------------------------------------------------------------------
-   Los partidos se guardan en RECEPCION_RIVAL_DATA y los entrenamientos en
-   RECEPCION_RIVAL_DATA_ENT. Mirando una sola, las recepciones de la otra no
-   aparecen nunca.
-
-   Va al final y con reintento: los archivos cifrados tardan en abrirse, y
-   juntarlos antes de que lleguen no sirve de nada.
-   ══════════════════════════════════════════════════════════════════════════ */
-(function(){
-  function juntar(){
-    try{
-      var A = window.RECEPCION_RIVAL_DATA || {};
-      var B = window.RECEPCION_RIVAL_DATA_ENT || {};
-      if(!Object.keys(B).length) return false;
-
-      var J = {};
-      Object.keys(A).forEach(function(k){ J[k] = A[k]; });
-      Object.keys(B).forEach(function(k){ if(!J[k]) J[k] = B[k]; });
-      window.RECEPCION_RIVAL_DATA = J;
-
-      /* y se vuelve a dibujar, que la pantalla ya se armo sin estos datos */
-      try{ if(typeof render === 'function') render(); }catch(e){}
-      try{ if(typeof initReceptores === 'function') initReceptores(); }catch(e){}
-      return true;
-    }catch(e){ return false; }
-  }
-
-  var intentos = 0;
-  (function probar(){
-    if(juntar()) return;
-    if(++intentos > 20) return;
-    setTimeout(probar, 250);
-  })();
-})();
 </script>
 <script>
 /* Cartel de diagnostico — temporal. Cuando esto funcione se saca. */
@@ -996,6 +960,62 @@ function recBtnOff(b){ b.classList.remove('on'); }
     d.textContent=L.join('\n');
   }
   setTimeout(poner,900); setInterval(poner,2500);
+})();
+</script>
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   LA RECEPCION SEGUN EL MODO
+   --------------------------------------------------------------------------
+   Los partidos se guardan en RECEPCION_RIVAL_DATA y los entrenamientos en
+   RECEPCION_RIVAL_DATA_ENT.
+
+   Antes se juntaban las dos en una sola y las recepciones de un entrenamiento
+   aparecian tambien en la cancha de partidos. Ahora se usa la que corresponde
+   al boton elegido —PARTIDO o ENTRENAMIENTO— y cada una muestra lo suyo.
+
+   Va al final y con reintento: los archivos cifrados tardan en abrirse.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  /* las dos fuentes, tal como llegan, sin mezclar */
+  var _P = null, _E = null;
+
+  function guardar(){
+    if(_P === null && window.RECEPCION_RIVAL_DATA)     _P = window.RECEPCION_RIVAL_DATA;
+    if(_E === null && window.RECEPCION_RIVAL_DATA_ENT) _E = window.RECEPCION_RIVAL_DATA_ENT;
+    return (_P || _E);
+  }
+
+  /* la que corresponde al modo elegido */
+  window._recFuente = function(){
+    var modo = window._recMode || 'partido';
+    guardar();
+    return (modo === 'entrenamiento') ? (_E || {}) : (_P || {});
+  };
+
+  function aplicar(){
+    if(!guardar()) return false;
+    window.RECEPCION_RIVAL_DATA = window._recFuente();
+    try{ if(typeof initReceptores === 'function') initReceptores(); }catch(e){}
+    try{ if(typeof render === 'function') render(); }catch(e){}
+    return true;
+  }
+
+  /* al tocar PARTIDO o ENTRENAMIENTO se cambia la fuente */
+  var _orig = window.recSetTipo;
+  window.recSetTipo = function(tipo, btn){
+    var r;
+    try{ r = _orig ? _orig.apply(this, arguments) : undefined; }catch(e){}
+    window._recMode = tipo;
+    aplicar();
+    return r;
+  };
+
+  var intentos = 0;
+  (function probar(){
+    if(aplicar()) return;
+    if(++intentos > 20) return;
+    setTimeout(probar, 250);
+  })();
 })();
 </script>
 </body>
