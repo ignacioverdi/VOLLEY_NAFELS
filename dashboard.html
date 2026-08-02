@@ -13,10 +13,18 @@ function w(s){document.write('<scr'+'ipt src="'+s+'" onerror="void 0"><\/scr'+'i
 if(ent){ w('datos_entrenamientos.js'); w('datos_historial_ent.js'); w('adapter_entrenamiento.js'); }
 else   { w('datos_partidos.js'); w('datos_historial.js'); }
 })();</script>
-<script src="datos_baterias.js.enc" onerror="void 0"></script>
-  <script src="modo_toggle.js" onerror="void 0"></script>
+<!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
+     quien los abra y el navegador los descarta. -->
+  <script src="datos_seguros.js"></script>
+  <script src="datos_baterias.js.enc" onerror="void 0"></script>
+  <!-- modo_toggle.js sacado: se superponia con el selector de idioma. -->
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
-<script src="datos_seguros.js"></script>
+  <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
+       queda vacia aunque los datos existan. -->
+  <script src="datos_historial.js" onerror="void 0"></script>
+  <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
+  <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
+  
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
 <script src="datos_video_25-26.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
