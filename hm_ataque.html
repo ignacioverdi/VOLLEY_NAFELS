@@ -484,10 +484,33 @@ function abrirVideo(){
   if(F.combo && F.combo !== 'all') u += '&combo=' + encodeURIComponent(F.combo);
   window.open(u + _vfilt(), '_blank');
 }
-function verVideoDest(zone, extra){
+
+/* Los videos de una zona puntual. Se usa desde la cancha de bloqueados: al
+   elegir una zona se abren solo los ataques bloqueados que salieron de ahi. */
+function verVideosZona(zona, resultado){
   if(!F.player){ alert('Elegí un jugador primero.'); return; }
-  window.open('cortes.html?num=' + encodeURIComponent(F.player) +
-              '&sk=Ataque&dz=' + zone + (extra || '') + _vfilt(), '_blank');
+  var u = 'cortes.html?num=' + encodeURIComponent(F.player) + '&sk=Ataque';
+  if(resultado) u += '&ev=' + encodeURIComponent(resultado);
+  if(zona)      u += '&oz=' + encodeURIComponent(zona);
+  if(F.combo && F.combo !== 'all') u += '&combo=' + encodeURIComponent(F.combo);
+  if(F.rival && F.rival !== 'all') u += '&rival=' + encodeURIComponent(F.rival);
+  window.open(u, '_blank');
+}
+function verVideoDest(zone, extra){
+  /* Los videos de una zona de la cancha.
+
+     En las canchas de destino la zona es a donde FUE la pelota —dz—, pero en
+     la de bloqueados es desde donde SALIO el ataque —oz—, porque un ataque
+     bloqueado no tiene destino. Mandando siempre dz, esa cancha pedia videos
+     que no existen y no abria ninguno.
+
+     _ccZonaOrigen lo marca la cancha de bloqueados justo antes de dibujarse. */
+  if(!F.player){ alert('Elegí un jugador primero.'); return; }
+  var esOrigen = !!window._ccZonaOrigen;
+  var u = 'cortes.html?num=' + encodeURIComponent(F.player) + '&sk=Ataque' +
+          (esOrigen ? '&oz=' : '&dz=') + zone;
+  if(esOrigen) u += '&ev=' + encodeURIComponent('/');
+  window.open(u + (extra || '') + _vfilt(), '_blank');
 }
 
 function courtSVG(destZones,originZone,total,color,title){
@@ -503,6 +526,9 @@ function courtSVG(destZones,originZone,total,color,title){
 }
 
 function courtSVGOrigin(originZones,total,color,title){
+  /* Esta es la cancha de los bloqueados: sus zonas son de ORIGEN, no de
+     destino. Se marca para que las celdas abran los videos correctos. */
+  window._ccZonaOrigen = true;
   var OWN=[[4,3,2],[7,8,9],[5,6,1]];
   var h="<div class='cc-wrap'>";
   /* Las otras canchas llevan la línea «Zona de origen»: acá va una vacía
@@ -512,6 +538,8 @@ function courtSVGOrigin(originZones,total,color,title){
   /* Sin minimo: los bloqueados son pocos repartidos en nueve zonas, y con el
      minimo de dos casi ninguna llegaba y la cancha quedaba en blanco. */
   h+=ccGrid(originZones,OWN,color,total,{minN:0});
+  /* se apaga: las demas canchas usan la zona de destino */
+  window._ccZonaOrigen = false;
   return h+"</div>";
 }
 
@@ -612,6 +640,8 @@ function render(){
 
      Se arma igual que en el plan de partido: se cuenta cada bloqueo en su zona
      y se pinta la cancha propia, sin exigir un minimo de acciones. */
+  /* Cada zona de la cancha de bloqueados abre sus propios videos: se hace clic
+     en la zona y se ven solo los ataques bloqueados que salieron de ahi. */
   var bloqO = acts.filter(function(a){ return a.result === "/"; });
   if(bloqO.length > 0){
     var bz = {1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0};
