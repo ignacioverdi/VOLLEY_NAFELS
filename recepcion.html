@@ -936,6 +936,58 @@ function recBtnOff(b){ b.classList.remove('on'); }
 
 <script src="lang.js"></script>
 <script src="temporadas_menu.js"></script>
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   CARTEL DE DIAGNOSTICO — temporal
+   --------------------------------------------------------------------------
+   Muestra abajo a la izquierda que nombres tiene el archivo de datos y cuales
+   esta pidiendo la pantalla. Cuando esto funcione se saca.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  function poner(){
+    var d = document.getElementById('_diag_rec');
+    if(!d){
+      d = document.createElement('div');
+      d.id = '_diag_rec';
+      d.style.cssText = 'position:fixed;bottom:10px;left:10px;z-index:99999;'+
+        'background:rgba(15,23,42,.96);border:1px solid rgba(34,197,94,.5);'+
+        'color:#e2e8f0;border-radius:10px;padding:10px 14px;'+
+        'font-family:ui-monospace,monospace;font-size:11px;line-height:1.7;'+
+        'max-width:78vw;white-space:pre-wrap';
+      document.body.appendChild(d);
+    }
+    var L = [];
+    function di(k,v){ L.push(k + ': ' + v); }
+
+    var A = window.RECEPCION_RIVAL_DATA || null;
+    var B = window.RECEPCION_RIVAL_DATA_ENT || null;
+    di('datos de PARTIDOS', A ? Object.keys(A).length + ' jugadores' : 'NO LLEGA');
+    if(A) di('  sus nombres', Object.keys(A).join(', ').slice(0,70));
+    di('datos de ENTREN.', B ? Object.keys(B).length + ' jugadores' : 'NO LLEGA');
+    if(B) di('  sus nombres', Object.keys(B).join(', ').slice(0,70));
+
+    try{ di('la pantalla PIDE', (typeof RECEPTORES !== 'undefined' ? RECEPTORES : defaultReceptores()).join(', ')); }
+    catch(e){ di('la pantalla PIDE', 'no lo puedo leer'); }
+
+    try{ di('rival elegido', typeof CUR_RIVAL !== 'undefined' ? CUR_RIVAL : '(no existe)'); }catch(e){}
+    try{ di('vista', typeof CUR !== 'undefined' ? CUR : '(no existe)'); }catch(e){}
+
+    /* que devuelve para cada uno */
+    try{
+      var lista = (typeof RECEPTORES !== 'undefined') ? RECEPTORES : defaultReceptores();
+      lista.forEach(function(n){
+        var r = null;
+        try{ r = getPlayerRecData(n); }catch(e){}
+        di('  ' + n, r ? 'ENCUENTRA datos' : 'nada');
+      });
+    }catch(e){}
+
+    d.textContent = L.join('\n');
+  }
+  setTimeout(poner, 600);
+  setInterval(poner, 2000);
+})();
+</script>
 </body>
 </html>
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
