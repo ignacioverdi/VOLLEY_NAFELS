@@ -445,7 +445,7 @@ function _ccRGB(c){if(!c)return '129,140,248';c=String(c);if(c.charAt(0)==='#'){
 function ccGrid(zones,layout,color,total,opts){opts=opts||{};var minN=opts.minN||0,rgb=_ccRGB(color);var vals=[];layout.forEach(function(r){r.forEach(function(z){vals.push(zones[z]||0);});});var mx=Math.max.apply(null,vals)||1;var h="<div class='cc-grid'>";layout.forEach(function(row){row.forEach(function(z){var cnt=zones[z]||0,low=(minN>0&&cnt>0&&cnt<minN),bg,inner='';if(cnt<=0){bg='rgba(255,255,255,.02)';}else if(low){bg='rgba(255,255,255,.05)';inner="<div class='cn' style='color:#64748b;font-size:20px'>"+cnt+"</div>";}else{var a=0.16+(cnt/mx)*0.72;bg='rgba('+rgb+','+a.toFixed(2)+')';inner="<div class='cn'>"+cnt+"</div>"+((total>0)?"<div class='pc'>"+Math.round(cnt/total*100)+"%</div>":'');}/* Si la zona tiene acciones, se puede tocar para ver esos videos.
        El heatmap deja de ser un cuadro y pasa a ser una puerta al video. */
     var _clic = (cnt>0 && typeof verVideoDest==='function')
-      ? " onclick=\"verVideoDest("+z+")\" style=\"background:"+bg+";cursor:pointer\" title=\"Ver los videos de esta zona\""
+      ? " onclick=\"verVideoDest("+z+","+(esOrig?"1":"0")+")\" style=\"background:"+bg+";cursor:pointer\" title=\"Ver los videos de esta zona\""
       : " style='background:"+bg+"'";
     h+="<div class='cc-cell'"+_clic+"><div class='zn'>"+z+"</div>"+inner+"</div>";});});return h+"</div>";}
 function ccOriginLine(zones,total){var arr=[];for(var z in zones){if(zones[z]>0)arr.push([z,zones[z]]);}arr.sort(function(a,b){return b[1]-a[1];});if(!arr.length)return "";var top=arr.slice(0,3).map(function(p){return "Z"+p[0]+(total>0?" "+Math.round(p[1]/total*100)+"%":" ("+p[1]+")");}).join(" \u00b7 ");return "<div class='cc-origin'>Zona de origen: <b>"+top+"</b></div>";}
@@ -496,24 +496,21 @@ function verVideosZona(zona, resultado){
   if(F.rival && F.rival !== 'all') u += '&rival=' + encodeURIComponent(F.rival);
   window.open(u, '_blank');
 }
-function verVideoDest(zone, extra){
-  /* Los videos de una zona de la cancha.
+function verVideoDest(zone, esOrigen){
+  /* Los videos de una zona.
 
-     En las canchas de destino la zona es a donde FUE la pelota —dz—, pero en
-     la de bloqueados es desde donde SALIO el ataque —oz—, porque un ataque
-     bloqueado no tiene destino. Mandando siempre dz, esa cancha pedia videos
-     que no existen y no abria ninguno.
+     En las canchas de destino la zona es a donde FUE la pelota —dz—; en la de
+     bloqueados es desde donde SALIO el ataque —oz—, porque un ataque bloqueado
+     no tiene destino.
 
-     _ccZonaOrigen lo marca la cancha de bloqueados justo antes de dibujarse. */
+     Cual de las dos es viene escrito en el propio boton. Antes se usaba una
+     marca global que se apagaba al terminar de dibujar: al hacer clic ya valia
+     falso y siempre mandaba el destino. */
   if(!F.player){ alert('Elegí un jugador primero.'); return; }
-  var esOrigen = !!window._ccZonaOrigen;
   var u = 'cortes.html?num=' + encodeURIComponent(F.player) + '&sk=Ataque' +
           (esOrigen ? '&oz=' : '&dz=') + zone;
-  /* La barra va SIN codificar: encodeURIComponent la convierte en %2F y
-     cortes.html compara el texto tal cual, asi que nunca coincidia y abria
-     todos los ataques en vez de los bloqueados. */
   if(esOrigen) u += '&ev=/';
-  window.open(u + (extra || '') + _vfilt(), '_blank');
+  window.open(u + _vfilt(), '_blank');
 }
 
 function courtSVG(destZones,originZone,total,color,title){
@@ -531,7 +528,6 @@ function courtSVG(destZones,originZone,total,color,title){
 function courtSVGOrigin(originZones,total,color,title){
   /* Esta es la cancha de los bloqueados: sus zonas son de ORIGEN, no de
      destino. Se marca para que las celdas abran los videos correctos. */
-  window._ccZonaOrigen = true;
   var OWN=[[4,3,2],[7,8,9],[5,6,1]];
   var h="<div class='cc-wrap'>";
   /* Las otras canchas llevan la línea «Zona de origen»: acá va una vacía
@@ -540,9 +536,8 @@ function courtSVGOrigin(originZones,total,color,title){
   h+="<div class='cc-lbl' style='color:rgba(239,68,68,.6)'>"+title+"</div>";
   /* Sin minimo: los bloqueados son pocos repartidos en nueve zonas, y con el
      minimo de dos casi ninguna llegaba y la cancha quedaba en blanco. */
-  h+=ccGrid(originZones,OWN,color,total,{minN:0});
+  h+=ccGrid(originZones,OWN,color,total,{minN:0,origen:true});
   /* se apaga: las demas canchas usan la zona de destino */
-  window._ccZonaOrigen = false;
   return h+"</div>";
 }
 
