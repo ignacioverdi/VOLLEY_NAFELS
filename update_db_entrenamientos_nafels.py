@@ -1524,11 +1524,14 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         except Exception as _e:
             _arm_pd={}
         partidos_individual.append({'id':g['rival']+'__'+g['date'],'nombre':g['rival'],'rival':g['rival'],'fecha':'/'.join(reversed(g['date'].split('-'))),
-            'resultado':g['result'],'equipo_obj':to_pcts(bpl['__EQUIPO__']),'jugadores':jug_obj,'armadores':_arm_pd,'transicion':_trans_pd})
+            'resultado':g['result'],'equipo_obj':(to_pcts(bpl['__EQUIPO__']) if '__EQUIPO__' in bpl else {}),'jugadores':jug_obj,'armadores':_arm_pd,'transicion':_trans_pd})
 
     # Acumulado
     bat_acum=merge_acum(bat_all_pl)
-    equipo_obj_acum=to_pcts(bat_acum['__EQUIPO__'])
+    # Con pocas acciones —una practica suelta, un partido corto— puede que no se
+    # haya armado el total del equipo. Antes el script se caia aca y no llegaba
+    # a escribir el historial: la sesion existia pero no aparecia en la app.
+    equipo_obj_acum=to_pcts(bat_acum['__EQUIPO__']) if '__EQUIPO__' in bat_acum else {}
     # Mapa de nombres acumulado (último partido disponible)
     acum_names={}
     for g in sorted(games,key=lambda x:x['date']):
