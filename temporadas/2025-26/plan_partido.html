@@ -507,10 +507,10 @@ function render(p){var cfg=ROLECFG[p.role];
       return v === '/' || (Array.isArray(v) && v.indexOf('/') >= 0);
     });
     if(_blk && !_viendoBlq) return;
-    /* Un ataque bloqueado no tiene destino: la pelota nunca paso. Se lo cuenta
-       en su zona de ORIGEN —desde donde se atacaba—, que es lo que interesa
-       ver: en que zona te bloquean mas. */
-    var _zona = (_blk && a.length>10 && a[10]) ? a[10] : a[cfg.court];if(z[_zona]!==undefined)z[_zona]++;if(ppVid(a[cfg.vIdx])){vz[_zona]=(vz[_zona]||0)+1;}});
+    /* El campo [4] ya trae la zona correcta para los dos casos: a donde fue la
+       pelota en un ataque normal, y desde donde se atacaba en uno bloqueado.
+       No hace falta buscarla en otro lado. */
+    if(z[a[cfg.court]]!==undefined)z[a[cfg.court]]++;if(ppVid(a[cfg.vIdx])){vz[a[cfg.court]]=(vz[a[cfg.court]]||0)+1;}});
   var P=function(x){return n?Math.round(x/n*100)+'%':'–';};
   var v;
   if(cfg.stats==='atk'){var k=0,e=0,b=0,hd=0,sf=0,tp=0,d0=0,d1=0,d2=0;
