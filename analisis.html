@@ -12,7 +12,8 @@ function w(s){document.write('<scr'+'ipt src="'+s+'" onerror="void 0"><\/scr'+'i
 if(ent){ w('datos_entrenamientos.js'); w('datos_historial_ent.js'); w('adapter_entrenamiento.js'); }
 else   { w('datos_partidos.js'); w('datos_historial.js'); }
 })();</script>
-<script src="objetivos_config.js" onerror="void 0"></script>
+<script src="datos_baterias.js.enc" onerror="void 0"></script>
+  <script src="objetivos_config.js" onerror="void 0"></script>
   <script src="datos_historial.js" onerror="void 0"></script>
   <script src="utils.js" onerror="void 0"></script>
   <script src="modo_toggle.js" onerror="void 0"></script>
@@ -507,8 +508,9 @@ function jugadorTd(j,showPJ){
 function thSec(txt,cols,color){ return '<th colspan="'+cols+'" class="sec" style="color:'+color+';border-left:1px solid rgba(255,255,255,.06);padding:10px 8px">'+txt+'</th>'; }
 
 function tablaSaque(jugs){
+  jugs = _aplicarSubfiltros(jugs);
   var isAcum=PARTIDO_IDX===-1||PARTIDO_IDX===-2;
-  var h='<div class="tabla-wrap"><table class="tabla"><thead><tr>';
+  var h=_subFiltros('saque')+'<div class="tabla-wrap"><table class="tabla"><thead><tr>';
   h+='<th class="left sec">JUGADOR</th>';
   if(isAcum) h+='<th style="color:var(--mut)">PJ</th>';
   h+=thSec('── SAQUE ──',7,'#f59e0b');
@@ -536,8 +538,9 @@ function tablaSaque(jugs){
 }
 
 function tablaRecepcion(jugs){
+  jugs = _aplicarSubfiltros(jugs);
   var isAcum=PARTIDO_IDX===-1||PARTIDO_IDX===-2;
-  var h='<div class="tabla-wrap"><table class="tabla"><thead><tr>';
+  var h=_subFiltros('recepcion')+'<div class="tabla-wrap"><table class="tabla"><thead><tr>';
   h+='<th class="left sec">JUGADOR</th>';
   if(isAcum) h+='<th style="color:var(--mut)">PJ</th>';
   h+=thSec('── RECEPCIÓN ──',7,'#22c55e');
@@ -565,8 +568,9 @@ function tablaRecepcion(jugs){
 }
 
 function tablaAtaque(jugs){
+  jugs = _aplicarSubfiltros(jugs);
   var isAcum=PARTIDO_IDX===-1||PARTIDO_IDX===-2;
-  var h='<div class="tabla-wrap"><table class="tabla"><thead><tr>';
+  var h=_subFiltros('ataque')+'<div class="tabla-wrap"><table class="tabla"><thead><tr>';
   h+='<th class="left sec">JUGADOR</th>';
   if(isAcum) h+='<th style="color:var(--mut)">PJ</th>';
   h+=thSec('── ATAQUE ──',8,'#818cf8');
@@ -1499,7 +1503,306 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 
 <script src="chat_nafels.js"></script>
 <script src="lang.js"></script>
-<script src="temporadas_menu.js"></script>
+<script src="temporadas_menu.js">
+/* ══════════════════════════════════════════════════════════════════════════
+   LAS BATERIAS Y LOS SUBFILTROS
+   --------------------------------------------------------------------------
+   Traido de la capsula 25-26, donde ya funciona. Las baterias leen de
+   datos_baterias.js —el que trae el detalle partido por partido— y los
+   subfiltros son los mismos del dashboard.
+   ══════════════════════════════════════════════════════════════════════════ */
+var ATK_FASE   = 'total';
+var RECEP_TIPO = 'total';
+var SAQUE_TIPO = 'total';
+var _OBJ_NULOS = {sq:null,rec:null,bqpos:null,bqpt:null,atqq:null,atqhb:null,atqx:null,atqrp:null,atqri:null,atqrm:null,atqtr:null};
+
+function _batMatchName(nombre, keys){
+  var b=(nombre||'').replace(/^\d+\s*/,'').toLowerCase().trim(); var bs=b.split(' ')[0];
+  for(var i=0;i<keys.length;i++){ if(keys[i].toLowerCase().replace(/^\d+\s*/,'').trim()===b) return keys[i]; }
+  for(var i=0;i<keys.length;i++){ var k=keys[i].toLowerCase().replace(/^\d+\s*/,'').trim(); if(k.split(' ')[0]===bs || (bs.length>2&&k.indexOf(bs)>=0)) return keys[i]; }
+  return null;
+}
+
+function batGet(nombre, partido){
+  var B=window.BAT_PARTIDOS; if(!B) return null;
+  if(partido && partido!=='acumulado'){
+    var m=(B.ind||[]).find(function(x){return String(x.id)===String(partido);});
+    if(!m) return _OBJ_NULOS;
+    if(nombre){ var k=_batMatchName(nombre, Object.keys(m.jug||{})); return (k&&m.jug[k])?m.jug[k]:_OBJ_NULOS; }
+    return m.eq||_OBJ_NULOS;
+  }
+  if(nombre){ var k2=_batMatchName(nombre, Object.keys(B.jug||{})); return (k2&&B.jug[k2])?B.jug[k2]:_OBJ_NULOS; }
+  return B.eq||_OBJ_NULOS;
+}
+
+function objPct(v,mn,mx){return Math.max(0,Math.min(100,(v-mn)/(mx-mn)*100));}
+
+function objClassify(id,val){
+  var m=window.OBJETIVOS_CONFIG.metas[id];
+  if(val>=m.g2) return{color:'#22c55e',bg:'rgba(34,197,94,.1)', border:'rgba(34,197,94,.35)', label:'Objetivo'};
+  if(val>=m.g1) return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
+  if(val>=m.y)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)', border:'rgba(251,191,36,.3)', label:'Neutro'};
+  return {color:'#ef4444',bg:'rgba(239,68,68,.1)', border:'rgba(239,68,68,.3)', label:'Lejos'};
+}
+
+function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
+
+function cell(v){ return (v===null||v===undefined)?'—':(v+'%'); }
+
+function colorEff(v){ if(v===null||v===undefined) return '#475569'; return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'#e2e8f0':'#ef4444'; }
+
+function diff(a,b){
+    if(a===null||a===undefined||b===null||b===undefined) return '<span style="color:#475569">—</span>';
+    var d=a-b, col=d>=5?'#22c55e':d>=0?'#86efac':d>=-8?'#fbbf24':'#ef4444';
+    return '<span style="color:'+col+';font-weight:800">'+(d>0?'+':'')+d+'</span>';
+  }
+
+function matchNombre(x){
+    if(!x.nombre) return false;
+    var a=x.nombre.replace(/^\d+\s*/,'').toLowerCase();
+    var b=(nombre||'').replace(/^\d+\s*/,'').toLowerCase();
+    return a===b || a.split(' ')[0]===b.split(' ')[0];
+  }
+
+function objSingleBat(id,val,meta,cls,objLine){
+  var fh=val!==null?objPct(val,meta.min,meta.max):0;
+  var oh=objPct(objLine,meta.min,meta.max);
+  var txt=val!==null?fmtEff(val):'—';
+  return '<div style="flex:1;min-width:60px;max-width:110px;display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 5px 8px;border:0.5px solid '+cls.border+';border-radius:10px;background:'+cls.bg+';position:relative;overflow:hidden;font-family:Barlow Condensed,sans-serif">'
+    +'<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+cls.color+';border-radius:10px 10px 0 0"></div>'
+    +'<div style="font-size:22px;font-weight:900;line-height:1;color:'+cls.color+'">'+txt+'</div>'
+    +'<div style="width:32px;height:68px;display:flex;flex-direction:column;align-items:center">'
+      +'<div style="width:14px;height:5px;border-radius:2px 2px 0 0;background:'+cls.color+';opacity:.7;flex-shrink:0"></div>'
+      +'<div style="position:relative;width:32px;flex:1;border-radius:3px;overflow:hidden;border:2px solid '+cls.color+'">'
+        +'<div style="position:absolute;inset:0;background:#07080f"></div>'
+        +(val!==null?'<div style="position:absolute;bottom:0;left:0;right:0;height:'+fh+'%;background:'+cls.color+'"></div>':'')
+        +'<div style="position:absolute;bottom:25%;left:0;right:0;height:1px;background:#fff;opacity:.15"></div>'
+        +'<div style="position:absolute;bottom:50%;left:0;right:0;height:1px;background:#fff;opacity:.15"></div>'
+        +'<div style="position:absolute;bottom:75%;left:0;right:0;height:1px;background:#fff;opacity:.15"></div>'
+        +'<div style="position:absolute;bottom:'+oh+'%;left:-2px;right:-2px;display:flex;align-items:center;z-index:3">'
+          +'<div style="width:0;height:0;border-top:3px solid transparent;border-bottom:3px solid transparent;border-right:4px solid rgba(255,255,255,.9)"></div>'
+          +'<div style="flex:1;height:2px;background:rgba(255,255,255,.9);border-radius:1px"></div>'
+          +'<div style="width:0;height:0;border-top:3px solid transparent;border-bottom:3px solid transparent;border-left:4px solid rgba(255,255,255,.9)"></div>'
+        +'</div>'
+      +'</div>'
+    +'</div>'
+    +'<div style="font-size:8px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:2px 5px;border-radius:20px;background:'+cls.color+'22;color:'+cls.color+'">'+cls.label+'</div>'
+    +'</div>';
+}
+
+function objGetVals(nombre){
+  var tipo    = window._objTipo;
+  var partido = window._objPartido;
+  var ent     = (tipo==='entrenamiento');
+
+  if(!ent && window.BAT_PARTIDOS){ return batGet(nombre, partido); }
+
+  var JUG = ent ? (typeof ENTRENAMIENTOS_JUGADORES!=='undefined'?ENTRENAMIENTOS_JUGADORES:null)
+                : (typeof PARTIDOS_JUGADORES!=='undefined'?PARTIDOS_JUGADORES:null);
+  var IND = ent ? (typeof ENTRENAMIENTOS_INDIVIDUAL!=='undefined'?ENTRENAMIENTOS_INDIVIDUAL:null)
+                : (typeof PARTIDOS_INDIVIDUAL!=='undefined'?PARTIDOS_INDIVIDUAL:null);
+  var EQ  = ent ? (typeof ENTRENAMIENTOS_EQUIPO_OBJ!=='undefined'?ENTRENAMIENTOS_EQUIPO_OBJ:null)
+                : (typeof PARTIDOS_EQUIPO_OBJ!=='undefined'?PARTIDOS_EQUIPO_OBJ:null);
+
+  function matchNombre(x){
+    if(!x.nombre) return false;
+    var a=x.nombre.replace(/^\d+\s*/,'').toLowerCase();
+    var b=(nombre||'').replace(/^\d+\s*/,'').toLowerCase();
+    return a===b || a.split(' ')[0]===b.split(' ')[0];
+  }
+
+  // ── PARTIDO PUNTUAL ──
+  if(partido!=='acumulado' && IND){
+    var pd = IND.find(function(p){ return (p.id||p.nombre)===partido; });
+    if(pd){
+      if(nombre){
+        var pj = (pd.jugadores||[]).find(matchNombre);
+        if(pj && pj.objetivos && Object.keys(pj.objetivos).length) return pj.objetivos;
+      } else if(pd.equipo_obj && Object.keys(pd.equipo_obj).length){
+        return pd.equipo_obj;   // ← equipo del partido puntual
+      }
+    }
+    return _OBJ_NULOS; // partido seleccionado sin datos para ese sujeto
+  }
+
+  // ── ACUMULADO ──
+  if(nombre){
+    if(JUG){
+      var pj2 = JUG.find(matchNombre);
+      if(pj2 && pj2.objetivos && Object.keys(pj2.objetivos).length) return pj2.objetivos;
+    }
+    return _OBJ_NULOS;
+  } else {
+    if(EQ && Object.keys(EQ).length) return EQ;
+    return _OBJ_NULOS;
+  }
+}
+
+function renderObjetivosJugador(cid, jugVals, eqVals){
+  var el=document.getElementById(cid); if(!el) return;
+  var metas=window.OBJETIVOS_CONFIG.metas;
+  /* En el analisis no hay un jugador elegido: la fila de "Jugador" mostraba lo
+     mismo que la de "Equipo". Se deja una sola. */
+  var rows=[{label:'Equipo',vals:eqVals,isJug:false}];
+  var html='<div style="font-family:Barlow Condensed,sans-serif;padding:4px 0 8px">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
+    +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">MI PERFORMANCE VS OBJETIVO</div>'
+    +'<div style="display:flex;gap:10px;flex-wrap:wrap">'
+    +[['#22c55e','Objetivo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Lejos']].map(function(x){
+      return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
+    }).join('')+'</div></div>'
+    +'<div style="display:flex;gap:8px;width:100%;margin-bottom:4px">'
+    +'<div style="width:64px;flex-shrink:0"></div>'
+    +Object.keys(metas).map(function(id){
+      return '<div style="flex:1;min-width:60px;text-align:center;padding:4px 2px">'
+        +'<div style="font-size:10px;font-weight:800;color:#e2e8f0;letter-spacing:0.5px;text-transform:uppercase;line-height:1.3;word-break:break-word">'+metas[id].label+'</div>'
+        +'<div style="font-size:10px;color:#22c55e;font-weight:700;margin-top:3px">'+metas[id].obj+'%</div>'
+        +'</div>';
+    }).join('')
+    +'</div>';
+  rows.forEach(function(row){
+    html+='<div style="display:flex;align-items:center;gap:8px;width:100%;margin-bottom:8px">'
+      +'<div style="width:64px;flex-shrink:0;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#94a3b8;text-align:right;padding-right:8px">'+row.label+'</div>'
+      +Object.keys(metas).map(function(id){
+        var m=metas[id],val=row.vals[id]!==undefined?row.vals[id]:null;
+        var cls,objLine;
+        if(row.isJug){
+          var eq=eqVals[id]!==undefined?eqVals[id]:null;
+          cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+          objLine=eq!==null?eq:m.obj;
+        } else {
+          cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+          objLine=m.obj;
+        }
+        return objSingleBat(id,val,m,cls,objLine);
+      }).join('')+'</div>';
+  });
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+function objBuildSubfiltro(){
+  var row = document.getElementById('obj-partido-row');
+  if(!row) return;
+  var ent = (window._objTipo==='entrenamiento');
+  var META = ent ? (typeof ENTRENAMIENTOS_META!=='undefined'?ENTRENAMIENTOS_META:null)
+                 : (window.BAT_PARTIDOS ? window.BAT_PARTIDOS.meta : (typeof PARTIDOS_META!=='undefined'?PARTIDOS_META:null));
+  if(!META){ row.style.display='none'; return; }
+  row.innerHTML=''; row.style.display='flex'; row.style.alignItems='center';
+  var lbl=document.createElement('span');
+  lbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase;margin-right:6px';
+  lbl.textContent='VER:';
+  row.appendChild(lbl);
+  var sel=document.createElement('select');
+  sel.style.cssText='background:#fff;color:#111;border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-family:inherit;font-weight:700;font-size:12px;max-width:270px';
+  var __cuenta={};META.forEach(function(m){var r=m.rival||m.nombre;__cuenta[r]=(__cuenta[r]||0)+1;});
+  var opts='<option value="acumulado">Acumulado</option>';
+  META.forEach(function(m){
+    var rival=m.rival||m.nombre;var label=rival;
+    if(__cuenta[rival]>1 && m.fecha) label+=' '+m.fecha;
+    if(m.resultado) label+=' ('+m.resultado+')';
+    opts+='<option value="'+(m.id||m.nombre)+'">'+label+'</option>';
+  });
+  sel.innerHTML=opts;
+  sel.value=window._objPartido||'acumulado';
+  sel.onchange=function(){ window._objPartido=sel.value; objRenderBaterias(); };
+  row.appendChild(sel);
+}
+
+function objRenderBaterias(){
+  /* En el perfil del jugador las baterias van en un contenedor que se llama
+     'objetivos-jugador'. En el analisis el contenedor se llama
+     'objetivos-panel': dibujar en el otro es dibujar en un lugar que no
+     existe, y no aparece nada.
+
+     Se prueba el del analisis primero y, si no esta, el del perfil. Asi la
+     misma funcion sirve en las dos pantallas. */
+  var destino = document.getElementById('objetivos-panel') ? 'objetivos-panel'
+              : (document.getElementById('objetivos-jugador') ? 'objetivos-jugador' : null);
+  if(!destino) return;
+
+  /* en el analisis no hay un jugador elegido: se muestran los del equipo */
+  var eqVals = objGetVals(null);
+  var jugVals = window._objNombre ? objGetVals(window._objNombre) : eqVals;
+  renderObjetivosJugador(destino, jugVals, eqVals);
+}
+
+function _sincronizarBaterias(){
+  try{
+    var ent = (typeof FILTRO_TIPO !== 'undefined' && FILTRO_TIPO === 'E');
+    window._objTipo = ent ? 'entrenamiento' : 'partido';
+    var META = (window.BAT_PARTIDOS && window.BAT_PARTIDOS.meta) || null;
+    var idx  = (typeof PARTIDO_IDX !== 'undefined') ? PARTIDO_IDX : null;
+    if(idx === null || idx < 0 || !META || !META[idx]) window._objPartido = 'acumulado';
+    else window._objPartido = META[idx].id;
+    if(typeof objRenderBaterias === 'function') objRenderBaterias();
+  }catch(e){}
+}
+
+function _aplicarSubfiltros(jugs){
+  if(SAQUE_TIPO==='total' && RECEP_TIPO==='total' && ATK_FASE==='total') return jugs;
+  return (jugs||[]).map(function(j){
+    var c = {}; for(var k in j) c[k] = j[k];
+    if(SAQUE_TIPO!=='total'){
+      var S = (SAQUE_TIPO==='flotado') ? j.sFlo : j.sPot;
+      if(S){ c.sT=S.T||0; c.sPunto=S.Punto||0; c.sPos=S.Pos||0; c.sAdm=S.Adm||0;
+             c.sOvp=S.Adm||0; c.sNeg=S.Neg||0; c.sErr=S.Err||0; c.sVend=S.Vend||0;
+             c.sEff = c.sT ? Math.round((c.sPunto - c.sErr)/c.sT*100) : null; }
+      else { c.sT=0; c.sEff=null; }
+    }
+    if(RECEP_TIPO!=='total'){
+      var R = (RECEP_TIPO==='flotado') ? j.rFlo : j.rPot;
+      if(R){ c.rT=R.T||0; c.rPunto=R.Punto||0; c.rPos=R.Pos||0; c.rAdm=R.Adm||0;
+             c.rOvp=R.Adm||0; c.rNeg=R.Neg||0; c.rErr=R.Err||0; c.rVend=R.Vend||0;
+             c.rEff = c.rT ? Math.round((c.rPunto - c.rErr)/c.rT*100) : null; }
+      else { c.rT=0; c.rEff=null; }
+    }
+    if(ATK_FASE!=='total'){
+      var A = (ATK_FASE==='so') ? j.aSo : j.aTr;
+      if(A){ c.aT=A.T||0; c.aPunto=A.Punto||0; c.aPos=A.Pos||0; c.aAdm=A.Adm||0;
+             c.aOvp=A.Adm||0; c.aNeg=A.Neg||0; c.aErr=A.Err||0; c.aVend=A.Vend||0;
+             c.aEff = c.aT ? Math.round((c.aPunto - c.aErr)/c.aT*100) : null; }
+      else { c.aT=0; c.aEff=null; }
+    }
+    return c;
+  });
+}
+
+function _subFiltros(cual){
+  var defs = {
+    saque:     {v:SAQUE_TIPO, f:'setSaqueTipo', c:'#f59e0b',
+                o:[['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']]},
+    recepcion: {v:RECEP_TIPO, f:'setRecepTipo', c:'#22c55e',
+                o:[['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']]},
+    ataque:    {v:ATK_FASE,   f:'setAtkFase',   c:'#818cf8',
+                o:[['total','TOTAL'],['so','SIDE-OUT'],['tr','TRANSICION']]}
+  };
+  var d = defs[cual];
+  if(!d) return '';
+  var h = '<div style="display:flex;gap:6px;margin:0 0 10px 2px;flex-wrap:wrap">';
+  for(var i=0;i<d.o.length;i++){
+    var on = (d.v === d.o[i][0]);
+    h += '<button type="button" onclick="' + d.f + '(\'' + d.o[i][0] + '\')" style="' +
+         'padding:5px 12px;border-radius:7px;cursor:pointer;' +
+         'font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;' +
+         (on ? ('background:' + d.c + '22;border:1px solid ' + d.c + '66;color:' + d.c)
+             : 'background:transparent;border:1px solid rgba(255,255,255,.08);color:#64748b') +
+         '">' + d.o[i][1] + '</button>';
+  }
+  return h + '</div>';
+}
+
+function _redibujar(){
+  try{ renderTab(typeof TAB_ACTIVO !== 'undefined' ? TAB_ACTIVO : 'saque'); }catch(e){}
+}
+
+function setSaqueTipo(t){ SAQUE_TIPO = t; _redibujar(); }
+
+function setRecepTipo(t){ RECEP_TIPO = t; _redibujar(); }
+
+function setAtkFase(t){   ATK_FASE   = t; _redibujar(); }
+
+</script>
 </body>
 </html>
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
