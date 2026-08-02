@@ -134,10 +134,10 @@ def build(dvw_dir, out_dir, filter_temp=None, db_path=None):
                 D['atk'][pnum].append([tp[0],('g' if(recv and rq in '#+') else 'b' if(recv and rq in '!-') else 'o'),
                     1 if(recv and rby==pnum) else 0, recz if recv else '', tr[1] if len(tr)>1 else '',
                     code[4] if len(code)>4 else '', tr[3] if len(tr)>3 else '', tsv, mid, (rby if recv else 0),
-                    # La zona de ORIGEN del ataque —desde donde se atacaba—. El
-                    # destino ya estaba en [4], pero un ataque bloqueado no
-                    # tiene destino: la pelota nunca paso. Sin el origen, la
-                    # cancha de bloqueados del plan de partido quedaba en cero.
+                    # [10] la zona de ORIGEN del ataque: desde donde se atacaba.
+                    # El campo [4] guarda el DESTINO —a donde fue la pelota— y un
+                    # ataque bloqueado no tiene destino, asi que sin esto la cancha
+                    # de bloqueados del plan de partido pintaba las zonas equivocadas.
                     tr[0] if len(tr)>0 else ''])
                 recv=False
 
