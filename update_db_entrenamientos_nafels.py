@@ -24,6 +24,56 @@ ESTRUCTURA DE ARCHIVOS:
 import os, re, json, argparse, shutil
 from collections import defaultdict, Counter
 
+def _sumar_al_historial(entrenamientos, output_dir='.'):
+    """Suma las sesiones al historial que leen las pantallas.
+
+    El motor guarda los entrenamientos en datos_historial_ent.js, pero el
+    dashboard, el historial y el perfil del jugador leen datos_historial.js.
+    Sin este paso ese archivo queda vacio y la app no muestra nada.
+    """
+    import json
+    import os as _os
+    import re as _re
+    from datetime import datetime
+
+    destino = _os.path.join(output_dir, 'datos_historial.js')
+
+    # lo que ya habia, para no pisar los partidos que ya estaban
+    previo = []
+    if _os.path.exists(destino):
+        try:
+            txt = open(destino, encoding='utf-8').read()
+            m = _re.search(r'window\.HISTORIAL_DATA\s*=\s*(\{.*\})\s*;', txt, _re.S)
+            if m:
+                previo = (json.loads(m.group(1)) or {}).get('entrenamientos', []) or []
+        except Exception:
+            previo = []
+
+    # las sesiones nuevas, sin repetir las que ya estaban
+    yaesta = set()
+    for e in previo:
+        yaesta.add((e.get('fecha', ''), e.get('rival', ''), e.get('tipo', '')))
+
+    for e in (entrenamientos or []):
+        clave = (e.get('fecha', ''), e.get('rival', ''), e.get('tipo', ''))
+        if clave in yaesta:
+            continue
+        previo.append(e)
+        yaesta.add(clave)
+
+    previo.sort(key=lambda x: x.get('fecha', ''))
+
+    salida = {
+        'generado': datetime.now().strftime('%d/%m/%Y, %H:%M:%S'),
+        'entrenamientos': previo,
+    }
+    with open(destino, 'w', encoding='utf-8') as f:
+        f.write('window.HISTORIAL_DATA = ')
+        json.dump(salida, f, ensure_ascii=False, indent=2)
+        f.write(';\n')
+    print('   %s: %d sesiones' % (_os.path.basename(destino), len(previo)))
+
+
 # ── NORMALIZACIÓN DE COMBOS AL CANÓNICO MUNDIAL ──────────────────────
 # Equivalencias argentino → canónico (mismo ataque, distinto idioma de scout)
 COMBO_EQUIV = {
@@ -1477,6 +1527,9 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
     hist_js = 'window.HISTORIAL_DATA_ENT = ' + json.dumps({'generado':now,'entrenamientos':historial}, ensure_ascii=False, indent=2) + ';\n'
     with open(os.path.join(output_dir,'datos_historial_ent.js'),'w',encoding='utf-8') as f: f.write(hist_js)
 
+    # Y ahora al historial que leen las pantallas: el dashboard,
+    # el historial y el perfil del jugador miran datos_historial.js
+    _sumar_al_historial(historial, output_dir)
     # ── DATOS_PARTIDOS.JS (ataques, saques, recepciones por jugador acumulado) ──
     if os.path.exists('entrenamientos_nafels_db.json'):
         with open('entrenamientos_nafels_db.json') as f: _db = json.load(f)
