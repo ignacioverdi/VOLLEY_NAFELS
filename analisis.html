@@ -1605,11 +1605,16 @@ function objSingleBat(id,val,meta,cls,objLine){
 }
 
 function objGetVals(nombre){
-  /* Los numeros de las baterias salen SIEMPRE del archivo de baterias, igual
-     que en el dashboard. Antes, en modo entrenamiento se iba por otro camino
-     que lee de archivos que en esta temporada no tienen el detalle, y los dos
-     mostraban valores distintos para la misma sesion. */
-  if(window.BAT_PARTIDOS) return batGet(nombre, window._objPartido);
+  /* Los numeros salen SIEMPRE del archivo de baterias, igual que en el
+     dashboard.
+
+     El partido elegido se guarda en dos variables distintas —_objPartido aca,
+     _dbatPartido en el dashboard— y si no coinciden las dos pantallas muestran
+     valores distintos para la misma sesion. Se usa la que este puesta. */
+  if(window.BAT_PARTIDOS){
+    var cual = window._objPartido || window._dbatPartido || 'acumulado';
+    return batGet(nombre, cual);
+  }
   return (typeof _OBJ_NULOS !== 'undefined') ? _OBJ_NULOS : {};
 }
 
@@ -1710,6 +1715,8 @@ function _sincronizarBaterias(){
     var idx  = (typeof PARTIDO_IDX !== 'undefined') ? PARTIDO_IDX : null;
     if(idx === null || idx < 0 || !META || !META[idx]) window._objPartido = 'acumulado';
     else window._objPartido = META[idx].id;
+    /* las dos pantallas leen la misma sesion */
+    window._dbatPartido = window._objPartido;
     if(typeof objRenderBaterias === 'function') objRenderBaterias();
   }catch(e){}
 }

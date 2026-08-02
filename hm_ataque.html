@@ -448,7 +448,16 @@ function ccGrid(zones,layout,color,total,opts){opts=opts||{};var minN=opts.minN|
       ? " onclick=\"verVideoDest("+z+","+(esOrig?"1":"0")+")\" style=\"background:"+bg+";cursor:pointer\" title=\"Ver los videos de esta zona\""
       : " style='background:"+bg+"'";
     h+="<div class='cc-cell'"+_clic+"><div class='zn'>"+z+"</div>"+inner+"</div>";});});return h+"</div>";}
-function ccOriginLine(zones,total){var arr=[];for(var z in zones){if(zones[z]>0)arr.push([z,zones[z]]);}arr.sort(function(a,b){return b[1]-a[1];});if(!arr.length)return "";var top=arr.slice(0,3).map(function(p){return "Z"+p[0]+(total>0?" "+Math.round(p[1]/total*100)+"%":" ("+p[1]+")");}).join(" \u00b7 ");return "<div class='cc-origin'>Zona de origen: <b>"+top+"</b></div>";}
+function ccOriginLine(zones,total){
+  /* El cartel "Zona de origen: Z2" quedaba arriba de cada cancha con la zona
+     mas frecuente, y hacia parecer que TODOS los ataques salieron de ahi
+     cuando salieron de varias.
+
+     Para eso esta el filtro de "Zona de origen" en la barra de la izquierda,
+     que ademas filtra de verdad. Se deja la linea vacia para no desalinear las
+     canchas, que la esperan. */
+  return "<div class='cc-origin' style='visibility:hidden'>&nbsp;</div>";
+}
 
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -519,7 +528,10 @@ function courtSVG(destZones,originZone,total,color,title){
      los números caían en el lugar equivocado de la cancha. */
   var RIVAL=[[4,3,2],[7,8,9],[5,6,1]];
   var h="<div class='cc-wrap'>";
-  if(originZone) h+="<div class='cc-origin'>Zona de origen: <b>Z"+originZone+"</b></div>";
+  /* El cartel "Zona de origen" se saca: hacia parecer que todos los ataques
+     salieron de esa zona. Para eso esta el filtro de la barra izquierda, que
+     ademas filtra de verdad. La linea vacia mantiene las canchas alineadas. */
+  h+="<div class='cc-origin' style='visibility:hidden'>&nbsp;</div>";
   h+="<div class='cc-lbl' style='color:rgba(232,25,44,.6)'>"+title+"</div>";
   h+=ccGrid(destZones,RIVAL,color,total,{minN:CC_MIN});
   return h+"</div>";
@@ -817,5 +829,10 @@ function _initModoBtns(){
 document.addEventListener('DOMContentLoaded', _initModoBtns);
 
 </script>
+<!-- lang.js trae el selector de idioma y el escudo del club, que es el
+     boton para volver al inicio. Sin el, no hay como salir de la
+     pantalla sin usar el boton de atras del navegador. -->
+<script src="lang.js" onerror="void 0"></script>
+<script src="temporadas_menu.js" onerror="void 0"></script>
 </body>
 </html>
