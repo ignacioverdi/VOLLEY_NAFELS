@@ -661,7 +661,15 @@ function cambiarZona(soloEsta){
 function recompute(){if(!curP)return;var cfg=ROLECFG[curP.role];
   var vals=cfg.filters.map(function(fl,i){return readFilt('vf'+i,fl);});
   var todas=(curZn==='*');
-  var all=curP.data.filter(function(a){return (todas||String(a[cfg.court])===curZn)&&MSEL.has(a[cfg.vIdx])&&passes(a,cfg,vals);});
+  /* La zona con la que se compara tiene que ser la misma que uso el cuadrante:
+     el DESTINO en un ataque normal, y el ORIGEN —el campo [10]— en uno
+     bloqueado. Comparando siempre el destino, al tocar la zona de bloqueados
+     se buscaban ataques que FUERON ahi en vez de los que SALIERON de ahi. */
+  var _zonaDe=function(a){
+    var blq=(cfg.stats==='atk' && a[cfg.evIdx]==='/');
+    return String((blq && a[10]) ? a[10] : a[cfg.court]);
+  };
+  var all=curP.data.filter(function(a){return (todas||_zonaDe(a)===curZn)&&MSEL.has(a[cfg.vIdx])&&passes(a,cfg,vals);});
   clips=all.map(function(a){return {tag:(cfg.stats==='dig'?(a[7]||a[cfg.tagIdx]):a[cfg.tagIdx]),ev:a[cfg.evIdx],t:a[cfg.tIdx],vid:ppVid(a[cfg.vIdx]),sel:true};}).filter(function(c){return c.vid;});
   applySavedSel();cur=firstSel();document.getElementById("vtitle").textContent=curP.name+" · "+(todas?"todas las zonas":"zona "+curZn)+" · "+all.length+U(curP.role)+(clips.length<all.length?' ('+clips.length+' c/video)':'');renderList();
   if(!clips.length){document.getElementById("vcount").textContent="sin video";document.getElementById("vlist").innerHTML='<div class="novid">No hay video en los partidos seleccionados con 🎥. Probá otra zona, destildá «Solo esta zona» o cambiá el filtro de Partido.</div>';return;}
