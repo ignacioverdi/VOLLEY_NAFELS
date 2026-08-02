@@ -303,24 +303,6 @@ canvas.panel-court{position:absolute;inset:0;width:100%;height:100%;opacity:.28;
 
 <!-- VB: selector PARTIDO/ENTRENAMIENTO - carga los datos segun el modo elegido -->
 <script>
-/* ══════════════════════════════════════════════════════════════════════════
-   LA RECEPCION, DE LAS DOS FUENTES
-   --------------------------------------------------------------------------
-   Los partidos se guardan en RECEPCION_RIVAL_DATA y los entrenamientos en
-   RECEPCION_RIVAL_DATA_ENT. Mirando una sola, las recepciones de la otra no
-   aparecen nunca.
-   ══════════════════════════════════════════════════════════════════════════ */
-(function(){
-  try{
-    var A = window.RECEPCION_RIVAL_DATA || {};
-    var B = window.RECEPCION_RIVAL_DATA_ENT || {};
-    if(!Object.keys(B).length) return;
-    var J = {};
-    Object.keys(A).forEach(function(k){ J[k] = A[k]; });
-    Object.keys(B).forEach(function(k){ if(!J[k]) J[k] = B[k]; });
-    window.RECEPCION_RIVAL_DATA = J;
-  }catch(e){}
-})();
 (function(){var ent=false;try{ent=(localStorage.getItem('vb_modo')||'partido')==='entrenamiento';}catch(e){}
 function w(s){document.write('<scr'+'ipt src="'+s+'" onerror="void 0"><\/scr'+'ipt>');}
 if(ent){ w('datos_entrenamientos.js'); w('datos_recepcion_ent.js'); w('adapter_entrenamiento.js'); }
@@ -938,54 +920,82 @@ function recBtnOff(b){ b.classList.remove('on'); }
 <script src="temporadas_menu.js"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
-   CARTEL DE DIAGNOSTICO — temporal
+   LA RECEPCION, DE LAS DOS FUENTES
    --------------------------------------------------------------------------
-   Muestra abajo a la izquierda que nombres tiene el archivo de datos y cuales
-   esta pidiendo la pantalla. Cuando esto funcione se saca.
+   Los partidos se guardan en RECEPCION_RIVAL_DATA y los entrenamientos en
+   RECEPCION_RIVAL_DATA_ENT. Mirando una sola, las recepciones de la otra no
+   aparecen nunca.
+
+   Va al final y con reintento: los archivos cifrados tardan en abrirse, y
+   juntarlos antes de que lleguen no sirve de nada.
    ══════════════════════════════════════════════════════════════════════════ */
 (function(){
+  function juntar(){
+    try{
+      var A = window.RECEPCION_RIVAL_DATA || {};
+      var B = window.RECEPCION_RIVAL_DATA_ENT || {};
+      if(!Object.keys(B).length) return false;
+
+      var J = {};
+      Object.keys(A).forEach(function(k){ J[k] = A[k]; });
+      Object.keys(B).forEach(function(k){ if(!J[k]) J[k] = B[k]; });
+      window.RECEPCION_RIVAL_DATA = J;
+
+      /* y se vuelve a dibujar, que la pantalla ya se armo sin estos datos */
+      try{ if(typeof render === 'function') render(); }catch(e){}
+      try{ if(typeof initReceptores === 'function') initReceptores(); }catch(e){}
+      return true;
+    }catch(e){ return false; }
+  }
+
+  var intentos = 0;
+  (function probar(){
+    if(juntar()) return;
+    if(++intentos > 20) return;
+    setTimeout(probar, 250);
+  })();
+})();
+</script>
+<script>
+/* Cartel de diagnostico — temporal. Cuando esto funcione se saca. */
+(function(){
   function poner(){
-    var d = document.getElementById('_diag_rec');
+    var d=document.getElementById('_diag_rec');
     if(!d){
-      d = document.createElement('div');
-      d.id = '_diag_rec';
-      d.style.cssText = 'position:fixed;bottom:10px;left:10px;z-index:99999;'+
-        'background:rgba(15,23,42,.96);border:1px solid rgba(34,197,94,.5);'+
-        'color:#e2e8f0;border-radius:10px;padding:10px 14px;'+
-        'font-family:ui-monospace,monospace;font-size:11px;line-height:1.7;'+
-        'max-width:78vw;white-space:pre-wrap';
+      d=document.createElement('div'); d.id='_diag_rec';
+      d.style.cssText='position:fixed;bottom:10px;left:10px;z-index:99999;'+
+        'background:rgba(15,23,42,.96);border:1px solid rgba(34,197,94,.5);color:#e2e8f0;'+
+        'border-radius:10px;padding:10px 14px;font-family:ui-monospace,monospace;'+
+        'font-size:11px;line-height:1.7;max-width:78vw;white-space:pre-wrap';
       document.body.appendChild(d);
     }
-    var L = [];
-    function di(k,v){ L.push(k + ': ' + v); }
-
-    var A = window.RECEPCION_RIVAL_DATA || null;
-    var B = window.RECEPCION_RIVAL_DATA_ENT || null;
-    di('datos de PARTIDOS', A ? Object.keys(A).length + ' jugadores' : 'NO LLEGA');
-    if(A) di('  sus nombres', Object.keys(A).join(', ').slice(0,70));
-    di('datos de ENTREN.', B ? Object.keys(B).length + ' jugadores' : 'NO LLEGA');
-    if(B) di('  sus nombres', Object.keys(B).join(', ').slice(0,70));
-
-    try{ di('la pantalla PIDE', (typeof RECEPTORES !== 'undefined' ? RECEPTORES : defaultReceptores()).join(', ')); }
-    catch(e){ di('la pantalla PIDE', 'no lo puedo leer'); }
-
-    try{ di('rival elegido', typeof CUR_RIVAL !== 'undefined' ? CUR_RIVAL : '(no existe)'); }catch(e){}
-    try{ di('vista', typeof CUR !== 'undefined' ? CUR : '(no existe)'); }catch(e){}
-
-    /* que devuelve para cada uno */
+    var L=[];
+    var A=window.RECEPCION_RIVAL_DATA||{}, B=window.RECEPCION_RIVAL_DATA_ENT||{};
+    L.push('PARTIDOS: '+Object.keys(A).length+'  '+Object.keys(A).join(', ').slice(0,50));
+    L.push('ENTREN.:  '+Object.keys(B).length+'  '+Object.keys(B).join(', ').slice(0,50));
     try{
-      var lista = (typeof RECEPTORES !== 'undefined') ? RECEPTORES : defaultReceptores();
+      var lista=(typeof RECEPTORES!=='undefined')?RECEPTORES:defaultReceptores();
+      L.push('la pantalla pide: '+lista.join(', '));
       lista.forEach(function(n){
-        var r = null;
-        try{ r = getPlayerRecData(n); }catch(e){}
-        di('  ' + n, r ? 'ENCUENTRA datos' : 'nada');
+        var r=null; try{ r=getPlayerRecData(n); }catch(e){}
+        var q='nada';
+        if(r){
+          var t=0;
+          try{ ['flotado','potencia'].forEach(function(tp){
+            var z=r[tp]||{};
+            Object.keys(z).forEach(function(o){
+              var pp=z[o]||{};
+              Object.keys(pp).forEach(function(k){ if(pp[k] && pp[k].tot) t+=pp[k].tot; });
+            });
+          }); }catch(e){}
+          q = t ? ('ENCUENTRA · '+t+' recepciones') : 'lo encuentra pero VACIO';
+        }
+        L.push('  '+n+': '+q);
       });
-    }catch(e){}
-
-    d.textContent = L.join('\n');
+    }catch(e){ L.push('error: '+e.message); }
+    d.textContent=L.join('\n');
   }
-  setTimeout(poner, 600);
-  setInterval(poner, 2000);
+  setTimeout(poner,900); setInterval(poner,2500);
 })();
 </script>
 </body>
