@@ -27,6 +27,12 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
   
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
 <script src="datos_video_25-26.js.enc" onerror="void 0"></script>
+  <!-- Los cortes de los ENTRENAMIENTOS. Sin estos, la solapa de defensa y
+       las baterias salen vacias: esas acciones viven aca, no en el archivo
+       de los partidos. -->
+  <script src="datos_video_ent_25-26.js.enc" onerror="void 0"></script>
+  <script src="datos_video_ent_26-27.js.enc" onerror="void 0"></script>
+  
   <script>abrirDatos();</script>
 <script src="datos_video_26-27.js" onerror="void 0"></script>
 <script src="datos_video_27-28.js" onerror="void 0"></script>
@@ -964,11 +970,30 @@ function renderEqContent(){
   cont.innerHTML=html;
 }
 
+
+/* La temporada anterior a la que se esta mirando. Sirve para no descartar lo
+   que se scouteo en pretemporada, que queda fechado en la que termino. */
+function _tempAnterior(){
+  try{
+    var c = _curSeason();
+    var m = String(c).match(/^(\d{2})-(\d{2})$/);
+    if(!m) return c;
+    var a = parseInt(m[1],10) - 1, b = parseInt(m[2],10) - 1;
+    return String(a).padStart(2,'0') + '-' + String(b).padStart(2,'0');
+  }catch(e){ return ''; }
+}
+
 function renderDefensaTabla(){
   var VD = window.VIDEO_DATA && window.VIDEO_DATA.matches;
   if(!VD) return '<div class="empty">Sin datos de defensa todavía</div>';
   var P={};
-  Object.keys(VD).forEach(function(c){ if(_seasonOf(VD[c].date)!==_curSeason())return; (VD[c].actions||[]).forEach(function(a){
+  /* Antes se descartaba todo lo que no fuera de la temporada en curso. Un
+     entrenamiento de pretemporada queda fechado en la anterior y se perdia:
+     ahora entra tambien lo que no trae fecha o es de la temporada pasada. */
+  Object.keys(VD).forEach(function(c){
+    var _f = VD[c].date;
+    if(_f && _seasonOf(_f) !== _curSeason() && _seasonOf(_f) !== _tempAnterior()) return;
+    (VD[c].actions||[]).forEach(function(a){
     if(a.sk!=='Defensa') return;
     if(a.tm!=='nafels') return;
     var k=a.num; if(!P[k]) P[k]={num:a.num,name:a.name,T:0,perf:0,buena:0,reg:0,mala:0,err:0};
