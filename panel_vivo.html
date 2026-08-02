@@ -46,11 +46,16 @@
   .pl-vacio{color:var(--dim);font-size:13px;padding:10px 0}
   /* Modo extensión: el campo cambia de color para que se vea que la próxima
      tecla va al código extendido y no arranca una acción nueva. */
-  #code.ext, #code-espejo/* El codigo extendido, en rojo y en negrita: igual que en DataVolley, para
-     distinguir de un vistazo lo que se agrego con el menu de lo que se tipeo. */
-  .ext{color:#ef4444;font-weight:900;
-       background:rgba(239,68,68,.10);
-       box-shadow:inset 0 0 0 2px rgba(239,68,68,.45)}
+  #code.ext, #code-espejo/* El codigo extendido en la barra, en ROJO y negrita: igual que en DataVolley,
+     para distinguir de un vistazo lo que se agrego con el menu de lo que se
+     tipeo.
+
+     Se llama "ext-barra" y no "ext" porque esa clase ya existe en otras dos
+     partes de la hoja de estilos, y la ultima definicion pisaba el color. */
+  .ext-barra{color:#ef4444 !important;font-weight:900;
+             background:rgba(239,68,68,.12);
+             border-radius:4px;padding:0 2px;
+             box-shadow:inset 0 0 0 2px rgba(239,68,68,.45)}
   #code.ext{caret-color:#a78bfa}
   .extmenu.open{box-shadow:0 0 0 2px rgba(167,139,250,.35),0 18px 44px rgba(0,0,0,.5)}
 
@@ -2223,7 +2228,7 @@ function pintarEspejo(){
              : inp.classList.contains('warn') ? 'aviso' : '';
     ajustarTamCodigo(EXT_TIPEADO.texto + EXT_TIPEADO.extra);
     e.innerHTML = '<span class="'+cls0+'">' + esc0(EXT_TIPEADO.texto) + '</span>'
-                + '<span class="'+(cls0||'ext')+'">' + esc0(EXT_TIPEADO.extra) + '</span>';
+                + '<span class="'+(cls0||'ext-barra')+'">' + esc0(EXT_TIPEADO.extra) + '</span>';
     return;
   }
   EXT_TIPEADO = null;
