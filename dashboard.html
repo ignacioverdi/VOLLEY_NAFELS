@@ -778,7 +778,35 @@ function renderEqStats(){
 
   // Defensa (de datos_video — solo partidos)
   var dT=0,dPerf=0,dBuena=0,dMala=0,dErr=0;
-  if(window.VIDEO_DATA&&window.VIDEO_DATA.matches){var _M=window.VIDEO_DATA.matches;Object.keys(_M).forEach(function(c){if(_seasonOf(_M[c].date)!==_curSeason())return;(_M[c].actions||[]).forEach(function(a){if(a.sk!=='Defensa')return;if(a.tm!=='nafels')return;dT++;if(a.ev==='#')dPerf++;else if(a.ev==='+')dBuena++;else if(a.ev==='-')dMala++;else if(a.ev==='=')dErr++;});});}
+  /* El recuadro de Defensa, con la misma cuenta que la tabla de abajo: las dos
+       fuentes de video —los partidos en VIDEO_DATA y los entrenamientos en
+       VIDEO_DATA_ENT— y la excepcion de fecha solo para las practicas, que en
+       julio caen en la temporada anterior. */
+    (function(){
+      var _M = {}, _idsEnt = {};
+      try{
+        var _E = window.VIDEO_DATA_ENT && window.VIDEO_DATA_ENT.matches;
+        if(_E) Object.keys(_E).forEach(function(k){ _M[k]=_E[k]; _idsEnt[k]=1; });
+        var _P = window.VIDEO_DATA && window.VIDEO_DATA.matches;
+        if(_P) Object.keys(_P).forEach(function(k){ _M[k]=_P[k]; });
+      }catch(e){}
+      Object.keys(_M).forEach(function(c){
+        var _t = _seasonOf(_M[c].date);
+        if(_t !== null){
+          if(_idsEnt[c]){ if(_t !== _curSeason() && _t !== _curSeason()-1) return; }
+          else { if(_t !== _curSeason()) return; }
+        }
+        (_M[c].actions||[]).forEach(function(a){
+          if(a.sk !== 'Defensa') return;
+          if(a.tm !== 'nafels') return;
+          dT++;
+          if(a.ev==='#') dPerf++;
+          else if(a.ev==='+') dBuena++;
+          else if(a.ev==='-') dMala++;
+          else if(a.ev==='=') dErr++;
+        });
+      });
+    })();
   var dEff=dT>0?Math.round((dPerf+0.5*dBuena-0.5*dMala-dErr)/dT*100):null;
   var dEff_str=dEff!==null?fmt(dEff):'—';
 
