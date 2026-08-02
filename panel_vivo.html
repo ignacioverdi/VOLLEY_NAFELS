@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Panel en Vivo — Scouting de partido</title>
+<title>Scout en Vivo — CASLA</title>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
    El panel ya no depende de Google Fonts: funciona 100% offline. */
@@ -46,8 +46,11 @@
   .pl-vacio{color:var(--dim);font-size:13px;padding:10px 0}
   /* Modo extensión: el campo cambia de color para que se vea que la próxima
      tecla va al código extendido y no arranca una acción nueva. */
-  #code.ext, #code-espejo.ext{background:rgba(167,139,250,.10);
-     box-shadow:inset 0 0 0 2px rgba(167,139,250,.55)}
+  #code.ext, #code-espejo/* El codigo extendido, en rojo y en negrita: igual que en DataVolley, para
+     distinguir de un vistazo lo que se agrego con el menu de lo que se tipeo. */
+  .ext{color:#ef4444;font-weight:900;
+       background:rgba(239,68,68,.10);
+       box-shadow:inset 0 0 0 2px rgba(239,68,68,.45)}
   #code.ext{caret-color:#a78bfa}
   .extmenu.open{box-shadow:0 0 0 2px rgba(167,139,250,.35),0 18px 44px rgba(0,0,0,.5)}
 
@@ -512,7 +515,6 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <span class="live livemin" title="Se pone celeste cuando está transmitiendo a la tablet" style="color:var(--vis);border-color:rgba(34,211,238,.35);background:rgba(34,211,238,.08)"><span class="pubdot" id="pubdot"></span></span>
   <div class="spacer"></div>
   <button class="tbtn" onclick="openSetup()">Partido</button>
-  <button class="tbtn" onclick="window.open('informe.html','_blank')" title="Informe del partido: estadísticas por jugador y nota, listo para PDF">Informe</button>
   <button class="tbtn" onclick="abrirPartidos()" title="Lista de partidos guardados (ver o borrar)">Partidos</button>
   <button class="tbtn" onclick="abrirVideo()" title="Video y sincronización (manual 2.5.6)">Video</button>
   <button class="tbtn" onclick="abrirCombos()" title="Combinaciones de ataque y llamadas (manual 12.2)">Comb ataque</button>
@@ -591,8 +593,6 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
       <div class="extmenu" id="extmenu"></div>
       <div class="exthint"><kbd>Ctrl</kbd> + <kbd>Espacio</kbd> para las extensiones</div>
       <div class="hint" id="hint"></div>
-      <button class="detbtn" id="descbtn" onclick="toggleDescripcion()"
-              style="margin-top:4px;opacity:.7;font-size:11px">Ocultar la descripción</button>
       <button class="detbtn" id="detbtn" onclick="toggleDetalle()">Detalle de la jugada ▾</button>
       <div class="detail" id="detail" hidden>
         <div class="dcol"><label>Desde — zona de inicio</label><div class="mini" id="mini-sz"></div></div>
@@ -691,25 +691,19 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 
 <div class="modal" id="m-subs"><div class="sheet" style="max-width:560px">
   <h2>Cambio · <span id="subs-team">Equipo</span></h2>
-  <div class="brow" style="gap:6px;margin:8px 0"><button class="tbtn" id="subs-th" onclick="substLado('home')">Local</button><button class="tbtn" id="subs-ta" onclick="substLado('away')">Visitante</button></div>
   <div id="subs-cancha"></div>
-  <div class="sub">Elegí quién sale (izquierda) y quién entra (derecha). Podés hacer dos seguidos con «+ Otro cambio». Cambios restantes: <b id="subs-restantes">6</b>.</div>
+  <div class="brow" style="gap:6px;margin:8px 0"><button class="tbtn" id="subs-th" onclick="substLado('home')">Local</button><button class="tbtn" id="subs-ta" onclick="substLado('away')">Visitante</button></div>
+  <div class="sub">Elegí quién sale (izquierda) y quién entra (derecha). Cambios restantes: <b id="subs-restantes">6</b>.</div>
   <div style="display:flex;gap:14px;margin-top:12px">
-    <div style="flex:1">
-      <div class="lutitle" style="margin-bottom:6px">Sale (en cancha)</div>
-      <div id="subs-sale" class="subcol"></div>
-    </div>
+    <div style="flex:1"><div class="lutitle" style="margin-bottom:6px">Sale (en cancha)</div><div id="subs-sale" class="subcol"></div></div>
     <div style="display:flex;align-items:center;font-size:22px;color:var(--mut)">→</div>
-    <div style="flex:1">
-      <div class="lutitle" style="margin-bottom:6px">Entra (banco)</div>
-      <div id="subs-entra" class="subcol"></div>
-    </div>
+    <div style="flex:1"><div class="lutitle" style="margin-bottom:6px">Entra (banco)</div><div id="subs-entra" class="subcol"></div></div>
   </div>
   <div id="subs-resumen" style="margin-top:12px;text-align:center;font-weight:700;color:#e6a743">Elegí quién sale y quién entra</div>
   <div class="brow" style="margin-top:12px;gap:8px;flex-wrap:wrap">
     <button class="tbtn" onclick="cerrarSubs()">Cerrar</button>
     <div style="flex:1"></div>
-    <button class="tbtn" onclick="confirmarCambio(true)" title="Hacer este cambio y seguir para un doble cambio">+ Otro cambio</button>
+    <button class="tbtn" onclick="confirmarCambio(true)">+ Otro cambio</button>
     <button class="tbtn pri" onclick="confirmarCambio(false)">Confirmar</button>
   </div>
 </div></div>
@@ -721,9 +715,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   </div>
   <div class="sub">Tocá un partido para abrirlo. Tildá los que quieras borrar y usá el botón rojo.</div>
   <div id="partidos-cont" style="margin-top:12px;max-height:60vh;overflow:auto"></div>
-  <div class="brow" style="margin-top:12px">
-    <button class="tbtn" onclick="cerrarPartidos()">Cerrar</button>
-  </div>
+  <div class="brow" style="margin-top:12px"><button class="tbtn" onclick="cerrarPartidos()">Cerrar</button></div>
 </div></div>
 
 <div class="modal" id="m-baterias"><div class="sheet" style="max-width:960px">
@@ -826,7 +818,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <div class="modal" id="m-equipo"><div class="sheet" style="max-width:720px">
   <h2>Ficha del equipo</h2>
   <div class="fgrid" style="grid-template-columns:2fr 90px 110px">
-    <div><label class="f">Nombre</label><input class="f" id="eq-nm" placeholder="Biogas Volley Näfels"></div>
+    <div><label class="f">Nombre</label><input class="f" id="eq-nm" placeholder="Club Atlético San Lorenzo"></div>
     <div><label class="f">Sigla</label><input class="f mono" id="eq-sg" maxlength="3" placeholder="BIO"></div>
     <div><label class="f">Id Data Volley</label><input class="f mono" id="eq-id" placeholder="4370"></div>
   </div>
@@ -916,11 +908,11 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         <option value="num_s">Escribe el número del próximo sacador y la S</option>
         <option value="num">Escribe sólo el número del próximo sacador</option>
         <option value="no">Deja la barra vacía</option></select>
+        <div style="font-size:11px;color:var(--mut);margin-top:5px">La barra se limpia siempre; esto define qué queda escrito.</div>
       </div>
       <div><label class="f">Fin de jugada automático (estilo Data)</label><select class="f" id="d-autofin">
         <option value="1">Sí — un código terminal (#, =, ataque bloqueado) cierra la jugada y da el punto solo</option>
         <option value="0">No — el punto se carga a mano (botones «Punto Local/Visitante»)</option></select>
-        <div style="font-size:11px;color:var(--mut);margin-top:5px">La barra se limpia siempre; esto define qué queda escrito.</div>
       </div>
       <div><label class="f">Modo entrenamiento (solo tu equipo)</label><select class="f" id="d-entren">
         <option value="0">No — partido normal (local y visitante)</option>
@@ -940,10 +932,10 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <div class="fgrid">
       <div><label class="f">Completar automáticamente</label><select class="f" id="d-auto">
         <option value="0">No (código estándar de DataVolley)</option>
-        <option value="1">Sí — como los archivos de Näfels: diferencia de puntos + fila del jugador</option></select></div>
+        <option value="1">Sí — diferencia de puntos + fila del jugador (convención de la liga)</option></select></div>
     </div>
-    <div class="ref" style="margin-top:10px">La opción de Näfels <b>no es un estándar de DataVolley</b>: la dedujimos de sus
-      archivos (coincide en el 98% de las acciones). Dejala en "No" si querés el código puro del manual.</div>
+    <div class="ref" style="margin-top:10px">Esta opción <b>no es un estándar de DataVolley</b>: se dedujo de archivos reales
+      (coincide en el 98% de las acciones). Dejala en "No" si querés el código puro del manual.</div>
   </div>
 
   <div class="sec">
@@ -1032,9 +1024,8 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <div class="modal" id="m-setup"><div class="sheet">
   <h2 id="setup-titulo">Partido</h2>
   <div class="sub" id="setup-sub">Cargá los dos equipos, el seis inicial y quién saca.</div>
-  <!-- Manual 4.12: elegir modo Partido o Entrenamiento -->
   <div style="display:flex;gap:8px;margin-bottom:14px">
-    <button type="button" id="modo-partido" class="tbtn" onclick="setModo('partido')" style="flex:1;background:#2563eb;color:#fff;border-color:#2563eb">🏐 Partido</button>
+    <button type="button" id="modo-partido" class="tbtn" onclick="setModo('partido')" style="flex:1;background:#2563eb;color:#fff;border-color:#2563eb">Partido</button>
     <button type="button" id="modo-entrenamiento" class="tbtn" onclick="setModo('entrenamiento')" style="flex:1">🏋️ Entrenamiento</button>
   </div>
   <div class="fgrid">
@@ -1081,8 +1072,8 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     </div>
   </div>
   <div class="actions">
-    <button class="tbtn" id="setup-nuevo" onclick="nuevoPartido()" style="background:rgba(34,197,94,.12);color:#22c55e;border-color:rgba(34,197,94,.3);margin-right:auto">Nuevo partido</button>
-    <button class="tbtn" id="setup-cerrar" onclick="cerrarPartidoActual()" title="Guarda el partido en «Partidos» y cierra (como Close Scouting del Data)">Cerrar</button>
+    <button class="tbtn" onclick="nuevoPartido()" style="background:rgba(34,197,94,.12);color:#22c55e;border-color:rgba(34,197,94,.3);margin-right:auto">Nuevo partido</button>
+    <button class="tbtn" onclick="cerrarPartidoActual()" title="Guarda el partido en «Partidos» y cierra (como Close Scouting del Data)">Cerrar</button>
     <button class="tbtn" id="setup-cancelar" onclick="closeModal('m-setup')">Cancelar</button>
     <button class="tbtn pri" id="setup-empezar" onclick="saveSetup()">Empezar</button>
   </div>
@@ -1131,8 +1122,6 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     </div>
   </div>
 
-  <!-- Manual 4.1.3 · Código extendido: tipo de golpe + jugadores/bloqueo + código especial.
-       Aparece en azul, con opciones que dependen de la skill y la evaluación del código. -->
   <div id="e-extendido" style="margin-top:14px;padding:12px;background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.25);border-radius:10px">
     <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#60a5fa;margin-bottom:10px">Código extendido</div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
@@ -1160,13 +1149,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 
 <div class="toast" id="toast"></div>
 
-<script src="datos_equipo.js" onerror="void 0"></script>
-  <script src="datos_equipo.js.enc" onerror="void 0"></script>
-  <script src="datos_voley.js" onerror="void 0"></script>
-  <script src="plan_partido_vivo.js" onerror="void 0"></script>
-  <script src="datos_seguros.js"></script>
 <script src="firebase.js" onerror="void 0"></script>
-<script src="plantel_nafels.js" onerror="void 0"></script>
 <script src="objetivos.js" onerror="void 0"></script>
 <script src="video_delay.js" onerror="void 0"></script>
 <script>
@@ -1179,7 +1162,7 @@ const EVALS  = ['#','+','!','-','/','='];
 const HITS  = {H:'Potente',P:'Colocada',T:'Finta'};   /* ataque; ver SUBTYPE para el resto */
 const SUBZ  = ['A','B','C','D'];
 const ZGRID = [4,3,2,7,8,9,5,6,1];   /* red arriba, fondo abajo */
-/* Tablas oficiales, extraidas de los DVW de Näfels (76) + NAFELS (1 extra) */
+/* Tablas oficiales, extraidas de los DVW de Näfels (76) + CASLA (1 extra) */
 /* d=descripción · z=zona · et=tipo de armado · tg=destino del armado (col. 3 y 8 de [3ATTACKCOMBINATION]) */
 /* Lado del ataque (col. 2) y nombre de cada llamada (col. 2 de [3SETTERCALL]),
    sacados de los 97 DVW oficiales de Näfels. No están inventados. */
@@ -1263,8 +1246,7 @@ if(CFG.autoCompound===undefined) CFG.autoCompound = true;
 if(CFG.cursorEfecto===undefined) CFG.cursorEfecto = false;
 if(CFG.autoServe===undefined) CFG.autoServe = 'num_s';
 /* Estilo Data Volley: un código terminal (#, =, ataque bloqueado) cierra la
-   jugada y asigna el punto solo. Por defecto ACTIVADO. Se puede apagar en
-   Configuración para cargar el fin de jugada a mano. */
+   jugada y asigna el punto solo. Por defecto ACTIVADO. */
 if(CFG.autoFin===undefined) CFG.autoFin = true;
 if(CFG.entrenamiento===undefined) CFG.entrenamiento = false;
 /* UN SOLO EQUIPO (manual DV4 13.3 + modo entrenamiento):
@@ -1331,34 +1313,17 @@ function persist(){
      RALLY_UNDO, así que si llegara a llamarse durante la carga inicial todavía
      no existe. Después de cargar la página siempre está. */
   try{ save('pv_undo', RALLY_UNDO); }catch(e){}
-  /* si este partido ya está en la lista, mantener su copia al día */
   if(M._id && (M.codes||[]).length){ try{ guardarPartidoEnLista(M); }catch(e){} }
   if(typeof publicarVivo==='function') publicarVivo();
 }
 
-/* ════════════════════════════════════════════════════════════════
-   TABLA DE PARTIDOS (modelo DataVolley, manual 9)
-   Guarda varios partidos sin pisarlos. Cada uno con id, nombre, fecha,
-   equipos, resultado y su M completo. Se puede abrir o borrar.
-   ════════════════════════════════════════════════════════════════ */
 function partidos(){ try{ return JSON.parse(localStorage.getItem('pv_partidos')||'[]'); }catch(e){ return []; } }
 function guardarPartidos(list){ try{ localStorage.setItem('pv_partidos', JSON.stringify(list)); }catch(e){ toast('No se pudo guardar la lista',true); } }
-
-/* resumen liviano de un partido, para la fila de la tabla */
 function resumenPartido(m){
-  const setsH = m.home.sets||0, setsA = m.away.sets||0;
-  const acc = (m.codes||[]).filter(c=>c.k!=='auto').length;
-  return {
-    home: m.home.name||'Local', away: m.away.name||'Visitante',
-    res: setsH+'-'+setsA, ptsH:m.home.pts||0, ptsA:m.away.pts||0,
-    acciones: acc,
-    fecha: (m.notas&&m.notas.fecha) ? m.notas.fecha : '',
-    competencia: (m.notas&&m.notas.competencia) ? m.notas.competencia : ''
-  };
+  const setsH=m.home.sets||0,setsA=m.away.sets||0;
+  const acc=(m.codes||[]).filter(c=>c.k!=='auto').length;
+  return {home:m.home.name||'Local',away:m.away.name||'Visitante',res:setsH+'-'+setsA,ptsH:m.home.pts||0,ptsA:m.away.pts||0,acciones:acc,fecha:(m.notas&&m.notas.fecha)?m.notas.fecha:'',competencia:(m.notas&&m.notas.competencia)?m.notas.competencia:''};
 }
-
-/* Guarda el partido actual en la lista (si tiene contenido). Si ya existe
-   (mismo id), lo actualiza; si no, lo agrega. Devuelve el id. */
 
 /* ══════════════════════════════════════════════════════════════════════════
    TRABAJO EN CURSO EN LA NUBE
@@ -1449,101 +1414,64 @@ function sincronizarEnCurso(cb){
 }
 
 function guardarPartidoEnLista(m){
-  if(!m || !(m.codes||[]).length) return null;   /* nada que guardar */
-  const list = partidos();
-  if(!m._id) m._id = 'p'+Date.now()+Math.floor(Math.random()*1000);
-  const entrada = { id:m._id, guardado:Date.now(), resumen:resumenPartido(m), M:m };
-  const i = list.findIndex(x=>x.id===m._id);
+  if(!m||!(m.codes||[]).length) return null;
+  const list=partidos();
+  if(!m._id) m._id='p'+Date.now()+Math.floor(Math.random()*1000);
+  const entrada={id:m._id,guardado:Date.now(),resumen:resumenPartido(m),M:m};
+  const i=list.findIndex(x=>x.id===m._id);
   if(i>=0) list[i]=entrada; else list.push(entrada);
-  guardarPartidos(list);
-  return m._id;
+  guardarPartidos(list); return m._id;
 }
-
-/* Abre un partido de la lista: guarda el actual primero, luego carga el elegido. */
 function abrirPartido(id){
-  guardarPartidoEnLista(M);           /* no perder el actual */
-  const list = partidos();
-  const p = list.find(x=>x.id===id);
+  guardarPartidoEnLista(M);
+  const list=partidos(); const p=list.find(x=>x.id===id);
   if(!p){ toast('No encontré ese partido',true); return; }
-  if(!p.M && p.uid){                  /* está en la nube: lo bajamos */
+  if(!p.M && p.uid){
     toast('Bajando el partido...');
     nubeLeer(PV_CURSO+'/'+p.uid, function(t){
-      if(!t || !t.M || !t.M.codes){ toast('No pude bajarlo. ¿Tenés internet?',true); return; }
-      p.M = t.M; abrirPartido(id);
+      if(!t||!t.M||!t.M.codes){ toast('No pude bajarlo. ¿Tenés internet?',true); return; }
+      p.M=t.M; abrirPartido(id);
     });
     return;
   }
   if(!p.M){ toast('Ese partido no está en esta PC ni en la nube',true); return; }
-  M = p.M;
-  if(!M._id) M._id = id;
-  SEL_I=-1; CALL_PEND=null;
-  document.getElementById('code').value='';
-  renderAll(); persist(); avisarMarcador();
-  cerrarPartidos();
+  M=p.M; if(!M._id) M._id=id;
+  SEL_I=-1; CALL_PEND=null; document.getElementById('code').value='';
+  renderAll(); persist(); avisarMarcador(); cerrarPartidos();
   toast('Partido abierto: '+p.resumen.home+' vs '+p.resumen.away);
 }
-
-/* Borra los partidos tildados (borrado directo con confirmación, manual 9.3). */
 function borrarPartidosSel(){
-  const marc = Array.from(document.querySelectorAll('.pcheck:checked')).map(c=>c.value);
+  const marc=Array.from(document.querySelectorAll('.pcheck:checked')).map(c=>c.value);
   if(!marc.length){ toast('Tildá al menos un partido',true); return; }
   if(!confirm('¿Borrar '+marc.length+' partido'+(marc.length>1?'s':'')+'? No se puede deshacer.')) return;
-  const list = partidos().filter(p=>!marc.includes(p.id));
-  guardarPartidos(list);
-  renderTablaPartidos();
-  toast(marc.length+' partido'+(marc.length>1?'s':'')+' borrado'+(marc.length>1?'s':''));
+  guardarPartidos(partidos().filter(p=>!marc.includes(p.id)));
+  renderTablaPartidos(); toast(marc.length+' partido'+(marc.length>1?'s':'')+' borrado'+(marc.length>1?'s':''));
 }
-
-function abrirPartidos(){
-  guardarPartidoEnLista(M);          /* guardar el actual antes de mostrar la lista */
-  renderTablaPartidos();
-  sincronizarEnCurso(function(n){ if(n){ renderTablaPartidos(); toast(n+' partido(s) en curso de tu equipo'); } });
-  document.getElementById('m-partidos').classList.add('open');
-}
+function abrirPartidos(){ guardarPartidoEnLista(M); renderTablaPartidos(); sincronizarEnCurso(function(n){ if(n){ renderTablaPartidos(); toast(n+' partido(s) en curso de tu equipo'); } }); document.getElementById('m-partidos').classList.add('open'); }
 function cerrarPartidos(){ const el=document.getElementById('m-partidos'); if(el) el.classList.remove('open'); }
-
 function renderTablaPartidos(){
-  const cont = document.getElementById('partidos-cont');
-  const list = partidos().slice().sort((a,b)=>(b.guardado||0)-(a.guardado||0));
+  const cont=document.getElementById('partidos-cont');
+  const list=partidos().slice().sort((a,b)=>(b.guardado||0)-(a.guardado||0));
   if(!list.length){ cont.innerHTML='<div class="empty-note">Todavía no hay partidos guardados.<br>Cuando scoutees uno, va a aparecer acá.</div>'; return; }
-  let html = '<table style="width:100%;border-collapse:collapse;font-size:14px">'
-    + '<thead><tr style="text-align:left;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:1px">'
-    + '<th style="padding:8px 6px;width:32px"></th><th style="padding:8px 6px">Fecha</th><th style="padding:8px 6px">Partido</th>'
-    + '<th style="padding:8px 6px;text-align:center">Resultado</th><th style="padding:8px 6px;text-align:center">Acciones</th>'
-    + '<th style="padding:8px 6px;width:70px"></th></tr></thead><tbody>';
-  list.forEach(p=>{
-    const r=p.resumen, actual = (p.id===M._id);
-    /* Quién lo scouteó: mostramos lo que va antes del @ del mail, en mayúscula
-       (at@... -> AT). Y marcamos con ☁ los que están en la nube y no en esta
-       PC: ésos son los que está scouteando otro ahora mismo. */
+  let html='<table style="width:100%;border-collapse:collapse;font-size:14px"><thead><tr style="text-align:left;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:1px"><th style="padding:8px 6px;width:32px"></th><th style="padding:8px 6px">Fecha</th><th style="padding:8px 6px">Partido</th><th style="padding:8px 6px;text-align:center">Resultado</th><th style="padding:8px 6px;text-align:center">Acciones</th><th style="padding:8px 6px;width:70px"></th></tr></thead><tbody>';
+  list.forEach(p=>{const r=p.resumen,actual=(p.id===M._id);
+    /* Quién lo scouteó: lo que va antes del @ del mail, en mayúscula (at@... -> AT).
+       Con ☁ los que están en la nube y no en esta PC: los de otro. */
     const autor = p.autor ? String(p.autor).split('@')[0].toUpperCase().slice(0,10) : '';
     const deOtro = !!p.uid;
     const etiqueta = (autor ? ' <span style="font-size:10px;font-weight:700;color:'+(deOtro?'var(--ok)':'var(--mut)')
         +';border:1px solid '+(deOtro?'var(--ok)':'var(--b2)')+';border-radius:5px;padding:1px 5px;margin-left:5px;letter-spacing:.5px">'
         +(deOtro?'☁ ':'')+autor+'</span>' : '');
-    html += '<tr style="border-top:1px solid var(--b)'+(actual?';background:rgba(230,167,67,.06)':'')+'">'
-      + '<td style="padding:8px 6px"><input type="checkbox" class="pcheck" value="'+p.id+'" onchange="pintarTrash()"></td>'
-      + '<td style="padding:8px 6px;color:var(--mut)">'+(r.fecha||'—')+(r.competencia?'<br><span style="font-size:11px">'+r.competencia+'</span>':'')+'</td>'
-      + '<td style="padding:8px 6px;font-weight:700">'+r.home+' <span style="color:var(--mut)">vs</span> '+r.away+(actual?' <span style="font-size:10px;color:#e6a743">● actual</span>':'')+etiqueta+'</td>'
-      + '<td style="padding:8px 6px;text-align:center;font-weight:800">'+r.res+'</td>'
-      + '<td style="padding:8px 6px;text-align:center;color:var(--mut)">'+r.acciones+'</td>'
-      + '<td style="padding:8px 6px"><button class="tbtn" onclick="abrirPartido(\''+p.id+'\')" style="padding:5px 12px">Abrir</button></td>'
-      + '</tr>';
+    html+='<tr style="border-top:1px solid var(--b)'+(actual?';background:rgba(230,167,67,.06)':'')+'"><td style="padding:8px 6px"><input type="checkbox" class="pcheck" value="'+p.id+'" onchange="pintarTrash()"></td><td style="padding:8px 6px;color:var(--mut)">'+(r.fecha||'—')+(r.competencia?'<br><span style="font-size:11px">'+r.competencia+'</span>':'')+'</td><td style="padding:8px 6px;font-weight:700">'+r.home+' <span style="color:var(--mut)">vs</span> '+r.away+(actual?' <span style="font-size:10px;color:#e6a743">● actual</span>':'')+etiqueta+'</td><td style="padding:8px 6px;text-align:center;font-weight:800">'+r.res+'</td><td style="padding:8px 6px;text-align:center;color:var(--mut)">'+r.acciones+'</td><td style="padding:8px 6px"><button class="tbtn" onclick="abrirPartido(\''+p.id+'\')" style="padding:5px 12px">Abrir</button></td></tr>';
   });
-  html += '</tbody></table>';
-  cont.innerHTML = html;
-  pintarTrash();
+  html+='</tbody></table>'; cont.innerHTML=html; pintarTrash();
 }
-/* el botón rojo del tacho aparece/actualiza el número cuando hay tildados (manual 9.3) */
 function pintarTrash(){
-  const n = document.querySelectorAll('.pcheck:checked').length;
-  const btn = document.getElementById('partidos-trash');
-  if(!btn) return;
-  btn.style.display = n>0 ? 'inline-flex' : 'none';
-  document.getElementById('partidos-trash-n').textContent = n;
+  const n=document.querySelectorAll('.pcheck:checked').length;
+  const btn=document.getElementById('partidos-trash'); if(!btn) return;
+  btn.style.display=n>0?'inline-flex':'none';
+  document.getElementById('partidos-trash-n').textContent=n;
 }
-
-
 
 /* ============================================================
    PARSEO Y NORMALIZACIÓN DEL CÓDIGO
@@ -1551,12 +1479,10 @@ function pintarTrash(){
    Lo que falta se completa con los valores por defecto (manual, 2.5.1).
    ============================================================ */
 function parseOne(raw){
-  /* Todo en mayúsculas. Scouteando se tipea rápido y sale mezclado: "11w4" y
-     "11W4" son lo mismo, y antes uno de los dos no se reconocía. */
-  let s = (raw||'').trim().toUpperCase();
+  let s = (raw||'').trim();
   if(!s) return null;
   let team = 'home';
-  if(s[0]==='A' && /^A\d/.test(s)){ if(!unSoloEquipo()) team='away'; s=s.slice(1); }
+  if(s[0]==='a' || s[0]==='A'){ if(!unSoloEquipo()) team='away'; s=s.slice(1); }
   else if(s[0]==='*'){ team='home'; s=s.slice(1); }
 
   /* '-1' = jugador desconocido. Aparece en los DVW oficiales (153 casos en 97 archivos) */
@@ -1739,11 +1665,11 @@ function parseInput(raw){
 }
 /* dot coding (DV4 2.3.4.3): une dos fundamentos correlacionados.
    Pares que define el manual: Saque/Recepción, Ataque/Bloqueo, Ataque/Defensa. */
-/* Tablas de correlación del código compuesto — según la tabla del cuerpo técnico (DataVolley). */
+/* Tablas de correlación del código compuesto — tabla del cuerpo técnico (DataVolley). */
 const ATK_TO_BLK={'/':'#','-':'+','!':'/','+':'-','#':'='};   /* ataque -> bloqueo */
 const ATK_TO_DEF={'-':'+#','+':'-','#':'='};                 /* ataque -> defensa */
 const SRV_TO_REC={'/':'/','+':'-','-':'+#','!':'!','#':'='}; /* saque -> recepción */
-function setEval(str,val){ return str.slice(0,5)+val+str.slice(6); }   /* escribe la evaluación (1 o 2 caracteres) */
+function setEval(str,val){ return str.slice(0,5)+val+str.slice(6); }
 function parseChunk(s){
   if(s.indexOf('.')>0 && s.indexOf('~')<0){   /* un código ya normalizado lleva ~ : el '.' ahí es un carácter personalizado */
     const p=s.split('.');
@@ -1824,12 +1750,7 @@ function parseChunk(s){
          Lo que el scout escribió siempre manda: por eso el !b.d.ez. Y la
          subzona va atada al destino: si el scout escribió otra zona, la
          subzona del ataque ya no aplica (una C de la 1 no es una C de la 5). */
-      /* En un entrenamiento hay un solo equipo, así que las dos mitades quedan
-         en local y esto parecía cobertura. Pero un ataque seguido de una
-         defensa en la práctica es lo mismo que en un partido: el que defiende
-         está del otro lado de la red. Por eso, con un solo equipo, se hereda
-         igual. */
-      if(b.skill==='D' && (b.team !== a.team || unSoloEquipo()) && a.d.ez && !b.d.ez){
+      if(b.skill==='D' && b.team !== a.team && a.d.ez && !b.d.ez){
         b.d.ez = a.d.ez;
         if(a.d.subz && !b.d.subz) b.d.subz = a.d.subz;
       }
@@ -1960,6 +1881,85 @@ function puedeDeshacerPunto(){
 function undoEndRally(){
   if(!puedeDeshacerPunto()){ toast('Ya cargaste una acción después del punto: no se puede deshacer el fin de jugada',true); return; }
   undoRally();
+}
+/* Trae el último punto CERRADO de vuelta a la lista para corregirlo (Ctrl+A).
+   A diferencia de «deshacer», acá los códigos de juego quedan en la lista para
+   editarlos: sólo se quitan los automáticos del cierre (*p, *P, *z) y se
+   restaura el marcador/rotación previos. */
+function reabrirPunto(){
+  if(!RALLY_UNDO.length){ toast('No hay ningún punto cerrado para reabrir',true); return; }
+  if(!puedeDeshacerPunto()){
+    /* Antes acá se cortaba y listo. Ahora te decimos cuántas acciones se
+       cargaron después del punto y decidís vos si las borrás para reabrirlo. */
+    var _tope = -1;
+    for(var _q=M.codes.length-1; _q>=0; _q--){
+      var _c = M.codes[_q];
+      if(_c.k==='auto' && /^[*a][pPz]/.test(_c.c)){ _tope=_q; break; }
+    }
+    if(_tope < 0){ toast('No encuentro el cierre del punto',true); return; }
+    var _sueltas = M.codes.length - 1 - _tope;
+    if(!confirm('Ya cargaste '+_sueltas+' acción(es) después del punto.\n\n¿Las borro y reabro el punto?')) return;
+    M.codes = M.codes.slice(0, _tope+1);
+    toast('Borré '+_sueltas+' acción(es) y reabrí el punto');
+  }
+  const st = JSON.parse(RALLY_UNDO.pop());
+  M.home=st.h; M.away=st.a; M.serving=st.s; M.set=st.set;
+  while(M.codes.length > st.n){
+    const u = M.codes[M.codes.length-1];
+    if(u.k==='auto' && /^[*a][pPz]/.test(u.c)) M.codes.pop();
+    else break;
+  }
+  /* Manual 4.8.1 (Undo end rally): al deshacer el fin de jugada «la acción previa
+     se restaura y aparece en la misma barra de scouting donde se habían tipeado
+     los dígitos», y el manual aclara que es justamente para poder modificarla.
+     Antes acá sólo se dejaba seleccionado el código: lo tipeado no volvía al
+     campo y no había forma de corregirlo sin abrir la ventana de corrección. */
+  SEL_I = -1;
+  let iUlt = -1;
+  for(let i=M.codes.length-1;i>=0;i--){
+    if(M.codes[i].set===M.set && M.codes[i].k==='play'){ iUlt=i; break; }
+  }
+  let devuelto = '';
+  if(iUlt >= 0 && iUlt === M.codes.length-1){
+    /* Vuelve TODA la jugada, no solo la ultima accion. Es como funciona en el
+       DataVolley: al reabrir el punto se recupera lo que se venia tipeando
+       para corregirlo entero, encadenado con puntos. Se para en el saque, que
+       es donde arranca la jugada. */
+    var _cad = [];
+    for(var _i = M.codes.length - 1; _i >= 0; _i--){
+      var _c = M.codes[_i];
+      if(!_c || _c.auto) break;
+      var _t = String(_c.c || '');
+      if(!/^[*a]\d\d[SRABDEF]/.test(_t)) break;
+      _cad.unshift(_t);
+      if(/^[*a]\d\dS/.test(_t)) break;
+    }
+    if(_cad.length){
+      devuelto = _cad.join('.');
+      M.codes = M.codes.slice(0, M.codes.length - _cad.length);
+    } else {
+      devuelto = M.codes[iUlt].c || '';
+      M.codes.pop();
+    }
+    /* si ese ataque arrastraba un armado automático se va con él: si no, al
+       volver a cerrar la jugada el armado quedaría escrito dos veces */
+    const prev = M.codes[M.codes.length-1];
+    if(prev && prev.auto) M.codes.pop();
+  } else {
+    SEL_I = iUlt;   /* no quedó al final: lo dejamos seleccionado, como antes */
+  }
+  renderAll(); persist();
+  if(devuelto){
+    const campo = document.getElementById('code');
+    if(campo){
+      campo.value = devuelto;
+      try{ drawDecoder(); drawPickers(); pintarEspejo(); }catch(e){}
+      try{ volverAlTipeo(); }catch(e){}
+    }
+    toast('Punto reabierto: «' + devuelto + '» volvió al campo para corregirlo');
+  }
+  else if(SEL_I>=0){ irAlVideo(SEL_I); toast('Punto reabierto: corregí el código y volvé a cerrar la jugada'); }
+  else toast('Punto reabierto');
 }
 
 /* Manual 2.6.1: Ctrl+R busca un código en la lista */
@@ -2198,7 +2198,10 @@ function pintarEspejo(){
   /* Si el campo tiene la forma completa que dejo el menu extendido, se muestra
      lo que se habia tipeado mas el valor elegido. Asi la barra se lee igual que
      siempre y el codigo guardado sigue siendo el correcto. */
-  if(EXT_TIPEADO && EXT_TIPEADO.completo === raw){
+  /* La barra se compara con lo CORTO, que es lo que ahora tiene el campo.
+     Antes se comparaba con la forma completa y, desde que el campo conserva lo
+     tipeado, esa condicion no se cumplia nunca: el extendido no se pintaba. */
+  if(EXT_TIPEADO && (EXT_TIPEADO.texto + EXT_TIPEADO.extra) === raw){
     var esc0 = function(t){ return String(t).replace(/&/g,'&amp;')
                               .replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
     var cls0 = inp.classList.contains('bad')  ? 'malo'
@@ -2284,7 +2287,7 @@ let PL = {home: [], away: []};
    Además cambia el nombre de cada campo según de dónde venga el jugador:
      .sq            -> {c, apellido, nombre, rol}
      base vieja     -> {num, nombre, pos}
-     plantel club   -> {num, ap, nombre, pos}
+     plantel club   -> {c, n} (formato viejo) o {num, ap, nombre, pos}
    Sin este puente el número queda vacío, se muestra el nombre de pila en la
    columna del apellido y el rol cae siempre en '—'. */
 const ROL_A_POS = {'1':'LIBERO','2':'PUNTA','3':'OPUESTO','4':'CENTRAL','5':'ARMADOR'};
@@ -2313,44 +2316,16 @@ function plRol(j){
   return PL_POS.indexOf(p) >= 0 ? p : '';
 }
 
-/* El plantel del club sí tiene los roles cargados: se usa para completar los
-   huecos del equipo propio. Nunca pisa un dato que ya vino de la base. */
+/* El plantel del club, para completar los huecos del equipo propio. Acepta el
+   formato viejo (array plano [{c,n}], sin rol) y el nuevo ({jugadores:[...]}).
+   Si el archivo no está cargado devuelve vacío y no rompe nada. */
 function plDelClub(){
-  /* El plantel del club, venga de donde venga.
-
-     Antes buscaba una sola variable con el nombre del club escrito adentro. Si
-     el club no tenía ese archivo, la pantalla de planteles salía vacía y había
-     que cargar los jugadores a mano en cada partido. */
-  const sacar = P => {
+  try{
+    const P = window.PLANTEL_CASLA;
     if(!P) return [];
     if(Array.isArray(P)) return P;
-    return P.jugadores || P.roster || [];
-  };
-  try{
-    for(const k in window){
-      if(k.indexOf('PLANTEL_') === 0){
-        const l = sacar(window[k]);
-        if(l.length) return l;
-      }
-    }
-    const e = sacar(window.EQUIPO_DATA);
-    if(e.length) return e;
-    const L = window.LIGA_DATA && window.LIGA_DATA.teams;
-    if(L){
-      for(const k in L){
-        const r = L[k] && L[k].roster;
-        if(r && Object.keys(r).length){
-          return Object.keys(r).map(n => ({
-            num: n,
-            apellido: ((L[k].atk||{})[n]||{}).name ||
-                      ((L[k].srv||{})[n]||{}).name || ('#' + n),
-            pos: r[n]
-          }));
-        }
-      }
-    }
-  }catch(e){}
-  return [];
+    return P.jugadores || [];
+  }catch(e){ return []; }
 }
 
 function plCargar(side){
@@ -2550,10 +2525,7 @@ function drawDecoder(){
   dec.innerHTML = parts.filter(p=>p && !p.err).map(fichasDe)
                        .join('<div class="seg punto"><div class="sv">·</div><div class="sl">y</div></div>');
   inp.classList.remove('bad');
-  /* Los ~ son separadores internos del formato DataVolley: adentro del código
-     hacen falta, pero en el cartel de abajo sólo estorban. */
-  const limpio = c => String(c).replace(/~+$/,'').replace(/~+/g,'');
-  let h = 'Se registra <b>'+parts.map(p=>limpio(fmt(p))).join(' </b>·<b> ')+'</b>';
+  let h = 'Se registra <b>'+parts.map(fmt).join(' </b>·<b> ')+'</b>';
   if(parts.length===2) h += ' — saque y recepción';
   const avisos=[]; parts.forEach(p=>verificar(p).forEach(x=>avisos.push(x)));
   if(avisos.length){ inp.classList.add('warn'); h += '<br><span style="color:var(--warn)">⚠ '+avisos.join(' · ')+'</span>'; }
@@ -2594,7 +2566,6 @@ function hhmmss(s){
   return (h?String(h)+':':'') + String(m).padStart(h?2:1,'0') + ':' + String(g).padStart(2,'0');
 }
 
-/* ══ BATERÍAS EN VIVO (manual: 11 baterías del motor oficial) ══ */
 
 function abrirVideo(){
   document.getElementById('v-ruta').value = M.video.ruta||'';
@@ -2854,21 +2825,10 @@ function drawPickers(){
    Muestra los códigos posibles que pueden seguir al recién escrito.
    ============================================================ */
 function extensionesPosibles(){
-  /* En un código encadenado hay dos acciones, y las extensiones tienen que
-     aplicarse a la que está tocando el cursor, no siempre a la última. El
-     punto separa las mitades: antes manda la primera, después la segunda. */
-  const inp=document.getElementById('code');
-  const raw=inp.value;
+  const raw=document.getElementById('code').value;
   const p=parseInput(raw);
   if(!p.length || p[0].err) return null;
-  let idx = p.length - 1;
-  if(p.length > 1){
-    const punto = raw.indexOf('.');
-    const cur = (inp.selectionStart == null) ? raw.length : inp.selectionStart;
-    if(punto > 0 && cur <= punto) idx = 0;
-  }
-  EXT_IDX = idx;
-  const a=p[idx], d=merged(a);
+  const a=p[p.length-1], d=merged(a);
   const grupos=[];
   if(!d.hit && SUBTYPE[a.skill]) grupos.push({t:'Tipo de golpe', o:SUBTYPE[a.skill]});
   if(!d.blk && PLAYERS[a.skill]) grupos.push({t:a.skill==='R'?'Quién recibe':'Jugadores en bloqueo', o:PLAYERS[a.skill]});
@@ -2883,7 +2843,6 @@ function extensionesPosibles(){
    el campo se pone de otro color y lo decís de un vistazo.
    ══════════════════════════════════════════════════════════════════════════ */
 let EXT_MODO = false;
-let EXT_IDX = -1;   /* a qué mitad del código encadenado se aplica la extensión */
 
 function abrirExtensiones(){
   const g=extensionesPosibles();
@@ -2978,21 +2937,23 @@ document.addEventListener('click', e=>{
 });
 function ponerExt(ch){
   /* Antes esto pegaba la letra donde estuviera el cursor. Con las letras no
-     había problema, pero los BLOQUEADORES son dígitos (0 a 4) y las zonas
-     también: al tipear un 2 con una sola zona cargada, el parser lo tomaba
-     como la segunda zona y se perdía la dirección.
+     habia problema, pero los BLOQUEADORES son digitos (0 a 4) y las zonas
+     tambien: al elegir un 2 con una sola zona cargada, se lo tomaba como la
+     segunda zona y se perdia la direccion del ataque.
 
-     Ahora se identifica a qué campo pertenece la opción y el código se
-     reescribe entero en la forma canónica. */
+     Ahora se identifica a que campo pertenece la opcion y el codigo se
+     reescribe entero en su forma completa, con cada valor en su casillero. */
   const inp=document.getElementById('code');
   const p=parseInput(inp.value);
   const idx = (typeof EXT_IDX !== 'undefined' && EXT_IDX >= 0 && EXT_IDX < p.length)
               ? EXT_IDX : p.length - 1;
 
-  if(!p.length || p[idx].err){
-    const pv=inp.selectionStart ?? inp.value.length;
-    inp.value = inp.value.slice(0,pv) + ch + inp.value.slice(pv);
-    cerrarExtensiones(); drawDecoder(); inp.focus();
+  if(!p.length || !p[idx] || p[idx].err){
+    const pv0=inp.selectionStart ?? inp.value.length;
+    inp.value = inp.value.slice(0,pv0) + ch + inp.value.slice(pv0);
+    cerrarExtensiones(); drawDecoder();
+    try{ pintarEspejo(); }catch(_){}
+    inp.focus();
     return;
   }
 
@@ -3006,10 +2967,21 @@ function ponerExt(ch){
      tener la forma completa —hace falta para que cada valor caiga en su
      casillero— pero la barra sigue mostrando lo corto, que es lo que se lee
      mientras se scoutea. En un punto largo la forma completa es ilegible. */
+  /* El campo NO se reescribe en la forma completa.
+
+     Antes, al elegir una extension, el codigo pasaba de "8SM15.8#L" a
+     "*08SM-~~~15.*08RM#~~~15~L": cambiaba el formato en pleno tipeo y se
+     perdia lo que se venia escribiendo —la recepcion rival, por ejemplo—
+     porque la forma completa se arma con lo que el parser entendio, no con lo
+     tipeado.
+
+     Ahora el campo conserva lo corto, que es lo que se sigue escribiendo, y la
+     forma completa queda guardada aparte para cuando se registre la jugada. */
+  var _corto = inp.value + ch;
   EXT_TIPEADO = { texto: inp.value, extra: (EXT_TIPEADO && EXT_TIPEADO.texto === inp.value
                                            ? (EXT_TIPEADO.extra || '') : '') + ch };
-  inp.value = p.map(fmt).join('.');
-  EXT_TIPEADO.completo = inp.value;
+  EXT_TIPEADO.completo = p.map(fmt).join('.');
+  inp.value = _corto;
   try{ inp.setSelectionRange(inp.value.length, inp.value.length); }catch(_){}
   /* pintarEspejo() vuelve a colorear la barra. Sin esto, el valor que se acaba
      de elegir no se ve hasta apretar Enter: el texto cambia pero nadie lo
@@ -3179,12 +3151,9 @@ function commit(){
   if(!parts.length) return false;
   if(parts[0].err){ toast(parts[0].err,true); marcarBarraMal(); return false; }
 
-  /* MANUAL 4.5.2 · modificar desde la barra: si hay un código seleccionado en la
-     lista y escribo UN código nuevo, REEMPLAZO el seleccionado (no lo agrego al
-     final). Igual que DataVolley: te parás sobre el código y lo reescribís. */
   if(SEL_I>=0 && parts.length===1 && !CALL_PEND && M.codes[SEL_I]){
     const nuevoCod = fmt(parts[0]);
-    editarCodigoEn(SEL_I, nuevoCod, parts[0]);   /* reemplaza y ajusta la pareja */
+    editarCodigoEn(SEL_I, nuevoCod, parts[0]);
     inp.value=''; clearPick(); drawDecoder(); renderCodes(); renderStats(); renderMiniAn(); persist();
     toast('Código '+(SEL_I+1)+' corregido');
     SEL_I=-1; renderCodes();
@@ -3222,92 +3191,6 @@ function undoRally(){
   M.codes = M.codes.slice(0, st.n);
   renderAll(); persist(); toast('Fin de jugada deshecho');
 }
-/* REABRIR EL ÚLTIMO PUNTO (Ctrl+A) — estilo Data Volley.
-   A diferencia de «Deshacer punto» (que borra la jugada entera), esto revierte
-   el marcador, la rotación y el saque al estado previo al punto, pero DEJA los
-   códigos de juego de esa jugada en la lista para que los puedas corregir y
-   volver a cerrar la jugada. Sólo se puede si el punto está recién cerrado
-   (no cargaste nada después). */
-function reabrirPunto(){
-  if(!RALLY_UNDO.length){ toast('No hay ningún punto cerrado para reabrir',true); return; }
-  if(!puedeDeshacerPunto()){
-    /* Antes acá se cortaba y listo. Ahora te decimos cuántas acciones se
-       cargaron después del punto y decidís vos si las borrás para reabrirlo. */
-    var _tope = -1;
-    for(var _q=M.codes.length-1; _q>=0; _q--){
-      var _c = M.codes[_q];
-      if(_c.k==='auto' && /^[*a][pPz]/.test(_c.c)){ _tope=_q; break; }
-    }
-    if(_tope < 0){ toast('No encuentro el cierre del punto',true); return; }
-    var _sueltas = M.codes.length - 1 - _tope;
-    if(!confirm('Ya cargaste '+_sueltas+' acción(es) después del punto.\n\n¿Las borro y reabro el punto?')) return;
-    M.codes = M.codes.slice(0, _tope+1);
-    toast('Borré '+_sueltas+' acción(es) y reabrí el punto');
-  }
-  const st = JSON.parse(RALLY_UNDO.pop());
-  M.home=st.h; M.away=st.a; M.serving=st.s; M.set=st.set;
-  /* quitar SÓLO los códigos automáticos del cierre (*p, *P, *z, aP, az) que van
-     al final; los códigos de juego de la jugada quedan en la lista */
-  while(M.codes.length > st.n){
-    const u = M.codes[M.codes.length-1];
-    if(u.k==='auto' && /^[*a][pPz]/.test(u.c)) M.codes.pop();
-    else break;
-  }
-  /* Manual 4.8.1 (Undo end rally): al deshacer el fin de jugada «la acción previa
-     se restaura y aparece en la misma barra de scouting donde se habían tipeado
-     los dígitos», y el manual aclara que es justamente para poder modificarla.
-     Antes acá sólo se dejaba seleccionado el código: lo tipeado no volvía al
-     campo y no había forma de corregirlo sin abrir la ventana de corrección. */
-  SEL_I = -1;
-  let iUlt = -1;
-  for(let i=M.codes.length-1;i>=0;i--){
-    if(M.codes[i].set===M.set && M.codes[i].k==='play'){ iUlt=i; break; }
-  }
-  let devuelto = '';
-  if(iUlt >= 0 && iUlt === M.codes.length-1){
-    /* Vuelve TODA la jugada, no solo la ultima accion. Es como funciona en el
-       DataVolley: al reabrir el punto se recupera lo que se venia tipeando
-       para corregirlo entero, encadenado con puntos.
-
-       Se toman las acciones de jugador que quedaron al final —las automaticas
-       del cierre ya se sacaron antes— y se paran en la anterior al saque, que
-       es donde arranca la jugada. */
-    var _cad = [];
-    for(var _i = M.codes.length - 1; _i >= 0; _i--){
-      var _c = M.codes[_i];
-      if(!_c || _c.auto) break;
-      var _t = String(_c.c || '');
-      if(!/^[*a]\d\d[SRABDEF]/.test(_t)) break;
-      _cad.unshift(_t);
-      if(/^[*a]\d\dS/.test(_t)) break;      /* el saque abre la jugada */
-    }
-    if(_cad.length){
-      devuelto = _cad.join('.');
-      M.codes = M.codes.slice(0, M.codes.length - _cad.length);
-    } else {
-      devuelto = M.codes[iUlt].c || '';
-      M.codes.pop();
-    }
-    /* si arrastraba un armado automático se va con él: si no, al volver a
-       cerrar la jugada el armado quedaría escrito dos veces */
-    const prev = M.codes[M.codes.length-1];
-    if(prev && prev.auto) M.codes.pop();
-  } else {
-    SEL_I = iUlt;   /* no quedó al final: lo dejamos seleccionado, como antes */
-  }
-  renderAll(); persist();
-  if(devuelto){
-    const campo = document.getElementById('code');
-    if(campo){
-      campo.value = devuelto;
-      try{ drawDecoder(); drawPickers(); pintarEspejo(); }catch(e){}
-      try{ volverAlTipeo(); }catch(e){}
-    }
-    toast('Punto reabierto: «' + devuelto + '» volvió al campo para corregirlo');
-  }
-  else if(SEL_I>=0){ irAlVideo(SEL_I); toast('Punto reabierto: corregí el código y volvé a cerrar la jugada'); }
-  else toast('Punto reabierto');
-}
 /* Los DVW oficiales escriben, después de cada punto, el armador y su zona
    para los dos equipos:   *p01:00  *P08  *z5  aP04  az3                 */
 /* Verificado en los DVW oficiales (193/193): el bloque va DESPUÉS de los cambios
@@ -3335,22 +3218,17 @@ function levantarEstado(){
   return quitados.length ? (quitados[0].c[0]==='*' ? 'home' : 'away') : null;
 }
 /* ── AUTO FIN DE JUGADA (estilo Data Volley) ──────────────────
-   Un código TERMINAL cierra la jugada y asigna el punto solo, según la tabla
-   del Data. Todo lo demás (corregir, reabrir con Ctrl+A, deshacer, o marcar
-   el punto a mano con los botones) sigue funcionando igual. */
+   Un código TERMINAL cierra la jugada y asigna el punto solo. Corregir,
+   reabrir (Ctrl+A), deshacer o marcar el punto a mano siguen funcionando. */
 function ganadorCodigo(cod){
   const a = splitCode(cod);
   if(!a || !a.skill) return null;
   const otro = a.team==='home' ? 'away' : 'home';
-  /* error (=) de cualquier fundamento -> punto al rival */
   if(a.ev==='=') return otro;
-  /* punto ganado (#) sólo cierra en ataque, saque y bloqueo */
   if(a.ev==='#' && (a.skill==='A' || a.skill==='S' || a.skill==='B')) return a.team;
-  /* ataque bloqueado (/) -> punto al que bloquea (el rival) */
   if(a.ev==='/' && a.skill==='A') return otro;
-  return null;   /* no es terminal: la jugada sigue */
+  return null;
 }
-/* mira el último código de juego recién cargado; si es terminal, cierra la jugada */
 function autoFinDeJugada(desde){
   if(CFG.autoFin===false) return;
   if(partidoTerminado()) return;
@@ -3380,7 +3258,7 @@ function endRally(winner){
   }
   /* si el set se cierra, el DVW no escribe el bloque: va directo el **Nset */
   if(!setTerminado()) escribirEstado('', winner);
-  _rallyN++;               /* punto cerrado: la tablet refrescará al detectar este cambio */
+  _rallyN++;
   renderAll(); persist();
 
   /* manual 4.10: al asignarse el último punto del set, el programa pregunta.
@@ -3484,8 +3362,6 @@ function timeout(side){
 /* El botón de cambio usa EXACTAMENTE el mismo camino que el comando C6.7:
    así valida el límite de cambios, el dorsal, el armador que sale, y reubica
    el bloque de estado. Antes eran dos caminos distintos y no coincidían. */
-/* Sustitución al estilo DataVolley (manual 4.9): dos listas, el que sale y el
-   que entra. Se pueden encadenar varias antes de cerrar (doble cambio). */
 let SUBS_SIDE='home', SUBS_SALE=null, SUBS_ENTRA=null;
 function subst(side){
   SUBS_SIDE=side; SUBS_SALE=null; SUBS_ENTRA=null;
@@ -3500,7 +3376,6 @@ function substLado(side){ SUBS_SIDE=side; SUBS_SALE=null; SUBS_ENTRA=null; rende
   try{ canchaCambios(SUBS_SIDE); }catch(e){}
 }
 function cerrarSubs(){ document.getElementById('m-subs').classList.remove('open'); }
-/* elenco del banco: los jugadores del equipo (pv_equipos o plantel) que NO están en cancha */
 function bancoDe(side){
   const enCancha = M[side].lineup.slice();
   if(M[side].libero) enCancha.push(M[side].libero);
@@ -3511,7 +3386,6 @@ function bancoDe(side){
     const eq = eqs.find(e=>(e.nombre||'').toUpperCase()===nombre);
     if(eq && eq.jugadores) roster = eq.jugadores.map(j=>parseInt(j.num,10)).filter(Boolean);
   }catch(e){}
-  /* si no hay roster cargado, permitimos escribir un número a mano */
   return roster.filter(n=>!enCancha.includes(n));
 }
 function renderSubs(){
@@ -3520,36 +3394,32 @@ function renderSubs(){
   var _th=document.getElementById('subs-th'), _ta=document.getElementById('subs-ta');
   if(_th) _th.classList.toggle('pri', side==='home'); if(_ta) _ta.classList.toggle('pri', side==='away');
   document.getElementById('subs-restantes').textContent = Math.max(0, (CFG.regl.cambios||6) - (M[side].subs||0));
-  /* columna IZQUIERDA: los 6 en cancha (el que sale) */
   const enCancha = M[side].lineup.slice();
   document.getElementById('subs-sale').innerHTML = enCancha.map(n=>
-    '<button class="subitem'+(n===SUBS_SALE?' sel':'')+'" onclick="pickSale('+n+')">'+n+(n===M[side].setter?' ⚙':'')+'</button>'
+    '<button class="subitem'+(n===SUBS_SALE?' sel':'')+'" onclick="pickSale('+n+')">'+n+(n===M[side].setter?' \u2699':'')+'</button>'
   ).join('');
-  /* columna DERECHA: el banco (el que entra) + opción de escribir a mano */
   const banco = bancoDe(side);
   let der = banco.map(n=>'<button class="subitem'+(n===SUBS_ENTRA?' sel':'')+'" onclick="pickEntra('+n+')">'+n+'</button>').join('');
-  der += '<div style="margin-top:8px;display:flex;gap:6px;align-items:center"><input id="subs-manual" class="mono" inputmode="numeric" placeholder="Nº" style="width:70px" oninput="pickEntraManual(this.value)"><span style="font-size:12px;color:var(--mut)">o escribí el número</span></div>';
+  der += '<div style="margin-top:8px;display:flex;gap:6px;align-items:center"><input id="subs-manual" class="mono" inputmode="numeric" placeholder="N\u00ba" style="width:70px" oninput="pickEntraManual(this.value)"><span style="font-size:12px;color:var(--mut)">o escrib\u00ed el n\u00famero</span></div>';
   document.getElementById('subs-entra').innerHTML = der;
-  /* resumen */
   const rs=document.getElementById('subs-resumen');
-  if(SUBS_SALE!==null && SUBS_ENTRA!==null){ rs.textContent='Sale '+SUBS_SALE+' → Entra '+SUBS_ENTRA; rs.style.opacity=1; }
-  else { rs.textContent='Elegí quién sale y quién entra'; rs.style.opacity=.6; }
+  if(SUBS_SALE!==null && SUBS_ENTRA!==null){ rs.textContent='Sale '+SUBS_SALE+' \u2192 Entra '+SUBS_ENTRA; rs.style.opacity=1; }
+  else { rs.textContent='Eleg\u00ed qui\u00e9n sale y qui\u00e9n entra'; rs.style.opacity=.6; }
 }
 function pickSale(n){ SUBS_SALE=(SUBS_SALE===n?null:n); renderSubs(); }
 function pickEntra(n){ SUBS_ENTRA=(SUBS_ENTRA===n?null:n); const m=document.getElementById('subs-manual'); if(m) m.value=''; renderSubs(); }
 function pickEntraManual(v){ const n=parseInt(v,10); SUBS_ENTRA = (n>=1&&n<=99)?n:null;
   document.querySelectorAll('#subs-entra .subitem').forEach(b=>b.classList.remove('sel'));
-  document.getElementById('subs-resumen').textContent = (SUBS_SALE!==null&&SUBS_ENTRA!==null)?('Sale '+SUBS_SALE+' → Entra '+SUBS_ENTRA):'Elegí quién sale y quién entra';
+  document.getElementById('subs-resumen').textContent = (SUBS_SALE!==null&&SUBS_ENTRA!==null)?('Sale '+SUBS_SALE+' \u2192 Entra '+SUBS_ENTRA):'Eleg\u00ed qui\u00e9n sale y qui\u00e9n entra';
   document.getElementById('subs-resumen').style.opacity = (SUBS_SALE!==null&&SUBS_ENTRA!==null)?1:.6;
 }
-/* confirmar UN cambio y seguir en la ventana (para encadenar doble cambio) */
 function confirmarCambio(seguir){
-  if(SUBS_SALE===null || SUBS_ENTRA===null){ toast('Elegí quién sale y quién entra',true); return; }
+  if(SUBS_SALE===null || SUBS_ENTRA===null){ toast('Eleg\u00ed qui\u00e9n sale y qui\u00e9n entra',true); return; }
   const okc = hacerCambio(SUBS_SIDE, SUBS_SALE, SUBS_ENTRA);
   if(!okc) return;
   renderAll(); persist();
   SUBS_SALE=null; SUBS_ENTRA=null;
-  if(seguir){ renderSubs(); toast('Cambio hecho. Podés hacer otro.'); }
+  if(seguir){ renderSubs(); toast('Cambio hecho. Pod\u00e9s hacer otro.'); }
   else { cerrarSubs(); toast('Cambio hecho'); }
 }
 
@@ -3584,10 +3454,7 @@ function closeSet(){
   toast('Set cerrado. Va el set '+M.set+' — revisá la formación');
   if(typeof openSetup==='function') openSetup(true);   /* formación del set nuevo: OBLIGATORIA (estilo Data Volley) */
 }
-/* ── SET AMISTOSO ──────────────────────────────────────────────
-   Cuando el partido ya está terminado (alguien llegó a los sets para ganar),
-   permite seguir jugando sets sueltos, como un amistoso. Habilita M.amistoso
-   para que partidoTerminado() deje de bloquear el End Rally / cierre de set. */
+/* ── SET AMISTOSO ── seguir jugando sets sueltos con el partido ya terminado */
 function nuevoSetAmistoso(saltarConfirm){
   const yaGanado = (M.home.sets>=CFG.regl.setsGanar || M.away.sets>=CFG.regl.setsGanar);
   if(!yaGanado && !M.amistoso){ toast('El partido sigue en juego'); return; }
@@ -3622,8 +3489,7 @@ function renderRot(side){
            '<span class="zn">'+zn+'</span><span class="pn">'+(n||'·')+'</span></div>';
   }).join('');
   /* La rotación en la que está el equipo: es la zona del armador, que es como
-     habla el cuerpo técnico ("estamos en P3"). El dato ya se calculaba para el
-     código; acá sólo se muestra. */
+     habla el cuerpo técnico ("estamos en P3"). */
   const zs = (t.setter && t.lineup) ? t.lineup.indexOf(t.setter) : -1;
   const rot = zs >= 0 ? ('P' + (zs + 1)) : '';
   const lb  = document.getElementById(side==='home'?'lb-h':'lb-a');
@@ -3822,26 +3688,9 @@ function renderStats(){
   });
 }
 /* nombre del jugador, si lo tenemos en el plantel */
-/* El plantel del club puede venir en dos formas: el formato viejo era un
-   array [{c,n}]; el nuevo es un objeto {jugadores:[{num,ap,nombre,...}], lista:[...]}.
-   plantelArr() devuelve SIEMPRE un array normalizado [{c,n}] para no romper
-   las tablas ni el análisis cuando cambia la estructura del plantel. */
-function plantelArr(){
-  const P = window.PLANTEL_NAFELS;
-  if(!P) return [];
-  if(Array.isArray(P)) return P;                       /* formato viejo [{c,n}] */
-  /* 'lista' ya trae el apellido como nombre visible (la convención del sitio) */
-  if(Array.isArray(P.lista) && P.lista.length)
-    return P.lista.map(j=>({ c:j.num, n:(j.nombre||'') }));
-  const src = P.jugadores || [];                        /* respaldo */
-  return src.map(j=>({
-    c: (j.c!=null ? j.c : j.num),
-    n: (j.n || j.ap || j.nombre || '')
-  }));
-}
 function nombreJug(side,num){
-  if(side==='home'){
-    const j=plantelArr().find(p=>String(p.c)===String(num));
+  if(side==='home' && window.PLANTEL_CASLA){
+    const j=window.PLANTEL_CASLA.find(p=>String(p.c)===String(num));
     if(j) return j.n;
   }
   return '';
@@ -3879,16 +3728,10 @@ document.addEventListener('keydown', e=>{
   /* manual 4.5.2: sobre la lista de códigos */
   if(e.key==='Insert'){ e.preventDefault(); insertarEn(SEL_I); return; }
   if(e.key==='Delete'){ e.preventDefault(); borrarEn(SEL_I); return; }
-  /* BORRAR RÁPIDO durante el punto: la tecla Backspace (arriba del Enter),
-     con la barra de escritura vacía, borra al instante.
-       · si hay un código seleccionado del medio -> borra ése
-       · si no hay nada seleccionado -> borra el ÚLTIMO (deshacer rápido)
-     Si estás escribiendo un código, Backspace sigue borrando letras normal. */
-    /* Backspace con el campo vacío borraba el último código sin preguntar, y
-     scouteando se aprieta sin querer todo el tiempo. Ahora sólo borra el que
-     esté seleccionado. Para el último sigue estando Ctrl+Z. */
   if(e.key==='Backspace' && !document.getElementById('code').value.trim() && M.codes.length){
-    if(SEL_I>=0){ e.preventDefault(); borrarEn(SEL_I, true); }
+    e.preventDefault();
+    if(SEL_I>=0) borrarEn(SEL_I, true);
+    else undoLast();
     return;
   }
   if(e.key==='Enter' && SEL_I>=0 && !document.getElementById('code').value.trim()){ e.preventDefault(); editCode(SEL_I); return; }
@@ -3955,12 +3798,6 @@ document.addEventListener('keydown', e=>{
   const at = extAbierto ? null : atajoDe(e);
   if(at){ e.preventDefault(); aplicarAtajo(at); return; }
 
-  /* Teclas de prefijo (manual 2.6). SOLO actúan cuando la tecla configurada
-     NO es una letra/número que forme parte del código: si el prefijo del
-     visitante fuera la propia 'a', dejamos que se escriba como texto normal
-     (así el scoutman siempre puede tipear a6AH#, a7RM#, etc.).
-     Cuando el prefijo es una tecla dedicada (\\ o q), PONE el prefijo sin
-     alternarlo: nunca borra una 'a'/'*' ya escrita. */
   const inp0=document.getElementById('code');
   /* La 'a' y el '*' son parte del código: si el prefijo configurado es una de
      esas dos, NO lo capturamos (dejamos que se escriban como texto, para poder
@@ -3973,13 +3810,11 @@ document.addEventListener('keydown', e=>{
     const pp  = inp0.selectionStart ?? inp0.value.length;
     const ppe = inp0.selectionEnd   ?? pp;
     if(pp===0 && ppe===0){
-      /* al inicio: prefijo de siempre (no duplica, alterna a/*) */
       let v=inp0.value;
       if(chPref==='a'){ if(v[0]!=='a') v='a'+v.replace(/^\*/,''); }
       else            { if(v[0]!=='*') v='*'+v.replace(/^a/,''); }
       inp0.value=v; try{ inp0.setSelectionRange(1,1); }catch(_){}
     } else {
-      /* en el medio: inserta el prefijo donde está el cursor (códigos compuestos) */
       inp0.value = inp0.value.slice(0,pp) + chPref + inp0.value.slice(ppe);
       const np = pp + 1; try{ inp0.setSelectionRange(np,np); }catch(_){}
     }
@@ -3992,7 +3827,7 @@ document.addEventListener('keydown', e=>{
   if(adj[k]){ e.preventDefault(); const [s,f,d]=adj[k]; M[s][f]=Math.max(0,M[s][f]+d); renderAll(); persist(); return; }
   const rots = {[K.rotHup]:['home',1],[K.rotHdn]:['home',-1],[K.rotAup]:['away',1],[K.rotAdn]:['away',-1]};
   if(rots[k]){ e.preventDefault(); rotate(...rots[k]); return; }
-  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='y'){ e.preventDefault(); undoLast(); return; }   /* borrar último código (alternativa) */
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='a'){ e.preventDefault(); undoLast(); return; }   /* manual 1.10.7 */
 
   const inp = document.getElementById('code');
   if(document.activeElement!==inp) return;
@@ -4001,8 +3836,6 @@ document.addEventListener('keydown', e=>{
     const eraEdit = (SEL_I>=0);
     const nAntes = M.codes.length;
     const ok = commit();
-    /* si se cargó una acción nueva (no una edición ni un comando) y el último
-       código es terminal, cerramos la jugada solo — como el Data */
     if(ok && !eraEdit && M.codes.length>nAntes) autoFinDeJugada(nAntes);
     return;
   }
@@ -4027,18 +3860,14 @@ document.getElementById('code').addEventListener('input', function(){
     this.value = _may;
     try{ this.setSelectionRange(_pos, _fin); }catch(_){}
   }
-
-  /* Elegir la extensión tipeando la letra tiene que cerrar el menú, igual que
-     hacer clic en el botón. */
-  if(typeof EXT_MODO !== 'undefined' && EXT_MODO) cerrarExtensiones();
   drawDecoder(); drawPickers(); pintarEspejo();
-  if(typeof aplicarDescripcion === 'function') aplicarDescripcion();
 });
 document.getElementById('e-code').addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); saveEdit(); } });
 
 /* ============================================================
    MODALES
    ============================================================ */
+let SETUP_OBLIGATORIO=false;
 function closeModal(id){
   if(id==='m-armador'){ toast('Elegí quién arma para poder seguir',true); return; }
   if(id==='m-setup' && SETUP_OBLIGATORIO){ toast('Cargá la formación del set '+M.set+' para seguir',true); return; }
@@ -4162,41 +3991,6 @@ function luSetter(side,z){
   drawLineup(side);
 }
 
-/* Manual 4.12 · Modo de scouteo: partido (dos equipos) o entrenamiento (tu equipo).
-   En entrenamiento el rival puede ser genérico y se pueden hacer "drills". */
-/* Muestra un indicador de modo entrenamiento y el botón «Nuevo drill» (manual 4.12). */
-function reflejarModo(){
-  var barra=document.getElementById('modo-indicador');
-  var esEntr = (M.modo==='entrenamiento');
-  if(!barra && esEntr){
-    barra=document.createElement('div');
-    barra.id='modo-indicador';
-    barra.style.cssText='display:inline-flex;align-items:center;gap:8px;margin-left:10px;padding:4px 12px;background:rgba(22,163,74,.15);border:1px solid rgba(22,163,74,.4);border-radius:8px;color:#22c55e;font-weight:800;font-size:13px';
-    barra.innerHTML='🏋️ ENTRENAMIENTO <button class="tbtn" onclick="nuevoDrill()" style="padding:3px 10px;font-size:12px;margin-left:4px">+ Nuevo drill</button>';
-    var cont=document.querySelector('.topbar')||document.querySelector('header')||document.body;
-    var ref=document.querySelector('[onclick="openSetup()"]');
-    if(ref&&ref.parentNode) ref.parentNode.insertBefore(barra, ref.nextSibling);
-    else cont.appendChild(barra);
-  } else if(barra && !esEntr){
-    barra.remove();
-  }
-}
-
-/* Manual 4.12 · Nuevo drill: reinicia el marcador del ejercicio con un score inicial. */
-function nuevoDrill(){
-  var ini=prompt('Marcador inicial del drill (ej: 0-0, o 15-15 para practicar finales):','0-0');
-  if(ini===null) return;
-  var m=/(\d+)\s*-\s*(\d+)/.exec(ini);
-  var h=m?parseInt(m[1],10):0, a=m?parseInt(m[2],10):0;
-  M.home.pts=h; M.away.pts=a;
-  /* el drill es una unidad dentro del entrenamiento: marcamos su inicio con un código de nota */
-  if(!M.drills) M.drills=[];
-  M.codes.push({k:'drill', c:'▪ DRILL '+(M.drills.length+1)+' · '+h+'-'+a, set:M.set, t:0});
-  M.drills.push({inicio:h+'-'+a, desde:M.codes.length});
-  renderAll(); persist(); avisarMarcador&&avisarMarcador();
-  toast('Nuevo drill · empieza '+h+'-'+a);
-}
-
 function setModo(modo){
   M.modo = modo;
   var bp=document.getElementById('modo-partido'), be=document.getElementById('modo-entrenamiento');
@@ -4226,8 +4020,31 @@ function reflejarUnEquipo(){
   var col=document.getElementById('setup-vis-lu');
   if(col && col.parentNode) col.parentNode.style.gridTemplateColumns = uno ? '1fr' : '1fr 1fr';
 }
-
-let SETUP_OBLIGATORIO = false;
+function reflejarModo(){
+  var barra=document.getElementById('modo-indicador');
+  var esEntr = (M.modo==='entrenamiento');
+  if(!barra && esEntr){
+    barra=document.createElement('div');
+    barra.id='modo-indicador';
+    barra.style.cssText='display:inline-flex;align-items:center;gap:8px;margin-left:10px;padding:4px 12px;background:rgba(22,163,74,.15);border:1px solid rgba(22,163,74,.4);border-radius:8px;color:#22c55e;font-weight:800;font-size:13px';
+    barra.innerHTML='🏋️ ENTRENAMIENTO <button class="tbtn" onclick="nuevoDrill()" style="padding:3px 10px;font-size:12px;margin-left:4px">+ Nuevo drill</button>';
+    var ref=document.querySelector('[onclick="openSetup()"]');
+    if(ref&&ref.parentNode) ref.parentNode.insertBefore(barra, ref.nextSibling);
+    else document.body.appendChild(barra);
+  } else if(barra && !esEntr){ barra.remove(); }
+}
+function nuevoDrill(){
+  var ini=prompt('Marcador inicial del drill (ej: 0-0, o 15-15 para practicar finales):','0-0');
+  if(ini===null) return;
+  var m=/(\d+)\s*-\s*(\d+)/.exec(ini);
+  var h=m?parseInt(m[1],10):0, a=m?parseInt(m[2],10):0;
+  M.home.pts=h; M.away.pts=a;
+  if(!M.drills) M.drills=[];
+  M.codes.push({k:'drill', c:'▪ DRILL '+(M.drills.length+1)+' · '+h+'-'+a, set:M.set, t:0});
+  M.drills.push({inicio:h+'-'+a, desde:M.codes.length});
+  renderAll(); persist(); avisarMarcador&&avisarMarcador();
+  toast('Nuevo drill · empieza '+h+'-'+a);
+}
 function openSetup(obligatorio){
   SETUP_OBLIGATORIO = !!obligatorio;
   poblarSelectEquipos();
@@ -4241,38 +4058,27 @@ function openSetup(obligatorio){
     M[side].lineup.forEach((num,i)=>{ if(num) LU[side].n[i+1]=String(num); });
     drawLineup(side);
   });
-  setModo(M.modo||'partido');   /* reflejar el modo actual (ya llama a reflejarUnEquipo) */
+  setModo(M.modo||'partido');
   /* Estilo Data Volley: al cerrar un set, la formación del set nuevo es OBLIGATORIA.
-     Se ocultan Cancelar/Cerrar/Nuevo y sólo se sale confirmando el seis con «Empezar». */
+     Se oculta «Cancelar» y sólo se sale confirmando el seis con «Empezar». */
   const tit=document.getElementById('setup-titulo'), sub=document.getElementById('setup-sub');
-  const bCancel=document.getElementById('setup-cancelar'), bCerrar=document.getElementById('setup-cerrar'),
-        bNuevo=document.getElementById('setup-nuevo'), bEmpezar=document.getElementById('setup-empezar');
+  const bCancel=document.getElementById('setup-cancelar'), bEmpezar=document.getElementById('setup-empezar');
   if(obligatorio){
     if(tit) tit.textContent='Formación del set '+M.set;
     if(sub) sub.textContent='Cargá el seis inicial de cada equipo para arrancar el set '+M.set+'. Data Volley propone el del set anterior — cambialo si hubo modificaciones.';
-    [bCancel,bCerrar,bNuevo].forEach(b=>{ if(b) b.style.display='none'; });
+    if(bCancel) bCancel.style.display='none';
     if(bEmpezar) bEmpezar.textContent='Empezar set '+M.set;
   } else {
-    if(tit) tit.textContent = (M.modo==='entrenamiento'?'Entrenamiento':'Partido');
-    if(sub) sub.textContent='Cargá los dos equipos, el seis inicial y quién saca.';
-    [bCancel,bCerrar,bNuevo].forEach(b=>{ if(b) b.style.display=''; });
+    if(bCancel) bCancel.style.display='';
     if(bEmpezar) bEmpezar.textContent='Empezar';
   }
   document.getElementById('m-setup').classList.add('open');
 }
 
-/* Borra el partido entero: todos los códigos, el marcador y los sets.
-   Pide confirmación porque no se puede deshacer. */
-/* Cerrar el partido (como «Close Scouting» del Data 4.11): lo GUARDA en la
-   lista de Partidos y limpia la pantalla. No destruye nada. */
 function cerrarPartidoActual(){
   const acc = (M.codes||[]).filter(c=>c.k!=='auto').length;
-  if(acc>0){
-    guardarPartidoEnLista(M);
-    toast('Partido guardado en «Partidos» y cerrado');
-  } else {
-    toast('Partido cerrado');
-  }
+  if(acc>0){ guardarPartidoEnLista(M); toast('Partido guardado en «Partidos» y cerrado'); }
+  else { toast('Partido cerrado'); }
   M.codes = [];
   M.home.pts=0; M.home.sets=0; M.away.pts=0; M.away.sets=0;
   M.set=1; SEL_I=-1; CALL_PEND=null;
@@ -4282,26 +4088,16 @@ function cerrarPartidoActual(){
   renderAll(); persist(); avisarMarcador();
   closeModal('m-setup');
 }
-
-/* Empezar un partido NUEVO: guarda el actual en la lista y deja todo limpio
-   para cargar los datos del próximo. El anterior NO se pierde (queda en Partidos). */
 function nuevoPartido(){
-  const acc = (M.codes||[]).filter(c=>c.k!=='auto').length;
-  if(acc>0){
-    guardarPartidoEnLista(M);
-    toast('Partido anterior guardado en «Partidos»');
-  }
-  M.codes = [];
-  M.home.pts=0; M.home.sets=0; M.away.pts=0; M.away.sets=0;
-  M.set=1; SEL_I=-1; CALL_PEND=null;
-  if(M.setsHist) M.setsHist=[];
+  const acc=(M.codes||[]).filter(c=>c.k!=='auto').length;
+  if(acc>0){ guardarPartidoEnLista(M); toast('Partido anterior guardado en «Partidos»'); }
+  M.codes=[]; M.home.pts=0; M.home.sets=0; M.away.pts=0; M.away.sets=0;
+  M.set=1; SEL_I=-1; CALL_PEND=null; if(M.setsHist) M.setsHist=[];
   /* la pila de reabrir punto es del partido que se cierra: si quedara, Ctrl+A
      restauraría el marcador de un partido que ya no existe */
   RALLY_UNDO.length = 0;
-  delete M._id;                         /* el nuevo tendrá su propio id al guardarse */
-  document.getElementById('code').value='';
-  renderAll(); persist(); avisarMarcador();
-  openSetup();                          /* que cargue los equipos del nuevo */
+  delete M._id; document.getElementById('code').value='';
+  renderAll(); persist(); avisarMarcador(); openSetup();
 }
 
 function saveSetup(){
@@ -4349,9 +4145,9 @@ function saveSetup(){
 }
 
 function arrancarPartido(){
-  escribirEstado('>LUp', M.serving);   /* >LUp, empezando por el equipo que saca (verificado en los DVW) */
+  escribirEstado('>LUp', M.serving);
   if(!M.modo) M.modo='partido';
-  SETUP_OBLIGATORIO = false;   /* formación cargada: ya se puede cerrar el modal */
+  SETUP_OBLIGATORIO=false;
   renderAll(); persist();
   toast(M.modo==='entrenamiento' ? 'Entrenamiento iniciado' : 'Listo, a scoutear');
   if(typeof reflejarModo==='function') reflejarModo();
@@ -4383,12 +4179,9 @@ function insertarEn(i){
 }
 function borrarEn(i, rapido){
   if(i<0){ toast('Elegí primero un código de la lista',true); return; }
-  /* durante el punto (rapido=true) no preguntamos: hay que ser inmediato */
   if(!rapido && !confirm('¿Borrar el código '+M.codes[i].c+'?')) return;
   M.codes.splice(i,1); SEL_I=-1; renderAll(); persist(); avisarMarcador(); toast('Código borrado');
 }
-/* Manual 4.1.3 · llena los 3 selectores del código extendido según la skill y
-   evaluación del código que estás editando, y marca lo que ya tiene. */
 /* ══════════════════════════════════════════════════════════════════════════
    SOBRE QUE MITAD DEL CODIGO SE ESTA TRABAJANDO
    --------------------------------------------------------------------------
@@ -4449,16 +4242,12 @@ function syncExtendido(){
   if(!parts[idx] || !parts[idx].skill){ box.style.display='none'; return; }
   var a=parts[idx], skill=a.skill, ev=a.ev, d=merged(a);
   box.style.display='block';
-
-  /* Tipo de golpe (SUBTYPE) */
   var hitSel=document.getElementById('ext-hit');
   var hits=SUBTYPE[skill]||{};
   hitSel.innerHTML='<option value="">—</option>'+Object.keys(hits).map(function(k){
     return '<option value="'+k+'"'+(d.hit===k?' selected':'')+'>'+k+' · '+hits[k]+'</option>';
   }).join('');
   hitSel.parentNode.style.display = Object.keys(hits).length? 'block':'none';
-
-  /* Jugadores / bloqueadores (PLAYERS) */
   var plrSel=document.getElementById('ext-plr'), plrLbl=document.getElementById('ext-plr-lbl');
   var plrs=PLAYERS[skill]||{};
   if(skill==='R'){ plrLbl.textContent='Receptores'; } else { plrLbl.textContent='Bloqueadores'; }
@@ -4466,8 +4255,6 @@ function syncExtendido(){
     return '<option value="'+k+'"'+(d.blk===k?' selected':'')+'>'+k+' · '+plrs[k]+'</option>';
   }).join('');
   plrSel.parentNode.style.display = Object.keys(plrs).length? 'block':'none';
-
-  /* Código especial / cómo terminó (SPECIALS según evaluación) */
   var spSel=document.getElementById('ext-spec');
   var sps=specialsFor(skill, ev)||{};
   spSel.innerHTML='<option value="">—</option>'+Object.keys(sps).map(function(k){
@@ -4475,8 +4262,6 @@ function syncExtendido(){
   }).join('');
   spSel.parentNode.style.display = Object.keys(sps).length? 'block':'none';
 }
-
-/* aplica lo elegido en los selectores al código de la barra de edición */
 function aplicarExtendido(){
   var cod=document.getElementById('e-code').value.trim();
   var parts=parseInput(cod);
@@ -4485,19 +4270,14 @@ function aplicarExtendido(){
   d.hit = document.getElementById('ext-hit').value || '';
   d.blk = document.getElementById('ext-plr').value || '';
   d.spec = document.getElementById('ext-spec').value || '';
-  /* reconstruir el código con la cola extendida nueva */
-  var nuevo = fmtConTail(a, d);
-  document.getElementById('e-code').value = nuevo;
+  document.getElementById('e-code').value = fmtConTail(a, d);
   drawEditDec();
 }
-
-/* reconstruye el código completo con la cola extendida modificada (mismo formato que fmt) */
 function fmtConTail(a, d){
   var pre = a.team==='home'?'*':'a';
   var nn = a.num===-1 ? '-1' : String(a.num).padStart(2,'0');
   return pre + nn + a.skill + a.type + a.ev + buildTail(d, a);
 }
-
 function editCode(i){
   const row = M.codes[i]; if(!row) return;
   EDIT_MODE='edit'; EDIT_I = i; SEL_I = i;
@@ -4572,10 +4352,6 @@ function saveEdit(){
   toast(viejo===cod ? 'Sin cambios' : 'Código corregido');
 }
 
-/* Reemplaza el código en la posición i y, si está activo el auto-compound,
-   ajusta el código pareja (manual: MODIFY CODE · Automatic Modification of
-   Compound Code). Una sola fuente de verdad para editar desde la ventana o
-   desde la barra. */
 function editarCodigoEn(i, cod, a){
   if(!M.codes[i]) return;
   M.codes[i].c = cod;
@@ -4610,7 +4386,7 @@ function deleteEdit(){
 }
 
 /* ============================================================
-   FICHAS — compatibilidad con el panel de Näfels
+   FICHAS — compatibilidad con el panel de análisis
    Genera window.VOLEY_DATA con la MISMA estructura que scout_vivo.js,
    para que panel_voley.html siga dibujando fichas, tablas y gráficos.
    Escala de valores: 1=#  2=+  3=!  4=-  5=/  6==   (igual que DataVolley)
@@ -5068,7 +4844,7 @@ function nombreDe(num, side){
   for(const sd of ['home','away']){
     if(M[sd] && M[sd].plantel){ const j=M[sd].plantel.find(x=>String(x.c)===String(num)); if(j) return j.n; }
   }
-  const P = plantelArr();
+  const P = window.PLANTEL_CASLA;
   if(P && P.length){ const j=P.find(x=>String(x.c)===String(num)); if(j) return j.n; }
   return String(num);
 }
@@ -5101,7 +4877,7 @@ function ladoVivo(side){
 function buildVoleyData(side){
   const pre = side==='home'?'*':'a';
   const VD = {ts:new Date().toTimeString().slice(0,5), j:[]};
-  const P = plantelArr();
+  const P = window.PLANTEL_CASLA;
   if(P && P.length) P.forEach(p=>VD.j.push(nuevoJugador(p.c,p.n)));
   const find=num=>{ let j=VD.j.find(x=>x.c===num); if(!j){ j=nuevoJugador(num,nombreDe(num)); VD.j.push(j); } return j; };
 
@@ -5144,7 +4920,7 @@ function buildVoleyData(side){
    Cada acción actualiza VOLEY_DATA en Firebase. El panel de análisis
    lo lee y se refresca solo: no hay que bajar ni publicar nada. */
 let _pubT=null, _pubUlt=0;
-let _rallyN = 0;   /* cuenta los puntos cerrados; la tablet refresca cuando cambia */
+let _rallyN = 0;
 function publicarVivo(){
   if(CFG.publicarVivo===false) return;
   if(typeof fbSet!=='function') return;
@@ -5161,7 +4937,7 @@ function publicarVivo(){
         local:{n:M.home.name, pts:M.home.pts, sets:M.home.sets},
         visitante:{n:M.away.name, pts:M.away.pts, sets:M.away.sets},
         acciones:M.codes.filter(c=>c.k==='play').length,
-        rally:_rallyN          /* nº de puntos cerrados; la tablet refresca cuando sube */
+        rally:_rallyN
       });
       /* Códigos crudos + nombres/líberos, para que el Plan de Partido se llene
          en vivo (lo consume plan_partido_vivo.js). Uno por cada equipo. */
@@ -5405,42 +5181,37 @@ function traerSesion(){
 
 /* accesos directos al Plan de Partido, en vivo y en la solapa elegida */
 /* abre el PLAN PREPARADO (datos del pasado) para comparar con lo que pasa en vivo */
-/* ── BATERÍAS EN VIVO ── */
-var _batLado = 'home';   /* home = nuestro equipo, away = rival */
+var _batLado = 'home';
 function abrirBaterias(){
   if(typeof window.bateriasVivo!=='function'){ toast('Faltan las baterías (objetivos.js)',true); return; }
-  _batLado = 'home';
-  pintarBatBotonesEquipo();
-  llenarBatJugadores();
-  renderBateriasPanel();
+  _batLado='home'; pintarBatBotonesEquipo(); llenarBatJugadores(); renderBateriasPanel();
   document.getElementById('m-baterias').classList.add('open');
 }
 function pintarBatBotonesEquipo(){
   var cont=document.getElementById('bat-teambtns'); if(!cont) return;
-  cont.innerHTML = [['home', M.home.name||'Nosotros'],['away', M.away.name||'Rival']].map(function(x){
+  cont.innerHTML=[['home', M.home.name||'Nosotros'],['away', M.away.name||'Rival']].map(function(x){
     return '<button class="teambtn'+(x[0]===_batLado?' active':'')+'" onclick="setBatLado(\''+x[0]+'\')">'+x[1]+'</button>';
   }).join('');
 }
-function setBatLado(lado){ _batLado=lado; pintarBatBotonesEquipo(); llenarBatJugadores(); renderBateriasPanel(); }
+function setBatLado(l){ _batLado=l; pintarBatBotonesEquipo(); llenarBatJugadores(); renderBateriasPanel(); }
 function llenarBatJugadores(){
-  var side = _batLado==='home' ? '*' : 'a';
-  var res = window.bateriasVivo(M.codes.filter(function(c){return c.k==='play';}), side);
-  var sel = document.getElementById('bat-jugsel');
-  var nums = Object.keys(res.jugadores).sort(function(a,b){return (+a)-(+b);});
-  var prev = sel.value;
-  sel.innerHTML = '<option value="">— Equipo completo —</option>' + nums.map(function(n){
-    var nn = parseInt(n,10);
-    return '<option value="'+nn+'">#'+nn+' '+nombreDe(nn,_batLado)+'</option>';
+  var side=_batLado==='home'?'*':'a';
+  var res=window.bateriasVivo(M.codes.filter(function(c){return c.k==='play';}), side);
+  var sel=document.getElementById('bat-jugsel');
+  var nums=Object.keys(res.jugadores).sort(function(a,b){return (+a)-(+b);});
+  var prev=sel.value;
+  sel.innerHTML='<option value="">— Equipo completo —</option>'+nums.map(function(n){
+    var nn=parseInt(n,10); return '<option value="'+nn+'">#'+nn+' '+nombreDe(nn,_batLado)+'</option>';
   }).join('');
   if(prev && sel.querySelector('option[value="'+prev+'"]')) sel.value=prev;
 }
 function renderBateriasPanel(){
-  var side = _batLado==='home' ? '*' : 'a';
-  var res = window.bateriasVivo(M.codes.filter(function(c){return c.k==='play';}), side);
-  var sel = document.getElementById('bat-jugsel');
-  var jugNum = sel.value ? parseInt(sel.value,10) : null;
-  var jugVals = jugNum!==null ? (res.jugadores[jugNum]||{}) : res.equipo;
-  var titulo = jugNum!==null ? ('#'+jugNum+' '+nombreDe(jugNum,_batLado)+' vs equipo') : 'Equipo completo';
+  var side=_batLado==='home'?'*':'a';
+  var res=window.bateriasVivo(M.codes.filter(function(c){return c.k==='play';}), side);
+  var sel=document.getElementById('bat-jugsel');
+  var jn=sel.value?parseInt(sel.value,10):null;
+  var jugVals=jn!==null?(res.jugadores[jn]||{}):res.equipo;
+  var titulo=jn!==null?('#'+jn+' '+nombreDe(jn,_batLado)+' vs equipo'):'Equipo completo';
   renderBaterias('bat-cont', jugVals, res.equipo, titulo);
 }
 
@@ -5491,7 +5262,6 @@ function applyComboMode(codeStr, modo){
   return out;
 }
 function abrirExportMode(){ document.getElementById('m-exportmode').classList.add('open'); }
-
 /* ══════════════════════════════════════════════════════════════════════════
    ABRIR UN .dvw PARA EDITARLO   (manual 9.2 «Import a match» + 9.1.1 «Modify scout»)
    --------------------------------------------------------------------------
@@ -5751,7 +5521,7 @@ function exportDVW(modo){
       let nom = '';
       const pl = M[sd].plantel;
       if(pl){ const j=pl.find(x=>String(x.c)===String(n)); if(j) nom = j.n; }
-      if(!nom && sd==='home'){ const j=plantelArr().find(p=>String(p.c)===String(n)); if(j) nom=j.n; }
+      if(!nom && sd==='home' && window.PLANTEL_CASLA){ const j=window.PLANTEL_CASLA.find(p=>String(p.c)===String(n)); if(j) nom=j.n; }
       const esLib = (n===M[sd].libero);
       const pos = [];
       for(let st=1; st<=5; st++){
@@ -5794,7 +5564,7 @@ function exportDVW(modo){
   L.push('[3SCOUT]');
   const pad6 = arr => { const a=(arr||[]).slice(0,6); while(a.length<6) a.push(''); return a.map(x=>(x==null?'':x)); };
   M.codes.forEach(c=>{
-    if(c.k==='drill' || !c.c) return;   /* los marcadores de drill y códigos vacíos NO van al .dvw */
+    if(c.k==='drill' || !c.c) return;
     const hl = pad6((c.hl && c.hl.length===6) ? c.hl : M.home.lineup);
     const al = pad6((c.al && c.al.length===6) ? c.al : M.away.lineup);
     /* columnas: 0 código · 8 set · 9 zona armador local · 10 zona armador visitante
@@ -5815,30 +5585,6 @@ function exportDVW(modo){
   toast('Archivo descargado');
 
   terminarEnCurso();   /* ya exportado: sale de la nube */
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   MOSTRAR O NO LA DESCRIPCIÓN DE LA JUGADA
-   Las fichas de colores ayudan al que recién empieza y le tapan pantalla al
-   que ya scoutea. Se puede apagar, y queda apagado para la próxima vez.
-   ══════════════════════════════════════════════════════════════════════════ */
-let DESC_VISIBLE = true;
-try{ DESC_VISIBLE = localStorage.getItem('pv_desc') !== '0'; }catch(_){}
-
-function aplicarDescripcion(){
-  const d = document.getElementById('dec');
-  const h = document.getElementById('hint');
-  const b = document.getElementById('descbtn');
-  if(d) d.style.display = DESC_VISIBLE ? '' : 'none';
-  if(h) h.style.display = DESC_VISIBLE ? '' : 'none';
-  if(b) b.textContent = DESC_VISIBLE ? 'Ocultar la descripción' : 'Mostrar la descripción';
-}
-
-function toggleDescripcion(){
-  DESC_VISIBLE = !DESC_VISIBLE;
-  try{ localStorage.setItem('pv_desc', DESC_VISIBLE ? '1' : '0'); }catch(_){}
-  aplicarDescripcion();
-  if(typeof volverAlTipeo === 'function') volverAlTipeo();
 }
 
 function toggleDetalle(){
@@ -6249,7 +5995,7 @@ function calcFaseKPIs(codes, side){
   side = side || '*';
   var ROL={};
   try{
-    var P=window.PLANTEL_NAFELS;
+    var P=window.PLANTEL_CASLA;
     var arr=(P&&P.jugadores)?P.jugadores:(P&&P.lista)?P.lista:(Array.isArray(P)?P:[]);
     arr.forEach(function(j){ var n=(j.num!=null?j.num:j.c); var pos=((j.pos||j.rol||'')+'').toUpperCase(); if(n!=null) ROL[parseInt(n,10)]=pos; });
   }catch(e){}
@@ -6371,15 +6117,13 @@ document.getElementById('code').focus();
 if(M.home.lineup.every(x=>!x)) openSetup();
 </script>
 
-<!-- VIDEO EN VIVO CON DELAY (asistente que scoutea) - nombres propios para no chocar con el visor de archivo -->
+<!-- VIDEO EN VIVO CON DELAY (asistente que scoutea) -->
 <div id="m-videovivo" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.92);padding:0">
   <div style="height:100%;display:flex;flex-direction:column;max-width:1100px;margin:0 auto">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
       <h2 style="font-family:Barlow Condensed,sans-serif;color:#e2e8f0;margin:0;font-size:20px">Video en vivo (delay)</h2>
-      <div style="display:flex;gap:8px">
-        <button id="vd-dock-btn" onclick="vdDock()" title="Achicá el video a un costado para poder tipear y ver el video a la vez" style="background:rgba(34,211,238,.15);color:#22d3ee;border:1px solid rgba(34,211,238,.35);border-radius:8px;padding:8px 16px;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-weight:700;font-size:14px">⧉ Acoplar</button>
-        <button onclick="cerrarVideoVivo()" style="background:rgba(255,255,255,.06);color:#e2e8f0;border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:8px 18px;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-weight:700;font-size:14px">Cerrar</button>
-      </div>
+      <button id="vd-dock-btn" onclick="vdDock()" title="Achicá el video a un costado para poder tipear y ver el video a la vez" style="background:rgba(34,211,238,.15);color:#22d3ee;border:1px solid rgba(34,211,238,.35);border-radius:8px;padding:8px 16px;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-weight:700;font-size:14px">⧉ Acoplar</button>
+      <button onclick="cerrarVideoVivo()" style="background:rgba(255,255,255,.06);color:#e2e8f0;border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:8px 18px;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-weight:700;font-size:14px">Cerrar</button>
     </div>
     <div id="vdv-conectar" style="padding:20px;display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;flex:1">
       <div style="font-size:13px;color:#8a8ba0;text-align:center;max-width:340px;line-height:1.6">Abrí <b style="color:#e2e8f0">camara.html</b> en el celular que apunta a la cancha, tocá Transmitir, y escribí acá el código de sala.</div>
@@ -6407,11 +6151,15 @@ if(M.home.lineup.every(x=>!x)) openSetup();
 </div>
 <script>
 function abrirVideoVivo(){ document.getElementById('m-videovivo').style.display='block'; var inp=document.getElementById('vd-sala'); if(inp) setTimeout(function(){inp.focus();},100); }
-function cerrarVideoVivo(){ if(window.VideoDelay) VideoDelay.desconectar(); VD_DOCKED=false; var m=document.getElementById('m-videovivo'); m.removeAttribute('data-dock'); vdAplicarModo(); m.style.display='none'; document.getElementById('vdv-player').style.display='none'; document.getElementById('vdv-conectar').style.display='flex'; }
-function vdConectar(){ var sala=(document.getElementById('vd-sala').value||'').trim(); if(sala.length<4){ document.getElementById('vd-estado').textContent='Escribí el código de 4 dígitos.'; return; } if(!window.VideoDelay){ document.getElementById('vd-estado').textContent='Falta video_delay.js'; return; } VideoDelay.conectar(sala); VideoDelay.setDelay(0); document.getElementById('vdv-conectar').style.display='none'; document.getElementById('vdv-player').style.display='flex'; }
+function cerrarVideoVivo(){ if(window.VideoDelay) VideoDelay.desconectar(); VD_DOCKED=false; vdAplicarModo(); document.getElementById('m-videovivo').style.display='none'; document.getElementById('vdv-player').style.display='none'; document.getElementById('vdv-conectar').style.display='flex'; }
 /* TAREA 6 · MODO ACOPLADO: achica el video a un panel abajo a la derecha para
    poder scoutear (tipear) y ver el video al mismo tiempo. */
 let VD_DOCKED=false;
+function vdDock(){
+  VD_DOCKED=!VD_DOCKED;
+  vdAplicarModo();
+  if(VD_DOCKED){ var code=document.getElementById('code'); if(code) setTimeout(function(){code.focus();},60); }
+}
 function vdAplicarModo(){
   var m=document.getElementById('m-videovivo'); if(!m) return;
   var inner=m.firstElementChild;
@@ -6436,29 +6184,25 @@ function vdAplicarModo(){
     if(btn){ btn.textContent='⧉ Acoplar'; btn.title='Achicá el video a un costado para poder tipear y ver el video a la vez'; }
   }
 }
-function vdDock(){
-  VD_DOCKED=!VD_DOCKED;
-  vdAplicarModo();
-  /* devolver el foco a la barra de scouting para poder tipear al toque */
-  if(VD_DOCKED){ var code=document.getElementById('code'); if(code) setTimeout(function(){code.focus();},60); }
-}
+function vdConectar(){ var sala=(document.getElementById('vd-sala').value||'').trim(); if(sala.length<4){ document.getElementById('vd-estado').textContent='Escribí el código de 4 dígitos.'; return; } if(!window.VideoDelay){ document.getElementById('vd-estado').textContent='Falta video_delay.js'; return; } VideoDelay.conectar(sala); VideoDelay.setDelay(0); document.getElementById('vdv-conectar').style.display='none'; document.getElementById('vdv-player').style.display='flex'; }
 function vdSlider(v){ document.getElementById('vd-slider-val').textContent=v+' s'; if(window.VideoDelay) VideoDelay.setDelay(parseInt(v,10)); }
 function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<!-- Botón escudo: volver al inicio de la app (mismo componente que el resto del sitio) -->
+<!-- Botón escudo: volver al inicio de la app -->
 <script>
 (function(){
   function poner(){
     try{
       if(document.getElementById('club-escudo')) return;
       var a=document.createElement('a');
-      a.id='club-escudo'; a.href='index.html'; a.title='Inicio · Volley Näfels';
-      a.style.cssText='position:fixed;left:12px;bottom:12px;z-index:99990;width:46px;height:46px;border-radius:50%;overflow:hidden;background:#000;border:1px solid rgba(255,255,255,.18);box-shadow:0 2px 12px rgba(0,0,0,.55);display:block;';
+      a.id='club-escudo'; a.href='index.html'; a.title='Inicio · CASLA Voley';
+      a.style.cssText='position:fixed;left:12px;bottom:12px;z-index:99990;width:46px;height:46px;border-radius:50%;overflow:hidden;background:#000;border:1px solid rgba(255,255,255,.18);box-shadow:0 2px 12px rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;';
       var i=document.createElement('img');
-      i.src='escudo.png'; i.alt='Volley Näfels';
+      i.src='logo_casl.png'; i.alt='CASLA';
       i.style.cssText='width:100%;height:100%;object-fit:cover;display:block;';
+      i.onerror=function(){ this.style.display='none'; a.innerHTML='<div style="font-family:Bebas Neue,Barlow Condensed,sans-serif;font-size:15px;line-height:.9;color:#e8192c;letter-spacing:1px;text-align:center;font-weight:800">CA<br>SL</div>'; };
       a.appendChild(i); document.body.appendChild(a);
     }catch(e){}
   }
@@ -6747,7 +6491,6 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
 </div></div>
 <script>function abrirAyuda(){ document.getElementById('m-ayuda').classList.add('open'); }</script>
 
-<script src="lang.js"></script>
 
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
