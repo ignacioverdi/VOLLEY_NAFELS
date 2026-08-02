@@ -492,7 +492,16 @@ function render(p){var cfg=ROLECFG[p.role];
   var vals=cfg.filters.map(function(fl,i){return readFilt(p.id+'-f'+i,fl);});
   var f=p.data.filter(function(a){return MSEL.has(a[cfg.vIdx])&&passes(a,cfg,vals);}),n=f.length;
   var z={"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0},vz={};
-  f.forEach(function(a){var _blk=(cfg.stats==='atk'&&a[cfg.evIdx]==='/');if(_blk)return;if(z[a[cfg.court]]!==undefined)z[a[cfg.court]]++;if(ppVid(a[cfg.vIdx])){vz[a[cfg.court]]=(vz[a[cfg.court]]||0)+1;}});
+  f.forEach(function(a){
+    /* Los ataques bloqueados se salteaban siempre: la idea era que no contaran
+       como direccion —la pelota no llego a la cancha rival—. Pero cuando se
+       filtra justo por "Bloqueado", saltearlos deja la cancha vacia.
+
+       Ahora solo se saltean si NO se esta mirando puntualmente los bloqueados:
+       asi el filtro sirve para ver desde donde te bloquean. */
+    var _blk=(cfg.stats==='atk'&&a[cfg.evIdx]==='/');
+    var _viendoBlq = vals.some(function(v){ return v==='/'; });
+    if(_blk && !_viendoBlq) return;if(z[a[cfg.court]]!==undefined)z[a[cfg.court]]++;if(ppVid(a[cfg.vIdx])){vz[a[cfg.court]]=(vz[a[cfg.court]]||0)+1;}});
   var P=function(x){return n?Math.round(x/n*100)+'%':'–';};
   var v;
   if(cfg.stats==='atk'){var k=0,e=0,b=0,hd=0,sf=0,tp=0,d0=0,d1=0,d2=0;
