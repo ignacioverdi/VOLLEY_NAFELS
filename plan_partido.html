@@ -500,7 +500,12 @@ function render(p){var cfg=ROLECFG[p.role];
        Ahora solo se saltean si NO se esta mirando puntualmente los bloqueados:
        asi el filtro sirve para ver desde donde te bloquean. */
     var _blk=(cfg.stats==='atk'&&a[cfg.evIdx]==='/');
-    var _viendoBlq = vals.some(function(v){ return v==='/'; });
+    /* El filtro puede venir como texto —"/"— o como lista —["/"]—, segun sea
+       de una opcion o de varias. Comparando solo el texto nunca daba verdadero
+       y los cuadrantes quedaban en cero. */
+    var _viendoBlq = vals.some(function(v){
+      return v === '/' || (Array.isArray(v) && v.indexOf('/') >= 0);
+    });
     if(_blk && !_viendoBlq) return;
     /* Un ataque bloqueado no tiene destino: la pelota nunca paso. Se lo cuenta
        en su zona de ORIGEN —desde donde se atacaba—, que es lo que interesa
