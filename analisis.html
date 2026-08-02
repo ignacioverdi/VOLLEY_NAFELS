@@ -1545,7 +1545,11 @@ function batGet(nombre, partido){
     if(nombre){ var k=_batMatchName(nombre, Object.keys(m.jug||{})); return (k&&m.jug[k])?m.jug[k]:_OBJ_NULOS; }
     return m.eq||_OBJ_NULOS;
   }
+  /* El acumulado. Cuando hay UNA sola sesion, el acumulado del archivo y el
+     detalle de esa sesion tienen que dar lo mismo: si no coinciden se usa el
+     de la sesion, que es el que esta calculado sobre las acciones. */
   if(nombre){ var k2=_batMatchName(nombre, Object.keys(B.jug||{})); return (k2&&B.jug[k2])?B.jug[k2]:_OBJ_NULOS; }
+  if((B.ind||[]).length === 1 && B.ind[0].eq) return B.ind[0].eq;
   return B.eq||_OBJ_NULOS;
 }
 

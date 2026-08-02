@@ -254,12 +254,23 @@ function batGet(nombre, partido){
     if(nombre){ var k=_batMatchName(nombre, Object.keys(m.jug||{})); return (k&&m.jug[k])?m.jug[k]:_OBJ_NULOS; }
     return m.eq||_OBJ_NULOS;
   }
+  /* El acumulado. Cuando hay UNA sola sesion, el acumulado del archivo y el
+     detalle de esa sesion tienen que dar lo mismo: si no coinciden se usa el
+     de la sesion, que es el que esta calculado sobre las acciones. */
   if(nombre){ var k2=_batMatchName(nombre, Object.keys(B.jug||{})); return (k2&&B.jug[k2])?B.jug[k2]:_OBJ_NULOS; }
+  if((B.ind||[]).length === 1 && B.ind[0].eq) return B.ind[0].eq;
   return B.eq||_OBJ_NULOS;
 }
 
 function objGetVals(nombre){
-  if(window.BAT_PARTIDOS) return batGet(nombre, window._dbatPartido);
+  /* El partido elegido se guarda en dos variables —_dbatPartido aca,
+     _objPartido en el analisis— y si no coinciden las dos pantallas muestran
+     valores distintos para la misma sesion: una el acumulado y la otra el
+     detalle de ese dia. Se usa la que este puesta. */
+  if(window.BAT_PARTIDOS){
+    var cual = window._dbatPartido || window._objPartido || 'acumulado';
+    return batGet(nombre, cual);
+  }
   return (typeof _OBJ_NULOS !== 'undefined') ? _OBJ_NULOS : {};
 }
 
