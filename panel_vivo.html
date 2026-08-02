@@ -1527,7 +1527,13 @@ function parseOne(raw){
     }
     rest = s.slice(i); break;
   }
-  if(raros) rest = rest + raros;
+  /* Las letras que se apartaron mas arriba —porque venian antes de la
+     evaluacion— vuelven AL PRINCIPIO de la cola, no al final.
+
+     Pegadas al final, el analizador las encontraba cuando el tipo de golpe ya
+     estaba resuelto y las mandaba a los personalizados: una L de recepcion
+     terminaba colgando fuera del formato en vez de ocupar su lugar. */
+  if(raros) rest = raros + rest;
 
   /* ══ Evaluación tipeada DESPUÉS de las zonas (4SQ15# = 4SQ#15) ══
      No es el orden del manual, pero es el que se usa scouteando en vivo:
@@ -1639,8 +1645,16 @@ function buildTail(d,a){
      Antes se armaba con 9 posiciones y el bloqueo con una sola: el tipo de
      golpe caia dos lugares corrido y las pantallas lo leian en el sitio
      equivocado, o directamente no lo veian. */
+  /* La cola, segun el manual de DataVolley:
+
+       4.1.3 El codigo extendido son 3 caracteres, en este orden:
+              TIPO DE GOLPE  ·  JUGADORES  ·  ESPECIAL
+       4.1.4 Los personalizados van despues, hasta 5.
+
+     Un intento anterior metia dos posiciones de mas y el tipo de golpe
+     terminaba corrido: las pantallas lo leian en el lugar equivocado. */
   const core=(d.combo||'~~')+(d.target||'~')+(d.sz||'~')+(d.ez||'~')+(d.subz||'~')
-            +(d.hit||'~')+(d.blk||'~')+'~'+'~~'+(d.spec||'~');
+            +(d.hit||'~')+(d.blk||'~')+(d.spec||'~');
   const cust = customFor(d,a);
   if(!cust) return core.replace(/~+$/,'');
   return core + cust;      /* los personalizados van siempre al final (DV4 4.1.4) */
@@ -2977,7 +2991,23 @@ function ponerExt(ch){
     return;
   }
 
-  const a = p[idx], d = a.d;
+  /* La opcion se aplica a la accion que le corresponde: si la letra es un tipo
+     de golpe valido para OTRA accion del codigo y no para la elegida, se usa
+     esa. Sin esto, una L de recepcion tipeada con el menu sobre el saque caia
+     en los personalizados y quedaba fuera del formato. */
+  var _i = idx;
+  if(!(SUBTYPE[p[_i].skill] && SUBTYPE[p[_i].skill][ch]) &&
+     !(PLAYERS[p[_i].skill] && PLAYERS[p[_i].skill][ch]) &&
+     !specialsFor(p[_i].skill, p[_i].ev)[ch]){
+    for(var _k = p.length - 1; _k >= 0; _k--){
+      if(p[_k].err) continue;
+      if((SUBTYPE[p[_k].skill] && SUBTYPE[p[_k].skill][ch] && !p[_k].d.hit) ||
+         (PLAYERS[p[_k].skill] && PLAYERS[p[_k].skill][ch] && !p[_k].d.blk) ||
+         (specialsFor(p[_k].skill, p[_k].ev)[ch] && !p[_k].d.spec)){ _i = _k; break; }
+    }
+  }
+
+  const a = p[_i], d = a.d;
   if(SUBTYPE[a.skill] && SUBTYPE[a.skill][ch] && !d.hit)            d.hit  = ch;
   else if(PLAYERS[a.skill] && PLAYERS[a.skill][ch] && !d.blk)       d.blk  = ch;
   else if(specialsFor(a.skill, a.ev)[ch] && !d.spec)                d.spec = ch;
