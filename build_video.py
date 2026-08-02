@@ -58,9 +58,42 @@ def norm_team(name):
     n=re.sub(r'\s+',' ',n).split('(')[0].strip()
     return n or 'Equipo'
 
+# Los clubes conocidos. El nombre en los .dvw cambia todos los anos con el
+# patrocinador —"Biogas Volley Nafels" un ano, "AXPO VOLLEY NAFELS" el otro—
+# pero la etiqueta corta tiene que ser siempre la misma, porque es la que
+# usan las pantallas para saber que acciones son del club.
+CLUBES_CONOCIDOS = [
+    'nafels', 'amriswil', 'chenois', 'colombier', 'jona', 'lausanne',
+    'schonenwerd', 'st_gallen', 'sursee', 'lucerne', 'volero',
+    'casla', 'sanlorenzo', 'boca', 'river', 'untref', 'ferro', 'uba',
+    'velez', 'lomas', 'ciudad', 'defensores', 'hacoaj', 'campana',
+]
+
+
 def slugify(name):
-    n=unicodedata.normalize('NFKD',name or '').encode('ascii','ignore').decode('ascii')
-    return re.sub(r'\s+','_',n.lower().strip())
+    """La etiqueta corta y estable del equipo.
+
+    Antes se armaba con el nombre completo: "AXPO VOLLEY NAFELS" daba
+    "axpo_volley_nafels", y las pantallas —que buscan "nafels"— no encontraban
+    ninguna accion. Al cambiar el sponsor, todas las tablas quedaban vacias.
+
+    Ahora, si adentro del nombre aparece un club conocido, se usa ese.
+    """
+    n = unicodedata.normalize('NFKD', name or '').encode('ascii', 'ignore').decode('ascii')
+    entero = re.sub(r'\s+', '_', n.lower().strip())
+
+    # el club conocido mas largo que aparezca adentro
+    for club in sorted(CLUBES_CONOCIDOS, key=len, reverse=True):
+        if club in entero:
+            return club
+
+    # tambien sin los guiones bajos: "san_lorenzo_de_almagro" trae "sanlorenzo"
+    pegado = entero.replace('_', '')
+    for club in sorted(CLUBES_CONOCIDOS, key=len, reverse=True):
+        if club.replace('_', '') in pegado:
+            return club
+
+    return entero
 
 def parse_set_result(txt):
     """Devuelve (sets_local, sets_visitante) leyendo [3SET]."""
