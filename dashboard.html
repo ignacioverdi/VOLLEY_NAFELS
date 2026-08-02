@@ -969,8 +969,18 @@ function renderEqContent(){
 }
 
 function renderDefensaTabla(){
-  var VD = window.VIDEO_DATA && window.VIDEO_DATA.matches;
-  if(!VD) return '<div class="empty">Sin datos de defensa todavía</div>';
+  /* Los cortes viven en DOS variables distintas: los partidos en VIDEO_DATA y
+     los entrenamientos en VIDEO_DATA_ENT. Mirando solo la primera, las
+     defensas de un entrenamiento no aparecian nunca. Se juntan las dos. */
+  var VD = {};
+  try{
+    [window.VIDEO_DATA, window.VIDEO_DATA_ENT].forEach(function(F){
+      var M = F && F.matches;
+      if(!M) return;
+      Object.keys(M).forEach(function(k){ VD[k] = M[k]; });
+    });
+  }catch(e){}
+  if(!Object.keys(VD).length) return '<div class="empty">Sin datos de defensa todavía</div>';
   var P={};
   /* Antes se descartaba todo lo que no fuera de la temporada en curso, y la
      temporada arranca en agosto: un entrenamiento del 30 de julio caia en la

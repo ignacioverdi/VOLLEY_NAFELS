@@ -98,7 +98,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   <script>abrirDatos();</script>
 <script>
 (function(){
-  var VD=(window.VIDEO_DATA&&window.VIDEO_DATA.matches)||{};
+  var VD=_videoTodo()||{};
   var EQ=(new URLSearchParams(location.search).get('equipo')||'nafels').toLowerCase();
   var RES_ORDER=['#','+','!','-','='];
   var RES_LABEL={'#':'Perfecta','+':'Buena','!':'Regular','-':'Mala','=':'Error'};
@@ -273,7 +273,25 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   render();
 })();
 </script>
-<script src="lang.js" onerror="void 0"></script>
+<script src="lang.js" onerror="void 0">
+/* ══════════════════════════════════════════════════════════════════════════
+   LOS CORTES DE VIDEO, DE LAS DOS FUENTES
+   --------------------------------------------------------------------------
+   Los partidos viven en VIDEO_DATA y los entrenamientos en VIDEO_DATA_ENT.
+   Mirando una sola, las acciones de la otra no aparecen nunca.
+   ══════════════════════════════════════════════════════════════════════════ */
+function _videoTodo(){
+  var VD = {};
+  try{
+    [window.VIDEO_DATA, window.VIDEO_DATA_ENT].forEach(function(F){
+      var M = F && F.matches;
+      if(!M) return;
+      Object.keys(M).forEach(function(k){ VD[k] = M[k]; });
+    });
+  }catch(e){}
+  return VD;
+}
+</script>
 </body>
 </html>
 
