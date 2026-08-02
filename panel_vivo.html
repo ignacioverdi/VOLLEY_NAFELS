@@ -2198,10 +2198,7 @@ function pintarEspejo(){
   /* Si el campo tiene la forma completa que dejo el menu extendido, se muestra
      lo que se habia tipeado mas el valor elegido. Asi la barra se lee igual que
      siempre y el codigo guardado sigue siendo el correcto. */
-  /* La barra se compara con lo CORTO, que es lo que ahora tiene el campo.
-     Antes se comparaba con la forma completa y, desde que el campo conserva lo
-     tipeado, esa condicion no se cumplia nunca: el extendido no se pintaba. */
-  if(EXT_TIPEADO && (EXT_TIPEADO.texto + EXT_TIPEADO.extra) === raw){
+  if(EXT_TIPEADO && EXT_TIPEADO.completo === raw){
     var esc0 = function(t){ return String(t).replace(/&/g,'&amp;')
                               .replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
     var cls0 = inp.classList.contains('bad')  ? 'malo'
@@ -2967,21 +2964,16 @@ function ponerExt(ch){
      tener la forma completa —hace falta para que cada valor caiga en su
      casillero— pero la barra sigue mostrando lo corto, que es lo que se lee
      mientras se scoutea. En un punto largo la forma completa es ilegible. */
-  /* El campo NO se reescribe en la forma completa.
+  /* El campo guarda la forma completa —hace falta para que cada valor caiga en
+     su casillero: la L del golpe no va al final del texto, va en su posicion—
+     pero la BARRA muestra lo corto, que es lo que se lee mientras se scoutea.
 
-     Antes, al elegir una extension, el codigo pasaba de "8SM15.8#L" a
-     "*08SM-~~~15.*08RM#~~~15~L": cambiaba el formato en pleno tipeo y se
-     perdia lo que se venia escribiendo —la recepcion rival, por ejemplo—
-     porque la forma completa se arma con lo que el parser entendio, no con lo
-     tipeado.
-
-     Ahora el campo conserva lo corto, que es lo que se sigue escribiendo, y la
-     forma completa queda guardada aparte para cuando se registre la jugada. */
-  var _corto = inp.value + ch;
+     Guardar solo lo corto no sirve: al pegar la letra suelta al final, el
+     parser la lee en el lugar equivocado y el dato se pierde. */
   EXT_TIPEADO = { texto: inp.value, extra: (EXT_TIPEADO && EXT_TIPEADO.texto === inp.value
                                            ? (EXT_TIPEADO.extra || '') : '') + ch };
-  EXT_TIPEADO.completo = p.map(fmt).join('.');
-  inp.value = _corto;
+  inp.value = p.map(fmt).join('.');
+  EXT_TIPEADO.completo = inp.value;
   try{ inp.setSelectionRange(inp.value.length, inp.value.length); }catch(_){}
   /* pintarEspejo() vuelve a colorear la barra. Sin esto, el valor que se acaba
      de elegir no se ve hasta apretar Enter: el texto cambia pero nadie lo
