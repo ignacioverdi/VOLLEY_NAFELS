@@ -24,62 +24,44 @@ ESTRUCTURA DE ARCHIVOS:
 import os, re, json, argparse, shutil
 from collections import defaultdict, Counter
 
-def _sumar_al_historial(entrenamientos, output_dir='.'):
-    """Suma las sesiones al historial que leen las pantallas.
+def _posDelPlantel(num, porDefecto=None):
+    """El rol del jugador —PUNTA, LIBERO, ARMADOR— segun el plantel del club.
 
-    El motor guarda los entrenamientos en datos_historial_ent.js, pero el
-    dashboard, el historial y el perfil del jugador leen datos_historial.js.
-    Sin este paso ese archivo queda vacio y la app no muestra nada.
+    En un partido el .dvw trae el rol y alcanza con leerlo. En un entrenamiento
+    trae la posicion EN CANCHA —1, 2, 5— que es otra cosa: asi el motor no
+    reconocia a ningun receptor y la tabla de recepcion quedaba vacia.
+
+    Se lee directo del plantel del club, buscando cada "num" con su "pos". El
+    plantel se lee una sola vez y queda guardado.
     """
-    import json
     import os as _os
     import re as _re
-    from datetime import datetime
 
-    destino = _os.path.join(output_dir, 'datos_historial.js')
-
-    # lo que ya habia, para no pisar los partidos que ya estaban
-    previo = []
-    if _os.path.exists(destino):
+    if not hasattr(_posDelPlantel, '_cache'):
+        cache = {}
         try:
-            txt = open(destino, encoding='utf-8').read()
-            m = _re.search(r'window\.HISTORIAL_DATA\s*=\s*(\{.*\})\s*;', txt, _re.S)
-            if m:
-                previo = (json.loads(m.group(1)) or {}).get('entrenamientos', []) or []
+            archivos = [n for n in _os.listdir('.')
+                        if n.startswith('plantel_') and n.endswith('.js')]
         except Exception:
-            previo = []
+            archivos = []
+        for nombre in archivos:
+            try:
+                txt = open(nombre, encoding='utf-8', errors='replace').read()
+            except Exception:
+                continue
+            # cada jugador: { num: 4, ap: "VAZQUEZ", ..., pos: "ARMADOR", ... }
+            for bloque in _re.findall(r'\{[^{}]*\}', txt):
+                mn = _re.search(r'\bnum\s*:\s*(\d+)', bloque)
+                mp = _re.search(r'\bpos\s*:\s*["\']([^"\']+)["\']', bloque)
+                if mn and mp:
+                    cache[mn.group(1)] = mp.group(1).upper()
+        _posDelPlantel._cache = cache
 
-    # las sesiones nuevas, sin repetir las que ya estaban
-    yaesta = set()
-    for e in previo:
-        yaesta.add((e.get('fecha', ''), e.get('rival', ''), e.get('tipo', '')))
+    p = _posDelPlantel._cache.get(str(num))
+    if p:
+        return p
+    return (porDefecto or '').upper()
 
-    for e in (entrenamientos or []):
-        clave = (e.get('fecha', ''), e.get('rival', ''), e.get('tipo', ''))
-        if clave in yaesta:
-            continue
-        previo.append(e)
-        yaesta.add(clave)
-
-    previo.sort(key=lambda x: x.get('fecha', ''))
-
-    salida = {
-        'generado': datetime.now().strftime('%d/%m/%Y, %H:%M:%S'),
-        'entrenamientos': previo,
-    }
-    with open(destino, 'w', encoding='utf-8') as f:
-        f.write('window.HISTORIAL_DATA = ')
-        json.dump(salida, f, ensure_ascii=False, indent=2)
-        f.write(';\n')
-    print('   %s: %d sesiones' % (_os.path.basename(destino), len(previo)))
-
-
-# ── NORMALIZACIÓN DE COMBOS AL CANÓNICO MUNDIAL ──────────────────────
-# Equivalencias argentino → canónico (mismo ataque, distinto idioma de scout)
-COMBO_EQUIV = {
-    'W4':'X5','G4':'V5','J1':'X1','J4':'XM','J3':'X2','J2':'X7','J5':'CB',
-    'W2':'X6','G2':'V6','Y9':'X8','G9':'V8','Y8':'XP','G8':'VP',
-}
 def normalize_combo(combo):
     """Convierte cualquier código de ataque a su canónico mundial."""
     return COMBO_EQUIV.get(combo, combo)
@@ -1527,9 +1509,6 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
     hist_js = 'window.HISTORIAL_DATA_ENT = ' + json.dumps({'generado':now,'entrenamientos':historial}, ensure_ascii=False, indent=2) + ';\n'
     with open(os.path.join(output_dir,'datos_historial_ent.js'),'w',encoding='utf-8') as f: f.write(hist_js)
 
-    # Y ahora al historial que leen las pantallas: el dashboard,
-    # el historial y el perfil del jugador miran datos_historial.js
-    _sumar_al_historial(historial, output_dir)
     # ── DATOS_PARTIDOS.JS (ataques, saques, recepciones por jugador acumulado) ──
     if os.path.exists('entrenamientos_nafels_db.json'):
         with open('entrenamientos_nafels_db.json') as f: _db = json.load(f)
@@ -1686,7 +1665,10 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
     for pj in partidos_jug:
         rec=pj.get('recepcion') or {}
         if not (rec.get('flotado') or rec.get('potencia')): continue
-        pos=(pj.get('pos') or '').upper()
+        # La posicion sale del plantel del club, no del .dvw: en un entrenamiento
+        # el archivo trae la posicion EN CANCHA —1, 2, 5— y no el rol, asi que
+        # el motor no reconocia a nadie como receptor y la tabla salia vacia.
+        pos = _posDelPlantel(pj.get('num'), pj.get('pos'))
         if pos not in ('PUNTA','LIBERO'): continue  # solo receptores
         nombre=pj['nombre'].split(' ',1)[-1].upper() if ' ' in pj['nombre'] else pj['nombre'].upper()
         # quitar el numero inicial del nombre si lo tiene
