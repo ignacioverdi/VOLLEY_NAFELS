@@ -61,6 +61,8 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 </head>
 <body>
 <div class="hdr">
+  <!-- PARTIDO / ENTRENAMIENTO, igual que en las otras pantallas -->
+  <div style="display:flex;gap:6px;margin-left:auto" id="modo-def-wrap"></div>
   <a href="index.html" class="back">← Inicio</a>
   <div><div class="hdr-t" id="hdr-t">ANALISIS DE DEFENSA</div><div class="hdr-s" id="hdr-s">EFF = (1x# + 0.5x+ − 0.5x− − 1x=) / total</div></div>
 </div>
@@ -98,7 +100,31 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   <script>abrirDatos();</script>
 <script>
 (function(){
-  var VD=_videoTodo()||{};
+  /* El modo elegido: PARTIDO o ENTRENAMIENTO. Se guarda en la misma clave que
+     usan las demas pantallas, asi el club queda igual en todas. */
+  var MODO = 'todos';
+  try{ MODO = localStorage.getItem('vb_modo_def') || 'todos'; }catch(e){}
+
+  /* Los cortes del modo elegido. Con "todos" van las dos fuentes juntas. */
+  function _cortesDelModo(){
+    var VD = {};
+    try{
+      var P = window.VIDEO_DATA && window.VIDEO_DATA.matches;
+      var E = window.VIDEO_DATA_ENT && window.VIDEO_DATA_ENT.matches;
+      if(MODO !== 'entrenamiento' && P) Object.keys(P).forEach(function(k){ VD[k]=P[k]; });
+      if(MODO !== 'partido' && E) Object.keys(E).forEach(function(k){ VD[k]=E[k]; });
+    }catch(e){}
+    return VD;
+  }
+
+  function setModoDef(m){
+    MODO = m;
+    try{ localStorage.setItem('vb_modo_def', m); }catch(e){}
+    location.reload();
+  }
+  window.setModoDef = setModoDef;
+
+  var VD = _cortesDelModo();
   var EQ=(new URLSearchParams(location.search).get('equipo')||'nafels').toLowerCase();
   var RES_ORDER=['#','+','!','-','='];
   var RES_LABEL={'#':'Perfecta','+':'Buena','!':'Regular','-':'Mala','=':'Error'};
@@ -271,6 +297,23 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
     c.innerHTML=html;
   }
   render();
+
+  /* los botones del encabezado, marcando cual esta elegido */
+  (function(){
+    var w = document.getElementById('modo-def-wrap');
+    if(!w) return;
+    var op = [['todos','TODOS'],['partido','PARTIDO'],['entrenamiento','ENTRENAMIENTO']];
+    w.innerHTML = op.map(function(o){
+      var on = (MODO === o[0]);
+      return '<button onclick="setModoDef(\'' + o[0] + '\')" style="' +
+        'padding:5px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:800;' +
+        'letter-spacing:1px;font-family:inherit;' +
+        (on ? 'border:1px solid rgba(239,68,68,.5);background:rgba(239,68,68,.14);color:#ef4444'
+            : 'border:1px solid rgba(255,255,255,.12);background:transparent;color:#94a3b8') +
+        '">' + o[1] + '</button>';
+    }).join('');
+  })();
+
 })();
 </script>
 <script src="lang.js" onerror="void 0">
