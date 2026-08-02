@@ -685,7 +685,13 @@
        perdia y venian los cortes de todos los resultados mezclados. */
     if(pEv){
       selEval = {};
-      pEv.split(',').forEach(function(e){ if(e) selEval[e]=1; });
+      /* Se acepta la barra codificada tambien: algunos enlaces la mandan como
+         %2F y comparando el texto tal cual nunca coincide. */
+      pEv.split(',').forEach(function(e){
+        if(!e) return;
+        try{ e = decodeURIComponent(e); }catch(_){}
+        selEval[e] = 1;
+      });
       /* que los botones de arriba muestren cual quedo elegido */
       try{
         document.querySelectorAll('#fEval [data-ev]').forEach(function(c){

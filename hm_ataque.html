@@ -509,7 +509,10 @@ function verVideoDest(zone, extra){
   var esOrigen = !!window._ccZonaOrigen;
   var u = 'cortes.html?num=' + encodeURIComponent(F.player) + '&sk=Ataque' +
           (esOrigen ? '&oz=' : '&dz=') + zone;
-  if(esOrigen) u += '&ev=' + encodeURIComponent('/');
+  /* La barra va SIN codificar: encodeURIComponent la convierte en %2F y
+     cortes.html compara el texto tal cual, asi que nunca coincidia y abria
+     todos los ataques en vez de los bloqueados. */
+  if(esOrigen) u += '&ev=/';
   window.open(u + (extra || '') + _vfilt(), '_blank');
 }
 
