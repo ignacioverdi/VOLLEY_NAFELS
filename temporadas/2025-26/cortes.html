@@ -605,8 +605,21 @@
     if((pCall||pApos)&&!pSk) pSk='Armado';
     if(pSk) fSk=pSk;
     if(pNum){ pNum.split(',').forEach(function(x){x=(''+x).replace(/[^0-9]/g,'');if(x)selPlayers[x.padStart(2,'0')]=true;}); }
-    if(pEv){ pEv.split(',').forEach(function(e){if(e)selEval[e]=1;}); }
     bind(); rebuildAll();
+    /* La valoracion va DESPUES de rebuildAll: esa funcion vacia selEval y lo
+       vuelve a llenar con todas las que existen, asi que puesta antes se
+       perdia y venian los cortes de todos los resultados mezclados. */
+    if(pEv){
+      selEval = {};
+      pEv.split(',').forEach(function(e){ if(e) selEval[e]=1; });
+      /* que los botones de arriba muestren cual quedo elegido */
+      try{
+        document.querySelectorAll('#fEval [data-ev]').forEach(function(c){
+          c.classList.toggle('on', !!selEval[c.dataset.ev]);
+        });
+      }catch(e){}
+      try{ apply(); }catch(e){}
+    }
     var pClips=Q.get('clips');
     if(pClips){
       var want=pClips.split(';').map(function(str){var x=str.split('-');return {mc:x[0],t:parseFloat(x[1]),num:x[2]};});
