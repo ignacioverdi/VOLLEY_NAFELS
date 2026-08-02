@@ -972,7 +972,16 @@ function renderDefensaTabla(){
   var VD = window.VIDEO_DATA && window.VIDEO_DATA.matches;
   if(!VD) return '<div class="empty">Sin datos de defensa todavía</div>';
   var P={};
-  Object.keys(VD).forEach(function(c){ if(_seasonOf(VD[c].date)!==_curSeason())return; (VD[c].actions||[]).forEach(function(a){
+  /* Antes se descartaba todo lo que no fuera de la temporada en curso, y la
+     temporada arranca en agosto: un entrenamiento del 30 de julio caia en la
+     anterior y se perdia por un dia.
+
+     Ahora entra tambien lo de la temporada pasada, que es donde caen los de
+     pretemporada, y lo que no trae fecha. */
+  Object.keys(VD).forEach(function(c){
+    var _t = _seasonOf(VD[c].date);
+    if(_t !== null && _t !== _curSeason() && _t !== _curSeason()-1) return;
+    (VD[c].actions||[]).forEach(function(a){
     if(a.sk!=='Defensa') return;
     if(a.tm!=='nafels') return;
     var k=a.num; if(!P[k]) P[k]={num:a.num,name:a.name,T:0,perf:0,buena:0,reg:0,mala:0,err:0};
