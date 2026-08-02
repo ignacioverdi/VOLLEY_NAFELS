@@ -302,7 +302,26 @@ canvas.panel-court{position:absolute;inset:0;width:100%;height:100%;opacity:.28;
 <div class="content" id="content"></div>
 
 <!-- VB: selector PARTIDO/ENTRENAMIENTO - carga los datos segun el modo elegido -->
-<script>(function(){var ent=false;try{ent=(localStorage.getItem('vb_modo')||'partido')==='entrenamiento';}catch(e){}
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   LA RECEPCION, DE LAS DOS FUENTES
+   --------------------------------------------------------------------------
+   Los partidos se guardan en RECEPCION_RIVAL_DATA y los entrenamientos en
+   RECEPCION_RIVAL_DATA_ENT. Mirando una sola, las recepciones de la otra no
+   aparecen nunca.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  try{
+    var A = window.RECEPCION_RIVAL_DATA || {};
+    var B = window.RECEPCION_RIVAL_DATA_ENT || {};
+    if(!Object.keys(B).length) return;
+    var J = {};
+    Object.keys(A).forEach(function(k){ J[k] = A[k]; });
+    Object.keys(B).forEach(function(k){ if(!J[k]) J[k] = B[k]; });
+    window.RECEPCION_RIVAL_DATA = J;
+  }catch(e){}
+})();
+(function(){var ent=false;try{ent=(localStorage.getItem('vb_modo')||'partido')==='entrenamiento';}catch(e){}
 function w(s){document.write('<scr'+'ipt src="'+s+'" onerror="void 0"><\/scr'+'ipt>');}
 if(ent){ w('datos_entrenamientos.js'); w('datos_recepcion_ent.js'); w('adapter_entrenamiento.js'); }
 else   { w('datos_partidos.js'); w('datos_recepcion.js'); }
