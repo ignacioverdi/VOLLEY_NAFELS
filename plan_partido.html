@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Plan de Partido — CASLA</title>
+<title>Plan de Partido — NÄFELS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -186,7 +186,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <body>
 <div class="wrap">
 <header class="masthead">
-  <div class="eyebrow">CASLA · DataVolley 4</div>
+  <div class="eyebrow">NÄFELS · DataVolley 4</div>
   <h1>Plan de partido</h1>
   <div class="sub">Análisis de: <b id="teamname" style="color:var(--red)">—</b></div>
   <div class="legend">
@@ -208,6 +208,15 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
   </div>
   <div class="msel"><button class="mbtn" onclick="togglePanel('r')">Rival <b id="rc"></b> ▾</button><div class="mpanel" id="rpanel"></div></div>
   <div class="msel"><button class="mbtn" onclick="togglePanel('m')">Partido <b id="mc"></b> ▾</button><div class="mpanel" id="mpanel"></div></div>
+  <!-- El minimo de acciones, ahora en pantalla. Antes estaba escondido en el
+       generador (30 saques, 30 recepciones) y no habia forma de moverlo sin
+       tocar el codigo. En 0 se ve todo; subiendolo se sacan de la vista los
+       jugadores con pocas pelotas, que es util cuando mirás a un rival con una
+       temporada entera encima. -->
+  <span class="mlab" style="margin-left:6px">Mín. acciones</span>
+  <input id="minacc" type="number" min="0" step="1" value="0" title="Oculta a los jugadores con menos acciones que este número"
+         style="width:64px;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:7px;padding:5px 7px;font-family:inherit;font-weight:700;font-size:12px"
+         oninput="ppVisibilidad()">
   <span class="mhint" id="mhint"></span></div>
 <div class="tabsbar" id="tabsbar">
   <span class="tabteam" id="tabteam">—</span>
@@ -246,7 +255,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <div class="grid3" id="row-defense"></div>
 </div><div class="tabgroup" id="tab-bloqueo"><div class="rolehead">Bloqueo <span>dónde bloquea según la zona de origen del ataque rival · celeste</span></div>
 <div class="grid3" id="row-bloqueo"></div>
-</div><footer>Ataque (rojo): dirección según recepción. Saque (azul): tipo, zona de origen, momento (puntos del set) y fuerza sobre la recepción; / = vendido (2ª mejor). Recepción (naranja): según tipo/zona del saque rival; zona real de caída de la pelota (todas las zonas). Video por timestamp (reproduce en partidos publicados en la app CASLA). Muestras chicas = tomar con cuidado.</footer>
+</div><footer>Ataque (rojo): dirección según recepción. Saque (azul): tipo, zona de origen, momento (puntos del set) y fuerza sobre la recepción; / = vendido (2ª mejor). Recepción (naranja): según tipo/zona del saque rival; zona real de caída de la pelota (todas las zonas). Video por timestamp (reproduce en partidos publicados en la app). Muestras chicas = tomar con cuidado.</footer>
 </div>
 
 <div id="vmodal" class="vmodal" onclick="if(event.target===this)closeV()">
@@ -560,7 +569,7 @@ function saveRead(el){try{localStorage.setItem(readKey(el.getAttribute("data-pid
 function buildSection(p){var cfg=ROLECFG[p.role];
   var fh=cfg.filters.map(function(fl,i){return filtCtrl(p.id+'-f'+i,fl,'',filterOpts(p,fl));}).join('');
   if(cfg.stats==='atk'||cfg.stats==='srv'||cfg.stats==='dig'){fh+='<div class="fgroup"><label title="Mín. pelotas">Mín.</label><input type="number" min="0" value="0" id="'+p.id+'-min" style="background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:7px;font-family:inherit;font-weight:700"></div>';}
-  return '<div class="player" data-num="'+p.num+'"><div class="phead"><div class="pnum">'+p.num+'</div><div class="pname">'+p.name+'</div><div class="prole">'+(p.pos||p.role)+'</div><div class="pmeta">'+p.total+U(p.role)+'</div><button class="vtodo" onclick="openZone(\''+p.id+'\',\'*\')" title="Ver todos los videos juntos, de todas las zonas">&#9654; Ver todo</button></div>'
+  return '<div class="player" data-num="'+p.num+'" data-pid="'+p.id+'"><div class="phead"><div class="pnum">'+p.num+'</div><div class="pname">'+p.name+'</div><div class="prole">'+(p.pos||p.role)+'</div><div class="pmeta">'+p.total+U(p.role)+'</div><button class="vtodo" onclick="openZone(\''+p.id+'\',\'*\')" title="Ver todos los videos juntos, de todas las zonas">&#9654; Ver todo</button></div>'
    +'<div class="filters">'+fh+'</div><div class="natt" id="'+p.id+'-n"></div>'
    +'<div class="body"><div class="courtwrap"><div class="court" id="'+p.id+'-court"></div><div class="cnote">Doble-click en zona con ▶ → video (partidos con 🎥)</div></div>'
    +'<div class="stats">'+tiles3(p,cfg)+'</div></div>'+'<div class="read" contenteditable="true" spellcheck="false" data-pid="'+p.id+'" data-ph="Escribí tu análisis…" title="Click para editar" oninput="saveRead(this)">'+readVal(p)+'</div>'+'</div>';
@@ -617,7 +626,7 @@ function render(p){var cfg=ROLECFG[p.role];
     var h=heat(val,mx,cfg.pal),hasVid=(vz[zn]||0)>0;
     return '<div class="cell'+(hasVid?' has vid':'')+'" style="background:'+h[0]+';border:'+h[2]+'"'+(hasVid?' ondblclick="openZone(\''+p.id+'\',\''+zn+'\')"':'')+'><div class="zn" style="color:'+h[1]+'">z'+zn+'</div><div class="cn" style="color:'+h[1]+'">'+val+'</div></div>';}).join('');
 }
-function renderAll(){PLAYERS.concat(TEAMCARDS).forEach(render);if(typeof renderArmador==="function")renderArmador();}
+function renderAll(){PLAYERS.concat(TEAMCARDS).forEach(render);try{ppVisibilidad();}catch(e){}if(typeof renderArmador==="function")renderArmador();}
 function fmtDate(d){if(!d||d==='?')return'?';var p=d.split('-');return p.length===3?p[2]+'/'+p[1]:d;}
 function togglePanel(w){var p=document.getElementById(w==='r'?'rpanel':'mpanel');var o=p.classList.contains('open');document.querySelectorAll('.mpanel').forEach(function(x){x.classList.remove('open');});if(!o)p.classList.add('open');}
 document.addEventListener('click',function(e){if(!e.target.closest('.msel'))document.querySelectorAll('.mpanel').forEach(function(x){x.classList.remove('open');});});
@@ -660,7 +669,38 @@ function buildTeam(){
 function setTeam(slug){TEAM=slug;document.querySelectorAll('.mpanel').forEach(function(x){x.classList.remove('open');});pintarBotonesEquipo();buildTeam();}
 /* ── SOLAPAS ── */
 function buildFocusSel(){var sel=document.getElementById("focusSel");if(!sel)return;var seen={},o='<option value="all">Todos los jugadores</option>';(PLAYERS||[]).slice().sort(function(a,b){return (a.num||0)-(b.num||0);}).forEach(function(p){if(seen[p.num])return;seen[p.num]=1;o+='<option value="'+p.num+'">#'+p.num+' '+p.name+'</option>';});sel.innerHTML=o;sel.value=(FOCUS_NUM&&seen[FOCUS_NUM])?FOCUS_NUM:"all";}
-function applyFocus(){var sel=document.getElementById("focusSel");var v=sel?sel.value:"all";document.querySelectorAll(".player").forEach(function(el){var mn=el.getAttribute("data-num");el.style.display=(v==="all"||String(mn)===String(v))?"":"none";});if(typeof renderArmador==="function")renderArmador();}
+/* ══ Que jugadores se ven ══════════════════════════════════════════════════
+   Dos condiciones: el jugador elegido arriba, y el minimo de acciones.
+
+   Las acciones se cuentan DESPUES de aplicar el filtro de sesiones, no sobre
+   el total historico: si estas mirando un solo partido, el minimo se compara
+   contra lo que hizo en ESE partido. Es lo unico que tiene sentido cuando la
+   lista de sesiones cambia. */
+function ppMinAcciones(){
+  var el=document.getElementById("minacc");
+  var v=el?parseInt(el.value,10):0;
+  return (isNaN(v)||v<0)?0:v;
+}
+function ppCuenta(p){
+  try{
+    var cfg=ROLECFG[p.role];
+    return (p.data||[]).filter(function(a){return MSEL.has(a[cfg.vIdx]);}).length;
+  }catch(e){ return (p.total||0); }
+}
+function ppVisibilidad(){
+  var sel=document.getElementById("focusSel"); var v=sel?sel.value:"all";
+  var min=ppMinAcciones();
+  var porId={};
+  try{ PLAYERS.concat(TEAMCARDS).forEach(function(p){ porId[p.id]=p; }); }catch(e){}
+  document.querySelectorAll(".player").forEach(function(el){
+    var mn=el.getAttribute("data-num"), pid=el.getAttribute("data-pid");
+    var okJug=(v==="all"||String(mn)===String(v));
+    var p=porId[pid];
+    var okMin=(!p) || (ppCuenta(p)>=min);
+    el.style.display=(okJug&&okMin)?"":"none";
+  });
+}
+function applyFocus(){ ppVisibilidad(); if(typeof renderArmador==="function")renderArmador(); }
 function setTab(t){
   document.querySelectorAll('.ptab').forEach(function(b){ b.classList.toggle('active', b.dataset.tab===t); });
   document.getElementById('armsec').classList.toggle('tabhide', t!=='armador');
