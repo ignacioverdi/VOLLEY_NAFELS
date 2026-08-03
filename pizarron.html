@@ -11,6 +11,10 @@
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
 <script src="datos_prep_fisica.js" onerror="void 0"></script>
+<!-- El catalogo de ejercicios. Cada ejercicio ya trae su nombre en es, en y
+     de: el pizarron no lo cargaba y por eso mostraba siempre el castellano,
+     mientras que prep_fisica.html si lo traducia. -->
+<script src="datos_ejercicios.js.enc" onerror="void 0"></script>
 <script src="firebase.js" onerror="void 0"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -183,6 +187,36 @@ var MES_ACTUAL = null;
 var MESES_PZ = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 function mesLabelFromKey(k){ var p=String(k).split('-'); return (MESES_PZ[(+p[1])-1]||'')+' '+(p[0]||''); }
 
+/* ══ El nombre del ejercicio en el idioma elegido ═══════════════════════════
+   Los ejercicios NO se traducen con el diccionario general: cada uno ya trae
+   sus nombres en el catalogo (campos es / en / de), cargados por el preparador.
+   Es la misma resolucion que usa prep_fisica.html, para que las dos pantallas
+   muestren exactamente lo mismo.
+
+   Se busca primero por id —que es lo que guardan las rutinas nuevas— y si no,
+   por el nombre en castellano, para las rutinas viejas que se cargaron antes
+   de que existieran los ids. Si no aparece, queda el nombre original. */
+function ejNombre(id, fallback){
+  var lang = (typeof getLang==='function') ? getLang() : 'es';
+  if(!window.EJERCICIOS_DATA || !window.EJERCICIOS_DATA.grupos) return fallback || '';
+  var found = null;
+  if(id){
+    window.EJERCICIOS_DATA.grupos.forEach(function(g){
+      (g.ejercicios||[]).forEach(function(e){ if(e.id===id) found=e; });
+    });
+  }
+  if(!found && fallback){
+    var fl = (''+fallback).trim().toLowerCase();
+    window.EJERCICIOS_DATA.grupos.forEach(function(g){
+      (g.ejercicios||[]).forEach(function(e){
+        if(!found && e.es && (''+e.es).trim().toLowerCase()===fl) found=e;
+      });
+    });
+  }
+  if(found) return found[lang] || found.en || found.es || fallback || '';
+  return fallback || '';
+}
+
 function armarPrep(mes){
   var roster = (window.PLANTEL_NAFELS && window.PLANTEL_NAFELS.jugadores) || [];
   var jugs = roster.map(function(j){
@@ -229,6 +263,12 @@ function poblarMeses(){
   MES_ACTUAL=meses[0]; sel.value=MES_ACTUAL;
   armarPrep(MES_ACTUAL); pintarJugSelector(); poblarDias();
 }
+/* Al cambiar de idioma hay que volver a dibujar: los nombres de ejercicio no
+   son texto de la pagina, se resuelven contra el catalogo al pintarlos. */
+window.addEventListener('langchange', function(){
+  try{ if(typeof renderPizarron==='function') renderPizarron(); }catch(e){}
+});
+
 function onMesChange(){ MES_ACTUAL=document.getElementById('sel-mes').value; armarPrep(MES_ACTUAL); pintarJugSelector(); poblarDias(); }
 function usarFallback(){
   document.getElementById('mes-wrap').style.display='none';
@@ -369,7 +409,7 @@ function renderPizarron(){
       ejTit.className = 'ejercicio-titulo';
       ejTit.innerHTML =
         '<div class="ej-num">' + (ei+1) + '</div>' +
-        '<div class="ej-nombre">' + ej.nombre + '</div>' +
+        '<div class="ej-nombre">' + ejNombre(ej.id, ej.nombre) + '</div>' +
         '<div class="ej-badges">' +
           '<span class="ej-badge badge-s">' + ej.series + ' SERIES</span>' +
           '<span class="ej-badge badge-r">' + ej.reps + ' REPS</span>' +

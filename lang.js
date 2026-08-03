@@ -191,6 +191,47 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    // ═══ PIZARRÓN — meses, encabezados y ejercicios ═══════════════════════
+    // Los meses estaban escritos en castellano dentro de la pagina, asi que el
+    // selector decia "Julio 2026" aunque la app estuviera en ingles o aleman.
+    "Enero":{en:"January",de:"Januar"},
+    "Febrero":{en:"February",de:"Februar"},
+    "Marzo":{en:"March",de:"M\u00e4rz"},
+    "Abril":{en:"April",de:"April"},
+    "Mayo":{en:"May",de:"Mai"},
+    "Junio":{en:"June",de:"Juni"},
+    "Julio":{en:"July",de:"Juli"},
+    "Agosto":{en:"August",de:"August"},
+    "Septiembre":{en:"September",de:"September"},
+    "Octubre":{en:"October",de:"Oktober"},
+    "Noviembre":{en:"November",de:"November"},
+    "Diciembre":{en:"December",de:"Dezember"},
+    "Jugadores a mostrar":{en:"Players to show",de:"Anzuzeigende Spieler"},
+    "Actualizado":{en:"Updated",de:"Aktualisiert"},
+    "Serie":{en:"Set",de:"Satz"},
+    "Serie 1":{en:"Set 1",de:"Satz 1"},
+    "Serie 2":{en:"Set 2",de:"Satz 2"},
+    "Serie 3":{en:"Set 3",de:"Satz 3"},
+    "Serie 4":{en:"Set 4",de:"Satz 4"},
+    "Serie 5":{en:"Set 5",de:"Satz 5"},
+    "Serie 6":{en:"Set 6",de:"Satz 6"},
+    "series":{en:"sets",de:"S\u00e4tze"},
+    "reps":{en:"reps",de:"Wdh."},
+    "descanso":{en:"rest",de:"Pause"},
+    "Rutina del d\u00eda":{en:"Routine of the day",de:"Tagesprogramm"},
+    "sin jugadores con rutina este mes":{en:"no players with a routine this month",de:"keine Spieler mit Programm in diesem Monat"},
+    "Eleg\u00ed el d\u00eda":{en:"Pick the day",de:"W\u00e4hle den Tag"},
+
+    // ── Bloques y ejercicios de la preparacion fisica ───────────────────────
+    // Estos nombres los escribe el preparador y viven en la base, no en el
+    // codigo. Se cargan aca para que el pizarron se lea completo en los tres
+    // idiomas. Cada ejercicio nuevo que cargue el PF hay que sumarlo.
+    "CORE":{en:"CORE",de:"RUMPF"},
+    "Core":{en:"Core",de:"Rumpf"},
+    "ABDOMINALES SENTADO CON PESO":{en:"SEATED WEIGHTED SIT-UPS",de:"SITZENDE CRUNCHES MIT GEWICHT"},
+    "ESPINALES ESTRICTOS":{en:"STRICT BACK EXTENSIONS",de:"STRIKTE R\u00dcCKENSTRECKER"},
+    "Abdominales sentado con peso":{en:"Seated weighted sit-ups",de:"Sitzende Crunches mit Gewicht"},
+    "Espinales estrictos":{en:"Strict back extensions",de:"Strikte R\u00fcckenstrecker"},
     // ═══ Sesiones y dispositivos ══════════════════════════════════════════
     "Sesiones y dispositivos":{en:"Sessions and devices",de:"Sitzungen und Ger\u00e4te"},
     "Qui\u00e9n tiene acceso, desde qu\u00e9 dispositivo y cu\u00e1ndo entr\u00f3. Pod\u00e9s cerrarle la sesi\u00f3n a uno o a todos.":{en:"Who has access, from which device and when they entered. You can close the session of one or of everyone.",de:"Wer Zugang hat, von welchem Ger\u00e4t und wann. Du kannst die Sitzung einzelner oder aller beenden."},
