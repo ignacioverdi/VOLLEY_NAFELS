@@ -118,7 +118,12 @@ body.fullscreen{background:#000;}
 </style>
 </head>
 <body>
-<div class="header-right" style="position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
+<!-- El selector de idiomas estaba en un contenedor FIJO arriba a la derecha,
+     encima de la cabecera. Y temporadas_menu.js busca ".header-right" y
+     engancha su boton en el PRIMERO que encuentra: caia justo ahi. Resultado:
+     idiomas, Temporadas, Pantalla completa e Individual apilados en el mismo
+     rincon. Ahora el selector va dentro de la cabecera de verdad, en linea
+     con el resto, y el boton de Temporadas se suma al final sin pisar nada. -->
 
 
 <div class="header">
@@ -127,11 +132,12 @@ body.fullscreen{background:#000;}
     <div class="logo">🏐 Pizarrón</div>
     <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;">NAFELS VOLEY · Rutina del día</div>
   </div>
-  <div class="header-right">
+  <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end">
     <div class="live-dot" title="Sincronizado con Firebase"></div>
     <span style="font-size:10px;color:var(--green);letter-spacing:1px;">LIVE</span>
     <button class="btn-fullscreen" onclick="toggleFullscreen()">⛶ Pantalla completa</button>
     <a href="prep_fisica.html" class="back-btn">💪 Individual</a>
+    <div id="lang-wrap" style="display:flex;gap:4px"></div>
   </div>
 </div>
 
