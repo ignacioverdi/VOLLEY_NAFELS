@@ -1770,6 +1770,14 @@ if __name__ == '__main__':
     # Se aplica una sola vez aca, asi liga_data.js, datos_partidos.js, heatmaps y
     # stats salen TODOS filtrados a la temporada actual (lo demas queda en la base).
     t_filter = args.filter_temporada  # None = mostrar todo lo que hay en la base
+
+    # ── La tabla de la liga es la EXCEPCION: lleva todas las temporadas ──
+    # El resto del sitio muestra solo la temporada en curso, pero esta tabla
+    # tiene su propio selector de temporada, asi que conviene que las tenga
+    # todas: se comparan 25-26 y 26-27 sin salir de la pagina ni cambiar de
+    # temporada en el menu. Se calcula ANTES del filtro, que es destructivo.
+    players_todas, teams_todas = calculate_stats(teams_data, None)
+
     if t_filter:
         teams_data = filter_teams_data(teams_data, t_filter)
         games_log  = [g for g in games_log if str(g.get('temporada')) == str(t_filter)]
@@ -1833,7 +1841,8 @@ if __name__ == '__main__':
     # Step 5: Build stats table (protegido: si falta template, no tumba el proceso)
     print("\n5. Building stats table...")
     try:
-        build_stats_table(players, teams, os.path.join(args.output_dir,'nla_stats_table.html'))
+        # con TODAS las temporadas: el selector de la pagina las separa
+        build_stats_table(players_todas, teams_todas, os.path.join(args.output_dir,'nla_stats_table.html'))
         print("   \u2713 nla_stats_table.html")
     except Exception as e:
         print(f"   (stats table omitida: {e})")
