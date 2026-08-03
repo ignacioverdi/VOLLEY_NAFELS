@@ -31,3 +31,43 @@ RESUMEN SISTEMA COMPLETO.pdf
 *.log
 diagnostico.txt
 _gen_nafels.b64
+
+# ── Estadisticas sin cifrar ─────────────────────────────────────────────────
+# nla_stats.json y nla_full_stats.json son la temporada entera de la liga en
+# texto plano: eficacias, totales y jugadores de los ocho equipos. Es el
+# producto del sistema, y se bajaba con solo pedir la direccion, sin pasar por
+# la pantalla de ingreso.
+# OJO: nla_full_stats.json lo pide el CHAT con fetch(). Si el chat deja de
+# traer datos, sacar esa linea y cifrarlo en su lugar.
+nla_stats.json
+nla_full_stats.json
+
+# ── Documentacion interna ───────────────────────────────────────────────────
+# Los .md son las notas del proyecto: como esta armado, que falta, decisiones
+# tomadas. Es el know-how, no la aplicacion. No tiene por que estar publicado.
+*.md
+
+# ── Planillas y planteles crudos ────────────────────────────────────────────
+# El Excel de videos y los .sq (planteles de DataVolley) son material de
+# trabajo, no los usa ninguna pagina del sitio.
+*.xlsx
+*.sq
+
+# ── Manual de DataVolley ────────────────────────────────────────────────────
+# Es material con derechos de Data Project. Sirve tenerlo en el repo como
+# referencia, pero republicarlo para descarga desde el sitio es otra cosa.
+DVWin4_HandBook_Eng.pdf
+
+# -- Estadisticas sin cifrar --
+nla_stats.json
+nla_full_stats.json
+
+# -- Documentacion interna --
+*.md
+
+# -- Planillas y planteles crudos --
+*.xlsx
+*.sq
+
+# -- Manual de DataVolley (derechos de Data Project) --
+DVWin4_HandBook_Eng.pdf
