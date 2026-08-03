@@ -518,6 +518,10 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 .subitem.sel{background:#2563eb;color:#fff;border-color:#2563eb}
 </style>
 <link rel="manifest" href="./manifest.json">
+<!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
+     sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
+     pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
+<script src="lang.js"></script>
 </head>
 <body>
 
@@ -599,9 +603,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <div class="pane">
     <h3>Código de la jugada</h3>
     <div class="scoutbar">
-      <div class="codewrap"><div id="code-espejo" aria-hidden="true"></div><input id="code" class="mono" placeholder="7#" autocomplete="off" spellcheck="false"></div>
+      <!-- data-notr: el traductor no entra aca. Son los lugares donde el panel
+     LEE de vuelta lo que hay en pantalla para operar (las letras del menu
+     de extensiones, las teclas configuradas) o donde el texto es el codigo
+     de DataVolley, que no se traduce en ningun idioma. -->
+      <div class="codewrap" data-notr><div id="code-espejo" aria-hidden="true"></div><input id="code" class="mono" placeholder="7#" autocomplete="off" spellcheck="false"></div>
       <div class="decoder" id="dec"></div>
-      <div class="extmenu" id="extmenu"></div>
+      <div class="extmenu" id="extmenu" data-notr></div>
       <div class="exthint"><kbd>Ctrl</kbd> + <kbd>Espacio</kbd> para las extensiones</div>
       <div class="hint" id="hint"></div>
       <button class="detbtn" id="detbtn" onclick="toggleDetalle()">Detalle de la jugada ▾</button>
@@ -642,7 +650,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
       <button class="hbtn" onclick="reabrirPunto()" title="Trae el último punto de vuelta a la lista para corregirlo (Ctrl+A)">Reabrir punto</button>
       <button class="hbtn" onclick="undoRally()" title="Deshace el punto (Ctrl+Shift+Z)">Deshacer punto</button>
       <span id="codes-n" class="cnt" title="Cuántas acciones lleva el partido"></span><button class="hbtn" onclick="undoLast()" title="Borra el último código (Ctrl+Z)">Deshacer código</button></h3>
-    <div class="codes" id="codes"></div>
+    <div class="codes" id="codes" data-notr></div>
   </div>
 </div>
 
@@ -860,13 +868,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
        De fábrica vienen las del manual de DataVolley, pero <b>ì è ù no existen en el teclado español</b>:
        usá el preset de abajo y después ajustá lo que quieras.</p>
     <button class="tbtn" onclick="applyPresetES()">Usar preset para teclado español</button>
-    <div class="fgrid" id="cfg-eval"></div>
+    <div class="fgrid" id="cfg-eval" data-notr></div>
   </div>
 
   <div class="sec">
     <h4>Fin de jugada, puntos y rotación</h4>
     <p>Fin de jugada asigna el punto, rota al equipo que hace side out y deja listo al próximo sacador.</p>
-    <div class="fgrid" id="cfg-cmd"></div>
+    <div class="fgrid" id="cfg-cmd" data-notr></div>
   </div>
 
   <div class="sec">
@@ -5902,6 +5910,28 @@ function _nombreDVW(){
   return '&' + f + ' ' + limpio(loc) + '-' + limpio(vis) + '.dvw';
 }
 
+/* Texto -> bytes en Windows-1252, la pagina de codigos que espera DataVolley.
+   Los caracteres entre 0x80 y 0x9F son los que 1252 agrega sobre latin-1
+   (comillas tipograficas, guion largo, el simbolo del euro). */
+var _CP1252_EXTRA = {'\u20AC':0x80,'\u201A':0x82,'\u0192':0x83,'\u201E':0x84,'\u2026':0x85,
+  '\u2020':0x86,'\u2021':0x87,'\u02C6':0x88,'\u2030':0x89,'\u0160':0x8A,'\u2039':0x8B,
+  '\u0152':0x8C,'\u017D':0x8E,'\u2018':0x91,'\u2019':0x92,'\u201C':0x93,'\u201D':0x94,
+  '\u2022':0x95,'\u2013':0x96,'\u2014':0x97,'\u02DC':0x98,'\u2122':0x99,'\u0161':0x9A,
+  '\u203A':0x9B,'\u0153':0x9C,'\u017E':0x9E,'\u0178':0x9F};
+function _aCp1252(texto){
+  var t = String(texto), out = new Uint8Array(t.length), n = 0;
+  for(var i=0;i<t.length;i++){
+    var c = t[i], cp = t.charCodeAt(i);
+    if(cp < 256){ out[n++] = cp; continue; }
+    if(_CP1252_EXTRA[c] !== undefined){ out[n++] = _CP1252_EXTRA[c]; continue; }
+    /* fuera de la pagina: se le saca el acento antes de rendirse */
+    var sin = '';
+    try{ sin = c.normalize('NFD').replace(/[\u0300-\u036f]/g,''); }catch(e){}
+    out[n++] = (sin && sin.charCodeAt(0) < 256) ? sin.charCodeAt(0) : 63;
+  }
+  return out.subarray(0, n);
+}
+
 function exportDVW(modo){
   modo = modo || 'keep';
   const d=new Date(), pad=n=>String(n).padStart(2,'0');
@@ -6017,7 +6047,22 @@ function exportDVW(modo){
     L.push([applyComboMode(c.c,modo),'','','','','','','',c.set,zh,za,'',tv,'',...hl,...al,''].join(';'));
   });
 
-  const blob = new Blob([L.join('\r\n')],{type:'text/plain'});
+  /* ══ El .dvw se escribe en Windows-1252, no en UTF-8 ══════════════════════
+     DataVolley lee el archivo con la pagina de codigos de la PC (manual 12.7):
+     avisa que hay que declararla si el scout viene de un idioma distinto. En
+     Europa esa pagina es Windows-1252, la que cubre aleman, frances, italiano
+     y castellano.
+
+     El navegador, si se le pasa un texto, lo guarda en UTF-8. Y un archivo
+     UTF-8 abierto con la pagina 1252 muestra "NÃ¤fels" en vez de "Näfels":
+     34 de los 97 .dvw de esta carpeta ya tienen los nombres corrompidos asi
+     ("ChÃªnois GenÃ¨ve"). Escribiendo en 1252 el archivo abre bien en el Data
+     Volley de cualquier club europeo.
+
+     Lo que no existe en 1252 no rompe el archivo: se le saca el acento
+     (Ł -> L) y, si tampoco se puede, va un signo de pregunta. Mejor un nombre
+     sin tilde que un archivo que no abre. */
+  const blob = new Blob([_aCp1252(L.join('\r\n'))],{type:'application/octet-stream'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
   a.download=_nombreDVW();
