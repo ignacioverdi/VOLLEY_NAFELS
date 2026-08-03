@@ -167,6 +167,9 @@ function batTipoActual(){
     if(window.EQ_FILTRO   !== undefined) return _norm(window.EQ_FILTRO);
     if(window.FILTRO_TIPO !== undefined) return _norm(window.FILTRO_TIPO);
     if(window._objTipo    !== undefined) return _norm(window._objTipo);
+    /* Ultimo recurso: el filtro compartido de filtro_tipo.js, para las
+       pantallas que no tienen variable propia (ranking, por ejemplo). */
+    if(typeof window.vbTipoLargo === 'function') return window.vbTipoLargo();
   }catch(e){}
   return null;
 }

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cortes de Video · NAFELS VOLEY</title>
 <script src="datos_seguros.js"></script>
+<script src="filtro_tipo.js" onerror="void 0"></script>
   <!-- datos_video_25-26 sacado: es el video de la CAPSULA. Esta pantalla es
        de la 26-27, y cargarlo mezclaba jugadores nuevos con cortes de la
        temporada pasada. -->
@@ -257,7 +258,16 @@
 <script>
 (function(){
   "use strict";
-  var MODO=(localStorage.getItem('cortes_modo')==='ent')?'ent':'partido';
+  /* El modo sale del filtro compartido cuando hay uno elegido, para que la
+     eleccion hecha en otra pantalla valga tambien aca. Con "Todos" se respeta
+     lo que tenia guardado esta pagina: los cortes leen una sola fuente de
+     video por vez y no pueden mostrar las dos juntas. */
+  var MODO=(function(){
+    try{ var t=(typeof vbTipo==='function') ? vbTipo() : 'todos';
+         if(t==='E') return 'ent';
+         if(t==='P') return 'partido'; }catch(e){}
+    return (localStorage.getItem('cortes_modo')==='ent') ? 'ent' : 'partido';
+  })();
   var VD=(MODO==='ent'?window.VIDEO_DATA_ENT:window.VIDEO_DATA)||{combos:{},matches:{}}, COMBOS=VD.combos||{};
   var MAP=Object.assign({}, VD.links||{}); (function(){var _mv=(MODO==='ent'?window.MAPA_VIDEOS_ENT:window.MAPA_VIDEOS)||{};for(var _k in _mv){if(_mv[_k])MAP[_k]=_mv[_k];}})();
   // --------- temporada (oct→abr): 25-26 = oct2025→abr2026 ---------
