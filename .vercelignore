@@ -58,16 +58,3 @@ nla_full_stats.json
 # referencia, pero republicarlo para descarga desde el sitio es otra cosa.
 DVWin4_HandBook_Eng.pdf
 
-# -- Estadisticas sin cifrar --
-nla_stats.json
-nla_full_stats.json
-
-# -- Documentacion interna --
-*.md
-
-# -- Planillas y planteles crudos --
-*.xlsx
-*.sq
-
-# -- Manual de DataVolley (derechos de Data Project) --
-DVWin4_HandBook_Eng.pdf
