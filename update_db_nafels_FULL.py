@@ -1789,6 +1789,10 @@ if __name__ == '__main__':
                 for _a in _pd.get(_k, []) or []:
                     _tt = _a.get('temporada')
                     if _tt: _temps.add(str(_tt))
+    # La temporada en curso va SIEMPRE, aunque todavia no tenga un solo partido.
+    # Si no, al empezar la temporada el selector solo ofrece la anterior y
+    # parece que la nueva no existe. Vacia se ve en ceros, que es la verdad.
+    if t_filter: _temps.add(str(t_filter))
     _temps = sorted(_temps)
     players_todas = []; teams_todas = []
     for _tt in _temps:
