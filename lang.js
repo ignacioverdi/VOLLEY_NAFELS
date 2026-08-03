@@ -191,6 +191,21 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    // ═══ Sesiones y dispositivos ══════════════════════════════════════════
+    "Sesiones y dispositivos":{en:"Sessions and devices",de:"Sitzungen und Ger\u00e4te"},
+    "Qui\u00e9n tiene acceso, desde qu\u00e9 dispositivo y cu\u00e1ndo entr\u00f3. Pod\u00e9s cerrarle la sesi\u00f3n a uno o a todos.":{en:"Who has access, from which device and when they entered. You can close the session of one or of everyone.",de:"Wer Zugang hat, von welchem Ger\u00e4t und wann. Du kannst die Sitzung einzelner oder aller beenden."},
+    "Acceso":{en:"Access",de:"Zugang"},
+    "Cerrar TODAS las sesiones":{en:"Close ALL sessions",de:"ALLE Sitzungen beenden"},
+    "Cerrar este dispositivo":{en:"Close this device",de:"Dieses Ger\u00e4t abmelden"},
+    "Actualizar":{en:"Refresh",de:"Aktualisieren"},
+    "Dispositivo":{en:"Device",de:"Ger\u00e4t"},
+    "Computadora":{en:"Computer",de:"Computer"},
+    "Celular":{en:"Phone",de:"Handy"},
+    "Tablet":{en:"Tablet",de:"Tablet"},
+    "este":{en:"this one",de:"dieses"},
+    "Todav\u00eda no hay dispositivos registrados.":{en:"No devices registered yet.",de:"Noch keine Ger\u00e4te registriert."},
+    "Todav\u00eda no hay ingresos registrados.":{en:"No logins registered yet.",de:"Noch keine Anmeldungen registriert."},
+    "No pude leer la base. \u00bfEst\u00e1s con tu sesi\u00f3n iniciada?":{en:"I could not read the database. Are you signed in?",de:"Die Datenbank konnte nicht gelesen werden. Bist du angemeldet?"},
     // ═══ PANEL EN VIVO — últimos textos de interfaz (tanda 3) ═════════════
     // Las teclas (Ctrl, Enter, Delete, Insert, Backspace), los nombres de
     // archivo (.dvw, camara.html) y "Smart Time" NO se traducen: son iguales
