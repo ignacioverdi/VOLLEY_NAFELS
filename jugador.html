@@ -214,6 +214,24 @@ function _batMatchName(nombre, keys){
 }
 function batGet(nombre, partido){
   var B=window.BAT_PARTIDOS; if(!B) return null;
+  /* Con el filtro en Partidos o en Entrenamientos, el acumulado NO puede ser el
+     de todo: sale de porTipo, que el generador arma por separado. Sin esto, con
+     "Partidos" y cero partidos jugados se mostraban igual los numeros de los
+     entrenamientos.
+
+     Si el archivo de datos todavia es el viejo —sin porTipo— no pasa nada: se
+     sigue de largo y queda el comportamiento de antes. */
+  if(!partido || partido==='acumulado'){
+    var _tp = (typeof batTipoActual==='function') ? batTipoActual() : null;
+    if(_tp && B.porTipo && B.porTipo[_tp]){
+      var _pt = B.porTipo[_tp];
+      if(nombre){
+        var _kt=_batMatchName(nombre, Object.keys(_pt.jug||{}));
+        return (_kt && _pt.jug[_kt]) ? _pt.jug[_kt] : _OBJ_NULOS;
+      }
+      return _pt.eq || _OBJ_NULOS;
+    }
+  }
   if(partido && partido!=='acumulado'){
     var m=(B.ind||[]).find(function(x){return String(x.id)===String(partido);});
     if(!m) return _OBJ_NULOS;

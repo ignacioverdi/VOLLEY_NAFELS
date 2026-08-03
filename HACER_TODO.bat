@@ -166,13 +166,17 @@ REM       REGENERAR_PLAN_2526.bat   y   GENERAR_BATERIAS.bat
 REM ===================================================================
 echo  ================= BATERIAS =================
 echo.
-if not "!ENT_DIR!"=="" (
-    echo  Baterias de la temporada en curso...
-    python gen_baterias.py "!ENT_DIR!" "datos_baterias.js"
-    if errorlevel 1 echo      [aviso] Problema en las baterias. Sigo igual.
+REM   Las dos carpetas en UNA sola corrida. El generador etiqueta cada sesion
+REM   con su tipo y arma tambien el acumulado de cada uno por separado, para
+REM   que las pantallas puedan filtrar Partidos / Entrenamientos sin cruzar
+REM   datos. El filtro de temporada es el mismo que usa el resto del script.
+echo  Baterias de la temporada !TEMPORADA_ACTUAL! (partidos + entrenamientos)...
+if "!ENT_DIR!"=="" (
+    python gen_baterias.py --partidos "!DVW_DIR!" --temporada "!TEMPORADA_ACTUAL!" --out "datos_baterias.js"
 ) else (
-    echo  No hay carpeta de entrenamientos: salteo las baterias.
+    python gen_baterias.py --partidos "!DVW_DIR!" --entrenamientos "!ENT_DIR!" --temporada "!TEMPORADA_ACTUAL!" --out "datos_baterias.js"
 )
+if errorlevel 1 echo      [aviso] Problema en las baterias. Sigo igual.
 echo.
 
 echo  ==================================================

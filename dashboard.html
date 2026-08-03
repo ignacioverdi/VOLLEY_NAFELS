@@ -248,6 +248,24 @@ function _batMatchName(nombre, keys){
 
 function batGet(nombre, partido){
   var B=window.BAT_PARTIDOS; if(!B) return null;
+  /* Con el filtro en Partidos o en Entrenamientos, el acumulado NO puede ser el
+     de todo: sale de porTipo, que el generador arma por separado. Sin esto, con
+     "Partidos" y cero partidos jugados se mostraban igual los numeros de los
+     entrenamientos.
+
+     Si el archivo de datos todavia es el viejo —sin porTipo— no pasa nada: se
+     sigue de largo y queda el comportamiento de antes. */
+  if(!partido || partido==='acumulado'){
+    var _tp = (typeof batTipoActual==='function') ? batTipoActual() : null;
+    if(_tp && B.porTipo && B.porTipo[_tp]){
+      var _pt = B.porTipo[_tp];
+      if(nombre){
+        var _kt=_batMatchName(nombre, Object.keys(_pt.jug||{}));
+        return (_kt && _pt.jug[_kt]) ? _pt.jug[_kt] : _OBJ_NULOS;
+      }
+      return _pt.eq || _OBJ_NULOS;
+    }
+  }
   if(partido && partido!=='acumulado'){
     var m=(B.ind||[]).find(function(x){return String(x.id)===String(partido);});
     if(!m) return _OBJ_NULOS;
@@ -797,14 +815,51 @@ function renderEqStats(){
        VIDEO_DATA_ENT— y la excepcion de fecha solo para las practicas, que en
        julio caen en la temporada anterior. */
     (function(){
+      /* ══ La Defensa tambien respeta el filtro ══════════════════════════════
+         Las otras cuatro pills salen de getEqSesiones(), que ya separa partidos
+         de entrenamientos y ademas se queda con la sesion elegida. La Defensa
+         no puede pasar por ahi —el dato solo existe en el video— asi que se
+         aplica el mismo criterio sobre las dos fuentes:
+
+             Partidos        -> solo VIDEO_DATA
+             Entrenamientos  -> solo VIDEO_DATA_ENT
+             Todos           -> las dos, que es como suma el resto
+
+         Antes se juntaban siempre las dos, y con el filtro en Partidos y cero
+         partidos jugados la pill se llenaba con la practica. */
+      var _tipo = (typeof EQ_FILTRO !== 'undefined') ? EQ_FILTRO : 'todos';
+
+      /* Y si hay UNA sesion elegida, solo esa. Las fechas vienen en dos
+         formatos segun de donde salgan (2026-07-30 y 30/07/2026), asi que se
+         normalizan antes de comparar. */
+      function _fkey(ds){
+        if(!ds) return '';
+        var t=String(ds).trim();
+        if(t.indexOf('-')>0){ var p=t.slice(0,10).split('-');
+          if(p.length===3 && p[0].length===4) return p[0]+'-'+('0'+p[1]).slice(-2)+'-'+('0'+p[2]).slice(-2); }
+        if(t.indexOf('/')>0){ var q=t.split('/');
+          if(q.length===3) return q[2].slice(0,4)+'-'+('0'+q[1]).slice(-2)+'-'+('0'+q[0]).slice(-2); }
+        return '';
+      }
+      var _fechas = null;
+      if(typeof EQ_SESION !== 'undefined' && EQ_SESION >= 0){
+        _fechas = {};
+        try{ getEqSesiones().forEach(function(s){ var k=_fkey(s && s.fecha); if(k) _fechas[k]=1; }); }catch(e){ _fechas=null; }
+      }
+
       var _M = {}, _idsEnt = {};
       try{
-        var _E = window.VIDEO_DATA_ENT && window.VIDEO_DATA_ENT.matches;
-        if(_E) Object.keys(_E).forEach(function(k){ _M[k]=_E[k]; _idsEnt[k]=1; });
-        var _P = window.VIDEO_DATA && window.VIDEO_DATA.matches;
-        if(_P) Object.keys(_P).forEach(function(k){ _M[k]=_P[k]; });
+        if(_tipo !== 'P'){
+          var _E = window.VIDEO_DATA_ENT && window.VIDEO_DATA_ENT.matches;
+          if(_E) Object.keys(_E).forEach(function(k){ _M[k]=_E[k]; _idsEnt[k]=1; });
+        }
+        if(_tipo !== 'E'){
+          var _P = window.VIDEO_DATA && window.VIDEO_DATA.matches;
+          if(_P) Object.keys(_P).forEach(function(k){ _M[k]=_P[k]; });
+        }
       }catch(e){}
       Object.keys(_M).forEach(function(c){
+        if(_fechas){ var _k=_fkey(_M[c].date); if(!_k || !_fechas[_k]) return; }
         var _t = _seasonOf(_M[c].date);
         if(_t !== null){
           if(_idsEnt[c]){ if(_t !== _curSeason() && _t !== _curSeason()-1) return; }

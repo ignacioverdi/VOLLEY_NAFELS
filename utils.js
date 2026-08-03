@@ -150,62 +150,18 @@ function objSingleBat(id,val,meta,cls,objLine){
     +'</div>';
 }
 
-function renderObjetivos(cid,extra){
-  var el=document.getElementById(cid); if(!el) return;
-  var metas=window.OBJETIVOS_CONFIG.metas;
-  var vals=Object.assign({},objCalcVals(null),extra||{});
-  var html='<div style="font-family:Barlow Condensed,sans-serif;padding:4px 0 8px">'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
-    +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">OBJETIVOS DEL EQUIPO · 2026</div>'
-    +'<div style="display:flex;gap:10px;flex-wrap:wrap">'
-    +[['#22c55e','Objetivo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Lejos']].map(function(x){
-      return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
-    }).join('')+'</div></div>'
-    +'<div style="display:flex;gap:8px;width:100%;margin-bottom:4px">'
-    +Object.keys(metas).map(function(id){return'<div style="flex:1;min-width:60px;max-width:110px;text-align:center;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#64748b">'+metas[id].label+'</div>';}).join('')
-    +'</div><div style="display:flex;gap:8px;width:100%">'
-    +Object.keys(metas).map(function(id){
-      var m=metas[id],val=vals[id]!==undefined?vals[id]:null;
-      var cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
-      return objSingleBat(id,val,m,cls,m.obj);
-    }).join('')+'</div></div>';
-  el.innerHTML=html;
-}
+/* ── Las baterias de objetivos NO se dibujan mas desde aca ──────────────────
+   renderObjetivos y renderObjetivosJugador estaban definidas tambien en
+   objetivos_config.js, y como analisis.html carga utils.js DESPUES, la version
+   de aca pisaba a la buena. La diferencia no era cosmetica:
 
-function renderObjetivosJugador(cid,nombre,extra){
-  var el=document.getElementById(cid); if(!el) return;
-  var metas=window.OBJETIVOS_CONFIG.metas;
-  var jugVals=Object.assign({},objCalcVals(nombre),extra||{});
-  var eqVals=objCalcVals(null);
-  var rows=[{label:'Jugador',vals:jugVals,isJug:true},{label:'Equipo',vals:eqVals,isJug:false}];
-  var html='<div style="font-family:Barlow Condensed,sans-serif;padding:4px 0 8px">'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
-    +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">MI PERFORMANCE VS EQUIPO</div>'
-    +'<div style="display:flex;gap:10px;flex-wrap:wrap">'
-    +[['#22c55e','Sobre equipo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Bajo equipo']].map(function(x){
-      return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
-    }).join('')+'</div></div>'
-    +'<div style="display:flex;gap:8px;width:100%;margin-bottom:4px">'
-    +'<div style="width:64px;flex-shrink:0"></div>'
-    +Object.keys(metas).map(function(id){return'<div style="flex:1;min-width:60px;max-width:110px;text-align:center;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#64748b">'+metas[id].label+'</div>';}).join('')
-    +'</div>';
-  rows.forEach(function(row){
-    html+='<div style="display:flex;align-items:center;gap:8px;width:100%;margin-bottom:8px">'
-      +'<div style="width:64px;flex-shrink:0;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#94a3b8;text-align:right;padding-right:8px">'+row.label+'</div>'
-      +Object.keys(metas).map(function(id){
-        var m=metas[id],val=row.vals[id]!==undefined?row.vals[id]:null;
-        var cls,objLine;
-        if(row.isJug){
-          var eq=eqVals[id]!==undefined?eqVals[id]:null;
-          cls=val!==null?objClassifyVsTeam(val,eq):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
-          objLine=eq!==null?eq:m.obj;
-        } else {
-          cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
-          objLine=m.obj;
-        }
-        return objSingleBat(id,val,m,cls,objLine);
-      }).join('')+'</div>';
-  });
-  html+='</div>';
-  el.innerHTML=html;
-}
+     - la buena lee los numeros con objGetVals(), que sale del archivo de
+       baterias; esta usaba objCalcVals() directo y por eso el analisis
+       mostraba casi todo en "—" mientras el dashboard mostraba los valores;
+     - la buena dibuja el objetivo (el % verde) debajo de cada etiqueta.
+
+   Se borran de aca para que quede UNA sola definicion. Verificado: las tres
+   paginas que cargan utils.js sin objetivos_config.js —equipo, pizarron y
+   videos— no llaman a ninguna de las dos. Las auxiliares (objClassify,
+   objSingleBat, objPct, objClassifyVsTeam) son identicas en los dos archivos,
+   asi que se dejan como estaban. */

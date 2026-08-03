@@ -141,6 +141,36 @@ function objCalcVals(nombreJugador){
   v.atqhb=a.mbT>0?Math.round((a.mbPt-a.mbVnd-a.mbErr)/a.mbT*100):null;
   return v;
 }
+
+/* ══ Partidos y entrenamientos no se cruzan ═══════════════════════════════
+   Cada pantalla guarda el filtro con un nombre y una codificacion distinta:
+   el dashboard usa EQ_FILTRO con 'P' y 'E', el analisis FILTRO_TIPO igual, y
+   el perfil del jugador _objTipo con 'partido' y 'entrenamiento'. Esta funcion
+   las lee todas y devuelve siempre lo mismo, para que la separacion no dependa
+   de que pantalla la pregunta.
+
+   Devuelve null cuando el filtro esta en "Todos": ahi el acumulado es la suma
+   de las dos cosas, que es como se venia usando. */
+function batTipoActual(){
+  function _norm(v){
+    if(v===null || v===undefined) return null;
+    v = String(v).toLowerCase();
+    if(v==='p' || v==='partido'  || v==='partidos')       return 'partido';
+    if(v==='e' || v==='entrenamiento' || v==='entrenamientos') return 'entrenamiento';
+    return null;   /* 'todos' o cualquier otra cosa */
+  }
+  /* El ORDEN importa. EQ_FILTRO y FILTRO_TIPO tienen un valor explicito para
+     "todos"; _objTipo no —en el analisis queda en 'partido' aunque el filtro
+     este en Todos—, asi que se mira ultimo y solo donde los otros no existen.
+     Manda la primera variable que exista en la pagina, incluso si dice todos. */
+  try{
+    if(window.EQ_FILTRO   !== undefined) return _norm(window.EQ_FILTRO);
+    if(window.FILTRO_TIPO !== undefined) return _norm(window.FILTRO_TIPO);
+    if(window._objTipo    !== undefined) return _norm(window._objTipo);
+  }catch(e){}
+  return null;
+}
+
 function renderObjetivos(cid,extra){
   var el=document.getElementById(cid); if(!el) return;
   var metas=window.OBJETIVOS_CONFIG.metas;
