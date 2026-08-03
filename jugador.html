@@ -21,6 +21,10 @@
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
 <script src="datos_prep_fisica.js.enc" onerror="window.PREP_DATA=null"></script>
+  <!-- El plantel real de la temporada. Sin esto, window.EQUIPO_DATA nunca existe
+     y la pagina cae en su lista de respaldo, que trae el plantel de otro anio.
+     Va DESPUES de datos_seguros.js y ANTES de abrirDatos(), como en equipo.html. -->
+  <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
   <script>abrirDatos();</script>
 
 <style>
@@ -491,22 +495,27 @@ var numJug = parseInt(params.get('num')) || 0;
 
 var POS_COLOR = {'ARMADOR':'#f59e0b','CENTRAL':'#f97316','PUNTA':'#22c55e','OPUESTO':'#818cf8','LIBERO':'#06b6d4'};
 
+/* Respaldo, solo si no se pudo abrir datos_equipo.js.enc. Las fotos van en
+   null a proposito: se llaman por el numero de camiseta (fotos/01.jpg), y el
+   numero se reasigna cada temporada. Armar la ruta desde el numero mostraba
+   la cara del jugador del anio pasado en el perfil del que llego nuevo.
+   Sin foto se ve el numero, que es correcto; una cara equivocada, no. */
 var EQUIPO_DEMO = {
   /* El plantel de la temporada en curso. */
   jugadores: [
-    {num:1, nombre:"DURDOS", pos:"PUNTA", foto:"fotos/01.jpg", pais:"", altura:"", edad:0},
-    {num:2, nombre:"BRUDERER", pos:"LIBERO", foto:"fotos/02.jpg", pais:"", altura:"", edad:0},
-    {num:3, nombre:"SCHWITTER", pos:"OPUESTO", foto:"fotos/03.jpg", pais:"", altura:"", edad:0},
-    {num:4, nombre:"VAZQUEZ", pos:"ARMADOR", foto:"fotos/04.jpg", pais:"", altura:"", edad:0},
-    {num:5, nombre:"CLEMENT", pos:"CENTRAL", foto:"fotos/05.jpg", pais:"", altura:"", edad:0},
-    {num:7, nombre:"SCHMID R", pos:"CENTRAL", foto:"fotos/07.jpg", pais:"", altura:"", edad:0},
-    {num:9, nombre:"NORRIS", pos:"OPUESTO", foto:"fotos/09.jpg", pais:"", altura:"", edad:0},
-    {num:10, nombre:"BOGDANOVSKI", pos:"PUNTA", foto:"fotos/10.jpg", pais:"", altura:"", edad:0},
-    {num:11, nombre:"BARTHOLET", pos:"PUNTA", foto:"fotos/11.jpg", pais:"", altura:"", edad:0},
-    {num:12, nombre:"JOHANSSON", pos:"CENTRAL", foto:"fotos/12.jpg", pais:"", altura:"", edad:0},
-    {num:13, nombre:"STEIMANN", pos:"ARMADOR", foto:"fotos/13.jpg", pais:"", altura:"", edad:0},
-    {num:17, nombre:"ROFFLER", pos:"PUNTA", foto:"fotos/17.jpg", pais:"", altura:"", edad:0},
-    {num:20, nombre:"SCHMID J", pos:"LIBERO", foto:"fotos/20.jpg", pais:"", altura:"", edad:0}
+    {num:1, nombre:"DURDOS", pos:"PUNTA", foto:null, pais:"", altura:"", edad:0},
+    {num:2, nombre:"BRUDERER", pos:"LIBERO", foto:null, pais:"", altura:"", edad:0},
+    {num:3, nombre:"SCHWITTER", pos:"OPUESTO", foto:null, pais:"", altura:"", edad:0},
+    {num:4, nombre:"VAZQUEZ", pos:"ARMADOR", foto:null, pais:"", altura:"", edad:0},
+    {num:5, nombre:"CLEMENT", pos:"CENTRAL", foto:null, pais:"", altura:"", edad:0},
+    {num:7, nombre:"SCHMID R", pos:"CENTRAL", foto:null, pais:"", altura:"", edad:0},
+    {num:9, nombre:"NORRIS", pos:"OPUESTO", foto:null, pais:"", altura:"", edad:0},
+    {num:10, nombre:"BOGDANOVSKI", pos:"PUNTA", foto:null, pais:"", altura:"", edad:0},
+    {num:11, nombre:"BARTHOLET", pos:"PUNTA", foto:null, pais:"", altura:"", edad:0},
+    {num:12, nombre:"JOHANSSON", pos:"CENTRAL", foto:null, pais:"", altura:"", edad:0},
+    {num:13, nombre:"STEIMANN", pos:"ARMADOR", foto:null, pais:"", altura:"", edad:0},
+    {num:17, nombre:"ROFFLER", pos:"PUNTA", foto:null, pais:"", altura:"", edad:0},
+    {num:20, nombre:"SCHMID J", pos:"LIBERO", foto:null, pais:"", altura:"", edad:0}
   ],
   staff: [
     {nombre:"IGNACIO VERDI", rol:"Head Coach", icon:"\uD83D\uDCCB"}
