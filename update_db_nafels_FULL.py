@@ -906,7 +906,25 @@ def build_stats_table(players, teams, output_path='nla_stats_table.html'):
     temporadas = sorted(set(p.get('temporada','') for p in players if p.get('temporada') and p.get('temporada')!='all'))
 
     html = template.replace('/*__DATA_PLACEHOLDER__*/', js_data)
-    opts = ''.join(f'<option>{t}</option>' for t in temporadas)
+
+    # La temporada del encabezado sale de los DATOS, no escrita a mano. Antes
+    # estaba fija en 2025/26 en la plantilla, asi que al arrancar la 26/27 la
+    # tabla mostraba los datos nuevos con el titulo de la temporada anterior.
+    # Se toma la de los equipos si los jugadores todavia no cargaron: al
+    # empezar una temporada hay equipos con 0 partidos y ningun jugador aun.
+    temps_eq = sorted(set(t.get('temporada','') for t in teams
+                          if t.get('temporada') and t.get('temporada') != 'all'))
+    todas = temporadas or temps_eq
+    if len(todas) == 1:      titulo = todas[0]
+    elif len(todas) > 1:     titulo = '%s – %s' % (todas[0], todas[-1])
+    else:                    titulo = ''
+    html = html.replace('<!--__TEMP_TITULO__-->', titulo)
+    html = html.replace('<!--__TEMP_BADGE__-->', titulo or '—')
+
+    # El desplegable tiene que ofrecer la temporada en curso desde el primer
+    # dia, aunque todavia no haya ni un jugador cargado.
+    opciones = sorted(set(list(temporadas) + list(temps_eq)))
+    opts = ''.join(f'<option>{t}</option>' for t in opciones)
     html = html.replace('<!--__TEMPORADAS__-->', opts)
 
     with open(output_path, 'w', encoding='utf-8') as f:

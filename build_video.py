@@ -261,10 +261,24 @@ if __name__=='__main__':
         print('  (no existe la carpeta '+folder+', no genero los archivos de '+prefix+')'); sys.exit(0)
 
     nuevos=build(folder, ent=ent)
+    # ── La temporada de un ENTRENAMIENTO la da la CARPETA ──────────────
+    # Por fecha, una practica del 30 de julio cae en la temporada anterior
+    # (la regla arranca en agosto). Pero el resto del sistema —el historial,
+    # las baterias, el plan de partido— la cuenta en la temporada que arranca,
+    # porque es pretemporada. Al no hacerlo aca, el archivo de video quedaba
+    # etiquetado 25-26 y los cortes se abrian con ese rotulo mientras todo lo
+    # demas decia 26/27.
+    _forzar=None
+    if ent:
+        _m=re.search(r'(20\d{2})', os.path.basename(os.path.normpath(folder)))
+        if _m:
+            _y=int(_m.group(1)); _forzar='%02d-%02d'%(_y%100,(_y+1)%100)
+            print('  (entrenamientos: temporada %s, tomada de la carpeta)'%_forzar)
+
     # agrupar por temporada (calculada desde la fecha)
     por_temp={}
     for code,m in nuevos.items():
-        s=season_of(m.get('date',''))
+        s=_forzar or season_of(m.get('date',''))
         por_temp.setdefault(s,{})[code]=m
 
     all_links=read_mapa_links(ent=ent)
@@ -275,6 +289,11 @@ if __name__=='__main__':
         agregados=0
         for code,m in por_temp[season].items():
             if code not in existentes:
+                # La temporada se guarda EN la sesion. Antes cada pantalla la
+                # recalculaba desde la fecha, y con esa cuenta una practica de
+                # julio caia en la temporada anterior. Escrita aca, todos leen
+                # lo mismo y no hay dos criterios dando vueltas.
+                m['season']=season
                 existentes[code]=m; agregados+=1
         # hornear SOLO los links de los partidos de esta temporada
         links={k:all_links[k] for k in existentes if k in all_links}
