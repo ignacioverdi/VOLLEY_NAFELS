@@ -376,6 +376,12 @@ body.arrastrando iframe{pointer-events:none}
 .ini-head{display:grid;grid-template-columns:96px 1fr 74px 1fr 150px 78px;gap:10px;padding:8px 12px;
       font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--mut);border-bottom:1px solid var(--b2)}
 .ini-tabs{display:flex;gap:6px;padding:10px 18px;border-top:1px solid var(--b);background:var(--sur);align-items:center}
+/* Partidos / Entrenamientos subieron a la fila de acciones: abajo a la izquierda
+   se superponian con el escudo del club, que va fijo en esa esquina.
+   Con margin-left:auto quedan pegados a la derecha, separados de los botones
+   de accion, que es lo que los distingue: aquellos hacen algo, estos eligen
+   que lista estas mirando. */
+.ini-modo{display:flex;gap:6px;margin-left:auto}
 .ini-pie{display:flex;gap:14px;align-items:center;margin-left:auto;color:var(--mut);font-size:11px}
 .ini-pie a{color:var(--mut);text-decoration:none;border-bottom:1px dotted var(--b2);cursor:pointer}
 .ini-pie a:hover{color:#fff}
@@ -1007,6 +1013,10 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         <button class="tbtn" onclick="abrirDVW()" title="Abrir un scout .dvw para corregirlo o seguir cargándolo (manual 9.1.1)">Abrir .dvw</button>
     <button class="tbtn" onclick="iniImportar()" title="Sumar las estadísticas de un .dvw al historial (no lo abre para editar)">Sumar al historial</button>
         <button class="tbtn" id="ini-seguir" onclick="iniSeguir()" style="display:none"></button>
+        <div class="ini-modo">
+          <button class="tbtn" id="ini-tab-p" onclick="iniTab('partido')">Partidos</button>
+          <button class="tbtn" id="ini-tab-e" onclick="iniTab('entrenamiento')">Entrenamientos</button>
+        </div>
       </div>
       <div class="ini-head">
         <span>Fecha</span><span>Local</span><span style="text-align:center">Sets</span>
@@ -1016,8 +1026,6 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     </div>
   </div>
   <div class="ini-tabs">
-    <button class="tbtn" id="ini-tab-p" onclick="iniTab('partido')">Partidos</button>
-    <button class="tbtn" id="ini-tab-e" onclick="iniTab('entrenamiento')">Entrenamientos</button>
     <div class="ini-pie">
       <a onclick="abrirAyuda()">Cómo se usa</a>
       <a onclick="closeModal('m-inicio')">Ir al panel sin abrir nada</a>

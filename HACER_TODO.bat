@@ -148,43 +148,30 @@ REM ================= VERIFICACION =================
 :LINKS
 
 REM ===================================================================
-REM   CAPSULA 25-26 Y BATERIAS
-REM   Dos pasos que hasta ahora habia que correr a mano:
-REM     - REGENERAR_PLAN_2526.bat : el plan de partido de la capsula.
-REM       El plan de arriba apunta a !TEMPORADA_ACTUAL!, donde todavia no
-REM       hay partidos jugados, asi que la capsula quedaba sin regenerar.
-REM     - GENERAR_BATERIAS.bat : gen_baterias.py no se corria nunca, y por
-REM       eso datos_baterias.js quedaba vacio.
+REM   BATERIAS DE LA TEMPORADA EN CURSO
+REM   gen_baterias.py no se corria nunca desde aca, y por eso
+REM   datos_baterias.js quedaba sin actualizar.
+REM
 REM   Va DESPUES de :LINKS a proposito: los "goto LINKS" de arriba saltean
-REM   partidos o entrenamientos cuando no hay .dvw, y este bloque tiene que
-REM   correr igual. Y va ANTES del cifrado del final, que es lo que necesitan
-REM   los dos scripts para poder leer los datos.
-REM   Los dos .bat sueltos siguen sirviendo para correr cada cosa por separado.
+REM   partidos o entrenamientos cuando no hay .dvw, y esto tiene que correr
+REM   igual. Y va ANTES del cifrado del final, que es lo que gen_baterias.py
+REM   necesita para poder leer los datos.
+REM
+REM   LA CAPSULA 25-26 NO SE TOCA. Es una temporada cerrada: su plan de
+REM   partido y sus baterias ya estan generados y no cambian mas. Volver a
+REM   armarlos en cada publicacion seria tiempo perdido, y ademas arriesga
+REM   pisar datos congelados si algun generador cambia mas adelante.
+REM   Si alguna vez hay que rehacerlos, estan los dos .bat sueltos:
+REM       REGENERAR_PLAN_2526.bat   y   GENERAR_BATERIAS.bat
 REM ===================================================================
-echo  ============== CAPSULA 25-26 Y BATERIAS ==============
+echo  ================= BATERIAS =================
 echo.
-echo  [1/3] Plan de partido de la capsula 2025/26...
-if exist "!DVW_DIR!\*.dvw" (
-    python gen_plan_partido.py --dvw_dir "!DVW_DIR!" --output_dir "temporadas\2025-26" --filter_temporada "2025/26"
-    if errorlevel 1 echo      [aviso] Problema en el plan de la capsula. Sigo igual.
-) else (
-    echo      --  no hay .dvw de partidos: salteo el plan de la capsula
-)
-echo.
-echo  [2/3] Baterias de la capsula 2025-26...
-if exist "!DVW_DIR!\*.dvw" (
-    python gen_baterias.py "!DVW_DIR!" "temporadas\2025-26\datos_baterias.js"
-    if errorlevel 1 echo      [aviso] Problema en las baterias de la capsula. Sigo igual.
-) else (
-    echo      --  no hay .dvw de partidos: salteo las baterias de la capsula
-)
-echo.
-echo  [3/3] Baterias de la temporada en curso...
 if not "!ENT_DIR!"=="" (
+    echo  Baterias de la temporada en curso...
     python gen_baterias.py "!ENT_DIR!" "datos_baterias.js"
-    if errorlevel 1 echo      [aviso] Problema en las baterias de entrenamientos. Sigo igual.
+    if errorlevel 1 echo      [aviso] Problema en las baterias. Sigo igual.
 ) else (
-    echo      --  no hay carpeta de entrenamientos: salteo estas baterias
+    echo  No hay carpeta de entrenamientos: salteo las baterias.
 )
 echo.
 
