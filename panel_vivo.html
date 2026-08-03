@@ -1157,6 +1157,11 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <script src="firebase.js" onerror="void 0"></script>
 <script src="objetivos.js" onerror="void 0"></script>
 <script src="video_delay.js" onerror="void 0"></script>
+<!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
+     el nombre de un jugador cuando el plantel del partido no lo tiene.
+     Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
+     Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
+<script src="plantel_nafels.js" onerror="void 0"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -2505,6 +2510,43 @@ function plNorm(t){
   return String(t == null ? '' : t).trim().toUpperCase()
            .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
+/* == El plantel del club ===================================================
+   El panel consultaba una variable con el nombre del club del que salio este
+   archivo. En NAFELS esa variable no existe —el plantel maestro vive en
+   PLANTEL_NAFELS— asi que las seis consultas devolvian siempre vacio: el
+   respaldo para resolver el nombre de un jugador nunca llegaba a funcionar y
+   quedaba el numero pelado.
+
+   Ahora se busca la variable que exista, sin importar el nombre del club, y
+   se normalizan los campos: el plantel maestro trae num/ap/nombre y el panel
+   consulta c/n. Los campos originales se conservan, porque plNum, plApe y
+   plRol leen de ahi.
+
+   Es un RESPALDO: la fuente principal sigue siendo el plantel del partido, y
+   esto solo completa lo que ese no tenga. */
+function plantelClub(){
+  var P = null;
+  var CANDIDATAS = ['PLANTEL_NAFELS','PLANTEL_CASLA','PLANTEL_CLUB','PLANTEL','PLANTEL_DATA'];
+  for(var i=0;i<CANDIDATAS.length && !P;i++){
+    try{ if(typeof window!=='undefined' && window[CANDIDATAS[i]]) P = window[CANDIDATAS[i]]; }catch(e){}
+  }
+  if(!P) return null;
+  var lista = Array.isArray(P) ? P : (P.jugadores || P.plantel || []);
+  if(!lista || !lista.length) return null;
+  var out = [];
+  for(var k=0;k<lista.length;k++){
+    var j = lista[k]; if(!j) continue;
+    var c = (j.c !== undefined && j.c !== null && j.c !== '') ? j.c : j.num;
+    if(c === undefined || c === null || c === '') continue;
+    var o = {};
+    for(var q in j) if(Object.prototype.hasOwnProperty.call(j,q)) o[q] = j[q];
+    o.c = String(c).trim();
+    o.n = String(j.n || j.apellido || j.ap || j.nombre || '').trim();
+    out.push(o);
+  }
+  return out.length ? out : null;
+}
+
 function plNum(j){
   const n = (j.num !== undefined && j.num !== null && j.num !== '') ? j.num : j.c;
   return String(n == null ? '' : n).trim();
@@ -2527,7 +2569,7 @@ function plRol(j){
    Si el archivo no está cargado devuelve vacío y no rompe nada. */
 function plDelClub(){
   try{
-    const P = window.PLANTEL_CASLA;
+    const P = plantelClub();
     if(!P) return [];
     if(Array.isArray(P)) return P;
     return P.jugadores || [];
@@ -2689,6 +2731,35 @@ function volverAlTipeo(){
   }catch(e){ try{ campo.focus(); }catch(e2){} }
 }
 
+/* ══ Lo que el preview tiene que mostrar ═══════════════════════════════════
+   El renglon "Se registra" mostraba solo lo tipeado. Pero el programa agrega
+   el armado por su cuenta, asi que con 11W4+ anunciaba una accion y guardaba
+   dos: el preview no coincidia con lo que terminaba en el archivo.
+
+   Se calcula con la misma logica del registro, para que no puedan separarse.
+   Y sin efectos: autoSet CONSUME la llamada pendiente (K1), asi que se guarda
+   antes y se repone despues. Sin eso, el solo hecho de mirar el preview se
+   comia la llamada y el armado se registraba sin ella. */
+function codigosDelPreview(parts){
+  var guardo = CALL_PEND, out = [];
+  try{
+    for(var i=0;i<parts.length;i++){
+      var a = parts[i];
+      if(!a || a.err) continue;
+      /* manual 4.7: la llamada se tipea en la recepcion y se le asigna al armado */
+      if(a.skill==='R' && a.d && a.d.combo && CALLS[a.d.combo]){
+        CALL_PEND = {c:a.d.combo, ev:'', z:'', sz:''};
+        a.d.combo = '';
+      }
+      var es = armadoYaEscrito(a, i>0 ? parts[i-1] : null) ? null : autoSet(a);
+      if(es) out.push({c:es, auto:true});
+      out.push({c:fmt(a), auto:false});
+    }
+  }catch(e){}
+  CALL_PEND = guardo;
+  return out;
+}
+
 function drawDecoder(){
   const raw = document.getElementById('code').value;
   const dec = document.getElementById('dec');
@@ -2731,8 +2802,21 @@ function drawDecoder(){
   dec.innerHTML = parts.filter(p=>p && !p.err).map(fichasDe)
                        .join('<div class="seg punto"><div class="sv">·</div><div class="sl">y</div></div>');
   inp.classList.remove('bad');
-  let h = 'Se registra <b>'+parts.map(fmt).join(' </b>·<b> ')+'</b>';
-  if(parts.length===2) h += ' — saque y recepción';
+  const cods = codigosDelPreview(parts);
+  let h = 'Se registra ' + cods.map(function(x){
+    return x.auto ? '<b style="color:var(--mut)">'+x.c+'</b>' : '<b>'+x.c+'</b>';
+  }).join(' · ');
+  /* El par se nombra por lo que es. Antes decia siempre "saque y recepción",
+     asi que un armado y un ataque tambien salian etiquetados como saque: el
+     texto estaba fijo en el unico par que se habia previsto. El punto une tres
+     pares distintos (manual 2.3.4.3) y la etiqueta sale del fundamento real. */
+  if(parts.length===2 && raw.indexOf('.')>0 && raw.indexOf('~')<0){
+    const PAR = {SR:'saque y recepción', AB:'ataque y bloqueo', AD:'ataque y defensa'};
+    const k = (parts[0].skill||'') + (parts[1].skill||'');
+    h += ' — ' + (PAR[k] || ((SKILLS[parts[0].skill]||'') + ' y ' + (SKILLS[parts[1].skill]||'')).toLowerCase());
+  }
+  if(cods.some(function(x){ return x.auto; }))
+    h += ' <span style="color:var(--mut)">· el armado en gris lo agrega el programa</span>';
   const avisos=[]; parts.forEach(p=>verificar(p).forEach(x=>avisos.push(x)));
   if(avisos.length){ inp.classList.add('warn'); h += '<br><span style="color:var(--warn)">⚠ '+avisos.join(' · ')+'</span>'; }
   else inp.classList.remove('warn');
@@ -4007,8 +4091,9 @@ function renderStats(){
 }
 /* nombre del jugador, si lo tenemos en el plantel */
 function nombreJug(side,num){
-  if(side==='home' && window.PLANTEL_CASLA){
-    const j=window.PLANTEL_CASLA.find(p=>String(p.c)===String(num));
+  const _pc = (side==='home') ? plantelClub() : null;
+  if(_pc){
+    const j=_pc.find(p=>String(p.c)===String(num));
     if(j) return j.n;
   }
   return '';
@@ -5162,7 +5247,7 @@ function nombreDe(num, side){
   for(const sd of ['home','away']){
     if(M[sd] && M[sd].plantel){ const j=M[sd].plantel.find(x=>String(x.c)===String(num)); if(j) return j.n; }
   }
-  const P = window.PLANTEL_CASLA;
+  const P = plantelClub();
   if(P && P.length){ const j=P.find(x=>String(x.c)===String(num)); if(j) return j.n; }
   return String(num);
 }
@@ -5195,7 +5280,7 @@ function ladoVivo(side){
 function buildVoleyData(side){
   const pre = side==='home'?'*':'a';
   const VD = {ts:new Date().toTimeString().slice(0,5), j:[]};
-  const P = window.PLANTEL_CASLA;
+  const P = plantelClub();
   if(P && P.length) P.forEach(p=>VD.j.push(nuevoJugador(p.c,p.n)));
   const find=num=>{ let j=VD.j.find(x=>x.c===num); if(!j){ j=nuevoJugador(num,nombreDe(num)); VD.j.push(j); } return j; };
 
@@ -5839,7 +5924,7 @@ function exportDVW(modo){
       let nom = '';
       const pl = M[sd].plantel;
       if(pl){ const j=pl.find(x=>String(x.c)===String(n)); if(j) nom = j.n; }
-      if(!nom && sd==='home' && window.PLANTEL_CASLA){ const j=window.PLANTEL_CASLA.find(p=>String(p.c)===String(n)); if(j) nom=j.n; }
+      if(!nom && sd==='home'){ const _pc=plantelClub(); const j=_pc&&_pc.find(p=>String(p.c)===String(n)); if(j) nom=j.n; }
       const esLib = (n===M[sd].libero);
       const pos = [];
       for(let st=1; st<=5; st++){
@@ -6313,7 +6398,7 @@ function calcFaseKPIs(codes, side){
   side = side || '*';
   var ROL={};
   try{
-    var P=window.PLANTEL_CASLA;
+    var P=plantelClub();
     var arr=(P&&P.jugadores)?P.jugadores:(P&&P.lista)?P.lista:(Array.isArray(P)?P:[]);
     arr.forEach(function(j){ var n=(j.num!=null?j.num:j.c); var pos=((j.pos||j.rol||'')+'').toUpperCase(); if(n!=null) ROL[parseInt(n,10)]=pos; });
   }catch(e){}
