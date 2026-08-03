@@ -374,8 +374,29 @@ function objBuildSubfiltro(){
   var row = document.getElementById('obj-partido-row');
   if(!row) return;
   var ent = (window._objTipo==='entrenamiento');
-  var META = ent ? (typeof ENTRENAMIENTOS_META!=='undefined'?ENTRENAMIENTOS_META:null)
-                 : (window.BAT_PARTIDOS ? window.BAT_PARTIDOS.meta : (typeof PARTIDOS_META!=='undefined'?PARTIDOS_META:null));
+  /* ══ La lista de sesiones sale del archivo de baterias, filtrada por tipo ══
+     Antes cada modo miraba una fuente distinta, y eso rompia las dos puntas:
+
+       · En PARTIDO se listaba BAT_PARTIDOS.meta entero, sin filtrar, asi que
+         un entrenamiento aparecia como si fuera un partido.
+       · En ENTRENAMIENTO se listaba ENTRENAMIENTOS_META, que es otra fuente con
+         otros identificadores. Al elegir una sesion, batGet la buscaba en el
+         archivo de baterias y no la encontraba nunca: todas las baterias
+         quedaban en cero.
+
+     Ahora las dos salen del mismo lado y se distinguen por el campo tipo, que
+     ya trae el generador. Si los datos todavia son los viejos —sin tipo— se
+     usa el camino de antes, para no romper nada. */
+  var _B = window.BAT_PARTIDOS;
+  var _conTipo = !!(_B && _B.meta && _B.meta.length && _B.meta.some(function(m){ return m.tipo; }));
+  var META;
+  if(_conTipo){
+    var _q = ent ? 'entrenamiento' : 'partido';
+    META = _B.meta.filter(function(m){ return (m.tipo||'partido') === _q; });
+  }else{
+    META = ent ? (typeof ENTRENAMIENTOS_META!=='undefined'?ENTRENAMIENTOS_META:null)
+               : (_B ? _B.meta : (typeof PARTIDOS_META!=='undefined'?PARTIDOS_META:null));
+  }
   if(!META){ row.style.display='none'; return; }
   row.innerHTML=''; row.style.display='flex'; row.style.alignItems='center';
   var lbl=document.createElement('span');

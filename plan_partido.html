@@ -199,6 +199,13 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
   <span id="teambtns" class="teambtns" style="display:none"></span>
   <select id="teamsel" class="teamsel"></select>
   <span class="mlab" style="margin-left:6px">Filtrar</span>
+  <!-- Partido / Entrenamiento. Va primero porque manda sobre los otros dos:
+       recorta que sesiones existen antes de elegir rival o partido. -->
+  <div class="msel" id="tipobar" style="display:none">
+    <button class="mbtn" data-pptipo="todos" onclick="ppSetTipo('todos')">Todos</button>
+    <button class="mbtn" data-pptipo="P"     onclick="ppSetTipo('P')">Partidos</button>
+    <button class="mbtn" data-pptipo="E"     onclick="ppSetTipo('E')">Entrenamientos</button>
+  </div>
   <div class="msel"><button class="mbtn" onclick="togglePanel('r')">Rival <b id="rc"></b> ▾</button><div class="mpanel" id="rpanel"></div></div>
   <div class="msel"><button class="mbtn" onclick="togglePanel('m')">Partido <b id="mc"></b> ▾</button><div class="mpanel" id="mpanel"></div></div>
   <span class="mhint" id="mhint"></span></div>
@@ -270,6 +277,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 </div>
 
 <script src="datos_seguros.js"></script>
+<script src="filtro_tipo.js" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script src="firebase.js"></script>
@@ -290,10 +298,67 @@ let PLAYERS=TEAMS[TEAM].players;
 let TEAMCARDS=[];
 let INFO=TEAMS[TEAM].info;
 let RIVALS=[],MATCHES=[],RSEL=new Set(),MSEL=new Set();
+/* ══ Partido / Entrenamiento ═══════════════════════════════════════════════
+   Todas las acciones de esta pagina guardan de que sesion salieron, y todas
+   las solapas —ataque, saque, recepcion, defensa, bloqueo, armado— filtran por
+   el conjunto MSEL. Asi que para separar partidos de entrenamientos alcanza
+   con dejar afuera de ese conjunto las sesiones del otro tipo: no hay que
+   tocar ni una accion ni ninguna solapa.
+
+   El tipo lo trae el generador en info[mid].tipo. Si los datos son los viejos
+   —sin ese campo— no se filtra nada y la pagina se comporta como antes. */
+function ppTipoActual(){
+  try{ if(typeof vbTipo==='function') return vbTipo(); }catch(e){}
+  return 'todos';
+}
+function ppHayTipos(){
+  try{ return Object.keys(INFO).some(function(k){ return INFO[k] && INFO[k].tipo; }); }catch(e){ return false; }
+}
+function ppEsDelTipo(k){
+  var t = ppTipoActual();
+  if(t==='todos' || !ppHayTipos()) return true;
+  var q = (t==='E') ? 'entrenamiento' : 'partido';
+  return ((INFO[k] && INFO[k].tipo) || 'partido') === q;
+}
+function ppSetTipo(t){
+  try{ if(typeof vbSetTipo==='function') vbSetTipo(t); }catch(e){}
+  computeMatchMeta();
+  buildRivalPanel(); buildMatchPanel(); updateCounts(); renderAll();
+  ppPintarTipo();
+}
+function ppPintarTipo(){
+  var barra=document.getElementById('tipobar');
+  if(barra) barra.style.display = ppHayTipos() ? '' : 'none';
+  /* El boton que abre la lista de sesiones dice lo que corresponda. */
+  try{
+    var _mb=document.getElementById('mc');
+    if(_mb && _mb.parentNode){
+      var _t=ppTipoActual();
+      var _txt = _t==='E' ? 'Entrenamiento' : (_t==='P' ? 'Partido' : 'Sesión');
+      _mb.parentNode.childNodes[0].nodeValue = _txt+' ';
+    }
+  }catch(e){}
+  var t=ppTipoActual();
+  var bs=document.querySelectorAll('[data-pptipo]');
+  for(var i=0;i<bs.length;i++){
+    var on = bs[i].getAttribute('data-pptipo')===t;
+    bs[i].style.background  = on ? 'rgba(239,39,64,.18)' : '';
+    bs[i].style.borderColor = on ? 'rgba(239,39,64,.55)' : '';
+    bs[i].style.fontWeight  = on ? '800' : '';
+  }
+}
+
 function computeMatchMeta(){
-  RIVALS=Array.from(new Set(Object.keys(INFO).map(function(k){return INFO[k].opp;}))).sort();
-  MATCHES=Object.keys(INFO).map(function(k){return {mid:k,opp:INFO[k].opp,date:INFO[k].date,res:INFO[k].res,yt:ppVid(k)};}).sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0;});
+  var CLAVES = Object.keys(INFO).filter(ppEsDelTipo);
+  RIVALS=Array.from(new Set(CLAVES.map(function(k){return INFO[k].opp;}))).sort();
+  MATCHES=CLAVES.map(function(k){return {mid:k,opp:INFO[k].opp,date:INFO[k].date,res:INFO[k].res,yt:ppVid(k)};}).sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0;});
   RSEL=new Set(RIVALS);MSEL=new Set(MATCHES.map(function(m){return m.mid;}));
+  /* La barra se pinta ACA y no al final de la pagina: los datos llegan
+     despues de que se dibuja el HTML, asi que al arrancar INFO todavia esta
+     vacio, ppHayTipos() daba false y la barra quedaba escondida para siempre.
+     computeMatchMeta() corre cada vez que se carga o cambia el equipo, que es
+     justo cuando INFO ya tiene contenido. */
+  try{ ppPintarTipo(); }catch(e){}
 }
 const RECS=[["all","Todas"],["g","# / +"],["b","! / -"]];
 const FASE=[["all","Todas"],["SO","Side Out"],["TR","Transici\u00f3n"]];
@@ -545,13 +610,23 @@ function fmtDate(d){if(!d||d==='?')return'?';var p=d.split('-');return p.length=
 function togglePanel(w){var p=document.getElementById(w==='r'?'rpanel':'mpanel');var o=p.classList.contains('open');document.querySelectorAll('.mpanel').forEach(function(x){x.classList.remove('open');});if(!o)p.classList.add('open');}
 document.addEventListener('click',function(e){if(!e.target.closest('.msel'))document.querySelectorAll('.mpanel').forEach(function(x){x.classList.remove('open');});});
 function buildRivalPanel(){var h='<div class="mhead"><button onclick="allRivals(1)">Todos</button><button onclick="allRivals(0)">Ninguno</button></div>';h+=RIVALS.map(function(r,i){return '<label class="mitem"><input type="checkbox" '+(RSEL.has(r)?'checked':'')+' onchange="toggleRival('+i+')">'+r+' <b>'+MATCHES.filter(function(m){return m.opp===r;}).length+'</b></label>';}).join('');document.getElementById('rpanel').innerHTML=h;}
-function buildMatchPanel(){var ms=MATCHES.filter(function(m){return RSEL.has(m.opp);});var h='<div class="mhead"><button onclick="allMatchesSel(1)">Todos</button><button onclick="allMatchesSel(0)">Ninguno</button></div>';h+=ms.map(function(m){return '<label class="mitem"><input type="checkbox" '+(MSEL.has(m.mid)?'checked':'')+' onchange="toggleMatchSel(\''+m.mid+'\')">'+fmtDate(m.date)+' · '+m.opp+' <b>'+m.res+(m.yt?' 🎥':'')+'</b></label>';}).join('');document.getElementById('mpanel').innerHTML=h;}
+/* Cada sesion, una por una, con su fecha. En un entrenamiento el resultado no
+   significa nada (viene 0-0), asi que en su lugar se aclara que es una
+   practica. Con esto se puede mirar fecha por fecha tanto los partidos como
+   los entrenamientos. */
+function buildMatchPanel(){var ms=MATCHES.filter(function(m){return RSEL.has(m.opp);});var h='<div class="mhead"><button onclick="allMatchesSel(1)">Todos</button><button onclick="allMatchesSel(0)">Ninguno</button></div>';h+=ms.map(function(m){var _e=((INFO[m.mid]&&INFO[m.mid].tipo)==='entrenamiento');var _et=_e?'🏋️ práctica':(m.res||'');return '<label class="mitem"><input type="checkbox" '+(MSEL.has(m.mid)?'checked':'')+' onchange="toggleMatchSel(\''+m.mid+'\')">'+fmtDate(m.date)+' · '+m.opp+' <b>'+_et+(m.yt?' 🎥':'')+'</b></label>';}).join('');document.getElementById('mpanel').innerHTML=h;}
 function syncMatches(){MSEL=new Set(MATCHES.filter(function(m){return RSEL.has(m.opp);}).map(function(m){return m.mid;}));}
 function toggleRival(i){var r=RIVALS[i];if(RSEL.has(r))RSEL.delete(r);else RSEL.add(r);syncMatches();buildRivalPanel();buildMatchPanel();updateCounts();renderAll();}
 function allRivals(on){RSEL=on?new Set(RIVALS):new Set();syncMatches();buildRivalPanel();buildMatchPanel();updateCounts();renderAll();}
 function toggleMatchSel(mid){if(MSEL.has(mid))MSEL.delete(mid);else MSEL.add(mid);updateCounts();renderAll();}
 function allMatchesSel(on){MATCHES.filter(function(m){return RSEL.has(m.opp);}).forEach(function(m){if(on)MSEL.add(m.mid);else MSEL.delete(m.mid);});buildMatchPanel();updateCounts();renderAll();}
-function updateCounts(){document.getElementById('rc').textContent='('+RSEL.size+')';document.getElementById('mc').textContent='('+MSEL.size+')';document.getElementById('mhint').textContent=MSEL.size+' partido'+(MSEL.size===1?'':'s');}
+function updateCounts(){document.getElementById('rc').textContent='('+RSEL.size+')';document.getElementById('mc').textContent='('+MSEL.size+')';
+  /* "3 partidos" no sirve cuando lo que se esta mirando son practicas. */
+  var _t=ppTipoActual(), _n=MSEL.size;
+  var _p = _t==='E' ? (_n===1?'entrenamiento':'entrenamientos')
+         : _t==='P' ? (_n===1?'partido':'partidos')
+         :            (_n===1?'sesión':'sesiones');
+  document.getElementById('mhint').textContent=_n+' '+_p;}
 function makeTeamPlayer(role){
   var rows=[]; PLAYERS.forEach(function(p){ if(p.role===role && p.data && p.data.length) rows=rows.concat(p.data); });
   if(!rows.length) return null;
@@ -717,6 +792,11 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
     document.body.appendChild(a);
   }catch(e){}
 })();
+</script>
+<script>
+/* Los botones se pintan cuando ya estan los datos. Si el archivo todavia es el
+   viejo —sin el campo tipo— la barra queda oculta y no molesta. */
+try{ ppPintarTipo(); }catch(e){}
 </script>
 </body>
 </html>

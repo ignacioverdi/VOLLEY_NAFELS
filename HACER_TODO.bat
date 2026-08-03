@@ -79,7 +79,9 @@ if errorlevel 1 echo      [aviso] Hubo un problema en partidos. Mira el detalle 
 echo.
 echo  [2/4] Scouting de rivales...
 python gen_scouting.py --dvw_dir "!DVW_DIR!" --output_dir .
-python gen_plan_partido.py --dvw_dir "!DVW_DIR!" --output_dir . --filter_temporada "!TEMPORADA_ACTUAL!"
+REM   El plan de partido se armo aca hasta ahora, pero se movio al final:
+REM   necesita la carpeta de entrenamientos, que recien se resuelve mas abajo,
+REM   y ademas tiene que correr aunque no haya partidos cargados todavia.
 if errorlevel 1 echo      [aviso] Hubo un problema en el scouting. Sigo igual.
 echo.
 echo  [3/4] Videos destacados (si hay Excel)...
@@ -164,6 +166,20 @@ REM   pisar datos congelados si algun generador cambia mas adelante.
 REM   Si alguna vez hay que rehacerlos, estan los dos .bat sueltos:
 REM       REGENERAR_PLAN_2526.bat   y   GENERAR_BATERIAS.bat
 REM ===================================================================
+echo  ============== PLAN DE PARTIDO ==============
+echo.
+REM   Toma las dos carpetas y etiqueta cada sesion con su tipo, para que la
+REM   pagina pueda separar partidos de entrenamientos. Va aca abajo porque
+REM   !ENT_DIR! recien existe despues del bloque de entrenamientos, y porque
+REM   asi corre aunque la seccion de partidos se haya salteado.
+if "!ENT_DIR!"=="" (
+    python gen_plan_partido.py --dvw_dir "!DVW_DIR!" --output_dir . --filter_temporada "!TEMPORADA_ACTUAL!"
+) else (
+    python gen_plan_partido.py --dvw_dir "!DVW_DIR!" --ent_dir "!ENT_DIR!" --output_dir . --filter_temporada "!TEMPORADA_ACTUAL!"
+)
+if errorlevel 1 echo      [aviso] Problema en el plan de partido. Sigo igual.
+echo.
+
 echo  ================= BATERIAS =================
 echo.
 REM   Las dos carpetas en UNA sola corrida. El generador etiqueta cada sesion
