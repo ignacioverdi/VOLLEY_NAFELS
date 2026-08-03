@@ -265,6 +265,7 @@ select, select option {
 </style>
 <script src="lang.js" onerror="void 0"></script>
 <script src="datos_seguros.js"></script>
+<script src="filtro_tipo.js" onerror="void 0"></script>
   <script src="liga_data.js.enc"></script>
 <script src="liga_data_entrenamientos.js.enc" onerror="void 0"></script>
 <script src="firebase.js" onerror="void 0"></script>
@@ -3493,7 +3494,10 @@ document.addEventListener('click', function(e){
 </div>
 
 <script>
-function setModo(modo){ try{ localStorage.setItem('vb_modo', modo); }catch(e){} location.reload(); }
+function setModo(modo){ try{ localStorage.setItem('vb_modo', modo); }catch(e){}
+  /* La eleccion vale para todo el sistema, no solo para esta pantalla. */
+  try{ if(typeof vbSetTipo==='function') vbSetTipo(modo); }catch(e){}
+  location.reload(); }
 function _initModoBtns(){
   var m=(function(){try{return localStorage.getItem('vb_modo')||'partido';}catch(e){return 'partido';}})();
   var bp=document.getElementById('modo-partido'), be=document.getElementById('modo-entrenamiento');

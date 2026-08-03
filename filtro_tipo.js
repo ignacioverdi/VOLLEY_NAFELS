@@ -62,6 +62,13 @@
        respeta lo que tenia, porque ahi no puede mostrar las dos juntas. */
     try{ if(v==='P') localStorage.setItem('cortes_modo','partido');
          if(v==='E') localStorage.setItem('cortes_modo','ent'); }catch(e){}
+    /* Los mapas de calor (ataque, saque, recepcion, armador) y la pagina de
+       armadores usan su propia clave vb_modo, con partido/entrenamiento y sin
+       "todos". Se deja alineada igual que la de los cortes: asi elegir el tipo
+       en cualquier pantalla llega tambien alla. Con "todos" se respeta lo que
+       tenian, porque esas pantallas muestran una fuente por vez. */
+    try{ if(v==='P') localStorage.setItem('vb_modo','partido');
+         if(v==='E') localStorage.setItem('vb_modo','entrenamiento'); }catch(e){}
     try{
       var u = new URL(location.href);
       if(v==='todos') u.searchParams.delete('tipo'); else u.searchParams.set('tipo', v);
