@@ -10,6 +10,7 @@
 <script src="game_plans.js" onerror="void 0"></script>
 <script src="objetivos_config.js" onerror="void 0"></script>
 <script src="datos_seguros.js"></script>
+<script src="filtro_tipo.js" onerror="void 0"></script>
   <script src="datos_video_ent_25-26.js.enc" onerror="void 0"></script>
   <script src="datos_partidos.js.enc" onerror="void 0"></script>
 <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
@@ -401,6 +402,10 @@ function objBuildSubfiltro(){
 function objSetTipo(tipo, btn){
   window._objTipo=tipo;
   window._objPartido='acumulado';
+  /* El perfil tiene sus propios botones, pero la eleccion es la misma que la
+     del resto del sistema: se avisa al filtro compartido para que al salir de
+     aca —al analisis, a los cortes, a la pagina de saque— llegue igual. */
+  try{ if(typeof vbSetTipo==='function') vbSetTipo(tipo); }catch(e){}
   document.querySelectorAll('.obj-tfbtn').forEach(function(b){ b.classList.remove('on','partido','ent'); });
   if(btn) btn.classList.add('on', tipo==='partido'?'partido':'ent');
   objBuildSubfiltro();
@@ -795,5 +800,22 @@ function _videoTodo(){
     <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">División de Honor 2026</div>
   </div>
 </div>
+<script>
+/* ── El perfil se pone en el tipo que ya venia elegido ──────────────────────
+   Los botones de aca (PARTIDO / ENTRENAMIENTO) y el filtro compartido tienen
+   que decir lo mismo, o el jugador ve una cosa y el resto del sistema otra.
+
+   El perfil no tiene "Todos": si el filtro compartido esta en Todos se deja el
+   que ya traia la pagina, que es Partido. Solo se cambia cuando afuera hay una
+   eleccion concreta. */
+try{
+  var _vt = (typeof vbTipo==='function') ? vbTipo() : 'todos';
+  if(_vt==='P' || _vt==='E'){
+    var _nom = (_vt==='E') ? 'entrenamiento' : 'partido';
+    if(window._objTipo !== _nom && typeof objSetTipo==='function')
+      objSetTipo(_nom, document.getElementById('obj-tbtn-'+_nom));
+  }
+}catch(e){}
+</script>
 </body>
 </html>
