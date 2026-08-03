@@ -93,8 +93,10 @@ echo  [4/4] Cortes de video de partidos...
 python build_video.py "!DVW_DIR!" datos_video.js VIDEO_DATA
 if errorlevel 1 echo      [aviso] Hubo un problema en los cortes de partidos. Sigo igual.
 echo.
-echo  [4b/4] Acciones de bloqueo...
-python gen_bloqueo.py
+REM   Las acciones de bloqueo se arman al final: necesitan el video de los
+REM   entrenamientos, que recien se genera mas abajo. Corriendo aca solo
+REM   alcanzaban a ver los partidos.
+echo  [4b/4] Acciones de bloqueo: se arman al final, con las dos fuentes.
 if errorlevel 1 echo      [aviso] Problema en bloqueo. Sigo igual.
 
 REM ---- contar cuantos videos quedaron cargados (mensaje claro) ----
@@ -166,6 +168,14 @@ REM   pisar datos congelados si algun generador cambia mas adelante.
 REM   Si alguna vez hay que rehacerlos, estan los dos .bat sueltos:
 REM       REGENERAR_PLAN_2526.bat   y   GENERAR_BATERIAS.bat
 REM ===================================================================
+echo  ================ BLOQUEO ================
+echo.
+REM   Toma el video de partidos y el de entrenamientos, y etiqueta cada
+REM   bloqueo con su tipo para que el mapa de calor pueda separarlos.
+python gen_bloqueo.py
+if errorlevel 1 echo      [aviso] Problema en las acciones de bloqueo. Sigo igual.
+echo.
+
 echo  ============== PLAN DE PARTIDO ==============
 echo.
 REM   Toma las dos carpetas y etiqueta cada sesion con su tipo, para que la
