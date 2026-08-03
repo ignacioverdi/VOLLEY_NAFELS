@@ -191,6 +191,26 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    // ═══ Tabla de estadisticas de la liga ═════════════════════════════════
+    // Los nombres de los equipos NO se traducen: Amriswil, Chenois, Jona y el
+    // resto se llaman igual en los tres idiomas.
+    "Cada celda:":{en:"Each cell:",de:"Jede Zelle:"},
+    "verde":{en:"green",de:"gr\u00fcn"},
+    "mejor \u2192":{en:"best \u2192",de:"am besten \u2192"},
+    "peor) \u00b7":{en:"worst) \u00b7",de:"am schlechtesten) \u00b7"},
+    "resaltado.":{en:"highlighted.",de:"hervorgehoben."},
+    "total de acciones":{en:"total actions",de:"Aktionen gesamt"},
+    "color = ranking en ese fundamento":{en:"colour = ranking in that skill",de:"Farbe = Rang in diesem Element"},
+    "Ranking Equipos":{en:"Team ranking",de:"Mannschaftsrangliste"},
+    "Ranking equipos NLA":{en:"NLA team ranking",de:"NLA-Mannschaftsrangliste"},
+    "eleg\u00ed un fundamento para ordenar":{en:"pick a skill to sort by",de:"w\u00e4hle ein Element zum Sortieren"},
+    "M\u00edn. acciones":{en:"Min. actions",de:"Min. Aktionen"},
+    "Limpiar":{en:"Clear",de:"Zur\u00fccksetzen"},
+    "Nombre...":{en:"Name...",de:"Name..."},
+    "jugadores \u00b7 Ataque (Total)":{en:"players \u00b7 Attack (Total)",de:"Spieler \u00b7 Angriff (gesamt)"},
+    "An\u00e1lisis Liga":{en:"League analysis",de:"Liga-Analyse"},
+    "Estad\u00edsticas Liga":{en:"League statistics",de:"Ligastatistik"},
+    "NLA SUIZA \u2014 ESTAD\u00cdSTICAS":{en:"SWISS NLA \u2014 STATISTICS",de:"SCHWEIZER NLA \u2014 STATISTIK"},
     // ═══ PIZARRÓN — meses, encabezados y ejercicios ═══════════════════════
     // Los meses estaban escritos en castellano dentro de la pagina, asi que el
     // selector decia "Julio 2026" aunque la app estuviera en ingles o aleman.
