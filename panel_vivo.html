@@ -3100,7 +3100,22 @@ function ponerExt(ch){
      parser la lee en el lugar equivocado y el dato se pierde. */
   EXT_TIPEADO = { texto: inp.value, extra: (EXT_TIPEADO && EXT_TIPEADO.texto === inp.value
                                            ? (EXT_TIPEADO.extra || '') : '') + ch };
-  inp.value = p.map(fmt).join('.');
+  /* ══ Los codigos van separados por ESPACIO, no por punto ══════════════════
+     Aca se reescribe el campo con los codigos ya en su forma completa. Antes se
+     unian con un punto, y eso rompia el codigo al confirmarlo: el punto une dos
+     acciones SOLO cuando estan en forma corta (2.3.4.3). En un codigo ya
+     normalizado —el que lleva ~— el punto es un caracter personalizado, asi que
+     parseChunk no parte por ahi y leia las dos acciones como una sola: el punto
+     caia en la subzona, el resto se corria y el saque se comia a la recepcion
+     entera como caracteres personalizados.
+
+     Se veia asi: elegir la L con Ctrl+Espacio la ponia bien en su casillero,
+     pero al apretar Enter quedaba UNA accion con el extendido en basura.
+
+     El manual ya define como se escriben varias acciones seguidas: separadas
+     por espacio (1.10.5). Es la forma que parseInput parte primero, antes de
+     mirar el punto, asi que cada codigo se lee entero y en su lugar. */
+  inp.value = p.map(fmt).join(' ');
   EXT_TIPEADO.completo = inp.value;
   try{ inp.setSelectionRange(inp.value.length, inp.value.length); }catch(_){}
   /* pintarEspejo() vuelve a colorear la barra. Sin esto, el valor que se acaba
