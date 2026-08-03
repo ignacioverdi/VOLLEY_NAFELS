@@ -8,6 +8,9 @@
 <script src="lang.js" onerror="void 0"></script>
 <script src="datos_seguros.js"></script>
   <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
+  <!-- El plantel maestro del club. Es la fuente unica: cuando entra un jugador
+       nuevo se agrega ahi y aparece en todas las pantallas. -->
+  <script src="plantel_nafels.js" onerror="void 0"></script>
   <script>abrirDatos();</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -182,6 +185,16 @@ select, select option {
     <div style="flex:1;height:1px;background:var(--border)"></div>
   </div>
 
+  <!-- Reparte los jugadores por la tabla de posiciones: impares al A, pares al
+       B. Sirve para armar dos equipos parejos sin discutir. -->
+  <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+    <button onclick="alinearEquipos()" title="Reparte segun la tabla: 1º, 3º, 5º… al A · 2º, 4º, 6º… al B"
+      style="cursor:pointer;background:rgba(55,138,221,.12);border:1px solid rgba(55,138,221,.4);color:#8fc0ee;
+             border-radius:9px;padding:8px 16px;font-family:inherit;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase">
+      ⚖️ Alinear equipos
+    </button>
+  </div>
+
   <div class="partido-wrap">
     <!-- EQUIPO A -->
     <div class="equipo-card ea">
@@ -270,6 +283,7 @@ select, select option {
 // ── JUGADORES ─────────────────────────────────────────────────
 var JUGADORES_DEFAULT = [
   {num:1,nombre:"DURDOS"},
+    {num:2,nombre:"BRUDERER"},
     {num:3,nombre:"SCHWITTER"},
     {num:4,nombre:"VAZQUEZ"},
     {num:5,nombre:"CLEMENT"},
@@ -282,13 +296,42 @@ var JUGADORES_DEFAULT = [
     {num:17,nombre:"ROFFLER"},
     {num:20,nombre:"SCHMID J"}];
 
+/* ══ El plantel ════════════════════════════════════════════════════════════
+   Hasta ahora esta pantalla leia solo datos_equipo.js, que es una lista
+   aparte y se fue quedando atras: BRUDERER (#2) estaba en el plantel maestro
+   pero no ahi, asi que no aparecia para armar los equipos.
+
+   Ahora manda el plantel maestro (plantel_nafels.js), que es donde se agrega
+   un jugador nuevo, y datos_equipo.js aporta las fotos y completa lo que
+   falte. Si ninguno de los dos carga, queda la lista de respaldo de arriba. */
 function getJugadores(){
-  if(window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores){
-    return window.EQUIPO_DATA.jugadores.map(function(j){
-      return {num:j.num, nombre:j.nombre, foto:j.foto||null};
+  var porNum = {};
+
+  try{
+    var P = window.PLANTEL_NAFELS;
+    var lista = P && (P.jugadores || (P.length ? P : null));
+    if(lista) lista.forEach(function(j){
+      var n = parseInt(j.num, 10);
+      if(isNaN(n)) return;
+      var ap = String(j.ap || j.apellido || j.nombre || '').trim();
+      if(!ap) return;
+      porNum[n] = {num:n, nombre:ap, foto:null};
     });
-  }
-  return JUGADORES_DEFAULT;
+  }catch(e){}
+
+  try{
+    var E = window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores;
+    if(E) E.forEach(function(j){
+      var n = parseInt(j.num, 10);
+      if(isNaN(n)) return;
+      if(!porNum[n]) porNum[n] = {num:n, nombre:j.nombre, foto:j.foto||null};
+      else if(j.foto) porNum[n].foto = j.foto;
+    });
+  }catch(e){}
+
+  var out = Object.keys(porNum).map(function(k){ return porNum[k]; })
+                  .sort(function(a,b){ return a.num - b.num; });
+  return out.length ? out : JUGADORES_DEFAULT;
 }
 
 var JUGADORES = getJugadores();
@@ -348,6 +391,48 @@ if(typeof fbGet!=='undefined'){
 }
 
 // ── RENDER SLOTS ─────────────────────────────────────────────
+/* ══ Alinear equipos ═══════════════════════════════════════════════════════
+   Reparte a los jugadores en zigzag segun la tabla de posiciones: el 1º al
+   equipo A, el 2º al B, el 3º al A, el 4º al B, y asi. Es la forma mas simple
+   de que los dos lados queden parejos, porque los mejores quedan repartidos en
+   vez de amontonados de un lado.
+
+   Se usa exactamente el mismo orden que muestra la tabla, para que lo que se
+   ve en pantalla y lo que reparte el boton sean lo mismo. */
+function ordenDeLaTabla(){
+  return standings.slice().sort(function(a,b){
+    var pa = a.pg*3, pb = b.pg*3;
+    if(pb !== pa) return pb-pa;
+    var da = a.ptsg-a.ptsp, db = b.ptsg-b.ptsp;
+    if(db !== da) return db-da;
+    return b.ptsg-a.ptsg;
+  });
+}
+function alinearEquipos(){
+  var orden = ordenDeLaTabla();
+  if(!orden.length){ toast('Todavia no hay jugadores en la tabla ⚠️','#f59e0b'); return; }
+
+  /* solo los que estan en el plantel de hoy: si alguien dejo el equipo sigue
+     en la tabla por su historial, pero no se lo puede poner a jugar */
+  var vigentes = {};
+  JUGADORES.forEach(function(j){ vigentes[j.nombre] = true; });
+  var reparto = orden.filter(function(j){ return vigentes[j.nombre]; });
+
+  var A = [], B = [];
+  reparto.forEach(function(j, i){ (i % 2 === 0 ? A : B).push(j.nombre); });
+
+  for(var i=1; i<=8; i++){
+    var sa = document.getElementById('slots-a_'+i);
+    var sb = document.getElementById('slots-b_'+i);
+    if(sa) sa.value = A[i-1] || '';
+    if(sb) sb.value = B[i-1] || '';
+  }
+
+  var sobran = Math.max(0, A.length-8) + Math.max(0, B.length-8);
+  toast('Equipos alineados: ' + Math.min(A.length,8) + ' vs ' + Math.min(B.length,8) +
+        (sobran ? ' (' + sobran + ' sin lugar)' : '') + ' ⚖️', 'var(--blue)');
+}
+
 function renderSlots(id){
   var el = document.getElementById(id);
   el.innerHTML = '';
