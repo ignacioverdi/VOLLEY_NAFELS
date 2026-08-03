@@ -280,6 +280,9 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <script src="filtro_tipo.js" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
+<!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
+     entrenamiento con video cargado igual no abria el cuadrante. -->
+<script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
 <script src="firebase.js"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
@@ -541,7 +544,16 @@ function readFilt(id,fl){var el=document.getElementById(id);if(!el)return "all";
     var sm=el.querySelector("summary");var allsel=(ch.length===0||ch.length===bx.length);if(sm)sm.textContent=allsel?"Todas":(ch.length+" sel");return allsel?"all":ch;}
   if(fl.lab==="Fase"){var fv=el.value;return fv==="SO"?["g","b"]:fv==="TR"?["o"]:"all";}
   return el.value;}
-function ppVid(code){var M=window.MAPA_VIDEOS||{};var u=M[code]||"";if(!u)return "";u=String(u);var m=u.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);return m?m[1]:(u.length===11?u:"");}
+/* Cada sesion busca su video en el mapa que le corresponde: los partidos en
+   MAPA_VIDEOS y las practicas en MAPA_VIDEOS_ENT. Antes se miraba solo el de
+   partidos, asi que un entrenamiento nunca encontraba su video por mas que
+   estuviera cargado. Se prueban los dos por las dudas. */
+function ppVid(code){
+  var _ent = false;
+  try{ _ent = ((INFO[code]&&INFO[code].tipo)==='entrenamiento'); }catch(e){}
+  var M1 = (_ent ? window.MAPA_VIDEOS_ENT : window.MAPA_VIDEOS) || {};
+  var M2 = (_ent ? window.MAPA_VIDEOS : window.MAPA_VIDEOS_ENT) || {};
+  var M = M1; var u=M[code]||M2[code]||"";if(!u)return "";u=String(u);var m=u.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);return m?m[1]:(u.length===11?u:"");}
 function readKey(pid){return "ppread:"+(typeof TEAM!=="undefined"?TEAM:"")+":"+pid;}
 function readVal(p){try{var v=localStorage.getItem(readKey(p.id));if(v!==null)return v;}catch(e){}return p.read||"";}
 function saveRead(el){try{localStorage.setItem(readKey(el.getAttribute("data-pid")),el.innerHTML);}catch(e){}}
