@@ -2978,6 +2978,36 @@ function autoSet(a){
   cola = cola.replace(/~+$/,'');
   return pre + String(setter).padStart(2,'0') + 'E' + tipo + evF + cola;
 }
+/* ══ Si el armado ya lo escribio el scout, no se agrega otro ═══════════════
+   El armado automatico existe para no tener que tipear la colocacion en cada
+   ataque: si el ataque lleva combinacion, el programa deduce quien armo y con
+   que tipo. Pero no miraba si el scout ACABABA de escribir el armado a mano.
+
+   Tipeando 7E+ 11W4+ quedaban TRES acciones —el armado del 7, el armado
+   automatico del armador titular y el ataque— y la colocacion se contaba dos
+   veces: una a un jugador y otra al otro. Las estadisticas de armado quedaban
+   infladas y con el reparto equivocado.
+
+   DataVolley hace exactamente esto: con 11W4+ 7E+ 11W4+ agrega el armado solo
+   antes del PRIMER ataque, porque el segundo ya viene con el suyo escrito.
+
+   Se mira la accion inmediatamente anterior, este en el mismo renglon o ya
+   registrada de antes: el scout puede tipear el armado, dar Enter, y recien
+   despues el ataque. Las lineas que no son acciones —rotaciones, cambios,
+   tiempos— se saltean, porque no cortan la secuencia de juego. */
+function armadoYaEscrito(a, previa){
+  if(a.skill!=='A') return false;
+  if(previa) return previa.skill==='E' && previa.team===a.team;
+  for(var i=M.codes.length-1;i>=0;i--){
+    var s = M.codes[i] && M.codes[i].c;
+    if(!s) continue;
+    var m = String(s).match(/^([*a])(?:\d{2}|-1)([SRABDEF])/);
+    if(!m) continue;
+    return m[2]==='E' && ((m[1]==='*' ? 'home' : 'away') === a.team);
+  }
+  return false;
+}
+
 function clearPick(){ PICK={combo:'',sz:'',ez:'',subz:'',hit:'',blk:'',spec:''}; drawPickers(); }
 function curEval(){
   const el=document.getElementById('code');
@@ -3445,10 +3475,10 @@ function commit(){
   }
   const av=[]; parts.forEach(p=>verificar(p).forEach(x=>av.push(x)));
   if(av.length) toast('⚠ '+av[0]);
-  parts.forEach(a=>{
+  parts.forEach((a,ai)=>{
     /* manual 4.7: la llamada (K1) se tipea en la recepción, pero se asigna al armado */
     if(a.skill==='R' && a.d && a.d.combo && CALLS[a.d.combo]){ CALL_PEND = {c:a.d.combo, ev:'', z:'', sz:''}; a.d.combo=''; }
-    const es = autoSet(a);
+    const es = armadoYaEscrito(a, ai>0 ? parts[ai-1] : null) ? null : autoSet(a);
     if(es){ pushCode(es,'play'); M.codes[M.codes.length-1].auto = true; }   /* armado escrito por el programa */
     pushCode(fmt(a),'play');
     if(a.skill==='S') anotarSacador(a.team, a.num);   /* manual 2.5.3: formación automática */
