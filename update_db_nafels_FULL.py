@@ -1774,9 +1774,29 @@ if __name__ == '__main__':
     # ── La tabla de la liga es la EXCEPCION: lleva todas las temporadas ──
     # El resto del sitio muestra solo la temporada en curso, pero esta tabla
     # tiene su propio selector de temporada, asi que conviene que las tenga
-    # todas: se comparan 25-26 y 26-27 sin salir de la pagina ni cambiar de
-    # temporada en el menu. Se calcula ANTES del filtro, que es destructivo.
-    players_todas, teams_todas = calculate_stats(teams_data, None)
+    # todas: se comparan 25-26 y 26-27 sin salir de la pagina.
+    #
+    # OJO: calculate_stats(datos, None) NO sirve para esto. Sin filtro mezcla
+    # todas las temporadas en una sola fila y la etiqueta 'all', asi que el
+    # selector se queda con una sola opcion. Hay que llamarlo UNA VEZ POR
+    # TEMPORADA y juntar los resultados: asi cada equipo y cada jugador tienen
+    # una fila por temporada, que es lo que el selector necesita.
+    # Se hace ANTES del filtro, que es destructivo.
+    _temps = set()
+    for _t in NLA_TEAMS:
+        for _pd in teams_data.get(_t, {}).values():
+            for _k in ('atk','srv','rec','blk'):
+                for _a in _pd.get(_k, []) or []:
+                    _tt = _a.get('temporada')
+                    if _tt: _temps.add(str(_tt))
+    _temps = sorted(_temps)
+    players_todas = []; teams_todas = []
+    for _tt in _temps:
+        _p, _q = calculate_stats(teams_data, _tt)
+        players_todas.extend(_p); teams_todas.extend(_q)
+    print('   (tabla de liga: %d temporadas -> %s)' % (len(_temps), ', '.join(_temps) or 'ninguna'))
+    if not _temps:
+        players_todas, teams_todas = calculate_stats(teams_data, None)
 
     if t_filter:
         teams_data = filter_teams_data(teams_data, t_filter)
