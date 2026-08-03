@@ -914,7 +914,12 @@ def build_stats_table(players, teams, output_path='nla_stats_table.html'):
     # empezar una temporada hay equipos con 0 partidos y ningun jugador aun.
     temps_eq = sorted(set(t.get('temporada','') for t in teams
                           if t.get('temporada') and t.get('temporada') != 'all'))
-    todas = temporadas or temps_eq
+    # El cartel tiene que decir lo que la pagina CONTIENE, no lo que tiene
+    # jugadores. Antes se quedaba con las temporadas de los jugadores y solo
+    # miraba los equipos si esa lista estaba vacia: al sumar la 25/26 —que si
+    # tiene jugadores— el cartel pasaba a decir "2025/26" y desaparecia la
+    # temporada nueva, que estaba en la tabla pero todavia sin jugadores.
+    todas = sorted(set(list(temporadas) + list(temps_eq)))
     if len(todas) == 1:      titulo = todas[0]
     elif len(todas) > 1:     titulo = '%s – %s' % (todas[0], todas[-1])
     else:                    titulo = ''
