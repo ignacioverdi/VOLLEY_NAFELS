@@ -2323,22 +2323,119 @@ function pintarEspejo(){
   EXT_TIPEADO = null;
   ajustarTamCodigo(raw);
   if(!raw){ e.innerHTML=''; return; }
-  function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   /* El estado (error / aviso) se pinta ACÁ, en el espejo. El campo de texto
      queda siempre transparente para que no se vean las dos capas superpuestas. */
   var cls = inp.classList.contains('bad')  ? 'malo'
           : inp.classList.contains('warn') ? 'aviso' : '';
-  /* Los tildes son los separadores del formato interno: marcan los casilleros
-     que quedaron vacios. Adentro del archivo hacen falta, pero en la barra solo
-     ensucian —"*11AT-W4~47~~3" cuesta leerlo de un vistazo mientras se
-     scoutea—. Se muestran como un espacio finito y apagado: la alineacion se
-     mantiene, y el ojo va directo a lo que importa. */
-  function pintar(t){
-    return esc(t).replace(/~/g, '<span class="sep">~</span>');
+  e.innerHTML = pintarBarra(raw, cls);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   EL CODIGO EXTENDIDO, EN ROJO — igual que DataVolley
+   --------------------------------------------------------------------------
+   Antes la barra se pintaba por posicion: los primeros 6 caracteres de un
+   color y el resto de otro. Eso sirve para UN codigo ya normalizado, pero no
+   para lo que se tipea en vivo: en 8SM15.8#L los primeros 6 caracteres son
+   "8SM15." y el corte no significa nada.
+
+   Ahora se le pregunta al parser. Para cada accion se busca donde termina la
+   cabecera (equipo, numero, fundamento, tipo y EVALUACION) y, de ahi en
+   adelante, cada caracter se consulta contra las mismas tablas que usa el menu
+   de extensiones —sub-tipo, jugadores y especial (manual 4.1.3)—. Si es codigo
+   extendido para ESA accion, va en rojo.
+
+   Los digitos son el caso delicado: un 3 puede ser una zona o la cantidad de
+   receptores. Como el manual fija el orden (tipo de golpe, despues jugadores),
+   un digito solo se pinta si ya vino antes un tipo de golpe. Asi las zonas
+   nunca se pintan de mas.
+   ══════════════════════════════════════════════════════════════════════════ */
+function _escBarra(t){
+  return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+/* Los tildes son los separadores del formato interno: marcan los casilleros que
+   quedaron vacios. Adentro del archivo hacen falta, pero en la barra solo
+   ensucian. Se muestran como un espacio finito y apagado: la alineacion se
+   mantiene y el ojo va directo a lo que importa. */
+function _spanBarra(t,c){
+  if(!t) return '';
+  return '<span class="'+c+'">'+_escBarra(t).replace(/~/g,'<span class="sep">~</span>')+'</span>';
+}
+/* Donde termina la cabecera. Recorre lo mismo que parseOne y en el mismo orden
+   —equipo, numero, combinacion, fundamento, tipo, evaluacion— y se detiene en
+   el primer caracter que ya es cola. No alcanza con buscar la evaluacion:
+   muchas veces no se tipea (4AH#.6DS) y entonces la cabecera termina antes. */
+function _finCabecera(txt){
+  var i=0;
+  if(/^[*aA]/.test(txt)) i=1;
+  if(txt.slice(i,i+2)==='-1') i+=2;                 /* jugador desconocido */
+  else while(i<txt.length && /[0-9]/.test(txt[i])) i++;
+  /* la combinacion puede ir pegada al numero y reemplaza fundamento y tipo */
+  var cand = txt.slice(i,i+2).toUpperCase();
+  if(cand.length===2 && COMBOS[cand] && !SKILLS[cand[0]] && !TYPES[cand[0]]) i+=2;
+  var skill=false, type=false, ev=false;
+  for(; i<txt.length; i++){
+    var c=txt[i], u=c.toUpperCase();
+    if(!ev && !skill && SKILLS[u]){ skill=true; continue; }
+    if(!ev && !type && TYPES[u]){ type=true; continue; }
+    if(!ev && EVALS.indexOf(c)>=0){ ev=true; continue; }
+    break;
   }
-  var base = raw.slice(0,6), ext = raw.slice(6);
-  e.innerHTML = '<span class="'+cls+'">'+pintar(base)+'</span>'
-              + (ext ? '<span class="'+(cls||'ext')+'">'+pintar(ext)+'</span>' : '');
+  return i;
+}
+function _esExtendido(ch,a,hubo){
+  var C=String(ch).toUpperCase();
+  if(/[0-9]/.test(ch)) return !!(hubo && PLAYERS[a.skill] && PLAYERS[a.skill][ch]);
+  if(SUBTYPE[a.skill] && SUBTYPE[a.skill][C]) return true;
+  try{ if(specialsFor(a.skill, a.ev)[C]) return true; }catch(e){}
+  return false;
+}
+function _pintarLargo(t,cls){
+  var h=_spanBarra(t.slice(0,6),cls), cola=t.slice(6), buf='', act=null;
+  for(var i=0;i<cola.length;i++){
+    /* en la forma normalizada los casilleros son fijos: 6 tipo de golpe,
+       7 jugadores, 8 especial (manual 4.1.3) */
+    var c = (i>=6 && i<=8 && cola[i]!=='~') ? 'ext-barra' : (cls||'ext');
+    if(c!==act){ h+=_spanBarra(buf,act); buf=''; act=c; }
+    buf+=cola[i];
+  }
+  return h+_spanBarra(buf,act);
+}
+function _pintarCorto(t,cls){
+  var acc=[]; try{ acc=parseChunk(t)||[]; }catch(e){ acc=[]; }
+  var idx=t.indexOf('.');
+  var trozos = (idx>0 && acc.length>1) ? [t.slice(0,idx), t.slice(idx+1)] : [t];
+  var h='';
+  for(var k=0;k<trozos.length;k++){
+    if(k) h+=_spanBarra('.',cls);
+    var seg=trozos[k], a=acc[k];
+    if(!seg) continue;
+    if(!a || a.err){ h+=_spanBarra(seg,cls); continue; }
+    var fin=_finCabecera(seg);
+    /* la combinacion tambien puede ir despues de la evaluacion (forma larga:
+       14AT#X55). No es codigo extendido: se deja sin pintar. */
+    var cab=seg.slice(fin,fin+2).toUpperCase();
+    if(cab.length===2 && (COMBOS[cab]||CALLS[cab])) fin+=2;
+    h+=_spanBarra(seg.slice(0,fin),cls);
+    var buf='', act=null, hubo=false;
+    for(var i=fin;i<seg.length;i++){
+      var ext=_esExtendido(seg[i],a,hubo); if(ext) hubo=true;
+      var c = ext ? 'ext-barra' : (cls||'ext');
+      if(c!==act){ h+=_spanBarra(buf,act); buf=''; act=c; }
+      buf+=seg[i];
+    }
+    h+=_spanBarra(buf,act);
+  }
+  return h;
+}
+function pintarBarra(raw,cls){
+  var partes=String(raw).split(/(\s+)/), out='';
+  for(var i=0;i<partes.length;i++){
+    var s=partes[i];
+    if(!s) continue;
+    if(/^\s+$/.test(s)){ out+=_escBarra(s); continue; }
+    out += (s.indexOf('~')>=0) ? _pintarLargo(s,cls) : _pintarCorto(s,cls);
+  }
+  return out;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -3044,6 +3141,30 @@ document.addEventListener('click', e=>{
   const m=document.getElementById('extmenu');
   if(m && m.classList.contains('open') && !m.contains(e.target) && e.target.id!=='code') cerrarExtensiones();
 });
+/* Agrega la letra elegida al final de la accion que le corresponde, sin sacar
+   al campo de la forma corta. Devuelve el texto nuevo, o null si no se puede
+   garantizar que quede exactamente igual que en la forma completa. */
+function extenderEnCorto(texto, idx, ch, largo){
+  var t = String(texto||'');
+  if(!t || t.indexOf('~')>=0) return null;          /* ya venia en forma completa */
+  var partes = t.split(/(\s+)/), n = 0, puesto = false, out = '';
+  for(var i=0;i<partes.length;i++){
+    var s = partes[i];
+    if(!s || /^\s+$/.test(s)){ out += s; continue; }
+    var cant = 0;
+    try{ cant = (parseChunk(s)||[]).length; }catch(e){ return null; }
+    if(!puesto && idx < n + cant){ out += s + ch; puesto = true; }
+    else out += s;
+    n += cant;
+  }
+  if(!puesto) return null;
+  var q; try{ q = parseInput(out); }catch(e){ return null; }
+  if(!q.length) return null;
+  for(var k=0;k<q.length;k++) if(q[k].err) return null;
+  /* la prueba: el texto corto tiene que dar los mismos codigos que el largo */
+  return (q.map(fmt).join(' ') === largo) ? out : null;
+}
+
 function ponerExt(ch){
   /* Antes esto pegaba la letra donde estuviera el cursor. Con las letras no
      habia problema, pero los BLOQUEADORES son digitos (0 a 4) y las zonas
@@ -3098,6 +3219,34 @@ function ponerExt(ch){
 
      Guardar solo lo corto no sirve: al pegar la letra suelta al final, el
      parser la lee en el lugar equivocado y el dato se pierde. */
+  /* ══ El campo NO cambia de forma ═══════════════════════════════════════════
+     Antes, al elegir una extension el campo se reescribia entero en la forma
+     completa. Funcionaba, pero rompia la lectura mientras se scoutea: el codigo
+     se alargaba solo y dejaba de parecerse a lo tipeado. DataVolley no hace
+     eso — el campo sigue mostrando 8SM15.8#L y solo cambia el color de la letra.
+
+     El motivo de aquella reescritura era que, pegada suelta al final, la letra
+     se leia en el lugar equivocado. Eso ya esta arreglado en el parser, asi que
+     ahora la letra se agrega al final de la accion que le corresponde y despues
+     se VERIFICA: si el texto corto produce exactamente los mismos codigos que
+     la forma completa, se queda el corto. Si no coincide —por ejemplo si la
+     extension va a una accion que no es la ultima del grupo— se vuelve a la
+     forma completa, que nunca pierde el dato.
+
+     La verificacion es lo que hace segura la simplificacion: no hay que confiar
+     en que la letra suelta se lea bien, se comprueba antes de aceptarla. */
+  var _largo = p.map(fmt).join(' ');
+  var _corto = extenderEnCorto(inp.value, _i, ch, _largo);
+  if(_corto !== null){
+    EXT_TIPEADO = null;
+    inp.value = _corto;
+    try{ inp.setSelectionRange(inp.value.length, inp.value.length); }catch(_){}
+    cerrarExtensiones(); drawDecoder();
+    try{ pintarEspejo(); }catch(_){}
+    try{ drawPickers(); }catch(_){}
+    inp.focus();
+    return;
+  }
   EXT_TIPEADO = { texto: inp.value, extra: (EXT_TIPEADO && EXT_TIPEADO.texto === inp.value
                                            ? (EXT_TIPEADO.extra || '') : '') + ch };
   /* ══ Los codigos van separados por ESPACIO, no por punto ══════════════════
@@ -3115,7 +3264,7 @@ function ponerExt(ch){
      El manual ya define como se escriben varias acciones seguidas: separadas
      por espacio (1.10.5). Es la forma que parseInput parte primero, antes de
      mirar el punto, asi que cada codigo se lee entero y en su lugar. */
-  inp.value = p.map(fmt).join(' ');
+  inp.value = _largo;
   EXT_TIPEADO.completo = inp.value;
   try{ inp.setSelectionRange(inp.value.length, inp.value.length); }catch(_){}
   /* pintarEspejo() vuelve a colorear la barra. Sin esto, el valor que se acaba
