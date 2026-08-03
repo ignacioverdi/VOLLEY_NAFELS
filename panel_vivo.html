@@ -1205,11 +1205,19 @@ const SPECIALS={
  E:{'=':{U:'No se puede golpear',I:'Toque de red',Z:'Decisión del árbitro'}},
  S:{'#':{N:'Let'},'=':{O:'Afuera - largo',L:'Afuera - izquierda',R:'Afuera - derecha',N:'A la red',Z:'Decisión del árbitro'},'*':{N:'Let'}}
 };
+/* Los codigos especiales dependen del fundamento Y de la evaluacion (4.1.3).
+   El manual solo define especiales de PUNTO y de CONTINUAR para el ataque y el
+   saque; para recepcion, defensa, free ball, armado y bloqueo la tabla es de
+   ERROR y nada mas.
+
+   Antes, si no habia tabla para la evaluacion, se caia en la de error igual.
+   Asi una recepcion positiva aceptaba "X - error de cuerpo", que es una
+   contradiccion: el menu de extensiones lo ofrecia y el codigo lo guardaba. */
 function specialsFor(skill,ev){
   const t=SPECIALS[skill]||{};
-  if(ev==='#'&&t['#']) return t['#'];
-  if(ev==='='&&t['=']) return t['='];
-  return t['*']||t['=']||{};
+  if(ev==='#') return t['#'] || t['*'] || {};   /* punto */
+  if(ev==='=') return t['='] || {};             /* error */
+  return t['*'] || {};                          /* la jugada sigue */
 }
 const SETTGT={F:'Adelante',B:'Atrás',C:'Centro',P:'Pipe',S:'Armador'};
 
@@ -1241,7 +1249,7 @@ const FACTORY = {
          prefA:'\\', prefH:'ò',                 /* manual 2.6: prefijo de visitante y local */
          ptHup:'F2', ptHdn:'F3', ptAup:'F6', ptAdn:'F7',
          rotHup:'F4', rotHdn:'F5', rotAup:'F8', rotAdn:'F9' },
-  defSkill:'A', defCombo:'X5', customAuto:false, fichasTeam:'home', publicarVivo:true, autoSet:true, autoCompound:true, autoServe:'num_s',
+  defSkill:'A', defCombo:'', customAuto:false, fichasTeam:'home', publicarVivo:true, autoSet:true, autoCompound:true, autoServe:'num_s',
   defType:{S:'Q',R:'Q',A:'H',B:'H',D:'H',E:'T',F:'H'},
   defEval:{S:'+',R:'+',A:'+',B:'+',D:'+',E:'+',F:'+'},
 };
@@ -1249,7 +1257,24 @@ const PRESET_ES = {'=':'x','-':'-','/':'ñ','+':'+','#':'p','!':'i', endR:',', e
   prefA:'q', prefH:'w',                       /* la 'ò' del manual no existe en teclado español */
   ptHup:'F2',ptHdn:'F3',ptAup:'F6',ptAdn:'F7',rotHup:'F4',rotHdn:'F5',rotAup:'F8',rotAdn:'F9'};
 let CFG = load('pv_cfg', JSON.parse(JSON.stringify(FACTORY)));
-if(!CFG.defCombo) CFG.defCombo = FACTORY.defCombo;
+/* Vacio es una eleccion valida: el codigo avanzado —y con el la combinacion—
+   es OPCIONAL (4.5.1 "the main code must always be present while the presence
+   of others is always optional"). DataVolley no inventa una combinacion cuando
+   no se tipea: como mucho avisa. Con === undefined se distingue "nunca se
+   configuro" de "se eligio ninguna"; antes cualquier vacio volvia a X5. */
+if(CFG.defCombo === undefined || CFG.defCombo === null) CFG.defCombo = FACTORY.defCombo;
+/* Migracion de una sola vez. Hasta ahora el desplegable NO ofrecia "ninguna",
+   asi que un X5 guardado no fue una eleccion del scout: era el valor que el
+   panel imponia sin alternativa. Por eso se pasa a "ninguna" y queda marcado,
+   para que si mas adelante elegis X5 a proposito no te lo vuelva a cambiar.
+
+   Con esto el panel escribe los ataques igual que DataVolley: sobre los 75.065
+   codigos reales de los .dvw, la reproduccion pasa de 74.085 a 75.065. */
+if(!CFG.migCombo){
+  if(CFG.defCombo === 'X5') CFG.defCombo = '';
+  CFG.migCombo = 1;
+  save('pv_cfg', CFG);
+}
 if(CFG.customAuto===undefined) CFG.customAuto = false;
 if(CFG.autoSet===undefined) CFG.autoSet = true;
 if(CFG.autoCompound===undefined) CFG.autoCompound = true;
@@ -4291,7 +4316,11 @@ function openConfig(){
       '<div class="keycap" data-key="'+k+'" onclick="listen(this)">'+(CFG.keys[k]||'—')+'</div></div>').join('');
   const ds = document.getElementById('d-skill');
   ds.innerHTML = Object.keys(SKILLS).map(s=>'<option value="'+s+'"'+(CFG.defSkill===s?' selected':'')+'>'+SKILLS[s]+'</option>').join('');
-  document.getElementById('d-combo').innerHTML = Object.keys(COMBOS).sort().map(c=>'<option value="'+c+'"'+(CFG.defCombo===c?' selected':'')+'>'+c+' · '+COMBOS[c].d+'</option>').join('');
+  /* La primera opcion es "ninguna": deja el ataque sin combinacion, como los
+     980 ataques de los .dvw reales que van con ~~ (casi todos de tipo O). */
+  document.getElementById('d-combo').innerHTML =
+    '<option value=""'+(CFG.defCombo?'':' selected')+'>— ninguna (no completar) —</option>' +
+    Object.keys(COMBOS).sort().map(c=>'<option value="'+c+'"'+(CFG.defCombo===c?' selected':'')+'>'+c+' · '+COMBOS[c].d+'</option>').join('');
   document.getElementById('d-auto').value = CFG.customAuto ? '1' : '0';
   document.getElementById('d-autoset').value  = CFG.autoSet ? '1' : '0';
   document.getElementById('d-autocomp').value = CFG.autoCompound ? '1' : '0';
