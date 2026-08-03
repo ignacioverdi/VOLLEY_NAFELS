@@ -43,6 +43,9 @@
   .vtab.on{background:var(--naf);color:#1a1206;border-color:var(--naf)}
   @media(max-width:680px){.row{grid-template-columns:1fr 70px;gap:8px}.thumb{order:-1}}
 </style>
+<!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
+     la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
+<script src="firebase.js" onerror="void 0"></script>
 </head>
 <body>
   <h1>🎬 Cargar videos de los partidos</h1>

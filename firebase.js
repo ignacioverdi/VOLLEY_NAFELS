@@ -342,6 +342,11 @@ function _fbPantalla(){
 }
 
 /* ── arranque: recupera la sesion guardada o pide ingresar ──────────────── */
+/* Este dispositivo, alguna vez, entro con usuario y clave. */
+function _fbHayLlaveGuardada(){
+  try{ return !!localStorage.getItem('club_llave'); }catch(e){ return false; }
+}
+
 function _fbArrancar(){
   if(_fbListo) return _fbListo;
   FB_SES = _fbLeerSes();
@@ -362,10 +367,19 @@ function _fbArrancar(){
         .then(function(){ return _fbTraerLlave(); })
         .then(function(){ resolve(true); })
         .catch(function(){
-          if(!navigator.onLine){ FB_OFF = true; resolve(true); }   /* sin internet: seguimos con lo guardado */
+          if(!navigator.onLine && _fbHayLlaveGuardada()){ FB_OFF = true; resolve(true); }   /* sin internet, pero este equipo ya habia entrado */
           else { _fbGuardarSes(null); pedir(); }                   /* sesion vencida: pedimos ingresar */
         });
-    } else if(!navigator.onLine){
+    } else if(!navigator.onLine && _fbHayLlaveGuardada()){
+      /* Sin internet SOLO se sigue de largo si este dispositivo ya habia
+         entrado antes: la llave de los datos quedo guardada de una sesion
+         valida. Es lo que permite scoutear en un club sin senal.
+
+         Antes alcanzaba con estar sin conexion, sin importar si el dispositivo
+         habia entrado alguna vez. Cualquiera podia apagar el wifi, abrir la
+         direccion y saltearse la pantalla de ingreso. No veia datos —sin llave
+         los archivos son ilegibles— pero entraba al sistema, y eso no puede
+         pasar en algo que se vende. */
       FB_OFF = true; resolve(true);
     } else {
       pedir();
