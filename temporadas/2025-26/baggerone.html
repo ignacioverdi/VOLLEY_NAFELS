@@ -155,7 +155,12 @@ select, select option {
   background-color: #ffffff !important;
 }
 </style>
-<script src="firebase.js" onerror="void 0"></script>
+<!-- Apunta al firebase.js de la RAIZ, no a una copia local. La copia que
+     tenia la capsula era vieja: pedia mail y clave pero NUNCA guardaba la
+     llave de los datos, asi que las paginas abrian vacias para cualquiera
+     que no hubiera entrado antes por la app principal. Con una sola fuente
+     no se vuelve a desincronizar. -->
+<script src="../../firebase.js" onerror="void 0"></script>
 </head>
 <body>
 
