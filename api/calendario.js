@@ -138,10 +138,16 @@ function plegar(linea) {
 export default async function handler(req, res) {
   let eventos = [];
   try {
-    const r = await fetch(`${FB}/calendario.json`);
+    /* El parametro suelto evita que Firebase devuelva una copia guardada. */
+    const r = await fetch(`${FB}/calendario.json?ts=${Date.now()}`);
     const d = (await r.json()) || {};
-    const partidos = Array.isArray(d.partidos) ? d.partidos : [];
-    const entrenos = Array.isArray(d.entrenamientos) ? d.entrenamientos : [];
+    /* Firebase NO siempre devuelve una lista. Si los indices no son 0,1,2...
+       —porque se borro un partido del medio, por ejemplo— la guarda como un
+       objeto con claves numericas. Un Array.isArray() sobre eso da false y se
+       perdian todos los eventos sin ningun aviso. */
+    const aLista = (x) => Array.isArray(x) ? x : (x && typeof x === 'object' ? Object.values(x) : []);
+    const partidos = aLista(d.partidos);
+    const entrenos = aLista(d.entrenamientos);
     eventos = partidos.filter(e => e && e.fecha).map(partido)
       .concat(entrenos.filter(e => e && e.fecha).map(entrenamiento));
   } catch (e) {
@@ -165,7 +171,10 @@ export default async function handler(req, res) {
 
   res.setHeader('Content-Type', 'text/calendar; charset=utf-8');
   res.setHeader('Content-Disposition', 'inline; filename="nafels.ics"');
-  /* Cache corto: que Vercel no sirva una version vieja durante horas. */
-  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300');
+  /* Sin cache. Un calendario que se actualiza solo no puede quedar servido
+     de una copia: si se corrige un horario, tiene que salir en la proxima
+     lectura. Google y Apple releen cada varias horas igual, asi que no hay
+     riesgo de sobrecarga. */
+  res.setHeader('Cache-Control', 'no-store, max-age=0');
   res.status(200).send(ics);
 }
