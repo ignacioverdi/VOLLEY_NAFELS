@@ -65,7 +65,11 @@
   .teamavg .n{font-family:'Bebas Neue';font-size:40px;line-height:1}
   .note{font-size:11px;color:var(--muted);line-height:1.6;margin-top:10px}
   @media(max-width:560px){.row2{grid-template-columns:1fr}.result .big{font-size:52px}}
-</style></head>
+</style><!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
+     toca el encabezado y las barras: en la computadora no hace nada.
+     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
+<link rel="stylesheet" href="movil.css">
+</head>
 <body>
 <div class="wrap">
   <div class="header">

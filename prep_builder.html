@@ -97,7 +97,11 @@
   .empty{color:var(--mut);text-align:center;padding:30px;font-size:14px}
   .colhdr{display:grid;grid-template-columns:1fr 56px 62px 78px 68px 1fr auto;gap:7px;padding:2px 12px 4px;font-size:9px;color:var(--mut);letter-spacing:1px;text-transform:uppercase}
   @media(max-width:640px){.ctrl-grid{grid-template-columns:1fr}.ej-row,.colhdr{grid-template-columns:1fr 1fr;}.ej-row .vbtn{grid-column:1/-1}}
-</style></head>
+</style><!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
+     toca el encabezado y las barras: en la computadora no hace nada.
+     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
+<link rel="stylesheet" href="movil.css">
+</head>
 <body>
 <div class="wrap">
   <div class="header">
