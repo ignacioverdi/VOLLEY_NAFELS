@@ -60,6 +60,21 @@ h1 span{color:var(--red)}
 .pasos li::before{content:counter(p);position:absolute;left:0;top:9px;width:26px;height:26px;
   border-radius:50%;background:var(--card2);border:1px solid var(--border);color:var(--indigo);
   font-family:"Bebas Neue",sans-serif;font-size:15px;display:flex;align-items:center;justify-content:center}
+.telefonos{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:620px){.telefonos{grid-template-columns:1fr 1fr}}
+.tel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px}
+.tel h3{font-family:"Bebas Neue",sans-serif;font-size:19px;letter-spacing:2px;display:flex;
+  align-items:center;gap:9px;margin-bottom:10px;padding-bottom:9px;border-bottom:1px solid var(--border)}
+.tel.ios h3{color:#9ca3af}
+.tel.and h3{color:var(--green)}
+.tel ol{counter-reset:s;list-style:none}
+.tel li{counter-increment:s;position:relative;padding:7px 0 7px 32px;font-size:14px;line-height:1.45;
+  color:var(--text)}
+.tel li::before{content:counter(s);position:absolute;left:0;top:8px;width:21px;height:21px;border-radius:50%;
+  background:var(--card2);border:1px solid var(--border);color:var(--muted);
+  font-family:"Bebas Neue",sans-serif;font-size:13px;display:flex;align-items:center;justify-content:center}
+.tel.ios li::before{color:#9ca3af}
+.tel.and li::before{color:var(--green)}
 .pie{color:var(--subtle);font-size:13px;line-height:1.6;margin-top:34px;
   border-top:1px solid var(--border);padding-top:16px}
 [data-l]{display:none}
@@ -118,16 +133,38 @@ h1 span{color:var(--red)}
     <div class="d">Los cortes de tus acciones, filtrados por lo que quieras ver. Para mirar tranquilo lo que hablamos en el entrenamiento.</div></div></div>
 
   <div class="aviso" data-l="es"><div class="ic">🔔</div><div class="d">
-    <b>Activá las notificaciones.</b> Los cambios de horario y los avisos de partido llegan por la app. Si no las activás, te los vas a perder. Está explicado en el PDF que te pasamos.</div></div>
+    <b>Activá las notificaciones.</b> Los cambios de horario y los avisos de partido llegan por la app. Si no las activás, te los vas a perder. Abajo están los pasos.</div></div>
 
   <div data-l="es">
-    <div class="sec">En 4 pasos</div>
-    <ol class="pasos">
-      <li>Abrí <b>volley-nafels.vercel.app</b> en el celular (en iPhone tiene que ser con Safari).</li>
-      <li>Agregala a la pantalla de inicio — está en el PDF, con las capturas.</li>
-      <li>Entrá con tu mail y tu fecha de nacimiento.</li>
-      <li>Tocá <b>Activar avisos</b> y listo.</li>
-    </ol>
+    <div class="sec">Instalarla en el celular</div>
+    <p class="sub" style="margin-top:-4px;margin-bottom:14px">Seguí la columna de tu teléfono. Es una sola vez y lleva 2 minutos.</p>
+    <div class="telefonos">
+      <div class="tel ios"><h3>🍎 iPhone <span style="font-size:12px;color:var(--muted);letter-spacing:0;font-family:'Barlow Condensed'">(iOS 16.4 o más nuevo)</span></h3>
+        <ol>
+          <li>Abrí <b>volley-nafels.vercel.app</b> en <b>Safari</b> (tiene que ser Safari, no Chrome).</li>
+          <li>Tocá el botón <b>Compartir</b> — el cuadradito con la flecha hacia arriba, abajo en el centro.</li>
+          <li>Deslizá hacia abajo y tocá <b>“Agregar a inicio”</b>.</li>
+          <li>Tocá <b>“Agregar”</b>, arriba a la derecha.</li>
+          <li>Abrí la app desde el ícono nuevo en tu pantalla.</li>
+          <li>Entrá con tu mail y tu clave.</li>
+          <li>Tocá el botón rojo <b>“Activar avisos”</b>, abajo a la izquierda.</li>
+          <li>Tocá <b>“Permitir”</b>. ¡Listo!</li>
+        </ol></div>
+      <div class="tel and"><h3>🤖 Android</h3>
+        <ol>
+          <li>Abrí <b>volley-nafels.vercel.app</b> en <b>Chrome</b>.</li>
+          <li>Tocá los <b>3 puntitos</b>, arriba a la derecha.</li>
+          <li>Tocá <b>“Instalar app”</b> o <b>“Agregar a pantalla principal”</b>.</li>
+          <li>Confirmá <b>“Instalar”</b>.</li>
+          <li>Abrí la app desde el ícono nuevo.</li>
+          <li>Entrá con tu mail y tu clave.</li>
+          <li>Tocá <b>“Activar avisos”</b>.</li>
+          <li>Tocá <b>“Permitir”</b>. ¡Listo!</li>
+        </ol></div>
+    </div>
+    <div class="aviso" style="display:flex;margin-top:12px"><div class="ic">🍎</div><div class="d">
+      <b>iPhone: instalarla no es opcional.</b> Si no la agregás a la pantalla de inicio (pasos 1 a 5), <b>no</b> te van a llegar los avisos. Es una regla de Apple, no del club.</div></div>
+    <p class="pie" style="margin-top:14px;border:0;padding:0">Se entra <b>una sola vez por dispositivo</b>. Si usás el celular y la computadora, tenés que entrar en cada uno; después queda abierto y no te lo vuelve a pedir.</p>
     <p class="pie">La app está en español, inglés y alemán. Se cambia con los botones de arriba a la derecha, en cualquier momento.<br><br>
     Si no podés entrar o algo no funciona, escribile al cuerpo técnico.</p>
   </div>
@@ -170,16 +207,38 @@ h1 span{color:var(--red)}
     <div class="d">Clips deiner Aktionen, gefiltert nach dem, was du sehen willst. Um in Ruhe anzuschauen, was wir im Training besprochen haben.</div></div></div>
 
   <div class="aviso" data-l="de"><div class="ic">🔔</div><div class="d">
-    <b>Benachrichtigungen aktivieren.</b> Änderungen bei Trainingszeiten und Spielen kommen über die App. Ohne aktivierte Benachrichtigungen verpasst du sie. Die Anleitung steht im PDF.</div></div>
+    <b>Benachrichtigungen aktivieren.</b> Änderungen bei Trainingszeiten und Spielen kommen über die App. Ohne aktivierte Benachrichtigungen verpasst du sie. Die Anleitung steht unten.</div></div>
 
   <div data-l="de">
-    <div class="sec">In 4 Schritten</div>
-    <ol class="pasos">
-      <li>Öffne <b>volley-nafels.vercel.app</b> auf dem Handy (beim iPhone mit Safari).</li>
-      <li>Füge sie zum Startbildschirm hinzu — im PDF mit Screenshots erklärt.</li>
-      <li>Melde dich mit E-Mail und Geburtsdatum an.</li>
-      <li>Tippe auf <b>Benachrichtigungen aktivieren</b> — fertig.</li>
-    </ol>
+    <div class="sec">Auf dem Handy installieren</div>
+    <p class="sub" style="margin-top:-4px;margin-bottom:14px">Folge der Spalte für dein Handy. Nur einmal nötig, dauert 2 Minuten.</p>
+    <div class="telefonos">
+      <div class="tel ios"><h3>🍎 iPhone <span style="font-size:12px;color:var(--muted);letter-spacing:0;font-family:'Barlow Condensed'">(iOS 16.4 oder neuer)</span></h3>
+        <ol>
+          <li>Öffne <b>volley-nafels.vercel.app</b> in <b>Safari</b> (es muss Safari sein, nicht Chrome).</li>
+          <li>Tippe auf <b>Teilen</b> — das Quadrat mit dem Pfeil nach oben, unten in der Mitte.</li>
+          <li>Scrolle nach unten und tippe auf <b>„Zum Home-Bildschirm“</b>.</li>
+          <li>Tippe auf <b>„Hinzufügen“</b>, oben rechts.</li>
+          <li>Öffne die App über das neue Symbol auf deinem Bildschirm.</li>
+          <li>Melde dich mit E-Mail und Passwort an.</li>
+          <li>Tippe auf den roten Button <b>„Benachrichtigungen aktivieren“</b>, unten links.</li>
+          <li>Tippe auf <b>„Erlauben“</b>. Fertig!</li>
+        </ol></div>
+      <div class="tel and"><h3>🤖 Android</h3>
+        <ol>
+          <li>Öffne <b>volley-nafels.vercel.app</b> in <b>Chrome</b>.</li>
+          <li>Tippe auf die <b>3 Punkte</b>, oben rechts.</li>
+          <li>Tippe auf <b>„App installieren“</b> oder <b>„Zum Startbildschirm hinzufügen“</b>.</li>
+          <li>Bestätige <b>„Installieren“</b>.</li>
+          <li>Öffne die App über das neue Symbol.</li>
+          <li>Melde dich mit E-Mail und Passwort an.</li>
+          <li>Tippe auf <b>„Benachrichtigungen aktivieren“</b>.</li>
+          <li>Tippe auf <b>„Erlauben“</b>. Fertig!</li>
+        </ol></div>
+    </div>
+    <div class="aviso" style="display:flex;margin-top:12px"><div class="ic">🍎</div><div class="d">
+      <b>iPhone: die Installation ist nicht optional.</b> Ohne Hinzufügen zum Home-Bildschirm (Schritte 1 bis 5) bekommst du <b>keine</b> Benachrichtigungen. Das ist eine Regel von Apple, nicht vom Verein.</div></div>
+    <p class="pie" style="margin-top:14px;border:0;padding:0">Du meldest dich <b>einmal pro Gerät</b> an. Wenn du Handy und Computer benutzt, musst du dich auf beiden anmelden; danach bleibst du angemeldet.</p>
     <p class="pie">Die App gibt es auf Deutsch, Englisch und Spanisch. Umschalten kannst du jederzeit oben rechts.<br><br>
     Wenn du dich nicht einloggen kannst oder etwas nicht funktioniert, melde dich beim Trainerstab.</p>
   </div>
@@ -222,16 +281,38 @@ h1 span{color:var(--red)}
     <div class="d">Clips of your actions, filtered however you want. To watch what we talked about in training, in your own time.</div></div></div>
 
   <div class="aviso" data-l="en"><div class="ic">🔔</div><div class="d">
-    <b>Turn on notifications.</b> Changes to training times and matches come through the app. If you don't turn them on, you'll miss them. The PDF explains how.</div></div>
+    <b>Turn on notifications.</b> Changes to training times and matches come through the app. If you don't turn them on, you'll miss them. The steps are below.</div></div>
 
   <div data-l="en">
-    <div class="sec">In 4 steps</div>
-    <ol class="pasos">
-      <li>Open <b>volley-nafels.vercel.app</b> on your phone (on iPhone it has to be Safari).</li>
-      <li>Add it to your home screen — the PDF shows how, with screenshots.</li>
-      <li>Log in with your email and date of birth.</li>
-      <li>Tap <b>Turn on notifications</b> and you're done.</li>
-    </ol>
+    <div class="sec">Install it on your phone</div>
+    <p class="sub" style="margin-top:-4px;margin-bottom:14px">Follow the column for your phone. Once only, takes 2 minutes.</p>
+    <div class="telefonos">
+      <div class="tel ios"><h3>🍎 iPhone <span style="font-size:12px;color:var(--muted);letter-spacing:0;font-family:'Barlow Condensed'">(iOS 16.4 or newer)</span></h3>
+        <ol>
+          <li>Open <b>volley-nafels.vercel.app</b> in <b>Safari</b> (it must be Safari, not Chrome).</li>
+          <li>Tap the <b>Share</b> button — the square with the up arrow, bottom centre.</li>
+          <li>Scroll down and tap <b>“Add to Home Screen”</b>.</li>
+          <li>Tap <b>“Add”</b>, top right.</li>
+          <li>Open the app from the new icon on your screen.</li>
+          <li>Log in with your email and password.</li>
+          <li>Tap the red <b>“Activate notifications”</b> button, bottom left.</li>
+          <li>Tap <b>“Allow”</b>. Done!</li>
+        </ol></div>
+      <div class="tel and"><h3>🤖 Android</h3>
+        <ol>
+          <li>Open <b>volley-nafels.vercel.app</b> in <b>Chrome</b>.</li>
+          <li>Tap the <b>3 dots</b>, top right.</li>
+          <li>Tap <b>“Install app”</b> or <b>“Add to Home screen”</b>.</li>
+          <li>Confirm <b>“Install”</b>.</li>
+          <li>Open the app from the new icon.</li>
+          <li>Log in with your email and password.</li>
+          <li>Tap <b>“Activate notifications”</b>.</li>
+          <li>Tap <b>“Allow”</b>. Done!</li>
+        </ol></div>
+    </div>
+    <div class="aviso" style="display:flex;margin-top:12px"><div class="ic">🍎</div><div class="d">
+      <b>iPhone: installing is not optional.</b> If you don't add it to your home screen (steps 1 to 5), you will <b>not</b> receive notifications. That's an Apple rule, not a club one.</div></div>
+    <p class="pie" style="margin-top:14px;border:0;padding:0">You log in <b>once per device</b>. If you use your phone and your computer, you have to log in on each one; after that you stay logged in.</p>
     <p class="pie">The app is in English, German and Spanish. Switch it any time with the buttons at the top right.<br><br>
     If you can't log in or something isn't working, message the coaching staff.</p>
   </div>
