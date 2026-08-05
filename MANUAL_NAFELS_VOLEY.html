@@ -198,6 +198,9 @@
       <li><a href="#mapa"><span class="n">4</span><span>Qué hay en la app y para qué sirve</span></a></li>
       <li><a href="#plandepartido"><span class="n">★</span><span>Plan de Partido (nuevo)</span></a></li>
       <li><a href="#videovivo"><span class="n">★</span><span>Video en vivo con delay (nuevo)</span></a></li>
+      <li><a href="#idiomas"><span class="n">★</span><span>Los tres idiomas (nuevo)</span></a></li>
+      <li><a href="#tipos"><span class="n">★</span><span>Partido o entrenamiento (nuevo)</span></a></li>
+      <li><a href="#acceso"><span class="n">★</span><span>Quién entra a la app (nuevo)</span></a></li>
       <li><a href="#entrenos"><span class="n">5</span><span>Entrenamientos</span></a></li>
       <li><a href="#videos"><span class="n">6</span><span>Videos</span></a></li>
       <li><a href="#calendario"><span class="n">7</span><span>Calendario y fixture</span></a></li>
@@ -266,7 +269,7 @@
           <li><span class="name">Dashboard</span><span class="desc">El panel general: cómo viene tu equipo de un vistazo.</span></li>
           <li><span class="name">Mi Perfil / Jugador</span><span class="desc">Ficha de cada jugador, con sus baterías “jugador vs equipo”.</span></li>
           <li><span class="name">Análisis</span><span class="desc">Por fundamento: Ataque, Saque, Recepción, Armado y Defensa.</span></li>
-          <li><span class="name">Heat Maps</span><span class="desc">Mapas de calor de dónde ataca, saca, recibe y arma cada uno.</span></li>
+          <li><span class="name">Heat Maps</span><span class="desc">Mapas de calor de dónde ataca, saca, recibe, arma, defiende y <b>bloquea</b> cada uno. El de bloqueo se lee al revés que los otros: la cancha es la del <b>rival</b>, y cada casillero es la zona <b>desde donde salió el ataque</b> que bloqueaste.</span></li>
           <li><span class="name">Equipo</span><span class="desc">El plantel: la lista de jugadores de la temporada.</span></li>
           <li><span class="name">Comparador</span><span class="desc">Dos jugadores cara a cara.</span></li>
           <li><span class="name">Tendencias / Historial</span><span class="desc">Cómo evolucionan los números partido a partido.</span></li>
@@ -399,6 +402,57 @@
     </div>
     <div class="rule do"><span class="ic">📶</span><div><b>Todos en la misma red:</b> la cámara, la tablet y el scout tienen que estar en el <b>mismo WiFi</b>. Si el gimnasio no tiene WiFi, compartís internet desde tu celu (hotspot) y conectás todo ahí. El video entre los dispositivos no gasta datos.</div></div>
     <div class="done">🎬 El “último punto” está conectado al scout: sabe exactamente cuándo terminó el rally, así te muestra la jugada justa.</div>
+  </section>
+
+  <!-- ★ IDIOMAS -->
+  <section id="idiomas">
+    <div class="eyebrow"><span class="num">★</span><span class="kicker">Nuevo</span></div>
+    <h2 class="title">La app habla tres idiomas</h2>
+    <p class="lead">Español, inglés y alemán. Los botones <b>ES · EN · DE</b> están arriba a la derecha en todas las pantallas.</p>
+    <div class="brain">
+      Se cambia con un clic y no hay que recargar nada. La elección queda guardada: la próxima vez que entres,
+      la app arranca en el idioma que dejaste.<br><br>
+      <b>Lo que NO se traduce, y está bien que así sea:</b> el código de la jugada
+      (<code>*08SM-~~~15</code>), los nombres de los equipos y de los jugadores, y las teclas
+      (<b>Ctrl</b>, <b>Enter</b>). El código de DataVolley es internacional: las mismas letras en los
+      ocho idiomas del programa. Si se tradujera, el archivo dejaría de servir.
+    </div>
+    <div class="rule do"><span class="ic">💪</span><div><b>Los ejercicios del físico se traducen solos.</b> Cada uno tiene su nombre en los tres idiomas cargado por el preparador. Si aparece uno en castellano, es que a ese ejercicio le falta la traducción en el catálogo: se agrega ahí y sale bien en todas las pantallas.</div></div>
+    <div class="rule dont"><span class="ic">⚠️</span><div>Si el preparador escribe un nombre de bloque nuevo que no está en la lista conocida, va a quedar en castellano. Es a propósito: preferimos que quede como lo escribió antes que inventarle una traducción.</div></div>
+  </section>
+
+  <!-- ★ PARTIDO O ENTRENAMIENTO -->
+  <section id="tipos">
+    <div class="eyebrow"><span class="num">★</span><span class="kicker">Nuevo</span></div>
+    <h2 class="title">Partido o entrenamiento, sin cruzar los datos</h2>
+    <p class="lead">Los partidos y las prácticas se guardan en carpetas distintas y ahora se miran por separado en todo el sistema.</p>
+    <div class="brain">
+      Vas a ver tres botones —<b>Todos · Partidos · Entrenamientos</b>— en el dashboard, el análisis,
+      el plan de partido, los cortes de video y las páginas de cada jugador. En el perfil y en los mapas
+      de calor son dos: <b>Partido</b> y <b>Entrenamiento</b>.<br><br>
+      <b>La elección viaja con vos.</b> Si ponés Entrenamientos en el análisis y después entrás a un
+      perfil o a los cortes de video, llegan ya filtrados. No hay que elegirlo de nuevo en cada pantalla.
+    </div>
+    <div class="rule do"><span class="ic">📅</span><div><b>Una práctica de julio cuenta en la temporada que arranca</b>, no en la anterior. La temporada de un entrenamiento la da la carpeta donde está, no su fecha: la pretemporada pertenece al año nuevo aunque el calendario diga otra cosa.</div></div>
+    <div class="rule"><span class="ic">📊</span><div>Con el filtro en <b>Partidos</b> y ningún partido jugado todavía, las pantallas van a estar vacías o en cero. Eso es correcto, no es un error: se llenan solas con el primer partido.</div></div>
+  </section>
+
+  <!-- ★ ACCESO -->
+  <section id="acceso">
+    <div class="eyebrow"><span class="num">★</span><span class="kicker">Nuevo</span></div>
+    <h2 class="title">Quién entra a la app</h2>
+    <p class="lead">Sin usuario y clave no se ve nada, en ninguna pantalla.</p>
+    <div class="brain">
+      Todas las páginas piden ingresar antes de mostrar algo. Y los datos del club van <b>cifrados</b>:
+      la llave para abrirlos llega recién cuando la sesión es válida. Sin ella, los archivos son ilegibles
+      aunque alguien los baje.<br><br>
+      En <b>Herramientas del entrenador → 🔐 Sesiones y dispositivos</b> ves quién tiene acceso, desde qué
+      dispositivo (computadora, celular o tablet) y cuándo entró. Podés cerrarle la sesión a un dispositivo,
+      a una persona, o a todos de una vez.
+    </div>
+    <div class="rule do"><span class="ic">📸</span><div><b>Antes de cerrar todas, sacale una captura a la lista.</b> El cierre también borra el registro, y después no vas a saber a quién tenés que darle acceso otra vez.</div></div>
+    <div class="rule"><span class="ic">⏱️</span><div>El cierre se aplica cuando la persona vuelve a abrir la app, así que puede tardar hasta una hora en alguien que la tenga abierta. Y te cierra la sesión a vos también: volvés a entrar con tu mail y tu clave.</div></div>
+    <div class="rule"><span class="ic">🔌</span><div><b>Scoutear sin señal sigue funcionando</b>, pero solo en un dispositivo que ya haya entrado alguna vez. Uno nuevo, sin conexión, no puede saltearse el ingreso.</div></div>
   </section>
 
   <section id="entrenos">

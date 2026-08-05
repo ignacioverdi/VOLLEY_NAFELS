@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La app del equipo — NÄFELS VOLEY</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
+<!--
+  ══════════════════════════════════════════════════════════════════════════
+  BIENVENIDA.html — la primera pantalla que ve un jugador
+
+  A PROPOSITO NO carga firebase.js: es la unica pagina publica del sistema.
+  Explica COMO entrar, asi que no puede estar detras del ingreso. No muestra
+  ningun dato del club, solo instrucciones.
+
+  Tampoco usa lang.js: los tres idiomas van escritos aca adentro. Es la pagina
+  que se manda por WhatsApp a gente que todavia no tiene la app, y tiene que
+  abrir sola aunque no cargue ningun otro archivo.
+  ══════════════════════════════════════════════════════════════════════════
+-->
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.08);
+      --red:#E8192C;--green:#22C55E;--indigo:#818CF8;--amber:#F59E0B;
+      --text:#E2E8F0;--muted:#64748B;--subtle:#475569}
+html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:680px;margin:0 auto;padding:0 18px 60px}
+.top{display:flex;align-items:center;gap:10px;padding:16px 0 8px;position:sticky;top:0;
+  background:linear-gradient(180deg,var(--bg) 72%,transparent);z-index:10}
+.lang{display:flex;gap:5px;margin-left:auto}
+.lang button{cursor:pointer;background:transparent;border:1px solid var(--border);color:var(--muted);
+  border-radius:8px;padding:6px 11px;font-family:inherit;font-size:12px;font-weight:800;letter-spacing:1px}
+.lang button.on{background:var(--red);border-color:var(--red);color:#fff}
+h1{font-family:"Bebas Neue",sans-serif;font-size:clamp(34px,9vw,52px);line-height:.95;letter-spacing:1px;margin-top:14px}
+h1 span{color:var(--red)}
+.sub{color:var(--muted);font-size:15px;margin-top:10px;line-height:1.55}
+.sec{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--subtle);
+  font-weight:800;margin:34px 0 12px}
+.entrar{background:linear-gradient(180deg,rgba(34,197,94,.10),rgba(34,197,94,.03));
+  border:1px solid rgba(34,197,94,.30);border-radius:14px;padding:16px 16px 14px}
+.entrar .l{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:800}
+.entrar .v{font-size:17px;font-weight:700;margin:3px 0 12px}
+.entrar .v:last-of-type{margin-bottom:6px}
+.ej{font-size:13px;color:var(--muted);border-top:1px dashed rgba(255,255,255,.10);padding-top:10px;margin-top:4px}
+.ej b{color:var(--green);font-family:"Bebas Neue",sans-serif;font-size:17px;letter-spacing:2px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:15px 16px;margin-bottom:10px;display:flex;gap:14px;align-items:flex-start}
+.card .ic{font-size:24px;line-height:1;flex-shrink:0;margin-top:1px}
+.card .t{font-family:"Bebas Neue",sans-serif;font-size:19px;letter-spacing:1.5px}
+.card .d{color:var(--muted);font-size:14px;line-height:1.5;margin-top:3px}
+.aviso{background:rgba(232,25,44,.07);border:1px solid rgba(232,25,44,.28);border-radius:14px;
+  padding:15px 16px;display:flex;gap:13px;align-items:flex-start;margin-top:6px}
+.aviso .ic{font-size:22px;flex-shrink:0}
+.aviso .d{font-size:14.5px;line-height:1.55}
+.pasos{counter-reset:p;list-style:none}
+.pasos li{counter-increment:p;position:relative;padding:9px 0 9px 40px;font-size:15px;line-height:1.5;
+  border-bottom:1px solid rgba(255,255,255,.05)}
+.pasos li:last-child{border-bottom:0}
+.pasos li::before{content:counter(p);position:absolute;left:0;top:9px;width:26px;height:26px;
+  border-radius:50%;background:var(--card2);border:1px solid var(--border);color:var(--indigo);
+  font-family:"Bebas Neue",sans-serif;font-size:15px;display:flex;align-items:center;justify-content:center}
+.pie{color:var(--subtle);font-size:13px;line-height:1.6;margin-top:34px;
+  border-top:1px solid var(--border);padding-top:16px}
+[data-l]{display:none}
+[data-l].on{display:block}
+.card[data-l],.aviso[data-l]{display:none}
+.card[data-l].on,.aviso[data-l].on{display:flex}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:3px;color:var(--muted)">NÄFELS VOLEY</div>
+    <div class="lang">
+      <button id="b-es" class="on" onclick="setIdioma('es')">ES</button>
+      <button id="b-de" onclick="setIdioma('de')">DE</button>
+      <button id="b-en" onclick="setIdioma('en')">EN</button>
+    </div>
+  </div>
+
+  <!-- ══════════════ ESPAÑOL ══════════════ -->
+  <div data-l="es" class="on">
+    <h1>La app<br>del <span>equipo</span></h1>
+    <p class="sub">Todo en un solo lugar: los horarios, el calendario, tus estadísticas, tus rutinas del gimnasio y los videos. Se instala una vez y después la abrís como cualquier otra app.</p>
+
+    <div class="sec">Cómo entrar</div>
+    <div class="entrar">
+      <div class="l">Usuario</div>
+      <div class="v">Tu dirección de mail</div>
+      <div class="l">Clave</div>
+      <div class="v">Tu fecha de nacimiento — 6 números, sin puntos ni barras</div>
+      <div class="ej">Si naciste el 01.01.1990, tu clave es <b>010190</b></div>
+    </div>
+
+    <div class="sec">Qué vas a encontrar</div>
+  </div>
+
+  <div class="card" data-l="es"><div class="ic">📊</div><div>
+    <div class="t">Tu perfil</div>
+    <div class="d">Cómo venís en saque, recepción, ataque y bloqueo. Partido por partido, o el acumulado de la temporada.</div></div></div>
+
+  <div class="card" data-l="es"><div class="ic">💪</div><div>
+    <div class="t">Físico</div>
+    <div class="d">Tu rutina del día con tus pesos. Los vas cargando vos y quedan guardados. En el gimnasio, la misma rutina se ve en la pantalla grande.</div></div></div>
+
+  <div class="card" data-l="es"><div class="ic">🌡️</div><div>
+    <div class="t">Wellness</div>
+    <div class="d">Cómo llegás cada día: sueño, cansancio, dolores. Son 30 segundos y nos sirve muchísimo para saber cómo armar la práctica.</div></div></div>
+
+  <div class="card" data-l="es"><div class="ic">📅</div><div>
+    <div class="t">Agenda</div>
+    <div class="d">Horarios de entrenamiento y calendario de partidos, siempre al día. Si algo cambia, se actualiza solo.</div></div></div>
+
+  <div class="card" data-l="es"><div class="ic">🎬</div><div>
+    <div class="t">Video</div>
+    <div class="d">Los cortes de tus acciones, filtrados por lo que quieras ver. Para mirar tranquilo lo que hablamos en el entrenamiento.</div></div></div>
+
+  <div class="aviso" data-l="es"><div class="ic">🔔</div><div class="d">
+    <b>Activá las notificaciones.</b> Los cambios de horario y los avisos de partido llegan por la app. Si no las activás, te los vas a perder. Está explicado en el PDF que te pasamos.</div></div>
+
+  <div data-l="es">
+    <div class="sec">En 4 pasos</div>
+    <ol class="pasos">
+      <li>Abrí <b>volley-nafels.vercel.app</b> en el celular (en iPhone tiene que ser con Safari).</li>
+      <li>Agregala a la pantalla de inicio — está en el PDF, con las capturas.</li>
+      <li>Entrá con tu mail y tu fecha de nacimiento.</li>
+      <li>Tocá <b>Activar avisos</b> y listo.</li>
+    </ol>
+    <p class="pie">La app está en español, inglés y alemán. Se cambia con los botones de arriba a la derecha, en cualquier momento.<br><br>
+    Si no podés entrar o algo no funciona, escribile al cuerpo técnico.</p>
+  </div>
+
+  <!-- ══════════════ DEUTSCH ══════════════ -->
+  <div data-l="de">
+    <h1>Die App<br>des <span>Teams</span></h1>
+    <p class="sub">Alles an einem Ort: Trainingszeiten, Spielplan, deine Statistiken, deine Kraftprogramme und die Videos. Einmal installieren, danach öffnest du sie wie jede andere App.</p>
+
+    <div class="sec">Zum Einloggen</div>
+    <div class="entrar">
+      <div class="l">Benutzer</div>
+      <div class="v">Deine E-Mail-Adresse</div>
+      <div class="l">Passwort</div>
+      <div class="v">Dein Geburtsdatum — 6 Zahlen, ohne Punkte</div>
+      <div class="ej">Geburtstag 01.01.1990 → Passwort <b>010190</b></div>
+    </div>
+
+    <div class="sec">Was du dort findest</div>
+  </div>
+
+  <div class="card" data-l="de"><div class="ic">📊</div><div>
+    <div class="t">Dein Profil</div>
+    <div class="d">Wie du in Aufschlag, Annahme, Angriff und Block stehst. Spiel für Spiel oder über die ganze Saison.</div></div></div>
+
+  <div class="card" data-l="de"><div class="ic">💪</div><div>
+    <div class="t">Kraft</div>
+    <div class="d">Dein Tagesprogramm mit deinen Gewichten. Du trägst sie selbst ein und sie bleiben gespeichert. Im Kraftraum läuft dasselbe Programm auf dem grossen Bildschirm.</div></div></div>
+
+  <div class="card" data-l="de"><div class="ic">🌡️</div><div>
+    <div class="t">Wellness</div>
+    <div class="d">Wie du dich fühlst: Schlaf, Müdigkeit, Schmerzen. 30 Sekunden, und uns hilft es enorm bei der Trainingsplanung.</div></div></div>
+
+  <div class="card" data-l="de"><div class="ic">📅</div><div>
+    <div class="t">Kalender</div>
+    <div class="d">Trainingszeiten und Spielplan, immer aktuell. Änderungen erscheinen automatisch.</div></div></div>
+
+  <div class="card" data-l="de"><div class="ic">🎬</div><div>
+    <div class="t">Video</div>
+    <div class="d">Clips deiner Aktionen, gefiltert nach dem, was du sehen willst. Um in Ruhe anzuschauen, was wir im Training besprochen haben.</div></div></div>
+
+  <div class="aviso" data-l="de"><div class="ic">🔔</div><div class="d">
+    <b>Benachrichtigungen aktivieren.</b> Änderungen bei Trainingszeiten und Spielen kommen über die App. Ohne aktivierte Benachrichtigungen verpasst du sie. Die Anleitung steht im PDF.</div></div>
+
+  <div data-l="de">
+    <div class="sec">In 4 Schritten</div>
+    <ol class="pasos">
+      <li>Öffne <b>volley-nafels.vercel.app</b> auf dem Handy (beim iPhone mit Safari).</li>
+      <li>Füge sie zum Startbildschirm hinzu — im PDF mit Screenshots erklärt.</li>
+      <li>Melde dich mit E-Mail und Geburtsdatum an.</li>
+      <li>Tippe auf <b>Benachrichtigungen aktivieren</b> — fertig.</li>
+    </ol>
+    <p class="pie">Die App gibt es auf Deutsch, Englisch und Spanisch. Umschalten kannst du jederzeit oben rechts.<br><br>
+    Wenn du dich nicht einloggen kannst oder etwas nicht funktioniert, melde dich beim Trainerstab.</p>
+  </div>
+
+  <!-- ══════════════ ENGLISH ══════════════ -->
+  <div data-l="en">
+    <h1>The team<br><span>app</span></h1>
+    <p class="sub">Everything in one place: training times, fixtures, your stats, your gym programmes and the videos. Install it once, then open it like any other app.</p>
+
+    <div class="sec">How to log in</div>
+    <div class="entrar">
+      <div class="l">Username</div>
+      <div class="v">Your email address</div>
+      <div class="l">Password</div>
+      <div class="v">Your date of birth — 6 digits, no dots or slashes</div>
+      <div class="ej">Born 01.01.1990 → password <b>010190</b></div>
+    </div>
+
+    <div class="sec">What you'll find</div>
+  </div>
+
+  <div class="card" data-l="en"><div class="ic">📊</div><div>
+    <div class="t">Your profile</div>
+    <div class="d">How you're doing in serve, reception, attack and block. Match by match, or across the season.</div></div></div>
+
+  <div class="card" data-l="en"><div class="ic">💪</div><div>
+    <div class="t">Strength</div>
+    <div class="d">Your programme for the day with your weights. You enter them yourself and they stay saved. In the gym, the same programme runs on the big screen.</div></div></div>
+
+  <div class="card" data-l="en"><div class="ic">🌡️</div><div>
+    <div class="t">Wellness</div>
+    <div class="d">How you're feeling: sleep, fatigue, soreness. It takes 30 seconds and it helps us a lot when planning the session.</div></div></div>
+
+  <div class="card" data-l="en"><div class="ic">📅</div><div>
+    <div class="t">Calendar</div>
+    <div class="d">Training times and fixtures, always up to date. If something changes, it updates by itself.</div></div></div>
+
+  <div class="card" data-l="en"><div class="ic">🎬</div><div>
+    <div class="t">Video</div>
+    <div class="d">Clips of your actions, filtered however you want. To watch what we talked about in training, in your own time.</div></div></div>
+
+  <div class="aviso" data-l="en"><div class="ic">🔔</div><div class="d">
+    <b>Turn on notifications.</b> Changes to training times and matches come through the app. If you don't turn them on, you'll miss them. The PDF explains how.</div></div>
+
+  <div data-l="en">
+    <div class="sec">In 4 steps</div>
+    <ol class="pasos">
+      <li>Open <b>volley-nafels.vercel.app</b> on your phone (on iPhone it has to be Safari).</li>
+      <li>Add it to your home screen — the PDF shows how, with screenshots.</li>
+      <li>Log in with your email and date of birth.</li>
+      <li>Tap <b>Turn on notifications</b> and you're done.</li>
+    </ol>
+    <p class="pie">The app is in English, German and Spanish. Switch it any time with the buttons at the top right.<br><br>
+    If you can't log in or something isn't working, message the coaching staff.</p>
+  </div>
+
+</div>
+
+<script>
+/* El idioma elegido queda guardado, asi que si vuelve a abrir la pagina la
+   encuentra como la dejo. Si el celular esta en aleman, arranca en aleman. */
+function setIdioma(l){
+  ['es','de','en'].forEach(function(x){
+    document.querySelectorAll('[data-l="'+x+'"]').forEach(function(el){
+      el.classList.toggle('on', x === l);
+    });
+    var b = document.getElementById('b-' + x);
+    if(b) b.classList.toggle('on', x === l);
+  });
+  document.documentElement.lang = l;
+  try{ localStorage.setItem('bienvenida_idioma', l); }catch(e){}
+}
+(function(){
+  var l = null;
+  try{ l = localStorage.getItem('bienvenida_idioma'); }catch(e){}
+  if(!l){
+    var nav = (navigator.language || 'es').slice(0,2).toLowerCase();
+    l = (nav === 'de' || nav === 'en') ? nav : 'es';
+  }
+  setIdioma(l);
+})();
+</script>
+</body>
+</html>
