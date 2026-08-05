@@ -140,3 +140,25 @@
     text-align: left !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   TU PROPIA FILA
+   ----------------------------------------------------------------------------
+   La marca mi_fila.js cuando el que entro es un jugador. Es una barra al
+   costado y un fondo apenas mas claro: se encuentra de un vistazo y no compite
+   con los colores que ya usan las tablas para marcar bueno y malo.
+
+   Va fuera de las reglas de celular: se ve igual en la computadora y en el
+   telefono.
+   ════════════════════════════════════════════════════════════════════════════ */
+tr.mi-fila > td:first-child,
+tr.mi-fila > th:first-child {
+  box-shadow: inset 3px 0 0 0 #22C55E;
+}
+tr.mi-fila > td,
+tr.mi-fila > th {
+  background: rgba(34, 197, 94, .07) !important;
+}
+tr.mi-fila {
+  font-weight: 700;
+}
