@@ -191,6 +191,16 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    // ═══ Rotaciones ══════════════════════════════════════════════════════
+    "Rotaciones":{en:"Rotations",de:"Rotationen"},
+    "Las seis rotaciones enfrentadas al rival, en una hoja. Para preparar el saque, el bloqueo y la defensa antes del partido.":{
+      en:"All six rotations against the opponent, on one page. To prepare the serve, the block and the defence before the match.",
+      de:"Alle sechs Rotationen gegen den Gegner, auf einer Seite. Zur Vorbereitung von Aufschlag, Block und Abwehr."},
+    "Rival":{en:"Opponent",de:"Gegner"},
+    "Mi armador en":{en:"My setter in",de:"Mein Zuspieler auf"},
+    "Su armador en":{en:"Their setter in",de:"Ihr Zuspieler auf"},
+    "✏️ Cambiar los seis":{en:"✏️ Change the starting six",de:"✏️ Startsechs ändern"},
+    "Nuevo":{en:"New",de:"Neu"},
     // ═══ Tabla de estadisticas de la liga ═════════════════════════════════
     // Los nombres de los equipos NO se traducen: Amriswil, Chenois, Jona y el
     // resto se llaman igual en los tres idiomas.
@@ -1682,7 +1692,6 @@
     "Próximo partido":{en:"Next match",de:"Nächstes Spiel"},
     "Liga NLA":{en:"NLA League",de:"NLA-Liga"},
     "Estadísticas Liga":{en:"League Stats",de:"Liga-Statistiken"},
-    "Nuevo":{en:"New",de:"Neu"},
     "Cargar Videos":{en:"Upload Videos",de:"Videos hochladen"},
     "Pizarrón":{en:"Whiteboard",de:"Taktiktafel"},
     "Próximamente":{en:"Coming soon",de:"Demnächst"},
