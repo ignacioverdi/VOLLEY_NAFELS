@@ -52,6 +52,10 @@ DATOS = [
     'datos_equipo.js', 'datos_partidos.js', 'datos_historial.js',
     'datos_armadores.js', 'datos_recepcion.js', 'datos_ejercicios.js',
     'datos_nla.js', 'nla_stats.json',
+    # El informe de equipo: son las metricas del club y de toda la liga, asi
+    # que se publica cifrado como el resto. Sin esta linea quedaba legible
+    # para cualquiera que abriera la direccion.
+    'datos_informe.js',
 ]
 # tambien las bases grandes
 def bases(carpeta):

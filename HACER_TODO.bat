@@ -205,6 +205,23 @@ if "!ENT_DIR!"=="" (
 if errorlevel 1 echo      [aviso] Problema en las baterias. Sigo igual.
 echo.
 
+REM ===================================================================
+REM   EL INFORME DE EQUIPO
+REM
+REM   Cambio de saque, breakpoint y sus valores ESPERADOS: cuanto
+REM   deberia sacar el equipo dada la calidad con la que recibe. Eso es
+REM   lo que convierte un numero en un diagnostico.
+REM
+REM   La referencia de cada calidad de recepcion se calcula con los .dvw
+REM   de TODA la liga cargada, no con numeros de otro campeonato: el
+REM   nivel cambia cuanto rinde cada tipo de pase.
+REM ===================================================================
+echo  ================= INFORME DE EQUIPO =================
+echo.
+python gen_informe.py --dvw_dir "!DVW_DIR!" --temporada "!TEMPORADA_ACTUAL!" --out "datos_informe.js"
+if errorlevel 1 echo      [aviso] Problema armando el informe. Sigo igual.
+echo.
+
 echo  ==================================================
 echo      VERIFICACION (archivos clave):
 if exist "datos_partidos.js"     (echo      OK  datos_partidos.js)            else (echo      --  falta datos_partidos.js)

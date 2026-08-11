@@ -47,6 +47,10 @@ DATOS = [
     'datos_equipo.js', 'datos_partidos.js', 'datos_historial.js',
     'datos_armadores.js', 'datos_recepcion.js', 'datos_ejercicios.js',
     'datos_nla.js', 'nla_stats.json',
+    # El informe de equipo. Tiene que estar en las DOS listas: si esta solo en
+    # la de cifrado, HACER_TODO no lo puede abrir para regenerarlo y el
+    # archivo queda congelado en la version del dia que se cifro.
+    'datos_informe.js',
 ]
 # tambien las bases grandes
 def bases(carpeta):

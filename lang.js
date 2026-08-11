@@ -191,6 +191,11 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    "Informe de equipo":{en:"Team report",de:"Mannschaftsbericht"},
+    "Cambio de saque y breakpoint contra su valor esperado: no cuánto sacaste, sino cuánto deberías haber sacado. En una pantalla.":{
+      en:"Sideout and breakpoint against their expected value: not how much you got, but how much you should have. On one screen.",
+      de:"Sideout und Breakpoint gegen ihren Erwartungswert: nicht was du geholt hast, sondern was du holen solltest. Auf einem Bildschirm."},
+    "Cargando el informe…":{en:"Loading the report…",de:"Bericht wird geladen…"},
     // ═══ Rotaciones ══════════════════════════════════════════════════════
     "Rotaciones":{en:"Rotations",de:"Rotationen"},
     "Las seis rotaciones enfrentadas al rival, en una hoja. Para preparar el saque, el bloqueo y la defensa antes del partido.":{
