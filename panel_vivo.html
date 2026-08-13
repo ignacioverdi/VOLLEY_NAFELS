@@ -42,12 +42,6 @@
   .pl-num:focus,.pl-nom:focus,.pl-pos:focus{border-color:var(--ok)}
   .pl-tag{font-size:9.5px;color:var(--ok);width:52px;text-align:right}
   .pl-x{background:none;border:none;color:var(--dim);cursor:pointer;font-size:16px;padding:0 4px}
-  .pl-fuera{background:none;border:none;color:var(--dim);cursor:pointer;font-size:15px;padding:0 4px}
-  .pl-fuera:hover{color:#f59e0b}
-  /* El no convocado queda a la vista pero apagado: sigue en la lista para el
-     proximo partido, sin ocupar lugar en este. */
-  .pl-row.fuera{opacity:.42}
-  .pl-row.fuera .pl-nom,.pl-row.fuera .pl-num{text-decoration:line-through}
   .pl-x:hover{color:var(--bad)}
   .pl-vacio{color:var(--dim);font-size:13px;padding:10px 0}
   /* Modo extensión: el campo cambia de color para que se vea que la próxima
@@ -527,11 +521,11 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="lang.js"></script>
+<script src="lang.js?v=20260813-1930"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css">
+<link rel="stylesheet" href="movil.css?v=20260813-1930">
 </head>
 <body>
 
@@ -1180,14 +1174,14 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 
 <div class="toast" id="toast"></div>
 
-<script src="firebase.js" onerror="void 0"></script>
-<script src="objetivos.js" onerror="void 0"></script>
-<script src="video_delay.js" onerror="void 0"></script>
+<script src="firebase.js?v=20260813-1930" onerror="void 0"></script>
+<script src="objetivos.js?v=20260813-1930" onerror="void 0"></script>
+<script src="video_delay.js?v=20260813-1930" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20260813-1930" onerror="void 0"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -2665,8 +2659,7 @@ function plCargar(side){
     if(l && !l.pos) l.pos = 'LIBERO';
   }
   lista.sort((a,b) => (parseInt(a.num,10)||0) - (parseInt(b.num,10)||0));
-  /* la marca de no convocado viaja con el jugador */
-  PL[side] = (lista || []).map(j => Object.assign({}, j, {fuera: !!j.fuera}));
+  PL[side] = lista;
 }
 
 function plPintar(side){
@@ -2674,9 +2667,9 @@ function plPintar(side){
   if(!cont) return;
   const enCancha = (M[side].lineup || []).filter(Boolean).map(String);
   cont.innerHTML = PL[side].map((j, i) => {
-    const juega = !j.fuera && enCancha.indexOf(String(j.num)) >= 0;
+    const juega = enCancha.indexOf(String(j.num)) >= 0;
     const lib   = String(j.num) === String(M[side].libero);
-    return '<div class="pl-row' + (juega ? ' juega' : '') + (j.fuera ? ' fuera' : '') + '">'
+    return '<div class="pl-row' + (juega ? ' juega' : '') + '">'
       + '<input class="pl-num" value="' + esc(j.num) + '" maxlength="2" inputmode="numeric"'
       + ' oninput="plEditar(\'' + side + '\',' + i + ',\'num\',this.value)">'
       + '<input class="pl-nom" value="' + esc(j.nombre) + '" placeholder="Apellido"'
@@ -2685,15 +2678,7 @@ function plPintar(side){
       + PL_POS.map(p => '<option value="' + p + '"' + (p === (j.pos||'') ? ' selected' : '') + '>'
                       + (p || '—') + '</option>').join('')
       + '</select>'
-      + '<span class="pl-tag">' + (j.fuera ? 'no convocado' : (lib ? 'líbero' : (juega ? 'en cancha' : ''))) + '</span>'
-      /* ══ No convocado ══════════════════════════════════════════════════
-         Antes la unica salida era la ×, que BORRA al jugador de la lista: al
-         partido siguiente habia que volver a cargarlo con su numero y su
-         puesto. Con esto queda guardado pero fuera de este partido, que es lo
-         que pasa de verdad con un lesionado o alguien que no viajo. */
-      + '<button class="pl-fuera" onclick="plFuera(\'' + side + '\',' + i + ')"'
-      + ' title="' + (j.fuera ? 'Volver a convocarlo' : 'No está convocado para este partido') + '">'
-      + (j.fuera ? '↺' : '⊘') + '</button>'
+      + '<span class="pl-tag">' + (lib ? 'líbero' : (juega ? 'en cancha' : '')) + '</span>'
       + '<button class="pl-x" onclick="plQuitar(\'' + side + '\',' + i + ')" title="Sacar de la lista">×</button>'
       + '</div>';
   }).join('') || '<div class="pl-vacio">Sin jugadores cargados.</div>';
@@ -2703,22 +2688,6 @@ function plEditar(side, i, campo, valor){
   if(!PL[side][i]) return;
   PL[side][i][campo] = (campo === 'num') ? String(valor).replace(/\D/g,'').slice(0,2) : valor;
 }
-function plFuera(side, i){
-  /* Marca o desmarca al jugador como no convocado para ESTE partido. No lo
-     borra: sigue en la lista con su numero y su puesto, listo para el
-     proximo. Si estaba en cancha, sale del seis. */
-  const j = PL[side][i];
-  if(!j) return;
-  j.fuera = !j.fuera;
-  if(j.fuera){
-    const L = M[side].lineup || [];
-    for(let k = 0; k < L.length; k++) if(String(L[k]) === String(j.num)) L[k] = '';
-    if(String(M[side].libero) === String(j.num)) M[side].libero = '';
-  }
-  plPintar(side);
-  try{ dibujarCancha && dibujarCancha(); }catch(e){}
-}
-
 function plAgregar(side){
   PL[side].push({num:'', nombre:'', pos:''});
   plPintar(side);
@@ -2776,12 +2745,8 @@ function plGuardar(side){
     const nombre = (M[side].name || '').toUpperCase();
     /* Se escribe en los DOS vocabularios: si guardáramos sólo {num,nombre,pos},
        el próximo .sq exportado perdería el apellido y el rol numérico. */
-    /* Se guardan TODOS, incluidos los no convocados: la lista es del club, no
-       de este partido. El campo 'fuera' viaja con cada jugador, asi al abrir
-       el partido siguiente aparece como estaba y alcanza con desmarcarlo. */
     const jug = PL[side].filter(j => j.num).map(j => ({
       num: j.num, c: parseInt(j.num,10) || j.num,
-      fuera: !!j.fuera,
       nombre:   j.pila || j.nombre,      /* nombre de pila, como en el .sq */
       apellido: j.nombre,                /* la columna que se edita es el apellido */
       pos: j.pos, rol: POS_A_ROL[j.pos] || '',
@@ -3355,23 +3320,8 @@ function extenderEnCorto(texto, idx, ch, largo){
   var q; try{ q = parseInput(out); }catch(e){ return null; }
   if(!q.length) return null;
   for(var k=0;k<q.length;k++) if(q[k].err) return null;
-  /* ══ La prueba ═════════════════════════════════════════════════════════
-     El texto corto tiene que dar los MISMOS codigos que el largo. Si no, se
-     devuelve null y quien llama reescribe el campo entero en forma completa.
-
-     Esa reescritura es la que rompia el trabajo en vivo: con un codigo
-     encadenado como "4SM15.8#K1O", al agregar una extension el campo se
-     reemplazaba por la forma larga y todo lo tipeado despues quedaba fuera de
-     la lista de codigos.
-
-     Por eso la comparacion ahora ignora las DIFERENCIAS DE FORMA que no
-     cambian lo que se leyo: espacios de mas y el relleno con ~ que agrega el
-     formateador. Lo que importa es que las acciones sean las mismas, no que
-     el texto coincida caracter por caracter. */
-  function _mismoFondo(x){
-    return String(x).replace(/~+/g, '~').replace(/\s+/g, ' ').trim().toUpperCase();
-  }
-  return (_mismoFondo(q.map(fmt).join(' ')) === _mismoFondo(largo)) ? out : null;
+  /* la prueba: el texto corto tiene que dar los mismos codigos que el largo */
+  return (q.map(fmt).join(' ') === largo) ? out : null;
 }
 
 function ponerExt(ch){
@@ -7322,5 +7272,6 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
+<script src="volver_inicio.js?v=20260813-1930" onerror="void 0"></script>
 </body>
 </html>

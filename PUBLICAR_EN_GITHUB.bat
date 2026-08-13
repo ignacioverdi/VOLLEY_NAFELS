@@ -14,6 +14,22 @@ if not exist ".git" goto NOREPO
 echo  Guardando y subiendo TODOS los cambios a GitHub...
 echo  (La PRIMERA vez puede abrirse el navegador para iniciar sesion en GitHub.)
 echo.
+REM ===================================================================
+REM   SELLAR LA VERSION ANTES DE SUBIR
+REM
+REM   El navegador guarda los .js y .css para no bajarlos cada vez, y sin
+REM   una señal no se entera de que cambiaron: un jugador puede quedarse
+REM   MESES con la app de hace semanas, reportando errores ya corregidos.
+REM
+REM   Esto le agrega ?v=<fecha> a cada archivo en las paginas, asi el
+REM   navegador lo toma como distinto y lo baja de nuevo. Los archivos en
+REM   si no se tocan.
+REM ===================================================================
+if exist "sellar_version.py" (
+    python sellar_version.py
+    echo.
+)
+
 git add -A
 git commit -m "Actualizacion %DATE%"
 git pull --no-rebase --no-edit -X ours
