@@ -34,9 +34,13 @@
   .vacio{ color:var(--mut); font-size:14px; padding:8px 2px; line-height:1.6; }
   .arrow{ color:var(--mut); font-size:20px; margin-left:6px; }
 </style>
-<!-- Puerta de entrada. La capsula quedo abierta cuando se cerro el resto del
-     sistema: 26 paginas con la temporada 25-26 completa se abrian sin clave. -->
-<script src="../../firebase.js" onerror="void 0"></script>
+<!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
+     la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
+<script src="firebase.js?v=20260813-1930" onerror="void 0"></script>
+<!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
+     toca el encabezado y las barras: en la computadora no hace nada.
+     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
+<link rel="stylesheet" href="movil.css?v=20260813-1930">
 </head>
 <body>
 <header>
@@ -51,7 +55,7 @@
   <div class="titulo" data-t="temp_titulo">Temporadas</div>
   <div class="sub" data-t="temp_sub">Elegí una temporada para ver sus estadísticas.</div>
 
-  <div class="lbl" data-t="temp_en_curso">temporada archivada</div>
+  <div class="lbl" data-t="temp_en_curso">Temporada en curso</div>
   <a class="temp actual" href="index.html">
     <div class="ico">🏐</div>
     <div>
@@ -66,8 +70,8 @@
   <div id="lista-archivadas"></div>
 </main>
 
-<script src="temporadas.js"></script>
-<script src="lang.js"></script>
+<script src="temporadas.js?v=20260813-1930"></script>
+<script src="lang.js?v=20260813-1930"></script>
 <script>
   (function(){
     var cont = document.getElementById('lista-archivadas');

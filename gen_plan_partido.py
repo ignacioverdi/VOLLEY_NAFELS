@@ -11,32 +11,95 @@ import json, re, os, glob, sys, argparse
 from collections import defaultdict, Counter
 
 import unicodedata
-# --- equipos de la liga (Naefels): keyword normalizado -> (slug, display) ---
-SLUGS = [
- ('amriswil',   ('amriswil','Amriswil')),
- ('nafels',     ('nafels','N\u00e4fels')),
- ('schonenwerd',('schonenwerd','Sch\u00f6nenwerd')),
- ('chenois',    ('chenois','Ch\u00eanois')),
- ('jona',       ('jona','Jona')),
- ('colombier',  ('colombier','Colombier')),
- ('gallen',     ('stgallen','St Gallen')),
- ('lausanne',   ('lausanne','Lausanne')),
- ('orion',      ('orion','Orion Stars')),
-]
+# ── Los equipos ─────────────────────────────────────────────────────────────
+# Antes esta tabla traia los de la liga del club de origen escritos a mano, y
+# un cliente de otra liga no reconocia a ninguno de los suyos.
+#
+# Ahora sale de config_club.json si el club la cargo, y lo que no este ahi se
+# resuelve con el propio nombre del equipo (ver name_to_slug). Nadie queda
+# afuera por no estar en una lista.
+SLUGS = []
+try:
+    import config_club as _cc
+    for _largo, _corto in (_cc.tabla_de_equipos() or {}).items():
+        _k = re.sub(r'[^a-z0-9]', '', _corto.lower())
+        if _k:
+            SLUGS.append((_k, (_k, _corto)))
+except Exception:
+    pass
 DISP_BY_SLUG = {slug:disp for kw,(slug,disp) in SLUGS}
 def _norm(x):
     x=''.join(c for c in unicodedata.normalize('NFD',x or '') if unicodedata.category(c)!='Mn')
     return re.sub(r'[^a-z0-9]','',x.lower())
 def name_to_slug(name):
-    k=_norm(name)
-    for kw,(slug,disp) in SLUGS:
-        if kw in k: return slug
-    return None
+    """El nombre corto de un equipo, a partir de como viene en el .dvw.
+
+    Se compara el nombre LARGO contra la tabla del club, no por pedacitos: si
+    se busca la palabra corta adentro de la larga, "Club Atletico San Lorenzo"
+    contiene "uba" —en "clUBAtletico"— y San Lorenzo se convertia en UBA.
+
+    Lo que no este en la tabla se resuelve con su propio nombre, en vez de
+    descartarlo: antes devolvia None y el equipo desaparecia del plan sin
+    ningun aviso.
+    """
+    k = _norm(name)
+    if not k:
+        return None
+    # 1) la tabla del club, comparando nombres completos
+    try:
+        import config_club as _cc
+        # Nombres COMPLETOS, nunca por pedacitos: "uba" esta adentro de
+        # "clUBAtletico", y buscando la palabra corta dentro de la larga UBA se
+        # convertia en Casla. Solo vale que sea igual al corto, o que el nombre
+        # que viene CONTENGA al largo configurado.
+        for largo, corto in (_cc.tabla_de_equipos() or {}).items():
+            kl, kc = _norm(largo), _norm(corto)
+            if kl and (k == kc or k == kl or kl in k):
+                return kc
+        # ── Y al reves: el nombre que viene, adentro del configurado ──────
+        # La tabla suele tener el nombre CON el sufijo de la liga —"Chenois
+        # Geneve Volleyball (NLA Men)"— y hay .dvw que lo traen sin el. Sin
+        # esta vuelta, ese equipo entra con su nombre largo y aparece dos
+        # veces: una como "chenois" y otra como "chenoisgenevevolleyball".
+        #
+        # Se pide un largo minimo para no emparejar por casualidad: "jona"
+        # esta adentro de muchas cosas.
+        if len(k) >= 8:
+            for largo, corto in (_cc.tabla_de_equipos() or {}).items():
+                kl, kc = _norm(largo), _norm(corto)
+                if kl and k in kl:
+                    return kc
+    except Exception:
+        pass
+    # 2) por si el .dvw ya trae el nombre corto
+    for kw, (slug, disp) in SLUGS:
+        if kw == k:
+            return slug
+    # 3) lo que no este configurado, con su propio nombre
+    return k
 TYPE={'Q':'pot','T':'pot','M':'flo','H':'flo'}
 
 def read_dvw(fp):
     b=open(fp,'rb').read()
-    t=b.decode('utf-8','replace')   # Naefels: DVW en UTF-8 (tolerante a bytes sueltos)
+    # ══ La codificacion se decide por CONTENIDO ═══════════════════════════
+    # No todos los .dvw usan la misma: DataVolley escribe en Windows-1252 y
+    # VolleyMetrics en UTF-8. Y hay archivos de VolleyMetrics que son UTF-8
+    # pero traen algun byte latin-1 suelto en un campo interno.
+    #
+    # Leerlos siempre como latin-1 duplica los acentos de los que son UTF-8:
+    # "Schonenwerd" queda "SchA¶nenwerd", ya no coincide con la tabla de
+    # equipos, y el mismo club aparece dos veces en la liga con nombres
+    # distintos.
+    #
+    # Se cuentan los acentos validos de cada lectura y gana la que mas tenga.
+    _ACENTOS = 'áéíóúàèìòùäëïöüâêîôûñçÁÉÍÓÚÄÖÜÑÇ'
+    _BASURA  = ('Ã¤','Ã¶','Ã¼','Ã©','Ã¨','Ãª','Ã¡','Ã³','Ã­','Ã±','Ã§')
+    def _punt(x):
+        return (sum(x.count(c) for c in _ACENTOS)
+                - sum(x.count(z) for z in _BASURA) * 3)
+    _u = b.decode('utf-8', 'ignore')
+    _l = b.decode('latin-1', 'replace')
+    t = _u if _punt(_u) >= _punt(_l) else _l
     return t.replace('\r\n','\n').replace('\r','\n')
 
 def load_season_map(db_path, out_dir):
@@ -52,9 +115,37 @@ def load_season_map(db_path, out_dir):
         except Exception: pass
     return {}
 
+# ── La temporada, segun el torneo del club ───────────────────────────────────
+# Antes cada generador la calculaba por su cuenta con la regla europea:
+# "arranca en agosto". Eso deja mal etiquetado cualquier torneo con otro
+# calendario —el Metropolitano argentino va de mayo a agosto— y los partidos
+# desaparecen de las pantallas sin ningun aviso: el motor los guarda con una
+# etiqueta y el generador busca otra.
+#
+# Ahora se le pregunta a config_club.json, que es el unico lugar donde vive el
+# calendario de cada torneo. Si el club no lo configuro, se usa la cuenta de
+# siempre y nada cambia.
+def _temp_config(date, carpeta=''):
+    try:
+        import config_club as _cc
+        if _cc.torneos():
+            t = _cc.temporada_de(date, '', carpeta)
+            if t:
+                tor = _cc.resolver_torneo('', carpeta)
+                cfg = _cc.torneos().get(tor) or {}
+                if cfg.get('cruza'):
+                    return "%d/%02d" % (int(t), (int(t) + 1) % 100)
+                return str(t)
+    except Exception:
+        pass
+    return None
+
+
 def season_from_date(date):
     """Fallback: deduce temporada 'YYYY/YY' desde la fecha (arranca en agosto)."""
     try:
+        _t = _temp_config(date)
+        if _t: return _t
         p=date.split('-'); y=int(p[0]); m=int(p[1]); st=y if m>=8 else y-1
         return "%d/%02d"%(st,(st+1)%100)
     except Exception: return None
@@ -69,6 +160,20 @@ def _slug_txt(t):
     import unicodedata as _u
     t=_u.normalize('NFKD', t or '').encode('ascii','ignore').decode()
     return re.sub(r'[^A-Za-z0-9]+','', t).upper()[:12] or 'SIN'
+
+def _mismo_equipo(a, b):
+    """Si dos nombres de equipo son el mismo.
+
+    No se puede usar _slug_txt: esa devuelve MAYUSCULAS y esta pensada para
+    nombres de archivo. Los equipos se comparan sin acentos, sin simbolos y
+    sin distinguir mayusculas, que es el criterio del resto del sistema.
+    """
+    import unicodedata as _u
+    def _p(x):
+        x = _u.normalize('NFKD', x or '').encode('ascii', 'ignore').decode()
+        return re.sub(r'[^a-z0-9]', '', x.lower())
+    return _p(a) == _p(b)
+
 
 def build(fuentes, out_dir, filter_temp=None, db_path=None):
     """fuentes: lista de (carpeta, tipo) con tipo 'partido' o 'entrenamiento'.
@@ -93,17 +198,59 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
     DATA={s:{'name':NAMES_T[s],'atk':defaultdict(list),'srv':defaultdict(list),'rec':defaultdict(list),'dig':defaultdict(list),
              'info':{},'names':{},'lib':set(),'set':Counter(),'app':Counter()} for s in DISP_BY_SLUG}
 
-    def walk(t,pfx,mid,D):
+    # ══ Las jugadoras que cambiaron de dorsal ══════════════════════════════
+    # Los dorsales cambian: una armadora puede jugar un partido con el 4 y el
+    # siguiente con el 5. El motor las unifica bajo el numero mas reciente y
+    # deja anotado el cambio en cambios_dorsal.json.
+    #
+    # Sin leerlo, el plan de partido ve dos personas distintas: cada una con
+    # la mitad de sus armados, y la pantalla de distribucion vacia porque
+    # ninguna llega al minimo.
+    CAMBIO_DORSAL = {}
+    try:
+        _rcd = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            'cambios_dorsal.json')
+        if os.path.exists(_rcd):
+            CAMBIO_DORSAL = json.load(open(_rcd, encoding='utf-8')) or {}
+    except Exception:
+        CAMBIO_DORSAL = {}
+
+    def _dorsal(slug_equipo, n):
+        # el numero que usa hoy esa jugadora
+        if not CAMBIO_DORSAL:
+            return n
+        for _t, _m in CAMBIO_DORSAL.items():
+            if _mismo_equipo(_t, slug_equipo):
+                try:
+                    return int(_m.get(str(n), n))
+                except Exception:
+                    return n
+        return n
+
+    def walk(t,pfx,mid,D,eq_slug=''):
         sec='[3PLAYERS-H]' if pfx=='*' else '[3PLAYERS-V]'
         pm=re.search(re.escape(sec)+r'(.*?)\[3',t,re.S)
         if pm:
             for l in pm.group(1).strip().splitlines():
                 f=l.split(';')
-                if len(f)<13: continue
+                if len(f)<13: continue   # 13 campos minimo; el puesto esta en el 14
                 try: num=int(f[1])
                 except: continue
+                num = _dorsal(eq_slug, num)   # si cambio de dorsal, el actual
                 D['names'][num]=f[9]
-                if f[12].strip()=='L': D['lib'].add(num)
+                # ── El puesto de cada jugadora ──────────────────────────
+                # Estaba mirando el campo 12 buscando la letra "L". El puesto
+                # vive en el campo 13 y va en NUMEROS:
+                #     1 libero · 2 punta · 3 opuesto · 4 central · 5 armador
+                # Con el campo equivocado no se reconocia ningun libero y las
+                # atacantes salian con el puesto que no era —casi todas como
+                # centrales— aunque el archivo lo declarara bien.
+                rol = f[13].strip() if len(f) > 13 else ''
+                if rol == '1' or (len(f) > 12 and f[12].strip().upper() == 'L'):
+                    D['lib'].add(num)
+                D.setdefault('rol', {})[num] = {
+                    '1':'LIBERO', '2':'PUNTA', '3':'OPUESTO',
+                    '4':'CENTRAL', '5':'ARMADOR'}.get(rol, '')
         i=t.find('[3SCOUT]\n'); scout=t[i+9:t.find('\n[3',i+9)].strip().split('\n')
         curset=None; lastsv=('',''); recv=False; rq=''; rby=0; recz=''; rally=0; last_opp_atk=''
         for line in scout:
@@ -112,7 +259,7 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
             sk=c[3]; team=c[0]; code=c[1:]
             try: tsv=int(f[12])
             except: tsv=0
-            try: pnum=int(code[:2])
+            try: pnum=_dorsal(eq_slug, int(code[:2]))
             except: pnum=-1
             if team==pfx and pnum>=0: D['app'][pnum]+=1
             if sk=='S':
@@ -209,8 +356,20 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
             return DISP_BY_SLUG.get(sl) or re.sub(r'\s*\(.*','',raw).strip() or '?'
         for slug,pfx,opp_sl,opp_raw,my_s,opp_s in [(hslug,'*',aslug,aname,hs,as_),(aslug,'a',hslug,hname,as_,hs)]:
             if slug is None: continue
+            # Un equipo que no estaba en la configuracion —un rival nuevo, un
+            # partido de otra liga— se agrega solo. Antes el generador cortaba
+            # con un error y NO se generaba el plan de partido de nadie: un
+            # solo .dvw inesperado dejaba la pantalla entera vacia.
+            if slug not in DATA:
+                # el mismo molde que arriba: con defaultdict, o revienta al
+                # guardar la primera accion de una jugadora
+                DATA[slug] = {'name': DISP_BY_SLUG.get(slug) or slug,
+                              'atk':defaultdict(list), 'srv':defaultdict(list),
+                              'rec':defaultdict(list), 'dig':defaultdict(list),
+                              'info':{}, 'names':{}, 'lib':set(),
+                              'set':Counter(), 'app':Counter()}
             D=DATA[slug]
-            walk(t,pfx,mid,D)
+            walk(t,pfx,mid,D,slug)
             D['info'][mid]={'opp':oppname(opp_sl,opp_raw),'date':date,'res':f"{my_s}-{opp_s}",
                             'yt':yt.get(mid,''),'tipo':TIPO}
         nf+=1
@@ -224,9 +383,75 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
         D['names']={str(k):v for k,v in D['names'].items()}
         D['set']={str(k):v for k,v in dict(D['set']).items()}
 
+        # ══ Juntar a la jugadora que cambio de dorsal ═══════════════════════
+        # Se hace ACA, cuando los partidos ya estan sumados y antes de armar
+        # las tarjetas.
+        #
+        # Traducir mientras se lee cada .dvw no alcanza: cada partido declara
+        # su plantel con el numero de ESE dia, asi que el 4 del primero y el 5
+        # del segundo entran igual y quedan como dos jugadoras. Una con la
+        # mitad de los armados y otra con la otra mitad: la distribucion del
+        # armador se ve vacia porque ninguna llega al minimo.
+        # ══ La misma jugadora con dos dorsales ═════════════════════════════
+        # Una jugadora puede cambiar de numero entre partidos: la armadora de
+        # GELP jugo con la 4 contra Banco Provincia y con la 5 contra Velez.
+        # Son la misma persona, pero el sistema las ve como dos: cada una con
+        # la mitad de sus acciones, y la distribucion del armador vacia porque
+        # ninguna llega al minimo.
+        #
+        # Se detecta por el NOMBRE, mirando solo los partidos que hay. Antes
+        # se leia un archivo con el mapa ya hecho, y eso fallaba: si el mapa
+        # decia "4 -> 5" pero en estos partidos solo jugo la 4, se traducia a
+        # un numero que no existe y el equipo quedaba sin armador.
+        #
+        # Se conserva el dorsal MAS ALTO: cuando alguien cambia de numero
+        # suele ser porque subio de categoria o le dieron uno nuevo, y ese es
+        # el que el equipo usa hoy.
+        import unicodedata as _u2
+
+        def _nom(x):
+            x = _u2.normalize('NFKD', x or '').encode('ascii', 'ignore').decode()
+            return re.sub(r'\s+', ' ', x).strip().lower()
+
+        _por_nombre = {}
+        for _k, _v2 in D['names'].items():
+            _nn = _nom(_v2)
+            if _nn:
+                _por_nombre.setdefault(_nn, []).append(str(_k))
+
+        for _nn, _nums in _por_nombre.items():
+            if len(_nums) < 2:
+                continue
+            # el mas alto se queda con todo
+            _nums.sort(key=lambda x: int(x) if x.isdigit() else 0)
+            _queda = _nums[-1]
+            for _v in _nums[:-1]:
+                for _k2 in ('atk', 'srv', 'rec', 'dig'):
+                    if _v in D[_k2]:
+                        D[_k2].setdefault(_queda, [])
+                        D[_k2][_queda] = list(D[_k2][_queda]) + list(D[_k2].pop(_v))
+                D['names'].pop(_v, None)
+                if _v in D['set']:
+                    D['set'][_queda] = D['set'].get(_queda, 0) + D['set'].pop(_v)
+                if _v in D.get('app', {}):
+                    D['app'][_queda] = D['app'].get(_queda, 0) + D['app'].pop(_v)
+
     # --- construir PP_DATA ---
     CB={'punta':{'X5','V5','X6','V6','XP'},'central':{'X1','X2','X7','XM'},'opuesto':{'X5','V5','X6','V6','X8','V8'}}
     def classify(D,num):
+        # ══ Primero el puesto DECLARADO ═══════════════════════════════════
+        # El .dvw lo trae en la lista de plantel y es el dato del scout, no
+        # una deduccion. Antes se ignoraba y todo salia de las combinaciones
+        # de ataque: en un partido con pocas acciones eso etiqueta a casi
+        # todas como centrales, aunque el archivo diga otra cosa.
+        #
+        # La deduccion sigue abajo, para los archivos que NO declaran el
+        # puesto —los que se bajan de VolleyMetrics vienen asi—.
+        _dec = (D.get('rol') or {}).get(num, '')
+        if _dec:
+            return {'LIBERO':'L\u00edbero', 'ARMADOR':'Armador',
+                    'CENTRAL':'Central', 'OPUESTO':'Opuesto',
+                    'PUNTA':'Punta'}.get(_dec, _dec.capitalize())
         if num in D['lib_set']: return 'L\u00edbero'
         combos=Counter(a[0] for a in D['atk'].get(str(num),[]))
         tot=sum(combos.values()); sets=D['set'].get(str(num),0)
@@ -265,8 +490,21 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
         receiv =sorted([n for n in pos if cnt('rec',n)>=1],key=lambda n:-cnt('rec',n))
         defen  =sorted([n for n in pos if cnt('dig',n)>=1],key=lambda n:-cnt('dig',n))
         def rol_atk(n):
-            p=pos.get(n,'')
-            return 'central' if p=='Central' else 'opuesto' if p=='Opuesto' else 'punta'
+            # Antes solo distinguia central, opuesto y punta: la armadora y la
+            # libero caian en "punta" por descarte. La armadora ataca poco pero
+            # ataca, asi que aparecia en la lista con el puesto equivocado.
+            # ── Los roles que la pantalla sabe dibujar ──────────────────
+            # Solo existen 'punta', 'central' y 'opuesto' como filas de
+            # atacantes. Devolver 'armador' o 'libero' hacia que la pantalla
+            # buscara una configuracion que no existe, REVENTARA el bucle y
+            # dejara sin dibujar TODAS las tarjetas siguientes: por eso se
+            # veia el acumulado del equipo y ninguna jugadora.
+            #
+            # La armadora ataca poco pero ataca, asi que va con las opuestas,
+            # que es donde suele rematar cuando le toca.
+            p = pos.get(n, '')
+            return {'Central':'central', 'Opuesto':'opuesto', 'Punta':'punta',
+                    'Armador':'opuesto', 'L\u00edbero':'punta'}.get(p, 'punta')
         players=[]
         def add(pfx,num,role,data,read):
             players.append({"id":pfx+str(num),"num":num,"name":apellido(D['names'].get(str(num),'')),

@@ -172,6 +172,10 @@ echo  ================ BLOQUEO ================
 echo.
 REM   Toma el video de partidos y el de entrenamientos, y etiqueta cada
 REM   bloqueo con su tipo para que el mapa de calor pueda separarlos.
+REM Los codigos que usa el club, para poder traducir los archivos que
+REM lleguen de otros scouts.
+if exist "gen_mis_codigos.py" python gen_mis_codigos.py
+
 python gen_bloqueo.py
 if errorlevel 1 echo      [aviso] Problema en las acciones de bloqueo. Sigo igual.
 echo.
@@ -250,6 +254,17 @@ if exist "LLAVE.txt" (
 
 REM ================= PUBLICAR =================
 set "RESP="
+REM ===================================================================
+REM   CONTROL DE CALIDAD, ANTES DE PUBLICAR
+REM   Se corre aca porque es el unico momento en que los datos estan
+REM   legibles: apenas se publica quedan cifrados.
+REM ===================================================================
+echo.
+echo  ================= CONTROL DE CALIDAD =================
+if exist "AUDITAR.py" python AUDITAR.py --sin-pausa
+if exist "VERIFICAR_DATOS.py" python VERIFICAR_DATOS.py --sin-pausa
+echo.
+
 set /p "RESP=Queres PUBLICAR a GitHub ahora? (S/N): "
 if /i "!RESP!"=="S" goto PUBLICAR
 echo.

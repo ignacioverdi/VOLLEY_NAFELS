@@ -57,9 +57,13 @@ select,select option{color:#111!important;background:#fff!important;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 @media(max-width:768px){.options-grid{grid-template-columns:1fr;}.main{padding:16px;}}
 </style>
-<!-- Puerta de entrada. La capsula quedo abierta cuando se cerro el resto del
-     sistema: 26 paginas con la temporada 25-26 completa se abrian sin clave. -->
-<script src="../../firebase.js" onerror="void 0"></script>
+<!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
+     la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
+<script src="firebase.js?v=20260813-1930" onerror="void 0"></script>
+<!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
+     toca el encabezado y las barras: en la computadora no hace nada.
+     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
+<link rel="stylesheet" href="movil.css?v=20260813-1930">
 </head>
 <body>
 <div class="header-right" style="position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
@@ -576,9 +580,8 @@ function showToast(msg){
   setTimeout(function(){ t.classList.remove('show'); }, 2800);
 }
 </script>
-<script src="datos_historial.js" onerror="void 0"></script>
-  <script src="lang.js"></script>
-<script src="temporadas_menu.js"></script>
+<script src="lang.js?v=20260813-1930"></script>
+<script src="temporadas_menu.js?v=20260813-1930"></script>
 </body>
 </html>
 

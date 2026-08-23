@@ -17,7 +17,10 @@ Uso:
 """
 import os,re,sys,json,glob,unicodedata
 
-DATA_VERSION = 6
+# 7: se guarda la zona del bloqueo. Los archivos hechos con la version
+#    anterior no la tienen, y sin ella el mapa de bloqueo pone todas las
+#    acciones en el medio de la red. Al subir el numero se regeneran solos.
+DATA_VERSION = 7
 
 def fix_enc(x):
     # Los DVW pueden venir en UTF-8 leido como latin-1 (mojibake "NÃ¤fels"). Lo corrige.
@@ -30,23 +33,14 @@ COMBOS = json.loads(r'''{"PP":"Setter tip","V0":"High set in 5","V5":"High set i
 SK={'S':'Saque','R':'Recepción','A':'Ataque','B':'Bloqueo','D':'Defensa','E':'Armado','F':'Freeball'}
 
 # Mapeo de nombres de equipo del DVW -> nombre canonico (igual que update_db_nafels_FULL.py)
-TEAM_NORM = {
-    'Biogas Volley Näfels (NLA Men)': 'Nafels',
-    'Volley NFELS': 'Nafels', 'Volley Nfels': 'Nafels',
-    'Volley Amriswil (NLA Men)': 'Amriswil',
-    'Volley Schönenwerd (NLA Men)': 'Schonenwerd',
-    'Chênois Genève Volleyball (NLA Men)': 'Chenois',
-    'Chnois Genve Volleyball': 'Chenois',
-    'Colombier Volley (NLA Men)': 'Colombier',
-    'STV St Gallen (NLA Men)': 'St Gallen',
-    'TSV Jona Volleyball (NLA Men)': 'Jona',
-    'TSV Jona Volleyball': 'Jona',
-    'Lausanne UC (NLA Men)': 'Lausanne',
-    'VBC Sursee (NLB Men)': 'Sursee',
-    'Orion Stars': 'Orion', 'CSU Corona Brasov': 'Brasov',
-    'Neftohimic 2010 BURGAS': 'Burgas',
-    'SCM ZALAU': 'Zalau', 'SCM Zalau': 'Zalau',
-}
+TEAM_NORM = {}
+try:
+    # La tabla de nombres largos sale de config_club.json. Antes estaban
+    # escritos aca los de la liga del club de origen.
+    import config_club as _cc
+    TEAM_NORM = dict(_cc.tabla_de_equipos() or {})
+except Exception:
+    pass
 
 def is_naf(n): return bool(re.search(r'n[aä]fels|biogas',n or '',re.I))
 
@@ -65,7 +59,7 @@ def norm_team(name):
 CLUBES_CONOCIDOS = [
     'nafels', 'amriswil', 'chenois', 'colombier', 'jona', 'lausanne',
     'schonenwerd', 'st_gallen', 'sursee', 'lucerne', 'volero',
-    'casla', 'sanlorenzo', 'boca', 'river', 'untref', 'ferro', 'uba',
+    'nafels', 'sanlorenzo', 'boca', 'river', 'untref', 'ferro', 'uba',
     'velez', 'lomas', 'ciudad', 'defensores', 'hacoaj', 'campana',
 ]
 
@@ -79,6 +73,33 @@ def slugify(name):
 
     Ahora, si adentro del nombre aparece un club conocido, se usa ese.
     """
+    # ── El nombre corto del club, primero ────────────────────────────────
+    # Sin esto, "Club Atletico San Lorenzo de Almagro" daba el slug
+    # "club_atletico_san_lorenzo_de_almagro", y las pantallas —que buscan
+    # "casla"— no encontraban ninguna accion: los cortes de video salian
+    # vacios aunque los datos estuvieran bien.
+    try:
+        import config_club as _cc
+        _t = _cc.tabla_de_equipos() or {}
+        _plano = re.sub(r'[^a-z0-9]', '',
+                        unicodedata.normalize('NFKD', name or '').encode('ascii','ignore').decode().lower())
+        def _pl(x):
+            return re.sub(r'[^a-z0-9]', '',
+                          unicodedata.normalize('NFKD', str(x)).encode('ascii','ignore').decode().lower())
+        # ── Comparar nombres COMPLETOS, nunca por pedacitos ──────────────
+        # "uba" esta adentro de "clUBAtletico": buscando la palabra corta
+        # dentro de la larga, UBA se convertia en Casla y sus acciones se
+        # mezclaban con las del club. Solo vale que el nombre que viene sea
+        # igual al corto, o que CONTENGA al largo configurado.
+        for _largo, _corto in _t.items():
+            _lp, _cp = _pl(_largo), _pl(_corto)
+            if not _lp:
+                continue
+            if _plano == _cp or _plano == _lp or _lp in _plano:
+                return _cp
+    except Exception:
+        pass
+
     n = unicodedata.normalize('NFKD', name or '').encode('ascii', 'ignore').decode('ascii')
     entero = re.sub(r'\s+', '_', n.lower().strip())
 
@@ -122,12 +143,28 @@ def parse_dvw(path, ent=False):
     home_slug=slugify(home_name); away_slug=slugify(away_name)
 
     base=os.path.basename(path)
-    mcode=re.search(r'(\d{6})',base); mdate=re.search(r'(\d{4}-\d{2}-\d{2})',base)
+    # El codigo oficial del partido: 5 o 6 digitos. Antes pedia exactamente 6
+    # y los .dvw con codigo de 5 —como los de la liga argentina— se descartaban
+    # TODOS en silencio: el paso no imprimia ni un error y el archivo de video
+    # salia vacio. El resto del sistema ya aceptaba las dos formas.
+    mcode=re.search(r'&?[\s_]*(\d{5,6})(?!\d)',base); mdate=re.search(r'(\d{4}-\d{2}-\d{2})',base)
     date=mdate.group(1) if mdate else ''
     if mcode: code=mcode.group(1)
     elif ent and date: code='ENT'+date.replace('-','')
     elif ent: code='ENT_'+re.sub(r'[^A-Za-z0-9]','',base)[:12]
-    else: return None   # partido sin codigo de 6 digitos -> se ignora
+    else:
+        # ══ Partido sin codigo oficial ═══════════════════════════════════
+        # Antes se descartaba. Pero un amistoso, o un .dvw exportado sin
+        # numerar, no trae ese codigo de 5 digitos: esos partidos quedaban
+        # SIN cortes de video para siempre, por mas que se cargara el link.
+        #
+        # Se arma el mismo identificador que usa el resto del sistema —tipo,
+        # fecha y nombre del archivo— asi el video que se cargue en esa
+        # pantalla lo encuentra.
+        _t = unicodedata.normalize('NFKD', os.path.splitext(base)[0])
+        _t = _t.encode('ascii','ignore').decode()
+        _t = re.sub(r'[^A-Za-z0-9]+','', _t).upper()[:12] or 'SIN'
+        code = 'P' + (date or 'sinfecha') + '-' + _t
 
     scout=txt.split('[3SCOUT]')[-1]
     scout_lines=scout.strip().splitlines()
@@ -179,6 +216,17 @@ def parse_dvw(path, ent=False):
                 _traj=_tp[_ti] if len(_tp)>_ti else ''
                 if _traj and len(_traj)>0 and _traj[0].isdigit(): a['oz']=int(_traj[0])
                 if _traj and len(_traj)>1 and _traj[1].isdigit(): a['dz']=int(_traj[1])
+            elif sk=='B':
+                # ══ La zona del bloqueo ═══════════════════════════════════
+                # No se guardaba. Sin ella, el mapa de bloqueo ponia TODAS las
+                # acciones en el medio de la red: una sola columna, como si
+                # nadie bloqueara por los costados.
+                #
+                # El bloqueo la trae al final del codigo, despues de las
+                # tildes:  *04BT#~~~~2  es zona 2  ·  *12BH#~~~~4  es zona 4
+                _cola = code0[6:].replace('~', '')
+                if _cola and _cola[-1].isdigit():
+                    a['oz'] = int(_cola[-1])
             if sk=='A':
                 cb=code0[6:8]
                 if cb and cb[0] in 'XVPC' and '~' not in cb: a['x']=cb
@@ -202,9 +250,31 @@ def parse_dvw(path, ent=False):
     return code,{'home':home_slug,'away':away_slug,'homeName':home_name,'awayName':away_name,
                  'date':date,'result':_res,'teams':teams_meta,'players':players,'actions':actions}
 
-def season_of(date):
-    # Temporada oct->abr. 2025-10 -> "25-26"; 2026-04 -> "25-26"; 2026-10 -> "26-27".
+def season_of(date, carpeta=''):
+    """La temporada de una sesion, para el nombre del archivo.
+
+    La cuenta de abajo es la europea: "arranca en agosto". Con un torneo que va
+    de mayo a agosto —el Metropolitano argentino— un partido de mayo cae en la
+    temporada ANTERIOR, y el archivo de video queda etiquetado distinto que
+    todo el resto del sistema. Las pantallas buscan una temporada y el archivo
+    dice otra, asi que los cortes no aparecen nunca.
+
+    Si el club configuro sus torneos, la etiqueta sale de ahi. Si no, se usa la
+    cuenta de siempre y nada cambia para los clubes que ya andan.
+    """
     if not date or len(date)<7: return 'sin-fecha'
+    try:
+        import config_club as _cc
+        if _cc.torneos():
+            t = _cc.temporada_de(date, '', carpeta)
+            if t:
+                tor = _cc.resolver_torneo('', carpeta)
+                cfg = _cc.torneos().get(tor) or {}
+                if cfg.get('cruza'):
+                    return '%02d-%02d' % (int(t) % 100, (int(t)+1) % 100)
+                return str(t)
+    except Exception:
+        pass
     try: y=int(date[:4]); mo=int(date[5:7])
     except: return 'sin-fecha'
     s = y if mo>=8 else y-1
@@ -278,7 +348,7 @@ if __name__=='__main__':
     # agrupar por temporada (calculada desde la fecha)
     por_temp={}
     for code,m in nuevos.items():
-        s=_forzar or season_of(m.get('date',''))
+        s=_forzar or season_of(m.get('date',''), folder)
         por_temp.setdefault(s,{})[code]=m
 
     all_links=read_mapa_links(ent=ent)
@@ -296,7 +366,31 @@ if __name__=='__main__':
                 m['season']=season
                 existentes[code]=m; agregados+=1
         # hornear SOLO los links de los partidos de esta temporada
-        links={k:all_links[k] for k in existentes if k in all_links}
+        # ══ Emparejar los links con su partido ═══════════════════════════
+        # El link se guarda con la clave que uso la pantalla de Cargar Videos,
+        # y el partido con el codigo que arma este script. Cuando no coinciden
+        # —pasa con los partidos sin codigo oficial— el link se descartaba y
+        # el video no aparecia en ninguna pantalla, aunque estuviera cargado.
+        #
+        # Aca se emparejan tambien por FECHA, que es el dato que los dos lados
+        # tienen y no cambia. Asi el video llega a su partido sin importar con
+        # que nombre se guardo.
+        links = {k: all_links[k] for k in existentes if k in all_links}
+        _sin = [k for k in existentes if k not in links]
+        if _sin and all_links:
+            import re as _re2
+            for _k in _sin:
+                _f = (existentes[_k] or {}).get('date', '')
+                if not _f:
+                    continue
+                _fp = _f.replace('-', '')
+                for _lk, _lv in all_links.items():
+                    if not _lv:
+                        continue
+                    _s = str(_lk)
+                    if _f in _s or _fp in _s:
+                        links[_k] = _lv
+                        break
         D={'v':DATA_VERSION,'season':season,'combos':COMBOS,'matches':existentes,'links':links}
         body=('/* '+prefix+' '+season+' — generado automaticamente, no editar a mano */\n'
               '(function(){\n'

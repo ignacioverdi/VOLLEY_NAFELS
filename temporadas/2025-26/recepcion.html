@@ -230,11 +230,6 @@ select, select option {
   @page { margin: 1cm; size: A4 portrait; }
 }
 
-
-/* La barrita de PARTIDO/ENTRENAMIENTO se superpone con el selector de idioma y
-   en esta pantalla no hace nada. Se esconde, no se saca: los mapas de calor
-   leen la misma clave que este archivo guarda. */
-#vb-modo-bar, .vb-modo-bar, #modo-toggle, .modo-toggle { display: none !important; }
 </style>
 <style>
 body{padding-top:56px;background:#07080f}
@@ -288,9 +283,16 @@ canvas.panel-court{position:absolute;inset:0;width:100%;height:100%;opacity:.28;
 .ts-v{font-size:15px;font-weight:900;line-height:1;font-family:"Barlow Condensed",sans-serif}
 .ts-l{font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
 </style>
-<!-- Puerta de entrada. La capsula quedo abierta cuando se cerro el resto del
-     sistema: 26 paginas con la temporada 25-26 completa se abrian sin clave. -->
-<script src="../../firebase.js" onerror="void 0"></script>
+<!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
+     la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
+<script src="firebase.js?v=20260813-1930" onerror="void 0"></script>
+<!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
+     toca el encabezado y las barras: en la computadora no hace nada.
+     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
+<link rel="stylesheet" href="movil.css?v=20260813-1930">
+<!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
+     hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
+<script src="mi_fila.js?v=20260813-1930" onerror="void 0"></script>
 </head>
 <body>
 <div class="header-right" style="position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
@@ -310,23 +312,31 @@ canvas.panel-court{position:absolute;inset:0;width:100%;height:100%;opacity:.28;
 <div class="content" id="content"></div>
 
 <!-- VB: selector PARTIDO/ENTRENAMIENTO - carga los datos segun el modo elegido -->
-<script>(function(){var ent=false;try{ent=(localStorage.getItem('vb_modo')||'partido')==='entrenamiento';}catch(e){}
+<script>
+(function(){var ent=false;try{ent=(localStorage.getItem('vb_modo')||'partido')==='entrenamiento';}catch(e){}
 function w(s){document.write('<scr'+'ipt src="'+s+'" onerror="void 0"><\/scr'+'ipt>');}
 if(ent){ w('datos_entrenamientos.js'); w('datos_recepcion_ent.js'); w('adapter_entrenamiento.js'); }
 else   { w('datos_partidos.js'); w('datos_recepcion.js'); }
 })();</script>
-<script src="datos_seguros.js"></script>
-  <!-- Los datos de recepcion. La pagina pedia el de entrenamientos, que no
-       existe: el que los tiene es este. -->
+<script src="datos_seguros.js?v=20260813-1930"></script>
+  <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
+       aunque el motor ya los haya generado. -->
+  <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
+  <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
+  
+  <!-- Los datos de recepcion y de los partidos. Van DESPUES del lector. -->
   <script src="datos_recepcion.js.enc" onerror="void 0"></script>
-  <script src="datos_baterias.js.enc" onerror="void 0"></script>
+  <!-- La recepcion de los ENTRENAMIENTOS, que va en su propio archivo con
+       su propia variable. Sin esto la pantalla queda vacia. -->
+  <script src="datos_recepcion_ent.js.enc" onerror="void 0"></script>
   <script src="datos_partidos.js.enc" onerror="void 0"></script>
-  <script src="datos_equipo_2025-26.js.enc" onerror="void 0"></script>
+  <script src="datos_baterias.js.enc" onerror="void 0"></script>
+  
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
   <!-- modo_toggle.js sacado: agregaba una barrita flotante que se superponia
        con el selector de idioma. Los botones de PARTIDO / ENTRENAMIENTO ya
-       estan en el encabezado, igual que en la app de CASLA. -->
+       estan en el encabezado. -->
 <!-- datos_recepcion.js: lo carga el selector de modo (arriba) -->
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
 
@@ -384,7 +394,7 @@ function calcEquipoData(){
                 desde_z6:{p1:{tot:0,eff:0,pos:0,neg:0},p6:{tot:0,eff:0,pos:0,neg:0},p5:{tot:0,eff:0,pos:0,neg:0}},
                 desde_z5:{p1:{tot:0,eff:0,pos:0,neg:0},p6:{tot:0,eff:0,pos:0,neg:0},p5:{tot:0,eff:0,pos:0,neg:0}} }
   };
-  /* De donde salen los numeros de cada jugador. La lista que se arma desde
+  /* De donde salen los numeros de cada jugador: la lista que se arma desde
      PARTIDOS_JUGADORES viene vacia —ese archivo no trae el detalle de
      recepcion— asi que se usa la misma fuente que usan los paneles de cada
      jugador, que si tiene datos. */
@@ -454,18 +464,6 @@ window._recPartido = 'acumulado';
 
 
 function defaultReceptores(){
-  /* Los que reciben: las puntas y el libero. Manda el plantel de la temporada
-     —plantel_nafels.js— sobre el archivo cifrado, que quedo congelado con los
-     jugadores de la temporada siguiente. Por eso aparecian Durdos, Roffler y
-     Schmid J, que no jugaron esta. */
-  try{
-    var P = window.PLANTEL_NAFELS && (window.PLANTEL_NAFELS.jugadores || []);
-    if(P && P.length){
-      var q = P.filter(function(j){ return j.pos==='PUNTA' || j.pos==='LIBERO'; })
-               .map(function(j){ return (j.ap || j.nombre || '').toUpperCase(); });
-      if(q.length) return q;
-    }
-  }catch(e){}
   try{
     if(window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores){
       var r = window.EQUIPO_DATA.jugadores
@@ -474,9 +472,7 @@ function defaultReceptores(){
       if(r.length) return r;
     }
   }catch(e){}
-  /* Los que recibieron esta temporada. Antes iba la lista de la temporada
-     siguiente. */
-  return ["BROCH", "BOGDANOVSKI", "BARTHOLET", "FIGUEIREDO", "PETER"];
+  return ["DURDOS", "BARTHOLET", "ROFFLER", "BOGDANOVSKI", "SCHMID J"];
 }
 function initReceptores(){
   cargarRecepcionNafels();
@@ -659,11 +655,35 @@ function buildRivalSelector(){
 }
 
 function getPlayerRecData(playerKey){
-  // Returns reception structure filtered by CUR_RIVAL
-  if(!window.RECEPCION_RIVAL_DATA || !window.RECEPCION_RIVAL_DATA[playerKey]) return null;
-  var pd = window.RECEPCION_RIVAL_DATA[playerKey];
+  /* Los numeros de un receptor, segun el rival elegido.
+
+     Los ENTRENAMIENTOS no se guardan por rival —no lo tienen— asi que
+     "por_rival" viene vacio y esto devolvia null: los nombres aparecian pero
+     las canchas quedaban en blanco. Cuando no hay nada para ese rival se usa
+     el acumulado, que es todo lo que hay. */
+  var TODO = window.RECEPCION_RIVAL_DATA;
+  if(!TODO) return null;
+
+  /* El nombre no siempre coincide: la lista dice "SCHMID J" y el motor guarda
+     "SCHMID", porque toma solo la primera palabra. Se prueba tal cual, despues
+     la primera palabra, y por ultimo cualquiera que empiece igual. */
+  var pd = TODO[playerKey];
+  if(!pd){
+    var corto = String(playerKey).split(' ')[0];
+    pd = TODO[corto];
+  }
+  if(!pd){
+    var buscado = String(playerKey).split(' ')[0].toUpperCase();
+    var k = Object.keys(TODO).filter(function(x){
+      var xs = String(x).toUpperCase();
+      return xs === buscado || xs.indexOf(buscado) === 0 || buscado.indexOf(xs) === 0;
+    })[0];
+    if(k) pd = TODO[k];
+  }
+  if(!pd) return null;
   if(CUR_RIVAL === 'TODOS') return pd.acumulado;
-  return pd.por_rival[CUR_RIVAL] || null;
+  var porRival = (pd.por_rival && pd.por_rival[CUR_RIVAL]) || null;
+  return porRival || pd.acumulado || null;
 }
 
 
@@ -906,9 +926,67 @@ function recBtnOn(b){ b.classList.add('on'); }
 function recBtnOff(b){ b.classList.remove('on'); }
 </script>
 
-<script src="lang.js"></script>
-<script src="temporadas_menu.js"></script>
-  <script src="plantel_nafels.js" onerror="void 0"></script>
+<script src="lang.js?v=20260813-1930"></script>
+<script src="temporadas_menu.js?v=20260813-1930"></script>
+<script>
+</script>
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   LA RECEPCION SEGUN EL MODO
+   --------------------------------------------------------------------------
+   Los partidos se guardan en RECEPCION_RIVAL_DATA y los entrenamientos en
+   RECEPCION_RIVAL_DATA_ENT.
+
+   Antes se juntaban las dos en una sola y las recepciones de un entrenamiento
+   aparecian tambien en la cancha de partidos. Ahora se usa la que corresponde
+   al boton elegido —PARTIDO o ENTRENAMIENTO— y cada una muestra lo suyo.
+
+   Va al final y con reintento: los archivos cifrados tardan en abrirse.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  /* las dos fuentes, tal como llegan, sin mezclar */
+  var _P = null, _E = null;
+
+  function guardar(){
+    if(_P === null && window.RECEPCION_RIVAL_DATA)     _P = window.RECEPCION_RIVAL_DATA;
+    if(_E === null && window.RECEPCION_RIVAL_DATA_ENT) _E = window.RECEPCION_RIVAL_DATA_ENT;
+    return (_P || _E);
+  }
+
+  /* la que corresponde al modo elegido */
+  window._recFuente = function(){
+    var modo = window._recMode || 'partido';
+    guardar();
+    return (modo === 'entrenamiento') ? (_E || {}) : (_P || {});
+  };
+
+  function aplicar(){
+    if(!guardar()) return false;
+    window.RECEPCION_RIVAL_DATA = window._recFuente();
+    try{ if(typeof initReceptores === 'function') initReceptores(); }catch(e){}
+    try{ if(typeof render === 'function') render(); }catch(e){}
+    return true;
+  }
+
+  /* al tocar PARTIDO o ENTRENAMIENTO se cambia la fuente */
+  var _orig = window.recSetTipo;
+  window.recSetTipo = function(tipo, btn){
+    var r;
+    try{ r = _orig ? _orig.apply(this, arguments) : undefined; }catch(e){}
+    window._recMode = tipo;
+    aplicar();
+    return r;
+  };
+
+  var intentos = 0;
+  (function probar(){
+    if(aplicar()) return;
+    if(++intentos > 20) return;
+    setTimeout(probar, 250);
+  })();
+})();
+</script>
+<script src="volver_inicio.js?v=20260813-1930" onerror="void 0"></script>
 </body>
 </html>
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
