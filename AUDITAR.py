@@ -325,8 +325,33 @@ def main():
         esperar()
         return 1
 
-    carpetas = [d for d in sorted(glob.glob(os.path.join(AQUI, 'DVW*')))
-                if os.path.isdir(d) and 'ENTREN' not in os.path.basename(d).upper()]
+    # ══ Solo la carpeta de la temporada que se esta procesando ═════════════
+    # Un club puede tener varias carpetas de partidos: una por temporada. El
+    # motor procesa SOLO la mas nueva con partidos adentro —es la temporada en
+    # curso— y las anteriores quedan archivadas.
+    #
+    # Auditando todas juntas, el auditor cuenta acciones de temporadas que la
+    # app no esta mostrando y marca diferencias que no existen. Paso en Nafels
+    # al abrir la carpeta 2027 para la temporada nueva: sumaba los 97 partidos
+    # de la 25-26 contra una app que todavia no tiene ninguno.
+    _todas = [d for d in sorted(glob.glob(os.path.join(AQUI, 'DVW*')))
+              if os.path.isdir(d) and 'ENTREN' not in os.path.basename(d).upper()]
+
+    # la mas nueva CON partidos: una carpeta vacia es la temporada que arranca
+    carpetas = []
+    for d in reversed(_todas):
+        if glob.glob(os.path.join(d, '*.dvw')):
+            carpetas = [d]
+            break
+    if not carpetas and _todas:
+        # todas vacias: se avisa en vez de fallar
+        print()
+        print('  Las carpetas de partidos estan vacias.')
+        print('  Es normal al arrancar una temporada nueva: cuando cargues el')
+        print('  primer partido, esto va a tener algo que revisar.')
+        esperar()
+        return 0
+
     if not carpetas:
         print('\n  No hay carpetas de partidos.')
         esperar()

@@ -236,6 +236,20 @@ if exist "datos_baterias.js"     (echo      OK  datos_baterias.js)            el
 echo  ==================================================
 echo.
 
+REM ===================================================================
+REM   CONTROL DE CALIDAD
+REM
+REM   Va ANTES de cifrar: es el unico momento en que los datos estan
+REM   legibles. Corriendolo despues, el auditor no puede abrir liga_data
+REM   ni comparar los equipos entre archivos, y esa parte de la revision
+REM   se pierde justo cuando mas importa.
+REM ===================================================================
+echo.
+echo  ================= CONTROL DE CALIDAD =================
+if exist "AUDITAR.py" python AUDITAR.py --sin-pausa
+if exist "VERIFICAR_DATOS.py" python VERIFICAR_DATOS.py --sin-pausa
+echo.
+
 REM ================= CERRAR LOS DATOS =================
 if exist "LLAVE.txt" (
     echo  Protegiendo los datos antes de publicar...
@@ -254,17 +268,6 @@ if exist "LLAVE.txt" (
 
 REM ================= PUBLICAR =================
 set "RESP="
-REM ===================================================================
-REM   CONTROL DE CALIDAD, ANTES DE PUBLICAR
-REM   Se corre aca porque es el unico momento en que los datos estan
-REM   legibles: apenas se publica quedan cifrados.
-REM ===================================================================
-echo.
-echo  ================= CONTROL DE CALIDAD =================
-if exist "AUDITAR.py" python AUDITAR.py --sin-pausa
-if exist "VERIFICAR_DATOS.py" python VERIFICAR_DATOS.py --sin-pausa
-echo.
-
 set /p "RESP=Queres PUBLICAR a GitHub ahora? (S/N): "
 if /i "!RESP!"=="S" goto PUBLICAR
 echo.

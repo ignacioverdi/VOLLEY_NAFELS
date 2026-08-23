@@ -520,6 +520,18 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
             add("r",n,"reception",D['rec'].get(str(n),[]),("L\u00edbero." if pos.get(n)=='L\u00edbero' else "Receptor."))
         for n in defen:
             add("d",n,"defense",D['dig'].get(str(n),[]),"Defensa.")
+        # ══ Solo los equipos que jugaron ═══════════════════════════════════
+        # Un equipo entra al archivo aunque no tenga una sola accion: quedaba
+        # su ficha vacia, con el nombre y nada mas.
+        #
+        # En el selector de rival aparecian todos los equipos de la liga al
+        # empezar una temporada nueva, y al elegir cualquiera la pantalla
+        # salia en blanco. El entrenador no tiene forma de saber si es que el
+        # equipo todavia no jugo o si algo se rompio.
+        #
+        # Si no hay jugadoras con acciones, el equipo no se guarda.
+        if not any(len(p.get('data') or []) for p in players):
+            continue
         PP[slug]={"name":D['name'],"players":players,"info":D['info']}
 
     outp=os.path.join(out_dir,'plan_partido_data.js')
