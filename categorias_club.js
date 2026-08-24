@@ -22,6 +22,17 @@
    La primera de la lista es la que se abre por defecto.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-window.CATEGORIAS_CLUB = ['Primera'];
+window.CATEGORIAS_CLUB = ['Primera', 'H1L', 'H2L'];
+
+/* ── LAS CARPETAS DE PARTIDOS DE CADA UNA ──────────────────────────────────
+   Primera no lleva marca: su carpeta es la de siempre.
+
+       Primera    DVW NAFELS 2027
+       H1L        DVW NAFELS H1L 2027
+       H2L        DVW NAFELS H2L 2027
+
+   Si una carpeta no existe o esta vacia, esa categoria se saltea con un
+   aviso: no hace falta crearlas hasta que tengas partidos.
+   ────────────────────────────────────────────────────────────────────────── */
 
 /* © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario */

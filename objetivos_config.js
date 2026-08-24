@@ -1,3 +1,23 @@
+
+/* ── LA TEMPORADA QUE SE ESTA MOSTRANDO ────────────────────────────────────
+   El titulo decia "2026" escrito a mano: al empezar la temporada nueva
+   seguia diciendo el año viejo. Ahora lo pregunta.
+   Lo busca donde ya esta, en este orden, y si no encuentra nada no muestra
+   ningun año en vez de mostrar uno equivocado.
+   ────────────────────────────────────────────────────────────────────────── */
+window.__TEMP_TITULO = (function () {
+  try {
+    var t = (window.LIGA_DATA && (window.LIGA_DATA.temporada ||
+             window.LIGA_DATA.season)) ||
+            (window.TEMPORADA_ACTUAL) ||
+            (document.body && document.body.dataset && document.body.dataset.temporada);
+    if (t) return ' \u00b7 ' + t;
+    var m = (location.pathname.match(/temporadas\/(\d{4}-\d{2})/) || [])[1];
+    if (m) return ' \u00b7 ' + m.replace('-', '/');
+  } catch (e) {}
+  return '';
+})();
+
 // objetivos_config.js — NÄFELS Voley
 // Configuracion compartida de baterias y objetivos
 // Importar en: jugador.html, dashboard.html, historial_voley.html
@@ -185,7 +205,7 @@ function renderObjetivos(cid,extra){
   var vals = Object.assign({}, base, extra||{});
   var html='<div style="font-family:Barlow Condensed,sans-serif;padding:4px 0 8px">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
-    +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">OBJETIVOS DEL EQUIPO · 2026</div>'
+    +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">OBJETIVOS DEL EQUIPO'+(window.__TEMP_TITULO||'')+'</div>'
     +'<div style="display:flex;gap:10px;flex-wrap:wrap">'
     +[['#22c55e','Objetivo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Lejos']].map(function(x){
       return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
@@ -238,7 +258,7 @@ function renderObjetivos(cid,extra){
   var vals=Object.assign({},typeof objGetVals!=="undefined"?objGetVals(null):objCalcVals(null),extra||{});
   var html='<div style="font-family:Barlow Condensed,sans-serif;padding:4px 0 8px">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
-    +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">OBJETIVOS DEL EQUIPO · 2026</div>'
+    +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">OBJETIVOS DEL EQUIPO'+(window.__TEMP_TITULO||'')+'</div>'
     +'<div style="display:flex;gap:10px;flex-wrap:wrap">'
     +[['#22c55e','Objetivo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Lejos']].map(function(x){
       return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
