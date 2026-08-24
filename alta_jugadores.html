@@ -86,7 +86,7 @@ textarea:focus{border-color:var(--club)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 <!-- Motor de idiomas (ES / EN / DE). -->
-<script src="lang.js?v=20260824-1119"></script>
+<script src="lang.js?v=20260824-1134"></script>
 </head>
 <body>
 <div class="hoja">
@@ -112,9 +112,29 @@ textarea:focus{border-color:var(--club)}
   <select id="sel-cat" style="width:100%;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:inherit;font-size:14px"></select>
   <div style="font-size:11px;color:#64748b;margin-top:6px">Los jugadores que cargues quedan en esta categoría.</div>
 </div>
-    <textarea id="lista" spellcheck="false" placeholder="mail@ejemplo.com    4     07/03/2004"></textarea>
-    <div class="ayuda">Tres datos por jugador: <b>mail</b>, <b>número de camiseta</b> y <b>fecha de nacimiento</b>.
-       Si los tenés en Excel, seleccioná las tres columnas, copiá y pegá acá directamente.</div>
+    <!-- ══ CARGA DE A UNO ══════════════════════════════════════════════════
+     Cada jugador en su fila, con todos sus datos y la foto al final.
+     Se agregan filas con el boton de abajo. -->
+<div id="form-filas"></div>
+
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+  <button type="button" class="btn sec" onclick="masFila()">+ Agregar otro jugador</button>
+  <button type="button" class="btn" onclick="leerFormulario()">Revisar y continuar</button>
+</div>
+
+<details style="margin-top:14px">
+  <summary style="cursor:pointer;font-size:12px;color:#64748b">
+    ¿Los tenés en una lista? Pegalos de una vez
+  </summary>
+  <textarea id="lista" spellcheck="false"
+            placeholder="mail@ejemplo.com 4 07/03/2004"
+            style="margin-top:10px"></textarea>
+  <div class="ayuda">Tres datos por jugador: <b>mail</b>, <b>número de camiseta</b> y
+    <b>fecha de nacimiento</b>. Si los tenés en Excel, seleccioná las tres columnas,
+    copiá y pegá acá.</div>
+  <button type="button" class="btn sec" onclick="leer()"
+          style="margin-top:8px">Leer la lista</button>
+</details>
     <div class="ejemplo">jugador1@gmail.com    4     07/03/2004
 jugador2@gmail.com    13    16/12/2004
 jugador3@gmail.com    9     23/08/2001</div>
@@ -130,8 +150,8 @@ jugador3@gmail.com    9     23/08/2001</div>
 
 </div>
 
-<script src="selector_categoria.js?v=20260824-1119"></script>
-<script src="firebase.js?v=20260824-1119"></script>
+<script src="selector_categoria.js?v=20260824-1134"></script>
+<script src="firebase.js?v=20260824-1134"></script>
 <script>
 /* ============================================================================
    Alta de jugadores — el DT pega su lista y se crean todas las cuentas.
@@ -382,6 +402,94 @@ function ponerFoto(i, input){
         'style="width:34px;height:34px;border-radius:50%;object-fit:cover">';
   });
 }
+
+/* ══ EL FORMULARIO DE A UNO ══════════════════════════════════════════════
+   Una fila por jugador, con todos sus datos y la foto al final. Es la forma
+   natural de cargar un plantel: se va llenando de arriba abajo, y cada
+   jugador se ve entero antes de pasar al siguiente. */
+var NFILAS = 0;
+
+function filaHTML(i){
+  return '<div class="fform" data-i="' + i + '" style="display:flex;gap:8px;'
+    + 'align-items:center;margin-bottom:8px;flex-wrap:wrap">'
+    + '<input type="number" min="1" max="99" placeholder="#" id="n' + i + '" '
+    +   'style="width:56px;padding:9px;border-radius:8px;background:rgba(255,255,255,.04);'
+    +   'border:1px solid rgba(255,255,255,.1);color:inherit;text-align:center;font-weight:700">'
+    + '<input type="email" placeholder="mail@ejemplo.com" id="m' + i + '" '
+    +   'style="flex:1;min-width:170px;padding:9px 11px;border-radius:8px;'
+    +   'background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:inherit">'
+    + '<input type="text" inputmode="numeric" placeholder="dd/mm/aaaa" id="d' + i + '" '
+    +   'style="width:118px;padding:9px 11px;border-radius:8px;background:rgba(255,255,255,.04);'
+    +   'border:1px solid rgba(255,255,255,.1);color:inherit">'
+    + '<label id="foto' + i + '" title="Agregar foto" style="flex:none;width:38px;height:38px;'
+    +   'border-radius:50%;border:1px dashed rgba(255,255,255,.25);display:flex;'
+    +   'align-items:center;justify-content:center;cursor:pointer;overflow:hidden;'
+    +   'font-size:17px;color:#64748b">+'
+    +   '<input type="file" accept="image/*" style="display:none" '
+    +   'onchange="fotoFila(' + i + ', this)"></label>'
+    + '<button type="button" onclick="borrarFila(' + i + ')" title="Quitar"'
+    +   ' style="flex:none;width:30px;height:30px;border-radius:8px;cursor:pointer;'
+    +   'background:transparent;border:1px solid rgba(255,255,255,.1);color:#64748b">×</button>'
+    + '</div>';
+}
+
+function masFila(){
+  var c = document.getElementById('form-filas');
+  if(!c) return;
+  c.insertAdjacentHTML('beforeend', filaHTML(NFILAS));
+  NFILAS++;
+}
+
+function borrarFila(i){
+  var f = document.querySelector('.fform[data-i="' + i + '"]');
+  if(f) f.remove();
+  if(!document.querySelectorAll('.fform').length) masFila();
+}
+
+var FOTOS = {};
+function fotoFila(i, input){
+  var f = input.files && input.files[0];
+  if(!f) return;
+  achicar(f, function(dataUrl){
+    if(!dataUrl){ alert('No pude leer esa imagen.'); return; }
+    FOTOS[i] = dataUrl;
+    var p = document.getElementById('foto' + i);
+    if(p) p.innerHTML = '<img src="' + dataUrl + '" alt="" style="width:38px;height:38px;'
+                      + 'border-radius:50%;object-fit:cover">'
+                      + '<input type="file" accept="image/*" style="display:none" '
+                      + 'onchange="fotoFila(' + i + ', this)">';
+  });
+}
+
+/* Pasa lo del formulario a la lista que ya sabe revisar y crear */
+function leerFormulario(){
+  var filas = document.querySelectorAll('.fform');
+  FILAS = [];
+  filas.forEach(function(f){
+    var i = f.getAttribute('data-i');
+    var mail = (document.getElementById('m' + i) || {}).value || '';
+    var num  = (document.getElementById('n' + i) || {}).value || '';
+    var fec  = (document.getElementById('d' + i) || {}).value || '';
+    mail = mail.trim().toLowerCase();
+    if(!mail) return;
+    FILAS.push({
+      mail: mail,
+      num:  num === '' ? null : parseInt(num, 10),
+      fecha: fec.trim(),
+      clave: claveDeFecha(fec.trim()),
+      foto: FOTOS[i] || null,
+      estado: ''
+    });
+  });
+  pintar();
+}
+
+/* Arranca con tres filas vacias, que es lo que se ve al abrir */
+(function(){
+  var c = document.getElementById('form-filas');
+  if(!c) return;
+  masFila(); masFila(); masFila();
+})();
 </script>
 </body>
 </html>
