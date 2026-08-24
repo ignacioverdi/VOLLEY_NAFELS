@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Acceso de los jugadores — <span id="nom-club"></span></title>
+<title>Acceso de los jugadores</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -84,9 +84,23 @@ textarea:focus{border-color:var(--club)}
   .resumen{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ══ EL DESPLEGABLE DE CATEGORIA ═════════════════════════════════════════
+   Las opciones de un <select> las dibuja el sistema operativo, no la
+   pagina: heredan el fondo blanco de Windows y con letra clara quedan
+   invisibles. Hay que pintarlas aparte.
+   Mismo par que usa el resto de la app. */
+#sel-cat {
+  background: rgba(255,255,255,.04);
+  color: #f1f5f9;
+}
+#sel-cat option {
+  background: #1e293b;
+  color: #f1f5f9;
+}
 </style>
 <!-- Motor de idiomas (ES / EN / DE). -->
-<script src="lang.js?v=20260824-1140"></script>
+<script src="lang.js?v=20260824-1151"></script>
 </head>
 <body>
 <div class="hoja">
@@ -94,7 +108,7 @@ textarea:focus{border-color:var(--club)}
   <div class="top">
     <div class="esc" id="esc"></div>
     <div>
-      <h1><span id="nom-club"></span></h1>
+      <h1 id="nom-club"></h1>
       <p>Acceso de los jugadores</p>
     </div>
     <a class="volver" href="index.html">Volver</a>
@@ -109,7 +123,7 @@ textarea:focus{border-color:var(--club)}
     <label class="lbl" for="lista">Pegá acá tu lista</label>
 <div id="caja-cat" style="display:none;margin-bottom:14px">
   <label style="display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#64748b;margin-bottom:6px">Categoría</label>
-  <select id="sel-cat" style="width:100%;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:inherit;font-size:14px"></select>
+  <select id="sel-cat" style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.1);font-size:14px"></select>
   <div style="font-size:11px;color:#64748b;margin-top:6px">Los jugadores que cargues quedan en esta categoría.</div>
 </div>
     <!-- ══ CARGA DE A UNO ══════════════════════════════════════════════════
@@ -150,9 +164,9 @@ jugador3@gmail.com    9     23/08/2001</div>
 
 </div>
 
-<script src="categorias_club.js?v=20260824-1140"></script>
-<script src="selector_categoria.js?v=20260824-1140"></script>
-<script src="firebase.js?v=20260824-1140"></script>
+<script src="categorias_club.js?v=20260824-1151"></script>
+<script src="selector_categoria.js?v=20260824-1151"></script>
+<script src="firebase.js?v=20260824-1151"></script>
 <script>
 /* ============================================================================
    Alta de jugadores — el DT pega su lista y se crean todas las cuentas.
@@ -515,20 +529,34 @@ function leerFormulario(){
    La plantilla trae una marca que ACTUALIZAR_CLIENTE reemplaza al crear un
    cliente. NAFELS es el club de origen, no un cliente, asi que ahi nadie la
    reemplazaba y se leia la marca cruda al lado del escudo.
-   Ahora se lee de donde ya esta, y si no hay nada no se muestra nada. */
+
+   Se lee de donde ya esta —el manifest de la app, que todo club tiene— y
+   si no se puede, del nombre del sitio. Si no hay nada, no se muestra nada:
+   mejor vacio que una marca cruda. */
 (function(){
   var el = document.getElementById('nom-club');
   if(!el) return;
-  var n = '';
+
+  function poner(n){
+    n = (n || '').trim();
+    if(n) el.textContent = n;
+  }
+
+  /* lo que ya este a mano */
   try {
-    n = (window.CLUB_NOMBRE || window.NOMBRE_CLUB || '');
-    if(!n){
-      var t = document.title || '';
-      var p = t.split(/[—·|-]/);
-      n = (p[p.length-1] || '').trim();
+    if(window.CLUB_NOMBRE || window.NOMBRE_CLUB){
+      poner(window.CLUB_NOMBRE || window.NOMBRE_CLUB);
+      return;
     }
   } catch(e){}
-  el.textContent = n || '';
+
+  /* el manifest: ahi vive el nombre con el que se instala la app */
+  try {
+    fetch('manifest.json')
+      .then(function(r){ return r.json(); })
+      .then(function(m){ poner(m.name || m.short_name); })
+      .catch(function(){});
+  } catch(e){}
 })();
 </script>
 </body>
