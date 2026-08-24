@@ -222,6 +222,26 @@ section{padding:86px 0}
 .club span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.11em;
   text-transform:uppercase;color:var(--gris);line-height:1.5;display:block}
 
+
+/* ═══ SERVICIO DE SCOUTING ═══ */
+.serv{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:16px;margin-top:8px}
+.sv{background:var(--sup);border:1px solid var(--linea);border-radius:13px;padding:24px 22px;
+  position:relative;transition:border-color .2s,transform .2s}
+.sv:hover{border-color:rgba(47,168,245,.45);transform:translateY(-3px)}
+.sv.vivo{border-color:rgba(47,168,245,.5);background:rgba(47,168,245,.05)}
+.sv .num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;
+  color:var(--frio);margin-bottom:12px;display:block}
+.sv h3{font-size:17px;margin-bottom:9px;line-height:1.25}
+.sv p{color:var(--gris);font-size:14px;line-height:1.55;margin-bottom:12px}
+.sv .flecha{display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;
+  font-size:10.5px;color:var(--gris);flex-wrap:wrap}
+.sv .fx2{background:var(--sup2);border:1px solid var(--linea);border-radius:6px;padding:5px 9px;white-space:nowrap}
+.sv .fx2.on{border-color:var(--frio);color:var(--frio);background:rgba(47,168,245,.08)}
+.sv .vivo-pt{position:absolute;top:20px;right:20px;display:flex;align-items:center;gap:6px;
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--ok)}
+.sv .vivo-pt i{width:6px;height:6px;border-radius:50%;background:var(--ok);
+  display:block;animation:lat 1.6s infinite}
+
 /* cierre */
 .fin{text-align:center;padding:92px 0 74px;border-top:1px solid var(--linea);
   background:radial-gradient(ellipse 880px 360px at 50% 0%,rgba(255,94,26,.1),transparent)}
@@ -329,6 +349,7 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gris)
       <a href="#todo">Qué incluye</a>
       <a href="#compara">Comparativa</a>
       <a href="#planes">Planes</a>
+      <a href="#servicio">Servicio</a>
     </div>
     <a href="#planes" class="btn btn-1">Ver planes</a>
   </div>
@@ -897,6 +918,64 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gris)
   </div>
 </section>
 
+
+<!-- ══ SERVICIO DE SCOUTING ══ -->
+<section id="servicio" style="background:var(--noche);border-top:1px solid var(--linea)">
+  <div class="w">
+    <div class="eyebrow frio">¿No tenés quién scoutee?</div>
+    <h2 class="tit">Lo scouteamos <em style="font-style:normal;color:var(--frio)">nosotros.</em></h2>
+    <p class="sub">No todos los clubes tienen un analista. Si el tuyo no lo tiene —o esta
+      semana no llega— lo hacemos por vos, con todo el análisis incluido.</p>
+
+    <div class="serv">
+      <div class="sv">
+        <span class="num">OPCIÓN 1</span>
+        <h3>Mandás el video, te devolvemos todo</h3>
+        <p>Nos pasás el link del partido. Lo scouteamos entero y te llega el archivo más
+          el análisis completo: plan del rival, mapas de calor, rotaciones y los videos
+          cortados acción por acción.</p>
+        <div class="flecha">
+          <span class="fx2">tu video</span><span>→</span>
+          <span class="fx2 on">nosotros</span><span>→</span>
+          <span class="fx2">todo el análisis</span>
+        </div>
+      </div>
+
+      <div class="sv">
+        <span class="num">OPCIÓN 2</span>
+        <h3>Ya lo scouteaste: hacemos el análisis</h3>
+        <p>Si tu asistente ya scouteó el partido, mandanos el archivo y te devolvemos el
+          análisis armado. Sirve para un partido puntual, para preparar una final o para
+          probar el sistema sin compromiso.</p>
+        <div class="flecha">
+          <span class="fx2">tu .dvw</span><span>→</span>
+          <span class="fx2 on">nosotros</span><span>→</span>
+          <span class="fx2">todo el análisis</span>
+        </div>
+      </div>
+
+      <div class="sv vivo">
+        <span class="vivo-pt"><i></i>EN VIVO</span>
+        <span class="num">OPCIÓN 3</span>
+        <h3>Lo scouteamos mientras se juega</h3>
+        <p>Nos pasan el link de la transmisión y scouteamos el partido en tiempo real, a
+          distancia. El cuerpo técnico ve las estadísticas <b>durante el partido</b>, en la
+          tablet del banco, sin tener a nadie tipeando en el gimnasio.</p>
+        <div class="flecha">
+          <span class="fx2">su transmisión</span><span>→</span>
+          <span class="fx2 on">scouteamos en vivo</span><span>→</span>
+          <span class="fx2">al banco</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="nota" style="margin-top:24px">
+      Se cobra por partido y no hace falta tener contratada la app.
+      <a href="#contacto" style="color:var(--frio);text-decoration:none;font-weight:600">Consultanos</a>
+      y te pasamos el precio según cuántos partidos necesites.</p>
+  </div>
+</section>
+
 <!-- ══ CÓMO EMPEZAR ══ -->
 <section>
   <div class="w">
@@ -980,6 +1059,113 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gris)
   });
 })();
 </script>
-<script src="ayuda.js?v=20260824-2025"></script>
+
+<script>
+/* =======================================================================
+   IDIOMAS DEL FLYER — español · inglés · alemán
+
+   Traduce NODO POR NODO, no bloque por bloque. Un parrafo con negritas
+   adentro se parte en varios pedazos de texto, y traducir solo el bloque
+   entero dejaba esos pedazos en español. Recorriendo cada nodo de texto no
+   se escapa ninguno.
+
+   Cada entrada es [español, inglés, alemán]. Si un texto no esta en la
+   lista, queda como esta: nunca se muestra una traduccion a medias.
+
+   Arranca en el idioma del navegador y recuerda la eleccion.
+   ======================================================================= */
+(function () {
+  'use strict';
+  var T = [["Scout en vivo", "Live scout", "Live-Scouting"], ["Cómo se ve", "How it looks", "So sieht es aus"], ["Qué incluye", "What's included", "Was enthalten ist"], ["Comparativa", "Comparison", "Vergleich"], ["Planes", "Plans", "Pakete"], ["Servicio", "Service", "Service"], ["Ver planes", "See plans", "Pakete ansehen"], ["EN CANCHA · LIGA NLA SUIZA · DIVISIÓN DE HONOR ARGENTINA", "ON COURT · SWISS NLA LEAGUE · ARGENTINE TOP DIVISION", "IM EINSATZ · SCHWEIZER NLA · ARGENTINISCHE TOP-LIGA"], ["Scouting profesional.", "Professional scouting.", "Professionelles Scouting."], ["Completo.", "Complete.", "Komplett."], ["Y en vivo.", "And live.", "Und live."], ["Todo lo que hace un software de scouting de élite —tipeo en vivo, video con delay, análisis por rotación—", "Everything an elite scouting program does —live typing, delayed video, rotation analysis—", "Alles, was eine Spitzen-Scouting-Software kann —Live-Eingabe, verzögertes Video, Rotationsanalyse—"], ["más la app que lo pone en el celular de cada jugadora.", "plus the app that puts it on every player's phone.", "dazu die App, die alles aufs Handy jeder Spielerin bringt."], ["Y los archivos que genera", "And the files it creates", "Und die erzeugten Dateien"], ["abren en DataVolley", "open in DataVolley", "öffnen sich in DataVolley"], ["sin convertir nada.", "with no conversion.", "ohne Umwandlung."], ["Ver planes y precios", "See plans and prices", "Pakete und Preise"], ["Ver el scout en vivo", "See the live scout", "Live-Scouting ansehen"], ["menos", "less", "weniger"], ["más", "more", "mehr"], ["El corazón del sistema", "The heart of the system", "Das Herz des Systems"], ["Scouteás el partido", "You scout the match", "Du scoutest das Spiel"], ["mientras se juega.", "while it is played.", "während es läuft."], ["No es un lector de archivos. Es un scout completo: tipeás cada acción con el teclado, ves el video con delay para revisar la jugada que se te pasó, y las estadísticas se calculan en el momento.", "This is not a file reader. It is a full scouting tool: you type every action on the keyboard, watch the delayed video to review the rally you missed, and the stats are calculated as you go.", "Kein Datei-Betrachter, sondern vollwertiges Scouting: Du tippst jede Aktion über die Tastatur, prüfst verpasste Ballwechsel im verzögerten Video, und die Statistik entsteht in Echtzeit."], ["Video en vivo con delay", "Live video with delay", "Live-Video mit Verzögerung"], ["Se te pasó una acción. Retrocedés unos segundos, la mirás y la cargás. Sin parar el partido.", "You missed an action. Rewind a few seconds, watch it, enter it. Without stopping the match.", "Eine Aktion verpasst? Ein paar Sekunden zurück, ansehen, eingeben. Ohne das Spiel zu unterbrechen."], ["Se transmite a la tablet del banco", "Streams to the bench tablet", "Überträgt auf das Tablet der Bank"], ["El asistente tipea arriba, el entrenador ve los números abajo. En el mismo momento.", "The assistant types up in the stands, the coach sees the numbers on the bench. At the same moment.", "Der Assistent tippt oben, der Trainer sieht die Zahlen unten. Im selben Moment."], ["Las 11 baterías, calculándose solas", "The 11 target bars, updating themselves", "Die 11 Zielbalken, automatisch berechnet"], ["Saque, recepción, bloqueo, ataque por tiempo, transición. Contra los objetivos del club, con semáforo.", "Serve, reception, block, attack by tempo, transition. Against the club's targets, with a traffic light.", "Aufschlag, Annahme, Block, Angriff nach Tempo, Transition. Gegen die Vereinsziele, mit Ampel."], ["Direcciones y distribución, en vivo", "Directions and distribution, live", "Richtungen und Verteilung, live"], ["Adónde ataca cada una, adónde saca, a quién le pasa el armador. Mientras el partido pasa.", "Where each player attacks, where she serves, who the setter feeds. While the match unfolds.", "Wohin jede angreift, wohin sie aufschlägt, wen der Zuspieler bedient. Während das Spiel läuft."], ["El plan del rival al lado", "The opponent's plan alongside", "Der Gegnerplan daneben"], ["Lo que preparaste durante la semana, contra lo que está pasando en la cancha. En la misma pantalla.", "What you prepared during the week against what is happening on court. On the same screen.", "Was du unter der Woche vorbereitet hast, gegen das Geschehen auf dem Feld. Auf demselben Bildschirm."], ["Verificador de códigos", "Code checker", "Code-Prüfer"], ["Revisa todo lo tipeado y marca lo que no cierra. Antes de que el error llegue a las estadísticas.", "Reviews everything typed and flags what does not add up. Before the error reaches the stats.", "Prüft alles Eingetippte und markiert Unstimmigkeiten. Bevor der Fehler in die Statistik gelangt."], ["scout en vivo · set 3 · 18-16", "live scout · set 3 · 18-16", "Live-Scouting · Satz 3 · 18-16"], ["EN VIVO", "LIVE", "LIVE"], ["saque", "serve", "Aufschlag"], ["recepción", "reception", "Annahme"], ["armado", "set", "Zuspiel"], ["ataque · punto", "attack · point", "Angriff · Punkt"], ["Baterías · en vivo", "Target bars · live", "Zielbalken · live"], ["Armador rival · a quién", "Opposing setter · to whom", "Gegnerischer Zuspieler · an wen"], ["otros", "others", "andere"], ["Compatibilidad total", "Full compatibility", "Volle Kompatibilität"], ["Lo que scouteás acá,", "What you scout here", "Was du hier scoutest,"], ["abre en DataVolley.", "opens in DataVolley.", "öffnet sich in DataVolley."], ["El archivo que genera Volley-Stats es un", "The file Volley-Stats creates is a standard", "Volley-Stats erzeugt eine Standard-"], ["estándar. Se lo mandás al analista, a la federación o al club rival y lo abren con su programa de siempre.", "file. Send it to your analyst, the federation or the opposing club and they open it with their usual program.", "Datei. Schick sie dem Analysten, dem Verband oder dem gegnerischen Verein — sie öffnen sie mit ihrem gewohnten Programm."], ["Y al revés: leemos los", "And the other way round: we read", "Und umgekehrt: Wir lesen"], ["de DataVolley", "files from DataVolley", "Dateien von DataVolley"], ["y de VolleyMetrics", "and VolleyMetrics", "und VolleyMetrics"], [", sin configurar nada.", ", with no setup.", ", ohne Konfiguration."], ["Si el partido lo scouteó otra persona con sus propios códigos, hay una pantalla que los traduce en dos clics — y guarda la equivalencia para la próxima.", "If someone else scouted the match with their own codes, one screen translates them in two clicks — and remembers the mapping for next time.", "Hat jemand anderes mit eigenen Codes gescoutet, übersetzt ein Bildschirm sie in zwei Klicks — und merkt sich die Zuordnung."], ["Tocá cada herramienta", "Tap each tool", "Tippe auf jedes Werkzeug"], ["y mirá qué hace.", "and see what it does.", "und sieh, was es kann."], ["Cuatro de las 55 pantallas, con datos de un partido real de la NLA suiza.", "A few of the 55 screens, with data from real Swiss NLA matches.", "Einige der 55 Bildschirme, mit Daten aus echten Spielen der Schweizer NLA."], ["Mapa de calor", "Heat map", "Heatmap"], ["Cortes de video", "Video clips", "Videoclips"], ["Objetivos del club", "Club targets", "Vereinsziele"], ["Cada jugador", "Each player", "Jeder Spieler"], ["Plan del rival", "Opponent plan", "Gegnerplan"], ["Armador rival", "Opposing setter", "Gegner-Zuspieler"], ["Tabla de la liga", "League table", "Ligatabelle"], ["analisis de ataque · 26 partidos NLA", "attack analysis · 26 NLA matches", "Angriffsanalyse · 26 NLA-Spiele"], ["Un jugador,", "One player,", "Ein Spieler,"], [", repartidos en las nueve zonas del campo rival — y separados en", ", spread across the nine zones of the opposing court — split into", ", verteilt auf die neun Zonen des gegnerischen Feldes — getrennt nach"], ["side-out, transición, kills y bloqueados", "side-out, transition, kills and blocked", "Side-out, Transition, Kills und geblockt"], [". Cada combinación con su eficacia. Y arriba a la izquierda,", ". Every combination with its efficiency. And at the top left,", ". Jede Kombination mit ihrer Effizienz. Oben links:"], ["VER LOS VIDEOS", "WATCH THE VIDEOS", "VIDEOS ANSEHEN"], [": lo que estás mirando en números, en imágenes.", ": what you are reading as numbers, as footage.", ": was du als Zahlen siehst, als Bilder."], ["cortes de video · filtrado por zona de origen 4", "video clips · filtered by origin zone 4", "Videoclips · gefiltert nach Ursprungszone 4"], ["Elegís las acciones —", "You pick the actions —", "Du wählst die Aktionen —"], ["982 ataques, 285 por X8, 120 por X5", "982 attacks, 285 through X8, 120 through X5", "982 Angriffe, 285 über X8, 120 über X5"], ["— y se reproducen una atrás de otra en el segundo del contacto. Con repetir, cámara lenta, ir 2 segundos atrás y loop.", "— and they play one after another at the exact moment of contact. With repeat, slow motion, 2-second rewind and loop.", "— und sie laufen nacheinander, genau im Moment des Kontakts. Mit Wiederholung, Zeitlupe, 2-Sekunden-Rücksprung und Loop."], ["objetivos del equipo · temporada 2026", "team targets · 2026 season", "Teamziele · Saison 2026"], ["Las", "The team's", "Die"], ["once baterías", "eleven target bars", "elf Zielbalken"], ["del equipo contra los objetivos que fija el club. Verde llegó, ámbar está cerca, rojo está lejos. De un vistazo se ve que el", "against the goals the club sets. Green reached it, amber is close, red is far off. At a glance you see the", "des Teams gegenüber den Vereinszielen. Grün erreicht, Bernstein nah dran, Rot weit entfernt. Auf einen Blick:"], ["ataque quick está en 36% cuando el objetivo es 48%", "quick attack at 36% when the target is 48%", "Quick-Angriff bei 36%, Ziel 48%"], ["— ahí hay trabajo. Y abajo, el mismo tablero para cada jugador del plantel.", "— there is work to do. Below, the same board for every player in the squad.", "— hier ist Arbeit nötig. Darunter dieselbe Übersicht für jeden Spieler des Kaders."], ["la pantalla de un jugador · temporada completa", "a player's screen · full season", "Der Bildschirm eines Spielers · ganze Saison"], ["Cada jugador entra con su cuenta y ve lo suyo: saque, ataque, recepción y bloqueo, y", "Each player logs in and sees their own data: serve, attack, reception and block, plus", "Jeder Spieler meldet sich an und sieht seine Daten: Aufschlag, Angriff, Annahme und Block, dazu"], ["sus once baterías contra las del equipo", "their eleven target bars against the team's", "seine elf Zielbalken im Vergleich zum Team"], [". Verde llegó al objetivo, rojo está lejos. Sabe exactamente en qué está mejor y en qué peor que sus compañeros.", ". Green reached the target, red is far off. They know exactly where they stand against their teammates.", ". Grün Ziel erreicht, Rot weit entfernt. Er weiss genau, wo er im Vergleich zu den Mitspielern steht."], ["plan de partido · direcciones de ataque · 26 partidos", "match plan · attack directions · 26 matches", "Spielplan · Angriffsrichtungen · 26 Spiele"], ["Cada rematador del rival con sus", "Every opposing hitter with their", "Jeder gegnerische Angreifer mit seinen"], ["nueve zonas de destino", "nine target zones", "neun Zielzonen"], [", su eficacia, y el reparto entre línea, centro y diagonal. Figueiredo tira", ", their efficiency, and the split between line, middle and cross. Figueiredo hits", ", seiner Effizienz und der Verteilung auf Linie, Mitte und Diagonale. Figueiredo schlägt"], ["184 pelotas a la z1", "184 balls to z1", "184 Bälle in z1"], ["y convierte el 45% por línea: ahí se arma el bloqueo. Doble click en cualquier zona y se abre el video de esos ataques.", "and converts 45% down the line: that is where you set the block. Double-click any zone to open the video of those attacks.", "und verwertet 45% über die Linie: dort stellt man den Block. Doppelklick auf eine Zone öffnet das Video."], ["plan de partido · distribución del armador · las 6 rotaciones", "match plan · setter distribution · the 6 rotations", "Spielplan · Zuspielverteilung · die 6 Rotationen"], ["A quién le pasa el armador rival en", "Who the opposing setter feeds in", "Wen der gegnerische Zuspieler bedient in"], ["cada una de las seis rotaciones", "each of the six rotations", "jeder der sechs Rotationen"], [", con el porcentaje de distribución y el de punto. En la P6 usa el", ", with the distribution and point percentages. In P6 they use", ", mit Verteilungs- und Punktquote. In P6 nutzt er"], ["41% por zona 4 con 47% de eficacia", "41% through zone 4 with 47% efficiency", "41% über Zone 4 bei 47% Effizienz"], [". Filtrable por fase, por tipo de recepción y por quién recibe.", ". Filterable by phase, reception type and who passes.", ". Filterbar nach Phase, Annahmeart und Annahmespieler."], ["dashboard del entrenador", "coach dashboard", "Trainer-Dashboard"], ["La puerta de entrada del cuerpo técnico. Desde acá se llega a todo: análisis, plan de partido, video, plantel, físico y gestión.", "The coaching staff's way in. Everything is reachable from here: analysis, match plan, video, squad, fitness and management.", "Der Einstieg für das Trainerteam. Von hier aus alles erreichbar: Analyse, Spielplan, Video, Kader, Athletik und Verwaltung."], ["estadísticas de toda la liga", "statistics for the whole league", "Statistik der ganzen Liga"], ["No solo tu equipo:", "Not just your team:", "Nicht nur dein Team:"], ["todos los jugadores de la liga", "every player in the league", "alle Spieler der Liga"], [", ordenables por cualquier columna. Para scoutear un rival, seguir a un jugador o ver dónde está parado el plantel contra el resto.", ", sortable by any column. To scout an opponent, follow a player, or see where your squad stands against the rest.", ", nach jeder Spalte sortierbar. Um einen Gegner zu scouten, einen Spieler zu verfolgen oder den Kader einzuordnen."], ["55 pantallas.", "55 screens.", "55 Bildschirme."], ["Un solo sistema.", "One single system.", "Ein einziges System."], ["Scouting, análisis, video, físico y gestión. Todo con los mismos datos, todo con la identidad del club.", "Scouting, analysis, video, fitness and management. All from the same data, all with the club's identity.", "Scouting, Analyse, Video, Athletik und Verwaltung. Alles aus denselben Daten, alles im Vereinsdesign."], ["Análisis táctico", "Tactical analysis", "Taktische Analyse"], ["Seis mapas de calor, uno por fundamento, con filtros por rotación, fase y valoración.", "Six heat maps, one per skill, with filters by rotation, phase and grade.", "Sechs Heatmaps, eine pro Element, mit Filtern nach Rotation, Phase und Bewertung."], ["Ataque, saque, recepción", "Attack, serve, reception", "Angriff, Aufschlag, Annahme"], ["Bloqueo, defensa, armado", "Block, defence, setting", "Block, Abwehr, Zuspiel"], ["Rotaciones: side-out y break", "Rotations: side-out and break", "Rotationen: Side-out und Break"], ["Distribución del armador", "Setter distribution", "Zuspielverteilung"], ["Plan de partido", "Match plan", "Spielplan"], ["El rival armado solo al subir el archivo. Cada jugadora con sus zonas y tendencias.", "The opponent built automatically when you upload the file. Every player with their zones and tendencies.", "Der Gegner wird beim Hochladen automatisch erstellt. Jede Spielerin mit Zonen und Tendenzen."], ["Scouting de rivales", "Opponent scouting", "Gegner-Scouting"], ["Comparador equipo vs rival", "Team vs opponent comparison", "Vergleich Team gegen Gegner"], ["Game plan y playbook", "Game plan and playbook", "Spielplan und Playbook"], ["Pizarrón táctico", "Tactical board", "Taktiktafel"], ["Video", "Video", "Video"], ["Tocás un número y se abren las jugadas, una atrás de otra, en el segundo exacto.", "Tap a number and the rallies open, one after another, at the exact second.", "Tippe auf eine Zahl und die Ballwechsel laufen nacheinander, auf die Sekunde genau."], ["Cortes por acción y valoración", "Clips by action and grade", "Clips nach Aktion und Bewertung"], ["Controles de repetición", "Replay controls", "Wiederholungssteuerung"], ["Une los archivos que cortó la cámara", "Merges the files the camera split", "Fügt die geteilten Kameradateien zusammen"], ["Sin instalar nada en el celular", "Nothing to install on the phone", "Keine Installation auf dem Handy"], ["Cada jugadora", "Each player", "Jede Spielerin"], ["Su app, su cuenta, sus números. Entra y ve lo suyo cuando quiere.", "Their app, their account, their numbers. They log in and see their own data whenever they want.", "Ihre App, ihr Konto, ihre Zahlen. Sie meldet sich an und sieht ihre Daten, wann sie will."], ["Perfil y evolución", "Profile and progress", "Profil und Entwicklung"], ["Plan de desarrollo individual", "Individual development plan", "Individueller Entwicklungsplan"], ["Ranking del plantel", "Squad ranking", "Kader-Rangliste"], ["Sus videos, filtrados", "Their videos, filtered", "Ihre Videos, gefiltert"], ["Físico y wellness", "Fitness and wellness", "Athletik und Wellness"], ["La carga real del plantel, cruzada con lo que pasa en la cancha.", "The squad's real load, cross-checked with what happens on court.", "Die tatsächliche Belastung des Kaders, abgeglichen mit dem Spielgeschehen."], ["Wellness diario", "Daily wellness", "Tägliches Wellness"], ["Rutinas y preparación física", "Routines and physical preparation", "Routinen und Athletiktraining"], ["Stats de entrenamiento", "Training stats", "Trainingsstatistik"], ["Historial por jugadora", "History by player", "Verlauf pro Spielerin"], ["El club entero", "The whole club", "Der ganze Verein"], ["Todas las categorías con sus planteles, sus partidos y sus números.", "Every category with its squad, its matches and its numbers.", "Jede Kategorie mit Kader, Spielen und Zahlen."], ["Primera, Sub-21, Sub-18, Sub-16…", "First team, U21, U18, U16…", "Erste Mannschaft, U21, U18, U16…"], ["Temporadas archivadas", "Archived seasons", "Archivierte Saisons"], ["Calendario y horarios", "Calendar and schedules", "Kalender und Zeitpläne"], ["Control de calidad automático", "Automatic quality control", "Automatische Qualitätskontrolle"], ["Para ubicarse", "For context", "Zur Einordnung"], ["Qué da cada uno,", "What each one gives,", "Was jedes bietet"], ["y qué cuesta.", "and what it costs.", "und was es kostet."], ["Precios públicos de agosto de 2026. DataVolley es el estándar del scouting profesional; Hudl es el estándar del video. Volley-Stats hace las dos cosas y las pone en el celular de todo el plantel.", "Public prices as of August 2026. DataVolley is the standard for professional scouting; Hudl is the standard for video. Volley-Stats does both and puts them on every player's phone.", "Öffentliche Preise, Stand August 2026. DataVolley ist der Standard im Scouting, Hudl der Standard im Video. Volley-Stats kann beides und bringt es aufs Handy jedes Spielers."], ["Scouting en vivo", "Live scouting", "Live-Scouting"], ["sí", "yes", "ja"], ["no", "no", "nein"], ["Video con delay", "Delayed video", "Verzögertes Video"], ["Mapas de calor y rotaciones", "Heat maps and rotations", "Heatmaps und Rotationen"], ["solo plan Plus", "Plus plan only", "nur Plus-Paket"], ["App para las jugadoras", "App for the players", "App für die Spielerinnen"], ["Wellness y carga física", "Wellness and physical load", "Wellness und Belastung"], ["producto aparte", "separate product", "separates Produkt"], ["Dónde se usa", "Where it is used", "Wo es genutzt wird"], ["1 PC con llave USB", "1 PC with USB key", "1 PC mit USB-Schlüssel"], ["web, por equipo", "web, per team", "Web, pro Team"], ["cualquier celular", "any phone", "jedes Handy"], ["Cuántos equipos", "How many teams", "Wie viele Teams"], ["1 licencia", "1 licence", "1 Lizenz"], ["se paga por equipo", "paid per team", "pro Team bezahlt"], ["todo el club", "the whole club", "der ganze Verein"], ["Precio por año", "Price per year", "Preis pro Jahr"], ["por equipo · plan Plus", "per team · Plus plan", "pro Team · Plus-Paket"], ["el club completo", "the whole club", "der ganze Verein"], ["DataVolley 4 arranca en EUR 299 en su versión básica. Hudl Volleymetrics va de USD 500 (Core) a USD 1.600 (Premier), siempre por equipo. Un club con cuatro categorías paga cuatro veces.", "DataVolley 4 starts at EUR 299 in its basic version. Hudl Volleymetrics runs from USD 500 (Core) to USD 1,600 (Premier), always per team. A club with four categories pays four times over.", "DataVolley 4 beginnt bei EUR 299 in der Basisversion. Hudl Volleymetrics reicht von USD 500 (Core) bis USD 1.600 (Premier), immer pro Team. Ein Verein mit vier Kategorien zahlt viermal."], ["Elegí por dónde empezar.", "Choose where to start.", "Wähle deinen Einstieg."], ["Todos incluyen la app con el escudo y los colores del club, acceso para todo el plantel y el cuerpo técnico, y las mejoras nuevas sin costo extra.", "All include the app with the club's crest and colours, access for the whole squad and staff, and new improvements at no extra cost.", "Alle enthalten die App mit Wappen und Farben des Vereins, Zugang für Kader und Staff, sowie neue Verbesserungen ohne Aufpreis."], ["Análisis", "Analysis", "Analyse"], ["Para el equipo que ya scoutea y quiere que ese trabajo sirva.", "For the team that already scouts and wants that work to pay off.", "Für das Team, das bereits scoutet und diese Arbeit nutzen will."], ["/año", "/year", "/Jahr"], ["/mes", "/month", "/Monat"], ["una categoría · USD 25 por mes", "one category · USD 25 per month", "eine Kategorie · USD 25 pro Monat"], ["una categoría · USD 45 por mes", "one category · USD 45 per month", "eine Kategorie · USD 45 pro Monat"], ["sin límite de equipos · USD 69 por mes", "no team limit · USD 69 per month", "ohne Team-Limit · USD 69 pro Monat"], ["según lo que haga falta", "based on what you need", "je nach Bedarf"], ["Las pantallas de análisis", "The analysis screens", "Die Analyse-Bildschirme"], ["Plan de partido y scouting rival", "Match plan and opponent scouting", "Spielplan und Gegner-Scouting"], ["Video enganchado a cada acción", "Video linked to every action", "Video zu jeder Aktion verknüpft"], ["App para todo el plantel", "App for the whole squad", "App für den ganzen Kader"], ["Histórico de la temporada", "Season history", "Saisonverlauf"], ["Wellness y físico", "Wellness and fitness", "Wellness und Athletik"], ["Empezar", "Get started", "Loslegen"], ["Equipo", "Team", "Team"], ["El sistema completo, para una sola categoría.", "The complete system, for a single category.", "Das komplette System, für eine Kategorie."], ["Todo lo del plan Análisis", "Everything in the Analysis plan", "Alles aus dem Analyse-Paket"], ["Scout en vivo + video delay", "Live scout + delayed video", "Live-Scouting + verzögertes Video"], ["Transmisión a la tablet del banco", "Streaming to the bench tablet", "Übertragung auf das Tablet der Bank"], ["Wellness y preparación física", "Wellness and physical preparation", "Wellness und Athletiktraining"], ["Exporta .dvw para DataVolley", "Exports .dvw for DataVolley", "Exportiert .dvw für DataVolley"], ["Soporte directo", "Direct support", "Direkter Support"], ["Las demás categorías", "The other categories", "Die übrigen Kategorien"], ["El más elegido", "Most chosen", "Am häufigsten gewählt"], ["Club", "Club", "Verein"], ["El sistema completo, para todas las categorías del club.", "The complete system, for every category in the club.", "Das komplette System, für alle Kategorien des Vereins."], ["Todo lo del plan Equipo", "Everything in the Team plan", "Alles aus dem Team-Paket"], ["Todas las categorías", "Every category", "Alle Kategorien"], ["Sin límite de equipos ni jugadoras", "No limit on teams or players", "Keine Begrenzung für Teams oder Spielerinnen"], ["Élite", "Elite", "Elite"], ["A medida", "Custom", "Massgeschneidert"], ["Para el club que necesita algo que todavía no existe.", "For the club that needs something that does not exist yet.", "Für den Verein, der etwas braucht, das es noch nicht gibt."], ["Todo lo del plan Club", "Everything in the Club plan", "Alles aus dem Verein-Paket"], ["Pantallas hechas a pedido", "Screens built to order", "Massgeschneiderte Bildschirme"], ["Temporadas anteriores cargadas", "Previous seasons loaded", "Frühere Saisons eingespielt"], ["Capacitación al cuerpo técnico", "Training for the coaching staff", "Schulung für das Trainerteam"], ["Integración con lo que ya usen", "Integration with what you already use", "Integration mit euren bestehenden Tools"], ["Soporte prioritario", "Priority support", "Priorisierter Support"], ["Conversemos", "Let's talk", "Sprechen wir"], ["Sin permanencia. El club se lleva sus archivos cuando quiera.", "No lock-in. The club takes its files whenever it wants.", "Keine Bindung. Der Verein nimmt seine Dateien jederzeit mit."], ["¿No tenés quién scoutee?", "No one to scout for you?", "Niemand da zum Scouten?"], ["Lo scouteamos", "We scout it", "Wir scouten es"], ["nosotros.", "for you.", "für euch."], ["No todos los clubes tienen un analista. Si el tuyo no lo tiene —o esta semana no llega— lo hacemos por vos, con todo el análisis incluido.", "Not every club has an analyst. If yours does not —or cannot make it this week— we do it for you, with the full analysis included.", "Nicht jeder Verein hat einen Analysten. Wenn eurer keinen hat —oder diese Woche ausfällt— übernehmen wir das, inklusive vollständiger Analyse."], ["OPCIÓN 1", "OPTION 1", "OPTION 1"], ["OPCIÓN 2", "OPTION 2", "OPTION 2"], ["OPCIÓN 3", "OPTION 3", "OPTION 3"], ["Mandás el video, te devolvemos todo", "You send the video, we send back everything", "Ihr schickt das Video, wir liefern alles"], ["Nos pasás el link del partido. Lo scouteamos entero y te llega el archivo más el análisis completo: plan del rival, mapas de calor, rotaciones y los videos cortados acción por acción.", "You send us the match link. We scout the whole thing and you get the file plus the complete analysis: opponent plan, heat maps, rotations and the videos cut action by action.", "Ihr schickt uns den Link zum Spiel. Wir scouten es komplett und ihr erhaltet die Datei plus die vollständige Analyse: Gegnerplan, Heatmaps, Rotationen und die Videos Aktion für Aktion geschnitten."], ["tu video", "your video", "euer Video"], ["nosotros", "us", "wir"], ["todo el análisis", "the full analysis", "die ganze Analyse"], ["Ya lo scouteaste: hacemos el análisis", "Already scouted: we do the analysis", "Schon gescoutet: wir machen die Analyse"], ["Si tu asistente ya scouteó el partido, mandanos el archivo y te devolvemos el análisis armado. Sirve para un partido puntual, para preparar una final o para probar el sistema sin compromiso.", "If your assistant already scouted the match, send us the file and we send back the finished analysis. Useful for a one-off match, to prepare a final, or to try the system with no commitment.", "Hat euer Assistent das Spiel bereits gescoutet, schickt uns die Datei und ihr bekommt die fertige Analyse. Ideal für ein einzelnes Spiel, zur Finalvorbereitung oder um das System unverbindlich zu testen."], ["tu .dvw", "your .dvw", "eure .dvw"], ["Lo scouteamos mientras se juega", "We scout it while it is played", "Wir scouten, während gespielt wird"], ["Nos pasan el link de la transmisión y scouteamos el partido en tiempo real, a distancia. El cuerpo técnico ve las estadísticas", "You send us the stream link and we scout the match in real time, remotely. The coaching staff sees the stats", "Ihr schickt uns den Link zur Übertragung und wir scouten das Spiel in Echtzeit, aus der Ferne. Das Trainerteam sieht die Statistik"], ["durante el partido", "during the match", "während des Spiels"], [", en la tablet del banco, sin tener a nadie tipeando en el gimnasio.", ", on the bench tablet, without anyone typing in the gym.", ", auf dem Tablet der Bank, ohne dass jemand in der Halle tippt."], ["su transmisión", "their stream", "ihre Übertragung"], ["scouteamos en vivo", "we scout live", "wir scouten live"], ["al banco", "to the bench", "an die Bank"], ["Se cobra por partido y no hace falta tener contratada la app.", "Charged per match, and you do not need a subscription to the app.", "Abrechnung pro Spiel, ein App-Abo ist nicht nötig."], ["Consultanos", "Get in touch", "Meldet euch"], ["y te pasamos el precio según cuántos partidos necesites.", "and we will quote you based on how many matches you need.", "und wir nennen euch den Preis je nach Anzahl der Spiele."], ["Cuatro pasos.", "Four steps.", "Vier Schritte."], ["Y está andando.", "And it is running.", "Und es läuft."], ["La primera semana la preparamos nosotros. Después, cargar un partido son dos clics — o directamente lo scouteás en vivo desde la app.", "We handle the first week. After that, uploading a match is two clicks — or you scout it live from the app.", "Die erste Woche übernehmen wir. Danach sind es zwei Klicks pro Spiel — oder du scoutest live in der App."], ["PASO 1", "STEP 1", "SCHRITT 1"], ["PASO 2", "STEP 2", "SCHRITT 2"], ["PASO 3", "STEP 3", "SCHRITT 3"], ["PASO 4", "STEP 4", "SCHRITT 4"], ["Nos pasás el escudo y el plantel", "You send us the crest and the squad", "Ihr schickt uns Wappen und Kader"], ["Y los partidos que ya tengas scouteados de esta temporada.", "Plus any matches you have already scouted this season.", "Dazu die bereits gescouteten Spiele dieser Saison."], ["Preparamos la app del club", "We prepare the club's app", "Wir richten die Vereins-App ein"], ["Con su escudo, sus colores y su nombre. Se instala en el celular como cualquier app.", "With its crest, its colours and its name. It installs on the phone like any app.", "Mit Wappen, Farben und Namen. Sie installiert sich wie jede App auf dem Handy."], ["Cada jugadora recibe su acceso", "Every player gets their access", "Jede Spielerin erhält ihren Zugang"], ["Entra con su cuenta y ve lo suyo. Sin instalar nada.", "She logs in and sees her own data. Nothing to install.", "Sie meldet sich an und sieht ihre Daten. Ohne Installation."], ["Scouteás y listo", "You scout and that is it", "Scouten und fertig"], ["En vivo desde la app, o subiendo el archivo del asistente. En minutos está todo actualizado.", "Live from the app, or by uploading the assistant's file. Everything is updated within minutes.", "Live in der App oder durch Hochladen der Datei des Assistenten. In Minuten ist alles aktualisiert."], ["Ya está funcionando en", "Already running in", "Bereits im Einsatz in"], ["dos primeras divisiones.", "two top divisions.", "zwei höchsten Ligen."], ["Dos ligas, dos idiomas, dos formas de scoutear — el mismo sistema.", "Two leagues, two languages, two ways of scouting — the same system.", "Zwei Ligen, zwei Sprachen, zwei Arten zu scouten — dasselbe System."], ["Liga Nacional A", "National League A", "Nationalliga A"], ["Suiza", "Switzerland", "Schweiz"], ["División de Honor", "Top Division", "Höchste Liga"], ["Argentina", "Argentina", "Argentinien"], ["Pedir una demostración", "Request a demo", "Demo anfragen"], ["pantallas", "screens", "Bildschirme"], ["primeras divisiones", "top divisions", "höchste Ligen"], ["acciones analizadas", "actions analysed", "analysierte Aktionen"], ["verificado vs DataVolley", "verified vs DataVolley", "geprüft gegen DataVolley"], ["El problema", "The problem", "Das Problem"], ["Empezar", "Get started", "Loslegen"], ["CAMPO RIVAL", "OPPONENT COURT", "GEGNERISCHES FELD"], ["NUESTRO CAMPO", "OUR COURT", "UNSER FELD"], ["RED", "NET", "NETZ"], ["1.052 ataques · #6 Cabanaspablo", "1,052 attacks · #6 Cabanaspablo", "1.052 Angriffe · #6 Cabanaspablo"], ["recep.", "recep.", "Annahme"], ["atq c.", "c. atk", "Angr. M."], ["blq #", "blk #", "Blk #"], ["transic.", "transit.", "Transit."], ["ZONA 4", "ZONE 4", "ZONE 4"], ["Adónde ataca el equipo rival", "Where the opposing team attacks", "Wohin die gegnerische Mannschaft angreift"], ["Quién ataca ahí", "Who attacks there", "Wer dort angreift"], ["Filtros activos", "Active filters", "Aktive Filter"], ["Rotación 1", "Rotation 1", "Rotation 1"], ["Side-out", "Side-out", "Side-out"], ["Recep. #+", "Recep. #+", "Annahme #+"], ["Los 18 clips, uno atrás de otro", "The 18 clips, one after another", "Die 18 Clips, einer nach dem anderen"], ["Se reproducen solos, uno detrás del otro. Sin buscar nada.", "They play by themselves, one after another. No searching.", "Sie laufen von selbst, einer nach dem anderen. Ohne Suchen."], ["Repetir", "Repeat", "Wiederholen"], ["Mis videos", "My videos", "Meine Videos"], ["Mi plan", "My plan", "Mein Plan"], ["ataque", "attack", "Angriff"], ["bloqueo", "block", "Block"], ["defensa", "defence", "Abwehr"], ["Objetivo", "Target", "Ziel"], ["Cerca", "Close", "Nah dran"], ["Neutro", "Neutral", "Neutral"], ["Lejos", "Far", "Weit"], ["1.052 ataques", "1,052 attacks", "1.052 Angriffe"]];
+  var LANGS = ['es','en','de'], CLAVE = 'vs_lang';
+  var EN = {}, DE = {};
+  T.forEach(function(f){ EN[f[0]] = f[1]; DE[f[0]] = f[2]; });
+
+  var NODOS = null;     /* cada nodo de texto y su original en español */
+
+  function juntar(){
+    if (NODOS) return;
+    NODOS = [];
+    var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+    var n;
+    while ((n = w.nextNode())) {
+      var p = n.parentElement;
+      if (!p) continue;
+      if (p.closest('script, style, #vs-lang')) continue;
+      var t = (n.textContent || '');
+      if (!t.replace(/\s+/g, ' ').trim()) continue;
+      NODOS.push([n, t]);
+    }
+  }
+
+  function aplicar(lang){
+    juntar();
+    var m = lang === 'en' ? EN : (lang === 'de' ? DE : null);
+    NODOS.forEach(function(par){
+      var nodo = par[0], orig = par[1];
+      if (!m) { nodo.textContent = orig; return; }
+      /* se compara sin los espacios de sobra, pero se conservan los del
+         original para que no se peguen las palabras con las negritas */
+      var clave = orig.replace(/\s+/g, ' ').trim();
+      var tr = m[clave];
+      if (!tr) { nodo.textContent = orig; return; }
+      var antes = /^\s/.test(orig) ? ' ' : '';
+      var despues = /\s$/.test(orig) ? ' ' : '';
+      nodo.textContent = antes + tr + despues;
+    });
+    document.documentElement.lang = lang;
+    pintar(lang);
+    try { localStorage.setItem(CLAVE, lang); } catch(e){}
+  }
+
+  function pintar(activo){
+    var w = document.getElementById('vs-lang');
+    if (!w) return;
+    Array.prototype.forEach.call(w.querySelectorAll('button'), function(b){
+      var on = b.getAttribute('data-l') === activo;
+      b.style.background = on ? 'var(--calor)' : 'transparent';
+      b.style.color = on ? '#150500' : 'var(--gris)';
+      b.style.borderColor = on ? 'var(--calor)' : 'var(--linea)';
+    });
+  }
+
+  function selector(){
+    var nav = document.querySelector('.nav .w');
+    if (!nav || document.getElementById('vs-lang')) return;
+    var w = document.createElement('div');
+    w.id = 'vs-lang';
+    w.style.cssText = 'display:flex;gap:4px;margin-left:auto;margin-right:12px';
+    LANGS.forEach(function(l){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('data-l', l);
+      b.textContent = l.toUpperCase();
+      b.style.cssText = 'font-family:"JetBrains Mono",monospace;font-size:10.5px;' +
+        'font-weight:700;letter-spacing:.08em;padding:5px 9px;border-radius:5px;' +
+        'cursor:pointer;background:transparent;border:1px solid var(--linea);' +
+        'color:var(--gris);transition:all .15s';
+      b.onclick = function(){ aplicar(l); };
+      w.appendChild(b);
+    });
+    var cta = nav.querySelector('a.btn');
+    if (cta) nav.insertBefore(w, cta); else nav.appendChild(w);
+  }
+
+  function arranque(){
+    try {
+      var g = localStorage.getItem(CLAVE);
+      if (g && LANGS.indexOf(g) >= 0) return g;
+    } catch(e){}
+    var n = (navigator.language || 'es').slice(0,2).toLowerCase();
+    return LANGS.indexOf(n) >= 0 ? n : 'es';
+  }
+
+  function iniciar(){ selector(); aplicar(arranque()); }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', iniciar);
+  } else { iniciar(); }
+})();
+</script>
 </body>
 </html>

@@ -160,11 +160,11 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
 <!-- Puerta de entrada. Esta es la PLANTILLA: la tabla de liga se regenera
      desde aca en cada HACER_TODO, asi que el candado tiene que estar aqui
      o se pierde en la proxima corrida. -->
-<script src="firebase.js?v=20260824-2025" onerror="void 0"></script>
+<script src="firebase.js?v=20260824-2042" onerror="void 0"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260824-2025">
+<link rel="stylesheet" href="movil.css?v=20260824-2042">
 </head>
 <body>
 <div class="header">
@@ -430,10 +430,35 @@ function buildSkillPills(){
 }
 
 function teamSeason(){var el=document.getElementById('f-temporada');var v=el?el.value:'';return v||SEASONS[SEASONS.length-1]||'';}
+/* ══ LOS EQUIPOS DE LA LIGA, EN LA TABLA DE EQUIPOS ══════════════════════
+   Mismo criterio que en la tabla de jugadores: un rival de copa jugo un
+   solo partido, asi que su volumen de juego es una fraccion del de los
+   equipos de la liga. Se detecta por eso y no por una lista de nombres,
+   que habria que actualizar cada temporada. */
+function equiposDeLigaT(lista){
+  var vol = {};
+  lista.forEach(function(t){
+    vol[t.team] = (vol[t.team] || 0) + (t.atk_tot || 0) + (t.srv_tot || 0);
+  });
+  var vals = Object.keys(vol).map(function(k){ return vol[k]; })
+                   .sort(function(a,b){ return b-a; });
+  if(vals.length < 3) return null;
+  var medio = vals[Math.floor(vals.length / 2)];
+  var corte = medio * 0.45;
+  var ok = {};
+  Object.keys(vol).forEach(function(k){ if(vol[k] >= corte) ok[k] = true; });
+  return ok;
+}
+
 function renderTeams(){
   var f=getF();
   var season=teamSeason();
   var seasonTeams=TEAMS.filter(function(t){return t.temporada===season;});
+  /* fuera los rivales de una sola vez, salvo que se los pida por nombre */
+  if(_SOLO_LIGA && !f.team){
+    var _ok = equiposDeLigaT(seasonTeams);
+    if(_ok) seasonTeams = seasonTeams.filter(function(t){ return _ok[t.team]; });
+  }
   var rows=seasonTeams.filter(function(t){return !f.team||t.team===f.team;});
   // ranking-frac por columna (dentro de la temporada)
   var fracByMetric={};
@@ -614,9 +639,9 @@ function loadStats(){
   });
 }
 loadStats();
-</script><script src="lang.js?v=20260824-2025" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260824-2025" onerror="void 0"></script>
-<script src="ayuda.js?v=20260824-2025"></script>
+</script><script src="lang.js?v=20260824-2042" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260824-2042" onerror="void 0"></script>
+<script src="ayuda.js?v=20260824-2042"></script>
 <script>
 /* El interruptor: apagado muestra todo tal cual viene, incluidos los
    rivales de copa y los jugadores con pocas acciones. */
