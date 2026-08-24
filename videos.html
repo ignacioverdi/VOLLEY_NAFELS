@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Videos — NAFELS VOLEY</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="datos_videos.js?v=20260824-0955" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260824-0955"></script>
+<script src="datos_videos.js?v=20260824-1008" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260824-1008"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="lang.js?v=20260824-0955" onerror="void 0"></script>
+<script src="lang.js?v=20260824-1008" onerror="void 0"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -115,15 +115,61 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
   .col{height:auto;position:relative;border-right:none;border-bottom:1px solid var(--border);}
   .col-main{height:auto;padding:16px;}
 }
+
+/* === ENCABEZADO: QUE NO SE ENCIME === */
+/* La barra de arriba es un flex en una sola fila. Cuando el titulo es
+   largo, los botones de idioma y la etiqueta de temporada se le montan
+   encima. Con esto, si no entran, bajan de renglon. */
+.header,
+.topbar,
+.top-bar,
+.page-header,
+.hdr {
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  row-gap: 10px;
+}
+/* El titulo puede achicarse en vez de empujar al resto */
+.header > div,
+.topbar > div,
+.top-bar > div,
+.page-header > div,
+.hdr > div {
+  min-width: 0;
+}
+.header .title,
+.topbar .title,
+.top-bar .title,
+.page-header .title,
+.hdr .title {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+/* Los botones de idioma no se estiran ni se parten */
+.lang-wrap,
+.lang-switch,
+.idiomas {
+  flex: none;
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .header,
+  .topbar,
+  .top-bar,
+  .page-header,
+  .hdr {
+    align-items: flex-start;
+  }
+}
 </style>
-<script src="utils.js?v=20260824-0955" onerror="void 0"></script>
+<script src="utils.js?v=20260824-1008" onerror="void 0"></script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260824-0955" onerror="void 0"></script>
+<script src="firebase.js?v=20260824-1008" onerror="void 0"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260824-0955">
+<link rel="stylesheet" href="movil.css?v=20260824-1008">
 </head>
 <body>
 
@@ -453,7 +499,7 @@ function getEmbedUrl(url){
 function esc(s){ return String(s||'').replace(/'/g,"&#39;").replace(/"/g,"&quot;"); }
 function escHtml(s){ return String(s||'').replace(/'/g,"&#39;"); }
 </script>
-<script src="temporadas_menu.js?v=20260824-0955"></script>
+<script src="temporadas_menu.js?v=20260824-1008"></script>
 <script>
 /* i18n local de esta página (auto-contenido, no depende del diccionario de lang.js) */
 (function(){

@@ -51,6 +51,52 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
 .sfbtn.on{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.35);color:#e8192c}
 .main{max-width:1100px;margin:0 auto;padding:20px 16px}
 .empty{text-align:center;padding:60px;color:#475569;font-size:13px;letter-spacing:1px}
+
+/* === ENCABEZADO: QUE NO SE ENCIME === */
+/* La barra de arriba es un flex en una sola fila. Cuando el titulo es
+   largo, los botones de idioma y la etiqueta de temporada se le montan
+   encima. Con esto, si no entran, bajan de renglon. */
+.header,
+.topbar,
+.top-bar,
+.page-header,
+.hdr {
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  row-gap: 10px;
+}
+/* El titulo puede achicarse en vez de empujar al resto */
+.header > div,
+.topbar > div,
+.top-bar > div,
+.page-header > div,
+.hdr > div {
+  min-width: 0;
+}
+.header .title,
+.topbar .title,
+.top-bar .title,
+.page-header .title,
+.hdr .title {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+/* Los botones de idioma no se estiran ni se parten */
+.lang-wrap,
+.lang-switch,
+.idiomas {
+  flex: none;
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .header,
+  .topbar,
+  .top-bar,
+  .page-header,
+  .hdr {
+    align-items: flex-start;
+  }
+}
 </style>
 <!-- Puerta de entrada. La capsula quedo abierta cuando se cerro el resto del
      sistema: 26 paginas con la temporada 25-26 completa se abrian sin clave. -->

@@ -287,6 +287,52 @@ canvas.panel-court{position:absolute;inset:0;width:100%;height:100%;opacity:.28;
 .ts{text-align:center}
 .ts-v{font-size:15px;font-weight:900;line-height:1;font-family:"Barlow Condensed",sans-serif}
 .ts-l{font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+
+/* === ENCABEZADO: QUE NO SE ENCIME === */
+/* La barra de arriba es un flex en una sola fila. Cuando el titulo es
+   largo, los botones de idioma y la etiqueta de temporada se le montan
+   encima. Con esto, si no entran, bajan de renglon. */
+.header,
+.topbar,
+.top-bar,
+.page-header,
+.hdr {
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  row-gap: 10px;
+}
+/* El titulo puede achicarse en vez de empujar al resto */
+.header > div,
+.topbar > div,
+.top-bar > div,
+.page-header > div,
+.hdr > div {
+  min-width: 0;
+}
+.header .title,
+.topbar .title,
+.top-bar .title,
+.page-header .title,
+.hdr .title {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+/* Los botones de idioma no se estiran ni se parten */
+.lang-wrap,
+.lang-switch,
+.idiomas {
+  flex: none;
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .header,
+  .topbar,
+  .top-bar,
+  .page-header,
+  .hdr {
+    align-items: flex-start;
+  }
+}
 </style>
 <!-- Puerta de entrada. La capsula quedo abierta cuando se cerro el resto del
      sistema: 26 paginas con la temporada 25-26 completa se abrian sin clave. -->

@@ -250,7 +250,53 @@ function singleCourtSVG(origZones, destZones, origColor, destColor, total, extra
   var maxD=Math.max.apply(null,Object.values(destZones))||1;
   var W=160,H=220,P=4,CW=(W-P*2)/3,CH=(H/2-P)/3;
   var s="<svg viewBox='0 0 "+W+" "+H+"' xmlns='http://www.w3.org/2000/svg' style='width:100%;max-width:170px;display:block;margin:0 auto'>";
-  s+="<style>text{pointer-events:none}</style><rect width='"+W+"' height='"+H+"' fill='rgba(13,14,26,.97)' rx='8'/>";
+  s+="<style>text{pointer-events:none}
+/* === ENCABEZADO: QUE NO SE ENCIME === */
+/* La barra de arriba es un flex en una sola fila. Cuando el titulo es
+   largo, los botones de idioma y la etiqueta de temporada se le montan
+   encima. Con esto, si no entran, bajan de renglon. */
+.header,
+.topbar,
+.top-bar,
+.page-header,
+.hdr {
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  row-gap: 10px;
+}
+/* El titulo puede achicarse en vez de empujar al resto */
+.header > div,
+.topbar > div,
+.top-bar > div,
+.page-header > div,
+.hdr > div {
+  min-width: 0;
+}
+.header .title,
+.topbar .title,
+.top-bar .title,
+.page-header .title,
+.hdr .title {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+/* Los botones de idioma no se estiran ni se parten */
+.lang-wrap,
+.lang-switch,
+.idiomas {
+  flex: none;
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .header,
+  .topbar,
+  .top-bar,
+  .page-header,
+  .hdr {
+    align-items: flex-start;
+  }
+}
+</style><rect width='"+W+"' height='"+H+"' fill='rgba(13,14,26,.97)' rx='8'/>";
   // Rival field background
   s+="<rect x='"+P+"' y='"+P+"' width='"+(W-P*2)+"' height='"+(H/2-P)+"' fill='rgba(232,25,44,.03)' rx='3'/>";
   // Own field background

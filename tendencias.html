@@ -33,14 +33,14 @@
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260824-0955" onerror="void 0"></script>
+<script src="firebase.js?v=20260824-1008" onerror="void 0"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260824-0955">
+<link rel="stylesheet" href="movil.css?v=20260824-1008">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260824-0955" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260824-1008" onerror="void 0"></script>
 </head>
 <body>
   <div class="hdr">
@@ -54,7 +54,7 @@
   <div id="strip" class="strip"></div>
   <div id="cards" class="cards"></div>
 
-  <script src="datos_historial.js?v=20260824-0955"></script>
+  <script src="datos_historial.js?v=20260824-1008"></script>
   <script>
   (function(){
     var H=window.HISTORIAL_DATA||{};
@@ -142,9 +142,55 @@
     }).join('');
   })();
   </script>
-<style>@media print{#lang-wrap{display:none!important}}</style>
-<script src="lang.js?v=20260824-0955" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260824-0955" onerror="void 0"></script>
+<style>@media print{#lang-wrap{display:none!important}}
+/* === ENCABEZADO: QUE NO SE ENCIME === */
+/* La barra de arriba es un flex en una sola fila. Cuando el titulo es
+   largo, los botones de idioma y la etiqueta de temporada se le montan
+   encima. Con esto, si no entran, bajan de renglon. */
+.header,
+.topbar,
+.top-bar,
+.page-header,
+.hdr {
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  row-gap: 10px;
+}
+/* El titulo puede achicarse en vez de empujar al resto */
+.header > div,
+.topbar > div,
+.top-bar > div,
+.page-header > div,
+.hdr > div {
+  min-width: 0;
+}
+.header .title,
+.topbar .title,
+.top-bar .title,
+.page-header .title,
+.hdr .title {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+/* Los botones de idioma no se estiran ni se parten */
+.lang-wrap,
+.lang-switch,
+.idiomas {
+  flex: none;
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .header,
+  .topbar,
+  .top-bar,
+  .page-header,
+  .hdr {
+    align-items: flex-start;
+  }
+}
+</style>
+<script src="lang.js?v=20260824-1008" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260824-1008" onerror="void 0"></script>
 </body>
 </html>
 

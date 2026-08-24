@@ -135,11 +135,11 @@ body.pres .slide.active{display:block;animation:slideIn .4s ease}
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260824-0955" onerror="void 0"></script>
+<script src="firebase.js?v=20260824-1008" onerror="void 0"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260824-0955">
+<link rel="stylesheet" href="movil.css?v=20260824-1008">
 </head><body>
 <!--
   ==================================================================
@@ -161,6 +161,52 @@ body.pres .slide.active{display:block;animation:slideIn .4s ease}
 @media(max-width:700px){
   .slide [style*="grid-template-columns"]{grid-template-columns:1fr !important}
   .topbar{flex-wrap:wrap;gap:8px}.topbar .sub{display:none}.tb-controls{flex-wrap:wrap}
+}
+
+/* === ENCABEZADO: QUE NO SE ENCIME === */
+/* La barra de arriba es un flex en una sola fila. Cuando el titulo es
+   largo, los botones de idioma y la etiqueta de temporada se le montan
+   encima. Con esto, si no entran, bajan de renglon. */
+.header,
+.topbar,
+.top-bar,
+.page-header,
+.hdr {
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  row-gap: 10px;
+}
+/* El titulo puede achicarse en vez de empujar al resto */
+.header > div,
+.topbar > div,
+.top-bar > div,
+.page-header > div,
+.hdr > div {
+  min-width: 0;
+}
+.header .title,
+.topbar .title,
+.top-bar .title,
+.page-header .title,
+.hdr .title {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+/* Los botones de idioma no se estiran ni se parten */
+.lang-wrap,
+.lang-switch,
+.idiomas {
+  flex: none;
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .header,
+  .topbar,
+  .top-bar,
+  .page-header,
+  .hdr {
+    align-items: flex-start;
+  }
 }
 </style>
 <div class="progress" id="progress"></div>
@@ -552,5 +598,5 @@ document.querySelectorAll('.vlink').forEach(function(a){
 <a id="club-escudo" href="index.html" title="Inicio · Volley Näfels" style="position:fixed;left:14px;bottom:14px;z-index:99990;width:46px;height:46px;border-radius:50%;overflow:hidden;background:#000;border:1px solid rgba(255,255,255,.18);box-shadow:0 2px 12px rgba(0,0,0,.55);display:block">
   <img src="escudo.png" alt="Volley Näfels" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none';this.parentElement.style.background='#111'">
 </a>
-<script src="lang.js?v=20260824-0955"></script>
+<script src="lang.js?v=20260824-1008"></script>
 </body></html>

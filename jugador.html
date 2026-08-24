@@ -7,10 +7,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 
 <!-- Datos (cada uno se carga si existe; si no, el onerror lo deja en null) -->
-<script src="game_plans.js?v=20260824-0955" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260824-0955" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260824-0955"></script>
-<script src="filtro_tipo.js?v=20260824-0955" onerror="void 0"></script>
+<script src="game_plans.js?v=20260824-1008" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260824-1008" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260824-1008"></script>
+<script src="filtro_tipo.js?v=20260824-1008" onerror="void 0"></script>
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
      las que no existen las descarta el onerror, sin ruido. Y todas con
      .enc, que es como se publican los datos del club. -->
@@ -20,9 +20,9 @@
 <script src="datos_video_ent_28-29.js.enc" onerror="void 0"></script>
   <script src="datos_partidos.js.enc" onerror="void 0"></script>
 <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
-<script src="firebase.js?v=20260824-0955" onerror="void 0"></script>
-<script src="lang.js?v=20260824-0955" onerror="void 0"></script>
-<script src="datos_historial.js?v=20260824-0955" onerror="window.HISTORIAL_DATA=null"></script>
+<script src="firebase.js?v=20260824-1008" onerror="void 0"></script>
+<script src="lang.js?v=20260824-1008" onerror="void 0"></script>
+<script src="datos_historial.js?v=20260824-1008" onerror="window.HISTORIAL_DATA=null"></script>
 <script src="datos_gameplan.js.enc" onerror="window.GAMEPLAN_DATA=null"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
@@ -113,14 +113,60 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 .hm-lbl{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px}
 .hm-sub{font-size:9px;color:#64748b;text-align:center}
 @media(min-width:600px){.main{padding:24px 20px;}.accesos-grid{grid-template-columns:repeat(2,1fr);}.hero-badge{width:72px;height:72px;}.hero-nombre{font-size:40px;}}
+
+/* === ENCABEZADO: QUE NO SE ENCIME === */
+/* La barra de arriba es un flex en una sola fila. Cuando el titulo es
+   largo, los botones de idioma y la etiqueta de temporada se le montan
+   encima. Con esto, si no entran, bajan de renglon. */
+.header,
+.topbar,
+.top-bar,
+.page-header,
+.hdr {
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  row-gap: 10px;
+}
+/* El titulo puede achicarse en vez de empujar al resto */
+.header > div,
+.topbar > div,
+.top-bar > div,
+.page-header > div,
+.hdr > div {
+  min-width: 0;
+}
+.header .title,
+.topbar .title,
+.top-bar .title,
+.page-header .title,
+.hdr .title {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+/* Los botones de idioma no se estiran ni se parten */
+.lang-wrap,
+.lang-switch,
+.idiomas {
+  flex: none;
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .header,
+  .topbar,
+  .top-bar,
+  .page-header,
+  .hdr {
+    align-items: flex-start;
+  }
+}
 </style>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260824-0955">
+<link rel="stylesheet" href="movil.css?v=20260824-1008">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260824-0955" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260824-1008" onerror="void 0"></script>
 </head>
 <body>
 <div class="page-header">

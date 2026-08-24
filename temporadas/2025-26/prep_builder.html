@@ -97,6 +97,52 @@
   .empty{color:var(--mut);text-align:center;padding:30px;font-size:14px}
   .colhdr{display:grid;grid-template-columns:1fr 56px 62px 78px 68px 1fr auto;gap:7px;padding:2px 12px 4px;font-size:9px;color:var(--mut);letter-spacing:1px;text-transform:uppercase}
   @media(max-width:640px){.ctrl-grid{grid-template-columns:1fr}.ej-row,.colhdr{grid-template-columns:1fr 1fr;}.ej-row .vbtn{grid-column:1/-1}}
+
+/* === ENCABEZADO: QUE NO SE ENCIME === */
+/* La barra de arriba es un flex en una sola fila. Cuando el titulo es
+   largo, los botones de idioma y la etiqueta de temporada se le montan
+   encima. Con esto, si no entran, bajan de renglon. */
+.header,
+.topbar,
+.top-bar,
+.page-header,
+.hdr {
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  row-gap: 10px;
+}
+/* El titulo puede achicarse en vez de empujar al resto */
+.header > div,
+.topbar > div,
+.top-bar > div,
+.page-header > div,
+.hdr > div {
+  min-width: 0;
+}
+.header .title,
+.topbar .title,
+.top-bar .title,
+.page-header .title,
+.hdr .title {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+/* Los botones de idioma no se estiran ni se parten */
+.lang-wrap,
+.lang-switch,
+.idiomas {
+  flex: none;
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .header,
+  .topbar,
+  .top-bar,
+  .page-header,
+  .hdr {
+    align-items: flex-start;
+  }
+}
 </style></head>
 <body>
 <div class="wrap">

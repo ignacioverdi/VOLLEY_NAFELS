@@ -335,7 +335,53 @@ function setterCourtSVG(sets,accentColor,W,H){
   var maxPct=Math.max.apply(null,[2,3,4,5,8,9].map(function(p){return posData[p]?posData[p].pct:0;}))||1;
 
   var s="<svg viewBox='0 0 "+W+" "+H+"' xmlns='http://www.w3.org/2000/svg' style='width:100%;display:block'>";
-  s+="<style>text{pointer-events:none}</style>";
+  s+="<style>text{pointer-events:none}
+/* === ENCABEZADO: QUE NO SE ENCIME === */
+/* La barra de arriba es un flex en una sola fila. Cuando el titulo es
+   largo, los botones de idioma y la etiqueta de temporada se le montan
+   encima. Con esto, si no entran, bajan de renglon. */
+.header,
+.topbar,
+.top-bar,
+.page-header,
+.hdr {
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  row-gap: 10px;
+}
+/* El titulo puede achicarse en vez de empujar al resto */
+.header > div,
+.topbar > div,
+.top-bar > div,
+.page-header > div,
+.hdr > div {
+  min-width: 0;
+}
+.header .title,
+.topbar .title,
+.top-bar .title,
+.page-header .title,
+.hdr .title {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+/* Los botones de idioma no se estiran ni se parten */
+.lang-wrap,
+.lang-switch,
+.idiomas {
+  flex: none;
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .header,
+  .topbar,
+  .top-bar,
+  .page-header,
+  .hdr {
+    align-items: flex-start;
+  }
+}
+</style>";
   s+="<rect width='"+W+"' height='"+H+"' fill='rgba(13,14,26,.97)' rx='5'/>";
   s+="<rect x='"+P+"' y='"+P+"' width='"+(W-P*2)+"' height='"+(H-P*2)+"' fill='rgba(184,116,40,.12)' rx='3'/>";
   // Net

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stats Entrenamiento</title>
-<script src="datos_voley.js?v=20260824-0955" onerror="void 0" onerror="void 0"></script>
+<script src="datos_voley.js?v=20260824-1008" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
    El panel ya no depende de Google Fonts: funciona 100% offline. */
@@ -278,11 +278,11 @@ body::before{content:'';position:fixed;inset:0;
 
 select, select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="datos_seguros.js?v=20260824-0955"></script>
-<script src="firebase.js?v=20260824-0955" onerror="void 0"></script>
-<script src="lang.js?v=20260824-0955"></script>
-<script src="objetivos.js?v=20260824-0955" onerror="void 0"></script>
-<script src="video_delay.js?v=20260824-0955" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260824-1008"></script>
+<script src="firebase.js?v=20260824-1008" onerror="void 0"></script>
+<script src="lang.js?v=20260824-1008"></script>
+<script src="objetivos.js?v=20260824-1008" onerror="void 0"></script>
+<script src="video_delay.js?v=20260824-1008" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -481,11 +481,57 @@ function renderObjetivosJugador(cid,nombre,extra){
 </script>
 <style>
 .hbtn2{ text-align:center; line-height:1.15; font-size:11px; padding:5px 10px; white-space:normal; }
+
+/* === ENCABEZADO: QUE NO SE ENCIME === */
+/* La barra de arriba es un flex en una sola fila. Cuando el titulo es
+   largo, los botones de idioma y la etiqueta de temporada se le montan
+   encima. Con esto, si no entran, bajan de renglon. */
+.header,
+.topbar,
+.top-bar,
+.page-header,
+.hdr {
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  row-gap: 10px;
+}
+/* El titulo puede achicarse en vez de empujar al resto */
+.header > div,
+.topbar > div,
+.top-bar > div,
+.page-header > div,
+.hdr > div {
+  min-width: 0;
+}
+.header .title,
+.topbar .title,
+.top-bar .title,
+.page-header .title,
+.hdr .title {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+/* Los botones de idioma no se estiran ni se parten */
+.lang-wrap,
+.lang-switch,
+.idiomas {
+  flex: none;
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .header,
+  .topbar,
+  .top-bar,
+  .page-header,
+  .hdr {
+    align-items: flex-start;
+  }
+}
 </style>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260824-0955">
+<link rel="stylesheet" href="movil.css?v=20260824-1008">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase">← Dashboard</a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -1952,8 +1998,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20260824-0955" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260824-0955"></script>
+<script src="plantel_nafels.js?v=20260824-1008" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260824-1008"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
