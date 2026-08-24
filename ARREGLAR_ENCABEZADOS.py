@@ -41,47 +41,53 @@ MARCA = '/* === ENCABEZADO: QUE NO SE ENCIME === */'
 
 ARREGLO = """
 /* === ENCABEZADO: QUE NO SE ENCIME === */
-/* La barra de arriba es un flex en una sola fila. Cuando el titulo es
-   largo, los botones de idioma y la etiqueta de temporada se le montan
-   encima. Con esto, si no entran, bajan de renglon. */
-.header,
+/* Los botones de idioma van en un ".header-right" con position:fixed, que
+   flota por encima de todo y NO ocupa lugar. El titulo se dibuja debajo y
+   se lee la mezcla de los dos.
+   Solucion: se le reserva el espacio al titulo con un margen del ancho de
+   esos botones, y se sube la barra por encima del contenido. */
+.header {
+  position: relative;
+  z-index: 1;
+  padding-right: 190px;   /* el lugar que ocupan los botones flotantes */
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+.header-right {
+  z-index: 99998;
+  pointer-events: auto;
+}
+/* El titulo puede achicarse en vez de empujar al resto */
+.header > div,
+.topbar > div,
+.top-bar > div {
+  min-width: 0;
+}
+.header .title,
+.topbar .title,
+.top-bar .title {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+/* Las otras barras, por las dudas */
 .topbar,
 .top-bar,
 .page-header,
 .hdr {
   flex-wrap: wrap;
   gap: 10px 14px;
-  row-gap: 10px;
 }
-/* El titulo puede achicarse en vez de empujar al resto */
-.header > div,
-.topbar > div,
-.top-bar > div,
-.page-header > div,
-.hdr > div {
-  min-width: 0;
-}
-.header .title,
-.topbar .title,
-.top-bar .title,
-.page-header .title,
-.hdr .title {
-  min-width: 0;
-  overflow-wrap: break-word;
-}
-/* Los botones de idioma no se estiran ni se parten */
 .lang-wrap,
 .lang-switch,
 .idiomas {
   flex: none;
   white-space: nowrap;
 }
-@media (max-width: 700px) {
-  .header,
-  .topbar,
-  .top-bar,
-  .page-header,
-  .hdr {
+/* En el celular los botones dejan de flotar: se ponen en su renglon */
+@media (max-width: 820px) {
+  .header {
+    padding-right: 14px;
+    padding-top: 46px;    /* aire para los botones de arriba */
     align-items: flex-start;
   }
 }
