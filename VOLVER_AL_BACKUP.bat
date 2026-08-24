@@ -8,6 +8,10 @@ echo      VOLVER LA TEMPORADA 2025-26
 echo      al backup del 12/08 que funcionaba
 echo  ==================================================
 echo.
+echo   Trae SOLO lo que usa el navegador: las pantallas,
+echo   los datos y las imagenes.
+echo   NO toca las carpetas DVW ni los programas .py.
+echo.
 
 set "ORIGEN=C:\Users\User\Desktop\NAFELS-RESPALDO\temporadas\2025-26"
 set "DESTINO=temporadas\2025-26"
@@ -16,23 +20,15 @@ if not exist "%ORIGEN%" (
   echo   No encuentro el backup en:
   echo   %ORIGEN%
   echo.
-  echo   Si esta en otro lado, avisame la ruta.
-  echo.
   pause
   exit /b 1
 )
-
 if not exist "%DESTINO%" (
-  echo   No encuentro "%DESTINO%".
-  echo   Corre este programa dentro de VOLLEY_NAFELS.
+  echo   No encuentro "%DESTINO%". Corre esto dentro de VOLLEY_NAFELS.
   echo.
   pause
   exit /b 1
 )
-
-echo   Origen : %ORIGEN%
-echo   Destino: %DESTINO%
-echo.
 
 REM ?? 1. Guardar lo que hay ahora ????????????????????????????????????
 set "SEG=_ROTO-2025-26"
@@ -46,30 +42,42 @@ if exist "%SEG%" (
   set "SEG=%SEG%-%I%"
 )
 
-echo   [1/3] Guardando el estado actual en "%SEG%"...
-xcopy "%DESTINO%" "%SEG%\" /E /I /H /Y /Q >nul
+echo   [1/4] Guardando el estado actual en "%SEG%"...
+mkdir "%SEG%" 2>nul
+for %%E in (html js json enc png css) do (
+  copy /Y "%DESTINO%\*.%%E" "%SEG%\" >nul 2>&1
+)
 echo         listo - no se pierde nada.
 echo.
 
-REM ?? 2. Traer la carpeta buena, entera ??????????????????????????????
-echo   [2/3] Trayendo la temporada del backup...
-rmdir /S /Q "%DESTINO%"
-xcopy "%ORIGEN%" "%DESTINO%\" /E /I /H /Y /Q >nul
-if errorlevel 1 (
-  echo         FALLO la copia. Devuelvo lo anterior.
-  xcopy "%SEG%" "%DESTINO%\" /E /I /H /Y /Q >nul
-  echo         El estado quedo como estaba. Avisame.
-  echo.
-  pause
-  exit /b 1
+REM ?? 2. Traer las pantallas y los datos del backup ??????????????????
+echo   [2/4] Trayendo pantallas y datos del backup...
+for %%E in (html js json enc png css) do (
+  copy /Y "%ORIGEN%\*.%%E" "%DESTINO%\" >nul 2>&1
 )
-
-for /f %%N in ('dir /b /s "%DESTINO%" 2^>nul ^| find /c /v ""') do set CANT=%%N
-echo         %CANT% archivo(s) restaurado(s).
+echo         pantallas y datos: listo.
 echo.
 
-REM ?? 3. Publicar ????????????????????????????????????????????????????
-echo   [3/3] Subir a GitHub? (S/N)
+REM ?? 3. Las fotos de los jugadores ??????????????????????????????????
+echo   [3/4] Trayendo las fotos y las imagenes...
+if exist "%ORIGEN%\fotos" (
+  xcopy "%ORIGEN%\fotos" "%DESTINO%\fotos\" /E /I /H /Y /Q >nul
+  echo         fotos      listo
+) else (
+  echo         fotos      no estaban en el backup
+)
+if exist "%ORIGEN%\imagenes" (
+  xcopy "%ORIGEN%\imagenes" "%DESTINO%\imagenes\" /E /I /H /Y /Q >nul
+  echo         imagenes   listo
+)
+if exist "%ORIGEN%\escudos" (
+  xcopy "%ORIGEN%\escudos" "%DESTINO%\escudos\" /E /I /H /Y /Q >nul
+  echo         escudos    listo
+)
+echo.
+
+REM ?? 4. Publicar ????????????????????????????????????????????????????
+echo   [4/4] Subir a GitHub? (S/N)
 set /p Q="        "
 if /I not "%Q%"=="S" goto FIN
 
@@ -92,14 +100,14 @@ echo      LISTO
 echo.
 echo      Abri la 2025-26 en una ventana de INCOGNITO.
 echo      La app guarda copias por su cuenta y en una
-echo      ventana normal podrias seguir viendo la vieja.
+echo      ventana normal podrias ver la vieja igual.
 echo.
 echo      Fijate en el heatmap de ataque:
-echo        - el plantel tiene que ser el de la 25-26
-echo        - VER LOS VIDEOS tiene que abrir los clips
+echo        - el plantel de la 25-26 (no el de la 26-27)
+echo        - el boton VER LOS VIDEOS
 echo        - las fotos de los jugadores
 echo.
-echo      Lo que estaba roto quedo guardado en "%SEG%"
+echo      Lo anterior quedo guardado en "%SEG%"
 echo  ==================================================
 echo.
 pause
