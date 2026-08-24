@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Acceso de los jugadores — {{CLUB_COMPLETO}}</title>
+<title>Acceso de los jugadores — <span id="nom-club"></span></title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -86,7 +86,7 @@ textarea:focus{border-color:var(--club)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 <!-- Motor de idiomas (ES / EN / DE). -->
-<script src="lang.js?v=20260824-1134"></script>
+<script src="lang.js?v=20260824-1140"></script>
 </head>
 <body>
 <div class="hoja">
@@ -94,7 +94,7 @@ textarea:focus{border-color:var(--club)}
   <div class="top">
     <div class="esc" id="esc"></div>
     <div>
-      <h1>{{CLUB_COMPLETO}}</h1>
+      <h1><span id="nom-club"></span></h1>
       <p>Acceso de los jugadores</p>
     </div>
     <a class="volver" href="index.html">Volver</a>
@@ -150,8 +150,9 @@ jugador3@gmail.com    9     23/08/2001</div>
 
 </div>
 
-<script src="selector_categoria.js?v=20260824-1134"></script>
-<script src="firebase.js?v=20260824-1134"></script>
+<script src="categorias_club.js?v=20260824-1140"></script>
+<script src="selector_categoria.js?v=20260824-1140"></script>
+<script src="firebase.js?v=20260824-1140"></script>
 <script>
 /* ============================================================================
    Alta de jugadores — el DT pega su lista y se crean todas las cuentas.
@@ -234,8 +235,15 @@ function pintar(){
           + '<div class="est">' + (f.textoEstado || falta) + '</div></div>';
   });
   html += '</div>';
+  /* Que quede claro adonde van, antes de apretar el boton */
+  if (window.CAT_ELEGIDA) {
+    html += '<div class="aviso" style="background:rgba(230,167,67,.1);'
+          + 'border-color:rgba(230,167,67,.3)">Estos jugadores quedan en '
+          + '<b>' + esc(window.CAT_ELEGIDA) + '</b>.</div>';
+  }
   html += '<div class="barra"><button class="btn" id="btn-crear" onclick="crear()"'
-        + (listos ? '' : ' disabled') + '>Crear las ' + listos + ' cuentas</button>'
+        + (listos ? '' : ' disabled') + '>Crear las ' + listos + ' cuentas'
+        + (window.CAT_ELEGIDA ? ' en ' + esc(window.CAT_ELEGIDA) : '') + '</button>'
         + '<button class="btn sec" onclick="leer()">Volver a revisar</button></div>';
   if(listos < FILAS.length){
     html += '<div class="aviso"><b>' + (FILAS.length - listos) + ' jugadores quedan afuera</b> porque les falta '
@@ -361,7 +369,14 @@ function pintarEstado(f){
   try { sel.value = (window.categoriaActual && window.categoriaActual()) || L[0]; }
   catch(e){ sel.value = L[0]; }
   window.CAT_ELEGIDA = sel.value;
-  sel.addEventListener('change', function(){ window.CAT_ELEGIDA = sel.value; });
+  sel.addEventListener('change', function(){
+    window.CAT_ELEGIDA = sel.value;
+    /* que se vea en cada fila a que categoria va */
+    document.querySelectorAll('.cat-fila').forEach(function(e){
+      e.textContent = sel.value;
+      e.style.display = 'inline-block';
+    });
+  });
   caja.style.display = 'block';
 })();
 
@@ -427,6 +442,11 @@ function filaHTML(i){
     +   'font-size:17px;color:#64748b">+'
     +   '<input type="file" accept="image/*" style="display:none" '
     +   'onchange="fotoFila(' + i + ', this)"></label>'
+    + '<span class="cat-fila" style="flex:none;font-size:10px;font-weight:700;'
+    +   'letter-spacing:1px;text-transform:uppercase;padding:5px 9px;border-radius:6px;'
+    +   'background:rgba(230,167,67,.12);border:1px solid rgba(230,167,67,.3);'
+    +   'color:#e6a743;display:' + (window.CAT_ELEGIDA ? 'inline-block' : 'none') + '">'
+    +   (window.CAT_ELEGIDA || '') + '</span>'
     + '<button type="button" onclick="borrarFila(' + i + ')" title="Quitar"'
     +   ' style="flex:none;width:30px;height:30px;border-radius:8px;cursor:pointer;'
     +   'background:transparent;border:1px solid rgba(255,255,255,.1);color:#64748b">×</button>'
@@ -489,6 +509,26 @@ function leerFormulario(){
   var c = document.getElementById('form-filas');
   if(!c) return;
   masFila(); masFila(); masFila();
+})();
+
+/* ══ EL NOMBRE DEL CLUB ══════════════════════════════════════════════════
+   La plantilla trae una marca que ACTUALIZAR_CLIENTE reemplaza al crear un
+   cliente. NAFELS es el club de origen, no un cliente, asi que ahi nadie la
+   reemplazaba y se leia la marca cruda al lado del escudo.
+   Ahora se lee de donde ya esta, y si no hay nada no se muestra nada. */
+(function(){
+  var el = document.getElementById('nom-club');
+  if(!el) return;
+  var n = '';
+  try {
+    n = (window.CLUB_NOMBRE || window.NOMBRE_CLUB || '');
+    if(!n){
+      var t = document.title || '';
+      var p = t.split(/[—·|-]/);
+      n = (p[p.length-1] || '').trim();
+    }
+  } catch(e){}
+  el.textContent = n || '';
 })();
 </script>
 </body>
