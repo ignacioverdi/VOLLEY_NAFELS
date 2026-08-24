@@ -12,3 +12,7 @@ LLAVE.txt
 
 _ROTO-*/
 _ANTES-*/
+
+# copias de trabajo, no van al repositorio
+*.antes-suelta
+_RESPALDO-VIEJO*/
