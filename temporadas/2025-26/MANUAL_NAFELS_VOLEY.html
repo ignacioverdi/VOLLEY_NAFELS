@@ -173,13 +173,9 @@
   }
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
-<!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
-     la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260813-1930" onerror="void 0"></script>
-<!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
-     toca el encabezado y las barras: en la computadora no hace nada.
-     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260813-1930">
+<!-- Puerta de entrada. La capsula quedo abierta cuando se cerro el resto del
+     sistema: 26 paginas con la temporada 25-26 completa se abrian sin clave. -->
+<script src="../../firebase.js" onerror="void 0"></script>
 </head>
 <body>
 
@@ -200,19 +196,14 @@
       <li><a href="#reglas"><span class="n">2</span><span>Las 3 reglas de oro</span></a></li>
       <li><a href="#rutina"><span class="n">3</span><span>Tu rutina cuando juega el equipo</span></a></li>
       <li><a href="#mapa"><span class="n">4</span><span>Qué hay en la app y para qué sirve</span></a></li>
-      <li><a href="#plandepartido"><span class="n">★</span><span>Plan de Partido (nuevo)</span></a></li>
-      <li><a href="#videovivo"><span class="n">★</span><span>Video en vivo con delay (nuevo)</span></a></li>
-      <li><a href="#idiomas"><span class="n">★</span><span>Los tres idiomas (nuevo)</span></a></li>
-      <li><a href="#tipos"><span class="n">★</span><span>Partido o entrenamiento (nuevo)</span></a></li>
-      <li><a href="#acceso"><span class="n">★</span><span>Quién entra a la app (nuevo)</span></a></li>
       <li><a href="#entrenos"><span class="n">5</span><span>Entrenamientos</span></a></li>
       <li><a href="#videos"><span class="n">6</span><span>Videos</span></a></li>
-      <li><a href="#calendario"><span class="n">7</span><span>Calendario y fixture</span></a></li>
-      <li><a href="#robot"><span class="n">8</span><span>El robot (se actualiza solo)</span></a></li>
-      <li><a href="#prepfisica"><span class="n">9</span><span>Preparación física</span></a></li>
-      <li><a href="#finde"><span class="n">10</span><span>Fin de temporada</span></a></li>
-      <li><a href="#problemas"><span class="n">11</span><span>Si algo sale mal</span></a></li>
-      <li><a href="#botones"><span class="n">12</span><span>Los botones que importan</span></a></li>
+      <li><a href="#robot"><span class="n">7</span><span>El robot (se actualiza solo)</span></a></li>
+      <li><a href="#prepfisica"><span class="n">8</span><span>Preparación física</span></a></li>
+      <li><a href="#finde"><span class="n">9</span><span>Fin de temporada</span></a></li>
+      <li><a href="#problemas"><span class="n">10</span><span>Si algo sale mal</span></a></li>
+      <li><a href="#botones"><span class="n">11</span><span>Los botones que importan</span></a></li>
+      <li><a href="#avisos"><span class="n">12</span><span>Avisar a los jugadores (push)</span></a></li>
     </ol>
   </nav>
 </div>
@@ -239,7 +230,7 @@
     <h2 class="title">Las 3 reglas de oro</h2>
     <p class="lead">Si solo te acordás de esto, ya no se rompe nada.</p>
     <div class="rules">
-      <div class="rule do"><span class="ic">✅</span><div><b>Para actualizar, usá siempre un solo botón:</b> <code>ACTUALIZAR_Y_PUBLICAR</code>. Ese genera los datos y los publica online, todo junto.</div></div>
+      <div class="rule do"><span class="ic">✅</span><div><b>Para actualizar, usá siempre un solo botón:</b> <code>HACER_TODO</code>. Ese genera los datos y los publica online, todo junto.</div></div>
       <div class="rule do"><span class="ic">✅</span><div><b>Los .dvw de la temporada actual van en una sola carpeta:</b> <code>DVW NAFELS 2027</code>. Nada de partidos nuevos en otra carpeta.</div></div>
       <div class="rule dont"><span class="ic">⛔</span><div><b>No corras los botones viejos de “actualizar”:</b> <code>ACTUALIZAR_FACIL</code>, <code>ACTUALIZAR_NAFELS</code>, <code>ACTUALIZAR_TODO</code> ni <code>correr_nafels</code>. Esos cargan datos viejos y ensucian la temporada nueva. Guardalos en una carpeta aparte.</div></div>
     </div>
@@ -253,7 +244,7 @@
     <ol class="steps">
       <li><b>Scouteá el partido en DataVolley</b><small>Cuando terminás, te queda un archivo que termina en <b>.dvw</b>.</small></li>
       <li><b>Copiá ese .dvw a la carpeta <code>DVW NAFELS 2027</code></b><small>Es la carpeta de la temporada actual. Ahí van todos los partidos nuevos.</small></li>
-      <li><b>Doble clic en <code>ACTUALIZAR_Y_PUBLICAR</code></b><small>Se abre una ventana negra. Dejala trabajar hasta que diga <b>“LISTO”</b>. No la cierres antes.</small></li>
+      <li><b>Doble clic en <code>HACER_TODO</code></b><small>Se abre una ventana negra. Dejala trabajar hasta que diga <b>“LISTO”</b>. No la cierres antes.</small></li>
       <li><b>Abrí la web y refrescá con <code>Ctrl + F5</code></b><small>Esperá 1 o 2 minutos después del “LISTO” para que se publique online.</small></li>
     </ol>
     <div class="done">🏐 Listo: los números nuevos ya aparecen en el dashboard, los perfiles, el game plan y todo lo demás.</div>
@@ -264,7 +255,6 @@
     <div class="eyebrow"><span class="num">4</span><span class="kicker">El mapa</span></div>
     <h2 class="title">Qué hay en la app y para qué sirve</h2>
     <p class="lead">Todo está agrupado por para qué lo usás. Entrás desde el menú principal.</p>
-    <div class="rule do"><span class="ic">👥</span><div><b>Dos vistas según quién entra:</b> el <b>jugador</b> ve lo suyo (el próximo rival, su rendimiento, físico y bienestar, agenda, video); el <b>cuerpo técnico</b> ve además las herramientas de gestión (Panel en Vivo, Scouting del rival, Comparador, Tendencias, Cargar Videos, Pizarrón). Abajo van todas las secciones agrupadas por tema.</div></div>
     <div class="map">
 
       <div class="group">
@@ -273,7 +263,7 @@
           <li><span class="name">Dashboard</span><span class="desc">El panel general: cómo viene tu equipo de un vistazo.</span></li>
           <li><span class="name">Mi Perfil / Jugador</span><span class="desc">Ficha de cada jugador, con sus baterías “jugador vs equipo”.</span></li>
           <li><span class="name">Análisis</span><span class="desc">Por fundamento: Ataque, Saque, Recepción, Armado y Defensa.</span></li>
-          <li><span class="name">Heat Maps</span><span class="desc">Mapas de calor de dónde ataca, saca, recibe, arma, defiende y <b>bloquea</b> cada uno. El de bloqueo se lee al revés que los otros: la cancha es la del <b>rival</b>, y cada casillero es la zona <b>desde donde salió el ataque</b> que bloqueaste.</span></li>
+          <li><span class="name">Heat Maps</span><span class="desc">Mapas de calor de dónde ataca, saca, recibe y arma cada uno.</span></li>
           <li><span class="name">Equipo</span><span class="desc">El plantel: la lista de jugadores de la temporada.</span></li>
           <li><span class="name">Comparador</span><span class="desc">Dos jugadores cara a cara.</span></li>
           <li><span class="name">Tendencias / Historial</span><span class="desc">Cómo evolucionan los números partido a partido.</span></li>
@@ -285,7 +275,7 @@
         <ul>
           <li><span class="name">Game Plan</span><span class="desc">El plan contra un rival, con los filtros: fase (side-out / transición), recepción, bandas, receptor y tipo de saque.</span></li>
           <li><span class="name">Scouting Rival</span><span class="desc">El dossier completo del rival.</span></li>
-          <li><span class="name">Plan de Partido</span><span class="desc">El scouting del rival jugador por jugador: canchas de ataque/saque/recepción, video por zona, distribución del armador y notas editables. Mirá la sección ★ para el detalle completo.</span></li>
+          <li><span class="name">Plan de Partido</span><span class="desc">El resumen imprimible para llevar al partido.</span></li>
         </ul>
       </div>
 
@@ -316,27 +306,16 @@
         <ul>
           <li><span class="name">Wellness</span><span class="desc">El estado físico diario que cargan los jugadores.</span></li>
           <li><span class="name">Prep Física</span><span class="desc">Rutinas y objetivos de preparación física.</span></li>
-          <li><span class="name">Calendario / Horarios</span><span class="desc">El fixture de la temporada con escudos, hora, lugar y mapa, más los entrenamientos. Ver la sección <a href="#calendario" style="color:var(--court-deep);font-weight:600">Calendario</a>.</span></li>
+          <li><span class="name">Calendario / Horarios</span><span class="desc">La agenda del equipo.</span></li>
         </ul>
       </div>
 
       <div class="group">
         <h3>⬛ Video y táctica</h3>
         <ul>
-          <li><span class="name">Panel en Vivo</span><span class="desc">Para scoutear <b>durante el partido</b>, punto por punto, en tiempo real, con las teclas de DataVolley. Trae marcador tipo tablero, las <b>11 baterías</b> calculadas al instante, edición de códigos <b>en el lugar</b> (corregís un valor sin saltar al final), modo partido/entrenamiento, <b>set amistoso</b> para seguir jugando cuando el partido terminó, y el <b>video en vivo con delay</b>. Es una tarjeta del cuerpo técnico (los jugadores no la ven).</span></li>
           <li><span class="name">Cargar Videos</span><span class="desc">Vincula los videos a las jugadas del game plan.</span></li>
           <li><span class="name">Cortes de Video</span><span class="desc">Clips recortados de jugadas puntuales.</span></li>
           <li><span class="name">Pizarrón</span><span class="desc">Pizarra táctica editable.</span></li>
-        </ul>
-      </div>
-
-      <div class="group">
-        <h3>🆕 Novedades del scout en vivo</h3>
-        <ul>
-          <li><span class="name">Corregís en el lugar</span><span class="desc">Ponés el cursor sobre un valor (o lo seleccionás) y la tecla de evaluación o la de adversario lo inserta/reemplaza <b>ahí mismo</b>, sin saltar al final del código. Sirve también para meter la <b>a</b> del visitante en el medio de un código compuesto.</span></li>
-          <li><span class="name">Modo entrenamiento</span><span class="desc">Para prácticas: cargás un solo equipo y todos los códigos quedan como <b>locales</b> (con <b>*</b>), aunque escribas la a o uses compuestos.</span></li>
-          <li><span class="name">Set amistoso</span><span class="desc">Cuando el partido terminó, te ofrece arrancar otro set (o lo hacés con el botón <b>Set amistoso</b>), para seguir jugando amistosos.</span></li>
-          <li><span class="name">Barra más prolija</span><span class="desc">Los botones de arriba quedaron en <b>una sola fila</b>, sin emojis; el de la cámara ahora dice <b>Video / delay</b> para no confundirlo con el de sincronización, y se quitó una Baterías repetida.</span></li>
         </ul>
       </div>
 
@@ -344,121 +323,6 @@
   </section>
 
   <!-- 5 -->
-  <!-- ★ Plan de Partido -->
-  <section id="plandepartido">
-    <div class="eyebrow"><span class="num">★</span><span class="kicker">Lo nuevo</span></div>
-    <h2 class="title">El Plan de Partido, en detalle</h2>
-    <p class="lead">El scouting del rival jugador por jugador, con todo lo que le sumamos.</p>
-    <div class="group">
-      <ul>
-        <li><span class="name">Elegís el rival</span><span class="desc">Del desplegable de arriba. Aparecen sus jugadores por rol (puntas, centrales, opuestos, saque, recepción) y abajo la distribución de su armador.</span></li>
-        <li><span class="name">Canchas por jugador</span><span class="desc">Cada tarjeta muestra dónde pega, saca o recibe. El número = golpes/saques (no puntos) y el color = cuánto repite en esa zona. <b>Doble clic en una zona abre el video de esa jugada</b> (en los partidos que tengan video cargado).</span></li>
-        <li><span class="name">Mín. pelotas</span><span class="desc">En cada tarjeta de saque y ataque. Escribís un número y se ocultan las zonas con menos pelotas que ese, para que quede clara la tendencia real y no te maree tanto número chico.</span></li>
-        <li><span class="name">Resultado múltiple</span><span class="desc">El filtro de resultado deja tildar <b>varias opciones a la vez</b> (por ej. Punto + Positivo), con botones <b>Todos / Ninguno</b> para marcar o desmarcar todo de una.</span></li>
-        <li><span class="name">Recibe (en ataque)</span><span class="desc">Filtrás los ataques de un rematador según <b>quién recibió</b> esa pelota — te lista los puntas y líberos por nombre y número.</span></li>
-      </ul>
-    </div>
-    <div class="group">
-      <h3>🟨 La distribución del armador</h3>
-      <ul>
-        <li><span class="name">Todos los filtros en una línea</span><span class="desc">Quedaron en desplegables compactos: <b>Fase</b> (side-out / transición / todo), <b>Recepción</b> (#+ / !−), <b>Recep. desde</b> por zona (Z1 = 1·9·2, Z6 = 6·8·3, Z5 = 5·7·4), <b>Recibe</b> (por jugador) y <b>Llamada</b>. Se combinan entre sí.</span></li>
-        <li><span class="name">Video del armado</span><span class="desc">Doble clic en una zona de la rotación abre el clip del armado, igual que en las canchas de jugador.</span></li>
-        <li><span class="name">Cada zona con su color</span><span class="desc">La cancha del armador pinta <b>cada zona con su propio color</b> y la intensidad sube según cuánto reparte ahí — se lee de un vistazo a dónde arma, igual que en el game plan.</span></li>
-      </ul>
-    </div>
-    <div class="group">
-      <h3>🔴 En vivo, durante el partido (nuevo)</h3>
-      <ul>
-        <li><span class="name">Se llena solo mientras scouteás</span><span class="desc">Cuando estás cargando el partido en el <b>Panel en Vivo</b>, el Plan de Partido se va llenando en <b>tiempo real</b> con lo que scouteás. Las cuatro canchas — <b>Distribución del armador, Direcciones de ataque, Direcciones de saque y Zonas de recepción</b> — se actualizan punto a punto, para vos y para el rival.</span></li>
-        <li><span class="name">Los dos equipos</span><span class="desc">Cambiás entre <b>tu equipo</b> y el <b>rival</b> con un botón, y ves las tendencias de cada uno con lo que va pasando en la cancha.</span></li>
-        <li><span class="name">Mismos números que DataVolley</span><span class="desc">La distribución del armador se calcula igual que el sistema oficial — verificado jugada por jugada. Lo que ves en vivo es fiel, no una aproximación.</span></li>
-      </ul>
-    </div>
-    <div class="group">
-      <h3>✏️ Notas editables</h3>
-      <ul>
-        <li><span class="name">Escribís lo tuyo</span><span class="desc">La línea de abajo de cada jugador la editás vos: hacés clic, borrás lo que trae y ponés tu análisis. Se guarda solo, en el navegador de esa compu (para vos). Si la dejás vacía, muestra un “Escribí tu análisis…”.</span></li>
-      </ul>
-    </div>
-    <div class="done">👥 El Plan de Partido ahora también aparece en la vista de los jugadores, no solo en la del entrenador.</div>
-    <div class="done">🔄 <b>Se actualiza solo</b> con el botón de siempre (ya no hay que generarlo aparte), y muestra la <b>temporada activa</b>: si la temporada nueva todavía no tiene partidos cargados, aparece vacío hasta que sumes los primeros. Cuando querés ver otra temporada, se cambia en el bat y sale todo parejo.</div>
-  </section>
-
-  <!-- ★ Video en vivo con delay -->
-  <section id="videovivo">
-    <div class="eyebrow"><span class="num">★</span><span class="kicker">Lo nuevo</span></div>
-    <h2 class="title">Video en vivo con delay</h2>
-    <p class="lead">Ver la jugada de nuevo, en el momento, sin depender de nada externo. Todo por la misma red.</p>
-    <div class="group">
-      <h3>📹 Para qué sirve</h3>
-      <ul>
-        <li><span class="name">Revisar la última acción</span><span class="desc">En pleno partido, tocás un botón y volvés a ver el punto que se acaba de jugar — para chequear un error o una jugada dudosa sin sacarte del scouteo.</span></li>
-        <li><span class="name">Corregir en el entrenamiento</span><span class="desc">Le mostrás al jugador su gesto técnico con unos segundos de <b>delay</b>: “mirá, recién hiciste esto”. La imagen va atrasada los segundos que elijas.</span></li>
-      </ul>
-    </div>
-    <div class="group">
-      <h3>🔌 Cómo se arma (fácil)</h3>
-      <ul>
-        <li><span class="name">1 · La cámara</span><span class="desc">Abrís <b>camara.html</b> en un celular apuntando a la cancha (o la webcam de la PC, o cámara por OBS). Tocás <b>Transmitir</b> y te da un <b>código de 4 dígitos</b>.</span></li>
-        <li><span class="name">2 · La tablet o el scout</span><span class="desc">Tocás el botón <b>Video delay</b> (en dos líneas), escribís el código y listo. Aparece el video en vivo.</span></li>
-        <li><span class="name">3 · El delay y el replay</span><span class="desc">Un deslizador para elegir cuántos segundos de atraso (0 a 25), y un botón <b>“Ver último punto”</b> que reproduce el rally que se acaba de cerrar. Botón ⛶ para pantalla completa.</span></li>
-      </ul>
-    </div>
-    <div class="rule do"><span class="ic">📶</span><div><b>Todos en la misma red:</b> la cámara, la tablet y el scout tienen que estar en el <b>mismo WiFi</b>. Si el gimnasio no tiene WiFi, compartís internet desde tu celu (hotspot) y conectás todo ahí. El video entre los dispositivos no gasta datos.</div></div>
-    <div class="done">🎬 El “último punto” está conectado al scout: sabe exactamente cuándo terminó el rally, así te muestra la jugada justa.</div>
-  </section>
-
-  <!-- ★ IDIOMAS -->
-  <section id="idiomas">
-    <div class="eyebrow"><span class="num">★</span><span class="kicker">Nuevo</span></div>
-    <h2 class="title">La app habla tres idiomas</h2>
-    <p class="lead">Español, inglés y alemán. Los botones <b>ES · EN · DE</b> están arriba a la derecha en todas las pantallas.</p>
-    <div class="brain">
-      Se cambia con un clic y no hay que recargar nada. La elección queda guardada: la próxima vez que entres,
-      la app arranca en el idioma que dejaste.<br><br>
-      <b>Lo que NO se traduce, y está bien que así sea:</b> el código de la jugada
-      (<code>*08SM-~~~15</code>), los nombres de los equipos y de los jugadores, y las teclas
-      (<b>Ctrl</b>, <b>Enter</b>). El código de DataVolley es internacional: las mismas letras en los
-      ocho idiomas del programa. Si se tradujera, el archivo dejaría de servir.
-    </div>
-    <div class="rule do"><span class="ic">💪</span><div><b>Los ejercicios del físico se traducen solos.</b> Cada uno tiene su nombre en los tres idiomas cargado por el preparador. Si aparece uno en castellano, es que a ese ejercicio le falta la traducción en el catálogo: se agrega ahí y sale bien en todas las pantallas.</div></div>
-    <div class="rule dont"><span class="ic">⚠️</span><div>Si el preparador escribe un nombre de bloque nuevo que no está en la lista conocida, va a quedar en castellano. Es a propósito: preferimos que quede como lo escribió antes que inventarle una traducción.</div></div>
-  </section>
-
-  <!-- ★ PARTIDO O ENTRENAMIENTO -->
-  <section id="tipos">
-    <div class="eyebrow"><span class="num">★</span><span class="kicker">Nuevo</span></div>
-    <h2 class="title">Partido o entrenamiento, sin cruzar los datos</h2>
-    <p class="lead">Los partidos y las prácticas se guardan en carpetas distintas y ahora se miran por separado en todo el sistema.</p>
-    <div class="brain">
-      Vas a ver tres botones —<b>Todos · Partidos · Entrenamientos</b>— en el dashboard, el análisis,
-      el plan de partido, los cortes de video y las páginas de cada jugador. En el perfil y en los mapas
-      de calor son dos: <b>Partido</b> y <b>Entrenamiento</b>.<br><br>
-      <b>La elección viaja con vos.</b> Si ponés Entrenamientos en el análisis y después entrás a un
-      perfil o a los cortes de video, llegan ya filtrados. No hay que elegirlo de nuevo en cada pantalla.
-    </div>
-    <div class="rule do"><span class="ic">📅</span><div><b>Una práctica de julio cuenta en la temporada que arranca</b>, no en la anterior. La temporada de un entrenamiento la da la carpeta donde está, no su fecha: la pretemporada pertenece al año nuevo aunque el calendario diga otra cosa.</div></div>
-    <div class="rule"><span class="ic">📊</span><div>Con el filtro en <b>Partidos</b> y ningún partido jugado todavía, las pantallas van a estar vacías o en cero. Eso es correcto, no es un error: se llenan solas con el primer partido.</div></div>
-  </section>
-
-  <!-- ★ ACCESO -->
-  <section id="acceso">
-    <div class="eyebrow"><span class="num">★</span><span class="kicker">Nuevo</span></div>
-    <h2 class="title">Quién entra a la app</h2>
-    <p class="lead">Sin usuario y clave no se ve nada, en ninguna pantalla.</p>
-    <div class="brain">
-      Todas las páginas piden ingresar antes de mostrar algo. Y los datos del club van <b>cifrados</b>:
-      la llave para abrirlos llega recién cuando la sesión es válida. Sin ella, los archivos son ilegibles
-      aunque alguien los baje.<br><br>
-      En <b>Herramientas del entrenador → 🔐 Sesiones y dispositivos</b> ves quién tiene acceso, desde qué
-      dispositivo (computadora, celular o tablet) y cuándo entró. Podés cerrarle la sesión a un dispositivo,
-      a una persona, o a todos de una vez.
-    </div>
-    <div class="rule do"><span class="ic">📸</span><div><b>Antes de cerrar todas, sacale una captura a la lista.</b> El cierre también borra el registro, y después no vas a saber a quién tenés que darle acceso otra vez.</div></div>
-    <div class="rule"><span class="ic">⏱️</span><div>El cierre se aplica cuando la persona vuelve a abrir la app, así que puede tardar hasta una hora en alguien que la tenga abierta. Y te cierra la sesión a vos también: volvés a entrar con tu mail y tu clave.</div></div>
-    <div class="rule"><span class="ic">🔌</span><div><b>Scoutear sin señal sigue funcionando</b>, pero solo en un dispositivo que ya haya entrado alguna vez. Uno nuevo, sin conexión, no puede saltearse el ingreso.</div></div>
-  </section>
-
   <section id="entrenos">
     <div class="eyebrow"><span class="num">5</span><span class="kicker">Entrenamientos</span></div>
     <h2 class="title">Cargar entrenamientos</h2>
@@ -467,7 +331,7 @@
       <li><b>Scouteá el entreno en DataVolley</b><small>Te queda un archivo .dvw del entrenamiento.</small></li>
       <li><b>Ponelo en la carpeta <code>DVW ENTRENAMIENTOS NAFELS 2026</code></b><small>Es la carpeta de los entrenamientos (ojo: distinta de la de los partidos).</small></li>
       <li><b>(Si tenés video) cargá el link primero</b><small>Mirá el paso de <a href="#videos" style="color:var(--court-deep);font-weight:600">Videos</a>: el video va a YouTube y el link se pega en “Cargar Videos”, modo Entrenamiento.</small></li>
-      <li><b>Doble clic en <code>correr_entrenamientos_nafels</code></b><small>Genera los datos del entreno. No toca nada de los partidos ni de la cápsula. Esperá el “LISTO”.</small></li>
+      <li><b>Doble clic en <code>HACER_TODO</code></b><small>Procesa los entrenamientos (y también los partidos) y publica, todo junto. Esperá el “LISTO”.</small></li>
       <li><b>Doble clic en <code>PUBLICAR_EN_GITHUB</code></b><small>Este botón <b>no publica solo</b>, así que este paso es obligatorio para que se vea online.</small></li>
       <li><b>Ctrl + F5 y poné el switch en <code>ENTRENAMIENTO</code></b><small>El switch aparece arriba en las páginas de análisis.</small></li>
     </ol>
@@ -497,32 +361,14 @@
     <ol class="steps">
       <li><b>Subí el video a YouTube</b><small>Cuando termina de procesarse, copiás el link del video.</small></li>
       <li><b>Abrí “Cargar Videos” (la tarjeta violeta del menú)</b><small>Ahí elegís el modo — <b>Partido</b> o <b>Entrenamiento</b> — y pegás el link.</small></li>
-      <li><b>Corré el botón que corresponda</b><small>Partidos → <code>cargar_videos</code> (o <code>ACTUALIZAR_Y_PUBLICAR</code>). Entrenamientos → <code>correr_entrenamientos_nafels</code>.</small></li>
+      <li><b>Corré <code>HACER_TODO</code></b><small>Procesa los videos junto con los partidos y entrenamientos, todo en un solo botón.</small></li>
       <li><b>Publicá y refrescá</b><small><code>PUBLICAR_EN_GITHUB</code> + Ctrl+F5. Los clips aparecen al lado de cada jugada, igual que en los partidos.</small></li>
     </ol>
   </section>
 
   <!-- 7 -->
-  <section id="calendario">
-    <div class="eyebrow"><span class="num">7</span><span class="kicker">Calendario</span></div>
-    <h2 class="title">El calendario y el fixture</h2>
-    <p class="lead">La agenda del equipo: el fixture de la temporada con el escudo de cada rival, la hora, el lugar y un pin al mapa — más los entrenamientos. Entrás desde el <b>Hub → Calendario</b>.</p>
-    <ol class="steps">
-      <li><b>Entrá a Calendario y poné la pestaña en “🏆 Partidos”</b><small>Las pestañas Partidos / Entrenamientos están arriba de la lista.</small></li>
-      <li><b>Tocá “⬇️ Importar fixture 2026/27 (14 partidos)”</b><small>Carga los 14 partidos de la temporada (ida y vuelta con los 7 rivales) de una sola vez. A prueba de errores: si lo apretás de nuevo, no los duplica.</small></li>
-      <li><b>Ya está — quedan agendados</b><small>El calendario guarda solo. No hace falta correr ningún .bat para que aparezcan los partidos.</small></li>
-    </ol>
-    <div class="callout">
-      <b>Cómo se ve cada partido (todo en una línea):</b> la fecha, el <b>escudo + nombre</b> de los dos equipos con <b>NÄFELS en verde</b>, la <b>hora</b>, el <b>lugar</b> y un <b>📍 que abre Google Maps</b> con la dirección. El borde de la izquierda es <b>verde si jugás de local</b> y <b>naranja si es de visitante</b>.
-    </div>
-    <p><b>Los escudos:</b> los logos de los clubes están en una carpeta <code>escudos/</code> en el repo (<code>nafels.png</code>, <code>amriswil.png</code>, etc.), al lado de <code>calendario.html</code>. Si falta un archivo, en vez del logo se ve un cuadradito con las siglas del club (NÄF, AMR…): nunca queda roto.</p>
-    <p><b>A mano:</b> con <b>+ Agregar</b> sumás un partido o entrenamiento suelto; el <b>lápiz ✏️</b> edita y el <b>tacho 🗑️</b> borra. La vista <b>Planificación</b> muestra todo en grilla (semana / quincena / mes).</p>
-    <div class="done">🏐 Ojo: los escudos y el <code>calendario.html</code> sí van al repo (se suben una vez con el .bat). Lo que cargás o importás dentro del calendario se guarda solo.</div>
-  </section>
-
-  <!-- 8 -->
   <section id="robot">
-    <div class="eyebrow"><span class="num">8</span><span class="kicker">Se actualiza solo</span></div>
+    <div class="eyebrow"><span class="num">7</span><span class="kicker">Se actualiza solo</span></div>
     <h2 class="title">El robot</h2>
     <p class="lead">Una ayudita que vive en GitHub (en la nube), no en tu PC.</p>
     <div class="brain">
@@ -535,7 +381,7 @@
     <div class="callout" style="background:#eef6f1;border-color:#bfe3cf;border-left-color:var(--go)">
       <b style="color:#1f6e4b">Lo que tenés que tener claro:</b> el robot SOLO actualiza el <b>ranking de la liga</b>.
       No toca el dashboard, los perfiles, el game plan ni los heatmaps. Para actualizar todo eso seguís
-      usando <code>ACTUALIZAR_Y_PUBLICAR</code>. El robot es un extra, no lo reemplaza.
+      usando <code>HACER_TODO</code>. El robot es un extra, no lo reemplaza.
     </div>
     <p class="lead" style="margin-top:18px">El circuito completo (cuando arranque la 26-27):</p>
     <ol class="steps">
@@ -552,7 +398,7 @@
 
   <!-- 8 -->
   <section id="prepfisica">
-    <div class="eyebrow"><span class="num">9</span><span class="kicker">El profe</span></div>
+    <div class="eyebrow"><span class="num">8</span><span class="kicker">El profe</span></div>
     <h2 class="title">Preparación física (rutinas)</h2>
     <p class="lead">Esto lo carga el preparador físico, pero te lo dejo documentado para que lo tengas todo.</p>
     <div class="brain">
@@ -583,7 +429,7 @@
 
   <!-- 9 -->
   <section id="finde">
-    <div class="eyebrow"><span class="num">10</span><span class="kicker">Una vez al año</span></div>
+    <div class="eyebrow"><span class="num">9</span><span class="kicker">Una vez al año</span></div>
     <h2 class="title">Fin de temporada</h2>
     <p class="lead">Para cerrar un año y arrancar el siguiente limpio.</p>
     <ol class="steps">
@@ -591,12 +437,12 @@
       <li><b>Creá la carpeta de la temporada nueva</b><small>Por ejemplo <code>DVW NAFELS 2028</code> para los partidos del año que viene.</small></li>
       <li><b>A partir de ahí, los .dvw nuevos van en esa carpeta</b><small>El sitio principal arranca en cero, esperando los partidos nuevos.</small></li>
     </ol>
-    <div class="callout">Mientras la carpeta de la temporada actual esté <b>vacía</b>, <code>ACTUALIZAR_Y_PUBLICAR</code> se detiene solo y no toca nada. Es tu seguro para no cargar datos viejos por error.</div>
+    <div class="callout">Mientras la carpeta de la temporada actual esté <b>vacía</b>, <code>HACER_TODO</code> se detiene solo y no toca nada. Es tu seguro para no cargar datos viejos por error.</div>
   </section>
 
   <!-- 10 -->
   <section id="problemas">
-    <div class="eyebrow"><span class="num">11</span><span class="kicker">Tranquilo</span></div>
+    <div class="eyebrow"><span class="num">10</span><span class="kicker">Tranquilo</span></div>
     <h2 class="title">Si algo sale mal</h2>
     <div class="fix">
       <div class="row"><div class="q">La web no muestra los cambios</div><div class="a">Refrescá con <code>Ctrl + F5</code> y esperá 1–2 minutos más. Vercel tarda un poco en publicar.</div></div>
@@ -609,25 +455,48 @@
 
   <!-- 11 -->
   <section id="botones">
-    <div class="eyebrow"><span class="num">12</span><span class="kicker">Chuleta</span></div>
+    <div class="eyebrow"><span class="num">11</span><span class="kicker">Chuleta</span></div>
     <h2 class="title">Los botones (.bat) que importan</h2>
     <p class="lead">Estos son los que usás. El resto, guardalos en una carpeta aparte.</p>
     <table class="bats">
       <thead><tr><th>Botón</th><th>Para qué</th><th>Cuándo</th></tr></thead>
       <tbody>
-        <tr><td><code>ACTUALIZAR_Y_PUBLICAR</code></td><td>Genera datos de los partidos y los publica.</td><td><span class="tag main">El principal</span></td></tr>
-        <tr><td><code>correr_entrenamientos_nafels</code></td><td>Igual, pero para los entrenamientos.</td><td><span class="tag some">Entrenos</span></td></tr>
-        <tr><td><code>convertir_entrenamiento_vivo</code></td><td>Entreno scouteado en vivo (llama al de arriba).</td><td><span class="tag some">Entrenos</span></td></tr>
-        <tr><td><code>cargar_videos</code></td><td>Suma los videos al game plan.</td><td><span class="tag some">Videos</span></td></tr>
+        <tr><td><code>HACER_TODO</code></td><td>Hace <b>todo</b>: procesa los partidos + los entrenamientos y publica. Tu botón de siempre.</td><td><span class="tag main">El principal</span></td></tr>
+        <tr><td><code>PUBLICAR_EN_GITHUB</code></td><td>Sube a la web los archivos que te paso yo (cortes.html, etc.).</td><td><span class="tag some">A veces</span></td></tr>
+        <tr><td><code>convertir_entrenamiento_vivo</code></td><td>Entreno scouteado en vivo (después corré HACER_TODO).</td><td><span class="tag some">Entrenos</span></td></tr>
         <tr><td><code>VIGILAR_PARTIDOS</code></td><td>Vigila la carpeta y sube los .dvw nuevos solos (despierta al robot).</td><td><span class="tag some">Robot</span></td></tr>
         <tr><td><code>SUBIR_PARTIDO</code></td><td>Sube un .dvw a GitHub (despierta al robot).</td><td><span class="tag some">Robot</span></td></tr>
         <tr><td><code>ARCHIVAR_TEMPORADA</code></td><td>Guarda la temporada en la cápsula.</td><td><span class="tag some">1 vez al año</span></td></tr>
-        <tr><td><code>PUBLICAR_EN_GITHUB</code></td><td>Sube cambios hechos a mano.</td><td><span class="tag some">A veces</span></td></tr>
         <tr><td><code>SUBIR_AHORA</code></td><td>Arregla el “rejected” del push.</td><td><span class="tag emerg">Emergencia</span></td></tr>
         <tr><td><code>VER_ERROR</code></td><td>Muestra qué falló.</td><td><span class="tag emerg">Emergencia</span></td></tr>
       </tbody>
     </table>
-    <div class="callout"><b>Guardá en una carpeta aparte</b> (no los uses): <code>ACTUALIZAR_FACIL</code>, <code>ACTUALIZAR_NAFELS</code>, <code>ACTUALIZAR_TODO</code>, <code>correr_nafels</code> (duplicados peligrosos) y los de instalación que ya corriste una vez: <code>CONECTAR_GITHUB</code>, <code>CONFIGURAR_IDENTIDAD</code>, <code>INSTALAR_ROBOT</code>, <code>LIMPIAR_REPO</code>, <code>FIRMAR_COPYRIGHT</code>.</div>
+    <div class="callout"><b>Guardá en una carpeta aparte</b> (ya no los uses, los reemplaza <code>HACER_TODO</code>): <code>ACTUALIZAR_Y_PUBLICAR</code>, <code>correr_entrenamientos_nafels</code>, <code>cargar_videos</code>, <code>ACTUALIZAR_FACIL</code>, <code>ACTUALIZAR_NAFELS</code>, <code>ACTUALIZAR_TODO</code>, <code>correr_nafels</code>. Y los de instalación que ya corriste una vez: <code>CONECTAR_GITHUB</code>, <code>CONFIGURAR_IDENTIDAD</code>, <code>INSTALAR_ROBOT</code>, <code>LIMPIAR_REPO</code>, <code>FIRMAR_COPYRIGHT</code>.</div>
+  </section>
+
+  <!-- 12 -->
+  <section id="avisos">
+    <div class="eyebrow"><span class="num">12</span><span class="kicker">Notificaciones</span></div>
+    <h2 class="title">Avisar a los jugadores (push)</h2>
+    <p class="lead">Los avisos se mandan desde <b>OneSignal</b> (panel web o la app del celular). Llegan aunque el jugador tenga la app cerrada.</p>
+    <div class="brain">
+      El jugador toca <b>“🔔 Activar avisos”</b> una vez (abajo a la izquierda en la web) y queda suscripto.
+      <b>iPhone:</b> solo recibe si instaló la app (Compartir → “Agregar a inicio”) — es regla de Apple. <b>Android/PC:</b> directo.
+    </div>
+    <p class="lead" style="margin-top:18px">Mandar un aviso a todo el equipo:</p>
+    <ol class="steps">
+      <li><b>Entrá a <code>app.onesignal.com</code></b><small>O la app de OneSignal en el celular.</small></li>
+      <li><b>Messages → New Push</b><small>Escribí el Título y el Mensaje.</small></li>
+      <li><b>⚠️ El texto va en el campo del idioma “English”</b><small>Aunque lo escribas en español. Si ese campo queda vacío, da error. (Es el error que tuviste la primera vez.)</small></li>
+      <li><b>Audiencia: “Subscribed Users” / “Total Subscriptions”</b><small>= todos. Después → <b>Send</b>.</small></li>
+    </ol>
+    <p class="lead" style="margin-top:18px">Otras opciones:</p>
+    <ol class="steps">
+      <li><b>A un jugador puntual</b><small>En audiencia filtrás por <b>External ID = número de camiseta</b> (ej: 17).</small></li>
+      <li><b>Programar para un día/hora</b><small>En “When to send” elegí <b>Specific time</b> → fecha y hora → <b>Schedule</b>. (Uno por vez.)</small></li>
+      <li><b>Plantillas en 1 clic</b><small>Messages → Templates → elegís Wellness o Estadísticas → audiencia → Send. Sin reescribir nada.</small></li>
+    </ol>
+    <div class="callout"><b>La clave secreta (REST API Key) no se comparte ni va en la app</b> — solo la usás vos desde el panel. Los avisos automáticos recurrentes (atados a los entrenamientos) quedan para activar cuando definas días y horarios.</div>
   </section>
 
 </div>
@@ -637,7 +506,5 @@
   NÄFELS VOLEY · Manual de uso · Hecho para que nunca te pierdas en tu propia app 🏐
 </footer>
 
-<script src="lang.js?v=20260813-1930"></script>
-<script src="volver_inicio.js?v=20260813-1930" onerror="void 0"></script>
 </body>
 </html>

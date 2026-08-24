@@ -272,15 +272,19 @@ select, select option {
 }
 
 </style>
-<script src="lang.js?v=20260813-1930" onerror="void 0"></script>
+<script src="datos_seguros.js" onerror="void 0"></script>
+  <script src="datos_recepcion.js.enc" onerror="void 0"></script>
+  <script src="lang.js" onerror="void 0"></script>
 <script src="liga_data.js.enc"></script>
-<script src="firebase.js?v=20260813-1930" onerror="void 0"></script>
+<!-- Apunta al firebase.js de la RAIZ, no a una copia local. La copia que
+     tenia la capsula era vieja: pedia mail y clave pero NUNCA guardaba la
+     llave de los datos, asi que las paginas abrian vacias para cualquiera
+     que no hubiera entrado antes por la app principal. Con una sola fuente
+     no se vuelve a desincronizar. -->
+<script src="../../firebase.js" onerror="void 0"></script>
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
-<script src="videos.js?v=20260813-1930" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
-<!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
-     toca el encabezado y las barras: en la computadora no hace nada.
-     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260813-1930">
+  <script>abrirDatos();</script>
+<script src="videos.js" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 </head>
 <body>
 
@@ -293,7 +297,7 @@ select, select option {
   </div>
   <div>
     <div class="rival-name" id="rival-nombre">AMRISWIL</div>
-    <div class="match-info" id="match-info">NLA Suiza 2026/27 · temporada en curso</div>
+    <div class="match-info" id="match-info">NLA Suiza 2025/26 · temporada archivada</div>
     <select id="rival-select" class="rival-select" title="Elegir equipo rival"></select>
   </div>
   <div id="lang-wrap" style="display:flex;align-items:center;gap:4px;margin-right:8px"></div>
@@ -3572,7 +3576,7 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20260813-1930"></script>
+<script src="temporadas_menu.js"></script>
 </body>
 </html>
 

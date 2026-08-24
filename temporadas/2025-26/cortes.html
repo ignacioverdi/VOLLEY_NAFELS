@@ -4,29 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cortes de Video · NAFELS VOLEY</title>
-<script src="datos_seguros.js?v=20260813-1930"></script>
-<script src="filtro_tipo.js?v=20260813-1930" onerror="void 0"></script>
-  <!-- datos_video_25-26 sacado: es el video de la CAPSULA. Esta pantalla es
-       de la 26-27, y cargarlo mezclaba jugadores nuevos con cortes de la
-       temporada pasada. -->
-<!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
-     las que no existen las descarta el onerror, sin ruido. Y todas con
-     .enc, que es como se publican los datos del club. -->
-<script src="datos_video_25-26.js.enc?v=3" onerror="void 0"></script>
-<script src="datos_video_26-27.js.enc?v=3" onerror="void 0"></script>
-<script src="datos_video_27-28.js.enc?v=3" onerror="void 0"></script>
-<script src="datos_video_28-29.js.enc?v=3" onerror="void 0"></script>
-<!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
-     las que no existen las descarta el onerror, sin ruido. Y todas con
-     .enc, que es como se publican los datos del club. -->
-<script src="datos_video_ent_25-26.js.enc?v=3" onerror="void 0"></script>
-<script src="datos_video_ent_26-27.js.enc?v=3" onerror="void 0"></script>
-<script src="datos_video_ent_27-28.js.enc?v=3" onerror="void 0"></script>
-<script src="datos_video_ent_28-29.js.enc?v=3" onerror="void 0"></script>
+<!-- El lector va PRIMERO: los archivos cifrados que se carguen antes no
+     tienen quien los abra y el navegador los descarta. Por eso el filtro de
+     ataques bloqueados daba cero. -->
+  <script src="../../datos_seguros.js"></script>
+  <script src="datos_video.js.enc" onerror="void 0"></script>
+  <script src="mapa_videos_ent.js.enc" onerror="void 0"></script>
+  <script src="mapa_videos.js.enc" onerror="void 0"></script>
+  <script src="datos_video_25-26.js.enc?v=3" onerror="void 0"></script>
+<script src="datos_video_26-27.js?v=3" onerror="void 0"></script>
+<script src="datos_video_27-28.js?v=3" onerror="void 0"></script>
+<script src="datos_video_28-29.js?v=3" onerror="void 0"></script>
+<script src="datos_video_ent_25-26.js?v=3" onerror="void 0"></script>
+<script src="datos_video_ent_26-27.js?v=3" onerror="void 0"></script>
+<script src="datos_video_ent_27-28.js?v=3" onerror="void 0"></script>
 <script src="mapa_videos.js.enc?v=3" onerror="void 0"></script>
 <script src="mapa_videos_ent.js.enc?v=3" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20260813-1930" onerror="void 0"></script>
+<!-- Apunta al firebase.js de la RAIZ, no a una copia local. La copia que
+     tenia la capsula era vieja: pedia mail y clave pero NUNCA guardaba la
+     llave de los datos, asi que las paginas abrian vacias para cualquiera
+     que no hubiera entrado antes por la app principal. Con una sola fuente
+     no se vuelve a desincronizar. -->
+<script src="../../firebase.js" onerror="void 0"></script>
 <style>
   :root{--bg:#0b1017;--bg2:#0f172a;--card:#111a27;--card2:#16212f;--line:#1f2c3d;--txt:#e2e8f0;--muted:#7689a1;--muted2:#475569;--naf:#22c55e;--naf-dim:rgba(34,197,94,.12);--atk:#F97316;--srv:#22C55E;--rec:#818CF8;--set:#F59E0B;--blk:#ef4444;--def:#06b6d4;--free:#94a3b8;--ev-pos:#22c55e;--ev-plus:#84cc16;--ev-excl:#eab308;--ev-neg:#f97316;--ev-slash:#f59e0b;--ev-err:#ef4444;}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -139,10 +139,6 @@
     .filters{padding:12px}
   }
 </style>
-<!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
-     toca el encabezado y las barras: en la computadora no hace nada.
-     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260813-1930">
 </head>
 <body>
 <div class="wrap">
@@ -181,44 +177,6 @@
       <div class="dd">
         <div class="dd-btn" id="sBtn">Elegir sets <span class="n" id="sN">—</span></div>
         <div class="dd-panel" id="sPanel"></div>
-      </div>
-      <div class="flabel">Situación <span style="text-transform:none">(secuencia de la jugada)</span></div>
-      <div class="dd">
-        <div class="dd-btn" id="sitBtn">Elegir situación <span class="n" id="sitN">—</span></div>
-        <div class="dd-panel" id="sitPanel" style="padding:9px 10px">
-          <style>
-            #sitPanel .sitrow{display:flex;gap:6px;align-items:center;margin-bottom:7px;flex-wrap:wrap}
-            #sitPanel .sitsk{background:var(--card2);border:1px solid var(--line);color:var(--txt);border-radius:7px;padding:5px 7px;font-size:12px;font-weight:600}
-            #sitPanel .sev{background:var(--card2);border:1px solid var(--line);color:var(--muted);border-radius:6px;width:24px;height:24px;font-size:12px;font-weight:800;cursor:pointer;padding:0}
-            #sitPanel .sev.on{background:var(--naf);border-color:var(--naf);color:#fff}
-            #sitPanel .sithint{font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.4}
-          </style>
-          <div class="sithint">Mostrá solo las jugadas que tengan TODO esto (elegí fundamento y su valoración; dejá la valoración vacía para «cualquiera»):</div>
-          <div class="sitrow">
-            <select class="sitsk">
-              <option value="">— fundamento —</option>
-              <option>Saque</option><option>Recepción</option><option>Ataque</option>
-              <option>Bloqueo</option><option>Defensa</option><option>Armado</option><option>Freeball</option>
-            </select>
-            <span class="seval"><button class="sev" data-ev="#">#</button><button class="sev" data-ev="+">+</button><button class="sev" data-ev="!">!</button><button class="sev" data-ev="/">/</button><button class="sev" data-ev="-">-</button><button class="sev" data-ev="=">=</button></span>
-          </div>
-          <div class="sitrow">
-            <select class="sitsk">
-              <option value="">— fundamento —</option>
-              <option>Saque</option><option>Recepción</option><option>Ataque</option>
-              <option>Bloqueo</option><option>Defensa</option><option>Armado</option><option>Freeball</option>
-            </select>
-            <span class="seval"><button class="sev" data-ev="#">#</button><button class="sev" data-ev="+">+</button><button class="sev" data-ev="!">!</button><button class="sev" data-ev="/">/</button><button class="sev" data-ev="-">-</button><button class="sev" data-ev="=">=</button></span>
-          </div>
-          <div class="sitrow">
-            <select class="sitsk">
-              <option value="">— fundamento —</option>
-              <option>Saque</option><option>Recepción</option><option>Ataque</option>
-              <option>Bloqueo</option><option>Defensa</option><option>Armado</option><option>Freeball</option>
-            </select>
-            <span class="seval"><button class="sev" data-ev="#">#</button><button class="sev" data-ev="+">+</button><button class="sev" data-ev="!">!</button><button class="sev" data-ev="/">/</button><button class="sev" data-ev="-">-</button><button class="sev" data-ev="=">=</button></span>
-          </div>
-        </div>
       </div>
       <div class="counter"><b id="cnt">0</b><span>clips filtrados</span></div>
       <button class="reset" id="reset">Limpiar filtros</button>
@@ -270,29 +228,14 @@
 <script>
 (function(){
   "use strict";
-  /* El modo sale del filtro compartido cuando hay uno elegido, para que la
-     eleccion hecha en otra pantalla valga tambien aca. Con "Todos" se respeta
-     lo que tenia guardado esta pagina: los cortes leen una sola fuente de
-     video por vez y no pueden mostrar las dos juntas. */
-  var MODO=(function(){
-    try{ var t=(typeof vbTipo==='function') ? vbTipo() : 'todos';
-         if(t==='E') return 'ent';
-         if(t==='P') return 'partido'; }catch(e){}
-    return (localStorage.getItem('cortes_modo')==='ent') ? 'ent' : 'partido';
-  })();
+  var MODO=(localStorage.getItem('cortes_modo')==='ent')?'ent':'partido';
   var VD=(MODO==='ent'?window.VIDEO_DATA_ENT:window.VIDEO_DATA)||{combos:{},matches:{}}, COMBOS=VD.combos||{};
   var MAP=Object.assign({}, VD.links||{}); (function(){var _mv=(MODO==='ent'?window.MAPA_VIDEOS_ENT:window.MAPA_VIDEOS)||{};for(var _k in _mv){if(_mv[_k])MAP[_k]=_mv[_k];}})();
   // --------- temporada (oct→abr): 25-26 = oct2025→abr2026 ---------
   function seasonOf(d){if(!d)return '';var p=(''+d).split('-');var y=parseInt(p[0],10),mo=parseInt(p[1],10);if(isNaN(y)||isNaN(mo))return '';var s=(mo>=8)?y:y-1;return String(s%100).padStart(2,'0')+'-'+String((s+1)%100).padStart(2,'0');}
   var selSeason='';
-  /* La temporada sale de la sesion, que ya la trae escrita. Se sigue
-     calculando desde la fecha SOLO como respaldo, para los archivos viejos
-     que todavia no la tienen. Con la cuenta por fecha, una practica de julio
-     aparecia rotulada en la temporada anterior aunque el resto del sistema la
-     contara en la que arranca. */
-  function seasonDe(c){var m=VD.matches[c]||{};return m.season||seasonOf(m.date);}
-  function allSeasons(){var s={};Object.keys(VD.matches).forEach(function(c){if(!teamPlayed(c))return;var se=seasonDe(c);if(se)s[se]=true;});return Object.keys(s).sort();}
-  function seasonCodes(){return Object.keys(VD.matches).filter(function(c){if(!teamPlayed(c))return false;var se=seasonDe(c);return !selSeason||!se||se===selSeason;});}
+  function allSeasons(){var s={};Object.keys(VD.matches).forEach(function(c){if(!teamPlayed(c))return;var se=seasonOf(VD.matches[c].date);if(se)s[se]=true;});return Object.keys(s).sort();}
+  function seasonCodes(){return Object.keys(VD.matches).filter(function(c){if(!teamPlayed(c))return false;var se=seasonOf(VD.matches[c].date);return !selSeason||!se||se===selSeason;});}
   function initSeasonSel(){var ss=allSeasons();var el=$('seasonSel');if(!el)return;if(ss.length<=0){el.style.display='none';return;}if(!selSeason||ss.indexOf(selSeason)<0)selSeason=ss[ss.length-1];el.innerHTML=ss.map(function(se){return '<option value="'+se+'"'+(se===selSeason?' selected':'')+'>Temporada '+se+'</option>';}).join('');}
   function applySeason(){selMatch={};seasonCodes().forEach(function(c){selMatch[c]=true;});renderMatches();rebuildAll();}
   // --------- abanico de equipos ---------
@@ -323,9 +266,9 @@
   function mmss(s){s=Math.max(0,Math.round(s));return Math.floor(s/60)+":"+String(s%60).padStart(2,'0');}
   function toast(t){var e=$('toast');e.textContent=t;e.classList.add('show');setTimeout(function(){e.classList.remove('show');},1900);}
   function preOff(){return parseFloat($('preoff').value);}function postOff(){return parseFloat($('postoff').value);}
-  function sub(a){return (a.sk==='Ataque'||a.sk==='Saque'||a.sk==='Recepción')?(a.x||'*'):(a.sk==='Armado'?(a.call||'*'):'*');}
+  function sub(a){return (a.sk==='Ataque'||a.sk==='Saque'||a.sk==='Recepción')?(a.x||'*'):'*';}
   function akey(sk,s){return sk+'|'+s;}
-  function subName(sk,s){if(s==='*')return '';return sk==='Ataque'?((COMBOS[s]||s)+' ('+s+')'):(sk==='Armado'?s:(TYPE_NAME[s]||s));}
+  function subName(sk,s){if(s==='*')return '';return sk==='Ataque'?((COMBOS[s]||s)+' ('+s+')'):(TYPE_NAME[s]||s);}
 
   // estado
   var selMatch={}, selPlayers={}, selAct={}, selEval={}, selSet={}, selected={};
@@ -423,44 +366,9 @@
   var EVAL_ORDER=['#','+','!','-','/','='];
   function evRank(e){var i=EVAL_ORDER.indexOf(e);return i<0?99:i;}
   // --------- aplicar ---------
-  function contextualize(P){
-    var groups={}, ctx={}, rallies={}, rid=0;
-    function ckey(a){ return a.mc+'|'+a.t+'|'+a.num+'|'+a.sk; }
-    P.forEach(function(a){ var g=a.mc+'|'+a.set; (groups[g]=groups[g]||[]).push(a); });
-    Object.keys(groups).forEach(function(g){
-      var arr=groups[g].slice().sort(function(x,y){return x.t-y.t;});
-      var cur=null;
-      arr.forEach(function(a){
-        if(cur===null || a.sk==='Saque' || a.sk==='Recepción'){ cur='r'+(rid++); rallies[cur]=[]; }
-        ctx[ckey(a)]=cur; rallies[cur].push({sk:a.sk, ev:a.ev});
-      });
-    });
-    return {ctx:ctx, rallies:rallies, key:ckey};
-  }
-  function sitConds(){
-    var out=[]; var rows=document.querySelectorAll('#sitPanel .sitrow');
-    Array.prototype.forEach.call(rows,function(row){
-      var sk=row.querySelector('.sitsk').value; if(!sk) return;
-      var evs=[]; Array.prototype.forEach.call(row.querySelectorAll('.sev.on'),function(b){evs.push(b.dataset.ev);});
-      out.push({sk:sk, evs:evs});
-    });
-    return out;
-  }
-  function matchConds(a,C,conds){
-    var rid=C.ctx[C.key(a)]; if(rid==null) return false;
-    var acts=C.rallies[rid]||[];
-    return conds.every(function(cd){ return acts.some(function(x){ return x.sk===cd.sk && (!cd.evs.length || cd.evs.indexOf(x.ev)>=0); }); });
-  }
-  function resetSit(){
-    Array.prototype.forEach.call(document.querySelectorAll('#sitPanel .sitsk'),function(s){s.value='';});
-    Array.prototype.forEach.call(document.querySelectorAll('#sitPanel .sev.on'),function(b){b.classList.remove('on');});
-  }
   function apply(){
     var evK=Object.keys(selEval), stK=Object.keys(selSet);
     var multi=selectedMatchCodes().length>1;
-    var CONDS = sitConds();
-    var CTX = CONDS.length ? contextualize(pool()) : null;
-    var _sl=document.getElementById('sitN'); if(_sl)_sl.textContent=(CONDS.length===0?'—':CONDS.length+(CONDS.length===1?' condición':' condiciones'));
     filtered=basePool().filter(function(a){
       if(!selAct[akey(a.sk,sub(a))]) return false;
       if(fDz.length&&(a.sk!==(fSk||"Ataque")||fDz.indexOf(a.dz)<0)) return false;
@@ -475,7 +383,6 @@
       if(fCall.length&&(a.sk!=="Armado"||fCall.indexOf(a.call)<0)) return false;
       if(evK.length&&evK.indexOf(a.ev)<0) return false;
       if(stK.length&&stK.indexOf(a.set)<0) return false;
-      if(CONDS.length && !matchConds(a,CTX,CONDS)) return false;
       return true;
     }).sort(function(a,b){ var ra=evRank(a.ev),rb=evRank(b.ev); if(ra!==rb)return ra-rb; if(a.mc!==b.mc)return a.mc<b.mc?-1:1; return a.t-b.t;});
     filtered.forEach(function(a){a._vid=ytId(MAP[a.mc]||'');});
@@ -542,7 +449,7 @@
   function quickReel(sk,evs){
     Object.keys(selAct).forEach(function(k){selAct[k]=(k.split('|')[0]===sk);});
     selEval={}; (evs||[]).forEach(function(e){if(e)selEval[e]=1;});
-    selPlayers={}; selSet={}; fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';fDate='';fSk='';resetSit();
+    selPlayers={}; selSet={}; fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';fDate='';fSk='';
     buildActionTree();
     document.querySelectorAll('#fEval [data-ev]').forEach(function(c){c.classList.toggle('on',!!selEval[c.dataset.ev]);});
     apply();
@@ -614,12 +521,9 @@
     $('pBtn').addEventListener('click',function(){$('pPanel').classList.toggle('open');});
     $('pPanel').addEventListener('click',function(e){var c=e.target.closest('[data-p]');if(!c)return;var n=c.dataset.p;selPlayers[n]=!selPlayers[n];rebuildAll();});
     $('fEval').addEventListener('click',function(e){var c=e.target.closest('[data-ev]');if(!c)return;var v=c.dataset.ev;if(selEval[v])delete selEval[v];else selEval[v]=1;c.classList.toggle('on');apply();});
-    $('sitBtn').addEventListener('click',function(){$('sitPanel').classList.toggle('open');});
-    $('sitPanel').addEventListener('click',function(e){var b=e.target.closest('.sev');if(!b)return;b.classList.toggle('on');apply();});
-    $('sitPanel').addEventListener('change',function(e){if(e.target.classList&&e.target.classList.contains('sitsk'))apply();});
     $('sBtn').addEventListener('click',function(){$('sPanel').classList.toggle('open');});
     $('sPanel').addEventListener('click',function(e){var c=e.target.closest('[data-set]');if(!c)return;var v=c.dataset.set;if(selSet[v])delete selSet[v];else selSet[v]=1;var bx=c.querySelector('.box');if(bx)bx.textContent=selSet[v]?'✓':'';c.classList.toggle('on',!!selSet[v]);updateSN();apply();});
-    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';fDate='';fSk='';resetSit();rebuildAll();});
+    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';fDate='';fSk='';rebuildAll();});
     $('btnPlay').addEventListener('click',togglePlay);
     $('btnNext').addEventListener('click',function(){if(ready)next();});
     $('btnPrev').addEventListener('click',prev);
@@ -704,7 +608,7 @@
     if(pOz) fOz=pOz.split(',').map(Number);
     if(pPh) fPh=pPh;
     if(pApos) fApos=pApos.split(',').map(Number);
-    // la llamada se filtra por el árbol de acciones (selAct), no por fCall
+    if(pCall) fCall=pCall.split(',');
     if((pDz||pOz||pPh)&&!pSk) pSk='Ataque';
     if((pCall||pApos)&&!pSk) pSk='Armado';
     if(pSk) fSk=pSk;
@@ -742,9 +646,9 @@
     } else if(pSk){
       var skName={ATAQUE:'Ataque',SAQUE:'Saque',RECEPCION:'Recepción','RECEPCIÓN':'Recepción',ARMADO:'Armado',BLOQUEO:'Bloqueo',DEFENSA:'Defensa',FREEBALL:'Freeball'};
       var sk=skName[pSk.toUpperCase()]||pSk, any=false;
-      var pSub=pCombo||pCall; Object.keys(selAct).forEach(function(k){var pp=k.split('|');var on=(pp[0]===sk)&&(!pSub||pSub.split(',').indexOf(pp[1])>=0);selAct[k]=on;if(on)any=true;});
+      Object.keys(selAct).forEach(function(k){var pp=k.split('|');var on=(pp[0]===sk)&&(!pCombo||pCombo.split(',').indexOf(pp[1])>=0);selAct[k]=on;if(on)any=true;});
       if(any){ buildActionTree(); $('ddPanel').classList.add('open'); apply(); }
-      var fl=[]; if(fDz.length)fl.push('zona destino '+fDz.join('/')); if(fOz.length)fl.push('zona origen '+fOz.join('/')); if(fPh)fl.push('fase '+(fPh==='SO'?'Side-Out':'Transición')); if(fApos.length)fl.push('armado a zona '+fApos.join('/')); if(pCall)fl.push('llamada '+pCall.split(',').join('/'));
+      var fl=[]; if(fDz.length)fl.push('zona destino '+fDz.join('/')); if(fOz.length)fl.push('zona origen '+fOz.join('/')); if(fPh)fl.push('fase '+(fPh==='SO'?'Side-Out':'Transición')); if(fApos.length)fl.push('armado a zona '+fApos.join('/')); if(fCall.length)fl.push('llamada '+fCall.join('/'));
       if(fl.length) $('sub').textContent='Filtrado por '+fl.join(' · ')+' · '+filtered.length+' clip(s)';
     }
     loadYT();
@@ -752,7 +656,6 @@
   document.addEventListener('DOMContentLoaded',init);
 })();
 </script>
-<script src="lang.js?v=20260813-1930" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260813-1930" onerror="void 0"></script>
+<script src="lang.js" onerror="void 0"></script>
 </body>
 </html>

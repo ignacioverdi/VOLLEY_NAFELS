@@ -131,13 +131,9 @@
   .atktab:hover{color:#fff}
   .atktab.on{background:rgba(249,115,22,.14);border-color:rgba(249,115,22,.5);color:var(--ataque)}
 </style>
-<!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
-     la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260813-1930" onerror="void 0"></script>
-<!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
-     toca el encabezado y las barras: en la computadora no hace nada.
-     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260813-1930">
+<!-- Puerta de entrada. La capsula quedo abierta cuando se cerro el resto del
+     sistema: 26 paginas con la temporada 25-26 completa se abrian sin clave. -->
+<script src="../../firebase.js" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -157,7 +153,7 @@
 </div>
 </div>
 
-<script src="datos_seguros.js?v=20260813-1930"></script>
+<script src="../../datos_seguros.js"></script>
   <script src="scouting_rival.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
 <script>
@@ -723,9 +719,8 @@ function renderDossier(n){
 
 buildTeams();
 </script>
-<script src="lang.js?v=20260813-1930" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260813-1930" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260813-1930" onerror="void 0"></script>
+<script src="lang.js" onerror="void 0"></script>
+<script src="temporadas_menu.js" onerror="void 0"></script>
 </body>
 </html>
 

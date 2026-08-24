@@ -79,19 +79,15 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 .cc-cell .cn{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;color:#fff}
 .cc-cell .pc{position:absolute;bottom:3px;right:5px;font-size:9px;opacity:.8;color:#fff}
 </style>
-<!-- Los datos vienen cifrados: este es el que sabe abrirlos. -->
-  <script src="datos_seguros.js?v=20260813-1930"></script>
-<script src="filtro_tipo.js?v=20260813-1930" onerror="void 0"></script>
+<!-- Los datos vienen cifrados: este es el que sabe abrirlos. Sin el, la
+     pantalla carga los archivos y no puede leer ni uno. -->
+  <script src="datos_seguros.js"></script>
   <script src="liga_data.js.enc"></script>
 <script src="liga_data_entrenamientos.js.enc"></script>
   <script>abrirDatos();</script>
-<!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
-     la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260813-1930" onerror="void 0"></script>
-<!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
-     toca el encabezado y las barras: en la computadora no hace nada.
-     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260813-1930">
+<!-- Puerta de entrada. La capsula quedo abierta cuando se cerro el resto del
+     sistema: 26 paginas con la temporada 25-26 completa se abrian sin clave. -->
+<script src="../../firebase.js" onerror="void 0"></script>
 </head>
 <body>
 <div class="hdr">
@@ -151,7 +147,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 
 <script>var RAW=(function(){
   var params=new URLSearchParams(window.location.search);
-  var equipo=(params.get('equipo')||'nafels').toLowerCase();
+  var equipo=(params.get('equipo')||'casla').toLowerCase();
   window.__MODO=(function(){try{return localStorage.getItem('vb_modo')||'partido';}catch(e){return 'partido';}})();
   var L = window.__MODO==='entrenamiento' ? (window.LIGA_DATA_ENT||window.LIGA_DATA) : window.LIGA_DATA;
   if(window.__MODO==='entrenamiento' && L && L.teams && L.teams['entrenamiento']) equipo='entrenamiento';
@@ -456,16 +452,7 @@ function ccGrid(zones,layout,color,total,opts){opts=opts||{};var minN=opts.minN|
       ? " onclick=\"verVideoDest("+z+","+(esOrig?"1":"0")+")\" style=\"background:"+bg+";cursor:pointer\" title=\"Ver los videos de esta zona\""
       : " style='background:"+bg+"'";
     h+="<div class='cc-cell'"+_clic+"><div class='zn'>"+z+"</div>"+inner+"</div>";});});return h+"</div>";}
-function ccOriginLine(zones,total){
-  /* El cartel "Zona de origen: Z2" quedaba arriba de cada cancha con la zona
-     mas frecuente, y hacia parecer que TODOS los ataques salieron de ahi
-     cuando salieron de varias.
-
-     Para eso esta el filtro de "Zona de origen" en la barra de la izquierda,
-     que ademas filtra de verdad. Se deja la linea vacia para no desalinear las
-     canchas, que la esperan. */
-  return "<div class='cc-origin' style='visibility:hidden'>&nbsp;</div>";
-}
+function ccOriginLine(zones,total){var arr=[];for(var z in zones){if(zones[z]>0)arr.push([z,zones[z]]);}arr.sort(function(a,b){return b[1]-a[1];});if(!arr.length)return "";var top=arr.slice(0,3).map(function(p){return "Z"+p[0]+(total>0?" "+Math.round(p[1]/total*100)+"%":" ("+p[1]+")");}).join(" \u00b7 ");return "<div class='cc-origin'>Zona de origen: <b>"+top+"</b></div>";}
 
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -536,10 +523,7 @@ function courtSVG(destZones,originZone,total,color,title){
      los números caían en el lugar equivocado de la cancha. */
   var RIVAL=[[4,3,2],[7,8,9],[5,6,1]];
   var h="<div class='cc-wrap'>";
-  /* El cartel "Zona de origen" se saca: hacia parecer que todos los ataques
-     salieron de esa zona. Para eso esta el filtro de la barra izquierda, que
-     ademas filtra de verdad. La linea vacia mantiene las canchas alineadas. */
-  h+="<div class='cc-origin' style='visibility:hidden'>&nbsp;</div>";
+  if(originZone) h+="<div class='cc-origin'>Zona de origen: <b>Z"+originZone+"</b></div>";
   h+="<div class='cc-lbl' style='color:rgba(232,25,44,.6)'>"+title+"</div>";
   h+=ccGrid(destZones,RIVAL,color,total,{minN:CC_MIN});
   return h+"</div>";
@@ -822,8 +806,6 @@ window.onload=function(){
 // ── SELECTOR PARTIDO / ENTRENAMIENTO ──────────────────────────────
 function setModo(modo){
   try{ localStorage.setItem('vb_modo', modo); }catch(e){}
-  /* La eleccion vale para todo el sistema, no solo para esta pantalla. */
-  try{ if(typeof vbSetTipo==='function') vbSetTipo(modo); }catch(e){}
   location.reload();
 }
 function _initModoBtns(){
@@ -839,11 +821,5 @@ function _initModoBtns(){
 document.addEventListener('DOMContentLoaded', _initModoBtns);
 
 </script>
-<!-- lang.js trae el selector de idioma y el escudo del club, que es el
-     boton para volver al inicio. Sin el, no hay como salir de la
-     pantalla sin usar el boton de atras del navegador. -->
-<script src="lang.js?v=20260813-1930" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260813-1930" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260813-1930" onerror="void 0"></script>
 </body>
 </html>

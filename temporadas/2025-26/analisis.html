@@ -12,19 +12,13 @@ function w(s){document.write('<scr'+'ipt src="'+s+'" onerror="void 0"><\/scr'+'i
 if(ent){ w('datos_entrenamientos.js'); w('datos_historial_ent.js'); w('adapter_entrenamiento.js'); }
 else   { w('datos_partidos.js'); w('datos_historial.js'); }
 })();</script>
-<!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
-     quien los abra y el navegador los descarta. -->
-  <script src="datos_seguros.js?v=20260813-1930"></script>
-<script src="filtro_tipo.js?v=20260813-1930" onerror="void 0"></script>
-  <script src="datos_baterias.js.enc" onerror="void 0"></script>
-  <script src="objetivos_config.js?v=20260813-1930" onerror="void 0"></script>
-  <script src="datos_historial.js?v=20260813-1930" onerror="void 0"></script>
-  <script src="utils.js?v=20260813-1930" onerror="void 0"></script>
-  <!-- modo_toggle.js sacado: se superponia con el selector de idioma. -->
-  <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
-       aunque el motor ya los haya generado. -->
-  <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
-  
+<script src="datos_baterias_2025-26.js" onerror="void 0"></script>
+  <script src="objetivos_config.js" onerror="void 0"></script>
+  <script src="datos_historial.js" onerror="void 0"></script>
+  <script src="utils.js" onerror="void 0"></script>
+  <!-- modo_toggle.js sacado: agregaba una barrita flotante que se superponia
+       con el selector de idioma. En la app de CASLA no existe. -->
+<script src="../../datos_seguros.js"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
 <!-- datos_historial.js: lo carga el selector de modo (arriba) -->
@@ -149,15 +143,15 @@ function acumJugadores(sesiones){
     (s.jugadores||[]).forEach(function(j){
       if(j.n==='TOTALES EQUIPO') return;
       if(!acum[j.c]) acum[j.c]={c:j.c,n:j.n,PJ:0,
-        sT:0,sPunto:0,sPos:0,sAdm:0,sNeg:0,sVend:0,sErr:0,sOrig:'',sDest:'',
-        rT:0,rPunto:0,rPos:0,rAdm:0,rNeg:0,rVend:0,rErr:0,
-        aT:0,aPunto:0,aPos:0,aAdm:0,aNeg:0,aVend:0,aErr:0,
+        sT:0,sPunto:0,sPos:0,sOvp:0,sNeg:0,sVend:0,sErr:0,sOrig:'',sDest:'',
+        rT:0,rPunto:0,rPos:0,rOvp:0,rNeg:0,rVend:0,rErr:0,
+        aT:0,aPunto:0,aPos:0,aOvp:0,aNeg:0,aVend:0,aErr:0,
         bT:0,bPt:0,bPtPos:0,dv4:{}};
       var a=acum[j.c];
       if((j.sT||0)+(j.rT||0)+(j.aT||0)+(j.bT||0)>0) a.PJ++;
-      ['sT','sPunto','sPos','sAdm','sNeg','sVend','sErr',
-       'rT','rPunto','rPos','rAdm','rNeg','rVend','rErr',
-       'aT','aPunto','aPos','aAdm','aNeg','aVend','aErr',
+      ['sT','sPunto','sPos','sOvp','sNeg','sVend','sErr',
+       'rT','rPunto','rPos','rOvp','rNeg','rVend','rErr',
+       'aT','aPunto','aPos','aOvp','aNeg','aVend','aErr',
        'bT','bPt','bPtPos'].forEach(function(k){ a[k]+=(j[k]||0); });
       if(j.dv4) Object.keys(j.dv4).forEach(function(cod){
         if(!a.dv4[cod]) a.dv4[cod]={tot:0,pt:0,err:0,orig:j.dv4[cod].orig||0};
@@ -210,16 +204,9 @@ window.OBJETIVOS_CONFIG={metas:{
 
 
 </script>
-<!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
-     la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260813-1930" onerror="void 0"></script>
-<!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
-     toca el encabezado y las barras: en la computadora no hace nada.
-     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260813-1930">
-<!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
-     hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260813-1930" onerror="void 0"></script>
+<!-- Puerta de entrada. La capsula quedo abierta cuando se cerro el resto del
+     sistema: 26 paginas con la temporada 25-26 completa se abrian sin clave. -->
+<script src="../../firebase.js" onerror="void 0"></script>
 </head>
 <body>
 <div class="header-right" style="position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
@@ -232,7 +219,7 @@ window.OBJETIVOS_CONFIG={metas:{
     <button onclick="showHeatmapMenu()" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:#F97316;padding:6px 14px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;cursor:pointer;letter-spacing:1px">🔥 HEAT MAPS</button>
     <div>
       <div class="title">📊 Análisis de Partidos</div>
-      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;">NAFELS VOLEY · NLA Suiza 2026/27</div>
+      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;">NAFELS VOLEY · NLA Suiza 2025/26</div>
     </div>
   </div>
 </div>
@@ -253,27 +240,7 @@ window.OBJETIVOS_CONFIG={metas:{
 
    Ahora se vuelven a dibujar cada vez que cambia lo que se esta mirando —el
    partido elegido, el filtro de partidos o entrenamientos— igual que en el
-   perfil del jugador. */
-function _refrescarBaterias(){
-  try{
-    if(typeof renderObjetivos === 'function') renderObjetivos('objetivos-panel');
-  }catch(e){}
-}
-
-setTimeout(_refrescarBaterias, 150);
-
-(function(){
-  ['setFiltroTipo','seleccionarPartido','setPartido','setVista'].forEach(function(nom){
-    var orig = window[nom];
-    if(typeof orig !== 'function') return;
-    window[nom] = function(){
-      var r = orig.apply(this, arguments);
-      setTimeout(_refrescarBaterias, 60);
-      return r;
-    };
-  });
-})();
-</script>
+   perfil del jugador. */</script>
 <div class="partidos-grid" id="partidos-grid">
     <div class="empty"><div class="empty-icon">📋</div><div class="empty-txt">Cargando...</div></div>
   </div>
@@ -360,9 +327,6 @@ window.addEventListener('load', function(){
 
 function setFiltroTipo(tipo, btn){
   FILTRO_TIPO = tipo;
-  /* La eleccion vale para todo el sistema, no solo para esta pantalla. */
-  try{ if(typeof vbSetTipo==='function') vbSetTipo(tipo); }catch(e){}
-
   document.querySelectorAll('#filtro-todos,#filtro-partidos,#filtro-entrenamientos').forEach(function(b){ b.classList.remove('activo'); });
   btn.classList.add('activo');
 
@@ -479,46 +443,25 @@ function renderTab(tab){
   else if(tab==='ranking') cont.innerHTML=tablaRanking(jugs);
 }
 
-/* ══ Las sesiones que se estan mirando ═════════════════════════════════════
-   Tres tablas distintas resolvian esto por su cuenta, todas con la misma
-   linea: FILTRO_INDICES si estaba puesto, y si no, TODAS las sesiones.
-
-   El problema es que setFiltroTipo() deja FILTRO_INDICES en null al cambiar
-   de tipo, y ese null significa "todas": con el filtro en Partidos la tabla
-   seguia mostrando los numeros del entrenamiento. El filtro solo se aplicaba
-   si ademas hacias clic en la tarjeta ACUMULADO.
-
-   Ahora el tipo se aplica SIEMPRE y en un solo lugar, asi que ninguna tabla
-   puede quedarse afuera. */
-function sesionesEnFoco(idx){
-  if(!DATA || !DATA.entrenamientos) return [];
-  if(idx !== null && idx !== undefined && idx >= 0)
-    return [DATA.entrenamientos[idx]].filter(Boolean);
-  var base = FILTRO_INDICES
-    ? FILTRO_INDICES.map(function(i){ return DATA.entrenamientos[i]; }).filter(Boolean)
-    : DATA.entrenamientos;
-  if(typeof FILTRO_TIPO !== 'undefined' && FILTRO_TIPO !== 'todos')
-    base = base.filter(function(p){ return p && (p.tipo||'P') === FILTRO_TIPO; });
-  return base;
-}
-
 function getJugadores(idx){
-  var partidos_fuente = sesionesEnFoco((idx===-1||idx===-2) ? null : idx);
+  var partidos_fuente = (idx===-1||idx===-2)
+    ? (FILTRO_INDICES ? FILTRO_INDICES.map(function(i){return DATA.entrenamientos[i];}) : DATA.entrenamientos)
+    : [DATA.entrenamientos[idx]];
   if(idx===-1||idx===-2){
     var acum={};
     partidos_fuente.forEach(function(p){
       p.jugadores.forEach(function(j){
         if(j.n==='TOTALES EQUIPO') return;
         if(!acum[j.c]) acum[j.c]={c:j.c,n:j.n,PJ:0,
-          sT:0,sPunto:0,sPos:0,sAdm:0,sNeg:0,sVend:0,sErr:0,sEff:0,sOrig:'',sDest:'',
-          rT:0,rPunto:0,rPos:0,rAdm:0,rNeg:0,rVend:0,rErr:0,rEff:0,
-          aT:0,aPunto:0,aPos:0,aAdm:0,aNeg:0,aVend:0,aErr:0,aEff:0,
+          sT:0,sPunto:0,sPos:0,sOvp:0,sNeg:0,sVend:0,sErr:0,sEff:0,sOrig:'',sDest:'',
+          rT:0,rPunto:0,rPos:0,rOvp:0,rNeg:0,rVend:0,rErr:0,rEff:0,
+          aT:0,aPunto:0,aPos:0,aOvp:0,aNeg:0,aVend:0,aErr:0,aEff:0,
           bT:0,bPt:0,bPtPos:0};
         var s=acum[j.c];
         if(j.sT+j.rT+j.aT+j.bT>0) s.PJ++;
-        ['sT','sPunto','sPos','sAdm','sNeg','sVend','sErr',
-         'rT','rPunto','rPos','rAdm','rNeg','rVend','rErr',
-         'aT','aPunto','aPos','aAdm','aNeg','aVend','aErr','bT','bPt','bPtPos'].forEach(function(k){s[k]+=(j[k]||0);});
+        ['sT','sPunto','sPos','sOvp','sNeg','sVend','sErr',
+         'rT','rPunto','rPos','rOvp','rNeg','rVend','rErr',
+         'aT','aPunto','aPos','aOvp','aNeg','aVend','aErr','bT','bPt','bPtPos'].forEach(function(k){s[k]+=(j[k]||0);});
       });
     });
     Object.values(acum).forEach(function(s){
@@ -548,8 +491,85 @@ function jugadorTd(j,showPJ){
 }
 function thSec(txt,cols,color){ return '<th colspan="'+cols+'" class="sec" style="color:'+color+';border-left:1px solid rgba(255,255,255,.06);padding:10px 8px">'+txt+'</th>'; }
 
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LOS SUBFILTROS DE SAQUE, RECEPCION Y ATAQUE
+   --------------------------------------------------------------------------
+   Los mismos que el dashboard. Los datos ya traen el detalle —sFlo, sPot,
+   rFlo, rPot, aSo, aTr—: no hace falta tocar las tablas, alcanza con darles
+   los numeros del subfiltro elegido en lugar de los totales.
+
+   Se hace asi a proposito: tocar las tablas por dentro rompio las baterias
+   en un intento anterior.
+   ══════════════════════════════════════════════════════════════════════════ */
+var SAQUE_TIPO = 'total';
+var RECEP_TIPO = 'total';
+var ATK_FASE   = 'total';
+
+/* renderTab necesita que le digan que solapa dibujar. Llamarla sin eso no
+   hace nada, y era por lo que los botones no respondian. */
+function _redibujar(){
+  try{ renderTab(typeof TAB_ACTIVO !== 'undefined' ? TAB_ACTIVO : 'saque'); }catch(e){}
+}
+function setSaqueTipo(t){ SAQUE_TIPO = t; _redibujar(); }
+function setRecepTipo(t){ RECEP_TIPO = t; _redibujar(); }
+function setAtkFase(t){   ATK_FASE   = t; _redibujar(); }
+
+function _aplicarSubfiltros(jugs){
+  if(SAQUE_TIPO==='total' && RECEP_TIPO==='total' && ATK_FASE==='total') return jugs;
+  return (jugs||[]).map(function(j){
+    var c = {}; for(var k in j) c[k] = j[k];
+    if(SAQUE_TIPO!=='total'){
+      var S = (SAQUE_TIPO==='flotado') ? j.sFlo : j.sPot;
+      if(S){ c.sT=S.T||0; c.sPunto=S.Punto||0; c.sPos=S.Pos||0; c.sAdm=S.Adm||0;
+             c.sOvp=S.Adm||0; c.sNeg=S.Neg||0; c.sErr=S.Err||0; c.sVend=S.Vend||0;
+             c.sEff = c.sT ? Math.round((c.sPunto - c.sErr)/c.sT*100) : null; }
+      else { c.sT=0; c.sEff=null; }
+    }
+    if(RECEP_TIPO!=='total'){
+      var R = (RECEP_TIPO==='flotado') ? j.rFlo : j.rPot;
+      if(R){ c.rT=R.T||0; c.rPunto=R.Punto||0; c.rPos=R.Pos||0; c.rAdm=R.Adm||0;
+             c.rOvp=R.Adm||0; c.rNeg=R.Neg||0; c.rErr=R.Err||0; c.rVend=R.Vend||0;
+             c.rEff = c.rT ? Math.round((c.rPunto - c.rErr)/c.rT*100) : null; }
+      else { c.rT=0; c.rEff=null; }
+    }
+    if(ATK_FASE!=='total'){
+      var A = (ATK_FASE==='so') ? j.aSo : j.aTr;
+      if(A){ c.aT=A.T||0; c.aPunto=A.Punto||0; c.aPos=A.Pos||0; c.aAdm=A.Adm||0;
+             c.aOvp=A.Adm||0; c.aNeg=A.Neg||0; c.aErr=A.Err||0; c.aVend=A.Vend||0;
+             c.aEff = c.aT ? Math.round((c.aPunto - c.aErr)/c.aT*100) : null; }
+      else { c.aT=0; c.aEff=null; }
+    }
+    return c;
+  });
+}
+
+function _subFiltros(cual){
+  var defs = {
+    saque:     {v:SAQUE_TIPO, f:'setSaqueTipo', c:'#f59e0b',
+                o:[['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']]},
+    recepcion: {v:RECEP_TIPO, f:'setRecepTipo', c:'#22c55e',
+                o:[['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']]},
+    ataque:    {v:ATK_FASE,   f:'setAtkFase',   c:'#818cf8',
+                o:[['total','TOTAL'],['so','SIDE-OUT'],['tr','TRANSICION']]}
+  };
+  var d = defs[cual];
+  if(!d) return '';
+  var h = '<div style="display:flex;gap:6px;margin:0 0 10px 2px;flex-wrap:wrap">';
+  for(var i=0;i<d.o.length;i++){
+    var on = (d.v === d.o[i][0]);
+    h += '<button type="button" onclick="' + d.f + '(\'' + d.o[i][0] + '\')" style="' +
+         'padding:5px 12px;border-radius:7px;cursor:pointer;' +
+         'font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;' +
+         (on ? ('background:' + d.c + '22;border:1px solid ' + d.c + '66;color:' + d.c)
+             : 'background:transparent;border:1px solid rgba(255,255,255,.08);color:#64748b') +
+         '">' + d.o[i][1] + '</button>';
+  }
+  return h + '</div>';
+}
+
 function tablaSaque(jugs){
-  jugs = _aplicarSubfiltros(jugs);
+  jugs = _aplicarSubfiltros(jugs);   /* los numeros del subfiltro elegido */
   var isAcum=PARTIDO_IDX===-1||PARTIDO_IDX===-2;
   var h=_subFiltros('saque')+'<div class="tabla-wrap"><table class="tabla"><thead><tr>';
   h+='<th class="left sec">JUGADOR</th>';
@@ -564,11 +584,11 @@ function tablaSaque(jugs){
   jugs.forEach(function(j,ri){
     if(j.sT===0) return;
     var e=sEff(j);
-    tT+=j.sT;tPt+=j.sPunto;tPos+=j.sPos;tAdm+=j.sAdm;tNeg+=j.sNeg;tVend+=j.sVend;tErr+=j.sErr;
+    tT+=j.sT;tPt+=j.sPunto;tPos+=j.sPos;tAdm+=j.sOvp;tNeg+=j.sNeg;tVend+=j.sVend;tErr+=j.sErr;
     var bg=ri%2===0?'transparent':'rgba(255,255,255,.015)';
     h+='<tr style="background:'+bg+'">'+jugadorTd(j,isAcum);
     if(isAcum) h+=td(j.PJ,'val-mut');
-    h+=effTd(e)+td(j.sT,'val-tot')+td(j.sPunto,'val-perf')+td(j.sPos,'val-pos')+td(j.sAdm,'val-adm')+td(j.sNeg,'val-neg')+td(j.sErr,'val-err')+'</tr>';
+    h+=effTd(e)+td(j.sT,'val-tot')+td(j.sPunto,'val-perf')+td(j.sPos,'val-pos')+td(j.sOvp,'val-adm')+td(j.sNeg,'val-neg')+td(j.sErr,'val-err')+'</tr>';
   });
   var tE=tT>0?Math.round((tPt*1+tVend*0.5+tPos*0.25-tErr*1)/tT*100):null;
   h+='<tr class="total-row"><td class="left" style="padding:8px 12px">TOTALES EQUIPO</td>';
@@ -579,7 +599,7 @@ function tablaSaque(jugs){
 }
 
 function tablaRecepcion(jugs){
-  jugs = _aplicarSubfiltros(jugs);
+  jugs = _aplicarSubfiltros(jugs);   /* los numeros del subfiltro elegido */
   var isAcum=PARTIDO_IDX===-1||PARTIDO_IDX===-2;
   var h=_subFiltros('recepcion')+'<div class="tabla-wrap"><table class="tabla"><thead><tr>';
   h+='<th class="left sec">JUGADOR</th>';
@@ -594,11 +614,11 @@ function tablaRecepcion(jugs){
   jugs.forEach(function(j,ri){
     if(j.rT===0) return;
     var e=rEff(j);
-    tT+=j.rT;tPt+=j.rPunto;tPos+=j.rPos;tAdm+=j.rAdm;tNeg+=j.rNeg;tVend+=j.rVend;tErr+=j.rErr;
+    tT+=j.rT;tPt+=j.rPunto;tPos+=j.rPos;tAdm+=j.rOvp;tNeg+=j.rNeg;tVend+=j.rVend;tErr+=j.rErr;
     var bg=ri%2===0?'transparent':'rgba(255,255,255,.015)';
     h+='<tr style="background:'+bg+'">'+jugadorTd(j,isAcum);
     if(isAcum) h+=td(j.PJ,'val-mut');
-    h+=effTd(e)+td(j.rT,'val-tot')+td(j.rPunto,'val-perf')+td(j.rPos,'val-pos')+td(j.rAdm,'val-adm')+td(j.rNeg,'val-neg')+td(j.rVend,'val-vend')+td(j.rErr,'val-err')+'</tr>';
+    h+=effTd(e)+td(j.rT,'val-tot')+td(j.rPunto,'val-perf')+td(j.rPos,'val-pos')+td(j.rOvp,'val-adm')+td(j.rNeg,'val-neg')+td(j.rVend,'val-vend')+td(j.rErr,'val-err')+'</tr>';
   });
   var tE=tT>0?Math.round((tPt*1+tPos*0.5-tVend*0.5-tErr*1)/tT*100):null;
   h+='<tr class="total-row"><td class="left" style="padding:8px 12px">TOTALES EQUIPO</td>';
@@ -609,7 +629,7 @@ function tablaRecepcion(jugs){
 }
 
 function tablaAtaque(jugs){
-  jugs = _aplicarSubfiltros(jugs);
+  jugs = _aplicarSubfiltros(jugs);   /* los numeros del subfiltro elegido */
   var isAcum=PARTIDO_IDX===-1||PARTIDO_IDX===-2;
   var h=_subFiltros('ataque')+'<div class="tabla-wrap"><table class="tabla"><thead><tr>';
   h+='<th class="left sec">JUGADOR</th>';
@@ -624,11 +644,11 @@ function tablaAtaque(jugs){
   jugs.forEach(function(j,ri){
     if(j.aT===0) return;
     var e=aEff(j);
-    tT+=j.aT;tPt+=j.aPunto;tPos+=j.aPos;tAdm+=j.aAdm;tNeg+=j.aNeg;tVend+=j.aVend;tErr+=j.aErr;
+    tT+=j.aT;tPt+=j.aPunto;tPos+=j.aPos;tAdm+=j.aOvp;tNeg+=j.aNeg;tVend+=j.aVend;tErr+=j.aErr;
     var bg=ri%2===0?'transparent':'rgba(255,255,255,.015)';
     h+='<tr style="background:'+bg+'">'+jugadorTd(j,isAcum);
     if(isAcum) h+=td(j.PJ,'val-mut');
-    h+=effTd(e)+td(j.aT,'val-tot')+td(j.aPunto,'val-perf')+td(j.aPos,'val-pos')+td(j.aAdm,'val-adm')+td(j.aNeg,'val-neg')+td(j.aVend,'val-vend')+td(j.aErr,'val-err')+'</tr>';
+    h+=effTd(e)+td(j.aT,'val-tot')+td(j.aPunto,'val-perf')+td(j.aPos,'val-pos')+td(j.aOvp,'val-adm')+td(j.aNeg,'val-neg')+td(j.aVend,'val-vend')+td(j.aErr,'val-err')+'</tr>';
   });
   var tE=tT>0?Math.round((tPt-tVend-tErr)/tT*100):null;
   h+='<tr class="total-row"><td class="left" style="padding:8px 12px">TOTALES EQUIPO</td>';
@@ -713,7 +733,9 @@ function renderPlayerSelectNew(){
 
 function renderIndividualNew(num){
   if(!DATA) return;
-  var partidos_a_ver = sesionesEnFoco((PARTIDO_IDX===-1||PARTIDO_IDX===-2) ? null : PARTIDO_IDX);
+  var partidos_a_ver=(PARTIDO_IDX===-1||PARTIDO_IDX===-2)
+    ?(FILTRO_INDICES?FILTRO_INDICES.map(function(i){return DATA.entrenamientos[i];}):DATA.entrenamientos)
+    :[DATA.entrenamientos[PARTIDO_IDX]];
   var hist_jug=[];
   partidos_a_ver.forEach(function(p){
     var j=p.jugadores.find(function(x){return x.c===num;});
@@ -722,14 +744,14 @@ function renderIndividualNew(num){
   if(!hist_jug.length){ document.getElementById('ind-content-new').innerHTML='<div class="empty-msg">Sin datos</div>'; return; }
   var nombre=hist_jug[0].n;
   var acum={n:nombre,c:num,PJ:hist_jug.length,
-    sT:0,sPunto:0,sPos:0,sAdm:0,sNeg:0,sVend:0,sErr:0,sOrig:'',sDest:'',
-    rT:0,rPunto:0,rPos:0,rAdm:0,rNeg:0,rVend:0,rErr:0,
-    aT:0,aPunto:0,aPos:0,aAdm:0,aNeg:0,aVend:0,aErr:0,bT:0,bPt:0,bPtPos:0,dv4:{}};
+    sT:0,sPunto:0,sPos:0,sOvp:0,sNeg:0,sVend:0,sErr:0,sOrig:'',sDest:'',
+    rT:0,rPunto:0,rPos:0,rOvp:0,rNeg:0,rVend:0,rErr:0,
+    aT:0,aPunto:0,aPos:0,aOvp:0,aNeg:0,aVend:0,aErr:0,bT:0,bPt:0,bPtPos:0,dv4:{}};
   var origMapS={},destMapS={};
   hist_jug.forEach(function(j){
-    ['sT','sPunto','sPos','sAdm','sNeg','sVend','sErr',
-     'rT','rPunto','rPos','rAdm','rNeg','rVend','rErr',
-     'aT','aPunto','aPos','aAdm','aNeg','aVend','aErr','bT','bPt','bPtPos'].forEach(function(k){acum[k]+=(j[k]||0);});
+    ['sT','sPunto','sPos','sOvp','sNeg','sVend','sErr',
+     'rT','rPunto','rPos','rOvp','rNeg','rVend','rErr',
+     'aT','aPunto','aPos','aOvp','aNeg','aVend','aErr','bT','bPt','bPtPos'].forEach(function(k){acum[k]+=(j[k]||0);});
     if(j.dv4) Object.keys(j.dv4).forEach(function(c){
       if(!acum.dv4[c]) acum.dv4[c]={tot:0,pt:0,err:0,orig:j.dv4[c].orig,dest:j.dv4[c].dest};
       acum.dv4[c].tot+=j.dv4[c].tot||0; acum.dv4[c].pt+=j.dv4[c].pt||0; acum.dv4[c].err+=j.dv4[c].err||0;
@@ -782,7 +804,7 @@ function renderIndividualNew(num){
     var sPills=document.createElement('div'); sPills.className='stat-pills';
     [[se!==null?se+'%':'--','EFF%','#f59e0b'],[acum.sT,'TOT','#f59e0b'],
      [acum.sPunto,'#','#22c55e'],[acum.sPos,'+','#86efac'],
-     [acum.sAdm,'!','#fbbf24'],[acum.sNeg,'-','#f97316'],[acum.sErr,'=','#ef4444']
+     [acum.sOvp,'!','#fbbf24'],[acum.sNeg,'-','#f97316'],[acum.sErr,'=','#ef4444']
     ].forEach(function(p){
       var c=document.createElement('div'); c.className='stat-pill';
       var v=document.createElement('div'); v.className='stat-pill-val'; v.style.color=p[2]; v.textContent=p[0];
@@ -800,7 +822,7 @@ function renderIndividualNew(num){
       '<div class="stat-pills">'+
       pill('EFF%',re!==null?re+'%':'--',effColor(re))+pill('TOT',acum.rT,'#22c55e')+
       pill('#',acum.rPunto,'#22c55e')+pill('+',acum.rPos,'#86efac')+
-      pill('!',acum.rAdm,'#fbbf24')+pill('-',acum.rNeg,'#f97316')+
+      pill('!',acum.rOvp,'#fbbf24')+pill('-',acum.rNeg,'#f97316')+
       pill('/',acum.rVend,'#fb923c')+pill('=',acum.rErr,'#ef4444')+
       '</div></div>';
   }
@@ -832,7 +854,7 @@ function renderIndividualNew(num){
     var aPills=document.createElement('div'); aPills.className='stat-pills';
     [[ae!==null?ae+'%':'--','EFF%','#818cf8'],[acum.aT,'TOT','#818cf8'],
      [acum.aPunto,'#','#22c55e'],[acum.aPos,'+','#86efac'],
-     [acum.aAdm,'!','#fbbf24'],[acum.aNeg,'-','#f97316'],
+     [acum.aOvp,'!','#fbbf24'],[acum.aNeg,'-','#f97316'],
      [acum.aVend,'/','#fb923c'],[acum.aErr,'=','#ef4444']
     ].forEach(function(p){
       var c=document.createElement('div'); c.className='stat-pill';
@@ -911,12 +933,12 @@ function renderCompar(){
   var numB=parseInt(document.getElementById('cmp-b').value);
   if(!numA||!numB||numA===numB){document.getElementById('comp-content').innerHTML='<div class="empty-msg">Elegí dos jugadores diferentes</div>';return;}
   function acumJug(num){
-    var a={c:num,n:'',sT:0,sPunto:0,sPos:0,sAdm:0,sNeg:0,sVend:0,sErr:0,
-      rT:0,rPunto:0,rPos:0,rAdm:0,rNeg:0,rVend:0,rErr:0,aT:0,aPunto:0,aPos:0,aAdm:0,aNeg:0,aVend:0,aErr:0,bT:0,bPt:0,bPtPos:0};
-    var ps=sesionesEnFoco((PARTIDO_IDX===-1||PARTIDO_IDX===-2) ? null : PARTIDO_IDX);
+    var a={c:num,n:'',sT:0,sPunto:0,sPos:0,sOvp:0,sNeg:0,sVend:0,sErr:0,
+      rT:0,rPunto:0,rPos:0,rOvp:0,rNeg:0,rVend:0,rErr:0,aT:0,aPunto:0,aPos:0,aOvp:0,aNeg:0,aVend:0,aErr:0,bT:0,bPt:0,bPtPos:0};
+    var ps=(PARTIDO_IDX===-1||PARTIDO_IDX===-2)?(FILTRO_INDICES?FILTRO_INDICES.map(function(i){return DATA.entrenamientos[i];}):DATA.entrenamientos):[DATA.entrenamientos[PARTIDO_IDX]];
     ps.forEach(function(p){var j=p.jugadores.find(function(x){return x.c===num;});if(!j)return;a.n=j.n;
-      ['sT','sPunto','sPos','sAdm','sNeg','sVend','sErr','rT','rPunto','rPos','rAdm','rNeg','rVend','rErr',
-       'aT','aPunto','aPos','aAdm','aNeg','aVend','aErr','bT','bPt','bPtPos'].forEach(function(k){a[k]+=(j[k]||0);});});
+      ['sT','sPunto','sPos','sOvp','sNeg','sVend','sErr','rT','rPunto','rPos','rOvp','rNeg','rVend','rErr',
+       'aT','aPunto','aPos','aOvp','aNeg','aVend','aErr','bT','bPt','bPtPos'].forEach(function(k){a[k]+=(j[k]||0);});});
     return a;
   }
   var A=acumJug(numA),B=acumJug(numB);
@@ -1530,9 +1552,9 @@ function tablaRanking(jugs){
       <a class="hm-card" href="hm_saque.html?equipo=nafels"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Zonas origen/destino</span></a>
       <a class="hm-card" href="hm_recepcion.html?equipo=nafels" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
       <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
-      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8">BLOQUEO</span><span class="hm-sub">EFF · Zona del ataque · Combos</span></a>
+      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">NLA Suiza 2026/27 · temporada en curso</div>
+    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">NLA Suiza 2025/26 · temporada archivada</div>
   </div>
 </div>
 <script>
@@ -1540,27 +1562,19 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260813-1930"></script>
-<script src="lang.js?v=20260813-1930"></script>
-<script src="temporadas_menu.js?v=20260813-1930"></script>
+<script src="chat_nafels.js"></script>
+<script src="lang.js"></script>
+<script src="temporadas_menu.js"></script>
 
 <!-- ════════════════════════════════════════════════════════════════════════
-     Este codigo estaba adentro de <script src="temporadas_menu.js?v=20260813-1930">, y el
-     navegador ignora por completo lo que hay adentro de una etiqueta que
-     carga un archivo: las funciones nunca se definian y las tablas de
-     saque, recepcion y ataque fallaban al llamarlas.
+     LAS BATERIAS DEL ANALISIS
+
+     Va en su PROPIA etiqueta, al final del cuerpo. Antes esto quedaba adentro
+     de un <script src="..."> y el navegador ignora por completo lo que hay
+     adentro de una etiqueta que carga un archivo: el codigo estaba bien pero
+     nunca se ejecutaba.
      ════════════════════════════════════════════════════════════════════════ -->
 <script>
-/* ══════════════════════════════════════════════════════════════════════════
-   LAS BATERIAS Y LOS SUBFILTROS
-   --------------------------------------------------------------------------
-   Traido de la capsula 25-26, donde ya funciona. Las baterias leen de
-   datos_baterias.js —el que trae el detalle partido por partido— y los
-   subfiltros son los mismos del dashboard.
-   ══════════════════════════════════════════════════════════════════════════ */
-var ATK_FASE   = 'total';
-var RECEP_TIPO = 'total';
-var SAQUE_TIPO = 'total';
 var _OBJ_NULOS = {sq:null,rec:null,bqpos:null,bqpt:null,atqq:null,atqhb:null,atqx:null,atqrp:null,atqri:null,atqrm:null,atqtr:null};
 
 function _batMatchName(nombre, keys){
@@ -1572,35 +1586,13 @@ function _batMatchName(nombre, keys){
 
 function batGet(nombre, partido){
   var B=window.BAT_PARTIDOS; if(!B) return null;
-  /* Con el filtro en Partidos o en Entrenamientos, el acumulado NO puede ser el
-     de todo: sale de porTipo, que el generador arma por separado. Sin esto, con
-     "Partidos" y cero partidos jugados se mostraban igual los numeros de los
-     entrenamientos.
-
-     Si el archivo de datos todavia es el viejo —sin porTipo— no pasa nada: se
-     sigue de largo y queda el comportamiento de antes. */
-  if(!partido || partido==='acumulado'){
-    var _tp = (typeof batTipoActual==='function') ? batTipoActual() : null;
-    if(_tp && B.porTipo && B.porTipo[_tp]){
-      var _pt = B.porTipo[_tp];
-      if(nombre){
-        var _kt=_batMatchName(nombre, Object.keys(_pt.jug||{}));
-        return (_kt && _pt.jug[_kt]) ? _pt.jug[_kt] : _OBJ_NULOS;
-      }
-      return _pt.eq || _OBJ_NULOS;
-    }
-  }
   if(partido && partido!=='acumulado'){
     var m=(B.ind||[]).find(function(x){return String(x.id)===String(partido);});
     if(!m) return _OBJ_NULOS;
     if(nombre){ var k=_batMatchName(nombre, Object.keys(m.jug||{})); return (k&&m.jug[k])?m.jug[k]:_OBJ_NULOS; }
     return m.eq||_OBJ_NULOS;
   }
-  /* El acumulado. Cuando hay UNA sola sesion, el acumulado del archivo y el
-     detalle de esa sesion tienen que dar lo mismo: si no coinciden se usa el
-     de la sesion, que es el que esta calculado sobre las acciones. */
   if(nombre){ var k2=_batMatchName(nombre, Object.keys(B.jug||{})); return (k2&&B.jug[k2])?B.jug[k2]:_OBJ_NULOS; }
-  if((B.ind||[]).length === 1 && B.ind[0].eq) return B.ind[0].eq;
   return B.eq||_OBJ_NULOS;
 }
 
@@ -1660,17 +1652,51 @@ function objSingleBat(id,val,meta,cls,objLine){
 }
 
 function objGetVals(nombre){
-  /* Los numeros salen SIEMPRE del archivo de baterias, igual que en el
-     dashboard.
+  var tipo    = window._objTipo;
+  var partido = window._objPartido;
+  var ent     = (tipo==='entrenamiento');
 
-     El partido elegido se guarda en dos variables distintas —_objPartido aca,
-     _dbatPartido en el dashboard— y si no coinciden las dos pantallas muestran
-     valores distintos para la misma sesion. Se usa la que este puesta. */
-  if(window.BAT_PARTIDOS){
-    var cual = window._objPartido || window._dbatPartido || 'acumulado';
-    return batGet(nombre, cual);
+  if(!ent && window.BAT_PARTIDOS){ return batGet(nombre, partido); }
+
+  var JUG = ent ? (typeof ENTRENAMIENTOS_JUGADORES!=='undefined'?ENTRENAMIENTOS_JUGADORES:null)
+                : (typeof PARTIDOS_JUGADORES!=='undefined'?PARTIDOS_JUGADORES:null);
+  var IND = ent ? (typeof ENTRENAMIENTOS_INDIVIDUAL!=='undefined'?ENTRENAMIENTOS_INDIVIDUAL:null)
+                : (typeof PARTIDOS_INDIVIDUAL!=='undefined'?PARTIDOS_INDIVIDUAL:null);
+  var EQ  = ent ? (typeof ENTRENAMIENTOS_EQUIPO_OBJ!=='undefined'?ENTRENAMIENTOS_EQUIPO_OBJ:null)
+                : (typeof PARTIDOS_EQUIPO_OBJ!=='undefined'?PARTIDOS_EQUIPO_OBJ:null);
+
+  function matchNombre(x){
+    if(!x.nombre) return false;
+    var a=x.nombre.replace(/^\d+\s*/,'').toLowerCase();
+    var b=(nombre||'').replace(/^\d+\s*/,'').toLowerCase();
+    return a===b || a.split(' ')[0]===b.split(' ')[0];
   }
-  return (typeof _OBJ_NULOS !== 'undefined') ? _OBJ_NULOS : {};
+
+  // ── PARTIDO PUNTUAL ──
+  if(partido!=='acumulado' && IND){
+    var pd = IND.find(function(p){ return (p.id||p.nombre)===partido; });
+    if(pd){
+      if(nombre){
+        var pj = (pd.jugadores||[]).find(matchNombre);
+        if(pj && pj.objetivos && Object.keys(pj.objetivos).length) return pj.objetivos;
+      } else if(pd.equipo_obj && Object.keys(pd.equipo_obj).length){
+        return pd.equipo_obj;   // ← equipo del partido puntual
+      }
+    }
+    return _OBJ_NULOS; // partido seleccionado sin datos para ese sujeto
+  }
+
+  // ── ACUMULADO ──
+  if(nombre){
+    if(JUG){
+      var pj2 = JUG.find(matchNombre);
+      if(pj2 && pj2.objetivos && Object.keys(pj2.objetivos).length) return pj2.objetivos;
+    }
+    return _OBJ_NULOS;
+  } else {
+    if(EQ && Object.keys(EQ).length) return EQ;
+    return _OBJ_NULOS;
+  }
 }
 
 function renderObjetivosJugador(cid, jugVals, eqVals){
@@ -1720,20 +1746,8 @@ function objBuildSubfiltro(){
   var row = document.getElementById('obj-partido-row');
   if(!row) return;
   var ent = (window._objTipo==='entrenamiento');
-  /* Misma correccion que en el perfil: la lista de sesiones sale del archivo de
-     baterias y se filtra por tipo. Antes, en PARTIDO se colaban los
-     entrenamientos, y en ENTRENAMIENTO se listaba otra fuente con otros
-     identificadores, que batGet no encontraba y dejaba todo en cero. */
-  var _B = window.BAT_PARTIDOS;
-  var _conTipo = !!(_B && _B.meta && _B.meta.length && _B.meta.some(function(m){ return m.tipo; }));
-  var META;
-  if(_conTipo){
-    var _q = ent ? 'entrenamiento' : 'partido';
-    META = _B.meta.filter(function(m){ return (m.tipo||'partido') === _q; });
-  }else{
-    META = ent ? (typeof ENTRENAMIENTOS_META!=='undefined'?ENTRENAMIENTOS_META:null)
-               : (_B ? _B.meta : (typeof PARTIDOS_META!=='undefined'?PARTIDOS_META:null));
-  }
+  var META = ent ? (typeof ENTRENAMIENTOS_META!=='undefined'?ENTRENAMIENTOS_META:null)
+                 : (window.BAT_PARTIDOS ? window.BAT_PARTIDOS.meta : (typeof PARTIDOS_META!=='undefined'?PARTIDOS_META:null));
   if(!META){ row.style.display='none'; return; }
   row.innerHTML=''; row.style.display='flex'; row.style.alignItems='center';
   var lbl=document.createElement('span');
@@ -1774,6 +1788,9 @@ function objRenderBaterias(){
   renderObjetivosJugador(destino, jugVals, eqVals);
 }
 
+/* El analisis guarda el partido elegido como la posicion en su lista
+   —PARTIDO_IDX—. Las baterias lo buscan por su CODIGO. Las dos listas van en
+   el mismo orden, asi que la posicion sirve para sacarlo. */
 function _sincronizarBaterias(){
   try{
     var ent = (typeof FILTRO_TIPO !== 'undefined' && FILTRO_TIPO === 'E');
@@ -1782,86 +1799,24 @@ function _sincronizarBaterias(){
     var idx  = (typeof PARTIDO_IDX !== 'undefined') ? PARTIDO_IDX : null;
     if(idx === null || idx < 0 || !META || !META[idx]) window._objPartido = 'acumulado';
     else window._objPartido = META[idx].id;
-    /* las dos pantallas leen la misma sesion */
-    window._dbatPartido = window._objPartido;
     if(typeof objRenderBaterias === 'function') objRenderBaterias();
   }catch(e){}
 }
 
-function _aplicarSubfiltros(jugs){
-  if(SAQUE_TIPO==='total' && RECEP_TIPO==='total' && ATK_FASE==='total') return jugs;
-  return (jugs||[]).map(function(j){
-    var c = {}; for(var k in j) c[k] = j[k];
-    if(SAQUE_TIPO!=='total'){
-      var S = (SAQUE_TIPO==='flotado') ? j.sFlo : j.sPot;
-      if(S){ c.sT=S.T||0; c.sPunto=S.Punto||0; c.sPos=S.Pos||0; c.sAdm=S.Adm||0;
-             c.sAdm=S.Adm||0; c.sNeg=S.Neg||0; c.sErr=S.Err||0; c.sVend=S.Vend||0;
-             c.sEff = c.sT ? Math.round((c.sPunto - c.sErr)/c.sT*100) : null; }
-      else { c.sT=0; c.sEff=null; }
-    }
-    if(RECEP_TIPO!=='total'){
-      var R = (RECEP_TIPO==='flotado') ? j.rFlo : j.rPot;
-      if(R){ c.rT=R.T||0; c.rPunto=R.Punto||0; c.rPos=R.Pos||0; c.rAdm=R.Adm||0;
-             c.rAdm=R.Adm||0; c.rNeg=R.Neg||0; c.rErr=R.Err||0; c.rVend=R.Vend||0;
-             c.rEff = c.rT ? Math.round((c.rPunto - c.rErr)/c.rT*100) : null; }
-      else { c.rT=0; c.rEff=null; }
-    }
-    if(ATK_FASE!=='total'){
-      var A = (ATK_FASE==='so') ? j.aSo : j.aTr;
-      if(A){ c.aT=A.T||0; c.aPunto=A.Punto||0; c.aPos=A.Pos||0; c.aAdm=A.Adm||0;
-             c.aAdm=A.Adm||0; c.aNeg=A.Neg||0; c.aErr=A.Err||0; c.aVend=A.Vend||0;
-             c.aEff = c.aT ? Math.round((c.aPunto - c.aErr)/c.aT*100) : null; }
-      else { c.aT=0; c.aEff=null; }
-    }
-    return c;
+/* enganchado a las funciones que de verdad cambian el partido */
+(function(){
+  ['selectPartido','selectPartidoFiltrado','setFiltroTipo','setTab','setVista','renderTab']
+  .forEach(function(nom){
+    var orig = window[nom];
+    if(typeof orig !== 'function') return;
+    window[nom] = function(){
+      var r = orig.apply(this, arguments);
+      setTimeout(_sincronizarBaterias, 50);
+      return r;
+    };
   });
-}
-
-function _subFiltros(cual){
-  var defs = {
-    saque:     {v:SAQUE_TIPO, f:'setSaqueTipo', c:'#f59e0b',
-                o:[['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']]},
-    recepcion: {v:RECEP_TIPO, f:'setRecepTipo', c:'#22c55e',
-                o:[['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']]},
-    ataque:    {v:ATK_FASE,   f:'setAtkFase',   c:'#818cf8',
-                o:[['total','TOTAL'],['so','SIDE-OUT'],['tr','TRANSICION']]}
-  };
-  var d = defs[cual];
-  if(!d) return '';
-  var h = '<div style="display:flex;gap:6px;margin:0 0 10px 2px;flex-wrap:wrap">';
-  for(var i=0;i<d.o.length;i++){
-    var on = (d.v === d.o[i][0]);
-    h += '<button type="button" onclick="' + d.f + '(\'' + d.o[i][0] + '\')" style="' +
-         'padding:5px 12px;border-radius:7px;cursor:pointer;' +
-         'font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;' +
-         (on ? ('background:' + d.c + '22;border:1px solid ' + d.c + '66;color:' + d.c)
-             : 'background:transparent;border:1px solid rgba(255,255,255,.08);color:#64748b') +
-         '">' + d.o[i][1] + '</button>';
-  }
-  return h + '</div>';
-}
-
-function _redibujar(){
-  try{ renderTab(typeof TAB_ACTIVO !== 'undefined' ? TAB_ACTIVO : 'saque'); }catch(e){}
-}
-
-function setSaqueTipo(t){ SAQUE_TIPO = t; _redibujar(); }
-
-function setRecepTipo(t){ RECEP_TIPO = t; _redibujar(); }
-
-function setAtkFase(t){   ATK_FASE   = t; _redibujar(); }
-</script>
-<script>
-/* Al entrar, el analisis adopta el tipo que ya venia elegido en otra pantalla.
-   Solo si es distinto del que trae por defecto, para no redibujar de mas. */
-try{
-  var _vt = (typeof vbTipo==='function') ? vbTipo() : 'todos';
-  if(_vt !== FILTRO_TIPO){
-    var _id = _vt==='P' ? 'filtro-partidos' : (_vt==='E' ? 'filtro-entrenamientos' : 'filtro-todos');
-    var _b = document.getElementById(_id);
-    if(_b && typeof setFiltroTipo==='function') setFiltroTipo(_vt, _b);
-  }
-}catch(e){}
+})();
+setTimeout(_sincronizarBaterias, 300);
 </script>
 </body>
 </html>

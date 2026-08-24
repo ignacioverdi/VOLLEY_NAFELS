@@ -5,19 +5,20 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Recepción — Nafels Voley</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="datos_seguros.js?v=20260813-1930"></script>
-<!-- El filtro Partido / Entrenamiento, compartido por todo el sistema.
-     Guarda la eleccion y la deja viajar entre pantallas. -->
-<script src="filtro_tipo.js?v=20260813-1930" onerror="void 0"></script>
+<script src="datos_historial.js" onerror="void 0"></script>
+  <script src="../../datos_seguros.js"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
+<script src="datos_equipo_2025-26.js.enc" onerror="void 0"></script>
+
 <!-- VB: selector PARTIDO/ENTRENAMIENTO - carga los datos segun el modo elegido -->
 <script>(function(){var ent=false;try{ent=(localStorage.getItem('vb_modo')||'partido')==='entrenamiento';}catch(e){}
 function w(s){document.write('<scr'+'ipt src="'+s+'" onerror="void 0"><\/scr'+'ipt>');}
 if(ent){ w('datos_entrenamientos.js'); w('datos_historial_ent.js'); w('adapter_entrenamiento.js'); }
 else   { w('datos_partidos.js'); w('datos_historial.js'); }
 })();</script>
-<script src="modo_toggle.js?v=20260813-1930" onerror="void 0"></script>
+  <!-- modo_toggle.js sacado: agregaba una barrita flotante que se superponia
+       con el selector de idioma. En la app de CASLA no existe. -->
 <!-- datos_historial.js: lo carga el selector de modo (arriba) -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -39,13 +40,9 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
 .empty{text-align:center;padding:60px;color:#475569;font-size:13px;letter-spacing:1px}
 .info-note{font-size:10px;color:#475569;letter-spacing:1px;padding:10px 16px;background:rgba(255,255,255,.02);border-radius:6px;margin-bottom:14px;border:1px solid rgba(255,255,255,.04)}
 </style>
-<!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
-     la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260813-1930" onerror="void 0"></script>
-<!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
-     toca el encabezado y las barras: en la computadora no hace nada.
-     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260813-1930">
+<!-- Puerta de entrada. La capsula quedo abierta cuando se cerro el resto del
+     sistema: 26 paginas con la temporada 25-26 completa se abrian sin clave. -->
+<script src="../../firebase.js" onerror="void 0"></script>
 </head>
 <body>
 <div class="header-right" style="position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
@@ -73,12 +70,7 @@ function buildRecepcionFromHistorial(num){
   var jNombre='';
   // El historial de entrenamientos no trae zona; se agrupa todo en desde_z6/total como referencia.
   sesiones.forEach(function(s){
-    /* Antes esta linea era  if(s.tipo!=='E') return;  o sea: la pagina
-       mostraba SOLO entrenamientos, con el tipo escrito a mano. Cuando
-       empiecen los partidos no iba a mostrar ninguno. Ahora respeta el filtro
-       que se eligio, y con "Todos" suma las dos cosas. */
-    var _vt = (typeof vbTipo==='function') ? vbTipo() : 'todos';
-    if(_vt !== 'todos' && (s.tipo||'P') !== _vt) return;
+    if(s.tipo!=='E') return;
     (s.jugadores||[]).forEach(function(j){
       if(j.c!==num) return;jNombre=j.n;
       var tot2=j.rT||0; if(!tot2) return;
@@ -395,15 +387,9 @@ function waitAndInit(tries){
 }
 waitAndInit(25);
 </script>
-<script src="lang.js?v=20260813-1930"></script>
-<script src="temporadas_menu.js?v=20260813-1930"></script>
-<script>
-/* La barra del filtro. Al cambiarlo se vuelve a dibujar la pagina entera:
-   estas pantallas leen todo de la direccion, asi que recargar es la forma
-   mas segura de que no quede ningun numero del tipo anterior. */
-try{ vbBarraTipo(); window.vbAlCambiarTipo = function(){ location.reload(); }; }catch(e){}
-</script>
-<script src="volver_inicio.js?v=20260813-1930" onerror="void 0"></script>
+<script src="lang.js"></script>
+<script src="temporadas_menu.js"></script>
+  <script src="plantel_nafels.js" onerror="void 0"></script>
 </body>
 </html>
 

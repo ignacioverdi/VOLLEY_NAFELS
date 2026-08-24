@@ -5,17 +5,16 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ranking — NAFELS Voley</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-  <!-- datos_casla.js sacado: es del club de origen. -->
-<script src="datos_seguros.js?v=20260813-1930"></script>
-  <script src="datos_partidos.js.enc" onerror="void 0"></script>
+<script src="utils.js" onerror="void 0"></script>
+  <script src="datos_seguros.js" onerror="void 0"></script>
   <script src="datos_baterias.js.enc" onerror="void 0"></script>
-  <!-- El plantel real de la temporada. Sin esto, window.EQUIPO_DATA nunca existe
-     y la pagina cae en su lista de respaldo, que trae el plantel de otro anio.
-     Va DESPUES de datos_seguros.js y ANTES de abrirDatos(), como en equipo.html. -->
-  <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
+  <script src="datos_partidos.js.enc" onerror="void 0"></script>
+<script src="datos_historial.js" onerror="void 0"></script>
+<script src="objetivos_config.js" onerror="void 0"></script>
+<script src="datos_equipo_2025-26.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="datos_historial.js?v=20260813-1930" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260813-1930" onerror="void 0"></script>
+  <script src="plantel_nafels.js" onerror="void 0"></script>
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#07080F;--card:#0D0E1A;--b:rgba(255,255,255,.06);--b2:rgba(255,255,255,.12);
@@ -44,18 +43,9 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',s
 .ver-mas{width:100%;margin-top:8px;padding:5px;border-radius:6px;border:1px solid var(--b);background:transparent;color:var(--mut);font-size:9px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;transition:all .15s}
 .ver-mas:hover{color:var(--txt);border-color:var(--b2)}
 </style>
-<!-- Motor de idiomas (ES / EN / DE). Traduce por data-t y por texto. -->
-<script src="lang.js?v=20260813-1930"></script>
-<!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
-     la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260813-1930" onerror="void 0"></script>
-<!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
-     toca el encabezado y las barras: en la computadora no hace nada.
-     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260813-1930">
-<!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
-     hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260813-1930" onerror="void 0"></script>
+<!-- Puerta de entrada. La capsula quedo abierta cuando se cerro el resto del
+     sistema: 26 paginas con la temporada 25-26 completa se abrian sin clave. -->
+<script src="../../firebase.js" onerror="void 0"></script>
 </head>
 <body>
 <div class="hdr">
@@ -151,7 +141,8 @@ function getActionCount(pjug, sk){
 
 
 /* Los numeros salen de datos_baterias.js, que trae el detalle partido por
-   partido. El sistema viejo los buscaba en un archivo que no lo tiene. */
+   partido. El sistema viejo los buscaba en un archivo que en esta temporada
+   no lo tiene, y por eso el ranking salia vacio. */
 var _OBJ_NULOS = {sq:null,rec:null,bqpos:null,bqpt:null,atqq:null,atqhb:null,atqx:null,atqrp:null,atqri:null,atqrm:null,atqtr:null};
 
 function _batMatchName(nombre, keys){
@@ -163,24 +154,6 @@ function _batMatchName(nombre, keys){
 
 function batGet(nombre, partido){
   var B=window.BAT_PARTIDOS; if(!B) return null;
-  /* Con el filtro en Partidos o en Entrenamientos, el acumulado NO puede ser el
-     de todo: sale de porTipo, que el generador arma por separado. Sin esto, con
-     "Partidos" y cero partidos jugados se mostraban igual los numeros de los
-     entrenamientos.
-
-     Si el archivo de datos todavia es el viejo —sin porTipo— no pasa nada: se
-     sigue de largo y queda el comportamiento de antes. */
-  if(!partido || partido==='acumulado'){
-    var _tp = (typeof batTipoActual==='function') ? batTipoActual() : null;
-    if(_tp && B.porTipo && B.porTipo[_tp]){
-      var _pt = B.porTipo[_tp];
-      if(nombre){
-        var _kt=_batMatchName(nombre, Object.keys(_pt.jug||{}));
-        return (_kt && _pt.jug[_kt]) ? _pt.jug[_kt] : _OBJ_NULOS;
-      }
-      return _pt.eq || _OBJ_NULOS;
-    }
-  }
   if(partido && partido!=='acumulado'){
     var m=(B.ind||[]).find(function(x){return String(x.id)===String(partido);});
     if(!m) return _OBJ_NULOS;
@@ -191,6 +164,9 @@ function batGet(nombre, partido){
   return B.eq||_OBJ_NULOS;
 }
 
+
+/* Las pantallas buscan el APELLIDO en el campo "nombre". El archivo del plantel
+   guarda ahi el nombre de pila: si se pasa tal cual, no encuentra a nadie. */
 function _plantelNormalizado(){
   try{
     var P = (window.PLANTEL_NAFELS && window.PLANTEL_NAFELS.jugadores) || [];
@@ -206,7 +182,7 @@ function getData(){
   var casla=typeof _plantelNormalizado()!=='undefined'?_plantelNormalizado():[];
   var pjugs=typeof PARTIDOS_JUGADORES!=='undefined'?PARTIDOS_JUGADORES:[];
   return casla.filter(function(j){return j.num;}).map(function(j){
-    var v=(window.BAT_PARTIDOS ? batGet(j.nombre, "acumulado") : (typeof objCalcVals==="function"?objCalcVals(j.nombre):null))||{};
+    var v=(window.BAT_PARTIDOS ? batGet(j.nombre, "acumulado") : (objCalcVals?objCalcVals(j.nombre):null))||{};
     var pjug=pjugs.find(function(p){return p.num===j.num;})||j;
     return {num:j.num,nm:(j.nombre||'').replace(/^\d+\s*/,''),pos:j.pos||'',col:PC[j.pos]||'#64748b',pjug:pjug,
       sq:v.sq!=null?v.sq:null,rec:v.rec!=null?v.rec:null,bqpos:v.bqpos!=null?v.bqpos:null,
@@ -293,6 +269,5 @@ function render(){
   });
 }
 </script>
-<script src="volver_inicio.js?v=20260813-1930" onerror="void 0"></script>
 </body>
 </html>

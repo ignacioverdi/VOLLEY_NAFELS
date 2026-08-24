@@ -240,16 +240,38 @@ footer{
 .bag-name{font-size:10px;color:var(--mut);font-weight:600;}
 .bag-pts{font-size:10px;color:var(--txt);}
 
+/* ── LOGIN PIN ───────────────────────────────────────── */
+.pin-overlay{position:fixed;inset:0;background:rgba(7,8,15,.95);backdrop-filter:blur(20px);z-index:1000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px;}
+.pin-box{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:32px;width:320px;text-align:center;}
+.pin-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;margin-bottom:4px;}
+.pin-sub{font-size:11px;color:var(--mut);margin-bottom:24px;letter-spacing:.5px;}
+.pin-jugador-sel{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:10px;color:var(--txt);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;padding:10px 12px;outline:none;margin-bottom:16px;}
+.pin-display{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:12px;height:52px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border2);border-radius:10px;margin-bottom:16px;background:rgba(255,255,255,.02);color:var(--red);}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.pin-btn{padding:14px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--txt);font-family:'Bebas Neue',sans-serif;font-size:20px;cursor:pointer;transition:all .15s;}
+.pin-btn:hover{background:rgba(255,255,255,.1);border-color:var(--border2);}
+.pin-btn:active{transform:scale(.95);}
+.pin-enter{width:100%;padding:12px;border-radius:10px;border:none;background:var(--red);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;cursor:pointer;transition:all .2s;}
+.pin-enter:hover{background:#c5101f;transform:translateY(-1px);}
+.pin-skip{font-size:10px;color:var(--mut);cursor:pointer;text-decoration:underline;margin-top:8px;}
+.pin-error{color:var(--red);font-size:11px;margin-top:4px;height:16px;}
+
 /* ── DROPDOWNS — texto siempre negro ── */
 select, select option {
   color: #111111 !important;
   background-color: #ffffff !important;
 }
 </style>
-<script src="datos_seguros.js?v=20260813-1930"></script>
-<script src="firebase.js?v=20260813-1930" onerror="void 0"></script>
-<script src="lang.js?v=20260813-1930"></script>
-<script src="plantel_nafels.js?v=20260813-1930"></script>
+<script src="datos_gameplan.js.enc" onerror="void 0"></script>
+  <script src="datos_equipo.js.enc" onerror="void 0"></script>
+  <script src="../../datos_seguros.js"></script>
+<!-- Apunta al firebase.js de la RAIZ, no a una copia local. La copia que
+     tenia la capsula era vieja: pedia mail y clave pero NUNCA guardaba la
+     llave de los datos, asi que las paginas abrian vacias para cualquiera
+     que no hubiera entrado antes por la app principal. Con una sola fuente
+     no se vuelve a desincronizar. -->
+<script src="../../firebase.js" onerror="void 0"></script>
+<script src="lang.js"></script>
 
 <style>
 @media(max-width:768px){
@@ -258,100 +280,27 @@ select, select option {
   .cal-grid .card-body{font-size:12px!important;}
 }
 </style>
-
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-<style id="skin-camiseta">
-  html{background:linear-gradient(165deg,#17110f 0%,#0d0a0c 46%,#140b0c 100%) fixed}
-  body{font-family:'Rajdhani',sans-serif!important;background:radial-gradient(1100px 560px at 50% -10%,rgba(220,60,80,.26),transparent 58%),radial-gradient(900px 620px at 100% 104%,rgba(240,180,80,.16),transparent 56%),radial-gradient(760px 520px at 0% 60%,rgba(200,40,52,.13),transparent 60%)!important}
-  #fx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-  #fx .grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.04) 1px,transparent 1.4px);background-size:26px 26px;-webkit-mask-image:radial-gradient(ellipse at 50% 26%,#000 28%,transparent 76%);mask-image:radial-gradient(ellipse at 50% 26%,#000 28%,transparent 76%)}
-  #fx .vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,transparent 52%,rgba(0,0,0,.62) 100%)}
-  #fx .sweep{position:absolute;top:-20%;left:-10%;width:60%;height:140%;transform:rotate(8deg);background:linear-gradient(90deg,transparent,rgba(255,220,150,.045),transparent);animation:sweepx 15s ease-in-out infinite}
-  @keyframes sweepx{0%,100%{transform:translateX(-30%) rotate(8deg)}50%{transform:translateX(160%) rotate(8deg)}}
-  .orb{position:absolute;border-radius:50%;filter:blur(80px);mix-blend-mode:screen;opacity:.44}
-  .o1{width:540px;height:540px;background:#e8192c;left:-7%;top:-10%;animation:dd1 30s ease-in-out infinite}
-  .o2{width:480px;height:480px;background:#e6a743;right:-5%;bottom:-8%;animation:dd2 36s ease-in-out infinite}
-  .o3{width:400px;height:400px;background:#b81f2b;left:44%;top:58%;animation:dd3 42s ease-in-out infinite}
-  @keyframes dd1{0%,100%{transform:translate(0,0)}50%{transform:translate(80px,54px)}}
-  @keyframes dd2{0%,100%{transform:translate(0,0)}50%{transform:translate(-70px,-64px)}}
-  @keyframes dd3{0%,100%{transform:translate(0,0)}50%{transform:translate(-54px,44px)}}
-  header,main{position:relative;z-index:2}
-  header{margin:16px 30px 4px!important;padding:26px 30px!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:24px!important;overflow:hidden;background:linear-gradient(120deg,rgba(220,50,66,.14),rgba(240,180,80,.09) 72%),rgba(14,10,12,.55)!important;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
-  header::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#e8192c,#e6a743 60%,#f9ec1f)}
-  .club-name{font-family:'Rajdhani'!important;font-weight:700!important;font-size:44px!important;color:#f3ede4!important;letter-spacing:.5px}
-  .club-sub{color:#cabfb2!important;font-family:'Rajdhani'!important;font-weight:500}
-  main{max-width:none!important;width:auto!important;margin:0!important;padding:6px 30px 60px!important;gap:0!important}
-  .section{margin:0!important}
-  .sec-head{display:flex;align-items:center;gap:13px;margin:38px 0 16px}
-  .sec-ic{font-size:20px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.05);border:1px solid rgba(230,167,67,.22);border-radius:14px;flex:0 0 auto}
-  .sec-title{font-family:'Rajdhani';font-weight:700;font-size:26px;letter-spacing:.5px;color:#f3ede4;display:flex;align-items:center;gap:10px}
-  .sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(230,167,67,.3),transparent);margin-left:6px}
-  .sec-sub{font-family:'Rajdhani';font-weight:500;font-size:13.5px;color:#a99e92}
-  .dt-pill{font-family:'Rajdhani';font-weight:600;font-size:10px;letter-spacing:1px;color:#e6a743;border:1px solid rgba(230,167,67,.4);background:rgba(230,167,67,.1);border-radius:20px;padding:2px 9px}
-  .dt-sec{margin-top:28px!important;padding:26px 24px 12px!important;border:1px dashed rgba(230,167,67,.28)!important;border-radius:24px!important;background:rgba(230,167,67,.03)!important}
-  .cards-grid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))!important;gap:16px!important}
-  .card{position:relative;border:1px solid rgba(255,255,255,.08)!important;background:rgba(18,13,15,.62)!important;-webkit-backdrop-filter:blur(16px) saturate(130%);backdrop-filter:blur(16px) saturate(130%);overflow:hidden;transition:transform .18s,box-shadow .26s,border-color .26s}
-  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--card-color,#e6a743);opacity:.75;z-index:1}
-  .card:hover{transform:translateY(-5px);border-color:var(--card-color,rgba(230,167,67,.5))!important;box-shadow:0 18px 50px rgba(0,0,0,.55),0 0 30px -10px var(--card-color,rgba(230,167,67,.6))}
-  .card-icon{filter:grayscale(.12)}
-  .card-title{font-family:'Rajdhani'!important;font-weight:700!important;letter-spacing:.3px;color:#f3ede4!important}
-  .card-desc{font-family:'Rajdhani'!important;font-weight:500;color:#a89e91!important}
-  .card-badge{font-family:'Rajdhani'!important;font-weight:600;color:#b9ae9e!important;background:rgba(255,255,255,.05)!important;border:1px solid rgba(255,255,255,.1)!important}
-  .card-arrow{color:#e6a743!important;opacity:.55}
-  .section-lbl{display:none!important}
-</style>
-<style id="celular-encabezado">
-/* ══ EL ENCABEZADO EN EL CELULAR ═══════════════════════════════════════════
-   La pagina solo tenia una regla para pantallas chicas, y era para las
-   tarjetas: el encabezado no tenia ninguna. En el escritorio sobra espacio y
-   se ve bien, pero en un celular de 390 px no entran el escudo de 72 px, el
-   titulo con 6 px de espaciado entre letras y los 40 px de margen. Como el
-   header tiene overflow:hidden, lo que sobraba quedaba cortado: los botones de
-   idioma, "Sistema activo", la fecha y el boton de Temporadas.
-
-   Ahora, en pantallas chicas, esa columna baja a su propio renglon y se
-   acomoda en fila. Nada de esto cambia como se ve en la computadora.
-   ══════════════════════════════════════════════════════════════════════════ */
-@media(max-width:768px){
-  header{
-    padding:14px 14px 12px !important;
-    gap:12px !important;
-    flex-wrap:wrap !important;
-    overflow:visible !important;      /* si no, sigue cortando lo que sobresale */
-  }
-  .logo-wrap{width:50px !important;height:50px !important}
-  .header-text{flex:1 1 auto;min-width:0}
-  .club-name{font-size:21px !important;letter-spacing:2.5px !important;line-height:1.05}
-  .club-sub{font-size:11px !important;line-height:1.3}
-
-  /* La columna de la derecha pasa a ser un renglon propio, debajo del titulo */
-  .header-right{
-    margin-left:0 !important;
-    width:100% !important;
-    flex-direction:row !important;
-    flex-wrap:wrap !important;
-    align-items:center !important;
-    justify-content:flex-start !important;
-    gap:8px !important;
-  }
-  #lang-wrap{margin-left:0 !important}
-  .live-badge{font-size:9px !important;padding:4px 10px !important;letter-spacing:1px !important}
-  .fecha-txt{font-size:10px !important;margin-left:auto !important;text-align:right}
-}
-
-/* Telefonos angostos: la fecha completa no entra al lado del resto */
-@media(max-width:400px){
-  .club-name{font-size:19px !important;letter-spacing:2px !important}
-  .fecha-txt{width:100%;margin-left:0 !important;text-align:left}
-}
-</style>
-<!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
-     toca el encabezado y las barras: en la computadora no hace nada.
-     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260813-1930">
 </head>
 <body>
-<div id="fx"><div class="grid"></div><div class="sweep"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="vig"></div></div>
+<!-- PIN LOGIN OVERLAY -->
+<div class="pin-overlay" id="pin-overlay" style="display:none;">
+  <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:4px;">
+    <img src="escudo.png" alt="Volley Näfels" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex:none;">
+    <span style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:6px;background:linear-gradient(120deg,#e8192c,#fff 50%,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">NAFELS VOLEY</span>
+  </div>
+  <div class="pin-box">
+    <div class="pin-title" data-t="pin_ingresar">Ingresar</div>
+    <div class="pin-sub"><span data-t="pin_sel_nombre">Seleccioná tu nombre</span> · PIN = <strong style="color:var(--red)">00</strong> + <span data-t="pin_num_camiseta">número de camiseta</span><br><span style="font-size:10px;opacity:.6"><span data-t="pin_ej_camiseta">Ej: camiseta</span> #17 → PIN: 0017</span></div>
+    <select class="pin-jugador-sel" id="pin-jugador">
+      <option value="" data-t="pin_elegi_nombre">— Elegí tu nombre —</option>
+    </select>
+    <div class="pin-display" id="pin-display">····</div>
+    <div class="pin-grid" id="pin-grid"></div>
+    <button class="pin-enter" onclick="pinEnter()"><span data-t="pin_entrar">ENTRAR</span> →</button>
+    <div class="pin-error" id="pin-error"></div>
+    <div class="pin-skip" onclick="pinSkip()" data-t="pin_continuar">Continuar sin ingresar</div>
+  </div>
+</div>
 
 
 
@@ -361,7 +310,7 @@ select, select option {
   </div>
   <div class="header-text">
     <div class="club-name">NAFELS VOLEY</div>
-    <div class="club-sub"><span data-t="club_sub">Sistema de Análisis · NLA Suiza 2026/27</span></div>
+    <div class="club-sub"><span data-t="club_sub">Sistema de Análisis · NLA Suiza 2025/26</span></div>
   </div>
   <div class="header-right">
     <div id="lang-wrap" style="display:flex;align-items:center;gap:4px;margin-left:8px"></div>
@@ -372,84 +321,79 @@ select, select option {
 
 <main>
 
-  <div class="section"><div class="sec-head"><span class="sec-ic">🎯</span><div><div class="sec-title">El próximo rival</div><div class="sec-sub">Todo para llegar preparado al partido</div></div></div><div class="cards-grid"><a href="Team_Playbook_Nafels.html" class="card" style="--card-color:#e6a743;grid-column:1/-1"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">📖</div><div class="card-badge">Equipo</div></div><div class="card-body"><div class="card-title">Team Playbook</div><div class="card-desc">Nuestra identidad, principios y sistemas de juego. Cómo jugamos — para todo el equipo.</div></div><div class="card-arrow">→</div></a><a href="plan_partido.html" class="card" style="--card-color:#e6a743">
+  <!-- ACCESO RÁPIDO PRINCIPAL -->
+  <div>
+    <div class="section-lbl"><span data-t="acceso_rapido">Acceso rápido</span></div>
+    <div class="cards-grid">
+
+      <!-- PANEL EN VIVO -->
+      <a href="panel_voley.html" class="card card-featured" style="--card-color:#22c55e">
         <div class="card-glow"></div>
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.2)">📋</div>
-          <div class="card-badge" style="background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)">Imprimible</div>
-        </div>
-        <div class="card-body">
-          <div class="card-title" style="color:#fbbf24">Plan de Partido</div>
-          <div class="card-desc">Hoja de 1 página para imprimir y llevar al partido: a quién sacarle, rotación más débil, derrumbe fuera de sistema y direcciones de ataque de cada rematador.</div>
-        </div>
-        <div class="card-arrow">→</div>
-      </a></div></div>
-  <div class="section"><div class="sec-head"><span class="sec-ic">📊</span><div><div class="sec-title">Mi rendimiento</div><div class="sec-sub">Tus números y los del equipo</div></div></div><div class="cards-grid"><a href="plan_desarrollo.html" class="card" style="--card-color:#a78bfa"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.2)">🚀</div><div class="card-badge" style="background:rgba(167,139,250,.1);color:#a78bfa;border:1px solid rgba(167,139,250,.2)">Por jugador</div></div><div class="card-body"><div class="card-title" style="color:#a78bfa">Plan de Desarrollo</div><div class="card-desc">Objetivos técnico-tácticos a mejorar por jugador, con seguimiento del progreso. Elegí tu nombre para ver el tuyo.</div></div><div class="card-arrow" style="color:#a78bfa">→</div></a><a href="equipo.html" class="card" style="--card-color:#e6a743">
-        <div class="card-glow"></div>
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.2)">🏐</div>
-          <div class="card-badge" style="background:rgba(232,25,44,.1);color:#e8192c;border:1px solid rgba(232,25,44,.2)" data-t="equipo">Equipo</div>
-        </div>
-        <div class="card-body">
-          <div class="card-title" style="color:#e8192c" data-t="equipo">Equipo</div>
-          <div class="card-desc"><span data-t="d_equipo">Plantel completo con fotos, posiciones y acceso al perfil individual de cada jugador.</span></div>
-        </div>
-        <div class="card-arrow">→</div>
-      </a><a href="#" onclick="showHeatmapMenu();return false;" class="card" style="--card-color:#e6a743">
-          <div class="card-glow"></div>
-          <div class="card-top">
-            <div class="card-icon" style="background:rgba(249,115,22,.1);border-color:rgba(249,115,22,.2)">🔥</div>
-            <div class="card-badge" style="background:rgba(249,115,22,.1);color:#F97316;border:1px solid rgba(249,115,22,.2)">Heat Maps</div>
+        <div class="card-top" style="border-right:1px solid var(--border);border-bottom:none;min-width:180px;flex-direction:column;gap:12px;justify-content:center">
+          <div class="card-icon" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2);font-size:28px;width:60px;height:60px">📊</div>
+          <div>
+            <div class="card-title" style="color:#22c55e"><span data-t="panel_vivo">Panel en Vivo</span></div>
+            <div class="card-badge" style="background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2)"><span data-t="en_vivo">En vivo</span></div>
           </div>
-          <div class="card-title">Heat Maps</div>
-          <div class="card-desc"><span data-t="d_heatmaps">Análisis visual por jugador. Ataque, saque, recepción y armado con heatmaps de zonas, EFF y tendencias.</span></div>
-          <div class="card-arrow">→</div>
-        </a><a href="nla_stats_table.html" class="card" style="--card-color:#e6a743">
-        <div class="card-glow"></div>
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.2)">🏆</div>
-          <div class="card-badge" style="background:rgba(59,130,246,.1);color:#3b82f6;border:1px solid rgba(59,130,246,.2)"><span data-t="b_liga_nla">Liga NLA</span></div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#3b82f6"><span data-t="c_stats_liga">Estadísticas Liga</span></div>
-          <div class="card-desc"><span data-t="d_stats_liga">Base de datos completa NLA 2026/27. Ranking por equipo y stats individuales de toda la liga. Ataque, saque, recepción y bloqueo.</span></div>
+          <div>
+            <div style="font-size:13px;color:var(--mut);line-height:1.6;max-width:400px">
+              <span data-t="d_panel">Stats en tiempo real durante el entrenamiento o partido. Saque, recepción, ataque y bloqueo con visualización táctica de la cancha.</span>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+              <span style="font-size:10px;padding:3px 8px;border-radius:4px;background:rgba(34,197,94,.08);color:#22c55e;border:1px solid rgba(34,197,94,.15);letter-spacing:.5px"><span data-t="chip1">DV4 en tiempo real</span></span>
+              <span style="font-size:10px;padding:3px 8px;border-radius:4px;background:rgba(34,197,94,.08);color:#22c55e;border:1px solid rgba(34,197,94,.15);letter-spacing:.5px"><span data-t="chip2">Dirección de saque</span></span>
+              <span style="font-size:10px;padding:3px 8px;border-radius:4px;background:rgba(34,197,94,.08);color:#22c55e;border:1px solid rgba(34,197,94,.15);letter-spacing:.5px"><span data-t="chip3">Filtros por fundamento</span></span>
+            </div>
+          </div>
+          <div class="card-arrow" style="color:#22c55e;margin-left:auto">→</div>
         </div>
-        <div class="card-arrow">→</div>
-      </a><a href="dashboard.html" class="card" style="--card-color:#e6a743">
+      </a>
+
+      <!-- HISTORIAL -->
+      <!-- CALENDARIO -->
+      <a href="calendario.html" class="card" style="--card-color:#2dd4bf">
         <div class="card-glow"></div>
         <div class="card-top">
-          <div class="card-icon" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2)">📋</div>
-          <div class="card-badge" style="background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2)"><span data-t="b_entrenador">Entrenador</span></div>
+          <div class="card-icon" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.2)">📅</div>
+          <div class="card-badge" style="background:rgba(45,212,191,.1);color:#2dd4bf;border:1px solid rgba(45,212,191,.2)">Editable</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#22c55e">Dashboard</div>
-          <div class="card-desc"><span data-t="d_dashboard">Progreso de todos los jugadores en tiempo real. Quién cargó los pesos, quién no, y comparativa del equipo.</span></div>
+          <div class="card-title" style="color:#2dd4bf">Calendario</div>
+          <div class="card-desc">Partidos y entrenamientos del equipo. Fecha, hora, lugar y tipo — editable en la misma página.</div>
         </div>
-        <div class="card-arrow">→</div>
-      </a><a href="informe_equipo.html" class="card" style="--card-color:#e6a743">
+        <div class="card-arrow" style="color:#2dd4bf">→</div>
+      </a>
+
+      <a href="horarios.html" class="card" style="--card-color:#f59e0b">
         <div class="card-glow"></div>
         <div class="card-top">
-          <div class="card-icon" style="background:rgba(27,175,122,.1);border-color:rgba(27,175,122,.2)">📈</div>
-          <div class="card-badge" style="background:rgba(27,175,122,.1);color:#1baf7a;border:1px solid rgba(27,175,122,.2)"><span data-t="b_nuevo">Nuevo</span></div>
+          <div class="card-icon" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2)">🗓️</div>
+          <div class="card-badge" style="background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2)">Editable</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#1baf7a"><span data-t="g_informe">Informe de equipo</span></div>
-          <div class="card-desc"><span data-t="d_informe">Cambio de saque y breakpoint contra su valor esperado: no cuánto sacaste, sino cuánto deberías haber sacado. En una pantalla.</span></div>
+          <div class="card-title" style="color:#f59e0b">Horarios</div>
+          <div class="card-desc">Horarios de entrenamiento de la semana. Pesas y vóley, día por día — sincronizado y editable.</div>
         </div>
-        <div class="card-arrow">→</div>
-      </a><a href="analisis.html" class="card" style="--card-color:#e6a743">
+        <div class="card-arrow" style="color:#f59e0b">→</div>
+      </a>
+
+      <a href="historial_voley.html" class="card" style="--card-color:#818cf8">
         <div class="card-glow"></div>
         <div class="card-top">
-          <div class="card-icon" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2)">📊</div>
-          <div class="card-badge" style="background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2)"><span data-t="b_detallado">Detallado</span></div>
+          <div class="card-icon" style="background:rgba(129,140,248,.1);border-color:rgba(129,140,248,.2)">📈</div>
+          <div class="card-badge" style="background:rgba(129,140,248,.1);color:#818cf8;border:1px solid rgba(129,140,248,.2)"><span data-t="b_analisis_hist">Análisis histórico</span></div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#f59e0b"><span data-t="g_analisis">Análisis</span></div>
-          <div class="card-desc"><span data-t="d_analisis">Stats detalladas por partido o acumulado. Saque, recepción, ataque y bloqueo con todos los valores.</span></div>
+          <div class="card-title" style="color:#818cf8"><span data-t="historial">Historial</span></div>
+          <div class="card-desc"><span data-t="d_historial">Stats acumulados por jugador y equipo. Comparativas, tendencias y evolución por período. Filtros por entrenamiento o partido.</span></div>
         </div>
         <div class="card-arrow">→</div>
-      </a></div></div>
-  <div class="section"><div class="sec-head"><span class="sec-ic">💪</span><div><div class="sec-title">Físico y bienestar</div><div class="sec-sub">Tu cuerpo, día a día</div></div></div><div class="cards-grid"><a href="prep_fisica.html" class="card" style="--card-color:#e6a743">
+      </a>
+
+      <!-- PREPARACIÓN FÍSICA -->
+      <a href="prep_fisica.html" class="card" style="--card-color:#e8192c">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.2)">💪</div>
@@ -463,7 +407,10 @@ select, select option {
           <div class="card-desc"><span data-t="prep_fisica_sub">Rutinas personalizadas por jugador</span>. <span data-t="d_prep_tail">Registrá tus pesos por serie, seguí tu progresión y calculá cargas de entrenamiento.</span></div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="wellness.html" class="card" style="--card-color:#e6a743">
+      </a>
+
+      <!-- WELLNESS -->
+      <a href="wellness.html" class="card" style="--card-color:#2dd4bf">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.22)">🩺</div>
@@ -476,31 +423,86 @@ select, select option {
           <div class="card-desc"><span data-t="wellness_sub">Estado físico diario</span>. <span data-t="d_wellness_tail">Encuesta del 1 al 10 post-entrenamiento y tabla de cómo viene cada jugador.</span></div>
         </div>
         <div class="card-arrow">→</div>
-      </a></div></div>
-  <div class="section"><div class="sec-head"><span class="sec-ic">📅</span><div><div class="sec-title">Agenda</div><div class="sec-sub">Cuándo y dónde</div></div></div><div class="cards-grid"><a href="calendario.html" class="card" style="--card-color:#e6a743">
+      </a>
+
+      <!-- EQUIPO -->
+      <a href="equipo.html" class="card" style="--card-color:#e8192c">
         <div class="card-glow"></div>
         <div class="card-top">
-          <div class="card-icon" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.2)">📅</div>
-          <div class="card-badge" style="background:rgba(45,212,191,.1);color:#2dd4bf;border:1px solid rgba(45,212,191,.2)">Editable</div>
+          <div class="card-icon" style="background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.2)">🏐</div>
+          <div class="card-badge" style="background:rgba(232,25,44,.1);color:#e8192c;border:1px solid rgba(232,25,44,.2)" data-t="equipo">Equipo</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#2dd4bf">Calendario</div>
-          <div class="card-desc">Partidos y entrenamientos del equipo. Fecha, hora, lugar y tipo — editable en la misma página.</div>
+          <div class="card-title" style="color:#e8192c" data-t="equipo">Equipo</div>
+          <div class="card-desc"><span data-t="d_equipo">Plantel completo con fotos, posiciones y acceso al perfil individual de cada jugador.</span></div>
         </div>
-        <div class="card-arrow" style="color:#2dd4bf">→</div>
-      </a><a href="horarios.html" class="card" style="--card-color:#e6a743">
+        <div class="card-arrow">→</div>
+      </a>
+
+      <!-- ANÁLISIS -->
+      <a href="analisis.html" class="card" style="--card-color:#f59e0b">
         <div class="card-glow"></div>
         <div class="card-top">
-          <div class="card-icon" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2)">🗓️</div>
-          <div class="card-badge" style="background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2)">Editable</div>
+          <div class="card-icon" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2)">📊</div>
+          <div class="card-badge" style="background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2)"><span data-t="b_detallado">Detallado</span></div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#f59e0b">Horarios</div>
-          <div class="card-desc">Horarios de entrenamiento de la semana. Pesas y vóley, día por día — sincronizado y editable.</div>
+          <div class="card-title" style="color:#f59e0b"><span data-t="g_analisis">Análisis</span></div>
+          <div class="card-desc"><span data-t="d_analisis">Stats detalladas por partido o acumulado. Saque, recepción, ataque y bloqueo con todos los valores.</span></div>
         </div>
-        <div class="card-arrow" style="color:#f59e0b">→</div>
-      </a></div></div>
-  <div class="section"><div class="sec-head"><span class="sec-ic">🎥</span><div><div class="sec-title">Video y juego</div><div class="sec-sub">Clips y un poco de joda</div></div></div><div class="cards-grid"><a href="cortes.html" class="card" style="--card-color:#e6a743">
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="game_plan.html" id="card-gameplan" class="card" style="--card-color:#fbbf24;grid-column:1/-1">
+        <div class="card-glow"></div>
+        <div class="card-top">
+          <div class="card-icon" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.2)">📋</div>
+          <div class="card-badge" id="gp-badge" style="background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)">Próximo partido</div>
+        </div>
+        <div class="card-body">
+          <div class="card-title" id="gp-title" style="color:#fbbf24">Game Plan</div>
+          <div class="card-desc" id="gp-desc">Plan del próximo rival: defensa, armadores, recepción y videos.</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="nla_stats_table.html" class="card" style="--card-color:#3b82f6">
+        <div class="card-glow"></div>
+        <div class="card-top">
+          <div class="card-icon" style="background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.2)">🏆</div>
+          <div class="card-badge" style="background:rgba(59,130,246,.1);color:#3b82f6;border:1px solid rgba(59,130,246,.2)"><span data-t="b_liga_nla">Liga NLA</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-title" style="color:#3b82f6"><span data-t="c_stats_liga">Estadísticas Liga</span></div>
+          <div class="card-desc"><span data-t="d_stats_liga">Base de datos completa NLA 2025/26. Ranking por equipo y stats individuales de toda la liga. Ataque, saque, recepción y bloqueo.</span></div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+        <a href="#" onclick="showHeatmapMenu();return false;" class="card" style="--card-color:#F97316">
+          <div class="card-glow"></div>
+          <div class="card-top">
+            <div class="card-icon" style="background:rgba(249,115,22,.1);border-color:rgba(249,115,22,.2)">🔥</div>
+            <div class="card-badge" style="background:rgba(249,115,22,.1);color:#F97316;border:1px solid rgba(249,115,22,.2)">Heat Maps</div>
+          </div>
+          <div class="card-title">Heat Maps</div>
+          <div class="card-desc"><span data-t="d_heatmaps">Análisis visual por jugador. Ataque, saque, recepción y armado con heatmaps de zonas, EFF y tendencias.</span></div>
+          <div class="card-arrow">→</div>
+        </a>
+
+      <!-- IMPORTAR DVW -->
+      <a href="importar_dvw.html" class="card" style="--card-color:#06b6d4">
+        <div class="card-glow"></div>
+        <div class="card-top">
+          <div class="card-icon" style="background:rgba(6,182,212,.1);border-color:rgba(6,182,212,.2)">📥</div>
+          <div class="card-badge" style="background:rgba(6,182,212,.1);color:#06b6d4;border:1px solid rgba(6,182,212,.2)">DataVolley 4</div>
+        </div>
+        <div class="card-body">
+          <div class="card-title" style="color:#06b6d4"><span data-t="c_importar_dvw">Importar DVW</span></div>
+          <div class="card-desc"><span data-t="d_importar">Subí el archivo .dvw de DataVolley y el sistema parsea todas las acciones automáticamente.</span></div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <!-- CORTES DE VIDEO -->
+      <a href="cortes.html" class="card" style="--card-color:#F97316">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(249,115,22,.1);border-color:rgba(249,115,22,.2)">🎬</div>
@@ -511,7 +513,51 @@ select, select option {
           <div class="card-desc">Filtrá acciones como en los heatmaps y mirá los clips de video sincronizados. Armá recortes para mostrarles a los jugadores.</div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="baggerone.html" class="card" style="--card-color:#e6a743">
+      </a>
+
+      <a href="importar_video.html" class="card" style="--card-color:#A855F7">
+        <div class="card-glow"></div>
+        <div class="card-top">
+          <div class="card-icon" style="background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.2)">📹</div>
+          <div class="card-badge" style="background:rgba(168,85,247,.1);color:#A855F7;border:1px solid rgba(168,85,247,.2)">Nuevo</div>
+        </div>
+        <div class="card-body">
+          <div class="card-title" style="color:#A855F7">Cargar Videos</div>
+          <div class="card-desc">Pegá el link de YouTube de cada partido de la temporada y generá el archivo. Sin que participe nadie más.</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <!-- DASHBOARD -->
+      <a href="dashboard.html" class="card" style="--card-color:#22c55e">
+        <div class="card-glow"></div>
+        <div class="card-top">
+          <div class="card-icon" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2)">📋</div>
+          <div class="card-badge" style="background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2)"><span data-t="b_entrenador">Entrenador</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-title" style="color:#22c55e">Dashboard</div>
+          <div class="card-desc"><span data-t="d_dashboard">Progreso de todos los jugadores en tiempo real. Quién cargó los pesos, quién no, y comparativa del equipo.</span></div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <!-- PIZARRÓN -->
+      <a href="pizarron.html" class="card" style="--card-color:#818cf8">
+        <div class="card-glow"></div>
+        <div class="card-top">
+          <div class="card-icon" style="background:rgba(129,140,248,.1);border-color:rgba(129,140,248,.2)">📺</div>
+          <div class="card-badge" style="background:rgba(129,140,248,.1);color:#818cf8;border:1px solid rgba(129,140,248,.2)">Tele · TV</div>
+        </div>
+        <div class="card-body">
+          <div class="card-title" style="color:#818cf8"><span data-t="c_pizarron">Pizarrón</span></div>
+          <div class="card-desc"><span data-t="d_pizarron">Vista para la tele. Rutina del día con todos los jugadores y pesos editables en tiempo real.</span></div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <!-- BAGGERONE -->
+      <a href="baggerone.html" class="card" style="--card-color:#378ADD">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(55,138,221,.1);border-color:rgba(55,138,221,.2)">🏐</div>
@@ -523,30 +569,47 @@ select, select option {
           <div class="bag-top3" id="bag-top3-index"></div>
         </div>
         <div class="card-arrow">→</div>
-      </a></div></div>
-  <div class="section dt-sec"><div class="sec-head"><span class="sec-ic">🛠️</span><div><div class="sec-title">Herramientas del entrenador<span class="dt-pill">🔒 Solo DT</span></div><div class="sec-sub">Solo lo ve el cuerpo técnico</div></div></div><div class="cards-grid"><a href="game_plan.html" id="card-gameplan" class="card" style="--card-color:#e6a743;grid-column:1/-1">
+      </a>
+
+      <!-- PLAN DE JUEGO -->
+      <a href="game_plan.html?rival=amriswil" class="card" style="--card-color:#f59e0b" id="card-gameplan">
         <div class="card-glow"></div>
         <div class="card-top">
-          <div class="card-icon" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.2)">📋</div>
-          <div class="card-badge" id="gp-badge" style="background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)">Próximo partido</div>
+          <div class="card-icon" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2)">&#127919;</div>
+          <div class="card-badge" style="background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2)">vs AMRISWIL</div>
         </div>
         <div class="card-body">
-          <div class="card-title" id="gp-title" style="color:#fbbf24">Game Plan</div>
-          <div class="card-desc" id="gp-desc">Plan del próximo rival: defensa, armadores, recepción y videos.</div>
+          <div class="card-title" style="color:#f59e0b">Plan de Juego</div>
+          <div class="card-desc"><span data-t="d_planjuego">Analisis tactico del rival. Ataques, saques y zonas preferidas por jugador.</span></div>
+          <div style="margin-top:10px;font-size:11px;color:var(--mut)">NLA Suiza 2025/26</div>
         </div>
-        <div class="card-arrow">→</div>
-      </a><a href="rotaciones.html" class="card" style="--card-color:#e6a743">
+        <div class="card-arrow">&#8594;</div>
+      </a>
+      <!-- /PLAN DE JUEGO -->
+
+      <!-- PRÓXIMAMENTE: VIDEOS -->
+      <div class="card" style="--card-color:#a855f7;opacity:.6;cursor:not-allowed">
         <div class="card-glow"></div>
         <div class="card-top">
-          <div class="card-icon" style="background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.2)">🔄</div>
-          <div class="card-badge" style="background:rgba(59,130,246,.1);color:#3b82f6;border:1px solid rgba(59,130,246,.2)"><span data-t="b_nuevo">Nuevo</span></div>
+          <div class="card-icon" style="background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.2)">🎬</div>
+          <div class="card-badge" style="background:rgba(168,85,247,.1);color:#a855f7;border:1px solid rgba(168,85,247,.2)"><span data-t="b_proximamente">Próximamente</span></div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#3b82f6"><span data-t="g_rotaciones">Rotaciones</span></div>
-          <div class="card-desc"><span data-t="d_rotaciones">Las seis rotaciones enfrentadas al rival, en una hoja. Para preparar el saque, el bloqueo y la defensa antes del partido.</span></div>
+          <div class="card-title" style="color:#a855f7">Videos</div>
+          <div class="card-desc"><span data-t="d_videos">Videoteca de acciones, clips por jugador y análisis de jugadas específicas vinculadas al plan de juego.</span></div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="panel_vivo.html" class="card" style="--card-color:#e6a743"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">🎯</div><div class="card-badge">Cargar</div></div><div class="card-body"><div class="card-title">Scout en Vivo</div><div class="card-desc">Cargá el partido punto por punto con el código de DataVolley.</div></div><div class="card-arrow">→</div></a><a href="panel_voley.html" class="card" style="--card-color:#e6a743"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">📡</div><div class="card-badge">En vivo</div></div><div class="card-body"><div class="card-title">Panel en Vivo</div><div class="card-desc">Fichas, tablas y gráficos que se actualizan solos mientras scouteás.</div></div><div class="card-arrow">→</div></a><a href="camara.html" class="card" style="--card-color:#e6a743"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">📹</div><div class="card-badge">Cámara</div></div><div class="card-body"><div class="card-title">Cámara del partido</div><div class="card-desc">Transmití desde el celular al scout con delay. Te da un código de sala.</div></div><div class="card-arrow">→</div></a><a href="scouting_rival.html" class="card" style="--card-color:#e6a743">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════ SCOUTING DEL RIVAL ════════ -->
+  <div class="section">
+    <div class="section-lbl"><span>🔍 Scouting del Rival</span></div>
+    <div class="cards-grid">
+
+      <a href="scouting_rival.html" class="card" style="--card-color:#F97316">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(249,115,22,.1);border-color:rgba(249,115,22,.2)">🔍</div>
@@ -557,7 +620,22 @@ select, select option {
           <div class="card-desc">Dossier completo de cada rival de la liga: saque, ataque por rematador con direcciones, armador, recepción, rotaciones y en sistema vs fuera de sistema.</div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="comparador.html" class="card" style="--card-color:#e6a743">
+      </a>
+
+      <a href="plan_partido.html" class="card" style="--card-color:#fbbf24">
+        <div class="card-glow"></div>
+        <div class="card-top">
+          <div class="card-icon" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.2)">📋</div>
+          <div class="card-badge" style="background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)">Imprimible</div>
+        </div>
+        <div class="card-body">
+          <div class="card-title" style="color:#fbbf24">Plan de Partido</div>
+          <div class="card-desc">Hoja de 1 página para imprimir y llevar al partido: a quién sacarle, rotación más débil, derrumbe fuera de sistema y direcciones de ataque de cada rematador.</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a href="comparador.html" class="card" style="--card-color:#06b6d4">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(6,182,212,.1);border-color:rgba(6,182,212,.2)">⚖️</div>
@@ -568,56 +646,33 @@ select, select option {
           <div class="card-desc">Näfels vs cualquier rival, lado a lado: saque, ataque y recepción con barras que marcan quién está mejor en cada métrica.</div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="subir_partido.html" class="card" style="--card-color:#3ddc84">
+      </a>
+
+      <a href="tendencias.html" class="card" style="--card-color:#22c55e">
         <div class="card-glow"></div>
         <div class="card-top">
-          <div class="card-icon" style="background:rgba(61,220,132,.1);border-color:rgba(61,220,132,.2)">📤</div>
-          <div class="card-badge" style="background:rgba(61,220,132,.1);color:#3ddc84;border:1px solid rgba(61,220,132,.2)">Cada partido</div>
+          <div class="card-icon" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2)">📈</div>
+          <div class="card-badge" style="background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2)">Näfels</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#3ddc84">Subir partido</div>
-          <div class="card-desc">Arrastrá el archivo del partido y listo. El sistema lo procesa solo y actualiza las estadísticas, los mapas de calor, el plan de partido y los perfiles de cada jugador.</div>
+          <div class="card-title" style="color:#22c55e">Tendencias</div>
+          <div class="card-desc">Evolución partido a partido del equipo: ataque, saque, recepción y bloqueo en gráficos, con la tira de resultados y promedios.</div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="importar_video.html" class="card" style="--card-color:#e6a743">
-        <div class="card-glow"></div>
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.2)">📹</div>
-          <div class="card-badge" style="background:rgba(168,85,247,.1);color:#A855F7;border:1px solid rgba(168,85,247,.2)">Nuevo</div>
-        </div>
-        <div class="card-body">
-          <div class="card-title" style="color:#A855F7">Cargar Videos</div>
-          <div class="card-desc">Pegá el link de YouTube de cada partido de la temporada y generá el archivo. Sin que participe nadie más.</div>
-        </div>
-        <div class="card-arrow">→</div>
-      </a><a href="sesiones.html" class="card" style="--card-color:#e6a743">
-        <div class="card-glow"></div>
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.2)">🔐</div>
-          <div class="card-badge" style="background:rgba(239,68,68,.1);color:#ef4444;border:1px solid rgba(239,68,68,.2)">Acceso</div>
-        </div>
-        <div class="card-body">
-          <div class="card-title" style="color:#ef4444"><span data-t="c_sesiones">Sesiones y dispositivos</span></div>
-          <div class="card-desc"><span data-t="d_sesiones">Quién tiene acceso, desde qué dispositivo y cuándo entró. Podés cerrarle la sesión a uno o a todos.</span></div>
-        </div>
-        <div class="card-arrow">→</div>
-      </a><a href="pizarron.html" class="card" style="--card-color:#e6a743">
-        <div class="card-glow"></div>
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(129,140,248,.1);border-color:rgba(129,140,248,.2)">📺</div>
-          <div class="card-badge" style="background:rgba(129,140,248,.1);color:#818cf8;border:1px solid rgba(129,140,248,.2)">Tele · TV</div>
-        </div>
-        <div class="card-body">
-          <div class="card-title" style="color:#818cf8"><span data-t="c_pizarron">Pizarrón</span></div>
-          <div class="card-desc"><span data-t="d_pizarron">Vista para la tele. Rutina del día con todos los jugadores y pesos editables en tiempo real.</span></div>
-        </div>
-        <div class="card-arrow">→</div>
-      </a></div></div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- PRÓXIMO PARTIDO -->
+  <!-- PROXIMO-GP-INI -->
+  <!-- PROXIMO-GP-FIN -->
+
 </main>
 
   <!-- CALENDARIO -->
     <div class="cal-section" style="display:none">
-    <div class="section-lbl"><span data-t="sec_fixture">📅 Fixture · NLA Suiza 2026/27</span></div>
+    <div class="section-lbl"><span data-t="sec_fixture">📅 Fixture · NLA Suiza 2025/26</span></div>
     <div class="cal-grid">
       <div style="position:relative;opacity:1;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;">
         <div style="display:flex;align-items:stretch;">
@@ -1067,7 +1122,7 @@ if(window.GAMEPLAN_DATA){
 // FIXTURE generado automáticamente desde PARTIDOS_META (datos_partidos.js)
 // + próximos partidos hardcodeados que aún no están en el Excel
 var FIXTURE_PROXIMOS = [
-  // Nafels NLA 2026/27 season completed - 26 matches played
+  // Nafels NLA 2025/26 season completed - 26 matches played
 ];
 
 function buildFixture(){
@@ -1112,7 +1167,7 @@ function buildFixture(){
         num: (fixture.length||0)+i+1,
         rival: p.rival,
         fecha: p.fecha,
-        torneo: 'NLA Suiza 2026/27',
+        torneo: 'NLA Suiza 2025/26',
         ts: ts,
         jugado: ts < Date.now(),
         res: '',
@@ -1189,6 +1244,167 @@ function initBaggeroneTop3(){
   }
 }
 
+// ── PIN LOGIN ─────────────────────────────────────────────────
+var PIN_JUGADORES = [];
+var pinActual = '';
+var pinCorrecto = '';
+
+function initPin(){
+  // Cargar jugadores desde el PLANTEL MAESTRO (plantel_nafels.js) o EQUIPO_DATA o default 2026-27
+  var jugs = (window.PLANTEL_NAFELS && window.PLANTEL_NAFELS.lista) ? window.PLANTEL_NAFELS.lista
+           : (window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores) ? window.EQUIPO_DATA.jugadores : [
+    {num:1,nombre:"DURDOS"},
+    {num:3,nombre:"SCHWITTER"},
+    {num:4,nombre:"VAZQUEZ"},
+    {num:5,nombre:"CLEMENT"},
+    {num:7,nombre:"SCHMID R"},
+    {num:9,nombre:"NORRIS"},
+    {num:10,nombre:"BOGDANOVSKI"},
+    {num:11,nombre:"BARTHOLET"},
+    {num:12,nombre:"JOHANSSON"},
+    {num:13,nombre:"STEIMANN"},
+    {num:17,nombre:"ROFFLER"},
+    {num:20,nombre:"SCHMID J"},
+  ];
+  PIN_JUGADORES = jugs;
+
+  var sel = document.getElementById('pin-jugador');
+  sel.innerHTML = '<option value="">— Elegí tu nombre —</option>';
+  // Opción entrenador
+  var oCoach = document.createElement('option');
+  oCoach.value = 'coach'; oCoach.textContent = '👨‍💼 Entrenador (Staff)';
+  sel.appendChild(oCoach);
+  var oPF = document.createElement('option');
+  oPF.value = 'pf'; oPF.textContent = '🏋️ Preparador Físico (PF)';
+  sel.appendChild(oPF);
+  var oAT = document.createElement('option');
+  oAT.value = 'at'; oAT.textContent = '📋 Asistente Técnico (AT)';
+  sel.appendChild(oAT);
+  jugs.slice().sort(function(a,b){ return (a.num||0)-(b.num||0); }).forEach(function(j){
+    var o = document.createElement('option');
+    o.value = j.num;
+    o.textContent = '#'+j.num+' '+j.nombre;
+    sel.appendChild(o);
+  });
+
+  // Teclado numérico
+  var grid = document.getElementById('pin-grid');
+  grid.innerHTML = '';
+  [1,2,3,4,5,6,7,8,9,'⌫',0,'✓'].forEach(function(n){
+    var btn = document.createElement('button');
+    btn.className = 'pin-btn';
+    btn.textContent = n;
+    btn.onclick = function(){
+      if(n==='⌫'){ pinActual=pinActual.slice(0,-1); }
+      else if(n==='✓'){ pinEnter(); return; }
+      else if(pinActual.length<4){ pinActual+=n; }
+      updatePinDisplay();
+    };
+    grid.appendChild(btn);
+  });
+
+  // Ver si hay sesión guardada
+  var savedNum = localStorage.getItem('vb_player_num');
+  var savedPin = localStorage.getItem('vb_player_pin_'+savedNum);
+  if(savedNum && savedPin){
+    // Auto-login silencioso
+    return;
+  }
+
+  // Mostrar overlay solo si no hay sesión
+  var visto = sessionStorage.getItem('vb_pin_skip');
+  if(!visto){
+    document.getElementById('pin-overlay').style.display='flex';
+  }
+}
+
+function updatePinDisplay(){
+  var dots = pinActual.split('').map(function(){ return '●'; }).join('');
+  while(dots.length<4) dots += '·';
+  document.getElementById('pin-display').textContent = dots;
+  document.getElementById('pin-error').textContent = '';
+}
+
+function pinEnter(){
+  var num = document.getElementById('pin-jugador').value;
+  if(!num){ document.getElementById('pin-error').textContent = 'Elegí tu nombre primero'; return; }
+  if(pinActual.length < 4){ document.getElementById('pin-error').textContent = 'Ingresá los 4 dígitos'; return; }
+
+  // ── ENTRENADOR ───────────────────────────────────────────
+  if(num === 'coach'){
+    if(pinActual === '1009'){
+      localStorage.setItem('vb_role','coach'); localStorage.removeItem('vb_player_num');
+      sessionStorage.setItem('vb_pin_skip','1');
+      document.getElementById('pin-overlay').style.display='none';
+      showToastLogin('👨‍💼 Welcome Coach!');
+      return;
+    } else {
+      document.getElementById('pin-error').textContent = 'PIN de entrenador incorrecto ⚠️';
+      pinActual=''; updatePinDisplay(); return;
+    }
+  }
+
+  // ── PREPARADOR FÍSICO (carga libre) ───────────────────────
+  if(num === 'pf'){
+    if(pinActual === '0000'){
+      localStorage.setItem('vb_role','pf'); localStorage.removeItem('vb_player_num');
+      sessionStorage.setItem('vb_pin_skip','1');
+      document.getElementById('pin-overlay').style.display='none';
+      showToastLogin('🏋️ Bienvenido, Preparador Físico');
+      window.location.href = 'prep_builder.html';   // va directo a armar rutinas
+      return;
+    } else {
+      document.getElementById('pin-error').textContent = 'PIN de PF incorrecto ⚠️';
+      pinActual=''; updatePinDisplay(); return;
+    }
+  }
+
+  // ── ASISTENTE TÉCNICO (carga libre) ───────────────────────
+  if(num === 'at'){
+    if(pinActual === '9999'){
+      localStorage.setItem('vb_role','at'); localStorage.removeItem('vb_player_num');
+      sessionStorage.setItem('vb_pin_skip','1');
+      document.getElementById('pin-overlay').style.display='none';
+      showToastLogin('📋 Bienvenido, Asistente Técnico');
+      return;   // se queda en el Hub con acceso completo a la carga
+    } else {
+      document.getElementById('pin-error').textContent = 'PIN de AT incorrecto ⚠️';
+      pinActual=''; updatePinDisplay(); return;
+    }
+  }
+
+  // ── JUGADOR — PIN = 00 + número de camiseta ───────────────
+  var pinCorrecto = '00' + String(num).padStart(2,'0');
+  // Números de 2 dígitos ya quedan bien: 00+02=0002, 00+17=0017
+  // Para camiseta 20: pin=0020, para camiseta 2: pin=0002
+  // Normalizar: siempre son 4 dígitos
+  pinCorrecto = String(num).padStart(4,'0'); // ej: num=2→0002, num=20→0020
+
+  if(pinActual === pinCorrecto){
+    localStorage.setItem('vb_player_num', num);
+    localStorage.setItem('vb_role','player');
+    sessionStorage.setItem('vb_pin_skip','1');
+    document.getElementById('pin-overlay').style.display='none';
+    window.location.href = 'jugador.html?num='+num;
+  } else {
+    document.getElementById('pin-error').textContent = 'PIN incorrecto ⚠️';
+    pinActual=''; updatePinDisplay();
+  }
+}
+
+function showToastLogin(msg){
+  var t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#22c55e;color:#fff;padding:10px 20px;border-radius:10px;font-family:Bebas Neue,sans-serif;font-size:15px;letter-spacing:2px;z-index:9999;';
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(function(){t.remove();},2500);
+}
+
+function pinSkip(){
+  sessionStorage.setItem('vb_pin_skip','1');
+  document.getElementById('pin-overlay').style.display='none';
+}
+
 // ── INIT ──────────────────────────────────────────────────────
 
 // ── AUTO-RESULTADOS desde PARTIDOS_META ─────────────────────────────
@@ -1213,7 +1429,7 @@ function updateResultados(){
     div.className = 'auto-result';
     div.style.cssText = "font-family:'Bebas Neue',sans-serif;font-size:16px;color:"+color+";letter-spacing:2px;";
     div.innerHTML = casla+' — '+riv+' <span style="font-size:9px;color:#64748b;letter-spacing:1px;">'+tipo+'</span>';
-    // Insert after the CASLA vs RIVAL line
+    // Insert after the NAFELS vs RIVAL line
     var rivalDiv = card.querySelector('[style*="font-size:17px"]');
     if(rivalDiv && rivalDiv.nextSibling){
       // Only add if not already there
@@ -1227,7 +1443,7 @@ function updateResultados(){
 document.addEventListener('DOMContentLoaded', function(){
   initCountdown();
   initBaggeroneTop3();
-  /* el PIN ya no se usa: el ingreso lo maneja firebase.js con cuentas reales */
+  initPin();
   highlightNextMatch();
   updateResultados();
 });
@@ -1285,9 +1501,9 @@ function highlightNextMatch(){
       <a class="hm-card" href="hm_saque.html?equipo=nafels"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Flotado/Potencia<br>Zonas origen/destino</span></a>
       <a class="hm-card" href="hm_recepcion.html?equipo=nafels" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
       <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
-      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8">BLOQUEO</span><span class="hm-sub">EFF · Zona del ataque · Combos</span></a>
+      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">NLA Suiza 2026/27 · temporada en curso</div>
+    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">NLA Suiza 2025/26 · temporada archivada</div>
   </div>
 </div>
 <script>
@@ -1295,9 +1511,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260813-1930"></script>
+<script src="chat_nafels.js"></script>
 
-<script src="proximo_rival.js?v=20260813-1930" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js" onerror="window.FIXTURE_DATA=null"></script>
 <script>
 (function(){
   try{
@@ -1323,14 +1539,18 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   }catch(e){}
 })();
 </script>
-<script src="temporadas_menu.js?v=20260813-1930"></script>
+<script src="temporadas_menu.js"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20260813-1930" defer></script>
+<script src="onesignal_push.js" defer></script>
+<script src="datos_equipo_2025-26.js.enc" onerror="void 0"></script>
+  <script>abrirDatos();</script>
+  <script src="plantel_nafels.js" onerror="void 0"></script>
+
 <!-- ════════ VISTA POR ROL ════════
-     El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
+     El jugador ve SOLO lo suyo + Game Plan + Cortes de video (visor completo).
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
 <script>
 (function(){
@@ -1350,16 +1570,14 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
       host.insertBefore(bar, host.firstChild);
       var b = document.getElementById('vbSalirJug');
       if(b) b.onclick = function(){
-        /* Cierra la sesion de verdad. Antes solo borraba el rol del navegador,
-           pero ahora el rol viene de la base y volveria a aparecer al recargar. */
-        if(typeof fbLogout === 'function'){ fbLogout(); return; }
-        try{ localStorage.removeItem('vb_role'); localStorage.removeItem('vb_player_num'); }catch(e){}
+        try{ localStorage.removeItem('vb_role'); localStorage.removeItem('vb_player_num'); sessionStorage.removeItem('vb_pin_skip'); }catch(e){}
         location.reload();
       };
     })();
 
     // Tarjetas que SÍ ve el jugador (lo demás se oculta)
-    var SHOW = ['plan_partido.html','equipo.html','nla_stats_table.html','analisis.html','prep_fisica.html','wellness.html','dashboard.html','calendario.html','horarios.html','cortes.html','baggerone.html'];
+    var SHOW = ['calendario.html','horarios.html','historial_voley.html','prep_fisica.html','wellness.html',
+                'equipo.html','nla_stats_table.html','game_plan.html','cortes.html','scouting_rival.html'];
     function keep(card){
       var oc = (card.getAttribute('onclick')||'');
       if(oc.indexOf('showHeatmapMenu')>=0) return true;  // Heat Maps: sí

@@ -9,3 +9,6 @@ _gen_nafels.b64
 LLAVE.txt
 # copias de respaldo que dejan los scripts
 *.antes
+
+_ROTO-*/
+_ANTES-*/

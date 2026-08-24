@@ -2,11 +2,18 @@
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>ARMAR RUTINAS — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="firebase.js?v=20260813-1930" onerror="void 0"></script>
-<script src="plantel_nafels.js?v=20260813-1930" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260813-1930"></script>
+<!-- Apunta al firebase.js de la RAIZ, no a una copia local. La copia que
+     tenia la capsula era vieja: pedia mail y clave pero NUNCA guardaba la
+     llave de los datos, asi que las paginas abrian vacias para cualquiera
+     que no hubiera entrado antes por la app principal. Con una sola fuente
+     no se vuelve a desincronizar. -->
+<script src="../../firebase.js" onerror="void 0"></script>
+<script src="../../datos_seguros.js"></script>
   <script src="datos_ejercicios.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
+<script src="datos_equipo_2025-26.js.enc" onerror="void 0"></script>
+  <script src="plantel_nafels.js" onerror="void 0"></script>
+
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   :root{--bg:#080a12;--card:#0e1019;--card2:#13162a;--elev:#171a30;--border:rgba(255,255,255,.07);--b2:rgba(255,255,255,.14);
@@ -80,13 +87,6 @@
   .ej-row{display:grid;grid-template-columns:1fr 56px 62px 78px 68px 1fr auto;gap:7px;align-items:center;padding:7px 12px;border-top:1px solid var(--border)}
   .ej-row select,.ej-row input{background:var(--card2);color:var(--txt);border-color:var(--border);font-size:13px;padding:7px 8px}
   .ej-row .vbtn{color:var(--indigo);font-size:11px;text-decoration:none;white-space:nowrap}
-  .ej-combo{display:flex;align-items:center;gap:7px;padding:0 12px 8px 30px}
-  .ej-combo .cmb-plus{color:var(--indigo);font-weight:800;font-size:15px;flex-shrink:0}
-  .ej-combo select{flex:1;min-width:0;background:var(--card2);color:var(--txt);border-color:var(--border);font-size:13px;padding:7px 8px}
-  .ej-combo input{width:62px;background:var(--card2);color:var(--txt);border-color:var(--border);font-size:13px;padding:7px 8px}
-  .ej-combo .vbtn{color:var(--indigo);font-size:11px;text-decoration:none;white-space:nowrap}
-  .btn-combinar{background:none;border:none;color:var(--indigo);font-size:11px;cursor:pointer;white-space:nowrap;padding:2px 4px}
-  .btn-combinar:hover{text-decoration:underline}
   .x{background:none;border:none;color:var(--mut);font-size:17px;cursor:pointer;padding:2px 6px}
   .x:hover{color:var(--red)}
   .addrow{display:flex;gap:8px;padding:9px 12px;flex-wrap:wrap}
@@ -97,11 +97,7 @@
   .empty{color:var(--mut);text-align:center;padding:30px;font-size:14px}
   .colhdr{display:grid;grid-template-columns:1fr 56px 62px 78px 68px 1fr auto;gap:7px;padding:2px 12px 4px;font-size:9px;color:var(--mut);letter-spacing:1px;text-transform:uppercase}
   @media(max-width:640px){.ctrl-grid{grid-template-columns:1fr}.ej-row,.colhdr{grid-template-columns:1fr 1fr;}.ej-row .vbtn{grid-column:1/-1}}
-</style><!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
-     toca el encabezado y las barras: en la computadora no hace nada.
-     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260813-1930">
-</head>
+</style></head>
 <body>
 <div class="wrap">
   <div class="header">
@@ -147,7 +143,6 @@
   <span class="st" id="savest">—</span>
   <button class="btn btn-ghost" onclick="cpOpen('copiar')">📋 COPIAR A…</button>
   <button class="btn btn-ghost" onclick="cpOpen('vaciar')">🧹 VACIAR EN…</button>
-  <button class="btn btn-ghost" onclick="moverMes()">📅 MOVER DE MES…</button>
   <button class="btn btn-teal" onclick="guardar()">💾 GUARDAR RUTINA</button>
 </div>
 
@@ -180,20 +175,11 @@ function setDirty(d){ DIRTY=d; document.getElementById('savest').textContent = d
   sj.innerHTML = roster().length ? roster().map(function(j){return '<option value="'+j.num+'">'+pname(j)+'</option>';}).join('')
                                  : '<option value="">(no se cargó el plantel)</option>';
   var sm=document.getElementById('selMes'), now=new Date(), opts='';
-  /* Antes la lista iba 11 meses HACIA ATRAS. Eso hacia que, por ejemplo en
-     julio, el ultimo de la lista fuera "Agosto" del ano anterior — y es muy
-     facil elegirlo creyendo que es el agosto que viene. Asi terminaron
-     cargandose rutinas con un ano de atraso.
-
-     Ahora van 2 meses atras (para completar algo que quedo pendiente) y 6
-     adelante (para planificar la temporada). Y el ano se marca cuando NO es el
-     actual, para que salte a la vista. */
-  for(var d=-2; d<=6; d++){
+  for(var d=-11; d<=4; d++){                          // hasta 11 meses atras + actual + 4 siguientes
     var dt=new Date(now.getFullYear(), now.getMonth()+d, 1);
     var key=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0');
     var lbl=MESES[dt.getMonth()]+' '+dt.getFullYear();
-    var marca=(dt.getFullYear()!==now.getFullYear()) ? '  \u26a0' : '';
-    opts+='<option value="'+key+'" data-lbl="'+lbl+'"'+(d===0?' selected':'')+'>'+lbl+marca+'</option>';
+    opts+='<option value="'+key+'" data-lbl="'+lbl+'"'+(d===0?' selected':'')+'>'+lbl+'</option>';
   }
   sm.innerHTML=opts;
   cargar();
@@ -397,18 +383,15 @@ function addBloque(si){ R.semanas[si].bloques.push({nombre:BLOQUES[2].nombre,ico
 function delBloque(si,bi){ R.semanas[si].bloques.splice(bi,1); setDirty(true); render(); }
 function addEj(si,bi){ R.semanas[si].bloques[bi].ejercicios.push({id:'',nombre:'',series:4,reps:'8-10',descanso:'90 s',carga:'',nota:'',video:null}); setDirty(true); render(); }
 function delEj(si,bi,ei){ R.semanas[si].bloques[bi].ejercicios.splice(ei,1); setDirty(true); render(); }
-function addCombo(si,bi,ei){ var e=R.semanas[si].bloques[bi].ejercicios[ei]; e.id2=''; e.nombre2=''; e.reps2=''; e.video2=null; setDirty(true); render(); }
-function delCombo(si,bi,ei){ var e=R.semanas[si].bloques[bi].ejercicios[ei]; delete e.id2; delete e.nombre2; delete e.reps2; delete e.video2; setDirty(true); render(); }
 
 function onSesLabel(si,v){ R.semanas[si].label=v; setDirty(true); }
 function onBloque(si,bi,v){ var b=bloqueByName(v); R.semanas[si].bloques[bi].nombre=b.nombre; R.semanas[si].bloques[bi].icon=b.icon; R.semanas[si].bloques[bi].color=b.color; setDirty(true); render(); }
 function onEj(si,bi,ei,field,v){
   var e=R.semanas[si].bloques[bi].ejercicios[ei];
   if(field==='id'){ var cat=ejById(v); e.id=v; e.nombre=cat?cat.es:''; e.video=cat?cat.video:null; }
-  else if(field==='id2'){ var cat2=ejById(v); e.id2=v; e.nombre2=cat2?cat2.es:''; e.video2=cat2?cat2.video:null; }
   else e[field]=v;
   setDirty(true);
-  if(field==='id'||field==='id2') render();
+  if(field==='id') render();
 }
 
 /* ---------- render ---------- */
@@ -444,7 +427,6 @@ function render(){
         h+='<div class="colhdr"><span>Ejercicio</span><span>Series</span><span>Reps</span><span>Descanso</span><span>Carga</span><span>Nota</span><span></span></div>';
       }
       b.ejercicios.forEach(function(e,ei){
-        var hasCombo = (e.id2!==undefined);
         h+='<div class="ej-row">'
           +'<select onchange="onEj('+si+','+bi+','+ei+',\'id\',this.value)">'+catOptions(e.id)+'</select>'
           +'<input type="number" min="1" placeholder="ser." value="'+(e.series||'')+'" oninput="onEj('+si+','+bi+','+ei+',\'series\',this.value)">'
@@ -454,19 +436,9 @@ function render(){
           +'<input type="text" placeholder="indicación…" value="'+(e.nota||'').replace(/"/g,'&quot;')+'" oninput="onEj('+si+','+bi+','+ei+',\'nota\',this.value)">'
           +'<span style="display:flex;align-items:center;gap:8px;justify-content:flex-end">'
             +(e.video?'<a class="vbtn" href="'+e.video+'" target="_blank">▶ video</a>':'')
-            +(hasCombo?'':'<button class="btn-combinar" title="Combinar con otro ejercicio (superserie)" onclick="addCombo('+si+','+bi+','+ei+')">+ combinar</button>')
             +'<button class="x" title="Eliminar ejercicio" onclick="delEj('+si+','+bi+','+ei+')">✕</button>'
           +'</span>'
           +'</div>';
-        if(hasCombo){
-          h+='<div class="ej-combo">'
-            +'<span class="cmb-plus" title="Superserie">＋</span>'
-            +'<select onchange="onEj('+si+','+bi+','+ei+',\'id2\',this.value)">'+catOptions(e.id2)+'</select>'
-            +'<input type="text" placeholder="reps" value="'+(e.reps2||'').replace(/"/g,'&quot;')+'" oninput="onEj('+si+','+bi+','+ei+',\'reps2\',this.value)">'
-            +(e.video2?'<a class="vbtn" href="'+e.video2+'" target="_blank">▶ video</a>':'')
-            +'<button class="x" title="Quitar el ejercicio combinado" onclick="delCombo('+si+','+bi+','+ei+')">✕</button>'
-          +'</div>';
-        }
       });
       h+='<div class="addrow"><button class="btn btn-ghost btn-sm" onclick="addEj('+si+','+bi+')">+ Ejercicio</button></div>';
       h+='</div>';
@@ -494,76 +466,6 @@ function guardar(){
   setDirty(false);
   refreshSavedChips();
 }
-
-/* ══ MOVER UNA RUTINA DE MES ══════════════════════════════════════════════
-   Una rutina queda guardada bajo la clave del mes que se eligio al armarla
-   (2025-08). Si se elige mal —y era facil, porque la lista de meses llegaba a
-   ir once meses hacia atras— la unica salida era rehacerla entera o entrar a
-   la base de datos a mano. Ninguna de las dos cosas se le puede pedir a un
-   preparador fisico.
-
-   Esto la copia al mes nuevo y borra la vieja, en un paso. Si en el destino ya
-   hay una rutina, avisa antes de pisarla. */
-function moverMes(){
-  var num = +document.getElementById('selJug').value;
-  if(!num){ alert('Elegí un jugador.'); return; }
-  if(!R || !R.mes){ alert('Abrí primero la rutina que querés mover.'); return; }
-
-  var origen = R.mes;
-  var destino = prompt(
-    'Mover la rutina de ' + mesLabelFromKey(origen) + '\n\n' +
-    'Escribí el mes destino con este formato:  AAAA-MM\n' +
-    'Por ejemplo  2026-08  para agosto de 2026.',
-    new Date().getFullYear() + '-' + String(new Date().getMonth()+1).padStart(2,'0'));
-  if(!destino) return;
-  destino = destino.trim();
-
-  if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(destino)){
-    alert('El formato tiene que ser AAAA-MM.\nPor ejemplo: 2026-08'); return;
-  }
-  if(destino === origen){ alert('Es el mismo mes.'); return; }
-
-  var seguir = function(){
-    var copia = JSON.parse(JSON.stringify(R));
-    copia.mes = destino;
-    copia.mesLabel = mesLabelFromKey(destino);
-    copia.actualizado = new Date().toISOString();
-
-    if(typeof fbSet === 'undefined'){
-      alert('Sin conexión a la nube no puedo mover la rutina.\nProbá de nuevo con internet.');
-      return;
-    }
-    /* primero se escribe la nueva; recien despues se borra la vieja, para que
-       un corte de conexion en el medio no deje al jugador sin rutina */
-    fbSet('prep_rutinas/'+num+'/'+destino, copia);
-    setTimeout(function(){
-      fbSet('prep_rutinas/'+num+'/'+origen, null);
-      try{
-        localStorage.setItem('prep_rutina_'+num+'_'+destino, JSON.stringify(copia));
-        localStorage.removeItem('prep_rutina_'+num+'_'+origen);
-      }catch(e){}
-      R = copia;
-      try{ var sel=document.getElementById('selMes'); if(sel) sel.value = destino; }catch(e){}
-      document.getElementById('savest').textContent =
-        'Movida de ' + mesLabelFromKey(origen) + ' a ' + mesLabelFromKey(destino) + ' ✓';
-      setDirty(false);
-      refreshSavedChips();
-    }, 600);
-  };
-
-  /* ¿ya hay algo en el destino? */
-  if(typeof fbGet !== 'undefined'){
-    fbGet('prep_rutinas/'+num+'/'+destino, function(ya){
-      if(ya && ya.semanas && ya.semanas.length){
-        if(!confirm('En ' + mesLabelFromKey(destino) + ' ya hay una rutina cargada.\n\n' +
-                    '¿La reemplazo por esta?')) return;
-      }
-      seguir();
-    });
-  } else { seguir(); }
-}
-
-
 /* ---------- copiar rutina a varios jugadores ---------- */
 var cpMode='copiar';
 function cpOpen(mode){
@@ -646,8 +548,6 @@ window.addEventListener('beforeunload', function(e){ if(DIRTY){ e.preventDefault
 <script>
 (function(){function a(){try{if(document.getElementById('club-escudo'))return;var a=document.createElement('a');a.id='club-escudo';a.href='index.html';a.title='Inicio · Volley Näfels';a.style.cssText='position:fixed;left:12px;bottom:12px;z-index:99990;width:46px;height:46px;border-radius:50%;overflow:hidden;background:#000;border:1px solid rgba(255,255,255,.18);box-shadow:0 2px 12px rgba(0,0,0,.55);display:block;';var i=document.createElement('img');i.src='escudo.png';i.alt='Volley Näfels';i.style.cssText='width:100%;height:100%;object-fit:cover;display:block;';a.appendChild(i);document.body.appendChild(a);}catch(e){}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',a);else a();})();
 </script>
-<script src="lang.js?v=20260813-1930"></script>
-<script src="volver_inicio.js?v=20260813-1930" onerror="void 0"></script>
 </body></html>
 
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->

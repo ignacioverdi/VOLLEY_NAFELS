@@ -43,13 +43,9 @@
   .vtab.on{background:var(--naf);color:#1a1206;border-color:var(--naf)}
   @media(max-width:680px){.row{grid-template-columns:1fr 70px;gap:8px}.thumb{order:-1}}
 </style>
-<!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
-     la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260813-1930" onerror="void 0"></script>
-<!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
-     toca el encabezado y las barras: en la computadora no hace nada.
-     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260813-1930">
+<!-- Puerta de entrada. La capsula quedo abierta cuando se cerro el resto del
+     sistema: 26 paginas con la temporada 25-26 completa se abrian sin clave. -->
+<script src="../../firebase.js" onerror="void 0"></script>
 </head>
 <body>
   <h1>🎬 Cargar videos de los partidos</h1>
@@ -84,18 +80,17 @@
 
   <div id="list"></div>
 
-  <script src="datos_seguros.js?v=20260813-1930"></script>
+  <script src="datos_video.js.enc" onerror="void 0"></script>
+  <script src="mapa_videos_ent.js.enc" onerror="void 0"></script>
+  <script src="mapa_videos.js.enc" onerror="void 0"></script>
+  <script src="../../datos_seguros.js"></script>
   <script src="datos_video_25-26.js.enc?v=3" onerror="void 0"></script>
-  <!-- Los datos del club se publican CIFRADOS: el archivo real se llama
-       datos_video_ent_25-26.js.enc. Estas lineas pedian el .js pelado, que
-       no existe, asi que la lista de entrenamientos salia siempre en 0 de 0.
-       Las de temporadas futuras se dejan igual, con .enc, para cuando existan. -->
-  <script src="datos_video_26-27.js.enc?v=3" onerror="void 0"></script>
-  <script src="datos_video_27-28.js.enc?v=3" onerror="void 0"></script>
-  <script src="datos_video_28-29.js.enc?v=3" onerror="void 0"></script>
-  <script src="datos_video_ent_25-26.js.enc?v=3" onerror="void 0"></script>
-  <script src="datos_video_ent_26-27.js.enc?v=3" onerror="void 0"></script>
-  <script src="datos_video_ent_27-28.js.enc?v=3" onerror="void 0"></script>
+  <script src="datos_video_26-27.js?v=3" onerror="void 0"></script>
+  <script src="datos_video_27-28.js?v=3" onerror="void 0"></script>
+  <script src="datos_video_28-29.js?v=3" onerror="void 0"></script>
+  <script src="datos_video_ent_25-26.js?v=3" onerror="void 0"></script>
+  <script src="datos_video_ent_26-27.js?v=3" onerror="void 0"></script>
+  <script src="datos_video_ent_27-28.js?v=3" onerror="void 0"></script>
   <script src="mapa_videos.js.enc?v=3" onerror="void 0"></script>
   <script src="mapa_videos_ent.js.enc?v=3" onerror="void 0"></script>
   <script>abrirDatos();</script>
@@ -227,8 +222,7 @@
     };
   })();
   </script>
-<script src="lang.js?v=20260813-1930" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260813-1930" onerror="void 0"></script>
+<script src="lang.js" onerror="void 0"></script>
 </body>
 </html>
 
