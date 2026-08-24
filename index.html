@@ -246,10 +246,10 @@ select, select option {
   background-color: #ffffff !important;
 }
 </style>
-<script src="datos_seguros.js?v=20260824-1444"></script>
-<script src="firebase.js?v=20260824-1444" onerror="void 0"></script>
-<script src="lang.js?v=20260824-1444"></script>
-<script src="plantel_nafels.js?v=20260824-1444"></script>
+<script src="datos_seguros.js?v=20260824-1703"></script>
+<script src="firebase.js?v=20260824-1703" onerror="void 0"></script>
+<script src="lang.js?v=20260824-1703"></script>
+<script src="plantel_nafels.js?v=20260824-1703"></script>
 
 <style>
 @media(max-width:768px){
@@ -348,7 +348,7 @@ select, select option {
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260824-1444">
+<link rel="stylesheet" href="movil.css?v=20260824-1703">
 </head>
 <body>
 <div id="fx"><div class="grid"></div><div class="sweep"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="vig"></div></div>
@@ -1380,9 +1380,41 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260824-1444"></script>
+<script src="chat_nafels.js?v=20260824-1703"></script>
 
-<script src="proximo_rival.js?v=20260824-1444" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js?v=20260824-1703" onerror="window.FIXTURE_DATA=null"></script>
+<script>
+/* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
+   proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
+   que el cuerpo tecnico mantiene al dia, y ahi esta el fixture de verdad.
+
+   Si en el calendario apretaron "Usar este fixture", eso pisa lo del Excel.
+   Si no, todo sigue como siempre: no cambia nada para quien no lo use. */
+(function(){
+  function tomar(fx){
+    if(fx && fx.proximo && fx.proximo.rival){
+      window.FIXTURE_DATA = fx;
+    }
+  }
+  /* lo guardado en este dispositivo, que es instantaneo */
+  try {
+    var g = localStorage.getItem('vb_fixture');
+    if(g) tomar(JSON.parse(g));
+  } catch(e){}
+  /* y lo del club, que puede haberlo puesto otro del cuerpo tecnico */
+  try {
+    if(window.fbGet) fbGet('fixture', function(fx){
+      if(!fx || !fx.proximo) return;
+      var antes = window.FIXTURE_DATA && window.FIXTURE_DATA.proximo;
+      tomar(fx);
+      /* si llego despues de pintar, se vuelve a pintar */
+      if(!antes || antes.fecha !== fx.proximo.fecha){
+        try { if(window.pintarProximo) window.pintarProximo(); } catch(e){}
+      }
+    });
+  } catch(e){}
+})();
+</script>
 <script>
 (function(){
   try{
@@ -1408,12 +1440,12 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   }catch(e){}
 })();
 </script>
-<script src="temporadas_menu.js?v=20260824-1444"></script>
+<script src="temporadas_menu.js?v=20260824-1703"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20260824-1444" defer></script>
+<script src="onesignal_push.js?v=20260824-1703" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -1481,7 +1513,6 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   }catch(e){}
 })();
 </script>
-<script src="ayuda.js?v=20260824-1444"></script>
 </body>
 </html>
 

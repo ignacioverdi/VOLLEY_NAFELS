@@ -7,8 +7,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="datos_seguros.js?v=20260824-1444"></script>
-<script src="firebase.js?v=20260824-1444" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260824-1703"></script>
+<script src="firebase.js?v=20260824-1703" onerror="void 0"></script>
 <style>
   :root{--bg:#0a0f1a;--surface:#111827;--card:#0f1020;--card2:#151b2e;--border:rgba(255,255,255,.08);--b2:rgba(255,255,255,.13);
     --text:#e2e8f0;--muted:#64748b;--mut2:#94a3b8;--green:#22c55e;--amber:#f59e0b;--orange:#f97316;--red:#ef4444;--acc:#2dd4bf;--accd:#14b8a6}
@@ -198,7 +198,7 @@
   }
 }
 </style>
-<link rel="stylesheet" href="movil.css?v=20260824-1444">
+<link rel="stylesheet" href="movil.css?v=20260824-1703">
 </head>
 <body>
 <div class="wrap" id="wrap">
@@ -234,7 +234,17 @@
             style="background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.4);color:#4ade80">
       <span id="cal-sub-txt">🔄 Suscribirme al calendario</span>
     </button>
-    <button class="add-btn" id="add-btn" onclick="openForm()" data-solo-editor>+ Agregar</button>
+    <!-- Del calendario al resto de la app: el proximo rival y el archivado
+     de la temporada que termino. Solo los ve el cuerpo tecnico. -->
+<button class="add-btn" onclick="usarFixture()" data-solo-editor
+        style="background:rgba(230,167,67,.14);border-color:rgba(230,167,67,.4);color:#e6a743"
+        title="Toma el proximo partido de este calendario y lo muestra en toda la app">
+  ⭐ Usar este fixture</button>
+<button class="add-btn" onclick="archivarTemporada()" data-solo-editor
+        style="background:rgba(148,163,184,.12);border-color:rgba(148,163,184,.3);color:#94a3b8"
+        title="Guarda los partidos ya jugados y deja el calendario con lo que viene">
+  📦 Archivar la temporada</button>
+<button class="add-btn" id="add-btn" onclick="openForm()" data-solo-editor>+ Agregar</button>
     <button class="import-btn" id="import-btn" onclick="importFixture()" data-solo-editor>⬇️ Importar fixture 2026/27 (14 partidos)</button>
     <button class="import-btn" id="import-gym-btn" onclick="importGym()" data-solo-editor style="display:none">🏋️ Gimnasio (Lun/Mié/Vie · sep–abr)</button>
     <button class="import-btn" id="import-xmas-btn" onclick="importHolidays()" data-solo-editor style="display:none">🎄 Christmas Holidays (20–25 dic)</button>
@@ -896,8 +906,96 @@ window.temporadaAlCalendario = function(){
 };
 
 </script>
-<script src="lang.js?v=20260824-1444" onerror="void 0"></script>
-<script src="ayuda.js?v=20260824-1444"></script>
+<script src="lang.js?v=20260824-1703" onerror="void 0"></script>
+<script>
+/* ══ DEL CALENDARIO AL RESTO DE LA APP ═══════════════════════════════════
+   El calendario ya tiene el fixture cargado. Estas dos funciones lo usan:
+
+   usarFixture()        el proximo partido pasa a verse en toda la app
+   archivarTemporada()  los partidos jugados se guardan aparte y el
+                        calendario queda con lo que viene
+
+   Las dos piden confirmacion antes de tocar nada, y ninguna borra: lo
+   archivado queda guardado y se puede volver a ver. */
+(function(){
+  function slug(t){
+    return (t || '').toString().toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]/g, '');
+  }
+  function hoy(){
+    var d = new Date();
+    return d.getFullYear() + '-' +
+           String(d.getMonth() + 1).padStart(2, '0') + '-' +
+           String(d.getDate()).padStart(2, '0');
+  }
+  function cond(p){
+    return (p.condicion || '').toLowerCase().indexOf('vis') >= 0
+           ? 'visitante' : 'local';
+  }
+
+  /* ── El proximo rival, para toda la app ───────────────────────────── */
+  window.usarFixture = function(){
+    var h = hoy();
+    var futuros = ((window.data && data.partidos) || [])
+      .filter(function(p){ return p.fecha && p.fecha >= h && p.rival; })
+      .sort(function(a, b){ return a.fecha < b.fecha ? -1 : 1; });
+
+    if(!futuros.length){
+      alert('No hay partidos futuros cargados en el calendario.\n\n' +
+            'Agregá el fixture de la temporada y volvé a intentar.');
+      return;
+    }
+    var p = futuros[0];
+    if(!confirm('El proximo partido pasa a ser:\n\n' +
+                '   ' + p.fecha + '   vs ' + p.rival + '   (' + cond(p) + ')\n\n' +
+                'Se va a ver en el inicio y en el plan de partido.\n' +
+                'Hay ' + futuros.length + ' partido(s) por delante.\n\n' +
+                'Continuo?')) return;
+
+    var fx = {
+      proximo: { fecha: p.fecha, rival: p.rival, slug: slug(p.rival), cond: cond(p) },
+      fixture: futuros.map(function(x){
+        return { fecha: x.fecha, rival: x.rival, slug: slug(x.rival), cond: cond(x) };
+      })
+    };
+    fbSet('fixture', fx);
+    try { localStorage.setItem('vb_fixture', JSON.stringify(fx)); } catch(e){}
+    alert('Listo.\n\nProximo rival: ' + p.rival + ' (' + p.fecha + ')\n' +
+          futuros.length + ' partido(s) en el fixture.\n\n' +
+          'Si no lo ves enseguida, apreta Ctrl+Shift+R.');
+  };
+
+  /* ── Archivar lo que ya se jugo ───────────────────────────────────── */
+  window.archivarTemporada = function(){
+    var h = hoy();
+    var todos = (window.data && data.partidos) || [];
+    var viejos = todos.filter(function(p){ return p.fecha && p.fecha < h; });
+    var quedan = todos.filter(function(p){ return !p.fecha || p.fecha >= h; });
+
+    if(!viejos.length){
+      alert('No hay partidos pasados para archivar.\n' +
+            'El calendario ya tiene solo lo que viene.');
+      return;
+    }
+    if(!confirm('Se archivan ' + viejos.length + ' partido(s) ya jugado(s).\n' +
+                'Quedan ' + quedan.length + ' por delante.\n\n' +
+                'NO se borran: se guardan aparte y se pueden volver a ver.\n\n' +
+                'Continuo?')) return;
+
+    var anio = (viejos[0].fecha || '').slice(0, 4) || 'anterior';
+    fbGet('calendario/archivo_' + anio, function(previo){
+      var todo = (Array.isArray(previo) ? previo : []).concat(viejos);
+      fbSet('calendario/archivo_' + anio, todo);
+      data.partidos = quedan;
+      fbSet('calendario/partidos', quedan);
+      if(window.render) render();
+      alert('Listo.\n\n' + viejos.length + ' partido(s) archivado(s) en ' + anio +
+            '.\nEl calendario quedo con ' + quedan.length + ' por jugar.');
+    });
+  };
+})();
+</script>
 </body></html>
 
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
