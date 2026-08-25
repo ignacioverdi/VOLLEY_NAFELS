@@ -219,9 +219,22 @@
      los codigos de scouteo y la camara del gimnasio son unicos.
      ══════════════════════════════════════════════════════════════════════ */
   (function(){
-    if(!window.fbGet || !window.fbSet) return;
-    if(window.__FB_POR_CAT) return;          /* una sola vez */
-    window.__FB_POR_CAT = true;
+    /* ── HAY QUE ESPERAR A FIREBASE ──────────────────────────────────
+       Este archivo se carga ANTES que firebase.js: va primero porque el
+       selector tiene que estar listo cuando el navegador empieza a pedir
+       los datos. Pero eso significa que fbGet todavia no existe.
+
+       Antes se hacia "if(!window.fbGet) return" y no se envolvia nunca:
+       el wellness y las rutinas seguian compartidos entre categorias.
+
+       Ahora se espera. Se revisa cada 30ms hasta que aparezca, con un
+       limite de 10 segundos por si esa pantalla no usa Firebase. */
+    var intentos = 0;
+
+    function envolver(){
+      if(window.__FB_POR_CAT) return true;   /* una sola vez */
+      if(!window.fbGet || !window.fbSet) return false;
+      window.__FB_POR_CAT = true;
 
     /* de un equipo: cada categoria tiene lo suyo */
     var DEL_EQUIPO = /^(wellness|pesos|rm|prep_rutinas|prep_hist|notas|notas_pf|obs|baggerone|voley_live|voley_data|pv_sesion|horarios|fixture|pendientes|calendario)(\/|$)/;
@@ -234,8 +247,17 @@
       return carpeta() + p;                  /* Primera devuelve '' */
     }
 
-    window.fbGet = function(p, cb){ return _get(ruta(p), cb); };
-    window.fbSet = function(p, v){ return _set(ruta(p), v); };
+      window.fbGet = function(p, cb){ return _get(ruta(p), cb); };
+      window.fbSet = function(p, v){ return _set(ruta(p), v); };
+      return true;
+    }
+
+    if(!envolver()){
+      var t = setInterval(function(){
+        intentos++;
+        if(envolver() || intentos > 330) clearInterval(t);
+      }, 30);
+    }
   })();
 
 })();
