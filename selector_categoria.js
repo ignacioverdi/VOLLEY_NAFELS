@@ -35,6 +35,14 @@
   function actual(){
     var L = cats();
     if(L.length < 2) return L[0] || 'Primera';
+
+    /* El jugador queda atado a su categoria: no sirve cambiar la direccion
+       a mano ni tocar la memoria del navegador. */
+    if(!esStaff()){
+      var mia = catDelJugador();
+      return (mia && L.indexOf(mia) >= 0) ? mia : L[0];
+    }
+
     var g = '';
     /* la direccion manda: es la que sobrevive aunque no se pueda guardar */
     try{
@@ -134,9 +142,47 @@
      Se pone al lado del de temporada, que es donde el entrenador ya busca
      este tipo de cosas. Si esa barra no existe en la pantalla, se muestra
      flotando arriba a la derecha. */
+  /* ══ QUIEN PUEDE CAMBIAR DE CATEGORIA ════════════════════════════════════
+     El entrenador y el staff navegan entre todas: necesitan ver Primera,
+     H1L y H2L para armar los planteles y comparar.
+
+     El jugador NO. Ve solo la suya. Sin esto, un jugador de H2L podia
+     elegir Primera en el selector y leer el wellness, las cargas y el plan
+     de partido del otro equipo.
+
+     Su categoria sale de jugador_cat, que se guarda cuando se le da el alta.
+     Si no la tiene anotada —planteles cargados antes de que existiera— se
+     queda en la primera, que es como estaba antes. */
+  function esStaff(){
+    try { return !window.VB_esEditor || VB_esEditor(); }
+    catch(e){ return true; }
+  }
+
+  function catDelJugador(){
+    try {
+      var g = localStorage.getItem('vb_player_cat');
+      if (g && cats().indexOf(g) >= 0) return g;
+    } catch(e){}
+    return null;
+  }
+
+  /* Se pregunta una sola vez y queda anotada, para no consultar en cada
+     pantalla. La escribe firebase.js al iniciar sesion. */
+  function fijarCategoriaJugador(){
+    if (esStaff()) return;
+    var mia = catDelJugador();
+    var L = cats();
+    var destino = (mia && L.indexOf(mia) >= 0) ? mia : L[0];
+    try {
+      if (localStorage.getItem(GUARDA) !== destino)
+        localStorage.setItem(GUARDA, destino);
+    } catch(e){}
+  }
+
   function pintar(){
     var L = cats();
     if(L.length < 2) return;             /* una sola: no se muestra */
+    if(!esStaff()) return;               /* el jugador no elige: ve la suya */
 
     var sel = document.createElement('select');
     sel.id = 'catSelGlobal';
@@ -199,6 +245,7 @@
     document.body.appendChild(caja);
   }
 
+  fijarCategoriaJugador();
   redirigir();                           /* antes de que carguen los datos */
   if(document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', pintar);
