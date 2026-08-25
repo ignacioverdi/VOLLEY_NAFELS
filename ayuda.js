@@ -435,6 +435,22 @@
         ojo:'Hat jemand anderes mit eigenen Codes gescoutet, führe es vorher durch Codes zuordnen.' }
     },
 
+
+    'manual': {
+      es: { titulo:'Manual del Club',
+        que:'Cómo se usa el sistema, explicado paso a paso.',
+        pasos:['Buscá el tema que necesites en el índice.','Cada sección explica una parte de la app.'],
+        ojo:'Para lo puntual de cada pantalla está este mismo botón "?" en cada una.' },
+      en: { titulo:'Club Manual',
+        que:'How the system is used, explained step by step.',
+        pasos:['Find the topic you need in the index.','Each section covers one part of the app.'],
+        ojo:'For screen-specific help, this same "?" button is on every screen.' },
+      de: { titulo:'Vereinshandbuch',
+        que:'Wie das System benutzt wird, Schritt für Schritt erklärt.',
+        pasos:['Suche das gewünschte Thema im Inhaltsverzeichnis.','Jeder Abschnitt behandelt einen Teil der App.'],
+        ojo:'Für bildschirmspezifische Hilfe gibt es diesen "?"-Knopf auf jedem Bildschirm.' }
+    },
+
     'playbook': {
       es: { titulo:'Playbook',
         que:'Las jugadas del equipo, dibujadas, para que las vean los jugadores.',
@@ -1049,8 +1065,21 @@
   /* ── Que pantalla es esta ─────────────────────────────────────────────── */
   function pantalla() {
     var p = (location.pathname || '').split('/').pop() || '';
-    return p.replace(/\.html.*$/, '').toLowerCase();
+    p = p.replace(/\.html.*$/, '').toLowerCase();
+
+    /* ── LOS ARCHIVOS QUE LLEVAN EL NOMBRE DEL CLUB ────────────────────
+       Algunas pantallas se llaman con el club adentro, porque se generan
+       para cada uno: "Team_Playbook_Nafels.html", "MANUAL_GELP_VOLEY.html".
+       El nombre cambia en cada club, asi que la clave del diccionario no
+       puede coincidir nunca.
+
+       Se reconocen por lo que tienen en comun: la palabra clave adentro. */
+    if (p.indexOf('playbook') >= 0) return 'playbook';
+    if (p.indexOf('manual') >= 0)   return 'manual';
+
+    return p;
   }
+
 
   /* ── Que idioma esta puesto ───────────────────────────────────────────── */
   function idioma() {
