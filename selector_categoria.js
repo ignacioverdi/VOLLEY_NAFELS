@@ -36,6 +36,14 @@
     var L = cats();
     if(L.length < 2) return L[0] || 'Primera';
     var g = '';
+    /* la direccion manda: es la que sobrevive aunque no se pueda guardar */
+    try{
+      var q = new URL(location.href).searchParams.get('cat');
+      if(q && L.indexOf(q) >= 0){
+        try{ localStorage.setItem(GUARDA, q); }catch(e){}
+        return q;
+      }
+    }catch(e){}
     try{ g = localStorage.getItem(GUARDA) || ''; }catch(e){}
     return (g && L.indexOf(g) >= 0) ? g : L[0];
   }
@@ -143,8 +151,29 @@
     }).join('');
 
     sel.addEventListener('change', function(){
-      try{ localStorage.setItem(GUARDA, sel.value); }catch(e){}
-      location.reload();                 /* los datos se cargan al abrir */
+      /* ── GUARDAR ANTES DE RECARGAR ──────────────────────────────────
+         location.reload() puede cortar la pagina antes de que el guardado
+         termine, y entonces vuelve a abrir con la categoria anterior:
+         elegis H1L y sigue diciendo Primera.
+
+         Se guarda en dos lugares y se comprueba que haya quedado. Recien
+         despues se recarga, y siempre en el siguiente turno del navegador,
+         nunca en el medio del evento. */
+      var v = sel.value;
+      var ok = false;
+      try{ localStorage.setItem(GUARDA, v);
+           ok = (localStorage.getItem(GUARDA) === v); }catch(e){}
+      if(!ok){
+        /* si el navegador no deja guardar —incognito con la memoria
+           bloqueada— se pasa por la direccion, que sobrevive a la recarga */
+        try{
+          var u = new URL(location.href);
+          u.searchParams.set('cat', v);
+          location.replace(u.toString());
+          return;
+        }catch(e){}
+      }
+      setTimeout(function(){ location.reload(); }, 0);
     });
 
     /* ══ Donde se pone ════════════════════════════════════════════════════
