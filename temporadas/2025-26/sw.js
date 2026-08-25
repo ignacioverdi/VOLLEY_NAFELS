@@ -32,7 +32,7 @@
    pegado, como los escudos o los estilos.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-var VERSION = 'v3';
+var VERSION = 'v5';
 /* La temporada archivada tiene su propia caja: si compartiera la de la
    carpeta principal, una borraria la de la otra al activarse. */
 var CAJA    = 'club-2025-26-' + VERSION;
@@ -117,13 +117,14 @@ self.addEventListener('fetch', function (e) {
       if (res && (res.ok || res.type === 'opaque')) {
         var copia = res.clone();
         caches.open(CAJA).then(function (c) {
-          c.put(req, copia).catch(function () {});
+          var limpio = req.url.split('?')[0];
+          c.put(new Request(limpio), copia).catch(function () {});
         });
       }
       return res;
     }).catch(function () {
       /* sin senal: se usa la copia */
-      return caches.match(req).then(function (guardado) {
+      return caches.match(req, { ignoreSearch: true }).then(function (guardado) {
         if (guardado) return guardado;
         /* si es una pantalla que nunca se abrio, al menos se muestra el
            inicio en vez de la pagina de error del navegador */
