@@ -283,6 +283,112 @@
     },
 
 
+
+    'index': {
+      es: { titulo:'Inicio',
+        que:'La puerta de entrada: desde acá se llega a todo lo que hace la app.',
+        pasos:['Elegí la categoría arriba si el club tiene varias.','Tocá la tarjeta de lo que necesites.','El próximo partido aparece destacado arriba.'],
+        ojo:'Los jugadores ven solo las tarjetas que les corresponden. El cuerpo técnico ve todas.' },
+      en: { titulo:'Home',
+        que:'The way in: everything the app does is reachable from here.',
+        pasos:['Pick the category at the top if the club has several.','Tap the card for what you need.','The next match is highlighted at the top.'],
+        ojo:'Players only see the cards meant for them. The staff sees all of them.' },
+      de: { titulo:'Start',
+        que:'Der Einstieg: von hier aus ist alles erreichbar, was die App kann.',
+        pasos:['Wähle oben die Kategorie, wenn der Verein mehrere hat.','Tippe auf die Kachel, die du brauchst.','Das nächste Spiel wird oben hervorgehoben.'],
+        ojo:'Spieler sehen nur die für sie bestimmten Kacheln. Der Staff sieht alle.' }
+    },
+
+    'ranking': {
+      es: { titulo:'Ranking',
+        que:'Cómo está cada jugador del plantel comparado con los demás.',
+        pasos:['Elegí el fundamento arriba.','La lista se ordena de mejor a peor.'],
+        ojo:'Mirá el volumen además del puesto: el que jugó tres partidos no se compara con el que jugó veinte.' },
+      en: { titulo:'Ranking',
+        que:'How each player in the squad stands against the rest.',
+        pasos:['Choose the skill at the top.','The list sorts from best to worst.'],
+        ojo:'Look at the volume as well as the position: three matches does not compare with twenty.' },
+      de: { titulo:'Rangliste',
+        que:'Wie jeder Spieler des Kaders im Vergleich zu den anderen dasteht.',
+        pasos:['Wähle oben das Element.','Die Liste sortiert von best nach schlechtest.'],
+        ojo:'Achte neben der Platzierung auf das Volumen: drei Spiele sind nicht mit zwanzig vergleichbar.' }
+    },
+
+    'recepcion': {
+      es: { titulo:'Recepción',
+        que:'Quién recibe, desde dónde le sacan y con qué calidad.',
+        pasos:['Elegí el jugador o mirá el equipo completo.','Las zonas muestran desde dónde le llegan los saques.','Filtrá por rival para preparar el próximo partido.'],
+        ojo:'El porcentaje que importa es el de recepción positiva (#+): es la que deja armar.' },
+      en: { titulo:'Reception',
+        que:'Who passes, where the serves come from, and with what quality.',
+        pasos:['Pick the player or look at the whole team.','The zones show where the serves reach them from.','Filter by opponent to prepare the next match.'],
+        ojo:'The percentage that matters is positive reception (#+): that is the one that lets you set.' },
+      de: { titulo:'Annahme',
+        que:'Wer annimmt, woher aufgeschlagen wird und in welcher Qualität.',
+        pasos:['Wähle den Spieler oder sieh das ganze Team.','Die Zonen zeigen, woher die Aufschläge kommen.','Filtere nach Gegner, um das nächste Spiel vorzubereiten.'],
+        ojo:'Entscheidend ist die positive Annahme (#+): sie ermöglicht das Zuspiel.' }
+    },
+
+    'tendencias': {
+      es: { titulo:'Tendencias',
+        que:'Cómo evoluciona el equipo partido a partido.',
+        pasos:['Elegí el fundamento.','La línea muestra si sube o baja a lo largo de la temporada.'],
+        ojo:'Un partido malo no es una tendencia. Mirá la dirección de tres o cuatro seguidos.' },
+      en: { titulo:'Trends',
+        que:'How the team evolves match by match.',
+        pasos:['Choose the skill.','The line shows whether it rises or falls across the season.'],
+        ojo:'One bad match is not a trend. Look at the direction across three or four in a row.' },
+      de: { titulo:'Trends',
+        que:'Wie sich das Team von Spiel zu Spiel entwickelt.',
+        pasos:['Wähle das Element.','Die Linie zeigt, ob es über die Saison steigt oder fällt.'],
+        ojo:'Ein schlechtes Spiel ist kein Trend. Achte auf die Richtung über drei bis vier Spiele.' }
+    },
+
+    'videos': {
+      es: { titulo:'Videos Destacados',
+        que:'Las jugadas que el cuerpo técnico eligió guardar.',
+        pasos:['Tocá un video para verlo.','Sirve para la charla técnica y para mostrarle a un jugador algo puntual.'],
+        ojo:'Para buscar jugadas por acción y valoración está Cortes de Video.' },
+      en: { titulo:'Featured Videos',
+        que:'The rallies the coaching staff chose to keep.',
+        pasos:['Tap a video to watch it.','Useful for the team talk and to show a player something specific.'],
+        ojo:'To search rallies by action and grade, use Video Clips.' },
+      de: { titulo:'Ausgewählte Videos',
+        que:'Die Ballwechsel, die das Trainerteam behalten wollte.',
+        pasos:['Tippe auf ein Video, um es anzusehen.','Nützlich für die Besprechung und um einem Spieler etwas Konkretes zu zeigen.'],
+        ojo:'Um Ballwechsel nach Aktion und Bewertung zu suchen, nutze Videoclips.' }
+    },
+
+    'temporadas': {
+      es: { titulo:'Temporadas',
+        que:'Las temporadas anteriores, guardadas y consultables.',
+        pasos:['Tocá una temporada para entrar.','Adentro está todo tal como quedó al cerrarla.'],
+        ojo:'Una temporada archivada no se modifica: es una foto del momento en que se cerró.' },
+      en: { titulo:'Seasons',
+        que:'Previous seasons, stored and available to consult.',
+        pasos:['Tap a season to open it.','Inside, everything is exactly as it was when it closed.'],
+        ojo:'An archived season is never modified: it is a snapshot of the moment it was closed.' },
+      de: { titulo:'Saisons',
+        que:'Frühere Saisons, gespeichert und abrufbar.',
+        pasos:['Tippe auf eine Saison, um sie zu öffnen.','Darin ist alles genau so, wie es beim Abschluss war.'],
+        ojo:'Eine archivierte Saison wird nicht verändert: sie ist eine Momentaufnahme des Abschlusses.' }
+    },
+
+    'prep_builder': {
+      es: { titulo:'Armar Rutinas',
+        que:'La rutina de gimnasio que después ve cada jugador en su celular.',
+        pasos:['Elegí los ejercicios de la lista.','Poné series, repeticiones y carga.','Asignásela al jugador o a todo el plantel.'],
+        ojo:'Cada categoría tiene sus propias rutinas: si cambiás de categoría arriba, cambian.' },
+      en: { titulo:'Build Routines',
+        que:'The gym routine each player then sees on their phone.',
+        pasos:['Pick the exercises from the list.','Set sets, reps and load.','Assign it to a player or to the whole squad.'],
+        ojo:'Each category has its own routines: switch category at the top and they change.' },
+      de: { titulo:'Routinen erstellen',
+        que:'Die Kraftraum-Routine, die jeder Spieler danach am Handy sieht.',
+        pasos:['Wähle die Übungen aus der Liste.','Lege Sätze, Wiederholungen und Gewicht fest.','Weise sie einem Spieler oder dem ganzen Kader zu.'],
+        ojo:'Jede Kategorie hat eigene Routinen: wechselst du oben die Kategorie, ändern sie sich.' }
+    },
+
     'calendario': {
       es: { titulo:'Calendario',
         que:'Los partidos y los entrenamientos de esta categoría, en un solo lugar.',
