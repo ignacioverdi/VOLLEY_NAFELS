@@ -53,10 +53,35 @@ function _fbGuardarSes(s){
   FB_SES = s;
   try{ s ? localStorage.setItem('nla_sesion', JSON.stringify(s))
          : localStorage.removeItem('nla_sesion'); }catch(e){}
-  _fbSincronizarRol();
+  _fbSincronizarRol(); _fbCategoriaJugador();
 }
 /* Si la cuenta es de jugador, el rol queda atado a la cuenta y no a lo que
    haya quedado guardado en el navegador. El staff conserva su rol del inicio. */
+
+/* ── A QUE CATEGORIA PERTENECE EL JUGADOR ─────────────────────────────────
+   El jugador ve SOLO su categoria. Cual es sale de jugador_cat, que se
+   guarda cuando se le da el alta. Se pregunta al entrar y queda anotada,
+   asi cada pantalla no tiene que volver a consultarla.
+
+   Si no la tiene anotada —planteles cargados antes de que existieran las
+   categorias— no se toca nada y ve la primera, como siempre. */
+function _fbCategoriaJugador(){
+  try{
+    if(!FB_SES || !FB_SES.uid) return;
+    if((localStorage.getItem('vb_role') || '') !== 'player') return;
+    fbGet('jugador_cat/' + FB_SES.uid, function(c){
+      try{
+        if(c && typeof c === 'string'){
+          localStorage.setItem('vb_player_cat', c);
+          if(localStorage.getItem('vb_categoria') !== c){
+            localStorage.setItem('vb_categoria', c);
+          }
+        }
+      }catch(e){}
+    });
+  }catch(e){}
+}
+
 function _fbSincronizarRol(){
   try{
     if(!FB_SES || !FB_SES.email) return;
@@ -67,8 +92,134 @@ function _fbSincronizarRol(){
     }
   }catch(e){}
 }
+
+/* ── llave de los datos ────────────────────────────────────────────────────
+   Los archivos de datos del club estan cifrados en el servidor. La llave vive
+   aca adentro y solo la recibe quien inicio sesion. La guardamos en el
+   dispositivo para que las paginas puedan abrir los datos al arrancar. */
+function _fbTraerLlave(){
+  if(typeof guardarLlave !== 'function') return Promise.resolve();
+  try{ if(localStorage.getItem('club_llave')) return Promise.resolve(); }catch(e){}
+  return _fbSufijo().then(function(q){
+    return fetch(FB_URL + '/' + (typeof fbRuta === 'function' ? fbRuta('llave') : 'llave') + '.json' + q)
+      .then(function(r){ return r.json(); })
+      .then(function(k){ if(typeof k === 'string' && k.length >= 32) guardarLlave(k); })
+      .catch(function(){});
+  });
+}
+
 /* El rol (coach / at / pf / player) vive en la base, atado al UID.
    Se lee al entrar, así no depende de lo que haya quedado en el navegador. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CONTROL DE SESIONES
+   --------------------------------------------------------------------------
+   La sesión se abre UNA vez por dispositivo y se renueva sola para siempre.
+   Eso es cómodo, pero significaba que si una sesión quedaba abierta en una
+   máquina ajena no había forma de cerrarla salvo cambiarle la contraseña a
+   la persona (y eso echa a todos sus dispositivos, incluidos los propios).
+
+   Ahora cada sesión guarda CUÁNDO se creó, y en la base hay una "fecha de
+   corte". Si la sesión es anterior al corte, el dispositivo se cierra solo la
+   próxima vez que abre la app — y borra también la llave de los datos, que si
+   no quedaba guardada y permitía seguir leyendo los archivos cifrados.
+
+   En la base de datos:
+     sesiones/corte                    -> cierra TODAS las sesiones del club
+     sesiones/corte_uid/<uid>          -> cierra las de un usuario
+     sesiones/corte_disp/<uid>/<disp>  -> cierra un dispositivo puntual
+     sesiones/dispositivos/<uid>/<disp> -> qué hay conectado (para poder verlo)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Identificador del dispositivo. Se inventa una vez y queda guardado acá. */
+function _fbDispId(){
+  try{
+    var d = localStorage.getItem('nla_disp');
+    if(!d){
+      d = 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+      localStorage.setItem('nla_disp', d);
+    }
+    return d;
+  }catch(e){ return 'd0'; }
+}
+
+/* Cierra la sesión en ESTE dispositivo y borra todo lo sensible. */
+function fbCerrarSesionLocal(motivo){
+  /* Cada app guarda la sesión con SU propio nombre (nla_sesion en NÄFELS,
+     casla_sesion en CASLA). Por eso no borramos la clave a mano: usamos la
+     función de la propia app, que sabe cuál es. Si se borra la equivocada,
+     la sesión sobrevive y el aviso vuelve a salir en bucle. */
+  try{ _fbGuardarSes(null); }catch(e){}
+  try{
+    localStorage.removeItem('nla_sesion');      /* por las dudas, las dos variantes */
+    localStorage.removeItem('casla_sesion');
+    localStorage.removeItem('club_llave');      /* la llave de los datos también */
+    localStorage.removeItem('vb_role');
+    localStorage.removeItem('vb_player_num');
+  }catch(e){}
+  FB_SES = null;
+  if(motivo){ try{ alert(motivo); }catch(e){} }
+  try{ location.reload(); }catch(e){}
+}
+
+/* Deja constancia de este dispositivo, para poder verlos y elegir cuál cerrar. */
+function _fbRegistrarDisp(){
+  if(!FB_SES || !FB_SES.uid) return Promise.resolve();
+  var ua = '';
+  try{ ua = navigator.userAgent || ''; }catch(e){}
+  var tipo = /iPad|Tablet/i.test(ua) ? 'Tablet'
+           : /Android|iPhone|Mobile/i.test(ua) ? 'Celular' : 'Computadora';
+  return _fbSufijo().then(function(q){
+    return fetch(FB_URL + '/sesiones/dispositivos/' + FB_SES.uid + '/' + _fbDispId() + '.json' + q, {
+      method:'PATCH', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ tipo:tipo, mail:FB_SES.email||'',
+                             desde:(FB_SES.emitido||Date.now()), ultimo:Date.now() })
+    });
+  }).catch(function(){});
+}
+
+/* Se corre en cada arranque: mira si esta sesión fue dada de baja. */
+
+/* Deja registrado cada INGRESO (cuando alguien pone mail y clave).
+   No se anota cada vez que abre la app —eso sería un diluvio—, sólo cuando
+   se crea una sesión nueva. Para "¿quién entró y cuándo?" es lo que importa. */
+function _fbRegistrarAcceso(){
+  if(!FB_SES || !FB_SES.uid) return;
+  var ua = ''; try{ ua = navigator.userAgent || ''; }catch(e){}
+  var tipo = /iPad|Tablet/i.test(ua) ? 'Tablet'
+           : /Android|iPhone|Mobile/i.test(ua) ? 'Celular' : 'Computadora';
+  var id = 'a' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+  _fbSufijo().then(function(q){
+    return fetch(FB_URL + '/sesiones/accesos/' + id + '.json' + q, {
+      method:'PUT', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ uid:FB_SES.uid, mail:FB_SES.email||'',
+                             cuando:Date.now(), tipo:tipo, disp:_fbDispId() })
+    });
+  }).catch(function(){});
+}
+
+function _fbControlSesion(){
+  if(!FB_SES || !FB_SES.uid) return Promise.resolve();
+  return _fbSufijo().then(function(q){
+    return fetch(FB_URL + '/sesiones.json' + q).then(function(r){ return r.json(); });
+  }).then(function(d){
+    if(!d || d.error) return _fbRegistrarDisp();
+    var emitido = FB_SES.emitido || 0;
+    var disp    = _fbDispId();
+    var corte   = parseInt(d.corte, 10) || 0;
+    if(d.corte_uid && d.corte_uid[FB_SES.uid])
+      corte = Math.max(corte, parseInt(d.corte_uid[FB_SES.uid], 10) || 0);
+    if(d.corte_disp && d.corte_disp[FB_SES.uid] && d.corte_disp[FB_SES.uid][disp])
+      corte = Math.max(corte, parseInt(d.corte_disp[FB_SES.uid][disp], 10) || 0);
+
+    if(emitido < corte){
+      fbCerrarSesionLocal('Tu sesión fue cerrada desde el club.\n\nVolvé a ingresar con tu usuario y tu clave.');
+      return;
+    }
+    return _fbRegistrarDisp();
+  }).catch(function(){});   /* sin internet no echamos a nadie */
+}
+
 function _fbCargarRol(){
   if(!FB_SES || !FB_SES.uid) return Promise.resolve();
   return _fbSufijo().then(function(q){
@@ -88,7 +239,8 @@ function _fbCargarRol(){
       try{ if(typeof window.VB_refrescarPermisos === 'function') window.VB_refrescarPermisos(); }catch(e){}
       /* avisar a quien dependa del numero (avisos personales, vista por jugador) */
       try{ window.dispatchEvent(new CustomEvent('vb-rol-listo', {detail:{rol:rol, num:num}})); }catch(e){}
-    }).catch(function(){});
+    }).catch(function(){})
+      .then(function(){ return _fbControlSesion(); });   /* ¿esta sesión sigue vigente? */
   });
 }
 
@@ -112,7 +264,7 @@ function _fbRefrescar(){
     .then(function(r){ return r.json(); })
     .then(function(d){
       if(!d || !d.id_token) throw new Error('sesion vencida');
-      _fbGuardarSes({idToken:d.id_token, refreshToken:d.refresh_token,
+      _fbGuardarSes({emitido:(FB_SES && FB_SES.emitido) || 0,   /* se conserva: NO se renueva al refrescar */ idToken:d.id_token, refreshToken:d.refresh_token,
                      vence:Date.now() + (parseInt(d.expires_in,10)||3600)*1000 - 60000,
                      email:FB_SES.email, uid:d.user_id || FB_SES.uid});
       return FB_SES.idToken;
@@ -146,7 +298,9 @@ function _fbEntrar(usuario, clave){
       }
       _fbGuardarSes({idToken:d.idToken, refreshToken:d.refreshToken,
                      vence:Date.now() + (parseInt(d.expiresIn,10)||3600)*1000 - 60000,
+                     emitido:Date.now(),          /* cuándo se abrió: lo usa el control de sesiones */
                      email:mail, uid:d.localId});
+      _fbRegistrarAcceso();   /* queda registrado quién entró y cuándo */
       return true;
     });
 }
@@ -213,27 +367,44 @@ function _fbPantalla(){
 }
 
 /* ── arranque: recupera la sesion guardada o pide ingresar ──────────────── */
+/* Este dispositivo, alguna vez, entro con usuario y clave. */
+function _fbHayLlaveGuardada(){
+  try{ return !!localStorage.getItem('club_llave'); }catch(e){ return false; }
+}
+
 function _fbArrancar(){
   if(_fbListo) return _fbListo;
   FB_SES = _fbLeerSes();
-  _fbSincronizarRol();
+  _fbSincronizarRol(); _fbCategoriaJugador();
   _fbListo = new Promise(function(resolve){
     function pedir(){
       if(document.readyState === 'loading')
         document.addEventListener('DOMContentLoaded', function(){
-          _fbPantalla().then(function(){ return _fbCargarRol(); }).then(resolve);
+          _fbPantalla().then(function(){ return _fbCargarRol(); })
+        .then(function(){ return _fbTraerLlave(); }).then(resolve);
         });
-      else _fbPantalla().then(function(){ return _fbCargarRol(); }).then(resolve);
+      else _fbPantalla().then(function(){ return _fbCargarRol(); })
+        .then(function(){ return _fbTraerLlave(); }).then(resolve);
     }
     if(FB_SES && FB_SES.refreshToken){
       _fbRefrescar()
         .then(function(){ return _fbCargarRol(); })
+        .then(function(){ return _fbTraerLlave(); })
         .then(function(){ resolve(true); })
         .catch(function(){
-          if(!navigator.onLine){ FB_OFF = true; resolve(true); }   /* sin internet: seguimos con lo guardado */
+          if(!navigator.onLine && _fbHayLlaveGuardada()){ FB_OFF = true; resolve(true); }   /* sin internet, pero este equipo ya habia entrado */
           else { _fbGuardarSes(null); pedir(); }                   /* sesion vencida: pedimos ingresar */
         });
-    } else if(!navigator.onLine){
+    } else if(!navigator.onLine && _fbHayLlaveGuardada()){
+      /* Sin internet SOLO se sigue de largo si este dispositivo ya habia
+         entrado antes: la llave de los datos quedo guardada de una sesion
+         valida. Es lo que permite scoutear en un club sin senal.
+
+         Antes alcanzaba con estar sin conexion, sin importar si el dispositivo
+         habia entrado alguna vez. Cualquiera podia apagar el wifi, abrir la
+         direccion y saltearse la pantalla de ingreso. No veia datos —sin llave
+         los archivos son ilegibles— pero entraba al sistema, y eso no puede
+         pasar en algo que se vende. */
       FB_OFF = true; resolve(true);
     } else {
       pedir();

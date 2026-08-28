@@ -47,6 +47,46 @@ def buscar_temporadas():
     return salida
 
 
+# Los archivos que toda temporada necesita tener propios. Si los toma de la
+# raiz, al actualizarse la temporada nueva la vieja se rompe: mostraba el
+# plantel equivocado, no abria los videos, y despues quedo sin los arreglos
+# de celular porque movil.css vivia solo en la raiz.
+COMUNES = [
+    'firebase.js', 'datos_seguros.js', 'movil.css', 'lang.js',
+    'ayuda.js', 'categorias_club.js', 'selector_categoria.js',
+    'volver_inicio.js',
+]
+
+
+def copiar_comunes(raiz, carpeta, aplicar):
+    """Deja en la temporada su propia copia de los archivos comunes.
+
+    Se copia siempre, no solo si falta: asi un arreglo hecho en la raiz
+    —como el de celular— tambien llega a las temporadas archivadas.
+    """
+    copiados = []
+    for a in COMUNES:
+        origen = os.path.join(raiz, a)
+        if not os.path.exists(origen):
+            continue
+        destino = os.path.join(carpeta, a)
+        try:
+            igual = (os.path.exists(destino) and
+                     io.open(origen, encoding='utf-8', errors='replace').read() ==
+                     io.open(destino, encoding='utf-8', errors='replace').read())
+        except Exception:
+            igual = False
+        if igual:
+            continue
+        if aplicar:
+            try:
+                shutil.copy2(origen, destino)
+            except Exception:
+                continue
+        copiados.append(a)
+    return copiados
+
+
 def soltar(carpeta, aplicar):
     """Cambia los ../../ por la copia local, cuando existe.
 
@@ -113,11 +153,15 @@ def main():
     total = 0
     for nombre, carpeta in temporadas:
         cambiadas, detalle = soltar(carpeta, aplicar=False)
+        faltan = copiar_comunes(AQUI, carpeta, aplicar=False)
         plan.append((nombre, carpeta, cambiadas, detalle))
-        total += cambiadas
+        total += cambiadas + len(faltan)
         print('  Temporada %s' % nombre)
-        if not cambiadas:
-            print('     ya estaba suelta: no hay nada que hacer.')
+        if faltan:
+            print('     %d archivo(s) por actualizar: %s'
+                  % (len(faltan), ', '.join(faltan)))
+        if not cambiadas and not faltan:
+            print('     ya estaba suelta y al dia: no hay nada que hacer.')
         else:
             print('     %d pantalla(s) para soltar de la carpeta principal:' % cambiadas)
             for n in sorted(detalle):
@@ -155,9 +199,12 @@ def main():
     total = 0
     for nombre, carpeta, _, _ in plan:
         cambiadas, detalle = soltar(carpeta, aplicar=True)
-        total += cambiadas
+        copiados = copiar_comunes(AQUI, carpeta, aplicar=True)
+        total += cambiadas + len(copiados)
 
-        print('  %s: %d pantalla(s) corregida(s).' % (nombre, cambiadas))
+        print('  %s: %d pantalla(s) corregida(s)%s.'
+              % (nombre, cambiadas,
+                 (', %d archivo(s) actualizado(s)' % len(copiados)) if copiados else ''))
 
     if total:
         print('  ' + '-' * 62)

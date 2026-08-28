@@ -1,0 +1,310 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   movil.css — QUE LAS PANTALLAS ENTREN EN UN CELULAR
+   ----------------------------------------------------------------------------
+   Casi todas las paginas tienen el encabezado armado con display:flex y
+   overflow:hidden, pensado para una computadora donde sobra el ancho. En un
+   telefono de 390 px no entra: el escudo, el titulo con mucho espaciado entre
+   letras y los botones de la derecha suman mas de 500 px, y como el desborde
+   esta oculto, lo que sobra NO baja a otro renglon — se corta.
+
+   Este archivo solo actua en pantallas de menos de 768 px y toca unicamente el
+   encabezado y las barras de herramientas. No cambia colores, ni tipografias,
+   ni el contenido de ninguna pantalla. En la computadora no hace nada.
+
+   Va cargado DESPUES de los estilos de cada pagina para poder corregirlos, y
+   por eso usa !important: los estilos propios de cada pantalla son mas
+   especificos y si no, ganan ellos.
+
+   Si alguna pantalla necesita un ajuste propio, se le agrega ahi y no aca:
+   este archivo es el piso comun de las 49 paginas.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  /* ── El encabezado ──────────────────────────────────────────────────────
+     Lo esencial son dos cosas: que pueda bajar a otro renglon (flex-wrap) y
+     que deje de recortar lo que sobresale (overflow). Sin la segunda, lo que
+     baja igual queda cortado. */
+  header,
+  .header,
+  .hdr,
+  .topbar {
+    flex-wrap: wrap !important;
+    overflow: visible !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    gap: 10px !important;
+    row-gap: 8px !important;
+  }
+
+  /* El escudo, mas chico. Ocupaba 72 px de los 390 disponibles. */
+  .logo-wrap,
+  .logo,
+  .escudo {
+    width: 50px !important;
+    height: 50px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* El nombre del club. El espaciado entre letras es lo que mas ancho come:
+     con 6 px por letra, "{{CLUB}} VOLEY" solo ya pide 240 px. */
+  .club-name,
+  .hdr-t,
+  .header-text h1,
+  header h1 {
+    font-size: 21px !important;
+    letter-spacing: 2.5px !important;
+    line-height: 1.05 !important;
+  }
+  .club-sub,
+  .hdr-s,
+  .header-text .subtitle {
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+  }
+
+  /* El texto del medio tiene que poder achicarse. Sin min-width:0 un elemento
+     flexible no baja de su contenido y empuja al resto afuera. */
+  .header-text,
+  .hdr-text {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  /* ── La columna de la derecha ───────────────────────────────────────────
+     Idiomas, "Sistema activo", la fecha, Temporadas, Pantalla completa. En el
+     escritorio va apilada a la derecha; en el celular baja a su propio renglon
+     y se acomoda en fila, usando el ancho completo. */
+  .header-right,
+  .hdr-right,
+  .header-actions {
+    margin-left: 0 !important;
+    width: 100% !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+  }
+  #lang-wrap {
+    margin-left: 0 !important;
+  }
+  .live-badge {
+    font-size: 9px !important;
+    padding: 4px 10px !important;
+    letter-spacing: 1px !important;
+  }
+  .fecha-txt {
+    font-size: 10px !important;
+    margin-left: auto !important;
+    text-align: right !important;
+  }
+
+  /* ── Barras de filtros y solapas ────────────────────────────────────────
+     Muchas pantallas ponen los filtros en una fila fija. En el celular se
+     desplazan de costado en vez de desbordar. */
+  .tabs,
+  .filtros,
+  .filters,
+  .toolbar,
+  .barra-filtros {
+    flex-wrap: wrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ── Tablas ─────────────────────────────────────────────────────────────
+     Una tabla con muchas columnas no se puede achicar sin volverla ilegible.
+     Se deja que se desplace de costado dentro de su contenedor, en vez de
+     estirar toda la pagina. */
+  .tabla-wrap,
+  .table-wrap,
+  .tabla-scroll {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Telefonos angostos (iPhone SE, modelos chicos de Android) */
+@media (max-width: 400px) {
+  .club-name,
+  .hdr-t,
+  header h1 {
+    font-size: 19px !important;
+    letter-spacing: 2px !important;
+  }
+  /* La fecha completa no entra al lado del resto: se va sola a un renglon. */
+  .fecha-txt {
+    width: 100% !important;
+    margin-left: 0 !important;
+    text-align: left !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   TU PROPIA FILA
+   ----------------------------------------------------------------------------
+   La marca mi_fila.js cuando el que entro es un jugador. Es una barra al
+   costado y un fondo apenas mas claro: se encuentra de un vistazo y no compite
+   con los colores que ya usan las tablas para marcar bueno y malo.
+
+   Va fuera de las reglas de celular: se ve igual en la computadora y en el
+   telefono.
+   ════════════════════════════════════════════════════════════════════════════ */
+tr.mi-fila > td:first-child,
+tr.mi-fila > th:first-child {
+  box-shadow: inset 3px 0 0 0 #22C55E;
+}
+tr.mi-fila > td,
+tr.mi-fila > th {
+  background: rgba(34, 197, 94, .07) !important;
+}
+tr.mi-fila {
+  font-weight: 700;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LO QUE FALTABA: EL ENCABEZADO PEGADO Y LAS TABLAS ANCHAS
+   ══════════════════════════════════════════════════════════════════════════
+
+   Dos cosas rompian las pantallas con datos en un telefono:
+
+   1. .header-right esta con position:fixed en varias pantallas. Flotar
+      significa que NO ocupa lugar: el titulo se dibuja debajo y quedan
+      encimados. Arriba se le da ancho y orden, pero mientras siga flotando
+      no sirve de nada. Hay que devolverlo al flujo.
+
+   2. Las tablas de estadisticas miden 600 px o mas. En una pantalla de 390
+      empujan toda la pagina: por eso las tarjetas de numeros se cortaban y
+      se leia "186 13 2" en vez del total. La tabla tiene que poder
+      deslizarse sola, sin arrastrar al resto.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  /* ── 1. que el encabezado deje de flotar ─────────────────────────────── */
+  .header-right, .hdr-right, .header-actions {
+    position: static !important;
+    top: auto !important; right: auto !important;
+    bottom: auto !important; left: auto !important;
+    margin-top: 10px !important;
+  }
+
+  /* el espacio que se le reservaba cuando flotaba ya no hace falta */
+  .header, .hdr, header {
+    padding-right: 14px !important;
+  }
+
+  /* ── 2. que las tablas no empujen la pagina ──────────────────────────── */
+  table {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  table thead, table tbody, table tr { width: max-content; min-width: 100%; }
+  table th, table td { white-space: nowrap; }
+
+  /* ── 3. nada se sale de la pantalla ──────────────────────────────────── */
+  html, body { overflow-x: hidden !important; max-width: 100vw !important; }
+  .wrap, .contenido, main, section, .card, .tarjeta, .kpis, .panel {
+    max-width: 100% !important;
+  }
+
+  /* las tarjetas de numeros: que bajen en vez de cortarse */
+  .kpis, .kpi-row, .resumen, .stats-row {
+    flex-wrap: wrap !important;
+    overflow: visible !important;
+  }
+  .kpi, .kpi-card, .stat-card { min-width: 0 !important; }
+}
+
+/* ── 4. las tarjetas de numeros ────────────────────────────────────────────
+   El resumen del equipo son tarjetas en una grilla de dos columnas. En un
+   telefono cada una queda en 154 px y adentro hay 170 px de numeros, con
+   overflow:hidden. Resultado: se leia "186 13 2" en vez del total.
+
+   Una tarjeta por renglon, y que nada se recorte. */
+@media (max-width: 768px) {
+  [style*="grid-template-columns"], .grid, .kpi-grid, .cards, .tarjetas {
+    grid-template-columns: 1fr !important;
+  }
+  .kpi, .kpi-card, .stat-card, .card, .tarjeta {
+    overflow: visible !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LA BARRA LATERAL Y LAS GRILLAS DE VARIAS COLUMNAS
+   ══════════════════════════════════════════════════════════════════════════
+
+   Ocho pantallas —los mapas de calor, cortes, armadores, game plan,
+   recepcion— estan armadas con dos columnas:
+
+       grid-template-columns: 270px 1fr
+
+   En una computadora esta bien: 270 px para los filtros y el resto para el
+   contenido. En un telefono de 390 px quedan 102 px para el contenido: los
+   cuadrantes no entran y el titulo se parte letra por letra.
+
+   La regla de abajo no distingue pantalla por pantalla, porque serian ocho
+   reglas que hay que mantener. Le dice a CUALQUIER grilla de dos columnas
+   con la primera fija que en el telefono pase a una sola columna, apilada:
+   primero los filtros, despues el contenido, cada uno con todo el ancho.
+
+   Y a las grillas de tarjetas que piden un minimo mayor al ancho del
+   telefono —300 px, 380 px— que bajen ese minimo, para que no desborden.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  /* ── La barra lateral pasa arriba, a lo ancho ─────────────────────────── */
+  .layout, .cols, .split, .main-grid, .wrap-2col {
+    display: block !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .sidebar, .side, .filtros, .panel-filtros, aside {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 0 14px 0 !important;
+    border-right: none !important;
+  }
+
+  .content, .contenido, .main, main {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+  }
+
+  /* ── Las grillas de tarjetas: minimo chico para que entren ────────────── */
+  [style*="minmax"], .cards, .grid-cards, .tarjetas {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+  }
+
+  /* ── La cancha del mapa de calor ──────────────────────────────────────── */
+  .cancha, .court, .heatmap, .zonas, .mapa {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* nada con ancho fijo mayor al telefono */
+  [style*="width: 3"], [style*="width:3"],
+  [style*="width: 4"], [style*="width:4"],
+  [style*="width: 5"], [style*="width:5"],
+  [style*="width: 6"], [style*="width:6"] {
+    max-width: 100% !important;
+  }
+
+  /* los titulos no se parten letra por letra */
+  h1, h2, h3, .titulo, .title { word-break: normal !important; overflow-wrap: anywhere; }
+}
