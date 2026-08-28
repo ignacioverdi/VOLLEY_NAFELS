@@ -87,6 +87,62 @@ def copiar_comunes(raiz, carpeta, aplicar):
     return copiados
 
 
+
+# Lo que cada pantalla tiene que CARGAR, no solo tener al lado. Una temporada
+# archivada antes de que existiera movil.css tiene el archivo copiado pero
+# ninguna pantalla lo pide: por eso se seguia viendo mal en el celular.
+#
+# Cada entrada es (archivo, etiqueta, donde). "head" va antes del primer
+# <script>; "body" va antes de </body>.
+CONECTAR = [
+    ('movil.css', '<link rel="stylesheet" href="movil.css">', 'head'),
+]
+
+
+def conectar_faltantes(carpeta, aplicar):
+    """Agrega a cada pantalla lo que tiene al lado pero no carga."""
+    tocadas = 0
+    for archivo in sorted(os.listdir(carpeta)):
+        if not archivo.endswith('.html'):
+            continue
+        ruta = os.path.join(carpeta, archivo)
+        try:
+            texto = io.open(ruta, encoding='utf-8', errors='replace').read()
+        except Exception:
+            continue
+
+        nuevo = texto
+        for nombre, etiqueta, donde in CONECTAR:
+            if nombre in nuevo:
+                continue
+            if not os.path.exists(os.path.join(carpeta, nombre)):
+                continue
+            if donde == 'head':
+                i = nuevo.find('<script')
+                if i < 0:
+                    i = nuevo.find('</head>')
+                if i < 0:
+                    continue
+                nuevo = nuevo[:i] + etiqueta + '\n' + nuevo[i:]
+            else:
+                i = nuevo.rfind('</body>')
+                if i < 0:
+                    continue
+                nuevo = nuevo[:i] + etiqueta + '\n' + nuevo[i:]
+
+        if nuevo != texto:
+            tocadas += 1
+            if aplicar:
+                respaldo = ruta + '.antes-suelta'
+                if not os.path.exists(respaldo):
+                    try:
+                        shutil.copy2(ruta, respaldo)
+                    except Exception:
+                        pass
+                io.open(ruta, 'w', encoding='utf-8').write(nuevo)
+    return tocadas
+
+
 def soltar(carpeta, aplicar):
     """Cambia los ../../ por la copia local, cuando existe.
 
@@ -154,13 +210,17 @@ def main():
     for nombre, carpeta in temporadas:
         cambiadas, detalle = soltar(carpeta, aplicar=False)
         faltan = copiar_comunes(AQUI, carpeta, aplicar=False)
+        sin_cargar = conectar_faltantes(carpeta, aplicar=False)
         plan.append((nombre, carpeta, cambiadas, detalle))
-        total += cambiadas + len(faltan)
+        total += cambiadas + len(faltan) + sin_cargar
         print('  Temporada %s' % nombre)
         if faltan:
             print('     %d archivo(s) por actualizar: %s'
                   % (len(faltan), ', '.join(faltan)))
-        if not cambiadas and not faltan:
+        if sin_cargar:
+            print('     %d pantalla(s) tienen movil.css al lado pero no lo cargan'
+                  % sin_cargar)
+        if not cambiadas and not faltan and not sin_cargar:
             print('     ya estaba suelta y al dia: no hay nada que hacer.')
         else:
             print('     %d pantalla(s) para soltar de la carpeta principal:' % cambiadas)
@@ -200,11 +260,13 @@ def main():
     for nombre, carpeta, _, _ in plan:
         cambiadas, detalle = soltar(carpeta, aplicar=True)
         copiados = copiar_comunes(AQUI, carpeta, aplicar=True)
-        total += cambiadas + len(copiados)
+        conectadas = conectar_faltantes(carpeta, aplicar=True)
+        total += cambiadas + len(copiados) + conectadas
 
         print('  %s: %d pantalla(s) corregida(s)%s.'
               % (nombre, cambiadas,
-                 (', %d archivo(s) actualizado(s)' % len(copiados)) if copiados else ''))
+                 (', %d archivo(s) actualizado(s)' % len(copiados) if copiados else '') +
+                 (', %d conectada(s) a movil.css' % conectadas if conectadas else '')))
 
     if total:
         print('  ' + '-' * 62)
