@@ -36,13 +36,14 @@
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="categorias_club.js?v=20260829-1009"></script>
-<script src="selector_categoria.js?v=20260829-1009"></script>
-<script src="firebase.js?v=20260829-1009" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260829-1029"></script>
+<script src="selector_categoria.js?v=20260829-1029"></script>
+<script src="firebase.js?v=20260829-1029" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260829-1029"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260829-1009">
+<link rel="stylesheet" href="movil.css?v=20260829-1029">
 </head>
 <body>
 <header>
@@ -72,8 +73,8 @@
   <div id="lista-archivadas"></div>
 </main>
 
-<script src="temporadas.js?v=20260829-1009"></script>
-<script src="lang.js?v=20260829-1009"></script>
+<script src="temporadas.js?v=20260829-1029"></script>
+<script src="lang.js?v=20260829-1029"></script>
 <script>
   (function(){
     var cont = document.getElementById('lista-archivadas');
@@ -107,7 +108,7 @@
     window.addEventListener('langchange', render); // re-traduce la lista al cambiar idioma
   })();
 </script>
-<script src="ayuda.js?v=20260829-1009"></script>
+<script src="ayuda.js?v=20260829-1029"></script>
 </body>
 </html>
 
