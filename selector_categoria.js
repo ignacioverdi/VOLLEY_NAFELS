@@ -289,11 +289,34 @@
 
        Ahora se espera. Se revisa cada 30ms hasta que aparezca, con un
        limite de 10 segundos por si esa pantalla no usa Firebase. */
+    /* ── PONER LA ENVOLTURA ANTES DE QUE EXISTA fbGet ──────────────────
+       Esperar a que firebase.js defina fbGet llega tarde: la pantalla pide
+       sus datos en ese hueco de milisegundos y los lee de la raiz. Asi el
+       calendario de H1L mostraba los 22 partidos de Primera mezclados con
+       los suyos.
+
+       La solucion es no esperar: se define fbGet y fbSet AHORA, con un
+       guardian que redirige la ruta y llama a la version real cuando exista.
+       Cuando firebase.js las define, se detecta y se envuelven de verdad. */
     var intentos = 0;
+
+    if (!window.fbGet) {
+      var _cola = [];
+      window.fbGet = function(p, cb){
+        /* Todavia no hay Firebase. Se anota el pedido TAL CUAL y la ruta se
+           corrige al atenderlo: aca arriba ruta() todavia no puede resolver
+           la categoria, porque las variables que usa se declaran mas abajo. */
+        _cola.push(['get', p, cb]);
+      };
+      window.fbSet = function(p, v){ _cola.push(['set', p, v]); };
+      window.__FB_COLA = _cola;
+    }
 
     function envolver(){
       if(window.__FB_POR_CAT) return true;   /* una sola vez */
       if(!window.fbGet || !window.fbSet) return false;
+      /* el guardian de arriba no cuenta: hay que esperar al de verdad */
+      if(window.__FB_COLA && String(window.fbGet).indexOf('_cola') >= 0) return false;
       window.__FB_POR_CAT = true;
 
     /* de un equipo: cada categoria tiene lo suyo */
@@ -309,6 +332,18 @@
 
       window.fbGet = function(p, cb){ return _get(ruta(p), cb); };
       window.fbSet = function(p, v){ return _set(ruta(p), v); };
+
+      /* lo que se pidio antes de que Firebase existiera, ya con su ruta
+         corregida, se atiende ahora */
+      try {
+        var c = window.__FB_COLA || [];
+        while (c.length) {
+          var x = c.shift();
+          var r = ruta(x[1]);          /* ahora si se puede resolver */
+          if (x[0] === 'get') _get(r, x[2]); else _set(r, x[2]);
+        }
+      } catch(e){}
+
       return true;
     }
 
