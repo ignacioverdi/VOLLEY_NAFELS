@@ -333,6 +333,21 @@
       window.fbGet = function(p, cb){ return _get(ruta(p), cb); };
       window.fbSet = function(p, v){ return _set(ruta(p), v); };
 
+      /* ── LA COPIA LOCAL TAMBIEN VA POR CATEGORIA ──────────────────────
+         firebase.js guarda una copia en el navegador con fbKey(path) para
+         que la app abra rapido y funcione sin senal. Pero la arma con la
+         ruta CRUDA, antes de que esta envoltura la corrija.
+
+         Resultado: en H1L la clave era "fb_calendario_partidos" —la misma
+         que Primera— y al abrir se leia el calendario equivocado.
+
+         Se envuelve fbKey igual que fbGet: la clave lleva la categoria. */
+      if (window.fbKey && !window.__FBKEY_POR_CAT) {
+        window.__FBKEY_POR_CAT = true;
+        var _key = window.fbKey;
+        window.fbKey = function(p){ return _key(ruta(p)); };
+      }
+
       /* lo que se pidio antes de que Firebase existiera, ya con su ruta
          corregida, se atiende ahora */
       try {
