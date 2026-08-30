@@ -48,7 +48,7 @@
 
   /* De un equipo: cada categoría tiene lo suyo. Lo que no esté acá es del
      club o de la persona, y se comparte a propósito. */
-  var DEL_EQUIPO = /^(wellness|pesos|rm|prep_rutinas|prep_hist|notas|notas_pf|obs|baggerone|voley_live|voley_data|pv_sesion|horarios|fixture|pendientes|calendario)(\/|$)/;
+  var DEL_EQUIPO = /^(wellness|pesos|rm|prep_rutinas|prep_hist|notas|notas_pf|obs|baggerone|voley_live|voley_data|pv_sesion|horarios|fixture|pendientes|calendario|cuerpo_tecnico)(\/|$)/;
 
   function prefijo() {
     try { return (window.carpetaCategoria && window.carpetaCategoria()) || ''; }
