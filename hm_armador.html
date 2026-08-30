@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Analisis de Armado — Nafels 2026</title>
+<title>Analisis de Armado — NAFELS 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>*{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#E8192C;--amber:#F59E0B;--green:#22C55E;--cyan:#06B6D4;--indigo:#818CF8;--orange:#F97316;--text:#E2E8F0;--muted:#64748B;--subtle:#475569}
@@ -54,26 +54,27 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 .fsel:last-child{margin-bottom:0}
 .fsel option{background:#0D0E1A}
 </style>
-<script src="categorias_club.js?v=20260830-0855"></script>
-<script src="selector_categoria.js?v=20260830-0855"></script>
-<script src="datos_seguros.js?v=20260830-0855"></script>
-<script src="filtro_tipo.js?v=20260830-0855" onerror="void 0"></script>
+<!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
+<script src="categorias_club.js?v=20260830-0920" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260830-0920" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260830-0920"></script>
+<script src="filtro_tipo.js?v=20260830-0920" onerror="void 0"></script>
   <script src="liga_data.js.enc"></script>
 <script src="liga_data_entrenamientos.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260830-0855" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260830-0855"></script>
+<script src="firebase.js?v=20260830-0920" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260830-0920"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260830-0855">
+<link rel="stylesheet" href="movil.css?v=20260830-0920">
 </head>
 <body>
-<div class="header-right" style="position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
+<div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
 
-<div class="hdr"><div><div class="hdr-t">AXPO VOLLEY NAFELS — ANALISIS DE ARMADO 2026</div><div class="hdr-s">26 partidos NLA · EFF del ataque generado (# - / - =) / total · Todos los filtros son combinables</div></div>
+<div class="hdr"><div><div class="hdr-t">NAFELS — ANALISIS DE ARMADO 2026</div><div class="hdr-s">26 partidos NLA · EFF del ataque generado (# - / - =) / total · Todos los filtros son combinables</div></div>
 </div>
 <div class="layout">
 <div class="sidebar">
@@ -120,7 +121,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 </div>
 <script>var RAW=(function(){
   var params=new URLSearchParams(window.location.search);
-  var equipo=(params.get('equipo')||'nafels').toLowerCase();
+  var equipo=(params.get('equipo')||'volley-nafels').toLowerCase();
   window.__MODO=(function(){try{return localStorage.getItem('vb_modo')||'partido';}catch(e){return 'partido';}})();
   var L = window.__MODO==='entrenamiento' ? (window.LIGA_DATA_ENT||window.LIGA_DATA) : window.LIGA_DATA;
   if(window.__MODO==='entrenamiento' && L && L.teams && L.teams['entrenamiento']) equipo='entrenamiento';
@@ -342,53 +343,7 @@ function setterCourtSVG(sets,accentColor,W,H){
   var maxPct=Math.max.apply(null,[2,3,4,5,8,9].map(function(p){return posData[p]?posData[p].pct:0;}))||1;
 
   var s="<svg viewBox='0 0 "+W+" "+H+"' xmlns='http://www.w3.org/2000/svg' style='width:100%;display:block'>";
-  s+="<style>text{pointer-events:none}
-/* === ENCABEZADO: QUE NO SE ENCIME === */
-/* La barra de arriba es un flex en una sola fila. Cuando el titulo es
-   largo, los botones de idioma y la etiqueta de temporada se le montan
-   encima. Con esto, si no entran, bajan de renglon. */
-.header,
-.topbar,
-.top-bar,
-.page-header,
-.hdr {
-  flex-wrap: wrap;
-  gap: 10px 14px;
-  row-gap: 10px;
-}
-/* El titulo puede achicarse en vez de empujar al resto */
-.header > div,
-.topbar > div,
-.top-bar > div,
-.page-header > div,
-.hdr > div {
-  min-width: 0;
-}
-.header .title,
-.topbar .title,
-.top-bar .title,
-.page-header .title,
-.hdr .title {
-  min-width: 0;
-  overflow-wrap: break-word;
-}
-/* Los botones de idioma no se estiran ni se parten */
-.lang-wrap,
-.lang-switch,
-.idiomas {
-  flex: none;
-  white-space: nowrap;
-}
-@media (max-width: 700px) {
-  .header,
-  .topbar,
-  .top-bar,
-  .page-header,
-  .hdr {
-    align-items: flex-start;
-  }
-}
-</style>";
+  s+="<style>text{pointer-events:none}</style>";
   s+="<rect width='"+W+"' height='"+H+"' fill='rgba(13,14,26,.97)' rx='5'/>";
   s+="<rect x='"+P+"' y='"+P+"' width='"+(W-P*2)+"' height='"+(H-P*2)+"' fill='rgba(184,116,40,.12)' rx='3'/>";
   // Net
@@ -486,9 +441,9 @@ function sc(label,color,val,sub){
 }
 
 var VSK='Armado';
-function abrirVideo(){ if(typeof equipo!=='undefined'&&equipo&&equipo!=='nafels'){alert('Por ahora el video está disponible solo para Näfels.');return;} if(!F.player){alert('Elegí un armador primero.');return;} var u='cortes.html?num='+encodeURIComponent(F.player)+'&sk='+encodeURIComponent(VSK); if(F.rival&&F.rival!=='all')u+='&rival='+encodeURIComponent(F.rival); if(F.gi&&F.gi!=='all'){var g=GAMES[F.gi];if(g&&g.date)u+='&date='+encodeURIComponent(g.date);} if(F.call&&F.call.length)u+='&call='+encodeURIComponent(F.call.join(',')); window.open(u,'_blank'); }
-function verVideoZona(pos){ if(typeof equipo!=='undefined'&&equipo&&equipo!=='nafels'){alert('Por ahora el video está disponible solo para Näfels.');return;} if(!F.player)return; var u='cortes.html?num='+encodeURIComponent(F.player)+'&sk=Armado&apos='+pos; if(F.call&&F.call.length)u+='&call='+encodeURIComponent(F.call.join(',')); window.open(u,'_blank'); }
-function verVideoCall(call){ if(typeof equipo!=='undefined'&&equipo&&equipo!=='nafels'){alert('Por ahora el video está disponible solo para Näfels.');return;} if(!F.player)return; window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Armado&call='+encodeURIComponent(call),'_blank'); }
+function abrirVideo(){ if(typeof equipo!=='undefined'&&equipo&&equipo!=='volley-nafels'){alert('Por ahora el video está disponible solo para Nafels.');return;} if(!F.player){alert('Elegí un armador primero.');return;} var u='cortes.html?num='+encodeURIComponent(F.player)+'&sk='+encodeURIComponent(VSK); if(F.rival&&F.rival!=='all')u+='&rival='+encodeURIComponent(F.rival); if(F.gi&&F.gi!=='all'){var g=GAMES[F.gi];if(g&&g.date)u+='&date='+encodeURIComponent(g.date);} if(F.call&&F.call.length)u+='&call='+encodeURIComponent(F.call.join(',')); window.open(u,'_blank'); }
+function verVideoZona(pos){ if(typeof equipo!=='undefined'&&equipo&&equipo!=='volley-nafels'){alert('Por ahora el video está disponible solo para Nafels.');return;} if(!F.player)return; var u='cortes.html?num='+encodeURIComponent(F.player)+'&sk=Armado&apos='+pos; if(F.call&&F.call.length)u+='&call='+encodeURIComponent(F.call.join(',')); window.open(u,'_blank'); }
+function verVideoCall(call){ if(typeof equipo!=='undefined'&&equipo&&equipo!=='volley-nafels'){alert('Por ahora el video está disponible solo para Nafels.');return;} if(!F.player)return; window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Armado&call='+encodeURIComponent(call),'_blank'); }
 // === MAIN RENDER ===
 function accToggle(id){ var hdr=document.getElementById('acc-hdr-'+id); if(!hdr) return; hdr.classList.toggle('active'); }
 function render(){
@@ -853,10 +808,9 @@ function _initModoBtns(){
 document.addEventListener('DOMContentLoaded', _initModoBtns);
 
 </script>
-<script src="lang.js?v=20260830-0855"></script>
-<script src="temporadas_menu.js?v=20260830-0855"></script>
-<script src="volver_inicio.js?v=20260830-0855" onerror="void 0"></script>
-<script src="ayuda.js?v=20260830-0855"></script>
+<script src="lang.js?v=20260830-0920"></script>
+<script src="temporadas_menu.js?v=20260830-0920"></script>
+<script src="ayuda.js?v=20260830-0920"></script>
 </body>
 </html>
-<!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
+<!-- © 2025-2026 Volley-Stats · Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Scouting Rival — Nafels Voley</title>
+<title>Scouting Rival — NAFELS Voley</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -17,7 +17,7 @@
   body::before{content:'';position:fixed;inset:0;background:radial-gradient(1200px 600px at 80% -10%,rgba(232,25,44,.06),transparent 60%),radial-gradient(900px 500px at -10% 110%,rgba(129,140,248,.05),transparent 60%);pointer-events:none;z-index:0}
   .wrap{position:relative;z-index:1}
 
-  .header-right{position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px}
+  .header-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto}
   #lang-wrap{display:flex;gap:4px}
 
   .hdr{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
@@ -130,63 +130,11 @@
   .atktab{background:var(--card2);border:1px solid var(--border);color:var(--mut2);border-radius:9px;padding:8px 14px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;transition:all .15s}
   .atktab:hover{color:#fff}
   .atktab.on{background:rgba(249,115,22,.14);border-color:rgba(249,115,22,.5);color:var(--ataque)}
-
-/* === ENCABEZADO: QUE NO SE ENCIME === */
-/* La barra de arriba es un flex en una sola fila. Cuando el titulo es
-   largo, los botones de idioma y la etiqueta de temporada se le montan
-   encima. Con esto, si no entran, bajan de renglon. */
-.header,
-.topbar,
-.top-bar,
-.page-header,
-.hdr {
-  flex-wrap: wrap;
-  gap: 10px 14px;
-  row-gap: 10px;
-}
-/* El titulo puede achicarse en vez de empujar al resto */
-.header > div,
-.topbar > div,
-.top-bar > div,
-.page-header > div,
-.hdr > div {
-  min-width: 0;
-}
-.header .title,
-.topbar .title,
-.top-bar .title,
-.page-header .title,
-.hdr .title {
-  min-width: 0;
-  overflow-wrap: break-word;
-}
-/* Los botones de idioma no se estiran ni se parten */
-.lang-wrap,
-.lang-switch,
-.idiomas {
-  flex: none;
-  white-space: nowrap;
-}
-@media (max-width: 700px) {
-  .header,
-  .topbar,
-  .top-bar,
-  .page-header,
-  .hdr {
-    align-items: flex-start;
-  }
-}
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="categorias_club.js?v=20260830-0855"></script>
-<script src="selector_categoria.js?v=20260830-0855"></script>
-<script src="firebase.js?v=20260830-0855" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260830-0855"></script>
-<!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
-     toca el encabezado y las barras: en la computadora no hace nada.
-     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260830-0855">
+<script src="firebase.js?v=20260830-0920" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260830-0920"></script>
 </head>
 <body>
 <div class="wrap">
@@ -206,7 +154,10 @@
 </div>
 </div>
 
-<script src="datos_seguros.js?v=20260830-0855"></script>
+<!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
+<script src="categorias_club.js?v=20260830-0920" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260830-0920" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260830-0920"></script>
   <script src="scouting_rival.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
 <script>
@@ -427,8 +378,8 @@ function renderAtkTab(m){
     else {combos=p.combos;eff=p.eff;n=p.tot;}
     var juego=(combos||[]).map(function(c){
       var dz=(c.dest||[]).map(function(d){return 'Z'+d.z+' '+d.pct+'%';}).join(' · ');
-      return '<span style="white-space:nowrap"><b style="color:var(--ataque);font-size:16px">'+c.k+'</b> <span style="color:var(--mut2);font-size:13px">'+c.pct+'%</span> <span style="color:#475569">→</span> <span style="color:var(--bloqueo,#06B6D4);font-size:13px">'+(dz||'—')+'</span></span>';
-    }).join('<span style="color:#334155;margin:0 9px">|</span>')||'<span style="color:#475569">—</span>';
+      return '<span style="white-space:nowrap"><b style="color:var(--ataque);font-size:16px">'+c.k+'</b> <span style="color:var(--mut2);font-size:13px">'+c.pct+'%</span> <span style="color:#8395ac">→</span> <span style="color:var(--bloqueo,#06B6D4);font-size:13px">'+(dz||'—')+'</span></span>';
+    }).join('<span style="color:#7c8ba1;margin:0 9px">|</span>')||'<span style="color:#8395ac">—</span>';
     var low=n<25;
     h+='<tr><td style="font-size:15px;font-weight:700">'+(i===0?'<span class="star">★</span> ':'')+p.name+'</td>'
       +'<td style="text-align:left"><span class="posbadge '+posClass(p.pos)+'">'+p.pos+'</span></td>'
@@ -633,7 +584,7 @@ function renderDossier(n){
   h+='<div class="dteam"><div><div class="dteam-name">'+n+'</div>'
     +'<div class="dteam-sub"><b>'+t.matches+'</b> partidos analizados · scouting basado en datos reales</div></div>'
     +'<div class="dteam-act"><a href="plan_partido.html?equipo='+enc+'" class="dact">📋 Plan de partido</a>'
-    +'<a href="comparador.html?equipo='+enc+'" class="dact">⚖ Comparar con Näfels</a></div></div>';
+    +'<a href="comparador.html?equipo='+enc+'" class="dact">⚖ Comparar con NAFELS</a></div></div>';
 
   h+='<div class="grid">';
 
@@ -772,11 +723,10 @@ function renderDossier(n){
 
 buildTeams();
 </script>
-<script src="lang.js?v=20260830-0855" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260830-0855" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260830-0855" onerror="void 0"></script>
-<script src="ayuda.js?v=20260830-0855"></script>
+<script src="lang.js?v=20260830-0920" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260830-0920" onerror="void 0"></script>
+<script src="ayuda.js?v=20260830-0920"></script>
 </body>
 </html>
 
-<!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
+<!-- © 2025-2026 Volley-Stats · Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
