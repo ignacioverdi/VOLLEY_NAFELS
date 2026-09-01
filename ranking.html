@@ -6,9 +6,9 @@
 <title>Ranking — NAFELS Voley</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
   <!-- datos_casla.js sacado: es del club de origen. -->
-<script src="categorias_club.js?v=20260901-2314"></script>
-<script src="selector_categoria.js?v=20260901-2314"></script>
-<script src="datos_seguros.js?v=20260901-2314"></script>
+<script src="categorias_club.js?v=20260901-2324"></script>
+<script src="selector_categoria.js?v=20260901-2324"></script>
+<script src="datos_seguros.js?v=20260901-2324"></script>
   <script src="datos_partidos.js.enc" onerror="void 0"></script>
   <script src="datos_baterias.js.enc" onerror="void 0"></script>
   <!-- El plantel real de la temporada. Sin esto, window.EQUIPO_DATA nunca existe
@@ -16,8 +16,8 @@
      Va DESPUES de datos_seguros.js y ANTES de abrirDatos(), como en equipo.html. -->
   <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
   <script>abrirDatos();</script>
-<script src="datos_historial.js?v=20260901-2314" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260901-2314" onerror="void 0"></script>
+<script src="datos_historial.js?v=20260901-2324" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260901-2324" onerror="void 0"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#07080F;--card:#0D0E1A;--b:rgba(255,255,255,.06);--b2:rgba(255,255,255,.12);
@@ -93,18 +93,18 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',s
 }
 </style>
 <!-- Motor de idiomas (ES / EN / DE). Traduce por data-t y por texto. -->
-<script src="lang.js?v=20260901-2314"></script>
+<script src="lang.js?v=20260901-2324"></script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260901-2314" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260901-2314"></script>
+<script src="firebase.js?v=20260901-2324" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260901-2324"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260901-2314">
+<link rel="stylesheet" href="movil.css?v=20260901-2324">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260901-2314" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260901-2324" onerror="void 0"></script>
 </head>
 <body>
 <div class="hdr">
@@ -342,7 +342,7 @@ function render(){
   });
 }
 </script>
-<script src="volver_inicio.js?v=20260901-2314" onerror="void 0"></script>
-<script src="ayuda.js?v=20260901-2314"></script>
+<script src="volver_inicio.js?v=20260901-2324" onerror="void 0"></script>
+<script src="ayuda.js?v=20260901-2324"></script>
 </body>
 </html>
