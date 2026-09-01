@@ -387,14 +387,20 @@ function _fbToken(){
    pero eso no impide que aparezca otro circulo manana.
 
    Esto es la red de abajo: un tope de pedidos por carga de pagina. Si algo
-   pide mas de 300 veces, no es uso normal — es un bucle. Se corta ahi, y la
+   pide mas de 5000 veces, no es uso normal — es un bucle. Se corta ahi, y la
    pagina sigue funcionando con lo que ya tiene en vez de colgarse.
 
-   300 alcanza de sobra: una pantalla normal hace entre 5 y 20 pedidos. */
+   EL TOPE ESTUVO EN 300 Y FUE UN ERROR: las pantallas con datos cargados
+   —calendario, preparacion fisica, baggerone— hacen una lectura por jugador,
+   por dia y por mes. Con 14 jugadores eso pasa de 300 sin ningun problema, y
+   el freno las cortaba a mitad de camino: se veian vacias.
+
+   5000 deja pasar el uso normal con margen de sobra y sigue frenando los
+   bucles de verdad, que hacen decenas de miles (el de hoy: 8886). */
 var _fbCuenta = 0, _fbCortado = false;
 function _fbCorta(){
   if(_fbCortado) return true;
-  if(++_fbCuenta > 300){
+  if(++_fbCuenta > 5000){
     _fbCortado = true;
     try{ console.warn('Volley-Stats: demasiados pedidos seguidos, se corto para no colgar la pagina.'); }catch(e){}
     return true;
