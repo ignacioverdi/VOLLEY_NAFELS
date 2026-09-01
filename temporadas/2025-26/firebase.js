@@ -269,16 +269,33 @@ function fbLogout(){
 /* Freno: si algo pide renovar muchas veces seguidas, se corta. Ningun uso
    normal necesita mas de unas pocas renovaciones por sesion; si pasa de ahi
    es un bucle, y un bucle cuelga el telefono. */
+/* ── UNA SOLA RENOVACION A LA VEZ ────────────────────────────────────────
+   LA CAUSA DE RAIZ del bucle: Firebase quema el refreshToken cada vez que
+   se usa y devuelve uno nuevo. El anterior deja de servir.
+
+   Al abrir una pantalla se piden varios datos casi al mismo tiempo, y cada
+   pedido llamaba a renovar por su cuenta. La primera renovacion quemaba el
+   token; las otras salian con el token ya quemado y Google respondia 400.
+   Cada 400 disparaba otro intento, y asi: miles de llamadas hasta colgar
+   la pagina.
+
+   Ahora, si ya hay una renovacion en curso, las demas esperan a ESA en vez
+   de largar otra. Una sola llamada, un solo token, sin pisarse. */
+var _fbEnCurso = null;
 var _fbIntentos = 0, _fbDesde = Date.now();
+
 function _fbRefrescar(){
   if(!FB_SES || !FB_SES.refreshToken) return Promise.reject(new Error('sin sesion'));
+
+  /* ya hay una en camino: se engancha a esa */
+  if(_fbEnCurso) return _fbEnCurso;
 
   if(Date.now() - _fbDesde > 60000){ _fbIntentos = 0; _fbDesde = Date.now(); }
   if(++_fbIntentos > 5){
     try{ _fbGuardarSes(null); }catch(e){}
     return Promise.reject(new Error('demasiados intentos'));
   }
-  return fetch('https://securetoken.googleapis.com/v1/token?key=' + FB_KEY, {
+  var p = fetch('https://securetoken.googleapis.com/v1/token?key=' + FB_KEY, {
       method:'POST',
       headers:{'Content-Type':'application/x-www-form-urlencoded'},
       body:'grant_type=refresh_token&refresh_token=' + encodeURIComponent(FB_SES.refreshToken)
@@ -315,7 +332,12 @@ function _fbRefrescar(){
                      vence:Date.now() + (parseInt(d.expires_in,10)||3600)*1000 - 60000,
                      email:FB_SES.email, uid:d.user_id || FB_SES.uid});
       return FB_SES.idToken;
-    });
+    })
+    .then(function(t){ _fbEnCurso = null; return t; },
+          function(e){ _fbEnCurso = null; throw e; });
+
+  _fbEnCurso = p;
+  return p;
 }
 function _fbToken(){
   if(!FB_SES) return Promise.resolve('');
