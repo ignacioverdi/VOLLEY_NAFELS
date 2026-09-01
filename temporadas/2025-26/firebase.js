@@ -53,7 +53,24 @@ function _fbGuardarSes(s){
   FB_SES = s;
   try{ s ? localStorage.setItem('nla_sesion', JSON.stringify(s))
          : localStorage.removeItem('nla_sesion'); }catch(e){}
-  _fbSincronizarRol(); _fbCategoriaJugador();
+  _fbSincronizarRol();
+  /* ── EL BUCLE INFINITO ESTABA ACA ──────────────────────────────────────
+     _fbCategoriaJugador() hace un fbGet para saber en que categoria juega.
+     Pero fbGet necesita token, y si hay que renovarlo llama a _fbRefrescar,
+     que al terminar llama a _fbGuardarSes... que volvia a llamar a
+     _fbCategoriaJugador. Un circulo sin salida:
+
+         guardar sesion -> pedir categoria -> pedir token ->
+         renovar -> guardar sesion -> ...
+
+     Miles de pedidos por segundo hasta que el navegador se queda sin
+     recursos (ERR_INSUFFICIENT_RESOURCES) y la pagina se cuelga.
+
+     Solo le pasaba a los JUGADORES: _fbCategoriaJugador corta enseguida si
+     el rol no es 'player'. Por eso el cuerpo tecnico nunca lo vio.
+
+     Ahora la categoria se pide UNA sola vez por carga. */
+  if(!_fbCatPedida){ _fbCatPedida = true; setTimeout(_fbCategoriaJugador, 0); }
 }
 /* Si la cuenta es de jugador, el rol queda atado a la cuenta y no a lo que
    haya quedado guardado en el navegador. El staff conserva su rol del inicio. */
@@ -82,6 +99,7 @@ function _fbCategoriaJugador(){
   }catch(e){}
 }
 
+var _fbCatPedida = false;
 function _fbSincronizarRol(){
   try{
     if(!FB_SES || !FB_SES.email) return;
