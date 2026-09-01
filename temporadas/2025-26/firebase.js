@@ -381,6 +381,27 @@ function _fbToken(){
   if(FB_SES.idToken && Date.now() < (FB_SES.vence||0)) return Promise.resolve(FB_SES.idToken);
   return _fbRefrescar().catch(function(){ return ''; });
 }
+/* ══ FRENO GENERAL ═══════════════════════════════════════════════════════
+   La causa de TODOS los problemas de hoy fue la misma: funciones que se
+   llaman entre si y terminan en circulo. Cada una se arreglo por separado,
+   pero eso no impide que aparezca otro circulo manana.
+
+   Esto es la red de abajo: un tope de pedidos por carga de pagina. Si algo
+   pide mas de 300 veces, no es uso normal — es un bucle. Se corta ahi, y la
+   pagina sigue funcionando con lo que ya tiene en vez de colgarse.
+
+   300 alcanza de sobra: una pantalla normal hace entre 5 y 20 pedidos. */
+var _fbCuenta = 0, _fbCortado = false;
+function _fbCorta(){
+  if(_fbCortado) return true;
+  if(++_fbCuenta > 300){
+    _fbCortado = true;
+    try{ console.warn('Volley-Stats: demasiados pedidos seguidos, se corto para no colgar la pagina.'); }catch(e){}
+    return true;
+  }
+  return false;
+}
+
 function _fbSufijo(){
   return _fbToken().then(function(t){ return t ? ('?auth=' + encodeURIComponent(t)) : ''; });
 }
@@ -537,6 +558,7 @@ _fbArrancar();
 
 /* ── API de siempre, ahora firmada (y con los permisos por rol intactos) ── */
 function fbSet(path, value){
+  if(_fbCorta()) return Promise.resolve();
   if(vbEdicionBloqueada(path)){ try{ console.warn('[permisos] escritura bloqueada para jugador:', path); }catch(e){} return; }
   try{ localStorage.setItem(fbKey(path), JSON.stringify(value)); }catch(e){}
   _fbArrancar().then(_fbSufijo).then(function(q){
@@ -549,6 +571,7 @@ function fbSet(path, value){
 }
 
 function fbGet(path, callback){
+  if(_fbCorta()) return undefined;
   function local(){
     try{
       var v = localStorage.getItem(fbKey(path));
@@ -570,6 +593,7 @@ function fbGet(path, callback){
 }
 
 function fbPush(path, value){
+  if(_fbCorta()) return Promise.resolve();
   if(vbEdicionBloqueada(path)){ try{ console.warn('[permisos] escritura bloqueada para jugador:', path); }catch(e){} return; }
   try{
     var arr = JSON.parse(localStorage.getItem(fbKey(path)) || '[]');
