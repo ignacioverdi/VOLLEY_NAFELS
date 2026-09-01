@@ -415,17 +415,38 @@ function _fbArrancar(){
 
                  Ahora se reintenta dos veces, esperando 1 y 3 segundos. Solo
                  si las tres fallan se pide ingresar. */
+              /* ── EL LOGIN SE MUESTRA YA, EL REINTENTO VA POR DETRAS ──
+                 Antes se reintentaba ANTES de mostrar el login: la app
+                 quedaba hasta 4 segundos en blanco y el jugador, creyendo
+                 que estaba colgada, la cerraba.
+
+                 Ahora el login aparece en el acto — nadie ve una pantalla
+                 muerta — y en paralelo se sigue intentando renovar. Si lo
+                 logra, la pantalla se saca sola y entra sin tocar nada.
+
+                 Y la sesion NO se borra hasta que los tres intentos fallan:
+                 si el telefono solo estaba despertando la red, se recupera. */
+              pedir();
+
               var _reint = 0;
               (function _volverAProbar() {
                 _reint++;
-                if (_reint > 2) { _fbGuardarSes(null); pedir(); return; }
+                if (_reint > 2) { _fbGuardarSes(null); return; }
                 setTimeout(function () {
+                  if (!FB_SES) return;              /* ya entro a mano */
                   _fbRefrescar()
                     .then(function(){ return _fbCargarRol(); })
                     .then(function(){ return _fbTraerLlave(); })
-                    .then(function(){ resolve(true); })
+                    .then(function(){
+                      /* funciono: se saca el login y sigue como si nada */
+                      try {
+                        var l = document.getElementById('fb-login');
+                        if (l && l.parentNode) l.parentNode.removeChild(l);
+                      } catch(e){}
+                      resolve(true);
+                    })
                     .catch(_volverAProbar);
-                }, _reint === 1 ? 1000 : 3000);
+                }, _reint === 1 ? 1200 : 3000);
               })();
             }                   /* sesion vencida: pedimos ingresar */
         });
