@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Revisión</title>
+<style>
+body{margin:0;background:#0b0d14;color:#e8eef7;font-family:system-ui,-apple-system,sans-serif;
+  font-size:16px;line-height:1.55;padding:22px}
+h1{font-size:21px;margin:0 0 4px}
+p.s{color:#93a5c0;font-size:14px;margin:0 0 22px}
+.fila{display:flex;justify-content:space-between;gap:12px;padding:11px 0;
+  border-bottom:1px solid rgba(255,255,255,.08)}
+.k{color:#93a5c0;font-size:14px}
+.v{font-weight:700;text-align:right;font-size:14px;word-break:break-all}
+.ok{color:#22c55e} .mal{color:#ef4444} .avi{color:#fbbf24}
+.caja{background:#111624;border:1px solid rgba(255,255,255,.1);border-radius:12px;
+  padding:14px 16px;margin-top:20px;font-size:14px}
+button{width:100%;margin-top:18px;padding:14px;border-radius:11px;border:none;
+  background:#e6a743;color:#191100;font-size:16px;font-weight:800;font-family:inherit}
+</style>
+</head>
+<body>
+
+<h1>Revisión del teléfono</h1>
+<p class="s">Sacale una foto a esta pantalla y mandásela a Ignacio.</p>
+
+<div id="r"></div>
+
+<div class="caja" id="resumen">Revisando…</div>
+
+<button onclick="location.reload()">Volver a revisar</button>
+
+<script>
+/* Esto no cambia nada de la app: solo mira y muestra. */
+function fila(k, v, clase){
+  return '<div class="fila"><div class="k">' + k + '</div>' +
+         '<div class="v ' + (clase||'') + '">' + v + '</div></div>';
+}
+
+var ua = navigator.userAgent || '';
+var ios = (ua.match(/OS (\d+[_\d]*)/) || [])[1] || '?';
+var app = window.navigator.standalone === true;
+
+var h = '';
+h += fila('Modo', app ? 'App instalada' : 'Safari', app ? 'ok' : 'avi');
+h += fila('iOS', ios.replace(/_/g,'.'), '');
+
+/* ── Lo que de verdad importa: qué se puede guardar ── */
+var puedeLS = false, puedeCookie = false, puedeSS = false;
+try { localStorage.setItem('__t','1'); puedeLS = localStorage.getItem('__t')==='1';
+      localStorage.removeItem('__t'); } catch(e){}
+try { sessionStorage.setItem('__t','1'); puedeSS = sessionStorage.getItem('__t')==='1';
+      sessionStorage.removeItem('__t'); } catch(e){}
+try { document.cookie='__t=1;path=/;SameSite=Lax;Secure';
+      puedeCookie = document.cookie.indexOf('__t=1')>=0;
+      document.cookie='__t=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/'; } catch(e){}
+
+h += fila('Puede guardar (local)', puedeLS?'SÍ':'NO', puedeLS?'ok':'mal');
+h += fila('Puede guardar (sesión)', puedeSS?'SÍ':'NO', puedeSS?'ok':'mal');
+h += fila('Puede guardar (cookie)', puedeCookie?'SÍ':'NO', puedeCookie?'ok':'mal');
+
+/* ── La sesión de la app ── */
+var ses = null, cookieSes = false;
+try { ses = localStorage.getItem('nla_sesion'); } catch(e){}
+try { cookieSes = document.cookie.indexOf('vb_ses')>=0; } catch(e){}
+
+h += fila('Sesión guardada', ses?'SÍ':'NO', ses?'ok':'mal');
+h += fila('Copia en cookie', cookieSes?'SÍ':'NO', cookieSes?'ok':'mal');
+
+if (ses) {
+  try {
+    var s = JSON.parse(ses);
+    var min = s.vence ? Math.round((s.vence - Date.now())/60000) : null;
+    h += fila('Token vence en', min===null?'—':(min+' min'), min>0?'ok':'avi');
+    h += fila('Puede renovarse', s.refreshToken?'SÍ':'NO', s.refreshToken?'ok':'mal');
+  } catch(e){ h += fila('Sesión legible','NO','mal'); }
+}
+
+/* ── Cuánto ocupa ── */
+var pesa = 0, claves = 0;
+try {
+  for (var i=0;i<localStorage.length;i++){
+    var k = localStorage.key(i); claves++;
+    pesa += k.length + (localStorage.getItem(k)||'').length;
+  }
+} catch(e){}
+h += fila('Datos guardados', claves + ' · ' + Math.round(pesa/1024) + ' KB',
+          pesa > 4000000 ? 'mal' : 'ok');
+
+/* ── El archivo nuevo ── */
+h += fila('Arreglo cargado', (typeof leerCookieVB!=='undefined')?'SÍ':'—', '');
+
+document.getElementById('r').innerHTML = h;
+
+/* ── El resumen, en una frase ── */
+var txt;
+if (!puedeLS && !puedeCookie) {
+  txt = '<b class="mal">El teléfono no deja guardar nada.</b> Puede estar en Navegación Privada, o con "Bloquear todas las cookies" activado en Ajustes → Safari.';
+} else if (!puedeCookie) {
+  txt = '<b class="mal">Las cookies están bloqueadas.</b> Ajustes → Safari → desactivar "Bloquear todas las cookies".';
+} else if (!ses && !cookieSes) {
+  txt = '<b class="avi">No hay ninguna sesión guardada.</b> Entrá una vez con tu mail y clave, y volvé a esta página.';
+} else if (ses) {
+  txt = '<b class="ok">Todo en orden.</b> La sesión está guardada y debería mantenerse.';
+} else {
+  txt = '<b class="avi">La sesión se perdió pero la copia está.</b> Debería recuperarse sola al abrir la app.';
+}
+document.getElementById('resumen').innerHTML = txt;
+</script>
+
+</body>
+</html>
