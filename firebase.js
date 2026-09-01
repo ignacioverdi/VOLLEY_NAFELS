@@ -70,7 +70,6 @@ function _fbGuardarSes(s){
      el rol no es 'player'. Por eso el cuerpo tecnico nunca lo vio.
 
      Ahora la categoria se pide UNA sola vez por carga. */
-  if(!_fbCatPedida){ _fbCatPedida = true; setTimeout(_fbCategoriaJugador, 0); }
 }
 /* Si la cuenta es de jugador, el rol queda atado a la cuenta y no a lo que
    haya quedado guardado en el navegador. El staff conserva su rol del inicio. */
@@ -82,22 +81,25 @@ function _fbGuardarSes(s){
 
    Si no la tiene anotada —planteles cargados antes de que existieran las
    categorias— no se toca nada y ve la primera, como siempre. */
-function _fbCategoriaJugador(){
-  try{
-    if(!FB_SES || !FB_SES.uid) return;
-    if((localStorage.getItem('vb_role') || '') !== 'player') return;
-    fbGet('jugador_cat/' + FB_SES.uid, function(c){
-      try{
-        if(c && typeof c === 'string'){
-          localStorage.setItem('vb_player_cat', c);
-          if(localStorage.getItem('vb_categoria') !== c){
-            localStorage.setItem('vb_categoria', c);
-          }
-        }
-      }catch(e){}
-    });
-  }catch(e){}
-}
+/* ── EL JUGADOR AHORA HACE EXACTAMENTE LO MISMO QUE EL ENTRENADOR ────────
+   Esta funcion leia jugador_cat/<uid> para saber en que categoria juega, y
+   era LO UNICO que un jugador hacia y un entrenador no.
+
+   Ahi estuvo el problema de todo el dia: un camino que solo recorrian los
+   jugadores, y que por eso nunca se podia ver probando con una cuenta de
+   cuerpo tecnico.
+
+   Ademas, en esta base la rama jugador_cat NO EXISTE: el pedido devolvia
+   vacio siempre y no servia para nada. Puro desperdicio en el peor lugar.
+
+   Queda desactivada. Si alguna vez hace falta separar jugadores por
+   categoria, se vuelve a encender — pero con un pedido, no con uno por
+   cada vez que se guarda la sesion.
+
+   A partir de aca, jugador y entrenador corren el MISMO codigo. */
+function _fbCategoriaJugador(){ return; }
+
+
 
 var _fbCatPedida = false;
 function _fbSincronizarRol(){
