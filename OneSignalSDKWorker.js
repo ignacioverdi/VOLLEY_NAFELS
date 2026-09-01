@@ -29,7 +29,11 @@
 
 importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 
-var VERSION = 'v5';
+/* v6: al cambiar este numero, cada telefono tira TODO lo que tenia
+   guardado y baja los archivos de nuevo. Es la unica forma de sacarle
+   a un iPhone una version rota que ya se llevo: borrar la app no
+   alcanza, porque el service worker sobrevive. */
+var VERSION = 'v6';
 var CAJA    = 'club-' + VERSION;
 
 /* Lo mínimo para que la app abra sin señal la primera vez. Si alguno no
