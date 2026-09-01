@@ -276,7 +276,20 @@ function _fbRefrescar(){
     .then(function(r){ return r.json(); })
     .then(function(d){
       if(!d || !d.id_token) throw new Error('sesion vencida');
-      _fbGuardarSes({emitido:(FB_SES && FB_SES.emitido) || 0,   /* se conserva: NO se renueva al refrescar */ idToken:d.id_token, refreshToken:d.refresh_token,
+            /* ── GUARDAR TAMBIEN LOS TOKENS ───────────────────────────────────
+         Aca se guardaba la sesion renovada SIN idToken ni refreshToken: se
+         perdian los dos. Entonces la proxima llamada no encontraba token,
+         pedia renovar de nuevo, volvia a perderlos, y asi sin fin.
+
+         En la consola se veian miles de POST a securetoken devolviendo 400
+         (Bad Request), porque se mandaba un refresh_token vacio. Eso colgaba
+         la pagina y tiraba la sesion.
+
+         Ahora se guardan los tokens nuevos que devuelve Google, que es lo
+         que hace falta para la proxima llamada. */
+      _fbGuardarSes({idToken: d.id_token,
+                     refreshToken: d.refresh_token || FB_SES.refreshToken,
+                     emitido:(FB_SES && FB_SES.emitido) || 0,   /* se conserva: NO se renueva al refrescar */
                      vence:Date.now() + (parseInt(d.expires_in,10)||3600)*1000 - 60000,
                      email:FB_SES.email, uid:d.user_id || FB_SES.uid});
       return FB_SES.idToken;
