@@ -250,7 +250,26 @@ function _fbControlSesion(){
   }).catch(function(){});   /* sin internet no echamos a nadie */
 }
 
+/* ── UNA SOLA CARGA DE ROL A LA VEZ ──────────────────────────────────────
+   _fbCargarRol pide roles/<uid> y jugador_num/<uid>, y al terminar llama al
+   control de sesion. No tenia ningun freno: cada vez que algo la invocaba
+   salian dos pedidos mas, y el arranque la llama desde tres lugares. Se
+   encadenaban miles de pedidos del mismo uid hasta que el navegador se
+   quedaba sin recursos (ERR_INSUFFICIENT_RESOURCES) y el calendario
+   quedaba vacio.
+
+   Esta envoltura hace que, si ya hay una carga en curso, las demas esperen
+   a ESA en vez de largar otra. */
+var _fbRolEnCurso = null;
 function _fbCargarRol(){
+  if(_fbRolEnCurso) return _fbRolEnCurso;
+  _fbRolEnCurso = _fbCargarRolReal();
+  var soltar = function(){ _fbRolEnCurso = null; };
+  _fbRolEnCurso.then(soltar, soltar);
+  return _fbRolEnCurso;
+}
+
+function _fbCargarRolReal(){
   if(!FB_SES || !FB_SES.uid) return Promise.resolve();
   return _fbSufijo().then(function(q){
     /* Rol (coach/at/pf/player) y numero de camiseta, los dos atados al UID.
