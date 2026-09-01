@@ -204,7 +204,19 @@ function _fbControlSesion(){
     return fetch(FB_URL + '/sesiones.json' + q).then(function(r){ return r.json(); });
   }).then(function(d){
     if(!d || d.error) return _fbRegistrarDisp();
-    var emitido = FB_SES.emitido || 0;
+    /* ── SI NO SE SABE CUANDO SE CREO, NO SE CIERRA ────────────────────
+           Acá decía  FB_SES.emitido || 0.  El campo "emitido" se agregó
+           después de que varios jugadores ya tenían su sesión: las de antes
+           no lo traen.
+
+           Y sin ese campo el valor quedaba en 0, que es menor que cualquier
+           fecha de corte. Resultado: la sesión se cerraba sola a los dos
+           segundos de entrar, una y otra vez, sin forma de salir del bucle.
+
+           Ahora, si no se sabe cuándo se creó, se la trata como recién
+           creada. Un corte viejo no puede cerrar una sesión de la que no
+           sabemos la fecha: en la duda, se deja entrar. */
+        var emitido = FB_SES.emitido || Date.now();
     var disp    = _fbDispId();
     var corte   = parseInt(d.corte, 10) || 0;
     if(d.corte_uid && d.corte_uid[FB_SES.uid])
@@ -342,6 +354,13 @@ function _fbPantalla(){
       + '<div class="err" id="fb-e"></div>'
       + '<div class="ay">Los jugadores entran con su numero de camiseta.<br>'
       + 'Si no tenes codigo, pediselo al cuerpo tecnico.</div>'
+      /* Un enlace chico para revisar el telefono desde ACA, sin salir de la
+         app. En iPhone, la app instalada y Safari tienen almacenamientos
+         separados: revisar desde Safari mide una caja distinta y da un
+         resultado que no sirve. Tiene que hacerse desde adentro. */
+      + '<div class="ay" style="margin-top:14px">'
+      + '<a href="revisar.html" style="color:#5a6a80;font-size:11px;'
+      + 'text-decoration:underline">Revisar este dispositivo</a></div>'
       + '</div>';
     document.documentElement.appendChild(d);
 
@@ -393,7 +412,55 @@ function _fbArrancar(){
         .then(function(){ resolve(true); })
         .catch(function(){
           if(!navigator.onLine && _fbHayLlaveGuardada()){ FB_OFF = true; resolve(true); }   /* sin internet, pero este equipo ya habia entrado */
-          else { _fbGuardarSes(null); pedir(); }                   /* sesion vencida: pedimos ingresar */
+          else {
+              /* ── NO BORRAR LA SESION AL PRIMER FALLO ────────────────────
+                 Acá se borraba la sesión apenas fallaba la renovación del
+                 token. En una computadora casi no se nota; en un iPhone sí:
+
+                 al abrir la app desde el ícono de la pantalla de inicio, el
+                 teléfono todavía está despertando la red. Ese primer pedido
+                 sale antes de que haya conexión y falla — no porque la
+                 sesión sea inválida, sino porque no había red todavía.
+
+                 Resultado: el jugador entraba, cerraba la app, la volvía a
+                 abrir y le pedía la contraseña de nuevo.
+
+                 Ahora se reintenta dos veces, esperando 1 y 3 segundos. Solo
+                 si las tres fallan se pide ingresar. */
+              /* ── EL LOGIN SE MUESTRA YA, EL REINTENTO VA POR DETRAS ──
+                 Antes se reintentaba ANTES de mostrar el login: la app
+                 quedaba hasta 4 segundos en blanco y el jugador, creyendo
+                 que estaba colgada, la cerraba.
+
+                 Ahora el login aparece en el acto — nadie ve una pantalla
+                 muerta — y en paralelo se sigue intentando renovar. Si lo
+                 logra, la pantalla se saca sola y entra sin tocar nada.
+
+                 Y la sesion NO se borra hasta que los tres intentos fallan:
+                 si el telefono solo estaba despertando la red, se recupera. */
+              pedir();
+
+              var _reint = 0;
+              (function _volverAProbar() {
+                _reint++;
+                if (_reint > 2) { _fbGuardarSes(null); return; }
+                setTimeout(function () {
+                  if (!FB_SES) return;              /* ya entro a mano */
+                  _fbRefrescar()
+                    .then(function(){ return _fbCargarRol(); })
+                    .then(function(){ return _fbTraerLlave(); })
+                    .then(function(){
+                      /* funciono: se saca el login y sigue como si nada */
+                      try {
+                        var l = document.getElementById('fb-login');
+                        if (l && l.parentNode) l.parentNode.removeChild(l);
+                      } catch(e){}
+                      resolve(true);
+                    })
+                    .catch(_volverAProbar);
+                }, _reint === 1 ? 1200 : 3000);
+              })();
+            }                   /* sesion vencida: pedimos ingresar */
         });
     } else if(!navigator.onLine && _fbHayLlaveGuardada()){
       /* Sin internet SOLO se sigue de largo si este dispositivo ya habia

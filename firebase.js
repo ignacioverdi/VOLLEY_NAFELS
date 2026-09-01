@@ -204,7 +204,19 @@ function _fbControlSesion(){
     return fetch(FB_URL + '/sesiones.json' + q).then(function(r){ return r.json(); });
   }).then(function(d){
     if(!d || d.error) return _fbRegistrarDisp();
-    var emitido = FB_SES.emitido || 0;
+    /* ── SI NO SE SABE CUANDO SE CREO, NO SE CIERRA ────────────────────
+           Acá decía  FB_SES.emitido || 0.  El campo "emitido" se agregó
+           después de que varios jugadores ya tenían su sesión: las de antes
+           no lo traen.
+
+           Y sin ese campo el valor quedaba en 0, que es menor que cualquier
+           fecha de corte. Resultado: la sesión se cerraba sola a los dos
+           segundos de entrar, una y otra vez, sin forma de salir del bucle.
+
+           Ahora, si no se sabe cuándo se creó, se la trata como recién
+           creada. Un corte viejo no puede cerrar una sesión de la que no
+           sabemos la fecha: en la duda, se deja entrar. */
+        var emitido = FB_SES.emitido || Date.now();
     var disp    = _fbDispId();
     var corte   = parseInt(d.corte, 10) || 0;
     if(d.corte_uid && d.corte_uid[FB_SES.uid])
