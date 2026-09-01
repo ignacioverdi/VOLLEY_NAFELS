@@ -197,6 +197,89 @@
     } catch (e) {}
   });
 
+  /* ══ 5. QUE FIREBASE VUELVA A LEER LA SESION ══════════════════════════
+     Este archivo carga ANTES que firebase.js y devuelve la sesion a
+     localStorage. Pero en la app instalada en la pantalla de inicio eso no
+     alcanzaba: firebase.js guarda la sesion en su variable FB_SES apenas
+     arranca, y si en ese instante todavia no habia nada, se queda con el
+     vacio y muestra el login — aunque un momento despues la sesion ya
+     estuviera restaurada.
+
+     En Safari normal no se notaba porque al recargar volvia a leer. En la
+     app instalada la pagina no se recarga: se queda en el login.
+
+     Se corrige avisandole a firebase.js que vuelva a mirar. */
+  (function avisarAFirebase() {
+    var intentos = 0;
+    var t = setInterval(function () {
+      intentos++;
+      if (intentos > 60) { clearInterval(t); return; }      /* 6 segundos */
+
+      /* todavia no cargo firebase.js */
+      if (typeof window.FB_SES === 'undefined') return;
+      clearInterval(t);
+
+      /* si ya tiene sesion, no hay nada que hacer */
+      if (window.FB_SES) return;
+
+      var r = recuperar();
+      if (!r) return;
+
+      try {
+        var s = JSON.parse(r.txt);
+        if (!s || !s.refreshToken) return;
+        window.FB_SES = s;
+        /* y que se guarde donde corresponde */
+        try { localStorage.setItem(CLAVE, r.txt); } catch (e) {}
+        window.__SESION_REINYECTADA = r.de;
+
+        /* si la pantalla de login ya se dibujo, se saca: la sesion existe */
+        setTimeout(function () {
+          try {
+            var l = document.getElementById('fb-login');
+            if (l && window.FB_SES) location.reload();
+          } catch (e) {}
+        }, 700);
+      } catch (e) {}
+    }, 100);
+  })();
+
+  /* ══ 6. DEJAR CONSTANCIA DE LO QUE PASO ═══════════════════════════════
+     Sin poder tener el telefono en la mano, la unica forma de saber que
+     falla es que la propia app lo anote. Se guarda una linea por entrada:
+     si tuvo que loguearse, desde donde se abrio y con que iOS.
+
+     No guarda nada personal: ni mail, ni contrasena, ni datos del jugador. */
+  function anotar() {
+    try {
+      var ua = navigator.userAgent || '';
+      if (!/iPhone|iPad/.test(ua)) return;          /* solo iPhone */
+
+      var ios = (ua.match(/OS (\d+[_\d]*)/) || [])[1] || '?';
+      var dato = {
+        cuando: new Date().toISOString().slice(0, 16),
+        modo: window.navigator.standalone ? 'app' : 'safari',
+        ios: ios.replace(/_/g, '.'),
+        pantalla: (location.pathname.split('/').pop() || 'index').replace('.html', ''),
+        tenia: {
+          local: !!(function () { try { return localStorage.getItem(CLAVE); } catch (e) { return null; } })(),
+          sesion: !!(function () { try { return sessionStorage.getItem(CLAVE); } catch (e) { return null; } })(),
+          cookie: !!leerCookie()
+        },
+        rescate: window.__SESION_RESCATADA || window.__SESION_REINYECTADA || null,
+        pidio_login: false                          /* se completa abajo */
+      };
+
+      setTimeout(function () {
+        try {
+          dato.pidio_login = !!document.getElementById('fb-login');
+          if (window.fbSet) fbSet('diagnostico/' + Date.now(), dato);
+        } catch (e) {}
+      }, 3500);
+    } catch (e) {}
+  }
+  setTimeout(anotar, 1500);
+
   window.__sesionDonde = recuperar;
 })();
 
