@@ -181,7 +181,15 @@
     if (pesa > 3500000) limpiarViejo();
   }
 
-  try { limpiarViejo(); medirYLimpiar(); } catch (e) {}
+  /* ── La limpieza NO se hace al abrir ───────────────────────────────────
+     Recorrer miles de claves en un iPhone tarda, y hacerlo justo cuando la
+     pantalla se esta dibujando es lo que la deja trabada unos segundos.
+
+     Se hace un rato despues, cuando la app ya esta andando y el jugador ya
+     esta usandola. Si tarda, no molesta a nadie. */
+  setTimeout(function () {
+    try { limpiarViejo(); medirYLimpiar(); } catch (e) {}
+  }, 4000);
 
   /* ══ 4. NO PERDER LA SESION AL VOLVER A LA APP ════════════════════════
      En iPhone, al cambiar de app y volver, Safari a veces descarta la
@@ -213,7 +221,10 @@
     var intentos = 0;
     var t = setInterval(function () {
       intentos++;
-      if (intentos > 60) { clearInterval(t); return; }      /* 6 segundos */
+      /* tope duro: pase lo que pase, a los 4 segundos se corta. Un
+         temporizador que no termina es lo que hace que el telefono se
+         caliente y la pagina deje de responder. */
+      if (intentos > 40) { clearInterval(t); return; }
 
       /* todavia no cargo firebase.js */
       if (typeof window.FB_SES === 'undefined') return;
@@ -233,13 +244,21 @@
         try { localStorage.setItem(CLAVE, r.txt); } catch (e) {}
         window.__SESION_REINYECTADA = r.de;
 
-        /* si la pantalla de login ya se dibujo, se saca: la sesion existe */
+        /* ── NUNCA RECARGAR ────────────────────────────────────────────
+           Acá había un location.reload() para sacar la pantalla de login
+           cuando la sesión se recuperaba. Era un error grave: si por lo
+           que sea el login volvía a aparecer, recargaba otra vez, y otra.
+           El teléfono se trababa.
+
+           Ahora simplemente se saca la pantalla de encima. Si algo falla,
+           el jugador ve el login y entra a mano: molesto, pero nunca un
+           teléfono trabado. */
         setTimeout(function () {
           try {
             var l = document.getElementById('fb-login');
-            if (l && window.FB_SES) location.reload();
+            if (l && window.FB_SES && window.FB_SES.refreshToken) l.remove();
           } catch (e) {}
-        }, 700);
+        }, 900);
       } catch (e) {}
     }, 100);
   })();
