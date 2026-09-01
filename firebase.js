@@ -266,8 +266,18 @@ function fbLogout(){
 }
 
 /* ── token: pide uno nuevo cuando está por vencer ───────────────────────── */
+/* Freno: si algo pide renovar muchas veces seguidas, se corta. Ningun uso
+   normal necesita mas de unas pocas renovaciones por sesion; si pasa de ahi
+   es un bucle, y un bucle cuelga el telefono. */
+var _fbIntentos = 0, _fbDesde = Date.now();
 function _fbRefrescar(){
   if(!FB_SES || !FB_SES.refreshToken) return Promise.reject(new Error('sin sesion'));
+
+  if(Date.now() - _fbDesde > 60000){ _fbIntentos = 0; _fbDesde = Date.now(); }
+  if(++_fbIntentos > 5){
+    try{ _fbGuardarSes(null); }catch(e){}
+    return Promise.reject(new Error('demasiados intentos'));
+  }
   return fetch('https://securetoken.googleapis.com/v1/token?key=' + FB_KEY, {
       method:'POST',
       headers:{'Content-Type':'application/x-www-form-urlencoded'},
@@ -275,7 +285,19 @@ function _fbRefrescar(){
     })
     .then(function(r){ return r.json(); })
     .then(function(d){
-      if(!d || !d.id_token) throw new Error('sesion vencida');
+      if(!d || !d.id_token){
+        /* ── SI GOOGLE RECHAZA EL TOKEN, LA SESION NO SIRVE MAS ──────────
+           Aca solo se lanzaba el error, pero la sesion con el token roto
+           quedaba guardada. Entonces la llamada siguiente volvia a
+           intentar renovar con el MISMO token invalido, y la siguiente, y
+           la siguiente: miles de POST a securetoken devolviendo 400, sin
+           fin, hasta colgar la pagina.
+
+           Un token que Google rechaza no se arregla reintentando. Se borra
+           la sesion y se pide ingresar de nuevo: una vez, y listo. */
+        try{ _fbGuardarSes(null); }catch(e){}
+        throw new Error('sesion vencida');
+      }
             /* ── GUARDAR TAMBIEN LOS TOKENS ───────────────────────────────────
          Aca se guardaba la sesion renovada SIN idToken ni refreshToken: se
          perdian los dos. Entonces la proxima llamada no encontraba token,
