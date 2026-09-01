@@ -126,25 +126,17 @@
 
   /* ── Guardar y recuperar los pesos del segundo ejercicio ────────────── */
   function conectar(card, sec2) {
-    /* ── EL DORSAL DEL JUGADOR ─────────────────────────────────────────
-       La pantalla lo guarda en jugadorActivo.num. Es el mismo numero que
-       usan las claves del primer ejercicio: prep_4_EJ076_s2. */
-    var num = '';
-    try { num = (window.jugadorActivo && window.jugadorActivo.num); } catch (e) {}
-    if (num === '' || num === null || num === undefined) return;
-    num = String(num);
-
-    /* ── EL ID DEL SEGUNDO MOVIMIENTO ──────────────────────────────────
-       No hay que inventarlo: la rutina ya lo trae. Cada ejercicio tiene
-       id e id2, por ejemplo:
+    /* ── El id del segundo movimiento ──────────────────────────────────
+       No hay que inventarlo: la rutina ya lo trae. Cada ejercicio en
+       jugadorActivo tiene id e id2, por ejemplo:
 
            Banco Plano   id: EJ002   id2: EJ074   (Fondos)
 
-       Se busca por el nombre y se usa SU id2, asi la clave queda igual
-       que si el profe lo hubiera puesto como ejercicio suelto. */
+       Se busca el ejercicio por su nombre y se usa SU id2. Asi la clave
+       del segundo peso es prep_<dorsal>_EJ074_s1, que no choca con nada
+       y ademas queda igual que si el profe lo hubiera puesto suelto. */
     var titulo = (card.querySelector('.ej-nombre') || {}).textContent || '';
     titulo = titulo.replace(/\s*(SUPERSERIE|SUPERSET|SUPERSATZ)\s*$/i, '').trim();
-    var primero = titulo.split(/\s+\+\s+/)[0];
 
     var id2 = null;
     try {
@@ -152,16 +144,24 @@
         (sem.bloques || []).forEach(function (b) {
           (b.ejercicios || []).forEach(function (e) {
             if (id2 || !e.id2) return;
-            var completo = ((e.nombre || '') + ' + ' + (e.nombre2 || '')).trim();
-            if (completo === titulo || (e.nombre || '') === primero) id2 = e.id2;
+            var completo = (e.nombre || '') + ' + ' + (e.nombre2 || '');
+            if (completo.trim() === titulo || (e.nombre || '') === titulo.split(/\s+\+\s+/)[0])
+              id2 = e.id2;
           });
         });
       });
     } catch (e) {}
 
-    /* Sin id2 no se guarda nada: mejor perder un dato que escribirlo en
-       una clave inventada que despues nadie sepa a que corresponde. */
-    if (!id2) return;
+    if (!id2) return;     /* sin id2 no se guarda: nunca a una clave inventada */
+
+    /* El dorsal del jugador que se esta viendo. La pantalla lo guarda en
+       jugadorActivo.num, que es de donde salen las claves del primer
+       ejercicio: prep_4_EJ076_s2. Si no esta, no se guarda nada: mejor
+       perder un dato que escribirlo en la clave equivocada. */
+    var num = '';
+    try { num = (window.jugadorActivo && window.jugadorActivo.num) || ''; } catch (e) {}
+    if (num === '' || num === null || num === undefined) return;
+    num = String(num);
 
     sec2.querySelectorAll('.peso-input-2').forEach(function (inp) {
       var clave = 'prep_' + num + '_' + id2 + '_s' + inp.getAttribute('data-serie');
@@ -171,13 +171,11 @@
         var v = localStorage.getItem(clave);
         if (v !== null && v !== '') inp.value = v;
       } catch (e) {}
-      try {
-        if (window.fbGet) fbGet('pesos/' + clave, function (d) {
-          if (d !== null && d !== undefined && d !== '' && !inp.value) inp.value = d;
-        });
-      } catch (e) {}
+      try { if (window.fbGet) fbGet('pesos/' + clave, function (d) {
+        if (d !== null && d !== undefined && d !== '' && !inp.value) inp.value = d;
+      }); } catch (e) {}
 
-      /* al escribir, se guarda igual que el primer ejercicio */
+      /* al escribir, se guarda igual que el primero */
       inp.addEventListener('change', function () {
         var val = inp.value.trim();
         try { localStorage.setItem(clave, val); } catch (e) {}
