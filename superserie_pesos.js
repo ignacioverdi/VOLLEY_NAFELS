@@ -126,21 +126,42 @@
 
   /* ── Guardar y recuperar los pesos del segundo ejercicio ────────────── */
   function conectar(card, sec2) {
-    /* El id del segundo movimiento sale del boton "Video 2", que ya lo
-       lleva. Si no aparece, se arma a partir del primero con el sufijo _b:
-       asi nunca choca con la clave del primer ejercicio. */
-    var id2 = card.getAttribute('data-id2');
-    if (!id2) {
-      var base = card.getAttribute('data-id') ||
-                 (card.querySelector('.ej-num') ? 'EJ' + card.querySelector('.ej-num').textContent.trim() : 'EJ');
-      id2 = base + '_b';
-    }
+    /* ── El id del segundo movimiento ──────────────────────────────────
+       No hay que inventarlo: la rutina ya lo trae. Cada ejercicio en
+       jugadorActivo tiene id e id2, por ejemplo:
 
+           Banco Plano   id: EJ002   id2: EJ074   (Fondos)
+
+       Se busca el ejercicio por su nombre y se usa SU id2. Asi la clave
+       del segundo peso es prep_<dorsal>_EJ074_s1, que no choca con nada
+       y ademas queda igual que si el profe lo hubiera puesto suelto. */
+    var titulo = (card.querySelector('.ej-nombre') || {}).textContent || '';
+    titulo = titulo.replace(/\s*(SUPERSERIE|SUPERSET|SUPERSATZ)\s*$/i, '').trim();
+
+    var id2 = null;
+    try {
+      (window.jugadorActivo.semanas || []).forEach(function (sem) {
+        (sem.bloques || []).forEach(function (b) {
+          (b.ejercicios || []).forEach(function (e) {
+            if (id2 || !e.id2) return;
+            var completo = (e.nombre || '') + ' + ' + (e.nombre2 || '');
+            if (completo.trim() === titulo || (e.nombre || '') === titulo.split(/\s+\+\s+/)[0])
+              id2 = e.id2;
+          });
+        });
+      });
+    } catch (e) {}
+
+    if (!id2) return;     /* sin id2 no se guarda: nunca a una clave inventada */
+
+    /* El dorsal del jugador que se esta viendo. La pantalla lo guarda en
+       jugadorActivo.num, que es de donde salen las claves del primer
+       ejercicio: prep_4_EJ076_s2. Si no esta, no se guarda nada: mejor
+       perder un dato que escribirlo en la clave equivocada. */
     var num = '';
-    try { num = (window.JUGADOR_ACTUAL && window.JUGADOR_ACTUAL.num) || window.NUM_ACTUAL || ''; } catch (e) {}
-    if (!num) {
-      try { num = (localStorage.getItem('vb_num') || '').trim(); } catch (e) {}
-    }
+    try { num = (window.jugadorActivo && window.jugadorActivo.num) || ''; } catch (e) {}
+    if (num === '' || num === null || num === undefined) return;
+    num = String(num);
 
     sec2.querySelectorAll('.peso-input-2').forEach(function (inp) {
       var clave = 'prep_' + num + '_' + id2 + '_s' + inp.getAttribute('data-serie');
