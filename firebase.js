@@ -216,8 +216,13 @@ function _fbRegistrarAcceso(){
   }).catch(function(){});
 }
 
+var _fbCtrlHecho = 0;
 function _fbControlSesion(){
   if(!FB_SES || !FB_SES.uid) return Promise.resolve();
+  /* Mismo criterio que el rol: alcanza con revisarlo una vez por minuto.
+     Si no, cada llamada al rol arrastraba otra lectura de sesiones. */
+  if(_fbCtrlHecho && (Date.now() - _fbCtrlHecho) < 60000) return Promise.resolve();
+  _fbCtrlHecho = Date.now();
   return _fbSufijo().then(function(q){
     return fetch(FB_URL + '/sesiones.json' + q).then(function(r){ return r.json(); });
   }).then(function(d){
@@ -261,10 +266,27 @@ function _fbControlSesion(){
    Esta envoltura hace que, si ya hay una carga en curso, las demas esperen
    a ESA en vez de largar otra. */
 var _fbRolEnCurso = null;
+var _fbRolHecho = 0;          /* cuando se cargo por ultima vez */
+
 function _fbCargarRol(){
+  /* ── POR QUE HAY DOS FRENOS ──────────────────────────────────────────
+     El primero evitaba llamadas AL MISMO TIEMPO. Pero si algo la llama
+     una detras de otra —termina una, empieza la siguiente— ese freno no
+     sirve: cada llamada arranca limpia.
+
+     Eso es lo que pasaba: 231 pedidos del mismo usuario, en fila. No es
+     un bucle infinito, pero alcanza para dejar sin recursos al navegador
+     y que la pantalla no termine de cargar.
+
+     El segundo freno recuerda que ya se cargo. El rol de una persona no
+     cambia mientras usa la app, asi que no hace falta preguntarlo mas de
+     una vez por minuto. Si algo insiste, se le devuelve lo que ya estaba
+     sin tocar la red. */
   if(_fbRolEnCurso) return _fbRolEnCurso;
+  if(_fbRolHecho && (Date.now() - _fbRolHecho) < 60000) return Promise.resolve();
+
   _fbRolEnCurso = _fbCargarRolReal();
-  var soltar = function(){ _fbRolEnCurso = null; };
+  var soltar = function(){ _fbRolEnCurso = null; _fbRolHecho = Date.now(); };
   _fbRolEnCurso.then(soltar, soltar);
   return _fbRolEnCurso;
 }
@@ -400,7 +422,7 @@ function _fbToken(){
 var _fbCuenta = 0, _fbCortado = false;
 function _fbCorta(){
   if(_fbCortado) return true;
-  if(++_fbCuenta > 5000){
+  if(++_fbCuenta > 1200){
     _fbCortado = true;
     try{ console.warn('Volley-Stats: demasiados pedidos seguidos, se corto para no colgar la pagina.'); }catch(e){}
     return true;
