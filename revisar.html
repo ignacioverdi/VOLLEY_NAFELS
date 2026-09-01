@@ -95,7 +95,16 @@ document.getElementById('r').innerHTML = h;
 
 /* ── El resumen, en una frase ── */
 var txt;
-if (!puedeLS && !puedeCookie) {
+/* Lo primero: si se abrio en Safari pero no hay NADA guardado, lo mas
+   probable es que el jugador use la app del icono. En iPhone son dos
+   almacenamientos separados, asi que medir Safari no dice nada de la app. */
+if (!app && claves === 0) {
+  txt = '<b class="avi">Estás en Safari, y acá no hay nada guardado.</b><br><br>' +
+        'Si usás la app desde el ícono de la pantalla de inicio, esta revisión ' +
+        'no sirve: en iPhone son dos lugares separados.<br><br>' +
+        '<b>Abrí la app desde el ícono</b>, y cuando te pida la contraseña tocá ' +
+        '"Revisar este dispositivo" abajo de todo.';
+} else if (!puedeLS && !puedeCookie) {
   txt = '<b class="mal">El teléfono no deja guardar nada.</b> Puede estar en Navegación Privada, o con "Bloquear todas las cookies" activado en Ajustes → Safari.';
 } else if (!puedeCookie) {
   txt = '<b class="mal">Las cookies están bloqueadas.</b> Ajustes → Safari → desactivar "Bloquear todas las cookies".';

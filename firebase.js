@@ -342,6 +342,13 @@ function _fbPantalla(){
       + '<div class="err" id="fb-e"></div>'
       + '<div class="ay">Los jugadores entran con su numero de camiseta.<br>'
       + 'Si no tenes codigo, pediselo al cuerpo tecnico.</div>'
+      /* Un enlace chico para revisar el telefono desde ACA, sin salir de la
+         app. En iPhone, la app instalada y Safari tienen almacenamientos
+         separados: revisar desde Safari mide una caja distinta y da un
+         resultado que no sirve. Tiene que hacerse desde adentro. */
+      + '<div class="ay" style="margin-top:14px">'
+      + '<a href="revisar.html" style="color:#5a6a80;font-size:11px;'
+      + 'text-decoration:underline">Revisar este dispositivo</a></div>'
       + '</div>';
     document.documentElement.appendChild(d);
 
@@ -393,7 +400,34 @@ function _fbArrancar(){
         .then(function(){ resolve(true); })
         .catch(function(){
           if(!navigator.onLine && _fbHayLlaveGuardada()){ FB_OFF = true; resolve(true); }   /* sin internet, pero este equipo ya habia entrado */
-          else { _fbGuardarSes(null); pedir(); }                   /* sesion vencida: pedimos ingresar */
+          else {
+              /* ── NO BORRAR LA SESION AL PRIMER FALLO ────────────────────
+                 Acá se borraba la sesión apenas fallaba la renovación del
+                 token. En una computadora casi no se nota; en un iPhone sí:
+
+                 al abrir la app desde el ícono de la pantalla de inicio, el
+                 teléfono todavía está despertando la red. Ese primer pedido
+                 sale antes de que haya conexión y falla — no porque la
+                 sesión sea inválida, sino porque no había red todavía.
+
+                 Resultado: el jugador entraba, cerraba la app, la volvía a
+                 abrir y le pedía la contraseña de nuevo.
+
+                 Ahora se reintenta dos veces, esperando 1 y 3 segundos. Solo
+                 si las tres fallan se pide ingresar. */
+              var _reint = 0;
+              (function _volverAProbar() {
+                _reint++;
+                if (_reint > 2) { _fbGuardarSes(null); pedir(); return; }
+                setTimeout(function () {
+                  _fbRefrescar()
+                    .then(function(){ return _fbCargarRol(); })
+                    .then(function(){ return _fbTraerLlave(); })
+                    .then(function(){ resolve(true); })
+                    .catch(_volverAProbar);
+                }, _reint === 1 ? 1000 : 3000);
+              })();
+            }                   /* sesion vencida: pedimos ingresar */
         });
     } else if(!navigator.onLine && _fbHayLlaveGuardada()){
       /* Sin internet SOLO se sigue de largo si este dispositivo ya habia
