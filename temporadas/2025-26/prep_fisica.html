@@ -5,22 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>PREPARACIÓN FÍSICA — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="movil.css">
-<script src="datos_seguros.js"></script>
+<script src="categorias_club.js?v=20260901-2352"></script>
+<script src="selector_categoria.js?v=20260901-2352"></script>
+<script src="plantel_nafels.js?v=20260901-2352" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260901-2352"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
-<script src="datos_prep_fisica.js" onerror="void 0"></script>
+<script src="datos_prep_fisica.js.enc" onerror="void 0"></script>
 <script src="datos_ejercicios.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="datos_equipo_2025-26.js.enc" onerror="void 0"></script>
-
-<script src="lang.js" onerror="void 0"></script>
-<!-- Apunta al firebase.js de la RAIZ, no a una copia local. La copia que
-     tenia la capsula era vieja: pedia mail y clave pero NUNCA guardaba la
-     llave de los datos, asi que las paginas abrian vacias para cualquiera
-     que no hubiera entrado antes por la app principal. Con una sola fuente
-     no se vuelve a desincronizar. -->
-<script src="firebase.js" onerror="void 0"></script>
-<script src="firebase_por_categoria.js"></script>
+<script src="lang.js?v=20260901-2352" onerror="void 0"></script>
+<script src="firebase.js?v=20260901-2352" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260901-2352"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -158,6 +153,21 @@ select,select option{color:#111!important;background-color:#fff!important}
   .page-header{padding:12px 16px}.player-selector{padding:14px 16px}.main{padding:16px}
   .calc-grid{grid-template-columns:1fr 1fr}.jug-stats-row{width:100%;margin-left:0;margin-top:6px}
   .readiness{margin-left:auto}
+  /* Tarjeta de ejercicio: todo apilado y ordenado en celular */
+  .ejercicio-header{flex-wrap:wrap;align-items:flex-start;gap:8px 10px;padding:12px 14px}
+  .ej-num{order:1;margin-top:1px}
+  .ej-info{order:2;flex:1 1 0;min-width:0}
+  .ej-nombre{font-size:15px;letter-spacing:.5px;white-space:normal;line-height:1.28;word-break:break-word}
+  .ej-badges{order:3;flex-basis:100%;width:100%;gap:6px}
+  .ej-badge{font-size:9px;padding:3px 8px}
+  .ej-video-btn{order:4;flex:1 1 130px;justify-content:center;text-align:center;padding:8px 10px}
+  .carga-section,.pesos-section,.obs-section,.nota-profe{padding-left:14px;padding-right:14px}
+  .carga-row{flex-wrap:wrap;gap:8px}
+  .carga-rm-input{flex:1 1 90px;min-width:0;width:auto}
+  .carga-result{font-size:13px;line-height:1.45}
+  .pesos-grid{gap:7px}
+  .peso-input{width:58px;font-size:16px}
+  .calc-results{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}
 }
 /* ── Panel Mi Progreso ───────────────────────────────────── */
 .prog-card{background:linear-gradient(150deg,var(--card),#0b1422);border:1px solid var(--elev);border-radius:16px;padding:18px;margin-bottom:16px}
@@ -226,20 +236,31 @@ select,select option{color:#111!important;background-color:#fff!important}
   }
 }
 </style>
+<!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
+     toca el encabezado y las barras: en la computadora no hace nada.
+     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
+<link rel="stylesheet" href="movil.css?v=20260901-2352">
+<!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
+     hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
+<script src="mi_fila.js?v=20260901-2352" onerror="void 0"></script>
 </head>
 <body>
-<div class="page-header">
-  <div style="display:flex;align-items:center;gap:14px;">
+<div class="page-header header">
+  <div class="header-text" style="display:flex;align-items:center;gap:14px;">
     <a href="index.html" class="back-btn">← Inicio</a>
     <div>
       <div class="page-title">💪 <span data-t="prep_fisica">Preparación Física</span></div>
-      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;">AXPO VOLLEY NÄFELS · NLA Suiza 2025/26</div>
+      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;">AXPO VOLLEY NÄFELS · NLA Suiza 2026/27</div>
     </div>
   </div>
-  <div style="display:flex;align-items:center;gap:12px;">
-    <a href="prep_builder.html" class="back-btn" style="border-color:rgba(239,39,64,.4);color:#ff5870">✏️ Armar rutinas</a>
+  <!-- header-right hace que en el celular esta columna baje a su propio
+       renglon en vez de encimarse con el titulo: movil.css la busca por ese
+       nombre. Sin ella, el boton de rutinas y el de temporadas quedaban
+       montados sobre el titulo. -->
+  <div class="header-right" style="display:flex;align-items:center;gap:12px;">
+    <a href="prep_builder.html" class="back-btn" style="border-color:rgba(239,39,64,.4);color:#ff5870" data-solo-editor>✏️ Armar rutinas</a>
     <div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div>
-    <div style="font-size:9px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase;" id="fecha-hoy"></div>
+    <div class="fecha-txt" style="font-size:9px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase;" id="fecha-hoy"></div>
   </div>
 </div>
 
@@ -258,7 +279,7 @@ select,select option{color:#111!important;background-color:#fff!important}
   <div id="jug-content" style="display:none;">
     <div class="dev-banner">
       <span style="font-size:15px;">🩺</span>
-      <span style="font-size:11px;color:var(--teal);">Tus pesos y notas se guardan y <b>sincronizan automáticamente</b> con tu cuenta.</span>
+      <span style="font-size:11px;color:var(--teal);" id="pf-sync-msg">Tus pesos y notas se guardan y <b>sincronizan automáticamente</b> con tu cuenta.</span>
     </div>
     <div id="readiness-banner" class="rd-banner" style="display:none"></div>
     <div class="jug-header">
@@ -269,9 +290,9 @@ select,select option{color:#111!important;background-color:#fff!important}
       </div>
       <div id="readiness-chip"></div>
       <div class="jug-stats-row">
-        <div class="jug-stat"><div class="jug-stat-val" id="stat-sesiones">0</div><div class="jug-stat-lbl">Días</div></div>
-        <div class="jug-stat"><div class="jug-stat-val" id="stat-ejercicios">0</div><div class="jug-stat-lbl">Ejercicios</div></div>
-        <div class="jug-stat"><div class="jug-stat-val" id="stat-registros">0</div><div class="jug-stat-lbl">Registros</div></div>
+        <div class="jug-stat"><div class="jug-stat-val" id="stat-sesiones">0</div><div class="jug-stat-lbl" id="pf-stat-dias-lbl">Días</div></div>
+        <div class="jug-stat"><div class="jug-stat-val" id="stat-ejercicios">0</div><div class="jug-stat-lbl" id="pf-stat-ej-lbl">Ejercicios</div></div>
+        <div class="jug-stat"><div class="jug-stat-val" id="stat-registros">0</div><div class="jug-stat-lbl" id="pf-stat-reg-lbl">Registros</div></div>
       </div>
     </div>
     <div id="progreso-panel"></div>
@@ -396,6 +417,74 @@ var PREP_DEMO = {
 var jugadorActivo = null;
 var semanaActiva = null;
 
+// ════ Traducción completa de la página (es/en/de) ════
+function PF_LANG(){ return (typeof getLang==='function')?getLang():'es'; }
+var PF_T = {
+  es:{ ejercicios:'ejercicios', superserie:'SUPERSERIE', series:'SERIES', reps:'REPS',
+       indicacion:'📋 Indicación del profe', ingresa_rm:'Ingresá tu 1RM para ver el peso a usar',
+       trabaja:'Trabajá con', de:'de', prescripcion:'Prescripción', de_tu_max:'de tu máximo',
+       tu_rm:'Tu 1RM en este ejercicio:', registra:'Registrá tu peso por serie (kg)', serie:'SERIE',
+       tu_obs:'💬 Tu observación', obs_ph:'Cómo te sentiste, si subiste peso, dolor, etc...',
+       semana:'Semana', sin_rutina:'Sin rutina cargada', sin_rutina_sub:'El profe todavía no cargó la rutina.',
+       mi_progreso:'Mi Progreso', ejercicio:'Ejercicio', dias:'Días', ej_lbl:'Ejercicios', registros:'Registros',
+       sync:'Tus pesos y notas se guardan y sincronizan automáticamente', sel_jug:'Seleccioná un jugador',
+       prog_empty_head:'📈 Mi progreso', prog_empty:'Registrá tus pesos en cada sesión y acá vas a ver tus <b>récords</b> y cómo vas <b>progresando</b> 💪', evo_head:'🚀 Tu evolución', evo_sub:'Cómo fueron subiendo tus cargas', rec_head:'🏆 Tus récords', rec_sub:'Tu mejor peso en cada ejercicio', 
+       mnames:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+       well_rec:'Al terminar, cargá tu wellness del día',well_cta:'Completar wellness',dnames:{lunes:'Lunes',martes:'Martes',miercoles:'Miércoles',jueves:'Jueves',viernes:'Viernes',sabado:'Sábado',domingo:'Domingo',y:'y'} },
+  en:{ ejercicios:'exercises', superserie:'SUPERSET', series:'SETS', reps:'REPS',
+       indicacion:"📋 Coach's note", ingresa_rm:'Enter your 1RM to see the weight to use',
+       trabaja:'Work with', de:'of', prescripcion:'Prescription', de_tu_max:'of your max',
+       tu_rm:'Your 1RM on this exercise:', registra:'Log your weight per set (kg)', serie:'SET',
+       tu_obs:'💬 Your note', obs_ph:'How you felt, if you went heavier, pain, etc...',
+       semana:'Week', sin_rutina:'No routine loaded', sin_rutina_sub:"The coach hasn't loaded the routine yet.",
+       mi_progreso:'My Progress', ejercicio:'Exercise', dias:'Days', ej_lbl:'Exercises', registros:'Logs',
+       sync:'Your weights and notes are saved and synced automatically', sel_jug:'Select a player',
+       prog_empty_head:'📈 My progress', prog_empty:'Log your weights each session and here you\'ll see your <b>records</b> and how you\'re <b>progressing</b> 💪', evo_head:'🚀 Your evolution', evo_sub:'How your loads went up', rec_head:'🏆 Your records', rec_sub:'Your best weight per exercise', 
+       mnames:['January','February','March','April','May','June','July','August','September','October','November','December'],
+       well_rec:'After the session, fill in your wellness',well_cta:'Fill in wellness',dnames:{lunes:'Monday',martes:'Tuesday',miercoles:'Wednesday',jueves:'Thursday',viernes:'Friday',sabado:'Saturday',domingo:'Sunday',y:'and'} },
+  de:{ ejercicios:'Übungen', superserie:'SUPERSATZ', series:'SÄTZE', reps:'Wdh',
+       indicacion:'📋 Trainernotiz', ingresa_rm:'Gib dein 1RM ein, um das Gewicht zu sehen',
+       trabaja:'Arbeite mit', de:'von', prescripcion:'Vorgabe', de_tu_max:'deines Maximums',
+       tu_rm:'Dein 1RM bei dieser Übung:', registra:'Notiere dein Gewicht pro Satz (kg)', serie:'SATZ',
+       tu_obs:'💬 Deine Notiz', obs_ph:'Wie du dich gefühlt hast, mehr Gewicht, Schmerzen, usw...',
+       semana:'Woche', sin_rutina:'Kein Plan geladen', sin_rutina_sub:'Der Trainer hat den Plan noch nicht geladen.',
+       mi_progreso:'Mein Fortschritt', ejercicio:'Übung', dias:'Tage', ej_lbl:'Übungen', registros:'Einträge',
+       sync:'Deine Gewichte und Notizen werden automatisch gespeichert', sel_jug:'Wähle einen Spieler',
+       prog_empty_head:'📈 Mein Fortschritt', prog_empty:'Notiere deine Gewichte in jeder Einheit und hier siehst du deine <b>Rekorde</b> und wie du <b>Fortschritte</b> machst 💪', evo_head:'🚀 Deine Entwicklung', evo_sub:'Wie deine Gewichte gestiegen sind', rec_head:'🏆 Deine Rekorde', rec_sub:'Dein bestes Gewicht pro Übung', 
+       mnames:['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'],
+       well_rec:'Nach dem Training: trag dein Wellness ein',well_cta:'Wellness ausfüllen',dnames:{lunes:'Montag',martes:'Dienstag',miercoles:'Mittwoch',jueves:'Donnerstag',viernes:'Freitag',sabado:'Samstag',domingo:'Sonntag',y:'und'} }
+};
+function tP(k){ var l=PF_LANG(); return (PF_T[l]&&PF_T[l][k]!==undefined)?PF_T[l][k]:PF_T.es[k]; }
+
+// Nombres de bloques comunes (los que no estén caen al texto original)
+var PF_BLOQUES = {
+  en:{'FUERZA SUPERIOR':'UPPER BODY STRENGTH','FUERZA INFERIOR':'LOWER BODY STRENGTH','TREN SUPERIOR':'UPPER BODY','TREN INFERIOR':'LOWER BODY',
+      'CORE':'CORE','ABDOMINALES':'ABS','ABDOMINAL':'ABS','MOVILIDAD':'MOBILITY','POTENCIA':'POWER','PLIOMETRIA':'PLYOMETRICS','PLIOMETRÍA':'PLYOMETRICS',
+      'RESISTENCIA':'ENDURANCE','VELOCIDAD':'SPEED','SALTO':'JUMP','CALENTAMIENTO':'WARM-UP','ENTRADA EN CALOR':'WARM-UP','ESTIRAMIENTO':'STRETCHING',
+      'ELONGACION':'STRETCHING','ELONGACIÓN':'STRETCHING','PECHO':'CHEST','ESPALDA':'BACK','PIERNAS':'LEGS','BRAZOS':'ARMS','HOMBROS':'SHOULDERS',
+      'GLUTEOS':'GLUTES','GLÚTEOS':'GLUTES','BICEPS':'BICEPS','BÍCEPS':'BICEPS','TRICEPS':'TRICEPS','TRÍCEPS':'TRICEPS','FUERZA':'STRENGTH',
+      'PREVENCION':'PREHAB','PREVENCIÓN':'PREHAB','ACTIVACION':'ACTIVATION','ACTIVACIÓN':'ACTIVATION','CIRCUITO':'CIRCUIT','GIMNASIO':'GYM',
+      'FISICO':'PHYSICAL','FÍSICO':'PHYSICAL','TECNICA':'TECHNIQUE','TÉCNICA':'TECHNIQUE'},
+  de:{'FUERZA SUPERIOR':'OBERKÖRPERKRAFT','FUERZA INFERIOR':'UNTERKÖRPERKRAFT','TREN SUPERIOR':'OBERKÖRPER','TREN INFERIOR':'UNTERKÖRPER',
+      'CORE':'CORE','ABDOMINALES':'BAUCH','ABDOMINAL':'BAUCH','MOVILIDAD':'MOBILITÄT','POTENCIA':'KRAFT','PLIOMETRIA':'PLYOMETRIE','PLIOMETRÍA':'PLYOMETRIE',
+      'RESISTENCIA':'AUSDAUER','VELOCIDAD':'SCHNELLIGKEIT','SALTO':'SPRUNG','CALENTAMIENTO':'AUFWÄRMEN','ENTRADA EN CALOR':'AUFWÄRMEN','ESTIRAMIENTO':'DEHNEN',
+      'ELONGACION':'DEHNEN','ELONGACIÓN':'DEHNEN','PECHO':'BRUST','ESPALDA':'RÜCKEN','PIERNAS':'BEINE','BRAZOS':'ARME','HOMBROS':'SCHULTERN',
+      'GLUTEOS':'GESÄSS','GLÚTEOS':'GESÄSS','BICEPS':'BIZEPS','BÍCEPS':'BIZEPS','TRICEPS':'TRIZEPS','TRÍCEPS':'TRIZEPS','FUERZA':'KRAFT',
+      'PREVENCION':'PRÄVENTION','PREVENCIÓN':'PRÄVENTION','ACTIVACION':'AKTIVIERUNG','ACTIVACIÓN':'AKTIVIERUNG','CIRCUITO':'ZIRKEL','GIMNASIO':'FITNESSSTUDIO',
+      'FISICO':'KÖRPERLICH','FÍSICO':'KÖRPERLICH','TECNICA':'TECHNIK','TÉCNICA':'TECHNIK'}
+};
+function bloqueNombre(nombre){
+  var l=PF_LANG(); if(l==='es'||!nombre) return nombre;
+  var d=PF_BLOQUES[l]||{}; var key=(''+nombre).trim().toUpperCase();
+  return d[key]||nombre;
+}
+function applyPFStatic(){
+  var t=PF_T[PF_LANG()]||PF_T.es;
+  setTxtPF('pf-stat-dias-lbl',t.dias); setTxtPF('pf-stat-ej-lbl',t.ej_lbl); setTxtPF('pf-stat-reg-lbl',t.registros);
+  setTxtPF('pf-sync-msg',t.sync);
+}
+function setTxtPF(id,s){ var el=document.getElementById(id); if(el) el.textContent=s; }
+
 // ── Construir DATA cuando todos los scripts cargaron ─────────────
 var DATA = {jugadores:[]};
 
@@ -503,10 +592,44 @@ var WELL = {
              date:d, today:(d===todayISO()) };
   }
 };
+/* ¿Este jugador ya cargo el wellness HOY? Se compara por fecha, no por la
+   ultima carga: una de ayer no sirve para la sesion de hoy. */
+WELL.hoyDe = function(num){
+  try{
+    var d = new Date();
+    var hoy = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    return (this.cache || []).some(function(e){ return e.num === num && e.date === hoy; });
+  }catch(e){ return false; }
+};
+
 function renderReadiness(num){
   var chip=document.getElementById('readiness-chip'), banner=document.getElementById('readiness-banner');
   var r=WELL.latest(num);
-  if(!r){ if(chip) chip.innerHTML=''; if(banner) banner.style.display='none'; return; }
+  /* ══ Sin wellness cargado hoy: se lo recordamos ═══════════════════════
+     Antes, si el jugador no lo habia completado, esto simplemente ocultaba el
+     aviso: el circuito se cortaba en silencio y nadie le decia que tenia que
+     llenarlo. El entrenador tampoco veia nada, asi que no podia ajustar la
+     carga.
+
+     En este club el wellness se carga DESPUES de entrenar: el jugador
+     responde como se sintio y cuan dura le resulto la sesion (el RPE). Por eso
+     el recordatorio dice "al terminar" y no "antes de entrenar". */
+  if(!r){
+    if(chip) chip.innerHTML='';
+    if(banner){
+      var _hoy = (typeof WELL!=='undefined' && WELL.hoyDe) ? WELL.hoyDe(num) : null;
+      if(_hoy){ banner.style.display='none'; return; }
+      var _t = (PF_T[PF_LANG()] || PF_T.es);
+      banner.style.display='flex';
+      banner.style.borderColor='rgba(56,189,248,.28)';
+      banner.style.background='rgba(56,189,248,.08)';
+      banner.innerHTML='<span style="font-size:15px">🩺</span>'
+        + '<span style="font-size:12px;color:#38bdf8">' + (_t.well_rec || '')
+        + ' · <a href="wellness.html" style="color:#38bdf8;font-weight:700">'
+        + (_t.well_cta || '') + ' →</a></span>';
+    }
+    return;
+  }
   var c=wellColor(r.pct);
   if(chip) chip.innerHTML='<div class="readiness" style="border-color:'+c+'55">'
     +'<span class="rd-dot" style="background:'+c+'"></span><span class="rd-pct" style="color:'+c+'">'+r.pct+'%</span>'
@@ -579,9 +702,9 @@ function sparkline(arr){
 function renderProgreso(j){
   var box=document.getElementById('progreso-panel'); if(!box||!j) return;
   var num=j.num, names=exNameMap(), best=bestWeights(num);
-  var prs=Object.keys(best).filter(function(id){return best[id]>0;}).map(function(id){return {id:id,nombre:names[id]||'Ejercicio',kg:best[id]};}).sort(function(a,b){return b.kg-a.kg;});
+  var prs=Object.keys(best).filter(function(id){return best[id]>0;}).map(function(id){return {id:id,nombre:names[id]||tP('ejercicio'),kg:best[id]};}).sort(function(a,b){return b.kg-a.kg;});
   if(!prs.length){
-    box.innerHTML='<div class="prog-card"><div class="prog-head">📈 Mi progreso</div><div class="prog-empty">Registrá tus pesos en cada sesión y acá vas a ver tus <b>récords</b> y cómo vas <b>progresando</b> 💪</div></div>';
+    box.innerHTML='<div class="prog-card"><div class="prog-head">'+tP('prog_empty_head')+'</div><div class="prog-empty">'+tP('prog_empty')+'</div></div>';
     return;
   }
   var top=prs.slice(0,8), maxKg=top[0].kg;
@@ -593,14 +716,14 @@ function renderProgreso(j){
   var evo=prs.map(function(p){ return {p:p,h:getHist(num,p.id)}; }).filter(function(x){return x.h.length>=2;}).slice(0,4);
   var evoHtml='';
   if(evo.length){
-    evoHtml='<div class="prog-card"><div class="prog-head">🚀 Tu evolución</div><div class="prog-sub">Cómo fueron subiendo tus cargas</div><div class="evo-grid">'
+    evoHtml='<div class="prog-card"><div class="prog-head">'+tP('evo_head')+'</div><div class="prog-sub">'+tP('evo_sub')+'</div><div class="evo-grid">'
       +evo.map(function(x){ var h=x.h, first=h[0].kg, last=h[h.length-1].kg, dd=Math.round((last-first)*10)/10, pct=first>0?Math.round((last-first)/first*100):0;
         var delta=dd>0?('<span class="evo-delta evo-up">▲ +'+dd+' kg'+(pct>0?' ('+pct+'%)':'')+'</span>'):'<span class="evo-delta evo-flat">—</span>';
         return '<div class="evo-item"><div class="evo-top"><span class="evo-name" title="'+x.p.nombre+'">'+x.p.nombre+'</span>'+delta+'</div>'
           +sparkline(h)+'<div class="evo-foot"><span>'+h[0].d.slice(5)+'</span><span>'+h[h.length-1].d.slice(5)+'</span></div></div>';
       }).join('')+'</div></div>';
   }
-  box.innerHTML='<div class="prog-card"><div class="prog-head">🏆 Tus récords</div><div class="prog-sub">Tu mejor peso en cada ejercicio</div>'+prHtml+'</div>'+evoHtml;
+  box.innerHTML='<div class="prog-card"><div class="prog-head">'+tP('rec_head')+'</div><div class="prog-sub">'+tP('rec_sub')+'</div>'+prHtml+'</div>'+evoHtml;
 }
 
 // ── Init ──────────────────────────────────────────────────────────
@@ -647,7 +770,7 @@ function selectJugador(j, btn){
 // ── Rutinas desde la nube (las que arma el PF en prep_builder), por mes ──
 var RUTINAS_MES = {};
 var MESES_PREP = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-function mesLabelFromKey(k){ var p=String(k).split('-'); return (MESES_PREP[(+p[1])-1]||'')+' '+(p[0]||''); }
+function mesLabelFromKey(k){ var p=String(k).split('-'); var mm=(PF_T[PF_LANG()]||PF_T.es).mnames; return (mm[(+p[1])-1]||'')+' '+(p[0]||''); }
 var MES_ACTIVO = null;
 function aplicarMes(j, mesKey){
   MES_ACTIVO = mesKey;
@@ -753,6 +876,19 @@ function loadRutinas(j){
 }
 
 // ── Render semanas ────────────────────────────────────────────────
+
+function traducirDias(txt){
+  try{
+    var d = (PF_T[PF_LANG()] || PF_T.es).dnames;
+    if(!d) return txt;
+    return String(txt).replace(/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+/g, function(pal){
+      var k = pal.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+      var tr = d[k];
+      if(!tr) return pal;
+      return (pal === pal.toUpperCase()) ? tr.toUpperCase() : tr;
+    });
+  }catch(e){ return txt; }
+}
 function renderSemanas(j){
   var tabs = document.getElementById('semanas-tabs');
   tabs.innerHTML = '';
@@ -760,14 +896,18 @@ function renderSemanas(j){
     document.getElementById('rutina-content').innerHTML =
       '<div style="text-align:center;padding:60px 20px;color:var(--mut);">' +
       '<div style="font-size:32px;margin-bottom:12px;">📋</div>' +
-      '<div style="font-family:Bebas Neue,sans-serif;font-size:20px;letter-spacing:3px;margin-bottom:8px;">Sin rutina cargada</div>' +
-      '<div style="font-size:12px;">El profe todavía no cargó la rutina.</div></div>';
+      '<div style="font-family:Bebas Neue,sans-serif;font-size:20px;letter-spacing:3px;margin-bottom:8px;">'+tP('sin_rutina')+'</div>' +
+      '<div style="font-size:12px;">'+tP('sin_rutina_sub')+'</div></div>';
     return;
   }
   j.semanas.forEach(function(s, idx){
     var tab = document.createElement('button');
     tab.className = 'semana-tab' + (idx === 0 ? ' active' : '');
-    tab.textContent = s.label;
+    /* Los dias de la rutina se traducen palabra por palabra: antes solo se
+       cambiaba "Semana" y una etiqueta como "LUNES, VIERNES" quedaba en
+       castellano para todos. Lo que no se reconoce queda como lo escribio el
+       preparador. */
+    tab.textContent = traducirDias((s.label||'').replace(/Semana/gi, tP('semana')));
     tab.onclick = (function(semana, t){
       return function(){
         document.querySelectorAll('.semana-tab').forEach(function(x){ x.classList.remove('active'); });
@@ -793,8 +933,8 @@ function renderRutina(j, semana){
     hdr.onclick = function(){ div.classList.toggle('open'); };
     hdr.innerHTML =
       '<span class="bloque-icon">' + (bloque.icon||'💪') + '</span>' +
-      '<span class="bloque-title" style="color:' + (bloque.color||'#fff') + '">' + bloque.nombre + '</span>' +
-      '<span class="bloque-meta">' + (bloque.ejercicios||[]).length + ' ejercicios</span>' +
+      '<span class="bloque-title" style="color:' + (bloque.color||'#fff') + '">' + bloqueNombre(bloque.nombre) + '</span>' +
+      '<span class="bloque-meta">' + (bloque.ejercicios||[]).length + ' ' + tP('ejercicios') + '</span>' +
       '<span class="bloque-arrow">▾</span>';
     var body = document.createElement('div');
     body.className = 'bloque-body';
@@ -805,6 +945,30 @@ function renderRutina(j, semana){
     div.appendChild(body);
     cont.appendChild(div);
   });
+}
+
+// ── Traducir nombre de ejercicio según idioma (es/en, de->en->es) ──
+function ejNombre(id, fallback){
+  var lang = (typeof getLang==='function') ? getLang() : 'es';
+  if(!window.EJERCICIOS_DATA) return fallback || '';
+  var found=null;
+  // 1) buscar por id (rutinas nuevas)
+  if(id){
+    window.EJERCICIOS_DATA.grupos.forEach(function(g){
+      g.ejercicios.forEach(function(e){ if(e.id===id) found=e; });
+    });
+  }
+  // 2) si no matcheo por id, buscar por nombre en español (rutinas viejas sin id)
+  if(!found && fallback){
+    var fl = (''+fallback).trim().toLowerCase();
+    window.EJERCICIOS_DATA.grupos.forEach(function(g){
+      g.ejercicios.forEach(function(e){
+        if(!found && e.es && (''+e.es).trim().toLowerCase()===fl) found=e;
+      });
+    });
+  }
+  if(found) return found[lang] || found.en || found.es || fallback || '';
+  return fallback || '';
 }
 
 // ── Build ejercicio ───────────────────────────────────────────────
@@ -826,18 +990,33 @@ function buildEjercicio(j, ej, num){
   }
   var tieneVideo = !!videoUrl;
   if(tieneVideo) ej.video = videoUrl;
+  // ── Segundo ejercicio (superserie / combinado) ──
+  var hasCombo = !!(ej.id2 || ej.nombre2);
+  var video2Url = (ej.video2 && ej.video2 !== 'null' && ej.video2 !== '') ? ej.video2 : null;
+  if(hasCombo && !video2Url && ej.id2 && window.EJERCICIOS_DATA){
+    window.EJERCICIOS_DATA.grupos.forEach(function(g){
+      g.ejercicios.forEach(function(e){ if(e.id === ej.id2 && e.video) video2Url = e.video; });
+    });
+  }
+  var nombre1 = ejNombre(ej.id, ej.nombre);
+  var nombre2 = hasCombo ? ejNombre(ej.id2, ej.nombre2) : '';
+  var nombreFull = nombre1 + (nombre2 ? ' <span style="color:var(--mut)">+</span> ' + nombre2 : '');
+  var repsFull = ej.reps + (nombre2 && ej.reps2 ? ' + ' + ej.reps2 : '');
   var videoBtn = tieneVideo
     ? '<button class="ej-video-btn" onclick="window.open(this.dataset.url,&quot;_blank&quot;)" data-url="' + ej.video + '" type="button">🎬 VIDEO</button>'
     : '<button class="ej-video-btn sin-video" disabled type="button">🎬 VIDEO</button>';
+  if(nombre2 && video2Url){
+    videoBtn += '<button class="ej-video-btn" onclick="window.open(this.dataset.url,&quot;_blank&quot;)" data-url="' + video2Url + '" type="button">🎬 VIDEO 2</button>';
+  }
   hdr.innerHTML =
     '<div class="ej-num">' + num + '</div>' +
     '<div class="ej-info">' +
-      '<div class="ej-nombre">' + ej.nombre + '</div>' +
+      '<div class="ej-nombre">' + nombreFull + (nombre2 ? ' <span class="ej-badge" style="background:rgba(99,102,241,.18);color:#a5b4fc;border:none;font-size:9px;vertical-align:middle">'+tP('superserie')+'</span>' : '') + '</div>' +
       '<div class="ej-desc">' + (ej.desc||'') + '</div>' +
     '</div>' +
     '<div class="ej-badges">' +
-      '<span class="ej-badge badge-series">' + ej.series + ' SERIES</span>' +
-      '<span class="ej-badge badge-reps">' + ej.reps + ' REPS</span>' +
+      '<span class="ej-badge badge-series">' + ej.series + ' ' + tP('series') + '</span>' +
+      '<span class="ej-badge badge-reps">' + repsFull + ' ' + tP('reps') + '</span>' +
       (ej.descanso ? '<span class="ej-badge badge-descanso">⏱ ' + ej.descanso + '</span>' : '') +
       (ej.carga ? '<span class="ej-badge badge-carga">🏋 ' + ej.carga + '</span>' : '') +
     '</div>' +
@@ -848,7 +1027,7 @@ function buildEjercicio(j, ej, num){
   if(ej.nota){
     var notaDiv = document.createElement('div');
     notaDiv.className = 'nota-profe';
-    notaDiv.innerHTML = '<div class="nota-profe-lbl">📋 Indicación del profe</div><div class="nota-profe-txt">' + ej.nota + '</div>';
+    notaDiv.innerHTML = '<div class="nota-profe-lbl">'+tP('indicacion')+'</div><div class="nota-profe-txt">' + ej.nota + '</div>';
     card.appendChild(notaDiv);
   }
 
@@ -861,14 +1040,14 @@ function buildEjercicio(j, ej, num){
     var savedRm = localStorage.getItem(rmk) || '';
     var calcLine = function(rm){
       rm = parseFloat(rm);
-      if(!rm || rm <= 0) return '<span style="color:var(--mut)">Ingresá tu 1RM para ver el peso a usar</span>';
+      if(!rm || rm <= 0) return '<span style="color:var(--mut)">'+tP('ingresa_rm')+'</span>';
       var w = round25(rm * cg.val / 100);
-      return '👉 Trabajá con <strong style="color:#2dd4bf;font-size:17px">' + w + ' kg</strong> <span style="color:var(--mut);font-size:11px">(' + cg.val + '% de ' + rm + ' kg)</span>';
+      return '👉 '+tP('trabaja')+' <strong style="color:#2dd4bf;font-size:17px">' + w + ' kg</strong> <span style="color:var(--mut);font-size:11px">(' + cg.val + '% '+tP('de')+' ' + rm + ' kg)</span>';
     };
     cargaDiv.innerHTML =
-      '<div class="carga-lbl">🏋 Prescripción: ' + cg.val + '% de tu máximo</div>' +
+      '<div class="carga-lbl">🏋 '+tP('prescripcion')+': ' + cg.val + '% '+tP('de_tu_max')+'</div>' +
       '<div class="carga-row">' +
-        '<span class="carga-rm-lbl">Tu 1RM en este ejercicio:</span>' +
+        '<span class="carga-rm-lbl">'+tP('tu_rm')+'</span>' +
         '<input type="number" class="carga-rm-input" placeholder="— kg" value="' + savedRm + '" min="0" max="500" step="0.5">' +
         '<span class="carga-rm-unit">kg</span>' +
       '</div>' +
@@ -895,7 +1074,23 @@ function buildEjercicio(j, ej, num){
   pesosDiv.className = 'pesos-section';
   var pesosLabel = document.createElement('div');
   pesosLabel.className = 'pesos-label';
-  pesosLabel.textContent = 'Registrá tu peso por serie (kg)';
+  /* ── SI ES SUPERSERIE, EL NOMBRE DEL PRIMER MOVIMIENTO ──────────────
+     Un ejercicio combinado —"Banco Plano + Fondos"— son DOS movimientos
+     con pesos muy distintos. Antes habia una sola fila y no se sabia a
+     cual correspondia el numero.
+
+     Ahora la fila lleva el nombre del primero, y mas abajo se agrega otra
+     para el segundo. Se arma aca mismo, al dibujar la tarjeta: no hay
+     ningun observador vigilando la pantalla (eso fue lo que trabo los
+     telefonos la primera vez). */
+  var _nom2 = (ej.nombre2 && ej.id2) ? ej.nombre2 : null;
+  if(_nom2){
+    pesosLabel.innerHTML = '<span style="color:#2dd4bf;font-weight:700">' +
+      (ej.nombre || '') + '</span><span style="opacity:.55"> · ' +
+      tP('registra') + '</span>';
+  } else {
+    pesosLabel.textContent = tP('registra');
+  }
   pesosDiv.appendChild(pesosLabel);
   var pesosGrid = document.createElement('div');
   pesosGrid.className = 'pesos-grid';
@@ -906,7 +1101,7 @@ function buildEjercicio(j, ej, num){
     serieDiv.className = 'serie-item';
     var sLabel = document.createElement('div');
     sLabel.className = 'serie-num';
-    sLabel.textContent = 'SERIE ' + i;
+    sLabel.textContent = tP('serie') + ' ' + i;
     var inp = document.createElement('input');
     inp.type = 'number'; inp.className = 'peso-input';
     inp.placeholder = '— kg'; inp.value = saved; inp.min = 0; inp.max = 500; inp.step = 0.5;
@@ -927,16 +1122,70 @@ function buildEjercicio(j, ej, num){
   pesosDiv.appendChild(pesosGrid);
   card.appendChild(pesosDiv);
 
+  /* ── LA SEGUNDA FILA, PARA EL OTRO MOVIMIENTO ──────────────────────────
+     Si el ejercicio es combinado, cada movimiento necesita su propia fila:
+     nadie hace fondos con el mismo peso que press de banca.
+
+     La clave usa el id2 que ya trae la rutina, asi que el peso del segundo
+     se guarda igual que si el profe lo hubiera puesto suelto. Los pesos ya
+     cargados quedan en la primera fila, donde estaban: nada se pisa. */
+  if(_nom2){
+    var pesos2 = document.createElement('div');
+    pesos2.className = 'pesos-section';
+    pesos2.style.borderTop = '1px dashed rgba(255,255,255,.10)';
+
+    var label2 = document.createElement('div');
+    label2.className = 'pesos-label';
+    label2.innerHTML = '<span style="color:#a5b4fc;font-weight:700">' + _nom2 +
+      '</span><span style="opacity:.55"> · ' + tP('registra') + '</span>';
+    pesos2.appendChild(label2);
+
+    var grid2 = document.createElement('div');
+    grid2.className = 'pesos-grid';
+
+    for(var s2 = 1; s2 <= ej.series; s2++){
+      (function(nSerie){
+        var k2 = storageKey(j.num, ej.id2, nSerie);
+        var item = document.createElement('div');
+        item.className = 'serie-item';
+
+        var lab = document.createElement('div');
+        lab.className = 'serie-num';
+        lab.textContent = tP('serie') + ' ' + nSerie;
+
+        var inp2 = document.createElement('input');
+        inp2.type = 'number';
+        inp2.className = 'peso-input';
+        inp2.placeholder = '— kg';
+        inp2.min = '0'; inp2.max = '500'; inp2.step = '0.5';
+        inp2.value = localStorage.getItem(k2) || '';
+
+        inp2.addEventListener('change', function(){
+          var v = inp2.value.trim();
+          try{ localStorage.setItem(k2, v); }catch(e){}
+          try{ if(typeof fbSet !== 'undefined') fbSet('pesos/' + k2, v === '' ? null : v); }catch(e){}
+        });
+
+        item.appendChild(lab);
+        item.appendChild(inp2);
+        grid2.appendChild(item);
+      })(s2);
+    }
+
+    pesos2.appendChild(grid2);
+    card.appendChild(pesos2);
+  }
+
   // Observación
   var obsDiv = document.createElement('div');
   obsDiv.className = 'obs-section';
   var obsKey = storageKeyObs(j.num, ej.id);
   var obsLabel = document.createElement('div');
   obsLabel.style.cssText = 'font-size:9px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;';
-  obsLabel.textContent = '💬 Tu observación';
+  obsLabel.textContent = tP('tu_obs');
   var obsInput = document.createElement('textarea');
   obsInput.className = 'obs-input'; obsInput.rows = 2;
-  obsInput.placeholder = 'Cómo te sentiste, si subiste peso, dolor, etc...';
+  obsInput.placeholder = tP('obs_ph');
   obsInput.value = localStorage.getItem(obsKey) || '';
   obsInput.addEventListener('input', (function(k){
     return function(){ localStorage.setItem(k, this.value); if(typeof fbSet !== 'undefined') fbSet('obs/'+k, this.value); };
@@ -970,18 +1219,23 @@ function calcularRM(){
 window.addEventListener('load', function(){
   construirData();
   init();
+  applyPFStatic();
   WELL.load(function(){ if(jugadorActivo) renderReadiness(jugadorActivo.num); });
 });
 
 window.addEventListener('langchange', function(e){
+  applyPFStatic();
   if(jugadorActivo && semanaActiva) renderRutina(jugadorActivo, semanaActiva);
-  if(jugadorActivo) renderReadiness(jugadorActivo.num);
+  if(jugadorActivo){ renderReadiness(jugadorActivo.num); try{ renderProgreso(jugadorActivo); }catch(_){}
+    try{ if(typeof MES_ACTIVO!=='undefined' && MES_ACTIVO) renderNotaProfe(jugadorActivo.num, MES_ACTIVO); }catch(_){}
+    // refrescar etiquetas del selector de mes
+    try{ var sel=document.getElementById('mesSel'); if(sel&&sel.options){ for(var i=0;i<sel.options.length;i++){ sel.options[i].textContent=mesLabelFromKey(sel.options[i].value); } } }catch(_){}
+  }
   try { if(window.translateTextNodes) window.translateTextNodes((e&&e.detail&&e.detail.lang)||document.documentElement.lang); } catch(_){}
 });
 </script>
-<script src="temporadas_menu.js"></script>
-  <script src="plantel_nafels.js" onerror="void 0"></script>
-<script src="ayuda.js"></script>
+<script src="temporadas_menu.js?v=20260901-2352"></script>
+<script src="ayuda.js?v=20260901-2352"></script>
 </body>
 </html>
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->

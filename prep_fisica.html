@@ -5,17 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>PREPARACIÓN FÍSICA — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20260901-2352"></script>
-<script src="selector_categoria.js?v=20260901-2352"></script>
-<script src="plantel_nafels.js?v=20260901-2352" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260901-2352"></script>
+<script src="categorias_club.js?v=20260901-2359"></script>
+<script src="selector_categoria.js?v=20260901-2359"></script>
+<script src="plantel_nafels.js?v=20260901-2359" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260901-2359"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
 <script src="datos_prep_fisica.js.enc" onerror="void 0"></script>
 <script src="datos_ejercicios.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="lang.js?v=20260901-2352" onerror="void 0"></script>
-<script src="firebase.js?v=20260901-2352" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260901-2352"></script>
+<script src="lang.js?v=20260901-2359" onerror="void 0"></script>
+<script src="firebase.js?v=20260901-2359" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260901-2359"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -239,10 +239,10 @@ select,select option{color:#111!important;background-color:#fff!important}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260901-2352">
+<link rel="stylesheet" href="movil.css?v=20260901-2359">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260901-2352" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260901-2359" onerror="void 0"></script>
 </head>
 <body>
 <div class="page-header header">
@@ -1074,7 +1074,23 @@ function buildEjercicio(j, ej, num){
   pesosDiv.className = 'pesos-section';
   var pesosLabel = document.createElement('div');
   pesosLabel.className = 'pesos-label';
-  pesosLabel.textContent = tP('registra');
+  /* ── SI ES SUPERSERIE, EL NOMBRE DEL PRIMER MOVIMIENTO ──────────────
+     Un ejercicio combinado —"Banco Plano + Fondos"— son DOS movimientos
+     con pesos muy distintos. Antes habia una sola fila y no se sabia a
+     cual correspondia el numero.
+
+     Ahora la fila lleva el nombre del primero, y mas abajo se agrega otra
+     para el segundo. Se arma aca mismo, al dibujar la tarjeta: no hay
+     ningun observador vigilando la pantalla (eso fue lo que trabo los
+     telefonos la primera vez). */
+  var _nom2 = (ej.nombre2 && ej.id2) ? ej.nombre2 : null;
+  if(_nom2){
+    pesosLabel.innerHTML = '<span style="color:#2dd4bf;font-weight:700">' +
+      (ej.nombre || '') + '</span><span style="opacity:.55"> · ' +
+      tP('registra') + '</span>';
+  } else {
+    pesosLabel.textContent = tP('registra');
+  }
   pesosDiv.appendChild(pesosLabel);
   var pesosGrid = document.createElement('div');
   pesosGrid.className = 'pesos-grid';
@@ -1105,6 +1121,60 @@ function buildEjercicio(j, ej, num){
   }
   pesosDiv.appendChild(pesosGrid);
   card.appendChild(pesosDiv);
+
+  /* ── LA SEGUNDA FILA, PARA EL OTRO MOVIMIENTO ──────────────────────────
+     Si el ejercicio es combinado, cada movimiento necesita su propia fila:
+     nadie hace fondos con el mismo peso que press de banca.
+
+     La clave usa el id2 que ya trae la rutina, asi que el peso del segundo
+     se guarda igual que si el profe lo hubiera puesto suelto. Los pesos ya
+     cargados quedan en la primera fila, donde estaban: nada se pisa. */
+  if(_nom2){
+    var pesos2 = document.createElement('div');
+    pesos2.className = 'pesos-section';
+    pesos2.style.borderTop = '1px dashed rgba(255,255,255,.10)';
+
+    var label2 = document.createElement('div');
+    label2.className = 'pesos-label';
+    label2.innerHTML = '<span style="color:#a5b4fc;font-weight:700">' + _nom2 +
+      '</span><span style="opacity:.55"> · ' + tP('registra') + '</span>';
+    pesos2.appendChild(label2);
+
+    var grid2 = document.createElement('div');
+    grid2.className = 'pesos-grid';
+
+    for(var s2 = 1; s2 <= ej.series; s2++){
+      (function(nSerie){
+        var k2 = storageKey(j.num, ej.id2, nSerie);
+        var item = document.createElement('div');
+        item.className = 'serie-item';
+
+        var lab = document.createElement('div');
+        lab.className = 'serie-num';
+        lab.textContent = tP('serie') + ' ' + nSerie;
+
+        var inp2 = document.createElement('input');
+        inp2.type = 'number';
+        inp2.className = 'peso-input';
+        inp2.placeholder = '— kg';
+        inp2.min = '0'; inp2.max = '500'; inp2.step = '0.5';
+        inp2.value = localStorage.getItem(k2) || '';
+
+        inp2.addEventListener('change', function(){
+          var v = inp2.value.trim();
+          try{ localStorage.setItem(k2, v); }catch(e){}
+          try{ if(typeof fbSet !== 'undefined') fbSet('pesos/' + k2, v === '' ? null : v); }catch(e){}
+        });
+
+        item.appendChild(lab);
+        item.appendChild(inp2);
+        grid2.appendChild(item);
+      })(s2);
+    }
+
+    pesos2.appendChild(grid2);
+    card.appendChild(pesos2);
+  }
 
   // Observación
   var obsDiv = document.createElement('div');
@@ -1164,8 +1234,8 @@ window.addEventListener('langchange', function(e){
   try { if(window.translateTextNodes) window.translateTextNodes((e&&e.detail&&e.detail.lang)||document.documentElement.lang); } catch(_){}
 });
 </script>
-<script src="temporadas_menu.js?v=20260901-2352"></script>
-<script src="ayuda.js?v=20260901-2352"></script>
+<script src="temporadas_menu.js?v=20260901-2359"></script>
+<script src="ayuda.js?v=20260901-2359"></script>
 </body>
 </html>
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
