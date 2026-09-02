@@ -33,17 +33,17 @@
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="categorias_club.js?v=20260902-0655"></script>
-<script src="selector_categoria.js?v=20260902-0655"></script>
-<script src="firebase.js?v=20260902-0655" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260902-0655"></script>
+<script src="categorias_club.js?v=20260902-0720"></script>
+<script src="selector_categoria.js?v=20260902-0720"></script>
+<script src="firebase.js?v=20260902-0720" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260902-0720"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260902-0655">
+<link rel="stylesheet" href="movil.css?v=20260902-0720">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260902-0655" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260902-0720" onerror="void 0"></script>
 </head>
 <body>
   <div class="hdr">
@@ -57,7 +57,7 @@
   <div id="strip" class="strip"></div>
   <div id="cards" class="cards"></div>
 
-  <script src="datos_historial.js?v=20260902-0655"></script>
+  <script src="datos_historial.js?v=20260902-0720"></script>
   <script>
   (function(){
     var H=window.HISTORIAL_DATA||{};
@@ -65,6 +65,15 @@
 /* Los datos cifrados pueden llegar despues de esta linea. Si eso pasa, la
    pantalla se quedaba vacia para siempre. Ahora los espera y se redibuja. */
 (function esperarDatos(){
+  /* Los archivos grandes ahora se abren de a pedazos, y avisan al terminar.
+     Escuchar ese aviso es mas directo que esperar a que el vigia mire. */
+  try{ window.addEventListener('datos-listos', function(){
+    try{ if(typeof render==='function') render();
+         else if(typeof pintar==='function') pintar();
+         else if(typeof dibujar==='function') dibujar();
+         else if(typeof init==='function') init(); }catch(e){}
+  }); }catch(e){}
+
   var _i = 0, _t = setInterval(function(){
     if(++_i > 40){ clearInterval(_t); return; }
     if(window.HISTORIAL_DATA && window.HISTORIAL_DATA !== H){
@@ -208,9 +217,9 @@
   }
 }
 </style>
-<script src="lang.js?v=20260902-0655" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260902-0655" onerror="void 0"></script>
-<script src="ayuda.js?v=20260902-0655"></script>
+<script src="lang.js?v=20260902-0720" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260902-0720" onerror="void 0"></script>
+<script src="ayuda.js?v=20260902-0720"></script>
 </body>
 </html>
 

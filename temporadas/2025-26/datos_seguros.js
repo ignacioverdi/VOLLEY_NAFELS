@@ -77,34 +77,135 @@
     return sha256(ent);
   }
 
-  function descifrar(b64, clave){
-    var bin=atob(b64), largo=bin.length;
-    var datos=new Uint8Array(largo);
-    for(var i=0;i<largo;i++) datos[i]=bin.charCodeAt(i);
-    var k=clave, bloque=0, pos=0;
-    while(pos<largo){
-      var ent=new Uint8Array(k.length+8);
-      ent.set(k); ent.set(contador(bloque), k.length);
-      var f=sha256(ent);
-      for(var j=0;j<32 && pos<largo;j++,pos++) datos[pos]^=f[j];
-      bloque++;
+  /* ── DESCIFRAR ─────────────────────────────────────────────────────────
+     El resultado es EXACTAMENTE el mismo que antes: mismo algoritmo, mismo
+     orden, mismos bytes. Lo unico que cambia es como se reparte el trabajo.
+
+     Antes: todo de un tiron. Con un archivo grande, el navegador quedaba
+     ocupado varios segundos y la pantalla no respondia — el telefono se
+     veia "tildado".
+
+     Ahora: se hace de a pedazos. Cada 64 KB se le devuelve el control al
+     navegador un instante, para que pueda dibujar y responder. El total
+     tarda casi lo mismo, pero la pantalla nunca se congela.
+
+     Esto no depende del tamaño: funciona igual con 1 MB que con 50. */
+
+  var TROZO = 512;           /* bloques de 32 bytes = 16 KB por vuelta.
+                               Mas chico = la pantalla responde mas seguido. */
+
+  function bytesDe(b64){
+    var bin = atob(b64), largo = bin.length;
+    var datos = new Uint8Array(largo);
+    for(var i=0;i<largo;i++) datos[i] = bin.charCodeAt(i);
+    return datos;
+  }
+
+  /* El nucleo: descifra desde un bloque, durante una cantidad de bloques.
+     Devuelve en que bloque quedo, para poder seguir despues. */
+  function descifrarTramo(datos, clave, bloqueIni, cuantos){
+    var largo = datos.length;
+    var bloque = bloqueIni, pos = bloqueIni * 32, hechos = 0;
+    while(pos < largo && hechos < cuantos){
+      var ent = new Uint8Array(clave.length + 8);
+      ent.set(clave); ent.set(contador(bloque), clave.length);
+      var f = sha256(ent);
+      for(var j=0; j<32 && pos<largo; j++, pos++) datos[pos] ^= f[j];
+      bloque++; hechos++;
     }
+    return bloque;
+  }
+
+  /* Version de siempre: descifra todo de una. Se conserva porque hay
+     pantallas que la usan asi, y para archivos chicos es lo mas simple. */
+  function descifrar(b64, clave){
+    var datos = bytesDe(b64);
+    var total = Math.ceil(datos.length / 32);
+    descifrarTramo(datos, clave, 0, total);
     return new TextDecoder('utf-8').decode(datos);
   }
 
+  /* Version por pedazos: la que evita que la pantalla se congele.
+     Llama a listo(texto) cuando termina. */
+  function descifrarDeAPoco(b64, clave, listo){
+    var datos = bytesDe(b64);
+    var total = Math.ceil(datos.length / 32);
+    var bloque = 0;
+
+    /* Si es chico, no vale la pena repartirlo: se hace de una. */
+    if(total <= TROZO){
+      descifrarTramo(datos, clave, 0, total);
+      listo(new TextDecoder('utf-8').decode(datos));
+      return;
+    }
+
+    (function seguir(){
+      bloque = descifrarTramo(datos, clave, bloque, TROZO);
+      if(bloque * 32 < datos.length){
+        /* setTimeout de 0 le devuelve el control al navegador: puede
+           dibujar, responder a un toque, y despues seguimos. */
+        setTimeout(seguir, 0);
+      } else {
+        listo(new TextDecoder('utf-8').decode(datos));
+      }
+    })();
+  }
+
   /* abre todo lo que haya llegado cifrado */
+  /* ── ABRIR LOS DATOS ───────────────────────────────────────────────────
+     Las 30 pantallas siguen llamando  abrirDatos()  exactamente igual, y
+     sigue devolviendo true/false en el acto. Eso NO cambia.
+
+     Lo que cambia es el reparto:
+
+       · los archivos chicos (menos de 64 KB) se abren al instante, como
+         siempre. Son la mayoria, y asi la pantalla tiene sus datos sin
+         esperar nada.
+
+       · los archivos grandes se abren de a pedazos, en segundo plano. La
+         pantalla no se congela mientras tanto, y cuando cada uno termina
+         se avisa con el evento 'datos-listos'.
+
+     Las pantallas que tienen el vigia esperarDatos() se redibujan solas
+     cuando llega ese aviso. Las que no lo tienen funcionan igual que
+     antes, porque sus archivos son chicos y se abren de una. */
   window.abrirDatos = function(){
     var llave = llaveLocal();
     if(!llave || !window.__D) return false;
-    var abiertos = 0;
+
+    var abiertos = 0, pendientes = [];
+    var CHICO = 64 * 1024;      /* en base64, unos 48 KB de datos reales */
+
     for(var nombre in window.__D){
+      var b64 = window.__D[nombre];
+      if(b64 && b64.length > CHICO) { pendientes.push(nombre); continue; }
       try{
-        (0, eval)(descifrar(window.__D[nombre], claveArchivo(llave, nombre)));
+        (0, eval)(descifrar(b64, claveArchivo(llave, nombre)));
         abiertos++;
       }catch(e){
         try{ console.warn('[datos] no pude abrir', nombre); }catch(_){}
       }
     }
+
+    /* los grandes, de a uno y sin congelar la pantalla */
+    pendientes.forEach(function(nombre){
+      try{
+        descifrarDeAPoco(window.__D[nombre], claveArchivo(llave, nombre),
+          function(texto){
+            try{
+              (0, eval)(texto);
+              try{ window.dispatchEvent(new CustomEvent('datos-listos',
+                     {detail:{archivo:nombre}})); }catch(_){}
+            }catch(e){
+              try{ console.warn('[datos] no pude abrir', nombre); }catch(_){}
+            }
+          });
+        abiertos++;
+      }catch(e){
+        try{ console.warn('[datos] no pude abrir', nombre); }catch(_){}
+      }
+    });
+
     return abiertos > 0;
   };
 
