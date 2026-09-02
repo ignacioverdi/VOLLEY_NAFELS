@@ -144,7 +144,9 @@ var EQUIPO_DEMO = {
    salen de los partidos. */
 var DATA = (function(){
   var base = window.EQUIPO_DATA || EQUIPO_DEMO;
-  var lista = window.PLANTEL_NAFELS;
+  /* PLANTEL_NAFELS es un objeto: {temporada, jugadores, staff, lista}.
+     Los jugadores estan en .jugadores, no en la raiz. */
+  var lista = (window.PLANTEL_NAFELS && window.PLANTEL_NAFELS.jugadores) || null;
   if(!lista || !lista.length) return base;
 
   var deLosPartidos = {};
