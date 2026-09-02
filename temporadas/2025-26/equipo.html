@@ -3,16 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>EQUIPO — Axpo Volley Näfels</title>
+<title>EQUIPO — NAFELS VOLEY</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="movil.css">
-<script src="lang.js" onerror="void 0"></script>
-<script src="utils.js" onerror="void 0"></script>
-<script src="datos_seguros.js"></script>
-  <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
+<script src="lang.js?v=20260902-2258" onerror="void 0"></script>
+<script src="utils.js?v=20260902-2258" onerror="void 0"></script>
+<!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
+<script src="categorias_club.js?v=20260902-2258" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260902-2258" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260902-2258"></script>
+  <!-- El plantel del club, con nombre y apellido. Es la lista de verdad:
+     datos_equipo.js.enc solo trae a los que YA JUGARON, asi que un
+     jugador nuevo no aparecia hasta su debut. -->
+<script src="plantel_nafels.js" onerror="void 0"></script>
+<script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
   <script>abrirDatos();</script>
-<script src="datos_equipo_2025-26.js.enc" onerror="void 0"></script>
-
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -68,10 +72,17 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 20%,rg
   .jug-foto-wrap{height:140px;}
 }
 </style>
-<!-- Puerta de entrada. La capsula quedo abierta cuando se cerro el resto del
-     sistema: 26 paginas con la temporada 25-26 completa se abrian sin clave. -->
-<script src="firebase.js" onerror="void 0"></script>
-<script src="firebase_por_categoria.js"></script>
+<!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
+     la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
+<script src="firebase.js?v=20260902-2258" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260902-2258"></script>
+<!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
+     toca el encabezado y las barras: en la computadora no hace nada.
+     Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
+<link rel="stylesheet" href="movil.css?v=20260902-2258">
+<!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
+     hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
+<script src="mi_fila.js?v=20260902-2258" onerror="void 0"></script>
 </head>
 <body>
 
@@ -81,14 +92,14 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 20%,rg
     <button onclick="showHeatmapMenu()" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:#F97316;padding:6px 14px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;cursor:pointer;letter-spacing:1px">🔥 HEAT MAPS</button>
     <div>
       <div class="page-title">🏐 <span data-t="equipo">Equipo</span></div>
-      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;">NAFELS VOLEY · NLA Suiza 2025/26</div>
+      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;">NAFELS VOLEY · NLA Suiza 2026/27</div>
     </div>
   </div>
   <div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div>
 </div>
 
 <div class="main">
-  <div class="section-lbl">Plantel NLA 2025/26</div>
+  <div class="section-lbl">Plantel NLA 2026/27</div>
   <div class="jugadores-grid" id="jugadores-grid"></div>
 
   <div class="section-lbl" style="margin-top:8px;">Cuerpo Técnico</div>
@@ -98,32 +109,84 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 20%,rg
 <script>
 // ── DATOS POR DEFECTO (reemplazados por datos_equipo.js) ─────────
 var EQUIPO_DEMO = {
-  /* El plantel que jugo la temporada 2025-26, verificado sobre los 97
-     partidos. Los doce tienen su foto en la carpeta. */
   jugadores: [
-    {num:1, nombre:"DEECKE", pos:"ARMADOR", foto:"fotos/01.jpg", pais:"", altura:"", edad:0},
-    {num:3, nombre:"SCHWITTER", pos:"OPUESTO", foto:"fotos/03.jpg", pais:"🇨🇭", altura:"188", edad:0},
-    {num:4, nombre:"VAZQUEZ", pos:"ARMADOR", foto:"fotos/04.jpg", pais:"🇦🇷", altura:"182", edad:0},
-    {num:5, nombre:"HESSELHOLT", pos:"CENTRAL", foto:"fotos/05.jpg", pais:"", altura:"", edad:0},
-    {num:6, nombre:"CABANAS", pos:"OPUESTO", foto:"fotos/06.jpg", pais:"", altura:"", edad:0},
-    {num:7, nombre:"SCHMID R", pos:"CENTRAL", foto:"fotos/07.jpg", pais:"🇨🇭", altura:"198", edad:0},
-    {num:8, nombre:"PETER", pos:"LIBERO", foto:"fotos/08.jpg", pais:"", altura:"", edad:0},
-    {num:9, nombre:"BROCH", pos:"PUNTA", foto:"fotos/09.jpg", pais:"", altura:"", edad:0},
-    {num:10, nombre:"BOGDANOVSKI", pos:"PUNTA", foto:"fotos/10.jpg", pais:"🇨🇭", altura:"196", edad:0},
-    {num:11, nombre:"BARTHOLET", pos:"PUNTA", foto:"fotos/11.jpg", pais:"🇨🇭", altura:"187", edad:0},
-    {num:14, nombre:"FIGUEIREDO", pos:"PUNTA", foto:"fotos/14.jpg", pais:"", altura:"", edad:0},
-    {num:15, nombre:"NIKOLOV", pos:"CENTRAL", foto:"fotos/15.jpg", pais:"", altura:"", edad:0}
   ],
   staff: [
-    {nombre:"IGNACIO VERDI", rol:"Head Coach", icon:"\uD83D\uDCCB"}
+    {nombre:"IGNACIO VERDI", rol:"Head Coach", icon:"📋"},
+    {nombre:"PREP. FISICO", rol:"Strength & Conditioning", icon:"💪"}
   ]
 };
 
-/* En una temporada archivada el plantel es el de abajo, verificado sobre los
-   97 partidos que se jugaron. Antes esta linea preferia el archivo cifrado, que
-   quedo congelado con los jugadores de la temporada SIGUIENTE: por eso la
-   capsula mostraba gente que nunca jugo esta. */
-var DATA = EQUIPO_DEMO;
+/* ── LOS DATOS PUEDEN LLEGAR DESPUES ────────────────────────────────
+   Esta linea corre UNA vez, al cargar la pagina. Si en ese instante el
+   archivo cifrado todavia no termino de descifrarse, DATA se quedaba con
+   la lista vacia del demo — y aunque los datos llegaran un segundo
+   despues, la pantalla ya no los miraba: quedaba en blanco.
+
+   Al entrenador casi nunca le pasaba porque su sesion ya esta armada y
+   todo llega junto. Al jugador, que ademas pide su rol y su categoria,
+   los datos llegan un poco mas tarde y la carrera se pierde.
+
+   Ahora DATA se relee cada vez que se dibuja, y si los datos aparecen
+   despues, la pantalla se vuelve a dibujar sola. */
+/* ── DE DONDE SALE EL PLANTEL ───────────────────────────────────────
+   Antes: window.EQUIPO_DATA || EQUIPO_DEMO
+
+   EQUIPO_DATA se genera al procesar los .dvw, asi que solo tiene a los
+   que ya jugaron. Un jugador nuevo —Bruderer, por ejemplo— no aparecia
+   hasta su debut, aunque tuviera cuenta y cargara wellness.
+
+   Y si se lo agregaba a mano, el siguiente HACER_TODO lo borraba: ese
+   archivo se rehace de cero en cada corrida.
+
+   Ahora la base es plantel_nafels.js, que es la lista real del club y
+   nadie la pisa. De EQUIPO_DATA se toman las fotos y los datos que
+   salen de los partidos. */
+var DATA = (function(){
+  var base = window.EQUIPO_DATA || EQUIPO_DEMO;
+  var lista = window.PLANTEL_NAFELS;
+  if(!lista || !lista.length) return base;
+
+  var deLosPartidos = {};
+  (base.jugadores || []).forEach(function(j){ deLosPartidos[j.num] = j; });
+
+  var jugadores = lista.map(function(p){
+    var extra = deLosPartidos[p.num] || {};
+    return {
+      num: p.num,
+      nombre: p.ap || extra.nombre || '',
+      pila: p.nombre || '',              /* el nombre de pila */
+      pos: p.pos || extra.pos || '',
+      foto: extra.foto || null,
+      pais: extra.pais || '',
+      altura: extra.altura || '',
+      edad: extra.edad || 0
+    };
+  });
+  return { jugadores: jugadores, staff: base.staff || EQUIPO_DEMO.staff };
+})();
+
+(function esperarDatos(){
+  /* Los archivos grandes ahora se abren de a pedazos, y avisan al terminar.
+     Escuchar ese aviso es mas directo que esperar a que el vigia mire. */
+  try{ window.addEventListener('datos-listos', function(){
+    try{ if(typeof render==='function') render();
+         else if(typeof pintar==='function') pintar();
+         else if(typeof dibujar==='function') dibujar();
+         else if(typeof init==='function') init(); }catch(e){}
+  }); }catch(e){}
+
+  var intentos = 0;
+  var t = setInterval(function(){
+    intentos++;
+    if(intentos > 40){ clearInterval(t); return; }        /* 8 segundos y basta */
+    if(window.EQUIPO_DATA && window.EQUIPO_DATA !== DATA){
+      DATA = window.EQUIPO_DATA;
+      clearInterval(t);
+      try{ render(); }catch(e){}
+    }
+  }, 200);
+})();
 
 var POS_COLOR = {
   'ARMADOR':'#f59e0b','CENTRAL':'#f97316',
@@ -156,7 +219,20 @@ function render(){
     }
 
     fotoWrap.innerHTML += '<div class="jug-num-overlay" style="color:' + color + '">#' + j.num + '</div>';
-    fotoWrap.innerHTML += '<div class="jug-pos-overlay" style="background:rgba(0,0,0,.6);color:' + color + ';border:1px solid ' + color + '33">' + j.pos + '</div>';
+    /* ══ El puesto, editable por el staff ═══════════════════════════════
+       Los puestos salen de lo que declara cada .dvw, y ahi el scout no
+       siempre los carga: quedan jugadoras sin puesto o con uno equivocado.
+       Eso despues aparece en su perfil, en el plan de partido y en el
+       informe, y no habia forma de corregirlo desde la app.
+
+       Ahora el cuerpo tecnico lo cambia con un toque. Se guarda en la base
+       del club y desde ahi manda sobre lo que digan los partidos: nadie
+       tiene que abrir un archivo ni correr nada. El jugador solo lo ve. */
+    var _pos = (window.PLANTEL_FIX && window.PLANTEL_FIX[String(j.num)]) || j.pos || '';
+    color = POS_COLOR[_pos] || '#64748b';
+    fotoWrap.style.borderBottom = '2px solid ' + color;
+    fotoWrap.innerHTML += '<div class="jug-pos-overlay" data-num="' + j.num + '" style="background:rgba(0,0,0,.6);color:' + color + ';border:1px solid ' + color + '33">'
+      + (_pos || '+ puesto') + '</div>';
 
     card.appendChild(fotoWrap);
 
@@ -164,7 +240,13 @@ function render(){
     var body = document.createElement('div');
     body.className = 'jug-card-body';
     body.innerHTML =
-      '<div class="jug-card-nombre">' + j.nombre + '</div>' +
+      /* El apellido grande, y abajo el nombre de pila en chico. Los enlaces de
+         abajo siguen usando SOLO el apellido, que es como los busca el resto
+         de la app: si se cambiara, se romperian las stats y la rutina. */
+      '<div class="jug-card-nombre">' + j.nombre +
+        (j.pila ? '<div style="font-size:11px;font-weight:400;opacity:.6;'
+                + 'letter-spacing:.5px;margin-top:2px">' + j.pila + '</div>' : '') +
+      '</div>' +
       '<div class="jug-card-meta">' + (j.pais||'') + ' · ' + (j.altura||'') + '</div>';
 
     // Links rápidos
@@ -183,7 +265,7 @@ function render(){
   // Staff
   var staffGrid = document.getElementById('staff-grid');
   staffGrid.innerHTML = '';
-  (DATA.staff||[]).forEach(function(s){
+  (window.STAFF_CLUB || DATA.staff || []).forEach(function(s){
     var card = document.createElement('div');
     card.className = 'staff-card';
     card.innerHTML =
@@ -194,7 +276,66 @@ function render(){
   });
 }
 
-render();
+/* ══ CORREGIR EL PUESTO DESDE LA APP ══════════════════════════════════════
+   Se toca la etiqueta del puesto y se elige el correcto. Queda guardado en la
+   base del club, en playbook aparte: los .dvw se siguen procesando igual y
+   esto manda sobre lo que ellos digan.
+
+   Solo el cuerpo tecnico puede: para un jugador la etiqueta no responde. */
+var PUESTOS = ['ARMADOR', 'PUNTA', 'CENTRAL', 'OPUESTO', 'LIBERO'];
+window.PLANTEL_FIX = {};
+
+function puedeEditarPlantel(){
+  try{ return (typeof VB_PUEDE_EDITAR === 'undefined') || VB_PUEDE_EDITAR; }catch(e){ return true; }
+}
+
+function cargarCorrecciones(cb){
+  try{
+    if(typeof fbGet === 'function'){
+      fbGet('plantel_pos', function(v){
+        if(v && typeof v === 'object') window.PLANTEL_FIX = v;
+        cb();
+      });
+      return;
+    }
+    var l = localStorage.getItem('plantel_pos');
+    if(l) window.PLANTEL_FIX = JSON.parse(l);
+  }catch(e){}
+  cb();
+}
+
+function guardarPuesto(num, pos){
+  window.PLANTEL_FIX[String(num)] = pos;
+  try{
+    localStorage.setItem('plantel_pos', JSON.stringify(window.PLANTEL_FIX));
+    if(typeof fbSet === 'function') fbSet('plantel_pos/' + num, pos);
+  }catch(e){}
+  render();
+  conectarEdicion();
+}
+
+function conectarEdicion(){
+  if(!puedeEditarPlantel()) return;
+  document.querySelectorAll('.jug-pos-overlay').forEach(function(el){
+    el.style.cursor = 'pointer';
+    el.title = 'Tocá para cambiar el puesto';
+    el.addEventListener('click', function(ev){
+      ev.preventDefault(); ev.stopPropagation();
+      var num = el.getAttribute('data-num');
+      if(!num) return;
+      var actual = window.PLANTEL_FIX[String(num)] || el.textContent.trim();
+      var i = PUESTOS.indexOf(actual);
+      /* va rotando por los cinco puestos con cada toque: mas rapido que un
+         menu, y son solo cinco */
+      guardarPuesto(num, PUESTOS[(i + 1) % PUESTOS.length]);
+    });
+  });
+}
+
+cargarCorrecciones(function(){
+  render();
+  conectarEdicion();
+});
 </script>
 
 <style>
@@ -207,53 +348,7 @@ render();
 .hm-card{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 10px;border-radius:14px;text-decoration:none;color:#fff;transition:all .18s;border:1px solid}
 .hm-card:hover{transform:translateY(-2px);filter:brightness(1.15)}
 .hm-icon{font-size:28px}.hm-lbl{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px}
-.hm-sub{font-size:9px;color:#64748b;text-align:center}
-
-/* === ENCABEZADO: QUE NO SE ENCIME === */
-/* La barra de arriba es un flex en una sola fila. Cuando el titulo es
-   largo, los botones de idioma y la etiqueta de temporada se le montan
-   encima. Con esto, si no entran, bajan de renglon. */
-.header,
-.topbar,
-.top-bar,
-.page-header,
-.hdr {
-  flex-wrap: wrap;
-  gap: 10px 14px;
-  row-gap: 10px;
-}
-/* El titulo puede achicarse en vez de empujar al resto */
-.header > div,
-.topbar > div,
-.top-bar > div,
-.page-header > div,
-.hdr > div {
-  min-width: 0;
-}
-.header .title,
-.topbar .title,
-.top-bar .title,
-.page-header .title,
-.hdr .title {
-  min-width: 0;
-  overflow-wrap: break-word;
-}
-/* Los botones de idioma no se estiran ni se parten */
-.lang-wrap,
-.lang-switch,
-.idiomas {
-  flex: none;
-  white-space: nowrap;
-}
-@media (max-width: 700px) {
-  .header,
-  .topbar,
-  .top-bar,
-  .page-header,
-  .hdr {
-    align-items: flex-start;
-  }
-}
+.hm-sub{font-size:9px;color:#94a3b8;text-align:center}
 </style>
 <div id="hm-overlay" onclick="if(event.target===this)closeHeatmapMenu()">
   <div class="hm-box">
@@ -263,9 +358,9 @@ render();
       <a class="hm-card" href="hm_saque.html?equipo=nafels"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Zonas origen/destino</span></a>
       <a class="hm-card" href="hm_recepcion.html?equipo=nafels" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
       <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
-      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a>
+      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8">BLOQUEO</span><span class="hm-sub">EFF · Zona del ataque · Combos</span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">NLA Suiza 2025/26 · temporada archivada</div>
+    <div style="margin-top:14px;font-size:10px;color:#8395ac;text-align:center">NLA Suiza 2026/27 · temporada en curso</div>
   </div>
 </div>
 <script>
@@ -273,10 +368,108 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js"></script>
-<script src="temporadas_menu.js"></script>
-<script src="ayuda.js"></script>
+<script src="chat_nafels.js?v=20260902-2258"></script>
+<script src="temporadas_menu.js?v=20260902-2258"></script>
+<script src="ayuda.js?v=20260902-2258"></script>
+
+<script>
+/* ══ EL CUERPO TECNICO ═══════════════════════════════════════════════════
+   Antes estaba escrito en el codigo: para cambiar un nombre habia que
+   editar el archivo y publicar. Ahora se carga y se edita desde la app,
+   como el plantel.
+
+   Se guarda en cuerpo_tecnico, que es un dato de EQUIPO: cada categoria
+   tiene el suyo. La Sub-18 puede tener otro entrenador que la Primera.
+
+   Editar es solo para el cuerpo tecnico. Un jugador lo ve y nada mas. */
+(function(){
+  var ROLES = ['Entrenador','Asistente','Preparador físico','Analista',
+               'Médico', 'Kinesiólogo', 'Manager', 'Otro'];
+  var ICONO = {'Entrenador':'📋','Asistente':'📝','Preparador físico':'💪',
+               'Analista':'📊','Médico':'🩺','Kinesiólogo':'🤕','Manager':'📎','Otro':'👤'};
+
+  function esStaff(){
+    try { return !window.VB_esEditor || VB_esEditor(); } catch(e){ return true; }
+  }
+
+  function pintar(){
+    if (typeof render === 'function') { try { render(); } catch(e){} }
+    var g = document.getElementById('staff-grid');
+    if (!g) return;
+    g.innerHTML = '';
+    (window.STAFF_CLUB || []).forEach(function(s, i){
+      var c = document.createElement('div');
+      c.className = 'staff-card';
+      c.innerHTML =
+        '<div class="staff-avatar">' + (s.icon || ICONO[s.rol] || '👤') + '</div>' +
+        '<div class="staff-nombre">' + (s.nombre || '') + '</div>' +
+        '<div class="staff-rol">' + (s.rol || '') + '</div>' +
+        (esStaff() ? '<button type="button" data-i="' + i + '" class="quitar-staff" ' +
+          'style="margin-top:8px;background:none;border:1px solid rgba(255,255,255,.14);' +
+          'color:#93a5c0;border-radius:7px;padding:3px 9px;font-size:11px;cursor:pointer">' +
+          'Quitar</button>' : '');
+      g.appendChild(c);
+    });
+
+    if (esStaff()) {
+      var add = document.createElement('div');
+      add.className = 'staff-card';
+      add.style.cssText = 'border-style:dashed;cursor:pointer;opacity:.75';
+      add.innerHTML = '<div class="staff-avatar">＋</div>' +
+        '<div class="staff-nombre">Agregar</div>' +
+        '<div class="staff-rol">cuerpo técnico</div>';
+      add.onclick = agregar;
+      g.appendChild(add);
+    }
+
+    Array.prototype.forEach.call(g.querySelectorAll('.quitar-staff'), function(b){
+      b.onclick = function(){
+        var i = parseInt(b.getAttribute('data-i'), 10);
+        var quien = (window.STAFF_CLUB[i] || {}).nombre || '';
+        if (!confirm('¿Quitar a ' + quien + ' del cuerpo técnico?')) return;
+        window.STAFF_CLUB.splice(i, 1);
+        guardar();
+      };
+    });
+  }
+
+  function agregar(){
+    var nombre = prompt('Nombre y apellido:');
+    if (!nombre || !nombre.trim()) return;
+    var rol = prompt('Rol:\n\n' + ROLES.join('  ·  '), 'Entrenador');
+    if (!rol || !rol.trim()) return;
+    rol = rol.trim();
+    window.STAFF_CLUB = window.STAFF_CLUB || [];
+    window.STAFF_CLUB.push({ nombre: nombre.trim().toUpperCase(), rol: rol,
+                             icon: ICONO[rol] || '👤' });
+    guardar();
+  }
+
+  function guardar(){
+    try { fbSet('cuerpo_tecnico', window.STAFF_CLUB || []); } catch(e){}
+    pintar();
+  }
+
+  function cargar(){
+    if (!window.fbGet) { setTimeout(cargar, 300); return; }
+    fbGet('cuerpo_tecnico', function(d){
+      if (Array.isArray(d) && d.length) window.STAFF_CLUB = d;
+      else {
+        /* la primera vez toma los que estaban escritos en la pagina, para
+           que el club no arranque con la seccion vacia */
+        try { window.STAFF_CLUB = (DATA && DATA.staff) ? DATA.staff.slice() : []; }
+        catch(e){ window.STAFF_CLUB = []; }
+      }
+      pintar();
+    });
+  }
+
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(cargar, 400); });
+  else setTimeout(cargar, 400);
+})();
+</script>
 </body>
 </html>
 
-<!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
+<!-- © 2025-2026 Volley-Stats · Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->

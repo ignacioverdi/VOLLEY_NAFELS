@@ -5,13 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>EQUIPO — NAFELS VOLEY</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="lang.js?v=20260902-2258" onerror="void 0"></script>
-<script src="utils.js?v=20260902-2258" onerror="void 0"></script>
+<script src="lang.js?v=20260902-2331" onerror="void 0"></script>
+<script src="utils.js?v=20260902-2331" onerror="void 0"></script>
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260902-2258" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260902-2258" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260902-2258"></script>
-  <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
+<script src="categorias_club.js?v=20260902-2331" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260902-2331" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260902-2331"></script>
+  <!-- El plantel del club, con nombre y apellido. Es la lista de verdad:
+     datos_equipo.js.enc solo trae a los que YA JUGARON, asi que un
+     jugador nuevo no aparecia hasta su debut. -->
+<script src="plantel_nafels.js?v=20260902-2331" onerror="void 0"></script>
+<script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
   <script>abrirDatos();</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -70,15 +74,15 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 20%,rg
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260902-2258" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260902-2258"></script>
+<script src="firebase.js?v=20260902-2331" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260902-2331"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260902-2258">
+<link rel="stylesheet" href="movil.css?v=20260902-2331">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260902-2258" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260902-2331" onerror="void 0"></script>
 </head>
 <body>
 
@@ -125,7 +129,42 @@ var EQUIPO_DEMO = {
 
    Ahora DATA se relee cada vez que se dibuja, y si los datos aparecen
    despues, la pantalla se vuelve a dibujar sola. */
-var DATA = window.EQUIPO_DATA || EQUIPO_DEMO;
+/* ── DE DONDE SALE EL PLANTEL ───────────────────────────────────────
+   Antes: window.EQUIPO_DATA || EQUIPO_DEMO
+
+   EQUIPO_DATA se genera al procesar los .dvw, asi que solo tiene a los
+   que ya jugaron. Un jugador nuevo —Bruderer, por ejemplo— no aparecia
+   hasta su debut, aunque tuviera cuenta y cargara wellness.
+
+   Y si se lo agregaba a mano, el siguiente HACER_TODO lo borraba: ese
+   archivo se rehace de cero en cada corrida.
+
+   Ahora la base es plantel_nafels.js, que es la lista real del club y
+   nadie la pisa. De EQUIPO_DATA se toman las fotos y los datos que
+   salen de los partidos. */
+var DATA = (function(){
+  var base = window.EQUIPO_DATA || EQUIPO_DEMO;
+  var lista = window.PLANTEL_NAFELS;
+  if(!lista || !lista.length) return base;
+
+  var deLosPartidos = {};
+  (base.jugadores || []).forEach(function(j){ deLosPartidos[j.num] = j; });
+
+  var jugadores = lista.map(function(p){
+    var extra = deLosPartidos[p.num] || {};
+    return {
+      num: p.num,
+      nombre: p.ap || extra.nombre || '',
+      pila: p.nombre || '',              /* el nombre de pila */
+      pos: p.pos || extra.pos || '',
+      foto: extra.foto || null,
+      pais: extra.pais || '',
+      altura: extra.altura || '',
+      edad: extra.edad || 0
+    };
+  });
+  return { jugadores: jugadores, staff: base.staff || EQUIPO_DEMO.staff };
+})();
 
 (function esperarDatos(){
   /* Los archivos grandes ahora se abren de a pedazos, y avisan al terminar.
@@ -201,7 +240,13 @@ function render(){
     var body = document.createElement('div');
     body.className = 'jug-card-body';
     body.innerHTML =
-      '<div class="jug-card-nombre">' + j.nombre + '</div>' +
+      /* El apellido grande, y abajo el nombre de pila en chico. Los enlaces de
+         abajo siguen usando SOLO el apellido, que es como los busca el resto
+         de la app: si se cambiara, se romperian las stats y la rutina. */
+      '<div class="jug-card-nombre">' + j.nombre +
+        (j.pila ? '<div style="font-size:11px;font-weight:400;opacity:.6;'
+                + 'letter-spacing:.5px;margin-top:2px">' + j.pila + '</div>' : '') +
+      '</div>' +
       '<div class="jug-card-meta">' + (j.pais||'') + ' · ' + (j.altura||'') + '</div>';
 
     // Links rápidos
@@ -323,9 +368,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260902-2258"></script>
-<script src="temporadas_menu.js?v=20260902-2258"></script>
-<script src="ayuda.js?v=20260902-2258"></script>
+<script src="chat_nafels.js?v=20260902-2331"></script>
+<script src="temporadas_menu.js?v=20260902-2331"></script>
+<script src="ayuda.js?v=20260902-2331"></script>
 
 <script>
 /* ══ EL CUERPO TECNICO ═══════════════════════════════════════════════════
