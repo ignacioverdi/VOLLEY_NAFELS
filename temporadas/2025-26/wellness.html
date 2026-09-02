@@ -400,8 +400,15 @@ function renderTeam(){
     var detalle = dias === 1
       ? es.map(function(e){return e.sesion;}).join(' · ')
       : es.length + (es.length === 1 ? ' encuesta' : ' encuestas');
+    /* (se recalcula abajo con los dias distintos) */
 
-    dayRows.push({j:j, pct:pct, rpe:rpe, prom:prom, ses:detalle, cuantas:es.length});
+    /* DIAS distintos, no encuestas: si alguien cargo mañana y tarde el
+       mismo dia, es UN dia cargado, no dos. */
+    var diasDistintos = {};
+    es.forEach(function(e){ diasDistintos[e.date] = 1; });
+
+    dayRows.push({j:j, pct:pct, rpe:rpe, prom:prom, ses:detalle,
+                  cuantas:Object.keys(diasDistintos).length});
   });
   var out=document.getElementById('teamOut'), avgEl=document.getElementById('teamAvg'), note=document.getElementById('teamNote');
   if(!dayRows.length){
@@ -414,7 +421,12 @@ function renderTeam(){
   avgEl.innerHTML='<div><div class="muted" style="font-size:10px;letter-spacing:1px;text-transform:uppercase">Promedio del equipo'+(dias>1?' · últimos '+dias+' días':'')+'</div>'
     +'<div class="n" style="color:'+colFor(tavg)+'">'+tavg+'%</div></div>'
     +'<div class="muted" style="font-size:13px">'+dayRows.length+(dias===1?' respondieron':' jugadores con datos')+(alerta?' · <span style="color:var(--red);font-weight:700">'+alerta+' en alerta</span>':'')+'</div>';
-  var h='<table><thead><tr><th>Jugador</th><th>Pos</th><th>RPE</th><th>vs prom</th><th>Wellness</th><th></th></tr></thead><tbody>';
+  /* Con un periodo de varios dias, saber CUANTAS veces contesto cada uno es
+     tan importante como el promedio: 6 encuestas en la semana es un dato
+     firme, 1 sola no dice mucho. */
+  var h='<table><thead><tr><th>Jugador</th><th>Pos</th>'
+    + (dias>1 ? '<th>Cargó</th>' : '')
+    + '<th>RPE</th><th>vs prom</th><th>Wellness</th><th></th></tr></thead><tbody>';
   dayRows.forEach(function(r){
     var c=colFor(r.pct), diff=r.pct-r.prom;
     var tr = diff<=-8?'<span class="trend" style="color:var(--red)">▼ '+diff+'</span>'
@@ -422,6 +434,13 @@ function renderTeam(){
            : '<span class="trend muted">≈</span>';
     h+='<tr><td><span class="dot" style="background:'+c+'"></span><b>'+r.j.ap+'</b></td>'
       +'<td class="muted">'+(POSAB[r.j.pos]||r.j.pos)+'</td>'
+      + (dias>1
+          /* cuantos dias distintos cargo, sobre los del periodo. Si cargo
+             pocos, el promedio vale menos y conviene verlo de un vistazo. */
+          ? '<td class="muted" style="white-space:nowrap">'
+            + '<b style="color:'+(r.cuantos>=dias*0.6?'var(--green)':r.cuantos>=dias*0.3?'var(--orange)':'var(--red)')+'">'
+            + r.cuantos + '</b><span style="opacity:.5"> de ' + dias + '</span></td>'
+          : '')
       +'<td style="color:var(--orange);font-weight:700">'+r.rpe+'</td>'
       +'<td>'+tr+'</td>'
       +'<td class="pctcell" style="color:'+c+'">'+r.pct+'%</td>'
