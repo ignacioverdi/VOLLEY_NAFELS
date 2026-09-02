@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>PIZARRÓN — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20260902-0750"></script>
-<script src="selector_categoria.js?v=20260902-0750"></script>
-<script src="utils.js?v=20260902-0750" onerror="void 0"></script>
-<script src="plantel_nafels.js?v=20260902-0750" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260902-0750"></script>
+<script src="categorias_club.js?v=20260902-2250"></script>
+<script src="selector_categoria.js?v=20260902-2250"></script>
+<script src="utils.js?v=20260902-2250" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20260902-2250" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260902-2250"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
 <script src="datos_prep_fisica.js.enc" onerror="void 0"></script>
 <!-- El catalogo de ejercicios. Cada ejercicio ya trae su nombre en es, en y
@@ -21,8 +21,8 @@
      existiera. Es el mismo orden que usa prep_fisica.html. -->
 <script src="datos_ejercicios.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20260902-0750" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260902-0750"></script>
+<script src="firebase.js?v=20260902-2250" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260902-2250"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -176,7 +176,7 @@ body.fullscreen{background:#000;}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260902-0750">
+<link rel="stylesheet" href="movil.css?v=20260902-2250">
 </head>
 <body>
 <!-- El selector de idiomas estaba en un contenedor FIJO arriba a la derecha,
@@ -508,6 +508,7 @@ function getDias(){
           if(!dias[s.label].bloques[b.nombre].ejercicios[e.id]){
             dias[s.label].bloques[b.nombre].ejercicios[e.id] = {
               id:e.id, nombre:e.nombre, series:e.series,
+            id2:e.id2, nombre2:e.nombre2, reps2:e.reps2, video2:e.video2,
               reps:e.reps, descanso:e.descanso, carga:e.carga, video:e.video
             };
           }
@@ -564,7 +565,7 @@ function renderPizarron(){
         if(!bloques[b.nombre]) bloques[b.nombre]={nombre:b.nombre,icon:b.icon,color:b.color,ejercicios:{}};
         (b.ejercicios||[]).forEach(function(e){
           if(!bloques[b.nombre].ejercicios[e.id])
-            bloques[b.nombre].ejercicios[e.id]={id:e.id,nombre:e.nombre,series:e.series,reps:e.reps,descanso:e.descanso,carga:e.carga,video:e.video};
+            bloques[b.nombre].ejercicios[e.id]={id:e.id,nombre:e.nombre,series:e.series,reps:e.reps,descanso:e.descanso,carga:e.carga,video:e.video,/* el segundo movimiento de una superserie: sin esto el pizarron mostraba   solo la mitad del ejercicio */id2:e.id2,nombre2:e.nombre2,reps2:e.reps2,video2:e.video2};
         });
       });
     });
@@ -605,10 +606,20 @@ function renderPizarron(){
       ejTit.className = 'ejercicio-titulo';
       ejTit.innerHTML =
         '<div class="ej-num">' + (ei+1) + '</div>' +
-        '<div class="ej-nombre">' + ejNombre(ej.id, ej.nombre) + '</div>' +
+        /* ── EJERCICIO COMBINADO ────────────────────────────────────────
+         Si la rutina trae un segundo movimiento (nombre2), se muestran
+         los dos nombres unidos y una etiqueta SUPERSERIE. Antes el
+         pizarron mostraba solo el primero: el profe veia "Banco Plano"
+         cuando en realidad el ejercicio es "Banco Plano + Fondos". */
+      '<div class="ej-nombre">' + ejNombre(ej.id, ej.nombre)
+        + (ej.nombre2 ? ' <span style="opacity:.75">+</span> ' + ejNombre(ej.id2, ej.nombre2)
+             + ' <span class="ej-badge" style="background:rgba(129,140,248,.18);'
+             + 'color:#a5b4fc;font-size:9px;vertical-align:middle">SUPERSERIE</span>'
+           : '')
+        + '</div>' +
         '<div class="ej-badges">' +
           '<span class="ej-badge badge-s">' + ej.series + ' SERIES</span>' +
-          '<span class="ej-badge badge-r">' + ej.reps + ' REPS</span>' +
+          '<span class="ej-badge badge-r">' + ej.reps + (ej.reps2 ? ' + ' + ej.reps2 : '') + ' REPS</span>' +
           (ej.descanso ? '<span class="ej-badge badge-d">⏱ ' + ej.descanso + '</span>' : '') +
           (ej.carga ? '<span class="ej-badge badge-c">🏋 ' + ej.carga + '</span>' : '') +
         '</div>' +
@@ -753,9 +764,9 @@ window.addEventListener('load', function(){
   }, 200);
 });
 </script>
-<script src="lang.js?v=20260902-0750"></script>
-<script src="temporadas_menu.js?v=20260902-0750"></script>
-<script src="ayuda.js?v=20260902-0750"></script>
+<script src="lang.js?v=20260902-2250"></script>
+<script src="temporadas_menu.js?v=20260902-2250"></script>
+<script src="ayuda.js?v=20260902-2250"></script>
 </body>
 </html>
 
