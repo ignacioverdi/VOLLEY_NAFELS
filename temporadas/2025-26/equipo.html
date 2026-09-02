@@ -168,24 +168,41 @@ var DATA = (function(){
   return { jugadores: jugadores, staff: base.staff || EQUIPO_DEMO.staff };
 })();
 
-(function esperarDatos(){
-  /* Los archivos grandes ahora se abren de a pedazos, y avisan al terminar.
-     Escuchar ese aviso es mas directo que esperar a que el vigia mire. */
-  try{ window.addEventListener('datos-listos', function(){
-    try{ if(typeof render==='function') render();
-         else if(typeof pintar==='function') pintar();
-         else if(typeof dibujar==='function') dibujar();
-         else if(typeof init==='function') init(); }catch(e){}
-  }); }catch(e){}
+/* ── EL VIGIA, AHORA QUE EL PLANTEL SALE DE OTRO LADO ───────────────────
+   Antes este vigia hacia  DATA = window.EQUIPO_DATA  cuando llegaban los
+   datos cifrados. Eso pisaba el plantel completo —los 13 de
+   plantel_nafels.js— con los 12 que salen de los partidos, y Bruderer
+   volvia a desaparecer.
 
-  var intentos = 0;
-  var t = setInterval(function(){
-    intentos++;
-    if(intentos > 40){ clearInterval(t); return; }        /* 8 segundos y basta */
-    if(window.EQUIPO_DATA && window.EQUIPO_DATA !== DATA){
-      DATA = window.EQUIPO_DATA;
+   Ahora no reemplaza DATA: solo vuelve a armarlo con las dos fuentes,
+   igual que al cargar. Asi las fotos llegan sin perder a nadie. */
+(function esperarDatos(){
+  function rearmar(){
+    try{
+      var lista = (window.PLANTEL_NAFELS && window.PLANTEL_NAFELS.jugadores) || null;
+      var base  = window.EQUIPO_DATA || EQUIPO_DEMO;
+      if(!lista || !lista.length){ DATA = base; }
+      else {
+        var dePartidos = {};
+        (base.jugadores || []).forEach(function(j){ dePartidos[j.num] = j; });
+        DATA = { jugadores: lista.map(function(p){
+                   var e = dePartidos[p.num] || {};
+                   return { num:p.num, nombre:p.ap || e.nombre || '', pila:p.nombre || '',
+                            pos:p.pos || e.pos || '', foto:e.foto || null,
+                            pais:e.pais || '', altura:e.altura || '', edad:e.edad || 0 };
+                 }),
+                 staff: base.staff || EQUIPO_DEMO.staff };
+      }
+      if(typeof render === 'function') render();
+    }catch(e){}
+  }
+  try{ window.addEventListener('datos-listos', rearmar); }catch(e){}
+  var i = 0, t = setInterval(function(){
+    if(++i > 40){ clearInterval(t); return; }
+    if(window.EQUIPO_DATA && window.EQUIPO_DATA !== DATA.__base){
+      DATA.__base = window.EQUIPO_DATA;
       clearInterval(t);
-      try{ render(); }catch(e){}
+      rearmar();
     }
   }, 200);
 })();
