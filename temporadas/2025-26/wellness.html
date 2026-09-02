@@ -2,15 +2,11 @@
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>WELLNESS — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="movil.css">
-<script src="datos_seguros.js"></script>
-<!-- Apunta al firebase.js de la RAIZ, no a una copia local. La copia que
-     tenia la capsula era vieja: pedia mail y clave pero NUNCA guardaba la
-     llave de los datos, asi que las paginas abrian vacias para cualquiera
-     que no hubiera entrado antes por la app principal. Con una sola fuente
-     no se vuelve a desincronizar. -->
-<script src="firebase.js" onerror="void 0"></script>
-<script src="firebase_por_categoria.js"></script>
+<script src="categorias_club.js?v=20260902-0720"></script>
+<script src="selector_categoria.js?v=20260902-0720"></script>
+<script src="datos_seguros.js?v=20260902-0720"></script>
+<script src="firebase.js?v=20260902-0720" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260902-0720"></script>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   :root{--bg:#0a0f1a;--surface:#111827;--card:#0f1020;--card2:#151b2e;--border:rgba(255,255,255,.08);--b2:rgba(255,255,255,.13);
@@ -118,7 +114,9 @@
     align-items: flex-start;
   }
 }
-</style></head>
+</style><link rel="stylesheet" href="movil.css?v=20260902-0720">
+<script src="mi_fila.js?v=20260902-0720" onerror="void 0"></script>
+</head>
 <body>
 <div class="wrap">
   <div class="header">
@@ -174,7 +172,15 @@
       <div class="card-ti">👥 Estado del equipo</div>
       <div class="card-sub">Quién llega bien y quién necesita atención</div>
       <div class="row2" style="margin-bottom:16px;max-width:420px">
-        <div><label class="fld">Día</label><input type="date" id="eqFecha"></div>
+        <div><label class="fld">Hasta el día</label><input type="date" id="eqFecha"></div>
+          <div><label class="fld">Período</label>
+            <select id="eqPeriodo">
+              <option value="1">Solo ese día</option>
+              <option value="7">Última semana</option>
+              <option value="15">Última quincena</option>
+              <option value="30">Último mes</option>
+            </select>
+          </div>
         <div><label class="fld">Sesión</label><select id="eqSes">
           <option value="">Todas</option><option>Pelota</option><option>Pesas</option><option>Partido</option></select></div>
       </div>
@@ -184,6 +190,8 @@
     </div>
   </div>
 </div>
+
+<script src="plantel_nafels.js?v=20260902-0720" onerror="void 0"></script>
 <script>
 /* ============================================================================
    CAPA DE DATOS  —  local + nube (Firebase) usando el mismo fbSet/fbGet que ya
@@ -296,6 +304,10 @@ function maybeLoadExisting(){
 
 function saveSurvey(){
   var sel=document.getElementById('selJug'); var num=+sel.value;
+  /* Si es un jugador, siempre manda su propio dorsal: aunque alguien cambiara
+     el desplegable desde el navegador, no puede cargar como otro. */
+  var _yo = jugadorConectado();
+  if(_yo !== null) num = _yo;
   var j=roster().find(function(x){return x.num===num;}); if(!j){ alert('Elegí un jugador.'); return; }
   var date=document.getElementById('selFecha').value||todayISO();
   var q={}, sum=0;
@@ -356,14 +368,40 @@ function renderTeam(){
   // promedio personal (todos los días) para calcular tendencia
   var byNum={}; all.forEach(function(e){ (byNum[e.num]=byNum[e.num]||[]).push(e); });
   // registros del día (uno por jugador: si hay varias sesiones, promedio o la filtrada)
+  /* ── EL PERIODO ────────────────────────────────────────────────────────
+     Antes esta tabla mostraba UN solo dia. Para ver como viene el equipo
+     eso no alcanza: un jugador puede tener un mal dia y no significar nada,
+     o venir cayendo hace dos semanas y no notarse.
+
+     Ahora se elige el periodo —dia, semana, quincena o mes— y la tabla
+     promedia todas las encuestas de cada jugador en ese rango. */
+  var dias = parseInt(document.getElementById('eqPeriodo').value, 10) || 1;
+  var hasta = new Date(date + 'T12:00:00');
+  var desde = new Date(hasta);
+  desde.setDate(desde.getDate() - (dias - 1));
+
+  function enRango(f){
+    var d = new Date(f + 'T12:00:00');
+    return d >= desde && d <= hasta;
+  }
+
   var dayRows=[];
   roster().forEach(function(j){
-    var es=all.filter(function(e){ return e.num===j.num && e.date===date && (!ses||e.sesion===ses); });
+    var es=all.filter(function(e){
+      return e.num===j.num && enRango(e.date) && (!ses||e.sesion===ses);
+    });
     if(!es.length) return;
     var pct=Math.round(avg(es.map(function(e){return e.pct;})));
     var rpe=Math.round(avg(es.map(function(e){return e.rpe;})));
     var prom=Math.round(avg((byNum[j.num]||[]).map(function(e){return e.pct;})));
-    dayRows.push({j:j, pct:pct, rpe:rpe, prom:prom, ses:es.map(function(e){return e.sesion;}).join(' · ')});
+
+    /* con varios dias, en vez de las sesiones se muestra cuantas encuestas
+       entraron en el promedio: es lo que dice si el dato es confiable */
+    var detalle = dias === 1
+      ? es.map(function(e){return e.sesion;}).join(' · ')
+      : es.length + (es.length === 1 ? ' encuesta' : ' encuestas');
+
+    dayRows.push({j:j, pct:pct, rpe:rpe, prom:prom, ses:detalle, cuantas:es.length});
   });
   var out=document.getElementById('teamOut'), avgEl=document.getElementById('teamAvg'), note=document.getElementById('teamNote');
   if(!dayRows.length){
@@ -373,9 +411,9 @@ function renderTeam(){
   dayRows.sort(function(a,b){ return a.pct-b.pct; });            // peores primero (a quién mirar)
   var tavg=Math.round(avg(dayRows.map(function(r){return r.pct;})));
   var alerta=dayRows.filter(function(r){return r.pct<55;}).length;
-  avgEl.innerHTML='<div><div class="muted" style="font-size:10px;letter-spacing:1px;text-transform:uppercase">Promedio del equipo</div>'
+  avgEl.innerHTML='<div><div class="muted" style="font-size:10px;letter-spacing:1px;text-transform:uppercase">Promedio del equipo'+(dias>1?' · últimos '+dias+' días':'')+'</div>'
     +'<div class="n" style="color:'+colFor(tavg)+'">'+tavg+'%</div></div>'
-    +'<div class="muted" style="font-size:13px">'+dayRows.length+' respondieron'+(alerta?' · <span style="color:var(--red);font-weight:700">'+alerta+' en alerta</span>':'')+'</div>';
+    +'<div class="muted" style="font-size:13px">'+dayRows.length+(dias===1?' respondieron':' jugadores con datos')+(alerta?' · <span style="color:var(--red);font-weight:700">'+alerta+' en alerta</span>':'')+'</div>';
   var h='<table><thead><tr><th>Jugador</th><th>Pos</th><th>RPE</th><th>vs prom</th><th>Wellness</th><th></th></tr></thead><tbody>';
   dayRows.forEach(function(r){
     var c=colFor(r.pct), diff=r.pct-r.prom;
@@ -406,11 +444,41 @@ function showTab(t){
 }
 
 /* ---- init ---- */
+/* ══ Quien esta respondiendo ═══════════════════════════════════════════════
+   La app ya sabe quien inicio sesion: al entrar guarda su dorsal en
+   vb_player_num. El wellness no lo usaba y obligaba a elegirse de una lista de
+   14 nombres.
+
+   Con trece jugadores cargando todos los dias, alguno se equivoca de nombre
+   tarde o temprano — y ese dato queda mal para siempre, atribuido a otro.
+
+   Ahora, si el que entro es un JUGADOR, queda elegido de entrada y el
+   desplegable se bloquea: solo puede cargar lo suyo. El cuerpo tecnico sigue
+   viendo la lista completa, porque a veces carga por alguien que no tiene el
+   telefono a mano. */
+function jugadorConectado(){
+  try{
+    if((localStorage.getItem('vb_role')||'').toLowerCase() !== 'player') return null;
+    var n = parseInt(localStorage.getItem('vb_player_num'), 10);
+    return isNaN(n) ? null : n;
+  }catch(e){ return null; }
+}
+
 (function init(){
   var sel=document.getElementById('selJug');
   var rs=roster();
   if(rs.length){
     sel.innerHTML=rs.map(function(j){return '<option value="'+j.num+'">#'+j.num+'  '+pname(j)+'</option>';}).join('');
+
+    var yo = jugadorConectado();
+    if(yo !== null && rs.some(function(j){ return j.num === yo; })){
+      sel.value = String(yo);
+      sel.disabled = true;                  /* solo puede cargar lo suyo */
+      sel.style.opacity = '.75';
+      sel.title = 'Estás cargando tu propio wellness';
+      var lbl = sel.parentNode && sel.parentNode.querySelector('.fld');
+      if(lbl) lbl.textContent = 'Vos';
+    }
   } else {
     sel.innerHTML='<option value="">(no se cargó el plantel)</option>';
   }
@@ -420,6 +488,7 @@ function showTab(t){
   sel.onchange=function(){ renderHist(); maybeLoadExisting(); };
   document.getElementById('selFecha').onchange=maybeLoadExisting;
   document.getElementById('eqFecha').onchange=renderTeam;
+  document.getElementById('eqPeriodo').onchange=renderTeam;
   document.getElementById('eqSes').onchange=renderTeam;
   WStore.init(function(){                     // local primero; cuando llega la nube, vuelve a entrar y re-dibuja
     renderHist(); maybeLoadExisting();
@@ -427,13 +496,9 @@ function showTab(t){
   });
 })();
 </script>
-<script src="lang.js" onerror="void 0"></script>
-<script src="onesignal_push.js" defer></script>
-<script src="datos_equipo_2025-26.js.enc" onerror="void 0"></script>
-  <script>abrirDatos();</script>
-  <script src="plantel_nafels.js" onerror="void 0"></script>
-
-<script src="ayuda.js"></script>
+<script src="lang.js?v=20260902-0720" onerror="void 0"></script>
+<script src="onesignal_push.js?v=20260902-0720" defer></script>
+<script src="ayuda.js?v=20260902-0720"></script>
 </body></html>
 
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
