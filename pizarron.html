@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>PIZARRÓN — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20260902-2339"></script>
-<script src="selector_categoria.js?v=20260902-2339"></script>
-<script src="utils.js?v=20260902-2339" onerror="void 0"></script>
-<script src="plantel_nafels.js?v=20260902-2339" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260902-2339"></script>
+<script src="categorias_club.js?v=20260903-0015"></script>
+<script src="selector_categoria.js?v=20260903-0015"></script>
+<script src="utils.js?v=20260903-0015" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20260903-0015" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260903-0015"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
 <script src="datos_prep_fisica.js.enc" onerror="void 0"></script>
 <!-- El catalogo de ejercicios. Cada ejercicio ya trae su nombre en es, en y
@@ -21,8 +21,8 @@
      existiera. Es el mismo orden que usa prep_fisica.html. -->
 <script src="datos_ejercicios.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20260902-2339" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260902-2339"></script>
+<script src="firebase.js?v=20260903-0015" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260903-0015"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -176,7 +176,7 @@ body.fullscreen{background:#000;}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260902-2339">
+<link rel="stylesheet" href="movil.css?v=20260903-0015">
 </head>
 <body>
 <!-- El selector de idiomas estaba en un contenedor FIJO arriba a la derecha,
@@ -632,9 +632,26 @@ function renderPizarron(){
       // Tabla de jugadores
       var tabla = document.createElement('table');
       tabla.className = 'tabla-jugadores';
-      var thead = '<thead><tr><th>#</th><th>Jugador</th><th>Posición</th>';
-      for(var s=1; s<=ej.series; s++) thead += '<th class="center">SERIE '+s+'</th>';
-      thead += '</tr></thead>';
+      /* ── EJERCICIO COMBINADO: UNA COLUMNA POR MOVIMIENTO ─────────────
+       Un "Banco Plano + Fondos" son dos ejercicios con pesos muy
+       distintos. Con una sola columna por serie no se sabia cual era
+       cual, y el profe no podia anotar los dos.
+
+       Ahora, si el ejercicio tiene un segundo movimiento, cada serie
+       lleva DOS columnas, con el nombre de cada uno arriba. */
+    var esSuper = !!(ej.nombre2 && ej.id2);
+    var thead = '<thead><tr><th>#</th><th>Jugador</th><th>Posición</th>';
+    for(var s=1; s<=ej.series; s++){
+      if(esSuper){
+        thead += '<th class="center" style="font-size:9px;color:#2dd4bf">S'+s+' · '+
+                 (ej.nombre||'').slice(0,12)+'</th>';
+        thead += '<th class="center" style="font-size:9px;color:#a5b4fc">S'+s+' · '+
+                 (ej.nombre2||'').slice(0,12)+'</th>';
+      } else {
+        thead += '<th class="center">SERIE '+s+'</th>';
+      }
+    }
+    thead += '</tr></thead>';
       tabla.innerHTML = thead;
 
       var tbody = document.createElement('tbody');
@@ -670,11 +687,15 @@ function renderPizarron(){
         tr.appendChild(tdNom);
         tr.appendChild(tdPos);
 
-        // Series editables
-        for(var serie=1; serie<=ej.series; serie++){
+        /* ── UNA CELDA POR MOVIMIENTO ──────────────────────────────────
+           Si el ejercicio es combinado, cada serie lleva dos casilleros:
+           uno para cada movimiento. El segundo se guarda con el id2 que
+           ya trae la rutina, asi que el peso queda igual que si el profe
+           lo hubiera puesto como ejercicio suelto. */
+        function celdaPeso(numJug, idEj, serie){
           var td = document.createElement('td');
           td.className = 'peso-cell';
-          var storKey = sk(j.num, ej.id, serie);
+          var storKey = sk(numJug, idEj, serie);
           var saved = localStorage.getItem(storKey) || '';
 
           var inp = document.createElement('input');
@@ -684,7 +705,6 @@ function renderPizarron(){
           inp.value = saved;
           inp.min = 0; inp.max = 500; inp.step = 0.5;
 
-          // Cargar desde Firebase
           if(typeof fbGet !== 'undefined'){
             (function(k, input){
               fbGet('pesos/'+k, function(val){
@@ -708,7 +728,12 @@ function renderPizarron(){
           })(storKey, inp));
 
           td.appendChild(inp);
-          tr.appendChild(td);
+          return td;
+        }
+
+        for(var serie=1; serie<=ej.series; serie++){
+          tr.appendChild(celdaPeso(j.num, ej.id, serie));
+          if(esSuper) tr.appendChild(celdaPeso(j.num, ej.id2, serie));
         }
 
         tbody.appendChild(tr);
@@ -767,9 +792,9 @@ window.addEventListener('load', function(){
   }, 200);
 });
 </script>
-<script src="lang.js?v=20260902-2339"></script>
-<script src="temporadas_menu.js?v=20260902-2339"></script>
-<script src="ayuda.js?v=20260902-2339"></script>
+<script src="lang.js?v=20260903-0015"></script>
+<script src="temporadas_menu.js?v=20260903-0015"></script>
+<script src="ayuda.js?v=20260903-0015"></script>
 </body>
 </html>
 
