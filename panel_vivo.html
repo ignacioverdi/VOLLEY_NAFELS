@@ -2578,7 +2578,7 @@ function plNorm(t){
    esto solo completa lo que ese no tenga. */
 function plantelClub(){
   var P = null;
-  var CANDIDATAS = ['PLANTEL_NAFELS','PLANTEL_CASLA','PLANTEL_CLUB','PLANTEL','PLANTEL_DATA'];
+  var CANDIDATAS = ['PLANTEL_NAFELS','PLANTEL_CASLA','PLANTEL_NAFELS','PLANTEL_CLUB','PLANTEL','PLANTEL_DATA'];
   for(var i=0;i<CANDIDATAS.length && !P;i++){
     try{ if(typeof window!=='undefined' && window[CANDIDATAS[i]]) P = window[CANDIDATAS[i]]; }catch(e){}
   }

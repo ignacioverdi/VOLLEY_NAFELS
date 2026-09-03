@@ -128,6 +128,11 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 <!-- Los datos vienen cifrados: este es el que sabe abrirlos. -->
   <script src="categorias_club.js?v=20260903-0015"></script>
 <script src="selector_categoria.js?v=20260903-0015"></script>
+<script>
+/* Pantalla de escritorio: necesita sus datos completos al abrir.
+   Las de las jugadoras no llevan esta marca. */
+window.__DESCIFRAR_SINCRONO = true;
+</script>
 <script src="datos_seguros.js?v=20260903-0015"></script>
 <script src="filtro_tipo.js?v=20260903-0015" onerror="void 0"></script>
   <script src="liga_data.js.enc"></script>
