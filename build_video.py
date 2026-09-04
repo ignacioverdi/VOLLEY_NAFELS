@@ -340,7 +340,11 @@ def read_mapa_links(ent=False):
         _txt = _leer_enc(mapa_file)
         if _txt:
             try:
-                _mm = re.search(r'window\\.'+mapa_glob+r'\\s*=\\s*(\\{.*?\\})\\s*;', _txt, re.S)
+                # En un raw string \\. es una BARRA literal, no un punto
+                # escapado: la busqueda no podia coincidir nunca, y como esto
+                # va adentro de un try/except pass, fallaba en silencio.
+                # Es la misma expresion que la de abajo, que si funciona.
+                _mm = re.search(r'window\.'+mapa_glob+r'\s*=\s*(\{.*?\})\s*;', _txt, re.S)
                 if _mm:
                     for k, v in json.loads(_mm.group(1)).items():
                         if v: links[k] = v

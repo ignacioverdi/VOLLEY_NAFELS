@@ -115,19 +115,53 @@ def main():
 
     print('\n  Abriendo los datos para que el motor pueda trabajar...\n')
     total = fallos = 0
+    conservados = []
     for enc in sorted(lista):
         original = enc[:-4]                      # saco el .enc
         ruta_enc = os.path.join(carpeta, *enc.split('/'))
+        ruta_js  = os.path.join(carpeta, *original.split('/'))
+
+        # ══ NO PISAR UN ARCHIVO QUE EL USUARIO ACABA DE PONER ═══════════════
+        # El ciclo normal es cifrar -> borrar el .js. Asi que si el .js ESTA,
+        # es porque alguien lo puso a mano despues: tipicamente el
+        # mapa_videos_ent.js recien bajado de "Cargar videos".
+        #
+        # Antes se pisaba sin preguntar. El link de video se cargaba en la
+        # pantalla, se bajaba el archivo, se ponia en la carpeta, y el primer
+        # paso de HACER_TODO lo reemplazaba por el contenido viejo del .enc.
+        # El link desaparecia antes de que ningun motor lo viera, sin un solo
+        # aviso, y podias repetir el circuito entero las veces que quisieras.
+        #
+        # Se compara por fecha para no depender de la buena fe: gana el mas
+        # nuevo. El .enc se borra igual, asi el resto del ciclo sigue como
+        # siempre y al final se cifra el que quedo.
+        if os.path.exists(ruta_js):
+            try:
+                mas_nuevo = os.path.getmtime(ruta_js) > os.path.getmtime(ruta_enc)
+            except OSError:
+                mas_nuevo = True
+            if mas_nuevo:
+                os.remove(ruta_enc)
+                conservados.append(original)
+                print('    %-40s CONSERVADO (el tuyo es mas nuevo)' % original)
+                continue
+
         try:
             txt = open(ruta_enc, encoding='utf-8').read()
             b64 = txt[txt.index('"]="') + 4 : txt.rindex('";')]
             claro = descifrar(b64, k, original)
         except Exception as e:
             print('    [ERROR] %-38s %s' % (original, e)); fallos += 1; continue
-        open(os.path.join(carpeta, *original.split('/')), 'w', encoding='utf-8').write(claro)
+        open(ruta_js, 'w', encoding='utf-8').write(claro)
         os.remove(ruta_enc)
         total += 1
         print('    %-40s legible' % original)
+
+    if conservados:
+        print('')
+        print('  Respete %d archivo(s) que pusiste vos, por ser mas nuevos:' % len(conservados))
+        for c in conservados:
+            print('      %s' % c)
 
     print('\n  Listos: %d archivos.' % total)
     if fallos:

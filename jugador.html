@@ -314,7 +314,17 @@ function objGetVals(nombre){
   var partido = window._objPartido;
   var ent     = (tipo==='entrenamiento');
 
-  if(!ent && window.BAT_PARTIDOS){ return batGet(nombre, partido); }
+  /* Antes decia (!ent && ...): con el filtro en Entrenamientos NO entraba aca
+     y se iba por el camino viejo, que busca ENTRENAMIENTOS_JUGADORES,
+     ENTRENAMIENTOS_INDIVIDUAL, ENTRENAMIENTOS_EQUIPO_OBJ y ENTRENAMIENTOS_META.
+     Esas cuatro ya no existen en ninguna pagina: quedaron de la epoca en que
+     los entrenamientos tenian su propio archivo. Resultado: todas las baterias
+     en cero, con los datos bien cargados.
+
+     batGet YA sabe separar por tipo —usa batTipoActual() y B.porTipo—, asi que
+     sirve para los dos casos. Se saca la condicion y listo. Si algun club
+     todavia no tiene BAT_PARTIDOS, se sigue de largo como antes. */
+  if(window.BAT_PARTIDOS){ return batGet(nombre, partido); }
 
   var JUG = ent ? (typeof ENTRENAMIENTOS_JUGADORES!=='undefined'?ENTRENAMIENTOS_JUGADORES:null)
                 : (typeof PARTIDOS_JUGADORES!=='undefined'?PARTIDOS_JUGADORES:null);
