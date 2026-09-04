@@ -1552,7 +1552,12 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
             set_strings.append(f"{th}-{tr}")
             if th>tr: tsets+=1
             else: rsets+=1
-        if tsets+rsets==0: continue
+        # Un entrenamiento no tiene sets ganados ni perdidos: la seccion
+        # [3SET] del .dvw viene vacia. Sin esto, la sesion se descartaba
+        # entera y no llegaba al historial que leen el analisis, el
+        # dashboard y el perfil del jugador.
+        _es_entren = norm(home).strip().upper() == norm(away).strip().upper()
+        if tsets+rsets==0 and not _es_entren: continue
 
         games.append({'file':fname,'date':date,'rival':rival,'team_home':team_home,
                        'tsets':tsets,'rsets':rsets,'result':'V' if tsets>rsets else 'D',
@@ -1568,6 +1573,10 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         home_raw,_ = get_teams(lines)
         team_home = norm(home_raw)==team_name
         pfx = '*' if team_home else 'a'
+        # En un entrenamiento los dos lados son el mismo club: las acciones
+        # vienen todas de un lado y no hay que filtrar por lado.
+        _home_e, _away_e = get_teams(lines)
+        _ENTREN_MISMO = norm(_home_e).strip().upper() == norm(_away_e).strip().upper()
         section = '[3PLAYERS-H]' if team_home else '[3PLAYERS-V]'
         players = get_players(lines, section)
 
@@ -1583,7 +1592,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
             if len(_b)>=4 and _b[:2].isdigit() and _b[2]=='S':
                 _st=_b[3]
                 _last_serve_tp='flotado' if _st in('M','H') else 'potencia' if _st in('Q','T') else None
-            if l[0]!=pfx: continue
+            if not _ENTREN_MISMO and l[0]!=pfx: continue
             code=l[1:]
             try: pn=int(code[:2])
             except: continue
