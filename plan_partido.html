@@ -185,12 +185,12 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260903-2321">
+<link rel="stylesheet" href="movil.css?v=20260904-0855">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="categorias_club.js?v=20260903-2321"></script>
-<script src="selector_categoria.js?v=20260903-2321"></script>
-<script src="mi_fila.js?v=20260903-2321" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260904-0855"></script>
+<script src="selector_categoria.js?v=20260904-0855"></script>
+<script src="mi_fila.js?v=20260904-0855" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -299,19 +299,19 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260903-2321"></script>
-<script src="filtro_tipo.js?v=20260903-2321" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260904-0855"></script>
+<script src="filtro_tipo.js?v=20260904-0855" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20260903-2321"></script>
-<script src="firebase_por_categoria.js?v=20260903-2321"></script>
+<script src="firebase.js?v=20260904-0855"></script>
+<script src="firebase_por_categoria.js?v=20260904-0855"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20260903-2321" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20260904-0855" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -597,12 +597,44 @@ function readFilt(id,fl){var el=document.getElementById(id);if(!el)return "all";
    MAPA_VIDEOS y las practicas en MAPA_VIDEOS_ENT. Antes se miraba solo el de
    partidos, asi que un entrenamiento nunca encontraba su video por mas que
    estuviera cargado. Se prueban los dos por las dudas. */
+/* ── La MISMA sesion tiene un codigo distinto en cada archivo ───────────────
+   Cada generador la bautiza a su manera:
+
+       plan_partido_data   E2026-09-03-PRAAXPONAFEL   (gen_plan_partido.py)
+       mapa de videos      ENT20260903                (build_video.py)
+       baterias            E2026-09-03-AXPONAFELS     (gen_baterias.py)
+
+   Buscar el codigo del plan adentro del mapa de videos no encuentra nada
+   nunca. Sin video no se pone el ondblclick, y el doble-click en la zona no
+   hace absolutamente nada: ni un aviso, ni un error en la consola.
+
+   Lo que SI es la misma sesion en los tres lados es la FECHA. Asi que cuando
+   el codigo no aparece, se la busca por fecha. Solo para entrenamientos y
+   solo si hay UNA sola coincidencia: dos partidos pueden caer el mismo dia y
+   ahi adivinar seria peor que no mostrar nada. */
+function _ppVidPorFecha(inf, M1, M2){
+  if(!inf || !inf.date) return "";
+  var d = String(inf.date).replace(/\D/g,'');          /* 2026-09-03 -> 20260903 */
+  if(d.length!==8) return "";
+  var i, k, hits;
+  for(i=0;i<2;i++){
+    var M = i===0 ? M1 : M2;
+    if(M['ENT'+d]) return M['ENT'+d];                  /* el nombre que usa build_video */
+    hits=[];
+    for(k in M){ if(M[k] && String(k).replace(/\D/g,'')===d) hits.push(M[k]); }
+    if(hits.length===1) return hits[0];
+  }
+  return "";
+}
 function ppVid(code){
-  var _ent = false;
-  try{ _ent = ((INFO[code]&&INFO[code].tipo)==='entrenamiento'); }catch(e){}
+  var _inf = null;
+  try{ _inf = INFO[code]; }catch(e){}
+  var _ent = !!(_inf && _inf.tipo==='entrenamiento');
   var M1 = (_ent ? window.MAPA_VIDEOS_ENT : window.MAPA_VIDEOS) || {};
   var M2 = (_ent ? window.MAPA_VIDEOS : window.MAPA_VIDEOS_ENT) || {};
-  var M = M1; var u=M[code]||M2[code]||"";if(!u)return "";u=String(u);var m=u.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);return m?m[1]:(u.length===11?u:"");}
+  var u=M1[code]||M2[code]||"";
+  if(!u && _ent) u=_ppVidPorFecha(_inf, M1, M2);
+  if(!u)return "";u=String(u);var m=u.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);return m?m[1]:(u.length===11?u:"");}
 function readKey(pid){return "ppread:"+(typeof TEAM!=="undefined"?TEAM:"")+":"+pid;}
 function readVal(p){try{var v=localStorage.getItem(readKey(p.id));if(v!==null)return v;}catch(e){}return p.read||"";}
 function saveRead(el){try{localStorage.setItem(readKey(el.getAttribute("data-pid")),el.innerHTML);}catch(e){}}
@@ -871,8 +903,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20260903-2321" onerror="void 0"></script>
-<script src="lang.js?v=20260903-2321" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20260904-0855" onerror="void 0"></script>
+<script src="lang.js?v=20260904-0855" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -890,7 +922,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20260903-2321" onerror="void 0"></script>
-<script src="ayuda.js?v=20260903-2321"></script>
+<script src="volver_inicio.js?v=20260904-0855" onerror="void 0"></script>
+<script src="ayuda.js?v=20260904-0855"></script>
 </body>
 </html>

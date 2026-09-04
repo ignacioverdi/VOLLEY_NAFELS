@@ -15,19 +15,19 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260903-2321" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260903-2321" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260904-0855" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260904-0855" onerror="void 0"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260903-2321"></script>
-<script src="filtro_tipo.js?v=20260903-2321" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260904-0855"></script>
+<script src="filtro_tipo.js?v=20260904-0855" onerror="void 0"></script>
   <script src="datos_baterias.js.enc" onerror="void 0"></script>
-  <script src="objetivos_config.js?v=20260903-2321" onerror="void 0"></script>
-  <script src="datos_historial.js?v=20260903-2321" onerror="void 0"></script>
-  <script src="utils.js?v=20260903-2321" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260904-0855" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260904-0855" onerror="void 0"></script>
+  <script src="utils.js?v=20260904-0855" onerror="void 0"></script>
   <!-- modo_toggle.js sacado: se superponia con el selector de idioma. -->
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -220,15 +220,15 @@ window.OBJETIVOS_CONFIG={metas:{
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260903-2321" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260903-2321"></script>
+<script src="firebase.js?v=20260904-0855" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260904-0855"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260903-2321">
+<link rel="stylesheet" href="movil.css?v=20260904-0855">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260903-2321" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260904-0855" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -559,6 +559,25 @@ function getJugadores(idx){
         ['sT','sPunto','sPos','sAdm','sNeg','sVend','sErr',
          'rT','rPunto','rPos','rAdm','rNeg','rVend','rErr',
          'aT','aPunto','aPos','aAdm','aNeg','aVend','aErr','bT','bPt','bPtPos'].forEach(function(k){s[k]+=(j[k]||0);});
+        /* ── Los desgloses tambien se acumulan ──────────────────────────────
+           sFlo/sPot, rFlo/rPot y aSo/aTr son objetos, no numeros, y la lista
+           de arriba solo copia numeros. Al elegir UNA sesion esto no se nota
+           —ahi se devuelve el jugador original, con todo adentro—, pero en
+           Acumulado los desgloses no existian y _aplicarSubfiltros los daba
+           por vacios: SAQUE FLOTADO y RECEPCION DE POTENCIA en cero, con los
+           totales bien. Por eso parecia un problema del filtro y no lo era.
+
+           Eff queda afuera a proposito: es un porcentaje, sumarlo no
+           significa nada. _aplicarSubfiltros lo vuelve a calcular con los
+           totales ya sumados. */
+        ['sFlo','sPot','rFlo','rPot','aSo','aTr'].forEach(function(sub){
+          var src=j[sub]; if(!src) return;
+          if(!s[sub]) s[sub]={};
+          for(var kk in src){
+            if(kk==='Eff') continue;
+            if(typeof src[kk]==='number') s[sub][kk]=(s[sub][kk]||0)+src[kk];
+          }
+        });
       });
     });
     Object.values(acum).forEach(function(s){
@@ -1580,12 +1599,12 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260903-2321"></script>
-<script src="lang.js?v=20260903-2321"></script>
-<script src="temporadas_menu.js?v=20260903-2321"></script>
+<script src="chat_nafels.js?v=20260904-0855"></script>
+<script src="lang.js?v=20260904-0855"></script>
+<script src="temporadas_menu.js?v=20260904-0855"></script>
 
 <!-- ════════════════════════════════════════════════════════════════════════
-     Este codigo estaba adentro de <script src="temporadas_menu.js?v=20260903-2321">, y el
+     Este codigo estaba adentro de <script src="temporadas_menu.js?v=20260904-0855">, y el
      navegador ignora por completo lo que hay adentro de una etiqueta que
      carga un archivo: las funciones nunca se definian y las tablas de
      saque, recepcion y ataque fallaban al llamarlas.
@@ -1944,7 +1963,7 @@ try{
   }
 }catch(e){}
 </script>
-<script src="ayuda.js?v=20260903-2321"></script>
+<script src="ayuda.js?v=20260904-0855"></script>
 </body>
 </html>
 <!-- © 2025-2026 Volley-Stats · Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
