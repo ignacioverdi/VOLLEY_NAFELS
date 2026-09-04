@@ -239,9 +239,16 @@
        Se busca la barra de arriba de la pantalla. Si no hay ninguna, va
        flotando abajo a la izquierda: arriba a la derecha se superponia con
        los botones de idioma y la fecha, y quedaba ilegible. */
-    var destino = document.querySelector('.tempbar, .seasonbar, .topbar-right');
+    /* .header-right agregado: es donde viven los botones de idioma, y existe
+       en casi todas las pantallas. Sin el, la caja caia flotando abajo a la
+       izquierda y ahi TAPA DATOS: medido en un telefono de 390 px, cubria
+       "18% EFF 165 Total" en el dashboard, "0% efectividad" en recepcion y
+       "15% FORMULA OFICIAL 23%" en los heat maps. Arriba no tapa nada y ocupa
+       78 px en un encabezado de 31 px de alto. */
+    var destino = document.querySelector('.tempbar, .seasonbar, .topbar-right, .header-right');
     if(destino){
       sel.style.marginLeft = '8px';
+      sel.style.maxWidth = '46vw';      /* que no empuje a los botones de idioma */
       destino.appendChild(sel);
       return;
     }

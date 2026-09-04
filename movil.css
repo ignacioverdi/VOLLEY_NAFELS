@@ -653,8 +653,26 @@ tr.mi-fila {
      mapa. Bajando a 8, la cancha pasa de 334 a 358 px, un 7% mas grande, sin
      desbordar (queda 15 px de margen). En un mapa de calor eso es el numero
      de cada zona leyendose de lejos, con el telefono apoyado. */
-  #content, .content {
-    padding-left: 8px !important;
-    padding-right: 8px !important;
+  #content, .content,
+  .main, .contenido, .container {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   UN SOLO MARGEN PARA TODA LA APP
+   ══════════════════════════════════════════════════════════════════════════
+   Cada pantalla traia el suyo y no coincidian entre si: el dashboard dejaba
+   28 px de aire de cada lado y recepcion 8. Al cambiar de pantalla las cosas
+   se corrian de lugar y sobraba espacio vacio a los costados.
+
+   Diez de cada lado, iguales en todas. Medido sobre un cuerpo de 388 px:
+
+       dashboard   332 -> 368     recepcion   372 -> 368
+       heat maps   372 -> 368
+
+   El contenido queda alineado de pantalla a pantalla y sin desperdiciar
+   ancho, que en un telefono es lo unico que escasea.
+   ══════════════════════════════════════════════════════════════════════════ */
+
