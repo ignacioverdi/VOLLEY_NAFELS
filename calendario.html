@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20260904-1416"></script>
-<script src="selector_categoria.js?v=20260904-1416"></script>
-<script src="datos_seguros.js?v=20260904-1416"></script>
-<script src="firebase.js?v=20260904-1416" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260904-1416"></script>
+<script src="categorias_club.js?v=20260904-2200"></script>
+<script src="selector_categoria.js?v=20260904-2200"></script>
+<script src="datos_seguros.js?v=20260904-2200"></script>
+<script src="firebase.js?v=20260904-2200" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260904-2200"></script>
 <style>
   :root{--bg:#0a0f1a;--surface:#111827;--card:#0f1020;--card2:#151b2e;--border:rgba(255,255,255,.08);--b2:rgba(255,255,255,.13);
     --text:#e2e8f0;--muted:#64748b;--mut2:#94a3b8;--green:#22c55e;--amber:#f59e0b;--orange:#f97316;--red:#ef4444;--acc:#2dd4bf;--accd:#14b8a6}
@@ -38,6 +38,14 @@
   .entry .info .t1{font-family:'Bebas Neue';font-size:19px;letter-spacing:1px;color:var(--text)}
   .entry .info .t2{font-size:12px;color:var(--mut2);letter-spacing:.5px;margin-top:3px}
   .entry .acts{display:flex;gap:6px;flex-shrink:0}
+  /* Evento del club: mismo formato que el resto, pero se reconoce sin leer.
+     La franja de la izquierda y el numero del dia en violeta alcanzan; no
+     hace falta cambiarle la forma a la tarjeta. */
+  .entry.evento{border-color:rgba(167,139,250,.45);
+    box-shadow:inset 4px 0 0 0 #a78bfa;
+    background:linear-gradient(180deg,rgba(167,139,250,.10),var(--card))}
+  .entry.evento .date .d{color:#c4b5fd}
+  .entry.evento .info .t1{color:#ddd6fe}
   .icon-btn{width:34px;height:34px;border-radius:9px;border:1px solid var(--border);background:var(--card2);
     color:var(--mut2);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}
   .icon-btn.del{color:var(--red);border-color:rgba(239,68,68,.25)}
@@ -140,6 +148,7 @@
   .cal-ev{font-size:11px;line-height:1.25;padding:3px 6px;border-radius:6px;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .cal-ev.p{background:rgba(249,115,22,.16);border:1px solid rgba(249,115,22,.32);color:#fdba74}
   .cal-ev.e{background:rgba(45,212,191,.13);border:1px solid rgba(45,212,191,.28);color:#5eead4}
+  .cal-ev.ev{background:rgba(167,139,250,.18);border:1px solid rgba(167,139,250,.42);color:#c4b5fd;font-weight:600}
   .cal-ev .eh{opacity:.7;font-size:10px}
   .plan-legend{display:flex;gap:18px;margin-top:14px;font-size:12px;color:var(--mut2);flex-wrap:wrap}
   .plan-legend .lg{display:flex;align-items:center;gap:6px}
@@ -201,7 +210,7 @@
   }
 }
 </style>
-<link rel="stylesheet" href="movil.css?v=20260904-1416">
+<link rel="stylesheet" href="movil.css?v=20260904-2200">
 <!-- El calendario ya no necesita redirigir: lo hace selector_categoria.js
      para todos los datos de equipo, en un solo lugar. -->
 
@@ -278,6 +287,7 @@
     <div id="plan-grid"></div>
     <div class="plan-legend">
       <div class="lg"><span class="dot" style="background:#f97316"></span> <span id="lg-partido">Partido</span></div>
+      <div class="lg"><span class="dot" style="background:#a78bfa"></span> <span id="lg-evento">Evento</span></div>
       <div class="lg"><span class="dot" style="background:#2dd4bf"></span> <span id="lg-entren">Entrenamiento</span></div>
       <div class="lg" style="color:var(--muted)" id="lg-tap">Tocá un evento para editarlo</div>
     </div>
@@ -286,7 +296,22 @@
 
 <script>
   var MESES=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
-  var TIPOS=['VOLLEYBALL SESSION','VIDEO SESSION','LIFTING SESSION','CHRISTMAS HOLIDAYS','Técnica','Táctica','Físico','Gimnasio','Recepción','Saque','Amistoso','Recuperación','Libre','Otro'];
+  var TIPOS=['VOLLEYBALL SESSION','VIDEO SESSION','LIFTING SESSION','CHRISTMAS HOLIDAYS','Técnica','Táctica','Físico','Gimnasio','Recepción','Saque','Amistoso','Recuperación','Libre','Presentación del equipo','Foto oficial','Evento del club','Otro'];
+
+  /* ══ EVENTOS DEL CLUB ═══════════════════════════════════════════════════
+     El calendario tenia dos formas de mostrar las cosas: partido (escudos y
+     "vs") o entrenamiento. La presentacion del equipo no es ninguna de las
+     dos, y metida como entrenamiento se perdia entre las practicas.
+
+     Esta es la tercera categoria. No es un tipo suelto: es una lista, asi que
+     agregar el proximo evento —una cena, un viaje, una firma de autografos—
+     es escribirlo en TIPOS y sumarlo aca abajo. Nada mas.
+
+     El color va aparte a proposito: naranja los partidos, verde agua los
+     entrenamientos, violeta los eventos. De un vistazo se distinguen los
+     tres sin leer.                                                          */
+  var EVENTOS = ['Presentación del equipo','Foto oficial','Evento del club'];
+  function esEvento(tipo){ return EVENTOS.indexOf(tipo||'') >= 0; }
 
   // ── Traducción de la vista (es/en/de) ──
   var CAL_I18N={
@@ -623,9 +648,10 @@ var FIXTURE_PRIMERA=[
         var dt=fmtDate(e.fecha);
         var t1=esc(e.tipo||'Entrenamiento');
         var _vb=venueBits(e); var _finR=(e.fechaFin&&e.fechaFin!==e.fecha)?(function(){var _p=e.fechaFin.split('-');return '→ '+_p[2]+' '+(calT().mc[parseInt(_p[1],10)-1]||'');})():''; var _hr=e.hora?(e.horaFin?e.hora+'–'+e.horaFin:e.hora):''; var _mid=[_finR,_hr,esc(_vb.name||'')].filter(Boolean).join(' · '); var t2=_mid+(_vb.mapUrl?' <a href="'+esc(_vb.mapUrl)+'" target="_blank" rel="noopener" title="Abrir en Google Maps" style="text-decoration:none">📍</a>':'');
-        h+='<div class="entry">'+
+        var _ev = esEvento(e.tipo);
+        h+='<div class="entry'+(_ev?' evento':'')+'">'+
           '<div class="date"><div class="d">'+dt.d+'</div><div class="m">'+dt.m+'</div></div>'+
-          '<div class="info"><div class="t1">'+t1+'</div><div class="t2">'+t2+'</div></div>'+
+          '<div class="info"><div class="t1">'+(_ev?'\u2b50 ':'')+t1+'</div><div class="t2">'+t2+'</div></div>'+
           '<div class="acts">'+
             ((window.VB_esEditor&&!VB_esEditor())?'':
               '<button class="icon-btn" title="Editar" onclick="editEntry('+e.id+')">✏️</button>'+
@@ -712,7 +738,7 @@ var FIXTURE_PRIMERA=[
       evs.forEach(function(ev){
         var label, cl;
         if(ev.type==='p'){ cl='p'; label=(((ev.e.condicion||'').indexOf('Visit')===0)?'@ ':'vs ')+esc(ev.e.rival||'—'); }
-        else { cl='e'; label=esc(ev.e.tipo||'Entren.'); }
+        else { cl = esEvento(ev.e.tipo) ? 'ev' : 'e'; label=esc(ev.e.tipo||'Entren.'); }
         var hora=ev.e.hora?'<span class="eh">'+esc(ev.e.hora)+'</span> ':'';
         h+='<div class="cal-ev '+cl+'" title="'+label+'" onclick="planEdit(\''+ev.type+'\','+ev.e.id+')">'+hora+label+'</div>';
       });
@@ -947,7 +973,7 @@ window.temporadaAlCalendario = function(){
 };
 
 </script>
-<script src="lang.js?v=20260904-1416" onerror="void 0"></script>
+<script src="lang.js?v=20260904-2200" onerror="void 0"></script>
 <script>
 /* ══ DEL CALENDARIO AL RESTO DE LA APP ═══════════════════════════════════
    El calendario ya tiene el fixture cargado. Estas dos funciones lo usan:
@@ -1084,7 +1110,7 @@ window.temporadaAlCalendario = function(){
   else setTimeout(poner, 300);
 })();
 </script>
-<script src="ayuda.js?v=20260904-1416"></script>
+<script src="ayuda.js?v=20260904-2200"></script>
 </body></html>
 
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->

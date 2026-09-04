@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20260904-1416"></script>
-<script src="selector_categoria.js?v=20260904-1416"></script>
+<script src="categorias_club.js?v=20260904-2200"></script>
+<script src="selector_categoria.js?v=20260904-2200"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -248,11 +248,11 @@ select, select option {
   background-color: #ffffff !important;
 }
 </style>
-<script src="datos_seguros.js?v=20260904-1416"></script>
-<script src="firebase.js?v=20260904-1416" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260904-1416"></script>
-<script src="lang.js?v=20260904-1416"></script>
-<script src="plantel_nafels.js?v=20260904-1416"></script>
+<script src="datos_seguros.js?v=20260904-2200"></script>
+<script src="firebase.js?v=20260904-2200" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260904-2200"></script>
+<script src="lang.js?v=20260904-2200"></script>
+<script src="plantel_nafels.js?v=20260904-2200"></script>
 
 <style>
 @media(max-width:768px){
@@ -351,7 +351,7 @@ select, select option {
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260904-1416">
+<link rel="stylesheet" href="movil.css?v=20260904-2200">
 </head>
 <body>
 <div id="fx"><div class="grid"></div><div class="sweep"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="vig"></div></div>
@@ -1394,9 +1394,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260904-1416"></script>
+<script src="chat_nafels.js?v=20260904-2200"></script>
 
-<script src="proximo_rival.js?v=20260904-1416" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js?v=20260904-2200" onerror="window.FIXTURE_DATA=null"></script>
 <script>
 /* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
    proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
@@ -1454,12 +1454,12 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   }catch(e){}
 })();
 </script>
-<script src="temporadas_menu.js?v=20260904-1416"></script>
+<script src="temporadas_menu.js?v=20260904-2200"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20260904-1416" defer></script>
+<script src="onesignal_push.js?v=20260904-2200" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -1527,7 +1527,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   }catch(e){}
 })();
 </script>
-<script src="ayuda.js?v=20260904-1416"></script>
+<script src="ayuda.js?v=20260904-2200"></script>
 </body>
 </html>
 
