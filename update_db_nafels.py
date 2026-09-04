@@ -312,6 +312,23 @@ def parse_dvw_both(fpath, temporada):
             elif skill=='B': blk[pnum].append(action)
             elif skill=='D': dfn[pnum].append(action)   # sección 8: defensa
 
+        # Entrenamiento: los dos lados son el mismo equipo.
+        # Si home y away se llaman igual, esto es el plantel entrenando
+        # contra si mismo. Antes la segunda vuelta pisaba a la primera y
+        # se perdian casi todas las acciones (228 quedaban en 3).
+        # Ahora se suman: cada jugador junta lo que hizo de los dos lados.
+        if team in result:
+            _ya = result[team]
+            for _k, _nuevo in [('atk',atk),('srv',srv),('rec',rec),('sets',sets),('blk',blk)]:
+                _viejo = _ya.get(_k) or {}
+                for _n, _acc in dict(_nuevo).items():
+                    _viejo[_n] = (_viejo.get(_n) or []) + _acc
+                _ya[_k] = _viejo
+            for _n, _p in (players or {}).items():
+                if _n not in _ya['players']:
+                    _ya['players'][_n] = _p
+            continue
+
         result[team]={'players':players,'atk':dict(atk),'srv':dict(srv),
                       'rec':dict(rec),'sets':dict(sets),'blk':dict(blk),'dfn':dict(dfn)}
     return result, date, home, away
