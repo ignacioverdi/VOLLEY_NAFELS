@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>EQUIPO — NAFELS VOLEY</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="lang.js?v=20260904-0906" onerror="void 0"></script>
-<script src="utils.js?v=20260904-0906" onerror="void 0"></script>
+<script src="lang.js?v=20260904-0916" onerror="void 0"></script>
+<script src="utils.js?v=20260904-0916" onerror="void 0"></script>
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260904-0906" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260904-0906" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260904-0906"></script>
+<script src="categorias_club.js?v=20260904-0916" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260904-0916" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260904-0916"></script>
   <!-- El plantel del club, con nombre y apellido. Es la lista de verdad:
      datos_equipo.js.enc solo trae a los que YA JUGARON, asi que un
      jugador nuevo no aparecia hasta su debut. -->
-<script src="plantel_nafels.js?v=20260904-0906" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20260904-0916" onerror="void 0"></script>
 <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
   <script>abrirDatos();</script>
 <style>
@@ -74,15 +74,15 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 20%,rg
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260904-0906" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260904-0906"></script>
+<script src="firebase.js?v=20260904-0916" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260904-0916"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260904-0906">
+<link rel="stylesheet" href="movil.css?v=20260904-0916">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260904-0906" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260904-0916" onerror="void 0"></script>
 </head>
 <body>
 
@@ -387,9 +387,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260904-0906"></script>
-<script src="temporadas_menu.js?v=20260904-0906"></script>
-<script src="ayuda.js?v=20260904-0906"></script>
+<script src="chat_nafels.js?v=20260904-0916"></script>
+<script src="temporadas_menu.js?v=20260904-0916"></script>
+<script src="ayuda.js?v=20260904-0916"></script>
 
 <script>
 /* ══ EL CUERPO TECNICO ═══════════════════════════════════════════════════
