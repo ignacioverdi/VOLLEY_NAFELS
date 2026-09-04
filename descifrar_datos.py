@@ -122,29 +122,28 @@ def main():
         ruta_js  = os.path.join(carpeta, *original.split('/'))
 
         # ══ NO PISAR UN ARCHIVO QUE EL USUARIO ACABA DE PONER ═══════════════
-        # El ciclo normal es cifrar -> borrar el .js. Asi que si el .js ESTA,
-        # es porque alguien lo puso a mano despues: tipicamente el
-        # mapa_videos_ent.js recien bajado de "Cargar videos".
+        # El ciclo normal es cifrar -> borrar el .js. Si el .js ESTA, es porque
+        # alguien lo puso a mano despues: tipicamente el mapa_videos_ent.js
+        # recien bajado de "Cargar videos". Antes se pisaba sin preguntar, y el
+        # link moria en el primer paso de HACER_TODO sin un solo aviso.
         #
-        # Antes se pisaba sin preguntar. El link de video se cargaba en la
-        # pantalla, se bajaba el archivo, se ponia en la carpeta, y el primer
-        # paso de HACER_TODO lo reemplazaba por el contenido viejo del .enc.
-        # El link desaparecia antes de que ningun motor lo viera, sin un solo
-        # aviso, y podias repetir el circuito entero las veces que quisieras.
+        # Solo vale para los archivos que se copian A MANO. Los demas los
+        # genera el propio HACER_TODO durante la corrida y siempre quedan mas
+        # nuevos que su version cifrada: conservarlos dejaria datos sin cifrar
+        # dando vueltas y el publicador los borraria del repo.
         #
-        # Se compara por fecha para no depender de la buena fe: gana el mas
-        # nuevo. El .enc se borra igual, asi el resto del ciclo sigue como
-        # siempre y al final se cifra el que quedo.
-        if os.path.exists(ruta_js):
+        # Los 2 segundos de tolerancia son para que un copiado lento o un reloj
+        # con poca precision no lo den por viejo.
+        A_MANO = ('mapa_videos.js', 'mapa_videos_ent.js', 'config_club.json')
+        if original in A_MANO and os.path.exists(ruta_js):
             try:
-                mas_nuevo = os.path.getmtime(ruta_js) > os.path.getmtime(ruta_enc)
+                if os.path.getmtime(ruta_js) > os.path.getmtime(ruta_enc) + 2:
+                    os.remove(ruta_enc)
+                    conservados.append(original)
+                    print('    %-40s CONSERVADO (el tuyo es mas nuevo)' % original)
+                    continue
             except OSError:
-                mas_nuevo = True
-            if mas_nuevo:
-                os.remove(ruta_enc)
-                conservados.append(original)
-                print('    %-40s CONSERVADO (el tuyo es mas nuevo)' % original)
-                continue
+                pass
 
         try:
             txt = open(ruta_enc, encoding='utf-8').read()
