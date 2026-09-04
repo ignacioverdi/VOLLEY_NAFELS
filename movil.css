@@ -569,3 +569,92 @@ tr.mi-fila {
     grid-template-columns: 1fr !important;
   }
 }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LAS TRES PANTALLAS QUE FALTABAN
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. RECEPCION: tres canchas lado a lado en 389 px ──────────────────────
+   Medido en la app: .zones-row reparte el ancho en tres columnas de 101,8 px.
+   Cada panel queda con 102 px utiles y adentro la cancha pide 228: por eso
+   los numeros del costado —EFIC, POTENCIA, PERFECTA— quedaban cortados.
+
+   No habia que achicar la cancha: habia que dejar de meter tres una al lado
+   de la otra. Con una por renglon, el panel pasa de 102 a 389 px y entran la
+   cancha y los numeros del costado sin tocarles el tamano.
+
+   La cancha en si —.zone-cards, sus tres columnas— no se toca: esas tres
+   columnas SON la cancha. */
+@media (max-width: 768px) {
+  .zones-row,
+  .acum-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── 2. OBJETIVOS: la fila de baterias, con deslizador ─────────────────────
+   Son once objetivos, cada uno pedido con min-width:60px, mas 64 px de la
+   etiqueta de la izquierda: 740 px dentro de 318. Achicarlos no es opcion,
+   ya estan al minimo, y apilarlos rompe la comparacion, que es justo para
+   que se lean de un vistazo uno al lado del otro.
+
+   Se desliza el bloque ENTERO, no cada fila por separado: asi los titulos, la
+   fila del jugador y la del equipo se mueven juntos y nunca se desalinean. */
+@media (max-width: 768px) {
+  #obj-jug-baterias,
+  #obj-cards,
+  #obj-jug-grid,
+  #eq-objetivos,
+  #objetivos-jugador {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px !important;
+  }
+  /* la barrita del deslizador, visible: si no, nada avisa que hay mas */
+  #obj-jug-baterias::-webkit-scrollbar,
+  #obj-cards::-webkit-scrollbar,
+  #obj-jug-grid::-webkit-scrollbar,
+  #eq-objetivos::-webkit-scrollbar,
+  #objetivos-jugador::-webkit-scrollbar {
+    height: 4px;
+  }
+  #obj-jug-baterias::-webkit-scrollbar-thumb,
+  #obj-cards::-webkit-scrollbar-thumb,
+  #obj-jug-grid::-webkit-scrollbar-thumb,
+  #eq-objetivos::-webkit-scrollbar-thumb,
+  #objetivos-jugador::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, .25);
+    border-radius: 2px;
+  }
+}
+
+/* ── 3. HEAT MAPS: la cancha a todo el ancho ───────────────────────────────
+   Opcion (a) de las dos que hablamos. Dos canchas por renglon dejarian cada
+   zona en unos 60 px: el numero entra, el porcentaje de abajo no, y el mapa
+   se mira justamente para comparar zonas de un vistazo.
+
+   A todo el ancho cada zona pasa de unos 95 a 125 px y el numero grande se
+   lee de lejos, que es como se usa: el telefono apoyado, mirando de reojo. */
+@media (max-width: 768px) {
+  .cancha, .court, .heatmap, .zonas, .mapa,
+  .cancha-wrap, .court-wrap, .mapa-cancha {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* La cancha no tiene una clase propia en todas las pantallas —en los heat
+     maps es un div sin nombre—, asi que en vez de perseguirla se le devuelve
+     el ancho al contenedor y ella lo ocupa sola.
+
+     Medido: los 20 px de relleno de cada lado de #content le comian 40 px al
+     mapa. Bajando a 8, la cancha pasa de 334 a 358 px, un 7% mas grande, sin
+     desbordar (queda 15 px de margen). En un mapa de calor eso es el numero
+     de cada zona leyendose de lejos, con el telefono apoyado. */
+  #content, .content {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+}
