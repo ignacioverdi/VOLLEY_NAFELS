@@ -246,6 +246,9 @@
       return;
     }
     var caja = document.createElement('div');
+    /* Con identificador propio para que movil.css pueda ubicarla. Sin esto
+       quedaba en el mismo rincon que el boton del escudo y se pisaban. */
+    caja.id = 'cat-flotante';
     caja.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:9998;'
       + 'background:rgba(10,12,24,.94);border:1px solid rgba(255,255,255,.14);'
       + 'border-radius:10px;padding:5px 7px;display:flex;align-items:center;gap:6px;'

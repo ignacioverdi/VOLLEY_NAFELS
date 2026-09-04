@@ -351,3 +351,91 @@ tr.mi-fila {
   /* un poco mas chicos, para que entren de a mas por renglon */
   .header-right *, .hdr-right * { font-size: 11.5px; }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LA CAPA FLOTANTE EN EL TELEFONO
+   ══════════════════════════════════════════════════════════════════════════
+
+   Cuatro cosas flotan sobre TODAS las pantallas, y ninguna sabe de las otras:
+
+       #club-escudo    volver al inicio       abajo a la izquierda
+       #cat-flotante   elegir categoria       abajo a la izquierda  <- mismo rincon
+       #ayuda-btn      el signo de pregunta   abajo a la derecha
+       #vb-chat-btn    la pelota del chat     abajo a la derecha
+
+   En una computadora sobra el ancho y casi no se nota. En un telefono de
+   390 px la caja de categoria mide 270 px y arranca en el mismo punto que el
+   escudo: se montan una encima de la otra y se lee "...RIA" con el escudo
+   tapando la palabra. Ademas, las cuatro estan a 12-22 px del piso, asi que
+   tapan la ultima fila de cualquier tabla —el renglon de TOTALES, que es
+   justo el que mas se mira.
+
+   Se resuelve en tres pasos:
+     1. la categoria sube y se apoya ARRIBA del escudo, no al lado
+     2. los cuatro botones se achican, que en un telefono 46 px es mucho
+     3. la pagina reserva lugar abajo, para que nada quede tapado
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  /* 1. cada uno en su lugar, sin pisarse ───────────────────────────────── */
+  #club-escudo {
+    left: 10px !important;
+    bottom: 10px !important;
+    width: 38px !important;
+    height: 38px !important;
+  }
+  #cat-flotante {
+    left: 10px !important;
+    bottom: 56px !important;                    /* justo arriba del escudo */
+    max-width: calc(100vw - 20px) !important;
+    padding: 4px 6px !important;
+  }
+  #cat-flotante select {
+    max-width: 46vw !important;
+    font-size: 12px !important;
+  }
+
+  /* 2. los de la derecha, mas chicos y sin encimarse entre ellos ───────── */
+  #ayuda-btn {
+    width: 34px !important;
+    height: 34px !important;
+    right: 12px !important;
+    bottom: 62px !important;
+  }
+  #vb-chat-btn {
+    width: 46px !important;
+    height: 46px !important;
+    right: 10px !important;
+    bottom: 10px !important;
+  }
+
+  /* 3. que la ultima fila no quede debajo de los botones ───────────────── */
+  body {
+    padding-bottom: 104px !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LAS TARJETAS DE NUMEROS QUE SE SEGUIAN CORTANDO
+   ══════════════════════════════════════════════════════════════════════════
+
+   Mas arriba ya se bajan a una columna las grillas con el ancho escrito en el
+   atributo style. Pero varias pantallas lo definen en su propia hoja de
+   estilos y por eso quedaban afuera. El caso tipico es el resumen del
+   entrenador:
+
+       .stats-row { grid-template-columns: repeat(auto-fill, minmax(160px,1fr)) }
+
+   En 390 px eso da DOS columnas de 154 px, y adentro de cada tarjeta hay
+   cuatro numeros con sus etiquetas que piden unos 170. Por eso en el telefono
+   se leia "63  2  0" y el ultimo "Errores" aparecia cortado por la mitad.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .stats-row,
+  .kpis,
+  .resumen-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
