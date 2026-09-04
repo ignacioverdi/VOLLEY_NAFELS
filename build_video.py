@@ -303,10 +303,64 @@ def build(folder, ent=False):
         if r and r[0] and r[0] not in matches: matches[r[0]]=r[1]
     return matches
 
+def _leer_enc(nombre):
+    """Lee un archivo de datos cifrado (.enc) y devuelve su texto.
+
+    Hace falta porque cifrar_datos.py borra el .js original: si build_video
+    corre despues del cifrado, el archivo suelto ya no existe y los links
+    se perderian.
+    """
+    import base64, hashlib, json as _json
+    ruta = nombre + '.enc'
+    if not os.path.isfile(ruta):
+        return None
+    try:
+        llave_txt = open('LLAVE.txt', encoding='utf-8').read().strip()
+    except Exception:
+        return None
+    try:
+        crudo = open(ruta, encoding='utf-8', errors='replace').read()
+        m = re.search(r'window\.__D\["[^"]+"\]\s*=\s*"([^"]*)"', crudo, re.S)
+        if not m:
+            return None
+        datos = bytearray(base64.b64decode(m.group(1)))
+
+        # la clave del archivo: sha256(llave + nombre), igual que en la app
+        llave = bytes.fromhex(llave_txt) if re.fullmatch(r'[0-9a-fA-F]+', llave_txt) \
+                else llave_txt.encode('utf-8')
+        clave = hashlib.sha256(llave + nombre.encode('utf-8')).digest()
+
+        bloque = 0
+        pos = 0
+        while pos < len(datos):
+            ent = clave + bloque.to_bytes(8, 'big')
+            f = hashlib.sha256(ent).digest()
+            for j in range(32):
+                if pos >= len(datos):
+                    break
+                datos[pos] ^= f[j]
+                pos += 1
+            bloque += 1
+        return datos.decode('utf-8', errors='replace')
+    except Exception:
+        return None
+
+
 def read_mapa_links(ent=False):
     mapa_file = 'mapa_videos_ent.js' if ent else 'mapa_videos.js'
     mapa_glob = 'MAPA_VIDEOS_ENT' if ent else 'MAPA_VIDEOS'
     links={}
+    # Si el .js no esta (cifrar_datos lo borro), se lee el .enc.
+    if not os.path.isfile(mapa_file):
+        _txt = _leer_enc(mapa_file)
+        if _txt:
+            try:
+                _mm = re.search(r'window\\.'+mapa_glob+r'\\s*=\\s*(\\{.*?\\})\\s*;', _txt, re.S)
+                if _mm:
+                    for k, v in json.loads(_mm.group(1)).items():
+                        if v: links[k] = v
+            except Exception:
+                pass
     if os.path.isfile(mapa_file):
         try:
             mt=open(mapa_file,encoding='utf-8').read()

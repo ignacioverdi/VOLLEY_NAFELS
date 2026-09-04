@@ -1,58 +1,47 @@
 ═══════════════════════════════════════════════════════════════════════════════
-   DOS ARREGLOS MÁS
+   LOS LINKS DE VIDEO Y EL CIFRADO
 ═══════════════════════════════════════════════════════════════════════════════
 
-   1)  RECEPCION_POR_TIPO.py
+── EL PROBLEMA ───────────────────────────────────────────────────────────────
 
-       Las recepciones no se separaban en flotado y potencia.
+   1. bajás mapa_videos_ent.js desde "Cargar videos"
+   2. lo ponés en la carpeta
+   3. cifrar_datos.py lo convierte en .enc  Y BORRA EL .js
+   4. HACER_TODO corre build_video
+   5. build_video busca mapa_videos_ent.js → ya no está
 
-       El motor miraba el SAQUE anterior para decidirlo. En un partido
-       funciona, pero con máquina de saque no hay línea de saque: de 165
-       recepciones, 102 no tenían saque antes y quedaban sin clasificar.
+           if os.path.isfile('mapa_videos_ent.js'):   # False
 
-       El dato estaba en la propia línea (RM / RQ). Ahora se lee de ahí.
+   Genera el archivo vacío. El video queda cargado en la pantalla pero
+   nunca llega a los cortes.
 
-       Probado con tu entrenamiento:
-           flotado  (RM):  62   ← el .dvw dice 62
-           potencia (RQ): 103   ← el .dvw dice 103
-           total        : 165
+   Lo confirmé: mapa_videos_ent.js.enc pesa 135 bytes — el envoltorio
+   vacío, sin ningún link adentro.
 
 
-   2)  LIMPIAR_VIDEOS_FANTASMA.py
+── LA SOLUCIÓN ───────────────────────────────────────────────────────────────
 
-       Que "Cargar videos" no liste sesiones cuyo .dvw ya no existe.
-
-       build_video.py hace un "merge seguro" que conserva todo lo anterior
-       y nunca saca nada. Por eso sigue apareciendo Campana.
-
-       Es el mismo patrón que ya corregimos en el motor de estadísticas,
-       pero en otro archivo.
+   Si el .js no está, build_video lee el .enc y lo descifra con LLAVE.txt.
+   Así el orden de los pasos deja de importar.
 
 
 ── LOS PASOS ─────────────────────────────────────────────────────────────────
 
-       1. RECEPCION_POR_TIPO.py        →  S
-       2. LIMPIAR_VIDEOS_FANTASMA.py   →  S
-       3. HACER_TODO.bat
+       1. LINKS_VIDEO_CIFRADOS.py   →  S
+       2. volvé a cargar el link en "Cargar videos"
+          (el actual se perdió al generarse vacío)
+       3. poné mapa_videos_ent.js en la carpeta
+       4. HACER_TODO.bat
 
 
-── SOBRE LOS ERRORES DE SAQUE ────────────────────────────────────────────────
+── UNA ACLARACIÓN HONESTA ────────────────────────────────────────────────────
 
-   No hay ninguno, y es correcto: revisé el .dvw y ningún saque tiene "=".
+   Esta parte no la pude probar acá: LLAVE.txt no se sube al repo, y está
+   bien que así sea. Verifiqué que el código compile y que la lógica de
+   descifrado sea la misma que usa la app, pero el descifrado real se
+   comprueba recién al correrlo.
 
-       #  2  ·  +  9  ·  !  15  ·  -  37  ·  =  0
-
-   El scout no cargó errores de saque en ese trabajo.
-
-
-── SOBRE LA PANTALLA DE RECEPCIÓN ────────────────────────────────────────────
-
-   No estaba vacía: estaba en modo PARTIDO. Tocando "🏋️ ENT" arriba
-   aparecen los datos del entrenamiento:
-
-       SAQUE FLOTADO — POR ZONA DE ORIGEN
-       POS 5: 29% efectividad · 17 recepciones
-       POS 6: 33% · 3
-       POS 1: 50%
+   Si al correr HACER_TODO el video sigue sin aparecer en cortes, avisame
+   con lo que muestre la consola y lo termino de ajustar.
 
 ═══════════════════════════════════════════════════════════════════════════════
