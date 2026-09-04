@@ -1,17 +1,17 @@
 {
   "_leeme": "La configuracion de NAFELS. La usa gen_informe.py para saber cual es el club propio y como se llama cada equipo de la liga. Sin esto, 'Volley Amriswil (NLA Men)' y 'Amriswil' cuentan como dos equipos distintos y el informe sale con 17 equipos en vez de 8.",
-
   "club": "Nafels",
   "nombre": "Biogas Volley Näfels",
   "equipo": "Nafels",
   "liga": "NLA Suiza",
   "pais": "Suiza",
-
   "_torneos": "La liga suiza va de septiembre a abril: arranca en un año y termina en el siguiente. 'inicio' es el mes en que empieza y 'cruza' que termina al año siguiente.",
   "torneos": {
-    "NLA Suiza": { "inicio": 9, "cruza": true }
+    "NLA Suiza": {
+      "inicio": 9,
+      "cruza": true
+    }
   },
-
   "_equipos": "El nombre largo tal como viene en el .dvw y el corto que se muestra. El nombre cambia todos los años con el patrocinador, por eso estan las variantes.",
   "equipos": {
     "Biogas Volley Näfels (NLA Men)": "Nafels",
@@ -31,6 +31,12 @@
     "CSU Corona Brasov": "Brasov",
     "Neftohimic 2010 BURGAS": "Burgas",
     "SCM ZALAU": "Zalau",
-    "SCM Zalau": "Zalau"
+    "SCM Zalau": "Zalau",
+    "NAFELS": "Nafels",
+    "AXPO NAFELS": "Nafels",
+    "AXPO VOLLEY NAFELS": "Nafels",
+    "VOLLEY NAFELS": "Nafels",
+    "NAFELS VOLLEY": "Nafels",
+    "BIOGAS VOLLEY NAFELS": "Nafels"
   }
 }

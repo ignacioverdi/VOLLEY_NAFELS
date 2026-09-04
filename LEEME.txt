@@ -1,47 +1,58 @@
 ═══════════════════════════════════════════════════════════════════════════════
-   LOS LINKS DE VIDEO Y EL CIFRADO
+   LA CAUSA DE RAÍZ — era una sola
 ═══════════════════════════════════════════════════════════════════════════════
 
-── EL PROBLEMA ───────────────────────────────────────────────────────────────
+   Tenías razón vos con lo de los nombres. Los tres problemas que
+   reportaste son el mismo, visto desde tres pantallas distintas.
 
-   1. bajás mapa_videos_ent.js desde "Cargar videos"
-   2. lo ponés en la carpeta
-   3. cifrar_datos.py lo convierte en .enc  Y BORRA EL .js
-   4. HACER_TODO corre build_video
-   5. build_video busca mapa_videos_ent.js → ya no está
 
-           if os.path.isfile('mapa_videos_ent.js'):   # False
+── QUÉ PASA ──────────────────────────────────────────────────────────────────
 
-   Genera el archivo vacío. El video queda cargado en la pantalla pero
-   nunca llega a los cortes.
+   Tu .sq nuevo dice "AXPO NAFELS". Ese nombre NO está en la tabla de
+   config_club.json, que solo tiene:
 
-   Lo confirmé: mapa_videos_ent.js.enc pesa 135 bytes — el envoltorio
-   vacío, sin ningún link adentro.
+       Biogas Volley Näfels (NLA Men)
+       Volley NFELS
+       Volley Nfels
+
+   Sin traducción, el motor guarda el equipo con otra clave:
+
+       plan_partido_data  →  'axponafels'
+       las pantallas      →  buscan  'nafels'
+
+   Y ahí se rompe todo lo que depende de encontrar al equipo:
+
+       · el acceso a RECEPCIÓN en el perfil (lo confirmé: con 'nafels'
+         hay 0 jugadores, con 'axponafels' están los 6 con rol reception,
+         incluido BARTHOLET #11)
+       · las baterías del jugador, todas en cero
+       · los videos de entrenamiento, que no se asocian
 
 
 ── LA SOLUCIÓN ───────────────────────────────────────────────────────────────
 
-   Si el .js no está, build_video lee el .enc y lo descifra con LLAVE.txt.
-   Así el orden de los pasos deja de importar.
+   1)  NOMBRES_DEL_CLUB.py
+
+       Agrega a la tabla las 6 formas que faltaban:
+
+           NAFELS · AXPO NAFELS · AXPO VOLLEY NAFELS
+           VOLLEY NAFELS · NAFELS VOLLEY · BIOGAS VOLLEY NAFELS
+
+       El año que viene, cuando cambie el sponsor, ya está cubierto.
+
+   2)  LINKS_VIDEO_V2.py
+
+       build_video no leía los links porque cifrar_datos borra el .js
+       después de cifrarlo. Ahora lee el .enc si el .js no está.
+
+       Probado de verdad esta vez: cifré un archivo, borré el original,
+       y recuperó el link.
 
 
 ── LOS PASOS ─────────────────────────────────────────────────────────────────
 
-       1. LINKS_VIDEO_CIFRADOS.py   →  S
-       2. volvé a cargar el link en "Cargar videos"
-          (el actual se perdió al generarse vacío)
-       3. poné mapa_videos_ent.js en la carpeta
-       4. HACER_TODO.bat
-
-
-── UNA ACLARACIÓN HONESTA ────────────────────────────────────────────────────
-
-   Esta parte no la pude probar acá: LLAVE.txt no se sube al repo, y está
-   bien que así sea. Verifiqué que el código compile y que la lógica de
-   descifrado sea la misma que usa la app, pero el descifrado real se
-   comprueba recién al correrlo.
-
-   Si al correr HACER_TODO el video sigue sin aparecer en cortes, avisame
-   con lo que muestre la consola y lo termino de ajustar.
+       1. NOMBRES_DEL_CLUB.py     →  S
+       2. LINKS_VIDEO_V2.py       →  S
+       3. HACER_TODO.bat
 
 ═══════════════════════════════════════════════════════════════════════════════
