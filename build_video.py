@@ -309,40 +309,25 @@ def _leer_enc(nombre):
     Hace falta porque cifrar_datos.py borra el .js original: si build_video
     corre despues del cifrado, el archivo suelto ya no existe y los links
     se perderian.
+
+    Usa las funciones de descifrar_datos.py en vez de reimplementarlas, para
+    que siga funcionando si algun dia cambia el cifrado.
     """
-    import base64, hashlib, json as _json
     ruta = nombre + '.enc'
     if not os.path.isfile(ruta):
         return None
     try:
-        llave_txt = open('LLAVE.txt', encoding='utf-8').read().strip()
-    except Exception:
-        return None
-    try:
+        import descifrar_datos as _dd
+        llave = _dd.llave_guardada(os.getcwd()) or _dd.llave_guardada('.')
+        if not llave:
+            return None
         crudo = open(ruta, encoding='utf-8', errors='replace').read()
-        m = re.search(r'window\.__D\["[^"]+"\]\s*=\s*"([^"]*)"', crudo, re.S)
+        m = re.search(r'window\.__D\["([^"]+)"\]\s*=\s*"([^"]*)"', crudo, re.S)
         if not m:
             return None
-        datos = bytearray(base64.b64decode(m.group(1)))
-
-        # la clave del archivo: sha256(llave + nombre), igual que en la app
-        llave = bytes.fromhex(llave_txt) if re.fullmatch(r'[0-9a-fA-F]+', llave_txt) \
-                else llave_txt.encode('utf-8')
-        clave = hashlib.sha256(llave + nombre.encode('utf-8')).digest()
-
-        bloque = 0
-        pos = 0
-        while pos < len(datos):
-            ent = clave + bloque.to_bytes(8, 'big')
-            f = hashlib.sha256(ent).digest()
-            for j in range(32):
-                if pos >= len(datos):
-                    break
-                datos[pos] ^= f[j]
-                pos += 1
-            bloque += 1
-        return datos.decode('utf-8', errors='replace')
-    except Exception:
+        return _dd.descifrar(m.group(2), llave, m.group(1))
+    except Exception as e:
+        print('   (aviso: no pude leer %s: %s)' % (ruta, str(e)[:60]))
         return None
 
 
