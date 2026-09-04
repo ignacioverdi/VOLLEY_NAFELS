@@ -325,7 +325,13 @@ def parse_dvw_both(fpath, temporada):
     date = m.group(1) if m else ''
     result = {}
 
+    # Entrenamiento: si los dos lados son el mismo club, es el plantel
+    # entrenando contra si mismo. Se procesa UNA sola vez, tomando las
+    # acciones de los dos lados.
+    _MISMO_EQUIPO = bool(home) and bool(away) and home.strip().upper() == away.strip().upper()
     for team, pfx, section in [(home,'*','[3PLAYERS-H]'),(away,'a','[3PLAYERS-V]')]:
+        if _MISMO_EQUIPO and pfx == 'a':
+            continue   # ya se tomaron las dos mitades en la primera vuelta
         if not team: continue
         players = get_players(lines, section)
         rival = away if pfx=='*' else home
@@ -377,7 +383,10 @@ def parse_dvw_both(fpath, temporada):
             if skill=='S':
                 prev_srv_orig=orig
                 current_atype=0 if t!=pfx else 1
-            if t!=pfx: continue
+            # En un entrenamiento los dos lados son el mismo equipo y las
+            # acciones suelen venir todas de un lado. Si se filtrara por
+            # lado, la segunda vuelta las descartaria todas.
+            if not _MISMO_EQUIPO and t!=pfx: continue
 
             action={'pnum':pnum,'stype':stype,'effect':effect,'combo': normalize_combo(combo),
                     'orig':orig,'dest':dest,'setter_pos':setter_pos,'set_num':set_num,
