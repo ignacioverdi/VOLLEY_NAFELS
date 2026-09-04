@@ -24,6 +24,15 @@ ESTRUCTURA DE ARCHIVOS:
 import os, re, json, argparse, shutil
 from collections import defaultdict, Counter
 
+# Traduce las combinaciones de ataque de DataVolley a las que usa el sistema.
+# El motor de partidos ya la tenia; el de entrenamientos la usaba sin
+# definirla, y por eso fallaba al leer cada .dvw.
+COMBO_EQUIV = {
+    'W4':'X5','G4':'V5','J1':'X1','J4':'XM','J3':'X2','J2':'X7','J5':'CB',
+    'W2':'X6','G2':'V6','Y9':'X8','G9':'V8','Y8':'XP','G8':'VP',
+}
+
+
 
 # ── NOMBRES CORTOS DE LOS CLUBES ──────────────────────────────────────────
 # Los .dvw traen el nombre completo del club. En pantalla no entra y se lee
