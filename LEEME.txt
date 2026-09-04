@@ -1,50 +1,58 @@
 ═══════════════════════════════════════════════════════════════════════════════
-   ENTRENAMIENTOS — LOS DOS ARREGLOS
+   DOS ARREGLOS MÁS
 ═══════════════════════════════════════════════════════════════════════════════
 
-   Correlos en este orden, en VOLLEY_NAFELS\
+   1)  RECEPCION_POR_TIPO.py
+
+       Las recepciones no se separaban en flotado y potencia.
+
+       El motor miraba el SAQUE anterior para decidirlo. En un partido
+       funciona, pero con máquina de saque no hay línea de saque: de 165
+       recepciones, 102 no tenían saque antes y quedaban sin clasificar.
+
+       El dato estaba en la propia línea (RM / RQ). Ahora se lee de ahí.
+
+       Probado con tu entrenamiento:
+           flotado  (RM):  62   ← el .dvw dice 62
+           potencia (RQ): 103   ← el .dvw dice 103
+           total        : 165
 
 
-   1)  ENTRENAMIENTOS_COMPLETO.py
+   2)  LIMPIAR_VIDEOS_FANTASMA.py
 
-       Que el entrenamiento aparezca en TODAS las pantallas: análisis,
-       dashboard y el perfil de cada jugador.
+       Que "Cargar videos" no liste sesiones cuyo .dvw ya no existe.
 
-       Tres causas:
-         · COMBO_EQUIV no estaba definida → el motor fallaba al leer
-         · el filtro por lado, en el armado del historial
-         · el filtro por sets: un entrenamiento no tiene sets ganados
-           ni perdidos, así que la sesión se descartaba entera
+       build_video.py hace un "merge seguro" que conserva todo lo anterior
+       y nunca saca nada. Por eso sigue apareciendo Campana.
 
-       Probado: 63 saques y 165 recepciones, los mismos que el .dvw.
+       Es el mismo patrón que ya corregimos en el motor de estadísticas,
+       pero en otro archivo.
 
 
-   2)  LIMPIAR_SESIONES_FANTASMA.py
+── LOS PASOS ─────────────────────────────────────────────────────────────────
 
-       Que la base no conserve sesiones cuyo .dvw ya no existe.
-
-       El motor acumulaba y nunca sacaba nada. Por eso seguía apareciendo
-       "AXPO NAFELS vs Campana" y la sesión del 30/07, con jugadores que
-       nunca participaron.
-
-       Probado: sacó la sesión vieja y dejó la real.
+       1. RECEPCION_POR_TIPO.py        →  S
+       2. LIMPIAR_VIDEOS_FANTASMA.py   →  S
+       3. HACER_TODO.bat
 
 
-   3)  HACER_TODO.bat
+── SOBRE LOS ERRORES DE SAQUE ────────────────────────────────────────────────
+
+   No hay ninguno, y es correcto: revisé el .dvw y ningún saque tiene "=".
+
+       #  2  ·  +  9  ·  !  15  ·  -  37  ·  =  0
+
+   El scout no cargó errores de saque en ese trabajo.
 
 
-── DESPUÉS TIENE QUE QUEDAR ──────────────────────────────────────────────────
+── SOBRE LA PANTALLA DE RECEPCIÓN ────────────────────────────────────────────
 
-   1 sesión: 03/09/2026
-   6 jugadores: BOGDANOVSKI · SCHMID J · ROFFLER · BARTHOLET · DURDOS · BRUDERER
-   63 saques · 165 recepciones
-   sin VAZQUEZ ni ninguno que no participó
+   No estaba vacía: estaba en modo PARTIDO. Tocando "🏋️ ENT" arriba
+   aparecen los datos del entrenamiento:
 
-   Y la sesión de prueba de Campana, desaparecida.
-
-
-── LO MISMO SIRVE PARA GELP Y LA PLANTILLA ───────────────────────────────────
-
-   Cuando esto esté confirmado en NÄFELS, los mismos dos programas.
+       SAQUE FLOTADO — POR ZONA DE ORIGEN
+       POS 5: 29% efectividad · 17 recepciones
+       POS 6: 33% · 3
+       POS 1: 50%
 
 ═══════════════════════════════════════════════════════════════════════════════

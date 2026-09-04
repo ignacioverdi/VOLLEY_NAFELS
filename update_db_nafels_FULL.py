@@ -2258,7 +2258,14 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
                 elif _styp in('Q','T'): pa[pn]['s_pot'].append({'effect':ef})
             elif sk=='R':
                 pa[pn]['r'].append({'effect':ef})
-                if _last_serve_tp=='flotado': pa[pn]['r_flo'].append({'effect':ef})
+                # El tipo lo trae la propia recepcion: RM/RH flotado,
+                # RQ/RT potencia. Antes se miraba el saque anterior, y con
+                # maquina de saque no hay saque que mirar: quedaban sin
+                # clasificar 102 de 165 recepciones.
+                _rtyp = code[3] if len(code)>3 else ''
+                if   _rtyp in ('M','H'): pa[pn]['r_flo'].append({'effect':ef})
+                elif _rtyp in ('Q','T'): pa[pn]['r_pot'].append({'effect':ef})
+                elif _last_serve_tp=='flotado': pa[pn]['r_flo'].append({'effect':ef})
                 elif _last_serve_tp=='potencia': pa[pn]['r_pot'].append({'effect':ef})
             elif sk=='B': pa[pn]['b'].append({'effect':ef})
 

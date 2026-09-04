@@ -1,5 +1,5 @@
 window.HISTORIAL_DATA = {
-  "generado": "04/09/2026, 07:42:17",
+  "generado": "04/09/2026, 07:44:05",
   "entrenamientos": [
     {
       "fecha": "03/09/2026",
@@ -51,24 +51,24 @@ window.HISTORIAL_DATA = {
           "rAdm": 4,
           "rVend": 1,
           "rFlo": {
-            "T": 27,
-            "Punto": 10,
-            "Pos": 6,
-            "Adm": 4,
-            "Neg": 3,
-            "Vend": 1,
-            "Err": 3,
-            "Eff": 35
-          },
-          "rPot": {
-            "T": 0,
-            "Punto": 0,
-            "Pos": 0,
-            "Adm": 0,
-            "Neg": 0,
+            "T": 11,
+            "Punto": 4,
+            "Pos": 4,
+            "Adm": 1,
+            "Neg": 2,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 55
+          },
+          "rPot": {
+            "T": 16,
+            "Punto": 6,
+            "Pos": 2,
+            "Adm": 3,
+            "Neg": 1,
+            "Vend": 1,
+            "Err": 3,
+            "Eff": 22
           },
           "aT": 0,
           "aEff": 0,
@@ -147,24 +147,24 @@ window.HISTORIAL_DATA = {
           "rAdm": 9,
           "rVend": 1,
           "rFlo": {
-            "T": 27,
-            "Punto": 5,
-            "Pos": 8,
-            "Adm": 9,
-            "Neg": 4,
-            "Vend": 1,
-            "Err": 0,
-            "Eff": 31
-          },
-          "rPot": {
-            "T": 0,
-            "Punto": 0,
-            "Pos": 0,
-            "Adm": 0,
-            "Neg": 0,
+            "T": 10,
+            "Punto": 1,
+            "Pos": 3,
+            "Adm": 4,
+            "Neg": 2,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 25
+          },
+          "rPot": {
+            "T": 17,
+            "Punto": 4,
+            "Pos": 5,
+            "Adm": 5,
+            "Neg": 2,
+            "Vend": 1,
+            "Err": 0,
+            "Eff": 35
           },
           "aT": 0,
           "aEff": 0,
@@ -243,24 +243,24 @@ window.HISTORIAL_DATA = {
           "rAdm": 10,
           "rVend": 2,
           "rFlo": {
-            "T": 29,
-            "Punto": 5,
-            "Pos": 5,
-            "Adm": 10,
-            "Neg": 5,
-            "Vend": 2,
-            "Err": 2,
-            "Eff": 16
-          },
-          "rPot": {
-            "T": 0,
-            "Punto": 0,
-            "Pos": 0,
-            "Adm": 0,
-            "Neg": 0,
+            "T": 12,
+            "Punto": 2,
+            "Pos": 2,
+            "Adm": 5,
+            "Neg": 3,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 25
+          },
+          "rPot": {
+            "T": 17,
+            "Punto": 3,
+            "Pos": 3,
+            "Adm": 5,
+            "Neg": 2,
+            "Vend": 2,
+            "Err": 2,
+            "Eff": 9
           },
           "aT": 0,
           "aEff": 0,
@@ -339,24 +339,24 @@ window.HISTORIAL_DATA = {
           "rAdm": 12,
           "rVend": 2,
           "rFlo": {
-            "T": 29,
-            "Punto": 4,
-            "Pos": 7,
-            "Adm": 12,
-            "Neg": 1,
-            "Vend": 2,
-            "Err": 3,
-            "Eff": 12
-          },
-          "rPot": {
-            "T": 0,
-            "Punto": 0,
-            "Pos": 0,
-            "Adm": 0,
+            "T": 11,
+            "Punto": 1,
+            "Pos": 5,
+            "Adm": 4,
             "Neg": 0,
             "Vend": 0,
-            "Err": 0,
-            "Eff": 0
+            "Err": 1,
+            "Eff": 23
+          },
+          "rPot": {
+            "T": 18,
+            "Punto": 3,
+            "Pos": 2,
+            "Adm": 8,
+            "Neg": 1,
+            "Vend": 2,
+            "Err": 2,
+            "Eff": 6
           },
           "aT": 0,
           "aEff": 0,
@@ -435,24 +435,24 @@ window.HISTORIAL_DATA = {
           "rAdm": 2,
           "rVend": 1,
           "rFlo": {
-            "T": 29,
-            "Punto": 3,
-            "Pos": 13,
-            "Adm": 2,
-            "Neg": 2,
-            "Vend": 1,
-            "Err": 8,
-            "Eff": 3
-          },
-          "rPot": {
-            "T": 0,
+            "T": 11,
             "Punto": 0,
-            "Pos": 0,
+            "Pos": 11,
             "Adm": 0,
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
+          },
+          "rPot": {
+            "T": 18,
+            "Punto": 3,
+            "Pos": 2,
+            "Adm": 2,
+            "Neg": 2,
+            "Vend": 1,
+            "Err": 8,
+            "Eff": -25
           },
           "aT": 0,
           "aEff": 0,
@@ -531,24 +531,24 @@ window.HISTORIAL_DATA = {
           "rAdm": 6,
           "rVend": 0,
           "rFlo": {
-            "T": 23,
+            "T": 7,
             "Punto": 2,
-            "Pos": 8,
-            "Adm": 5,
-            "Neg": 5,
+            "Pos": 2,
+            "Adm": 0,
+            "Neg": 2,
             "Vend": 0,
-            "Err": 3,
-            "Eff": 13
+            "Err": 1,
+            "Eff": 29
           },
           "rPot": {
-            "T": 1,
+            "T": 17,
             "Punto": 0,
-            "Pos": 0,
-            "Adm": 1,
-            "Neg": 0,
+            "Pos": 6,
+            "Adm": 6,
+            "Neg": 3,
             "Vend": 0,
-            "Err": 0,
-            "Eff": 0
+            "Err": 2,
+            "Eff": 6
           },
           "aT": 0,
           "aEff": 0,
