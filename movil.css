@@ -378,7 +378,7 @@ tr.mi-fila {
 
 @media (max-width: 768px) {
 
-  /* 1. cada uno en su lugar, sin pisarse ───────────────────────────────── */
+  /* 1. en el telefono, los dos mas chicos ──────────────────────────────── */
   #club-escudo {
     left: 10px !important;
     bottom: 10px !important;
@@ -387,7 +387,6 @@ tr.mi-fila {
   }
   #cat-flotante {
     left: 10px !important;
-    bottom: 56px !important;                    /* justo arriba del escudo */
     max-width: calc(100vw - 20px) !important;
     padding: 4px 6px !important;
   }
@@ -437,5 +436,56 @@ tr.mi-fila {
   .kpis,
   .resumen-grid {
     grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LA CATEGORIA VA ARRIBA DEL ESCUDO, SIEMPRE
+   ══════════════════════════════════════════════════════════════════════════
+   Medido en la app: los dos nacen en left:12 bottom:12, asi que se pisan
+   tambien en la computadora, no solo en el telefono. Por eso esta regla va
+   fuera de las medidas de pantalla.
+
+   66 px deja libre al escudo en los dos tamanos: 12 + 46 en la computadora,
+   10 + 38 en el telefono.
+   ══════════════════════════════════════════════════════════════════════════ */
+#cat-flotante {
+  bottom: 66px !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LA COLUMNA DEL NOMBRE, FIJA MIENTRAS LA TABLA SE DESLIZA
+   ══════════════════════════════════════════════════════════════════════════
+
+   Las tablas ya se deslizan de costado, pero al hacerlo el nombre del jugador
+   se va de pantalla y quedan numeros sueltos sin saber de quien son. Y como
+   nada avisa que se puede deslizar, la columna cortada al borde parece un
+   error y no una tabla que sigue.
+
+   Dejando fija la primera columna se resuelven las dos cosas: siempre se sabe
+   de quien es la fila, y el movimiento del resto contra un nombre quieto es lo
+   que le dice al jugador que hay mas para ver.
+
+   La sombrita del borde derecho marca donde termina lo fijo y empieza lo que
+   se mueve.
+
+   El fondo tiene que ser opaco o se transparenta lo que pasa por debajo. Se
+   usa el color de tarjeta de cada pantalla; las pocas que no lo definen caen
+   en el mas usado del sistema.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  table th:first-child,
+  table td:first-child {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 2 !important;
+    background: var(--card, #0d0e1a) !important;
+    box-shadow: 1px 0 0 0 rgba(255, 255, 255, .07);
+  }
+  /* La franja verde del propio jugador se mantiene sobre el fondo opaco. */
+  tr.mi-fila > td:first-child {
+    box-shadow: inset 3px 0 0 0 #22C55E, 1px 0 0 0 rgba(255, 255, 255, .07);
   }
 }
