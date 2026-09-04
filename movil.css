@@ -536,3 +536,36 @@ tr.mi-fila {
     font-size: 11.5px !important;
   }
 }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   UNA TARJETA POR RENGLON EN EL TELEFONO
+   ══════════════════════════════════════════════════════════════════════════
+
+   Habia dos reglas peleandose, las dos con !important y con la misma fuerza,
+   asi que ganaba la ultima escrita:
+
+       [style*="grid-template-columns"]  ->  1fr
+       [style*="minmax"]                 ->  repeat(auto-fill, minmax(140px,1fr))
+
+   Ganaba la segunda. Medido en el resumen del entrenador dentro de un marco
+   de 390 px: quedaban dos columnas de 154,8 px con 167 px de contenido
+   adentro y overflow:hidden. De ahi salia el "63  2  0" con "Errores"
+   cortado al medio, y el simbolo de porcentaje comido a la izquierda.
+
+   Esta regla va al final para ganar la discusion, y solo hasta 480 px: en un
+   telefono, dos columnas para cuatro numeros con sus etiquetas no entran
+   nunca. Entre 481 y 768 px sigue valiendo la de 140 px, que ahi si da.
+
+   La cancha del mapa de calor queda afuera a proposito: sus tres columnas
+   SON la cancha, apilarlas la destruiria.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 480px) {
+  [style*="grid-template-columns"]:not(.cancha):not(.court):not(.heatmap):not(.zonas):not(.mapa),
+  [style*="minmax"]:not(.cancha):not(.court):not(.heatmap):not(.zonas):not(.mapa),
+  .grid, .kpi-grid, .cards, .grid-cards, .tarjetas,
+  .stats-row, .kpis, .resumen-grid, .player-grid, .ses-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
