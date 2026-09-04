@@ -480,6 +480,22 @@ def update_database(dvw_dir, temporada, db_path='entrenamientos_nafels_db.json')
         added += 1
         if added % 10 == 0: print(f"  Parsed {added} files...")
 
+    # ── SACAR LAS SESIONES CUYO .dvw YA NO EXISTE ────────────────────
+    # El motor acumula: si se borra un archivo de la carpeta, su sesion
+    # quedaba en la base para siempre y seguia apareciendo en la app, con
+    # jugadores que no participaron.
+    #
+    # Aca la base se pone al dia con la carpeta: lo que ya no esta, sale.
+    try:
+        _en_carpeta = set(os.listdir(dvw_dir))
+        _antes = len(games_log)
+        games_log = [g for g in games_log if g.get('file') in _en_carpeta]
+        _fuera = _antes - len(games_log)
+        if _fuera:
+            print('   Saque %d sesion(es) de la base: su .dvw ya no esta en la carpeta.' % _fuera)
+    except Exception as _e:
+        print('   (aviso: no pude revisar la carpeta, dejo la base como estaba)')
+
     db_out = {'teams': teams_data, 'games': games_log}
     with open(db_path, 'w', encoding='utf-8') as f:
         json.dump(db_out, f, ensure_ascii=False)

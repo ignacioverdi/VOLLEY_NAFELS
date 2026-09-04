@@ -1,49 +1,50 @@
 ═══════════════════════════════════════════════════════════════════════════════
-   PONER LA PLANTILLA AL DÍA
-   Para que los clientes nuevos nazcan con todo lo del 2 y 3 de septiembre
+   ENTRENAMIENTOS — LOS DOS ARREGLOS
 ═══════════════════════════════════════════════════════════════════════════════
 
-   Copiá todo a  CLIENTE VOLEY STATS\PLANTILLA\  y corré en este orden:
+   Correlos en este orden, en VOLLEY_NAFELS\
 
 
-   1)  PASAR_DESCIFRADO.py
-       El descifrado por pedazos: los archivos grandes ya no cuelgan
-       el teléfono.
+   1)  ENTRENAMIENTOS_COMPLETO.py
 
-   2)  ARREGLAR_VIDEOS_VACIO.py
-       Deja preparado datos_seguros.js para que las pantallas de
-       escritorio puedan pedir sus datos completos.
+       Que el entrenamiento aparezca en TODAS las pantallas: análisis,
+       dashboard y el perfil de cada jugador.
 
-   3)  PONER_LA_PLANTILLA_AL_DIA.py
-       Los seis arreglos de una:
+       Tres causas:
+         · COMBO_EQUIV no estaba definida → el motor fallaba al leer
+         · el filtro por lado, en el armado del historial
+         · el filtro por sets: un entrenamiento no tiene sets ganados
+           ni perdidos, así que la sesión se descartaba entera
 
-         · las pantallas de análisis esperan sus datos
-         · tres armadoras en los motores
-         · la pantalla de armado las lee
-         · dorsales "6" y "06" se juntan
-         · el plantel del club con la marca {{club}}
-
-   4)  NOMBRES_CORTOS.py
-       "CLUB SOCIAL, DEPORTIVO Y CULTURAL ARGENTINO DE CASTELAR"
-       pasa a decir "Castelar".
-
-   5)  REVISAR_ANTES_DE_PUBLICAR.py
-       Tiene que decir TODO EN ORDEN.
-
-   6)  LIMPIAR_REPO.bat
-       Borra los programas ya aplicados y sus respaldos.
+       Probado: 63 saques y 165 recepciones, los mismos que el .dvw.
 
 
-── LA PLANTILLA NO SE PUBLICA ────────────────────────────────────────────────
+   2)  LIMPIAR_SESIONES_FANTASMA.py
 
-   Se usa al dar de alta el próximo cliente. Los cambios viajan solos.
+       Que la base no conserve sesiones cuyo .dvw ya no existe.
+
+       El motor acumulaba y nunca sacaba nada. Por eso seguía apareciendo
+       "AXPO NAFELS vs Campana" y la sesión del 30/07, con jugadores que
+       nunca participaron.
+
+       Probado: sacó la sesión vieja y dejó la real.
 
 
-── LO MISMO SIRVE PARA NÄFELS ────────────────────────────────────────────────
+   3)  HACER_TODO.bat
 
-   NÄFELS quedó atrasado respecto de GELP: le faltan las pantallas de
-   análisis, las tres armadoras y los nombres cortos.
 
-   Los mismos programas, en el mismo orden. Ahí sí, publicar al final.
+── DESPUÉS TIENE QUE QUEDAR ──────────────────────────────────────────────────
+
+   1 sesión: 03/09/2026
+   6 jugadores: BOGDANOVSKI · SCHMID J · ROFFLER · BARTHOLET · DURDOS · BRUDERER
+   63 saques · 165 recepciones
+   sin VAZQUEZ ni ninguno que no participó
+
+   Y la sesión de prueba de Campana, desaparecida.
+
+
+── LO MISMO SIRVE PARA GELP Y LA PLANTILLA ───────────────────────────────────
+
+   Cuando esto esté confirmado en NÄFELS, los mismos dos programas.
 
 ═══════════════════════════════════════════════════════════════════════════════
