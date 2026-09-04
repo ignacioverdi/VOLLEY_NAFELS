@@ -356,6 +356,19 @@ if __name__=='__main__':
     for season in sorted(por_temp.keys()):
         season_out=prefix+'_'+season+'.js'
         existentes=load_existing_season(season_out)
+        # Sacar lo que ya no existe: el merge de arriba conserva todo lo
+        # anterior, asi que una sesion borrada de la carpeta seguia
+        # apareciendo en "Cargar videos" para siempre.
+        try:
+            _ARCHIVOS_QUE_EXISTEN = set(por_temp[season].keys())
+            _fuera = [c for c in list(existentes.keys())
+                      if c not in _ARCHIVOS_QUE_EXISTEN]
+            for _c in _fuera:
+                existentes.pop(_c, None)
+            if _fuera:
+                print('   Saque %d sesion(es) de la lista de videos: su .dvw ya no esta.' % len(_fuera))
+        except Exception:
+            pass
         agregados=0
         for code,m in por_temp[season].items():
             if code not in existentes:
