@@ -126,7 +126,7 @@ for /d %%D in ("DVW ENTRENAMIENTOS NAFELS *") do (
 if "!ENT_DIR!"=="" (
     echo  No hay carpeta de entrenamientos. SALTEO ^(es normal si no scouteaste practicas^).
     echo.
-    goto LINKS
+    goto HIGHSET
 )
 
 set "NDVW=0"
@@ -134,7 +134,7 @@ for %%F in ("!ENT_DIR!\*.dvw") do set /a NDVW+=1
 if !NDVW!==0 (
     echo  La carpeta "!ENT_DIR!" no tiene .dvw.  SALTEO entrenamientos.
     echo.
-    goto LINKS
+    goto HIGHSET
 )
 
 echo  Carpeta: "!ENT_DIR!"   ^(!NDVW! practicas^)
@@ -149,6 +149,50 @@ if errorlevel 1 echo      [aviso] Hubo un problema en los cortes de entrenamient
 echo.
 
 REM ================= VERIFICACION =================
+:HIGHSET
+echo  ================== HIGH SET ==================
+REM   Carpeta EXCLUSIVA del ejercicio de armado de pelota alta.
+REM
+REM   Va aparte de los entrenamientos comunes a proposito. En una practica
+REM   normal el armado lo escribe solo el panel, cuando cargas el ataque, y
+REM   le pone la valoracion por defecto: no la juzga nadie. Aca en cambio se
+REM   scoutea el ejercicio y nada mas, con la valoracion tipeada armado por
+REM   armado. Mezclarlos ensuciaria la tabla con cientos de armados sin
+REM   graduar, y el ranking mediria volumen en vez de calidad.
+REM
+REM   Usa el mismo motor que los cortes: misma lectura del .dvw y mismo
+REM   formato de salida. Lo unico distinto es la carpeta y el archivo.
+set "HS_DIR="
+set "HS_ANIO=0"
+for /d %%D in ("DVW HIGH SET NAFELS *") do (
+    set "HS_NOMBRE=%%D"
+    set "HS_A=!HS_NOMBRE:DVW HIGH SET NAFELS =!"
+    if !HS_A! GTR !HS_ANIO! (
+        set "HS_ANIO=!HS_A!"
+        set "HS_DIR=%%D"
+    )
+)
+
+if "!HS_DIR!"=="" (
+    echo  No hay carpeta de HIGH SET. SALTEO ^(es normal si todavia no hiciste el ejercicio^).
+    echo.
+    goto LINKS
+)
+
+set "NHS=0"
+for %%F in ("!HS_DIR!\*.dvw") do set /a NHS+=1
+if !NHS!==0 (
+    echo  La carpeta "!HS_DIR!" no tiene .dvw.  SALTEO HIGH SET.
+    echo.
+    goto LINKS
+)
+
+echo  Carpeta: "!HS_DIR!"   ^(!NHS! sesion^(es^)^)
+echo.
+python build_video.py "!HS_DIR!" datos_high_set.js HIGH_SET_DATA ent
+if errorlevel 1 echo      [aviso] Hubo un problema con HIGH SET. Sigo igual.
+echo.
+
 :LINKS
 
 REM ===================================================================

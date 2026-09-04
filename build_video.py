@@ -208,8 +208,15 @@ def parse_dvw(path, ent=False):
             try: t=int(c[12])
             except: continue
             ev=code0[5] if len(code0)>5 else ''
+            # 'ty' = el caracter que va entre el fundamento y la valoracion.
+            # En *11ET#K1F~3C~~~-1  el fundamento es E, el tipo T y la
+            # valoracion #. Para el armado el tipo dice si fue pelota alta (H),
+            # rapida (Q), tensa (T)... y sin el no se puede separar el armado
+            # de alta del resto. Antes se descartaba, asi que ninguna pantalla
+            # podia distinguirlos. Sirve igual para los otros fundamentos.
+            ty=code0[4] if len(code0)>4 else ''
             a={'t':t,'num':num,'name':pmap[num],'skill':sk,'sk':SK.get(sk,sk),
-               'ev':ev,'set':c[8] if len(c)>8 else '','tm':tslug}
+               'ev':ev,'ty':ty,'set':c[8] if len(c)>8 else '','tm':tslug}
             # zonas origen/destino (oz/dz): ataque usa tp[1] ; defensa usa tp[3] (como saque/recepcion)
             if sk in ('A','D','S','R'):
                 _rest=code0[6:]; _tp=_rest.split('~'); _ti=1 if sk=='A' else 3

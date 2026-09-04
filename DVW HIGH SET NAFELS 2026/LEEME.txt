@@ -1,0 +1,47 @@
+CARPETA DEL EJERCICIO "HIGH SET"
+================================
+
+Aca van SOLO los .dvw del ejercicio de armado de pelota alta.
+Nada mas. Ni practicas comunes, ni partidos.
+
+POR QUE ESTA SEPARADO
+---------------------
+En un entrenamiento normal el armado lo escribe el panel automaticamente
+cuando cargas el ataque, y le pone la valoracion POR DEFECTO: nadie la
+juzga. Si eso se mezclara con el ejercicio, la tabla quedaria tapada por
+cientos de armados sin graduar y el ranking mediria quien armo mas, no
+quien armo mejor.
+
+COMO SE SCOUTEA
+---------------
+Un armado de alta se ve asi en el DVW:
+
+    *11EH#
+
+    *    nuestro equipo
+    11   dorsal del que armo
+    E    armado
+    H    pelota ALTA   <- si no es H, HIGH SET no lo cuenta
+    #    la valoracion, que es lo importante
+
+La valoracion hay que TIPEARLA en cada armado. Es todo el sentido del
+ejercicio:
+
+    #   perfecto     +2
+    +   bueno        +1
+    !   neutro        0
+    -   malo         -1
+    /   muy malo     -1,5
+    =   error        -2
+
+QUE HACER DESPUES
+-----------------
+1. Dejar el .dvw en esta carpeta
+2. Correr HACER_TODO
+3. Publicar
+4. Abrir HIGH SET desde el menu "Video y juego"
+
+El nombre de la carpeta lleva el anio y de ahi sale la temporada:
+"DVW HIGH SET NAFELS 2026" -> temporada 26-27. Cuando arranque la
+siguiente, se crea "DVW HIGH SET NAFELS 2027" al lado. Las dos conviven:
+HACER_TODO usa siempre la del anio mas alto.

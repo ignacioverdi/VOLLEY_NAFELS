@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HIGH SET · NAFELS VOLEY</title>
+<script src="categorias_club.js?v=20260904-0855"></script>
+<script src="selector_categoria.js?v=20260904-0855"></script>
+<script>
+/* Pantalla de escritorio: necesita sus datos completos al abrir. */
+window.__DESCIFRAR_SINCRONO = true;
+</script>
+<script src="datos_seguros.js?v=20260904-0855"></script>
+<script src="filtro_tipo.js?v=20260904-0855" onerror="void 0"></script>
+<!-- HIGH SET tiene su PROPIA carpeta de .dvw y su propio archivo de datos.
+     No lee los entrenamientos comunes ni los partidos de liga, a proposito:
+     ahi el armado lo escribe el panel automaticamente con la valoracion por
+     defecto, y mezclarlo taparia el ejercicio con cientos de armados sin
+     graduar. Aca entra unicamente lo que se scouteo para este ejercicio. -->
+<script src="datos_high_set_25-26.js.enc?v=1" onerror="void 0"></script>
+<script src="datos_high_set_26-27.js.enc?v=1" onerror="void 0"></script>
+<script src="datos_high_set_27-28.js.enc?v=1" onerror="void 0"></script>
+<script src="datos_high_set_28-29.js.enc?v=1" onerror="void 0"></script>
+  <script>abrirDatos();</script>
+<script src="firebase.js?v=20260904-0855" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260904-0855"></script>
+<style>
+  :root{--bg:#0b1017;--bg2:#0f172a;--card:#111a27;--card2:#16212f;--line:#1f2c3d;
+        --txt:#e2e8f0;--muted:#7689a1;--muted2:#475569;--naf:#22c55e;--set:#F59E0B;
+        --ev-pos:#22c55e;--ev-plus:#84cc16;--ev-excl:#eab308;
+        --ev-neg:#f97316;--ev-slash:#f59e0b;--ev-err:#ef4444;--oro:#fbbf24;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+       background:linear-gradient(160deg,var(--bg),var(--bg2));color:var(--txt);
+       min-height:100vh;padding:16px;font-size:14px}
+  .wrap{max-width:1100px;margin:0 auto}
+  .brand{font-weight:800;letter-spacing:1px;font-size:13px;color:var(--naf)}
+  .brand span{color:var(--muted)}
+  h1{font-size:22px;font-weight:800;margin-top:2px}
+  .sub{color:var(--muted);font-size:12px;margin:2px 0 16px}
+  a.volver{color:var(--muted);text-decoration:none;font-size:12px}
+  a.volver:hover{color:var(--txt)}
+
+  .filtros{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px;align-items:flex-end}
+  .campo{display:flex;flex-direction:column;gap:4px}
+  .campo label{font-size:10px;letter-spacing:.6px;color:var(--muted2);text-transform:uppercase}
+  select{background:var(--card2);color:var(--txt);border:1px solid var(--line);
+         border-radius:8px;padding:8px 10px;font-size:13px;min-width:190px}
+
+  .baremo{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}
+  .bar-it{background:var(--card);border:1px solid var(--line);border-radius:8px;
+          padding:6px 10px;font-size:12px;display:flex;gap:7px;align-items:center}
+  .bar-it b{font-size:14px}
+  .pts{color:var(--muted);font-variant-numeric:tabular-nums}
+
+  .tabla{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table{width:100%;border-collapse:collapse}
+  th{background:var(--card2);font-size:10px;letter-spacing:.6px;color:var(--muted2);
+     text-transform:uppercase;padding:10px 8px;text-align:center;font-weight:700}
+  th.izq,td.izq{text-align:left}
+  td{padding:10px 8px;text-align:center;border-top:1px solid var(--line);
+     font-variant-numeric:tabular-nums}
+  tr:hover td{background:rgba(255,255,255,.02)}
+  .pos{width:36px;color:var(--muted);font-weight:700}
+  .pos.p1{color:var(--oro)} .pos.p2{color:#cbd5e1} .pos.p3{color:#b47a3a}
+  .jug{font-weight:600}
+  .dorsal{display:inline-block;min-width:22px;padding:1px 5px;border-radius:5px;
+          background:rgba(34,197,94,.12);color:var(--naf);font-size:11px;
+          font-weight:700;margin-right:7px}
+  .cero{color:var(--muted2)}
+  .total{font-weight:700}
+  .punt{font-weight:800;font-size:15px}
+  .punt.bien{color:var(--ev-pos)} .punt.mal{color:var(--ev-err)}
+  .prom{color:var(--muted)}
+  tfoot td{border-top:2px solid var(--line);background:var(--card2);font-weight:700}
+
+  .vacio{background:var(--card);border:1px solid var(--line);border-radius:12px;
+         padding:26px;text-align:center;color:var(--muted);line-height:1.7}
+  .vacio b{color:var(--txt)}
+  .nota{margin-top:14px;padding:12px 14px;border-radius:10px;font-size:12px;
+        line-height:1.6;background:rgba(245,158,11,.10);
+        border:1px solid rgba(245,158,11,.35);color:#f6c667}
+  code{background:rgba(255,255,255,.06);padding:1px 5px;border-radius:4px;font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="volver" href="index.html">← Volver</a>
+  <div class="brand">NAFELS <span>VOLEY</span></div>
+  <h1>HIGH SET</h1>
+  <div class="sub">Armados de pelota alta <code>EH</code> por jugador, valorados y puntuados · ejercicio propio</div>
+
+  <div class="filtros">
+    <div class="campo">
+      <label>Temporada</label>
+      <select id="f-temp" onchange="pintar()"></select>
+    </div>
+    <div class="campo">
+      <label>Sesión</label>
+      <select id="f-ses" onchange="pintar()"></select>
+    </div>
+    <div class="campo">
+      <label>Mínimo de armados</label>
+      <select id="f-min" onchange="pintar()">
+        <option value="1">1</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="baremo" id="baremo"></div>
+  <div id="salida"></div>
+</div>
+
+<script>
+/* ══ HIGH SET ══════════════════════════════════════════════════════════════
+   Que cuenta y que no:
+
+     · Solo el fundamento E (armado) con tipo H (pelota alta). En el DVW se ve
+       asi:  *11EH#K1F~3C~~~-1   →  E armado · H alta · # valoracion.
+       El tipo H lo escriben las combinaciones G2 G3 G4 G5 G8 G9 (Alta en 2, 3,
+       4, 6, 1) y V0 V5 V6 V8 V9 VB (High A, Hut, Red, High C, High D).
+     · Solo nuestro club. Los armados del rival se descartan.
+     · Solo entrenamientos, por decision tuya.
+
+   El puntaje ordena la tabla. Un armado perfecto suma 2 y uno que termina en
+   error resta 2, asi que un jugador con muchisimos armados mediocres NO le
+   gana a uno con pocos y buenos: por eso ademas del total se muestra el
+   promedio por armado, que es la columna que compara parejo.                */
+
+var CLUB = 'nafels';          /* en la PLANTILLA esto es {{club}} */
+
+var BAREMO = [
+  {ev:'#', pts: 2,   color:'var(--ev-pos)',   txt:'perfecto'},
+  {ev:'+', pts: 1,   color:'var(--ev-plus)',  txt:'bueno'},
+  {ev:'!', pts: 0,   color:'var(--ev-excl)',  txt:'neutro'},
+  {ev:'-', pts:-1,   color:'var(--ev-neg)',   txt:'malo'},
+  {ev:'/', pts:-1.5, color:'var(--ev-slash)', txt:'muy malo'},
+  {ev:'=', pts:-2,   color:'var(--ev-err)',   txt:'error'}
+];
+var ORDEN = BAREMO.map(function(b){ return b.ev; });
+var PTS   = {}; BAREMO.forEach(function(b){ PTS[b.ev] = b.pts; });
+
+function fCorta(f){
+  if(!f) return '';
+  var q = String(f).split('-');
+  return q.length === 3 ? (q[2]+'/'+q[1]+'/'+q[0].slice(2)) : String(f);
+}
+function num(n){ return (Math.round(n*10)/10).toString().replace('.',','); }
+
+/* Todos los armados de alta, ya filtrados, con la sesion a la que pertenecen */
+function armados(){
+  var D = (window.HIGH_SET_DATA && HIGH_SET_DATA.matches) || {};
+  var out = [];
+  Object.keys(D).forEach(function(cod){
+    var m = D[cod] || {};
+    (m.actions || []).forEach(function(a){
+      if(a.skill !== 'E') return;                 /* solo armado          */
+      if(a.ty    !== 'H') return;                 /* solo pelota alta     */
+      if(a.tm    !== CLUB) return;                /* solo nuestro club    */
+      out.push({num:a.num, name:a.name, ev:a.ev,
+                cod:cod, fecha:m.date || '', temp:m.season || ''});
+    });
+  });
+  return out;
+}
+
+function llenarFiltros(A){
+  var temps = {}, ses = {};
+  A.forEach(function(a){
+    if(a.temp) temps[a.temp] = 1;
+    ses[a.cod] = a.fecha;
+  });
+  var t = document.getElementById('f-temp');
+  var ordT = Object.keys(temps).sort().reverse();
+  t.innerHTML = '<option value="">Todas</option>' +
+    ordT.map(function(x){ return '<option value="'+x+'">Temporada '+x+'</option>'; }).join('');
+  if(ordT.length) t.value = ordT[0];
+
+  var s = document.getElementById('f-ses');
+  var ordS = Object.keys(ses).sort(function(a,b){
+    return String(ses[b]).localeCompare(String(ses[a]));
+  });
+  s.innerHTML = '<option value="">Acumulado (todas)</option>' +
+    ordS.map(function(c){ return '<option value="'+c+'">'+(fCorta(ses[c])||c)+'</option>'; }).join('');
+}
+
+function pintarBaremo(){
+  document.getElementById('baremo').innerHTML = BAREMO.map(function(b){
+    return '<div class="bar-it"><b style="color:'+b.color+'">'+b.ev+'</b>'+
+           '<span class="pts">'+(b.pts>0?'+':'')+num(b.pts)+'</span>'+
+           '<span style="color:var(--muted2);font-size:11px">'+b.txt+'</span></div>';
+  }).join('');
+}
+
+function pintar(){
+  var A     = armados();
+  var temp  = document.getElementById('f-temp').value;
+  var ses   = document.getElementById('f-ses').value;
+  var minim = parseInt(document.getElementById('f-min').value, 10) || 1;
+
+  if(temp) A = A.filter(function(a){ return a.temp === temp; });
+  if(ses)  A = A.filter(function(a){ return a.cod  === ses;  });
+
+  var out = document.getElementById('salida');
+
+  if(!A.length){
+    out.innerHTML =
+      '<div class="vacio"><b>Todavía no hay sesiones del ejercicio.</b><br><br>'+
+      'HIGH SET lee únicamente la carpeta <code>DVW HIGH SET NAFELS 2026</code>. '+
+      'Poné ahí el .dvw del ejercicio, corré <code>HACER_TODO</code> y publicá.<br><br>'+
+      'Los entrenamientos comunes y los partidos no entran acá, para que el ejercicio '+
+      'no quede tapado por armados sin graduar.</div>';
+    return;
+  }
+
+  /* por jugador */
+  var J = {};
+  A.forEach(function(a){
+    var k = a.num;
+    if(!J[k]) { J[k] = {num:a.num, name:a.name, tot:0, pts:0}; ORDEN.forEach(function(e){ J[k][e] = 0; }); }
+    var j = J[k];
+    j.tot++;
+    if(PTS[a.ev] !== undefined){ j[a.ev]++; j.pts += PTS[a.ev]; }
+    else { j.otros = (j.otros||0) + 1; }        /* valoracion rara: se cuenta aparte */
+  });
+
+  var lista = Object.keys(J).map(function(k){ return J[k]; })
+    .filter(function(j){ return j.tot >= minim; })
+    .sort(function(a,b){ return (b.pts - a.pts) || (b.tot - a.tot); });
+
+  if(!lista.length){
+    out.innerHTML = '<div class="vacio">Ningún jugador llega a <b>'+minim+'</b> armados de alta con este filtro.</div>' + nota();
+    return;
+  }
+
+  var sum = {tot:0, pts:0}; ORDEN.forEach(function(e){ sum[e] = 0; });
+  lista.forEach(function(j){
+    sum.tot += j.tot; sum.pts += j.pts;
+    ORDEN.forEach(function(e){ sum[e] += j[e]; });
+  });
+
+  var filas = lista.map(function(j, i){
+    var pos = i + 1;
+    var prom = j.tot ? j.pts / j.tot : 0;
+    return '<tr>'+
+      '<td class="pos p'+pos+'">'+pos+'</td>'+
+      '<td class="izq jug"><span class="dorsal">'+j.num+'</span>'+(j.name||'')+'</td>'+
+      ORDEN.map(function(e){
+        var b = BAREMO.filter(function(x){ return x.ev === e; })[0];
+        return '<td'+(j[e] ? ' style="color:'+b.color+';font-weight:600"' : ' class="cero"')+'>'+j[e]+'</td>';
+      }).join('')+
+      '<td class="total">'+j.tot+'</td>'+
+      '<td class="punt '+(j.pts>=0?'bien':'mal')+'">'+(j.pts>0?'+':'')+num(j.pts)+'</td>'+
+      '<td class="prom">'+(j.pts>0?'+':'')+num(prom)+'</td>'+
+    '</tr>';
+  }).join('');
+
+  out.innerHTML =
+    '<div class="tabla"><table>'+
+      '<thead><tr>'+
+        '<th></th><th class="izq">Jugador</th>'+
+        ORDEN.map(function(e){
+          var b = BAREMO.filter(function(x){ return x.ev === e; })[0];
+          return '<th style="color:'+b.color+'">'+e+'</th>';
+        }).join('')+
+        '<th>Armados</th><th>Puntos</th><th>Prom.</th>'+
+      '</tr></thead>'+
+      '<tbody>'+filas+'</tbody>'+
+      '<tfoot><tr><td></td><td class="izq">Equipo</td>'+
+        ORDEN.map(function(e){ return '<td>'+sum[e]+'</td>'; }).join('')+
+        '<td>'+sum.tot+'</td><td>'+(sum.pts>0?'+':'')+num(sum.pts)+'</td>'+
+        '<td>'+(sum.pts>0?'+':'')+num(sum.tot ? sum.pts/sum.tot : 0)+'</td>'+
+      '</tr></tfoot>'+
+    '</table></div>' + nota();
+}
+
+/* Aviso honesto: si casi todo cayo en la misma valoracion, la tabla no esta
+   midiendo calidad y conviene decirlo en vez de mostrar un ranking que
+   engania. En este ejercicio no deberia pasar —se gradua armado por armado—,
+   pero si el .dvw entra sin graduar, mejor que avise. */
+function nota(){
+  var A = armados();
+  if(!A.length) return '';
+  var c = {}; A.forEach(function(a){ c[a.ev] = (c[a.ev]||0) + 1; });
+  var top = Object.keys(c).sort(function(x,y){ return c[y]-c[x]; })[0];
+  var pc  = Math.round(100 * c[top] / A.length);
+  if(pc < 85) return '';
+  return '<div class="nota"><b>Ojo con leer este ranking como calidad.</b> '+
+    'El '+pc+'% de los armados están valorados <code>'+top+'</code>, así que la tabla '+
+    'está ordenando sobre todo por cantidad. Revisá que el ejercicio se haya scouteado '+
+    'graduando cada armado y no con la valoración por defecto.</div>';
+}
+
+window.addEventListener('load', function(){
+  pintarBaremo();
+  llenarFiltros(armados());
+  pintar();
+});
+</script>
+</body>
+</html>
