@@ -245,27 +245,35 @@
        "18% EFF 165 Total" en el dashboard, "0% efectividad" en recepcion y
        "15% FORMULA OFICIAL 23%" en los heat maps. Arriba no tapa nada y ocupa
        78 px en un encabezado de 31 px de alto. */
-    var destino = document.querySelector('.tempbar, .seasonbar, .topbar-right, .header-right');
+    var destino = document.querySelector('.tempbar, .seasonbar, .topbar-right, .header-right, .page-header');
     if(destino){
       sel.style.marginLeft = '8px';
       sel.style.maxWidth = '46vw';      /* que no empuje a los botones de idioma */
       destino.appendChild(sel);
       return;
     }
+    /* ══ Sin barra donde montarse: va EN EL FLUJO, no flotando ═════════════
+       Antes caia fija abajo a la izquierda. Perseguir clases de encabezado no
+       alcanza: quedaban 29 pantallas sin ninguna de ellas, y ahi la caja se
+       apoyaba sobre el contenido. Medido en un telefono de 390 px, tapaba
+       "18% EFF 165 Total" en el dashboard, "0% efectividad" en recepcion y
+       los botones PARTIDO / ENTRENAMIENTO en el perfil del jugador: no solo
+       datos, tambien controles que hay que poder tocar.
+
+       Entrando en el flujo, arriba de todo, empuja al contenido en vez de
+       taparlo. Nunca se come nada, en ninguna pantalla, la tenga o no
+       prevista. Y el rincon de abajo queda libre para el escudo. */
     var caja = document.createElement('div');
-    /* Con identificador propio para que movil.css pueda ubicarla. Sin esto
-       quedaba en el mismo rincon que el boton del escudo y se pisaban. */
     caja.id = 'cat-flotante';
-    caja.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:9998;'
+    caja.style.cssText = 'position:relative;z-index:9998;margin:0 0 8px;'
       + 'background:rgba(10,12,24,.94);border:1px solid rgba(255,255,255,.14);'
-      + 'border-radius:10px;padding:5px 7px;display:flex;align-items:center;gap:6px;'
-      + 'box-shadow:0 6px 20px rgba(0,0,0,.5)';
+      + 'border-radius:10px;padding:6px 10px;display:flex;align-items:center;gap:8px';
     var et = document.createElement('span');
     et.textContent = 'CATEGORÍA';
     et.style.cssText = 'font-size:9px;letter-spacing:1.5px;color:#64748b';
     caja.appendChild(et);
     caja.appendChild(sel);
-    document.body.appendChild(caja);
+    document.body.insertBefore(caja, document.body.firstChild);
   }
 
   fijarCategoriaJugador();

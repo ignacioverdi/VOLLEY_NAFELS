@@ -450,8 +450,12 @@ tr.mi-fila {
    66 px deja libre al escudo en los dos tamanos: 12 + 46 en la computadora,
    10 + 38 en el telefono.
    ══════════════════════════════════════════════════════════════════════════ */
+/* Ya no flota: selector_categoria.js la mete en el flujo de la pagina cuando
+   no encuentra una barra de encabezado donde montarse. Se le deja el ancho
+   completo para que no quede un recuadro suelto al costado. */
 #cat-flotante {
-  bottom: 66px !important;
+  width: 100% !important;
+  box-sizing: border-box;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
