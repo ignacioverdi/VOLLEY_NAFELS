@@ -185,12 +185,12 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260907-2100">
+<link rel="stylesheet" href="movil.css?v=20260906-0817">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="categorias_club.js?v=20260907-2100"></script>
-<script src="selector_categoria.js?v=20260907-2100"></script>
-<script src="mi_fila.js?v=20260907-2100" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260906-0817"></script>
+<script src="selector_categoria.js?v=20260906-0817"></script>
+<script src="mi_fila.js?v=20260906-0817" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -299,19 +299,24 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260907-2100"></script>
-<script src="filtro_tipo.js?v=20260907-2100" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260906-0817"></script>
+<script src="filtro_tipo.js?v=20260906-0817" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
+  <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
+       se cargaba SOLO el de partidos, asi que en una temporada sin partidos
+       jugados la lista de armadores venia vacia y la seccion se escondia
+       entera, aunque el entrenamiento tuviera 74 armados cargados. -->
+  <script src="liga_data_entrenamientos.js.enc" onerror="window.LIGA_DATA_ENT={teams:{},combos:[],calls:[]}"></script>
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20260907-2100"></script>
-<script src="firebase_por_categoria.js?v=20260907-2100"></script>
+<script src="firebase.js?v=20260906-0817"></script>
+<script src="firebase_por_categoria.js?v=20260906-0817"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20260907-2100" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20260906-0817" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -352,6 +357,8 @@ function ppSetTipo(t){
   computeMatchMeta();
   buildRivalPanel(); buildMatchPanel(); updateCounts(); renderAll();
   ppPintarTipo();
+  /* La fuente del armador depende del filtro: hay que repintarla. */
+  try{ if(typeof renderArmador==='function') renderArmador(); }catch(e){}
 }
 function ppPintarTipo(){
   var barra=document.getElementById('tipobar');
@@ -507,10 +514,30 @@ function armRallies(setter,pos){var dates=armDates(),mt=(armTeam.matches||[]);
     var mm=mt[r[12]];if(mm&&mm.date&&!dates[mm.date])return false;
     return true;});
 }
+/* De donde salen los armadores, segun el filtro de arriba.
+
+   Partidos       -> liga_data.js
+   Entrenamientos -> liga_data_entrenamientos.js
+   Todos          -> el que TENGA armadores; si los dos tienen, manda partidos.
+
+   La regla de "Todos" es a proposito: en pretemporada no hay partidos jugados
+   y la unica fuente con datos es la de entrenamientos. Si se prefiriera
+   siempre partidos, la seccion seguiria vacia hasta el primer partido
+   oficial, que es justo el problema que se vino a resolver. */
+function armFuente(slug){
+  var P=(window.LIGA_DATA&&LIGA_DATA.teams)?LIGA_DATA.teams[slug]:null;
+  var E=(window.LIGA_DATA_ENT&&LIGA_DATA_ENT.teams)?LIGA_DATA_ENT.teams[slug]:null;
+  var hayP=!!(P&&P.setters&&P.setters.length);
+  var hayE=!!(E&&E.setters&&E.setters.length);
+  var t=(typeof ppTipoActual==='function')?ppTipoActual():'todos';
+  if(t==='P') return hayP?P:null;
+  if(t==='E') return hayE?E:null;
+  return hayP?P:(hayE?E:null);
+}
 function renderArmador(){
   var sec=document.getElementById("armsec");
   var slug=(typeof VIVO!=='undefined'&&VIVO)?TEAM:ARM_SLUG[TEAM];
-  armTeam=(slug&&GPL.teams&&GPL.teams[slug])?GPL.teams[slug]:null;
+  armTeam=armFuente(slug);
   if(!armTeam||!(armTeam.setters&&armTeam.setters.length)){sec.classList.add("hidden");return;}
   sec.classList.remove("hidden");
   var _fs=document.getElementById("focusSel");var _foc=(_fs&&_fs.value&&_fs.value!=="all")?_fs.value:"";
@@ -930,8 +957,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20260907-2100" onerror="void 0"></script>
-<script src="lang.js?v=20260907-2100" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20260906-0817" onerror="void 0"></script>
+<script src="lang.js?v=20260906-0817" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -949,7 +976,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20260907-2100" onerror="void 0"></script>
-<script src="ayuda.js?v=20260907-2100"></script>
+<script src="volver_inicio.js?v=20260906-0817" onerror="void 0"></script>
+<script src="ayuda.js?v=20260906-0817"></script>
 </body>
 </html>

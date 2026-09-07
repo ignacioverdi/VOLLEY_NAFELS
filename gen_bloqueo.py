@@ -174,12 +174,24 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
     """
     import glob as _g
 
+    # Antes se excluian las carpetas con 'ENTREN' en el nombre: el bloqueo era
+    # solo de partidos. Pero los entrenamientos tambien se scoutean con B, y
+    # esos bloqueos no aparecian en ningun lado. Ahora entran las dos, y de
+    # cada archivo se recuerda SI viene de una carpeta de entrenamiento,
+    # porque de eso dependen el codigo de la sesion y su tipo.
+    #
+    # La carpeta de HIGH SET queda afuera: es de un ejercicio puntual y su
+    # .dvw suele ser el MISMO de una practica que ya esta en la carpeta de
+    # entrenamientos. Sin excluirla, los mismos bloqueos entraban dos veces.
     carpetas = [d for d in os.listdir('.')
                 if os.path.isdir(d) and d.upper().startswith('DVW')
-                and 'ENTREN' not in d.upper()]
+                and 'HIGH SET' not in d.upper()]
     archivos = []
+    ES_ENT = {}
     for c in carpetas:
-        archivos += _g.glob(os.path.join(c, '*.dvw'))
+        _ent = ('ENTREN' in c.upper())
+        for _f in _g.glob(os.path.join(c, '*.dvw')):
+            archivos.append(_f); ES_ENT[_f] = _ent
     if not archivos:
         return 0
 
@@ -274,7 +286,11 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
             import unicodedata as _u
             _t = _u.normalize('NFKD', os.path.splitext(_fn)[0]).encode('ascii', 'ignore').decode()
             _t = re.sub(r'[^A-Za-z0-9]+', '', _t).upper()[:12] or 'SIN'
-            mid = 'P' + _b + '-' + _t
+            # gen_plan_partido pone 'E' cuando es entrenamiento y 'P' cuando es
+            # partido. Aca iba 'P' siempre, asi que un entrenamiento quedaba
+            # como P2026-09-07-... contra el E2026-09-07-... de la pantalla:
+            # no coincidian nunca y los bloqueos se descartaban en silencio.
+            mid = ('E' if ES_ENT.get(ruta) else 'P') + _b + '-' + _t
 
         combo = ''
         zona = ''
@@ -307,7 +323,8 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
                     continue
                 BLOCK.setdefault(eq, {}).setdefault(
                     num, {'name': nombres.get((lado, num), '#' + num), 'data': []}
-                )['data'].append([combo, zona, ev, '', mid, fase, 'partido'])
+                )['data'].append([combo, zona, ev, '', mid, fase,
+                                  'entrenamiento' if ES_ENT.get(ruta) else 'partido'])
 
     if not BLOCK:
         return 0
