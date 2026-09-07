@@ -716,6 +716,31 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
 
 
 
+def _puestos_del_plantel():
+    """El puesto de cada jugador segun el plantel del club (datos_equipo.js).
+
+    Es la fuente buena: la mantiene el staff desde la pantalla Equipo. El
+    plantel que viene adentro de cada .dvw lo escribe el scout y arrastra
+    errores que despues aparecen en toda la app.
+
+    Si el archivo no esta —un club recien empezado, o antes del primer
+    HACER_TODO— devuelve vacio y se sigue usando lo del .dvw.
+    """
+    out = {}
+    try:
+        with open('datos_equipo.js', encoding='utf-8', errors='replace') as f:
+            t = f.read()
+        m = re.search(r'=\s*(\{.*\})\s*;?\s*$', t, re.S)
+        if not m: return out
+        d = json.loads(m.group(1))
+        for j in (d.get('jugadores') or []):
+            try: out[int(j.get('num'))] = str(j.get('pos') or '')
+            except Exception: pass
+    except Exception:
+        pass
+    return out
+
+
 def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
     """Recorre todos los DVW y junta los rallies de los 2 armadores de cada equipo.
     Excluye líberos (jugadores que NO atacan y reciben mucho)."""
@@ -734,6 +759,9 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
             liberos_by_team[tm] = libs
     rallies_both = defaultdict(lambda: defaultdict(list))
     setters_detected = {}
+    # El puesto declarado de cada jugador, por equipo. Se junta de todos los
+    # .dvw porque un archivo suelto puede tenerlo vacio.
+    puestos_por_equipo = {}
     files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
     for fname in files:
         with open(os.path.join(dvw_dir, fname), encoding='utf-8', errors='ignore') as f:
@@ -748,6 +776,9 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
             team_libs = liberos_by_team.get(team, set())
             psec = '[3PLAYERS-H]' if pfx=='*' else '[3PLAYERS-V]'
             team_pos = _get_positions(content, psec)
+            _pp = puestos_por_equipo.setdefault(team, {})
+            for _n, _c in (team_pos or {}).items():
+                if str(_c).strip(): _pp[_n] = str(_c).strip()
             setters = detectar_armadores(content, pfx, 3, team_libs, team_pos)
             for sn in setters:
                 setters_detected.setdefault(team, set()).add(sn)
@@ -757,7 +788,37 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
     setters_map = {}
     rallies_final = {}
     for team, sd in rallies_both.items():
-        ranked = sorted(sd.items(), key=lambda x: -len(x[1]))[:2]
+        # ══ MANDA EL PUESTO, NO EL VOLUMEN ═══════════════════════════════════
+        # Antes se tomaban los 2 que mas armaron. En un partido eso da bien,
+        # porque arma el armador. Pero en un entrenamiento no: un ejercicio de
+        # armado de pelota alta lo hace el equipo entero, y ahi un central que
+        # levanto 25 pelotas entraba a "Distribucion del armador" como si fuera
+        # armador, mientras el armador real que ese dia no vino no aparecia.
+        #
+        # Ahora primero van los que tienen puesto ARMADOR declarado (codigo 5
+        # o el texto SETTER en el plantel del .dvw), ordenados entre ellos por
+        # volumen. Los demas quedan como respaldo y solo se usan si el equipo
+        # no declaro ningun armador, para no dejar la pantalla vacia en un club
+        # que no carga los puestos.
+        #
+        # El puesto se corrige desde la pantalla EQUIPO cuando el scout lo
+        # cargo mal, y eso ya pisa lo que diga el .dvw.
+        _pp = puestos_por_equipo.get(team, {})
+        _club = _puestos_del_plantel()      # el plantel del club, si existe
+        def _es_armador(n):
+            # Primero el plantel del CLUB: es el que mantiene el staff y el
+            # que se ve en la pantalla Equipo. El plantel que viene adentro
+            # del .dvw lo carga el scout y suele estar mal: en el
+            # entrenamiento del 07/09 declaraba a CLEMENT como SETTER siendo
+            # central, y a STEIMANN como OTRO siendo armador.
+            v = _club.get(int(n)) if str(n).lstrip('-').isdigit() else None
+            if v: return v.strip().upper() == 'ARMADOR'
+            v = str(_pp.get(n, '')).strip().upper()
+            return v == '5' or v == 'SETTER' or v == 'ARMADOR'
+        _orden = sorted(sd.items(), key=lambda x: -len(x[1]))
+        _titulares = [x for x in _orden if _es_armador(x[0])]
+        _resto     = [x for x in _orden if not _es_armador(x[0])]
+        ranked = (_titulares or _resto)[:2]
         setters_map[team] = [sn for sn, _ in ranked]
         rallies_final[team] = {str(sn): rl for sn, rl in ranked}
     return setters_map, rallies_final

@@ -307,6 +307,10 @@ window.__DESCIFRAR_SINCRONO = true;
        jugados la lista de armadores venia vacia y la seccion se escondia
        entera, aunque el entrenamiento tuviera 74 armados cargados. -->
   <script src="liga_data_entrenamientos.js.enc" onerror="window.LIGA_DATA_ENT={teams:{},combos:[],calls:[]}"></script>
+  <!-- El plantel del club, con el puesto REAL de cada jugador. Es la fuente
+       buena: el plantel que viene adentro del .dvw lo carga el scout y suele
+       estar mal o incompleto. -->
+  <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
@@ -524,15 +528,79 @@ function armRallies(setter,pos){var dates=armDates(),mt=(armTeam.matches||[]);
    y la unica fuente con datos es la de entrenamientos. Si se prefiriera
    siempre partidos, la seccion seguiria vacia hasta el primer partido
    oficial, que es justo el problema que se vino a resolver. */
+/* ══ SOLO LOS ARMADORES DE VERDAD ═══════════════════════════════════════════
+   El motor arma la lista de armadores con los 2 que MAS armaron. En un
+   partido eso da bien. En un entrenamiento no: un ejercicio de armado de
+   pelota alta lo hace el equipo entero, y un central que levanto 25 pelotas
+   entraba a esta seccion como si fuera armador.
+
+   La correccion de puesto que hace el staff desde la pantalla EQUIPO se
+   guarda en Firebase, en 'plantel_pos', y los motores en Python no pueden
+   leerla. La pantalla si. Asi que se lee de ahi y se descarta a cualquiera
+   que no tenga puesto ARMADOR.
+
+   Si el club todavia no corrigio ningun puesto, o si ninguno de los
+   detectados figura como armador, se deja la lista como vino: mejor mostrar
+   algo aproximado que dejar la seccion vacia sin explicar por que.          */
+window.PLANTEL_FIX = window.PLANTEL_FIX || {};
+(function(){
+  try{
+    if(typeof fbGet==='function'){
+      fbGet('plantel_pos', function(v){
+        if(v && typeof v === 'object'){
+          window.PLANTEL_FIX = v;
+          try{ if(typeof renderArmador==='function') renderArmador(); }catch(e){}
+        }
+      });
+    }
+    var l = localStorage.getItem('plantel_pos');
+    if(l) window.PLANTEL_FIX = JSON.parse(l);
+  }catch(e){}
+})();
+/* El puesto de cada jugador, del mas confiable al menos:
+
+     1. plantel_pos   lo que corrigio el staff a mano desde EQUIPO
+     2. datos_equipo  el plantel del club, que ya trae el puesto bien
+     (3. el .dvw       NO se usa: es el que confunde a un central con armador)
+
+   Medido en la app: el .dvw del entrenamiento declaraba a CLEMENT como SETTER
+   y a STEIMANN como OTRO. El plantel del club los tiene bien, CENTRAL y
+   ARMADOR. Por eso se lee de aca y no de ahi.                              */
+function armPuestoDe(num){
+  var fix = window.PLANTEL_FIX || {};
+  var v = String(fix[String(num)] || '').toUpperCase();
+  if(v) return v;
+  var js = (window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores) || [];
+  for(var i=0;i<js.length;i++){
+    if(String(js[i].num) === String(num)) return String(js[i].pos||'').toUpperCase();
+  }
+  return '';
+}
+function armSoloArmadores(T){
+  if(!T || !T.setters || !T.setters.length) return T;
+  var solo = T.setters.filter(function(s){ return armPuestoDe(s.num) === 'ARMADOR'; });
+  /* Si el club TIENE el plantel cargado, manda el plantel: sin armadores, la
+     seccion queda vacia y esta bien, porque ese dia no armo ningun armador.
+     El respaldo es solo para un club que todavia no cargo los puestos: ahi se
+     deja lo que detecto el motor, para no mostrar una pantalla vacia sin
+     explicacion. */
+  var hayPlantel = !!((window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores &&
+                       window.EQUIPO_DATA.jugadores.length) ||
+                      Object.keys(window.PLANTEL_FIX||{}).length);
+  if(!solo.length) return hayPlantel ? null : T;
+  var C = {}; for(var k in T) C[k] = T[k];
+  C.setters = solo;
+  return C;
+}
 function armFuente(slug){
   var P=(window.LIGA_DATA&&LIGA_DATA.teams)?LIGA_DATA.teams[slug]:null;
   var E=(window.LIGA_DATA_ENT&&LIGA_DATA_ENT.teams)?LIGA_DATA_ENT.teams[slug]:null;
   var hayP=!!(P&&P.setters&&P.setters.length);
   var hayE=!!(E&&E.setters&&E.setters.length);
   var t=(typeof ppTipoActual==='function')?ppTipoActual():'todos';
-  if(t==='P') return hayP?P:null;
-  if(t==='E') return hayE?E:null;
-  return hayP?P:(hayE?E:null);
+  if(t==='P') return hayP?armSoloArmadores(P):null;
+  if(t==='E') return hayE?armSoloArmadores(E):null;
+  return hayP?armSoloArmadores(P):(hayE?armSoloArmadores(E):null);
 }
 function renderArmador(){
   var sec=document.getElementById("armsec");
