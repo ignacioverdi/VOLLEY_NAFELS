@@ -1093,7 +1093,49 @@ function renderEqStats(){
      mismos .dvw que el resto y respeta la sesion elegida. El conteo por video
      queda como respaldo para los clubes que ya lo venian usando. */
   (function(){
+    /* ══ LA DEFENSA TIENE QUE SEGUIR LA SESION ELEGIDA ═════════════════════
+       objGetVals lee la sesion de _dbatPartido, que es el estado de la pestaña
+       Objetivos, no el de este filtro. Resultado: el recuadro mostraba el
+       acumulado de todo eligieras lo que eligieras. Medido: 47 defensas con
+       las tres sesiones y 47 con cada una por separado, cuando en realidad son
+       0, 0 y 47.
+
+       Los totales por sesion estan en BAT_PARTIDOS.ind, cada uno con su fecha
+       adentro del id. Se suman los de las sesiones elegidas y la efectividad
+       se recalcula con la misma formula del generador, sobre los totales ya
+       sumados: promediar los porcentajes de dias distintos daria un numero sin
+       sentido. */
     try{
+      var B = window.BAT_PARTIDOS;
+      var ses = (typeof getEqSesiones === 'function') ? getEqSesiones() : null;
+      if(B && B.ind && B.ind.length && ses && ses.length){
+        var quiero = {};
+        ses.forEach(function(x){
+          var f = String((x && x.fecha) || '');
+          var m = f.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);   /* dd/mm/aaaa */
+          if(m) quiero[m[3]+'-'+m[2]+'-'+m[1]] = 1;
+          else if(/^\d{4}-\d{2}-\d{2}$/.test(f)) quiero[f] = 1;
+        });
+        var t=0, perf=0, buena=0, mala=0, err=0, hay=false;
+        B.ind.forEach(function(x){
+          var d = (String((x&&x.id)||'').match(/(20\d\d-\d\d-\d\d)/)||[])[1];
+          if(!d || !quiero[d]) return;
+          var q = (x && x.eq) || {};
+          if(q.defT === undefined || q.defT === null) return;
+          hay = true;
+          t     += q.defT     || 0;
+          perf  += q.defPerf  || 0;
+          buena += q.defBuena || 0;
+          mala  += q.defMala  || 0;
+          err   += q.defErr   || 0;
+        });
+        if(hay){
+          dT = t; dPerf = perf; dErr = err;
+          dEff = t ? Math.round((perf + 0.5*buena - 0.5*mala - err) / t * 100) : null;
+          return;
+        }
+      }
+      /* Sin seleccion, o con un archivo de baterias viejo: como antes. */
       if(typeof objGetVals !== 'function' && typeof batGet !== 'function') return;
       var v = (typeof objGetVals === 'function') ? objGetVals(null)
             : batGet(null, window._dbatPartido || 'acumulado');

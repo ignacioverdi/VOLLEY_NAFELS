@@ -157,6 +157,11 @@ def _bat_to_pcts(P):
         'defT':    D['T'],
         'defPerf': D['#'],
         'defErr':  D['='],
+        # Tambien las intermedias: sin ellas la pantalla no puede recalcular la
+        # efectividad de un subconjunto de sesiones, y promediar porcentajes de
+        # dias distintos da un numero que no significa nada.
+        'defBuena': D['+'],
+        'defMala':  D['-'],
         'def':     _roundpy((D['#']+0.5*D['+']-0.5*D['-']-D['='])/D['T']*100) if D['T'] else None,
         'sq':    _roundpy((S['#']+0.5*S['/']+0.25*S['+']-S['='])/S['T']*100) if S['T'] else None,
         'rec':   _roundpy((R['#']+0.5*R['+']-0.5*R['/']-R['='])/R['T']*100) if R['T'] else None,
