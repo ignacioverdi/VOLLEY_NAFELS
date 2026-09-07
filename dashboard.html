@@ -16,13 +16,13 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260907-2100" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260907-2100" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260907-2100"></script>
-<script src="filtro_tipo.js?v=20260907-2100" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260906-0817" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260906-0817" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260906-0817"></script>
+<script src="filtro_tipo.js?v=20260906-0817" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
-  <script src="objetivos_config.js?v=20260907-2100" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260906-0817" onerror="void 0"></script>
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
@@ -39,7 +39,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20260907-2100" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260906-0817" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   
@@ -435,15 +435,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260907-2100" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260907-2100"></script>
+<script src="firebase.js?v=20260906-0817" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260906-0817"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260907-2100">
+<link rel="stylesheet" href="movil.css?v=20260906-0817">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260907-2100" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260906-0817" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -525,6 +525,15 @@ function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
     <div style="width:1px;height:20px;background:var(--b)"></div>
     <span class="fbar-lbl">Sesión</span>
     <select id="eq-ses-sel" onchange="setEqSesion(parseInt(this.value))"></select>
+    <!-- Elegir VARIAS sesiones, como en Plan de partido. El desplegable de al
+         lado sigue sirviendo para ver una sola o el acumulado de todas. -->
+    <div style="position:relative;display:inline-block">
+      <button class="ftag" id="eq-multi-btn" onclick="eqTogglePanel()">📋 Elegir sesiones <b id="eq-multi-n"></b> ▾</button>
+      <div id="eq-multi-panel" style="display:none;position:absolute;z-index:9999;top:110%;left:0;
+           min-width:280px;max-height:320px;overflow:auto;background:var(--card,#111a27);
+           border:1px solid var(--b,#1f2c3d);border-radius:10px;padding:8px;
+           box-shadow:0 10px 30px rgba(0,0,0,.55)"></div>
+    </div>
   </div>
   <div id="eq-tab-content"></div>
   <!-- Objetivos del equipo -->
@@ -642,6 +651,15 @@ function _seasonOf(ds){ if(!ds) return null; var y,m;
 // ════════════════════════════════════════════════════════════
 var EQ_FILTRO    = 'todos';
 var EQ_SESION    = -2;   // -2 = acumulado
+/* Varias sesiones a la vez, como en Plan de partido.
+
+   null  = no hay eleccion, vale lo que diga EQ_SESION (acumulado o una sola)
+   Set   = los indices elegidos dentro de la lista que devuelve getSesiones()
+
+   Se agrego porque el desplegable solo dejaba ver UNA practica o el acumulado
+   de todas. No habia forma de comparar, por ejemplo, los tres entrenamientos
+   de esta semana sin arrastrar los de la anterior. */
+var EQ_SEL       = null;
 var EQ_TAB       = 'saque';
 var RECEP_TIPO   = 'total';  // total | flotado | potencia
 function setRecepTipo(t){ RECEP_TIPO=t; renderEqContent(); }
@@ -802,8 +820,13 @@ function getJugadoresAcum(sesiones){
   return Object.values(acum).sort(function(a,b){return a.c-b.c;});
 }
 
+function eqHaySeleccion(){
+  return !!(EQ_SEL && EQ_SEL.size && EQ_SEL.size < getSesiones(EQ_FILTRO).length);
+}
 function getEqSesiones(){
   var all = getSesiones(EQ_FILTRO);
+  /* La eleccion multiple manda sobre el desplegable de una sola. */
+  if(EQ_SEL && EQ_SEL.size) return all.filter(function(_s,i){ return EQ_SEL.has(i); });
   if(EQ_SESION>=0) return [all[EQ_SESION]].filter(Boolean);
   return all;
 }
@@ -812,19 +835,86 @@ function getEqSesiones(){
 // TAB EQUIPO
 // ════════════════════════════════════════════════════════════
 function setEqFiltro(f,btn){
-  EQ_FILTRO=f; EQ_SESION=-2;
+  /* Los indices son posiciones dentro de la lista del tipo actual: al cambiar
+     de Partidos a Entrenamientos apuntarian a otras sesiones. */
+  EQ_FILTRO=f; EQ_SESION=-2; EQ_SEL=null;
   /* La eleccion vale para todo el sistema, no solo para esta pantalla. */
   try{ if(typeof vbSetTipo==='function') vbSetTipo(f); }catch(e){}
 
   document.querySelectorAll('.ftag').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   rebuildEqDropdown();
+  try{ eqBuildPanel(); eqPintarMulti(); }catch(e){}
   renderEqTab();
 }
 function setEqSesion(idx){
   EQ_SESION=idx;
+  EQ_SEL=null;                 /* el desplegable manda: se suelta la eleccion */
+  eqPintarMulti();
   renderEqTab();
 }
+
+/* ══ ELEGIR VARIAS SESIONES ═════════════════════════════════════════════════
+   El desplegable de al lado solo deja ver UNA practica o el acumulado de
+   todas. Para comparar, por ejemplo, los tres entrenamientos de esta semana
+   sin arrastrar los de la anterior, hacia falta poder tildar varias.
+
+   Los indices son posiciones dentro de la lista del tipo actual, asi que al
+   cambiar de Partidos a Entrenamientos la eleccion se suelta: apuntarian a
+   otras sesiones.                                                           */
+function eqTogglePanel(){
+  var p=document.getElementById('eq-multi-panel');
+  if(!p) return;
+  if(p.style.display==='none'){ eqBuildPanel(); p.style.display='block'; }
+  else p.style.display='none';
+}
+function eqBuildPanel(){
+  var p=document.getElementById('eq-multi-panel'); if(!p) return;
+  var ses=getSesiones(EQ_FILTRO)||[];
+  if(!ses.length){ p.innerHTML='<div style="padding:10px;color:var(--mut,#8395ac);font-size:12px">No hay sesiones para este filtro.</div>'; return; }
+  var h='<div style="display:flex;gap:6px;margin-bottom:8px">'
+      + '<button class="ftag" onclick="eqSelTodas()">Todas</button>'
+      + '<button class="ftag" onclick="eqSelNinguna()">Ninguna</button></div>';
+  ses.forEach(function(x,i){
+    var esP = !!(x && x.rival);
+    var etiqueta = (x.fecha||'') + ' · ' + (esP ? ('vs '+(x.rival||'RIVAL')) : 'Entrenamiento');
+    var on = EQ_SEL ? EQ_SEL.has(i) : true;
+    h += '<label style="display:flex;gap:8px;align-items:center;padding:6px 4px;font-size:13px;cursor:pointer">'
+       + '<input type="checkbox" '+(on?'checked':'')+' onchange="eqTildar('+i+',this.checked)">'
+       + '<span>'+etiqueta+'</span></label>';
+  });
+  p.innerHTML=h;
+}
+function eqTildar(i, on){
+  if(!EQ_SEL){
+    /* Primera vez: se parte de todas tildadas, que es lo que se ve. */
+    EQ_SEL=new Set(); (getSesiones(EQ_FILTRO)||[]).forEach(function(_s,k){ EQ_SEL.add(k); });
+  }
+  if(on) EQ_SEL.add(i); else EQ_SEL.delete(i);
+  if(!EQ_SEL.size) EQ_SEL=null;      /* ninguna tildada = como si no hubiera filtro */
+  EQ_SESION=-2;
+  var d=document.getElementById('eq-ses-sel'); if(d) d.value='-2';
+  eqPintarMulti(); renderEqTab();
+}
+function eqSelTodas(){ EQ_SEL=null; EQ_SESION=-2; eqBuildPanel(); eqPintarMulti(); renderEqTab(); }
+function eqSelNinguna(){
+  EQ_SEL=new Set(); var ses=getSesiones(EQ_FILTRO)||[];
+  if(ses.length) EQ_SEL.add(0);      /* al menos una, si no no hay nada que mostrar */
+  eqBuildPanel(); eqPintarMulti(); renderEqTab();
+}
+function eqPintarMulti(){
+  var b=document.getElementById('eq-multi-n'); if(!b) return;
+  var tot=(getSesiones(EQ_FILTRO)||[]).length;
+  b.textContent = (EQ_SEL && EQ_SEL.size && EQ_SEL.size<tot) ? ('('+EQ_SEL.size+' de '+tot+')') : '';
+  var btn=document.getElementById('eq-multi-btn');
+  if(btn) btn.classList.toggle('on', !!(EQ_SEL && EQ_SEL.size && EQ_SEL.size<tot));
+}
+/* Al tocar fuera, se cierra. */
+document.addEventListener('click', function(ev){
+  var p=document.getElementById('eq-multi-panel'), b=document.getElementById('eq-multi-btn');
+  if(!p||!b) return;
+  if(p.style.display!=='none' && !p.contains(ev.target) && !b.contains(ev.target)) p.style.display='none';
+});
 function showEqTab(tab,btn){
   EQ_TAB=tab;
   document.querySelectorAll('#view-equipo .stab').forEach(b=>b.classList.remove('on'));
@@ -943,7 +1033,8 @@ function renderEqStats(){
         return '';
       }
       var _fechas = null;
-      if(typeof EQ_SESION !== 'undefined' && EQ_SESION >= 0){
+      if((typeof EQ_SESION !== 'undefined' && EQ_SESION >= 0) ||
+         (typeof eqHaySeleccion === 'function' && eqHaySeleccion())){
         _fechas = {};
         try{ getEqSesiones().forEach(function(s){ var k=_fkey(s && s.fecha); if(k) _fechas[k]=1; }); }catch(e){ _fechas=null; }
       }
@@ -1859,11 +1950,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260907-2100"></script>
-<script src="lang.js?v=20260907-2100"></script>
-<script src="temporadas_menu.js?v=20260907-2100"></script>
-<script src="app_offline.js?v=20260907-2100"></script>
-<script src="ayuda.js?v=20260907-2100"></script>
+<script src="chat_nafels.js?v=20260906-0817"></script>
+<script src="lang.js?v=20260906-0817"></script>
+<script src="temporadas_menu.js?v=20260906-0817"></script>
+<script src="app_offline.js?v=20260906-0817"></script>
+<script src="ayuda.js?v=20260906-0817"></script>
 <!-- Los archivos de video (datos_video_*.js.enc) se sacaron de esta
      pantalla: pesan unos 15 MB por temporada, descifrarlos son mas de
      un millon de vueltas de calculo, y el dashboard NO LOS USA para
