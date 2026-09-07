@@ -660,8 +660,37 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
     idx = content.find('[3SCOUT]\n')
     if idx < 0: return []
     scout = content[idx+9:content.find('\n[3', idx+9)].strip().split('\n')
+
+    # ══ SOLO LOS ARMADOS QUE TERMINARON EN ATAQUE ════════════════════════════
+    # En un ejercicio de armado de pelota alta hay armado y nada mas: el
+    # jugador levanta la pelota y ahi termina. En el juego, despues del armado
+    # SIEMPRE viene un ataque.
+    #
+    # Esa es la unica diferencia confiable entre las dos cosas, y sin ella el
+    # ejercicio ensucia la distribucion: el .dvw del 03/09 tiene 255 armados y
+    # CERO ataques, y esos 255 entraban al mismo lugar que el juego real.
+    #
+    # Se mira la linea siguiente en el propio scout, sin depender de que el
+    # ataque quede bien enganchado mas abajo: desde cada armado se avanza hasta
+    # el proximo armado o saque, y si en el medio hay un ataque, cuenta.
+    # Se acepta el ataque de cualquiera de los dos lados porque en un
+    # entrenamiento el equipo juega contra si mismo y el scout reparte los
+    # lados como quiere.
+    _skills = []
+    for _l in scout:
+        _c = _l.strip()
+        if len(_c) < 6: _skills.append(''); continue
+        _cd = _c[1:]
+        _skills.append(_cd[2].upper() if len(_cd) > 2 else '')
+    _con_ataque = [False] * len(_skills)
+    for _i, _sk in enumerate(_skills):
+        if _sk != 'E': continue
+        for _j in range(_i + 1, len(_skills)):
+            if _skills[_j] in ('E', 'S'): break
+            if _skills[_j] == 'A': _con_ataque[_i] = True; break
+
     rallies = []; pending = None; last_skill = ''; last_rq = '?'; atype = 0; last_serve_t = 0; last_rec_t = 0; last_rec_zone = 0; last_rec_num = 0; last_rec_type = ''
-    for line in scout:
+    for _idx_l, line in enumerate(scout):
         l = line.strip()
         if len(l) < 6: continue
         t = l[0]; code = l[1:]
@@ -692,6 +721,8 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
             last_rec_type = code[3].upper() if len(code) > 3 else ''
         elif skill == 'E' and pnum == setter_num:
             if pending: rallies.append(pending)
+            if not _con_ataque[_idx_l]:
+                pending = None; last_skill = 'E'; continue   # ejercicio, no juego
             rq = last_rq if last_skill == 'R' else '?'
             raw = tp[0] if tp else ''; call = raw[:2] if len(raw) >= 2 else raw
             pending = {'setter_pos': spos, 'set_num': setn, 'call': call, 'rec_quality': rq, 'atype': (0 if last_skill == 'R' else 1),

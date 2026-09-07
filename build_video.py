@@ -419,15 +419,32 @@ if __name__=='__main__':
                 print('   Saque %d sesion(es) de la lista de videos: su .dvw ya no esta.' % len(_fuera))
         except Exception:
             pass
-        agregados=0
+        agregados=0; actualizados=0
         for code,m in por_temp[season].items():
+            # La temporada se guarda EN la sesion. Antes cada pantalla la
+            # recalculaba desde la fecha, y con esa cuenta una practica de
+            # julio caia en la temporada anterior. Escrita aca, todos leen
+            # lo mismo y no hay dos criterios dando vueltas.
+            m['season']=season
             if code not in existentes:
-                # La temporada se guarda EN la sesion. Antes cada pantalla la
-                # recalculaba desde la fecha, y con esa cuenta una practica de
-                # julio caia en la temporada anterior. Escrita aca, todos leen
-                # lo mismo y no hay dos criterios dando vueltas.
-                m['season']=season
                 existentes[code]=m; agregados+=1
+                continue
+            # ══ SI EL .dvw CAMBIO, SE VUELVE A LEER ══════════════════════════
+            # Antes solo se agregaban los codigos nuevos: una sesion ya
+            # conocida se daba por buena para siempre. Al rescoutear un
+            # entrenamiento —por ejemplo agregandole los armados— el archivo
+            # cambiaba pero el codigo era el mismo, asi que el motor lo
+            # salteaba y la app seguia mostrando la version vieja. Quedaban dos
+            # verdades distintas conviviendo: una sesion con 228 acciones en el
+            # video y 494 en el resto del sistema.
+            #
+            # Arriba ya se sacan los codigos cuyo .dvw no esta mas, asi que
+            # todo lo que llega aca viene de un archivo que existe hoy: se
+            # puede reemplazar sin perder nada.
+            _antes = len((existentes.get(code) or {}).get('actions') or [])
+            _ahora = len(m.get('actions') or [])
+            if _antes != _ahora:
+                existentes[code]=m; actualizados+=1
         # hornear SOLO los links de los partidos de esta temporada
         # ══ Emparejar los links con su partido ═══════════════════════════
         # El link se guarda con la clave que uso la pantalla de Cargar Videos,
@@ -466,6 +483,8 @@ if __name__=='__main__':
         with open(season_out,'w',encoding='utf-8') as f:
             f.write(body)
         tot=sum(len(m['actions']) for m in existentes.values())
-        print('  '+season_out+': '+str(len(existentes))+' partidos ('+str(agregados)+' nuevos), '+str(tot)+' acciones')
+        print('  '+season_out+': '+str(len(existentes))+' partidos ('+str(agregados)+' nuevos'
+              + (', '+str(actualizados)+' actualizados' if actualizados else '')
+              + '), '+str(tot)+' acciones')
 
 # © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados
