@@ -351,3 +351,332 @@ tr.mi-fila {
   /* un poco mas chicos, para que entren de a mas por renglon */
   .header-right *, .hdr-right * { font-size: 11.5px; }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LA CAPA FLOTANTE EN EL TELEFONO
+   ══════════════════════════════════════════════════════════════════════════
+
+   Cuatro cosas flotan sobre TODAS las pantallas, y ninguna sabe de las otras:
+
+       #club-escudo    volver al inicio       abajo a la izquierda
+       #cat-flotante   elegir categoria       abajo a la izquierda  <- mismo rincon
+       #ayuda-btn      el signo de pregunta   abajo a la derecha
+       #vb-chat-btn    la pelota del chat     abajo a la derecha
+
+   En una computadora sobra el ancho y casi no se nota. En un telefono de
+   390 px la caja de categoria mide 270 px y arranca en el mismo punto que el
+   escudo: se montan una encima de la otra y se lee "...RIA" con el escudo
+   tapando la palabra. Ademas, las cuatro estan a 12-22 px del piso, asi que
+   tapan la ultima fila de cualquier tabla —el renglon de TOTALES, que es
+   justo el que mas se mira.
+
+   Se resuelve en tres pasos:
+     1. la categoria sube y se apoya ARRIBA del escudo, no al lado
+     2. los cuatro botones se achican, que en un telefono 46 px es mucho
+     3. la pagina reserva lugar abajo, para que nada quede tapado
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  /* 1. en el telefono, los dos mas chicos ──────────────────────────────── */
+  #club-escudo {
+    left: 10px !important;
+    bottom: 10px !important;
+    width: 38px !important;
+    height: 38px !important;
+  }
+  #cat-flotante {
+    left: 10px !important;
+    max-width: calc(100vw - 20px) !important;
+    padding: 4px 6px !important;
+  }
+  #cat-flotante select {
+    max-width: 46vw !important;
+    font-size: 12px !important;
+  }
+
+  /* 2. los de la derecha, mas chicos y sin encimarse entre ellos ───────── */
+  #ayuda-btn {
+    width: 34px !important;
+    height: 34px !important;
+    right: 12px !important;
+    bottom: 62px !important;
+  }
+  #vb-chat-btn {
+    width: 46px !important;
+    height: 46px !important;
+    right: 10px !important;
+    bottom: 10px !important;
+  }
+
+  /* 3. que la ultima fila no quede debajo de los botones ───────────────── */
+  body {
+    padding-bottom: 104px !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LAS TARJETAS DE NUMEROS QUE SE SEGUIAN CORTANDO
+   ══════════════════════════════════════════════════════════════════════════
+
+   Mas arriba ya se bajan a una columna las grillas con el ancho escrito en el
+   atributo style. Pero varias pantallas lo definen en su propia hoja de
+   estilos y por eso quedaban afuera. El caso tipico es el resumen del
+   entrenador:
+
+       .stats-row { grid-template-columns: repeat(auto-fill, minmax(160px,1fr)) }
+
+   En 390 px eso da DOS columnas de 154 px, y adentro de cada tarjeta hay
+   cuatro numeros con sus etiquetas que piden unos 170. Por eso en el telefono
+   se leia "63  2  0" y el ultimo "Errores" aparecia cortado por la mitad.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .stats-row,
+  .kpis,
+  .resumen-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LA CATEGORIA VA ARRIBA DEL ESCUDO, SIEMPRE
+   ══════════════════════════════════════════════════════════════════════════
+   Medido en la app: los dos nacen en left:12 bottom:12, asi que se pisan
+   tambien en la computadora, no solo en el telefono. Por eso esta regla va
+   fuera de las medidas de pantalla.
+
+   66 px deja libre al escudo en los dos tamanos: 12 + 46 en la computadora,
+   10 + 38 en el telefono.
+   ══════════════════════════════════════════════════════════════════════════ */
+/* Ya no flota: selector_categoria.js la mete en el flujo de la pagina cuando
+   no encuentra una barra de encabezado donde montarse. Se le deja el ancho
+   completo para que no quede un recuadro suelto al costado. */
+#cat-flotante {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LA COLUMNA DEL NOMBRE, FIJA MIENTRAS LA TABLA SE DESLIZA
+   ══════════════════════════════════════════════════════════════════════════
+
+   Las tablas ya se deslizan de costado, pero al hacerlo el nombre del jugador
+   se va de pantalla y quedan numeros sueltos sin saber de quien son. Y como
+   nada avisa que se puede deslizar, la columna cortada al borde parece un
+   error y no una tabla que sigue.
+
+   Dejando fija la primera columna se resuelven las dos cosas: siempre se sabe
+   de quien es la fila, y el movimiento del resto contra un nombre quieto es lo
+   que le dice al jugador que hay mas para ver.
+
+   La sombrita del borde derecho marca donde termina lo fijo y empieza lo que
+   se mueve.
+
+   El fondo tiene que ser opaco o se transparenta lo que pasa por debajo. Se
+   usa el color de tarjeta de cada pantalla; las pocas que no lo definen caen
+   en el mas usado del sistema.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  table:has(tr > *:nth-child(13)) th:first-child,
+  table:has(tr > *:nth-child(13)) td:first-child {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 2 !important;
+    background: var(--card, #0d0e1a) !important;
+    box-shadow: 1px 0 0 0 rgba(255, 255, 255, .07);
+  }
+  /* La franja verde del propio jugador se mantiene sobre el fondo opaco. */
+  table:has(tr > *:nth-child(13)) tr.mi-fila > td:first-child {
+    box-shadow: inset 3px 0 0 0 #22C55E, 1px 0 0 0 rgba(255, 255, 255, .07);
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   QUE SE VEAN TODAS LAS COLUMNAS
+   ══════════════════════════════════════════════════════════════════════════
+
+   Deslizar de costado no alcanza. En la tabla de recepcion la ultima columna
+   es SIEMPRE el "=" (los errores), y al quedar cortada al borde parecia que
+   la tabla terminaba en "/". Se leia una fila incompleta creyendo que estaba
+   completa, que es peor que no verla.
+
+   Medido en la app, con la tabla de recepcion de entrenamientos: son diez
+   columnas, pero el contenido son numeros de uno o dos digitos. Estirada en
+   la computadora mide 1342 px; el ancho es espacio sobrante, no informacion.
+   Achicando el relleno y la letra, las diez entran en 390 px exactos, sin
+   desbordar y con la fila en 24 px de alto.
+
+   El limite esta en trece columnas. panel_voley tiene 26 e informe 17: esas
+   no entran de ninguna forma y siguen deslizandose, con la primera columna
+   fija para no perder de quien es la fila.
+
+   El :not(:has(...)) es a proposito. Si el navegador no entiende :has, la
+   regla entera se descarta y todo se comporta como hasta ahora: deslizando.
+   Nunca recorta datos por no entender el selector.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  table:not(:has(tr > *:nth-child(13))) {
+    display: table !important;
+    table-layout: auto !important;
+    width: 100% !important;
+    overflow: visible !important;
+  }
+  table:not(:has(tr > *:nth-child(13))) thead,
+  table:not(:has(tr > *:nth-child(13))) tbody,
+  table:not(:has(tr > *:nth-child(13))) tr {
+    width: auto !important;
+    min-width: 0 !important;
+  }
+  table:not(:has(tr > *:nth-child(13))) th,
+  table:not(:has(tr > *:nth-child(13))) td {
+    white-space: normal !important;
+    padding: 5px 2px !important;
+    font-size: 11.5px !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   UNA TARJETA POR RENGLON EN EL TELEFONO
+   ══════════════════════════════════════════════════════════════════════════
+
+   Habia dos reglas peleandose, las dos con !important y con la misma fuerza,
+   asi que ganaba la ultima escrita:
+
+       [style*="grid-template-columns"]  ->  1fr
+       [style*="minmax"]                 ->  repeat(auto-fill, minmax(140px,1fr))
+
+   Ganaba la segunda. Medido en el resumen del entrenador dentro de un marco
+   de 390 px: quedaban dos columnas de 154,8 px con 167 px de contenido
+   adentro y overflow:hidden. De ahi salia el "63  2  0" con "Errores"
+   cortado al medio, y el simbolo de porcentaje comido a la izquierda.
+
+   Esta regla va al final para ganar la discusion, y solo hasta 480 px: en un
+   telefono, dos columnas para cuatro numeros con sus etiquetas no entran
+   nunca. Entre 481 y 768 px sigue valiendo la de 140 px, que ahi si da.
+
+   La cancha del mapa de calor queda afuera a proposito: sus tres columnas
+   SON la cancha, apilarlas la destruiria.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 480px) {
+  [style*="grid-template-columns"]:not(.cancha):not(.court):not(.heatmap):not(.zonas):not(.mapa),
+  [style*="minmax"]:not(.cancha):not(.court):not(.heatmap):not(.zonas):not(.mapa),
+  .grid, .kpi-grid, .cards, .grid-cards, .tarjetas,
+  .stats-row, .kpis, .resumen-grid, .player-grid, .ses-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LAS TRES PANTALLAS QUE FALTABAN
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. RECEPCION: tres canchas lado a lado en 389 px ──────────────────────
+   Medido en la app: .zones-row reparte el ancho en tres columnas de 101,8 px.
+   Cada panel queda con 102 px utiles y adentro la cancha pide 228: por eso
+   los numeros del costado —EFIC, POTENCIA, PERFECTA— quedaban cortados.
+
+   No habia que achicar la cancha: habia que dejar de meter tres una al lado
+   de la otra. Con una por renglon, el panel pasa de 102 a 389 px y entran la
+   cancha y los numeros del costado sin tocarles el tamano.
+
+   La cancha en si —.zone-cards, sus tres columnas— no se toca: esas tres
+   columnas SON la cancha. */
+@media (max-width: 768px) {
+  .zones-row,
+  .acum-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── 2. OBJETIVOS: la fila de baterias, con deslizador ─────────────────────
+   Son once objetivos, cada uno pedido con min-width:60px, mas 64 px de la
+   etiqueta de la izquierda: 740 px dentro de 318. Achicarlos no es opcion,
+   ya estan al minimo, y apilarlos rompe la comparacion, que es justo para
+   que se lean de un vistazo uno al lado del otro.
+
+   Se desliza el bloque ENTERO, no cada fila por separado: asi los titulos, la
+   fila del jugador y la del equipo se mueven juntos y nunca se desalinean. */
+@media (max-width: 768px) {
+  #obj-jug-baterias,
+  #obj-cards,
+  #obj-jug-grid,
+  #eq-objetivos,
+  #objetivos-jugador {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px !important;
+  }
+  /* la barrita del deslizador, visible: si no, nada avisa que hay mas */
+  #obj-jug-baterias::-webkit-scrollbar,
+  #obj-cards::-webkit-scrollbar,
+  #obj-jug-grid::-webkit-scrollbar,
+  #eq-objetivos::-webkit-scrollbar,
+  #objetivos-jugador::-webkit-scrollbar {
+    height: 4px;
+  }
+  #obj-jug-baterias::-webkit-scrollbar-thumb,
+  #obj-cards::-webkit-scrollbar-thumb,
+  #obj-jug-grid::-webkit-scrollbar-thumb,
+  #eq-objetivos::-webkit-scrollbar-thumb,
+  #objetivos-jugador::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, .25);
+    border-radius: 2px;
+  }
+}
+
+/* ── 3. HEAT MAPS: la cancha a todo el ancho ───────────────────────────────
+   Opcion (a) de las dos que hablamos. Dos canchas por renglon dejarian cada
+   zona en unos 60 px: el numero entra, el porcentaje de abajo no, y el mapa
+   se mira justamente para comparar zonas de un vistazo.
+
+   A todo el ancho cada zona pasa de unos 95 a 125 px y el numero grande se
+   lee de lejos, que es como se usa: el telefono apoyado, mirando de reojo. */
+@media (max-width: 768px) {
+  .cancha, .court, .heatmap, .zonas, .mapa,
+  .cancha-wrap, .court-wrap, .mapa-cancha {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* La cancha no tiene una clase propia en todas las pantallas —en los heat
+     maps es un div sin nombre—, asi que en vez de perseguirla se le devuelve
+     el ancho al contenedor y ella lo ocupa sola.
+
+     Medido: los 20 px de relleno de cada lado de #content le comian 40 px al
+     mapa. Bajando a 8, la cancha pasa de 334 a 358 px, un 7% mas grande, sin
+     desbordar (queda 15 px de margen). En un mapa de calor eso es el numero
+     de cada zona leyendose de lejos, con el telefono apoyado. */
+  #content, .content,
+  .main, .contenido, .container {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   UN SOLO MARGEN PARA TODA LA APP
+   ══════════════════════════════════════════════════════════════════════════
+   Cada pantalla traia el suyo y no coincidian entre si: el dashboard dejaba
+   28 px de aire de cada lado y recepcion 8. Al cambiar de pantalla las cosas
+   se corrian de lugar y sobraba espacio vacio a los costados.
+
+   Diez de cada lado, iguales en todas. Medido sobre un cuerpo de 388 px:
+
+       dashboard   332 -> 368     recepcion   372 -> 368
+       heat maps   372 -> 368
+
+   El contenido queda alineado de pantalla a pantalla y sin desperdiciar
+   ancho, que en un telefono es lo unico que escasea.
+   ══════════════════════════════════════════════════════════════════════════ */
+

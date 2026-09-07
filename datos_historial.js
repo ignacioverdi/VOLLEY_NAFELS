@@ -1,5 +1,5 @@
 window.HISTORIAL_DATA = {
-  "generado": "04/09/2026, 13:19:42",
+  "generado": "07/09/2026, 08:46:50",
   "entrenamientos": [
     {
       "fecha": "03/09/2026",
@@ -14,23 +14,23 @@ window.HISTORIAL_DATA = {
         {
           "c": 10,
           "n": "BOGDANOVSKI",
-          "sT": 16,
-          "sEff": 2,
+          "sT": 19,
+          "sEff": -14,
           "sPunto": 0,
           "sPos": 1,
           "sNeg": 12,
-          "sErr": 0,
+          "sErr": 3,
           "sAdm": 3,
           "sVend": 0,
           "sFlo": {
-            "T": 16,
+            "T": 19,
             "Punto": 0,
             "Pos": 1,
             "Adm": 3,
             "Neg": 12,
             "Vend": 0,
-            "Err": 0,
-            "Eff": 2
+            "Err": 3,
+            "Eff": -14
           },
           "sPot": {
             "T": 0,
@@ -206,23 +206,23 @@ window.HISTORIAL_DATA = {
         {
           "c": 17,
           "n": "ROFFLER",
-          "sT": 16,
-          "sEff": 8,
+          "sT": 19,
+          "sEff": -9,
           "sPunto": 1,
           "sPos": 1,
           "sNeg": 9,
-          "sErr": 0,
+          "sErr": 3,
           "sAdm": 5,
           "sVend": 0,
           "sFlo": {
-            "T": 16,
+            "T": 19,
             "Punto": 1,
             "Pos": 1,
             "Adm": 5,
             "Neg": 9,
             "Vend": 0,
-            "Err": 0,
-            "Eff": 8
+            "Err": 3,
+            "Eff": -9
           },
           "sPot": {
             "T": 0,
@@ -302,23 +302,23 @@ window.HISTORIAL_DATA = {
         {
           "c": 11,
           "n": "BARTHOLET",
-          "sT": 15,
-          "sEff": 5,
+          "sT": 18,
+          "sEff": -12,
           "sPunto": 0,
           "sPos": 3,
           "sNeg": 9,
-          "sErr": 0,
+          "sErr": 3,
           "sAdm": 3,
           "sVend": 0,
           "sFlo": {
-            "T": 14,
+            "T": 17,
             "Punto": 0,
             "Pos": 3,
             "Adm": 2,
             "Neg": 9,
             "Vend": 0,
-            "Err": 0,
-            "Eff": 5
+            "Err": 3,
+            "Eff": -13
           },
           "sPot": {
             "T": 1,
@@ -398,23 +398,23 @@ window.HISTORIAL_DATA = {
         {
           "c": 1,
           "n": "DURDOS",
-          "sT": 16,
-          "sEff": 12,
+          "sT": 18,
+          "sEff": 0,
           "sPunto": 1,
           "sPos": 4,
           "sNeg": 7,
-          "sErr": 0,
+          "sErr": 2,
           "sAdm": 4,
           "sVend": 0,
           "sFlo": {
-            "T": 16,
+            "T": 18,
             "Punto": 1,
             "Pos": 4,
             "Adm": 4,
             "Neg": 7,
             "Vend": 0,
-            "Err": 0,
-            "Eff": 12
+            "Err": 2,
+            "Eff": 0
           },
           "sPot": {
             "T": 0,
