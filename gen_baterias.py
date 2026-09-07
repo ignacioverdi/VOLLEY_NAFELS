@@ -72,9 +72,14 @@ def norm_team(name):
 # ══════════ MOTOR DE BATERÍAS — PORT EXACTO DE objetivos.js ══════════
 def _bat_nuevo():
     na=lambda:{'#':0,'/':0,'=':0,'T':0}
+    # 'D' = defensa. Se agrego porque el recuadro de Defensa del dashboard era
+    # el unico que quedaba en cero: se contaba desde el archivo de VIDEO, que
+    # el dashboard ni siquiera carga, asi que nunca se llenaba. Los .dvw traen
+    # la defensa como cualquier otro fundamento.
     return {'S':{'#':0,'+':0,'/':0,'=':0,'T':0},
             'R':{'#':0,'+':0,'/':0,'=':0,'T':0},
             'B':{'#':0,'+':0,'T':0},
+            'D':{'#':0,'+':0,'-':0,'=':0,'T':0},
             'Aall':na(),'cent':na(),'alta':na(),'rap':na(),
             'rp':na(),'ri':na(),'rm':na(),'tr':na()}
 
@@ -95,6 +100,9 @@ def _calc_baterias(codes, side):
             if pfx==side:
                 P=get(num); P['S']['T']+=1
                 if res in P['S']: P['S'][res]+=1
+        elif skill=='D' and pfx==side:
+            Pd=get(num); Pd['D']['T']+=1
+            if res in Pd['D']: Pd['D'][res]+=1
         elif skill=='R' and pfx==side:
             last_rec=res; rec_valida=True
             Pr=get(num); Pr['R']['T']+=1
@@ -142,7 +150,14 @@ def _roundpy(x):
 def _bat_to_pcts(P):
     def atk(d): return _roundpy((d['#']-d['/']-d['='])/d['T']*100) if d['T'] else None
     S,R,B=P['S'],P['R'],P['B']
+    D=P.get('D') or {'#':0,'+':0,'-':0,'=':0,'T':0}
     return {
+        # El dashboard ya buscaba defT / defPerf / defErr / def: estaba escrito
+        # el lector pero nadie generaba el dato.
+        'defT':    D['T'],
+        'defPerf': D['#'],
+        'defErr':  D['='],
+        'def':     _roundpy((D['#']+0.5*D['+']-0.5*D['-']-D['='])/D['T']*100) if D['T'] else None,
         'sq':    _roundpy((S['#']+0.5*S['/']+0.25*S['+']-S['='])/S['T']*100) if S['T'] else None,
         'rec':   _roundpy((R['#']+0.5*R['+']-0.5*R['/']-R['='])/R['T']*100) if R['T'] else None,
         'bqpos': _roundpy((B['#']+B['+'])/B['T']*100) if B['T'] else None,

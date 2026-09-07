@@ -524,11 +524,14 @@ function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
     <button class="ftag"    onclick="setEqFiltro('E',this)"     >🏋️ Entrenamientos</button>
     <div style="width:1px;height:20px;background:var(--b)"></div>
     <span class="fbar-lbl">Sesión</span>
-    <select id="eq-ses-sel" onchange="setEqSesion(parseInt(this.value))"></select>
-    <!-- Elegir VARIAS sesiones, como en Plan de partido. El desplegable de al
-         lado sigue sirviendo para ver una sola o el acumulado de todas. -->
+    <!-- Un solo control. Antes convivian un desplegable de UNA sesion y este
+         panel de varias: dos cosas para lo mismo, y no era obvio cual mandaba.
+         Queda el panel, que ademas de elegir varias tambien permite una sola.
+         El desplegable sigue existiendo escondido porque otras partes de la
+         pantalla leen su valor. -->
+    <select id="eq-ses-sel" onchange="setEqSesion(parseInt(this.value))" style="display:none"></select>
     <div style="position:relative;display:inline-block">
-      <button class="ftag" id="eq-multi-btn" onclick="eqTogglePanel()">📋 Elegir sesiones <b id="eq-multi-n"></b> ▾</button>
+      <button class="ftag" id="eq-multi-btn" onclick="eqTogglePanel()">📋 <b id="eq-multi-n">Todas las sesiones</b> ▾</button>
       <div id="eq-multi-panel" style="display:none;position:absolute;z-index:9999;top:110%;left:0;
            min-width:280px;max-height:320px;overflow:auto;background:var(--card,#111a27);
            border:1px solid var(--b,#1f2c3d);border-radius:10px;padding:8px;
@@ -904,8 +907,17 @@ function eqSelNinguna(){
 }
 function eqPintarMulti(){
   var b=document.getElementById('eq-multi-n'); if(!b) return;
-  var tot=(getSesiones(EQ_FILTRO)||[]).length;
-  b.textContent = (EQ_SEL && EQ_SEL.size && EQ_SEL.size<tot) ? ('('+EQ_SEL.size+' de '+tot+')') : '';
+  var ses=getSesiones(EQ_FILTRO)||[];
+  var tot=ses.length;
+  var n=(EQ_SEL && EQ_SEL.size) ? EQ_SEL.size : tot;
+  /* El boton dice SIEMPRE que se esta mirando, sin tener que abrirlo. Con una
+     sola elegida se muestra la fecha, que es mas util que un "1 de 3". */
+  if(n>=tot || !EQ_SEL){ b.textContent = 'Todas las sesiones ('+tot+')'; }
+  else if(n===1){
+    var i=[...EQ_SEL][0], x=ses[i]||{};
+    b.textContent = (x.fecha||'') + (x.rival ? (' · vs '+x.rival) : ' · Entrenamiento');
+  }
+  else { b.textContent = n+' de '+tot+' sesiones'; }
   var btn=document.getElementById('eq-multi-btn');
   if(btn) btn.classList.toggle('on', !!(EQ_SEL && EQ_SEL.size && EQ_SEL.size<tot));
 }
@@ -923,6 +935,7 @@ function showEqTab(tab,btn){
 }
 
 function rebuildEqDropdown(){
+  try{ eqPintarMulti(); }catch(e){}
   var ses=getSesiones(EQ_FILTRO);
   var sel=document.getElementById('eq-ses-sel');
   var html='<option value="-2">📊 ACUMULADO ('+ses.length+' sesiones)</option>';
