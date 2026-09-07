@@ -124,8 +124,21 @@ def _sumar_tiempos_del_video(vp, out='datos_bloqueo.js'):
 
         # (partido, dorsal, cuantos van) -> segundo
         tiempos = {}
+        # ══ EL MISMO ENTRENAMIENTO SE LLAMA DISTINTO EN CADA ARCHIVO ═════════
+        # El de video lo nombra por fecha:      ENT20260907
+        # El de bloqueo como gen_plan_partido:  E2026-09-07-PRAAXPONAFEL
+        # Emparejando por codigo no coinciden nunca, y los bloqueos de
+        # entrenamiento quedaban sin segundo: el clip abria en el momento
+        # equivocado, desincronizado con el video del ataque.
+        #
+        # Lo que SI comparten es la fecha. Se arma un segundo indice por fecha
+        # y se usa cuando el codigo no alcanza. Los partidos siguen igual: ahi
+        # el codigo numerico coincide y se resuelve en el primer intento.
+        por_fecha = {}
         for cod, m in ms.items():
             visto = {}
+            fecha = re.sub(r'\D', '', str(m.get('date') or ''))
+            vistof = {}
             for a in (m.get('actions') or []):
                 if a.get('skill') != 'B':
                     continue
@@ -133,8 +146,12 @@ def _sumar_tiempos_del_video(vp, out='datos_bloqueo.js'):
                 k = (cod, num)
                 visto[k] = visto.get(k, 0) + 1
                 tiempos[(cod, num, visto[k])] = a.get('t')
+                if fecha:
+                    kf = (fecha, num)
+                    vistof[kf] = vistof.get(kf, 0) + 1
+                    por_fecha[(fecha, num, vistof[kf])] = a.get('t')
 
-        if not tiempos:
+        if not tiempos and not por_fecha:
             return
 
         txt = io.open(out, encoding='utf-8', errors='replace').read()
@@ -152,6 +169,10 @@ def _sumar_tiempos_del_video(vp, out='datos_bloqueo.js'):
                     cod = a[4] if len(a) > 4 else ''
                     cuenta[cod] = cuenta.get(cod, 0) + 1
                     t = tiempos.get((cod, num, cuenta[cod]))
+                    if t is None:
+                        _f = re.search(r'(20\d\d)-?(\d\d)-?(\d\d)', str(cod))
+                        if _f:
+                            t = por_fecha.get((''.join(_f.groups()), num, cuenta[cod]))
                     if t is not None and len(a) > 3:
                         a[3] = t
                         puestos += 1
@@ -522,6 +543,12 @@ if __name__=='__main__':
     if n:
         print('[bloqueo] %d bloqueos leidos de los .dvw' % n)
         _sumar_tiempos_del_video(vp, 'datos_bloqueo.js')
+        # El video de ENTRENAMIENTOS es otro archivo. Se detecta mas arriba
+        # pero nunca se abria: solo se aplicaban los tiempos del video de
+        # partidos. Por eso los bloqueos de entrenamiento quedaban sin segundo
+        # y el clip arrancaba en cualquier lado, desincronizado del ataque.
+        for _f in _ent:
+            _sumar_tiempos_del_video(_f, 'datos_bloqueo.js')
         sys.exit(0)
 
     if not vp or not os.path.isfile(vp):
