@@ -16,13 +16,13 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260908-1357" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260908-1357" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260908-1357"></script>
-<script src="filtro_tipo.js?v=20260908-1357" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260908-1402" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260908-1402" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260908-1402"></script>
+<script src="filtro_tipo.js?v=20260908-1402" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
-  <script src="objetivos_config.js?v=20260908-1357" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260908-1402" onerror="void 0"></script>
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
@@ -39,7 +39,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20260908-1357" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260908-1402" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   
@@ -435,15 +435,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260908-1357" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260908-1357"></script>
+<script src="firebase.js?v=20260908-1402" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260908-1402"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260908-1357">
+<link rel="stylesheet" href="movil.css?v=20260908-1402">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260908-1357" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260908-1402" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -976,11 +976,14 @@ function renderEqStats(){
   var ses=getEqSesiones();
   var jugs=getJugadoresAcum(ses);
   var sT=0,rT=0,aT=0,bT=0,bPt=0,bPtPos=0,sPt=0,rPt=0,aPt=0;
-  var sPunto=0,sVend=0,sPos=0,sErr=0,rPunto=0,rPos=0,rVend=0,rErr=0,aPunto=0,aVend=0,aErr=0;
+  /* sNeg y rNeg: los negativos. Antes no se acumulaban porque la formula
+     vieja no los usaba; la nueva si, y sin declararlos la pantalla se caia
+     entera y el resumen del equipo quedaba en blanco. */
+  var sPunto=0,sVend=0,sPos=0,sNeg=0,sErr=0,rPunto=0,rPos=0,rNeg=0,rVend=0,rErr=0,aPunto=0,aVend=0,aErr=0;
   jugs.forEach(function(j){
     sT+=j.sT;rT+=j.rT;aT+=j.aT;bT+=j.bT;
-    sPunto+=j.sPunto;sVend+=j.sVend;sPos+=j.sPos;sErr+=j.sErr;
-    rPunto+=j.rPunto;rPos+=j.rPos;rVend+=j.rVend;rErr+=j.rErr;
+    sPunto+=j.sPunto;sVend+=j.sVend;sPos+=j.sPos;sNeg+=(j.sNeg||0);sErr+=j.sErr;
+    rPunto+=j.rPunto;rPos+=j.rPos;rNeg+=(j.rNeg||0);rVend+=j.rVend;rErr+=j.rErr;
     aPunto+=j.aPunto;aVend+=j.aVend;aErr+=j.aErr;
     bPt+=(j.bPt||0);bPtPos+=(j.bPtPos||0);
   });
@@ -2005,11 +2008,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260908-1357"></script>
-<script src="lang.js?v=20260908-1357"></script>
-<script src="temporadas_menu.js?v=20260908-1357"></script>
-<script src="app_offline.js?v=20260908-1357"></script>
-<script src="ayuda.js?v=20260908-1357"></script>
+<script src="chat_nafels.js?v=20260908-1402"></script>
+<script src="lang.js?v=20260908-1402"></script>
+<script src="temporadas_menu.js?v=20260908-1402"></script>
+<script src="app_offline.js?v=20260908-1402"></script>
+<script src="ayuda.js?v=20260908-1402"></script>
 <!-- Los archivos de video (datos_video_*.js.enc) se sacaron de esta
      pantalla: pesan unos 15 MB por temporada, descifrarlos son mas de
      un millon de vueltas de calculo, y el dashboard NO LOS USA para
