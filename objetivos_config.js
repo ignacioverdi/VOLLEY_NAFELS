@@ -39,10 +39,10 @@
       if(!o) return null;
       var T = g(o,['sT','T','tot','total']);
       if(!T) return null;
-      var ace  = g(o,['sPunto','Punto','pts','ace','k']);
-      var free = g(o,['sVend','Vend','slash','sl','bl']);
-      var pos  = g(o,['sPos','Pos','plus','pl','p']);
-      var ntr  = g(o,['sAdm','Adm','ntr','nt','exc']);
+      var ace  = g(o,['sPunto','Punto','pts','ace','perf','k']);
+      var free = g(o,['sVend','Vend','slash','over','sl','bl']);
+      var pos  = g(o,['sPos','Pos','plus','pos','pl','p']);
+      var ntr  = g(o,['sAdm','Adm','ntr','nt','exc','reg']);
       var neg  = g(o,['sNeg','Neg','neg','ng']);
       return redondear((ace + 0.875*free + 0.75*pos + 0.5*ntr + 0.25*neg)/T*100);
     },
@@ -51,11 +51,13 @@
       if(!o) return null;
       var T = g(o,['rT','T','tot','total']);
       if(!T) return null;
+      /* 'over' es como llaman al sobrepase armadores y game_plan; sin el,
+         esas dos pantallas daban 37 donde el resto daba 59. */
       var perf = g(o,['rPunto','Punto','pts','perf','k']);
-      var pos  = g(o,['rPos','Pos','plus','pl','p']);
-      var ntr  = g(o,['rAdm','Adm','ntr','nt','exc']);
+      var pos  = g(o,['rPos','Pos','plus','pos','pl','p','mas']);
+      var ntr  = g(o,['rAdm','Adm','ntr','nt','exc','reg']);
       var neg  = g(o,['rNeg','Neg','neg','ng']);
-      var sob  = g(o,['rVend','Vend','over','slash','sl','bl']);
+      var sob  = g(o,['rVend','Vend','over','ovp','slash','sl','bl']);
       return redondear((perf + 0.75*pos + 0.5*ntr + 0.25*neg + 0.125*sob)/T*100);
     },
     /* DEFENSA: mismo criterio que recepcion, sin sobrepase. */
@@ -63,10 +65,10 @@
       if(!o) return null;
       var T = g(o,['dT','defT','T','tot','total']);
       if(!T) return null;
-      var perf = g(o,['dPerf','defPerf','Punto','perf']);
-      var buena= g(o,['dBuena','defBuena','Pos','plus']);
-      var ntr  = g(o,['dAdm','defAdm','Adm','ntr']);
-      var mala = g(o,['dMala','defMala','Neg','neg']);
+      var perf = g(o,['dPerf','defPerf','Punto','perf','pt']);
+      var buena= g(o,['dBuena','defBuena','Pos','plus','buena','pos']);
+      var ntr  = g(o,['dAdm','defAdm','Adm','ntr','reg']);
+      var mala = g(o,['dMala','defMala','Neg','neg','mala']);
       return redondear((perf + 0.75*buena + 0.5*ntr + 0.25*mala)/T*100);
     },
     /* ATAQUE: la formula de siempre, la eficacia clasica del voley.

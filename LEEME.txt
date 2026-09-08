@@ -1,41 +1,54 @@
-CIERRE REAL
-===========
+TODO CONECTADO Y DOCUMENTADO
+============================
 
-Los 6 archivos a la carpeta y publicar. Sin HACER_TODO.
-
-AL PROBAR: Ctrl+F5. Y si algo sigue raro, Ctrl+Shift+R.
-Los .js se cachean aparte del .html: por eso a veces el html estaba nuevo y
-objetivos_config.js viejo.
+Los archivos a la carpeta y publicar. Sin HACER_TODO.
 
 
-LO QUE ENCONTRE ESTA VEZ
-------------------------
-1) LA TABLA DE RECEPCION MOSTRABA LA ESCALA VIEJA
-   DURDOS aparecia con 25% y en rojo, cuando su valor real es 59% (verde
-   claro). Los 7 jugadores en rojo eran por eso, no porque recibieran mal.
+1) EL CACHE, RESUELTO DE RAIZ
+   Los .js se cargaban con ?v=20260908-1506 y esa version no cambiaba, asi que
+   el navegador seguia sirviendo la version vieja aunque publicaras. Por eso el
+   objetivo de defensa "no existia" y la columna se veia verde.
 
-   La causa: esa tabla calculaba con (Punto + 0,5*Pos - 0,5*Vend - Err)/T,
-   escrito como src.* en vez de rPunto. Mi barrido anterior buscaba por
-   nombre de campo y no la vio.
-
-2) 16 CUENTAS SUELTAS MAS
-   4 en dashboard (src.*), 2 en analisis (tPt), 7 en panel_voley y 3 en
-   panel_vivo (arrays por posicion: d[0], sT[4]...), 2 en recepcion_jugador.
-
-   Todas pasan ahora por VB_EFF.
-
-3) TRES PANTALLAS NO CARGABAN objetivos_config.js
-   panel_vivo, recepcion_jugador y una mas. Sin eso la funcion no existe.
+   Se subio la version a 20260908-1620 en las 56 pantallas. De ahora en mas,
+   cada vez que cambies un .js conviene subir ese numero.
 
 
-VERIFICADO — la misma cuenta con TODOS los formatos de dato
-   saque   j.*  39  ·  src.*  39  ·  array  39
-   recep   j.*  59  ·  src.*  59
-   ataque       29  ·  src.*  29     (41-4-7)/105 = 29  a mano
-   defensa      27
+2) TODAS LAS PANTALLAS CONECTADAS
+   Control automatico: ninguna pantalla queda con formula propia ni con la
+   version vieja de los colores.
 
-   Barrido final: solo quedan 2 cuentas fuera de VB_EFF y las dos estan
-   BIEN: una es positividad (#+) y la otra ataque ya con la formula correcta.
+   Se arreglaron las dos ultimas:
+   · hm_ataque.html usaba 3 colores con un corte fijo de 8 puntos. Ahora los
+     mismos 4 del resto.
+   · importar_dvw.html no cargaba objetivos_config.js.
 
-   Sintaxis: todo OK menos hm_armador y hm_defensa, que YA VENIAN con error
-   de plantilla y no se tocaron.
+
+3) LOS VALORES COINCIDEN EN TODAS PARTES
+   Probado con DURDOS, recepcion, escrito como lo nombra cada pantalla:
+
+     dashboard (j.*)         59
+     dashboard tabla (src.*) 59
+     panel_voley (array)     59
+     recepcion_jugador       59
+     armadores/game_plan     59
+     recepcion.html          59
+
+   armadores y game_plan daban 37: llamaban 'over' al sobrepase y la funcion
+   no conocia ese nombre. Ya lo acepta.
+
+
+4) LA DOCUMENTACION, EN PANTALLA
+   En el Dashboard, pestaña OBJETIVOS, debajo del editor, ahora aparece un
+   bloque que explica:
+
+   · la escala 0-100 y cuanto vale cada valoracion en saque, recepcion y
+     defensa
+   · que el ataque usa la eficacia clasica (puntos - bloqueados - errores)
+     y que puede dar negativo
+   · que significa cada color y de donde salen los cortes (192 actuaciones
+     de equipo en partidos de la liga)
+   · por que las bandas no son iguales para todos los fundamentos: el saque
+     varia ±4 puntos entre partidos y el ataque ±21
+
+   Esta pensado para que un entrenador nuevo entienda que esta mirando sin
+   preguntarle a nadie.

@@ -16,13 +16,13 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260908-1506" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260908-1506" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260908-1506"></script>
-<script src="filtro_tipo.js?v=20260908-1506" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260908-1620" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260908-1620" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260908-1620"></script>
+<script src="filtro_tipo.js?v=20260908-1620" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
-  <script src="objetivos_config.js?v=20260908-1506" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260908-1620" onerror="void 0"></script>
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
@@ -39,7 +39,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20260908-1506" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260908-1620" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   
@@ -457,15 +457,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260908-1506" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260908-1506"></script>
+<script src="firebase.js?v=20260908-1620" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260908-1620"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
 <link rel="stylesheet" href="movil.css?v=20260908-1506">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260908-1506" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260908-1620" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -1765,6 +1765,80 @@ function pintarEditorObjetivos(){
       }
     });
   });
+
+  /* ══ DE DONDE SALE CADA NUMERO ═════════════════════════════════════════════
+     Se muestra en pantalla, debajo del editor, para que cualquier entrenador
+     que use la app entienda que esta mirando sin tener que preguntar. */
+  var doc = document.createElement('div');
+  doc.id = 'obj-doc';
+  doc.style.cssText = 'margin-top:14px;background:var(--card,#0f1020);'
+    + 'border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;'
+    + 'font-size:12.5px;line-height:1.75;color:#cbd5e1';
+  doc.innerHTML =
+      '<div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;'
+    + 'color:#94a3b8;margin-bottom:10px">Como se calcula cada valor</div>'
+
+    + '<div style="color:#94a3b8;margin-bottom:14px">'
+    + 'Saque, recepcion y defensa usan una escala de <b style="color:#e2e8f0">0 a 100</b>. '
+    + 'El error vale 0, la accion perfecta vale 100 y la neutra queda en el medio, en 50. '
+    + 'Asi el numero se lee solo: 50 es "todo neutro", 25 "todo negativo", 75 "todo positivo".'
+    + '</div>'
+
+    + '<table style="width:100%;border-collapse:collapse;font-size:12px">'
+    + '<tr style="color:#8395ac;text-align:left">'
+    + '<th style="padding:4px 6px">Fundamento</th><th style="padding:4px 6px">Cuanto vale cada valoracion</th></tr>'
+
+    + '<tr><td style="padding:5px 6px;color:#f59e0b;font-weight:700">Saque</td>'
+    + '<td style="padding:5px 6px"># ace <b>100</b> · / free ball <b>87,5</b> · + positivo <b>75</b> · '
+    + '! neutro <b>50</b> · &minus; negativo <b>25</b> · = error <b>0</b></td></tr>'
+
+    + '<tr><td style="padding:5px 6px;color:#22c55e;font-weight:700">Recepcion</td>'
+    + '<td style="padding:5px 6px"># perfecta <b>100</b> · + positiva <b>75</b> · ! neutra <b>50</b> · '
+    + '&minus; negativa <b>25</b> · / sobrepase <b>12,5</b> · = error <b>0</b></td></tr>'
+
+    + '<tr><td style="padding:5px 6px;color:#ef4444;font-weight:700">Defensa</td>'
+    + '<td style="padding:5px 6px"># perfecta <b>100</b> · + buena <b>75</b> · ! neutra <b>50</b> · '
+    + '&minus; mala <b>25</b> · = error <b>0</b></td></tr>'
+
+    + '<tr><td style="padding:5px 6px;color:#818cf8;font-weight:700">Ataque</td>'
+    + '<td style="padding:5px 6px">Eficacia clasica del voley: '
+    + '<b>(puntos &minus; bloqueados &minus; errores) / total</b>. '
+    + 'Es el estandar mundial y puede dar negativo.</td></tr>'
+
+    + '<tr><td style="padding:5px 6px;color:#06b6d4;font-weight:700">Bloqueo</td>'
+    + '<td style="padding:5px 6px">Blq #+ es <b>(punto + positivo) / total</b>. '
+    + 'Blq # es solo <b>punto / total</b>.</td></tr>'
+    + '</table>'
+
+    + '<div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;'
+    + 'color:#94a3b8;margin:16px 0 8px">De donde salen los objetivos</div>'
+
+    + '<div style="color:#94a3b8">'
+    + 'No estan puestos a ojo. Salen de <b style="color:#e2e8f0">192 actuaciones de equipo</b> '
+    + 'en partidos de la liga, y cada color marca donde estas parado respecto de ella:'
+    + '<div style="margin:10px 0 0 0">'
+    + '<div><span style="color:#22c55e;font-weight:800">Verde fuerte</span> '
+    + '&nbsp;el cuarto superior de la liga. No es "cumpliste", es estar entre los mejores.</div>'
+    + '<div><span style="color:#86efac;font-weight:800">Verde claro</span> '
+    + '&nbsp;por encima del promedio de la liga.</div>'
+    + '<div><span style="color:#fbbf24;font-weight:800">Amarillo</span> '
+    + '&nbsp;por debajo del promedio, dentro de lo normal.</div>'
+    + '<div><span style="color:#ef4444;font-weight:800">Rojo</span> '
+    + '&nbsp;el cuarto inferior.</div>'
+    + '</div></div>'
+
+    + '<div style="color:#8395ac;margin-top:14px;font-size:11.5px;'
+    + 'border-top:1px solid rgba(255,255,255,.07);padding-top:10px">'
+    + 'El ancho de cada banda no es igual para todos los fundamentos, y es a proposito: '
+    + 'depende de cuanto varia ese fundamento de un partido a otro. El saque se mueve '
+    + '&plusmn;4 puntos y el ataque &plusmn;21, asi que el ataque necesita bandas mas anchas. '
+    + 'Con bandas mas angostas que esa variacion, el color cambiaria por azar y no diria nada.'
+    + '<br><br>'
+    + 'Los numeros de arriba se pueden cambiar: son el objetivo de <b>este</b> equipo. '
+    + 'Conviene revisarlos al final de cada temporada, con los partidos nuevos.'
+    + '</div>';
+
+  if(!document.getElementById('obj-doc')) d.parentNode.insertBefore(doc, d.nextSibling);
 }
 
 function renderObjetivosTab(){
@@ -2047,11 +2121,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260908-1506"></script>
-<script src="lang.js?v=20260908-1506"></script>
-<script src="temporadas_menu.js?v=20260908-1506"></script>
-<script src="app_offline.js?v=20260908-1506"></script>
-<script src="ayuda.js?v=20260908-1506"></script>
+<script src="chat_nafels.js?v=20260908-1620"></script>
+<script src="lang.js?v=20260908-1620"></script>
+<script src="temporadas_menu.js?v=20260908-1620"></script>
+<script src="app_offline.js?v=20260908-1620"></script>
+<script src="ayuda.js?v=20260908-1620"></script>
 <!-- Los archivos de video (datos_video_*.js.enc) se sacaron de esta
      pantalla: pesan unos 15 MB por temporada, descifrarlos son mas de
      un millon de vueltas de calculo, y el dashboard NO LOS USA para
