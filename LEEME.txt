@@ -1,58 +1,30 @@
-═══════════════════════════════════════════════════════════════════════════════
-   LA CAUSA DE RAÍZ — era una sola
-═══════════════════════════════════════════════════════════════════════════════
+FALTABA LA MITAD: LAS PANTALLAS
+===============================
 
-   Tenías razón vos con lo de los nombres. Los tres problemas que
-   reportaste son el mismo, visto desde tres pantallas distintas.
+Los 8 archivos a la carpeta y PUBLICAR. No hace falta HACER_TODO: son todas
+pantallas.
 
+QUE PASO
+--------
+El motor (gen_baterias.py) quedo bien en escala 0-100, pero cada pantalla
+calcula el numero POR SU CUENTA y esas formulas quedaron en la escala vieja.
+Resultado: los cortes de color eran los nuevos (42/38/34) y los valores los
+viejos (-25, 11), asi que todo se pintaba ROJO.
 
-── QUÉ PASA ──────────────────────────────────────────────────────────────────
+Ahora las 8 pantallas usan la misma formula que el motor:
 
-   Tu .sq nuevo dice "AXPO NAFELS". Ese nombre NO está en la tabla de
-   config_club.json, que solo tiene:
+  saque     = (# + 0,875*/ + 0,75*+ + 0,5*! + 0,25*-) / total
+  recepcion = (# + 0,75*+ + 0,5*! + 0,25*- + 0,125*/) / total
 
-       Biogas Volley Näfels (NLA Men)
-       Volley NFELS
-       Volley Nfels
+Verificado contra los datos publicados: la conversion cierra exacta.
+  saque      -22  ->  39     (-22 + 100) / 2 = 39
+  recepcion   11  ->  55,5   ( 11 + 100) / 2 = 55,5
 
-   Sin traducción, el motor guarda el equipo con otra clave:
+Y los colores quedan: saque verde claro, recepcion amarillo.
 
-       plan_partido_data  →  'axponafels'
-       las pantallas      →  buscan  'nafels'
-
-   Y ahí se rompe todo lo que depende de encontrar al equipo:
-
-       · el acceso a RECEPCIÓN en el perfil (lo confirmé: con 'nafels'
-         hay 0 jugadores, con 'axponafels' están los 6 con rol reception,
-         incluido BARTHOLET #11)
-       · las baterías del jugador, todas en cero
-       · los videos de entrenamiento, que no se asocian
-
-
-── LA SOLUCIÓN ───────────────────────────────────────────────────────────────
-
-   1)  NOMBRES_DEL_CLUB.py
-
-       Agrega a la tabla las 6 formas que faltaban:
-
-           NAFELS · AXPO NAFELS · AXPO VOLLEY NAFELS
-           VOLLEY NAFELS · NAFELS VOLLEY · BIOGAS VOLLEY NAFELS
-
-       El año que viene, cuando cambie el sponsor, ya está cubierto.
-
-   2)  LINKS_VIDEO_V2.py
-
-       build_video no leía los links porque cifrar_datos borra el .js
-       después de cifrarlo. Ahora lee el .enc si el .js no está.
-
-       Probado de verdad esta vez: cifré un archivo, borré el original,
-       y recuperó el link.
-
-
-── LOS PASOS ─────────────────────────────────────────────────────────────────
-
-       1. NOMBRES_DEL_CLUB.py     →  S
-       2. LINKS_VIDEO_V2.py       →  S
-       3. HACER_TODO.bat
-
-═══════════════════════════════════════════════════════════════════════════════
+DE PASO
+-------
+armadores.html, game_plan.html y hm_saque.html no contaban el neutro ('!').
+Con la escala vieja valia cero y no hacia falta; ahora vale 50, asi que sin
+contarlo esas tres pantallas mostrarian un numero mas bajo que el resto.
+Se les agrego el contador.
