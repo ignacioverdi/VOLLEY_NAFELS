@@ -1,60 +1,41 @@
-CIERRE COMPLETO
-===============
+CIERRE REAL
+===========
 
-Los archivos a la carpeta y PUBLICAR. Sin HACER_TODO: son todas pantallas.
+Los 6 archivos a la carpeta y publicar. Sin HACER_TODO.
 
-IMPORTANTE AL PROBAR: recarga con Ctrl+F5 (o Ctrl+Shift+R).
-Con la recarga normal el navegador se queda con la version vieja. Eso fue lo
-que te hizo ver la columna verde aunque el archivo ya estuviera bien.
-
-
-1) LA COLUMNA EFF: HABIA DOS effColor
-   dashboard.html y analisis.html tenian DOS definiciones. La segunda pisa a
-   la primera en JavaScript, y estaba con los cortes viejos. Ahora las dos son
-   iguales. Otras 7 pantallas tenian solo la vieja: unificadas.
-
-2) 37 FORMULAS SUELTAS MAS
-   analisis(19), dashboard(8), importar_dvw(3), utils(5), jugador(1),
-   panel_voley(1). Muchas todavia con la escala vieja. Todas pasan ahora por
-   VB_EFF.
-
-   Caso llamativo: en analisis, los subfiltros FLOTADO y POTENCIA usaban una
-   formula propia y mas pobre —(punto - error)/total— distinta de la del
-   filtro TOTAL. Ahora usan la misma.
-
-3) EL ATAQUE: CORREGI UN ERROR MIO
-   Cuando arme VB_EFF.ataque le puse una formula inventada (punto 100, resto
-   50). NO era la tuya. Ya esta con la tuya:
-
-       ataque = (punto - bloqueado - error) / total
-
-   Es la eficacia clasica del voley y es la que estaba en tu sistema. Nunca
-   se toco en el motor; el error estaba solo en la funcion nueva, que todavia
-   no usaba nadie.
+AL PROBAR: Ctrl+F5. Y si algo sigue raro, Ctrl+Shift+R.
+Los .js se cachean aparte del .html: por eso a veces el html estaba nuevo y
+objetivos_config.js viejo.
 
 
-QUEDA VERIFICADO
-  saque      39   escala 0-100, neutro 50
-  recepcion  55   escala 0-100, neutro 50
-  ataque     29   formula clasica (41-4-7)/105 = 29  ✓ a mano
-  defensa    27   escala 0-100
+LO QUE ENCONTRE ESTA VEZ
+------------------------
+1) LA TABLA DE RECEPCION MOSTRABA LA ESCALA VIEJA
+   DURDOS aparecia con 25% y en rojo, cuando su valor real es 59% (verde
+   claro). Los 7 jugadores en rojo eran por eso, no porque recibieran mal.
 
-  semaforo probado en saque, recepcion y ataque:
-    bajo -> ROJO · medio-bajo -> AMARILLO · medio -> verde claro · alto -> VERDE FUERTE
+   La causa: esa tabla calculaba con (Punto + 0,5*Pos - 0,5*Vend - Err)/T,
+   escrito como src.* en vez de rPunto. Mi barrido anterior buscaba por
+   nombre de campo y no la vio.
 
-  quedan 2 cuentas sueltas y estan BIEN: son "Rec #+" (positividad),
-  otra metrica distinta de la efectividad.
+2) 16 CUENTAS SUELTAS MAS
+   4 en dashboard (src.*), 2 en analisis (tPt), 7 en panel_voley y 3 en
+   panel_vivo (arrays por posicion: d[0], sT[4]...), 2 en recepcion_jugador.
+
+   Todas pasan ahora por VB_EFF.
+
+3) TRES PANTALLAS NO CARGABAN objetivos_config.js
+   panel_vivo, recepcion_jugador y una mas. Sin eso la funcion no existe.
 
 
-SOBRE LOS OBJETIVOS DE ATAQUE
------------------------------
-No se cambio ninguna formula de ataque: se cambio donde poner los cortes de
-color. El metodo fue el mismo que en saque y recepcion: sobre 192 actuaciones
-de equipo de la 25-26, verde fuerte = percentil 75, verde claro = mediana,
-amarillo = percentil 25.
+VERIFICADO — la misma cuenta con TODOS los formatos de dato
+   saque   j.*  39  ·  src.*  39  ·  array  39
+   recep   j.*  59  ·  src.*  59
+   ataque       29  ·  src.*  29     (41-4-7)/105 = 29  a mano
+   defensa      27
 
-El caso mas notorio fue el ataque de alta: tenia objetivo 20 y la mediana real
-de la liga es 12,5, asi que un equipo promedio quedaba en rojo permanente.
+   Barrido final: solo quedan 2 cuentas fuera de VB_EFF y las dos estan
+   BIEN: una es positividad (#+) y la otra ataque ya con la formula correcta.
 
-Si tus objetivos venian de una exigencia tuya como entrenador y no de lo que
-hace la liga, se vuelven a poner los que quieras: es un solo archivo.
+   Sintaxis: todo OK menos hm_armador y hm_defensa, que YA VENIAN con error
+   de plantilla y no se tocaron.

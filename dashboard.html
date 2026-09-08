@@ -1256,14 +1256,14 @@ function renderEqContent(){
         else if(RECEP_TIPO==='potencia'&&j.rPot) src={T:j.rPot.T,Punto:j.rPot.Punto,Pos:j.rPot.Pos,Adm:j.rPot.Adm,Neg:j.rPot.Neg,Vend:j.rPot.Vend,Err:j.rPot.Err};
         else src={T:j.rT,Punto:j.rPunto,Pos:j.rPos,Adm:j.rAdm||0,Neg:j.rNeg,Vend:j.rVend,Err:j.rErr};
         if(!src.T)return null;
-        var e=Math.round((src.Punto+0.5*src.Pos-0.5*src.Vend-src.Err)/src.T*100);
+        var e=VB_EFF.recepcion(src);
         return[{v:fmt(e),c:effColor(e,'rec'),b:true},{v:src.T,c:'#22c55e',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Pos,c:'#86efac'},{v:src.Adm,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Vend,c:'#fbbf24'},{v:src.Err,c:'#ef4444'}];},
       getTot:function(a){
         var src;
         if(RECEP_TIPO==='flotado'&&a.rFlo) src={T:a.rFlo.T,Punto:a.rFlo.Punto,Pos:a.rFlo.Pos,Adm:a.rFlo.Adm,Neg:a.rFlo.Neg,Vend:a.rFlo.Vend,Err:a.rFlo.Err};
         else if(RECEP_TIPO==='potencia'&&a.rPot) src={T:a.rPot.T,Punto:a.rPot.Punto,Pos:a.rPot.Pos,Adm:a.rPot.Adm,Neg:a.rPot.Neg,Vend:a.rPot.Vend,Err:a.rPot.Err};
         else src={T:a.rT,Punto:a.rPunto,Pos:a.rPos,Adm:a.rAdm||0,Neg:a.rNeg,Vend:a.rVend,Err:a.rErr};
-        var e=src.T>0?Math.round((src.Punto+0.5*src.Pos-0.5*src.Vend-src.Err)/src.T*100):null;
+        var e=src.T>0?VB_EFF.recepcion(src):null;
         return[{v:e!==null?fmt(e):'—',c:effColor(e,'rec'),b:true},{v:src.T,c:'#22c55e',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Pos,c:'#86efac'},{v:src.Adm,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Vend,c:'#fbbf24'},{v:src.Err,c:'#ef4444'}];}},
     ataque:{color:'#818cf8',ths:['EFF%','TOT','# Pto','+ Pos','! Ntr','– Neg','/ Blq','= Err'],
       getData:function(j){
@@ -1272,14 +1272,14 @@ function renderEqContent(){
         else if(ATK_FASE==='tr'&&j.aTr) src={T:j.aTr.T,Punto:j.aTr.Punto,Pos:j.aTr.Pos,Adm:j.aTr.Adm,Neg:j.aTr.Neg,Vend:j.aTr.Vend,Err:j.aTr.Err};
         else src={T:j.aT,Punto:j.aPunto,Pos:j.aPos,Adm:j.aAdm||0,Neg:j.aNeg,Vend:j.aVend,Err:j.aErr};
         if(!src.T)return null;
-        var e=Math.round((src.Punto-src.Vend-src.Err)/src.T*100);
+        var e=VB_EFF.ataque(src);
         return[{v:fmt(e),c:effColor(e,'atqq'),b:true},{v:src.T,c:'#818cf8',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Pos,c:'#86efac'},{v:src.Adm,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Vend,c:'#fbbf24'},{v:src.Err,c:'#ef4444'}];},
       getTot:function(a){
         var src;
         if(ATK_FASE==='so'&&a.aSo) src={T:a.aSo.T,Punto:a.aSo.Punto,Pos:a.aSo.Pos,Adm:a.aSo.Adm,Neg:a.aSo.Neg,Vend:a.aSo.Vend,Err:a.aSo.Err};
         else if(ATK_FASE==='tr'&&a.aTr) src={T:a.aTr.T,Punto:a.aTr.Punto,Pos:a.aTr.Pos,Adm:a.aTr.Adm,Neg:a.aTr.Neg,Vend:a.aTr.Vend,Err:a.aTr.Err};
         else src={T:a.aT,Punto:a.aPunto,Pos:a.aPos,Adm:a.aAdm||0,Neg:a.aNeg,Vend:a.aVend,Err:a.aErr};
-        var e=src.T>0?Math.round((src.Punto-src.Vend-src.Err)/src.T*100):null;
+        var e=src.T>0?VB_EFF.ataque(src):null;
         return[{v:e!==null?fmt(e):'—',c:effColor(e,'atqq'),b:true},{v:src.T,c:'#818cf8',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Pos,c:'#86efac'},{v:src.Adm,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Vend,c:'#fbbf24'},{v:src.Err,c:'#ef4444'}];}},
     bloqueo:{color:'#06b6d4',ths:['EFF%','TOT','# Pto','+ Pos','! Ntr','– Neg','/ Toq','= Err'],
       getData:function(j){if(!j.bT)return null;

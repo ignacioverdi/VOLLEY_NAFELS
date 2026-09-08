@@ -865,16 +865,16 @@ function getFD(p,k){if(k==='R')return p.rT;if(k==='S')return p.sT;if(k==='A')ret
   if(k==='F')return p.fT||[0,0,0,0,0,0,0];
   return [0,0,0,0,0,0,0];}
 // Eficiencia Saque: (1×# + 0.5×/ + 0.25×+ - 1×=) / total
-function efS(d){if(!d||!d[6])return null;return Math.round((d[0]*1 + d[4]*0.5 + d[1]*0.25 - d[5]*1)/d[6]*100);}
+function efS(d){if(!d||!d[6])return null;return VB_EFF.saque({T:d[6],Punto:d[0],Vend:d[4],Pos:d[1],Adm:d[2]||0,Neg:d[3]||0});}
 // Eficiencia Recepcion: (1×# + 0.5×+ - 0.5×/ - 1×=) / total
-function efR(d){if(!d||!d[6])return null;return Math.round((d[0]*1 + d[1]*0.5 - d[4]*0.5 - d[5]*1)/d[6]*100);}
+function efR(d){if(!d||!d[6])return null;return VB_EFF.recepcion({T:d[6],Punto:d[0],Pos:d[1],Adm:d[2]||0,Neg:d[3]||0,Vend:d[4]});}
 // Eficiencia Ataque: (# - / - =) / total
-function efA(d){if(!d||!d[6])return null;return Math.round((d[0] - d[4] - d[5])/d[6]*100);}
+function efA(d){if(!d||!d[6])return null;return VB_EFF.ataque({T:d[6],Punto:d[0],Vend:d[4],Err:d[5]});}
 // Eficiencia Bloqueo: (# + 0.5×+) / total
 function efB(d){if(!d||!d[6])return null;return Math.round((d[0] + d[1]*0.5)/d[6]*100);}
 // Defensa y Freeball: positividad (# y +). Armado: eficiencia (# menos = y /). Manual DV4 2.3.4.4
 function efD(d){if(!d||!d[6])return null;return Math.round((d[0] + d[1])/d[6]*100);}
-function efE(d){if(!d||!d[6])return null;return Math.round((d[0] - d[4] - d[5])/d[6]*100);}
+function efE(d){if(!d||!d[6])return null;return VB_EFF.ataque({T:d[6],Punto:d[0],Vend:d[4],Err:d[5]});}
 function efFB(d){if(!d||!d[6])return null;return Math.round((d[0] + d[1])/d[6]*100);}
 function efF(d,k){if(k==='R')return efR(d);if(k==='S')return efS(d);if(k==='A')return efA(d);if(k==='B')return efB(d);
   if(k==='D')return efD(d);if(k==='E')return efE(d);if(k==='F')return efFB(d);
@@ -1105,7 +1105,7 @@ function renderTabla(){
 
     // SAQUE
     const s=p.sT; const sT=s[6]||0;
-    const sEff=sT?Math.round((s[0]*1+s[4]*0.5+s[1]*0.25-s[5]*1)/sT*100):null;
+    const sEff=sT?VB_EFF.saque({T:sT,Punto:s[0],Vend:s[4],Pos:s[1],Adm:s[2]||0,Neg:s[3]||0}):null;
     const sPt=sT?Math.round(s[0]/sT*100):null;
     const sVend=sT?Math.round(s[4]/sT*100):null;
     const sPos=sT?Math.round(s[1]/sT*100):null;
@@ -1113,7 +1113,7 @@ function renderTabla(){
 
     // RECEPCION
     const r=p.rT; const rT=r[6]||0;
-    const rEff=rT?Math.round((r[0]*1+r[1]*0.5-r[4]*0.5-r[5]*1)/rT*100):null;
+    const rEff=rT?VB_EFF.recepcion({T:rT,Punto:r[0],Pos:r[1],Adm:r[2]||0,Neg:r[3]||0,Vend:r[4]}):null;
     const rPt=rT?Math.round(r[0]/rT*100):null;
     const rPos=rT?Math.round(r[1]/rT*100):null;
     const rNeg=rT?Math.round(r[3]/rT*100):null;
@@ -1288,13 +1288,13 @@ function calcObjetivos(D){
     }
   });
   // Eff Saque: (1×# + 0.5×/ + 0.25×+ - 1×=) / total
-  const effS=sT[6]?Math.round((sT[0]*1+sT[4]*0.5+sT[1]*0.25-sT[5]*1)/sT[6]*100):null;
+  const effS=sT[6]?VB_EFF.saque({T:sT[6],Punto:sT[0],Vend:sT[4],Pos:sT[1],Adm:sT[2]||0,Neg:sT[3]||0}):null;
   // Eff Rec: (1×# + 0.5×+ - 0.5×/ - 1×=) / total
-  const effR=rT[6]?Math.round((rT[0]*1+rT[1]*0.5-rT[4]*0.5-rT[5]*1)/rT[6]*100):null;
+  const effR=rT[6]?VB_EFF.recepcion({T:rT[6],Punto:rT[0],Pos:rT[1],Adm:rT[2]||0,Neg:rT[3]||0,Vend:rT[4]}):null;
   // Bloqueo #+%: (# + +) / total
   const effB=bT[6]?Math.round((bT[0]+bT[1])/bT[6]*100):null;
   // Eff Ataque Alta: (# - / - =) / total altas
-  const effA=aV[6]?Math.round((aV[0]-aV[4]-aV[5])/aV[6]*100):null;
+  const effA=aV[6]?VB_EFF.ataque({T:aV[6],Punto:aV[0],Vend:aV[4],Err:aV[5]}):null;
   // Toques
   const tcq=aTT[6]||0;
   // Manos y afuera: bloqueos = del equipo rival = bT[5]
