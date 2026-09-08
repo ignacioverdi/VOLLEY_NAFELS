@@ -139,15 +139,16 @@ window./* ── SAQUE Y RECEPCION: ESCALA 0 A 100 Y CORTES SACADOS DE LA LIGA �
 OBJETIVOS_CONFIG={metas:{
   sq:   { label:'% Saque (42)', obj:42, min:25,max:55, g2:42, g1:38, y:34},
   rec:  { label:'% Recepción (62)', obj:62, min:45,max:75, g2:62, g1:58, y:54},
-  bqpos:{label:'% Blq #+ (43%)',    obj:43, min:25, max:52, g2:43, g1:37, y:30},
-  bqpt: {label:'% Blq # (23%)',   obj:23, min:12, max:28, g2:23, g1:20, y:17},
-  atqq: {label:'% Atq Central (48%)', obj:48, min:35, max:56, g2:48, g1:44, y:40},
-  atqhb:{label:'% Atq Alta (20%)',    obj:20, min:8,  max:26, g2:20, g1:16, y:12},
-  atqx: {label:'% Atq Rápida (42%)',     obj:42, min:28, max:50, g2:42, g1:38, y:34},
-  atqrp:{label:'% Atq R #+ (50%)',   obj:50, min:32, max:58, g2:50, g1:44, y:38},
-  atqri:{label:'% Atq R ! (36%)',    obj:36, min:22, max:44, g2:36, g1:32, y:28},
-  atqrm:{label:'% Atq R - (26%)',    obj:26, min:14, max:34, g2:26, g1:22, y:18},
-  atqtr:{label:'% Transición (34%)',    obj:34, min:22, max:42, g2:34, g1:30, y:26}
+  bqpos:{ label:'% Blq #+ (46)', obj:46, min:20,max:60, g2:46, g1:41, y:35},
+  bqpt: { label:'% Blq # (22)', obj:22, min:5,max:32, g2:22, g1:17, y:12},
+  atqq: { label:'% Atq Central (56)', obj:56, min:15,max:75, g2:56, g1:42, y:29},
+  atqhb:{ label:'% Atq Alta (24)', obj:24, min:-10,max:40, g2:24, g1:12, y:0},
+  atqx: { label:'% Atq Rápida (41)', obj:41, min:10,max:55, g2:41, g1:34, y:24},
+  atqrp:{ label:'% Atq R#+ (50)', obj:50, min:15,max:65, g2:50, g1:39, y:28},
+  atqri:{ label:'% Atq R! (45)', obj:45, min:5,max:60, g2:45, g1:30, y:17},
+  atqrm:{ label:'% Atq R- (30)', obj:30, min:-10,max:45, g2:30, g1:18, y:0},
+  atqtr:{ label:'% Atq Transición (35)', obj:35, min:5,max:50, g2:35, g1:27, y:17},
+  def: { label:'% Defensa (59)', obj:59, min:40,max:70, g2:59, g1:54, y:49}
 }};
 
 window.currentObjPartido = window.currentObjPartido || 'acumulado';

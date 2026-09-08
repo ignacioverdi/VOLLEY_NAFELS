@@ -1,35 +1,65 @@
-DOS COSAS
-=========
+TODOS LOS FUNDAMENTOS: COLORES Y OBJETIVOS
+==========================================
 
-1) EL ARCHIVO
-   dashboard.html a la carpeta y publicar.
-
-   Arregla el "ReferenceError: s is not defined" que dejaba el resumen del
-   equipo en blanco. Mi reemplazo automatico habia generado VB_EFF.saque(s),
-   tomando la "s" de sPunto como si fuera el nombre de un objeto. Ahora se
-   arma el objeto con los totales sueltos y se lo pasa completo.
+Los 12 archivos a la carpeta y publicar. Sin HACER_TODO: son pantallas.
 
 
-2) HAY QUE CORRER HACER_TODO
-   Esto NO es un archivo, es un paso que falta.
+1) OBJETIVOS RECALCULADOS CON LA LIGA REAL
+   Los de ataque y bloqueo venian de criterios viejos y estaban
+   descalibrados. Ejemplo: atqhb (ataque de alta) tenia objetivo 20 cuando la
+   MEDIANA de la liga es 12,5, asi que medio campeonato quedaba en rojo.
 
-   datos_baterias.js todavia tiene la escala VIEJA:
+   Ahora los 12 usan el mismo metodo que saque y recepcion, sobre 192
+   actuaciones de equipo en partidos de la 25-26:
 
-     saque      -25   (deberia dar 39)
-     recepcion   11   (deberia dar 55)
+     verde fuerte = P75 (cuarto superior de la liga)
+     verde claro  = mediana
+     amarillo     = P25
+     rojo         = debajo del cuarto inferior
 
-   El motor gen_baterias.py ya esta publicado con la escala 0-100, pero el
-   archivo de datos se genera al correr HACER_TODO y eso no se hizo desde
-   entonces. Por eso las BATERIAS muestran numeros negativos y se pintan
-   rojas, aunque las tarjetas de arriba ya esten bien.
+   FUND      ANTES         AHORA        que mide
+   bqpos     43/37/30      46/41/35     bloqueo #+
+   bqpt      23/20/17      22/17/12     bloqueo punto
+   atqq      48/44/40      56/42/29     ataque central
+   atqx      42/38/34      41/34/24     ataque rapida
+   atqhb     20/16/12      24/12/0      ataque alta
+   atqrp     50/44/38      50/39/28     ataque tras recepcion #+
+   atqri     36/32/28      45/30/17     ataque tras recepcion !
+   atqrm     26/22/18      30/18/0      ataque tras recepcion -
+   atqtr     34/30/26      35/27/17     ataque en transicion
+   def       (no existia)  59/54/49     defensa
+   sq        42/38/34      igual        saque
+   rec       62/58/54      igual        recepcion
 
-   Correr HACER_TODO y publicar. Ahi las baterias pasan a la misma escala
-   que el resto y los colores dejan de dar rojo.
+   Fijate el ancho de las bandas: en ataque central son de 14 puntos y en
+   saque de 4. No es capricho: el ataque varia ±21 puntos de un partido a
+   otro y el saque ±4. Bandas mas angostas que el ruido cambiarian de color
+   por azar.
 
 
-VERIFICADO EN ESTA TANDA
-------------------------
-  · sintaxis de las 8 pantallas + objetivos_config.js: OK
-  · las 30 llamadas a VB_EFF, una por una: todas con su objeto declarado
-  · dashboard: 17 llamadas, todas correctas
-  · la funcion unica devuelve lo mismo con los 5 juegos de nombres
+2) LA COLUMNA EFF% YA NO ES TODA VERDE
+   Usaba cortes fijos (verde arriba de 40) que servian para la escala vieja.
+   Ahora cada fundamento usa SUS cortes.
+
+   En saque, con tus jugadores:
+     SCHWITTER  23%   antes verde claro   ahora ROJO
+     NORRIS     30%   antes verde claro   ahora ROJO
+     STEIMANN   34%   antes verde claro   ahora AMARILLO
+     ROFFLER    41%   antes VERDE FUERTE  ahora verde claro
+     VAZQUEZ    44%   antes VERDE FUERTE  ahora VERDE FUERTE
+
+
+3) SE ENCONTRARON 6 COPIAS MAS DE LAS FORMULAS
+   En armadores, game_plan, recepcion, saque_jugador y dos en dashboard
+   quedaban cuentas sueltas de recepcion y defensa con la escala vieja.
+   Todas pasan ahora por VB_EFF.
+
+   Barrido final: NO queda ninguna formula suelta en ningun archivo.
+
+
+VERIFICADO
+  · los 12 fundamentos: bajo->ROJO, medio->verde claro, alto->VERDE FUERTE
+  · sintaxis de los 12 archivos
+  · seis pantallas mas tenian el effColor viejo: unificadas
+  · recepcion.html, ataque_jugador y saque_jugador no cargaban
+    objetivos_config.js: se les agrego

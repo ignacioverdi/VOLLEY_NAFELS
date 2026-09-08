@@ -85,7 +85,7 @@ def _bat_nuevo():
     return {'S':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
             'R':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
             'B':{'#':0,'+':0,'T':0},
-            'D':{'#':0,'+':0,'-':0,'=':0,'T':0},
+            'D':{'#':0,'+':0,'!':0,'-':0,'=':0,'T':0},
             'Aall':na(),'cent':na(),'alta':na(),'rap':na(),
             'rp':na(),'ri':na(),'rm':na(),'tr':na()}
 
@@ -168,7 +168,10 @@ def _bat_to_pcts(P):
         # dias distintos da un numero que no significa nada.
         'defBuena': D['+'],
         'defMala':  D['-'],
-        'def':     _roundpy((D['#']+0.5*D['+']-0.5*D['-']-D['='])/D['T']*100) if D['T'] else None,
+        # Misma escala 0-100 que el resto: perfecta 100, buena 75, neutra 50,
+        # mala 25, error 0. Estaba en la escala vieja y daba -44 mientras la
+        # pantalla mostraba 27 para lo mismo.
+        'def':     _roundpy((D['#']+0.75*D['+']+0.5*D['!']+0.25*D['-'])/D['T']*100) if D['T'] else None,
         # ══ SAQUE Y RECEPCION: ESCALA SIMETRICA ══════════════════════════════
         # Antes los pesos eran chicos y asimetricos, y sobre todo el saque
         # negativo y el neutro valian LO MISMO (cero). Un saque que el rival
@@ -356,10 +359,22 @@ def build(fuentes, out='datos_baterias.js', filtro_temp=None):
                 for sec2 in P:
                     for k in P[sec2]: acc[nom][sec2][k]+=P[sec2][k]
         jug_a={nom:_bat_to_pcts(acc[nom]) for nom in acc}
+        # ── EL TOTAL DEL EQUIPO INCLUYE A TODOS ──────────────────────────────
+        # Antes el acumulado se armaba sumando solo a los jugadores con nombre
+        # reconocido, porque arriba se saltean los que no lo tienen ("if not
+        # nom: continue"). Pero el total POR SESION si los cuenta, asi que el
+        # numero del acumulado no coincidia con el de las sesiones: 37 contra
+        # 39 con las mismas cuatro practicas.
+        #
+        # Cada sesion ya trae su __EQUIPO__, que es la suma de TODOS los
+        # jugadores. Sumando esos, el acumulado y las sesiones dicen lo mismo.
+        # Los promedios por jugador siguen igual: ahi si hace falta el nombre.
         eq_acc=_bat_nuevo()
-        for nom in acc:
-            for sec2 in acc[nom]:
-                for k in acc[nom][sec2]: eq_acc[sec2][k]+=acc[nom][sec2][k]
+        for m in lista:
+            E=m['_acum'].get('__EQUIPO__')
+            if not E: continue
+            for sec2 in E:
+                for k in E[sec2]: eq_acc[sec2][k]+=E[sec2][k]
         return jug_a, _bat_to_pcts(eq_acc)
 
     jug_acum, eq_acum = acumular(matches)
