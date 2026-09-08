@@ -139,7 +139,7 @@ function effRecepcion(j){
   return j.rT>0 ? VB_EFF.recepcion(j) : null;
 }
 function effAtaque(j){
-  return j.aT>0 ? Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100) : null;
+  return j.aT>0 ? VB_EFF.ataque(j) : null;
 }
 function effBloqueo(j){
   return j.bT>0 ? Math.round((j.bPt+j.bPtPos)/j.bT*100) : null;
@@ -598,9 +598,9 @@ function getJugadores(idx){
       });
     });
     Object.values(acum).forEach(function(s){
-      if(s.sT>0) s.sEff=Math.round((s.sPunto*1+s.sVend*0.5+s.sPos*0.25-s.sErr*1)/s.sT*100);
-      if(s.rT>0) s.rEff=Math.round((s.rPunto*1 + s.rPos*0.5 - s.rNeg*0.5 - s.rVend*0.75 - s.rErr*1)/s.rT*100);
-      if(s.aT>0) s.aEff=Math.round((s.aPunto-s.aVend-s.aErr)/s.aT*100);
+      if(s.sT>0) s.sEff=VB_EFF.saque(s);
+      if(s.rT>0) s.rEff=VB_EFF.recepcion(s);
+      if(s.aT>0) s.aEff=VB_EFF.ataque(s);
     });
     return Object.values(acum).sort(function(a,b){return a.c-b.c;});
   } else {
@@ -623,9 +623,9 @@ function effColor(v, meta){
   }
   return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#f97316':'#ef4444';
 }
-function sEff(j){ return j.sT>0?Math.round((j.sPunto*1+j.sVend*0.5+j.sPos*0.25-j.sErr*1)/j.sT*100):null; }
-function rEff(j){ return j.rT>0?Math.round((j.rPunto*1 + j.rPos*0.5 - j.rNeg*0.5 - j.rVend*0.75 - j.rErr*1)/j.rT*100):null; }
-function aEff(j){ return j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null; }
+function sEff(j){ return j.sT>0?VB_EFF.saque(j):null; }
+function rEff(j){ return j.rT>0?VB_EFF.recepcion(j):null; }
+function aEff(j){ return j.aT>0?VB_EFF.ataque(j):null; }
 function bEff(j){ return j.bT>0?Math.round((j.bPt+j.bPtPos)/j.bT*100):null; }
 function td(v,cls){ return '<td class="'+(cls||'')+'">'+(v!==undefined&&v!==null?v:'-')+'</td>'; }
 function effTd(v){ return '<td style="font-weight:800;color:'+effColor(v)+'">'+(v!==null&&v!==undefined?v+'%':'--')+'</td>'; }
@@ -834,9 +834,9 @@ function renderIndividualNew(num){
     }
   });
   // Calcular eficiencias
-  var se=acum.sT>0?Math.round((acum.sPunto*1+acum.sVend*0.5+acum.sPos*0.25-acum.sErr*1)/acum.sT*100):null;
-  var re=acum.rT>0?Math.round((acum.rPunto*1 + acum.rPos*0.5 - acum.rNeg*0.5 - acum.rVend*0.75 - acum.rErr*1)/acum.rT*100):null;
-  var ae=acum.aT>0?Math.round((acum.aPunto-acum.aVend-acum.aErr)/acum.aT*100):null;
+  var se=acum.sT>0?VB_EFF.saque(acum):null;
+  var re=acum.rT>0?VB_EFF.recepcion(acum):null;
+  var ae=acum.aT>0?VB_EFF.ataque(acum):null;
   var be=acum.bT>0?Math.round((acum.bPt+acum.bPtPos)/acum.bT*100):null;
   // Direcciones de saque
   var totalDestsS=Object.values(destMapS).reduce(function(a,b){return a+b;},0);
@@ -963,9 +963,9 @@ function renderIndividualNew(num){
     evol+='<th style="color:#818cf8">A</th><th style="color:#818cf8">A%</th><th style="color:#06b6d4">B</th>';
     evol+='</tr></thead><tbody>';
     hist_jug.forEach(function(j,ri){
-      var se2=j.sT>0?Math.round((j.sPunto*1+j.sVend*0.5+j.sPos*0.25-j.sErr*1)/j.sT*100):null;
-      var re2=j.rT>0?Math.round((j.rPunto*1 + j.rPos*0.5 - j.rNeg*0.5 - j.rVend*0.75 - j.rErr*1)/j.rT*100):null;
-      var ae2=j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null;
+      var se2=j.sT>0?VB_EFF.saque(j):null;
+      var re2=j.rT>0?VB_EFF.recepcion(j):null;
+      var ae2=j.aT>0?VB_EFF.ataque(j):null;
       var res=j.resultado||{},gan=setsDelClub(res) > setsDelRival(res);
       var bg=ri%2===0?'transparent':'rgba(255,255,255,.015)';
       evol+='<tr style="background:'+bg+'"><td class="left" style="padding:8px 12px">';
@@ -1012,12 +1012,12 @@ function renderCompar(){
     return a;
   }
   var A=acumJug(numA),B=acumJug(numB);
-  var seA=A.sT>0?Math.round((A.sPunto*1+A.sVend*0.5+A.sPos*0.25-A.sErr*1)/A.sT*100):0;
-  var seB=B.sT>0?Math.round((B.sPunto*1+B.sVend*0.5+B.sPos*0.25-B.sErr*1)/B.sT*100):0;
-  var reA=A.rT>0?Math.round((A.rPunto*1 + A.rPos*0.5 - A.rNeg*0.5 - A.rVend*0.75 - A.rErr*1)/A.rT*100):0;
-  var reB=B.rT>0?Math.round((B.rPunto*1 + B.rPos*0.5 - B.rNeg*0.5 - B.rVend*0.75 - B.rErr*1)/B.rT*100):0;
-  var aeA=A.aT>0?Math.round((A.aPunto-A.aVend-A.aErr)/A.aT*100):0;
-  var aeB=B.aT>0?Math.round((B.aPunto-B.aVend-B.aErr)/B.aT*100):0;
+  var seA=A.sT>0?VB_EFF.saque(A):0;
+  var seB=B.sT>0?VB_EFF.saque(B):0;
+  var reA=A.rT>0?VB_EFF.recepcion(A):0;
+  var reB=B.rT>0?VB_EFF.recepcion(B):0;
+  var aeA=A.aT>0?VB_EFF.ataque(A):0;
+  var aeB=B.aT>0?VB_EFF.ataque(B):0;
   var beA=A.bT>0?Math.round((A.bPt+A.bPtPos)/A.bT*100):0;
   var beB=B.bT>0?Math.round((B.bPt+B.bPtPos)/B.bT*100):0;
   function compRow(lbl,vA,vB,suffix){
@@ -1929,21 +1929,21 @@ function _aplicarSubfiltros(jugs){
       var S = (SAQUE_TIPO==='flotado') ? j.sFlo : j.sPot;
       if(S){ c.sT=S.T||0; c.sPunto=S.Punto||0; c.sPos=S.Pos||0; c.sAdm=S.Adm||0;
              c.sAdm=S.Adm||0; c.sNeg=S.Neg||0; c.sErr=S.Err||0; c.sVend=S.Vend||0;
-             c.sEff = c.sT ? Math.round((c.sPunto - c.sErr)/c.sT*100) : null; }
+             c.sEff = VB_EFF.saque(c);   /* misma formula que el resto, no una propia */ }
       else { c.sT=0; c.sEff=null; }
     }
     if(RECEP_TIPO!=='total'){
       var R = (RECEP_TIPO==='flotado') ? j.rFlo : j.rPot;
       if(R){ c.rT=R.T||0; c.rPunto=R.Punto||0; c.rPos=R.Pos||0; c.rAdm=R.Adm||0;
              c.rAdm=R.Adm||0; c.rNeg=R.Neg||0; c.rErr=R.Err||0; c.rVend=R.Vend||0;
-             c.rEff = c.rT ? Math.round((c.rPunto - c.rErr)/c.rT*100) : null; }
+             c.rEff = VB_EFF.recepcion(c); }
       else { c.rT=0; c.rEff=null; }
     }
     if(ATK_FASE!=='total'){
       var A = (ATK_FASE==='so') ? j.aSo : j.aTr;
       if(A){ c.aT=A.T||0; c.aPunto=A.Punto||0; c.aPos=A.Pos||0; c.aAdm=A.Adm||0;
              c.aAdm=A.Adm||0; c.aNeg=A.Neg||0; c.aErr=A.Err||0; c.aVend=A.Vend||0;
-             c.aEff = c.aT ? Math.round((c.aPunto - c.aErr)/c.aT*100) : null; }
+             c.aEff = VB_EFF.ataque(c); }
       else { c.aT=0; c.aEff=null; }
     }
     return c;

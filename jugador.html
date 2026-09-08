@@ -758,7 +758,7 @@ function renderQuickStats(j){
   if(_videoTodo()){ var M=_videoTodo(); Object.keys(M).forEach(function(c){ (M[c].actions||[]).forEach(function(a){ if(a.sk!=='Defensa') return; if(a.tm!=='nafels') return; if(parseInt(a.num,10)!==parseInt(j.num,10)) return; hasD=true; dT++; if(a.ev==='#')dPerf++; else if(a.ev==='+')dBuena++; else if(a.ev==='-')dMala++; else if(a.ev==='=')dErr++; }); }); }
   var sEff=t.sT>0?VB_EFF.saque(t):null;
   var rEff=t.rT>0?VB_EFF.recepcion(t):null;
-  var aEff=t.aT>0?Math.round((t.aPunto-t.aVend-t.aErr)/t.aT*100):null;
+  var aEff=t.aT>0?VB_EFF.ataque(t):null;
   var bEff=t.bT>0?Math.round((t.bPt+t.bPtPos)/t.bT*100):null;
   var rPos=t.rT>0?Math.round((t.rPunto+t.rPos)/t.rT*100):null;
   var rNeg=t.rT>0?Math.round((t.rVend+t.rErr)/t.rT*100):null;

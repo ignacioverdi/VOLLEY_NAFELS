@@ -69,7 +69,11 @@
       var mala = g(o,['dMala','defMala','Neg','neg']);
       return redondear((perf + 0.75*buena + 0.5*ntr + 0.25*mala)/T*100);
     },
-    /* ATAQUE: el punto vale todo, el bloqueado y el error nada. */
+    /* ATAQUE: la formula de siempre, la eficacia clasica del voley.
+       (punto - bloqueado - error) / total. NO se toco: es un estandar
+       mundial y los objetivos de ataque estan calibrados sobre ella.
+       Ojo: esta escala NO es la de 0 a 100 de saque y recepcion; el ataque
+       puede dar negativo y eso esta bien, asi se mide en todos lados. */
     ataque: function(o){
       if(!o) return null;
       var T = g(o,['aT','T','tot','total']);
@@ -77,9 +81,7 @@
       var pt  = g(o,['aPunto','Punto','pts','k']);
       var blq = g(o,['aVend','Vend','slash','bl']);
       var err = g(o,['aErr','Err','err','e']);
-      var resto = T - pt - blq - err;
-      if(resto < 0) resto = 0;
-      return redondear((pt + 0.5*resto)/T*100);
+      return redondear((pt - blq - err)/T*100);
     }
   };
 })();

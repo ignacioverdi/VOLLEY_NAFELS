@@ -175,7 +175,7 @@ function effRecepcion(j){
   return j.rT>0 ? VB_EFF.recepcion(j) : null;
 }
 function effAtaque(j){
-  return j.aT>0 ? Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100) : null;
+  return j.aT>0 ? VB_EFF.ataque(j) : null;
 }
 function effBloqueo(j){
   return j.bT>0 ? Math.round((j.bPt+j.bPtPos)/j.bT*100) : null;
@@ -850,7 +850,7 @@ function getJugadoresAcum(sesiones){
   Object.values(acum).forEach(function(a){
     if(a.sT>0) a.sEff=VB_EFF.saque(a);
     if(a.rT>0) a.rEff=VB_EFF.recepcion(a);
-    if(a.aT>0) a.aEff=Math.round((a.aPunto-a.aVend-a.aErr)/a.aT*100);
+    if(a.aT>0) a.aEff=VB_EFF.ataque(a);
     if(a.bT>0) a.bEff=Math.round((a.bPt+a.bPtPos)/a.bT*100);
   });
   return Object.values(acum).sort(function(a,b){return a.c-b.c;});
@@ -1027,7 +1027,7 @@ function renderEqStats(){
      arma uno al vuelo para pasarselo a la funcion. */
   var sEff=VB_EFF.saque({sT:sT,sPunto:sPunto,sVend:sVend,sPos:sPos,sAdm:sAdm,sNeg:sNeg,sErr:sErr});
   var rEff=VB_EFF.recepcion({rT:rT,rPunto:rPunto,rPos:rPos,rAdm:rAdm,rNeg:rNeg,rVend:rVend,rErr:rErr});
-  var aEff=aT>0?Math.round((aPunto-aVend-aErr)/aT*100):null;
+  var aEff=VB_EFF.ataque({aT:aT,aPunto:aPunto,aVend:aVend,aErr:aErr});
   // Build 4 rectangles
   var sEff_str  = sEff!==null ? fmt(sEff) : '—';
   var aEff_str  = aEff!==null ? fmt(aEff) : '—';
@@ -1307,7 +1307,7 @@ function renderEqContent(){
       if(j.sT+j.rT+j.aT+j.bT===0)return;
       var se=j.sT>0?VB_EFF.saque(j):null;
       var re=j.rT>0?VB_EFF.recepcion(j):null;
-      var ae=j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null;
+      var ae=j.aT>0?VB_EFF.ataque(j):null;
       var be=j.bT>0?Math.round((j.bPt+j.bPtPos)/j.bT*100):null;
       var bg=ri%2?'rgba(255,255,255,.015)':'transparent';
       html+='<tr style="background:'+bg+'">'
@@ -1680,7 +1680,7 @@ function renderJugContent(){
         var j=r.j;
         var se=j.sT>0?VB_EFF.saque(j):null;
         var re=j.rT>0?VB_EFF.recepcion(j):null;
-        var ae=j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null;
+        var ae=j.aT>0?VB_EFF.ataque(j):null;
         var bg=ri%2?'rgba(255,255,255,.015)':'transparent';
         return'<tr style="background:'+bg+'">'
           +'<td><span style="font-size:11px;color:var(--mut);margin-right:6px">'+(r.esP?'🏆':'🏋️')+' '+r.fecha+'</span>'+(r.esP?'vs '+r.rival:'Entrenamiento')+'</td>'
@@ -1697,7 +1697,7 @@ function renderJugContent(){
 function renderJugTabla(j,showPJ){
   var se=j.sT>0?VB_EFF.saque(j):null;
   var re=j.rT>0?VB_EFF.recepcion(j):null;
-  var ae=j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null;
+  var ae=j.aT>0?VB_EFF.ataque(j):null;
   var be=j.bT>0?Math.round((j.bPt+j.bPtPos)/j.bT*100):null;
   return'<div class="stats-row">'
     +[{v:se!==null?fmt(se):'—',l:'Eff. Saque',c:effColor(se,'sq')},{v:re!==null?fmt(re):'—',l:'Eff. Recep.',c:effColor(re,'rec')},
@@ -1908,9 +1908,9 @@ function buildRankingData(){
     var pos = info ? info.pos : '';
     return {
       num:a.c, nm:nm, pos:pos, col:POS_COLOR[pos]||'#64748b',
-      aEff: a.aT>=5 ? Math.round((a.aPunto-a.aVend-a.aErr)/a.aT*100) : null,
-      sEff: a.sT>=5 ? Math.round((a.sPunto+.5*a.sVend+.25*a.sPos-a.sErr)/a.sT*100) : null,
-      rEff: a.rT>=5 ? Math.round((a.rPunto+.5*a.rPos-.5*a.rVend-a.rErr)/a.rT*100) : null,
+      aEff: a.aT>=5 ? VB_EFF.ataque(a) : null,
+      sEff: a.sT>=5 ? VB_EFF.saque(a) : null,
+      rEff: a.rT>=5 ? VB_EFF.recepcion(a) : null,
       bEff: a.bT>=3 ? Math.round((a.bPt+a.bPtPos)/a.bT*100) : null,
       aT:a.aT, sT:a.sT, rT:a.rT, bT:a.bT, sP:a.sPunto, bP:a.bPt
     };

@@ -1,44 +1,60 @@
-LA COLUMNA SEGUIA VERDE: HABIA DOS effColor
-===========================================
+CIERRE COMPLETO
+===============
 
-Los 9 archivos a la carpeta y publicar. Sin HACER_TODO.
+Los archivos a la carpeta y PUBLICAR. Sin HACER_TODO: son todas pantallas.
 
-
-QUE PASABA
-----------
-dashboard.html y analisis.html tenian DOS definiciones de effColor:
-
-  linea 197   function effColor(v, meta)   <- la nueva, con los cortes
-  linea 742   function effColor(v)         <- la vieja, cortes fijos
-
-En JavaScript la ultima declarada PISA a la anterior. Yo habia reemplazado la
-primera y la segunda seguia mandando, asi que la columna seguia pintandose
-con verde arriba de 40 y verde claro arriba de 20: todo verde.
-
-Verificado en tu app: effColor no tenia el parametro meta aunque el archivo
-publicado si lo tuviera en la primera definicion.
-
-Ahora las dos definiciones son iguales, asi que gana la correcta igual.
+IMPORTANTE AL PROBAR: recarga con Ctrl+F5 (o Ctrl+Shift+R).
+Con la recarga normal el navegador se queda con la version vieja. Eso fue lo
+que te hizo ver la columna verde aunque el archivo ya estuviera bien.
 
 
-Y SIETE PANTALLAS MAS
----------------------
-armadores, game_plan, hm_armador, hm_defensa, hm_recepcion, hm_saque y
-scouting_rival tenian solo la version vieja. Todas unificadas.
-Cuatro de ellas no cargaban objetivos_config.js: se les agrego.
+1) LA COLUMNA EFF: HABIA DOS effColor
+   dashboard.html y analisis.html tenian DOS definiciones. La segunda pisa a
+   la primera en JavaScript, y estaba con los cortes viejos. Ahora las dos son
+   iguales. Otras 7 pantallas tenian solo la vieja: unificadas.
+
+2) 37 FORMULAS SUELTAS MAS
+   analisis(19), dashboard(8), importar_dvw(3), utils(5), jugador(1),
+   panel_voley(1). Muchas todavia con la escala vieja. Todas pasan ahora por
+   VB_EFF.
+
+   Caso llamativo: en analisis, los subfiltros FLOTADO y POTENCIA usaban una
+   formula propia y mas pobre —(punto - error)/total— distinta de la del
+   filtro TOTAL. Ahora usan la misma.
+
+3) EL ATAQUE: CORREGI UN ERROR MIO
+   Cuando arme VB_EFF.ataque le puse una formula inventada (punto 100, resto
+   50). NO era la tuya. Ya esta con la tuya:
+
+       ataque = (punto - bloqueado - error) / total
+
+   Es la eficacia clasica del voley y es la que estaba en tu sistema. Nunca
+   se toco en el motor; el error estaba solo en la funcion nueva, que todavia
+   no usaba nadie.
 
 
-PROBADO simulando la pagina con las dos definiciones:
-  la que gana tiene el parametro meta: SI
+QUEDA VERIFICADO
+  saque      39   escala 0-100, neutro 50
+  recepcion  55   escala 0-100, neutro 50
+  ataque     29   formula clasica (41-4-7)/105 = 29  ✓ a mano
+  defensa    27   escala 0-100
 
-  JUGADOR         EFF    SIN CLAVE      CON CLAVE
-  SCHWITTER      23%    verde claro    ROJO
-  NORRIS         30%    verde claro    ROJO
-  STEIMANN       34%    verde claro    AMARILLO
-  BOGDANOVSKI    37%    verde claro    AMARILLO
-  DURDOS         39%    verde claro    verde claro
-  ROFFLER        41%    VERDE FUERTE   verde claro
-  VAZQUEZ        44%    VERDE FUERTE   VERDE FUERTE
+  semaforo probado en saque, recepcion y ataque:
+    bajo -> ROJO · medio-bajo -> AMARILLO · medio -> verde claro · alto -> VERDE FUERTE
 
-NOTA: hm_armador.html y hm_defensa.html dan error de sintaxis en la
-verificacion, pero YA VENIAN ASI: son los marcadores {{ }} de plantilla.
+  quedan 2 cuentas sueltas y estan BIEN: son "Rec #+" (positividad),
+  otra metrica distinta de la efectividad.
+
+
+SOBRE LOS OBJETIVOS DE ATAQUE
+-----------------------------
+No se cambio ninguna formula de ataque: se cambio donde poner los cortes de
+color. El metodo fue el mismo que en saque y recepcion: sobre 192 actuaciones
+de equipo de la 25-26, verde fuerte = percentil 75, verde claro = mediana,
+amarillo = percentil 25.
+
+El caso mas notorio fue el ataque de alta: tenia objetivo 20 y la mediana real
+de la liga es 12,5, asi que un equipo promedio quedaba en rojo permanente.
+
+Si tus objetivos venian de una exigencia tuya como entrenador y no de lo que
+hace la liga, se vuelven a poner los que quieras: es un solo archivo.

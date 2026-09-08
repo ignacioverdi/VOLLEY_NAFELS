@@ -5,13 +5,13 @@
 
 // ── Eficiencias ──────────────────────────────────────────────
 function effSaque(j){
-  return j.sT>0 ? Math.round((j.sPunto+0.5*j.sVend+0.25*j.sPos-j.sErr)/j.sT*100) : null;
+  return j.sT>0 ? VB_EFF.saque(j) : null;
 }
 function effRecepcion(j){
-  return j.rT>0 ? Math.round((j.rPunto+0.5*j.rPos-0.5*j.rVend-j.rErr)/j.rT*100) : null;
+  return j.rT>0 ? VB_EFF.recepcion(j) : null;
 }
 function effAtaque(j){
-  return j.aT>0 ? Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100) : null;
+  return j.aT>0 ? VB_EFF.ataque(j) : null;
 }
 function effBloqueo(j){
   return j.bT>0 ? Math.round((j.bPt+j.bPtPos)/j.bT*100) : null;
@@ -116,8 +116,8 @@ function objCalcVals(nombreJugador){
     });
   });
   var v={};
-  v.sq   =a.sT>0?Math.round((a.sPunto+0.5*a.sVend+0.25*a.sPos-a.sErr)/a.sT*100):null;
-  v.rec  =a.rT>0?Math.round((a.rPunto+0.5*a.rPos-0.5*a.rVend-a.rErr)/a.rT*100):null;
+  v.sq   =a.sT>0?VB_EFF.saque(a):null;
+  v.rec  =a.rT>0?VB_EFF.recepcion(a):null;
   v.bqpos=a.bT>0?Math.round((a.bPt+a.bPtPos)/a.bT*100):null;
   v.bqpt =a.bT>0?Math.round(a.bPt/a.bT*100):null;
   v.atqhb=a.mbT>0?Math.round((a.mbPt-a.mbVnd-a.mbErr)/a.mbT*100):null;
