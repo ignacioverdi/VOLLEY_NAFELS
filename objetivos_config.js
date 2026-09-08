@@ -112,47 +112,42 @@ window.__TEMP_TITULO = (function () {
 // Configuracion compartida de baterias y objetivos
 // Importar en: jugador.html, dashboard.html, historial_voley.html
 
-window./* ── SAQUE Y RECEPCION: ESCALA 0 A 100 Y CORTES SACADOS DE LA LIGA ─────────
-   La escala paso de -100..+100 a 0..100 (el error vale 0, el ace 100, el
-   neutro 50), asi que los objetivos viejos —saque 3, recepcion 36— ya no
-   significan nada en esta vara.
+window./* ── DE DONDE SALEN ESTOS OBJETIVOS ────────────────────────────────────────
+   El objetivo de cada fundamento es EL MEJOR DE LA LIGA en ese fundamento,
+   medido sobre los 97 partidos de la temporada 25-26.
 
-   Los cortes nuevos NO son a ojo. Salen de 192 actuaciones de equipo en
-   partidos de la temporada 25-26:
+   No es siempre el mismo equipo, y por eso no alcanzaba con copiar al campeon:
 
-     percentiles reales    SAQUE   RECEPCION
-       P25                  35,2      54,5
-       mediana              38,6      58,4
-       P75                  41,6      61,7
+     Saque, recepcion, bloqueo #, y casi todo el ataque   Amriswil
+     Bloqueo #+                                           Jona   (45,4 · Amriswil 43,0)
+     Ataque tras recepcion negativa                       Schonenwerd (23,0)
+     Defensa                                              NAFELS (58,0)
 
-   Y el ancho de banda —4 puntos— sale de medir cuanto varia un equipo de un
-   partido a otro: ±4,0 en saque y ±5,1 en recepcion. Con bandas mas angostas
-   que eso el color cambiaria por azar y no informaria nada. Dato que vale la
-   pena recordar: ese ruido de un partido es MAS GRANDE que la distancia
-   entre el campeon y el ultimo en toda la temporada.
+   En defensa el mejor era el propio equipo, asi que el objetivo se subio a 60:
+   poner 58 seria pedirles lo que ya hacen y no dejaria nada por delante.
 
-   Como quedan repartidas las 192 actuaciones:
-     verde fuerte 23%   verde claro 30-32%   amarillo 24-26%   rojo 19-23%
+   Los otros dos cortes se reparten entre ese techo y el promedio de la liga,
+   asi que el verde claro es "arriba del promedio" y el amarillo "abajo pero
+   dentro de lo normal".
 
-   O sea: verde fuerte = cuarto superior de la liga, no "cumpliste". Y el
-   corte del verde claro cae en la mediana, asi que la linea verde/amarillo
-   es "arriba o abajo del promedio de la liga".
+   Como referencia, con estos cortes el NAFELS de la 25-26 quedaba en amarillo
+   en la mayoria de los fundamentos. Es correcto: no salieron campeones. El
+   unico rojo claro era el ataque central, 36,4 contra 54,8 de Amriswil.
 
-   Revisar en diciembre con los partidos de la 26-27: estos numeros son de
-   la temporada pasada y con otro plantel.                                   */
+   Revisar al final de cada temporada con los partidos nuevos.               */
 OBJETIVOS_CONFIG={metas:{
-  sq:   { label:'% Saque (42)', obj:42, min:25,max:55, g2:42, g1:38, y:34},
-  rec:  { label:'% Recepción (62)', obj:62, min:45,max:75, g2:62, g1:58, y:54},
-  bqpos:{ label:'% Blq #+ (46)', obj:46, min:20,max:60, g2:46, g1:41, y:35},
-  bqpt: { label:'% Blq # (22)', obj:22, min:5,max:32, g2:22, g1:17, y:12},
-  atqq: { label:'% Atq Central (56)', obj:56, min:15,max:75, g2:56, g1:42, y:29},
-  atqhb:{ label:'% Atq Alta (24)', obj:24, min:-10,max:40, g2:24, g1:12, y:0},
-  atqx: { label:'% Atq Rápida (41)', obj:41, min:10,max:55, g2:41, g1:34, y:24},
-  atqrp:{ label:'% Atq R#+ (50)', obj:50, min:15,max:65, g2:50, g1:39, y:28},
-  atqri:{ label:'% Atq R! (45)', obj:45, min:5,max:60, g2:45, g1:30, y:17},
-  atqrm:{ label:'% Atq R- (30)', obj:30, min:-10,max:45, g2:30, g1:18, y:0},
-  atqtr:{ label:'% Atq Transición (35)', obj:35, min:5,max:50, g2:35, g1:27, y:17},
-  def: { label:'% Defensa (59)', obj:59, min:40,max:70, g2:59, g1:54, y:49}
+  sq:   { label:'% Saque (42)', obj:42, min:25,max:55, g2:42, g1:40, y:37},
+  rec:  { label:'% Recepción (60)', obj:60, min:45,max:72, g2:60, g1:59, y:57},
+  bqpos:{ label:'% Blq #+ (45)', obj:45, min:25,max:58, g2:45, g1:43, y:39},
+  bqpt: { label:'% Blq # (21)', obj:21, min:5,max:32, g2:21, g1:19, y:15},
+  atqq: { label:'% Atq Central (55)', obj:55, min:20,max:70, g2:55, g1:48, y:37},
+  atqhb:{ label:'% Atq Alta (18)', obj:18, min:-5,max:35, g2:18, g1:15, y:10},
+  atqx: { label:'% Atq Rápida (40)', obj:40, min:15,max:55, g2:40, g1:36, y:29},
+  atqrp:{ label:'% Atq R#+ (47)', obj:47, min:20,max:62, g2:47, g1:42, y:34},
+  atqri:{ label:'% Atq R! (44)', obj:44, min:15,max:58, g2:44, g1:37, y:26},
+  atqrm:{ label:'% Atq R- (23)', obj:23, min:0,max:38, g2:23, g1:20, y:14},
+  atqtr:{ label:'% Atq Transición (33)', obj:33, min:10,max:46, g2:33, g1:29, y:22},
+  def: { label:'% Defensa (60)', obj:60, min:40,max:72, g2:60, g1:56, y:52}
 }};
 
 window.currentObjPartido = window.currentObjPartido || 'acumulado';

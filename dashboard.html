@@ -1820,29 +1820,21 @@ function pintarEditorObjetivos(){
     + 'color:#94a3b8;margin:16px 0 8px">De donde salen los objetivos</div>'
 
     + '<div style="color:#94a3b8">'
-    + 'No estan puestos a ojo. Salen de <b style="color:#e2e8f0">192 actuaciones de equipo</b> '
-    + 'en partidos de la liga, y cada color marca donde estas parado respecto de ella:'
+    + 'El objetivo de cada fundamento es <b style="color:#e2e8f0">el mejor de la liga '
+    + 'en ese fundamento</b>, medido sobre los 97 partidos de la temporada anterior. '
+    + 'No es siempre el mismo equipo: el campeon lidera casi todo, pero el bloqueo #+ '
+    + 'lo gano otro club, y lo mismo el ataque tras recepcion negativa. Copiar a un '
+    + 'solo equipo dejaria objetivos por debajo del techo real.'
     + '<div style="margin:10px 0 0 0">'
     + '<div><span style="color:#22c55e;font-weight:800">Verde fuerte</span> '
-    + '&nbsp;el cuarto superior de la liga. No es "cumpliste", es estar entre los mejores.</div>'
+    + '&nbsp;estas al nivel del mejor de la liga en eso.</div>'
     + '<div><span style="color:#86efac;font-weight:800">Verde claro</span> '
-    + '&nbsp;por encima del promedio de la liga.</div>'
+    + '&nbsp;por encima del promedio, camino al objetivo.</div>'
     + '<div><span style="color:#fbbf24;font-weight:800">Amarillo</span> '
     + '&nbsp;por debajo del promedio, dentro de lo normal.</div>'
     + '<div><span style="color:#ef4444;font-weight:800">Rojo</span> '
-    + '&nbsp;el cuarto inferior.</div>'
-    + '</div></div>'
-
-    + '<div style="color:#8395ac;margin-top:14px;font-size:11.5px;'
-    + 'border-top:1px solid rgba(255,255,255,.07);padding-top:10px">'
-    + 'El ancho de cada banda no es igual para todos los fundamentos, y es a proposito: '
-    + 'depende de cuanto varia ese fundamento de un partido a otro. El saque se mueve '
-    + '&plusmn;4 puntos y el ataque &plusmn;21, asi que el ataque necesita bandas mas anchas. '
-    + 'Con bandas mas angostas que esa variacion, el color cambiaria por azar y no diria nada.'
-    + '<br><br>'
-    + 'Los numeros de arriba se pueden cambiar: son el objetivo de <b>este</b> equipo. '
-    + 'Conviene revisarlos al final de cada temporada, con los partidos nuevos.'
-    + '</div>';
+    + '&nbsp;lejos, hay trabajo concreto para hacer.</div>'
+    + '</div></div>';
 
   if(!document.getElementById('obj-doc')) d.parentNode.insertBefore(doc, d.nextSibling);
 }

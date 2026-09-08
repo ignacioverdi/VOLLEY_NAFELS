@@ -1,46 +1,46 @@
-LA CAUSA DE FONDO, RESUELTA
-===========================
+OBJETIVOS: EL MEJOR DE LA LIGA EN CADA FUNDAMENTO
+=================================================
 
-Los 7 archivos a la carpeta y publicar. Sin HACER_TODO.
-
-
-QUE PASABA
-----------
-El objetivo de DEFENSA no aparecia nunca, aunque el archivo publicado si lo
-tuviera. No era cache: habia OCHO definiciones de OBJETIVOS_CONFIG repartidas
-en la app, y las de las pantallas se cargan DESPUES de objetivos_config.js,
-asi que la pisaban con su version vieja de 11 claves.
-
-  objetivos_config.js    12 claves (con def)   <- la buena
-  utils.js               11 claves             <- pisaba
-  objetivos.js           13 claves             <- pisaba
-  dashboard.html         12 claves             <- pisaba
-  analisis.html          12 claves             <- pisaba
-  historial_voley.html   11 claves             <- pisaba
-  jugador.html           11 claves             <- pisaba
-  panel_voley.html       11 claves             <- pisaba
-
-Esto explica varias de las vueltas de hoy: publicabas bien y la pantalla
-seguia con datos viejos.
+2 archivos a la carpeta y publicar. Sin HACER_TODO.
 
 
-LA SOLUCION
+EL CRITERIO
 -----------
-Las siete copias pasan a ser RESPALDO: solo definen si objetivos_config.js
-no cargo. Asi ninguna pisa a la buena, pero si el archivo central falla la
-pantalla no queda sin colores.
+El objetivo de cada fundamento es EL MEJOR DE LA LIGA en ESE fundamento,
+sobre los 97 partidos de la 25-26. No es siempre el mismo equipo, y por eso
+no alcanzaba con copiar al campeon:
 
-Ojo al detalle: la condicion mira si hay METAS, no si el objeto existe.
-objetivos.js dejaba un objeto vacio, que ya cuenta como "existe", y con un
-|| simple el respaldo no se hubiera activado nunca.
+  Saque, recepcion, bloqueo #, casi todo el ataque   AMRISWIL
+  Bloqueo #+                                         JONA        45,4  (Amriswil 43,0)
+  Ataque tras recepcion negativa                     SCHONENWERD 23,0
+  Defensa                                            NAFELS      58,0
+
+En DEFENSA el mejor era el propio equipo. Poner 58 seria pedir lo que ya
+hacen, asi que el objetivo quedo en 60: hay algo por delante.
 
 
-VERIFICADO EJECUTANDO LOS ARCHIVOS
-  tras objetivos.js         11 claves
-  tras objetivos_config.js  12 claves (con def)   <- gana la buena
-  tras utils.js             12 claves (con def)   <- ya no pisa
+LOS OBJETIVOS
+-------------
+  Saque             42        Atq Central       55
+  Recepcion         60        Atq Rapida        40
+  Defensa           60        Atq Alta          18
+  Blq #+            45        Atq R#+           47
+  Blq #             21        Atq R!            44
+  Atq Transicion    33        Atq R-            23
 
-  prueba de resistencia, sin objetivos_config.js: el respaldo entra con 11
-  claves, la pantalla sigue funcionando.
 
-  sintaxis de los 8 archivos: OK
+DONDE QUEDABA EL NAFELS 25-26 CON ESTA VARA
+  Defensa, Blq #+, Atq Alta, Atq Transicion    verde claro
+  Saque, Recepcion, Blq #, Atq Rapida,
+  Atq R#+, Atq R!, Atq R-                      AMARILLO
+  Atq Central                                  ROJO   (36,4 vs 55)
+
+Es una foto honesta: no salieron campeones. El unico rojo es el ataque
+central, que era su debilidad real: sextos de ocho y 18 puntos por debajo
+de Amriswil.
+
+
+TAMBIEN SE ACTUALIZO EL TEXTO EN PANTALLA
+En Dashboard > Objetivos, el bloque explicativo ahora dice que el objetivo
+es el mejor de la liga en cada fundamento y por que no es siempre el mismo
+equipo. Es lo que va a leer un entrenador nuevo.
