@@ -990,8 +990,10 @@ function renderEqStats(){
     aPunto+=j.aPunto;aVend+=j.aVend;aErr+=j.aErr;
     bPt+=(j.bPt||0);bPtPos+=(j.bPtPos||0);
   });
-  var sEff=sT>0?VB_EFF.saque(s):null;
-  var rEff=rT>0?VB_EFF.recepcion(r):null;
+  /* Aca los totales estan en variables sueltas, no en un objeto, asi que se
+     arma uno al vuelo para pasarselo a la funcion. */
+  var sEff=VB_EFF.saque({sT:sT,sPunto:sPunto,sVend:sVend,sPos:sPos,sAdm:sAdm,sNeg:sNeg,sErr:sErr});
+  var rEff=VB_EFF.recepcion({rT:rT,rPunto:rPunto,rPos:rPos,rAdm:rAdm,rNeg:rNeg,rVend:rVend,rErr:rErr});
   var aEff=aT>0?Math.round((aPunto-aVend-aErr)/aT*100):null;
   // Build 4 rectangles
   var sEff_str  = sEff!==null ? fmt(sEff) : '—';

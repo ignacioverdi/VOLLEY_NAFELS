@@ -1,48 +1,35 @@
-UNA SOLA FORMULA PARA TODA LA APP
-=================================
+DOS COSAS
+=========
 
-Los 8 archivos a la carpeta y PUBLICAR. Sin HACER_TODO: son todas pantallas.
+1) EL ARCHIVO
+   dashboard.html a la carpeta y publicar.
 
-
-QUE SE HIZO
------------
-La cuenta de saque, recepcion, defensa y ataque estaba COPIADA en 28 lugares
-repartidos en ocho archivos, y cada copia usaba nombres de variable distintos
-para el mismo dato: j.sPunto, a.sPunto, t.sPunto, src.Punto, k, pl, bl, nt...
-
-Por eso cambiar un peso obligaba a acertarle a las 28, y tres veces seguidas
-quedo alguna afuera: una pantalla mostraba un numero distinto al resto, o
-directamente se caia y dejaba el resumen en blanco.
-
-Ahora la cuenta vive en UN solo lugar, objetivos_config.js, en window.VB_EFF:
-
-    VB_EFF.saque(datos)      VB_EFF.recepcion(datos)
-    VB_EFF.defensa(datos)    VB_EFF.ataque(datos)
-
-Las funciones aceptan los distintos nombres que usa cada pantalla, asi que
-funcionan tal cual estan los datos en cada lugar. Devuelven null si no hay
-acciones, en vez de romperse.
-
-De ahora en mas, cambiar un peso es tocar UN archivo.
+   Arregla el "ReferenceError: s is not defined" que dejaba el resumen del
+   equipo en blanco. Mi reemplazo automatico habia generado VB_EFF.saque(s),
+   tomando la "s" de sPunto como si fuera el nombre de un objeto. Ahora se
+   arma el objeto con los totales sueltos y se lo pasa completo.
 
 
-QUE SE VERIFICO
----------------
-  · el mismo dato con los 5 juegos de nombres de las pantallas -> 39 en todos
-  · bordes: sin acciones -> null · todo ace -> 100 · todo error -> 0
-            todo neutro -> 50 · campos faltantes -> no rompe
-  · las 8 llamadas reales, ejecutadas: ninguna da error
-  · barrido final: no queda NINGUNA formula suelta en ningun archivo
-  · sintaxis de los 9 archivos: OK
+2) HAY QUE CORRER HACER_TODO
+   Esto NO es un archivo, es un paso que falta.
 
-Cuatro pantallas (armadores, game_plan, hm_saque, panel_voley) no cargaban
-objetivos_config.js: se les agrego, si no la funcion no existiria ahi.
+   datos_baterias.js todavia tiene la escala VIEJA:
 
-De paso, la DEFENSA quedo tambien en escala 0-100. Estaba en la vieja y
-mostraba -44%.
+     saque      -25   (deberia dar 39)
+     recepcion   11   (deberia dar 55)
+
+   El motor gen_baterias.py ya esta publicado con la escala 0-100, pero el
+   archivo de datos se genera al correr HACER_TODO y eso no se hizo desde
+   entonces. Por eso las BATERIAS muestran numeros negativos y se pintan
+   rojas, aunque las tarjetas de arriba ya esten bien.
+
+   Correr HACER_TODO y publicar. Ahi las baterias pasan a la misma escala
+   que el resto y los colores dejan de dar rojo.
 
 
-NOTA
-----
-hm_armador.html y hm_defensa.html dan error de sintaxis, pero YA VENIAN ASI
-y no se tocaron: son los marcadores {{ }} de plantilla, no un error real.
+VERIFICADO EN ESTA TANDA
+------------------------
+  · sintaxis de las 8 pantallas + objetivos_config.js: OK
+  · las 30 llamadas a VB_EFF, una por una: todas con su objeto declarado
+  · dashboard: 17 llamadas, todas correctas
+  · la funcion unica devuelve lo mismo con los 5 juegos de nombres
