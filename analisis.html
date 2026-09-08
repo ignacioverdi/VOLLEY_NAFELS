@@ -15,19 +15,19 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260907-2100" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260907-2100" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260908-1357" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260908-1357" onerror="void 0"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260907-2100"></script>
-<script src="filtro_tipo.js?v=20260907-2100" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260908-1357"></script>
+<script src="filtro_tipo.js?v=20260908-1357" onerror="void 0"></script>
   <script src="datos_baterias.js.enc" onerror="void 0"></script>
-  <script src="objetivos_config.js?v=20260907-2100" onerror="void 0"></script>
-  <script src="datos_historial.js?v=20260907-2100" onerror="void 0"></script>
-  <script src="utils.js?v=20260907-2100" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260908-1357" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260908-1357" onerror="void 0"></script>
+  <script src="utils.js?v=20260908-1357" onerror="void 0"></script>
   <!-- modo_toggle.js sacado: se superponia con el selector de idioma. -->
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -133,10 +133,10 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
 
 // ── Eficiencias ──────────────────────────────────────────────
 function effSaque(j){
-  return j.sT>0 ? Math.round((j.sPunto+0.5*j.sVend+0.25*j.sPos-j.sErr)/j.sT*100) : null;
+  return j.sT>0 ? Math.round((j.sPunto + 0.75*j.sVend + 0.5*j.sPos - 0.5*j.sNeg - j.sErr)/j.sT*100) : null;
 }
 function effRecepcion(j){
-  return j.rT>0 ? Math.round((j.rPunto+0.5*j.rPos-0.5*j.rVend-j.rErr)/j.rT*100) : null;
+  return j.rT>0 ? Math.round((j.rPunto + 0.5*j.rPos - 0.5*j.rNeg - 0.75*j.rVend - j.rErr)/j.rT*100) : null;
 }
 function effAtaque(j){
   return j.aT>0 ? Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100) : null;
@@ -245,15 +245,15 @@ window.OBJETIVOS_CONFIG={metas:{
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260907-2100" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260907-2100"></script>
+<script src="firebase.js?v=20260908-1357" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260908-1357"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260907-2100">
+<link rel="stylesheet" href="movil.css?v=20260908-1357">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260907-2100" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260908-1357" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -589,7 +589,7 @@ function getJugadores(idx){
     });
     Object.values(acum).forEach(function(s){
       if(s.sT>0) s.sEff=Math.round((s.sPunto*1+s.sVend*0.5+s.sPos*0.25-s.sErr*1)/s.sT*100);
-      if(s.rT>0) s.rEff=Math.round((s.rPunto*1+s.rPos*0.5-s.rVend*0.5-s.rErr*1)/s.rT*100);
+      if(s.rT>0) s.rEff=Math.round((s.rPunto*1 + s.rPos*0.5 - s.rNeg*0.5 - s.rVend*0.75 - s.rErr*1)/s.rT*100);
       if(s.aT>0) s.aEff=Math.round((s.aPunto-s.aVend-s.aErr)/s.aT*100);
     });
     return Object.values(acum).sort(function(a,b){return a.c-b.c;});
@@ -600,7 +600,7 @@ function getJugadores(idx){
 
 function effColor(v){ return v===null||isNaN(v)?'var(--mut)':v>20?'#22c55e':v>0?'#86efac':v===0?'var(--mut)':'#ef4444'; }
 function sEff(j){ return j.sT>0?Math.round((j.sPunto*1+j.sVend*0.5+j.sPos*0.25-j.sErr*1)/j.sT*100):null; }
-function rEff(j){ return j.rT>0?Math.round((j.rPunto*1+j.rPos*0.5-j.rVend*0.5-j.rErr*1)/j.rT*100):null; }
+function rEff(j){ return j.rT>0?Math.round((j.rPunto*1 + j.rPos*0.5 - j.rNeg*0.5 - j.rVend*0.75 - j.rErr*1)/j.rT*100):null; }
 function aEff(j){ return j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null; }
 function bEff(j){ return j.bT>0?Math.round((j.bPt+j.bPtPos)/j.bT*100):null; }
 function td(v,cls){ return '<td class="'+(cls||'')+'">'+(v!==undefined&&v!==null?v:'-')+'</td>'; }
@@ -811,7 +811,7 @@ function renderIndividualNew(num){
   });
   // Calcular eficiencias
   var se=acum.sT>0?Math.round((acum.sPunto*1+acum.sVend*0.5+acum.sPos*0.25-acum.sErr*1)/acum.sT*100):null;
-  var re=acum.rT>0?Math.round((acum.rPunto*1+acum.rPos*0.5-acum.rVend*0.5-acum.rErr*1)/acum.rT*100):null;
+  var re=acum.rT>0?Math.round((acum.rPunto*1 + acum.rPos*0.5 - acum.rNeg*0.5 - acum.rVend*0.75 - acum.rErr*1)/acum.rT*100):null;
   var ae=acum.aT>0?Math.round((acum.aPunto-acum.aVend-acum.aErr)/acum.aT*100):null;
   var be=acum.bT>0?Math.round((acum.bPt+acum.bPtPos)/acum.bT*100):null;
   // Direcciones de saque
@@ -940,7 +940,7 @@ function renderIndividualNew(num){
     evol+='</tr></thead><tbody>';
     hist_jug.forEach(function(j,ri){
       var se2=j.sT>0?Math.round((j.sPunto*1+j.sVend*0.5+j.sPos*0.25-j.sErr*1)/j.sT*100):null;
-      var re2=j.rT>0?Math.round((j.rPunto*1+j.rPos*0.5-j.rVend*0.5-j.rErr*1)/j.rT*100):null;
+      var re2=j.rT>0?Math.round((j.rPunto*1 + j.rPos*0.5 - j.rNeg*0.5 - j.rVend*0.75 - j.rErr*1)/j.rT*100):null;
       var ae2=j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null;
       var res=j.resultado||{},gan=setsDelClub(res) > setsDelRival(res);
       var bg=ri%2===0?'transparent':'rgba(255,255,255,.015)';
@@ -990,8 +990,8 @@ function renderCompar(){
   var A=acumJug(numA),B=acumJug(numB);
   var seA=A.sT>0?Math.round((A.sPunto*1+A.sVend*0.5+A.sPos*0.25-A.sErr*1)/A.sT*100):0;
   var seB=B.sT>0?Math.round((B.sPunto*1+B.sVend*0.5+B.sPos*0.25-B.sErr*1)/B.sT*100):0;
-  var reA=A.rT>0?Math.round((A.rPunto*1+A.rPos*0.5-A.rVend*0.5-A.rErr*1)/A.rT*100):0;
-  var reB=B.rT>0?Math.round((B.rPunto*1+B.rPos*0.5-B.rVend*0.5-B.rErr*1)/B.rT*100):0;
+  var reA=A.rT>0?Math.round((A.rPunto*1 + A.rPos*0.5 - A.rNeg*0.5 - A.rVend*0.75 - A.rErr*1)/A.rT*100):0;
+  var reB=B.rT>0?Math.round((B.rPunto*1 + B.rPos*0.5 - B.rNeg*0.5 - B.rVend*0.75 - B.rErr*1)/B.rT*100):0;
   var aeA=A.aT>0?Math.round((A.aPunto-A.aVend-A.aErr)/A.aT*100):0;
   var aeB=B.aT>0?Math.round((B.aPunto-B.aVend-B.aErr)/B.aT*100):0;
   var beA=A.bT>0?Math.round((A.bPt+A.bPtPos)/A.bT*100):0;
@@ -1608,12 +1608,12 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260907-2100"></script>
-<script src="lang.js?v=20260907-2100"></script>
-<script src="temporadas_menu.js?v=20260907-2100"></script>
+<script src="chat_nafels.js?v=20260908-1357"></script>
+<script src="lang.js?v=20260908-1357"></script>
+<script src="temporadas_menu.js?v=20260908-1357"></script>
 
 <!-- ════════════════════════════════════════════════════════════════════════
-     Este codigo estaba adentro de <script src="temporadas_menu.js?v=20260907-2100">, y el
+     Este codigo estaba adentro de <script src="temporadas_menu.js?v=20260908-1357">, y el
      navegador ignora por completo lo que hay adentro de una etiqueta que
      carga un archivo: las funciones nunca se definian y las tablas de
      saque, recepcion y ataque fallaban al llamarlas.
@@ -1972,7 +1972,7 @@ try{
   }
 }catch(e){}
 </script>
-<script src="ayuda.js?v=20260907-2100"></script>
+<script src="ayuda.js?v=20260908-1357"></script>
 </body>
 </html>
 <!-- © 2025-2026 Volley-Stats · Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->

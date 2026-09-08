@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20260906-0817"></script>
-<script src="selector_categoria.js?v=20260906-0817"></script>
+<script src="categorias_club.js?v=20260908-1357"></script>
+<script src="selector_categoria.js?v=20260908-1357"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -285,13 +285,13 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260906-0817"></script>
-<script src="firebase.js?v=20260906-0817" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260906-0817"></script>
-<script src="lang.js?v=20260906-0817"></script>
-<script src="objetivos.js?v=20260906-0817" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20260908"></script>
-  <script src="video_delay.js?v=20260906-0817" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260908-1357"></script>
+<script src="firebase.js?v=20260908-1357" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260908-1357"></script>
+<script src="lang.js?v=20260908-1357"></script>
+<script src="objetivos.js?v=20260908-1357" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20260908-1357"></script>
+  <script src="video_delay.js?v=20260908-1357" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -300,10 +300,10 @@ window.__DESCIFRAR_SINCRONO = true;
 
 // ── Eficiencias ──────────────────────────────────────────────
 function effSaque(j){
-  return j.sT>0 ? Math.round((j.sPunto+0.5*j.sVend+0.25*j.sPos-j.sErr)/j.sT*100) : null;
+  return j.sT>0 ? Math.round((j.sPunto + 0.75*j.sVend + 0.5*j.sPos - 0.5*j.sNeg - j.sErr)/j.sT*100) : null;
 }
 function effRecepcion(j){
-  return j.rT>0 ? Math.round((j.rPunto+0.5*j.rPos-0.5*j.rVend-j.rErr)/j.rT*100) : null;
+  return j.rT>0 ? Math.round((j.rPunto + 0.5*j.rPos - 0.5*j.rNeg - 0.75*j.rVend - j.rErr)/j.rT*100) : null;
 }
 function effAtaque(j){
   return j.aT>0 ? Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100) : null;
@@ -398,8 +398,8 @@ function objCalcVals(nombreJugador){
     });
   });
   var v={};
-  v.sq   =a.sT>0?Math.round((a.sPunto+0.5*a.sVend+0.25*a.sPos-a.sErr)/a.sT*100):null;
-  v.rec  =a.rT>0?Math.round((a.rPunto+0.5*a.rPos-0.5*a.rVend-a.rErr)/a.rT*100):null;
+  v.sq   =a.sT>0?Math.round((a.sPunto + 0.75*a.sVend + 0.5*a.sPos - 0.5*a.sNeg - a.sErr)/a.sT*100):null;
+  v.rec  =a.rT>0?Math.round((a.rPunto + 0.5*a.rPos - 0.5*a.rNeg - 0.75*a.rVend - a.rErr)/a.rT*100):null;
   v.bqpos=a.bT>0?Math.round((a.bPt+a.bPtPos)/a.bT*100):null;
   v.bqpt =a.bT>0?Math.round(a.bPt/a.bT*100):null;
   v.atqhb=a.mbT>0?Math.round((a.mbPt-a.mbVnd-a.mbErr)/a.mbT*100):null;
@@ -540,7 +540,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260906-0817">
+<link rel="stylesheet" href="movil.css?v=20260908-1357">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase">← Dashboard</a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -2037,8 +2037,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20260906-0817" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260906-0817"></script>
+<script src="plantel_nafels.js?v=20260908-1357" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260908-1357"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2137,7 +2137,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20260906-0817"></script>
+<script src="ayuda.js?v=20260908-1357"></script>
 </body>
 </html>
 

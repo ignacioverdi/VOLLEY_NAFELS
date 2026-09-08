@@ -16,13 +16,13 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260906-0817" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260906-0817" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260906-0817"></script>
-<script src="filtro_tipo.js?v=20260906-0817" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260908-1357" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260908-1357" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260908-1357"></script>
+<script src="filtro_tipo.js?v=20260908-1357" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
-  <script src="objetivos_config.js?v=20260906-0817" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260908-1357" onerror="void 0"></script>
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
@@ -39,7 +39,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20260906-0817" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260908-1357" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   
@@ -169,10 +169,10 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 0%,rgb
 
 // ── Eficiencias ──────────────────────────────────────────────
 function effSaque(j){
-  return j.sT>0 ? Math.round((j.sPunto+0.5*j.sVend+0.25*j.sPos-j.sErr)/j.sT*100) : null;
+  return j.sT>0 ? Math.round((j.sPunto + 0.75*j.sVend + 0.5*j.sPos - 0.5*j.sNeg - j.sErr)/j.sT*100) : null;
 }
 function effRecepcion(j){
-  return j.rT>0 ? Math.round((j.rPunto+0.5*j.rPos-0.5*j.rVend-j.rErr)/j.rT*100) : null;
+  return j.rT>0 ? Math.round((j.rPunto + 0.5*j.rPos - 0.5*j.rNeg - 0.75*j.rVend - j.rErr)/j.rT*100) : null;
 }
 function effAtaque(j){
   return j.aT>0 ? Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100) : null;
@@ -435,15 +435,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260906-0817" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260906-0817"></script>
+<script src="firebase.js?v=20260908-1357" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260908-1357"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260906-0817">
+<link rel="stylesheet" href="movil.css?v=20260908-1357">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260906-0817" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260908-1357" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -815,8 +815,8 @@ function getJugadoresAcum(sesiones){
     });
   });
   Object.values(acum).forEach(function(a){
-    if(a.sT>0) a.sEff=Math.round((a.sPunto+0.5*a.sVend+0.25*a.sPos-a.sErr)/a.sT*100);
-    if(a.rT>0) a.rEff=Math.round((a.rPunto+0.5*a.rPos-0.5*a.rVend-a.rErr)/a.rT*100);
+    if(a.sT>0) a.sEff=Math.round((a.sPunto + 0.75*a.sVend + 0.5*a.sPos - 0.5*a.sNeg - a.sErr)/a.sT*100);
+    if(a.rT>0) a.rEff=Math.round((a.rPunto + 0.5*a.rPos - 0.5*a.rNeg - 0.75*a.rVend - a.rErr)/a.rT*100);
     if(a.aT>0) a.aEff=Math.round((a.aPunto-a.aVend-a.aErr)/a.aT*100);
     if(a.bT>0) a.bEff=Math.round((a.bPt+a.bPtPos)/a.bT*100);
   });
@@ -984,8 +984,8 @@ function renderEqStats(){
     aPunto+=j.aPunto;aVend+=j.aVend;aErr+=j.aErr;
     bPt+=(j.bPt||0);bPtPos+=(j.bPtPos||0);
   });
-  var sEff=sT>0?Math.round((sPunto+0.5*sVend+0.25*sPos-sErr)/sT*100):null;
-  var rEff=rT>0?Math.round((rPunto+0.5*rPos-0.5*rVend-rErr)/rT*100):null;
+  var sEff=sT>0?Math.round((sPunto + 0.75*sVend + 0.5*sPos - 0.5*sNeg - sErr)/sT*100):null;
+  var rEff=rT>0?Math.round((rPunto + 0.5*rPos - 0.5*rNeg - 0.75*rVend - rErr)/rT*100):null;
   var aEff=aT>0?Math.round((aPunto-aVend-aErr)/aT*100):null;
   // Build 4 rectangles
   var sEff_str  = sEff!==null ? fmt(sEff) : '—';
@@ -1199,14 +1199,14 @@ function renderEqContent(){
         else if(SAQUE_TIPO==='potencia'&&j.sPot) src={T:j.sPot.T,Punto:j.sPot.Punto,Vend:j.sPot.Vend,Pos:j.sPot.Pos,Adm:j.sPot.Adm,Neg:j.sPot.Neg,Err:j.sPot.Err};
         else src={T:j.sT,Punto:j.sPunto,Vend:j.sVend,Pos:j.sPos,Adm:j.sAdm||0,Neg:j.sNeg,Err:j.sErr};
         if(!src.T)return null;
-        var e=Math.round((src.Punto+0.5*src.Vend+0.25*src.Pos-src.Err)/src.T*100);
+        var e=Math.round((src.Punto + 0.75*src.Vend + 0.5*src.Pos - 0.5*src.Neg - src.Err)/src.T*100);
         return[{v:fmt(e),c:effColor(e),b:true},{v:src.T,c:'#f59e0b',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Vend,c:'#86efac'},{v:src.Pos,c:'#86efac'},{v:src.Adm,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Err,c:'#ef4444'}];},
       getTot:function(a){
         var src;
         if(SAQUE_TIPO==='flotado'&&a.sFlo) src={T:a.sFlo.T,Punto:a.sFlo.Punto,Vend:a.sFlo.Vend,Pos:a.sFlo.Pos,Adm:a.sFlo.Adm,Neg:a.sFlo.Neg,Err:a.sFlo.Err};
         else if(SAQUE_TIPO==='potencia'&&a.sPot) src={T:a.sPot.T,Punto:a.sPot.Punto,Vend:a.sPot.Vend,Pos:a.sPot.Pos,Adm:a.sPot.Adm,Neg:a.sPot.Neg,Err:a.sPot.Err};
         else src={T:a.sT,Punto:a.sPunto,Vend:a.sVend,Pos:a.sPos,Adm:a.sAdm||0,Neg:a.sNeg,Err:a.sErr};
-        var e=src.T>0?Math.round((src.Punto+0.5*src.Vend+0.25*src.Pos-src.Err)/src.T*100):null;
+        var e=src.T>0?Math.round((src.Punto + 0.75*src.Vend + 0.5*src.Pos - 0.5*src.Neg - src.Err)/src.T*100):null;
         return[{v:e!==null?fmt(e):'—',c:effColor(e),b:true},{v:src.T,c:'#f59e0b',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Vend,c:'#86efac'},{v:src.Pos,c:'#86efac'},{v:src.Adm,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Err,c:'#ef4444'}];}},
     recepcion:{color:'#22c55e',ths:['EFF%','TOT','# Perf','+ Pos','! Ntr','– Neg','/ Vnd','= Err'],
       getData:function(j){
@@ -1264,8 +1264,8 @@ function renderEqContent(){
       +'</tr></thead><tbody>';
     jugs.forEach(function(j,ri){
       if(j.sT+j.rT+j.aT+j.bT===0)return;
-      var se=j.sT>0?Math.round((j.sPunto+0.5*j.sVend+0.25*j.sPos-j.sErr)/j.sT*100):null;
-      var re=j.rT>0?Math.round((j.rPunto+0.5*j.rPos-0.5*j.rVend-j.rErr)/j.rT*100):null;
+      var se=j.sT>0?Math.round((j.sPunto + 0.75*j.sVend + 0.5*j.sPos - 0.5*j.sNeg - j.sErr)/j.sT*100):null;
+      var re=j.rT>0?Math.round((j.rPunto + 0.5*j.rPos - 0.5*j.rNeg - 0.75*j.rVend - j.rErr)/j.rT*100):null;
       var ae=j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null;
       var be=j.bT>0?Math.round((j.bPt+j.bPtPos)/j.bT*100):null;
       var bg=ri%2?'rgba(255,255,255,.015)':'transparent';
@@ -1636,8 +1636,8 @@ function renderJugContent(){
       +'</tr></thead><tbody>'
       +rows.map(function(r,ri){
         var j=r.j;
-        var se=j.sT>0?Math.round((j.sPunto+0.5*j.sVend+0.25*j.sPos-j.sErr)/j.sT*100):null;
-        var re=j.rT>0?Math.round((j.rPunto+0.5*j.rPos-0.5*j.rVend-j.rErr)/j.rT*100):null;
+        var se=j.sT>0?Math.round((j.sPunto + 0.75*j.sVend + 0.5*j.sPos - 0.5*j.sNeg - j.sErr)/j.sT*100):null;
+        var re=j.rT>0?Math.round((j.rPunto + 0.5*j.rPos - 0.5*j.rNeg - 0.75*j.rVend - j.rErr)/j.rT*100):null;
         var ae=j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null;
         var bg=ri%2?'rgba(255,255,255,.015)':'transparent';
         return'<tr style="background:'+bg+'">'
@@ -1653,8 +1653,8 @@ function renderJugContent(){
 }
 
 function renderJugTabla(j,showPJ){
-  var se=j.sT>0?Math.round((j.sPunto+0.5*j.sVend+0.25*j.sPos-j.sErr)/j.sT*100):null;
-  var re=j.rT>0?Math.round((j.rPunto+0.5*j.rPos-0.5*j.rVend-j.rErr)/j.rT*100):null;
+  var se=j.sT>0?Math.round((j.sPunto + 0.75*j.sVend + 0.5*j.sPos - 0.5*j.sNeg - j.sErr)/j.sT*100):null;
+  var re=j.rT>0?Math.round((j.rPunto + 0.5*j.rPos - 0.5*j.rNeg - 0.75*j.rVend - j.rErr)/j.rT*100):null;
   var ae=j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null;
   var be=j.bT>0?Math.round((j.bPt+j.bPtPos)/j.bT*100):null;
   return'<div class="stats-row">'
@@ -2005,11 +2005,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260906-0817"></script>
-<script src="lang.js?v=20260906-0817"></script>
-<script src="temporadas_menu.js?v=20260906-0817"></script>
-<script src="app_offline.js?v=20260906-0817"></script>
-<script src="ayuda.js?v=20260906-0817"></script>
+<script src="chat_nafels.js?v=20260908-1357"></script>
+<script src="lang.js?v=20260908-1357"></script>
+<script src="temporadas_menu.js?v=20260908-1357"></script>
+<script src="app_offline.js?v=20260908-1357"></script>
+<script src="ayuda.js?v=20260908-1357"></script>
 <!-- Los archivos de video (datos_video_*.js.enc) se sacaron de esta
      pantalla: pesan unos 15 MB por temporada, descifrarlos son mas de
      un millon de vueltas de calculo, y el dashboard NO LOS USA para

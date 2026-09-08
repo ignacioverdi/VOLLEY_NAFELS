@@ -154,8 +154,8 @@ function objCalcVals(nombreJugador){
     });
   });
   var v={};
-  v.sq   =a.sT>0?Math.round((a.sPunto+0.5*a.sVend+0.25*a.sPos-a.sErr)/a.sT*100):null;
-  v.rec  =a.rT>0?Math.round((a.rPunto+0.5*a.rPos-0.5*a.rVend-a.rErr)/a.rT*100):null;
+  v.sq   =a.sT>0?Math.round((a.sPunto + 0.75*a.sVend + 0.5*a.sPos - 0.5*a.sNeg - a.sErr)/a.sT*100):null;
+  v.rec  =a.rT>0?Math.round((a.rPunto + 0.5*a.rPos - 0.5*a.rNeg - 0.75*a.rVend - a.rErr)/a.rT*100):null;
   v.bqpos=a.bT>0?Math.round((a.bPt+a.bPtPos)/a.bT*100):null;
   v.bqpt =a.bT>0?Math.round(a.bPt/a.bT*100):null;
   v.atqhb=a.mbT>0?Math.round((a.mbPt-a.mbVnd-a.mbErr)/a.mbT*100):null;
