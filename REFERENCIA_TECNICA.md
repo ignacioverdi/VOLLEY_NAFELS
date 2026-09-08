@@ -159,8 +159,8 @@ Se usan iguales en toda la app. **No inventar variantes.**
 
 ```
 EFF ataque    = (# − / − =) / total × 100
-EFF saque     = (# + 0,5×/ + 0,25×+ − =) / total × 100
-EFF recepción = (# + 0,5×+ − 0,5×/ − =) / total × 100
+EFF saque     = (# + 0,75×/ + 0,5×+ − 0,5×− − =) / total × 100
+EFF recepción = (# + 0,5×+ − 0,5×− − 0,75×/ − =) / total × 100
 EFF bloqueo   = (# + +) / total × 100
 ```
 

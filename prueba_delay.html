@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prueba de delay · NAFELS VOLEY</title>
+<!--
+  PARA QUE SIRVE ESTA PAGINA
+  --------------------------
+  Probar el retraso SIN montar todo: sin la camara en el tripode, sin el
+  codigo de sala, sin un entrenamiento. Usa la camara del propio aparato.
+
+  Si aca se ve fluido, con el video de la cancha tambien va a serlo: el motor
+  es el mismo, lo unico que cambia es de donde viene la imagen.
+
+  Como probarlo: poner 8 segundos de retraso y saludar a la camara. Tenes que
+  verte saludar 8 segundos despues, sin cortes ni tirones. Moviendo la barra
+  el retraso cambia al instante.
+-->
+<script src="delay_buffer.js"></script>
+<style>
+  :root{--bg:#0b1017;--card:#111a27;--line:#1f2c3d;--txt:#e2e8f0;--mut:#8395ac;--ok:#22c55e;--err:#ef4444;--amb:#f59e0b}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+       background:var(--bg);color:var(--txt);padding:16px;font-size:14px}
+  .wrap{max-width:820px;margin:0 auto}
+  h1{font-size:20px;font-weight:800;margin-bottom:2px}
+  .sub{color:var(--mut);font-size:12px;margin-bottom:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
+  video{width:100%;background:#000;border-radius:10px;display:block;aspect-ratio:16/9;object-fit:cover}
+  .fila{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+  button{background:#16212f;color:var(--txt);border:1px solid var(--line);border-radius:9px;
+         padding:10px 14px;font:inherit;font-weight:600;cursor:pointer}
+  button.p{background:var(--ok);color:#04210f;border-color:var(--ok)}
+  button:disabled{opacity:.45;cursor:default}
+  input[type=range]{flex:1;min-width:180px}
+  .lbl{font-size:11px;color:var(--mut);letter-spacing:1px;text-transform:uppercase}
+  .big{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+  .est{display:inline-flex;align-items:center;gap:7px;font-size:12px}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--mut)}
+  .dot.ok{background:var(--ok)} .dot.err{background:var(--err)} .dot.wait{background:var(--amb)}
+  .aviso{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.35);color:#f6c667;
+         border-radius:10px;padding:12px;font-size:12px;line-height:1.6}
+  .datos{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:12px}
+  .dato{background:#16212f;border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+  .dato .v{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+  .dato .k{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Prueba de delay</h1>
+  <div class="sub">Usa la cámara de este aparato · el mismo motor que el video de la cancha</div>
+
+  <div id="no-soporta" class="card aviso" style="display:none">
+    <b>Este navegador no puede hacer el delay continuo.</b><br>
+    Le falta MediaSource o el formato de grabación. En ese caso la app sigue
+    funcionando con el método anterior, el de clips.
+  </div>
+
+  <div class="card">
+    <video id="v" playsinline muted></video>
+    <div class="fila">
+      <button id="btn" class="p" onclick="arrancar()">▶ Empezar</button>
+      <button id="btn-punto" onclick="marcar()" disabled>🏐 Marcar punto</button>
+      <button id="btn-rep" onclick="repetir()" disabled>↺ Ver último punto</button>
+      <span class="est"><span class="dot" id="dot"></span><span id="est">Detenido</span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="lbl">Retraso</div>
+    <div class="fila">
+      <span class="big" id="seg">0 s</span>
+      <input type="range" id="rango" min="0" max="30" step="1" value="0" oninput="cambiar(this.value)" disabled>
+    </div>
+    <div class="datos">
+      <div class="dato"><div class="v" id="d-buf">0 s</div><div class="k">Guardado</div></div>
+      <div class="dato"><div class="v" id="d-real">0,0 s</div><div class="k">Retraso real</div></div>
+      <div class="dato"><div class="v" id="d-vel">1,00×</div><div class="k">Velocidad</div></div>
+      <div class="dato"><div class="v" id="d-mime">—</div><div class="k">Formato</div></div>
+    </div>
+  </div>
+
+  <div class="card aviso">
+    <b>Cómo saber si anda bien.</b> Poné 8 segundos y saludá a la cámara: tenés
+    que verte saludar 8 segundos después. Movés la barra y el retraso cambia en
+    el momento, sin cortes. La velocidad se va a mover entre 0,95 y 1,05: eso es
+    normal, es la corrección fina para que el retraso no se vaya desviando.
+  </div>
+</div>
+
+<script>
+var bd = null, stream = null, timer = null;
+
+if (!window.delaySoportado || !delaySoportado()) {
+  document.getElementById('no-soporta').style.display = 'block';
+}
+
+function est(txt, tipo){
+  document.getElementById('est').textContent = txt;
+  var d = document.getElementById('dot');
+  d.className = 'dot' + (tipo ? ' ' + tipo : '');
+}
+
+function arrancar(){
+  var b = document.getElementById('btn');
+  if (bd) {
+    bd.parar();
+    if (stream) stream.getTracks().forEach(function(t){ t.stop(); });
+    bd = null; stream = null;
+    clearInterval(timer);
+    b.textContent = '▶ Empezar'; b.classList.add('p');
+    document.getElementById('rango').disabled = true;
+    document.getElementById('btn-punto').disabled = true;
+    document.getElementById('btn-rep').disabled = true;
+    est('Detenido', '');
+    return;
+  }
+  est('Pidiendo la cámara…', 'wait');
+  navigator.mediaDevices.getUserMedia({ video:{ width:{ideal:1280}, height:{ideal:720} }, audio:false })
+    .then(function(s){
+      stream = s;
+      bd = new BufferDelay(document.getElementById('v'));
+      bd.onEstado = est;
+      if (!bd.arrancar(s)) { est('No soportado', 'err'); return; }
+      document.getElementById('d-mime').textContent = (bd.mime||'').replace('video/','');
+      b.textContent = '■ Parar'; b.classList.remove('p');
+      document.getElementById('rango').disabled = false;
+      document.getElementById('btn-punto').disabled = false;
+      document.getElementById('btn-rep').disabled = false;
+      timer = setInterval(refrescar, 400);
+    })
+    .catch(function(e){ est('No se pudo abrir la cámara: ' + e.name, 'err'); });
+}
+
+function cambiar(v){
+  document.getElementById('seg').textContent = v + ' s';
+  if (bd) bd.setRetraso(parseInt(v, 10));
+}
+function marcar(){ if (bd) { bd.marcarPunto(); est('Punto marcado', 'ok'); } }
+function repetir(){ if (bd && !bd.verUltimoPunto(8)) est('Todavía no marcaste ningún punto', 'wait'); }
+
+function refrescar(){
+  if (!bd) return;
+  var v = document.getElementById('v');
+  var buf = bd.disponible();
+  document.getElementById('d-buf').textContent = Math.round(buf) + ' s';
+  var real = 0;
+  try { real = bd._fin() - v.currentTime; } catch (e) {}
+  document.getElementById('d-real').textContent = (Math.round(real*10)/10).toString().replace('.', ',') + ' s';
+  document.getElementById('d-vel').textContent = (v.playbackRate||1).toFixed(2).replace('.', ',') + '×';
+  /* No dejar pedir mas retraso del que hay grabado. */
+  var r = document.getElementById('rango');
+  var tope = Math.max(0, Math.floor(buf) - 2);
+  r.max = Math.min(30, Math.max(5, tope));
+}
+</script>
+</body>
+</html>

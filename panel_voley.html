@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20260907-2100"></script>
-<script src="selector_categoria.js?v=20260907-2100"></script>
+<script src="categorias_club.js?v=20260906-0817"></script>
+<script src="selector_categoria.js?v=20260906-0817"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -285,12 +285,13 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260907-2100"></script>
-<script src="firebase.js?v=20260907-2100" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260907-2100"></script>
-<script src="lang.js?v=20260907-2100"></script>
-<script src="objetivos.js?v=20260907-2100" onerror="void 0"></script>
-<script src="video_delay.js?v=20260907-2100" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260906-0817"></script>
+<script src="firebase.js?v=20260906-0817" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260906-0817"></script>
+<script src="lang.js?v=20260906-0817"></script>
+<script src="objetivos.js?v=20260906-0817" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20260908"></script>
+  <script src="video_delay.js?v=20260906-0817" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -539,7 +540,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260907-2100">
+<link rel="stylesheet" href="movil.css?v=20260906-0817">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase">← Dashboard</a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -1510,7 +1511,7 @@ function abrirPlanPreparadoModal(){
   document.getElementById('plan-frame').src='plan_partido.html#armador';
   m.style.display='block';
 }
-var _lastRally = -1;   /* último punto cerrado que ya mostramos */
+var _lastRally = -1; var _lastAcciones = null;   /* último punto cerrado que ya mostramos */
 function refrescarVista(D){
   window.VOLEY_DATA=D;
   try{ render(); }catch(e){}
@@ -1557,9 +1558,21 @@ function traerEnVivo(primera){
     var rally = (typeof L.rally==='number') ? L.rally : null;
     /* si viene el contador de rally, refrescamos SOLO cuando cambió (punto cerrado).
        Si no viene (compatibilidad), caemos al modo por timestamp. */
-    if(rally!==null){
-      if(rally!==_lastRally || primera){
-        _lastRally = rally;
+    /* ══ TAMBIEN CON CADA ACCION, NO SOLO AL CERRAR EL PUNTO ═══════════════
+       Antes la vista se rehacia unicamente cuando cambiaba el contador de
+       rally, o sea cuando el scout cerraba un punto. En un partido alcanza.
+       En un ENTRENAMIENTO no: se scoutean ejercicios donde no se cierra
+       ningun punto, el contador nunca se mueve y la pantalla se quedaba
+       congelada hasta que alguien la refrescaba a mano.
+
+       El scout ya publica 'acciones', que es la cantidad de codigos cargados
+       y sube con cada Enter. Alcanza con mirar tambien ese numero: en partido
+       se comporta igual que antes —entre punto y punto igual hubo acciones—
+       y en entrenamiento por fin se actualiza solo. */
+    var acciones = (typeof L.acciones==='number') ? L.acciones : null;
+    if(rally!==null || acciones!==null){
+      if(rally!==_lastRally || acciones!==_lastAcciones || primera){
+        _lastRally = rally; _lastAcciones = acciones;
         fbGet('voley_data', function(D){
           if(!D || !D.j || !D.j.length) return;
           _liveTS=D.ts;
@@ -1634,7 +1647,25 @@ function renderBateriasPanel(){
 
 function iniciarEnVivo(){
   traerEnVivo(true);
-  setInterval(function(){ traerEnVivo(false); }, 2000);   /* refresco cada 2 s */
+
+  /* ══ QUE SE VEA EN EL MOMENTO ═══════════════════════════════════════════
+     Antes se preguntaba cada 2 segundos. Entre pregunta y pregunta el que
+     mira el panel veia una version vieja, y en un entrenamiento eso se nota:
+     el compañero carga el codigo y del otro lado tarda en aparecer.
+
+     Con fbStream, Firebase avisa apenas alguien escribe, asi que se ve
+     practicamente al instante. El temporizador se queda igual como respaldo,
+     pero mucho mas lento: si el aviso funciona no hace falta preguntar tan
+     seguido, y si se corta la conexion el panel se sigue actualizando igual
+     aunque tarde un poco mas. */
+  var _hayStream = false;
+  try{
+    if(typeof fbStream === 'function'){
+      var cortar = fbStream('voley_live', function(){ traerEnVivo(false); });
+      _hayStream = !!cortar;
+    }
+  }catch(e){}
+  setInterval(function(){ traerEnVivo(false); }, _hayStream ? 10000 : 2000);   /* refresco cada 2 s */
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',iniciarEnVivo);
 else iniciarEnVivo();
@@ -2006,8 +2037,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20260907-2100" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260907-2100"></script>
+<script src="plantel_nafels.js?v=20260906-0817" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260906-0817"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2106,7 +2137,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20260907-2100"></script>
+<script src="ayuda.js?v=20260906-0817"></script>
 </body>
 </html>
 

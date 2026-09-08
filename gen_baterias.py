@@ -76,8 +76,11 @@ def _bat_nuevo():
     # el unico que quedaba en cero: se contaba desde el archivo de VIDEO, que
     # el dashboard ni siquiera carga, asi que nunca se llenaba. Los .dvw traen
     # la defensa como cualquier otro fundamento.
-    return {'S':{'#':0,'+':0,'/':0,'=':0,'T':0},
-            'R':{'#':0,'+':0,'/':0,'=':0,'T':0},
+    # El '-' (negativo) no se guardaba: hasta ahora ninguna formula lo usaba,
+    # valia cero igual que el neutro. La escala nueva SI lo usa, asi que hay
+    # que contarlo o restaria siempre cero y no cambiaria nada.
+    return {'S':{'#':0,'+':0,'-':0,'/':0,'=':0,'T':0},
+            'R':{'#':0,'+':0,'-':0,'/':0,'=':0,'T':0},
             'B':{'#':0,'+':0,'T':0},
             'D':{'#':0,'+':0,'-':0,'=':0,'T':0},
             'Aall':na(),'cent':na(),'alta':na(),'rap':na(),
@@ -163,8 +166,32 @@ def _bat_to_pcts(P):
         'defBuena': D['+'],
         'defMala':  D['-'],
         'def':     _roundpy((D['#']+0.5*D['+']-0.5*D['-']-D['='])/D['T']*100) if D['T'] else None,
-        'sq':    _roundpy((S['#']+0.5*S['/']+0.25*S['+']-S['='])/S['T']*100) if S['T'] else None,
-        'rec':   _roundpy((R['#']+0.5*R['+']-0.5*R['/']-R['='])/R['T']*100) if R['T'] else None,
+        # ══ SAQUE Y RECEPCION: ESCALA SIMETRICA ══════════════════════════════
+        # Antes los pesos eran chicos y asimetricos, y sobre todo el saque
+        # negativo y el neutro valian LO MISMO (cero). Un saque que el rival
+        # recibe perfecto no puede puntuar igual que uno que lo incomoda.
+        #
+        # Ahora la escala es simetrica alrededor del neutro: lo que suma un
+        # positivo es exactamente lo que resta un negativo, y los extremos
+        # valen 1. Se mide QUE TAN BIEN SE EJECUTO la accion, no cuanto
+        # ayudo despues a ganar el punto: son dos preguntas distintas y esta
+        # es la que le sirve al entrenador para corregir.
+        #
+        #   SAQUE        #  +1     /  +0,75   +  +0,5   !  0   -  -0,5   =  -1
+        #   RECEPCION    #  +1     +  +0,5    !   0     -  -0,5   /  -0,75   =  -1
+        #
+        # El free ball del saque (/) entra entre el positivo y el ace: la
+        # pelota vuelve sin ataque y eso es casi tan bueno como un punto.
+        # El sobrepase de recepcion (/) entra entre el negativo y el error:
+        # la pelota cruza y el rival ataca de una, pero todavia se puede
+        # defender.
+        #
+        # OJO al leer los numeros: en esta escala el saque del equipo da
+        # negativo casi siempre, porque el 44% de los saques son negativos y
+        # antes valian cero. No es que se saque peor: cambio la vara. Los
+        # objetivos de la pantalla hay que reajustarlos a esta escala.
+        'sq':    _roundpy((S['#']+0.75*S['/']+0.5*S['+']-0.5*S['-']-S['='])/S['T']*100) if S['T'] else None,
+        'rec':   _roundpy((R['#']+0.5*R['+']-0.5*R['-']-0.75*R['/']-R['='])/R['T']*100) if R['T'] else None,
         'bqpos': _roundpy((B['#']+B['+'])/B['T']*100) if B['T'] else None,
         'bqpt':  _roundpy(B['#']/B['T']*100) if B['T'] else None,
         'atqq':  atk(P['cent']),

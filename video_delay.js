@@ -96,6 +96,16 @@
   var rallyMarks = [];          /* timestamps de fin de cada punto (del scout) */
   var _lastRally = -1;
 
+  /* ══ MOTOR NUEVO, CON EL VIEJO DE RESPALDO ═══════════════════════════════
+     El metodo de clips de 12 segundos deja un corte en cada empalme, no
+     permite elegir el retraso de verdad y se queda esperando cuando un clip
+     todavia no cerro. Eso es lo que se siente como que "se traba".
+
+     delay_buffer.js arma un solo video continuo y el retraso es moverse
+     dentro de el. Si el navegador no lo soporta, arrancar() devuelve false y
+     se sigue con los clips: nadie se queda sin video.                       */
+  var BD = null;
+
   function onStreamRecibido(stream){
     var vLive = $('vd-live'), vDelay = $('vd-delay');
     if(vLive){
@@ -104,6 +114,16 @@
     }
     if(vDelay){ vDelay.style.display='none'; }
     setEstado('Conectado · en vivo', 'ok');
+
+    if(typeof BufferDelay === 'function' && vDelay){
+      BD = new BufferDelay(vDelay);
+      BD.onEstado = setEstado;
+      if(BD.arrancar(stream)){
+        escucharCierreDeRally();
+        return;                      /* motor nuevo andando */
+      }
+      BD = null;                     /* no se pudo: se sigue como antes */
+    }
     iniciarGrabacionEnCiclos(stream);
     escucharCierreDeRally();
   }
@@ -147,6 +167,7 @@
           if(_lastRally<0){ _lastRally=d.rally; return; }
           if(d.rally>_lastRally){
             _lastRally = d.rally;
+            if(BD) BD.marcarPunto();       /* queda marcado DENTRO del video */
             rallyMarks.push(Date.now());   /* acá terminó un punto */
             if(rallyMarks.length>20) rallyMarks.shift();
             var b=$('vd-replay-hint'); if(b){ b.style.display='block'; setTimeout(function(){ b.style.display='none'; },3000); }
@@ -159,6 +180,15 @@
 
   /* ── DELAY CONTINUO: reproducir el ciclo anterior (ya cerrado y fluido) ── */
   function setDelay(seg){
+    if(BD){
+      var vLive=$('vd-live'), vDelay=$('vd-delay');
+      BD.setRetraso(seg);
+      /* Con 0 se muestra el directo, que tiene menos latencia todavia. */
+      if(vLive)  vLive.style.display  = seg<=0 ? 'block' : 'none';
+      if(vDelay) vDelay.style.display = seg<=0 ? 'none'  : 'block';
+      var lbl=$('vd-delay-lbl'); if(lbl) lbl.textContent = seg+' s';
+      return;
+    }
     delayMs = Math.max(0, seg*1000);
     var lbl = $('vd-delay-lbl'); if(lbl) lbl.textContent = seg+' s';
     var vLive=$('vd-live'), vDelay=$('vd-delay');

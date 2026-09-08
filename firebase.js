@@ -432,6 +432,69 @@ function _fbCorta(){
   return false;
 }
 
+/* ══ AVISO EN TIEMPO REAL ═══════════════════════════════════════════════════
+   fbGet pregunta una vez y corta. Para el scout en vivo eso obliga a preguntar
+   cada tantos segundos, y entre pregunta y pregunta la pantalla del que mira
+   se queda vieja.
+
+   La misma API REST de Firebase puede EMPUJAR los cambios: pidiendo el dato
+   como flujo de eventos, avisa apenas alguien lo escribe. Es lo que hace que
+   el panel se actualice en el momento y no "hasta 2 segundos despues".
+
+   fbStream(ruta, callback) devuelve una funcion para cortar. Si el navegador
+   no lo soporta, o Firebase esta apagado, devuelve null y quien llama sigue
+   preguntando como antes: nunca deja a la pantalla sin datos.               */
+function fbStream(path, callback){
+  try{
+    if(typeof EventSource === 'undefined') return null;
+    if(typeof FB_OFF !== 'undefined' && FB_OFF) return null;
+    if(typeof _fbCorta === 'function' && _fbCorta()) return null;
+  }catch(e){ return null; }
+
+  var es = null, muerto = false, reintento = null;
+
+  function abrir(){
+    if(muerto) return;
+    _fbArrancar().then(_fbSufijo).then(function(q){
+      if(muerto) return;
+      try{
+        es = new EventSource(FB_URL + '/' + path + '.json' + q);
+      }catch(e){ return; }
+
+      function leer(ev){
+        if(muerto) return;
+        try{
+          var m = JSON.parse(ev.data || '{}');
+          /* El primer evento trae el dato entero; los siguientes, el pedazo
+             que cambio. Como aca siempre se escribe el objeto completo, con
+             mirar 'data' alcanza. */
+          if(m && m.data !== undefined && m.data !== null) callback(m.data);
+        }catch(e){}
+      }
+      es.addEventListener('put', leer);
+      es.addEventListener('patch', leer);
+
+      /* Si se corta —wifi del club, token vencido— se reconecta solo.
+         Sin esto, una caida de un segundo dejaba el panel congelado el resto
+         del entrenamiento. */
+      es.onerror = function(){
+        try{ es.close(); }catch(e){}
+        es = null;
+        if(muerto) return;
+        clearTimeout(reintento);
+        reintento = setTimeout(abrir, 3000);
+      };
+    }).catch(function(){});
+  }
+  abrir();
+
+  return function cortar(){
+    muerto = true;
+    clearTimeout(reintento);
+    try{ if(es) es.close(); }catch(e){}
+  };
+}
+
 function _fbSufijo(){
   return _fbToken().then(function(t){ return t ? ('?auth=' + encodeURIComponent(t)) : ''; });
 }

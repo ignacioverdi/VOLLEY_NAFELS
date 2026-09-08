@@ -953,7 +953,18 @@ document.getElementById('teamsel').addEventListener('change',function(){setTeam(
 pintarBotonesEquipo();
 var _h=(location.hash||'').replace('#','');
 setTab(['armador','ataque','saque','recepcion','defensa','bloqueo'].indexOf(_h)>=0?_h:'armador');
-if(VIVO){ cargarVivo(true); setInterval(function(){ cargarVivo(false); }, 2000); }
+if(VIVO){
+  cargarVivo(true);
+  /* Igual que el panel: Firebase avisa apenas cambia, y el temporizador queda
+     de respaldo por si el aviso no esta disponible o se corta la conexion. */
+  var _vivoStream = false;
+  try{
+    if(typeof fbStream === 'function'){
+      _vivoStream = !!fbStream('voley_codes', function(){ cargarVivo(false); });
+    }
+  }catch(e){}
+  setInterval(function(){ cargarVivo(false); }, _vivoStream ? 10000 : 2000);
+}
 buildTeam();
 buildFocusSel(); applyFocus();
 

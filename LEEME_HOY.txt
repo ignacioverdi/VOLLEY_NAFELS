@@ -1,0 +1,76 @@
+QUE HAY QUE HACER CON ESTO
+==========================
+
+1. Copiar los 10 archivos a la carpeta de NAFELS.
+2. Correr HACER_TODO.bat        <- necesario: gen_baterias.py es motor
+3. Publicar.
+
+Con eso queda todo. Abajo, que trae cada archivo y como probarlo.
+
+
+A) EL SCOUT EN VIVO, AHORA INSTANTANEO
+   panel_voley.html · plan_partido.html · panel_vivo.html · firebase.js
+
+   Antes: el panel preguntaba cada 2 segundos y solo se redibujaba al
+   cerrar un punto. En entrenamiento, donde no se cierran puntos, no se
+   actualizaba nunca.
+
+   Ahora: Firebase avisa apenas alguien escribe, el scout publica a los
+   60 ms en vez de 250, y el panel tambien se refresca con cada accion.
+
+   COMO PROBARLO: tu companero abre el scout y carga codigos; vos mirás
+   el panel. Tienen que aparecer casi al instante, en entrenamiento y en
+   partido. No hace falta que esten en la misma cuenta: alcanza con que
+   los dos sean staff y esten en la misma categoria.
+
+
+B) EL VIDEO DELAY, DE NUEVO
+   delay_buffer.js (nuevo) · video_delay.js · prueba_delay.html (nuevo)
+
+   El metodo viejo grababa clips de 12 segundos y los pegaba uno atras
+   del otro: corte visible en cada empalme, el retraso no se podia
+   elegir de verdad, y si un clip no habia cerrado el video esperaba.
+   Eso era lo que se trababa.
+
+   Ahora es un solo video continuo y el retraso es mirar mas atras
+   dentro de el. Para que no se vaya desviando se acelera o frena la
+   reproduccion entre 0,95 y 1,05, que el ojo no nota.
+
+   COMO PROBARLO: abrir prueba_delay.html EN LA TABLET QUE VAS A USAR.
+   Usa la camara del propio aparato, no hace falta tripode ni sala.
+   Poner 8 segundos y saludar: tenes que verte saludar 8 segundos
+   despues, sin tirones.
+
+   SI NO FUNCIONA en ese aparato, la pagina lo avisa y la app sigue con
+   el metodo viejo. No se rompe nada.
+
+
+C) LA DEFENSA EN EL DASHBOARD
+   gen_baterias.py
+
+   El recuadro de Defensa estaba siempre en cero: se leia del archivo de
+   video, que el dashboard ni carga. Ahora se cuenta desde los .dvw como
+   los otros fundamentos, y respeta el filtro de sesiones.
+
+
+D) FORMULAS DE SAQUE Y RECEPCION
+   gen_baterias.py · REFERENCIA_TECNICA.md · RESUMEN_SISTEMA_COMPLETO.md
+
+   Escala simetrica: lo que suma un positivo es lo que resta un negativo.
+
+     SAQUE       #  +1    /  +0,75   +  +0,5   !  0   -  -0,5   =  -1
+     RECEPCION   #  +1    +  +0,5    !   0     -  -0,5   /  -0,75   =  -1
+
+   OJO: los numeros van a bajar y NO es que se juegue peor, cambio la
+   vara. Medido sobre 25 partidos:
+
+     saque       de  -6,6%  a  -24,2%
+     recepcion   de  25,9%  a   15,9%
+
+   El saque baja tanto porque el 44% de los saques son negativos y antes
+   valian cero.
+
+   DESPUES DE CORRER HACER_TODO: mirar donde queda parado el equipo y
+   recien ahi ajustar los objetivos desde el Dashboard, pestana
+   Objetivos. Los que estan hoy (saque 3%, recepcion 36%) fueron
+   calculados con la formula vieja y ya no aplican.
