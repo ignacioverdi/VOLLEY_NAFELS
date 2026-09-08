@@ -79,8 +79,11 @@ def _bat_nuevo():
     # El '-' (negativo) no se guardaba: hasta ahora ninguna formula lo usaba,
     # valia cero igual que el neutro. La escala nueva SI lo usa, asi que hay
     # que contarlo o restaria siempre cero y no cambiaria nada.
-    return {'S':{'#':0,'+':0,'-':0,'/':0,'=':0,'T':0},
-            'R':{'#':0,'+':0,'-':0,'/':0,'=':0,'T':0},
+    # El '!' (neutro) tampoco se guardaba: con la escala vieja valia cero y
+    # daba igual. En la escala de 0 a 100 el neutro vale 50, asi que si no se
+    # cuenta, cada saque neutro puntuaria 0 y el numero se hunde.
+    return {'S':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
+            'R':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
             'B':{'#':0,'+':0,'T':0},
             'D':{'#':0,'+':0,'-':0,'=':0,'T':0},
             'Aall':na(),'cent':na(),'alta':na(),'rap':na(),
@@ -190,8 +193,28 @@ def _bat_to_pcts(P):
         # negativo casi siempre, porque el 44% de los saques son negativos y
         # antes valian cero. No es que se saque peor: cambio la vara. Los
         # objetivos de la pantalla hay que reajustarlos a esta escala.
-        'sq':    _roundpy((S['#']+0.75*S['/']+0.5*S['+']-0.5*S['-']-S['='])/S['T']*100) if S['T'] else None,
-        'rec':   _roundpy((R['#']+0.5*R['+']-0.5*R['-']-0.75*R['/']-R['='])/R['T']*100) if R['T'] else None,
+        # ── DE 0 A 100, NO DE -100 A +100 ────────────────────────────────────
+        # Mismo criterio de antes, misma jerarquia, mismo orden. Lo unico que
+        # cambia es DONDE esta el cero.
+        #
+        # Con el cero en el medio, cualquier equipo con muchos negativos caia
+        # por debajo de cero, y en saque masculino el negativo es el 40-47% de
+        # las acciones: los OCHO equipos de la liga daban negativo, campeon
+        # incluido. Un numero donde todos son negativos no dice si estas bien
+        # o mal.
+        #
+        # Corriendo la escala con (valor + 1) / 2, cada valoracion queda:
+        #
+        #   SAQUE       #  100    /  87,5   +  75    !  50    -  25    =  0
+        #   RECEPCION   #  100    +  75     !  50    -  25    /  12,5  =  0
+        #
+        # Y el numero se lee solo: 50 es "todo neutro", 25 "todo negativo",
+        # 75 "todo positivo". Es el criterio del Serve Effectiveness Rating,
+        # que tampoco usa negativos.
+        #
+        # Equivalencia exacta con la escala anterior: nuevo = (viejo + 100) / 2
+        'sq':    _roundpy((S['#'] + 0.875*S['/'] + 0.75*S['+'] + 0.5*S['!'] + 0.25*S['-'])/S['T']*100) if S['T'] else None,
+        'rec':   _roundpy((R['#'] + 0.75*R['+'] + 0.5*R['!'] + 0.25*R['-'] + 0.125*R['/'])/R['T']*100) if R['T'] else None,
         'bqpos': _roundpy((B['#']+B['+'])/B['T']*100) if B['T'] else None,
         'bqpt':  _roundpy(B['#']/B['T']*100) if B['T'] else None,
         'atqq':  atk(P['cent']),

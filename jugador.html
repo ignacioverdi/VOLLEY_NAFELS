@@ -7,17 +7,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 
 <!-- Datos (cada uno se carga si existe; si no, el onerror lo deja en null) -->
-<script src="categorias_club.js?v=20260908-1402"></script>
-<script src="selector_categoria.js?v=20260908-1402"></script>
-<script src="game_plans.js?v=20260908-1402" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260908-1402" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260908-1428"></script>
+<script src="selector_categoria.js?v=20260908-1428"></script>
+<script src="game_plans.js?v=20260908-1428" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260908-1428" onerror="void 0"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260908-1402"></script>
-<script src="filtro_tipo.js?v=20260908-1402" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260908-1428"></script>
+<script src="filtro_tipo.js?v=20260908-1428" onerror="void 0"></script>
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
      las que no existen las descarta el onerror, sin ruido. Y todas con
      .enc, que es como se publican los datos del club. -->
@@ -27,10 +27,10 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="datos_video_ent_28-29.js.enc" onerror="void 0"></script>
   <script src="datos_partidos.js.enc" onerror="void 0"></script>
 <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
-<script src="firebase.js?v=20260908-1402" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260908-1402"></script>
-<script src="lang.js?v=20260908-1402" onerror="void 0"></script>
-<script src="datos_historial.js?v=20260908-1402" onerror="window.HISTORIAL_DATA=null"></script>
+<script src="firebase.js?v=20260908-1428" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260908-1428"></script>
+<script src="lang.js?v=20260908-1428" onerror="void 0"></script>
+<script src="datos_historial.js?v=20260908-1428" onerror="window.HISTORIAL_DATA=null"></script>
 <script src="datos_gameplan.js.enc" onerror="window.GAMEPLAN_DATA=null"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
@@ -171,10 +171,10 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260908-1402">
+<link rel="stylesheet" href="movil.css?v=20260908-1428">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260908-1402" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260908-1428" onerror="void 0"></script>
 </head>
 <body>
 <div class="page-header">
@@ -230,8 +230,8 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 // CONFIG DE BATERÍAS (objetivos del equipo 2026)
 // ════════════════════════════════════════════════════════════════
 window.OBJETIVOS_CONFIG = {metas:{
-  sq:   {label:'% Saque',     obj:3,  min:-12,max:8,  g2:3,  g1:-3, y:-8},
-  rec:  {label:'% Recep.',    obj:36, min:20, max:44, g2:36, g1:30, y:25},
+  sq:   {label:'% Saque',     obj:42, min:25,max:55, g2:42, g1:38, y:34},
+  rec:  {label:'% Recep.',    obj:62, min:45,max:75, g2:62, g1:58, y:54},
   bqpos:{label:'Blq #+',      obj:43, min:25, max:52, g2:43, g1:37, y:30},
   bqpt: {label:'% Blq #',     obj:23, min:12, max:28, g2:23, g1:20, y:17},
   atqq: {label:'Atq Central', obj:48, min:35, max:56, g2:48, g1:44, y:40},
@@ -977,6 +977,6 @@ try{
   else window.addEventListener('load', function(){ setTimeout(poner, 400); });
 })();
 </script>
-<script src="ayuda.js?v=20260908-1402"></script>
+<script src="ayuda.js?v=20260908-1428"></script>
 </body>
 </html>

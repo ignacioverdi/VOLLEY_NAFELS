@@ -1,0 +1,66 @@
+SAQUE Y RECEPCION: ESCALA 0-100 Y COLORES
+=========================================
+
+1. Los 9 archivos a la carpeta de NAFELS
+2. HACER_TODO            <- gen_baterias.py es motor
+3. Publicar
+
+
+QUE CAMBIO
+----------
+La escala pasa de -100..+100 a 0..100. MISMO criterio, mismo orden, mismos
+pesos relativos: lo unico que se movio es donde esta el cero.
+
+  SAQUE       #  100    /  87,5   +  75    !  50    -  25    =  0
+  RECEPCION   #  100    +  75     !  50    -  25    /  12,5  =  0
+
+Equivalencia con lo anterior:  nuevo = (viejo + 100) / 2
+
+Se lee solo:  0 = todo errores · 25 = todo negativo · 50 = todo neutro
+              75 = todo positivo · 100 = todo ace o perfecta
+
+
+LOS COLORES
+-----------
+  SAQUE                        RECEPCION
+  VERDE FUERTE   >= 42         VERDE FUERTE   >= 62
+  VERDE CLARO    38 - 42       VERDE CLARO    58 - 62
+  AMARILLO       34 - 38       AMARILLO       54 - 58
+  ROJO           <  34         ROJO           <  54
+
+No son a ojo. Salen de 192 actuaciones de equipo en partidos de la 25-26:
+
+  percentiles     SAQUE   RECEPCION
+    P25            35,2      54,5
+    mediana        38,6      58,4
+    P75            41,6      61,7
+
+El ancho de banda (4 puntos) sale de medir cuanto varia un equipo entre
+partidos: ±4,0 en saque y ±5,1 en recepcion. Con bandas mas angostas el
+color cambiaria por azar.
+
+Reparto de las 192 actuaciones:
+  verde fuerte 23%  ·  verde claro 30-32%  ·  amarillo 24-26%  ·  rojo 19-23%
+
+Verde fuerte = cuarto superior de la liga, no "cumpliste".
+La linea verde/amarillo cae en la mediana: arriba o abajo del promedio.
+
+
+DONDE QUEDA NAFELS (temporada 25-26)
+------------------------------------
+  saque       39,3   verde claro
+  recepcion   57,6   amarillo
+
+  mejor partido:  saque 49,0 verde fuerte  ·  recepcion 68,4 verde fuerte
+  peor partido:   saque 33,6 rojo          ·  recepcion 45,6 rojo
+
+
+OJO
+---
+Los cortes estaban repetidos en OCHO archivos, cada uno con su copia. Se
+actualizaron los ocho. Si algun dia cambias un objetivo desde la pantalla
+Objetivos del Dashboard, eso pisa estos valores y queda guardado para todo
+el cuerpo tecnico.
+
+Revisar en diciembre con los partidos de la 26-27: estos numeros son de la
+temporada pasada y con otro plantel.

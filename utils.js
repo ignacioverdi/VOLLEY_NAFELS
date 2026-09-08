@@ -64,8 +64,8 @@ var POS_COLOR={
 
 // ── Objetivos config ─────────────────────────────────────────
 window.OBJETIVOS_CONFIG={metas:{
-  sq:   {label:'% Saque',   obj:3,  min:-12,max:8,  g2:3,  g1:-3, y:-8},
-  rec:  {label:'% Recep.',  obj:36, min:20, max:44, g2:36, g1:30, y:25},
+  sq:   {label:'% Saque',   obj:42, min:25,max:55, g2:42, g1:38, y:34},
+  rec:  {label:'% Recep.',  obj:62, min:45,max:75, g2:62, g1:58, y:54},
   bqpos:{label:'Blq #+',    obj:43, min:25, max:52, g2:43, g1:37, y:30},
   bqpt: {label:'% Blq #',   obj:23, min:12, max:28, g2:23, g1:20, y:17},
   atqq: {label:'Atq Quick', obj:48, min:35, max:56, g2:48, g1:44, y:40},

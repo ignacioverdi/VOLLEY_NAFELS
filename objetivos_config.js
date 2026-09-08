@@ -22,9 +22,37 @@ window.__TEMP_TITULO = (function () {
 // Configuracion compartida de baterias y objetivos
 // Importar en: jugador.html, dashboard.html, historial_voley.html
 
-window.OBJETIVOS_CONFIG={metas:{
-  sq:   {label:'% Saque (3%)',   obj:3,  min:-12,max:8,  g2:3,  g1:-3, y:-8},
-  rec:  {label:'% Recepción (36%)',  obj:36, min:20, max:44, g2:36, g1:30, y:25},
+window./* ── SAQUE Y RECEPCION: ESCALA 0 A 100 Y CORTES SACADOS DE LA LIGA ─────────
+   La escala paso de -100..+100 a 0..100 (el error vale 0, el ace 100, el
+   neutro 50), asi que los objetivos viejos —saque 3, recepcion 36— ya no
+   significan nada en esta vara.
+
+   Los cortes nuevos NO son a ojo. Salen de 192 actuaciones de equipo en
+   partidos de la temporada 25-26:
+
+     percentiles reales    SAQUE   RECEPCION
+       P25                  35,2      54,5
+       mediana              38,6      58,4
+       P75                  41,6      61,7
+
+   Y el ancho de banda —4 puntos— sale de medir cuanto varia un equipo de un
+   partido a otro: ±4,0 en saque y ±5,1 en recepcion. Con bandas mas angostas
+   que eso el color cambiaria por azar y no informaria nada. Dato que vale la
+   pena recordar: ese ruido de un partido es MAS GRANDE que la distancia
+   entre el campeon y el ultimo en toda la temporada.
+
+   Como quedan repartidas las 192 actuaciones:
+     verde fuerte 23%   verde claro 30-32%   amarillo 24-26%   rojo 19-23%
+
+   O sea: verde fuerte = cuarto superior de la liga, no "cumpliste". Y el
+   corte del verde claro cae en la mediana, asi que la linea verde/amarillo
+   es "arriba o abajo del promedio de la liga".
+
+   Revisar en diciembre con los partidos de la 26-27: estos numeros son de
+   la temporada pasada y con otro plantel.                                   */
+OBJETIVOS_CONFIG={metas:{
+  sq:   { label:'% Saque (42)', obj:42, min:25,max:55, g2:42, g1:38, y:34},
+  rec:  { label:'% Recepción (62)', obj:62, min:45,max:75, g2:62, g1:58, y:54},
   bqpos:{label:'% Blq #+ (43%)',    obj:43, min:25, max:52, g2:43, g1:37, y:30},
   bqpt: {label:'% Blq # (23%)',   obj:23, min:12, max:28, g2:23, g1:20, y:17},
   atqq: {label:'% Atq Central (48%)', obj:48, min:35, max:56, g2:48, g1:44, y:40},
