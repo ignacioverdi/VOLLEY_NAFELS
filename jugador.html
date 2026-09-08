@@ -7,17 +7,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 
 <!-- Datos (cada uno se carga si existe; si no, el onerror lo deja en null) -->
-<script src="categorias_club.js?v=20260908-1440"></script>
-<script src="selector_categoria.js?v=20260908-1440"></script>
-<script src="game_plans.js?v=20260908-1440" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260908-1440" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260908-1446"></script>
+<script src="selector_categoria.js?v=20260908-1446"></script>
+<script src="game_plans.js?v=20260908-1446" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260908-1446" onerror="void 0"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260908-1440"></script>
-<script src="filtro_tipo.js?v=20260908-1440" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260908-1446"></script>
+<script src="filtro_tipo.js?v=20260908-1446" onerror="void 0"></script>
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
      las que no existen las descarta el onerror, sin ruido. Y todas con
      .enc, que es como se publican los datos del club. -->
@@ -27,10 +27,10 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="datos_video_ent_28-29.js.enc" onerror="void 0"></script>
   <script src="datos_partidos.js.enc" onerror="void 0"></script>
 <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
-<script src="firebase.js?v=20260908-1440" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260908-1440"></script>
-<script src="lang.js?v=20260908-1440" onerror="void 0"></script>
-<script src="datos_historial.js?v=20260908-1440" onerror="window.HISTORIAL_DATA=null"></script>
+<script src="firebase.js?v=20260908-1446" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260908-1446"></script>
+<script src="lang.js?v=20260908-1446" onerror="void 0"></script>
+<script src="datos_historial.js?v=20260908-1446" onerror="window.HISTORIAL_DATA=null"></script>
 <script src="datos_gameplan.js.enc" onerror="window.GAMEPLAN_DATA=null"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
@@ -171,10 +171,10 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260908-1440">
+<link rel="stylesheet" href="movil.css?v=20260908-1446">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260908-1440" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260908-1446" onerror="void 0"></script>
 </head>
 <body>
 <div class="page-header">
@@ -756,13 +756,13 @@ function renderQuickStats(j){
   // Defensa desde VIDEO_DATA (si está cargada), filtrando por número de jugador
   var dT=0,dPerf=0,dBuena=0,dMala=0,dErr=0,hasD=false;
   if(_videoTodo()){ var M=_videoTodo(); Object.keys(M).forEach(function(c){ (M[c].actions||[]).forEach(function(a){ if(a.sk!=='Defensa') return; if(a.tm!=='nafels') return; if(parseInt(a.num,10)!==parseInt(j.num,10)) return; hasD=true; dT++; if(a.ev==='#')dPerf++; else if(a.ev==='+')dBuena++; else if(a.ev==='-')dMala++; else if(a.ev==='=')dErr++; }); }); }
-  var sEff=t.sT>0?Math.round((t.sPunto + 0.875*t.sVend + 0.75*t.sPos + 0.5*t.sAdm + 0.25*t.sNeg)/t.sT*100):null;
-  var rEff=t.rT>0?Math.round((t.rPunto + 0.75*t.rPos + 0.5*t.rAdm + 0.25*t.rNeg + 0.125*t.rVend)/t.rT*100):null;
+  var sEff=t.sT>0?VB_EFF.saque(t):null;
+  var rEff=t.rT>0?VB_EFF.recepcion(t):null;
   var aEff=t.aT>0?Math.round((t.aPunto-t.aVend-t.aErr)/t.aT*100):null;
   var bEff=t.bT>0?Math.round((t.bPt+t.bPtPos)/t.bT*100):null;
   var rPos=t.rT>0?Math.round((t.rPunto+t.rPos)/t.rT*100):null;
   var rNeg=t.rT>0?Math.round((t.rVend+t.rErr)/t.rT*100):null;
-  var dEff=dT>0?Math.round((dPerf+0.5*dBuena-0.5*dMala-dErr)/dT*100):null;
+  var dEff=dT>0?VB_EFF.defensa({dT:dT,dPerf:dPerf,dBuena:dBuena,dMala:dMala}):null;
   var html='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px">';
   html+=mkRect('#F59E0B','Saque',[{v:fmtE(sEff),l:'EFF',c:effC(sEff)},{v:t.sT,l:'Total'},{v:t.sPunto,l:'Puntos'},{v:t.sErr,l:'Errores'}]);
   html+=mkRect('#F97316','Ataque',[{v:fmtE(aEff),l:'EFF',c:effC(aEff)},{v:t.aPunto,l:'Puntos'},{v:t.aVend,l:'Bloqueados'},{v:t.aErr,l:'Errores'}]);
@@ -977,6 +977,6 @@ try{
   else window.addEventListener('load', function(){ setTimeout(poner, 400); });
 })();
 </script>
-<script src="ayuda.js?v=20260908-1440"></script>
+<script src="ayuda.js?v=20260908-1446"></script>
 </body>
 </html>

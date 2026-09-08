@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20260908-1440"></script>
-<script src="selector_categoria.js?v=20260908-1440"></script>
+<script src="categorias_club.js?v=20260908-1446"></script>
+<script src="selector_categoria.js?v=20260908-1446"></script>
+<script src="objetivos_config.js?v=20260908-1446"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>GAME PLAN — AMRISWIL · NAFELS</title>
@@ -320,16 +321,16 @@ select, select option {
   }
 }
 </style>
-<script src="lang.js?v=20260908-1440" onerror="void 0"></script>
+<script src="lang.js?v=20260908-1446" onerror="void 0"></script>
 <script src="liga_data.js.enc"></script>
-<script src="firebase.js?v=20260908-1440" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260908-1440"></script>
+<script src="firebase.js?v=20260908-1446" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260908-1446"></script>
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
-<script src="videos.js?v=20260908-1440" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="videos.js?v=20260908-1446" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260908-1440">
+<link rel="stylesheet" href="movil.css?v=20260908-1446">
 </head>
 <body>
 
@@ -841,7 +842,7 @@ function gpStatSrv(rows){
   var RES=['#','/','+','!','=','-'];
   var t=rows.length,k=0,pl=0,bl=0,ng=0,nt=0,e=0;
   rows.forEach(function(r){var x=RES[r[5]];if(x==='#')k++;else if(x==='+')pl++;else if(x==='/')bl++;else if(x==='-')ng++;else if(x==='!')nt++;else if(x==='=')e++;});
-  return {tot:t,pts:k,plus:pl,slash:bl,neg:ng,ntr:nt,err:e,eff:t?Math.round((k + 0.875*bl + 0.75*pl + 0.5*nt + 0.25*ng)/t*100):0,pts_pct:t?Math.round(k/t*100):0};
+  return {tot:t,pts:k,plus:pl,slash:bl,neg:ng,ntr:nt,err:e,eff:(window.VB_EFF?(VB_EFF.saque({total:t,k:k,sl:bl,p:pl,nt:nt,ng:ng})||0):0),pts_pct:t?Math.round(k/t*100):0};
 }
 var GP_POS_COLOR={'OPPOSITE':'#818cf8','MIDDLE':'#f97316','OUTSIDE':'#22c55e','SETTER':'#fbbf24','LIBERO':'#06b6d4','OTRO':'#64748b',
   'OPUESTO':'#818cf8','CENTRAL':'#f97316','PUNTA':'#22c55e','ARMADOR':'#fbbf24'};
@@ -3621,8 +3622,8 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20260908-1440"></script>
-<script src="ayuda.js?v=20260908-1440"></script>
+<script src="temporadas_menu.js?v=20260908-1446"></script>
+<script src="ayuda.js?v=20260908-1446"></script>
 </body>
 </html>
 

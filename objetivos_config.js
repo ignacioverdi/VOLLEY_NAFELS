@@ -1,3 +1,89 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   LAS FORMULAS, EN UN SOLO LUGAR
+
+   Antes cada pantalla tenia su propia copia de la cuenta: 28 copias repartidas
+   en ocho archivos, con nombres de variable distintos en cada una (j.sPunto,
+   a.sPunto, t.sPunto, src.Punto, k, pl, bl...). Cambiar un peso obligaba a
+   acertarle a las 28. En la practica siempre quedaba alguna afuera, y una
+   pantalla mostraba un numero distinto al resto sin que nadie entendiera por
+   que. Tres veces seguidas paso lo mismo con el mismo cambio.
+
+   Ahora la cuenta vive aca y todas las pantallas la llaman. Cambiar un peso
+   es tocar UN solo lugar.
+
+   Las funciones reciben un objeto con los conteos y devuelven el numero
+   redondeado, o null si no hay acciones. Aceptan los distintos nombres que
+   usa cada pantalla, asi que sirven tal cual esten los datos.
+
+   ESCALA 0 a 100:  el error vale 0, el ace o la perfecta 100, el neutro 50.
+     SAQUE       #  100    /  87,5   +  75    !  50    -  25    =  0
+     RECEPCION   #  100    +  75     !  50    -  25    /  12,5  =  0
+     DEFENSA     #  100    +  75     !  50    -  25            =  0
+     ATAQUE      punto 100, bloqueado y error 0, el resto 50
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  function n(v){ return (typeof v === 'number' && isFinite(v)) ? v : 0; }
+  /* Toma el primer nombre que exista: cada pantalla llama distinto al mismo dato. */
+  function g(o, nombres){
+    for(var i=0;i<nombres.length;i++){
+      var v=o[nombres[i]];
+      if(v!==undefined && v!==null) return n(v);
+    }
+    return 0;
+  }
+  function redondear(x){ return Math.round(x); }
+
+  window.VB_EFF = {
+    /* SAQUE: # ace · / free ball · + positivo · ! neutro · - negativo · = error */
+    saque: function(o){
+      if(!o) return null;
+      var T = g(o,['sT','T','tot','total']);
+      if(!T) return null;
+      var ace  = g(o,['sPunto','Punto','pts','ace','k']);
+      var free = g(o,['sVend','Vend','slash','sl','bl']);
+      var pos  = g(o,['sPos','Pos','plus','pl','p']);
+      var ntr  = g(o,['sAdm','Adm','ntr','nt','exc']);
+      var neg  = g(o,['sNeg','Neg','neg','ng']);
+      return redondear((ace + 0.875*free + 0.75*pos + 0.5*ntr + 0.25*neg)/T*100);
+    },
+    /* RECEPCION: # perfecta · + positiva · ! neutra · - negativa · / sobrepase · = error */
+    recepcion: function(o){
+      if(!o) return null;
+      var T = g(o,['rT','T','tot','total']);
+      if(!T) return null;
+      var perf = g(o,['rPunto','Punto','pts','perf','k']);
+      var pos  = g(o,['rPos','Pos','plus','pl','p']);
+      var ntr  = g(o,['rAdm','Adm','ntr','nt','exc']);
+      var neg  = g(o,['rNeg','Neg','neg','ng']);
+      var sob  = g(o,['rVend','Vend','over','slash','sl','bl']);
+      return redondear((perf + 0.75*pos + 0.5*ntr + 0.25*neg + 0.125*sob)/T*100);
+    },
+    /* DEFENSA: mismo criterio que recepcion, sin sobrepase. */
+    defensa: function(o){
+      if(!o) return null;
+      var T = g(o,['dT','defT','T','tot','total']);
+      if(!T) return null;
+      var perf = g(o,['dPerf','defPerf','Punto','perf']);
+      var buena= g(o,['dBuena','defBuena','Pos','plus']);
+      var ntr  = g(o,['dAdm','defAdm','Adm','ntr']);
+      var mala = g(o,['dMala','defMala','Neg','neg']);
+      return redondear((perf + 0.75*buena + 0.5*ntr + 0.25*mala)/T*100);
+    },
+    /* ATAQUE: el punto vale todo, el bloqueado y el error nada. */
+    ataque: function(o){
+      if(!o) return null;
+      var T = g(o,['aT','T','tot','total']);
+      if(!T) return null;
+      var pt  = g(o,['aPunto','Punto','pts','k']);
+      var blq = g(o,['aVend','Vend','slash','bl']);
+      var err = g(o,['aErr','Err','err','e']);
+      var resto = T - pt - blq - err;
+      if(resto < 0) resto = 0;
+      return redondear((pt + 0.5*resto)/T*100);
+    }
+  };
+})();
+
 
 /* ── LA TEMPORADA QUE SE ESTA MOSTRANDO ────────────────────────────────────
    El titulo decia "2026" escrito a mano: al empezar la temporada nueva
@@ -182,8 +268,8 @@ function objCalcVals(nombreJugador){
     });
   });
   var v={};
-  v.sq   =a.sT>0?Math.round((a.sPunto + 0.875*a.sVend + 0.75*a.sPos + 0.5*a.sAdm + 0.25*a.sNeg)/a.sT*100):null;
-  v.rec  =a.rT>0?Math.round((a.rPunto + 0.75*a.rPos + 0.5*a.rAdm + 0.25*a.rNeg + 0.125*a.rVend)/a.rT*100):null;
+  v.sq   =a.sT>0?VB_EFF.saque(a):null;
+  v.rec  =a.rT>0?VB_EFF.recepcion(a):null;
   v.bqpos=a.bT>0?Math.round((a.bPt+a.bPtPos)/a.bT*100):null;
   v.bqpt =a.bT>0?Math.round(a.bPt/a.bT*100):null;
   v.atqhb=a.mbT>0?Math.round((a.mbPt-a.mbVnd-a.mbErr)/a.mbT*100):null;

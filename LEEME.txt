@@ -1,30 +1,48 @@
-FALTABA LA MITAD: LAS PANTALLAS
-===============================
+UNA SOLA FORMULA PARA TODA LA APP
+=================================
 
-Los 8 archivos a la carpeta y PUBLICAR. No hace falta HACER_TODO: son todas
-pantallas.
+Los 8 archivos a la carpeta y PUBLICAR. Sin HACER_TODO: son todas pantallas.
 
-QUE PASO
---------
-El motor (gen_baterias.py) quedo bien en escala 0-100, pero cada pantalla
-calcula el numero POR SU CUENTA y esas formulas quedaron en la escala vieja.
-Resultado: los cortes de color eran los nuevos (42/38/34) y los valores los
-viejos (-25, 11), asi que todo se pintaba ROJO.
 
-Ahora las 8 pantallas usan la misma formula que el motor:
+QUE SE HIZO
+-----------
+La cuenta de saque, recepcion, defensa y ataque estaba COPIADA en 28 lugares
+repartidos en ocho archivos, y cada copia usaba nombres de variable distintos
+para el mismo dato: j.sPunto, a.sPunto, t.sPunto, src.Punto, k, pl, bl, nt...
 
-  saque     = (# + 0,875*/ + 0,75*+ + 0,5*! + 0,25*-) / total
-  recepcion = (# + 0,75*+ + 0,5*! + 0,25*- + 0,125*/) / total
+Por eso cambiar un peso obligaba a acertarle a las 28, y tres veces seguidas
+quedo alguna afuera: una pantalla mostraba un numero distinto al resto, o
+directamente se caia y dejaba el resumen en blanco.
 
-Verificado contra los datos publicados: la conversion cierra exacta.
-  saque      -22  ->  39     (-22 + 100) / 2 = 39
-  recepcion   11  ->  55,5   ( 11 + 100) / 2 = 55,5
+Ahora la cuenta vive en UN solo lugar, objetivos_config.js, en window.VB_EFF:
 
-Y los colores quedan: saque verde claro, recepcion amarillo.
+    VB_EFF.saque(datos)      VB_EFF.recepcion(datos)
+    VB_EFF.defensa(datos)    VB_EFF.ataque(datos)
 
-DE PASO
--------
-armadores.html, game_plan.html y hm_saque.html no contaban el neutro ('!').
-Con la escala vieja valia cero y no hacia falta; ahora vale 50, asi que sin
-contarlo esas tres pantallas mostrarian un numero mas bajo que el resto.
-Se les agrego el contador.
+Las funciones aceptan los distintos nombres que usa cada pantalla, asi que
+funcionan tal cual estan los datos en cada lugar. Devuelven null si no hay
+acciones, en vez de romperse.
+
+De ahora en mas, cambiar un peso es tocar UN archivo.
+
+
+QUE SE VERIFICO
+---------------
+  · el mismo dato con los 5 juegos de nombres de las pantallas -> 39 en todos
+  · bordes: sin acciones -> null · todo ace -> 100 · todo error -> 0
+            todo neutro -> 50 · campos faltantes -> no rompe
+  · las 8 llamadas reales, ejecutadas: ninguna da error
+  · barrido final: no queda NINGUNA formula suelta en ningun archivo
+  · sintaxis de los 9 archivos: OK
+
+Cuatro pantallas (armadores, game_plan, hm_saque, panel_voley) no cargaban
+objetivos_config.js: se les agrego, si no la funcion no existiria ahi.
+
+De paso, la DEFENSA quedo tambien en escala 0-100. Estaba en la vieja y
+mostraba -44%.
+
+
+NOTA
+----
+hm_armador.html y hm_defensa.html dan error de sintaxis, pero YA VENIAN ASI
+y no se tocaron: son los marcadores {{ }} de plantilla, no un error real.
