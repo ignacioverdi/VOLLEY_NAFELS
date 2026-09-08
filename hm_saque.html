@@ -176,9 +176,18 @@ function calcEff(acts){
   });
   return window.VB_EFF ? VB_EFF.saque({total:t,k:k,sl:sl,p:p,nt:nt,ng:ng}) : null;
 }
-function effColor(v){
-  if(v===null||v===undefined) return '#475569';
-  return v>=OBJ_VAL?'#22c55e':v>=(OBJ_VAL-10)?'#fbbf24':'#ef4444';
+function effColor(v, meta){
+  /* Mismos cortes que las baterias. Sin clave vuelve al criterio anterior. */
+  if(v===null||v===undefined||isNaN(v)) return 'var(--mut,#475569)';
+  var _m = (meta && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+            ? window.OBJETIVOS_CONFIG.metas[meta] : null;
+  if(_m){
+    if(v >= _m.g2) return '#22c55e';
+    if(v >= _m.g1) return '#86efac';
+    if(v >= _m.y)  return '#fbbf24';
+    return '#ef4444';
+  }
+  return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#f97316':'#ef4444';
 }
 var pNums=Object.keys(PLAYERS).map(Number).sort(function(a,b){
   return PLAYERS[b].actions.length-PLAYERS[a].actions.length;

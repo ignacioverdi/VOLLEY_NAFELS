@@ -608,7 +608,21 @@ function getJugadores(idx){
   }
 }
 
-function effColor(v){ return v===null||isNaN(v)?'var(--mut)':v>20?'#22c55e':v>0?'#86efac':v===0?'var(--mut)':'#ef4444'; }
+function effColor(v, meta){
+  /* Segunda definicion del archivo: como se declara despues, PISA a la de
+     arriba. Estaba con los cortes viejos y por eso la columna seguia toda
+     verde aunque la primera ya estuviera bien. Ahora las dos hacen lo mismo. */
+  if(v===null||v===undefined||isNaN(v)) return 'var(--mut,#475569)';
+  var m = (meta && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+            ? window.OBJETIVOS_CONFIG.metas[meta] : null;
+  if(m){
+    if(v >= m.g2) return '#22c55e';
+    if(v >= m.g1) return '#86efac';
+    if(v >= m.y)  return '#fbbf24';
+    return '#ef4444';
+  }
+  return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#f97316':'#ef4444';
+}
 function sEff(j){ return j.sT>0?Math.round((j.sPunto*1+j.sVend*0.5+j.sPos*0.25-j.sErr*1)/j.sT*100):null; }
 function rEff(j){ return j.rT>0?Math.round((j.rPunto*1 + j.rPos*0.5 - j.rNeg*0.5 - j.rVend*0.75 - j.rErr*1)/j.rT*100):null; }
 function aEff(j){ return j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null; }

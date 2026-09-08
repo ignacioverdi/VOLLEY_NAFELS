@@ -1201,12 +1201,18 @@ function dibujarCanchaDefensa(canvasId, def, item){
 // ═══════════════════════════════════════════════════════
 // UTILIDADES
 // ═══════════════════════════════════════════════════════
-function effColor(e){
-  if(e===null||e===undefined) return 'var(--mut)';
-  if(e>=60) return '#22c55e';
-  if(e>=30) return '#fbbf24';
-  if(e>=0)  return '#f97316';
-  return '#ef4444';
+function effColor(e, meta){
+  /* Mismos cortes que las baterias. Sin clave vuelve al criterio anterior. */
+  if(e===null||e===undefined||isNaN(e)) return 'var(--mut,#475569)';
+  var _m = (meta && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+            ? window.OBJETIVOS_CONFIG.metas[meta] : null;
+  if(_m){
+    if(e >= _m.g2) return '#22c55e';
+    if(e >= _m.g1) return '#86efac';
+    if(e >= _m.y)  return '#fbbf24';
+    return '#ef4444';
+  }
+  return e>=40?'#22c55e':e>=20?'#86efac':e>=0?'var(--txt,#e2e8f0)':e>=-20?'#f97316':'#ef4444';
 }
 
 function drawWood(ctx,x,y,w,h,c1,c2){

@@ -101,6 +101,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   <div class="content" id="content"><div class="nodata">Elegí un jugador para ver su defensa</div></div>
 </div>
 
+<script src="objetivos_config.js?v=20260908"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
@@ -221,7 +222,19 @@ window.__DESCIFRAR_SINCRONO = true;
     });
   }
   function eff(acts){ if(!acts.length)return null; var s=0; acts.forEach(function(a){ s+=(a.ev==='#'?1:a.ev==='+'?0.5:a.ev==='-'?-0.5:a.ev==='='?-1:0); }); return Math.round(s/acts.length*100); }
-  function effColor(e){ return e===null?'#475569':e>=40?'#22C55E':e>=15?'#84CC16':e>=0?'#EAB308':e>=-25?'#F97316':'#EF4444'; }
+  function effColor(e, meta){
+  /* Mismos cortes que las baterias. Sin clave vuelve al criterio anterior. */
+  if(e===null||e===undefined||isNaN(e)) return 'var(--mut,#475569)';
+  var _m = (meta && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+            ? window.OBJETIVOS_CONFIG.metas[meta] : null;
+  if(_m){
+    if(e >= _m.g2) return '#22c55e';
+    if(e >= _m.g1) return '#86efac';
+    if(e >= _m.y)  return '#fbbf24';
+    return '#ef4444';
+  }
+  return e>=40?'#22c55e':e>=20?'#86efac':e>=0?'var(--txt,#e2e8f0)':e>=-20?'#f97316':'#ef4444';
+}
   function pct(n,t){ return t>0?Math.round(n/t*100):0; }
 
   function courtSVG(origZ,destZ,total){

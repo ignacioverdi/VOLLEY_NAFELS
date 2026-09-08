@@ -1,65 +1,44 @@
-TODOS LOS FUNDAMENTOS: COLORES Y OBJETIVOS
-==========================================
+LA COLUMNA SEGUIA VERDE: HABIA DOS effColor
+===========================================
 
-Los 12 archivos a la carpeta y publicar. Sin HACER_TODO: son pantallas.
-
-
-1) OBJETIVOS RECALCULADOS CON LA LIGA REAL
-   Los de ataque y bloqueo venian de criterios viejos y estaban
-   descalibrados. Ejemplo: atqhb (ataque de alta) tenia objetivo 20 cuando la
-   MEDIANA de la liga es 12,5, asi que medio campeonato quedaba en rojo.
-
-   Ahora los 12 usan el mismo metodo que saque y recepcion, sobre 192
-   actuaciones de equipo en partidos de la 25-26:
-
-     verde fuerte = P75 (cuarto superior de la liga)
-     verde claro  = mediana
-     amarillo     = P25
-     rojo         = debajo del cuarto inferior
-
-   FUND      ANTES         AHORA        que mide
-   bqpos     43/37/30      46/41/35     bloqueo #+
-   bqpt      23/20/17      22/17/12     bloqueo punto
-   atqq      48/44/40      56/42/29     ataque central
-   atqx      42/38/34      41/34/24     ataque rapida
-   atqhb     20/16/12      24/12/0      ataque alta
-   atqrp     50/44/38      50/39/28     ataque tras recepcion #+
-   atqri     36/32/28      45/30/17     ataque tras recepcion !
-   atqrm     26/22/18      30/18/0      ataque tras recepcion -
-   atqtr     34/30/26      35/27/17     ataque en transicion
-   def       (no existia)  59/54/49     defensa
-   sq        42/38/34      igual        saque
-   rec       62/58/54      igual        recepcion
-
-   Fijate el ancho de las bandas: en ataque central son de 14 puntos y en
-   saque de 4. No es capricho: el ataque varia ±21 puntos de un partido a
-   otro y el saque ±4. Bandas mas angostas que el ruido cambiarian de color
-   por azar.
+Los 9 archivos a la carpeta y publicar. Sin HACER_TODO.
 
 
-2) LA COLUMNA EFF% YA NO ES TODA VERDE
-   Usaba cortes fijos (verde arriba de 40) que servian para la escala vieja.
-   Ahora cada fundamento usa SUS cortes.
+QUE PASABA
+----------
+dashboard.html y analisis.html tenian DOS definiciones de effColor:
 
-   En saque, con tus jugadores:
-     SCHWITTER  23%   antes verde claro   ahora ROJO
-     NORRIS     30%   antes verde claro   ahora ROJO
-     STEIMANN   34%   antes verde claro   ahora AMARILLO
-     ROFFLER    41%   antes VERDE FUERTE  ahora verde claro
-     VAZQUEZ    44%   antes VERDE FUERTE  ahora VERDE FUERTE
+  linea 197   function effColor(v, meta)   <- la nueva, con los cortes
+  linea 742   function effColor(v)         <- la vieja, cortes fijos
 
+En JavaScript la ultima declarada PISA a la anterior. Yo habia reemplazado la
+primera y la segunda seguia mandando, asi que la columna seguia pintandose
+con verde arriba de 40 y verde claro arriba de 20: todo verde.
 
-3) SE ENCONTRARON 6 COPIAS MAS DE LAS FORMULAS
-   En armadores, game_plan, recepcion, saque_jugador y dos en dashboard
-   quedaban cuentas sueltas de recepcion y defensa con la escala vieja.
-   Todas pasan ahora por VB_EFF.
+Verificado en tu app: effColor no tenia el parametro meta aunque el archivo
+publicado si lo tuviera en la primera definicion.
 
-   Barrido final: NO queda ninguna formula suelta en ningun archivo.
+Ahora las dos definiciones son iguales, asi que gana la correcta igual.
 
 
-VERIFICADO
-  · los 12 fundamentos: bajo->ROJO, medio->verde claro, alto->VERDE FUERTE
-  · sintaxis de los 12 archivos
-  · seis pantallas mas tenian el effColor viejo: unificadas
-  · recepcion.html, ataque_jugador y saque_jugador no cargaban
-    objetivos_config.js: se les agrego
+Y SIETE PANTALLAS MAS
+---------------------
+armadores, game_plan, hm_armador, hm_defensa, hm_recepcion, hm_saque y
+scouting_rival tenian solo la version vieja. Todas unificadas.
+Cuatro de ellas no cargaban objetivos_config.js: se les agrego.
+
+
+PROBADO simulando la pagina con las dos definiciones:
+  la que gana tiene el parametro meta: SI
+
+  JUGADOR         EFF    SIN CLAVE      CON CLAVE
+  SCHWITTER      23%    verde claro    ROJO
+  NORRIS         30%    verde claro    ROJO
+  STEIMANN       34%    verde claro    AMARILLO
+  BOGDANOVSKI    37%    verde claro    AMARILLO
+  DURDOS         39%    verde claro    verde claro
+  ROFFLER        41%    VERDE FUERTE   verde claro
+  VAZQUEZ        44%    VERDE FUERTE   VERDE FUERTE
+
+NOTA: hm_armador.html y hm_defensa.html dan error de sintaxis en la
+verificacion, pero YA VENIAN ASI: son los marcadores {{ }} de plantilla.
