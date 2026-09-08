@@ -1,54 +1,46 @@
-TODO CONECTADO Y DOCUMENTADO
-============================
+LA CAUSA DE FONDO, RESUELTA
+===========================
 
-Los archivos a la carpeta y publicar. Sin HACER_TODO.
-
-
-1) EL CACHE, RESUELTO DE RAIZ
-   Los .js se cargaban con ?v=20260908-1506 y esa version no cambiaba, asi que
-   el navegador seguia sirviendo la version vieja aunque publicaras. Por eso el
-   objetivo de defensa "no existia" y la columna se veia verde.
-
-   Se subio la version a 20260908-1620 en las 56 pantallas. De ahora en mas,
-   cada vez que cambies un .js conviene subir ese numero.
+Los 7 archivos a la carpeta y publicar. Sin HACER_TODO.
 
 
-2) TODAS LAS PANTALLAS CONECTADAS
-   Control automatico: ninguna pantalla queda con formula propia ni con la
-   version vieja de los colores.
+QUE PASABA
+----------
+El objetivo de DEFENSA no aparecia nunca, aunque el archivo publicado si lo
+tuviera. No era cache: habia OCHO definiciones de OBJETIVOS_CONFIG repartidas
+en la app, y las de las pantallas se cargan DESPUES de objetivos_config.js,
+asi que la pisaban con su version vieja de 11 claves.
 
-   Se arreglaron las dos ultimas:
-   · hm_ataque.html usaba 3 colores con un corte fijo de 8 puntos. Ahora los
-     mismos 4 del resto.
-   · importar_dvw.html no cargaba objetivos_config.js.
+  objetivos_config.js    12 claves (con def)   <- la buena
+  utils.js               11 claves             <- pisaba
+  objetivos.js           13 claves             <- pisaba
+  dashboard.html         12 claves             <- pisaba
+  analisis.html          12 claves             <- pisaba
+  historial_voley.html   11 claves             <- pisaba
+  jugador.html           11 claves             <- pisaba
+  panel_voley.html       11 claves             <- pisaba
 
-
-3) LOS VALORES COINCIDEN EN TODAS PARTES
-   Probado con DURDOS, recepcion, escrito como lo nombra cada pantalla:
-
-     dashboard (j.*)         59
-     dashboard tabla (src.*) 59
-     panel_voley (array)     59
-     recepcion_jugador       59
-     armadores/game_plan     59
-     recepcion.html          59
-
-   armadores y game_plan daban 37: llamaban 'over' al sobrepase y la funcion
-   no conocia ese nombre. Ya lo acepta.
+Esto explica varias de las vueltas de hoy: publicabas bien y la pantalla
+seguia con datos viejos.
 
 
-4) LA DOCUMENTACION, EN PANTALLA
-   En el Dashboard, pestaña OBJETIVOS, debajo del editor, ahora aparece un
-   bloque que explica:
+LA SOLUCION
+-----------
+Las siete copias pasan a ser RESPALDO: solo definen si objetivos_config.js
+no cargo. Asi ninguna pisa a la buena, pero si el archivo central falla la
+pantalla no queda sin colores.
 
-   · la escala 0-100 y cuanto vale cada valoracion en saque, recepcion y
-     defensa
-   · que el ataque usa la eficacia clasica (puntos - bloqueados - errores)
-     y que puede dar negativo
-   · que significa cada color y de donde salen los cortes (192 actuaciones
-     de equipo en partidos de la liga)
-   · por que las bandas no son iguales para todos los fundamentos: el saque
-     varia ±4 puntos entre partidos y el ataque ±21
+Ojo al detalle: la condicion mira si hay METAS, no si el objeto existe.
+objetivos.js dejaba un objeto vacio, que ya cuenta como "existe", y con un
+|| simple el respaldo no se hubiera activado nunca.
 
-   Esta pensado para que un entrenador nuevo entienda que esta mirando sin
-   preguntarle a nadie.
+
+VERIFICADO EJECUTANDO LOS ARCHIVOS
+  tras objetivos.js         11 claves
+  tras objetivos_config.js  12 claves (con def)   <- gana la buena
+  tras utils.js             12 claves (con def)   <- ya no pisa
+
+  prueba de resistencia, sin objetivos_config.js: el respaldo entra con 11
+  claves, la pantalla sigue funcionando.
+
+  sintaxis de los 8 archivos: OK

@@ -249,7 +249,13 @@ var POS_COLOR={
 };
 
 // ── Objetivos config ─────────────────────────────────────────
-window.OBJETIVOS_CONFIG={metas:{
+/* RESPALDO: la configuracion buena vive en objetivos_config.js.
+   Esta copia solo se usa si ese archivo no cargo, para que la pantalla no
+   quede sin colores. Antes se asignaba directo y PISABA a la buena, porque
+   se carga despues: por eso faltaba el objetivo de defensa aunque el
+   archivo central si lo tuviera. */
+window.OBJETIVOS_CONFIG = (window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+                          ? window.OBJETIVOS_CONFIG : {metas:{
   sq:   {label:'% Saque',   obj:42, min:25,max:55, g2:42, g1:38, y:34},
   rec:  {label:'% Recep.',  obj:62, min:45,max:75, g2:62, g1:58, y:54},
   bqpos:{label:'Blq #+',    obj:43, min:25, max:52, g2:43, g1:37, y:30},
