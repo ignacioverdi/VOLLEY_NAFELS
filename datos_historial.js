@@ -1,5 +1,5 @@
 window.HISTORIAL_DATA = {
-  "generado": "08/09/2026, 15:51:15",
+  "generado": "09/09/2026, 15:33:14",
   "entrenamientos": [
     {
       "fecha": "03/09/2026",
@@ -3477,9 +3477,9 @@ window.HISTORIAL_DATA = {
           "aAdm": 0,
           "aVend": 0,
           "aSo": {
-            "T": 0,
+            "T": 1,
             "Punto": 0,
-            "Pos": 0,
+            "Pos": 1,
             "Adm": 0,
             "Neg": 0,
             "Vend": 0,
@@ -3487,9 +3487,9 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "aTr": {
-            "T": 1,
+            "T": 0,
             "Punto": 0,
-            "Pos": 1,
+            "Pos": 0,
             "Adm": 0,
             "Neg": 0,
             "Vend": 0,
