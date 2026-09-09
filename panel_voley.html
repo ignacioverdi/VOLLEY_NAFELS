@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20260909-2242"></script>
-<script src="selector_categoria.js?v=20260909-2242"></script>
+<script src="categorias_club.js?v=20260909-2245"></script>
+<script src="selector_categoria.js?v=20260909-2245"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -57,7 +57,7 @@
 .hright{ width:100%; margin-left:0 !important; justify-content:flex-start !important;
          order:10; padding-top:0 !important; gap:10px !important; }
 .hbtn{ padding:4px 9px !important; font-size:10px !important; }
-.hbtn2{ font-size:9.5px !important; padding:3px 8px !important; line-height:1.1 !important; }
+.hbtn2{max-width:96px; font-size:9.5px !important; padding:3px 8px !important; line-height:1.1 !important; }
 .hgrupo{ padding:3px 5px !important; gap:4px !important; }
 
 /* las barras de arriba y los filtros, mas finas */
@@ -351,19 +351,19 @@ body::before{content:'';position:fixed;inset:0;
 
 select, select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20260909-2242"></script>
+<script src="objetivos_config.js?v=20260909-2245"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260909-2242"></script>
-<script src="firebase.js?v=20260909-2242" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260909-2242"></script>
-<script src="lang.js?v=20260909-2242"></script>
-<script src="objetivos.js?v=20260909-2242" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20260909-2242"></script>
-  <script src="video_delay.js?v=20260909-2242" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260909-2245"></script>
+<script src="firebase.js?v=20260909-2245" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260909-2245"></script>
+<script src="lang.js?v=20260909-2245"></script>
+<script src="objetivos.js?v=20260909-2245" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20260909-2245"></script>
+  <script src="video_delay.js?v=20260909-2245" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -628,7 +628,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260909-2242">
+<link rel="stylesheet" href="movil.css?v=20260909-2245">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase">← Dashboard</a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -662,11 +662,11 @@ function renderObjetivosJugador(cid,nombre,extra){
     <button class="hbtn" id="video-btn" onclick="abrirVideo()" title="Video en vivo con delay" style="background:rgba(34,211,238,.12);color:#22d3ee;border-color:rgba(34,211,238,.3)">&#128249; Video</button>
     </div>
     <div class="hgrupo">
-    <button class="hbtn hbtn2" onclick="abrirPlan('armador')" title="Distribución del armador — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">Distribución<br>armador</button>
-    <button class="hbtn hbtn2" onclick="abrirPlan('ataque')" title="Direcciones de ataque — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">Direcciones<br>ataque</button>
-    <button class="hbtn hbtn2" onclick="abrirPlan('saque')" title="Direcciones de saque — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">Direcciones<br>saque</button>
-    <button class="hbtn hbtn2" onclick="abrirPlan('recepcion')" title="Zonas de recepción — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">Zonas<br>recepción</button>
-    <button class="hbtn hbtn2" onclick="abrirPlanPreparadoModal()" title="Plan de partido que preparamos (para comparar con lo que pasa en vivo)" style="background:rgba(129,140,248,.12);color:#818cf8;border-color:rgba(129,140,248,.3)">Plan de<br>partido</button>
+    <button class="hbtn hbtn2" onclick="abrirPlan('armador')" title="Distribución del armador — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)" data-t="pv_dist_arm">Distribución armador</button>
+    <button class="hbtn hbtn2" onclick="abrirPlan('ataque')" title="Direcciones de ataque — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)" data-t="pv_dir_atq">Direcciones ataque</button>
+    <button class="hbtn hbtn2" onclick="abrirPlan('saque')" title="Direcciones de saque — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)" data-t="pv_dir_saq">Direcciones saque</button>
+    <button class="hbtn hbtn2" onclick="abrirPlan('recepcion')" title="Zonas de recepción — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)" data-t="pv_zon_rec">Zonas recepción</button>
+    <button class="hbtn hbtn2" onclick="abrirPlanPreparadoModal()" title="Plan de partido que preparamos (para comparar con lo que pasa en vivo)" style="background:rgba(129,140,248,.12);color:#818cf8;border-color:rgba(129,140,248,.3)" data-t="pv_plan_part">Plan de partido</button>
     </div>
   </div>
 </header>
@@ -2141,8 +2141,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20260909-2242" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260909-2242"></script>
+<script src="plantel_nafels.js?v=20260909-2245" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260909-2245"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2241,7 +2241,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20260909-2242"></script>
+<script src="ayuda.js?v=20260909-2245"></script>
 </body>
 </html>
 

@@ -22,6 +22,14 @@
 
   // ── Diccionario ───────────────────────────────────────────────────────────
   var T = {
+    /* Botones del panel en vivo. Antes el texto iba partido con <br> y el
+       motor traducia cada mitad por separado: "Direcciones"+"ataque" salia
+       como "DIRECCIONES ATTACK". Con la clave se traduce la frase entera. */
+    pv_dist_arm:   { es:'Distribución armador', en:'Setter distribution', de:'Zuspielverteilung' },
+    pv_dir_atq:    { es:'Direcciones ataque', en:'Attack directions', de:'Angriffsrichtungen' },
+    pv_dir_saq:    { es:'Direcciones saque', en:'Serve directions', de:'Aufschlagrichtungen' },
+    pv_zon_rec:    { es:'Zonas recepción', en:'Reception zones', de:'Annahmezonen' },
+    pv_plan_part:  { es:'Plan de partido', en:'Match plan', de:'Spielplan' },
     /* Partes fijas de textos que llevan un numero adentro. No se pueden
        traducir como frase completa porque el numero cambia. */
     t_sesiones:   { es:'sesiones', en:'sessions', de:'Einheiten' },
@@ -278,6 +286,53 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    'Plan de partido (preparado)': { en:'Match plan (prepared)', de:'Spielplan (vorbereitet)' },
+    '📍 Ver dirección': { en:'📍 See address', de:'📍 Adresse ansehen' },
+    /* Panel en vivo: indicadores, filtros y el modal de objetivos. */
+    '# BLOCK OUT': { en:'# BLOCK OUT', de:'# BLOCK OUT' },
+    '# Block Out': { en:'# Block out', de:'# Block out' },
+    '# MB EN TRANSICIÓN': { en:'# MB IN TRANSITION', de:'# MB IN DER TRANSITION' },
+    '# MB en Transición': { en:'# MB in transition', de:'# MB in der Transition' },
+    '# PIPE EN SIDE OUT': { en:'# PIPE IN SIDE OUT', de:'# PIPE IM SIDE-OUT' },
+    '# PIPE EN TRANSICIÓN': { en:'# PIPE IN TRANSITION', de:'# PIPE IN DER TRANSITION' },
+    '# Pipe en Side Out': { en:'# Pipe in side out', de:'# Pipe im Side-out' },
+    '# Pipe en Transición': { en:'# Pipe in transition', de:'# Pipe in der Transition' },
+    '# TOQUES': { en:'# TOUCHES', de:'# BERÜHRUNGEN' },
+    '# Toques': { en:'# Touches', de:'# Berührungen' },
+    '% SIDE OUT (REC #/+)': { en:'% SIDE OUT (REC #/+)', de:'% SIDE OUT (ANN #/+)' },
+    '% Side Out (rec #/+)': { en:'% Side out (rec #/+)', de:'% Side-out (Ann #/+)' },
+    '% TRANSITION': { en:'% TRANSITION', de:'% TRANSITION' },
+    '% Transition': { en:'% Transition', de:'% Transition' },
+    'ALTA': { en:'HIGH', de:'HOCH' },
+    'BLOQUEO # + %': { en:'BLOCK # + %', de:'BLOCK # + %' },
+    'Bloqueo # + %': { en:'Block # + %', de:'Block # + %' },
+    'EFICIENCIA ATAQUE ALTA': { en:'HIGH-BALL ATTACK EFFICIENCY', de:'EFFIZIENZ ANGRIFF HOHER BALL' },
+    'EFICIENCIA RECEPCION': { en:'RECEPTION EFFICIENCY', de:'ANNAHME-EFFIZIENZ' },
+    'EFICIENCIA SAQUE': { en:'SERVE EFFICIENCY', de:'AUFSCHLAG-EFFIZIENZ' },
+    'ENTRENAMIENTO EN CURSO': { en:'TRAINING IN PROGRESS', de:'TRAINING LÄUFT' },
+    'Eficiencia Ataque Alta': { en:'High-ball attack efficiency', de:'Effizienz Angriff hoher Ball' },
+    'Eficiencia Recepcion': { en:'Reception efficiency', de:'Annahme-Effizienz' },
+    'Eficiencia Saque': { en:'Serve efficiency', de:'Aufschlag-Effizienz' },
+    'En proceso': { en:'In progress', de:'In Arbeit' },
+    'INGRESA OBJETIVO': { en:'SET A TARGET', de:'ZIEL EINGEBEN' },
+    'Ingresa objetivo': { en:'Set a target', de:'Ziel eingeben' },
+    'Logrado': { en:'Achieved', de:'Erreicht' },
+    'MAQUINA': { en:'MACHINE', de:'MASCHINE' },
+    'Maquina': { en:'Machine', de:'Maschine' },
+    'OBJETIVOS DE EQUIPO': { en:'TEAM TARGETS', de:'TEAMZIELE' },
+    'Objetivos del Dia': { en:'Targets of the day', de:'Tagesziele' },
+    'RAPIDA': { en:'QUICK', de:'SCHNELL' },
+    'Rapida': { en:'Quick', de:'Schnell' },
+    'Resumen Post Entrenamiento': { en:'Post-training summary', de:'Zusammenfassung nach dem Training' },
+    'Resumen del Entrenamiento': { en:'Training summary', de:'Trainingsübersicht' },
+    'Sin datos aun': { en:'No data yet', de:'Noch keine Daten' },
+    'TOQUE': { en:'TIP', de:'LOB' },
+    'Toque': { en:'Tip', de:'Lob' },
+    'Video en vivo': { en:'Live video', de:'Live-Video' },
+    'objetivo': { en:'target', de:'Ziel' },
+    '★ Resumen del Entrenamiento': { en:'★ Training summary', de:'★ Trainingsübersicht' },
+    '☰ Resumen Post Entrenamiento': { en:'☰ Post-training summary', de:'☰ Zusammenfassung nach dem Training' },
+    '📹 Video en vivo': { en:'📹 Live video', de:'📹 Live-Video' },
     ' · Mañana': { en:' · Morning', de:' · Vormittag' },
     ' · Tarde': { en:' · Afternoon', de:' · Nachmittag' },
     'Mañana': { en:'Morning', de:'Vormittag' },
