@@ -90,13 +90,13 @@ tr.tot td{border-top:2px solid var(--b2);font-weight:800;background:var(--card2)
 }
 </style>
 <!-- Motor de idiomas (ES / EN / DE). Traduce por data-t y por texto. -->
-<script src="categorias_club.js?v=20260909-0918"></script>
-<script src="selector_categoria.js?v=20260909-0918"></script>
-<script src="lang.js?v=20260909-0918"></script>
+<script src="categorias_club.js?v=20260909-0925"></script>
+<script src="selector_categoria.js?v=20260909-0925"></script>
+<script src="lang.js?v=20260909-0925"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260909-0918">
+<link rel="stylesheet" href="movil.css?v=20260909-0925">
 </head>
 <body>
 
@@ -116,14 +116,21 @@ tr.tot td{border-top:2px solid var(--b2);font-weight:800;background:var(--card2)
 </div>
 
 <script>
+/* El idioma para fechas: seguia fijo en es-AR, asi que en ingles y aleman
+   la fecha aparecia igual en castellano. */
+function vbLocale(){
+  var L = (window.getLang ? getLang() : 'es');
+  return L==='en' ? 'en-GB' : (L==='de' ? 'de-CH' : 'es-AR');
+}
+
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260909-0918" onerror="void 0"></script>
-<script src="objetivos.js?v=20260909-0918" onerror="void 0"></script>
-<script src="firebase.js?v=20260909-0918" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260909-0918"></script>
+<script src="datos_seguros.js?v=20260909-0925" onerror="void 0"></script>
+<script src="objetivos.js?v=20260909-0925" onerror="void 0"></script>
+<script src="firebase.js?v=20260909-0925" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260909-0925"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
    INFORME DE PARTIDO
@@ -473,7 +480,7 @@ function pintar(){
     +   'Ataque: (=×0 +/×0 +-×5 ++×5 +#×10) / total · '
     +   'Bloqueo: 8,5 / 8 / 7 según puntos de bloqueo por set. '
     +   'Ninguna nota baja de 5,5. La final es el promedio de las que corresponden.<br>'
-    +   '<span class="noprint">Generado el ' + new Date().toLocaleString('es-AR') + '</span>'
+    +   '<span class="noprint">Generado el ' + new Date().toLocaleString(vbLocale()) + '</span>'
     + '</div>';
 }
 
@@ -496,7 +503,7 @@ function arrancar(){
 if(typeof _fbListo !== 'undefined' && _fbListo && _fbListo.then) _fbListo.then(arrancar).catch(arrancar);
 else window.addEventListener('load', arrancar);
 </script>
-<script src="volver_inicio.js?v=20260909-0918" onerror="void 0"></script>
-<script src="ayuda.js?v=20260909-0918"></script>
+<script src="volver_inicio.js?v=20260909-0925" onerror="void 0"></script>
+<script src="ayuda.js?v=20260909-0925"></script>
 </body>
 </html>

@@ -22,6 +22,12 @@
 
   // ── Diccionario ───────────────────────────────────────────────────────────
   var T = {
+    /* Partes fijas de textos que llevan un numero adentro. No se pueden
+       traducir como frase completa porque el numero cambia. */
+    t_sesiones:   { es:'sesiones', en:'sessions', de:'Einheiten' },
+    t_acumulado:  { es:'ACUMULADO', en:'CUMULATIVE', de:'GESAMT' },
+    t_de:         { es:'de', en:'of', de:'von' },
+    t_todas_ses:  { es:'Todas las sesiones', en:'All sessions', de:'Alle Einheiten' },
     /* ── Claves que estaban marcadas con data-t pero sin traduccion ──────
        Sin esto, el elemento se quedaba en castellano en los tres idiomas. */
     b_nuevo:         { es:'NUEVO',
@@ -272,6 +278,53 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    'ACUMULADO (todos los partidos)': { en:'CUMULATIVE (all matches)', de:'GESAMT (alle Spiele)' },
+    'Adónde arma cuando el equipo rota en ': { en:'Where they set when the team rotates in ', de:'Wohin sie zuspielen, wenn das Team rotiert in ' },
+    'Cargá el seis inicial de cada equipo para arrancar el set ': { en:'Load the starting six of each team to begin set ', de:'Lade die Startsechs beider Teams, um den Satz zu beginnen ' },
+    'Copiado — pegalo en el chat': { en:'Copied — paste it in the chat', de:'Kopiert — im Chat einfügen' },
+    'Crear de nuevo': { en:'Create again', de:'Neu erstellen' },
+    'DISTRIBUCIÓN POR LLAMADA (REC # o +) · TOCÁ UNA LLAMADA →': { en:'DISTRIBUTION BY CALL (REC # or +) · TAP A CALL →', de:'VERTEILUNG NACH ZUSPIELRUF (ANN # oder +) · AUF EINEN RUF TIPPEN →' },
+    'DISTRIBUCIÓN POR ROTACIÓN': { en:'DISTRIBUTION BY ROTATION', de:'VERTEILUNG NACH ROTATION' },
+    'Dirección de Saque': { en:'Serve direction', de:'Aufschlagrichtung' },
+    'EFF POR ROTACIÓN': { en:'EFF BY ROTATION', de:'EFF NACH ROTATION' },
+    'EFF/RECEPCIÓN': { en:'EFF/RECEPTION', de:'EFF/ANNAHME' },
+    'Escribí el código de 4 dígitos.': { en:'Type the 4-digit code.', de:'Gib den 4-stelligen Code ein.' },
+    'Filtros completos: llamada, posición, SO/TR': { en:'Full filters: call, position, SO/TR', de:'Alle Filter: Zuspielruf, Position, SO/TR' },
+    'Fin de la lista': { en:'End of list', de:'Ende der Liste' },
+    'Fin de la secuencia': { en:'End of sequence', de:'Ende der Sequenz' },
+    'Formación del set ': { en:'Line-up for set ', de:'Aufstellung für Satz ' },
+    'Insertar código': { en:'Insert code', de:'Code einfügen' },
+    'No se encontró la planilla de datos.': { en:'The data sheet was not found.', de:'Die Datentabelle wurde nicht gefunden.' },
+    'PRÓXIMO': { en:'NEXT', de:'NÄCHSTES' },
+    'Salió el armador. Elegí quién arma de acá en adelante.': { en:'The setter is out. Choose who sets from now on.', de:'Der Zuspieler ist raus. Wähle, wer ab jetzt zuspielt.' },
+    'Sin datos de saque registrados': { en:'No serve data recorded', de:'Keine Aufschlagdaten erfasst' },
+    'Sin datos suficientes para análisis automático.': { en:'Not enough data for automatic analysis.', de:'Nicht genug Daten für die automatische Analyse.' },
+    'se insertará antes de: ': { en:'will be inserted before: ', de:'wird eingefügt vor: ' },
+    '¿Quién arma ahora en ': { en:'Who sets now in ', de:'Wer spielt jetzt zu in ' },
+    '◆ Claves del jugador': { en:'◆ Player keys', de:'◆ Schlüsselwerte des Spielers' },
+    '⬇️ Importar fixture de ': { en:'⬇️ Import fixtures from ', de:'⬇️ Spielplan importieren von ' },
+    /* ── Textos que arma el JavaScript, no el HTML ─────────────────────
+       Las etiquetas de los objetivos y las preguntas del asistente se
+       generan por codigo, asi que no aparecian en el barrido del HTML. */
+    '% Atq Alta (18)': { en:'% Att High (18)', de:'% Angr Hoch (18)' },
+    '% Atq Central (55)': { en:'% Att Middle (55)', de:'% Angr Mitte (55)' },
+    '% Atq R! (44)': { en:'% Att R! (44)', de:'% Angr A! (44)' },
+    '% Atq R#+ (47)': { en:'% Att R#+ (47)', de:'% Angr A#+ (47)' },
+    '% Atq R- (23)': { en:'% Att R- (23)', de:'% Angr A- (23)' },
+    '% Atq Rápida (40)': { en:'% Att Quick (40)', de:'% Angr Schnell (40)' },
+    '% Atq Transición (33)': { en:'% Att Transition (33)', de:'% Angr Transition (33)' },
+    '% Blq # (21)': { en:'% Block # (21)', de:'% Block # (21)' },
+    '% Blq #+ (45)': { en:'% Block #+ (45)', de:'% Block #+ (45)' },
+    '% Defensa (60)': { en:'% Defence (60)', de:'% Abwehr (60)' },
+    '% Recepción (60)': { en:'% Reception (60)', de:'% Annahme (60)' },
+    '% Saque (42)': { en:'% Serve (42)', de:'% Aufschlag (42)' },
+    'Cerca': { en:'Close', de:'Nah dran' },
+    'Lejos': { en:'Far', de:'Weit weg' },
+    'Neutro': { en:'Neutral', de:'Neutral' },
+    'Objetivo': { en:'Target', de:'Ziel' },
+    '¿Cómo armo una rutina?': { en:'How do I build a routine?', de:'Wie erstelle ich ein Programm?' },
+    '¿Cómo cargo el wellness?': { en:'How do I fill in the wellness?', de:'Wie trage ich das Wohlbefinden ein?' },
+    '¿Qué es el EFF?': { en:'What is EFF?', de:'Was ist EFF?' },
     ', que es donde se tipea el partido. El scout lleva solo el marcador, las rotaciones, los cambios y el cierre de sets: vos te concentrás en cargar cada acción.': { en:', which is where the match is typed. The scout only handles the score, rotations, substitutions and set closing: you focus on entering each action.', de:', dort wird das Spiel getippt. Der Scout führt nur Spielstand, Rotationen, Wechsel und Satzabschluss: du konzentrierst dich aufs Erfassen jeder Aktion.' },
     ': cada casillero es la zona desde donde salió el ataque que bloqueamos, igual que en la solapa de bloqueo del plan de partido. Doble clic en un casillero o en una combinación para ver esos bloqueos en video.': { en:': each box is the zone the attack we blocked came from, same as in the block tab of the match plan. Double-click a box or a combination to see those blocks on video.', de:': jedes Feld ist die Zone, aus der der geblockte Angriff kam, wie im Block-Reiter des Spielplans. Doppelklick auf ein Feld oder eine Kombination zeigt diese Blocks im Video.' },
     'Arrastrá el archivo del partido y listo. El sistema lo procesa solo y actualiza las estadísticas, los mapas de calor, el plan de partido y los perfiles de cada jugador.': { en:'Drag the match file and that is it. The system processes it and updates the statistics, heat maps, match plan and each player profile.', de:'Zieh die Spieldatei hierher, fertig. Das System verarbeitet sie und aktualisiert Statistiken, Heatmaps, Spielplan und die Profile jedes Spielers.' },
@@ -3701,6 +3754,16 @@
     try{ BIG_RE=new RegExp('(^|[^'+WORDCH+'])('+keys.map(escapeRe).join('|')+')(?!['+WORDCH+'])','gi'); }
     catch(e){ BIG_RE=null; }
   }
+  /* Frases pensadas para llevar un valor pegado atras: terminan en espacio,
+     en dos puntos o en "de ". Solo estas se prueban como prefijo. */
+  var PREFIJOS=null;
+  function buildPrefijos(){
+    if(!PHRASE_MAP) buildPhraseIndex();
+    PREFIJOS=[];
+    if(!PHRASE_MAP) return;
+    for(var k in PHRASE_MAP){ if(/[ :]$/.test(k) && k.trim().length>7) PREFIJOS.push(k); }
+    PREFIJOS.sort(function(a,b){ return b.length-a.length; });   // el mas largo primero
+  }
   function translateString(text, lang){
     /* ══ SOLO FRASE COMPLETA ═══════════════════════════════════════════════
        Antes, si la frase entera no estaba en el diccionario, se reemplazaba
@@ -3720,6 +3783,33 @@
     if(lang==='es'||!text) return text;
     var exact=trPhrase(text.trim(),lang);
     if(exact!==null) return text.replace(text.trim(), exact);
+
+    /* ── PREFIJO CONOCIDO ──────────────────────────────────────────────────
+       Algunos textos los arma el JavaScript pegando un valor al final:
+       "Formación del set " + 3, "Importar fixture de " + "2026/27". La frase
+       completa nunca coincide porque el final cambia.
+
+       Acá se traduce SOLO si el texto EMPIEZA con una frase entera del
+       diccionario y lo que sigue no es una letra (es un numero, una fecha,
+       un nombre). El resto se deja intacto.
+
+       Esto NO es el reemplazo palabra por palabra que producia spanglish:
+       ahi se cambiaba cualquier palabra suelta en cualquier posicion. Acá
+       tiene que coincidir una frase completa y desde el principio. */
+    var t2=text.trim();
+    if(!PHRASE_MAP) buildPhraseIndex();
+    if(PHRASE_MAP){
+      if(!PREFIJOS) buildPrefijos();
+      for(var i=0;i<PREFIJOS.length;i++){
+        var ph=PREFIJOS[i];
+        if(t2.length>ph.length && t2.slice(0,ph.length)===ph){
+          var sig=t2.charAt(ph.length);
+          if(/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/.test(sig)) continue;   // corta una palabra: no
+          var e=PHRASE_MAP[ph];
+          if(e&&e[lang]) return text.replace(t2, e[lang]+t2.slice(ph.length));
+        }
+      }
+    }
     return text;
   }
   window.translateString=translateString;

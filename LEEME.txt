@@ -1,61 +1,64 @@
-TRADUCCION COMPLETA — 100%
-==========================
+TRADUCCION — CIERRE DE LO QUE FALTABA
+=====================================
 
-Un archivo: lang.js. Publicar y Ctrl+F5.
-
-
-CERO FRASES SIN TRADUCIR EN TODA LA APP
----------------------------------------
-  arranque             877 frases sin traducir
-  ahora                  0
-  diccionario        1.816 frases en espanol, ingles y aleman
-  claves data-t rotas    0
+5 archivos a la carpeta y publicar. Ctrl+F5.
 
 
-ESTA ENTREGA: +305 frases
--------------------------
-Cierra las dos pantallas grandes y todo lo que quedaba suelto:
+LO QUE ENCONTRE VERIFICANDO EN LA APP
+-------------------------------------
+El HTML ya estaba al 100%, pero quedaban textos que NO estan en el HTML:
+los escribe el JavaScript en el momento. Por eso no aparecian en el
+barrido de archivos.
 
-  panel_vivo.html          151 -> 0
-  GUIA_COMO_SCOUTEAR.html   84 -> 0
-  volley-stats.html         19 -> 0
-  el resto                  33 -> 0
+1. LAS ETIQUETAS DE LOS OBJETIVOS
+   "% RECEPCIÓN (60)", "% ATQ RÁPIDA (40)", "% ATQ TRANSICIÓN (33)" y las
+   otras nueve salian de objetivos_config.js, que las tiene en castellano.
+   Tambien "Objetivo", "Cerca", "Neutro", "Lejos" del semaforo.
 
-Incluye la documentacion tecnica del scouting: atajos de teclado, codigos
-compuestos, fin de jugada automatico, formacion, exportacion .dvw,
-referencias al manual de DataVolley, y la comparativa de precios contra
-DataVolley 4 y Hudl Volleymetrics.
+2. LAS PREGUNTAS DEL ASISTENTE
+   "¿Cómo armo una rutina?", "¿Cómo cargo el wellness?", "¿Qué es el EFF?"
+   las genera chat_nafels.js.
 
+3. LAS FECHAS
+   Estaban fijas en 'es-AR' en index, importar_dvw e informe. En ingles y
+   aleman seguian mostrando "miércoles, 9 de septiembre de 2026". Ahora
+   siguen el idioma elegido (en-GB / de-CH) y el " hs" solo va en
+   castellano. Se redibujan al cambiar de idioma.
 
-EL RECORRIDO COMPLETO
----------------------
-  tandas 1-2    -493   pantallas del equipo
-  tandas 3-4    -329   video, importacion, heat maps, pagina de venta
-  tandas 5-6    -202   guia de scouteo y panel en vivo
-  tandas 7-8    -305   cierre total
+4. TEXTOS CON UN NUMERO ADENTRO
+   "ACUMULADO (4 sesiones)", "2 de 3 sesiones", "Todas las sesiones (4)".
+   La frase entera cambia con cada sesion, asi que nunca coincidia. Se
+   separo la parte fija del numero.
 
-Y antes que todo eso, lo que de verdad importaba: se apago el reemplazo
-palabra por palabra que producia spanglish ("All los Players", "Actions
-de Block", "before de empezar"). Ahora el motor traduce SOLO frase
-completa: si algun dia se agrega texto nuevo sin traducir, se va a ver en
-castellano entero, nunca mezclado.
-
-
-PARA CUANDO AGREGUES TEXTO NUEVO
---------------------------------
-Dos formas, las dos validas:
-
-  1. Poner data-t="mi_clave" en el HTML y agregar la clave en var T con
-     sus tres idiomas.
-  2. Escribir el texto normal en el HTML y agregar la frase completa en
-     PHRASES_EXTRA con en: y de:.
-
-La segunda es mas rapida y es la que se uso para estas 1.816.
+5. 25 TEXTOS MAS QUE ESCRIBE EL JAVASCRIPT
+   "Sin datos de saque registrados", "Fin de la secuencia", "Salió el
+   armador. Elegí quién arma de acá en adelante", y otros.
 
 
-UN DETALLE
-----------
-Varias frases del panel en vivo tienen entidades HTML escritas a mano
-(&iacute;, &ntilde;, &mdash;). Se tradujeron respetando esa forma porque
-el motor compara el texto tal como esta en el HTML. Si algun dia se
-limpian esas entidades, esas frases hay que volver a darlas de alta.
+UNA MEJORA EN EL MOTOR
+----------------------
+Algunos textos se arman pegando un valor al final: "Formación del set " + 3.
+La frase completa nunca coincide. Ahora el motor traduce tambien cuando el
+texto EMPIEZA con una frase entera del diccionario y lo que sigue no es una
+letra (un numero, una fecha).
+
+Esto NO es el reemplazo palabra por palabra que producia spanglish. Alla se
+cambiaba cualquier palabra suelta en cualquier posicion; aca tiene que
+coincidir una frase COMPLETA y desde el principio.
+
+Probado:
+  "Formación del set 3"             -> "Line-up for set 3"        ✓
+  "⬇️ Importar fixture de 2026/27"  -> "⬇️ Import fixtures from 2026/27"  ✓
+  "Formación del set 5"  (aleman)   -> "Aufstellung für Satz 5"   ✓
+
+Y que NO rompa nada:
+  "Acciones de bloqueo del rival Juan"  -> sin cambios  ✓
+  "Todos los jugadores nuevos"          -> sin cambios  ✓
+  "de mi casa"                          -> sin cambios  ✓
+
+
+ESTADO
+------
+  HTML sin traducir        0
+  diccionario          1.860 frases en espanol, ingles y aleman
+  spanglish                0

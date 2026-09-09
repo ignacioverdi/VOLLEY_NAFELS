@@ -59,14 +59,14 @@ select,select option{color:#111!important;background:#fff!important;}
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="categorias_club.js?v=20260909-0918"></script>
-<script src="selector_categoria.js?v=20260909-0918"></script>
-<script src="firebase.js?v=20260909-0918" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260909-0918"></script>
+<script src="categorias_club.js?v=20260909-0925"></script>
+<script src="selector_categoria.js?v=20260909-0925"></script>
+<script src="firebase.js?v=20260909-0925" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260909-0925"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260909-0918">
+<link rel="stylesheet" href="movil.css?v=20260909-0925">
 </head>
 <body>
 <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
@@ -159,8 +159,15 @@ select,select option{color:#111!important;background:#fff!important;}
 
 <div class="toast" id="toast"></div>
 
-<script src="objetivos_config.js?v=20260909-0918"></script>
+<script src="objetivos_config.js?v=20260909-0925"></script>
 <script>
+/* El idioma para fechas: seguia fijo en es-AR, asi que en ingles y aleman
+   la fecha aparecia igual en castellano. */
+function vbLocale(){
+  var L = (window.getLang ? getLang() : 'es');
+  return L==='en' ? 'en-GB' : (L==='de' ? 'de-CH' : 'es-AR');
+}
+
 // ── Plantel NAFELS ─────────────────────────────────────────────
 var NOMBRES = {
   /* Vacia a proposito. Los nombres salen del propio .dvw que se importa.
@@ -441,7 +448,7 @@ function procesarDVW(){
       var tipo = document.getElementById('opt-tipo').value;
 
       sesionParsed = {
-        fecha: fecha || new Date().toLocaleDateString('es-AR'),
+        fecha: fecha || new Date().toLocaleDateString(vbLocale()),
         tipo: tipo,
         rival: rival,
         resultado: {casla: caslaS, rival: rivalS, sets: sets.map(function(s){return s.h+'-'+s.v;})},
@@ -541,7 +548,7 @@ function guardarHistorial(){
       historialExistente.push(sesionParsed);
 
       // Generar JS acumulado
-      var ahora = new Date().toLocaleString('es-AR');
+      var ahora = new Date().toLocaleString(vbLocale());
       var js = 'window.HISTORIAL_DATA = {\n';
       js += '  "generado": "' + ahora + '",\n';
       js += '  "entrenamientos": ' + JSON.stringify(historialExistente, null, 2) + '\n';
@@ -557,7 +564,7 @@ function guardarHistorial(){
         '(Si tenés sesiones anteriores se van a perder)');
       if(!aviso) return;
 
-      var ahora = new Date().toLocaleString('es-AR');
+      var ahora = new Date().toLocaleString(vbLocale());
       var js = 'window.HISTORIAL_DATA = {\n';
       js += '  "generado": "' + ahora + '",\n';
       js += '  "entrenamientos": ' + JSON.stringify([sesionParsed], null, 2) + '\n';
@@ -585,9 +592,9 @@ function showToast(msg){
   setTimeout(function(){ t.classList.remove('show'); }, 2800);
 }
 </script>
-<script src="lang.js?v=20260909-0918"></script>
-<script src="temporadas_menu.js?v=20260909-0918"></script>
-<script src="ayuda.js?v=20260909-0918"></script>
+<script src="lang.js?v=20260909-0925"></script>
+<script src="temporadas_menu.js?v=20260909-0925"></script>
+<script src="ayuda.js?v=20260909-0925"></script>
 </body>
 </html>
 
