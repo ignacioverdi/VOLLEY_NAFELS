@@ -1,5 +1,5 @@
 window.HISTORIAL_DATA = {
-  "generado": "09/09/2026, 15:47:44",
+  "generado": "09/09/2026, 15:55:41",
   "entrenamientos": [
     {
       "fecha": "04/09/2026",
@@ -3316,20 +3316,20 @@ window.HISTORIAL_DATA = {
         {
           "c": 3,
           "n": "SCHWITTER",
-          "sT": 5,
+          "sT": 4,
           "sEff": 0,
           "sPunto": 1,
           "sPos": 0,
-          "sNeg": 2,
+          "sNeg": 1,
           "sErr": 1,
           "sAdm": 1,
           "sVend": 0,
           "sFlo": {
-            "T": 5,
+            "T": 4,
             "Punto": 1,
             "Pos": 0,
             "Adm": 1,
-            "Neg": 2,
+            "Neg": 1,
             "Vend": 0,
             "Err": 1,
             "Eff": 0
@@ -3796,20 +3796,20 @@ window.HISTORIAL_DATA = {
         {
           "c": 13,
           "n": "STEIMANN",
-          "sT": 1,
+          "sT": 2,
           "sEff": 0,
           "sPunto": 0,
           "sPos": 0,
-          "sNeg": 1,
+          "sNeg": 2,
           "sErr": 0,
           "sAdm": 0,
           "sVend": 0,
           "sFlo": {
-            "T": 1,
+            "T": 2,
             "Punto": 0,
             "Pos": 0,
             "Adm": 0,
-            "Neg": 1,
+            "Neg": 2,
             "Vend": 0,
             "Err": 0,
             "Eff": 0

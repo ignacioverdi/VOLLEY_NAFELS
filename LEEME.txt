@@ -1,41 +1,52 @@
-EL LISTENER ESTABA EN UN LUGAR QUE EL NAVEGADOR NO CARGA
-========================================================
+LAS ULTIMAS: PALABRAS SIN ACENTO
+================================
 
-Un archivo: dashboard.html. Publicar y Ctrl+F5.
-
-
-EL DIAGNOSTICO
---------------
-Quedaban solo dos textos en castellano:
-
-  "📊 ACUMULADO (4 sesiones)"
-  "Todas las sesiones (4)"
-
-Y el arreglo SI estaba publicado. Lo comprobe paso a paso:
-
-  · el archivo tiene el listener                        SI
-  · lang.js tiene las claves (t_sesiones, t_acumulado)  SI
-  · tr('t_sesiones','en') devuelve "sessions"           SI
-  · llamando las funciones A MANO, el texto cambia
-    a "All sessions (4)"                                SI
-  · el evento langchange se dispara                     SI
-  · pero el listener NUNCA se ejecutaba
-
-La causa: el bloque <script> estaba al final del archivo y el navegador
-NO lo cargaba. El archivo tiene 12 scripts inline; el navegador solo
-carga 11, y el que quedaba afuera era justo ese.
-
-Ahora el listener esta ADENTRO del mismo script donde vive eqPintarMulti,
-que es codigo que ya se ejecuta seguro. Nada de bloques sueltos al final.
+Los archivos a la carpeta y publicar. Ctrl+F5.
 
 
-LO QUE VA A PASAR
------------------
-Al cambiar de idioma esos dos textos se redibujan:
+PRIMERO: EL ARREGLO ANTERIOR FUNCIONA
+-------------------------------------
+El boton de sesiones ahora cambia con el idioma:
 
-  es  📊 ACUMULADO (4 sesiones)  ·  Todas las sesiones (4)
-  en  📊 CUMULATIVE (4 sessions) ·  All sessions (4)
-  de  📊 GESAMT (4 Einheiten)    ·  Alle Einheiten (4)
+  es  Todas las sesiones (4)
+  en  All sessions (4)
+  de  Alle Einheiten (4)
+
+Y en el chequeo limpio: 0 frases sin traducir, 0 spanglish.
 
 
-Version de los scripts subida a 20260909-1210.
+UN AVISO IMPORTANTE SOBRE LA MEDICION
+-------------------------------------
+La primera medicion dio mal, pero era falsa alarma: Chrome tenia el
+TRADUCTOR AUTOMATICO encendido sobre la pagina. Aparecian cosas como
+"Panel de control del entrenador", "ACEPTACION", "SUPOSICION" y hasta
+"Valora esta traduccion". Nada de eso es de la app: eran 574 etiquetas
+que mete Google encima.
+
+Si alguna vez ves palabras raras que no pusiste vos, fijate si el
+navegador ofrecio traducir la pagina. Conviene decirle que NO para
+espanol, porque pisa la traduccion propia de la app.
+
+
+ESTA ENTREGA: +34 frases
+------------------------
+Palabras castellanas SIN ACENTO. El barrido las buscaba por tilde o por
+articulo ("de", "la", "los"), asi que estas se escapaban:
+
+  Actualizado:  ·  Total / TOTAL  ·  JUGADO  ·  Cerrar / CERRAR
+  Buscar  ·  Guardar / GUARDAR  ·  Volver  ·  Copiar  ·  Borrar
+  TEMPORADA  ·  Comentario  ·  Nuevo partido  ·  ULTIMO PUNTO
+  Cargando…  ·  LIMPIAR TODO  ·  Fecha (opcional)  ·  Abrir archivo
+
+Probado:
+  Actualizado: 08/09/2026, 15:51:15  ->  Updated: 08/09/2026, 15:51:15   EN
+                                     ->  Aktualisiert: 08/09/2026...    DE
+  TOTAL   -> GESAMT      DE
+  Cerrar  -> Schließen   DE
+  JUGADO  -> PLAYED      EN
+
+La fecha funciona porque el motor traduce el prefijo conocido y deja el
+numero intacto.
+
+
+Version de los scripts: 20260909-1310
