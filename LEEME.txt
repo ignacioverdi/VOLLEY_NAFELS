@@ -1,50 +1,68 @@
-EL ESPACIO ENTRE CODIGOS
-========================
+SCOUT EN VIVO — LO QUE HACE DATA VOLLEY
+=======================================
 
 Un archivo: panel_vivo.html. Publicar y Ctrl+F5.
 
 
-QUE PASABA
-----------
-En DataVolley cada vez que tocas Space queda un espacio VISIBLE que separa
-un codigo del siguiente:
+TENIAS RAZON EN LAS DOS COSAS
+-----------------------------
 
-   17G4= 17G4-6.11D 13E+ 1W4#6.4        <- Data Volley 4
+1) DESCARTAR "REPETIDOS" ERA PELIGROSO
+   Lo saque. En voley el mismo codigo se repite todo el tiempo de forma
+   legitima: el mismo jugador, el mismo gesto, la misma evaluacion. Compararlos
+   y borrar los iguales habria borrado acciones de verdad.
 
-y en el panel se veia todo pegado:
+2) FUI A VER COMO LO HACE DATA VOLLEY, EN VEZ DE INVENTAR
+   Mire su propio archivo de practica, el &Pra-AXPO NAFELS-2026-09-07.dvw:
 
-   17G4=17G4-6.11D13E+1W4#6.4           <- la app
+      298 lineas y TODAS son acciones
+      ni una marca de drill · ni una linea de punto · ni de rotacion
+      el marcador queda 0-0 de principio a fin
 
+   O sea: para DataVolley una practica es UNA LISTA CONTINUA. El New Drill
+   no parte el archivo ni escribe nada en el scout, solo pone el marcador
+   en cero. Nunca hay dos archivos.
 
-LA CAUSA (no era el tipeo)
---------------------------
-Lo verifique en la app publicada, paso a paso:
-
-  · el espacio SI se escribia: el campo tenia los 3 espacios
-  · el HTML del renglon SI los tenia, como texto entre los <span>
-  · parseInput ya los usaba para separar los codigos
-
-El problema era el dibujo. La capa que pinta el codigo (#code-espejo) tiene
-display:flex, y en un contenedor flex los textos que son SOLO espacio se
-descartan: no llegan a ser un elemento, asi que no ocupan lugar.
-
-Medido en la pagina real: el hueco entre codigos era de 0 pixeles.
-
-El white-space:pre que ya estaba puesto no alcanzaba, justamente porque el
-espacio ni siquiera existia como item del flex.
+   Nuestro panel ya hacia lo mismo: la marca "▪ DRILL 1" se ve en pantalla
+   pero NO se exporta al .dvw (el exportador la saltea). El archivo sale
+   igual al de DataVolley. Eso estaba bien.
 
 
-LA SOLUCION
------------
-El espacio ahora se envuelve en su propio <span class="esp">, con ancho
-minimo. Al ser un elemento, el flex lo respeta.
+LA UNION, REESCRITA CON ESE CRITERIO
+------------------------------------
+Si quedaron dos copias, son dos FOTOS de la misma lista continua tomadas en
+momentos distintos. Dos fotos de la misma lista comparten el principio: lo
+que cambia es hasta donde llego cada una.
 
-Medido despues del cambio: 15 pixeles de separacion entre codigos, en los
-tres lugares donde corresponde.
+Entonces: se busca hasta donde son iguales (comparando codigo y set EN
+ORDEN, que respeta la secuencia real del juego) y despues se agrega lo que
+trae cada una.
+
+NO SE DESCARTA NINGUNA ACCION. Te muestra:
+
+    Copia 1: 427 códigos
+    Copia 2: 376 códigos
+    Tramo igual en las dos: N
+    Lo que agrega una: X
+    Lo que agrega la otra: Y
+    TOTAL: Z códigos
+
+Probado con dos listas que comparten 10 codigos —tres de ellos IGUALES entre
+si a proposito— y despues se separan: 15 + 13 quedaron en 18, sin perder
+ninguno.
+
+Si el tramo comun sale corto puede haber acciones repetidas al final. Se ven
+y se borran a mano. Es preferible que sobre y se vea, a que falte y no te
+enteres.
 
 
-NOTA
-----
-Esto era solo visual: los codigos ya se guardaban y se separaban bien. Lo
-que fallaba era que vos no podias VER donde terminaba uno y empezaba el
-otro mientras tipeabas, que en vivo es justamente cuando mas importa.
+LO DEMAS QUE VA EN ESTE ARCHIVO
+-------------------------------
+· La clave del aparato ya no cambia (la causa de que se partiera el archivo)
+· No se sube nada sin sesion iniciada
+· La sincronizacion no importa copias propias como partido aparte
+· El deshacer jugada quedo atado a SU partido: antes podia recortar los
+  codigos de otro archivo y perderlos sin aviso
+· El New Drill deja copia completa antes de tocar nada y controla que quede
+  exactamente un codigo mas
+· El espacio entre codigos se ve, como en DataVolley

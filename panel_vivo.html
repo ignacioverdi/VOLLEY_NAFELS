@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260909-2107"></script>
-<script src="selector_categoria.js?v=20260909-2107"></script>
-<script src="lang.js?v=20260909-2107"></script>
+<script src="categorias_club.js?v=20260909-2122"></script>
+<script src="selector_categoria.js?v=20260909-2122"></script>
+<script src="lang.js?v=20260909-2122"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260909-2107">
+<link rel="stylesheet" href="movil.css?v=20260909-2122">
 </head>
 <body>
 
@@ -752,6 +752,9 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
     <h2>📂 Partidos guardados</h2>
     <button id="partidos-trash" onclick="borrarPartidosSel()" style="display:none;align-items:center;gap:6px;background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.4);border-radius:8px;padding:7px 14px;cursor:pointer;font:inherit;font-weight:700">🗑️ Borrar (<span id="partidos-trash-n">0</span>)</button>
+    <!-- Junta dos copias del mismo partido. No borra los originales ni
+         descarta ninguna accion: crea un tercero con todo. -->
+    <button id="partidos-unir" onclick="unirCopias()" style="display:none;align-items:center;gap:6px;background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.4);border-radius:8px;padding:7px 14px;cursor:pointer;font:inherit;font-weight:700">🔗 Unir copias</button>
   </div>
   <div class="sub">Tocá un partido para abrirlo. Tildá los que quieras borrar y usá el botón rojo.</div>
   <div id="partidos-cont" style="margin-top:12px;max-height:60vh;overflow:auto"></div>
@@ -1227,16 +1230,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260909-2107" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260909-2107"></script>
-<script src="objetivos.js?v=20260909-2107" onerror="void 0"></script>
-<script src="video_delay.js?v=20260909-2107" onerror="void 0"></script>
+<script src="firebase.js?v=20260909-2122" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260909-2122"></script>
+<script src="objetivos.js?v=20260909-2122" onerror="void 0"></script>
+<script src="video_delay.js?v=20260909-2122" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260909-2107" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260909-2107"></script>
+<script src="plantel_nafels.js?v=20260909-2122" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260909-2122"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -1476,12 +1479,57 @@ function nubeLeer(path, cb){
     .catch(function(){ cb(null); });
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   LA CLAVE DEL APARATO — POR QUE SE PARTIO EL ARCHIVO
+   --------------------------------------------------------------------------
+   El partido en curso se guarda en la nube en pv_encurso/<clave>. Esta
+   funcion devolvia esa clave asi:
+
+        uid   ...o si no hay uid, el email   ...o si no hay nada, 'local'
+
+   El problema es que esos tres valores NO son estables durante una misma
+   sesion. Al abrir la pagina, o al renovarse el token, puede haber un
+   momento en que fbUser() todavia no devuelva el uid. En ese momento la
+   clave es 'local' o el email, y el panel guarda ahi. Un rato despues ya
+   hay uid y guarda en OTRA ranura.
+
+   Resultado: el MISMO aparato, en la MISMA sesion y con el MISMO usuario,
+   termina escribiendo en dos lugares distintos. Y como sincronizarEnCurso()
+   solo saltea la ranura que coincide con la clave DE ESE MOMENTO, la otra
+   la toma como si fuera de otra persona y la agrega a la lista como un
+   partido aparte.
+
+   Por eso aparecieron dos "AXPO NAFELS vs PRUEBA" con los codigos repartidos
+   sin ningun criterio: son dos fotos del mismo trabajo, tomadas en momentos
+   distintos, guardadas bajo dos claves distintas.
+
+   La solucion es que la clave NO cambie nunca en este aparato: la primera
+   vez que hay una buena se guarda, y a partir de ahi siempre se usa esa.
+   ══════════════════════════════════════════════════════════════════════════ */
 function _miId(){
+  var GUARDADA = 'pv_clave_aparato';
+  var previa = null;
+  try{ previa = localStorage.getItem(GUARDADA) || null; }catch(e){}
+
+  var actual = null;
   try{
     var u = (typeof fbUser === 'function') ? fbUser() : null;
-    var s = (u && (u.uid || u.email)) ? String(u.uid || u.email) : 'local';
-    return s.replace(/[.#$\/\[\]]/g,'_');
-  }catch(e){ return 'local'; }
+    if(u && u.uid)   actual = String(u.uid);
+    else if(u && u.email) actual = String(u.email);
+  }catch(e){}
+  if(actual) actual = actual.replace(/[.#$\/\[\]]/g,'_');
+
+  /* Ya hay una clave elegida: se respeta SIEMPRE, aunque ahora fbUser()
+     devuelva otra cosa. Es lo que impide que el archivo se parta. */
+  if(previa) return previa;
+
+  /* Todavia no hay usuario: NO se inventa una clave provisoria. Se devuelve
+     null y el que llama no sube nada hasta que haya sesion de verdad.
+     Antes se usaba 'local' y esa era justamente la ranura fantasma. */
+  if(!actual) return null;
+
+  try{ localStorage.setItem(GUARDADA, actual); }catch(e){}
+  return actual;
 }
 function _miNombre(){
   try{ var u = (typeof fbUser === 'function') ? fbUser() : null;
@@ -1492,6 +1540,9 @@ function _miNombre(){
    el marcador en vivo, así no agrega tráfico extra. */
 function guardarEnCurso(){
   if(!M || !(M.codes||[]).length) return;
+  /* Sin clave estable todavia no se sube: subir con una clave provisoria es
+     lo que creaba el segundo archivo. */
+  if(!_miId()) return;
   if(!M._id) M._id = 'p'+Date.now()+Math.floor(Math.random()*1000);
   nubeGuardar(PV_CURSO + '/' + _miId(), {
     actualizado: Date.now(),
@@ -1502,7 +1553,7 @@ function guardarEnCurso(){
   });
 }
 /* Al exportar el .dvw el trabajo está terminado: se saca de la nube. */
-function terminarEnCurso(){ nubeGuardar(PV_CURSO + '/' + _miId(), null); }
+function terminarEnCurso(){ var k=_miId(); if(k) nubeGuardar(PV_CURSO + '/' + k, null); }
 
 /* Trae los trabajos en curso (el tuyo y los de los demás) y los suma a la
    lista de partidos, para poder abrirlos desde la misma pantalla. */
@@ -1511,9 +1562,17 @@ function sincronizarEnCurso(cb){
     if(!todos){ if(cb) cb(0); return; }
     var list = partidos(), porId = {}, nuevos = 0;
     list.forEach(function(p){ porId[p.id] = p; });
+    var _yo = _miId(), _miMail = (_miNombre()||'').toLowerCase();
     Object.keys(todos).forEach(function(uid){
       var t = todos[uid];
-      if(!t || !t.id || uid === _miId()) return;      /* el mío ya está local */
+      if(!t || !t.id) return;
+      if(uid === _yo) return;                        /* el mío ya está local */
+      /* Segunda barrera: aunque la clave sea otra (una ranura vieja de este
+         mismo aparato), si el autor soy yo NO se agrega como partido aparte.
+         Sin esto, una copia propia guardada bajo otra clave aparecia en la
+         lista como si fuera de otra persona. */
+      if(_miMail && String(t.autor||'').toLowerCase() === _miMail) return;
+      if(t.id === (M && M._id)) return;              /* es el que tengo abierto */
       if(porId[t.id]) { porId[t.id].autor = t.autor||''; return; }
       list.push({ id:t.id, guardado:t.actualizado||0, resumen:t.resumen||{},
                   autor:t.autor||'', enNube:true, uid:uid });
@@ -1551,6 +1610,78 @@ function abrirPartido(id){
   renderAll(); persist(); avisarMarcador(); cerrarPartidos();
   toast('Partido abierto: '+p.resumen.home+' vs '+p.resumen.away);
 }
+/* ══════════════════════════════════════════════════════════════════════════
+   UNIR DOS COPIAS DEL MISMO PARTIDO — SIN DESCARTAR NADA
+   --------------------------------------------------------------------------
+   COMO LO HACE DATA VOLLEY. Lo mire en un archivo real de practica suyo,
+   el &Pra-AXPO NAFELS-2026-09-07.dvw:
+
+     · 298 lineas y TODAS son acciones
+     · ni una marca de drill, ni una linea de punto, ni de rotacion
+     · el marcador queda en 0-0 de principio a fin
+
+   Para DataVolley una practica es UNA LISTA CONTINUA de acciones. El "New
+   Drill" no parte el archivo ni escribe nada: solo pone el marcador en cero.
+   Nunca hay dos archivos que unir.
+
+   Entonces, si aca quedaron dos copias, son dos FOTOS de esa misma lista
+   tomadas en momentos distintos. Dos fotos de la misma lista comparten el
+   principio: lo que cambia es hasta donde llego cada una.
+
+   POR ESO se busca hasta donde son iguales y despues se agrega lo que trae
+   cada una. NO se comparan "codigos repetidos": en voley el mismo codigo se
+   repite todo el tiempo de forma legitima —el mismo jugador, el mismo gesto,
+   la misma evaluacion— y descartarlos borraria acciones de verdad.
+
+   REGLA: no se descarta ninguna. Si algo queda duplicado se ve y se borra a
+   mano. Una accion perdida no se recupera nunca.
+   ══════════════════════════════════════════════════════════════════════════ */
+function unirCopias(){
+  var marc = Array.from(document.querySelectorAll('.pcheck:checked')).map(function(c){ return c.value; });
+  if(marc.length !== 2){ toast('Tildá exactamente DOS partidos para unirlos', true); return; }
+  var list = partidos();
+  var a = list.find(function(x){ return x.id === marc[0]; });
+  var b = list.find(function(x){ return x.id === marc[1]; });
+  if(!a || !b || !a.M || !b.M){ toast('Alguno de los dos no está bajado. Abrilo una vez y volvé.', true); return; }
+
+  var ca = (a.M.codes || []).slice();
+  var cb = (b.M.codes || []).slice();
+
+  /* Hasta donde son la misma lista: se compara codigo y set, EN ORDEN. Es la
+     unica comparacion segura, porque respeta la secuencia real del juego. */
+  var comun = 0;
+  while(comun < ca.length && comun < cb.length){
+    var x = ca[comun], y = cb[comun];
+    if((x.c||'') !== (y.c||'') || (x.set||0) !== (y.set||0)) break;
+    comun++;
+  }
+
+  var restoA = ca.slice(comun), restoB = cb.slice(comun);
+  var largo = (restoA.length >= restoB.length) ? restoA : restoB;
+  var corto = (restoA.length >= restoB.length) ? restoB : restoA;
+  var todos = ca.slice(0, comun).concat(largo, corto);
+
+  var nuevo = JSON.parse(JSON.stringify((ca.length >= cb.length) ? a.M : b.M));
+  nuevo.codes = todos;
+  nuevo._id = 'union' + Date.now();
+
+  var entrada = { id:nuevo._id, guardado:Date.now(), resumen:resumenPartido(nuevo), M:nuevo };
+  list.push(entrada); guardarPartidos(list);
+  if(typeof renderPartidos === 'function') renderPartidos();
+
+  alert('COPIAS UNIDAS — no se descartó ninguna acción\n\n'
+      + 'Copia 1: ' + ca.length + ' códigos\n'
+      + 'Copia 2: ' + cb.length + ' códigos\n\n'
+      + 'Tramo igual en las dos: ' + comun + '\n'
+      + 'Lo que agrega una: ' + largo.length + '\n'
+      + 'Lo que agrega la otra: ' + corto.length + '\n'
+      + 'TOTAL: ' + todos.length + ' códigos\n\n'
+      + 'Se creó un TERCER partido con todo junto. Los dos originales quedan '
+      + 'como estaban.\n\nRevisá el final de la lista: si el tramo común fue '
+      + 'corto, puede haber acciones repetidas ahí. Borralas a mano — es '
+      + 'preferible que sobre y se vea, a que falte y no te enteres.');
+}
+
 function borrarPartidosSel(){
   const marc=Array.from(document.querySelectorAll('.pcheck:checked')).map(c=>c.value);
   if(!marc.length){ toast('Tildá al menos un partido',true); return; }
@@ -1580,6 +1711,7 @@ function renderTablaPartidos(){
 function pintarTrash(){
   const n=document.querySelectorAll('.pcheck:checked').length;
   const btn=document.getElementById('partidos-trash'); if(!btn) return;
+  try{ var _u=document.getElementById('partidos-unir'); if(_u) _u.style.display = (document.querySelectorAll('.pcheck:checked').length===2)?'flex':'none'; }catch(e){}
   btn.style.display=n>0?'inline-flex':'none';
   document.getElementById('partidos-trash-n').textContent=n;
 }
@@ -3692,12 +3824,27 @@ function commit(){
    ningún punto cerrado para reabrir» con el punto ahí a la vista. */
 let RALLY_UNDO = load('pv_undo', []);
 function snapshotRally(){
-  RALLY_UNDO.push(JSON.stringify({h:M.home,a:M.away,s:M.serving,set:M.set,n:M.codes.length}));
+  /* La foto guarda a QUE partido pertenece. La pila se guarda en el
+     navegador y sobrevive a cambiar de archivo: sin el id, deshacer una
+     jugada podia recortar los codigos de OTRO partido hasta un numero que
+     no tiene nada que ver, y esos codigos se perdian sin aviso. */
+  RALLY_UNDO.push(JSON.stringify({id:(M&&M._id)||'', h:M.home, a:M.away,
+                                  s:M.serving, set:M.set, n:M.codes.length}));
   if(RALLY_UNDO.length>40) RALLY_UNDO.shift();
 }
 function undoRally(){
   if(!RALLY_UNDO.length){ toast('No hay jugada para deshacer',true); return; }
   const st = JSON.parse(RALLY_UNDO.pop());
+  /* La foto es de otro partido: no se toca nada. */
+  if(st.id && M && M._id && st.id !== M._id){
+    toast('Esa jugada es de otro partido. No se deshace nada.', true);
+    return;
+  }
+  /* Nunca recortar hacia arriba ni a un numero que no existe. */
+  if(typeof st.n !== 'number' || st.n < 0 || st.n > M.codes.length){
+    toast('No pude deshacer: la marca no coincide con este partido.', true);
+    return;
+  }
   M.home=st.h; M.away=st.a; M.serving=st.s; M.set=st.set;
   M.codes = M.codes.slice(0, st.n);
   renderAll(); persist(); toast('Fin de jugada deshecho');
@@ -4602,12 +4749,34 @@ function nuevoDrill(){
   if(ini===null) return;
   var m=/(\d+)\s*-\s*(\d+)/.exec(ini);
   var h=m?parseInt(m[1],10):0, a=m?parseInt(m[2],10):0;
+  /* ══ RED DE SEGURIDAD ══════════════════════════════════════════════════
+     En DataVolley un drill nuevo NO parte el archivo ni escribe nada en el
+     scout: solo pone el marcador en cero. Aca se hace igual, y ademas se
+     agrega una marca que se ve en pantalla pero NO se exporta al .dvw
+     (exportDVW la saltea), asi el archivo sale identico al de DataVolley.
+
+     Igual se deja una copia completa antes de tocar nada. Si algo sale mal
+     se recupera desde la consola con:
+         JSON.parse(localStorage.getItem('pv_antes_drill'))              */
+  try{
+    localStorage.setItem('pv_antes_drill', JSON.stringify({
+      cuando: Date.now(), codigos: (M.codes||[]).length, M: M
+    }));
+  }catch(e){}
+  var _antes = (M.codes||[]).length;
+
   M.home.pts=h; M.away.pts=a;
   if(!M.drills) M.drills=[];
   M.codes.push({k:'drill', c:'▪ DRILL '+(M.drills.length+1)+' · '+h+'-'+a, set:M.set, t:0});
   M.drills.push({inicio:h+'-'+a, desde:M.codes.length});
+  /* Control: el drill tiene que dejar UN codigo mas, ni uno menos. */
+  if((M.codes||[]).length !== _antes + 1){
+    toast('⚠ El drill no dejó los códigos como debía. Se recupera la copia previa.', true);
+    try{ var _g=JSON.parse(localStorage.getItem('pv_antes_drill')); if(_g&&_g.M) M=_g.M; }catch(e){}
+    renderAll(); return;
+  }
   renderAll(); persist(); avisarMarcador&&avisarMarcador();
-  toast('Nuevo drill · empieza '+h+'-'+a);
+  toast('Nuevo drill · empieza '+h+'-'+a+' · '+_antes+' códigos intactos');
 }
 function openSetup(obligatorio){
   SETUP_OBLIGATORIO = !!obligatorio;
@@ -7435,7 +7604,7 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260909-2107" onerror="void 0"></script>
-<script src="ayuda.js?v=20260909-2107"></script>
+<script src="volver_inicio.js?v=20260909-2122" onerror="void 0"></script>
+<script src="ayuda.js?v=20260909-2122"></script>
 </body>
 </html>
