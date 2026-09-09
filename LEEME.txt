@@ -1,48 +1,42 @@
-TRADUCCION — TANDA 2
-====================
+TRADUCCION — TANDAS 3 Y 4
+=========================
 
-Un archivo: lang.js. Reemplaza al de la tanda 1. Publicar y Ctrl+F5.
-
-
-VERIFICADO EN TU APP (tanda 1, ya publicada)
---------------------------------------------
-Plan de partido en ingles: CERO spanglish.
-Ahora dice "the number = swings/serves, not points", "FILTER", "Matches",
-"Trainings". Antes decia "All los Players" y "Actions de Block".
+Un archivo: lang.js. Reemplaza al anterior. Publicar y Ctrl+F5.
 
 
-ESTA TANDA: +178 frases
------------------------
-volley-stats.html (la pagina de venta) y BIENVENIDA.html, que son las dos
-que ve alguien de afuera: un club que evalua comprar, o un jugador nuevo
-el primer dia.
+ESTA ENTREGA: +329 frases
+-------------------------
+  Tanda 3 (198)  herramientas de video, importacion, sesiones, heat maps,
+                 diagnostico, camara, pizarron, rankings de liga
+  Tanda 4 (131)  cierre de las pantallas chicas y el resto de la pagina
+                 de venta: planes, precios, privacidad, respuestas del FAQ
 
-Incluye los textos largos de venta traducidos con cuidado:
-planes, precios, privacidad, como viajan los datos, que pasa al cerrar una
-temporada. Son los que se leen antes de firmar.
-
-volley-stats paso de 229 frases sin traducir a 110.
+El diccionario paso de 1.036 a 1.309 frases.
 
 
-ESTADO GENERAL
---------------
-COMPLETAS (0 sin traducir):
-  index · dashboard · jugador · calendario · wellness · equipo · high_set
-  baggerone · prep_fisica · horarios · plan_partido · analisis · cortes
-  ranking · recepcion · armadores · informe_equipo · historial
+PANTALLAS QUE QUEDARON COMPLETAS (0 sin traducir)
+-------------------------------------------------
+  Todas las del equipo:
+    index (queda 3) · dashboard · jugador · calendario · wellness · equipo
+    high_set · baggerone · prep_fisica · horarios · plan_partido · analisis
+    cortes · ranking · recepcion · armadores · informe_equipo · historial
 
-FALTA:
-  panel_vivo.html          295   el scout en vivo
-  GUIA_COMO_SCOUTEAR.html  147   la guia de scouteo
-  volley-stats.html        110   resto de la pagina de venta
-  unir_video.html           46
-  BIENVENIDA.html           25
-  el resto                 ~190  (importar, asociar codigos, sesiones,
-                                  camara, alta de jugadores, heat maps...)
+  Y ahora tambien:
+    unir_video · alta_jugadores · asociar_codigos · importar_dvw
+    pizarron · diagnostico · prep_builder · prueba_delay · nla_stats
+    los seis heat maps · scouting_rival · game_plan · rotaciones
 
-Las dos mas grandes, panel_vivo y la guia, son herramientas que usan
-Ignacio y su asistente, los dos en castellano. Son las de menor urgencia
-real aunque sean las de mayor volumen.
 
-Con el motor arreglado, lo que falta se ve en castellano ENTERO y legible.
-Nunca mezclado.
+LO QUE FALTA (489 frases, y 436 son solo dos pantallas)
+-------------------------------------------------------
+  panel_vivo.html          290   el scout en vivo
+  GUIA_COMO_SCOUTEAR.html  146   la guia de scouteo
+  volley-stats.html         18
+  el resto                  35   (2 a 5 frases por pantalla)
+
+Las dos grandes son la documentacion tecnica del scouting: atajos de
+teclado, codigos de DataVolley, como cerrar un set, correccion de codigos
+compuestos. Las usan Ignacio y su asistente, los dos en castellano.
+
+Son las ultimas y las mas largas. Con el motor arreglado se ven en
+castellano entero, nunca mezclado.
