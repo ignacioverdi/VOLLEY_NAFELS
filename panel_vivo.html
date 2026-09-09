@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260909-2249"></script>
-<script src="selector_categoria.js?v=20260909-2249"></script>
-<script src="lang.js?v=20260909-2249"></script>
+<script src="categorias_club.js?v=20260909-2342"></script>
+<script src="selector_categoria.js?v=20260909-2342"></script>
+<script src="lang.js?v=20260909-2342"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260909-2249">
+<link rel="stylesheet" href="movil.css?v=20260909-2342">
 </head>
 <body>
 
@@ -546,7 +546,10 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <span class="live livemin" title="Se pone celeste cuando está transmitiendo a la tablet" style="color:var(--vis);border-color:rgba(34,211,238,.35);background:rgba(34,211,238,.08)"><span class="pubdot" id="pubdot"></span></span>
   <div class="spacer"></div>
   <button class="tbtn" onclick="openSetup()">Partido</button>
-  <button class="tbtn" onclick="abrirPartidos()" title="Lista de partidos guardados (ver o borrar)">Partidos</button>
+  <button id="btn-seguridad" class="tbtn" onclick="elegirArchivoSeguridad()"
+        title="Elegí un archivo: el panel lo reescribe después de cada jugada, como el archivo de seguridad de DataVolley"
+        style="background:rgba(251,191,36,.14);color:#fbbf24;border-color:rgba(251,191,36,.4)">🛟 Archivo de seguridad</button>
+<button class="tbtn" onclick="abrirPartidos()" title="Lista de partidos guardados (ver o borrar)">Partidos</button>
   <button class="tbtn" onclick="abrirVideo()" title="Video y sincronización (manual 2.5.6)">Video</button>
   <button class="tbtn" onclick="abrirCombos()" title="Combinaciones de ataque y llamadas (manual 12.2)">Comb ataque</button>
   <button class="tbtn" onclick="abrirEquipos()" title="Base de equipos (nuevo · importar · exportar)">Equipos</button>
@@ -1230,16 +1233,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260909-2249" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260909-2249"></script>
-<script src="objetivos.js?v=20260909-2249" onerror="void 0"></script>
-<script src="video_delay.js?v=20260909-2249" onerror="void 0"></script>
+<script src="firebase.js?v=20260909-2342" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260909-2342"></script>
+<script src="objetivos.js?v=20260909-2342" onerror="void 0"></script>
+<script src="video_delay.js?v=20260909-2342" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260909-2249" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260909-2249"></script>
+<script src="plantel_nafels.js?v=20260909-2342" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260909-2342"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -1401,7 +1404,36 @@ const CMD_LABELS = {
   rotHup:'Rotar + Local',rotHdn:'Rotar − Local',rotAup:'Rotar + Visitante',rotAdn:'Rotar − Visitante'};
 
 function load(k,def){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):def; }catch(e){ return def; } }
-function save(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+/* ══════════════════════════════════════════════════════════════════════════
+   GUARDAR SIN MENTIR
+   --------------------------------------------------------------------------
+   Esta funcion decia:
+
+       function save(k,v){ try{ localStorage.setItem(...); }catch(e){} }
+
+   Ese catch vacio se tragaba el error EN SILENCIO. Si el navegador no podia
+   guardar —memoria llena, modo privado, permisos, una pestaña que se quedo
+   sin espacio— el scout seguia tipeando, la pantalla mostraba todo bien, y
+   no se estaba guardando NADA. Al recargar o cerrar, todo lo posterior a la
+   ultima escritura buena desaparecia sin un solo aviso.
+
+   Es lo que paso el 09/09: el archivo corta EXACTO en el segundo New Drill
+   y despues no hay nada, sin ningun error a la vista.
+
+   Ahora save() devuelve si pudo o no, y el que llama decide. Nunca mas se
+   pierde algo sin que alguien se entere.
+   ══════════════════════════════════════════════════════════════════════════ */
+var _SAVE_FALLO = 0;
+function save(k,v){
+  try{
+    localStorage.setItem(k, JSON.stringify(v));
+    return true;
+  }catch(e){
+    _SAVE_FALLO++;
+    try{ console.error('[GUARDAR] fallo en '+k+': '+(e && e.name), e); }catch(_){}
+    return false;
+  }
+}
 
 /* ============================================================
    ESTADO DEL PARTIDO
@@ -1452,16 +1484,203 @@ function _cajaNegra(){
   }catch(e){ /* si no entra en el navegador, no rompemos el scouteo */ }
 }
 
+/* Arma el texto del .dvw SIN bajarlo. Lo usa el archivo de seguridad. */
+var _DVW_TEXTO = null;
+function armarDVW(){
+  try{
+    if(!M || !(M.codes||[]).length) return null;
+    _DVW_TEXTO = null;
+    _SIN_BAJAR = true;
+    exportDVW('keep');
+    _SIN_BAJAR = false;
+    return _DVW_TEXTO;
+  }catch(e){ _SIN_BAJAR = false; return null; }
+}
+var _SIN_BAJAR = false;
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ARCHIVO DE SEGURIDAD — el "safety scout" de DataVolley
+   --------------------------------------------------------------------------
+   Asi trabaja DataVolley: mantiene un archivo en el DISCO que reescribe al
+   final de CADA jugada. Si el programa se cierra de golpe, ese archivo esta
+   completo. No confia en tener las cosas en memoria ni en una base interna.
+
+   Aca se hace lo mismo. Se elige UNA VEZ donde guardarlo —al empezar el
+   entrenamiento— y a partir de ahi el panel reescribe ese .dvw despues de
+   cada jugada, solo. No hay que acordarse de nada.
+
+   Si el navegador no permite escribir en disco (Firefox, Safari, o el
+   celular), se cae a un plan B: baja una copia cada 40 codigos. Menos
+   comodo, pero nunca se pierde mas que eso.
+
+   Es la unica forma de garantizar lo que pediste: que si manana pasa
+   cualquier cosa, el trabajo este en un archivo de verdad.
+   ══════════════════════════════════════════════════════════════════════════ */
+var _SEG_FILE = null;       /* donde escribir, si el navegador lo permite */
+var _SEG_ULTIMO = 0;        /* cuantos codigos se escribieron la ultima vez */
+var _SEG_ESCRIBIENDO = false;
+
+function haySeguridadEnDisco(){
+  return !!(window.showSaveFilePicker);
+}
+
+async function elegirArchivoSeguridad(){
+  if(!haySeguridadEnDisco()){
+    toast('Este navegador no puede escribir en disco. Se baja una copia cada 40 códigos.', true);
+    return;
+  }
+  try{
+    var nombre = (typeof _nombreDVW === 'function') ? _nombreDVW() : 'scout.dvw';
+    _SEG_FILE = await window.showSaveFilePicker({
+      suggestedName: nombre,
+      types: [{ description:'Scout DataVolley', accept:{ 'application/octet-stream':['.dvw'] } }]
+    });
+    _SEG_ULTIMO = 0;
+    await escribirSeguridad(true);
+    toast('Archivo de seguridad activo: se reescribe después de cada jugada');
+    var b = document.getElementById('btn-seguridad');
+    if(b){ b.textContent = '🛟 Seguridad ON'; b.style.background='rgba(34,197,94,.18)';
+           b.style.color='#4ade80'; b.style.borderColor='rgba(34,197,94,.45)'; }
+  }catch(e){
+    /* el usuario cancelo el dialogo: no es un error */
+  }
+}
+
+async function escribirSeguridad(forzar){
+  if(_SEG_ESCRIBIENDO) return;
+  var n = _contarCodigos(M);
+  if(!_SEG_FILE || (!forzar && n === _SEG_ULTIMO)) return;
+  _SEG_ESCRIBIENDO = true;
+  try{
+    var texto = (typeof armarDVW === 'function') ? armarDVW() : null;
+    if(texto === null){ _SEG_ESCRIBIENDO=false; return; }
+    var w = await _SEG_FILE.createWritable();
+    await w.write(new Blob([_aCp1252(texto)], {type:'application/octet-stream'}));
+    await w.close();
+    _SEG_ULTIMO = n;
+  }catch(e){
+    try{ console.error('[SEGURIDAD] no pude escribir', e); }catch(_){}
+    toast('No pude escribir el archivo de seguridad. Revisá los permisos.', true);
+  }
+  _SEG_ESCRIBIENDO = false;
+}
+
+/* Plan B para los navegadores que no dejan escribir: una copia cada 40. */
+var _PLANB_ULTIMO = 0;
+function planBseguridad(){
+  if(_SEG_FILE || haySeguridadEnDisco()) return;
+  var n = _contarCodigos(M);
+  if(n - _PLANB_ULTIMO < 40) return;
+  _PLANB_ULTIMO = n;
+  try{
+    var texto = (typeof armarDVW === 'function') ? armarDVW() : null;
+    if(texto === null) return;
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([_aCp1252(texto)], {type:'application/octet-stream'}));
+    a.download = 'COPIA_' + n + '_' + ((typeof _nombreDVW==='function') ? _nombreDVW() : 'scout.dvw');
+    a.click();
+    toast('Copia de seguridad bajada (' + n + ' códigos)');
+  }catch(e){}
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   EL VIGILANTE — lo que hace DataVolley con su "safety scout"
+   --------------------------------------------------------------------------
+   DataVolley guarda un archivo de seguridad EN EL DISCO al final de CADA
+   jugada. Si el programa se cierra, el archivo esta completo. Nunca confia
+   en tener las cosas solo en memoria.
+
+   Aca faltaba justamente eso: los codigos vivian en memoria y se guardaban
+   "cuando se podia". Si el guardado fallaba, nadie lo sabia.
+
+   Ahora, despues de CADA jugada:
+
+     1. se guarda
+     2. se VUELVE A LEER lo guardado y se cuentan los codigos
+     3. si lo guardado tiene menos que lo que hay en pantalla, se para todo
+        y se avisa con un cartel rojo que no se puede ignorar
+     4. y se dispara una descarga de emergencia con todo lo que hay en
+        memoria, para no depender del navegador
+
+   Es la diferencia entre perder una hora y media y perder nada.
+   ══════════════════════════════════════════════════════════════════════════ */
+var _ULTIMO_OK = 0;        /* cuantos codigos se confirmaron guardados */
+var _ALARMA_PUESTA = false;
+
+function _contarCodigos(m){
+  try{ return ((m && m.codes) || []).filter(function(c){ return c && c.c; }).length; }
+  catch(e){ return 0; }
+}
+
+function _alarmaGuardado(cuantosMemoria, cuantosDisco){
+  if(_ALARMA_PUESTA) return;
+  _ALARMA_PUESTA = true;
+  try{
+    var d = document.createElement('div');
+    d.id = 'alarma-guardado';
+    d.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99999;background:#7f1d1d;'
+      + 'color:#fff;padding:14px 18px;font-family:Barlow Condensed,sans-serif;font-size:15px;'
+      + 'font-weight:800;letter-spacing:.5px;box-shadow:0 4px 24px rgba(0,0,0,.6);text-align:center';
+    d.innerHTML = '⚠ NO SE ESTA GUARDANDO — en pantalla hay ' + cuantosMemoria
+      + ' códigos y guardados sólo ' + cuantosDisco + '. '
+      + 'Se descargó una copia de emergencia. NO cierres esta ventana: '
+      + 'exportá el .dvw ahora. '
+      + '<button onclick="descargaEmergencia()" style="margin-left:12px;padding:5px 12px;'
+      + 'background:#fff;color:#7f1d1d;border:0;border-radius:6px;font:inherit;font-weight:800;'
+      + 'cursor:pointer">Descargar de nuevo</button>';
+    document.body.appendChild(d);
+  }catch(e){}
+  try{ descargaEmergencia(); }catch(e){}
+}
+
+/* Todo lo que hay en memoria a un archivo, sin pasar por el navegador. */
+function descargaEmergencia(){
+  try{
+    var paq = { cuando:new Date().toISOString(), motivo:'no se pudo guardar',
+                codigos:_contarCodigos(M), M:M };
+    var b = new Blob([JSON.stringify(paq)], {type:'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = 'EMERGENCIA_scout_' + new Date().toISOString().slice(0,19).replace(/[:T]/g,'-') + '.json';
+    a.click();
+  }catch(e){}
+}
+
 function persist(){
-  save('pv_match', M);
+  var enMemoria = _contarCodigos(M);
+  var ok = save('pv_match', M);
   _cajaNegra();
-  /* el try es por el orden de declaración: persist() está escrita antes que
-     RALLY_UNDO, así que si llegara a llamarse durante la carga inicial todavía
-     no existe. Después de cargar la página siempre está. */
+
+  /* Verificar de verdad: leer lo guardado y contar. No alcanza con que
+     setItem no haya tirado error. */
+  var enDisco = 0;
+  try{
+    var g = JSON.parse(localStorage.getItem('pv_match') || 'null');
+    enDisco = _contarCodigos(g);
+  }catch(e){ enDisco = 0; }
+
+  if(!ok || enDisco < enMemoria){
+    _alarmaGuardado(enMemoria, enDisco);
+  } else {
+    _ULTIMO_OK = enDisco;
+    if(_ALARMA_PUESTA){
+      /* volvio a andar: se saca el cartel */
+      _ALARMA_PUESTA = false;
+      var el = document.getElementById('alarma-guardado');
+      if(el) el.remove();
+      try{ toast('Guardado normalizado: ' + enDisco + ' códigos a salvo'); }catch(e){}
+    }
+  }
+
+  /* el archivo de seguridad, despues de cada jugada, como DataVolley */
+  try{ escribirSeguridad(false); }catch(e){}
+  try{ planBseguridad(); }catch(e){}
   try{ save('pv_undo', RALLY_UNDO); }catch(e){}
   if(M._id && (M.codes||[]).length){ try{ guardarPartidoEnLista(M); }catch(e){} }
   if(typeof publicarVivo==='function') publicarVivo();
 }
+
+
 
 function partidos(){ try{ return JSON.parse(localStorage.getItem('pv_partidos')||'[]'); }catch(e){ return []; } }
 function guardarPartidos(list){ try{ localStorage.setItem('pv_partidos', JSON.stringify(list)); }catch(e){ toast('No se pudo guardar la lista',true); } }
@@ -6430,8 +6649,12 @@ function exportDVW(modo){
      Lo que no existe en 1252 no rompe el archivo: se le saca el acento
      (Ł -> L) y, si tampoco se puede, va un signo de pregunta. Mejor un nombre
      sin tilde que un archivo que no abre. */
-  const blob = new Blob([_aCp1252(L.join('\r\n'))],{type:'application/octet-stream'});
+  /* El texto queda guardado aparte: el archivo de seguridad lo reescribe
+     despues de cada jugada sin tener que bajar nada. */
+  _DVW_TEXTO = L.join('\r\n');
+  const blob = new Blob([_aCp1252(_DVW_TEXTO)],{type:'application/octet-stream'});
   const a=document.createElement('a');
+  if(_SIN_BAJAR) return;      /* lo llamo el archivo de seguridad: solo queria el texto */
   a.href=URL.createObjectURL(blob);
   a.download=_nombreDVW();
   a.click();
@@ -7636,7 +7859,7 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260909-2249" onerror="void 0"></script>
-<script src="ayuda.js?v=20260909-2249"></script>
+<script src="volver_inicio.js?v=20260909-2342" onerror="void 0"></script>
+<script src="ayuda.js?v=20260909-2342"></script>
 </body>
 </html>
