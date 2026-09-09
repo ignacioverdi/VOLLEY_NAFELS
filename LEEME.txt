@@ -1,54 +1,40 @@
-SUBIR LA VERSION DE LOS SCRIPTS
-===============================
+LOS ULTIMOS DOS TEXTOS
+======================
 
-Los 56 archivos a la carpeta y publicar.
+Los archivos a la carpeta y publicar.
 
 
-POR QUE
+QUE PASABA
+----------
+El chequeo dio muy bien: motor nuevo cargado, spanglish 0, todo el
+dashboard traducido ("Coach dashboard", "Trainer-Dashboard", "Seasons",
+"Saisons", "PLAYERS", "SPIELER").
+
+Solo quedaban DOS textos en castellano:
+
+  "📊 ACUMULADO (4 sesiones)"
+  "Todas las sesiones (4)"
+
+Verifique los archivos publicados y estaban BIEN: el dashboard usa la
+funcion de traduccion y lang.js tiene las claves. La prueba directa daba
+"CUMULATIVE", "sessions", "Alle Einheiten".
+
+El problema era otro: esos dos textos se arman por codigo UNA sola vez, al
+cargar la pagina. Como llevan un numero adentro, el motor no los puede
+tomar como frase completa, y al cambiar de idioma nadie los volvia a
+dibujar: quedaban con el texto del idioma inicial.
+
+Ahora se vuelven a dibujar cuando cambias de idioma.
+
+
+PROBADO EN LOS TRES IDIOMAS
+---------------------------
+  es  📊 ACUMULADO (4 sesiones)  ·  Todas las sesiones (4)  ·  2 de 3 sesiones
+  en  📊 CUMULATIVE (4 sessions) ·  All sessions (4)        ·  2 of 3 sessions
+  de  📊 GESAMT (4 Einheiten)    ·  Alle Einheiten (4)      ·  2 von 3 Einheiten
+
+
+TAMBIEN
 -------
-Verifique el dashboard publicado y quedaban 8 textos en castellano:
-
-  "📊 ACUMULADO (4 sesiones)"    "Todas las sesiones (4)"
-  "% RECEPCIÓN (60)"             "% ATQ RÁPIDA (40)"
-  "% ATQ TRANSICIÓN (33)"        "¿Cómo armo una rutina?"
-  "¿Cómo cargo el wellness?"     "¿Qué es el EFF?"
-
-NO era un problema del codigo. El lang.js publicado ya los tiene: lo
-descargue fresco y los once casos que probe traducen bien.
-
-El problema era la etiqueta:  <script src="lang.js?v=20260909-0918">
-
-Ese ?v= no cambio al publicar, asi que el navegador siguio sirviendo el
-lang.js viejo desde su cache. La pagina se recargaba pero el diccionario
-era el anterior.
-
-Se subio la version a 20260909-1030 en las 56 pantallas. Con eso el
-navegador esta obligado a bajar los .js nuevos.
-
-
-PROBADO CONTRA EL ARCHIVO YA PUBLICADO
---------------------------------------
-  % Recepción (60)          -> % Reception (60)            EN
-  % ATQ RÁPIDA (40)         -> % ATT QUICK (40)            EN
-  % Atq Transición (33)     -> % Angr Transition (33)      DE
-  ¿Cómo armo una rutina?    -> How do I build a routine?   EN
-  ¿Qué es el EFF?           -> Was ist EFF?                DE
-  Objetivo / Cerca / Lejos  -> Target / Nah / Far
-  Formación del set 3       -> Line-up for set 3           EN
-  Salió el armador...       -> The setter is out...        EN
-
-  los 11 casos traducen · spanglish: 0
-
-
-NOTA
-----
-hm_armador.html y hm_defensa.html dan error de sintaxis en la verificacion,
-pero YA VENIAN asi desde antes: son los marcadores {{ }} de plantilla, no un
-error real. No se tocaron mas que en la linea de la version.
-
-
-PARA EL FUTURO
---------------
-Cada vez que cambies un .js hay que subir ese numero de version. Si no, el
-navegador sirve la copia vieja y parece que el cambio no se publico. Nos
-paso varias veces hoy, con lang.js y con objetivos_config.js.
+Version de los scripts subida a 20260909-1120 en las 56 pantallas, para
+que el navegador baje los .js nuevos y no sirva los de su cache.
