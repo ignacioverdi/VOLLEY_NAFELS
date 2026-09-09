@@ -1,46 +1,67 @@
-OBJETIVOS: EL MEJOR DE LA LIGA EN CADA FUNDAMENTO
-=================================================
+TRADUCCION: EL PROBLEMA DE FONDO Y LA PRIMERA MITAD RESUELTA
+============================================================
 
-2 archivos a la carpeta y publicar. Sin HACER_TODO.
-
-
-EL CRITERIO
------------
-El objetivo de cada fundamento es EL MEJOR DE LA LIGA en ESE fundamento,
-sobre los 97 partidos de la 25-26. No es siempre el mismo equipo, y por eso
-no alcanzaba con copiar al campeon:
-
-  Saque, recepcion, bloqueo #, casi todo el ataque   AMRISWIL
-  Bloqueo #+                                         JONA        45,4  (Amriswil 43,0)
-  Ataque tras recepcion negativa                     SCHONENWERD 23,0
-  Defensa                                            NAFELS      58,0
-
-En DEFENSA el mejor era el propio equipo. Poner 58 seria pedir lo que ya
-hacen, asi que el objetivo quedo en 60: hay algo por delante.
+Un archivo: lang.js. A la carpeta y publicar. Ctrl+F5 al probar.
 
 
-LOS OBJETIVOS
--------------
-  Saque             42        Atq Central       55
-  Recepcion         60        Atq Rapida        40
-  Defensa           60        Atq Alta          18
-  Blq #+            45        Atq R#+           47
-  Blq #             21        Atq R!            44
-  Atq Transicion    33        Atq R-            23
+1) LO MAS IMPORTANTE: SE ACABO EL SPANGLISH
+   El motor tenia DOS sistemas. El primero traduce lo que tiene data-t y
+   funciona bien. El segundo recorria TODO el texto restante y reemplazaba
+   palabra por palabra, sin entender la frase. Producia esto:
+
+     "Todos los jugadores"      ->  "All los Players"
+     "Acciones de bloqueo"      ->  "Actions de Block"
+     "Zonas defensa"            ->  "Zonas Dig"
+     "Antes de empezar"         ->  "before de empezar"
+     "Tu fecha de nacimiento"   ->  "Tu Date de nacimiento"
+     "¿Como cargo el Wellness?" ->  "¿How cargo el Wellness?"
+
+   Para un jugador suizo o aleman eso es PEOR que verlo en castellano:
+   parece que la app esta rota.
+
+   Ahora traduce solo cuando la frase COMPLETA esta en el diccionario. Lo que
+   falte queda en castellano, entero y legible, y se puede ir agregando sin
+   riesgo de romper nada.
 
 
-DONDE QUEDABA EL NAFELS 25-26 CON ESTA VARA
-  Defensa, Blq #+, Atq Alta, Atq Transicion    verde claro
-  Saque, Recepcion, Blq #, Atq Rapida,
-  Atq R#+, Atq R!, Atq R-                      AMARILLO
-  Atq Central                                  ROJO   (36,4 vs 55)
-
-Es una foto honesta: no salieron campeones. El unico rojo es el ataque
-central, que era su debilidad real: sextos de ocho y 18 puntos por debajo
-de Amriswil.
+2) 315 FRASES TRADUCIDAS AL INGLES Y AL ALEMAN
+   Terminologia de voley correcta: Zuspiel, Annahme, Aufschlag, Abwehr,
+   Mittelblocker, Aussenangreifer, Diagonalangreifer, Side-out.
 
 
-TAMBIEN SE ACTUALIZO EL TEXTO EN PANTALLA
-En Dashboard > Objetivos, el bloque explicativo ahora dice que el objetivo
-es el mejor de la liga en cada fundamento y por que no es siempre el mismo
-equipo. Es lo que va a leer un entrenador nuevo.
+3) 15 CLAVES QUE ESTABAN ROTAS
+   Tenian data-t puesto pero no existian en el diccionario, asi que se
+   quedaban en castellano en los tres idiomas. Entre ellas cuatro del index:
+   "Informe de equipo", "Cambio de saque y breakpoint...", "Las seis
+   rotaciones...", "Quien tiene acceso...".
+
+
+COMO QUEDAN LAS PANTALLAS
+-------------------------
+LAS 18 QUE USA EL EQUIPO TODOS LOS DIAS: 0 frases sin traducir.
+
+  index · dashboard · jugador · calendario · wellness · equipo · high_set
+  baggerone · prep_fisica · horarios · plan_partido · analisis · cortes
+  ranking · recepcion · armadores · informe_equipo · historial
+
+
+LO QUE FALTA (859 frases, 32 pantallas)
+---------------------------------------
+Son herramientas del cuerpo tecnico y la pagina de venta:
+
+  panel_vivo.html          254   el scout en vivo (lo usan Ignacio y su asistente)
+  volley-stats.html        229   la pagina de venta
+  GUIA_COMO_SCOUTEAR.html  135   la guia de scouteo
+  BIENVENIDA.html           39
+  unir_video.html           35
+  el resto                  ~170  (importar, asociar codigos, sesiones, camara,
+                                   alta de jugadores, pizarron, heat maps...)
+
+No se tradujeron todavia por volumen, no por dificultad. Con el motor ya
+arreglado, agregar cada tanda es solo sumar frases al diccionario: no hay
+riesgo de romper nada y lo que falta se ve en castellano entero.
+
+Prioridad sugerida para la proxima tanda:
+  1. volley-stats.html  — es la pagina con la que vendes la app
+  2. BIENVENIDA.html    — es lo primero que ve un jugador nuevo
+  3. panel_vivo + guia  — uso interno, puede esperar
