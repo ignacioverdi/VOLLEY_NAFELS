@@ -1,70 +1,43 @@
-2 ARCHIVOS — LAS TRES COSAS
-===========================
+OBJETIVOS DEL DIA — DOS FILAS DE 6
+==================================
 
    panel_voley.html
    objetivos_config.js
 
-Copiar los dos y publicar. Ctrl+F5.
+Copiar los dos y PUBLICAR (no hace falta HACER_TODO).
+Despues, en la maquina y en la tele: Ctrl+Shift+R.
 
 
-1) EL ENCABEZADO DESORDENADO (foto 1)
--------------------------------------
-Encontre la causa, y no era estetica:
+LO QUE CAMBIA
+-------------
+1) DOS FILAS DE 6, COMO PEDISTE
+   Antes la grilla se acomodaba sola y armaba 7 + 4, que quedaba desprolijo.
+   Ahora son 6 columnas fijas: 6 arriba y 5 abajo.
 
-   .hdr tenia  height:58px  FIJO, pero su contenido mide 93 px.
+   En pantallas mas chicas baja sola a 4, a 3 y a 2, para que no se aplasten.
 
-Los doce botones no entraban y se DESBORDABAN hacia abajo, ENCIMA de la
-barra de filtros. Lo medi en la pagina: la fila de botones terminaba en
-182 px y la de filtros arrancaba en 151. Se pisaban 31 px.
+2) TODAS LAS TARJETAS DEL MISMO ALTO
+   En tu captura se nota: la de "Eficiencia Saque" —la unica con objetivo
+   cargado— era mas alta que el resto, porque le aparece la chapa "▲ CERCA"
+   y el "35% de 42%". La fila entera quedaba despareja.
 
-Por eso se veia amontonado: no era un problema de estilo, era una barra
-mas chica que lo que tiene adentro.
+   Ahora esos dos lugares estan reservados aunque esten vacios, asi que
+   todas miden lo mismo tenga o no objetivo cargado.
 
-Ademas habia CUATRO barras apiladas sumando 418 px de los 791 de pantalla:
-categoria, dashboard+idiomas, encabezado y filtros. Mas de la mitad del
-televisor ocupado por menus.
-
-CORREGIDO:
-   · .hdr pasa a alto automatico: crece lo que necesita y deja de pisar
-   · los botones bajan a su propia linea completa
-   · paddings, titulo y etiquetas de filtros mas chicos
-
-   antes   197 px  pisandose
-   ahora   216 px  sin pisarse
-
-Crece 19 px, pero antes "entraba" solo porque tapaba la fila de abajo.
-Ahora se ve entero.
+MEDIDO:
+   filas                     2  (6 + 5)
+   alturas distintas         231 y 230 px  (un pixel, es redondeo)
+   alto total                471 px
+   con el titulo             581 px  contra 791 de pantalla
+   ENTRA SIN SCROLLEAR
 
 
-2) LOS OBJETIVOS DE ARRIBA
---------------------------
-   antes   209 px  ·  tres filas
-   ahora   117 px  ·  una fila de baterias
+SOBRE EL CACHE
+--------------
+Verifique que el objetivos_config.js publicado esta bien: lo baje fresco,
+lo cargue en la pagina y el panel de arriba paso de 209 px a 139 px con las
+12 baterias en una fila.
 
-(Este cambio ya te lo habia mandado pero no llegaste a publicarlo: en la
-pagina sigue viendose la version vieja.)
-
-
-3) EL MODAL "OBJETIVOS DEL DIA" (foto 2)
-----------------------------------------
-Era una lista vertical de once filas anchas, una debajo de otra:
-
-   alto del contenido  1155 px
-   pantalla             791 px
-
-Por eso scrolleabas cada dos por tres.
-
-Ahora es una grilla de tarjetas con forma de bateria: nombre arriba, numero
-grande al medio, la bateria que se llena segun cuanto falta para el
-objetivo, y abajo el casillero para cargarlo.
-
-   antes  1155 px  ·  once filas
-   ahora   404 px  ·  dos filas de grilla
-
-Con el titulo: 514 px contra 791. ENTRA SIN SCROLLEAR.
-
-
-EN TOTAL
---------
-   encabezado + objetivos:  425 px  ->  333 px
-   quedan 458 px de pantalla libres para los datos
+Lo que pasa es que tu proceso de publicacion le pone su propia version
+(?v=20260909-2229) y esa direccion quedo guardada en el navegador con el
+archivo viejo. Con un Ctrl+Shift+R una vez se arregla.

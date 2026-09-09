@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20260909-2230"></script>
-<script src="selector_categoria.js?v=20260909-2230"></script>
+<script src="categorias_club.js?v=20260909-2242"></script>
+<script src="selector_categoria.js?v=20260909-2242"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -70,6 +70,14 @@
   .hdr{ padding:4px 10px !important; }
   .hgrupo{ padding:2px 4px !important; }
 }
+
+/* Las 11 tarjetas de "Objetivos del dia" en DOS FILAS DE 6: mas prolijo que
+   dejar que el navegador decida y arme 7+4. En pantallas mas chicas baja a 4
+   y despues a 3, para que no se aplasten. */
+#obj-grid-inner{ grid-template-columns:repeat(6,1fr) !important; }
+@media (max-width:1250px){ #obj-grid-inner{ grid-template-columns:repeat(4,1fr) !important; } }
+@media (max-width:900px){  #obj-grid-inner{ grid-template-columns:repeat(3,1fr) !important; } }
+@media (max-width:620px){  #obj-grid-inner{ grid-template-columns:repeat(2,1fr) !important; } }
 </style>
 <style>
 :root{
@@ -343,19 +351,19 @@ body::before{content:'';position:fixed;inset:0;
 
 select, select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20260909-2230"></script>
+<script src="objetivos_config.js?v=20260909-2242"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260909-2230"></script>
-<script src="firebase.js?v=20260909-2230" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260909-2230"></script>
-<script src="lang.js?v=20260909-2230"></script>
-<script src="objetivos.js?v=20260909-2230" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20260909-2230"></script>
-  <script src="video_delay.js?v=20260909-2230" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260909-2242"></script>
+<script src="firebase.js?v=20260909-2242" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260909-2242"></script>
+<script src="lang.js?v=20260909-2242"></script>
+<script src="objetivos.js?v=20260909-2242" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20260909-2242"></script>
+  <script src="video_delay.js?v=20260909-2242" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -620,7 +628,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260909-2230">
+<link rel="stylesheet" href="movil.css?v=20260909-2242">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase">← Dashboard</a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -763,7 +771,7 @@ function renderObjetivosJugador(cid,nombre,extra){
     <!-- KPI ROWS -->
     <!-- Grilla en vez de lista: con 11 indicadores uno debajo del otro habia
          que scrollear siempre. En grilla entran todos en una pantalla. -->
-    <div id="obj-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px"></div>
+    <div id="obj-cards" style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px" id="obj-grid-inner"></div>
   </div>
 </div>
 
@@ -1473,9 +1481,13 @@ function updateObj(){
        misma forma de bateria que el panel de arriba. Los once entran juntos
        y se leen de un vistazo desde el televisor.                         */
     const row=document.createElement('div');
+    /* Todas del mismo alto: sin esto, la tarjeta que ya tiene objetivo cargado
+       —que muestra la chapa "CERCA" y el "35% de 42%"— queda mas alta que las
+       demas y la fila se ve despareja. */
     row.style.cssText='display:flex;flex-direction:column;align-items:center;gap:6px;'
       + 'padding:12px 8px 10px;background:rgba(255,255,255,.025);'
-      + 'border:1px solid rgba(255,255,255,.07);border-radius:12px;position:relative;overflow:hidden';
+      + 'border:1px solid rgba(255,255,255,.07);border-radius:12px;position:relative;'
+      + 'overflow:hidden;min-height:210px;justify-content:flex-start';
 
     const colorFin = hasData ? k.color : 'rgba(255,255,255,.2)';
     const llena = (hasGoal && hasData && goal>0) ? Math.min(100, Math.round(actual/goal*100)) : 0;
@@ -1505,8 +1517,9 @@ function updateObj(){
                border:1px solid rgba(255,255,255,.12);border-radius:7px;color:var(--txt);
                font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;outline:none">
 
-      <div style="min-height:20px;display:flex;align-items:center">${badge}</div>
-      ${sub}
+      <!-- lugar reservado para la chapa y el detalle, este o no este -->
+      <div style="min-height:34px;display:flex;align-items:center;justify-content:center;text-align:center">${badge}</div>
+      <div style="min-height:14px">${sub}</div>
     `;
     container.appendChild(row);
   });
@@ -2128,8 +2141,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20260909-2230" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260909-2230"></script>
+<script src="plantel_nafels.js?v=20260909-2242" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260909-2242"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2228,7 +2241,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20260909-2230"></script>
+<script src="ayuda.js?v=20260909-2242"></script>
 </body>
 </html>
 
