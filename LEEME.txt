@@ -1,64 +1,54 @@
-TRADUCCION — CIERRE DE LO QUE FALTABA
-=====================================
+SUBIR LA VERSION DE LOS SCRIPTS
+===============================
 
-5 archivos a la carpeta y publicar. Ctrl+F5.
-
-
-LO QUE ENCONTRE VERIFICANDO EN LA APP
--------------------------------------
-El HTML ya estaba al 100%, pero quedaban textos que NO estan en el HTML:
-los escribe el JavaScript en el momento. Por eso no aparecian en el
-barrido de archivos.
-
-1. LAS ETIQUETAS DE LOS OBJETIVOS
-   "% RECEPCIÓN (60)", "% ATQ RÁPIDA (40)", "% ATQ TRANSICIÓN (33)" y las
-   otras nueve salian de objetivos_config.js, que las tiene en castellano.
-   Tambien "Objetivo", "Cerca", "Neutro", "Lejos" del semaforo.
-
-2. LAS PREGUNTAS DEL ASISTENTE
-   "¿Cómo armo una rutina?", "¿Cómo cargo el wellness?", "¿Qué es el EFF?"
-   las genera chat_nafels.js.
-
-3. LAS FECHAS
-   Estaban fijas en 'es-AR' en index, importar_dvw e informe. En ingles y
-   aleman seguian mostrando "miércoles, 9 de septiembre de 2026". Ahora
-   siguen el idioma elegido (en-GB / de-CH) y el " hs" solo va en
-   castellano. Se redibujan al cambiar de idioma.
-
-4. TEXTOS CON UN NUMERO ADENTRO
-   "ACUMULADO (4 sesiones)", "2 de 3 sesiones", "Todas las sesiones (4)".
-   La frase entera cambia con cada sesion, asi que nunca coincidia. Se
-   separo la parte fija del numero.
-
-5. 25 TEXTOS MAS QUE ESCRIBE EL JAVASCRIPT
-   "Sin datos de saque registrados", "Fin de la secuencia", "Salió el
-   armador. Elegí quién arma de acá en adelante", y otros.
+Los 56 archivos a la carpeta y publicar.
 
 
-UNA MEJORA EN EL MOTOR
-----------------------
-Algunos textos se arman pegando un valor al final: "Formación del set " + 3.
-La frase completa nunca coincide. Ahora el motor traduce tambien cuando el
-texto EMPIEZA con una frase entera del diccionario y lo que sigue no es una
-letra (un numero, una fecha).
+POR QUE
+-------
+Verifique el dashboard publicado y quedaban 8 textos en castellano:
 
-Esto NO es el reemplazo palabra por palabra que producia spanglish. Alla se
-cambiaba cualquier palabra suelta en cualquier posicion; aca tiene que
-coincidir una frase COMPLETA y desde el principio.
+  "📊 ACUMULADO (4 sesiones)"    "Todas las sesiones (4)"
+  "% RECEPCIÓN (60)"             "% ATQ RÁPIDA (40)"
+  "% ATQ TRANSICIÓN (33)"        "¿Cómo armo una rutina?"
+  "¿Cómo cargo el wellness?"     "¿Qué es el EFF?"
 
-Probado:
-  "Formación del set 3"             -> "Line-up for set 3"        ✓
-  "⬇️ Importar fixture de 2026/27"  -> "⬇️ Import fixtures from 2026/27"  ✓
-  "Formación del set 5"  (aleman)   -> "Aufstellung für Satz 5"   ✓
+NO era un problema del codigo. El lang.js publicado ya los tiene: lo
+descargue fresco y los once casos que probe traducen bien.
 
-Y que NO rompa nada:
-  "Acciones de bloqueo del rival Juan"  -> sin cambios  ✓
-  "Todos los jugadores nuevos"          -> sin cambios  ✓
-  "de mi casa"                          -> sin cambios  ✓
+El problema era la etiqueta:  <script src="lang.js?v=20260909-0918">
+
+Ese ?v= no cambio al publicar, asi que el navegador siguio sirviendo el
+lang.js viejo desde su cache. La pagina se recargaba pero el diccionario
+era el anterior.
+
+Se subio la version a 20260909-1030 en las 56 pantallas. Con eso el
+navegador esta obligado a bajar los .js nuevos.
 
 
-ESTADO
-------
-  HTML sin traducir        0
-  diccionario          1.860 frases en espanol, ingles y aleman
-  spanglish                0
+PROBADO CONTRA EL ARCHIVO YA PUBLICADO
+--------------------------------------
+  % Recepción (60)          -> % Reception (60)            EN
+  % ATQ RÁPIDA (40)         -> % ATT QUICK (40)            EN
+  % Atq Transición (33)     -> % Angr Transition (33)      DE
+  ¿Cómo armo una rutina?    -> How do I build a routine?   EN
+  ¿Qué es el EFF?           -> Was ist EFF?                DE
+  Objetivo / Cerca / Lejos  -> Target / Nah / Far
+  Formación del set 3       -> Line-up for set 3           EN
+  Salió el armador...       -> The setter is out...        EN
+
+  los 11 casos traducen · spanglish: 0
+
+
+NOTA
+----
+hm_armador.html y hm_defensa.html dan error de sintaxis en la verificacion,
+pero YA VENIAN asi desde antes: son los marcadores {{ }} de plantilla, no un
+error real. No se tocaron mas que en la linea de la version.
+
+
+PARA EL FUTURO
+--------------
+Cada vez que cambies un .js hay que subir ese numero de version. Si no, el
+navegador sirve la copia vieja y parece que el cambio no se publico. Nos
+paso varias veces hoy, con lang.js y con objetivos_config.js.
