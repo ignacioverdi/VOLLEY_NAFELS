@@ -1,67 +1,48 @@
-TRADUCCION: EL PROBLEMA DE FONDO Y LA PRIMERA MITAD RESUELTA
-============================================================
+TRADUCCION — TANDA 2
+====================
 
-Un archivo: lang.js. A la carpeta y publicar. Ctrl+F5 al probar.
-
-
-1) LO MAS IMPORTANTE: SE ACABO EL SPANGLISH
-   El motor tenia DOS sistemas. El primero traduce lo que tiene data-t y
-   funciona bien. El segundo recorria TODO el texto restante y reemplazaba
-   palabra por palabra, sin entender la frase. Producia esto:
-
-     "Todos los jugadores"      ->  "All los Players"
-     "Acciones de bloqueo"      ->  "Actions de Block"
-     "Zonas defensa"            ->  "Zonas Dig"
-     "Antes de empezar"         ->  "before de empezar"
-     "Tu fecha de nacimiento"   ->  "Tu Date de nacimiento"
-     "¿Como cargo el Wellness?" ->  "¿How cargo el Wellness?"
-
-   Para un jugador suizo o aleman eso es PEOR que verlo en castellano:
-   parece que la app esta rota.
-
-   Ahora traduce solo cuando la frase COMPLETA esta en el diccionario. Lo que
-   falte queda en castellano, entero y legible, y se puede ir agregando sin
-   riesgo de romper nada.
+Un archivo: lang.js. Reemplaza al de la tanda 1. Publicar y Ctrl+F5.
 
 
-2) 315 FRASES TRADUCIDAS AL INGLES Y AL ALEMAN
-   Terminologia de voley correcta: Zuspiel, Annahme, Aufschlag, Abwehr,
-   Mittelblocker, Aussenangreifer, Diagonalangreifer, Side-out.
+VERIFICADO EN TU APP (tanda 1, ya publicada)
+--------------------------------------------
+Plan de partido en ingles: CERO spanglish.
+Ahora dice "the number = swings/serves, not points", "FILTER", "Matches",
+"Trainings". Antes decia "All los Players" y "Actions de Block".
 
 
-3) 15 CLAVES QUE ESTABAN ROTAS
-   Tenian data-t puesto pero no existian en el diccionario, asi que se
-   quedaban en castellano en los tres idiomas. Entre ellas cuatro del index:
-   "Informe de equipo", "Cambio de saque y breakpoint...", "Las seis
-   rotaciones...", "Quien tiene acceso...".
+ESTA TANDA: +178 frases
+-----------------------
+volley-stats.html (la pagina de venta) y BIENVENIDA.html, que son las dos
+que ve alguien de afuera: un club que evalua comprar, o un jugador nuevo
+el primer dia.
+
+Incluye los textos largos de venta traducidos con cuidado:
+planes, precios, privacidad, como viajan los datos, que pasa al cerrar una
+temporada. Son los que se leen antes de firmar.
+
+volley-stats paso de 229 frases sin traducir a 110.
 
 
-COMO QUEDAN LAS PANTALLAS
--------------------------
-LAS 18 QUE USA EL EQUIPO TODOS LOS DIAS: 0 frases sin traducir.
-
+ESTADO GENERAL
+--------------
+COMPLETAS (0 sin traducir):
   index · dashboard · jugador · calendario · wellness · equipo · high_set
   baggerone · prep_fisica · horarios · plan_partido · analisis · cortes
   ranking · recepcion · armadores · informe_equipo · historial
 
+FALTA:
+  panel_vivo.html          295   el scout en vivo
+  GUIA_COMO_SCOUTEAR.html  147   la guia de scouteo
+  volley-stats.html        110   resto de la pagina de venta
+  unir_video.html           46
+  BIENVENIDA.html           25
+  el resto                 ~190  (importar, asociar codigos, sesiones,
+                                  camara, alta de jugadores, heat maps...)
 
-LO QUE FALTA (859 frases, 32 pantallas)
----------------------------------------
-Son herramientas del cuerpo tecnico y la pagina de venta:
+Las dos mas grandes, panel_vivo y la guia, son herramientas que usan
+Ignacio y su asistente, los dos en castellano. Son las de menor urgencia
+real aunque sean las de mayor volumen.
 
-  panel_vivo.html          254   el scout en vivo (lo usan Ignacio y su asistente)
-  volley-stats.html        229   la pagina de venta
-  GUIA_COMO_SCOUTEAR.html  135   la guia de scouteo
-  BIENVENIDA.html           39
-  unir_video.html           35
-  el resto                  ~170  (importar, asociar codigos, sesiones, camara,
-                                   alta de jugadores, pizarron, heat maps...)
-
-No se tradujeron todavia por volumen, no por dificultad. Con el motor ya
-arreglado, agregar cada tanda es solo sumar frases al diccionario: no hay
-riesgo de romper nada y lo que falta se ve en castellano entero.
-
-Prioridad sugerida para la proxima tanda:
-  1. volley-stats.html  — es la pagina con la que vendes la app
-  2. BIENVENIDA.html    — es lo primero que ve un jugador nuevo
-  3. panel_vivo + guia  — uso interno, puede esperar
+Con el motor arreglado, lo que falta se ve en castellano ENTERO y legible.
+Nunca mezclado.
