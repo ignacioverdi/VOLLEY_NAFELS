@@ -1,87 +1,50 @@
-DOBLE TURNO — LOS TRES PUNTOS
-=============================
+EL ESPACIO ENTRE CODIGOS
+========================
 
-9 archivos a la carpeta, HACER_TODO, publicar.
-
-
-LO PRIMERO: LOS DOS ENTRENAMIENTOS DEL 08/09 ESTAN
---------------------------------------------------
-Verifique los archivos contra el dashboard y NO se perdio nada:
-
-  MORNING (AXPO NAFELS vs PRUEBA)     240 saques · 185 recep · 427 acciones
-  Pra-AXPO NAFELS (NAFELS vs NAFELS)  203 ataques · 159 def · 904 acciones
-
-Pero se distinguian POR CASUALIDAD, porque escribiste distinto el rival.
+Un archivo: panel_vivo.html. Publicar y Ctrl+F5.
 
 
-(b) EL .DVW DE LA APP ENTRABA COMO PARTIDO, NO COMO ENTRENAMIENTO
------------------------------------------------------------------
-Es lo que se ve en tu captura. Comparando los archivos:
+QUE PASABA
+----------
+En DataVolley cada vez que tocas Space queda un espacio VISIBLE que separa
+un codigo del siguiente:
 
-  DataVolley  [3MATCH]  07/09/2026;;2024/2025;PRE-SEASON;Practice;...
-  la app      [3MATCH]  08/09/2026;;;;;;;;...        <- todo vacio
+   17G4= 17G4-6.11D 13E+ 1W4#6.4        <- Data Volley 4
 
-  DataVolley  [3TEAMS]  AXPO NAFELS  vs  AXPO NAFELS   <- mismo equipo
-  la app      [3TEAMS]  AXPO NAFELS  vs  PRUEBA        <- parece rival
+y en el panel se veia todo pegado:
 
-DataVolley decide si es practica o partido por esas columnas. Vacias, lo
-toma como partido contra un rival llamado "Prueba".
-
-CORREGIDO. En modo entrenamiento el panel ahora escribe:
-  · temporada (se arma sola: de agosto a julio, como el calendario real)
-  · competencia PRE-SEASON
-  · fase Practice
-  · los DOS equipos con el nombre del club
-
-Los .dvw que exportes de ahora en mas van a entrar al DataVolley como
-"PRE-SEASON, Practice", igual que los que hace el propio DataVolley.
+   17G4=17G4-6.11D13E+1W4#6.4           <- la app
 
 
-(c) LA M EN EL NOMBRE
----------------------
-El panel ahora agrega el turno al nombre del archivo:
+LA CAUSA (no era el tipeo)
+--------------------------
+Lo verifique en la app publicada, paso a paso:
 
-  &2026-09-15 AXP-ENTRENAMIENTO-M.dvw     (manana)
-  &2026-09-15 AXP-ENTRENAMIENTO-T.dvw     (tarde)
+  · el espacio SI se escribia: el campo tenia los 3 espacios
+  · el HTML del renglon SI los tenia, como texto entre los <span>
+  · parseInput ya los usaba para separar los codigos
 
-Si no elegiste turno, lo propone por la hora: antes de las 14, manana.
+El problema era el dibujo. La capa que pinta el codigo (#code-espejo) tiene
+display:flex, y en un contenedor flex los textos que son SOLO espacio se
+descartan: no llegan a ser un elemento, asi que no ocupan lugar.
 
-Y los motores leen el turno del nombre. Reconocen, en tres idiomas:
-  MANANA:  MORNING · MANANA · MORGEN · VORMITTAG · AM · T1 · sufijo -M
-  TARDE:   AFTERNOON · TARDE · NACHMITTAG · ABEND · NOCHE · PM · T2 · -T
+Medido en la pagina real: el hueco entre codigos era de 0 pixeles.
 
-OJO con un detalle: "AM" y "PM" se buscan como palabra suelta. Sin eso,
-"&2026-09-15 AXP-AMRISWIL.dvw" se leia como turno manana por el "AM" de
-AMRISWIL, y un partido quedaba marcado como entrenamiento. Probado:
-AMRISWIL y LAUSANNE ya no disparan nada.
-
-
-(a) EL VIDEO DE AMBOS
----------------------
-En la pantalla de videos aparecia UNA sola fila del 08/09. La de la tarde
-no estaba: el codigo de video se armaba solo con la fecha (ENT20260908),
-asi que los dos entrenamientos compartian codigo y uno tapaba al otro.
-
-Ahora el codigo incluye el turno:
-  ENT20260908M   ENT20260908T
-
-Con eso las dos sesiones aparecen y podes cargarle video a cada una.
+El white-space:pre que ya estaba puesto no alcanzaba, justamente porque el
+espacio ni siquiera existia como item del flex.
 
 
-ADEMAS: YA NO SE PIERDEN SESIONES
----------------------------------
-Habia un control de duplicados con clave (fecha, rival, tipo). Dos
-entrenamientos el mismo dia contra el mismo rival: el segundo se
-DESCARTABA EN SILENCIO. Ahora la clave incluye el turno.
-
-
-DONDE SE VE
+LA SOLUCION
 -----------
-Dashboard (desplegable, panel de casillas, boton y tabla), analisis,
-historial y plan de partido muestran:
+El espacio ahora se envuelve en su propio <span class="esp">, con ancho
+minimo. Al ser un elemento, el flex lo respeta.
 
-  08/09/2026 · Mañana — Entrenamiento
-  08/09/2026 · Tarde  — Entrenamiento
+Medido despues del cambio: 15 pixeles de separacion entre codigos, en los
+tres lugares donde corresponde.
 
-Traducido: Morning / Afternoon · Vormittag / Nachmittag.
-Los dias con un solo entrenamiento no muestran nada, como antes.
+
+NOTA
+----
+Esto era solo visual: los codigos ya se guardaban y se separaban bien. Lo
+que fallaba era que vos no podias VER donde terminaba uno y empezaba el
+otro mientras tipeabas, que en vivo es justamente cuando mas importa.
