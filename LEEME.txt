@@ -1,47 +1,61 @@
-TRADUCCION — TANDAS 5 Y 6
-=========================
+TRADUCCION COMPLETA — 100%
+==========================
 
-Un archivo: lang.js. Reemplaza al anterior. Publicar y Ctrl+F5.
+Un archivo: lang.js. Publicar y Ctrl+F5.
 
 
-ESTA ENTREGA: +202 frases
+CERO FRASES SIN TRADUCIR EN TODA LA APP
+---------------------------------------
+  arranque             877 frases sin traducir
+  ahora                  0
+  diccionario        1.816 frases en espanol, ingles y aleman
+  claves data-t rotas    0
+
+
+ESTA ENTREGA: +305 frases
 -------------------------
-  Tanda 5 (87)   la GUIA DE SCOUTEO completa: atajos de teclado, codigos,
-                 cierre de set, correccion de codigos compuestos
-  Tanda 6 (115)  el PANEL EN VIVO: controles, conceptos, fin de jugada
-                 automatico, formacion, exportacion .dvw
+Cierra las dos pantallas grandes y todo lo que quedaba suelto:
 
-El diccionario paso de 1.309 a 1.511 frases.
+  panel_vivo.html          151 -> 0
+  GUIA_COMO_SCOUTEAR.html   84 -> 0
+  volley-stats.html         19 -> 0
+  el resto                  33 -> 0
 
-
-COMO VENIMOS
-------------
-  arranque      877 frases sin traducir
-  tanda 1-2     -493
-  tanda 3-4     -329
-  tanda 5-6     -202
-  ahora         287
-
-  GUIA_COMO_SCOUTEAR   146 -> 84
-  panel_vivo           290 -> 151
+Incluye la documentacion tecnica del scouting: atajos de teclado, codigos
+compuestos, fin de jugada automatico, formacion, exportacion .dvw,
+referencias al manual de DataVolley, y la comparativa de precios contra
+DataVolley 4 y Hudl Volleymetrics.
 
 
-LO QUE FALTA (287)
-------------------
-  panel_vivo.html         151
-  GUIA_COMO_SCOUTEAR.html  84
-  volley-stats.html        19
-  el resto                 33   (2 a 5 frases por pantalla)
+EL RECORRIDO COMPLETO
+---------------------
+  tandas 1-2    -493   pantallas del equipo
+  tandas 3-4    -329   video, importacion, heat maps, pagina de venta
+  tandas 5-6    -202   guia de scouteo y panel en vivo
+  tandas 7-8    -305   cierre total
 
-Sigue siendo casi todo documentacion tecnica del scouting en las dos
-pantallas que usan Ignacio y su asistente. Todo lo que ve el equipo, la
-pagina de venta y las herramientas de gestion ya estan completas.
+Y antes que todo eso, lo que de verdad importaba: se apago el reemplazo
+palabra por palabra que producia spanglish ("All los Players", "Actions
+de Block", "before de empezar"). Ahora el motor traduce SOLO frase
+completa: si algun dia se agrega texto nuevo sin traducir, se va a ver en
+castellano entero, nunca mezclado.
 
 
-UN DETALLE TECNICO
-------------------
+PARA CUANDO AGREGUES TEXTO NUEVO
+--------------------------------
+Dos formas, las dos validas:
+
+  1. Poner data-t="mi_clave" en el HTML y agregar la clave en var T con
+     sus tres idiomas.
+  2. Escribir el texto normal en el HTML y agregar la frase completa en
+     PHRASES_EXTRA con en: y de:.
+
+La segunda es mas rapida y es la que se uso para estas 1.816.
+
+
+UN DETALLE
+----------
 Varias frases del panel en vivo tienen entidades HTML escritas a mano
-(&iacute; en vez de i con tilde, &ntilde; en vez de enie). Se tradujeron
-respetando esa forma, porque el motor compara el texto tal como esta en
-el HTML. Si alguna vez se limpian esas entidades, esas frases habria que
-volver a darlas de alta.
+(&iacute;, &ntilde;, &mdash;). Se tradujeron respetando esa forma porque
+el motor compara el texto tal como esta en el HTML. Si algun dia se
+limpian esas entidades, esas frases hay que volver a darlas de alta.
