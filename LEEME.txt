@@ -1,85 +1,62 @@
-QUE ESTO NO VUELVA A PASAR
-==========================
+SIMPLE Y AUTOMATICO
+===================
 
-Un archivo: panel_vivo.html. Publicar y Ctrl+Shift+R.
-
-
-LA CAUSA, ENCONTRADA
---------------------
-El panel guardaba asi:
-
-    function save(k,v){ try{ localStorage.setItem(...); }catch(e){} }
-
-Ese catch vacio se tragaba el error EN SILENCIO.
-
-Si el navegador no podia guardar —memoria, modo privado, permisos, lo que
-sea— el scout seguia tipeando, la pantalla mostraba TODO bien, y no se
-estaba guardando nada. Al cerrar, todo lo posterior a la ultima escritura
-buena desaparecia sin un solo aviso.
-
-Encaja exacto con lo que paso: el archivo corta EN el segundo New Drill y
-despues no hay una sola accion, sin ningun error a la vista.
-
-(Descarte que fuera falta de espacio: eran 515 KB de los 5 MB que permite
-el navegador. El problema no es cuanto ocupa, es que cuando falla no avisa.)
+2 archivos: panel_vivo.html y recuperar.html.
+Publicar y Ctrl+Shift+R.
 
 
-COMO LO HACE DATA VOLLEY
-------------------------
-Lo busque. DataVolley mantiene un "safety scout file" que reescribe EN EL
-DISCO al final de CADA jugada. VolleyStation tiene su equivalente, el "live
-export". No confian en la memoria: escriben un archivo de verdad, siempre.
-
-Eso es lo que faltaba y es lo que se agrego.
-
-
-LO QUE SE HIZO
+LO QUE SACAMOS
 --------------
+Fuera el boton del salvavidas. Fuera la ventana que preguntaba donde
+guardar. Fuera el paso extra.
 
-1. GUARDAR YA NO MIENTE
-   save() devuelve si pudo o no. Nunca mas se pierde algo en silencio.
-
-2. UN VIGILANTE DESPUES DE CADA JUGADA
-   Se guarda, se VUELVE A LEER lo guardado y se cuentan los codigos. Si lo
-   guardado tiene menos que lo que hay en pantalla:
-
-     · aparece un cartel ROJO fijo arriba que no se puede ignorar
-     · dice cuantos codigos hay en pantalla y cuantos guardados
-     · se dispara sola una descarga de emergencia con todo
-
-   Antes se perdia sin aviso. Ahora es imposible no darse cuenta.
-
-3. ARCHIVO DE SEGURIDAD EN EL DISCO  ← lo de DataVolley
-   Boton nuevo "🛟 Archivo de seguridad". Se toca UNA VEZ al empezar, se
-   elige donde guardarlo, y a partir de ahi el panel REESCRIBE ese .dvw
-   despues de cada jugada, solo.
-
-   Si el navegador se cierra, la maquina se apaga o pasa cualquier cosa, el
-   archivo en el disco esta completo hasta la ultima jugada.
-
-   Anda en Chrome y Edge en Windows, que es lo que usa Sebastian.
-   Si el navegador no lo permite, cae a un plan B: baja una copia cada 40
-   codigos. Nunca se pierde mas que eso.
-
-4. CAJA NEGRA
-   12 fotos del entrenamiento guardadas mientras se scoutea, que se bajan
-   desde recuperar.html.
+Tenias razon: si para no perder el trabajo hay que acordarse de tocar algo,
+tarde o temprano no se toca.
 
 
-LA RUTINA DE MAÑANA — dos segundos
-----------------------------------
+COMO FUNCIONA AHORA — no hay que hacer NADA
+-------------------------------------------
    1. Abrir el Scout en Vivo
-   2. Tocar "🛟 Archivo de seguridad" y elegir donde guardarlo
-   3. Scoutear normal
+   2. Cargar equipos y formacion
+   3. Scoutear
 
-El boton queda verde y dice "Seguridad ON". Listo.
+Eso es todo. Igual que siempre. Sin botones nuevos, sin ventanas, sin
+acordarse de nada.
 
 
-LO QUE TE PUEDO ASEGURAR AHORA
-------------------------------
-Con el archivo de seguridad activo, para perder trabajo tendria que fallar
-el disco de la computadora. No la pagina, no el navegador, no el guardado
-interno: el disco.
+QUE PASA POR DEBAJO
+-------------------
+Despues de cada jugada el panel guarda una foto del entrenamiento en el
+almacen GRANDE del navegador (IndexedDB): cientos de megas, en vez de los
+5 MB del almacen chico.
 
-Y si algo fallara igual, ahora HAY AVISO: cartel rojo y descarga automatica.
-Antes no habia nada.
+Eso importa porque el 09/09 fallo justamente el almacen chico. Y la copia
+de seguridad que teniamos vivia ahi tambien: la red estaba atada al mismo
+clavo que se soltaba. Ahora esta en otro lado.
+
+No pide permiso, no abre ventanas, no se ve. Guarda las ultimas 30 fotos.
+
+PROBADO EN EL NAVEGADOR, simulando un entrenamiento de 300 codigos:
+
+   guardo 20 fotos: 15, 30, 45, 60 ... 285, 300
+   la ultima tenia los 300 codigos completos
+
+O sea: en el peor de los casos se pierden 15 codigos, no una hora y media.
+
+
+SI ALGO PASA
+------------
+Abrir  volley-nafels.vercel.app/recuperar.html  en esa computadora.
+
+Arriba de todo aparece "🛟 La red" con las fotos ordenadas, la mas completa
+primera. Se toca "Códigos" o "Completo" y listo.
+
+Un solo boton "Bajar TODO" se lleva absolutamente todo, incluida la red.
+
+
+EL RESUMEN
+----------
+   antes    si fallaba el guardado, se perdia todo y sin aviso
+   ahora    se guarda solo en otro lado, cada 15 codigos, sin tocar nada
+
+No hay proceso nuevo que aprender. Scoutean igual que siempre.

@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260909-2342"></script>
-<script src="selector_categoria.js?v=20260909-2342"></script>
-<script src="lang.js?v=20260909-2342"></script>
+<script src="categorias_club.js?v=20260909-2352"></script>
+<script src="selector_categoria.js?v=20260909-2352"></script>
+<script src="lang.js?v=20260909-2352"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260909-2342">
+<link rel="stylesheet" href="movil.css?v=20260909-2352">
 </head>
 <body>
 
@@ -546,10 +546,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <span class="live livemin" title="Se pone celeste cuando está transmitiendo a la tablet" style="color:var(--vis);border-color:rgba(34,211,238,.35);background:rgba(34,211,238,.08)"><span class="pubdot" id="pubdot"></span></span>
   <div class="spacer"></div>
   <button class="tbtn" onclick="openSetup()">Partido</button>
-  <button id="btn-seguridad" class="tbtn" onclick="elegirArchivoSeguridad()"
-        title="Elegí un archivo: el panel lo reescribe después de cada jugada, como el archivo de seguridad de DataVolley"
-        style="background:rgba(251,191,36,.14);color:#fbbf24;border-color:rgba(251,191,36,.4)">🛟 Archivo de seguridad</button>
-<button class="tbtn" onclick="abrirPartidos()" title="Lista de partidos guardados (ver o borrar)">Partidos</button>
+  <button class="tbtn" onclick="abrirPartidos()" title="Lista de partidos guardados (ver o borrar)">Partidos</button>
   <button class="tbtn" onclick="abrirVideo()" title="Video y sincronización (manual 2.5.6)">Video</button>
   <button class="tbtn" onclick="abrirCombos()" title="Combinaciones de ataque y llamadas (manual 12.2)">Comb ataque</button>
   <button class="tbtn" onclick="abrirEquipos()" title="Base de equipos (nuevo · importar · exportar)">Equipos</button>
@@ -1233,16 +1230,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260909-2342" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260909-2342"></script>
-<script src="objetivos.js?v=20260909-2342" onerror="void 0"></script>
-<script src="video_delay.js?v=20260909-2342" onerror="void 0"></script>
+<script src="firebase.js?v=20260909-2352" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260909-2352"></script>
+<script src="objetivos.js?v=20260909-2352" onerror="void 0"></script>
+<script src="video_delay.js?v=20260909-2352" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260909-2342" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260909-2342"></script>
+<script src="plantel_nafels.js?v=20260909-2352" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260909-2352"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -1499,87 +1496,71 @@ function armarDVW(){
 var _SIN_BAJAR = false;
 
 /* ══════════════════════════════════════════════════════════════════════════
-   ARCHIVO DE SEGURIDAD — el "safety scout" de DataVolley
+   LA RED — automatica, invisible, sin tocar nada
    --------------------------------------------------------------------------
-   Asi trabaja DataVolley: mantiene un archivo en el DISCO que reescribe al
-   final de CADA jugada. Si el programa se cierra de golpe, ese archivo esta
-   completo. No confia en tener las cosas en memoria ni en una base interna.
+   POR QUE HACE FALTA OTRA COSA ADEMAS DEL GUARDADO NORMAL
 
-   Aca se hace lo mismo. Se elige UNA VEZ donde guardarlo —al empezar el
-   entrenamiento— y a partir de ahi el panel reescribe ese .dvw despues de
-   cada jugada, solo. No hay que acordarse de nada.
+   El panel guardaba todo en localStorage, que es el almacen chico del
+   navegador (5 MB) y el que fallo el 09/09: cuando no puede escribir, tira
+   un error que el codigo se tragaba, y se perdia todo sin aviso.
 
-   Si el navegador no permite escribir en disco (Firefox, Safari, o el
-   celular), se cae a un plan B: baja una copia cada 40 codigos. Menos
-   comodo, pero nunca se pierde mas que eso.
+   La caja negra tambien vivia ahi. O sea: si fallaba el guardado, fallaba
+   tambien la copia de seguridad. La red estaba atada al mismo clavo que se
+   soltaba.
 
-   Es la unica forma de garantizar lo que pediste: que si manana pasa
-   cualquier cosa, el trabajo este en un archivo de verdad.
+   POR ESO AHORA SE GUARDA EN INDEXEDDB, que es el otro almacen del
+   navegador: cientos de megas en vez de 5, pensado justamente para esto, y
+   totalmente independiente del que fallo. No pide permiso, no abre ninguna
+   ventana, no hay ningun boton. Se escribe despues de cada jugada y listo.
+
+   Es lo mismo que hace DataVolley con su archivo de seguridad, pero sin
+   que el usuario tenga que elegir nada: el navegador no deja escribir en el
+   disco sin autorizacion, pero IndexedDB si, y para este caso alcanza y
+   sobra.
+
+   Guarda las ultimas 30 fotos del entrenamiento. Con una cada 15 codigos,
+   son unos 450 codigos de historia: mas que un entrenamiento entero.
    ══════════════════════════════════════════════════════════════════════════ */
-var _SEG_FILE = null;       /* donde escribir, si el navegador lo permite */
-var _SEG_ULTIMO = 0;        /* cuantos codigos se escribieron la ultima vez */
-var _SEG_ESCRIBIENDO = false;
+var _RED_DB = null;
+var _RED_ULTIMO = 0;
 
-function haySeguridadEnDisco(){
-  return !!(window.showSaveFilePicker);
+function _redAbrir(){
+  return new Promise(function(res){
+    if(_RED_DB) return res(_RED_DB);
+    try{
+      var req = indexedDB.open('volley_red', 1);
+      req.onupgradeneeded = function(e){
+        var db = e.target.result;
+        if(!db.objectStoreNames.contains('fotos'))
+          db.createObjectStore('fotos', { keyPath:'t' });
+      };
+      req.onsuccess = function(e){ _RED_DB = e.target.result; res(_RED_DB); };
+      req.onerror   = function(){ res(null); };
+    }catch(e){ res(null); }
+  });
 }
 
-async function elegirArchivoSeguridad(){
-  if(!haySeguridadEnDisco()){
-    toast('Este navegador no puede escribir en disco. Se baja una copia cada 40 códigos.', true);
-    return;
-  }
+/* Una foto despues de cada jugada. Sin ventanas, sin botones, sin avisos. */
+async function redGuardar(){
   try{
-    var nombre = (typeof _nombreDVW === 'function') ? _nombreDVW() : 'scout.dvw';
-    _SEG_FILE = await window.showSaveFilePicker({
-      suggestedName: nombre,
-      types: [{ description:'Scout DataVolley', accept:{ 'application/octet-stream':['.dvw'] } }]
-    });
-    _SEG_ULTIMO = 0;
-    await escribirSeguridad(true);
-    toast('Archivo de seguridad activo: se reescribe después de cada jugada');
-    var b = document.getElementById('btn-seguridad');
-    if(b){ b.textContent = '🛟 Seguridad ON'; b.style.background='rgba(34,197,94,.18)';
-           b.style.color='#4ade80'; b.style.borderColor='rgba(34,197,94,.45)'; }
-  }catch(e){
-    /* el usuario cancelo el dialogo: no es un error */
-  }
-}
-
-async function escribirSeguridad(forzar){
-  if(_SEG_ESCRIBIENDO) return;
-  var n = _contarCodigos(M);
-  if(!_SEG_FILE || (!forzar && n === _SEG_ULTIMO)) return;
-  _SEG_ESCRIBIENDO = true;
-  try{
-    var texto = (typeof armarDVW === 'function') ? armarDVW() : null;
-    if(texto === null){ _SEG_ESCRIBIENDO=false; return; }
-    var w = await _SEG_FILE.createWritable();
-    await w.write(new Blob([_aCp1252(texto)], {type:'application/octet-stream'}));
-    await w.close();
-    _SEG_ULTIMO = n;
-  }catch(e){
-    try{ console.error('[SEGURIDAD] no pude escribir', e); }catch(_){}
-    toast('No pude escribir el archivo de seguridad. Revisá los permisos.', true);
-  }
-  _SEG_ESCRIBIENDO = false;
-}
-
-/* Plan B para los navegadores que no dejan escribir: una copia cada 40. */
-var _PLANB_ULTIMO = 0;
-function planBseguridad(){
-  if(_SEG_FILE || haySeguridadEnDisco()) return;
-  var n = _contarCodigos(M);
-  if(n - _PLANB_ULTIMO < 40) return;
-  _PLANB_ULTIMO = n;
-  try{
-    var texto = (typeof armarDVW === 'function') ? armarDVW() : null;
-    if(texto === null) return;
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([_aCp1252(texto)], {type:'application/octet-stream'}));
-    a.download = 'COPIA_' + n + '_' + ((typeof _nombreDVW==='function') ? _nombreDVW() : 'scout.dvw');
-    a.click();
-    toast('Copia de seguridad bajada (' + n + ' códigos)');
+    var n = _contarCodigos(M);
+    if(!n || n === _RED_ULTIMO) return;
+    if(n - _RED_ULTIMO < 15) return;          /* una cada 15 codigos alcanza */
+    var db = await _redAbrir();
+    if(!db) return;
+    _RED_ULTIMO = n;
+    var tx = db.transaction('fotos','readwrite');
+    var st = tx.objectStore('fotos');
+    st.put({ t:Date.now(), n:n, id:(M&&M._id)||'', equipos:((M.home||{}).name||'')+' vs '+((M.away||{}).name||''), M:JSON.parse(JSON.stringify(M)) });
+    /* dejar solo las ultimas 30 */
+    var todas = st.getAllKeys();
+    todas.onsuccess = function(){
+      var ks = todas.result || [];
+      if(ks.length > 30){
+        ks.sort();
+        for(var i=0;i<ks.length-30;i++) st.delete(ks[i]);
+      }
+    };
   }catch(e){}
 }
 
@@ -1672,9 +1653,8 @@ function persist(){
     }
   }
 
-  /* el archivo de seguridad, despues de cada jugada, como DataVolley */
-  try{ escribirSeguridad(false); }catch(e){}
-  try{ planBseguridad(); }catch(e){}
+  /* la red: automatica, en el almacen grande del navegador */
+  try{ redGuardar(); }catch(e){}
   try{ save('pv_undo', RALLY_UNDO); }catch(e){}
   if(M._id && (M.codes||[]).length){ try{ guardarPartidoEnLista(M); }catch(e){} }
   if(typeof publicarVivo==='function') publicarVivo();
@@ -7859,7 +7839,7 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260909-2342" onerror="void 0"></script>
-<script src="ayuda.js?v=20260909-2342"></script>
+<script src="volver_inicio.js?v=20260909-2352" onerror="void 0"></script>
+<script src="ayuda.js?v=20260909-2352"></script>
 </body>
 </html>
