@@ -1,68 +1,73 @@
-SCOUT EN VIVO — LO QUE HACE DATA VOLLEY
-=======================================
+URGENTE — RESCATAR LA TARDE DE HOY
+==================================
 
-Un archivo: panel_vivo.html. Publicar y Ctrl+F5.
-
-
-TENIAS RAZON EN LAS DOS COSAS
------------------------------
-
-1) DESCARTAR "REPETIDOS" ERA PELIGROSO
-   Lo saque. En voley el mismo codigo se repite todo el tiempo de forma
-   legitima: el mismo jugador, el mismo gesto, la misma evaluacion. Compararlos
-   y borrar los iguales habria borrado acciones de verdad.
-
-2) FUI A VER COMO LO HACE DATA VOLLEY, EN VEZ DE INVENTAR
-   Mire su propio archivo de practica, el &Pra-AXPO NAFELS-2026-09-07.dvw:
-
-      298 lineas y TODAS son acciones
-      ni una marca de drill · ni una linea de punto · ni de rotacion
-      el marcador queda 0-0 de principio a fin
-
-   O sea: para DataVolley una practica es UNA LISTA CONTINUA. El New Drill
-   no parte el archivo ni escribe nada en el scout, solo pone el marcador
-   en cero. Nunca hay dos archivos.
-
-   Nuestro panel ya hacia lo mismo: la marca "▪ DRILL 1" se ve en pantalla
-   pero NO se exporta al .dvw (el exportador la saltea). El archivo sale
-   igual al de DataVolley. Eso estaba bien.
+2 archivos a la carpeta y publicar YA.
 
 
-LA UNION, REESCRITA CON ESE CRITERIO
-------------------------------------
-Si quedaron dos copias, son dos FOTOS de la misma lista continua tomadas en
-momentos distintos. Dos fotos de la misma lista comparten el principio: lo
-que cambia es hasta donde llego cada una.
+LO PRIMERO, ANTES DE PUBLICAR NADA
+----------------------------------
+Decile al asistente:
 
-Entonces: se busca hasta donde son iguales (comparando codigo y set EN
-ORDEN, que respeta la secuencia real del juego) y despues se agrega lo que
-trae cada una.
+   NO ABRA EL SCOUT EN VIVO.
 
-NO SE DESCARTA NINGUNA ACCION. Te muestra:
-
-    Copia 1: 427 códigos
-    Copia 2: 376 códigos
-    Tramo igual en las dos: N
-    Lo que agrega una: X
-    Lo que agrega la otra: Y
-    TOTAL: Z códigos
-
-Probado con dos listas que comparten 10 codigos —tres de ellos IGUALES entre
-si a proposito— y despues se separan: 15 + 13 quedaron en 18, sin perder
-ninguno.
-
-Si el tramo comun sale corto puede haber acciones repetidas al final. Se ven
-y se borran a mano. Es preferible que sobre y se vea, a que falte y no te
-enteres.
+El panel guarda solo cada vez que se toca algo. Si lo abre y empieza otra
+cosa, puede pisar lo que quedo de la tarde. Que no lo toque hasta bajar
+todo.
 
 
-LO DEMAS QUE VA EN ESTE ARCHIVO
+DONDE ESTA LO DE HOY A LA TARDE
 -------------------------------
-· La clave del aparato ya no cambia (la causa de que se partiera el archivo)
-· No se sube nada sin sesion iniciada
-· La sincronizacion no importa copias propias como partido aparte
-· El deshacer jugada quedo atado a SU partido: antes podia recortar los
-  codigos de otro archivo y perderlos sin aviso
-· El New Drill deja copia completa antes de tocar nada y controla que quede
-  exactamente un codigo mas
-· El espacio entre codigos se ve, como en DataVolley
+En la nube NO esta. Mire pv_encurso y quedo una sola ranura, de Sebastian,
+con 4 codigos, de las 09:12 de hoy. La hora y media de la tarde nunca
+llego ahi.
+
+Eso deja un solo lugar: el navegador de SU computadora. Ahi sigue, aunque
+en la app se vea vacio o mezclado.
+
+
+COMO SACARLO
+------------
+1. El asistente abre, EN SU PC y en el MISMO navegador donde scouteo:
+
+      volley-nafels.vercel.app/recuperar.html
+
+2. Toca el boton grande "⬇ Bajar TODO en un archivo".
+
+   Se lleva TODAS las claves del panel tal cual estan, sin elegir ni
+   filtrar. Aunque algo parezca vacio o roto, igual viene: es preferible
+   mirarlo despues con calma a descartarlo ahora.
+
+3. Te manda ese archivo .json sin abrirlo ni modificarlo.
+
+4. Me lo pasas y lo abro: ahi vamos a ver que hay de los dos drills y
+   cuanto se puede reconstruir.
+
+La pagina tambien lista todo lo que encuentra con su cantidad de codigos,
+incluidos los que tienen CERO. No esconde nada: si algo esta vacio hay que
+verlo, no ocultarlo.
+
+
+PARA QUE NO DEPENDA MAS DE LA SUERTE — LA CAJA NEGRA
+----------------------------------------------------
+Le agregue al panel una caja negra. Cada vez que guarda, deja ademas una
+copia aparte con la hora y la cantidad de codigos. Guarda las ULTIMAS 12 y
+nunca se pisan entre si: cada una es una foto de un momento distinto del
+entrenamiento.
+
+Se toma una foto nueva cada 25 codigos o cada 3 minutos, lo que pase
+primero. Ocupa poco.
+
+Con esto, si un scout se corrompe, se vacia o se mezcla, siempre hay varias
+fotos anteriores para volver. Aparecen todas en recuperar.html, ordenadas,
+y se baja la que sirva.
+
+Es lo que hoy no existia y por eso estamos buscando a ciegas.
+
+
+NOTA HONESTA
+------------
+No puedo prometerte que lo de la tarde este completo. Lo que si te puedo
+decir es que el navegador guarda mas de lo que muestra la app, y que hasta
+no ver ese archivo no hay que darlo por perdido.
+
+Si aparece incompleto, con la caja negra al menos no vuelve a pasar.

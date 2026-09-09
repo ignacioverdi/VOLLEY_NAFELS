@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260909-2122"></script>
-<script src="selector_categoria.js?v=20260909-2122"></script>
-<script src="lang.js?v=20260909-2122"></script>
+<script src="categorias_club.js?v=20260909-2130"></script>
+<script src="selector_categoria.js?v=20260909-2130"></script>
+<script src="lang.js?v=20260909-2130"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260909-2122">
+<link rel="stylesheet" href="movil.css?v=20260909-2130">
 </head>
 <body>
 
@@ -1230,16 +1230,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260909-2122" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260909-2122"></script>
-<script src="objetivos.js?v=20260909-2122" onerror="void 0"></script>
-<script src="video_delay.js?v=20260909-2122" onerror="void 0"></script>
+<script src="firebase.js?v=20260909-2130" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260909-2130"></script>
+<script src="objetivos.js?v=20260909-2130" onerror="void 0"></script>
+<script src="video_delay.js?v=20260909-2130" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260909-2122" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260909-2122"></script>
+<script src="plantel_nafels.js?v=20260909-2130" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260909-2130"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -1421,8 +1421,40 @@ if(M.vert===undefined) M.vert = false;    /* comando ROT: canchas verticales u h
 if(!M.setFirstServer) M.setFirstServer = M.serving || 'home';   /* quién sacó primero en este set */
 if(!M.home.six) M.home.six = M.home.lineup.slice();   /* formación con la que arrancó el set */
 if(!M.away.six) M.away.six = M.away.lineup.slice();
+/* ══════════════════════════════════════════════════════════════════════════
+   CAJA NEGRA
+   --------------------------------------------------------------------------
+   Cada vez que se guarda, se deja ademas una copia aparte con hora y cantidad
+   de codigos. Se conservan las ultimas 12 y NUNCA se pisan entre si: cada una
+   es una foto de un momento distinto del entrenamiento.
+
+   Por que hace falta: si el partido en curso se corrompe, se vacia o se
+   mezcla, hoy no queda de donde sacarlo. Con esto siempre hay varias fotos
+   anteriores para volver. Ocupa poco y evita perder una hora y media de
+   trabajo.
+
+   Se recuperan desde recuperar.html, o a mano:
+       JSON.parse(localStorage.getItem('pv_cajanegra'))
+   ══════════════════════════════════════════════════════════════════════════ */
+function _cajaNegra(){
+  try{
+    var n = (M && M.codes) ? M.codes.filter(function(c){ return c.c; }).length : 0;
+    if(!n) return;                       /* nada que guardar */
+    var caja = [];
+    try{ caja = JSON.parse(localStorage.getItem('pv_cajanegra')||'[]'); }catch(e){ caja = []; }
+    var ult = caja.length ? caja[caja.length-1] : null;
+    /* Una foto nueva cada 25 codigos o cada 3 minutos, lo que pase primero.
+       No hace falta guardar en cada tecla. */
+    if(ult && (n - ult.n) < 25 && (Date.now() - ult.t) < 180000) return;
+    caja.push({ t:Date.now(), n:n, id:(M&&M._id)||'', M:M });
+    while(caja.length > 12) caja.shift();
+    localStorage.setItem('pv_cajanegra', JSON.stringify(caja));
+  }catch(e){ /* si no entra en el navegador, no rompemos el scouteo */ }
+}
+
 function persist(){
   save('pv_match', M);
+  _cajaNegra();
   /* el try es por el orden de declaración: persist() está escrita antes que
      RALLY_UNDO, así que si llegara a llamarse durante la carga inicial todavía
      no existe. Después de cargar la página siempre está. */
@@ -7604,7 +7636,7 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260909-2122" onerror="void 0"></script>
-<script src="ayuda.js?v=20260909-2122"></script>
+<script src="volver_inicio.js?v=20260909-2130" onerror="void 0"></script>
+<script src="ayuda.js?v=20260909-2130"></script>
 </body>
 </html>
