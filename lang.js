@@ -286,6 +286,29 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    /* Etiquetas del panel sin el "(42)": el dibujo le saca el parentesis. */
+    '% Atq Alta': { en:'% Att High', de:'% Angr Hoch' },
+    '% Atq Central': { en:'% Att Middle', de:'% Angr Mitte' },
+    '% Atq R!': { en:'% Att R!', de:'% Angr A!' },
+    '% Atq R#+': { en:'% Att R#+', de:'% Angr A#+' },
+    '% Atq R-': { en:'% Att R-', de:'% Angr A-' },
+    '% Atq Rápida': { en:'% Att Quick', de:'% Angr Schnell' },
+    '% Atq Transición': { en:'% Att Transition', de:'% Angr Transition' },
+    '% Blq #': { en:'% Block #', de:'% Block #' },
+    '% Blq #+': { en:'% Block #+', de:'% Block #+' },
+    '% Defensa': { en:'% Defence', de:'% Abwehr' },
+    '% Recepción': { en:'% Reception', de:'% Annahme' },
+    '% Saque': { en:'% Serve', de:'% Aufschlag' },
+    'Informe': { en:'Report', de:'Bericht' },
+    'OBJETIVOS DEL EQUIPO': { en:'TEAM TARGETS', de:'TEAMZIELE' },
+    'Objetivos del equipo': { en:'Team targets', de:'Teamziele' },
+    'Podio': { en:'Podium', de:'Podest' },
+    'Tabla': { en:'Table', de:'Tabelle' },
+    'obj': { en:'tgt', de:'Ziel' },
+    '● Toque': { en:'● Tip', de:'● Lob' },
+    '★ Podio': { en:'★ Podium', de:'★ Podest' },
+    '☰ Tabla': { en:'☰ Table', de:'☰ Tabelle' },
+    '📋 Informe': { en:'📋 Report', de:'📋 Bericht' },
     'Plan de partido (preparado)': { en:'Match plan (prepared)', de:'Spielplan (vorbereitet)' },
     '📍 Ver dirección': { en:'📍 See address', de:'📍 Adresse ansehen' },
     /* Panel en vivo: indicadores, filtros y el modal de objetivos. */

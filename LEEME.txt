@@ -1,66 +1,51 @@
-EL PANEL EN VIVO, EN LOS TRES IDIOMAS
-=====================================
+LAS ULTIMAS DEL PANEL
+=====================
 
-   panel_voley.html
-   objetivos_config.js
-   lang.js
-
-Publicar (sin HACER_TODO) y despues Ctrl+Shift+R.
+Un archivo: lang.js. Publicar y Ctrl+Shift+R.
 
 
-LO QUE ENCONTRE
----------------
-1) SPANGLISH EN LOS BOTONES
+LO QUE YA FUNCIONA — verificado en la pagina publicada
+------------------------------------------------------
+   encabezado          214 px, sin pisarse
+   panel de objetivos  139 px, dos filas de baterias
+   botones con clave   los 5
 
-   En ingles se veia asi:
+   SPANGLISH: CERO en ingles y en aleman.
 
-      DIRECCIONES ATTACK        DIRECCIONES SERVE
-      ZONAS RECEPTION           DISTRIBUTION SETTER
-      PLAN OF MATCH
+   Los botones que antes salian mezclados ahora dicen:
 
-   La causa: esos botones tienen el texto partido en dos lineas con un <br>.
-   Eso los convierte en DOS textos separados, y el motor traduce cada mitad
-   por su cuenta: "Direcciones" se queda y "ataque" pasa a "Attack".
+      EN   SETTER DISTRIBUTION · ATTACK DIRECTIONS · SERVE DIRECTIONS
+           RECEPTION ZONES · MATCH PLAN
+      DE   ZUSPIELVERTEILUNG · ANGRIFFSRICHTUNGEN · AUFSCHLAGRICHTUNGEN
+           ANNAHMEZONEN · SPIELPLAN
 
-   Corregido: ahora cada boton lleva su clave y se traduce la frase entera.
-   Siguen viendose en dos lineas, pero eso lo hace el CSS.
+   Y el modal:
 
-      Setter distribution · Attack directions · Aufschlagrichtungen
-      Annahmezonen · Match plan
-
-2) 46 FRASES QUE NO ESTABAN
-
-   El modal:  ENTRENAMIENTO EN CURSO · INGRESA OBJETIVO · EFICIENCIA SAQUE
-              EFICIENCIA RECEPCION · BLOQUEO # + % · # TOQUES · # BLOCK OUT
-              # MB EN TRANSICIÓN · # PIPE EN SIDE OUT · # PIPE EN TRANSICIÓN
-              Logrado · En proceso · Sin datos aun
-
-   El panel:  OBJETIVOS DE EQUIPO
-
-   Los filtros: MAQUINA · RAPIDA · ALTA · TOQUE
-
-   Los otros paneles: Resumen Post Entrenamiento · Resumen del Entrenamiento
-                      Video en vivo · Plan de partido (preparado)
+      EN   TRAINING IN PROGRESS · GOALS OF THE DAY · SET A TARGET
+           SERVE EFFICIENCY · RECEPTION EFFICIENCY · # TOUCHES
+      DE   TRAINING LÄUFT · TAGESZIELE · ZIEL EINGEBEN
+           AUFSCHLAGEFFIZIENZ · ANNAHME-EFFIZIENZ · # BERÜHRUNGEN
 
 
-PROBADO
--------
-   en  ENTRENAMIENTO EN CURSO  ->  TRAINING IN PROGRESS
-   de  ENTRENAMIENTO EN CURSO  ->  TRAINING LÄUFT
-   en  INGRESA OBJETIVO        ->  SET A TARGET
-   de  INGRESA OBJETIVO        ->  ZIEL EINGEBEN
-   de  # MB EN TRANSICIÓN      ->  # MB IN DER TRANSITION
-   en  OBJETIVOS DE EQUIPO     ->  TEAM TARGETS
-   de  RAPIDA                  ->  SCHNELL
-   de  TOQUE                   ->  LOB
+LO QUE FALTABA, Y POR QUE
+-------------------------
+Quedaban sin traducir las etiquetas del panel de arriba:
 
-   Barrido final del panel: 0 frases sin traducir en el HTML y 0 en el
-   JavaScript.
+      % RECEPCIÓN · % ATQ RÁPIDA · % ATQ TRANSICIÓN
 
+La causa es un efecto de mi propio cambio: para que las 12 baterias entren
+en una fila, el dibujo le SACA el "(42)" al nombre. Entonces la frase que
+llega al traductor ya no es "% Saque (42)" —que si estaba en el diccionario—
+sino "% Saque", que no estaba.
 
-UNA COSA PARA TENER EN CUENTA
------------------------------
-Si alguna vez agregas un boton con el texto partido en dos lineas usando
-<br>, va a volver a pasar lo mismo: el motor trata cada mitad como una
-frase aparte. La forma segura es poner el texto entero y usar el CSS para
-que se parta solo.
+Se dieron de alta las 12 etiquetas en su forma corta, mas:
+
+      OBJETIVOS DEL EQUIPO · ☰ Tabla · 📋 Informe · ★ Podio · ● Toque
+
+Probado:
+   en  % Recepción          ->  % Reception
+   de  % Recepción          ->  % Annahme
+   de  % Atq Transición     ->  % Angr Transition
+   en  OBJETIVOS DEL EQUIPO ->  TEAM TARGETS
+   de  ☰ Tabla              ->  ☰ Tabelle
+   de  ● Toque              ->  ● Lob
