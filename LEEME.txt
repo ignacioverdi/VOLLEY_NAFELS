@@ -1,62 +1,58 @@
-SIMPLE Y AUTOMATICO
-===================
+NEW DRILL — COMO FUNCIONA Y QUE SE ARREGLO
+==========================================
 
-2 archivos: panel_vivo.html y recuperar.html.
-Publicar y Ctrl+Shift+R.
-
-
-LO QUE SACAMOS
---------------
-Fuera el boton del salvavidas. Fuera la ventana que preguntaba donde
-guardar. Fuera el paso extra.
-
-Tenias razon: si para no perder el trabajo hay que acordarse de tocar algo,
-tarde o temprano no se toca.
+Un archivo: panel_vivo.html. Publicar y Ctrl+Shift+R.
 
 
-COMO FUNCIONA AHORA — no hay que hacer NADA
--------------------------------------------
-   1. Abrir el Scout en Vivo
-   2. Cargar equipos y formacion
-   3. Scoutear
+QUE HACE EL BOTON NEW DRILL
+---------------------------
+Lo mismo que DataVolley: NADA de partir el archivo.
 
-Eso es todo. Igual que siempre. Sin botones nuevos, sin ventanas, sin
-acordarse de nada.
+   1. Pregunta el marcador inicial ("0-0", o "15-15" para practicar finales)
+   2. Pone el marcador en ese numero
+   3. Deja una marca ▪ DRILL 1 en la lista, para que vos veas donde empezo
+   4. Se sigue scouteando en el MISMO archivo
 
+Esa marca se ve en pantalla pero NO se exporta al .dvw. Lo verifique contra
+un archivo de practica hecho con DataVolley: 298 lineas y todas son
+acciones, ni una marca de drill. Nuestro .dvw sale igual.
 
-QUE PASA POR DEBAJO
--------------------
-Despues de cada jugada el panel guarda una foto del entrenamiento en el
-almacen GRANDE del navegador (IndexedDB): cientos de megas, en vez de los
-5 MB del almacen chico.
-
-Eso importa porque el 09/09 fallo justamente el almacen chico. Y la copia
-de seguridad que teniamos vivia ahi tambien: la red estaba atada al mismo
-clavo que se soltaba. Ahora esta en otro lado.
-
-No pide permiso, no abre ventanas, no se ve. Guarda las ultimas 30 fotos.
-
-PROBADO EN EL NAVEGADOR, simulando un entrenamiento de 300 codigos:
-
-   guardo 20 fotos: 15, 30, 45, 60 ... 285, 300
-   la ultima tenia los 300 codigos completos
-
-O sea: en el peor de los casos se pierden 15 codigos, no una hora y media.
+O sea: un drill nuevo es un cambio de marcador, no un archivo nuevo.
 
 
-SI ALGO PASA
-------------
-Abrir  volley-nafels.vercel.app/recuperar.html  en esa computadora.
+LO QUE ENCONTRE AHORA
+---------------------
+El New Drill ya guardaba una copia antes de tocar nada. Pero la guardaba
+asi:
 
-Arriba de todo aparece "🛟 La red" con las fotos ordenadas, la mas completa
-primera. Se toca "Códigos" o "Completo" y listo.
+    localStorage.setItem('pv_antes_drill', ...)   dentro de un catch vacio
 
-Un solo boton "Bajar TODO" se lleva absolutamente todo, incluida la red.
+Es decir: en EL MISMO ALMACEN QUE FALLO el 09/09, y con el mismo catch que
+se traga el error. Si ese almacen estaba roto, la copia de seguridad del
+drill tampoco se guardaba. La red estaba atada al clavo que se soltaba.
+
+CORREGIDO: ahora el drill fuerza una foto en LA RED (el almacen grande,
+independiente) justo antes de tocar los codigos, y otra justo despues. Asi
+queda una copia de cada lado del corte.
 
 
-EL RESUMEN
-----------
-   antes    si fallaba el guardado, se perdia todo y sin aviso
-   ahora    se guarda solo en otro lado, cada 15 codigos, sin tocar nada
+PROBADO CON EL ESCENARIO EXACTO DEL 09/09
+-----------------------------------------
+   40 codigos  ->  DRILL 1  ->  50 codigos mas
+   ROMPO localStorage (el fallo real)
+   ->  DRILL 2  ->  30 codigos mas
 
-No hay proceso nuevo que aprender. Scoutean igual que siempre.
+   en pantalla: 122 codigos
+   la red guardo: 5 fotos -> 40, 41, 91, 92, 122
+   la mas completa: 122
+
+   VEREDICTO: todo salvado, incluido lo posterior al segundo drill.
+
+Eso es justo lo que se perdio la vez pasada.
+
+
+PARA SEBASTIAN NO CAMBIA NADA
+-----------------------------
+Toca New Drill igual que siempre, pone el marcador y sigue. No hay ningun
+paso nuevo. Lo unico distinto es que ahora, si algo falla, hay de donde
+volver.
