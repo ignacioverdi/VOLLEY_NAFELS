@@ -1,10 +1,12 @@
 window.HISTORIAL_DATA = {
-  "generado": "09/09/2026, 15:55:41",
+  "generado": "09/09/2026, 16:13:23",
   "entrenamientos": [
     {
       "fecha": "04/09/2026",
       "tipo": "E",
       "rival": "Nafels",
+      "turno": "",
+      "turnoTxt": "",
       "resultado": {
         "nafels": 0,
         "rival": 0,
@@ -1169,6 +1171,8 @@ window.HISTORIAL_DATA = {
       "fecha": "07/09/2026",
       "tipo": "E",
       "rival": "Nafels",
+      "turno": "",
+      "turnoTxt": "",
       "resultado": {
         "nafels": 0,
         "rival": 0,
@@ -2237,6 +2241,8 @@ window.HISTORIAL_DATA = {
       "fecha": "08/09/2026",
       "tipo": "E",
       "rival": "PRUEBA",
+      "turno": "M",
+      "turnoTxt": "Mañana",
       "resultado": {
         "nafels": 0,
         "rival": 1,
@@ -2923,6 +2929,8 @@ window.HISTORIAL_DATA = {
       "fecha": "08/09/2026",
       "tipo": "E",
       "rival": "Nafels",
+      "turno": "",
+      "turnoTxt": "",
       "resultado": {
         "nafels": 0,
         "rival": 0,

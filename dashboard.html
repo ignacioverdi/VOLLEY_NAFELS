@@ -805,6 +805,18 @@ function renderIframe(iframeId, src){
 // ════════════════════════════════════════════════════════════
 // HELPERS DATA
 // ════════════════════════════════════════════════════════════
+
+/* DOBLE TURNO: manana y tarde el mismo dia.
+   El DVW no trae la hora, asi que el turno se detecta del nombre del archivo
+   en el motor y llega aca como 'M' o 'T'. Sin marca no muestra nada, que es
+   el caso de los dias con un solo entrenamiento. */
+function turnoTxt(s){
+  var t = s && (s.turno || '');
+  if(t==='M') return ' · Mañana';
+  if(t==='T') return ' · Tarde';
+  return '';
+}
+
 function getSesiones(filtro){
   if(!DATA) return [];
   filtro = filtro||'todos';
@@ -919,7 +931,7 @@ function eqBuildPanel(){
       + '<button class="ftag" onclick="eqSelNinguna()">Ninguna</button></div>';
   ses.forEach(function(x,i){
     var esP = !!(x && x.rival);
-    var etiqueta = (x.fecha||'') + ' · ' + (esP ? ('vs '+(x.rival||'RIVAL')) : 'Entrenamiento');
+    var etiqueta = (x.fecha||'') + turnoTxt(x) + ' · ' + (esP ? ('vs '+(x.rival||'RIVAL')) : 'Entrenamiento');
     var on = EQ_SEL ? EQ_SEL.has(i) : true;
     h += '<label style="display:flex;gap:8px;align-items:center;padding:6px 4px;font-size:13px;cursor:pointer">'
        + '<input type="checkbox" '+(on?'checked':'')+' onchange="eqTildar('+i+',this.checked)">'
@@ -954,7 +966,7 @@ function eqPintarMulti(){
   if(n>=tot || !EQ_SEL){ b.textContent = ((window.tr&&window.getLang)?(tr('t_todas_ses',getLang())||'Todas las sesiones'):'Todas las sesiones')+' ('+tot+')'; }
   else if(n===1){
     var i=[...EQ_SEL][0], x=ses[i]||{};
-    b.textContent = (x.fecha||'') + (x.rival ? (' · vs '+x.rival) : ' · Entrenamiento');
+    b.textContent = (x.fecha||'') + turnoTxt(x) + (x.rival ? (' · vs '+x.rival) : ' · Entrenamiento');
   }
   else { b.textContent = n+' '+((window.tr&&window.getLang)?(tr('t_de',getLang())||'de'):'de')+' '+tot+' '+((window.tr&&window.getLang)?(tr('t_sesiones',getLang())||'sesiones'):'sesiones'); }
   var btn=document.getElementById('eq-multi-btn');
@@ -998,7 +1010,7 @@ function rebuildEqDropdown(){
   ses.forEach(function(s,i){
     var esP=(s.tipo||'P')==='P';
     var res=s.resultado||{};
-    html+='<option value="'+i+'">'+(esP?'🏆':'🏋️')+' '+s.fecha+' — '+(esP?'vs '+(s.rival||'RIVAL'):'Entrenamiento')+'</option>';
+    html+='<option value="'+i+'">'+(esP?'🏆':'🏋️')+' '+s.fecha+turnoTxt(s)+' — '+(esP?'vs '+(s.rival||'RIVAL'):'Entrenamiento')+'</option>';
   });
   sel.innerHTML=html;
   sel.value=String(EQ_SESION);
@@ -1689,7 +1701,7 @@ function renderJugContent(){
       var jd=s.jugadores.find(function(x){return x.n===nombre;});
       if(!jd||jd.sT+jd.rT+jd.aT+jd.bT===0)return null;
       var esP=(s.tipo||'P')==='P';
-      return{fecha:s.fecha,tipo:s.tipo,rival:s.rival,esP:esP,j:jd};
+      return{fecha:s.fecha,tipo:s.tipo,rival:s.rival,turno:s.turno||'',esP:esP,j:jd};
     }).filter(Boolean);
     if(!rows.length){cont.innerHTML='<div class="empty">Sin sesiones para este jugador</div>';return;}
     cont.innerHTML='<div class="tabla-wrap"><table><thead><tr>'
@@ -1706,7 +1718,7 @@ function renderJugContent(){
         var ae=j.aT>0?VB_EFF.ataque(j):null;
         var bg=ri%2?'rgba(255,255,255,.015)':'transparent';
         return'<tr style="background:'+bg+'">'
-          +'<td><span style="font-size:11px;color:var(--mut);margin-right:6px">'+(r.esP?'🏆':'🏋️')+' '+r.fecha+'</span>'+(r.esP?'vs '+r.rival:'Entrenamiento')+'</td>'
+          +'<td><span style="font-size:11px;color:var(--mut);margin-right:6px">'+(r.esP?'🏆':'🏋️')+' '+r.fecha+turnoTxt(r)+'</span>'+(r.esP?'vs '+r.rival:'Entrenamiento')+'</td>'
           +'<td style="font-size:15px;font-weight:900;color:'+effColor(se,'sq')+'">'+(se!==null?fmt(se):'—')+'</td><td style="color:#f59e0b">'+(j.sT||'—')+'</td>'
           +'<td style="font-size:15px;font-weight:900;color:'+effColor(re,'rec')+'">'+(re!==null?fmt(re):'—')+'</td><td style="color:#22c55e">'+(j.rT||'—')+'</td>'
           +'<td style="font-size:15px;font-weight:900;color:'+effColor(ae,'atqq')+'">'+(ae!==null?fmt(ae):'—')+'</td><td style="color:#818cf8">'+(j.aT||'—')+'</td>'

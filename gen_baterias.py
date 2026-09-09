@@ -1,3 +1,4 @@
+import re
 # -*- coding: utf-8 -*-
 """
 gen_baterias.py — Genera las baterías de los 13 partidos leyendo los DVW crudos,
@@ -265,7 +266,8 @@ def parse_dvw(path):
 
     scout=txt.split('[3SCOUT]')[-1].strip().splitlines()
     # resultado (sets) — simple: contar de la meta si está
-    return {'code':code,'rival':rival,'date':date,'side':side,'names':names,'scout':scout}
+    return {'code':code,'rival':rival,'date':date,'side':side,'names':names,'scout':scout,
+            'turno':_turno(base)}
 
 def season_from_date(date):
     """Temporada 'YYYY/YY' desde la fecha. Arranca en agosto, igual que en
@@ -293,11 +295,44 @@ def _slug(t):
     t=unicodedata.normalize('NFKD', t or '').encode('ascii','ignore').decode()
     return re.sub(r'[^A-Za-z0-9]+','', t).upper()[:12] or 'SIN'
 
-def _mk_id(code, tipo, date, rival, usados):
+
+def _turno(nombre_archivo):
+    """Doble turno: manana y tarde el mismo dia.
+
+    El DVW NO trae la hora (el campo de [3MATCH] viene vacio), asi que el
+    turno se saca del nombre del archivo. Se aceptan las formas que se usan
+    en la practica, en castellano, ingles y aleman.
+
+    Sin marca devuelve '' y la sesion se trata como unica del dia. Si hay dos
+    sin marca, el _mk_id les pone -2 y no se pisan igual.
+    """
+    # Sufijo corto al final del nombre: "...-M.dvw" o "...-T.dvw". Es lo que
+    # pone el panel al exportar. Se mira SOLO al final, para no confundirlo
+    # con una M o una T que aparezca en el nombre del equipo.
+    import os as _os
+    _base = _os.path.splitext(_os.path.basename(nombre_archivo or ''))[0].upper()
+    if _base.endswith('-M'): return 'M'
+    if _base.endswith('-T'): return 'T'
+    n = (nombre_archivo or '').upper()
+    # Palabras largas: alcanza con que aparezcan.
+    for pal, t in [('MORNING','M'), ('MANANA','M'), ('MAÑANA','M'), ('MORGEN','M'),
+                   ('VORMITTAG','M'), ('TURNO1','M'),
+                   ('AFTERNOON','T'), ('TARDE','T'), ('NACHMITTAG','T'), ('ABEND','T'),
+                   ('EVENING','T'), ('NOCHE','T'), ('TURNO2','T')]:
+        if pal in n: return t
+    # Siglas cortas: tienen que ser palabra suelta. Sin esto, "AMRISWIL"
+    # se leia como "AM" y el partido contra Amriswil quedaba marcado
+    # como entrenamiento de manana.
+    for pal, t in [('AM','M'), ('T1','M'), ('PM','T'), ('T2','T')]:
+        if re.search(r'(?<![A-Z0-9])' + pal + r'(?![A-Z0-9])', n): return t
+    return ''
+
+def _mk_id(code, tipo, date, rival, usados, turno=''):
     """Un id estable y unico por sesion. Con codigo oficial se usa ese; si no
     —el caso de los entrenamientos— se arma con el tipo, la fecha y el rival."""
-    base = code if code else ('%s%s-%s' % ('E' if tipo=='entrenamiento' else 'P',
-                                           date or 'sinfecha', _slug(rival)))
+    base = code if code else ('%s%s-%s%s' % ('E' if tipo=='entrenamiento' else 'P',
+                                             date or 'sinfecha', _slug(rival),
+                                             ('-'+turno) if turno else ''))
     i, k = base, 2
     while i in usados:
         i = '%s-%d' % (base, k); k += 1
@@ -331,7 +366,7 @@ def build(fuentes, out='datos_baterias.js', filtro_temp=None):
             r=parse_dvw(f)
             if not r: continue
             if filtro_temp and not temp_carpeta and season_from_date(r['date']) != filtro_temp: continue
-            sid=_mk_id(r['code'], tipo, r['date'], r['rival'], usados)
+            sid=_mk_id(r['code'], tipo, r['date'], r['rival'], usados, r.get('turno',''))
             pl=_calc_baterias(r['scout'], r['side'])
             jug={}
             for num,P in pl.items():
@@ -340,7 +375,7 @@ def build(fuentes, out='datos_baterias.js', filtro_temp=None):
                 if not nom: continue
                 jug[nom]=_bat_to_pcts(P)
             eq=_bat_to_pcts(pl['__EQUIPO__']) if '__EQUIPO__' in pl else {}
-            matches.append({'id':sid,'tipo':tipo,'rival':r['rival'],'fecha':r['date'],
+            matches.append({'id':sid,'tipo':tipo,'rival':r['rival'],'fecha':r['date'],'turno':r.get('turno',''),
                             'jug':jug,'eq':eq,'_acum':pl,'names':r['names']})
 
     matches.sort(key=lambda m:(m['fecha'], m['id']))
@@ -385,7 +420,8 @@ def build(fuentes, out='datos_baterias.js', filtro_temp=None):
         porTipo[tipo]={'total':len(sub),'jug':j_t,'eq':e_t,
                        'ids':[m['id'] for m in sub]}
 
-    meta=[{'id':m['id'],'tipo':m['tipo'],'rival':m['rival'],'nombre':m['rival'],'fecha':m['fecha']} for m in matches]
+    meta=[{'id':m['id'],'tipo':m['tipo'],'rival':m['rival'],'nombre':m['rival'],'fecha':m['fecha'],
+           'turno':m.get('turno','')} for m in matches]
     ind=[{'id':m['id'],'tipo':m['tipo'],'jug':m['jug'],'eq':m['eq']} for m in matches]
     OUT={'total':len(matches),'meta':meta,'jug':jug_acum,'ind':ind,'eq':eq_acum,
          'porTipo':porTipo,'temporada':filtro_temp or ''}

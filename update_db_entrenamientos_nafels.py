@@ -101,10 +101,13 @@ def _sumar_al_historial(entrenamientos, output_dir='.'):
 
     yaesta = set()
     for e in previo:
-        yaesta.add((e.get('fecha', ''), e.get('rival', ''), e.get('tipo', '')))
+        yaesta.add((e.get('fecha', ''), e.get('rival', ''), e.get('tipo', ''), e.get('turno', '')))
 
     for e in (entrenamientos or []):
-        clave = (e.get('fecha', ''), e.get('rival', ''), e.get('tipo', ''))
+        # El turno entra en la clave. Sin el, dos entrenamientos del mismo dia
+        # contra el mismo rival se tomaban como repetidos y el segundo se
+        # descartaba sin avisar.
+        clave = (e.get('fecha', ''), e.get('rival', ''), e.get('tipo', ''), e.get('turno', ''))
         if clave in yaesta:
             continue
         previo.append(e)
@@ -324,6 +327,35 @@ def infer_pos(atk_acts):
     return best if scores[best] > 0 else '?'
 
 # ── PARSE DVW (both teams) ────────────────────────────────────────
+
+def _turno(nombre_archivo):
+    """Doble turno: manana y tarde el mismo dia. El DVW no trae la hora, asi
+    que el turno sale del nombre del archivo. Devuelve 'M', 'T' o ''."""
+    # Sufijo corto al final del nombre: "...-M.dvw" o "...-T.dvw". Es lo que
+    # pone el panel al exportar. Se mira SOLO al final, para no confundirlo
+    # con una M o una T que aparezca en el nombre del equipo.
+    import os as _os
+    _base = _os.path.splitext(_os.path.basename(nombre_archivo or ''))[0].upper()
+    if _base.endswith('-M'): return 'M'
+    if _base.endswith('-T'): return 'T'
+    n = (nombre_archivo or '').upper()
+    # Palabras largas: alcanza con que aparezcan.
+    for pal, t in [('MORNING','M'), ('MANANA','M'), ('MAÑANA','M'), ('MORGEN','M'),
+                   ('VORMITTAG','M'), ('TURNO1','M'),
+                   ('AFTERNOON','T'), ('TARDE','T'), ('NACHMITTAG','T'), ('ABEND','T'),
+                   ('EVENING','T'), ('NOCHE','T'), ('TURNO2','T')]:
+        if pal in n: return t
+    # Siglas cortas: tienen que ser palabra suelta. Sin esto, "AMRISWIL"
+    # se leia como "AM" y el partido contra Amriswil quedaba marcado
+    # como entrenamiento de manana.
+    for pal, t in [('AM','M'), ('T1','M'), ('PM','T'), ('T2','T')]:
+        if re.search(r'(?<![A-Z0-9])' + pal + r'(?![A-Z0-9])', n): return t
+    return ''
+
+def _etiqueta_turno(t):
+    return {'M':'Mañana', 'T':'Tarde'}.get(t, '')
+
+
 def parse_dvw_both(fpath, temporada):
     with open(fpath, encoding='utf-8', errors='ignore') as f:
         content = f.read()
@@ -1668,6 +1700,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         if tsets+rsets==0 and not _es_entren: continue
 
         games.append({'file':fname,'date':date,'rival':rival,'team_home':team_home,
+                       'turno':_turno(fname),
                        'tsets':tsets,'rsets':rsets,'result':'V' if tsets>rsets else 'D',
                        'set_strings':set_strings,'content_path':os.path.join(dvw_dir,fname)})
 
@@ -1752,6 +1785,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
                 'aSo':_blk(aso),'aTr':_blk(atr),
                 'bT':bT,'bPt':bk,'bPtPos':bp,'bEff':bEff,'bAdm':bExc,'bVend':bSl,'bNeg':bNeg,'bErr':bErr})
         historial.append({'fecha':'/'.join(reversed(g['date'].split('-'))),'tipo':'E','rival':g['rival'],
+            'turno':g.get('turno',''), 'turnoTxt':_etiqueta_turno(g.get('turno','')),
             'resultado':{'nafels':g['tsets'],'rival':g['rsets'],'sets':g['set_strings']},'jugadores':jugs})
 
     now = datetime.now().strftime('%d/%m/%Y, %H:%M:%S')

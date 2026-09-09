@@ -22,6 +22,24 @@ import os,re,sys,json,glob,unicodedata
 #    acciones en el medio de la red. Al subir el numero se regeneran solos.
 DATA_VERSION = 7
 
+
+def _turno(nombre_archivo):
+    """Doble turno: manana y tarde el mismo dia. El DVW no trae la hora, asi
+    que el turno sale del nombre del archivo. Devuelve 'M', 'T' o ''."""
+    n = (nombre_archivo or '').upper()
+    _base = os.path.splitext(os.path.basename(n))[0]
+    if _base.endswith('-M'): return 'M'
+    if _base.endswith('-T'): return 'T'
+    for pal, t in [('MORNING','M'), ('MANANA','M'), ('MAÑANA','M'), ('MORGEN','M'),
+                   ('VORMITTAG','M'), ('TURNO1','M'),
+                   ('AFTERNOON','T'), ('TARDE','T'), ('NACHMITTAG','T'), ('ABEND','T'),
+                   ('EVENING','T'), ('NOCHE','T'), ('TURNO2','T')]:
+        if pal in n: return t
+    for pal, t in [('AM','M'), ('T1','M'), ('PM','T'), ('T2','T')]:
+        if re.search(r'(?<![A-Z0-9])' + pal + r'(?![A-Z0-9])', n): return t
+    return ''
+
+
 def fix_enc(x):
     # Los DVW pueden venir en UTF-8 leido como latin-1 (mojibake "NÃ¤fels"). Lo corrige.
     if x and 'Ã' in x:
@@ -150,7 +168,10 @@ def parse_dvw(path, ent=False):
     mcode=re.search(r'&?[\s_]*(\d{5,6})(?!\d)',base); mdate=re.search(r'(\d{4}-\d{2}-\d{2})',base)
     date=mdate.group(1) if mdate else ''
     if mcode: code=mcode.group(1)
-    elif ent and date: code='ENT'+date.replace('-','')
+    # El turno entra en el codigo. Sin el, los dos entrenamientos del mismo
+    # dia compartian el codigo ENT20260908 y en la pantalla de videos
+    # aparecia UNO SOLO: el segundo no se podia cargar.
+    elif ent and date: code='ENT'+date.replace('-','')+_turno(base)
     elif ent: code='ENT_'+re.sub(r'[^A-Za-z0-9]','',base)[:12]
     else:
         # ══ Partido sin codigo oficial ═══════════════════════════════════

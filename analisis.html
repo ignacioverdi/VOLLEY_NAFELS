@@ -5,7 +5,16 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Análisis de Partidos — NAFELS VOLEY</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script>window.OBJETIVOS_CONFIG=window.OBJETIVOS_CONFIG||{};</script>
+<script>
+/* DOBLE TURNO: manana y tarde el mismo dia. El turno llega desde el motor
+   como 'M' o 'T'; sin marca no muestra nada. */
+function turnoTxt(s){
+  var t = s && (s.turno || '');
+  if(t==='M') return ' · Mañana';
+  if(t==='T') return ' · Tarde';
+  return '';
+}
+window.OBJETIVOS_CONFIG=window.OBJETIVOS_CONFIG||{};</script>
 <!-- VB: selector PARTIDO/ENTRENAMIENTO - carga los datos segun el modo elegido -->
 <script>(function(){var ent=false;try{ent=(localStorage.getItem('vb_modo')||'partido')==='entrenamiento';}catch(e){}
 function w(s){document.write('<scr'+'ipt src="'+s+'" onerror="void 0"><\/scr'+'ipt>');}
@@ -476,7 +485,7 @@ function renderPartidosGrid(){
         '<div class="pb-res '+(ganado?'res-win':'res-loss')+'">NAFELS '+(setsDelClub(res))+' — '+(res.rival||0)+'</div>'+
         '<div class="pb-sets">'+sets+'</div>';
     } else {
-      btn.innerHTML = '<div class="pb-fecha">🏋️ '+(p.fecha||'')+'</div><div class="pb-rival">'+(p.rival||'Entrenamiento')+'</div>'+
+      btn.innerHTML = '<div class="pb-fecha">🏋️ '+(p.fecha||'')+turnoTxt(p)+'</div><div class="pb-rival">'+(p.rival||'Entrenamiento')+'</div>'+
         '<div class="pb-res" style="color:var(--indigo)">ENTRENAMIENTO</div>';
     }
     btn.onclick = function(){ selectPartido(i, this); };

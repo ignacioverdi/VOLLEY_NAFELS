@@ -1,52 +1,87 @@
-LAS ULTIMAS: PALABRAS SIN ACENTO
-================================
+DOBLE TURNO — LOS TRES PUNTOS
+=============================
 
-Los archivos a la carpeta y publicar. Ctrl+F5.
-
-
-PRIMERO: EL ARREGLO ANTERIOR FUNCIONA
--------------------------------------
-El boton de sesiones ahora cambia con el idioma:
-
-  es  Todas las sesiones (4)
-  en  All sessions (4)
-  de  Alle Einheiten (4)
-
-Y en el chequeo limpio: 0 frases sin traducir, 0 spanglish.
+9 archivos a la carpeta, HACER_TODO, publicar.
 
 
-UN AVISO IMPORTANTE SOBRE LA MEDICION
--------------------------------------
-La primera medicion dio mal, pero era falsa alarma: Chrome tenia el
-TRADUCTOR AUTOMATICO encendido sobre la pagina. Aparecian cosas como
-"Panel de control del entrenador", "ACEPTACION", "SUPOSICION" y hasta
-"Valora esta traduccion". Nada de eso es de la app: eran 574 etiquetas
-que mete Google encima.
+LO PRIMERO: LOS DOS ENTRENAMIENTOS DEL 08/09 ESTAN
+--------------------------------------------------
+Verifique los archivos contra el dashboard y NO se perdio nada:
 
-Si alguna vez ves palabras raras que no pusiste vos, fijate si el
-navegador ofrecio traducir la pagina. Conviene decirle que NO para
-espanol, porque pisa la traduccion propia de la app.
+  MORNING (AXPO NAFELS vs PRUEBA)     240 saques · 185 recep · 427 acciones
+  Pra-AXPO NAFELS (NAFELS vs NAFELS)  203 ataques · 159 def · 904 acciones
+
+Pero se distinguian POR CASUALIDAD, porque escribiste distinto el rival.
 
 
-ESTA ENTREGA: +34 frases
-------------------------
-Palabras castellanas SIN ACENTO. El barrido las buscaba por tilde o por
-articulo ("de", "la", "los"), asi que estas se escapaban:
+(b) EL .DVW DE LA APP ENTRABA COMO PARTIDO, NO COMO ENTRENAMIENTO
+-----------------------------------------------------------------
+Es lo que se ve en tu captura. Comparando los archivos:
 
-  Actualizado:  ·  Total / TOTAL  ·  JUGADO  ·  Cerrar / CERRAR
-  Buscar  ·  Guardar / GUARDAR  ·  Volver  ·  Copiar  ·  Borrar
-  TEMPORADA  ·  Comentario  ·  Nuevo partido  ·  ULTIMO PUNTO
-  Cargando…  ·  LIMPIAR TODO  ·  Fecha (opcional)  ·  Abrir archivo
+  DataVolley  [3MATCH]  07/09/2026;;2024/2025;PRE-SEASON;Practice;...
+  la app      [3MATCH]  08/09/2026;;;;;;;;...        <- todo vacio
 
-Probado:
-  Actualizado: 08/09/2026, 15:51:15  ->  Updated: 08/09/2026, 15:51:15   EN
-                                     ->  Aktualisiert: 08/09/2026...    DE
-  TOTAL   -> GESAMT      DE
-  Cerrar  -> Schließen   DE
-  JUGADO  -> PLAYED      EN
+  DataVolley  [3TEAMS]  AXPO NAFELS  vs  AXPO NAFELS   <- mismo equipo
+  la app      [3TEAMS]  AXPO NAFELS  vs  PRUEBA        <- parece rival
 
-La fecha funciona porque el motor traduce el prefijo conocido y deja el
-numero intacto.
+DataVolley decide si es practica o partido por esas columnas. Vacias, lo
+toma como partido contra un rival llamado "Prueba".
+
+CORREGIDO. En modo entrenamiento el panel ahora escribe:
+  · temporada (se arma sola: de agosto a julio, como el calendario real)
+  · competencia PRE-SEASON
+  · fase Practice
+  · los DOS equipos con el nombre del club
+
+Los .dvw que exportes de ahora en mas van a entrar al DataVolley como
+"PRE-SEASON, Practice", igual que los que hace el propio DataVolley.
 
 
-Version de los scripts: 20260909-1310
+(c) LA M EN EL NOMBRE
+---------------------
+El panel ahora agrega el turno al nombre del archivo:
+
+  &2026-09-15 AXP-ENTRENAMIENTO-M.dvw     (manana)
+  &2026-09-15 AXP-ENTRENAMIENTO-T.dvw     (tarde)
+
+Si no elegiste turno, lo propone por la hora: antes de las 14, manana.
+
+Y los motores leen el turno del nombre. Reconocen, en tres idiomas:
+  MANANA:  MORNING · MANANA · MORGEN · VORMITTAG · AM · T1 · sufijo -M
+  TARDE:   AFTERNOON · TARDE · NACHMITTAG · ABEND · NOCHE · PM · T2 · -T
+
+OJO con un detalle: "AM" y "PM" se buscan como palabra suelta. Sin eso,
+"&2026-09-15 AXP-AMRISWIL.dvw" se leia como turno manana por el "AM" de
+AMRISWIL, y un partido quedaba marcado como entrenamiento. Probado:
+AMRISWIL y LAUSANNE ya no disparan nada.
+
+
+(a) EL VIDEO DE AMBOS
+---------------------
+En la pantalla de videos aparecia UNA sola fila del 08/09. La de la tarde
+no estaba: el codigo de video se armaba solo con la fecha (ENT20260908),
+asi que los dos entrenamientos compartian codigo y uno tapaba al otro.
+
+Ahora el codigo incluye el turno:
+  ENT20260908M   ENT20260908T
+
+Con eso las dos sesiones aparecen y podes cargarle video a cada una.
+
+
+ADEMAS: YA NO SE PIERDEN SESIONES
+---------------------------------
+Habia un control de duplicados con clave (fecha, rival, tipo). Dos
+entrenamientos el mismo dia contra el mismo rival: el segundo se
+DESCARTABA EN SILENCIO. Ahora la clave incluye el turno.
+
+
+DONDE SE VE
+-----------
+Dashboard (desplegable, panel de casillas, boton y tabla), analisis,
+historial y plan de partido muestran:
+
+  08/09/2026 · Mañana — Entrenamiento
+  08/09/2026 · Tarde  — Entrenamiento
+
+Traducido: Morning / Afternoon · Vormittag / Nachmittag.
+Los dias con un solo entrenamiento no muestran nada, como antes.

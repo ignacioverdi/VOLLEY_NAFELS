@@ -278,6 +278,10 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    ' · Mañana': { en:' · Morning', de:' · Vormittag' },
+    ' · Tarde': { en:' · Afternoon', de:' · Nachmittag' },
+    'Mañana': { en:'Morning', de:'Vormittag' },
+    'Tarde': { en:'Afternoon', de:'Nachmittag' },
     /* Palabras castellanas SIN acento. El barrido las buscaba por tilde o
        por articulo, asi que estas se escapaban: 'Total', 'Cerrar', 'JUGADO'. */
     'Abrir .dvw': { en:'Open .dvw', de:'.dvw öffnen' },

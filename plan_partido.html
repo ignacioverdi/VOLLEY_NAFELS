@@ -295,6 +295,15 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 </div>
 
 <script>
+/* DOBLE TURNO: manana y tarde el mismo dia. El turno llega desde el motor
+   como 'M' o 'T'; sin marca no muestra nada. */
+function turnoTxt(s){
+  var t = s && (s.turno || '');
+  if(t==='M') return ' · Mañana';
+  if(t==='T') return ' · Tarde';
+  return '';
+}
+
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;

@@ -6012,7 +6012,29 @@ function _nombreDVW(){
   var limpio = function(t){
     return String(t).replace(/[\\/:*?"<>|]/g, '').trim().slice(0, 20);
   };
-  return '&' + f + ' ' + limpio(loc) + '-' + limpio(vis) + '.dvw';
+
+  /* ══ DOBLE TURNO ══════════════════════════════════════════════════════════
+     Cuando se entrena manana y tarde, los dos archivos caen el mismo dia y
+     con el mismo nombre. El turno va en el nombre para poder distinguirlos:
+
+        &2026-09-15 AXP-ENTRENAMIENTO-M.dvw     (manana)
+        &2026-09-15 AXP-ENTRENAMIENTO-T.dvw     (tarde)
+
+     Los motores leen esa M o esa T del nombre y arman ids distintos, asi que
+     las dos sesiones aparecen separadas en el dashboard y en las planillas.
+
+     Si el usuario ya eligio el turno a mano, se respeta. Si no, se propone
+     segun la hora: antes de las 14, manana. */
+  var turno = '';
+  try{
+    if(typeof unSoloEquipo === 'function' && unSoloEquipo()){
+      var elegido = (M.notas && M.notas.turno) || '';
+      if(elegido === 'M' || elegido === 'T') turno = elegido;
+      else turno = (new Date().getHours() < 14) ? 'M' : 'T';
+    }
+  }catch(_){}
+
+  return '&' + f + ' ' + limpio(loc) + '-' + limpio(vis) + (turno ? '-'+turno : '') + '.dvw';
 }
 
 /* Texto -> bytes en Windows-1252, la pagina de codigos que espera DataVolley.
@@ -6052,14 +6074,39 @@ function exportDVW(modo){
      [7] n° de partido · [8] codepage (65001 = UTF-8, que es como grabamos)
      [12] y [13] = competencia y fase en hexadecimal                            */
   const N = M.notas || {};
-  L.push('[3MATCH]', [N.fecha||fecha, N.hora||'', N.temporada||'', N.competencia||'', N.fase||'',
-                      '', '', N.codigo||'', '65001', '1', 'Z', '0',
-                      hexSQ(N.competencia||''), hexSQ(N.fase||''), '\x0f2', ''].join(';'),
+  /* ══ ENTRENAMIENTO, NO PARTIDO ═══════════════════════════════════════════
+     DataVolley decide si un archivo es practica o partido por estas columnas.
+     Los .dvw que hace el propio DataVolley traen:
+
+        07/09/2026;;2024/2025;PRE-SEASON;Practice;...
+
+     y los que hacia el panel las dejaban VACIAS, asi que aparecian en la
+     lista como un partido cualquiera contra un rival. Ahora, en modo
+     entrenamiento, se completan igual que DataVolley.
+
+     La temporada se arma sola: de agosto a julio, como el calendario real. */
+  var _esEnt = false;
+  try{ _esEnt = (typeof unSoloEquipo === 'function') && unSoloEquipo(); }catch(_){}
+  function _temporadaAuto(){
+    var y=d.getFullYear(), m=d.getMonth()+1, ini=(m>=8)?y:y-1;
+    return ini+'/'+(ini+1);
+  }
+  var _comp = N.competencia || (_esEnt ? 'PRE-SEASON' : '');
+  var _fase = N.fase        || (_esEnt ? 'Practice'   : '');
+  var _temp = N.temporada   || (_esEnt ? _temporadaAuto() : '');
+  L.push('[3MATCH]', [N.fecha||fecha, N.hora||'', _temp, _comp, _fase,
+                      '', '', N.codigo||'', '65001', '1', 'Z', _esEnt?'1':'0',
+                      hexSQ(_comp), hexSQ(_fase), '\x0f2', ''].join(';'),
                      ';;0;;;;;;;0;');   /* segunda línea de [3MATCH]: sin ella DataVolley tira "list index out of bounds (1)" */
   /* Formato real: [0] id del equipo · [1] nombre · [2] sets ganados */
   L.push('[3TEAMS]');
+  /* En un entrenamiento los dos lados son el MISMO club: asi lo escribe
+     DataVolley y asi lo reconocen despues los motores. Antes salia
+     "AXPO NAFELS vs PRUEBA" y parecia un partido contra un rival. */
+  var _awName = _esEnt ? M.home.name : M.away.name;
+  var _awId   = _esEnt ? (M.home.id||'') : (M.away.id||'');
   L.push([M.home.id||'', M.home.name, M.home.sets, '', '', '', '', '', '', ''].join(';'));
-  L.push([M.away.id||'', M.away.name, M.away.sets, '', '', '', '', '', '', ''].join(';'));
+  L.push([_awId, _awName, M.away.sets, '', '', '', '', '', '', ''].join(';'));
   L.push('[3MORE]',';;;;;Panel en Vivo;;;;');
   L.push('[3COMMENTS]', (M.notas && M.notas.comentario) ? M.notas.comentario+';;;;' : ';;;;');
 

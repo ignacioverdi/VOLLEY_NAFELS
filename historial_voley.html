@@ -9,6 +9,15 @@
 <script src="categorias_club.js?v=20260909-1310" onerror="void 0"></script>
 <script src="selector_categoria.js?v=20260909-1310" onerror="void 0"></script>
 <script>
+/* DOBLE TURNO: manana y tarde el mismo dia. El turno llega desde el motor
+   como 'M' o 'T'; sin marca no muestra nada. */
+function turnoTxt(s){
+  var t = s && (s.turno || '');
+  if(t==='M') return ' · Mañana';
+  if(t==='T') return ' · Tarde';
+  return '';
+}
+
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
@@ -465,7 +474,7 @@ function renderCalendario(c){
     html+='<div class="cal-card" onclick="goToSesion(\''+sesNom+'\',\''+s.tipo+'\')">';
     html+='<div class="cal-ico" style="background:'+bg+';color:'+color+'">'+icon+'</div>';
     html+='<div class="cal-info">';
-    html+='<div class="cal-rival" style="color:'+color+'">'+(isP?(s.rival||'Rival'):(s.fecha||'Entrenamiento'))+'</div>';
+    html+='<div class="cal-rival" style="color:'+color+'">'+(isP?(s.rival||'Rival'):((s.fecha||'Entrenamiento')+turnoTxt(s)))+'</div>';
     html+='<div class="cal-fecha">'+s.fecha+(isP?(' · '+s.rival):'')+'</div>';
     if(jug){
       html+='<div class="cal-stats">';
