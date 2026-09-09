@@ -1,42 +1,47 @@
-TRADUCCION — TANDAS 3 Y 4
+TRADUCCION — TANDAS 5 Y 6
 =========================
 
 Un archivo: lang.js. Reemplaza al anterior. Publicar y Ctrl+F5.
 
 
-ESTA ENTREGA: +329 frases
+ESTA ENTREGA: +202 frases
 -------------------------
-  Tanda 3 (198)  herramientas de video, importacion, sesiones, heat maps,
-                 diagnostico, camara, pizarron, rankings de liga
-  Tanda 4 (131)  cierre de las pantallas chicas y el resto de la pagina
-                 de venta: planes, precios, privacidad, respuestas del FAQ
+  Tanda 5 (87)   la GUIA DE SCOUTEO completa: atajos de teclado, codigos,
+                 cierre de set, correccion de codigos compuestos
+  Tanda 6 (115)  el PANEL EN VIVO: controles, conceptos, fin de jugada
+                 automatico, formacion, exportacion .dvw
 
-El diccionario paso de 1.036 a 1.309 frases.
-
-
-PANTALLAS QUE QUEDARON COMPLETAS (0 sin traducir)
--------------------------------------------------
-  Todas las del equipo:
-    index (queda 3) · dashboard · jugador · calendario · wellness · equipo
-    high_set · baggerone · prep_fisica · horarios · plan_partido · analisis
-    cortes · ranking · recepcion · armadores · informe_equipo · historial
-
-  Y ahora tambien:
-    unir_video · alta_jugadores · asociar_codigos · importar_dvw
-    pizarron · diagnostico · prep_builder · prueba_delay · nla_stats
-    los seis heat maps · scouting_rival · game_plan · rotaciones
+El diccionario paso de 1.309 a 1.511 frases.
 
 
-LO QUE FALTA (489 frases, y 436 son solo dos pantallas)
--------------------------------------------------------
-  panel_vivo.html          290   el scout en vivo
-  GUIA_COMO_SCOUTEAR.html  146   la guia de scouteo
-  volley-stats.html         18
-  el resto                  35   (2 a 5 frases por pantalla)
+COMO VENIMOS
+------------
+  arranque      877 frases sin traducir
+  tanda 1-2     -493
+  tanda 3-4     -329
+  tanda 5-6     -202
+  ahora         287
 
-Las dos grandes son la documentacion tecnica del scouting: atajos de
-teclado, codigos de DataVolley, como cerrar un set, correccion de codigos
-compuestos. Las usan Ignacio y su asistente, los dos en castellano.
+  GUIA_COMO_SCOUTEAR   146 -> 84
+  panel_vivo           290 -> 151
 
-Son las ultimas y las mas largas. Con el motor arreglado se ven en
-castellano entero, nunca mezclado.
+
+LO QUE FALTA (287)
+------------------
+  panel_vivo.html         151
+  GUIA_COMO_SCOUTEAR.html  84
+  volley-stats.html        19
+  el resto                 33   (2 a 5 frases por pantalla)
+
+Sigue siendo casi todo documentacion tecnica del scouting en las dos
+pantallas que usan Ignacio y su asistente. Todo lo que ve el equipo, la
+pagina de venta y las herramientas de gestion ya estan completas.
+
+
+UN DETALLE TECNICO
+------------------
+Varias frases del panel en vivo tienen entidades HTML escritas a mano
+(&iacute; en vez de i con tilde, &ntilde; en vez de enie). Se tradujeron
+respetando esa forma, porque el motor compara el texto tal como esta en
+el HTML. Si alguna vez se limpian esas entidades, esas frases habria que
+volver a darlas de alta.
