@@ -1,40 +1,41 @@
-LOS ULTIMOS DOS TEXTOS
-======================
+EL LISTENER ESTABA EN UN LUGAR QUE EL NAVEGADOR NO CARGA
+========================================================
 
-Los archivos a la carpeta y publicar.
+Un archivo: dashboard.html. Publicar y Ctrl+F5.
 
 
-QUE PASABA
-----------
-El chequeo dio muy bien: motor nuevo cargado, spanglish 0, todo el
-dashboard traducido ("Coach dashboard", "Trainer-Dashboard", "Seasons",
-"Saisons", "PLAYERS", "SPIELER").
-
-Solo quedaban DOS textos en castellano:
+EL DIAGNOSTICO
+--------------
+Quedaban solo dos textos en castellano:
 
   "📊 ACUMULADO (4 sesiones)"
   "Todas las sesiones (4)"
 
-Verifique los archivos publicados y estaban BIEN: el dashboard usa la
-funcion de traduccion y lang.js tiene las claves. La prueba directa daba
-"CUMULATIVE", "sessions", "Alle Einheiten".
+Y el arreglo SI estaba publicado. Lo comprobe paso a paso:
 
-El problema era otro: esos dos textos se arman por codigo UNA sola vez, al
-cargar la pagina. Como llevan un numero adentro, el motor no los puede
-tomar como frase completa, y al cambiar de idioma nadie los volvia a
-dibujar: quedaban con el texto del idioma inicial.
+  · el archivo tiene el listener                        SI
+  · lang.js tiene las claves (t_sesiones, t_acumulado)  SI
+  · tr('t_sesiones','en') devuelve "sessions"           SI
+  · llamando las funciones A MANO, el texto cambia
+    a "All sessions (4)"                                SI
+  · el evento langchange se dispara                     SI
+  · pero el listener NUNCA se ejecutaba
 
-Ahora se vuelven a dibujar cuando cambias de idioma.
+La causa: el bloque <script> estaba al final del archivo y el navegador
+NO lo cargaba. El archivo tiene 12 scripts inline; el navegador solo
+carga 11, y el que quedaba afuera era justo ese.
+
+Ahora el listener esta ADENTRO del mismo script donde vive eqPintarMulti,
+que es codigo que ya se ejecuta seguro. Nada de bloques sueltos al final.
 
 
-PROBADO EN LOS TRES IDIOMAS
----------------------------
-  es  📊 ACUMULADO (4 sesiones)  ·  Todas las sesiones (4)  ·  2 de 3 sesiones
-  en  📊 CUMULATIVE (4 sessions) ·  All sessions (4)        ·  2 of 3 sessions
-  de  📊 GESAMT (4 Einheiten)    ·  Alle Einheiten (4)      ·  2 von 3 Einheiten
+LO QUE VA A PASAR
+-----------------
+Al cambiar de idioma esos dos textos se redibujan:
+
+  es  📊 ACUMULADO (4 sesiones)  ·  Todas las sesiones (4)
+  en  📊 CUMULATIVE (4 sessions) ·  All sessions (4)
+  de  📊 GESAMT (4 Einheiten)    ·  Alle Einheiten (4)
 
 
-TAMBIEN
--------
-Version de los scripts subida a 20260909-1120 en las 56 pantallas, para
-que el navegador baje los .js nuevos y no sirva los de su cache.
+Version de los scripts subida a 20260909-1210.
