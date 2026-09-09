@@ -50,7 +50,20 @@ body::before{content:'';position:fixed;inset:0;
 .leg{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .li{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--mut)}
 .ld{width:7px;height:7px;border-radius:2px;flex-shrink:0}
-.hright{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0}
+/* ══ LA BARRA DE ARRIBA, EN DOS GRUPOS ═══════════════════════════════════
+   Antes eran 12 botones en una sola fila, todos iguales y pegados: los que
+   cambian la VISTA de esta pantalla (Podio, Objetivos, Baterías, Tabla,
+   Informe, TV, Video) mezclados con los que ABREN OTRA pantalla
+   (Distribución armador, Direcciones, Zonas, Plan de partido). Al no
+   distinguirse habia que leerlos uno por uno.
+
+   Ahora van en dos grupos, cada uno con su caja. El ojo encuentra primero
+   el grupo y despues el boton.                                            */
+.hright{margin-left:auto;display:flex;align-items:center;gap:14px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+.hgrupo{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:10px;
+        background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07)}
+.hgrupo .hbtn{margin:0}
+@media (max-width:1150px){.hright{gap:8px}.hgrupo{padding:3px 5px;gap:4px}}
 .ts-lbl{font-size:10px;color:var(--mut)}
 .hbtn{padding:5px 12px;border-radius:7px;font-family:'Barlow Condensed',sans-serif;
   font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;border:1px solid}
@@ -581,6 +594,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 
   <div class="hright">
     <span class="ts-lbl"><span id="ts">--</span></span>
+    <div class="hgrupo">
     <button class="hbtn podio-btn" onclick="togglePodio()">&#9733; Podio</button>
     <button class="hbtn" id="obj-btn" onclick="toggleObj()" style="background:rgba(34,197,94,.1);color:#22c55e;border-color:rgba(34,197,94,.3)">&#9679; Objetivos</button>
     <button class="hbtn" onclick="abrirBaterias()" title="Baterías del partido en vivo" style="background:rgba(129,140,248,.12);color:#818cf8;border-color:rgba(129,140,248,.3)">&#128267; Baterías</button>
@@ -588,12 +602,14 @@ function renderObjetivosJugador(cid,nombre,extra){
     <button class="hbtn inf-btn" onclick="window.open('informe.html','_blank')" title="Informe del partido, listo para PDF">&#128203; Informe</button>
     <button class="hbtn tv-btn" id="tv-btn" onclick="toggleTV()">&#9654; TV</button>
     <button class="hbtn" id="video-btn" onclick="abrirVideo()" title="Video en vivo con delay" style="background:rgba(34,211,238,.12);color:#22d3ee;border-color:rgba(34,211,238,.3)">&#128249; Video</button>
-    <span style="width:1px;height:24px;background:rgba(255,255,255,.12);margin:0 4px"></span>
+    </div>
+    <div class="hgrupo">
     <button class="hbtn hbtn2" onclick="abrirPlan('armador')" title="Distribución del armador — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">Distribución<br>armador</button>
     <button class="hbtn hbtn2" onclick="abrirPlan('ataque')" title="Direcciones de ataque — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">Direcciones<br>ataque</button>
     <button class="hbtn hbtn2" onclick="abrirPlan('saque')" title="Direcciones de saque — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">Direcciones<br>saque</button>
     <button class="hbtn hbtn2" onclick="abrirPlan('recepcion')" title="Zonas de recepción — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">Zonas<br>recepción</button>
     <button class="hbtn hbtn2" onclick="abrirPlanPreparadoModal()" title="Plan de partido que preparamos (para comparar con lo que pasa en vivo)" style="background:rgba(129,140,248,.12);color:#818cf8;border-color:rgba(129,140,248,.3)">Plan de<br>partido</button>
+    </div>
   </div>
 </header>
 

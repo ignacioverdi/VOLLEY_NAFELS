@@ -1,73 +1,53 @@
-URGENTE — RESCATAR LA TARDE DE HOY
-==================================
+PANEL EN VIVO — BOTONES Y OBJETIVOS
+===================================
 
-2 archivos a la carpeta y publicar YA.
-
-
-LO PRIMERO, ANTES DE PUBLICAR NADA
-----------------------------------
-Decile al asistente:
-
-   NO ABRA EL SCOUT EN VIVO.
-
-El panel guarda solo cada vez que se toca algo. Si lo abre y empieza otra
-cosa, puede pisar lo que quedo de la tarde. Que no lo toque hasta bajar
-todo.
+2 archivos a la carpeta y publicar. Ctrl+F5.
 
 
-DONDE ESTA LO DE HOY A LA TARDE
--------------------------------
-En la nube NO esta. Mire pv_encurso y quedo una sola ranura, de Sebastian,
-con 4 codigos, de las 09:12 de hoy. La hora y media de la tarde nunca
-llego ahi.
+1) LOS BOTONES DE ARRIBA
+------------------------
+Eran 12 botones en una sola fila, todos del mismo tamaño y pegados. Y no son
+lo mismo: siete cambian la VISTA de esta pantalla y cinco ABREN OTRA.
 
-Eso deja un solo lugar: el navegador de SU computadora. Ahi sigue, aunque
-en la app se vea vacio o mezclado.
+   vista de esta pantalla   Podio · Objetivos · Baterías · Tabla · Informe
+                            · TV · Video
+   abren otra pantalla      Distribución armador · Direcciones ataque ·
+                            Direcciones saque · Zonas recepción ·
+                            Plan de partido
 
+Al no distinguirse habia que leerlos uno por uno para encontrar el que se
+busca.
 
-COMO SACARLO
-------------
-1. El asistente abre, EN SU PC y en el MISMO navegador donde scouteo:
-
-      volley-nafels.vercel.app/recuperar.html
-
-2. Toca el boton grande "⬇ Bajar TODO en un archivo".
-
-   Se lleva TODAS las claves del panel tal cual estan, sin elegir ni
-   filtrar. Aunque algo parezca vacio o roto, igual viene: es preferible
-   mirarlo despues con calma a descartarlo ahora.
-
-3. Te manda ese archivo .json sin abrirlo ni modificarlo.
-
-4. Me lo pasas y lo abro: ahi vamos a ver que hay de los dos drills y
-   cuanto se puede reconstruir.
-
-La pagina tambien lista todo lo que encuentra con su cantidad de codigos,
-incluidos los que tienen CERO. No esconde nada: si algo esta vacio hay que
-verlo, no ocultarlo.
+Ahora van en DOS GRUPOS, cada uno con su caja y separados por un espacio
+real. El ojo encuentra primero el grupo y despues el boton. En pantallas
+angostas el segundo grupo baja solo a la linea de abajo, sin amontonarse.
 
 
-PARA QUE NO DEPENDA MAS DE LA SUERTE — LA CAJA NEGRA
-----------------------------------------------------
-Le agregue al panel una caja negra. Cada vez que guarda, deja ademas una
-copia aparte con la hora y la cantidad de codigos. Guarda las ULTIMAS 12 y
-nunca se pisan entre si: cada una es una foto de un momento distinto del
-entrenamiento.
+2) LOS OBJETIVOS, PARA EL TELEVISOR
+-----------------------------------
+El bloque ocupaba 209 px repartidos en TRES filas:
 
-Se toma una foto nueva cada 25 codigos o cada 3 minutos, lo que pase
-primero. Ocupa poco.
+   una con el titulo
+   otra con el nombre de cada fundamento y su objetivo
+   otra con las baterias
 
-Con esto, si un scout se corrompe, se vacia o se mezcla, siempre hay varias
-fotos anteriores para volver. Aparecen todas en recuperar.html, ordenadas,
-y se baja la que sirva.
+Por eso en la tele habia que subir y bajar la pagina.
 
-Es lo que hoy no existia y por eso estamos buscando a ciegas.
+Ademas el objetivo salia DOS VECES: la etiqueta ya decia "% Saque (42)" y
+justo abajo aparecia otra vez "42%".
 
+Ahora es UNA sola tarjeta por fundamento, con forma de bateria como pediste:
 
-NOTA HONESTA
-------------
-No puedo prometerte que lo de la tarde este completo. Lo que si te puedo
-decir es que el navegador guarda mas de lo que muestra la app, y que hasta
-no ver ese archivo no hay que darlo por perdido.
+   arriba    el nombre, en una linea
+   al medio  el numero grande, que es lo que se lee de lejos
+   abajo     la bateria, con la marca blanca del objetivo
+   al pie    "obj 42", chiquito, como referencia
 
-Si aparece incompleto, con la caja negra al menos no vuelve a pasar.
+MEDIDO EN LA PANTALLA REAL:
+
+   antes   209 px  ·  tres filas
+   ahora   117 px  ·  una fila
+   ahorro   92 px
+
+Las 12 tarjetas entran en una sola linea, ninguna con el nombre cortado.
+En el televisor se ven todas juntas sin scrollear.
