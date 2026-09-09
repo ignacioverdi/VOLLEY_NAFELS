@@ -1,53 +1,70 @@
-PANEL EN VIVO — BOTONES Y OBJETIVOS
-===================================
+2 ARCHIVOS — LAS TRES COSAS
+===========================
 
-2 archivos a la carpeta y publicar. Ctrl+F5.
+   panel_voley.html
+   objetivos_config.js
 
-
-1) LOS BOTONES DE ARRIBA
-------------------------
-Eran 12 botones en una sola fila, todos del mismo tamaño y pegados. Y no son
-lo mismo: siete cambian la VISTA de esta pantalla y cinco ABREN OTRA.
-
-   vista de esta pantalla   Podio · Objetivos · Baterías · Tabla · Informe
-                            · TV · Video
-   abren otra pantalla      Distribución armador · Direcciones ataque ·
-                            Direcciones saque · Zonas recepción ·
-                            Plan de partido
-
-Al no distinguirse habia que leerlos uno por uno para encontrar el que se
-busca.
-
-Ahora van en DOS GRUPOS, cada uno con su caja y separados por un espacio
-real. El ojo encuentra primero el grupo y despues el boton. En pantallas
-angostas el segundo grupo baja solo a la linea de abajo, sin amontonarse.
+Copiar los dos y publicar. Ctrl+F5.
 
 
-2) LOS OBJETIVOS, PARA EL TELEVISOR
------------------------------------
-El bloque ocupaba 209 px repartidos en TRES filas:
+1) EL ENCABEZADO DESORDENADO (foto 1)
+-------------------------------------
+Encontre la causa, y no era estetica:
 
-   una con el titulo
-   otra con el nombre de cada fundamento y su objetivo
-   otra con las baterias
+   .hdr tenia  height:58px  FIJO, pero su contenido mide 93 px.
 
-Por eso en la tele habia que subir y bajar la pagina.
+Los doce botones no entraban y se DESBORDABAN hacia abajo, ENCIMA de la
+barra de filtros. Lo medi en la pagina: la fila de botones terminaba en
+182 px y la de filtros arrancaba en 151. Se pisaban 31 px.
 
-Ademas el objetivo salia DOS VECES: la etiqueta ya decia "% Saque (42)" y
-justo abajo aparecia otra vez "42%".
+Por eso se veia amontonado: no era un problema de estilo, era una barra
+mas chica que lo que tiene adentro.
 
-Ahora es UNA sola tarjeta por fundamento, con forma de bateria como pediste:
+Ademas habia CUATRO barras apiladas sumando 418 px de los 791 de pantalla:
+categoria, dashboard+idiomas, encabezado y filtros. Mas de la mitad del
+televisor ocupado por menus.
 
-   arriba    el nombre, en una linea
-   al medio  el numero grande, que es lo que se lee de lejos
-   abajo     la bateria, con la marca blanca del objetivo
-   al pie    "obj 42", chiquito, como referencia
+CORREGIDO:
+   · .hdr pasa a alto automatico: crece lo que necesita y deja de pisar
+   · los botones bajan a su propia linea completa
+   · paddings, titulo y etiquetas de filtros mas chicos
 
-MEDIDO EN LA PANTALLA REAL:
+   antes   197 px  pisandose
+   ahora   216 px  sin pisarse
 
+Crece 19 px, pero antes "entraba" solo porque tapaba la fila de abajo.
+Ahora se ve entero.
+
+
+2) LOS OBJETIVOS DE ARRIBA
+--------------------------
    antes   209 px  ·  tres filas
-   ahora   117 px  ·  una fila
-   ahorro   92 px
+   ahora   117 px  ·  una fila de baterias
 
-Las 12 tarjetas entran en una sola linea, ninguna con el nombre cortado.
-En el televisor se ven todas juntas sin scrollear.
+(Este cambio ya te lo habia mandado pero no llegaste a publicarlo: en la
+pagina sigue viendose la version vieja.)
+
+
+3) EL MODAL "OBJETIVOS DEL DIA" (foto 2)
+----------------------------------------
+Era una lista vertical de once filas anchas, una debajo de otra:
+
+   alto del contenido  1155 px
+   pantalla             791 px
+
+Por eso scrolleabas cada dos por tres.
+
+Ahora es una grilla de tarjetas con forma de bateria: nombre arriba, numero
+grande al medio, la bateria que se llena segun cuanto falta para el
+objetivo, y abajo el casillero para cargarlo.
+
+   antes  1155 px  ·  once filas
+   ahora   404 px  ·  dos filas de grilla
+
+Con el titulo: 514 px contra 791. ENTRA SIN SCROLLEAR.
+
+
+EN TOTAL
+--------
+   encabezado + objetivos:  425 px  ->  333 px
+   quedan 458 px de pantalla libres para los datos

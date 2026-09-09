@@ -393,12 +393,16 @@ function renderObjetivos(cid,extra){
     +[['#22c55e','Objetivo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Lejos']].map(function(x){
       return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
     }).join('')+'</div></div>'
-    +'<div style="display:flex;gap:8px;width:100%;margin-bottom:4px;align-items:flex-end">'
-    +Object.keys(metas).map(function(id){return '<div style="flex:1;min-width:60px;max-width:110px;text-align:center;padding:4px 5px">'
-        +'<div style="font-size:10px;font-weight:800;color:#e2e8f0;letter-spacing:0.5px;text-transform:uppercase;line-height:1.3;word-break:break-word">'+metas[id].label+'</div>'
-        +'<div style="font-size:10px;color:#22c55e;font-weight:700;margin-top:3px">'+metas[id].obj+'%</div>'
-        +'</div>';}).join('')
-    +'</div><div style="display:flex;gap:8px;width:100%">'
+    /* ══ UNA SOLA FILA, PARA QUE ENTRE EN EL TELEVISOR ══════════════════
+       OJO: hay DOS renderObjetivos en este archivo y la que manda es ESTA,
+       la segunda, porque se declara despues. Modificar solo la de arriba no
+       cambia nada en pantalla.
+
+       Antes eran dos filas —una con el nombre y el objetivo, otra con la
+       bateria— que sumaban mas de 200px. En la tele habia que subir y bajar
+       la pagina para ver los doce. Y el objetivo salia repetido: la etiqueta
+       ya dice "% Saque (42)" y abajo aparecia otra vez "42%".            */
+    +'<div style="display:flex;gap:6px;width:100%;flex-wrap:nowrap">'
     +Object.keys(metas).map(function(id){
       var m=metas[id],val=vals[id]!==undefined?vals[id]:null;
       var cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
