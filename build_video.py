@@ -39,6 +39,35 @@ def _turno(nombre_archivo):
         if re.search(r'(?<![A-Z0-9])' + pal + r'(?![A-Z0-9])', n): return t
     return ''
 
+def _acc_dvw(fp):
+    try:
+        with open(fp, encoding='latin-1', errors='replace') as fh: t=fh.read()
+        if '[3SCOUT]' not in t: return 0
+        return len([l for l in t.split('[3SCOUT]')[1].splitlines()
+                    if re.match(r'^[*a]\d\d[SRABDE]', l.split(';')[0])])
+    except Exception: return 0
+
+def _sin_repetidos(archivos):
+    """La misma sesion exportada dos veces: se queda la mas completa.
+       Si no, el mismo entrenamiento aparecia dos veces en la pantalla de
+       videos y no se sabia a cual cargarle el link."""
+    import collections
+    g = collections.OrderedDict()
+    for f in archivos:
+        b = os.path.basename(f)
+        mfe = re.search(r'(\d{4}-\d{2}-\d{2})', b)
+        base = re.sub(r'\s*\(\d+\)(?=\.dvw$)', '', b, flags=re.I)
+        g.setdefault((mfe.group(1) if mfe else b, _turno(b), base.lower()), []).append(f)
+    out = []
+    for k, l in g.items():
+        if len(l) == 1: out.append(l[0]); continue
+        l.sort(key=lambda f: -_acc_dvw(f))
+        print('  [video] misma sesion en %d archivos, me quedo con %s (%d acciones)'
+              % (len(l), os.path.basename(l[0])[:46], _acc_dvw(l[0])))
+        out.append(l[0])
+    return out
+
+
 
 def fix_enc(x):
     # Los DVW pueden venir en UTF-8 leido como latin-1 (mojibake "NÃ¤fels"). Lo corrige.
@@ -326,7 +355,7 @@ def load_existing_season(path):
 
 def build(folder, ent=False):
     matches={}
-    for f in sorted(glob.glob(os.path.join(folder,'*.dvw'))):
+    for f in _sin_repetidos(sorted(glob.glob(os.path.join(folder,'*.dvw')))):
         r=parse_dvw(f, ent=ent)
         if r and r[0] and r[0] not in matches: matches[r[0]]=r[1]
     return matches

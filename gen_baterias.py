@@ -339,6 +339,51 @@ def _mk_id(code, tipo, date, rival, usados, turno=''):
     usados.add(i)
     return i
 
+
+def elegir_mejor_copia(archivos, parse):
+    """Cuando el mismo entrenamiento aparece dos veces, se queda el mas completo.
+
+    POR QUE HACE FALTA
+    El panel arma el nombre del .dvw con la fecha, los equipos y el turno:
+
+        &2026-09-15 AXP-ENTRENAMIENTO-T.dvw
+
+    Ese nombre es SIEMPRE EL MISMO para una sesion. Si se exporta dos veces
+    —a mitad del entrenamiento y otra vez al final, que es lo razonable—
+    Windows no pisa el primero: guarda el segundo como
+
+        &2026-09-15 AXP-ENTRENAMIENTO-T (1).dvw
+
+    Y si los dos van a la carpeta, el sistema ve DOS entrenamientos donde hay
+    uno solo. Peor: el que exportaste a mitad tiene MENOS acciones, y si se
+    procesara ese se estarian perdiendo datos sin que nadie lo note.
+
+    Aca se agrupan por (fecha, turno, rival) y se elige el que MAS acciones
+    tiene, que es siempre el mas completo. Los otros se descartan y se avisa
+    por pantalla, con nombre y cantidad, para que se vea que paso.
+    """
+    import collections, os
+    grupos = collections.OrderedDict()
+    for f in archivos:
+        r = parse(f)
+        if not r: continue
+        clave = (r.get('date',''), r.get('turno',''), _slug(r.get('rival','')))
+        grupos.setdefault(clave, []).append((f, r, len(r.get('scout') or [])))
+
+    elegidos = []
+    for clave, lista in grupos.items():
+        if len(lista) == 1:
+            elegidos.append(lista[0][:2]); continue
+        lista.sort(key=lambda x: -x[2])          # el de mas acciones primero
+        mejor = lista[0]
+        print('[baterias] MISMA SESION EN %d ARCHIVOS (%s turno %s):'
+              % (len(lista), clave[0], clave[1] or '-'))
+        for f, r, n in lista:
+            marca = '  <-- ME QUEDO CON ESTE' if f == mejor[0] else '      descartado'
+            print('           %-52s %4d acciones%s' % (os.path.basename(f)[:52], n, marca))
+        elegidos.append(mejor[:2])
+    return elegidos
+
 def build(fuentes, out='datos_baterias.js', filtro_temp=None):
     """fuentes: lista de (carpeta, tipo) con tipo 'partido' o 'entrenamiento'.
 
@@ -362,9 +407,8 @@ def build(fuentes, out='datos_baterias.js', filtro_temp=None):
         if filtro_temp and temp_carpeta and temp_carpeta != filtro_temp:
             print('[baterias] "%s" es de la %s, no de la %s: la salteo' % (folder, temp_carpeta, filtro_temp))
             continue
-        for f in sorted(glob.glob(os.path.join(folder,'*.dvw'))):
-            r=parse_dvw(f)
-            if not r: continue
+        _todos = sorted(glob.glob(os.path.join(folder,'*.dvw')))
+        for f, r in elegir_mejor_copia(_todos, parse_dvw):
             if filtro_temp and not temp_carpeta and season_from_date(r['date']) != filtro_temp: continue
             sid=_mk_id(r['code'], tipo, r['date'], r['rival'], usados, r.get('turno',''))
             pl=_calc_baterias(r['scout'], r['side'])

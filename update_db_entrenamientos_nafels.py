@@ -356,6 +356,50 @@ def _etiqueta_turno(t):
     return {'M':'Mañana', 'T':'Tarde'}.get(t, '')
 
 
+
+def _acciones_dvw(fpath):
+    """Cuantas acciones tiene un .dvw. Sirve para elegir la copia mas completa."""
+    try:
+        with open(fpath, encoding='latin-1', errors='replace') as fh:
+            t = fh.read()
+        if '[3SCOUT]' not in t: return 0
+        return len([l for l in t.split('[3SCOUT]')[1].splitlines()
+                    if re.match(r'^[*a]\d\d[SRABDE]', l.split(';')[0])])
+    except Exception:
+        return 0
+
+def filtrar_copias_repetidas(dvw_dir, nombres):
+    """El mismo entrenamiento exportado dos veces: se queda el mas completo.
+
+    El panel arma el nombre con fecha + equipos + turno, asi que exportar dos
+    veces la misma sesion da el mismo nombre y Windows guarda el segundo como
+    "... (1).dvw". Si los dos van a la carpeta, el sistema veria DOS
+    entrenamientos donde hay uno, y el de mitad de sesion tiene menos
+    acciones. Aca se agrupan y se elige el mas completo.
+    """
+    import collections
+    grupos = collections.OrderedDict()
+    for fn in nombres:
+        # la fecha del nombre, el turno, y el nombre sin el "(1)" de Windows
+        mfe = re.search(r'(\d{4}-\d{2}-\d{2})', fn)
+        base = re.sub(r'\s*\(\d+\)(?=\.dvw$)', '', fn, flags=re.I)
+        clave = (mfe.group(1) if mfe else fn, _turno(fn), base.lower())
+        grupos.setdefault(clave, []).append(fn)
+
+    salida = []
+    for clave, lista in grupos.items():
+        if len(lista) == 1:
+            salida.append(lista[0]); continue
+        conCuenta = sorted(((fn, _acciones_dvw(os.path.join(dvw_dir, fn))) for fn in lista),
+                           key=lambda x: -x[1])
+        print('  [!] MISMA SESION EN %d ARCHIVOS:' % len(lista))
+        for fn, n in conCuenta:
+            print('      %-54s %4d acciones%s'
+                  % (fn[:54], n, '  <-- ME QUEDO CON ESTE' if fn == conCuenta[0][0] else '      descartado'))
+        salida.append(conCuenta[0][0])
+    return salida
+
+
 def parse_dvw_both(fpath, temporada):
     with open(fpath, encoding='utf-8', errors='ignore') as f:
         content = f.read()
@@ -473,6 +517,8 @@ def update_database(dvw_dir, temporada, db_path='entrenamientos_nafels_db.json')
         teams_data = {}; games_log = []; existing_dates = set()
 
     dvw_files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
+    # si la misma sesion vino dos veces, se procesa solo la mas completa
+    dvw_files = filtrar_copias_repetidas(dvw_dir, dvw_files)
     added = 0; skipped = 0
 
     for fname in dvw_files:
