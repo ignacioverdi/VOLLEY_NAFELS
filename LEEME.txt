@@ -1,64 +1,59 @@
-EL TABLERO DECIA 44 Y SUMABA 38
-===============================
+LOS BLOQUEADOS AHORA SE VEN
+===========================
 
 Un archivo: plan_partido.html. Publicar y Ctrl+Shift+R.
 NO hace falta HACER_TODO.
 
 
-LO PRIMERO: LOS DATOS ESTAN BIEN
---------------------------------
-Investigue los 44 ataques de Durdos uno por uno, contra los .dvw:
-
-   12 del 07/09  +  32 del 08/09  =  44
-
-Ninguno del 05/09 —ese dia ya no existe en el sistema— y ninguno de la
-mañana del 08/09, que fue saque y pase. La base esta correcta.
-
-
-LO QUE SI ESTABA MAL: EL ROTULO
--------------------------------
-Arriba decia "44 ataques" pero los cuadrantes sumaban 38. Faltaban 6, y
-por eso parecia que el sistema recordaba cosas viejas.
-
-Los 6 son:
-
-   5 ataques BLOQUEADOS (evaluacion "/")
-   1 ataque SIN ZONA de destino
-
-Y no aparecen POR DISEÑO, esta documentado en el codigo: un ataque
-bloqueado no es una direccion, la pelota nunca llego a la cancha rival.
-Si filtras por "Bloqueado" si se ven, y ahi se pintan en la zona desde
-donde salio el ataque.
-
-Verificado zona por zona:
-
-   z1   6 en el archivo   2 bloqueados   ->  4 en pantalla   OK
-   z2   7                 1 bloqueado    ->  6               OK
-   z4   1                 1 bloqueado    ->  0               OK
-   z6  13                 1 bloqueado    ->  12              OK
-
-El criterio es correcto. Lo que fallaba era que el rotulo no lo decia.
-
-
-AHORA DICE
-----------
-   antes:  44 ataques
-   ahora:  44 ataques · 38 con dirección (5 bloq. · 1 sin zona aparte)
-
-Las tres cifras cierran: 38 + 5 + 1 = 44.
-
-Cuando no haya bloqueados ni acciones sin zona, el rotulo queda como
-siempre: "44 ataques" a secas.
-
-
-LO DEL VIDEO
+TENIAS RAZON
 ------------
-Las 5 sesiones tienen su video cargado, lo verifique:
+Si la valoracion "Bloqueado (/)" esta en el menu de filtros, el usuario
+espera verlos en la cancha. Esconderlos por defecto no tiene sentido, y
+ademas hacia que los numeros no cerraran: el rotulo decia 44 ataques y los
+cuadrantes sumaban 38, sin ninguna explicacion a la vista.
 
-   03/09 ENT20260903 ✅    08/09 ENT20260908  ✅
-   04/09 ENT20260904 ✅    08/09 ENT20260908M ✅
-   07/09 ENT20260907 ✅
+Estaban escondidos con el razonamiento de que un ataque bloqueado no es
+una direccion porque la pelota nunca llego a la cancha rival. Es cierto
+como concepto, pero el dato existe y hay que poder verlo.
 
-El cuadrante sin ▶ que viste es porque sus ataques eran bloqueados, y
-esos no se dibujan salvo que filtres por "Bloqueado". No era falta de
-video.
+
+COMO SE MUESTRAN
+----------------
+En su zona de ORIGEN: desde donde salio el remate.
+
+Es lo unico que tiene sentido —un bloqueado no tiene destino, pero si
+tiene desde donde se ataco— y ademas es EL MISMO criterio que ya usaba la
+pantalla al filtrar por bloqueados y al abrir el video. Antes la cancha
+usaba un criterio y el video otro; ahora coinciden siempre.
+
+
+EL TABLERO DE DURDOS
+
+   antes                        ahora
+   z1  4                        z1  4
+   z2  6                        z2  6
+   z3  0                        z3  0
+   z4  0   <- vacio             z4  5   <- los 5 bloqueados
+   z5  7                        z5  7
+   z6 12                        z6 12
+   z7  4                        z7  4
+   z8  4                        z8  4
+   z9  1                        z9  1
+   ───────                      ───────
+   suma 38  (decia 44)          suma 43  + 1 sin zona = 44
+
+El rotulo va a decir:
+
+   44 ataques · 5 bloq. · 1 sin zona
+
+Ahora cierra: 43 en la cancha + 1 sin zona = 44.
+
+El "1 sin zona" es un ataque cuyo codigo no tiene zona de destino
+(*01AH-G4~4~~H2~L7). Es un dato incompleto del scout, no un error del
+sistema. Se avisa para que no parezca que falta algo.
+
+
+Y EL VIDEO
+----------
+El cuadrante z4 ahora tiene su ▶ y al hacerle doble click abre los 5
+ataques bloqueados, cada uno en su jugada.

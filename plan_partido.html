@@ -185,12 +185,12 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260910-1718">
+<link rel="stylesheet" href="movil.css?v=20260910-1719">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="categorias_club.js?v=20260910-1718"></script>
-<script src="selector_categoria.js?v=20260910-1718"></script>
-<script src="mi_fila.js?v=20260910-1718" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260910-1719"></script>
+<script src="selector_categoria.js?v=20260910-1719"></script>
+<script src="mi_fila.js?v=20260910-1719" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -308,8 +308,8 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260910-1718"></script>
-<script src="filtro_tipo.js?v=20260910-1718" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260910-1719"></script>
+<script src="filtro_tipo.js?v=20260910-1719" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
   <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
        se cargaba SOLO el de partidos, asi que en una temporada sin partidos
@@ -324,12 +324,12 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20260910-1718"></script>
-<script src="firebase_por_categoria.js?v=20260910-1718"></script>
+<script src="firebase.js?v=20260910-1719"></script>
+<script src="firebase_por_categoria.js?v=20260910-1719"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20260910-1718" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20260910-1719" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -788,14 +788,23 @@ function render(p){var cfg=ROLECFG[p.role];
 
        Ahora solo se saltean si NO se esta mirando puntualmente los bloqueados:
        asi el filtro sirve para ver desde donde te bloquean. */
+    /* ══ LOS BLOQUEADOS TAMBIEN SE MUESTRAN ══════════════════════════════
+       Antes se salteaban salvo que filtraras por "Bloqueado", con el
+       razonamiento de que un ataque bloqueado no es una direccion: la pelota
+       no llego a la cancha rival.
+
+       El problema practico es que la valoracion "Bloqueado (/)" ESTA en el
+       menu de filtros, asi que el usuario espera verlos. Y ademas los
+       numeros no cerraban: el rotulo decia 44 ataques y los cuadrantes
+       sumaban 38, sin explicacion a la vista.
+
+       Ahora se muestran siempre, pintados en su zona de ORIGEN —desde donde
+       salio el ataque—, que es lo unico que tiene sentido: un bloqueado no
+       tiene destino, pero si tiene desde donde se remato. Es el mismo
+       criterio que ya se usaba al filtrar por bloqueados y al abrir el
+       video, asi que ahora la cancha y el video coinciden siempre. */
     var _blk=(cfg.stats==='atk'&&a[cfg.evIdx]==='/');
-    /* El filtro puede venir como texto —"/"— o como lista —["/"]—, segun sea
-       de una opcion o de varias. Comparando solo el texto nunca daba verdadero
-       y los cuadrantes quedaban en cero. */
-    var _viendoBlq = vals.some(function(v){
-      return v === '/' || (Array.isArray(v) && v.indexOf('/') >= 0);
-    });
-    if(_blk && !_viendoBlq){ _nBlq++; return; }
+    if(_blk) _nBlq++;
     /* El campo [4] es el DESTINO —a donde fue la pelota—. Un ataque bloqueado
        no tiene destino, asi que se lo cuenta en su zona de ORIGEN, que viene
        en [10].
@@ -822,12 +831,13 @@ function render(p){var cfg=ROLECFG[p.role];
   (function(){
     /* El rotulo tiene que describir la cancha que se esta viendo. Antes decia
        el total y los cuadrantes sumaban menos: parecia que faltaban datos. */
+    /* Los bloqueados YA estan en la cancha, en su zona de origen. Lo unico
+       que puede quedar afuera es una accion sin zona, que es un dato
+       incompleto del scout. Si hay alguna, se dice. */
     var _dib=0; for(var _k in z) _dib+=z[_k];
     var _txt = n+U(p.role);
-    var _fuera=[];
-    if(_nBlq)     _fuera.push(_nBlq+' bloq.');
-    if(_nSinZona) _fuera.push(_nSinZona+' sin zona');
-    if(_fuera.length) _txt += ' · '+_dib+' con dirección ('+_fuera.join(' · ')+' aparte)';
+    if(_nBlq)     _txt += ' · '+_nBlq+' bloq.';
+    if(_nSinZona) _txt += ' · '+_nSinZona+' sin zona';
     document.getElementById(p.id+'-n').textContent=_txt;
   })();
   var mx=Math.max(1,z["1"],z["2"],z["3"],z["4"],z["5"],z["6"],z["7"],z["8"],z["9"]);
@@ -1082,8 +1092,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20260910-1718" onerror="void 0"></script>
-<script src="lang.js?v=20260910-1718" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20260910-1719" onerror="void 0"></script>
+<script src="lang.js?v=20260910-1719" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -1101,7 +1111,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20260910-1718" onerror="void 0"></script>
-<script src="ayuda.js?v=20260910-1718"></script>
+<script src="volver_inicio.js?v=20260910-1719" onerror="void 0"></script>
+<script src="ayuda.js?v=20260910-1719"></script>
 </body>
 </html>
