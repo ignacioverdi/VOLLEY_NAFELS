@@ -387,6 +387,9 @@ function renderObjetivos(cid,extra){
     +Object.keys(metas).map(function(id){
       var m=metas[id],val=vals[id]!==undefined?vals[id]:null;
       var cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+      /* El total de acciones viaja con la meta: es lo que permite leer bien el
+         numero. Un 40% de 5 acciones y un 20% de 238 no valen lo mismo. */
+      try{ if(vals['n_'+id]!=null) m=Object.assign({},m,{n:vals['n_'+id]}); }catch(e){}
       return objSingleBat(id,val,m,cls,m.obj);
     }).join('')+'</div></div>';
   el.innerHTML=html;
@@ -394,41 +397,45 @@ function renderObjetivos(cid,extra){
 function objPct(v,mn,mx){return Math.max(0,Math.min(100,(v-mn)/(mx-mn)*100));}
 function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
 function objSingleBat(id,val,meta,cls,objLine){
-  /* Tarjeta compacta: nombre, numero y bateria, todo junto. Sin repetir el
-     objetivo, que ya va en el nombre. Pensada para que los doce fundamentos
-     entren en una pantalla de televisor sin scrollear. */
+  /* Tarjeta compacta: nombre, numero, bateria, sobre cuantas acciones y el
+     objetivo. El total de acciones es lo que permite leer bien el numero: un
+     40% de 5 acciones y un 20% de 238 no valen lo mismo, y pintados iguales
+     enganan. No se filtra nada — si son 5, se muestra 5. */
   var fh = (val!==null) ? objPct(val, meta.min, meta.max) : 0;
   var oh = objPct(objLine, meta.min, meta.max);
   var txt = (val!==null) ? fmtEff(val) : '—';
-  var nombre = String(meta.label||'').replace(/\s*\(-?\d+\)\s*$/, '');   /* el (42) sobra */
+  var nombre = String(meta.label||'').replace(/\s*\(-?\d+\)\s*$/, '');
+  var n = (meta.n!=null) ? meta.n : null;
 
-  return '<div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;'
-      + 'gap:3px;padding:7px 3px 6px;border:1px solid '+cls.border+';border-radius:9px;'
-      + 'background:'+cls.bg+';position:relative;overflow:hidden;font-family:Barlow Condensed,sans-serif">'
+  var tip = nombre;
+  try{
+    if(val!==null && meta.obj!=null && meta.min!=null && meta.obj>meta.min){
+      var reco = Math.round((val-meta.min)/(meta.obj-meta.min)*100);
+      tip = nombre+': '+val+'%'+(n!=null?' sobre '+n+' acciones':'')
+          + ' · el peor de la liga '+meta.min+'%, el mejor '+meta.obj+'%'
+          + ' · estás al '+reco+'% del recorrido';
+    }
+  }catch(e){}
+
+  return '<div title="'+tip+'" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;'
+      + 'align-items:center;gap:3px;padding:7px 3px 6px;border:1px solid '+cls.border+';'
+      + 'border-radius:9px;background:'+cls.bg+';position:relative;overflow:hidden;'
+      + 'font-family:Barlow Condensed,sans-serif">'
       + '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+cls.color+'"></div>'
-
-      /* nombre del fundamento, en una linea */
       + '<div style="font-size:9.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;'
       + 'color:#94a3b8;line-height:1.1;text-align:center;white-space:nowrap;overflow:hidden;'
-      + 'text-overflow:ellipsis;max-width:100%" title="'+nombre+'">'+nombre+'</div>'
-
-      /* el numero, que es lo que se lee de lejos */
+      + 'text-overflow:ellipsis;max-width:100%">'+nombre+'</div>'
       + '<div style="font-size:20px;font-weight:900;line-height:1;color:'+cls.color+'">'+txt+'</div>'
-
-      /* la bateria, mas baja que antes */
-      + '<div style="width:26px;height:40px;display:flex;flex-direction:column;align-items:center">'
+      + '<div style="width:26px;height:38px;display:flex;flex-direction:column;align-items:center">'
         + '<div style="width:11px;height:4px;border-radius:2px 2px 0 0;background:'+cls.color+';opacity:.7;flex-shrink:0"></div>'
         + '<div style="position:relative;width:26px;flex:1;border-radius:3px;overflow:hidden;border:2px solid '+cls.color+'">'
           + '<div style="position:absolute;inset:0;background:#07080f"></div>'
           + (val!==null ? '<div style="position:absolute;bottom:0;left:0;right:0;height:'+fh+'%;background:'+cls.color+';opacity:.85"></div>' : '')
-          /* la marca blanca del objetivo */
           + '<div style="position:absolute;left:0;right:0;bottom:'+oh+'%;height:2px;background:#fff;opacity:.85"></div>'
         + '</div>'
       + '</div>'
-
-      /* el objetivo, chiquito: la referencia sin robar protagonismo */
-      + '<div style="font-size:8.5px;font-weight:700;color:#64748b;letter-spacing:.3px">'
-      + 'obj ' + objLine + '</div>'
+      + (n!=null ? '<div style="font-size:8.5px;font-weight:700;color:#8395ac">'+n+' acc.</div>' : '')
+      + '<div style="font-size:8.5px;font-weight:700;color:#64748b;letter-spacing:.3px">obj '+objLine+'</div>'
       + '</div>';
 }
 function renderObjetivos(cid,extra){
@@ -455,6 +462,9 @@ function renderObjetivos(cid,extra){
     +Object.keys(metas).map(function(id){
       var m=metas[id],val=vals[id]!==undefined?vals[id]:null;
       var cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+      /* El total de acciones viaja con la meta: es lo que permite leer bien el
+         numero. Un 40% de 5 acciones y un 20% de 238 no valen lo mismo. */
+      try{ if(vals['n_'+id]!=null) m=Object.assign({},m,{n:vals['n_'+id]}); }catch(e){}
       return objSingleBat(id,val,m,cls,m.obj);
     }).join('')+'</div></div>';
   el.innerHTML=html;

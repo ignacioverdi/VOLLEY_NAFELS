@@ -1,76 +1,50 @@
-LAS BATERIAS: AUDITADAS, SIN FILTROS
-====================================
+FALTABA CONECTAR EL CONTEO
+==========================
 
-4 archivos. HACER_TODO y publicar.
-(Lleva HACER_TODO porque cambia gen_baterias.py)
-
-
-PRIMERO: AUDITE LAS 12, UNA POR UNA
------------------------------------
-Recalcule cada bateria desde cero, leyendo los .dvw y replicando la logica
-del motor, y compare contra lo que muestra la pantalla:
-
-   FUNDAMENTO       recalculo  pantalla  acciones   estado
-   Saque                   39        39      1018   coincide
-   Recepción               55        55       998   coincide
-   Blq #+                  42        42       101   coincide
-   Blq #                   20        20       101   coincide
-   Atq Central             22        22        45   coincide
-   Atq Alta                 5         5        99   coincide
-   Atq Rápida              36        36       129   coincide
-   Atq R#+                 35        35        20   coincide
-   Atq R!                  35        35        17   coincide
-   Atq R-                  40        40         5   coincide
-   Atq Transición          20        20       238   coincide
-   Defensa                 51        51       206   coincide
-
-LAS 12 COINCIDEN. No hay nada inventado ni mal calculado.
+Un archivo: objetivos_config.js. Publicar y Ctrl+Shift+R.
+NO hace falta HACER_TODO.
 
 
-EL 40% DE ATQ R- ES REAL
-------------------------
-Son 5 ataques tras recepcion mala: 2 punto, 0 bloqueados, 0 errores.
-(2 - 0 - 0) / 5 = 40%. La cuenta esta bien.
+LO QUE YA FUNCIONA — verificado en la app
+-----------------------------------------
+Las 12 baterias tienen su titulo y el semaforo correcto:
 
-Y el "174%" que te mostre no esta en pantalla: lo escribi yo para explicarte
-el semaforo. Sale de que el objetivo es 23% y el equipo marca 40%, o sea que
-supero al mejor de la liga. Es posible: el objetivo es una referencia, no un
-techo.
+   % SAQUE          39%  obj 42   CERCA
+   % RECEPCIÓN      55%  obj 60   NEUTRO
+   % BLQ #+         42%  obj 45   CERCA
+   % BLQ #          20%  obj 21   CERCA
+   % ATQ CENTRAL    22%  obj 55   LEJOS
+   % ATQ ALTA        5%  obj 18   LEJOS
+   % ATQ RÁPIDA     36%  obj 40   CERCA
+   % ATQ R#+        35%  obj 47   NEUTRO
+   % ATQ R!         35%  obj 44   NEUTRO
+   % ATQ R-         40%  obj 23   OBJETIVO
+   % ATQ TRANSICIÓN 20%  obj 33   LEJOS
+   % DEFENSA        51%  obj 60   NEUTRO
 
-SIN MINIMOS, como pediste. Si son 5 acciones se muestra el 40% y punto. Se
-va a acomodar solo cuando se carguen mas entrenamientos.
+Cada color coincide exactamente con el recorrido de la liga que calcule.
+Ninguna quedo sin nombre.
+
+Y el motor YA esta generando los totales: verifique que el dato existe y
+coincide con mi auditoria (n_atqrm 5 · n_atqtr 238 · n_sq 1018).
 
 
-LO QUE SI AGREGUE: EL CONTEXTO
-------------------------------
-Cada bateria ahora muestra SOBRE CUANTAS ACCIONES esta hecha:
+LO QUE FALTABA
+--------------
+El conteo no aparecia en la tarjeta. La razon: hay DOS objSingleBat, una en
+dashboard.html y otra en objetivos_config.js, y la del panel de arriba es la
+del segundo archivo. Habia actualizado solo la del dashboard.
+
+Es el mismo problema de siempre en este codigo: la misma funcion escrita en
+dos lados, y uno se olvida de uno.
+
+Ahora las dos muestran:
 
      % ATQ R-
        40%
       [bat]
       5 acc.        <- esto
       obj 23
-      OBJETIVO
 
-No filtra ni esconde nada. Solo pone al lado el dato que falta para leerlo
-bien: un 40% de 5 y un 20% de 238 no valen lo mismo, y pintados iguales
-enganan.
-
-Al apoyar el mouse: "% Atq R-: 40% sobre 5 acciones · el peor de la liga 0%,
-el mejor 23% · estás al 174% del recorrido".
-
-
-EL IDIOMA MEZCLADO
-------------------
-El bloque de "how each value is calculated" tenia el titulo en ingles y el
-contenido en castellano. Traducidas 13 frases mas: la escala de 0 a 100, de
-donde salen los objetivos, y las cuatro lineas del semaforo.
-
-Y esas cuatro lineas ADEMAS DECIAN EL CRITERIO VIEJO ("por encima del
-promedio"), que ya no es el que usa el semaforo. Ahora dicen lo que hace de
-verdad:
-
-   Verde fuerte  llegaste al mejor de la liga en ese fundamento
-   Verde claro   estas en el cuarto de arriba de la liga
-   Amarillo      estas en la mitad de arriba de la liga
-   Rojo          estas en la mitad de abajo de la liga
+Y al apoyar el mouse: "% Atq R-: 40% sobre 5 acciones · el peor de la liga
+0%, el mejor 23% · estás al 174% del recorrido".
