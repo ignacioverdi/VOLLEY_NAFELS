@@ -1,53 +1,47 @@
-LO QUE FALTABA — EL PLANTEL PRUEBA
-==================================
+LO QUE FALTABA — ADENTRO DE LA BASE
+===================================
 
-2 archivos a la raiz. HACER_TODO y publicar.
-
-   update_db_entrenamientos_nafels.py
-   entrenamientos_nafels_db.json
+3 archivos a la raiz. HACER_TODO y publicar.
 
 
-LO QUE YA FUNCIONO
-------------------
-El historial quedo perfecto. Los cuatro entrenamientos:
+LO QUE YA ESTABA BIEN
+---------------------
+   equipos    ['Nafels']            sin PRUEBA ni CAMPANA
+   historial  los 4 entrenamientos  todos "vs Nafels"
 
-   04/09/2026  vs Nafels   turno -   12 jugadores
-   07/09/2026  vs Nafels   turno -   11 jugadores
-   08/09/2026  vs Nafels   turno M    7 jugadores   <- antes decia PRUEBA
-   08/09/2026  vs Nafels   turno -   12 jugadores
-
-Ninguno dice PRUEBA ni CAMPANA. Y sin haber tocado un solo .dvw.
+Eso quedo perfecto con lo anterior.
 
 
-LO QUE QUEDABA
---------------
-El equipo PRUEBA seguia en la lista de equipos. Era otro lugar del mismo
-motor, que no habia mirado:
+LO QUE ENCONTRE MIRANDO MAS ADENTRO
+-----------------------------------
+Cada ACCION de cada jugador guarda su propio campo "rival", y ahi seguian
+1.294 acciones diciendo PRUEBA o CAMPANA.
 
-El archivo del 08/09 tiene dos secciones de plantel, una por equipo. El
-codigo salteaba la segunda solo cuando los DOS NOMBRES COINCIDIAN. En ese
-archivo dicen "AXPO NAFELS" y "PRUEBA", asi que no coincidian, entraba a la
-segunda vuelta y creaba un equipo PRUEBA con su propio plantel.
+Por que no se habian arreglado solas: el archivo entrenamientos_nafels_db.json
+ACUMULA las acciones y no reescribe las viejas. La lista de equipos y el
+historial se regeneran enteros, por eso salieron limpios; las acciones no.
 
-Ahora se saltea cuando es un ENTRENAMIENTO, sin importar como se llame el
-visitante. Son los mismos jugadores del club, ya tomados en la primera
-vuelta.
+Lo corregi en dos lados:
 
-PROBADO CON TUS ARCHIVOS PUBLICADOS, sin tocarlos:
+1. EL MOTOR, para lo que venga
+   Habia un tercer lugar que guardaba el rival y no lo habia tocado:
+   parse_setter_rallies, que arma las acciones del armador. Ahora tambien
+   ignora el casillero del visitante cuando es un entrenamiento.
 
-   &2026-09-08 AXP-ENTRENAMIENTO MORNING   crea: ['AXPO NAFELS']
-   &Pra-AXPO NAFELS-2026-09-04             crea: ['AXPO NAFELS']
-   &Pra-AXPO NAFELS-2026-09-07             crea: ['AXPO NAFELS']
-   &Pra-AXPO NAFELS-2026-09-08             crea: ['AXPO NAFELS']
+2. LO QUE YA ESTABA GUARDADO
+   El script normalizar_rival.py recorre la base y cambia el rival donde
+   diga PRUEBA o CAMPANA. No toca ningun otro dato: ni el jugador, ni la
+   zona, ni la evaluacion, ni la fecha.
 
-Y en el json se borro el PRUEBA que ya habia quedado, mas la entrada del
-08/09 para que se reprocese con la regla nueva.
+   Ya lo corri sobre tu base: 1.294 acciones corregidas.
+   El entrenamientos_nafels_db.json de este zip YA VIENE LIMPIO.
 
 
-DESPUES DE ESTO
----------------
-Queda un solo equipo: Nafels. Y no vuelve a aparecer ninguno inventado,
-escriba lo que escriba el scout en el casillero del visitante durante un
-entrenamiento.
+VERIFICADO
+----------
+   "rival": "PRUEBA"   ->  0
+   "rival": "CAMPANA"  ->  0
+   equipos             ->  ['Nafels']
 
-En un PARTIDO no cambia nada: ahi el rival y su plantel se registran normal.
+El script queda por si alguna vez hace falta de nuevo. Deja una copia .bak
+antes de escribir.
