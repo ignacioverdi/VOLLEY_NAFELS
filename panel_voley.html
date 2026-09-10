@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20260910-0001"></script>
-<script src="selector_categoria.js?v=20260910-0001"></script>
+<script src="categorias_club.js?v=20260910-0805"></script>
+<script src="selector_categoria.js?v=20260910-0805"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -351,19 +351,19 @@ body::before{content:'';position:fixed;inset:0;
 
 select, select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20260910-0001"></script>
+<script src="objetivos_config.js?v=20260910-0805"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260910-0001"></script>
-<script src="firebase.js?v=20260910-0001" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260910-0001"></script>
-<script src="lang.js?v=20260910-0001"></script>
-<script src="objetivos.js?v=20260910-0001" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20260910-0001"></script>
-  <script src="video_delay.js?v=20260910-0001" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260910-0805"></script>
+<script src="firebase.js?v=20260910-0805" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260910-0805"></script>
+<script src="lang.js?v=20260910-0805"></script>
+<script src="objetivos.js?v=20260910-0805" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20260910-0805"></script>
+  <script src="video_delay.js?v=20260910-0805" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -628,7 +628,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260910-0001">
+<link rel="stylesheet" href="movil.css?v=20260910-0805">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase">← Dashboard</a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -1487,7 +1487,7 @@ function updateObj(){
     row.style.cssText='display:flex;flex-direction:column;align-items:center;gap:6px;'
       + 'padding:12px 8px 10px;background:rgba(255,255,255,.025);'
       + 'border:1px solid rgba(255,255,255,.07);border-radius:12px;position:relative;'
-      + 'overflow:hidden;min-height:210px;justify-content:flex-start';
+      + 'overflow:hidden;min-height:280px;justify-content:flex-start';
 
     const colorFin = hasData ? k.color : 'rgba(255,255,255,.2)';
     const llena = (hasGoal && hasData && goal>0) ? Math.min(100, Math.round(actual/goal*100)) : 0;
@@ -1495,23 +1495,26 @@ function updateObj(){
     row.innerHTML = `
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:${k.color};opacity:${hasData?1:.25}"></div>
 
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:10.5px;font-weight:800;
-                  letter-spacing:1px;text-transform:uppercase;color:${k.color};text-align:center;
-                  line-height:1.2;min-height:25px;display:flex;align-items:center">${k.label}</div>
+      <!-- El nombre del indicador, mas grande: en el televisor a varios metros
+           el de 10.5px no se leia. Ahora 15px y hasta dos lineas. -->
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;
+                  letter-spacing:.8px;text-transform:uppercase;color:${k.color};text-align:center;
+                  line-height:1.15;min-height:36px;display:flex;align-items:center;
+                  justify-content:center;padding:0 2px">${k.label}</div>
 
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:900;
                   line-height:1;color:${colorFin}">${hasData?Math.round(actual)+k.unit:'--'}</div>
 
       <!-- la bateria: se llena segun cuanto falta para el objetivo -->
-      <div style="width:30px;height:46px;display:flex;flex-direction:column;align-items:center">
-        <div style="width:12px;height:4px;border-radius:2px 2px 0 0;background:${k.color};opacity:.7;flex-shrink:0"></div>
-        <div style="position:relative;width:30px;flex:1;border-radius:3px;overflow:hidden;border:2px solid ${k.color};opacity:${hasData?1:.3}">
+      <div style="width:40px;height:92px;display:flex;flex-direction:column;align-items:center">
+        <div style="width:16px;height:5px;border-radius:3px 3px 0 0;background:${k.color};opacity:.7;flex-shrink:0"></div>
+        <div style="position:relative;width:40px;flex:1;border-radius:5px;overflow:hidden;border:2.5px solid ${k.color};opacity:${hasData?1:.3}">
           <div style="position:absolute;inset:0;background:#07080f"></div>
           <div style="position:absolute;bottom:0;left:0;right:0;height:${llena}%;background:${k.color};opacity:.85;transition:height .6s ease"></div>
         </div>
       </div>
 
-      <input type="number" value="${saved}" placeholder="objetivo"
+      <input type="number" value="${saved}" data-t-ph="obj_ph" placeholder="objetivo"
         onchange="localStorage.setItem('goal-${k.id}',this.value);updateObj()"
         style="width:74px;padding:5px 6px;text-align:center;background:rgba(0,0,0,.35);
                border:1px solid rgba(255,255,255,.12);border-radius:7px;color:var(--txt);
@@ -2141,8 +2144,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20260910-0001" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260910-0001"></script>
+<script src="plantel_nafels.js?v=20260910-0805" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260910-0805"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2241,7 +2244,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20260910-0001"></script>
+<script src="ayuda.js?v=20260910-0805"></script>
 </body>
 </html>
 

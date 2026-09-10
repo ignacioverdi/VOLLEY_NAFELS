@@ -1,73 +1,43 @@
-DEFINITIVO — DRILLS, NOMBRES Y COPIAS
-=====================================
+OBJETIVOS DEL DIA — MAS GRANDE Y EN 3 IDIOMAS
+=============================================
 
-4 archivos. HACER_TODO y publicar.
-
-   panel_vivo.html                     el scout
-   gen_baterias.py                     las baterias
-   update_db_entrenamientos_nafels.py  las pantallas
-   build_video.py                      los videos
+2 archivos: panel_voley.html y lang.js.
+Publicar (sin HACER_TODO) y Ctrl+Shift+R.
 
 
-TUS DOS PREGUNTAS, RESPONDIDAS CON EL CODIGO EN LA MANO
--------------------------------------------------------
+LO QUE PEDISTE
+--------------
+1) EL NOMBRE DEL INDICADOR, MAS GRANDE
+   Estaba en 10.5px, que a varios metros del televisor no se lee.
+   Ahora esta en 15px, con espacio para dos lineas si el nombre es largo.
 
-1) ¿CADA DRILL SE GUARDA COMO ARCHIVO SEPARADO?
-   NO. Un entrenamiento entero es UN solo archivo, con todos los drills
-   adentro. Lo verifique: el exportador recorre la lista una sola vez y
-   SALTEA las marcas de drill, asi que no van al .dvw.
+   Probado con el mas largo ("HIGH-BALL ATTACK EFFICIENCY"): ninguno se
+   corta.
 
-   Es exactamente lo que hace DataVolley. Lo comprobe abriendo tu propia
-   practica del 07/09 hecha con DataVolley: 298 lineas, TODAS acciones, ni
-   una marca de drill, marcador 0-0 de principio a fin.
+2) LA BATERIA, MAS LARGA
+   De 30x46 px a 40x92 px: el doble de alto y mas ancha. Es el dibujo que
+   se lee de lejos, asi que gana el espacio que sobraba en la tarjeta.
 
-   Un drill nuevo es un cambio de marcador. Nada mas.
-
-2) ¿SE PUEDE REPETIR EL NOMBRE AL DESCARGAR?
-   SI, y era un problema real. El nombre se arma con fecha + equipos + turno:
-
-       &2026-09-15 AXP-ENTRENAMIENTO-T.dvw
-
-   Siempre el mismo para una sesion. Si exportas dos veces —a mitad del
-   entrenamiento y otra al final, que es lo razonable— Windows guarda el
-   segundo como "... (1).dvw".
-
-   Y si los dos van a la carpeta, el sistema veia DOS entrenamientos donde
-   hay uno. Peor: el de mitad tiene MENOS acciones, y si se procesaba ese se
-   perdian datos sin que nadie lo notara.
-
-   RESUELTO EN LOS TRES MOTORES. Ahora agrupan por fecha + turno + rival, se
-   quedan con el que MAS acciones tiene, y avisan por pantalla:
-
-       [baterias] MISMA SESION EN 2 ARCHIVOS (2026-09-08 turno -):
-                  &Pra-AXPO NAFELS-2026-09-08.dvw      948 acciones  <-- ME QUEDO CON ESTE
-                  &Pra-AXPO NAFELS-2026-09-08 (1).dvw  474 acciones      descartado
-
-   PROBADO CON TUS ARCHIVOS REALES: puse el completo (948) y uno de mitad de
-   sesion (474) en la carpeta. 5 archivos -> 4 sesiones. Se quedo con el
-   completo y lo dijo.
+   Tambien el numero paso de 30 a 34 px.
 
 
-ADEMAS: EL NEW DRILL YA NO DEPENDE DEL ALMACEN QUE FALLO
---------------------------------------------------------
-Revisando encontre que la copia previa al drill se guardaba con
-localStorage.setItem dentro de un catch vacio: EL MISMO ALMACEN Y EL MISMO
-CATCH que fallaron el 09/09. Si ese almacen estaba roto, la copia del drill
-tampoco se guardaba.
+ADEMAS: LO QUE QUEDABA EN CASTELLANO
+------------------------------------
+En tu captura se ve: todo en ingles pero la chapa decia "✓ LOGRADO" y el
+casillero "objetivo". Traducido:
 
-Ahora el drill fuerza una foto en la red —el almacen grande, independiente—
-justo antes de tocar los codigos y otra justo despues.
-
-PROBADO CON EL ESCENARIO EXACTO DEL 09/09:
-   40 codigos -> DRILL 1 -> 50 mas -> ROMPO localStorage -> DRILL 2 -> 30 mas
-   en pantalla 122 · la red guardo 40, 41, 91, 92, 122
-   TODO SALVADO, incluido lo posterior al segundo drill.
+   ✓ LOGRADO   ->  ✓ ACHIEVED   ·  ✓ ERREICHT
+   ▲ CERCA     ->  ▲ CLOSE      ·  ▲ NAH DRAN
+   EN PROCESO  ->  IN PROGRESS  ·  IN ARBEIT
+   objetivo    ->  target       ·  Ziel
 
 
-COMO QUEDA LA COSA
-------------------
-   scoutear          igual que siempre, sin botones ni ventanas nuevas
-   New Drill         cambia el marcador, no parte nada
-   exportar          un archivo por entrenamiento
-   exportar 2 veces  el sistema se queda con el completo y avisa
-   si algo falla     la red tiene una foto cada 15 codigos
+MEDIDO EN LA PANTALLA REAL
+--------------------------
+   antes   titulo 10.5px · bateria 46px · alto total 471 px
+   ahora   titulo 15px   · bateria 92px · alto total 594 px
+
+   con el titulo de la pagina: 704 px contra 791 de pantalla
+   SIGUE ENTRANDO SIN SCROLLEAR
+
+   11 tarjetas en 2 filas de 6, todas de 292 px, ninguna despareja.

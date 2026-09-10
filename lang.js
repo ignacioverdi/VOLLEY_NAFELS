@@ -22,6 +22,8 @@
 
   // ── Diccionario ───────────────────────────────────────────────────────────
   var T = {
+    /* El casillero para escribir el objetivo, en el modal del panel. */
+    obj_ph:  { es:'objetivo', en:'target', de:'Ziel' },
     /* Botones del panel en vivo. Antes el texto iba partido con <br> y el
        motor traducia cada mitad por separado: "Direcciones"+"ataque" salia
        como "DIRECCIONES ATTACK". Con la clave se traduce la frase entera. */
@@ -286,6 +288,13 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    /* Las chapas del modal de objetivos. */
+    'CERCA': { en:'CLOSE', de:'NAH DRAN' },
+    'EN PROCESO': { en:'IN PROGRESS', de:'IN ARBEIT' },
+    'LOGRADO': { en:'ACHIEVED', de:'ERREICHT' },
+    '▲ CERCA': { en:'▲ CLOSE', de:'▲ NAH DRAN' },
+    '▲ EN PROCESO': { en:'▲ IN PROGRESS', de:'▲ IN ARBEIT' },
+    '✓ LOGRADO': { en:'✓ ACHIEVED', de:'✓ ERREICHT' },
     /* Etiquetas del panel sin el "(42)": el dibujo le saca el parentesis. */
     '% Atq Alta': { en:'% Att High', de:'% Angr Hoch' },
     '% Atq Central': { en:'% Att Middle', de:'% Angr Mitte' },
