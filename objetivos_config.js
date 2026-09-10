@@ -154,11 +154,27 @@ window.currentObjPartido = window.currentObjPartido || 'acumulado';
 window.currentObjTipo = window.currentObjTipo || 'partido'; // 'partido' or 'entrenamiento'
 
 function objClassify(id,val){
-  var m=window.OBJETIVOS_CONFIG.metas[id];
-  if(val>=m.g2) return{color:'#22c55e',bg:'rgba(34,197,94,.1)',   border:'rgba(34,197,94,.35)',  label:'Objetivo'};
-  if(val>=m.g1) return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
-  if(val>=m.y)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)',  border:'rgba(251,191,36,.3)',  label:'Neutro'};
-  return              {color:'#ef4444',bg:'rgba(239,68,68,.1)',   border:'rgba(239,68,68,.3)',   label:'Lejos'};
+  /* ══ EL SEMAFORO, PROPORCIONAL AL OBJETIVO ════════════════════════════════
+     Antes cada fundamento tenia sus cortes escritos a mano y no guardaban
+     relacion entre si: el corte de "Neutro" iba del 56% al 95% del objetivo
+     segun cual fuera. Por eso 36 de 40 (90%) daba CERCA y 55 de 60 (92%)
+     daba LEJOS, que no hay forma de explicarle a nadie.
+
+     Y los cortes eran numeros fijos: si cambiabas el objetivo en el panel, el
+     semaforo seguia usando los del objetivo viejo.
+
+     Ahora salen del objetivo, iguales para los doce:
+         Objetivo >= 100%   ·   Cerca >= 92%   ·   Neutro >= 80%   ·   Lejos < 80% */
+  var m = window.OBJETIVOS_CONFIG.metas[id] || {};
+  var obj = (m.obj != null) ? m.obj : null;
+  var g2, g1, y;
+  if (m.cortesPropios && m.g2 != null) { g2=m.g2; g1=m.g1; y=m.y; }
+  else if (obj) { g2=obj; g1=obj*0.92; y=obj*0.80; }
+  else { g2=m.g2; g1=m.g1; y=m.y; }
+  if(val>=g2) return{color:'#22c55e',bg:'rgba(34,197,94,.1)',   border:'rgba(34,197,94,.35)',  label:'Objetivo'};
+  if(val>=g1) return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
+  if(val>=y)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)',  border:'rgba(251,191,36,.3)',  label:'Neutro'};
+  return             {color:'#ef4444',bg:'rgba(239,68,68,.1)',   border:'rgba(239,68,68,.3)',   label:'Lejos'};
 }
 
 function objClassifyVsTeam(val,teamVal){

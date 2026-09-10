@@ -1,44 +1,83 @@
-UN DETALLE DEL NOMBRE
-=====================
+LAS BATERIAS: TITULO, SEMAFORO Y TRADUCCION
+===========================================
 
-Un archivo: panel_vivo.html. Publicar y Ctrl+Shift+R.
-
-
-PROBE TODO LO QUE HABLAMOS. FUNCIONA:
--------------------------------------
-
-LA TABLA
-   saque       # / + ! - =     6 valoraciones (antes 4)
-   recepcion   # + ! - / =     6 valoraciones (antes 5)
-   los % suman 101 (redondeo), antes no cerraban
-   tooltip     "26 de 221 · punto"  en las 12 celdas
-   titulos     S A Q U E -> S E R V E · A U F S C H L A G
-               R E C E P C I O N -> R E C E P T I O N · A N N A H M E
-               JUGADOR -> P L A Y E R · S P I E L E R
-
-LA DISTRIBUCION DEL ARMADOR
-   Side-out      33 armados
-   Transicion   102 armados
-   Todo         135 armados     <- los 135 completos, como pediste
-   Aparece la cancha "Sin rotación · el archivo no guarda rotación"
-
-EL SCOUT
-   Backspace con la barra vacia: 3 codigos antes, 3 despues. NO BORRA.
-   El desplegable de correccion: 11 jugadores, incluidos los que ya jugaron
-   y no estaban en la formacion (7, 9, 13).
-
-EL DRILL EN EL .DVW
-   DataVolley : **Drill;;;;;;;10.56.34;1;0;0;1;1610;;;;;;;;;;;;;;
-   el panel   : **Drill;;;;;;;07.50.54;1;0;0;1;1610;;;;;;;;;;;;;;
-   27 columnas los dos, misma estructura, mismo segundo de video.
+3 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
 
 
-LO QUE FALTABA AJUSTAR
-----------------------
-El nombre del archivo salia con el CODIGO del equipo en vez del nombre:
+1) NINGUNA BATERIA DECIA QUE MEDIA
+----------------------------------
+La tarjeta mostraba "39% NEUTRO" y nada mas. Sin el nombre del fundamento
+hay que acordarse de memoria en que orden van los doce, y en el televisor
+no sirve para nada.
 
-   DataVolley  &Pra-AXPO NAFELS-2026-09-08.dvw
-   salia       &Pra-NAF-2026-09-10-T.dvw
-   ahora       &Pra-AXPO NAFELS-2026-09-10-T.dvw
+LA CAUSA: dashboard.html tiene SU PROPIA COPIA de objSingleBat, distinta
+de la del archivo central. Cuando arreglamos la del panel en vivo, esta
+quedo igual. (Tambien tiene su propia objClassify y DOS copias de
+OBJETIVOS_CONFIG.)
 
-Ahora si son iguales. Es el ultimo detalle que quedaba.
+AHORA cada tarjeta dice:
+
+     % SAQUE
+       39%
+      [bateria]
+     obj 42
+     CERCA
+
+
+2) EL SEMAFORO NO ERA COHERENTE  ← lo mas importante
+----------------------------------------------------
+Cada fundamento tenia sus cortes escritos a mano, sin relacion entre si.
+Medido sobre tus objetivos, el corte de "Neutro" iba del 56% al 95% del
+objetivo segun cual fuera:
+
+     recepcion    Neutro desde el 95% del objetivo
+     defensa      Neutro desde el 87%
+     atq alta     Neutro desde el 56%
+
+Por eso pasaba esto, que no hay forma de explicarle a nadie:
+
+     36 de 40  (90% del objetivo)  ->  CERCA
+     55 de 60  (92% del objetivo)  ->  LEJOS
+
+Y peor: los cortes eran numeros FIJOS. Si cambiabas el objetivo de saque de
+42 a 50 en el panel, el semaforo seguia usando los cortes del 42 y quedaba
+mintiendo.
+
+AHORA los tres cortes salen del objetivo, iguales para los doce:
+
+     Objetivo  >= 100% del objetivo
+     Cerca     >=  92%
+     Neutro    >=  80%
+     Lejos      <  80%
+
+COMO QUEDAN TUS NUMEROS:
+
+     FUNDAMENTO        val  obj    %     antes   ->  ahora
+     Saque              39   42   93%    NEUTRO      CERCA
+     Recepción          55   60   92%    LEJOS       NEUTRO
+     Blq #+             42   45   93%    NEUTRO      CERCA
+     Blq #              20   21   95%    CERCA       CERCA
+     Atq Central        22   55   40%    LEJOS       LEJOS
+     Atq Alta            5   18   28%    LEJOS       LEJOS
+     Atq Rápida         36   40   90%    CERCA       NEUTRO
+     Atq R#+            35   47   74%    NEUTRO      LEJOS
+     Atq R!             35   44   80%    NEUTRO      LEJOS
+     Atq R-             40   23  174%    OBJETIVO    OBJETIVO
+     Atq Transición     20   33   61%    LEJOS       LEJOS
+     Defensa            51   60   85%    LEJOS       NEUTRO
+
+Ahora se leen igual todos: el mismo porcentaje da el mismo color, sea el
+fundamento que sea. Y si cambias un objetivo, el semaforo se mueve con el.
+
+Si algun dia queres cortes propios para un fundamento, se pueden dejar:
+alcanza con marcarlo con cortesPropios en la configuracion.
+
+
+3) LA EXPLICACION ESTABA EN CASTELLANO
+--------------------------------------
+Con el resto de la pantalla en ingles. La arma el JavaScript, por eso no
+entraba en el barrido del HTML.
+
+Traducidas 11 frases: los nombres de los fundamentos, las escalas completas
+("# ace 100 · / free ball 87.5 · ..."), la formula del ataque, la del
+bloqueo, los titulos de las secciones y las cuatro chapas del semaforo.

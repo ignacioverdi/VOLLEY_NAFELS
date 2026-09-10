@@ -296,6 +296,19 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    /* La explicacion de como se calcula cada valor, en el dashboard. La arma
+       el JavaScript, por eso no entraba en el barrido del HTML. */
+    '# ace 100 · / free ball 87,5 · + positivo 75 · ! neutro 50 · − negativo 25 · = error 0': { en:'# ace 100 · / free ball 87.5 · + positive 75 · ! neutral 50 · − negative 25 · = error 0', de:'# Ass 100 · / Freeball 87,5 · + positiv 75 · ! neutral 50 · − negativ 25 · = Fehler 0' },
+    '# perfecta 100 · + buena 75 · ! neutra 50 · − mala 25 · = error 0': { en:'# perfect 100 · + good 75 · ! neutral 50 · − poor 25 · = error 0', de:'# perfekt 100 · + gut 75 · ! neutral 50 · − schlecht 25 · = Fehler 0' },
+    '# perfecta 100 · + positiva 75 · ! neutra 50 · − negativa 25 · / sobrepase 12,5 · = error 0': { en:'# perfect 100 · + positive 75 · ! neutral 50 · − negative 25 · / overpass 12.5 · = error 0', de:'# perfekt 100 · + positiv 75 · ! neutral 50 · − negativ 25 · / Überpass 12,5 · = Fehler 0' },
+    'Blq #+ es (punto + positivo) / total. Blq # es solo punto / total.': { en:'Block #+ is (point + positive) / total. Block # is just point / total.', de:'Block #+ ist (Punkt + positiv) / gesamt. Block # ist nur Punkt / gesamt.' },
+    'COMO SE CALCULA CADA VALOR': { en:'HOW EACH VALUE IS CALCULATED', de:'WIE JEDER WERT BERECHNET WIRD' },
+    'Cambia el numero y los colores se ajustan solos. Queda guardado para todo el cuerpo tecnico.': { en:'Change the number and the colours adjust by themselves. It is saved for the whole coaching staff.', de:'Ändere die Zahl und die Farben passen sich an. Es wird für den ganzen Trainerstab gespeichert.' },
+    'Cuanto vale cada valoracion': { en:'What each rating is worth', de:'Was jede Bewertung zählt' },
+    'DE DONDE SALEN LOS OBJETIVOS': { en:'WHERE THE TARGETS COME FROM', de:'WOHER DIE ZIELE KOMMEN' },
+    'Eficacia clasica del voley: (puntos − bloqueados − errores) / total. Es el estandar mundial y puede dar negativo.': { en:'Classic volleyball efficiency: (kills − blocked − errors) / total. It is the world standard and can be negative.', de:'Klassische Volleyball-Effizienz: (Punkte − geblockt − Fehler) / gesamt. Weltstandard, kann negativ sein.' },
+    'Fundamento': { en:'Skill', de:'Element' },
+    'LOS OBJETIVOS DE ESTE EQUIPO': { en:'THIS TEAM TARGETS', de:'DIE ZIELE DIESES TEAMS' },
     /* Las chapas del modal de objetivos. */
     'CERCA': { en:'CLOSE', de:'NAH DRAN' },
     'EN PROCESO': { en:'IN PROGRESS', de:'IN ARBEIT' },
