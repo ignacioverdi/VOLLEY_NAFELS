@@ -267,7 +267,10 @@ def parse_dvw(path):
     scout=txt.split('[3SCOUT]')[-1].strip().splitlines()
     # resultado (sets) — simple: contar de la meta si está
     return {'code':code,'rival':rival,'date':date,'side':side,'names':names,'scout':scout,
-            'turno':_turno(base)}
+            'turno':_turno(base),
+            # cual de los dos equipos es el nuestro: en un entrenamiento el
+            # rival pasa a ser este mismo, sin mirar lo que diga el archivo
+            'nuestro': home_name if casla_home else away_name}
 
 def season_from_date(date):
     """Temporada 'YYYY/YY' desde la fecha. Arranca en agosto, igual que en
@@ -410,6 +413,14 @@ def build(fuentes, out='datos_baterias.js', filtro_temp=None):
         _todos = sorted(glob.glob(os.path.join(folder,'*.dvw')))
         for f, r in elegir_mejor_copia(_todos, parse_dvw):
             if filtro_temp and not temp_carpeta and season_from_date(r['date']) != filtro_temp: continue
+            # ══ EN UN ENTRENAMIENTO NO HAY RIVAL ═══════════════════════════
+            # El scout escribe cualquier cosa en el casillero del visitante
+            # —PRUEBA, CAMPANA, lo que sea— y eso terminaba inventando equipos
+            # en el sistema. En una practica los dos lados son el club, punto.
+            # Asi lo escribe DataVolley y asi se toma aca, sin depender de lo
+            # que diga el archivo.
+            if tipo == 'entrenamiento':
+                r['rival'] = r.get('nuestro') or r['rival']
             sid=_mk_id(r['code'], tipo, r['date'], r['rival'], usados, r.get('turno',''))
             pl=_calc_baterias(r['scout'], r['side'])
             jug={}

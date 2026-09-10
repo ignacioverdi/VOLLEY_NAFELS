@@ -414,12 +414,21 @@ def parse_dvw_both(fpath, temporada):
     # entrenando contra si mismo. Se procesa UNA sola vez, tomando las
     # acciones de los dos lados.
     _MISMO_EQUIPO = bool(home) and bool(away) and home.strip().upper() == away.strip().upper()
+    # Es un entrenamiento si los dos equipos son el mismo (asi lo escribe
+    # DataVolley y asi lo exporta el panel), o si el archivo esta en la
+    # carpeta de entrenamientos. Lo segundo cubre los .dvw viejos, donde
+    # el scout habia puesto un nombre inventado como rival.
+    _ES_ENTREN = _MISMO_EQUIPO or ('ENTRENAMIENTO' in (fpath or '').upper())
     for team, pfx, section in [(home,'*','[3PLAYERS-H]'),(away,'a','[3PLAYERS-V]')]:
         if _MISMO_EQUIPO and pfx == 'a':
             continue   # ya se tomaron las dos mitades en la primera vuelta
         if not team: continue
         players = get_players(lines, section)
         rival = away if pfx=='*' else home
+        # En un entrenamiento no hay rival: los dos lados son el club. El
+        # scout puede haber escrito cualquier cosa en el casillero del
+        # visitante (PRUEBA, CAMPANA) y eso inventaba equipos en el sistema.
+        rival = team_name if _ES_ENTREN else rival
 
         idx = content.find('[3SCOUT]\n')
         if idx < 0: continue
@@ -1731,6 +1740,11 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         date = m.group(1) if m else ''
         team_home = home == team_name
         rival = away if team_home else home
+        # En un entrenamiento no hay rival: los dos lados son el club. Se
+        # detecta por los equipos iguales o por la carpeta, asi tambien
+        # quedan bien los .dvw viejos con un nombre inventado adentro.
+        if home.strip().upper() == away.strip().upper() or 'ENTRENAMIENTO' in (fname or '').upper():
+            rival = team_name
 
         tsets=0; rsets=0; set_strings=[]
         for h,a in sets:

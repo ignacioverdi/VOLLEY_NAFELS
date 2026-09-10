@@ -1,62 +1,60 @@
-LIMPIAR CAMPANA Y PRUEBA — OPCION B
-===================================
+SIN TOCAR NINGUN DVW
+====================
 
-3 archivos. Copiar, HACER_TODO y publicar.
+2 archivos a la raiz. HACER_TODO y publicar.
 
-   &2026-09-08 AXP-ENTRENAMIENTO MORNING.dvw   -> a la carpeta DVW ENTRENAMIENTOS
-   entrenamientos_nafels_db.json               -> a la raiz
-   limpiar_pruebas.py                          -> a la raiz (por si hace falta de nuevo)
+   gen_baterias.py
+   update_db_entrenamientos_nafels.py
 
-
-LO QUE SE HIZO — sin perder una sola accion
---------------------------------------------
-
-1) EL ARCHIVO DEL 08/09 MAÑANA, AL FORMATO CORRECTO
-   Se habia exportado ANTES de que arreglaramos el panel, por eso figuraba
-   como un partido contra un rival llamado PRUEBA:
-
-      antes   [3MATCH]  08/09/2026;;;;;;;;        sin temporada, sin fase
-              [3TEAMS]  AXPO NAFELS  vs  PRUEBA
-
-      ahora   [3MATCH]  08/09/2026;;2026/2027;PRE-SEASON;Practice;...
-              [3TEAMS]  AXPO NAFELS  vs  AXPO NAFELS
-
-   Es exactamente como lo escribe DataVolley, y como lo exporta el panel
-   desde el arreglo de ayer.
-
-   LAS 427 ACCIONES ESTAN INTACTAS: 240 saques, 185 recepciones, 1 ataque,
-   1 bloqueo. Solo se cambiaron dos lineas de la cabecera.
-
-2) LOS PLANTELES FALSOS, BORRADOS
-   CAMPANA y PRUEBA salieron de entrenamientos_nafels_db.json. Eran restos
-   de las pruebas y no estaban usados por ningun partido.
-
-3) LA ENTRADA DEL 08/09 SE SACO DEL REGISTRO
-   Para que HACER_TODO la vuelva a procesar desde el .dvw ya corregido y
-   quede igual que las otras.
+DESCARTA el zip anterior (NAFELS_FALTA_DVW). No hace falta.
 
 
-VERIFICADO CON EL MOTOR
------------------------
-   &2026-09-08 AXP-ENTRENAMIENTO MORNING   rival AXPO NAFELS   turno M
-   &Pra-AXPO NAFELS-2026-09-04             rival AXPO NAFELS   turno -
-   &Pra-AXPO NAFELS-2026-09-07             rival AXPO NAFELS   turno -
-   &Pra-AXPO NAFELS-2026-09-08             rival AXPO NAFELS   turno -
+TENIAS RAZON
+------------
+El .dvw que subiste funciona perfecto: lee las 427 acciones, el
+entrenamiento aparece, los jugadores estan. Hacerte reemplazar un archivo
+que anda bien, para cambiarle una palabra de la cabecera, era la solucion
+incomoda.
 
-   Ninguno dice PRUEBA. Los cuatro son entrenamientos del club.
-
-Despues de HACER_TODO, el del 08/09 va a aparecer como
-"08/09/2026 · Mañana — Entrenamiento", igual que los demas.
-
-
-POR LAS DUDAS
--------------
-El script deja una copia de cada archivo que toca, con extension .bak, en la
-misma carpeta. Si algo no cuadra, se vuelve renombrando.
+El problema no era el archivo. Era que los motores le creian al casillero
+del "rival" incluso en un entrenamiento, donde ese casillero no significa
+nada.
 
 
-DE ACA EN ADELANTE
-------------------
-Esto no vuelve a pasar: el panel ya exporta los entrenamientos con los dos
-equipos iguales y marcados como PRE-SEASON / Practice. El nombre que ponga
-el scout en "rival" deja de importar.
+LO QUE SE HIZO
+--------------
+Los dos motores ahora IGNORAN el rival cuando es un entrenamiento. Los dos
+lados pasan a ser el club, sin mirar lo que diga el archivo.
+
+Se detecta que es entrenamiento de dos formas:
+   · los dos equipos son iguales (asi lo escribe DataVolley y el panel)
+   · o el archivo esta en la carpeta de entrenamientos
+
+Lo segundo es lo que cubre los .dvw viejos, donde el scout habia escrito
+un nombre inventado.
+
+
+PROBADO CON TUS ARCHIVOS TAL CUAL ESTAN PUBLICADOS
+--------------------------------------------------
+   &2026-09-08 AXP-ENTRENAMIENTO MORNING   dice PRUEBA       -> AXPO NAFELS
+   &Pra-AXPO NAFELS-2026-09-04             dice AXPO NAFELS  -> AXPO NAFELS
+   &Pra-AXPO NAFELS-2026-09-07             dice AXPO NAFELS  -> AXPO NAFELS
+   &Pra-AXPO NAFELS-2026-09-08             dice AXPO NAFELS  -> AXPO NAFELS
+
+Ninguno reemplazado. Los cuatro quedan como entrenamientos del club.
+
+
+LA VENTAJA DE HACERLO ASI
+-------------------------
+No es solo para este archivo. Si mañana Sebastian escribe cualquier cosa en
+el casillero del visitante durante un entrenamiento, el sistema lo ignora
+igual. No hay que corregir archivos nunca mas.
+
+Y en un PARTIDO no cambia nada: ahi el rival se respeta tal cual, porque los
+equipos son distintos y el archivo no esta en la carpeta de entrenamientos.
+
+
+DESPUES DE HACER_TODO
+---------------------
+PRUEBA desaparece del historial y del listado de equipos. El del 08/09 va a
+figurar "08/09/2026 · Mañana — Entrenamiento", como los otros tres.
