@@ -1,43 +1,62 @@
-OBJETIVOS DEL DIA — MAS GRANDE Y EN 3 IDIOMAS
-=============================================
+LIMPIAR CAMPANA Y PRUEBA — OPCION B
+===================================
 
-2 archivos: panel_voley.html y lang.js.
-Publicar (sin HACER_TODO) y Ctrl+Shift+R.
+3 archivos. Copiar, HACER_TODO y publicar.
 
-
-LO QUE PEDISTE
---------------
-1) EL NOMBRE DEL INDICADOR, MAS GRANDE
-   Estaba en 10.5px, que a varios metros del televisor no se lee.
-   Ahora esta en 15px, con espacio para dos lineas si el nombre es largo.
-
-   Probado con el mas largo ("HIGH-BALL ATTACK EFFICIENCY"): ninguno se
-   corta.
-
-2) LA BATERIA, MAS LARGA
-   De 30x46 px a 40x92 px: el doble de alto y mas ancha. Es el dibujo que
-   se lee de lejos, asi que gana el espacio que sobraba en la tarjeta.
-
-   Tambien el numero paso de 30 a 34 px.
+   &2026-09-08 AXP-ENTRENAMIENTO MORNING.dvw   -> a la carpeta DVW ENTRENAMIENTOS
+   entrenamientos_nafels_db.json               -> a la raiz
+   limpiar_pruebas.py                          -> a la raiz (por si hace falta de nuevo)
 
 
-ADEMAS: LO QUE QUEDABA EN CASTELLANO
-------------------------------------
-En tu captura se ve: todo en ingles pero la chapa decia "✓ LOGRADO" y el
-casillero "objetivo". Traducido:
+LO QUE SE HIZO — sin perder una sola accion
+--------------------------------------------
 
-   ✓ LOGRADO   ->  ✓ ACHIEVED   ·  ✓ ERREICHT
-   ▲ CERCA     ->  ▲ CLOSE      ·  ▲ NAH DRAN
-   EN PROCESO  ->  IN PROGRESS  ·  IN ARBEIT
-   objetivo    ->  target       ·  Ziel
+1) EL ARCHIVO DEL 08/09 MAÑANA, AL FORMATO CORRECTO
+   Se habia exportado ANTES de que arreglaramos el panel, por eso figuraba
+   como un partido contra un rival llamado PRUEBA:
+
+      antes   [3MATCH]  08/09/2026;;;;;;;;        sin temporada, sin fase
+              [3TEAMS]  AXPO NAFELS  vs  PRUEBA
+
+      ahora   [3MATCH]  08/09/2026;;2026/2027;PRE-SEASON;Practice;...
+              [3TEAMS]  AXPO NAFELS  vs  AXPO NAFELS
+
+   Es exactamente como lo escribe DataVolley, y como lo exporta el panel
+   desde el arreglo de ayer.
+
+   LAS 427 ACCIONES ESTAN INTACTAS: 240 saques, 185 recepciones, 1 ataque,
+   1 bloqueo. Solo se cambiaron dos lineas de la cabecera.
+
+2) LOS PLANTELES FALSOS, BORRADOS
+   CAMPANA y PRUEBA salieron de entrenamientos_nafels_db.json. Eran restos
+   de las pruebas y no estaban usados por ningun partido.
+
+3) LA ENTRADA DEL 08/09 SE SACO DEL REGISTRO
+   Para que HACER_TODO la vuelva a procesar desde el .dvw ya corregido y
+   quede igual que las otras.
 
 
-MEDIDO EN LA PANTALLA REAL
---------------------------
-   antes   titulo 10.5px · bateria 46px · alto total 471 px
-   ahora   titulo 15px   · bateria 92px · alto total 594 px
+VERIFICADO CON EL MOTOR
+-----------------------
+   &2026-09-08 AXP-ENTRENAMIENTO MORNING   rival AXPO NAFELS   turno M
+   &Pra-AXPO NAFELS-2026-09-04             rival AXPO NAFELS   turno -
+   &Pra-AXPO NAFELS-2026-09-07             rival AXPO NAFELS   turno -
+   &Pra-AXPO NAFELS-2026-09-08             rival AXPO NAFELS   turno -
 
-   con el titulo de la pagina: 704 px contra 791 de pantalla
-   SIGUE ENTRANDO SIN SCROLLEAR
+   Ninguno dice PRUEBA. Los cuatro son entrenamientos del club.
 
-   11 tarjetas en 2 filas de 6, todas de 292 px, ninguna despareja.
+Despues de HACER_TODO, el del 08/09 va a aparecer como
+"08/09/2026 · Mañana — Entrenamiento", igual que los demas.
+
+
+POR LAS DUDAS
+-------------
+El script deja una copia de cada archivo que toca, con extension .bak, en la
+misma carpeta. Si algo no cuadra, se vuelve renombrando.
+
+
+DE ACA EN ADELANTE
+------------------
+Esto no vuelve a pasar: el panel ya exporta los entrenamientos con los dos
+equipos iguales y marcados como PRE-SEASON / Practice. El nombre que ponga
+el scout en "rival" deja de importar.
