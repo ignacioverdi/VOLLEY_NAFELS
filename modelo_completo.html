@@ -185,6 +185,12 @@ td.num{font-weight:600;white-space:nowrap}
 .pl-edit:hover{border-color:var(--gris-claro)}
 .pl-edit:focus{border-color:var(--cat);background:#fff;outline:none}
 .cadena{font-family:var(--fn);font-size:12.5px;font-weight:600;color:var(--cat);margin:0 0 6px;letter-spacing:.02em}
+.pl-nota td,.pl-cont td{border-top:0;padding-top:0}
+.pl-nota span{display:block;font-family:var(--fn);font-size:13.5px;color:var(--gris);padding:0 0 8px 6px;border-left:2px solid var(--gris-claro);margin-left:4px}
+.pl-cont span{display:block;font-family:var(--fn);font-size:13.5px;padding:0 0 9px 6px;border-left:2px solid #C93F60;margin-left:4px;color:var(--tinta)}
+.pl-cont a{color:var(--tinta);text-decoration:none;border-bottom:1px solid var(--gris-claro)}
+.pl-cont b{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);margin-right:5px}
+.sin-cont{color:#9E1F2C}
 .err-dt{border-left:3px solid #9E1F2C;background:#FDF6F5;padding:10px 15px;margin-bottom:8px;font-size:15.3px}
 .nota-inline{font-size:14.6px;color:var(--gris)}
 .gesto{border-top:1px solid var(--gris-claro);padding:16px 0}
@@ -353,8 +359,8 @@ const MTEC = [
   ["aterrizaje","I","D","C","M","M","M",0]
 ];
 const MTAC = [
-  ["s33","C","M","x","x","x","x",1],
-  ["s44","x","D","C","x","x","x",1],
+  ["s33","C","M","M","M","M","M",1],
+  ["s44","x","D","C","M","M","M",1],
   ["s66","x","x","I","D","C","M",1],
   ["s66p1","x","x","I","C","M","M",2],
   ["s62","x","x","x","I","C","M",2],
@@ -595,6 +601,7 @@ matriz:{
  b1:"Matriz técnica",
  b1p:"Cada fundamento aparece en una sola etapa como contenido nuevo, y después se sostiene. Un entrenador que quiere saber si le toca enseñar el bloqueo lector mira una celda.",
  b2:"Matriz táctica",
+ b2n2:"<strong>Corrección verificada contra la fuente oficial.</strong> Swiss Volley establece que el 3:3 y el 4:4 son los sistemas de base de la formación y que por eso <em>deben seguir usándose como formas de entrenamiento también en las fases Future y Active</em>. Una versión anterior de esta matriz los daba por terminados en Rookie. No terminan: se dominan y se siguen usando. Un entrenador de Future 3 que arma un 4:4 con penetración no está retrocediendo, está aplicando el reglamento.",
  b2n:"<strong>Competir con un sistema y aprenderlo son dos cosas distintas.</strong> Swiss Volley define con qué sistema se <em>compite</em> en cada etapa, y eso no se discute. Pero cuándo se <em>enseña</em> lo decide el club, y ahí tomamos una decisión deliberada: el 5-1 se explica desde que aparece la cancha grande, en Rookie 3, aunque falten tres etapas para jugarlo. El motivo es simple: no se puede consolidar en Future 3 algo que el jugador nunca vio. Lo mismo vale para el 6-2, que se introduce en Future 1. Cuando llegan a la etapa en que ese sistema es el oficial, ya lo entienden por dentro y la temporada se usa para jugarlo mejor, no para descubrirlo.<br><br>Cuando una fila salta dos niveles de una columna a la siguiente es siempre por el mismo motivo: en esa etapa ese sistema es el oficial, y una temporada entera compitiendo hace sola el trabajo de introducir y desarrollar.",
  b2p:"Acá se ve con claridad la progresión de sistemas que define Swiss Volley: 3:3, luego 4:4 con penetración desde la posición 1, luego cancha grande con 6-6, después 6-2 y finalmente 5-1.",
  b3:"Escalera atlética: por maduración, no por edad",
@@ -1305,6 +1312,7 @@ matriz:{
  b1:"Technikmatrix",
  b1p:"Jedes Element erscheint nur auf einer Stufe als neuer Inhalt und wird danach gehalten. Wer wissen will, ob bei ihm der Lesende Block ansteht, schaut auf ein Feld.",
  b2:"Taktikmatrix",
+ b2n2:"<strong>Gegen die offizielle Quelle geprüfte Korrektur.</strong> Swiss Volley hält fest, dass 3:3 und 4:4 die Basissysteme der Ausbildung sind und deshalb <em>auch in den Phasen Future und Active als Trainingsformen weiterverwendet werden müssen</em>. Eine frühere Fassung dieser Matrix liess sie mit Rookie enden. Sie enden nicht: Sie werden beherrscht und weiter eingesetzt.",
  b2n:"<strong>Mit einem System zu spielen und es zu lernen sind zwei verschiedene Dinge.</strong> Swiss Volley legt fest, mit welchem System auf jeder Stufe <em>gespielt</em> wird, und das steht nicht zur Diskussion. Wann es <em>unterrichtet</em> wird, entscheidet der Verein — und hier treffen wir einen bewussten Entscheid: Das 5-1 wird ab dem Moment erklärt, in dem das ganze Feld dazukommt, also in Rookie 3, obwohl noch drei Stufen bis zum Spielen fehlen. Der Grund ist einfach: Man kann in Future 3 nichts festigen, das die Person nie gesehen hat. Dasselbe gilt für das 6-2, das in Future 1 eingeführt wird. Erreichen sie die Stufe, auf der dieses System offiziell ist, verstehen sie es bereits von innen, und die Saison dient dazu, es besser zu spielen statt es zu entdecken.<br><br>Wenn eine Zeile von einer Spalte zur nächsten zwei Stufen überspringt, hat das immer denselben Grund: Auf dieser Stufe ist dieses System das offizielle, und eine ganze Saison im Wettkampf leistet die Arbeit des Einführens und Entwickelns von selbst.",
  b2p:"Hier wird die von Swiss Volley vorgegebene Systemabfolge deutlich sichtbar: 3:3, dann 4:4 mit Penetration aus Position 1, dann ganzes Feld mit 6-6, anschliessend 6-2 und schliesslich 5-1.",
  b3:"Athletik-Stufen: nach Reifegrad, nicht nach Alter",
@@ -2043,6 +2051,7 @@ matriz:{
  b1:"Technical matrix",
  b1p:"Each skill appears as new content at one stage only, and is maintained thereafter. A coach wondering whether reading block is on their plate looks at one cell.",
  b2:"Tactical matrix",
+ b2n2:"<strong>Correction verified against the official source.</strong> Swiss Volley states that 3:3 and 4:4 are the base systems of the development pathway and must therefore <em>continue to be used as training forms in the Future and Active phases as well</em>. An earlier version of this matrix had them ending at Rookie. They do not end: they are mastered and kept in use.",
  b2n:"<strong>Competing with a system and learning it are two different things.</strong> Swiss Volley defines which system is <em>played</em> at each stage, and that is not open to discussion. When it is <em>taught</em> is the club decision, and here we make a deliberate one: the 5-1 is explained from the moment the full court appears, in Rookie 3, even though it is three stages away from being played. The reason is simple: you cannot consolidate in Future 3 something the player has never seen. The same applies to the 6-2, introduced in Future 1. By the time they reach the stage where that system is the official one, they already understand it from the inside, and the season is spent playing it better rather than discovering it.<br><br>Whenever a row jumps two levels from one column to the next, it is always for the same reason: at that stage the system is the official one, and a full season of competing does the work of introducing and developing on its own.",
  b2p:"Here the system progression set by Swiss Volley becomes clearly visible: 3v3, then 4v4 with penetration from position 1, then full court with 6-6, then 6-2 and finally 5-1.",
  b3:"Athletic tiers: by maturation, not by age",
@@ -2662,12 +2671,22 @@ ref:{
 
 /* ════════ PLANTEL — editable, los datos son del club ════════ */
 const EQUIPOS = {
-  m:{form:["U14","U16","U18","U20","Kids Volley"], liga:["—","4ª liga","3ª liga","2ª liga B","2ª liga","1ª liga","NLA"]},
-  f:{form:["U14","U16-1","U16-2","Kids Volley"],   liga:["—","4ª liga","3ª liga","1ª liga"]}
+  m:{form:["—","Kids Volley","U14","U16","U18","U20","U23"], liga:["—","5ª liga","4ª liga","3ª liga","2ª liga B","2ª liga","1ª liga","NLA"]},
+  f:{form:["—","Kids Volley","U14","U16-1","U16-2"], liga:["—","4ª liga","3ª liga","1ª liga"]}
 };
 const RANGO_EDAD = [[10,1.5,3],[12,3,4.5],[14,4.5,6],[16,6,9],[18,7.5,10.5],[99,9,13.5]];
 const TEMPORADA = 2026;
-let PLANTEL = [], PL_AGRUPAR = "grupo", PL_RAMA = "todas", PL_BUSCA = "", plSeq = 1;
+const POSICIONES = ["—","Armador","Punta","Central","Opuesto","Líbero","Polivalente"];
+let PLANTEL = [], PL_AGRUPAR = "grupo", PL_RAMA = "todas", PL_BUSCA = "", plSeq = 1, PL_CONTACTO = false;
+window.plContacto = function(){ PL_CONTACTO = !PL_CONTACTO; render(); };
+function contactoDe(j){
+  const t = function(x){ return x ? '<a href="tel:'+x.replace(/\s/g,"")+'">'+x+'</a>' : ""; };
+  const m = function(x){ return x ? '<a href="mailto:'+x+'">'+x+'</a>' : ""; };
+  const pr = [t(j.tel), m(j.mail)].filter(Boolean).join(" \u00b7 ");
+  const fa = [j.telM?"madre "+t(j.telM):"", j.telP?"padre "+t(j.telP):"", j.mailM?m(j.mailM):"", j.mailP?m(j.mailP):""].filter(Boolean).join(" \u00b7 ");
+  if(!pr && !fa) return '<em class="sin-cont">Sin contacto registrado</em>';
+  return (pr?'<b>Jugador</b> '+pr:"") + (pr&&fa?"<br>":"") + (fa?'<b>Familia</b> '+fa:"");
+}
 
 const edadDe = j => j.jg ? TEMPORADA - j.jg : null;
 function rangoDe(j){
@@ -2692,6 +2711,8 @@ function claveDe(j){
   if(PL_AGRUPAR==="liga")   return (j.liga && j.liga!=="—") ? j.liga : S("plSinLiga");
   if(PL_AGRUPAR==="jg")     return j.jg ? String(j.jg) : S("plSinAnio");
   if(PL_AGRUPAR==="rama")   return j.rama==="f" ? S("plF") : S("plM");
+  if(PL_AGRUPAR==="pos")    return j.pos || "Sin posición definida";
+  if(PL_AGRUPAR==="lic")    return j.lic || "Sin licencia registrada";
   if(PL_AGRUPAR==="estado") return estadoDe(j)[1];
   return "—";
 }
@@ -2701,7 +2722,9 @@ window.plAdd = function(){
   if(!nombre){ g("plNombre").focus(); return; }
   PLANTEL.push({id:plSeq++, nombre:nombre, jg:parseInt(g("plJg").value)||null,
     rama:g("plRama").value, grupo:g("plGrupo").value, liga:g("plLiga").value,
-    h:parseFloat(g("plH").value)||0, comp:parseFloat(g("plComp").value)||0});
+    h:parseFloat(g("plH").value)||0, comp:parseFloat(g("plComp").value)||0,
+    pos:g("plPos")?g("plPos").value:"", lic:"", nota:"",
+    tel:"", mail:"", telM:"", telP:"", mailM:"", mailP:""});
   g("plNombre").value=""; g("plJg").value="";
   render(); var n=document.getElementById("plNombre"); if(n) n.focus();
 };
@@ -2730,9 +2753,10 @@ window.plExport = function(){
   bajar(JSON.stringify({temporada:TEMPORADA, plantel:PLANTEL}, null, 2), "plantel_naefels.json", "application/json");
 };
 window.plCSV = function(){
-  const filas = [[S("plNombre"),S("plAnio"),S("plRama"),S("plGrupo"),S("plLiga"),S("plH"),S("plComp"),"Status"]].concat(
+  const filas = [[S("plNombre"),S("plAnio"),S("plRama"),S("plGrupo"),S("plLiga"),"Posición","Licencia",S("plH"),S("plComp"),"Status","Teléfono","E-mail","Tel. madre","Tel. padre","Mail madre","Mail padre","Nota"]].concat(
     PLANTEL.map(function(j){ return [j.nombre, j.jg||"", j.rama==="f"?S("plF"):S("plM"),
-      j.grupo||"", j.liga||"", j.h||0, j.comp||0, estadoDe(j)[1]]; }));
+      j.grupo||"", j.liga||"", j.pos||"", j.lic||"", j.h||0, j.comp||0, estadoDe(j)[1],
+      j.tel||"", j.mail||"", j.telM||"", j.telP||"", j.mailM||"", j.mailP||"", j.nota||""]; }));
   const csv = filas.map(function(f){ return f.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(";"); }).join("\n");
   bajar("\ufeff"+csv, "plantel_naefels.csv", "text/csv;charset=utf-8");
 };
@@ -2746,7 +2770,9 @@ window.plImport = function(ev){
       if(!Array.isArray(arr)) throw new Error("formato");
       PLANTEL = arr.map(function(j){ return {id:plSeq++, nombre:j.nombre||"", jg:j.jg||null,
         rama:j.rama==="f"?"f":"m", grupo:j.grupo||"", liga:j.liga||"—",
-        h:parseFloat(j.h)||0, comp:parseFloat(j.comp)||0}; });
+        h:parseFloat(j.h)||0, comp:parseFloat(j.comp)||0,
+        pos:j.pos||"", lic:j.lic||"", nota:j.nota||"",
+        tel:j.tel||"", mail:j.mail||"", telM:j.telM||"", telP:j.telP||"", mailM:j.mailM||"", mailP:j.mailP||""}; });
       render();
     }catch(err){ alert(S("plError")); }
   };
@@ -2940,6 +2966,7 @@ function vMatriz(){
   <div class="nota of" style="margin-top:22px">${m.aviso}</div>
   <section class="bloque"><h3><span class="n">01</span>${m.b1}</h3><p>${m.b1p}</p>${leyMx}${tabla(MTEC)}</section>
   <section class="bloque"><h3><span class="n">02</span>${m.b2}</h3><p>${m.b2p} ${F("of")}</p>${leyMx}${tabla(MTAC)}
+    <div class="nota of">${m.b2n2} ${F("of")}</div>
     <div class="nota aviso">${m.b2n}</div></section>
   <section class="bloque"><h3><span class="n">03</span>${m.b3}</h3><p>${m.b3p} ${F("lit")}</p>
     ${m.esc.map(e=>`<div class="escalon" style="--c:${e.c}"><h4>${e.t}</h4><span class="cuando">${e.w}</span>
@@ -3027,11 +3054,14 @@ function vPlantel(){
       + '<td><select class="pl-edit" onchange="plSet('+j.id+',\'rama\',this.value)">'+opt("m",S("plMasc"),j.rama)+opt("f",S("plFem"),j.rama)+'</select></td>'
       + '<td><select class="pl-edit" onchange="plSet('+j.id+',\'grupo\',this.value)">'+selGrupo(j)+'</select></td>'
       + '<td><select class="pl-edit" onchange="plSet('+j.id+',\'liga\',this.value)">'+selLiga(j)+'</select></td>'
+      + '<td><select class="pl-edit" onchange="plSet('+j.id+',\'pos\',this.value)">'+POSICIONES.map(function(x){return opt(x===POSICIONES[0]?"":x,x,j.pos||"");}).join("")+'</select></td>'
       + '<td><input class="pl-edit" type="number" step="0.5" style="width:64px" value="'+(j.h||0)+'" onchange="plSet('+j.id+',\'h\',this.value)"></td>'
       + '<td><input class="pl-edit" type="number" step="1" style="width:58px" value="'+(j.comp||0)+'" onchange="plSet('+j.id+',\'comp\',this.value)"></td>'
       + '<td class="num">'+(r?r[0]+"–"+r[1]+" h":"—")+'</td>'
       + '<td><span class="pill '+st[0]+'">'+st[1]+'</span></td>'
-      + '<td><button class="btn-x" title="'+S("plQuitar")+'" onclick="plDel('+j.id+')">×</button></td></tr>';
+      + '<td><button class="btn-x" title="'+S("plQuitar")+'" onclick="plDel('+j.id+')">×</button></td></tr>'
+      + (j.nota ? '<tr class="pl-nota"><td colspan="13"><span>'+(j.lic?'<b>'+j.lic+'</b> · ':'')+j.nota+'</span></td></tr>' : "")
+      + (PL_CONTACTO ? '<tr class="pl-cont"><td colspan="13"><span>'+contactoDe(j)+'</span></td></tr>' : "");
   };
 
   const tabla = function(js){
@@ -3063,10 +3093,11 @@ function vPlantel(){
     + '<div class="pl-campo"><label>'+S("plAgrupar")+'</label><select onchange="PL_AGRUPAR=this.value;render()">'
       + opt("grupo",S("plPorGrupo"),PL_AGRUPAR)+opt("liga",S("plPorLiga"),PL_AGRUPAR)
       + opt("jg",S("plPorAnio"),PL_AGRUPAR)+opt("rama",S("plPorRama"),PL_AGRUPAR)
-      + opt("estado",S("plPorEstado"),PL_AGRUPAR)+'</select></div>'
+      + opt("estado",S("plPorEstado"),PL_AGRUPAR)+opt("pos","Posición",PL_AGRUPAR)+opt("lic","Licencia",PL_AGRUPAR)+'</select></div>'
     + '<div class="pl-campo"><label>'+S("plRama")+'</label><select onchange="PL_RAMA=this.value;render()">'
       + opt("todas",S("plTodas"),PL_RAMA)+opt("m",S("plM"),PL_RAMA)+opt("f",S("plF"),PL_RAMA)+'</select></div>'
     + '<div class="pl-campo"><label>'+S("plBuscar")+'</label><input class="txt" value="'+PL_BUSCA.replace(/"/g,"&quot;")+'" oninput="PL_BUSCA=this.value;render()" placeholder="'+S("plNombre")+'"></div>'
+    + '<button class="btn-s sec" onclick="plContacto()">'+(PL_CONTACTO?"Ocultar contactos":"Ver contactos")+'</button>'
     + '<button class="btn-s sec" onclick="plExport()">'+S("plGuardar")+'</button>'
     + '<button class="btn-s sec" onclick="plCSV()">'+S("plCSV")+'</button>'
     + '<label class="btn-s sec" style="cursor:pointer">'+S("plCargar")+'<input type="file" accept=".json" style="display:none" onchange="plImport(event)"></label>'
@@ -3575,7 +3606,8 @@ ENSC.r3.tactica=[
  {n:"Sistema 6-6 con penetración",d:"Se introduce acá, tres etapas antes de que sea el sistema oficial de Future 1. Que lo vean venir."},
  {n:"El 5-1 se explica",d:"Todavía falta mucho para jugarlo, pero se nombra y se explica desde que aparece la cancha grande. No se puede consolidar en Future 3 algo que nunca vieron."},
  {n:"Cobertura del propio ataque",d:"Viene de Rookie y acá se desarrolla con seis jugadores: tres acompañan y los otros dos cubren el fondo."},
- {n:"Detección regional",d:"Todos los perfiles que corresponden van a la sichtung. Sin excepciones y sin que dependa de que el entrenador se acuerde."}];
+ {n:"Detección regional",d:"Todos los perfiles que corresponden van a la sichtung. Sin excepciones y sin que dependa de que el entrenador se acuerde."},
+ {n:"Sin alibis: la pelota que te llega, la resolvés",d:"Regla de Velasco adaptada al club: nadie comenta el pase que recibió, lo resuelve. Se instala acá y se sostiene hasta el primer equipo. Es lo que corta la cadena de culpas antes de que se forme."}];
 
 ENSC.f1.tecnica=[
  {n:"Armado desde zaga en desplazamiento",cad:"Viene de la penetración de Rookie 2 · va al armado especializado de Future 2",int:"Que cualquiera pueda armar cuando la pelota no llega al armador.",pts:["Frente alta y manos adelante antes del último paso.","Impulso de piernas.","El torso apunta al destino."],frase:"«El que no arma hoy, no arma nunca.»",err:"Los altos evitan el segundo toque.",arreglo:"Regla: en cada rotación arma alguien distinto, y se anota."},
@@ -3601,7 +3633,8 @@ ENSC.f2.tactica=[
  {n:"Lectura del armador rival",d:"Viene de Future 1 y acá se desarrolla. Se puntúa haber decidido antes del salto, aunque el bloqueo salga mal."},
  {n:"Ajustes tácticos en partido",d:"Se introduce acá: reconocer qué está pasando y cambiar algo sin que lo pida el entrenador."},
  {n:"Scouting y video",d:"Se introduce acá, apoyado en el sistema que el club ya tiene en el primer equipo. Un clip de treinta segundos por semana."},
- {n:"Coberturas y transiciones del 6-2",d:"Con tres atacantes siempre en red, la cobertura cambia en cada rotación. Es lo que más se descuida de este sistema."}];
+ {n:"Coberturas y transiciones del 6-2",d:"Con tres atacantes siempre en red, la cobertura cambia en cada rotación. Es lo que más se descuida de este sistema."},
+ {n:"Sin alibis, aplicado al 6-2",d:"Con dos armadoras y tres atacantes, la cadena de culpas tiene más eslabones. La regla no cambia: el atacante no habla del pase, lo resuelve, y después lo conversan fuera de la cancha."}];
 
 ENSC.f3.tecnica=[
  {n:"Ejecución bajo fatiga y presión",cad:"Es la síntesis de todo lo anterior · va directo al primer equipo",int:"Que la técnica sea la del tercer set y no la del calentamiento.",pts:["Mismo gesto con las piernas cansadas.","Decisión rápida con el marcador en contra."],frase:"«Tu técnica es la del punto 24.»",err:"Sostienen el nivel mientras van ganando.",arreglo:"Empezá ejercicios con el marcador en contra a propósito."},
@@ -4257,6 +4290,53 @@ const EQUIV_EN = [
 
 const EQ = () => LANG==="de" ? EQUIV_DE : LANG==="en" ? EQUIV_EN : EQUIV;
 const EC = () => { const M = LANG==="de" ? (typeof ENSC_DE!=="undefined"?ENSC_DE:null) : LANG==="en" ? (typeof ENSC_EN!=="undefined"?ENSC_EN:null) : null; return (M && M[ENS_CAT]) ? M : ENSC; };
+
+ENSC.gen.bloques.push(
+ {h:"Doble chequeo: dónde coinciden las tres escuelas y dónde no",
+  p:"La secuencia de esta guía se contrastó contra el <strong>Manual de Entrenadores Nivel I de la FIVB</strong>, la federación internacional, con capítulos de Doug Beal —oro olímpico 1984 y luego director ejecutivo de USA Volleyball—, Yuri Chesnokov, el profesor Hiroshi Toyoda de la Comisión Técnica y Yasutaka Matsudaira. Hay coincidencias muy fuertes y hay tres desacuerdos que conviene conocer en vez de tapar.",
+  f:"Cuando dos autoridades no coinciden, el documento lo dice. Esconderlo sería el verdadero error."},
+ {h:"En qué coinciden las tres, sin fisuras",
+  p:"Que se enseña con <strong>juegos reducidos desde el primer día</strong> — la FIVB manda 2:2, 3:3 y 4:4 en cancha chica y lo llama juegos de iniciación. Que <strong>nadie mira</strong>: dice textualmente que no hay mejora en los jugadores que solo observan o están sentados, y que hay que dar oportunidades iguales de participar. Que el <strong>proceso vale más que el resultado</strong>: no buscar solo victorias, porque el esfuerzo en el entrenamiento importa más que el resultado de la competencia. Y que el <strong>bloqueo va último</strong>, después de la recepción de ataque y la recepción de saque. Nuestro modelo lo ubica en Rookie 3 y coincide.",
+  f:"Tres cuerpos independientes llegando a lo mismo. Eso ya no es opinión."},
+ {h:"Desacuerdo 1 — el orden de la manchette y el toque de dedos",
+  p:"Es el más concreto y nos toca de lleno. La FIVB enseña <strong>primero la manchette</strong> —semanas 3 a 5 de su plan— y el toque de arriba recién en las semanas 8 a 10. El sistema suizo, y nuestra guía con él, hace lo contrario: primero atrapar y lanzar, después el toque de arriba, y la manchette aparece como recurso en Kids Volley 3. Los dos órdenes están defendidos por autoridades reales. Nosotros seguimos el suizo porque es el que rige la competencia del club, pero el entrenador tiene que saber que no es la única secuencia válida.",
+  f:"Si un chico no engancha con el toque de arriba, probá la manchette antes. La FIVB dice que ese es el orden natural."},
+ {h:"Desacuerdo 2 — especializar temprano o no",
+  p:"Beal escribe que la especialización acorta el camino al éxito, y que un equipo se desarrolla más rápido concentrándose en pocos elementos en vez de construir una base amplia. Pero agrega la condición completa: <strong>es peligroso, porque dependés de un conjunto estrecho de habilidades en vez de una base amplia</strong>. Es la respuesta directa a la pregunta de si se pueden acortar pasos: sí se puede, y el precio es un jugador más frágil. El sistema suizo eligió lo contrario en Future 1 —sin líbero, todos arman— y nuestro modelo también.",
+  f:"El atajo existe y tiene nombre: especializar. Sabé lo que estás pagando antes de tomarlo."},
+ {h:"Desacuerdo 3 — el manual de la FIVB enseña por partes",
+  p:"Las progresiones del manual van «movimiento de brazo, después carrera, después despegue, después saltar y atrapar, después saltar y golpear». Eso es exactamente la enseñanza por partes que la revisión de aprendizaje motor no encontró respaldada en ningún estudio. El manual de la FIVB es de 2013 y en método quedó atrás de la escuela americana de McGown. <strong>Nuestra posición: tomamos de la FIVB el orden de los contenidos y de McGown el método para enseñarlos.</strong>",
+  f:"Qué enseñar y cuándo: FIVB y Swiss Volley. Cómo enseñarlo: aprendizaje motor."},
+ {h:"Lo que sí se puede acortar",
+  p:"No se acorta la maduración: un chico en pico de crecimiento no se apura. Lo que sí se elimina es el desperdicio, y ahí hay mucho. <strong>Contactos por jugador</strong> en vez de filas. <strong>Jugada entera</strong> en vez de gesto aislado que no transfiere. <strong>Aleatorio</strong> en vez de repetir veinte veces lo mismo, que se ve mejor y rinde peor. <strong>Una regla</strong> en vez de una explicación. Y la <strong>medición de octubre y marzo</strong>, que evita el año perdido en decidir a ojo. Un club que hace estas cinco cosas no acelera al jugador: deja de frenarlo.",
+  f:"El atajo real no es entrenar más rápido. Es dejar de perder el sesenta por ciento del entrenamiento."});
+
+RECURSOS.push({g:"Federación Internacional · la autoridad máxima", l:[
+ {t:"FIVB — Manual de Entrenadores Nivel I (PDF completo)", u:"https://www.vq.org.au/wp-content/uploads/2018/03/FIVB-Level-1-Coaches-Manual-2013.pdf", d:"El manual oficial de la federación internacional. Capítulos de Doug Beal, Yuri Chesnokov, el profesor Hiroshi Toyoda y Philippe Blain. Trae el plan de contenidos semana por semana para principiantes: 22 semanas, dos días por semana, dos horas por día. Es la referencia contra la que contrastamos nuestra secuencia."},
+ {t:"FIVB — Cursos de entrenadores y estructura de formación", u:"https://www.fivb.com/fivb-coaching-education-surges-with-nine-courses-across-seven-countries/", d:"Cómo está organizada la formación de entrenadores a nivel mundial: Nivel I cómo jugar, Nivel II cómo enseñar, Nivel III cómo entrenar. Unos treinta cursos y mil participantes por año."}]});
+
+ENSC.gen.bloques.push(
+ {h:"La escuela italiana: el entrenador es un maestro",
+  p:"Julio Velasco estudió filosofía y quería ser profesor de secundaria. Dejó la carrera a seis materias del título, y después llevó a Italia a ser la selección votada como equipo del siglo, dirigió las selecciones juveniles masculinas de la federación italiana desde 2019, y ganó el oro olímpico en París 2024 y el mundial de 2025 con la selección femenina. Al día siguiente del oro explicó su método en una frase: <strong>todo entrenador tiene que ser un maestro, olvidándose por completo de que fue jugador.</strong> Esa frase es la premisa de esta solapa entera.",
+  f:"Si tu manera de explicar depende de cómo lo hacías vos cuando jugabas, todavía no estás enseñando."},
+ {h:"La teoría de los alibis, y la regla que sale de ella",
+  p:"Es la idea más aplicable de todo el material que revisamos. Velasco la describe así: el atacante falla un remate y culpa al armador; el armador acusa al receptor; y así sucesivamente. Nadie se hace cargo. Su regla contra eso es de una sola línea y se puede instalar mañana: <strong>los atacantes no hablan del pase de ninguna manera, lo resuelven.</strong> Y el principio detrás: atribuir a otros la responsabilidad de nuestros fracasos es el camino más seguro hacia la mediocridad. Dejar de buscar culpables y empezar a buscar soluciones.",
+  f:"Regla del club, desde Rookie 3: nadie comenta la pelota que recibió. La resuelve."},
+ {h:"El error no se demoniza",
+  p:"Velasco fue precursor de lo que hoy se llama resiliencia: el error no se teme ni se castiga, se entiende y se convierte en ocasión de aprendizaje. Es exactamente nuestro principio de identidad número 05 —el error agresivo se banca, el pasivo no— y ahora tiene detrás al entrenador más ganador de la historia del vóley europeo, no solo nuestro criterio.",
+  f:"El resultado del ejercicio no es el punto. Es la decisión."},
+ {h:"Y una frase que corrige nuestra sección de carga",
+  p:"Sobre la gestión de la energía de las atletas, Velasco es tajante: <strong>el descanso principal de un atleta no es muscular, es del sistema nervioso y mental.</strong> Nuestra ficha de carga individual cuenta horas, saltos y competencias, que son carga física. Le falta la otra mitad. Sobre los juveniles fue todavía más directo: un chico de formativas hace una vida más dura que un profesional, porque va a la escuela, cursa, a veces toma clases de idioma y después entrena, y entrena o juega siete días sobre siete. Y remató: <em>dejémoslos respirar un momento y vamos a ver que van a tener más ganas de entrenar y de mejorar.</em>",
+  f:"Los dos días libres de la semana no son una concesión. Son entrenamiento del sistema nervioso."},
+ {h:"Comparación final de las cuatro escuelas",
+  p:"<strong>Suiza</strong> aporta la estructura: qué se compite en cada etapa y cómo se clasifica por nivel y no por edad. <strong>Estados Unidos</strong> aporta el método: gesto entero, aleatorio, densidad de contactos y evidencia de aprendizaje motor. <strong>La FIVB</strong> aporta el orden de los contenidos y el estándar mundial de formación de entrenadores. <strong>Italia</strong> aporta lo que a las otras tres les falta: la cultura. El entrenador como maestro, la responsabilidad sin alibis, el error como material de trabajo y el descanso mental como parte del plan. Las cuatro juntas son este documento.",
+  f:"Estructura suiza, método americano, secuencia FIVB, cultura italiana."});
+
+RECURSOS.push({g:"Escuela italiana · Julio Velasco", l:[
+ {t:"Velasco explica su método antes de París 2024 (Olympics.com)", u:"https://www.olympics.com/it/notizie/metodo-velasco-volley-femminile-italia-qualificazione-parigi-2024", d:"El método completo en sus propias palabras: gestión del grupo, control de lo controlable, y la frase sobre el descanso nervioso y mental que corrige nuestra ficha de carga."},
+ {t:"Velasco sobre jóvenes y deporte — entrevista larga", u:"https://lavialibera.it/it-schede-1361-julio_velasco_sport_giovani", d:"La mejor fuente sobre su pensamiento en formativas. Incluye lo de que un juvenil hace una vida más dura que un profesional, y que hay que dejarlos respirar. Dirigió las selecciones juveniles italianas desde 2019."},
+ {t:"El entrenador es antes que nada un maestro", u:"https://sapere.virgilio.it/scuola/mondo-scuola/velasco-la-lezione-l-allenatore-e-prima-di-tutto-un-insegnante", d:"La declaración del día después del oro olímpico. Es la premisa de toda esta solapa."},
+ {t:"Club Italia — el proyecto federal italiano de formativas", u:"https://en.wikipedia.org/wiki/Club_Italia_(women%27s_volleyball)", d:"Fundado por Velasco en 1998 como director técnico: desarrollar jóvenes compitiendo en liga de mayores. Por ahí pasaron Egonu, Danesi, Malinov y Orro."}]});
 
 const ENS_ORDEN = ["gen","kv1","kv2","kv3","r1","r2","r3","f1","f2","f3"];
 
