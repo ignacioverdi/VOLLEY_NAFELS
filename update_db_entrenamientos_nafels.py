@@ -21,7 +21,8 @@ ESTRUCTURA DE ARCHIVOS:
   recepcion_{equipo}.html — heatmap recepción por equipo (se regenera)
 """
 
-import os, re, json, argparse, shutil
+import os
+import shutil, re, json, argparse, shutil
 from collections import defaultdict, Counter
 
 # Traduce las combinaciones de ataque de DataVolley a las que usa el sistema.
@@ -433,7 +434,8 @@ def parse_dvw_both(fpath, temporada):
         # En un entrenamiento no hay rival: los dos lados son el club. El
         # scout puede haber escrito cualquier cosa en el casillero del
         # visitante (PRUEBA, CAMPANA) y eso inventaba equipos en el sistema.
-        rival = team_name if _ES_ENTREN else rival
+        # en un entrenamiento los dos lados son el club
+        rival = home if _ES_ENTREN else rival
 
         idx = content.find('[3SCOUT]\n')
         if idx < 0: continue
@@ -489,7 +491,7 @@ def parse_dvw_both(fpath, temporada):
 
             action={'pnum':pnum,'stype':stype,'effect':effect,'combo': normalize_combo(combo),
                     'orig':orig,'dest':dest,'setter_pos':setter_pos,'set_num':set_num,
-                    'date':date,'rival':rival,'atype':current_atype,'fase_dv':fase_dv,
+                    'date':date,'turno':_turno(fpath),'rival':rival,'atype':current_atype,'fase_dv':fase_dv,
                     'srv_orig':prev_srv_orig,'temporada':temporada}
 
             if   skill=='A': atk[pnum].append(action)
@@ -522,13 +524,34 @@ def parse_dvw_both(fpath, temporada):
 # ── UPDATE DATABASE ───────────────────────────────────────────────
 def update_database(dvw_dir, temporada, db_path='entrenamientos_nafels_db.json'):
     # Load existing DB
+    # ══════════════════════════════════════════════════════════════════════
+    #  SE RECONSTRUYE, NO SE ACUMULA
+    #  --------------------------------------------------------------------
+    #  Antes se cargaba la base existente y se le hacia .extend() con las
+    #  acciones nuevas. Eso tenia dos consecuencias graves:
+    #
+    #    1. Si un entrenamiento se reprocesaba —por ejemplo, sacando su
+    #       entrada de "games" para corregir algo— sus acciones se SUMABAN
+    #       otra vez a las que ya estaban. El 08/09 de la mañana quedo
+    #       cargado TRES VECES: 240 saques se convirtieron en 743.
+    #
+    #    2. Si se borraba un .dvw de la carpeta, sus acciones seguian en la
+    #       base para siempre. Quedaron dos fechas fantasma, 30/07 y 03/09,
+    #       sin ningun archivo que las respalde.
+    #
+    #  Ahora la base se arma DESDE CERO en cada corrida, leyendo los .dvw
+    #  que estan en la carpeta. Lo que esta en la carpeta es la verdad; la
+    #  base es solo el resultado de leerla.
+    #
+    #  Se conserva una copia de la anterior en .bak por las dudas.
+    # ══════════════════════════════════════════════════════════════════════
     if os.path.exists(db_path):
-        with open(db_path) as f: db = json.load(f)
-        teams_data = db.get('teams', {})
-        games_log  = db.get('games', [])
-        existing_dates = {g['file'] for g in games_log}
-    else:
-        teams_data = {}; games_log = []; existing_dates = set()
+        try:
+            shutil.copy2(db_path, db_path + '.bak')
+            print('  [db] copia de la anterior en %s.bak' % os.path.basename(db_path))
+        except Exception:
+            pass
+    teams_data = {}; games_log = []; existing_dates = set()
 
     dvw_files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
     # si la misma sesion vino dos veces, se procesa solo la mas completa
@@ -746,7 +769,7 @@ def detectar_armadores(content, pfx, setter_count=2, extra_liberos=None, positio
             result.append(n)
         if len(result) >= setter_count: break
     return result[:setter_count]
-def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, rival):
+def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, rival, turno=''):
     """Extrae los rallies de armado de un setter específico."""
     content = content.replace('\r\n','\n')
     idx = content.find('[3SCOUT]\n')
@@ -818,7 +841,9 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
             rq = last_rq if last_skill == 'R' else '?'
             raw = tp[0] if tp else ''; call = raw[:2] if len(raw) >= 2 else raw
             pending = {'setter_pos': spos, 'set_num': setn, 'call': call, 'rec_quality': rq, 'atype': (0 if last_skill == 'R' else 1),
-                       'atk_combo': '', 'atk_result': '', 'atk_dest': 0, 'atk_orig': 0, 'date': date, 'rival': rival,
+                       'atk_combo': '', 'atk_result': '', 'atk_dest': 0, 'atk_orig': 0, 'date': date,
+                     # el turno, para no mezclar las dos sesiones de un mismo dia
+                     'turno': turno, 'rival': rival,
                        't_start': (last_serve_t or last_rec_t or vt), 't_atk': 0,
                        'rec_zone': last_rec_zone, 'rec_num': last_rec_num, 'atk_num': 0, 'rec_type': last_rec_type}
             last_skill = 'E'
@@ -905,7 +930,7 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
             setters = detectar_armadores(content, pfx, 3, team_libs, team_pos)
             for sn in setters:
                 setters_detected.setdefault(team, set()).add(sn)
-                r = parse_setter_rallies(content, pfx, rpfx, ishome, sn, date, rival)
+                r = parse_setter_rallies(content, pfx, rpfx, ishome, sn, date, rival, _turno(fname))
                 if r: rallies_both[team][sn].extend(r)
     # Keep top-2 setters per team by volume
     setters_map = {}

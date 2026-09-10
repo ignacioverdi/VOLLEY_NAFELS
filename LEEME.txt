@@ -1,47 +1,98 @@
-LO QUE FALTABA — ADENTRO DE LA BASE
-===================================
+LA BASE ESTABA CORROMPIDA — RECONSTRUIDA
+========================================
 
-3 archivos a la raiz. HACER_TODO y publicar.
-
-
-LO QUE YA ESTABA BIEN
----------------------
-   equipos    ['Nafels']            sin PRUEBA ni CAMPANA
-   historial  los 4 entrenamientos  todos "vs Nafels"
-
-Eso quedo perfecto con lo anterior.
+7 archivos a la raiz. HACER_TODO y publicar.
 
 
-LO QUE ENCONTRE MIRANDO MAS ADENTRO
------------------------------------
-Cada ACCION de cada jugador guarda su propio campo "rival", y ahi seguian
-1.294 acciones diciendo PRUEBA o CAMPANA.
+LO QUE ENCONTRE — hice la investigacion completa
+------------------------------------------------
 
-Por que no se habian arreglado solas: el archivo entrenamientos_nafels_db.json
-ACUMULA las acciones y no reescribe las viejas. La lista de equipos y el
-historial se regeneran enteros, por eso salieron limpios; las acciones no.
+1) LA SESION DE LA MAÑANA ESTABA CARGADA TRES VECES
 
-Lo corregi en dos lados:
+        mañana  tarde   suma    en la base   veces
+   S       240     23    263           743     3.0
+   R       185     15    200           570     3.0
+   A         1    203    204           206     3.0
+   B         1     90     91            93     3.0
 
-1. EL MOTOR, para lo que venga
-   Habia un tercer lugar que guardaba el rival y no lo habia tocado:
-   parse_setter_rallies, que arma las acciones del armador. Ahora tambien
-   ignora el casillero del visitante cuando es un entrenamiento.
+   Exacto en los cuatro fundamentos.
 
-2. LO QUE YA ESTABA GUARDADO
-   El script normalizar_rival.py recorre la base y cambia el rival donde
-   diga PRUEBA o CAMPANA. No toca ningun otro dato: ni el jugador, ni la
-   zona, ni la evaluacion, ni la fecha.
+   ESTO LO CAUSE YO. Te hice sacar la entrada del 08/09 de "games" para
+   forzar el reprocesado, sin darme cuenta de que la base ACUMULA: cada
+   HACER_TODO volvia a sumar las mismas acciones en vez de reemplazarlas.
 
-   Ya lo corri sobre tu base: 1.294 acciones corregidas.
-   El entrenamientos_nafels_db.json de este zip YA VIENE LIMPIO.
+   Por eso Durdos mostraba ataques donde no correspondia y los videos caian
+   en la accion equivocada: habia tres copias de la mañana mezcladas con la
+   tarde.
+
+2) DOS FECHAS FANTASMA
+   30/07 (7 ataques, 3 saques, 3 recepciones) y 03/09 (63 saques, 165
+   recepciones) seguian en la base SIN ningun .dvw que las respalde. Sus
+   archivos ya no estan en la carpeta, pero las acciones nunca se borraron.
+
+3) LAS ACCIONES NO GUARDABAN EL TURNO
+   Cada accion guardaba la fecha pero no el turno, asi que las dos sesiones
+   del 08/09 se mezclaban aunque estuvieran bien cargadas.
 
 
-VERIFICADO
-----------
-   "rival": "PRUEBA"   ->  0
-   "rival": "CAMPANA"  ->  0
-   equipos             ->  ['Nafels']
+LO QUE SE HIZO
+--------------
 
-El script queda por si alguna vez hace falta de nuevo. Deja una copia .bak
-antes de escribir.
+A) LA BASE SE RECONSTRUYE, YA NO SE ACUMULA
+   Antes cargaba lo que habia y le hacia .extend() con lo nuevo. Ahora se
+   arma DESDE CERO en cada corrida leyendo los .dvw de la carpeta.
+
+   Lo que esta en la carpeta es la verdad; la base es el resultado de
+   leerla. Si borras un .dvw, sus acciones desaparecen. Si reprocesas, no
+   se duplica nada.
+
+   Deja copia .bak de la anterior antes de escribir.
+
+B) CADA ACCION GUARDA SU TURNO
+   Se agrego en los dos lugares donde se arman las acciones. Ahora una
+   accion del 08/09 sabe si fue de la mañana o de la tarde.
+
+C) YA RECONSTRUI TU BASE
+   Los archivos de este zip son el resultado. No hace falta que corras
+   nada para arreglarlo: ya viene corregido.
+
+
+VERIFICADO CONTRA LOS ARCHIVOS ORIGINALES
+-----------------------------------------
+   04/09   coincide
+   07/09   coincide
+   08/09   coincide
+   fechas fantasma: NINGUNA
+
+   El turno en cada accion:
+      04/09  turno -    702 acciones
+      07/09  turno -    172 acciones
+      08/09  turno M    427 acciones   <- la mañana
+      08/09  turno -    331 acciones   <- la tarde
+
+   EL CASO QUE VISTE:
+      Durdos, 32 ataques el 08/09
+      turno M (mañana, saque y pase):  0 ataques   CORRECTO
+      turno - (tarde):                32 ataques
+
+   Antes: los 32 mezclados sin turno, por eso caian en la mañana.
+
+
+UNA COSA QUE NO ES UN ERROR
+---------------------------
+El armado (sets) figura en 0 dentro de entrenamientos_nafels_db.json. Lo
+compare contra la base que tenias publicada ANTES: ahi tambien estaba en 0.
+No es algo que se haya roto ahora. El armado vive en
+liga_data_entrenamientos.js, que es de donde lo lee el plan de partido.
+
+
+LOS NUMEROS BAJAN, Y ESTA BIEN
+------------------------------
+   antes  1193 saques · 1142 recepciones · 16 jugadores
+   ahora   647 saques ·  604 recepciones · 14 jugadores
+
+Bajan porque se fueron las copias triplicadas y las dos fechas fantasma.
+Los 14 jugadores son los del plantel real; los otros 2 venian de los
+entrenamientos borrados.
+
+Ahora los numeros que ves en pantalla son EXACTAMENTE los de los archivos.
