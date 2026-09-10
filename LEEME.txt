@@ -1,60 +1,53 @@
-SIN TOCAR NINGUN DVW
-====================
+LO QUE FALTABA — EL PLANTEL PRUEBA
+==================================
 
 2 archivos a la raiz. HACER_TODO y publicar.
 
-   gen_baterias.py
    update_db_entrenamientos_nafels.py
-
-DESCARTA el zip anterior (NAFELS_FALTA_DVW). No hace falta.
-
-
-TENIAS RAZON
-------------
-El .dvw que subiste funciona perfecto: lee las 427 acciones, el
-entrenamiento aparece, los jugadores estan. Hacerte reemplazar un archivo
-que anda bien, para cambiarle una palabra de la cabecera, era la solucion
-incomoda.
-
-El problema no era el archivo. Era que los motores le creian al casillero
-del "rival" incluso en un entrenamiento, donde ese casillero no significa
-nada.
+   entrenamientos_nafels_db.json
 
 
-LO QUE SE HIZO
+LO QUE YA FUNCIONO
+------------------
+El historial quedo perfecto. Los cuatro entrenamientos:
+
+   04/09/2026  vs Nafels   turno -   12 jugadores
+   07/09/2026  vs Nafels   turno -   11 jugadores
+   08/09/2026  vs Nafels   turno M    7 jugadores   <- antes decia PRUEBA
+   08/09/2026  vs Nafels   turno -   12 jugadores
+
+Ninguno dice PRUEBA ni CAMPANA. Y sin haber tocado un solo .dvw.
+
+
+LO QUE QUEDABA
 --------------
-Los dos motores ahora IGNORAN el rival cuando es un entrenamiento. Los dos
-lados pasan a ser el club, sin mirar lo que diga el archivo.
+El equipo PRUEBA seguia en la lista de equipos. Era otro lugar del mismo
+motor, que no habia mirado:
 
-Se detecta que es entrenamiento de dos formas:
-   · los dos equipos son iguales (asi lo escribe DataVolley y el panel)
-   · o el archivo esta en la carpeta de entrenamientos
+El archivo del 08/09 tiene dos secciones de plantel, una por equipo. El
+codigo salteaba la segunda solo cuando los DOS NOMBRES COINCIDIAN. En ese
+archivo dicen "AXPO NAFELS" y "PRUEBA", asi que no coincidian, entraba a la
+segunda vuelta y creaba un equipo PRUEBA con su propio plantel.
 
-Lo segundo es lo que cubre los .dvw viejos, donde el scout habia escrito
-un nombre inventado.
+Ahora se saltea cuando es un ENTRENAMIENTO, sin importar como se llame el
+visitante. Son los mismos jugadores del club, ya tomados en la primera
+vuelta.
 
+PROBADO CON TUS ARCHIVOS PUBLICADOS, sin tocarlos:
 
-PROBADO CON TUS ARCHIVOS TAL CUAL ESTAN PUBLICADOS
---------------------------------------------------
-   &2026-09-08 AXP-ENTRENAMIENTO MORNING   dice PRUEBA       -> AXPO NAFELS
-   &Pra-AXPO NAFELS-2026-09-04             dice AXPO NAFELS  -> AXPO NAFELS
-   &Pra-AXPO NAFELS-2026-09-07             dice AXPO NAFELS  -> AXPO NAFELS
-   &Pra-AXPO NAFELS-2026-09-08             dice AXPO NAFELS  -> AXPO NAFELS
+   &2026-09-08 AXP-ENTRENAMIENTO MORNING   crea: ['AXPO NAFELS']
+   &Pra-AXPO NAFELS-2026-09-04             crea: ['AXPO NAFELS']
+   &Pra-AXPO NAFELS-2026-09-07             crea: ['AXPO NAFELS']
+   &Pra-AXPO NAFELS-2026-09-08             crea: ['AXPO NAFELS']
 
-Ninguno reemplazado. Los cuatro quedan como entrenamientos del club.
-
-
-LA VENTAJA DE HACERLO ASI
--------------------------
-No es solo para este archivo. Si mañana Sebastian escribe cualquier cosa en
-el casillero del visitante durante un entrenamiento, el sistema lo ignora
-igual. No hay que corregir archivos nunca mas.
-
-Y en un PARTIDO no cambia nada: ahi el rival se respeta tal cual, porque los
-equipos son distintos y el archivo no esta en la carpeta de entrenamientos.
+Y en el json se borro el PRUEBA que ya habia quedado, mas la entrada del
+08/09 para que se reprocese con la regla nueva.
 
 
-DESPUES DE HACER_TODO
----------------------
-PRUEBA desaparece del historial y del listado de equipos. El del 08/09 va a
-figurar "08/09/2026 · Mañana — Entrenamiento", como los otros tres.
+DESPUES DE ESTO
+---------------
+Queda un solo equipo: Nafels. Y no vuelve a aparecer ninguno inventado,
+escriba lo que escriba el scout en el casillero del visitante durante un
+entrenamiento.
+
+En un PARTIDO no cambia nada: ahi el rival y su plantel se registran normal.

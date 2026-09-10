@@ -420,8 +420,13 @@ def parse_dvw_both(fpath, temporada):
     # el scout habia puesto un nombre inventado como rival.
     _ES_ENTREN = _MISMO_EQUIPO or ('ENTRENAMIENTO' in (fpath or '').upper())
     for team, pfx, section in [(home,'*','[3PLAYERS-H]'),(away,'a','[3PLAYERS-V]')]:
-        if _MISMO_EQUIPO and pfx == 'a':
-            continue   # ya se tomaron las dos mitades en la primera vuelta
+        if _ES_ENTREN and pfx == 'a':
+            # En un entrenamiento el visitante es el MISMO club. Antes solo se
+            # salteaba cuando los dos nombres coincidian; si el scout habia
+            # escrito "PRUEBA" en el casillero del visitante, esa vuelta creaba
+            # un equipo PRUEBA con su propio plantel. Los jugadores son los
+            # mismos, ya tomados en la primera vuelta.
+            continue
         if not team: continue
         players = get_players(lines, section)
         rival = away if pfx=='*' else home
