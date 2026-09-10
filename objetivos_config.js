@@ -485,13 +485,13 @@ function renderObjetivosJugador(cid,nombre,extra){
     +[['#22c55e','Sobre equipo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Bajo equipo']].map(function(x){
       return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
     }).join('')+'</div></div>'
-    +'<div style="display:flex;gap:8px;width:100%;margin-bottom:4px;align-items:flex-end">'
-    +'<div style="width:64px;flex-shrink:0"></div>'
-    +Object.keys(metas).map(function(id){return '<div style="flex:1;min-width:60px;max-width:110px;text-align:center;padding:4px 5px">'
-        +'<div style="font-size:10px;font-weight:800;color:#e2e8f0;letter-spacing:0.5px;text-transform:uppercase;line-height:1.3;word-break:break-word">'+metas[id].label+'</div>'
-        +'<div style="font-size:10px;color:#22c55e;font-weight:700;margin-top:3px">'+metas[id].obj+'%</div>'
-        +'</div>';}).join('')
-    +'</div>';
+    /* ══ SE SACO LA FILA DE ENCABEZADO ════════════════════════════════════
+       Repetia el nombre y el objetivo de cada fundamento arriba de las
+       tarjetas, y las tarjetas YA los muestran: el nombre arriba y "obj 42"
+       abajo. Quedaba todo escrito dos veces —"% SERVE (42)" y "42%" en el
+       encabezado, "% SERVE" y "obj 42" en la tarjeta— y ocupaba una fila
+       entera de alto sin agregar nada. */
+    ;
   rows.forEach(function(row){
     html+='<div style="display:flex;align-items:center;gap:8px;width:100%;margin-bottom:8px">'
       +'<div style="width:64px;flex-shrink:0;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#94a3b8;text-align:right;padding-right:8px">'+row.label+'</div>'

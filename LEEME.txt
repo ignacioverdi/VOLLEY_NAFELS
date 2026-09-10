@@ -1,58 +1,67 @@
-EL SPANGLISH DE LAS ESCALAS
-===========================
+EL PANEL POR JUGADOR, ORDENADO
+==============================
 
-2 archivos: dashboard.html y lang.js.
-Publicar y Ctrl+Shift+R. Sin HACER_TODO.
-
-
-POR QUE SEGUIA MEZCLADO
------------------------
-Los titulos si se traducian —"HOW EACH VALUE IS CALCULATED", "Skill", "What
-each rating is worth"— pero el contenido de las filas no.
-
-La causa: esas frases llevan NEGRITAS ADENTRO:
-
-     # ace <b>100</b> · / free ball <b>87,5</b> · + positivo <b>75</b> · ...
-
-Cada <b> parte el texto en pedazos. El traductor ve "# ace", despues "100",
-despues "· / free ball", y no reconoce ninguno como frase.
-
-Es exactamente el mismo problema que tenian los botones con <br>, donde
-"Direcciones<br>ataque" salia como "DIRECCIONES ATTACK".
+3 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
 
 
-LO QUE SE HIZO
---------------
-1. Las 10 frases con etiquetas adentro ahora se traducen POR CLAVE, enteras,
-   con las negritas incluidas:
+1) EL OBJETIVO ESTABA ESCRITO DOS VECES
+---------------------------------------
+Arriba de las tarjetas habia una fila que repetia el nombre y el objetivo de
+cada fundamento:
 
-      las 3 escalas (saque, recepcion, defensa)
-      la formula del ataque y la del bloqueo
-      el parrafo de la escala 0 a 100
-      las 4 lineas del semaforo
+     encabezado   % SERVE (42)  ·  42%
+     tarjeta      % SERVE  ...  obj 42
 
-2. EL MOTOR TENIA UN LIMITE QUE HABIA QUE LEVANTAR
-   Escribia las traducciones con textContent, que es texto plano. Con una
-   traduccion que trae <b> se habria visto el codigo crudo en pantalla:
-
-      "# ace <b>100</b> · / free ball..."
-
-   Ahora, si la traduccion trae etiquetas, se escribe como HTML. Si no trae,
-   se sigue usando textContent, que es mas seguro.
-
-   Esto sirve para cualquier frase con formato de aca en adelante.
+Lo mismo dos veces, y una fila entera de alto sin agregar nada. Se saco el
+encabezado: las tarjetas ya dicen todo.
 
 
-PROBADO
--------
-   en  # ace 100 · / free ball 87.5 · + positive 75 · ! neutral 50 · ...
-   de  # Ass 100 · / Freeball 87,5 · + positiv 75 · ! neutral 50 · ...
-   en  # perfect 100 · + positive 75 · ! neutral 50 · / overpass 12.5 · ...
-   de  # perfekt 100 · + gut 75 · ! neutral 50 · − schlecht 25 · = Fehler 0
-   en  Classic volleyball efficiency: (kills − blocked − errors) / total.
-   de  Block #+ ist (Punkt + positiv) / gesamt.
-   en  Red · you are in the bottom half of the league.
-   de  Hellgrün · du bist im oberen Viertel der Liga.
+2) NO SE SABIA SI ERAN PARTIDOS O ENTRENAMIENTOS  ← lo importante
+-----------------------------------------------------------------
+El selector decia "ACUMULADO (todos)" y nada mas. Para leer una bateria eso
+cambia todo: no es lo mismo un 39% de saque en partidos que en
+entrenamientos.
 
-Y el "red" en minuscula de la captura tambien queda arreglado: ahora dice
-"Red", porque la linea entera se traduce de una.
+AHORA dice de donde sale:
+
+     es   VER:      ACUMULADO (2 partidos + 5 entrenamientos)
+     en   VIEW:     CUMULATIVE (2 matches + 5 trainings)
+     de   ANSICHT:  GESAMT (2 Spiele + 5 Trainings)
+
+Y cada sesion de la lista lleva su icono delante:
+
+     🏆 Amriswil · 14/09/2026
+     🏋️ Nafels · 08/09/2026 · Mañana
+
+Se ve de un vistazo que es cada una, y ademas aparece el turno.
+
+
+3) LA POSICION SALIA EN CASTELLANO
+----------------------------------
+El titulo decia "DURDOS — PUNTA" con toda la pantalla en ingles, aunque el
+boton de arriba decia "OUTSIDE".
+
+La causa: el traductor cambia lo que se VE en el boton, pero el valor que
+viaja en el click sigue siendo el original. Ahora se traduce al mostrarlo.
+
+     PUNTA    -> OUTSIDE   · AUSSEN
+     OPUESTO  -> OPPOSITE  · DIAGONAL
+     CENTRAL  -> MIDDLE    · MITTE
+     ARMADOR  -> SETTER    · ZUSPIELER
+     LIBERO   -> LIBERO    · LIBERO
+
+
+4) EL ROTULO "VER:" TAMPOCO SE TRADUCIA
+---------------------------------------
+Se arma por codigo, asi que no entraba en el barrido. Ya esta en los tres.
+
+
+SOBRE LO QUE PEDISTE DE REVISAR TODO
+------------------------------------
+Es un trabajo grande y prefiero hacerlo bien: recorrer pantalla por pantalla
+verificando que cada una separe partidos de entrenamientos y que funcione en
+los tres idiomas.
+
+Lo arranco ahora y te lo entrego por partes, empezando por las que mas usas:
+dashboard, panel en vivo, plan de partido y analisis. Te voy avisando que
+encuentro en cada una en vez de mandarte todo junto al final.

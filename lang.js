@@ -22,6 +22,14 @@
 
   // ── Diccionario ───────────────────────────────────────────────────────────
   var T = {
+    /* El selector de sesion del dashboard: tiene que decir si son partidos
+       o entrenamientos, y en el idioma que corresponda. */
+    dbat_ver:       { es:'VER:', en:'VIEW:', de:'ANSICHT:' },
+    dbat_acum:      { es:'ACUMULADO', en:'CUMULATIVE', de:'GESAMT' },
+    dbat_partido:   { es:'partido', en:'match', de:'Spiel' },
+    dbat_partidos:  { es:'partidos', en:'matches', de:'Spiele' },
+    dbat_entren:    { es:'entrenamiento', en:'training', de:'Training' },
+    dbat_entrens:   { es:'entrenamientos', en:'trainings', de:'Trainings' },
     /* ══ LA EXPLICACION DE LAS ESCALAS ═══════════════════════════════════
        Estas frases llevan negritas adentro —<b>100</b>, <b>87,5</b>— y eso
        parte el texto en varios pedazos: el traductor por texto ve "# ace",
@@ -342,6 +350,11 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    /* Posiciones y rotulos del panel por jugador. */
+    'EQUIPO': { en:'TEAM', de:'TEAM' },
+    'JUGADOR': { en:'PLAYER', de:'SPIELER' },
+    'MI PERFORMANCE VS EQUIPO': { en:'MY PERFORMANCE VS TEAM', de:'MEINE LEISTUNG VS TEAM' },
+    'POR JUGADOR': { en:'BY PLAYER', de:'NACH SPIELER' },
     /* El bloque explicativo del dashboard, que arma el JavaScript. */
     ', medido sobre los 97 partidos de la temporada anterior. No es siempre el mismo equipo: el campeon lidera casi todo, pero el bloqueo #+ lo gano otro club, y lo mismo el ataque tras recepcion negativa. Copiar a un solo equipo dejaria objetivos por debajo del techo real.': { en:', measured over the 97 matches of last season. It is not always the same team: the champion leads almost everything, but block #+ was won by another club, and so was attack after negative reception. Copying a single team would leave targets below the real ceiling.', de:', gemessen über die 97 Spiele der letzten Saison. Es ist nicht immer dasselbe Team: der Meister führt fast alles an, aber Block #+ gewann ein anderer Verein, ebenso den Angriff nach negativer Annahme. Ein einziges Team zu kopieren würde die Ziele unter die reale Obergrenze setzen.' },
     '. El error vale 0, la accion perfecta vale 100 y la neutra queda en el medio, en 50. Asi el numero se lee solo: 50 es "todo neutro", 25 "todo negativo", 75 "todo positivo".': { en:'. An error is 0, a perfect action is 100 and a neutral one sits in the middle, at 50. So the number reads by itself: 50 is "all neutral", 25 "all negative", 75 "all positive".', de:'. Ein Fehler zählt 0, eine perfekte Aktion 100 und eine neutrale liegt in der Mitte, bei 50. So liest sich die Zahl von selbst: 50 ist „alles neutral", 25 „alles negativ", 75 „alles positiv".' },
