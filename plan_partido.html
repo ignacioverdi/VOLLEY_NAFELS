@@ -185,12 +185,12 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260910-0805">
+<link rel="stylesheet" href="movil.css?v=20260910-1718">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="categorias_club.js?v=20260910-0805"></script>
-<script src="selector_categoria.js?v=20260910-0805"></script>
-<script src="mi_fila.js?v=20260910-0805" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260910-1718"></script>
+<script src="selector_categoria.js?v=20260910-1718"></script>
+<script src="mi_fila.js?v=20260910-1718" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -308,8 +308,8 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260910-0805"></script>
-<script src="filtro_tipo.js?v=20260910-0805" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260910-1718"></script>
+<script src="filtro_tipo.js?v=20260910-1718" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
   <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
        se cargaba SOLO el de partidos, asi que en una temporada sin partidos
@@ -324,12 +324,12 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20260910-0805"></script>
-<script src="firebase_por_categoria.js?v=20260910-0805"></script>
+<script src="firebase.js?v=20260910-1718"></script>
+<script src="firebase_por_categoria.js?v=20260910-1718"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20260910-0805" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20260910-1718" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -775,6 +775,12 @@ function render(p){var cfg=ROLECFG[p.role];
   var vals=cfg.filters.map(function(fl,i){return readFilt(p.id+'-f'+i,fl);});
   var f=p.data.filter(function(a){return MSEL.has(a[cfg.vIdx])&&passes(a,cfg,vals);}),n=f.length;
   var z={"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0},vz={};
+  /* Cuantos quedaron fuera de la cancha dibujada, para poder decirlo.
+     Antes el rotulo decia el total —"44 ataques"— y los cuadrantes
+     sumaban 38: daba la sensacion de que faltaban datos cuando en
+     realidad los 6 restantes son bloqueados y sin zona, que no son
+     una direccion. */
+  var _nBlq=0, _nSinZona=0;
   f.forEach(function(a){
     /* Los ataques bloqueados se salteaban siempre: la idea era que no contaran
        como direccion —la pelota no llego a la cancha rival—. Pero cuando se
@@ -789,7 +795,7 @@ function render(p){var cfg=ROLECFG[p.role];
     var _viendoBlq = vals.some(function(v){
       return v === '/' || (Array.isArray(v) && v.indexOf('/') >= 0);
     });
-    if(_blk && !_viendoBlq) return;
+    if(_blk && !_viendoBlq){ _nBlq++; return; }
     /* El campo [4] es el DESTINO —a donde fue la pelota—. Un ataque bloqueado
        no tiene destino, asi que se lo cuenta en su zona de ORIGEN, que viene
        en [10].
@@ -799,7 +805,7 @@ function render(p){var cfg=ROLECFG[p.role];
        nunca estuvo: es peor mostrar un dato falso que no mostrar nada. */
     if(_blk && !a[10]) return;
     var _zona = _blk ? a[10] : a[cfg.court];
-    if(z[_zona]!==undefined)z[_zona]++;if(ppVid(a[cfg.vIdx])){vz[_zona]=(vz[_zona]||0)+1;}});
+    if(z[_zona]!==undefined)z[_zona]++; else _nSinZona++;if(ppVid(a[cfg.vIdx])){vz[_zona]=(vz[_zona]||0)+1;}});
   var P=function(x){return n?Math.round(x/n*100)+'%':'–';};
   var v;
   if(cfg.stats==='atk'){var k=0,e=0,b=0,hd=0,sf=0,tp=0,d0=0,d1=0,d2=0;
@@ -813,7 +819,17 @@ function render(p){var cfg=ROLECFG[p.role];
     v=[n?Math.round((pos-rerr-ov)/n*100)+'%':'–',P(pos),P(ov+rerr),P(rpot),P(rflo),String(n),P(perf),P(ok),P(ov+bad)];
   }
   for(var i=0;i<9;i++)document.getElementById(p.id+'-s'+i).textContent=v[i];
-  document.getElementById(p.id+'-n').textContent=n+U(p.role);
+  (function(){
+    /* El rotulo tiene que describir la cancha que se esta viendo. Antes decia
+       el total y los cuadrantes sumaban menos: parecia que faltaban datos. */
+    var _dib=0; for(var _k in z) _dib+=z[_k];
+    var _txt = n+U(p.role);
+    var _fuera=[];
+    if(_nBlq)     _fuera.push(_nBlq+' bloq.');
+    if(_nSinZona) _fuera.push(_nSinZona+' sin zona');
+    if(_fuera.length) _txt += ' · '+_dib+' con dirección ('+_fuera.join(' · ')+' aparte)';
+    document.getElementById(p.id+'-n').textContent=_txt;
+  })();
   var mx=Math.max(1,z["1"],z["2"],z["3"],z["4"],z["5"],z["6"],z["7"],z["8"],z["9"]);
   var _useMin=(cfg.stats==='atk'||cfg.stats==='srv'||cfg.stats==='dig');
   var _min=0; if(_useMin){var _me=document.getElementById(p.id+'-min'); _min=_me?(parseInt(_me.value,10)||0):0;}
@@ -1066,8 +1082,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20260910-0805" onerror="void 0"></script>
-<script src="lang.js?v=20260910-0805" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20260910-1718" onerror="void 0"></script>
+<script src="lang.js?v=20260910-1718" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -1085,7 +1101,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20260910-0805" onerror="void 0"></script>
-<script src="ayuda.js?v=20260910-0805"></script>
+<script src="volver_inicio.js?v=20260910-1718" onerror="void 0"></script>
+<script src="ayuda.js?v=20260910-1718"></script>
 </body>
 </html>

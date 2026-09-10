@@ -1,84 +1,64 @@
-EL VIDEO DE CADA ACCION — Y LA BASE RECONSTRUIDA
-================================================
+EL TABLERO DECIA 44 Y SUMABA 38
+===============================
 
-9 archivos a la raiz. HACER_TODO y publicar.
-
-
-TU PREGUNTA: ¿RESPETA EL VIDEO DE CADA UNO?
--------------------------------------------
-NO lo hacia. Fui a ver el codigo y encontre exactamente por que.
-
-El plan de partido busca el video asi: agarra la fecha de la accion y
-busca la clave 'ENT' + fecha. Para el 08/09 esa clave es ENT20260908...
-que es LA SESION DE LA TARDE.
-
-Entonces una accion de la MAÑANA se llevaba el video de la TARDE. Doble
-click en un ataque y se abria una jugada de otro entrenamiento.
-
-Eso es lo que viste.
+Un archivo: plan_partido.html. Publicar y Ctrl+Shift+R.
+NO hace falta HACER_TODO.
 
 
-POR QUE PASABA
---------------
-Ni las acciones ni el plan de partido sabian de que turno eran. Solo
-guardaban la fecha, y con dos sesiones el mismo dia la fecha no alcanza
-para distinguirlas.
+LO PRIMERO: LOS DATOS ESTAN BIEN
+--------------------------------
+Investigue los 44 ataques de Durdos uno por uno, contra los .dvw:
 
-CORREGIDO EN TRES LUGARES:
+   12 del 07/09  +  32 del 08/09  =  44
 
-  1. update_db_entrenamientos_nafels.py
-     cada accion guarda su turno junto a la fecha
-
-  2. gen_plan_partido.py
-     el plan de partido guarda el turno de cada sesion
-
-  3. plan_partido.html
-     el video se busca por FECHA + TURNO:
-        mañana -> ENT20260908M
-        tarde  -> ENT20260908
-
-     Y si hay dos sesiones el mismo dia y no se sabe cual es, NO ADIVINA.
-     Antes devolvia la primera que encontraba. Es preferible que el doble
-     click no haga nada a que abra una jugada equivocada.
+Ninguno del 05/09 —ese dia ya no existe en el sistema— y ninguno de la
+mañana del 08/09, que fue saque y pase. La base esta correcta.
 
 
-PROBADO
--------
-   08/09 turno M  (mañana, saque y pase)  ->  video de la MAÑANA
-   08/09 turno -  (tarde)                 ->  video de la TARDE
-   04/09          (una sola sesion)       ->  su video
-   07/09          (una sola sesion)       ->  su video
-   fecha que no existe                    ->  sin video, no inventa
+LO QUE SI ESTABA MAL: EL ROTULO
+-------------------------------
+Arriba decia "44 ataques" pero los cuadrantes sumaban 38. Faltaban 6, y
+por eso parecia que el sistema recordaba cosas viejas.
 
-   Antes, la mañana recibia el video de la tarde.
+Los 6 son:
 
+   5 ataques BLOQUEADOS (evaluacion "/")
+   1 ataque SIN ZONA de destino
 
-Y ADEMAS: LA BASE ESTABA CORROMPIDA
------------------------------------
-En la misma investigacion encontre que la sesion de la mañana estaba
-cargada TRES VECES (240 saques figuraban como 743), y que habia dos
-fechas fantasma sin ningun .dvw que las respalde.
+Y no aparecen POR DISEÑO, esta documentado en el codigo: un ataque
+bloqueado no es una direccion, la pelota nunca llego a la cancha rival.
+Si filtras por "Bloqueado" si se ven, y ahi se pintan en la zona desde
+donde salio el ataque.
 
-Lo cause yo: te hice sacar la entrada del 08/09 de "games" para forzar el
-reprocesado, y la base ACUMULABA en vez de reemplazar.
+Verificado zona por zona:
 
-Ya esta arreglado y la base viene reconstruida en este zip:
+   z1   6 en el archivo   2 bloqueados   ->  4 en pantalla   OK
+   z2   7                 1 bloqueado    ->  6               OK
+   z4   1                 1 bloqueado    ->  0               OK
+   z6  13                 1 bloqueado    ->  12              OK
 
-   04/09  coincide con el archivo      08/09  turno M  427 acciones
-   07/09  coincide con el archivo      08/09  turno -  331 acciones
-   08/09  coincide con el archivo      fechas fantasma: NINGUNA
-
-   Durdos, 08/09:  mañana 0 ataques (correcto, fue saque y pase)
-                   tarde 32 ataques
-
-Y el motor ahora RECONSTRUYE la base en cada corrida en vez de acumular,
-asi que reprocesar no vuelve a duplicar nada nunca mas.
+El criterio es correcto. Lo que fallaba era que el rotulo no lo decia.
 
 
-LOS NUMEROS BAJAN, Y ESTA BIEN
-------------------------------
-   antes  1193 saques · 1142 recepciones
-   ahora   647 saques ·  604 recepciones
+AHORA DICE
+----------
+   antes:  44 ataques
+   ahora:  44 ataques · 38 con dirección (5 bloq. · 1 sin zona aparte)
 
-Se fueron las copias triplicadas y las fechas fantasma. Ahora lo que ves
-en pantalla es exactamente lo que dicen los .dvw.
+Las tres cifras cierran: 38 + 5 + 1 = 44.
+
+Cuando no haya bloqueados ni acciones sin zona, el rotulo queda como
+siempre: "44 ataques" a secas.
+
+
+LO DEL VIDEO
+------------
+Las 5 sesiones tienen su video cargado, lo verifique:
+
+   03/09 ENT20260903 ✅    08/09 ENT20260908  ✅
+   04/09 ENT20260904 ✅    08/09 ENT20260908M ✅
+   07/09 ENT20260907 ✅
+
+El cuadrante sin ▶ que viste es porque sus ataques eran bloqueados, y
+esos no se dibujan salvo que filtres por "Bloqueado". No era falta de
+video.
