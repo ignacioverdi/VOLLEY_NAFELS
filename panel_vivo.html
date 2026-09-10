@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260910-1719"></script>
-<script src="selector_categoria.js?v=20260910-1719"></script>
-<script src="lang.js?v=20260910-1719"></script>
+<script src="categorias_club.js?v=20260910-2320"></script>
+<script src="selector_categoria.js?v=20260910-2320"></script>
+<script src="lang.js?v=20260910-2320"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260910-1719">
+<link rel="stylesheet" href="movil.css?v=20260910-2320">
 </head>
 <body>
 
@@ -1230,16 +1230,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260910-1719" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260910-1719"></script>
-<script src="objetivos.js?v=20260910-1719" onerror="void 0"></script>
-<script src="video_delay.js?v=20260910-1719" onerror="void 0"></script>
+<script src="firebase.js?v=20260910-2320" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260910-2320"></script>
+<script src="objetivos.js?v=20260910-2320" onerror="void 0"></script>
+<script src="video_delay.js?v=20260910-2320" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260910-1719" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260910-1719"></script>
+<script src="plantel_nafels.js?v=20260910-2320" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260910-2320"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -6540,6 +6540,17 @@ function _aCp1252(texto){
   return out.subarray(0, n);
 }
 
+/* La hora en el formato de DataVolley: hh.mm.ss con puntos, no dos puntos.
+   Si el codigo no tiene segundo de video, se usa la hora del reloj. */
+function _horaDVW(seg){
+  try{
+    var d = new Date();
+    if(seg && M.t0){ d = new Date(M.t0 + seg*1000); }
+    var p = n => (n<10?'0':'')+n;
+    return p(d.getHours())+'.'+p(d.getMinutes())+'.'+p(d.getSeconds());
+  }catch(e){ return ''; }
+}
+
 function exportDVW(modo){
   modo = modo || 'keep';
   const d=new Date(), pad=n=>String(n).padStart(2,'0');
@@ -6667,7 +6678,26 @@ function exportDVW(modo){
   L.push('[3SCOUT]');
   const pad6 = arr => { const a=(arr||[]).slice(0,6); while(a.length<6) a.push(''); return a.map(x=>(x==null?'':x)); };
   M.codes.forEach(c=>{
-    if(c.k==='drill' || !c.c) return;
+    /* ══ EL DRILL SE ESCRIBE, COMO EN DATA VOLLEY ══════════════════════════
+       Antes se salteaba: yo habia asumido que DataVolley no conocia los
+       drills. Me equivoque. Abriendo el &Pra-AXPO NAFELS-2026-09-08.dvw, que
+       lo hizo DataVolley, aparecen dos lineas asi:
+
+           **Drill;;;;;;;10.56.34;1;0;0;1;1610;;;;;;;;;;;;;;
+
+       Misma estructura de 27 columnas que cualquier accion: la hora en la 7,
+       el set en la 8 y el segundo del video en la 12.
+
+       Al saltearlo, el archivo que exportaba el panel perdia la division
+       entre ejercicios: quedaba un bloque continuo y despues no habia forma
+       de saber donde empezaba cada drill. Ahora se escribe igual que el. */
+    if(c.k==='drill'){
+      const _hh = _horaDVW(c.t);
+      L.push(['**Drill','','','','','','',_hh, String(c.set||1),'0','0','1',
+              String(Math.round(c.t||0)),'','','','','','','','','','','','','',''].join(';'));
+      return;
+    }
+    if(!c.c) return;
     const hl = pad6((c.hl && c.hl.length===6) ? c.hl : M.home.lineup);
     const al = pad6((c.al && c.al.length===6) ? c.al : M.away.lineup);
     /* columnas: 0 código · 8 set · 9 zona armador local · 10 zona armador visitante
@@ -7905,7 +7935,7 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260910-1719" onerror="void 0"></script>
-<script src="ayuda.js?v=20260910-1719"></script>
+<script src="volver_inicio.js?v=20260910-2320" onerror="void 0"></script>
+<script src="ayuda.js?v=20260910-2320"></script>
 </body>
 </html>

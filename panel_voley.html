@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20260910-1719"></script>
-<script src="selector_categoria.js?v=20260910-1719"></script>
+<script src="categorias_club.js?v=20260910-2320"></script>
+<script src="selector_categoria.js?v=20260910-2320"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -351,19 +351,19 @@ body::before{content:'';position:fixed;inset:0;
 
 select, select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20260910-1719"></script>
+<script src="objetivos_config.js?v=20260910-2320"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260910-1719"></script>
-<script src="firebase.js?v=20260910-1719" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260910-1719"></script>
-<script src="lang.js?v=20260910-1719"></script>
-<script src="objetivos.js?v=20260910-1719" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20260910-1719"></script>
-  <script src="video_delay.js?v=20260910-1719" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260910-2320"></script>
+<script src="firebase.js?v=20260910-2320" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260910-2320"></script>
+<script src="lang.js?v=20260910-2320"></script>
+<script src="objetivos.js?v=20260910-2320" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20260910-2320"></script>
+  <script src="video_delay.js?v=20260910-2320" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -628,7 +628,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260910-1719">
+<link rel="stylesheet" href="movil.css?v=20260910-2320">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase">← Dashboard</a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -1183,6 +1183,8 @@ function renderTabla(){
     const sPt=sT?Math.round(s[0]/sT*100):null;
     const sVend=sT?Math.round(s[4]/sT*100):null;
     const sPos=sT?Math.round(s[1]/sT*100):null;
+    const sAdm=sT?Math.round((s[2]||0)/sT*100):null;
+    const sNeg=sT?Math.round((s[3]||0)/sT*100):null;
     const sErr=sT?Math.round(s[5]/sT*100):null;
 
     // RECEPCION
@@ -1190,6 +1192,7 @@ function renderTabla(){
     const rEff=rT?VB_EFF.recepcion({T:rT,Punto:r[0],Pos:r[1],Adm:r[2]||0,Neg:r[3]||0,Vend:r[4]}):null;
     const rPt=rT?Math.round(r[0]/rT*100):null;
     const rPos=rT?Math.round(r[1]/rT*100):null;
+    const rAdm=rT?Math.round((r[2]||0)/rT*100):null;
     const rNeg=rT?Math.round(r[3]/rT*100):null;
     const rVend=rT?Math.round(r[4]/rT*100):null;
     const rErr=rT?Math.round(r[5]/rT*100):null;
@@ -1210,27 +1213,40 @@ function renderTabla(){
     function c(v){if(v===null)return'<td style="color:var(--dim)">--</td>';}
     function td(v,col){if(v===null)return`<td style="color:var(--dim)">--</td>`;return`<td style="color:${col||'var(--txt)'}">${v}%</td>`;}
 
+    /* ══ EL NUMERO ENTERO AL PASAR EL MOUSE ═══════════════════════════════
+       Un 22% no dice lo mismo si son 2 de 9 que si son 44 de 200. Ahora cada
+       porcentaje muestra "6 de 27" al apoyar el mouse, que es el dato que
+       hace falta para saber si el porcentaje significa algo. */
+    function pc(v, col, cant, total, etiqueta){
+      if(v===null) return `<td style="color:var(--dim)">--</td>`;
+      const t = (cant!=null && total) ? `${cant} de ${total}${etiqueta?' · '+etiqueta:''}` : '';
+      return `<td style="color:${col||'var(--txt)'}"${t?` title="${t}"`:''}>${v}%</td>`;
+    }
+
     return `<tr${cls}>
       ${nameCell}
       <td class=t-total>${sT||'--'}</td>
       <td>${fmtEff(sEff)}</td>
-      <td style="color:${C.green}">${sPt!==null?sPt+'%':'--'}</td>
-      <td style="color:${C.red}">${sVend!==null?sVend+'%':'--'}</td>
-      <td style="color:${C.lgreen}">${sPos!==null?sPos+'%':'--'}</td>
-      <td style="color:${C.dred}">${sErr!==null?sErr+'%':'--'}</td>
+      ${pc(sPt,C.green,s[0],sT,"punto")}
+      ${pc(sVend,C.red,s[4],sT,"sin ataque")}
+      ${pc(sPos,C.lgreen,s[1],sT,"limitado")}
+      ${pc(sAdm,C.amber,s[2],sT,"incómoda")}
+      ${pc(sNeg,C.orange,s[3],sT,"recibe bien")}
+      ${pc(sErr,C.dred,s[5],sT,"error")}
       <td class=sep-col></td>
       <td class=t-total>${rT||'--'}</td>
       <td>${fmtEff(rEff)}</td>
-      <td style="color:${C.green}">${rPt!==null?rPt+'%':'--'}</td>
-      <td style="color:${C.lgreen}">${rPos!==null?rPos+'%':'--'}</td>
-      <td style="color:${C.orange}">${rNeg!==null?rNeg+'%':'--'}</td>
-      <td style="color:${C.red}">${rVend!==null?rVend+'%':'--'}</td>
-      <td style="color:${C.dred}">${rErr!==null?rErr+'%':'--'}</td>
+      ${pc(rPt,C.green,r[0],rT,"perfecta")}
+      ${pc(rPos,C.lgreen,r[1],rT,"buena")}
+      ${pc(rAdm,C.amber,r[2],rT,"incómoda")}
+      ${pc(rNeg,C.orange,r[3],rT,"mala")}
+      ${pc(rVend,C.red,r[4],rT,"vendida")}
+      ${pc(rErr,C.dred,r[5],rT,"error")}
       <td class=sep-col></td>
       <td class=t-total>${aT||'--'}</td>
       <td>${fmtEff(aEff)}</td>
-      <td style="color:${C.green}">${aPt!==null?aPt+'%':'--'}</td>
-      <td style="color:${C.red}">${aVend!==null?aVend+'%':'--'}</td>
+      ${pc(aPt,C.green,a[0],aT,"punto")}
+      ${pc(aVend,C.red,a[4],aT,"bloqueado")}
       <td style="color:${C.dred}">${aErr!==null?aErr+'%':'--'}</td>
       <td style="color:${C.purple}">${aTCQ||'--'}</td>
       <td class=sep-col></td>
@@ -1253,31 +1269,37 @@ function renderTabla(){
   <table class=tabla>
     <thead>
       <tr>
-        <th style="text-align:left;min-width:160px">JUGADOR</th>
-        <th colspan=6 style="color:${C.amber};border-bottom-color:${C.amber};font-size:15px">S A Q U E</th>
+        <th style="text-align:left;min-width:160px" data-t="tb_jugador">JUGADOR</th>
+        <th colspan=8 style="color:${C.amber};border-bottom-color:${C.amber};font-size:15px" data-t="tb_saque">S A Q U E</th>
         <th class=sep-col></th>
-        <th colspan=7 style="color:${C.green};border-bottom-color:${C.green};font-size:15px">R E C E P C I O N</th>
+        <th colspan=8 style="color:${C.green};border-bottom-color:${C.green};font-size:15px" data-t="tb_recep">R E C E P C I O N</th>
         <th class=sep-col></th>
-        <th colspan=6 style="color:${C.indigo};border-bottom-color:${C.indigo};font-size:15px">A T A Q U E</th>
+        <th colspan=6 style="color:${C.indigo};border-bottom-color:${C.indigo};font-size:15px" data-t="tb_ataque">A T A Q U E</th>
         <th class=sep-col></th>
-        <th colspan=3 style="color:${C.purple};border-bottom-color:${C.purple};font-size:15px">B L O Q U E O</th>
+        <th colspan=3 style="color:${C.purple};border-bottom-color:${C.purple};font-size:15px" data-t="tb_bloqueo">B L O Q U E O</th>
       </tr>
       <tr style="border-bottom:1px solid var(--b)">
         <th></th>
+        <!-- Las valoraciones, en el MISMO orden que la escala de las baterias.
+             Faltaban dos en saque (! y -) y una en recepcion (!): sin ellas los
+             porcentajes no sumaban 100 y no se entendia de donde salia el Eff. -->
         <th style="color:${C.mut}">Total</th>
         <th style="color:${C.amber}">Eff</th>
-        <th style="color:${C.green}"># %</th>
-        <th style="color:${C.red}">/ %</th>
-        <th style="color:${C.lgreen}">+ %</th>
-        <th style="color:${C.dred}">= %</th>
+        <th style="color:${C.green}" title="Punto directo"># %</th>
+        <th style="color:${C.red}" title="El rival no puede atacar">/ %</th>
+        <th style="color:${C.lgreen}" title="Ataque limitado">+ %</th>
+        <th style="color:${C.amber}" title="Recepción incómoda">! %</th>
+        <th style="color:${C.orange}" title="El rival recibe bien">- %</th>
+        <th style="color:${C.dred}" title="Error">= %</th>
         <th class=sep-col></th>
         <th style="color:${C.mut}">Total</th>
         <th style="color:${C.green}">Eff</th>
-        <th style="color:${C.green}"># %</th>
-        <th style="color:${C.lgreen}">+ %</th>
-        <th style="color:${C.orange}">- %</th>
-        <th style="color:${C.red}">/ %</th>
-        <th style="color:${C.dred}">= %</th>
+        <th style="color:${C.green}" title="Perfecta"># %</th>
+        <th style="color:${C.lgreen}" title="Buena">+ %</th>
+        <th style="color:${C.amber}" title="Incómoda">! %</th>
+        <th style="color:${C.orange}" title="Mala">- %</th>
+        <th style="color:${C.red}" title="Sin ataque posible">/ %</th>
+        <th style="color:${C.dred}" title="Error">= %</th>
         <th class=sep-col></th>
         <th style="color:${C.mut}">Total</th>
         <th style="color:${C.indigo}">Eff</th>
@@ -2144,8 +2166,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20260910-1719" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260910-1719"></script>
+<script src="plantel_nafels.js?v=20260910-2320" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260910-2320"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2244,7 +2266,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20260910-1719"></script>
+<script src="ayuda.js?v=20260910-2320"></script>
 </body>
 </html>
 

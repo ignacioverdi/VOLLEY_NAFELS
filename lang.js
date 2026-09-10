@@ -22,6 +22,14 @@
 
   // ── Diccionario ───────────────────────────────────────────────────────────
   var T = {
+    /* Encabezados de la tabla del panel. Van con las letras separadas
+       —"S A Q U E"— asi que el traductor por texto no los reconoce:
+       hay que traducirlos por clave. */
+    tb_jugador: { es:'JUGADOR',           en:'P L A Y E R',    de:'S P I E L E R' },
+    tb_saque:   { es:'S A Q U E',         en:'S E R V E',      de:'A U F S C H L A G' },
+    tb_recep:   { es:'R E C E P C I O N', en:'R E C E P T I O N', de:'A N N A H M E' },
+    tb_ataque:  { es:'A T A Q U E',       en:'A T T A C K',    de:'A N G R I F F' },
+    tb_bloqueo: { es:'B L O Q U E O',     en:'B L O C K',      de:'B L O C K' },
     /* El casillero para escribir el objetivo, en el modal del panel. */
     obj_ph:  { es:'objetivo', en:'target', de:'Ziel' },
     /* Botones del panel en vivo. Antes el texto iba partido con <br> y el
