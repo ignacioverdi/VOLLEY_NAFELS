@@ -1,50 +1,58 @@
-FALTABA CONECTAR EL CONTEO
-==========================
+EL SPANGLISH DE LAS ESCALAS
+===========================
 
-Un archivo: objetivos_config.js. Publicar y Ctrl+Shift+R.
-NO hace falta HACER_TODO.
-
-
-LO QUE YA FUNCIONA — verificado en la app
------------------------------------------
-Las 12 baterias tienen su titulo y el semaforo correcto:
-
-   % SAQUE          39%  obj 42   CERCA
-   % RECEPCIÓN      55%  obj 60   NEUTRO
-   % BLQ #+         42%  obj 45   CERCA
-   % BLQ #          20%  obj 21   CERCA
-   % ATQ CENTRAL    22%  obj 55   LEJOS
-   % ATQ ALTA        5%  obj 18   LEJOS
-   % ATQ RÁPIDA     36%  obj 40   CERCA
-   % ATQ R#+        35%  obj 47   NEUTRO
-   % ATQ R!         35%  obj 44   NEUTRO
-   % ATQ R-         40%  obj 23   OBJETIVO
-   % ATQ TRANSICIÓN 20%  obj 33   LEJOS
-   % DEFENSA        51%  obj 60   NEUTRO
-
-Cada color coincide exactamente con el recorrido de la liga que calcule.
-Ninguna quedo sin nombre.
-
-Y el motor YA esta generando los totales: verifique que el dato existe y
-coincide con mi auditoria (n_atqrm 5 · n_atqtr 238 · n_sq 1018).
+2 archivos: dashboard.html y lang.js.
+Publicar y Ctrl+Shift+R. Sin HACER_TODO.
 
 
-LO QUE FALTABA
+POR QUE SEGUIA MEZCLADO
+-----------------------
+Los titulos si se traducian —"HOW EACH VALUE IS CALCULATED", "Skill", "What
+each rating is worth"— pero el contenido de las filas no.
+
+La causa: esas frases llevan NEGRITAS ADENTRO:
+
+     # ace <b>100</b> · / free ball <b>87,5</b> · + positivo <b>75</b> · ...
+
+Cada <b> parte el texto en pedazos. El traductor ve "# ace", despues "100",
+despues "· / free ball", y no reconoce ninguno como frase.
+
+Es exactamente el mismo problema que tenian los botones con <br>, donde
+"Direcciones<br>ataque" salia como "DIRECCIONES ATTACK".
+
+
+LO QUE SE HIZO
 --------------
-El conteo no aparecia en la tarjeta. La razon: hay DOS objSingleBat, una en
-dashboard.html y otra en objetivos_config.js, y la del panel de arriba es la
-del segundo archivo. Habia actualizado solo la del dashboard.
+1. Las 10 frases con etiquetas adentro ahora se traducen POR CLAVE, enteras,
+   con las negritas incluidas:
 
-Es el mismo problema de siempre en este codigo: la misma funcion escrita en
-dos lados, y uno se olvida de uno.
+      las 3 escalas (saque, recepcion, defensa)
+      la formula del ataque y la del bloqueo
+      el parrafo de la escala 0 a 100
+      las 4 lineas del semaforo
 
-Ahora las dos muestran:
+2. EL MOTOR TENIA UN LIMITE QUE HABIA QUE LEVANTAR
+   Escribia las traducciones con textContent, que es texto plano. Con una
+   traduccion que trae <b> se habria visto el codigo crudo en pantalla:
 
-     % ATQ R-
-       40%
-      [bat]
-      5 acc.        <- esto
-      obj 23
+      "# ace <b>100</b> · / free ball..."
 
-Y al apoyar el mouse: "% Atq R-: 40% sobre 5 acciones · el peor de la liga
-0%, el mejor 23% · estás al 174% del recorrido".
+   Ahora, si la traduccion trae etiquetas, se escribe como HTML. Si no trae,
+   se sigue usando textContent, que es mas seguro.
+
+   Esto sirve para cualquier frase con formato de aca en adelante.
+
+
+PROBADO
+-------
+   en  # ace 100 · / free ball 87.5 · + positive 75 · ! neutral 50 · ...
+   de  # Ass 100 · / Freeball 87,5 · + positiv 75 · ! neutral 50 · ...
+   en  # perfect 100 · + positive 75 · ! neutral 50 · / overpass 12.5 · ...
+   de  # perfekt 100 · + gut 75 · ! neutral 50 · − schlecht 25 · = Fehler 0
+   en  Classic volleyball efficiency: (kills − blocked − errors) / total.
+   de  Block #+ ist (Punkt + positiv) / gesamt.
+   en  Red · you are in the bottom half of the league.
+   de  Hellgrün · du bist im oberen Viertel der Liga.
+
+Y el "red" en minuscula de la captura tambien queda arreglado: ahora dice
+"Red", porque la linea entera se traduce de una.

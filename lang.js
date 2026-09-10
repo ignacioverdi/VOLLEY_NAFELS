@@ -22,6 +22,52 @@
 
   // ── Diccionario ───────────────────────────────────────────────────────────
   var T = {
+    /* ══ LA EXPLICACION DE LAS ESCALAS ═══════════════════════════════════
+       Estas frases llevan negritas adentro —<b>100</b>, <b>87,5</b>— y eso
+       parte el texto en varios pedazos: el traductor por texto ve "# ace",
+       "100", "· / free ball" por separado y no reconoce ninguno. Es el mismo
+       problema que tenian los botones con <br>.
+       Con clave se traduce la frase entera, negritas incluidas.            */
+    esc_intro: {
+      es:'Saque, recepcion y defensa usan una escala de <b style="color:#e2e8f0">0 a 100</b>. El error vale 0, la accion perfecta vale 100 y la neutra queda en el medio, en 50. Asi el numero se lee solo: 50 es "todo neutro", 25 "todo negativo", 75 "todo positivo".',
+      en:'Serve, reception and defence use a scale of <b style="color:#e2e8f0">0 to 100</b>. An error is 0, a perfect action is 100 and a neutral one sits in the middle, at 50. So the number reads by itself: 50 is "all neutral", 25 "all negative", 75 "all positive".',
+      de:'Aufschlag, Annahme und Abwehr nutzen eine Skala von <b style="color:#e2e8f0">0 bis 100</b>. Ein Fehler zählt 0, eine perfekte Aktion 100 und eine neutrale liegt in der Mitte, bei 50. So liest sich die Zahl von selbst: 50 ist „alles neutral", 25 „alles negativ", 75 „alles positiv".' },
+    esc_saque: {
+      es:'# ace <b>100</b> · / free ball <b>87,5</b> · + positivo <b>75</b> · ! neutro <b>50</b> · &minus; negativo <b>25</b> · = error <b>0</b>',
+      en:'# ace <b>100</b> · / free ball <b>87.5</b> · + positive <b>75</b> · ! neutral <b>50</b> · &minus; negative <b>25</b> · = error <b>0</b>',
+      de:'# Ass <b>100</b> · / Freeball <b>87,5</b> · + positiv <b>75</b> · ! neutral <b>50</b> · &minus; negativ <b>25</b> · = Fehler <b>0</b>' },
+    esc_recep: {
+      es:'# perfecta <b>100</b> · + positiva <b>75</b> · ! neutra <b>50</b> · &minus; negativa <b>25</b> · / sobrepase <b>12,5</b> · = error <b>0</b>',
+      en:'# perfect <b>100</b> · + positive <b>75</b> · ! neutral <b>50</b> · &minus; negative <b>25</b> · / overpass <b>12.5</b> · = error <b>0</b>',
+      de:'# perfekt <b>100</b> · + positiv <b>75</b> · ! neutral <b>50</b> · &minus; negativ <b>25</b> · / Überpass <b>12,5</b> · = Fehler <b>0</b>' },
+    esc_def: {
+      es:'# perfecta <b>100</b> · + buena <b>75</b> · ! neutra <b>50</b> · &minus; mala <b>25</b> · = error <b>0</b>',
+      en:'# perfect <b>100</b> · + good <b>75</b> · ! neutral <b>50</b> · &minus; poor <b>25</b> · = error <b>0</b>',
+      de:'# perfekt <b>100</b> · + gut <b>75</b> · ! neutral <b>50</b> · &minus; schlecht <b>25</b> · = Fehler <b>0</b>' },
+    esc_atq: {
+      es:'Eficacia clasica del voley: <b>(puntos &minus; bloqueados &minus; errores) / total</b>. Es el estandar mundial y puede dar negativo.',
+      en:'Classic volleyball efficiency: <b>(kills &minus; blocked &minus; errors) / total</b>. It is the world standard and can be negative.',
+      de:'Klassische Volleyball-Effizienz: <b>(Punkte &minus; geblockt &minus; Fehler) / gesamt</b>. Weltstandard, kann negativ sein.' },
+    esc_blq: {
+      es:'Blq #+ es <b>(punto + positivo) / total</b>. Blq # es solo <b>punto / total</b>.',
+      en:'Block #+ is <b>(point + positive) / total</b>. Block # is just <b>point / total</b>.',
+      de:'Block #+ ist <b>(Punkt + positiv) / gesamt</b>. Block # ist nur <b>Punkt / gesamt</b>.' },
+    sem_verde2: {
+      es:'<span style="color:#22c55e;font-weight:800">Verde fuerte</span> &nbsp;llegaste al mejor de la liga en ese fundamento.',
+      en:'<span style="color:#22c55e;font-weight:800">Strong green</span> &nbsp;you have reached the best in the league in that skill.',
+      de:'<span style="color:#22c55e;font-weight:800">Kräftiges Grün</span> &nbsp;du hast den Ligabesten in diesem Element erreicht.' },
+    sem_verde1: {
+      es:'<span style="color:#86efac;font-weight:800">Verde claro</span> &nbsp;estas en el cuarto de arriba de la liga.',
+      en:'<span style="color:#86efac;font-weight:800">Light green</span> &nbsp;you are in the top quarter of the league.',
+      de:'<span style="color:#86efac;font-weight:800">Hellgrün</span> &nbsp;du bist im oberen Viertel der Liga.' },
+    sem_amar: {
+      es:'<span style="color:#fbbf24;font-weight:800">Amarillo</span> &nbsp;estas en la mitad de arriba de la liga.',
+      en:'<span style="color:#fbbf24;font-weight:800">Yellow</span> &nbsp;you are in the top half of the league.',
+      de:'<span style="color:#fbbf24;font-weight:800">Gelb</span> &nbsp;du bist in der oberen Ligahälfte.' },
+    sem_rojo: {
+      es:'<span style="color:#ef4444;font-weight:800">Rojo</span> &nbsp;estas en la mitad de abajo de la liga.',
+      en:'<span style="color:#ef4444;font-weight:800">Red</span> &nbsp;you are in the bottom half of the league.',
+      de:'<span style="color:#ef4444;font-weight:800">Rot</span> &nbsp;du bist in der unteren Ligahälfte.' },
     /* Encabezados de la tabla del panel. Van con las letras separadas
        —"S A Q U E"— asi que el traductor por texto no los reconoce:
        hay que traducirlos por clave. */
@@ -4017,7 +4063,14 @@
     for (var i=0; i<els.length; i++){
       var k = els[i].getAttribute('data-t');
       var v = tr(k, lang);
-      if (v !== null) els[i].textContent = v;   // si no está en el diccionario, no toca nada
+      if (v !== null) {
+        /* Si la traduccion trae etiquetas —negritas, colores— hay que
+           escribirla como HTML. Con textContent se veria el codigo crudo:
+           "# ace <b>100</b>" en vez de "# ace 100" con el 100 en negrita.
+           Sin etiquetas se sigue usando textContent, que es mas seguro. */
+        if (/<[a-z][\s\S]*>/i.test(v)) els[i].innerHTML = v;
+        else els[i].textContent = v;
+      }   // si no está en el diccionario, no toca nada
     }
     // placeholders
     var ph = document.querySelectorAll('[data-t-ph]');
