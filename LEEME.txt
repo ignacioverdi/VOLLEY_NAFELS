@@ -1,66 +1,44 @@
-LOS DRILLS Y LA TABLA
+UN DETALLE DEL NOMBRE
 =====================
 
-3 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
+Un archivo: panel_vivo.html. Publicar y Ctrl+Shift+R.
 
 
-1) EL DRILL SE ESCRIBE EN EL .DVW, COMO DATA VOLLEY
----------------------------------------------------
-Me equivoque antes: DataVolley SI guarda los drills. Abri tu
-&Pra-AXPO NAFELS-2026-09-08.dvw y estan:
+PROBE TODO LO QUE HABLAMOS. FUNCIONA:
+-------------------------------------
 
-   **Drill;;;;;;;10.56.34;1;0;0;1;1610;;;;;;;;;;;;;;
+LA TABLA
+   saque       # / + ! - =     6 valoraciones (antes 4)
+   recepcion   # + ! - / =     6 valoraciones (antes 5)
+   los % suman 101 (redondeo), antes no cerraban
+   tooltip     "26 de 221 · punto"  en las 12 celdas
+   titulos     S A Q U E -> S E R V E · A U F S C H L A G
+               R E C E P C I O N -> R E C E P T I O N · A N N A H M E
+               JUGADOR -> P L A Y E R · S P I E L E R
 
-Misma estructura de 27 columnas que cualquier accion: la hora en la 7, el
-set en la 8 y el segundo del video en la 12.
+LA DISTRIBUCION DEL ARMADOR
+   Side-out      33 armados
+   Transicion   102 armados
+   Todo         135 armados     <- los 135 completos, como pediste
+   Aparece la cancha "Sin rotación · el archivo no guarda rotación"
 
-Al saltearlos, el archivo del panel perdia la division entre ejercicios:
-quedaba un bloque continuo y despues no habia forma de saber donde empezaba
-cada drill.
+EL SCOUT
+   Backspace con la barra vacia: 3 codigos antes, 3 despues. NO BORRA.
+   El desplegable de correccion: 11 jugadores, incluidos los que ya jugaron
+   y no estaban en la formacion (7, 9, 13).
 
-Ahora el panel escribe exactamente la misma linea. Comparado caracter por
-caracter con la de DataVolley: identica, 27 columnas las dos.
+EL DRILL EN EL .DVW
+   DataVolley : **Drill;;;;;;;10.56.34;1;0;0;1;1610;;;;;;;;;;;;;;
+   el panel   : **Drill;;;;;;;07.50.54;1;0;0;1;1610;;;;;;;;;;;;;;
+   27 columnas los dos, misma estructura, mismo segundo de video.
 
-Los motores no necesitan cambios: ya la ignoran al contar acciones, porque
-filtran por otro patron.
 
+LO QUE FALTABA AJUSTAR
+----------------------
+El nombre del archivo salia con el CODIGO del equipo en vez del nombre:
 
-2) LA TABLA
------------
+   DataVolley  &Pra-AXPO NAFELS-2026-09-08.dvw
+   salia       &Pra-NAF-2026-09-10-T.dvw
+   ahora       &Pra-AXPO NAFELS-2026-09-10-T.dvw
 
-a) LOS TITULOS NO SE TRADUCIAN
-   Estan escritos con las letras separadas —"S A Q U E"— y asi el traductor
-   por texto no los reconoce. Ahora van por clave:
-
-      S A Q U E          ->  S E R V E        ·  A U F S C H L A G
-      R E C E P C I O N  ->  R E C E P T I O N ·  A N N A H M E
-      A T A Q U E        ->  A T T A C K      ·  A N G R I F F
-      B L O Q U E O      ->  B L O C K        ·  B L O C K
-      JUGADOR            ->  P L A Y E R      ·  S P I E L E R
-
-b) FALTABAN VALORACIONES — tenias razon
-   La escala que definimos para las baterias tiene seis valores en cada
-   fundamento, y la tabla mostraba menos:
-
-      SAQUE      mostraba  # / + =        faltaban  !  y  -
-      RECEPCION  mostraba  # + - / =      faltaba   !
-
-   Sin ellas los porcentajes no sumaban 100 y no se entendia de donde salia
-   el Eff. Agregadas, en el MISMO orden que la escala:
-
-      SAQUE      #  /  +  !  -  =
-      RECEPCION  #  +  !  -  /  =
-
-   Cada columna tiene ademas su explicacion al apoyar el mouse:
-   "El rival no puede atacar", "Recepción incómoda", etc.
-
-c) EL EFF ES EL MISMO DE LAS BATERIAS — respondiendo tu pregunta
-   SI. La tabla usa VB_EFF.saque y VB_EFF.recepcion, la funcion unica que
-   pusimos en objetivos_config.js. Es exactamente la misma cuenta que las
-   baterias, el dashboard y el resto del sistema. No hay dos formulas.
-
-d) EL NUMERO ENTERO AL PASAR EL MOUSE — hecho, no era jodido
-   Cada porcentaje muestra ahora "6 de 27 · punto" al apoyar el mouse.
-
-   Un 22% no dice lo mismo si son 2 de 9 que si son 44 de 200. Con pocas
-   acciones el porcentaje engaña, y ahora se ve de inmediato.
+Ahora si son iguales. Es el ultimo detalle que quedaba.
