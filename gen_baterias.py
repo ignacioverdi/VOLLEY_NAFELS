@@ -228,6 +228,24 @@ def _bat_to_pcts(P):
         'atqri': atk(P['ri']),
         'atqrm': atk(P['rm']),
         'atqtr': atk(P['tr']),
+        # ══ SOBRE CUANTAS ACCIONES ESTA HECHA CADA CUENTA ═══════════════════
+        # Un 40% de 5 acciones y un 20% de 238 no valen lo mismo. Mostrar los
+        # dos iguales engana. No se filtra ni se esconde nada —el numero es
+        # real y se va a acomodar solo a medida que se carguen entrenamientos—
+        # pero al lado va sobre cuanto esta calculado, que es lo que permite
+        # leerlo bien.
+        'n_sq':    S['T'],
+        'n_rec':   R['T'],
+        'n_bqpos': B['T'],
+        'n_bqpt':  B['T'],
+        'n_def':   D['T'],
+        'n_atqq':  P['cent']['T'],
+        'n_atqhb': P['alta']['T'],
+        'n_atqx':  P['rap']['T'],
+        'n_atqrp': P['rp']['T'],
+        'n_atqri': P['ri']['T'],
+        'n_atqrm': P['rm']['T'],
+        'n_atqtr': P['tr']['T'],
     }
 
 # ══════════ LECTURA DVW ══════════

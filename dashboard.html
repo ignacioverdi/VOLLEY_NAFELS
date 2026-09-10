@@ -403,30 +403,36 @@ function objPct(v,mn,mx){return Math.max(0,Math.min(100,(v-mn)/(mx-mn)*100));}
 
 function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
 function objSingleBat(id,val,meta,cls,objLine){
-  /* ══ CADA BATERIA DICE QUE MIDE Y DONDE ESTA ══════════════════════════════
-     Antes mostraba "39% NEUTRO" y nada mas: sin el nombre del fundamento hay
-     que acordarse de memoria en que orden van los doce, y en el televisor no
-     sirve para nada.
+  /* ══ CADA BATERIA DICE QUE MIDE Y SOBRE CUANTO ════════════════════════════
+     Antes mostraba "39% NEUTRO" y nada mas. Faltaban dos cosas:
 
-     Ahora dice el fundamento, el valor, el objetivo, la chapa, y al apoyar el
-     mouse cuenta donde cae dentro de la liga. */
+       1. el nombre del fundamento — sin el hay que acordarse de memoria en
+          que orden van los doce, y en el televisor no sirve para nada;
+
+       2. sobre cuantas acciones esta hecha la cuenta — un 40% de 5 acciones
+          y un 20% de 238 no valen lo mismo, y pintados iguales enganan.
+
+     NO se esconde ni se filtra nada: si son 5 acciones, se muestra el 40% y
+     se muestra que son 5. El numero es real y se va a acomodar solo a medida
+     que se carguen entrenamientos. Ocultarlo seria peor que mostrarlo. */
   var fh = val!==null ? objPct(val, meta.min, meta.max) : 0;
   var oh = objPct(objLine, meta.min, meta.max);
   var txt = val!==null ? fmtEff(val) : '—';
   var nombre = String(meta.label||'').replace(/\s*\(-?\d+\)\s*$/, '');
+  var n = (meta.n!=null) ? meta.n : null;
 
-  /* la explicacion del color, con el numero que la sostiene */
   var tip = nombre;
   try{
     if(val!==null && meta.obj!=null && meta.min!=null && meta.obj>meta.min){
       var reco = Math.round((val-meta.min)/(meta.obj-meta.min)*100);
-      tip = nombre+': '+val+'% · el peor de la liga '+meta.min+'%, el mejor '+meta.obj+'%'
+      tip = nombre+': '+val+'%'+(n!=null?' sobre '+n+' acciones':'')
+          + ' · el peor de la liga '+meta.min+'%, el mejor '+meta.obj+'%'
           + ' · estás al '+reco+'% del recorrido';
     }
   }catch(e){}
 
   return '<div title="'+tip+'" style="flex:1;min-width:70px;max-width:120px;display:flex;'
-    + 'flex-direction:column;align-items:center;gap:4px;padding:8px 4px 7px;'
+    + 'flex-direction:column;align-items:center;gap:3px;padding:8px 4px 7px;'
     + 'border:0.5px solid '+cls.border+';border-radius:10px;background:'+cls.bg+';'
     + 'position:relative;overflow:hidden;font-family:Barlow Condensed,sans-serif">'
     + '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+cls.color+';border-radius:10px 10px 0 0"></div>'
@@ -434,7 +440,7 @@ function objSingleBat(id,val,meta,cls,objLine){
     + 'color:#94a3b8;line-height:1.1;text-align:center;white-space:nowrap;overflow:hidden;'
     + 'text-overflow:ellipsis;max-width:100%">'+nombre+'</div>'
     + '<div style="font-size:21px;font-weight:900;line-height:1;color:'+cls.color+'">'+txt+'</div>'
-    + '<div style="width:30px;height:56px;display:flex;flex-direction:column;align-items:center">'
+    + '<div style="width:30px;height:52px;display:flex;flex-direction:column;align-items:center">'
       + '<div style="width:12px;height:4px;border-radius:2px 2px 0 0;background:'+cls.color+';opacity:.7;flex-shrink:0"></div>'
       + '<div style="position:relative;width:30px;flex:1;border-radius:4px;overflow:hidden;border:2px solid '+cls.color+'">'
         + '<div style="position:absolute;inset:0;background:#07080f"></div>'
@@ -442,7 +448,9 @@ function objSingleBat(id,val,meta,cls,objLine){
         + '<div style="position:absolute;left:0;right:0;bottom:'+oh+'%;height:2px;background:#fff;opacity:.85"></div>'
       + '</div>'
     + '</div>'
-    + '<div style="font-size:8.5px;font-weight:700;color:#64748b;letter-spacing:.3px">obj '+objLine+'</div>'
+    /* sobre cuantas acciones: el contexto que hace honesto al numero */
+    + (n!=null ? '<div style="font-size:8.5px;font-weight:700;color:#8395ac">'+n+' acc.</div>' : '')
+    + '<div style="font-size:8.5px;font-weight:700;color:#64748b">obj '+objLine+'</div>'
     + '<div style="font-size:8.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:'+cls.color+'">'+cls.label+'</div>'
     + '</div>';
 }
@@ -482,7 +490,13 @@ function dbatRender(cid, jugVals, eqVals){
           cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
           objLine=m.obj;
         }
-        return objSingleBat(id,val,m,cls,objLine);
+        /* el total de acciones viaja con la meta, para que la bateria lo muestre */
+        var _m = m;
+        try{
+          var _n = row.vals['n_'+id];
+          if(_n!=null) _m = Object.assign({}, m, {n:_n});
+        }catch(e){}
+        return objSingleBat(id,val,_m,cls,objLine);
       }).join('')+'</div>';
   });
   html+='</div>';
@@ -1923,14 +1937,18 @@ function pintarEditorObjetivos(){
     + 'lo gano otro club, y lo mismo el ataque tras recepcion negativa. Copiar a un '
     + 'solo equipo dejaria objetivos por debajo del techo real.'
     + '<div style="margin:10px 0 0 0">'
+    /* Estas cuatro lineas describian el criterio VIEJO —"por encima del
+       promedio"— que ya no es el que usa el semaforo. Ahora dicen lo que
+       realmente hace: ubicarte dentro del recorrido de la liga, del peor al
+       mejor equipo. */
     + '<div><span style="color:#22c55e;font-weight:800">Verde fuerte</span> '
-    + '&nbsp;estas al nivel del mejor de la liga en eso.</div>'
+    + '&nbsp;llegaste al mejor de la liga en ese fundamento.</div>'
     + '<div><span style="color:#86efac;font-weight:800">Verde claro</span> '
-    + '&nbsp;por encima del promedio, camino al objetivo.</div>'
+    + '&nbsp;estas en el cuarto de arriba de la liga.</div>'
     + '<div><span style="color:#fbbf24;font-weight:800">Amarillo</span> '
-    + '&nbsp;por debajo del promedio, dentro de lo normal.</div>'
+    + '&nbsp;estas en la mitad de arriba de la liga.</div>'
     + '<div><span style="color:#ef4444;font-weight:800">Rojo</span> '
-    + '&nbsp;lejos, hay trabajo concreto para hacer.</div>'
+    + '&nbsp;estas en la mitad de abajo de la liga.</div>'
     + '</div></div>';
 
   if(!document.getElementById('obj-doc')) d.parentNode.insertBefore(doc, d.nextSibling);

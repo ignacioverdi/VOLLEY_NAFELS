@@ -22,6 +22,14 @@
 
   // ── Diccionario ───────────────────────────────────────────────────────────
   var T = {
+    /* Encabezados de la tabla del panel. Van con las letras separadas
+       —"S A Q U E"— asi que el traductor por texto no los reconoce:
+       hay que traducirlos por clave. */
+    tb_jugador: { es:'JUGADOR',           en:'P L A Y E R',    de:'S P I E L E R' },
+    tb_saque:   { es:'S A Q U E',         en:'S E R V E',      de:'A U F S C H L A G' },
+    tb_recep:   { es:'R E C E P C I O N', en:'R E C E P T I O N', de:'A N N A H M E' },
+    tb_ataque:  { es:'A T A Q U E',       en:'A T T A C K',    de:'A N G R I F F' },
+    tb_bloqueo: { es:'B L O Q U E O',     en:'B L O C K',      de:'B L O C K' },
     /* El casillero para escribir el objetivo, en el modal del panel. */
     obj_ph:  { es:'objetivo', en:'target', de:'Ziel' },
     /* Botones del panel en vivo. Antes el texto iba partido con <br> y el
@@ -288,6 +296,34 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    /* El bloque explicativo del dashboard, que arma el JavaScript. */
+    ', medido sobre los 97 partidos de la temporada anterior. No es siempre el mismo equipo: el campeon lidera casi todo, pero el bloqueo #+ lo gano otro club, y lo mismo el ataque tras recepcion negativa. Copiar a un solo equipo dejaria objetivos por debajo del techo real.': { en:', measured over the 97 matches of last season. It is not always the same team: the champion leads almost everything, but block #+ was won by another club, and so was attack after negative reception. Copying a single team would leave targets below the real ceiling.', de:', gemessen über die 97 Spiele der letzten Saison. Es ist nicht immer dasselbe Team: der Meister führt fast alles an, aber Block #+ gewann ein anderer Verein, ebenso den Angriff nach negativer Annahme. Ein einziges Team zu kopieren würde die Ziele unter die reale Obergrenze setzen.' },
+    '. El error vale 0, la accion perfecta vale 100 y la neutra queda en el medio, en 50. Asi el numero se lee solo: 50 es "todo neutro", 25 "todo negativo", 75 "todo positivo".': { en:'. An error is 0, a perfect action is 100 and a neutral one sits in the middle, at 50. So the number reads by itself: 50 is "all neutral", 25 "all negative", 75 "all positive".', de:'. Ein Fehler zählt 0, eine perfekte Aktion 100 und eine neutrale liegt in der Mitte, bei 50. So liest sich die Zahl von selbst: 50 ist „alles neutral", 25 „alles negativ", 75 „alles positiv".' },
+    'Amarillo': { en:'Yellow', de:'Gelb' },
+    'El objetivo de cada fundamento es': { en:'The target for each skill is', de:'Das Ziel jedes Elements ist' },
+    'Rojo': { en:'Red', de:'Rot' },
+    'Saque, recepcion y defensa usan una escala de': { en:'Serve, reception and defence use a scale of', de:'Aufschlag, Annahme und Abwehr nutzen eine Skala von' },
+    'Verde claro': { en:'Light green', de:'Hellgrün' },
+    'Verde fuerte': { en:'Strong green', de:'Kräftiges Grün' },
+    'el mejor de la liga en ese fundamento': { en:'the best in the league in that skill', de:'der Ligabeste in diesem Element' },
+    'estas en el cuarto de arriba de la liga.': { en:'you are in the top quarter of the league.', de:'du bist im oberen Viertel der Liga.' },
+    'estas en la mitad de abajo de la liga.': { en:'you are in the bottom half of the league.', de:'du bist in der unteren Ligahälfte.' },
+    'estas en la mitad de arriba de la liga.': { en:'you are in the top half of the league.', de:'du bist in der oberen Ligahälfte.' },
+    'llegaste al mejor de la liga en ese fundamento.': { en:'you have reached the best in the league in that skill.', de:'du hast den Ligabesten in diesem Element erreicht.' },
+    /* La explicacion del dashboard, que arma el JavaScript. */
+    /* La explicacion de como se calcula cada valor, en el dashboard. La arma
+       el JavaScript, por eso no entraba en el barrido del HTML. */
+    '# ace 100 · / free ball 87,5 · + positivo 75 · ! neutro 50 · − negativo 25 · = error 0': { en:'# ace 100 · / free ball 87.5 · + positive 75 · ! neutral 50 · − negative 25 · = error 0', de:'# Ass 100 · / Freeball 87,5 · + positiv 75 · ! neutral 50 · − negativ 25 · = Fehler 0' },
+    '# perfecta 100 · + buena 75 · ! neutra 50 · − mala 25 · = error 0': { en:'# perfect 100 · + good 75 · ! neutral 50 · − poor 25 · = error 0', de:'# perfekt 100 · + gut 75 · ! neutral 50 · − schlecht 25 · = Fehler 0' },
+    '# perfecta 100 · + positiva 75 · ! neutra 50 · − negativa 25 · / sobrepase 12,5 · = error 0': { en:'# perfect 100 · + positive 75 · ! neutral 50 · − negative 25 · / overpass 12.5 · = error 0', de:'# perfekt 100 · + positiv 75 · ! neutral 50 · − negativ 25 · / Überpass 12,5 · = Fehler 0' },
+    'Blq #+ es (punto + positivo) / total. Blq # es solo punto / total.': { en:'Block #+ is (point + positive) / total. Block # is just point / total.', de:'Block #+ ist (Punkt + positiv) / gesamt. Block # ist nur Punkt / gesamt.' },
+    'COMO SE CALCULA CADA VALOR': { en:'HOW EACH VALUE IS CALCULATED', de:'WIE JEDER WERT BERECHNET WIRD' },
+    'Cambia el numero y los colores se ajustan solos. Queda guardado para todo el cuerpo tecnico.': { en:'Change the number and the colours adjust by themselves. It is saved for the whole coaching staff.', de:'Ändere die Zahl und die Farben passen sich an. Es wird für den ganzen Trainerstab gespeichert.' },
+    'Cuanto vale cada valoracion': { en:'What each rating is worth', de:'Was jede Bewertung zählt' },
+    'DE DONDE SALEN LOS OBJETIVOS': { en:'WHERE THE TARGETS COME FROM', de:'WOHER DIE ZIELE KOMMEN' },
+    'Eficacia clasica del voley: (puntos − bloqueados − errores) / total. Es el estandar mundial y puede dar negativo.': { en:'Classic volleyball efficiency: (kills − blocked − errors) / total. It is the world standard and can be negative.', de:'Klassische Volleyball-Effizienz: (Punkte − geblockt − Fehler) / gesamt. Weltstandard, kann negativ sein.' },
+    'Fundamento': { en:'Skill', de:'Element' },
+    'LOS OBJETIVOS DE ESTE EQUIPO': { en:'THIS TEAM TARGETS', de:'DIE ZIELE DIESES TEAMS' },
     /* Las chapas del modal de objetivos. */
     'CERCA': { en:'CLOSE', de:'NAH DRAN' },
     'EN PROCESO': { en:'IN PROGRESS', de:'IN ARBEIT' },

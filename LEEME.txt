@@ -1,73 +1,76 @@
-EL SEMAFORO, MEDIDO CONTRA LA LIGA
-==================================
+LAS BATERIAS: AUDITADAS, SIN FILTROS
+====================================
 
-3 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
-
-
-LOS CUATRO COLORES — confirmado, son esos
------------------------------------------
-   verde fuerte   objetivo logrado
-   verde claro    cerca
-   amarillo       neutro
-   rojo           lejos
+4 archivos. HACER_TODO y publicar.
+(Lleva HACER_TODO porque cambia gen_baterias.py)
 
 
-POR QUE NO ALCANZABA CON UN PORCENTAJE DEL OBJETIVO
----------------------------------------------------
-Te propuse "verde claro desde el 92% del objetivo". Suena razonable pero no
-significa nada: el objetivo es EL MEJOR DE LA LIGA, y estar al 92% del mejor
-puede ser excelente o mediocre segun cuanto se estiren los demas equipos.
+PRIMERO: AUDITE LAS 12, UNA POR UNA
+-----------------------------------
+Recalcule cada bateria desde cero, leyendo los .dvw y replicando la logica
+del motor, y compare contra lo que muestra la pantalla:
 
-Y encima generaba confusiones como la que marcaste: 92,86% daba verde claro
-y 91,67% amarillo, pero redondeados los dos se veian "92%".
+   FUNDAMENTO       recalculo  pantalla  acciones   estado
+   Saque                   39        39      1018   coincide
+   Recepción               55        55       998   coincide
+   Blq #+                  42        42       101   coincide
+   Blq #                   20        20       101   coincide
+   Atq Central             22        22        45   coincide
+   Atq Alta                 5         5        99   coincide
+   Atq Rápida              36        36       129   coincide
+   Atq R#+                 35        35        20   coincide
+   Atq R!                  35        35        17   coincide
+   Atq R-                  40        40         5   coincide
+   Atq Transición          20        20       238   coincide
+   Defensa                 51        51       206   coincide
 
-
-LOS CORTES QUE ELEGI, Y POR QUE
--------------------------------
-Cada fundamento ya guarda el RANGO REAL DE LA LIGA: el peor equipo y el
-mejor, medidos sobre los 97 partidos de la temporada. Entonces el color dice
-DONDE ESTAS DENTRO DE LA LIGA:
-
-   verde fuerte   llegaste al mejor de la liga
-   verde claro    estas en el cuarto de arriba     (75% del recorrido)
-   amarillo       estas en la mitad de arriba      (50%)
-   rojo           estas en la mitad de abajo       (menos del 50%)
-
-El 50% no lo elegi a dedo: es literalmente el punto medio entre el peor y el
-mejor equipo de la liga. Y el 75% es el cuarto superior.
-
-Asi el tablero motiva SIN MENTIR. "Estas en el cuarto de arriba de la liga"
-es una frase que se sostiene con los numeros en la mano. Y "estas en la
-mitad de abajo" tambien.
+LAS 12 COINCIDEN. No hay nada inventado ni mal calculado.
 
 
-COMO QUEDA TU EQUIPO
+EL 40% DE ATQ R- ES REAL
+------------------------
+Son 5 ataques tras recepcion mala: 2 punto, 0 bloqueados, 0 errores.
+(2 - 0 - 0) / 5 = 40%. La cuenta esta bien.
 
-   FUNDAMENTO         valor   peor  mejor   recorrido   color
-   Blq #                 20      5     21       94%     verde claro
-   Blq #+                42     25     45       85%     verde claro
-   Atq Rápida            36     15     40       84%     verde claro
-   Saque                 39     25     42       82%     verde claro
-   Atq R!                35     15     44       69%     amarillo
-   Recepción             55     45     60       67%     amarillo
-   Atq R#+               35     20     47       56%     amarillo
-   Defensa               51     40     60       55%     amarillo
-   Atq Transición        20     10     33       43%     ROJO
-   Atq Central           22     20     55        6%     ROJO
-   Atq R-                40      0     23      174%     VERDE FUERTE
+Y el "174%" que te mostre no esta en pantalla: lo escribi yo para explicarte
+el semaforo. Sale de que el objetivo es 23% y el equipo marca 40%, o sea que
+supero al mejor de la liga. Es posible: el objetivo es una referencia, no un
+techo.
 
-   1 verde fuerte · 4 verde claro · 4 amarillo · 2 rojo
-
-Es un reparto realista: ni todo verde (mentira) ni todo rojo
-(desmotivante). Y los dos rojos son los dos problemas de verdad del equipo,
-los mismos que ya habiamos detectado analizando la liga.
+SIN MINIMOS, como pediste. Si son 5 acciones se muestra el 40% y punto. Se
+va a acomodar solo cuando se carguen mas entrenamientos.
 
 
-ADEMAS
-------
-· Cada bateria dice QUE mide: "% SAQUE" arriba y "obj 42" abajo.
-· Al apoyar el mouse: "% Saque: 39% · el peor de la liga 25%, el mejor 42%
-  · estás al 82% del recorrido". El numero que sostiene el color, a la vista.
-· Si cambias un objetivo en el panel, el semaforo se mueve con el. Antes los
-  cortes eran fijos y quedaban mintiendo.
-· La explicacion de como se calcula cada valor, traducida a los tres idiomas.
+LO QUE SI AGREGUE: EL CONTEXTO
+------------------------------
+Cada bateria ahora muestra SOBRE CUANTAS ACCIONES esta hecha:
+
+     % ATQ R-
+       40%
+      [bat]
+      5 acc.        <- esto
+      obj 23
+      OBJETIVO
+
+No filtra ni esconde nada. Solo pone al lado el dato que falta para leerlo
+bien: un 40% de 5 y un 20% de 238 no valen lo mismo, y pintados iguales
+enganan.
+
+Al apoyar el mouse: "% Atq R-: 40% sobre 5 acciones · el peor de la liga 0%,
+el mejor 23% · estás al 174% del recorrido".
+
+
+EL IDIOMA MEZCLADO
+------------------
+El bloque de "how each value is calculated" tenia el titulo en ingles y el
+contenido en castellano. Traducidas 13 frases mas: la escala de 0 a 100, de
+donde salen los objetivos, y las cuatro lineas del semaforo.
+
+Y esas cuatro lineas ADEMAS DECIAN EL CRITERIO VIEJO ("por encima del
+promedio"), que ya no es el que usa el semaforo. Ahora dicen lo que hace de
+verdad:
+
+   Verde fuerte  llegaste al mejor de la liga en ese fundamento
+   Verde claro   estas en el cuarto de arriba de la liga
+   Amarillo      estas en la mitad de arriba de la liga
+   Rojo          estas en la mitad de abajo de la liga
