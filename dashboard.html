@@ -16,13 +16,13 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260910-2333" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260910-2333" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260910-2333"></script>
-<script src="filtro_tipo.js?v=20260910-2333" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260910-2336" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260910-2336" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260910-2336"></script>
+<script src="filtro_tipo.js?v=20260910-2336" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
-  <script src="objetivos_config.js?v=20260910-2333" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260910-2336" onerror="void 0"></script>
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
@@ -39,7 +39,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20260910-2333" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260910-2336" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   
@@ -275,52 +275,60 @@ window._dbatPartido = 'acumulado';
 window._dbatNombre  = '';
 
 function objClassify(id,val){
-  /* ══ EL SEMAFORO, PROPORCIONAL AL OBJETIVO ════════════════════════════════
-     Antes cada fundamento tenia sus tres cortes escritos a mano (g2, g1, y) y
-     no guardaban relacion entre si. Medido sobre los objetivos reales, el
-     corte de "Neutro" iba del 56% al 95% del objetivo segun el fundamento:
+  /* ══ EL SEMAFORO, MEDIDO CONTRA LA LIGA DE VERDAD ═════════════════════════
+     PROBLEMA 1 — los cortes no guardaban relacion entre si
+     Cada fundamento tenia los suyos escritos a mano. El corte de "Neutro" iba
+     del 56% al 95% del objetivo segun cual fuera, asi que 36 de 40 daba CERCA
+     y 55 de 60 daba LEJOS. Sin forma de explicarlo.
 
-         recepcion     Neutro desde el 95% del objetivo
-         defensa       Neutro desde el 87%
-         atq alta      Neutro desde el 56%
+     PROBLEMA 2 — eran numeros fijos
+     Si cambiabas el objetivo en el panel, el semaforo seguia con los cortes
+     viejos y quedaba mintiendo.
 
-     Por eso pasaba esto, que no hay forma de explicarle a nadie:
+     PROBLEMA 3 — un porcentaje del objetivo tampoco alcanza
+     Poner "verde si llegas al 92% del objetivo" suena razonable pero no
+     significa nada: el objetivo es EL MEJOR DE LA LIGA, y estar al 92% del
+     mejor puede ser excelente o mediocre segun cuanto se estiren los demas.
 
-         36 de 40  (90% del objetivo)  ->  CERCA
-         55 de 60  (92% del objetivo)  ->  LEJOS
+     LA SOLUCION — el recorrido real de la liga
+     Cada fundamento ya guarda el rango de la liga: min es el peor equipo y
+     obj es el mejor, medidos sobre los 97 partidos de la temporada. Entonces
+     el color dice DONDE ESTAS DENTRO DE LA LIGA, que es un dato verificable
+     y no una opinion:
 
-     Peor todavia: los cortes eran numeros fijos. Si en el panel cambiabas el
-     objetivo de saque de 42 a 50, el semaforo seguia usando los cortes del 42
-     y quedaba mintiendo.
+         verde fuerte   llegaste al mejor de la liga
+         verde claro    estas en el cuarto de arriba      (>= 75% del recorrido)
+         amarillo       estas en la mitad de arriba       (>= 50%)
+         rojo           estas en la mitad de abajo        (<  50%)
 
-     Ahora los tres cortes salen del objetivo, iguales para todos:
+     El 50% es literalmente el medio entre el peor y el mejor. No es un numero
+     elegido a dedo: es la mitad de la liga.
 
-         Objetivo   >= 100% del objetivo
-         Cerca      >=  92%
-         Neutro     >=  80%
-         Lejos       <  80%
+     Asi el tablero motiva sin mentir. "Estas en el cuarto de arriba de la
+     liga" es una frase que se puede sostener con los numeros en la mano, y
+     "estas en la mitad de abajo" tambien.
 
-     Se leen igual en los doce, y si cambias un objetivo el semaforo se mueve
-     con el. Si un fundamento tiene cortes propios cargados a mano, se
-     respetan: alcanza con dejar g2/g1/y en la configuracion. */
+     Si algun fundamento necesita cortes propios, se respetan: alcanza con
+     marcarlo con cortesPropios en la configuracion. */
   var m = window.OBJETIVOS_CONFIG.metas[id] || {};
   var obj = (m.obj != null) ? m.obj : null;
+  var piso = (m.min != null) ? m.min : 0;
 
-  var g2, g1, y;
   if (m.cortesPropios && m.g2 != null) {
-    g2 = m.g2; g1 = m.g1; y = m.y;
-  } else if (obj) {
-    g2 = obj;
-    g1 = obj * 0.92;
-    y  = obj * 0.80;
-  } else {
-    g2 = m.g2; g1 = m.g1; y = m.y;
+    if(val>=m.g2) return{color:'#22c55e',bg:'rgba(34,197,94,.1)',   border:'rgba(34,197,94,.35)',  label:'Objetivo'};
+    if(val>=m.g1) return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
+    if(val>=m.y)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)',  border:'rgba(251,191,36,.3)',  label:'Neutro'};
+    return              {color:'#ef4444',bg:'rgba(239,68,68,.1)',   border:'rgba(239,68,68,.3)',   label:'Lejos'};
   }
 
-  if(val>=g2) return{color:'#22c55e',bg:'rgba(34,197,94,.1)',   border:'rgba(34,197,94,.35)',  label:'Objetivo'};
-  if(val>=g1) return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
-  if(val>=y)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)',  border:'rgba(251,191,36,.3)',  label:'Neutro'};
-  return             {color:'#ef4444',bg:'rgba(239,68,68,.1)',   border:'rgba(239,68,68,.3)',   label:'Lejos'};
+  /* donde cae dentro del recorrido de la liga: 0 = el peor, 100 = el mejor */
+  var reco = (obj != null && obj > piso) ? ((val - piso) / (obj - piso) * 100) : null;
+  if (reco === null) reco = (val >= (m.g2||0)) ? 100 : 0;
+
+  if(reco>=100) return{color:'#22c55e',bg:'rgba(34,197,94,.1)',   border:'rgba(34,197,94,.35)',  label:'Objetivo'};
+  if(reco>=75)  return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
+  if(reco>=50)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)',  border:'rgba(251,191,36,.3)',  label:'Neutro'};
+  return              {color:'#ef4444',bg:'rgba(239,68,68,.1)',   border:'rgba(239,68,68,.3)',   label:'Lejos'};
 }
 // ── Clasificación vs equipo (fila jugador) ──
 function objClassifyVsTeam(val,teamVal){
@@ -395,38 +403,37 @@ function objPct(v,mn,mx){return Math.max(0,Math.min(100,(v-mn)/(mx-mn)*100));}
 
 function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
 function objSingleBat(id,val,meta,cls,objLine){
-  /* ══ CADA BATERIA CON SU TITULO ═══════════════════════════════════════════
-     Antes la tarjeta mostraba solo el numero y la chapa: "39% NEUTRO". Sin el
-     nombre del fundamento es un grafico sin explicacion —hay que acordarse de
-     memoria en que orden van los doce— y en el televisor no sirve de nada.
+  /* ══ CADA BATERIA DICE QUE MIDE Y DONDE ESTA ══════════════════════════════
+     Antes mostraba "39% NEUTRO" y nada mas: sin el nombre del fundamento hay
+     que acordarse de memoria en que orden van los doce, y en el televisor no
+     sirve para nada.
 
-     Ahora cada una dice QUE mide y CUAL es el objetivo:
-
-         % SAQUE
-           39%
-          [bat]
-         obj 42
-         NEUTRO
-
-     El "(42)" se saca del nombre porque el objetivo ya va abajo, en su linea. */
+     Ahora dice el fundamento, el valor, el objetivo, la chapa, y al apoyar el
+     mouse cuenta donde cae dentro de la liga. */
   var fh = val!==null ? objPct(val, meta.min, meta.max) : 0;
   var oh = objPct(objLine, meta.min, meta.max);
   var txt = val!==null ? fmtEff(val) : '—';
   var nombre = String(meta.label||'').replace(/\s*\(-?\d+\)\s*$/, '');
 
-  return '<div style="flex:1;min-width:70px;max-width:120px;display:flex;flex-direction:column;'
-    + 'align-items:center;gap:4px;padding:8px 4px 7px;border:0.5px solid '+cls.border+';'
-    + 'border-radius:10px;background:'+cls.bg+';position:relative;overflow:hidden;'
-    + 'font-family:Barlow Condensed,sans-serif">'
-    + '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+cls.color+';border-radius:10px 10px 0 0"></div>'
+  /* la explicacion del color, con el numero que la sostiene */
+  var tip = nombre;
+  try{
+    if(val!==null && meta.obj!=null && meta.min!=null && meta.obj>meta.min){
+      var reco = Math.round((val-meta.min)/(meta.obj-meta.min)*100);
+      tip = nombre+': '+val+'% · el peor de la liga '+meta.min+'%, el mejor '+meta.obj+'%'
+          + ' · estás al '+reco+'% del recorrido';
+    }
+  }catch(e){}
 
-    /* el nombre del fundamento */
+  return '<div title="'+tip+'" style="flex:1;min-width:70px;max-width:120px;display:flex;'
+    + 'flex-direction:column;align-items:center;gap:4px;padding:8px 4px 7px;'
+    + 'border:0.5px solid '+cls.border+';border-radius:10px;background:'+cls.bg+';'
+    + 'position:relative;overflow:hidden;font-family:Barlow Condensed,sans-serif">'
+    + '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+cls.color+';border-radius:10px 10px 0 0"></div>'
     + '<div style="font-size:9.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;'
     + 'color:#94a3b8;line-height:1.1;text-align:center;white-space:nowrap;overflow:hidden;'
-    + 'text-overflow:ellipsis;max-width:100%" title="'+nombre+'">'+nombre+'</div>'
-
+    + 'text-overflow:ellipsis;max-width:100%">'+nombre+'</div>'
     + '<div style="font-size:21px;font-weight:900;line-height:1;color:'+cls.color+'">'+txt+'</div>'
-
     + '<div style="width:30px;height:56px;display:flex;flex-direction:column;align-items:center">'
       + '<div style="width:12px;height:4px;border-radius:2px 2px 0 0;background:'+cls.color+';opacity:.7;flex-shrink:0"></div>'
       + '<div style="position:relative;width:30px;flex:1;border-radius:4px;overflow:hidden;border:2px solid '+cls.color+'">'
@@ -435,11 +442,7 @@ function objSingleBat(id,val,meta,cls,objLine){
         + '<div style="position:absolute;left:0;right:0;bottom:'+oh+'%;height:2px;background:#fff;opacity:.85"></div>'
       + '</div>'
     + '</div>'
-
-    /* el objetivo, para no tener que buscarlo en otro lado */
     + '<div style="font-size:8.5px;font-weight:700;color:#64748b;letter-spacing:.3px">obj '+objLine+'</div>'
-
-    /* la chapa */
     + '<div style="font-size:8.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:'+cls.color+'">'+cls.label+'</div>'
     + '</div>';
 }
@@ -528,15 +531,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260910-2333" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260910-2333"></script>
+<script src="firebase.js?v=20260910-2336" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260910-2336"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260910-2333">
+<link rel="stylesheet" href="movil.css?v=20260910-2336">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260910-2333" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260910-2336" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -2213,11 +2216,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260910-2333"></script>
-<script src="lang.js?v=20260910-2333"></script>
-<script src="temporadas_menu.js?v=20260910-2333"></script>
-<script src="app_offline.js?v=20260910-2333"></script>
-<script src="ayuda.js?v=20260910-2333"></script>
+<script src="chat_nafels.js?v=20260910-2336"></script>
+<script src="lang.js?v=20260910-2336"></script>
+<script src="temporadas_menu.js?v=20260910-2336"></script>
+<script src="app_offline.js?v=20260910-2336"></script>
+<script src="ayuda.js?v=20260910-2336"></script>
 
 <!-- Los archivos de video (datos_video_*.js.enc) se sacaron de esta
      pantalla: pesan unos 15 MB por temporada, descifrarlos son mas de

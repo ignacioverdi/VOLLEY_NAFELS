@@ -154,27 +154,60 @@ window.currentObjPartido = window.currentObjPartido || 'acumulado';
 window.currentObjTipo = window.currentObjTipo || 'partido'; // 'partido' or 'entrenamiento'
 
 function objClassify(id,val){
-  /* ══ EL SEMAFORO, PROPORCIONAL AL OBJETIVO ════════════════════════════════
-     Antes cada fundamento tenia sus cortes escritos a mano y no guardaban
-     relacion entre si: el corte de "Neutro" iba del 56% al 95% del objetivo
-     segun cual fuera. Por eso 36 de 40 (90%) daba CERCA y 55 de 60 (92%)
-     daba LEJOS, que no hay forma de explicarle a nadie.
+  /* ══ EL SEMAFORO, MEDIDO CONTRA LA LIGA DE VERDAD ═════════════════════════
+     PROBLEMA 1 — los cortes no guardaban relacion entre si
+     Cada fundamento tenia los suyos escritos a mano. El corte de "Neutro" iba
+     del 56% al 95% del objetivo segun cual fuera, asi que 36 de 40 daba CERCA
+     y 55 de 60 daba LEJOS. Sin forma de explicarlo.
 
-     Y los cortes eran numeros fijos: si cambiabas el objetivo en el panel, el
-     semaforo seguia usando los del objetivo viejo.
+     PROBLEMA 2 — eran numeros fijos
+     Si cambiabas el objetivo en el panel, el semaforo seguia con los cortes
+     viejos y quedaba mintiendo.
 
-     Ahora salen del objetivo, iguales para los doce:
-         Objetivo >= 100%   ·   Cerca >= 92%   ·   Neutro >= 80%   ·   Lejos < 80% */
+     PROBLEMA 3 — un porcentaje del objetivo tampoco alcanza
+     Poner "verde si llegas al 92% del objetivo" suena razonable pero no
+     significa nada: el objetivo es EL MEJOR DE LA LIGA, y estar al 92% del
+     mejor puede ser excelente o mediocre segun cuanto se estiren los demas.
+
+     LA SOLUCION — el recorrido real de la liga
+     Cada fundamento ya guarda el rango de la liga: min es el peor equipo y
+     obj es el mejor, medidos sobre los 97 partidos de la temporada. Entonces
+     el color dice DONDE ESTAS DENTRO DE LA LIGA, que es un dato verificable
+     y no una opinion:
+
+         verde fuerte   llegaste al mejor de la liga
+         verde claro    estas en el cuarto de arriba      (>= 75% del recorrido)
+         amarillo       estas en la mitad de arriba       (>= 50%)
+         rojo           estas en la mitad de abajo        (<  50%)
+
+     El 50% es literalmente el medio entre el peor y el mejor. No es un numero
+     elegido a dedo: es la mitad de la liga.
+
+     Asi el tablero motiva sin mentir. "Estas en el cuarto de arriba de la
+     liga" es una frase que se puede sostener con los numeros en la mano, y
+     "estas en la mitad de abajo" tambien.
+
+     Si algun fundamento necesita cortes propios, se respetan: alcanza con
+     marcarlo con cortesPropios en la configuracion. */
   var m = window.OBJETIVOS_CONFIG.metas[id] || {};
   var obj = (m.obj != null) ? m.obj : null;
-  var g2, g1, y;
-  if (m.cortesPropios && m.g2 != null) { g2=m.g2; g1=m.g1; y=m.y; }
-  else if (obj) { g2=obj; g1=obj*0.92; y=obj*0.80; }
-  else { g2=m.g2; g1=m.g1; y=m.y; }
-  if(val>=g2) return{color:'#22c55e',bg:'rgba(34,197,94,.1)',   border:'rgba(34,197,94,.35)',  label:'Objetivo'};
-  if(val>=g1) return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
-  if(val>=y)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)',  border:'rgba(251,191,36,.3)',  label:'Neutro'};
-  return             {color:'#ef4444',bg:'rgba(239,68,68,.1)',   border:'rgba(239,68,68,.3)',   label:'Lejos'};
+  var piso = (m.min != null) ? m.min : 0;
+
+  if (m.cortesPropios && m.g2 != null) {
+    if(val>=m.g2) return{color:'#22c55e',bg:'rgba(34,197,94,.1)',   border:'rgba(34,197,94,.35)',  label:'Objetivo'};
+    if(val>=m.g1) return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
+    if(val>=m.y)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)',  border:'rgba(251,191,36,.3)',  label:'Neutro'};
+    return              {color:'#ef4444',bg:'rgba(239,68,68,.1)',   border:'rgba(239,68,68,.3)',   label:'Lejos'};
+  }
+
+  /* donde cae dentro del recorrido de la liga: 0 = el peor, 100 = el mejor */
+  var reco = (obj != null && obj > piso) ? ((val - piso) / (obj - piso) * 100) : null;
+  if (reco === null) reco = (val >= (m.g2||0)) ? 100 : 0;
+
+  if(reco>=100) return{color:'#22c55e',bg:'rgba(34,197,94,.1)',   border:'rgba(34,197,94,.35)',  label:'Objetivo'};
+  if(reco>=75)  return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
+  if(reco>=50)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)',  border:'rgba(251,191,36,.3)',  label:'Neutro'};
+  return              {color:'#ef4444',bg:'rgba(239,68,68,.1)',   border:'rgba(239,68,68,.3)',   label:'Lejos'};
 }
 
 function objClassifyVsTeam(val,teamVal){

@@ -296,6 +296,7 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    /* La explicacion del dashboard, que arma el JavaScript. */
     /* La explicacion de como se calcula cada valor, en el dashboard. La arma
        el JavaScript, por eso no entraba en el barrido del HTML. */
     '# ace 100 · / free ball 87,5 · + positivo 75 · ! neutro 50 · − negativo 25 · = error 0': { en:'# ace 100 · / free ball 87.5 · + positive 75 · ! neutral 50 · − negative 25 · = error 0', de:'# Ass 100 · / Freeball 87,5 · + positiv 75 · ! neutral 50 · − negativ 25 · = Fehler 0' },
