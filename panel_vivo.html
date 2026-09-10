@@ -4633,12 +4633,17 @@ document.addEventListener('keydown', e=>{
   /* manual 4.5.2: sobre la lista de códigos */
   if(e.key==='Insert'){ e.preventDefault(); insertarEn(SEL_I); return; }
   if(e.key==='Delete'){ e.preventDefault(); borrarEn(SEL_I); return; }
-  if(e.key==='Backspace' && !document.getElementById('code').value.trim() && M.codes.length){
-    e.preventDefault();
-    if(SEL_I>=0) borrarEn(SEL_I, true);
-    else undoLast();
-    return;
-  }
+  /* ══ BACKSPACE YA NO BORRA CODIGOS ══════════════════════════════════════
+     Antes, si la barra de tipeo estaba vacia, Backspace borraba el ultimo
+     codigo cargado. En vivo eso es peligrosisimo: uno viene tipeando, borra
+     lo que escribio para corregirlo, se pasa una tecla y se lleva puesta una
+     accion ya guardada sin darse cuenta.
+
+     Borrar tiene que ser un acto deliberado. Ahora solo se borra con Delete
+     —o con el boton de borrar—, que es lo que uno toca a proposito.
+
+     Backspace vuelve a hacer lo unico que se espera de el: borrar letras de
+     lo que se esta escribiendo. */
   if(e.key==='Enter' && SEL_I>=0 && !document.getElementById('code').value.trim()){ e.preventDefault(); editCode(SEL_I); return; }
   if((e.ctrlKey||e.metaKey) && e.code==='Space'){ e.preventDefault(); abrirExtensiones(); return; }
   if(e.key==='Escape'){ cerrarExtensiones(); }
@@ -5949,11 +5954,35 @@ function _wizActual(){
   }catch(e){ return null; }
 }
 function _wizJugadores(team){
+  /* ══ TODOS LOS JUGADORES, NO SOLO LOS SEIS EN CANCHA ═══════════════════
+     Antes salian los seis de la formacion, el libero y el plantel. Pero si
+     el plantel no se cargo —pasa seguido en un entrenamiento, donde uno
+     arranca a tipear sin llenar la ficha— quedaban SOLO SEIS.
+
+     En una practica entra y sale gente todo el tiempo: si el que hay que
+     corregir no esta en la lista, no se puede elegir.
+
+     Ahora se suman ademas TODOS los numeros que ya aparecen en los codigos
+     cargados. Si alguien aparece en el scout, es un jugador de verdad y
+     tiene que estar en la lista. */
   var lado = M[team] || {}, seis = (lado.six||lado.lineup||[]).slice();
   var lst = [];
   seis.forEach(function(n){ if(n) lst.push(Number(n)); });
   if(lado.libero && lst.indexOf(Number(lado.libero))<0) lst.push(Number(lado.libero));
   (lado.plantel||[]).forEach(function(j){ var n=Number(j.c||j.num); if(n && lst.indexOf(n)<0) lst.push(n); });
+
+  /* los que ya jugaron, sacados de los propios codigos */
+  try{
+    var marca = (team==='home') ? '*' : 'a';
+    (M.codes||[]).forEach(function(c){
+      var t = c && c.c;
+      if(!t || t.charAt(0)!==marca) return;
+      var n = parseInt(t.substr(1,2), 10);
+      if(n && lst.indexOf(n)<0) lst.push(n);
+    });
+  }catch(e){}
+
+  lst.sort(function(a,b){ return a-b; });
   return lst;
 }
 function _wizOpt(cont, val, etiqueta, activo, alClic){
@@ -6457,6 +6486,35 @@ function _nombreDVW(){
     }
   }catch(_){}
 
+  /* ══ EL MISMO NOMBRE QUE USA DATA VOLLEY ══════════════════════════════
+     Asi guarda DataVolley sus practicas:
+
+         &Pra-AXPO NAFELS-2026-09-08.dvw
+          ^^^^ ^^^^^^^^^^^ ^^^^^^^^^^
+          Pra- + equipo    + fecha
+
+     Y asi guardaba el panel:
+
+         &2026-09-10 AXP-ENTRENAMIENTO-T.dvw
+
+     Dos formatos distintos en la misma carpeta: los archivos no se ordenan
+     juntos, no se reconocen de un vistazo y hay que mirar dos veces para
+     saber cual es cual.
+
+     Ahora el panel usa la forma de DataVolley. Lo unico que se agrega es el
+     turno al final, que DataVolley no necesita porque no distingue dos
+     sesiones del mismo dia, y nosotros si:
+
+         &Pra-AXPO NAFELS-2026-09-10-T.dvw
+
+     Los partidos siguen con su formato de siempre: equipo-rival, que es lo
+     que corresponde cuando hay un rival de verdad. */
+  var esEnt = false;
+  try{ esEnt = (typeof unSoloEquipo === 'function') && unSoloEquipo(); }catch(_){}
+
+  if(esEnt){
+    return '&Pra-' + limpio(loc) + '-' + f + (turno ? '-'+turno : '') + '.dvw';
+  }
   return '&' + f + ' ' + limpio(loc) + '-' + limpio(vis) + (turno ? '-'+turno : '') + '.dvw';
 }
 
@@ -7394,7 +7452,7 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
       <tr><td>Insertar un código en el medio</td><td>Seleccionar + <span class="k">Insert</span></td></tr>
       <tr><td>Editar un código</td><td>Doble clic (o seleccionar + <span class="k">Enter</span>)</td></tr>
       <tr><td>Corregir un valor en el lugar</td><td>Cursor sobre el valor (o seleccionarlo) + tecla del valor nuevo</td></tr>
-      <tr><td>Borrar un código</td><td><span class="k">Delete</span> · rápido el último: <span class="k">Backspace</span></td></tr>
+      <tr><td>Borrar un código</td><td><span class="k">Delete</span></td></tr>
       <tr><td>Deshacer el último código</td><td><span class="k">Ctrl+Z</span></td></tr>
       <tr><td>Deshacer el punto entero</td><td><span class="k">Ctrl+Shift+Z</span></td></tr>
       <tr><td>Buscar / Verificar</td><td><span class="k">Ctrl+R</span> · <span class="k">Ctrl+V</span></td></tr>
@@ -7451,7 +7509,7 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
       <tr><td class="c">Enter</td><td>Cargar el código</td><td class="c">Ctrl+Z</td><td>Deshacer código</td></tr>
       <tr><td class="c">Insert</td><td>Insertar antes del seleccionado</td><td class="c">Ctrl+Shift+Z</td><td>Deshacer punto</td></tr>
       <tr><td class="c">Delete</td><td>Borrar seleccionado</td><td class="c">Ctrl+A</td><td>Reabrir punto</td></tr>
-      <tr><td class="c">Backspace</td><td>Borrar rápido el último</td><td class="c">Ctrl+R</td><td>Buscar</td></tr>
+      <tr><td class="c">Backspace</td><td>Borra letras de lo que escribís (no borra códigos)</td><td class="c">Ctrl+R</td><td>Buscar</td></tr>
       <tr><td class="c">Ctrl+V</td><td>Verificar</td><td></td><td></td></tr>
     </table>
   </div>

@@ -1,59 +1,61 @@
-LOS BLOQUEADOS AHORA SE VEN
-===========================
+ROTACION Y NOMBRE DE ARCHIVO
+============================
 
-Un archivo: plan_partido.html. Publicar y Ctrl+Shift+R.
-NO hace falta HACER_TODO.
-
-
-TENIAS RAZON
-------------
-Si la valoracion "Bloqueado (/)" esta en el menu de filtros, el usuario
-espera verlos en la cancha. Esconderlos por defecto no tiene sentido, y
-ademas hacia que los numeros no cerraran: el rotulo decia 44 ataques y los
-cuadrantes sumaban 38, sin ninguna explicacion a la vista.
-
-Estaban escondidos con el razonamiento de que un ataque bloqueado no es
-una direccion porque la pelota nunca llego a la cancha rival. Es cierto
-como concepto, pero el dato existe y hay que poder verlo.
+2 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
+DESCARTA el zip anterior (NAFELS_TRES_ARREGLOS): este lo incluye y corrige
+una cosa.
 
 
-COMO SE MUESTRAN
-----------------
-En su zona de ORIGEN: desde donde salio el remate.
+1) LA ROTACION — tenias razon
+-----------------------------
+Revise los cinco archivos uno por uno:
 
-Es lo unico que tiene sentido —un bloqueado no tiene destino, pero si
-tiene desde donde se ataco— y ademas es EL MISMO criterio que ya usaba la
-pantalla al filtrar por bloqueados y al abrir el video. Antes la cancha
-usaba un criterio y el video otro; ahora coinciden siempre.
+   &Pra-AXPO NAFELS-2026-09-03    494 acciones, SIN rotacion
+   &Pra-AXPO NAFELS-2026-09-04    984 acciones, SIN rotacion
+   &Pra-AXPO NAFELS-2026-09-07    293 acciones, SIN rotacion
+   &Pra-AXPO NAFELS-2026-09-08    904 acciones, SIN rotacion
+   &2026-09-08 ... MORNING        427 acciones, CON rotacion
 
+Los de DataVolley no la guardan. El del panel SI: tiene lineas de rotacion
+(z) y de formacion (P), y las columnas de posicion del armador completas.
 
-EL TABLERO DE DURDOS
+MI ARREGLO ANTERIOR ESTABA MAL: como la pantalla junta todas las sesiones,
+si UNA tenia rotacion mostraba las seis canchas y las otras desaparecian.
+Justo lo contrario de lo que hacia falta.
 
-   antes                        ahora
-   z1  4                        z1  4
-   z2  6                        z2  6
-   z3  0                        z3  0
-   z4  0   <- vacio             z4  5   <- los 5 bloqueados
-   z5  7                        z5  7
-   z6 12                        z6 12
-   z7  4                        z7  4
-   z8  4                        z8  4
-   z9  1                        z9  1
-   ───────                      ───────
-   suma 38  (decia 44)          suma 43  + 1 sin zona = 44
+AHORA: se muestran las seis rotaciones SIEMPRE, y si ademas hay armados sin
+rotacion se agrega una cancha mas que dice "Sin rotación · el archivo no
+guarda rotación". No se pierde ninguno, venga del archivo que venga.
 
-El rotulo va a decir:
-
-   44 ataques · 5 bloq. · 1 sin zona
-
-Ahora cierra: 43 en la cancha + 1 sin zona = 44.
-
-El "1 sin zona" es un ataque cuyo codigo no tiene zona de destino
-(*01AH-G4~4~~H2~L7). Es un dato incompleto del scout, no un error del
-sistema. Se avisa para que no parezca que falta algo.
+Y de paso: descubri que DataVolley SI escribe los drills en el archivo. En
+el del 08/09 hay una linea "**Drill". Nosotros los salteamos al exportar
+porque pensaba que no los conocia. Lo dejo anotado para revisarlo.
 
 
-Y EL VIDEO
-----------
-El cuadrante z4 ahora tiene su ▶ y al hacerle doble click abre los 5
-ataques bloqueados, cada uno en su jugada.
+2) EL NOMBRE DEL ARCHIVO — replicado
+------------------------------------
+   DataVolley       &Pra-AXPO NAFELS-2026-09-08.dvw
+   el panel ANTES   &2026-09-10 AXP-ENTRENAMIENTO-T.dvw
+   el panel AHORA   &Pra-AXPO NAFELS-2026-09-10.dvw
+
+Mismo formato: Pra- + equipo + fecha.
+
+Con dos sesiones el mismo dia se agrega el turno al final, que es lo unico
+que DataVolley no necesita porque no las distingue:
+
+   &Pra-AXPO NAFELS-2026-09-10-M.dvw    mañana
+   &Pra-AXPO NAFELS-2026-09-10-T.dvw    tarde
+
+Los PARTIDOS siguen igual que siempre —fecha + equipo-rival— porque ahi si
+hay un rival de verdad:
+
+   &2026-09-14 AXPO NAFELS-AMRISWIL.dvw
+
+VERIFICADO que los motores siguen leyendo el turno de los nombres nuevos Y
+de los viejos, asi que los archivos que ya tenes subidos no se tocan.
+
+
+VAN TAMBIEN LOS DOS DE ANTES
+----------------------------
+   Backspace ya no borra codigos (solo Delete)
+   El desplegable de correccion lista a TODOS los jugadores

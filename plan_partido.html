@@ -517,6 +517,8 @@ function armDates(){var d={};MATCHES.forEach(function(m){if(MSEL.has(m.mid))d[m.
 function midByDate(d){if(typeof MATCHES==="undefined")return"";var m=MATCHES.find(function(x){return x.date===d;});return m?m.mid:"";}
 function armRallies(setter,pos){var dates=armDates(),mt=(armTeam.matches||[]);
   return setter.s.filter(function(r){
+    /* pos 0 = los armados SIN rotacion. Los archivos de practica de
+       DataVolley no la guardan y quedaban todos afuera de las seis canchas. */
     if(r[6]!==pos)return false;
     if(armCall!=="all"&&r[5]!==armCall)return false;
     if(armPhase==="SO"&&r[4]!==0)return false;
@@ -650,13 +652,44 @@ function renderArmador(){
   document.getElementById("armrecnum").innerHTML='<option value="">Todos</option>'+recvNums.map(function(n){return '<option value="'+n+'"'+(armRecNum===n?" selected":"")+'>#'+n+" "+(NBYNUM[n]?apellidoJS(NBYNUM[n]):"")+" ("+recvCount[n]+")</option>";}).join("");
   document.getElementById("armrecgrp").style.opacity=(armPhase==="SO")?"1":".35";document.getElementById("armreczgrp").style.opacity=(armPhase==="SO")?"1":".35";
   var grid=document.getElementById("armgrid");grid.innerHTML="";
-  [4,3,2,5,6,1].forEach(function(pos){
+
+  /* ══ ENTRENAMIENTOS SIN ROTACION ═══════════════════════════════════════
+     DataVolley NO guarda la rotacion en los archivos de practica: las
+     columnas de posicion del armador y de formacion en cancha vienen
+     vacias. Lo verifique en los cuatro .dvw de entrenamiento: todas en 0.
+     Es logico, en una practica no se lleva rotacion ni marcador.
+
+     El resultado era que las seis rotaciones daban 0 armados aunque arriba
+     dijera "135 armados": ninguno se podia asignar a una rotacion y todos
+     quedaban afuera.
+
+     Ahora, si no hay dato de rotacion, se muestra UNA sola cancha con TODOS
+     los armados —de side-out y de transicion— en vez de seis vacias. Los
+     datos existen y hay que poder verlos.
+
+     Cuando el archivo SI trae rotacion —un partido de DataVolley, o un
+     entrenamiento scouteado con el panel— se siguen viendo las seis. */
+  /* Hay sesiones CON rotacion y sesiones SIN. Un partido de DataVolley y un
+     entrenamiento scouteado con el panel la traen; una practica hecha con
+     DataVolley no, porque no lleva rotacion ni marcador.
+
+     Como esta pantalla junta todas las sesiones, no alcanza con elegir un
+     modo u otro: se muestran las seis rotaciones Y, si ademas hay armados
+     sin rotacion, una cancha mas con esos. Asi no se pierde ninguno. */
+  var _sinRot = armRallies(setter,0).length;
+  var _POSICIONES = [4,3,2,5,6,1];
+  if(_sinRot) _POSICIONES.push(0);
+
+  _POSICIONES.forEach(function(pos){
     var rows=armRallies(setter,pos),tot=rows.length,zc={};
     var zp={},zvc={},_mt=(armTeam.matches||[]);rows.forEach(function(r){var z=gpGetZone(GP_COMBOS[r[8]]||"",r[11],r[6]);if(z>0){zc[z]=(zc[z]||0)+1;if(r[9]===0)zp[z]=(zp[z]||0)+1;var _mm=_mt[r[12]]||{},_yt=ppVid(_mm.code||midByDate(_mm.date)),_tt=r[14]||r[13];if(_yt&&_tt)zvc[z]=(zvc[z]||0)+1;}});
     var mx=1;ARMZ.forEach(function(z){if((zc[z]||0)>mx)mx=zc[z];});
     var cells=ARMZ.map(function(z){var v=zc[z]||0,has=v>0,hasVid=(zvc[z]||0)>0,pct=tot?Math.round(v/tot*100):0,kp=v?Math.round((zp[z]||0)/v*100):0,h=armHeat(z,v,pct);
       return '<div class="cell'+(hasVid?" has vid":"")+'" style="background:'+h[0]+';border:'+h[2]+'"'+(hasVid?' ondblclick="openArmZone('+pos+",'"+z+"')\"":"")+'>'+(has?'<div class="cn-n" style="color:'+h[1]+'">'+v+'</div><div class="cn-p" style="color:'+h[1]+'">'+pct+'% · '+kp+'%</div>':"")+'</div>';}).join("");
-    grid.insertAdjacentHTML("beforeend",'<div class="armrot"><div class="rt"><b>Rotación P'+pos+'</b><span>'+tot+' armados</span></div><div class="armcourt">'+cells+'</div></div>');
+    var _esSin = (pos===0);
+    var _tit = _esSin ? 'Sin rotación' : ('Rotación P'+pos);
+    var _sub = _esSin ? (tot+' armados · el archivo no guarda rotación') : (tot+' armados');
+    grid.insertAdjacentHTML("beforeend",'<div class="armrot"><div class="rt"><b>'+_tit+'</b><span>'+_sub+'</span></div><div class="armcourt">'+cells+'</div></div>');
   });
 }
 function setArmSetter(i){armSetIdx=i;renderArmador();}
