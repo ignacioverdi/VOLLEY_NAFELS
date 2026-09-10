@@ -28,6 +28,25 @@ try:
 except Exception:
     pass
 DISP_BY_SLUG = {slug:disp for kw,(slug,disp) in SLUGS}
+
+def _turno(nombre_archivo):
+    """Doble turno: manana y tarde el mismo dia. El DVW no trae la hora, asi
+       que el turno sale del nombre del archivo. Devuelve 'M', 'T' o ''."""
+    import os as _os
+    n = (nombre_archivo or '').upper()
+    _b = _os.path.splitext(_os.path.basename(n))[0]
+    if _b.endswith('-M'): return 'M'
+    if _b.endswith('-T'): return 'T'
+    for pal, t in [('MORNING','M'), ('MANANA','M'), ('MAÑANA','M'), ('MORGEN','M'),
+                   ('VORMITTAG','M'), ('TURNO1','M'),
+                   ('AFTERNOON','T'), ('TARDE','T'), ('NACHMITTAG','T'), ('ABEND','T'),
+                   ('EVENING','T'), ('NOCHE','T'), ('TURNO2','T')]:
+        if pal in n: return t
+    for pal, t in [('AM','M'), ('T1','M'), ('PM','T'), ('T2','T')]:
+        if re.search(r'(?<![A-Z0-9])' + pal + r'(?![A-Z0-9])', n): return t
+    return ''
+
+
 def _norm(x):
     x=''.join(c for c in unicodedata.normalize('NFD',x or '') if unicodedata.category(c)!='Mn')
     return re.sub(r'[^a-z0-9]','',x.lower())
@@ -371,7 +390,10 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
             D=DATA[slug]
             walk(t,pfx,mid,D,slug)
             D['info'][mid]={'opp':oppname(opp_sl,opp_raw),'date':date,'res':f"{my_s}-{opp_s}",
-                            'yt':yt.get(mid,''),'tipo':TIPO}
+                            'yt':yt.get(mid,''),'tipo':TIPO,
+                            # el turno, para que el video no se mezcle entre las
+                            # dos sesiones de un mismo dia
+                            'turno':_turno(fn)}
         nf+=1
 
     # normalizar claves a string (como cuando pasaba por JSON)

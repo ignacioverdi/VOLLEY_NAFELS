@@ -1,98 +1,84 @@
-LA BASE ESTABA CORROMPIDA — RECONSTRUIDA
-========================================
+EL VIDEO DE CADA ACCION — Y LA BASE RECONSTRUIDA
+================================================
 
-7 archivos a la raiz. HACER_TODO y publicar.
-
-
-LO QUE ENCONTRE — hice la investigacion completa
-------------------------------------------------
-
-1) LA SESION DE LA MAÑANA ESTABA CARGADA TRES VECES
-
-        mañana  tarde   suma    en la base   veces
-   S       240     23    263           743     3.0
-   R       185     15    200           570     3.0
-   A         1    203    204           206     3.0
-   B         1     90     91            93     3.0
-
-   Exacto en los cuatro fundamentos.
-
-   ESTO LO CAUSE YO. Te hice sacar la entrada del 08/09 de "games" para
-   forzar el reprocesado, sin darme cuenta de que la base ACUMULA: cada
-   HACER_TODO volvia a sumar las mismas acciones en vez de reemplazarlas.
-
-   Por eso Durdos mostraba ataques donde no correspondia y los videos caian
-   en la accion equivocada: habia tres copias de la mañana mezcladas con la
-   tarde.
-
-2) DOS FECHAS FANTASMA
-   30/07 (7 ataques, 3 saques, 3 recepciones) y 03/09 (63 saques, 165
-   recepciones) seguian en la base SIN ningun .dvw que las respalde. Sus
-   archivos ya no estan en la carpeta, pero las acciones nunca se borraron.
-
-3) LAS ACCIONES NO GUARDABAN EL TURNO
-   Cada accion guardaba la fecha pero no el turno, asi que las dos sesiones
-   del 08/09 se mezclaban aunque estuvieran bien cargadas.
+9 archivos a la raiz. HACER_TODO y publicar.
 
 
-LO QUE SE HIZO
+TU PREGUNTA: ¿RESPETA EL VIDEO DE CADA UNO?
+-------------------------------------------
+NO lo hacia. Fui a ver el codigo y encontre exactamente por que.
+
+El plan de partido busca el video asi: agarra la fecha de la accion y
+busca la clave 'ENT' + fecha. Para el 08/09 esa clave es ENT20260908...
+que es LA SESION DE LA TARDE.
+
+Entonces una accion de la MAÑANA se llevaba el video de la TARDE. Doble
+click en un ataque y se abria una jugada de otro entrenamiento.
+
+Eso es lo que viste.
+
+
+POR QUE PASABA
 --------------
+Ni las acciones ni el plan de partido sabian de que turno eran. Solo
+guardaban la fecha, y con dos sesiones el mismo dia la fecha no alcanza
+para distinguirlas.
 
-A) LA BASE SE RECONSTRUYE, YA NO SE ACUMULA
-   Antes cargaba lo que habia y le hacia .extend() con lo nuevo. Ahora se
-   arma DESDE CERO en cada corrida leyendo los .dvw de la carpeta.
+CORREGIDO EN TRES LUGARES:
 
-   Lo que esta en la carpeta es la verdad; la base es el resultado de
-   leerla. Si borras un .dvw, sus acciones desaparecen. Si reprocesas, no
-   se duplica nada.
+  1. update_db_entrenamientos_nafels.py
+     cada accion guarda su turno junto a la fecha
 
-   Deja copia .bak de la anterior antes de escribir.
+  2. gen_plan_partido.py
+     el plan de partido guarda el turno de cada sesion
 
-B) CADA ACCION GUARDA SU TURNO
-   Se agrego en los dos lugares donde se arman las acciones. Ahora una
-   accion del 08/09 sabe si fue de la mañana o de la tarde.
+  3. plan_partido.html
+     el video se busca por FECHA + TURNO:
+        mañana -> ENT20260908M
+        tarde  -> ENT20260908
 
-C) YA RECONSTRUI TU BASE
-   Los archivos de este zip son el resultado. No hace falta que corras
-   nada para arreglarlo: ya viene corregido.
-
-
-VERIFICADO CONTRA LOS ARCHIVOS ORIGINALES
------------------------------------------
-   04/09   coincide
-   07/09   coincide
-   08/09   coincide
-   fechas fantasma: NINGUNA
-
-   El turno en cada accion:
-      04/09  turno -    702 acciones
-      07/09  turno -    172 acciones
-      08/09  turno M    427 acciones   <- la mañana
-      08/09  turno -    331 acciones   <- la tarde
-
-   EL CASO QUE VISTE:
-      Durdos, 32 ataques el 08/09
-      turno M (mañana, saque y pase):  0 ataques   CORRECTO
-      turno - (tarde):                32 ataques
-
-   Antes: los 32 mezclados sin turno, por eso caian en la mañana.
+     Y si hay dos sesiones el mismo dia y no se sabe cual es, NO ADIVINA.
+     Antes devolvia la primera que encontraba. Es preferible que el doble
+     click no haga nada a que abra una jugada equivocada.
 
 
-UNA COSA QUE NO ES UN ERROR
----------------------------
-El armado (sets) figura en 0 dentro de entrenamientos_nafels_db.json. Lo
-compare contra la base que tenias publicada ANTES: ahi tambien estaba en 0.
-No es algo que se haya roto ahora. El armado vive en
-liga_data_entrenamientos.js, que es de donde lo lee el plan de partido.
+PROBADO
+-------
+   08/09 turno M  (mañana, saque y pase)  ->  video de la MAÑANA
+   08/09 turno -  (tarde)                 ->  video de la TARDE
+   04/09          (una sola sesion)       ->  su video
+   07/09          (una sola sesion)       ->  su video
+   fecha que no existe                    ->  sin video, no inventa
+
+   Antes, la mañana recibia el video de la tarde.
+
+
+Y ADEMAS: LA BASE ESTABA CORROMPIDA
+-----------------------------------
+En la misma investigacion encontre que la sesion de la mañana estaba
+cargada TRES VECES (240 saques figuraban como 743), y que habia dos
+fechas fantasma sin ningun .dvw que las respalde.
+
+Lo cause yo: te hice sacar la entrada del 08/09 de "games" para forzar el
+reprocesado, y la base ACUMULABA en vez de reemplazar.
+
+Ya esta arreglado y la base viene reconstruida en este zip:
+
+   04/09  coincide con el archivo      08/09  turno M  427 acciones
+   07/09  coincide con el archivo      08/09  turno -  331 acciones
+   08/09  coincide con el archivo      fechas fantasma: NINGUNA
+
+   Durdos, 08/09:  mañana 0 ataques (correcto, fue saque y pase)
+                   tarde 32 ataques
+
+Y el motor ahora RECONSTRUYE la base en cada corrida en vez de acumular,
+asi que reprocesar no vuelve a duplicar nada nunca mas.
 
 
 LOS NUMEROS BAJAN, Y ESTA BIEN
 ------------------------------
-   antes  1193 saques · 1142 recepciones · 16 jugadores
-   ahora   647 saques ·  604 recepciones · 14 jugadores
+   antes  1193 saques · 1142 recepciones
+   ahora   647 saques ·  604 recepciones
 
-Bajan porque se fueron las copias triplicadas y las dos fechas fantasma.
-Los 14 jugadores son los del plantel real; los otros 2 venian de los
-entrenamientos borrados.
-
-Ahora los numeros que ves en pantalla son EXACTAMENTE los de los archivos.
+Se fueron las copias triplicadas y las fechas fantasma. Ahora lo que ves
+en pantalla es exactamente lo que dicen los .dvw.
