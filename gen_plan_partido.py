@@ -301,6 +301,11 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
                 landz=traj[1] if len(traj)>1 and traj[1].isdigit() else ''
                 D['rec'][pnum].append([lastsv[0],lastsv[1],landz,rq,rally-1,tsv,mid])
                 continue
+            if sk=='F' and team==pfx:
+                # El free ball cierra la fase de recepcion: el ataque que
+                # viene despues es TRANSICION, no side-out.
+                recv=False; rq=''
+                continue
             if sk=='D' and team==pfx:
                 dq=code[4] if len(code)>4 else ''
                 tp=code[5:].split('~'); traj=tp[3] if len(tp)>3 else ''

@@ -1,79 +1,64 @@
-TRES COSAS
-==========
+EL FREE BALL, BIEN
+==================
 
-   panel_vivo.html              -> a la raiz
-   temporadas/2025-26/*.html    -> pisando las de esa carpeta (41 paginas)
+3 archivos. HACER_TODO y publicar.
+REEMPLAZA al zip anterior.
 
-Solo publicar. Sin HACER_TODO.
-
-
-1) LEI EL MANUAL DE DATA VOLLEY
--------------------------------
-Esta en tu repo: DVWin4_HandBook_Eng.pdf, 190 paginas. La seccion 4.12
-"Practice" dice, textual:
-
-   · New Match -> elegir el equipo -> boton [Practice]
-   · [Line Up] para el plantel, la posicion del armador o la formacion de
-     un drill
-   · [New Drill] para empezar un drill y fijar su MARCADOR INICIAL
-
-Y lo importante: NO menciona ningun tope de puntos en practica. Solo habla
-del marcador con el que ARRANCA cada drill.
-
-Ademas confirme en la pagina 55 que el FREE BALL es un fundamento oficial
-con su propia escala:
-
-   #  perfecta: se pueden hacer todas las combinaciones de ataque
-   +  positiva: pelota dentro de los 3 metros
-   !  suficiente: pelota fuera de los 3 metros
-   -  pobre: solo queda un ataque obligado
-   /  muy pobre: la pelota se va al campo rival
-   =  error
-
-Eso refuerza lo del informe anterior: tenemos 119 acciones de free ball
-scouteadas que las baterias no cuentan.
+   gen_baterias.py · gen_plan_partido.py · panel_vivo.html
+   (objetivos_config.js NO va: quedan las 12 baterias de siempre)
 
 
-2) EL LIMITE DE 25 PUNTOS  ← tenias razon
-------------------------------------------
-El panel cortaba el set a los 25 (15 el quinto) y preguntaba si cerrarlo,
-igual que en un partido. En un entrenamiento eso no va: un ejercicio puede
-jugarse a tablero abierto, a 40 puntos o sin marcador, y cortarlo en el
-medio del drill arruina el trabajo.
-
-CORREGIDO: en modo entrenamiento el set NO termina solo. Se cierra a mano
-cuando el entrenador quiere, con el boton de siempre.
-
-Y de paso arregle algo peor que estaba al lado: partidoTerminado() daba el
-"partido" por terminado despues de 3 sets y DEJABA DE ACEPTAR ACCIONES. En
-un entrenamiento eso no tiene sentido: no se gana ni se pierde. Ahora
-tampoco corta.
+TENIAS RAZON Y YO ESTABA EQUIVOCADO
+-----------------------------------
+Un ataque que sale de un free ball ES TRANSICION. El side-out es lo que
+viene de recibir el SAQUE del rival, nada mas. Yo lo habia entendido al
+reves y lo estaba mandando a las fases de recepcion.
 
 
-3) POR QUE A SEBASTIAN LE ABRE LA TEMPORADA VIEJA  ← encontrado
----------------------------------------------------------------
-No es configuracion. Es esto:
+PERO BUSCANDO ESO ENCONTRE UN ERROR DE VERDAD
+---------------------------------------------
+El motor no conocia la letra F, asi que la linea del free ball era
+INVISIBLE para el. Y al ser invisible, ARRASTRABA la recepcion anterior del
+mismo punto.
 
-   temporadas/2025-26/   es una COPIA COMPLETA del sistema:
-                         41 paginas, con su propio Scout en Vivo
+Un caso real de tu archivo del 08/09:
 
-Y lo grave:
+     *01SM#   saque del rival
+     *20RM=   el 20 recibe MAL (error)
+     *20FH#   free ball, perfecto
+     *04EQ+   armado
+     *07AQ#   el 7 ATACA
 
-   el titulo de la pagina    IDENTICO al actual ("Scout en Vivo — NAFELS")
-   avisa que es vieja        NO
-   enlace para volver        NO EXISTE
+Ese ataque se contaba como "ataque tras recepcion mala". Pero no tiene nada
+que ver con esa recepcion fallada: sale del free ball, o sea es TRANSICION.
 
-O sea: si entra ahi una vez —por un favorito viejo, un link guardado, el
-historial del navegador— NO TIENE COMO DARSE CUENTA. Todo se ve igual. Y lo
-que scoutee ahi no aparece en la temporada actual.
+Son 7 casos mal clasificados en los archivos de septiembre.
 
-CORREGIDO: las 41 paginas ahora tienen una barra naranja fija arriba:
 
-   📚 TEMPORADA 2025-26 — ARCHIVADA. Lo que cargues acá no va a la
-      temporada actual.        [ Ir a la temporada actual → ]
+LO QUE HACE AHORA
+-----------------
+El free ball CORTA la fase de recepcion. Lo que viene despues cae en
+transicion, que es donde corresponde segun tu criterio.
 
-Y el titulo de la pestaña arranca con "[25-26]", asi que tambien se ve
-desde la barra del navegador sin abrir la pagina.
+   Atq R#+ (tras recepcion buena)   26
+   Atq R!  (tras recepcion neutra)  18
+   Atq R-  (tras recepcion mala)     8
+   Atq Transición                  354
+   ───────────────────────────────────
+   total                           406
 
-DECILE A SEBASTIAN que borre el favorito viejo y guarde de nuevo desde la
-pagina principal. Pero aunque no lo haga, ahora se va a dar cuenta.
+
+LO QUE NO HAY
+-------------
+   bateria de free ball        NO, sacada
+   porcentaje de free ball     NO
+   tarjeta nueva en ningun lado NO
+
+Las 12 baterias de siempre. El free ball solo se usa para saber donde EMPIEZA
+y donde TERMINA cada fase, que es lo que estaba mal.
+
+
+LO DEMAS DEL ZIP
+----------------
+   panel_vivo.html   sin limite de puntos en entrenamiento, y el
+                     entrenamiento ya no "termina" a los 3 sets
