@@ -1,48 +1,65 @@
-UNIFICAR 2 — CORREGIDO
-======================
+BATERIAS MAS GRANDES
+====================
 
-17 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
-REEMPLAZA al zip anterior (NAFELS_UNIFICAR_2): ese quedo incompleto.
+5 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
 
-
-QUE PASO
---------
-Publicaste la etapa 2 y la probe. Tres fundamentos coincidian y tres no:
-
-   Saque      bateria CERCA (verde claro)  ·  numero AMARILLO
-   Recepción  bateria NEUTRO (amarillo)    ·  numero ROJO
-   Defensa    bateria NEUTRO (amarillo)    ·  numero ROJO
-
-EL ERROR FUE MIO. Mi script reemplazaba la PRIMERA copia de effColor de cada
-archivo y seguia al siguiente. Pero dashboard.html y analisis.html tienen
-DOS copias cada uno, y la segunda —la que gana, porque se define despues— se
-quedo con la version vieja.
-
-O sea: cambie la copia que no se usaba.
-
-CORREGIDO: ahora el script recorre TODAS las copias de cada archivo, de atras
-hacia adelante. Verificado uno por uno:
-
-   analisis.html          2 copias · 2 nuevas
-   dashboard.html         2 copias · 2 nuevas
-   los otros 13           1 copia  · 1 nueva
-   utils.js               1 copia  · 1 nueva
-
-17 de 17.
+   dashboard.html · historial_voley.html
+   objetivos.js · objetivos_config.js · utils.js
 
 
-POR QUE NO LO VI ANTES
-----------------------
-Mi verificacion contaba archivos tocados (15) y no copias por archivo. Es el
-mismo tipo de error que veniamos persiguiendo todo el dia: asumir que hay una
-sola copia de algo.
+PRIMERO: LA UNIFICACION QUEDO CERRADA
+-------------------------------------
+Verifique los doce fundamentos en el dashboard:
 
-Lo anoto porque es exactamente lo que estamos tratando de eliminar.
+   Saque CERCA · Recepción NEUTRO · Blq #+ CERCA · Blq # CERCA
+   Atq Central LEJOS · Atq Alta LEJOS · Atq Rápida CERCA
+   Atq R#+ NEUTRO · Atq R! NEUTRO · Atq R- OBJETIVO
+   Atq Transición LEJOS · Defensa NEUTRO
+
+   LOS DOCE COINCIDEN. El color del numero y el de la bateria son el mismo.
+   Antes fallaban cuatro.
+
+Y los 15 archivos con effColor quedaron todos con la version unica:
+dashboard, analisis, jugador, panel_voley, historial, armadores, game_plan,
+ataque_jugador, saque_jugador, los 5 heat maps, scouting_rival y utils.js.
 
 
-COMO COMPROBARLO VOS
---------------------
-Entra al dashboard, solapa Objetivos, y compara el color del numero grande
-con el de la bateria en cada tarjeta. Tienen que ser el mismo.
+LAS BATERIAS
+------------
+Medi cada pantalla antes de elegir el tamaño, porque no todas tienen el
+mismo espacio:
 
-Yo lo voy a verificar igual apenas publiques.
+   dashboard   tarjetas de 107 px de ancho, las 12 en UNA fila
+   jugador     tarjetas de  60 px de ancho, en DOS filas
+
+El limite es el ancho, no el alto: las paginas ya scrollean (1.670 px contra
+791 de pantalla), asi que crecer hacia abajo no molesta.
+
+   antes    bateria 26 x 36
+   ahora    bateria 32 x 72     el doble de alta
+
+Y lo que la acompaña:
+   el numero      19 -> 22 px
+   el nombre       9 -> 10 px
+   el pico de arriba, proporcional
+
+PROBADO EN VIVO en las dos pantallas, que son las que mas aprietan:
+
+   dashboard   las 12 siguen en UNA fila
+   jugador     siguen en DOS filas, tarjeta 60 x 138
+   nada se corta ni se desborda en ninguna de las dos
+
+
+UNA COSA QUE HICE DISTINTO ESTA VEZ
+-----------------------------------
+Antes de dar por hecho el cambio, verifique que NINGUNA copia quedara con la
+bateria chica:
+
+   dashboard.html         1 copia · 1 nueva · 0 viejas
+   historial_voley.html   1 copia · 1 nueva · 0 viejas
+   objetivos.js           1 copia · 1 nueva · 0 viejas
+   objetivos_config.js    1 copia · 1 nueva · 0 viejas
+   utils.js               1 copia · 1 nueva · 0 viejas
+
+Es el chequeo que me falto la vez pasada con effColor, cuando cambie la
+copia que no se usaba.
