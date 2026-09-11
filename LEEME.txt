@@ -1,70 +1,56 @@
-EL FREE BALL, CORREGIDO EN TODO EL SISTEMA
-==========================================
+LA MAQUINA DE SAQUE
+===================
 
-11 archivos. HACER_TODO y publicar.
-REEMPLAZA a los dos zips anteriores.
+5 archivos. HACER_TODO y publicar.
 
-
-EL ERROR CONCEPTUAL, Y DONDE ESTABA
------------------------------------
-Un ataque que sale de un free ball es TRANSICION. El side-out es lo que
-viene de recibir el SAQUE del rival, nada mas. Yo lo habia entendido al
-reves; tenias razon.
-
-Pero el error de fondo era otro y estaba desde antes: NINGUN motor conocia
-la letra F. Esa linea era invisible, y al ser invisible ARRASTRABA la
-recepcion anterior del mismo punto:
-
-     *01SM#   saque del rival
-     *20RM=   el 20 recibe MAL (error)
-     *20FH#   free ball, perfecto
-     *04EQ+   armado
-     *07AQ#   el 7 ATACA        <- se contaba "tras recepcion mala"
-
-Ese ataque no tiene nada que ver con la recepcion fallada: sale del free
-ball, o sea es transicion.
+   gen_baterias.py · update_db_entrenamientos_nafels.py
+   update_db_nafels.py · update_db_nafels_FULL.py · config_club.json
 
 
-LOS 11 ARCHIVOS QUE LO TENIAN MAL
----------------------------------
-Busque en TODO el sistema los que clasifican fases desde los codigos crudos.
-Estaban todos con el mismo error:
+LO QUE PEDISTE, HECHO
+---------------------
+Los saques del #8 son de la maquina: no los tira una persona, no tienen
+intencion ni tecnica. Sumarlos a la estadistica de saque la deforma.
 
-   baterias_engine.py                 las baterias
-   gen_baterias.py                    idem
-   gen_plan_partido.py                el plan de partido
-   gen_scouting.py                    el scouting del rival
-   objetivos.js                       los objetivos
-   panel_vivo.html                    el scout en vivo
-   panel_voley.html                   el panel de estadisticas
-   plan_partido_vivo.js               el plan en vivo
-   update_db_entrenamientos_nafels.py la base de entrenamientos
-   update_db_nafels.py                la base de partidos
-   update_db_nafels_FULL.py           idem completa
+   saques del equipo   1424  ->  1148
+   del #8               276  ->     0
+   recepciones         1356  ->  1356   <- INTACTAS
 
-En los 11 el free ball ahora CIERRA la fase de recepcion.
+Las recepciones siguen contando enteras, que es lo que pediste: el jugador
+esta entrenando justamente eso, recibir pelotas potentes.
+
+Eran el 19% de los saques del equipo. Casi uno de cada cinco.
 
 
-COMO QUEDAN LOS NUMEROS
+LO QUE NO SE TOCA
+-----------------
+El saque de la maquina IGUAL ABRE EL PUNTO. Eso importa: si lo hubiera
+ignorado del todo, la recepcion que viene despues se quedaba sin saque
+delante y el ataque posterior dejaba de contarse como side-out.
 
-   Atq R#+ (tras recepcion buena)   26
-   Atq R!  (tras recepcion neutra)  18
-   Atq R-  (tras recepcion mala)     8
-   Atq Transición                  354
-   ─────────────────────────────────────
-   total                           406
-
-Los ataques que salian de un free ball pasaron a transicion, que es donde
-corresponde.
+Verificado: las fases de ataque quedan igual que antes.
+   R#+ 26 · R! 18 · R- 8 · Transición 354
 
 
-LO QUE NO HAY
--------------
-Ninguna bateria nueva. Ningun porcentaje de free ball. Las 12 de siempre.
-objetivos_config.js NO va en este zip: queda como estaba.
+EL NUMERO NO ESTA ESCRITO EN EL CODIGO
+--------------------------------------
+Va en config_club.json:
+
+   "maquinas_saque": [8]
+
+Si algun dia usan otro numero, o ponen una segunda maquina, se agrega ahi y
+listo. No hay que tocar ningun motor.
+
+Si el archivo no existe, el sistema usa el 8 igual, asi que no se rompe nada
+si se pierde.
 
 
-ADEMAS, EN panel_vivo.html
---------------------------
-   sin limite de puntos en entrenamiento
-   el entrenamiento ya no "termina" a los 3 sets
+SOBRE ADRIAN
+------------
+Me dijiste que entreno un dia por la ausencia de un companero. Entonces esta
+BIEN que aparezca: es un jugador de verdad y esas acciones existieron. No
+toco nada.
+
+Si algun dia queres que los invitados no ensucien los promedios del plantel,
+se puede marcar igual que la maquina. Pero eso es una decision tuya y hoy no
+hace falta.

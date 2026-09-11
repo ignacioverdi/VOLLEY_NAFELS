@@ -45,6 +45,54 @@ NOMBRE_CORTO = {
 }
 
 
+
+# ══════════════════════════════════════════════════════════════════════════
+#  LA MAQUINA DE SAQUE
+#  ------------------------------------------------------------------------
+#  En los entrenamientos se scoutea la maquina con un numero de camiseta que
+#  no existe en el plantel (en Näfels es el 8). Eso permite hacer el
+#  ejercicio, pero sus saques NO SON DE NADIE: no los tira una persona, no
+#  tienen intencion ni tecnica, y sumarlos a la estadistica de saque del
+#  equipo la deforma. Eran 276 de 1.424, el 19%.
+#
+#  Las RECEPCIONES de esos saques SI cuentan: el jugador esta entrenando
+#  justamente eso, recibir pelotas potentes.
+#
+#  Tampoco se toca la logica de fases: el saque de la maquina igual abre el
+#  punto, asi que la recepcion y el ataque posterior siguen clasificando
+#  bien como side-out.
+#
+#  El numero sale de la configuracion del club. Si algun dia se usa otro, o
+#  se agrega una segunda maquina, se cambia ahi y no en el codigo.
+# ══════════════════════════════════════════════════════════════════════════
+def _es_maquina(num):
+    """Si este numero de camiseta es una maquina y no un jugador."""
+    try:
+        import os, json
+        global _MAQ_CACHE
+    except Exception:
+        pass
+    return str(num).lstrip('0') in _MAQUINAS
+
+
+def _cargar_maquinas():
+    """Los numeros de maquina salen de config_club.json si existe."""
+    import os, json
+    for p in ('config_club.json', 'club.json', 'CONFIG.json'):
+        try:
+            if os.path.exists(p):
+                c = json.load(open(p, encoding='utf-8'))
+                v = c.get('maquinas_saque') or c.get('maquina_saque')
+                if v:
+                    if not isinstance(v, (list, tuple)): v = [v]
+                    return {str(x).lstrip('0') for x in v}
+        except Exception:
+            pass
+    return {'8'}          # el valor de Näfels, por defecto
+
+_MAQUINAS = _cargar_maquinas()
+
+
 def _sin_tildes(t):
     import unicodedata
     return ''.join(c for c in unicodedata.normalize('NFD', t)
@@ -315,7 +363,9 @@ def parse_dvw_both(fpath, temporada):
                     'srv_orig':prev_srv_orig,'temporada':temporada}
 
             if   skill=='A': atk[pnum].append(action)
-            elif skill=='S': srv[pnum].append(action)
+            elif skill=='S':
+                    # el saque de la maquina no es de nadie: no suma
+                    if not _es_maquina(pnum): srv[pnum].append(action)
             elif skill=='R': rec[pnum].append(action)
             elif skill=='E': sets[pnum].append(action)
             elif skill=='B': blk[pnum].append(action)
