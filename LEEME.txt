@@ -1,47 +1,79 @@
-LOS DOS DEL SCOUT EN VIVO
-=========================
+TRES COSAS
+==========
 
-3 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
+   panel_vivo.html              -> a la raiz
+   temporadas/2025-26/*.html    -> pisando las de esa carpeta (41 paginas)
 
-   panel_vivo.html · panel_voley.html · lang.js
-
-
-1) NO DEJABA CARGAR EL SEIS PARA EL SET SIGUIENTE  (foto 2)
------------------------------------------------------------
-LA CAUSA: el sistema pregunta "es entrenamiento?" en DOS lugares distintos.
-
-   unSoloEquipo()  mira CFG.entrenamiento Y M.modo    <- la buena
-   saveSetup()     miraba SOLO M.modo                 <- la rota
-
-Si el modo entrenamiento viene de la configuracion del club, M.modo se queda
-en 'partido'. Entonces la pantalla ocultaba el equipo rival —es un
-entrenamiento, no hay rival— pero la validacion SEGUIA EXIGIENDO sus seis
-jugadores.
-
-Te pedia cargar una formacion que la pantalla no te dejaba cargar. Sin salida.
-
-CORREGIDO: saveSetup usa unSoloEquipo(), como el resto. Y aproveche para
-alinear otros dos lugares que tenian el mismo chequeo a medias.
+Solo publicar. Sin HACER_TODO.
 
 
-   Ademas: el aviso salia mezclado — "Load the line-up for set 1 para seguir".
-   Se armaba pegando texto + numero + texto, asi que el traductor reconocia
-   la primera mitad y dejaba la segunda. Ahora la frase viaja entera, con {n}
-   donde va el numero, en los tres idiomas.
+1) LEI EL MANUAL DE DATA VOLLEY
+-------------------------------
+Esta en tu repo: DVWin4_HandBook_Eng.pdf, 190 paginas. La seccion 4.12
+"Practice" dice, textual:
+
+   · New Match -> elegir el equipo -> boton [Practice]
+   · [Line Up] para el plantel, la posicion del armador o la formacion de
+     un drill
+   · [New Drill] para empezar un drill y fijar su MARCADOR INICIAL
+
+Y lo importante: NO menciona ningun tope de puntos en practica. Solo habla
+del marcador con el que ARRANCA cada drill.
+
+Ademas confirme en la pagina 55 que el FREE BALL es un fundamento oficial
+con su propia escala:
+
+   #  perfecta: se pueden hacer todas las combinaciones de ataque
+   +  positiva: pelota dentro de los 3 metros
+   !  suficiente: pelota fuera de los 3 metros
+   -  pobre: solo queda un ataque obligado
+   /  muy pobre: la pelota se va al campo rival
+   =  error
+
+Eso refuerza lo del informe anterior: tenemos 119 acciones de free ball
+scouteadas que las baterias no cuentan.
 
 
-2) LOS IDIOMAS SE PISABAN CON EL BOTON CERRAR  (foto 1)
---------------------------------------------------------
-LA CAUSA, medida en la pantalla:
+2) EL LIMITE DE 25 PUNTOS  ← tenias razon
+------------------------------------------
+El panel cortaba el set a los 25 (15 el quinto) y preguntaba si cerrarlo,
+igual que en un partido. En un entrenamiento eso no va: un ejercicio puede
+jugarse a tablero abierto, a 40 puntos o sin marcador, y cortarlo en el
+medio del drill arruina el trabajo.
 
-   la barra de arriba (idiomas, temporadas)   z-index 300
-   los modales (resumen, tabla, podio)        z-index 200
+CORREGIDO: en modo entrenamiento el set NO termina solo. Se cierra a mano
+cuando el entrenador quiere, con el boton de siempre.
 
-La barra quedaba ENCIMA del modal. Por eso los botones ES/EN/DE se montaban
-sobre el titulo y el Cerrar del modal quedaba tapado.
+Y de paso arregle algo peor que estaba al lado: partidoTerminado() daba el
+"partido" por terminado despues de 3 sets y DEJABA DE ACEPTAR ACCIONES. En
+un entrenamiento eso no tiene sentido: no se gana ni se pierde. Ahora
+tampoco corta.
 
-CORREGIDO: los modales pasan a 400, por arriba. Y mientras hay uno abierto,
-la barra se esconde —igual no se puede usar lo que hay detras—.
 
-PROBADO EN VIVO: con el arreglo, los botones de idioma desaparecen y al
-apuntar al Cerrar lo que esta encima ES el Cerrar. Antes era la barra.
+3) POR QUE A SEBASTIAN LE ABRE LA TEMPORADA VIEJA  ← encontrado
+---------------------------------------------------------------
+No es configuracion. Es esto:
+
+   temporadas/2025-26/   es una COPIA COMPLETA del sistema:
+                         41 paginas, con su propio Scout en Vivo
+
+Y lo grave:
+
+   el titulo de la pagina    IDENTICO al actual ("Scout en Vivo — NAFELS")
+   avisa que es vieja        NO
+   enlace para volver        NO EXISTE
+
+O sea: si entra ahi una vez —por un favorito viejo, un link guardado, el
+historial del navegador— NO TIENE COMO DARSE CUENTA. Todo se ve igual. Y lo
+que scoutee ahi no aparece en la temporada actual.
+
+CORREGIDO: las 41 paginas ahora tienen una barra naranja fija arriba:
+
+   📚 TEMPORADA 2025-26 — ARCHIVADA. Lo que cargues acá no va a la
+      temporada actual.        [ Ir a la temporada actual → ]
+
+Y el titulo de la pestaña arranca con "[25-26]", asi que tambien se ve
+desde la barra del navegador sin abrir la pagina.
+
+DECILE A SEBASTIAN que borre el favorito viejo y guarde de nuevo desde la
+pagina principal. Pero aunque no lo haga, ahora se va a dar cuenta.
