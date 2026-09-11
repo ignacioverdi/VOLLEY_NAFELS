@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20260911-2108"></script>
-<script src="selector_categoria.js?v=20260911-2108"></script>
+<script src="categorias_club.js?v=20260911-0806"></script>
+<script src="selector_categoria.js?v=20260911-0806"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -351,19 +351,19 @@ body::before{content:'';position:fixed;inset:0;
 
 select, select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20260911-2108"></script>
+<script src="objetivos_config.js?v=20260911-0806"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260911-2108"></script>
-<script src="firebase.js?v=20260911-2108" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260911-2108"></script>
-<script src="lang.js?v=20260911-2108"></script>
-<script src="objetivos.js?v=20260911-2108" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20260911-2108"></script>
-  <script src="video_delay.js?v=20260911-2108" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260911-0806"></script>
+<script src="firebase.js?v=20260911-0806" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260911-0806"></script>
+<script src="lang.js?v=20260911-0806"></script>
+<script src="objetivos.js?v=20260911-0806" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20260911-0806"></script>
+  <script src="video_delay.js?v=20260911-0806" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -617,23 +617,11 @@ function renderObjetivosJugador(cid,nombre,extra){
     align-items: flex-start;
   }
 }
-
-/* ══ LA BARRA DE ARRIBA NO PUEDE TAPAR LOS MODALES ════════════════════════
-   La barra fija con el selector de idioma y las temporadas tiene z-index 300.
-   Los modales —el resumen, la tabla, el podio— tenian 200, asi que la barra
-   les quedaba ENCIMA: los botones ES/EN/DE se montaban sobre el titulo y el
-   boton Cerrar del modal quedaba tapado, sin poder tocarlo.
-
-   Los modales pasan por arriba (z-index 400). Mientras uno esta abierto, la
-   barra se esconde: igual no se puede usar lo que hay detras. */
-.podio-overlay, .cancha-modal, .modal-overlay { z-index: 400 !important; }
-body.modal-abierto #lang-wrap,
-body.modal-abierto .barra-superior { display: none !important; }
 </style>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260911-2108">
+<link rel="stylesheet" href="movil.css?v=20260911-0806">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase">← Dashboard</a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -1436,7 +1424,12 @@ function calcFaseKPIs(codes, side){
     var combo=l.slice(6,8); if(combo.indexOf('~')>=0) combo='';
     if(skill==='S'){ last_rec=null; rec_valida=false; }
     else if(skill==='R' && pfx===side){ last_rec=ev; rec_valida=true; }
-    else if(pfx!==side && (skill==='A'||skill==='D'||skill==='E'||skill==='B')){ rec_valida=false; }
+          /* ══ EL FREE BALL CIERRA LA FASE DE RECEPCION ══════════════════════
+         Un ataque que sale de un free ball es TRANSICION: el side-out es lo
+         que viene de recibir el SAQUE del rival. La linea del free ball era
+         invisible para el motor y arrastraba la recepcion anterior. */
+      else if(skill==='F' && pfx===side){ last_rec=null; rec_valida=false; }
+      else if(pfx!==side && (skill==='A'||skill==='D'||skill==='E'||skill==='B')){ rec_valida=false; }
     else if(skill==='A' && pfx===side){
       var esSO=(last_rec!==null && rec_valida);
       var recBuena=esSO && (last_rec==='#'||last_rec==='+');
@@ -2182,8 +2175,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20260911-2108" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260911-2108"></script>
+<script src="plantel_nafels.js?v=20260911-0806" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260911-0806"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2282,21 +2275,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20260911-2108">
-/* Marcar el body mientras hay un modal abierto, para esconder la barra. */
-(function(){
-  function revisar(){
-    var hay = !!document.querySelector('.podio-overlay.open, .cancha-modal.open, .modal-overlay.open');
-    document.body.classList.toggle('modal-abierto', hay);
-  }
-  try{
-    new MutationObserver(revisar).observe(document.body,
-      {subtree:true, attributes:true, attributeFilter:['class']});
-    document.addEventListener('DOMContentLoaded', revisar);
-    revisar();
-  }catch(e){}
-})();
-</script>
+<script src="ayuda.js?v=20260911-0806"></script>
 </body>
 </html>
 

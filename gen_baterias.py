@@ -116,27 +116,18 @@ def _calc_baterias(codes, side):
             if res in Pr['R']: Pr['R'][res]+=1
         elif pfx!=side and skill in ('A','D','E','B'):
             rec_valida=False
+                # ══ EL FREE BALL CIERRA LA FASE DE RECEPCION ═══════════════════
+        # Un ataque que sale de un free ball es TRANSICION. El side-out es
+        # lo que viene de recibir el SAQUE del rival, nada mas.
+        #
+        # El motor no conocia la letra F, asi que esa linea era invisible y
+        # ARRASTRABA la recepcion anterior del mismo punto. Caso real del
+        # 08/09:
+        #     *20RM=   recepcion MAL      *20FH#   free ball
+        #     *04EQ+   armado         *07AQ#   ataque
+        # Ese ataque se contaba como "tras recepcion mala" cuando en
+        # realidad sale del free ball: es transicion.
         elif skill=='F' and pfx==side:
-            # ══ EL FREE BALL CIERRA LA FASE DE RECEPCION ═══════════════════
-            # Un ataque que sale de un free ball es TRANSICION, no side-out:
-            # el side-out es lo que viene de recibir el saque del rival.
-            #
-            # El motor no conocia la letra F, asi que esa linea era invisible
-            # y ARRASTRABA la recepcion anterior del mismo punto. Un caso real
-            # del 08/09:
-            #
-            #     *01SM#   saque
-            #     *20RM=   el 20 recibe MAL
-            #     *20FH#   free ball
-            #     *04EQ+   armado
-            #     *07AQ#   ataque   <- se contaba como "ataque tras recepcion"
-            #
-            # Ese ataque no tiene nada que ver con la recepcion fallada: sale
-            # del free ball. Son 7 casos mal clasificados en los archivos de
-            # septiembre.
-            #
-            # Ahora el free ball corta la fase y el ataque cae en transicion,
-            # que es donde corresponde.
             last_rec=None; rec_valida=False
         elif skill=='B' and pfx==side:
             Pb=get(num); Pb['B']['T']+=1

@@ -1,64 +1,70 @@
-EL FREE BALL, BIEN
-==================
+EL FREE BALL, CORREGIDO EN TODO EL SISTEMA
+==========================================
 
-3 archivos. HACER_TODO y publicar.
-REEMPLAZA al zip anterior.
-
-   gen_baterias.py · gen_plan_partido.py · panel_vivo.html
-   (objetivos_config.js NO va: quedan las 12 baterias de siempre)
+11 archivos. HACER_TODO y publicar.
+REEMPLAZA a los dos zips anteriores.
 
 
-TENIAS RAZON Y YO ESTABA EQUIVOCADO
+EL ERROR CONCEPTUAL, Y DONDE ESTABA
 -----------------------------------
-Un ataque que sale de un free ball ES TRANSICION. El side-out es lo que
+Un ataque que sale de un free ball es TRANSICION. El side-out es lo que
 viene de recibir el SAQUE del rival, nada mas. Yo lo habia entendido al
-reves y lo estaba mandando a las fases de recepcion.
+reves; tenias razon.
 
-
-PERO BUSCANDO ESO ENCONTRE UN ERROR DE VERDAD
----------------------------------------------
-El motor no conocia la letra F, asi que la linea del free ball era
-INVISIBLE para el. Y al ser invisible, ARRASTRABA la recepcion anterior del
-mismo punto.
-
-Un caso real de tu archivo del 08/09:
+Pero el error de fondo era otro y estaba desde antes: NINGUN motor conocia
+la letra F. Esa linea era invisible, y al ser invisible ARRASTRABA la
+recepcion anterior del mismo punto:
 
      *01SM#   saque del rival
      *20RM=   el 20 recibe MAL (error)
      *20FH#   free ball, perfecto
      *04EQ+   armado
-     *07AQ#   el 7 ATACA
+     *07AQ#   el 7 ATACA        <- se contaba "tras recepcion mala"
 
-Ese ataque se contaba como "ataque tras recepcion mala". Pero no tiene nada
-que ver con esa recepcion fallada: sale del free ball, o sea es TRANSICION.
-
-Son 7 casos mal clasificados en los archivos de septiembre.
+Ese ataque no tiene nada que ver con la recepcion fallada: sale del free
+ball, o sea es transicion.
 
 
-LO QUE HACE AHORA
------------------
-El free ball CORTA la fase de recepcion. Lo que viene despues cae en
-transicion, que es donde corresponde segun tu criterio.
+LOS 11 ARCHIVOS QUE LO TENIAN MAL
+---------------------------------
+Busque en TODO el sistema los que clasifican fases desde los codigos crudos.
+Estaban todos con el mismo error:
+
+   baterias_engine.py                 las baterias
+   gen_baterias.py                    idem
+   gen_plan_partido.py                el plan de partido
+   gen_scouting.py                    el scouting del rival
+   objetivos.js                       los objetivos
+   panel_vivo.html                    el scout en vivo
+   panel_voley.html                   el panel de estadisticas
+   plan_partido_vivo.js               el plan en vivo
+   update_db_entrenamientos_nafels.py la base de entrenamientos
+   update_db_nafels.py                la base de partidos
+   update_db_nafels_FULL.py           idem completa
+
+En los 11 el free ball ahora CIERRA la fase de recepcion.
+
+
+COMO QUEDAN LOS NUMEROS
 
    Atq R#+ (tras recepcion buena)   26
    Atq R!  (tras recepcion neutra)  18
    Atq R-  (tras recepcion mala)     8
    Atq Transición                  354
-   ───────────────────────────────────
+   ─────────────────────────────────────
    total                           406
+
+Los ataques que salian de un free ball pasaron a transicion, que es donde
+corresponde.
 
 
 LO QUE NO HAY
 -------------
-   bateria de free ball        NO, sacada
-   porcentaje de free ball     NO
-   tarjeta nueva en ningun lado NO
-
-Las 12 baterias de siempre. El free ball solo se usa para saber donde EMPIEZA
-y donde TERMINA cada fase, que es lo que estaba mal.
+Ninguna bateria nueva. Ningun porcentaje de free ball. Las 12 de siempre.
+objetivos_config.js NO va en este zip: queda como estaba.
 
 
-LO DEMAS DEL ZIP
-----------------
-   panel_vivo.html   sin limite de puntos en entrenamiento, y el
-                     entrenamiento ya no "termina" a los 3 sets
+ADEMAS, EN panel_vivo.html
+--------------------------
+   sin limite de puntos en entrenamiento
+   el entrenamiento ya no "termina" a los 3 sets

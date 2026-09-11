@@ -83,6 +83,15 @@ def walk_attacks(content, pfx):
         skill = code[2].upper() if len(code) > 2 else ''
         if skill == 'S':
             rec_valida = False; last_rq = ''; last_orig = ''; last_by = 0; last_call = ''; continue
+        if skill == 'F' and t == pfx:
+            # ══ EL FREE BALL CIERRA LA FASE DE RECEPCION ═══════════════════
+            # Un ataque que sale de un free ball es TRANSICION: el side-out es
+            # lo que viene de recibir el SAQUE del rival, nada mas.
+            # Esta linea era invisible para el motor y ARRASTRABA la recepcion
+            # anterior del mismo punto, asi que ataques de transicion se
+            # contaban como ataques tras recepcion.
+            rec_valida = False; last_rq = ''; last_orig = ''; last_by = 0; last_call = ''
+            continue
         if t == pfx and skill == 'R':
             rec_valida = True
             last_rq = code[4] if len(code) > 4 else ''

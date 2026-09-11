@@ -57,6 +57,8 @@
         continue;
       }
       if(team!==pfx && sk==='A'){ var tpO=code.slice(5).split('~'); lastOppAtk=canonCombo(tpO[0]||''); recv=false; continue; }
+      /* el free ball cierra la fase: lo que viene despues es transicion */
+      if(team===pfx && sk==='F'){ recv=false; rq=''; continue; }
       if(team!==pfx && (sk==='D'||sk==='E'||sk==='B')){ recv=false; continue; }
       if(team===pfx && sk==='A'){
         var tpA = code.slice(5).split('~'); var tr = tpA.length>1?tpA[1]:'';

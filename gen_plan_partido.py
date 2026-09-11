@@ -301,9 +301,18 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
                 landz=traj[1] if len(traj)>1 and traj[1].isdigit() else ''
                 D['rec'][pnum].append([lastsv[0],lastsv[1],landz,rq,rally-1,tsv,mid])
                 continue
+                        # ══ EL FREE BALL CIERRA LA FASE DE RECEPCION ═══════════════════
+            # Un ataque que sale de un free ball es TRANSICION. El side-out es
+            # lo que viene de recibir el SAQUE del rival, nada mas.
+            #
+            # El motor no conocia la letra F, asi que esa linea era invisible y
+            # ARRASTRABA la recepcion anterior del mismo punto. Caso real del
+            # 08/09:
+            #     *20RM=   recepcion MAL      *20FH#   free ball
+            #     *04EQ+   armado             *07AQ#   ataque
+            # Ese ataque se contaba como "tras recepcion mala" cuando en
+            # realidad sale del free ball: es transicion.
             if sk=='F' and team==pfx:
-                # El free ball cierra la fase de recepcion: el ataque que
-                # viene despues es TRANSICION, no side-out.
                 recv=False; rq=''
                 continue
             if sk=='D' and team==pfx:
