@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260911-0806"></script>
-<script src="selector_categoria.js?v=20260911-0806"></script>
-<script src="lang.js?v=20260911-0806"></script>
+<script src="categorias_club.js?v=20260911-2146"></script>
+<script src="selector_categoria.js?v=20260911-2146"></script>
+<script src="lang.js?v=20260911-2146"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260911-0806">
+<link rel="stylesheet" href="movil.css?v=20260911-2146">
 </head>
 <body>
 
@@ -1230,16 +1230,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260911-0806" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260911-0806"></script>
-<script src="objetivos.js?v=20260911-0806" onerror="void 0"></script>
-<script src="video_delay.js?v=20260911-0806" onerror="void 0"></script>
+<script src="firebase.js?v=20260911-2146" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260911-2146"></script>
+<script src="objetivos.js?v=20260911-2146" onerror="void 0"></script>
+<script src="video_delay.js?v=20260911-2146" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260911-0806" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260911-0806"></script>
+<script src="plantel_nafels.js?v=20260911-2146" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260911-2146"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -1914,12 +1914,83 @@ function unirCopias(){
       + 'preferible que sobre y se vea, a que falte y no te enteres.');
 }
 
-function borrarPartidosSel(){
-  const marc=Array.from(document.querySelectorAll('.pcheck:checked')).map(c=>c.value);
+async function borrarPartidosSel(){
+  /* ══ BORRAR DE VERDAD, DE TODOS LADOS ═════════════════════════════════════
+     Antes esto solo sacaba el partido de la lista local (pv_partidos). Pero
+     un partido vive en SEIS lugares distintos:
+
+        pv_partidos      la lista que se ve en pantalla
+        pv_match         si es el que esta abierto ahora
+        pv_cajanegra     las 12 fotos de seguridad
+        volley_red       las 30 fotos de IndexedDB
+        pv_antes_drill   la copia previa al ultimo New Drill
+        la nube          el "en curso", que es lo que ve el otro scout
+
+     Resultado: lo borrabas, se iba de la lista, y al rato VOLVIA — porque la
+     sincronizacion lo traia de nuevo desde la nube. O quedaba escondido en la
+     caja negra y aparecia al recuperar.
+
+     Ahora se borra en los seis. */
+  const marc = Array.from(document.querySelectorAll('.pcheck:checked')).map(c=>c.value);
   if(!marc.length){ toast('Tildá al menos un partido',true); return; }
-  if(!confirm('¿Borrar '+marc.length+' partido'+(marc.length>1?'s':'')+'? No se puede deshacer.')) return;
-  guardarPartidos(partidos().filter(p=>!marc.includes(p.id)));
-  renderTablaPartidos(); toast(marc.length+' partido'+(marc.length>1?'s':'')+' borrado'+(marc.length>1?'s':''));
+  if(!confirm('¿Borrar '+marc.length+' partido'+(marc.length>1?'s':'')
+              +'?\n\nSe borra de la lista, de la nube y de las copias de seguridad.\nNo se puede deshacer.')) return;
+
+  const lista = partidos();
+  const aBorrar = lista.filter(p => marc.includes(p.id));
+
+  /* 1 ── la lista local */
+  guardarPartidos(lista.filter(p => !marc.includes(p.id)));
+
+  /* 2 ── el partido abierto, si es uno de los borrados */
+  try{
+    if(M && M._id && marc.includes(M._id)){
+      localStorage.removeItem('pv_match');
+      localStorage.removeItem('pv_undo');
+      localStorage.removeItem('pv_antes_drill');
+    }
+  }catch(e){}
+
+  /* 3 ── la caja negra */
+  try{
+    const caja = JSON.parse(localStorage.getItem('pv_cajanegra')||'[]');
+    const queda = caja.filter(f => !marc.includes(f.id));
+    if(queda.length) localStorage.setItem('pv_cajanegra', JSON.stringify(queda));
+    else localStorage.removeItem('pv_cajanegra');
+  }catch(e){}
+
+  /* 4 ── la red (IndexedDB) */
+  try{
+    const db = await _redAbrir();
+    if(db){
+      const st = db.transaction('fotos','readwrite').objectStore('fotos');
+      const todas = st.getAll();
+      todas.onsuccess = function(){
+        (todas.result||[]).forEach(function(f){
+          if(marc.includes(f.id)) st.delete(f.t);
+        });
+      };
+    }
+  }catch(e){}
+
+  /* 5 ── la nube: el "en curso" propio y el de los demas.
+     Es lo que hacia que volvieran solos despues de borrarlos. */
+  try{
+    if(typeof nubeLeer === 'function' && typeof nubeGuardar === 'function'){
+      nubeLeer(PV_CURSO, function(todos){
+        if(!todos) return;
+        Object.keys(todos).forEach(function(k){
+          const t = todos[k];
+          const id = (t && t.M && t.M._id) || (t && t._id);
+          if(id && marc.includes(id)) nubeGuardar(PV_CURSO + '/' + k, null);
+        });
+      });
+    }
+  }catch(e){}
+
+  renderTablaPartidos();
+  toast(marc.length+' partido'+(marc.length>1?'s':'')+' borrado'+(marc.length>1?'s':'')
+        +' de la lista, la nube y las copias');
 }
 function abrirPartidos(){ guardarPartidoEnLista(M); renderTablaPartidos(); sincronizarEnCurso(function(n){ if(n){ renderTablaPartidos(); toast(n+' partido(s) en curso de tu equipo'); } }); document.getElementById('m-partidos').classList.add('open'); }
 function cerrarPartidos(){ const el=document.getElementById('m-partidos'); if(el) el.classList.remove('open'); }
@@ -7961,7 +8032,7 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260911-0806" onerror="void 0"></script>
-<script src="ayuda.js?v=20260911-0806"></script>
+<script src="volver_inicio.js?v=20260911-2146" onerror="void 0"></script>
+<script src="ayuda.js?v=20260911-2146"></script>
 </body>
 </html>

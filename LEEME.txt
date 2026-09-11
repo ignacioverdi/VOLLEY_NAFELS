@@ -1,56 +1,65 @@
-LA MAQUINA DE SAQUE
-===================
+LA PANTALLA INICIAL DEL SCOUT
+=============================
 
-5 archivos. HACER_TODO y publicar.
-
-   gen_baterias.py · update_db_entrenamientos_nafels.py
-   update_db_nafels.py · update_db_nafels_FULL.py · config_club.json
+Un archivo: panel_vivo.html. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
 
 
-LO QUE PEDISTE, HECHO
----------------------
-Los saques del #8 son de la maquina: no los tira una persona, no tienen
-intencion ni tecnica. Sumarlos a la estadistica de saque la deforma.
+LO COMPARE CON DATA VOLLEY (manual, seccion 9)
+----------------------------------------------
+DataVolley, al abrir, muestra todos los partidos de la temporada activa y
+permite: abrirlos, importar, BORRAR, y filtrar por fase, competencia o
+equipo.
 
-   saques del equipo   1424  ->  1148
-   del #8               276  ->     0
-   recepciones         1356  ->  1356   <- INTACTAS
+Lo que tenemos:
 
-Las recepciones siguen contando enteras, que es lo que pediste: el jugador
-esta entrenando justamente eso, recibir pelotas potentes.
-
-Eran el 19% de los saques del equipo. Casi uno de cada cinco.
-
-
-LO QUE NO SE TOCA
------------------
-El saque de la maquina IGUAL ABRE EL PUNTO. Eso importa: si lo hubiera
-ignorado del todo, la recepcion que viene despues se quedaba sin saque
-delante y el ataque posterior dejaba de contarse como side-out.
-
-Verificado: las fases de ataque quedan igual que antes.
-   R#+ 26 · R! 18 · R- 8 · Transición 354
+   ver la lista               SI
+   abrir uno                  SI
+   importar (.dvw)            SI
+   filtrar por equipo         SI
+   filtrar por competencia    SI
+   separar partidos/entren.   SI  (mejor que DataVolley: el tiene un icono)
+   borrar                     SI, pero borraba mal  <- corregido
+   ver los del asistente      SI, pero solo mientras los tiene ABIERTOS
 
 
-EL NUMERO NO ESTA ESCRITO EN EL CODIGO
---------------------------------------
-Va en config_club.json:
+EL PROBLEMA GRAVE: EL BORRADO NO BORRABA
+----------------------------------------
+Un partido vive en SEIS lugares:
 
-   "maquinas_saque": [8]
+   pv_partidos      la lista que ves en pantalla
+   pv_match         si es el que esta abierto ahora
+   pv_cajanegra     las 12 fotos de seguridad
+   volley_red       las 30 fotos de IndexedDB
+   pv_antes_drill   la copia previa al ultimo New Drill
+   la nube          el "en curso", que es lo que ve el otro scout
 
-Si algun dia usan otro numero, o ponen una segunda maquina, se agrega ahi y
-listo. No hay que tocar ningun motor.
+El boton de borrar sacaba el partido de UNO SOLO: la lista local.
 
-Si el archivo no existe, el sistema usa el 8 igual, asi que no se rompe nada
-si se pierde.
+Consecuencia real: lo borrabas, desaparecia de la pantalla, y al rato
+VOLVIA — porque la sincronizacion lo traia de nuevo desde la nube. O
+quedaba escondido en la caja negra y reaparecia al usar recuperar.html.
+
+CORREGIDO: ahora el borrado limpia los seis. El aviso lo dice:
+"Se borra de la lista, de la nube y de las copias de seguridad."
 
 
-SOBRE ADRIAN
-------------
-Me dijiste que entreno un dia por la ausencia de un companero. Entonces esta
-BIEN que aparezca: es un jugador de verdad y esas acciones existieron. No
-toco nada.
+LO QUE FALTA, Y QUIERO QUE LO DECIDAS VOS
+-----------------------------------------
+Los partidos del asistente aparecen en tu lista SOLO mientras los tiene
+abiertos. Apenas cierra o exporta, salen de la nube y no los ves mas.
 
-Si algun dia queres que los invitados no ensucien los promedios del plantel,
-se puede marcar igual que la maquina. Pero eso es una decision tuya y hoy no
-hace falta.
+Vos queres poder borrarlos "por si hace falta". Hoy podes, pero solo
+mientras el los tiene abiertos.
+
+Para verlos siempre habria que cambiar algo de fondo: que al cerrar un
+partido NO se borre de la nube sino que quede archivado ahi, con su autor
+y su fecha. Eso trae dos cosas:
+
+   a favor   ves todo el historial del equipo, de los dos scouts, y podes
+             limpiar lo que no sirve desde cualquier maquina
+   en contra la nube acumula todos los partidos de la temporada (hoy solo
+             guarda los que estan en curso), y hay que decidir cuanto
+             tiempo se conservan
+
+No lo hago sin que lo decidas porque cambia como funciona el sistema entre
+las dos maquinas. Decime y lo armo.
