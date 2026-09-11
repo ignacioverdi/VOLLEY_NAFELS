@@ -427,14 +427,29 @@ def elegir_mejor_copia(archivos, parse):
 # ══════════════════════════════════════════════════════════════════════════
 def _unificar_por_numero(matches):
     """Un nombre por numero de camiseta, para todos los archivos."""
-    canon = {}
+    #  CUAL DE LAS VERSIONES GANA
+    #  Antes ganaba la mas larga, y con "SCHMID ROY" / "SCHIMD ROY" —que miden
+    #  igual— quedaba la primera que apareciera: podia quedar el error de
+    #  tipeo como nombre oficial del jugador.
+    #
+    #  Ahora gana la que MAS VECES aparece en los archivos: si el scout la
+    #  escribio bien cuatro veces y mal una, queda la buena. Si empatan, se
+    #  prefiere la que esta toda en mayusculas —el formato del resto del
+    #  plantel— y recien despues la mas larga.
+    import collections as _c
+    cuenta = _c.defaultdict(_c.Counter)
     for m in matches:
         for num, nom in (m.get('names') or {}).items():
             if not nom: continue
             n = str(num).lstrip('0') or str(num)
-            # gana el nombre mas largo: "BRUDERER GIAN" antes que "GIAN"
-            if n not in canon or len(nom) > len(canon[n]):
-                canon[n] = nom
+            cuenta[n][nom] += 1
+
+    canon = {}
+    for n, opciones in cuenta.items():
+        canon[n] = sorted(
+            opciones.items(),
+            key=lambda x: (-x[1], 0 if x[0].isupper() else 1, -len(x[0]), x[0])
+        )[0][0]
     for m in matches:
         nombres = m.get('names') or {}
         nuevo = {}

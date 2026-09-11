@@ -1,73 +1,74 @@
-LOS CUATRO PUNTOS
-=================
+LOS DOS QUE FALTABAN
+====================
 
-4 archivos. HACER_TODO y publicar.
-(Lleva HACER_TODO porque cambia gen_baterias.py)
-
-
-1) FALTABA EL #2 BRUDERER  ← y no era solo el
-----------------------------------------------
-Los jugadores se identificaban por el NOMBRE que trae cada .dvw. Pero el
-nombre lo escribe el scout a mano, y no siempre igual. Revise los cinco
-archivos y encontre TRES jugadores escritos distinto:
-
-     #2    BRUDERER  /  GIAN       (apellido en uno, nombre en el otro)
-     #7    SCHMID    /  SCHIMD     (una letra cambiada)
-     #20   SCHMID    /  SCHIMD
-
-Cada uno quedaba partido en DOS fichas con la mitad de las acciones cada
-una. El #2 directamente no aparecia en el listado.
-
-CORREGIDO: ahora se identifican por el NUMERO DE CAMISETA, que es lo unico
-confiable —es el que se tipea en cada codigo y el que usa DataVolley—. El
-nombre se toma de la version mas completa.
-
-Despues de HACER_TODO va a aparecer el #2, y el #7 y el #20 van a tener sus
-acciones juntas en vez de partidas.
+2 archivos. HACER_TODO y publicar.
 
 
-2) EL DESPLEGABLE SOLO DECIA "ACUMULADO"
-----------------------------------------
-Tenias razon: no dejaba elegir practica por practica.
+LO QUE YA FUNCIONA — verificado en la app publicada
+---------------------------------------------------
 
-LA CAUSA: leia PARTIDOS_META, que son los PARTIDOS. Como todavia no hay
-ninguno cargado de esta temporada, venia VACIO.
+PUNTO 2 — EL DESPLEGABLE  ✓ RESUELTO
+   ACUMULADO (7 entrenamientos)
+   🏋️ AXPO NAFELS · 10/09/2026 · Tarde
+   🏋️ AXPO NAFELS · 09/09/2026
+   🏋️ AXPO NAFELS · 08/09/2026
+   🏋️ AXPO NAFELS · 08/09/2026 · Mañana
+   🏋️ AXPO NAFELS · 07/09/2026
+   🏋️ AXPO NAFELS · 04/09/2026
+   🏋️ AXPO NAFELS · 03/09/2026
 
-Las sesiones de entrenamiento estaban en otro lado (BAT_PARTIDOS.meta), con
-sus 6 sesiones, su tipo, fecha y turno.
+   Ya podes elegir practica por practica, con su fecha y su turno.
 
-AHORA junta las dos fuentes:
-
-     CUMULATIVE (6 trainings)
-     🏋️ Nafels · 10/09/2026 · Tarde
-     🏋️ Nafels · 08/09/2026 · Mañana
-     🏋️ Nafels · 08/09/2026
-     🏋️ Nafels · 07/09/2026
-     🏋️ Nafels · 04/09/2026
-     🏋️ Nafels · 03/09/2026
-
-Cada una con su icono —🏆 partido · 🏋️ entrenamiento—, su fecha y su turno.
-Cuando empiece la temporada y cargues partidos, aparecen solos en la misma
-lista, ordenados por fecha.
+PUNTO 4 — LAS REGLAS  ✓ RESUELTO
+   "WHERE THE TARGETS COME FROM · The target for each skill is the best in
+   the league in that skill, measured over the 97 matches of last season..."
+   Todo en ingles, sin mezcla.
 
 
-3) EL TITULO REPETIDO TRES VECES
---------------------------------
-La fila de encabezado que repetia "% SAQUE (42) 42%" arriba de las tarjetas
-ya estaba sacada en el archivo que te mande antes. Lo que ves todavia es
-cache: el objetivos_config.js va de nuevo en este zip por las dudas.
+LO QUE FALTABA
+--------------
 
-Con eso queda: el nombre arriba de la tarjeta y "obj 42" abajo. Una sola vez.
+PUNTO 1 — EL #2 BRUDERER
+   La correccion esta publicada y FUNCIONA: la probe con tus archivos y pasa
+   de 17 nombres a 12. Pero HACER_TODO no se volvio a correr con el motor
+   nuevo, asi que los datos siguen con los nombres viejos.
+
+   Ademas le hice un ajuste: antes, entre "SCHMID ROY" y "SCHIMD ROY" —que
+   miden igual— quedaba el primero que apareciera, y podia quedar el ERROR DE
+   TIPEO como nombre oficial. Ahora gana el que MAS VECES aparece en los
+   archivos:
+
+      #1  DURDOS VALENTIN      #10 BOGDANOVSKI DEJAN
+      #2  BRUDERER GIAN        #11 BARTHOLET CHRISTIAN
+      #3  SCHWITTER TOM        #12 JOHANNSEN PATRICK
+      #4  VAZQUEZ EZEQUIEL     #13 STEIMANN YANNIK
+      #5  CLEMENT OLIVIER      #17 ROFFLER PASCAL
+      #7  SCHMID ROY           #20 SCHMID JONAS
+      #9  NORRIS JAMES
+
+   Todos bien escritos. Corriendo HACER_TODO aparece el #2 y el #7 y #20
+   juntan sus acciones en vez de tenerlas partidas.
+
+PUNTO 3 — EL TITULO REPETIDO
+   Lo perseguí hasta encontrarlo. El encabezado que repite "% SAQUE (42) 42%"
+   estaba en un CUARTO archivo: objetivos.js.
+
+   Ya lo habiamos sacado de dashboard.html y de las DOS copias que hay en
+   objetivos_config.js. Pero la pantalla que estas mirando la dibuja este
+   otro, que no habiamos tocado. Por eso seguia apareciendo incluso despues
+   de recargar con Ctrl+Shift+R.
+
+   Aprovechando, en objetivos.js tambien quedaron alineadas la tarjeta (con
+   nombre, "5 acc." y "obj 42") y el semaforo por recorrido de liga, que ahi
+   seguian con la version vieja.
 
 
-4) LAS REGLAS NO TERMINABAN DE TRADUCIRSE
------------------------------------------
-Los titulos si —"HOW EACH VALUE IS CALCULATED"— pero las cuatro lineas del
-semaforo y las escalas no.
+ESTO CONFIRMA LO QUE TE DECIA
+-----------------------------
+Cuatro archivos con la misma funcion:
 
-LA CAUSA: ese bloque lo arma el JavaScript DESPUES de que el traductor ya
-recorrio la pagina. Lo que esta en el HTML se traduce; lo que nace despues,
-no.
+   objSingleBat   dashboard.html · objetivos_config.js · objetivos.js
+   objClassify    los mismos tres
+   el encabezado  los mismos tres (y dos veces en objetivos_config)
 
-CORREGIDO: se vuelve a pasar el traductor apenas se termina de dibujar, y
-tambien al elegir un jugador.
+Hoy nos hizo perder tiempo tres veces. Cuando quieras, se unifican.

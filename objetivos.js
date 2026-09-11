@@ -30,11 +30,25 @@ window.OBJETIVOS_CONFIG = (window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.me
 
 /* ── Clasificación por color (idéntica al dashboard) ── */
 function objClassify(id,val){
-  var m=window.OBJETIVOS_CONFIG.metas[id];
-  if(val>=m.g2) return{color:'#22c55e',bg:'rgba(34,197,94,.1)', border:'rgba(34,197,94,.35)', label:'Objetivo'};
-  if(val>=m.g1) return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
-  if(val>=m.y)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)', border:'rgba(251,191,36,.3)', label:'Neutro'};
-  return {color:'#ef4444',bg:'rgba(239,68,68,.1)', border:'rgba(239,68,68,.3)', label:'Lejos'};
+  /* El semaforo, medido contra el recorrido real de la liga: del peor equipo
+     al mejor. Verde fuerte al llegar al mejor, verde claro en el cuarto de
+     arriba, amarillo en la mitad de arriba, rojo en la mitad de abajo.
+     Es el mismo criterio que el resto de las pantallas. */
+  var m = window.OBJETIVOS_CONFIG.metas[id] || {};
+  var obj = (m.obj != null) ? m.obj : null;
+  var piso = (m.min != null) ? m.min : 0;
+  if (m.cortesPropios && m.g2 != null) {
+    if(val>=m.g2) return{color:'#22c55e',bg:'rgba(34,197,94,.1)',   border:'rgba(34,197,94,.35)',  label:'Objetivo'};
+    if(val>=m.g1) return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
+    if(val>=m.y)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)',  border:'rgba(251,191,36,.3)',  label:'Neutro'};
+    return              {color:'#ef4444',bg:'rgba(239,68,68,.1)',   border:'rgba(239,68,68,.3)',   label:'Lejos'};
+  }
+  var reco = (obj != null && obj > piso) ? ((val - piso) / (obj - piso) * 100) : null;
+  if (reco === null) reco = (val >= (m.g2||0)) ? 100 : 0;
+  if(reco>=100) return{color:'#22c55e',bg:'rgba(34,197,94,.1)',   border:'rgba(34,197,94,.35)',  label:'Objetivo'};
+  if(reco>=75)  return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
+  if(reco>=50)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)',  border:'rgba(251,191,36,.3)',  label:'Neutro'};
+  return              {color:'#ef4444',bg:'rgba(239,68,68,.1)',   border:'rgba(239,68,68,.3)',   label:'Lejos'};
 }
 function objClassifyVsTeam(val,teamVal){
   if(teamVal===null||teamVal===undefined) return{color:'#64748b',bg:'rgba(100,116,139,.08)',border:'rgba(100,116,139,.2)',label:'—'};
@@ -49,29 +63,44 @@ function objClassifyVsTeam(val,teamVal){
 function objPct(v,mn,mx){return Math.max(0,Math.min(100,(v-mn)/(mx-mn)*100));}
 function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
 function objSingleBat(id,val,meta,cls,objLine){
-  var fh=val!==null?objPct(val,meta.min,meta.max):0;
-  var oh=objPct(objLine,meta.min,meta.max);
-  var txt=val!==null?fmtEff(val):'—';
-  return '<div style="flex:1;min-width:60px;max-width:110px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;padding:10px 5px 8px;border:0.5px solid '+cls.border+';border-radius:10px;background:'+cls.bg+';position:relative;overflow:hidden;font-family:Barlow Condensed,sans-serif">'
-    +'<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+cls.color+';border-radius:10px 10px 0 0"></div>'
-    +'<div style="font-size:22px;font-weight:900;line-height:1;color:'+cls.color+'">'+txt+'</div>'
-    +'<div style="width:32px;height:68px;display:flex;flex-direction:column;align-items:center">'
-      +'<div style="width:14px;height:5px;border-radius:2px 2px 0 0;background:'+cls.color+';opacity:.7;flex-shrink:0"></div>'
-      +'<div style="position:relative;width:32px;flex:1;border-radius:3px;overflow:hidden;border:2px solid '+cls.color+'">'
-        +'<div style="position:absolute;inset:0;background:#07080f"></div>'
-        +(val!==null?'<div style="position:absolute;bottom:0;left:0;right:0;height:'+fh+'%;background:'+cls.color+'"></div>':'')
-        +'<div style="position:absolute;bottom:25%;left:0;right:0;height:1px;background:#fff;opacity:.15"></div>'
-        +'<div style="position:absolute;bottom:50%;left:0;right:0;height:1px;background:#fff;opacity:.15"></div>'
-        +'<div style="position:absolute;bottom:75%;left:0;right:0;height:1px;background:#fff;opacity:.15"></div>'
-        +'<div style="position:absolute;bottom:'+oh+'%;left:-2px;right:-2px;display:flex;align-items:center;z-index:3">'
-          +'<div style="width:0;height:0;border-top:3px solid transparent;border-bottom:3px solid transparent;border-right:4px solid rgba(255,255,255,.9)"></div>'
-          +'<div style="flex:1;height:2px;background:rgba(255,255,255,.9);border-radius:1px"></div>'
-          +'<div style="width:0;height:0;border-top:3px solid transparent;border-bottom:3px solid transparent;border-left:4px solid rgba(255,255,255,.9)"></div>'
-        +'</div>'
-      +'</div>'
-    +'</div>'
-    +'<div style="font-size:8px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:2px 5px;border-radius:20px;background:'+cls.color+'22;color:'+cls.color+'">'+cls.label+'</div>'
-    +'</div>';
+  /* Tarjeta compacta: nombre del fundamento, valor, bateria, sobre cuantas
+     acciones y el objetivo. La misma que usan las otras pantallas. */
+  var fh = (val!==null) ? objPct(val, meta.min, meta.max) : 0;
+  var oh = objPct(objLine, meta.min, meta.max);
+  var txt = (val!==null) ? fmtEff(val) : '\u2014';
+  var nombre = String(meta.label||'').replace(/\s*\(-?\d+\)\s*$/, '');
+  var n = (meta.n!=null) ? meta.n : null;
+
+  var tip = nombre;
+  try{
+    if(val!==null && meta.obj!=null && meta.min!=null && meta.obj>meta.min){
+      var reco = Math.round((val-meta.min)/(meta.obj-meta.min)*100);
+      tip = nombre+': '+val+'%'+(n!=null?' sobre '+n+' acciones':'')
+          + ' \u00b7 el peor de la liga '+meta.min+'%, el mejor '+meta.obj+'%'
+          + ' \u00b7 est\u00e1s al '+reco+'% del recorrido';
+    }
+  }catch(e){}
+
+  return '<div title="'+tip+'" style="flex:1;min-width:60px;max-width:110px;display:flex;'
+    + 'flex-direction:column;align-items:center;gap:3px;padding:7px 3px 6px;'
+    + 'border:1px solid '+cls.border+';border-radius:9px;background:'+cls.bg+';'
+    + 'position:relative;overflow:hidden;font-family:Barlow Condensed,sans-serif">'
+    + '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+cls.color+'"></div>'
+    + '<div style="font-size:9px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;'
+    + 'color:#94a3b8;line-height:1.1;text-align:center;white-space:nowrap;overflow:hidden;'
+    + 'text-overflow:ellipsis;max-width:100%">'+nombre+'</div>'
+    + '<div style="font-size:19px;font-weight:900;line-height:1;color:'+cls.color+'">'+txt+'</div>'
+    + '<div style="width:26px;height:36px;display:flex;flex-direction:column;align-items:center">'
+      + '<div style="width:11px;height:4px;border-radius:2px 2px 0 0;background:'+cls.color+';opacity:.7;flex-shrink:0"></div>'
+      + '<div style="position:relative;width:26px;flex:1;border-radius:3px;overflow:hidden;border:2px solid '+cls.color+'">'
+        + '<div style="position:absolute;inset:0;background:#07080f"></div>'
+        + (val!==null ? '<div style="position:absolute;bottom:0;left:0;right:0;height:'+fh+'%;background:'+cls.color+';opacity:.85"></div>' : '')
+        + '<div style="position:absolute;left:0;right:0;bottom:'+oh+'%;height:2px;background:#fff;opacity:.85"></div>'
+      + '</div>'
+    + '</div>'
+    + (n!=null ? '<div style="font-size:8px;font-weight:700;color:#8395ac">'+n+' acc.</div>' : '')
+    + '<div style="font-size:8px;font-weight:700;color:#64748b">obj '+objLine+'</div>'
+    + '</div>';
 }
 
 /* ════════════════════════════════════════════════════════════════════
@@ -185,15 +214,17 @@ function renderBaterias(containerId, jugVals, eqVals, titulo, rivalVals){
     +[['#22c55e','Sobre equipo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Bajo equipo']].map(function(x){
       return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
     }).join('')+'</div></div>'
-    +'<div style="display:flex;gap:8px;width:100%;margin-bottom:4px">'
-    +'<div style="width:64px;flex-shrink:0"></div>'
-    +Object.keys(metas).map(function(id){
-      return '<div style="flex:1;min-width:60px;max-width:110px;text-align:center;padding:0 5px">'
-        +'<div style="font-size:10px;font-weight:800;color:#e2e8f0;letter-spacing:0.5px;text-transform:uppercase;line-height:1.3;word-break:break-word">'+metas[id].label+'</div>'
-        +'<div style="font-size:10px;color:#22c55e;font-weight:700;margin-top:3px">'+metas[id].obj+'%</div>'
-        +'</div>';
-    }).join('')
-    +'</div>';
+    /* ══ SE SACO LA FILA DE ENCABEZADO ══════════════════════════════════════
+       Repetia el nombre y el objetivo de cada fundamento arriba de las
+       tarjetas —"% SAQUE (42)" y "42%"— y las tarjetas YA los muestran: el
+       nombre arriba y "obj 42" abajo. Todo escrito dos veces, y una fila
+       entera de alto sin agregar nada.
+
+       ESTE ES EL CUARTO ARCHIVO con el mismo codigo repetido: ya estaba en
+       dashboard.html y dos veces en objetivos_config.js. Al arreglar los
+       otros tres el encabezado seguia apareciendo, porque el que dibuja
+       esta pantalla es este. */
+    ;
   rows.forEach(function(row){
     if(row.sep){ html+='<div style="height:1px;background:rgba(255,255,255,.1);margin:10px 0 12px"></div>'; return; }
     var lblColor = row.esRival ? '#f87171' : '#94a3b8';
