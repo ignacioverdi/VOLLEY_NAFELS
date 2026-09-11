@@ -133,8 +133,8 @@
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260911-0732" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260911-0732"></script>
+<script src="firebase.js?v=20260911-0740" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260911-0740"></script>
 </head>
 <body>
 <div class="wrap">
@@ -155,11 +155,11 @@
 </div>
 
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260911-0732" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260911-0732" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260911-0732"></script>
+<script src="categorias_club.js?v=20260911-0740" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260911-0740" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260911-0740"></script>
   <script src="scouting_rival.js.enc" onerror="void 0"></script>
-  <script src="objetivos_config.js?v=20260911-0732"></script>
+  <script src="objetivos_config.js?v=20260911-0740"></script>
 <script>abrirDatos();</script>
 <script>
 var SC = window.SCOUTING_RIVAL || {};
@@ -167,15 +167,23 @@ var CUR = null;
 
 // === colores / helpers ===
 function effColor(v, meta){
-  /* Mismos cortes que las baterias. Sin clave vuelve al criterio anterior. */
+  /* ══ UNA SOLA VERSION, Y ATADA AL SEMAFORO ════════════════════════════════
+     Habia CINCO versiones distintas repartidas en 17 archivos. Peor: todas
+     usaban los cortes VIEJOS (g2/g1/y) mientras el semaforo de las baterias
+     ya usa el recorrido de la liga. O sea que el color del NUMERO y el de la
+     BATERIA podian no coincidir para el mismo dato.
+
+     Ahora, cuando se pasa el fundamento, el color sale de objClassify: la
+     misma funcion que pinta las baterias. Asi no pueden volver a separarse
+     nunca, porque es literalmente el mismo calculo.
+
+     Sin fundamento se usa la escala de eficacia de ataque (40/20/0/-20), que
+     es lo que esperan las pantallas que llaman sin segundo parametro. */
   if(v===null||v===undefined||isNaN(v)) return 'var(--mut,#475569)';
-  var _m = (meta && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
-            ? window.OBJETIVOS_CONFIG.metas[meta] : null;
-  if(_m){
-    if(v >= _m.g2) return '#22c55e';
-    if(v >= _m.g1) return '#86efac';
-    if(v >= _m.y)  return '#fbbf24';
-    return '#ef4444';
+  if(meta && typeof objClassify === 'function'
+          && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas
+          && window.OBJETIVOS_CONFIG.metas[meta]){
+    try{ return objClassify(meta, v).color; }catch(e){}
   }
   return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#f97316':'#ef4444';
 }
@@ -736,9 +744,9 @@ function renderDossier(n){
 
 buildTeams();
 </script>
-<script src="lang.js?v=20260911-0732" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260911-0732" onerror="void 0"></script>
-<script src="ayuda.js?v=20260911-0732"></script>
+<script src="lang.js?v=20260911-0740" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260911-0740" onerror="void 0"></script>
+<script src="ayuda.js?v=20260911-0740"></script>
 </body>
 </html>
 

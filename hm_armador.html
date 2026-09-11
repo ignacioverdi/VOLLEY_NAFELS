@@ -55,27 +55,27 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 .fsel option{background:#0D0E1A}
 </style>
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260911-0732" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260911-0732" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260911-0732"></script>
+<script src="categorias_club.js?v=20260911-0740" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260911-0740" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260911-0740"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260911-0732"></script>
-<script src="filtro_tipo.js?v=20260911-0732" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260911-0740"></script>
+<script src="filtro_tipo.js?v=20260911-0740" onerror="void 0"></script>
   <script src="liga_data.js.enc"></script>
 <script src="liga_data_entrenamientos.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260911-0732" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260911-0732"></script>
+<script src="firebase.js?v=20260911-0740" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260911-0740"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260911-0732">
+<link rel="stylesheet" href="movil.css?v=20260911-0740">
 </head>
 <body>
 <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
@@ -248,15 +248,23 @@ function resetFilters(){
 function uniq(arr){var s={},r=[];arr.forEach(function(v){if(v!==null&&v!==undefined&&!s[v]){s[v]=1;r.push(v);}});return r;}
 
 function effColor(v, meta){
-  /* Mismos cortes que las baterias. Sin clave vuelve al criterio anterior. */
+  /* ══ UNA SOLA VERSION, Y ATADA AL SEMAFORO ════════════════════════════════
+     Habia CINCO versiones distintas repartidas en 17 archivos. Peor: todas
+     usaban los cortes VIEJOS (g2/g1/y) mientras el semaforo de las baterias
+     ya usa el recorrido de la liga. O sea que el color del NUMERO y el de la
+     BATERIA podian no coincidir para el mismo dato.
+
+     Ahora, cuando se pasa el fundamento, el color sale de objClassify: la
+     misma funcion que pinta las baterias. Asi no pueden volver a separarse
+     nunca, porque es literalmente el mismo calculo.
+
+     Sin fundamento se usa la escala de eficacia de ataque (40/20/0/-20), que
+     es lo que esperan las pantallas que llaman sin segundo parametro. */
   if(v===null||v===undefined||isNaN(v)) return 'var(--mut,#475569)';
-  var _m = (meta && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
-            ? window.OBJETIVOS_CONFIG.metas[meta] : null;
-  if(_m){
-    if(v >= _m.g2) return '#22c55e';
-    if(v >= _m.g1) return '#86efac';
-    if(v >= _m.y)  return '#fbbf24';
-    return '#ef4444';
+  if(meta && typeof objClassify === 'function'
+          && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas
+          && window.OBJETIVOS_CONFIG.metas[meta]){
+    try{ return objClassify(meta, v).color; }catch(e){}
   }
   return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#f97316':'#ef4444';
 }
@@ -830,9 +838,9 @@ function _initModoBtns(){
 document.addEventListener('DOMContentLoaded', _initModoBtns);
 
 </script>
-<script src="lang.js?v=20260911-0732"></script>
-<script src="temporadas_menu.js?v=20260911-0732"></script>
-<script src="ayuda.js?v=20260911-0732"></script>
+<script src="lang.js?v=20260911-0740"></script>
+<script src="temporadas_menu.js?v=20260911-0740"></script>
+<script src="ayuda.js?v=20260911-0740"></script>
 </body>
 </html>
 <!-- © 2025-2026 Volley-Stats · Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->

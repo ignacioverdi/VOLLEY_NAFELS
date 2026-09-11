@@ -1,82 +1,71 @@
-UNIFICAR — PRIMERA ETAPA
+UNIFICAR — SEGUNDA ETAPA
 ========================
 
-8 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
-
-   analisis.html · jugador.html · panel_voley.html
-   dashboard.html · historial_voley.html
-   objetivos.js · objetivos_config.js · utils.js
+17 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
 
 
-PRIMERO: HIGH SET CONFIRMADO
-----------------------------
-Verifique la pantalla publicada contra mi conteo a mano: 1.167 armados y los
-doce jugadores coinciden UNO POR UNO.
+PRIMERO: LA ETAPA 1 QUEDO BIEN
+------------------------------
+Probe el semaforo con los mismos valores en las cuatro pantallas:
 
-   #05 107   #17  98   #09  97
-   #11 105   #20  98   #07  97
-   #01 102   #10  97   #13  93
-   #02 102   #04  98   #03  73
+   dashboard    Saque CERCA · Recepción NEUTRO · Atq Rápida CERCA · Defensa NEUTRO
+   analisis     igual
+   jugador      igual
+   panel_voley  igual
 
-Confirmado: son todos armados de pelota alta, con valoracion, sin ataque
-posterior.
-
-
-LO QUE ENCONTRE AL EMPEZAR A UNIFICAR
--------------------------------------
-El inventario dio peor de lo que pensaba:
-
-   effColor           21 copias · 5 versiones distintas
-   OBJETIVOS_CONFIG   12 copias
-   fmtEff             11 copias · 3 versiones
-   objSingleBat        8 copias · 4 versiones
-   objPct              8 copias
-   objClassify         6 copias · 2 versiones
-
-Y lo importante: NO eran copias iguales. Habia versiones distintas
-conviviendo, y eso ya estaba causando un problema real que no habiamos
-visto:
-
-   analisis.html y jugador.html usaban el SEMAFORO VIEJO.
-
-O sea: los mismos numeros daban un color en el dashboard y otro color en
-analisis. Nadie lo habia notado todavia.
+ANTES analisis y jugador daban colores distintos con los mismos numeros.
+Ahora coinciden las cuatro. Ninguna pantalla tiro error.
 
 
-LO QUE SE HIZO EN ESTA ETAPA
-----------------------------
-1. SE QUITARON LAS COPIAS LOCALES donde ya se carga el archivo compartido:
+ESTA ETAPA: effColor
+--------------------
+Era la peor: 15 copias en 15 archivos, con 5 versiones distintas.
 
-      analisis.html      3 copias quitadas
-      jugador.html       4 copias quitadas
-      panel_voley.html   2 copias quitadas
+Y encontre algo que no habiamos visto: TODAS usaban los cortes VIEJOS
+(g2/g1/y) mientras el semaforo de las baterias ya usa el recorrido de la
+liga. O sea que el color del NUMERO y el de la BATERIA podian no coincidir
+para el mismo dato.
 
-   Verifique que objetivos_config.js se carga ANTES del primer uso en las
-   tres, que es el riesgo de hacer esto.
+LA SOLUCION: ahora effColor no tiene logica propia. Cuando se le pasa el
+fundamento, le pregunta a objClassify —la misma funcion que pinta las
+baterias— y devuelve su color.
 
-2. SE ALINEARON LAS QUE NO SE PUEDEN QUITAR (porque son archivos
-   compartidos o la pantalla no carga el otro):
+Asi no pueden volver a separarse nunca, porque es literalmente el mismo
+calculo. No son "dos copias que hay que mantener iguales": es una sola.
 
-      objSingleBat   5 copias -> UNA SOLA VERSION
-      objClassify    4 copias -> UNA SOLA VERSION
-      objPct         5 copias -> UNA SOLA VERSION
-      objClassifyVsTeam 4     -> UNA SOLA VERSION
+Sin fundamento se usa la escala de eficacia de ataque (40/20/0/-20), que es
+lo que esperan las pantallas que llaman sin segundo parametro.
 
-3. Se agrego una proteccion para que no reviente si la funcion corre antes
-   de que termine de cargar la configuracion.
-
-RESULTADO: las cuatro funciones de objetivos tienen ahora UNA SOLA VERSION
-en todo el sistema. Cambias una y vale para todas las pantallas.
+ARCHIVOS TOCADOS (15 copias alineadas)
+   analisis · armadores · ataque_jugador · dashboard · game_plan
+   historial_voley · hm_armador · hm_ataque · hm_defensa · hm_recepcion
+   hm_saque · panel_voley · saque_jugador · scouting_rival · utils.js
 
 
-LO QUE FALTA (segunda etapa)
-----------------------------
-   effColor    21 copias, 5 versiones  <- la peor
-   fmtEff      11 copias, 3 versiones
-   OBJETIVOS_CONFIG  12 copias
+LO QUE NO VOY A UNIFICAR, Y POR QUE
+-----------------------------------
+fmtEff tiene 11 copias y 3 versiones, pero NO son duplicados: son funciones
+distintas que por casualidad se llaman igual.
 
-Estas tocan MUCHAS mas pantallas (heat maps, armadores, scouting rival,
-game plan). Prefiero que pruebes esta etapa primero: si las pantallas de
-objetivos andan bien, sigo con las otras con la misma tecnica.
+   8 copias   devuelven texto plano:  "39%"
+   2 copias   (nla_stats) devuelven HTML con color y toman 2 parametros
+   1 copia    (panel_voley) devuelve HTML con su propia escala de color
 
-Es mas seguro hacerlo por partes que tocar 21 archivos de una.
+Juntarlas romperia esas pantallas. Lo correcto seria renombrarlas para que
+no se pisen, pero eso es un cambio mas grande y no urge: hoy cada una vive
+en su pantalla y funciona.
+
+Lo mismo con OBJETIVOS_CONFIG (12 copias): son las CONFIGURACIONES de cada
+club/categoria, no codigo repetido. Ahi esta bien que haya varias.
+
+
+COMO QUEDA EL SISTEMA
+---------------------
+   objClassify        UNA sola version
+   objSingleBat       UNA sola version
+   objPct             UNA sola version
+   objClassifyVsTeam  UNA sola version
+   effColor           UNA sola version, atada a objClassify
+
+Las cinco funciones que nos hicieron perder tiempo hoy —cuatro veces—
+quedaron con una sola copia cada una.

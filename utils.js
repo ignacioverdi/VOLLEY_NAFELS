@@ -16,8 +16,25 @@ function effAtaque(j){
 function effBloqueo(j){
   return j.bT>0 ? Math.round((j.bPt+j.bPtPos)/j.bT*100) : null;
 }
-function effColor(v){
+function effColor(v, meta){
+  /* ══ UNA SOLA VERSION, Y ATADA AL SEMAFORO ════════════════════════════════
+     Habia CINCO versiones distintas repartidas en 17 archivos. Peor: todas
+     usaban los cortes VIEJOS (g2/g1/y) mientras el semaforo de las baterias
+     ya usa el recorrido de la liga. O sea que el color del NUMERO y el de la
+     BATERIA podian no coincidir para el mismo dato.
+
+     Ahora, cuando se pasa el fundamento, el color sale de objClassify: la
+     misma funcion que pinta las baterias. Asi no pueden volver a separarse
+     nunca, porque es literalmente el mismo calculo.
+
+     Sin fundamento se usa la escala de eficacia de ataque (40/20/0/-20), que
+     es lo que esperan las pantallas que llaman sin segundo parametro. */
   if(v===null||v===undefined||isNaN(v)) return 'var(--mut,#475569)';
+  if(meta && typeof objClassify === 'function'
+          && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas
+          && window.OBJETIVOS_CONFIG.metas[meta]){
+    try{ return objClassify(meta, v).color; }catch(e){}
+  }
   return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#f97316':'#ef4444';
 }
 function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
