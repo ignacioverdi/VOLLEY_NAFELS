@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260911-0806"></script>
-<script src="selector_categoria.js?v=20260911-0806"></script>
-<script src="lang.js?v=20260911-0806"></script>
+<script src="categorias_club.js?v=20260911-2100"></script>
+<script src="selector_categoria.js?v=20260911-2100"></script>
+<script src="lang.js?v=20260911-2100"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260911-0806">
+<link rel="stylesheet" href="movil.css?v=20260911-2100">
 </head>
 <body>
 
@@ -1230,16 +1230,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260911-0806" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260911-0806"></script>
-<script src="objetivos.js?v=20260911-0806" onerror="void 0"></script>
-<script src="video_delay.js?v=20260911-0806" onerror="void 0"></script>
+<script src="firebase.js?v=20260911-2100" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260911-2100"></script>
+<script src="objetivos.js?v=20260911-2100" onerror="void 0"></script>
+<script src="video_delay.js?v=20260911-2100" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260911-0806" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260911-0806"></script>
+<script src="plantel_nafels.js?v=20260911-2100" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260911-2100"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -4791,7 +4791,15 @@ document.getElementById('e-code').addEventListener('keydown', function(e){ if(e.
 let SETUP_OBLIGATORIO=false;
 function closeModal(id){
   if(id==='m-armador'){ toast('Elegí quién arma para poder seguir',true); return; }
-  if(id==='m-setup' && SETUP_OBLIGATORIO){ toast('Cargá la formación del set '+M.set+' para seguir',true); return; }
+  if(id==='m-setup' && SETUP_OBLIGATORIO){
+    /* El aviso se armaba pegando texto + numero + texto, asi que el traductor
+       reconocia la primera mitad y dejaba la segunda en castellano:
+       "Load the line-up for set 1 para seguir". Ahora la frase viaja entera. */
+    var _t = (window.tr && window.getLang)
+             ? (tr('sv_carga_seis', getLang()) || 'Cargá la formación del set {n} para seguir')
+             : 'Cargá la formación del set {n} para seguir';
+    toast(_t.replace('{n}', M.set), true); return;
+  }
   document.getElementById(id).classList.remove('open'); document.getElementById('code').focus();
 
   /* Al cerrar una ventana el cursor vuelve al campo de tipeo: si no,
@@ -4960,7 +4968,7 @@ function setModo(modo){
 
 /* Con un solo equipo no hace falta cargar el visitante: se esconde su bloque. */
 function reflejarUnEquipo(){
-  var uno = (M.modo==='entrenamiento');
+  var uno = (typeof unSoloEquipo==='function') ? unSoloEquipo() : (M.modo==='entrenamiento');
   ['setup-vis-eq','setup-vis-sg','setup-vis-lu','setup-saca'].forEach(function(id){
     var el=document.getElementById(id);
     if(el) el.style.display = uno ? 'none' : '';
@@ -4970,7 +4978,7 @@ function reflejarUnEquipo(){
 }
 function reflejarModo(){
   var barra=document.getElementById('modo-indicador');
-  var esEntr = (M.modo==='entrenamiento');
+  var esEntr = (typeof unSoloEquipo==='function') ? unSoloEquipo() : (M.modo==='entrenamiento');
   if(!barra && esEntr){
     barra=document.createElement('div');
     barra.id='modo-indicador';
@@ -5084,7 +5092,20 @@ function saveSetup(){
     for(let z=1; z<=6; z++){ const v=parseInt(LU[side].n[z],10); if(!v) return null; arr.push(v); }
     return arr;   /* arr[0] = zona 1, arr[1] = zona 2, ... */
   };
-  const UNO = (M.modo==='entrenamiento');   /* entrenamiento = un solo equipo */
+  /* ══ EL MODO SE PREGUNTA EN UN SOLO LUGAR ════════════════════════════════
+     Aca se miraba SOLO M.modo. Pero el modo entrenamiento tambien puede venir
+     de la configuracion del club (CFG.entrenamiento), y en ese caso M.modo
+     seguia en 'partido'.
+
+     Resultado: al terminar un set, la pantalla ocultaba el equipo rival —es
+     un entrenamiento, no hay rival— pero esta validacion seguia exigiendo sus
+     seis jugadores. El aviso pedia cargar una formacion que no se podia
+     cargar, y no se podia arrancar el set siguiente.
+
+     unSoloEquipo() ya mira las dos cosas. Se usa esa, como en el resto. */
+  const UNO = (typeof unSoloEquipo === 'function')
+                ? unSoloEquipo()
+                : (M.modo==='entrenamiento');
   const lh=read('home');
   let la=read('away');
   if(!lh){ toast('Faltan jugadores: cargá los 6 casilleros de tu equipo',true); return; }
@@ -7941,7 +7962,7 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260911-0806" onerror="void 0"></script>
-<script src="ayuda.js?v=20260911-0806"></script>
+<script src="volver_inicio.js?v=20260911-2100" onerror="void 0"></script>
+<script src="ayuda.js?v=20260911-2100"></script>
 </body>
 </html>

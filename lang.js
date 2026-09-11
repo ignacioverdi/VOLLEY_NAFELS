@@ -22,6 +22,14 @@
 
   // ── Diccionario ───────────────────────────────────────────────────────────
   var T = {
+    /* El aviso al cerrar un set. Antes se armaba pegando texto + numero +
+       texto, y el traductor dejaba la segunda mitad en castellano:
+       "Load the line-up for set 1 para seguir". Ahora va entero, con
+       {n} donde va el numero de set. */
+    sv_carga_seis: {
+      es:'Cargá la formación del set {n} para seguir',
+      en:'Load the line-up for set {n} to continue',
+      de:'Lade die Aufstellung für Satz {n}, um fortzufahren' },
     /* El turno en el selector de sesion. */
     turno_m:    { es:'Mañana', en:'Morning', de:'Vormittag' },
     turno_t:    { es:'Tarde', en:'Afternoon', de:'Nachmittag' },

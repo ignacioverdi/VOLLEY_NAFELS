@@ -1,75 +1,47 @@
-LOS TRES PENDIENTES
-===================
+LOS DOS DEL SCOUT EN VIVO
+=========================
 
-4 archivos. HACER_TODO y publicar.
-(Lleva HACER_TODO porque cambian dos .dvw)
+3 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
 
-   high_set.html                    el puntaje del !
-   panel_voley.html                 la colision de fmtEff
-   DVW ENTRENAMIENTOS .../&Pra-AXPO NAFELS-2026-09-09.dvw   el 77
-   DVW HIGH SET .../&Pra-AXPO NAFELS-2026-09-09.dvw         el 77
+   panel_vivo.html · panel_voley.html · lang.js
 
 
-1) EL ! DE HIGH SET: DE 0 A 0,5
--------------------------------
-Como pediste. El baremo queda:
+1) NO DEJABA CARGAR EL SEIS PARA EL SET SIGUIENTE  (foto 2)
+-----------------------------------------------------------
+LA CAUSA: el sistema pregunta "es entrenamiento?" en DOS lugares distintos.
 
-   #  perfecto   +2
-   +  bueno      +1
-   !  neutro    +0,5      <- era 0
-   -  malo        -1
-   /  vendida   -1,5
-   =  error       -2
+   unSoloEquipo()  mira CFG.entrenamiento Y M.modo    <- la buena
+   saveSetup()     miraba SOLO M.modo                 <- la rota
 
-OJO CON EL IMPACTO, porque es grande: el equipo tiene 597 pelotas neutras
-sobre 1.167 armados, o sea la mitad.
+Si el modo entrenamiento viene de la configuracion del club, M.modo se queda
+en 'partido'. Entonces la pantalla ocultaba el equipo rival —es un
+entrenamiento, no hay rival— pero la validacion SEGUIA EXIGIENDO sus seis
+jugadores.
 
-   antes   -172,0 puntos
-   ahora   +126,5 puntos
+Te pedia cargar una formacion que la pantalla no te dejaba cargar. Sin salida.
 
-Pasa de negativo a positivo. Es lo que pediste y tiene sentido —una pelota
-neutra no es un error, algo aporta— pero te aviso para que no te sorprenda.
+CORREGIDO: saveSetup usa unSoloEquipo(), como el resto. Y aproveche para
+alinear otros dos lugares que tenian el mismo chequeo a medias.
 
 
-2) EL 77 ERA UN 7
------------------
-Corregido en los dos archivos del 09/09.
-
-PERO OJO, algo importante que encontre: el 77 NO siempre es un error. Lo
-busque en TODAS las carpetas y es un numero de camiseta REAL y muy usado en
-los partidos de la liga —aparece cientos de veces en los .dvw de partidos,
-tanto en rivales como en Nafels—.
-
-Por eso NO puse una regla general que cambie todos los 77. Corregi UNA sola
-linea, la del entrenamiento donde el plantel no tiene ese numero:
-
-   *13EH-  ->  *77EH!  ->  *01EH!
-   queda:      *07EH!
-
-Los partidos no se tocaron.
+   Ademas: el aviso salia mezclado — "Load the line-up for set 1 para seguir".
+   Se armaba pegando texto + numero + texto, asi que el traductor reconocia
+   la primera mitad y dejaba la segunda. Ahora la frase viaja entera, con {n}
+   donde va el numero, en los tres idiomas.
 
 
-3) LAS 3 VERSIONES DE fmtEff — RESUELTO, Y HABIA UN PROBLEMA REAL
------------------------------------------------------------------
-Lo analice a fondo. De las 11 copias:
+2) LOS IDIOMAS SE PISABAN CON EL BOTON CERRAR  (foto 1)
+--------------------------------------------------------
+LA CAUSA, medida en la pantalla:
 
-   8 copias  devuelven texto plano ("39%") y SON IDENTICAS entre si.
-             No hay nada que unificar: ya son la misma.
+   la barra de arriba (idiomas, temporadas)   z-index 300
+   los modales (resumen, tabla, podio)        z-index 200
 
-   2 copias  en nla_stats_table y nla_stats_template devuelven HTML con
-             color y toman 2 parametros. Son de las tablas de LIGA, no del
-             club, y no cargan objetivos_config: no se pisan con nada.
+La barra quedaba ENCIMA del modal. Por eso los botones ES/EN/DE se montaban
+sobre el titulo y el Cerrar del modal quedaba tapado.
 
-   1 copia   en panel_voley.html devuelve HTML.  <-- ACA ESTABA EL PROBLEMA
+CORREGIDO: los modales pasan a 400, por arriba. Y mientras hay uno abierto,
+la barra se esconde —igual no se puede usar lo que hay detras—.
 
-EL PROBLEMA REAL: panel_voley define fmtEff DOS VECES. Primero la de texto
-y mas abajo la de HTML. Como la segunda se define despues, GANA. Y
-objSingleBat —que arma las baterias— llama a fmtEff esperando un numero, y
-recibia HTML crudo.
-
-SOLUCION: la de HTML pasa a llamarse fmtEffHTML, con sus 3 llamadas
-actualizadas. No se unifican —son funciones distintas— simplemente dejan de
-pisarse.
-
-Esto explica por que las baterias de panel_voley se veian distinto que en
-las otras pantallas.
+PROBADO EN VIVO: con el arreglo, los botones de idioma desaparecen y al
+apuntar al Cerrar lo que esta encima ES el Cerrar. Antes era la barra.
