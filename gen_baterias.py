@@ -405,6 +405,53 @@ def elegir_mejor_copia(archivos, parse):
         elegidos.append(mejor[:2])
     return elegidos
 
+
+# ══════════════════════════════════════════════════════════════════════════
+#  EL MISMO JUGADOR, ESCRITO DISTINTO EN CADA ARCHIVO
+#  ------------------------------------------------------------------------
+#  Los jugadores se identificaban por el NOMBRE que trae cada .dvw. Pero el
+#  nombre lo escribe el scout a mano, y no siempre igual. En los archivos de
+#  Näfels aparecen estas tres:
+#
+#      #2   BRUDERER  /  GIAN        (apellido en uno, nombre en el otro)
+#      #7   SCHMID    /  SCHIMD      (una letra cambiada)
+#      #20  SCHMID    /  SCHIMD
+#
+#  Resultado: el mismo jugador quedaba partido en DOS fichas con la mitad de
+#  las acciones cada una, y en el listado del dashboard directamente no
+#  aparecia —el #2 Bruderer faltaba—.
+#
+#  El numero de camiseta SI es confiable: es el que se tipea en cada codigo y
+#  el que usa DataVolley. Asi que el jugador se identifica por numero, y el
+#  nombre se toma del archivo mas reciente que lo tenga.
+# ══════════════════════════════════════════════════════════════════════════
+def _unificar_por_numero(matches):
+    """Un nombre por numero de camiseta, para todos los archivos."""
+    canon = {}
+    for m in matches:
+        for num, nom in (m.get('names') or {}).items():
+            if not nom: continue
+            n = str(num).lstrip('0') or str(num)
+            # gana el nombre mas largo: "BRUDERER GIAN" antes que "GIAN"
+            if n not in canon or len(nom) > len(canon[n]):
+                canon[n] = nom
+    for m in matches:
+        nombres = m.get('names') or {}
+        nuevo = {}
+        for num, P in (m.get('jug') or {}).items():
+            pass
+        # reescribir jug con el nombre canonico
+        rev = {}
+        for num, nom in nombres.items():
+            n = str(num).lstrip('0') or str(num)
+            rev[nom] = canon.get(n, nom)
+        jug2 = {}
+        for nom, P in (m.get('jug') or {}).items():
+            jug2[rev.get(nom, nom)] = P
+        m['jug'] = jug2
+        m['names'] = {k: canon.get(str(k).lstrip('0') or str(k), v) for k, v in nombres.items()}
+    return canon
+
 def build(fuentes, out='datos_baterias.js', filtro_temp=None):
     """fuentes: lista de (carpeta, tipo) con tipo 'partido' o 'entrenamiento'.
 
@@ -451,6 +498,10 @@ def build(fuentes, out='datos_baterias.js', filtro_temp=None):
             matches.append({'id':sid,'tipo':tipo,'rival':r['rival'],'fecha':r['date'],'turno':r.get('turno',''),
                             'jug':jug,'eq':eq,'_acum':pl,'names':r['names']})
 
+    # un solo nombre por numero de camiseta, antes de acumular nada
+    _canon = _unificar_por_numero(matches)
+    for _n, _nom in sorted(_canon.items(), key=lambda x: int(x[0]) if x[0].isdigit() else 99):
+        pass
     matches.sort(key=lambda m:(m['fecha'], m['id']))
 
     def acumular(lista):

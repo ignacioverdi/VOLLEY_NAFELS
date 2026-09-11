@@ -22,6 +22,9 @@
 
   // ── Diccionario ───────────────────────────────────────────────────────────
   var T = {
+    /* El turno en el selector de sesion. */
+    turno_m:    { es:'Mañana', en:'Morning', de:'Vormittag' },
+    turno_t:    { es:'Tarde', en:'Afternoon', de:'Nachmittag' },
     /* El selector de sesion del dashboard: tiene que decir si son partidos
        o entrenamientos, y en el idioma que corresponda. */
     dbat_ver:       { es:'VER:', en:'VIEW:', de:'ANSICHT:' },

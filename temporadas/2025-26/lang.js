@@ -22,6 +22,60 @@
 
   // ── Diccionario ───────────────────────────────────────────────────────────
   var T = {
+    /* El selector de sesion del dashboard: tiene que decir si son partidos
+       o entrenamientos, y en el idioma que corresponda. */
+    dbat_ver:       { es:'VER:', en:'VIEW:', de:'ANSICHT:' },
+    dbat_acum:      { es:'ACUMULADO', en:'CUMULATIVE', de:'GESAMT' },
+    dbat_partido:   { es:'partido', en:'match', de:'Spiel' },
+    dbat_partidos:  { es:'partidos', en:'matches', de:'Spiele' },
+    dbat_entren:    { es:'entrenamiento', en:'training', de:'Training' },
+    dbat_entrens:   { es:'entrenamientos', en:'trainings', de:'Trainings' },
+    /* ══ LA EXPLICACION DE LAS ESCALAS ═══════════════════════════════════
+       Estas frases llevan negritas adentro —<b>100</b>, <b>87,5</b>— y eso
+       parte el texto en varios pedazos: el traductor por texto ve "# ace",
+       "100", "· / free ball" por separado y no reconoce ninguno. Es el mismo
+       problema que tenian los botones con <br>.
+       Con clave se traduce la frase entera, negritas incluidas.            */
+    esc_intro: {
+      es:'Saque, recepcion y defensa usan una escala de <b style="color:#e2e8f0">0 a 100</b>. El error vale 0, la accion perfecta vale 100 y la neutra queda en el medio, en 50. Asi el numero se lee solo: 50 es "todo neutro", 25 "todo negativo", 75 "todo positivo".',
+      en:'Serve, reception and defence use a scale of <b style="color:#e2e8f0">0 to 100</b>. An error is 0, a perfect action is 100 and a neutral one sits in the middle, at 50. So the number reads by itself: 50 is "all neutral", 25 "all negative", 75 "all positive".',
+      de:'Aufschlag, Annahme und Abwehr nutzen eine Skala von <b style="color:#e2e8f0">0 bis 100</b>. Ein Fehler zählt 0, eine perfekte Aktion 100 und eine neutrale liegt in der Mitte, bei 50. So liest sich die Zahl von selbst: 50 ist „alles neutral", 25 „alles negativ", 75 „alles positiv".' },
+    esc_saque: {
+      es:'# ace <b>100</b> · / free ball <b>87,5</b> · + positivo <b>75</b> · ! neutro <b>50</b> · &minus; negativo <b>25</b> · = error <b>0</b>',
+      en:'# ace <b>100</b> · / free ball <b>87.5</b> · + positive <b>75</b> · ! neutral <b>50</b> · &minus; negative <b>25</b> · = error <b>0</b>',
+      de:'# Ass <b>100</b> · / Freeball <b>87,5</b> · + positiv <b>75</b> · ! neutral <b>50</b> · &minus; negativ <b>25</b> · = Fehler <b>0</b>' },
+    esc_recep: {
+      es:'# perfecta <b>100</b> · + positiva <b>75</b> · ! neutra <b>50</b> · &minus; negativa <b>25</b> · / sobrepase <b>12,5</b> · = error <b>0</b>',
+      en:'# perfect <b>100</b> · + positive <b>75</b> · ! neutral <b>50</b> · &minus; negative <b>25</b> · / overpass <b>12.5</b> · = error <b>0</b>',
+      de:'# perfekt <b>100</b> · + positiv <b>75</b> · ! neutral <b>50</b> · &minus; negativ <b>25</b> · / Überpass <b>12,5</b> · = Fehler <b>0</b>' },
+    esc_def: {
+      es:'# perfecta <b>100</b> · + buena <b>75</b> · ! neutra <b>50</b> · &minus; mala <b>25</b> · = error <b>0</b>',
+      en:'# perfect <b>100</b> · + good <b>75</b> · ! neutral <b>50</b> · &minus; poor <b>25</b> · = error <b>0</b>',
+      de:'# perfekt <b>100</b> · + gut <b>75</b> · ! neutral <b>50</b> · &minus; schlecht <b>25</b> · = Fehler <b>0</b>' },
+    esc_atq: {
+      es:'Eficacia clasica del voley: <b>(puntos &minus; bloqueados &minus; errores) / total</b>. Es el estandar mundial y puede dar negativo.',
+      en:'Classic volleyball efficiency: <b>(kills &minus; blocked &minus; errors) / total</b>. It is the world standard and can be negative.',
+      de:'Klassische Volleyball-Effizienz: <b>(Punkte &minus; geblockt &minus; Fehler) / gesamt</b>. Weltstandard, kann negativ sein.' },
+    esc_blq: {
+      es:'Blq #+ es <b>(punto + positivo) / total</b>. Blq # es solo <b>punto / total</b>.',
+      en:'Block #+ is <b>(point + positive) / total</b>. Block # is just <b>point / total</b>.',
+      de:'Block #+ ist <b>(Punkt + positiv) / gesamt</b>. Block # ist nur <b>Punkt / gesamt</b>.' },
+    sem_verde2: {
+      es:'<span style="color:#22c55e;font-weight:800">Verde fuerte</span> &nbsp;llegaste al mejor de la liga en ese fundamento.',
+      en:'<span style="color:#22c55e;font-weight:800">Strong green</span> &nbsp;you have reached the best in the league in that skill.',
+      de:'<span style="color:#22c55e;font-weight:800">Kräftiges Grün</span> &nbsp;du hast den Ligabesten in diesem Element erreicht.' },
+    sem_verde1: {
+      es:'<span style="color:#86efac;font-weight:800">Verde claro</span> &nbsp;estas en el cuarto de arriba de la liga.',
+      en:'<span style="color:#86efac;font-weight:800">Light green</span> &nbsp;you are in the top quarter of the league.',
+      de:'<span style="color:#86efac;font-weight:800">Hellgrün</span> &nbsp;du bist im oberen Viertel der Liga.' },
+    sem_amar: {
+      es:'<span style="color:#fbbf24;font-weight:800">Amarillo</span> &nbsp;estas en la mitad de arriba de la liga.',
+      en:'<span style="color:#fbbf24;font-weight:800">Yellow</span> &nbsp;you are in the top half of the league.',
+      de:'<span style="color:#fbbf24;font-weight:800">Gelb</span> &nbsp;du bist in der oberen Ligahälfte.' },
+    sem_rojo: {
+      es:'<span style="color:#ef4444;font-weight:800">Rojo</span> &nbsp;estas en la mitad de abajo de la liga.',
+      en:'<span style="color:#ef4444;font-weight:800">Red</span> &nbsp;you are in the bottom half of the league.',
+      de:'<span style="color:#ef4444;font-weight:800">Rot</span> &nbsp;du bist in der unteren Ligahälfte.' },
     /* Encabezados de la tabla del panel. Van con las letras separadas
        —"S A Q U E"— asi que el traductor por texto no los reconoce:
        hay que traducirlos por clave. */
@@ -296,6 +350,41 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    /* Auditoria de toda la app: lo ultimo que quedaba sin traducir. */
+    'Actualizado ': { en:'Updated ', de:'Aktualisiert ' },
+    'Borra letras de lo que escribís (no borra códigos)': { en:'Deletes letters from what you type (does not delete codes)', de:'Löscht Buchstaben deiner Eingabe (löscht keine Codes)' },
+    'Detalle de la jugada ▴': { en:'Rally detail ▴', de:'Details des Ballwechsels ▴' },
+    'Equipo:': { en:'Team:', de:'Team:' },
+    'JUGADOR A': { en:'PLAYER A', de:'SPIELER A' },
+    'JUGADOR B': { en:'PLAYER B', de:'SPIELER B' },
+    'Movida de ': { en:'Moved from ', de:'Verschoben von ' },
+    'No había rutina para ese mes. Empezás una nueva.': { en:'There was no routine for that month. You are starting a new one.', de:'Für diesen Monat gab es kein Programm. Du beginnst ein neues.' },
+    'PARTIDO': { en:'MATCH', de:'SPIEL' },
+    'Partido completo': { en:'Full match', de:'Ganzes Spiel' },
+    'Partido procesado': { en:'Match processed', de:'Spiel verarbeitet' },
+    'Se copiará la rutina de ': { en:'The routine will be copied from ', de:'Das Programm wird kopiert von ' },
+    'Se vaciará la rutina de ': { en:'The routine will be emptied for ', de:'Das Programm wird geleert für ' },
+    'Sin señal · se guarda igual': { en:'No signal · it saves anyway', de:'Kein Signal · es speichert trotzdem' },
+    'Tiene que abrirse en la': { en:'It has to be opened on the', de:'Es muss geöffnet werden auf dem' },
+    'Todo lo que se scouteó en': { en:'Everything scouted on', de:'Alles, was gescoutet wurde auf' },
+    'Un solo archivo con absolutamente todo lo que hay guardado. Es lo más seguro: no hay que elegir nada.': { en:'A single file with absolutely everything saved. It is the safest: nothing to choose.', de:'Eine einzige Datei mit absolut allem Gespeicherten. Am sichersten: nichts auszuwählen.' },
+    'Ver el código': { en:'See the code', de:'Code ansehen' },
+    'donde se scouteó. Lo que guarda un navegador no lo ve otro, ni siquiera en la misma máquina.': { en:'where it was scouted. What one browser saves, another cannot see, not even on the same machine.', de:'wo gescoutet wurde. Was ein Browser speichert, sieht ein anderer nicht, auch nicht auf demselben Rechner.' },
+    'equipo': { en:'team', de:'Team' },
+    'no abras el Scout en Vivo hasta bajar todo de acá. El panel guarda automáticamente y puede pisar lo que quedó ': { en:'do not open the Live Scout until you download everything here. The panel saves automatically and may overwrite what is left ', de:'öffne das Live-Scouting nicht, bevor du hier alles heruntergeladen hast. Das Panel speichert automatisch und kann Vorhandenes überschreiben ' },
+    'queda guardado en el navegador, aunque no se haya exportado. Acá se ve y se puede bajar. No se modifica nada: ': { en:'is saved in the browser, even if it was never exported. Here you can see it and download it. Nothing is modified: ', de:'wird im Browser gespeichert, auch wenn nie exportiert wurde. Hier siehst du es und kannst es herunterladen. Nichts wird verändert: ' },
+    'y el': { en:'and the', de:'und der' },
+    'ℹ️  Sin desglose por zona en este scout.': { en:'ℹ️  No zone breakdown in this scout.', de:'ℹ️  Keine Zonenaufteilung in diesem Scouting.' },
+    '← Volver al scout': { en:'← Back to the scout', de:'← Zurück zum Scouting' },
+    '▸ Seguir con ': { en:'▸ Continue with ', de:'▸ Weiter mit ' },
+    '✓ Descargado — subilo al repo': { en:'✓ Downloaded — upload it to the repo', de:'✓ Heruntergeladen — lade es ins Repo' },
+    '⬇ Bajar TODO en un archivo': { en:'⬇ Download EVERYTHING in one file', de:'⬇ ALLES in einer Datei herunterladen' },
+    '🛡 RECEPCIÓN — ': { en:'🛡 RECEPTION — ', de:'🛡 ANNAHME — ' },
+    /* Posiciones y rotulos del panel por jugador. */
+    'EQUIPO': { en:'TEAM', de:'TEAM' },
+    'JUGADOR': { en:'PLAYER', de:'SPIELER' },
+    'MI PERFORMANCE VS EQUIPO': { en:'MY PERFORMANCE VS TEAM', de:'MEINE LEISTUNG VS TEAM' },
+    'POR JUGADOR': { en:'BY PLAYER', de:'NACH SPIELER' },
     /* El bloque explicativo del dashboard, que arma el JavaScript. */
     ', medido sobre los 97 partidos de la temporada anterior. No es siempre el mismo equipo: el campeon lidera casi todo, pero el bloqueo #+ lo gano otro club, y lo mismo el ataque tras recepcion negativa. Copiar a un solo equipo dejaria objetivos por debajo del techo real.': { en:', measured over the 97 matches of last season. It is not always the same team: the champion leads almost everything, but block #+ was won by another club, and so was attack after negative reception. Copying a single team would leave targets below the real ceiling.', de:', gemessen über die 97 Spiele der letzten Saison. Es ist nicht immer dasselbe Team: der Meister führt fast alles an, aber Block #+ gewann ein anderer Verein, ebenso den Angriff nach negativer Annahme. Ein einziges Team zu kopieren würde die Ziele unter die reale Obergrenze setzen.' },
     '. El error vale 0, la accion perfecta vale 100 y la neutra queda en el medio, en 50. Asi el numero se lee solo: 50 es "todo neutro", 25 "todo negativo", 75 "todo positivo".': { en:'. An error is 0, a perfect action is 100 and a neutral one sits in the middle, at 50. So the number reads by itself: 50 is "all neutral", 25 "all negative", 75 "all positive".', de:'. Ein Fehler zählt 0, eine perfekte Aktion 100 und eine neutrale liegt in der Mitte, bei 50. So liest sich die Zahl von selbst: 50 ist „alles neutral", 25 „alles negativ", 75 „alles positiv".' },
@@ -4017,7 +4106,14 @@
     for (var i=0; i<els.length; i++){
       var k = els[i].getAttribute('data-t');
       var v = tr(k, lang);
-      if (v !== null) els[i].textContent = v;   // si no está en el diccionario, no toca nada
+      if (v !== null) {
+        /* Si la traduccion trae etiquetas —negritas, colores— hay que
+           escribirla como HTML. Con textContent se veria el codigo crudo:
+           "# ace <b>100</b>" en vez de "# ace 100" con el 100 en negrita.
+           Sin etiquetas se sigue usando textContent, que es mas seguro. */
+        if (/<[a-z][\s\S]*>/i.test(v)) els[i].innerHTML = v;
+        else els[i].textContent = v;
+      }   // si no está en el diccionario, no toca nada
     }
     // placeholders
     var ph = document.querySelectorAll('[data-t-ph]');

@@ -1,67 +1,73 @@
-EL PANEL POR JUGADOR, ORDENADO
-==============================
+LOS CUATRO PUNTOS
+=================
 
-3 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
-
-
-1) EL OBJETIVO ESTABA ESCRITO DOS VECES
----------------------------------------
-Arriba de las tarjetas habia una fila que repetia el nombre y el objetivo de
-cada fundamento:
-
-     encabezado   % SERVE (42)  ·  42%
-     tarjeta      % SERVE  ...  obj 42
-
-Lo mismo dos veces, y una fila entera de alto sin agregar nada. Se saco el
-encabezado: las tarjetas ya dicen todo.
+4 archivos. HACER_TODO y publicar.
+(Lleva HACER_TODO porque cambia gen_baterias.py)
 
 
-2) NO SE SABIA SI ERAN PARTIDOS O ENTRENAMIENTOS  ← lo importante
------------------------------------------------------------------
-El selector decia "ACUMULADO (todos)" y nada mas. Para leer una bateria eso
-cambia todo: no es lo mismo un 39% de saque en partidos que en
-entrenamientos.
+1) FALTABA EL #2 BRUDERER  ← y no era solo el
+----------------------------------------------
+Los jugadores se identificaban por el NOMBRE que trae cada .dvw. Pero el
+nombre lo escribe el scout a mano, y no siempre igual. Revise los cinco
+archivos y encontre TRES jugadores escritos distinto:
 
-AHORA dice de donde sale:
+     #2    BRUDERER  /  GIAN       (apellido en uno, nombre en el otro)
+     #7    SCHMID    /  SCHIMD     (una letra cambiada)
+     #20   SCHMID    /  SCHIMD
 
-     es   VER:      ACUMULADO (2 partidos + 5 entrenamientos)
-     en   VIEW:     CUMULATIVE (2 matches + 5 trainings)
-     de   ANSICHT:  GESAMT (2 Spiele + 5 Trainings)
+Cada uno quedaba partido en DOS fichas con la mitad de las acciones cada
+una. El #2 directamente no aparecia en el listado.
 
-Y cada sesion de la lista lleva su icono delante:
+CORREGIDO: ahora se identifican por el NUMERO DE CAMISETA, que es lo unico
+confiable —es el que se tipea en cada codigo y el que usa DataVolley—. El
+nombre se toma de la version mas completa.
 
-     🏆 Amriswil · 14/09/2026
+Despues de HACER_TODO va a aparecer el #2, y el #7 y el #20 van a tener sus
+acciones juntas en vez de partidas.
+
+
+2) EL DESPLEGABLE SOLO DECIA "ACUMULADO"
+----------------------------------------
+Tenias razon: no dejaba elegir practica por practica.
+
+LA CAUSA: leia PARTIDOS_META, que son los PARTIDOS. Como todavia no hay
+ninguno cargado de esta temporada, venia VACIO.
+
+Las sesiones de entrenamiento estaban en otro lado (BAT_PARTIDOS.meta), con
+sus 6 sesiones, su tipo, fecha y turno.
+
+AHORA junta las dos fuentes:
+
+     CUMULATIVE (6 trainings)
+     🏋️ Nafels · 10/09/2026 · Tarde
      🏋️ Nafels · 08/09/2026 · Mañana
+     🏋️ Nafels · 08/09/2026
+     🏋️ Nafels · 07/09/2026
+     🏋️ Nafels · 04/09/2026
+     🏋️ Nafels · 03/09/2026
 
-Se ve de un vistazo que es cada una, y ademas aparece el turno.
-
-
-3) LA POSICION SALIA EN CASTELLANO
-----------------------------------
-El titulo decia "DURDOS — PUNTA" con toda la pantalla en ingles, aunque el
-boton de arriba decia "OUTSIDE".
-
-La causa: el traductor cambia lo que se VE en el boton, pero el valor que
-viaja en el click sigue siendo el original. Ahora se traduce al mostrarlo.
-
-     PUNTA    -> OUTSIDE   · AUSSEN
-     OPUESTO  -> OPPOSITE  · DIAGONAL
-     CENTRAL  -> MIDDLE    · MITTE
-     ARMADOR  -> SETTER    · ZUSPIELER
-     LIBERO   -> LIBERO    · LIBERO
+Cada una con su icono —🏆 partido · 🏋️ entrenamiento—, su fecha y su turno.
+Cuando empiece la temporada y cargues partidos, aparecen solos en la misma
+lista, ordenados por fecha.
 
 
-4) EL ROTULO "VER:" TAMPOCO SE TRADUCIA
----------------------------------------
-Se arma por codigo, asi que no entraba en el barrido. Ya esta en los tres.
+3) EL TITULO REPETIDO TRES VECES
+--------------------------------
+La fila de encabezado que repetia "% SAQUE (42) 42%" arriba de las tarjetas
+ya estaba sacada en el archivo que te mande antes. Lo que ves todavia es
+cache: el objetivos_config.js va de nuevo en este zip por las dudas.
+
+Con eso queda: el nombre arriba de la tarjeta y "obj 42" abajo. Una sola vez.
 
 
-SOBRE LO QUE PEDISTE DE REVISAR TODO
-------------------------------------
-Es un trabajo grande y prefiero hacerlo bien: recorrer pantalla por pantalla
-verificando que cada una separe partidos de entrenamientos y que funcione en
-los tres idiomas.
+4) LAS REGLAS NO TERMINABAN DE TRADUCIRSE
+-----------------------------------------
+Los titulos si —"HOW EACH VALUE IS CALCULATED"— pero las cuatro lineas del
+semaforo y las escalas no.
 
-Lo arranco ahora y te lo entrego por partes, empezando por las que mas usas:
-dashboard, panel en vivo, plan de partido y analisis. Te voy avisando que
-encuentro en cada una en vez de mandarte todo junto al final.
+LA CAUSA: ese bloque lo arma el JavaScript DESPUES de que el traductor ya
+recorrio la pagina. Lo que esta en el HTML se traduce; lo que nace despues,
+no.
+
+CORREGIDO: se vuelve a pasar el traductor apenas se termina de dibujar, y
+tambien al elegir un jugador.

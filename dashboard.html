@@ -511,8 +511,30 @@ function dbatRenderBaterias(){
 function dbatBuildSubfiltro(){
   var row = document.getElementById('dbat-partido-row');
   if(!row) return;
-  var META = (typeof PARTIDOS_META!=='undefined'?PARTIDOS_META:null);
-  if(!META){ row.style.display='none'; return; }
+  /* ══ DE DONDE SALEN LAS SESIONES ══════════════════════════════════════
+     Usaba PARTIDOS_META, que son los PARTIDOS. Como todavia no hay ninguno
+     cargado de esta temporada, venia vacio y el desplegable mostraba solo
+     "ACUMULADO": no dejaba elegir practica por practica.
+
+     Las sesiones de entrenamiento estan en BAT_PARTIDOS.meta —hoy son 6— y
+     traen tipo, fecha y turno. Ahora se juntan las dos fuentes: partidos y
+     entrenamientos en la misma lista, cada uno con su icono.
+
+     Cuando empiece la temporada y haya partidos, van a aparecer solos al
+     lado de los entrenamientos. */
+  var _P = (typeof PARTIDOS_META!=='undefined' && PARTIDOS_META) ? PARTIDOS_META : [];
+  var _E = (window.BAT_PARTIDOS && BAT_PARTIDOS.meta) ? BAT_PARTIDOS.meta : [];
+  var META = [];
+  _P.forEach(function(m){ META.push(Object.assign({}, m, {tipo: m.tipo || 'P'})); });
+  _E.forEach(function(m){
+    /* el motor escribe 'entrenamiento' entero; aca alcanza con la inicial */
+    var t = (m.tipo === 'entrenamiento' || m.tipo === 'E') ? 'E' : 'P';
+    /* no repetir si ya vino por PARTIDOS_META */
+    if(_P.some(function(x){ return (x.id||x.nombre) === (m.id||m.nombre); })) return;
+    META.push(Object.assign({}, m, {tipo:t}));
+  });
+  META.sort(function(a,b){ return String(b.fecha||'').localeCompare(String(a.fecha||'')); });
+  if(!META.length){ row.style.display='none'; return; }
   row.innerHTML=''; row.style.display='flex';
   var lbl=document.createElement('span');
   lbl.style.cssText='font-size:12px;color:#8395ac;letter-spacing:2px;text-transform:uppercase;align-self:center;margin-right:6px';
@@ -547,8 +569,15 @@ function dbatBuildSubfiltro(){
     var rv=m.rival||m.nombre;
     var ico = ((m.tipo||'P')==='E') ? '\ud83c\udfcb\ufe0f ' : '\ud83c\udfc6 ';
     var lb = ico + rv;
-    if(cu[rv]>1&&m.fecha) lb+=' \u00b7 '+m.fecha;
-    if(m.turnoTxt) lb+=' \u00b7 '+m.turnoTxt;
+    /* la fecha siempre, no solo cuando el rival se repite: en una lista de
+       entrenamientos todos se llaman igual y sin fecha no se distinguen */
+    if(m.fecha){
+      var _f = String(m.fecha);
+      if(/^\d{4}-\d{2}-\d{2}/.test(_f)) _f = _f.slice(8,10)+'/'+_f.slice(5,7)+'/'+_f.slice(0,4);
+      lb += ' \u00b7 ' + _f;
+    }
+    var _tu = m.turnoTxt || (m.turno==='M' ? _t('turno_m','Mañana') : m.turno==='T' ? _t('turno_t','Tarde') : '');
+    if(_tu) lb+=' \u00b7 '+_tu;
     if(m.resultado) lb+=' ('+m.resultado+')';
     addOpt(lb, m.id||m.nombre);
   });
@@ -1985,6 +2014,13 @@ function pintarEditorObjetivos(){
 function renderObjetivosTab(){
   if(typeof renderObjetivos!=='undefined') renderObjetivos('obj-equipo-panel');
   try{ pintarEditorObjetivos(); }catch(e){}
+  /* ══ TRADUCIR LO QUE SE ACABA DE DIBUJAR ══════════════════════════════════
+     El bloque de reglas y el editor los arma este codigo DESPUES de que el
+     traductor ya recorrio la pagina. Por eso quedaban a medias: los titulos
+     —que estan en el HTML— si se traducian, pero las lineas del semaforo y
+     las escalas, que nacen aca, se quedaban en castellano.
+     Se vuelve a pasar el traductor por lo recien dibujado. */
+  try{ if(window.applyLang && window.getLang) applyLang(getLang()); }catch(e){}
   var grid=document.getElementById('obj-jug-grid');
   if(!EQUIPO){grid.innerHTML='<div class="empty">Sin datos de equipo</div>';return;}
   grid.innerHTML=EQUIPO.jugadores.map(function(j){
@@ -2012,6 +2048,8 @@ function selectObjJug(nombre,pos,btn){
     }
   }catch(e){}
   document.getElementById('obj-jug-hero').textContent=nombre+' — '+_pos;
+  /* el panel del jugador tambien nace despues del traductor */
+  setTimeout(function(){ try{ if(window.applyLang && window.getLang) applyLang(getLang()); }catch(e){} }, 60);
   // Baterías: fila jugador + fila equipo + filtro de partidos (motor de jugador.html)
   window._dbatNombre = nombre;
   window._dbatPartido = 'acumulado';
