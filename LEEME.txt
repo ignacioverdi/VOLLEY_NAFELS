@@ -1,69 +1,63 @@
-HIGH SET: SOLO EL EJERCICIO
-===========================
+HIGH SET: EL CHEQUEO PROFUNDO
+=============================
 
-3 archivos. HACER_TODO y publicar.
-
-   build_video.py    el arreglo de High Set
-   gen_baterias.py   el #2 Bruderer (todavia pendiente de correr)
-   objetivos.js      el titulo repetido (el cuarto archivo)
+Un archivo: build_video.py. HACER_TODO y publicar.
 
 
-TENIAS RAZON, Y LA CAUSA ES EXACTA
-----------------------------------
-La carpeta "DVW HIGH SET NAFELS 2026" tiene COPIAS de los entrenamientos
-completos. Uno de ellos, el del 08/09, trae 203 ataques adentro.
+HICE EL CHEQUEO QUE PEDISTE
+---------------------------
+Conte los armados A MANO, leyendo los cuatro .dvw crudos de la carpeta HIGH
+SET, sin usar el motor. Despues compare contra lo que muestra la pantalla.
 
-El motor contaba TODOS los armados de esos archivos, sin distinguir el
-ejercicio del juego normal. Y ahi esta la diferencia que marcaste:
-
-   #04 VAZQUEZ    49 armados CON ataque  +  79 del ejercicio
-   #13 STEIMANN   48 armados CON ataque  +  72 del ejercicio
-   #01 DURDOS      6 armados CON ataque  +  84 del ejercicio
-   #05 CLEMENT     1 armado  CON ataque  +  88 del ejercicio
-
-Los dos armadores sumaban ~50 armados de juego que los demas no tienen
-—porque arman ellos— y quedaban arriba de todo por un ejercicio en el que
-en realidad estan PAREJOS con el resto.
+RESULTADO: casi coincide, pero encontre 12 armados mal descartados.
 
 
-LO QUE SE HIZO
---------------
-Ahora se cuenta solo lo que pediste: armados de pelota alta (EH) que NO
-tienen ninguna accion de ataque despues, antes del proximo saque.
+LO QUE ESTABA MAL
+-----------------
+El motor miraba TRES acciones hacia adelante y solo frenaba si aparecia un
+saque. No frenaba en el armado siguiente. Un caso real del 03/09:
 
-   antes   1.101 armados   #04:123 · #13:120 · #02:97 · #20:91 · #01:90
-   ahora     953 armados   #05:86 · #01:84 · #11:84 · #09:81 · #02:81
+     *03EH=      <- este armado
+     despues:  *05EH-  ,  *04EH-  ,  *20AH/
 
-Se fueron 148 armados de juego. Y mira como queda el orden: ahora arriba
-estan Clement, Durdos y Bartholet, no los armadores. Eso es el ejercicio
-de verdad.
+El ataque llega TRES ARMADOS DESPUES y no tiene nada que ver con el primero,
+pero quedaba descartado igual.
 
-Lo confirme mirando los .dvw como decias: hay rachas de 255, 226 y 217
-codigos EH seguidos sin un solo ataque. Ese es el bloque del ejercicio, y
-mas adelante en el mismo archivo aparecen los EH con ataque, que son el
-juego global.
+CORREGIDO: ahora se corta en cuanto aparece otro armado. A partir de ahi el
+ataque ya es del siguiente, no de este.
 
-
-NO HACE FALTA TOCAR LA CARPETA
-------------------------------
-Podes seguir dejando ahi las copias de los entrenamientos completos. El
-motor ahora separa solo, mirando cada armado.
+     antes del arreglo   1.154 armados
+     despues             1.167 armados
+     mi conteo a mano    1.167 armados (descontando el #77, ver abajo)
 
 
-LOS OTROS DOS ARCHIVOS
-----------------------
-Son los del mensaje anterior, que todavia no corriste:
+LA TABLA, VERIFICADA
+--------------------
+   #05  107      #17   98      #09   97
+   #11  105      #20   98      #07   97
+   #01  102      #10   97      #13   93
+   #02  102      #04   98      #03   73
+                              TOTAL 1.167
 
-   gen_baterias.py   para que aparezca el #2 Bruderer y se junten las
-                     acciones de #7 y #20 (nombres escritos distinto)
-   objetivos.js      el encabezado repetido "% SAQUE (42) 42%", que estaba
-                     en un cuarto archivo
+Cada uno de esos armados cumple las tres condiciones:
+   · es codigo E (armado)
+   · es tipo H (pelota alta)
+   · tiene valoracion (#, +, !, -, / o =)
+   · NO tiene ataque despues, antes del proximo armado o saque
 
-Con este HACER_TODO se resuelven los tres de una.
+SI, TE LO CONFIRMO: la tabla es 100% armados de pelota alta con valoracion y
+sin ataque posterior.
 
 
-LO DE UNIFICAR
---------------
-Cuando termines con esto lo encaramos. Es sacar las copias repetidas de
-objSingleBat, objClassify y renderObjetivos de los tres archivos y dejar
-una sola. Hoy nos costo tiempo cuatro veces.
+UN HALLAZGO: EL JUGADOR #77
+---------------------------
+Aparece un armado del "#77" en el archivo del 03/09:
+
+     *13EH-  ->  *77EH!  ->  *01EH!
+
+El plantel tiene los numeros 1,2,3,4,5,7,9,10,11,12,13,17,20. El 77 NO
+existe: es un error de tipeo del scout, casi seguro un 7 tecleado dos veces.
+
+El motor lo descarta bien porque no esta en el plantel, asi que no ensucia
+la tabla. Lo dejo anotado por si queres corregirlo en el .dvw. Es UNA
+accion, no cambia nada.

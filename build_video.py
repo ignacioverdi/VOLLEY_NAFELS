@@ -337,12 +337,27 @@ def parse_dvw(path, ent=False, modo_high_set=False):
             # solo los armados de pelota alta: el tipo es H
             if _a.get('ty') != 'H':
                 continue
+            # ¿este armado termino en ataque?
+            #
+            # Se mira hacia adelante hasta que empiece otra jugada, y se CORTA
+            # en cuanto aparece OTRO ARMADO: a partir de ahi el ataque ya no es
+            # de este, es del siguiente.
+            #
+            # Antes se miraban tres acciones sin frenar en el armado siguiente,
+            # y se descartaban de mas. Un caso real del 03/09:
+            #
+            #     *03EH=     <- este armado
+            #     *05EH-     *04EH-     *20AH/
+            #
+            # El ataque llega TRES armados despues y no tiene nada que ver con
+            # el primero, pero quedaba descartado igual. Eran 12 armados mal
+            # sacados de la tabla.
             _hay_atk = False
-            for _j in range(_i + 1, min(_i + 4, len(actions))):
-                _sig = actions[_j]
-                if _sig.get('skill') == 'S':      # arranca otra jugada
+            for _j in range(_i + 1, len(actions)):
+                _sk = actions[_j].get('skill')
+                if _sk in ('S', 'E'):             # otra jugada, u otro armado
                     break
-                if _sig.get('skill') == 'A':      # hubo ataque: es juego, no el ejercicio
+                if _sk == 'A':                    # este armado SI termino en ataque
                     _hay_atk = True
                     break
             if not _hay_atk:
