@@ -180,7 +180,9 @@ def parse_set_result(txt):
             elif a>h: as_+=1
     return (hs,as_) if (hs or as_) else None
 
-def parse_dvw(path, ent=False):
+HIGH_SET_MODO = False   # lo enciende el main cuando la salida es datos_high_set.js
+
+def parse_dvw(path, ent=False, modo_high_set=False):
     txt=open(path,encoding='latin-1',errors='ignore').read()
     def sec(a,b):
         m=re.search(r'\['+a+r'\](.*?)(?:\['+b+r'\]|\Z)',txt,re.S); return m.group(1) if m else ''
@@ -300,6 +302,52 @@ def parse_dvw(path, ent=False):
                 for _s in _seg:
                     if _s and _s[0].isdigit(): a['apos']=int(_s[0]); break
             actions.append(a)
+
+    # ══════════════════════════════════════════════════════════════════════
+    #  HIGH SET: SOLO LOS ARMADOS QUE NO TERMINAN EN ATAQUE
+    #  --------------------------------------------------------------------
+    #  La pantalla de High Set mide UN EJERCICIO puntual: armados de pelota
+    #  alta sueltos, sin ataque despues. En el .dvw se ven como rachas largas
+    #  de codigos EH seguidos —hay bloques de 255, 226 y 217 seguidos— y son
+    #  un trabajo aparte del juego.
+    #
+    #  El problema: la carpeta de High Set tiene COPIAS de los entrenamientos
+    #  completos, asi que entraban tambien los armados del juego normal, los
+    #  que SI terminan en ataque. Y eso deformaba todo:
+    #
+    #      #04 VAZQUEZ   49 armados con ataque  +  79 del ejercicio
+    #      #13 STEIMANN  48 con ataque          +  72 del ejercicio
+    #      #01 DURDOS     6 con ataque          +  84 del ejercicio
+    #
+    #  Los dos armadores sumaban ~50 armados de juego que los demas no tienen
+    #  —porque arman ellos— y quedaban arriba de todo por un ejercicio en el
+    #  que en realidad estan parejos.
+    #
+    #  Ahora se descarta cualquier armado que tenga un ataque detras antes del
+    #  proximo saque. Quedan solo los del ejercicio, que es lo que la pantalla
+    #  dice medir.
+    if modo_high_set or HIGH_SET_MODO:
+        _limpias = []
+        # 'skill' guarda la LETRA del fundamento (E, A, S...); 'sk' guarda el
+        # nombre largo ("Saque", "Armado"), que no sirve para comparar.
+        for _i, _a in enumerate(actions):
+            if _a.get('skill') != 'E':
+                _limpias.append(_a)
+                continue
+            # solo los armados de pelota alta: el tipo es H
+            if _a.get('ty') != 'H':
+                continue
+            _hay_atk = False
+            for _j in range(_i + 1, min(_i + 4, len(actions))):
+                _sig = actions[_j]
+                if _sig.get('skill') == 'S':      # arranca otra jugada
+                    break
+                if _sig.get('skill') == 'A':      # hubo ataque: es juego, no el ejercicio
+                    _hay_atk = True
+                    break
+            if not _hay_atk:
+                _limpias.append(_a)
+        actions = _limpias
 
     if not actions: return None  # partido sin acciones con segundo -> se ignora
 
@@ -424,6 +472,14 @@ if __name__=='__main__':
     folder=sys.argv[1]
     out=sys.argv[2] if len(sys.argv)>2 else 'datos_video.js'
     glob_name=sys.argv[3] if len(sys.argv)>3 else 'VIDEO_DATA'
+    # ══ MODO HIGH SET ══════════════════════════════════════════════════════
+    # HACER_TODO llama a este mismo programa dos veces: una para los videos
+    # normales y otra para High Set, con salida "datos_high_set.js". Cuando
+    # es la segunda hay que quedarse SOLO con los armados del ejercicio, los
+    # que no terminan en ataque.
+    HIGH_SET_MODO = ('high_set' in (out or '').lower()) or ('HIGH_SET' in (glob_name or ''))
+    if HIGH_SET_MODO:
+        print('  [high set] solo cuento los armados que NO terminan en ataque')
     ent=('ent' in sys.argv[4:]) if len(sys.argv)>4 else False
     # prefijo de salida: "datos_video.js" -> "datos_video" ; "datos_video_ent.js" -> "datos_video_ent"
     prefix=re.sub(r'\.js$','',out)

@@ -1,74 +1,69 @@
-LOS DOS QUE FALTABAN
-====================
+HIGH SET: SOLO EL EJERCICIO
+===========================
 
-2 archivos. HACER_TODO y publicar.
+3 archivos. HACER_TODO y publicar.
 
-
-LO QUE YA FUNCIONA — verificado en la app publicada
----------------------------------------------------
-
-PUNTO 2 — EL DESPLEGABLE  ✓ RESUELTO
-   ACUMULADO (7 entrenamientos)
-   🏋️ AXPO NAFELS · 10/09/2026 · Tarde
-   🏋️ AXPO NAFELS · 09/09/2026
-   🏋️ AXPO NAFELS · 08/09/2026
-   🏋️ AXPO NAFELS · 08/09/2026 · Mañana
-   🏋️ AXPO NAFELS · 07/09/2026
-   🏋️ AXPO NAFELS · 04/09/2026
-   🏋️ AXPO NAFELS · 03/09/2026
-
-   Ya podes elegir practica por practica, con su fecha y su turno.
-
-PUNTO 4 — LAS REGLAS  ✓ RESUELTO
-   "WHERE THE TARGETS COME FROM · The target for each skill is the best in
-   the league in that skill, measured over the 97 matches of last season..."
-   Todo en ingles, sin mezcla.
+   build_video.py    el arreglo de High Set
+   gen_baterias.py   el #2 Bruderer (todavia pendiente de correr)
+   objetivos.js      el titulo repetido (el cuarto archivo)
 
 
-LO QUE FALTABA
+TENIAS RAZON, Y LA CAUSA ES EXACTA
+----------------------------------
+La carpeta "DVW HIGH SET NAFELS 2026" tiene COPIAS de los entrenamientos
+completos. Uno de ellos, el del 08/09, trae 203 ataques adentro.
+
+El motor contaba TODOS los armados de esos archivos, sin distinguir el
+ejercicio del juego normal. Y ahi esta la diferencia que marcaste:
+
+   #04 VAZQUEZ    49 armados CON ataque  +  79 del ejercicio
+   #13 STEIMANN   48 armados CON ataque  +  72 del ejercicio
+   #01 DURDOS      6 armados CON ataque  +  84 del ejercicio
+   #05 CLEMENT     1 armado  CON ataque  +  88 del ejercicio
+
+Los dos armadores sumaban ~50 armados de juego que los demas no tienen
+—porque arman ellos— y quedaban arriba de todo por un ejercicio en el que
+en realidad estan PAREJOS con el resto.
+
+
+LO QUE SE HIZO
 --------------
+Ahora se cuenta solo lo que pediste: armados de pelota alta (EH) que NO
+tienen ninguna accion de ataque despues, antes del proximo saque.
 
-PUNTO 1 — EL #2 BRUDERER
-   La correccion esta publicada y FUNCIONA: la probe con tus archivos y pasa
-   de 17 nombres a 12. Pero HACER_TODO no se volvio a correr con el motor
-   nuevo, asi que los datos siguen con los nombres viejos.
+   antes   1.101 armados   #04:123 · #13:120 · #02:97 · #20:91 · #01:90
+   ahora     953 armados   #05:86 · #01:84 · #11:84 · #09:81 · #02:81
 
-   Ademas le hice un ajuste: antes, entre "SCHMID ROY" y "SCHIMD ROY" —que
-   miden igual— quedaba el primero que apareciera, y podia quedar el ERROR DE
-   TIPEO como nombre oficial. Ahora gana el que MAS VECES aparece en los
-   archivos:
+Se fueron 148 armados de juego. Y mira como queda el orden: ahora arriba
+estan Clement, Durdos y Bartholet, no los armadores. Eso es el ejercicio
+de verdad.
 
-      #1  DURDOS VALENTIN      #10 BOGDANOVSKI DEJAN
-      #2  BRUDERER GIAN        #11 BARTHOLET CHRISTIAN
-      #3  SCHWITTER TOM        #12 JOHANNSEN PATRICK
-      #4  VAZQUEZ EZEQUIEL     #13 STEIMANN YANNIK
-      #5  CLEMENT OLIVIER      #17 ROFFLER PASCAL
-      #7  SCHMID ROY           #20 SCHMID JONAS
-      #9  NORRIS JAMES
-
-   Todos bien escritos. Corriendo HACER_TODO aparece el #2 y el #7 y #20
-   juntan sus acciones en vez de tenerlas partidas.
-
-PUNTO 3 — EL TITULO REPETIDO
-   Lo perseguí hasta encontrarlo. El encabezado que repite "% SAQUE (42) 42%"
-   estaba en un CUARTO archivo: objetivos.js.
-
-   Ya lo habiamos sacado de dashboard.html y de las DOS copias que hay en
-   objetivos_config.js. Pero la pantalla que estas mirando la dibuja este
-   otro, que no habiamos tocado. Por eso seguia apareciendo incluso despues
-   de recargar con Ctrl+Shift+R.
-
-   Aprovechando, en objetivos.js tambien quedaron alineadas la tarjeta (con
-   nombre, "5 acc." y "obj 42") y el semaforo por recorrido de liga, que ahi
-   seguian con la version vieja.
+Lo confirme mirando los .dvw como decias: hay rachas de 255, 226 y 217
+codigos EH seguidos sin un solo ataque. Ese es el bloque del ejercicio, y
+mas adelante en el mismo archivo aparecen los EH con ataque, que son el
+juego global.
 
 
-ESTO CONFIRMA LO QUE TE DECIA
------------------------------
-Cuatro archivos con la misma funcion:
+NO HACE FALTA TOCAR LA CARPETA
+------------------------------
+Podes seguir dejando ahi las copias de los entrenamientos completos. El
+motor ahora separa solo, mirando cada armado.
 
-   objSingleBat   dashboard.html · objetivos_config.js · objetivos.js
-   objClassify    los mismos tres
-   el encabezado  los mismos tres (y dos veces en objetivos_config)
 
-Hoy nos hizo perder tiempo tres veces. Cuando quieras, se unifican.
+LOS OTROS DOS ARCHIVOS
+----------------------
+Son los del mensaje anterior, que todavia no corriste:
+
+   gen_baterias.py   para que aparezca el #2 Bruderer y se junten las
+                     acciones de #7 y #20 (nombres escritos distinto)
+   objetivos.js      el encabezado repetido "% SAQUE (42) 42%", que estaba
+                     en un cuarto archivo
+
+Con este HACER_TODO se resuelven los tres de una.
+
+
+LO DE UNIFICAR
+--------------
+Cuando termines con esto lo encaramos. Es sacar las copias repetidas de
+objSingleBat, objClassify y renderObjetivos de los tres archivos y dejar
+una sola. Hoy nos costo tiempo cuatro veces.
