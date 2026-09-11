@@ -22,6 +22,9 @@
 
   // ── Diccionario ───────────────────────────────────────────────────────────
   var T = {
+    /* El turno en el selector de sesion. */
+    turno_m:    { es:'Mañana', en:'Morning', de:'Vormittag' },
+    turno_t:    { es:'Tarde', en:'Afternoon', de:'Nachmittag' },
     /* El selector de sesion del dashboard: tiene que decir si son partidos
        o entrenamientos, y en el idioma que corresponda. */
     dbat_ver:       { es:'VER:', en:'VIEW:', de:'ANSICHT:' },
@@ -350,36 +353,6 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
-    /* Auditoria de toda la app: lo ultimo que quedaba sin traducir. */
-    'Actualizado ': { en:'Updated ', de:'Aktualisiert ' },
-    'Borra letras de lo que escribís (no borra códigos)': { en:'Deletes letters from what you type (does not delete codes)', de:'Löscht Buchstaben deiner Eingabe (löscht keine Codes)' },
-    'Detalle de la jugada ▴': { en:'Rally detail ▴', de:'Details des Ballwechsels ▴' },
-    'Equipo:': { en:'Team:', de:'Team:' },
-    'JUGADOR A': { en:'PLAYER A', de:'SPIELER A' },
-    'JUGADOR B': { en:'PLAYER B', de:'SPIELER B' },
-    'Movida de ': { en:'Moved from ', de:'Verschoben von ' },
-    'No había rutina para ese mes. Empezás una nueva.': { en:'There was no routine for that month. You are starting a new one.', de:'Für diesen Monat gab es kein Programm. Du beginnst ein neues.' },
-    'PARTIDO': { en:'MATCH', de:'SPIEL' },
-    'Partido completo': { en:'Full match', de:'Ganzes Spiel' },
-    'Partido procesado': { en:'Match processed', de:'Spiel verarbeitet' },
-    'Se copiará la rutina de ': { en:'The routine will be copied from ', de:'Das Programm wird kopiert von ' },
-    'Se vaciará la rutina de ': { en:'The routine will be emptied for ', de:'Das Programm wird geleert für ' },
-    'Sin señal · se guarda igual': { en:'No signal · it saves anyway', de:'Kein Signal · es speichert trotzdem' },
-    'Tiene que abrirse en la': { en:'It has to be opened on the', de:'Es muss geöffnet werden auf dem' },
-    'Todo lo que se scouteó en': { en:'Everything scouted on', de:'Alles, was gescoutet wurde auf' },
-    'Un solo archivo con absolutamente todo lo que hay guardado. Es lo más seguro: no hay que elegir nada.': { en:'A single file with absolutely everything saved. It is the safest: nothing to choose.', de:'Eine einzige Datei mit absolut allem Gespeicherten. Am sichersten: nichts auszuwählen.' },
-    'Ver el código': { en:'See the code', de:'Code ansehen' },
-    'donde se scouteó. Lo que guarda un navegador no lo ve otro, ni siquiera en la misma máquina.': { en:'where it was scouted. What one browser saves, another cannot see, not even on the same machine.', de:'wo gescoutet wurde. Was ein Browser speichert, sieht ein anderer nicht, auch nicht auf demselben Rechner.' },
-    'equipo': { en:'team', de:'Team' },
-    'no abras el Scout en Vivo hasta bajar todo de acá. El panel guarda automáticamente y puede pisar lo que quedó ': { en:'do not open the Live Scout until you download everything here. The panel saves automatically and may overwrite what is left ', de:'öffne das Live-Scouting nicht, bevor du hier alles heruntergeladen hast. Das Panel speichert automatisch und kann Vorhandenes überschreiben ' },
-    'queda guardado en el navegador, aunque no se haya exportado. Acá se ve y se puede bajar. No se modifica nada: ': { en:'is saved in the browser, even if it was never exported. Here you can see it and download it. Nothing is modified: ', de:'wird im Browser gespeichert, auch wenn nie exportiert wurde. Hier siehst du es und kannst es herunterladen. Nichts wird verändert: ' },
-    'y el': { en:'and the', de:'und der' },
-    'ℹ️  Sin desglose por zona en este scout.': { en:'ℹ️  No zone breakdown in this scout.', de:'ℹ️  Keine Zonenaufteilung in diesem Scouting.' },
-    '← Volver al scout': { en:'← Back to the scout', de:'← Zurück zum Scouting' },
-    '▸ Seguir con ': { en:'▸ Continue with ', de:'▸ Weiter mit ' },
-    '✓ Descargado — subilo al repo': { en:'✓ Downloaded — upload it to the repo', de:'✓ Heruntergeladen — lade es ins Repo' },
-    '⬇ Bajar TODO en un archivo': { en:'⬇ Download EVERYTHING in one file', de:'⬇ ALLES in einer Datei herunterladen' },
-    '🛡 RECEPCIÓN — ': { en:'🛡 RECEPTION — ', de:'🛡 ANNAHME — ' },
     /* Posiciones y rotulos del panel por jugador. */
     'EQUIPO': { en:'TEAM', de:'TEAM' },
     'JUGADOR': { en:'PLAYER', de:'SPIELER' },
