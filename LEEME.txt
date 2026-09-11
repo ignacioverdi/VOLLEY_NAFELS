@@ -1,71 +1,48 @@
-UNIFICAR — SEGUNDA ETAPA
-========================
+UNIFICAR 2 — CORREGIDO
+======================
 
 17 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
+REEMPLAZA al zip anterior (NAFELS_UNIFICAR_2): ese quedo incompleto.
 
 
-PRIMERO: LA ETAPA 1 QUEDO BIEN
-------------------------------
-Probe el semaforo con los mismos valores en las cuatro pantallas:
+QUE PASO
+--------
+Publicaste la etapa 2 y la probe. Tres fundamentos coincidian y tres no:
 
-   dashboard    Saque CERCA · Recepción NEUTRO · Atq Rápida CERCA · Defensa NEUTRO
-   analisis     igual
-   jugador      igual
-   panel_voley  igual
+   Saque      bateria CERCA (verde claro)  ·  numero AMARILLO
+   Recepción  bateria NEUTRO (amarillo)    ·  numero ROJO
+   Defensa    bateria NEUTRO (amarillo)    ·  numero ROJO
 
-ANTES analisis y jugador daban colores distintos con los mismos numeros.
-Ahora coinciden las cuatro. Ninguna pantalla tiro error.
+EL ERROR FUE MIO. Mi script reemplazaba la PRIMERA copia de effColor de cada
+archivo y seguia al siguiente. Pero dashboard.html y analisis.html tienen
+DOS copias cada uno, y la segunda —la que gana, porque se define despues— se
+quedo con la version vieja.
+
+O sea: cambie la copia que no se usaba.
+
+CORREGIDO: ahora el script recorre TODAS las copias de cada archivo, de atras
+hacia adelante. Verificado uno por uno:
+
+   analisis.html          2 copias · 2 nuevas
+   dashboard.html         2 copias · 2 nuevas
+   los otros 13           1 copia  · 1 nueva
+   utils.js               1 copia  · 1 nueva
+
+17 de 17.
 
 
-ESTA ETAPA: effColor
+POR QUE NO LO VI ANTES
+----------------------
+Mi verificacion contaba archivos tocados (15) y no copias por archivo. Es el
+mismo tipo de error que veniamos persiguiendo todo el dia: asumir que hay una
+sola copia de algo.
+
+Lo anoto porque es exactamente lo que estamos tratando de eliminar.
+
+
+COMO COMPROBARLO VOS
 --------------------
-Era la peor: 15 copias en 15 archivos, con 5 versiones distintas.
+Entra al dashboard, solapa Objetivos, y compara el color del numero grande
+con el de la bateria en cada tarjeta. Tienen que ser el mismo.
 
-Y encontre algo que no habiamos visto: TODAS usaban los cortes VIEJOS
-(g2/g1/y) mientras el semaforo de las baterias ya usa el recorrido de la
-liga. O sea que el color del NUMERO y el de la BATERIA podian no coincidir
-para el mismo dato.
-
-LA SOLUCION: ahora effColor no tiene logica propia. Cuando se le pasa el
-fundamento, le pregunta a objClassify —la misma funcion que pinta las
-baterias— y devuelve su color.
-
-Asi no pueden volver a separarse nunca, porque es literalmente el mismo
-calculo. No son "dos copias que hay que mantener iguales": es una sola.
-
-Sin fundamento se usa la escala de eficacia de ataque (40/20/0/-20), que es
-lo que esperan las pantallas que llaman sin segundo parametro.
-
-ARCHIVOS TOCADOS (15 copias alineadas)
-   analisis · armadores · ataque_jugador · dashboard · game_plan
-   historial_voley · hm_armador · hm_ataque · hm_defensa · hm_recepcion
-   hm_saque · panel_voley · saque_jugador · scouting_rival · utils.js
-
-
-LO QUE NO VOY A UNIFICAR, Y POR QUE
------------------------------------
-fmtEff tiene 11 copias y 3 versiones, pero NO son duplicados: son funciones
-distintas que por casualidad se llaman igual.
-
-   8 copias   devuelven texto plano:  "39%"
-   2 copias   (nla_stats) devuelven HTML con color y toman 2 parametros
-   1 copia    (panel_voley) devuelve HTML con su propia escala de color
-
-Juntarlas romperia esas pantallas. Lo correcto seria renombrarlas para que
-no se pisen, pero eso es un cambio mas grande y no urge: hoy cada una vive
-en su pantalla y funciona.
-
-Lo mismo con OBJETIVOS_CONFIG (12 copias): son las CONFIGURACIONES de cada
-club/categoria, no codigo repetido. Ahi esta bien que haya varias.
-
-
-COMO QUEDA EL SISTEMA
----------------------
-   objClassify        UNA sola version
-   objSingleBat       UNA sola version
-   objPct             UNA sola version
-   objClassifyVsTeam  UNA sola version
-   effColor           UNA sola version, atada a objClassify
-
-Las cinco funciones que nos hicieron perder tiempo hoy —cuatro veces—
-quedaron con una sola copia cada una.
+Yo lo voy a verificar igual apenas publiques.
