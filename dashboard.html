@@ -16,13 +16,13 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260911-0022" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260911-0022" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260911-0022"></script>
-<script src="filtro_tipo.js?v=20260911-0022" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260911-0732" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260911-0732" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260911-0732"></script>
+<script src="filtro_tipo.js?v=20260911-0732" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
-  <script src="objetivos_config.js?v=20260911-0022" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260911-0732" onerror="void 0"></script>
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
@@ -39,7 +39,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20260911-0022" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260911-0732" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   
@@ -310,7 +310,9 @@ function objClassify(id,val){
 
      Si algun fundamento necesita cortes propios, se respetan: alcanza con
      marcarlo con cortesPropios en la configuracion. */
-  var m = window.OBJETIVOS_CONFIG.metas[id] || {};
+  /* La proteccion evita que reviente si esta funcion corre antes de que
+     termine de cargar la configuracion. */
+  var m = (window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas[id]) || {};
   var obj = (m.obj != null) ? m.obj : null;
   var piso = (m.min != null) ? m.min : 0;
 
@@ -403,55 +405,50 @@ function objPct(v,mn,mx){return Math.max(0,Math.min(100,(v-mn)/(mx-mn)*100));}
 
 function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
 function objSingleBat(id,val,meta,cls,objLine){
-  /* ══ CADA BATERIA DICE QUE MIDE Y SOBRE CUANTO ════════════════════════════
-     Antes mostraba "39% NEUTRO" y nada mas. Faltaban dos cosas:
+  /* ══ UNA SOLA VERSION, IGUAL EN TODOS LADOS ═══════════════════════════════
+     Habia CINCO copias de esta funcion y CUATRO eran distintas entre si:
+     algunas con el nombre del fundamento, otras sin el; algunas con el total
+     de acciones, otras sin. La bateria se veia de una forma u otra segun por
+     que pantalla entraras.
 
-       1. el nombre del fundamento — sin el hay que acordarse de memoria en
-          que orden van los doce, y en el televisor no sirve para nada;
+     Esta es la unica version. Si hay que cambiar algo, se cambia aca y vale
+     para todas.
 
-       2. sobre cuantas acciones esta hecha la cuenta — un 40% de 5 acciones
-          y un 20% de 238 no valen lo mismo, y pintados iguales enganan.
-
-     NO se esconde ni se filtra nada: si son 5 acciones, se muestra el 40% y
-     se muestra que son 5. El numero es real y se va a acomodar solo a medida
-     que se carguen entrenamientos. Ocultarlo seria peor que mostrarlo. */
-  var fh = val!==null ? objPct(val, meta.min, meta.max) : 0;
+     Muestra: el fundamento, el valor, la bateria con la linea del objetivo,
+     sobre cuantas acciones esta hecha la cuenta, y el objetivo. */
+  var fh = (val!==null) ? objPct(val, meta.min, meta.max) : 0;
   var oh = objPct(objLine, meta.min, meta.max);
-  var txt = val!==null ? fmtEff(val) : '—';
+  var txt = (val!==null) ? fmtEff(val) : '\u2014';
   var nombre = String(meta.label||'').replace(/\s*\(-?\d+\)\s*$/, '');
   var n = (meta.n!=null) ? meta.n : null;
-
   var tip = nombre;
   try{
     if(val!==null && meta.obj!=null && meta.min!=null && meta.obj>meta.min){
       var reco = Math.round((val-meta.min)/(meta.obj-meta.min)*100);
       tip = nombre+': '+val+'%'+(n!=null?' sobre '+n+' acciones':'')
-          + ' · el peor de la liga '+meta.min+'%, el mejor '+meta.obj+'%'
-          + ' · estás al '+reco+'% del recorrido';
+          + ' \u00b7 el peor de la liga '+meta.min+'%, el mejor '+meta.obj+'%'
+          + ' \u00b7 est\u00e1s al '+reco+'% del recorrido';
     }
   }catch(e){}
-
-  return '<div title="'+tip+'" style="flex:1;min-width:70px;max-width:120px;display:flex;'
-    + 'flex-direction:column;align-items:center;gap:3px;padding:8px 4px 7px;'
-    + 'border:0.5px solid '+cls.border+';border-radius:10px;background:'+cls.bg+';'
+  return '<div title="'+tip+'" style="flex:1;min-width:60px;max-width:110px;display:flex;'
+    + 'flex-direction:column;align-items:center;gap:3px;padding:7px 3px 6px;'
+    + 'border:1px solid '+cls.border+';border-radius:9px;background:'+cls.bg+';'
     + 'position:relative;overflow:hidden;font-family:Barlow Condensed,sans-serif">'
-    + '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+cls.color+';border-radius:10px 10px 0 0"></div>'
-    + '<div style="font-size:9.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;'
+    + '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+cls.color+'"></div>'
+    + '<div style="font-size:9px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;'
     + 'color:#94a3b8;line-height:1.1;text-align:center;white-space:nowrap;overflow:hidden;'
     + 'text-overflow:ellipsis;max-width:100%">'+nombre+'</div>'
-    + '<div style="font-size:21px;font-weight:900;line-height:1;color:'+cls.color+'">'+txt+'</div>'
-    + '<div style="width:30px;height:52px;display:flex;flex-direction:column;align-items:center">'
-      + '<div style="width:12px;height:4px;border-radius:2px 2px 0 0;background:'+cls.color+';opacity:.7;flex-shrink:0"></div>'
-      + '<div style="position:relative;width:30px;flex:1;border-radius:4px;overflow:hidden;border:2px solid '+cls.color+'">'
+    + '<div style="font-size:19px;font-weight:900;line-height:1;color:'+cls.color+'">'+txt+'</div>'
+    + '<div style="width:26px;height:36px;display:flex;flex-direction:column;align-items:center">'
+      + '<div style="width:11px;height:4px;border-radius:2px 2px 0 0;background:'+cls.color+';opacity:.7;flex-shrink:0"></div>'
+      + '<div style="position:relative;width:26px;flex:1;border-radius:3px;overflow:hidden;border:2px solid '+cls.color+'">'
         + '<div style="position:absolute;inset:0;background:#07080f"></div>'
         + (val!==null ? '<div style="position:absolute;bottom:0;left:0;right:0;height:'+fh+'%;background:'+cls.color+';opacity:.85"></div>' : '')
         + '<div style="position:absolute;left:0;right:0;bottom:'+oh+'%;height:2px;background:#fff;opacity:.85"></div>'
       + '</div>'
     + '</div>'
-    /* sobre cuantas acciones: el contexto que hace honesto al numero */
-    + (n!=null ? '<div style="font-size:8.5px;font-weight:700;color:#8395ac">'+n+' acc.</div>' : '')
-    + '<div style="font-size:8.5px;font-weight:700;color:#64748b">obj '+objLine+'</div>'
-    + '<div style="font-size:8.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:'+cls.color+'">'+cls.label+'</div>'
+    + (n!=null ? '<div style="font-size:8px;font-weight:700;color:#8395ac">'+n+' acc.</div>' : '')
+    + '<div style="font-size:8px;font-weight:700;color:#64748b">obj '+objLine+'</div>'
     + '</div>';
 }
 
@@ -602,15 +599,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260911-0022" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260911-0022"></script>
+<script src="firebase.js?v=20260911-0732" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260911-0732"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260911-0022">
+<link rel="stylesheet" href="movil.css?v=20260911-0732">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260911-0022" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260911-0732" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -2309,11 +2306,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260911-0022"></script>
-<script src="lang.js?v=20260911-0022"></script>
-<script src="temporadas_menu.js?v=20260911-0022"></script>
-<script src="app_offline.js?v=20260911-0022"></script>
-<script src="ayuda.js?v=20260911-0022"></script>
+<script src="chat_nafels.js?v=20260911-0732"></script>
+<script src="lang.js?v=20260911-0732"></script>
+<script src="temporadas_menu.js?v=20260911-0732"></script>
+<script src="app_offline.js?v=20260911-0732"></script>
+<script src="ayuda.js?v=20260911-0732"></script>
 
 <!-- Los archivos de video (datos_video_*.js.enc) se sacaron de esta
      pantalla: pesan unos 15 MB por temporada, descifrarlos son mas de

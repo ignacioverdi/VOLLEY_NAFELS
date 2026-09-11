@@ -84,10 +84,29 @@ window.OBJETIVOS_CONFIG = (window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.me
 }};
 
 function objClassify(id,val){
-  var m=window.OBJETIVOS_CONFIG.metas[id];
-  if(val>=m.g2) return{color:'#22c55e',bg:'rgba(34,197,94,.1)',   border:'rgba(34,197,94,.35)',  label:'Objetivo'};
-  if(val>=m.g1) return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
-  if(val>=m.y)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)',  border:'rgba(251,191,36,.3)',  label:'Neutro'};
+  /* ══ EL MISMO SEMAFORO QUE EL RESTO DEL SISTEMA ═══════════════════════════
+     Esta copia se habia quedado con los cortes viejos, escritos a mano y sin
+     relacion entre si. Resultado: las pantallas que cargan utils.js pintaban
+     los MISMOS numeros de otro color que el dashboard.
+
+     Ahora usa el mismo criterio que todas: el recorrido real de la liga, del
+     peor equipo al mejor.
+         verde fuerte  llegaste al mejor   ·  verde claro  cuarto de arriba
+         amarillo      mitad de arriba     ·  rojo         mitad de abajo   */
+  var m = (window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas[id]) || {};
+  var obj = (m.obj != null) ? m.obj : null;
+  var piso = (m.min != null) ? m.min : 0;
+  if (m.cortesPropios && m.g2 != null) {
+    if(val>=m.g2) return{color:'#22c55e',bg:'rgba(34,197,94,.1)',   border:'rgba(34,197,94,.35)',  label:'Objetivo'};
+    if(val>=m.g1) return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
+    if(val>=m.y)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)',  border:'rgba(251,191,36,.3)',  label:'Neutro'};
+    return              {color:'#ef4444',bg:'rgba(239,68,68,.1)',   border:'rgba(239,68,68,.3)',   label:'Lejos'};
+  }
+  var reco = (obj != null && obj > piso) ? ((val - piso) / (obj - piso) * 100) : null;
+  if (reco === null) reco = (val >= (m.g2||0)) ? 100 : 0;
+  if(reco>=100) return{color:'#22c55e',bg:'rgba(34,197,94,.1)',   border:'rgba(34,197,94,.35)',  label:'Objetivo'};
+  if(reco>=75)  return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
+  if(reco>=50)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)',  border:'rgba(251,191,36,.3)',  label:'Neutro'};
   return              {color:'#ef4444',bg:'rgba(239,68,68,.1)',   border:'rgba(239,68,68,.3)',   label:'Lejos'};
 }
 function objClassifyVsTeam(val,teamVal){
@@ -131,29 +150,51 @@ function objCalcVals(nombreJugador){
 }
 
 function objSingleBat(id,val,meta,cls,objLine){
-  var fh=val!==null?objPct(val,meta.min,meta.max):0;
-  var oh=objPct(objLine,meta.min,meta.max);
-  var txt=val!==null?fmtEff(val):'—';
-  return '<div style="flex:1;min-width:60px;max-width:110px;display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 5px 8px;border:0.5px solid '+cls.border+';border-radius:10px;background:'+cls.bg+';position:relative;overflow:hidden;font-family:Barlow Condensed,sans-serif">'
-    +'<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+cls.color+';border-radius:10px 10px 0 0"></div>'
-    +'<div style="font-size:22px;font-weight:900;line-height:1;color:'+cls.color+'">'+txt+'</div>'
-    +'<div style="width:32px;height:68px;display:flex;flex-direction:column;align-items:center">'
-      +'<div style="width:14px;height:5px;border-radius:2px 2px 0 0;background:'+cls.color+';opacity:.7;flex-shrink:0"></div>'
-      +'<div style="position:relative;width:32px;flex:1;border-radius:3px;overflow:hidden;border:2px solid '+cls.color+'">'
-        +'<div style="position:absolute;inset:0;background:#07080f"></div>'
-        +(val!==null?'<div style="position:absolute;bottom:0;left:0;right:0;height:'+fh+'%;background:'+cls.color+'"></div>':'')
-        +'<div style="position:absolute;bottom:25%;left:0;right:0;height:1px;background:#fff;opacity:.15"></div>'
-        +'<div style="position:absolute;bottom:50%;left:0;right:0;height:1px;background:#fff;opacity:.15"></div>'
-        +'<div style="position:absolute;bottom:75%;left:0;right:0;height:1px;background:#fff;opacity:.15"></div>'
-        +'<div style="position:absolute;bottom:'+oh+'%;left:-2px;right:-2px;display:flex;align-items:center;z-index:3">'
-          +'<div style="width:0;height:0;border-top:3px solid transparent;border-bottom:3px solid transparent;border-right:4px solid rgba(255,255,255,.9)"></div>'
-          +'<div style="flex:1;height:2px;background:rgba(255,255,255,.9);border-radius:1px"></div>'
-          +'<div style="width:0;height:0;border-top:3px solid transparent;border-bottom:3px solid transparent;border-left:4px solid rgba(255,255,255,.9)"></div>'
-        +'</div>'
-      +'</div>'
-    +'</div>'
-    +'<div style="font-size:8px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:2px 5px;border-radius:20px;background:'+cls.color+'22;color:'+cls.color+'">'+cls.label+'</div>'
-    +'</div>';
+  /* ══ UNA SOLA VERSION, IGUAL EN TODOS LADOS ═══════════════════════════════
+     Habia CINCO copias de esta funcion y CUATRO eran distintas entre si:
+     algunas con el nombre del fundamento, otras sin el; algunas con el total
+     de acciones, otras sin. La bateria se veia de una forma u otra segun por
+     que pantalla entraras.
+
+     Esta es la unica version. Si hay que cambiar algo, se cambia aca y vale
+     para todas.
+
+     Muestra: el fundamento, el valor, la bateria con la linea del objetivo,
+     sobre cuantas acciones esta hecha la cuenta, y el objetivo. */
+  var fh = (val!==null) ? objPct(val, meta.min, meta.max) : 0;
+  var oh = objPct(objLine, meta.min, meta.max);
+  var txt = (val!==null) ? fmtEff(val) : '\u2014';
+  var nombre = String(meta.label||'').replace(/\s*\(-?\d+\)\s*$/, '');
+  var n = (meta.n!=null) ? meta.n : null;
+  var tip = nombre;
+  try{
+    if(val!==null && meta.obj!=null && meta.min!=null && meta.obj>meta.min){
+      var reco = Math.round((val-meta.min)/(meta.obj-meta.min)*100);
+      tip = nombre+': '+val+'%'+(n!=null?' sobre '+n+' acciones':'')
+          + ' \u00b7 el peor de la liga '+meta.min+'%, el mejor '+meta.obj+'%'
+          + ' \u00b7 est\u00e1s al '+reco+'% del recorrido';
+    }
+  }catch(e){}
+  return '<div title="'+tip+'" style="flex:1;min-width:60px;max-width:110px;display:flex;'
+    + 'flex-direction:column;align-items:center;gap:3px;padding:7px 3px 6px;'
+    + 'border:1px solid '+cls.border+';border-radius:9px;background:'+cls.bg+';'
+    + 'position:relative;overflow:hidden;font-family:Barlow Condensed,sans-serif">'
+    + '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+cls.color+'"></div>'
+    + '<div style="font-size:9px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;'
+    + 'color:#94a3b8;line-height:1.1;text-align:center;white-space:nowrap;overflow:hidden;'
+    + 'text-overflow:ellipsis;max-width:100%">'+nombre+'</div>'
+    + '<div style="font-size:19px;font-weight:900;line-height:1;color:'+cls.color+'">'+txt+'</div>'
+    + '<div style="width:26px;height:36px;display:flex;flex-direction:column;align-items:center">'
+      + '<div style="width:11px;height:4px;border-radius:2px 2px 0 0;background:'+cls.color+';opacity:.7;flex-shrink:0"></div>'
+      + '<div style="position:relative;width:26px;flex:1;border-radius:3px;overflow:hidden;border:2px solid '+cls.color+'">'
+        + '<div style="position:absolute;inset:0;background:#07080f"></div>'
+        + (val!==null ? '<div style="position:absolute;bottom:0;left:0;right:0;height:'+fh+'%;background:'+cls.color+';opacity:.85"></div>' : '')
+        + '<div style="position:absolute;left:0;right:0;bottom:'+oh+'%;height:2px;background:#fff;opacity:.85"></div>'
+      + '</div>'
+    + '</div>'
+    + (n!=null ? '<div style="font-size:8px;font-weight:700;color:#8395ac">'+n+' acc.</div>' : '')
+    + '<div style="font-size:8px;font-weight:700;color:#64748b">obj '+objLine+'</div>'
+    + '</div>';
 }
 
 /* ── Las baterias de objetivos NO se dibujan mas desde aca ──────────────────

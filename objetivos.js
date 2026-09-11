@@ -34,7 +34,9 @@ function objClassify(id,val){
      al mejor. Verde fuerte al llegar al mejor, verde claro en el cuarto de
      arriba, amarillo en la mitad de arriba, rojo en la mitad de abajo.
      Es el mismo criterio que el resto de las pantallas. */
-  var m = window.OBJETIVOS_CONFIG.metas[id] || {};
+  /* La proteccion evita que reviente si esta funcion corre antes de que
+     termine de cargar la configuracion. */
+  var m = (window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas[id]) || {};
   var obj = (m.obj != null) ? m.obj : null;
   var piso = (m.min != null) ? m.min : 0;
   if (m.cortesPropios && m.g2 != null) {
@@ -63,14 +65,22 @@ function objClassifyVsTeam(val,teamVal){
 function objPct(v,mn,mx){return Math.max(0,Math.min(100,(v-mn)/(mx-mn)*100));}
 function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
 function objSingleBat(id,val,meta,cls,objLine){
-  /* Tarjeta compacta: nombre del fundamento, valor, bateria, sobre cuantas
-     acciones y el objetivo. La misma que usan las otras pantallas. */
+  /* ══ UNA SOLA VERSION, IGUAL EN TODOS LADOS ═══════════════════════════════
+     Habia CINCO copias de esta funcion y CUATRO eran distintas entre si:
+     algunas con el nombre del fundamento, otras sin el; algunas con el total
+     de acciones, otras sin. La bateria se veia de una forma u otra segun por
+     que pantalla entraras.
+
+     Esta es la unica version. Si hay que cambiar algo, se cambia aca y vale
+     para todas.
+
+     Muestra: el fundamento, el valor, la bateria con la linea del objetivo,
+     sobre cuantas acciones esta hecha la cuenta, y el objetivo. */
   var fh = (val!==null) ? objPct(val, meta.min, meta.max) : 0;
   var oh = objPct(objLine, meta.min, meta.max);
   var txt = (val!==null) ? fmtEff(val) : '\u2014';
   var nombre = String(meta.label||'').replace(/\s*\(-?\d+\)\s*$/, '');
   var n = (meta.n!=null) ? meta.n : null;
-
   var tip = nombre;
   try{
     if(val!==null && meta.obj!=null && meta.min!=null && meta.obj>meta.min){
@@ -80,7 +90,6 @@ function objSingleBat(id,val,meta,cls,objLine){
           + ' \u00b7 est\u00e1s al '+reco+'% del recorrido';
     }
   }catch(e){}
-
   return '<div title="'+tip+'" style="flex:1;min-width:60px;max-width:110px;display:flex;'
     + 'flex-direction:column;align-items:center;gap:3px;padding:7px 3px 6px;'
     + 'border:1px solid '+cls.border+';border-radius:9px;background:'+cls.bg+';'

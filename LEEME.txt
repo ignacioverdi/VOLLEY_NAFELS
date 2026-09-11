@@ -1,63 +1,82 @@
-HIGH SET: EL CHEQUEO PROFUNDO
-=============================
+UNIFICAR — PRIMERA ETAPA
+========================
 
-Un archivo: build_video.py. HACER_TODO y publicar.
+8 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
 
-
-HICE EL CHEQUEO QUE PEDISTE
----------------------------
-Conte los armados A MANO, leyendo los cuatro .dvw crudos de la carpeta HIGH
-SET, sin usar el motor. Despues compare contra lo que muestra la pantalla.
-
-RESULTADO: casi coincide, pero encontre 12 armados mal descartados.
+   analisis.html · jugador.html · panel_voley.html
+   dashboard.html · historial_voley.html
+   objetivos.js · objetivos_config.js · utils.js
 
 
-LO QUE ESTABA MAL
------------------
-El motor miraba TRES acciones hacia adelante y solo frenaba si aparecia un
-saque. No frenaba en el armado siguiente. Un caso real del 03/09:
+PRIMERO: HIGH SET CONFIRMADO
+----------------------------
+Verifique la pantalla publicada contra mi conteo a mano: 1.167 armados y los
+doce jugadores coinciden UNO POR UNO.
 
-     *03EH=      <- este armado
-     despues:  *05EH-  ,  *04EH-  ,  *20AH/
+   #05 107   #17  98   #09  97
+   #11 105   #20  98   #07  97
+   #01 102   #10  97   #13  93
+   #02 102   #04  98   #03  73
 
-El ataque llega TRES ARMADOS DESPUES y no tiene nada que ver con el primero,
-pero quedaba descartado igual.
-
-CORREGIDO: ahora se corta en cuanto aparece otro armado. A partir de ahi el
-ataque ya es del siguiente, no de este.
-
-     antes del arreglo   1.154 armados
-     despues             1.167 armados
-     mi conteo a mano    1.167 armados (descontando el #77, ver abajo)
+Confirmado: son todos armados de pelota alta, con valoracion, sin ataque
+posterior.
 
 
-LA TABLA, VERIFICADA
---------------------
-   #05  107      #17   98      #09   97
-   #11  105      #20   98      #07   97
-   #01  102      #10   97      #13   93
-   #02  102      #04   98      #03   73
-                              TOTAL 1.167
+LO QUE ENCONTRE AL EMPEZAR A UNIFICAR
+-------------------------------------
+El inventario dio peor de lo que pensaba:
 
-Cada uno de esos armados cumple las tres condiciones:
-   · es codigo E (armado)
-   · es tipo H (pelota alta)
-   · tiene valoracion (#, +, !, -, / o =)
-   · NO tiene ataque despues, antes del proximo armado o saque
+   effColor           21 copias · 5 versiones distintas
+   OBJETIVOS_CONFIG   12 copias
+   fmtEff             11 copias · 3 versiones
+   objSingleBat        8 copias · 4 versiones
+   objPct              8 copias
+   objClassify         6 copias · 2 versiones
 
-SI, TE LO CONFIRMO: la tabla es 100% armados de pelota alta con valoracion y
-sin ataque posterior.
+Y lo importante: NO eran copias iguales. Habia versiones distintas
+conviviendo, y eso ya estaba causando un problema real que no habiamos
+visto:
+
+   analisis.html y jugador.html usaban el SEMAFORO VIEJO.
+
+O sea: los mismos numeros daban un color en el dashboard y otro color en
+analisis. Nadie lo habia notado todavia.
 
 
-UN HALLAZGO: EL JUGADOR #77
----------------------------
-Aparece un armado del "#77" en el archivo del 03/09:
+LO QUE SE HIZO EN ESTA ETAPA
+----------------------------
+1. SE QUITARON LAS COPIAS LOCALES donde ya se carga el archivo compartido:
 
-     *13EH-  ->  *77EH!  ->  *01EH!
+      analisis.html      3 copias quitadas
+      jugador.html       4 copias quitadas
+      panel_voley.html   2 copias quitadas
 
-El plantel tiene los numeros 1,2,3,4,5,7,9,10,11,12,13,17,20. El 77 NO
-existe: es un error de tipeo del scout, casi seguro un 7 tecleado dos veces.
+   Verifique que objetivos_config.js se carga ANTES del primer uso en las
+   tres, que es el riesgo de hacer esto.
 
-El motor lo descarta bien porque no esta en el plantel, asi que no ensucia
-la tabla. Lo dejo anotado por si queres corregirlo en el .dvw. Es UNA
-accion, no cambia nada.
+2. SE ALINEARON LAS QUE NO SE PUEDEN QUITAR (porque son archivos
+   compartidos o la pantalla no carga el otro):
+
+      objSingleBat   5 copias -> UNA SOLA VERSION
+      objClassify    4 copias -> UNA SOLA VERSION
+      objPct         5 copias -> UNA SOLA VERSION
+      objClassifyVsTeam 4     -> UNA SOLA VERSION
+
+3. Se agrego una proteccion para que no reviente si la funcion corre antes
+   de que termine de cargar la configuracion.
+
+RESULTADO: las cuatro funciones de objetivos tienen ahora UNA SOLA VERSION
+en todo el sistema. Cambias una y vale para todas las pantallas.
+
+
+LO QUE FALTA (segunda etapa)
+----------------------------
+   effColor    21 copias, 5 versiones  <- la peor
+   fmtEff      11 copias, 3 versiones
+   OBJETIVOS_CONFIG  12 copias
+
+Estas tocan MUCHAS mas pantallas (heat maps, armadores, scouting rival,
+game plan). Prefiero que pruebes esta etapa primero: si las pantallas de
+objetivos andan bien, sigo con las otras con la misma tecnica.
+
+Es mas seguro hacerlo por partes que tocar 21 archivos de una.
