@@ -1,65 +1,75 @@
-BATERIAS MAS GRANDES
-====================
+LOS TRES PENDIENTES
+===================
 
-5 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
+4 archivos. HACER_TODO y publicar.
+(Lleva HACER_TODO porque cambian dos .dvw)
 
-   dashboard.html · historial_voley.html
-   objetivos.js · objetivos_config.js · utils.js
-
-
-PRIMERO: LA UNIFICACION QUEDO CERRADA
--------------------------------------
-Verifique los doce fundamentos en el dashboard:
-
-   Saque CERCA · Recepción NEUTRO · Blq #+ CERCA · Blq # CERCA
-   Atq Central LEJOS · Atq Alta LEJOS · Atq Rápida CERCA
-   Atq R#+ NEUTRO · Atq R! NEUTRO · Atq R- OBJETIVO
-   Atq Transición LEJOS · Defensa NEUTRO
-
-   LOS DOCE COINCIDEN. El color del numero y el de la bateria son el mismo.
-   Antes fallaban cuatro.
-
-Y los 15 archivos con effColor quedaron todos con la version unica:
-dashboard, analisis, jugador, panel_voley, historial, armadores, game_plan,
-ataque_jugador, saque_jugador, los 5 heat maps, scouting_rival y utils.js.
+   high_set.html                    el puntaje del !
+   panel_voley.html                 la colision de fmtEff
+   DVW ENTRENAMIENTOS .../&Pra-AXPO NAFELS-2026-09-09.dvw   el 77
+   DVW HIGH SET .../&Pra-AXPO NAFELS-2026-09-09.dvw         el 77
 
 
-LAS BATERIAS
-------------
-Medi cada pantalla antes de elegir el tamaño, porque no todas tienen el
-mismo espacio:
+1) EL ! DE HIGH SET: DE 0 A 0,5
+-------------------------------
+Como pediste. El baremo queda:
 
-   dashboard   tarjetas de 107 px de ancho, las 12 en UNA fila
-   jugador     tarjetas de  60 px de ancho, en DOS filas
+   #  perfecto   +2
+   +  bueno      +1
+   !  neutro    +0,5      <- era 0
+   -  malo        -1
+   /  vendida   -1,5
+   =  error       -2
 
-El limite es el ancho, no el alto: las paginas ya scrollean (1.670 px contra
-791 de pantalla), asi que crecer hacia abajo no molesta.
+OJO CON EL IMPACTO, porque es grande: el equipo tiene 597 pelotas neutras
+sobre 1.167 armados, o sea la mitad.
 
-   antes    bateria 26 x 36
-   ahora    bateria 32 x 72     el doble de alta
+   antes   -172,0 puntos
+   ahora   +126,5 puntos
 
-Y lo que la acompaña:
-   el numero      19 -> 22 px
-   el nombre       9 -> 10 px
-   el pico de arriba, proporcional
-
-PROBADO EN VIVO en las dos pantallas, que son las que mas aprietan:
-
-   dashboard   las 12 siguen en UNA fila
-   jugador     siguen en DOS filas, tarjeta 60 x 138
-   nada se corta ni se desborda en ninguna de las dos
+Pasa de negativo a positivo. Es lo que pediste y tiene sentido —una pelota
+neutra no es un error, algo aporta— pero te aviso para que no te sorprenda.
 
 
-UNA COSA QUE HICE DISTINTO ESTA VEZ
------------------------------------
-Antes de dar por hecho el cambio, verifique que NINGUNA copia quedara con la
-bateria chica:
+2) EL 77 ERA UN 7
+-----------------
+Corregido en los dos archivos del 09/09.
 
-   dashboard.html         1 copia · 1 nueva · 0 viejas
-   historial_voley.html   1 copia · 1 nueva · 0 viejas
-   objetivos.js           1 copia · 1 nueva · 0 viejas
-   objetivos_config.js    1 copia · 1 nueva · 0 viejas
-   utils.js               1 copia · 1 nueva · 0 viejas
+PERO OJO, algo importante que encontre: el 77 NO siempre es un error. Lo
+busque en TODAS las carpetas y es un numero de camiseta REAL y muy usado en
+los partidos de la liga —aparece cientos de veces en los .dvw de partidos,
+tanto en rivales como en Nafels—.
 
-Es el chequeo que me falto la vez pasada con effColor, cuando cambie la
-copia que no se usaba.
+Por eso NO puse una regla general que cambie todos los 77. Corregi UNA sola
+linea, la del entrenamiento donde el plantel no tiene ese numero:
+
+   *13EH-  ->  *77EH!  ->  *01EH!
+   queda:      *07EH!
+
+Los partidos no se tocaron.
+
+
+3) LAS 3 VERSIONES DE fmtEff — RESUELTO, Y HABIA UN PROBLEMA REAL
+-----------------------------------------------------------------
+Lo analice a fondo. De las 11 copias:
+
+   8 copias  devuelven texto plano ("39%") y SON IDENTICAS entre si.
+             No hay nada que unificar: ya son la misma.
+
+   2 copias  en nla_stats_table y nla_stats_template devuelven HTML con
+             color y toman 2 parametros. Son de las tablas de LIGA, no del
+             club, y no cargan objetivos_config: no se pisan con nada.
+
+   1 copia   en panel_voley.html devuelve HTML.  <-- ACA ESTABA EL PROBLEMA
+
+EL PROBLEMA REAL: panel_voley define fmtEff DOS VECES. Primero la de texto
+y mas abajo la de HTML. Como la segunda se define despues, GANA. Y
+objSingleBat —que arma las baterias— llama a fmtEff esperando un numero, y
+recibia HTML crudo.
+
+SOLUCION: la de HTML pasa a llamarse fmtEffHTML, con sus 3 llamadas
+actualizadas. No se unifican —son funciones distintas— simplemente dejan de
+pisarse.
+
+Esto explica por que las baterias de panel_voley se veian distinto que en
+las otras pantallas.

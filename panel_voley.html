@@ -1153,7 +1153,18 @@ function toggleTabla(){
 
 function pct(v){if(v===null||v===undefined)return '--';}
 function fmtPct(v){if(v===null||v===undefined||isNaN(v))return '--';return Math.round(v*100)+'%';}
-function fmtEff(v){
+/* ══ RENOMBRADA: ANTES SE LLAMABA fmtEff Y PISABA A LA COMPARTIDA ══════════
+   Esta funcion devuelve HTML con color —'<span style="color:...">39%</span>'—
+   y es la que usan las tablas de esta pantalla.
+
+   El problema: se llamaba fmtEff, igual que la compartida de
+   objetivos_config.js, que devuelve texto plano ("39%"). Como esta se define
+   DESPUES, ganaba, y objSingleBat —que arma las baterias— terminaba metiendo
+   HTML crudo donde esperaba un numero.
+
+   No son duplicados: son funciones distintas con el mismo nombre. La solucion
+   no es unificarlas sino que no se pisen. */
+function fmtEffHTML(v){
   if(v===null||v===undefined||isNaN(v))return '<span style="color:var(--mut)">--</span>';
   const c=v>=50?C.green:v>=20?C.amber:v>=0?C.orange:C.red;
   return `<span class=t-eff style="color:${c}">${v>0?'+':''}${v}%</span>`;
@@ -1219,7 +1230,7 @@ function renderTabla(){
     return `<tr${cls}>
       ${nameCell}
       <td class=t-total>${sT||'--'}</td>
-      <td>${fmtEff(sEff)}</td>
+      <td>${fmtEffHTML(sEff)}</td>
       ${pc(sPt,C.green,s[0],sT,"punto")}
       ${pc(sVend,C.red,s[4],sT,"sin ataque")}
       ${pc(sPos,C.lgreen,s[1],sT,"limitado")}
@@ -1228,7 +1239,7 @@ function renderTabla(){
       ${pc(sErr,C.dred,s[5],sT,"error")}
       <td class=sep-col></td>
       <td class=t-total>${rT||'--'}</td>
-      <td>${fmtEff(rEff)}</td>
+      <td>${fmtEffHTML(rEff)}</td>
       ${pc(rPt,C.green,r[0],rT,"perfecta")}
       ${pc(rPos,C.lgreen,r[1],rT,"buena")}
       ${pc(rAdm,C.amber,r[2],rT,"incómoda")}
@@ -1237,7 +1248,7 @@ function renderTabla(){
       ${pc(rErr,C.dred,r[5],rT,"error")}
       <td class=sep-col></td>
       <td class=t-total>${aT||'--'}</td>
-      <td>${fmtEff(aEff)}</td>
+      <td>${fmtEffHTML(aEff)}</td>
       ${pc(aPt,C.green,a[0],aT,"punto")}
       ${pc(aVend,C.red,a[4],aT,"bloqueado")}
       <td style="color:${C.dred}">${aErr!==null?aErr+'%':'--'}</td>
