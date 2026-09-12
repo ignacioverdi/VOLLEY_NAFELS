@@ -1,49 +1,57 @@
-EL CARTEL DE "NO PUDE IDENTIFICAR AL JUGADOR"
-=============================================
+EL ARCHIVO NO LLEGO AL SERVIDOR
+===============================
 
-6 archivos. Publicar y Ctrl+Shift+R.
-
-
-POR QUE SALTABA
----------------
-Ese cartel es mio. Para saber que jugador estabas mirando yo leia una
-variable global... pero CADA PANTALLA LA LLAMA DISTINTO:
-
-   dashboard.html     _dbatNombre
-   jugador.html       _objNombre
-   analisis.html      _objNombre
-   panel_voley.html   no tiene ninguna
-
-Yo solo miraba la del dashboard. Por eso ahi funcionaba y en las otras
-saltaba el cartel.
-
-LO CONFIRME EN LA APP: entre a jugador.html y la variable era _objNombre con
-el valor "DURDOS". La version publicada ni la miraba.
+UN SOLO ARCHIVO: objetivos_config.js
 
 
-LO QUE HICE
------------
-En vez de adivinar cual variable mirar, ahora EL NOMBRE VIAJA CON LA
-BATERIA. La bateria ya sabe de que fila salio —eso lo arreglamos antes—, asi
-que tambien lleva de quien es.
+QUE PASO
+--------
+Fui a fijarme y el servidor TODAVIA TIENE LA VERSION VIEJA. Pedi el archivo
+sin cache y confirme:
 
-Las globales quedan solo como respaldo, las tres, y ademas se busca en la
-pantalla como ultimo recurso.
+   lo publicado   ->  llama a repAbrir (mi reproductor propio)
+   lo que mande   ->  abre cortes.html
 
-Probado en jugador.html:
+O sea que el objetivos_config.js del zip anterior no se subio.
 
-   nombre: DURDOS  ->  numero: 1  ->  31 errores de recepción
-   y los 31 son de DURDOS, ninguno de otro
+Y ojo con esto: SI BORRASTE reproductor.js del repo como te dije, ahi si se
+rompe todo. La version vieja que esta arriba LO NECESITA. Por eso no abria
+nada.
 
-Es el mismo error de siempre y ya van varias: arreglo algo mirando una sola
-pantalla y las otras cinco quedan afuera. Esta vez toque las seis de una.
+Fue culpa mia: te dije que se podia borrar reproductor.js en el mismo texto
+donde te mandaba el archivo nuevo. Si borraste uno y no subiste el otro,
+quedaste sin ninguno de los dos.
 
 
-LO QUE QUEDA IGUAL
-------------------
-Todo lo demas ya andaba y lo verifique antes de tocar nada:
+QUE HACER
+---------
+1. Subi este objetivos_config.js
+2. Recien DESPUES borra reproductor.js si queres (ya no lo va a usar nadie)
 
-   los 8 fundamentos con su valoración correcta
-   la fila del equipo: 163 clips de 7 jugadores
-   Antes / Después · velocidad · pantalla completa · guardar
-   el #8 y el #6 fuera del plantel
+En ese orden. Nunca al reves.
+
+Si ya lo borraste, no pasa nada: subi este archivo y listo, porque este NO
+usa reproductor.js.
+
+
+COMO SABER QUE SUBIO BIEN
+-------------------------
+Abri la consola en el dashboard y pega esto:
+
+   fetch('/objetivos_config.js').then(r=>r.text()).then(t=>
+     console.log(t.includes('cortes.html?') ? 'OK, subio' : 'todavia la vieja'))
+
+Si dice OK, tocas un numero en la bateria y te abre cortes.html con los
+filtros puestos.
+
+
+LO QUE VERIFIQUE HOY
+--------------------
+Con lo que hay publicado ahora mismo, el flujo llega hasta el final:
+
+   la ventanita abre                          OK
+   encuentra la fila del Error                OK
+   el numero tiene su onclick bien armado     OK
+      objVerVideo('rec','e','Jugador',18,'BARTHOLET')
+
+Asi que el puente esta bien. Solo falta el archivo nuevo.

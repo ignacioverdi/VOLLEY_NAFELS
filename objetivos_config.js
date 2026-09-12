@@ -756,63 +756,56 @@ function objSesionElegida(){
 }
 
 function objVerVideo(id, clave, nombreFila, cuantas, jugNombre){
+  /* ══ AL REPRODUCTOR QUE YA EXISTE ═════════════════════════════════════════
+     cortes.html ya hace TODO esto: tiene las acciones filtradas, ordenadas,
+     con su video, y el reproductor armado. Lo usan 9 pantallas del sistema
+     —dashboard, los mapas de calor, informe de equipo, ataque_jugador—.
+
+     Yo habia escrito un reproductor entero al lado. Era trabajo de mas y
+     traia errores nuevos. Lo unico que hacia falta era pasarle los filtros.
+
+     Los parametros son los suyos, tal cual los lee:
+         num   el numero de camiseta (vacio = todo el equipo)
+         sk    Saque · Recepción · Ataque · Bloqueo · Defensa · Armado
+         ev    la valoracion: #  +  !  -  /  =
+     La barra va codificada porque si no rompe la direccion. */
   try{
-    if(typeof repAbrir !== 'function'){
-      alert('El reproductor no está cargado en esta pantalla.');
-      return;
-    }
     var cfg = OBJ_DETALLE[id];
     if(!cfg) return;
 
-    /* la letra del scout que hay que buscar */
     var sig = null;
     (cfg.filas||[]).forEach(function(f){ if(f[0] === clave) sig = f[4]; });
     if(!sig) sig = ({p:'#', b:'/', e:'='})[clave] || null;
     if(!sig) return;
 
-    /* ══ DE QUIEN SON LAS ACCIONES ═══════════════════════════════════════
-       Si la fila es la del EQUIPO, no se filtra por jugador.
-       Si es la de un jugador, hay que saber cual. Cada pantalla guarda esa
-       eleccion con otro nombre, y ademas guarda el NOMBRE mientras que el
-       reproductor filtra por NUMERO: se busca el numero en el plantel. */
-    /* ══ DE QUIEN SON ═══════════════════════════════════════════════════
-       Antes esto leia una variable global, y cada pantalla la llama distinto:
-       _dbatNombre en el dashboard, _objNombre en jugador y analisis, y en
-       panel_voley directamente no existe. Por eso saltaba el cartel de "no
-       pude identificar al jugador".
-
-       Ahora el nombre viaja CON la bateria, que ya sabe de que fila salio. Las
-       globales quedan solo como respaldo. */
-    var jug = null, quien = 'Equipo';
+    var jug = '';
     if(!(nombreFila && /equipo/i.test(nombreFila))){
-      var nom = jugNombre || null;
+      var nom = jugNombre || '';
       if(!nom){
-        try{ nom = window._dbatNombre || window._objNombre || window.__objJugNombre
-                   || (window.__objJugActual && (window.__objJugActual.nombre
-                       || window.__objJugActual.name || window.__objJugActual)); }catch(e){}
+        try{ nom = window._dbatNombre || window._objNombre || ''; }catch(e){}
       }
-      /* ultimo recurso: el nombre que la pantalla muestra como elegido */
-      if(!nom){
-        try{
-          var el = document.querySelector('.jug-sel, .player-sel, [class*="jugSel"], .obj-jug.sel');
-          if(el) nom = (el.textContent||'').trim();
-        }catch(e){}
-      }
-      if(nom){ quien = String(nom); jug = objNumeroDe(nom); }
-      if(!jug){
+      var n = objNumeroDe(nom);
+      if(!n){
         alert('No pude identificar al jugador para traer sus acciones.');
         return;
       }
+      jug = String(n);
     }
 
-    repAbrir({
-      titulo: quien + ' \u00b7 ' + (cfg.nom||'') + ' \u00b7 ' + sig
-              + (cuantas ? '  (' + cuantas + ')' : ''),
-      num: jug, fund: OBJ_FUND[id], ev: sig,
-      sesion: objSesionElegida()
-    });
+    var q = [];
+    if(jug) q.push('num=' + jug);
+    q.push('sk=' + encodeURIComponent(OBJ_SKILL_NOMBRE[id] || ''));
+    q.push('ev=' + encodeURIComponent(sig));
+    window.open('cortes.html?' + q.join('&'), '_blank');
   }catch(e){}
 }
+
+/* El nombre del fundamento como lo espera cortes.html. */
+var OBJ_SKILL_NOMBRE = {
+  sq:'Saque', rec:'Recepción', def:'Defensa', bqpos:'Bloqueo', bqpt:'Bloqueo',
+  atqq:'Ataque', atqhb:'Ataque', atqx:'Ataque',
+  atqrp:'Ataque', atqri:'Ataque', atqrm:'Ataque', atqtr:'Ataque'
+};
 
 
 function objTocarBat(mid){
