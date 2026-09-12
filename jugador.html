@@ -11,16 +11,7 @@
 <script src="selector_categoria.js?v=20260912-1132"></script>
 <script src="game_plans.js?v=20260912-1132" onerror="void 0"></script>
 <script src="objetivos_config.js?v=20260912-1132" onerror="void 0"></script>
-<!-- El mini reproductor: uno solo para todo el sistema. Lo usan la
-     ventanita de las baterias y cualquier pantalla que quiera mostrar
-     las acciones de un numero. -->
 
-<!-- Los datos que necesita el mini reproductor. Son los MISMOS que usa
-     plan_partido: las acciones con su segundo de video y el mapa que
-     dice que video corresponde a cada sesion. No se duplica nada:
-     se cargan los archivos que ya existen. -->
-<script src="mapa_videos.js.enc" onerror="void 0"></script>
-<script src="mapa_videos_ent.js.enc" onerror="void 0"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
@@ -44,9 +35,6 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="datos_gameplan.js.enc" onerror="window.GAMEPLAN_DATA=null"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
-<!-- El reproductor va DESPUES de los datos: si carga antes, no encuentra
-     ni las acciones ni el mapa de videos y no abre nada. -->
-<script src="reproductor.js"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
 <script src="datos_prep_fisica.js.enc" onerror="window.PREP_DATA=null"></script>
   <!-- El plantel real de la temporada. Sin esto, window.EQUIPO_DATA nunca existe

@@ -1,57 +1,61 @@
-EL ARCHIVO NO LLEGO AL SERVIDOR
-===============================
+TODO LIMPIO
+===========
 
-UN SOLO ARCHIVO: objetivos_config.js
+5 archivos. Publicar los 5 juntos y Ctrl+Shift+R.
 
+   objetivos_config.js   la ventanita + el enlace a cortes.html
+   dashboard.html
+   panel_voley.html      les saque lo que ya no hace falta
+   analisis.html
+   jugador.html
 
-QUE PASO
---------
-Fui a fijarme y el servidor TODAVIA TIENE LA VERSION VIEJA. Pedi el archivo
-sin cache y confirme:
-
-   lo publicado   ->  llama a repAbrir (mi reproductor propio)
-   lo que mande   ->  abre cortes.html
-
-O sea que el objetivos_config.js del zip anterior no se subio.
-
-Y ojo con esto: SI BORRASTE reproductor.js del repo como te dije, ahi si se
-rompe todo. La version vieja que esta arriba LO NECESITA. Por eso no abria
-nada.
-
-Fue culpa mia: te dije que se podia borrar reproductor.js en el mismo texto
-donde te mandaba el archivo nuevo. Si borraste uno y no subiste el otro,
-quedaste sin ninguno de los dos.
+DESPUES de publicar estos 5, podes borrar reproductor.js del repo.
+En ese orden. Si lo borras antes, queda un rato sin funcionar.
 
 
-QUE HACER
----------
-1. Subi este objetivos_config.js
-2. Recien DESPUES borra reproductor.js si queres (ya no lo va a usar nadie)
+QUE CAMBIO
+----------
+Tocas un numero en la bateria y se abre cortes.html con los filtros puestos:
 
-En ese orden. Nunca al reves.
+   cortes.html?num=11&sk=Recepción&ev==
 
-Si ya lo borraste, no pasa nada: subi este archivo y listo, porque este NO
-usa reproductor.js.
+Nada mas. cortes.html ya hace todo el trabajo —las acciones filtradas, el
+reproductor, los controles— y lo usan otras 9 pantallas del sistema.
 
-
-COMO SABER QUE SUBIO BIEN
--------------------------
-Abri la consola en el dashboard y pega esto:
-
-   fetch('/objetivos_config.js').then(r=>r.text()).then(t=>
-     console.log(t.includes('cortes.html?') ? 'OK, subio' : 'todavia la vieja'))
-
-Si dice OK, tocas un numero en la bateria y te abre cortes.html con los
-filtros puestos.
+Probado con la direccion real: 18 FILTERED CLIPS, 1 de 14 jugadores,
+Reception tildado. Son los 18 errores de Bartholet.
 
 
-LO QUE VERIFIQUE HOY
---------------------
-Con lo que hay publicado ahora mismo, el flujo llega hasta el final:
+QUE SE SACO DE LAS 4 PANTALLAS
+------------------------------
+Todo lo que yo habia agregado para mi reproductor:
 
-   la ventanita abre                          OK
-   encuentra la fila del Error                OK
-   el numero tiene su onclick bien armado     OK
-      objVerVideo('rec','e','Jugador',18,'BARTHOLET')
+   reproductor.js
+   mapa_videos.js.enc
+   mapa_videos_ent.js.enc
+   plan_partido_data.js.enc
 
-Asi que el puente esta bien. Solo falta el archivo nuevo.
+Son unos 700 bytes de HTML por pantalla, pero sobre todo ~1 MB de datos que
+ya no se descargan en cada visita. Las cuatro van a cargar mas rapido.
+
+(jugador.html conserva plan_partido_data porque ya lo tenia de antes, no lo
+agregue yo.)
+
+Tambien saque objSesionElegida, que quedo sin uso: cortes.html tiene sus
+propios filtros de partido y sesion, mejores que el que yo habia hecho.
+
+
+LO QUE QUEDA FUNCIONANDO, TODO VERIFICADO
+-----------------------------------------
+   la ventanita de las 12 baterias
+   el desglose con el signo del scout y la cuenta a la vista
+   "de cada 10" con decimal
+   "lo que mas te cuesta"
+   "para llegar a X" con consejos realistas
+   la palanca mas grande cuando ningun cambio solo alcanza
+   el aviso cuando son pocas acciones
+   la ventana del ataque, que se explica como resta
+   el jugador viaja con la bateria (no depende de variables de cada pantalla)
+   el #8 y el #6 fuera del plantel
+
+Verifique que ninguna funcion llame a algo que ya no existe.
