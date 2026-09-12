@@ -256,6 +256,18 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <div class="grid3" id="row-central"></div>
 <div class="rolehead">Opuestos <span>ataque · espejo invertido pos. 2 · línea = z5/z7/z4</span></div>
 <div class="grid2" id="row-opuesto"></div>
+<!-- ══ ARMADORES ═══════════════════════════════════════════════════════════
+     Faltaba el grupo. Los armadores atacan poco pero atacan —el segundo
+     toque, la finta— y sus ataques caian en el grupo de opuestos, que no es
+     donde van. Ahora tienen el suyo, con el acumulado del puesto arriba
+     igual que los otros tres. -->
+<div class="rolehead">Armadores <span>ataque · segundo toque y fintas</span></div>
+<div class="grid2" id="row-armador"></div>
+<!-- El libero no ataca. Si aparece algo aca es un error de tipeo en el
+     scout, y conviene que se vea en vez de quedar escondido entre los
+     puntas. Si no hay nada, la fila no se muestra. -->
+<div class="rolehead" id="head-libero" style="display:none">Líberos <span>no deberían tener ataques · si aparece alguno, revisá el scout</span></div>
+<div class="grid2" id="row-libero"></div>
 </div><div class="tabgroup" id="tab-saque"><div class="rolehead">Saque <span>dónde y cómo saca · azul · fuerza = fuerte/medio/fácil</span></div>
 <div class="grid3" id="row-saque"></div>
 </div><div class="tabgroup" id="tab-recepcion"><div class="rolehead">Recepción <span>cómo recibe según el saque rival · naranja · zona donde recibe</span></div>
@@ -936,7 +948,7 @@ function makeTeamPlayer(role){
   return {id:role.charAt(0)+'-equipo', num:'\u03a3', name:'EQUIPO', pos:'Acumulado', role:role, total:rows.length, read:'', data:rows, isTeam:true};
 }
 function buildTeam(){
-  ['punta','central','opuesto','saque','reception','defense','bloqueo'].forEach(function(r){var el=document.getElementById('row-'+r);if(el)el.innerHTML='';});
+  ['punta','central','opuesto','armador','libero','saque','reception','defense','bloqueo'].forEach(function(r){var el=document.getElementById('row-'+r);if(el)el.innerHTML='';});
   PLAYERS=TEAMS[TEAM].players;INFO=TEAMS[TEAM].info;computeMatchMeta();
   /* ── BLOQUEO: solo la temporada en curso, y solo quien tiene acciones ─────
      PP_BLOCK viene de datos_bloqueo.js, que se arma leyendo TODOS los .dvw de
@@ -969,6 +981,8 @@ function buildTeam(){
   TEAMCARDS=[]; ['punta','central','opuesto','saque','reception','defense','bloqueo'].forEach(function(role){var tp=makeTeamPlayer(role); if(tp) TEAMCARDS.push(tp);});
   TEAMCARDS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('afterbegin',buildSection(p));});
   PLAYERS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('beforeend',buildSection(p));});
+  try{ var _hl=document.getElementById('head-libero'), _rl=document.getElementById('row-libero');
+       if(_hl&&_rl) _hl.style.display = _rl.children.length ? '' : 'none'; }catch(e){}
   TEAMCARDS.concat(PLAYERS).forEach(function(p){ROLECFG[p.role].filters.forEach(function(fl,i){var fe=document.getElementById(p.id+'-f'+i);if(fe)fe.addEventListener('change',function(){if(ROLECFG[p.role].stats==='dig'&&fl.lab==='Ataque desde'){defRefreshTipo(p);}render(p);});});var me=document.getElementById(p.id+'-min');if(me)me.addEventListener('input',function(){render(p);});render(p);});
   buildRivalPanel();buildMatchPanel();updateCounts();
   document.getElementById('teamname').textContent=TEAMS[TEAM].name;

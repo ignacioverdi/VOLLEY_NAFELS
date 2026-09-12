@@ -589,7 +589,15 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
             # que es donde suele rematar cuando le toca.
             p = pos.get(n, '')
             return {'Central':'central', 'Opuesto':'opuesto', 'Punta':'punta',
-                    'Armador':'opuesto', 'L\u00edbero':'punta'}.get(p, 'punta')
+            # ══ CADA PUESTO EN SU GRUPO ═══════════════════════════════════
+            # El armador se mandaba a OPUESTOS y el libero a PUNTAS, porque
+            # la pantalla solo tenia esas tres filas. Ahora hay una cuarta
+            # para los armadores, asi que va donde corresponde.
+            #
+            # El libero NO ataca: si aparece con ataques es un error de
+            # tipeo en el scout. Se lo deja en su propio grupo para que se
+            # note, en vez de esconderlo entre los puntas.
+            'Armador':'armador', 'L\u00edbero':'libero'}.get(p, 'punta')
         players=[]
         def add(pfx,num,role,data,read):
             players.append({"id":pfx+str(num),"num":num,"name":apellido(D['names'].get(str(num),'')),

@@ -1,75 +1,88 @@
-LOS NOMBRES, LOS PUESTOS Y EL ARMADOR
-=====================================
+LAS TRES COSAS + UN ERROR MIO QUE ENCONTRE
+==========================================
 
-HACER_TODO y publicar. REEMPLAZA al zip de puestos.
+HACER_TODO y publicar. REEMPLAZA a los dos zips anteriores.
 
-   panel_vivo.html        a la raiz
-   plan_partido.html      a la raiz
-   gen_plan_partido.py    a la raiz
-   los 13 .dvw            a sus carpetas, pisando los que estan
+   panel_vivo.html · plan_partido.html · gen_plan_partido.py
+   config_club.json · los 13 .dvw
 
 
-1) LOS 47 ATAQUES DEL LIBERO — la causa es esta
------------------------------------------------
-EL PLAN DE PARTIDO AGRUPA POR NOMBRE, NO POR NUMERO.
+0) UN ERROR MIO, IMPORTANTE
+---------------------------
+Cuando arme lo de la maquina de saque, CREE un config_club.json nuevo con
+solo ese dato. Pise el que existia, que tenia la tabla de 24 equipos.
 
-En los .dvw el #7 y el #20 estaban escritos IGUAL: "SCHIMD" los dos. Son
-los dos hermanos Schmid. El plan los fusiono en uno solo:
+   antes de mi cambio   24 equipos configurados
+   despues               0
 
-   #7  SCHMID ROY   46 ataques  (central)
-   #20 SCHMID JONA   1 ataque   (libero)
-                    ──────────
-   quedaba          47 ataques a nombre del #20
+Esa tabla es la que traduce cada forma de escribir un nombre a un solo
+equipo. Sin ella, cada variante se volvia un equipo distinto.
 
-Y el #7 DESAPARECIA de los centrales, porque ya no existia como jugador
-aparte. Los dos errores que viste son el mismo error.
-
-plantel_nafels.js los distingue —"SCHMID R" y "SCHMID J"— y hasta lo avisa
-en su comentario: "Si hay dos jugadores con el mismo apellido, distinguilos
-en ap". El panel no lo usaba: escribia lo que tuviera cargado en la sesion.
-
-CORREGIDO: el panel toma el nombre Y el puesto del plantel maestro. Y van
-los 13 .dvw ya arreglados, asi no esperas a scoutear de nuevo.
-
-Despues de HACER_TODO:
-   #7  SCHMID R  CENTRAL  con sus 46 ataques
-   #20 SCHMID J  LIBERO   con 1, fuera de los puntas
+RESTAURADO del historial de GitHub, con la maquina de saque agregada
+encima. Perdon: lo hice sin verificar si el archivo ya existia.
 
 
-2) LA DISTRIBUCION DEL ARMADOR, VACIA
--------------------------------------
-Los datos nunca se fueron: Vazquez tiene 251 armados guardados. Lo que se
-rompio fue el vinculo.
+1) POR QUE APARECIA MAS DE UN EQUIPO — tenias razon
+----------------------------------------------------
+El equipo figura de tres formas en los .dvw:
 
-El plan arma sus claves con el nombre del archivo —"AXPO NAFELS" pasa a ser
-"axponafels"— y el motor de armadores usa la clave del club: "nafels".
-Mientras hubo partidos de liga, donde el equipo figura como "Näfels", las
-dos coincidian. Esta temporada arranco con entrenamientos solos, todos con
-el nombre largo, y dejaron de encontrarse.
+   "AXPO NAFELS"    en 25 archivos
+   "Volley NÄFELS"  en 1
+   "Volley Näfels"  en 1
 
-CORREGIDO: ahora busca el equipo aunque el nombre no coincida exacto.
+Cada una generaba una clave distinta y el sistema las trataba como equipos
+DIFERENTES. Por eso la Distribucion del armador quedaba vacia: los datos
+estaban bajo una clave y la pantalla buscaba en otra.
+
+La tabla de equipos YA tenia las nueve variantes cargadas —AXPO NAFELS,
+VOLLEY NAFELS, BIOGAS VOLLEY NAFELS...— todas apuntando a "Nafels". Con el
+archivo restaurado vuelven a unificarse solas.
+
+Ademas los 13 .dvw van con UN SOLO nombre: "AXPO NAFELS".
+
+Y el plan de partido ahora tambien encuentra al equipo aunque la clave no
+coincida exacto, como segunda red.
 
 
-3) EL #6 Y EL #8
+2) EL ATAQUE DEL LIBERO — era un tipeo, lo confirme
+----------------------------------------------------
+Tenias razon: es imposible. Mira el contexto en el archivo del 04/09:
+
+     *03EH=
+     *05EH-
+     *04EH-
+     *20AH/     <- este, una A entre cientos de E
+     *11EH-
+     *09EH+
+
+Esta en el medio del ejercicio de high set, rodeado de armados. El scout
+quiso poner *20EH/ y le salio A.
+
+Corregido en el .dvw. Ahora el #20 tiene CERO ataques.
+
+
+3) EL GRUPO DE ARMADORES — agregado
+------------------------------------
+Y encontre por que faltaba: el generador mandaba al armador al grupo de
+OPUESTOS y al libero al de PUNTAS, porque la pantalla solo tenia esas tres
+filas. Por eso Vazquez aparecia entre los opuestos.
+
+Ahora son cinco grupos:
+
+   PUNTAS       Σ del puesto + cada jugador
+   CENTRALES    Σ del puesto + cada jugador
+   OPUESTOS     Σ del puesto + cada jugador
+   ARMADORES    Σ del puesto + cada jugador     <- nuevo
+   LIBEROS      solo aparece si hay algo, con un aviso
+
+La fila de liberos esta escondida mientras no haya nada. Si algun dia
+aparece un ataque ahi, se ve enseguida que hubo un error de tipeo en vez de
+quedar disimulado entre los puntas.
+
+
+COMO VA A QUEDAR
 ----------------
-   #8  es la maquina de saque. Tiene 1 ataque suelto, seguro un error de
-       tipeo. No esta en el plantel, asi que va a quedar sin puesto.
-   #6  es el invitado. 13 ataques reales.
-
-Los dos van a aparecer sin nombre y sin puesto. Si queres que no aparezcan,
-se filtra por el plantel maestro: decime y lo hago.
-
-
-SOBRE EL ORDEN POR PUESTO QUE PEDISTE
--------------------------------------
-Ya funciona asi: muestra el acumulado del grupo y despues cada jugador.
-
-   PUNTAS      Σ EQUIPO 323 · BARTHOLET 82 · DURDOS 76 · ROFFLER 63 · BOGDANOVSKI 55
-   CENTRALES   Σ EQUIPO  65 · CLEMENT 49
-   OPUESTOS    Σ EQUIPO 153 · NORRIS 90 · SCHWITTER 57
-
-Lo que faltaba era que los jugadores estuvieran en el grupo correcto, que es
-lo que arregla este zip.
-
-FALTA EL GRUPO ARMADORES. Hoy hay Puntas, Centrales y Opuestos nada mas. Se
-puede agregar sin problema: decime y lo hago en la proxima.
+   PUNTAS      Σ EQUIPO · DURDOS · BARTHOLET · BOGDANOVSKI · ROFFLER
+   CENTRALES   Σ EQUIPO · CLEMENT · SCHMID R · JOHANSSON
+   OPUESTOS    Σ EQUIPO · NORRIS · SCHWITTER
+   ARMADORES   Σ EQUIPO · VAZQUEZ · STEIMANN
