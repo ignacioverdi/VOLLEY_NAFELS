@@ -282,6 +282,8 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
                 except: continue
                 num = _dorsal(eq_slug, num)   # si cambio de dorsal, el actual
                 D['names'][num]=f[9]
+                # el nombre de pila, para distinguir homonimos
+                D.setdefault('nombres_pila', {})[str(num)] = (f[10] if len(f) > 10 else '')
                 # ── El puesto de cada jugadora ──────────────────────────
                 # Estaba mirando el campo 12 buscando la letra "L". El puesto
                 # vive en el campo 13 y va en NUMEROS:
@@ -498,16 +500,40 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
             x = _u2.normalize('NFKD', x or '').encode('ascii', 'ignore').decode()
             return re.sub(r'\s+', ' ', x).strip().lower()
 
+        # ══ SOLO SE JUNTAN SI ES LA MISMA PERSONA ═══════════════════════════
+        #  Esta regla existe porque un jugador puede cambiar de numero entre
+        #  partidos y hay que juntar sus acciones. Pero estaba juntando por
+        #  APELLIDO, y eso es distinto:
+        #
+        #     #7  SCHMID ROY    central, 46 ataques
+        #     #20 SCHMID JONA   libero,  0 ataques
+        #
+        #  No son la misma persona: son dos jugadores con el mismo apellido.
+        #  La regla les daba todo al numero mas alto, asi que el libero
+        #  aparecia con 46 ataques y el central desaparecia del plan.
+        #
+        #  Ahora se exige que coincida el NOMBRE COMPLETO —apellido Y nombre de
+        #  pila— y que los dos tengan el MISMO PUESTO. Un jugador que cambia de
+        #  camiseta sigue siendo el mismo nombre y el mismo puesto; dos
+        #  hermanos o dos homonimos no.
+        import unicodedata as _u2
+
+        def _nom(x):
+            x = _u2.normalize('NFKD', x or '').encode('ascii', 'ignore').decode()
+            return re.sub(r'\s+', ' ', x).strip().lower()
+
         _por_nombre = {}
         for _k, _v2 in D['names'].items():
-            _nn = _nom(_v2)
-            if _nn:
+            # el nombre completo, no solo el apellido
+            _completo = _nom(_v2) + '|' + _nom((D.get('nombres_pila') or {}).get(str(_k), ''))
+            _pu = _nom((D.get('rol') or {}).get(int(_k) if str(_k).isdigit() else _k, ''))
+            _nn = _completo + '|' + _pu
+            if _nom(_v2):
                 _por_nombre.setdefault(_nn, []).append(str(_k))
 
         for _nn, _nums in _por_nombre.items():
             if len(_nums) < 2:
                 continue
-            # el mas alto se queda con todo
             _nums.sort(key=lambda x: int(x) if x.isdigit() else 0)
             _queda = _nums[-1]
             for _v in _nums[:-1]:

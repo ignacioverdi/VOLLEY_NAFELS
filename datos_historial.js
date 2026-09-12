@@ -1,5 +1,5 @@
 window.HISTORIAL_DATA = {
-  "generado": "12/09/2026, 03:09:15",
+  "generado": "12/09/2026, 03:17:56",
   "entrenamientos": [
     {
       "fecha": "03/09/2026",
@@ -111,7 +111,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 20,
-          "n": "SCHMID J",
+          "n": "SCHMID",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -893,7 +893,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 20,
-          "n": "SCHMID J",
+          "n": "SCHMID",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -1867,7 +1867,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 20,
-          "n": "SCHMID J",
+          "n": "SCHMID",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -4585,7 +4585,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 20,
-          "n": "SCHMID J",
+          "n": "SCHMID",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -4791,7 +4791,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 20,
-          "n": "SCHMID J",
+          "n": "SCHMID",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -6917,7 +6917,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 20,
-          "n": "SCHMID J",
+          "n": "SCHMID",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,

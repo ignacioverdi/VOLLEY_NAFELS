@@ -1,88 +1,71 @@
-LAS TRES COSAS + UN ERROR MIO QUE ENCONTRE
-==========================================
+LAS CAUSAS DE FONDO, NO PARCHES
+===============================
 
-HACER_TODO y publicar. REEMPLAZA a los dos zips anteriores.
-
-   panel_vivo.html · plan_partido.html · gen_plan_partido.py
-   config_club.json · los 13 .dvw
+HACER_TODO y publicar. REEMPLAZA a todos los zips anteriores.
 
 
-0) UN ERROR MIO, IMPORTANTE
----------------------------
-Cuando arme lo de la maquina de saque, CREE un config_club.json nuevo con
-solo ese dato. Pise el que existia, que tenia la tabla de 24 equipos.
-
-   antes de mi cambio   24 equipos configurados
-   despues               0
-
-Esa tabla es la que traduce cada forma de escribir un nombre a un solo
-equipo. Sin ella, cada variante se volvia un equipo distinto.
-
-RESTAURADO del historial de GitHub, con la maquina de saque agregada
-encima. Perdon: lo hice sin verificar si el archivo ya existia.
-
-
-1) POR QUE APARECIA MAS DE UN EQUIPO — tenias razon
-----------------------------------------------------
-El equipo figura de tres formas en los .dvw:
-
-   "AXPO NAFELS"    en 25 archivos
-   "Volley NÄFELS"  en 1
-   "Volley Näfels"  en 1
-
-Cada una generaba una clave distinta y el sistema las trataba como equipos
-DIFERENTES. Por eso la Distribucion del armador quedaba vacia: los datos
-estaban bajo una clave y la pantalla buscaba en otra.
-
-La tabla de equipos YA tenia las nueve variantes cargadas —AXPO NAFELS,
-VOLLEY NAFELS, BIOGAS VOLLEY NAFELS...— todas apuntando a "Nafels". Con el
-archivo restaurado vuelven a unificarse solas.
-
-Ademas los 13 .dvw van con UN SOLO nombre: "AXPO NAFELS".
-
-Y el plan de partido ahora tambien encuentra al equipo aunque la clave no
-coincida exacto, como segunda red.
-
-
-2) EL ATAQUE DEL LIBERO — era un tipeo, lo confirme
-----------------------------------------------------
-Tenias razon: es imposible. Mira el contexto en el archivo del 04/09:
-
-     *03EH=
-     *05EH-
-     *04EH-
-     *20AH/     <- este, una A entre cientos de E
-     *11EH-
-     *09EH+
-
-Esta en el medio del ejercicio de high set, rodeado de armados. El scout
-quiso poner *20EH/ y le salio A.
-
-Corregido en el .dvw. Ahora el #20 tiene CERO ataques.
-
-
-3) EL GRUPO DE ARMADORES — agregado
+LA CAUSA RAIZ DE TODO — la encontre
 ------------------------------------
-Y encontre por que faltaba: el generador mandaba al armador al grupo de
-OPUESTOS y al libero al de PUNTAS, porque la pantalla solo tenia esas tres
-filas. Por eso Vazquez aparecia entre los opuestos.
+En gen_plan_partido.py habia una regla que JUNTA A DOS JUGADORES CUANDO
+TIENEN EL MISMO APELLIDO, y le da todo al numero mas alto.
 
-Ahora son cinco grupos:
+Existe por un motivo valido: si alguien cambia de camiseta entre partidos
+hay que sumar sus acciones. Pero juntaba por APELLIDO, y eso es otra cosa:
 
-   PUNTAS       Σ del puesto + cada jugador
-   CENTRALES    Σ del puesto + cada jugador
-   OPUESTOS     Σ del puesto + cada jugador
-   ARMADORES    Σ del puesto + cada jugador     <- nuevo
-   LIBEROS      solo aparece si hay algo, con un aviso
+     #7  SCHMID ROY    central, 46 ataques
+     #20 SCHMID JONA   libero,   0 ataques
 
-La fila de liberos esta escondida mientras no haya nada. Si algun dia
-aparece un ataque ahi, se ve enseguida que hubo un error de tipeo en vez de
-quedar disimulado entre los puntas.
+No son la misma persona. La regla le daba los 46 al libero y borraba al
+central del plan. De ahi salian TRES de los errores que viste:
+   · el libero con 47 ataques
+   · el #7 que no aparecia en centrales
+   · y por eso yo habia "arreglado" los nombres poniendo SCHMID R / SCHMID J,
+     que ademas rompio como se muestran
+
+CORREGIDO: ahora para juntar dos numeros se exige que coincida el NOMBRE
+COMPLETO —apellido Y nombre de pila— Y el PUESTO. Un jugador que cambia de
+camiseta sigue siendo el mismo nombre y el mismo puesto. Dos homonimos no.
+
+
+LO DEMAS, EN ORDEN
+------------------
+
+1. LOS APELLIDOS VUELVEN A SER NORMALES
+   Saque el "SCHMID R" que habia puesto yo —por eso se veia "7 R"— y quedan
+   los nombres de verdad, con el nombre de pila en su columna:
+
+      #7  SCHMID ROY     CENTRAL
+      #20 SCHMID JONA    LIBERO
+
+   Ya no hace falta distinguirlos a mano: los distingue el numero.
+
+2. LA FILA DE ARMADORES, VACIA
+   Faltaba la configuracion del grupo. Sin ella buildSection reventaba con
+   "Cannot read properties of undefined (reading 'filters')" y la fila
+   quedaba vacia aunque los datos estuvieran. Agregada, y tambien la de
+   liberos.
+
+3. EL ARMADOR #4 SIN APELLIDO
+   El codigo hacia .get('name', '#4'), que solo usa el '#4' si la clave NO
+   EXISTE. Si existe vacia devuelve vacio. Corregido con 'or'.
+
+4. config_club.json RESTAURADO
+   Yo lo habia pisado al agregar la maquina de saque: quedo con 0 equipos
+   cuando tenia 24. Es la tabla que unifica "AXPO NAFELS", "Volley Näfels" y
+   las otras siete variantes en un solo equipo. Va completo, con la maquina
+   agregada encima.
+
+5. EL ATAQUE DEL LIBERO
+   Era un tipeo: *20AH/ en medio del ejercicio de high set, rodeado de
+   armados. Corregido en el .dvw.
 
 
 COMO VA A QUEDAR
-----------------
+
    PUNTAS      Σ EQUIPO · DURDOS · BARTHOLET · BOGDANOVSKI · ROFFLER
-   CENTRALES   Σ EQUIPO · CLEMENT · SCHMID R · JOHANSSON
+   CENTRALES   Σ EQUIPO · CLEMENT · SCHMID (Roy) · JOHANSSON
    OPUESTOS    Σ EQUIPO · NORRIS · SCHWITTER
    ARMADORES   Σ EQUIPO · VAZQUEZ · STEIMANN
+   LIBEROS     oculto, salvo que aparezca un error de tipeo
+
+   Distribucion del armador: VAZQUEZ EZEQUIEL y STEIMANN YANNIK, con nombre.

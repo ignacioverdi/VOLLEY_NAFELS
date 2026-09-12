@@ -445,6 +445,21 @@ const ROLECFG={
  opuesto:{court:4,evIdx:5,subIdx:6,tIdx:7,vIdx:8,tagIdx:0,stats:'atk',pal:'red',
    filters:[{lab:'Combo',idx:0,opts:CB_O},{lab:'Fase',idx:1,opts:FASE},{lab:'Recepción',idx:1,opts:RECS},{lab:'Recep. desde',idx:3,opts:RECZ},{lab:'Resultado',idx:5,opts:RESS}],
    dir:{L:["5","7","4"],C:["6","8","3"],D:["1","9","2"]},tiles:['Efic','Kill','Bloq','Línea','Centro','Diag','Hard','Soft','Tip'],hl:[0,3]},
+ /* ══ ARMADORES ════════════════════════════════════════════════════════════
+    Faltaba la configuracion del grupo, y sin ella buildSection reventaba:
+    "Cannot read properties of undefined (reading 'filters')". Por eso la fila
+    de armadores quedaba vacia aunque los datos estuvieran.
+
+    Un armador ataca desde la zona 2, como el opuesto: el segundo toque y la
+    finta salen de ahi. Se copia esa configuracion. */
+ armador:{court:4,evIdx:5,subIdx:6,tIdx:7,vIdx:8,tagIdx:0,stats:'atk',pal:'red',
+   filters:[{lab:'Combo',idx:0,opts:CB_O},{lab:'Fase',idx:1,opts:FASE},{lab:'Recepción',idx:1,opts:RECS},{lab:'Recep. desde',idx:3,opts:RECZ},{lab:'Resultado',idx:5,opts:RESS}],
+   dir:{L:["5","7","4"],C:["6","8","3"],D:["1","9","2"]},tiles:['Efic','Kill','Bloq','Línea','Centro','Diag','Hard','Soft','Tip'],hl:[0,3]},
+ /* El libero no ataca. Si aparece algo aca es un error de tipeo en el scout
+    y conviene verlo, no esconderlo entre los puntas. */
+ libero:{court:4,evIdx:5,subIdx:6,tIdx:7,vIdx:8,tagIdx:0,stats:'atk',pal:'red',
+   filters:[{lab:'Combo',idx:0,opts:CB_P},{lab:'Fase',idx:1,opts:FASE},{lab:'Resultado',idx:5,opts:RESS}],
+   dir:{L:["1","9","2"],C:["6","8","3"],D:["5","7","4"]},tiles:['Efic','Kill','Bloq','Línea','Centro','Diag','Hard','Soft','Tip'],hl:[0,3]},
  saque:{court:2,evIdx:3,tIdx:5,vIdx:6,tagIdx:0,stats:'srv',pal:'blue',
    filters:[{lab:'Tipo',idx:0,opts:STY},{lab:'Desde',idx:1,opts:SDZ},{lab:'Momento',idx:4,opts:SMO,range:true},{lab:'Resultado',idx:3,opts:SRS}],
    dir:null,tiles:['Efic','Aces','Err','Potencia','Flotado','N','Fuerte','Medio','Fácil'],hl:[0,6]},

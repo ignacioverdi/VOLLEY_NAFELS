@@ -1063,7 +1063,12 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         for sn in team_setters:
             rl = team_rallies.get(str(sn), []) if isinstance(team_rallies, dict) else []
             if not rl: continue
-            sname = td.get(str(sn),{}).get('info',{}).get('name',f'#{sn}')
+            # ══ SI EL NOMBRE VIENE VACIO, NO ALCANZA CON EL VALOR POR DEFECTO ══
+            # .get('name', '#4') solo devuelve '#4' si la clave NO EXISTE. Si
+            # existe pero esta vacia —el .dvw no traia el apellido— devuelve la
+            # cadena vacia, y el armador aparecia sin nombre en la pantalla de
+            # Distribucion. Con 'or' se cubre tambien el caso vacio.
+            sname = (td.get(str(sn),{}).get('info',{}).get('name') or '').strip() or f'#{sn}'
             arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1),r.get('t_start',0),r.get('t_atk',0),r.get('rec_zone',0),r.get('rec_num',0),r.get('atk_num',0),r.get('rec_type','')] for r in rl]
             setters_list.append({'num':sn,'name':sname,'s':arm,'total':len(rl)})
         setters_list.sort(key=lambda x:-x['total'])
