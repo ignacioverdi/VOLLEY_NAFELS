@@ -50,6 +50,34 @@ def _turno(nombre_archivo):
 def _norm(x):
     x=''.join(c for c in unicodedata.normalize('NFD',x or '') if unicodedata.category(c)!='Mn')
     return re.sub(r'[^a-z0-9]','',x.lower())
+
+def _plantel_maestro():
+    """El plantel del club: numero -> datos. Es la fuente unica de quien es
+       jugador del equipo y quien no."""
+    global _PM2
+    try:
+        return _PM2
+    except NameError:
+        pass
+    import glob as _g, re as _r, os as _o
+    out = {}
+    for f in _g.glob(_o.path.join(_o.path.dirname(_o.path.abspath(__file__)), 'plantel_*.js')):
+        try: t = open(f, encoding='utf-8', errors='replace').read()
+        except Exception: continue
+        for m in _r.finditer(r'\{\s*num:\s*(\d+)[^}]*?ap:\s*"([^"]*)"[^}]*?pos:\s*"([^"]*)"', t):
+            out[int(m.group(1))] = {'apellido': m.group(2).strip(), 'pos': m.group(3).strip()}
+    _PM2 = out
+    return out
+
+
+def _clave_club():
+    """La clave de nuestro club, para saber que equipo filtrar."""
+    try:
+        import config_club as _cc
+        return (_cc.club() or '').strip().lower()
+    except Exception:
+        return ''
+
 def name_to_slug(name):
     """El nombre corto de un equipo, a partir de como viene en el .dvw.
 
@@ -625,7 +653,30 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
             # note, en vez de esconderlo entre los puntas.
             'Armador':'armador', 'L\u00edbero':'libero'}.get(p, 'punta')
         players=[]
+
+        # ══ SOLO LOS DEL PLANTEL ══════════════════════════════════════════════
+        #  En los entrenamientos aparecen numeros que no son jugadores del
+        #  equipo y ensucian el plan:
+        #
+        #     #8  es la MAQUINA DE SAQUE, se scoutea con un numero para poder
+        #         hacer el ejercicio
+        #     #6  fue un invitado que entreno un dia por la ausencia de un
+        #         companero
+        #
+        #  Sus acciones son reales y quedan en la base, pero no tienen que
+        #  aparecer entre los puntas o los centrales del equipo: no son parte
+        #  del plantel y deforman el acumulado de cada puesto.
+        #
+        #  El filtro usa plantel_<club>.js, que es la fuente unica. Si manana
+        #  el invitado se suma al plantel, se lo agrega ahi y aparece solo.
+        #  Solo se filtra NUESTRO equipo: de los rivales se muestra todo,
+        #  porque de ellos no tenemos plantel cargado.
+        _pm = _plantel_maestro()
+        _es_nuestro = (s == _clave_club())
+
         def add(pfx,num,role,data,read):
+            if _es_nuestro and _pm and int(num) not in _pm:
+                return
             players.append({"id":pfx+str(num),"num":num,"name":apellido(D['names'].get(str(num),'')),
                             "pos":pos.get(num,'\u2014'),"role":role,"total":len(data),"read":read,"data":data})
         for n in atacan:

@@ -1,5 +1,5 @@
 window.HISTORIAL_DATA = {
-  "generado": "12/09/2026, 03:17:56",
+  "generado": "12/09/2026, 03:25:02",
   "entrenamientos": [
     {
       "fecha": "03/09/2026",
@@ -495,7 +495,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 2,
-          "n": "2",
+          "n": "BRUDERER",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -605,7 +605,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 9,
-          "n": "9",
+          "n": "NORRIS",
           "sT": 38,
           "sEff": -14,
           "sPunto": 2,
@@ -1085,7 +1085,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 2,
-          "n": "2",
+          "n": "BRUDERER",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -1373,7 +1373,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "7",
+          "n": "SCHMID R",
           "sT": 46,
           "sEff": -10,
           "sPunto": 4,
@@ -1469,7 +1469,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "4",
+          "n": "VAZQUEZ",
           "sT": 44,
           "sEff": -2,
           "sPunto": 8,
@@ -1565,7 +1565,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 3,
-          "n": "3",
+          "n": "SCHWITTER",
           "sT": 40,
           "sEff": -44,
           "sPunto": 1,
@@ -1963,7 +1963,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "7",
+          "n": "SCHMID R",
           "sT": 8,
           "sEff": 12,
           "sPunto": 2,
@@ -2155,7 +2155,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 3,
-          "n": "3",
+          "n": "SCHWITTER",
           "sT": 4,
           "sEff": -25,
           "sPunto": 0,
@@ -2347,7 +2347,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "9",
+          "n": "NORRIS",
           "sT": 6,
           "sEff": -62,
           "sPunto": 0,
@@ -2539,7 +2539,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 2,
-          "n": "2",
+          "n": "BRUDERER",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -2843,7 +2843,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 4,
-          "n": "4",
+          "n": "VAZQUEZ",
           "sT": 40,
           "sEff": 9,
           "sPunto": 6,
@@ -3035,7 +3035,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "9",
+          "n": "NORRIS",
           "sT": 44,
           "sEff": -34,
           "sPunto": 5,
@@ -3323,7 +3323,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "7",
+          "n": "SCHMID R",
           "sT": 42,
           "sEff": -12,
           "sPunto": 5,
@@ -3625,7 +3625,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "7",
+          "n": "SCHMID R",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -3721,7 +3721,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "4",
+          "n": "VAZQUEZ",
           "sT": 3,
           "sEff": -33,
           "sPunto": 0,
@@ -3913,7 +3913,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 3,
-          "n": "3",
+          "n": "SCHWITTER",
           "sT": 4,
           "sEff": 0,
           "sPunto": 1,
@@ -4009,7 +4009,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "9",
+          "n": "NORRIS",
           "sT": 3,
           "sEff": -33,
           "sPunto": 0,
@@ -4489,7 +4489,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 2,
-          "n": "2",
+          "n": "BRUDERER",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -5079,7 +5079,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 2,
-          "n": "2",
+          "n": "BRUDERER",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -5463,7 +5463,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "9",
+          "n": "NORRIS",
           "sT": 1,
           "sEff": 0,
           "sPunto": 0,
@@ -5655,7 +5655,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "7",
+          "n": "SCHMID R",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -5847,7 +5847,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "4",
+          "n": "VAZQUEZ",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -5957,7 +5957,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 4,
-          "n": "4",
+          "n": "VAZQUEZ",
           "sT": 38,
           "sEff": -5,
           "sPunto": 2,
@@ -6245,7 +6245,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "9",
+          "n": "NORRIS",
           "sT": 39,
           "sEff": -18,
           "sPunto": 5,
@@ -6341,7 +6341,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "7",
+          "n": "SCHMID R",
           "sT": 32,
           "sEff": 12,
           "sPunto": 7,
@@ -6629,7 +6629,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 3,
-          "n": "3",
+          "n": "SCHWITTER",
           "sT": 35,
           "sEff": -1,
           "sPunto": 3,
@@ -6725,7 +6725,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 2,
-          "n": "2",
+          "n": "BRUDERER",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -7221,7 +7221,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "7",
+          "n": "SCHMID R",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -7317,7 +7317,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 3,
-          "n": "3",
+          "n": "SCHWITTER",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -7413,7 +7413,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "9",
+          "n": "NORRIS",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -7893,7 +7893,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "4",
+          "n": "VAZQUEZ",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -8085,7 +8085,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 2,
-          "n": "2",
+          "n": "BRUDERER",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,

@@ -307,6 +307,34 @@ def get_teams(lines):
         if in_t and ';' in l and not l.startswith('['): tl.append(l.split(';'))
     return (tl[0][1].strip() if tl else ''), (tl[1][1].strip() if len(tl)>1 else '')
 
+
+def _plantel_maestro():
+    """El plantel del club, leido de plantel_<club>.js.
+
+    Es la FUENTE UNICA: ahi estan el apellido, el nombre y el puesto reales.
+    Sirve de respaldo cuando un .dvw viene incompleto, y para saber quien es
+    del plantel y quien es un invitado.
+    """
+    global _PM_CACHE
+    try:
+        return _PM_CACHE
+    except NameError:
+        pass
+    import glob as _g, re as _r, os as _o
+    out = {}
+    for f in _g.glob(_o.path.join(_o.path.dirname(_o.path.abspath(__file__)), 'plantel_*.js')):
+        try:
+            t = open(f, encoding='utf-8', errors='replace').read()
+        except Exception:
+            continue
+        for m in _r.finditer(r'\{\s*num:\s*(\d+)[^}]*?ap:\s*"([^"]*)"[^}]*?nombre:\s*"([^"]*)"[^}]*?pos:\s*"([^"]*)"', t):
+            n = int(m.group(1)); ape = m.group(2).strip(); nmb = m.group(3).strip()
+            pos = {'LIBERO':'L','PUNTA':'OH','OPUESTO':'OPP','CENTRAL':'MB','ARMADOR':'S'}.get(
+                  m.group(4).strip().upper(), '?')
+            out[n] = {'apellido': ape, 'nombre': (ape + ' ' + nmb).strip(), 'pos': pos}
+    _PM_CACHE = out
+    return out
+
 def get_players(lines, section):
     in_sec=False; players={}
     for line in lines:
@@ -321,9 +349,26 @@ def get_players(lines, section):
                 first=parts[10].strip() if len(parts)>10 else ''
                 role=parts[12].strip() if len(parts)>12 else ''
                 pc=parts[13].strip() if len(parts)>13 else ''
-                pm={'1':'OH','2':'OPP','3':'MB','4':'S','L':'L','5':'OH','':'?'}
+                # ══ EL PUESTO, BIEN TRADUCIDO ══════════════════════════════
+                # La tabla estaba corrida. En DataVolley la columna 13 es:
+                #     1 libero · 2 punta · 3 opuesto · 4 central · 5 armador
+                # y aca decia 1->OH, 2->OPP, 3->MB, 4->S, 5->OH. Resultado:
+                # DURDOS (punta) figuraba como libero y STEIMANN (armador)
+                # como punta.
+                pm={'1':'L','2':'OH','3':'OPP','4':'MB','5':'S','':'?'}
                 pos='L' if role=='L' else pm.get(pc,'?')
-                players[num]={'name':f"{last} {first}".strip(),'apellido':last,'pos':pos,'num':num}
+
+                # ══ EL NOMBRE, DEL PLANTEL MAESTRO ═════════════════════════
+                # Si el .dvw no trae el apellido, se usa el del plantel del
+                # club. Antes quedaba vacio y el jugador aparecia sin nombre
+                # —el armador #4 salia en blanco en Distribucion del armador—.
+                nom = f"{last} {first}".strip()
+                if not nom:
+                    _m = _plantel_maestro().get(num)
+                    if _m:
+                        nom = _m['nombre']; last = _m['apellido']
+                        if pos == '?': pos = _m['pos']
+                players[num]={'name':nom,'apellido':last,'pos':pos,'num':num}
             except: pass
     return players
 

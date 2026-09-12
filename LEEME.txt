@@ -1,71 +1,55 @@
-LAS CAUSAS DE FONDO, NO PARCHES
-===============================
+LOS DOS ERRORES, DE RAIZ
+========================
 
-HACER_TODO y publicar. REEMPLAZA a todos los zips anteriores.
+2 archivos. HACER_TODO y publicar.
 
-
-LA CAUSA RAIZ DE TODO — la encontre
-------------------------------------
-En gen_plan_partido.py habia una regla que JUNTA A DOS JUGADORES CUANDO
-TIENEN EL MISMO APELLIDO, y le da todo al numero mas alto.
-
-Existe por un motivo valido: si alguien cambia de camiseta entre partidos
-hay que sumar sus acciones. Pero juntaba por APELLIDO, y eso es otra cosa:
-
-     #7  SCHMID ROY    central, 46 ataques
-     #20 SCHMID JONA   libero,   0 ataques
-
-No son la misma persona. La regla le daba los 46 al libero y borraba al
-central del plan. De ahi salian TRES de los errores que viste:
-   · el libero con 47 ataques
-   · el #7 que no aparecia en centrales
-   · y por eso yo habia "arreglado" los nombres poniendo SCHMID R / SCHMID J,
-     que ademas rompio como se muestran
-
-CORREGIDO: ahora para juntar dos numeros se exige que coincida el NOMBRE
-COMPLETO —apellido Y nombre de pila— Y el PUESTO. Un jugador que cambia de
-camiseta sigue siendo el mismo nombre y el mismo puesto. Dos homonimos no.
+   gen_plan_partido.py
+   update_db_entrenamientos_nafels.py
 
 
-LO DEMAS, EN ORDEN
-------------------
+1) EL #4 SIN APELLIDO — habia DOS errores en la misma funcion
+-------------------------------------------------------------
+Fui a la funcion que lee el plantel de cada .dvw y encontre esto:
 
-1. LOS APELLIDOS VUELVEN A SER NORMALES
-   Saque el "SCHMID R" que habia puesto yo —por eso se veia "7 R"— y quedan
-   los nombres de verdad, con el nombre de pila en su columna:
+   pm={'1':'OH','2':'OPP','3':'MB','4':'S','5':'OH'}
 
-      #7  SCHMID ROY     CENTRAL
-      #20 SCHMID JONA    LIBERO
+LA TABLA DE PUESTOS ESTABA CORRIDA. En DataVolley la columna 13 es:
 
-   Ya no hace falta distinguirlos a mano: los distingue el numero.
+   1 libero · 2 punta · 3 opuesto · 4 central · 5 armador
 
-2. LA FILA DE ARMADORES, VACIA
-   Faltaba la configuracion del grupo. Sin ella buildSection reventaba con
-   "Cannot read properties of undefined (reading 'filters')" y la fila
-   quedaba vacia aunque los datos estuvieran. Agregada, y tambien la de
-   liberos.
+y el codigo traducia 1 como punta, 2 como opuesto, 3 como central, 4 como
+armador. Todo un lugar corrido.
 
-3. EL ARMADOR #4 SIN APELLIDO
-   El codigo hacia .get('name', '#4'), que solo usa el '#4' si la clave NO
-   EXISTE. Si existe vacia devuelve vacio. Corregido con 'or'.
+Por eso en la base DURDOS (punta) figuraba como LIBERO y STEIMANN (armador)
+como PUNTA. Corregido.
 
-4. config_club.json RESTAURADO
-   Yo lo habia pisado al agregar la maquina de saque: quedo con 0 equipos
-   cuando tenia 24. Es la tabla que unifica "AXPO NAFELS", "Volley Näfels" y
-   las otras siete variantes en un solo equipo. Va completo, con la maquina
-   agregada encima.
-
-5. EL ATAQUE DEL LIBERO
-   Era un tipeo: *20AH/ en medio del ejercicio de high set, rodeado de
-   armados. Corregido en el .dvw.
+Y el nombre vacio: si el .dvw no trae el apellido, ahora se toma del plantel
+maestro en vez de dejarlo en blanco. El #4 ya no puede quedar sin nombre,
+pase lo que pase con el archivo.
 
 
-COMO VA A QUEDAR
+2) EL #6 Y EL #8 EN DIRECCIONES DE ATAQUE
+-----------------------------------------
+Ahora el plan muestra SOLO a los jugadores del plantel.
 
-   PUNTAS      Σ EQUIPO · DURDOS · BARTHOLET · BOGDANOVSKI · ROFFLER
-   CENTRALES   Σ EQUIPO · CLEMENT · SCHMID (Roy) · JOHANSSON
-   OPUESTOS    Σ EQUIPO · NORRIS · SCHWITTER
-   ARMADORES   Σ EQUIPO · VAZQUEZ · STEIMANN
-   LIBEROS     oculto, salvo que aparezca un error de tipeo
+   #8  es la maquina de saque
+   #6  fue un invitado de un dia
 
-   Distribucion del armador: VAZQUEZ EZEQUIEL y STEIMANN YANNIK, con nombre.
+Sus acciones siguen en la base —existieron— pero no aparecen entre los
+puntas ni los centrales del equipo: no son del plantel y deforman el
+acumulado de cada puesto.
+
+El filtro usa plantel_nafels.js, que es la fuente unica. Si manana ese
+invitado se suma al equipo, lo agregas ahi y aparece solo. No hay que tocar
+codigo.
+
+Y solo filtra NUESTRO equipo: de los rivales se sigue mostrando todo,
+porque de ellos no tenemos plantel cargado.
+
+
+UNA COSA QUE NOTE
+-----------------
+En plantel_nafels.js el #7 figura como "SCHMID R" y el #20 como "SCHMID J".
+Eso ya no hace falta: el sistema los distingue por numero y por nombre
+completo. Si queres, podes dejarlos como "SCHMID" a secas y se van a ver
+mas prolijos. No es urgente ni rompe nada como esta.
