@@ -479,6 +479,32 @@ function objNombreSesion(){
   }catch(e){ return ''; }
 }
 
+
+/* ══ CUANDO NINGUN CAMBIO SOLO ALCANZA ══════════════════════════════════════
+   Antes se decia "hace falta subir la calidad general", que es la forma
+   elegante de no decir nada. Ahora se calcula la palanca mas grande que el
+   jugador tiene a mano —cortar lo que regala— y se muestra cuanto gana. */
+function objMejorPalanca(cfg, D, total, suma, val, obj){
+  var neutro = null;
+  cfg.filas.forEach(function(f){ if(f[2]===50) neutro = f; });
+  if(!neutro) return 'Hace falta subir la calidad general.';
+  var mejor = null;
+  cfg.filas.forEach(function(f){
+    if(f[2]==null || f[2] >= 50) return;
+    var n = D[f[0]]||0; if(!n) return;
+    var gana = (neutro[2] - f[2]) * n / total;
+    if(!mejor || gana > mejor.gana) mejor = {f:f, n:n, gana:gana};
+  });
+  if(!mejor) return 'Hace falta subir la calidad general.';
+  var nuevo = val + mejor.gana;
+  var txt = 'Ningún cambio por separado alcanza. La palanca más grande:<br>'
+    + '\u2022 no regalar <b>' + mejor.n + ' ' + objPlural(mejor.f[1], mejor.n) + '</b>'
+    + ' \u2192 pasás de <b>' + fmtEff(val) + '</b> a <b>' + fmtEff(nuevo) + '</b>';
+  txt += (Math.round(nuevo) >= Math.round(obj)) ? ' y llegás al objetivo.'
+                                                : '. Después hay que subir calidad.';
+  return txt;
+}
+
 function objPlural(p, n){
   p = String(p||'').toLowerCase();
   if(n === 1) return p;
@@ -560,7 +586,10 @@ function objAbrirDetalle(id, vals, meta, quien){
       + '<span style="flex:1;color:#cbd5e1">'+f[1]+'</span>'
       + '<span style="font-weight:900;color:#e2e8f0;min-width:30px;text-align:right;font-size:14px">'+n+'</span>'
       + '<span style="color:#64748b;min-width:56px;text-align:right;font-size:11px">'
-      +    (de10>=0.95 ? de10.toFixed(0) : de10.toFixed(1))+' de 10</span>'
+      /* SIEMPRE con un decimal. Con 1362 acciones, 260 y 336 pelotas daban
+         "2 de 10" las dos: el redondeo borraba justo lo que se queria
+         mostrar. Con decimal se ve 1.9 contra 2.5. */
+      +    de10.toFixed(1)+' de 10</span>'
       + '</div>';
   });
 
@@ -577,7 +606,7 @@ function objAbrirDetalle(id, vals, meta, quien){
       pierde.forEach(function(x){
         cuesta += '<div style="display:flex;align-items:center;gap:7px;padding:3px 0;font-size:12px">'
           + '<span style="width:9px;height:9px;border-radius:2px;background:'+x.c+';flex:none"></span>'
-          + '<span style="flex:1;color:#cbd5e1">'+x.n+' '+x.nom.toLowerCase()+'</span>'
+          + '<span style="flex:1;color:#cbd5e1">'+x.n+' '+objPlural(x.nom,x.n)+'</span>'
           + '<span style="color:#f87171;font-weight:800">\u2212'+Math.round(x.p)+'</span></div>';
       });
       cuesta += '</div>';
@@ -634,7 +663,7 @@ function objAbrirDetalle(id, vals, meta, quien){
         + '<div style="color:#fbbf24;font-weight:800;margin-bottom:4px">Para llegar a '+obj+'</div>'
         + (opciones.length
             ? opciones.slice(0,2).map(function(o){ return '\u2022 '+o.txt; }).join('<br>')
-            : 'Hace falta subir la calidad general: no alcanza con corregir un solo tipo de pelota.')
+            : objMejorPalanca(cfg, D, total, suma, val, obj))
         + '</div>';
     }
   }

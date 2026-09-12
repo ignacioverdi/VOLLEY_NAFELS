@@ -1,58 +1,64 @@
-LA VENTANITA SABE A QUIEN TOCASTE
-=================================
+LA VENTANITA, COMPLETA
+======================
 
-6 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
-
-
-EL ERROR — era mio y era grave
-------------------------------
-Tocabas la bateria de un jugador y la ventana mostraba los numeros del
-EQUIPO. Y tampoco distinguia si estabas viendo el acumulado, un
-entrenamiento suelto o un partido.
-
-La causa: cuando armaba la bateria yo guardaba QUE fundamento era, pero no
-DE QUE FILA salia. Asi que al abrirla iba a buscar los valores por su cuenta
-y traia siempre los del equipo.
-
-Lo absurdo es que el dato correcto ya estaba ahi: la pantalla usa los
-valores de cada fila para pintar la bateria. Solo faltaba pasarlos.
+Un archivo: objetivos_config.js. Publicar y Ctrl+Shift+R.
+Los otros 5 del zip anterior ya estan bien, no hace falta tocarlos.
 
 
-LO QUE SE HIZO
---------------
-Ahora cada bateria lleva consigo:
+LA PROBE Y FUNCIONA
+-------------------
+Elegi a BARTHOLET y toque las dos baterias de recepcion:
 
-   los valores de SU fila        el jugador o el equipo
-   de que sesion son            acumulado, entrenamiento o partido
-   y una etiqueta que lo dice    arriba de todo, en verde
+   la del jugador   158 pelotas · 55%
+   la del equipo   1362 pelotas · 53%
 
-Asi que si tocas la bateria de recepcion de Bartholet en el entrenamiento
-del 11/09, la ventana dice:
-
-   ┌────────────────────────────────────────┐
-   │  JUGADOR · ENTRENAMIENTOS · 11/09/26   │  <- nuevo
-   │  RECEPCIÓN                        55%  │
-   │  158 pelotas · objetivo 60             │
-   └────────────────────────────────────────┘
-
-Y si tocas la del equipo:
-
-   ┌────────────────────────────────────────┐
-   │  EQUIPO · ENTRENAMIENTOS               │
-   │  RECEPCIÓN                        53%  │
-   │  1362 pelotas · objetivo 60            │
-   └────────────────────────────────────────┘
-
-Ya no hay forma de confundirse: la ventana dice de quien es y de que
-sesion, y los numeros son los que se estan viendo en la pantalla.
+Datos distintos, como tiene que ser. El error grave esta resuelto.
 
 
-POR QUE SON 6 ARCHIVOS
-----------------------
-Porque cada pantalla arma sus filas por su cuenta —eso ya lo sabemos— asi
-que hay que marcarlas en las seis. Esta vez las toque TODAS de una, no de a
-una como venia haciendo.
+PERO SE HABIAN PERDIDO TRES ARREGLOS
+------------------------------------
+Al armar la version anterior baje los archivos de GitHub ANTES de que
+publicaras los arreglos del "de cada 10", el plural y la palanca. Asi que se
+perdieron.
 
-   objetivos_config.js   la ventana y la logica
-   objetivos.js · dashboard · panel_voley · analisis · jugador
-                         cada una marca sus filas
+Es la segunda vez que me pasa lo mismo. Los reaplique sobre lo que hay
+publicado ahora, y verifique las SEIS cosas juntas:
+
+   de cada 10 con decimal    OK
+   plural                    OK
+   la palanca                OK
+   la fila jugador/equipo    OK
+   la sesion                 OK
+   los valores de la fila    OK
+
+
+ASI QUEDA — las dos, una al lado de la otra
+
+   JUGADOR · ENTRENAMIENTOS        EQUIPO · ENTRENAMIENTOS
+   RECEPCIÓN              55%      RECEPCIÓN              53%
+   158 pelotas · obj 60            1362 pelotas · obj 60
+
+   #  Perfecta    27  1.7/10       #  Perfecta   260  1.9/10
+   +  Positiva    45  2.8/10       +  Positiva   319  2.3/10
+   !  Suficiente  40  2.5/10       !  Suficiente 336  2.5/10
+   -  Pobre       23  1.5/10       -  Pobre      213  1.6/10
+   /  Sobrepase    5  0.3/10       /  Sobrepase   65  0.5/10
+   =  Error       18  1.1/10       =  Error      169  1.2/10
+
+   CÓMO SE LLEGA A 55%             CÓMO SE LLEGA A 53%
+   27×100 + 45×75 + ...            260×100 + 319×75 + ...
+   8713 ÷ 158 = 55%                72863 ÷ 1362 = 53%
+
+   LO QUE MÁS TE CUESTA            LO QUE MÁS TE CUESTA
+    40 suficientes      −13         169 errores         −12
+    18 errores          −11         336 suficientes     −12
+
+   Para llegar a 60                Para llegar a 60
+   • convertir 16 errores          Ningún cambio solo alcanza.
+     en suficientes                La palanca más grande:
+                                   • no regalar 169 errores →
+                                     pasás de 53% a 60%
+
+Fijate la diferencia del consejo: al jugador le alcanza con cortar 16
+errores; al equipo no le alcanza con nada suelto, asi que le muestra la
+palanca mas grande y cuanto gana con ella.
