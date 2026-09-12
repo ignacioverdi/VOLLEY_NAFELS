@@ -290,11 +290,35 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
                 # atacantes salian con el puesto que no era —casi todas como
                 # centrales— aunque el archivo lo declarara bien.
                 rol = f[13].strip() if len(f) > 13 else ''
-                if rol == '1' or (len(f) > 12 and f[12].strip().upper() == 'L'):
+                esL = (len(f) > 12 and f[12].strip().upper() == 'L')
+                if rol == '1' or esL:
                     D['lib'].add(num)
-                D.setdefault('rol', {})[num] = {
-                    '1':'LIBERO', '2':'PUNTA', '3':'OPUESTO',
-                    '4':'CENTRAL', '5':'ARMADOR'}.get(rol, '')
+
+                # ══ EL PUESTO NO SE PISA CON UN VACIO ═══════════════════════
+                # Los archivos del panel traen el puesto en la columna 13:
+                #     1 libero · 2 punta · 3 opuesto · 4 central · 5 armador
+                # Los partidos de liga la traen VACIA, porque DataVolley no la
+                # completa cuando importa las planillas oficiales.
+                #
+                # El codigo guardaba el puesto con .get(rol, '') SIEMPRE. Asi
+                # que al procesar un partido de liga despues de un
+                # entrenamiento, el puesto bueno se sobrescribia con vacio y el
+                # jugador quedaba sin puesto. Despues caia en el grupo que no
+                # era:
+                #     #20 SCHMID (libero)  aparecia entre los PUNTAS con 47 ataques
+                #     #13 STEIMANN (armador) aparecia entre los CENTRALES
+                #     #7  SCHMID (central) no aparecia en ningun lado
+                #
+                # Ahora un puesto solo se escribe si viene con dato. Si un
+                # archivo no lo trae, se respeta el que ya estaba.
+                _puestos = {'1':'LIBERO', '2':'PUNTA', '3':'OPUESTO',
+                            '4':'CENTRAL', '5':'ARMADOR'}
+                _nuevo = _puestos.get(rol, 'LIBERO' if esL else '')
+                _tabla = D.setdefault('rol', {})
+                if _nuevo:
+                    _tabla[num] = _nuevo
+                elif num not in _tabla:
+                    _tabla[num] = ''
         i=t.find('[3SCOUT]\n'); scout=t[i+9:t.find('\n[3',i+9)].strip().split('\n')
         curset=None; lastsv=('',''); recv=False; rq=''; rby=0; recz=''; rally=0; last_opp_atk=''
         for line in scout:

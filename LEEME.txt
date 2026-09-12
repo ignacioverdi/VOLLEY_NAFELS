@@ -1,59 +1,83 @@
-LOS NOMBRES Y EL SEIS OPCIONAL
+LOS PUESTOS EN PLAN DE PARTIDO
 ==============================
 
 HACER_TODO y publicar.
 
-   panel_vivo.html           a la raiz
-   gen_plan_partido.py       a la raiz
-   los 12 .dvw               a sus carpetas, pisando los que estan
+   panel_vivo.html        a la raiz
+   gen_plan_partido.py    a la raiz
+   los 4 .dvw             a sus carpetas, pisando los que estan
 
 
-1) DE DONDE SALIAN AZCOITIA Y SALSBURG
---------------------------------------
-Los escribia NUESTRO PANEL. Mira la diferencia:
+POR QUE APARECIO AHORA SI ANTES ESTABA BIEN
+-------------------------------------------
+Porque los archivos del 10 y 11 de septiembre los hizo NUESTRO PANEL, y los
+anteriores los hizo DataVolley. Mira:
 
-   hechos con DataVolley (03 al 09)
-      [3PLAYERS-V]  #1 DURDOS, #2 BRUDERER, #3 SCHWITTER...   correcto
+   archivo                              #13 STEIMANN
+   &Pra-AXPO NAFELS-2026-09-03  (DV)      ARMADOR   correcto
+   &Pra-AXPO NAFELS-2026-09-04  (DV)      ARMADOR   correcto
+   &Pra-AXPO NAFELS-2026-09-08  (DV)      ARMADOR   correcto
+   &Pra-AXPO NAFELS-2026-09-09  (DV)      ARMADOR   correcto
+   &2026-09-10 ...-T            (panel)   CENTRAL   MAL
+   &Pra-AXPO NAFELS-2026-09-11-T (panel)  CENTRAL   MAL
 
-   hechos con el panel (10/09 y 11/09)
-      [3PLAYERS-V]  #1 Azcoitia, #2 Verdi, #3 Durdos,
-                    #4 Vazquez, #5 Salsburg                    basura
-
-Un .dvw trae dos listas de jugadores: local y visitante. En un partido cada
-una es la suya. En un ENTRENAMIENTO los dos equipos son el club, asi que
-las dos tienen que ser IGUALES — es lo que hace DataVolley.
-
-Nuestro panel escribia en la lista del visitante lo que hubiera quedado en
-esa ranura de sesiones viejas: el asistente, vos, y nombres sueltos.
-
-CORREGIDO EN DOS LADOS:
-
-   el panel      en entrenamiento escribe el plantel del club de los dos
-                 lados, como DataVolley
-   el plan       si los dos equipos son el mismo, usa siempre el plantel
-                 local (por si aparece otro archivo viejo)
-
-Y ADEMAS van los 12 .dvw ya corregidos, para que no tengas que esperar a
-scoutear de nuevo. Los del 10 y 11 de septiembre tenian la lista mala; el
-resto ya estaba bien y no se toco el contenido.
+El plan se queda con el puesto del ULTIMO archivo que procesa. Como los del
+panel son los mas nuevos, ganaban los puestos equivocados.
 
 
-2) EL SEIS INICIAL, AHORA OPCIONAL EN ENTRENAMIENTO
----------------------------------------------------
-Tenias razon: en un entrenamiento siempre son los mismos jugadores, muchos
-ejercicios no tienen rotacion, y obligar a cargar seis casilleros antes de
-cada drill frena el trabajo.
+LA CAUSA
+--------
+Al exportar, el panel tomaba el puesto de la lista de jugadores cargada en
+ESA SESION (M.plantel). Si esa lista venia vieja o incompleta, el puesto
+salia mal y quedaba escrito en el .dvw para siempre.
 
-El manual de DataVolley dice lo mismo (4.12): [Line Up] sirve "para el
-plantel, la posicion del armador o la formacion de un drill" — las tres
-opcionales.
+Y el plantel maestro —plantel_nafels.js, que dice de si mismo que es la
+"FUENTE UNICA del plantel actual"— tiene todo BIEN:
 
-AHORA en entrenamiento:
-   no exige los 6 casilleros
-   no exige marcar el armador
-   no bloquea al cerrar un set
+   #4  VAZQUEZ    ARMADOR      #1  DURDOS      PUNTA
+   #13 STEIMANN   ARMADOR      #11 BARTHOLET   PUNTA
+   #9  NORRIS     OPUESTO      #17 ROFFLER     PUNTA
+   #3  SCHWITTER  OPUESTO      #10 BOGDANOVSKI PUNTA
+   #12 JOHANSSON  CENTRAL      #20 SCHMID J    LIBERO
+   #7  SCHMID R   CENTRAL      #2  BRUDERER    LIBERO
+   #5  CLEMENT    CENTRAL
 
-Se puede cargar igual si el ejercicio lo necesita, pero ya no frena.
+Simplemente no se usaba.
 
-En un PARTIDO sigue siendo obligatorio, que es como tiene que ser: sin
-formacion no se puede llevar la rotacion ni saber quien saca.
+
+LO QUE SE HIZO
+--------------
+1. EL PANEL usa el plantel maestro para el puesto de nuestros jugadores.
+   Traduce el texto (ARMADOR) al numero que espera el .dvw (5). La lista de
+   la sesion queda solo como respaldo.
+
+2. EL PLAN ya no pisa un puesto bueno con uno vacio. Los partidos de liga
+   traen esa columna en blanco —DataVolley no la completa al importar las
+   planillas oficiales— y borraban el puesto que venia del entrenamiento.
+
+3. LOS 4 .DVW ya corregidos, para que no esperes a scoutear de nuevo:
+   9 puestos arreglados en total.
+
+VERIFICADO: #13 ARMADOR · #20 LIBERO · #7 CENTRAL en los cuatro.
+
+
+SOBRE EL #20 CON 47 ATAQUES
+---------------------------
+En los entrenamientos el #20 tiene UN ataque, no 47. Los otros 46 salen de
+los partidos de la liga 2025-26, donde el #20 es otro jugador de otro club
+(Steiner, Zaugg, Schmid de otros equipos).
+
+Con el puesto arreglado ya no aparece entre los puntas. Si igual ves
+numeros raros en el #20, decime y miro como el plan separa la temporada
+vieja de la nueva, que es otro frente.
+
+
+SOBRE EL #6
+-----------
+Aparece porque tiene 13 ataques en el entrenamiento del 09/09: existio. No
+esta en el plantel maestro, asi que va a quedar SIN PUESTO y no deberia
+caer entre los centrales.
+
+Si queres que los invitados no aparezcan, se puede filtrar por el plantel
+maestro. Decime y lo hago, pero es una decision tuya: hoy esos datos son
+reales.

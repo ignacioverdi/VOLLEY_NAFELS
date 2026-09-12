@@ -1,5 +1,5 @@
 window.HISTORIAL_DATA = {
-  "generado": "12/09/2026, 02:47:51",
+  "generado": "12/09/2026, 02:58:09",
   "entrenamientos": [
     {
       "fecha": "03/09/2026",
@@ -2843,7 +2843,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "4",
           "sT": 40,
           "sEff": 9,
           "sPunto": 6,
@@ -2939,7 +2939,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 1,
-          "n": "DURDOS",
+          "n": "Azcoitia",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -3035,7 +3035,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "NORRIS",
+          "n": "9",
           "sT": 44,
           "sEff": -34,
           "sPunto": 5,
@@ -3131,7 +3131,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 5,
-          "n": "CLEMENT",
+          "n": "Salsburg",
           "sT": 41,
           "sEff": -18,
           "sPunto": 3,
@@ -3323,7 +3323,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHIMD",
+          "n": "7",
           "sT": 42,
           "sEff": -12,
           "sPunto": 5,
@@ -5957,7 +5957,7 @@ window.HISTORIAL_DATA = {
       "jugadores": [
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "4",
           "sT": 38,
           "sEff": -5,
           "sPunto": 2,
@@ -6245,7 +6245,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "NORRIS",
+          "n": "9",
           "sT": 39,
           "sEff": -18,
           "sPunto": 5,
@@ -6341,7 +6341,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHIMD",
+          "n": "7",
           "sT": 32,
           "sEff": 12,
           "sPunto": 7,
@@ -6629,7 +6629,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 3,
-          "n": "SCHWITTER",
+          "n": "3",
           "sT": 35,
           "sEff": -1,
           "sPunto": 3,
@@ -6725,7 +6725,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 2,
-          "n": "GIAN",
+          "n": "2",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -7221,7 +7221,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 7,
-          "n": "SCHIMD",
+          "n": "7",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -7317,7 +7317,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 3,
-          "n": "SCHWITTER",
+          "n": "3",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -7413,7 +7413,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 9,
-          "n": "NORRIS",
+          "n": "9",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -7893,7 +7893,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 4,
-          "n": "VAZQUEZ",
+          "n": "4",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,
@@ -8085,7 +8085,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 2,
-          "n": "GIAN",
+          "n": "2",
           "sT": 0,
           "sEff": 0,
           "sPunto": 0,

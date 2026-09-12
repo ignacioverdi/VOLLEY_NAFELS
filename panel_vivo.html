@@ -6773,7 +6773,33 @@ function exportDVW(modo){
         else pos.push('');                          /* no jugó ese set */
       }
       const pj = (M[sd].plantel||[]).find(x=>String(x.c)===String(n));
-      const rol = esLib ? '1' : ((pj && pj.rol) || '');   /* col 13: rol; el líbero que juega va con 1 */
+      /* ══ EL PUESTO SALE DEL PLANTEL MAESTRO ═══════════════════════════════
+         Antes se tomaba de M[sd].plantel, que es lo que quedo cargado en esa
+         sesion del panel. Si esa lista venia vieja o incompleta, el puesto
+         salia mal y quedaba escrito en el .dvw para siempre.
+
+         Paso de verdad: el #13 STEIMANN, que es ARMADOR, se exporto como
+         CENTRAL en los archivos del 10 y 11 de septiembre. En plan de partido
+         aparecia entre los centrales.
+
+         plantel_nafels.js dice de si mismo que es la "FUENTE UNICA del plantel
+         actual". Asi que para NUESTRO equipo se usa ese, y la lista de la
+         sesion queda solo como respaldo. */
+      let _rolMaestro = '';
+      try{
+        if(sd === 'home'){
+          const _pc = plantelClub();
+          const _j = _pc && _pc.find(x => String(x.c) === String(n));
+          if(_j){
+            /* El plantel maestro guarda el puesto como TEXTO en "pos"
+               (ARMADOR, PUNTA...) y el .dvw lo quiere como NUMERO. */
+            const _NUM = { LIBERO:'1', PUNTA:'2', OPUESTO:'3', CENTRAL:'4', ARMADOR:'5' };
+            const _txt = String(_j.pos || _j.puesto || '').trim().toUpperCase();
+            _rolMaestro = _NUM[_txt] || (_j.rol ? String(_j.rol) : '');
+          }
+        }
+      }catch(e){}
+      const rol = esLib ? '1' : (_rolMaestro || (pj && pj.rol) || '');   /* col 13 */
       /* DataVolley necesita apellido, nombre y apodo en columnas separadas (+ versiones en hex),
          si no, muestra "AUTO1, AUTO2...". Apellido = todo menos la última palabra; nombre = la última. */
       const _pn = String(nom||'').trim().split(/\s+/).filter(Boolean);
