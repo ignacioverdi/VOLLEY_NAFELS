@@ -27,7 +27,11 @@
 
   /* ── LAS VARIABLES, IGUAL QUE EN PLAN DE PARTIDO ────────────────────────── */
   var YTP=null, YTReady=false, clips=[], cur=0, loadedVid="", vtimer=null;
-  var pre=2, post=8, speed=1, curKey='', VSEL={}, onlySel=false;
+  var pre=2, post=8, speed=1, curKey='', VSEL={}, onlyShow=false;
+  /* TAGFMT en plan_partido traduce el codigo de la jugada a nombre legible.
+     Aca la etiqueta ya viene armada (la fecha de la sesion), asi que va vacio
+     y la funcion usa el valor tal cual, que es lo que queremos. */
+  var TAGFMT = {};
 
   /* ── DONDE ESTA CADA DATO — la tabla de ROLECFG de plan_partido ─────────── */
   var CAMPOS = {

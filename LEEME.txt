@@ -1,57 +1,54 @@
-EL MISMO REPRODUCTOR DEL PLAN DE PARTIDO
-========================================
+EL ARREGLO FINAL
+================
 
-2 archivos. Publicar y Ctrl+Shift+R.
-
-
-TENIAS RAZON
-------------
-Yo escribi uno nuevo y trajo problemas nuevos. Ya teniamos uno que funciona
-y esta probado hace meses. Lo correcto era traerlo, no inventar.
-
-Este reproductor.js ES el de plan_partido, sacado de ahi TAL CUAL: su HTML,
-su CSS y sus 20 funciones, sin reescribir una linea.
-
-   clipId · firstSel · applySavedSel · saveSel · toggleClip · clipAll
-   toggleOnly · renderList · playCur · nextClip · prevClip · replayCur
-   togglePlay · setSpeed · toggleFullV · closeV · evLabel · jump · nextSel
-   enPantallaCompleta
-
-Verifique una por una que no llamen a nada que falte.
+Un archivo: reproductor.js. Publicar y Ctrl+Shift+R.
+objetivos_config.js ya esta bien, no hace falta tocarlo.
 
 
-LO QUE AHORA TENES, IGUAL QUE ALLA
-----------------------------------
-   Antes / Después     cuántos segundos ver de cada lado de la acción
-                       (esto es lo que pediste, y es lo que faltaba)
-   Velocidad           0.5× · 1× · 1.5× · 2×
-   ◀  ↻ Repetir  ▶
-   ⛶ Pantalla completa (tecla F)
-   La lista de acciones con tildes para elegir cuáles ver
-   💾 Guardar la selección
-   Escape para cerrar · flechas para moverse · barra para pausar
+LO QUE PROBE Y QUE ENCONTRE
+---------------------------
+Abri la bateria de recepcion de BARTHOLET y toque los 18 errores.
 
-Si el clip arranca antes o después de lo que queres, subis "Antes" a 5 y
-listo. Es el mismo control que ya usas en el plan de partido.
+FUNCIONABA CASI TODO:
+   el modal abre                        OK
+   el titulo dice "BARTHOLET · Recepción · =  (18)"   OK
+   Antes / Después                      OK
+   Velocidad 0.5× 1× 1.5× 2×            OK
+   ⛶ Pantalla completa                  OK
+   💾 Guardar                            OK
+   encuentra las 18 acciones            OK
+
+PERO LA LISTA SALIA VACIA.
+
+La causa: al traer renderList de plan_partido, esa funcion usa dos variables
+—onlyShow y TAGFMT— que yo no habia declarado. No tiraba error, simplemente
+no pintaba nada.
+
+CORREGIDO. Probado en vivo sobre la app publicada: las 18 aparecen con su
+fecha.
+
+   1. 03/09  =
+   2. 03/09  =
+   3. 03/09  =
+   ...
 
 
-LO UNICO NUEVO
+QUE ES CADA UNA
+---------------
+   onlyShow   el "Solo seleccionadas" del panel lateral
+   TAGFMT     en plan_partido traduce el codigo de jugada a nombre legible.
+              Aca la etiqueta ya viene armada —la fecha de la sesion— asi que
+              va vacio y usa el valor tal cual, que es lo que queremos.
+
+
+DONDE QUEDAMOS
 --------------
-Una sola funcion de entrada:
+El reproductor es EL de plan de partido, con sus 20 funciones tal cual, y
+ahora anda completo desde las baterias.
 
-   repAbrir({ num:11, fund:'rec', ev:'=', sesion:'...' })
+Cuando lo pruebes, si alguna accion sigue sin coincidir con el video, fijate
+que dice la fecha en la lista y que se ve en pantalla:
 
-Arma los clips desde PP_DATA con los MISMOS indices que usa plan_partido
-—los saque de su ROLECFG— y despues llama a su reproductor de siempre.
-
-Nada mas. Sin ajustes raros, sin controles inventados.
-
-
-Y RESPETA LA SESION
--------------------
-Ese era el error de fondo: si mirabas el entrenamiento del 11 y tocabas los
-18 errores, yo te traia los 18 de TODAS las sesiones y el primero era del
-03: otro dia, otro video.
-
-Ahora si la pantalla muestra una sesion, trae solo esa. Si muestra el
-acumulado, trae todas.
+   la fecha coincide pero arranca corrido  -> subi "Antes" a 5
+   la fecha NO coincide                    -> a esa sesion le cargaron el
+                                              link equivocado en Cargar Videos
