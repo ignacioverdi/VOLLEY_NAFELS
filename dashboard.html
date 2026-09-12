@@ -16,13 +16,13 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260912-0405" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260912-0405" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260912-0405"></script>
-<script src="filtro_tipo.js?v=20260912-0405" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260912-1116" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260912-1116" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260912-1116"></script>
+<script src="filtro_tipo.js?v=20260912-1116" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
-  <script src="objetivos_config.js?v=20260912-0405" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260912-1116" onerror="void 0"></script>
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
@@ -39,7 +39,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20260912-0405" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260912-1116" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   
@@ -411,7 +411,9 @@ function dbatRender(cid, jugVals, eqVals){
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
     +'<div style="font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#94a3b8"><span data-t="d_mi_perf">MI PERFORMANCE VS EQUIPO</span></div>'
     +'<div style="display:flex;gap:10px;flex-wrap:wrap">'
-    +[['#22c55e','Sobre equipo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Bajo equipo']].map(function(x){
+    /* La leyenda decia "Sobre equipo" porque el jugador se comparaba contra
+       su equipo. Ahora se compara contra el objetivo, igual que la otra fila. */
+    +[['#22c55e','Objetivo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Lejos']].map(function(x){
       return'<div style="display:flex;align-items:center;gap:4px;font-size:12px;color:#94a3b8"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
     }).join('')+'</div></div>'
     +'<div style="display:flex;gap:8px;width:100%;margin-bottom:4px">'
@@ -430,9 +432,19 @@ function dbatRender(cid, jugVals, eqVals){
         var m=metas[id],val=row.vals[id]!==undefined?row.vals[id]:null;
         var cls,objLine;
         if(row.isJug){
-          var eq=eqVals[id]!==undefined?eqVals[id]:null;
-          cls=val!==null?objClassifyVsTeam(val,eq):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
-          objLine=eq!==null?eq:m.obj;
+          /* ══ EL OBJETIVO ES UNO SOLO, EL DEL EQUIPO ═══════════════════════
+             Antes al jugador se lo comparaba contra el promedio de SU EQUIPO
+             DE ESE DIA. Por eso su objetivo CAMBIABA todos los dias: si el
+             equipo recibia bien la vara subia, si recibia mal bajaba.
+
+             Un objetivo que se mueve no es un objetivo. Lo fija el cuerpo
+             tecnico una vez y no se toca.
+
+             Y habia algo peor: un jugador podia estar "sobre el equipo" y aun
+             asi LEJOS del objetivo. El verde decia que estaba bien cuando no
+             lo estaba. */
+          cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+          objLine=m.obj;
         } else {
           cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
           objLine=m.obj;
@@ -549,15 +561,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260912-0405" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260912-0405"></script>
+<script src="firebase.js?v=20260912-1116" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260912-1116"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260912-0405">
+<link rel="stylesheet" href="movil.css?v=20260912-1116">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260912-0405" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260912-1116" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -2257,11 +2269,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260912-0405"></script>
-<script src="lang.js?v=20260912-0405"></script>
-<script src="temporadas_menu.js?v=20260912-0405"></script>
-<script src="app_offline.js?v=20260912-0405"></script>
-<script src="ayuda.js?v=20260912-0405"></script>
+<script src="chat_nafels.js?v=20260912-1116"></script>
+<script src="lang.js?v=20260912-1116"></script>
+<script src="temporadas_menu.js?v=20260912-1116"></script>
+<script src="app_offline.js?v=20260912-1116"></script>
+<script src="ayuda.js?v=20260912-1116"></script>
 
 <!-- Los archivos de video (datos_video_*.js.enc) se sacaron de esta
      pantalla: pesan unos 15 MB por temporada, descifrarlos son mas de
