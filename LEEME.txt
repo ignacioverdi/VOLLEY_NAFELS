@@ -1,49 +1,78 @@
-LOS DOS ULTIMOS DETALLES
-========================
+LAS 12 BATERIAS, COMPLETAS
+==========================
 
-Un archivo: objetivos_config.js. Publicar y Ctrl+Shift+R.
-
-
-LO PROBE Y ANDA BIEN
---------------------
-Elegi a BARTHOLET y toque las dos baterias:
-
-   JUGADOR   158 pelotas · 55%
-   EQUIPO   1362 pelotas · 53%
-
-Datos distintos, cada uno el suyo. Y la ventana dice arriba de quien es.
-
-El jugador ve:
-   #  Perfecta      27   1.7 de 10
-   +  Positiva      45   2.8 de 10
-   !  Suficiente    40   2.5 de 10
-   -  Pobre         23   1.5 de 10
-   /  Sobrepase      5   0.3 de 10
-   =  Error         18   1.1 de 10
-
-   CÓMO SE LLEGA A 55%
-   27×100 + 45×75 + 40×50 + 23×25 + 5×12,5 + 18×0
-   8713 ÷ 158 = 55%
-
-   LO QUE MÁS TE CUESTA
-    40 suficientes   −13
-    18 errores       −11
-
-   Para llegar a 60
-   • convertir 16 errores en suficientes
+2 archivos. HACER_TODO y publicar.
 
 
-LOS DOS QUE QUEDABAN
---------------------
-1. UN NUMERO CON 14 DECIMALES
-   La palanca decia:
-      "pasás de 53% a 59.20411160058737%"
-   Quedaba horrible. Ahora redondea antes de mostrar:
-      "pasás de 53% a 60% y llegás al objetivo"
+AHORA LAS DOCE ABREN VENTANA
+----------------------------
+   saque · recepción · defensa          promedio ponderado
+   bloqueo #+ · bloqueo #               cuántos terminaron en punto
+   atq central · alta · rápida          resta
+   atq tras rec #+ · ! · -              resta
+   atq en transición                    resta
 
-   Y de paso se ve que SI llega: antes el decimal lo dejaba en 59 y decia
-   "después hay que subir calidad", cuando en realidad alcanzaba.
 
-2. EL MISMO NUMERO ESCRITO DE DOS FORMAS
-   La cuenta decia "65×12.5" y la leyenda de abajo "/ vale 12,5".
-   Ahora las dos con coma.
+EL ATAQUE SE EXPLICA DISTINTO — y hay que decirlo
+--------------------------------------------------
+El ataque no es un promedio. Es una RESTA:
+
+   (puntos - bloqueados - errores) / total
+
+Por eso puede dar negativo. La ventana lo muestra asi:
+
+   #  Punto            29    4.0 de 10
+   ▸  Sigue en juego   26    3.6 de 10
+   /  Bloqueado         7    1.0 de 10
+   =  Error            11    1.5 de 10
+
+   CÓMO SE LLEGA A 15%
+   29 puntos − 7 bloqueados − 11 errores = 11
+   11 ÷ 73 = 15%
+
+   No es un promedio como en recepción: es una RESTA. Cuenta cuántos
+   puntos netos deja cada ataque, por eso puede dar negativo.
+
+Agregue "SIGUE EN JUEGO", que en las otras baterias no existe: son los
+ataques que ni fueron punto ni se perdieron. Sin esa fila los numeros no
+cerraban y el jugador no entendia donde estaban los demas ataques.
+
+
+LO MAS IMPORTANTE QUE ENCONTRE
+------------------------------
+Al probarlo con TU caso —Bartholet, ataque tras recepcion #+, -33%— vi
+esto:
+
+   son 3 ataques, y UNO salio bloqueado.
+
+Un jugador ve -33% y se preocupa. Pero con 3 pelotas, una bloqueada te
+manda a -33 y una de punto te manda a +33: el numero cambia 67 puntos por
+UNA accion. No significa nada todavia.
+
+Ocultarlo seria peor. Mostrarlo sin avisar, tambien. Asi que la ventana
+avisa:
+
+   ┌──────────────────────────────────┐
+   │ Ojo: son pocas pelotas.          │
+   │ Con 3 ataques, una sola cambia   │
+   │ el número 67 puntos. Este        │
+   │ porcentaje todavía no dice       │
+   │ mucho: miralo cuando haya más.   │
+   └──────────────────────────────────┘
+
+Y cuando pasa eso no muestra el consejo de "para llegar a X", porque seria
+darle una meta sobre un numero que no es real.
+
+El aviso sale con menos de 10 ataques, o menos de 15 acciones en los otros
+fundamentos.
+
+
+LOS ATAQUES REALES DE BARTHOLET
+
+   tras recepción #+     3 ataques    -33%   <- aviso
+   tras recepción !      3 ataques    100%   <- aviso
+   tras recepción -      3 ataques    -33%   <- aviso
+   en transición        73 ataques     15%   <- sin aviso, el dato sirve
+
+Fijate: los tres primeros son ruido. El unico que dice algo es transicion,
+y ahi se ve que regala 18 de 73 pelotas.

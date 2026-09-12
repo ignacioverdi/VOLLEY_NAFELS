@@ -315,6 +315,24 @@ def _bat_to_pcts(P):
         'n_bqpos': B['T'],
         'n_bqpt':  B['T'],
         'n_def':   D['T'],
+        # ══ EL DESGLOSE DE CADA ATAQUE ═══════════════════════════════════════
+        #  El ataque no se cuenta como los demas fundamentos. No es un
+        #  promedio ponderado sino una RESTA:
+        #      (puntos - bloqueados - errores) / total
+        #  Por eso puede dar negativo, y por eso la ventanita necesita
+        #  mostrarlo distinto.
+        #
+        #  Se exporta: punto, bloqueado, error y total. Lo que queda —los
+        #  ataques que siguieron en juego— sale de restar.
+        'atqD': {
+            'q':  {'p':P['cent']['#'], 'b':P['cent']['/'], 'e':P['cent']['='], 't':P['cent']['T']},
+            'hb': {'p':P['alta']['#'], 'b':P['alta']['/'], 'e':P['alta']['='], 't':P['alta']['T']},
+            'x':  {'p':P['rap']['#'],  'b':P['rap']['/'],  'e':P['rap']['='],  't':P['rap']['T']},
+            'rp': {'p':P['rp']['#'],   'b':P['rp']['/'],   'e':P['rp']['='],   't':P['rp']['T']},
+            'ri': {'p':P['ri']['#'],   'b':P['ri']['/'],   'e':P['ri']['='],   't':P['ri']['T']},
+            'rm': {'p':P['rm']['#'],   'b':P['rm']['/'],   'e':P['rm']['='],   't':P['rm']['T']},
+            'tr': {'p':P['tr']['#'],   'b':P['tr']['/'],   'e':P['tr']['='],   't':P['tr']['T']},
+        },
         'n_atqq':  P['cent']['T'],
         'n_atqhb': P['alta']['T'],
         'n_atqx':  P['rap']['T'],

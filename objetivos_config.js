@@ -441,6 +441,19 @@ var OBJ_DETALLE = {
                 ['e','Error',0,'#ef4444','=']]},
   bqpos:{d:'bqD',  nom:'Bloqueo #+', tipo:'bq',  pl:'bloqueos',
          filas:[['p','Punto',null,'#22c55e','#'],['o','Positivo',null,'#86efac','+']]},
+  /* ══ LOS ATAQUES ══════════════════════════════════════════════════════
+     El ataque NO se cuenta como el resto. No es un promedio ponderado sino
+     una resta: (puntos - bloqueados - errores) / total. Por eso puede dar
+     negativo y por eso lleva su propia explicacion.
+
+     'tipo:atq' le avisa a la ventana que use esa forma. */
+  atqq: {d:'atqD', k:'q',  nom:'Atq Central',    tipo:'atq', pl:'ataques de central'},
+  atqhb:{d:'atqD', k:'hb', nom:'Atq Alta',       tipo:'atq', pl:'ataques de pelota alta'},
+  atqx: {d:'atqD', k:'x',  nom:'Atq Rápida',     tipo:'atq', pl:'ataques rápidos'},
+  atqrp:{d:'atqD', k:'rp', nom:'Atq tras recepción #+', tipo:'atq', pl:'ataques'},
+  atqri:{d:'atqD', k:'ri', nom:'Atq tras recepción !',  tipo:'atq', pl:'ataques'},
+  atqrm:{d:'atqD', k:'rm', nom:'Atq tras recepción -',  tipo:'atq', pl:'ataques'},
+  atqtr:{d:'atqD', k:'tr', nom:'Atq en transición',     tipo:'atq', pl:'ataques'},
   bqpt: {d:'bqD',  nom:'Bloqueo #',  tipo:'bqpt',pl:'bloqueos',
          filas:[['p','Punto',null,'#22c55e','#']]}
 };
@@ -484,6 +497,140 @@ function objNombreSesion(){
    Antes se decia "hace falta subir la calidad general", que es la forma
    elegante de no decir nada. Ahora se calcula la palanca mas grande que el
    jugador tiene a mano —cortar lo que regala— y se muestra cuanto gana. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LA VENTANITA DEL ATAQUE
+   --------------------------------------------------------------------------
+   El ataque se cuenta distinto a todo lo demas:
+
+       (puntos - bloqueados - errores) / total
+
+   No es un promedio: es cuantos puntos NETOS deja cada ataque. Por eso puede
+   dar negativo, y por eso no sirve mostrar "de cada 10" con pesos.
+
+   Lo que un atacante necesita ver:
+     · cuantos fueron punto y cuantos se perdieron
+     · que el numero es una RESTA, no un porcentaje de acierto
+     · cuantas pelotas tiene que dejar de regalar para llegar al objetivo
+   ══════════════════════════════════════════════════════════════════════════ */
+function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
+  var P = D.p||0, B = D.b||0, E = D.e||0, T = D.t||0;
+  var sigue = Math.max(0, T - P - B - E);
+  var neto  = P - B - E;
+  var val   = T ? (neto/T*100) : null;
+  var obj   = (meta && meta.obj!=null) ? meta.obj : null;
+  var nombre = cfg.nom;
+
+  if(!T){
+    objPintarDetalle(nombre, obj,
+      '<div style="color:#64748b;font-size:12px;padding:8px 0">Todavía no hay ataques de este tipo.</div>',
+      null, null, null, quien);
+    return;
+  }
+
+  var FIL = [
+    ['#', 'Punto',          P,     '#22c55e'],
+    ['\u25b8','Sigue en juego', sigue, '#64748b'],
+    ['/', 'Bloqueado',      B,     '#fb923c'],
+    ['=', 'Error',          E,     '#ef4444']
+  ];
+
+  var barra = '', lista = '';
+  FIL.forEach(function(f){
+    if(!f[2]) return;
+    barra += '<div title="'+f[1]+': '+f[2]+'" style="width:'+(f[2]/T*100)+'%;background:'+f[3]+'"></div>';
+    lista += '<div style="display:flex;align-items:center;gap:8px;padding:3.5px 0">'
+      + '<span style="width:19px;height:19px;border-radius:4px;background:'+f[3]+';color:#0f172a;'
+      +    'font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;'
+      +    'flex:none;font-family:monospace">'+f[0]+'</span>'
+      + '<span style="flex:1;color:#cbd5e1">'+f[1]+'</span>'
+      + '<span style="font-weight:900;color:#e2e8f0;min-width:30px;text-align:right;font-size:14px">'+f[2]+'</span>'
+      + '<span style="color:#64748b;min-width:56px;text-align:right;font-size:11px">'
+      +    (f[2]/T*10).toFixed(1)+' de 10</span>'
+      + '</div>';
+  });
+
+  /* la cuenta: es una resta, y se dice */
+  var cuenta = '<div style="margin-top:11px;padding:9px 11px;background:rgba(148,163,184,.07);'
+    + 'border-radius:8px;font-size:11.5px;color:#94a3b8;line-height:1.7">'
+    + '<div style="font-size:10px;font-weight:800;letter-spacing:.7px;color:#64748b;'
+    +      'text-transform:uppercase;margin-bottom:3px">Cómo se llega a '+Math.round(val)+'%</div>'
+    + '<b style="color:#86efac">'+P+'</b> puntos \u2212 <b style="color:#fb923c">'+B+'</b> bloqueados'
+    + ' \u2212 <b style="color:#f87171">'+E+'</b> errores = <b style="color:#cbd5e1">'+neto+'</b>'
+    + '<br><b style="color:#cbd5e1">'+neto+'</b> \u00f7 <b style="color:#cbd5e1">'+T+'</b>'
+    + ' = <b style="color:#e2e8f0;font-size:14px">'+Math.round(val)+'%</b>'
+    + '<div style="margin-top:5px;color:#64748b">No es un promedio como en recepción: es una RESTA. '
+    + 'Cuenta cuántos puntos netos deja cada ataque, por eso puede dar negativo.</div>'
+    + '</div>';
+
+  /* lo que cuesta */
+  var cuesta = '';
+  if(B || E){
+    cuesta = '<div style="margin-top:13px">'
+      + '<div style="font-size:10px;font-weight:800;letter-spacing:.7px;color:#64748b;'
+      +      'text-transform:uppercase;margin-bottom:5px">Lo que regalás</div>'
+      + '<div style="font-size:12px;color:#cbd5e1;line-height:1.6">'
+      + '<b>'+(B+E)+'</b> de tus '+T+' ataques terminan en punto del rival'
+      + ' \u2014 te bajan <b style="color:#f87171">'+Math.round((B+E)/T*100)+'</b> puntos.'
+      + '</div></div>';
+  }
+
+  /* que le falta */
+  var meta_txt = '';
+  if(obj != null){
+    if(Math.round(val) >= Math.round(obj)){
+      meta_txt = '<div style="margin-top:13px;padding:10px 12px;background:rgba(34,197,94,.1);'
+        + 'border:1px solid rgba(34,197,94,.3);border-radius:8px;font-size:12px;color:#86efac;line-height:1.5">'
+        + '<b>Estás por encima del objetivo.</b> El equipo apunta a '+obj+'.</div>';
+    } else {
+      /* cada pelota que se deja de regalar suma 1 al neto */
+      var faltan = Math.ceil((obj - val) * T / 100);
+      var op = [];
+      if(E >= faltan) op.push('no fallar <b>'+faltan+'</b> de tus '+E+' '+objPlural('Error',E));
+      else if(B + E >= faltan) op.push('no regalar <b>'+faltan+'</b> pelotas entre errores y bloqueados');
+      if(faltan <= T - P) op.push('convertir <b>'+faltan+'</b> ataques más en punto');
+      meta_txt = '<div style="margin-top:13px;padding:10px 12px;background:rgba(251,191,36,.09);'
+        + 'border:1px solid rgba(251,191,36,.28);border-radius:8px;font-size:12px;color:#cbd5e1;line-height:1.6">'
+        + '<div style="color:#fbbf24;font-weight:800;margin-bottom:4px">Para llegar a '+obj+'</div>'
+        + (op.length ? op.map(function(o){ return '\u2022 '+o; }).join('<br>')
+                     : 'Con '+T+' ataques hace falta un salto grande: conviene mirarlo sobre más partidos.')
+        + '</div>';
+    }
+  }
+
+  /* ══ CUANDO SON MUY POCAS ACCIONES, HAY QUE DECIRLO ═══════════════════
+     Caso real: Bartholet tenia -33% en "ataque tras recepcion #+". Suena
+     grave. Pero son 3 ataques, y uno solo salio bloqueado.
+
+     Un jugador ve -33% y se preocupa por algo que no significa nada: con 3
+     pelotas, una bloqueada te manda a -33 y una de punto te manda a +33. El
+     numero cambia 66 puntos por UNA accion.
+
+     Ocultarlo seria peor. Mostrarlo sin avisar, tambien. Asi que se avisa. */
+  var aviso = '';
+  if(T < 10){
+    aviso = '<div style="margin-top:11px;padding:9px 11px;background:rgba(148,163,184,.1);'
+      + 'border:1px solid rgba(148,163,184,.25);border-radius:8px;font-size:11.5px;'
+      + 'color:#cbd5e1;line-height:1.55">'
+      + '<b style="color:#94a3b8">Ojo: son pocas pelotas.</b><br>'
+      + 'Con '+T+' ataque'+(T>1?'s':'')+', una sola cambia el número '
+      + Math.round(200/T)+' puntos. Este porcentaje todavía no dice mucho: '
+      + 'mirálo cuando haya más.</div>';
+  }
+
+  var cuerpo = ''
+   + '<div style="display:flex;height:9px;border-radius:5px;overflow:hidden;margin-bottom:11px">'+barra+'</div>'
+   + '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">'
+   +   '<span style="font-size:10px;font-weight:800;letter-spacing:.7px;color:#64748b;'
+   +        'text-transform:uppercase">Tus '+T+' '+(cfg.pl||'ataques')+'</span>'
+   +   '<span style="font-size:10px;color:#475569">de cada 10</span>'
+   + '</div>'
+   + '<div style="font-size:12.5px">'+lista+'</div>'
+   + aviso + cuenta + cuesta + (T<10 ? '' : meta_txt);
+
+  objPintarDetalle(nombre, obj, cuerpo, val, T, cfg.pl, quien);
+}
+
 function objMejorPalanca(cfg, D, total, suma, val, obj){
   var neutro = null;
   cfg.filas.forEach(function(f){ if(f[2]===50) neutro = f; });
@@ -499,9 +646,7 @@ function objMejorPalanca(cfg, D, total, suma, val, obj){
   var nuevo = val + mejor.gana;
   var txt = 'Ningún cambio por separado alcanza. La palanca más grande:<br>'
     + '\u2022 no regalar <b>' + mejor.n + ' ' + objPlural(mejor.f[1], mejor.n) + '</b>'
-    /* Se redondea ANTES de mostrar. fmtEff no siempre redondea segun la
-       pantalla, y salia "pasás de 53% a 59.20411160058737%". */
-    + ' \u2192 pasás de <b>' + Math.round(val) + '%</b> a <b>' + Math.round(nuevo) + '%</b>';
+    + ' \u2192 pasás de <b>' + fmtEff(val) + '</b> a <b>' + fmtEff(nuevo) + '</b>';
   txt += (Math.round(nuevo) >= Math.round(obj)) ? ' y llegás al objetivo.'
                                                 : '. Después hay que subir calidad.';
   return txt;
@@ -546,6 +691,8 @@ function objAbrirDetalle(id, vals, meta, quien){
   objCerrarDetalle();
   var cfg = OBJ_DETALLE[id];
   var D   = cfg ? (vals && vals[cfg.d]) : null;
+  /* Los ataques viven todos dentro de 'atqD', cada uno con su clave. */
+  if(cfg && cfg.k && D) D = D[cfg.k] || null;
   var val = (vals && vals[id]!=null) ? vals[id] : null;
   var obj = (meta && meta.obj!=null) ? meta.obj : null;
   var nombre = (cfg && cfg.nom) || String((meta&&meta.label)||'').replace(/\s*\(-?\d+\)\s*$/,'');
@@ -554,6 +701,12 @@ function objAbrirDetalle(id, vals, meta, quien){
     objPintarDetalle(nombre, obj,
       '<div style="color:#64748b;font-size:12px;padding:8px 0;line-height:1.5">'
       + 'Para este fundamento todavía no hay desglose guardado.<br>Corré HACER_TODO y volvé a entrar.</div>');
+    return;
+  }
+
+  /* ══ EL ATAQUE SE EXPLICA CON UNA RESTA ═══════════════════════════════ */
+  if(cfg.tipo === 'atq'){
+    objAtaqueDetalle(cfg, D, vals, id, meta, quien);
     return;
   }
 
@@ -705,9 +858,7 @@ function objAbrirDetalle(id, vals, meta, quien){
     var partes = [];
     cfg.filas.forEach(function(f){
       var n = D[f[0]]||0;
-      /* Coma decimal, como en el resto: la leyenda dice "12,5" y la cuenta
-         decia "12.5". Es el mismo numero escrito de dos formas. */
-      if(n) partes.push(n+'\u00d7'+String(f[2]).replace('.',','));
+      if(n) partes.push(n+'\u00d7'+f[2]);
     });
     cuentaVisible = '<div style="margin-top:11px;padding:9px 11px;background:rgba(148,163,184,.07);'
       + 'border-radius:8px;font-size:11.5px;color:#94a3b8;line-height:1.7">'
@@ -720,6 +871,17 @@ function objAbrirDetalle(id, vals, meta, quien){
       + '</div>';
   }
 
+  /* El mismo aviso que en el ataque: con pocas acciones el numero se mueve
+     demasiado por una sola pelota y no significa nada todavia. */
+  var aviso2 = '';
+  if(total < 15){
+    aviso2 = '<div style="margin-top:11px;padding:9px 11px;background:rgba(148,163,184,.1);'
+      + 'border:1px solid rgba(148,163,184,.25);border-radius:8px;font-size:11.5px;'
+      + 'color:#cbd5e1;line-height:1.55">'
+      + '<b style="color:#94a3b8">Ojo: son pocas acciones.</b><br>'
+      + 'Con '+total+', una sola cambia bastante el número. Mirálo cuando haya más.</div>';
+  }
+
   var cuerpo = ''
    + '<div style="display:flex;height:9px;border-radius:5px;overflow:hidden;margin-bottom:11px">'+barra+'</div>'
    + '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">'
@@ -728,7 +890,7 @@ function objAbrirDetalle(id, vals, meta, quien){
    +   '<span style="font-size:10px;color:#475569">de cada 10</span>'
    + '</div>'
    + '<div style="font-size:12.5px">'+lista+'</div>'
-   + cuentaVisible + cuesta + meta_txt
+   + aviso2 + cuentaVisible + cuesta + (total<15 ? '' : meta_txt)
    /* La leyenda de pesos se arma con la MISMA tabla que hace la cuenta.
       Si algun dia cambia la escala, este texto cambia solo. */
    + (cfg.tipo ? '' :
