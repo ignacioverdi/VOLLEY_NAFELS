@@ -1,79 +1,57 @@
-EL REPRODUCTOR, AHORA SI
-========================
+EL MISMO REPRODUCTOR DEL PLAN DE PARTIDO
+========================================
 
-6 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
-
-
-POR QUE ABRIA CUALQUIER ACCION
-------------------------------
-Tenias razon en las dos cosas. Yo habia escrito mi propia forma de leer los
-datos de video en vez de traer la de plan_partido. Y tenia DOS errores de
-fondo:
-
-1. LEIA EL CAMPO EQUIVOCADO
-   Cada accion es un ARRAY, y la posicion de cada dato CAMBIA segun el
-   fundamento:
-
-       ataque      evaluación en [5] · segundo en [7] · sesión en [8]
-       saque       evaluación en [3] · segundo en [5] · sesión en [6]
-       recepción   evaluación en [3] · segundo en [5] · sesión en [6]
-       bloqueo     evaluación en [2] · segundo en [3] · sesión en [4]
-
-   Yo leia siempre el mismo campo. Por eso salia cualquier cosa.
-
-2. EL CODIGO DE LA SESION NO ES LA CLAVE DEL VIDEO
-   La accion dice    E2026-09-10-20260910AXPE
-   El mapa tiene     ENT20260910T
-
-   No coinciden. plan_partido ya tenia esto resuelto: empareja por FECHA y
-   por TURNO —el 08/09 hubo dos sesiones y sin mirar el turno las acciones
-   de la mañana se llevaban el video de la tarde—.
-
-   Y si hay varias sesiones ese dia y no se sabe cual, NO ADIVINA: prefiere
-   no abrir nada antes que mostrar una jugada equivocada.
+2 archivos. Publicar y Ctrl+Shift+R.
 
 
-LO QUE HICE
------------
-Traje la logica de plan_partido tal cual, sin inventar. Y la verifique
-contra ella misma en la pagina real:
-
-   8 sesiones · mismo video en las 8 · cero diferencias
-
-       E2026-09-08-20260908AXPE   vXIkjFYqBZs   igual
-       E2026-09-10-20260910AXPE   tEK_CoI0QbQ   igual
-       E2026-09-03-PRAAXPONAFEL   sGFl_TO2iEE   igual
-       E2026-09-04-PRAAXPONAFEL   -0-4Ouw4D68   igual
-
-
-PROBADO CON DATOS REALES
-------------------------
-Busque los errores de recepcion del #11 en la pagina de verdad:
-
-   18 acciones · todas con evaluación "=" · minutos 18:50, 28:59, 31:11...
-
-Son exactamente los mismos 18 que conte a mano en los .dvw, con los mismos
-minutos. Y los ataques punto del #11: 27, todos con "#".
-
-
-LO QUE FALTABA Y NO SE VEIA
----------------------------
-Las pantallas NO cargaban los datos del plan ni los mapas de video. El
-reproductor no tenia de donde sacar nada.
-
-Ahora dashboard, panel_voley, analisis y jugador cargan los mismos tres
-archivos que plan_partido:
-
-   mapa_videos.js.enc
-   mapa_videos_ent.js.enc
-   plan_partido_data.js.enc
-
-Y el reproductor va DESPUES de ellos: si carga antes, no encuentra nada.
-Eso tambien lo verifique en los cuatro.
-
-
-UNA COSA MAS
+TENIAS RAZON
 ------------
-Si la ventana no puede identificar al jugador, NO abre el video del equipo:
-avisa. Mostrar las acciones del equipo cuando el jugador pidio las suyas
-seria repetir el mismo error que me marcaste.
+Yo escribi uno nuevo y trajo problemas nuevos. Ya teniamos uno que funciona
+y esta probado hace meses. Lo correcto era traerlo, no inventar.
+
+Este reproductor.js ES el de plan_partido, sacado de ahi TAL CUAL: su HTML,
+su CSS y sus 20 funciones, sin reescribir una linea.
+
+   clipId · firstSel · applySavedSel · saveSel · toggleClip · clipAll
+   toggleOnly · renderList · playCur · nextClip · prevClip · replayCur
+   togglePlay · setSpeed · toggleFullV · closeV · evLabel · jump · nextSel
+   enPantallaCompleta
+
+Verifique una por una que no llamen a nada que falte.
+
+
+LO QUE AHORA TENES, IGUAL QUE ALLA
+----------------------------------
+   Antes / Después     cuántos segundos ver de cada lado de la acción
+                       (esto es lo que pediste, y es lo que faltaba)
+   Velocidad           0.5× · 1× · 1.5× · 2×
+   ◀  ↻ Repetir  ▶
+   ⛶ Pantalla completa (tecla F)
+   La lista de acciones con tildes para elegir cuáles ver
+   💾 Guardar la selección
+   Escape para cerrar · flechas para moverse · barra para pausar
+
+Si el clip arranca antes o después de lo que queres, subis "Antes" a 5 y
+listo. Es el mismo control que ya usas en el plan de partido.
+
+
+LO UNICO NUEVO
+--------------
+Una sola funcion de entrada:
+
+   repAbrir({ num:11, fund:'rec', ev:'=', sesion:'...' })
+
+Arma los clips desde PP_DATA con los MISMOS indices que usa plan_partido
+—los saque de su ROLECFG— y despues llama a su reproductor de siempre.
+
+Nada mas. Sin ajustes raros, sin controles inventados.
+
+
+Y RESPETA LA SESION
+-------------------
+Ese era el error de fondo: si mirabas el entrenamiento del 11 y tocabas los
+18 errores, yo te traia los 18 de TODAS las sesiones y el primero era del
+03: otro dia, otro video.
+
+Ahora si la pantalla muestra una sesion, trae solo esa. Si muestra el
+acumulado, trae todas.

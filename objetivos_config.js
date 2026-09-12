@@ -710,6 +710,42 @@ function objNumeroDe(nombre){
   return null;
 }
 
+
+/* ══ QUE SESION ESTA MIRANDO ══════════════════════════════════════════════════
+   Si la pantalla muestra el acumulado, devuelve null y el reproductor trae
+   todas. Si muestra UNA sesion, devuelve su codigo para que traiga solo esa.
+
+   Sin esto, el jugador miraba el entrenamiento del 11 y el video le abria
+   acciones del 03: otro dia, otro video, nada que ver. */
+function objSesionElegida(){
+  try{
+    var sel = document.getElementById('eq-ses-sel') || document.getElementById('objSesion')
+           || document.getElementById('_dbatSel');
+    if(!sel) return null;
+    var v = String(sel.value);
+    /* -1 y -2 son el acumulado */
+    if(v === '-1' || v === '-2' || v === '') return null;
+    /* el valor es el indice de la sesion: se busca su codigo en PP_DATA */
+    var txt = (sel.options[sel.selectedIndex] || {}).text || '';
+    var m = txt.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+    if(!m) return null;
+    var fecha = m[3] + '-' + m[2] + '-' + m[1];
+    var turno = /mañana|manana|morning/i.test(txt) ? 'M'
+              : (/tarde|afternoon/i.test(txt) ? 'T' : '');
+    var D = window.PP_DATA || {};
+    for(var eq in D){
+      var I = (D[eq] && D[eq].info) || {};
+      for(var code in I){
+        if(I[code].date !== fecha) continue;
+        if(turno && (I[code].turno || '') !== turno) continue;
+        if(!turno && (I[code].turno || '')) continue;
+        return code;
+      }
+    }
+  }catch(e){}
+  return null;
+}
+
 function objVerVideo(id, clave, nombreFila, cuantas){
   try{
     if(typeof repAbrir !== 'function'){
@@ -751,7 +787,8 @@ function objVerVideo(id, clave, nombreFila, cuantas){
     repAbrir({
       titulo: quien + ' \u00b7 ' + (cfg.nom||'') + ' \u00b7 ' + sig
               + (cuantas ? '  (' + cuantas + ')' : ''),
-      num: jug, fund: OBJ_FUND[id], ev: sig
+      num: jug, fund: OBJ_FUND[id], ev: sig,
+      sesion: objSesionElegida()
     });
   }catch(e){}
 }
