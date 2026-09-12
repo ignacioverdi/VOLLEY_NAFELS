@@ -1,61 +1,57 @@
-TODO LIMPIO
-===========
+EL ULTIMO ARREGLO
+=================
 
-5 archivos. Publicar los 5 juntos y Ctrl+Shift+R.
-
-   objetivos_config.js   la ventanita + el enlace a cortes.html
-   dashboard.html
-   panel_voley.html      les saque lo que ya no hace falta
-   analisis.html
-   jugador.html
-
-DESPUES de publicar estos 5, podes borrar reproductor.js del repo.
-En ese orden. Si lo borras antes, queda un rato sin funcionar.
+UN SOLO ARCHIVO: objetivos_config.js
+Las 4 pantallas ya estan bien, no las toques.
 
 
-QUE CAMBIO
-----------
-Tocas un numero en la bateria y se abre cortes.html con los filtros puestos:
+QUE PASO
+--------
+Lo probe y el enlace NO se generaba. La causa fue mia y es de manual:
 
-   cortes.html?num=11&sk=Recepción&ev==
+Sacamos plan_partido_data.js de las pantallas —bien, era 1 MB al pedo—.
+Pero objNumeroDe, que traduce "BARTHOLET" a 11, buscaba JUSTO AHI.
 
-Nada mas. cortes.html ya hace todo el trabajo —las acciones filtradas, el
-reproductor, los controles— y lo usan otras 9 pantallas del sistema.
+Sin ese archivo se quedaba sin donde buscar, devolvia null, y objVerVideo
+cortaba antes de armar la direccion. Sin error visible, porque el try/catch
+se lo tragaba.
 
-Probado con la direccion real: 18 FILTERED CLIPS, 1 de 14 jugadores,
-Reception tildado. Son los 18 errores de Bartholet.
+Saque una dependencia sin revisar quien la usaba. El clasico.
 
 
-QUE SE SACO DE LAS 4 PANTALLAS
+COMO LO ARREGLE
+---------------
+objNumeroDe ahora busca en tres lugares, en orden:
+
+   1. el plantel del club, si la pantalla lo tiene cargado
+   2. la grilla de jugadores que la pantalla YA muestra ("#11 BARTHOLET")
+   3. PP_DATA, para las pantallas que si la tienen (plan_partido)
+
+El segundo es el que salva el dia: esa grilla esta en todas las pantallas
+que tienen baterias, y no hay que descargar nada.
+
+
+PROBADO EN LA APP, LOS 5 CASOS
 ------------------------------
-Todo lo que yo habia agregado para mi reproductor:
+   recepción error  #11    num=11  sk=Recepción  ev==
+   saque ace        #11    num=11  sk=Saque      ev=#
+   ataque bloqueado #11    num=11  sk=Ataque     ev=/
+   defensa perfecta #1     num=1   sk=Defensa    ev=#
+   error del EQUIPO        sin num sk=Recepción  ev==
 
-   reproductor.js
-   mapa_videos.js.enc
-   mapa_videos_ent.js.enc
-   plan_partido_data.js.enc
-
-Son unos 700 bytes de HTML por pantalla, pero sobre todo ~1 MB de datos que
-ya no se descargan en cada visita. Las cuatro van a cargar mas rapido.
-
-(jugador.html conserva plan_partido_data porque ya lo tenia de antes, no lo
-agregue yo.)
-
-Tambien saque objSesionElegida, que quedo sin uso: cortes.html tiene sus
-propios filtros de partido y sesion, mejores que el que yo habia hecho.
+Los cinco arman bien. Y BARTHOLET->11, DURDOS->1, SCHMID R->7, #11->11.
 
 
-LO QUE QUEDA FUNCIONANDO, TODO VERIFICADO
------------------------------------------
-   la ventanita de las 12 baterias
-   el desglose con el signo del scout y la cuenta a la vista
-   "de cada 10" con decimal
-   "lo que mas te cuesta"
-   "para llegar a X" con consejos realistas
-   la palanca mas grande cuando ningun cambio solo alcanza
-   el aviso cuando son pocas acciones
-   la ventana del ataque, que se explica como resta
-   el jugador viaja con la bateria (no depende de variables de cada pantalla)
-   el #8 y el #6 fuera del plantel
+LO QUE VERIFIQUE ADEMAS
+-----------------------
+   objetivos_config publicado tiene el enlace      OK
+   ya no llama a repAbrir                          OK
+   las 4 pantallas sin reproductor.js ni los mapas OK
+   la ventanita abre con todo su contenido         OK
 
-Verifique que ninguna funcion llame a algo que ya no existe.
+      PLAYER · RECEPTION · 55%
+      158 pelotas que recibe · objetivo 60
+      #  Perfect      27   1.7 de 10
+      +  Positive     45   2.8 de 10
+      !  Suficiente   40   2.5 de 10
+      =  Error        18   1.1 de 10

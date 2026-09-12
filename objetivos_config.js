@@ -701,21 +701,59 @@ var OBJ_FUND = { sq:'sq', rec:'rec', def:'def', bqpos:'blq', bqpt:'blq',
 /* Del nombre que muestra la pantalla al numero de camiseta que necesita el
    reproductor. Se busca en PP_DATA, que es la misma fuente de las acciones. */
 function objNumeroDe(nombre){
+  /* ══ DEL NOMBRE AL NUMERO DE CAMISETA ═════════════════════════════════════
+     Antes esto buscaba en PP_DATA. Pero PP_DATA venia de plan_partido_data.js,
+     que eran ~1 MB que cargabamos solo para esto. Al sacarlo de las pantallas
+     —que era lo correcto— objNumeroDe se quedo sin nada donde buscar y el
+     enlace no se armaba.
+
+     Ahora busca en el PLANTEL, que ya esta cargado en todas las pantallas y
+     es la fuente unica de nombres y numeros del club. Sin descargar nada. */
   var n = String(nombre||'').trim().toUpperCase();
   if(!n) return null;
+
   /* si ya vino un numero */
   var d = n.match(/^#?\s*(\d{1,2})\b/);
   if(d) return Number(d[1]);
+
+  function _cmp(a, b){
+    a = String(a||'').trim().toUpperCase();
+    b = String(b||'').trim().toUpperCase();
+    if(!a || !b) return false;
+    return a === b || a.indexOf(b) >= 0 || b.indexOf(a) >= 0;
+  }
+
+  /* 1. el plantel del club */
   try{
-    var D = window.PP_DATA || {};
-    for(var eq in D){
-      var P = (D[eq] && D[eq].players) || [];
+    var P = window.PLANTEL || window.PLANTEL_NAFELS || window.PLANTEL_CLUB;
+    if(P && P.length){
       for(var i=0;i<P.length;i++){
-        var nm = String(P[i].name||'').trim().toUpperCase();
-        if(nm && (nm === n || n.indexOf(nm) >= 0 || nm.indexOf(n) >= 0)) return Number(P[i].num);
+        var j = P[i];
+        if(_cmp(j.ap, n) || _cmp(j.nombre, n) || _cmp(j.name, n)
+           || _cmp((j.ap||'') + ' ' + (j.nom||''), n)) return Number(j.num);
       }
     }
   }catch(e){}
+
+  /* 2. lo que muestre la propia pantalla: "#11 BARTHOLET" */
+  try{
+    var els = document.querySelectorAll('#obj-jug-grid > *, .jug-card, .player-card');
+    for(var k=0;k<els.length;k++){
+      var t = (els[k].textContent||'').toUpperCase();
+      var m = t.match(/#\s*(\d{1,2})/);
+      if(m && t.indexOf(n) >= 0) return Number(m[1]);
+    }
+  }catch(e){}
+
+  /* 3. PP_DATA, si esta (plan_partido la tiene) */
+  try{
+    var D = window.PP_DATA || {};
+    for(var eq in D){
+      var L = (D[eq] && D[eq].players) || [];
+      for(var x=0;x<L.length;x++){ if(_cmp(L[x].name, n)) return Number(L[x].num); }
+    }
+  }catch(e){}
+
   return null;
 }
 
