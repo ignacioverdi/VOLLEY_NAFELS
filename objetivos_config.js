@@ -499,7 +499,9 @@ function objMejorPalanca(cfg, D, total, suma, val, obj){
   var nuevo = val + mejor.gana;
   var txt = 'Ningún cambio por separado alcanza. La palanca más grande:<br>'
     + '\u2022 no regalar <b>' + mejor.n + ' ' + objPlural(mejor.f[1], mejor.n) + '</b>'
-    + ' \u2192 pasás de <b>' + fmtEff(val) + '</b> a <b>' + fmtEff(nuevo) + '</b>';
+    /* Se redondea ANTES de mostrar. fmtEff no siempre redondea segun la
+       pantalla, y salia "pasás de 53% a 59.20411160058737%". */
+    + ' \u2192 pasás de <b>' + Math.round(val) + '%</b> a <b>' + Math.round(nuevo) + '%</b>';
   txt += (Math.round(nuevo) >= Math.round(obj)) ? ' y llegás al objetivo.'
                                                 : '. Después hay que subir calidad.';
   return txt;
@@ -703,7 +705,9 @@ function objAbrirDetalle(id, vals, meta, quien){
     var partes = [];
     cfg.filas.forEach(function(f){
       var n = D[f[0]]||0;
-      if(n) partes.push(n+'\u00d7'+f[2]);
+      /* Coma decimal, como en el resto: la leyenda dice "12,5" y la cuenta
+         decia "12.5". Es el mismo numero escrito de dos formas. */
+      if(n) partes.push(n+'\u00d7'+String(f[2]).replace('.',','));
     });
     cuentaVisible = '<div style="margin-top:11px;padding:9px 11px;background:rgba(148,163,184,.07);'
       + 'border-radius:8px;font-size:11.5px;color:#94a3b8;line-height:1.7">'

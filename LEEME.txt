@@ -1,64 +1,49 @@
-LA VENTANITA, COMPLETA
-======================
+LOS DOS ULTIMOS DETALLES
+========================
 
 Un archivo: objetivos_config.js. Publicar y Ctrl+Shift+R.
-Los otros 5 del zip anterior ya estan bien, no hace falta tocarlos.
 
 
-LA PROBE Y FUNCIONA
--------------------
-Elegi a BARTHOLET y toque las dos baterias de recepcion:
+LO PROBE Y ANDA BIEN
+--------------------
+Elegi a BARTHOLET y toque las dos baterias:
 
-   la del jugador   158 pelotas · 55%
-   la del equipo   1362 pelotas · 53%
+   JUGADOR   158 pelotas · 55%
+   EQUIPO   1362 pelotas · 53%
 
-Datos distintos, como tiene que ser. El error grave esta resuelto.
+Datos distintos, cada uno el suyo. Y la ventana dice arriba de quien es.
+
+El jugador ve:
+   #  Perfecta      27   1.7 de 10
+   +  Positiva      45   2.8 de 10
+   !  Suficiente    40   2.5 de 10
+   -  Pobre         23   1.5 de 10
+   /  Sobrepase      5   0.3 de 10
+   =  Error         18   1.1 de 10
+
+   CÓMO SE LLEGA A 55%
+   27×100 + 45×75 + 40×50 + 23×25 + 5×12,5 + 18×0
+   8713 ÷ 158 = 55%
+
+   LO QUE MÁS TE CUESTA
+    40 suficientes   −13
+    18 errores       −11
+
+   Para llegar a 60
+   • convertir 16 errores en suficientes
 
 
-PERO SE HABIAN PERDIDO TRES ARREGLOS
-------------------------------------
-Al armar la version anterior baje los archivos de GitHub ANTES de que
-publicaras los arreglos del "de cada 10", el plural y la palanca. Asi que se
-perdieron.
+LOS DOS QUE QUEDABAN
+--------------------
+1. UN NUMERO CON 14 DECIMALES
+   La palanca decia:
+      "pasás de 53% a 59.20411160058737%"
+   Quedaba horrible. Ahora redondea antes de mostrar:
+      "pasás de 53% a 60% y llegás al objetivo"
 
-Es la segunda vez que me pasa lo mismo. Los reaplique sobre lo que hay
-publicado ahora, y verifique las SEIS cosas juntas:
+   Y de paso se ve que SI llega: antes el decimal lo dejaba en 59 y decia
+   "después hay que subir calidad", cuando en realidad alcanzaba.
 
-   de cada 10 con decimal    OK
-   plural                    OK
-   la palanca                OK
-   la fila jugador/equipo    OK
-   la sesion                 OK
-   los valores de la fila    OK
-
-
-ASI QUEDA — las dos, una al lado de la otra
-
-   JUGADOR · ENTRENAMIENTOS        EQUIPO · ENTRENAMIENTOS
-   RECEPCIÓN              55%      RECEPCIÓN              53%
-   158 pelotas · obj 60            1362 pelotas · obj 60
-
-   #  Perfecta    27  1.7/10       #  Perfecta   260  1.9/10
-   +  Positiva    45  2.8/10       +  Positiva   319  2.3/10
-   !  Suficiente  40  2.5/10       !  Suficiente 336  2.5/10
-   -  Pobre       23  1.5/10       -  Pobre      213  1.6/10
-   /  Sobrepase    5  0.3/10       /  Sobrepase   65  0.5/10
-   =  Error       18  1.1/10       =  Error      169  1.2/10
-
-   CÓMO SE LLEGA A 55%             CÓMO SE LLEGA A 53%
-   27×100 + 45×75 + ...            260×100 + 319×75 + ...
-   8713 ÷ 158 = 55%                72863 ÷ 1362 = 53%
-
-   LO QUE MÁS TE CUESTA            LO QUE MÁS TE CUESTA
-    40 suficientes      −13         169 errores         −12
-    18 errores          −11         336 suficientes     −12
-
-   Para llegar a 60                Para llegar a 60
-   • convertir 16 errores          Ningún cambio solo alcanza.
-     en suficientes                La palanca más grande:
-                                   • no regalar 169 errores →
-                                     pasás de 53% a 60%
-
-Fijate la diferencia del consejo: al jugador le alcanza con cortar 16
-errores; al equipo no le alcanza con nada suelto, asi que le muestra la
-palanca mas grande y cuanto gana con ella.
+2. EL MISMO NUMERO ESCRITO DE DOS FORMAS
+   La cuenta decia "65×12.5" y la leyenda de abajo "/ vale 12,5".
+   Ahora las dos con coma.
