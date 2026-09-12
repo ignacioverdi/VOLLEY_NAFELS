@@ -1,58 +1,54 @@
-UNA SOLA ESCALA EN TODO EL SISTEMA
-==================================
+EL OBJETIVO DEL JUGADOR, FIJO
+=============================
 
-5 archivos. HACER_TODO y publicar.
-REEMPLAZA al zip anterior.
-
-
-LO QUE ENCONTRE AL REVISAR TODAS
---------------------------------
-Fui a buscar todas las formulas de eficacia del sistema. Habia mas
-desalineadas de las que hablamos:
-
-   SAQUE       una version, distinta de las baterias
-   RECEPCION   una version, distinta de las baterias
-   DEFENSA     una version, distinta de las baterias
-   BLOQUEO     DOS VERSIONES DISTINTAS entre si:
-                  (punto + positivo) / total          en 3 archivos
-                  (punto + positivo - error) / total  en update_db_nafels_FULL
-   ATAQUE      igual en todos lados, ya estaba bien
-
-Lo del bloqueo no lo habiamos visto: el mismo bloqueo daba dos numeros
-distintos segun que motor lo calculara. Quedo la version de las baterias,
-porque restar el error es contarlo dos veces —el error de bloqueo ya es
-punto del rival—.
+4 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
 
 
-COMO QUEDA, IGUAL EN TODAS LAS PANTALLAS
-----------------------------------------
-   SAQUE       # 100 · / 87,5 · + 75 · ! 50 · - 25 · = 0
-   RECEPCION   # 100 · + 75 · ! 50 · - 25 · / 12,5 · = 0
-   DEFENSA     # 100 · + 75 · ! 50 · - 25 · = 0
-   BLOQUEO     (punto + positivo) / total
-   ATAQUE      (puntos - bloqueados - errores) / total   <- el estandar mundial,
-                                                            puede dar negativo
+TENIAS RAZON Y AHORA ENTENDI BIEN
+---------------------------------
+El objetivo del jugador CAMBIABA todos los dias porque no era un objetivo:
+era el promedio del equipo de ESE DIA.
 
-Verificado: UNA sola version de cada una en los cuatro motores, y las cinco
-coinciden con gen_baterias.py.
+   si el equipo recibia bien   la vara subia
+   si el equipo recibia mal    la vara bajaba
 
+Un objetivo que se mueve no es un objetivo. Lo fija el cuerpo tecnico una
+vez y no se toca.
 
-COMO CAMBIAN LOS NUMEROS DE LA LIGA
-
-   SAQUE                RECEPCION              DEFENSA
-   antes  ahora         antes  ahora           antes  ahora
-   -1,7    42,5  Amri    29,9   60,1   Amri      6,1   53,1
-   -2,1    39,3  Näfe    24,9   57,2   Näfe     16,8   58,4
-   -3,7    40,7  Schö    28,7   58,8   Schö      8,9   54,4
-   -8,0    35,5  StGa    17,8   52,5   StGa     -4,8   47,6
-
-Se van los negativos y los numeros pasan a ser los mismos que ves en las
-baterias. Näfels es el MEJOR de la liga en defensa con 58,4, algo que con la
-escala vieja tambien se veia pero en otra unidad.
+Y traia algo peor: un jugador podia estar "sobre el equipo" y aun asi LEJOS
+del objetivo. El verde decia que estaba bien cuando no lo estaba.
 
 
-Y LOS OBJETIVOS
----------------
-El jugador y el equipo se miden contra el MISMO objetivo, el del equipo. Ya
-no existe la comparacion "contra mi propio equipo", que permitia estar en
-verde estando lejos del objetivo.
+POR QUE NO SE ARREGLO ANTES
+---------------------------
+Yo lo habia corregido en objetivos_config.js. Pero el mismo codigo esta
+repetido en CUATRO archivos, y el que dibuja el dashboard es otro:
+
+   dashboard.html       tenia su copia
+   objetivos.js         tenia su copia   <- esta es la que veias
+   panel_voley.html     tenia su copia
+   objetivos_config.js  la que yo habia arreglado
+
+Es el mismo problema que venimos arrastrando: la misma funcion escrita en
+varios lados. Esta vez las busque TODAS antes de tocar: ahora no queda
+ninguna comparacion contra el equipo en todo el sistema.
+
+
+LA LEYENDA TAMBIEN MENTIA
+-------------------------
+Arriba decia "Sobre equipo · Cerca · Neutro · Bajo equipo", que era coherente
+con el criterio viejo. Ahora dice lo mismo que el resto:
+
+   Objetivo · Cerca · Neutro · Lejos
+
+
+COMO VA A QUEDAR
+----------------
+Las dos filas —jugador y equipo— con el MISMO numero abajo:
+
+   % SAQUE      jugador 38%   obj 42        equipo 39%   obj 42
+   % RECEPCION  jugador 55%   obj 60        equipo 53%   obj 60
+   % DEFENSA    jugador 39%   obj 60        equipo 50%   obj 60
+
+Y el color del jugador ya dice si llego al objetivo, no si le gano a sus
+companeros.

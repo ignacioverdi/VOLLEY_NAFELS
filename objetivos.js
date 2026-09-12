@@ -226,7 +226,10 @@ function renderBaterias(containerId, jugVals, eqVals, titulo, rivalVals){
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
     +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">'+(titulo||'BATERÍAS')+'</div>'
     +'<div style="display:flex;gap:10px;flex-wrap:wrap">'
-    +[['#22c55e','Sobre equipo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Bajo equipo']].map(function(x){
+    /* La leyenda decia "Sobre equipo" / "Bajo equipo" porque el jugador se
+       comparaba contra su propio equipo. Ahora se compara contra el objetivo,
+       igual que la fila del equipo, asi que dice lo mismo que las demas. */
+    +[['#22c55e','Objetivo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Lejos']].map(function(x){
       return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
     }).join('')+'</div></div>'
     /* ══ SE SACO LA FILA DE ENCABEZADO ══════════════════════════════════════
@@ -249,9 +252,21 @@ function renderBaterias(containerId, jugVals, eqVals, titulo, rivalVals){
         var m=metas[id], val=row.vals[id]!==undefined && row.vals[id]!==null ? row.vals[id] : null;
         var cls, objLine;
         if(row.isJug){
-          var eq=(eqVals&&eqVals[id]!==undefined&&eqVals[id]!==null)?eqVals[id]:null;
-          cls=val!==null?objClassifyVsTeam(val,eq):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
-          objLine=eq!==null?eq:m.obj;
+          /* ══ EL OBJETIVO ES UNO SOLO, EL DEL EQUIPO ═══════════════════════════════
+   Antes al jugador se lo comparaba contra el promedio de SU EQUIPO DE
+   ESE DIA. Por eso el objetivo del jugador CAMBIABA todos los dias: si
+   el equipo recibia bien, la vara subia; si recibia mal, bajaba.
+
+   Eso rompe la idea de objetivo. El objetivo lo fija el cuerpo tecnico
+   una vez y no se mueve, pase lo que pase en un entrenamiento suelto.
+
+   Y traia un problema peor: un jugador podia estar "sobre el equipo" y
+   aun asi lejos del objetivo. El verde decia que estaba bien cuando no
+   lo estaba.
+
+   Ahora las dos filas, jugador y equipo, se miden contra el MISMO
+   objetivo. */
+          cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'}; objLine=m.obj;
         } else {
           cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
           objLine=m.obj;
