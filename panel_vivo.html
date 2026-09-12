@@ -5114,7 +5114,20 @@ function nuevoDrill(){
   toast('Nuevo drill · empieza '+h+'-'+a+' · '+_antes+' códigos intactos');
 }
 function openSetup(obligatorio){
-  SETUP_OBLIGATORIO = !!obligatorio;
+  /* ══ EN UN ENTRENAMIENTO EL SEIS ES OPCIONAL ═══════════════════════════
+     En un partido la formacion es obligatoria: sin ella no se puede llevar
+     la rotacion ni saber quien saca. En un ENTRENAMIENTO no: siempre son los
+     mismos jugadores del club, muchos ejercicios no tienen rotacion, y
+     obligar a cargar seis casilleros antes de cada drill frena el trabajo.
+
+     DataVolley tampoco la exige en practica: su manual (4.12) dice que
+     [Line Up] sirve "para el plantel, la posicion del armador o la formacion
+     de un drill" — las tres opcionales.
+
+     Se puede cargar igual si se quiere, pero ya no bloquea. */
+  var _esEntren = false;
+  try{ _esEntren = (typeof unSoloEquipo==='function') && unSoloEquipo(); }catch(e){}
+  SETUP_OBLIGATORIO = !!obligatorio && !_esEntren;
   poblarSelectEquipos();
   const V=(id,v)=>document.getElementById(id).value=v;
   V('s-nmh',M.home.name==='LOCAL'?'':M.home.name); V('s-nma',M.away.name==='VISITANTE'?'':M.away.name);
@@ -5178,7 +5191,9 @@ function saveSetup(){
   const UNO = (M.modo==='entrenamiento');   /* entrenamiento = un solo equipo */
   const lh=read('home');
   let la=read('away');
-  if(!lh){ toast('Faltan jugadores: cargá los 6 casilleros de tu equipo',true); return; }
+  /* En un entrenamiento se puede arrancar sin formacion: los ejercicios no
+     siempre tienen rotacion y son siempre los mismos jugadores. */
+  if(!lh && !UNO){ toast('Faltan jugadores: cargá los 6 casilleros de tu equipo',true); return; }
   if(!la){
     if(!UNO){ toast('Faltan jugadores: cada equipo necesita los 6 casilleros',true); return; }
     la=[1,2,3,4,5,6];                       /* rival genérico: no se le carga ninguna acción */
@@ -5186,7 +5201,7 @@ function saveSetup(){
   }
   const dup=a=>new Set(a).size!==a.length;
   if(dup(lh)||(!UNO&&dup(la))){ toast('Hay un número repetido en la cancha',true); return; }
-  if(!LU.home.setter){ toast('Marcá el armador de tu equipo',true); return; }
+  if(!LU.home.setter && !UNO){ toast('Marcá el armador de tu equipo',true); return; }
   if(!UNO && !LU.away.setter){ toast('Marcá el armador de cada equipo',true); return; }
   if(UNO && !LU.away.setter) LU.away.setter = la[0];
 
@@ -6716,9 +6731,23 @@ function exportDVW(modo){
   }
 
   /* jugadores: todos los que aparecen en el partido, no sólo los seis en cancha */
+  /* ══ EN UN ENTRENAMIENTO LOS DOS PLANTELES SON EL MISMO ══════════════════
+     El .dvw trae dos listas de jugadores: local y visitante. En un partido
+     cada una es la suya. En un ENTRENAMIENTO los dos equipos son el club, asi
+     que las dos listas tienen que ser IGUALES.
+
+     Antes se escribia M.away.plantel tal cual, y ahi quedaba lo que hubiera
+     cargado en esa ranura de sesiones viejas. En los archivos de Näfels
+     salieron nombres que no son del plantel —Azcoitia, Verdi, Salsburg— y el
+     plan de partido los mostraba en lugar de Durdos y Clement.
+
+     DataVolley escribe el mismo plantel de los dos lados en sus practicas;
+     esto lo iguala. */
+  const _unSolo = (function(){ try{ return typeof unSoloEquipo==='function' && unSoloEquipo(); }catch(e){ return false; } })();
   ['home','away'].forEach(sd=>{
     L.push(sd==='home'?'[3PLAYERS-H]':'[3PLAYERS-V]');
     const pre = sd==='home'?'*':'a';
+    if(_unSolo) sd = 'home';   /* entrenamiento: los dos lados, el plantel del club */
     const nums = new Set(M[sd].lineup.filter(Boolean));
     if(M[sd].six) M[sd].six.filter(Boolean).forEach(n=>nums.add(n));
     if(M[sd].libero) nums.add(M[sd].libero);

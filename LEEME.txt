@@ -1,65 +1,59 @@
-LA PANTALLA INICIAL DEL SCOUT
-=============================
+LOS NOMBRES Y EL SEIS OPCIONAL
+==============================
 
-Un archivo: panel_vivo.html. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
+HACER_TODO y publicar.
 
-
-LO COMPARE CON DATA VOLLEY (manual, seccion 9)
-----------------------------------------------
-DataVolley, al abrir, muestra todos los partidos de la temporada activa y
-permite: abrirlos, importar, BORRAR, y filtrar por fase, competencia o
-equipo.
-
-Lo que tenemos:
-
-   ver la lista               SI
-   abrir uno                  SI
-   importar (.dvw)            SI
-   filtrar por equipo         SI
-   filtrar por competencia    SI
-   separar partidos/entren.   SI  (mejor que DataVolley: el tiene un icono)
-   borrar                     SI, pero borraba mal  <- corregido
-   ver los del asistente      SI, pero solo mientras los tiene ABIERTOS
+   panel_vivo.html           a la raiz
+   gen_plan_partido.py       a la raiz
+   los 12 .dvw               a sus carpetas, pisando los que estan
 
 
-EL PROBLEMA GRAVE: EL BORRADO NO BORRABA
-----------------------------------------
-Un partido vive en SEIS lugares:
+1) DE DONDE SALIAN AZCOITIA Y SALSBURG
+--------------------------------------
+Los escribia NUESTRO PANEL. Mira la diferencia:
 
-   pv_partidos      la lista que ves en pantalla
-   pv_match         si es el que esta abierto ahora
-   pv_cajanegra     las 12 fotos de seguridad
-   volley_red       las 30 fotos de IndexedDB
-   pv_antes_drill   la copia previa al ultimo New Drill
-   la nube          el "en curso", que es lo que ve el otro scout
+   hechos con DataVolley (03 al 09)
+      [3PLAYERS-V]  #1 DURDOS, #2 BRUDERER, #3 SCHWITTER...   correcto
 
-El boton de borrar sacaba el partido de UNO SOLO: la lista local.
+   hechos con el panel (10/09 y 11/09)
+      [3PLAYERS-V]  #1 Azcoitia, #2 Verdi, #3 Durdos,
+                    #4 Vazquez, #5 Salsburg                    basura
 
-Consecuencia real: lo borrabas, desaparecia de la pantalla, y al rato
-VOLVIA — porque la sincronizacion lo traia de nuevo desde la nube. O
-quedaba escondido en la caja negra y reaparecia al usar recuperar.html.
+Un .dvw trae dos listas de jugadores: local y visitante. En un partido cada
+una es la suya. En un ENTRENAMIENTO los dos equipos son el club, asi que
+las dos tienen que ser IGUALES — es lo que hace DataVolley.
 
-CORREGIDO: ahora el borrado limpia los seis. El aviso lo dice:
-"Se borra de la lista, de la nube y de las copias de seguridad."
+Nuestro panel escribia en la lista del visitante lo que hubiera quedado en
+esa ranura de sesiones viejas: el asistente, vos, y nombres sueltos.
+
+CORREGIDO EN DOS LADOS:
+
+   el panel      en entrenamiento escribe el plantel del club de los dos
+                 lados, como DataVolley
+   el plan       si los dos equipos son el mismo, usa siempre el plantel
+                 local (por si aparece otro archivo viejo)
+
+Y ADEMAS van los 12 .dvw ya corregidos, para que no tengas que esperar a
+scoutear de nuevo. Los del 10 y 11 de septiembre tenian la lista mala; el
+resto ya estaba bien y no se toco el contenido.
 
 
-LO QUE FALTA, Y QUIERO QUE LO DECIDAS VOS
------------------------------------------
-Los partidos del asistente aparecen en tu lista SOLO mientras los tiene
-abiertos. Apenas cierra o exporta, salen de la nube y no los ves mas.
+2) EL SEIS INICIAL, AHORA OPCIONAL EN ENTRENAMIENTO
+---------------------------------------------------
+Tenias razon: en un entrenamiento siempre son los mismos jugadores, muchos
+ejercicios no tienen rotacion, y obligar a cargar seis casilleros antes de
+cada drill frena el trabajo.
 
-Vos queres poder borrarlos "por si hace falta". Hoy podes, pero solo
-mientras el los tiene abiertos.
+El manual de DataVolley dice lo mismo (4.12): [Line Up] sirve "para el
+plantel, la posicion del armador o la formacion de un drill" — las tres
+opcionales.
 
-Para verlos siempre habria que cambiar algo de fondo: que al cerrar un
-partido NO se borre de la nube sino que quede archivado ahi, con su autor
-y su fecha. Eso trae dos cosas:
+AHORA en entrenamiento:
+   no exige los 6 casilleros
+   no exige marcar el armador
+   no bloquea al cerrar un set
 
-   a favor   ves todo el historial del equipo, de los dos scouts, y podes
-             limpiar lo que no sirve desde cualquier maquina
-   en contra la nube acumula todos los partidos de la temporada (hoy solo
-             guarda los que estan en curso), y hay que decidir cuanto
-             tiempo se conservan
+Se puede cargar igual si el ejercicio lo necesita, pero ya no frena.
 
-No lo hago sin que lo decidas porque cambia como funciona el sistema entre
-las dos maquinas. Decime y lo armo.
+En un PARTIDO sigue siendo obligatorio, que es como tiene que ser: sin
+formacion no se puede llevar la rotacion ni saber quien saca.

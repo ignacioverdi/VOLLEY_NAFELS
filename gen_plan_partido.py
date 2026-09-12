@@ -247,7 +247,32 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
         return n
 
     def walk(t,pfx,mid,D,eq_slug=''):
-        sec='[3PLAYERS-H]' if pfx=='*' else '[3PLAYERS-V]'
+        # ══ EN UN ENTRENAMIENTO LOS DOS LADOS SON EL CLUB ═════════════════════
+        # El plantel salia de [3PLAYERS-H] para el local y [3PLAYERS-V] para el
+        # visitante. En un PARTIDO esta bien. En un ENTRENAMIENTO los dos
+        # equipos son el mismo club, pero el archivo trae igual una segunda
+        # lista de visitante, que suele ser basura: nombres sueltos, gente que
+        # se cargo de prueba, o el asistente.
+        #
+        # Por eso en el plan aparecia:
+        #     #1  Azcoitia   cuando es Durdos
+        #     #5  Salsburg   cuando es Clement
+        #
+        # Son los nombres de [3PLAYERS-V] del archivo del 10/09, que tiene 6
+        # jugadores inventados contra los 12 reales de [3PLAYERS-H].
+        #
+        # Cuando los dos equipos son el mismo, se usa SIEMPRE el plantel local,
+        # que es el bueno.
+        _mismo = False
+        try:
+            _tm = re.search(r'\[3TEAMS\](.*?)\[3', t, re.S)
+            if _tm:
+                _l = [x for x in _tm.group(1).strip().splitlines() if ';' in x][:2]
+                if len(_l) == 2:
+                    _mismo = _l[0].split(';')[1].strip().upper() == _l[1].split(';')[1].strip().upper()
+        except Exception:
+            pass
+        sec = '[3PLAYERS-H]' if (pfx=='*' or _mismo) else '[3PLAYERS-V]'
         pm=re.search(re.escape(sec)+r'(.*?)\[3',t,re.S)
         if pm:
             for l in pm.group(1).strip().splitlines():
