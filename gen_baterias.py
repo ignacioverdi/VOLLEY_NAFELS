@@ -410,6 +410,57 @@ def _turno(nombre_archivo):
         if re.search(r'(?<![A-Z0-9])' + pal + r'(?![A-Z0-9])', n): return t
     return ''
 
+
+def _plantel_club():
+    """Los numeros del plantel del club, de plantel_<club>.js."""
+    global _PC
+    try:
+        return _PC
+    except NameError:
+        pass
+    import glob as _g, re as _r, os as _o
+    out = {}
+    for f in _g.glob(_o.path.join(_o.path.dirname(_o.path.abspath(__file__)), 'plantel_*.js')):
+        try: t = open(f, encoding='utf-8', errors='replace').read()
+        except Exception: continue
+        for m in _r.finditer(r'\{\s*num:\s*(\d+)[^}]*?ap:\s*"([^"]*)"', t):
+            out[int(m.group(1))] = m.group(2).strip()
+    _PC = out
+    return out
+
+
+def _es_nuestro_equipo(nombre):
+    """Si este nombre de equipo es el club del sistema."""
+    if not nombre:
+        return False
+    import unicodedata as _u, re as _r
+    def _p(x):
+        x = _u.normalize('NFKD', x or '').encode('ascii', 'ignore').decode()
+        return _r.sub(r'[^a-z0-9]', '', x.lower())
+    clave = ''
+    try:
+        if 'NUESTRO' in globals() and NUESTRO and NUESTRO[0]:
+            clave = _p(NUESTRO[0])
+    except Exception:
+        pass
+    if not clave:
+        # el nombre del plantel: plantel_nafels.js -> nafels
+        import glob as _g, os as _o
+        for f in _g.glob(_o.path.join(_o.path.dirname(_o.path.abspath(__file__)), 'plantel_*.js')):
+            clave = _p(_o.path.basename(f)[8:-3])
+            if clave: break
+    if not clave:
+        try:
+            import config_club as _cc
+            clave = _p(_cc.club())
+        except Exception:
+            pass
+    if not clave:
+        return False
+    n = _p(nombre)
+    return clave in n or n in clave
+
+
 def _mk_id(code, tipo, date, rival, usados, turno=''):
     """Un id estable y unico por sesion. Con codigo oficial se usa ese; si no
     —el caso de los entrenamientos— se arma con el tipo, la fecha y el rival."""
@@ -568,6 +619,24 @@ def build(fuentes, out='datos_baterias.js', filtro_temp=None):
             jug={}
             for num,P in pl.items():
                 if num=='__EQUIPO__': continue
+                # ══ SOLO LOS DEL PLANTEL ══════════════════════════════════
+                #  En los entrenamientos aparecen numeros que no son
+                #  jugadores del equipo:
+                #     #8  la MAQUINA DE SAQUE, que se scoutea con un numero
+                #         para poder hacer el ejercicio
+                #     #6  un invitado que entreno un dia suelto
+                #
+                #  Ya los habiamos sacado del plan de partido, pero el
+                #  dashboard lee de ESTE motor y seguian apareciendo. Sus
+                #  acciones quedan en la base —existieron— pero no ensucian
+                #  las baterias del equipo.
+                #
+                #  El filtro usa plantel_<club>.js, la fuente unica. Si
+                #  manana el invitado se suma, se lo agrega ahi y aparece
+                #  solo. De los RIVALES no se filtra: no tenemos su plantel.
+                if _es_nuestro_equipo(r.get('nuestro') or r.get('rival')):
+                    if _plantel_club() and int(num) not in _plantel_club():
+                        continue
                 nom=r['names'].get(num)
                 if not nom: continue
                 jug[nom]=_bat_to_pcts(P)

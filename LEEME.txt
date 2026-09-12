@@ -1,51 +1,48 @@
-LAS DOS QUE FALTABAN
-====================
+EL #8 FUERA DE TODOS LADOS
+==========================
 
-2 archivos: jugador.html y analisis.html
-Publicar y Ctrl+Shift+R. Sin HACER_TODO.
-
-
-TENIAS RAZON Y EL ERROR FUE MIO
--------------------------------
-Yo venia verificando el DASHBOARD, que ya estaba bien. Tu captura era de
-OTRA pantalla.
-
-Se distinguen por el titulo:
-
-   "MI PERFORMANCE VS EQUIPO"     -> dashboard, panel_voley   (ya estaban OK)
-   "MI PERFORMANCE VS OBJETIVO"   -> jugador, analisis        (estas NO)
-
-Las dos que faltaban son justamente las que dicen "VS OBJETIVO". El titulo
-prometia una cosa y el codigo hacia otra.
+Un archivo: gen_baterias.py. HACER_TODO y publicar.
 
 
-QUE TENIAN MAL
---------------
-Algo raro: el COLOR ya se calculaba contra el objetivo —eso lo habia
-corregido— pero la linea de abajo seguia mostrando el promedio del equipo:
+POR QUE SEGUIA APARECIENDO
+--------------------------
+El filtro del plantel lo habia puesto SOLO en gen_plan_partido.py.
 
-   cls = objClassify(id,val)          <- el color, contra el objetivo. BIEN.
-   objLine = eq!==null ? eq : m.obj   <- el numero, contra el equipo. MAL.
+Pero el dashboard, el ranking y las baterias leen de OTRO motor:
+gen_baterias.py. Ese no tenia el filtro, asi que el #8 y el #6 seguian
+saliendo ahi.
 
-Por eso veias "obj 39" en el jugador y "obj 42" en el equipo, con los
-colores aparentemente coherentes. Estaba a medio arreglar y no lo vi.
+Es el mismo problema de siempre: lo arregle en un lado y no barri todos.
 
-CORREGIDO: objLine = m.obj
+CORREGIDO: ahora gen_baterias.py filtra igual. Los dos motores que arman
+listas de jugadores usan la misma fuente —plantel_nafels.js—.
+
+Probado:
+   "AXPO NAFELS"     reconocido como nuestro   -> filtra
+   "Volley Näfels"   reconocido como nuestro   -> filtra
+   "Amriswil"        rival                     -> NO filtra
+   plantel: 13 jugadores · el #8 no esta · el #6 no esta
+
+De los rivales no se filtra nada, porque de ellos no tenemos plantel.
 
 
-BARRIDO COMPLETO, ESTA VEZ SIN EXCEPCIONES
-------------------------------------------
-Revise las SEIS pantallas que dibujan esa fila:
+SOBRE EL MINI DASHBOARD DE LA BATERIA
+-------------------------------------
+Entendi perfecto lo que queres y me parece la mejor idea que surgio hoy.
 
-   analisis.html          m.obj / m.obj    OK
-   dashboard.html         m.obj / m.obj    OK
-   jugador.html           m.obj / m.obj    OK
-   objetivos.js           m.obj / m.obj    OK
-   objetivos_config.js    m.obj / m.obj    OK
-   panel_voley.html       m.obj / m.obj    OK
+El caso que diste: Bartholet, ataque con recepcion #+ da -33%. El jugador
+ve el numero y no puede hacer nada con eso. Lo que necesita ver es:
 
-   pantallas que muestran el numero del equipo: NINGUNA
-   leyenda vieja "Sobre equipo":               NINGUNA
+   cuantos ataques fueron        el detalle de cada uno
+   cuantos punto / bloqueado     contra que rival
+   de que zona atacaba           en que set
+   con que combinacion           el video, si esta
 
-Perdon por las vueltas. El problema fue que arregle de a una pantalla por
-vez en vez de barrer las seis juntas desde el principio.
+Lo armo, pero necesito saber una cosa antes: si al tocar la bateria queres
+que se abra un panel ahi mismo —como el bloque de objetivos— o que te lleve
+a la pantalla de Analisis con el filtro ya puesto.
+
+La primera es mas rapida para el jugador. La segunda reusa lo que ya existe
+y ahi ya podes ver el video de cada accion.
+
+Decime cual y lo hago.
