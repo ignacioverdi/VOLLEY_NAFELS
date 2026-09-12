@@ -270,6 +270,22 @@ python gen_informe.py --dvw_dir "!DVW_DIR!" --temporada "!TEMPORADA_ACTUAL!" --o
 if errorlevel 1 echo      [aviso] Problema armando el informe. Sigo igual.
 echo.
 
+REM ===================================================================
+REM   ESTADISTICAS DE LA LIGA
+REM
+REM   Esto NO se generaba aca: nla_stats.json quedaba con los numeros de
+REM   la ultima vez que alguien corrio el script a mano. Por eso, despues
+REM   de cambiar las formulas, esa pantalla seguia mostrando saque -2 y
+REM   recepcion 30 mientras el resto del sistema ya usaba la escala 0-100.
+REM
+REM   Ahora se rehace en cada corrida, como todo lo demas.
+REM ===================================================================
+echo  ============== ESTADISTICAS DE LA LIGA ==============
+echo.
+python gen_liga_stats.py
+if errorlevel 1 echo      [aviso] Problema con las estadisticas de la liga. Sigo igual.
+echo.
+
 echo  ==================================================
 echo      VERIFICACION (archivos clave):
 if exist "datos_partidos.js"     (echo      OK  datos_partidos.js)            else (echo      --  falta datos_partidos.js)
