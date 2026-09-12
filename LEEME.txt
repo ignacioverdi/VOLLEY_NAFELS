@@ -1,39 +1,52 @@
-LOS DOS QUE SE HABIAN VUELTO ATRAS
-==================================
+LOS DATOS INDIVIDUALES DE LA LIGA
+=================================
 
-2 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
+Un archivo: update_db_nafels.py. HACER_TODO y publicar.
 
 
-QUE PASO — error mio
+HICISTE BIEN EN PREGUNTAR
+-------------------------
+No estaban con las formulas correctas: NO ESTABAN, directamente.
+
+nla_stats.json tenia 8 equipos y CERO jugadores. La pantalla mostraba los
+equipos pero la parte individual quedaba vacia.
+
+
+LA CAUSA — error mio
 --------------------
-El objetivo del jugador habia quedado bien cuando publicaste NAFELS_OBJETIVO_FIJO.
+Cuando reemplace las formulas de eficacia, mi script cortaba desde
+"def eff_..." hasta el siguiente "def". Y justo en el medio de dos de esas
+funciones habia una linea suelta:
 
-Pero despues, para sacar las copias repetidas, baje dashboard.html y
-panel_voley.html de GitHub ANTES de que tu publicacion estuviera arriba. Asi
-que trabaje sobre la version vieja y te la mande de vuelta: mi propio zip
-piso mi propio arreglo.
+   REC_FLOT={'M','H'}; REC_POT={'Q','T'}
 
-Por eso en tu pantalla el objetivo del jugador volvio a cambiar todos los
-dias.
+Se la llevo puesta. Lo confirme en el historial de GitHub: hasta el 11/09 a
+las 21:26 estaba, y en la version del 12/09 a las 10:50 ya no.
 
-Corregido sobre lo que hay publicado AHORA, asi no vuelve a pasar.
+Sin esa linea, el generador fallaba con "REC_FLOT is not defined" y emitia
+solo los equipos. Y como HACER_TODO tapaba el aviso, nadie se enteraba.
 
+(Eso ultimo ya lo arreglamos: ahora el resumen final avisa.)
 
-LO QUE YA ESTA BIEN — verificado en el repo
--------------------------------------------
-   LIGA        Amriswil 42/60 · Näfels 39/58 · cero negativos
-               Se regenero: actualizado 11:11
-   FORMULAS    una sola version de cada fundamento en todos los motores
-   RANKING     lee los objetivos de objetivos_config.js
-   HACER_TODO  corre gen_liga_stats y muestra el resumen de fallos
-   objetivos.js  ya tenia el objetivo fijo
+CORREGIDO: la linea vuelve, con un comentario que explica que es —flotado
+M/H, potencia Q/T— para que no se pierda de nuevo.
 
 
-DESPUES DE ESTO
----------------
-   objetivos con vara propia            NINGUNA pantalla
-   formulas con mas de una version      NINGUNA
-   valores negativos en la liga         NINGUNO
-   ranking con objetivos a mano         NO
+PROBADO DE VERDAD
+-----------------
+Corri gen_liga_stats.py completo:
 
-Una sola escala, un solo objetivo, una sola formula.
+   ✓ nla_stats.json: 8 filas equipo, 99 jugadores
+
+Y los 99 con la escala correcta:
+
+   JUGADOR                equipo        saque  recep    def
+   Joel Hauck             Amriswil       44.2   67.0   48.8
+   Damein ROSSIGNOL       Colombier      39.3   65.6   45.2
+   Alexander Lengweiler   Schonenwerd    41.7   63.7   57.9
+   Joachim Hesselholt     Nafels         39.6   63.0   53.3
+
+   negativos: 0 de 99
+   recepcion va de 0 a 67 · saque de 26 a 48
+
+Misma escala que las baterias, el ranking y los equipos.

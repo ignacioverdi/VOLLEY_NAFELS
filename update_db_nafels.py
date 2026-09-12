@@ -65,6 +65,22 @@ NOMBRE_CORTO = {
 #  El numero sale de la configuracion del club. Si algun dia se usa otro, o
 #  se agrega una segunda maquina, se cambia ahi y no en el codigo.
 # ══════════════════════════════════════════════════════════════════════════
+
+# ══════════════════════════════════════════════════════════════════════════
+#  QUE SAQUE ESTAMOS RECIBIENDO
+#  Flotado: M (float) y H (high float).   Potencia: Q (jump) y T (tense).
+#  Sirve para separar la recepcion segun el tipo de saque que llega, que es
+#  otra cosa: no se recibe igual un flotado que un potencia.
+#
+#  Esta linea se perdio cuando reemplace las formulas de eficacia: mi script
+#  cortaba desde "def eff_..." hasta el siguiente "def", y esta definicion
+#  estaba justo en el medio. Por eso la pantalla de liga dejo de mostrar los
+#  datos individuales: fallaba con "REC_FLOT is not defined" y emitia solo
+#  los equipos.
+# ══════════════════════════════════════════════════════════════════════════
+REC_FLOT = {'M', 'H'}
+REC_POT  = {'Q', 'T'}
+
 def _es_maquina(num):
     """Si este numero de camiseta es una maquina y no un jugador."""
     try:
