@@ -1,54 +1,58 @@
-LAS COMBINACIONES, CON NOMBRE (corregido)
-=========================================
+UNA SOLA ESCALA EN TODO EL SISTEMA
+==================================
 
-Un archivo: plan_partido.html. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
+5 archivos. HACER_TODO y publicar.
 REEMPLAZA al zip anterior.
 
 
-QUE PASO CON EL ANTERIOR
-------------------------
-Lo publicaste y el menu seguia mostrando "G2, G4, V4, W4, Y1, Y7, Y8".
+LO QUE ENCONTRE AL REVISAR TODAS
+--------------------------------
+Fui a buscar todas las formulas de eficacia del sistema. Habia mas
+desalineadas de las que hablamos:
 
-Yo habia cambiado unas listas —CB_P, CB_C, CB_O— que resultaron ser las
-viejas, las que ya no se usan. Las opciones reales las arma una funcion,
-filterOpts(), que las saca de los datos de cada jugador.
+   SAQUE       una version, distinta de las baterias
+   RECEPCION   una version, distinta de las baterias
+   DEFENSA     una version, distinta de las baterias
+   BLOQUEO     DOS VERSIONES DISTINTAS entre si:
+                  (punto + positivo) / total          en 3 archivos
+                  (punto + positivo - error) / total  en update_db_nafels_FULL
+   ATAQUE      igual en todos lados, ya estaba bien
 
-Ahora el cambio esta EN ESA funcion, que es donde correspondia.
-
-
-COMO QUEDA
-----------
-   QUICK IN 4      X5 · W4          OVERPASS IN 4   V4
-   HIGH IN 4       V5 · G4          OVERPASS IN 3   V3
-   QUICK IN 2      X6 · W2          OVERPASS IN 2   V2
-   HIGH IN 2       V6 · G2          SETTER TIP      PP · JJ
-   QUICK IN 1      X8 · Y9          CLOSE           X1 · J1
-   HIGH IN 1       V8 · G9          BEHIND          X2 · J3
-   PIPE            XP · Y8          PUSH            XM · J4
-   PIPE 6-1        XB · Y1          SHOOT           X7 · J2
-   PIPE 6-5        XR · Y7
-
-Cada opcion filtra LOS DOS codigos a la vez.
-
-Y el menu de cada jugador muestra solo las jugadas que ESE jugador hizo. Un
-punta no va a tener "CLOSE" ni "PUSH" en su menu, porque no las hace.
+Lo del bloqueo no lo habiamos visto: el mismo bloqueo daba dos numeros
+distintos segun que motor lo calculara. Quedo la version de las baterias,
+porque restar el error es contarlo dos veces —el error de bloqueo ya es
+punto del rival—.
 
 
-LO QUE SI FUNCIONO DEL ZIP ANTERIOR
------------------------------------
-El filtro del plantel: el #6 y el #8 YA NO APARECEN. Verificado en la app.
+COMO QUEDA, IGUAL EN TODAS LAS PANTALLAS
+----------------------------------------
+   SAQUE       # 100 · / 87,5 · + 75 · ! 50 · - 25 · = 0
+   RECEPCION   # 100 · + 75 · ! 50 · - 25 · / 12,5 · = 0
+   DEFENSA     # 100 · + 75 · ! 50 · - 25 · = 0
+   BLOQUEO     (punto + positivo) / total
+   ATAQUE      (puntos - bloqueados - errores) / total   <- el estandar mundial,
+                                                            puede dar negativo
 
-   PUNTAS      Σ + 4 jugadores
-   CENTRALES   Σ + 2   (sin el #8)
-   OPUESTOS    Σ + 2   (sin el #6)
-   ARMADORES   Σ + Vazquez y Steimann
+Verificado: UNA sola version de cada una en los cuatro motores, y las cinco
+coinciden con gen_baterias.py.
 
 
-SOBRE EL G3
------------
-No lo agregue a la tabla porque no me lo pasaste. Pero lo deje asi: si un
-codigo NO esta en la tabla, se muestra igual con su codigo, en vez de
-desaparecer del menu.
+COMO CAMBIAN LOS NUMEROS DE LA LIGA
 
-Asi que G3 va a aparecer como "G3" y la jugada no se pierde. Cuando me digas
-como se llama, lo agrego y listo.
+   SAQUE                RECEPCION              DEFENSA
+   antes  ahora         antes  ahora           antes  ahora
+   -1,7    42,5  Amri    29,9   60,1   Amri      6,1   53,1
+   -2,1    39,3  Näfe    24,9   57,2   Näfe     16,8   58,4
+   -3,7    40,7  Schö    28,7   58,8   Schö      8,9   54,4
+   -8,0    35,5  StGa    17,8   52,5   StGa     -4,8   47,6
+
+Se van los negativos y los numeros pasan a ser los mismos que ves en las
+baterias. Näfels es el MEJOR de la liga en defensa con 58,4, algo que con la
+escala vieja tambien se veia pero en otra unidad.
+
+
+Y LOS OBJETIVOS
+---------------
+El jugador y el equipo se miden contra el MISMO objetivo, el del equipo. Ya
+no existe la comparacion "contra mi propio equipo", que permitia estar en
+verde estando lejos del objetivo.

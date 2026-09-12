@@ -506,9 +506,21 @@ function renderObjetivosJugador(cid,nombre,extra){
         var m=metas[id],val=row.vals[id]!==undefined?row.vals[id]:null;
         var cls,objLine;
         if(row.isJug){
-          var eq=eqVals[id]!==undefined?eqVals[id]:null;
-          cls=val!==null?objClassifyVsTeam(val,eq):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
-          objLine=eq!==null?eq:m.obj;
+          /* ══ EL MISMO OBJETIVO PARA TODOS ═══════════════════════════════
+             Antes al jugador se lo comparaba contra el promedio de SU EQUIPO
+             en vez de contra el objetivo. Eso traia dos problemas:
+
+               · parecia que a cada uno se le pedia algo distinto: la fila del
+                 jugador decia "obj 75" y la del equipo "obj 60". Ese 75 no
+                 era un objetivo, era el numero del equipo.
+
+               · un jugador podia estar "sobre el equipo" y aun asi lejos del
+                 objetivo. El verde decia que estaba bien cuando no lo estaba.
+
+             El objetivo es uno solo y lo fija el cuerpo tecnico: el del
+             equipo. Ahora las dos filas se miden contra lo mismo. */
+          cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+          objLine=m.obj;
         } else {
           cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
           objLine=m.obj;

@@ -235,31 +235,34 @@ def get_players(lines, section):
     return players
 
 def eff_atk(acts):
-    if not acts: return None
-    t=len(acts); k=sum(1 for a in acts if a['effect']=='#')
-    bl=sum(1 for a in acts if a['effect']=='/'); e=sum(1 for a in acts if a['effect']=='=')
-    return round((k-bl-e)/t*100,1)
+    """ATAQUE — eficacia clasica: (puntos - bloqueados - errores) / total.
 
+       Esta NO se toca: es el estandar mundial del voley y puede dar negativo.
+       Ya era la misma en todos lados."""
+    if not acts: return None
+    t=len(acts); n=lambda e: sum(1 for a in acts if a['effect']==e)
+    return round((n('#')-n('/')-n('='))/t*100, 1)
 def eff_srv(acts):
+    """SAQUE — escala 0 a 100, la misma de las baterias.
+       # ace 100 · / free ball 87,5 · + positivo 75 · ! neutro 50 · - negativo 25 · = error 0"""
     if not acts: return None
-    t=len(acts); k=sum(1 for a in acts if a['effect']=='#')
-    pp=sum(1 for a in acts if a['effect']=='+'); sl=sum(1 for a in acts if a['effect']=='/')
-    e=sum(1 for a in acts if a['effect']=='=')
-    return round((k+0.5*sl+0.25*pp-e)/t*100,1)
-
+    t=len(acts); n=lambda e: sum(1 for a in acts if a['effect']==e)
+    return round((n('#')*100 + n('/')*87.5 + n('+')*75 + n('!')*50 + n('-')*25)/t, 1)
 def eff_rec(acts):
+    """RECEPCION — escala 0 a 100.
+       # perfecta 100 · + positiva 75 · ! suficiente 50 · - pobre 25 · / muy pobre 12,5 · = error 0"""
     if not acts: return None
-    t=len(acts); k=sum(1 for a in acts if a['effect']=='#')
-    pp=sum(1 for a in acts if a['effect']=='+'); sl=sum(1 for a in acts if a['effect']=='/')
-    e=sum(1 for a in acts if a['effect']=='=')
-    return round((k+0.5*pp-0.5*sl-e)/t*100,1)
-
+    t=len(acts); n=lambda e: sum(1 for a in acts if a['effect']==e)
+    return round((n('#')*100 + n('+')*75 + n('!')*50 + n('-')*25 + n('/')*12.5)/t, 1)
 def eff_blk(acts):
-    if not acts: return None
-    t=len(acts); k=sum(1 for a in acts if a['effect']=='#')
-    pos=sum(1 for a in acts if a['effect']=='+')
-    return round((k+pos)/t*100,1)
+    """BLOQUEO — (punto + positivo) / total.
 
+       Habia DOS versiones: una restaba los errores y la otra no. El error de
+       bloqueo ya se cuenta como punto del rival, restarlo es contarlo dos
+       veces. Queda la que usan las baterias."""
+    if not acts: return None
+    t=len(acts); n=lambda e: sum(1 for a in acts if a['effect']==e)
+    return round((n('#')+n('+'))/t*100, 1)
 def pct_val(acts, eff):
     if not acts: return None
     return round(sum(1 for a in acts if a['effect']==eff)/len(acts)*100,1)
@@ -461,17 +464,11 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
 
 # ── CALCULATE STATS ───────────────────────────────────────────────
 def eff_def(acts):
-    """Defensa: (Perf + 0.5·Buena − 0.5·Mala − Error)/T  (misma fórmula que jugador.html).
-    Códigos: # perfecta, + buena, ! ok(neutra), - mala, = error."""
+    """DEFENSA — escala 0 a 100.
+       # perfecta 100 · + buena 75 · ! neutra 50 · - mala 25 · = error 0"""
     if not acts: return None
-    t=len(acts); k=sum(1 for a in acts if a['effect']=='#')
-    pp=sum(1 for a in acts if a['effect']=='+'); ml=sum(1 for a in acts if a['effect']=='-')
-    e=sum(1 for a in acts if a['effect']=='=')
-    return round((k+0.5*pp-0.5*ml-e)/t*100,1)
-
-# Mapeo de tipo de recepción (igual que baterias_engine): M/H=flotado, Q/T=potencia
-REC_FLOT={'M','H'}; REC_POT={'Q','T'}
-
+    t=len(acts); n=lambda e: sum(1 for a in acts if a['effect']==e)
+    return round((n('#')*100 + n('+')*75 + n('!')*50 + n('-')*25)/t, 1)
 def build_teams_data_fresh(season_dirs):
     """Construye teams_data desde cero parseando TODOS los DVW de las carpetas dadas.
     season_dirs: lista de (label_temporada, carpeta). Robusto: saltea carpetas vacías/inexistentes.
