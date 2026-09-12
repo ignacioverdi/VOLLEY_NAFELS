@@ -1,46 +1,59 @@
-LOS DOS QUE FALTABAN
-====================
+LAS COMBINACIONES, CON NOMBRE
+=============================
 
-2 archivos. HACER_TODO y publicar.
-
-   gen_plan_partido.py
-   plan_partido.html
+Un archivo: plan_partido.html. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
 
 
-LO QUE YA FUNCIONA — verificado
+ENTENDI LO QUE PEDISTE
+----------------------
+El desplegable mostraba el codigo crudo —"W4", "J1", "Y9"—. El cuerpo
+tecnico sabe que significa cada uno, pero el jugador no tiene por que, y esa
+pantalla la miran ellos.
+
+Ahora muestra el nombre de la jugada, con la tabla que me pasaste:
+
+   QUICK IN 4      X5 · W4          OVERPASS IN 4   V4
+   HIGH IN 4       V5 · G4          OVERPASS IN 3   V3
+   QUICK IN 2      X6 · W2          OVERPASS IN 2   V2
+   HIGH IN 2       V6 · G2          SETTER TIP      PP · JJ
+   QUICK IN 1      X8 · Y9          CLOSE           X1 · J1
+   HIGH IN 1       V8 · G9          BEHIND          X2 · J3
+   PIPE            XP · Y8          PUSH            XM · J4
+   PIPE 6-1        XB · Y1          SHOOT           X7 · J2
+   PIPE 6-5        XR · Y7
+
+Cada jugada tiene DOS codigos y los dos significan lo mismo, asi que cada
+opcion del menu FILTRA LOS DOS A LA VEZ. El filtro ya sabia trabajar con
+listas, no hubo que tocarlo.
+
+
+UNA COSA QUE AGREGUE, Y POR QUE
 -------------------------------
-Los 13 jugadores con su nombre y su puesto CORRECTO en la base. Cero errores.
+Mire que combinaciones usa Näfels de verdad:
 
-Y EL CLASIFICADOR ANDA: al #6, que no esta en el plantel y no tiene puesto
-declarado, lo dedujo como OPUESTO — que es exactamente lo que me dijiste que
-era ese invitado. Nadie le dijo nada: lo saco de como ataca.
+   W4 125 · G4 108 · W2 58 · J1 57 · G2 48 · Y9 43 · Y8 20 · J2 20 ...
 
+Usan la familia W/G/Y/J. Los codigos X/V casi no aparecen.
 
-1) EL #6 Y EL #8 SEGUIAN APARECIENDO — error mio
--------------------------------------------------
-El filtro estaba bien escrito pero comparaba contra una variable que no
-existe en ese punto:
+Si el menu listara las 34 combinaciones, la mitad de las opciones no
+devolveria nada: el jugador elige "QUICK IN 4" por el lado X5, no ve nada y
+piensa que esta roto.
 
-   _es_nuestro = (s == _clave_club())        <- 's' no existe ahi
-   _es_nuestro = (slug == _clave_club())     <- el bucle usa 'slug'
+Asi que EL MENU SE ARMA CON LO QUE HAY. Se miran los datos cargados y se
+ofrecen solo las jugadas que ese equipo hizo. Contra un rival que scoutee
+con la otra familia, va a funcionar igual sin tocar nada.
 
-Python no avisa de esto hasta que corre, y ahi tomaba el valor equivocado.
-Corregido.
+Asi queda para Näfels:
 
-
-2) FALTABA EL Σ EQUIPO DE LOS ARMADORES
----------------------------------------
-Las filas de puntas, centrales y opuestos tienen su tarjeta de acumulado
-arriba. La de armadores no, porque 'armador' no estaba en la lista que las
-arma. Agregado.
+   Todos · QUICK IN 4 · HIGH IN 4 · QUICK IN 2 · HIGH IN 2 · QUICK IN 1
+   HIGH IN 1 · PIPE · PIPE 6-1 · PIPE 6-5 · OVERPASS IN 4 · OVERPASS IN 3
+   OVERPASS IN 2 · SETTER TIP · CLOSE · BEHIND · PUSH · SHOOT
 
 
-COMO VA A QUEDAR
+UNA DUDA PARA VOS
+-----------------
+Encontre un codigo que no esta en tu tabla: G3, usado UNA vez.
 
-   PUNTAS      Σ EQUIPO 276 · BARTHOLET 82 · DURDOS 76 · ROFFLER 63 · BOGDANOVSKI 55
-   CENTRALES   Σ EQUIPO  95 · CLEMENT 49 · SCHMID 46
-   OPUESTOS    Σ EQUIPO 147 · NORRIS 90 · SCHWITTER 57
-   ARMADORES   Σ EQUIPO   8 · VAZQUEZ 6 · STEIMANN 2
-   LIBEROS     oculto
-
-Sin el #6 ni el #8.
+Siguiendo el patron —G = high, el numero = la zona— seria "HIGH IN 3". Pero
+no lo agrego por mi cuenta: decime si va asi o si es un error de tipeo y lo
+dejamos afuera.
