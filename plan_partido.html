@@ -185,12 +185,12 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260912-0357">
+<link rel="stylesheet" href="movil.css?v=20260912-0400">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="categorias_club.js?v=20260912-0357"></script>
-<script src="selector_categoria.js?v=20260912-0357"></script>
-<script src="mi_fila.js?v=20260912-0357" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260912-0400"></script>
+<script src="selector_categoria.js?v=20260912-0400"></script>
+<script src="mi_fila.js?v=20260912-0400" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -320,8 +320,8 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260912-0357"></script>
-<script src="filtro_tipo.js?v=20260912-0357" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260912-0400"></script>
+<script src="filtro_tipo.js?v=20260912-0400" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
   <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
        se cargaba SOLO el de partidos, asi que en una temporada sin partidos
@@ -336,12 +336,12 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20260912-0357"></script>
-<script src="firebase_por_categoria.js?v=20260912-0357"></script>
+<script src="firebase.js?v=20260912-0400"></script>
+<script src="firebase_por_categoria.js?v=20260912-0400"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20260912-0357" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20260912-0400" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -424,83 +424,9 @@ const FASE=[["all","Todas"],["SO","Side Out"],["TR","Transici\u00f3n"]];
 const RESS=[["all","Todas"],["#","Punto (#)"],["+","Buena (+)"],["!","Media (!)"],["-","Mala (−)"],["/","Bloqueado"],["=","Error"]];
 const OWN=[["all","Todas"],["1","Sí"],["0","No"]];
 const RECZ=[["all","Todas"],["1","z1"],["6","z6"],["5","z5"]];
-
-/* ══ LAS COMBINACIONES, CON NOMBRE ════════════════════════════════════════
-   El desplegable mostraba el codigo tal cual: "X5", "W4", "J1". El cuerpo
-   tecnico sabe que significa cada uno, pero el jugador no tiene por que, y
-   esta pantalla la miran ellos.
-
-   Cada jugada tiene DOS codigos —uno por familia de tipeo— y los dos
-   significan lo mismo. Por eso cada opcion del menu filtra los dos a la vez:
-   el valor es una lista, y el filtro ya sabe trabajar con listas.
-
-   La tabla la dicto el cuerpo tecnico, no la deduje yo. */
-var COMBO_NOMBRES = [
-  [['X5','W4'], 'QUICK IN 4'],
-  [['V5','G4'], 'HIGH IN 4'],
-  [['X6','W2'], 'QUICK IN 2'],
-  [['V6','G2'], 'HIGH IN 2'],
-  [['X8','Y9'], 'QUICK IN 1'],
-  [['V8','G9'], 'HIGH IN 1'],
-  [['XP','Y8'], 'PIPE'],
-  [['XB','Y1'], 'PIPE 6-1'],
-  [['XR','Y7'], 'PIPE 6-5'],
-  [['V4'],      'OVERPASS IN 4'],
-  [['V3'],      'OVERPASS IN 3'],
-  [['V2'],      'OVERPASS IN 2'],
-  [['PP','JJ'], 'SETTER TIP'],
-  [['X1','J1'], 'CLOSE'],
-  [['X2','J3'], 'BEHIND'],
-  [['XM','J4'], 'PUSH'],
-  [['X7','J2'], 'SHOOT']
-];
-
-/* Arma el menu con las jugadas que ESTE equipo hizo de verdad.
-
-   Cada equipo scoutea con una familia de codigos: Näfels usa W/G/Y/J y otros
-   usan X/V. Si el menu lista las dos familias, la mitad de las opciones no
-   devuelve nada y el jugador prueba y no ve nada.
-
-   Asi que se miran los datos cargados y se ofrecen solo las jugadas que
-   aparecen. Si un equipo no hace pipe, no hay opcion de pipe. */
-function _combosDelEquipo(){
-  var vistos = {};
-  try{
-    var eq = (window.TEAMS && window.TEAM) ? TEAMS[TEAM] : null;
-    ((eq && eq.players) || []).forEach(function(p){
-      if(['punta','central','opuesto','armador','libero'].indexOf(p.role) < 0) return;
-      (p.data || []).forEach(function(a){
-        var k = String(a[0] || '').trim().toUpperCase();
-        if(k) vistos[k] = 1;
-      });
-    });
-  }catch(e){}
-  return vistos;
-}
-function comboOpts(codigos){
-  var hay = _combosDelEquipo();
-  var alguno = Object.keys(hay).length > 0;
-  var out = [['all','Todos']];
-  COMBO_NOMBRES.forEach(function(par){
-    var cods = par[0].filter(function(c){
-      if(codigos && codigos.indexOf(c) < 0) return false;
-      return alguno ? !!hay[c] : true;
-    });
-    if(cods.length) out.push([cods, par[1]]);
-  });
-  return out;
-}
-
-/* Todas las jugadas, para cuando no se quiere limitar por puesto. */
-function comboOptsTodas(){
-  var out = [['all','Todos']];
-  COMBO_NOMBRES.forEach(function(par){ out.push([par[0], par[1]]); });
-  return out;
-}
-
-const CB_P=comboOpts(null);
-const CB_C=comboOpts(null);
-const CB_O=comboOpts(null);
+const CB_P=[["all","Todos"],["X5","X5"],["V5","V5"],["X6","X6"],["V6","V6"],["XP","XP"]];
+const CB_C=[["all","Todos"],["X1","X1"],["X2","X2"],["X7","X7"],["XM","XM"]];
+const CB_O=[["all","Todos"],["X5","X5"],["V5","V5"],["X6","X6"],["V6","V6"],["X8","X8"],["V8","V8"]];
 const STY=[["all","Todos"],["pot","Potencia"],["flo","Flotado"]];
 const SDZ=[["all","Todas"],["1","z1"],["9","z9"],["6","z6"],["7","z7"],["5","z5"]];
 const SMO=[["all","Todo"],["b1","0-8"],["b2","9-16"],["b3","17-40"]];
@@ -844,7 +770,51 @@ function tiles3(p,cfg){var t=cfg.tiles.map(function(lb,i){var hl=cfg.hl.indexOf(
 function U(role){return role==='saque'?' saques':role==='reception'?' recep.':role==='defense'?' defensas':role==='bloqueo'?' bloqueos':' ataques';}
 function mAll(btn,val){var pop=btn.closest(".mpop");var cbs=pop.querySelectorAll('input[type=checkbox]');cbs.forEach(function(c){c.checked=!!val;});if(cbs[0])cbs[0].dispatchEvent(new Event("change",{bubbles:true}));}
 function _isMulti(fl){return fl.multi||fl.lab==="Resultado";}
-function filterOpts(p,fl){if(fl.lab==="Combo"&&fl.idx===0){var cm={};(p&&p.data||[]).forEach(function(a){if(a[0])cm[a[0]]=1;});return [["all","Todas"]].concat(Object.keys(cm).sort().map(function(c){return [c,c];}));}if(fl.lab==="Recibe"&&fl.idx===9){var NB={};((window.PP_DATA&&window.PP_DATA[TEAM]&&window.PP_DATA[TEAM].players)||[]).forEach(function(pp){NB[pp.num]=pp.name;});var rc={};(p&&p.data||[]).forEach(function(a){var rn=a[9];if(rn>0)rc[rn]=1;});return [["all","Todas"]].concat(Object.keys(rc).map(Number).sort(function(x,y){return x-y;}).map(function(n){return [String(n),"#"+n+" "+(NB[n]?apellidoJS(NB[n]):"")];}));}if(fl.dyn==='combo'){var cc={};(p&&p.data||[]).forEach(function(a){var cb=a[fl.idx]||'';if(cb)cc[cb]=(cc[cb]||0)+1;});return [["all","Todas"]].concat(Object.keys(cc).sort(function(x,y){return cc[y]-cc[x];}).map(function(c){return [c,c+" ("+cc[c]+")"];}));}return fl.opts;}
+
+/* ══ LAS COMBINACIONES, CON NOMBRE ════════════════════════════════════════
+   El menu mostraba el codigo tal cual —"W4", "J1", "Y9"—. El cuerpo tecnico
+   sabe que significa cada uno, pero el jugador no tiene por que, y esta
+   pantalla la miran ellos.
+
+   Cada jugada tiene DOS codigos, uno por familia de tipeo, y los dos son lo
+   mismo. Por eso cada opcion filtra los dos a la vez: el valor es una lista
+   y el filtro ya sabia trabajar con listas.
+
+   La tabla la dicto el cuerpo tecnico. */
+var COMBO_NOMBRES = [
+  [['X5','W4'], 'QUICK IN 4'],   [['V5','G4'], 'HIGH IN 4'],
+  [['X6','W2'], 'QUICK IN 2'],   [['V6','G2'], 'HIGH IN 2'],
+  [['X8','Y9'], 'QUICK IN 1'],   [['V8','G9'], 'HIGH IN 1'],
+  [['XP','Y8'], 'PIPE'],         [['XB','Y1'], 'PIPE 6-1'],
+  [['XR','Y7'], 'PIPE 6-5'],     [['V4'],      'OVERPASS IN 4'],
+  [['V3'],      'OVERPASS IN 3'],[['V2'],      'OVERPASS IN 2'],
+  [['PP','JJ'], 'SETTER TIP'],   [['X1','J1'], 'CLOSE'],
+  [['X2','J3'], 'BEHIND'],       [['XM','J4'], 'PUSH'],
+  [['X7','J2'], 'SHOOT']
+];
+var COMBO_DE_CODIGO = (function(){ var m={}; COMBO_NOMBRES.forEach(function(par){
+  par[0].forEach(function(c){ m[c]=par[1]; }); }); return m; })();
+
+function filterOpts(p,fl){if(fl.lab==="Combo"&&fl.idx===0){
+  /* ══ EL MENU MUESTRA LA JUGADA, NO EL CODIGO ══════════════════════════
+     Antes listaba los codigos crudos que aparecian en los datos. Ahora los
+     traduce con COMBO_NOMBRES y JUNTA los dos codigos de cada jugada en una
+     sola opcion, asi el jugador elige "QUICK IN 4" y ve las dos familias.
+
+     Solo se ofrecen las jugadas que ESTE equipo hizo: cada club scoutea con
+     una familia distinta —Näfels usa W/G/Y/J— y listar las 34 haria que la
+     mitad de las opciones no devuelva nada. */
+  var cm={};(p&&p.data||[]).forEach(function(a){if(a[0])cm[String(a[0]).trim().toUpperCase()]=1;});
+  var out=[["all","Todas"]], usados={};
+  COMBO_NOMBRES.forEach(function(par){
+    var cods=par[0].filter(function(c){ return cm[c]; });
+    if(cods.length){ out.push([cods, par[1]]); cods.forEach(function(c){ usados[c]=1; }); }
+  });
+  /* Un codigo que no este en la tabla se muestra igual, con su codigo. Asi
+     no desaparece del menu una jugada que el equipo si hizo. */
+  Object.keys(cm).sort().forEach(function(c){ if(!usados[c]) out.push([c,c]); });
+  return out;
+}if(fl.lab==="Recibe"&&fl.idx===9){var NB={};((window.PP_DATA&&window.PP_DATA[TEAM]&&window.PP_DATA[TEAM].players)||[]).forEach(function(pp){NB[pp.num]=pp.name;});var rc={};(p&&p.data||[]).forEach(function(a){var rn=a[9];if(rn>0)rc[rn]=1;});return [["all","Todas"]].concat(Object.keys(rc).map(Number).sort(function(x,y){return x-y;}).map(function(n){return [String(n),"#"+n+" "+(NB[n]?apellidoJS(NB[n]):"")];}));}if(fl.dyn==='combo'){var cc={};(p&&p.data||[]).forEach(function(a){var cb=a[fl.idx]||'';if(cb)cc[cb]=(cc[cb]||0)+1;});return [["all","Todas"]].concat(Object.keys(cc).sort(function(x,y){return cc[y]-cc[x];}).map(function(c){return [c,c+" ("+cc[c]+")"];}));}return fl.opts;}
 /* refresca las opciones de "Tipo" (combos) de defensa según la zona elegida */
 function defRefreshTipo(p){var tsel=document.getElementById(p.id+'-f0'),zsel=document.getElementById(p.id+'-f1');if(!tsel||!zsel)return;var zv=zsel.value,prev=tsel.value,cc={};p.data.forEach(function(a){if(zv!=='all'&&String(a[1])!==zv)return;var cb=a[7]||'';if(cb)cc[cb]=(cc[cb]||0)+1;});var op=[["all","Todas"]].concat(Object.keys(cc).sort(function(x,y){return cc[y]-cc[x];}).map(function(c){return [c,c+" ("+cc[c]+")"];}));tsel.innerHTML=op.map(function(o){return '<option value="'+o[0]+'">'+o[1]+'</option>';}).join('');tsel.value=op.some(function(o){return o[0]===prev;})?prev:'all';}
 function filtCtrl(id,fl,onchg,op){op=op||fl.opts;
@@ -1254,8 +1224,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20260912-0357" onerror="void 0"></script>
-<script src="lang.js?v=20260912-0357" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20260912-0400" onerror="void 0"></script>
+<script src="lang.js?v=20260912-0400" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -1273,7 +1243,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20260912-0357" onerror="void 0"></script>
-<script src="ayuda.js?v=20260912-0357"></script>
+<script src="volver_inicio.js?v=20260912-0400" onerror="void 0"></script>
+<script src="ayuda.js?v=20260912-0400"></script>
 </body>
 </html>

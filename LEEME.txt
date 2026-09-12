@@ -1,17 +1,23 @@
-LAS COMBINACIONES, CON NOMBRE
-=============================
+LAS COMBINACIONES, CON NOMBRE (corregido)
+=========================================
 
 Un archivo: plan_partido.html. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
+REEMPLAZA al zip anterior.
 
 
-ENTENDI LO QUE PEDISTE
-----------------------
-El desplegable mostraba el codigo crudo —"W4", "J1", "Y9"—. El cuerpo
-tecnico sabe que significa cada uno, pero el jugador no tiene por que, y esa
-pantalla la miran ellos.
+QUE PASO CON EL ANTERIOR
+------------------------
+Lo publicaste y el menu seguia mostrando "G2, G4, V4, W4, Y1, Y7, Y8".
 
-Ahora muestra el nombre de la jugada, con la tabla que me pasaste:
+Yo habia cambiado unas listas —CB_P, CB_C, CB_O— que resultaron ser las
+viejas, las que ya no se usan. Las opciones reales las arma una funcion,
+filterOpts(), que las saca de los datos de cada jugador.
 
+Ahora el cambio esta EN ESA funcion, que es donde correspondia.
+
+
+COMO QUEDA
+----------
    QUICK IN 4      X5 · W4          OVERPASS IN 4   V4
    HIGH IN 4       V5 · G4          OVERPASS IN 3   V3
    QUICK IN 2      X6 · W2          OVERPASS IN 2   V2
@@ -22,38 +28,27 @@ Ahora muestra el nombre de la jugada, con la tabla que me pasaste:
    PIPE 6-1        XB · Y1          SHOOT           X7 · J2
    PIPE 6-5        XR · Y7
 
-Cada jugada tiene DOS codigos y los dos significan lo mismo, asi que cada
-opcion del menu FILTRA LOS DOS A LA VEZ. El filtro ya sabia trabajar con
-listas, no hubo que tocarlo.
+Cada opcion filtra LOS DOS codigos a la vez.
+
+Y el menu de cada jugador muestra solo las jugadas que ESE jugador hizo. Un
+punta no va a tener "CLOSE" ni "PUSH" en su menu, porque no las hace.
 
 
-UNA COSA QUE AGREGUE, Y POR QUE
--------------------------------
-Mire que combinaciones usa Näfels de verdad:
+LO QUE SI FUNCIONO DEL ZIP ANTERIOR
+-----------------------------------
+El filtro del plantel: el #6 y el #8 YA NO APARECEN. Verificado en la app.
 
-   W4 125 · G4 108 · W2 58 · J1 57 · G2 48 · Y9 43 · Y8 20 · J2 20 ...
-
-Usan la familia W/G/Y/J. Los codigos X/V casi no aparecen.
-
-Si el menu listara las 34 combinaciones, la mitad de las opciones no
-devolveria nada: el jugador elige "QUICK IN 4" por el lado X5, no ve nada y
-piensa que esta roto.
-
-Asi que EL MENU SE ARMA CON LO QUE HAY. Se miran los datos cargados y se
-ofrecen solo las jugadas que ese equipo hizo. Contra un rival que scoutee
-con la otra familia, va a funcionar igual sin tocar nada.
-
-Asi queda para Näfels:
-
-   Todos · QUICK IN 4 · HIGH IN 4 · QUICK IN 2 · HIGH IN 2 · QUICK IN 1
-   HIGH IN 1 · PIPE · PIPE 6-1 · PIPE 6-5 · OVERPASS IN 4 · OVERPASS IN 3
-   OVERPASS IN 2 · SETTER TIP · CLOSE · BEHIND · PUSH · SHOOT
+   PUNTAS      Σ + 4 jugadores
+   CENTRALES   Σ + 2   (sin el #8)
+   OPUESTOS    Σ + 2   (sin el #6)
+   ARMADORES   Σ + Vazquez y Steimann
 
 
-UNA DUDA PARA VOS
------------------
-Encontre un codigo que no esta en tu tabla: G3, usado UNA vez.
+SOBRE EL G3
+-----------
+No lo agregue a la tabla porque no me lo pasaste. Pero lo deje asi: si un
+codigo NO esta en la tabla, se muestra igual con su codigo, en vez de
+desaparecer del menu.
 
-Siguiendo el patron —G = high, el numero = la zona— seria "HIGH IN 3". Pero
-no lo agrego por mi cuenta: decime si va asi o si es un error de tipeo y lo
-dejamos afuera.
+Asi que G3 va a aparecer como "G3" y la jugada no se pierde. Cuando me digas
+como se llama, lo agrego y listo.
