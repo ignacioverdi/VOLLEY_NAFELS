@@ -398,6 +398,316 @@ function renderObjetivos(cid,extra){
 }
 function objPct(v,mn,mx){return Math.max(0,Math.min(100,(v-mn)/(mx-mn)*100));}
 function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LA VENTANITA DEL DETALLE
+   --------------------------------------------------------------------------
+   La primera version mostraba la cuenta: acciones x peso = puntos, y abajo
+   "8712 puntos repartidos entre 158 acciones = 55".
+
+   Eso es la aritmetica, no el entendimiento. Ningun jugador piensa en "8712
+   puntos", y saber la formula no le dice que hacer el martes que viene.
+
+   Un jugador necesita tres cosas, en este orden:
+
+     1. COMO RECIBE, en algo que pueda imaginar: "de cada 10 pelotas".
+        158 acciones no se visualizan; 10 si.
+     2. QUE LE ESTA COSTANDO el numero. No cuanto suma lo bueno, sino cuanto
+        le RESTA lo malo, que es donde se puede mejorar.
+     3. QUE LE FALTA para el objetivo, en acciones concretas. "Te faltan 5"
+        no sirve; "convertir 15 errores en suficientes" si.
+
+   La cuenta completa queda abajo, plegada, para el cuerpo tecnico.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+var OBJ_DETALLE = {
+  sq:   {d:'sqD',  nom:'Saque',      pl:'saques que pega',
+         filas:[['p','Ace',100,'#22c55e','#'],['f','Free ball',87.5,'#4ade80','/'],
+                ['o','Positivo',75,'#86efac','+'],['n','Neutro',50,'#fbbf24','!'],
+                ['m','Negativo',25,'#fb923c','-'],['e','Error',0,'#ef4444','=']]},
+  rec:  {d:'recD', nom:'Recepción',  pl:'pelotas que recibe',
+         filas:[['p','Perfecta',100,'#22c55e','#'],['o','Positiva',75,'#86efac','+'],
+                ['n','Suficiente',50,'#fbbf24','!'],['m','Pobre',25,'#fb923c','-'],
+                ['s','Sobrepase',12.5,'#f87171','/'],['e','Error',0,'#ef4444','=']]},
+  def:  {d:'defD', nom:'Defensa',    pl:'pelotas que defiende',
+         filas:[['p','Perfecta',100,'#22c55e','#'],['o','Buena',75,'#86efac','+'],
+                ['n','Neutra',50,'#fbbf24','!'],['m','Mala',25,'#fb923c','-'],
+                ['e','Error',0,'#ef4444','=']]},
+  bqpos:{d:'bqD',  nom:'Bloqueo #+', tipo:'bq',  pl:'bloqueos',
+         filas:[['p','Punto',null,'#22c55e','#'],['o','Positivo',null,'#86efac','+']]},
+  bqpt: {d:'bqD',  nom:'Bloqueo #',  tipo:'bqpt',pl:'bloqueos',
+         filas:[['p','Punto',null,'#22c55e','#']]}
+};
+
+
+/* El plural en castellano: "error" -> "errores", "positiva" -> "positivas". */
+function objPlural(p, n){
+  p = String(p||'').toLowerCase();
+  if(n === 1) return p;
+  if(/[aeiou]$/.test(p)) return p + 's';
+  return p + 'es';
+}
+
+function objTocarBat(mid){
+  try{
+    var d = (window.__objMeta||{})[mid];
+    if(!d) return;
+    var vals = null;
+    try{ if(typeof objGetVals === 'function') vals = objGetVals(window.__objJugActual || null); }catch(e){}
+    if(!vals){ try{ vals = window.__objValsActuales || null; }catch(e){} }
+    if(!vals && d.meta && d.meta.vals) vals = d.meta.vals;
+    objAbrirDetalle(d.id, vals || {}, d.meta);
+  }catch(e){}
+}
+
+function objCerrarDetalle(){
+  var v = document.getElementById('obj-detalle');
+  if(v) v.remove();
+  document.removeEventListener('keydown', objEscDetalle);
+}
+function objEscDetalle(e){ if(e.key==='Escape') objCerrarDetalle(); }
+function objVerCuenta(){
+  var c = document.getElementById('obj-cuenta');
+  var b = document.getElementById('obj-cuenta-btn');
+  if(!c) return;
+  var ab = c.style.display === 'none';
+  c.style.display = ab ? 'block' : 'none';
+  if(b) b.textContent = ab ? 'ocultar la cuenta' : 'ver la cuenta completa';
+}
+
+function objAbrirDetalle(id, vals, meta){
+  objCerrarDetalle();
+  var cfg = OBJ_DETALLE[id];
+  var D   = cfg ? (vals && vals[cfg.d]) : null;
+  var val = (vals && vals[id]!=null) ? vals[id] : null;
+  var obj = (meta && meta.obj!=null) ? meta.obj : null;
+  var nombre = (cfg && cfg.nom) || String((meta&&meta.label)||'').replace(/\s*\(-?\d+\)\s*$/,'');
+
+  if(!cfg || !D){
+    objPintarDetalle(nombre, obj,
+      '<div style="color:#64748b;font-size:12px;padding:8px 0;line-height:1.5">'
+      + 'Para este fundamento todavía no hay desglose guardado.<br>Corré HACER_TODO y volvé a entrar.</div>');
+    return;
+  }
+
+  var total = 0, suma = 0;
+  cfg.filas.forEach(function(f){
+    var n = D[f[0]] || 0; total += n;
+    if(f[2]!=null) suma += n * f[2];
+  });
+  if(cfg.tipo) total = D.t || total;
+  if(!total){
+    objPintarDetalle(nombre, obj,
+      '<div style="color:#64748b;font-size:12px;padding:8px 0">Todavía no hay acciones de este fundamento.</div>');
+    return;
+  }
+
+  /* ── 1. LA BARRA Y EL "DE CADA 10" ─────────────────────────────────────── */
+  var barra = '', lista = '';
+  cfg.filas.forEach(function(f){
+    var n = D[f[0]] || 0;
+    if(!n) return;
+    var pc = n/total*100;
+    barra += '<div title="'+f[1]+': '+n+'" style="width:'+pc+'%;background:'+f[3]+'"></div>';
+    var de10 = (n/total*10);
+    /* El SIGNO va primero y bien visible: es el codigo que el jugador ve en
+       el video y en la planilla. Sin el, "Perfecta" y "#" son dos idiomas.
+       Despues el total, que es lo que de verdad hizo, y recien al final el
+       "de cada 10", que sirve para imaginarlo. */
+    lista += '<div style="display:flex;align-items:center;gap:8px;padding:3.5px 0">'
+      + '<span style="width:19px;height:19px;border-radius:4px;background:'+f[3]+';color:#0f172a;'
+      +    'font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;'
+      +    'flex:none;font-family:monospace">'+(f[4]||'')+'</span>'
+      + '<span style="flex:1;color:#cbd5e1">'+f[1]+'</span>'
+      + '<span style="font-weight:900;color:#e2e8f0;min-width:30px;text-align:right;font-size:14px">'+n+'</span>'
+      + '<span style="color:#64748b;min-width:56px;text-align:right;font-size:11px">'
+      +    (de10>=0.95 ? de10.toFixed(0) : de10.toFixed(1))+' de 10</span>'
+      + '</div>';
+  });
+
+  /* ── 2. QUE LE ESTA COSTANDO ───────────────────────────────────────────── */
+  var cuesta = '';
+  if(!cfg.tipo){
+    var pierde = cfg.filas.filter(function(f){ return f[2]!=null && f[2]<100 && (D[f[0]]||0)>0; })
+      .map(function(f){ return {nom:f[1], n:D[f[0]], p:(100-f[2])*D[f[0]]/total, c:f[3]}; })
+      .sort(function(a,b){ return b.p-a.p; }).slice(0,2);
+    if(pierde.length){
+      cuesta = '<div style="margin-top:13px">'
+        + '<div style="font-size:10px;font-weight:800;letter-spacing:.7px;color:#64748b;'
+        +      'text-transform:uppercase;margin-bottom:5px">Lo que más te cuesta</div>';
+      pierde.forEach(function(x){
+        cuesta += '<div style="display:flex;align-items:center;gap:7px;padding:3px 0;font-size:12px">'
+          + '<span style="width:9px;height:9px;border-radius:2px;background:'+x.c+';flex:none"></span>'
+          + '<span style="flex:1;color:#cbd5e1">'+x.n+' '+x.nom.toLowerCase()+'</span>'
+          + '<span style="color:#f87171;font-weight:800">\u2212'+Math.round(x.p)+'</span></div>';
+      });
+      cuesta += '</div>';
+    }
+  }
+
+  /* ── 3. QUE LE FALTA PARA EL OBJETIVO ──────────────────────────────────── */
+  var meta_txt = '';
+  if(!cfg.tipo && obj!=null && val!=null){
+    if(val >= obj){
+      meta_txt = '<div style="margin-top:13px;padding:10px 12px;background:rgba(34,197,94,.1);'
+        + 'border:1px solid rgba(34,197,94,.3);border-radius:8px;font-size:12px;color:#86efac;line-height:1.5">'
+        + '<b>Estás por encima del objetivo.</b> El equipo apunta a '+obj+' y vos vas '
+        + Math.round(val-obj)+' arriba.</div>';
+    } else {
+      /* ══ QUE TIENE QUE PASAR PARA LLEGAR AL OBJETIVO ════════════════════
+         La primera version proponia subir cada pelota UN escalon. Eso da
+         consejos que nadie puede usar: "convertir 31 positivas en perfectas"
+         es pedirle a un jugador que sea perfecto.
+
+         Un entrenador no dice eso. Dice "no me regales pelotas": primero se
+         corta lo que se REGALA —errores y sobrepases— y recien despues se
+         busca calidad. Asi que:
+
+           · las pelotas MALAS (por debajo de neutra) se llevan a NEUTRA.
+             Es lo mas realista: no fallar.
+           · las de neutra para arriba suben un escalon.
+
+         Y se muestra primero lo que salga de arreglar lo peor. */
+      var falta = (obj - val) * total;
+      var opciones = [];
+      var neutro = null;
+      cfg.filas.forEach(function(f){ if(f[2]===50) neutro = f; });
+      cfg.filas.forEach(function(f,i){
+        if(f[2]==null || i===0) return;
+        var n = D[f[0]]||0; if(!n) return;
+        var destino = (neutro && f[2] < 50) ? neutro : cfg.filas[i-1];
+        var gana = destino[2] - f[2];
+        if(gana <= 0) return;
+        var cuantas = Math.ceil(falta/gana);
+        if(cuantas>0 && cuantas<=n){
+          opciones.push({
+            txt: 'convertir <b>'+cuantas+' '+objPlural(f[1],cuantas)
+                 +'</b> en '+objPlural(destino[1],cuantas),
+            malo: (f[2] < 50) ? 0 : 1,
+            n: cuantas
+          });
+        }
+      });
+      /* primero arreglar lo peor; entre iguales, lo que pide menos cambios */
+      opciones.sort(function(a,b){ return (a.malo-b.malo) || (a.n-b.n); });
+      meta_txt = '<div style="margin-top:13px;padding:10px 12px;background:rgba(251,191,36,.09);'
+        + 'border:1px solid rgba(251,191,36,.28);border-radius:8px;font-size:12px;color:#cbd5e1;line-height:1.6">'
+        + '<div style="color:#fbbf24;font-weight:800;margin-bottom:4px">Para llegar a '+obj+'</div>'
+        + (opciones.length
+            ? opciones.slice(0,2).map(function(o){ return '\u2022 '+o.txt; }).join('<br>')
+            : 'Hace falta subir la calidad general: no alcanza con corregir un solo tipo de pelota.')
+        + '</div>';
+    }
+  }
+  if(cfg.tipo){
+    meta_txt = '<div style="margin-top:13px;padding:10px 12px;background:rgba(148,163,184,.08);'
+      + 'border-radius:8px;font-size:12px;color:#94a3b8;line-height:1.5">'
+      + (cfg.tipo==='bqpt' ? (D.p||0)+' bloqueos terminaron en punto'
+                           : (D.p||0)+' en punto y '+(D.o||0)+' en positivo')
+      + ' sobre <b style="color:#cbd5e1">'+total+'</b>.</div>';
+  }
+
+  /* ── la cuenta, plegada, para el cuerpo tecnico ─────────────────────────── */
+  var tabla = '';
+  if(!cfg.tipo){
+    cfg.filas.forEach(function(f){
+      var n = D[f[0]]||0; if(!n) return;
+      tabla += '<tr><td style="padding:3px 6px;color:#94a3b8">'+f[1]+'</td>'
+        + '<td style="padding:3px 6px;text-align:right;color:#cbd5e1">'+n+'</td>'
+        + '<td style="padding:3px 6px;text-align:right;color:#64748b">\u00d7'+f[2]+'</td>'
+        + '<td style="padding:3px 6px;text-align:right;color:#94a3b8">'+Math.round(n*f[2])+'</td></tr>';
+    });
+    tabla = '<table style="width:100%;border-collapse:collapse;font-size:11px">'+tabla+'</table>'
+      + '<div style="margin-top:6px;color:#64748b;font-size:11px;line-height:1.5">'
+      + Math.round(suma)+' \u00f7 '+total+' = <b style="color:#94a3b8">'+(val!=null?fmtEff(val):'\u2014')+'</b>'
+      + '<br>Es un promedio: 100 es una pelota perfecta, 50 una neutra.</div>';
+  }
+
+  /* ══ LA CUENTA, A LA VISTA ═══════════════════════════════════════════════
+     Estaba plegada detras de "ver la cuenta completa". Pero la pregunta que
+     el jugador se hace primero es "de donde sale ese numero", asi que tiene
+     que verla sin buscarla.
+
+     Se muestra en dos renglones cortos: la suma de lo que vale cada pelota,
+     y la division por el total. Nada de tablas. */
+  var cuentaVisible = '';
+  if(!cfg.tipo){
+    var partes = [];
+    cfg.filas.forEach(function(f){
+      var n = D[f[0]]||0;
+      if(n) partes.push(n+'\u00d7'+f[2]);
+    });
+    cuentaVisible = '<div style="margin-top:11px;padding:9px 11px;background:rgba(148,163,184,.07);'
+      + 'border-radius:8px;font-size:11.5px;color:#94a3b8;line-height:1.7">'
+      + '<div style="font-size:10px;font-weight:800;letter-spacing:.7px;color:#64748b;'
+      +      'text-transform:uppercase;margin-bottom:3px">Cómo se llega a '
+      +      (val!=null?fmtEff(val):'\u2014')+'</div>'
+      + partes.join(' + ')
+      + '<br><b style="color:#cbd5e1">'+Math.round(suma)+'</b> \u00f7 <b style="color:#cbd5e1">'
+      + total+'</b> = <b style="color:#e2e8f0;font-size:14px">'+(val!=null?fmtEff(val):'\u2014')+'</b>'
+      + '</div>';
+  }
+
+  var cuerpo = ''
+   + '<div style="display:flex;height:9px;border-radius:5px;overflow:hidden;margin-bottom:11px">'+barra+'</div>'
+   + '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">'
+   +   '<span style="font-size:10px;font-weight:800;letter-spacing:.7px;color:#64748b;'
+   +        'text-transform:uppercase">Tus '+total+' '+(cfg.pl||'acciones')+'</span>'
+   +   '<span style="font-size:10px;color:#475569">de cada 10</span>'
+   + '</div>'
+   + '<div style="font-size:12.5px">'+lista+'</div>'
+   + cuentaVisible + cuesta + meta_txt
+   /* La leyenda de pesos se arma con la MISMA tabla que hace la cuenta.
+      Si algun dia cambia la escala, este texto cambia solo. */
+   + (cfg.tipo ? '' :
+      '<div style="margin-top:9px;font-size:10.5px;color:#475569;line-height:1.5">'
+      + 'Cada pelota vale según cómo quedó: '
+      + cfg.filas.map(function(f){ return f[4]+' vale '+String(f[2]).replace('.',','); }).join(' \u00b7 ')
+      + '. El resultado es el promedio.</div>');
+
+  objPintarDetalle(nombre, obj, cuerpo, val, total, cfg.pl);
+}
+
+function objPintarDetalle(nombre, obj, cuerpo, val, total, pl){
+  var cab = ''
+   + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;'
+   +      'padding:12px 14px;border-bottom:1px solid rgba(148,163,184,.16)">'
+   +   '<div>'
+   +     '<div style="font-size:13px;font-weight:800;letter-spacing:.6px;color:#e2e8f0;'
+   +          'text-transform:uppercase">'+nombre+'</div>'
+   +     (total!=null
+        ? '<div style="font-size:10.5px;color:#64748b;margin-top:2px">'+total+' '+(pl||'acciones')
+          + (obj!=null ? ' \u00b7 objetivo '+obj : '')+'</div>'
+        : (obj!=null ? '<div style="font-size:10.5px;color:#64748b;margin-top:2px">objetivo '+obj+'</div>' : ''))
+   +   '</div>'
+   +   (val!=null
+       ? '<div style="font-size:27px;font-weight:900;color:#e2e8f0;line-height:1">'+fmtEff(val)+'</div>'
+       : '')
+   + '</div>';
+
+  var html = ''
+   + '<div id="obj-detalle" style="position:fixed;inset:0;z-index:9000;display:flex;'
+   +      'align-items:center;justify-content:center;background:rgba(2,6,23,.74);padding:16px">'
+   + '<div style="background:#0f172a;border:1px solid rgba(148,163,184,.25);border-radius:14px;'
+   +      'max-width:340px;width:100%;max-height:88vh;overflow:auto;'
+   +      'box-shadow:0 20px 55px rgba(0,0,0,.65);font-family:Barlow Condensed,sans-serif">'
+   +   '<div style="position:sticky;top:0;background:#0f172a;z-index:1">'+cab+'</div>'
+   +   '<div style="padding:12px 14px 14px">'+cuerpo+'</div>'
+   +   '<div style="padding:0 14px 13px">'
+   +     '<button onclick="objCerrarDetalle()" style="width:100%;padding:8px;background:rgba(148,163,184,.1);'
+   +        'border:1px solid rgba(148,163,184,.2);border-radius:8px;color:#cbd5e1;font-size:12px;'
+   +        'font-weight:700;cursor:pointer;font-family:inherit">Cerrar</button>'
+   +   '</div>'
+   + '</div></div>';
+
+  var cont = document.createElement('div');
+  cont.innerHTML = html;
+  var nodo = cont.firstChild;
+  nodo.addEventListener('click', function(e){ if(e.target===nodo) objCerrarDetalle(); });
+  document.body.appendChild(nodo);
+  document.addEventListener('keydown', objEscDetalle);
+}
+
 function objSingleBat(id,val,meta,cls,objLine){
   /* ══ UNA SOLA VERSION, IGUAL EN TODOS LADOS ═══════════════════════════════
      Habia CINCO copias de esta funcion y CUATRO eran distintas entre si:
@@ -424,7 +734,11 @@ function objSingleBat(id,val,meta,cls,objLine){
           + ' \u00b7 est\u00e1s al '+reco+'% del recorrido';
     }
   }catch(e){}
-  return '<div title="'+tip+'" style="flex:1;min-width:60px;max-width:110px;display:flex;'
+  /* La bateria se toca y se abre el detalle. */
+  var _mid = 'b'+id+'_'+Math.random().toString(36).slice(2,8);
+  try{ window.__objMeta = window.__objMeta || {}; window.__objMeta[_mid] = {id:id, meta:meta}; }catch(e){}
+  return '<div id="'+_mid+'" title="'+tip+'" onclick="objTocarBat(\''+_mid+'\')" '
+    + 'style="flex:1;min-width:60px;max-width:110px;display:flex;cursor:pointer;'
     + 'flex-direction:column;align-items:center;gap:3px;padding:7px 3px 6px;'
     + 'border:1px solid '+cls.border+';border-radius:9px;background:'+cls.bg+';'
     + 'position:relative;overflow:hidden;font-family:Barlow Condensed,sans-serif">'

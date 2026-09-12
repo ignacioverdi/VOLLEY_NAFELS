@@ -1,48 +1,77 @@
-EL #8 FUERA DE TODOS LADOS
-==========================
+LA VENTANITA, CON LA CUENTA A LA VISTA
+======================================
 
-Un archivo: gen_baterias.py. HACER_TODO y publicar.
-
-
-POR QUE SEGUIA APARECIENDO
---------------------------
-El filtro del plantel lo habia puesto SOLO en gen_plan_partido.py.
-
-Pero el dashboard, el ranking y las baterias leen de OTRO motor:
-gen_baterias.py. Ese no tenia el filtro, asi que el #8 y el #6 seguian
-saliendo ahi.
-
-Es el mismo problema de siempre: lo arregle en un lado y no barri todos.
-
-CORREGIDO: ahora gen_baterias.py filtra igual. Los dos motores que arman
-listas de jugadores usan la misma fuente —plantel_nafels.js—.
-
-Probado:
-   "AXPO NAFELS"     reconocido como nuestro   -> filtra
-   "Volley Näfels"   reconocido como nuestro   -> filtra
-   "Amriswil"        rival                     -> NO filtra
-   plantel: 13 jugadores · el #8 no esta · el #6 no esta
-
-De los rivales no se filtra nada, porque de ellos no tenemos plantel.
+2 archivos. HACER_TODO y publicar.
+REEMPLAZA al zip anterior.
 
 
-SOBRE EL MINI DASHBOARD DE LA BATERIA
--------------------------------------
-Entendi perfecto lo que queres y me parece la mejor idea que surgio hoy.
+LO QUE FALTABA
+--------------
+Tenias razon en las dos cosas:
 
-El caso que diste: Bartholet, ataque con recepcion #+ da -33%. El jugador
-ve el numero y no puede hacer nada con eso. Lo que necesita ver es:
+   1. NO SE VEIA COMO SE LLEGA AL NUMERO. La cuenta estaba plegada detras de
+      un "ver la cuenta completa". Pero esa es la PRIMERA pregunta que se
+      hace el jugador, no la ultima. Ahora esta a la vista.
 
-   cuantos ataques fueron        el detalle de cada uno
-   cuantos punto / bloqueado     contra que rival
-   de que zona atacaba           en que set
-   con que combinacion           el video, si esta
+   2. FALTABA EL SIGNO. Yo mostraba "Perfecta", "Positiva". Pero el jugador
+      ve # y + en el video y en la planilla. Sin el signo son dos idiomas
+      distintos.
 
-Lo armo, pero necesito saber una cosa antes: si al tocar la bateria queres
-que se abra un panel ahi mismo —como el bloque de objetivos— o que te lleve
-a la pantalla de Analisis con el filtro ya puesto.
 
-La primera es mas rapida para el jugador. La segunda reusa lo que ya existe
-y ahi ya podes ver el video de cada accion.
+ASI QUEDA
 
-Decime cual y lo hago.
+   ┌────────────────────────────────────────┐
+   │  RECEPCIÓN                        55%  │
+   │  158 pelotas · objetivo 60             │
+   ├────────────────────────────────────────┤
+   │  ████████░░░░░░░▓▓▓▓▒░▓▓               │
+   │                                        │
+   │  TUS 158 PELOTAS          de cada 10   │
+   │   #  Perfecta        27      2 de 10   │
+   │   +  Positiva        45      3 de 10   │
+   │   !  Suficiente      40      3 de 10   │
+   │   -  Pobre           23      1 de 10   │
+   │   /  Sobrepase        5    0.3 de 10   │
+   │   =  Error           18      1 de 10   │
+   │                                        │
+   │  ┌──────────────────────────────────┐  │
+   │  │ CÓMO SE LLEGA A 55%              │  │
+   │  │ 27×100 + 45×75 + 40×50 +         │  │
+   │  │ 23×25 + 5×12,5 + 18×0            │  │
+   │  │ 8712 ÷ 158 = 55%                 │  │
+   │  └──────────────────────────────────┘  │
+   │                                        │
+   │  LO QUE MÁS TE CUESTA                  │
+   │   ■ 40 suficientes             −13     │
+   │   ■ 18 errores                 −11     │
+   │                                        │
+   │  ┌──────────────────────────────────┐  │
+   │  │ Para llegar a 60                 │  │
+   │  │ • convertir 16 errores en        │  │
+   │  │   suficientes                    │  │
+   │  └──────────────────────────────────┘  │
+   │                                        │
+   │  Cada pelota vale según cómo quedó:    │
+   │  # vale 100 · + vale 75 · ! vale 50 ·  │
+   │  - vale 25 · / vale 12,5 · = vale 0    │
+   │                                        │
+   │  ┌──────────────────────────────────┐  │
+   │  │              Cerrar              │  │
+   │  └──────────────────────────────────┘  │
+   └────────────────────────────────────────┘
+
+Datos REALES del #11 Bartholet.
+
+
+EL SIGNO VA EN UN CUADRITO DE COLOR
+-----------------------------------
+Del mismo color que su parte en la barra de arriba. Asi el jugador une las
+tres cosas de un vistazo: el signo que conoce del video, el pedazo de barra
+que ocupa, y cuantas fueron.
+
+
+LA LEYENDA NO ESTA ESCRITA A MANO
+---------------------------------
+"# vale 100 · + vale 75..." se arma con la MISMA tabla que hace la cuenta.
+Si algun dia cambiamos la escala, ese texto cambia solo. No puede quedar
+desactualizado.

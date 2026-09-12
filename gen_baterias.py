@@ -223,6 +223,20 @@ def _bat_to_pcts(P):
     return {
         # El dashboard ya buscaba defT / defPerf / defErr / def: estaba escrito
         # el lector pero nadie generaba el dato.
+        # ══ EL DESGLOSE, PARA QUE EL JUGADOR VEA DE DONDE SALE EL NUMERO ══════
+        #  Antes solo se exportaba el porcentaje y el total. El jugador veia
+        #  "39%" y no tenia como saber que hizo para llegar ahi.
+        #
+        #  Ahora va tambien cuantas acciones de cada valoracion, asi la
+        #  ventanita puede mostrar la cuenta completa:
+        #     12 perfectas x100 + 30 positivas x75 + ... / 80 = 57
+        'sqD':  {'p':S['#'], 'f':S.get('/',0), 'o':S['+'], 'n':S.get('!',0),
+                 'm':S.get('-',0), 'e':S['=']},
+        'recD': {'p':R['#'], 'o':R['+'], 'n':R.get('!',0), 'm':R.get('-',0),
+                 's':R.get('/',0), 'e':R['=']},
+        'defD': {'p':D['#'], 'o':D['+'], 'n':D.get('!',0), 'm':D.get('-',0),
+                 'e':D['=']},
+        'bqD':  {'p':B['#'], 'o':B['+'], 't':B['T']},
         'defT':    D['T'],
         'defPerf': D['#'],
         'defErr':  D['='],
