@@ -1,54 +1,49 @@
-EL ARREGLO FINAL
-================
+EL CARTEL DE "NO PUDE IDENTIFICAR AL JUGADOR"
+=============================================
 
-Un archivo: reproductor.js. Publicar y Ctrl+Shift+R.
-objetivos_config.js ya esta bien, no hace falta tocarlo.
-
-
-LO QUE PROBE Y QUE ENCONTRE
----------------------------
-Abri la bateria de recepcion de BARTHOLET y toque los 18 errores.
-
-FUNCIONABA CASI TODO:
-   el modal abre                        OK
-   el titulo dice "BARTHOLET · Recepción · =  (18)"   OK
-   Antes / Después                      OK
-   Velocidad 0.5× 1× 1.5× 2×            OK
-   ⛶ Pantalla completa                  OK
-   💾 Guardar                            OK
-   encuentra las 18 acciones            OK
-
-PERO LA LISTA SALIA VACIA.
-
-La causa: al traer renderList de plan_partido, esa funcion usa dos variables
-—onlyShow y TAGFMT— que yo no habia declarado. No tiraba error, simplemente
-no pintaba nada.
-
-CORREGIDO. Probado en vivo sobre la app publicada: las 18 aparecen con su
-fecha.
-
-   1. 03/09  =
-   2. 03/09  =
-   3. 03/09  =
-   ...
+6 archivos. Publicar y Ctrl+Shift+R.
 
 
-QUE ES CADA UNA
+POR QUE SALTABA
 ---------------
-   onlyShow   el "Solo seleccionadas" del panel lateral
-   TAGFMT     en plan_partido traduce el codigo de jugada a nombre legible.
-              Aca la etiqueta ya viene armada —la fecha de la sesion— asi que
-              va vacio y usa el valor tal cual, que es lo que queremos.
+Ese cartel es mio. Para saber que jugador estabas mirando yo leia una
+variable global... pero CADA PANTALLA LA LLAMA DISTINTO:
+
+   dashboard.html     _dbatNombre
+   jugador.html       _objNombre
+   analisis.html      _objNombre
+   panel_voley.html   no tiene ninguna
+
+Yo solo miraba la del dashboard. Por eso ahi funcionaba y en las otras
+saltaba el cartel.
+
+LO CONFIRME EN LA APP: entre a jugador.html y la variable era _objNombre con
+el valor "DURDOS". La version publicada ni la miraba.
 
 
-DONDE QUEDAMOS
---------------
-El reproductor es EL de plan de partido, con sus 20 funciones tal cual, y
-ahora anda completo desde las baterias.
+LO QUE HICE
+-----------
+En vez de adivinar cual variable mirar, ahora EL NOMBRE VIAJA CON LA
+BATERIA. La bateria ya sabe de que fila salio —eso lo arreglamos antes—, asi
+que tambien lleva de quien es.
 
-Cuando lo pruebes, si alguna accion sigue sin coincidir con el video, fijate
-que dice la fecha en la lista y que se ve en pantalla:
+Las globales quedan solo como respaldo, las tres, y ademas se busca en la
+pantalla como ultimo recurso.
 
-   la fecha coincide pero arranca corrido  -> subi "Antes" a 5
-   la fecha NO coincide                    -> a esa sesion le cargaron el
-                                              link equivocado en Cargar Videos
+Probado en jugador.html:
+
+   nombre: DURDOS  ->  numero: 1  ->  31 errores de recepción
+   y los 31 son de DURDOS, ninguno de otro
+
+Es el mismo error de siempre y ya van varias: arreglo algo mirando una sola
+pantalla y las otras cinco quedan afuera. Esta vez toque las seis de una.
+
+
+LO QUE QUEDA IGUAL
+------------------
+Todo lo demas ya andaba y lo verifique antes de tocar nada:
+
+   los 8 fundamentos con su valoración correcta
+   la fila del equipo: 163 clips de 7 jugadores
+   Antes / Después · velocidad · pantalla completa · guardar
+   el #8 y el #6 fuera del plantel

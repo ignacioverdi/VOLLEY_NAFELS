@@ -396,7 +396,9 @@ function renderObjetivos(cid,extra){
          se esta viendo. Viaja con la meta para que la ventanita lo muestre. */
       try{ var _q = (row && row.label) ? String(row.label) : '';
            var _s = (typeof objNombreSesion === 'function') ? objNombreSesion() : '';
-           _m = Object.assign({}, m, {__fila: _q + (_s ? ' \u00b7 ' + _s : '')});
+           _m = Object.assign({}, m, {__fila: _q + (_s ? ' \u00b7 ' + _s : ''),
+          /* el nombre del jugador de esta fila, para el video */
+          __jug: (row && (row.jug || row.nombre || row.name)) || (/equipo/i.test(_q) ? '' : (window._dbatNombre || window._objNombre || ''))});
       }catch(e){ _m = m; }
             return objSingleBat(id,val,_m,cls,m.obj);
     }).join('')+'</div></div>';
@@ -514,6 +516,13 @@ function objNombreSesion(){
      · cuantas pelotas tiene que dejar de regalar para llegar al objetivo
    ══════════════════════════════════════════════════════════════════════════ */
 function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
+  /* El nombre del jugador de ESTA ventana. Sale de la meta que guardo la
+     bateria; si no vino, se cae a las globales de cada pantalla. */
+  var _jugNom = '';
+  try{
+    _jugNom = (meta && meta.__jug) || window._dbatNombre || window._objNombre || '';
+  }catch(e){}
+
   var P = D.p||0, B = D.b||0, E = D.e||0, T = D.t||0;
   var sigue = Math.max(0, T - P - B - E);
   var neto  = P - B - E;
@@ -549,7 +558,7 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
       /* El numero se toca. "Sigue en juego" no: no es una valoracion del
          scout sino lo que queda al restar, no hay un signo que buscar. */
       + (f[4]
-         ? '<span onclick="objVerVideo(\''+id+'\',\''+f[4]+'\',\''+(quien||'').replace(/\'/g,'')+'\','+f[2]+')" '
+         ? '<span onclick="objVerVideo(\''+id+'\',\''+f[4]+'\',\''+(quien||'').replace(/\'/g,'')+'\','+f[2]+',\''+String(_jugNom||'').replace(/\'/g,'')+'\')" '
            + 'title="Ver estos '+f[2]+' ataques en video" '
            + 'style="font-weight:900;color:#e2e8f0;min-width:30px;text-align:right;font-size:14px;'
            + 'cursor:pointer;text-decoration:underline;text-decoration-color:rgba(148,163,184,.4);'
@@ -746,7 +755,7 @@ function objSesionElegida(){
   return null;
 }
 
-function objVerVideo(id, clave, nombreFila, cuantas){
+function objVerVideo(id, clave, nombreFila, cuantas, jugNombre){
   try{
     if(typeof repAbrir !== 'function'){
       alert('El reproductor no está cargado en esta pantalla.');
@@ -766,18 +775,30 @@ function objVerVideo(id, clave, nombreFila, cuantas){
        Si es la de un jugador, hay que saber cual. Cada pantalla guarda esa
        eleccion con otro nombre, y ademas guarda el NOMBRE mientras que el
        reproductor filtra por NUMERO: se busca el numero en el plantel. */
+    /* ══ DE QUIEN SON ═══════════════════════════════════════════════════
+       Antes esto leia una variable global, y cada pantalla la llama distinto:
+       _dbatNombre en el dashboard, _objNombre en jugador y analisis, y en
+       panel_voley directamente no existe. Por eso saltaba el cartel de "no
+       pude identificar al jugador".
+
+       Ahora el nombre viaja CON la bateria, que ya sabe de que fila salio. Las
+       globales quedan solo como respaldo. */
     var jug = null, quien = 'Equipo';
     if(!(nombreFila && /equipo/i.test(nombreFila))){
-      var nom = null;
-      try{ nom = window._dbatNombre || window.__objJugNombre
-                 || (window.__objJugActual && (window.__objJugActual.nombre
-                     || window.__objJugActual.name || window.__objJugActual)); }catch(e){}
-      if(nom){
-        quien = String(nom);
-        jug = objNumeroDe(nom);
+      var nom = jugNombre || null;
+      if(!nom){
+        try{ nom = window._dbatNombre || window._objNombre || window.__objJugNombre
+                   || (window.__objJugActual && (window.__objJugActual.nombre
+                       || window.__objJugActual.name || window.__objJugActual)); }catch(e){}
       }
-      /* sin jugador identificado no se abre: mostrar las acciones del equipo
-         cuando el jugador pidio las suyas seria justo el error de antes. */
+      /* ultimo recurso: el nombre que la pantalla muestra como elegido */
+      if(!nom){
+        try{
+          var el = document.querySelector('.jug-sel, .player-sel, [class*="jugSel"], .obj-jug.sel');
+          if(el) nom = (el.textContent||'').trim();
+        }catch(e){}
+      }
+      if(nom){ quien = String(nom); jug = objNumeroDe(nom); }
       if(!jug){
         alert('No pude identificar al jugador para traer sus acciones.');
         return;
@@ -845,6 +866,13 @@ function objAbrirDetalle(id, vals, meta, quien){
     return;
   }
 
+  /* El nombre del jugador de ESTA ventana. Sale de la meta que guardo la
+     bateria; si no vino, se cae a las globales de cada pantalla. */
+  var _jugNom = '';
+  try{
+    _jugNom = (meta && meta.__jug) || window._dbatNombre || window._objNombre || '';
+  }catch(e){}
+
   var total = 0, suma = 0;
   cfg.filas.forEach(function(f){
     var n = D[f[0]] || 0; total += n;
@@ -877,7 +905,7 @@ function objAbrirDetalle(id, vals, meta, quien){
       /* ══ EL NUMERO SE TOCA Y SE ABRE EL VIDEO ══════════════════════════
          Tocas "18" al lado de Error y ves esas 18 pelotas. El subrayado
          suave avisa que se puede tocar sin ensuciar la lectura. */
-      + '<span onclick="objVerVideo(\''+id+'\',\''+f[0]+'\',\''+(quien||'').replace(/\'/g,'')+'\','+n+')" '
+      + '<span onclick="objVerVideo(\''+id+'\',\''+f[0]+'\',\''+(quien||'').replace(/\'/g,'')+'\','+n+',\''+String(_jugNom||'').replace(/\'/g,'')+'\')" '
       +    'title="Ver estas '+n+' acciones en video" '
       +    'style="font-weight:900;color:#e2e8f0;min-width:30px;text-align:right;font-size:14px;'
       +    'cursor:pointer;text-decoration:underline;text-decoration-color:rgba(148,163,184,.4);'
@@ -1127,7 +1155,8 @@ function objSingleBat(id,val,meta,cls,objLine,vals){
   /* La bateria se toca y se abre el detalle. */
   var _mid = 'b'+id+'_'+Math.random().toString(36).slice(2,8);
   try{ window.__objMeta = window.__objMeta || {}; window.__objMeta[_mid] = {id:id, meta:meta, vals:vals||null,
-      quien:(meta&&meta.__fila)||null}; }catch(e){}
+      quien:(meta&&meta.__fila)||null,
+      jug:(meta&&meta.__jug)||null}; }catch(e){}
   return '<div id="'+_mid+'" title="'+tip+'" onclick="objTocarBat(\''+_mid+'\')" '
     + 'style="flex:1;min-width:60px;max-width:110px;display:flex;cursor:pointer;'
     + 'flex-direction:column;align-items:center;gap:3px;padding:7px 3px 6px;'

@@ -446,7 +446,9 @@ function renderObjetivosJugador(cid, jugVals, eqVals){
            se esta viendo. Viaja con la meta para que la ventanita lo muestre. */
         try{ var _q = (row && row.label) ? String(row.label) : '';
              var _s = (typeof objNombreSesion === 'function') ? objNombreSesion() : '';
-             _m = Object.assign({}, m, {__fila: _q + (_s ? ' \u00b7 ' + _s : '')});
+             _m = Object.assign({}, m, {__fila: _q + (_s ? ' \u00b7 ' + _s : ''),
+          /* el nombre del jugador de esta fila, para el video */
+          __jug: (row && (row.jug || row.nombre || row.name)) || (/equipo/i.test(_q) ? '' : (window._dbatNombre || window._objNombre || ''))});
         }catch(e){ _m = m; }
                 return objSingleBat(id,val,_m,cls,objLine,row.vals);
       }).join('')+'</div>';
