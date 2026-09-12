@@ -993,7 +993,9 @@ function buildTeam(){
                total:rows.length, data:rows, id:bp.id||('blk'+bp.num) });
   });
   PLAYERS=PLAYERS.concat(_bk);
-  TEAMCARDS=[]; ['punta','central','opuesto','saque','reception','defense','bloqueo'].forEach(function(role){var tp=makeTeamPlayer(role); if(tp) TEAMCARDS.push(tp);});
+  /* El acumulado del puesto. Faltaba 'armador', asi que esa fila salia sin su
+     tarjeta Σ EQUIPO mientras las otras tres si la tenian. */
+  TEAMCARDS=[]; ['punta','central','opuesto','armador','saque','reception','defense','bloqueo'].forEach(function(role){var tp=makeTeamPlayer(role); if(tp) TEAMCARDS.push(tp);});
   TEAMCARDS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('afterbegin',buildSection(p));});
   PLAYERS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('beforeend',buildSection(p));});
   try{ var _hl=document.getElementById('head-libero'), _rl=document.getElementById('row-libero');

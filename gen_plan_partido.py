@@ -702,7 +702,7 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
         #  Solo se filtra NUESTRO equipo: de los rivales se muestra todo,
         #  porque de ellos no tenemos plantel cargado.
         _pm = _plantel_maestro()
-        _es_nuestro = (s == _clave_club())
+        _es_nuestro = (slug == _clave_club())   # la variable del bucle es 'slug'
 
         def add(pfx,num,role,data,read):
             if _es_nuestro and _pm and int(num) not in _pm:
