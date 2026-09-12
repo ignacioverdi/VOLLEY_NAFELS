@@ -6758,10 +6758,26 @@ function exportDVW(modo){
        [9] apellido · [12] 'L' si es líbero · [13] número de líbero · [14] False */
     const jugóEn = (num,st) => M.codes.some(c=>c.k==='play' && c.set===st && c.c[0]===pre && parseInt(c.c.slice(1,3),10)===num);
     [...nums].sort((a,b)=>a-b).forEach((n,i)=>{
+      /* ══ EL NOMBRE SALE DEL PLANTEL MAESTRO ═══════════════════════════════
+         Antes se usaba la lista de la sesion y solo se caia al maestro si no
+         habia nada. Con dos hermanos eso rompe todo: el #7 SCHMID ROY y el
+         #20 SCHMID JONA salian los dos como "SCHIMD".
+
+         El plan de partido agrupa a los jugadores POR NOMBRE, asi que los
+         fusionaba en uno solo: los 46 ataques del central se sumaban al unico
+         del libero y quedaban 47 ataques a nombre del #20. El #7
+         desaparecia de los centrales.
+
+         plantel_nafels.js los distingue —"SCHMID R" y "SCHMID J"— y avisa en
+         su propio comentario: "Si hay dos jugadores con el mismo apellido,
+         distinguilos en ap". Ahora se usa ese nombre. */
       let nom = '';
-      const pl = M[sd].plantel;
-      if(pl){ const j=pl.find(x=>String(x.c)===String(n)); if(j) nom = j.n; }
-      if(!nom && sd==='home'){ const _pc=plantelClub(); const j=_pc&&_pc.find(p=>String(p.c)===String(n)); if(j) nom=j.n; }
+      if(sd==='home'){
+        const _pc = plantelClub();
+        const _j = _pc && _pc.find(x => String(x.c) === String(n));
+        if(_j) nom = _j.n;
+      }
+      if(!nom){ const pl = M[sd].plantel; if(pl){ const j=pl.find(x=>String(x.c)===String(n)); if(j) nom = j.n; } }
       const esLib = (n===M[sd].libero);
       const pos = [];
       for(let st=1; st<=5; st++){

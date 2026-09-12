@@ -603,9 +603,35 @@ function armSoloArmadores(T){
   C.setters = solo;
   return C;
 }
+/* ══ EL MISMO EQUIPO, DOS NOMBRES DISTINTOS ═══════════════════════════════
+   El plan de partido arma sus claves a partir del nombre que trae el .dvw:
+   "AXPO NAFELS" -> "axponafels". El motor de armadores usa la clave del club:
+   "nafels". Mientras hubo partidos de liga —donde el equipo figura como
+   "Näfels"— las dos coincidian y no se notaba.
+
+   Ahora la temporada arranco con entrenamientos solos, todos con el nombre
+   largo, y ARM_SLUG['axponafels'] no existe: la seccion de Distribucion del
+   armador quedaba VACIA aunque los datos estuvieran ahi (251 armados de
+   Vazquez).
+
+   Esta funcion prueba la clave tal cual y, si no encuentra, busca el equipo
+   cuyo nombre se parezca. Asi deja de importar como se llame el archivo. */
+function _armClave(slug, teams){
+  if(!teams) return null;
+  if(teams[slug]) return teams[slug];
+  var limpio = function(x){ return String(x||'').toLowerCase().replace(/[^a-z]/g,''); };
+  var s = limpio(slug);
+  for(var k in teams){
+    var a = limpio(k), b = limpio((teams[k]||{}).name);
+    if(a===s || b===s) return teams[k];
+    if(s && (s.indexOf(a)>=0 || a.indexOf(s)>=0) && a.length>3) return teams[k];
+    if(s && b && (s.indexOf(b)>=0 || b.indexOf(s)>=0) && b.length>3) return teams[k];
+  }
+  return null;
+}
 function armFuente(slug){
-  var P=(window.LIGA_DATA&&LIGA_DATA.teams)?LIGA_DATA.teams[slug]:null;
-  var E=(window.LIGA_DATA_ENT&&LIGA_DATA_ENT.teams)?LIGA_DATA_ENT.teams[slug]:null;
+  var P=(window.LIGA_DATA&&LIGA_DATA.teams)?_armClave(slug, LIGA_DATA.teams):null;
+  var E=(window.LIGA_DATA_ENT&&LIGA_DATA_ENT.teams)?_armClave(slug, LIGA_DATA_ENT.teams):null;
   var hayP=!!(P&&P.setters&&P.setters.length);
   var hayE=!!(E&&E.setters&&E.setters.length);
   var t=(typeof ppTipoActual==='function')?ppTipoActual():'todos';
@@ -615,7 +641,7 @@ function armFuente(slug){
 }
 function renderArmador(){
   var sec=document.getElementById("armsec");
-  var slug=(typeof VIVO!=='undefined'&&VIVO)?TEAM:ARM_SLUG[TEAM];
+  var slug=(typeof VIVO!=='undefined'&&VIVO)?TEAM:(ARM_SLUG[TEAM]||TEAM);
   armTeam=armFuente(slug);
   if(!armTeam||!(armTeam.setters&&armTeam.setters.length)){sec.classList.add("hidden");return;}
   sec.classList.remove("hidden");
