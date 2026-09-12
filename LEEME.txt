@@ -1,46 +1,64 @@
-FALTABA CORRER EL GENERADOR DE LA LIGA
-======================================
+EL MOTOR + QUE LOS ERRORES NO SE ESCONDAN
+=========================================
 
-Un archivo: HACER_TODO.bat. Copiar y correr HACER_TODO.
+2 archivos. HACER_TODO y publicar.
 
-
-LO QUE ESTA BIEN — verificado
------------------------------
-   EL RANKING           objetivos escritos a mano: NINGUNO
-                        los lee de objetivos_config.js
-                        saque paso de "obj 3%" a "obj 42%"
-
-   baterias_engine.py   alineado con la escala 0-100
-
-   LAS COPIAS           ninguna pisa al archivo compartido.
-                        Queda un effColor en analisis.html pero es IDENTICO
-                        al de utils.js —misma firma— asi que no molesta.
+   baterias_engine.py    el arreglo del motor de la liga
+   HACER_TODO.bat        el resumen de fallos al final
 
 
-LO QUE FALTABA
---------------
-nla_stats.json seguia diciendo "Amriswil saque -2 · recepcion 30".
+1) EL MOTOR DE LA LIGA
+----------------------
+El generador fallaba con KeyError: '!'
 
-LA CAUSA: HACER_TODO no corre gen_liga_stats.py. Ese archivo se generaba a
-mano cuando alguien se acordaba, asi que quedo con los numeros de la ultima
-vez, de antes de cambiar las formulas.
+Cuando cambie la formula a la escala 0-100 empece a usar el neutro (!) y el
+negativo (-). Pero la ficha de ESE motor solo guardaba cuatro valoraciones
+—# + / =— porque la formula vieja no las necesitaba. Le pedi algo que no
+tenia. El error fue mio.
 
-Revise la lista completa de lo que corre HACER_TODO —18 scripts— y ese no
-estaba.
+CORREGIDO: las dos fichas del motor guardan las seis valoraciones, y la
+formula usa .get() por las dudas.
 
-CORREGIDO: ahora se rehace en cada corrida, justo antes de cifrar los datos.
+PROBADO corriendo el generador completo con los 97 .dvw:
+
+   EQUIPO           saque  recep
+   Amriswil            42     60
+   Colombier           37     59
+   Schönenwerd         41     59
+   Chênois             39     58
+   NÄFELS              39     58
+   Jona                38     57
+   Lausanne            36     57
+   St Gallen           36     53
+
+Coinciden con las baterias y con el ranking. Cero negativos.
 
 
-DESPUES DE CORRER HACER_TODO, LA PANTALLA DE LIGA VA A DECIR
+2) LOS ERRORES YA NO SE ESCONDEN
+--------------------------------
+Este problema estuvo dias sin que nadie lo viera, y la razon es que
+HACER_TODO tapa cada falla con "[aviso] Sigo igual" en medio de cientos de
+lineas.
 
-   EQUIPO           saque  recep        antes
-   Amriswil            42     60        -2 / 30
-   Schönenwerd         41     59        -4 / 29
-   Colombier           37     59        -7 / 27
-   Chênois             39     58        -4 / 27
-   NÄFELS              39     57        -2 / 26
-   Jona                38     57        -6 / 25
-   Lausanne            36     57       -11 / 25
-   St Gallen           36     53        -8 / 18
+Esta bien que una falla no corte todo. Lo que faltaba era ENTERARSE.
 
-Los mismos numeros que las baterias y que el ranking.
+Ahora los 12 avisos se anotan y al final aparece:
+
+   ============================================================
+       ATENCION: 2 PASO(S) FALLARON
+   ============================================================
+       - Problema con las estadisticas de la liga
+       - Problema armando el informe
+
+       Los datos de esos pasos quedaron SIN ACTUALIZAR.
+       El detalle esta mas arriba, donde dice [aviso].
+   ============================================================
+
+Y si sale todo bien:
+
+   ============================================================
+       TODO OK: no fallo ningun paso.
+   ============================================================
+
+Aparece justo antes del control de calidad, o sea antes de que cifres y
+publiques. Si algo fallo, te enteras ANTES de subir datos viejos.

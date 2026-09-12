@@ -4,6 +4,10 @@ set PYTHONUTF8=1
 set PYTHONIOENCODING=utf-8
 cd /d "%~dp0"
 setlocal enabledelayedexpansion
+
+REM  Lista de pasos que fallaron, para mostrarla al final.
+set "FALLOS="
+set /a NFALLOS=0
 title NAFELS - HACER TODO
 color 0B
 
@@ -76,6 +80,8 @@ echo.
 echo  [1/4] Procesando partidos... (puede tardar, NO la cierres)
 python update_db_nafels_FULL.py --dvw_dir "!DVW_DIR!" --temporada "!TEMP_TAG!" --output_dir . --filter_temporada "!TEMPORADA_ACTUAL!"
 if errorlevel 1 echo      [aviso] Hubo un problema en partidos. Mira el detalle de arriba; sigo igual.
+if errorlevel 1 set "FALLOS=!FALLOS!|Hubo un problema en partidos."
+if errorlevel 1 set /a NFALLOS+=1
 echo.
 echo  [2/4] Scouting de rivales...
 python gen_scouting.py --dvw_dir "!DVW_DIR!" --output_dir .
@@ -83,6 +89,8 @@ REM   El plan de partido se armo aca hasta ahora, pero se movio al final:
 REM   necesita la carpeta de entrenamientos, que recien se resuelve mas abajo,
 REM   y ademas tiene que correr aunque no haya partidos cargados todavia.
 if errorlevel 1 echo      [aviso] Hubo un problema en el scouting. Sigo igual.
+if errorlevel 1 set "FALLOS=!FALLOS!|Hubo un problema en el scouting."
+if errorlevel 1 set /a NFALLOS+=1
 echo.
 echo  [3/4] Videos destacados (si hay Excel)...
 if exist "videos_nafels.xlsx" python build_videos.py videos_nafels.xlsx
@@ -92,12 +100,16 @@ echo.
 echo  [4/4] Cortes de video de partidos...
 python build_video.py "!DVW_DIR!" datos_video.js VIDEO_DATA
 if errorlevel 1 echo      [aviso] Hubo un problema en los cortes de partidos. Sigo igual.
+if errorlevel 1 set "FALLOS=!FALLOS!|Hubo un problema en los cortes de partidos."
+if errorlevel 1 set /a NFALLOS+=1
 echo.
 REM   Las acciones de bloqueo se arman al final: necesitan el video de los
 REM   entrenamientos, que recien se genera mas abajo. Corriendo aca solo
 REM   alcanzaban a ver los partidos.
 echo  [4b/4] Acciones de bloqueo: se arman al final, con las dos fuentes.
 if errorlevel 1 echo      [aviso] Problema en bloqueo. Sigo igual.
+if errorlevel 1 set "FALLOS=!FALLOS!|Problema en bloqueo."
+if errorlevel 1 set /a NFALLOS+=1
 
 REM ---- contar cuantos videos quedaron cargados (mensaje claro) ----
 set "NVID=0"
@@ -142,10 +154,14 @@ echo.
 echo  [1/2] Procesando entrenamientos...
 python update_db_entrenamientos_nafels.py --dvw_dir "!ENT_DIR!" --temporada !ENT_ANIO!
 if errorlevel 1 echo      [aviso] Las stats de entrenamiento dieron error, pero los cortes igual se generan. Sigo.
+if errorlevel 1 set "FALLOS=!FALLOS!|Las stats de entrenamiento dieron error, pero los cortes i"
+if errorlevel 1 set /a NFALLOS+=1
 echo.
 echo  [2/2] Cortes de video de entrenamientos...
 python build_video.py "!ENT_DIR!" datos_video_ent.js VIDEO_DATA_ENT ent
 if errorlevel 1 echo      [aviso] Hubo un problema en los cortes de entrenamiento. Sigo igual.
+if errorlevel 1 set "FALLOS=!FALLOS!|Hubo un problema en los cortes de entrenamiento."
+if errorlevel 1 set /a NFALLOS+=1
 echo.
 
 REM ================= VERIFICACION =================
@@ -191,6 +207,8 @@ echo  Carpeta: "!HS_DIR!"   ^(!NHS! sesion^(es^)^)
 echo.
 python build_video.py "!HS_DIR!" datos_high_set.js HIGH_SET_DATA ent
 if errorlevel 1 echo      [aviso] Hubo un problema con HIGH SET. Sigo igual.
+if errorlevel 1 set "FALLOS=!FALLOS!|Hubo un problema con HIGH SET."
+if errorlevel 1 set /a NFALLOS+=1
 echo.
 
 :LINKS
@@ -222,6 +240,8 @@ if exist "gen_mis_codigos.py" python gen_mis_codigos.py
 
 python gen_bloqueo.py
 if errorlevel 1 echo      [aviso] Problema en las acciones de bloqueo. Sigo igual.
+if errorlevel 1 set "FALLOS=!FALLOS!|Problema en las acciones de bloqueo."
+if errorlevel 1 set /a NFALLOS+=1
 echo.
 
 echo  ============== PLAN DE PARTIDO ==============
@@ -236,6 +256,8 @@ if "!ENT_DIR!"=="" (
     python gen_plan_partido.py --dvw_dir "!DVW_DIR!" --ent_dir "!ENT_DIR!" --output_dir . --filter_temporada "!TEMPORADA_ACTUAL!"
 )
 if errorlevel 1 echo      [aviso] Problema en el plan de partido. Sigo igual.
+if errorlevel 1 set "FALLOS=!FALLOS!|Problema en el plan de partido."
+if errorlevel 1 set /a NFALLOS+=1
 echo.
 
 echo  ================= BATERIAS =================
@@ -251,6 +273,8 @@ if "!ENT_DIR!"=="" (
     python gen_baterias.py --partidos "!DVW_DIR!" --entrenamientos "!ENT_DIR!" --temporada "!TEMPORADA_ACTUAL!" --out "datos_baterias.js"
 )
 if errorlevel 1 echo      [aviso] Problema en las baterias. Sigo igual.
+if errorlevel 1 set "FALLOS=!FALLOS!|Problema en las baterias."
+if errorlevel 1 set /a NFALLOS+=1
 echo.
 
 REM ===================================================================
@@ -268,6 +292,8 @@ echo  ================= INFORME DE EQUIPO =================
 echo.
 python gen_informe.py --dvw_dir "!DVW_DIR!" --temporada "!TEMPORADA_ACTUAL!" --out "datos_informe.js"
 if errorlevel 1 echo      [aviso] Problema armando el informe. Sigo igual.
+if errorlevel 1 set "FALLOS=!FALLOS!|Problema armando el informe."
+if errorlevel 1 set /a NFALLOS+=1
 echo.
 
 REM ===================================================================
@@ -284,6 +310,8 @@ echo  ============== ESTADISTICAS DE LA LIGA ==============
 echo.
 python gen_liga_stats.py
 if errorlevel 1 echo      [aviso] Problema con las estadisticas de la liga. Sigo igual.
+if errorlevel 1 set "FALLOS=!FALLOS!|Problema con las estadisticas de la liga."
+if errorlevel 1 set /a NFALLOS+=1
 echo.
 
 echo  ==================================================
@@ -319,6 +347,36 @@ REM   ni comparar los equipos entre archivos, y esa parte de la revision
 REM   se pierde justo cuando mas importa.
 REM ===================================================================
 echo.
+REM ===================================================================
+REM   RESUMEN DE LO QUE FALLO
+REM
+REM   Cada paso que falla imprime su aviso y sigue de largo, que esta bien:
+REM   una falla suelta no tiene por que cortar todo. El problema era que ese
+REM   aviso se perdia entre cientos de lineas y nadie lo veia.
+REM
+REM   Paso de verdad: gen_liga_stats.py fallaba en silencio y la pantalla de
+REM   estadisticas de la liga quedo con numeros viejos, mientras el resto del
+REM   sistema ya usaba la escala nueva.
+REM
+REM   Ahora, antes del control de calidad, se listan los pasos que fallaron.
+REM ===================================================================
+echo.
+if !NFALLOS! GTR 0 (
+  echo  ============================================================
+  echo      ATENCION: !NFALLOS! PASO^(S^) FALLARON
+  echo  ============================================================
+  for %%F in ("!FALLOS:|=" "!") do if not "%%~F"=="" echo      - %%~F
+  echo.
+  echo      Los datos de esos pasos quedaron SIN ACTUALIZAR.
+  echo      El detalle esta mas arriba, donde dice [aviso].
+  echo  ============================================================
+) else (
+  echo  ============================================================
+  echo      TODO OK: no fallo ningun paso.
+  echo  ============================================================
+)
+echo.
+
 echo  ================= CONTROL DE CALIDAD =================
 if exist "AUDITAR.py" python AUDITAR.py --sin-pausa
 if exist "VERIFICAR_DATOS.py" python VERIFICAR_DATOS.py --sin-pausa

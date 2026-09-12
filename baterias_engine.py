@@ -32,8 +32,8 @@ def calc_baterias(scout, side):
     Devuelve {num: baterias} con num='__EQUIPO__' para el total del equipo."""
     # acumuladores por jugador
     def nuevo():
-        return {'S':{'#':0,'+':0,'/':0,'=':0,'T':0},
-                'R':{'#':0,'+':0,'/':0,'=':0,'T':0},
+        return {'S':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
+                'R':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
                 'B':{'#':0,'+':0,'T':0},
                 'Aall':_na(),
                 'cent':_na(),'alta':_na(),'rap':_na(),
@@ -168,12 +168,15 @@ def calc_baterias(scout, side):
     pl['__EQUIPO__']=eq
     return pl
 
+# La ficha guarda las SEIS valoraciones. Antes solo guardaba # + / = porque
+# la formula vieja no usaba las otras dos. La escala 0-100 SI las usa: el
+# neutro vale 50 y el negativo 25, y sin contarlos el resultado sale mal.
 def to_pcts(P):
     """Convierte acumuladores a las 11 baterías en %."""
     def atk(d): return round((d['#']-d['/']-d['='])/d['T']*100) if d['T'] else None
     S=P['S']; R=P['R']; B=P['B']
     return {
-        'sq':    (round((S['#']*100 + S['/']*87.5 + S['+']*75 + S['!']*50 + S['-']*25)/S['T'])
+        'sq':    (round((S.get('#',0)*100 + S.get('/',0)*87.5 + S.get('+',0)*75 + S.get('!',0)*50 + S.get('-',0)*25)/S['T'])
                   if S['T'] else None),
         # SAQUE en la escala 0-100 del sistema:
         #   # ace 100 · / free ball 87,5 · + positivo 75 · ! neutro 50 · - negativo 25 · = error 0
@@ -181,7 +184,7 @@ def to_pcts(P):
         # baterias, y es el que alimenta la pantalla de estadisticas de la
         # liga. Por eso ahi se veian numeros negativos que no coincidian con
         # nada del resto del sistema.
-        'rec':   (round((R['#']*100 + R['+']*75 + R['!']*50 + R['-']*25 + R['/']*12.5)/R['T'])
+        'rec':   (round((R.get('#',0)*100 + R.get('+',0)*75 + R.get('!',0)*50 + R.get('-',0)*25 + R.get('/',0)*12.5)/R['T'])
                   if R['T'] else None),
         # RECEPCION en la escala 0-100:
         #   # 100 · + 75 · ! 50 · - 25 · / 12,5 · = 0
@@ -200,7 +203,7 @@ def to_pcts(P):
 def merge_acum(lista_pl):
     """Suma acumuladores de varios partidos (lista de dicts {num:acums})."""
     def nuevo():
-        return {'S':{'#':0,'+':0,'/':0,'=':0,'T':0},'R':{'#':0,'+':0,'/':0,'=':0,'T':0},
+        return {'S':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},'R':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
                 'B':{'#':0,'+':0,'T':0},'Aall':_na(),'cent':_na(),'alta':_na(),'rap':_na(),
                 'rp':_na(),'ri':_na(),'rm':_na(),'tr':_na(),
                 '_sq_dest':{},'_sq_tipo':{},'_atk_combo':{},'_rec':{}}
