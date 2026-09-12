@@ -528,11 +528,13 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
     return;
   }
 
+  /* El quinto dato es la clave para el video: el signo que busca en el
+     scout. "Sigue en juego" no tiene, porque no es una valoracion. */
   var FIL = [
-    ['#', 'Punto',          P,     '#22c55e'],
-    ['\u25b8','Sigue en juego', sigue, '#64748b'],
-    ['/', 'Bloqueado',      B,     '#fb923c'],
-    ['=', 'Error',          E,     '#ef4444']
+    ['#', 'Punto',          P,     '#22c55e', 'p'],
+    ['\u25b8','Sigue en juego', sigue, '#64748b', null],
+    ['/', 'Bloqueado',      B,     '#fb923c', 'b'],
+    ['=', 'Error',          E,     '#ef4444', 'e']
   ];
 
   var barra = '', lista = '';
@@ -544,7 +546,15 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
       +    'font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;'
       +    'flex:none;font-family:monospace">'+f[0]+'</span>'
       + '<span style="flex:1;color:#cbd5e1">'+f[1]+'</span>'
-      + '<span style="font-weight:900;color:#e2e8f0;min-width:30px;text-align:right;font-size:14px">'+f[2]+'</span>'
+      /* El numero se toca. "Sigue en juego" no: no es una valoracion del
+         scout sino lo que queda al restar, no hay un signo que buscar. */
+      + (f[4]
+         ? '<span onclick="objVerVideo(\''+id+'\',\''+f[4]+'\',\''+(quien||'').replace(/\'/g,'')+'\','+f[2]+')" '
+           + 'title="Ver estos '+f[2]+' ataques en video" '
+           + 'style="font-weight:900;color:#e2e8f0;min-width:30px;text-align:right;font-size:14px;'
+           + 'cursor:pointer;text-decoration:underline;text-decoration-color:rgba(148,163,184,.4);'
+           + 'text-underline-offset:3px">'+f[2]+'</span>'
+         : '<span style="font-weight:900;color:#e2e8f0;min-width:30px;text-align:right;font-size:14px">'+f[2]+'</span>')
       + '<span style="color:#64748b;min-width:56px;text-align:right;font-size:11px">'
       +    (f[2]/T*10).toFixed(1)+' de 10</span>'
       + '</div>';
@@ -659,6 +669,52 @@ function objPlural(p, n){
   return p + 'es';
 }
 
+
+/* ══ DE LA VENTANITA AL REPRODUCTOR ═══════════════════════════════════════════
+   El jugador toca "18" al lado de Error y ve esas 18 pelotas.
+
+   No se guarda nada nuevo: datos_video ya tiene cada accion con su jugador,
+   fundamento, valoracion y segundo —51.710 acciones, el 98%—. Se le pide al
+   reproductor que filtre eso mismo. Una sola fuente para el dato: duplicarlo
+   habria sido crear una segunda verdad que tarde o temprano queda vieja. */
+var OBJ_SKILL = { sq:'S', rec:'R', def:'D', bqpos:'B', bqpt:'B',
+                  atqq:'A', atqhb:'A', atqx:'A',
+                  atqrp:'A', atqri:'A', atqrm:'A', atqtr:'A' };
+
+function objVerVideo(id, clave, nombreFila, cuantas){
+  try{
+    if(typeof repAbrir !== 'function'){
+      alert('El reproductor no está cargado en esta pantalla.');
+      return;
+    }
+    var cfg = OBJ_DETALLE[id];
+    if(!cfg) return;
+
+    /* la letra que busca en el scout */
+    var sig = null;
+    (cfg.filas||[]).forEach(function(f){ if(f[0] === clave) sig = f[4]; });
+    if(!sig) sig = ({p:'#', b:'/', e:'='})[clave] || null;
+
+    /* de quien: si la fila es la del EQUIPO no se filtra por jugador */
+    var jug = null, quien = 'Equipo';
+    if(!(nombreFila && /equipo/i.test(nombreFila))){
+      try{
+        var d = window.__objJugActual;
+        if(d){ jug = d.num || d; quien = d.nombre || d.name || ('#'+jug); }
+      }catch(e){}
+    }
+
+    var tipo = null;
+    try{ var t = window._objTipo; if(t==='P'||t==='E') tipo = t; }catch(e){}
+
+    repAbrir({
+      titulo: quien + ' \u00b7 ' + (cfg.nom||'') + (sig ? ' \u00b7 ' + sig : '')
+              + (cuantas ? '  (' + cuantas + ')' : ''),
+      num: jug, skill: OBJ_SKILL[id] || null, ev: sig, tipo: tipo
+    });
+  }catch(e){}
+}
+
 function objTocarBat(mid){
   try{
     var d = (window.__objMeta||{})[mid];
@@ -739,7 +795,14 @@ function objAbrirDetalle(id, vals, meta, quien){
       +    'font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;'
       +    'flex:none;font-family:monospace">'+(f[4]||'')+'</span>'
       + '<span style="flex:1;color:#cbd5e1">'+f[1]+'</span>'
-      + '<span style="font-weight:900;color:#e2e8f0;min-width:30px;text-align:right;font-size:14px">'+n+'</span>'
+      /* ══ EL NUMERO SE TOCA Y SE ABRE EL VIDEO ══════════════════════════
+         Tocas "18" al lado de Error y ves esas 18 pelotas. El subrayado
+         suave avisa que se puede tocar sin ensuciar la lectura. */
+      + '<span onclick="objVerVideo(\''+id+'\',\''+f[0]+'\',\''+(quien||'').replace(/\'/g,'')+'\','+n+')" '
+      +    'title="Ver estas '+n+' acciones en video" '
+      +    'style="font-weight:900;color:#e2e8f0;min-width:30px;text-align:right;font-size:14px;'
+      +    'cursor:pointer;text-decoration:underline;text-decoration-color:rgba(148,163,184,.4);'
+      +    'text-underline-offset:3px">'+n+'</span>'
       + '<span style="color:#64748b;min-width:56px;text-align:right;font-size:11px">'
       /* SIEMPRE con un decimal. Con 1362 acciones, 260 y 336 pelotas daban
          "2 de 10" las dos: el redondeo borraba justo lo que se queria

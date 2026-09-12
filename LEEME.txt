@@ -1,78 +1,84 @@
-LAS 12 BATERIAS, COMPLETAS
-==========================
+EL MINI REPRODUCTOR
+===================
 
-2 archivos. HACER_TODO y publicar.
+6 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
 
-
-AHORA LAS DOCE ABREN VENTANA
-----------------------------
-   saque · recepción · defensa          promedio ponderado
-   bloqueo #+ · bloqueo #               cuántos terminaron en punto
-   atq central · alta · rápida          resta
-   atq tras rec #+ · ! · -              resta
-   atq en transición                    resta
+   reproductor.js        <- NUEVO, va a la raiz
+   objetivos_config.js
+   dashboard · panel_voley · analisis · jugador   (cargan el reproductor)
 
 
-EL ATAQUE SE EXPLICA DISTINTO — y hay que decirlo
+COMO FUNCIONA
+-------------
+En la ventanita de cualquier bateria, el NUMERO de cada valoracion esta
+subrayado. Lo tocas y se abre el reproductor con esas acciones:
+
+   =  Error          18   1.1 de 10
+                     ↑
+                  tocas acá
+
+   ┌──────────────────────────────────────┐
+   │  BARTHOLET · RECEPCIÓN · =    (18)   │
+   ├──────────────────────────────────────┤
+   │                                      │
+   │           [ el video ]               │
+   │                                      │
+   │   ◀    Pausar    ↺    ▶              │
+   │   3 / 18            velocidad ½ ¾ 1× │
+   ├──────────────────────────────────────┤
+   │  1  BARTHOLET   set 1      18:50     │
+   │  2  BARTHOLET   set 1      28:59     │
+   │  3  BARTHOLET   set 2      31:11  ←  │
+   │  ...                                 │
+   └──────────────────────────────────────┘
+
+Pasa de una a otra solo. Se puede saltar tocando la lista, ir con las
+flechas del teclado, pausar con la barra espaciadora y cerrar con Escape.
+
+
+LA DECISION IMPORTANTE: NO SE DUPLICO NINGUN DATO
 --------------------------------------------------
-El ataque no es un promedio. Es una RESTA:
+Mi primera idea era guardar en las baterias la lista de acciones con su
+video. Eso pesaba 1,6 MB.
 
-   (puntos - bloqueados - errores) / total
+Fui a mirar y YA EXISTIA TODO. datos_video guarda de cada accion: jugador,
+fundamento, valoracion, tipo, set, segundo y video. Son 51.710 acciones con
+segundo, el 98% del total.
 
-Por eso puede dar negativo. La ventana lo muestra asi:
-
-   #  Punto            29    4.0 de 10
-   ▸  Sigue en juego   26    3.6 de 10
-   /  Bloqueado         7    1.0 de 10
-   =  Error            11    1.5 de 10
-
-   CÓMO SE LLEGA A 15%
-   29 puntos − 7 bloqueados − 11 errores = 11
-   11 ÷ 73 = 15%
-
-   No es un promedio como en recepción: es una RESTA. Cuenta cuántos
-   puntos netos deja cada ataque, por eso puede dar negativo.
-
-Agregue "SIGUE EN JUEGO", que en las otras baterias no existe: son los
-ataques que ni fueron punto ni se perdieron. Sin esa fila los numeros no
-cerraban y el jugador no entendia donde estaban los demas ataques.
+Asi que el reproductor le pide al dato que ya esta. Cero bytes nuevos, y
+sobre todo: UNA SOLA FUENTE. Duplicarlo habria sido crear una segunda
+verdad que tarde o temprano queda vieja — el problema que venimos peleando
+todo el dia.
 
 
-LO MAS IMPORTANTE QUE ENCONTRE
-------------------------------
-Al probarlo con TU caso —Bartholet, ataque tras recepcion #+, -33%— vi
-esto:
+Y EL REPRODUCTOR ES UNO SOLO
+----------------------------
+plan_partido tenia el suyo escrito adentro de esa pagina. Copiarlo habria
+dejado tres versiones.
 
-   son 3 ataques, y UNO salio bloqueado.
+reproductor.js esta solo, y lo usan todas. Si manana hay que cambiar algo
+—la velocidad, cuanto muestra antes de la accion— se cambia una vez.
 
-Un jugador ve -33% y se preocupa. Pero con 3 pelotas, una bloqueada te
-manda a -33 y una de punto te manda a +33: el numero cambia 67 puntos por
-UNA accion. No significa nada todavia.
+Cualquier pantalla puede usarlo asi:
 
-Ocultarlo seria peor. Mostrarlo sin avisar, tambien. Asi que la ventana
-avisa:
-
-   ┌──────────────────────────────────┐
-   │ Ojo: son pocas pelotas.          │
-   │ Con 3 ataques, una sola cambia   │
-   │ el número 67 puntos. Este        │
-   │ porcentaje todavía no dice       │
-   │ mucho: miralo cuando haya más.   │
-   └──────────────────────────────────┘
-
-Y cuando pasa eso no muestra el consejo de "para llegar a X", porque seria
-darle una meta sobre un numero que no es real.
-
-El aviso sale con menos de 10 ataques, o menos de 15 acciones en los otros
-fundamentos.
+   repAbrir({ titulo:'...', num:11, skill:'R', ev:'=', tipo:'E' });
 
 
-LOS ATAQUES REALES DE BARTHOLET
+LO QUE RESPETA
+--------------
+   de quien es      si tocaste la fila del jugador o la del equipo
+   que tipo         partidos o entrenamientos, segun el boton
+   que valoracion   la letra exacta del scout
 
-   tras recepción #+     3 ataques    -33%   <- aviso
-   tras recepción !      3 ataques    100%   <- aviso
-   tras recepción -      3 ataques    -33%   <- aviso
-   en transición        73 ataques     15%   <- sin aviso, el dato sirve
+En el ataque, "Sigue en juego" NO es tocable: no es una valoracion del
+scout sino lo que queda al restar, asi que no hay nada que buscar.
 
-Fijate: los tres primeros son ruido. El unico que dice algo es transicion,
-y ahi se ve que regala 18 de 73 pelotas.
+
+LO QUE FALTA PROBAR
+-------------------
+No pude probarlo con video real porque los archivos estan cifrados y no
+tengo la llave. La estructura la saque de build_video.py y la verifique
+contra el generador, pero el unico que puede confirmar que los clips se ven
+sos vos.
+
+Si algo no abre, decime QUE bateria tocaste y en que pantalla, y lo miro.
