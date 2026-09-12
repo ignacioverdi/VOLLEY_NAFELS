@@ -673,13 +673,42 @@ function objPlural(p, n){
 /* ══ DE LA VENTANITA AL REPRODUCTOR ═══════════════════════════════════════════
    El jugador toca "18" al lado de Error y ve esas 18 pelotas.
 
-   No se guarda nada nuevo: datos_video ya tiene cada accion con su jugador,
-   fundamento, valoracion y segundo —51.710 acciones, el 98%—. Se le pide al
-   reproductor que filtre eso mismo. Una sola fuente para el dato: duplicarlo
-   habria sido crear una segunda verdad que tarde o temprano queda vieja. */
-var OBJ_SKILL = { sq:'S', rec:'R', def:'D', bqpos:'B', bqpt:'B',
-                  atqq:'A', atqhb:'A', atqx:'A',
-                  atqrp:'A', atqri:'A', atqrm:'A', atqtr:'A' };
+   La primera version que hice mostraba cualquier accion. El motivo: yo
+   recorria los datos de video a mi manera, sin entender que el codigo de la
+   sesion que traen las acciones NO es la clave del mapa de videos.
+
+   Ahora el reproductor usa exactamente los datos y la logica de
+   plan_partido, que ya tenia todo esto resuelto. Verificado contra el: para
+   el mismo codigo devuelve el mismo video.
+
+   Las claves internas de la ventana y lo que entiende el reproductor:
+       fundamento   sq · rec · def · blq · atk
+       valoracion   la letra del scout: # + ! - / = */
+var OBJ_FUND = { sq:'sq', rec:'rec', def:'def', bqpos:'blq', bqpt:'blq',
+                 atqq:'atk', atqhb:'atk', atqx:'atk',
+                 atqrp:'atk', atqri:'atk', atqrm:'atk', atqtr:'atk' };
+
+
+/* Del nombre que muestra la pantalla al numero de camiseta que necesita el
+   reproductor. Se busca en PP_DATA, que es la misma fuente de las acciones. */
+function objNumeroDe(nombre){
+  var n = String(nombre||'').trim().toUpperCase();
+  if(!n) return null;
+  /* si ya vino un numero */
+  var d = n.match(/^#?\s*(\d{1,2})\b/);
+  if(d) return Number(d[1]);
+  try{
+    var D = window.PP_DATA || {};
+    for(var eq in D){
+      var P = (D[eq] && D[eq].players) || [];
+      for(var i=0;i<P.length;i++){
+        var nm = String(P[i].name||'').trim().toUpperCase();
+        if(nm && (nm === n || n.indexOf(nm) >= 0 || nm.indexOf(n) >= 0)) return Number(P[i].num);
+      }
+    }
+  }catch(e){}
+  return null;
+}
 
 function objVerVideo(id, clave, nombreFila, cuantas){
   try{
@@ -690,30 +719,43 @@ function objVerVideo(id, clave, nombreFila, cuantas){
     var cfg = OBJ_DETALLE[id];
     if(!cfg) return;
 
-    /* la letra que busca en el scout */
+    /* la letra del scout que hay que buscar */
     var sig = null;
     (cfg.filas||[]).forEach(function(f){ if(f[0] === clave) sig = f[4]; });
     if(!sig) sig = ({p:'#', b:'/', e:'='})[clave] || null;
+    if(!sig) return;
 
-    /* de quien: si la fila es la del EQUIPO no se filtra por jugador */
+    /* ══ DE QUIEN SON LAS ACCIONES ═══════════════════════════════════════
+       Si la fila es la del EQUIPO, no se filtra por jugador.
+       Si es la de un jugador, hay que saber cual. Cada pantalla guarda esa
+       eleccion con otro nombre, y ademas guarda el NOMBRE mientras que el
+       reproductor filtra por NUMERO: se busca el numero en el plantel. */
     var jug = null, quien = 'Equipo';
     if(!(nombreFila && /equipo/i.test(nombreFila))){
-      try{
-        var d = window.__objJugActual;
-        if(d){ jug = d.num || d; quien = d.nombre || d.name || ('#'+jug); }
-      }catch(e){}
+      var nom = null;
+      try{ nom = window._dbatNombre || window.__objJugNombre
+                 || (window.__objJugActual && (window.__objJugActual.nombre
+                     || window.__objJugActual.name || window.__objJugActual)); }catch(e){}
+      if(nom){
+        quien = String(nom);
+        jug = objNumeroDe(nom);
+      }
+      /* sin jugador identificado no se abre: mostrar las acciones del equipo
+         cuando el jugador pidio las suyas seria justo el error de antes. */
+      if(!jug){
+        alert('No pude identificar al jugador para traer sus acciones.');
+        return;
+      }
     }
 
-    var tipo = null;
-    try{ var t = window._objTipo; if(t==='P'||t==='E') tipo = t; }catch(e){}
-
     repAbrir({
-      titulo: quien + ' \u00b7 ' + (cfg.nom||'') + (sig ? ' \u00b7 ' + sig : '')
+      titulo: quien + ' \u00b7 ' + (cfg.nom||'') + ' \u00b7 ' + sig
               + (cuantas ? '  (' + cuantas + ')' : ''),
-      num: jug, skill: OBJ_SKILL[id] || null, ev: sig, tipo: tipo
+      num: jug, fund: OBJ_FUND[id], ev: sig
     });
   }catch(e){}
 }
+
 
 function objTocarBat(mid){
   try{

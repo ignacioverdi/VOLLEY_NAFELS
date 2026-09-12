@@ -1,84 +1,79 @@
-EL MINI REPRODUCTOR
-===================
+EL REPRODUCTOR, AHORA SI
+========================
 
 6 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
 
-   reproductor.js        <- NUEVO, va a la raiz
-   objetivos_config.js
-   dashboard · panel_voley · analisis · jugador   (cargan el reproductor)
+
+POR QUE ABRIA CUALQUIER ACCION
+------------------------------
+Tenias razon en las dos cosas. Yo habia escrito mi propia forma de leer los
+datos de video en vez de traer la de plan_partido. Y tenia DOS errores de
+fondo:
+
+1. LEIA EL CAMPO EQUIVOCADO
+   Cada accion es un ARRAY, y la posicion de cada dato CAMBIA segun el
+   fundamento:
+
+       ataque      evaluación en [5] · segundo en [7] · sesión en [8]
+       saque       evaluación en [3] · segundo en [5] · sesión en [6]
+       recepción   evaluación en [3] · segundo en [5] · sesión en [6]
+       bloqueo     evaluación en [2] · segundo en [3] · sesión en [4]
+
+   Yo leia siempre el mismo campo. Por eso salia cualquier cosa.
+
+2. EL CODIGO DE LA SESION NO ES LA CLAVE DEL VIDEO
+   La accion dice    E2026-09-10-20260910AXPE
+   El mapa tiene     ENT20260910T
+
+   No coinciden. plan_partido ya tenia esto resuelto: empareja por FECHA y
+   por TURNO —el 08/09 hubo dos sesiones y sin mirar el turno las acciones
+   de la mañana se llevaban el video de la tarde—.
+
+   Y si hay varias sesiones ese dia y no se sabe cual, NO ADIVINA: prefiere
+   no abrir nada antes que mostrar una jugada equivocada.
 
 
-COMO FUNCIONA
--------------
-En la ventanita de cualquier bateria, el NUMERO de cada valoracion esta
-subrayado. Lo tocas y se abre el reproductor con esas acciones:
+LO QUE HICE
+-----------
+Traje la logica de plan_partido tal cual, sin inventar. Y la verifique
+contra ella misma en la pagina real:
 
-   =  Error          18   1.1 de 10
-                     ↑
-                  tocas acá
+   8 sesiones · mismo video en las 8 · cero diferencias
 
-   ┌──────────────────────────────────────┐
-   │  BARTHOLET · RECEPCIÓN · =    (18)   │
-   ├──────────────────────────────────────┤
-   │                                      │
-   │           [ el video ]               │
-   │                                      │
-   │   ◀    Pausar    ↺    ▶              │
-   │   3 / 18            velocidad ½ ¾ 1× │
-   ├──────────────────────────────────────┤
-   │  1  BARTHOLET   set 1      18:50     │
-   │  2  BARTHOLET   set 1      28:59     │
-   │  3  BARTHOLET   set 2      31:11  ←  │
-   │  ...                                 │
-   └──────────────────────────────────────┘
-
-Pasa de una a otra solo. Se puede saltar tocando la lista, ir con las
-flechas del teclado, pausar con la barra espaciadora y cerrar con Escape.
+       E2026-09-08-20260908AXPE   vXIkjFYqBZs   igual
+       E2026-09-10-20260910AXPE   tEK_CoI0QbQ   igual
+       E2026-09-03-PRAAXPONAFEL   sGFl_TO2iEE   igual
+       E2026-09-04-PRAAXPONAFEL   -0-4Ouw4D68   igual
 
 
-LA DECISION IMPORTANTE: NO SE DUPLICO NINGUN DATO
---------------------------------------------------
-Mi primera idea era guardar en las baterias la lista de acciones con su
-video. Eso pesaba 1,6 MB.
+PROBADO CON DATOS REALES
+------------------------
+Busque los errores de recepcion del #11 en la pagina de verdad:
 
-Fui a mirar y YA EXISTIA TODO. datos_video guarda de cada accion: jugador,
-fundamento, valoracion, tipo, set, segundo y video. Son 51.710 acciones con
-segundo, el 98% del total.
+   18 acciones · todas con evaluación "=" · minutos 18:50, 28:59, 31:11...
 
-Asi que el reproductor le pide al dato que ya esta. Cero bytes nuevos, y
-sobre todo: UNA SOLA FUENTE. Duplicarlo habria sido crear una segunda
-verdad que tarde o temprano queda vieja — el problema que venimos peleando
-todo el dia.
+Son exactamente los mismos 18 que conte a mano en los .dvw, con los mismos
+minutos. Y los ataques punto del #11: 27, todos con "#".
 
 
-Y EL REPRODUCTOR ES UNO SOLO
-----------------------------
-plan_partido tenia el suyo escrito adentro de esa pagina. Copiarlo habria
-dejado tres versiones.
+LO QUE FALTABA Y NO SE VEIA
+---------------------------
+Las pantallas NO cargaban los datos del plan ni los mapas de video. El
+reproductor no tenia de donde sacar nada.
 
-reproductor.js esta solo, y lo usan todas. Si manana hay que cambiar algo
-—la velocidad, cuanto muestra antes de la accion— se cambia una vez.
+Ahora dashboard, panel_voley, analisis y jugador cargan los mismos tres
+archivos que plan_partido:
 
-Cualquier pantalla puede usarlo asi:
+   mapa_videos.js.enc
+   mapa_videos_ent.js.enc
+   plan_partido_data.js.enc
 
-   repAbrir({ titulo:'...', num:11, skill:'R', ev:'=', tipo:'E' });
-
-
-LO QUE RESPETA
---------------
-   de quien es      si tocaste la fila del jugador o la del equipo
-   que tipo         partidos o entrenamientos, segun el boton
-   que valoracion   la letra exacta del scout
-
-En el ataque, "Sigue en juego" NO es tocable: no es una valoracion del
-scout sino lo que queda al restar, asi que no hay nada que buscar.
+Y el reproductor va DESPUES de ellos: si carga antes, no encuentra nada.
+Eso tambien lo verifique en los cuatro.
 
 
-LO QUE FALTA PROBAR
--------------------
-No pude probarlo con video real porque los archivos estan cifrados y no
-tengo la llave. La estructura la saque de build_video.py y la verifique
-contra el generador, pero el unico que puede confirmar que los clips se ven
-sos vos.
-
-Si algo no abre, decime QUE bateria tocaste y en que pantalla, y lo miro.
+UNA COSA MAS
+------------
+Si la ventana no puede identificar al jugador, NO abre el video del equipo:
+avisa. Mostrar las acciones del equipo cuando el jugador pidio las suyas
+seria repetir el mismo error que me marcaste.
