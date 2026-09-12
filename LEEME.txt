@@ -1,52 +1,51 @@
-LOS DATOS INDIVIDUALES DE LA LIGA
-=================================
+LAS DOS QUE FALTABAN
+====================
 
-Un archivo: update_db_nafels.py. HACER_TODO y publicar.
-
-
-HICISTE BIEN EN PREGUNTAR
--------------------------
-No estaban con las formulas correctas: NO ESTABAN, directamente.
-
-nla_stats.json tenia 8 equipos y CERO jugadores. La pantalla mostraba los
-equipos pero la parte individual quedaba vacia.
+2 archivos: jugador.html y analisis.html
+Publicar y Ctrl+Shift+R. Sin HACER_TODO.
 
 
-LA CAUSA — error mio
---------------------
-Cuando reemplace las formulas de eficacia, mi script cortaba desde
-"def eff_..." hasta el siguiente "def". Y justo en el medio de dos de esas
-funciones habia una linea suelta:
+TENIAS RAZON Y EL ERROR FUE MIO
+-------------------------------
+Yo venia verificando el DASHBOARD, que ya estaba bien. Tu captura era de
+OTRA pantalla.
 
-   REC_FLOT={'M','H'}; REC_POT={'Q','T'}
+Se distinguen por el titulo:
 
-Se la llevo puesta. Lo confirme en el historial de GitHub: hasta el 11/09 a
-las 21:26 estaba, y en la version del 12/09 a las 10:50 ya no.
+   "MI PERFORMANCE VS EQUIPO"     -> dashboard, panel_voley   (ya estaban OK)
+   "MI PERFORMANCE VS OBJETIVO"   -> jugador, analisis        (estas NO)
 
-Sin esa linea, el generador fallaba con "REC_FLOT is not defined" y emitia
-solo los equipos. Y como HACER_TODO tapaba el aviso, nadie se enteraba.
-
-(Eso ultimo ya lo arreglamos: ahora el resumen final avisa.)
-
-CORREGIDO: la linea vuelve, con un comentario que explica que es —flotado
-M/H, potencia Q/T— para que no se pierda de nuevo.
+Las dos que faltaban son justamente las que dicen "VS OBJETIVO". El titulo
+prometia una cosa y el codigo hacia otra.
 
 
-PROBADO DE VERDAD
------------------
-Corri gen_liga_stats.py completo:
+QUE TENIAN MAL
+--------------
+Algo raro: el COLOR ya se calculaba contra el objetivo —eso lo habia
+corregido— pero la linea de abajo seguia mostrando el promedio del equipo:
 
-   ✓ nla_stats.json: 8 filas equipo, 99 jugadores
+   cls = objClassify(id,val)          <- el color, contra el objetivo. BIEN.
+   objLine = eq!==null ? eq : m.obj   <- el numero, contra el equipo. MAL.
 
-Y los 99 con la escala correcta:
+Por eso veias "obj 39" en el jugador y "obj 42" en el equipo, con los
+colores aparentemente coherentes. Estaba a medio arreglar y no lo vi.
 
-   JUGADOR                equipo        saque  recep    def
-   Joel Hauck             Amriswil       44.2   67.0   48.8
-   Damein ROSSIGNOL       Colombier      39.3   65.6   45.2
-   Alexander Lengweiler   Schonenwerd    41.7   63.7   57.9
-   Joachim Hesselholt     Nafels         39.6   63.0   53.3
+CORREGIDO: objLine = m.obj
 
-   negativos: 0 de 99
-   recepcion va de 0 a 67 · saque de 26 a 48
 
-Misma escala que las baterias, el ranking y los equipos.
+BARRIDO COMPLETO, ESTA VEZ SIN EXCEPCIONES
+------------------------------------------
+Revise las SEIS pantallas que dibujan esa fila:
+
+   analisis.html          m.obj / m.obj    OK
+   dashboard.html         m.obj / m.obj    OK
+   jugador.html           m.obj / m.obj    OK
+   objetivos.js           m.obj / m.obj    OK
+   objetivos_config.js    m.obj / m.obj    OK
+   panel_voley.html       m.obj / m.obj    OK
+
+   pantallas que muestran el numero del equipo: NINGUNA
+   leyenda vieja "Sobre equipo":               NINGUNA
+
+Perdon por las vueltas. El problema fue que arregle de a una pantalla por
+vez en vez de barrer las seis juntas desde el principio.
