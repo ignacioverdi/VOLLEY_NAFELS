@@ -153,27 +153,18 @@ function effAtaque(j){
 function effBloqueo(j){
   return j.bT>0 ? Math.round((j.bPt+j.bPtPos)/j.bT*100) : null;
 }
-function effColor(v, meta){
-  /* ══ UNA SOLA VERSION, Y ATADA AL SEMAFORO ════════════════════════════════
-     Habia CINCO versiones distintas repartidas en 17 archivos. Peor: todas
-     usaban los cortes VIEJOS (g2/g1/y) mientras el semaforo de las baterias
-     ya usa el recorrido de la liga. O sea que el color del NUMERO y el de la
-     BATERIA podian no coincidir para el mismo dato.
+/* ══ ESTA FUNCION VIVE EN utils.js ═══════════════════
+   Habia una copia local aca que PISABA a la compartida, porque se define
+   despues. Eso significa que corregir la compartida no tenia efecto en esta
+   pantalla: habia que acordarse de tocar las dos.
 
-     Ahora, cuando se pasa el fundamento, el color sale de objClassify: la
-     misma funcion que pinta las baterias. Asi no pueden volver a separarse
-     nunca, porque es literalmente el mismo calculo.
+   Nos paso varias veces: el semaforo, el color del numero, el tamaño de las
+   baterias y el objetivo del jugador. Cada vez se arreglaba en un lado y
+   seguia mal en el otro.
 
-     Sin fundamento se usa la escala de eficacia de ataque (40/20/0/-20), que
-     es lo que esperan las pantallas que llaman sin segundo parametro. */
-  if(v===null||v===undefined||isNaN(v)) return 'var(--mut,#475569)';
-  if(meta && typeof objClassify === 'function'
-          && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas
-          && window.OBJETIVOS_CONFIG.metas[meta]){
-    try{ return objClassify(meta, v).color; }catch(e){}
-  }
-  return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#f97316':'#ef4444';
-}
+   La copia local se quita. Si esta pantalla necesita algo distinto, se hace
+   un cambio en la compartida y vale para todas. */
+
 
 
 // ── Acumular jugadores de múltiples sesiones ─────────────────
@@ -1733,7 +1724,18 @@ function batGet(nombre, partido){
    Ahora se usa la de objetivos_config.js, que se carga mas arriba. Una sola
    copia, un solo lugar donde corregir. */
 
-function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
+/* ══ ESTA FUNCION VIVE EN objetivos_config.js ═══════════════════
+   Habia una copia local aca que PISABA a la compartida, porque se define
+   despues. Eso significa que corregir la compartida no tenia efecto en esta
+   pantalla: habia que acordarse de tocar las dos.
+
+   Nos paso varias veces: el semaforo, el color del numero, el tamaño de las
+   baterias y el objetivo del jugador. Cada vez se arreglaba en un lado y
+   seguia mal en el otro.
+
+   La copia local se quita. Si esta pantalla necesita algo distinto, se hace
+   un cambio en la compartida y vale para todas. */
+
 
 function cell(v){ return (v===null||v===undefined)?'—':(v+'%'); }
 

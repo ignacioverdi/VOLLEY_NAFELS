@@ -1,54 +1,49 @@
-EL OBJETIVO DEL JUGADOR, FIJO
-=============================
+EL RANKING + LO QUE FALTABA
+===========================
 
-4 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
-
-
-TENIAS RAZON Y AHORA ENTENDI BIEN
----------------------------------
-El objetivo del jugador CAMBIABA todos los dias porque no era un objetivo:
-era el promedio del equipo de ESE DIA.
-
-   si el equipo recibia bien   la vara subia
-   si el equipo recibia mal    la vara bajaba
-
-Un objetivo que se mueve no es un objetivo. Lo fija el cuerpo tecnico una
-vez y no se toca.
-
-Y traia algo peor: un jugador podia estar "sobre el equipo" y aun asi LEJOS
-del objetivo. El verde decia que estaba bien cuando no lo estaba.
+6 archivos. HACER_TODO y publicar.
 
 
-POR QUE NO SE ARREGLO ANTES
----------------------------
-Yo lo habia corregido en objetivos_config.js. Pero el mismo codigo esta
-repetido en CUATRO archivos, y el que dibuja el dashboard es otro:
+1) EL RANKING TENIA SUS PROPIOS OBJETIVOS
+-----------------------------------------
+Escritos a mano en la pagina, de otra epoca:
 
-   dashboard.html       tenia su copia
-   objetivos.js         tenia su copia   <- esta es la que veias
-   panel_voley.html     tenia su copia
-   objetivos_config.js  la que yo habia arreglado
+   FUNDAMENTO      antes    ahora
+   Saque               3       42
+   Recepción          36       60
+   Blq #+             43       45
+   Atq Central        48       55
+   Atq Alta           20       18
+   Atq Rápida         42       40
+   Transición         34       33
 
-Es el mismo problema que venimos arrastrando: la misma funcion escrita en
-varios lados. Esta vez las busque TODAS antes de tocar: ahora no queda
-ninguna comparacion contra el equipo en todo el sistema.
+Fijate el saque: decia "obj 3%" cuando el objetivo real es 42. Por eso todos
+los jugadores aparecian en verde con la barra llena: le ganaban a un
+objetivo que no existia.
+
+CORREGIDO: ahora los lee de objetivos_config.js, que es donde vos los
+editas. Cambias el objetivo en el panel y el ranking se actualiza solo.
+
+Si algun dia la configuracion no carga, el fundamento queda SIN objetivo en
+vez de mostrar uno inventado.
+
+Revise el resto de las pantallas: era la unica que los tenia propios.
 
 
-LA LEYENDA TAMBIEN MENTIA
--------------------------
-Arriba decia "Sobre equipo · Cerca · Neutro · Bajo equipo", que era coherente
-con el criterio viejo. Ahora dice lo mismo que el resto:
+2) LO QUE YA TE HABIA MANDADO Y VA DE NUEVO
+-------------------------------------------
+   baterias_engine.py    el motor de la pantalla de liga, que no llego.
+                         Sin esto nla_stats.json sigue con "saque -2".
 
-   Objetivo · Cerca · Neutro · Lejos
+   dashboard · analisis · jugador · panel_voley
+                         las 8 copias locales que pisaban al archivo
+                         compartido, eliminadas.
 
 
-COMO VA A QUEDAR
-----------------
-Las dos filas —jugador y equipo— con el MISMO numero abajo:
+DESPUES DE ESTO
+---------------
+Un solo lugar para los objetivos: objetivos_config.js
+Una sola formula por fundamento: la misma en los 5 motores
+Una sola copia de cada funcion compartida en las pantallas que la cargan
 
-   % SAQUE      jugador 38%   obj 42        equipo 39%   obj 42
-   % RECEPCION  jugador 55%   obj 60        equipo 53%   obj 60
-   % DEFENSA    jugador 39%   obj 60        equipo 50%   obj 60
-
-Y el color del jugador ya dice si llego al objetivo, no si le gano a sus
-companeros.
+Es lo que veniamos buscando: tocar un archivo y que valga para todo.

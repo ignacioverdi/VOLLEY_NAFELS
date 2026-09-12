@@ -404,7 +404,18 @@ function effColor(v, meta){
   }
   return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#f97316':'#ef4444';
 }
-function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
+/* ══ ESTA FUNCION VIVE EN objetivos_config.js ═══════════════════
+   Habia una copia local aca que PISABA a la compartida, porque se define
+   despues. Eso significa que corregir la compartida no tenia efecto en esta
+   pantalla: habia que acordarse de tocar las dos.
+
+   Nos paso varias veces: el semaforo, el color del numero, el tamaño de las
+   baterias y el objetivo del jugador. Cada vez se arreglaba en un lado y
+   seguia mal en el otro.
+
+   La copia local se quita. Si esta pantalla necesita algo distinto, se hace
+   un cambio en la compartida y vale para todas. */
+
 
 // ── Acumular jugadores de múltiples sesiones ─────────────────
 function acumJugadores(sesiones){
@@ -540,10 +551,7 @@ function renderObjetivosJugador(cid,nombre,extra){
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
     +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">MI PERFORMANCE VS EQUIPO</div>'
     +'<div style="display:flex;gap:10px;flex-wrap:wrap">'
-    /* La leyenda decia "Sobre equipo" / "Bajo equipo" porque el jugador se
-       comparaba contra su propio equipo. Ahora se compara contra el objetivo,
-       igual que la fila del equipo, asi que dice lo mismo que las demas. */
-    +[['#22c55e','Objetivo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Lejos']].map(function(x){
+    +[['#22c55e','Sobre equipo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Bajo equipo']].map(function(x){
       return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
     }).join('')+'</div></div>'
     +'<div style="display:flex;gap:8px;width:100%;margin-bottom:4px">'
@@ -557,22 +565,9 @@ function renderObjetivosJugador(cid,nombre,extra){
         var m=metas[id],val=row.vals[id]!==undefined?row.vals[id]:null;
         var cls,objLine;
         if(row.isJug){
-          /* ══ EL OBJETIVO ES UNO SOLO, EL DEL EQUIPO ═══════════════════════════════
-             Antes al jugador se lo comparaba contra el promedio de SU EQUIPO DE
-             ESE DIA. Por eso el objetivo del jugador CAMBIABA todos los dias: si
-             el equipo recibia bien, la vara subia; si recibia mal, bajaba.
-
-             Eso rompe la idea de objetivo. El objetivo lo fija el cuerpo tecnico
-             una vez y no se mueve, pase lo que pase en un entrenamiento suelto.
-
-             Y traia un problema peor: un jugador podia estar "sobre el equipo" y
-             aun asi lejos del objetivo. El verde decia que estaba bien cuando no
-             lo estaba.
-
-             Ahora las dos filas, jugador y equipo, se miden contra el MISMO
-             objetivo. */
-          cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
-          objLine=m.obj;
+          var eq=eqVals[id]!==undefined?eqVals[id]:null;
+          cls=val!==null?objClassifyVsTeam(val,eq):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+          objLine=eq!==null?eq:m.obj;
         } else {
           cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
           objLine=m.obj;

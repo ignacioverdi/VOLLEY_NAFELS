@@ -173,8 +173,18 @@ def to_pcts(P):
     def atk(d): return round((d['#']-d['/']-d['='])/d['T']*100) if d['T'] else None
     S=P['S']; R=P['R']; B=P['B']
     return {
-        'sq':    round((S['#']+0.5*S['/']+0.25*S['+']-S['='])/S['T']*100) if S['T'] else None,
-        'rec':   round((R['#']+0.5*R['+']-0.5*R['/']-R['='])/R['T']*100) if R['T'] else None,
+        'sq':    (round((S['#']*100 + S['/']*87.5 + S['+']*75 + S['!']*50 + S['-']*25)/S['T'])
+                  if S['T'] else None),
+        # SAQUE en la escala 0-100 del sistema:
+        #   # ace 100 · / free ball 87,5 · + positivo 75 · ! neutro 50 · - negativo 25 · = error 0
+        # Antes este motor tenia su PROPIA formula, distinta de la de las
+        # baterias, y es el que alimenta la pantalla de estadisticas de la
+        # liga. Por eso ahi se veian numeros negativos que no coincidian con
+        # nada del resto del sistema.
+        'rec':   (round((R['#']*100 + R['+']*75 + R['!']*50 + R['-']*25 + R['/']*12.5)/R['T'])
+                  if R['T'] else None),
+        # RECEPCION en la escala 0-100:
+        #   # 100 · + 75 · ! 50 · - 25 · / 12,5 · = 0
         'bqpos': round((B['#']+B['+'])/B['T']*100) if B['T'] else None,
         'bqpt':  round(B['#']/B['T']*100) if B['T'] else None,
         'atk':   atk(P['Aall']) if 'Aall' in P else None,

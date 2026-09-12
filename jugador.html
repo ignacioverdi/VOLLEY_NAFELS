@@ -372,7 +372,18 @@ function objGetVals(nombre){
 
 // ── Helpers de dibujo de las baterías ──
 /* objPct: tambien vive en objetivos_config.js */
-function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
+/* ══ ESTA FUNCION VIVE EN objetivos_config.js ═══════════════════
+   Habia una copia local aca que PISABA a la compartida, porque se define
+   despues. Eso significa que corregir la compartida no tenia efecto en esta
+   pantalla: habia que acordarse de tocar las dos.
+
+   Nos paso varias veces: el semaforo, el color del numero, el tamaño de las
+   baterias y el objetivo del jugador. Cada vez se arreglaba en un lado y
+   seguia mal en el otro.
+
+   La copia local se quita. Si esta pantalla necesita algo distinto, se hace
+   un cambio en la compartida y vale para todas. */
+
 /* objSingleBat: tambien vive en objetivos_config.js */
 
 // ── Render de las 2 filas (jugador + equipo) ──
