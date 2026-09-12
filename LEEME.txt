@@ -1,55 +1,82 @@
-LOS DOS ERRORES, DE RAIZ
-========================
+LA APP APRENDE A LEER EL PUESTO
+===============================
 
-2 archivos. HACER_TODO y publicar.
+3 archivos. HACER_TODO y publicar.
 
+   clasificador.py                    <- NUEVO, a la raiz
    gen_plan_partido.py
    update_db_entrenamientos_nafels.py
 
 
-1) EL #4 SIN APELLIDO — habia DOS errores en la misma funcion
--------------------------------------------------------------
-Fui a la funcion que lee el plantel de cada .dvw y encontre esto:
+TENIAS RAZON: LA COMBINACION DEFINE EL PUESTO
+---------------------------------------------
+Cada combinacion es una jugada concreta, y cada jugada la hace un puesto.
+No es una tendencia: es como se llama la pelota.
 
-   pm={'1':'OH','2':'OPP','3':'MB','4':'S','5':'OH'}
+Conte 1.018 ataques de jugadores de los que SI sabemos el puesto —Näfels y
+cinco equipos de la liga— y arme la tabla con el dato, no a ojo:
 
-LA TABLA DE PUESTOS ESTABA CORRIDA. En DataVolley la columna 13 es:
+   combo  usos  puesto     seguridad     combo  usos  puesto    seguridad
+   J1       63  CENTRAL      100%        W2       67  OPUESTO     84%
+   J2       32  CENTRAL       97%        G2       48  OPUESTO     90%
+   J4       19  CENTRAL      100%        X6       44  OPUESTO     93%
+   X7       30  CENTRAL      100%        X8       27  OPUESTO     96%
+   X1       19  CENTRAL       89%        Y9       56  OPUESTO     77%
+   W4      167  PUNTA         97%        G9       15  OPUESTO     80%
+   G4      128  PUNTA         98%        V6       20  OPUESTO     75%
+   X5       90  PUNTA         87%        JJ       15  ARMADOR    100%
+   V5       48  PUNTA         92%
+   Y8       32  PUNTA        100%
+   Y1       14  PUNTA        100%
+   XP       13  PUNTA        100%
 
-   1 libero · 2 punta · 3 opuesto · 4 central · 5 armador
+Se lee solo: las J son primer tiempo (central), las que terminan en 4 son de
+zona 4 (punta), las que terminan en 2 son de zona 2 (opuesto), y JJ es el
+armador atacando el segundo toque.
 
-y el codigo traducia 1 como punta, 2 como opuesto, 3 como central, 4 como
-armador. Todo un lugar corrido.
-
-Por eso en la base DURDOS (punta) figuraba como LIBERO y STEIMANN (armador)
-como PUNTA. Corregido.
-
-Y el nombre vacio: si el .dvw no trae el apellido, ahora se toma del plantel
-maestro en vez de dejarlo en blanco. El #4 ya no puede quedar sin nombre,
-pase lo que pase con el archivo.
-
-
-2) EL #6 Y EL #8 EN DIRECCIONES DE ATAQUE
------------------------------------------
-Ahora el plan muestra SOLO a los jugadores del plantel.
-
-   #8  es la maquina de saque
-   #6  fue un invitado de un dia
-
-Sus acciones siguen en la base —existieron— pero no aparecen entre los
-puntas ni los centrales del equipo: no son del plantel y deforman el
-acumulado de cada puesto.
-
-El filtro usa plantel_nafels.js, que es la fuente unica. Si manana ese
-invitado se suma al equipo, lo agregas ahi y aparece solo. No hay que tocar
-codigo.
-
-Y solo filtra NUESTRO equipo: de los rivales se sigue mostrando todo,
-porque de ellos no tenemos plantel cargado.
+PR quedo AFUERA a proposito: 53% de seguridad, la usan todos. Una
+combinacion que no distingue no sirve, y meterla ensuciaria el resto.
 
 
-UNA COSA QUE NOTE
------------------
-En plantel_nafels.js el #7 figura como "SCHMID R" y el #20 como "SCHMID J".
-Eso ya no hace falta: el sistema los distingue por numero y por nombre
-completo. Si queres, podes dejarlos como "SCHMID" a secas y se van a ver
-mas prolijos. No es urgente ni rompe nada como esta.
+EL ORDEN DE LAS SEÑALES
+-----------------------
+Va de la mas firme a la mas debil, para que una respuesta segura no quede
+tapada por una dudosa:
+
+   1. LIBERO       no saca NUNCA y no ataca NUNCA. Es regla de juego.
+   2. ARMADOR      arma 68-75 por partido contra 0-7 de los demas.
+   3. COMBINACION  la tabla de arriba. La señal mas directa.
+   4. PRIMER TIEMPO  73% de los ataques del central, 1% del punta, 0% del opuesto.
+   5. RECEPCION    separa punta de opuesto: el opuesto recibe CERO.
+   6. BLOQUEO      lo que queda: el central vive en la red.
+
+
+PROBADO CONTRA 59 JUGADORES QUE SI SABEMOS
+------------------------------------------
+   Näfels, sin decirle NADA          12 de 12
+   Chênois Genève                     7 de 8
+   TSV Jona                           7 de 7
+   SCM Zalau                          9 de 9  (dos veces)
+   Volley Näfels (liga)               7 de 7  (dos veces)
+   ────────────────────────────────────────
+   RIVALES                           46 de 47    98%
+
+Y en 25 casos PREFIRIO NO OPINAR, porque habia menos de 3 ataques. Eso es a
+proposito: el vacio se nota y se corrige, un puesto inventado se toma por
+bueno. Antes, con un solo ataque y un solo bloqueo, decia "central".
+
+EL UNICO QUE FALLA es discutible: el #4 de Chênois hizo 21 ataques y NINGUNO
+en primer tiempo —todos Y9, W2, G9, de zona 2—. Su archivo dice central,
+pero jugo como opuesto. Puede ser un error del scout de ellos.
+
+
+COMO SE USA
+-----------
+No hay que hacer nada. El orden es:
+
+   1. el puesto del PLANTEL, si es nuestro equipo
+   2. el puesto que DECLARA el .dvw
+   3. la DEDUCCION, si los dos anteriores faltan
+
+Si manana llega un equipo nuevo sin plantel ni puestos declarados, lo
+resuelve solo.

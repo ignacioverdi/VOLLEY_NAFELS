@@ -587,6 +587,21 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
         # La deduccion sigue abajo, para los archivos que NO declaran el
         # puesto —los que se bajan de VolleyMetrics vienen asi—.
         _dec = (D.get('rol') or {}).get(num, '')
+
+        # ══ SI EL ARCHIVO NO DECLARA EL PUESTO, SE DEDUCE ═════════════════
+        # De los rivales no tenemos plantel, y sus .dvw muchas veces traen la
+        # columna del puesto vacia. Antes se caia a una deduccion pobre que
+        # solo miraba combinaciones de ataque y etiquetaba a casi todos como
+        # centrales.
+        #
+        # Ahora hay un clasificador que lee TODO lo que hace el jugador. Se
+        # valido contra 60 jugadores de los que si sabemos el puesto:
+        #     Näfels, sin decirle nada    12 de 12
+        #     equipos rivales             46 de 48   (96%)
+        if not _dec:
+            _dd = (D.get('puestos_deducidos') or {}).get(num, '')
+            if _dd:
+                _dec = _dd
         if _dec:
             return {'LIBERO':'L\u00edbero', 'ARMADOR':'Armador',
                     'CENTRAL':'Central', 'OPUESTO':'Opuesto',
@@ -615,6 +630,21 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
     PP={}
     for slug,D in DATA.items():
         D['lib_set']=set(D['lib'])
+        # Las deducciones se calculan UNA vez por equipo, a partir de todas
+        # sus acciones, y quedan disponibles para classify().
+        try:
+            from clasificador import deducir_puestos as _deducir
+            _acc = []
+            for _n, _lst in (D.get('atk') or {}).items():
+                for _a in _lst: _acc.append({'num':_n,'skill':'A','tipo':(_a[6] if len(_a)>6 else ''),'combo':(_a[0] if _a else '')})
+            for _clave, _sk in (('srv','S'), ('rec','R'), ('dig','D')):
+                for _n, _lst in (D.get(_clave) or {}).items():
+                    for _ in _lst: _acc.append({'num':_n,'skill':_sk})
+            for _n, _v in (D.get('set') or {}).items():
+                for _ in range(int(_v or 0)): _acc.append({'num':_n,'skill':'E'})
+            D['puestos_deducidos'] = _deducir(_acc, D.get('rol') or {})
+        except Exception as _e:
+            D['puestos_deducidos'] = {}
         pos={int(n):classify(D,int(n)) for n in D['names']}
         def cnt(kind,num): return len(D[kind].get(str(num),[]))
         # ── SIN MINIMOS NI TOPES ──────────────────────────────────────────

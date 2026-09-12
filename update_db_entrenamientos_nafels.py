@@ -308,6 +308,25 @@ def get_teams(lines):
     return (tl[0][1].strip() if tl else ''), (tl[1][1].strip() if len(tl)>1 else '')
 
 
+
+def _es_nuestro_club(nombre):
+    """Si este nombre de equipo es el club del sistema."""
+    if not nombre:
+        return False
+    import unicodedata as _u, re as _r
+    def _p(x):
+        x = _u.normalize('NFKD', x or '').encode('ascii','ignore').decode()
+        return _r.sub(r'[^a-z0-9]', '', x.lower())
+    try:
+        import config_club as _cc
+        clave = _p(_cc.club())
+    except Exception:
+        clave = ''
+    if not clave:
+        clave = 'nafels'
+    n = _p(nombre)
+    return bool(clave) and (clave in n or n in clave)
+
 def _plantel_maestro():
     """El plantel del club, leido de plantel_<club>.js.
 
@@ -335,7 +354,10 @@ def _plantel_maestro():
     _PM_CACHE = out
     return out
 
-def get_players(lines, section):
+def get_players(lines, section, equipo=None):
+    # 'equipo' sirve para saber si es NUESTRO club: solo a los nuestros se
+    # les aplica el plantel maestro. De los rivales se lee el .dvw tal cual.
+    _es_nuestro = _es_nuestro_club(equipo)
     in_sec=False; players={}
     for line in lines:
         l=line.strip()
@@ -363,11 +385,27 @@ def get_players(lines, section):
                 # club. Antes quedaba vacio y el jugador aparecia sin nombre
                 # —el armador #4 salia en blanco en Distribucion del armador—.
                 nom = f"{last} {first}".strip()
-                if not nom:
-                    _m = _plantel_maestro().get(num)
-                    if _m:
-                        nom = _m['nombre']; last = _m['apellido']
-                        if pos == '?': pos = _m['pos']
+
+                # ══ PARA NUESTRO CLUB MANDA EL PLANTEL MAESTRO ═════════════
+                # El puesto salia del .dvw, y eso trae dos problemas:
+                #
+                #   1. En los partidos de LIGA el mismo numero es otro
+                #      jugador. El #1 es libero en Amriswil y en Schonenwerd,
+                #      y esa marca terminaba pisando el puesto de DURDOS, que
+                #      es PUNTA. En la base figuraba como LIBERO.
+                #
+                #   2. Un scout apurado puede dejar la columna vacia o poner
+                #      cualquier cosa, y el error queda guardado para siempre.
+                #
+                # plantel_<club>.js es la FUENTE UNICA: ahi estan el apellido,
+                # el nombre y el puesto reales de cada jugador del equipo. Para
+                # NUESTROS jugadores se usa ese, siempre. De los rivales se
+                # sigue leyendo el .dvw, que es lo unico que tenemos.
+                _m = _plantel_maestro().get(num) if _es_nuestro else None
+                if _m:
+                    nom  = _m['nombre']
+                    last = _m['apellido']
+                    pos  = _m['pos']
                 players[num]={'name':nom,'apellido':last,'pos':pos,'num':num}
             except: pass
     return players
@@ -522,7 +560,7 @@ def parse_dvw_both(fpath, temporada):
             # mismos, ya tomados en la primera vuelta.
             continue
         if not team: continue
-        players = get_players(lines, section)
+        players = get_players(lines, section, team)
         rival = away if pfx=='*' else home
         # En un entrenamiento no hay rival: los dos lados son el club. El
         # scout puede haber escrito cualquier cosa en el casillero del
@@ -1922,7 +1960,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         _home_e, _away_e = get_teams(lines)
         _ENTREN_MISMO = norm(_home_e).strip().upper() == norm(_away_e).strip().upper()
         section = '[3PLAYERS-H]' if team_home else '[3PLAYERS-V]'
-        players = get_players(lines, section)
+        players = get_players(lines, section, team_name)
 
         idx = content.find('[3SCOUT]\n')
         scout = content[idx+9:content.find('\n[3',idx+9)].strip().split('\n')
