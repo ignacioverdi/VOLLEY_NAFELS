@@ -1,77 +1,58 @@
-LA VENTANITA, CON LA CUENTA A LA VISTA
-======================================
+LA VENTANITA SABE A QUIEN TOCASTE
+=================================
 
-2 archivos. HACER_TODO y publicar.
-REEMPLAZA al zip anterior.
+6 archivos. Publicar y Ctrl+Shift+R. Sin HACER_TODO.
 
 
-LO QUE FALTABA
+EL ERROR — era mio y era grave
+------------------------------
+Tocabas la bateria de un jugador y la ventana mostraba los numeros del
+EQUIPO. Y tampoco distinguia si estabas viendo el acumulado, un
+entrenamiento suelto o un partido.
+
+La causa: cuando armaba la bateria yo guardaba QUE fundamento era, pero no
+DE QUE FILA salia. Asi que al abrirla iba a buscar los valores por su cuenta
+y traia siempre los del equipo.
+
+Lo absurdo es que el dato correcto ya estaba ahi: la pantalla usa los
+valores de cada fila para pintar la bateria. Solo faltaba pasarlos.
+
+
+LO QUE SE HIZO
 --------------
-Tenias razon en las dos cosas:
+Ahora cada bateria lleva consigo:
 
-   1. NO SE VEIA COMO SE LLEGA AL NUMERO. La cuenta estaba plegada detras de
-      un "ver la cuenta completa". Pero esa es la PRIMERA pregunta que se
-      hace el jugador, no la ultima. Ahora esta a la vista.
+   los valores de SU fila        el jugador o el equipo
+   de que sesion son            acumulado, entrenamiento o partido
+   y una etiqueta que lo dice    arriba de todo, en verde
 
-   2. FALTABA EL SIGNO. Yo mostraba "Perfecta", "Positiva". Pero el jugador
-      ve # y + en el video y en la planilla. Sin el signo son dos idiomas
-      distintos.
-
-
-ASI QUEDA
+Asi que si tocas la bateria de recepcion de Bartholet en el entrenamiento
+del 11/09, la ventana dice:
 
    ┌────────────────────────────────────────┐
+   │  JUGADOR · ENTRENAMIENTOS · 11/09/26   │  <- nuevo
    │  RECEPCIÓN                        55%  │
    │  158 pelotas · objetivo 60             │
-   ├────────────────────────────────────────┤
-   │  ████████░░░░░░░▓▓▓▓▒░▓▓               │
-   │                                        │
-   │  TUS 158 PELOTAS          de cada 10   │
-   │   #  Perfecta        27      2 de 10   │
-   │   +  Positiva        45      3 de 10   │
-   │   !  Suficiente      40      3 de 10   │
-   │   -  Pobre           23      1 de 10   │
-   │   /  Sobrepase        5    0.3 de 10   │
-   │   =  Error           18      1 de 10   │
-   │                                        │
-   │  ┌──────────────────────────────────┐  │
-   │  │ CÓMO SE LLEGA A 55%              │  │
-   │  │ 27×100 + 45×75 + 40×50 +         │  │
-   │  │ 23×25 + 5×12,5 + 18×0            │  │
-   │  │ 8712 ÷ 158 = 55%                 │  │
-   │  └──────────────────────────────────┘  │
-   │                                        │
-   │  LO QUE MÁS TE CUESTA                  │
-   │   ■ 40 suficientes             −13     │
-   │   ■ 18 errores                 −11     │
-   │                                        │
-   │  ┌──────────────────────────────────┐  │
-   │  │ Para llegar a 60                 │  │
-   │  │ • convertir 16 errores en        │  │
-   │  │   suficientes                    │  │
-   │  └──────────────────────────────────┘  │
-   │                                        │
-   │  Cada pelota vale según cómo quedó:    │
-   │  # vale 100 · + vale 75 · ! vale 50 ·  │
-   │  - vale 25 · / vale 12,5 · = vale 0    │
-   │                                        │
-   │  ┌──────────────────────────────────┐  │
-   │  │              Cerrar              │  │
-   │  └──────────────────────────────────┘  │
    └────────────────────────────────────────┘
 
-Datos REALES del #11 Bartholet.
+Y si tocas la del equipo:
+
+   ┌────────────────────────────────────────┐
+   │  EQUIPO · ENTRENAMIENTOS               │
+   │  RECEPCIÓN                        53%  │
+   │  1362 pelotas · objetivo 60            │
+   └────────────────────────────────────────┘
+
+Ya no hay forma de confundirse: la ventana dice de quien es y de que
+sesion, y los numeros son los que se estan viendo en la pantalla.
 
 
-EL SIGNO VA EN UN CUADRITO DE COLOR
------------------------------------
-Del mismo color que su parte en la barra de arriba. Asi el jugador une las
-tres cosas de un vistazo: el signo que conoce del video, el pedazo de barra
-que ocupa, y cuantas fueron.
+POR QUE SON 6 ARCHIVOS
+----------------------
+Porque cada pantalla arma sus filas por su cuenta —eso ya lo sabemos— asi
+que hay que marcarlas en las seis. Esta vez las toque TODAS de una, no de a
+una como venia haciendo.
 
-
-LA LEYENDA NO ESTA ESCRITA A MANO
----------------------------------
-"# vale 100 · + vale 75..." se arma con la MISMA tabla que hace la cuenta.
-Si algun dia cambiamos la escala, ese texto cambia solo. No puede quedar
-desactualizado.
+   objetivos_config.js   la ventana y la logica
+   objetivos.js · dashboard · panel_voley · analisis · jugador
+                         cada una marca sus filas

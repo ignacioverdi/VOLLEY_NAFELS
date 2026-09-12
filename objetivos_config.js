@@ -392,7 +392,13 @@ function renderObjetivos(cid,extra){
       /* El total de acciones viaja con la meta: es lo que permite leer bien el
          numero. Un 40% de 5 acciones y un 20% de 238 no valen lo mismo. */
       try{ if(vals['n_'+id]!=null) m=Object.assign({},m,{n:vals['n_'+id]}); }catch(e){}
-      return objSingleBat(id,val,m,cls,m.obj);
+            /* De que fila es esta bateria: el jugador o el equipo, y que sesion
+         se esta viendo. Viaja con la meta para que la ventanita lo muestre. */
+      try{ var _q = (row && row.label) ? String(row.label) : '';
+           var _s = (typeof objNombreSesion === 'function') ? objNombreSesion() : '';
+           _m = Object.assign({}, m, {__fila: _q + (_s ? ' \u00b7 ' + _s : '')});
+      }catch(e){ _m = m; }
+            return objSingleBat(id,val,_m,cls,m.obj);
     }).join('')+'</div></div>';
   el.innerHTML=html;
 }
@@ -441,6 +447,38 @@ var OBJ_DETALLE = {
 
 
 /* El plural en castellano: "error" -> "errores", "positiva" -> "positivas". */
+
+/* ══ QUE SESION SE ESTA VIENDO ══════════════════════════════════════════════
+   La ventanita tiene que decir de donde salen los numeros: del acumulado, de
+   un entrenamiento suelto o de un partido. Sin eso el jugador ve "53%" y no
+   sabe si es de hoy o de toda la temporada.
+
+   Cada pantalla guarda esa eleccion en un lugar distinto —el selector de
+   sesion, el boton PARTIDO/ENTRENAMIENTO—, asi que se leen los que existen y
+   se arma una etiqueta corta. */
+function objNombreSesion(){
+  try{
+    var partes = [];
+
+    /* partido o entrenamiento */
+    var t = null;
+    try{ t = window._objTipo || (typeof ppTipoActual==='function' ? ppTipoActual() : null); }catch(e){}
+    if(t === 'P' || t === 'partido')       partes.push('Partidos');
+    else if(t === 'E' || t === 'entrenamiento') partes.push('Entrenamientos');
+
+    /* la sesion elegida en el desplegable */
+    var sel = document.getElementById('objSesion') || document.getElementById('_dbatSel')
+           || document.getElementById('batSel')    || document.getElementById('sesionSel');
+    if(sel && sel.options && sel.selectedIndex >= 0){
+      var txt = (sel.options[sel.selectedIndex].text || '').trim();
+      /* el acumulado ya se entiende con "Partidos"/"Entrenamientos" */
+      if(txt && !/^(acumulado|cumulative|gesamt)/i.test(txt)) partes.push(txt);
+      else if(!partes.length) partes.push(txt);
+    }
+    return partes.join(' \u00b7 ');
+  }catch(e){ return ''; }
+}
+
 function objPlural(p, n){
   p = String(p||'').toLowerCase();
   if(n === 1) return p;
@@ -452,11 +490,12 @@ function objTocarBat(mid){
   try{
     var d = (window.__objMeta||{})[mid];
     if(!d) return;
-    var vals = null;
-    try{ if(typeof objGetVals === 'function') vals = objGetVals(window.__objJugActual || null); }catch(e){}
-    if(!vals){ try{ vals = window.__objValsActuales || null; }catch(e){} }
+    /* Los valores vienen guardados con la bateria: son los de SU fila y los
+       de la sesion que esta elegida. No se adivinan. */
+    var vals = d.vals;
     if(!vals && d.meta && d.meta.vals) vals = d.meta.vals;
-    objAbrirDetalle(d.id, vals || {}, d.meta);
+    if(!vals){ try{ if(typeof objGetVals === 'function') vals = objGetVals(null); }catch(e){} }
+    objAbrirDetalle(d.id, vals || {}, d.meta, d.quien);
   }catch(e){}
 }
 
@@ -475,7 +514,7 @@ function objVerCuenta(){
   if(b) b.textContent = ab ? 'ocultar la cuenta' : 'ver la cuenta completa';
 }
 
-function objAbrirDetalle(id, vals, meta){
+function objAbrirDetalle(id, vals, meta, quien){
   objCerrarDetalle();
   var cfg = OBJ_DETALLE[id];
   var D   = cfg ? (vals && vals[cfg.d]) : null;
@@ -665,14 +704,20 @@ function objAbrirDetalle(id, vals, meta){
       + cfg.filas.map(function(f){ return f[4]+' vale '+String(f[2]).replace('.',','); }).join(' \u00b7 ')
       + '. El resultado es el promedio.</div>');
 
-  objPintarDetalle(nombre, obj, cuerpo, val, total, cfg.pl);
+  objPintarDetalle(nombre, obj, cuerpo, val, total, cfg.pl, quien);
 }
 
-function objPintarDetalle(nombre, obj, cuerpo, val, total, pl){
+function objPintarDetalle(nombre, obj, cuerpo, val, total, pl, quien){
   var cab = ''
    + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;'
    +      'padding:12px 14px;border-bottom:1px solid rgba(148,163,184,.16)">'
    +   '<div>'
+   /* ══ DE QUIEN Y DE QUE SESION ══════════════════════════════════════
+      Antes la ventana no lo decia. Si tocabas la bateria de un jugador y
+      veias numeros, no habia forma de estar seguro de que fueran suyos y
+      no del equipo. Ahora lo dice arriba, junto al fundamento. */
+   +     (quien ? '<div style="font-size:10px;font-weight:800;letter-spacing:.8px;'
+   +          'color:#22c55e;text-transform:uppercase;margin-bottom:1px">'+quien+'</div>' : '')
    +     '<div style="font-size:13px;font-weight:800;letter-spacing:.6px;color:#e2e8f0;'
    +          'text-transform:uppercase">'+nombre+'</div>'
    +     (total!=null
@@ -708,7 +753,15 @@ function objPintarDetalle(nombre, obj, cuerpo, val, total, pl){
   document.addEventListener('keydown', objEscDetalle);
 }
 
-function objSingleBat(id,val,meta,cls,objLine){
+function objSingleBat(id,val,meta,cls,objLine,vals){
+  /* ══ 'vals' ES EL DATO DE ESTA FILA ══════════════════════════════════════
+     Sin esto la ventanita mostraba SIEMPRE los numeros del equipo, aunque
+     tocaras la bateria de un jugador. Y tampoco distinguia si estabas viendo
+     el acumulado, un entrenamiento o un partido.
+
+     La pantalla ya tiene los valores correctos de cada fila —los usa para
+     pintar la bateria—; lo unico que faltaba era pasarlos. Ahora viajan con
+     la bateria y la ventana muestra exactamente lo que se esta viendo. */
   /* ══ UNA SOLA VERSION, IGUAL EN TODOS LADOS ═══════════════════════════════
      Habia CINCO copias de esta funcion y CUATRO eran distintas entre si:
      algunas con el nombre del fundamento, otras sin el; algunas con el total
@@ -736,7 +789,8 @@ function objSingleBat(id,val,meta,cls,objLine){
   }catch(e){}
   /* La bateria se toca y se abre el detalle. */
   var _mid = 'b'+id+'_'+Math.random().toString(36).slice(2,8);
-  try{ window.__objMeta = window.__objMeta || {}; window.__objMeta[_mid] = {id:id, meta:meta}; }catch(e){}
+  try{ window.__objMeta = window.__objMeta || {}; window.__objMeta[_mid] = {id:id, meta:meta, vals:vals||null,
+      quien:(meta&&meta.__fila)||null}; }catch(e){}
   return '<div id="'+_mid+'" title="'+tip+'" onclick="objTocarBat(\''+_mid+'\')" '
     + 'style="flex:1;min-width:60px;max-width:110px;display:flex;cursor:pointer;'
     + 'flex-direction:column;align-items:center;gap:3px;padding:7px 3px 6px;'

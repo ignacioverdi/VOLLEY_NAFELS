@@ -429,7 +429,13 @@ function renderObjetivosJugador(cid, jugVals, eqVals){
           cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
           objLine=m.obj;
         }
-        return objSingleBat(id,val,m,cls,objLine);
+                /* De que fila es esta bateria: el jugador o el equipo, y que sesion
+           se esta viendo. Viaja con la meta para que la ventanita lo muestre. */
+        try{ var _q = (row && row.label) ? String(row.label) : '';
+             var _s = (typeof objNombreSesion === 'function') ? objNombreSesion() : '';
+             _m = Object.assign({}, m, {__fila: _q + (_s ? ' \u00b7 ' + _s : '')});
+        }catch(e){ _m = m; }
+                return objSingleBat(id,val,_m,cls,objLine,row.vals);
       }).join('')+'</div>';
   });
   html+='</div>';

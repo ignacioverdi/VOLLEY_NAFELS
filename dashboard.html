@@ -455,7 +455,13 @@ function dbatRender(cid, jugVals, eqVals){
           var _n = row.vals['n_'+id];
           if(_n!=null) _m = Object.assign({}, m, {n:_n});
         }catch(e){}
-        return objSingleBat(id,val,_m,cls,objLine);
+                /* De que fila es esta bateria: el jugador o el equipo, y que sesion
+           se esta viendo. Viaja con la meta para que la ventanita lo muestre. */
+        try{ var _q = (row && row.label) ? String(row.label) : '';
+             var _s = (typeof objNombreSesion === 'function') ? objNombreSesion() : '';
+             _m = Object.assign({}, m, {__fila: _q + (_s ? ' \u00b7 ' + _s : '')});
+        }catch(e){ _m = m; }
+                return objSingleBat(id,val,_m,cls,objLine,row.vals);
       }).join('')+'</div>';
   });
   html+='</div>';
