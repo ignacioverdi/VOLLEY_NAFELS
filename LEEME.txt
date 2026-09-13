@@ -1,57 +1,63 @@
-EL HEATMAP DE DEFENSA — LA CAUSA REAL
-=====================================
+ARMADO Y BLOQUEO — LAS DOS CAUSAS REALES
+========================================
 
-Un archivo: hm_defensa.html. Publicar y Ctrl+Shift+R.
-
-
-LO QUE ENCONTRE
----------------
-Todo lo que veniamos arreglando estaba bien puesto —los botones, la espera de
-los datos, el modo— pero NADA de eso corria. Y por fin entendi por que.
-
-Dentro del javascript hay una linea que arma el SVG de la cancha:
-
-    s+="<style>text{pointer-events:none}</style>";
-
-Alguien pego 40 lineas de CSS ADENTRO de esa cadena de texto:
-
-    s+="<style>text{pointer-events:none}
-    /* === ENCABEZADO: QUE NO SE ENCIME === */
-    .header, .topbar, .top-bar { flex-wrap: wrap; ... }
-    ...
-    </style>";
-
-Los saltos de linea CORTAN la cadena. En javascript una cadena no puede
-ocupar varias lineas, asi que el bloque ENTERO deja de compilar.
-
-Resultado: el script de la pantalla nunca corria. Ni la lista de jugadores,
-ni el mapa, ni el modo. Ni en partido ni en entrenamiento.
-
-Por eso todo lo que agregabamos parecia no hacer nada: el codigo estaba ahi,
-pero el navegador lo descartaba entero antes de leerlo.
+2 archivos. Publicar y Ctrl+Shift+R.
 
 
-LO QUE HICE
------------
-Saque el CSS de adentro de la cadena y lo puse en la hoja de estilos de la
-pagina, que es su lugar. El CSS se conserva igual —arregla el encabezado
-cuando el titulo es largo— solo que ahora esta donde corresponde.
-
-La linea vuelve a ser una sola:
-
-    s+="<style>text{pointer-events:none}</style>";
-
-VERIFICADO: los 4 bloques de javascript compilan. Antes uno no.
+DEFENSA YA ANDA — lo verifique
+------------------------------
+   13 jugadores en el desplegable
+   #20 SCHMID (65) · #2 BRUDERER (50) · #4 VAZQUEZ (34) · ...
+   el mapa se dibuja: 65 defensas, 62 zonas pintadas
+   el boton PARTIDO / ENTRENAMIENTO cambia en las dos direcciones
+   en PARTIDO dice "0 partidos", que es correcto en la 26-27
 
 
-LO QUE DEBERIA PASAR AHORA
---------------------------
-Con el script corriendo, la pantalla arma la lista con los datos que ya
-estan:
+1) ARMADO — una llave de mas
+----------------------------
+Es el mismo tipo de problema que defensa, en otra forma. La linea 19 decia:
 
-    354 defensas de entrenamiento · 13 jugadores · 8 sesiones
+      }; }
+        ^ esta llave cerraba la funcion ANTES del return
 
-Y el boton ENTRENAMIENTO / PARTIDO funciona en las dos direcciones.
+Con el return afuera de la funcion, el bloque entero de javascript no
+compilaba. Y cuando un bloque no compila, el navegador lo descarta COMPLETO:
+no existia pintar, ni setModo, ni el desplegable de armadores.
 
-Revise las otras 5 pantallas de heatmap: este error de CSS dentro de una
-cadena solo estaba en defensa.
+Por eso la solapa ENTRENAMIENTO no hacia nada. El codigo estaba ahi, pero
+nunca llegaba a ejecutarse.
+
+VERIFICADO en la app: LIGA_DATA_ENT tiene los 2 armadores
+
+   VAZQUEZ Ezequiel (#4)  250 acciones
+   STEIMANN Yannik (#13)  158 acciones
+
+y en pantalla no aparecia ninguno.
+
+Corregido. Los 3 bloques compilan.
+
+
+2) BLOQUEO — faltaba llamar a una funcion
+-----------------------------------------
+El selector PARTIDO / ENTRENAMIENTO ya aparece —eso se arreglo— pero el
+desplegable de jugador seguia con "equipo completo" nada mas.
+
+Verifique en la app: EQ era 'nafels' y JUGADORES tenia los 13. El dato
+estaba. Lo que faltaba era llamar a rellenarJugadores(), que es la que llena
+el <select>. Yo llamaba a rellenarCombos y a pintar, pero no a esa.
+
+Corregido.
+
+
+LOS 6 HEATMAPS, VERIFICADOS
+---------------------------
+   armador     3 bloques   todos compilan
+   ataque      3 bloques   todos compilan
+   bloqueo     3 bloques   todos compilan
+   defensa     4 bloques   todos compilan
+   recepcion   3 bloques   todos compilan
+   saque       3 bloques   todos compilan
+
+Antes de hoy, defensa y armador tenian un bloque roto cada uno. Eran errores
+de sintaxis viejos, no de las traducciones: por eso esas dos pantallas nunca
+respondieron por mas que les agregaramos cosas.
