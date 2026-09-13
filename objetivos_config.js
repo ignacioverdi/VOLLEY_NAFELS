@@ -450,12 +450,6 @@ function fmtEff(v){
    tienen. */
 var OBJ_T = {
   en: {
-    '% Blq #+':'% Block #+',
-    '% Blq #':'% Block #',
-    '% Atq R#+':'% Atk after R#+',
-    '% Atq R!':'% Atk after R!',
-    '% Atq R-':'% Atk after R-',
-    '% Atq Transición':'% Atk in transition',
     'Objetivo':'Target',
     'Cerca':'Close',
     'Lejos':'Far',
@@ -530,12 +524,6 @@ var OBJ_T = {
     'El reproductor no está cargado en esta pantalla.':'The player is not loaded on this screen.'
   },
   de: {
-    '% Blq #+':'% Block #+',
-    '% Blq #':'% Block #',
-    '% Atq R#+':'% Angriff nach R#+',
-    '% Atq R!':'% Angriff nach R!',
-    '% Atq R-':'% Angriff nach R-',
-    '% Atq Transición':'% Angriff im Umschalten',
     'Objetivo':'Ziel',
     'Cerca':'Nah',
     'Lejos':'Weit',
@@ -771,12 +759,13 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
     + 'border-radius:8px;font-size:11.5px;color:#94a3b8;line-height:1.7">'
     + '<div style="font-size:10px;font-weight:800;letter-spacing:.7px;color:#64748b;'
     +      'text-transform:uppercase;margin-bottom:3px">'+ot('Cómo se llega a')+' '+Math.round(val)+'%</div>'
-    + '<b style="color:#86efac">'+P+'</b> puntos \u2212 <b style="color:#fb923c">'+B+'</b> bloqueados'
-    + ' \u2212 <b style="color:#f87171">'+E+'</b> errores = <b style="color:#cbd5e1">'+neto+'</b>'
+    + '<b style="color:#86efac">'+P+'</b> '+ot('puntos')+' \u2212 <b style="color:#fb923c">'+B+'</b> '+ot('bloqueados')
+    + ' \u2212 <b style="color:#f87171">'+E+'</b> '+ot('errores')+' = <b style="color:#cbd5e1">'+neto+'</b>'
     + '<br><b style="color:#cbd5e1">'+neto+'</b> \u00f7 <b style="color:#cbd5e1">'+T+'</b>'
     + ' = <b style="color:#e2e8f0;font-size:14px">'+Math.round(val)+'%</b>'
-    + '<div style="margin-top:5px;color:#64748b">No es un promedio como en recepción: es una RESTA. '
-    + 'Cuenta cuántos puntos netos deja cada ataque, por eso puede dar negativo.</div>'
+    + '<div style="margin-top:5px;color:#64748b">'
+    + ot('No es un promedio como en recepción: es una RESTA. Cuenta cuántos puntos netos deja cada ataque, por eso puede dar negativo.')
+    + '</div>'
     + '</div>';
 
   /* lo que cuesta */

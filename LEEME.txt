@@ -1,39 +1,39 @@
-LAS 6 ETIQUETAS QUE FALTABAN
-============================
+LAS DOS LINEAS DEL ATAQUE
+=========================
 
 Un archivo: objetivos_config.js. Publicar y Ctrl+Shift+R.
 
 
-LO QUE YA ANDA
---------------
-Verificado en la app:
+LO QUE YA QUEDO BIEN
+--------------------
+Las 24 baterias del dashboard, sin una palabra en castellano:
+
+   % Serve · % Reception · % Block #+ · % Block #
+   % Middle Atk · % High-ball Atk · % Quick Atk
+   % Atk after R#+ · % Atk after R! · % Atk after R-
+   % Atk in transition · % Defense
 
    globo:    % Serve: 39% out of 1159 actions · worst in the league 25%,
              best 42% · you are at 82% of the way there
    bateria:  % Serve  39%  1159 act.  tgt 42
    leyenda:  Target · Close · Neutral · Far
 
-   22 de las 24 baterias, completas en ingles.
+Y la ventanita de RECEPCION: cero castellano, revisada linea por linea.
 
 
 LO QUE FALTABA
 --------------
-Seis etiquetas no estaban en la tabla:
+Solo dos lineas, en la ventana del ATAQUE:
 
-   % Blq #+          % Atq R#+
-   % Blq #           % Atq R!
-   % Atq Transición  % Atq R-
+   5 puntos − 1 bloqueados − 5 errores = -1
+   No es un promedio como en recepción: es una RESTA...
 
-Las otras —Saque, Recepción, Defensa, Atq Central, Alta, Rápida— si estaban,
-por eso se traducian. Estas seis se me habian pasado.
+Estas dos ya te las habia corregido antes pero no entraron en el archivo
+publicado. Las aplique de nuevo sobre lo que hay arriba ahora.
 
+   [en]  5 points − 1 blocked − 5 errors = -1
+         This is not an average like reception: it is a SUBTRACTION...
 
-COMO QUEDAN
------------
-   [en]  % Block #+ · % Block # · % Atk after R#+ · % Atk after R!
-         % Atk after R- · % Atk in transition
-
-   [de]  % Block #+ · % Block # · % Angriff nach R#+ · % Angriff nach R!
-         % Angriff nach R- · % Angriff im Umschalten
-
-Con estas, las 24 baterias del dashboard quedan traducidas.
+   [de]  5 Punkte − 1 geblockt − 5 Fehler = -1
+         Das ist kein Durchschnitt wie bei der Annahme, sondern eine
+         SUBTRAKTION...
