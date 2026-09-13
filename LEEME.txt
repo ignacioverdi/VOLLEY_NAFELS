@@ -1,57 +1,57 @@
-DOS COSAS QUE ENCONTRE AL CHEQUEAR
-==================================
+EL HEATMAP DE DEFENSA — LA CAUSA REAL
+=====================================
 
-Publicar todo junto y Ctrl+Shift+R.
-
-
-1) METI UN <span> DENTRO DEL <title>  — error mio, se veia feo
---------------------------------------------------------------
-La pestaña del navegador mostraba esto:
-
-   <span data-t="ANALISIS DE DEFENSA...">ANALISIS DE DEFENSA...</span>
-
-Al marcar los textos envolvi TODO en <span>, incluido lo que va dentro de
-<title>, <option> y <textarea>. Esas etiquetas no admiten HTML adentro: se ve
-el codigo crudo.
-
-Estaban asi 42 archivos. Corregido: en esos tres casos el data-t va EN la
-etiqueta, no adentro:
-
-   antes:  <title><span data-t="X">X</span></title>
-   ahora:  <title data-t="X">X</title>
-
-Verificado: 0 titulos con span adentro.
+Un archivo: hm_defensa.html. Publicar y Ctrl+Shift+R.
 
 
-2) DEFENSA SEGUIA SIN JUGADORES
--------------------------------
-Los botones ya estaban y el modo quedaba en entrenamiento, pero el
-desplegable seguia vacio.
+LO QUE ENCONTRE
+---------------
+Todo lo que veniamos arreglando estaba bien puesto —los botones, la espera de
+los datos, el modo— pero NADA de eso corria. Y por fin entendi por que.
 
-La causa: el bloque de codigo corria apenas se leia, y los archivos cifrados
-(datos_video_ent_*.js.enc) todavia no habian terminado de descifrarse. Con
-VIDEO_DATA_ENT vacio, la lista quedaba en cero.
+Dentro del javascript hay una linea que arma el SVG de la cancha:
 
-LO VERIFIQUE EN LA APP: corri el mismo filtro a mano, despues de que cargaran
-los datos, y dio:
+    s+="<style>text{pointer-events:none}</style>";
 
-   354 defensas · 13 jugadores · 8 sesiones
+Alguien pego 40 lineas de CSS ADENTRO de esa cadena de texto:
 
-O sea que el dato estaba y el codigo llegaba antes. Es el mismo problema que
-tenia bloqueo.
+    s+="<style>text{pointer-events:none}
+    /* === ENCABEZADO: QUE NO SE ENCIME === */
+    .header, .topbar, .top-bar { flex-wrap: wrap; ... }
+    ...
+    </style>";
 
-Ahora el bloque espera a que los datos existan, reintentando hasta 10
-segundos. Mismo arreglo que en bloqueo.
+Los saltos de linea CORTAN la cadena. En javascript una cadena no puede
+ocupar varias lineas, asi que el bloque ENTERO deja de compilar.
+
+Resultado: el script de la pantalla nunca corria. Ni la lista de jugadores,
+ni el mapa, ni el modo. Ni en partido ni en entrenamiento.
+
+Por eso todo lo que agregabamos parecia no hacer nada: el codigo estaba ahi,
+pero el navegador lo descartaba entero antes de leerlo.
 
 
-ESTADO DE LOS 6 HEATMAPS
-------------------------
-   armador      html OK · botones SI
-   ataque       html OK · botones SI
-   bloqueo      html OK · botones SI · espera los datos SI
-   defensa      html OK · botones SI · espera los datos SI
-   recepcion    html OK · botones SI
-   saque        html OK · botones SI
+LO QUE HICE
+-----------
+Saque el CSS de adentro de la cadena y lo puse en la hoja de estilos de la
+pagina, que es su lugar. El CSS se conserva igual —arregla el encabezado
+cuando el titulo es largo— solo que ahora esta donde corresponde.
 
-Armado, ataque, recepcion y saque no necesitan la espera: usan liga_data, que
-carga de otra forma. Si alguno apareciera vacio, decime y le pongo lo mismo.
+La linea vuelve a ser una sola:
+
+    s+="<style>text{pointer-events:none}</style>";
+
+VERIFICADO: los 4 bloques de javascript compilan. Antes uno no.
+
+
+LO QUE DEBERIA PASAR AHORA
+--------------------------
+Con el script corriendo, la pantalla arma la lista con los datos que ya
+estan:
+
+    354 defensas de entrenamiento · 13 jugadores · 8 sesiones
+
+Y el boton ENTRENAMIENTO / PARTIDO funciona en las dos direcciones.
+
+Revise las otras 5 pantallas de heatmap: este error de CSS dentro de una
+cadena solo estaba en defensa.
