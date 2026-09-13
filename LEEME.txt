@@ -1,66 +1,63 @@
-LA VENTANA DEL ATAQUE
-=====================
+LA VENTANITA, TRADUCIDA ENTERA
+==============================
 
 Un archivo: objetivos_config.js. Publicar y Ctrl+Shift+R.
 
 
-LA DE RECEPCION QUEDO PERFECTA
-------------------------------
-Lo verifique: CERO palabras en castellano.
+LO QUE YA ESTABA BIEN
+---------------------
+La ventana de RECEPCION quedo sin una palabra en castellano, y la del
+ATAQUE casi toda:
 
-   158 balls received · target 60
-   YOUR 158 BALLS RECEIVED         out of 10
-    #  Perfect    27   1.7 out of 10
-    +  Positive   45   2.8 out of 10
-    !  Fair       40   2.5 out of 10
-    -  Poor       23   1.5 out of 10
-    /  Overpass    5   0.3 out of 10
-    =  Error      18   1.1 out of 10
-   HOW YOU GET TO 55%
-   WHAT COSTS YOU MOST · 40 fairs −13 · 18 errors −11
-   To reach 60 · turn 16 errors into fairs
-   [Close]
+   HIGH-BALL ATK
+   21 high-ball attacks · target 18
+   Point · Still in play · Blocked · Error
+   WHAT YOU GIVE AWAY
+   6 of your 21 attacks end in a point for the opponent — they cost you 29 points.
+   To reach 18 · do not miss 5 of your 5 errors
 
 
-PERO LA DEL ATAQUE ESTABA EN CASTELLANO
----------------------------------------
-Fui a mirarla y encontre esto:
+LO QUE FALTABA
+--------------
+Dos lineas de la cuenta del ataque:
 
-   ATQ ALTA                                    <- castellano
-   5 puntos − 1 bloqueados − 5 errores = -1    <- castellano
-   No es un promedio como en recepción...      <- castellano entero
-   6 de tus 21 ataques terminan en punto...    <- castellano
-   • no fallar 5 de tus 5 errors               <- mezclado
-   • convertir 5 ataques más en punto          <- castellano
-   Todavía no hay ataques de este tipo.        <- castellano
+   5 puntos − 1 bloqueados − 5 errores = -1        <- castellano
+   No es un promedio como en recepción: es una...  <- castellano entero
 
-Son dos bloques de codigo distintos —la ventana normal y la del ataque— y yo
-solo habia pasado el primero.
+Y despues hice un barrido por TODO el archivo, no solo por lo que se veia
+en pantalla. Aparecieron otros que no habiamos mirado:
+
+   el globo que sale al pasar el mouse por una bateria
+       "39% sobre 1159 acciones · el peor de la liga 12%, el mejor 42"
+
+   la leyenda de colores de abajo
+       Objetivo · Cerca · Neutro · Lejos
+
+   el aviso de pocas acciones
+       "Con 3 ataques, una sola cambia el número 67 puntos..."
+
+   el mensaje de cuando no alcanza
+       "Con 21 ataques hace falta un salto grande..."
+
+   los titulos de los botones de video
+       "Ver estas 18 acciones en video"
+
+   y los dos finales del consejo
+       "y llegás al objetivo" · "Después hay que subir calidad"
+
+Todo eso ya pasa por el traductor. En ingles:
+
+   Target · Close to it · Neutral · Far
+   39% out of 1159 actions · worst in the league 12%, best 42
+   With 3 attacks, a single one moves the number 67 points...
+   Watch these 18 actions on video
+   and you hit the target · After that you need better quality
 
 
-COMO QUEDA
+COMO LO VERIFIQUE
+-----------------
+Recorri el archivo entero buscando texto entre comillas que tuviera acentos
+o palabras castellanas y no estuviera envuelto en ot(). Quedan 0.
 
-   [en]  High-ball Atk
-         21 high-ball attacks · target 18
-         Point · Still in play · Blocked · Error
-         How you get to -5%
-         5 points − 1 blocked − 5 errors = -1
-         What you give away: 6 of your 21 attacks end in a point for the
-         opponent — they cost you 29 points.
-         To reach 18
-          • do not miss 5 of your 5 errors
-          • turn 5 more attacks into points
-
-   [de]  Hoher Angriff
-         21 hohe Angriffe · Ziel 18
-         Punkt · Noch im Spiel · Geblockt · Fehler
-         So kommt man auf -5%
-         5 Punkte − 1 geblockt − 5 Fehler = -1
-         Was du verschenkst: 6 deiner 21 Angriffe enden mit einem Punkt
-         für den Gegner — das kostet dich 29 Punkte.
-         Um zu erreichen 18
-          • nicht vergeben 5 deiner 5 Fehler
-          • wandle 5 weitere Angriffe zu Punkten
-
-Tambien los titulos —Atq Central, Atq Alta, Atq Rapida— y el mensaje de
-cuando no hay ataques de ese tipo.
+Son 54 llamadas al traductor y unos 90 terminos en la tabla, en ingles y
+aleman.
