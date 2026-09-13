@@ -1,61 +1,76 @@
-LOS DOS TEMAS
-=============
+LOS 6 HEATMAPS — COMPLETO
+=========================
 
-Un archivo: objetivos_config.js. Publicar y Ctrl+Shift+R.
-
-
-1) LOS PORCENTAJES, SIEMPRE REDONDOS
-------------------------------------
-Encontre la raiz: fmtEff NO redondeaba.
-
-   antes:  function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
-
-Si le llegaba 55.34 escribia "55.34%". Por eso aparecian decimales en unas
-pantallas y en otras no: dependia de si el numero venia ya redondeado desde
-el motor o crudo.
-
-Como fmtEff la usan TODAS las pantallas, arreglarlo ahi los deja redondos en
-todo el sistema de una sola vez.
-
-   55.34  ->  55%
-   59.8   ->  60%
-   -33.33 ->  -33%
-   null   ->  —
-
-(El "de cada 10" sigue con un decimal a proposito: ahi el redondeo borraba
-la diferencia entre 1.9 y 2.5, que era justo lo que se queria mostrar. No es
-un porcentaje.)
+6 archivos. Publicar y Ctrl+Shift+R.
+REEMPLAZA al zip anterior.
 
 
-2) EL CARTEL EN LAS BATERIAS DE EQUIPO
---------------------------------------
-Lo reproduje exacto. Toque la bateria de SAQUE del bloque de equipo:
+LOS 4 PROBLEMAS, CON SU CAUSA
+-----------------------------
 
-   onclick:  objVerVideo('sq','e','',276,'')
-   alerta:   "No pude identificar al jugador para traer sus acciones."
+1) HTML ROTO — la causa de fondo de tu punto 2
+   En armador, ataque, recepcion y saque estaba esto:
 
-La fila llega VACIA —''—, no con la palabra "Equipo". Y yo tomaba como
-equipo SOLO si decia "Equipo". Entonces lo trataba como un jugador, no
-encontraba a nadie, y saltaba el cartel.
+       <div class="content"<div class="content" id="content">
+                          ^ falta cerrar
 
-Lo di vuelta, que es lo correcto: se trata como JUGADOR solo si hay un
-nombre de jugador. Sin nombre es el equipo.
+   Una etiqueta abierta dentro de otra. El navegador se come lo que sigue, y
+   lo que seguia era el <script> que arma los datos.
 
-   fila ""            ->  EQUIPO
-   fila "Equipo"      ->  EQUIPO
-   fila "Team"        ->  EQUIPO     (tambien en ingles)
-   fila "Mannschaft"  ->  EQUIPO     (y en aleman)
-   fila "Jugador" + BARTHOLET  ->  jugador
-   fila "Player"  + DURDOS     ->  jugador
+   Por eso en ARMADO podias tocar ENTRENAMIENTO y la lista de armadores
+   quedaba vacia: el script nunca terminaba de correr.
 
-Los idiomas importan porque la app esta en ES/EN/DE y la fila viene
-traducida.
+2) BLOQUEO — EQ se calculaba antes de que hubiera datos
+       var EQ = equipoActual();            <- corre ANTES del .enc
+       var JUGADORES = PP_BLOCK[EQ] || []; <- queda VACIO
+
+   Con la lista vacia, hayTipos() daba falso y el selector de PARTIDO /
+   ENTRENAMIENTO no se dibujaba nunca.
+
+   Lo verifique en la app: los 206 bloqueos de entrenamiento ESTABAN
+   cargados. La pantalla no los ofrecia.
+
+       entrenamiento 206 · partido 1356
+
+   Ahora se recalcula cuando los datos llegaron, reintentando hasta 10 seg.
+   Use el selector que ya tenia la pantalla, no agregue otro al lado.
+
+3) DEFENSA — la funcion existia, el boton no
+   setModoDef() estaba escrita y nadie la llamaba. Cero botones.
+   Agregue los dos, iguales a los de saque, con la clave del sistema.
+
+4) TRADUCCIONES
+   Audite los 6 comparando cada texto contra su tabla, y ademas busque los
+   textos que genera el javascript en vivo, que era el hueco que te marque.
+
+   bloqueo y defensa NO TENIAN motor de traduccion. Nada se traducia.
+
+   La tabla pasa de 74 a 144 terminos, IGUAL EN LOS 6:
+       56 de pantalla (titulos, filtros, mensajes)
+       27 del javascript (posiciones de cancha, "Elegí un jugador primero",
+          "Por ahora el video está disponible solo para Nafels", etc.)
+
+   Y 124 textos marcados para que el motor los tome.
+
+   armador 28 · ataque 30 · bloqueo 10 · defensa 18 · recepcion 24 · saque 24
 
 
-LO QUE VA A PASAR AHORA
------------------------
-Tocas los 276 errores de saque del equipo y abre:
+COMO QUEDAN
+-----------
+   archivo      términos  marcados  modo  html
+   armador        144        28      SI    OK
+   ataque         144        30      SI    OK
+   bloqueo        144        10      SI    OK
+   defensa        144        18      SI    OK
+   recepcion      144        24      SI    OK
+   saque          144        24      SI    OK
 
-   cortes.html?sk=Saque&ev==
 
-Sin num, o sea todos los jugadores. Que es lo que pediste.
+UNA COSA QUE TE DEBO
+--------------------
+Intente envolver automaticamente en t() los textos que arma el javascript,
+y me rompio dos archivos. Los restaure del repo y rehice el trabajo a mano.
+
+Esos textos ESTAN traducidos en la tabla, pero algunos se escriben directo
+al HTML sin pasar por t(). Si publicas y ves alguno en castellano, pasame la
+frase exacta: ya esta traducida, solo falta engancharla, y es un minuto.

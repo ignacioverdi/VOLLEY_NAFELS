@@ -91,24 +91,47 @@ select,input{width:100%;background:var(--card2);border:1px solid var(--border);c
 </style>
 <!-- Motor de idiomas (ES / EN / DE). Traduce por data-t y ademas por texto,
      asi que alcanza con cargarlo. -->
-<script src="categorias_club.js?v=20260913-0826"></script>
-<script src="selector_categoria.js?v=20260913-0826"></script>
-<script src="lang.js?v=20260913-0826"></script>
+<script src="categorias_club.js?v=20260913-0842"></script>
+<script src="selector_categoria.js?v=20260913-0842"></script>
+<script src="lang.js?v=20260913-0842"></script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260913-0826" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-0826"></script>
+<script src="firebase.js?v=20260913-0842" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-0842"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0826">
+<link rel="stylesheet" href="movil.css?v=20260913-0842">
+
+<script>
+/* ══ TRADUCCION ══════════════════════════════════════════════════════════════
+   Esta pantalla no tenia traductor: todo quedaba en castellano aunque el club
+   estuviera en ingles o aleman. Es el mismo motor que usan los otros heatmaps,
+   con la misma tabla, asi que un termino se traduce igual en todas. */
+var LANG=(function(){var l=null;try{l=localStorage.getItem('vb_lang');}catch(e){}
+  if(l)return l;var n=(navigator.language||'es').substring(0,2).toLowerCase();
+  return['es','en','de'].indexOf(n)>=0?n:'es';})();
+var T={"Jugador": {"en": "Player", "de": "Spieler"}, "Tipo de ataque": {"en": "Attack type", "de": "Angriffstyp"}, "Tipo de saque": {"en": "Serve type", "de": "Aufschlagtyp"}, "Tipo de recepcion": {"en": "Reception type", "de": "Annahmetyp"}, "Tipo de armado": {"en": "Set type", "de": "Stelltyp"}, "Rival": {"en": "Opponent", "de": "Gegner"}, "Set": {"en": "Set", "de": "Satz"}, "Momento del set": {"en": "Set moment", "de": "Satzphase"}, "Valoracion": {"en": "Rating", "de": "Bewertung"}, "Combinacion": {"en": "Combination", "de": "Kombination"}, "Combinacion de ataque": {"en": "Attack combination", "de": "Angriffskombination"}, "Llamada del colocador": {"en": "Setter call", "de": "Stellerruf"}, "Posicion del armador": {"en": "Setter position", "de": "Stellerposition"}, "Resultado del ataque": {"en": "Attack result", "de": "Angriffsergebnis"}, "Calidad de la recepcion previa": {"en": "Prior reception quality", "de": "Annahmequalitaet vorher"}, "Calidad de recepcion previa": {"en": "Prior reception quality", "de": "Annahmequalitaet vorher"}, "Quien recibio": {"en": "Who received", "de": "Wer angenommen"}, "Zona origen (saque rival)": {"en": "Origin zone (opp. serve)", "de": "Ursprungszone (Gegneraufschlag)"}, "Zona origen": {"en": "Origin zone", "de": "Ursprungszone"}, "Limpiar filtros": {"en": "Clear filters", "de": "Filter löschen"}, "acciones filtradas": {"en": "filtered actions", "de": "gefilterte Aktionen"}, "armadas filtradas": {"en": "filtered sets", "de": "gefilterte Stellaktionen"}, "Todos": {"en": "All", "de": "Alle"}, "Todas": {"en": "All", "de": "Alle"}, "Side Out": {"en": "Side Out", "de": "Side Out"}, "Transicion": {"en": "Transition", "de": "Uebergang"}, "Flotado": {"en": "Float", "de": "Flatter"}, "Potencia": {"en": "Spin", "de": "Sprung"}, "Perfecta": {"en": "Perfect", "de": "Perfekt"}, "Positiva": {"en": "Positive", "de": "Positiv"}, "Exclamativa": {"en": "Exclamation", "de": "Ausrufer"}, "Negativa": {"en": "Negative", "de": "Negativ"}, "Vendida": {"en": "Over", "de": "Uebergebracht"}, "Error": {"en": "Error", "de": "Fehler"}, "Kill": {"en": "Kill", "de": "Kill"}, "Pos": {"en": "Pos", "de": "Pos"}, "Neg": {"en": "Neg", "de": "Neg"}, "Bloq": {"en": "Block", "de": "Block"}, "Err": {"en": "Err", "de": "Fehl"}, "Punto": {"en": "Point", "de": "Punkt"}, "Vendido": {"en": "Over", "de": "Angenommen"}, "Positivo": {"en": "Positive", "de": "Positiv"}, "Negativo": {"en": "Negative", "de": "Negativ"}, "▲ RIVAL": {"en": "▲ OPP", "de": "▲ GEGNER"}, "▼ PROPIO": {"en": "▼ OWN", "de": "▼ EIGENES"}, "▼ ORIGEN": {"en": "▼ ORIGIN", "de": "▼ URSPRUNG"}, "EFF Ataque": {"en": "ATK EFF", "de": "Ang.Wirk."}, "EFF Side Out": {"en": "SO EFF", "de": "SO-Wirk."}, "EFF Transicion": {"en": "TR EFF", "de": "Ueberg.Wirk."}, "%Kill": {"en": "%Kill", "de": "%Kill"}, "ataques": {"en": "attacks", "de": "Angriffe"}, "saques": {"en": "serves", "de": "Aufschlaege"}, "recepciones": {"en": "receptions", "de": "Annahmen"}, "armadas": {"en": "sets", "de": "Stellaktionen"}, "arm.": {"en": "sets", "de": "Stz."}, "kills": {"en": "kills", "de": "Kills"}, "Mapas de destino": {"en": "Destination maps", "de": "Zielkarten"}, "EFF por rival": {"en": "EFF by opponent", "de": "Wirk. nach Gegner"}, "Evolucion partido a partido": {"en": "Match-by-match trend", "de": "Spielverlauf"}, "SO vs TR por rival": {"en": "SO vs TR by opponent", "de": "SO vs TR nach Gegner"}, "Combinaciones": {"en": "Combinations", "de": "Kombinationen"}, "Mapa de cancha": {"en": "Court map", "de": "Feldkarte"}, "Distribucion en cancha": {"en": "Court distribution", "de": "Feldverteilung"}, "Analisis por llamada": {"en": "Analysis by call", "de": "Analyse nach Ruf"}, "Distribucion": {"en": "Distribution", "de": "Verteilung"}, "Destino ataque": {"en": "Attack destination", "de": "Angriffsziel"}, "Juego segun posicion del armador": {"en": "Play by setter position", "de": "Spiel nach Stellerposition"}, "EFF segun calidad de recepcion previa": {"en": "EFF by prior reception quality", "de": "Wirk. nach Annahmequalitaet"}, "Combinaciones generadas": {"en": "Generated combinations", "de": "Erzeugte Kombinationen"}, "Distribucion por llamada": {"en": "Distribution by call", "de": "Verteilung nach Ruf"}, "Inicio": {"en": "Start", "de": "Anfang"}, "Final": {"en": "End", "de": "Ende"}, "Mejorando +": {"en": "Improving +", "de": "Verbesserung +"}, "Bajando ": {"en": "Declining ", "de": "Rueckgang "}, "ANALISIS DE BLOQUEO": {"en": "BLOCK ANALYSIS", "de": "BLOCKANALYSE"}, "ANALISIS DE DEFENSA": {"en": "DEFENSE ANALYSIS", "de": "ABWEHRANALYSE"}, "ANALISIS DE SAQUE": {"en": "SERVE ANALYSIS", "de": "AUFSCHLAGANALYSE"}, "ANALISIS DE RECEPCION": {"en": "RECEPTION ANALYSIS", "de": "ANNAHMEANALYSE"}, "ANALISIS DE ATAQUE": {"en": "ATTACK ANALYSIS", "de": "ANGRIFFSANALYSE"}, "ANALISIS DE ARMADO": {"en": "SETTING ANALYSIS", "de": "ZUSPIELANALYSE"}, "PARTIDO": {"en": "MATCH", "de": "SPIEL"}, "ENTRENAMIENTO": {"en": "TRAINING", "de": "TRAINING"}, "Partido": {"en": "Match", "de": "Spiel"}, "Entrenamiento": {"en": "Training", "de": "Training"}, "Origen de datos": {"en": "Data source", "de": "Datenquelle"}, "Contexto": {"en": "Context", "de": "Kontext"}, "Fase": {"en": "Phase", "de": "Phase"}, "Llamada": {"en": "Call", "de": "Zuspielart"}, "Combinación": {"en": "Combination", "de": "Kombination"}, "Combinación bloqueada": {"en": "Blocked combination", "de": "Geblockte Kombination"}, "Combinaciones que enfrentamos": {"en": "Combinations we face", "de": "Kombinationen gegen uns"}, "Calidad recepción": {"en": "Reception quality", "de": "Annahmequalität"}, "Calidad recepcion": {"en": "Reception quality", "de": "Annahmequalität"}, "Partido específico": {"en": "Specific match", "de": "Bestimmtes Spiel"}, "Partido especifico": {"en": "Specific match", "de": "Bestimmtes Spiel"}, "Error (=)": {"en": "Error (=)", "de": "Fehler (=)"}, "Buena": {"en": "Good", "de": "Gut"}, "Regular": {"en": "Average", "de": "Mittel"}, "Mala": {"en": "Poor", "de": "Schlecht"}, "Bloqueado": {"en": "Blocked", "de": "Geblockt"}, "Elegí un jugador para ver su defensa": {"en": "Pick a player to see their defense", "de": "Wähle einen Spieler für seine Abwehr"}, "Elegi un jugador para ver su defensa": {"en": "Pick a player to see their defense", "de": "Wähle einen Spieler für seine Abwehr"}, "Elegí un jugador para ver su bloqueo": {"en": "Pick a player to see their block", "de": "Wähle einen Spieler für seinen Block"}, "Elegi un jugador para ver su bloqueo": {"en": "Pick a player to see their block", "de": "Wähle einen Spieler für seinen Block"}, "Cómo bloqueamos según de dónde ataca el rival": {"en": "How we block by where the opponent attacks", "de": "Wie wir je nach Angriffsort blocken"}, "Como bloqueamos segun de donde ataca el rival": {"en": "How we block by where the opponent attacks", "de": "Wie wir je nach Angriffsort blocken"}, "Ver los videos": {"en": "Watch the videos", "de": "Videos ansehen"}, "VER VIDEO DE ESTAS DEFENSAS": {"en": "WATCH VIDEO OF THESE DIGS", "de": "VIDEO DIESER ABWEHREN"}, "VER VIDEO DE ESTOS BLOQUEOS": {"en": "WATCH VIDEO OF THESE BLOCKS", "de": "VIDEO DIESER BLOCKS"}, "Sin datos de entrenamiento": {"en": "No training data", "de": "Keine Trainingsdaten"}, "defensas mostradas": {"en": "defenses shown", "de": "Abwehren gezeigt"}, "bloqueos mostrados": {"en": "blocks shown", "de": "Blocks gezeigt"}, "Selecciona jugador y filtros": {"en": "Select player and filters", "de": "Spieler und Filter wählen"}, "Zona destino": {"en": "Target zone", "de": "Zielzone"}, "Valoración": {"en": "Rating", "de": "Bewertung"}, "Ninguno": {"en": "None", "de": "Keine"}, "Total": {"en": "Total", "de": "Gesamt"}, "Elegí un armador primero.": {"en": "Pick a setter first.", "de": "Wähle zuerst einen Zuspieler."}, "Elegí un jugador primero.": {"en": "Pick a player first.", "de": "Wähle zuerst einen Spieler."}, "Elegí un jugador para ver sus bloqueos en video.": {"en": "Pick a player to watch their blocks on video.", "de": "Wähle einen Spieler, um seine Blocks im Video zu sehen."}, "Por ahora el video está disponible solo para Nafels.": {"en": "Video is currently available for Nafels only.", "de": "Video ist derzeit nur für Näfels verfügbar."}, "Del. Izq. (4)": {"en": "Front Left (4)", "de": "Vorne links (4)"}, "Del. Centro (3)": {"en": "Front Centre (3)", "de": "Vorne Mitte (3)"}, "Del. Der. (2)": {"en": "Front Right (2)", "de": "Vorne rechts (2)"}, "Zag. Izq. (5)": {"en": "Back Left (5)", "de": "Hinten links (5)"}, "Zag. Centro (6)": {"en": "Back Centre (6)", "de": "Hinten Mitte (6)"}, "Zag. Der. (1)": {"en": "Back Right (1)", "de": "Hinten rechts (1)"}, "Pos 2 (Der.)": {"en": "Pos 2 (Right)", "de": "Pos 2 (rechts)"}, "Pos 3 (Centro)": {"en": "Pos 3 (Centre)", "de": "Pos 3 (Mitte)"}, "Pos 4 (Izq.)": {"en": "Pos 4 (Left)", "de": "Pos 4 (links)"}, "Pos 5 (Zag.Izq.)": {"en": "Pos 5 (Back Left)", "de": "Pos 5 (hinten links)"}, "Pos 9 (Zag.Der.)": {"en": "Pos 9 (Back Right)", "de": "Pos 9 (hinten rechts)"}, "Quién": {"en": "Who", "de": "Wer"}, "Zona": {"en": "Zone", "de": "Zone"}, "Zona de origen": {"en": "Origin zone", "de": "Ursprungszone"}, "Recepción": {"en": "Reception", "de": "Annahme"}, "Saque": {"en": "Serve", "de": "Aufschlag"}, "Defensa": {"en": "Defense", "de": "Abwehr"}, "Armado": {"en": "Setting", "de": "Zuspiel"}, "Ataque": {"en": "Attack", "de": "Angriff"}, "Bloqueo": {"en": "Block", "de": "Block"}, "TODOS": {"en": "ALL", "de": "ALLE"}, "Eficiencia por rival": {"en": "Efficiency by opponent", "de": "Effizienz nach Gegner"}, "Evolución partido a partido": {"en": "Match-by-match trend", "de": "Verlauf Spiel für Spiel"}};
+function t(k){ if(LANG==='es')return k; var e=T[k]; return (e&&e[LANG])?e[LANG]:k; }
+function setLang(l){ LANG=l; try{localStorage.setItem('vb_lang',l);}catch(e){} location.reload(); }
+function translatePage(){
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    el.textContent=t(el.getAttribute('data-i18n'));
+  });
+  ['es','en','de'].forEach(function(x){
+    var b=document.getElementById('lang-'+x);
+    if(b)b.style.opacity=(x===LANG)?'1':'0.4';
+  });
+}
+document.addEventListener('DOMContentLoaded', translatePage);
+</script>
 </head>
 <body>
 <div class="hdr">
   <a href="index.html" class="back">← Inicio</a>
   <div>
-    <div class="hdr-t">ANALISIS DE BLOQUEO</div>
-    <div class="hdr-s" id="hdr-s">Cómo bloqueamos según de dónde ataca el rival</div>
+    <div class="hdr-t" data-i18n="ANALISIS DE BLOQUEO">ANALISIS DE BLOQUEO</div>
+    <div class="hdr-s" id="hdr-s" data-i18n="Cómo bloqueamos según de dónde ataca el rival">Cómo bloqueamos según de dónde ataca el rival</div>
   </div>
   <!-- PARTIDO / ENTRENAMIENTO, igual que en las otras pantallas. Va atado al
        filtro compartido, asi la eleccion viaja desde y hacia el resto. -->
@@ -117,28 +140,28 @@ select,input{width:100%;background:var(--card2);border:1px solid var(--border);c
 
 <div class="layout">
   <div class="sidebar">
-    <div class="flabel" style="margin-top:0">Jugador</div>
+    <div class="flabel" style="margin-top:0" data-i18n="Jugador">Jugador</div>
     <select id="psel" onchange="pintar()"></select>
 
-    <div class="flabel">Combinación bloqueada</div>
-    <select id="fcombo" onchange="pintar()"><option value="all">Todas</option></select>
+    <div class="flabel" data-i18n="Combinación bloqueada">Combinación bloqueada</div>
+    <select id="fcombo" onchange="pintar()"><option value="all" data-i18n="Todas">Todas</option></select>
 
-    <div class="flabel">Fase</div>
+    <div class="flabel" data-i18n="Fase">Fase</div>
     <select id="ffase" onchange="pintar()">
-      <option value="all">Todas</option>
+      <option value="all" data-i18n="Todas">Todas</option>
       <option value="g">Side out</option>
       <option value="o">Transición</option>
     </select>
 
     <div class="flabel">Resultado</div>
     <select id="fev" onchange="pintar()">
-      <option value="all">Todos</option>
+      <option value="all" data-i18n="Todos">Todos</option>
       <option value="#">Punto de bloqueo (#)</option>
       <option value="+">Positivo (+)</option>
       <option value="!">Toque (!)</option>
       <option value="/">Tocado y sigue (/)</option>
       <option value="-">Malo (−)</option>
-      <option value="=">Error (=)</option>
+      <option value="=" data-i18n="Error (=)">Error (=)</option>
     </select>
 
     <button class="vbtn" onclick="verVideo()">🎬 VER VIDEO DE ESTOS BLOQUEOS</button>
@@ -153,7 +176,7 @@ select,input{width:100%;background:var(--card2);border:1px solid var(--border);c
     <div class="rednote">▲ Rival</div>
     <div class="court" id="court"></div>
 
-    <div class="sec">Combinaciones que enfrentamos</div>
+    <div class="sec" data-i18n="Combinaciones que enfrentamos">Combinaciones que enfrentamos</div>
     <div class="combos" id="combos"></div>
   </div>
 </div>
@@ -164,8 +187,8 @@ select,input{width:100%;background:var(--card2);border:1px solid var(--border);c
   Doble clic en un casillero o en una combinación para ver esos bloqueos en video.
 </div>
 
-<script src="datos_seguros.js?v=20260913-0826"></script>
-<script src="filtro_tipo.js?v=20260913-0826" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260913-0842"></script>
+<script src="filtro_tipo.js?v=20260913-0842" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="window.PP_BLOCK=window.PP_BLOCK||{}"></script>
 <script>abrirDatos();</script>
 <script>
@@ -204,8 +227,25 @@ function equipoActual(){
     return sb-sa;
   })[0];
 }
+/* ══ EQ SE CALCULABA DEMASIADO PRONTO ═══════════════════════════════════════
+   Este script corre ANTES de que termine de cargar datos_bloqueo.js.enc, asi
+   que window.PP_BLOCK todavia no existia: equipoActual() devolvia null y
+   JUGADORES quedaba VACIO.
+
+   Con la lista vacia, hayTipos() daba falso y el selector de PARTIDO /
+   ENTRENAMIENTO no se dibujaba nunca. Por eso no habia forma de ver los
+   bloqueos de los entrenamientos, aunque los 206 estaban cargados.
+
+   Ahora se recalcula cuando los datos ya estan. */
 var EQ=equipoActual();
 var JUGADORES=(window.PP_BLOCK&&EQ&&window.PP_BLOCK[EQ])||[];
+
+function _recargarJugadores(){
+  if(JUGADORES && JUGADORES.length) return true;
+  EQ = equipoActual();
+  JUGADORES = (window.PP_BLOCK && EQ && window.PP_BLOCK[EQ]) || [];
+  return !!(JUGADORES && JUGADORES.length);
+}
 
 /* ── El tipo: partido o entrenamiento ────────────────────────────────────
    Los bloqueos traen su tipo desde el generador. Si los datos son viejos y no
@@ -224,6 +264,7 @@ function hayTipos(){
 function pintarModo(){
   var w=document.getElementById('modo-wrap');
   if(!w) return;
+  _recargarJugadores();
   if(!hayTipos()){ w.innerHTML=''; return; }
   var t=(typeof vbTipo==='function')?vbTipo():'todos';
   w.innerHTML=[['todos','Todos'],['P','Partidos'],['E','Entrenamientos']].map(function(o){
@@ -368,6 +409,31 @@ function rellenarJugadores(){
 document.getElementById('psel').addEventListener('change', function(){ rellenarCombos(); pintar(); });
 pintarModo(); rellenarJugadores(); rellenarCombos(); pintar();
 </script>
-<script src="ayuda.js?v=20260913-0826"></script>
+<script src="ayuda.js?v=20260913-0842"></script>
+
+
+<script>
+/* Los datos cifrados terminan de cargar despues que este script. Cuando eso
+   pasa hay que rehacer la lista de jugadores y volver a pintar, o la pantalla
+   queda vacia y sin selector de partido/entrenamiento. */
+(function(){
+  function _listo(){
+    try{
+      if(typeof _recargarJugadores === 'function' && _recargarJugadores()){
+        if(typeof rellenarCombos === 'function') rellenarCombos();
+        if(typeof pintarModo === 'function') pintarModo();
+        if(typeof pintar === 'function') pintar();
+        return true;
+      }
+    }catch(e){}
+    return false;
+  }
+  var n = 0;
+  var reloj = setInterval(function(){
+    if(_listo() || ++n > 40) clearInterval(reloj);
+  }, 250);
+  document.addEventListener('DOMContentLoaded', _listo);
+})();
+</script>
 </body>
 </html>
