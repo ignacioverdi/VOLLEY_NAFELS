@@ -1,61 +1,66 @@
-LAS TRES FILAS QUE FALTABAN
-===========================
+LA VENTANA DEL ATAQUE
+=====================
 
 Un archivo: objetivos_config.js. Publicar y Ctrl+Shift+R.
 
 
-LO QUE VI AL CHEQUEAR
----------------------
-Casi toda la ventana quedo en ingles. Andaba:
+LA DE RECEPCION QUEDO PERFECTA
+------------------------------
+Lo verifique: CERO palabras en castellano.
 
    158 balls received · target 60
-   YOUR 158 BALLS RECEIVED       out of 10
+   YOUR 158 BALLS RECEIVED         out of 10
+    #  Perfect    27   1.7 out of 10
+    +  Positive   45   2.8 out of 10
+    !  Fair       40   2.5 out of 10
+    -  Poor       23   1.5 out of 10
+    /  Overpass    5   0.3 out of 10
+    =  Error      18   1.1 out of 10
    HOW YOU GET TO 55%
-   WHAT COSTS YOU MOST
-   40 fairs · 18 errors
-   To reach 60
-   • turn 16 errors into fairs
-   Each ball counts by how it ended...
+   WHAT COSTS YOU MOST · 40 fairs −13 · 18 errors −11
+   To reach 60 · turn 16 errors into fairs
    [Close]
 
-Pero tres filas seguian en castellano:
 
-   Perfect      27      <- bien
-   Positive     45      <- bien
-   Suficiente   40      <- castellano
-   Pobre        23      <- castellano
-   Sobrepase     5      <- castellano
-   Error        18      <- bien
+PERO LA DEL ATAQUE ESTABA EN CASTELLANO
+---------------------------------------
+Fui a mirarla y encontre esto:
 
+   ATQ ALTA                                    <- castellano
+   5 puntos − 1 bloqueados − 5 errores = -1    <- castellano
+   No es un promedio como en recepción...      <- castellano entero
+   6 de tus 21 ataques terminan en punto...    <- castellano
+   • no fallar 5 de tus 5 errors               <- mezclado
+   • convertir 5 ataques más en punto          <- castellano
+   Todavía no hay ataques de este tipo.        <- castellano
 
-POR QUE
--------
-Mi cambio se aplico en la ventana del ATAQUE y no en la normal. Son dos
-bloques de codigo parecidos y el reemplazo agarro el equivocado.
-
-Se notaba justo en esas tres porque "Perfect", "Positive" y "Error" se
-escriben igual o casi en los dos idiomas, asi que parecian traducidas
-aunque tampoco lo estaban.
+Son dos bloques de codigo distintos —la ventana normal y la del ataque— y yo
+solo habia pasado el primero.
 
 
 COMO QUEDA
-----------
-   [es]  Perfecta · Positiva · Suficiente · Pobre · Sobrepase · Error
-   [en]  Perfect · Positive · Fair · Poor · Overpass · Error
-   [de]  Perfekt · Positiv · Ausreichend · Schwach · Überpass · Fehler
 
-Y el consejo:
+   [en]  High-ball Atk
+         21 high-ball attacks · target 18
+         Point · Still in play · Blocked · Error
+         How you get to -5%
+         5 points − 1 blocked − 5 errors = -1
+         What you give away: 6 of your 21 attacks end in a point for the
+         opponent — they cost you 29 points.
+         To reach 18
+          • do not miss 5 of your 5 errors
+          • turn 5 more attacks into points
 
-   [es]  convertir 16 errores en suficientes
-   [en]  turn 16 errors into fairs
-   [de]  wandle 16 Fehler in Ausreichend
+   [de]  Hoher Angriff
+         21 hohe Angriffe · Ziel 18
+         Punkt · Noch im Spiel · Geblockt · Fehler
+         So kommt man auf -5%
+         5 Punkte − 1 geblockt − 5 Fehler = -1
+         Was du verschenkst: 6 deiner 21 Angriffe enden mit einem Punkt
+         für den Gegner — das kostet dich 29 Punkte.
+         Um zu erreichen 18
+          • nicht vergeben 5 deiner 5 Fehler
+          • wandle 5 weitere Angriffe zu Punkten
 
-Tambien traduje el globo que aparece al pasar el mouse por la barra de
-colores, y la tabla plegada. Eran los dos ultimos lugares donde quedaba
-texto fijo.
-
-
-LO DEMAS SIGUE BIEN
--------------------
-Bloqueo con los 11 apellidos y "#6 (5)" sin repetir, modo partido en cero,
-el mapa dibujando, y los 6 heatmaps sin scripts rotos.
+Tambien los titulos —Atq Central, Atq Alta, Atq Rapida— y el mensaje de
+cuando no hay ataques de ese tipo.

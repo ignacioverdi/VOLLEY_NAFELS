@@ -450,6 +450,11 @@ function fmtEff(v){
    tienen. */
 var OBJ_T = {
   en: {
+    'no fallar':'do not miss',
+    'ataques más en punto':'more attacks into points',
+    'pelotas entre errores y bloqueados':'balls between errors and blocks',
+    'Todavía no hay ataques de este tipo.':'No attacks of this type yet.',
+    'puntos.':'points.',
     'pelotas que recibe':'balls received', 'saques que pega':'serves hit',
     'ataques de central':'middle attacks', 'ataques de pelota alta':'high-ball attacks',
     'ataques rápidos':'quick attacks', 'ataques':'attacks', 'bloqueos':'blocks',
@@ -497,6 +502,11 @@ var OBJ_T = {
     'El reproductor no está cargado en esta pantalla.':'The player is not loaded on this screen.'
   },
   de: {
+    'no fallar':'nicht vergeben',
+    'ataques más en punto':'weitere Angriffe zu Punkten',
+    'pelotas entre errores y bloqueados':'Bälle zwischen Fehlern und Blocks',
+    'Todavía no hay ataques de este tipo.':'Noch keine Angriffe dieser Art.',
+    'puntos.':'Punkte.',
     'pelotas que recibe':'angenommene Bälle', 'saques que pega':'Aufschläge',
     'ataques de central':'Angriffe Mitte', 'ataques de pelota alta':'hohe Angriffe',
     'ataques rápidos':'schnelle Angriffe', 'ataques':'Angriffe', 'bloqueos':'Blocks',
@@ -659,11 +669,11 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
   var neto  = P - B - E;
   var val   = T ? (neto/T*100) : null;
   var obj   = (meta && meta.obj!=null) ? meta.obj : null;
-  var nombre = cfg.nom;
+  var nombre = ot(cfg.nom);
 
   if(!T){
     objPintarDetalle(nombre, obj,
-      '<div style="color:#64748b;font-size:12px;padding:8px 0">Todavía no hay ataques de este tipo.</div>',
+      '<div style="color:#64748b;font-size:12px;padding:8px 0">'+ot('Todavía no hay ataques de este tipo.')+'</div>',
       null, null, null, quien);
     return;
   }
@@ -720,8 +730,8 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
       + '<div style="font-size:10px;font-weight:800;letter-spacing:.7px;color:#64748b;'
       +      'text-transform:uppercase;margin-bottom:5px">'+ot('Lo que regalás')+'</div>'
       + '<div style="font-size:12px;color:#cbd5e1;line-height:1.6">'
-      + '<b>'+(B+E)+'</b> de tus '+T+' ataques terminan en punto del rival'
-      + ' \u2014 te bajan <b style="color:#f87171">'+Math.round((B+E)/T*100)+'</b> puntos.'
+      + '<b>'+(B+E)+'</b> '+ot('de tus')+' '+T+' '+ot('ataques terminan en punto del rival')
+      + ' \u2014 '+ot('te bajan')+' <b style="color:#f87171">'+Math.round((B+E)/T*100)+'</b> '+ot('puntos.')
       + '</div></div>';
   }
 
@@ -736,9 +746,9 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
       /* cada pelota que se deja de regalar suma 1 al neto */
       var faltan = Math.ceil((obj - val) * T / 100);
       var op = [];
-      if(E >= faltan) op.push('no fallar <b>'+faltan+'</b> de tus '+E+' '+objPlural('Error',E));
-      else if(B + E >= faltan) op.push('no regalar <b>'+faltan+'</b> pelotas entre errores y bloqueados');
-      if(faltan <= T - P) op.push('convertir <b>'+faltan+'</b> ataques más en punto');
+      if(E >= faltan) op.push(ot('no fallar')+' <b>'+faltan+'</b> '+ot('de tus')+' '+E+' '+objPlural('Error',E));
+      else if(B + E >= faltan) op.push(ot('no regalar')+' <b>'+faltan+'</b> '+ot('pelotas entre errores y bloqueados'));
+      if(faltan <= T - P) op.push(ot('convertir')+' <b>'+faltan+'</b> '+ot('ataques más en punto'));
       meta_txt = '<div style="margin-top:13px;padding:10px 12px;background:rgba(251,191,36,.09);'
         + 'border:1px solid rgba(251,191,36,.28);border-radius:8px;font-size:12px;color:#cbd5e1;line-height:1.6">'
         + '<div style="color:#fbbf24;font-weight:800;margin-bottom:4px">'+ot('Para llegar a')+' '+obj+'</div>'
