@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260913-1857"></script>
-<script src="selector_categoria.js?v=20260913-1857"></script>
-<script src="lang.js?v=20260913-1857"></script>
+<script src="categorias_club.js?v=20260913-2043"></script>
+<script src="selector_categoria.js?v=20260913-2043"></script>
+<script src="lang.js?v=20260913-2043"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-1857">
+<link rel="stylesheet" href="movil.css?v=20260913-2043">
 </head>
 <body>
 
@@ -1230,16 +1230,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260913-1857" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-1857"></script>
-<script src="objetivos.js?v=20260913-1857" onerror="void 0"></script>
-<script src="video_delay.js?v=20260913-1857" onerror="void 0"></script>
+<script src="firebase.js?v=20260913-2043" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-2043"></script>
+<script src="objetivos.js?v=20260913-2043" onerror="void 0"></script>
+<script src="video_delay.js?v=20260913-2043" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260913-1857" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260913-1857"></script>
+<script src="plantel_nafels.js?v=20260913-2043" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260913-2043"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -7269,6 +7269,37 @@ function abrirInicio(){
   document.getElementById('m-inicio').classList.add('open');
 }
 function iniSeguir(){ closeModal('m-inicio'); }
+
+/* ══ LA LISTA ES LA PUERTA DE ENTRADA ═══════════════════════════════════════
+   Toda esta pantalla ya estaba escrita —las solapas Partidos/Entrenamientos,
+   el filtro por competencia, el boton de seguir el que dejaste— pero colgaba
+   de un boton. Al entrar caias DENTRO de un partido y la lista quedaba
+   escondida adentro, al reves de como trabaja el DataVolley: ahi lo primero
+   que ves es la lista y desde ahi elegis.
+
+   Ahora se abre sola. Con una excepcion: si venis de un partido EN CURSO
+   —hay acciones cargadas y no lo cerraste— no se abre, para no meterse en el
+   medio de un scout. En ese caso alcanza con el boton de siempre. */
+function _inicioAlEntrar(){
+  try{
+    /* Si hay un partido con acciones cargadas, no interrumpir. */
+    var acc = (M && M.codes ? M.codes : []).filter(function(c){
+      return c && c.k !== 'auto';
+    }).length;
+    if(acc > 0) return;
+
+    /* Tampoco si el usuario entro con un partido puntual en la direccion. */
+    if(location.hash && location.hash.length > 1) return;
+
+    abrirInicio();
+  }catch(e){}
+}
+
+/* Se espera un momento: los partidos guardados se leen del disco del
+   navegador y si se abre antes la lista sale vacia. */
+document.addEventListener('DOMContentLoaded', function(){
+  setTimeout(_inicioAlEntrar, 400);
+});
 function iniAbrir(id){ abrirPartido(id); closeModal('m-inicio'); }
 function iniNuevo(){ closeModal('m-inicio'); nuevoPartido(); }
 function iniImportar(){ window.open('importar_dvw.html','_blank'); }
@@ -8103,7 +8134,7 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260913-1857" onerror="void 0"></script>
-<script src="ayuda.js?v=20260913-1857"></script>
+<script src="volver_inicio.js?v=20260913-2043" onerror="void 0"></script>
+<script src="ayuda.js?v=20260913-2043"></script>
 </body>
 </html>
