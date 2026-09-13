@@ -1,39 +1,47 @@
-LAS DOS LINEAS DEL ATAQUE
-=========================
+LAS DOS COSAS JUNTAS
+====================
 
 Un archivo: objetivos_config.js. Publicar y Ctrl+Shift+R.
 
 
-LO QUE YA QUEDO BIEN
---------------------
-Las 24 baterias del dashboard, sin una palabra en castellano:
+QUE PASO
+--------
+Te vengo mandando de a un arreglo y se estan pisando entre ellos.
 
-   % Serve · % Reception · % Block #+ · % Block #
-   % Middle Atk · % High-ball Atk · % Quick Atk
-   % Atk after R#+ · % Atk after R! · % Atk after R-
-   % Atk in transition · % Defense
+En la ultima publicacion entraron LAS DOS LINEAS del ataque —eso quedo
+bien— pero se perdieron LAS 6 ETIQUETAS que te habia mandado antes.
 
-   globo:    % Serve: 39% out of 1159 actions · worst in the league 25%,
-             best 42% · you are at 82% of the way there
-   bateria:  % Serve  39%  1159 act.  tgt 42
-   leyenda:  Target · Close · Neutral · Far
+Lo verifique en el archivo del servidor:
 
-Y la ventanita de RECEPCION: cero castellano, revisada linea por linea.
+   tiene las dos lineas   SI
+   tiene "% Blq #+"       NO
+
+Es culpa mia: armo cada zip desde mi copia y no desde lo que hay publicado,
+asi que el nuevo borra lo anterior. Este lo hice al reves: baje el archivo
+del servidor y le agregue lo que faltaba encima.
+
+VERIFICADO en este archivo:
+   las dos lineas del ataque   SI
+   las 6 etiquetas             SI
 
 
-LO QUE FALTABA
---------------
-Solo dos lineas, en la ventana del ATAQUE:
+LO QUE SE VE AHORA EN LA APP
+----------------------------
+   la ventanita de RECEPCION   cero castellano
+   la ventanita del ATAQUE     cero castellano
+       5 points − 1 blocked − 5 errors = -1
+       This is not an average like reception: it is a SUBTRACTION...
+   los globos del mouse        traducidos
+   la leyenda                  Target · Close · Neutral · Far
+   la grilla                   12 jugadores, sin el #8
 
-   5 puntos − 1 bloqueados − 5 errores = -1
-   No es un promedio como en recepción: es una RESTA...
+Lo unico que faltaba eran los NOMBRES de 6 baterias:
 
-Estas dos ya te las habia corregido antes pero no entraron en el archivo
-publicado. Las aplique de nuevo sobre lo que hay arriba ahora.
+   % Blq #+ · % Blq # · % Atq R#+ · % Atq R! · % Atq R- · % Atq Transición
 
-   [en]  5 points − 1 blocked − 5 errors = -1
-         This is not an average like reception: it is a SUBTRACTION...
+Con este archivo quedan:
 
-   [de]  5 Punkte − 1 geblockt − 5 Fehler = -1
-         Das ist kein Durchschnitt wie bei der Annahme, sondern eine
-         SUBTRAKTION...
+   [en]  % Block #+ · % Block # · % Atk after R#+ · % Atk after R!
+         % Atk after R- · % Atk in transition
+   [de]  % Block #+ · % Block # · % Angriff nach R#+ · % Angriff nach R!
+         % Angriff nach R- · % Angriff im Umschalten

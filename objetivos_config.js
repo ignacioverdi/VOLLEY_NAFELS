@@ -450,6 +450,12 @@ function fmtEff(v){
    tienen. */
 var OBJ_T = {
   en: {
+    '% Blq #+':'% Block #+',
+    '% Blq #':'% Block #',
+    '% Atq R#+':'% Atk after R#+',
+    '% Atq R!':'% Atk after R!',
+    '% Atq R-':'% Atk after R-',
+    '% Atq Transición':'% Atk in transition',
     'Objetivo':'Target',
     'Cerca':'Close',
     'Lejos':'Far',
@@ -524,6 +530,12 @@ var OBJ_T = {
     'El reproductor no está cargado en esta pantalla.':'The player is not loaded on this screen.'
   },
   de: {
+    '% Blq #+':'% Block #+',
+    '% Blq #':'% Block #',
+    '% Atq R#+':'% Angriff nach R#+',
+    '% Atq R!':'% Angriff nach R!',
+    '% Atq R-':'% Angriff nach R-',
+    '% Atq Transición':'% Angriff im Umschalten',
     'Objetivo':'Ziel',
     'Cerca':'Nah',
     'Lejos':'Weit',
