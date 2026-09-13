@@ -1,76 +1,84 @@
-LOS 6 HEATMAPS — COMPLETO
-=========================
+TRADUCCIONES — BARRIDO COMPLETO DE LA APP
+=========================================
 
-6 archivos. Publicar y Ctrl+Shift+R.
-REEMPLAZA al zip anterior.
-
-
-LOS 4 PROBLEMAS, CON SU CAUSA
------------------------------
-
-1) HTML ROTO — la causa de fondo de tu punto 2
-   En armador, ataque, recepcion y saque estaba esto:
-
-       <div class="content"<div class="content" id="content">
-                          ^ falta cerrar
-
-   Una etiqueta abierta dentro de otra. El navegador se come lo que sigue, y
-   lo que seguia era el <script> que arma los datos.
-
-   Por eso en ARMADO podias tocar ENTRENAMIENTO y la lista de armadores
-   quedaba vacia: el script nunca terminaba de correr.
-
-2) BLOQUEO — EQ se calculaba antes de que hubiera datos
-       var EQ = equipoActual();            <- corre ANTES del .enc
-       var JUGADORES = PP_BLOCK[EQ] || []; <- queda VACIO
-
-   Con la lista vacia, hayTipos() daba falso y el selector de PARTIDO /
-   ENTRENAMIENTO no se dibujaba nunca.
-
-   Lo verifique en la app: los 206 bloqueos de entrenamiento ESTABAN
-   cargados. La pantalla no los ofrecia.
-
-       entrenamiento 206 · partido 1356
-
-   Ahora se recalcula cuando los datos llegaron, reintentando hasta 10 seg.
-   Use el selector que ya tenia la pantalla, no agregue otro al lado.
-
-3) DEFENSA — la funcion existia, el boton no
-   setModoDef() estaba escrita y nadie la llamaba. Cero botones.
-   Agregue los dos, iguales a los de saque, con la clave del sistema.
-
-4) TRADUCCIONES
-   Audite los 6 comparando cada texto contra su tabla, y ademas busque los
-   textos que genera el javascript en vivo, que era el hueco que te marque.
-
-   bloqueo y defensa NO TENIAN motor de traduccion. Nada se traducia.
-
-   La tabla pasa de 74 a 144 terminos, IGUAL EN LOS 6:
-       56 de pantalla (titulos, filtros, mensajes)
-       27 del javascript (posiciones de cancha, "Elegí un jugador primero",
-          "Por ahora el video está disponible solo para Nafels", etc.)
-
-   Y 124 textos marcados para que el motor los tome.
-
-   armador 28 · ataque 30 · bloqueo 10 · defensa 18 · recepcion 24 · saque 24
+55 archivos: 54 pantallas + lang.js. Publicar TODO junto y Ctrl+Shift+R.
 
 
-COMO QUEDAN
+TENIAS RAZON
+------------
+Ofrecer traduccion y despues pedirte que busques frase por frase no es un
+servicio. Barri las 60 pantallas.
+
+
+LO QUE ENCONTRE
+---------------
+Primero me equivoque de sistema: estuve mirando data-i18n, que solo usan los
+heatmaps. El sistema REAL de la app es lang.js con data-t, y ya tenia 2025
+textos traducidos a ingles y aleman.
+
+El problema no era que faltaran traducciones. Era que EL TEXTO NO ESTABA
+MARCADO: lang.js sabia traducirlo y nadie se lo pedia.
+
+   textos en castellano sin traducir     1011
+   de esos, YA traducidos en lang.js      543   <- solo faltaba marcarlos
+   de esos, sin traduccion                198
+
+
+LO QUE HICE
 -----------
-   archivo      términos  marcados  modo  html
-   armador        144        28      SI    OK
-   ataque         144        30      SI    OK
-   bloqueo        144        10      SI    OK
-   defensa        144        18      SI    OK
-   recepcion      144        24      SI    OK
-   saque          144        24      SI    OK
+1. MARQUE 1585 textos con data-t en 54 pantallas.
+   Es lo que mas movio la aguja: la traduccion existia, faltaba engancharla.
+
+2. TRADUJE 87 textos nuevos al ingles y al aleman, y los sume a lang.js:
+   titulos de pantalla, fundamentos, descripciones del menu, secciones de
+   preparacion fisica, botones.
+
+   lang.js pasa de 1990 a 2031 entradas.
+
+3. VERIFIQUE que no se rompiera nada: ningun archivo quedo con etiquetas
+   mal cerradas, ningun data-t mal formado. +45 KB en total.
 
 
-UNA COSA QUE TE DEBO
---------------------
-Intente envolver automaticamente en t() los textos que arma el javascript,
-y me rompio dos archivos. Los restaure del repo y rehice el trabajo a mano.
+RESULTADO
+---------
+   antes:  1011 textos en castellano
+   ahora:   301
 
-Esos textos ESTAN traducidos en la tabla, pero algunos se escriben directo
-al HTML sin pasar por t(). Si publicas y ves alguno en castellano, pasame la
-frase exacta: ya esta traducida, solo falta engancharla, y es un minuto.
+Y de esos 301 que quedan:
+
+   124  MANUAL_NAFELS_VOLEY.html      } los tres manuales
+    53  GUIA_COMO_SCOUTEAR.html       } 244 textos, 81%
+    10  BIENVENIDA.html               } de lo que queda
+    67  panel_vivo.html
+    13  unir_video.html
+    34  el resto, repartido
+
+
+LO QUE QUEDA Y POR QUE
+----------------------
+Los manuales y el panel en vivo tienen el texto PARTIDO POR ETIQUETAS:
+
+   "El <b>.dvw</b> en tu carpeta es el respaldo de <b>verdad</b>."
+
+Eso llega como tres pedazos —"El", ".dvw en tu carpeta es el respaldo de",
+"verdad."— y traducir pedazos sueltos da un ingles roto. Hay que reescribir
+esas frases enteras, una por una, y son documentos largos.
+
+No lo hice automatico a proposito: preferi dejarlo sin traducir antes que
+llenarte los manuales de ingles mal armado.
+
+Si queres que los haga, decime y los hago a mano. Son unas 2-3 horas de
+trabajo prolijo y quedan bien. Lo que NO voy a hacer es pasarlos por una
+traduccion automatica que quede mal.
+
+
+LAS PANTALLAS OPERATIVAS — las que se usan todos los dias
+----------------------------------------------------------
+Estas quedaron limpias o casi:
+
+   dashboard · jugador · equipo · analisis · ranking · informe
+   los 6 heatmaps · prep_fisica · wellness · calendario · videos
+   cortes · index · historial
+
+cortes.html queda con 6 y plan_partido con 5, todos fragmentos partidos como
+los de arriba.

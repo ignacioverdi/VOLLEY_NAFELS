@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Subir partido — NAFELS VOLEY</title>
+<title data-t="Subir partido — NAFELS VOLEY">Subir partido — NAFELS VOLEY</title>
 <style>
 :root{--bg:#0d1017;--sur:#141922;--card:#1a2029;--card2:#212936;--b:#2a3441;--b2:#38445a;
       --txt:#e8edf5;--mut:#8b97ab;--dim:#5f6b7f;--ok:#3ddc84;--bad:#ff5f6d;--warn:#e6a743}
@@ -50,18 +50,18 @@ input[type=file]{display:none}
 </style>
 <!-- Motor de idiomas (ES / EN / DE). Traduce por data-t y ademas por texto,
      asi que alcanza con cargarlo. -->
-<script src="categorias_club.js?v=20260913-0842"></script>
-<script src="selector_categoria.js?v=20260913-0842"></script>
-<script src="lang.js?v=20260913-0842"></script>
+<script src="categorias_club.js?v=20260913-0851"></script>
+<script src="selector_categoria.js?v=20260913-0851"></script>
+<script src="lang.js?v=20260913-0851"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0842">
+<link rel="stylesheet" href="movil.css?v=20260913-0851">
 </head>
 <body>
 
 <div class="top">
-  <h1>Subir partido</h1>
+  <h1 data-t="Subir partido">Subir partido</h1>
   <span style="color:var(--mut);font-size:12px">NAFELS VOLEY</span>
 </div>
 
@@ -74,7 +74,7 @@ input[type=file]{display:none}
 
   <div class="zona" id="zona" onclick="document.getElementById('sel').click()">
     <div class="ic">🏐</div>
-    <div class="t">Arrastrá acá el archivo del partido</div>
+    <div class="t" data-t="Arrastrá acá el archivo del partido">Arrastrá acá el archivo del partido</div>
     <div class="s">
       Es el archivo <b>.dvw</b> que exportás de DataVolley.<br>Sirve tanto para partidos como para entrenamientos.<br>
       También podés hacer clic para buscarlo.
@@ -85,7 +85,7 @@ input[type=file]{display:none}
   <div class="lista" id="lista"></div>
 
   <div class="aviso">
-    <b>No tenés que hacer nada más.</b> Apenas lo subís, el sistema lo procesa solo:
+    <b data-t="No tenés que hacer nada más.">No tenés que hacer nada más.</b> Apenas lo subís, el sistema lo procesa solo:
     actualiza las estadísticas, los mapas de calor, el plan de partido y los perfiles
     de cada jugador.<br><br>
     Tarda unos minutos. Podés cerrar esta pantalla tranquilo — cuando vuelvas ya va a
@@ -94,9 +94,9 @@ input[type=file]{display:none}
 
 </div>
 
-<script src="datos_seguros.js?v=20260913-0842" onerror="void 0"></script>
-<script src="firebase.js?v=20260913-0842"></script>
-<script src="firebase_por_categoria.js?v=20260913-0842"></script>
+<script src="datos_seguros.js?v=20260913-0851" onerror="void 0"></script>
+<script src="firebase.js?v=20260913-0851"></script>
+<script src="firebase_por_categoria.js?v=20260913-0851"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
    El archivo se deja esperando en la base. Un robot en la nube lo levanta,
@@ -243,7 +243,7 @@ document.getElementById('sel').addEventListener('change', function(ev){
 pintar();
 try{ traerEstado(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20260913-0842" onerror="void 0"></script>
-<script src="ayuda.js?v=20260913-0842"></script>
+<script src="volver_inicio.js?v=20260913-0851" onerror="void 0"></script>
+<script src="ayuda.js?v=20260913-0851"></script>
 </body>
 </html>

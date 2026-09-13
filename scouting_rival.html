@@ -133,33 +133,33 @@
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260913-0842" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-0842"></script>
+<script src="firebase.js?v=20260913-0851" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-0851"></script>
 </head>
 <body>
 <div class="wrap">
 <div class="header-right"><button class="printbtn" onclick="window.print()">🖨 Imprimir / PDF</button><div id="lang-wrap"></div></div>
 
 <div class="hdr">
-  <a href="dashboard.html" class="back-btn">← Dashboard</a>
+  <a href="dashboard.html" class="back-btn" data-t="← Dashboard">← Dashboard</a>
   <div>
     <div class="hdr-t">SCOUTING <span>RIVAL</span></div>
-    <div class="hdr-s">Dossier del próximo rival · NLA Suiza</div>
+    <div class="hdr-s" data-t="Dossier del próximo rival · NLA Suiza">Dossier del próximo rival · NLA Suiza</div>
   </div>
 </div>
 
 <div class="teamsel" id="teamsel"></div>
 <div class="dossier" id="dossier">
-  <div class="empty-st"><div class="big">ELEGÍ UN RIVAL</div><div>Seleccioná un equipo arriba para ver su dossier completo de scouting.</div></div>
+  <div class="empty-st"><div class="big" data-t="ELEGÍ UN RIVAL">ELEGÍ UN RIVAL</div><div data-t="Seleccioná un equipo arriba para ver su dossier completo de scouting.">Seleccioná un equipo arriba para ver su dossier completo de scouting.</div></div>
 </div>
 </div>
 
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260913-0842" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260913-0842" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260913-0842"></script>
+<script src="categorias_club.js?v=20260913-0851" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260913-0851" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260913-0851"></script>
   <script src="scouting_rival.js.enc" onerror="void 0"></script>
-  <script src="objetivos_config.js?v=20260913-0842"></script>
+  <script src="objetivos_config.js?v=20260913-0851"></script>
 <script>abrirDatos();</script>
 <script>
 var SC = window.SCOUTING_RIVAL || {};
@@ -744,9 +744,9 @@ function renderDossier(n){
 
 buildTeams();
 </script>
-<script src="lang.js?v=20260913-0842" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260913-0842" onerror="void 0"></script>
-<script src="ayuda.js?v=20260913-0842"></script>
+<script src="lang.js?v=20260913-0851" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260913-0851" onerror="void 0"></script>
+<script src="ayuda.js?v=20260913-0851"></script>
 </body>
 </html>
 

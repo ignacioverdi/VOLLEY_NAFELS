@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>PIZARRÓN — Axpo Volley Näfels</title>
+<title data-t="PIZARRÓN — Axpo Volley Näfels">PIZARRÓN — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20260913-0842"></script>
-<script src="selector_categoria.js?v=20260913-0842"></script>
-<script src="utils.js?v=20260913-0842" onerror="void 0"></script>
-<script src="plantel_nafels.js?v=20260913-0842" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260913-0842"></script>
+<script src="categorias_club.js?v=20260913-0851"></script>
+<script src="selector_categoria.js?v=20260913-0851"></script>
+<script src="utils.js?v=20260913-0851" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20260913-0851" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260913-0851"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
 <script src="datos_prep_fisica.js.enc" onerror="void 0"></script>
 <!-- El catalogo de ejercicios. Cada ejercicio ya trae su nombre en es, en y
@@ -21,8 +21,8 @@
      existiera. Es el mismo orden que usa prep_fisica.html. -->
 <script src="datos_ejercicios.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20260913-0842" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-0842"></script>
+<script src="firebase.js?v=20260913-0851" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-0851"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -176,7 +176,7 @@ body.fullscreen{background:#000;}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0842">
+<link rel="stylesheet" href="movil.css?v=20260913-0851">
 </head>
 <body>
 <!-- El selector de idiomas estaba en un contenedor FIJO arriba a la derecha,
@@ -189,14 +189,14 @@ body.fullscreen{background:#000;}
 
 <div class="header">
   <div style="display:flex;align-items:center;gap:14px;">
-    <a href="index.html" class="back-btn">← Inicio</a>
-    <div class="logo">🏐 Pizarrón</div>
-    <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;">NAFELS VOLEY · Rutina del día</div>
+    <a href="index.html" class="back-btn" data-t="← Inicio">← Inicio</a>
+    <div class="logo" data-t="🏐 Pizarrón">🏐 Pizarrón</div>
+    <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;" data-t="NAFELS VOLEY · Rutina del día">NAFELS VOLEY · Rutina del día</div>
   </div>
   <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end">
     <div class="live-dot" title="Sincronizado con Firebase"></div>
     <span style="font-size:10px;color:var(--green);letter-spacing:1px;">LIVE</span>
-    <button class="btn-fullscreen" onclick="toggleFullscreen()">⛶ Pantalla completa</button>
+    <button class="btn-fullscreen" onclick="toggleFullscreen()" data-t="⛶ Pantalla completa">⛶ Pantalla completa</button>
     <a href="prep_fisica.html" class="back-btn">💪 Individual</a>
     <div id="lang-wrap" style="display:flex;gap:4px"></div>
   </div>
@@ -205,20 +205,20 @@ body.fullscreen{background:#000;}
 <!-- CONTROLES -->
 <div class="controles">
   <div id="mes-wrap" style="display:none">
-    <div class="ctrl-label">Mes</div>
+    <div class="ctrl-label" data-t="Mes">Mes</div>
     <select class="ctrl-sel" id="sel-mes" onchange="onMesChange()"></select>
   </div>
   <div>
-    <div class="ctrl-label">Día de rutina</div>
+    <div class="ctrl-label" data-t="Día de rutina">Día de rutina</div>
     <select class="ctrl-sel" id="sel-dia" onchange="renderPizarron()">
-      <option value="">— Elegí el día —</option>
+      <option value="" data-t="— Elegí el día —">— Elegí el día —</option>
     </select>
   </div>
   <!-- Antes eran 13 fichas una al lado de la otra: con el plantel completo la
        fila ocupaba media pantalla. Ahora es un boton que abre un panel con las
        tildes, y muestra cuantos hay elegidos sin necesidad de abrirlo. -->
   <div style="position:relative">
-    <div class="ctrl-label">Jugadores a mostrar</div>
+    <div class="ctrl-label" data-t="Jugadores a mostrar">Jugadores a mostrar</div>
     <!-- Fondo blanco y texto oscuro, igual que los dos <select> de al lado. La
          hoja de estilos les pone fondo oscuro, pero el navegador dibuja los
          desplegables nativos en blanco: si el boton seguia la hoja, quedaba
@@ -227,14 +227,14 @@ body.fullscreen{background:#000;}
     <button class="ctrl-sel" id="jug-boton" onclick="abrirJugs(event)"
             style="cursor:pointer;text-align:left;min-width:190px;display:flex;align-items:center;gap:10px;
                    justify-content:space-between;background:#fff;color:#111;border-color:rgba(0,0,0,.15)">
-      <span id="jug-resumen">Todos</span><span style="color:#555;font-size:11px">▾</span>
+      <span id="jug-resumen" data-t="Todos">Todos</span><span style="color:#555;font-size:11px">▾</span>
     </button>
     <div id="jug-panel" style="display:none;position:absolute;top:100%;left:0;margin-top:6px;z-index:500;
          background:var(--card2);border:1px solid var(--border2);border-radius:12px;padding:10px;
          box-shadow:0 12px 34px rgba(0,0,0,.6);min-width:250px;max-height:340px;overflow:auto">
       <div style="display:flex;gap:8px;padding-bottom:8px;margin-bottom:6px;border-bottom:1px solid var(--border)">
-        <button onclick="jugTodos(true)" style="flex:1;cursor:pointer;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35);color:#4ade80;border-radius:7px;padding:5px;font-family:inherit;font-size:11px;font-weight:700">Todos</button>
-        <button onclick="jugTodos(false)" style="flex:1;cursor:pointer;background:transparent;border:1px solid var(--border);color:var(--mut);border-radius:7px;padding:5px;font-family:inherit;font-size:11px;font-weight:700">Ninguno</button>
+        <button onclick="jugTodos(true)" style="flex:1;cursor:pointer;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35);color:#4ade80;border-radius:7px;padding:5px;font-family:inherit;font-size:11px;font-weight:700" data-t="Todos">Todos</button>
+        <button onclick="jugTodos(false)" style="flex:1;cursor:pointer;background:transparent;border:1px solid var(--border);color:var(--mut);border-radius:7px;padding:5px;font-family:inherit;font-size:11px;font-weight:700" data-t="Ninguno">Ninguno</button>
       </div>
       <div id="jug-chips"></div>
     </div>
@@ -246,8 +246,8 @@ body.fullscreen{background:#000;}
 <div class="main" id="main-content">
   <div class="empty">
     <div class="empty-icon">🏋️</div>
-    <div class="empty-txt">Elegí el día de rutina</div>
-    <div class="empty-sub">Seleccioná el día arriba para ver la rutina completa</div>
+    <div class="empty-txt" data-t="Elegí el día de rutina">Elegí el día de rutina</div>
+    <div class="empty-sub" data-t="Seleccioná el día arriba para ver la rutina completa">Seleccioná el día arriba para ver la rutina completa</div>
   </div>
 </div>
 
@@ -792,9 +792,9 @@ window.addEventListener('load', function(){
   }, 200);
 });
 </script>
-<script src="lang.js?v=20260913-0842"></script>
-<script src="temporadas_menu.js?v=20260913-0842"></script>
-<script src="ayuda.js?v=20260913-0842"></script>
+<script src="lang.js?v=20260913-0851"></script>
+<script src="temporadas_menu.js?v=20260913-0851"></script>
+<script src="ayuda.js?v=20260913-0851"></script>
 </body>
 </html>
 

@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>BAGGERONE — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20260913-0842"></script>
-<script src="selector_categoria.js?v=20260913-0842"></script>
-<script src="lang.js?v=20260913-0842" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260913-0851"></script>
+<script src="selector_categoria.js?v=20260913-0851"></script>
+<script src="lang.js?v=20260913-0851" onerror="void 0"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260913-0842"></script>
+<script src="datos_seguros.js?v=20260913-0851"></script>
   <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
   <!-- El plantel maestro del club. Es la fuente unica: cuando entra un jugador
        nuevo se agrega ahi y aparece en todas las pantallas. -->
-  <script src="plantel_nafels.js?v=20260913-0842" onerror="void 0"></script>
+  <script src="plantel_nafels.js?v=20260913-0851" onerror="void 0"></script>
   <script>abrirDatos();</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -209,24 +209,24 @@ select, select option {
   }
 }
 </style>
-<script src="firebase.js?v=20260913-0842" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-0842"></script>
+<script src="firebase.js?v=20260913-0851" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-0851"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0842">
+<link rel="stylesheet" href="movil.css?v=20260913-0851">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260913-0842" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260913-0851" onerror="void 0"></script>
 </head>
 <body>
 
 <div class="page-header">
   <div style="display:flex;align-items:center;gap:14px;">
-    <a href="index.html" class="back-btn">← Inicio</a>
+    <a href="index.html" class="back-btn" data-t="← Inicio">← Inicio</a>
     <div>
-      <div class="page-title">🏐 Baggerone</div>
-      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;">NAFELS VOLEY · Ranking interno</div>
+      <div class="page-title" data-t="🏐 Baggerone">🏐 Baggerone</div>
+      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;" data-t="NAFELS VOLEY · Ranking interno">NAFELS VOLEY · Ranking interno</div>
     </div>
   </div>
   <div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div>
@@ -236,7 +236,7 @@ select, select option {
 
   <!-- PODIO -->
   <div class="podio-wrap">
-    <div class="podio-titulo">🏆 Ranking</div>
+    <div class="podio-titulo" data-t="🏆 Ranking">🏆 Ranking</div>
     <div class="podio" id="podio"></div>
   </div>
 
@@ -251,7 +251,7 @@ select, select option {
   <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
     <button onclick="abrirAlinear()" title="Elegí quién vino y reparte según la tabla: 1º, 3º, 5º… al A · 2º, 4º, 6º… al B"
       style="cursor:pointer;background:rgba(55,138,221,.12);border:1px solid rgba(55,138,221,.4);color:#8fc0ee;
-             border-radius:9px;padding:8px 16px;font-family:inherit;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase">
+             border-radius:9px;padding:8px 16px;font-family:inherit;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase" data-t="⚖️ Alinear equipos">
       ⚖️ Alinear equipos
     </button>
   </div>
@@ -260,17 +260,17 @@ select, select option {
        faltaron y recien ahi se reparte. -->
   <div id="alinear-panel" style="display:none;background:var(--card,rgba(255,255,255,.03));border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-      <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mut);font-weight:700">¿Quiénes vinieron hoy?</div>
+      <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mut);font-weight:700" data-t="¿Quiénes vinieron hoy?">¿Quiénes vinieron hoy?</div>
       <div style="flex:1;height:1px;background:var(--border)"></div>
-      <button onclick="marcarTodos(1)" style="cursor:pointer;background:transparent;border:1px solid var(--border);color:var(--mut);border-radius:7px;padding:4px 10px;font-family:inherit;font-size:11px">Todos</button>
-      <button onclick="marcarTodos(0)" style="cursor:pointer;background:transparent;border:1px solid var(--border);color:var(--mut);border-radius:7px;padding:4px 10px;font-family:inherit;font-size:11px">Ninguno</button>
+      <button onclick="marcarTodos(1)" style="cursor:pointer;background:transparent;border:1px solid var(--border);color:var(--mut);border-radius:7px;padding:4px 10px;font-family:inherit;font-size:11px" data-t="Todos">Todos</button>
+      <button onclick="marcarTodos(0)" style="cursor:pointer;background:transparent;border:1px solid var(--border);color:var(--mut);border-radius:7px;padding:4px 10px;font-family:inherit;font-size:11px" data-t="Ninguno">Ninguno</button>
     </div>
     <div id="alinear-lista" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px"></div>
     <div style="display:flex;align-items:center;gap:12px;margin-top:12px">
       <span id="alinear-cuenta" style="font-size:12px;color:var(--mut)"></span>
       <div style="flex:1"></div>
-      <button onclick="cerrarAlinear()" style="cursor:pointer;background:transparent;border:1px solid var(--border);color:var(--mut);border-radius:9px;padding:8px 14px;font-family:inherit;font-size:12px;font-weight:700">Cancelar</button>
-      <button onclick="alinearEquipos()" style="cursor:pointer;background:rgba(55,138,221,.18);border:1px solid rgba(55,138,221,.5);color:#8fc0ee;border-radius:9px;padding:8px 18px;font-family:inherit;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase">Armar equipos</button>
+      <button onclick="cerrarAlinear()" style="cursor:pointer;background:transparent;border:1px solid var(--border);color:var(--mut);border-radius:9px;padding:8px 14px;font-family:inherit;font-size:12px;font-weight:700" data-t="Cancelar">Cancelar</button>
+      <button onclick="alinearEquipos()" style="cursor:pointer;background:rgba(55,138,221,.18);border:1px solid rgba(55,138,221,.5);color:#8fc0ee;border-radius:9px;padding:8px 18px;font-family:inherit;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase" data-t="Armar equipos">Armar equipos</button>
     </div>
   </div>
 
@@ -279,7 +279,7 @@ select, select option {
     <div class="equipo-card ea">
       <div class="equipo-header">
         <div class="equipo-color" style="background:var(--blue)"></div>
-        <div class="equipo-nombre" style="color:var(--blue)">Equipo A</div>
+        <div class="equipo-nombre" style="color:var(--blue)" data-t="Equipo A">Equipo A</div>
       </div>
       <div class="equipo-slots" id="slots-a"></div>
     </div>
@@ -287,7 +287,7 @@ select, select option {
     <!-- SETS -->
     <div class="sets-panel">
       <div class="vs-badge">VS</div>
-      <div class="sets-label">Sets</div>
+      <div class="sets-label" data-t="Sets">Sets</div>
       <div class="set-row">
         <div class="set-lbl">S1</div>
         <input type="number" class="set-inp" id="s1a" min="0" max="99" value="" placeholder="A">
@@ -306,14 +306,14 @@ select, select option {
         <span class="set-sep">—</span>
         <input type="number" class="set-inp" id="s3b" min="0" max="99" value="" placeholder="B">
       </div>
-      <button class="btn-guardar" onclick="guardarPartido()">💾 GUARDAR</button>
+      <button class="btn-guardar" onclick="guardarPartido()" data-t="💾 GUARDAR">💾 GUARDAR</button>
     </div>
 
     <!-- EQUIPO B -->
     <div class="equipo-card eb">
       <div class="equipo-header">
         <div class="equipo-color" style="background:var(--coral)"></div>
-        <div class="equipo-nombre" style="color:var(--coral)">Equipo B</div>
+        <div class="equipo-nombre" style="color:var(--coral)" data-t="Equipo B">Equipo B</div>
       </div>
       <div class="equipo-slots" id="slots-b"></div>
     </div>
@@ -323,20 +323,20 @@ select, select option {
   <div class="tabla-wrap">
     <div class="tabla-header">
       <span style="font-size:18px">📊</span>
-      <div class="tabla-title">Tabla de posiciones</div>
+      <div class="tabla-title" data-t="Tabla de posiciones">Tabla de posiciones</div>
     </div>
     <table class="tabla">
       <thead>
         <tr>
           <th>#</th>
           <th><span data-t="g_jugador">Jugador</span></th>
-          <th>PJ</th>
+          <th data-t="PJ">PJ</th>
           <th>PG</th>
           <th>PP</th>
-          <th>Pts G</th>
-          <th>Pts P</th>
-          <th>Dif</th>
-          <th>Puntos</th>
+          <th data-t="Pts G">Pts G</th>
+          <th data-t="Pts P">Pts P</th>
+          <th data-t="Dif">Dif</th>
+          <th data-t="Puntos">Puntos</th>
         </tr>
       </thead>
       <tbody id="tabla-body"></tbody>
@@ -347,8 +347,8 @@ select, select option {
   <div class="historial-wrap">
     <div class="hist-header">
       <span style="font-size:16px">📋</span>
-      <div class="hist-title">Historial de partidos</div>
-      <button onclick="limpiarHistorial()" style="margin-left:auto;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--mut);font-size:10px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;cursor:pointer;">LIMPIAR TODO</button>
+      <div class="hist-title" data-t="Historial de partidos">Historial de partidos</div>
+      <button onclick="limpiarHistorial()" style="margin-left:auto;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--mut);font-size:10px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;cursor:pointer;" data-t="LIMPIAR TODO">LIMPIAR TODO</button>
     </div>
     <div id="historial-lista"></div>
   </div>
@@ -863,8 +863,8 @@ if(window.EQUIPO_DATA){
   renderPodio();
 }
 </script>
-<script src="temporadas_menu.js?v=20260913-0842"></script>
-<script src="ayuda.js?v=20260913-0842"></script>
+<script src="temporadas_menu.js?v=20260913-0851"></script>
+<script src="ayuda.js?v=20260913-0851"></script>
 </body>
 </html>
 

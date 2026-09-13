@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mi Performance — NAFELS Voley</title>
+<title data-t="Mi Performance — NAFELS Voley">Mi Performance — NAFELS Voley</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260913-0842" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260913-0842" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260913-0851" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260913-0851" onerror="void 0"></script>
 <script>
 /* DOBLE TURNO: manana y tarde el mismo dia. El turno llega desde el motor
    como 'M' o 'T'; sin marca no muestra nada. */
@@ -22,17 +22,17 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260913-0842"></script>
+<script src="datos_seguros.js?v=20260913-0851"></script>
   <!-- El historial y los entrenamientos: la pagina los usa pero no los
        pedia, asi que la lista salia vacia. -->
-  <script src="datos_historial.js?v=20260913-0842" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260913-0851" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
   <!-- El plantel del club. La lista de jugadores sale de EQUIPO_DATA, que
        viene cifrado y a veces no llega: sin eso la pagina queda en blanco. -->
-  <script src="plantel_nafels.js?v=20260913-0842" onerror="void 0"></script>
+  <script src="plantel_nafels.js?v=20260913-0851" onerror="void 0"></script>
   <script>abrirDatos();</script>
 <!-- VB: selector PARTIDO/ENTRENAMIENTO - carga los datos segun el modo elegido -->
 <script>(function(){var ent=false;try{ent=(localStorage.getItem('vb_modo')||'partido')==='entrenamiento';}catch(e){}
@@ -136,15 +136,15 @@ html,body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260913-0842" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-0842"></script>
+<script src="firebase.js?v=20260913-0851" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-0851"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0842">
+<link rel="stylesheet" href="movil.css?v=20260913-0851">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260913-0842" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260913-0851" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -178,9 +178,9 @@ function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
 <!-- HEADER -->
 <div class="hdr">
   <div class="hdr-top">
-    <a href="dashboard.html" class="back-btn">← Dashboard</a>
-    <button onclick="showHeatmapMenu()" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:#F97316;padding:6px 14px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;cursor:pointer;letter-spacing:1px">🔥 HEAT MAPS</button>
-    <div class="hdr-title">MI PERFORMANCE</div>
+    <a href="dashboard.html" class="back-btn" data-t="← Dashboard">← Dashboard</a>
+    <button onclick="showHeatmapMenu()" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:#F97316;padding:6px 14px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;cursor:pointer;letter-spacing:1px" data-t="🔥 HEAT MAPS">🔥 HEAT MAPS</button>
+    <div class="hdr-title" data-t="MI PERFORMANCE">MI PERFORMANCE</div>
   </div>
 </div>
 
@@ -200,8 +200,8 @@ function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
 <!-- BATERIAS -->
 <div class="bat-wrap" id="bat-wrap">
   <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;align-items:center">
-    <button class="tfbtn on-p" id="bat-tbtn-p" onclick="batSetTipo('partido',this)">🏆 PARTIDO</button>
-    <button class="tfbtn" id="bat-tbtn-e" onclick="batSetTipo('entrenamiento',this)">🏋️ ENTRENAMIENTO</button>
+    <button class="tfbtn on-p" id="bat-tbtn-p" onclick="batSetTipo('partido',this)" data-t="🏆 PARTIDO">🏆 PARTIDO</button>
+    <button class="tfbtn" id="bat-tbtn-e" onclick="batSetTipo('entrenamiento',this)" data-t="🏋️ ENTRENAMIENTO">🏋️ ENTRENAMIENTO</button>
   </div>
   <div id="bat-sfrow" style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px"></div>
   <div id="objetivos-jugador"></div>
@@ -209,19 +209,19 @@ function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
 
 <!-- TIPO + SESION FILTER -->
 <div class="filter-row" id="filter-row">
-  <button class="tfbtn on-p" id="tfbtn-p" onclick="setTipo('partido',this)">🏆 PARTIDO</button>
-  <button class="tfbtn" id="tfbtn-e" onclick="setTipo('entrenamiento',this)">🏋️ ENTRENAMIENTO</button>
+  <button class="tfbtn on-p" id="tfbtn-p" onclick="setTipo('partido',this)" data-t="🏆 PARTIDO">🏆 PARTIDO</button>
+  <button class="tfbtn" id="tfbtn-e" onclick="setTipo('entrenamiento',this)" data-t="🏋️ ENTRENAMIENTO">🏋️ ENTRENAMIENTO</button>
   <div class="divider"></div>
   <div id="sfrow" style="display:flex;gap:4px;flex-wrap:wrap"></div>
 </div>
 
 <!-- TABS -->
 <div class="tabs" id="tabs">
-  <button class="tab on" onclick="setTab('calendario',this)">📅 CALENDARIO</button>
-  <button class="tab" onclick="setTab('rendimiento',this)">📈 RENDIMIENTO</button>
-  <button class="tab" onclick="setTab('ataque',this)">💥 ATAQUE</button>
-  <button class="tab" onclick="setTab('saque',this)">⚡ SAQUE</button>
-  <button class="tab" onclick="setTab('recepcion',this)">🛡 RECEPCIÓN</button>
+  <button class="tab on" onclick="setTab('calendario',this)" data-t="📅 CALENDARIO">📅 CALENDARIO</button>
+  <button class="tab" onclick="setTab('rendimiento',this)" data-t="📈 RENDIMIENTO">📈 RENDIMIENTO</button>
+  <button class="tab" onclick="setTab('ataque',this)" data-t="💥 ATAQUE">💥 ATAQUE</button>
+  <button class="tab" onclick="setTab('saque',this)" data-t="⚡ SAQUE">⚡ SAQUE</button>
+  <button class="tab" onclick="setTab('recepcion',this)" data-t="🛡 RECEPCIÓN">🛡 RECEPCIÓN</button>
 </div>
 
 <div class="main" id="main"></div>
@@ -1053,15 +1053,15 @@ function setObjTipo(tipo, btn){
 </style>
 <div id="hm-overlay" onclick="if(event.target===this)closeHeatmapMenu()">
   <div class="hm-box">
-    <div class="hm-title"><span>🔥 HEAT MAPS</span><button class="hm-close" onclick="closeHeatmapMenu()">✕</button></div>
+    <div class="hm-title"><span data-t="🔥 HEAT MAPS">🔥 HEAT MAPS</span><button class="hm-close" onclick="closeHeatmapMenu()">✕</button></div>
     <div class="hm-grid">
-      <a class="hm-card" href="hm_ataque.html?equipo=nafels"    style="background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#F97316">ATAQUE</span><span class="hm-sub">EFF · SO/TR · Zonas</span></a>
-      <a class="hm-card" href="hm_saque.html?equipo=nafels"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Zonas origen/destino</span></a>
-      <a class="hm-card" href="hm_recepcion.html?equipo=nafels" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
-      <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
-      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8">BLOQUEO</span><span class="hm-sub">EFF · Zona del ataque · Combos</span></a>
+      <a class="hm-card" href="hm_ataque.html?equipo=nafels"    style="background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#F97316" data-t="ATAQUE">ATAQUE</span><span class="hm-sub" data-t="EFF · SO/TR · Zonas">EFF · SO/TR · Zonas</span></a>
+      <a class="hm-card" href="hm_saque.html?equipo=nafels"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E" data-t="SAQUE">SAQUE</span><span class="hm-sub" data-t="EFF · Zonas origen/destino">EFF · Zonas origen/destino</span></a>
+      <a class="hm-card" href="hm_recepcion.html?equipo=nafels" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8" data-t="RECEPCION">RECEPCION</span><span class="hm-sub" data-t="EFF · Calidad · Zonas">EFF · Calidad · Zonas</span></a>
+      <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B" data-t="ARMADO">ARMADO</span><span class="hm-sub" data-t="Llamadas · Pos · EFF">Llamadas · Pos · EFF</span></a>
+      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444" data-t="DEFENSA">DEFENSA</span><span class="hm-sub" data-t="EFF · Zonas · Por rival">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8" data-t="BLOQUEO">BLOQUEO</span><span class="hm-sub" data-t="EFF · Zona del ataque · Combos">EFF · Zona del ataque · Combos</span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#8395ac;text-align:center">NLA Suiza 2026/27 · temporada en curso</div>
+    <div style="margin-top:14px;font-size:10px;color:#8395ac;text-align:center" data-t="NLA Suiza 2026/27 · temporada en curso">NLA Suiza 2026/27 · temporada en curso</div>
   </div>
 </div>
 <script>
@@ -1069,9 +1069,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260913-0842"></script>
-<script src="lang.js?v=20260913-0842"></script>
-<script src="temporadas_menu.js?v=20260913-0842"></script>
+<script src="chat_nafels.js?v=20260913-0851"></script>
+<script src="lang.js?v=20260913-0851"></script>
+<script src="temporadas_menu.js?v=20260913-0851"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
    EL PLANTEL, VENGA DE DONDE VENGA
@@ -1101,7 +1101,7 @@ function _plantelDelClub(){
   return [];
 }
 </script>
-<script src="ayuda.js?v=20260913-0842"></script>
+<script src="ayuda.js?v=20260913-0851"></script>
 </body>
 </html>
 

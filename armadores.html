@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20260913-0842"></script>
-<script src="selector_categoria.js?v=20260913-0842"></script>
-<script src="objetivos_config.js?v=20260913-0842"></script>
+<script src="categorias_club.js?v=20260913-0851"></script>
+<script src="selector_categoria.js?v=20260913-0851"></script>
+<script src="objetivos_config.js?v=20260913-0851"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>GAME PLAN — AMRISWIL · NAFELS</title>
+<title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -312,41 +312,41 @@ select, select option {
   }
 }
 </style>
-<script src="lang.js?v=20260913-0842" onerror="void 0"></script>
+<script src="lang.js?v=20260913-0851" onerror="void 0"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260913-0842"></script>
-<script src="filtro_tipo.js?v=20260913-0842" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260913-0851"></script>
+<script src="filtro_tipo.js?v=20260913-0851" onerror="void 0"></script>
   <script src="liga_data.js.enc"></script>
 <script src="liga_data_entrenamientos.js.enc" onerror="void 0"></script>
-<script src="firebase.js?v=20260913-0842" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-0842"></script>
+<script src="firebase.js?v=20260913-0851" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-0851"></script>
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
   <script>abrirDatos();</script>
-<script src="videos.js?v=20260913-0842" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="videos.js?v=20260913-0851" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0842">
+<link rel="stylesheet" href="movil.css?v=20260913-0851">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260913-0842" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260913-0851" onerror="void 0"></script>
 </head>
 <body>
 
 <header class="page-header">
-  <a href="jugador.html" class="back-btn">← Volver</a>
-  <button onclick="descargarPDF()" class="pdf-btn" id="pdf-btn">📄 Descargar PDF</button>
+  <a href="jugador.html" class="back-btn" data-t="← Volver">← Volver</a>
+  <button onclick="descargarPDF()" class="pdf-btn" id="pdf-btn" data-t="📄 Descargar PDF">📄 Descargar PDF</button>
   <div>
-    <div class="page-title"><span>Distribución de Armado</span></div>
+    <div class="page-title"><span data-t="Distribución de Armado">Distribución de Armado</span></div>
     <div style="font-size:10px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;margin-top:1px">Mi performance en partidos — Volley Näfels</div>
   </div>
   <div>
     <div class="rival-name" id="rival-nombre">NÄFELS</div>
-    <div class="match-info" id="match-info">NLA Suiza 2026/27 · temporada en curso</div>
+    <div class="match-info" id="match-info" data-t="NLA Suiza 2026/27 · temporada en curso">NLA Suiza 2026/27 · temporada en curso</div>
   </div>
   <div id="lang-wrap" style="display:flex;align-items:center;gap:4px;margin-right:8px"></div>
   <div class="nav-dots" id="nav-dots"></div>
@@ -355,8 +355,8 @@ window.__DESCIFRAR_SINCRONO = true;
 <main class="main" id="main-content">
   <!-- Toggle Partido / Entrenamiento -->
   <div style="display:flex;gap:6px;max-width:360px;margin:4px 0 4px" id="modo-toggle">
-    <button id="modo-partido" onclick="setModo('partido')" style="flex:1;background:#e8192c;border:none;color:#fff;padding:9px;border-radius:9px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">PARTIDO</button>
-    <button id="modo-entrenamiento" onclick="setModo('entrenamiento')" style="flex:1;background:transparent;border:1px solid rgba(255,255,255,.15);color:#94a3b8;padding:9px;border-radius:9px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">ENTRENAMIENTO</button>
+    <button id="modo-partido" onclick="setModo('partido')" style="flex:1;background:#e8192c;border:none;color:#fff;padding:9px;border-radius:9px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px" data-t="j_partido">PARTIDO</button>
+    <button id="modo-entrenamiento" onclick="setModo('entrenamiento')" style="flex:1;background:transparent;border:1px solid rgba(255,255,255,.15);color:#94a3b8;padding:9px;border-radius:9px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px" data-t="ENTRENAMIENTO">ENTRENAMIENTO</button>
   </div>
   <!-- ARMADOR -->
   <div style="margin-top:40px;padding-top:28px;border-top:1px solid rgba(255,255,255,.06)">
@@ -372,10 +372,10 @@ window.__DESCIFRAR_SINCRONO = true;
   <div style="margin-top:32px;display:none" id="seccion-recepcion">
     <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:#e2e8f0;margin-bottom:16px">
       RECEPCIÓN DEL RIVAL
-      <span style="font-size:11px;font-family:'Barlow Condensed',sans-serif;color:#475569;letter-spacing:1px;margin-left:12px;font-weight:400">Cómo reciben · dónde atacar</span>
+      <span style="font-size:11px;font-family:'Barlow Condensed',sans-serif;color:#475569;letter-spacing:1px;margin-left:12px;font-weight:400" data-t="Cómo reciben · dónde atacar">Cómo reciben · dónde atacar</span>
     </div>
     <div id="rec-rival-content">
-      <div style="color:#475569;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:1px;padding:24px;border:1px solid rgba(255,255,255,.06);border-radius:12px;text-align:center">
+      <div style="color:#475569;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:1px;padding:24px;border:1px solid rgba(255,255,255,.06);border-radius:12px;text-align:center" data-t="Sin datos de recepción rival cargados">
         Sin datos de recepción rival cargados
       </div>
     </div>
@@ -386,8 +386,8 @@ window.__DESCIFRAR_SINCRONO = true;
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
       <div style="width:4px;height:28px;background:linear-gradient(180deg,#e8192c,transparent);border-radius:2px;flex-shrink:0"></div>
       <div>
-        <div style="font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase">Planificación táctica</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:#fff">CÓMO VAMOS A JUGAR</div>
+        <div style="font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase" data-t="Planificación táctica">Planificación táctica</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:#fff" data-t="CÓMO VAMOS A JUGAR">CÓMO VAMOS A JUGAR</div>
       </div>
     </div>
     <div id="seccion-juego"></div>
@@ -398,7 +398,7 @@ window.__DESCIFRAR_SINCRONO = true;
   <div class="modal-box">
     <div class="modal-hdr">
       <div class="modal-title" id="modal-title"><span data-t="g_analisis">Análisis</span></div>
-      <button class="modal-close" onclick="closeModal()">✕ Cerrar</button>
+      <button class="modal-close" onclick="closeModal()" data-t="✕ Cerrar">✕ Cerrar</button>
     </div>
     <div class="modal-info" id="modal-info"></div>
     <div style="border-radius:10px;overflow:hidden;box-shadow:0 0 0 4px rgba(255,255,255,.04)">
@@ -3529,7 +3529,7 @@ document.addEventListener('click', function(e){
 
 <div style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:150;display:none;flex-direction:column;gap:6px;align-items:flex-end">
   <div onclick="window.scrollTo({top:0,behavior:'smooth'})" style="display:flex;align-items:center;gap:7px;cursor:pointer;padding:5px 9px;border-radius:7px;background:rgba(13,14,26,.92);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(10px)">
-    <span style="font-size:8px;color:#818cf8;letter-spacing:1.5px;font-weight:700;text-transform:uppercase">Jugadores</span>
+    <span style="font-size:8px;color:#818cf8;letter-spacing:1.5px;font-weight:700;text-transform:uppercase" data-t="Jugadores">Jugadores</span>
     <div style="width:5px;height:5px;border-radius:50%;background:#818cf8;flex-shrink:0"></div>
   </div>
   <div onclick="document.getElementById('seccion-armador').scrollIntoView({behavior:'smooth'})" style="display:flex;align-items:center;gap:7px;cursor:pointer;padding:5px 9px;border-radius:7px;background:rgba(13,14,26,.92);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(10px)">
@@ -3537,20 +3537,20 @@ document.addEventListener('click', function(e){
     <div style="width:5px;height:5px;border-radius:50%;background:#f59e0b;flex-shrink:0"></div>
   </div>
   <div onclick="document.getElementById('anchor-juego').scrollIntoView({behavior:'smooth'})" style="display:flex;align-items:center;gap:7px;cursor:pointer;padding:5px 9px;border-radius:7px;background:rgba(13,14,26,.92);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(10px)">
-    <span style="font-size:8px;color:#e8192c;letter-spacing:1.5px;font-weight:700;text-transform:uppercase">Estrategia</span>
+    <span style="font-size:8px;color:#e8192c;letter-spacing:1.5px;font-weight:700;text-transform:uppercase" data-t="Estrategia">Estrategia</span>
     <div style="width:5px;height:5px;border-radius:50%;background:#e8192c;flex-shrink:0"></div>
   </div>
 </div>
 
 <button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="position:fixed;bottom:20px;right:20px;z-index:200;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.1);background:rgba(13,14,26,.95);backdrop-filter:blur(10px);color:#64748b;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.5)" title="Volver al inicio">↑</button>
-      <button onclick="document.getElementById('seccion-recepcion').scrollIntoView({behavior:'smooth'})" style="display:none;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#64748b;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer">🛡 RECEPCIÓN RIVAL</button>
+      <button onclick="document.getElementById('seccion-recepcion').scrollIntoView({behavior:'smooth'})" style="display:none;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#64748b;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer" data-t="🛡 RECEPCIÓN RIVAL">🛡 RECEPCIÓN RIVAL</button>
 
 <!-- MODAL ARMADOR -->
 <div id="modal-armador" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.92);backdrop-filter:blur(20px);align-items:center;justify-content:center">
   <div style="background:#0d0e1a;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px;max-width:560px;width:94%;box-shadow:0 32px 80px rgba(0,0,0,.8);max-height:92vh;overflow-y:auto">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
       <div id="modal-arm-title" style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:#f59e0b"></div>
-      <button onclick="cerrarModalArmador()" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#475569;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px">✕ CERRAR</button>
+      <button onclick="cerrarModalArmador()" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#475569;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px" data-t="✕ CERRAR">✕ CERRAR</button>
     </div>
     <div id="modal-arm-sub" style="font-size:12px;color:#64748b;margin-bottom:16px;font-family:Barlow Condensed,sans-serif;letter-spacing:.5px"></div>
     <div id="modal-arm-body"></div>
@@ -3563,7 +3563,7 @@ document.addEventListener('click', function(e){
   <div style="background:#0d0e1a;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;max-width:480px;width:92%;box-shadow:0 32px 80px rgba(0,0,0,.8);max-height:90vh;overflow-y:auto">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
       <div id="modal-sotr-title" style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px"></div>
-      <button onclick="document.getElementById('modal-sotr').style.display='none';document.body.style.overflow=''" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#475569;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px">✕ CERRAR</button>
+      <button onclick="document.getElementById('modal-sotr').style.display='none';document.body.style.overflow=''" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#475569;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px" data-t="✕ CERRAR">✕ CERRAR</button>
     </div>
     <div id="modal-sotr-content"></div>
   </div>
@@ -3585,9 +3585,9 @@ function _initModoBtns(){
 }
 document.addEventListener('DOMContentLoaded', _initModoBtns);
 </script>
-<script src="temporadas_menu.js?v=20260913-0842"></script>
-<script src="volver_inicio.js?v=20260913-0842" onerror="void 0"></script>
-<script src="ayuda.js?v=20260913-0842"></script>
+<script src="temporadas_menu.js?v=20260913-0851"></script>
+<script src="volver_inicio.js?v=20260913-0851" onerror="void 0"></script>
+<script src="ayuda.js?v=20260913-0851"></script>
 </body>
 </html>
 

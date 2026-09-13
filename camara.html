@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Cámara — Video del partido</title>
+<title data-t="Cámara — Video del partido">Cámara — Video del partido</title>
 <style>
   :root{
     --bg:#0a0b12; --card:#12131f; --card2:#1a1b2b; --b:rgba(255,255,255,.08);
@@ -51,12 +51,12 @@
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0842">
+<link rel="stylesheet" href="movil.css?v=20260913-0851">
 </head>
 <body>
   <div class="top">
     <span class="dot" id="dot"></span>
-    <h1>Cámara del partido</h1>
+    <h1 data-t="Cámara del partido">Cámara del partido</h1>
   </div>
 
   <div class="wrap">
@@ -67,8 +67,8 @@
 
     <!-- Paso 1: elegir cámara -->
     <div class="card" id="setup">
-      <label class="f" for="camsel">Cámara</label>
-      <select class="f" id="camsel"><option>Buscando cámaras…</option></select>
+      <label class="f" for="camsel" data-t="Cámara">Cámara</label>
+      <select class="f" id="camsel"><option data-t="Buscando cámaras…">Buscando cámaras…</option></select>
       <div style="height:12px"></div>
       <label class="f" for="qualsel">Calidad</label>
       <select class="f" id="qualsel">
@@ -80,29 +80,29 @@
 
     <!-- Sala -->
     <div class="card sala hidden" id="salaCard">
-      <div class="lbl">Código de sala</div>
+      <div class="lbl" data-t="Código de sala">Código de sala</div>
       <div class="code" id="salaCode">—</div>
       <div style="height:14px"></div>
       <div class="viewers hidden" id="viewers">👁 0 viendo</div>
     </div>
 
-    <div class="status" id="status">Elegí la cámara y tocá Transmitir.</div>
+    <div class="status" id="status" data-t="Elegí la cámara y tocá Transmitir.">Elegí la cámara y tocá Transmitir.</div>
 
     <button class="btn go" id="startBtn">▶ Transmitir</button>
-    <button class="btn stop hidden" id="stopBtn">■ Detener transmisión</button>
+    <button class="btn stop hidden" id="stopBtn" data-t="■ Detener transmisión">■ Detener transmisión</button>
 
     <div class="hint">
-      <b>Cómo funciona:</b> tocá <b>Transmitir</b> y aparece un código de sala.
-      En la tablet, abrí el panel, tocá <b>Video en vivo</b> y escribí ese código.
+      <b data-t="Cómo funciona:">Cómo funciona:</b> tocá <b data-t="Transmitir">Transmitir</b> y aparece un código de sala.
+      En la tablet, abrí el panel, tocá <b data-t="Video en vivo">Video en vivo</b> y escribí ese código.
       Dejá esta pantalla abierta y el celular enchufado. Todos tienen que estar en la misma red WiFi.
     </div>
   </div>
 
-<script src="categorias_club.js?v=20260913-0842"></script>
-<script src="selector_categoria.js?v=20260913-0842"></script>
-<script src="datos_seguros.js?v=20260913-0842"></script>
-<script src="firebase.js?v=20260913-0842"></script>
-<script src="firebase_por_categoria.js?v=20260913-0842"></script>
+<script src="categorias_club.js?v=20260913-0851"></script>
+<script src="selector_categoria.js?v=20260913-0851"></script>
+<script src="datos_seguros.js?v=20260913-0851"></script>
+<script src="firebase.js?v=20260913-0851"></script>
+<script src="firebase_por_categoria.js?v=20260913-0851"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════
    CÁMARA — Emisor de video por WebRTC hacia la(s) tablet(s).
@@ -270,8 +270,8 @@ if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
   setStatus('Este navegador no soporta cámara. Probá con Chrome o Safari.', 'err');
 }
 </script>
-<script src="lang.js?v=20260913-0842"></script>
-<script src="volver_inicio.js?v=20260913-0842" onerror="void 0"></script>
-<script src="ayuda.js?v=20260913-0842"></script>
+<script src="lang.js?v=20260913-0851"></script>
+<script src="volver_inicio.js?v=20260913-0851" onerror="void 0"></script>
+<script src="ayuda.js?v=20260913-0851"></script>
 </body>
 </html>

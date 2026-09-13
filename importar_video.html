@@ -45,43 +45,43 @@
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="categorias_club.js?v=20260913-0842"></script>
-<script src="selector_categoria.js?v=20260913-0842"></script>
-<script src="firebase.js?v=20260913-0842" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-0842"></script>
+<script src="categorias_club.js?v=20260913-0851"></script>
+<script src="selector_categoria.js?v=20260913-0851"></script>
+<script src="firebase.js?v=20260913-0851" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-0851"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0842">
+<link rel="stylesheet" href="movil.css?v=20260913-0851">
 </head>
 <body>
-  <h1>🎬 Cargar videos de los partidos</h1>
+  <h1 data-t="🎬 Cargar videos de los partidos">🎬 Cargar videos de los partidos</h1>
   <div class="sub">Pegá el link de YouTube de cada partido. La miniatura te confirma que es el correcto. El resto es automático.</div>
 
   <div class="vtabs">
-    <button class="vtab" id="vtab-p" onclick="vbSetModo('partido')">🏐 Partidos</button>
-    <button class="vtab" id="vtab-e" onclick="vbSetModo('ent')">🏋️ Entrenamientos</button>
+    <button class="vtab" id="vtab-p" onclick="vbSetModo('partido')" data-t="🏐 Partidos">🏐 Partidos</button>
+    <button class="vtab" id="vtab-e" onclick="vbSetModo('ent')" data-t="🏋️ Entrenamientos">🏋️ Entrenamientos</button>
   </div>
   <script>function vbSetModo(m){try{localStorage.setItem('cargar_video_modo',m);}catch(e){}location.reload();}(function(){var m=(localStorage.getItem('cargar_video_modo')==='ent')?'e':'p';var b=document.getElementById('vtab-'+m);if(b)b.classList.add('on');})();</script>
 
   <div class="hint">
-    <b>Cómo se usa:</b> 1) Subí el partido a YouTube (en <b>"No listado"</b>). 2) Pegá el link en la fila del partido — aparece la <b>miniatura</b> para que confirmes que es ese. 3) Apretá <b>"Generar mapa_videos.js"</b> y subí ese archivo al repo. Listo. <b>Se guarda solo</b> mientras cargás, no perdés nada si cerrás.
+    <b data-t="Cómo se usa:">Cómo se usa:</b> 1) Subí el partido a YouTube (en <b>"No listado"</b>). 2) Pegá el link en la fila del partido — aparece la <b data-t="miniatura">miniatura</b> para que confirmes que es ese. 3) Apretá <b>"Generar mapa_videos.js"</b> y subí ese archivo al repo. Listo. <b data-t="Se guarda solo">Se guarda solo</b> mientras cargás, no perdés nada si cerrás.
   </div>
 
   <details>
-    <summary>⚡ Pegado masivo — cargar todos los links de una</summary>
+    <summary data-t="⚡ Pegado masivo — cargar todos los links de una">⚡ Pegado masivo — cargar todos los links de una</summary>
     <div class="batch">
-      <p>Pegá un link de YouTube por línea. Si la línea trae el <b>código del partido</b> (tus títulos de YouTube lo tienen, ej. <b>636595</b>), se empareja solo con ese partido — no importa el orden. Los links sin código se reparten por fecha entre los partidos que estén vacíos. Después <b>revisá las miniaturas</b>.</p>
+      <p>Pegá un link de YouTube por línea. Si la línea trae el <b data-t="código del partido">código del partido</b> (tus títulos de YouTube lo tienen, ej. <b>636595</b>), se empareja solo con ese partido — no importa el orden. Los links sin código se reparten por fecha entre los partidos que estén vacíos. Después <b data-t="revisá las miniaturas">revisá las miniaturas</b>.</p>
       <textarea id="batchtxt" placeholder="2025 10 22 03 28 636595  https://youtu.be/aaaa&#10;636588  https://youtu.be/bbbb&#10;https://youtu.be/cccc  (sin código → va por orden)"></textarea>
-      <div style="margin-top:8px"><button class="btn" onclick="aplicarBatch()">🔗 Emparejar automáticamente</button></div>
+      <div style="margin-top:8px"><button class="btn" onclick="aplicarBatch()" data-t="🔗 Emparejar automáticamente">🔗 Emparejar automáticamente</button></div>
     </div>
   </details>
 
   <div class="bar">
     <div class="count"><b id="nok">0</b> de <span id="ntot">0</span></div>
     <div class="prog"><i id="progbar"></i></div>
-    <button class="btn" onclick="generar()">⬇ Generar archivo de links</button>
-    <button class="btn sec" onclick="copiar()">Copiar</button>
+    <button class="btn" onclick="generar()" data-t="⬇ Generar archivo de links">⬇ Generar archivo de links</button>
+    <button class="btn sec" onclick="copiar()" data-t="Copiar">Copiar</button>
     <span id="msg"></span>
   </div>
 
@@ -99,7 +99,7 @@
    Con los datos abriendose en segundo plano, se dibujaba vacia. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260913-0842"></script>
+<script src="datos_seguros.js?v=20260913-0851"></script>
   <script src="datos_video_25-26.js.enc?v=3" onerror="void 0"></script>
   <!-- Los datos del club se publican CIFRADOS: el archivo real se llama
        datos_video_ent_25-26.js.enc. Estas lineas pedian el .js pelado, que
@@ -271,9 +271,9 @@ window.__DESCIFRAR_SINCRONO = true;
     };
   })();
   </script>
-<script src="lang.js?v=20260913-0842" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260913-0842" onerror="void 0"></script>
-<script src="ayuda.js?v=20260913-0842"></script>
+<script src="lang.js?v=20260913-0851" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260913-0851" onerror="void 0"></script>
+<script src="ayuda.js?v=20260913-0851"></script>
 </body>
 </html>
 

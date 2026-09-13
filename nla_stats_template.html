@@ -160,18 +160,18 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
 <!-- Puerta de entrada. Esta es la PLANTILLA: la tabla de liga se regenera
      desde aca en cada HACER_TODO, asi que el candado tiene que estar aqui
      o se pierde en la proxima corrida. -->
-<script src="firebase.js?v=20260913-0842" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-0842"></script>
+<script src="firebase.js?v=20260913-0851" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-0851"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0842">
+<link rel="stylesheet" href="movil.css?v=20260913-0851">
 </head>
 <body>
 <div class="header">
   <div>
-    <div class="subtitle">Volley Nafels — Análisis Liga</div>
-    <h1>NLA SUIZA — ESTADÍSTICAS</h1>
+    <div class="subtitle" data-t="Volley Nafels — Análisis Liga">Volley Nafels — Análisis Liga</div>
+    <h1 data-t="NLA SUIZA — ESTADÍSTICAS">NLA SUIZA — ESTADÍSTICAS</h1>
   </div>
   <!-- La temporada la escribe el generador: estaba fija en 2025/26 y seguia
        diciendo eso aunque los datos ya fueran de la 26/27. -->
@@ -187,17 +187,17 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
 </div>
 <div class="filters">
   <div class="filter-group">
-    <span class="filter-label">Equipo</span>
+    <span class="filter-label" data-t="Equipo">Equipo</span>
     <select id="f-team">
-      <option value="">Todos</option>
+      <option value="" data-t="Todos">Todos</option>
       <option>Amriswil</option><option>Chenois</option><option>Colombier</option>
       <option>Jona</option><option>Lausanne</option><option>Nafels</option>
       <option>Schonenwerd</option><option>St Gallen</option>
     </select>
   </div>
   <div class="filter-group">
-    <span class="filter-label">Temporada</span>
-    <select id="f-temporada"><option value="">Todas</option><!--__TEMPORADAS__--></select>
+    <span class="filter-label" data-t="Temporada">Temporada</span>
+    <select id="f-temporada"><option value="" data-t="Todas">Todas</option><!--__TEMPORADAS__--></select>
   </div>
   <div class="filter-group">
     <span class="filter-label">Posición<label style="display:inline-flex;align-items:center;gap:7px;cursor:pointer;
@@ -209,23 +209,23 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
 </label>
 </span>
     <select id="f-pos">
-      <option value="">Todas</option>
-      <option value="OUTSIDE">Punta</option>
-      <option value="OPPOSITE">Opuesto</option>
-      <option value="MIDDLE">Central</option>
-      <option value="SETTER">Armador</option>
-      <option value="LIBERO">Líbero</option>
+      <option value="" data-t="Todas">Todas</option>
+      <option value="OUTSIDE" data-t="Punta">Punta</option>
+      <option value="OPPOSITE" data-t="Opuesto">Opuesto</option>
+      <option value="MIDDLE" data-t="Central">Central</option>
+      <option value="SETTER" data-t="Armador">Armador</option>
+      <option value="LIBERO" data-t="Líbero">Líbero</option>
     </select>
   </div>
   <div class="filter-group">
-    <span class="filter-label">Buscar</span>
+    <span class="filter-label" data-t="Buscar">Buscar</span>
     <input type="text" id="f-search" placeholder="Nombre..." style="min-width:140px">
   </div>
   <div class="filter-group">
-    <span class="filter-label">Mín. acciones</span>
+    <span class="filter-label" data-t="Mín. acciones">Mín. acciones</span>
     <select id="f-min-atk">
       <option value="20">20+</option>
-      <option value="0">Sin mínimo</option>
+      <option value="0" data-t="Sin mínimo">Sin mínimo</option>
       <option value="50">50+</option><option value="100">100+</option>
       <option value="200">200+</option><option value="300">300+</option>
     </select>
@@ -234,7 +234,7 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
   <span class="results-count" id="results-count"></span>
 </div>
 <div class="panel active" id="panel-equipos">
-  <div class="section-title">RANKING EQUIPOS NLA — ELEGÍ UN FUNDAMENTO PARA ORDENAR</div>
+  <div class="section-title" data-t="RANKING EQUIPOS NLA — ELEGÍ UN FUNDAMENTO PARA ORDENAR">RANKING EQUIPOS NLA — ELEGÍ UN FUNDAMENTO PARA ORDENAR</div>
   <div class="skill-pills" id="skill-pills"></div>
   <div class="table-wrap">
     <table id="teams-table">
@@ -242,10 +242,10 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
       <tbody id="teams-tbody"></tbody>
     </table>
   </div>
-  <div class="rank-legend">Cada celda: <b>EFF%</b> <span class="lg-tot">(total de acciones)</span> · color = ranking en ese fundamento (<span style="color:#22c55e">verde</span> mejor → <span style="color:#ef4444">rojo</span> peor) · <span style="color:#22c55e;font-weight:700">Näfels</span> resaltado. <span id="updated-label" style="color:#475569"></span></div>
+  <div class="rank-legend">Cada celda: <b>EFF%</b> <span class="lg-tot" data-t="(total de acciones)">(total de acciones)</span> · color = ranking en ese fundamento (<span style="color:#22c55e" data-t="verde">verde</span> mejor → <span style="color:#ef4444" data-t="rojo">rojo</span> peor) · <span style="color:#22c55e;font-weight:700">Näfels</span> resaltado. <span id="updated-label" style="color:#475569"></span></div>
 </div>
 <div class="panel" id="panel-jugadores">
-  <div class="section-title">RANKING JUGADORES NLA — ELEGÍ UN FUNDAMENTO</div>
+  <div class="section-title" data-t="RANKING JUGADORES NLA — ELEGÍ UN FUNDAMENTO">RANKING JUGADORES NLA — ELEGÍ UN FUNDAMENTO</div>
   <div class="skill-pills" id="player-skills"></div>
   <div class="skill-pills sub-pills" id="player-subs"></div>
   <div class="table-wrap">
@@ -254,7 +254,7 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
       <tbody id="players-tbody"></tbody>
     </table>
   </div>
-  <div class="rank-legend">La columna <b>EFF%</b> manda el ranking <span class="lg-tot">(entre paréntesis: total de acciones del fundamento elegido)</span> · color = ranking en ese corte (<span style="color:#22c55e">verde</span> mejor → <span style="color:#ef4444">rojo</span> peor) · <span style="color:#22c55e;font-weight:700">Näfels</span> resaltado · filtrá por posición para comparar like-with-like.</div>
+  <div class="rank-legend">La columna <b>EFF%</b> manda el ranking <span class="lg-tot" data-t="(entre paréntesis: total de acciones del fundamento elegido)">(entre paréntesis: total de acciones del fundamento elegido)</span> · color = ranking en ese corte (<span style="color:#22c55e" data-t="verde">verde</span> mejor → <span style="color:#ef4444" data-t="rojo">rojo</span> peor) · <span style="color:#22c55e;font-weight:700">Näfels</span> resaltado · filtrá por posición para comparar like-with-like.</div>
 </div>
 <script>
 /*__DATA_PLACEHOLDER__*/
@@ -638,8 +638,8 @@ function loadStats(){
   });
 }
 loadStats();
-</script><script src="lang.js?v=20260913-0842" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260913-0842" onerror="void 0"></script>
+</script><script src="lang.js?v=20260913-0851" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260913-0851" onerror="void 0"></script>
 <script>
 /* El interruptor: apagado muestra todo tal cual viene, incluidos los
    rivales de copa y los jugadores con pocas acciones. */

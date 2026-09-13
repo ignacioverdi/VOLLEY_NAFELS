@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Asociar códigos · NAFELS</title>
+<title data-t="Asociar códigos · NAFELS">Asociar códigos · NAFELS</title>
 <!--
 ===============================================================================
   asociar_codigos.html — TRADUCIR LOS CODIGOS DE OTRO SCOUT
@@ -102,26 +102,26 @@
   <a href="index.html" class="btn" style="display:inline-block;text-decoration:none;
      margin-bottom:14px;font-size:13px">&larr; VOLVER</a>
 
-  <h1>ASOCIAR CÓDIGOS</h1>
+  <h1 data-t="ASOCIAR CÓDIGOS">ASOCIAR CÓDIGOS</h1>
   <div class="sub">Cuando el partido lo scouteó otra persona, sus códigos de
     ataque y de armador pueden ser distintos de los tuyos. Acá se asocian.</div>
 
   <div class="zona" id="zona" onclick="document.getElementById('sel').click()">
     <div class="ic">📋</div>
-    <b>Arrastrá acá el .dvw del otro scout</b>
-    <span>También podés hacer clic para buscarlo</span>
+    <b data-t="Arrastrá acá el .dvw del otro scout">Arrastrá acá el .dvw del otro scout</b>
+    <span data-t="También podés hacer clic para buscarlo">También podés hacer clic para buscarlo</span>
   </div>
   <input type="file" id="sel" accept=".dvw" class="oculto">
 
   <div id="panel" class="oculto">
     <div class="tabs">
-      <div class="tab on" id="tab-atk" onclick="verSeccion('atk')">Combinaciones de ataque</div>
-      <div class="tab" id="tab-set" onclick="verSeccion('set')">Llamadas del armador</div>
+      <div class="tab on" id="tab-atk" onclick="verSeccion('atk')" data-t="Combinaciones de ataque">Combinaciones de ataque</div>
+      <div class="tab" id="tab-set" onclick="verSeccion('set')" data-t="Llamadas del armador">Llamadas del armador</div>
     </div>
 
     <div class="cols">
       <div class="col">
-        <h2 id="tit-izq">Del archivo</h2>
+        <h2 id="tit-izq" data-t="Del archivo">Del archivo</h2>
         <div class="lista" id="izq"></div>
       </div>
       <div class="medio">
@@ -130,12 +130,12 @@
       </div>
       <div class="col">
         <h2 style="display:flex;align-items:center;gap:8px">
-          <span id="tit-der">Los tuyos</span>
+          <span id="tit-der" data-t="Los tuyos">Los tuyos</span>
           <select id="selTabla" onchange="cambiarTabla()"
             style="margin-left:auto;background:var(--card);color:var(--txt);
             border:1px solid var(--border);border-radius:6px;padding:3px 7px;
             font-family:inherit;font-size:11px;font-weight:700;cursor:pointer">
-            <option value="_mios">Los míos</option>
+            <option value="_mios" data-t="Los míos">Los míos</option>
           </select>
           <button onclick="document.getElementById('selDestino').click()"
             title="Usar la tabla de otro archivo .dvw"
@@ -149,10 +149,10 @@
     </div>
 
     <div class="barra">
-      <button class="btn" onclick="guardarAsoc()">Guardar asociación</button>
-      <button class="btn" onclick="document.getElementById('selAsoc').click()">Cargar una guardada</button>
+      <button class="btn" onclick="guardarAsoc()" data-t="Guardar asociación">Guardar asociación</button>
+      <button class="btn" onclick="document.getElementById('selAsoc').click()" data-t="Cargar una guardada">Cargar una guardada</button>
       <input type="file" id="selAsoc" accept=".json" class="oculto">
-      <button class="btn ppal" id="bGen" onclick="generar()">Generar el archivo traducido</button>
+      <button class="btn ppal" id="bGen" onclick="generar()" data-t="Generar el archivo traducido">Generar el archivo traducido</button>
       <span class="cuenta" id="cuenta"></span>
     </div>
 
@@ -161,8 +161,8 @@
 
 </div>
 
-<script src="categorias_club.js?v=20260913-0842"></script>
-<script src="selector_categoria.js?v=20260913-0842"></script>
+<script src="categorias_club.js?v=20260913-0851"></script>
+<script src="selector_categoria.js?v=20260913-0851"></script>
 <script>
 /* ══ El archivo cargado ═══════════════════════════════════════════════════ */
 var TXT = '';          /* el .dvw entero */
@@ -644,15 +644,15 @@ document.getElementById('sel').addEventListener('change', function(e){
 
 <!-- La puerta de entrada: esta pantalla es del cuerpo tecnico, asi que pide
      sesion como el resto de la app. -->
-<script src="firebase.js?v=20260913-0842"></script>
-<script src="firebase_por_categoria.js?v=20260913-0842"></script>
-<script src="lang.js?v=20260913-0842" onerror="void 0"></script>
+<script src="firebase.js?v=20260913-0851"></script>
+<script src="firebase_por_categoria.js?v=20260913-0851"></script>
+<script src="lang.js?v=20260913-0851" onerror="void 0"></script>
 
 <!-- Los códigos del club, para la columna de la derecha. Los genera
      HACER_TODO a partir del último partido propio. -->
-<script src="mis_codigos.js?v=20260913-0842" onerror="void 0"></script>
+<script src="mis_codigos.js?v=20260913-0851" onerror="void 0"></script>
 
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario -->
-<script src="ayuda.js?v=20260913-0842"></script>
+<script src="ayuda.js?v=20260913-0851"></script>
 </body>
 </html>

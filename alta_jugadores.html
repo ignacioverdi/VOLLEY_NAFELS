@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Acceso de los jugadores</title>
+<title data-t="Acceso de los jugadores">Acceso de los jugadores</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -100,7 +100,7 @@ textarea:focus{border-color:var(--club)}
 }
 </style>
 <!-- Motor de idiomas (ES / EN / DE). -->
-<script src="lang.js?v=20260913-0842"></script>
+<script src="lang.js?v=20260913-0851"></script>
 </head>
 <body>
 <div class="hoja">
@@ -109,22 +109,22 @@ textarea:focus{border-color:var(--club)}
     <div class="esc" id="esc"></div>
     <div>
       <h1 id="nom-club"></h1>
-      <p>Acceso de los jugadores</p>
+      <p data-t="Acceso de los jugadores">Acceso de los jugadores</p>
     </div>
-    <a class="volver" href="index.html">Volver</a>
+    <a class="volver" href="index.html" data-t="Volver">Volver</a>
   </div>
 
   <div class="eyebrow">Una sola vez</div>
-  <h2 class="tit">Dale acceso a tu plantel</h2>
+  <h2 class="tit" data-t="Dale acceso a tu plantel">Dale acceso a tu plantel</h2>
   <p class="bajada">Cada jugador entra con su mail y su fecha de nacimiento sin barras. Vos cargás la lista una vez
      y listo: después entran solos desde el celular y reciben los avisos del equipo.</p>
 
   <div class="caja">
-    <label class="lbl" for="lista">Pegá acá tu lista</label>
+    <label class="lbl" for="lista" data-t="Pegá acá tu lista">Pegá acá tu lista</label>
 <div id="caja-cat" style="display:none;margin-bottom:14px">
-  <label style="display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#64748b;margin-bottom:6px">Categoría</label>
+  <label style="display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#64748b;margin-bottom:6px" data-t="Categoría">Categoría</label>
   <select id="sel-cat" style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.1);font-size:14px"></select>
-  <div style="font-size:11px;color:#64748b;margin-top:6px">Los jugadores que cargues quedan en esta categoría.</div>
+  <div style="font-size:11px;color:#64748b;margin-top:6px" data-t="Los jugadores que cargues quedan en esta categoría.">Los jugadores que cargues quedan en esta categoría.</div>
 </div>
     <!-- ══ CARGA DE A UNO ══════════════════════════════════════════════════
      Cada jugador en su fila, con todos sus datos y la foto al final.
@@ -135,7 +135,7 @@ textarea:focus{border-color:var(--club)}
 <label id="caja-dvw" style="display:block;margin-bottom:14px;padding:14px 16px;
        border:1px dashed rgba(230,167,67,.35);border-radius:10px;cursor:pointer;
        background:rgba(230,167,67,.05)">
-  <div style="font-size:14px;font-weight:700;margin-bottom:4px">
+  <div style="font-size:14px;font-weight:700;margin-bottom:4px" data-t="&#8681; Traer el plantel de un partido">
     &#8681; Traer el plantel de un partido</div>
   <div style="font-size:12.5px;color:#93a5c0;line-height:1.5">
     Elegí un archivo .dvw ya scouteado y se cargan los jugadores con su
@@ -153,24 +153,24 @@ textarea:focus{border-color:var(--club)}
 </div>
 
 <details style="margin-top:14px">
-  <summary style="cursor:pointer;font-size:12px;color:#64748b">
+  <summary style="cursor:pointer;font-size:12px;color:#64748b" data-t="¿Los tenés en una lista? Pegalos de una vez">
     ¿Los tenés en una lista? Pegalos de una vez
   </summary>
   <textarea id="lista" spellcheck="false"
             placeholder="mail@ejemplo.com 4 07/03/2004"
             style="margin-top:10px"></textarea>
-  <div class="ayuda">Tres datos por jugador: <b>mail</b>, <b>número de camiseta</b> y
-    <b>fecha de nacimiento</b>. Si los tenés en Excel, seleccioná las tres columnas,
+  <div class="ayuda">Tres datos por jugador: <b>mail</b>, <b data-t="número de camiseta">número de camiseta</b> y
+    <b data-t="fecha de nacimiento">fecha de nacimiento</b>. Si los tenés en Excel, seleccioná las tres columnas,
     copiá y pegá acá.</div>
   <button type="button" class="btn sec" onclick="leer()"
-          style="margin-top:8px">Leer la lista</button>
+          style="margin-top:8px" data-t="Leer la lista">Leer la lista</button>
 </details>
     <div class="ejemplo">jugador1@gmail.com    4     07/03/2004
 jugador2@gmail.com    13    16/12/2004
 jugador3@gmail.com    9     23/08/2001</div>
 
     <div class="barra">
-      <button class="btn sec" onclick="leer()">Revisar la lista</button>
+      <button class="btn sec" onclick="leer()" data-t="Revisar la lista">Revisar la lista</button>
     </div>
   </div>
 
@@ -180,11 +180,11 @@ jugador3@gmail.com    9     23/08/2001</div>
 
 </div>
 
-<script src="categorias_club.js?v=20260913-0842"></script>
-<script src="selector_categoria.js?v=20260913-0842"></script>
-<script src="plantel_desde_dvw.js?v=20260913-0842"></script>
-<script src="firebase.js?v=20260913-0842"></script>
-<script src="firebase_por_categoria.js?v=20260913-0842"></script>
+<script src="categorias_club.js?v=20260913-0851"></script>
+<script src="selector_categoria.js?v=20260913-0851"></script>
+<script src="plantel_desde_dvw.js?v=20260913-0851"></script>
+<script src="firebase.js?v=20260913-0851"></script>
+<script src="firebase_por_categoria.js?v=20260913-0851"></script>
 <script>
 /* ============================================================================
    Alta de jugadores — el DT pega su lista y se crean todas las cuentas.
@@ -591,7 +591,7 @@ function leerFormulario(){
   } catch(e){}
 })();
 </script>
-<script src="ayuda.js?v=20260913-0842">
+<script src="ayuda.js?v=20260913-0851">
 
 </script>
 <script>

@@ -531,48 +531,48 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260913-0842"></script>
-<script src="selector_categoria.js?v=20260913-0842"></script>
-<script src="lang.js?v=20260913-0842"></script>
+<script src="categorias_club.js?v=20260913-0851"></script>
+<script src="selector_categoria.js?v=20260913-0851"></script>
+<script src="lang.js?v=20260913-0851"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0842">
+<link rel="stylesheet" href="movil.css?v=20260913-0851">
 </head>
 <body>
 
 <div class="top">
-  <h1>Panel en Vivo</h1>
+  <h1 data-t="Panel en Vivo">Panel en Vivo</h1>
   <span class="live livemin" title="Se pone celeste cuando está transmitiendo a la tablet" style="color:var(--vis);border-color:rgba(34,211,238,.35);background:rgba(34,211,238,.08)"><span class="pubdot" id="pubdot"></span></span>
   <div class="spacer"></div>
-  <button class="tbtn" onclick="openSetup()">Partido</button>
-  <button class="tbtn" onclick="abrirPartidos()" title="Lista de partidos guardados (ver o borrar)">Partidos</button>
+  <button class="tbtn" onclick="openSetup()" data-t="Partido">Partido</button>
+  <button class="tbtn" onclick="abrirPartidos()" title="Lista de partidos guardados (ver o borrar)" data-t="Partidos">Partidos</button>
   <button class="tbtn" onclick="abrirVideo()" title="Video y sincronización (manual 2.5.6)">Video</button>
-  <button class="tbtn" onclick="abrirCombos()" title="Combinaciones de ataque y llamadas (manual 12.2)">Comb ataque</button>
-  <button class="tbtn" onclick="abrirEquipos()" title="Base de equipos (nuevo · importar · exportar)">Equipos</button>
+  <button class="tbtn" onclick="abrirCombos()" title="Combinaciones de ataque y llamadas (manual 12.2)" data-t="Comb ataque">Comb ataque</button>
+  <button class="tbtn" onclick="abrirEquipos()" title="Base de equipos (nuevo · importar · exportar)" data-t="Equipos">Equipos</button>
   <button class="tbtn" onclick="toggleObj()" style="color:#4ade80;border-color:rgba(74,222,128,.35)">&#9679; Objetivos</button>
   <button class="tbtn" onclick="traerSesion()" title="Traer lo que se scouteo en el otro dispositivo">&#8681; Traer</button>
   <button class="tbtn" onclick="flotReset()" title="Vuelve todos los paneles y análisis a su lugar original">⧉ Ventanas</button>
-  <button class="tbtn" onclick="openConfig()">Teclado y códigos</button>
-  <button class="tbtn" onclick="abrirAyuda()" title="Cómo usar el scout — guía paso a paso">Cómo se usa</button>
-  <button class="tbtn" onclick="abrirExportMode()">Exportar .dvw</button>
-  <button class="tbtn" onclick="abrirBaterias()" title="Las 11 baterías calculadas de lo scouteado en vivo">Baterías</button>
+  <button class="tbtn" onclick="openConfig()" data-t="Teclado y códigos">Teclado y códigos</button>
+  <button class="tbtn" onclick="abrirAyuda()" title="Cómo usar el scout — guía paso a paso" data-t="Cómo se usa">Cómo se usa</button>
+  <button class="tbtn" onclick="abrirExportMode()" data-t="Exportar .dvw">Exportar .dvw</button>
+  <button class="tbtn" onclick="abrirBaterias()" title="Las 11 baterías calculadas de lo scouteado en vivo" data-t="Baterías">Baterías</button>
   <button class="tbtn" onclick="abrirVideoVivo()" title="Video en vivo con delay para revisar acciones">Video<br>delay</button>
   <span class="tbsep" style="width:1px;background:var(--b2);margin:0 4px"></span>
-  <button class="tbtn" onclick="abrirPlan('armador')" title="Distribución del armador — en vivo">Distribución armador</button>
-  <button class="tbtn" onclick="abrirPlan('ataque')" title="Direcciones de ataque por zona — en vivo">Direcciones ataque</button>
-  <button class="tbtn" onclick="abrirPlan('saque')" title="Direcciones de saque — en vivo">Direcciones saque</button>
-  <button class="tbtn" onclick="abrirPlan('recepcion')" title="Zonas de recepción — en vivo">Zonas recepción</button>
+  <button class="tbtn" onclick="abrirPlan('armador')" title="Distribución del armador — en vivo" data-t="Distribución armador">Distribución armador</button>
+  <button class="tbtn" onclick="abrirPlan('ataque')" title="Direcciones de ataque por zona — en vivo" data-t="Direcciones ataque">Direcciones ataque</button>
+  <button class="tbtn" onclick="abrirPlan('saque')" title="Direcciones de saque — en vivo" data-t="Direcciones saque">Direcciones saque</button>
+  <button class="tbtn" onclick="abrirPlan('recepcion')" title="Zonas de recepción — en vivo" data-t="Zonas recepción">Zonas recepción</button>
   <span class="tbsep" style="width:1px;background:var(--b2);margin:0 4px"></span>
-  <button class="tbtn" onclick="abrirPlanPreparado()" title="Plan de partido que preparamos (para comparar con lo que pasa en vivo)">Plan de partido</button>
-  <button class="tbtn pri" onclick="closeSet()">Cerrar set</button>
-  <button class="tbtn" id="btn-amistoso" style="display:none" onclick="nuevoSetAmistoso()" title="Partido terminado: empezar un set nuevo (amistoso)">Set amistoso</button>
+  <button class="tbtn" onclick="abrirPlanPreparado()" title="Plan de partido que preparamos (para comparar con lo que pasa en vivo)" data-t="Plan de partido">Plan de partido</button>
+  <button class="tbtn pri" onclick="closeSet()" data-t="Cerrar set">Cerrar set</button>
+  <button class="tbtn" id="btn-amistoso" style="display:none" onclick="nuevoSetAmistoso()" title="Partido terminado: empezar un set nuevo (amistoso)" data-t="Set amistoso">Set amistoso</button>
 </div>
 
 <div class="board">
   <div class="tside home">
     <span class="serveball" id="sb-h"></span>
-    <div><div class="tname" id="nm-h">LOCAL</div><div class="tmeta"><span id="to-h">0</span> TO · <span id="sub-h">0</span> cambios</div></div>
+    <div><div class="tname" id="nm-h" data-t="LOCAL">LOCAL</div><div class="tmeta"><span id="to-h">0</span> TO · <span id="sub-h">0</span> cambios</div></div>
     <div class="spacer"></div>
     <div class="pts" id="pt-h">0</div>
   </div>
@@ -582,7 +582,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   </div>
   <div class="tside away">
     <span class="serveball" id="sb-a"></span>
-    <div><div class="tname" id="nm-a">VISITANTE</div><div class="tmeta"><span id="to-a">0</span> TO · <span id="sub-a">0</span> cambios</div></div>
+    <div><div class="tname" id="nm-a" data-t="VISITANTE">VISITANTE</div><div class="tmeta"><span id="to-a">0</span> TO · <span id="sub-a">0</span> cambios</div></div>
     <div class="spacer"></div>
     <div class="pts" id="pt-a">0</div>
   </div>
@@ -592,32 +592,32 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <!-- LOCAL -->
   <div class="col">
   <div class="pane">
-    <h3 style="color:var(--loc)">Local · rotación</h3>
+    <h3 style="color:var(--loc)" data-t="Local · rotación">Local · rotación</h3>
     <div class="rot home-c" id="rot-h"></div>
     <div class="libero" id="lb-h"></div>
     <div class="rowbtns">
       <button onclick="rotate('home',1)">Rotar ▸</button>
       <button onclick="rotate('home',-1)">◂ Rotar</button>
-      <button onclick="timeout('home')">Tiempo</button>
-      <button onclick="subst('home')">Cambio</button>
+      <button onclick="timeout('home')" data-t="Tiempo">Tiempo</button>
+      <button onclick="subst('home')" data-t="Cambio">Cambio</button>
     </div>
   </div>
 <div class="pane">
-    <h3 style="color:var(--vis)">Visitante · rotación</h3>
+    <h3 style="color:var(--vis)" data-t="Visitante · rotación">Visitante · rotación</h3>
     <div class="rot away-c" id="rot-a"></div>
     <div class="libero" id="lb-a"></div>
     <div class="rowbtns">
       <button onclick="rotate('away',1)">Rotar ▸</button>
       <button onclick="rotate('away',-1)">◂ Rotar</button>
-      <button onclick="timeout('away')">Tiempo</button>
-      <button onclick="subst('away')">Cambio</button>
+      <button onclick="timeout('away')" data-t="Tiempo">Tiempo</button>
+      <button onclick="subst('away')" data-t="Cambio">Cambio</button>
     </div>
   </div>
   </div>
 
   <!-- CENTRO -->
   <div class="pane">
-    <h3>Código de la jugada</h3>
+    <h3 data-t="Código de la jugada">Código de la jugada</h3>
     <div class="scoutbar">
       <!-- data-notr: el traductor no entra aca. Son los lugares donde el panel
      LEE de vuelta lo que hay en pantalla para operar (las letras del menu
@@ -628,21 +628,21 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
       <div class="extmenu" id="extmenu" data-notr></div>
       <div class="exthint"><kbd>Ctrl</kbd> + <kbd>Espacio</kbd> para las extensiones</div>
       <div class="hint" id="hint"></div>
-      <button class="detbtn" id="detbtn" onclick="toggleDetalle()">Detalle de la jugada ▾</button>
+      <button class="detbtn" id="detbtn" onclick="toggleDetalle()" data-t="Detalle de la jugada ▾">Detalle de la jugada ▾</button>
       <div class="detail" id="detail" hidden>
-        <div class="dcol"><label>Desde — zona de inicio</label><div class="mini" id="mini-sz"></div></div>
-        <div class="dcol"><label>Hacia — zona de destino</label><div class="mini" id="mini-ez"></div></div>
+        <div class="dcol"><label data-t="Desde — zona de inicio">Desde — zona de inicio</label><div class="mini" id="mini-sz"></div></div>
+        <div class="dcol"><label data-t="Hacia — zona de destino">Hacia — zona de destino</label><div class="mini" id="mini-ez"></div></div>
         <div class="dstack">
-          <div><label>Combinación</label><select class="mini2" id="sel-combo"></select></div>
-          <div><label>Subzona</label><div class="pills" id="pl-subz"></div></div>
-          <div><label id="lb-hit">Golpe</label><div class="pills" id="pl-hit"></div></div>
-          <div><label id="lb-blk">Bloqueadores</label><div class="pills" id="pl-blk"></div></div>
-          <div><label>Especial</label><select class="mini2" id="sel-spec"></select></div>
+          <div><label data-t="Combinación">Combinación</label><select class="mini2" id="sel-combo"></select></div>
+          <div><label data-t="Subzona">Subzona</label><div class="pills" id="pl-subz"></div></div>
+          <div><label id="lb-hit" data-t="Golpe">Golpe</label><div class="pills" id="pl-hit"></div></div>
+          <div><label id="lb-blk" data-t="Bloqueadores">Bloqueadores</label><div class="pills" id="pl-blk"></div></div>
+          <div><label data-t="Especial">Especial</label><select class="mini2" id="sel-spec"></select></div>
         </div>
       </div>
       <div class="endrow">
-        <button class="endbtn h" onclick="endRally('home')">Punto Local</button>
-        <button class="endbtn a" onclick="endRally('away')">Punto Visitante</button>
+        <button class="endbtn h" onclick="endRally('home')" data-t="Punto Local">Punto Local</button>
+        <button class="endbtn a" onclick="endRally('away')" data-t="Punto Visitante">Punto Visitante</button>
       </div>
     </div>
     <div style="margin-top:12px" class="ref">
@@ -656,21 +656,21 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <div class="pane">
     <h3>Acciones del set
       <select class="hsel" id="codes-h" onchange="altoCodigos(this.value)" title="Cuántos códigos ver">
-        <option value="240">Chica</option>
-        <option value="440" selected>Media</option>
-        <option value="640">Alta</option>
-        <option value="900">Máxima</option>
+        <option value="240" data-t="Chica">Chica</option>
+        <option value="440" selected data-t="Media">Media</option>
+        <option value="640" data-t="Alta">Alta</option>
+        <option value="900" data-t="Máxima">Máxima</option>
       </select>
-      <button class="hbtn" onclick="buscarCodigo()" title="Buscar un código (Ctrl+R)">Buscar</button>
-      <button class="hbtn" onclick="abrirVerificacion()" title="Verificar todos los códigos (Ctrl+V)">Verificar</button>
-      <button class="hbtn" onclick="reabrirPunto()" title="Trae el último punto de vuelta a la lista para corregirlo (Ctrl+A)">Reabrir punto</button>
-      <button class="hbtn" onclick="undoRally()" title="Deshace el punto (Ctrl+Shift+Z)">Deshacer punto</button>
+      <button class="hbtn" onclick="buscarCodigo()" title="Buscar un código (Ctrl+R)" data-t="Buscar">Buscar</button>
+      <button class="hbtn" onclick="abrirVerificacion()" title="Verificar todos los códigos (Ctrl+V)" data-t="Verificar">Verificar</button>
+      <button class="hbtn" onclick="reabrirPunto()" title="Trae el último punto de vuelta a la lista para corregirlo (Ctrl+A)" data-t="Reabrir punto">Reabrir punto</button>
+      <button class="hbtn" onclick="undoRally()" title="Deshace el punto (Ctrl+Shift+Z)" data-t="Deshacer punto">Deshacer punto</button>
       <!-- Las dos herramientas van aca porque es donde el scout trabaja: si
            recibe un partido con codigos distintos, o la camara le corto la
            grabacion, lo resuelve sin salir de su pantalla. -->
-      <button class="hbtn" onclick="window.open('asociar_codigos.html','_blank')" title="Traducir los códigos de un partido scouteado por otra persona">Asociar códigos</button>
+      <button class="hbtn" onclick="window.open('asociar_codigos.html','_blank')" title="Traducir los códigos de un partido scouteado por otra persona" data-t="Asociar códigos">Asociar códigos</button>
       <button class="hbtn" onclick="window.open('unir_video.html','_blank')" title="Unir los archivos de un partido que la cámara cortó en varios">Unir videos</button>
-      <span id="codes-n" class="cnt" title="Cuántas acciones lleva el partido"></span><button class="hbtn" onclick="undoLast()" title="Borra el último código (Ctrl+Z)">Deshacer código</button></h3>
+      <span id="codes-n" class="cnt" title="Cuántas acciones lleva el partido"></span><button class="hbtn" onclick="undoLast()" title="Borra el último código (Ctrl+Z)" data-t="Deshacer código">Deshacer código</button></h3>
     <div class="codes" id="codes" data-notr></div>
   </div>
 </div>
@@ -682,17 +682,17 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <div class="anwrap" id="twin" hidden>
   <div class="pane" id="pane-an">
     <h3>Análisis en vivo
-      <button class="hbtn" onclick="ciclarAnalisis()" id="anbtn">Local</button></h3>
+      <button class="hbtn" onclick="ciclarAnalisis()" id="anbtn" data-t="Local">Local</button></h3>
     <div id="mini-an" class="minian"></div>
   </div>
   <div class="twin">
     <div class="pane">
-      <div class="tbl-head"><span class="tag" style="color:var(--loc)" id="st-nm-h">LOCAL</span></div>
-      <table><thead><tr><th>Fund.</th><th>Tot</th><th>#</th><th>+</th><th>!</th><th>−</th><th>/</th><th>=</th><th>Pos%</th><th>Ef%</th></tr></thead><tbody id="st-h"></tbody></table>
+      <div class="tbl-head"><span class="tag" style="color:var(--loc)" id="st-nm-h" data-t="LOCAL">LOCAL</span></div>
+      <table><thead><tr><th data-t="Fund.">Fund.</th><th data-t="Tot">Tot</th><th>#</th><th>+</th><th>!</th><th>−</th><th>/</th><th>=</th><th data-t="Pos%">Pos%</th><th>Ef%</th></tr></thead><tbody id="st-h"></tbody></table>
     </div>
     <div class="pane">
-      <div class="tbl-head"><span class="tag" style="color:var(--vis)" id="st-nm-a">VISITANTE</span></div>
-      <table><thead><tr><th>Fund.</th><th>Tot</th><th>#</th><th>+</th><th>!</th><th>−</th><th>/</th><th>=</th><th>Pos%</th><th>Ef%</th></tr></thead><tbody id="st-a"></tbody></table>
+      <div class="tbl-head"><span class="tag" style="color:var(--vis)" id="st-nm-a" data-t="VISITANTE">VISITANTE</span></div>
+      <table><thead><tr><th data-t="Fund.">Fund.</th><th data-t="Tot">Tot</th><th>#</th><th>+</th><th>!</th><th>−</th><th>/</th><th>=</th><th data-t="Pos%">Pos%</th><th>Ef%</th></tr></thead><tbody id="st-a"></tbody></table>
     </div>
   </div>
   </div>
@@ -701,50 +701,50 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- ====== MODAL: CONFIG ====== -->
 
 <div class="modal" id="m-roster"><div class="sheet" style="max-width:660px">
-  <h2 id="rv-tit">Validación de plantel</h2>
-  <div class="sub">Manual 12.3. Compara los jugadores del partido con el plantel oficial guardado en Equipos.</div>
+  <h2 id="rv-tit" data-t="Validación de plantel">Validación de plantel</h2>
+  <div class="sub" data-t="Manual 12.3. Compara los jugadores del partido con el plantel oficial guardado en Equipos.">Manual 12.3. Compara los jugadores del partido con el plantel oficial guardado en Equipos.</div>
   <div id="rv-lista" style="margin-top:12px;max-height:44vh;overflow:auto"></div>
   <div class="brow">
-    <button class="tbtn" onclick="abrirValidacion('home')">Revisar local</button>
-    <button class="tbtn" onclick="abrirValidacion('away')">Revisar visitante</button>
-    <button class="tbtn" onclick="closeModal('m-roster')">Cerrar</button>
+    <button class="tbtn" onclick="abrirValidacion('home')" data-t="Revisar local">Revisar local</button>
+    <button class="tbtn" onclick="abrirValidacion('away')" data-t="Revisar visitante">Revisar visitante</button>
+    <button class="tbtn" onclick="closeModal('m-roster')" data-t="Cerrar">Cerrar</button>
   </div>
 </div></div>
 
 
 <!-- ══ PLANTELES: revisar antes de empezar (manual 12.3) ══════════════════ -->
 <div class="modal" id="m-planteles"><div class="sheet" style="max-width:1000px">
-  <h2>Planteles</h2>
+  <h2 data-t="Planteles">Planteles</h2>
   <div class="sub">Revisá que estén todos y con su posición antes de arrancar. Lo que
     corrijas acá queda guardado en la base de equipos: la próxima vez ya sale bien.</div>
   <div class="pl-wrap">
-    <div class="pl-col"><div class="pl-tit" id="pl-th">Local</div><div id="pl-home"></div>
-      <button class="tbtn" onclick="plAgregar('home')">+ Agregar jugador</button></div>
-    <div class="pl-col"><div class="pl-tit" id="pl-ta">Visitante</div><div id="pl-away"></div>
-      <button class="tbtn" onclick="plAgregar('away')">+ Agregar jugador</button></div>
+    <div class="pl-col"><div class="pl-tit" id="pl-th" data-t="Local">Local</div><div id="pl-home"></div>
+      <button class="tbtn" onclick="plAgregar('home')" data-t="+ Agregar jugador">+ Agregar jugador</button></div>
+    <div class="pl-col"><div class="pl-tit" id="pl-ta" data-t="Visitante">Visitante</div><div id="pl-away"></div>
+      <button class="tbtn" onclick="plAgregar('away')" data-t="+ Agregar jugador">+ Agregar jugador</button></div>
   </div>
   <div class="brow" style="margin-top:16px">
-    <button class="tbtn" onclick="closeModal('m-planteles')">Volver</button>
-    <button class="tbtn pri" onclick="plConfirmar()">Empezar el partido</button>
+    <button class="tbtn" onclick="closeModal('m-planteles')" data-t="Volver">Volver</button>
+    <button class="tbtn pri" onclick="plConfirmar()" data-t="Empezar el partido">Empezar el partido</button>
   </div>
 </div></div>
 
 <div class="modal" id="m-subs"><div class="sheet" style="max-width:560px">
-  <h2>Cambio · <span id="subs-team">Equipo</span></h2>
+  <h2>Cambio · <span id="subs-team" data-t="Equipo">Equipo</span></h2>
   <div id="subs-cancha"></div>
-  <div class="brow" style="gap:6px;margin:8px 0"><button class="tbtn" id="subs-th" onclick="substLado('home')">Local</button><button class="tbtn" id="subs-ta" onclick="substLado('away')">Visitante</button></div>
+  <div class="brow" style="gap:6px;margin:8px 0"><button class="tbtn" id="subs-th" onclick="substLado('home')" data-t="Local">Local</button><button class="tbtn" id="subs-ta" onclick="substLado('away')" data-t="Visitante">Visitante</button></div>
   <div class="sub">Elegí quién sale (izquierda) y quién entra (derecha). Cambios restantes: <b id="subs-restantes">6</b>.</div>
   <div style="display:flex;gap:14px;margin-top:12px">
-    <div style="flex:1"><div class="lutitle" style="margin-bottom:6px">Sale (en cancha)</div><div id="subs-sale" class="subcol"></div></div>
+    <div style="flex:1"><div class="lutitle" style="margin-bottom:6px" data-t="Sale (en cancha)">Sale (en cancha)</div><div id="subs-sale" class="subcol"></div></div>
     <div style="display:flex;align-items:center;font-size:22px;color:var(--mut)">→</div>
-    <div style="flex:1"><div class="lutitle" style="margin-bottom:6px">Entra (banco)</div><div id="subs-entra" class="subcol"></div></div>
+    <div style="flex:1"><div class="lutitle" style="margin-bottom:6px" data-t="Entra (banco)">Entra (banco)</div><div id="subs-entra" class="subcol"></div></div>
   </div>
-  <div id="subs-resumen" style="margin-top:12px;text-align:center;font-weight:700;color:#e6a743">Elegí quién sale y quién entra</div>
+  <div id="subs-resumen" style="margin-top:12px;text-align:center;font-weight:700;color:#e6a743" data-t="Elegí quién sale y quién entra">Elegí quién sale y quién entra</div>
   <div class="brow" style="margin-top:12px;gap:8px;flex-wrap:wrap">
-    <button class="tbtn" onclick="cerrarSubs()">Cerrar</button>
+    <button class="tbtn" onclick="cerrarSubs()" data-t="Cerrar">Cerrar</button>
     <div style="flex:1"></div>
-    <button class="tbtn" onclick="confirmarCambio(true)">+ Otro cambio</button>
-    <button class="tbtn pri" onclick="confirmarCambio(false)">Confirmar</button>
+    <button class="tbtn" onclick="confirmarCambio(true)" data-t="+ Otro cambio">+ Otro cambio</button>
+    <button class="tbtn pri" onclick="confirmarCambio(false)" data-t="Confirmar">Confirmar</button>
   </div>
 </div></div>
 
@@ -756,14 +756,14 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
          descarta ninguna accion: crea un tercero con todo. -->
     <button id="partidos-unir" onclick="unirCopias()" style="display:none;align-items:center;gap:6px;background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.4);border-radius:8px;padding:7px 14px;cursor:pointer;font:inherit;font-weight:700">🔗 Unir copias</button>
   </div>
-  <div class="sub">Tocá un partido para abrirlo. Tildá los que quieras borrar y usá el botón rojo.</div>
+  <div class="sub" data-t="Tocá un partido para abrirlo. Tildá los que quieras borrar y usá el botón rojo.">Tocá un partido para abrirlo. Tildá los que quieras borrar y usá el botón rojo.</div>
   <div id="partidos-cont" style="margin-top:12px;max-height:60vh;overflow:auto"></div>
-  <div class="brow" style="margin-top:12px"><button class="tbtn" onclick="cerrarPartidos()">Cerrar</button></div>
+  <div class="brow" style="margin-top:12px"><button class="tbtn" onclick="cerrarPartidos()" data-t="Cerrar">Cerrar</button></div>
 </div></div>
 
 <div class="modal" id="m-baterias"><div class="sheet" style="max-width:960px">
-  <h2>🔋 Baterías del partido</h2>
-  <div class="sub">Rendimiento por batería, calculado en vivo con lo que se scoutea. La marca blanca es el objetivo.</div>
+  <h2 data-t="🔋 Baterías del partido">🔋 Baterías del partido</h2>
+  <div class="sub" data-t="Rendimiento por batería, calculado en vivo con lo que se scoutea. La marca blanca es el objetivo.">Rendimiento por batería, calculado en vivo con lo que se scoutea. La marca blanca es el objetivo.</div>
   <div class="brow" style="margin:10px 0;align-items:center;gap:10px">
     <span id="bat-teambtns" class="bat-teambtns"></span>
     <div style="flex:1"></div>
@@ -773,172 +773,172 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   </div>
   <div id="bat-cont" style="overflow-x:auto"></div>
   <div class="brow" style="margin-top:10px">
-    <button class="tbtn" onclick="closeModal('m-baterias')">Cerrar</button>
+    <button class="tbtn" onclick="closeModal('m-baterias')" data-t="Cerrar">Cerrar</button>
   </div>
 </div></div>
 
 <div class="modal" id="m-video"><div class="sheet" style="max-width:720px">
-  <div class="vhdr" style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0;font-size:20px">Video</h2><div style="display:flex;gap:6px"><button class="tbtn" id="vid-dock-btn" onclick="vidDock()" title="Achicá el video a un costado para tipear y verlo a la vez">⧉ Acoplar</button><button class="tbtn" onclick="cerrarVideoArchivo()">Cerrar</button></div></div>
-  <div class="sub vhide">El .dvw guarda el segundo del video de cada código (columna 12) y la ruta en [3VIDEO].</div>
+  <div class="vhdr" style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0;font-size:20px">Video</h2><div style="display:flex;gap:6px"><button class="tbtn" id="vid-dock-btn" onclick="vidDock()" title="Achicá el video a un costado para tipear y verlo a la vez">⧉ Acoplar</button><button class="tbtn" onclick="cerrarVideoArchivo()" data-t="Cerrar">Cerrar</button></div></div>
+  <div class="sub vhide" data-t="El .dvw guarda el segundo del video de cada código (columna 12) y la ruta en [3VIDEO].">El .dvw guarda el segundo del video de cada código (columna 12) y la ruta en [3VIDEO].</div>
   <div class="brow vhide" style="margin:10px 0">
     <label class="sqbtn">Abrir archivo
       <input type="file" accept="video/*" onchange="cargarVideoArchivo(this)" hidden>
     </label>
     <input class="f" id="v-url" placeholder="…o pegá una URL" style="flex:1;min-width:180px">
-    <button class="tbtn" onclick="cargarVideoURL()">Cargar</button>
+    <button class="tbtn" onclick="cargarVideoURL()" data-t="Cargar">Cargar</button>
   </div>
   <video id="vid" controls style="width:100%;border-radius:8px;background:#000;max-height:38vh" ontimeupdate="refrescarVideo()"></video>
   <div class="sub vhide" id="v-estado" style="margin-top:6px"></div>
   <div class="fgrid vhide" style="grid-template-columns:1fr;margin-top:10px">
-    <div><label class="f">Ruta que va al archivo (Camera0)</label>
+    <div><label class="f" data-t="Ruta que va al archivo (Camera0)">Ruta que va al archivo (Camera0)</label>
       <input class="f mono" id="v-ruta" placeholder="D:\VIDEOS\2026-01-31.mp4" onchange="guardarRutaVideo()"></div>
   </div>
   <div class="brow vhide" style="margin-top:10px">
-    <button class="tbtn" onclick="alinearCodigo()" title="Tecla F2">Alinear código elegido</button>
+    <button class="tbtn" onclick="alinearCodigo()" title="Tecla F2" data-t="Alinear código elegido">Alinear código elegido</button>
     <button class="tbtn" onclick="smartTime()">Smart Time</button>
-    <button class="tbtn" onclick="arrancarReloj()">Reloj en cero (sin video)</button>
-    <button class="tbtn" onclick="closeModal('m-video')">Cerrar</button>
+    <button class="tbtn" onclick="arrancarReloj()" data-t="Reloj en cero (sin video)">Reloj en cero (sin video)</button>
+    <button class="tbtn" onclick="closeModal('m-video')" data-t="Cerrar">Cerrar</button>
   </div>
-  <div class="sub vhide" style="margin-top:8px">Smart Time: 3 s del saque al ataque rival · 3,2 s entre ataques · 3 s del último golpe al punto.</div>
+  <div class="sub vhide" style="margin-top:8px" data-t="Smart Time: 3 s del saque al ataque rival · 3,2 s entre ataques · 3 s del último golpe al punto.">Smart Time: 3 s del saque al ataque rival · 3,2 s entre ataques · 3 s del último golpe al punto.</div>
 </div></div>
 
 <div class="modal" id="m-combos"><div class="sheet" style="max-width:820px">
-  <h2>Combinaciones y llamadas</h2>
+  <h2 data-t="Combinaciones y llamadas">Combinaciones y llamadas</h2>
   <div class="sub">Manual 12.2. Cada combinación son 2 caracteres, un tipo de pelota, la zona de origen y el atacante destino.</div>
-  <div class="cbrow cbhead" style="margin-top:12px"><span>Cód</span><span>Tipo</span><span>Zona</span><span>Destino</span><span>Lado</span><span>Nombre</span><span></span></div>
+  <div class="cbrow cbhead" style="margin-top:12px"><span data-t="Cód">Cód</span><span data-t="Tipo">Tipo</span><span data-t="Zona">Zona</span><span data-t="Destino">Destino</span><span data-t="Lado">Lado</span><span data-t="Nombre">Nombre</span><span></span></div>
   <div id="cb-lista" style="max-height:34vh;overflow:auto"></div>
-  <div class="brow"><button class="tbtn" onclick="nuevoCombo()">+ Combinación</button></div>
-  <div class="sub" style="margin-top:10px"><b>Llamadas del armador</b></div>
+  <div class="brow"><button class="tbtn" onclick="nuevoCombo()" data-t="+ Combinación">+ Combinación</button></div>
+  <div class="sub" style="margin-top:10px"><b data-t="Llamadas del armador">Llamadas del armador</b></div>
   <div id="cl-lista" style="max-height:20vh;overflow:auto"></div>
   <div class="brow">
-    <button class="tbtn" onclick="nuevaCall()">+ Llamada</button>
-    <button class="tbtn" onclick="guardarCombos()">Guardar</button>
-    <button class="tbtn" onclick="restaurarCombos()">Restaurar original</button>
-    <button class="tbtn" onclick="closeModal('m-combos')">Cerrar</button>
+    <button class="tbtn" onclick="nuevaCall()" data-t="+ Llamada">+ Llamada</button>
+    <button class="tbtn" onclick="guardarCombos()" data-t="Guardar">Guardar</button>
+    <button class="tbtn" onclick="restaurarCombos()" data-t="Restaurar original">Restaurar original</button>
+    <button class="tbtn" onclick="closeModal('m-combos')" data-t="Cerrar">Cerrar</button>
   </div>
 </div></div>
 
 <div class="modal" id="m-lista"><div class="sheet" style="max-width:520px">
-  <h2 id="l-tit">Jugadores</h2>
+  <h2 id="l-tit" data-t="Jugadores">Jugadores</h2>
   <div class="sub">Posición con la que arrancó cada set · <b>*</b> entró después · <b>·</b> no jugó</div>
   <div id="l-lista" style="margin-top:12px;max-height:52vh;overflow:auto"></div>
-  <div class="brow"><button class="tbtn" onclick="closeModal('m-lista')">Cerrar</button></div>
+  <div class="brow"><button class="tbtn" onclick="closeModal('m-lista')" data-t="Cerrar">Cerrar</button></div>
 </div></div>
 
 <div class="modal" id="m-notas"><div class="sheet" style="max-width:560px">
-  <h2>Datos del partido</h2>
-  <div class="sub">Comando NOTES. Van a la cabecera del archivo .dvw.</div>
+  <h2 data-t="Datos del partido">Datos del partido</h2>
+  <div class="sub" data-t="Comando NOTES. Van a la cabecera del archivo .dvw.">Comando NOTES. Van a la cabecera del archivo .dvw.</div>
   <div class="fgrid" style="grid-template-columns:1fr 1fr;margin-top:12px">
-    <div><label class="f">Fecha</label><input class="f mono" id="n-fecha" placeholder="31/01/2026"></div>
-    <div><label class="f">Hora</label><input class="f mono" id="n-hora" placeholder="19.30.00"></div>
-    <div><label class="f">Temporada</label><input class="f" id="n-temporada" placeholder="2025/2026"></div>
-    <div><label class="f">N° de partido</label><input class="f mono" id="n-codigo" placeholder="636643"></div>
-    <div style="grid-column:1/-1"><label class="f">Competencia</label><input class="f" id="n-competencia" placeholder="NLA Volleyball League Men"></div>
-    <div style="grid-column:1/-1"><label class="f">Fase</label><input class="f" id="n-fase" placeholder="8th Finals"></div>
-    <div style="grid-column:1/-1"><label class="f">Comentario</label><input class="f" id="n-comentario"></div>
+    <div><label class="f" data-t="Fecha">Fecha</label><input class="f mono" id="n-fecha" placeholder="31/01/2026"></div>
+    <div><label class="f" data-t="Hora">Hora</label><input class="f mono" id="n-hora" placeholder="19.30.00"></div>
+    <div><label class="f" data-t="Temporada">Temporada</label><input class="f" id="n-temporada" placeholder="2025/2026"></div>
+    <div><label class="f" data-t="N° de partido">N° de partido</label><input class="f mono" id="n-codigo" placeholder="636643"></div>
+    <div style="grid-column:1/-1"><label class="f" data-t="Competencia">Competencia</label><input class="f" id="n-competencia" placeholder="NLA Volleyball League Men"></div>
+    <div style="grid-column:1/-1"><label class="f" data-t="Fase">Fase</label><input class="f" id="n-fase" placeholder="8th Finals"></div>
+    <div style="grid-column:1/-1"><label class="f" data-t="Comentario">Comentario</label><input class="f" id="n-comentario"></div>
   </div>
   <div class="brow">
-    <button class="tbtn" onclick="guardarNotas()">Guardar</button>
-    <button class="tbtn" onclick="closeModal('m-notas')">Cancelar</button>
+    <button class="tbtn" onclick="guardarNotas()" data-t="Guardar">Guardar</button>
+    <button class="tbtn" onclick="closeModal('m-notas')" data-t="Cancelar">Cancelar</button>
   </div>
 </div></div>
 
 <div class="modal" id="m-equipos"><div class="sheet" style="max-width:660px">
-  <h2>Equipos</h2>
-  <div class="sub">Tu base de equipos. Se guarda en este dispositivo.</div>
+  <h2 data-t="Equipos">Equipos</h2>
+  <div class="sub" data-t="Tu base de equipos. Se guarda en este dispositivo.">Tu base de equipos. Se guarda en este dispositivo.</div>
   <div class="brow" style="margin:12px 0">
-    <button class="tbtn" onclick="nuevoEquipo()">+ Nuevo</button>
+    <button class="tbtn" onclick="nuevoEquipo()" data-t="+ Nuevo">+ Nuevo</button>
     <label class="sqbtn">Importar .sq
       <input type="file" accept=".sq,.vis" multiple onchange="importarEquipos(this)" hidden>
     </label>
-    <button class="tbtn" onclick="exportarTodo()">Exportar todo</button>
-    <button class="tbtn" onclick="closeModal('m-equipos');document.getElementById('m-roster').classList.add('open');abrirValidacion('home')" title="Manual 12.3">Validar plantel</button>
+    <button class="tbtn" onclick="exportarTodo()" data-t="Exportar todo">Exportar todo</button>
+    <button class="tbtn" onclick="closeModal('m-equipos');document.getElementById('m-roster').classList.add('open');abrirValidacion('home')" title="Manual 12.3" data-t="Validar plantel">Validar plantel</button>
   </div>
   <div id="eq-lista" style="max-height:46vh;overflow:auto"></div>
-  <div class="brow"><button class="tbtn" onclick="closeModal('m-equipos')">Cerrar</button></div>
+  <div class="brow"><button class="tbtn" onclick="closeModal('m-equipos')" data-t="Cerrar">Cerrar</button></div>
 </div></div>
 
 <div class="modal" id="m-equipo"><div class="sheet" style="max-width:720px">
-  <h2>Ficha del equipo</h2>
+  <h2 data-t="Ficha del equipo">Ficha del equipo</h2>
   <div class="fgrid" style="grid-template-columns:2fr 90px 110px">
-    <div><label class="f">Nombre</label><input class="f" id="eq-nm" placeholder="Volley Amriswil"></div>
-    <div><label class="f">Sigla</label><input class="f mono" id="eq-sg" maxlength="3" placeholder="BIO"></div>
-    <div><label class="f">Id Data Volley</label><input class="f mono" id="eq-id" placeholder="4370"></div>
+    <div><label class="f" data-t="Nombre">Nombre</label><input class="f" id="eq-nm" placeholder="Volley Amriswil"></div>
+    <div><label class="f" data-t="Sigla">Sigla</label><input class="f mono" id="eq-sg" maxlength="3" placeholder="BIO"></div>
+    <div><label class="f" data-t="Id Data Volley">Id Data Volley</label><input class="f mono" id="eq-id" placeholder="4370"></div>
   </div>
   <div class="sub" style="margin-top:10px">Jugadores. El código de la derecha lo arma el programa con 3 letras del apellido y 3 del nombre; si se repite, avisa.</div>
   <div id="eq-jug" style="margin-top:8px;max-height:40vh;overflow:auto"></div>
   <div class="sub" id="eq-dup" style="color:#f87171"></div>
   <div class="brow">
-    <button class="tbtn" onclick="agregarJug()">+ Agregar jugador</button>
-    <button class="tbtn" onclick="guardarEquipo()">Guardar</button>
-    <button class="tbtn" onclick="closeModal('m-equipo')">Cancelar</button>
+    <button class="tbtn" onclick="agregarJug()" data-t="+ Agregar jugador">+ Agregar jugador</button>
+    <button class="tbtn" onclick="guardarEquipo()" data-t="Guardar">Guardar</button>
+    <button class="tbtn" onclick="closeModal('m-equipo')" data-t="Cancelar">Cancelar</button>
   </div>
 </div></div>
 
 <div class="modal" id="m-verif"><div class="sheet" style="max-width:560px">
-  <h2 id="v-tit">Verificación</h2>
-  <div class="sub">Manual 4.5.3. Tocá un código para ir a buscarlo en la lista.</div>
+  <h2 id="v-tit" data-t="Verificación">Verificación</h2>
+  <div class="sub" data-t="Manual 4.5.3. Tocá un código para ir a buscarlo en la lista.">Manual 4.5.3. Tocá un código para ir a buscarlo en la lista.</div>
   <div id="v-lista" style="margin-top:12px;max-height:44vh;overflow:auto"></div>
-  <div class="brow"><button class="tbtn" onclick="closeModal('m-verif')">Cerrar</button></div>
+  <div class="brow"><button class="tbtn" onclick="closeModal('m-verif')" data-t="Cerrar">Cerrar</button></div>
 </div></div>
 
 <div class="modal" id="m-config"><div class="sheet">
-  <h2>Teclado y códigos</h2>
-  <div class="sub">Se guarda en este dispositivo. Es tu configuración personal: no afecta a nadie más.</div>
+  <h2 data-t="Teclado y códigos">Teclado y códigos</h2>
+  <div class="sub" data-t="Se guarda en este dispositivo. Es tu configuración personal: no afecta a nadie más.">Se guarda en este dispositivo. Es tu configuración personal: no afecta a nadie más.</div>
 
   <div class="sec">
-    <h4>Teclas de evaluación</h4>
+    <h4 data-t="Teclas de evaluación">Teclas de evaluación</h4>
     <p>Hacé clic en una tecla y apretá la que quieras usar. Poné las seis juntas, de un lado del teclado.
-       De fábrica vienen las del manual de DataVolley, pero <b>ì è ù no existen en el teclado español</b>:
+       De fábrica vienen las del manual de DataVolley, pero <b data-t="ì è ù no existen en el teclado español">ì è ù no existen en el teclado español</b>:
        usá el preset de abajo y después ajustá lo que quieras.</p>
-    <button class="tbtn" onclick="applyPresetES()">Usar preset para teclado español</button>
+    <button class="tbtn" onclick="applyPresetES()" data-t="Usar preset para teclado español">Usar preset para teclado español</button>
     <div class="fgrid" id="cfg-eval" data-notr></div>
   </div>
 
   <div class="sec">
-    <h4>Fin de jugada, puntos y rotación</h4>
-    <p>Fin de jugada asigna el punto, rota al equipo que hace side out y deja listo al próximo sacador.</p>
+    <h4 data-t="Fin de jugada, puntos y rotación">Fin de jugada, puntos y rotación</h4>
+    <p data-t="Fin de jugada asigna el punto, rota al equipo que hace side out y deja listo al próximo sacador.">Fin de jugada asigna el punto, rota al equipo que hace side out y deja listo al próximo sacador.</p>
     <div class="fgrid" id="cfg-cmd" data-notr></div>
   </div>
 
   <div class="sec">
-    <h4>Valores por defecto</h4>
-    <p>Lo que no escribas, se completa con esto. Con <span class="mono">Ataque / Alto / +</span>, escribir <span class="mono">7</span> registra <span class="mono">*07AH+</span>.</p>
+    <h4 data-t="Valores por defecto">Valores por defecto</h4>
+    <p>Lo que no escribas, se completa con esto. Con <span class="mono" data-t="Ataque / Alto / +">Ataque / Alto / +</span>, escribir <span class="mono">7</span> registra <span class="mono">*07AH+</span>.</p>
     <div class="fgrid">
-      <div><label class="f">Fundamento por defecto</label><select class="f" id="d-skill"></select></div>
-      <div><label class="f">Combinación por defecto (ataque)</label><select class="f" id="d-combo"></select></div>
+      <div><label class="f" data-t="Fundamento por defecto">Fundamento por defecto</label><select class="f" id="d-skill"></select></div>
+      <div><label class="f" data-t="Combinación por defecto (ataque)">Combinación por defecto (ataque)</label><select class="f" id="d-combo"></select></div>
     </div>
     <div style="margin-top:12px" class="fgrid" id="cfg-def"></div>
   </div>
 
   <div class="sec">
-    <h4>Verificación de datos</h4>
-    <p>El programa revisa cada acción y te avisa en la barra. Si el código no se entiende, se pone <b style="color:var(--bad)">rojo</b>; si hay algo raro, <b style="color:var(--warn)">ámbar</b>.</p>
+    <h4 data-t="Verificación de datos">Verificación de datos</h4>
+    <p>El programa revisa cada acción y te avisa en la barra. Si el código no se entiende, se pone <b style="color:var(--bad)" data-t="rojo">rojo</b>; si hay algo raro, <b style="color:var(--warn)" data-t="ámbar">ámbar</b>.</p>
     <div class="fgrid" id="cfg-verif"></div>
     <div class="f" style="margin-top:10px">
-      <label class="f">Formación automática (manual 2.5.3)</label>
+      <label class="f" data-t="Formación automática (manual 2.5.3)">Formación automática (manual 2.5.3)</label>
       <select class="f" id="cfg-autolineup">
-        <option value="0">No — cargo la formación yo</option>
-        <option value="1">Sí — reconstruila mirando quién saca</option>
+        <option value="0" data-t="No — cargo la formación yo">No — cargo la formación yo</option>
+        <option value="1" data-t="Sí — reconstruila mirando quién saca">Sí — reconstruila mirando quién saca</option>
       </select>
-      <div class="sub">Si arrancás sin saber la formación del rival, el panel la arma sola a las seis rotaciones.</div>
+      <div class="sub" data-t="Si arrancás sin saber la formación del rival, el panel la arma sola a las seis rotaciones.">Si arrancás sin saber la formación del rival, el panel la arma sola a las seis rotaciones.</div>
     </div>
   </div>
 
   <div class="sec">
-        <h4>Teclas del video</h4>
+        <h4 data-t="Teclas del video">Teclas del video</h4>
         <p>El manual (2.5.6) las llama <em>shortcut keys</em> de sincronización.
            Podés poner cualquier tecla: F2, F3, una letra, la que te quede cómoda.</p>
 
         <div class="fgrid">
           <div>
-            <label class="f">Alinear el código al video</label>
+            <label class="f" data-t="Alinear el código al video">Alinear el código al video</label>
             <div class="keycap" data-key="__sync" onclick="listen(this)">F2</div>
             <div class="sub">Apretala mientras corre el video: el código seleccionado
               queda alineado a ese momento.</div>
           </div>
           <div>
-            <label class="f">Deshacer la última acción</label>
+            <label class="f" data-t="Deshacer la última acción">Deshacer la última acción</label>
             <div class="keycap" data-key="__undo" onclick="listen(this)">F4</div>
             <div class="sub">Antes era Ctrl+A, pero esa combinación reabre el punto
               completo, como dice el manual.</div>
@@ -948,90 +948,90 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         <div style="margin-top:10px">
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
             <input type="checkbox" id="cfg-video-avanza">
-            <span>Después de alinear, pasar al código siguiente</span>
+            <span data-t="Después de alinear, pasar al código siguiente">Después de alinear, pasar al código siguiente</span>
           </label>
-          <div class="sub">Así vas alineando el rally entero sin tocar la lista.</div>
+          <div class="sub" data-t="Así vas alineando el rally entero sin tocar la lista.">Así vas alineando el rally entero sin tocar la lista.</div>
         </div>
 
         <div style="margin-top:8px">
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
             <input type="checkbox" id="cfg-video-salta">
-            <span>Al elegir un código, saltar ahí en el video</span>
+            <span data-t="Al elegir un código, saltar ahí en el video">Al elegir un código, saltar ahí en el video</span>
           </label>
-          <div class="sub">Para revisar si quedó bien alineado.</div>
+          <div class="sub" data-t="Para revisar si quedó bien alineado.">Para revisar si quedó bien alineado.</div>
         </div>
       </div>
 
       <div class="sec">
-    <h4>Atajos propios</h4>
+    <h4 data-t="Atajos propios">Atajos propios</h4>
     <p>Una tecla que escribe lo que vos quieras en la barra: un dorsal de dos cifras, una combinación como «X5»,
        o un código entero. El manual los llama <em>shortcut keys</em>. Podés usar la tecla sola, o con Ctrl o Alt.</p>
     <div id="cfg-atajos"></div>
-    <button class="tbtn" onclick="agregarAtajo()" style="margin-top:8px">+ Agregar atajo</button>
+    <button class="tbtn" onclick="agregarAtajo()" style="margin-top:8px" data-t="+ Agregar atajo">+ Agregar atajo</button>
   </div>
 
   <div class="sec">
-    <h4>Completar códigos automáticamente</h4>
-    <p>Como el DataVolley: lo que no llegás a cargar, lo escribe el programa.</p>
+    <h4 data-t="Completar códigos automáticamente">Completar códigos automáticamente</h4>
+    <p data-t="Como el DataVolley: lo que no llegás a cargar, lo escribe el programa.">Como el DataVolley: lo que no llegás a cargar, lo escribe el programa.</p>
     <div class="fgrid">
-      <div><label class="f">Armado automático</label><select class="f" id="d-autoset">
-        <option value="1">Sí — al cargar un ataque con combinación, escribe el armado</option>
+      <div><label class="f" data-t="Armado automático">Armado automático</label><select class="f" id="d-autoset">
+        <option value="1" data-t="Sí — al cargar un ataque con combinación, escribe el armado">Sí — al cargar un ataque con combinación, escribe el armado</option>
         <option value="0">No</option></select>
         <div style="font-size:11px;color:var(--mut);margin-top:5px">El tipo y el destino salen de la combinación. No lo escribe si ataca el armador. Con el especial «X», el armado se evalúa «#».</div>
       </div>
-      <div><label class="f">Corrección del código compuesto</label><select class="f" id="d-autocomp">
-        <option value="1">Sí — al corregir un código, se ajusta su pareja</option>
+      <div><label class="f" data-t="Corrección del código compuesto">Corrección del código compuesto</label><select class="f" id="d-autocomp">
+        <option value="1" data-t="Sí — al corregir un código, se ajusta su pareja">Sí — al corregir un código, se ajusta su pareja</option>
         <option value="0">No</option></select>
-        <div style="font-size:11px;color:var(--mut);margin-top:5px">Saque↔recepción, ataque↔bloqueo, ataque↔defensa y ataque↔armado previo.</div>
+        <div style="font-size:11px;color:var(--mut);margin-top:5px" data-t="Saque↔recepción, ataque↔bloqueo, ataque↔defensa y ataque↔armado previo.">Saque↔recepción, ataque↔bloqueo, ataque↔defensa y ataque↔armado previo.</div>
       </div>
-      <div><label class="f">Después de cerrar el punto</label><select class="f" id="d-autoserve">
-        <option value="num_s">Escribe el número del próximo sacador y la S</option>
-        <option value="num">Escribe sólo el número del próximo sacador</option>
-        <option value="no">Deja la barra vacía</option></select>
-        <div style="font-size:11px;color:var(--mut);margin-top:5px">La barra se limpia siempre; esto define qué queda escrito.</div>
+      <div><label class="f" data-t="Después de cerrar el punto">Después de cerrar el punto</label><select class="f" id="d-autoserve">
+        <option value="num_s" data-t="Escribe el número del próximo sacador y la S">Escribe el número del próximo sacador y la S</option>
+        <option value="num" data-t="Escribe sólo el número del próximo sacador">Escribe sólo el número del próximo sacador</option>
+        <option value="no" data-t="Deja la barra vacía">Deja la barra vacía</option></select>
+        <div style="font-size:11px;color:var(--mut);margin-top:5px" data-t="La barra se limpia siempre; esto define qué queda escrito.">La barra se limpia siempre; esto define qué queda escrito.</div>
       </div>
-      <div><label class="f">Fin de jugada automático (estilo Data)</label><select class="f" id="d-autofin">
-        <option value="1">Sí — un código terminal (#, =, ataque bloqueado) cierra la jugada y da el punto solo</option>
-        <option value="0">No — el punto se carga a mano (botones «Punto Local/Visitante»)</option></select>
+      <div><label class="f" data-t="Fin de jugada automático (estilo Data)">Fin de jugada automático (estilo Data)</label><select class="f" id="d-autofin">
+        <option value="1" data-t="Sí — un código terminal (#, =, ataque bloqueado) cierra la jugada y da el punto solo">Sí — un código terminal (#, =, ataque bloqueado) cierra la jugada y da el punto solo</option>
+        <option value="0" data-t="No — el punto se carga a mano (botones «Punto Local/Visitante»)">No — el punto se carga a mano (botones «Punto Local/Visitante»)</option></select>
       </div>
-      <div><label class="f">Modo entrenamiento (solo tu equipo)</label><select class="f" id="d-entren">
-        <option value="0">No — partido normal (local y visitante)</option>
-        <option value="1">Sí — todo se carga como local (*), sin adversario · práctica o amistoso</option></select>
-        <div style="font-size:11px;color:var(--mut);margin-top:5px">En entrenamiento, aunque tipees «a», el código va a tu equipo.</div>
+      <div><label class="f" data-t="Modo entrenamiento (solo tu equipo)">Modo entrenamiento (solo tu equipo)</label><select class="f" id="d-entren">
+        <option value="0" data-t="No — partido normal (local y visitante)">No — partido normal (local y visitante)</option>
+        <option value="1" data-t="Sí — todo se carga como local (*), sin adversario · práctica o amistoso">Sí — todo se carga como local (*), sin adversario · práctica o amistoso</option></select>
+        <div style="font-size:11px;color:var(--mut);margin-top:5px" data-t="En entrenamiento, aunque tipees «a», el código va a tu equipo.">En entrenamiento, aunque tipees «a», el código va a tu equipo.</div>
       </div>
-      <div><label class="f">Al editar, el cursor va</label><select class="f" id="d-cursor">
-        <option value="0">Al final del código (completar)</option>
-        <option value="1">Sobre el símbolo de evaluación (corregir)</option></select></div>
+      <div><label class="f" data-t="Al editar, el cursor va">Al editar, el cursor va</label><select class="f" id="d-cursor">
+        <option value="0" data-t="Al final del código (completar)">Al final del código (completar)</option>
+        <option value="1" data-t="Sobre el símbolo de evaluación (corregir)">Sobre el símbolo de evaluación (corregir)</option></select></div>
     </div>
   </div>
 
   <div class="sec">
-    <h4>Caracteres personalizados</h4>
+    <h4 data-t="Caracteres personalizados">Caracteres personalizados</h4>
     <p>El manual permite hasta 5 caracteres libres al final del código (4.1.4). Los códigos especiales ya vienen
        definidos por DataVolley según el fundamento y la evaluación, así que no hace falta editarlos.</p>
     <div class="fgrid">
-      <div><label class="f">Completar automáticamente</label><select class="f" id="d-auto">
-        <option value="0">No (código estándar de DataVolley)</option>
-        <option value="1">Sí — diferencia de puntos + fila del jugador (convención de la liga)</option></select></div>
+      <div><label class="f" data-t="Completar automáticamente">Completar automáticamente</label><select class="f" id="d-auto">
+        <option value="0" data-t="No (código estándar de DataVolley)">No (código estándar de DataVolley)</option>
+        <option value="1" data-t="Sí — diferencia de puntos + fila del jugador (convención de la liga)">Sí — diferencia de puntos + fila del jugador (convención de la liga)</option></select></div>
     </div>
-    <div class="ref" style="margin-top:10px">Esta opción <b>no es un estándar de DataVolley</b>: se dedujo de archivos reales
+    <div class="ref" style="margin-top:10px">Esta opción <b data-t="no es un estándar de DataVolley">no es un estándar de DataVolley</b>: se dedujo de archivos reales
       (coincide en el 98% de las acciones). Dejala en "No" si querés el código puro del manual.</div>
   </div>
 
   <div class="sec">
-    <h4>Referencia del código</h4>
+    <h4 data-t="Referencia del código">Referencia del código</h4>
     <div class="ref">
-      <b>Estructura:</b> <span class="mono">equipo · nº · fundamento · tipo · evaluación</span> → <span class="mono">*04AH#</span><br>
-      <b>Fundamentos:</b> <span class="mono">S</span> saque · <span class="mono">R</span> recepción · <span class="mono">A</span> ataque · <span class="mono">B</span> bloqueo · <span class="mono">D</span> defensa · <span class="mono">E</span> armado · <span class="mono">F</span> freeball<br>
-      <b>Tipos:</b> <span class="mono">H</span> alto · <span class="mono">M</span> medio · <span class="mono">Q</span> rápido · <span class="mono">T</span> tenso · <span class="mono">U</span> súper · <span class="mono">N</span> fast · <span class="mono">O</span> otro<br>
-      <b>Evaluaciones:</b> el símbolo es el mismo, pero significa distinto en cada fundamento. En ataque <span class="mono">/</span> es bloqueado; en bloqueo, invasión.
+      <b data-t="Estructura:">Estructura:</b> <span class="mono" data-t="equipo · nº · fundamento · tipo · evaluación">equipo · nº · fundamento · tipo · evaluación</span> → <span class="mono">*04AH#</span><br>
+      <b data-t="Fundamentos:">Fundamentos:</b> <span class="mono">S</span> saque · <span class="mono">R</span> recepción · <span class="mono">A</span> ataque · <span class="mono">B</span> bloqueo · <span class="mono">D</span> defensa · <span class="mono">E</span> armado · <span class="mono">F</span> freeball<br>
+      <b data-t="Tipos:">Tipos:</b> <span class="mono">H</span> alto · <span class="mono">M</span> medio · <span class="mono">Q</span> rápido · <span class="mono">T</span> tenso · <span class="mono">U</span> súper · <span class="mono">N</span> fast · <span class="mono">O</span> otro<br>
+      <b data-t="Evaluaciones:">Evaluaciones:</b> el símbolo es el mismo, pero significa distinto en cada fundamento. En ataque <span class="mono">/</span> es bloqueado; en bloqueo, invasión.
     </div>
   </div>
 
   <div class="actions">
-    <button class="tbtn" onclick="resetConfig()">Volver a los valores de fábrica</button>
-    <button class="tbtn" onclick="closeModal('m-config')">Cancelar</button>
-    <button class="tbtn pri" onclick="saveConfig()">Guardar</button>
+    <button class="tbtn" onclick="resetConfig()" data-t="Volver a los valores de fábrica">Volver a los valores de fábrica</button>
+    <button class="tbtn" onclick="closeModal('m-config')" data-t="Cancelar">Cancelar</button>
+    <button class="tbtn pri" onclick="saveConfig()" data-t="Guardar">Guardar</button>
   </div>
 </div></div>
 
@@ -1042,7 +1042,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <h2 id="arm-tit">&iquest;Qui&eacute;n arma ahora?</h2>
   <div class="sub" id="arm-sub"></div>
   <div id="arm-lista" class="armlista"></div>
-  <div class="sub" style="margin-top:12px;color:var(--warn)">
+  <div class="sub" style="margin-top:12px;color:var(--warn)" data-t="Hay que elegir uno: de esto dependen las rotaciones y todo el an&aacute;lisis del armador.">
     Hay que elegir uno: de esto dependen las rotaciones y todo el an&aacute;lisis del armador.
   </div>
 </div></div>
@@ -1050,12 +1050,12 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- OBJETIVOS DEL DÍA — mismo tablero que el panel voley, calculado en vivo -->
 <div class="modal" id="m-objetivos"><div class="sheet" style="width:min(980px,96vw)">
   <h2>Objetivos del día
-    <button class="x" onclick="closeModal('m-objetivos')">Cerrar</button>
+    <button class="x" onclick="closeModal('m-objetivos')" data-t="Cerrar">Cerrar</button>
   </h2>
-  <div class="sub">Se calculan en vivo con lo que vas scouteando. Escribí la meta de cada indicador y queda guardada.</div>
+  <div class="sub" data-t="Se calculan en vivo con lo que vas scouteando. Escribí la meta de cada indicador y queda guardada.">Se calculan en vivo con lo que vas scouteando. Escribí la meta de cada indicador y queda guardada.</div>
   <div class="obj-scroll">
     <div class="obj-head">
-      <span>Indicador</span><span>Actual</span><span>Objetivo</span><span>Resultado</span>
+      <span data-t="Indicador">Indicador</span><span data-t="Actual">Actual</span><span data-t="Objetivo">Objetivo</span><span data-t="Resultado">Resultado</span>
     </div>
     <div id="obj-cards" class="obj-cards"></div>
   </div>
@@ -1063,55 +1063,55 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 
 <div class="modal inicio" id="m-inicio"><div class="sheet">
   <div class="ini-top">
-    <h2><span class="hb">≡</span> <span id="ini-temp">Temporada</span></h2>
+    <h2><span class="hb">≡</span> <span id="ini-temp" data-t="Temporada">Temporada</span></h2>
     <div class="ini-acc">
-      <button class="tbtn" onclick="abrirEquipos()" title="Base de equipos">Equipos</button>
-      <button class="tbtn" onclick="abrirCombos()" title="Combinaciones de ataque y llamadas">Combinaciones</button>
+      <button class="tbtn" onclick="abrirEquipos()" title="Base de equipos" data-t="Equipos">Equipos</button>
+      <button class="tbtn" onclick="abrirCombos()" title="Combinaciones de ataque y llamadas" data-t="Combinaciones">Combinaciones</button>
     </div>
   </div>
   <div class="ini-body">
     <div class="ini-side">
-      <h4>Equipo</h4>
+      <h4 data-t="Equipo">Equipo</h4>
       <select class="f" id="ini-eq" onchange="renderInicio()" style="width:100%;margin-bottom:14px"></select>
-      <h4>Competencia</h4>
+      <h4 data-t="Competencia">Competencia</h4>
       <div id="ini-comp"></div>
     </div>
     <div class="ini-main">
       <div class="ini-btns">
-        <button class="tbtn pri2" onclick="iniNuevo()">+ Nuevo partido</button>
-        <button class="tbtn" onclick="abrirDVW()" title="Abrir un scout .dvw para corregirlo o seguir cargándolo (manual 9.1.1)">Abrir .dvw</button>
-    <button class="tbtn" onclick="iniImportar()" title="Sumar las estadísticas de un .dvw al historial (no lo abre para editar)">Sumar al historial</button>
+        <button class="tbtn pri2" onclick="iniNuevo()" data-t="+ Nuevo partido">+ Nuevo partido</button>
+        <button class="tbtn" onclick="abrirDVW()" title="Abrir un scout .dvw para corregirlo o seguir cargándolo (manual 9.1.1)" data-t="Abrir .dvw">Abrir .dvw</button>
+    <button class="tbtn" onclick="iniImportar()" title="Sumar las estadísticas de un .dvw al historial (no lo abre para editar)" data-t="Sumar al historial">Sumar al historial</button>
         <button class="tbtn" id="ini-seguir" onclick="iniSeguir()" style="display:none"></button>
         <div class="ini-modo">
-          <button class="tbtn" id="ini-tab-p" onclick="iniTab('partido')">Partidos</button>
-          <button class="tbtn" id="ini-tab-e" onclick="iniTab('entrenamiento')">Entrenamientos</button>
+          <button class="tbtn" id="ini-tab-p" onclick="iniTab('partido')" data-t="Partidos">Partidos</button>
+          <button class="tbtn" id="ini-tab-e" onclick="iniTab('entrenamiento')" data-t="Entrenamientos">Entrenamientos</button>
         </div>
       </div>
       <div class="ini-head">
-        <span>Fecha</span><span>Local</span><span style="text-align:center">Sets</span>
-        <span>Visitante</span><span>Competencia</span><span></span>
+        <span data-t="Fecha">Fecha</span><span data-t="Local">Local</span><span style="text-align:center" data-t="Sets">Sets</span>
+        <span data-t="Visitante">Visitante</span><span data-t="Competencia">Competencia</span><span></span>
       </div>
       <div class="ini-cont" id="ini-lista"></div>
     </div>
   </div>
   <div class="ini-tabs">
     <div class="ini-pie">
-      <a onclick="abrirAyuda()">Cómo se usa</a>
-      <a onclick="closeModal('m-inicio')">Ir al panel sin abrir nada</a>
+      <a onclick="abrirAyuda()" data-t="Cómo se usa">Cómo se usa</a>
+      <a onclick="closeModal('m-inicio')" data-t="Ir al panel sin abrir nada">Ir al panel sin abrir nada</a>
       <span id="ini-info"></span>
     </div>
   </div>
 </div></div>
 
 <div class="modal" id="m-setup"><div class="sheet">
-  <h2 id="setup-titulo">Partido</h2>
-  <div class="sub" id="setup-sub">Cargá los dos equipos, el seis inicial y quién saca.</div>
+  <h2 id="setup-titulo" data-t="Partido">Partido</h2>
+  <div class="sub" id="setup-sub" data-t="Cargá los dos equipos, el seis inicial y quién saca.">Cargá los dos equipos, el seis inicial y quién saca.</div>
   <div style="display:flex;gap:8px;margin-bottom:14px">
-    <button type="button" id="modo-partido" class="tbtn" onclick="setModo('partido')" style="flex:1;background:#2563eb;color:#fff;border-color:#2563eb">Partido</button>
-    <button type="button" id="modo-entrenamiento" class="tbtn" onclick="setModo('entrenamiento')" style="flex:1">🏋️ Entrenamiento</button>
+    <button type="button" id="modo-partido" class="tbtn" onclick="setModo('partido')" style="flex:1;background:#2563eb;color:#fff;border-color:#2563eb" data-t="Partido">Partido</button>
+    <button type="button" id="modo-entrenamiento" class="tbtn" onclick="setModo('entrenamiento')" style="flex:1" data-t="🏋️ Entrenamiento">🏋️ Entrenamiento</button>
   </div>
   <div class="fgrid">
-    <div><label class="f">Local — equipo</label><select class="f" id="s-eqh" onchange="elegirEquipoSetup('home',this.value)" style="margin-bottom:5px"><option value="">— elegí un equipo guardado —</option></select><input class="f" id="s-nmh" placeholder="…o escribí el nombre"></div>
+    <div><label class="f" data-t="Local — equipo">Local — equipo</label><select class="f" id="s-eqh" onchange="elegirEquipoSetup('home',this.value)" style="margin-bottom:5px"><option value="" data-t="— elegí un equipo guardado —">— elegí un equipo guardado —</option></select><input class="f" id="s-nmh" placeholder="…o escribí el nombre"></div>
     <div><label class="f">Local — sigla</label><input class="f" id="s-cdh" maxlength="3" placeholder="SLO">
       <div class="sqbox">
         <label class="sqbtn">Importar equipo (.sq)
@@ -1119,7 +1119,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         </label>
         <span class="sub" id="sq-info-h"></span>
       </div></div>
-    <div id="setup-vis-eq"><label class="f">Visitante — equipo</label><select class="f" id="s-eqa" onchange="elegirEquipoSetup('away',this.value)" style="margin-bottom:5px"><option value="">— elegí un equipo guardado —</option></select><input class="f" id="s-nma" placeholder="…o escribí el nombre"></div>
+    <div id="setup-vis-eq"><label class="f" data-t="Visitante — equipo">Visitante — equipo</label><select class="f" id="s-eqa" onchange="elegirEquipoSetup('away',this.value)" style="margin-bottom:5px"><option value="" data-t="— elegí un equipo guardado —">— elegí un equipo guardado —</option></select><input class="f" id="s-nma" placeholder="…o escribí el nombre"></div>
     <div id="setup-vis-sg"><label class="f">Visitante — sigla</label><input class="f" id="s-cda" maxlength="3" placeholder="AMR">
       <div class="sqbox">
         <label class="sqbtn">Importar equipo (.sq)
@@ -1130,48 +1130,48 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   </div>
 
   <div class="sec">
-    <h4>Seis inicial</h4>
+    <h4 data-t="Seis inicial">Seis inicial</h4>
     <p>Poné el número de cada jugador en su casillero. La red está arriba, la zona 1 abajo a la derecha (quien saca).
        Marcá el armador con «armador». El líbero va al costado.</p>
     <div class="fgrid" style="grid-template-columns:1fr 1fr">
       <div>
-        <div class="lutitle" style="color:var(--loc)">Local</div>
+        <div class="lutitle" style="color:var(--loc)" data-t="Local">Local</div>
         <div class="netline"></div>
         <div class="luwrap">
           <div class="lucourt home-c" id="lu-h"></div>
-          <div class="lulib"><div class="zl">LÍBERO</div><input class="mono" id="s-libh" inputmode="numeric"><div class="lurot"><button type="button" onclick="girarSeis('home',-1)" title="Girar las posiciones a la izquierda">&#9666;</button><button type="button" onclick="girarSeis('home',1)" title="Girar las posiciones a la derecha">&#9656;</button></div></div></div>
+          <div class="lulib"><div class="zl" data-t="LÍBERO">LÍBERO</div><input class="mono" id="s-libh" inputmode="numeric"><div class="lurot"><button type="button" onclick="girarSeis('home',-1)" title="Girar las posiciones a la izquierda">&#9666;</button><button type="button" onclick="girarSeis('home',1)" title="Girar las posiciones a la derecha">&#9656;</button></div></div></div>
       </div>
       <div id="setup-vis-lu">
-        <div class="lutitle" style="color:var(--vis)">Visitante</div>
+        <div class="lutitle" style="color:var(--vis)" data-t="Visitante">Visitante</div>
         <div class="netline"></div>
         <div class="luwrap">
           <div class="lucourt away-c" id="lu-a"></div>
-          <div class="lulib"><div class="zl">LÍBERO</div><input class="mono" id="s-liba" inputmode="numeric"><div class="lurot"><button type="button" onclick="girarSeis('away',-1)" title="Girar las posiciones a la izquierda">&#9666;</button><button type="button" onclick="girarSeis('away',1)" title="Girar las posiciones a la derecha">&#9656;</button></div></div></div>
+          <div class="lulib"><div class="zl" data-t="LÍBERO">LÍBERO</div><input class="mono" id="s-liba" inputmode="numeric"><div class="lurot"><button type="button" onclick="girarSeis('away',-1)" title="Girar las posiciones a la izquierda">&#9666;</button><button type="button" onclick="girarSeis('away',1)" title="Girar las posiciones a la derecha">&#9656;</button></div></div></div>
       </div>
     </div>
     <div class="fgrid" style="margin-top:14px">
-      <div id="setup-saca"><label class="f">Saca</label><select class="f" id="s-serve"><option value="home">Local</option><option value="away">Visitante</option></select></div>
+      <div id="setup-saca"><label class="f" data-t="Saca">Saca</label><select class="f" id="s-serve"><option value="home" data-t="Local">Local</option><option value="away" data-t="Visitante">Visitante</option></select></div>
     </div>
   </div>
   <div class="actions">
-    <button class="tbtn" onclick="nuevoPartido()" style="background:rgba(34,197,94,.12);color:#22c55e;border-color:rgba(34,197,94,.3);margin-right:auto">Nuevo partido</button>
-    <button class="tbtn" onclick="cerrarPartidoActual()" title="Guarda el partido en «Partidos» y cierra (como Close Scouting del Data)">Cerrar</button>
-    <button class="tbtn" id="setup-cancelar" onclick="closeModal('m-setup')">Cancelar</button>
-    <button class="tbtn pri" id="setup-empezar" onclick="saveSetup()">Empezar</button>
+    <button class="tbtn" onclick="nuevoPartido()" style="background:rgba(34,197,94,.12);color:#22c55e;border-color:rgba(34,197,94,.3);margin-right:auto" data-t="Nuevo partido">Nuevo partido</button>
+    <button class="tbtn" onclick="cerrarPartidoActual()" title="Guarda el partido en «Partidos» y cierra (como Close Scouting del Data)" data-t="Cerrar">Cerrar</button>
+    <button class="tbtn" id="setup-cancelar" onclick="closeModal('m-setup')" data-t="Cancelar">Cancelar</button>
+    <button class="tbtn pri" id="setup-empezar" onclick="saveSetup()" data-t="Empezar">Empezar</button>
   </div>
 </div></div>
 
 
 <div class="modal" id="m-edit"><div class="sheet" style="max-width:1180px">
-  <h2 id="e-titulo">Corregir código</h2>
-  <div class="sub">En vivo siempre se escapa algo. Completá lo que falte: la pareja del código se ajusta sola.</div>
+  <h2 id="e-titulo" data-t="Corregir código">Corregir código</h2>
+  <div class="sub" data-t="En vivo siempre se escapa algo. Completá lo que falte: la pareja del código se ajusta sola.">En vivo siempre se escapa algo. Completá lo que falte: la pareja del código se ajusta sola.</div>
   <!-- El codigo crudo arranca escondido: se corrige mirando las opciones, no
        leyendo tildes. Sigue estando para quien lo quiera tocar a mano. -->
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
     <div class="mitades" id="e-mitades" style="display:none;gap:6px"></div>
     <button type="button" id="e-vercod" onclick="verCodigoCrudo()"
       style="margin-left:auto;background:transparent;border:1px solid var(--b2);color:var(--mut);
-             border-radius:8px;padding:5px 11px;font-family:inherit;font-size:11px;cursor:pointer">
+             border-radius:8px;padding:5px 11px;font-family:inherit;font-size:11px;cursor:pointer" data-t="Ver el c&oacute;digo">
       Ver el c&oacute;digo</button>
   </div>
   <div id="e-crudo" style="display:none;margin-bottom:12px">
@@ -1184,7 +1184,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
        se guarda con Enter, como en DataVolley. -->
   <div id="e-fila" style="margin-bottom:10px"></div>
   <div style="display:flex;gap:14px;margin-bottom:12px;font-size:11px;color:var(--mut)">
-    <span>&larr; &rarr; casillero</span><span>&uarr; &darr; valor</span><span>Enter guarda</span>
+    <span>&larr; &rarr; casillero</span><span>&uarr; &darr; valor</span><span data-t="Enter guarda">Enter guarda</span>
   </div>
 <div id="e-dec" class="edec"></div>
   <!-- El asistente viejo queda escondido: ahora se corrige con la fila de
@@ -1192,54 +1192,54 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
      volver: alcanza con sacarle el display:none. -->
   <div id="e-wizard" style="display:none">
     <div class="wiz">
-      <div class="wcol"><h4>Equipo</h4><div class="wlist" id="w-team"></div></div>
-      <div class="wcol"><h4>Jugador</h4><div class="wlist" id="w-num"></div></div>
+      <div class="wcol"><h4 data-t="Equipo">Equipo</h4><div class="wlist" id="w-team"></div></div>
+      <div class="wcol"><h4 data-t="Jugador">Jugador</h4><div class="wlist" id="w-num"></div></div>
       <div class="wcol"><h4>Acci&oacute;n</h4><div class="wlist" id="w-skill"></div></div>
-      <div class="wcol"><h4>Tipo</h4><div class="wlist" id="w-type"></div></div>
+      <div class="wcol"><h4 data-t="Tipo">Tipo</h4><div class="wlist" id="w-type"></div></div>
       <div class="wcol"><h4>Evaluaci&oacute;n</h4><div class="wlist" id="w-ev"></div></div>
       <div class="wcol"><h4>Combinaci&oacute;n</h4><div class="wlist" id="w-combo"></div></div>
-      <div class="wcol"><h4>Zona origen</h4><div class="wlist" id="w-sz"></div></div>
-      <div class="wcol"><h4>Zona destino</h4><div class="wlist" id="w-ez"></div></div>
-      <div class="wcol"><h4>Subzona</h4><div class="wlist" id="w-subz"></div></div>
+      <div class="wcol"><h4 data-t="Zona origen">Zona origen</h4><div class="wlist" id="w-sz"></div></div>
+      <div class="wcol"><h4 data-t="Zona destino">Zona destino</h4><div class="wlist" id="w-ez"></div></div>
+      <div class="wcol"><h4 data-t="Subzona">Subzona</h4><div class="wlist" id="w-subz"></div></div>
     </div>
   </div>
 
   <div id="e-extendido" style="margin-top:14px;padding:12px;background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.25);border-radius:10px">
-    <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#60a5fa;margin-bottom:10px">Código extendido</div>
+    <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#60a5fa;margin-bottom:10px" data-t="Código extendido">Código extendido</div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
       <div>
-        <label style="font-size:11px;color:var(--mut);display:block;margin-bottom:4px">Tipo de golpe</label>
+        <label style="font-size:11px;color:var(--mut);display:block;margin-bottom:4px" data-t="Tipo de golpe">Tipo de golpe</label>
         <select id="ext-hit" onchange="aplicarExtendido()" style="width:100%;background:var(--card2);border:1px solid var(--b2);color:var(--txt);border-radius:8px;padding:8px;font-family:inherit"></select>
       </div>
       <div>
-        <label style="font-size:11px;color:var(--mut);display:block;margin-bottom:4px" id="ext-plr-lbl">Bloqueadores</label>
+        <label style="font-size:11px;color:var(--mut);display:block;margin-bottom:4px" id="ext-plr-lbl" data-t="Bloqueadores">Bloqueadores</label>
         <select id="ext-plr" onchange="aplicarExtendido()" style="width:100%;background:var(--card2);border:1px solid var(--b2);color:var(--txt);border-radius:8px;padding:8px;font-family:inherit"></select>
       </div>
       <div>
-        <label style="font-size:11px;color:var(--mut);display:block;margin-bottom:4px">Cómo terminó</label>
+        <label style="font-size:11px;color:var(--mut);display:block;margin-bottom:4px" data-t="Cómo terminó">Cómo terminó</label>
         <select id="ext-spec" onchange="aplicarExtendido()" style="width:100%;background:var(--card2);border:1px solid var(--b2);color:var(--txt);border-radius:8px;padding:8px;font-family:inherit"></select>
       </div>
     </div>
   </div>
   <div class="actions">
     <button class="tbtn" id="e-wizbtn" onclick="toggleWizard()">Modo cl&aacute;sico</button>
-    <button class="tbtn" onclick="deleteEdit()">Borrar</button>
-    <button class="tbtn" onclick="closeModal('m-edit')">Cancelar</button>
-    <button class="tbtn pri" onclick="saveEdit()">Guardar</button>
+    <button class="tbtn" onclick="deleteEdit()" data-t="Borrar">Borrar</button>
+    <button class="tbtn" onclick="closeModal('m-edit')" data-t="Cancelar">Cancelar</button>
+    <button class="tbtn pri" onclick="saveEdit()" data-t="Guardar">Guardar</button>
   </div>
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260913-0842" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-0842"></script>
-<script src="objetivos.js?v=20260913-0842" onerror="void 0"></script>
-<script src="video_delay.js?v=20260913-0842" onerror="void 0"></script>
+<script src="firebase.js?v=20260913-0851" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-0851"></script>
+<script src="objetivos.js?v=20260913-0851" onerror="void 0"></script>
+<script src="video_delay.js?v=20260913-0851" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260913-0842" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260913-0842"></script>
+<script src="plantel_nafels.js?v=20260913-0851" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260913-0851"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -7441,27 +7441,27 @@ if(M.home.lineup.every(x=>!x)) openSetup();
 <div id="m-videovivo" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.92);padding:0">
   <div style="height:100%;display:flex;flex-direction:column;max-width:1100px;margin:0 auto">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
-      <h2 style="font-family:Barlow Condensed,sans-serif;color:#e2e8f0;margin:0;font-size:20px">Video en vivo (delay)</h2>
+      <h2 style="font-family:Barlow Condensed,sans-serif;color:#e2e8f0;margin:0;font-size:20px" data-t="Video en vivo (delay)">Video en vivo (delay)</h2>
       <button id="vd-dock-btn" onclick="vdDock()" title="Achicá el video a un costado para poder tipear y ver el video a la vez" style="background:rgba(34,211,238,.15);color:#22d3ee;border:1px solid rgba(34,211,238,.35);border-radius:8px;padding:8px 16px;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-weight:700;font-size:14px">⧉ Acoplar</button>
-      <button onclick="cerrarVideoVivo()" style="background:rgba(255,255,255,.06);color:#e2e8f0;border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:8px 18px;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-weight:700;font-size:14px">Cerrar</button>
+      <button onclick="cerrarVideoVivo()" style="background:rgba(255,255,255,.06);color:#e2e8f0;border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:8px 18px;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-weight:700;font-size:14px" data-t="Cerrar">Cerrar</button>
     </div>
     <div id="vdv-conectar" style="padding:20px;display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;flex:1">
       <div style="font-size:13px;color:#8a8ba0;text-align:center;max-width:340px;line-height:1.6">Abrí <b style="color:#e2e8f0">camara.html</b> en el celular que apunta a la cancha, tocá Transmitir, y escribí acá el código de sala.</div>
       <input id="vd-sala" inputmode="numeric" maxlength="4" placeholder="0000" style="width:180px;text-align:center;font-family:Barlow Condensed,monospace;font-size:40px;font-weight:800;letter-spacing:8px;background:#1a1b2b;border:1px solid rgba(255,255,255,.1);color:#e6a743;border-radius:12px;padding:12px;outline:none">
-      <button onclick="vdConectar()" style="background:#22d3ee;color:#04212a;border:0;border-radius:12px;padding:14px 30px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit">Conectar</button>
+      <button onclick="vdConectar()" style="background:#22d3ee;color:#04212a;border:0;border-radius:12px;padding:14px 30px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit" data-t="Conectar">Conectar</button>
       <div id="vd-estado" class="vd-estado" style="font-size:13px;color:#8a8ba0;min-height:20px"></div>
     </div>
     <div id="vdv-player" style="display:none;flex-direction:column;padding:14px;gap:12px;overflow-y:auto;flex:1">
       <div id="vd-videowrap" style="position:relative;background:#000;border-radius:14px;overflow:hidden;width:100%;max-height:45vh;aspect-ratio:16/9;flex-shrink:0">
         <video id="vd-live" autoplay muted playsinline style="width:100%;height:100%;object-fit:contain;display:none"></video>
         <video id="vd-delay" autoplay muted playsinline style="width:100%;height:100%;object-fit:contain;display:block"></video>
-        <div id="vd-estado-replay" style="display:none;position:absolute;top:12px;left:12px;padding:6px 14px;border-radius:20px;background:rgba(230,167,67,.9);color:#1a1200;font-weight:800;font-size:12px;letter-spacing:1px">ULTIMO PUNTO</div>
+        <div id="vd-estado-replay" style="display:none;position:absolute;top:12px;left:12px;padding:6px 14px;border-radius:20px;background:rgba(230,167,67,.9);color:#1a1200;font-weight:800;font-size:12px;letter-spacing:1px" data-t="ULTIMO PUNTO">ULTIMO PUNTO</div>
         <div style="position:absolute;top:12px;right:12px;padding:6px 14px;border-radius:20px;background:rgba(0,0,0,.6);color:#22d3ee;font-weight:800;font-size:12px;letter-spacing:1px;backdrop-filter:blur(6px)">DELAY <span id="vd-delay-lbl">0 s</span></div>
       </div>
       <div style="display:flex;flex-direction:column;gap:10px">
-        <button onclick="vdReplay()" style="width:100%;background:#e6a743;color:#1a1200;border:0;border-radius:12px;padding:16px;font-size:17px;font-weight:800;cursor:pointer;font-family:inherit">Ver ultimo punto</button>
+        <button onclick="vdReplay()" style="width:100%;background:#e6a743;color:#1a1200;border:0;border-radius:12px;padding:16px;font-size:17px;font-weight:800;cursor:pointer;font-family:inherit" data-t="Ver ultimo punto">Ver ultimo punto</button>
         <div style="display:flex;align-items:center;gap:12px;background:#12131f;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 16px">
-          <span style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8a8ba0;white-space:nowrap">Delay</span>
+          <span style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8a8ba0;white-space:nowrap" data-t="Delay">Delay</span>
           <input type="range" id="vd-slider" min="0" max="25" step="1" value="0" oninput="vdSlider(this.value)" style="flex:1;accent-color:#22d3ee">
           <span id="vd-slider-val" style="font-family:Barlow Condensed,monospace;font-size:18px;font-weight:800;color:#22d3ee;min-width:44px;text-align:right">0 s</span>
         </div>
@@ -7553,176 +7553,176 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
 </style>
 <div class="modal" id="m-ayuda"><div class="sheet">
   <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:6px">
-    <h2 class="tit">❓ Cómo usar el Scout en Vivo</h2>
-    <button class="tbtn" onclick="closeModal('m-ayuda')">Cerrar</button>
+    <h2 class="tit" data-t="❓ Cómo usar el Scout en Vivo">❓ Cómo usar el Scout en Vivo</h2>
+    <button class="tbtn" onclick="closeModal('m-ayuda')" data-t="Cerrar">Cerrar</button>
   </div>
-  <div class="sub">Guía paso a paso para cargar un partido en tiempo real. Se usa en una computadora con teclado.</div>
+  <div class="sub" data-t="Guía paso a paso para cargar un partido en tiempo real. Se usa en una computadora con teclado.">Guía paso a paso para cargar un partido en tiempo real. Se usa en una computadora con teclado.</div>
 
   <div class="ay-sec">
     <h3><span class="n">1</span> Antes de empezar: equipos y formación</h3>
     <ol>
       <li>Con <span class="b">👥 Equipos</span> creás o editás los planteles (número, apellido, nombre y rol). También podés importar equipos desde archivos <span class="m">.sq</span> de DataVolley: podés soltar varios de una vez y traen el rol de cada jugador.</li>
-      <li>Con <span class="b">Partido</span> cargás el <b>seis inicial</b> de cada equipo, el armador, el líbero y quién saca primero.</li>
-      <li>Al tocar <span class="b">Empezar</span> se abre la <b>pantalla de planteles</b>: número, apellido y rol de cada jugador, como la tabla de DataVolley. Lo que corrijas ahí queda guardado para la próxima vez.</li>
-      <li>Confirmás y ya podés tipear.</li>
+      <li>Con <span class="b" data-t="Partido">Partido</span> cargás el <b data-t="seis inicial">seis inicial</b> de cada equipo, el armador, el líbero y quién saca primero.</li>
+      <li>Al tocar <span class="b" data-t="Empezar">Empezar</span> se abre la <b data-t="pantalla de planteles">pantalla de planteles</b>: número, apellido y rol de cada jugador, como la tabla de DataVolley. Lo que corrijas ahí queda guardado para la próxima vez.</li>
+      <li data-t="Confirmás y ya podés tipear.">Confirmás y ya podés tipear.</li>
     </ol>
   </div>
 
   <div class="ay-sec">
     <h3><span class="n">2</span> El código de la jugada</h3>
-    <p>Cada acción se escribe como un código corto (la notación estándar del scouting de vóley):</p>
-    <div class="fml"><span class="m">equipo</span> + <span class="m">número</span> + <span class="m">gesto</span> + <span class="m">evaluación</span></div>
-    <p><b>Equipo:</b> el local va con el número directo (o con <span class="m">*</span>); el visitante empieza con <span class="m">a</span>. Ej.: <span class="m">7#</span> local nº 7, <span class="m">a7#</span> visitante nº 7.</p>
-    <h4>Gesto</h4>
+    <p data-t="Cada acción se escribe como un código corto (la notación estándar del scouting de vóley):">Cada acción se escribe como un código corto (la notación estándar del scouting de vóley):</p>
+    <div class="fml"><span class="m" data-t="equipo">equipo</span> + <span class="m" data-t="número">número</span> + <span class="m" data-t="gesto">gesto</span> + <span class="m" data-t="evaluación">evaluación</span></div>
+    <p><b data-t="Equipo:">Equipo:</b> el local va con el número directo (o con <span class="m">*</span>); el visitante empieza con <span class="m">a</span>. Ej.: <span class="m">7#</span> local nº 7, <span class="m">a7#</span> visitante nº 7.</p>
+    <h4 data-t="Gesto">Gesto</h4>
     <table>
-      <tr><th>Letra</th><th>Gesto</th><th>Letra</th><th>Gesto</th></tr>
-      <tr><td class="c">S</td><td>Saque</td><td class="c">D</td><td>Defensa</td></tr>
-      <tr><td class="c">R</td><td>Recepción</td><td class="c">E</td><td>Armado</td></tr>
-      <tr><td class="c">A</td><td>Ataque</td><td class="c">F</td><td>Freeball</td></tr>
-      <tr><td class="c">B</td><td>Bloqueo</td><td></td><td></td></tr>
+      <tr><th data-t="Letra">Letra</th><th data-t="Gesto">Gesto</th><th data-t="Letra">Letra</th><th data-t="Gesto">Gesto</th></tr>
+      <tr><td class="c">S</td><td data-t="Saque">Saque</td><td class="c">D</td><td data-t="Defensa">Defensa</td></tr>
+      <tr><td class="c">R</td><td data-t="Recepción">Recepción</td><td class="c">E</td><td data-t="Armado">Armado</td></tr>
+      <tr><td class="c">A</td><td data-t="Ataque">Ataque</td><td class="c">F</td><td data-t="Freeball">Freeball</td></tr>
+      <tr><td class="c">B</td><td data-t="Bloqueo">Bloqueo</td><td></td><td></td></tr>
     </table>
-    <h4>Evaluación</h4>
+    <h4 data-t="Evaluación">Evaluación</h4>
     <table>
-      <tr><th>Signo</th><th>Significado</th></tr>
-      <tr><td class="c">#</td><td>Punto / perfecto</td></tr>
-      <tr><td class="c">+</td><td>Positivo</td></tr>
-      <tr><td class="c">!</td><td>Insuficiente / justo</td></tr>
-      <tr><td class="c">/</td><td>Muy positivo o muy pobre (según el gesto)</td></tr>
-      <tr><td class="c">-</td><td>Flojo</td></tr>
-      <tr><td class="c">=</td><td>Error</td></tr>
+      <tr><th data-t="Signo">Signo</th><th data-t="Significado">Significado</th></tr>
+      <tr><td class="c">#</td><td data-t="Punto / perfecto">Punto / perfecto</td></tr>
+      <tr><td class="c">+</td><td data-t="Positivo">Positivo</td></tr>
+      <tr><td class="c">!</td><td data-t="Insuficiente / justo">Insuficiente / justo</td></tr>
+      <tr><td class="c">/</td><td data-t="Muy positivo o muy pobre (según el gesto)">Muy positivo o muy pobre (según el gesto)</td></tr>
+      <tr><td class="c">-</td><td data-t="Flojo">Flojo</td></tr>
+      <tr><td class="c">=</td><td data-t="Error">Error</td></tr>
     </table>
-    <h4>Ejemplos</h4>
+    <h4 data-t="Ejemplos">Ejemplos</h4>
     <table>
-      <tr><td class="c">6S#</td><td>Local nº 6, ace de saque</td></tr>
+      <tr><td class="c">6S#</td><td data-t="Local nº 6, ace de saque">Local nº 6, ace de saque</td></tr>
       <tr><td class="c">a11A#</td><td>Visitante nº 11, remate ganador</td></tr>
-      <tr><td class="c">4A=</td><td>Local nº 4, error de ataque</td></tr>
-      <tr><td class="c">5B#</td><td>Local nº 5, bloqueo punto</td></tr>
+      <tr><td class="c">4A=</td><td data-t="Local nº 4, error de ataque">Local nº 4, error de ataque</td></tr>
+      <tr><td class="c">5B#</td><td data-t="Local nº 5, bloqueo punto">Local nº 5, bloqueo punto</td></tr>
     </table>
-    <div class="note">Lo que no escribís, el sistema lo completa con tus valores por defecto. El <b>decodificador en vivo</b> te muestra el código en palabras mientras escribís. Podés encadenar saque y recepción con un punto: <span class="m">5S.8#</span>.</div>
+    <div class="note">Lo que no escribís, el sistema lo completa con tus valores por defecto. El <b data-t="decodificador en vivo">decodificador en vivo</b> te muestra el código en palabras mientras escribís. Podés encadenar saque y recepción con un punto: <span class="m">5S.8#</span>.</div>
   </div>
 
   <div class="ay-sec">
     <h3><span class="n">3</span> Zonas y direcciones</h3>
-    <p>Después de la evaluación podés indicar <b>desde dónde</b> y <b>hacia dónde</b> fue la pelota. Van pegados: primero el origen, después el destino, y si querés la subzona.</p>
+    <p>Después de la evaluación podés indicar <b data-t="desde dónde">desde dónde</b> y <b data-t="hacia dónde">hacia dónde</b> fue la pelota. Van pegados: primero el origen, después el destino, y si querés la subzona.</p>
     <div class="fml"><span class="m">a17A-</span> · <span class="m">2</span> desde · <span class="m">1</span> hacia · <span class="m">C</span> subzona</div>
-    <p>El <b>saque</b> usa cinco zonas de origen, dos de ellas intermedias (manual 13.2):</p>
+    <p>El <b data-t="saque">saque</b> usa cinco zonas de origen, dos de ellas intermedias (manual 13.2):</p>
     <table>
-      <tr><td class="c">1</td><td>desde la zona 1</td><td class="c">9</td><td>entre la 1 y la 6</td></tr>
-      <tr><td class="c">6</td><td>desde el centro</td><td class="c">7</td><td>entre la 6 y la 5</td></tr>
-      <tr><td class="c">5</td><td>desde la zona 5</td><td></td><td></td></tr>
+      <tr><td class="c">1</td><td data-t="desde la zona 1">desde la zona 1</td><td class="c">9</td><td data-t="entre la 1 y la 6">entre la 1 y la 6</td></tr>
+      <tr><td class="c">6</td><td data-t="desde el centro">desde el centro</td><td class="c">7</td><td data-t="entre la 6 y la 5">entre la 6 y la 5</td></tr>
+      <tr><td class="c">5</td><td data-t="desde la zona 5">desde la zona 5</td><td></td><td></td></tr>
     </table>
-    <h4>Lo que el sistema completa solo</h4>
+    <h4 data-t="Lo que el sistema completa solo">Lo que el sistema completa solo</h4>
     <p>Cuando encadenás dos acciones con un punto, la segunda hereda las direcciones de la primera, igual que DataVolley:</p>
     <table>
-      <tr><th>Si encadenás</th><th>La segunda hereda</th></tr>
-      <tr><td>Ataque + <b>defensa del rival</b></td><td>el origen, el destino y la subzona</td></tr>
-      <tr><td>Ataque + <b>cobertura</b> del mismo equipo</td><td>sólo el origen: la pelota levantada cae en cualquier lado</td></tr>
-      <tr><td>Ataque + <b>bloqueo</b></td><td>la zona espejada — el 4 de uno es el 2 del otro</td></tr>
-      <tr><td>Saque + <b>recepción</b></td><td>el destino siempre; el origen pasa 9→1 y 7→5</td></tr>
+      <tr><th data-t="Si encadenás">Si encadenás</th><th data-t="La segunda hereda">La segunda hereda</th></tr>
+      <tr><td>Ataque + <b data-t="defensa del rival">defensa del rival</b></td><td data-t="el origen, el destino y la subzona">el origen, el destino y la subzona</td></tr>
+      <tr><td>Ataque + <b data-t="cobertura">cobertura</b> del mismo equipo</td><td data-t="sólo el origen: la pelota levantada cae en cualquier lado">sólo el origen: la pelota levantada cae en cualquier lado</td></tr>
+      <tr><td>Ataque + <b>bloqueo</b></td><td data-t="la zona espejada — el 4 de uno es el 2 del otro">la zona espejada — el 4 de uno es el 2 del otro</td></tr>
+      <tr><td>Saque + <b data-t="recepción">recepción</b></td><td data-t="el destino siempre; el origen pasa 9→1 y 7→5">el destino siempre; el origen pasa 9→1 y 7→5</td></tr>
     </table>
-    <div class="note"><b>Lo que escribís siempre manda.</b> Si ponés una zona a mano, el sistema no la pisa. Ej.: <span class="m">a17G2-1C.2D</span> registra <span class="m">a17AH-G2~21C</span> y <span class="m">*02DH+~~~21C</span>; en cambio <span class="m">a17G2-1C.2D5</span> deja la defensa en la zona 5, la que vos escribiste.</div>
+    <div class="note"><b data-t="Lo que escribís siempre manda.">Lo que escribís siempre manda.</b> Si ponés una zona a mano, el sistema no la pisa. Ej.: <span class="m">a17G2-1C.2D</span> registra <span class="m">a17AH-G2~21C</span> y <span class="m">*02DH+~~~21C</span>; en cambio <span class="m">a17G2-1C.2D5</span> deja la defensa en la zona 5, la que vos escribiste.</div>
   </div>
 
   <div class="ay-sec">
     <h3><span class="n">4</span> Cargar en vivo y el fin de jugada automático</h3>
     <ol>
       <li>Escribís el código y apretás <span class="k">Enter</span>. La acción entra en la lista.</li>
-      <li>Si el código es <b>terminal</b>, el punto se asigna solo y la jugada cierra. Son terminales: remate, saque o bloqueo con <span class="m">#</span>; el ataque bloqueado <span class="m">/</span>; y cualquier error <span class="m">=</span> (punto al rival).</li>
-      <li>El marcador, la rotación y el sacador los lleva el sistema.</li>
+      <li>Si el código es <b data-t="terminal">terminal</b>, el punto se asigna solo y la jugada cierra. Son terminales: remate, saque o bloqueo con <span class="m">#</span>; el ataque bloqueado <span class="m">/</span>; y cualquier error <span class="m">=</span> (punto al rival).</li>
+      <li data-t="El marcador, la rotación y el sacador los lleva el sistema.">El marcador, la rotación y el sacador los lleva el sistema.</li>
     </ol>
-    <div class="note">Los positivos que no son punto (armado <span class="m">#</span>, defensa <span class="m">#</span>, saque <span class="m">+</span>) no cierran la jugada. Podés cargar el punto a mano con <span class="b">Punto Local</span> / <span class="b">Punto Visitante</span>, o apagar el fin de jugada automático en <span class="b">Teclado y códigos</span>.</div>
+    <div class="note">Los positivos que no son punto (armado <span class="m">#</span>, defensa <span class="m">#</span>, saque <span class="m">+</span>) no cierran la jugada. Podés cargar el punto a mano con <span class="b" data-t="Punto Local">Punto Local</span> / <span class="b" data-t="Punto Visitante">Punto Visitante</span>, o apagar el fin de jugada automático en <span class="b" data-t="Teclado y códigos">Teclado y códigos</span>.</div>
   </div>
 
   <div class="ay-sec">
     <h3><span class="n">5</span> Cambios, tiempos y doble cambio</h3>
     <ul>
-      <li>Cada equipo tiene sus botones <span class="b">Tiempo</span> y <span class="b">Cambio</span>.</li>
-      <li>En <span class="b">Cambio</span> vas a ver la <b>formación del momento</b> y elegís quién sale y quién entra.</li>
-      <li><b>Doble cambio:</b> el primero con <span class="b">Confirmar y seguir</span> (la ventana queda abierta), el segundo con <span class="b">Confirmar</span>. El sistema controla el límite por set.</li>
+      <li>Cada equipo tiene sus botones <span class="b" data-t="Tiempo">Tiempo</span> y <span class="b" data-t="Cambio">Cambio</span>.</li>
+      <li>En <span class="b" data-t="Cambio">Cambio</span> vas a ver la <b data-t="formación del momento">formación del momento</b> y elegís quién sale y quién entra.</li>
+      <li><b data-t="Doble cambio:">Doble cambio:</b> el primero con <span class="b" data-t="Confirmar y seguir">Confirmar y seguir</span> (la ventana queda abierta), el segundo con <span class="b" data-t="Confirmar">Confirmar</span>. El sistema controla el límite por set.</li>
     </ul>
   </div>
 
   <div class="ay-sec">
     <h3><span class="n">6</span> Corregir sin romper nada</h3>
     <table>
-      <tr><th>Para</th><th>Cómo</th></tr>
-      <tr><td>Reabrir el último punto para corregir</td><td><span class="k">Ctrl+A</span> · <span class="b">Reabrir punto</span></td></tr>
-      <tr><td>Insertar un código en el medio</td><td>Seleccionar + <span class="k">Insert</span></td></tr>
-      <tr><td>Editar un código</td><td>Doble clic (o seleccionar + <span class="k">Enter</span>)</td></tr>
-      <tr><td>Corregir un valor en el lugar</td><td>Cursor sobre el valor (o seleccionarlo) + tecla del valor nuevo</td></tr>
-      <tr><td>Borrar un código</td><td><span class="k">Delete</span></td></tr>
-      <tr><td>Deshacer el último código</td><td><span class="k">Ctrl+Z</span></td></tr>
-      <tr><td>Deshacer el punto entero</td><td><span class="k">Ctrl+Shift+Z</span></td></tr>
-      <tr><td>Buscar / Verificar</td><td><span class="k">Ctrl+R</span> · <span class="k">Ctrl+V</span></td></tr>
+      <tr><th>Para</th><th data-t="Cómo">Cómo</th></tr>
+      <tr><td data-t="Reabrir el último punto para corregir">Reabrir el último punto para corregir</td><td><span class="k">Ctrl+A</span> · <span class="b" data-t="Reabrir punto">Reabrir punto</span></td></tr>
+      <tr><td data-t="Insertar un código en el medio">Insertar un código en el medio</td><td>Seleccionar + <span class="k">Insert</span></td></tr>
+      <tr><td data-t="Editar un código">Editar un código</td><td>Doble clic (o seleccionar + <span class="k">Enter</span>)</td></tr>
+      <tr><td data-t="Corregir un valor en el lugar">Corregir un valor en el lugar</td><td data-t="Cursor sobre el valor (o seleccionarlo) + tecla del valor nuevo">Cursor sobre el valor (o seleccionarlo) + tecla del valor nuevo</td></tr>
+      <tr><td data-t="Borrar un código">Borrar un código</td><td><span class="k">Delete</span></td></tr>
+      <tr><td data-t="Deshacer el último código">Deshacer el último código</td><td><span class="k">Ctrl+Z</span></td></tr>
+      <tr><td data-t="Deshacer el punto entero">Deshacer el punto entero</td><td><span class="k">Ctrl+Shift+Z</span></td></tr>
+      <tr><td data-t="Buscar / Verificar">Buscar / Verificar</td><td><span class="k">Ctrl+R</span> · <span class="k">Ctrl+V</span></td></tr>
     </table>
-    <div class="note">Al reabrir un punto (<span class="k">Ctrl+A</span>) el <b>último código vuelve al campo de tipeo</b> para que lo corrijas ahí mismo: sale de la lista, lo editás y lo cargás de nuevo con <span class="k">Enter</span>. Es lo que hace DataVolley al deshacer el fin de jugada (manual 4.8.1). Si ese ataque arrastraba un armado automático, se va con él.</div>
-    <div class="note">Casi todas las ventanas tienen <span class="b">⧉ Soltar</span>: la dejás flotando a un costado, se sigue actualizando sola y <b>podés seguir tipeando con los atajos funcionando</b>.</div>
+    <div class="note">Al reabrir un punto (<span class="k">Ctrl+A</span>) el <b data-t="último código vuelve al campo de tipeo">último código vuelve al campo de tipeo</b> para que lo corrijas ahí mismo: sale de la lista, lo editás y lo cargás de nuevo con <span class="k">Enter</span>. Es lo que hace DataVolley al deshacer el fin de jugada (manual 4.8.1). Si ese ataque arrastraba un armado automático, se va con él.</div>
+    <div class="note">Casi todas las ventanas tienen <span class="b">⧉ Soltar</span>: la dejás flotando a un costado, se sigue actualizando sola y <b data-t="podés seguir tipeando con los atajos funcionando">podés seguir tipeando con los atajos funcionando</b>.</div>
     <div class="note">Las teclas de evaluación (# + ! …) y la de adversario insertan donde está el cursor, no al final. Ej.: en <b>4A+</b> seleccionás el <b>+</b>, apretás <b>!</b> y queda <b>4A!</b>. En compuestos podés meter la <b>a</b> del visitante en el medio.</div>
   </div>
 
   <div class="ay-sec">
     <h3><span class="n">7</span> Cierre de set y formación del siguiente</h3>
     <ol>
-      <li>Al llegar a <b>25 con 2 de diferencia</b> (15 en el quinto), el set se cierra solo.</li>
-      <li>Se abre sola la formación del set siguiente, y es <b>obligatoria</b>: propone el seis anterior, lo ajustás y confirmás con <span class="b">Empezar set</span>. No te deja seguir sin cargarla.</li>
-      <li><b>¿Amistoso?</b> Si el partido terminó y querés seguir, al cerrar el set final te pregunta si es amistoso para jugar otro set. También está el botón <span class="b">Set amistoso</span>.</li>
+      <li>Al llegar a <b data-t="25 con 2 de diferencia">25 con 2 de diferencia</b> (15 en el quinto), el set se cierra solo.</li>
+      <li>Se abre sola la formación del set siguiente, y es <b data-t="obligatoria">obligatoria</b>: propone el seis anterior, lo ajustás y confirmás con <span class="b" data-t="Empezar set">Empezar set</span>. No te deja seguir sin cargarla.</li>
+      <li><b data-t="¿Amistoso?">¿Amistoso?</b> Si el partido terminó y querés seguir, al cerrar el set final te pregunta si es amistoso para jugar otro set. También está el botón <span class="b" data-t="Set amistoso">Set amistoso</span>.</li>
     </ol>
   </div>
 
   <div class="ay-sec">
     <h3><span class="n">8</span> Modo entrenamiento (un solo equipo)</h3>
-    <p>Para prácticas: activá el modo entrenamiento en <span class="b">Configuración</span>. Cargás un solo equipo y todos los códigos quedan como locales (con <b>*</b>), aunque escribas la <b>a</b> o uses compuestos.</p>
+    <p>Para prácticas: activá el modo entrenamiento en <span class="b" data-t="Configuración">Configuración</span>. Cargás un solo equipo y todos los códigos quedan como locales (con <b>*</b>), aunque escribas la <b>a</b> o uses compuestos.</p>
   </div>
 
   <div class="ay-sec">
     <h3><span class="n">9</span> Video en vivo con delay</h3>
     <ol>
-      <li>En el celular que filma la cancha (misma red/WiFi) abrís la cámara y tocás <b>Transmitir</b>: te da un <b>código de sala de 4 dígitos</b>.</li>
-      <li>En el scout tocás <span class="b">Video delay</span> (la cámara, en dos líneas), escribís el código y <span class="b">Conectar</span>.</li>
-      <li>Atrasás el video con la barra de <b>delay</b> (0–25 s) y podés ver el <b>último punto</b>.</li>
+      <li>En el celular que filma la cancha (misma red/WiFi) abrís la cámara y tocás <b data-t="Transmitir">Transmitir</b>: te da un <b data-t="código de sala de 4 dígitos">código de sala de 4 dígitos</b>.</li>
+      <li>En el scout tocás <span class="b">Video delay</span> (la cámara, en dos líneas), escribís el código y <span class="b" data-t="Conectar">Conectar</span>.</li>
+      <li>Atrasás el video con la barra de <b data-t="delay">delay</b> (0–25 s) y podés ver el <b data-t="último punto">último punto</b>.</li>
       <li>Con <span class="b">⧉ Acoplar</span> el video se achica a un costado y tipeás mientras lo ves; con <span class="b">⛶ Grande</span> volvés a pantalla completa.</li>
     </ol>
-    <div class="note">Hay dos botones de video: <span class="b">Video</span> es el visor por archivo/URL (sincronización), y <span class="b">Video delay</span> (en dos líneas) es la <b>cámara en vivo con delay</b>.</div>
+    <div class="note">Hay dos botones de video: <span class="b">Video</span> es el visor por archivo/URL (sincronización), y <span class="b">Video delay</span> (en dos líneas) es la <b data-t="cámara en vivo con delay">cámara en vivo con delay</b>.</div>
   </div>
 
   <div class="ay-sec">
     <h3><span class="n">10</span> Tablas y análisis en vivo</h3>
-    <p>Debajo de la lista de códigos, <span class="b">▸ Tablas y análisis</span> despliega el análisis del partido en tiempo real (eficiencias por fundamento y quiénes más puntúan), para los dos equipos.</p>
+    <p>Debajo de la lista de códigos, <span class="b" data-t="▸ Tablas y análisis">▸ Tablas y análisis</span> despliega el análisis del partido en tiempo real (eficiencias por fundamento y quiénes más puntúan), para los dos equipos.</p>
   </div>
 
   <div class="ay-sec">
     <h3><span class="n">11</span> Guardar y exportar</h3>
     <ul>
       <li>El partido se guarda solo. Con <span class="b">📂 Partidos</span> ves y reabrís los guardados.</li>
-      <li>Con <span class="b">Exportar .dvw</span> generás el archivo del partido en formato estándar, para compartirlo con otras herramientas de análisis.</li>
-      <li>Con <span class="b">Abrir .dvw</span> cargás un scout ya hecho, con todos sus códigos, para corregirlo, seguir cargándolo o volver a exportarlo (manual 9.1.1).</li>
-      <li><span class="b">Sumar al historial</span> es otra cosa: suma las estadísticas de un <span class="m">.dvw</span> al historial del club, sin abrirlo para editar.</li>
-      <li>Con <span class="b">Informe</span> sacás el informe del partido —estadísticas por jugador y nota— por set o completo, listo para PDF.</li>
+      <li>Con <span class="b" data-t="Exportar .dvw">Exportar .dvw</span> generás el archivo del partido en formato estándar, para compartirlo con otras herramientas de análisis.</li>
+      <li>Con <span class="b" data-t="Abrir .dvw">Abrir .dvw</span> cargás un scout ya hecho, con todos sus códigos, para corregirlo, seguir cargándolo o volver a exportarlo (manual 9.1.1).</li>
+      <li><span class="b" data-t="Sumar al historial">Sumar al historial</span> es otra cosa: suma las estadísticas de un <span class="m">.dvw</span> al historial del club, sin abrirlo para editar.</li>
+      <li>Con <span class="b" data-t="Informe">Informe</span> sacás el informe del partido —estadísticas por jugador y nota— por set o completo, listo para PDF.</li>
     </ul>
   </div>
 
   <div class="ay-sec">
     <h3><span class="n">12</span> Atajos de teclado</h3>
     <table>
-      <tr><td class="c">Enter</td><td>Cargar el código</td><td class="c">Ctrl+Z</td><td>Deshacer código</td></tr>
-      <tr><td class="c">Insert</td><td>Insertar antes del seleccionado</td><td class="c">Ctrl+Shift+Z</td><td>Deshacer punto</td></tr>
-      <tr><td class="c">Delete</td><td>Borrar seleccionado</td><td class="c">Ctrl+A</td><td>Reabrir punto</td></tr>
-      <tr><td class="c">Backspace</td><td>Borra letras de lo que escribís (no borra códigos)</td><td class="c">Ctrl+R</td><td>Buscar</td></tr>
-      <tr><td class="c">Ctrl+V</td><td>Verificar</td><td></td><td></td></tr>
+      <tr><td class="c">Enter</td><td data-t="Cargar el código">Cargar el código</td><td class="c">Ctrl+Z</td><td data-t="Deshacer código">Deshacer código</td></tr>
+      <tr><td class="c">Insert</td><td data-t="Insertar antes del seleccionado">Insertar antes del seleccionado</td><td class="c">Ctrl+Shift+Z</td><td data-t="Deshacer punto">Deshacer punto</td></tr>
+      <tr><td class="c">Delete</td><td data-t="Borrar seleccionado">Borrar seleccionado</td><td class="c">Ctrl+A</td><td data-t="Reabrir punto">Reabrir punto</td></tr>
+      <tr><td class="c">Backspace</td><td>Borra letras de lo que escribís (no borra códigos)</td><td class="c">Ctrl+R</td><td data-t="Buscar">Buscar</td></tr>
+      <tr><td class="c">Ctrl+V</td><td data-t="Verificar">Verificar</td><td></td><td></td></tr>
     </table>
   </div>
 
 </div></div>
 <div class="modal" id="m-exportmode"><div class="sheet" style="max-width:520px">
   <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px">
-    <h2 class="tit">Exportar .dvw — codificación de combos</h2>
-    <button class="tbtn" onclick="closeModal('m-exportmode')">Cerrar</button>
+    <h2 class="tit" data-t="Exportar .dvw — codificación de combos">Exportar .dvw — codificación de combos</h2>
+    <button class="tbtn" onclick="closeModal('m-exportmode')" data-t="Cerrar">Cerrar</button>
   </div>
   <p style="font-size:13px;color:#9aa4b2;margin:4px 0 12px">Elegí cómo exportar las combinaciones de ataque (como el DataVolley al abrir un partido con otra tabla de combos):</p>
   <div style="display:flex;flex-direction:column;gap:8px">
-    <button class="tbtn" style="text-align:left;padding:10px 12px" onclick="closeModal('m-exportmode');exportDVW('keep')"><b>Mantener</b> — exporta los combos tal como los scouteaste.</button>
-    <button class="tbtn" style="text-align:left;padding:10px 12px" onclick="closeModal('m-exportmode');exportDVW('convert')"><b>Convertir</b> — los pasa a su combo estándar de DataVolley (según equivalencias).</button>
-    <button class="tbtn" style="text-align:left;padding:10px 12px" onclick="closeModal('m-exportmode');exportDVW('ignore')"><b>Ignorar</b> — quita el combo del código (queda el ataque sin combinación).</button>
+    <button class="tbtn" style="text-align:left;padding:10px 12px" onclick="closeModal('m-exportmode');exportDVW('keep')"><b data-t="Mantener">Mantener</b> — exporta los combos tal como los scouteaste.</button>
+    <button class="tbtn" style="text-align:left;padding:10px 12px" onclick="closeModal('m-exportmode');exportDVW('convert')"><b data-t="Convertir">Convertir</b> — los pasa a su combo estándar de DataVolley (según equivalencias).</button>
+    <button class="tbtn" style="text-align:left;padding:10px 12px" onclick="closeModal('m-exportmode');exportDVW('ignore')"><b data-t="Ignorar">Ignorar</b> — quita el combo del código (queda el ataque sin combinación).</button>
   </div>
 
 <!-- ═══ Scoutear sin internet ═══════════════════════════════════════════ -->
@@ -7738,10 +7738,10 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px">
 
     <div style="background:var(--card2);border:1px solid var(--b2);border-radius:10px;padding:13px">
-      <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#22c55e;margin-bottom:8px">
+      <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#22c55e;margin-bottom:8px" data-t="1 &middot; Antes de ir">
         1 &middot; Antes de ir</div>
       <div style="font-size:12px;line-height:1.65;color:var(--txt)">
-        <b>Con se&ntilde;al</b>, abr&iacute; el panel en la computadora que vas a llevar y
+        <b data-t="Con se&ntilde;al">Con se&ntilde;al</b>, abr&iacute; el panel en la computadora que vas a llevar y
         esper&aacute; unos diez segundos.<br><br>
         Ah&iacute; se guarda solo. No vas a ver ning&uacute;n aviso: pasa de fondo.<br><br>
         <span style="color:var(--mut)">Una vez por computadora. Si el scout usa la
@@ -7750,12 +7750,12 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
     </div>
 
     <div style="background:var(--card2);border:1px solid var(--b2);border-radius:10px;padding:13px">
-      <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#f59e0b;margin-bottom:8px">
+      <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#f59e0b;margin-bottom:8px" data-t="2 &middot; En el partido">
         2 &middot; En el partido</div>
       <div style="font-size:12px;line-height:1.65;color:var(--txt)">
         Abr&iacute; la misma direcci&oacute;n de siempre. El panel abre normal.<br><br>
         Arriba aparece un cartel amarillo que dice
-        <b style="color:#f59e0b">Sin se&ntilde;al &middot; se guarda igual</b>.<br><br>
+        <b style="color:#f59e0b" data-t="Sin se&ntilde;al &middot; se guarda igual">Sin se&ntilde;al &middot; se guarda igual</b>.<br><br>
         Scoute&aacute; como siempre: no cambia nada.
       </div>
     </div>
@@ -7765,8 +7765,8 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
         3 &middot; Al volver</div>
       <div style="font-size:12px;line-height:1.65;color:var(--txt)">
         Con se&ntilde;al, el cartel desaparece solo.<br><br>
-        Export&aacute; con <b>Exportar .dvw</b> y sub&iacute; el archivo desde
-        <b>Subir partido</b>, como siempre.<br><br>
+        Export&aacute; con <b data-t="Exportar .dvw">Exportar .dvw</b> y sub&iacute; el archivo desde
+        <b data-t="Subir partido">Subir partido</b>, como siempre.<br><br>
         <span style="color:var(--mut)">De ah&iacute; en adelante el sistema hace
         el resto.</span>
       </div>
@@ -7775,35 +7775,35 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
   </div>
 
   <div style="margin-top:14px;background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.25);border-radius:10px;padding:13px">
-    <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#60a5fa;margin-bottom:8px">
+    <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#60a5fa;margin-bottom:8px" data-t="Para que quede como una aplicaci&oacute;n">
       Para que quede como una aplicaci&oacute;n</div>
     <div style="font-size:12px;line-height:1.7;color:var(--txt)">
       No es obligatorio, pero es m&aacute;s c&oacute;modo: abre en su propia ventana,
       sin la barra del navegador, y queda como un &iacute;cono m&aacute;s.<br><br>
-      <b>En la computadora</b> &mdash; con el panel abierto, mir&aacute; el final de la
+      <b data-t="En la computadora">En la computadora</b> &mdash; con el panel abierto, mir&aacute; el final de la
       barra de direcciones: aparece un &iacute;cono de pantallita con una flecha.
-      Clic ah&iacute; y <b>Instalar</b>.<br>
+      Clic ah&iacute; y <b data-t="Instalar">Instalar</b>.<br>
       <span style="color:var(--mut)">Si no lo ves: men&uacute; de tres puntos &rarr;
       Enviar, guardar y compartir &rarr; Instalar p&aacute;gina como aplicaci&oacute;n.</span><br><br>
-      <b>En el celular</b> &mdash; Android: tres puntos &rarr; Agregar a pantalla
+      <b data-t="En el celular">En el celular</b> &mdash; Android: tres puntos &rarr; Agregar a pantalla
       principal. iPhone: compartir &rarr; Agregar a inicio.
     </div>
   </div>
 
   <div style="margin-top:14px;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:13px">
-    <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#f59e0b;margin-bottom:8px">
+    <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#f59e0b;margin-bottom:8px" data-t="Lo que conviene saber">
       Lo que conviene saber</div>
     <div style="font-size:12px;line-height:1.75;color:var(--txt)">
-      <b>La primera vez s&iacute; hace falta se&ntilde;al.</b> Es cuando se guarda.
+      <b data-t="La primera vez s&iacute; hace falta se&ntilde;al.">La primera vez s&iacute; hace falta se&ntilde;al.</b> Es cuando se guarda.
       Despu&eacute;s no.<br>
-      <b>Si publicamos una correcci&oacute;n, se actualiza sola</b> la pr&oacute;xima vez
+      <b data-t="Si publicamos una correcci&oacute;n, se actualiza sola">Si publicamos una correcci&oacute;n, se actualiza sola</b> la pr&oacute;xima vez
       que abras con se&ntilde;al. No hay que borrar nada.<br>
-      <b>No borres los datos del navegador.</b> Ah&iacute; queda lo que scouteaste:
+      <b data-t="No borres los datos del navegador.">No borres los datos del navegador.</b> Ah&iacute; queda lo que scouteaste:
       limpiar el historial con la opci&oacute;n de datos de sitios se lleva lo que no
       hayas exportado.<br>
       <b>Export&aacute; apenas puedas.</b> El .dvw en tu carpeta es el respaldo de
       verdad.<br>
-      <b>Una computadora, un partido.</b> Lo guardado vive en esa m&aacute;quina. Si
+      <b data-t="Una computadora, un partido.">Una computadora, un partido.</b> Lo guardado vive en esa m&aacute;quina. Si
       empez&aacute;s en una y quer&eacute;s seguir en otra, export&aacute; y abr&iacute; el .dvw.
     </div>
   </div>
@@ -8103,7 +8103,7 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260913-0842" onerror="void 0"></script>
-<script src="ayuda.js?v=20260913-0842"></script>
+<script src="volver_inicio.js?v=20260913-0851" onerror="void 0"></script>
+<script src="ayuda.js?v=20260913-0851"></script>
 </body>
 </html>

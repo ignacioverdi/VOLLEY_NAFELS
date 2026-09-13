@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20260913-0842"></script>
-<script src="selector_categoria.js?v=20260913-0842"></script>
+<script src="categorias_club.js?v=20260913-0851"></script>
+<script src="selector_categoria.js?v=20260913-0851"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-title" content="Näfels Volley">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<title>NAFELS VOLEY — Sistema de Análisis</title>
+<title data-t="NAFELS VOLEY — Sistema de Análisis">NAFELS VOLEY — Sistema de Análisis</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -248,11 +248,11 @@ select, select option {
   background-color: #ffffff !important;
 }
 </style>
-<script src="datos_seguros.js?v=20260913-0842"></script>
-<script src="firebase.js?v=20260913-0842" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-0842"></script>
-<script src="lang.js?v=20260913-0842"></script>
-<script src="plantel_nafels.js?v=20260913-0842"></script>
+<script src="datos_seguros.js?v=20260913-0851"></script>
+<script src="firebase.js?v=20260913-0851" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-0851"></script>
+<script src="lang.js?v=20260913-0851"></script>
+<script src="plantel_nafels.js?v=20260913-0851"></script>
 
 <style>
 @media(max-width:768px){
@@ -351,7 +351,7 @@ select, select option {
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0842">
+<link rel="stylesheet" href="movil.css?v=20260913-0851">
 </head>
 <body>
 <div id="fx"><div class="grid"></div><div class="sweep"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="vig"></div></div>
@@ -375,19 +375,19 @@ select, select option {
 
 <main>
 
-  <div class="section"><div class="sec-head"><span class="sec-ic">🎯</span><div><div class="sec-title">El próximo rival</div><div class="sec-sub">Todo para llegar preparado al partido</div></div></div><div class="cards-grid"><a href="Team_Playbook_Nafels.html" class="card" style="--card-color:#e6a743;grid-column:1/-1"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">📖</div><div class="card-badge">Equipo</div></div><div class="card-body"><div class="card-title">Team Playbook</div><div class="card-desc">Nuestra identidad, principios y sistemas de juego. Cómo jugamos — para todo el equipo.</div></div><div class="card-arrow">→</div></a><a href="plan_partido.html" class="card" style="--card-color:#e6a743">
+  <div class="section"><div class="sec-head"><span class="sec-ic">🎯</span><div><div class="sec-title" data-t="El próximo rival">El próximo rival</div><div class="sec-sub" data-t="Todo para llegar preparado al partido">Todo para llegar preparado al partido</div></div></div><div class="cards-grid"><a href="Team_Playbook_Nafels.html" class="card" style="--card-color:#e6a743;grid-column:1/-1"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">📖</div><div class="card-badge" data-t="Equipo">Equipo</div></div><div class="card-body"><div class="card-title" data-t="Team Playbook">Team Playbook</div><div class="card-desc" data-t="Nuestra identidad, principios y sistemas de juego. Cómo jugamos — para todo el equipo.">Nuestra identidad, principios y sistemas de juego. Cómo jugamos — para todo el equipo.</div></div><div class="card-arrow">→</div></a><a href="plan_partido.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.2)">📋</div>
-          <div class="card-badge" style="background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)">Imprimible</div>
+          <div class="card-badge" style="background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)" data-t="Imprimible">Imprimible</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#fbbf24">Plan de Partido</div>
+          <div class="card-title" style="color:#fbbf24" data-t="Plan de Partido">Plan de Partido</div>
           <div class="card-desc">Hoja de 1 página para imprimir y llevar al partido: a quién sacarle, rotación más débil, derrumbe fuera de sistema y direcciones de ataque de cada rematador.</div>
         </div>
         <div class="card-arrow">→</div>
       </a></div></div>
-  <div class="section"><div class="sec-head"><span class="sec-ic">📊</span><div><div class="sec-title">Mi rendimiento</div><div class="sec-sub">Tus números y los del equipo</div></div></div><div class="cards-grid"><a href="plan_desarrollo.html" class="card" style="--card-color:#a78bfa"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.2)">🚀</div><div class="card-badge" style="background:rgba(167,139,250,.1);color:#a78bfa;border:1px solid rgba(167,139,250,.2)">Por jugador</div></div><div class="card-body"><div class="card-title" style="color:#a78bfa">Plan de Desarrollo</div><div class="card-desc">Objetivos técnico-tácticos a mejorar por jugador, con seguimiento del progreso. Elegí tu nombre para ver el tuyo.</div></div><div class="card-arrow" style="color:#a78bfa">→</div></a><a href="equipo.html" class="card" style="--card-color:#e6a743">
+  <div class="section"><div class="sec-head"><span class="sec-ic">📊</span><div><div class="sec-title" data-t="Mi rendimiento">Mi rendimiento</div><div class="sec-sub" data-t="Tus números y los del equipo">Tus números y los del equipo</div></div></div><div class="cards-grid"><a href="plan_desarrollo.html" class="card" style="--card-color:#a78bfa"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.2)">🚀</div><div class="card-badge" style="background:rgba(167,139,250,.1);color:#a78bfa;border:1px solid rgba(167,139,250,.2)" data-t="Por jugador">Por jugador</div></div><div class="card-body"><div class="card-title" style="color:#a78bfa" data-t="Plan de Desarrollo">Plan de Desarrollo</div><div class="card-desc">Objetivos técnico-tácticos a mejorar por jugador, con seguimiento del progreso. Elegí tu nombre para ver el tuyo.</div></div><div class="card-arrow" style="color:#a78bfa">→</div></a><a href="equipo.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.2)">🏐</div>
@@ -402,9 +402,9 @@ select, select option {
           <div class="card-glow"></div>
           <div class="card-top">
             <div class="card-icon" style="background:rgba(249,115,22,.1);border-color:rgba(249,115,22,.2)">🔥</div>
-            <div class="card-badge" style="background:rgba(249,115,22,.1);color:#F97316;border:1px solid rgba(249,115,22,.2)">Heat Maps</div>
+            <div class="card-badge" style="background:rgba(249,115,22,.1);color:#F97316;border:1px solid rgba(249,115,22,.2)" data-t="Heat Maps">Heat Maps</div>
           </div>
-          <div class="card-title">Heat Maps</div>
+          <div class="card-title" data-t="Heat Maps">Heat Maps</div>
           <div class="card-desc"><span data-t="d_heatmaps">Análisis visual por jugador. Ataque, saque, recepción y armado con heatmaps de zonas, EFF y tendencias.</span></div>
           <div class="card-arrow">→</div>
         </a><a href="nla_stats_table.html" class="card" style="--card-color:#e6a743">
@@ -425,7 +425,7 @@ select, select option {
           <div class="card-badge" style="background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2)"><span data-t="b_entrenador">Entrenador</span></div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#22c55e">Dashboard</div>
+          <div class="card-title" style="color:#22c55e" data-t="Dashboard">Dashboard</div>
           <div class="card-desc"><span data-t="d_dashboard">Progreso de todos los jugadores en tiempo real. Quién cargó los pesos, quién no, y comparativa del equipo.</span></div>
         </div>
         <div class="card-arrow">→</div>
@@ -452,7 +452,7 @@ select, select option {
         </div>
         <div class="card-arrow">→</div>
       </a></div></div>
-  <div class="section"><div class="sec-head"><span class="sec-ic">💪</span><div><div class="sec-title">Físico y bienestar</div><div class="sec-sub">Tu cuerpo, día a día</div></div></div><div class="cards-grid"><a href="prep_fisica.html" class="card" style="--card-color:#e6a743">
+  <div class="section"><div class="sec-head"><span class="sec-ic">💪</span><div><div class="sec-title" data-t="Físico y bienestar">Físico y bienestar</div><div class="sec-sub" data-t="Tu cuerpo, día a día">Tu cuerpo, día a día</div></div></div><div class="cards-grid"><a href="prep_fisica.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.2)">💪</div>
@@ -480,37 +480,37 @@ select, select option {
         </div>
         <div class="card-arrow">→</div>
       </a></div></div>
-  <div class="section"><div class="sec-head"><span class="sec-ic">📅</span><div><div class="sec-title">Agenda</div><div class="sec-sub">Cuándo y dónde</div></div></div><div class="cards-grid"><a href="calendario.html" class="card" style="--card-color:#e6a743">
+  <div class="section"><div class="sec-head"><span class="sec-ic">📅</span><div><div class="sec-title" data-t="Agenda">Agenda</div><div class="sec-sub" data-t="Cuándo y dónde">Cuándo y dónde</div></div></div><div class="cards-grid"><a href="calendario.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.2)">📅</div>
-          <div class="card-badge" style="background:rgba(45,212,191,.1);color:#2dd4bf;border:1px solid rgba(45,212,191,.2)">Editable</div>
+          <div class="card-badge" style="background:rgba(45,212,191,.1);color:#2dd4bf;border:1px solid rgba(45,212,191,.2)" data-t="Editable">Editable</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#2dd4bf">Calendario</div>
-          <div class="card-desc">Partidos y entrenamientos del equipo. Fecha, hora, lugar y tipo — editable en la misma página.</div>
+          <div class="card-title" style="color:#2dd4bf" data-t="Calendario">Calendario</div>
+          <div class="card-desc" data-t="Partidos y entrenamientos del equipo. Fecha, hora, lugar y tipo — editable en la misma página.">Partidos y entrenamientos del equipo. Fecha, hora, lugar y tipo — editable en la misma página.</div>
         </div>
         <div class="card-arrow" style="color:#2dd4bf">→</div>
       </a><a href="horarios.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2)">🗓️</div>
-          <div class="card-badge" style="background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2)">Editable</div>
+          <div class="card-badge" style="background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2)" data-t="Editable">Editable</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#f59e0b">Horarios</div>
-          <div class="card-desc">Horarios de entrenamiento de la semana. Pesas y vóley, día por día — sincronizado y editable.</div>
+          <div class="card-title" style="color:#f59e0b" data-t="Horarios">Horarios</div>
+          <div class="card-desc" data-t="Horarios de entrenamiento de la semana. Pesas y vóley, día por día — sincronizado y editable.">Horarios de entrenamiento de la semana. Pesas y vóley, día por día — sincronizado y editable.</div>
         </div>
         <div class="card-arrow" style="color:#f59e0b">→</div>
       </a></div></div>
-  <div class="section"><div class="sec-head"><span class="sec-ic">🎥</span><div><div class="sec-title">Video y juego</div><div class="sec-sub">Clips y un poco de joda</div></div></div><div class="cards-grid"><a href="cortes.html" class="card" style="--card-color:#e6a743">
+  <div class="section"><div class="sec-head"><span class="sec-ic">🎥</span><div><div class="sec-title" data-t="Video y juego">Video y juego</div><div class="sec-sub" data-t="Clips y un poco de joda">Clips y un poco de joda</div></div></div><div class="cards-grid"><a href="cortes.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(249,115,22,.1);border-color:rgba(249,115,22,.2)">🎬</div>
-          <div class="card-badge" style="background:rgba(249,115,22,.1);color:#F97316;border:1px solid rgba(249,115,22,.2)">Nuevo</div>
+          <div class="card-badge" style="background:rgba(249,115,22,.1);color:#F97316;border:1px solid rgba(249,115,22,.2)" data-t="Nuevo">Nuevo</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#F97316">Cortes de Video</div>
+          <div class="card-title" style="color:#F97316" data-t="Cortes de Video">Cortes de Video</div>
           <div class="card-desc">Filtrá acciones como en los heatmaps y mirá los clips de video sincronizados. Armá recortes para mostrarles a los jugadores.</div>
         </div>
         <div class="card-arrow">→</div>
@@ -518,10 +518,10 @@ select, select option {
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2)">🏐</div>
-          <div class="card-badge" style="background:rgba(245,158,11,.1);color:#F59E0B;border:1px solid rgba(245,158,11,.2)">Nuevo</div>
+          <div class="card-badge" style="background:rgba(245,158,11,.1);color:#F59E0B;border:1px solid rgba(245,158,11,.2)" data-t="Nuevo">Nuevo</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#F59E0B">HIGH SET</div>
+          <div class="card-title" style="color:#F59E0B" data-t="hs_titulo">HIGH SET</div>
           <div class="card-desc">Los armados de pelota alta de cada jugador, valorados y con puntaje. Tabla de posiciones de los entrenamientos.</div>
         </div>
         <div class="card-arrow">→</div>
@@ -529,24 +529,24 @@ select, select option {
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(55,138,221,.1);border-color:rgba(55,138,221,.2)">🏐</div>
-          <div class="card-badge" style="background:rgba(55,138,221,.1);color:#378ADD;border:1px solid rgba(55,138,221,.2)">Ranking</div>
+          <div class="card-badge" style="background:rgba(55,138,221,.1);color:#378ADD;border:1px solid rgba(55,138,221,.2)" data-t="Ranking">Ranking</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#378ADD">Baggerone</div>
+          <div class="card-title" style="color:#378ADD" data-t="Baggerone">Baggerone</div>
           <div class="card-desc"><span data-t="d_baggerone">Tabla de posiciones, armado de equipos, registro de sets y podio con fotos.</span></div>
           <div class="bag-top3" id="bag-top3-index"></div>
         </div>
         <div class="card-arrow">→</div>
       </a></div></div>
-  <div class="section dt-sec"><div class="sec-head"><span class="sec-ic">🛠️</span><div><div class="sec-title">Herramientas del entrenador<span class="dt-pill">🔒 Solo DT</span></div><div class="sec-sub">Solo lo ve el cuerpo técnico</div></div></div><div class="cards-grid"><a href="game_plan.html" id="card-gameplan" class="card" style="--card-color:#e6a743;grid-column:1/-1">
+  <div class="section dt-sec"><div class="sec-head"><span class="sec-ic">🛠️</span><div><div class="sec-title">Herramientas del entrenador<span class="dt-pill" data-t="🔒 Solo DT">🔒 Solo DT</span></div><div class="sec-sub" data-t="Solo lo ve el cuerpo técnico">Solo lo ve el cuerpo técnico</div></div></div><div class="cards-grid"><a href="game_plan.html" id="card-gameplan" class="card" style="--card-color:#e6a743;grid-column:1/-1">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.2)">📋</div>
-          <div class="card-badge" id="gp-badge" style="background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)">Próximo partido</div>
+          <div class="card-badge" id="gp-badge" style="background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)" data-t="Próximo partido">Próximo partido</div>
         </div>
         <div class="card-body">
-          <div class="card-title" id="gp-title" style="color:#fbbf24">Game Plan</div>
-          <div class="card-desc" id="gp-desc">Plan del próximo rival: defensa, armadores, recepción y videos.</div>
+          <div class="card-title" id="gp-title" style="color:#fbbf24" data-t="Game Plan">Game Plan</div>
+          <div class="card-desc" id="gp-desc" data-t="Plan del próximo rival: defensa, armadores, recepción y videos.">Plan del próximo rival: defensa, armadores, recepción y videos.</div>
         </div>
         <div class="card-arrow">→</div>
       </a><a href="rotaciones.html" class="card" style="--card-color:#e6a743">
@@ -560,14 +560,14 @@ select, select option {
           <div class="card-desc"><span data-t="d_rotaciones">Las seis rotaciones enfrentadas al rival, en una hoja. Para preparar el saque, el bloqueo y la defensa antes del partido.</span></div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="panel_vivo.html" class="card" style="--card-color:#e6a743"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">🎯</div><div class="card-badge">Cargar</div></div><div class="card-body"><div class="card-title">Scout en Vivo</div><div class="card-desc">Cargá el partido punto por punto con el código de DataVolley.</div></div><div class="card-arrow">→</div></a><a href="panel_voley.html" class="card" style="--card-color:#e6a743"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">📡</div><div class="card-badge">En vivo</div></div><div class="card-body"><div class="card-title">Panel en Vivo</div><div class="card-desc">Fichas, tablas y gráficos que se actualizan solos mientras scouteás.</div></div><div class="card-arrow">→</div></a><a href="camara.html" class="card" style="--card-color:#e6a743"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">📹</div><div class="card-badge">Cámara</div></div><div class="card-body"><div class="card-title">Cámara del partido</div><div class="card-desc">Transmití desde el celular al scout con delay. Te da un código de sala.</div></div><div class="card-arrow">→</div></a><a href="scouting_rival.html" class="card" style="--card-color:#e6a743">
+      </a><a href="panel_vivo.html" class="card" style="--card-color:#e6a743"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">🎯</div><div class="card-badge" data-t="Cargar">Cargar</div></div><div class="card-body"><div class="card-title" data-t="Scout en Vivo">Scout en Vivo</div><div class="card-desc" data-t="Cargá el partido punto por punto con el código de DataVolley.">Cargá el partido punto por punto con el código de DataVolley.</div></div><div class="card-arrow">→</div></a><a href="panel_voley.html" class="card" style="--card-color:#e6a743"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">📡</div><div class="card-badge" data-t="en_vivo">En vivo</div></div><div class="card-body"><div class="card-title" data-t="Panel en Vivo">Panel en Vivo</div><div class="card-desc" data-t="Fichas, tablas y gráficos que se actualizan solos mientras scouteás.">Fichas, tablas y gráficos que se actualizan solos mientras scouteás.</div></div><div class="card-arrow">→</div></a><a href="camara.html" class="card" style="--card-color:#e6a743"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">📹</div><div class="card-badge" data-t="Cámara">Cámara</div></div><div class="card-body"><div class="card-title" data-t="Cámara del partido">Cámara del partido</div><div class="card-desc" data-t="Transmití desde el celular al scout con delay. Te da un código de sala.">Transmití desde el celular al scout con delay. Te da un código de sala.</div></div><div class="card-arrow">→</div></a><a href="scouting_rival.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(249,115,22,.1);border-color:rgba(249,115,22,.2)">🔍</div>
-          <div class="card-badge" style="background:rgba(249,115,22,.1);color:#F97316;border:1px solid rgba(249,115,22,.2)">Dossier</div>
+          <div class="card-badge" style="background:rgba(249,115,22,.1);color:#F97316;border:1px solid rgba(249,115,22,.2)" data-t="Dossier">Dossier</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#F97316">Scouting Rival</div>
+          <div class="card-title" style="color:#F97316" data-t="Scouting Rival">Scouting Rival</div>
           <div class="card-desc">Dossier completo de cada rival de la liga: saque, ataque por rematador con direcciones, armador, recepción, rotaciones y en sistema vs fuera de sistema.</div>
         </div>
         <div class="card-arrow">→</div>
@@ -575,10 +575,10 @@ select, select option {
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(6,182,212,.1);border-color:rgba(6,182,212,.2)">⚖️</div>
-          <div class="card-badge" style="background:rgba(6,182,212,.1);color:#06b6d4;border:1px solid rgba(6,182,212,.2)">Cara a cara</div>
+          <div class="card-badge" style="background:rgba(6,182,212,.1);color:#06b6d4;border:1px solid rgba(6,182,212,.2)" data-t="Cara a cara">Cara a cara</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#06b6d4">Comparador</div>
+          <div class="card-title" style="color:#06b6d4" data-t="Comparador">Comparador</div>
           <div class="card-desc">Näfels vs cualquier rival, lado a lado: saque, ataque y recepción con barras que marcan quién está mejor en cada métrica.</div>
         </div>
         <div class="card-arrow">→</div>
@@ -586,10 +586,10 @@ select, select option {
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(61,220,132,.1);border-color:rgba(61,220,132,.2)">📤</div>
-          <div class="card-badge" style="background:rgba(61,220,132,.1);color:#3ddc84;border:1px solid rgba(61,220,132,.2)">Cada partido</div>
+          <div class="card-badge" style="background:rgba(61,220,132,.1);color:#3ddc84;border:1px solid rgba(61,220,132,.2)" data-t="Cada partido">Cada partido</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#3ddc84">Subir partido</div>
+          <div class="card-title" style="color:#3ddc84" data-t="Subir partido">Subir partido</div>
           <div class="card-desc">Arrastrá el archivo del partido y listo. El sistema lo procesa solo y actualiza las estadísticas, los mapas de calor, el plan de partido y los perfiles de cada jugador.</div>
         </div>
         <div class="card-arrow">→</div>
@@ -597,10 +597,10 @@ select, select option {
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.2)">📹</div>
-          <div class="card-badge" style="background:rgba(168,85,247,.1);color:#A855F7;border:1px solid rgba(168,85,247,.2)">Nuevo</div>
+          <div class="card-badge" style="background:rgba(168,85,247,.1);color:#A855F7;border:1px solid rgba(168,85,247,.2)" data-t="Nuevo">Nuevo</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#A855F7">Cargar Videos</div>
+          <div class="card-title" style="color:#A855F7" data-t="Cargar Videos">Cargar Videos</div>
           <div class="card-desc">Pegá el link de YouTube de cada partido de la temporada y generá el archivo. Sin que participe nadie más.</div>
         </div>
         <div class="card-arrow">→</div>
@@ -610,10 +610,10 @@ select, select option {
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.2)">🔤</div>
-          <div class="card-badge" style="background:rgba(56,189,248,.1);color:#38bdf8;border:1px solid rgba(56,189,248,.2)">Nuevo</div>
+          <div class="card-badge" style="background:rgba(56,189,248,.1);color:#38bdf8;border:1px solid rgba(56,189,248,.2)" data-t="Nuevo">Nuevo</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#38bdf8">Asociar Códigos</div>
+          <div class="card-title" style="color:#38bdf8" data-t="Asociar Códigos">Asociar Códigos</div>
           <div class="card-desc">Cuando el partido lo scouteó otra persona, sus códigos pueden ser distintos. Acá los traducís a los tuyos.</div>
         </div>
         <div class="card-arrow">→</div>
@@ -623,11 +623,11 @@ select, select option {
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(244,114,182,.1);border-color:rgba(244,114,182,.2)">🎞️</div>
-          <div class="card-badge" style="background:rgba(244,114,182,.1);color:#f472b6;border:1px solid rgba(244,114,182,.2)">Nuevo</div>
+          <div class="card-badge" style="background:rgba(244,114,182,.1);color:#f472b6;border:1px solid rgba(244,114,182,.2)" data-t="Nuevo">Nuevo</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#f472b6">Unir Videos</div>
-          <div class="card-desc">¿La cámara cortó el partido en varios archivos? Acá se unen en uno solo para poder subirlo.</div>
+          <div class="card-title" style="color:#f472b6" data-t="Unir Videos">Unir Videos</div>
+          <div class="card-desc" data-t="¿La cámara cortó el partido en varios archivos? Acá se unen en uno solo para poder subirlo.">¿La cámara cortó el partido en varios archivos? Acá se unen en uno solo para poder subirlo.</div>
         </div>
         <div class="card-arrow">→</div>
       </a><!-- Alta de jugadores: la cuenta, el dorsal, la categoria y la foto,
@@ -636,18 +636,18 @@ select, select option {
   <div class="card-glow"></div>
   <div class="card-top">
     <div class="card-icon" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2)">🧑‍🤝‍🧑</div>
-    <div class="card-badge" style="background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2)">Nuevo</div>
+    <div class="card-badge" style="background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2)" data-t="Nuevo">Nuevo</div>
   </div>
   <div class="card-body">
-    <div class="card-title" style="color:#22c55e">Alta de Jugadores</div>
-    <div class="card-desc">Dales acceso a la app: mail, dorsal, categoría y foto, todo de una vez.</div>
+    <div class="card-title" style="color:#22c55e" data-t="Alta de Jugadores">Alta de Jugadores</div>
+    <div class="card-desc" data-t="Dales acceso a la app: mail, dorsal, categoría y foto, todo de una vez.">Dales acceso a la app: mail, dorsal, categoría y foto, todo de una vez.</div>
   </div>
   <div class="card-arrow">→</div>
 </a><a href="sesiones.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.2)">🔐</div>
-          <div class="card-badge" style="background:rgba(239,68,68,.1);color:#ef4444;border:1px solid rgba(239,68,68,.2)">Acceso</div>
+          <div class="card-badge" style="background:rgba(239,68,68,.1);color:#ef4444;border:1px solid rgba(239,68,68,.2)" data-t="Acceso">Acceso</div>
         </div>
         <div class="card-body">
           <div class="card-title" style="color:#ef4444"><span data-t="c_sesiones">Sesiones y dispositivos</span></div>
@@ -658,7 +658,7 @@ select, select option {
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(129,140,248,.1);border-color:rgba(129,140,248,.2)">📺</div>
-          <div class="card-badge" style="background:rgba(129,140,248,.1);color:#818cf8;border:1px solid rgba(129,140,248,.2)">Tele · TV</div>
+          <div class="card-badge" style="background:rgba(129,140,248,.1);color:#818cf8;border:1px solid rgba(129,140,248,.2)" data-t="Tele · TV">Tele · TV</div>
         </div>
         <div class="card-body">
           <div class="card-title" style="color:#818cf8"><span data-t="c_pizarron">Pizarrón</span></div>
@@ -681,7 +681,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J1</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> LAUSANNE</div>
           </div>
@@ -696,7 +696,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J2</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> ST. GALLEN</div>
           </div>
@@ -711,7 +711,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J3</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> COLOMBIER</div>
           </div>
@@ -726,7 +726,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J4</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> JONA</div>
           </div>
@@ -741,7 +741,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J5</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> AMRISWIL</div>
           </div>
@@ -756,7 +756,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J6</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> SCHONENWERD</div>
           </div>
@@ -771,7 +771,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J7</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> CHENOIS</div>
           </div>
@@ -786,7 +786,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J8</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> JONA</div>
           </div>
@@ -801,7 +801,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J9</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> LAUSANNE</div>
           </div>
@@ -816,7 +816,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J10</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> ST. GALLEN</div>
           </div>
@@ -831,7 +831,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J11</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> COLOMBIER</div>
           </div>
@@ -846,7 +846,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J12</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> AMRISWIL</div>
           </div>
@@ -861,7 +861,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J13</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> SURSEE</div>
           </div>
@@ -876,7 +876,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J14</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> SCHONENWERD</div>
           </div>
@@ -891,7 +891,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J15</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> CHENOIS</div>
           </div>
@@ -906,7 +906,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J16</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> JONA</div>
           </div>
@@ -921,7 +921,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J17</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> COLOMBIER</div>
           </div>
@@ -936,7 +936,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J18</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> COLOMBIER</div>
           </div>
@@ -951,7 +951,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J19</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> COLOMBIER</div>
           </div>
@@ -966,7 +966,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J20</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> CHENOIS</div>
           </div>
@@ -981,7 +981,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J21</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> CHENOIS</div>
           </div>
@@ -996,7 +996,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J22</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> CHENOIS</div>
           </div>
@@ -1011,7 +1011,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J23</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> AMRISWIL</div>
           </div>
@@ -1026,7 +1026,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J24</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> AMRISWIL</div>
           </div>
@@ -1041,7 +1041,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J25</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> AMRISWIL</div>
           </div>
@@ -1056,7 +1056,7 @@ select, select option {
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J26</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">JUGADO</span>
+              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO">JUGADO</span>
             </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> AMRISWIL</div>
           </div>
@@ -1071,25 +1071,25 @@ select, select option {
   <!-- COUNTDOWN PRÓXIMO PARTIDO -->
   <div class="countdown-bar" id="countdown-bar">
     <div class="cd-left">
-      <div class="cd-label">Próximo partido</div>
+      <div class="cd-label" data-t="Próximo partido">Próximo partido</div>
       <div class="cd-rival" id="cd-rival">—</div>
       <div class="cd-meta" id="cd-meta">—</div>
     </div>
     <div class="cd-timer" id="cd-timer">
-      <div class="cd-unit"><div class="cd-num" id="cd-d">0</div><div class="cd-unit-lbl">Días</div></div>
+      <div class="cd-unit"><div class="cd-num" id="cd-d">0</div><div class="cd-unit-lbl" data-t="Días">Días</div></div>
       <div class="cd-sep">:</div>
       <div class="cd-unit"><div class="cd-num" id="cd-h">00</div><div class="cd-unit-lbl">Hs</div></div>
       <div class="cd-sep">:</div>
-      <div class="cd-unit"><div class="cd-num" id="cd-m">00</div><div class="cd-unit-lbl">Min</div></div>
+      <div class="cd-unit"><div class="cd-num" id="cd-m">00</div><div class="cd-unit-lbl" data-t="Min">Min</div></div>
       <div class="cd-sep">:</div>
-      <div class="cd-unit"><div class="cd-num" id="cd-s">00</div><div class="cd-unit-lbl">Seg</div></div>
+      <div class="cd-unit"><div class="cd-num" id="cd-s">00</div><div class="cd-unit-lbl" data-t="Seg">Seg</div></div>
     </div>
   </div>
 
   </div>
 
 <footer>
-  <div>NAFELS VOLEY · Sistema de Análisis v1.0</div>
+  <div data-t="NAFELS VOLEY · Sistema de Análisis v1.0">NAFELS VOLEY · Sistema de Análisis v1.0</div>
   <div id="footer-time"></div>
 </footer>
 
@@ -1387,15 +1387,15 @@ function highlightNextMatch(){
 </style>
 <div id="hm-overlay" onclick="if(event.target===this)closeHeatmapMenu()">
   <div class="hm-box">
-    <div class="hm-title"><span>🔥 HEAT MAPS</span><button class="hm-close" onclick="closeHeatmapMenu()">✕</button></div>
+    <div class="hm-title"><span data-t="🔥 HEAT MAPS">🔥 HEAT MAPS</span><button class="hm-close" onclick="closeHeatmapMenu()">✕</button></div>
     <div class="hm-grid">
-      <a class="hm-card" href="hm_ataque.html?equipo=nafels"    style="background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#F97316">ATAQUE</span><span class="hm-sub">EFF · SO/TR · Zonas<br>Combos · Calidad rec.</span></a>
-      <a class="hm-card" href="hm_saque.html?equipo=nafels"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Flotado/Potencia<br>Zonas origen/destino</span></a>
-      <a class="hm-card" href="hm_recepcion.html?equipo=nafels" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
-      <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
-      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8">BLOQUEO</span><span class="hm-sub">EFF · Zona del ataque · Combos</span></a>
+      <a class="hm-card" href="hm_ataque.html?equipo=nafels"    style="background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#F97316" data-t="ATAQUE">ATAQUE</span><span class="hm-sub">EFF · SO/TR · Zonas<br>Combos · Calidad rec.</span></a>
+      <a class="hm-card" href="hm_saque.html?equipo=nafels"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E" data-t="SAQUE">SAQUE</span><span class="hm-sub">EFF · Flotado/Potencia<br>Zonas origen/destino</span></a>
+      <a class="hm-card" href="hm_recepcion.html?equipo=nafels" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8" data-t="RECEPCION">RECEPCION</span><span class="hm-sub" data-t="EFF · Calidad · Zonas">EFF · Calidad · Zonas</span></a>
+      <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B" data-t="ARMADO">ARMADO</span><span class="hm-sub" data-t="Llamadas · Pos · EFF">Llamadas · Pos · EFF</span></a>
+      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444" data-t="DEFENSA">DEFENSA</span><span class="hm-sub" data-t="EFF · Zonas · Por rival">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8" data-t="BLOQUEO">BLOQUEO</span><span class="hm-sub" data-t="EFF · Zona del ataque · Combos">EFF · Zona del ataque · Combos</span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">NLA Suiza 2026/27 · temporada en curso</div>
+    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center" data-t="NLA Suiza 2026/27 · temporada en curso">NLA Suiza 2026/27 · temporada en curso</div>
   </div>
 </div>
 <script>
@@ -1403,9 +1403,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260913-0842"></script>
+<script src="chat_nafels.js?v=20260913-0851"></script>
 
-<script src="proximo_rival.js?v=20260913-0842" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js?v=20260913-0851" onerror="window.FIXTURE_DATA=null"></script>
 <script>
 /* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
    proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
@@ -1463,12 +1463,12 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   }catch(e){}
 })();
 </script>
-<script src="temporadas_menu.js?v=20260913-0842"></script>
+<script src="temporadas_menu.js?v=20260913-0851"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20260913-0842" defer></script>
+<script src="onesignal_push.js?v=20260913-0851" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -1540,7 +1540,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   }catch(e){}
 })();
 </script>
-<script src="ayuda.js?v=20260913-0842"></script>
+<script src="ayuda.js?v=20260913-0851"></script>
 </body>
 </html>
 

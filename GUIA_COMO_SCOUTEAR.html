@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Guía del Scout en Vivo — Cómo scoutear un partido</title>
+<title data-t="Guía del Scout en Vivo — Cómo scoutear un partido">Guía del Scout en Vivo — Cómo scoutear un partido</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -40,148 +40,148 @@
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="categorias_club.js?v=20260913-0842"></script>
-<script src="selector_categoria.js?v=20260913-0842"></script>
-<script src="firebase.js?v=20260913-0842" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-0842"></script>
+<script src="categorias_club.js?v=20260913-0851"></script>
+<script src="selector_categoria.js?v=20260913-0851"></script>
+<script src="firebase.js?v=20260913-0851" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-0851"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0842">
+<link rel="stylesheet" href="movil.css?v=20260913-0851">
 </head>
 <body>
 <header class="hero"><div class="wrap">
-  <h1>Guía del Scout en Vivo</h1>
+  <h1 data-t="Guía del Scout en Vivo">Guía del Scout en Vivo</h1>
   <p>Cómo scoutear un partido con tu sistema, paso a paso: desde cargar los equipos hasta exportar el partido.</p>
 </div></header>
 
 <div class="wrap">
 
   <div class="intro">
-    <p>Esta guía explica cómo usar tu <strong>Scout en Vivo</strong> para cargar un partido en tiempo real. Está pensada para usar en una <strong>computadora con teclado completo</strong>, que es donde se tipea el partido. El scout lleva solo el marcador, las rotaciones, los cambios y el cierre de sets: vos te concentrás en cargar cada acción.</p>
+    <p>Esta guía explica cómo usar tu <strong data-t="Scout en Vivo">Scout en Vivo</strong> para cargar un partido en tiempo real. Está pensada para usar en una <strong data-t="computadora con teclado completo">computadora con teclado completo</strong>, que es donde se tipea el partido. El scout lleva solo el marcador, las rotaciones, los cambios y el cierre de sets: vos te concentrás en cargar cada acción.</p>
   </div>
 
   <h2><span class="n">1</span> Antes de empezar: equipos y formación</h2>
   <ol>
-    <li>Con el botón <span class="btn">Equipos</span> creás o editás los planteles (número, apellido, nombre y rol de cada jugador). También podés importar un equipo desde un archivo <span class="mono">.sq</span>.</li>
-    <li>Con el botón <span class="btn">Partido</span> / <span class="btn">Formación</span> cargás el <strong>seis inicial</strong> de cada equipo, el armador, el líbero y quién saca primero.</li>
-    <li>Confirmás con <span class="btn">Empezar</span> y ya podés tipear.</li>
+    <li>Con el botón <span class="btn" data-t="Equipos">Equipos</span> creás o editás los planteles (número, apellido, nombre y rol de cada jugador). También podés importar un equipo desde un archivo <span class="mono">.sq</span>.</li>
+    <li>Con el botón <span class="btn" data-t="Partido">Partido</span> / <span class="btn" data-t="Formación">Formación</span> cargás el <strong data-t="seis inicial">seis inicial</strong> de cada equipo, el armador, el líbero y quién saca primero.</li>
+    <li>Confirmás con <span class="btn" data-t="Empezar">Empezar</span> y ya podés tipear.</li>
   </ol>
 
   <h2><span class="n">2</span> El código de la jugada</h2>
-  <p>Cada acción se escribe como un <strong>código corto</strong>. Es la notación estándar del scouting de vóley, y se arma con hasta cuatro partes:</p>
-  <p style="text-align:center;font-size:19px;margin:18px 0"><span class="mono">equipo</span> + <span class="mono">número</span> + <span class="mono">gesto</span> + <span class="mono">evaluación</span></p>
+  <p>Cada acción se escribe como un <strong data-t="código corto">código corto</strong>. Es la notación estándar del scouting de vóley, y se arma con hasta cuatro partes:</p>
+  <p style="text-align:center;font-size:19px;margin:18px 0"><span class="mono" data-t="equipo">equipo</span> + <span class="mono" data-t="número">número</span> + <span class="mono" data-t="gesto">gesto</span> + <span class="mono" data-t="evaluación">evaluación</span></p>
 
-  <h3>Equipo</h3>
+  <h3 data-t="Equipo">Equipo</h3>
   <p>Para el <strong>local</strong> escribís directamente el número (podés anteponer <span class="mono">*</span>). Para el <strong>visitante</strong>, empezás con <span class="mono">a</span>. Por ejemplo, <span class="mono">7#</span> es el local nº 7; <span class="mono">a7#</span> es el visitante nº 7.</p>
 
-  <h3>Gesto (qué hizo)</h3>
+  <h3 data-t="Gesto (qué hizo)">Gesto (qué hizo)</h3>
   <table>
-    <tr><th>Letra</th><th>Gesto</th></tr>
-    <tr><td class="c">S</td><td>Saque</td></tr>
-    <tr><td class="c">R</td><td>Recepción</td></tr>
-    <tr><td class="c">A</td><td>Ataque</td></tr>
-    <tr><td class="c">B</td><td>Bloqueo</td></tr>
-    <tr><td class="c">D</td><td>Defensa</td></tr>
-    <tr><td class="c">E</td><td>Armado</td></tr>
-    <tr><td class="c">F</td><td>Freeball</td></tr>
+    <tr><th data-t="Letra">Letra</th><th data-t="Gesto">Gesto</th></tr>
+    <tr><td class="c">S</td><td data-t="Saque">Saque</td></tr>
+    <tr><td class="c">R</td><td data-t="Recepción">Recepción</td></tr>
+    <tr><td class="c">A</td><td data-t="Ataque">Ataque</td></tr>
+    <tr><td class="c">B</td><td data-t="Bloqueo">Bloqueo</td></tr>
+    <tr><td class="c">D</td><td data-t="Defensa">Defensa</td></tr>
+    <tr><td class="c">E</td><td data-t="Armado">Armado</td></tr>
+    <tr><td class="c">F</td><td data-t="Freeball">Freeball</td></tr>
   </table>
 
-  <h3>Evaluación (cómo salió)</h3>
+  <h3 data-t="Evaluación (cómo salió)">Evaluación (cómo salió)</h3>
   <table>
-    <tr><th>Signo</th><th>Significado</th></tr>
-    <tr><td class="c">#</td><td>Punto / perfecto (el mejor resultado)</td></tr>
-    <tr><td class="c">+</td><td>Positivo</td></tr>
-    <tr><td class="c">!</td><td>Insuficiente / justo</td></tr>
-    <tr><td class="c">/</td><td>Muy positivo o muy pobre, según el gesto</td></tr>
-    <tr><td class="c">-</td><td>Flojo</td></tr>
-    <tr><td class="c">=</td><td>Error</td></tr>
+    <tr><th data-t="Signo">Signo</th><th data-t="Significado">Significado</th></tr>
+    <tr><td class="c">#</td><td data-t="Punto / perfecto (el mejor resultado)">Punto / perfecto (el mejor resultado)</td></tr>
+    <tr><td class="c">+</td><td data-t="Positivo">Positivo</td></tr>
+    <tr><td class="c">!</td><td data-t="Insuficiente / justo">Insuficiente / justo</td></tr>
+    <tr><td class="c">/</td><td data-t="Muy positivo o muy pobre, según el gesto">Muy positivo o muy pobre, según el gesto</td></tr>
+    <tr><td class="c">-</td><td data-t="Flojo">Flojo</td></tr>
+    <tr><td class="c">=</td><td data-t="Error">Error</td></tr>
   </table>
-  <p class="tip">El significado fino de cada signo cambia un poco según el gesto (no es lo mismo un saque <span class="mono">/</span> que un ataque <span class="mono">/</span>). Mientras escribís, el <strong>decodificador en vivo</strong> te muestra el código desarmado en palabras, así verificás que cargaste lo que querías.</p>
+  <p class="tip">El significado fino de cada signo cambia un poco según el gesto (no es lo mismo un saque <span class="mono">/</span> que un ataque <span class="mono">/</span>). Mientras escribís, el <strong data-t="decodificador en vivo">decodificador en vivo</strong> te muestra el código desarmado en palabras, así verificás que cargaste lo que querías.</p>
 
-  <h3>Ejemplos</h3>
+  <h3 data-t="Ejemplos">Ejemplos</h3>
   <table>
-    <tr><th>Código</th><th>Qué significa</th></tr>
-    <tr><td class="c">6S#</td><td>Local nº 6, ace de saque (punto)</td></tr>
+    <tr><th data-t="Código">Código</th><th data-t="Qué significa">Qué significa</th></tr>
+    <tr><td class="c">6S#</td><td data-t="Local nº 6, ace de saque (punto)">Local nº 6, ace de saque (punto)</td></tr>
     <tr><td class="c">a11A#</td><td>Visitante nº 11, remate ganador</td></tr>
-    <tr><td class="c">4A=</td><td>Local nº 4, error de ataque</td></tr>
-    <tr><td class="c">a8R-</td><td>Visitante nº 8, recepción floja</td></tr>
-    <tr><td class="c">5B#</td><td>Local nº 5, bloqueo punto</td></tr>
+    <tr><td class="c">4A=</td><td data-t="Local nº 4, error de ataque">Local nº 4, error de ataque</td></tr>
+    <tr><td class="c">a8R-</td><td data-t="Visitante nº 8, recepción floja">Visitante nº 8, recepción floja</td></tr>
+    <tr><td class="c">5B#</td><td data-t="Local nº 5, bloqueo punto">Local nº 5, bloqueo punto</td></tr>
   </table>
-  <p>Lo que no escribís, el sistema lo completa con tus valores por defecto. Y podés <strong>encadenar el saque y la recepción</strong> de una misma jugada en una sola línea con un punto, por ejemplo <span class="mono">5S.8#</span>.</p>
+  <p>Lo que no escribís, el sistema lo completa con tus valores por defecto. Y podés <strong data-t="encadenar el saque y la recepción">encadenar el saque y la recepción</strong> de una misma jugada en una sola línea con un punto, por ejemplo <span class="mono">5S.8#</span>.</p>
 
   <h2><span class="n">3</span> Cargar en vivo (y el fin de jugada automático)</h2>
   <ol>
     <li>Escribís el código en la barra y apretás <span class="key">Enter</span>. La acción entra en la lista.</li>
-    <li>Si el código es <strong>terminal</strong>, el punto se asigna solo y la jugada se cierra — no hace falta marcar nada aparte. Son terminales: <strong>remate, saque o bloqueo con <span class="mono">#</span></strong>; el <strong>ataque bloqueado</strong> (<span class="mono">/</span>); y cualquier <strong>error <span class="mono">=</span></strong> (que da el punto al rival).</li>
-    <li>El marcador, la rotación y el sacador los lleva el sistema automáticamente.</li>
+    <li>Si el código es <strong data-t="terminal">terminal</strong>, el punto se asigna solo y la jugada se cierra — no hace falta marcar nada aparte. Son terminales: <strong>remate, saque o bloqueo con <span class="mono">#</span></strong>; el <strong>ataque bloqueado</strong> (<span class="mono">/</span>); y cualquier <strong>error <span class="mono">=</span></strong> (que da el punto al rival).</li>
+    <li data-t="El marcador, la rotación y el sacador los lleva el sistema automáticamente.">El marcador, la rotación y el sacador los lleva el sistema automáticamente.</li>
   </ol>
-  <p class="tip">Los positivos que no son punto (armado <span class="mono">#</span>, defensa <span class="mono">#</span>, saque <span class="mono">+</span>, etc.) no cierran la jugada: la acción sigue. Si preferís cargar el punto a mano, podés usar los botones <span class="btn">Punto Local</span> / <span class="btn">Punto Visitante</span>, o apagar el fin de jugada automático en <span class="btn">Configuración</span>.</p>
+  <p class="tip">Los positivos que no son punto (armado <span class="mono">#</span>, defensa <span class="mono">#</span>, saque <span class="mono">+</span>, etc.) no cierran la jugada: la acción sigue. Si preferís cargar el punto a mano, podés usar los botones <span class="btn" data-t="Punto Local">Punto Local</span> / <span class="btn" data-t="Punto Visitante">Punto Visitante</span>, o apagar el fin de jugada automático en <span class="btn" data-t="Configuración">Configuración</span>.</p>
 
   <h2><span class="n">4</span> Cambios, tiempos y doble cambio</h2>
   <ul>
-    <li>Cada equipo tiene sus botones <span class="btn">Tiempo</span> y <span class="btn">Cambio</span>.</li>
-    <li>En <span class="btn">Cambio</span> elegís quién sale (los 6 en cancha) y quién entra (el banco o el número).</li>
-    <li>Para el <strong>doble cambio</strong>: hacés el primero con <span class="btn">Confirmar y seguir</span> (la ventana queda abierta) y el segundo con <span class="btn">Confirmar</span>. El sistema controla el límite de cambios por set.</li>
+    <li>Cada equipo tiene sus botones <span class="btn" data-t="Tiempo">Tiempo</span> y <span class="btn" data-t="Cambio">Cambio</span>.</li>
+    <li>En <span class="btn" data-t="Cambio">Cambio</span> elegís quién sale (los 6 en cancha) y quién entra (el banco o el número).</li>
+    <li>Para el <strong>doble cambio</strong>: hacés el primero con <span class="btn" data-t="Confirmar y seguir">Confirmar y seguir</span> (la ventana queda abierta) y el segundo con <span class="btn" data-t="Confirmar">Confirmar</span>. El sistema controla el límite de cambios por set.</li>
   </ul>
 
   <h2><span class="n">5</span> Corregir sin romper nada</h2>
-  <p>Todo se puede arreglar. Estas son tus herramientas:</p>
+  <p data-t="Todo se puede arreglar. Estas son tus herramientas:">Todo se puede arreglar. Estas son tus herramientas:</p>
   <table>
-    <tr><th>Acción</th><th>Cómo</th></tr>
-    <tr><td>Reabrir el último punto para corregirlo</td><td><span class="key">Ctrl+A</span> o <span class="btn">Reabrir punto</span></td></tr>
-    <tr><td>Insertar un código en el medio de la lista</td><td>Seleccioná el código y apretá <span class="key">Insert</span></td></tr>
-    <tr><td>Editar un código</td><td>Doble clic sobre el código (o seleccionar + <span class="key">Enter</span>)</td></tr>
-    <tr><td>Corregir un valor <strong>en el lugar</strong></td><td>Poné el cursor sobre el valor (o seleccionalo) y apretá la tecla del valor nuevo: se reemplaza ahí mismo, sin saltar al final</td></tr>
-    <tr><td>Borrar un código</td><td>Seleccioná y apretá <span class="key">Delete</span>. Con <span class="key">Backspace</span> borrás rápido el último</td></tr>
-    <tr><td>Deshacer el último código</td><td><span class="key">Ctrl+Z</span> o <span class="btn">Deshacer código</span></td></tr>
-    <tr><td>Deshacer el punto entero</td><td><span class="key">Ctrl+Shift+Z</span> o <span class="btn">Deshacer punto</span></td></tr>
-    <tr><td>Buscar un código en la lista</td><td><span class="key">Ctrl+R</span> o <span class="btn">Buscar</span></td></tr>
-    <tr><td>Verificar coherencia</td><td><span class="key">Ctrl+V</span> o <span class="btn">Verificar</span></td></tr>
+    <tr><th data-t="Acción">Acción</th><th data-t="Cómo">Cómo</th></tr>
+    <tr><td data-t="Reabrir el último punto para corregirlo">Reabrir el último punto para corregirlo</td><td><span class="key">Ctrl+A</span> o <span class="btn" data-t="Reabrir punto">Reabrir punto</span></td></tr>
+    <tr><td data-t="Insertar un código en el medio de la lista">Insertar un código en el medio de la lista</td><td>Seleccioná el código y apretá <span class="key">Insert</span></td></tr>
+    <tr><td data-t="Editar un código">Editar un código</td><td>Doble clic sobre el código (o seleccionar + <span class="key">Enter</span>)</td></tr>
+    <tr><td>Corregir un valor <strong data-t="en el lugar">en el lugar</strong></td><td>Poné el cursor sobre el valor (o seleccionalo) y apretá la tecla del valor nuevo: se reemplaza ahí mismo, sin saltar al final</td></tr>
+    <tr><td data-t="Borrar un código">Borrar un código</td><td>Seleccioná y apretá <span class="key">Delete</span>. Con <span class="key">Backspace</span> borrás rápido el último</td></tr>
+    <tr><td data-t="Deshacer el último código">Deshacer el último código</td><td><span class="key">Ctrl+Z</span> o <span class="btn" data-t="Deshacer código">Deshacer código</span></td></tr>
+    <tr><td data-t="Deshacer el punto entero">Deshacer el punto entero</td><td><span class="key">Ctrl+Shift+Z</span> o <span class="btn" data-t="Deshacer punto">Deshacer punto</span></td></tr>
+    <tr><td data-t="Buscar un código en la lista">Buscar un código en la lista</td><td><span class="key">Ctrl+R</span> o <span class="btn" data-t="Buscar">Buscar</span></td></tr>
+    <tr><td>Verificar coherencia</td><td><span class="key">Ctrl+V</span> o <span class="btn" data-t="Verificar">Verificar</span></td></tr>
   </table>
-  <p class="tip">Cuando reabrís un punto (Ctrl+A), los códigos de la jugada <strong>quedan en la lista</strong> con el último seleccionado, listos para editar. Corregís y volvés a cerrar la jugada normalmente.</p>
-  <p class="tip">Las teclas de <strong>evaluación</strong> (<span class="mono">#</span> <span class="mono">+</span> <span class="mono">!</span> …) y la tecla de <strong>adversario</strong> ahora insertan <strong>donde está el cursor</strong>, no al final. Ejemplo: en <span class="mono">4A+</span> seleccionás el <span class="mono">+</span>, apretás la tecla de <span class="mono">!</span> y queda <span class="mono">4A!</span>. En códigos compuestos podés meter la <span class="mono">a</span> del visitante justo en el medio, donde estás escribiendo.</p>
+  <p class="tip">Cuando reabrís un punto (Ctrl+A), los códigos de la jugada <strong data-t="quedan en la lista">quedan en la lista</strong> con el último seleccionado, listos para editar. Corregís y volvés a cerrar la jugada normalmente.</p>
+  <p class="tip">Las teclas de <strong data-t="evaluación">evaluación</strong> (<span class="mono">#</span> <span class="mono">+</span> <span class="mono">!</span> …) y la tecla de <strong>adversario</strong> ahora insertan <strong data-t="donde está el cursor">donde está el cursor</strong>, no al final. Ejemplo: en <span class="mono">4A+</span> seleccionás el <span class="mono">+</span>, apretás la tecla de <span class="mono">!</span> y queda <span class="mono">4A!</span>. En códigos compuestos podés meter la <span class="mono">a</span> del visitante justo en el medio, donde estás escribiendo.</p>
 
   <h2><span class="n">6</span> Cierre de set y formación del set siguiente</h2>
   <ol>
-    <li>Cuando un equipo llega a <strong>25 con 2 de diferencia</strong> (15 en el quinto set), al cerrarse ese punto el <strong>set se cierra solo</strong>.</li>
-    <li>Enseguida se abre <strong>sola</strong> la formación del set siguiente, y es <strong>obligatoria</strong>: el sistema propone el seis del set anterior, lo ajustás si hubo cambios y confirmás con <span class="btn">Empezar set</span>. No te deja seguir hasta cargar la formación.</li>
-    <li><strong>¿Amistoso?</strong> Si el partido ya terminó (un equipo ganó los sets) y querés seguir jugando, al cerrar el set final te pregunta si es un amistoso para arrancar otro set. También tenés el botón <span class="btn">Set amistoso</span>, que aparece cuando el partido está terminado.</li>
+    <li>Cuando un equipo llega a <strong data-t="25 con 2 de diferencia">25 con 2 de diferencia</strong> (15 en el quinto set), al cerrarse ese punto el <strong data-t="set se cierra solo">set se cierra solo</strong>.</li>
+    <li>Enseguida se abre <strong>sola</strong> la formación del set siguiente, y es <strong data-t="obligatoria">obligatoria</strong>: el sistema propone el seis del set anterior, lo ajustás si hubo cambios y confirmás con <span class="btn" data-t="Empezar set">Empezar set</span>. No te deja seguir hasta cargar la formación.</li>
+    <li><strong data-t="¿Amistoso?">¿Amistoso?</strong> Si el partido ya terminó (un equipo ganó los sets) y querés seguir jugando, al cerrar el set final te pregunta si es un amistoso para arrancar otro set. También tenés el botón <span class="btn" data-t="Set amistoso">Set amistoso</span>, que aparece cuando el partido está terminado.</li>
   </ol>
 
   <h2><span class="n">7</span> Modo entrenamiento (un solo equipo)</h2>
-  <p>Si vas a scoutear una <strong>práctica</strong> y no un partido con rival, activá el <strong>modo entrenamiento</strong> en <span class="btn">Configuración</span>. En ese modo cargás <strong>un solo equipo</strong>: todos los códigos se registran como <strong>locales</strong> (con <span class="mono">*</span>), aunque escribas la <span class="mono">a</span> o uses códigos compuestos. Así te concentrás en las acciones de tu equipo sin pensar en el lado.</p>
+  <p>Si vas a scoutear una <strong data-t="práctica">práctica</strong> y no un partido con rival, activá el <strong>modo entrenamiento</strong> en <span class="btn" data-t="Configuración">Configuración</span>. En ese modo cargás <strong data-t="un solo equipo">un solo equipo</strong>: todos los códigos se registran como <strong>locales</strong> (con <span class="mono">*</span>), aunque escribas la <span class="mono">a</span> o uses códigos compuestos. Así te concentrás en las acciones de tu equipo sin pensar en el lado.</p>
 
   <h2><span class="n">8</span> Video en vivo con delay</h2>
   <ol>
-    <li>En el celular que apunta a la cancha abrís la cámara (misma red / WiFi) y tocás <strong>Transmitir</strong>: te da un <strong>código de sala de 4 dígitos</strong>.</li>
-    <li>En el scout tocás el botón <span class="btn">Video delay</span> (el de la cámara, en dos líneas), escribís ese código y <span class="btn">Conectar</span>.</li>
-    <li>Podés atrasar el video con la barra de <strong>delay</strong> (0 a 25 s) y volver a ver el <strong>último punto</strong>.</li>
-    <li>Con <span class="btn">⧉ Acoplar</span> el video se achica a un costado y podés <strong>tipear y ver el video a la vez</strong>. Con <span class="btn">⛶ Grande</span> volvés a pantalla completa.</li>
+    <li>En el celular que apunta a la cancha abrís la cámara (misma red / WiFi) y tocás <strong data-t="Transmitir">Transmitir</strong>: te da un <strong data-t="código de sala de 4 dígitos">código de sala de 4 dígitos</strong>.</li>
+    <li>En el scout tocás el botón <span class="btn">Video delay</span> (el de la cámara, en dos líneas), escribís ese código y <span class="btn" data-t="Conectar">Conectar</span>.</li>
+    <li>Podés atrasar el video con la barra de <strong data-t="delay">delay</strong> (0 a 25 s) y volver a ver el <strong data-t="último punto">último punto</strong>.</li>
+    <li>Con <span class="btn">⧉ Acoplar</span> el video se achica a un costado y podés <strong data-t="tipear y ver el video a la vez">tipear y ver el video a la vez</strong>. Con <span class="btn">⛶ Grande</span> volvés a pantalla completa.</li>
   </ol>
-  <p class="tip">Ojo: hay <strong>dos</strong> botones de video. <span class="btn">Video</span> es el visor de un video por archivo/URL (sincronización). <span class="btn">Video delay</span> (en dos líneas) es el de la <strong>cámara en vivo con delay</strong>, el que usa el código de sala.</p>
+  <p class="tip">Ojo: hay <strong>dos</strong> botones de video. <span class="btn">Video</span> es el visor de un video por archivo/URL (sincronización). <span class="btn">Video delay</span> (en dos líneas) es el de la <strong data-t="cámara en vivo con delay">cámara en vivo con delay</strong>, el que usa el código de sala.</p>
 
   <h2><span class="n">9</span> Tablas y análisis en vivo</h2>
-  <p>Debajo de la lista de códigos, el título <span class="btn">▸ Tablas y análisis</span> despliega el análisis del partido en tiempo real: eficiencias por fundamento y los jugadores que más puntúan, para los dos equipos. Se va llenando con lo que vas cargando.</p>
+  <p>Debajo de la lista de códigos, el título <span class="btn" data-t="▸ Tablas y análisis">▸ Tablas y análisis</span> despliega el análisis del partido en tiempo real: eficiencias por fundamento y los jugadores que más puntúan, para los dos equipos. Se va llenando con lo que vas cargando.</p>
 
   <h2><span class="n">10</span> Guardar y exportar</h2>
   <ul>
-    <li>El partido se guarda solo mientras cargás. Con <span class="btn">Partidos</span> ves y reabrís los partidos guardados.</li>
-    <li>Con <span class="btn">Exportar .dvw</span> generás el archivo del partido en formato estándar, para abrirlo o compartirlo con otras herramientas de análisis de vóley.</li>
+    <li>El partido se guarda solo mientras cargás. Con <span class="btn" data-t="Partidos">Partidos</span> ves y reabrís los partidos guardados.</li>
+    <li>Con <span class="btn" data-t="Exportar .dvw">Exportar .dvw</span> generás el archivo del partido en formato estándar, para abrirlo o compartirlo con otras herramientas de análisis de vóley.</li>
   </ul>
 
   <h2><span class="n">11</span> Atajos de teclado (resumen)</h2>
   <table>
-    <tr><th>Atajo</th><th>Para qué</th></tr>
-    <tr><td><span class="key">Enter</span></td><td>Cargar el código escrito</td></tr>
-    <tr><td><span class="key">Insert</span></td><td>Insertar un código antes del seleccionado</td></tr>
-    <tr><td><span class="key">Delete</span></td><td>Borrar el código seleccionado</td></tr>
-    <tr><td><span class="key">Backspace</span></td><td>Borrar rápido el último código</td></tr>
-    <tr><td><span class="key">Ctrl+Z</span></td><td>Deshacer el último código</td></tr>
-    <tr><td><span class="key">Ctrl+Shift+Z</span></td><td>Deshacer el punto entero</td></tr>
-    <tr><td><span class="key">Ctrl+A</span></td><td>Reabrir el último punto para corregir</td></tr>
-    <tr><td><span class="key">Ctrl+R</span></td><td>Buscar un código</td></tr>
-    <tr><td><span class="key">Ctrl+V</span></td><td>Verificar</td></tr>
+    <tr><th>Atajo</th><th data-t="Para qué">Para qué</th></tr>
+    <tr><td><span class="key">Enter</span></td><td data-t="Cargar el código escrito">Cargar el código escrito</td></tr>
+    <tr><td><span class="key">Insert</span></td><td data-t="Insertar un código antes del seleccionado">Insertar un código antes del seleccionado</td></tr>
+    <tr><td><span class="key">Delete</span></td><td data-t="Borrar el código seleccionado">Borrar el código seleccionado</td></tr>
+    <tr><td><span class="key">Backspace</span></td><td data-t="Borrar rápido el último código">Borrar rápido el último código</td></tr>
+    <tr><td><span class="key">Ctrl+Z</span></td><td data-t="Deshacer el último código">Deshacer el último código</td></tr>
+    <tr><td><span class="key">Ctrl+Shift+Z</span></td><td data-t="Deshacer el punto entero">Deshacer el punto entero</td></tr>
+    <tr><td><span class="key">Ctrl+A</span></td><td data-t="Reabrir el último punto para corregir">Reabrir el último punto para corregir</td></tr>
+    <tr><td><span class="key">Ctrl+R</span></td><td data-t="Buscar un código">Buscar un código</td></tr>
+    <tr><td><span class="key">Ctrl+V</span></td><td data-t="Verificar">Verificar</td></tr>
   </table>
 
   <footer>
@@ -189,8 +189,8 @@
   </footer>
 
 </div>
-<script src="lang.js?v=20260913-0842"></script>
-<script src="volver_inicio.js?v=20260913-0842" onerror="void 0"></script>
-<script src="ayuda.js?v=20260913-0842"></script>
+<script src="lang.js?v=20260913-0851"></script>
+<script src="volver_inicio.js?v=20260913-0851" onerror="void 0"></script>
+<script src="ayuda.js?v=20260913-0851"></script>
 </body>
 </html>

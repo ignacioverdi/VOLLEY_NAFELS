@@ -59,14 +59,14 @@ select,select option{color:#111!important;background:#fff!important;}
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="categorias_club.js?v=20260913-0842"></script>
-<script src="selector_categoria.js?v=20260913-0842"></script>
-<script src="firebase.js?v=20260913-0842" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-0842"></script>
+<script src="categorias_club.js?v=20260913-0851"></script>
+<script src="selector_categoria.js?v=20260913-0851"></script>
+<script src="firebase.js?v=20260913-0851" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-0851"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0842">
+<link rel="stylesheet" href="movil.css?v=20260913-0851">
 </head>
 <body>
 <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
@@ -74,7 +74,7 @@ select,select option{color:#111!important;background:#fff!important;}
 
 <div class="page-header">
   <div style="display:flex;align-items:center;gap:14px;">
-    <a href="index.html" class="back-btn">← Inicio</a>
+    <a href="index.html" class="back-btn" data-t="← Inicio">← Inicio</a>
     <div>
       <div class="page-title">📥 Importar DVW</div>
       <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;">NAFELS VOLEY · DataVolley 4</div>
@@ -85,12 +85,12 @@ select,select option{color:#111!important;background:#fff!important;}
 <div class="main">
 
   <div class="instrucciones">
-    <div class="inst-titulo">⚡ Cómo funciona</div>
-    <div class="inst-paso"><div class="inst-num">1</div><div>Arrastrá o seleccioná el archivo .dvw exportado de DataVolley 4</div></div>
-    <div class="inst-paso"><div class="inst-num">2</div><div>Elegí si es Partido o Entrenamiento y completá el rival</div></div>
-    <div class="inst-paso"><div class="inst-num">3</div><div>El sistema parsea automáticamente todas las acciones de NAFELS</div></div>
-    <div class="inst-paso"><div class="inst-num">4</div><div>Revisás el resumen y guardás — se agrega al historial automáticamente</div></div>
-    <div class="inst-paso"><div class="inst-num">5</div><div>Descargás el datos_historial.js y lo subís a Vercel</div></div>
+    <div class="inst-titulo" data-t="⚡ Cómo funciona">⚡ Cómo funciona</div>
+    <div class="inst-paso"><div class="inst-num">1</div><div data-t="Arrastrá o seleccioná el archivo .dvw exportado de DataVolley 4">Arrastrá o seleccioná el archivo .dvw exportado de DataVolley 4</div></div>
+    <div class="inst-paso"><div class="inst-num">2</div><div data-t="Elegí si es Partido o Entrenamiento y completá el rival">Elegí si es Partido o Entrenamiento y completá el rival</div></div>
+    <div class="inst-paso"><div class="inst-num">3</div><div data-t="El sistema parsea automáticamente todas las acciones de NAFELS">El sistema parsea automáticamente todas las acciones de NAFELS</div></div>
+    <div class="inst-paso"><div class="inst-num">4</div><div data-t="Revisás el resumen y guardás — se agrega al historial automáticamente">Revisás el resumen y guardás — se agrega al historial automáticamente</div></div>
+    <div class="inst-paso"><div class="inst-num">5</div><div data-t="Descargás el datos_historial.js y lo subís a Vercel">Descargás el datos_historial.js y lo subís a Vercel</div></div>
   </div>
 
   <!-- UPLOAD -->
@@ -98,8 +98,8 @@ select,select option{color:#111!important;background:#fff!important;}
     <div class="card-title">📁 Archivo DVW</div>
     <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
       <div class="drop-icon">📂</div>
-      <div class="drop-txt">Arrastrá el archivo aquí</div>
-      <div class="drop-sub">o hacé clic para seleccionar · Formato: .dvw (DataVolley 4)</div>
+      <div class="drop-txt" data-t="Arrastrá el archivo aquí">Arrastrá el archivo aquí</div>
+      <div class="drop-sub" data-t="o hacé clic para seleccionar · Formato: .dvw (DataVolley 4)">o hacé clic para seleccionar · Formato: .dvw (DataVolley 4)</div>
     </div>
     <input type="file" id="file-input" accept=".dvw" style="display:none" onchange="onFileSelect(event)">
     <div id="file-name" style="margin-top:10px;font-size:11px;color:var(--mut);text-align:center;"></div>
@@ -107,13 +107,13 @@ select,select option{color:#111!important;background:#fff!important;}
 
   <!-- OPCIONES -->
   <div class="card">
-    <div class="card-title">⚙️ Configuración</div>
+    <div class="card-title" data-t="⚙️ Configuración">⚙️ Configuración</div>
     <div class="options-grid">
       <div class="opt-field">
-        <div class="opt-label">Tipo de sesión</div>
+        <div class="opt-label" data-t="Tipo de sesión">Tipo de sesión</div>
         <select class="opt-input" id="opt-tipo">
-          <option value="P">🏆 Partido oficial</option>
-          <option value="E">🏋️ Entrenamiento</option>
+          <option value="P" data-t="🏆 Partido oficial">🏆 Partido oficial</option>
+          <option value="E" data-t="🏋️ Entrenamiento">🏋️ Entrenamiento</option>
         </select>
       </div>
       <div class="opt-field">
@@ -121,7 +121,7 @@ select,select option{color:#111!important;background:#fff!important;}
         <input type="text" class="opt-input" id="opt-rival" placeholder="Ej: Vélez Sarsfield">
       </div>
       <div class="opt-field">
-        <div class="opt-label">Fecha (opcional)</div>
+        <div class="opt-label" data-t="Fecha (opcional)">Fecha (opcional)</div>
         <input type="text" class="opt-input" id="opt-fecha" placeholder="DD/MM/YYYY">
       </div>
     </div>
@@ -135,7 +135,7 @@ select,select option{color:#111!important;background:#fff!important;}
     <div class="res-header">
       <span style="font-size:22px">✅</span>
       <div>
-        <div class="res-titulo" id="res-titulo">Partido procesado</div>
+        <div class="res-titulo" id="res-titulo" data-t="Partido procesado">Partido procesado</div>
         <div style="font-size:11px;color:var(--mut)" id="res-sub"></div>
       </div>
     </div>
@@ -152,14 +152,14 @@ select,select option{color:#111!important;background:#fff!important;}
       </thead>
       <tbody id="tabla-resultado"></tbody>
     </table>
-    <button class="btn-guardar" onclick="guardarHistorial()">💾 GUARDAR EN HISTORIAL Y DESCARGAR</button>
+    <button class="btn-guardar" onclick="guardarHistorial()" data-t="💾 GUARDAR EN HISTORIAL Y DESCARGAR">💾 GUARDAR EN HISTORIAL Y DESCARGAR</button>
   </div>
 
 </div>
 
 <div class="toast" id="toast"></div>
 
-<script src="objetivos_config.js?v=20260913-0842"></script>
+<script src="objetivos_config.js?v=20260913-0851"></script>
 <script>
 /* El idioma para fechas: seguia fijo en es-AR, asi que en ingles y aleman
    la fecha aparecia igual en castellano. */
@@ -592,9 +592,9 @@ function showToast(msg){
   setTimeout(function(){ t.classList.remove('show'); }, 2800);
 }
 </script>
-<script src="lang.js?v=20260913-0842"></script>
-<script src="temporadas_menu.js?v=20260913-0842"></script>
-<script src="ayuda.js?v=20260913-0842"></script>
+<script src="lang.js?v=20260913-0851"></script>
+<script src="temporadas_menu.js?v=20260913-0851"></script>
+<script src="ayuda.js?v=20260913-0851"></script>
 </body>
 </html>
 

@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>PERFIL — NAFELS VOLEY</title>
+<title data-t="PERFIL — NAFELS VOLEY">PERFIL — NAFELS VOLEY</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 
 <!-- Datos (cada uno se carga si existe; si no, el onerror lo deja en null) -->
-<script src="categorias_club.js?v=20260913-0842"></script>
-<script src="selector_categoria.js?v=20260913-0842"></script>
-<script src="game_plans.js?v=20260913-0842" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260913-0842" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260913-0851"></script>
+<script src="selector_categoria.js?v=20260913-0851"></script>
+<script src="game_plans.js?v=20260913-0851" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260913-0851" onerror="void 0"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260913-0842"></script>
-<script src="filtro_tipo.js?v=20260913-0842" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260913-0851"></script>
+<script src="filtro_tipo.js?v=20260913-0851" onerror="void 0"></script>
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
      las que no existen las descarta el onerror, sin ruido. Y todas con
      .enc, que es como se publican los datos del club. -->
@@ -28,10 +28,10 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="datos_video_ent_28-29.js.enc" onerror="void 0"></script>
   <script src="datos_partidos.js.enc" onerror="void 0"></script>
 <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
-<script src="firebase.js?v=20260913-0842" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-0842"></script>
-<script src="lang.js?v=20260913-0842" onerror="void 0"></script>
-<script src="datos_historial.js?v=20260913-0842" onerror="window.HISTORIAL_DATA=null"></script>
+<script src="firebase.js?v=20260913-0851" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-0851"></script>
+<script src="lang.js?v=20260913-0851" onerror="void 0"></script>
+<script src="datos_historial.js?v=20260913-0851" onerror="window.HISTORIAL_DATA=null"></script>
 <script src="datos_gameplan.js.enc" onerror="window.GAMEPLAN_DATA=null"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
@@ -172,24 +172,24 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0842">
+<link rel="stylesheet" href="movil.css?v=20260913-0851">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260913-0842" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260913-0851" onerror="void 0"></script>
 </head>
 <body>
 <div class="page-header">
   <div style="display:flex;align-items:center;gap:8px;">
-    <a href="dashboard.html" class="back-btn">← Dashboard</a>
-    <a href="index.html" class="back-btn">🏠 Hub</a>
+    <a href="dashboard.html" class="back-btn" data-t="← Dashboard">← Dashboard</a>
+    <a href="index.html" class="back-btn" data-t="🏠 Hub">🏠 Hub</a>
   </div>
-  <button onclick="cambiarJugador()" style="padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--mut);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;">👤 Cambiar</button>
+  <button onclick="cambiarJugador()" style="padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--mut);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;" data-t="👤 Cambiar">👤 Cambiar</button>
 </div>
 
 <div class="hero" id="hero">
   <div class="hero-bg-num" id="hero-num-dec"></div>
   <div class="hero-top" id="hero-content">
-    <div class="estado-msg"><div class="estado-msg-icon">⏳</div><div class="estado-msg-txt">Cargando...</div></div>
+    <div class="estado-msg"><div class="estado-msg-icon">⏳</div><div class="estado-msg-txt" data-t="Cargando...">Cargando...</div></div>
   </div>
 </div>
 
@@ -198,31 +198,31 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 <div class="main" id="main-content" style="display:none;">
   <div id="next-match-wrap"></div>
   <div id="obj-tipo-row" style="display:none;gap:6px;margin-bottom:8px;padding:0 4px">
-    <button class="obj-tfbtn on partido" id="obj-tbtn-partido" onclick="objSetTipo('partido',this)">🏆 PARTIDO</button>
-    <button class="obj-tfbtn" id="obj-tbtn-entrenamiento" onclick="objSetTipo('entrenamiento',this)">🏋️ ENTRENAMIENTO</button>
+    <button class="obj-tfbtn on partido" id="obj-tbtn-partido" onclick="objSetTipo('partido',this)" data-t="🏆 PARTIDO">🏆 PARTIDO</button>
+    <button class="obj-tfbtn" id="obj-tbtn-entrenamiento" onclick="objSetTipo('entrenamiento',this)" data-t="🏋️ ENTRENAMIENTO">🏋️ ENTRENAMIENTO</button>
   </div>
   <div id="obj-partido-row" style="display:none;gap:5px;flex-wrap:wrap;margin-bottom:10px;padding:0 4px"></div>
   <div id="objetivos-jugador" style="margin-bottom:20px"></div>
 
-  <div class="section-lbl" style="margin-bottom:12px;">Acceso rápido</div>
+  <div class="section-lbl" style="margin-bottom:12px;" data-t="Acceso rápido">Acceso rápido</div>
   <div class="accesos-grid" id="accesos-grid"></div>
 
   <div id="comparativa-section" style="display:none;padding:0 0 20px">
-    <div class="section-lbl" style="margin-bottom:12px">Comparativa vs Equipo y Posición</div>
+    <div class="section-lbl" style="margin-bottom:12px" data-t="Comparativa vs Equipo y Posición">Comparativa vs Equipo y Posición</div>
     <div id="comparativa-content"></div>
   </div>
 
-  <div class="section-lbl">Estadísticas acumuladas</div>
+  <div class="section-lbl" data-t="Estadísticas acumuladas">Estadísticas acumuladas</div>
   <div class="stats-grid" id="stats-grid">
     <div style="grid-column:span 3" class="estado-msg">
       <div class="estado-msg-icon">📊</div>
-      <div class="estado-msg-txt">Sin datos de historial</div>
+      <div class="estado-msg-txt" data-t="Sin datos de historial">Sin datos de historial</div>
     </div>
   </div>
 
-  <div class="section-lbl">Próxima rutina</div>
+  <div class="section-lbl" data-t="Próxima rutina">Próxima rutina</div>
   <div class="rutina-card" id="rutina-card">
-    <div class="estado-msg"><div class="estado-msg-icon">💪</div><div class="estado-msg-txt">Sin rutina cargada</div></div>
+    <div class="estado-msg"><div class="estado-msg-icon">💪</div><div class="estado-msg-txt" data-t="Sin rutina cargada">Sin rutina cargada</div></div>
   </div>
 </div>
 
@@ -912,16 +912,16 @@ function _videoTodo(){
 </script>
 <div id="hm-overlay" onclick="if(event.target===this)closeHeatmapMenu()">
   <div class="hm-box">
-    <div class="hm-title"><span>🔥 HEAT MAPS</span><button class="hm-close" onclick="closeHeatmapMenu()">✕</button></div>
+    <div class="hm-title"><span data-t="🔥 HEAT MAPS">🔥 HEAT MAPS</span><button class="hm-close" onclick="closeHeatmapMenu()">✕</button></div>
     <div class="hm-grid">
-      <a class="hm-card" href="plan_partido.html?equipo=nafels#ataque"    style="background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#F97316">ATAQUE</span><span class="hm-sub">EFF · SO/TR · Zonas<br>Combos · Calidad rec.</span></a>
-      <a class="hm-card" href="plan_partido.html?equipo=nafels#saque"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Flotado/Potencia<br>Zonas origen/destino</span></a>
-      <a class="hm-card" href="plan_partido.html?equipo=nafels#recepcion" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
-      <a class="hm-card" href="plan_partido.html?equipo=nafels#armador"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
-      <a class="hm-card" href="plan_partido.html?equipo=nafels#defensa"  style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🤲</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Origen/Destino</span></a>
-      <a class="hm-card" href="plan_partido.html?equipo=nafels#bloqueo"  style="background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#2DD4BF">BLOQUEO</span><span class="hm-sub">Dónde bloquea · Zona origen ataque</span></a>
+      <a class="hm-card" href="plan_partido.html?equipo=nafels#ataque"    style="background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#F97316" data-t="ATAQUE">ATAQUE</span><span class="hm-sub">EFF · SO/TR · Zonas<br>Combos · Calidad rec.</span></a>
+      <a class="hm-card" href="plan_partido.html?equipo=nafels#saque"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E" data-t="SAQUE">SAQUE</span><span class="hm-sub">EFF · Flotado/Potencia<br>Zonas origen/destino</span></a>
+      <a class="hm-card" href="plan_partido.html?equipo=nafels#recepcion" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8" data-t="RECEPCION">RECEPCION</span><span class="hm-sub" data-t="EFF · Calidad · Zonas">EFF · Calidad · Zonas</span></a>
+      <a class="hm-card" href="plan_partido.html?equipo=nafels#armador"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B" data-t="ARMADO">ARMADO</span><span class="hm-sub" data-t="Llamadas · Pos · EFF">Llamadas · Pos · EFF</span></a>
+      <a class="hm-card" href="plan_partido.html?equipo=nafels#defensa"  style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🤲</span><span class="hm-lbl" style="color:#EF4444" data-t="DEFENSA">DEFENSA</span><span class="hm-sub" data-t="EFF · Zonas · Origen/Destino">EFF · Zonas · Origen/Destino</span></a>
+      <a class="hm-card" href="plan_partido.html?equipo=nafels#bloqueo"  style="background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#2DD4BF" data-t="BLOQUEO">BLOQUEO</span><span class="hm-sub" data-t="Dónde bloquea · Zona origen ataque">Dónde bloquea · Zona origen ataque</span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">División de Honor 2026</div>
+    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center" data-t="División de Honor 2026">División de Honor 2026</div>
   </div>
 </div>
 <script>
@@ -984,6 +984,6 @@ try{
   else window.addEventListener('load', function(){ setTimeout(poner, 400); });
 })();
 </script>
-<script src="ayuda.js?v=20260913-0842"></script>
+<script src="ayuda.js?v=20260913-0851"></script>
 </body>
 </html>
