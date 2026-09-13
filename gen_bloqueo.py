@@ -323,7 +323,10 @@ def _nombre_de(num, nombre):
         if k not in _COMPLETADOS:
             _COMPLETADOS.add(k)
         return delplantel
-    return n or ('#' + k)
+    # Si no esta en el plantel —un invitado que vino un dia— se devuelve
+    # VACIO, no '#6'. La pantalla ya escribe el numero adelante, asi que
+    # devolver '#6' hacia que se leyera "#6 #6 (5)".
+    return ''
 
 
 def bloqueo_desde_dvw(out='datos_bloqueo.js'):

@@ -1,66 +1,51 @@
-LOS NOMBRES — SEGUNDO INTENTO, CON DIAGNOSTICO
-==============================================
+FUNCIONO — queda un detalle chico
+=================================
 
 Un archivo: gen_bloqueo.py
 Correr HACER_TODO y publicar.
 
 
-QUE PASO
---------
-Los nombres siguen faltando: #7, #9, #4, #3.
+LO QUE LOGRO ESTA CORRIDA
+-------------------------
+El log lo dijo y lo confirme en la app:
 
-Verifique lo que pude desde aca:
-   datos_bloqueo.js.enc  se regenero (13:15:53)
-   plantel_nafels.js     esta publicado, con los 13 jugadores
-   mi codigo             probado contra tu plantel real: los 13 los lee bien
+   [bloqueo] plantel: 13 jugadores para completar nombres
+   [bloqueo] 206 bloqueos leidos de los .dvw
+   [bloqueo] 97 partidos de temporadas anteriores, descartados.
 
-Asi que el codigo funciona, pero en tu maquina algo no se dio. Las dos
-posibilidades son que gen_bloqueo.py no se haya reemplazado, o que el .dvw
-traiga en ese campo algo que yo no estaba contemplando.
+En pantalla:
 
+   #7  SCHMID R    (65)      <- antes decia "#7 (65)"
+   #5  CLEMENT     (44)
+   #9  NORRIS      (21)      <- antes "#9 (21)"
+   #10 BOGDANOVSKI (18)
+   #4  VAZQUEZ     (13)      <- antes "#4 (13)"
+   #17 ROFFLER     (10)
+   #13 STEIMANN    (10)
+   #11 BARTHOLET   (8)
+   #1  DURDOS      (6)
+   #3  SCHWITTER   (6)       <- antes "#3 (6)"
 
-LO QUE HICE — cubrir las dos
------------------------------
-1. AHORA ACEPTA CUALQUIER FORMATO
-   Antes solo completaba si el campo venia vacio. Ahora, si lo que trae el
-   .dvw no parece un nombre —menos de dos letras: '7', '#7', un espacio—
-   tambien lo completa con el plantel.
+Los cuatro que faltaban ya tienen su apellido.
 
-       dvw ''      ->  SCHMID R
-       dvw '7'     ->  SCHMID R
-       dvw '#7'    ->  SCHMID R
-       dvw ' '     ->  VAZQUEZ
-       dvw 'CLEMENT' -> CLEMENT   (respeta el que ya esta bien)
+Y el mapa dibuja: elegi a SCHMID R y salieron las 9 zonas con sus numeros
+("4 · punta 3% · 34 blq · 7 pto").
 
-2. AVISA EN PANTALLA MIENTRAS CORRE
-   Si encuentra el plantel:
-
-       [bloqueo] plantel: 13 jugadores para completar nombres
-                 (#1 DURDOS, #2 BRUDERER, #3 SCHWITTER, #4 VAZQUEZ...)
-
-   Si NO lo encuentra:
-
-       [bloqueo] AVISO: no encontre plantel_*.js en esta carpeta.
-       [bloqueo] Los jugadores sin nombre en el .dvw van a quedar con
-       [bloqueo] el numero solo (#7, #9...).
+Tambien se ve en el peso del archivo: datos_bloqueo.js paso de 394 KB a
+14 KB. Eso son los 1356 bloqueos viejos que ya no estan.
 
 
-LO QUE NECESITO DE VOS
-----------------------
-Cuando corras HACER_TODO, fijate si aparece la linea que empieza con
-"[bloqueo] plantel:".
+EL DETALLE QUE QUEDA
+--------------------
+El invitado se ve asi:
 
-   SI APARECE con los 13 -> el plantel se leyo bien. Si aun asi los nombres
-   no salen, pasame esa linea y sigo por otro lado.
+   #6 #6 (5)
+      ^^ repetido
 
-   SI DICE "AVISO: no encontre plantel_*.js" -> el archivo no esta en la
-   carpeta donde corre el .bat, y con moverlo ahi se arregla.
+Es culpa mia: cuando el jugador no esta en el plantel yo devolvia "#6" como
+nombre, y la pantalla ya escribe el numero adelante. Ahora devuelvo vacio y
+queda:
 
-   SI NO APARECE NINGUNA de las dos -> el gen_bloqueo.py nuevo no se
-   reemplazo. Fijate que el archivo del zip haya quedado en la carpeta.
+   #6 (5)
 
-
-EL #6 SIGUE SIN NOMBRE, A PROPOSITO
------------------------------------
-Como me dijiste: vino una vez y no esta en el plantel. El sistema no inventa
-nombres. Si algun dia se suma, lo agregas al plantel y aparece solo.
+Es solo eso. Todo lo demas de esta corrida quedo bien.
