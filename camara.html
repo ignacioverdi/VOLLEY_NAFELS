@@ -51,7 +51,7 @@
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-2050">
+<link rel="stylesheet" href="movil.css?v=20260913-2059">
 </head>
 <body>
   <div class="top">
@@ -98,11 +98,11 @@
     </div>
   </div>
 
-<script src="categorias_club.js?v=20260913-2050"></script>
-<script src="selector_categoria.js?v=20260913-2050"></script>
-<script src="datos_seguros.js?v=20260913-2050"></script>
-<script src="firebase.js?v=20260913-2050"></script>
-<script src="firebase_por_categoria.js?v=20260913-2050"></script>
+<script src="categorias_club.js?v=20260913-2059"></script>
+<script src="selector_categoria.js?v=20260913-2059"></script>
+<script src="datos_seguros.js?v=20260913-2059"></script>
+<script src="firebase.js?v=20260913-2059"></script>
+<script src="firebase_por_categoria.js?v=20260913-2059"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════
    CÁMARA — Emisor de video por WebRTC hacia la(s) tablet(s).
@@ -270,7 +270,10 @@ if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
 } else {
   setStatus('Este navegador no soporta cámara. Probá con Chrome o Safari.', 'err');
 }
-
+</script>
+<script src="lang.js?v=20260913-2059"></script>
+<script src="volver_inicio.js?v=20260913-2059" onerror="void 0"></script>
+<script src="ayuda.js?v=20260913-2059">
 /* ══ EL NOMBRE DEL ARCHIVO Y EL SEGUNDO CERO ═════════════════════════════════
    La camara transmite pero no graba: el video de verdad lo graba el telefono
    aparte. Despues hay que subirlo y engancharlo con el scout, y ahi aparecian
@@ -293,14 +296,18 @@ function _nombreDeArchivo(){
   var d = new Date();
   function dos(n){ return (n<10?'0':'')+n; }
   var fecha = d.getFullYear()+'-'+dos(d.getMonth()+1)+'-'+dos(d.getDate());
+  /* ══ DE DONDE SALE EL NOMBRE DEL CLUB ═══════════════════════════════════
+     La primera version lo buscaba en CLUB_NOMBRE y, si no, en el titulo de
+     la pagina. Pero el titulo aca es "Camara — Video del partido", asi que el
+     archivo salia "2026-09-13_VIDEO_DEL_PARTIDO". Mal.
+
+     FB_CLUB si esta en todas las pantallas y trae el nombre de verdad
+     ("NÄFELS"). Se usa eso primero. */
   var club = '';
   try{
-    club = (window.CLUB_NOMBRE || (window.CONFIG_CLUB && window.CONFIG_CLUB.club)
-            || (window.PLANTEL && window.PLANTEL.club) || '').trim();
-    /* Del titulo se saca la parte del club, no la de la pantalla:
-       "Camara — NAFELS" -> NAFELS */
-    if(!club && document.title.indexOf('\u2014') >= 0)
-      club = document.title.split('\u2014').pop().trim();
+    club = (window.FB_CLUB || window.CLUB_NOMBRE
+            || (window.CONFIG_CLUB && window.CONFIG_CLUB.club) || '').trim();
+    if(!club && window.FB_DOM) club = String(window.FB_DOM).split('.')[0];
   }catch(e){}
   if(!club) club = 'PARTIDO';
   /* Los acentos y la dieresis se pasan a su letra simple: "NÄFELS" tiene que
@@ -308,7 +315,17 @@ function _nombreDeArchivo(){
      todo lo que no fuera A-Z. */
   club = club.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   club = club.replace(/[^A-Za-z0-9]+/g,'_').replace(/^_+|_+$/g,'').toUpperCase();
-  return fecha + '_' + (club || 'PARTIDO') + '_sala' + salaId + '.mp4';
+  /* La categoria tambien: un club scoutea Primera, H1L y H2L el mismo dia y
+     si no va en el nombre los archivos se confunden entre si. */
+  var cat = '';
+  try{
+    cat = (typeof categoriaActual === 'function') ? (categoriaActual() || '')
+          : (window.categoriaActual || '');
+    cat = String(cat).normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+                     .replace(/[^A-Za-z0-9]+/g,'').toUpperCase();
+  }catch(e){}
+  return fecha + '_' + (club || 'PARTIDO') + (cat ? '_' + cat : '')
+         + '_sala' + salaId + '.mp4';
 }
 
 function _marcarArranque(){
@@ -356,11 +373,6 @@ function _copiarNombre(){
     setStatus('Nombre copiado: ' + g.nombre, '');
   }catch(e){}
 }
-
-</script>
-<script src="lang.js?v=20260913-2050"></script>
-<script src="volver_inicio.js?v=20260913-2050" onerror="void 0"></script>
-<script src="ayuda.js?v=20260913-2050">
 </script>
 </body>
 </html>
