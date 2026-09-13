@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title data-t="ANALISIS DE BLOQUEO — AXPO VOLLEY NAFELS"><span data-t="ANALISIS DE BLOQUEO — AXPO VOLLEY NAFELS">ANALISIS DE BLOQUEO — AXPO VOLLEY NAFELS</span></title>
+<title data-t="ANALISIS DE BLOQUEO — AXPO VOLLEY NAFELS">ANALISIS DE BLOQUEO — AXPO VOLLEY NAFELS</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>*{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#E8192C;--amber:#F59E0B;--green:#22C55E;--lime:#84CC16;--orange:#F97316;--indigo:#818CF8;--text:#E2E8F0;--muted:#64748B;--subtle:#475569;--h0:#0F1120}
@@ -91,17 +91,17 @@ select,input{width:100%;background:var(--card2);border:1px solid var(--border);c
 </style>
 <!-- Motor de idiomas (ES / EN / DE). Traduce por data-t y ademas por texto,
      asi que alcanza con cargarlo. -->
-<script src="categorias_club.js?v=20260913-0851"></script>
-<script src="selector_categoria.js?v=20260913-0851"></script>
-<script src="lang.js?v=20260913-0851"></script>
+<script src="categorias_club.js?v=20260913-1228"></script>
+<script src="selector_categoria.js?v=20260913-1228"></script>
+<script src="lang.js?v=20260913-1228"></script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260913-0851" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-0851"></script>
+<script src="firebase.js?v=20260913-1228" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-1228"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0851">
+<link rel="stylesheet" href="movil.css?v=20260913-1228">
 </head>
 <body>
 <div class="hdr">
@@ -121,19 +121,19 @@ select,input{width:100%;background:var(--card2);border:1px solid var(--border);c
     <select id="psel" onchange="pintar()"></select>
 
     <div class="flabel" data-t="Combinación bloqueada"><span data-t="Combinación bloqueada">Combinación bloqueada</span></div>
-    <select id="fcombo" onchange="pintar()"><option value="all" data-t="Todas"><span data-t="Todas">Todas</span></option></select>
+    <select id="fcombo" onchange="pintar()"><option value="all" data-t="Todas">Todas</option></select>
 
     <div class="flabel" data-t="Fase"><span data-t="Fase">Fase</span></div>
     <select id="ffase" onchange="pintar()">
-      <option value="all" data-t="Todas"><span data-t="Todas">Todas</span></option>
+      <option value="all" data-t="Todas">Todas</option>
       <option value="g" data-t="Side out">Side out</option>
       <option value="o" data-t="Transición">Transición</option>
     </select>
 
     <div class="flabel" data-t="Resultado">Resultado</div>
     <select id="fev" onchange="pintar()">
-      <option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option>
-      <option value="#" data-t="Punto de bloqueo (#)"><span data-t="Punto de bloqueo (#)">Punto de bloqueo (#)</span></option>
+      <option value="all" data-t="Todos">Todos</option>
+      <option value="#" data-t="Punto de bloqueo (#)">Punto de bloqueo (#)</option>
       <option value="+" data-t="Positivo (+)">Positivo (+)</option>
       <option value="!" data-t="Toque (!)">Toque (!)</option>
       <option value="/" data-t="Tocado y sigue (/)">Tocado y sigue (/)</option>
@@ -164,8 +164,8 @@ select,input{width:100%;background:var(--card2);border:1px solid var(--border);c
   Doble clic en un casillero o en una combinación para ver esos bloqueos en video.</span>
 </div>
 
-<script src="datos_seguros.js?v=20260913-0851"></script>
-<script src="filtro_tipo.js?v=20260913-0851" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260913-1228"></script>
+<script src="filtro_tipo.js?v=20260913-1228" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="window.PP_BLOCK=window.PP_BLOCK||{}"></script>
 <script>abrirDatos();</script>
 <script>
@@ -381,7 +381,7 @@ function rellenarJugadores(){
 document.getElementById('psel').addEventListener('change', function(){ rellenarCombos(); pintar(); });
 pintarModo(); rellenarJugadores(); rellenarCombos(); pintar();
 </script>
-<script src="ayuda.js?v=20260913-0851"></script>
+<script src="ayuda.js?v=20260913-1228"></script>
 
 <script>
 /* Los datos cifrados pueden llegar despues que el script de arriba. Cuando eso

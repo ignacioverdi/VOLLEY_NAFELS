@@ -1,92 +1,57 @@
-TODO COMPLETO
-=============
+DOS COSAS QUE ENCONTRE AL CHEQUEAR
+==================================
 
-57 archivos. Publicar TODO junto y Ctrl+Shift+R.
-HACER_TODO hace falta solo para los bloqueos de 25-26 (punto 2b).
+Publicar todo junto y Ctrl+Shift+R.
 
 
-POR QUE HABIA VUELTO TODO ATRAS
+1) METI UN <span> DENTRO DEL <title>  — error mio, se veia feo
+--------------------------------------------------------------
+La pestaña del navegador mostraba esto:
+
+   <span data-t="ANALISIS DE DEFENSA...">ANALISIS DE DEFENSA...</span>
+
+Al marcar los textos envolvi TODO en <span>, incluido lo que va dentro de
+<title>, <option> y <textarea>. Esas etiquetas no admiten HTML adentro: se ve
+el codigo crudo.
+
+Estaban asi 42 archivos. Corregido: en esos tres casos el data-t va EN la
+etiqueta, no adentro:
+
+   antes:  <title><span data-t="X">X</span></title>
+   ahora:  <title data-t="X">X</title>
+
+Verificado: 0 titulos con span adentro.
+
+
+2) DEFENSA SEGUIA SIN JUGADORES
 -------------------------------
-El zip de traducciones lo arme desde una copia LIMPIA del repo, no desde los
-archivos ya arreglados. Al publicarlo PISO los heatmaps.
+Los botones ya estaban y el modo quedaba en entrenamiento, pero el
+desplegable seguia vacio.
 
-Esta vez parti de lo publicado AHORA y verifique al final que cada pantalla
-tenga TODO a la vez. Eso ya no puede volver a pasar en esta entrega.
+La causa: el bloque de codigo corria apenas se leia, y los archivos cifrados
+(datos_video_ent_*.js.enc) todavia no habian terminado de descifrarse. Con
+VIDEO_DATA_ENT vacio, la lista quedaba en cero.
 
+LO VERIFIQUE EN LA APP: corri el mismo filtro a mano, despues de que cargaran
+los datos, y dio:
 
-1) DEFENSA — training aparecia vacio
-------------------------------------
-Faltaban los botones PARTIDO/ENTRENAMIENTO (se habian perdido) y MODO leia
-solo 'vb_modo_def' en vez de la clave comun del sistema.
+   354 defensas · 13 jugadores · 8 sesiones
 
-Verificado en la app: 354 defensas de entrenamiento cargadas, todas con
-tm='nafels'. El dato estaba; faltaba como pedirlo.
+O sea que el dato estaba y el codigo llegaba antes. Es el mismo problema que
+tenia bloqueo.
 
-
-2) BLOQUEO — dos problemas distintos
-------------------------------------
-a) EL DESPLEGABLE SIN JUGADORES
-   var EQ = equipoActual();              <- corre ANTES del .enc
-   var JUGADORES = PP_BLOCK[EQ] || [];   <- queda VACIO
-
-   Verificado: EQ era null y JUGADORES 0, con 13 jugadores en PP_BLOCK.
-   Por eso solo ofrecia "equipo completo". Ahora se recalcula al llegar
-   los datos, reintentando hasta 10 segundos.
-
-b) LOS BLOQUEOS DE 25-26  <- este necesita HACER_TODO
-   gen_bloqueo.py filtra por temporada leyendo plan_partido_data.js.
-   Si ese archivo no esta, NO FILTRA NADA.
-
-   Y no estaba, por el ORDEN en HACER_TODO:
-       10. gen_bloqueo.py        <- leia un plan viejo o ninguno
-       11. gen_plan_partido.py   <- lo generaba DESPUES
-
-   Corregido: gen_bloqueo pasa al paso 12. Ademas ahora AVISA fuerte si el
-   archivo falta, en vez de incluir todo en silencio.
-
-   Verifique los datos: 29 codigos 636xxx-753xxx (25-26) y 4 E2026-09-xx
-   (26-27). Despues de HACER_TODO, partidos queda en 0.
+Ahora el bloque espera a que los datos existan, reintentando hasta 10
+segundos. Mismo arreglo que en bloqueo.
 
 
-3) ARMADO — la solapa entrenamiento
------------------------------------
-HTML roto:  <div class="content"<div class="content" id="content">
+ESTADO DE LOS 6 HEATMAPS
+------------------------
+   armador      html OK · botones SI
+   ataque       html OK · botones SI
+   bloqueo      html OK · botones SI · espera los datos SI
+   defensa      html OK · botones SI · espera los datos SI
+   recepcion    html OK · botones SI
+   saque        html OK · botones SI
 
-El navegador se come lo que sigue, y lo que seguia era el script que arma
-los datos. Verificado: RAW no existia, __MODO no existia.
-Corregido en armador, ataque, recepcion y saque.
-
-
-4) TRADUCCIONES — el barrido completo
--------------------------------------
-   1011  textos en castellano al empezar
-      9  quedan
-
-El sistema real es lang.js con data-t. Ya tenia 2000+ traducciones: el
-problema era que el texto NO ESTABA MARCADO.
-
-Lo que hice:
-   · 3.500+ textos marcados con data-t en las 54 pantallas
-   · 250+ traducciones nuevas escritas a mano en ingles y aleman
-   · lang.js: 1990 -> 2149 entradas
-
-Y lo que faltaba de verdad: PANEL_VIVO y UNIR_VIDEO, donde el texto esta
-partido por etiquetas:
-
-   "El <b>.dvw</b> en tu carpeta es el respaldo de <b>verdad</b>."
-
-Traduje cada trozo ENTERO —no palabra por palabra— y los envolvi en
-<span data-t> para que el traductor los alcance. 449 trozos entre las dos.
-El ingles y el aleman se leen naturales, no como traduccion automatica.
-
-Los 9 que quedan son repeticiones del mismo texto en un segundo lugar de la
-misma pagina. No afectan lo que se ve.
-
-
-LO QUE VERIFIQUE ANTES DE MANDARTELO
-------------------------------------
-   ningun archivo con etiquetas rotas nuevas
-   ningun script con mas errores que antes
-   lang.js compila
-   los 6 heatmaps: html OK · botones de modo OK
-   HACER_TODO: gen_plan_partido paso 11 · gen_bloqueo paso 12
+Armado, ataque, recepcion y saque no necesitan la espera: usan liga_data, que
+carga de otra forma. Si alguno apareciera vacio, decime y le pongo lo mismo.

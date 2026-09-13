@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title data-t="Plan de Partido — NÄFELS"><span data-t="Plan de Partido — NÄFELS"><span data-t="Plan de Partido — NÄFELS">Plan de Partido — NÄFELS</span></span></title>
+<title data-t="Plan de Partido — NÄFELS">Plan de Partido — NÄFELS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -185,12 +185,12 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0851">
+<link rel="stylesheet" href="movil.css?v=20260913-1228">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="categorias_club.js?v=20260913-0851"></script>
-<script src="selector_categoria.js?v=20260913-0851"></script>
-<script src="mi_fila.js?v=20260913-0851" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260913-1228"></script>
+<script src="selector_categoria.js?v=20260913-1228"></script>
+<script src="mi_fila.js?v=20260913-1228" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -229,7 +229,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
   <span class="mhint" id="mhint"></span></div>
 <div class="tabsbar" id="tabsbar">
   <span class="tabteam" id="tabteam">—</span>
-  <select id="focusSel" onchange="applyFocus()" style="margin-left:8px;background:#fff;color:#111;border:1px solid var(--border);border-radius:8px;padding:5px 9px;font-family:inherit;font-weight:700;font-size:12px;max-width:220px"><option value="all" data-t="Todos los jugadores"><span data-t="Todos los jugadores"><span data-t="Todos los jugadores">Todos los jugadores</span></span></option></select>
+  <select id="focusSel" onchange="applyFocus()" style="margin-left:8px;background:#fff;color:#111;border:1px solid var(--border);border-radius:8px;padding:5px 9px;font-family:inherit;font-weight:700;font-size:12px;max-width:220px"><option value="all" data-t="Todos los jugadores">Todos los jugadores</option></select>
   <button class="ptab active" data-tab="armador" onclick="setTab('armador')"><span data-t="Distribución armador"><span data-t="Distribución armador">Distribución armador</span></span></button>
   <button class="ptab" data-tab="ataque" onclick="setTab('ataque')"><span data-t="Direcciones ataque"><span data-t="Direcciones ataque">Direcciones ataque</span></span></button>
   <button class="ptab" data-tab="saque" onclick="setTab('saque')"><span data-t="Direcciones saque"><span data-t="Direcciones saque">Direcciones saque</span></span></button>
@@ -241,9 +241,9 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
   <div class="armhead"><h2 data-t="Distribución del armador"><span data-t="Distribución del armador"><span data-t="Distribución del armador">Distribución del armador</span></span></h2><span class="sub" id="armname">—</span></div>
   <div class="armctrl">
     <div class="grp" id="armsetsel"></div>
-    <div class="grp"><label data-t="Fase"><span data-t="Fase"><span data-t="Fase">Fase</span></span></label><select id="armfase" class="armsel" onchange="setArmPhase(this.value)"><option value="SO" data-t="Side-out"><span data-t="Side-out"><span data-t="Side-out">Side-out</span></span></option><option value="TR" data-t="Transición">Transición</option><option value="all" data-t="Todo"><span data-t="Todo"><span data-t="Todo">Todo</span></span></option></select></div>
-    <div class="grp" id="armrecgrp"><label data-t="Recepción"><span data-t="Recepción"><span data-t="Recepción">Recepción</span></span></label><select id="armrecsel" class="armsel" onchange="setArmRec(this.value)"><option value="all" data-t="Toda"><span data-t="Toda"><span data-t="Toda">Toda</span></span></option><option value="pos">#+</option><option value="neg">!−</option></select></div>
-    <div class="grp" id="armreczgrp"><label data-t="Recep. desde"><span data-t="Recep. desde"><span data-t="Recep. desde">Recep. desde</span></span></label><select id="armreczsel" class="armsel" onchange="setArmRecZone(this.value)"><option value="all" data-t="Todas"><span data-t="Todas"><span data-t="Todas">Todas</span></span></option><option value="r1">Z1</option><option value="r6">Z6</option><option value="r5">Z5</option></select></div>
+    <div class="grp"><label data-t="Fase"><span data-t="Fase"><span data-t="Fase">Fase</span></span></label><select id="armfase" class="armsel" onchange="setArmPhase(this.value)"><option value="SO" data-t="Side-out">Side-out</option><option value="TR" data-t="Transición">Transición</option><option value="all" data-t="Todo">Todo</option></select></div>
+    <div class="grp" id="armrecgrp"><label data-t="Recepción"><span data-t="Recepción"><span data-t="Recepción">Recepción</span></span></label><select id="armrecsel" class="armsel" onchange="setArmRec(this.value)"><option value="all" data-t="Toda">Toda</option><option value="pos">#+</option><option value="neg">!−</option></select></div>
+    <div class="grp" id="armreczgrp"><label data-t="Recep. desde"><span data-t="Recep. desde"><span data-t="Recep. desde">Recep. desde</span></span></label><select id="armreczsel" class="armsel" onchange="setArmRecZone(this.value)"><option value="all" data-t="Todas">Todas</option><option value="r1">Z1</option><option value="r6">Z6</option><option value="r5">Z5</option></select></div>
     <div class="grp"><label data-t="Recibe"><span data-t="Recibe"><span data-t="Recibe">Recibe</span></span></label><select id="armrecnum" class="armsel" onchange="setArmRecNum(this.value)"></select></div>
     <div class="grp"><label data-t="Llamada"><span data-t="Llamada"><span data-t="Llamada">Llamada</span></span></label><select id="armcall" class="armsel" onchange="setArmCall(this.value)"></select></div>
   </div>
@@ -320,8 +320,8 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260913-0851"></script>
-<script src="filtro_tipo.js?v=20260913-0851" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260913-1228"></script>
+<script src="filtro_tipo.js?v=20260913-1228" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
   <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
        se cargaba SOLO el de partidos, asi que en una temporada sin partidos
@@ -336,12 +336,12 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20260913-0851"></script>
-<script src="firebase_por_categoria.js?v=20260913-0851"></script>
+<script src="firebase.js?v=20260913-1228"></script>
+<script src="firebase_por_categoria.js?v=20260913-1228"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20260913-0851" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20260913-1228" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -1229,8 +1229,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20260913-0851" onerror="void 0"></script>
-<script src="lang.js?v=20260913-0851" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20260913-1228" onerror="void 0"></script>
+<script src="lang.js?v=20260913-1228" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -1248,7 +1248,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20260913-0851" onerror="void 0"></script>
-<script src="ayuda.js?v=20260913-0851"></script>
+<script src="volver_inicio.js?v=20260913-1228" onerror="void 0"></script>
+<script src="ayuda.js?v=20260913-1228"></script>
 </body>
 </html>

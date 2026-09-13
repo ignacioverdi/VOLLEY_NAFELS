@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title data-t="Analisis de Ataque — Nafels 2026"><span data-t="Analisis de Ataque — Nafels 2026">Analisis de Ataque — Nafels 2026</span></title>
+<title data-t="Analisis de Ataque — Nafels 2026">Analisis de Ataque — Nafels 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -126,27 +126,27 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 }
 </style>
 <!-- Los datos vienen cifrados: este es el que sabe abrirlos. -->
-  <script src="categorias_club.js?v=20260913-0851"></script>
-<script src="selector_categoria.js?v=20260913-0851"></script>
-<script src="objetivos_config.js?v=20260913-0851"></script>
+  <script src="categorias_club.js?v=20260913-1228"></script>
+<script src="selector_categoria.js?v=20260913-1228"></script>
+<script src="objetivos_config.js?v=20260913-1228"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260913-0851"></script>
-<script src="filtro_tipo.js?v=20260913-0851" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260913-1228"></script>
+<script src="filtro_tipo.js?v=20260913-1228" onerror="void 0"></script>
   <script src="liga_data.js.enc"></script>
 <script src="liga_data_entrenamientos.js.enc"></script>
   <script>abrirDatos();</script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260913-0851" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-0851"></script>
+<script src="firebase.js?v=20260913-1228" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-1228"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0851">
+<link rel="stylesheet" href="movil.css?v=20260913-1228">
 </head>
 <body>
 <div class="hdr">
@@ -162,41 +162,41 @@ window.__DESCIFRAR_SINCRONO = true;
     <button id="modo-entrenamiento" onclick="setModo('entrenamiento')" style="flex:1;background:transparent;border:1px solid var(--border2,rgba(255,255,255,.15));color:#94a3b8;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px" data-t="ENTRENAMIENTO"><span data-t="ENTRENAMIENTO">ENTRENAMIENTO</span></button>
   </div>
   <div class="flabel" data-i18n="Jugador" data-t="Jugador"><span data-t="Jugador">Jugador</span></div>
-  <select class="psel" id="psel" onchange="onPlayerChange(this.value)"><option value="" data-t="Seleccionar..."><span data-t="Seleccionar...">Seleccionar...</span></option></select>
+  <select class="psel" id="psel" onchange="onPlayerChange(this.value)"><option value="" data-t="Seleccionar...">Seleccionar...</option></select>
   <button id="ver-video-btn" onclick="abrirVideo()" style="width:100%;margin-top:8px;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.32);color:#F97316;border-radius:8px;padding:9px;font-family:inherit;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer" data-t="&#9654; Ver los videos"><span data-t="&#9654; Ver los videos">&#9654; Ver los videos</span></button>
   <div class="active-filters" id="active-tags"></div>
   <div class="acc-group"><div class="acc-header" id="acc-hdr-partido" onclick="accToggle('partido')"><span data-t="Partido"><span data-t="Partido">Partido</span></span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
   <div class="acc-body" id="acc-body-partido">
     <div class="flabel" style="margin-top:0" data-i18n="Rival" data-t="Rival">Rival</div>
-    <select class="fsel" id="fsel-rival"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
+    <select class="fsel" id="fsel-rival"><option value="all" data-t="Todos">Todos</option></select>
     <div class="flabel" data-i18n="Partido especifico" data-t="Partido específico"><span data-t="Partido específico">Partido específico</span></div>
-    <select class="fsel" id="fsel-gi"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
+    <select class="fsel" id="fsel-gi"><option value="all" data-t="Todos">Todos</option></select>
   </div></div>
   <div class="acc-group"><div class="acc-header" id="acc-hdr-contexto" onclick="accToggle('contexto')"><span data-t="Contexto"><span data-t="Contexto">Contexto</span></span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
   <div class="acc-body" id="acc-body-contexto">
     <!-- Desde que zona salio el ataque. Con esto se ve, por ejemplo, adonde
          van los remates cuando se ataca desde la 4. -->
     <div class="flabel" style="margin-top:0" data-i18n="Zona de origen" data-t="Zona de origen"><span data-t="Zona de origen">Zona de origen</span></div>
-    <select class="fsel" id="fsel-origin"><option value="all" data-t="Todas"><span data-t="Todas">Todas</span></option></select>
+    <select class="fsel" id="fsel-origin"><option value="all" data-t="Todas">Todas</option></select>
     <div class="flabel" data-i18n="Combinacion" data-t="Combinación"><span data-t="Combinación">Combinación</span></div>
-    <select class="fsel" id="fsel-combo"><option value="all" data-t="Todas"><span data-t="Todas">Todas</span></option></select>
+    <select class="fsel" id="fsel-combo"><option value="all" data-t="Todas">Todas</option></select>
     <div class="flabel" data-i18n="Tipo de ataque" data-t="Tipo de ataque"><span data-t="Tipo de ataque">Tipo de ataque</span></div>
-    <select class="fsel" id="fsel-atype"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
+    <select class="fsel" id="fsel-atype"><option value="all" data-t="Todos">Todos</option></select>
     <div class="flabel" data-i18n="Set" data-t="Set"><span data-t="Set">Set</span></div>
-    <select class="fsel" id="fsel-set"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
+    <select class="fsel" id="fsel-set"><option value="all" data-t="Todos">Todos</option></select>
     <div class="flabel" data-i18n="Momento del set" data-t="Momento del set"><span data-t="Momento del set">Momento del set</span></div>
-    <select class="fsel" id="fsel-moment"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
+    <select class="fsel" id="fsel-moment"><option value="all" data-t="Todos">Todos</option></select>
   </div></div>
   <div class="acc-group"><div class="acc-header" id="acc-hdr-tecnico" onclick="accToggle('tecnico')"><span data-t="Técnico"><span data-t="Técnico">Técnico</span></span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
   <div class="acc-body" id="acc-body-tecnico">
     <div class="flabel" style="margin-top:0" data-i18n="Valoracion" data-t="Valoración"><span data-t="Valoración">Valoración</span></div>
-    <select class="fsel" id="fsel-result"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
+    <select class="fsel" id="fsel-result"><option value="all" data-t="Todos">Todos</option></select>
     <div class="flabel" data-i18n="Combinacion" data-t="Combinación"><span data-t="Combinación">Combinación</span></div>
-    <select class="fsel" id="fsel-combo"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
+    <select class="fsel" id="fsel-combo"><option value="all" data-t="Todos">Todos</option></select>
     <div class="flabel" data-i18n="Calidad de recepcion previa" data-t="Calidad recepción"><span data-t="Calidad recepción">Calidad recepción</span></div>
-    <select class="fsel" id="fsel-rec_quality"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
+    <select class="fsel" id="fsel-rec_quality"><option value="all" data-t="Todos">Todos</option></select>
     <div class="flabel" data-i18n="Quien recibio" data-t="Quién recibió"><span data-t="Quién recibió">Quién recibió</span></div>
-    <select class="fsel" id="fsel-rec_player"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
+    <select class="fsel" id="fsel-rec_player"><option value="all" data-t="Todos">Todos</option></select>
   </div></div>
   <div class="counter"><div class="counter-n" id="cnt">0</div><div class="counter-l" data-t="acciones filtradas"><span data-t="acciones filtradas">acciones filtradas</span></div></div>
   <button class="reset-btn" onclick="resetFilters()" data-t="Limpiar filtros"><span data-t="Limpiar filtros">Limpiar filtros</span></button>
@@ -914,9 +914,9 @@ document.addEventListener('DOMContentLoaded', _initModoBtns);
 <!-- lang.js trae el selector de idioma y el escudo del club, que es el
      boton para volver al inicio. Sin el, no hay como salir de la
      pantalla sin usar el boton de atras del navegador. -->
-<script src="lang.js?v=20260913-0851" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260913-0851" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260913-0851" onerror="void 0"></script>
-<script src="ayuda.js?v=20260913-0851"></script>
+<script src="lang.js?v=20260913-1228" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260913-1228" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260913-1228" onerror="void 0"></script>
+<script src="ayuda.js?v=20260913-1228"></script>
 </body>
 </html>

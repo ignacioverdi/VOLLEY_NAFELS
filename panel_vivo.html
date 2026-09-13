@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260913-0851"></script>
-<script src="selector_categoria.js?v=20260913-0851"></script>
-<script src="lang.js?v=20260913-0851"></script>
+<script src="categorias_club.js?v=20260913-1228"></script>
+<script src="selector_categoria.js?v=20260913-1228"></script>
+<script src="lang.js?v=20260913-1228"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260913-0851">
+<link rel="stylesheet" href="movil.css?v=20260913-1228">
 </head>
 <body>
 
@@ -659,7 +659,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         <option value="240" data-t="Chica">Chica</option>
         <option value="440" selected data-t="Media">Media</option>
         <option value="640" data-t="Alta">Alta</option>
-        <option value="900" data-t="Máxima"><span data-t="Máxima"><span data-t="Máxima">Máxima</span></span></option>
+        <option value="900" data-t="Máxima">Máxima</option>
       </select>
       <button class="hbtn" onclick="buscarCodigo()" title="Buscar un código (Ctrl+R)" data-t="Buscar"><span data-t="Buscar"><span data-t="Buscar">Buscar</span></span></button>
       <button class="hbtn" onclick="abrirVerificacion()" title="Verificar todos los códigos (Ctrl+V)" data-t="Verificar">Verificar</button>
@@ -918,8 +918,8 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <div class="f" style="margin-top:10px">
       <label class="f" data-t="Formación automática (manual 2.5.3)"><span data-t="Formación automática (manual 2.5.3)"><span data-t="Formación automática (manual 2.5.3)">Formación automática (manual 2.5.3)</span></span></label>
       <select class="f" id="cfg-autolineup">
-        <option value="0" data-t="No — cargo la formación yo"><span data-t="No — cargo la formación yo"><span data-t="No — cargo la formación yo">No — cargo la formación yo</span></span></option>
-        <option value="1" data-t="Sí — reconstruila mirando quién saca"><span data-t="Sí — reconstruila mirando quién saca"><span data-t="Sí — reconstruila mirando quién saca">Sí — reconstruila mirando quién saca</span></span></option>
+        <option value="0" data-t="No — cargo la formación yo">No — cargo la formación yo</option>
+        <option value="1" data-t="Sí — reconstruila mirando quién saca">Sí — reconstruila mirando quién saca</option>
       </select>
       <div class="sub" data-t="Si arrancás sin saber la formación del rival, el panel la arma sola a las seis rotaciones."><span data-t="Si arrancás sin saber la formación del rival, el panel la arma sola a las seis rotaciones."><span data-t="Si arrancás sin saber la formación del rival, el panel la arma sola a las seis rotaciones.">Si arrancás sin saber la formación del rival, el panel la arma sola a las seis rotaciones.</span></span></div>
     </div>
@@ -975,33 +975,33 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <p data-t="Como el DataVolley: lo que no llegás a cargar, lo escribe el programa."><span data-t="Como el DataVolley: lo que no llegás a cargar, lo escribe el programa."><span data-t="Como el DataVolley: lo que no llegás a cargar, lo escribe el programa.">Como el DataVolley: lo que no llegás a cargar, lo escribe el programa.</span></span></p>
     <div class="fgrid">
       <div><label class="f" data-t="Armado automático"><span data-t="Armado automático"><span data-t="Armado automático">Armado automático</span></span></label><select class="f" id="d-autoset">
-        <option value="1" data-t="Sí — al cargar un ataque con combinación, escribe el armado"><span data-t="Sí — al cargar un ataque con combinación, escribe el armado"><span data-t="Sí — al cargar un ataque con combinación, escribe el armado">Sí — al cargar un ataque con combinación, escribe el armado</span></span></option>
+        <option value="1" data-t="Sí — al cargar un ataque con combinación, escribe el armado">Sí — al cargar un ataque con combinación, escribe el armado</option>
         <option value="0">No</option></select>
         <div style="font-size:11px;color:var(--mut);margin-top:5px" data-t="El tipo y el destino salen de la combinación. No lo escribe si ataca el armador. Con el especial «X», el armado se evalúa «#»."><span data-t="El tipo y el destino salen de la combinación. No lo escribe si ataca el armador. Con el especial «X», el armado se evalúa «#»."><span data-t="El tipo y el destino salen de la combinación. No lo escribe si ataca el armador. Con el especial «X», el armado se evalúa «#».">El tipo y el destino salen de la combinación. No lo escribe si ataca el armador. Con el especial «X», el armado se evalúa «#».</span></span></div>
       </div>
       <div><label class="f" data-t="Corrección del código compuesto"><span data-t="Corrección del código compuesto"><span data-t="Corrección del código compuesto">Corrección del código compuesto</span></span></label><select class="f" id="d-autocomp">
-        <option value="1" data-t="Sí — al corregir un código, se ajusta su pareja"><span data-t="Sí — al corregir un código, se ajusta su pareja"><span data-t="Sí — al corregir un código, se ajusta su pareja">Sí — al corregir un código, se ajusta su pareja</span></span></option>
+        <option value="1" data-t="Sí — al corregir un código, se ajusta su pareja">Sí — al corregir un código, se ajusta su pareja</option>
         <option value="0">No</option></select>
         <div style="font-size:11px;color:var(--mut);margin-top:5px" data-t="Saque↔recepción, ataque↔bloqueo, ataque↔defensa y ataque↔armado previo."><span data-t="Saque↔recepción, ataque↔bloqueo, ataque↔defensa y ataque↔armado previo."><span data-t="Saque↔recepción, ataque↔bloqueo, ataque↔defensa y ataque↔armado previo.">Saque↔recepción, ataque↔bloqueo, ataque↔defensa y ataque↔armado previo.</span></span></div>
       </div>
       <div><label class="f" data-t="Después de cerrar el punto"><span data-t="Después de cerrar el punto"><span data-t="Después de cerrar el punto">Después de cerrar el punto</span></span></label><select class="f" id="d-autoserve">
-        <option value="num_s" data-t="Escribe el número del próximo sacador y la S"><span data-t="Escribe el número del próximo sacador y la S"><span data-t="Escribe el número del próximo sacador y la S">Escribe el número del próximo sacador y la S</span></span></option>
-        <option value="num" data-t="Escribe sólo el número del próximo sacador"><span data-t="Escribe sólo el número del próximo sacador"><span data-t="Escribe sólo el número del próximo sacador">Escribe sólo el número del próximo sacador</span></span></option>
-        <option value="no" data-t="Deja la barra vacía"><span data-t="Deja la barra vacía"><span data-t="Deja la barra vacía">Deja la barra vacía</span></span></option></select>
+        <option value="num_s" data-t="Escribe el número del próximo sacador y la S">Escribe el número del próximo sacador y la S</option>
+        <option value="num" data-t="Escribe sólo el número del próximo sacador">Escribe sólo el número del próximo sacador</option>
+        <option value="no" data-t="Deja la barra vacía">Deja la barra vacía</option></select>
         <div style="font-size:11px;color:var(--mut);margin-top:5px" data-t="La barra se limpia siempre; esto define qué queda escrito."><span data-t="La barra se limpia siempre; esto define qué queda escrito."><span data-t="La barra se limpia siempre; esto define qué queda escrito.">La barra se limpia siempre; esto define qué queda escrito.</span></span></div>
       </div>
       <div><label class="f" data-t="Fin de jugada automático (estilo Data)"><span data-t="Fin de jugada automático (estilo Data)"><span data-t="Fin de jugada automático (estilo Data)">Fin de jugada automático (estilo Data)</span></span></label><select class="f" id="d-autofin">
-        <option value="1" data-t="Sí — un código terminal (#, =, ataque bloqueado) cierra la jugada y da el punto solo"><span data-t="Sí — un código terminal (#, =, ataque bloqueado) cierra la jugada y da el punto solo"><span data-t="Sí — un código terminal (#, =, ataque bloqueado) cierra la jugada y da el punto solo">Sí — un código terminal (#, =, ataque bloqueado) cierra la jugada y da el punto solo</span></span></option>
-        <option value="0" data-t="No — el punto se carga a mano (botones «Punto Local/Visitante»)"><span data-t="No — el punto se carga a mano (botones «Punto Local/Visitante»)"><span data-t="No — el punto se carga a mano (botones «Punto Local/Visitante»)">No — el punto se carga a mano (botones «Punto Local/Visitante»)</span></span></option></select>
+        <option value="1" data-t="Sí — un código terminal (#, =, ataque bloqueado) cierra la jugada y da el punto solo">Sí — un código terminal (#, =, ataque bloqueado) cierra la jugada y da el punto solo</option>
+        <option value="0" data-t="No — el punto se carga a mano (botones «Punto Local/Visitante»)">No — el punto se carga a mano (botones «Punto Local/Visitante»)</option></select>
       </div>
       <div><label class="f" data-t="Modo entrenamiento (solo tu equipo)"><span data-t="Modo entrenamiento (solo tu equipo)"><span data-t="Modo entrenamiento (solo tu equipo)">Modo entrenamiento (solo tu equipo)</span></span></label><select class="f" id="d-entren">
         <option value="0" data-t="No — partido normal (local y visitante)">No — partido normal (local y visitante)</option>
-        <option value="1" data-t="Sí — todo se carga como local (*), sin adversario · práctica o amistoso"><span data-t="Sí — todo se carga como local (*), sin adversario · práctica o amistoso"><span data-t="Sí — todo se carga como local (*), sin adversario · práctica o amistoso">Sí — todo se carga como local (*), sin adversario · práctica o amistoso</span></span></option></select>
+        <option value="1" data-t="Sí — todo se carga como local (*), sin adversario · práctica o amistoso">Sí — todo se carga como local (*), sin adversario · práctica o amistoso</option></select>
         <div style="font-size:11px;color:var(--mut);margin-top:5px" data-t="En entrenamiento, aunque tipees «a», el código va a tu equipo."><span data-t="En entrenamiento, aunque tipees «a», el código va a tu equipo."><span data-t="En entrenamiento, aunque tipees «a», el código va a tu equipo.">En entrenamiento, aunque tipees «a», el código va a tu equipo.</span></span></div>
       </div>
       <div><label class="f" data-t="Al editar, el cursor va"><span data-t="Al editar, el cursor va"><span data-t="Al editar, el cursor va">Al editar, el cursor va</span></span></label><select class="f" id="d-cursor">
-        <option value="0" data-t="Al final del código (completar)"><span data-t="Al final del código (completar)"><span data-t="Al final del código (completar)">Al final del código (completar)</span></span></option>
-        <option value="1" data-t="Sobre el símbolo de evaluación (corregir)"><span data-t="Sobre el símbolo de evaluación (corregir)"><span data-t="Sobre el símbolo de evaluación (corregir)">Sobre el símbolo de evaluación (corregir)</span></span></option></select></div>
+        <option value="0" data-t="Al final del código (completar)">Al final del código (completar)</option>
+        <option value="1" data-t="Sobre el símbolo de evaluación (corregir)">Sobre el símbolo de evaluación (corregir)</option></select></div>
     </div>
   </div>
 
@@ -1011,8 +1011,8 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
        definidos por DataVolley según el fundamento y la evaluación, así que no hace falta editarlos.</span></p>
     <div class="fgrid">
       <div><label class="f" data-t="Completar automáticamente"><span data-t="Completar automáticamente"><span data-t="Completar automáticamente">Completar automáticamente</span></span></label><select class="f" id="d-auto">
-        <option value="0" data-t="No (código estándar de DataVolley)"><span data-t="No (código estándar de DataVolley)"><span data-t="No (código estándar de DataVolley)">No (código estándar de DataVolley)</span></span></option>
-        <option value="1" data-t="Sí — diferencia de puntos + fila del jugador (convención de la liga)"><span data-t="Sí — diferencia de puntos + fila del jugador (convención de la liga)"><span data-t="Sí — diferencia de puntos + fila del jugador (convención de la liga)">Sí — diferencia de puntos + fila del jugador (convención de la liga)</span></span></option></select></div>
+        <option value="0" data-t="No (código estándar de DataVolley)">No (código estándar de DataVolley)</option>
+        <option value="1" data-t="Sí — diferencia de puntos + fila del jugador (convención de la liga)">Sí — diferencia de puntos + fila del jugador (convención de la liga)</option></select></div>
     </div>
     <div class="ref" style="margin-top:10px"><span data-t="Esta opción"><span data-t="Esta opción">Esta opción</span></span> <b data-t="no es un estándar de DataVolley"><span data-t="no es un estándar de DataVolley"><span data-t="no es un estándar de DataVolley">no es un estándar de DataVolley</span></span></b><span data-t=": se dedujo de archivos reales (coincide en el 98% de las acciones). Dejala en &quot;No&quot; si querés el código puro del manual.">: se dedujo de archivos reales
       (coincide en el 98% de las acciones). Dejala en "No" si querés el código puro del manual.</span></div>
@@ -1111,7 +1111,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <button type="button" id="modo-entrenamiento" class="tbtn" onclick="setModo('entrenamiento')" style="flex:1" data-t="🏋️ Entrenamiento"><span data-t="🏋️ Entrenamiento"><span data-t="🏋️ Entrenamiento">🏋️ Entrenamiento</span></span></button>
   </div>
   <div class="fgrid">
-    <div><label class="f" data-t="Local — equipo"><span data-t="Local — equipo"><span data-t="Local — equipo">Local — equipo</span></span></label><select class="f" id="s-eqh" onchange="elegirEquipoSetup('home',this.value)" style="margin-bottom:5px"><option value="" data-t="— elegí un equipo guardado —"><span data-t="— elegí un equipo guardado —"><span data-t="— elegí un equipo guardado —">— elegí un equipo guardado —</span></span></option></select><input class="f" id="s-nmh" placeholder="…o escribí el nombre"></div>
+    <div><label class="f" data-t="Local — equipo"><span data-t="Local — equipo"><span data-t="Local — equipo">Local — equipo</span></span></label><select class="f" id="s-eqh" onchange="elegirEquipoSetup('home',this.value)" style="margin-bottom:5px"><option value="" data-t="— elegí un equipo guardado —">— elegí un equipo guardado —</option></select><input class="f" id="s-nmh" placeholder="…o escribí el nombre"></div>
     <div><label class="f">Local — sigla</label><input class="f" id="s-cdh" maxlength="3" placeholder="SLO">
       <div class="sqbox">
         <label class="sqbtn"><span data-t="Importar equipo (.sq)"><span data-t="Importar equipo (.sq)">Importar equipo (.sq)</span></span>
@@ -1119,7 +1119,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         </label>
         <span class="sub" id="sq-info-h"></span>
       </div></div>
-    <div id="setup-vis-eq"><label class="f" data-t="Visitante — equipo"><span data-t="Visitante — equipo"><span data-t="Visitante — equipo">Visitante — equipo</span></span></label><select class="f" id="s-eqa" onchange="elegirEquipoSetup('away',this.value)" style="margin-bottom:5px"><option value="" data-t="— elegí un equipo guardado —"><span data-t="— elegí un equipo guardado —"><span data-t="— elegí un equipo guardado —">— elegí un equipo guardado —</span></span></option></select><input class="f" id="s-nma" placeholder="…o escribí el nombre"></div>
+    <div id="setup-vis-eq"><label class="f" data-t="Visitante — equipo"><span data-t="Visitante — equipo"><span data-t="Visitante — equipo">Visitante — equipo</span></span></label><select class="f" id="s-eqa" onchange="elegirEquipoSetup('away',this.value)" style="margin-bottom:5px"><option value="" data-t="— elegí un equipo guardado —">— elegí un equipo guardado —</option></select><input class="f" id="s-nma" placeholder="…o escribí el nombre"></div>
     <div id="setup-vis-sg"><label class="f">Visitante — sigla</label><input class="f" id="s-cda" maxlength="3" placeholder="AMR">
       <div class="sqbox">
         <label class="sqbtn"><span data-t="Importar equipo (.sq)"><span data-t="Importar equipo (.sq)">Importar equipo (.sq)</span></span>
@@ -1230,16 +1230,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260913-0851" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260913-0851"></script>
-<script src="objetivos.js?v=20260913-0851" onerror="void 0"></script>
-<script src="video_delay.js?v=20260913-0851" onerror="void 0"></script>
+<script src="firebase.js?v=20260913-1228" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260913-1228"></script>
+<script src="objetivos.js?v=20260913-1228" onerror="void 0"></script>
+<script src="video_delay.js?v=20260913-1228" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260913-0851" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260913-0851"></script>
+<script src="plantel_nafels.js?v=20260913-1228" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260913-1228"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -8103,7 +8103,7 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260913-0851" onerror="void 0"></script>
-<script src="ayuda.js?v=20260913-0851"></script>
+<script src="volver_inicio.js?v=20260913-1228" onerror="void 0"></script>
+<script src="ayuda.js?v=20260913-1228"></script>
 </body>
 </html>
