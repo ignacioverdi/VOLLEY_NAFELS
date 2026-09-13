@@ -291,16 +291,39 @@ def _plantel_maestro():
             if ap and ap.group(1).strip():
                 out[str(int(m.group(1)))] = ap.group(1).strip()
     _PLANTEL_CACHE = out
+    if out:
+        print('[bloqueo] plantel: %d jugadores para completar nombres (%s)'
+              % (len(out), ', '.join('#%s %s' % (k, v)
+                 for k, v in sorted(out.items(), key=lambda x: int(x[0]))[:4]) + '...'))
+    else:
+        print('[bloqueo] AVISO: no encontre plantel_*.js en esta carpeta.')
+        print('[bloqueo] Los jugadores sin nombre en el .dvw van a quedar con')
+        print('[bloqueo] el numero solo (#7, #9...). Revisa que plantel_nafels.js')
+        print('[bloqueo] este junto a gen_bloqueo.py.')
     return out
 
 
+_COMPLETADOS = set()
+
+
 def _nombre_de(num, nombre):
-    """El nombre que va en pantalla: el del .dvw, y si no el del plantel."""
+    """El nombre que va en pantalla: el del .dvw, y si no el del plantel.
+
+    Se acepta cualquier cosa que parezca un nombre. Si lo que trae el .dvw es
+    el numero, una letra suelta o esta vacio, se busca en el plantel.
+    """
     n = (nombre or '').strip()
-    if n and not n.startswith('#'):
-        return n
     k = str(num).lstrip('0') or str(num)
-    return _plantel_maestro().get(k) or n or ('#' + k)
+    # Un nombre de verdad tiene al menos dos letras. '7', '#7' o '' no lo son.
+    import re as _re
+    if len(_re.sub(r'[^A-Za-zÁÉÍÓÚÑáéíóúñ]', '', n)) >= 2:
+        return n
+    delplantel = _plantel_maestro().get(k)
+    if delplantel:
+        if k not in _COMPLETADOS:
+            _COMPLETADOS.add(k)
+        return delplantel
+    return n or ('#' + k)
 
 
 def bloqueo_desde_dvw(out='datos_bloqueo.js'):
