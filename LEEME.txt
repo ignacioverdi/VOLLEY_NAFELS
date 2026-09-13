@@ -1,66 +1,61 @@
-LA VENTANITA — LO QUE QUEDABA A MEDIAS
-======================================
+LAS TRES FILAS QUE FALTABAN
+===========================
 
 Un archivo: objetivos_config.js. Publicar y Ctrl+Shift+R.
 
 
-LO QUE PASO
------------
-La entrega anterior tradujo la mitad. Asi quedaba en pantalla:
+LO QUE VI AL CHEQUEAR
+---------------------
+Casi toda la ventana quedo en ingles. Andaba:
 
-   158 pelotas que recibe · target 60      <- mezclado
-   YOUR 158 BALLS RECEIVED                 <- bien
-   de cada 10                              <- castellano
-   Perfect · Positive                      <- bien
-   Suficiente · Pobre · Sobrepase          <- castellano
-   CÓMO SE LLEGA A 55%                     <- castellano
-   WHAT COSTS YOU MOST                     <- bien
-   40 suficientes  ·  18 errores           <- castellano
-   Para llegar a 60                        <- castellano
-   • turn 16 errors into suficientes       <- mezclado en la misma frase
-   # vale 100 · + vale 75                  <- castellano
-
-Me faltaron dos cosas: los textos de la cabecera y de los titulos, y sobre
-todo objPlural, que arma los nombres del consejo y devolvia siempre
-castellano. De ahi salia "turn 16 errors into suficientes".
-
-
-COMO QUEDA AHORA
-----------------
    158 balls received · target 60
-   YOUR 158 BALLS RECEIVED          out of 10
-    Perfect      27   1.7 out of 10
-    Positive     45   2.8 out of 10
-    Fair         40   2.5 out of 10
-    Poor         23   1.5 out of 10
-    Overpass      5   0.3 out of 10
-    Error        18   1.1 out of 10
-
+   YOUR 158 BALLS RECEIVED       out of 10
    HOW YOU GET TO 55%
    WHAT COSTS YOU MOST
-     40 fairs    −13
-     18 errors   −11
-
+   40 fairs · 18 errors
    To reach 60
    • turn 16 errors into fairs
-
-   Each ball counts by how it ended: # counts 100 · + counts 75 ...
-   The result is the average.
+   Each ball counts by how it ended...
    [Close]
 
-Y en los tres idiomas:
+Pero tres filas seguian en castellano:
+
+   Perfect      27      <- bien
+   Positive     45      <- bien
+   Suficiente   40      <- castellano
+   Pobre        23      <- castellano
+   Sobrepase     5      <- castellano
+   Error        18      <- bien
+
+
+POR QUE
+-------
+Mi cambio se aplico en la ventana del ATAQUE y no en la normal. Son dos
+bloques de codigo parecidos y el reemplazo agarro el equivocado.
+
+Se notaba justo en esas tres porque "Perfect", "Positive" y "Error" se
+escriben igual o casi en los dos idiomas, asi que parecian traducidas
+aunque tampoco lo estaban.
+
+
+COMO QUEDA
+----------
+   [es]  Perfecta · Positiva · Suficiente · Pobre · Sobrepase · Error
+   [en]  Perfect · Positive · Fair · Poor · Overpass · Error
+   [de]  Perfekt · Positiv · Ausreichend · Schwach · Überpass · Fehler
+
+Y el consejo:
 
    [es]  convertir 16 errores en suficientes
    [en]  turn 16 errors into fairs
    [de]  wandle 16 Fehler in Ausreichend
 
-En aleman los sustantivos van con mayuscula, como corresponde; en castellano
-e ingles en minuscula, porque estan en medio de una frase.
+Tambien traduje el globo que aparece al pasar el mouse por la barra de
+colores, y la tabla plegada. Eran los dos ultimos lugares donde quedaba
+texto fijo.
 
 
-LO DEMAS, VERIFICADO
---------------------
-BLOQUEO quedo bien: los 11 jugadores con su apellido, "#6 (5)" sin repetir,
-modo partido en cero y el mapa dibujando las 9 zonas.
-
-Los 6 heatmaps sin scripts rotos y con sus botones.
+LO DEMAS SIGUE BIEN
+-------------------
+Bloqueo con los 11 apellidos y "#6 (5)" sin repetir, modo partido en cero,
+el mapa dibujando, y los 6 heatmaps sin scripts rotos.

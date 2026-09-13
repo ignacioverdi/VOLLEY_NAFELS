@@ -680,7 +680,7 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
   var barra = '', lista = '';
   FIL.forEach(function(f){
     if(!f[2]) return;
-    barra += '<div title="'+f[1]+': '+f[2]+'" style="width:'+(f[2]/T*100)+'%;background:'+f[3]+'"></div>';
+    barra += '<div title="'+ot(f[1])+': '+f[2]+'" style="width:'+(f[2]/T*100)+'%;background:'+f[3]+'"></div>';
     lista += '<div style="display:flex;align-items:center;gap:8px;padding:3.5px 0">'
       + '<span style="width:19px;height:19px;border-radius:4px;background:'+f[3]+';color:#0f172a;'
       +    'font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;'
@@ -1048,7 +1048,7 @@ function objAbrirDetalle(id, vals, meta, quien){
     var n = D[f[0]] || 0;
     if(!n) return;
     var pc = n/total*100;
-    barra += '<div title="'+f[1]+': '+n+'" style="width:'+pc+'%;background:'+f[3]+'"></div>';
+    barra += '<div title="'+ot(f[1])+': '+n+'" style="width:'+pc+'%;background:'+f[3]+'"></div>';
     var de10 = (n/total*10);
     /* El SIGNO va primero y bien visible: es el codigo que el jugador ve en
        el video y en la planilla. Sin el, "Perfecta" y "#" son dos idiomas.
@@ -1058,7 +1058,7 @@ function objAbrirDetalle(id, vals, meta, quien){
       + '<span style="width:19px;height:19px;border-radius:4px;background:'+f[3]+';color:#0f172a;'
       +    'font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;'
       +    'flex:none;font-family:monospace">'+(f[4]||'')+'</span>'
-      + '<span style="flex:1;color:#cbd5e1">'+f[1]+'</span>'
+      + '<span style="flex:1;color:#cbd5e1">'+ot(f[1])+'</span>'
       /* ══ EL NUMERO SE TOCA Y SE ABRE EL VIDEO ══════════════════════════
          Tocas "18" al lado de Error y ves esas 18 pelotas. El subrayado
          suave avisa que se puede tocar sin ensuciar la lectura. */
@@ -1131,8 +1131,8 @@ function objAbrirDetalle(id, vals, meta, quien){
         var cuantas = Math.ceil(falta/gana);
         if(cuantas>0 && cuantas<=n){
           opciones.push({
-            txt: ot('convertir')+' <b>'+cuantas+' '+ot(objPlural(f[1],cuantas))
-                 +'</b> '+ot('en')+' '+ot(objPlural(destino[1],cuantas)),
+            txt: ot('convertir')+' <b>'+cuantas+' '+objPlural(f[1],cuantas)
+                 +'</b> '+ot('en')+' '+objPlural(destino[1],cuantas),
             malo: (f[2] < 50) ? 0 : 1,
             n: cuantas
           });
@@ -1162,7 +1162,7 @@ function objAbrirDetalle(id, vals, meta, quien){
   if(!cfg.tipo){
     cfg.filas.forEach(function(f){
       var n = D[f[0]]||0; if(!n) return;
-      tabla += '<tr><td style="padding:3px 6px;color:#94a3b8">'+f[1]+'</td>'
+      tabla += '<tr><td style="padding:3px 6px;color:#94a3b8">'+ot(f[1])+'</td>'
         + '<td style="padding:3px 6px;text-align:right;color:#cbd5e1">'+n+'</td>'
         + '<td style="padding:3px 6px;text-align:right;color:#64748b">\u00d7'+f[2]+'</td>'
         + '<td style="padding:3px 6px;text-align:right;color:#94a3b8">'+Math.round(n*f[2])+'</td></tr>';
