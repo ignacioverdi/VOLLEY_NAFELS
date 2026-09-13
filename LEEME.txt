@@ -1,52 +1,70 @@
-CHEQUEO COMPLETO DE LOS 6 HEATMAPS
-==================================
+LOS BLOQUEOS DE 25-26 — LA CAUSA DE VERDAD
+==========================================
 
-Un archivo: hm_bloqueo.html. Publicar y Ctrl+Shift+R.
-
-
-LO QUE YA ANDA — verificado uno por uno en la app
--------------------------------------------------
-
-ARMADO          ✓  #4 VAZQUEZ (250 arm.) · #13 STEIMANN (158 arm.)
-                   dibuja 346 zonas · la llave de mas ya no rompe nada
-
-DEFENSA         ✓  13 jugadores · #20 SCHMID (65) · #2 BRUDERER (50)...
-                   dibuja 62 zonas · el boton cambia en las dos direcciones
-                   en PARTIDO dice "0 partidos" (correcto en la 26-27)
-
-SAQUE           ✓  11 jugadores · #9 NORRIS (131) · #5 CLEMENT (129)...
-
-RECEPCIÓN       ✓  8 jugadores · #20 SCHMID J (272) · #1 DURDOS (264)...
-
-ATAQUE          ✓  12 jugadores · #9 NORRIS (90) · #11 BARTHOLET (82)...
-
-BLOQUEO         ~  la lista ya aparece (12 jugadores), pero no se rehacia
-                   al cambiar de modo. Va corregido en este zip.
+Un archivo: gen_bloqueo.py
+Correr HACER_TODO y publicar.
 
 
-LO QUE ARREGLE AHORA
---------------------
-Al pasar de PARTIDO a ENTRENAMIENTO, setModoBlq rehacia los combos y el mapa
-pero NO el desplegable de jugador:
+PRIMERO: LO QUE YA ANDA
+-----------------------
+Chequee todo despues de que publicaste y corriste HACER_TODO:
 
-    pintarModo(); rellenarCombos(); pintar();
-                  ^ faltaba rellenarJugadores()
+   ARMADO      ✓  #4 VAZQUEZ (250) · #13 STEIMANN (158) · dibuja 346 zonas
+   DEFENSA     ✓  13 jugadores · dibuja 62 zonas · cambia de modo bien
+   SAQUE       ✓  11 jugadores · #9 NORRIS (131) · #5 CLEMENT (129)
+   RECEPCIÓN   ✓  8 jugadores · #20 SCHMID J (272) · #1 DURDOS (264)
+   ATAQUE      ✓  12 jugadores · #9 NORRIS (90) · #11 BARTHOLET (82)
 
-Quedaba con los totales del modo anterior: pasabas a entrenamientos y seguias
-viendo "356 bloqueos", que eran los de partidos.
+   BLOQUEO, entrenamientos  ✓  206 acciones, con el plantel de HOY
+                               Nikolov y Figueiredo ya NO aparecen
 
-rellenarJugadores ya filtraba por tipo. Solo faltaba llamarla.
+Falta solo una cosa: el modo PARTIDO de bloqueo.
 
 
-LO QUE TE VA A LLAMAR LA ATENCION EN BLOQUEO
---------------------------------------------
-El desplegable muestra nombres que NO son del plantel actual:
+POR QUE SEGUIAN APARECIENDO
+---------------------------
+El orden en HACER_TODO ya estaba bien —lo verifique por las fechas de los
+archivos: plan a las 12:51:27, bloqueo a las 12:52:03—. No era eso.
 
-    #15 Nikolov (356) · #14 Figueiredo (149) · #6 (192) · #4 (185)
+El problema estaba en como gen_bloqueo ELIGE el archivo de video:
 
-Son de la temporada 25-26. Es el problema del filtro de temporada que te
-explique: gen_bloqueo corria ANTES que gen_plan_partido y no podia filtrar.
+    cands = glob.glob('datos_video*.js')        # todos
+    cands.sort(por fecha de modificacion)       # el mas reciente
+    usa el primero que sirva
 
-ESO SE ARREGLA CORRIENDO HACER_TODO. Ya esta el orden corregido en el .bat.
-Despues de correrlo, en bloqueo van a quedar solo los 206 de entrenamiento
-de la 26-27, con los nombres del plantel de hoy.
+En la 26-27 TODAVIA NO SE JUGO NINGUN PARTIDO, asi que no existe
+datos_video_26-27.js. El unico que hay es datos_video_25-26.js.
+
+Entonces agarraba ese, y de ahi salian los 1356 bloqueos de la temporada
+pasada con jugadores que ya no estan.
+
+El filtro por temporada no llegaba a actuar: el problema era anterior, en la
+eleccion misma del archivo.
+
+
+LO QUE HICE
+-----------
+Ahora saltea los archivos cuya temporada figura como ARCHIVADA en
+temporadas.js (ahi esta 2025-26).
+
+   datos_video_25-26.js     SALTEADO (archivada)
+   datos_video_26-27.js     se usa
+   datos_video.js           se usa
+
+Si no queda ninguno —que es hoy— devuelve None y los bloqueos de partido
+quedan en CERO. Que es lo correcto: no se jugo ningun partido.
+
+Y avisa en pantalla mientras corre:
+
+   [bloqueo] Salteo datos_video_25-26.js: esa temporada esta archivada.
+   [bloqueo] No hay video de partidos de la temporada en curso.
+   [bloqueo] Los bloqueos de partido quedan en 0, como corresponde.
+
+Probado con los dos formatos de nombre: 25-26 y 2025-26 (los archivos usan
+uno y temporadas.js el otro).
+
+
+CUANDO JUEGUEN EL PRIMER PARTIDO
+--------------------------------
+Se genera datos_video_26-27.js solo, y como 26-27 no esta archivada, entra
+sin que tengas que tocar nada.

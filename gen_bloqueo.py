@@ -11,7 +11,8 @@ Uso:  python gen_bloqueo.py            (auto)
       python gen_bloqueo.py video.js   (forzar archivo)
 Salida: datos_bloqueo.js  ->  window.PP_BLOCK
 """
-import os, re, sys, json, glob, io
+import os
+import re, re, sys, json, glob, io
 
 # ── combo -> zona de origen del ataque (universal, de game_plan.html + reglas Nacho) ──
 COMBO_ZONE = {
@@ -370,13 +371,56 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
     return total
 
 
+def _temporadas_archivadas():
+    """Los ids de las temporadas ya cerradas, de temporadas.js."""
+    out=set()
+    try:
+        t=open('temporadas.js',encoding='utf-8',errors='replace').read()
+        for m in re.finditer(r'id\s*:\s*["\']([\d\-]+)["\']', t):
+            out.add(m.group(1))
+    except Exception:
+        pass
+    return out
+
+
 def autodetect_video():
+    """El archivo de video de los PARTIDOS de la temporada en curso.
+
+    ══ POR QUE HAY QUE EXCLUIR LAS TEMPORADAS ARCHIVADAS ═════════════════════
+    Antes esto agarraba cualquier datos_video*.js, el mas reciente por fecha de
+    archivo. En la 26-27 todavia no se jugo ningun partido, asi que NO EXISTE
+    datos_video_26-27.js: el unico que hay es datos_video_25-26.js.
+
+    Resultado: el mapa de bloqueo mostraba los 1356 bloqueos de la temporada
+    pasada, con jugadores que ya no estan en el plantel (Nikolov, Figueiredo).
+
+    Ahora se saltean los archivos cuya temporada figura en temporadas.js como
+    archivada. Si no queda ninguno, se devuelve None y los partidos quedan en
+    CERO, que es lo correcto cuando todavia no se jugo nada.
+    """
+    archivadas=_temporadas_archivadas()
     cands=[f for f in glob.glob('datos_video*.js') if 'ent' not in f.lower()]
-    # más reciente primero (por si hay uno por temporada + el fresco)
-    cands.sort(key=lambda f:os.path.getmtime(f), reverse=True)
-    # usar el primero que REALMENTE tenga VIDEO_DATA (saltea datos_videos.js u otros)
-    for c in cands:
+
+    def es_archivada(f):
+        # Los archivos usan 25-26 y temporadas.js usa 2025-26: se comparan
+        # solo los digitos para que coincidan igual.
+        m=re.search(r'datos_video_(\d{2,4}-\d{2})\.js$', f)
+        if not m: return False
+        d=re.sub(r'\D','',m.group(1))[-4:]
+        return any(re.sub(r'\D','',a)[-4:]==d for a in archivadas)
+
+    vivos=[f for f in cands if not es_archivada(f)]
+    saltados=[f for f in cands if es_archivada(f)]
+    for f in saltados:
+        print('[bloqueo] Salteo %s: esa temporada esta archivada.' % f)
+
+    vivos.sort(key=lambda f:os.path.getmtime(f), reverse=True)
+    for c in vivos:
         if load_video(c): return c
+
+    if saltados:
+        print('[bloqueo] No hay video de partidos de la temporada en curso.')
+        print('[bloqueo] Los bloqueos de partido quedan en 0, como corresponde.')
     return None
 
 def pp_team_info():
