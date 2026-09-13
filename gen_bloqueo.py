@@ -11,8 +11,7 @@ Uso:  python gen_bloqueo.py            (auto)
       python gen_bloqueo.py video.js   (forzar archivo)
 Salida: datos_bloqueo.js  ->  window.PP_BLOCK
 """
-import os
-import re, re, sys, json, glob, io
+import os, re, sys, json, glob, io
 
 # ── combo -> zona de origen del ataque (universal, de game_plan.html + reglas Nacho) ──
 COMBO_ZONE = {
@@ -187,6 +186,77 @@ def _sumar_tiempos_del_video(vp, out='datos_bloqueo.js'):
         pass      # sin tiempos igual funciona: solo no se abre el clip
 
 
+
+def _inicio_temporada():
+    """El 1 de julio del anio en que arranca la temporada en curso.
+
+    Se deduce de temporadas.js, que lista las temporadas ARCHIVADAS: la que
+    sigue a la ultima archivada es la que se esta jugando. Si el archivo no
+    esta, se usa el anio actual (julio a junio).
+    """
+    import datetime
+    ult = 0
+    try:
+        t = open('temporadas.js', encoding='utf-8', errors='replace').read()
+        for m in re.finditer(r"id\s*:\s*[\'\"]((?:19|20)?\d{2})-(\d{2})[\'\"]", t):
+            a = m.group(1)
+            a = int(a) if len(a) == 4 else 2000 + int(a)
+            if a > ult: ult = a
+    except Exception:
+        pass
+    if ult:
+        return (ult + 1) * 10000 + 701
+    hoy = datetime.date.today()
+    a = hoy.year if hoy.month >= 7 else hoy.year - 1
+    return a * 10000 + 701
+
+
+_INI_TEMP = [None]
+_fuera_temp_dvw = [0]
+
+
+def _de_la_temporada(fecha):
+    """True si esa fecha cae dentro de la temporada en curso."""
+    if _INI_TEMP[0] is None:
+        _INI_TEMP[0] = _inicio_temporada()
+    d = re.sub(r'\D', '', str(fecha or ''))
+    if len(d) != 8:
+        return True            # sin fecha no se descarta: mejor de mas
+    return int(d) >= _INI_TEMP[0]
+
+
+def _fecha_dvw(ruta, txt):
+    """La fecha del partido, en aaaammdd.
+
+    Se usa el NOMBRE DEL ARCHIVO, que en este club siempre arranca con la
+    fecha ISO:  &2025-10-11 636587 AMRI-LUC(VM).dvw
+
+    No se usa el [3MATCH] del .dvw porque viene en formato de Estados Unidos
+    —mes/dia/anio— y sin saber cual es cual se confunden, por ejemplo, el 7 de
+    enero con el 1 de julio. El nombre no tiene esa ambiguedad.
+    """
+    m = re.search(r'(20\d\d)-(\d\d)-(\d\d)', os.path.basename(ruta))
+    if m:
+        return m.group(1) + m.group(2) + m.group(3)
+    # Sin fecha en el nombre, se prueba el [3MATCH] asumiendo mm/dd/aaaa,
+    # que es como lo escribe DataVolley.
+    try:
+        mm = re.search(r'\[3MATCH\]\s*\n([^\n]*)', txt)
+        if mm:
+            c = mm.group(1).split(';')
+            d = re.sub(r'\D', '', c[0]) if c else ''
+            if len(d) == 8:
+                aa, m1, m2 = d[4:], int(d[:2]), int(d[2:4])
+                # DataVolley escribe mm/dd/aaaa. Si el primer numero pasa de
+                # 12 no puede ser un mes, asi que ahi viene dd/mm/aaaa.
+                if m1 > 12: m1, m2 = m2, m1
+                if 1 <= m1 <= 12 and 1 <= m2 <= 31:
+                    return '%s%02d%02d' % (aa, m1, m2)
+    except Exception:
+        pass
+    return None
+
+
 def bloqueo_desde_dvw(out='datos_bloqueo.js'):
     """Arma datos_bloqueo.js leyendo los .dvw, sin depender del video.
 
@@ -292,6 +362,20 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
         ms = re.search(r'\[3SCOUT\](.*)', txt, re.S)
         if not ms:
             continue
+
+        # ══ SOLO LA TEMPORADA EN CURSO ═══════════════════════════════════════
+        #  La carpeta DVW NAFELS 2026 tiene 97 partidos de la 25-26 mezclados
+        #  con los de la temporada nueva. gen_plan_partido ya los descarta
+        #  ("97 fuera"), pero aca entraban todos: de ahi salian los 1356
+        #  bloqueos viejos, con jugadores que ya no estan en el plantel.
+        #
+        #  Los entrenamientos no se filtran: su carpeta ya es de una sola
+        #  temporada.
+        if not ES_ENT.get(ruta):
+            _f = _fecha_dvw(ruta, txt)
+            if _f and not _de_la_temporada(_f):
+                _fuera_temp_dvw[0] += 1
+                continue
         # ── El identificador del partido ────────────────────────────────
         # Tiene que ser EL MISMO que arma gen_plan_partido.py, o la pantalla
         # descarta todo: filtra los bloqueos contra la lista de partidos
@@ -371,56 +455,13 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
     return total
 
 
-def _temporadas_archivadas():
-    """Los ids de las temporadas ya cerradas, de temporadas.js."""
-    out=set()
-    try:
-        t=open('temporadas.js',encoding='utf-8',errors='replace').read()
-        for m in re.finditer(r'id\s*:\s*["\']([\d\-]+)["\']', t):
-            out.add(m.group(1))
-    except Exception:
-        pass
-    return out
-
-
 def autodetect_video():
-    """El archivo de video de los PARTIDOS de la temporada en curso.
-
-    ══ POR QUE HAY QUE EXCLUIR LAS TEMPORADAS ARCHIVADAS ═════════════════════
-    Antes esto agarraba cualquier datos_video*.js, el mas reciente por fecha de
-    archivo. En la 26-27 todavia no se jugo ningun partido, asi que NO EXISTE
-    datos_video_26-27.js: el unico que hay es datos_video_25-26.js.
-
-    Resultado: el mapa de bloqueo mostraba los 1356 bloqueos de la temporada
-    pasada, con jugadores que ya no estan en el plantel (Nikolov, Figueiredo).
-
-    Ahora se saltean los archivos cuya temporada figura en temporadas.js como
-    archivada. Si no queda ninguno, se devuelve None y los partidos quedan en
-    CERO, que es lo correcto cuando todavia no se jugo nada.
-    """
-    archivadas=_temporadas_archivadas()
     cands=[f for f in glob.glob('datos_video*.js') if 'ent' not in f.lower()]
-
-    def es_archivada(f):
-        # Los archivos usan 25-26 y temporadas.js usa 2025-26: se comparan
-        # solo los digitos para que coincidan igual.
-        m=re.search(r'datos_video_(\d{2,4}-\d{2})\.js$', f)
-        if not m: return False
-        d=re.sub(r'\D','',m.group(1))[-4:]
-        return any(re.sub(r'\D','',a)[-4:]==d for a in archivadas)
-
-    vivos=[f for f in cands if not es_archivada(f)]
-    saltados=[f for f in cands if es_archivada(f)]
-    for f in saltados:
-        print('[bloqueo] Salteo %s: esa temporada esta archivada.' % f)
-
-    vivos.sort(key=lambda f:os.path.getmtime(f), reverse=True)
-    for c in vivos:
+    # más reciente primero (por si hay uno por temporada + el fresco)
+    cands.sort(key=lambda f:os.path.getmtime(f), reverse=True)
+    # usar el primero que REALMENTE tenga VIDEO_DATA (saltea datos_videos.js u otros)
+    for c in cands:
         if load_video(c): return c
-
-    if saltados:
-        print('[bloqueo] No hay video de partidos de la temporada en curso.')
-        print('[bloqueo] Los bloqueos de partido quedan en 0, como corresponde.')
     return None
 
 def pp_team_info():
@@ -458,41 +499,6 @@ def map_team(tm, keys):
     if RENAME_TEAM.get(tm) in keys: return RENAME_TEAM[tm]
     return tm  # fallback inofensivo
 
-
-def _inicio_temporada():
-    """El 1 de julio del año en que arranca la temporada en curso.
-
-    Se deduce de temporadas.js: ahi se listan las temporadas ARCHIVADAS. La
-    que sigue a la ultima archivada es la que se esta jugando.
-    Si el archivo no esta, se usa el año actual (julio a junio).
-    """
-    import datetime
-    ult=0
-    try:
-        t=open('temporadas.js',encoding='utf-8',errors='replace').read()
-        for m in re.finditer(r"id\s*:\s*[\"']((?:19|20)?\d{2})-(\d{2})[\"']", t):
-            a=m.group(1)
-            a=int(a) if len(a)==4 else 2000+int(a)
-            if a>ult: ult=a
-    except Exception:
-        pass
-    if ult: return (ult+1)*10000 + 701          # 20260701
-    hoy=datetime.date.today()
-    a = hoy.year if hoy.month>=7 else hoy.year-1
-    return a*10000 + 701
-
-
-_INI_TEMP = None
-
-def _de_la_temporada(fecha):
-    """True si esa fecha cae dentro de la temporada en curso."""
-    global _INI_TEMP
-    if _INI_TEMP is None: _INI_TEMP=_inicio_temporada()
-    d=re.sub(r'\D','', str(fecha or ''))
-    if len(d)!=8: return True     # sin fecha: no se descarta, mejor de mas
-    return int(d) >= _INI_TEMP
-
-
 def build(fuentes, out='datos_bloqueo.js'):
     """fuentes: lista de (archivo_de_video, tipo) con tipo 'partido' o
     'entrenamiento'. Cada bloqueo queda etiquetado con su tipo, para que las
@@ -510,23 +516,8 @@ def build(fuentes, out='datos_bloqueo.js'):
         if not _VD:
             print('[bloqueo] aviso: no pude leer VIDEO_DATA de %s, la salteo' % _vp); continue
         print('[bloqueo] %-14s %s (%d sesiones)' % (_tp,_vp,len(_VD.get('matches',{}))))
-        _desc=0
         for _mid,_mt in _VD['matches'].items():
-            # ══ FILTRO POR FECHA — el unico que no depende de nombres ═══════
-            #  Antes se confiaba en el nombre del archivo y en el plan del
-            #  partido. Los dos fallaron: en la 26-27 no hay ningun partido
-            #  jugado, no existe datos_video_26-27.js, y el generador caia en
-            #  el de 25-26. Resultado: 1356 bloqueos de la temporada pasada,
-            #  con jugadores que ya no estan en el plantel.
-            #
-            #  La fecha de cada partido si esta siempre y no se puede
-            #  confundir. Todo lo anterior al 1 de julio de la temporada en
-            #  curso queda afuera.
-            if _tp!='entrenamiento' and not _de_la_temporada(_mt.get('date')):
-                _desc+=1; continue
             matches[_mid]=_mt; TIPO_DE[_mid]=_tp
-        if _desc:
-            print('[bloqueo] %d partidos de temporadas anteriores, descartados.' % _desc)
     if not matches:
         print('[bloqueo] ERROR: no hay video para procesar'); sys.exit(1)
 
@@ -650,6 +641,9 @@ if __name__=='__main__':
     n = bloqueo_desde_dvw('datos_bloqueo.js')
     if n:
         print('[bloqueo] %d bloqueos leidos de los .dvw' % n)
+        if _fuera_temp_dvw[0]:
+            print('[bloqueo] %d partidos de temporadas anteriores, descartados.'
+                  % _fuera_temp_dvw[0])
         _sumar_tiempos_del_video(vp, 'datos_bloqueo.js')
         # El video de ENTRENAMIENTOS es otro archivo. Se detecta mas arriba
         # pero nunca se abria: solo se aplicaban los tiempos del video de

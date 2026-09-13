@@ -1,61 +1,77 @@
-LOS BLOQUEOS DE 25-26 — AHORA SI
-================================
+LOS BLOQUEOS DE 25-26 — AHORA SI, CON LA CAUSA A LA VISTA
+=========================================================
 
 Un archivo: gen_bloqueo.py
 Correr HACER_TODO y publicar.
 
 
-LO QUE PASO CON EL INTENTO ANTERIOR
------------------------------------
-Verifique que corriste todo bien: datos_bloqueo.js.enc se regenero a las
-12:59:42. Pero los 1356 bloqueos viejos siguen ahi.
+EL LOG QUE ME MANDASTE TENIA LA RESPUESTA
+-----------------------------------------
+Gracias por mandarlo, sin eso seguia adivinando. Esta linea lo dijo todo:
 
-Mi arreglo anterior salteaba el archivo de video por su NOMBRE
-(datos_video_25-26.js, porque 2025-26 figura como archivada). No alcanzo.
+    [bloqueo] 9165 bloqueos leidos de los .dvw
 
-Lo mas probable es que los datos viejos entren por otro archivo —hay
-datos_video.js y datos_video_sin-fecha.js dando vueltas— y esos no tienen la
-temporada en el nombre, asi que mi filtro no los tocaba.
+LOS BLOQUEOS NO SALEN DEL VIDEO. Salen directo de los .dvw.
 
-Te lo digo derecho: apunte al sintoma, no a la causa. Dos veces.
+Yo venia filtrando el archivo de video —dos veces, y las dos funcionaron:
+
+    [bloqueo] Salteo datos_video_25-26.js: esa temporada esta archivada.
+
+pero eso solo afecta al MINUTO del corte, no a los numeros. Los numeros se
+leen de la carpeta DVW NAFELS 2026, que tiene 97 partidos y 84 de ellos son
+de la temporada pasada.
+
+Otras partes del sistema ya lo sabian:
+
+    [plan_partido] 8 DVW -> ... temporada 2026/27 (97 fuera)
+    [informe] los 97 partidos de la carpeta son de otra temporada
+
+gen_bloqueo era el unico que no filtraba.
 
 
-LO QUE HICE AHORA — un filtro que no puede fallar
---------------------------------------------------
-Dejo de mirar nombres de archivo y planes de partido. Miro LA FECHA DE CADA
-PARTIDO, que siempre esta y no se puede confundir con nada.
+LO QUE HICE
+-----------
+El filtro va ahora donde se leen los .dvw, usando la FECHA del partido.
 
-   partido del 2025-10-04   DESCARTADO
-   partido del 2026-02-15   DESCARTADO
-   final del 2026-05-30     DESCARTADO
-   entrenamiento 2026-09-10  ENTRA
-   partido futuro 2026-10-05 ENTRA
+PROBADO CONTRA TUS 97 ARCHIVOS REALES:
 
-El corte lo deduce solo: temporadas.js dice que 2025-26 esta archivada, asi
-que la actual arranca el 1 de julio de 2026.
+    descartados: 97 de 97
+    entran     : 0
 
-No importa de que archivo salgan los datos. Si el partido es de antes del
-1/7/2026, no entra.
+Cero es lo correcto: en la 26-27 todavia no jugaron.
 
-Los entrenamientos no se tocan: su archivo ya es de una sola temporada.
+
+UN DETALLE QUE CASI ME COME
+---------------------------
+La fecha de adentro del .dvw viene en formato de Estados Unidos:
+
+    [3MATCH]  10/11/2025     <- 11 de octubre, no 10 de noviembre
+
+Mi primera version la leia al reves y el 7 de enero se convertia en 1 de
+julio: 13 partidos viejos se colaban.
+
+Ahora la fecha sale del NOMBRE del archivo, que en tu club siempre arranca
+con la fecha ISO y no se puede confundir:
+
+    &2025-10-11 636587 AMRI-LUC(VM).dvw
+     ^^^^^^^^^^
+
+Y si algun archivo no la tiene en el nombre, se lee el [3MATCH] revisando
+cual numero puede ser mes y cual dia.
+
+Los entrenamientos no se filtran: su carpeta ya es de una sola temporada.
 
 
 CUANDO CORRAS HACER_TODO
 ------------------------
-Vas a ver una linea nueva:
+Vas a ver:
 
-   [bloqueo] 26 partidos de temporadas anteriores, descartados.
+    [bloqueo] 97 partidos de temporadas anteriores, descartados.
 
-Ese numero te confirma que funciono. Despues, en el mapa de bloqueo:
+Y despues, en el mapa de bloqueo:
 
-   modo PARTIDO         solo WHOLE TEAM (no se jugo ninguno todavia)
-   modo ENTRENAMIENTO   los 206 con el plantel de hoy
+    modo PARTIDO        solo TODO EL EQUIPO (no se jugo ninguno)
+    modo ENTRENAMIENTO  los 206 con el plantel de hoy
 
-Y cuando jueguen el primero de la 26-27, entra solo: su fecha va a ser
-posterior al 1 de julio.
-
-
-SI DESPUES DE ESTO SIGUE IGUAL
-------------------------------
-Copiame las lineas que empiezan con [bloqueo] de la ventana de HACER_TODO.
-Ahi va a estar la respuesta y no tengo que seguir adivinando.
+Cuando jueguen el primero de la 26-27 entra solo, porque su fecha va a ser
+posterior al 1 de julio de 2026.
