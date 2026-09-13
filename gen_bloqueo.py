@@ -257,6 +257,52 @@ def _fecha_dvw(ruta, txt):
     return None
 
 
+
+def _plantel_maestro():
+    """{numero: apellido} del plantel del club, de plantel_<club>.js.
+
+    ══ POR QUE HACE FALTA ═══════════════════════════════════════════════════
+    El nombre de cada jugador sale del .dvw, del bloque [3PLAYERS]. Pero en
+    varios archivos ese bloque viene incompleto y el jugador quedaba como
+    "#7" o "#9", sin apellido, aunque en el plantel del club esta cargado
+    desde siempre.
+
+    En pantalla se veia asi:
+        #7 (65)  ·  #9 (21)  ·  #4 (13)  ·  #3 (6)
+
+    Ahora, cuando el .dvw no trae el nombre, se completa con el plantel. Si
+    tampoco esta ahi —un invitado que vino a entrenar un dia— queda el numero
+    solo, que es lo correcto: no se inventa nada.
+    """
+    global _PLANTEL_CACHE
+    try:
+        return _PLANTEL_CACHE
+    except NameError:
+        pass
+    out = {}
+    for f in glob.glob('plantel_*.js'):
+        try:
+            t = open(f, encoding='utf-8', errors='replace').read()
+        except Exception:
+            continue
+        for m in re.finditer(r'\{[^}]*?num:\s*(\d+)[^}]*?\}', t):
+            b = m.group(0)
+            ap = re.search(r'ap:\s*"([^"]*)"', b)
+            if ap and ap.group(1).strip():
+                out[str(int(m.group(1)))] = ap.group(1).strip()
+    _PLANTEL_CACHE = out
+    return out
+
+
+def _nombre_de(num, nombre):
+    """El nombre que va en pantalla: el del .dvw, y si no el del plantel."""
+    n = (nombre or '').strip()
+    if n and not n.startswith('#'):
+        return n
+    k = str(num).lstrip('0') or str(num)
+    return _plantel_maestro().get(k) or n or ('#' + k)
+
+
 def bloqueo_desde_dvw(out='datos_bloqueo.js'):
     """Arma datos_bloqueo.js leyendo los .dvw, sin depender del video.
 
@@ -428,7 +474,7 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
                 if not eq:
                     continue
                 BLOCK.setdefault(eq, {}).setdefault(
-                    num, {'name': nombres.get((lado, num), '#' + num), 'data': []}
+                    num, {'name': _nombre_de(num, nombres.get((lado, num))), 'data': []}
                 )['data'].append([combo, zona, ev, '', mid, fase,
                                   'entrenamiento' if ES_ENT.get(ruta) else 'partido'])
 
@@ -586,7 +632,7 @@ def build(fuentes, out='datos_bloqueo.js'):
                 _al=info_map.get(key)
                 if _al is None or mid not in _al: fuera_temp+=1; continue  # fuera de la temporada actual / equipo no seguido
             num=str(a.get('num') or '').lstrip('0') or str(a.get('num'))
-            BLOCK.setdefault(key,{}).setdefault(num,{'name':a.get('name'),'data':[]})['data'].append(
+            BLOCK.setdefault(key,{}).setdefault(num,{'name':_nombre_de(num, a.get('name')),'data':[]})['data'].append(
                 [combo, rz, a.get('ev'), t, mid, ph, TIPO_DE.get(mid,'partido')])
 
     _PUE = _puestos_del_club()

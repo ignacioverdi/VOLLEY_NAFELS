@@ -1,77 +1,51 @@
-LOS BLOQUEOS DE 25-26 — AHORA SI, CON LA CAUSA A LA VISTA
-=========================================================
+LOS NOMBRES EN EL MAPA DE BLOQUEO
+=================================
 
 Un archivo: gen_bloqueo.py
 Correr HACER_TODO y publicar.
 
 
-EL LOG QUE ME MANDASTE TENIA LA RESPUESTA
------------------------------------------
-Gracias por mandarlo, sin eso seguia adivinando. Esta linea lo dijo todo:
+PRIMERO: LO DE LA TEMPORADA YA ANDA
+-----------------------------------
+Lo verifique en la app despues de que publicaste:
 
-    [bloqueo] 9165 bloqueos leidos de los .dvw
+   antes:  entrenamiento 206 · partido 1356
+   ahora:  entrenamiento 206
 
-LOS BLOQUEOS NO SALEN DEL VIDEO. Salen directo de los .dvw.
+   modo PARTIDO        solo TODO EL EQUIPO (no jugaron ninguno: correcto)
+   modo ENTRENAMIENTO  #7 (65) · #5 CLEMENT (44) · #9 (21) ... suma 206
 
-Yo venia filtrando el archivo de video —dos veces, y las dos funcionaron:
-
-    [bloqueo] Salteo datos_video_25-26.js: esa temporada esta archivada.
-
-pero eso solo afecta al MINUTO del corte, no a los numeros. Los numeros se
-leen de la carpeta DVW NAFELS 2026, que tiene 97 partidos y 84 de ellos son
-de la temporada pasada.
-
-Otras partes del sistema ya lo sabian:
-
-    [plan_partido] 8 DVW -> ... temporada 2026/27 (97 fuera)
-    [informe] los 97 partidos de la carpeta son de otra temporada
-
-gen_bloqueo era el unico que no filtraba.
+Y dibuja: elegi a CLEMENT y salieron las 9 zonas con sus numeros
+("4 · punta 28% · 18 blq · 8 pto"). Nikolov y Figueiredo ya no estan.
 
 
-LO QUE HICE
------------
-El filtro va ahora donde se leen los .dvw, usando la FECHA del partido.
+EL PROBLEMA DE LOS NOMBRES
+--------------------------
+El nombre de cada jugador salia del .dvw, del bloque [3PLAYERS]. En varios
+archivos ese bloque viene incompleto, y el jugador quedaba solo con su
+numero, aunque en plantel_nafels.js esta cargado desde siempre.
 
-PROBADO CONTRA TUS 97 ARCHIVOS REALES:
+Ahora, cuando el .dvw no trae el nombre, se completa con el plantel:
 
-    descartados: 97 de 97
-    entran     : 0
+   #7   ->  SCHMID R
+   #9   ->  NORRIS
+   #4   ->  VAZQUEZ
+   #3   ->  SCHWITTER
 
-Cero es lo correcto: en la 26-27 todavia no jugaron.
-
-
-UN DETALLE QUE CASI ME COME
----------------------------
-La fecha de adentro del .dvw viene en formato de Estados Unidos:
-
-    [3MATCH]  10/11/2025     <- 11 de octubre, no 10 de noviembre
-
-Mi primera version la leia al reves y el 7 de enero se convertia en 1 de
-julio: 13 partidos viejos se colaban.
-
-Ahora la fecha sale del NOMBRE del archivo, que en tu club siempre arranca
-con la fecha ISO y no se puede confundir:
-
-    &2025-10-11 636587 AMRI-LUC(VM).dvw
-     ^^^^^^^^^^
-
-Y si algun archivo no la tiene en el nombre, se lee el [3MATCH] revisando
-cual numero puede ser mes y cual dia.
-
-Los entrenamientos no se filtran: su carpeta ya es de una sola temporada.
+Probado contra tu plantel real, los 13 jugadores.
 
 
-CUANDO CORRAS HACER_TODO
-------------------------
-Vas a ver:
+EL #6 QUEDA SIN NOMBRE, A PROPOSITO
+-----------------------------------
+Como me dijiste, el #6 vino a entrenar una vez y no es del plantel. No esta
+en plantel_nafels.js, asi que queda como "#6".
 
-    [bloqueo] 97 partidos de temporadas anteriores, descartados.
+Eso es lo correcto: el sistema no inventa un nombre que no tiene. Si algun
+dia se suma, lo agregas al plantel y aparece solo.
 
-Y despues, en el mapa de bloqueo:
 
-    modo PARTIDO        solo TODO EL EQUIPO (no se jugo ninguno)
-    modo ENTRENAMIENTO  los 206 con el plantel de hoy
-
-Cuando jueguen el primero de la 26-27 entra solo, porque su fecha va a ser
-posterior al 1 de julio de 2026.
+DONDE MAS APLICA
+----------------
+El arreglo va en los dos lugares donde el generador arma la lista: el que lee
+los .dvw y el que lee el video. Asi el nombre es el mismo mire por donde
+mire la pantalla.
