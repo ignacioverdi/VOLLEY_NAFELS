@@ -1,51 +1,82 @@
-FUNCIONO — queda un detalle chico
-=================================
+CHEQUEO COMPLETO — y lo que falta traducir
+==========================================
 
-Un archivo: gen_bloqueo.py
-Correr HACER_TODO y publicar.
+2 archivos:
+   gen_bloqueo.py        el "#6 #6" repetido  (necesita HACER_TODO)
+   objetivos_config.js   la ventanita en ingles y aleman  (solo publicar)
 
 
-LO QUE LOGRO ESTA CORRIDA
--------------------------
-El log lo dijo y lo confirme en la app:
+LO QUE ESTA BIEN — verificado en la app
+---------------------------------------
+BLOQUEO, que era lo que veniamos peleando:
 
-   [bloqueo] plantel: 13 jugadores para completar nombres
-   [bloqueo] 206 bloqueos leidos de los .dvw
-   [bloqueo] 97 partidos de temporadas anteriores, descartados.
-
-En pantalla:
-
-   #7  SCHMID R    (65)      <- antes decia "#7 (65)"
+   #7  SCHMID R    (65)
    #5  CLEMENT     (44)
-   #9  NORRIS      (21)      <- antes "#9 (21)"
+   #9  NORRIS      (21)
    #10 BOGDANOVSKI (18)
-   #4  VAZQUEZ     (13)      <- antes "#4 (13)"
+   #4  VAZQUEZ     (13)
    #17 ROFFLER     (10)
    #13 STEIMANN    (10)
    #11 BARTHOLET   (8)
    #1  DURDOS      (6)
-   #3  SCHWITTER   (6)       <- antes "#3 (6)"
+   #3  SCHWITTER   (6)
+   #6              (5)
 
-Los cuatro que faltaban ya tienen su apellido.
+   modo PARTIDO   ->  solo TODO EL EQUIPO (correcto: no jugaron ninguno)
+   el mapa dibuja ->  9 zonas ("4 · punta 3% · 34 blq · 7 pto")
+   los datos      ->  solo 206 de entrenamiento
 
-Y el mapa dibuja: elegi a SCHMID R y salieron las 9 zonas con sus numeros
-("4 · punta 3% · 34 blq · 7 pto").
+LOS 6 HEATMAPS:
+   armador · ataque · bloqueo · defensa · recepcion · saque
+   scripts rotos: 0 · botones de modo: SI · HTML: OK · titulos: OK
 
-Tambien se ve en el peso del archivo: datos_bloqueo.js paso de 394 KB a
-14 KB. Eso son los 1356 bloqueos viejos que ya no estan.
+EL DASHBOARD: la ventanita de las baterias abre con todo su contenido, y el
+#8 (la maquina de saque) no aparece en la grilla.
 
 
-EL DETALLE QUE QUEDA
---------------------
-El invitado se ve asi:
+LO QUE ENCONTRE MAL
+-------------------
+1) EL "#6 #6" — ya te lo habia mandado, va de nuevo por si no lo aplicaste.
+   Ahora queda "#6 (5)".
 
-   #6 #6 (5)
-      ^^ repetido
+2) LA VENTANITA ESTABA TODA EN CASTELLANO
+   Con el club en ingles se veia mezclado:
 
-Es culpa mia: cuando el jugador no esta en el plantel yo devolvia "#6" como
-nombre, y la pantalla ya escribe el numero adelante. Ahora devuelvo vacio y
-queda:
+       PLAYER
+       RECEPTION
+       158 pelotas que recibe · objetivo 60      <- castellano
+       TUS 158 PELOTAS QUE RECIBE                <- castellano
+       Perfect  27  1.7 de 10                    <- mezclado
+       CÓMO SE LLEGA A 55%                       <- castellano
+       LO QUE MÁS TE CUESTA                      <- castellano
+       • convertir 16 errores en suficientes     <- castellano
 
-   #6 (5)
+   Es culpa mia: escribi toda esa ventana con el texto fijo en castellano y
+   nunca la pase por el traductor.
 
-Es solo eso. Todo lo demas de esta corrida quedo bien.
+   Ahora usa lang.js si esta cargado —asi comparte las traducciones con el
+   resto de la app— y si no, una tabla propia con lo mismo. Asi funciona
+   igual en las pantallas que no cargan lang.js.
+
+   Queda:
+
+       158 balls received · target 60
+       YOUR 158 BALLS RECEIVED
+       Perfect  27  1.7 out of 10
+       HOW YOU GET TO 55%
+       WHAT COSTS YOU MOST
+       • turn 16 errors into fair
+
+   Y en aleman:
+
+       158 angenommene Bälle · Ziel 60
+       SO KOMMT MAN AUF 55%
+       WAS DICH AM MEISTEN KOSTET
+
+   Son 60 terminos, escritos a mano en los dos idiomas.
+
+
+COMO PUBLICAR
+-------------
+   objetivos_config.js  ->  publicar y Ctrl+Shift+R
+   gen_bloqueo.py       ->  correr HACER_TODO y publicar

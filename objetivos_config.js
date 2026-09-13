@@ -439,6 +439,126 @@ function fmtEff(v){
    La cuenta completa queda abajo, plegada, para el cuerpo tecnico.
    ══════════════════════════════════════════════════════════════════════════ */
 
+
+/* ══ LA VENTANITA EN LOS TRES IDIOMAS ════════════════════════════════════════
+   Todo lo que escribe esta ventana estaba fijo en castellano: "158 pelotas
+   que recibe", "LO QUE MÁS TE CUESTA", "convertir 16 errores en suficientes".
+   Con el club en ingles quedaba mezclado y se leia mal.
+
+   Se usa el traductor del sistema —lang.js— si esta cargado; si no, una tabla
+   propia con lo mismo, para que funcione igual en las pantallas que no lo
+   tienen. */
+var OBJ_T = {
+  en: {
+    'pelotas que recibe':'balls received', 'saques que pega':'serves hit',
+    'ataques de central':'middle attacks', 'ataques de pelota alta':'high-ball attacks',
+    'ataques rápidos':'quick attacks', 'ataques':'attacks', 'bloqueos':'blocks',
+    'pelotas que defiende':'balls dug', 'acciones':'actions',
+    'objetivo':'target', 'de cada 10':'out of 10', 'Tus':'Your',
+    'Cómo se llega a':'How you get to', 'Lo que más te cuesta':'What costs you most',
+    'Para llegar a':'To reach', 'convertir':'turn', 'en':'into',
+    'no regalar':'stop giving away', 'pasás de':'you go from', 'a':'to',
+    'y llegás al objetivo.':'and you hit the target.',
+    'Después hay que subir calidad.':'After that you need better quality.',
+    'Ningún cambio por separado alcanza. La palanca más grande:':'No single change is enough. The biggest lever:',
+    'Estás por encima del objetivo.':'You are above target.',
+    'El equipo apunta a':'The team aims for', 'y vos vas':'and you are',
+    'arriba.':'above.',
+    'Hace falta subir la calidad general.':'Overall quality needs to improve.',
+    'Ojo: son pocas pelotas.':'Careful: few balls.',
+    'Ojo: son pocas acciones.':'Careful: few actions.',
+    'Con':'With', 'ataque':'attack', 'una sola cambia el número':'a single one moves the number',
+    'puntos. Este porcentaje todavía no dice mucho: mirálo cuando haya más.':'points. This percentage does not say much yet: check it when there are more.',
+    ', una sola cambia bastante el número. Mirálo cuando haya más.':', a single one moves the number a lot. Check it when there are more.',
+    'Cada pelota vale según cómo quedó:':'Each ball counts by how it ended:',
+    'vale':'counts', 'El resultado es el promedio.':'The result is the average.',
+    'No es un promedio como en recepción: es una RESTA. Cuenta cuántos puntos netos deja cada ataque, por eso puede dar negativo.':'This is not an average like reception: it is a SUBTRACTION. It counts net points per attack, which is why it can go negative.',
+    'puntos':'points', 'bloqueados':'blocked', 'errores':'errors',
+    'Lo que regalás':'What you give away', 'de tus':'of your',
+    'ataques terminan en punto del rival':'attacks end in a point for the opponent',
+    'te bajan':'they cost you',
+    'bloqueos terminaron en punto':'blocks ended in a point',
+    'en punto y':'in a point and', 'en positivo':'positive', 'sobre':'out of',
+    'Punto':'Point', 'Sigue en juego':'Still in play', 'Bloqueado':'Blocked', 'Error':'Error',
+    'Perfecta':'Perfect', 'Positiva':'Positive', 'Suficiente':'Fair', 'Pobre':'Poor',
+    'Sobrepase':'Overpass', 'Ace':'Ace', 'Free ball':'Free ball', 'Positivo':'Positive',
+    'Neutro':'Neutral', 'Negativo':'Negative', 'Buena':'Good', 'Neutra':'Neutral', 'Mala':'Poor',
+    'Saque':'Serve', 'Recepción':'Reception', 'Defensa':'Defense',
+    'Bloqueo #+':'Block #+', 'Bloqueo #':'Block #',
+    'Atq Central':'Middle Atk', 'Atq Alta':'High-ball Atk', 'Atq Rápida':'Quick Atk',
+    'Atq tras recepción #+':'Atk after reception #+', 'Atq tras recepción !':'Atk after reception !',
+    'Atq tras recepción -':'Atk after reception -', 'Atq en transición':'Atk in transition',
+    'Todavía no hay acciones de este fundamento.':'No actions for this skill yet.',
+    'Para este fundamento todavía no hay desglose guardado.':'No breakdown stored for this skill yet.',
+    'Corré HACER_TODO y volvé a entrar.':'Run HACER_TODO and come back in.',
+    'Cerrar':'Close',
+    'El resultado es el PROMEDIO. Por eso 50 no es "la mitad de bien": 50 es lo que vale una pelota neutra.':'The result is the AVERAGE. That is why 50 is not "half good": 50 is what a neutral ball is worth.',
+    'No pude identificar al jugador para traer sus acciones.':'I could not identify the player to fetch their actions.',
+    'El reproductor no está cargado en esta pantalla.':'The player is not loaded on this screen.'
+  },
+  de: {
+    'pelotas que recibe':'angenommene Bälle', 'saques que pega':'Aufschläge',
+    'ataques de central':'Angriffe Mitte', 'ataques de pelota alta':'hohe Angriffe',
+    'ataques rápidos':'schnelle Angriffe', 'ataques':'Angriffe', 'bloqueos':'Blocks',
+    'pelotas que defiende':'abgewehrte Bälle', 'acciones':'Aktionen',
+    'objetivo':'Ziel', 'de cada 10':'von 10', 'Tus':'Deine',
+    'Cómo se llega a':'So kommt man auf', 'Lo que más te cuesta':'Was dich am meisten kostet',
+    'Para llegar a':'Um zu erreichen', 'convertir':'wandle', 'en':'in',
+    'no regalar':'nicht verschenken', 'pasás de':'du gehst von', 'a':'auf',
+    'y llegás al objetivo.':'und erreichst das Ziel.',
+    'Después hay que subir calidad.':'Danach braucht es mehr Qualität.',
+    'Ningún cambio por separado alcanza. La palanca más grande:':'Keine einzelne Änderung reicht. Der grösste Hebel:',
+    'Estás por encima del objetivo.':'Du liegst über dem Ziel.',
+    'El equipo apunta a':'Das Team zielt auf', 'y vos vas':'und du bist',
+    'arriba.':'darüber.',
+    'Hace falta subir la calidad general.':'Die Qualität muss insgesamt steigen.',
+    'Ojo: son pocas pelotas.':'Achtung: wenige Bälle.',
+    'Ojo: son pocas acciones.':'Achtung: wenige Aktionen.',
+    'Con':'Mit', 'ataque':'Angriff', 'una sola cambia el número':'ein einziger verschiebt die Zahl',
+    'puntos. Este porcentaje todavía no dice mucho: mirálo cuando haya más.':'Punkte. Dieser Prozentwert sagt noch wenig: schau später nochmal.',
+    ', una sola cambia bastante el número. Mirálo cuando haya más.':', eine einzige verschiebt die Zahl deutlich. Schau später nochmal.',
+    'Cada pelota vale según cómo quedó:':'Jeder Ball zählt je nach Ausgang:',
+    'vale':'zählt', 'El resultado es el promedio.':'Das Ergebnis ist der Durchschnitt.',
+    'No es un promedio como en recepción: es una RESTA. Cuenta cuántos puntos netos deja cada ataque, por eso puede dar negativo.':'Das ist kein Durchschnitt wie bei der Annahme, sondern eine SUBTRAKTION: Nettopunkte pro Angriff, darum kann es negativ werden.',
+    'puntos':'Punkte', 'bloqueados':'geblockt', 'errores':'Fehler',
+    'Lo que regalás':'Was du verschenkst', 'de tus':'deiner',
+    'ataques terminan en punto del rival':'Angriffe enden mit einem Punkt für den Gegner',
+    'te bajan':'das kostet dich',
+    'bloqueos terminaron en punto':'Blocks endeten mit einem Punkt',
+    'en punto y':'als Punkt und', 'en positivo':'positiv', 'sobre':'von',
+    'Punto':'Punkt', 'Sigue en juego':'Noch im Spiel', 'Bloqueado':'Geblockt', 'Error':'Fehler',
+    'Perfecta':'Perfekt', 'Positiva':'Positiv', 'Suficiente':'Ausreichend', 'Pobre':'Schwach',
+    'Sobrepase':'Überpass', 'Ace':'Ass', 'Free ball':'Freeball', 'Positivo':'Positiv',
+    'Neutro':'Neutral', 'Negativo':'Negativ', 'Buena':'Gut', 'Neutra':'Neutral', 'Mala':'Schwach',
+    'Saque':'Aufschlag', 'Recepción':'Annahme', 'Defensa':'Abwehr',
+    'Bloqueo #+':'Block #+', 'Bloqueo #':'Block #',
+    'Atq Central':'Angriff Mitte', 'Atq Alta':'Hoher Angriff', 'Atq Rápida':'Schneller Angriff',
+    'Atq tras recepción #+':'Angriff nach Annahme #+', 'Atq tras recepción !':'Angriff nach Annahme !',
+    'Atq tras recepción -':'Angriff nach Annahme -', 'Atq en transición':'Angriff im Umschalten',
+    'Todavía no hay acciones de este fundamento.':'Noch keine Aktionen für dieses Element.',
+    'Para este fundamento todavía no hay desglose guardado.':'Für dieses Element ist noch keine Aufschlüsselung gespeichert.',
+    'Corré HACER_TODO y volvé a entrar.':'Führe HACER_TODO aus und komm zurück.',
+    'Cerrar':'Schliessen',
+    'El resultado es el PROMEDIO. Por eso 50 no es "la mitad de bien": 50 es lo que vale una pelota neutra.':'Das Ergebnis ist der DURCHSCHNITT. Darum heisst 50 nicht "halb gut": 50 ist der Wert eines neutralen Balls.',
+    'No pude identificar al jugador para traer sus acciones.':'Ich konnte den Spieler nicht identifizieren.',
+    'El reproductor no está cargado en esta pantalla.':'Der Player ist auf diesem Bildschirm nicht geladen.'
+  }
+};
+
+function objIdioma(){
+  try{ return localStorage.getItem('vb_lang') || 'es'; }catch(e){ return 'es'; }
+}
+
+/* Traduce un texto de la ventanita. Primero prueba lang.js —asi comparte las
+   traducciones con el resto de la app— y si no lo tiene usa la tabla de aca. */
+function ot(txt){
+  var L = objIdioma();
+  if(L === 'es') return txt;
+  try{ if(typeof t === 'function'){ var r = t(txt); if(r && r !== txt) return r; } }catch(e){}
+  var d = OBJ_T[L];
+  return (d && d[txt]) ? d[txt] : txt;
+}
+
 var OBJ_DETALLE = {
   sq:   {d:'sqD',  nom:'Saque',      pl:'saques que pega',
          filas:[['p','Ace',100,'#22c55e','#'],['f','Free ball',87.5,'#4ade80','/'],
@@ -565,7 +685,7 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
       + '<span style="width:19px;height:19px;border-radius:4px;background:'+f[3]+';color:#0f172a;'
       +    'font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;'
       +    'flex:none;font-family:monospace">'+f[0]+'</span>'
-      + '<span style="flex:1;color:#cbd5e1">'+f[1]+'</span>'
+      + '<span style="flex:1;color:#cbd5e1">'+ot(f[1])+'</span>'
       /* El numero se toca. "Sigue en juego" no: no es una valoracion del
          scout sino lo que queda al restar, no hay un signo que buscar. */
       + (f[4]
@@ -576,7 +696,7 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
            + 'text-underline-offset:3px">'+f[2]+'</span>'
          : '<span style="font-weight:900;color:#e2e8f0;min-width:30px;text-align:right;font-size:14px">'+f[2]+'</span>')
       + '<span style="color:#64748b;min-width:56px;text-align:right;font-size:11px">'
-      +    (f[2]/T*10).toFixed(1)+' de 10</span>'
+      +    (f[2]/T*10).toFixed(1)+' '+ot('de cada 10')+'</span>'
       + '</div>';
   });
 
@@ -584,7 +704,7 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
   var cuenta = '<div style="margin-top:11px;padding:9px 11px;background:rgba(148,163,184,.07);'
     + 'border-radius:8px;font-size:11.5px;color:#94a3b8;line-height:1.7">'
     + '<div style="font-size:10px;font-weight:800;letter-spacing:.7px;color:#64748b;'
-    +      'text-transform:uppercase;margin-bottom:3px">Cómo se llega a '+Math.round(val)+'%</div>'
+    +      'text-transform:uppercase;margin-bottom:3px">'+ot('Cómo se llega a')+' '+Math.round(val)+'%</div>'
     + '<b style="color:#86efac">'+P+'</b> puntos \u2212 <b style="color:#fb923c">'+B+'</b> bloqueados'
     + ' \u2212 <b style="color:#f87171">'+E+'</b> errores = <b style="color:#cbd5e1">'+neto+'</b>'
     + '<br><b style="color:#cbd5e1">'+neto+'</b> \u00f7 <b style="color:#cbd5e1">'+T+'</b>'
@@ -598,7 +718,7 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
   if(B || E){
     cuesta = '<div style="margin-top:13px">'
       + '<div style="font-size:10px;font-weight:800;letter-spacing:.7px;color:#64748b;'
-      +      'text-transform:uppercase;margin-bottom:5px">Lo que regalás</div>'
+      +      'text-transform:uppercase;margin-bottom:5px">'+ot('Lo que regalás')+'</div>'
       + '<div style="font-size:12px;color:#cbd5e1;line-height:1.6">'
       + '<b>'+(B+E)+'</b> de tus '+T+' ataques terminan en punto del rival'
       + ' \u2014 te bajan <b style="color:#f87171">'+Math.round((B+E)/T*100)+'</b> puntos.'
@@ -621,7 +741,7 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
       if(faltan <= T - P) op.push('convertir <b>'+faltan+'</b> ataques más en punto');
       meta_txt = '<div style="margin-top:13px;padding:10px 12px;background:rgba(251,191,36,.09);'
         + 'border:1px solid rgba(251,191,36,.28);border-radius:8px;font-size:12px;color:#cbd5e1;line-height:1.6">'
-        + '<div style="color:#fbbf24;font-weight:800;margin-bottom:4px">Para llegar a '+obj+'</div>'
+        + '<div style="color:#fbbf24;font-weight:800;margin-bottom:4px">'+ot('Para llegar a')+' '+obj+'</div>'
         + (op.length ? op.map(function(o){ return '\u2022 '+o; }).join('<br>')
                      : 'Con '+T+' ataques hace falta un salto grande: conviene mirarlo sobre más partidos.')
         + '</div>';
@@ -642,7 +762,7 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
     aviso = '<div style="margin-top:11px;padding:9px 11px;background:rgba(148,163,184,.1);'
       + 'border:1px solid rgba(148,163,184,.25);border-radius:8px;font-size:11.5px;'
       + 'color:#cbd5e1;line-height:1.55">'
-      + '<b style="color:#94a3b8">Ojo: son pocas pelotas.</b><br>'
+      + '<b style="color:#94a3b8">'+ot('Ojo: son pocas pelotas.')+'</b><br>'
       + 'Con '+T+' ataque'+(T>1?'s':'')+', una sola cambia el número '
       + Math.round(200/T)+' puntos. Este porcentaje todavía no dice mucho: '
       + 'mirálo cuando haya más.</div>';
@@ -652,8 +772,8 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
    + '<div style="display:flex;height:9px;border-radius:5px;overflow:hidden;margin-bottom:11px">'+barra+'</div>'
    + '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">'
    +   '<span style="font-size:10px;font-weight:800;letter-spacing:.7px;color:#64748b;'
-   +        'text-transform:uppercase">Tus '+T+' '+(cfg.pl||'ataques')+'</span>'
-   +   '<span style="font-size:10px;color:#475569">de cada 10</span>'
+   +        'text-transform:uppercase">'+ot('Tus')+' '+T+' '+ot(cfg.pl||'ataques')+'</span>'
+   +   '<span style="font-size:10px;color:#475569">'+ot('de cada 10')+'</span>'
    + '</div>'
    + '<div style="font-size:12.5px">'+lista+'</div>'
    + aviso + cuenta + cuesta + (T<10 ? '' : meta_txt);
@@ -664,7 +784,7 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
 function objMejorPalanca(cfg, D, total, suma, val, obj){
   var neutro = null;
   cfg.filas.forEach(function(f){ if(f[2]===50) neutro = f; });
-  if(!neutro) return 'Hace falta subir la calidad general.';
+  if(!neutro) return ot('Hace falta subir la calidad general.');
   var mejor = null;
   cfg.filas.forEach(function(f){
     if(f[2]==null || f[2] >= 50) return;
@@ -672,11 +792,11 @@ function objMejorPalanca(cfg, D, total, suma, val, obj){
     var gana = (neutro[2] - f[2]) * n / total;
     if(!mejor || gana > mejor.gana) mejor = {f:f, n:n, gana:gana};
   });
-  if(!mejor) return 'Hace falta subir la calidad general.';
+  if(!mejor) return ot('Hace falta subir la calidad general.');
   var nuevo = val + mejor.gana;
-  var txt = 'Ningún cambio por separado alcanza. La palanca más grande:<br>'
-    + '\u2022 no regalar <b>' + mejor.n + ' ' + objPlural(mejor.f[1], mejor.n) + '</b>'
-    + ' \u2192 pasás de <b>' + fmtEff(val) + '</b> a <b>' + fmtEff(nuevo) + '</b>';
+  var txt = ot('Ningún cambio por separado alcanza. La palanca más grande:')+'<br>'
+    + '\u2022 '+ot('no regalar')+' <b>' + mejor.n + ' ' + objPlural(mejor.f[1], mejor.n) + '</b>'
+    + ' \u2192 '+ot('pasás de')+' <b>' + fmtEff(val) + '</b> a <b>' + fmtEff(nuevo) + '</b>';
   txt += (Math.round(nuevo) >= Math.round(obj)) ? ' y llegás al objetivo.'
                                                 : '. Después hay que subir calidad.';
   return txt;
@@ -878,7 +998,7 @@ function objAbrirDetalle(id, vals, meta, quien){
   if(cfg && cfg.k && D) D = D[cfg.k] || null;
   var val = (vals && vals[id]!=null) ? vals[id] : null;
   var obj = (meta && meta.obj!=null) ? meta.obj : null;
-  var nombre = (cfg && cfg.nom) || String((meta&&meta.label)||'').replace(/\s*\(-?\d+\)\s*$/,'');
+  var nombre = ot((cfg && cfg.nom) || '')  || (cfg && cfg.nom) || String((meta&&meta.label)||'').replace(/\s*\(-?\d+\)\s*$/,'');
 
   if(!cfg || !D){
     objPintarDetalle(nombre, obj,
@@ -941,7 +1061,7 @@ function objAbrirDetalle(id, vals, meta, quien){
       /* SIEMPRE con un decimal. Con 1362 acciones, 260 y 336 pelotas daban
          "2 de 10" las dos: el redondeo borraba justo lo que se queria
          mostrar. Con decimal se ve 1.9 contra 2.5. */
-      +    de10.toFixed(1)+' de 10</span>'
+      +    de10.toFixed(1)+' '+ot('de cada 10')+'</span>'
       + '</div>';
   });
 
@@ -954,7 +1074,7 @@ function objAbrirDetalle(id, vals, meta, quien){
     if(pierde.length){
       cuesta = '<div style="margin-top:13px">'
         + '<div style="font-size:10px;font-weight:800;letter-spacing:.7px;color:#64748b;'
-        +      'text-transform:uppercase;margin-bottom:5px">Lo que más te cuesta</div>';
+        +      'text-transform:uppercase;margin-bottom:5px">'+ot('Lo que más te cuesta')+'</div>';
       pierde.forEach(function(x){
         cuesta += '<div style="display:flex;align-items:center;gap:7px;padding:3px 0;font-size:12px">'
           + '<span style="width:9px;height:9px;border-radius:2px;background:'+x.c+';flex:none"></span>'
@@ -1001,8 +1121,8 @@ function objAbrirDetalle(id, vals, meta, quien){
         var cuantas = Math.ceil(falta/gana);
         if(cuantas>0 && cuantas<=n){
           opciones.push({
-            txt: 'convertir <b>'+cuantas+' '+objPlural(f[1],cuantas)
-                 +'</b> en '+objPlural(destino[1],cuantas),
+            txt: ot('convertir')+' <b>'+cuantas+' '+ot(objPlural(f[1],cuantas))
+                 +'</b> '+ot('en')+' '+ot(objPlural(destino[1],cuantas)),
             malo: (f[2] < 50) ? 0 : 1,
             n: cuantas
           });
@@ -1075,7 +1195,7 @@ function objAbrirDetalle(id, vals, meta, quien){
     aviso2 = '<div style="margin-top:11px;padding:9px 11px;background:rgba(148,163,184,.1);'
       + 'border:1px solid rgba(148,163,184,.25);border-radius:8px;font-size:11.5px;'
       + 'color:#cbd5e1;line-height:1.55">'
-      + '<b style="color:#94a3b8">Ojo: son pocas acciones.</b><br>'
+      + '<b style="color:#94a3b8">'+ot('Ojo: son pocas acciones.')+'</b><br>'
       + 'Con '+total+', una sola cambia bastante el número. Mirálo cuando haya más.</div>';
   }
 
@@ -1083,7 +1203,7 @@ function objAbrirDetalle(id, vals, meta, quien){
    + '<div style="display:flex;height:9px;border-radius:5px;overflow:hidden;margin-bottom:11px">'+barra+'</div>'
    + '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">'
    +   '<span style="font-size:10px;font-weight:800;letter-spacing:.7px;color:#64748b;'
-   +        'text-transform:uppercase">Tus '+total+' '+(cfg.pl||'acciones')+'</span>'
+   +        'text-transform:uppercase">'+ot('Tus')+' '+total+' '+ot(cfg.pl||'acciones')+'</span>'
    +   '<span style="font-size:10px;color:#475569">de cada 10</span>'
    + '</div>'
    + '<div style="font-size:12.5px">'+lista+'</div>'
@@ -1092,9 +1212,9 @@ function objAbrirDetalle(id, vals, meta, quien){
       Si algun dia cambia la escala, este texto cambia solo. */
    + (cfg.tipo ? '' :
       '<div style="margin-top:9px;font-size:10.5px;color:#475569;line-height:1.5">'
-      + 'Cada pelota vale según cómo quedó: '
+      + ot('Cada pelota vale según cómo quedó:')+' '
       + cfg.filas.map(function(f){ return f[4]+' vale '+String(f[2]).replace('.',','); }).join(' \u00b7 ')
-      + '. El resultado es el promedio.</div>');
+      + '. '+ot('El resultado es el promedio.')+'</div>');
 
   objPintarDetalle(nombre, obj, cuerpo, val, total, cfg.pl, quien);
 }
@@ -1114,8 +1234,8 @@ function objPintarDetalle(nombre, obj, cuerpo, val, total, pl, quien){
    +          'text-transform:uppercase">'+nombre+'</div>'
    +     (total!=null
         ? '<div style="font-size:10.5px;color:#64748b;margin-top:2px">'+total+' '+(pl||'acciones')
-          + (obj!=null ? ' \u00b7 objetivo '+obj : '')+'</div>'
-        : (obj!=null ? '<div style="font-size:10.5px;color:#64748b;margin-top:2px">objetivo '+obj+'</div>' : ''))
+          + (obj!=null ? ' \u00b7 '+ot('objetivo')+' '+obj : '')+'</div>'
+        : (obj!=null ? '<div style="font-size:10.5px;color:#64748b;margin-top:2px">'+ot('objetivo')+' '+obj+'</div>' : ''))
    +   '</div>'
    +   (val!=null
        ? '<div style="font-size:27px;font-weight:900;color:#e2e8f0;line-height:1">'+fmtEff(val)+'</div>'
@@ -1133,7 +1253,7 @@ function objPintarDetalle(nombre, obj, cuerpo, val, total, pl, quien){
    +   '<div style="padding:0 14px 13px">'
    +     '<button onclick="objCerrarDetalle()" style="width:100%;padding:8px;background:rgba(148,163,184,.1);'
    +        'border:1px solid rgba(148,163,184,.2);border-radius:8px;color:#cbd5e1;font-size:12px;'
-   +        'font-weight:700;cursor:pointer;font-family:inherit">Cerrar</button>'
+   +        'font-weight:700;cursor:pointer;font-family:inherit">'+ot('Cerrar')+'</button>'
    +   '</div>'
    + '</div></div>';
 
