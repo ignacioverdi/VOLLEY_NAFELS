@@ -1,63 +1,52 @@
-ARMADO Y BLOQUEO — LAS DOS CAUSAS REALES
-========================================
+CHEQUEO COMPLETO DE LOS 6 HEATMAPS
+==================================
 
-2 archivos. Publicar y Ctrl+Shift+R.
-
-
-DEFENSA YA ANDA — lo verifique
-------------------------------
-   13 jugadores en el desplegable
-   #20 SCHMID (65) · #2 BRUDERER (50) · #4 VAZQUEZ (34) · ...
-   el mapa se dibuja: 65 defensas, 62 zonas pintadas
-   el boton PARTIDO / ENTRENAMIENTO cambia en las dos direcciones
-   en PARTIDO dice "0 partidos", que es correcto en la 26-27
+Un archivo: hm_bloqueo.html. Publicar y Ctrl+Shift+R.
 
 
-1) ARMADO — una llave de mas
-----------------------------
-Es el mismo tipo de problema que defensa, en otra forma. La linea 19 decia:
+LO QUE YA ANDA — verificado uno por uno en la app
+-------------------------------------------------
 
-      }; }
-        ^ esta llave cerraba la funcion ANTES del return
+ARMADO          ✓  #4 VAZQUEZ (250 arm.) · #13 STEIMANN (158 arm.)
+                   dibuja 346 zonas · la llave de mas ya no rompe nada
 
-Con el return afuera de la funcion, el bloque entero de javascript no
-compilaba. Y cuando un bloque no compila, el navegador lo descarta COMPLETO:
-no existia pintar, ni setModo, ni el desplegable de armadores.
+DEFENSA         ✓  13 jugadores · #20 SCHMID (65) · #2 BRUDERER (50)...
+                   dibuja 62 zonas · el boton cambia en las dos direcciones
+                   en PARTIDO dice "0 partidos" (correcto en la 26-27)
 
-Por eso la solapa ENTRENAMIENTO no hacia nada. El codigo estaba ahi, pero
-nunca llegaba a ejecutarse.
+SAQUE           ✓  11 jugadores · #9 NORRIS (131) · #5 CLEMENT (129)...
 
-VERIFICADO en la app: LIGA_DATA_ENT tiene los 2 armadores
+RECEPCIÓN       ✓  8 jugadores · #20 SCHMID J (272) · #1 DURDOS (264)...
 
-   VAZQUEZ Ezequiel (#4)  250 acciones
-   STEIMANN Yannik (#13)  158 acciones
+ATAQUE          ✓  12 jugadores · #9 NORRIS (90) · #11 BARTHOLET (82)...
 
-y en pantalla no aparecia ninguno.
-
-Corregido. Los 3 bloques compilan.
+BLOQUEO         ~  la lista ya aparece (12 jugadores), pero no se rehacia
+                   al cambiar de modo. Va corregido en este zip.
 
 
-2) BLOQUEO — faltaba llamar a una funcion
------------------------------------------
-El selector PARTIDO / ENTRENAMIENTO ya aparece —eso se arreglo— pero el
-desplegable de jugador seguia con "equipo completo" nada mas.
+LO QUE ARREGLE AHORA
+--------------------
+Al pasar de PARTIDO a ENTRENAMIENTO, setModoBlq rehacia los combos y el mapa
+pero NO el desplegable de jugador:
 
-Verifique en la app: EQ era 'nafels' y JUGADORES tenia los 13. El dato
-estaba. Lo que faltaba era llamar a rellenarJugadores(), que es la que llena
-el <select>. Yo llamaba a rellenarCombos y a pintar, pero no a esa.
+    pintarModo(); rellenarCombos(); pintar();
+                  ^ faltaba rellenarJugadores()
 
-Corregido.
+Quedaba con los totales del modo anterior: pasabas a entrenamientos y seguias
+viendo "356 bloqueos", que eran los de partidos.
+
+rellenarJugadores ya filtraba por tipo. Solo faltaba llamarla.
 
 
-LOS 6 HEATMAPS, VERIFICADOS
----------------------------
-   armador     3 bloques   todos compilan
-   ataque      3 bloques   todos compilan
-   bloqueo     3 bloques   todos compilan
-   defensa     4 bloques   todos compilan
-   recepcion   3 bloques   todos compilan
-   saque       3 bloques   todos compilan
+LO QUE TE VA A LLAMAR LA ATENCION EN BLOQUEO
+--------------------------------------------
+El desplegable muestra nombres que NO son del plantel actual:
 
-Antes de hoy, defensa y armador tenian un bloque roto cada uno. Eran errores
-de sintaxis viejos, no de las traducciones: por eso esas dos pantallas nunca
-respondieron por mas que les agregaramos cosas.
+    #15 Nikolov (356) · #14 Figueiredo (149) · #6 (192) · #4 (185)
+
+Son de la temporada 25-26. Es el problema del filtro de temporada que te
+explique: gen_bloqueo corria ANTES que gen_plan_partido y no podia filtrar.
+
+ESO SE ARREGLA CORRIENDO HACER_TODO. Ya esta el orden corregido en el .bat.
+Despues de correrlo, en bloqueo van a quedar solo los 206 de entrenamiento
+de la 26-27, con los nombres del plantel de hoy.
