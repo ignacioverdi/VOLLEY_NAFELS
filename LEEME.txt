@@ -1,82 +1,66 @@
-CHEQUEO COMPLETO — y lo que falta traducir
-==========================================
+LA VENTANITA — LO QUE QUEDABA A MEDIAS
+======================================
 
-2 archivos:
-   gen_bloqueo.py        el "#6 #6" repetido  (necesita HACER_TODO)
-   objetivos_config.js   la ventanita en ingles y aleman  (solo publicar)
+Un archivo: objetivos_config.js. Publicar y Ctrl+Shift+R.
 
 
-LO QUE ESTA BIEN — verificado en la app
----------------------------------------
-BLOQUEO, que era lo que veniamos peleando:
+LO QUE PASO
+-----------
+La entrega anterior tradujo la mitad. Asi quedaba en pantalla:
 
-   #7  SCHMID R    (65)
-   #5  CLEMENT     (44)
-   #9  NORRIS      (21)
-   #10 BOGDANOVSKI (18)
-   #4  VAZQUEZ     (13)
-   #17 ROFFLER     (10)
-   #13 STEIMANN    (10)
-   #11 BARTHOLET   (8)
-   #1  DURDOS      (6)
-   #3  SCHWITTER   (6)
-   #6              (5)
+   158 pelotas que recibe · target 60      <- mezclado
+   YOUR 158 BALLS RECEIVED                 <- bien
+   de cada 10                              <- castellano
+   Perfect · Positive                      <- bien
+   Suficiente · Pobre · Sobrepase          <- castellano
+   CÓMO SE LLEGA A 55%                     <- castellano
+   WHAT COSTS YOU MOST                     <- bien
+   40 suficientes  ·  18 errores           <- castellano
+   Para llegar a 60                        <- castellano
+   • turn 16 errors into suficientes       <- mezclado en la misma frase
+   # vale 100 · + vale 75                  <- castellano
 
-   modo PARTIDO   ->  solo TODO EL EQUIPO (correcto: no jugaron ninguno)
-   el mapa dibuja ->  9 zonas ("4 · punta 3% · 34 blq · 7 pto")
-   los datos      ->  solo 206 de entrenamiento
-
-LOS 6 HEATMAPS:
-   armador · ataque · bloqueo · defensa · recepcion · saque
-   scripts rotos: 0 · botones de modo: SI · HTML: OK · titulos: OK
-
-EL DASHBOARD: la ventanita de las baterias abre con todo su contenido, y el
-#8 (la maquina de saque) no aparece en la grilla.
+Me faltaron dos cosas: los textos de la cabecera y de los titulos, y sobre
+todo objPlural, que arma los nombres del consejo y devolvia siempre
+castellano. De ahi salia "turn 16 errors into suficientes".
 
 
-LO QUE ENCONTRE MAL
--------------------
-1) EL "#6 #6" — ya te lo habia mandado, va de nuevo por si no lo aplicaste.
-   Ahora queda "#6 (5)".
+COMO QUEDA AHORA
+----------------
+   158 balls received · target 60
+   YOUR 158 BALLS RECEIVED          out of 10
+    Perfect      27   1.7 out of 10
+    Positive     45   2.8 out of 10
+    Fair         40   2.5 out of 10
+    Poor         23   1.5 out of 10
+    Overpass      5   0.3 out of 10
+    Error        18   1.1 out of 10
 
-2) LA VENTANITA ESTABA TODA EN CASTELLANO
-   Con el club en ingles se veia mezclado:
+   HOW YOU GET TO 55%
+   WHAT COSTS YOU MOST
+     40 fairs    −13
+     18 errors   −11
 
-       PLAYER
-       RECEPTION
-       158 pelotas que recibe · objetivo 60      <- castellano
-       TUS 158 PELOTAS QUE RECIBE                <- castellano
-       Perfect  27  1.7 de 10                    <- mezclado
-       CÓMO SE LLEGA A 55%                       <- castellano
-       LO QUE MÁS TE CUESTA                      <- castellano
-       • convertir 16 errores en suficientes     <- castellano
+   To reach 60
+   • turn 16 errors into fairs
 
-   Es culpa mia: escribi toda esa ventana con el texto fijo en castellano y
-   nunca la pase por el traductor.
+   Each ball counts by how it ended: # counts 100 · + counts 75 ...
+   The result is the average.
+   [Close]
 
-   Ahora usa lang.js si esta cargado —asi comparte las traducciones con el
-   resto de la app— y si no, una tabla propia con lo mismo. Asi funciona
-   igual en las pantallas que no cargan lang.js.
+Y en los tres idiomas:
 
-   Queda:
+   [es]  convertir 16 errores en suficientes
+   [en]  turn 16 errors into fairs
+   [de]  wandle 16 Fehler in Ausreichend
 
-       158 balls received · target 60
-       YOUR 158 BALLS RECEIVED
-       Perfect  27  1.7 out of 10
-       HOW YOU GET TO 55%
-       WHAT COSTS YOU MOST
-       • turn 16 errors into fair
-
-   Y en aleman:
-
-       158 angenommene Bälle · Ziel 60
-       SO KOMMT MAN AUF 55%
-       WAS DICH AM MEISTEN KOSTET
-
-   Son 60 terminos, escritos a mano en los dos idiomas.
+En aleman los sustantivos van con mayuscula, como corresponde; en castellano
+e ingles en minuscula, porque estan en medio de una frase.
 
 
-COMO PUBLICAR
--------------
-   objetivos_config.js  ->  publicar y Ctrl+Shift+R
-   gen_bloqueo.py       ->  correr HACER_TODO y publicar
+LO DEMAS, VERIFICADO
+--------------------
+BLOQUEO quedo bien: los 11 jugadores con su apellido, "#6 (5)" sin repetir,
+modo partido en cero y el mapa dibujando las 9 zonas.
+
+Los 6 heatmaps sin scripts rotos y con sus botones.

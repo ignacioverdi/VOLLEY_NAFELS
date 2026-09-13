@@ -803,10 +803,20 @@ function objMejorPalanca(cfg, D, total, suma, val, obj){
 }
 
 function objPlural(p, n){
-  p = String(p||'').toLowerCase();
-  if(n === 1) return p;
-  if(/[aeiou]$/.test(p)) return p + 's';
-  return p + 'es';
+  /* ══ EL PLURAL, EN EL IDIOMA QUE CORRESPONDA ══════════════════════════════
+     Antes esto devolvia siempre castellano y el consejo quedaba mezclado:
+     "turn 16 errors into suficientes". Ahora se traduce PRIMERO la palabra y
+     despues se pluraliza segun el idioma. */
+  var base = ot(String(p||''));
+  var L = objIdioma();
+  /* En castellano e ingles va en minuscula: aparece en medio de una frase
+     —"turn 16 errors into fair balls"— y con mayuscula se lee raro.
+     En aleman NO: ahi los sustantivos llevan mayuscula siempre. */
+  if(L !== 'de') base = base.charAt(0).toLowerCase() + base.slice(1);
+  if(n === 1) return base;
+  if(L === 'es') return /[aeiou]$/.test(base) ? base + 's' : base + 'es';
+  if(L === 'en') return /(s|x|z|ch|sh)$/i.test(base) ? base + 'es' : base + 's';
+  return base;   /* aleman: el plural no siempre suma -s */
 }
 
 
@@ -1132,7 +1142,7 @@ function objAbrirDetalle(id, vals, meta, quien){
       opciones.sort(function(a,b){ return (a.malo-b.malo) || (a.n-b.n); });
       meta_txt = '<div style="margin-top:13px;padding:10px 12px;background:rgba(251,191,36,.09);'
         + 'border:1px solid rgba(251,191,36,.28);border-radius:8px;font-size:12px;color:#cbd5e1;line-height:1.6">'
-        + '<div style="color:#fbbf24;font-weight:800;margin-bottom:4px">Para llegar a '+obj+'</div>'
+        + '<div style="color:#fbbf24;font-weight:800;margin-bottom:4px">'+ot('Para llegar a')+' '+obj+'</div>'
         + (opciones.length
             ? opciones.slice(0,2).map(function(o){ return '\u2022 '+o.txt; }).join('<br>')
             : objMejorPalanca(cfg, D, total, suma, val, obj))
@@ -1180,7 +1190,7 @@ function objAbrirDetalle(id, vals, meta, quien){
     cuentaVisible = '<div style="margin-top:11px;padding:9px 11px;background:rgba(148,163,184,.07);'
       + 'border-radius:8px;font-size:11.5px;color:#94a3b8;line-height:1.7">'
       + '<div style="font-size:10px;font-weight:800;letter-spacing:.7px;color:#64748b;'
-      +      'text-transform:uppercase;margin-bottom:3px">Cómo se llega a '
+      +      'text-transform:uppercase;margin-bottom:3px">'+ot('Cómo se llega a')+' '
       +      (val!=null?fmtEff(val):'\u2014')+'</div>'
       + partes.join(' + ')
       + '<br><b style="color:#cbd5e1">'+Math.round(suma)+'</b> \u00f7 <b style="color:#cbd5e1">'
@@ -1204,7 +1214,7 @@ function objAbrirDetalle(id, vals, meta, quien){
    + '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">'
    +   '<span style="font-size:10px;font-weight:800;letter-spacing:.7px;color:#64748b;'
    +        'text-transform:uppercase">'+ot('Tus')+' '+total+' '+ot(cfg.pl||'acciones')+'</span>'
-   +   '<span style="font-size:10px;color:#475569">de cada 10</span>'
+   +   '<span style="font-size:10px;color:#475569">'+ot('de cada 10')+'</span>'
    + '</div>'
    + '<div style="font-size:12.5px">'+lista+'</div>'
    + aviso2 + cuentaVisible + cuesta + (total<15 ? '' : meta_txt)
@@ -1213,7 +1223,7 @@ function objAbrirDetalle(id, vals, meta, quien){
    + (cfg.tipo ? '' :
       '<div style="margin-top:9px;font-size:10.5px;color:#475569;line-height:1.5">'
       + ot('Cada pelota vale según cómo quedó:')+' '
-      + cfg.filas.map(function(f){ return f[4]+' vale '+String(f[2]).replace('.',','); }).join(' \u00b7 ')
+      + cfg.filas.map(function(f){ return f[4]+' '+ot('vale')+' '+String(f[2]).replace('.',','); }).join(' \u00b7 ')
       + '. '+ot('El resultado es el promedio.')+'</div>');
 
   objPintarDetalle(nombre, obj, cuerpo, val, total, cfg.pl, quien);
@@ -1233,7 +1243,7 @@ function objPintarDetalle(nombre, obj, cuerpo, val, total, pl, quien){
    +     '<div style="font-size:13px;font-weight:800;letter-spacing:.6px;color:#e2e8f0;'
    +          'text-transform:uppercase">'+nombre+'</div>'
    +     (total!=null
-        ? '<div style="font-size:10.5px;color:#64748b;margin-top:2px">'+total+' '+(pl||'acciones')
+        ? '<div style="font-size:10.5px;color:#64748b;margin-top:2px">'+total+' '+ot(pl||'acciones')
           + (obj!=null ? ' \u00b7 '+ot('objetivo')+' '+obj : '')+'</div>'
         : (obj!=null ? '<div style="font-size:10.5px;color:#64748b;margin-top:2px">'+ot('objetivo')+' '+obj+'</div>' : ''))
    +   '</div>'
