@@ -218,23 +218,23 @@
 <body>
 <div class="wrap" id="wrap">
   <div class="header">
-    <a href="index.html" class="back-btn" data-t="← Hub">← Hub</a>
+    <a href="index.html" class="back-btn" data-t="← Hub"><span data-t="← Hub">← Hub</span></a>
     <div>
-      <h1 data-t="📅 CALENDARIO">📅 CALENDARIO</h1>
+      <h1 data-t="📅 CALENDARIO"><span data-t="📅 CALENDARIO">📅 CALENDARIO</span></h1>
       <div class="subtitle">Axpo Volley Näfels</div>
     </div>
   </div>
 
   <div class="view-toggle">
-    <button class="vt on" id="vt-lista" onclick="setView('lista')" data-t="📋 Lista">📋 Lista</button>
-    <button class="vt" id="vt-plan" onclick="setView('plan')" data-t="🗓️ Planificación">🗓️ Planificación</button>
+    <button class="vt on" id="vt-lista" onclick="setView('lista')" data-t="📋 Lista"><span data-t="📋 Lista">📋 Lista</span></button>
+    <button class="vt" id="vt-plan" onclick="setView('plan')" data-t="🗓️ Planificación"><span data-t="🗓️ Planificación">🗓️ Planificación</span></button>
   </div>
 
   <!-- ── VISTA LISTA ── -->
   <div id="lista-view">
     <div class="tabs">
-      <button class="tab on" id="tab-partidos" onclick="setTab('partidos')" data-t="🏆 Partidos">🏆 Partidos</button>
-      <button class="tab" id="tab-entrenamientos" onclick="setTab('entrenamientos')" data-t="🏋️ Entrenamientos">🏋️ Entrenamientos</button>
+      <button class="tab on" id="tab-partidos" onclick="setTab('partidos')" data-t="🏆 Partidos"><span data-t="🏆 Partidos">🏆 Partidos</span></button>
+      <button class="tab" id="tab-entrenamientos" onclick="setTab('entrenamientos')" data-t="🏋️ Entrenamientos"><span data-t="🏋️ Entrenamientos">🏋️ Entrenamientos</span></button>
     </div>
     <!-- Un solo boton para llevarse TODO al calendario del telefono: los
          partidos y los entrenamientos juntos. Ir uno por uno con 14 partidos y
@@ -247,24 +247,24 @@
          volver a ofrecerla. -->
     <button class="import-btn" id="cal-sub-btn" onclick="suscribirCalendario()"
             style="background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.4);color:#4ade80">
-      <span id="cal-sub-txt" data-t="🔄 Suscribirme al calendario">🔄 Suscribirme al calendario</span>
+      <span id="cal-sub-txt" data-t="🔄 Suscribirme al calendario"><span data-t="🔄 Suscribirme al calendario">🔄 Suscribirme al calendario</span></span>
     </button>
     <!-- Del calendario al resto de la app: el proximo rival y el archivado
      de la temporada que termino. Solo los ve el cuerpo tecnico. -->
 <button class="add-btn" onclick="usarFixture()" data-solo-editor
         style="background:rgba(230,167,67,.14);border-color:rgba(230,167,67,.4);color:#e6a743"
         title="Toma el proximo partido de este calendario y lo muestra en toda la app" data-t="⭐ Usar este fixture">
-  ⭐ Usar este fixture</button>
+  <span data-t="⭐ Usar este fixture">⭐ Usar este fixture</span></button>
 <button class="add-btn" onclick="archivarTemporada()" data-solo-editor
         style="background:rgba(148,163,184,.12);border-color:rgba(148,163,184,.3);color:#94a3b8"
         title="Guarda los partidos ya jugados y deja el calendario con lo que viene" data-t="📦 Archivar la temporada">
-  📦 Archivar la temporada</button>
-<button class="add-btn" id="add-btn" onclick="openForm()" data-solo-editor data-t="+ Agregar">+ Agregar</button>
-    <button class="import-btn" id="import-btn" onclick="importFixture()" data-solo-editor data-t="⬇️ Importar fixture 2026/27">⬇️ Importar fixture 2026/27</button>
-    <button class="import-btn" id="import-gym-btn" onclick="importGym()" data-solo-editor style="display:none" data-t="🏋️ Gimnasio (Lun/Mié/Vie · sep–abr)">🏋️ Gimnasio (Lun/Mié/Vie · sep–abr)</button>
-    <button class="import-btn" id="import-xmas-btn" onclick="importHolidays()" data-solo-editor style="display:none" data-t="🎄 Christmas Holidays (20–25 dic)">🎄 Christmas Holidays (20–25 dic)</button>
-    <button class="import-btn" id="import-volley-btn" onclick="importVolley()" data-solo-editor style="display:none" data-t="🏐 Vóley (01/09 – 30/04, sin vacaciones)">🏐 Vóley (01/09 – 30/04, sin vacaciones)</button>
-    <button class="import-btn" id="import-filzbach-btn" onclick="importFilzbach()" data-solo-editor style="display:none" data-t="📍 Filzbach (19 · sep–abr)">📍 Filzbach (19 · sep–abr)</button>
+  <span data-t="📦 Archivar la temporada">📦 Archivar la temporada</span></button>
+<button class="add-btn" id="add-btn" onclick="openForm()" data-solo-editor data-t="+ Agregar"><span data-t="+ Agregar">+ Agregar</span></button>
+    <button class="import-btn" id="import-btn" onclick="importFixture()" data-solo-editor data-t="⬇️ Importar fixture 2026/27"><span data-t="⬇️ Importar fixture 2026/27">⬇️ Importar fixture 2026/27</span></button>
+    <button class="import-btn" id="import-gym-btn" onclick="importGym()" data-solo-editor style="display:none" data-t="🏋️ Gimnasio (Lun/Mié/Vie · sep–abr)"><span data-t="🏋️ Gimnasio (Lun/Mié/Vie · sep–abr)">🏋️ Gimnasio (Lun/Mié/Vie · sep–abr)</span></button>
+    <button class="import-btn" id="import-xmas-btn" onclick="importHolidays()" data-solo-editor style="display:none" data-t="🎄 Christmas Holidays (20–25 dic)"><span data-t="🎄 Christmas Holidays (20–25 dic)">🎄 Christmas Holidays (20–25 dic)</span></button>
+    <button class="import-btn" id="import-volley-btn" onclick="importVolley()" data-solo-editor style="display:none" data-t="🏐 Vóley (01/09 – 30/04, sin vacaciones)"><span data-t="🏐 Vóley (01/09 – 30/04, sin vacaciones)">🏐 Vóley (01/09 – 30/04, sin vacaciones)</span></button>
+    <button class="import-btn" id="import-filzbach-btn" onclick="importFilzbach()" data-solo-editor style="display:none" data-t="📍 Filzbach (19 · sep–abr)"><span data-t="📍 Filzbach (19 · sep–abr)">📍 Filzbach (19 · sep–abr)</span></button>
     <div id="form-wrap"></div>
     <div id="list"></div>
   </div>
@@ -273,12 +273,12 @@
   <div id="plan-view" style="display:none">
     <div class="plan-ctrl">
       <div class="range-toggle">
-        <button class="rg on" id="rg-semana" onclick="setRange('semana')" data-t="Semana">Semana</button>
-        <button class="rg" id="rg-quincena" onclick="setRange('quincena')" data-t="Quincena">Quincena</button>
-        <button class="rg" id="rg-mes" onclick="setRange('mes')" data-t="Mes">Mes</button>
+        <button class="rg on" id="rg-semana" onclick="setRange('semana')" data-t="Semana"><span data-t="Semana">Semana</span></button>
+        <button class="rg" id="rg-quincena" onclick="setRange('quincena')" data-t="Quincena"><span data-t="Quincena">Quincena</span></button>
+        <button class="rg" id="rg-mes" onclick="setRange('mes')" data-t="Mes"><span data-t="Mes">Mes</span></button>
       </div>
       <div class="plan-nav">
-        <button class="today-btn" id="btn-hoy" onclick="goToday()" data-t="Hoy">Hoy</button>
+        <button class="today-btn" id="btn-hoy" onclick="goToday()" data-t="Hoy"><span data-t="Hoy">Hoy</span></button>
         <button class="nav-btn" onclick="navPlan(-1)" title="Anterior">‹</button>
         <div class="plan-label" id="plan-label"></div>
         <button class="nav-btn" onclick="navPlan(1)" title="Siguiente">›</button>
@@ -286,10 +286,10 @@
     </div>
     <div id="plan-grid"></div>
     <div class="plan-legend">
-      <div class="lg"><span class="dot" style="background:#f97316"></span> <span id="lg-partido" data-t="Partido">Partido</span></div>
-      <div class="lg"><span class="dot" style="background:#a78bfa"></span> <span id="lg-evento" data-t="Evento">Evento</span></div>
-      <div class="lg"><span class="dot" style="background:#2dd4bf"></span> <span id="lg-entren" data-t="Entrenamiento">Entrenamiento</span></div>
-      <div class="lg" style="color:var(--muted)" id="lg-tap" data-t="Tocá un evento para editarlo">Tocá un evento para editarlo</div>
+      <div class="lg"><span class="dot" style="background:#f97316"></span> <span id="lg-partido" data-t="Partido"><span data-t="Partido">Partido</span></span></div>
+      <div class="lg"><span class="dot" style="background:#a78bfa"></span> <span id="lg-evento" data-t="Evento"><span data-t="Evento">Evento</span></span></div>
+      <div class="lg"><span class="dot" style="background:#2dd4bf"></span> <span id="lg-entren" data-t="Entrenamiento"><span data-t="Entrenamiento">Entrenamiento</span></span></div>
+      <div class="lg" style="color:var(--muted)" id="lg-tap" data-t="Tocá un evento para editarlo"><span data-t="Tocá un evento para editarlo">Tocá un evento para editarlo</span></div>
     </div>
   </div>
 </div>

@@ -154,19 +154,19 @@
 <body>
 <div class="wrap">
   <div class="header">
-    <a href="prep_fisica.html" class="back-btn" data-t="← Prep Física">← Prep Física</a>
-    <div><div class="subtitle" data-t="Axpo Volley Näfels · Cuerpo técnico">Axpo Volley Näfels · Cuerpo técnico</div><h1>ARMAR RUTINAS</h1></div>
-    <div class="badge" data-t="Preparador físico">Preparador físico</div>
+    <a href="prep_fisica.html" class="back-btn" data-t="← Prep Física"><span data-t="← Prep Física">← Prep Física</span></a>
+    <div><div class="subtitle" data-t="Axpo Volley Näfels · Cuerpo técnico"><span data-t="Axpo Volley Näfels · Cuerpo técnico">Axpo Volley Näfels · Cuerpo técnico</span></div><h1>ARMAR RUTINAS</h1></div>
+    <div class="badge" data-t="Preparador físico"><span data-t="Preparador físico">Preparador físico</span></div>
   </div>
   <div class="topline"></div>
 
   <div class="card">
     <div class="ctrl-grid">
-      <div><label class="fld" data-t="Jugador">Jugador</label><select id="selJug" onchange="onPick()"></select></div>
-      <div><label class="fld" data-t="Mes de uso">Mes de uso</label><select id="selMes" onchange="onPick()"></select></div>
-      <button class="btn btn-ghost" onclick="onPick()" data-t="Cargar">Cargar</button>
+      <div><label class="fld" data-t="Jugador"><span data-t="Jugador">Jugador</span></label><select id="selJug" onchange="onPick()"></select></div>
+      <div><label class="fld" data-t="Mes de uso"><span data-t="Mes de uso">Mes de uso</span></label><select id="selMes" onchange="onPick()"></select></div>
+      <button class="btn btn-ghost" onclick="onPick()" data-t="Cargar"><span data-t="Cargar">Cargar</span></button>
     </div>
-    <div class="hint" style="margin-top:10px" id="estado">Elegí jugador y mes. Si ya hay una rutina cargada para ese mes, se abre para editar; si no, empezás una nueva.</div>
+    <div class="hint" style="margin-top:10px" id="estado" data-t="Elegí jugador y mes. Si ya hay una rutina cargada para ese mes, se abre para editar; si no, empezás una nueva."><span data-t="Elegí jugador y mes. Si ya hay una rutina cargada para ese mes, se abre para editar; si no, empezás una nueva.">Elegí jugador y mes. Si ya hay una rutina cargada para ese mes, se abre para editar; si no, empezás una nueva.</span></div>
     <div id="saved-chips" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center"></div>
   </div>
 
@@ -175,19 +175,19 @@
   <div id="editor"></div>
 
   <div class="card" style="text-align:center">
-    <button class="btn btn-ghost" onclick="addSesion()" data-t="+ Agregar día / sesión">+ Agregar día / sesión</button>
+    <button class="btn btn-ghost" onclick="addSesion()" data-t="+ Agregar día / sesión"><span data-t="+ Agregar día / sesión">+ Agregar día / sesión</span></button>
   </div>
 </div>
 
 <div class="cp-ov" id="cpOv">
   <div class="cp-box">
     <h3 id="cpTitle">📋 Copiar rutina a…</h3>
-    <div class="hint" id="cpHint" data-t="Se copiará la rutina actual a los jugadores que elijas.">Se copiará la rutina actual a los jugadores que elijas.</div>
-    <div style="text-align:right;margin-top:12px"><button class="btn btn-ghost btn-sm" id="cpAllBtn" onclick="cpToggleAll()" data-t="Seleccionar todos">Seleccionar todos</button></div>
+    <div class="hint" id="cpHint" data-t="Se copiará la rutina actual a los jugadores que elijas."><span data-t="Se copiará la rutina actual a los jugadores que elijas.">Se copiará la rutina actual a los jugadores que elijas.</span></div>
+    <div style="text-align:right;margin-top:12px"><button class="btn btn-ghost btn-sm" id="cpAllBtn" onclick="cpToggleAll()" data-t="Seleccionar todos"><span data-t="Seleccionar todos">Seleccionar todos</span></button></div>
     <div class="cp-list" id="cpList"></div>
     <div class="cp-actions">
-      <button class="btn btn-ghost" onclick="cpClose()" data-t="Cancelar">Cancelar</button>
-      <button class="btn btn-teal" id="cpConfirmBtn" onclick="cpConfirm()" data-t="Copiar">Copiar</button>
+      <button class="btn btn-ghost" onclick="cpClose()" data-t="Cancelar"><span data-t="Cancelar">Cancelar</span></button>
+      <button class="btn btn-teal" id="cpConfirmBtn" onclick="cpConfirm()" data-t="Copiar"><span data-t="Copiar">Copiar</span></button>
     </div>
   </div>
 </div>
@@ -197,7 +197,7 @@
   <button class="btn btn-ghost" onclick="cpOpen('copiar')">📋 COPIAR A…</button>
   <button class="btn btn-ghost" onclick="cpOpen('vaciar')">🧹 VACIAR EN…</button>
   <button class="btn btn-ghost" onclick="moverMes()">📅 MOVER DE MES…</button>
-  <button class="btn btn-teal" onclick="guardar()" data-t="💾 GUARDAR RUTINA">💾 GUARDAR RUTINA</button>
+  <button class="btn btn-teal" onclick="guardar()" data-t="💾 GUARDAR RUTINA"><span data-t="💾 GUARDAR RUTINA">💾 GUARDAR RUTINA</span></button>
 </div>
 
 <script>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title data-t="ANALISIS DE BLOQUEO — AXPO VOLLEY NAFELS">ANALISIS DE BLOQUEO — AXPO VOLLEY NAFELS</title>
+<title data-t="ANALISIS DE BLOQUEO — AXPO VOLLEY NAFELS"><span data-t="ANALISIS DE BLOQUEO — AXPO VOLLEY NAFELS">ANALISIS DE BLOQUEO — AXPO VOLLEY NAFELS</span></title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>*{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#E8192C;--amber:#F59E0B;--green:#22C55E;--lime:#84CC16;--orange:#F97316;--indigo:#818CF8;--text:#E2E8F0;--muted:#64748B;--subtle:#475569;--h0:#0F1120}
@@ -105,10 +105,10 @@ select,input{width:100%;background:var(--card2);border:1px solid var(--border);c
 </head>
 <body>
 <div class="hdr">
-  <a href="index.html" class="back" data-t="← Inicio">← Inicio</a>
+  <a href="index.html" class="back" data-t="← Inicio"><span data-t="← Inicio">← Inicio</span></a>
   <div>
     <div class="hdr-t" data-t="ANALISIS DE BLOQUEO">ANALISIS DE BLOQUEO</div>
-    <div class="hdr-s" id="hdr-s" data-t="Cómo bloqueamos según de dónde ataca el rival">Cómo bloqueamos según de dónde ataca el rival</div>
+    <div class="hdr-s" id="hdr-s" data-t="Cómo bloqueamos según de dónde ataca el rival"><span data-t="Cómo bloqueamos según de dónde ataca el rival">Cómo bloqueamos según de dónde ataca el rival</span></div>
   </div>
   <!-- PARTIDO / ENTRENAMIENTO, igual que en las otras pantallas. Va atado al
        filtro compartido, asi la eleccion viaja desde y hacia el resto. -->
@@ -117,23 +117,23 @@ select,input{width:100%;background:var(--card2);border:1px solid var(--border);c
 
 <div class="layout">
   <div class="sidebar">
-    <div class="flabel" style="margin-top:0" data-t="Jugador">Jugador</div>
+    <div class="flabel" style="margin-top:0" data-t="Jugador"><span data-t="Jugador">Jugador</span></div>
     <select id="psel" onchange="pintar()"></select>
 
-    <div class="flabel" data-t="Combinación bloqueada">Combinación bloqueada</div>
-    <select id="fcombo" onchange="pintar()"><option value="all" data-t="Todas">Todas</option></select>
+    <div class="flabel" data-t="Combinación bloqueada"><span data-t="Combinación bloqueada">Combinación bloqueada</span></div>
+    <select id="fcombo" onchange="pintar()"><option value="all" data-t="Todas"><span data-t="Todas">Todas</span></option></select>
 
-    <div class="flabel" data-t="Fase">Fase</div>
+    <div class="flabel" data-t="Fase"><span data-t="Fase">Fase</span></div>
     <select id="ffase" onchange="pintar()">
-      <option value="all" data-t="Todas">Todas</option>
+      <option value="all" data-t="Todas"><span data-t="Todas">Todas</span></option>
       <option value="g" data-t="Side out">Side out</option>
       <option value="o" data-t="Transición">Transición</option>
     </select>
 
     <div class="flabel" data-t="Resultado">Resultado</div>
     <select id="fev" onchange="pintar()">
-      <option value="all" data-t="Todos">Todos</option>
-      <option value="#" data-t="Punto de bloqueo (#)">Punto de bloqueo (#)</option>
+      <option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option>
+      <option value="#" data-t="Punto de bloqueo (#)"><span data-t="Punto de bloqueo (#)">Punto de bloqueo (#)</span></option>
       <option value="+" data-t="Positivo (+)">Positivo (+)</option>
       <option value="!" data-t="Toque (!)">Toque (!)</option>
       <option value="/" data-t="Tocado y sigue (/)">Tocado y sigue (/)</option>
@@ -146,22 +146,22 @@ select,input{width:100%;background:var(--card2);border:1px solid var(--border);c
   </div>
 
   <div class="main">
-    <div class="sec" data-t="Resumen">Resumen</div>
+    <div class="sec" data-t="Resumen"><span data-t="Resumen">Resumen</span></div>
     <div class="kpis" id="kpis"></div>
 
-    <div class="sec" data-t="Zona de origen del ataque rival">Zona de origen del ataque rival</div>
+    <div class="sec" data-t="Zona de origen del ataque rival"><span data-t="Zona de origen del ataque rival">Zona de origen del ataque rival</span></div>
     <div class="rednote">▲ Rival</div>
     <div class="court" id="court"></div>
 
-    <div class="sec" data-t="Combinaciones que enfrentamos">Combinaciones que enfrentamos</div>
+    <div class="sec" data-t="Combinaciones que enfrentamos"><span data-t="Combinaciones que enfrentamos">Combinaciones que enfrentamos</span></div>
     <div class="combos" id="combos"></div>
   </div>
 </div>
 
 <div class="pie">
-  EFF = (positivos − errores − tocados) / total. La cancha es la del <b>rival</b>: cada casillero es la zona
+  <span data-t="EFF = (positivos − errores − tocados) / total. La cancha es la del">EFF = (positivos − errores − tocados) / total. La cancha es la del</span> <b data-t="rival"><span data-t="rival">rival</span></b><span data-t=": cada casillero es la zona desde donde salió el ataque que bloqueamos, igual que en la solapa de bloqueo del plan de partido. Doble clic en un casillero o en una combinación para ver esos bloqueos en video.">: cada casillero es la zona
   desde donde salió el ataque que bloqueamos, igual que en la solapa de bloqueo del plan de partido.
-  Doble clic en un casillero o en una combinación para ver esos bloqueos en video.
+  Doble clic en un casillero o en una combinación para ver esos bloqueos en video.</span>
 </div>
 
 <script src="datos_seguros.js?v=20260913-0851"></script>
@@ -204,8 +204,20 @@ function equipoActual(){
     return sb-sa;
   })[0];
 }
+/* ══ EQ SE CALCULABA ANTES DE QUE HUBIERA DATOS ════════════════════════════
+   Este script corre antes de que window.PP_BLOCK este disponible: equipoActual()
+   devolvia null y JUGADORES quedaba VACIO. Consecuencias en pantalla:
+     · el desplegable de jugador solo ofrecia "equipo completo"
+     · hayTipos() daba falso y no aparecia el selector PARTIDO / ENTRENAMIENTO */
 var EQ=equipoActual();
 var JUGADORES=(window.PP_BLOCK&&EQ&&window.PP_BLOCK[EQ])||[];
+
+function _recargarJugadores(){
+  if(JUGADORES && JUGADORES.length) return true;
+  EQ = equipoActual();
+  JUGADORES = (window.PP_BLOCK && EQ && window.PP_BLOCK[EQ]) || [];
+  return !!(JUGADORES && JUGADORES.length);
+}
 
 /* ── El tipo: partido o entrenamiento ────────────────────────────────────
    Los bloqueos traen su tipo desde el generador. Si los datos son viejos y no
@@ -224,6 +236,7 @@ function hayTipos(){
 function pintarModo(){
   var w=document.getElementById('modo-wrap');
   if(!w) return;
+  _recargarJugadores();
   if(!hayTipos()){ w.innerHTML=''; return; }
   var t=(typeof vbTipo==='function')?vbTipo():'todos';
   w.innerHTML=[['todos','Todos'],['P','Partidos'],['E','Entrenamientos']].map(function(o){
@@ -369,5 +382,25 @@ document.getElementById('psel').addEventListener('change', function(){ rellenarC
 pintarModo(); rellenarJugadores(); rellenarCombos(); pintar();
 </script>
 <script src="ayuda.js?v=20260913-0851"></script>
+
+<script>
+/* Los datos cifrados pueden llegar despues que el script de arriba. Cuando eso
+   pasa hay que rehacer la lista de jugadores y repintar. */
+(function(){
+  function _listo(){
+    try{
+      if(typeof _recargarJugadores==='function' && _recargarJugadores()){
+        if(typeof rellenarCombos==='function') rellenarCombos();
+        if(typeof pintarModo==='function') pintarModo();
+        if(typeof pintar==='function') pintar();
+        return true;
+      }
+    }catch(e){}
+    return false;
+  }
+  var n=0, reloj=setInterval(function(){ if(_listo()||++n>40) clearInterval(reloj); },250);
+  document.addEventListener('DOMContentLoaded', _listo);
+})();
+</script>
 </body>
 </html>

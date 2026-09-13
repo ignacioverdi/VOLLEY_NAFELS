@@ -381,8 +381,22 @@ def autodetect_video():
 
 def pp_team_info():
     # {team: set(mids)} desde plan_partido_data.js (ya viene filtrado por temporada).
-    # None si no existe el archivo -> no se filtra (se incluye todo).
-    if not os.path.isfile('plan_partido_data.js'): return None
+    #
+    # ══ SI ESTE ARCHIVO NO ESTA, NO SE FILTRA NADA ═══════════════════════════
+    #  Y eso es grave: entran TODOS los bloqueos de todas las temporadas. Fue
+    #  lo que paso: en la 26-27, sin partidos jugados todavia, el mapa mostraba
+    #  los 1356 bloqueos de la 25-26.
+    #
+    #  La causa era el ORDEN: gen_bloqueo corria ANTES que gen_plan_partido, asi
+    #  que leia un plan viejo o ninguno. Ya se corrigio en HACER_TODO.
+    #
+    #  Igual, si el archivo falta se avisa fuerte en vez de seguir callado.
+    if not os.path.isfile('plan_partido_data.js'):
+        print('[bloqueo] AVISO: no encuentro plan_partido_data.js.')
+        print('[bloqueo] Sin ese archivo NO se puede filtrar por temporada y')
+        print('[bloqueo] entrarian bloqueos de temporadas viejas.')
+        print('[bloqueo] Corre gen_plan_partido.py ANTES que este.')
+        return None
     txt=open('plan_partido_data.js',encoding='utf-8',errors='replace').read()
     m=re.search(r'PP_DATA\s*=\s*(\{)', txt)
     if not m: return None

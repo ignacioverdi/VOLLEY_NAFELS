@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title data-t="Plan de Partido — NÄFELS">Plan de Partido — NÄFELS</title>
+<title data-t="Plan de Partido — NÄFELS"><span data-t="Plan de Partido — NÄFELS"><span data-t="Plan de Partido — NÄFELS">Plan de Partido — NÄFELS</span></span></title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -196,85 +196,85 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <div class="wrap">
 <header class="masthead">
   <div class="eyebrow">NÄFELS · DataVolley 4</div>
-  <h1 data-t="Plan de partido">Plan de partido</h1>
-  <div class="sub">Análisis de: <b id="teamname" style="color:var(--red)">—</b></div>
+  <h1 data-t="Plan de partido"><span data-t="Plan de partido"><span data-t="Plan de partido">Plan de partido</span></span></h1>
+  <div class="sub"><span data-t="Análisis de:"><span data-t="Análisis de:">Análisis de:</span></span> <b id="teamname" style="color:var(--red)">—</b></div>
   <div class="legend">
-    <span><span class="sw" style="background:var(--h1)"></span>poco <span class="sw" style="background:var(--h2);margin-left:5px"></span>medio <span class="sw" style="background:var(--h3);margin-left:5px"></span>mucho</span>
-    <span><b style="color:var(--red)" data-t="▶ doble-click">▶ doble-click</b> en una zona = video</span>
-    <span data-t="el número = golpes/saques, no puntos">el número = golpes/saques, no puntos</span>
+    <span><span class="sw" style="background:var(--h1)"></span><span data-t="poco"><span data-t="poco">poco</span></span> <span class="sw" style="background:var(--h2);margin-left:5px"></span><span data-t="medio"><span data-t="medio">medio</span></span> <span class="sw" style="background:var(--h3);margin-left:5px"></span><span data-t="mucho"><span data-t="mucho">mucho</span></span></span>
+    <span><b style="color:var(--red)" data-t="▶ doble-click"><span data-t="▶ doble-click"><span data-t="▶ doble-click">▶ doble-click</span></span></b> <span data-t="en una zona = video"><span data-t="en una zona = video">en una zona = video</span></span></span>
+    <span data-t="el número = golpes/saques, no puntos"><span data-t="el número = golpes/saques, no puntos"><span data-t="el número = golpes/saques, no puntos">el número = golpes/saques, no puntos</span></span></span>
   </div>
 </header>
-<div class="matchbar"><span class="mlab" data-t="Equipo">Equipo</span>
+<div class="matchbar"><span class="mlab" data-t="Equipo"><span data-t="Equipo"><span data-t="Equipo">Equipo</span></span></span>
   <span id="teambtns" class="teambtns" style="display:none"></span>
   <select id="teamsel" class="teamsel"></select>
-  <span class="mlab" style="margin-left:6px" data-t="Filtrar">Filtrar</span>
+  <span class="mlab" style="margin-left:6px" data-t="Filtrar"><span data-t="Filtrar"><span data-t="Filtrar">Filtrar</span></span></span>
   <!-- Partido / Entrenamiento. Va primero porque manda sobre los otros dos:
        recorta que sesiones existen antes de elegir rival o partido. -->
   <div class="msel" id="tipobar" style="display:none">
-    <button class="mbtn" data-pptipo="todos" onclick="ppSetTipo('todos')" data-t="Todos">Todos</button>
-    <button class="mbtn" data-pptipo="P"     onclick="ppSetTipo('P')" data-t="Partidos">Partidos</button>
+    <button class="mbtn" data-pptipo="todos" onclick="ppSetTipo('todos')" data-t="Todos"><span data-t="Todos"><span data-t="Todos">Todos</span></span></button>
+    <button class="mbtn" data-pptipo="P"     onclick="ppSetTipo('P')" data-t="Partidos"><span data-t="Partidos"><span data-t="Partidos">Partidos</span></span></button>
     <button class="mbtn" data-pptipo="E"     onclick="ppSetTipo('E')" data-t="Entrenamientos">Entrenamientos</button>
   </div>
   <div class="msel"><button class="mbtn" onclick="togglePanel('r')">Rival <b id="rc"></b> ▾</button><div class="mpanel" id="rpanel"></div></div>
-  <div class="msel"><button class="mbtn" onclick="togglePanel('m')">Partido <b id="mc"></b> ▾</button><div class="mpanel" id="mpanel"></div></div>
+  <div class="msel"><button class="mbtn" onclick="togglePanel('m')"><span data-t="Partido"><span data-t="Partido">Partido</span></span> <b id="mc"></b> ▾</button><div class="mpanel" id="mpanel"></div></div>
   <!-- El minimo de acciones, ahora en pantalla. Antes estaba escondido en el
        generador (30 saques, 30 recepciones) y no habia forma de moverlo sin
        tocar el codigo. En 0 se ve todo; subiendolo se sacan de la vista los
        jugadores con pocas pelotas, que es util cuando mirás a un rival con una
        temporada entera encima. -->
-  <span class="mlab" style="margin-left:6px" data-t="Mín. acciones">Mín. acciones</span>
+  <span class="mlab" style="margin-left:6px" data-t="Mín. acciones"><span data-t="Mín. acciones"><span data-t="Mín. acciones">Mín. acciones</span></span></span>
   <input id="minacc" type="number" min="0" step="1" value="0" title="Oculta a los jugadores con menos acciones que este número"
          style="width:64px;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:7px;padding:5px 7px;font-family:inherit;font-weight:700;font-size:12px"
          oninput="ppVisibilidad()">
   <span class="mhint" id="mhint"></span></div>
 <div class="tabsbar" id="tabsbar">
   <span class="tabteam" id="tabteam">—</span>
-  <select id="focusSel" onchange="applyFocus()" style="margin-left:8px;background:#fff;color:#111;border:1px solid var(--border);border-radius:8px;padding:5px 9px;font-family:inherit;font-weight:700;font-size:12px;max-width:220px"><option value="all" data-t="Todos los jugadores">Todos los jugadores</option></select>
-  <button class="ptab active" data-tab="armador" onclick="setTab('armador')">Distribución armador</button>
-  <button class="ptab" data-tab="ataque" onclick="setTab('ataque')">Direcciones ataque</button>
-  <button class="ptab" data-tab="saque" onclick="setTab('saque')">Direcciones saque</button>
-  <button class="ptab" data-tab="recepcion" onclick="setTab('recepcion')">Zonas recepción</button>
-  <button class="ptab" data-tab="defensa" onclick="setTab('defensa')">Zonas defensa</button>
-  <button class="ptab" data-tab="bloqueo" onclick="setTab('bloqueo')">Acciones de bloqueo</button>
+  <select id="focusSel" onchange="applyFocus()" style="margin-left:8px;background:#fff;color:#111;border:1px solid var(--border);border-radius:8px;padding:5px 9px;font-family:inherit;font-weight:700;font-size:12px;max-width:220px"><option value="all" data-t="Todos los jugadores"><span data-t="Todos los jugadores"><span data-t="Todos los jugadores">Todos los jugadores</span></span></option></select>
+  <button class="ptab active" data-tab="armador" onclick="setTab('armador')"><span data-t="Distribución armador"><span data-t="Distribución armador">Distribución armador</span></span></button>
+  <button class="ptab" data-tab="ataque" onclick="setTab('ataque')"><span data-t="Direcciones ataque"><span data-t="Direcciones ataque">Direcciones ataque</span></span></button>
+  <button class="ptab" data-tab="saque" onclick="setTab('saque')"><span data-t="Direcciones saque"><span data-t="Direcciones saque">Direcciones saque</span></span></button>
+  <button class="ptab" data-tab="recepcion" onclick="setTab('recepcion')"><span data-t="Zonas recepción"><span data-t="Zonas recepción">Zonas recepción</span></span></button>
+  <button class="ptab" data-tab="defensa" onclick="setTab('defensa')"><span data-t="Zonas defensa"><span data-t="Zonas defensa">Zonas defensa</span></span></button>
+  <button class="ptab" data-tab="bloqueo" onclick="setTab('bloqueo')"><span data-t="Acciones de bloqueo"><span data-t="Acciones de bloqueo">Acciones de bloqueo</span></span></button>
 </div>
 <div class="armsec" id="armsec">
-  <div class="armhead"><h2 data-t="Distribución del armador">Distribución del armador</h2><span class="sub" id="armname">—</span></div>
+  <div class="armhead"><h2 data-t="Distribución del armador"><span data-t="Distribución del armador"><span data-t="Distribución del armador">Distribución del armador</span></span></h2><span class="sub" id="armname">—</span></div>
   <div class="armctrl">
     <div class="grp" id="armsetsel"></div>
-    <div class="grp"><label data-t="Fase">Fase</label><select id="armfase" class="armsel" onchange="setArmPhase(this.value)"><option value="SO" data-t="Side-out">Side-out</option><option value="TR" data-t="Transición">Transición</option><option value="all" data-t="Todo">Todo</option></select></div>
-    <div class="grp" id="armrecgrp"><label data-t="Recepción">Recepción</label><select id="armrecsel" class="armsel" onchange="setArmRec(this.value)"><option value="all" data-t="Toda">Toda</option><option value="pos">#+</option><option value="neg">!−</option></select></div>
-    <div class="grp" id="armreczgrp"><label data-t="Recep. desde">Recep. desde</label><select id="armreczsel" class="armsel" onchange="setArmRecZone(this.value)"><option value="all" data-t="Todas">Todas</option><option value="r1">Z1</option><option value="r6">Z6</option><option value="r5">Z5</option></select></div>
-    <div class="grp"><label data-t="Recibe">Recibe</label><select id="armrecnum" class="armsel" onchange="setArmRecNum(this.value)"></select></div>
-    <div class="grp"><label data-t="Llamada">Llamada</label><select id="armcall" class="armsel" onchange="setArmCall(this.value)"></select></div>
+    <div class="grp"><label data-t="Fase"><span data-t="Fase"><span data-t="Fase">Fase</span></span></label><select id="armfase" class="armsel" onchange="setArmPhase(this.value)"><option value="SO" data-t="Side-out"><span data-t="Side-out"><span data-t="Side-out">Side-out</span></span></option><option value="TR" data-t="Transición">Transición</option><option value="all" data-t="Todo"><span data-t="Todo"><span data-t="Todo">Todo</span></span></option></select></div>
+    <div class="grp" id="armrecgrp"><label data-t="Recepción"><span data-t="Recepción"><span data-t="Recepción">Recepción</span></span></label><select id="armrecsel" class="armsel" onchange="setArmRec(this.value)"><option value="all" data-t="Toda"><span data-t="Toda"><span data-t="Toda">Toda</span></span></option><option value="pos">#+</option><option value="neg">!−</option></select></div>
+    <div class="grp" id="armreczgrp"><label data-t="Recep. desde"><span data-t="Recep. desde"><span data-t="Recep. desde">Recep. desde</span></span></label><select id="armreczsel" class="armsel" onchange="setArmRecZone(this.value)"><option value="all" data-t="Todas"><span data-t="Todas"><span data-t="Todas">Todas</span></span></option><option value="r1">Z1</option><option value="r6">Z6</option><option value="r5">Z5</option></select></div>
+    <div class="grp"><label data-t="Recibe"><span data-t="Recibe"><span data-t="Recibe">Recibe</span></span></label><select id="armrecnum" class="armsel" onchange="setArmRecNum(this.value)"></select></div>
+    <div class="grp"><label data-t="Llamada"><span data-t="Llamada"><span data-t="Llamada">Llamada</span></span></label><select id="armcall" class="armsel" onchange="setArmCall(this.value)"></select></div>
   </div>
   <div class="armgrid" id="armgrid"></div>
-  <div class="armnote">Por zona: <b data-t="pelotas armadas">pelotas armadas</b> (arriba) y abajo <b data-t="% distribución · % punto (#)">% distribución · % punto (#)</b>. Cancha espejada (vista del rival). Doble-click en zona con ▶ = video (partidos con 🎥).</div>
+  <div class="armnote"><span data-t="Por zona:"><span data-t="Por zona:">Por zona:</span></span> <b data-t="pelotas armadas"><span data-t="pelotas armadas"><span data-t="pelotas armadas">pelotas armadas</span></span></b> <span data-t="(arriba) y abajo"><span data-t="(arriba) y abajo">(arriba) y abajo</span></span> <b data-t="% distribución · % punto (#)"><span data-t="% distribución · % punto (#)"><span data-t="% distribución · % punto (#)">% distribución · % punto (#)</span></span></b><span data-t=". Cancha espejada (vista del rival). Doble-click en zona con ▶ = video (partidos con 🎥)."><span data-t=". Cancha espejada (vista del rival). Doble-click en zona con ▶ = video (partidos con 🎥).">. Cancha espejada (vista del rival). Doble-click en zona con ▶ = video (partidos con 🎥).</span></span></div>
 </div>
-<div class="tabgroup" id="tab-ataque"><div class="rolehead">Puntas <span data-t="ataque · espejo pos. 4 · línea = z1/z9/z2">ataque · espejo pos. 4 · línea = z1/z9/z2</span></div>
+<div class="tabgroup" id="tab-ataque"><div class="rolehead"><span data-t="Puntas"><span data-t="Puntas">Puntas</span></span> <span data-t="ataque · espejo pos. 4 · línea = z1/z9/z2"><span data-t="ataque · espejo pos. 4 · línea = z1/z9/z2"><span data-t="ataque · espejo pos. 4 · línea = z1/z9/z2">ataque · espejo pos. 4 · línea = z1/z9/z2</span></span></span></div>
 <div class="grid3" id="row-punta"></div>
-<div class="rolehead">Centrales <span>ataque · primer tiempo · izq/recto/der (a confirmar)</span></div>
+<div class="rolehead"><span data-t="Centrales"><span data-t="Centrales">Centrales</span></span> <span>ataque · primer tiempo · izq/recto/der (a confirmar)</span></div>
 <div class="grid3" id="row-central"></div>
-<div class="rolehead">Opuestos <span data-t="ataque · espejo invertido pos. 2 · línea = z5/z7/z4">ataque · espejo invertido pos. 2 · línea = z5/z7/z4</span></div>
+<div class="rolehead"><span data-t="Opuestos"><span data-t="Opuestos">Opuestos</span></span> <span data-t="ataque · espejo invertido pos. 2 · línea = z5/z7/z4"><span data-t="ataque · espejo invertido pos. 2 · línea = z5/z7/z4"><span data-t="ataque · espejo invertido pos. 2 · línea = z5/z7/z4">ataque · espejo invertido pos. 2 · línea = z5/z7/z4</span></span></span></div>
 <div class="grid2" id="row-opuesto"></div>
 <!-- ══ ARMADORES ═══════════════════════════════════════════════════════════
      Faltaba el grupo. Los armadores atacan poco pero atacan —el segundo
      toque, la finta— y sus ataques caian en el grupo de opuestos, que no es
      donde van. Ahora tienen el suyo, con el acumulado del puesto arriba
      igual que los otros tres. -->
-<div class="rolehead">Armadores <span data-t="ataque · segundo toque y fintas">ataque · segundo toque y fintas</span></div>
+<div class="rolehead"><span data-t="Armadores"><span data-t="Armadores">Armadores</span></span> <span data-t="ataque · segundo toque y fintas"><span data-t="ataque · segundo toque y fintas"><span data-t="ataque · segundo toque y fintas">ataque · segundo toque y fintas</span></span></span></div>
 <div class="grid2" id="row-armador"></div>
 <!-- El libero no ataca. Si aparece algo aca es un error de tipeo en el
      scout, y conviene que se vea en vez de quedar escondido entre los
      puntas. Si no hay nada, la fila no se muestra. -->
-<div class="rolehead" id="head-libero" style="display:none">Líberos <span data-t="no deberían tener ataques · si aparece alguno, revisá el scout">no deberían tener ataques · si aparece alguno, revisá el scout</span></div>
+<div class="rolehead" id="head-libero" style="display:none">Líberos <span data-t="no deberían tener ataques · si aparece alguno, revisá el scout"><span data-t="no deberían tener ataques · si aparece alguno, revisá el scout"><span data-t="no deberían tener ataques · si aparece alguno, revisá el scout">no deberían tener ataques · si aparece alguno, revisá el scout</span></span></span></div>
 <div class="grid2" id="row-libero"></div>
-</div><div class="tabgroup" id="tab-saque"><div class="rolehead">Saque <span data-t="dónde y cómo saca · azul · fuerza = fuerte/medio/fácil">dónde y cómo saca · azul · fuerza = fuerte/medio/fácil</span></div>
+</div><div class="tabgroup" id="tab-saque"><div class="rolehead">Saque <span data-t="dónde y cómo saca · azul · fuerza = fuerte/medio/fácil"><span data-t="dónde y cómo saca · azul · fuerza = fuerte/medio/fácil"><span data-t="dónde y cómo saca · azul · fuerza = fuerte/medio/fácil">dónde y cómo saca · azul · fuerza = fuerte/medio/fácil</span></span></span></div>
 <div class="grid3" id="row-saque"></div>
-</div><div class="tabgroup" id="tab-recepcion"><div class="rolehead">Recepción <span data-t="cómo recibe según el saque rival · naranja · zona donde recibe">cómo recibe según el saque rival · naranja · zona donde recibe</span></div>
+</div><div class="tabgroup" id="tab-recepcion"><div class="rolehead"><span data-t="Recepción"><span data-t="Recepción">Recepción</span></span> <span data-t="cómo recibe según el saque rival · naranja · zona donde recibe"><span data-t="cómo recibe según el saque rival · naranja · zona donde recibe"><span data-t="cómo recibe según el saque rival · naranja · zona donde recibe">cómo recibe según el saque rival · naranja · zona donde recibe</span></span></span></div>
 <div class="grid3" id="row-reception"></div>
-</div><div class="tabgroup" id="tab-defensa"><div class="rolehead">Defensa <span data-t="dónde y cómo defiende · verde · zona donde levanta la pelota">dónde y cómo defiende · verde · zona donde levanta la pelota</span></div>
+</div><div class="tabgroup" id="tab-defensa"><div class="rolehead"><span data-t="Defensa"><span data-t="Defensa">Defensa</span></span> <span data-t="dónde y cómo defiende · verde · zona donde levanta la pelota"><span data-t="dónde y cómo defiende · verde · zona donde levanta la pelota"><span data-t="dónde y cómo defiende · verde · zona donde levanta la pelota">dónde y cómo defiende · verde · zona donde levanta la pelota</span></span></span></div>
 <div class="grid3" id="row-defense"></div>
-</div><div class="tabgroup" id="tab-bloqueo"><div class="rolehead">Bloqueo <span data-t="dónde bloquea según la zona de origen del ataque rival · celeste">dónde bloquea según la zona de origen del ataque rival · celeste</span></div>
+</div><div class="tabgroup" id="tab-bloqueo"><div class="rolehead"><span data-t="Bloqueo"><span data-t="Bloqueo">Bloqueo</span></span> <span data-t="dónde bloquea según la zona de origen del ataque rival · celeste"><span data-t="dónde bloquea según la zona de origen del ataque rival · celeste"><span data-t="dónde bloquea según la zona de origen del ataque rival · celeste">dónde bloquea según la zona de origen del ataque rival · celeste</span></span></span></div>
 <div class="grid3" id="row-bloqueo"></div>
 </div><footer>Ataque (rojo): dirección según recepción. Saque (azul): tipo, zona de origen, momento (puntos del set) y fuerza sobre la recepción; / = vendido (2ª mejor). Recepción (naranja): según tipo/zona del saque rival; zona real de caída de la pelota (todas las zonas). Video por timestamp (reproduce en partidos publicados en la app). Muestras chicas = tomar con cuidado.</footer>
 </div>
@@ -288,18 +288,18 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
         <div class="vplayer"><div id="ytplayer"></div><div class="vshield" id="vshield" onclick="togglePlay()" title="Click o barra espaciadora: play/pausa"></div></div>
         <div class="vctrls">
           <button class="sec" onclick="prevClip()">◀</button>
-          <button onclick="replayCur()" data-t="↻ Repetir">↻ Repetir</button>
+          <button onclick="replayCur()" data-t="↻ Repetir"><span data-t="↻ Repetir"><span data-t="↻ Repetir">↻ Repetir</span></span></button>
           <button class="sec" onclick="nextClip()">▶</button>
-          <button class="sec" id="vfsbtn" onclick="toggleFullV()" title="Pantalla completa (tecla F)" data-t="⛶ Pantalla completa">⛶ Pantalla completa</button>
+          <button class="sec" id="vfsbtn" onclick="toggleFullV()" title="Pantalla completa (tecla F)" data-t="⛶ Pantalla completa"><span data-t="⛶ Pantalla completa"><span data-t="⛶ Pantalla completa">⛶ Pantalla completa</span></span></button>
           <span class="vcount" id="vcount"></span>
-          <label>Vel <select id="vspeed" onchange="setSpeed(this.value)" style="width:auto"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
-          <label>Antes <input id="vpre" type="number" value="2" min="0" max="20" onchange="pre=+this.value||2"></label>
-          <label>Después <input id="vpost" type="number" value="8" min="0" max="20" onchange="post=+this.value||8"></label>
+          <label><span data-t="Vel"><span data-t="Vel">Vel</span></span> <select id="vspeed" onchange="setSpeed(this.value)" style="width:auto"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
+          <label><span data-t="Antes"><span data-t="Antes">Antes</span></span> <input id="vpre" type="number" value="2" min="0" max="20" onchange="pre=+this.value||2"></label>
+          <label><span data-t="Después"><span data-t="Después">Después</span></span> <input id="vpost" type="number" value="8" min="0" max="20" onchange="post=+this.value||8"></label>
         </div>
       </div>
       <div class="vside">
-        <div class="vside-head"><b data-t="Acciones">Acciones</b><span id="vselcount"></span><button onclick="clipAll(1)" data-t="Todas">Todas</button><button onclick="clipAll(0)" data-t="Ninguna">Ninguna</button></div>
-        <div class="vside-head2"><button id="vsavebtn" onclick="saveSel()" data-t="💾 Guardar">💾 Guardar</button><label class="vonly"><input type="checkbox" id="vonly" onchange="toggleOnly()"> Solo seleccionadas</label></div>
+        <div class="vside-head"><b data-t="Acciones"><span data-t="Acciones"><span data-t="Acciones">Acciones</span></span></b><span id="vselcount"></span><button onclick="clipAll(1)" data-t="Todas"><span data-t="Todas"><span data-t="Todas">Todas</span></span></button><button onclick="clipAll(0)" data-t="Ninguna"><span data-t="Ninguna"><span data-t="Ninguna">Ninguna</span></span></button></div>
+        <div class="vside-head2"><button id="vsavebtn" onclick="saveSel()" data-t="💾 Guardar"><span data-t="💾 Guardar"><span data-t="💾 Guardar">💾 Guardar</span></span></button><label class="vonly"><input type="checkbox" id="vonly" onchange="toggleOnly()"> <span data-t="Solo seleccionadas"><span data-t="Solo seleccionadas">Solo seleccionadas</span></span></label></div>
         <div id="vlist" class="vlist"></div>
       </div>
     </div>

@@ -120,72 +120,72 @@
 <body>
 <div class="wrap">
   <div class="header">
-    <a href="index.html" class="back-btn" data-t="← Hub">← Hub</a>
+    <a href="index.html" class="back-btn" data-t="← Hub"><span data-t="← Hub">← Hub</span></a>
     <div><div class="subtitle">Axpo Volley Näfels</div><h1>WELLNESS</h1></div>
-    <div class="badge" data-t="Estado físico diario">Estado físico diario</div>
+    <div class="badge" data-t="Estado físico diario"><span data-t="Estado físico diario">Estado físico diario</span></div>
   </div>
   <div class="topline"></div>
 
   <div class="tabs">
-    <button class="tab on" id="tab-mi" onclick="showTab('mi')" data-t="Mi día">Mi día</button>
-    <button class="tab" id="tab-eq" onclick="showTab('eq')" data-t="Equipo">Equipo</button>
+    <button class="tab on" id="tab-mi" onclick="showTab('mi')" data-t="Mi día"><span data-t="Mi día">Mi día</span></button>
+    <button class="tab" id="tab-eq" onclick="showTab('eq')" data-t="Equipo"><span data-t="Equipo">Equipo</span></button>
   </div>
 
   <!-- ====== MI DÍA ====== -->
   <div id="view-mi">
     <div class="card">
-      <div class="card-ti" data-t="📝 Encuesta del día">📝 Encuesta del día</div>
-      <div class="card-sub" data-t="Respondé del 1 al 10 cómo te sentís hoy">Respondé del 1 al 10 cómo te sentís hoy</div>
+      <div class="card-ti" data-t="📝 Encuesta del día"><span data-t="📝 Encuesta del día">📝 Encuesta del día</span></div>
+      <div class="card-sub" data-t="Respondé del 1 al 10 cómo te sentís hoy"><span data-t="Respondé del 1 al 10 cómo te sentís hoy">Respondé del 1 al 10 cómo te sentís hoy</span></div>
       <div class="row2" style="margin-bottom:16px">
-        <div><label class="fld" data-t="Jugador">Jugador</label><select id="selJug"></select></div>
+        <div><label class="fld" data-t="Jugador"><span data-t="Jugador">Jugador</span></label><select id="selJug"></select></div>
         <div><label class="fld" data-t="Fecha">Fecha</label><input type="date" id="selFecha"></div>
       </div>
-      <label class="fld" data-t="¿Después de qué?">¿Después de qué?</label>
+      <label class="fld" data-t="¿Después de qué?"><span data-t="¿Después de qué?">¿Después de qué?</span></label>
       <div class="chips" id="chipsSes" style="margin-bottom:6px">
-        <div class="chip on" data-s="Pelota" data-t="🏐 Pelota">🏐 Pelota</div>
-        <div class="chip" data-s="Pesas" data-t="🏋️ Pesas">🏋️ Pesas</div>
-        <div class="chip" data-s="Partido" data-t="🆚 Partido">🆚 Partido</div>
+        <div class="chip on" data-s="Pelota" data-t="🏐 Pelota"><span data-t="🏐 Pelota">🏐 Pelota</span></div>
+        <div class="chip" data-s="Pesas" data-t="🏋️ Pesas"><span data-t="🏋️ Pesas">🏋️ Pesas</span></div>
+        <div class="chip" data-s="Partido" data-t="🆚 Partido"><span data-t="🆚 Partido">🆚 Partido</span></div>
       </div>
       <div id="questions"></div>
-      <button class="btn" id="btnSave" onclick="saveSurvey()" data-t="GUARDAR">GUARDAR</button>
+      <button class="btn" id="btnSave" onclick="saveSurvey()" data-t="GUARDAR"><span data-t="GUARDAR">GUARDAR</span></button>
     </div>
 
     <div class="card" id="cardResult" style="display:none">
       <div class="result">
-        <div class="muted" style="font-size:11px;letter-spacing:2px;text-transform:uppercase" data-t="Tu wellness de hoy">Tu wellness de hoy</div>
+        <div class="muted" style="font-size:11px;letter-spacing:2px;text-transform:uppercase" data-t="Tu wellness de hoy"><span data-t="Tu wellness de hoy">Tu wellness de hoy</span></div>
         <div class="big" id="resPct">—</div>
         <div class="fb" id="resFb"></div>
-        <div style="margin-top:12px"><a href="prep_fisica.html" style="color:var(--acc);font-size:13px;font-weight:700;text-decoration:none" data-t="Ver tu preparación física →">Ver tu preparación física →</a></div>
+        <div style="margin-top:12px"><a href="prep_fisica.html" style="color:var(--acc);font-size:13px;font-weight:700;text-decoration:none" data-t="Ver tu preparación física →"><span data-t="Ver tu preparación física →">Ver tu preparación física →</span></a></div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-ti" data-t="📈 Tu historial">📈 Tu historial</div>
-      <div class="card-sub" data-t="Cómo viene tu estado físico">Cómo viene tu estado físico</div>
-      <div id="histOut"><div class="empty" data-t="Elegí tu nombre y cargá tu primera encuesta.">Elegí tu nombre y cargá tu primera encuesta.</div></div>
+      <div class="card-ti" data-t="📈 Tu historial"><span data-t="📈 Tu historial">📈 Tu historial</span></div>
+      <div class="card-sub" data-t="Cómo viene tu estado físico"><span data-t="Cómo viene tu estado físico">Cómo viene tu estado físico</span></div>
+      <div id="histOut"><div class="empty" data-t="Elegí tu nombre y cargá tu primera encuesta."><span data-t="Elegí tu nombre y cargá tu primera encuesta.">Elegí tu nombre y cargá tu primera encuesta.</span></div></div>
     </div>
   </div>
 
   <!-- ====== EQUIPO ====== -->
   <div id="view-eq" style="display:none">
     <div class="card">
-      <div class="card-ti" data-t="👥 Estado del equipo">👥 Estado del equipo</div>
-      <div class="card-sub" data-t="Quién llega bien y quién necesita atención">Quién llega bien y quién necesita atención</div>
+      <div class="card-ti" data-t="👥 Estado del equipo"><span data-t="👥 Estado del equipo">👥 Estado del equipo</span></div>
+      <div class="card-sub" data-t="Quién llega bien y quién necesita atención"><span data-t="Quién llega bien y quién necesita atención">Quién llega bien y quién necesita atención</span></div>
       <div class="row2" style="margin-bottom:16px;max-width:420px">
-        <div><label class="fld" data-t="Hasta el día">Hasta el día</label><input type="date" id="eqFecha"></div>
-          <div><label class="fld" data-t="Período">Período</label>
+        <div><label class="fld" data-t="Hasta el día"><span data-t="Hasta el día">Hasta el día</span></label><input type="date" id="eqFecha"></div>
+          <div><label class="fld" data-t="Período"><span data-t="Período">Período</span></label>
             <select id="eqPeriodo">
-              <option value="1" data-t="Solo ese día">Solo ese día</option>
-              <option value="7" data-t="Última semana">Última semana</option>
-              <option value="15" data-t="Última quincena">Última quincena</option>
-              <option value="30" data-t="Último mes">Último mes</option>
+              <option value="1" data-t="Solo ese día"><span data-t="Solo ese día">Solo ese día</span></option>
+              <option value="7" data-t="Última semana"><span data-t="Última semana">Última semana</span></option>
+              <option value="15" data-t="Última quincena"><span data-t="Última quincena">Última quincena</span></option>
+              <option value="30" data-t="Último mes"><span data-t="Último mes">Último mes</span></option>
             </select>
           </div>
         <div><label class="fld" data-t="Sesión">Sesión</label><select id="eqSes">
-          <option value="" data-t="Todas">Todas</option><option data-t="Pelota">Pelota</option><option data-t="Pesas">Pesas</option><option data-t="Partido">Partido</option></select></div>
+          <option value="" data-t="Todas"><span data-t="Todas">Todas</span></option><option data-t="Pelota"><span data-t="Pelota">Pelota</span></option><option data-t="Pesas">Pesas</option><option data-t="Partido"><span data-t="Partido">Partido</span></option></select></div>
       </div>
       <div class="teamavg" id="teamAvg"></div>
-      <div id="teamOut"><div class="empty" data-t="Sin respuestas cargadas todavía.">Sin respuestas cargadas todavía.</div></div>
+      <div id="teamOut"><div class="empty" data-t="Sin respuestas cargadas todavía."><span data-t="Sin respuestas cargadas todavía.">Sin respuestas cargadas todavía.</span></div></div>
       <div class="note" id="teamNote"></div>
     </div>
   </div>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title data-t="EQUIPO — NAFELS VOLEY">EQUIPO — NAFELS VOLEY</title>
+<title data-t="EQUIPO — NAFELS VOLEY"><span data-t="EQUIPO — NAFELS VOLEY">EQUIPO — NAFELS VOLEY</span></title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="lang.js?v=20260913-0851" onerror="void 0"></script>
 <script src="utils.js?v=20260913-0851" onerror="void 0"></script>
@@ -88,21 +88,21 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 20%,rg
 
 <div class="page-header">
   <div style="display:flex;align-items:center;gap:14px;">
-    <a href="index.html" class="back-btn" data-t="← Inicio">← Inicio</a>
-    <button onclick="showHeatmapMenu()" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:#F97316;padding:6px 14px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;cursor:pointer;letter-spacing:1px" data-t="🔥 HEAT MAPS">🔥 HEAT MAPS</button>
+    <a href="index.html" class="back-btn" data-t="← Inicio"><span data-t="← Inicio">← Inicio</span></a>
+    <button onclick="showHeatmapMenu()" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:#F97316;padding:6px 14px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;cursor:pointer;letter-spacing:1px" data-t="🔥 HEAT MAPS"><span data-t="🔥 HEAT MAPS">🔥 HEAT MAPS</span></button>
     <div>
-      <div class="page-title">🏐 <span data-t="equipo">Equipo</span></div>
-      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;" data-t="NAFELS VOLEY · NLA Suiza 2026/27">NAFELS VOLEY · NLA Suiza 2026/27</div>
+      <div class="page-title">🏐 <span data-t="equipo"><span data-t="Equipo">Equipo</span></span></div>
+      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;" data-t="NAFELS VOLEY · NLA Suiza 2026/27"><span data-t="NAFELS VOLEY · NLA Suiza 2026/27">NAFELS VOLEY · NLA Suiza 2026/27</span></div>
     </div>
   </div>
   <div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div>
 </div>
 
 <div class="main">
-  <div class="section-lbl" data-t="Plantel NLA 2026/27">Plantel NLA 2026/27</div>
+  <div class="section-lbl" data-t="Plantel NLA 2026/27"><span data-t="Plantel NLA 2026/27">Plantel NLA 2026/27</span></div>
   <div class="jugadores-grid" id="jugadores-grid"></div>
 
-  <div class="section-lbl" style="margin-top:8px;" data-t="Cuerpo Técnico">Cuerpo Técnico</div>
+  <div class="section-lbl" style="margin-top:8px;" data-t="Cuerpo Técnico"><span data-t="Cuerpo Técnico">Cuerpo Técnico</span></div>
   <div class="staff-grid" id="staff-grid"></div>
 </div>
 
@@ -371,15 +371,15 @@ cargarCorrecciones(function(){
 </style>
 <div id="hm-overlay" onclick="if(event.target===this)closeHeatmapMenu()">
   <div class="hm-box">
-    <div class="hm-title"><span data-t="🔥 HEAT MAPS">🔥 HEAT MAPS</span><button class="hm-close" onclick="closeHeatmapMenu()">✕</button></div>
+    <div class="hm-title"><span data-t="🔥 HEAT MAPS"><span data-t="🔥 HEAT MAPS">🔥 HEAT MAPS</span></span><button class="hm-close" onclick="closeHeatmapMenu()">✕</button></div>
     <div class="hm-grid">
-      <a class="hm-card" href="hm_ataque.html?equipo=nafels"    style="background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#F97316" data-t="ATAQUE">ATAQUE</span><span class="hm-sub" data-t="EFF · SO/TR · Zonas">EFF · SO/TR · Zonas</span></a>
-      <a class="hm-card" href="hm_saque.html?equipo=nafels"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E" data-t="SAQUE">SAQUE</span><span class="hm-sub" data-t="EFF · Zonas origen/destino">EFF · Zonas origen/destino</span></a>
-      <a class="hm-card" href="hm_recepcion.html?equipo=nafels" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8" data-t="RECEPCION">RECEPCION</span><span class="hm-sub" data-t="EFF · Calidad · Zonas">EFF · Calidad · Zonas</span></a>
-      <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B" data-t="ARMADO">ARMADO</span><span class="hm-sub" data-t="Llamadas · Pos · EFF">Llamadas · Pos · EFF</span></a>
-      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444" data-t="DEFENSA">DEFENSA</span><span class="hm-sub" data-t="EFF · Zonas · Por rival">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8" data-t="BLOQUEO">BLOQUEO</span><span class="hm-sub" data-t="EFF · Zona del ataque · Combos">EFF · Zona del ataque · Combos</span></a>
+      <a class="hm-card" href="hm_ataque.html?equipo=nafels"    style="background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#F97316" data-t="ATAQUE"><span data-t="ATAQUE">ATAQUE</span></span><span class="hm-sub" data-t="EFF · SO/TR · Zonas"><span data-t="EFF · SO/TR · Zonas">EFF · SO/TR · Zonas</span></span></a>
+      <a class="hm-card" href="hm_saque.html?equipo=nafels"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E" data-t="SAQUE"><span data-t="SAQUE">SAQUE</span></span><span class="hm-sub" data-t="EFF · Zonas origen/destino"><span data-t="EFF · Zonas origen/destino">EFF · Zonas origen/destino</span></span></a>
+      <a class="hm-card" href="hm_recepcion.html?equipo=nafels" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8" data-t="RECEPCION"><span data-t="RECEPCION">RECEPCION</span></span><span class="hm-sub" data-t="EFF · Calidad · Zonas"><span data-t="EFF · Calidad · Zonas">EFF · Calidad · Zonas</span></span></a>
+      <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B" data-t="ARMADO"><span data-t="ARMADO">ARMADO</span></span><span class="hm-sub" data-t="Llamadas · Pos · EFF"><span data-t="Llamadas · Pos · EFF">Llamadas · Pos · EFF</span></span></a>
+      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444" data-t="DEFENSA"><span data-t="DEFENSA">DEFENSA</span></span><span class="hm-sub" data-t="EFF · Zonas · Por rival"><span data-t="EFF · Zonas · Por rival">EFF · Zonas · Por rival</span></span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8" data-t="BLOQUEO"><span data-t="BLOQUEO">BLOQUEO</span></span><span class="hm-sub" data-t="EFF · Zona del ataque · Combos"><span data-t="EFF · Zona del ataque · Combos">EFF · Zona del ataque · Combos</span></span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#8395ac;text-align:center" data-t="NLA Suiza 2026/27 · temporada en curso">NLA Suiza 2026/27 · temporada en curso</div>
+    <div style="margin-top:14px;font-size:10px;color:#8395ac;text-align:center" data-t="NLA Suiza 2026/27 · temporada en curso"><span data-t="NLA Suiza 2026/27 · temporada en curso">NLA Suiza 2026/27 · temporada en curso</span></div>
   </div>
 </div>
 <script>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title data-t="Analisis de Armado — NAFELS 2026">Analisis de Armado — NAFELS 2026</title>
+<title data-t="Analisis de Armado — NAFELS 2026"><span data-t="Analisis de Armado — NAFELS 2026">Analisis de Armado — NAFELS 2026</span></title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>*{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#E8192C;--amber:#F59E0B;--green:#22C55E;--cyan:#06B6D4;--indigo:#818CF8;--orange:#F97316;--text:#E2E8F0;--muted:#64748B;--subtle:#475569}
@@ -80,50 +80,50 @@ window.__DESCIFRAR_SINCRONO = true;
 <body>
 <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
 
-<div class="hdr"><div><div class="hdr-t" data-t="NAFELS — ANALISIS DE ARMADO 2026">NAFELS — ANALISIS DE ARMADO 2026</div><div class="hdr-s" data-t="26 partidos NLA · EFF del ataque generado (# - / - =) / total · Todos los filtros son combinables">26 partidos NLA · EFF del ataque generado (# - / - =) / total · Todos los filtros son combinables</div></div>
+<div class="hdr"><div><div class="hdr-t" data-t="NAFELS — ANALISIS DE ARMADO 2026"><span data-t="NAFELS — ANALISIS DE ARMADO 2026">NAFELS — ANALISIS DE ARMADO 2026</span></div><div class="hdr-s" data-t="26 partidos NLA · EFF del ataque generado (# - / - =) / total · Todos los filtros son combinables"><span data-t="26 partidos NLA · EFF del ataque generado (# - / - =) / total · Todos los filtros son combinables">26 partidos NLA · EFF del ataque generado (# - / - =) / total · Todos los filtros son combinables</span></div></div>
 </div>
 <div class="layout">
 <div class="sidebar">
-  <div class="flabel" style="margin-top:0" data-t="Origen de datos">Origen de datos</div>
+  <div class="flabel" style="margin-top:0" data-t="Origen de datos"><span data-t="Origen de datos">Origen de datos</span></div>
   <div style="display:flex;gap:4px;margin-bottom:10px" id="modo-toggle">
     <button id="modo-partido" onclick="setModo('partido')" style="flex:1;background:var(--accent,#e8192c);border:none;color:#fff;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px" data-t="j_partido">PARTIDO</button>
-    <button id="modo-entrenamiento" onclick="setModo('entrenamiento')" style="flex:1;background:transparent;border:1px solid var(--border2,rgba(255,255,255,.15));color:#94a3b8;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px" data-t="ENTRENAMIENTO">ENTRENAMIENTO</button>
+    <button id="modo-entrenamiento" onclick="setModo('entrenamiento')" style="flex:1;background:transparent;border:1px solid var(--border2,rgba(255,255,255,.15));color:#94a3b8;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px" data-t="ENTRENAMIENTO"><span data-t="ENTRENAMIENTO">ENTRENAMIENTO</span></button>
   </div>
-  <div class="flabel" data-i18n="Jugador"><span data-t="g_jugador">Jugador</span></div>
-  <select class="psel" id="psel" onchange="onPlayerChange(this.value)"><option value="" data-t="Seleccionar...">Seleccionar...</option></select>
+  <div class="flabel" data-i18n="Jugador"><span data-t="g_jugador"><span data-t="Jugador">Jugador</span></span></div>
+  <select class="psel" id="psel" onchange="onPlayerChange(this.value)"><option value="" data-t="Seleccionar..."><span data-t="Seleccionar...">Seleccionar...</span></option></select>
   <button id="ver-video-btn" onclick="abrirVideo()" style="width:100%;margin-top:8px;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.45);color:#F97316;padding:9px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:1px;cursor:pointer">🎬 VER VIDEO DE LOS SETS</button>
   <div class="active-filters" id="active-tags"></div>
-  <div class="acc-group"><div class="acc-header" id="acc-hdr-partido" onclick="accToggle('partido')"><span><span data-t="g_partido">Partido</span></span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
+  <div class="acc-group"><div class="acc-header" id="acc-hdr-partido" onclick="accToggle('partido')"><span><span data-t="g_partido"><span data-t="Partido">Partido</span></span></span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
   <div class="acc-body" id="acc-body-partido">
     <div class="flabel" style="margin-top:0" data-i18n="Rival"><span data-t="g_rival">Rival</span></div>
-    <select class="fsel" id="fsel-rival"><option value="all" data-t="Todos">Todos</option></select>
-    <div class="flabel" data-i18n="Partido especifico" data-t="Partido específico">Partido específico</div>
-    <select class="fsel" id="fsel-gi"><option value="all" data-t="Todos">Todos</option></select>
+    <select class="fsel" id="fsel-rival"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
+    <div class="flabel" data-i18n="Partido especifico" data-t="Partido específico"><span data-t="Partido específico">Partido específico</span></div>
+    <select class="fsel" id="fsel-gi"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
   </div></div>
-  <div class="acc-group"><div class="acc-header" id="acc-hdr-contexto" onclick="accToggle('contexto')"><span data-t="Contexto">Contexto</span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
+  <div class="acc-group"><div class="acc-header" id="acc-hdr-contexto" onclick="accToggle('contexto')"><span data-t="Contexto"><span data-t="Contexto">Contexto</span></span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
   <div class="acc-body" id="acc-body-contexto">
     <div class="flabel" style="margin-top:0" data-i18n="Tipo de armado" data-t="Tipo">Tipo</div>
-    <select class="fsel" id="fsel-atype"><option value="all" data-t="Todos">Todos</option></select>
-    <div class="flabel" data-i18n="Set" data-t="Set">Set</div>
-    <select class="fsel" id="fsel-set"><option value="all" data-t="Todos">Todos</option></select>
-    <div class="flabel" data-i18n="Momento del set" data-t="Momento del set">Momento del set</div>
-    <select class="fsel" id="fsel-moment"><option value="all" data-t="Todos">Todos</option></select>
+    <select class="fsel" id="fsel-atype"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
+    <div class="flabel" data-i18n="Set" data-t="Set"><span data-t="Set">Set</span></div>
+    <select class="fsel" id="fsel-set"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
+    <div class="flabel" data-i18n="Momento del set" data-t="Momento del set"><span data-t="Momento del set">Momento del set</span></div>
+    <select class="fsel" id="fsel-moment"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
   </div></div>
-  <div class="acc-group"><div class="acc-header" id="acc-hdr-tecnico" onclick="accToggle('tecnico')"><span data-t="Técnico">Técnico</span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
+  <div class="acc-group"><div class="acc-header" id="acc-hdr-tecnico" onclick="accToggle('tecnico')"><span data-t="Técnico"><span data-t="Técnico">Técnico</span></span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
   <div class="acc-body" id="acc-body-tecnico">
-    <div class="flabel" style="margin-top:0" data-i18n="Llamada del colocador" data-t="Llamada">Llamada</div>
-    <select class="fsel" id="fsel-call"><option value="all" data-t="Todos">Todos</option></select>
-    <div class="flabel" data-i18n="Combinacion de ataque" data-t="Combinación">Combinación</div>
-    <select class="fsel" id="fsel-atk_combo"><option value="all" data-t="Todos">Todos</option></select>
-    <div class="flabel" data-i18n="Calidad de recepcion previa" data-t="Calidad recepción">Calidad recepción</div>
-    <select class="fsel" id="fsel-rec_quality"><option value="all" data-t="Todos">Todos</option></select>
-    <div class="flabel" data-i18n="Posicion del armador" data-t="Posición armador">Posición armador</div>
-    <select class="fsel" id="fsel-setter_pos"><option value="all" data-t="Todos">Todos</option></select>
+    <div class="flabel" style="margin-top:0" data-i18n="Llamada del colocador" data-t="Llamada"><span data-t="Llamada">Llamada</span></div>
+    <select class="fsel" id="fsel-call"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
+    <div class="flabel" data-i18n="Combinacion de ataque" data-t="Combinación"><span data-t="Combinación">Combinación</span></div>
+    <select class="fsel" id="fsel-atk_combo"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
+    <div class="flabel" data-i18n="Calidad de recepcion previa" data-t="Calidad recepción"><span data-t="Calidad recepción">Calidad recepción</span></div>
+    <select class="fsel" id="fsel-rec_quality"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
+    <div class="flabel" data-i18n="Posicion del armador" data-t="Posición armador"><span data-t="Posición armador">Posición armador</span></div>
+    <select class="fsel" id="fsel-setter_pos"><option value="all" data-t="Todos"><span data-t="Todos">Todos</span></option></select>
   </div></div>
-  <div class="counter"><div class="counter-n" id="cnt">0</div><div class="counter-l" data-t="acciones filtradas">acciones filtradas</div></div>
-  <button class="reset-btn" onclick="resetFilters()" data-t="Limpiar filtros">Limpiar filtros</button>
+  <div class="counter"><div class="counter-n" id="cnt">0</div><div class="counter-l" data-t="acciones filtradas"><span data-t="acciones filtradas">acciones filtradas</span></div></div>
+  <button class="reset-btn" onclick="resetFilters()" data-t="Limpiar filtros"><span data-t="Limpiar filtros">Limpiar filtros</span></button>
 </div>
-<div class="content"<div class="content" id="content"><div class="nodata" data-t="Selecciona un armador para comenzar">Selecciona un armador para comenzar</div></div>
+<div class="content" id="content"><div class="nodata" data-t="Selecciona un armador para comenzar"><span data-t="Selecciona un armador para comenzar">Selecciona un armador para comenzar</span></div></div>
 </div>
 <script>var RAW=(function(){
   var params=new URLSearchParams(window.location.search);

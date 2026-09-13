@@ -74,7 +74,7 @@ select,select option{color:#111!important;background:#fff!important;}
 
 <div class="page-header">
   <div style="display:flex;align-items:center;gap:14px;">
-    <a href="index.html" class="back-btn" data-t="← Inicio">← Inicio</a>
+    <a href="index.html" class="back-btn" data-t="← Inicio"><span data-t="← Inicio">← Inicio</span></a>
     <div>
       <div class="page-title">📥 Importar DVW</div>
       <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;">NAFELS VOLEY · DataVolley 4</div>
@@ -85,12 +85,12 @@ select,select option{color:#111!important;background:#fff!important;}
 <div class="main">
 
   <div class="instrucciones">
-    <div class="inst-titulo" data-t="⚡ Cómo funciona">⚡ Cómo funciona</div>
-    <div class="inst-paso"><div class="inst-num">1</div><div data-t="Arrastrá o seleccioná el archivo .dvw exportado de DataVolley 4">Arrastrá o seleccioná el archivo .dvw exportado de DataVolley 4</div></div>
-    <div class="inst-paso"><div class="inst-num">2</div><div data-t="Elegí si es Partido o Entrenamiento y completá el rival">Elegí si es Partido o Entrenamiento y completá el rival</div></div>
-    <div class="inst-paso"><div class="inst-num">3</div><div data-t="El sistema parsea automáticamente todas las acciones de NAFELS">El sistema parsea automáticamente todas las acciones de NAFELS</div></div>
-    <div class="inst-paso"><div class="inst-num">4</div><div data-t="Revisás el resumen y guardás — se agrega al historial automáticamente">Revisás el resumen y guardás — se agrega al historial automáticamente</div></div>
-    <div class="inst-paso"><div class="inst-num">5</div><div data-t="Descargás el datos_historial.js y lo subís a Vercel">Descargás el datos_historial.js y lo subís a Vercel</div></div>
+    <div class="inst-titulo" data-t="⚡ Cómo funciona"><span data-t="⚡ Cómo funciona">⚡ Cómo funciona</span></div>
+    <div class="inst-paso"><div class="inst-num">1</div><div data-t="Arrastrá o seleccioná el archivo .dvw exportado de DataVolley 4"><span data-t="Arrastrá o seleccioná el archivo .dvw exportado de DataVolley 4">Arrastrá o seleccioná el archivo .dvw exportado de DataVolley 4</span></div></div>
+    <div class="inst-paso"><div class="inst-num">2</div><div data-t="Elegí si es Partido o Entrenamiento y completá el rival"><span data-t="Elegí si es Partido o Entrenamiento y completá el rival">Elegí si es Partido o Entrenamiento y completá el rival</span></div></div>
+    <div class="inst-paso"><div class="inst-num">3</div><div data-t="El sistema parsea automáticamente todas las acciones de NAFELS"><span data-t="El sistema parsea automáticamente todas las acciones de NAFELS">El sistema parsea automáticamente todas las acciones de NAFELS</span></div></div>
+    <div class="inst-paso"><div class="inst-num">4</div><div data-t="Revisás el resumen y guardás — se agrega al historial automáticamente"><span data-t="Revisás el resumen y guardás — se agrega al historial automáticamente">Revisás el resumen y guardás — se agrega al historial automáticamente</span></div></div>
+    <div class="inst-paso"><div class="inst-num">5</div><div data-t="Descargás el datos_historial.js y lo subís a Vercel"><span data-t="Descargás el datos_historial.js y lo subís a Vercel">Descargás el datos_historial.js y lo subís a Vercel</span></div></div>
   </div>
 
   <!-- UPLOAD -->
@@ -98,8 +98,8 @@ select,select option{color:#111!important;background:#fff!important;}
     <div class="card-title">📁 Archivo DVW</div>
     <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
       <div class="drop-icon">📂</div>
-      <div class="drop-txt" data-t="Arrastrá el archivo aquí">Arrastrá el archivo aquí</div>
-      <div class="drop-sub" data-t="o hacé clic para seleccionar · Formato: .dvw (DataVolley 4)">o hacé clic para seleccionar · Formato: .dvw (DataVolley 4)</div>
+      <div class="drop-txt" data-t="Arrastrá el archivo aquí"><span data-t="Arrastrá el archivo aquí">Arrastrá el archivo aquí</span></div>
+      <div class="drop-sub" data-t="o hacé clic para seleccionar · Formato: .dvw (DataVolley 4)"><span data-t="o hacé clic para seleccionar · Formato: .dvw (DataVolley 4)">o hacé clic para seleccionar · Formato: .dvw (DataVolley 4)</span></div>
     </div>
     <input type="file" id="file-input" accept=".dvw" style="display:none" onchange="onFileSelect(event)">
     <div id="file-name" style="margin-top:10px;font-size:11px;color:var(--mut);text-align:center;"></div>
@@ -107,13 +107,13 @@ select,select option{color:#111!important;background:#fff!important;}
 
   <!-- OPCIONES -->
   <div class="card">
-    <div class="card-title" data-t="⚙️ Configuración">⚙️ Configuración</div>
+    <div class="card-title" data-t="⚙️ Configuración"><span data-t="⚙️ Configuración">⚙️ Configuración</span></div>
     <div class="options-grid">
       <div class="opt-field">
-        <div class="opt-label" data-t="Tipo de sesión">Tipo de sesión</div>
+        <div class="opt-label" data-t="Tipo de sesión"><span data-t="Tipo de sesión">Tipo de sesión</span></div>
         <select class="opt-input" id="opt-tipo">
           <option value="P" data-t="🏆 Partido oficial">🏆 Partido oficial</option>
-          <option value="E" data-t="🏋️ Entrenamiento">🏋️ Entrenamiento</option>
+          <option value="E" data-t="🏋️ Entrenamiento"><span data-t="🏋️ Entrenamiento">🏋️ Entrenamiento</span></option>
         </select>
       </div>
       <div class="opt-field">
@@ -121,7 +121,7 @@ select,select option{color:#111!important;background:#fff!important;}
         <input type="text" class="opt-input" id="opt-rival" placeholder="Ej: Vélez Sarsfield">
       </div>
       <div class="opt-field">
-        <div class="opt-label" data-t="Fecha (opcional)">Fecha (opcional)</div>
+        <div class="opt-label" data-t="Fecha (opcional)"><span data-t="Fecha (opcional)">Fecha (opcional)</span></div>
         <input type="text" class="opt-input" id="opt-fecha" placeholder="DD/MM/YYYY">
       </div>
     </div>
@@ -143,16 +143,16 @@ select,select option{color:#111!important;background:#fff!important;}
     <table class="tabla-res">
       <thead>
         <tr>
-          <th>#</th><th><span data-t="g_jugador">Jugador</span></th>
+          <th>#</th><th><span data-t="g_jugador"><span data-t="Jugador">Jugador</span></span></th>
           <th>S Total</th><th>S Eff%</th>
-          <th>R Total</th><th>R Eff%</th>
-          <th>A Total</th><th>A Eff%</th>
+          <th data-t="R Total"><span data-t="R Total">R Total</span></th><th>R Eff%</th>
+          <th data-t="A Total"><span data-t="A Total">A Total</span></th><th>A Eff%</th>
           <th>B</th>
         </tr>
       </thead>
       <tbody id="tabla-resultado"></tbody>
     </table>
-    <button class="btn-guardar" onclick="guardarHistorial()" data-t="💾 GUARDAR EN HISTORIAL Y DESCARGAR">💾 GUARDAR EN HISTORIAL Y DESCARGAR</button>
+    <button class="btn-guardar" onclick="guardarHistorial()" data-t="💾 GUARDAR EN HISTORIAL Y DESCARGAR"><span data-t="💾 GUARDAR EN HISTORIAL Y DESCARGAR">💾 GUARDAR EN HISTORIAL Y DESCARGAR</span></button>
   </div>
 
 </div>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title data-t="Mi Performance — NAFELS Voley">Mi Performance — NAFELS Voley</title>
+<title data-t="Mi Performance — NAFELS Voley"><span data-t="Mi Performance — NAFELS Voley">Mi Performance — NAFELS Voley</span></title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
 <script src="categorias_club.js?v=20260913-0851" onerror="void 0"></script>
@@ -178,9 +178,9 @@ function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
 <!-- HEADER -->
 <div class="hdr">
   <div class="hdr-top">
-    <a href="dashboard.html" class="back-btn" data-t="← Dashboard">← Dashboard</a>
-    <button onclick="showHeatmapMenu()" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:#F97316;padding:6px 14px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;cursor:pointer;letter-spacing:1px" data-t="🔥 HEAT MAPS">🔥 HEAT MAPS</button>
-    <div class="hdr-title" data-t="MI PERFORMANCE">MI PERFORMANCE</div>
+    <a href="dashboard.html" class="back-btn" data-t="← Dashboard"><span data-t="← Dashboard">← Dashboard</span></a>
+    <button onclick="showHeatmapMenu()" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:#F97316;padding:6px 14px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;cursor:pointer;letter-spacing:1px" data-t="🔥 HEAT MAPS"><span data-t="🔥 HEAT MAPS">🔥 HEAT MAPS</span></button>
+    <div class="hdr-title" data-t="MI PERFORMANCE"><span data-t="MI PERFORMANCE">MI PERFORMANCE</span></div>
   </div>
 </div>
 
@@ -200,8 +200,8 @@ function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
 <!-- BATERIAS -->
 <div class="bat-wrap" id="bat-wrap">
   <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;align-items:center">
-    <button class="tfbtn on-p" id="bat-tbtn-p" onclick="batSetTipo('partido',this)" data-t="🏆 PARTIDO">🏆 PARTIDO</button>
-    <button class="tfbtn" id="bat-tbtn-e" onclick="batSetTipo('entrenamiento',this)" data-t="🏋️ ENTRENAMIENTO">🏋️ ENTRENAMIENTO</button>
+    <button class="tfbtn on-p" id="bat-tbtn-p" onclick="batSetTipo('partido',this)" data-t="🏆 PARTIDO"><span data-t="🏆 PARTIDO">🏆 PARTIDO</span></button>
+    <button class="tfbtn" id="bat-tbtn-e" onclick="batSetTipo('entrenamiento',this)" data-t="🏋️ ENTRENAMIENTO"><span data-t="🏋️ ENTRENAMIENTO">🏋️ ENTRENAMIENTO</span></button>
   </div>
   <div id="bat-sfrow" style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px"></div>
   <div id="objetivos-jugador"></div>
@@ -209,19 +209,19 @@ function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
 
 <!-- TIPO + SESION FILTER -->
 <div class="filter-row" id="filter-row">
-  <button class="tfbtn on-p" id="tfbtn-p" onclick="setTipo('partido',this)" data-t="🏆 PARTIDO">🏆 PARTIDO</button>
-  <button class="tfbtn" id="tfbtn-e" onclick="setTipo('entrenamiento',this)" data-t="🏋️ ENTRENAMIENTO">🏋️ ENTRENAMIENTO</button>
+  <button class="tfbtn on-p" id="tfbtn-p" onclick="setTipo('partido',this)" data-t="🏆 PARTIDO"><span data-t="🏆 PARTIDO">🏆 PARTIDO</span></button>
+  <button class="tfbtn" id="tfbtn-e" onclick="setTipo('entrenamiento',this)" data-t="🏋️ ENTRENAMIENTO"><span data-t="🏋️ ENTRENAMIENTO">🏋️ ENTRENAMIENTO</span></button>
   <div class="divider"></div>
   <div id="sfrow" style="display:flex;gap:4px;flex-wrap:wrap"></div>
 </div>
 
 <!-- TABS -->
 <div class="tabs" id="tabs">
-  <button class="tab on" onclick="setTab('calendario',this)" data-t="📅 CALENDARIO">📅 CALENDARIO</button>
-  <button class="tab" onclick="setTab('rendimiento',this)" data-t="📈 RENDIMIENTO">📈 RENDIMIENTO</button>
-  <button class="tab" onclick="setTab('ataque',this)" data-t="💥 ATAQUE">💥 ATAQUE</button>
-  <button class="tab" onclick="setTab('saque',this)" data-t="⚡ SAQUE">⚡ SAQUE</button>
-  <button class="tab" onclick="setTab('recepcion',this)" data-t="🛡 RECEPCIÓN">🛡 RECEPCIÓN</button>
+  <button class="tab on" onclick="setTab('calendario',this)" data-t="📅 CALENDARIO"><span data-t="📅 CALENDARIO">📅 CALENDARIO</span></button>
+  <button class="tab" onclick="setTab('rendimiento',this)" data-t="📈 RENDIMIENTO"><span data-t="📈 RENDIMIENTO">📈 RENDIMIENTO</span></button>
+  <button class="tab" onclick="setTab('ataque',this)" data-t="💥 ATAQUE"><span data-t="💥 ATAQUE">💥 ATAQUE</span></button>
+  <button class="tab" onclick="setTab('saque',this)" data-t="⚡ SAQUE"><span data-t="⚡ SAQUE">⚡ SAQUE</span></button>
+  <button class="tab" onclick="setTab('recepcion',this)" data-t="🛡 RECEPCIÓN"><span data-t="🛡 RECEPCIÓN">🛡 RECEPCIÓN</span></button>
 </div>
 
 <div class="main" id="main"></div>
@@ -1053,15 +1053,15 @@ function setObjTipo(tipo, btn){
 </style>
 <div id="hm-overlay" onclick="if(event.target===this)closeHeatmapMenu()">
   <div class="hm-box">
-    <div class="hm-title"><span data-t="🔥 HEAT MAPS">🔥 HEAT MAPS</span><button class="hm-close" onclick="closeHeatmapMenu()">✕</button></div>
+    <div class="hm-title"><span data-t="🔥 HEAT MAPS"><span data-t="🔥 HEAT MAPS">🔥 HEAT MAPS</span></span><button class="hm-close" onclick="closeHeatmapMenu()">✕</button></div>
     <div class="hm-grid">
-      <a class="hm-card" href="hm_ataque.html?equipo=nafels"    style="background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#F97316" data-t="ATAQUE">ATAQUE</span><span class="hm-sub" data-t="EFF · SO/TR · Zonas">EFF · SO/TR · Zonas</span></a>
-      <a class="hm-card" href="hm_saque.html?equipo=nafels"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E" data-t="SAQUE">SAQUE</span><span class="hm-sub" data-t="EFF · Zonas origen/destino">EFF · Zonas origen/destino</span></a>
-      <a class="hm-card" href="hm_recepcion.html?equipo=nafels" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8" data-t="RECEPCION">RECEPCION</span><span class="hm-sub" data-t="EFF · Calidad · Zonas">EFF · Calidad · Zonas</span></a>
-      <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B" data-t="ARMADO">ARMADO</span><span class="hm-sub" data-t="Llamadas · Pos · EFF">Llamadas · Pos · EFF</span></a>
-      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444" data-t="DEFENSA">DEFENSA</span><span class="hm-sub" data-t="EFF · Zonas · Por rival">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8" data-t="BLOQUEO">BLOQUEO</span><span class="hm-sub" data-t="EFF · Zona del ataque · Combos">EFF · Zona del ataque · Combos</span></a>
+      <a class="hm-card" href="hm_ataque.html?equipo=nafels"    style="background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#F97316" data-t="ATAQUE"><span data-t="ATAQUE">ATAQUE</span></span><span class="hm-sub" data-t="EFF · SO/TR · Zonas"><span data-t="EFF · SO/TR · Zonas">EFF · SO/TR · Zonas</span></span></a>
+      <a class="hm-card" href="hm_saque.html?equipo=nafels"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E" data-t="SAQUE"><span data-t="SAQUE">SAQUE</span></span><span class="hm-sub" data-t="EFF · Zonas origen/destino"><span data-t="EFF · Zonas origen/destino">EFF · Zonas origen/destino</span></span></a>
+      <a class="hm-card" href="hm_recepcion.html?equipo=nafels" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8" data-t="RECEPCION"><span data-t="RECEPCION">RECEPCION</span></span><span class="hm-sub" data-t="EFF · Calidad · Zonas"><span data-t="EFF · Calidad · Zonas">EFF · Calidad · Zonas</span></span></a>
+      <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B" data-t="ARMADO"><span data-t="ARMADO">ARMADO</span></span><span class="hm-sub" data-t="Llamadas · Pos · EFF"><span data-t="Llamadas · Pos · EFF">Llamadas · Pos · EFF</span></span></a>
+      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444" data-t="DEFENSA"><span data-t="DEFENSA">DEFENSA</span></span><span class="hm-sub" data-t="EFF · Zonas · Por rival"><span data-t="EFF · Zonas · Por rival">EFF · Zonas · Por rival</span></span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8" data-t="BLOQUEO"><span data-t="BLOQUEO">BLOQUEO</span></span><span class="hm-sub" data-t="EFF · Zona del ataque · Combos"><span data-t="EFF · Zona del ataque · Combos">EFF · Zona del ataque · Combos</span></span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#8395ac;text-align:center" data-t="NLA Suiza 2026/27 · temporada en curso">NLA Suiza 2026/27 · temporada en curso</div>
+    <div style="margin-top:14px;font-size:10px;color:#8395ac;text-align:center" data-t="NLA Suiza 2026/27 · temporada en curso"><span data-t="NLA Suiza 2026/27 · temporada en curso">NLA Suiza 2026/27 · temporada en curso</span></div>
   </div>
 </div>
 <script>

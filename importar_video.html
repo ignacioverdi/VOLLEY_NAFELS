@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cargar Videos — Näfels</title>
+<title data-t="Cargar Videos — Näfels"><span data-t="Cargar Videos — Näfels">Cargar Videos — Näfels</span></title>
 <style>
   :root{--bg:#0a0e1a;--card:#11162a;--card2:#0d1322;--border:#1e2944;--text:#e8edf7;--muted:#8493b0;--naf:#F97316;--ok:#22C55E;--bad:#ef4444}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -55,33 +55,33 @@
 <link rel="stylesheet" href="movil.css?v=20260913-0851">
 </head>
 <body>
-  <h1 data-t="🎬 Cargar videos de los partidos">🎬 Cargar videos de los partidos</h1>
-  <div class="sub">Pegá el link de YouTube de cada partido. La miniatura te confirma que es el correcto. El resto es automático.</div>
+  <h1 data-t="🎬 Cargar videos de los partidos"><span data-t="🎬 Cargar videos de los partidos">🎬 Cargar videos de los partidos</span></h1>
+  <div class="sub" data-t="Pegá el link de YouTube de cada partido. La miniatura te confirma que es el correcto. El resto es automático."><span data-t="Pegá el link de YouTube de cada partido. La miniatura te confirma que es el correcto. El resto es automático.">Pegá el link de YouTube de cada partido. La miniatura te confirma que es el correcto. El resto es automático.</span></div>
 
   <div class="vtabs">
-    <button class="vtab" id="vtab-p" onclick="vbSetModo('partido')" data-t="🏐 Partidos">🏐 Partidos</button>
-    <button class="vtab" id="vtab-e" onclick="vbSetModo('ent')" data-t="🏋️ Entrenamientos">🏋️ Entrenamientos</button>
+    <button class="vtab" id="vtab-p" onclick="vbSetModo('partido')" data-t="🏐 Partidos"><span data-t="🏐 Partidos">🏐 Partidos</span></button>
+    <button class="vtab" id="vtab-e" onclick="vbSetModo('ent')" data-t="🏋️ Entrenamientos"><span data-t="🏋️ Entrenamientos">🏋️ Entrenamientos</span></button>
   </div>
   <script>function vbSetModo(m){try{localStorage.setItem('cargar_video_modo',m);}catch(e){}location.reload();}(function(){var m=(localStorage.getItem('cargar_video_modo')==='ent')?'e':'p';var b=document.getElementById('vtab-'+m);if(b)b.classList.add('on');})();</script>
 
   <div class="hint">
-    <b data-t="Cómo se usa:">Cómo se usa:</b> 1) Subí el partido a YouTube (en <b>"No listado"</b>). 2) Pegá el link en la fila del partido — aparece la <b data-t="miniatura">miniatura</b> para que confirmes que es ese. 3) Apretá <b>"Generar mapa_videos.js"</b> y subí ese archivo al repo. Listo. <b data-t="Se guarda solo">Se guarda solo</b> mientras cargás, no perdés nada si cerrás.
+    <b data-t="Cómo se usa:"><span data-t="Cómo se usa:">Cómo se usa:</span></b> <span data-t="1) Subí el partido a YouTube (en">1) Subí el partido a YouTube (en</span> <b>"No listado"</b><span data-t="). 2) Pegá el link en la fila del partido — aparece la">). 2) Pegá el link en la fila del partido — aparece la</span> <b data-t="miniatura"><span data-t="miniatura">miniatura</span></b> <span data-t="para que confirmes que es ese. 3) Apretá">para que confirmes que es ese. 3) Apretá</span> <b>"Generar mapa_videos.js"</b> <span data-t="y subí ese archivo al repo. Listo.">y subí ese archivo al repo. Listo.</span> <b data-t="Se guarda solo"><span data-t="Se guarda solo">Se guarda solo</span></b> <span data-t="mientras cargás, no perdés nada si cerrás.">mientras cargás, no perdés nada si cerrás.</span>
   </div>
 
   <details>
-    <summary data-t="⚡ Pegado masivo — cargar todos los links de una">⚡ Pegado masivo — cargar todos los links de una</summary>
+    <summary data-t="⚡ Pegado masivo — cargar todos los links de una"><span data-t="⚡ Pegado masivo — cargar todos los links de una">⚡ Pegado masivo — cargar todos los links de una</span></summary>
     <div class="batch">
-      <p>Pegá un link de YouTube por línea. Si la línea trae el <b data-t="código del partido">código del partido</b> (tus títulos de YouTube lo tienen, ej. <b>636595</b>), se empareja solo con ese partido — no importa el orden. Los links sin código se reparten por fecha entre los partidos que estén vacíos. Después <b data-t="revisá las miniaturas">revisá las miniaturas</b>.</p>
+      <p><span data-t="Pegá un link de YouTube por línea. Si la línea trae el">Pegá un link de YouTube por línea. Si la línea trae el</span> <b data-t="código del partido"><span data-t="código del partido">código del partido</span></b> <span data-t="(tus títulos de YouTube lo tienen, ej.">(tus títulos de YouTube lo tienen, ej.</span> <b>636595</b><span data-t="), se empareja solo con ese partido — no importa el orden. Los links sin código se reparten por fecha entre los partidos que estén vacíos. Después">), se empareja solo con ese partido — no importa el orden. Los links sin código se reparten por fecha entre los partidos que estén vacíos. Después</span> <b data-t="revisá las miniaturas"><span data-t="revisá las miniaturas">revisá las miniaturas</span></b>.</p>
       <textarea id="batchtxt" placeholder="2025 10 22 03 28 636595  https://youtu.be/aaaa&#10;636588  https://youtu.be/bbbb&#10;https://youtu.be/cccc  (sin código → va por orden)"></textarea>
-      <div style="margin-top:8px"><button class="btn" onclick="aplicarBatch()" data-t="🔗 Emparejar automáticamente">🔗 Emparejar automáticamente</button></div>
+      <div style="margin-top:8px"><button class="btn" onclick="aplicarBatch()" data-t="🔗 Emparejar automáticamente"><span data-t="🔗 Emparejar automáticamente">🔗 Emparejar automáticamente</span></button></div>
     </div>
   </details>
 
   <div class="bar">
-    <div class="count"><b id="nok">0</b> de <span id="ntot">0</span></div>
+    <div class="count"><b id="nok">0</b> <span data-t="de">de</span> <span id="ntot">0</span></div>
     <div class="prog"><i id="progbar"></i></div>
-    <button class="btn" onclick="generar()" data-t="⬇ Generar archivo de links">⬇ Generar archivo de links</button>
-    <button class="btn sec" onclick="copiar()" data-t="Copiar">Copiar</button>
+    <button class="btn" onclick="generar()" data-t="⬇ Generar archivo de links"><span data-t="⬇ Generar archivo de links">⬇ Generar archivo de links</span></button>
+    <button class="btn sec" onclick="copiar()" data-t="Copiar"><span data-t="Copiar">Copiar</span></button>
     <span id="msg"></span>
   </div>
 

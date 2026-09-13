@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title data-t="Sesiones y dispositivos">Sesiones y dispositivos</title>
+<title data-t="Sesiones y dispositivos"><span data-t="Sesiones y dispositivos">Sesiones y dispositivos</span></title>
 <style>
 :root{--bg:#0d1017;--sur:#141922;--card:#1a2029;--card2:#212936;--b:#2a3441;--b2:#38445a;
       --txt:#e8edf5;--mut:#8b97ab;--dim:#5f6b7f;--ok:#3ddc84;--bad:#ff5f6d;--warn:#e6a743}
@@ -48,37 +48,37 @@ button.peligro:hover{background:var(--bad);color:#fff}
 <body>
 
 <div class="top">
-  <h1 data-t="Sesiones y dispositivos">Sesiones y dispositivos</h1>
+  <h1 data-t="Sesiones y dispositivos"><span data-t="Sesiones y dispositivos">Sesiones y dispositivos</span></h1>
   <div style="flex:1"></div>
   <button onclick="cargar()" data-t="Actualizar">Actualizar</button>
-  <button class="peligro grande" onclick="cerrarTodas()" data-t="Cerrar TODAS las sesiones">Cerrar TODAS las sesiones</button>
+  <button class="peligro grande" onclick="cerrarTodas()" data-t="Cerrar TODAS las sesiones"><span data-t="Cerrar TODAS las sesiones">Cerrar TODAS las sesiones</span></button>
 </div>
 
 <div class="wrap">
   <div class="aviso">
-    Cada persona entra <b data-t="una sola vez por dispositivo">una sola vez por dispositivo</b> y después no se le vuelve a pedir la clave.
-    Desde acá podés cortar ese acceso sin tocarle la computadora.<br><br>
-    Al cerrar una sesión, ese dispositivo vuelve a pedir usuario y clave la próxima vez que abra la app,
-    y además <b data-t="se le borra la llave de los datos">se le borra la llave de los datos</b>, así no puede seguir leyendo lo cifrado.
-    <br><br><b data-t="Puede tardar hasta una hora">Puede tardar hasta una hora</b> en hacerse efectivo: es el tiempo que dura el permiso
-    que ya tiene en la mano. Después no lo puede renovar más.
+    <span data-t="Cada persona entra">Cada persona entra</span> <b data-t="una sola vez por dispositivo"><span data-t="una sola vez por dispositivo">una sola vez por dispositivo</span></b> <span data-t="y después no se le vuelve a pedir la clave. Desde acá podés cortar ese acceso sin tocarle la computadora.">y después no se le vuelve a pedir la clave.
+    Desde acá podés cortar ese acceso sin tocarle la computadora.</span><br><br>
+    <span data-t="Al cerrar una sesión, ese dispositivo vuelve a pedir usuario y clave la próxima vez que abra la app, y además">Al cerrar una sesión, ese dispositivo vuelve a pedir usuario y clave la próxima vez que abra la app,
+    y además</span> <b data-t="se le borra la llave de los datos"><span data-t="se le borra la llave de los datos">se le borra la llave de los datos</span></b><span data-t=", así no puede seguir leyendo lo cifrado.">, así no puede seguir leyendo lo cifrado.</span>
+    <br><br><b data-t="Puede tardar hasta una hora"><span data-t="Puede tardar hasta una hora">Puede tardar hasta una hora</span></b> <span data-t="en hacerse efectivo: es el tiempo que dura el permiso que ya tiene en la mano. Después no lo puede renovar más.">en hacerse efectivo: es el tiempo que dura el permiso
+    que ya tiene en la mano. Después no lo puede renovar más.</span>
   </div>
 
-  <div id="lista"><div class="vacio" data-t="Cargando…">Cargando…</div></div>
+  <div id="lista"><div class="vacio" data-t="Cargando…"><span data-t="Cargando…">Cargando…</span></div></div>
 
-  <h2 style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);margin:30px 0 12px" data-t="Últimos ingresos">Últimos ingresos</h2>
+  <h2 style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);margin:30px 0 12px" data-t="Últimos ingresos"><span data-t="Últimos ingresos">Últimos ingresos</span></h2>
   <div id="accesos"><div class="vacio">—</div></div>
 
   <div class="pie" style="margin-top:20px">
-    <b data-t="Tu identificador de usuario (UID):">Tu identificador de usuario (UID):</b>
+    <b data-t="Tu identificador de usuario (UID):"><span data-t="Tu identificador de usuario (UID):">Tu identificador de usuario (UID):</span></b>
     <code id="miuid" style="color:var(--ok);user-select:all;font-size:12px">—</code><br>
-    Copialo y pegalo en Firebase, en el nodo <code>admins</code>, para poder cerrar sesiones.
+    <span data-t="Copialo y pegalo en Firebase, en el nodo">Copialo y pegalo en Firebase, en el nodo</span> <code>admins</code><span data-t=", para poder cerrar sesiones.">, para poder cerrar sesiones.</span>
   </div>
 
   <div class="pie">
-    <b data-t="Cerrar TODAS">Cerrar TODAS</b> echa a todo el mundo, incluido vos: todos vuelven a entrar con su usuario y clave.
-    Usalo cuando no sepas bien dónde quedó abierta una sesión.<br>
-    <b data-t="Cerrar este dispositivo">Cerrar este dispositivo</b> corta solo esa máquina y no molesta a nadie más.
+    <b data-t="Cerrar TODAS"><span data-t="Cerrar TODAS">Cerrar TODAS</span></b> <span data-t="echa a todo el mundo, incluido vos: todos vuelven a entrar con su usuario y clave. Usalo cuando no sepas bien dónde quedó abierta una sesión.">echa a todo el mundo, incluido vos: todos vuelven a entrar con su usuario y clave.
+    Usalo cuando no sepas bien dónde quedó abierta una sesión.</span><br>
+    <b data-t="Cerrar este dispositivo"><span data-t="Cerrar este dispositivo">Cerrar este dispositivo</span></b> <span data-t="corta solo esa máquina y no molesta a nadie más.">corta solo esa máquina y no molesta a nadie más.</span>
   </div>
 </div>
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title data-t="Acceso de los jugadores">Acceso de los jugadores</title>
+<title data-t="Acceso de los jugadores"><span data-t="Acceso de los jugadores"><span data-t="Acceso de los jugadores">Acceso de los jugadores</span></span></title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -109,22 +109,22 @@ textarea:focus{border-color:var(--club)}
     <div class="esc" id="esc"></div>
     <div>
       <h1 id="nom-club"></h1>
-      <p data-t="Acceso de los jugadores">Acceso de los jugadores</p>
+      <p data-t="Acceso de los jugadores"><span data-t="Acceso de los jugadores"><span data-t="Acceso de los jugadores">Acceso de los jugadores</span></span></p>
     </div>
-    <a class="volver" href="index.html" data-t="Volver">Volver</a>
+    <a class="volver" href="index.html" data-t="Volver"><span data-t="Volver"><span data-t="Volver">Volver</span></span></a>
   </div>
 
-  <div class="eyebrow">Una sola vez</div>
-  <h2 class="tit" data-t="Dale acceso a tu plantel">Dale acceso a tu plantel</h2>
-  <p class="bajada">Cada jugador entra con su mail y su fecha de nacimiento sin barras. Vos cargás la lista una vez
-     y listo: después entran solos desde el celular y reciben los avisos del equipo.</p>
+  <div class="eyebrow"><span data-t="Una sola vez">Una sola vez</span></div>
+  <h2 class="tit" data-t="Dale acceso a tu plantel"><span data-t="Dale acceso a tu plantel"><span data-t="Dale acceso a tu plantel">Dale acceso a tu plantel</span></span></h2>
+  <p class="bajada"><span data-t="Cada jugador entra con su mail y su fecha de nacimiento sin barras. Vos cargás la lista una vez y listo: después entran solos desde el celular y reciben los avisos del equipo."><span data-t="Cada jugador entra con su mail y su fecha de nacimiento sin barras. Vos cargás la lista una vez y listo: después entran solos desde el celular y reciben los avisos del equipo.">Cada jugador entra con su mail y su fecha de nacimiento sin barras. Vos cargás la lista una vez
+     y listo: después entran solos desde el celular y reciben los avisos del equipo.</span></span></p>
 
   <div class="caja">
-    <label class="lbl" for="lista" data-t="Pegá acá tu lista">Pegá acá tu lista</label>
+    <label class="lbl" for="lista" data-t="Pegá acá tu lista"><span data-t="Pegá acá tu lista"><span data-t="Pegá acá tu lista">Pegá acá tu lista</span></span></label>
 <div id="caja-cat" style="display:none;margin-bottom:14px">
-  <label style="display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#64748b;margin-bottom:6px" data-t="Categoría">Categoría</label>
+  <label style="display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#64748b;margin-bottom:6px" data-t="Categoría"><span data-t="Categoría"><span data-t="Categoría">Categoría</span></span></label>
   <select id="sel-cat" style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.1);font-size:14px"></select>
-  <div style="font-size:11px;color:#64748b;margin-top:6px" data-t="Los jugadores que cargues quedan en esta categoría.">Los jugadores que cargues quedan en esta categoría.</div>
+  <div style="font-size:11px;color:#64748b;margin-top:6px" data-t="Los jugadores que cargues quedan en esta categoría."><span data-t="Los jugadores que cargues quedan en esta categoría."><span data-t="Los jugadores que cargues quedan en esta categoría.">Los jugadores que cargues quedan en esta categoría.</span></span></div>
 </div>
     <!-- ══ CARGA DE A UNO ══════════════════════════════════════════════════
      Cada jugador en su fila, con todos sus datos y la foto al final.
@@ -136,10 +136,10 @@ textarea:focus{border-color:var(--club)}
        border:1px dashed rgba(230,167,67,.35);border-radius:10px;cursor:pointer;
        background:rgba(230,167,67,.05)">
   <div style="font-size:14px;font-weight:700;margin-bottom:4px" data-t="&#8681; Traer el plantel de un partido">
-    &#8681; Traer el plantel de un partido</div>
+    <span data-t="&#8681; Traer el plantel de un partido"><span data-t="&#8681; Traer el plantel de un partido">&#8681; Traer el plantel de un partido</span></span></div>
   <div style="font-size:12.5px;color:#93a5c0;line-height:1.5">
-    Elegí un archivo .dvw ya scouteado y se cargan los jugadores con su
-    dorsal y su nombre. Vos solo completás los mails.</div>
+    <span data-t="Elegí un archivo .dvw ya scouteado y se cargan los jugadores con su dorsal y su nombre. Vos solo completás los mails."><span data-t="Elegí un archivo .dvw ya scouteado y se cargan los jugadores con su dorsal y su nombre. Vos solo completás los mails.">Elegí un archivo .dvw ya scouteado y se cargan los jugadores con su
+    dorsal y su nombre. Vos solo completás los mails.</span></span></div>
   <input type="file" accept=".dvw,.DVW" style="display:none"
          onchange="traerPlantel(this)">
 </label>
@@ -148,29 +148,29 @@ textarea:focus{border-color:var(--club)}
 <div id="form-filas"></div>
 
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-  <button type="button" class="btn sec" onclick="masFila()">+ Agregar otro jugador</button>
+  <button type="button" class="btn sec" onclick="masFila()" data-t="+ Agregar otro jugador"><span data-t="+ Agregar otro jugador"><span data-t="+ Agregar otro jugador">+ Agregar otro jugador</span></span></button>
   <button type="button" class="btn" onclick="leerFormulario()">Revisar y continuar</button>
 </div>
 
 <details style="margin-top:14px">
   <summary style="cursor:pointer;font-size:12px;color:#64748b" data-t="¿Los tenés en una lista? Pegalos de una vez">
-    ¿Los tenés en una lista? Pegalos de una vez
+    <span data-t="¿Los tenés en una lista? Pegalos de una vez"><span data-t="¿Los tenés en una lista? Pegalos de una vez">¿Los tenés en una lista? Pegalos de una vez</span></span>
   </summary>
   <textarea id="lista" spellcheck="false"
             placeholder="mail@ejemplo.com 4 07/03/2004"
             style="margin-top:10px"></textarea>
-  <div class="ayuda">Tres datos por jugador: <b>mail</b>, <b data-t="número de camiseta">número de camiseta</b> y
-    <b data-t="fecha de nacimiento">fecha de nacimiento</b>. Si los tenés en Excel, seleccioná las tres columnas,
-    copiá y pegá acá.</div>
+  <div class="ayuda"><span data-t="Tres datos por jugador:"><span data-t="Tres datos por jugador:">Tres datos por jugador:</span></span> <b>mail</b>, <b data-t="número de camiseta"><span data-t="número de camiseta"><span data-t="número de camiseta">número de camiseta</span></span></b> y
+    <b data-t="fecha de nacimiento"><span data-t="fecha de nacimiento"><span data-t="fecha de nacimiento">fecha de nacimiento</span></span></b><span data-t=". Si los tenés en Excel, seleccioná las tres columnas, copiá y pegá acá."><span data-t=". Si los tenés en Excel, seleccioná las tres columnas, copiá y pegá acá.">. Si los tenés en Excel, seleccioná las tres columnas,
+    copiá y pegá acá.</span></span></div>
   <button type="button" class="btn sec" onclick="leer()"
-          style="margin-top:8px" data-t="Leer la lista">Leer la lista</button>
+          style="margin-top:8px" data-t="Leer la lista"><span data-t="Leer la lista"><span data-t="Leer la lista">Leer la lista</span></span></button>
 </details>
     <div class="ejemplo">jugador1@gmail.com    4     07/03/2004
 jugador2@gmail.com    13    16/12/2004
 jugador3@gmail.com    9     23/08/2001</div>
 
     <div class="barra">
-      <button class="btn sec" onclick="leer()" data-t="Revisar la lista">Revisar la lista</button>
+      <button class="btn sec" onclick="leer()" data-t="Revisar la lista"><span data-t="Revisar la lista"><span data-t="Revisar la lista">Revisar la lista</span></span></button>
     </div>
   </div>
 

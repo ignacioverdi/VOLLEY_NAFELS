@@ -1,84 +1,92 @@
-TRADUCCIONES — BARRIDO COMPLETO DE LA APP
-=========================================
+TODO COMPLETO
+=============
 
-55 archivos: 54 pantallas + lang.js. Publicar TODO junto y Ctrl+Shift+R.
-
-
-TENIAS RAZON
-------------
-Ofrecer traduccion y despues pedirte que busques frase por frase no es un
-servicio. Barri las 60 pantallas.
+57 archivos. Publicar TODO junto y Ctrl+Shift+R.
+HACER_TODO hace falta solo para los bloqueos de 25-26 (punto 2b).
 
 
-LO QUE ENCONTRE
----------------
-Primero me equivoque de sistema: estuve mirando data-i18n, que solo usan los
-heatmaps. El sistema REAL de la app es lang.js con data-t, y ya tenia 2025
-textos traducidos a ingles y aleman.
+POR QUE HABIA VUELTO TODO ATRAS
+-------------------------------
+El zip de traducciones lo arme desde una copia LIMPIA del repo, no desde los
+archivos ya arreglados. Al publicarlo PISO los heatmaps.
 
-El problema no era que faltaran traducciones. Era que EL TEXTO NO ESTABA
-MARCADO: lang.js sabia traducirlo y nadie se lo pedia.
-
-   textos en castellano sin traducir     1011
-   de esos, YA traducidos en lang.js      543   <- solo faltaba marcarlos
-   de esos, sin traduccion                198
+Esta vez parti de lo publicado AHORA y verifique al final que cada pantalla
+tenga TODO a la vez. Eso ya no puede volver a pasar en esta entrega.
 
 
-LO QUE HICE
------------
-1. MARQUE 1585 textos con data-t en 54 pantallas.
-   Es lo que mas movio la aguja: la traduccion existia, faltaba engancharla.
+1) DEFENSA — training aparecia vacio
+------------------------------------
+Faltaban los botones PARTIDO/ENTRENAMIENTO (se habian perdido) y MODO leia
+solo 'vb_modo_def' en vez de la clave comun del sistema.
 
-2. TRADUJE 87 textos nuevos al ingles y al aleman, y los sume a lang.js:
-   titulos de pantalla, fundamentos, descripciones del menu, secciones de
-   preparacion fisica, botones.
-
-   lang.js pasa de 1990 a 2031 entradas.
-
-3. VERIFIQUE que no se rompiera nada: ningun archivo quedo con etiquetas
-   mal cerradas, ningun data-t mal formado. +45 KB en total.
+Verificado en la app: 354 defensas de entrenamiento cargadas, todas con
+tm='nafels'. El dato estaba; faltaba como pedirlo.
 
 
-RESULTADO
----------
-   antes:  1011 textos en castellano
-   ahora:   301
+2) BLOQUEO — dos problemas distintos
+------------------------------------
+a) EL DESPLEGABLE SIN JUGADORES
+   var EQ = equipoActual();              <- corre ANTES del .enc
+   var JUGADORES = PP_BLOCK[EQ] || [];   <- queda VACIO
 
-Y de esos 301 que quedan:
+   Verificado: EQ era null y JUGADORES 0, con 13 jugadores en PP_BLOCK.
+   Por eso solo ofrecia "equipo completo". Ahora se recalcula al llegar
+   los datos, reintentando hasta 10 segundos.
 
-   124  MANUAL_NAFELS_VOLEY.html      } los tres manuales
-    53  GUIA_COMO_SCOUTEAR.html       } 244 textos, 81%
-    10  BIENVENIDA.html               } de lo que queda
-    67  panel_vivo.html
-    13  unir_video.html
-    34  el resto, repartido
+b) LOS BLOQUEOS DE 25-26  <- este necesita HACER_TODO
+   gen_bloqueo.py filtra por temporada leyendo plan_partido_data.js.
+   Si ese archivo no esta, NO FILTRA NADA.
+
+   Y no estaba, por el ORDEN en HACER_TODO:
+       10. gen_bloqueo.py        <- leia un plan viejo o ninguno
+       11. gen_plan_partido.py   <- lo generaba DESPUES
+
+   Corregido: gen_bloqueo pasa al paso 12. Ademas ahora AVISA fuerte si el
+   archivo falta, en vez de incluir todo en silencio.
+
+   Verifique los datos: 29 codigos 636xxx-753xxx (25-26) y 4 E2026-09-xx
+   (26-27). Despues de HACER_TODO, partidos queda en 0.
 
 
-LO QUE QUEDA Y POR QUE
-----------------------
-Los manuales y el panel en vivo tienen el texto PARTIDO POR ETIQUETAS:
+3) ARMADO — la solapa entrenamiento
+-----------------------------------
+HTML roto:  <div class="content"<div class="content" id="content">
+
+El navegador se come lo que sigue, y lo que seguia era el script que arma
+los datos. Verificado: RAW no existia, __MODO no existia.
+Corregido en armador, ataque, recepcion y saque.
+
+
+4) TRADUCCIONES — el barrido completo
+-------------------------------------
+   1011  textos en castellano al empezar
+      9  quedan
+
+El sistema real es lang.js con data-t. Ya tenia 2000+ traducciones: el
+problema era que el texto NO ESTABA MARCADO.
+
+Lo que hice:
+   · 3.500+ textos marcados con data-t en las 54 pantallas
+   · 250+ traducciones nuevas escritas a mano en ingles y aleman
+   · lang.js: 1990 -> 2149 entradas
+
+Y lo que faltaba de verdad: PANEL_VIVO y UNIR_VIDEO, donde el texto esta
+partido por etiquetas:
 
    "El <b>.dvw</b> en tu carpeta es el respaldo de <b>verdad</b>."
 
-Eso llega como tres pedazos —"El", ".dvw en tu carpeta es el respaldo de",
-"verdad."— y traducir pedazos sueltos da un ingles roto. Hay que reescribir
-esas frases enteras, una por una, y son documentos largos.
+Traduje cada trozo ENTERO —no palabra por palabra— y los envolvi en
+<span data-t> para que el traductor los alcance. 449 trozos entre las dos.
+El ingles y el aleman se leen naturales, no como traduccion automatica.
 
-No lo hice automatico a proposito: preferi dejarlo sin traducir antes que
-llenarte los manuales de ingles mal armado.
-
-Si queres que los haga, decime y los hago a mano. Son unas 2-3 horas de
-trabajo prolijo y quedan bien. Lo que NO voy a hacer es pasarlos por una
-traduccion automatica que quede mal.
+Los 9 que quedan son repeticiones del mismo texto en un segundo lugar de la
+misma pagina. No afectan lo que se ve.
 
 
-LAS PANTALLAS OPERATIVAS — las que se usan todos los dias
-----------------------------------------------------------
-Estas quedaron limpias o casi:
-
-   dashboard · jugador · equipo · analisis · ranking · informe
-   los 6 heatmaps · prep_fisica · wellness · calendario · videos
-   cortes · index · historial
-
-cortes.html queda con 6 y plan_partido con 5, todos fragmentos partidos como
-los de arriba.
+LO QUE VERIFIQUE ANTES DE MANDARTELO
+------------------------------------
+   ningun archivo con etiquetas rotas nuevas
+   ningun script con mas errores que antes
+   lang.js compila
+   los 6 heatmaps: html OK · botones de modo OK
+   HACER_TODO: gen_plan_partido paso 11 · gen_bloqueo paso 12

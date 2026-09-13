@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title data-t="Asociar códigos · NAFELS">Asociar códigos · NAFELS</title>
+<title data-t="Asociar códigos · NAFELS"><span data-t="Asociar códigos · NAFELS">Asociar códigos · NAFELS</span></title>
 <!--
 ===============================================================================
   asociar_codigos.html — TRADUCIR LOS CODIGOS DE OTRO SCOUT
@@ -102,26 +102,26 @@
   <a href="index.html" class="btn" style="display:inline-block;text-decoration:none;
      margin-bottom:14px;font-size:13px">&larr; VOLVER</a>
 
-  <h1 data-t="ASOCIAR CÓDIGOS">ASOCIAR CÓDIGOS</h1>
-  <div class="sub">Cuando el partido lo scouteó otra persona, sus códigos de
-    ataque y de armador pueden ser distintos de los tuyos. Acá se asocian.</div>
+  <h1 data-t="ASOCIAR CÓDIGOS"><span data-t="ASOCIAR CÓDIGOS">ASOCIAR CÓDIGOS</span></h1>
+  <div class="sub"><span data-t="Cuando el partido lo scouteó otra persona, sus códigos de ataque y de armador pueden ser distintos de los tuyos. Acá se asocian.">Cuando el partido lo scouteó otra persona, sus códigos de
+    ataque y de armador pueden ser distintos de los tuyos. Acá se asocian.</span></div>
 
   <div class="zona" id="zona" onclick="document.getElementById('sel').click()">
     <div class="ic">📋</div>
-    <b data-t="Arrastrá acá el .dvw del otro scout">Arrastrá acá el .dvw del otro scout</b>
-    <span data-t="También podés hacer clic para buscarlo">También podés hacer clic para buscarlo</span>
+    <b data-t="Arrastrá acá el .dvw del otro scout"><span data-t="Arrastrá acá el .dvw del otro scout">Arrastrá acá el .dvw del otro scout</span></b>
+    <span data-t="También podés hacer clic para buscarlo"><span data-t="También podés hacer clic para buscarlo">También podés hacer clic para buscarlo</span></span>
   </div>
   <input type="file" id="sel" accept=".dvw" class="oculto">
 
   <div id="panel" class="oculto">
     <div class="tabs">
-      <div class="tab on" id="tab-atk" onclick="verSeccion('atk')" data-t="Combinaciones de ataque">Combinaciones de ataque</div>
-      <div class="tab" id="tab-set" onclick="verSeccion('set')" data-t="Llamadas del armador">Llamadas del armador</div>
+      <div class="tab on" id="tab-atk" onclick="verSeccion('atk')" data-t="Combinaciones de ataque"><span data-t="Combinaciones de ataque">Combinaciones de ataque</span></div>
+      <div class="tab" id="tab-set" onclick="verSeccion('set')" data-t="Llamadas del armador"><span data-t="Llamadas del armador">Llamadas del armador</span></div>
     </div>
 
     <div class="cols">
       <div class="col">
-        <h2 id="tit-izq" data-t="Del archivo">Del archivo</h2>
+        <h2 id="tit-izq" data-t="Del archivo"><span data-t="Del archivo">Del archivo</span></h2>
         <div class="lista" id="izq"></div>
       </div>
       <div class="medio">
@@ -130,12 +130,12 @@
       </div>
       <div class="col">
         <h2 style="display:flex;align-items:center;gap:8px">
-          <span id="tit-der" data-t="Los tuyos">Los tuyos</span>
+          <span id="tit-der" data-t="Los tuyos"><span data-t="Los tuyos">Los tuyos</span></span>
           <select id="selTabla" onchange="cambiarTabla()"
             style="margin-left:auto;background:var(--card);color:var(--txt);
             border:1px solid var(--border);border-radius:6px;padding:3px 7px;
             font-family:inherit;font-size:11px;font-weight:700;cursor:pointer">
-            <option value="_mios" data-t="Los míos">Los míos</option>
+            <option value="_mios" data-t="Los míos"><span data-t="Los míos">Los míos</span></option>
           </select>
           <button onclick="document.getElementById('selDestino').click()"
             title="Usar la tabla de otro archivo .dvw"
@@ -149,10 +149,10 @@
     </div>
 
     <div class="barra">
-      <button class="btn" onclick="guardarAsoc()" data-t="Guardar asociación">Guardar asociación</button>
-      <button class="btn" onclick="document.getElementById('selAsoc').click()" data-t="Cargar una guardada">Cargar una guardada</button>
+      <button class="btn" onclick="guardarAsoc()" data-t="Guardar asociación"><span data-t="Guardar asociación">Guardar asociación</span></button>
+      <button class="btn" onclick="document.getElementById('selAsoc').click()" data-t="Cargar una guardada"><span data-t="Cargar una guardada">Cargar una guardada</span></button>
       <input type="file" id="selAsoc" accept=".json" class="oculto">
-      <button class="btn ppal" id="bGen" onclick="generar()" data-t="Generar el archivo traducido">Generar el archivo traducido</button>
+      <button class="btn ppal" id="bGen" onclick="generar()" data-t="Generar el archivo traducido"><span data-t="Generar el archivo traducido">Generar el archivo traducido</span></button>
       <span class="cuenta" id="cuenta"></span>
     </div>
 

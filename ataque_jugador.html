@@ -73,7 +73,7 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
 <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
 
 <div class="hdr">
-  <a id="back-jug" href="jugador.html" class="back-btn" data-t="← Perfil">← Perfil</a>
+  <a id="back-jug" href="jugador.html" class="back-btn" data-t="← Perfil"><span data-t="← Perfil">← Perfil</span></a>
   <div style="flex-shrink:0">
     <div id="jug-title" style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#e2e8f0">ATAQUES</div>
     <div style="font-size:9px;color:#8395ac;letter-spacing:2px;text-transform:uppercase">NAFELS VOLEY</div>
@@ -81,14 +81,14 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
   <div class="filter-row">
     <select class="subfiltro-select" id="subfiltro-select" style="display:none"></select>
     <select class="subfiltro-select" id="fase-ataque-select" onchange="setFaseAtaque(this.value)" style="border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.08);color:#818cf8;min-width:auto">
-      <option value="todos" data-t="🏐 TODOS LOS ATAQUES">🏐 TODOS LOS ATAQUES</option>
-      <option value="so" data-t="🛡 SIDE-OUT (tras recepción)">🛡 SIDE-OUT (tras recepción)</option>
-      <option value="tr" data-t="🔄 TRANSICIÓN (juego corrido)">🔄 TRANSICIÓN (juego corrido)</option>
+      <option value="todos" data-t="🏐 TODOS LOS ATAQUES"><span data-t="🏐 TODOS LOS ATAQUES">🏐 TODOS LOS ATAQUES</span></option>
+      <option value="so" data-t="🛡 SIDE-OUT (tras recepción)"><span data-t="🛡 SIDE-OUT (tras recepción)">🛡 SIDE-OUT (tras recepción)</span></option>
+      <option value="tr" data-t="🔄 TRANSICIÓN (juego corrido)"><span data-t="🔄 TRANSICIÓN (juego corrido)">🔄 TRANSICIÓN (juego corrido)</span></option>
     </select>
   </div>
 </div>
 <div class="main">
-  <div id="content"><div class="empty" data-t="Cargando...">Cargando...</div></div>
+  <div id="content"><div class="empty" data-t="Cargando..."><span data-t="Cargando...">Cargando...</span></div></div>
 </div>
 <script>
 var POS_COLOR={'ARMADOR':'#f59e0b','OPUESTO':'#f97316','PUNTA':'#818cf8','CENTRAL':'#22c55e','LIBERO':'#06b6d4'};

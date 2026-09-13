@@ -238,8 +238,6 @@ REM Los codigos que usa el club, para poder traducir los archivos que
 REM lleguen de otros scouts.
 if exist "gen_mis_codigos.py" python gen_mis_codigos.py
 
-python gen_bloqueo.py
-if errorlevel 1 echo      [aviso] Problema en las acciones de bloqueo. Sigo igual.
 if errorlevel 1 set "FALLOS=!FALLOS!|Problema en las acciones de bloqueo."
 if errorlevel 1 set /a NFALLOS+=1
 echo.
@@ -254,6 +252,15 @@ if "!ENT_DIR!"=="" (
     python gen_plan_partido.py --dvw_dir "!DVW_DIR!" --output_dir . --filter_temporada "!TEMPORADA_ACTUAL!"
 ) else (
     python gen_plan_partido.py --dvw_dir "!DVW_DIR!" --ent_dir "!ENT_DIR!" --output_dir . --filter_temporada "!TEMPORADA_ACTUAL!"
+
+REM  == gen_bloqueo VA DESPUES DE gen_plan_partido =========================
+REM  Antes corria ANTES. gen_bloqueo filtra los partidos de la temporada
+REM  actual leyendo plan_partido_data.js; si ese archivo todavia no se
+REM  genero -o es el de la temporada pasada- el filtro no se aplica y
+REM  entran TODOS los bloqueos viejos.
+REM  Por eso aparecian los bloqueos de 25-26 en la temporada 26-27.
+python gen_bloqueo.py
+if errorlevel 1 echo      [aviso] Problema en las acciones de bloqueo. Sigo igual.
 )
 if errorlevel 1 echo      [aviso] Problema en el plan de partido. Sigo igual.
 if errorlevel 1 set "FALLOS=!FALLOS!|Problema en el plan de partido."

@@ -170,8 +170,8 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
 <body>
 <div class="header">
   <div>
-    <div class="subtitle" data-t="Volley Nafels — Análisis Liga">Volley Nafels — Análisis Liga</div>
-    <h1 data-t="NLA SUIZA — ESTADÍSTICAS">NLA SUIZA — ESTADÍSTICAS</h1>
+    <div class="subtitle" data-t="Volley Nafels — Análisis Liga"><span data-t="Volley Nafels — Análisis Liga"><span data-t="Volley Nafels — Análisis Liga">Volley Nafels — Análisis Liga</span></span></div>
+    <h1 data-t="NLA SUIZA — ESTADÍSTICAS"><span data-t="NLA SUIZA — ESTADÍSTICAS"><span data-t="NLA SUIZA — ESTADÍSTICAS">NLA SUIZA — ESTADÍSTICAS</span></span></h1>
   </div>
   <!-- La temporada la escribe el generador: estaba fija en 2025/26 y seguia
        diciendo eso aunque los datos ya fueran de la 26/27. -->
@@ -183,58 +183,58 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
 </div>
 <div class="tabs">
   <div class="tab active" data-tab="equipos">🏆 Ranking Equipos</div>
-  <div class="tab" data-tab="jugadores">👤 Jugadores</div>
+  <div class="tab" data-tab="jugadores"><span data-t="👤 Jugadores"><span data-t="👤 Jugadores">👤 Jugadores</span></span></div>
 </div>
 <div class="filters">
   <div class="filter-group">
-    <span class="filter-label" data-t="Equipo">Equipo</span>
+    <span class="filter-label" data-t="Equipo"><span data-t="Equipo"><span data-t="Equipo">Equipo</span></span></span>
     <select id="f-team">
-      <option value="" data-t="Todos">Todos</option>
+      <option value="" data-t="Todos"><span data-t="Todos"><span data-t="Todos">Todos</span></span></option>
       <option>Amriswil</option><option>Chenois</option><option>Colombier</option>
       <option>Jona</option><option>Lausanne</option><option>Nafels</option>
       <option>Schonenwerd</option><option>St Gallen</option>
     </select>
   </div>
   <div class="filter-group">
-    <span class="filter-label" data-t="Temporada">Temporada</span>
-    <select id="f-temporada"><option value="" data-t="Todas">Todas</option><!--__TEMPORADAS__--></select>
+    <span class="filter-label" data-t="Temporada"><span data-t="Temporada"><span data-t="Temporada">Temporada</span></span></span>
+    <select id="f-temporada"><option value="" data-t="Todas"><span data-t="Todas"><span data-t="Todas">Todas</span></span></option><!--__TEMPORADAS__--></select>
   </div>
   <div class="filter-group">
-    <span class="filter-label">Posición<label style="display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+    <span class="filter-label"><span data-t="Posición"><span data-t="Posición">Posición</span></span><label style="display:inline-flex;align-items:center;gap:7px;cursor:pointer;
        font-size:12px;color:#94a3b8;white-space:nowrap;margin-right:12px"
        title="Los rivales de copa que se enfrentaron una sola vez, y los jugadores con muy pocas acciones, distorsionan el ranking">
   <input type="checkbox" id="f-liga" checked onchange="aplicarLiga(this.checked)"
          style="width:15px;height:15px;accent-color:#e6a743;cursor:pointer">
-  Solo la liga
+  <span data-t="Solo la liga"><span data-t="Solo la liga">Solo la liga</span></span>
 </label>
 </span>
     <select id="f-pos">
-      <option value="" data-t="Todas">Todas</option>
-      <option value="OUTSIDE" data-t="Punta">Punta</option>
+      <option value="" data-t="Todas"><span data-t="Todas"><span data-t="Todas">Todas</span></span></option>
+      <option value="OUTSIDE" data-t="Punta"><span data-t="Punta"><span data-t="Punta">Punta</span></span></option>
       <option value="OPPOSITE" data-t="Opuesto">Opuesto</option>
-      <option value="MIDDLE" data-t="Central">Central</option>
+      <option value="MIDDLE" data-t="Central"><span data-t="Central"><span data-t="Central">Central</span></span></option>
       <option value="SETTER" data-t="Armador">Armador</option>
       <option value="LIBERO" data-t="Líbero">Líbero</option>
     </select>
   </div>
   <div class="filter-group">
-    <span class="filter-label" data-t="Buscar">Buscar</span>
+    <span class="filter-label" data-t="Buscar"><span data-t="Buscar"><span data-t="Buscar">Buscar</span></span></span>
     <input type="text" id="f-search" placeholder="Nombre..." style="min-width:140px">
   </div>
   <div class="filter-group">
-    <span class="filter-label" data-t="Mín. acciones">Mín. acciones</span>
+    <span class="filter-label" data-t="Mín. acciones"><span data-t="Mín. acciones"><span data-t="Mín. acciones">Mín. acciones</span></span></span>
     <select id="f-min-atk">
       <option value="20">20+</option>
-      <option value="0" data-t="Sin mínimo">Sin mínimo</option>
+      <option value="0" data-t="Sin mínimo"><span data-t="Sin mínimo"><span data-t="Sin mínimo">Sin mínimo</span></span></option>
       <option value="50">50+</option><option value="100">100+</option>
       <option value="200">200+</option><option value="300">300+</option>
     </select>
   </div>
-  <button class="reset-btn" id="reset-btn">✕ Limpiar</button>
+  <button class="reset-btn" id="reset-btn" data-t="✕ Limpiar"><span data-t="✕ Limpiar"><span data-t="✕ Limpiar">✕ Limpiar</span></span></button>
   <span class="results-count" id="results-count"></span>
 </div>
 <div class="panel active" id="panel-equipos">
-  <div class="section-title" data-t="RANKING EQUIPOS NLA — ELEGÍ UN FUNDAMENTO PARA ORDENAR">RANKING EQUIPOS NLA — ELEGÍ UN FUNDAMENTO PARA ORDENAR</div>
+  <div class="section-title" data-t="RANKING EQUIPOS NLA — ELEGÍ UN FUNDAMENTO PARA ORDENAR"><span data-t="RANKING EQUIPOS NLA — ELEGÍ UN FUNDAMENTO PARA ORDENAR"><span data-t="RANKING EQUIPOS NLA — ELEGÍ UN FUNDAMENTO PARA ORDENAR">RANKING EQUIPOS NLA — ELEGÍ UN FUNDAMENTO PARA ORDENAR</span></span></div>
   <div class="skill-pills" id="skill-pills"></div>
   <div class="table-wrap">
     <table id="teams-table">
@@ -242,10 +242,10 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
       <tbody id="teams-tbody"></tbody>
     </table>
   </div>
-  <div class="rank-legend">Cada celda: <b>EFF%</b> <span class="lg-tot" data-t="(total de acciones)">(total de acciones)</span> · color = ranking en ese fundamento (<span style="color:#22c55e" data-t="verde">verde</span> mejor → <span style="color:#ef4444" data-t="rojo">rojo</span> peor) · <span style="color:#22c55e;font-weight:700">Näfels</span> resaltado. <span id="updated-label" style="color:#475569"></span></div>
+  <div class="rank-legend">Cada celda: <b>EFF%</b> <span class="lg-tot" data-t="(total de acciones)"><span data-t="(total de acciones)"><span data-t="(total de acciones)">(total de acciones)</span></span></span> · color = ranking en ese fundamento (<span style="color:#22c55e" data-t="verde">verde</span> <span data-t="mejor →"><span data-t="mejor →">mejor →</span></span> <span style="color:#ef4444" data-t="rojo">rojo</span> <span data-t="peor) ·"><span data-t="peor) ·">peor) ·</span></span> <span style="color:#22c55e;font-weight:700">Näfels</span> resaltado. <span id="updated-label" style="color:#475569"></span></div>
 </div>
 <div class="panel" id="panel-jugadores">
-  <div class="section-title" data-t="RANKING JUGADORES NLA — ELEGÍ UN FUNDAMENTO">RANKING JUGADORES NLA — ELEGÍ UN FUNDAMENTO</div>
+  <div class="section-title" data-t="RANKING JUGADORES NLA — ELEGÍ UN FUNDAMENTO"><span data-t="RANKING JUGADORES NLA — ELEGÍ UN FUNDAMENTO"><span data-t="RANKING JUGADORES NLA — ELEGÍ UN FUNDAMENTO">RANKING JUGADORES NLA — ELEGÍ UN FUNDAMENTO</span></span></div>
   <div class="skill-pills" id="player-skills"></div>
   <div class="skill-pills sub-pills" id="player-subs"></div>
   <div class="table-wrap">
@@ -254,7 +254,7 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
       <tbody id="players-tbody"></tbody>
     </table>
   </div>
-  <div class="rank-legend">La columna <b>EFF%</b> manda el ranking <span class="lg-tot" data-t="(entre paréntesis: total de acciones del fundamento elegido)">(entre paréntesis: total de acciones del fundamento elegido)</span> · color = ranking en ese corte (<span style="color:#22c55e" data-t="verde">verde</span> mejor → <span style="color:#ef4444" data-t="rojo">rojo</span> peor) · <span style="color:#22c55e;font-weight:700">Näfels</span> resaltado · filtrá por posición para comparar like-with-like.</div>
+  <div class="rank-legend">La columna <b>EFF%</b> <span data-t="manda el ranking"><span data-t="manda el ranking">manda el ranking</span></span> <span class="lg-tot" data-t="(entre paréntesis: total de acciones del fundamento elegido)"><span data-t="(entre paréntesis: total de acciones del fundamento elegido)"><span data-t="(entre paréntesis: total de acciones del fundamento elegido)">(entre paréntesis: total de acciones del fundamento elegido)</span></span></span> · color = ranking en ese corte (<span style="color:#22c55e" data-t="verde">verde</span> <span data-t="mejor →"><span data-t="mejor →">mejor →</span></span> <span style="color:#ef4444" data-t="rojo">rojo</span> <span data-t="peor) ·"><span data-t="peor) ·">peor) ·</span></span> <span style="color:#22c55e;font-weight:700">Näfels</span> <span data-t="resaltado · filtrá por posición para comparar like-with-like."><span data-t="resaltado · filtrá por posición para comparar like-with-like.">resaltado · filtrá por posición para comparar like-with-like.</span></span></div>
 </div>
 <script>
 /*__DATA_PLACEHOLDER__*/
