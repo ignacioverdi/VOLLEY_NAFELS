@@ -51,7 +51,7 @@
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260914-0019">
+<link rel="stylesheet" href="movil.css?v=20260914-0025">
 </head>
 <body>
   <div class="top">
@@ -98,11 +98,11 @@
     </div>
   </div>
 
-<script src="categorias_club.js?v=20260914-0019"></script>
-<script src="selector_categoria.js?v=20260914-0019"></script>
-<script src="datos_seguros.js?v=20260914-0019"></script>
-<script src="firebase.js?v=20260914-0019"></script>
-<script src="firebase_por_categoria.js?v=20260914-0019"></script>
+<script src="categorias_club.js?v=20260914-0025"></script>
+<script src="selector_categoria.js?v=20260914-0025"></script>
+<script src="datos_seguros.js?v=20260914-0025"></script>
+<script src="firebase.js?v=20260914-0025"></script>
+<script src="firebase_por_categoria.js?v=20260914-0025"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════
    CÁMARA — Emisor de video por WebRTC hacia la(s) tablet(s).
@@ -170,6 +170,7 @@ async function transmitir(){
   $('badge').classList.add('live');
   $('dot').classList.add('on');
   _marcarArranque();
+  _cajaYouTube();
   setStatus('Transmitiendo. En la tablet, entrá a Video en vivo y poné la sala '+salaId+'.', 'live');
 
   /* anunciar la sala como activa */
@@ -370,10 +371,120 @@ function _copiarNombre(){
     setStatus('Nombre copiado: ' + g.nombre, '');
   }catch(e){}
 }
+
+/* ══ EL LINK DE YOUTUBE, ENGANCHADO SOLO ════════════════════════════════════
+   Hoy el camino del video es: grabar en el telefono, buscar el archivo,
+   subirlo a YouTube, copiar el link, entrar a Cargar Videos, elegir la sesion
+   y pegarlo. Seis pasos y el que se olvida uno pierde el video.
+
+   Con YouTube en vivo el video queda grabado SOLO en el canal, con su link,
+   apenas termina la transmision. Lo unico que falta es que ese link llegue al
+   mapa sin que nadie lo copie a mano.
+
+   Eso es lo que hace esto: pegas el link UNA VEZ, cuando arranca, y queda
+   atado a la fecha y la categoria. Cargar Videos despues lo encuentra solo.
+
+   El link se puede pegar antes de empezar o en cualquier momento: YouTube te
+   lo da apenas creas la transmision, antes de salir al aire.
+*/
+function _claveSesion(){
+  /* La misma clave que usa Cargar Videos: ENT + aaaammdd + turno.
+     El turno sale de la hora: antes de las 14, M (manana); despues, T. */
+  var d = new Date();
+  function dos(n){ return (n<10?'0':'')+n; }
+  var f = '' + d.getFullYear() + dos(d.getMonth()+1) + dos(d.getDate());
+  var turno = (d.getHours() < 14) ? 'M' : 'T';
+  return { ent: 'ENT' + f + turno, entSinTurno: 'ENT' + f, fecha: f, turno: turno };
+}
+
+function _idDeYoutube(url){
+  var u = String(url || '').trim();
+  if(!u) return '';
+  var m = u.match(/(?:v=|youtu\.be\/|embed\/|live\/|shorts\/)([A-Za-z0-9_-]{11})/);
+  if(m) return m[1];
+  return (/^[A-Za-z0-9_-]{11}$/.test(u)) ? u : '';
+}
+
+function _guardarLinkYT(){
+  var campo = document.getElementById('yt-link');
+  if(!campo) return;
+  var id = _idDeYoutube(campo.value);
+  var aviso = document.getElementById('yt-aviso');
+
+  if(!id){
+    if(aviso){
+      aviso.style.color = '#fca5a5';
+      aviso.textContent = campo.value.trim()
+        ? 'Ese link no parece de YouTube. Tiene que tener el codigo de 11 letras.'
+        : 'Pega el link que te da YouTube al crear la transmision.';
+    }
+    return;
+  }
+
+  var k = _claveSesion();
+  var modo = (document.getElementById('yt-modo') || {}).value || 'ent';
+  var lsk = 'nafels_video_map_draft_' + modo;
+  var mapa = {};
+  try{ mapa = JSON.parse(localStorage.getItem(lsk) || '{}'); }catch(e){}
+
+  /* Se guarda con turno y sin turno: segun como quede scouteada la sesion,
+     Cargar Videos busca una u otra. Con las dos puestas, la encuentra igual. */
+  var url = 'https://www.youtube.com/watch?v=' + id;
+  mapa[k.ent] = url;
+  mapa[k.entSinTurno] = url;
+  try{ localStorage.setItem(lsk, JSON.stringify(mapa)); }catch(e){}
+
+  try{
+    var g = JSON.parse(localStorage.getItem('cam_arranque') || '{}');
+    g.youtube = url; g.youtubeId = id; g.clave = k.ent;
+    localStorage.setItem('cam_arranque', JSON.stringify(g));
+  }catch(e){}
+
+  if(aviso){
+    aviso.style.color = '#86efac';
+    aviso.innerHTML = 'Guardado para <b>' + k.ent + '</b>. '
+      + 'Cuando entres a Cargar Videos ya va a estar puesto.';
+  }
+}
+
+function _cajaYouTube(){
+  if(document.getElementById('yt-caja')) return;
+  var caja = document.createElement('div');
+  caja.id = 'yt-caja';
+  caja.style.cssText = 'margin:10px 0;padding:10px 12px;border-radius:10px;'
+    + 'background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.30);'
+    + 'font-size:13px;line-height:1.5;text-align:left';
+  caja.innerHTML =
+      '<div style="font-weight:800;color:#7dd3fc;margin-bottom:5px">'
+    +   'Si transmitis a YouTube, pega el link aca</div>'
+    + '<div style="color:#94a3b8;font-size:12px;margin-bottom:7px">'
+    +   'Queda atado a la sesion de hoy. Despues no tenes que cargarlo a mano: '
+    +   'Cargar Videos lo encuentra solo.</div>'
+    + '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">'
+    +   '<input id="yt-link" type="text" placeholder="https://youtube.com/watch?v=..." '
+    +     'style="flex:1;min-width:190px;padding:7px 9px;border-radius:8px;'
+    +     'background:rgba(15,23,42,.6);border:1px solid rgba(148,163,184,.25);'
+    +     'color:#e2e8f0;font-size:12.5px;font-family:inherit">'
+    +   '<select id="yt-modo" style="padding:7px 9px;border-radius:8px;'
+    +     'background:rgba(15,23,42,.6);border:1px solid rgba(148,163,184,.25);'
+    +     'color:#e2e8f0;font-size:12.5px;font-family:inherit">'
+    +     '<option value="ent">Entrenamiento</option>'
+    +     '<option value="partido">Partido</option></select>'
+    +   '<button onclick="_guardarLinkYT()" style="padding:7px 12px;border-radius:8px;'
+    +     'background:rgba(56,189,248,.18);border:1px solid rgba(56,189,248,.35);'
+    +     'color:#e0f2fe;font-size:12.5px;font-weight:700;cursor:pointer;'
+    +     'font-family:inherit">Guardar</button>'
+    + '</div>'
+    + '<div id="yt-aviso" style="margin-top:7px;font-size:12px;color:#94a3b8"></div>';
+  var ref = document.getElementById('cam-archivo');
+  if(ref && ref.parentNode) ref.parentNode.insertBefore(caja, ref.nextSibling);
+  else document.body.appendChild(caja);
+}
+
 </script>
-<script src="lang.js?v=20260914-0019"></script>
-<script src="volver_inicio.js?v=20260914-0019" onerror="void 0"></script>
-<script src="ayuda.js?v=20260914-0019">
+<script src="lang.js?v=20260914-0025"></script>
+<script src="volver_inicio.js?v=20260914-0025" onerror="void 0"></script>
+<script src="ayuda.js?v=20260914-0025">
 
 </script>
 </body>
