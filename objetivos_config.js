@@ -450,6 +450,13 @@ function fmtEff(v){
    tienen. */
 var OBJ_T = {
   en: {
+    'Objetivo':'Target',
+    'Cerca':'Close',
+    'Lejos':'Far',
+    'Ver estas':'Watch these',
+    'Ver estos':'Watch these',
+    'acciones en video':'actions on video',
+    'ataques en video':'attacks on video',
     'el peor de la liga':'worst in the league',
     'el mejor':'best',
     '% Recepción':'% Reception',
@@ -517,6 +524,13 @@ var OBJ_T = {
     'El reproductor no está cargado en esta pantalla.':'The player is not loaded on this screen.'
   },
   de: {
+    'Objetivo':'Ziel',
+    'Cerca':'Nah',
+    'Lejos':'Weit',
+    'Ver estas':'Diese ansehen',
+    'Ver estos':'Diese ansehen',
+    'acciones en video':'Aktionen im Video',
+    'ataques en video':'Angriffe im Video',
     'el peor de la liga':'Schlechtester der Liga',
     'el mejor':'Bester',
     '% Recepción':'% Annahme',
@@ -730,7 +744,7 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
          scout sino lo que queda al restar, no hay un signo que buscar. */
       + (f[4]
          ? '<span onclick="objVerVideo(\''+id+'\',\''+f[4]+'\',\''+(quien||'').replace(/\'/g,'')+'\','+f[2]+',\''+String(_jugNom||'').replace(/\'/g,'')+'\')" '
-           + 'title="Ver estos '+f[2]+' ataques en video" '
+           + 'title="'+ot('Ver estos')+' '+f[2]+' '+ot('ataques en video')+'" '
            + 'style="font-weight:900;color:#e2e8f0;min-width:30px;text-align:right;font-size:14px;'
            + 'cursor:pointer;text-decoration:underline;text-decoration-color:rgba(148,163,184,.4);'
            + 'text-underline-offset:3px">'+f[2]+'</span>'
@@ -803,9 +817,8 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
       + 'border:1px solid rgba(148,163,184,.25);border-radius:8px;font-size:11.5px;'
       + 'color:#cbd5e1;line-height:1.55">'
       + '<b style="color:#94a3b8">'+ot('Ojo: son pocas pelotas.')+'</b><br>'
-      + 'Con '+T+' ataque'+(T>1?'s':'')+', una sola cambia el número '
-      + Math.round(200/T)+' puntos. Este porcentaje todavía no dice mucho: '
-      + 'mirálo cuando haya más.</div>';
+      + ot('Con')+' '+T+' '+(T>1?ot('ataques'):ot('ataque'))+', '+ot('una sola cambia el número')+' '
+      + Math.round(200/T)+' '+ot('puntos. Este porcentaje todavía no dice mucho: mirálo cuando haya más.')+'</div>';
   }
 
   var cuerpo = ''
@@ -837,8 +850,8 @@ function objMejorPalanca(cfg, D, total, suma, val, obj){
   var txt = ot('Ningún cambio por separado alcanza. La palanca más grande:')+'<br>'
     + '\u2022 '+ot('no regalar')+' <b>' + mejor.n + ' ' + objPlural(mejor.f[1], mejor.n) + '</b>'
     + ' \u2192 '+ot('pasás de')+' <b>' + fmtEff(val) + '</b> a <b>' + fmtEff(nuevo) + '</b>';
-  txt += (Math.round(nuevo) >= Math.round(obj)) ? ' y llegás al objetivo.'
-                                                : '. Después hay que subir calidad.';
+  txt += (Math.round(nuevo) >= Math.round(obj)) ? ' '+ot('y llegás al objetivo.')
+                                                : '. '+ot('Después hay que subir calidad.');
   return txt;
 }
 
@@ -1103,7 +1116,7 @@ function objAbrirDetalle(id, vals, meta, quien){
          Tocas "18" al lado de Error y ves esas 18 pelotas. El subrayado
          suave avisa que se puede tocar sin ensuciar la lectura. */
       + '<span onclick="objVerVideo(\''+id+'\',\''+f[0]+'\',\''+(quien||'').replace(/\'/g,'')+'\','+n+',\''+String(_jugNom||'').replace(/\'/g,'')+'\')" '
-      +    'title="Ver estas '+n+' acciones en video" '
+      +    'title="'+ot('Ver estas')+' '+n+' '+ot('acciones en video')+'" '
       +    'style="font-weight:900;color:#e2e8f0;min-width:30px;text-align:right;font-size:14px;'
       +    'cursor:pointer;text-decoration:underline;text-decoration-color:rgba(148,163,184,.4);'
       +    'text-underline-offset:3px">'+n+'</span>'
@@ -1246,7 +1259,7 @@ function objAbrirDetalle(id, vals, meta, quien){
       + 'border:1px solid rgba(148,163,184,.25);border-radius:8px;font-size:11.5px;'
       + 'color:#cbd5e1;line-height:1.55">'
       + '<b style="color:#94a3b8">'+ot('Ojo: son pocas acciones.')+'</b><br>'
-      + 'Con '+total+', una sola cambia bastante el número. Mirálo cuando haya más.</div>';
+      + ot('Con')+' '+total+', '+ot('una sola cambia bastante el número. Mirálo cuando haya más.')+'</div>';
   }
 
   var cuerpo = ''
@@ -1346,8 +1359,8 @@ function objSingleBat(id,val,meta,cls,objLine,vals){
   try{
     if(val!==null && meta.obj!=null && meta.min!=null && meta.obj>meta.min){
       var reco = Math.round((val-meta.min)/(meta.obj-meta.min)*100);
-      tip = nombre+': '+val+'%'+(n!=null?' sobre '+n+' acciones':'')
-          + ' \u00b7 el peor de la liga '+meta.min+'%, el mejor '+meta.obj+'%'
+      tip = nombre+': '+val+'%'+(n!=null?' '+ot('sobre')+' '+n+' '+ot('acciones'):'')
+          + ' \u00b7 '+ot('el peor de la liga')+' '+meta.min+'%, '+ot('el mejor')+' '+meta.obj+'%'
           + ' \u00b7 '+ot('estás al')+' '+reco+'% '+ot('del recorrido');
     }
   }catch(e){}
@@ -1375,7 +1388,7 @@ function objSingleBat(id,val,meta,cls,objLine,vals){
       + '</div>'
     + '</div>'
     + (n!=null ? '<div style="font-size:8px;font-weight:700;color:#8395ac">'+n+' '+ot('acc.')+'</div>' : '')
-    + '<div style="font-size:8px;font-weight:700;color:#64748b">obj '+objLine+'</div>'
+    + '<div style="font-size:8px;font-weight:700;color:#64748b">'+ot('obj')+' '+objLine+'</div>'
     + '</div>';
 }
 function renderObjetivos(cid,extra){
@@ -1386,7 +1399,7 @@ function renderObjetivos(cid,extra){
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
     +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">OBJETIVOS DEL EQUIPO'+(window.__TEMP_TITULO||'')+'</div>'
     +'<div style="display:flex;gap:10px;flex-wrap:wrap">'
-    +[['#22c55e','Objetivo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Lejos']].map(function(x){
+    +[['#22c55e',ot('Objetivo')],['#86efac',ot('Cerca')],['#fbbf24',ot('Neutro')],['#ef4444',ot('Lejos')]].map(function(x){
       return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
     }).join('')+'</div></div>'
     /* ══ UNA SOLA FILA, PARA QUE ENTRE EN EL TELEVISOR ══════════════════
@@ -1425,7 +1438,7 @@ function renderObjetivosJugador(cid,nombre,extra){
     /* La leyenda decia "Sobre equipo" / "Bajo equipo" porque el jugador se
        comparaba contra su propio equipo. Ahora se compara contra el objetivo,
        igual que la fila del equipo, asi que dice lo mismo que las demas. */
-    +[['#22c55e','Objetivo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Lejos']].map(function(x){
+    +[['#22c55e',ot('Objetivo')],['#86efac',ot('Cerca')],['#fbbf24',ot('Neutro')],['#ef4444',ot('Lejos')]].map(function(x){
       return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
     }).join('')+'</div></div>'
     /* ══ SE SACO LA FILA DE ENCABEZADO ════════════════════════════════════

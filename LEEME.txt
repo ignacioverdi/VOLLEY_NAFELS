@@ -1,51 +1,56 @@
-LOS ULTIMOS TRES LUGARES
-========================
+LA VENTANITA Y LAS BATERIAS — COMPLETO
+======================================
 
 Un archivo: objetivos_config.js. Publicar y Ctrl+Shift+R.
 
 
-LA VENTANA DEL ATAQUE YA QUEDO COMPLETA
----------------------------------------
-Verificado, sin una palabra en castellano:
+POR QUE SIGUIERON APARECIENDO COSAS
+-----------------------------------
+Te lo digo derecho: vengo entregando esto de a pedazos y no esta bien.
 
-   HIGH-BALL ATK
-   21 high-ball attacks · target 18
-   Point · Still in play · Blocked · Error
-   HOW YOU GET TO -5%
-   5 points − 1 blocked − 5 errors = -1
-   This is not an average like reception: it is a SUBTRACTION...
-   WHAT YOU GIVE AWAY
-   6 of your 21 attacks end in a point for the opponent — they cost you 29 points.
-   To reach 18 · do not miss 5 of your 5 errors
+Lo que pasaba es que yo miraba el TEXTO DE LA PANTALLA, y varias cosas no
+estan ahi:
 
-Y la leyenda de colores: Target · Close to it · Neutral · Far
+   los globos que salen al pasar el mouse
+   los titulos de los botones
+   la leyenda de colores de abajo
+   los avisos que aparecen solo en ciertos casos
 
-
-LO QUE FALTABA
---------------
-El GLOBO que aparece al pasar el mouse por una bateria:
-
-   antes:  % Recepción: 53% out of 1362 actions · worst in the league 45%,
-           best 60% · estás al 53% del recorrido
-                        ^^^^^^^^^^^^^^^^^^^^^^^
-
-   La bateria decia "% Reception" pero el globo "% Recepción": el nombre
-   salia de la etiqueta sin pasar por el traductor.
-
-Y dos etiquetas chicas de la bateria: "1362 acc." y "obj 60".
-
-   ahora:  % Reception: 53% out of 1362 actions · worst in the league 45%,
-           best 60% · you are at 53% of the way there
-
-           la bateria: % Reception  53%  1362 act.  tgt 60
-
-   [de]    % Annahme: 53% von 1362 Aktionen · Schlechtester der Liga 45%,
-           Bester 60% · du bist bei 53% des Weges
+Esta vez recorri el archivo entero, linea por linea, y despues fui a la app
+a leer los globos y los titulos uno por uno.
 
 
-DONDE ESTOY PARADO
-------------------
-Recorri el archivo entero buscando texto con acentos o palabras castellanas
-que no pasara por el traductor, y despues fui a la app a mirar lo que de
-verdad se ve —incluidos los globos del mouse, que no salen en el texto de la
-pantalla—. Estos tres eran los que quedaban.
+LO QUE FALTABA AHORA
+--------------------
+   el globo, la mitad:
+       % Reception: 53% sobre 1362 acciones · el peor de la liga 45%...
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+   la etiqueta de la bateria:  "obj 42"
+   la leyenda de colores:      Objetivo · Cerca · Neutro · Lejos
+   el titulo del boton video:  "Ver estas 18 acciones en video"
+   el aviso de pocas acciones: "Con 3 ataques, una sola cambia..."
+   el cierre del consejo:      "y llegás al objetivo"
+
+Varios de esos ya te los habia mandado antes pero no habian entrado: el
+archivo publicado no los tenia. Ahora los apliqué sobre lo que hay arriba
+ahora mismo, no sobre mi copia.
+
+
+COMO QUEDA
+----------
+   [en]  globo:   % Reception: 53% out of 1362 actions · worst in the
+                  league 45%, best 60% · you are at 53% of the way there
+         bateria: % Reception  53%  1362 act.  tgt 60
+         leyenda: Target · Close · Neutral · Far
+         video:   Watch these 18 actions on video
+         aviso:   With 3 attacks, a single one moves the number 67 points...
+
+   [de]  globo:   % Annahme: 53% von 1362 Aktionen · Schlechtester der
+                  Liga 45%, Bester 60% · du bist bei 53% des Weges
+         bateria: % Annahme  53%  1362 Akt.  Ziel 60
+         leyenda: Ziel · Nah · Neutral · Weit
+         video:   Diese ansehen 18 Aktionen im Video
+
+
+80 llamadas al traductor y unos 100 terminos en la tabla.
