@@ -1,57 +1,61 @@
-EL ULTIMO ARREGLO
-=================
+LOS DOS TEMAS
+=============
 
-UN SOLO ARCHIVO: objetivos_config.js
-Las 4 pantallas ya estan bien, no las toques.
-
-
-QUE PASO
---------
-Lo probe y el enlace NO se generaba. La causa fue mia y es de manual:
-
-Sacamos plan_partido_data.js de las pantallas —bien, era 1 MB al pedo—.
-Pero objNumeroDe, que traduce "BARTHOLET" a 11, buscaba JUSTO AHI.
-
-Sin ese archivo se quedaba sin donde buscar, devolvia null, y objVerVideo
-cortaba antes de armar la direccion. Sin error visible, porque el try/catch
-se lo tragaba.
-
-Saque una dependencia sin revisar quien la usaba. El clasico.
+Un archivo: objetivos_config.js. Publicar y Ctrl+Shift+R.
 
 
-COMO LO ARREGLE
----------------
-objNumeroDe ahora busca en tres lugares, en orden:
+1) LOS PORCENTAJES, SIEMPRE REDONDOS
+------------------------------------
+Encontre la raiz: fmtEff NO redondeaba.
 
-   1. el plantel del club, si la pantalla lo tiene cargado
-   2. la grilla de jugadores que la pantalla YA muestra ("#11 BARTHOLET")
-   3. PP_DATA, para las pantallas que si la tienen (plan_partido)
+   antes:  function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
 
-El segundo es el que salva el dia: esa grilla esta en todas las pantallas
-que tienen baterias, y no hay que descargar nada.
+Si le llegaba 55.34 escribia "55.34%". Por eso aparecian decimales en unas
+pantallas y en otras no: dependia de si el numero venia ya redondeado desde
+el motor o crudo.
+
+Como fmtEff la usan TODAS las pantallas, arreglarlo ahi los deja redondos en
+todo el sistema de una sola vez.
+
+   55.34  ->  55%
+   59.8   ->  60%
+   -33.33 ->  -33%
+   null   ->  —
+
+(El "de cada 10" sigue con un decimal a proposito: ahi el redondeo borraba
+la diferencia entre 1.9 y 2.5, que era justo lo que se queria mostrar. No es
+un porcentaje.)
 
 
-PROBADO EN LA APP, LOS 5 CASOS
-------------------------------
-   recepción error  #11    num=11  sk=Recepción  ev==
-   saque ace        #11    num=11  sk=Saque      ev=#
-   ataque bloqueado #11    num=11  sk=Ataque     ev=/
-   defensa perfecta #1     num=1   sk=Defensa    ev=#
-   error del EQUIPO        sin num sk=Recepción  ev==
+2) EL CARTEL EN LAS BATERIAS DE EQUIPO
+--------------------------------------
+Lo reproduje exacto. Toque la bateria de SAQUE del bloque de equipo:
 
-Los cinco arman bien. Y BARTHOLET->11, DURDOS->1, SCHMID R->7, #11->11.
+   onclick:  objVerVideo('sq','e','',276,'')
+   alerta:   "No pude identificar al jugador para traer sus acciones."
+
+La fila llega VACIA —''—, no con la palabra "Equipo". Y yo tomaba como
+equipo SOLO si decia "Equipo". Entonces lo trataba como un jugador, no
+encontraba a nadie, y saltaba el cartel.
+
+Lo di vuelta, que es lo correcto: se trata como JUGADOR solo si hay un
+nombre de jugador. Sin nombre es el equipo.
+
+   fila ""            ->  EQUIPO
+   fila "Equipo"      ->  EQUIPO
+   fila "Team"        ->  EQUIPO     (tambien en ingles)
+   fila "Mannschaft"  ->  EQUIPO     (y en aleman)
+   fila "Jugador" + BARTHOLET  ->  jugador
+   fila "Player"  + DURDOS     ->  jugador
+
+Los idiomas importan porque la app esta en ES/EN/DE y la fila viene
+traducida.
 
 
-LO QUE VERIFIQUE ADEMAS
+LO QUE VA A PASAR AHORA
 -----------------------
-   objetivos_config publicado tiene el enlace      OK
-   ya no llama a repAbrir                          OK
-   las 4 pantallas sin reproductor.js ni los mapas OK
-   la ventanita abre con todo su contenido         OK
+Tocas los 276 errores de saque del equipo y abre:
 
-      PLAYER · RECEPTION · 55%
-      158 pelotas que recibe · objetivo 60
-      #  Perfect      27   1.7 de 10
-      +  Positive     45   2.8 de 10
-      !  Suficiente   40   2.5 de 10
-      =  Error        18   1.1 de 10
+   cortes.html?sk=Saque&ev==
+
+Sin num, o sea todos los jugadores. Que es lo que pediste.

@@ -405,7 +405,18 @@ function renderObjetivos(cid,extra){
   el.innerHTML=html;
 }
 function objPct(v,mn,mx){return Math.max(0,Math.min(100,(v-mn)/(mx-mn)*100));}
-function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
+function fmtEff(v){
+  /* ══ SIEMPRE REDONDO ══════════════════════════════════════════════════════
+     Antes esto NO redondeaba: si le llegaba 55.34 escribia "55.34%". Por eso
+     aparecian porcentajes con decimales en distintas pantallas, segun de
+     donde viniera el numero.
+
+     Como fmtEff la usan todas las pantallas, arreglarlo aca los deja redondos
+     en todo el sistema de una sola vez. */
+  if(v === null || v === undefined || isNaN(v)) return '\u2014';
+  var n = Math.round(Number(v));
+  return (n < 0 ? '-' : '') + Math.abs(n) + '%';
+}
 
 /* ══════════════════════════════════════════════════════════════════════════
    LA VENTANITA DEL DETALLE
@@ -759,6 +770,12 @@ function objNumeroDe(nombre){
 
 
 
+
+/* Si la etiqueta de la fila nombra a un jugador, en los tres idiomas. */
+function _esJugadorFila(t){
+  return /jugador|player|spieler|joueur/i.test(String(t||''));
+}
+
 function objVerVideo(id, clave, nombreFila, cuantas, jugNombre){
   /* ══ AL REPRODUCTOR QUE YA EXISTE ═════════════════════════════════════════
      cortes.html ya hace TODO esto: tiene las acciones filtradas, ordenadas,
@@ -782,8 +799,21 @@ function objVerVideo(id, clave, nombreFila, cuantas, jugNombre){
     if(!sig) sig = ({p:'#', b:'/', e:'='})[clave] || null;
     if(!sig) return;
 
+    /* ══ CUANDO ES EL EQUIPO ══════════════════════════════════════════════
+       Yo daba por equipo solo si la fila decia "Equipo". Pero las baterias
+       del BLOQUE DE EQUIPO —las de arriba, sin jugador elegido— vienen con la
+       fila VACIA, no con la palabra. Entonces las tomaba como de un jugador,
+       no encontraba a nadie y saltaba el cartel.
+
+       Ahora es al reves, que es lo correcto: se trata como jugador SOLO si
+       hay un nombre de jugador. Sin nombre es el equipo, en cualquier idioma
+       y con la fila vacia. */
     var jug = '';
-    if(!(nombreFila && /equipo/i.test(nombreFila))){
+    var _nomFila = String(nombreFila||'');
+    var _esEquipo = !_nomFila
+                 || /equipo|team|mannschaft|équipe|equipe/i.test(_nomFila)
+                 || (!jugNombre && !_esJugadorFila(_nomFila));
+    if(!_esEquipo){
       var nom = jugNombre || '';
       if(!nom){
         try{ nom = window._dbatNombre || window._objNombre || ''; }catch(e){}
