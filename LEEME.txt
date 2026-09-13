@@ -1,63 +1,51 @@
-LA VENTANITA, TRADUCIDA ENTERA
-==============================
+LOS ULTIMOS TRES LUGARES
+========================
 
 Un archivo: objetivos_config.js. Publicar y Ctrl+Shift+R.
 
 
-LO QUE YA ESTABA BIEN
----------------------
-La ventana de RECEPCION quedo sin una palabra en castellano, y la del
-ATAQUE casi toda:
+LA VENTANA DEL ATAQUE YA QUEDO COMPLETA
+---------------------------------------
+Verificado, sin una palabra en castellano:
 
    HIGH-BALL ATK
    21 high-ball attacks · target 18
    Point · Still in play · Blocked · Error
+   HOW YOU GET TO -5%
+   5 points − 1 blocked − 5 errors = -1
+   This is not an average like reception: it is a SUBTRACTION...
    WHAT YOU GIVE AWAY
    6 of your 21 attacks end in a point for the opponent — they cost you 29 points.
    To reach 18 · do not miss 5 of your 5 errors
 
+Y la leyenda de colores: Target · Close to it · Neutral · Far
+
 
 LO QUE FALTABA
 --------------
-Dos lineas de la cuenta del ataque:
+El GLOBO que aparece al pasar el mouse por una bateria:
 
-   5 puntos − 1 bloqueados − 5 errores = -1        <- castellano
-   No es un promedio como en recepción: es una...  <- castellano entero
+   antes:  % Recepción: 53% out of 1362 actions · worst in the league 45%,
+           best 60% · estás al 53% del recorrido
+                        ^^^^^^^^^^^^^^^^^^^^^^^
 
-Y despues hice un barrido por TODO el archivo, no solo por lo que se veia
-en pantalla. Aparecieron otros que no habiamos mirado:
+   La bateria decia "% Reception" pero el globo "% Recepción": el nombre
+   salia de la etiqueta sin pasar por el traductor.
 
-   el globo que sale al pasar el mouse por una bateria
-       "39% sobre 1159 acciones · el peor de la liga 12%, el mejor 42"
+Y dos etiquetas chicas de la bateria: "1362 acc." y "obj 60".
 
-   la leyenda de colores de abajo
-       Objetivo · Cerca · Neutro · Lejos
+   ahora:  % Reception: 53% out of 1362 actions · worst in the league 45%,
+           best 60% · you are at 53% of the way there
 
-   el aviso de pocas acciones
-       "Con 3 ataques, una sola cambia el número 67 puntos..."
+           la bateria: % Reception  53%  1362 act.  tgt 60
 
-   el mensaje de cuando no alcanza
-       "Con 21 ataques hace falta un salto grande..."
-
-   los titulos de los botones de video
-       "Ver estas 18 acciones en video"
-
-   y los dos finales del consejo
-       "y llegás al objetivo" · "Después hay que subir calidad"
-
-Todo eso ya pasa por el traductor. En ingles:
-
-   Target · Close to it · Neutral · Far
-   39% out of 1159 actions · worst in the league 12%, best 42
-   With 3 attacks, a single one moves the number 67 points...
-   Watch these 18 actions on video
-   and you hit the target · After that you need better quality
+   [de]    % Annahme: 53% von 1362 Aktionen · Schlechtester der Liga 45%,
+           Bester 60% · du bist bei 53% des Weges
 
 
-COMO LO VERIFIQUE
------------------
-Recorri el archivo entero buscando texto entre comillas que tuviera acentos
-o palabras castellanas y no estuviera envuelto en ot(). Quedan 0.
-
-Son 54 llamadas al traductor y unos 90 terminos en la tabla, en ingles y
-aleman.
+DONDE ESTOY PARADO
+------------------
+Recorri el archivo entero buscando texto con acentos o palabras castellanas
+que no pasara por el traductor, y despues fui a la app a mirar lo que de
+verdad se ve —incluidos los globos del mouse, que no salen en el texto de la
+pantalla—. Estos tres eran los que quedaban.
