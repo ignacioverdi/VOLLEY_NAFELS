@@ -1,70 +1,61 @@
-LOS BLOQUEOS DE 25-26 — LA CAUSA DE VERDAD
-==========================================
+LOS BLOQUEOS DE 25-26 — AHORA SI
+================================
 
 Un archivo: gen_bloqueo.py
 Correr HACER_TODO y publicar.
 
 
-PRIMERO: LO QUE YA ANDA
------------------------
-Chequee todo despues de que publicaste y corriste HACER_TODO:
+LO QUE PASO CON EL INTENTO ANTERIOR
+-----------------------------------
+Verifique que corriste todo bien: datos_bloqueo.js.enc se regenero a las
+12:59:42. Pero los 1356 bloqueos viejos siguen ahi.
 
-   ARMADO      ✓  #4 VAZQUEZ (250) · #13 STEIMANN (158) · dibuja 346 zonas
-   DEFENSA     ✓  13 jugadores · dibuja 62 zonas · cambia de modo bien
-   SAQUE       ✓  11 jugadores · #9 NORRIS (131) · #5 CLEMENT (129)
-   RECEPCIÓN   ✓  8 jugadores · #20 SCHMID J (272) · #1 DURDOS (264)
-   ATAQUE      ✓  12 jugadores · #9 NORRIS (90) · #11 BARTHOLET (82)
+Mi arreglo anterior salteaba el archivo de video por su NOMBRE
+(datos_video_25-26.js, porque 2025-26 figura como archivada). No alcanzo.
 
-   BLOQUEO, entrenamientos  ✓  206 acciones, con el plantel de HOY
-                               Nikolov y Figueiredo ya NO aparecen
+Lo mas probable es que los datos viejos entren por otro archivo —hay
+datos_video.js y datos_video_sin-fecha.js dando vueltas— y esos no tienen la
+temporada en el nombre, asi que mi filtro no los tocaba.
 
-Falta solo una cosa: el modo PARTIDO de bloqueo.
-
-
-POR QUE SEGUIAN APARECIENDO
----------------------------
-El orden en HACER_TODO ya estaba bien —lo verifique por las fechas de los
-archivos: plan a las 12:51:27, bloqueo a las 12:52:03—. No era eso.
-
-El problema estaba en como gen_bloqueo ELIGE el archivo de video:
-
-    cands = glob.glob('datos_video*.js')        # todos
-    cands.sort(por fecha de modificacion)       # el mas reciente
-    usa el primero que sirva
-
-En la 26-27 TODAVIA NO SE JUGO NINGUN PARTIDO, asi que no existe
-datos_video_26-27.js. El unico que hay es datos_video_25-26.js.
-
-Entonces agarraba ese, y de ahi salian los 1356 bloqueos de la temporada
-pasada con jugadores que ya no estan.
-
-El filtro por temporada no llegaba a actuar: el problema era anterior, en la
-eleccion misma del archivo.
+Te lo digo derecho: apunte al sintoma, no a la causa. Dos veces.
 
 
-LO QUE HICE
------------
-Ahora saltea los archivos cuya temporada figura como ARCHIVADA en
-temporadas.js (ahi esta 2025-26).
+LO QUE HICE AHORA — un filtro que no puede fallar
+--------------------------------------------------
+Dejo de mirar nombres de archivo y planes de partido. Miro LA FECHA DE CADA
+PARTIDO, que siempre esta y no se puede confundir con nada.
 
-   datos_video_25-26.js     SALTEADO (archivada)
-   datos_video_26-27.js     se usa
-   datos_video.js           se usa
+   partido del 2025-10-04   DESCARTADO
+   partido del 2026-02-15   DESCARTADO
+   final del 2026-05-30     DESCARTADO
+   entrenamiento 2026-09-10  ENTRA
+   partido futuro 2026-10-05 ENTRA
 
-Si no queda ninguno —que es hoy— devuelve None y los bloqueos de partido
-quedan en CERO. Que es lo correcto: no se jugo ningun partido.
+El corte lo deduce solo: temporadas.js dice que 2025-26 esta archivada, asi
+que la actual arranca el 1 de julio de 2026.
 
-Y avisa en pantalla mientras corre:
+No importa de que archivo salgan los datos. Si el partido es de antes del
+1/7/2026, no entra.
 
-   [bloqueo] Salteo datos_video_25-26.js: esa temporada esta archivada.
-   [bloqueo] No hay video de partidos de la temporada en curso.
-   [bloqueo] Los bloqueos de partido quedan en 0, como corresponde.
-
-Probado con los dos formatos de nombre: 25-26 y 2025-26 (los archivos usan
-uno y temporadas.js el otro).
+Los entrenamientos no se tocan: su archivo ya es de una sola temporada.
 
 
-CUANDO JUEGUEN EL PRIMER PARTIDO
---------------------------------
-Se genera datos_video_26-27.js solo, y como 26-27 no esta archivada, entra
-sin que tengas que tocar nada.
+CUANDO CORRAS HACER_TODO
+------------------------
+Vas a ver una linea nueva:
+
+   [bloqueo] 26 partidos de temporadas anteriores, descartados.
+
+Ese numero te confirma que funciono. Despues, en el mapa de bloqueo:
+
+   modo PARTIDO         solo WHOLE TEAM (no se jugo ninguno todavia)
+   modo ENTRENAMIENTO   los 206 con el plantel de hoy
+
+Y cuando jueguen el primero de la 26-27, entra solo: su fecha va a ser
+posterior al 1 de julio.
+
+
+SI DESPUES DE ESTO SIGUE IGUAL
+------------------------------
+Copiame las lineas que empiezan con [bloqueo] de la ventana de HACER_TODO.
+Ahi va a estar la respuesta y no tengo que seguir adivinando.

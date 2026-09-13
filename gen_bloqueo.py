@@ -458,6 +458,41 @@ def map_team(tm, keys):
     if RENAME_TEAM.get(tm) in keys: return RENAME_TEAM[tm]
     return tm  # fallback inofensivo
 
+
+def _inicio_temporada():
+    """El 1 de julio del año en que arranca la temporada en curso.
+
+    Se deduce de temporadas.js: ahi se listan las temporadas ARCHIVADAS. La
+    que sigue a la ultima archivada es la que se esta jugando.
+    Si el archivo no esta, se usa el año actual (julio a junio).
+    """
+    import datetime
+    ult=0
+    try:
+        t=open('temporadas.js',encoding='utf-8',errors='replace').read()
+        for m in re.finditer(r"id\s*:\s*[\"']((?:19|20)?\d{2})-(\d{2})[\"']", t):
+            a=m.group(1)
+            a=int(a) if len(a)==4 else 2000+int(a)
+            if a>ult: ult=a
+    except Exception:
+        pass
+    if ult: return (ult+1)*10000 + 701          # 20260701
+    hoy=datetime.date.today()
+    a = hoy.year if hoy.month>=7 else hoy.year-1
+    return a*10000 + 701
+
+
+_INI_TEMP = None
+
+def _de_la_temporada(fecha):
+    """True si esa fecha cae dentro de la temporada en curso."""
+    global _INI_TEMP
+    if _INI_TEMP is None: _INI_TEMP=_inicio_temporada()
+    d=re.sub(r'\D','', str(fecha or ''))
+    if len(d)!=8: return True     # sin fecha: no se descarta, mejor de mas
+    return int(d) >= _INI_TEMP
+
+
 def build(fuentes, out='datos_bloqueo.js'):
     """fuentes: lista de (archivo_de_video, tipo) con tipo 'partido' o
     'entrenamiento'. Cada bloqueo queda etiquetado con su tipo, para que las
@@ -475,8 +510,23 @@ def build(fuentes, out='datos_bloqueo.js'):
         if not _VD:
             print('[bloqueo] aviso: no pude leer VIDEO_DATA de %s, la salteo' % _vp); continue
         print('[bloqueo] %-14s %s (%d sesiones)' % (_tp,_vp,len(_VD.get('matches',{}))))
+        _desc=0
         for _mid,_mt in _VD['matches'].items():
+            # ══ FILTRO POR FECHA — el unico que no depende de nombres ═══════
+            #  Antes se confiaba en el nombre del archivo y en el plan del
+            #  partido. Los dos fallaron: en la 26-27 no hay ningun partido
+            #  jugado, no existe datos_video_26-27.js, y el generador caia en
+            #  el de 25-26. Resultado: 1356 bloqueos de la temporada pasada,
+            #  con jugadores que ya no estan en el plantel.
+            #
+            #  La fecha de cada partido si esta siempre y no se puede
+            #  confundir. Todo lo anterior al 1 de julio de la temporada en
+            #  curso queda afuera.
+            if _tp!='entrenamiento' and not _de_la_temporada(_mt.get('date')):
+                _desc+=1; continue
             matches[_mid]=_mt; TIPO_DE[_mid]=_tp
+        if _desc:
+            print('[bloqueo] %d partidos de temporadas anteriores, descartados.' % _desc)
     if not matches:
         print('[bloqueo] ERROR: no hay video para procesar'); sys.exit(1)
 
