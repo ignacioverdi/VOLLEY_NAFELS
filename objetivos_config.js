@@ -1404,6 +1404,17 @@ function objSingleBat(id,val,meta,cls,objLine,vals){
     + '<div style="font-size:8px;font-weight:700;color:#64748b">'+ot('obj')+' '+objLine+'</div>'
     + '</div>';
 }
+
+/* ══ ESTA ES LA UNICA BATERIA DEL SISTEMA ═══════════════════════════════════
+   Se publica con un nombre propio —__objSingleBatReal— para que las copias
+   viejas de objetivos.js, utils.js e historial_voley.html puedan reenviar
+   aca sin pisarla, cargue quien cargue ultimo.
+
+   Antes, en analisis.html y panel_voley.html ganaba la copia vieja y la
+   bateria no se podia tocar. Ahora da igual el orden: la que dibuja es
+   siempre esta. */
+window.__objSingleBatReal = objSingleBat;
+
 function renderObjetivos(cid,extra){
   var el=document.getElementById(cid); if(!el) return;
   var metas=window.OBJETIVOS_CONFIG.metas;
