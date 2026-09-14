@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260914-2321"></script>
-<script src="selector_categoria.js?v=20260914-2321"></script>
-<script src="lang.js?v=20260914-2321"></script>
+<script src="categorias_club.js?v=20260914-2331"></script>
+<script src="selector_categoria.js?v=20260914-2331"></script>
+<script src="lang.js?v=20260914-2331"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260914-2321">
+<link rel="stylesheet" href="movil.css?v=20260914-2331">
 </head>
 <body>
 
@@ -1230,16 +1230,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260914-2321" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260914-2321"></script>
-<script src="objetivos.js?v=20260914-2321" onerror="void 0"></script>
-<script src="video_delay.js?v=20260914-2321" onerror="void 0"></script>
+<script src="firebase.js?v=20260914-2331" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260914-2331"></script>
+<script src="objetivos.js?v=20260914-2331" onerror="void 0"></script>
+<script src="video_delay.js?v=20260914-2331" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260914-2321" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260914-2321"></script>
+<script src="plantel_nafels.js?v=20260914-2331" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260914-2331"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -3406,7 +3406,12 @@ function pushCode(code, kind){
    El .dvw guarda, por cada código, el segundo del video en la columna 12.
    Verificado en un partido oficial: enteros, crecientes, 86 → 8385 (138 minutos). */
 function videoEl(){ return document.getElementById('vid'); }
-function hayVideo(){ const v=videoEl(); return !!(v && v.src); }
+function hayVideo(){
+  /* Cuenta tambien YouTube: si no, el panel cree que no hay video y el reloj
+     del partido arranca igual, pisando el tiempo del stream. */
+  if(window.YTP && typeof YTP.getCurrentTime === 'function') return true;
+  const v=videoEl(); return !!(v && v.src);
+}
 function tiempoVideo(){
   const v = videoEl();
   if(v && v.src && !isNaN(v.currentTime)) return Math.round(v.currentTime);
@@ -3519,9 +3524,77 @@ function cargarVideoArchivo(input){
 function cargarVideoURL(){
   const u = document.getElementById('v-url').value.trim();
   if(!u) return;
+
+  /* ══ SI ES DE YOUTUBE, SE ABRE SU REPRODUCTOR ═════════════════════════════
+     El <video> de abajo no puede reproducir YouTube: necesita un archivo. Si
+     se le pega un link de YouTube queda en negro y parece que fallo el link.
+
+     Con el reproductor de YouTube andan las dos cosas que hacen falta:
+       · saltar a un segundo   (seekTo)
+       · saber en que segundo va (getCurrentTime)
+     que es lo que usan el mini reproductor y tiempoVideo().
+
+     Sirve igual con una transmision EN VIVO —hay que tener el DVR prendido en
+     YouTube Studio— o con el video ya subido despues del partido. */
+  const id = ytIdDe(u);
+  if(id){ cargarYouTube(id, u); return; }
+
   videoEl().src = u; M.video.url = u;
   if(!M.video.ruta){ M.video.ruta = u; document.getElementById('v-ruta').value = u; }
   persist(); refrescarVideo(); toast('Video cargado');
+}
+
+/* El codigo de 11 letras, venga como venga el link. */
+function ytIdDe(url){
+  const u = String(url||'').trim();
+  const m = u.match(/(?:v=|youtu\.be\/|embed\/|live\/|shorts\/)([A-Za-z0-9_-]{11})/);
+  if(m) return m[1];
+  return /^[A-Za-z0-9_-]{11}$/.test(u) ? u : '';
+}
+
+function cargarYouTube(id, url){
+  M.video.url = url || ('https://www.youtube.com/watch?v='+id);
+  M.video.yt  = id;
+  if(!M.video.ruta){
+    M.video.ruta = M.video.url;
+    const r = document.getElementById('v-ruta'); if(r) r.value = M.video.ruta;
+  }
+  persist();
+
+  /* el <video> se esconde y en su lugar va el de YouTube */
+  const v = videoEl();
+  if(v){ try{ v.pause(); }catch(e){} v.removeAttribute('src'); v.style.display='none'; }
+
+  let caja = document.getElementById('yt-caja-panel');
+  if(!caja){
+    caja = document.createElement('div');
+    caja.id = 'yt-caja-panel';
+    caja.style.cssText = 'width:100%;aspect-ratio:16/9;max-height:38vh;'
+                       + 'border-radius:8px;overflow:hidden;background:#000';
+    caja.innerHTML = '<div id="yt-player"></div>';
+    if(v && v.parentNode) v.parentNode.insertBefore(caja, v);
+  }
+  caja.style.display = '';
+
+  function armar(){
+    try{
+      window.YTP = new YT.Player('yt-player', {
+        videoId: id, host: 'https://www.youtube.com',
+        playerVars: { rel:0, modestbranding:1, playsinline:1 },
+        events: { onReady: function(){ refrescarVideo(); toast('YouTube listo'); } }
+      });
+    }catch(e){ toast('No pude abrir el video de YouTube', true); }
+  }
+
+  if(window.YT && YT.Player){ armar(); return; }
+  /* la primera vez hay que traer el reproductor de YouTube */
+  window.onYouTubeIframeAPIReady = armar;
+  if(!document.getElementById('yt-api')){
+    const sc = document.createElement('script');
+    sc.id = 'yt-api'; sc.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(sc);
+  }
+  toast('Abriendo YouTube…');
 }
 function guardarRutaVideo(){ M.video.ruta = document.getElementById('v-ruta').value.trim(); persist(); }
 function refrescarVideo(){
@@ -3540,7 +3613,17 @@ function arrancarReloj(){
 function alinearCodigo(){
   if(SEL_I<0){ toast('Elegí primero un código de la lista',true); return; }
   if(!hayVideo()){ toast('No hay video cargado',true); return; }
-  M.codes[SEL_I].t = Math.round(videoEl().currentTime);
+  /* ══ EL DESFASAJE SE ARREGLA DE UNA ═══════════════════════════════════════
+     Se elige un codigo —lo natural es el primer saque del set—, se pone el
+     video en ese momento y se aprieta este boton. Es el "Code Alignment" del
+     manual de DataVolley (2.5.6): pega el codigo al frame exacto.
+
+     Con YouTube hay que preguntarle al reproductor de YouTube, no al <video>,
+     que con un link de YouTube queda vacio. */
+  var _t = (window.YTP && YTP.getCurrentTime) ? YTP.getCurrentTime()
+                                              : (videoEl()||{}).currentTime;
+  if(isNaN(_t)){ toast('No pude leer el momento del video', true); return; }
+  M.codes[SEL_I].t = Math.round(_t);
   toast('Código '+(SEL_I+1)+' alineado en '+hhmmss(M.codes[SEL_I].t));
   if(CFG.videoAvanza && SEL_I < M.codes.length-1) SEL_I++;
   renderCodes(); persist();
@@ -8174,8 +8257,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260914-2321" onerror="void 0"></script>
-<script src="ayuda.js?v=20260914-2321"></script>
+<script src="volver_inicio.js?v=20260914-2331" onerror="void 0"></script>
+<script src="ayuda.js?v=20260914-2331"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
