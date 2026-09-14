@@ -170,7 +170,34 @@ function roundPy(x){
 function batToPcts(P){
   var atk=function(d){ return d.T ? roundPy((d['#']-d['/']-d['='])/d.T*100) : null; };
   var S=P.S, R=P.R, B=P.B;
+
+  /* ══ EL DESGLOSE, PARA LA VENTANITA ══════════════════════════════════════
+     Los porcentajes de abajo salen de contar cada valoracion por separado:
+     cuantas recepciones perfectas, cuantas positivas, cuantos errores. Esos
+     conteos YA ESTAN calculados aca —son P.S, P.R, P.B y los de ataque— pero
+     no se devolvian: solo salia el porcentaje final.
+
+     Por eso, al tocar una bateria en el panel en vivo, la ventana decia "para
+     este fundamento todavia no hay desglose guardado" aunque el dato
+     estuviera a la mano.
+
+     Se devuelven con los mismos nombres que usa el dashboard —sqD, recD, bqD,
+     atqD— asi la ventanita los entiende sin cambiarle una linea. */
+  var det = function(d){
+    return { p:d['#']||0, o:d['+']||0, n:d['!']||0, m:d['-']||0,
+             s:d['/']||0, e:d['=']||0, t:d.T||0 };
+  };
+  var detAtq = function(d){
+    return { p:d['#']||0, b:d['/']||0, e:d['=']||0, t:d.T||0 };
+  };
+
   return {
+    sqD:  det(S),
+    recD: det(R),
+    bqD:  det(B),
+    atqD: { q:detAtq(P.cent), hb:detAtq(P.alta), x:detAtq(P.rap),
+            rp:detAtq(P.rp), ri:detAtq(P.ri), rm:detAtq(P.rm),
+            tr:detAtq(P.tr) },
     sq:    S.T ? roundPy((S['#']+0.5*S['/']+0.25*S['+']-S['='])/S.T*100) : null,
     rec:   R.T ? roundPy((R['#']+0.5*R['+']-0.5*R['/']-R['='])/R.T*100) : null,
     bqpos: B.T ? roundPy((B['#']+B['+'])/B.T*100) : null,
