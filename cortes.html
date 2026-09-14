@@ -4,28 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Cortes de Video · NAFELS VOLEY">Cortes de Video · NAFELS VOLEY</title>
-<script src="categorias_club.js?v=20260914-0825"></script>
-<script src="selector_categoria.js?v=20260914-0825"></script>
-<script>
-/* ══ UN VIDEO_DATA VACIO, POR SI NO LO DEFINIO NADIE ════════════════════════
-   Los datos de los partidos venian TODOS del archivo de la temporada 25-26,
-   que era el unico que definia window.VIDEO_DATA. Al dejar de cargarlo por
-   defecto —pesaba 15 MB— la variable no existia y la pantalla no arrancaba
-   ni siquiera en ENTRENAMIENTOS, que usa otra variable: decia "no se
-   encontro la planilla" y los filtros salian vacios.
+<script src="categorias_club.js?v=20260914-0829"></script>
+<script src="selector_categoria.js?v=20260914-0829"></script>
 
-   Con esto arranca siempre. Si despues hace falta la temporada vieja, se
-   baja y pisa este vacio. */
-window.VIDEO_DATA = window.VIDEO_DATA || { matches:{}, teams:[], players:{} };
-window.VIDEO_DATA_ENT = window.VIDEO_DATA_ENT || { matches:{}, teams:[], players:{} };
-</script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260914-0825"></script>
-<script src="filtro_tipo.js?v=20260914-0825" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260914-0829"></script>
+<script src="filtro_tipo.js?v=20260914-0829" onerror="void 0"></script>
   <!-- datos_video_25-26 sacado: es el video de la CAPSULA. Esta pantalla es
        de la 26-27, y cargarlo mezclaba jugadores nuevos con cortes de la
        temporada pasada. -->
@@ -45,9 +33,26 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="datos_video_ent_28-29.js.enc?v=3" onerror="void 0"></script>
 <script src="mapa_videos.js.enc?v=3" onerror="void 0"></script>
 <script src="mapa_videos_ent.js.enc?v=3" onerror="void 0"></script>
+<script>
+/* ══ UN VIDEO_DATA VACIO, DESPUES DE LOS DATOS ══════════════════════════════
+   Los partidos venian TODOS del archivo de la temporada 25-26: era el unico
+   que definia window.VIDEO_DATA. Los de 26-27 en adelante ni siquiera
+   existen en el servidor —dan 404— porque todavia no se jugo ninguno.
+
+   Al dejar de cargar el de 25-26 por su peso, la variable no existia y la
+   pantalla no arrancaba NI EN ENTRENAMIENTOS, que usa otra: salia "no se
+   encontro la planilla" y los filtros vacios.
+
+   Este vacio va DESPUES de los .enc a proposito. La primera vez lo puse
+   antes y no servia de nada: los archivos de datos se leen despues y lo
+   dejaban sin efecto. */
+window.VIDEO_DATA = window.VIDEO_DATA || { matches:{}, teams:[], players:{} };
+window.VIDEO_DATA_ENT = window.VIDEO_DATA_ENT || { matches:{}, teams:[], players:{} };
+</script>
+
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20260914-0825" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260914-0825"></script>
+<script src="firebase.js?v=20260914-0829" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260914-0829"></script>
 <style>
   :root{--bg:#0b1017;--bg2:#0f172a;--card:#111a27;--card2:#16212f;--line:#1f2c3d;--txt:#e2e8f0;--muted:#7689a1;--muted2:#475569;--naf:#22c55e;--naf-dim:rgba(34,197,94,.12);--atk:#F97316;--srv:#22C55E;--rec:#818CF8;--set:#F59E0B;--blk:#ef4444;--def:#06b6d4;--free:#94a3b8;--ev-pos:#22c55e;--ev-plus:#84cc16;--ev-excl:#eab308;--ev-neg:#f97316;--ev-slash:#f59e0b;--ev-err:#ef4444;}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -163,7 +168,7 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260914-0825">
+<link rel="stylesheet" href="movil.css?v=20260914-0829">
 </head>
 <body>
 <div class="wrap">
@@ -786,9 +791,9 @@ window.__DESCIFRAR_SINCRONO = true;
   document.addEventListener('DOMContentLoaded',init);
 })();
 </script>
-<script src="lang.js?v=20260914-0825" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260914-0825" onerror="void 0"></script>
-<script src="ayuda.js?v=20260914-0825"></script>
+<script src="lang.js?v=20260914-0829" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260914-0829" onerror="void 0"></script>
+<script src="ayuda.js?v=20260914-0829"></script>
 
 <script>
 /* ══ LAS TEMPORADAS VIEJAS, SOLO SI SE PIDEN ════════════════════════════════
