@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260914-2240"></script>
-<script src="selector_categoria.js?v=20260914-2240"></script>
-<script src="lang.js?v=20260914-2240"></script>
+<script src="categorias_club.js?v=20260914-2307"></script>
+<script src="selector_categoria.js?v=20260914-2307"></script>
+<script src="lang.js?v=20260914-2307"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260914-2240">
+<link rel="stylesheet" href="movil.css?v=20260914-2307">
 </head>
 <body>
 
@@ -1230,16 +1230,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260914-2240" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260914-2240"></script>
-<script src="objetivos.js?v=20260914-2240" onerror="void 0"></script>
-<script src="video_delay.js?v=20260914-2240" onerror="void 0"></script>
+<script src="firebase.js?v=20260914-2307" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260914-2307"></script>
+<script src="objetivos.js?v=20260914-2307" onerror="void 0"></script>
+<script src="video_delay.js?v=20260914-2307" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260914-2240" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260914-2240"></script>
+<script src="plantel_nafels.js?v=20260914-2307" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260914-2307"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -3380,6 +3380,21 @@ function marcarBarraMal(){
   setTimeout(()=>inp.classList.remove('shake'),400);
 }
 function pushCode(code, kind){
+  /* ══ EL RELOJ ARRANCA SOLO ═══════════════════════════════════════════════
+     Cada codigo guarda en que segundo paso, y ese segundo es lo que despues
+     permite saltar a la jugada en el video.
+
+     El problema: el reloj se arrancaba A MANO, con un boton. Si el scout se
+     olvidaba —y en el apuro del primer saque se olvida— tiempoVideo()
+     devolvia 0 para TODO el partido y el dato se perdia para siempre. No se
+     puede recuperar despues: nadie se acuerda en que minuto fue cada accion.
+
+     Ahora, si al entrar el primer codigo no hay reloj ni video, se pone en
+     cero solo. Si el scout ya lo habia arrancado, no se toca. */
+  if(!M.t0 && !hayVideo()){
+    M.t0 = Date.now();
+    try{ refrescarVideo(); }catch(e){}
+  }
   const zh = M.home.lineup.indexOf(M.home.setter), za = M.away.lineup.indexOf(M.away.setter);
   M.codes.push({c:code, k:kind||'play', set:M.set,
     hl:M.home.lineup.slice(), al:M.away.lineup.slice(),   /* rotación del momento */
@@ -3395,6 +3410,18 @@ function hayVideo(){ const v=videoEl(); return !!(v && v.src); }
 function tiempoVideo(){
   const v = videoEl();
   if(v && v.src && !isNaN(v.currentTime)) return Math.round(v.currentTime);
+
+  /* ══ YOUTUBE EN VIVO ══════════════════════════════════════════════════════
+     Si el partido se esta transmitiendo a YouTube, el segundo sale de su
+     reproductor. Es el mismo numero que el de un archivo: cuanto va corrido
+     desde que arranco. */
+  try{
+    if(window.YTP && typeof window.YTP.getCurrentTime === 'function'){
+      const t = window.YTP.getCurrentTime();
+      if(!isNaN(t) && t > 0) return Math.round(t);
+    }
+  }catch(e){}
+
   if(M.t0) return Math.round((Date.now()-M.t0)/1000);   /* sin video: reloj del partido */
   return 0;
 }
@@ -8147,7 +8174,7 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260914-2240" onerror="void 0"></script>
-<script src="ayuda.js?v=20260914-2240"></script>
+<script src="volver_inicio.js?v=20260914-2307" onerror="void 0"></script>
+<script src="ayuda.js?v=20260914-2307"></script>
 </body>
 </html>
