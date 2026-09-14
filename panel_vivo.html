@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260914-2314"></script>
-<script src="selector_categoria.js?v=20260914-2314"></script>
-<script src="lang.js?v=20260914-2314"></script>
+<script src="categorias_club.js?v=20260914-2321"></script>
+<script src="selector_categoria.js?v=20260914-2321"></script>
+<script src="lang.js?v=20260914-2321"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260914-2314">
+<link rel="stylesheet" href="movil.css?v=20260914-2321">
 </head>
 <body>
 
@@ -1230,16 +1230,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260914-2314" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260914-2314"></script>
-<script src="objetivos.js?v=20260914-2314" onerror="void 0"></script>
-<script src="video_delay.js?v=20260914-2314" onerror="void 0"></script>
+<script src="firebase.js?v=20260914-2321" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260914-2321"></script>
+<script src="objetivos.js?v=20260914-2321" onerror="void 0"></script>
+<script src="video_delay.js?v=20260914-2321" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260914-2314" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260914-2314"></script>
+<script src="plantel_nafels.js?v=20260914-2321" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260914-2321"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -8174,7 +8174,145 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260914-2314" onerror="void 0"></script>
-<script src="ayuda.js?v=20260914-2314"></script>
+<script src="volver_inicio.js?v=20260914-2321" onerror="void 0"></script>
+<script src="ayuda.js?v=20260914-2321"></script>
+
+<div id="m-repro" class="modal">
+  <div class="mbox" style="max-width:520px">
+    <div class="mhead">
+      <span data-t="Acciones">Acciones</span>
+      <button class="tbtn" onclick="rvCerrar()" data-t="Cerrar">Cerrar</button>
+    </div>
+    <div id="rv-cont" style="padding:12px 14px"></div>
+  </div>
+</div>
+
+<script>
+/* ══ MINI REPRODUCTOR DE ACCIONES ═══════════════════════════════════════════
+   Entre set y set hay 3 o 4 minutos. La idea es tocar una bateria —"18 errores
+   de recepcion"— y ver esas 18 ahi mismo, sin salir del panel.
+
+   cortes.html no sirve para esto: necesita el .dvw ya subido y procesado, y
+   durante el partido todavia no existe. Ademas descarga 17 MB.
+
+   Aca no hace falta nada de eso: el video ya esta en pantalla y cada codigo
+   guarda su segundo (columna 12 del .dvw, igual que DataVolley). Con eso
+   alcanza para saltar de una accion a la otra.
+
+   Esta copiado del reproductor de plan de partido, que ya funciona:
+     · unos segundos ANTES de la accion, para ver como se llega
+     · unos DESPUES, y salta solo a la siguiente
+     · anterior / siguiente / repetir / velocidad
+*/
+var RV = { clips:[], cur:0, pre:6, post:4, speed:1, timer:null, titulo:'' };
+
+function rvHhmmss(t){
+  t = Math.max(0, Math.round(t||0));
+  var m = Math.floor(t/60), sg = t%60;
+  return m + ':' + (sg<10?'0':'') + sg;
+}
+
+/* Las acciones que caen dentro de una bateria: mismo fundamento y, si se
+   pidio, misma valoracion y mismo jugador. */
+function rvBuscar(skill, evalu, num){
+  var out = [];
+  (M.codes||[]).forEach(function(c, i){
+    if(!c || c.k !== 'play' || !c.c) return;
+    var cod = String(c.c);
+    var mm = cod.match(/^([*a])(\d{1,2})([SRAEBD])([A-Z])?([#+!\-\/=])/);
+    if(!mm) return;
+    if(skill && mm[3] !== skill) return;
+    if(evalu && mm[5] !== evalu) return;
+    if(num != null && parseInt(mm[2],10) !== parseInt(num,10)) return;
+    out.push({ i:i, t:(c.t||0), cod:cod, set:c.set });
+  });
+  return out;
+}
+
+function rvAbrir(clips, titulo){
+  if(!clips || !clips.length){ toast('No hay acciones para mostrar', true); return; }
+  RV.clips = clips; RV.cur = 0; RV.titulo = titulo || '';
+  rvPintar();
+  document.getElementById('m-repro').classList.add('open');
+  rvPlay();
+}
+
+function rvCerrar(){
+  clearInterval(RV.timer); RV.timer = null;
+  var m = document.getElementById('m-repro');
+  if(m) m.classList.remove('open');
+}
+
+function rvPlay(){
+  var a = RV.clips[RV.cur];
+  if(!a) return;
+  var desde = Math.max(0, a.t - RV.pre);
+  var v = videoEl();
+
+  if(v && v.src){
+    v.currentTime = desde;
+    try{ v.playbackRate = RV.speed; }catch(e){}
+    v.play();
+  }else if(window.YTP && YTP.seekTo){
+    YTP.seekTo(desde, true);
+    try{ YTP.setPlaybackRate(RV.speed); }catch(e){}
+    try{ YTP.playVideo(); }catch(e){}
+  }else{
+    toast('No hay video cargado. Igual podes ver la lista.', true);
+  }
+
+  /* al llegar al final del corte, salta al siguiente */
+  clearInterval(RV.timer);
+  var hasta = a.t + RV.post;
+  RV.timer = setInterval(function(){
+    var ahora = 0;
+    if(v && v.src) ahora = v.currentTime;
+    else if(window.YTP && YTP.getCurrentTime) ahora = YTP.getCurrentTime();
+    if(ahora >= hasta){
+      if(RV.cur < RV.clips.length - 1){ RV.cur++; rvPlay(); }
+      else{ clearInterval(RV.timer); RV.timer = null; }
+      rvPintar();
+    }
+  }, 300);
+  rvPintar();
+}
+
+function rvSig(){ if(RV.cur < RV.clips.length-1){ RV.cur++; rvPlay(); } }
+function rvAnt(){ if(RV.cur > 0){ RV.cur--; rvPlay(); } }
+function rvRepetir(){ rvPlay(); }
+function rvVel(v){ RV.speed = v; rvPlay(); }
+function rvIr(i){ RV.cur = i; rvPlay(); }
+
+function rvPintar(){
+  var c = document.getElementById('rv-cont');
+  if(!c) return;
+  var a = RV.clips[RV.cur] || {};
+  c.innerHTML =
+      '<div style="font-size:11px;letter-spacing:2px;color:#94a3b8;'
+    +   'text-transform:uppercase;margin-bottom:6px">' + (RV.titulo||'') + '</div>'
+    + '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:9px">'
+    +   '<button class="tbtn" onclick="rvAnt()">◀</button>'
+    +   '<button class="tbtn" onclick="rvRepetir()">↻</button>'
+    +   '<button class="tbtn" onclick="rvSig()">▶</button>'
+    +   '<span style="font-weight:800;color:#e2e8f0;margin:0 6px">'
+    +     (RV.cur+1) + ' / ' + RV.clips.length + '</span>'
+    +   [0.5,1,1.5].map(function(v){
+          return '<button class="tbtn" onclick="rvVel('+v+')" style="'
+               + (RV.speed===v?'background:var(--accent,#e8192c);color:#fff':'') + '">'
+               + v + 'x</button>'; }).join('')
+    + '</div>'
+    + '<div style="max-height:190px;overflow:auto;border-top:1px solid rgba(148,163,184,.15)">'
+    +   RV.clips.map(function(x, i){
+          return '<div onclick="rvIr('+i+')" style="padding:5px 7px;cursor:pointer;'
+               + 'display:flex;gap:9px;font-size:12.5px;'
+               + (i===RV.cur?'background:rgba(232,25,44,.16);color:#fff':'color:#cbd5e1') + '">'
+               + '<span style="color:#64748b;min-width:26px">'+(i+1)+'</span>'
+               + '<span style="font-family:ui-monospace,monospace;flex:1">'+x.cod+'</span>'
+               + '<span style="color:#94a3b8">set '+(x.set||'-')+'</span>'
+               + '<span style="color:#64748b">'+rvHhmmss(x.t)+'</span>'
+               + '</div>'; }).join('')
+    + '</div>';
+}
+</script>
 </body>
 </html>

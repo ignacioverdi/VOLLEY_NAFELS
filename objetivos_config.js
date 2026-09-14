@@ -973,6 +973,33 @@ function _esJugadorFila(t){
 }
 
 function objVerVideo(id, clave, nombreFila, cuantas, jugNombre){
+  /* ══ EN EL PANEL EN VIVO, EL REPRODUCTOR DE AL LADO ══════════════════════
+     Durante el partido cortes.html no sirve: necesita el .dvw ya subido y
+     procesado, y todavia no existe. Ademas descarga 17 MB, que entre set y
+     set es una eternidad.
+
+     El panel en vivo tiene su propio reproductor —rvAbrir()— que usa el video
+     que ya esta en pantalla y el segundo que guarda cada codigo. Si esa
+     funcion existe, se usa esa. En las demas pantallas nada cambia. */
+  if(typeof window.rvAbrir === 'function' && typeof window.rvBuscar === 'function'){
+    try{
+      var _c = OBJ_DETALLE[id];
+      var _sk = ({sq:'S', rec:'R', def:'D', bqpos:'B', bqpt:'B'})[id]
+                || (String(id).indexOf('atq')===0 ? 'A' : null);
+      if(_sk){
+        var _num = null;
+        var _m = String(jugNombre||'').match(/(\d{1,2})/);
+        if(_m) _num = parseInt(_m[1],10);
+        var _ev = (clave && clave.length===1 && '#+!-/='.indexOf(clave)>=0) ? clave : null;
+        var _lista = window.rvBuscar(_sk, _ev, _num);
+        if(_lista.length){
+          window.rvAbrir(_lista, (nombreFila||'') + ' · ' + _lista.length);
+          return;
+        }
+      }
+    }catch(e){}
+  }
+
   /* ══ AL REPRODUCTOR QUE YA EXISTE ═════════════════════════════════════════
      cortes.html ya hace TODO esto: tiene las acciones filtradas, ordenadas,
      con su video, y el reproductor armado. Lo usan 9 pantallas del sistema
