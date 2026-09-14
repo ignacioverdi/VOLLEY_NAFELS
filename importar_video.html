@@ -45,14 +45,14 @@
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="categorias_club.js?v=20260914-0025"></script>
-<script src="selector_categoria.js?v=20260914-0025"></script>
-<script src="firebase.js?v=20260914-0025" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260914-0025"></script>
+<script src="categorias_club.js?v=20260914-0819"></script>
+<script src="selector_categoria.js?v=20260914-0819"></script>
+<script src="firebase.js?v=20260914-0819" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260914-0819"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260914-0025">
+<link rel="stylesheet" href="movil.css?v=20260914-0819">
 </head>
 <body>
   <h1 data-t="🎬 Cargar videos de los partidos"><span data-t="🎬 Cargar videos de los partidos">🎬 Cargar videos de los partidos</span></h1>
@@ -89,6 +89,38 @@
        publicaron. Sin esto la pantalla se ve toda en verde -barra al 100%,
        miniatura, tilde- estando el link solo en este navegador, y no hay
        forma de darse cuenta. -->
+  <div id="pendiente" style="margin:0 0 14px;padding:12px 14px;border-radius:12px;
+     background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.30)">
+  <div style="font-weight:800;color:#7dd3fc;font-size:13.5px;margin-bottom:4px">
+    Grabaste hoy y todavia no subiste el .dvw?</div>
+  <div style="color:#94a3b8;font-size:12px;line-height:1.5;margin-bottom:9px">
+    Guarda el link igual. Queda reservado para esa fecha, y en cuanto subas el
+    .dvw y la sesion aparezca en la lista de abajo, el link ya va a estar puesto.</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+    <input id="pd-fecha" type="date"
+       style="padding:7px 9px;border-radius:8px;background:rgba(15,23,42,.6);
+              border:1px solid rgba(148,163,184,.25);color:#e2e8f0;font-size:12.5px;
+              font-family:inherit">
+    <select id="pd-turno"
+       style="padding:7px 9px;border-radius:8px;background:rgba(15,23,42,.6);
+              border:1px solid rgba(148,163,184,.25);color:#e2e8f0;font-size:12.5px;
+              font-family:inherit">
+      <option value="">Sin turno</option>
+      <option value="M">Mañana</option>
+      <option value="T">Tarde</option>
+    </select>
+    <input id="pd-link" type="text" placeholder="Link de YouTube (transmision o video subido)"
+       style="flex:1;min-width:210px;padding:7px 9px;border-radius:8px;
+              background:rgba(15,23,42,.6);border:1px solid rgba(148,163,184,.25);
+              color:#e2e8f0;font-size:12.5px;font-family:inherit">
+    <button onclick="pdGuardar()"
+       style="padding:7px 13px;border-radius:8px;background:rgba(56,189,248,.18);
+              border:1px solid rgba(56,189,248,.35);color:#e0f2fe;font-size:12.5px;
+              font-weight:700;cursor:pointer;font-family:inherit">Reservar</button>
+  </div>
+  <div id="pd-aviso" style="margin-top:8px;font-size:12px;color:#94a3b8"></div>
+  <div id="pd-lista" style="margin-top:9px;font-size:12px"></div>
+</div>
   <div id="sinpublicar" style="display:none;margin:0 0 14px;padding:12px 14px;border-radius:10px;
        background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.45);
        color:#f6c667;font-size:13px;line-height:1.5"></div>
@@ -99,8 +131,8 @@
    Con los datos abriendose en segundo plano, se dibujaba vacia. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260914-0025"></script>
-  <script src="datos_video_25-26.js.enc?v=3" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260914-0819"></script>
+  <!-- datos_video_25-26.js.enc: se carga SOLO si se pide esa temporada. Ver _cargarTemporada() -->
   <!-- Los datos del club se publican CIFRADOS: el archivo real se llama
        datos_video_ent_25-26.js.enc. Estas lineas pedian el .js pelado, que
        no existe, asi que la lista de entrenamientos salia siempre en 0 de 0.
@@ -108,7 +140,7 @@ window.__DESCIFRAR_SINCRONO = true;
   <script src="datos_video_26-27.js.enc?v=3" onerror="void 0"></script>
   <script src="datos_video_27-28.js.enc?v=3" onerror="void 0"></script>
   <script src="datos_video_28-29.js.enc?v=3" onerror="void 0"></script>
-  <script src="datos_video_ent_25-26.js.enc?v=3" onerror="void 0"></script>
+  <!-- datos_video_ent_25-26.js.enc: se carga SOLO si se pide esa temporada. Ver _cargarTemporada() -->
   <script src="datos_video_ent_26-27.js.enc?v=3" onerror="void 0"></script>
   <script src="datos_video_ent_27-28.js.enc?v=3" onerror="void 0"></script>
   <script src="mapa_videos.js.enc?v=3" onerror="void 0"></script>
@@ -181,12 +213,98 @@ window.__DESCIFRAR_SINCRONO = true;
       var obj={}; list.querySelectorAll('input').forEach(function(i){ if(i.value.trim()) obj[i.dataset.code]=i.value.trim(); });
       try{ localStorage.setItem(LSK, JSON.stringify(obj)); }catch(e){}
     }
+
+    /* ══ EL LINK, ANTES DE QUE EXISTA LA SESION ═══════════════════════════════
+       La lista de abajo sale de los .dvw ya subidos. O sea que el dia del
+       partido la sesion todavia NO ESTA, y no hay donde pegar el link.
+
+       Con YouTube el link lo tenes en el momento —cuando creas la transmision,
+       antes de salir al aire—. Si hay que esperar a procesar el .dvw, se
+       pierde: pasan tres dias y ya nadie sabe cual video era cual.
+
+       Aca se reserva por FECHA. Se guarda en el mismo borrador que usa la
+       lista, con la clave ENT+aaaammdd(+turno). Cuando el .dvw entra y la
+       sesion aparece abajo, el link ya esta puesto: la lista lee ese mismo
+       borrador. */
+    function pdClave(fecha, turno){
+      var d = String(fecha||'').replace(/\D/g,'');
+      if(d.length !== 8) return '';
+      return (MODO === 'ent' ? 'ENT' : '') + d + (turno || '');
+    }
+
+    function pdGuardar(){
+      var av = document.getElementById('pd-aviso');
+      var f  = document.getElementById('pd-fecha').value;
+      var tu = document.getElementById('pd-turno').value;
+      var id = ytId(document.getElementById('pd-link').value.trim());
+
+      if(!f){ av.style.color='#fca5a5'; av.textContent='Elegi la fecha del partido.'; return; }
+      if(!id){ av.style.color='#fca5a5';
+               av.textContent='Ese link no parece de YouTube.'; return; }
+
+      var k = pdClave(f, tu);
+      if(!k){ av.style.color='#fca5a5'; av.textContent='La fecha no se entiende.'; return; }
+
+      var d = {};
+      try{ d = JSON.parse(localStorage.getItem(LSK) || '{}'); }catch(e){}
+      var url = 'https://www.youtube.com/watch?v=' + id;
+      d[k] = url;
+      /* Tambien sin turno: si la sesion queda scouteada sin turno, la lista
+         busca la clave corta y con las dos puestas la encuentra igual. */
+      if(tu) d[pdClave(f,'')] = url;
+      try{ localStorage.setItem(LSK, JSON.stringify(d)); }catch(e){}
+
+      av.style.color = '#86efac';
+      av.innerHTML = 'Reservado para <b>' + k + '</b>. Cuando subas el .dvw '
+                   + 'de ese dia, el link ya va a estar puesto.';
+      document.getElementById('pd-link').value = '';
+      pdLista();
+      try{ refresh(); }catch(e){}
+    }
+
+    /* Los reservados que todavia no tienen su sesion en la lista. */
+    function pdLista(){
+      var caja = document.getElementById('pd-lista');
+      if(!caja) return;
+      var d = {};
+      try{ d = JSON.parse(localStorage.getItem(LSK) || '{}'); }catch(e){}
+      var enLista = {};
+      try{ Object.keys(VD).forEach(function(c){ enLista[c] = 1; }); }catch(e){}
+
+      var pend = Object.keys(d).filter(function(k){
+        if(enLista[k]) return false;
+        /* la clave corta se muestra solo si no esta la que tiene turno */
+        if(!/[MT]$/.test(k) && d[k+'M'] === d[k]) return false;
+        if(!/[MT]$/.test(k) && d[k+'T'] === d[k]) return false;
+        return true;
+      });
+
+      if(!pend.length){ caja.innerHTML = ''; return; }
+      caja.innerHTML = '<div style="color:#94a3b8;margin-bottom:4px">'
+        + 'Reservados, esperando el .dvw:</div>'
+        + pend.map(function(k){
+            return '<div style="color:#cbd5e1;padding:2px 0">\u00b7 <b>' + k
+                 + '</b> <span style="color:#64748b">' + d[k] + '</span>'
+                 + ' <span onclick="pdBorrar(\'' + k + '\')" '
+                 + 'style="color:#f87171;cursor:pointer;margin-left:6px">quitar</span></div>';
+          }).join('');
+    }
+
+    function pdBorrar(k){
+      var d = {};
+      try{ d = JSON.parse(localStorage.getItem(LSK) || '{}'); }catch(e){}
+      delete d[k];
+      try{ localStorage.setItem(LSK, JSON.stringify(d)); }catch(e){}
+      pdLista();
+    }
+
     function refresh(){
       var inputs = list.querySelectorAll('input'), n=0;
       inputs.forEach(function(i){ if(ytId(i.value.trim())) n++; });
       document.getElementById('nok').textContent = n;
       document.getElementById('progbar').style.width = (inputs.length? Math.round(n/inputs.length*100):0)+'%';
       avisarSinPublicar();
+      try{ pdLista(); }catch(e){}
     }
 
     /* Lo que hay en pantalla contra lo que hay PUBLICADO ────────────────────
@@ -271,9 +389,63 @@ window.__DESCIFRAR_SINCRONO = true;
     };
   })();
   </script>
-<script src="lang.js?v=20260914-0025" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260914-0025" onerror="void 0"></script>
-<script src="ayuda.js?v=20260914-0025"></script>
+<script src="lang.js?v=20260914-0819" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260914-0819" onerror="void 0"></script>
+<script src="ayuda.js?v=20260914-0819"></script>
+<script>
+/* La fecha arranca en hoy: es el caso normal, se reserva el mismo dia. */
+document.addEventListener('DOMContentLoaded', function(){
+  try{
+    var f=document.getElementById('pd-fecha');
+    if(f && !f.value){
+      var d=new Date();
+      function dos(n){ return (n<10?'0':'')+n; }
+      f.value = d.getFullYear()+'-'+dos(d.getMonth()+1)+'-'+dos(d.getDate());
+    }
+    var h=d=new Date(); 
+    var t=document.getElementById('pd-turno');
+    if(t) t.value = (new Date().getHours() < 14) ? 'M' : 'T';
+  }catch(e){}
+});
+</script>
+
+<script>
+/* ══ LAS TEMPORADAS VIEJAS, SOLO SI SE PIDEN ════════════════════════════════
+   Esta pantalla descargaba 17 MB por entrar, y 15 de esos eran los videos de
+   la temporada PASADA. En el gimnasio, con la senial justa, eso es un minuto
+   de pantalla en blanco: el jugador cierra y no vuelve.
+
+   Ahora arranca con la temporada en curso —1,8 MB— y la vieja se baja recien
+   si alguien la elige en el selector. El que nunca mira atras no la baja
+   nunca. */
+window._cargarTemporada = function(id, luego){
+  var arch = 'datos_video_' + id + '.js.enc';
+  window.__tempCargadas = window.__tempCargadas || {};
+  if(window.__tempCargadas[id]){ if(luego) luego(); return; }
+
+  var aviso = document.createElement('div');
+  aviso.id = '_cargando-temp';
+  aviso.style.cssText = 'position:fixed;left:50%;top:14px;transform:translateX(-50%);'
+    + 'z-index:9999;padding:9px 15px;border-radius:10px;background:#0f172a;'
+    + 'border:1px solid rgba(148,163,184,.3);color:#e2e8f0;font-size:13px';
+  aviso.textContent = 'Bajando los videos de ' + id + '\u2026';
+  document.body.appendChild(aviso);
+
+  var listo = 0, total = 2;
+  function fin(){
+    if(++listo < total) return;
+    window.__tempCargadas[id] = true;
+    var a = document.getElementById('_cargando-temp');
+    if(a && a.parentNode) a.parentNode.removeChild(a);
+    if(luego) luego();
+  }
+  [arch, 'datos_video_ent_' + id + '.js.enc'].forEach(function(x){
+    var sc = document.createElement('script');
+    sc.src = x; sc.onload = fin; sc.onerror = fin;
+    document.head.appendChild(sc);
+  });
+};
+</script>
 </body>
 </html>
 

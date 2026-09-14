@@ -4,37 +4,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Cortes de Video · NAFELS VOLEY">Cortes de Video · NAFELS VOLEY</title>
-<script src="categorias_club.js?v=20260914-0025"></script>
-<script src="selector_categoria.js?v=20260914-0025"></script>
+<script src="categorias_club.js?v=20260914-0819"></script>
+<script src="selector_categoria.js?v=20260914-0819"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260914-0025"></script>
-<script src="filtro_tipo.js?v=20260914-0025" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260914-0819"></script>
+<script src="filtro_tipo.js?v=20260914-0819" onerror="void 0"></script>
   <!-- datos_video_25-26 sacado: es el video de la CAPSULA. Esta pantalla es
        de la 26-27, y cargarlo mezclaba jugadores nuevos con cortes de la
        temporada pasada. -->
 <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
      las que no existen las descarta el onerror, sin ruido. Y todas con
      .enc, que es como se publican los datos del club. -->
-<script src="datos_video_25-26.js.enc?v=3" onerror="void 0"></script>
+<!-- datos_video_25-26.js.enc: se carga SOLO si se pide esa temporada. Ver _cargarTemporada() -->
 <script src="datos_video_26-27.js.enc?v=3" onerror="void 0"></script>
 <script src="datos_video_27-28.js.enc?v=3" onerror="void 0"></script>
 <script src="datos_video_28-29.js.enc?v=3" onerror="void 0"></script>
 <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
      las que no existen las descarta el onerror, sin ruido. Y todas con
      .enc, que es como se publican los datos del club. -->
-<script src="datos_video_ent_25-26.js.enc?v=3" onerror="void 0"></script>
+<!-- datos_video_ent_25-26.js.enc: se carga SOLO si se pide esa temporada. Ver _cargarTemporada() -->
 <script src="datos_video_ent_26-27.js.enc?v=3" onerror="void 0"></script>
 <script src="datos_video_ent_27-28.js.enc?v=3" onerror="void 0"></script>
 <script src="datos_video_ent_28-29.js.enc?v=3" onerror="void 0"></script>
 <script src="mapa_videos.js.enc?v=3" onerror="void 0"></script>
 <script src="mapa_videos_ent.js.enc?v=3" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20260914-0025" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260914-0025"></script>
+<script src="firebase.js?v=20260914-0819" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260914-0819"></script>
 <style>
   :root{--bg:#0b1017;--bg2:#0f172a;--card:#111a27;--card2:#16212f;--line:#1f2c3d;--txt:#e2e8f0;--muted:#7689a1;--muted2:#475569;--naf:#22c55e;--naf-dim:rgba(34,197,94,.12);--atk:#F97316;--srv:#22C55E;--rec:#818CF8;--set:#F59E0B;--blk:#ef4444;--def:#06b6d4;--free:#94a3b8;--ev-pos:#22c55e;--ev-plus:#84cc16;--ev-excl:#eab308;--ev-neg:#f97316;--ev-slash:#f59e0b;--ev-err:#ef4444;}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -150,7 +150,7 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260914-0025">
+<link rel="stylesheet" href="movil.css?v=20260914-0819">
 </head>
 <body>
 <div class="wrap">
@@ -603,7 +603,20 @@ window.__DESCIFRAR_SINCRONO = true;
 
   function bind(){
     $('teamSel').addEventListener('change',function(){selTeam=this.value;initSeasonSel();applyTeam();loadYT();});
-    $('seasonSel').addEventListener('change',function(){selSeason=this.value;applySeason();loadYT();});
+    $('seasonSel').addEventListener('change',function(){
+      var v=this.value;
+      /* Si es una temporada que todavia no se bajo, se baja ahora y recien
+         despues se aplica. Asi entrar a la pantalla sigue costando 1,8 MB. */
+      if(v && window._cargarTemporada && !(window.__tempCargadas||{})[v]){
+        window._cargarTemporada(v, function(){
+          selSeason=v;
+          try{ VD = (window.VIDEO_DATA && window.VIDEO_DATA.matches) ? window.VIDEO_DATA : VD; }catch(e){}
+          applySeason(); loadYT();
+        });
+        return;
+      }
+      selSeason=v; applySeason(); loadYT();
+    });
     $('mBtn').addEventListener('click',function(){$('mPanel').classList.toggle('open');});
     $('mPanel').addEventListener('click',function(e){
       if(e.target.id==='mAll'){Object.keys(selMatch).forEach(function(c){selMatch[c]=true;});renderMatches();rebuildAll();return;}
@@ -760,8 +773,46 @@ window.__DESCIFRAR_SINCRONO = true;
   document.addEventListener('DOMContentLoaded',init);
 })();
 </script>
-<script src="lang.js?v=20260914-0025" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260914-0025" onerror="void 0"></script>
-<script src="ayuda.js?v=20260914-0025"></script>
+<script src="lang.js?v=20260914-0819" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260914-0819" onerror="void 0"></script>
+<script src="ayuda.js?v=20260914-0819"></script>
+
+<script>
+/* ══ LAS TEMPORADAS VIEJAS, SOLO SI SE PIDEN ════════════════════════════════
+   Esta pantalla descargaba 17 MB por entrar, y 15 de esos eran los videos de
+   la temporada PASADA. En el gimnasio, con la senial justa, eso es un minuto
+   de pantalla en blanco: el jugador cierra y no vuelve.
+
+   Ahora arranca con la temporada en curso —1,8 MB— y la vieja se baja recien
+   si alguien la elige en el selector. El que nunca mira atras no la baja
+   nunca. */
+window._cargarTemporada = function(id, luego){
+  var arch = 'datos_video_' + id + '.js.enc';
+  window.__tempCargadas = window.__tempCargadas || {};
+  if(window.__tempCargadas[id]){ if(luego) luego(); return; }
+
+  var aviso = document.createElement('div');
+  aviso.id = '_cargando-temp';
+  aviso.style.cssText = 'position:fixed;left:50%;top:14px;transform:translateX(-50%);'
+    + 'z-index:9999;padding:9px 15px;border-radius:10px;background:#0f172a;'
+    + 'border:1px solid rgba(148,163,184,.3);color:#e2e8f0;font-size:13px';
+  aviso.textContent = 'Bajando los videos de ' + id + '\u2026';
+  document.body.appendChild(aviso);
+
+  var listo = 0, total = 2;
+  function fin(){
+    if(++listo < total) return;
+    window.__tempCargadas[id] = true;
+    var a = document.getElementById('_cargando-temp');
+    if(a && a.parentNode) a.parentNode.removeChild(a);
+    if(luego) luego();
+  }
+  [arch, 'datos_video_ent_' + id + '.js.enc'].forEach(function(x){
+    var sc = document.createElement('script');
+    sc.src = x; sc.onload = fin; sc.onerror = fin;
+    document.head.appendChild(sc);
+  });
+};
+</script>
 </body>
 </html>
