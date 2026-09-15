@@ -75,6 +75,41 @@ NOMBRE_CORTO = {
 #  El numero sale de la configuracion del club. Si algun dia se usa otro, o
 #  se agrega una segunda maquina, se cambia ahi y no en el codigo.
 # ══════════════════════════════════════════════════════════════════════════
+
+def _nombres_del_plantel():
+    """Apellido de cada jugador segun el plantel del club.
+
+    ══ POR QUE HACE FALTA ═══════════════════════════════════════════════════
+    El nombre sale del bloque [3PLAYERS-H] de cada .dvw. Pero ese bloque lo
+    escribe el scout y no siempre esta completo: en el entrenamiento del 14
+    el #11 no figuraba, y en el del 7 faltaba el #13.
+
+    Cuando falta, el sistema se quedaba con el numero pelado. Resultado: en la
+    tabla aparecian "11" y "13" como si fueran jugadores aparte, con sus
+    propias acciones separadas de BARTHOLET y STEIMANN, que son ellos mismos.
+
+    El plantel de la app (datos_equipo.js) si los tiene a todos y lo mantiene
+    el staff. Se usa eso primero.
+    """
+    out = {}
+    for arch in ('datos_equipo.js', 'plantel_nafels.js'):
+        try:
+            t = open(arch, encoding='utf-8', errors='replace').read()
+        except Exception:
+            continue
+        for m in re.finditer(r'\{[^{}]*?"?num"?\s*:\s*"?(\d+)"?[^{}]*?\}', t):
+            b = m.group(0)
+            ap = re.search(r'"?(?:ap|apellido)"?\s*:\s*"([^"]+)"', b)
+            if ap and ap.group(1).strip():
+                out[int(m.group(1))] = ap.group(1).strip().upper()
+        if out:
+            break
+    return out
+
+
+_PLANTEL_NOMBRES = _nombres_del_plantel()
+
+
 def _es_maquina(num):
     """Si este numero de camiseta es una maquina y no un jugador."""
     try:
@@ -2042,7 +2077,13 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
             if _es_maquina(pn): continue
 
             _p = players.get(pn,{})
-            nm = NAFELS_NAMES.get(pn, _p.get('apellido') or (_p.get('name','').split()[0] if _p.get('name') else str(pn)))
+            #  El plantel de la app manda: si el .dvw no trae el nombre, o
+            #  lo trae mal, se usa el que mantiene el staff. Asi las acciones
+            #  no quedan sueltas bajo un numero.
+            nm = (_PLANTEL_NOMBRES.get(pn)
+                  or NAFELS_NAMES.get(pn)
+                  or _p.get('apellido')
+                  or (_p.get('name','').split()[0] if _p.get('name') else str(pn)))
             def _blk(x): return {'T':x['T'],'Punto':x['Punto'],'Pos':x['Pos'],'Adm':x['Adm'],'Neg':x['Neg'],'Vend':x['Vend'],'Err':x['Err'],'Eff':x['Eff']}
             jugs.append({'c':pn,'n':nm,
                 's'+'T':s['T'],'sEff':s['Eff'],'sPunto':s['Punto'],'sPos':s['Pos'],'sNeg':s['Neg'],'sErr':s['Err'],'sAdm':s['Adm'],'sVend':s['Vend'],

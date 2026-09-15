@@ -1,5 +1,5 @@
 window.HISTORIAL_DATA = {
-  "generado": "15/09/2026, 16:18:02",
+  "generado": "15/09/2026, 16:28:17",
   "entrenamientos": [
     {
       "fecha": "03/09/2026",
@@ -2731,7 +2731,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 13,
-          "n": "13",
+          "n": "STEIMANN",
           "sT": 1,
           "sEff": 25,
           "sPunto": 0,
@@ -8387,7 +8387,7 @@ window.HISTORIAL_DATA = {
         },
         {
           "c": 11,
-          "n": "11",
+          "n": "BARTHOLET",
           "sT": 51,
           "sEff": -8,
           "sPunto": 6,
