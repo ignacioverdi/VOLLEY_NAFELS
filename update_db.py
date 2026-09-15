@@ -45,6 +45,31 @@ NOMBRE_CORTO = {
 }
 
 
+
+def _cargar_maquinas():
+    """Los numeros de maquina de saque salen de config_club.json."""
+    import os, json
+    for p in ('config_club.json', 'club.json', 'CONFIG.json'):
+        try:
+            if os.path.exists(p):
+                c = json.load(open(p, encoding='utf-8'))
+                v = c.get('maquinas_saque') or c.get('maquina_saque')
+                if v:
+                    if not isinstance(v, (list, tuple)): v = [v]
+                    return {str(x).lstrip('0') for x in v}
+        except Exception:
+            pass
+    return {'8'}
+
+
+_MAQUINAS = _cargar_maquinas()
+
+
+def _es_maquina(num):
+    """Si este numero de camiseta es una maquina y no un jugador."""
+    return str(num).lstrip('0') in _MAQUINAS
+
+
 def _sin_tildes(t):
     import unicodedata
     return ''.join(c for c in unicodedata.normalize('NFD', t)
@@ -306,6 +331,17 @@ def parse_dvw_both(fpath, temporada):
                     'orig':orig,'dest':dest,'setter_pos':setter_pos,'set_num':set_num,
                     'date':date,'rival':rival,'atype':current_atype,
                     'srv_orig':prev_srv_orig,'temporada':temporada}
+
+            # ══ LA MAQUINA DE SAQUE NO ES UNA JUGADORA ═══════════════════
+            #  El #8 se usa para poder cargar los saques de la MAQUINA y asi
+            #  registrar COMO RECIBIERON los jugadores contra ella. Las
+            #  recepciones son de cada jugador y cuentan normal; lo que no
+            #  cuenta es el saque de la maquina, que no es de nadie.
+            #
+            #  Sin este filtro el #8 aparecia en las tablas como si fuera un
+            #  jugador mas, con 509 saques y 51%% de eficacia, ensuciando los
+            #  promedios del equipo.
+            if _es_maquina(pnum): continue
 
             if   skill=='A': atk[pnum].append(action)
             elif skill=='S': srv[pnum].append(action)

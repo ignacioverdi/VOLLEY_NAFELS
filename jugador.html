@@ -279,9 +279,60 @@ var _OBJ_NULOS = {sq:null,rec:null,bqpos:null,bqpt:null,atqq:null,atqhb:null,atq
 //   Respeta _objTipo (partido/entrenamiento) y _objPartido (acumulado/partido puntual)
 // ════════════════════════════════════════════════════════════════
 function _batMatchName(nombre, keys){
-  var b=(nombre||'').replace(/^\d+\s*/,'').toLowerCase().trim(); var bs=b.split(' ')[0];
-  for(var i=0;i<keys.length;i++){ if(keys[i].toLowerCase().replace(/^\d+\s*/,'').trim()===b) return keys[i]; }
-  for(var i=0;i<keys.length;i++){ var k=keys[i].toLowerCase().replace(/^\d+\s*/,'').trim(); if(k.split(' ')[0]===bs || (bs.length>2&&k.indexOf(bs)>=0)) return keys[i]; }
+  /* ══ DOS JUGADORES CON EL MISMO APELLIDO ═══════════════════════════════════
+     Esta funcion busca al jugador en las baterias por su nombre. Comparaba
+     por APELLIDO, y el plantel tiene dos SCHMID:
+
+         #7  SCHMID R   (Roy)
+         #20 SCHMID J   (Jonas)
+
+     Buscando "SCHMID R" devolvia "SCHMID JONA" —el primero que encontraba—,
+     asi que al #7 le mostraba las baterias del #20. Y como los nombres no
+     terminaban de coincidir, a veces la bateria salia vacia y la pill con
+     numeros: dos valores distintos para el mismo jugador.
+
+     Ahora, antes que nada, se prueba con el NUMERO de camiseta, que es unico
+     y no se puede confundir. Recien si eso no da, se compara por nombre, y la
+     comparacion por apellido suelto pide que no haya dos candidatos: si hay
+     mas de uno, se prefiere no mostrar nada antes que mostrar los datos del
+     jugador equivocado. */
+  var num = null;
+  try{
+    var mn = String(nombre||'').match(/^\s*#?(\d{1,2})\b/);
+    if(mn) num = parseInt(mn[1], 10);
+    if(num === null && window.JUG_NUM != null) num = parseInt(window.JUG_NUM, 10);
+  }catch(e){}
+  if(num !== null && !isNaN(num)){
+    for(var i=0;i<keys.length;i++){
+      var mk = String(keys[i]).match(/^\s*#?(\d{1,2})\b/);
+      if(mk && parseInt(mk[1],10) === num) return keys[i];
+    }
+  }
+
+  var b=(nombre||'').replace(/^\d+\s*/,'').toLowerCase().trim();
+  var bs=b.split(' ')[0];
+
+  /* 1) el nombre completo, igual */
+  for(var i=0;i<keys.length;i++){
+    if(keys[i].toLowerCase().replace(/^\d+\s*/,'').trim()===b) return keys[i];
+  }
+
+  /* 2) empieza igual: "schmid r" contra "schmid roy" */
+  var porPrefijo=[];
+  for(var i=0;i<keys.length;i++){
+    var k=keys[i].toLowerCase().replace(/^\d+\s*/,'').trim();
+    if(b.length>2 && (k.indexOf(b)===0 || b.indexOf(k)===0)) porPrefijo.push(keys[i]);
+  }
+  if(porPrefijo.length===1) return porPrefijo[0];
+
+  /* 3) solo el apellido: si hay dos, NO se elige ninguno */
+  var porApellido=[];
+  for(var i=0;i<keys.length;i++){
+    var k2=keys[i].toLowerCase().replace(/^\d+\s*/,'').trim();
+    if(k2.split(' ')[0]===bs) porApellido.push(keys[i]);
+  }
+  if(porApellido.length===1) return porApellido[0];
+
   return null;
 }
 function batGet(nombre, partido){

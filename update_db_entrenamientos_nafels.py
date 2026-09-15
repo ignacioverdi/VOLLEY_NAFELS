@@ -628,10 +628,19 @@ def parse_dvw_both(fpath, temporada):
                     'date':date,'turno':_turno(fpath),'rival':rival,'atype':current_atype,'fase_dv':fase_dv,
                     'srv_orig':prev_srv_orig,'temporada':temporada}
 
+            # ══ LA MAQUINA DE SAQUE NO ES UNA JUGADORA ═══════════════════
+            #  El #8 se usa para poder cargar los saques de la MAQUINA y asi
+            #  registrar COMO RECIBIERON los jugadores contra ella. Las
+            #  recepciones son de cada jugador y cuentan normal; lo que no
+            #  cuenta es el saque de la maquina, que no es de nadie.
+            #
+            #  Sin este filtro el #8 aparecia en las tablas como si fuera un
+            #  jugador mas, con 509 saques y 51%% de eficacia, ensuciando los
+            #  promedios del equipo.
+            if _es_maquina(pnum): continue
+
             if   skill=='A': atk[pnum].append(action)
-            elif skill=='S':
-                    # el saque de la maquina no es de nadie: no suma
-                    if not _es_maquina(pnum): srv[pnum].append(action)
+            elif skill=='S': srv[pnum].append(action)
             elif skill=='R': rec[pnum].append(action)
             elif skill=='E': sets[pnum].append(action)
             elif skill=='B': blk[pnum].append(action)
@@ -2017,6 +2026,21 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
             bNeg=sum(1 for x in acts['b'] if x['effect']=='-'); bErr=sum(1 for x in acts['b'] if x['effect']=='=')
             bT=len(acts['b']); bEff=round((bk+bp)/bT*100) if bT else 0
             if s['T']+r['T']+a['T']+bT<1: continue
+
+            # ══ LA MAQUINA NO VA A LA TABLA ══════════════════════════════════
+            #  El #8 se usa para cargar los saques de la MAQUINA y poder
+            #  registrar COMO RECIBEN los jugadores contra ella. Pero la
+            #  maquina no es una jugadora: no tiene que aparecer en la tabla
+            #  ni sumar a los promedios del equipo.
+            #
+            #  Las RECEPCIONES contra esos saques SI cuentan: cada una lleva
+            #  el numero del jugador que recibio, no el de la maquina, asi que
+            #  no se pierden.
+            #
+            #  Se veia en el dashboard: "#8 · 509 saques · 51%" arriba de
+            #  jugadores de verdad.
+            if _es_maquina(pn): continue
+
             _p = players.get(pn,{})
             nm = NAFELS_NAMES.get(pn, _p.get('apellido') or (_p.get('name','').split()[0] if _p.get('name') else str(pn)))
             def _blk(x): return {'T':x['T'],'Punto':x['Punto'],'Pos':x['Pos'],'Adm':x['Adm'],'Neg':x['Neg'],'Vend':x['Vend'],'Err':x['Err'],'Eff':x['Eff']}
