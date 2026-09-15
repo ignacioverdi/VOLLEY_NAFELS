@@ -16,13 +16,13 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260915-1633" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260915-1633" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260915-1633"></script>
-<script src="filtro_tipo.js?v=20260915-1633" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260915-1639" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260915-1639" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260915-1639"></script>
+<script src="filtro_tipo.js?v=20260915-1639" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
-  <script src="objetivos_config.js?v=20260915-1633" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260915-1639" onerror="void 0"></script>
 
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -40,7 +40,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20260915-1633" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260915-1639" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   
@@ -161,6 +161,47 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 0%,rgb
 
 /* ── EMPTY ───────────────────────────────────────────────────────── */
 .empty{text-align:center;padding:40px;color:var(--mut);font-size:13px;letter-spacing:1px;}
+/* ══ QUE SE NOTE QUE EL NUMERO SE PUEDE TOCAR ═══════════════════════════════
+   Los numeros de las tablas abren el video de esas acciones, pero nada lo
+   decia: pasabas el mouse por arriba y no pasaba nada. Solo lo usaba el que
+   ya sabia que estaba.
+
+   Ahora, al pasar por encima:
+     · el numero se agranda un poco y se pone en blanco
+     · queda con un fondo suave y el borde marcado
+     · aparece una claqueta chiquita al lado
+     · el cursor pasa a ser una manito
+
+   Se marca SOLO la celda, no la fila entera, para que quede claro que lo que
+   se abre son ESAS acciones y no todas las del jugador. */
+td.dbat-clic{
+  position:relative;
+  cursor:pointer;
+  border-radius:6px;
+  transition:background .12s ease, transform .12s ease, box-shadow .12s ease;
+}
+td.dbat-clic:hover{
+  background:rgba(255,255,255,.09);
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.28);
+  transform:scale(1.14);
+  color:#fff !important;
+}
+td.dbat-clic:hover::after{
+  content:'\1F3AC';
+  position:absolute;
+  top:1px; right:2px;
+  font-size:9px;
+  opacity:.75;
+}
+td.dbat-clic:active{ transform:scale(1.04); }
+
+/* En el telefono no hay mouse: se marca con un punteado permanente para que
+   igual se vea que ahi hay algo. */
+@media (hover:none){
+  td.dbat-clic{ text-decoration:underline dotted rgba(255,255,255,.35); text-underline-offset:3px; }
+  td.dbat-clic:hover{ transform:none; }
+}
+
 </style>
 <script>
 // ================================================================
@@ -570,15 +611,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260915-1633" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260915-1633"></script>
+<script src="firebase.js?v=20260915-1639" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260915-1639"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260915-1633">
+<link rel="stylesheet" href="movil.css?v=20260915-1639">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260915-1633" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260915-1639" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -1536,9 +1577,9 @@ function renderEqContent(){
           var _val = (DBAT_VALOR[EQ_TAB]||[])[i] || null;
           var _cl = '';
           if(_val && c.v){
-            _cl = ' onclick="event.stopPropagation();window.open(\''
+            _cl = ' class="dbat-clic" onclick="event.stopPropagation();window.open(\''
                 + dbatURL(j.c, skVid, _val) + '\',\'_blank\')"'
-                + ' title="Ver en video"';
+                + ' title="Ver estas acciones en video"';
           }
           return'<td'+_cl+' style="font-size:'+(c.b?'16':'13')+'px;font-weight:'+(c.b?900:700)+';color:'+c.c+';'+(_val&&c.v?'cursor:pointer;':'')+(i===0?'border-left:2px solid '+cfg.color+'22':'')+'">'+c.v+'</td>';}).join('')
       +'</tr>';
@@ -2312,11 +2353,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260915-1633"></script>
-<script src="lang.js?v=20260915-1633"></script>
-<script src="temporadas_menu.js?v=20260915-1633"></script>
-<script src="app_offline.js?v=20260915-1633"></script>
-<script src="ayuda.js?v=20260915-1633"></script>
+<script src="chat_nafels.js?v=20260915-1639"></script>
+<script src="lang.js?v=20260915-1639"></script>
+<script src="temporadas_menu.js?v=20260915-1639"></script>
+<script src="app_offline.js?v=20260915-1639"></script>
+<script src="ayuda.js?v=20260915-1639"></script>
 
 <!-- Los archivos de video (datos_video_*.js.enc) se sacaron de esta
      pantalla: pesan unos 15 MB por temporada, descifrarlos son mas de
