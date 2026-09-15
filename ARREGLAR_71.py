@@ -1,83 +1,94 @@
 # -*- coding: utf-8 -*-
 """
-ARREGLAR_71.py — cambia el saque del #71 por el #7
+ARREGLAR_71.py - cambia el saque del #71 por el #7
 
-QUE PASO
-    El 15/09 el asistente tipeo 71 donde queria poner 7. En DataVolley el
-    numero de camiseta son DOS digitos, asi que "71" es un jugador que no
-    existe: aparece en las tablas como un numero fantasma y ese saque no se
-    le suma a nadie.
+Busca en TODAS las carpetas de .dvw que encuentre, sin importar como se
+llamen. Si no encuentra nada, te dice donde busco y que si vio, para saber
+si el problema es la carpeta o si ya estaba corregido.
 
-QUE HACE
-    Busca la linea  *71SM!  en el .dvw del entrenamiento y la deja como
-    *07SM!  — que es como se escribe el 7 en formato de dos digitos.
-
-    Toca UNA sola linea. Antes deja una copia con .bak por si acaso.
-
-COMO SE USA
-    Ponelo en la carpeta del sistema (al lado de HACER_TODO.bat) y hace
-    doble clic, o desde la consola:
-
-        python ARREGLAR_71.py
-
-    Despues corre HACER_TODO para que los datos se regeneren.
+Uso:  doble clic, o  python ARREGLAR_71.py
 """
-import io, os, glob, re, shutil
+import io, os, re, shutil
 
 VIEJO = '71'
 NUEVO = '07'
-CARPETAS = ['DVW ENTRENAMIENTOS NAFELS 2026', 'DVW NAFELS 2026',
-            'DVW HIGH SET NAFELS 2026']
 
 
 def main():
+    aqui = os.path.dirname(os.path.abspath(__file__)) or '.'
+    os.chdir(aqui)
+
     print()
     print('  ==============================================')
-    print('    CAMBIAR EL SAQUE DEL #%s POR EL #%s' % (VIEJO, str(int(NUEVO))))
+    print('    CAMBIAR EL SAQUE DEL #%s POR EL #%d' % (VIEJO, int(NUEVO)))
     print('  ==============================================')
+    print()
+    print('  Buscando en: %s' % aqui)
     print()
 
+    # todos los .dvw, esten donde esten
+    archivos = []
+    for raiz, dirs, files in os.walk(aqui):
+        dirs[:] = [d for d in dirs if not d.startswith('.')]
+        for a in files:
+            if a.lower().endswith('.dvw'):
+                archivos.append(os.path.join(raiz, a))
+
+    if not archivos:
+        print('  No encontre NINGUN archivo .dvw.')
+        print('  Puse este script en la carpeta equivocada:')
+        print('  tiene que estar al lado de HACER_TODO.bat')
+        print()
+        return
+
+    print('  Encontre %d archivo(s) .dvw' % len(archivos))
+    print()
+
+    patron = re.compile(r'^([*a])' + VIEJO + r'([A-Z])', re.M)
     total = 0
-    for carpeta in CARPETAS:
-        if not os.path.isdir(carpeta):
-            continue
-        for ruta in sorted(glob.glob(os.path.join(carpeta, '*.dvw'))):
+    con71 = []
+
+    for ruta in sorted(archivos):
+        try:
             txt = io.open(ruta, encoding='latin-1', errors='replace').read()
+        except Exception as e:
+            print('  no pude abrir %s: %s' % (os.path.basename(ruta), e))
+            continue
 
-            # Solo las lineas que EMPIEZAN con el numero, para no tocar un 71
-            # que aparezca en el medio de otro dato.
-            patron = re.compile(r'^([*a])' + VIEJO + r'([A-Z])', re.M)
-            encontradas = patron.findall(txt)
-            if not encontradas:
-                continue
+        if not patron.search(txt):
+            continue
 
-            print('  %s' % os.path.basename(ruta))
-            for m in patron.finditer(txt):
-                ini = txt.rfind('\n', 0, m.start()) + 1
-                fin = txt.find('\n', m.start())
-                print('     antes:  %s' % txt[ini:fin][:60])
+        con71.append(ruta)
+        print('  %s' % os.path.relpath(ruta, aqui))
+        for m in patron.finditer(txt):
+            ini = txt.rfind('\n', 0, m.start()) + 1
+            fin = txt.find('\n', m.start())
+            print('     antes:  %s' % txt[ini:fin][:62])
 
-            nuevo = patron.sub(lambda m: m.group(1) + NUEVO + m.group(2), txt)
+        nuevo = patron.sub(lambda m: m.group(1) + NUEVO + m.group(2), txt)
+        shutil.copy2(ruta, ruta + '.bak')
+        io.open(ruta, 'w', encoding='latin-1', errors='replace').write(nuevo)
 
-            for m in re.finditer(r'^([*a])' + NUEVO + r'[A-Z][^\n]*', nuevo, re.M):
-                pass
-
-            shutil.copy2(ruta, ruta + '.bak')
-            io.open(ruta, 'w', encoding='latin-1', errors='replace').write(nuevo)
-
-            for m in patron.finditer(nuevo):
-                pass
-            print('     ahora:  el saque quedo a nombre del #%s' % str(int(NUEVO)))
-            print('     copia:  %s.bak' % os.path.basename(ruta))
-            total += len(encontradas)
-            print()
+        n = len(patron.findall(txt))
+        total += n
+        print('     ahora:  %d accion(es) a nombre del #%d' % (n, int(NUEVO)))
+        print('     copia:  %s.bak' % os.path.basename(ruta))
+        print()
 
     if total:
         print('  Listo: %d accion(es) corregida(s).' % total)
-        print('  Ahora corre HACER_TODO para que se actualicen los datos.')
+        print('  Ahora corre HACER_TODO.')
     else:
-        print('  No encontre ninguna accion del #%s.' % VIEJO)
-        print('  Puede que ya este corregido.')
+        print('  Revise los %d archivos y NINGUNO tiene acciones del #%s.'
+              % (len(archivos), VIEJO))
+        print()
+        print('  Puede ser que:')
+        print('    - ya lo hayas corregido a mano en el scout, o')
+        print('    - el .dvw de ese entrenamiento todavia no este exportado')
+        print()
+        print('  Para que pueda ayudarte, fijate si esta este archivo:')
+        print('    &Pra-AXPO NAFELS-2026-09-15-M.dvw')
+        print('  y decime en que carpeta lo tenes.')
     print()
 
 

@@ -756,8 +756,28 @@ function renderQuickStats(j){
   }
   if(!window.HISTORIAL_DATA||!window.HISTORIAL_DATA.entrenamientos||!window.HISTORIAL_DATA.entrenamientos.length){ qs.style.display='none'; return; }
   var nmC=nm1(j.nombre), found=false;
-  var t={sT:0,sPunto:0,sVend:0,sPos:0,sErr:0,rT:0,rPunto:0,rPos:0,rVend:0,rErr:0,aT:0,aPunto:0,aVend:0,aErr:0,bT:0,bPt:0,bPtPos:0};
-  var KS=['sT','sPunto','sVend','sPos','sErr','rT','rPunto','rPos','rVend','rErr','aT','aPunto','aVend','aErr','bT','bPt','bPtPos'];
+  /* ══ FALTABAN LOS NEUTROS Y LOS NEGATIVOS ══════════════════════════════════
+     VB_EFF es la formula unica del sistema y necesita las SEIS valoraciones:
+
+         saque      # ace · / free · + positivo · ! neutro · - negativo · = error
+         recepcion  # perfecta · + positiva · ! neutra · - negativa · / sobrepase · = error
+
+     Aca solo se sumaban cuatro: faltaban sAdm/sNeg y rAdm/rNeg. La formula
+     los buscaba, no los encontraba y los tomaba como CERO. Resultado: el
+     numero de arriba salia mucho mas bajo que el de la bateria y no habia
+     forma de saber a cual creerle.
+
+     Verificado con el #1 DURDOS, 148 saques:
+         con las seis valoraciones  40%   (lo que da la bateria)
+         sin ! ni -                 21%   (lo que mostraba la pill)
+
+     Los datos ya estaban en datos_historial: solo faltaba sumarlos. */
+  var t={sT:0,sPunto:0,sVend:0,sPos:0,sAdm:0,sNeg:0,sErr:0,
+         rT:0,rPunto:0,rPos:0,rAdm:0,rNeg:0,rVend:0,rErr:0,
+         aT:0,aPunto:0,aVend:0,aErr:0,bT:0,bPt:0,bPtPos:0};
+  var KS=['sT','sPunto','sVend','sPos','sAdm','sNeg','sErr',
+          'rT','rPunto','rPos','rAdm','rNeg','rVend','rErr',
+          'aT','aPunto','aVend','aErr','bT','bPt','bPtPos'];
   window.HISTORIAL_DATA.entrenamientos.forEach(function(e){ (e.jugadores||[]).forEach(function(jh){ if(nm1(jh.n)!==nmC) return; found=true; KS.forEach(function(k){ t[k]+=jh[k]||0; }); }); });
   if(!found){ qs.style.display='none'; return; }
   // Defensa desde VIDEO_DATA (si está cargada), filtrando por número de jugador
