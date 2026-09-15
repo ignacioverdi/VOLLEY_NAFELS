@@ -16,13 +16,13 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260914-2331" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260914-2331" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260914-2331"></script>
-<script src="filtro_tipo.js?v=20260914-2331" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260915-1633" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260915-1633" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260915-1633"></script>
+<script src="filtro_tipo.js?v=20260915-1633" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
-  <script src="objetivos_config.js?v=20260914-2331" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260915-1633" onerror="void 0"></script>
 
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -40,7 +40,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20260914-2331" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260915-1633" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   
@@ -570,15 +570,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260914-2331" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260914-2331"></script>
+<script src="firebase.js?v=20260915-1633" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260915-1633"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260914-2331">
+<link rel="stylesheet" href="movil.css?v=20260915-1633">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260914-2331" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260915-1633" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -1368,6 +1368,32 @@ function renderEqStats(){
   document.getElementById('eq-stats-row').innerHTML = rectHTML;
 }
 
+/* ══ CADA NUMERO DE LA TABLA ABRE SUS PROPIAS ACCIONES ══════════════════════
+   Antes el clic estaba en la FILA entera y abria cortes.html con el jugador y
+   el fundamento, nada mas. Asi, tocar los "12 errores de ataque de BARTHOLET"
+   te mostraba sus 82 ataques: habia que buscar los errores a mano entre
+   todos.
+
+   Ahora cada celda sabe que valoracion representa y la manda. La primera
+   columna es el EFF y la segunda el total: esas siguen abriendo todo, que es
+   lo correcto. */
+var DBAT_VALOR = {
+  /* Copiado del orden real de 'ths' de cada fundamento. Las dos primeras
+     —EFF% y TOT— van en null a proposito: esas abren todas las acciones. */
+  /*          EFF   TOT   3ra  4ta  5ta  6ta  7ma  8va                      */
+  saque:     [null, null, '#', '/', '+', '!', '-', '='],  /* # / + ! - =    */
+  recepcion: [null, null, '#', '+', '!', '-', '/', '='],  /* # + ! - / =    */
+  ataque:    [null, null, '#', '+', '!', '-', '/', '='],  /* # + ! - / =    */
+  bloqueo:   [null, null, '#', '+', '!', '-', '/', '=']   /* # + ! - / =    */
+};
+
+function dbatURL(num, skill, valor){
+  var u = 'cortes.html?num=' + encodeURIComponent(num);
+  if(skill) u += '&sk=' + encodeURIComponent(skill);
+  if(valor) u += '&ev=' + encodeURIComponent(valor);
+  return u;
+}
+
 function renderEqContent(){
   var ses=getEqSesiones();
   var jugs=getJugadoresAcum(ses);
@@ -1506,7 +1532,15 @@ function renderEqContent(){
     html+='<tr style="background:'+bg+';cursor:pointer" title="Ver video de '+j.n+' 🎬" onclick="window.open(\'cortes.html?num='+encodeURIComponent(j.c)+(skVid?'&sk='+encodeURIComponent(skVid):'')+'\',\'_blank\')">'
       +'<td><div class="t-name"><div class="t-cam">'+j.c+'</div><span style="font-weight:800;font-size:14px">'+j.n+'</span> <span style="opacity:.35;font-size:14px">🎬</span></div></td>'
       +(isAcum?'<td style="color:var(--mut)">'+j.PJ+'</td>':'')
-      +cells.map(function(c,i){return'<td style="font-size:'+(c.b?'16':'13')+'px;font-weight:'+(c.b?900:700)+';color:'+c.c+';'+(i===0?'border-left:2px solid '+cfg.color+'22':'')+'">'+c.v+'</td>';}).join('')
+      +cells.map(function(c,i){
+          var _val = (DBAT_VALOR[EQ_TAB]||[])[i] || null;
+          var _cl = '';
+          if(_val && c.v){
+            _cl = ' onclick="event.stopPropagation();window.open(\''
+                + dbatURL(j.c, skVid, _val) + '\',\'_blank\')"'
+                + ' title="Ver en video"';
+          }
+          return'<td'+_cl+' style="font-size:'+(c.b?'16':'13')+'px;font-weight:'+(c.b?900:700)+';color:'+c.c+';'+(_val&&c.v?'cursor:pointer;':'')+(i===0?'border-left:2px solid '+cfg.color+'22':'')+'">'+c.v+'</td>';}).join('')
       +'</tr>';
   });
   if(!hasData)html+='<tr><td colspan="20" class="empty">Sin datos</td></tr>';
@@ -2278,11 +2312,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260914-2331"></script>
-<script src="lang.js?v=20260914-2331"></script>
-<script src="temporadas_menu.js?v=20260914-2331"></script>
-<script src="app_offline.js?v=20260914-2331"></script>
-<script src="ayuda.js?v=20260914-2331"></script>
+<script src="chat_nafels.js?v=20260915-1633"></script>
+<script src="lang.js?v=20260915-1633"></script>
+<script src="temporadas_menu.js?v=20260915-1633"></script>
+<script src="app_offline.js?v=20260915-1633"></script>
+<script src="ayuda.js?v=20260915-1633"></script>
 
 <!-- Los archivos de video (datos_video_*.js.enc) se sacaron de esta
      pantalla: pesan unos 15 MB por temporada, descifrarlos son mas de
