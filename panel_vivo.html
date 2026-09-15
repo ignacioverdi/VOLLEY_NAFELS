@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260915-1658"></script>
-<script src="selector_categoria.js?v=20260915-1658"></script>
-<script src="lang.js?v=20260915-1658"></script>
+<script src="categorias_club.js?v=20260915-1704"></script>
+<script src="selector_categoria.js?v=20260915-1704"></script>
+<script src="lang.js?v=20260915-1704"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260915-1658">
+<link rel="stylesheet" href="movil.css?v=20260915-1704">
 </head>
 <body>
 
@@ -1082,6 +1082,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
         <button class="tbtn" onclick="abrirDVW()" title="Abrir un scout .dvw para corregirlo o seguir cargándolo (manual 9.1.1)" data-t="Abrir .dvw"><span data-t="Abrir .dvw"><span data-t="Abrir .dvw">Abrir .dvw</span></span></button>
     <button class="tbtn" onclick="iniImportar()" title="Sumar las estadísticas de un .dvw al historial (no lo abre para editar)" data-t="Sumar al historial"><span data-t="Sumar al historial"><span data-t="Sumar al historial">Sumar al historial</span></span></button>
         <button class="tbtn" id="ini-seguir" onclick="iniSeguir()" style="display:none"></button>
+        <!-- Aparece solo cuando hay algo tildado, para no tentar al error -->
+        <button class="tbtn" id="ini-borrar" onclick="iniBorrarSel()"
+                title="Borrar los scouts tildados"
+                style="display:none;align-items:center;gap:6px;background:rgba(239,68,68,.15);
+                       color:#f87171;border:1px solid rgba(239,68,68,.35)">🗑 Borrar</button>
+        <button class="tbtn" onclick="iniTildarTodos()" title="Tildar o destildar todos"
+                style="font-size:11px;opacity:.75">Tildar todos</button>
         <div class="ini-modo">
           <button class="tbtn" id="ini-tab-p" onclick="iniTab('partido')" data-t="Partidos"><span data-t="Partidos"><span data-t="Partidos">Partidos</span></span></button>
           <button class="tbtn" id="ini-tab-e" onclick="iniTab('entrenamiento')" data-t="Entrenamientos">Entrenamientos</button>
@@ -1230,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260915-1658" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260915-1658"></script>
-<script src="objetivos.js?v=20260915-1658" onerror="void 0"></script>
-<script src="video_delay.js?v=20260915-1658" onerror="void 0"></script>
+<script src="firebase.js?v=20260915-1704" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260915-1704"></script>
+<script src="objetivos.js?v=20260915-1704" onerror="void 0"></script>
+<script src="video_delay.js?v=20260915-1704" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260915-1658" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260915-1658"></script>
+<script src="plantel_nafels.js?v=20260915-1704" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260915-1704"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -7356,7 +7363,19 @@ function renderInicio(){
       cl.innerHTML=list.map(function(p){
         var r=p.resumen||{}, act=(p.id===M._id);
         var f=(r.fecha||'').split('-'); var fec=(f.length===3)?(f[2]+'/'+f[1]+'/'+f[0]):(r.fecha||'—');
+        /* ══ UNA TILDE POR SCOUT ═══════════════════════════════════════════
+           El asistente hace pruebas y despues quiere borrarlas. Hasta ahora
+           tenia que entrar a cada una, ir a Partidos y borrarla desde ahi:
+           varios pasos por cada prueba.
+
+           Ahora se tildan desde esta misma lista y se borran todas juntas.
+           El clic en la tilde NO abre el partido —stopPropagation— para no
+           entrar sin querer al que se quiere borrar. */
         return '<div class="ini-row'+(act?' act':'')+'" onclick="iniAbrir(\''+p.id+'\')">'
+          + '<div class="f" style="max-width:26px;padding-right:0">'
+          +   '<input type="checkbox" class="inicheck" value="'+p.id+'"'
+          +   ' onclick="event.stopPropagation();iniPintarBorrar()"'
+          +   ' style="width:15px;height:15px;cursor:pointer;accent-color:#ef4444"></div>'
           + '<div class="f">'+iniEsc(fec)+'</div>'
           + '<div class="eq">'+iniEsc(r.home)+(act?' <span style="font-size:10px;color:#e6a743">● abierto</span>':'')+'</div>'
           + '<div class="rs">'+iniEsc(r.res||'')+'</div>'
@@ -8269,8 +8288,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260915-1658" onerror="void 0"></script>
-<script src="ayuda.js?v=20260915-1658"></script>
+<script src="volver_inicio.js?v=20260915-1704" onerror="void 0"></script>
+<script src="ayuda.js?v=20260915-1704"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -8446,6 +8465,52 @@ function stEstilo(activo){
 function stSetTipo(sk, t){
   window.ST_TIPO[sk] = t;
   try{ renderStats(); }catch(e){}
+}
+</script>
+
+<script>
+/* ══ BORRAR LOS SCOUTS TILDADOS, DESDE LA PANTALLA DE INICIO ════════════════
+   Reusa borrarPartidosSel(), que ya sabe borrar de los seis lugares donde
+   vive un partido: la lista, el abierto, la caja negra, IndexedDB, la copia
+   previa al drill y la nube. Aca solo se le pasan los que se tildaron. */
+function iniPintarBorrar(){
+  var n = document.querySelectorAll('.inicheck:checked').length;
+  var b = document.getElementById('ini-borrar');
+  if(!b) return;
+  b.style.display = n ? 'inline-flex' : 'none';
+  b.textContent = '🗑 Borrar ' + n;
+}
+
+function iniBorrarSel(){
+  var marc = Array.from(document.querySelectorAll('.inicheck:checked')).map(function(c){ return c.value; });
+  if(!marc.length){ toast('Tildá al menos uno', true); return; }
+
+  /* Se le presta la seleccion a la funcion de siempre: se crean casillas
+     ocultas con la clase que ella busca, se la llama, y se sacan. Asi el
+     borrado es exactamente el mismo y no hay dos caminos que mantener. */
+  var tmp = document.createElement('div');
+  tmp.style.display = 'none';
+  marc.forEach(function(id){
+    var c = document.createElement('input');
+    c.type = 'checkbox'; c.className = 'pcheck'; c.value = id; c.checked = true;
+    tmp.appendChild(c);
+  });
+  document.body.appendChild(tmp);
+  try{ borrarPartidosSel(); }
+  catch(e){ toast('No pude borrar: ' + e.message, true); }
+  finally{
+    if(tmp.parentNode) tmp.parentNode.removeChild(tmp);
+    setTimeout(function(){
+      try{ renderInicio(); iniPintarBorrar(); }catch(e){}
+    }, 400);
+  }
+}
+
+function iniTildarTodos(){
+  var cs = document.querySelectorAll('.inicheck');
+  var todos = document.querySelectorAll('.inicheck:checked').length === cs.length;
+  cs.forEach(function(c){ c.checked = !todos; });
+  iniPintarBorrar();
 }
 </script>
 </body>
