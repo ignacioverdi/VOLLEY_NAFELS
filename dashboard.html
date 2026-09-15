@@ -16,13 +16,13 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260915-1639" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260915-1639" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260915-1639"></script>
-<script src="filtro_tipo.js?v=20260915-1639" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260915-1641" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260915-1641" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260915-1641"></script>
+<script src="filtro_tipo.js?v=20260915-1641" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
-  <script src="objetivos_config.js?v=20260915-1639" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260915-1641" onerror="void 0"></script>
 
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -40,7 +40,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20260915-1639" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260915-1641" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   
@@ -175,31 +175,51 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 0%,rgb
    Se marca SOLO la celda, no la fila entera, para que quede claro que lo que
    se abre son ESAS acciones y no todas las del jugador. */
 td.dbat-clic{
-  position:relative;
   cursor:pointer;
-  border-radius:6px;
-  transition:background .12s ease, transform .12s ease, box-shadow .12s ease;
 }
-td.dbat-clic:hover{
-  background:rgba(255,255,255,.09);
-  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.28);
-  transform:scale(1.14);
+
+/* ══ EL CIRCULO DETRAS DEL NUMERO ═══════════════════════════════════════════
+   El primer intento pintaba la CELDA entera. No se notaba: la celda es ancha
+   y el color quedaba diluido en todo ese espacio, lejos del numero.
+
+   Ahora el numero va adentro de su propia burbuja —un <span>— y lo que se
+   pinta es esa burbuja, del tamanio del numero. Al pasar el mouse aparece un
+   circulo con fondo, borde claro y el numero en blanco: se ve de una que ahi
+   se puede tocar. */
+td.dbat-clic .dbat-n{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:30px;
+  height:30px;
+  padding:0 7px;
+  border-radius:999px;
+  border:1.5px solid transparent;
+  transition:background .14s ease, border-color .14s ease,
+             box-shadow .14s ease, transform .14s ease, color .14s ease;
+}
+td.dbat-clic:hover .dbat-n{
+  background:rgba(255,255,255,.14);
+  border-color:rgba(255,255,255,.45);
+  box-shadow:0 0 0 4px rgba(255,255,255,.07);
+  transform:scale(1.1);
   color:#fff !important;
 }
-td.dbat-clic:hover::after{
-  content:'\1F3AC';
-  position:absolute;
-  top:1px; right:2px;
-  font-size:9px;
-  opacity:.75;
+td.dbat-clic:active .dbat-n{
+  transform:scale(.97);
+  background:rgba(255,255,255,.22);
 }
-td.dbat-clic:active{ transform:scale(1.04); }
 
-/* En el telefono no hay mouse: se marca con un punteado permanente para que
-   igual se vea que ahi hay algo. */
+/* En el telefono no hay mouse: el circulo se deja puesto, tenue, para que
+   igual se vea que el numero se puede tocar. */
 @media (hover:none){
-  td.dbat-clic{ text-decoration:underline dotted rgba(255,255,255,.35); text-underline-offset:3px; }
-  td.dbat-clic:hover{ transform:none; }
+  td.dbat-clic .dbat-n{
+    border-color:rgba(255,255,255,.18);
+    background:rgba(255,255,255,.05);
+  }
+  td.dbat-clic:hover .dbat-n{ transform:none; }
+}
+
 }
 
 </style>
@@ -611,15 +631,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260915-1639" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260915-1639"></script>
+<script src="firebase.js?v=20260915-1641" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260915-1641"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260915-1639">
+<link rel="stylesheet" href="movil.css?v=20260915-1641">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260915-1639" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260915-1641" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -1581,7 +1601,8 @@ function renderEqContent(){
                 + dbatURL(j.c, skVid, _val) + '\',\'_blank\')"'
                 + ' title="Ver estas acciones en video"';
           }
-          return'<td'+_cl+' style="font-size:'+(c.b?'16':'13')+'px;font-weight:'+(c.b?900:700)+';color:'+c.c+';'+(_val&&c.v?'cursor:pointer;':'')+(i===0?'border-left:2px solid '+cfg.color+'22':'')+'">'+c.v+'</td>';}).join('')
+          var _cont = (_val && c.v) ? '<span class="dbat-n">'+c.v+'</span>' : c.v;
+          return'<td'+_cl+' style="font-size:'+(c.b?'16':'13')+'px;font-weight:'+(c.b?900:700)+';color:'+c.c+';'+(i===0?'border-left:2px solid '+cfg.color+'22':'')+'">'+_cont+'</td>';}).join('')
       +'</tr>';
   });
   if(!hasData)html+='<tr><td colspan="20" class="empty">Sin datos</td></tr>';
@@ -2353,11 +2374,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260915-1639"></script>
-<script src="lang.js?v=20260915-1639"></script>
-<script src="temporadas_menu.js?v=20260915-1639"></script>
-<script src="app_offline.js?v=20260915-1639"></script>
-<script src="ayuda.js?v=20260915-1639"></script>
+<script src="chat_nafels.js?v=20260915-1641"></script>
+<script src="lang.js?v=20260915-1641"></script>
+<script src="temporadas_menu.js?v=20260915-1641"></script>
+<script src="app_offline.js?v=20260915-1641"></script>
+<script src="ayuda.js?v=20260915-1641"></script>
 
 <!-- Los archivos de video (datos_video_*.js.enc) se sacaron de esta
      pantalla: pesan unos 15 MB por temporada, descifrarlos son mas de
