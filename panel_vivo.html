@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260915-1704"></script>
-<script src="selector_categoria.js?v=20260915-1704"></script>
-<script src="lang.js?v=20260915-1704"></script>
+<script src="categorias_club.js?v=20260915-1709"></script>
+<script src="selector_categoria.js?v=20260915-1709"></script>
+<script src="lang.js?v=20260915-1709"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260915-1704">
+<link rel="stylesheet" href="movil.css?v=20260915-1709">
 </head>
 <body>
 
@@ -1237,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260915-1704" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260915-1704"></script>
-<script src="objetivos.js?v=20260915-1704" onerror="void 0"></script>
-<script src="video_delay.js?v=20260915-1704" onerror="void 0"></script>
+<script src="firebase.js?v=20260915-1709" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260915-1709"></script>
+<script src="objetivos.js?v=20260915-1709" onerror="void 0"></script>
+<script src="video_delay.js?v=20260915-1709" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260915-1704" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260915-1704"></script>
+<script src="plantel_nafels.js?v=20260915-1709" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260915-1709"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -2624,20 +2624,112 @@ function reabrirPunto(){
 
 /* Manual 2.6.1: Ctrl+R busca un código en la lista */
 function buscarCodigo(){
-  const q = prompt('Buscar en la lista de acciones (ej: 14A, RQ#, *p):');
-  if(!q) return;
-  const t = q.trim().toUpperCase();
-  const desde = (SEL_I>=0 ? SEL_I+1 : 0);
-  for(let k=0;k<M.codes.length;k++){
-    const i=(desde+k)%M.codes.length;
-    if(M.codes[i].c.toUpperCase().includes(t)){
-      SEL_I=i; renderCodes();
-      const el=document.querySelector('.crow.sel'); if(el && el.scrollIntoView) el.scrollIntoView({block:'center'});
-      toast('Encontrado en la acción '+(i+1)+' de '+M.codes.length);
-      return;
+  /* ══ BUSCADOR DE CODIGOS (manual 9.6.1 "Free Search") ══════════════════════
+     Antes esto era un prompt: escribias, saltaba a UNA coincidencia y se
+     cerraba. Si el #2 tenia 14 recepciones, para ver la tercera habia que
+     abrir el prompt tres veces.
+
+     El manual describe otra cosa: se escribe un patron parcial —"*05" para
+     todo lo del jugador 5 del local— y el programa muestra TODAS las que
+     coinciden, y desde ahi se recorren.
+
+     Aca queda igual: un panel fijo con el patron, cuantas hay, en cual estas,
+     y flechas para ir a la anterior y la siguiente. Al elegir, la lista de
+     codigos salta a esa accion y la resalta. */
+  var caja = document.getElementById('bc-caja');
+  if(caja){ document.getElementById('bc-q').focus(); return; }
+
+  caja = document.createElement('div');
+  caja.id = 'bc-caja';
+  caja.style.cssText = 'position:fixed;right:14px;bottom:14px;z-index:99999;'
+    + 'background:#0f172a;border:1px solid rgba(148,163,184,.3);border-radius:12px;'
+    + 'padding:10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.5);'
+    + 'font-family:inherit;min-width:250px';
+  caja.innerHTML =
+      '<div style="display:flex;align-items:center;gap:6px;margin-bottom:7px">'
+    +   '<span style="font-size:10px;letter-spacing:1.4px;color:#64748b;flex:1">BUSCAR CÓDIGO</span>'
+    +   '<span onclick="bcCerrar()" style="cursor:pointer;color:#94a3b8;font-size:15px;line-height:1">×</span>'
+    + '</div>'
+    + '<input id="bc-q" type="text" placeholder="*05  ·  RQ#  ·  14A" '
+    +   'oninput="bcBuscar()" onkeydown="bcTecla(event)" '
+    +   'style="width:100%;padding:6px 8px;border-radius:7px;background:rgba(15,23,42,.8);'
+    +   'border:1px solid rgba(148,163,184,.28);color:#e2e8f0;font-size:13px;'
+    +   'font-family:ui-monospace,monospace;box-sizing:border-box">'
+    + '<div style="display:flex;align-items:center;gap:6px;margin-top:7px">'
+    +   '<button onclick="bcIr(-1)" class="tbtn" style="padding:3px 9px">◀</button>'
+    +   '<span id="bc-cnt" style="flex:1;text-align:center;font-size:12px;color:#94a3b8">—</span>'
+    +   '<button onclick="bcIr(1)" class="tbtn" style="padding:3px 9px">▶</button>'
+    + '</div>'
+    + '<div id="bc-lista" style="margin-top:7px;max-height:180px;overflow:auto;font-size:12px"></div>';
+  document.body.appendChild(caja);
+  document.getElementById('bc-q').focus();
+}
+
+var BC = { hits: [], cur: -1 };
+
+function bcCerrar(){
+  var c = document.getElementById('bc-caja');
+  if(c && c.parentNode) c.parentNode.removeChild(c);
+  BC = { hits: [], cur: -1 };
+}
+
+function bcBuscar(){
+  var q = (document.getElementById('bc-q').value || '').trim().toUpperCase();
+  BC.hits = [];
+  if(q){
+    for(var i=0;i<M.codes.length;i++){
+      var c = (M.codes[i].c || '').toUpperCase();
+      if(c.indexOf(q) >= 0) BC.hits.push(i);
     }
   }
-  toast('No hay ninguna acción con «'+q+'»',true);
+  /* Arranca siempre en la PRIMERA, como pide el manual: se ve la mas vieja y
+     desde ahi se baja hasta la que se busca. */
+  BC.cur = BC.hits.length ? 0 : -1;
+  bcPintar();
+  if(BC.cur >= 0) bcSaltar();
+}
+
+function bcIr(paso){
+  if(!BC.hits.length) return;
+  BC.cur = (BC.cur + paso + BC.hits.length) % BC.hits.length;
+  bcPintar(); bcSaltar();
+}
+
+function bcSaltar(){
+  var i = BC.hits[BC.cur];
+  if(i === undefined) return;
+  SEL_I = i;
+  try{ renderCodes(); }catch(e){}
+  var el = document.querySelector('.crow.sel');
+  if(el && el.scrollIntoView) el.scrollIntoView({block:'center', behavior:'smooth'});
+}
+
+function bcPintar(){
+  var cnt = document.getElementById('bc-cnt');
+  var lis = document.getElementById('bc-lista');
+  if(!cnt) return;
+  if(!BC.hits.length){
+    cnt.textContent = (document.getElementById('bc-q').value.trim() ? 'sin coincidencias' : '—');
+    if(lis) lis.innerHTML = '';
+    return;
+  }
+  cnt.innerHTML = '<b style="color:#e2e8f0">' + (BC.cur+1) + '</b> de <b style="color:#e2e8f0">'
+                + BC.hits.length + '</b>';
+  if(!lis) return;
+  lis.innerHTML = BC.hits.map(function(idx, n){
+    var c = M.codes[idx];
+    return '<div onclick="BC.cur='+n+';bcPintar();bcSaltar()" style="padding:3px 6px;cursor:pointer;'
+         + 'display:flex;gap:8px;border-radius:5px;'
+         + (n===BC.cur ? 'background:rgba(232,25,44,.18);color:#fff' : 'color:#cbd5e1') + '">'
+         + '<span style="color:#64748b;min-width:34px">#'+(idx+1)+'</span>'
+         + '<span style="font-family:ui-monospace,monospace;flex:1">'+(c.c||'')+'</span>'
+         + '<span style="color:#64748b">set '+(c.set||'-')+'</span></div>';
+  }).join('');
+}
+
+function bcTecla(e){
+  if(e.key === 'Enter'){ e.preventDefault(); bcIr(e.shiftKey ? -1 : 1); }
+  else if(e.key === 'Escape'){ e.preventDefault(); bcCerrar(); }
 }
 
 /* Manual 2.6.1: Ctrl+U (comando UPDATE) recalcula las tablas */
@@ -8288,8 +8380,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260915-1704" onerror="void 0"></script>
-<script src="ayuda.js?v=20260915-1704"></script>
+<script src="volver_inicio.js?v=20260915-1709" onerror="void 0"></script>
+<script src="ayuda.js?v=20260915-1709"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
