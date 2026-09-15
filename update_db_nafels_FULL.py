@@ -570,10 +570,21 @@ def parse_dvw_both(fpath, temporada):
                     'date':date,'rival':rival,'atype':current_atype,'fase_dv':fase_dv,
                     'srv_orig':prev_srv_orig,'temporada':temporada}
 
+            # ══ LA MAQUINA DE SAQUE NO ES UNA JUGADORA ═══════════════════
+            #  El #8 se scoutea con un numero para poder cargar sus saques,
+            #  pero es una MAQUINA: no juega, no recibe, no ataca.
+            #
+            #  Antes se la filtraba SOLO en el saque. Si el asistente le
+            #  cargaba por error una recepcion o un ataque —o si la maquina
+            #  quedaba anotada en una jugada— esa accion entraba como si
+            #  fuera de una jugadora real y ensuciaba las tablas y las
+            #  baterias con un numero que no existe en el plantel.
+            #
+            #  Ahora no entra en ninguno.
+            if _es_maquina(pnum): continue
+
             if   skill=='A': atk[pnum].append(action)
-            elif skill=='S':
-                    # el saque de la maquina no es de nadie: no suma
-                    if not _es_maquina(pnum): srv[pnum].append(action)
+            elif skill=='S': srv[pnum].append(action)
             elif skill=='R': rec[pnum].append(action)
             elif skill=='E': sets[pnum].append(action)
             elif skill=='B': blk[pnum].append(action)

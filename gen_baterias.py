@@ -150,10 +150,19 @@ def _calc_baterias(codes, side):
         pfx=l[0]; body=l[1:].split(';')[0]
         if len(body)<5 or not re.match(r'^\d\d', body): continue
         num=body[0:2]; skill=body[2]; res=body[4]
+
+        # ══ LA MAQUINA DE SAQUE NO ES UNA JUGADORA ═══════════════════════════
+        #  Antes se la salteaba SOLO en el saque. Si por un error de tipeo
+        #  quedaba anotada en una recepcion, un ataque o una defensa, esa
+        #  accion entraba a las baterias como si fuera de una jugadora real:
+        #  aparecia un numero que no esta en el plantel y los porcentajes del
+        #  equipo salian con acciones que nadie hizo.
+        if _es_maquina(num): continue
+
         if skill=='S':
             last_rec=None; rec_valida=False
             # La maquina abre el punto pero su saque no es de nadie.
-            if pfx==side and not _es_maquina(num):
+            if pfx==side:
                 P=get(num); P['S']['T']+=1
                 if res in P['S']: P['S'][res]+=1
         elif skill=='D' and pfx==side:
