@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Plan de Partido — NÄFELS</title>
+<title data-t="Plan de Partido — NÄFELS">Plan de Partido — NÄFELS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -185,84 +185,96 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260916-2134">
+<link rel="stylesheet" href="movil.css?v=20260916-2140">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="categorias_club.js?v=20260916-2134"></script>
-<script src="selector_categoria.js?v=20260916-2134"></script>
-<script src="mi_fila.js?v=20260916-2134" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260916-2140"></script>
+<script src="selector_categoria.js?v=20260916-2140"></script>
+<script src="mi_fila.js?v=20260916-2140" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
 <header class="masthead">
   <div class="eyebrow">NÄFELS · DataVolley 4</div>
-  <h1>Plan de partido</h1>
-  <div class="sub">Análisis de: <b id="teamname" style="color:var(--red)">—</b></div>
+  <h1 data-t="Plan de partido"><span data-t="Plan de partido"><span data-t="Plan de partido">Plan de partido</span></span></h1>
+  <div class="sub"><span data-t="Análisis de:"><span data-t="Análisis de:">Análisis de:</span></span> <b id="teamname" style="color:var(--red)">—</b></div>
   <div class="legend">
-    <span><span class="sw" style="background:var(--h1)"></span>poco <span class="sw" style="background:var(--h2);margin-left:5px"></span>medio <span class="sw" style="background:var(--h3);margin-left:5px"></span>mucho</span>
-    <span><b style="color:var(--red)">▶ doble-click</b> en una zona = video</span>
-    <span>el número = golpes/saques, no puntos</span>
+    <span><span class="sw" style="background:var(--h1)"></span><span data-t="poco"><span data-t="poco">poco</span></span> <span class="sw" style="background:var(--h2);margin-left:5px"></span><span data-t="medio"><span data-t="medio">medio</span></span> <span class="sw" style="background:var(--h3);margin-left:5px"></span><span data-t="mucho"><span data-t="mucho">mucho</span></span></span>
+    <span><b style="color:var(--red)" data-t="▶ doble-click"><span data-t="▶ doble-click"><span data-t="▶ doble-click">▶ doble-click</span></span></b> <span data-t="en una zona = video"><span data-t="en una zona = video">en una zona = video</span></span></span>
+    <span data-t="el número = golpes/saques, no puntos"><span data-t="el número = golpes/saques, no puntos"><span data-t="el número = golpes/saques, no puntos">el número = golpes/saques, no puntos</span></span></span>
   </div>
 </header>
-<div class="matchbar"><span class="mlab">Equipo</span>
+<div class="matchbar"><span class="mlab" data-t="Equipo"><span data-t="Equipo"><span data-t="Equipo">Equipo</span></span></span>
   <span id="teambtns" class="teambtns" style="display:none"></span>
   <select id="teamsel" class="teamsel"></select>
-  <span class="mlab" style="margin-left:6px">Filtrar</span>
+  <span class="mlab" style="margin-left:6px" data-t="Filtrar"><span data-t="Filtrar"><span data-t="Filtrar">Filtrar</span></span></span>
   <!-- Partido / Entrenamiento. Va primero porque manda sobre los otros dos:
        recorta que sesiones existen antes de elegir rival o partido. -->
   <div class="msel" id="tipobar" style="display:none">
-    <button class="mbtn" data-pptipo="todos" onclick="ppSetTipo('todos')">Todos</button>
-    <button class="mbtn" data-pptipo="P"     onclick="ppSetTipo('P')">Partidos</button>
-    <button class="mbtn" data-pptipo="E"     onclick="ppSetTipo('E')">Entrenamientos</button>
+    <button class="mbtn" data-pptipo="todos" onclick="ppSetTipo('todos')" data-t="Todos"><span data-t="Todos"><span data-t="Todos">Todos</span></span></button>
+    <button class="mbtn" data-pptipo="P"     onclick="ppSetTipo('P')" data-t="Partidos"><span data-t="Partidos"><span data-t="Partidos">Partidos</span></span></button>
+    <button class="mbtn" data-pptipo="E"     onclick="ppSetTipo('E')" data-t="Entrenamientos">Entrenamientos</button>
   </div>
   <div class="msel"><button class="mbtn" onclick="togglePanel('r')">Rival <b id="rc"></b> ▾</button><div class="mpanel" id="rpanel"></div></div>
-  <div class="msel"><button class="mbtn" onclick="togglePanel('m')">Partido <b id="mc"></b> ▾</button><div class="mpanel" id="mpanel"></div></div>
+  <div class="msel"><button class="mbtn" onclick="togglePanel('m')"><span data-t="Partido"><span data-t="Partido">Partido</span></span> <b id="mc"></b> ▾</button><div class="mpanel" id="mpanel"></div></div>
   <!-- El minimo de acciones, ahora en pantalla. Antes estaba escondido en el
        generador (30 saques, 30 recepciones) y no habia forma de moverlo sin
        tocar el codigo. En 0 se ve todo; subiendolo se sacan de la vista los
        jugadores con pocas pelotas, que es util cuando mirás a un rival con una
        temporada entera encima. -->
-  <span class="mlab" style="margin-left:6px">Mín. acciones</span>
+  <span class="mlab" style="margin-left:6px" data-t="Mín. acciones"><span data-t="Mín. acciones"><span data-t="Mín. acciones">Mín. acciones</span></span></span>
   <input id="minacc" type="number" min="0" step="1" value="0" title="Oculta a los jugadores con menos acciones que este número"
          style="width:64px;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:7px;padding:5px 7px;font-family:inherit;font-weight:700;font-size:12px"
          oninput="ppVisibilidad()">
   <span class="mhint" id="mhint"></span></div>
 <div class="tabsbar" id="tabsbar">
   <span class="tabteam" id="tabteam">—</span>
-  <select id="focusSel" onchange="applyFocus()" style="margin-left:8px;background:#fff;color:#111;border:1px solid var(--border);border-radius:8px;padding:5px 9px;font-family:inherit;font-weight:700;font-size:12px;max-width:220px"><option value="all">Todos los jugadores</option></select>
-  <button class="ptab active" data-tab="armador" onclick="setTab('armador')">Distribución armador</button>
-  <button class="ptab" data-tab="ataque" onclick="setTab('ataque')">Direcciones ataque</button>
-  <button class="ptab" data-tab="saque" onclick="setTab('saque')">Direcciones saque</button>
-  <button class="ptab" data-tab="recepcion" onclick="setTab('recepcion')">Zonas recepción</button>
-  <button class="ptab" data-tab="defensa" onclick="setTab('defensa')">Zonas defensa</button>
-  <button class="ptab" data-tab="bloqueo" onclick="setTab('bloqueo')">Acciones de bloqueo</button>
+  <select id="focusSel" onchange="applyFocus()" style="margin-left:8px;background:#fff;color:#111;border:1px solid var(--border);border-radius:8px;padding:5px 9px;font-family:inherit;font-weight:700;font-size:12px;max-width:220px"><option value="all" data-t="Todos los jugadores">Todos los jugadores</option></select>
+  <button class="ptab active" data-tab="armador" onclick="setTab('armador')"><span data-t="Distribución armador"><span data-t="Distribución armador">Distribución armador</span></span></button>
+  <button class="ptab" data-tab="ataque" onclick="setTab('ataque')"><span data-t="Direcciones ataque"><span data-t="Direcciones ataque">Direcciones ataque</span></span></button>
+  <button class="ptab" data-tab="saque" onclick="setTab('saque')"><span data-t="Direcciones saque"><span data-t="Direcciones saque">Direcciones saque</span></span></button>
+  <button class="ptab" data-tab="recepcion" onclick="setTab('recepcion')"><span data-t="Zonas recepción"><span data-t="Zonas recepción">Zonas recepción</span></span></button>
+  <button class="ptab" data-tab="defensa" onclick="setTab('defensa')"><span data-t="Zonas defensa"><span data-t="Zonas defensa">Zonas defensa</span></span></button>
+  <button class="ptab" data-tab="bloqueo" onclick="setTab('bloqueo')"><span data-t="Acciones de bloqueo"><span data-t="Acciones de bloqueo">Acciones de bloqueo</span></span></button>
 </div>
 <div class="armsec" id="armsec">
-  <div class="armhead"><h2>Distribución del armador</h2><span class="sub" id="armname">—</span></div>
+  <div class="armhead"><h2 data-t="Distribución del armador"><span data-t="Distribución del armador"><span data-t="Distribución del armador">Distribución del armador</span></span></h2><span class="sub" id="armname">—</span></div>
   <div class="armctrl">
     <div class="grp" id="armsetsel"></div>
-    <div class="grp"><label>Fase</label><select id="armfase" class="armsel" onchange="setArmPhase(this.value)"><option value="SO">Side-out</option><option value="TR">Transición</option><option value="all">Todo</option></select></div>
-    <div class="grp" id="armrecgrp"><label>Recepción</label><select id="armrecsel" class="armsel" onchange="setArmRec(this.value)"><option value="all">Toda</option><option value="pos">#+</option><option value="neg">!−</option></select></div>
-    <div class="grp" id="armreczgrp"><label>Recep. desde</label><select id="armreczsel" class="armsel" onchange="setArmRecZone(this.value)"><option value="all">Todas</option><option value="r1">Z1</option><option value="r6">Z6</option><option value="r5">Z5</option></select></div>
-    <div class="grp"><label>Recibe</label><select id="armrecnum" class="armsel" onchange="setArmRecNum(this.value)"></select></div>
-    <div class="grp"><label>Llamada</label><select id="armcall" class="armsel" onchange="setArmCall(this.value)"></select></div>
+    <div class="grp"><label data-t="Fase"><span data-t="Fase"><span data-t="Fase">Fase</span></span></label><select id="armfase" class="armsel" onchange="setArmPhase(this.value)"><option value="SO" data-t="Side-out">Side-out</option><option value="TR" data-t="Transición">Transición</option><option value="all" data-t="Todo">Todo</option></select></div>
+    <div class="grp" id="armrecgrp"><label data-t="Recepción"><span data-t="Recepción"><span data-t="Recepción">Recepción</span></span></label><select id="armrecsel" class="armsel" onchange="setArmRec(this.value)"><option value="all" data-t="Toda">Toda</option><option value="pos">#+</option><option value="neg">!−</option></select></div>
+    <div class="grp" id="armreczgrp"><label data-t="Recep. desde"><span data-t="Recep. desde"><span data-t="Recep. desde">Recep. desde</span></span></label><select id="armreczsel" class="armsel" onchange="setArmRecZone(this.value)"><option value="all" data-t="Todas">Todas</option><option value="r1">Z1</option><option value="r6">Z6</option><option value="r5">Z5</option></select></div>
+    <div class="grp"><label data-t="Recibe"><span data-t="Recibe"><span data-t="Recibe">Recibe</span></span></label><select id="armrecnum" class="armsel" onchange="setArmRecNum(this.value)"></select></div>
+    <div class="grp"><label data-t="Llamada"><span data-t="Llamada"><span data-t="Llamada">Llamada</span></span></label><select id="armcall" class="armsel" onchange="setArmCall(this.value)"></select></div>
   </div>
   <div class="armgrid" id="armgrid"></div>
-  <div class="armnote">Por zona: <b>pelotas armadas</b> (arriba) y abajo <b>% distribución · % punto (#)</b>. Cancha espejada (vista del rival). Doble-click en zona con ▶ = video (partidos con 🎥).</div>
+  <div class="armnote"><span data-t="Por zona:"><span data-t="Por zona:">Por zona:</span></span> <b data-t="pelotas armadas"><span data-t="pelotas armadas"><span data-t="pelotas armadas">pelotas armadas</span></span></b> <span data-t="(arriba) y abajo"><span data-t="(arriba) y abajo">(arriba) y abajo</span></span> <b data-t="% distribución · % punto (#)"><span data-t="% distribución · % punto (#)"><span data-t="% distribución · % punto (#)">% distribución · % punto (#)</span></span></b><span data-t=". Cancha espejada (vista del rival). Doble-click en zona con ▶ = video (partidos con 🎥)."><span data-t=". Cancha espejada (vista del rival). Doble-click en zona con ▶ = video (partidos con 🎥).">. Cancha espejada (vista del rival). Doble-click en zona con ▶ = video (partidos con 🎥).</span></span></div>
 </div>
-<div class="tabgroup" id="tab-ataque"><div class="rolehead">Puntas <span>ataque · espejo pos. 4 · línea = z1/z9/z2</span></div>
+<div class="tabgroup" id="tab-ataque"><div class="rolehead"><span data-t="Puntas"><span data-t="Puntas">Puntas</span></span> <span data-t="ataque · espejo pos. 4 · línea = z1/z9/z2"><span data-t="ataque · espejo pos. 4 · línea = z1/z9/z2"><span data-t="ataque · espejo pos. 4 · línea = z1/z9/z2">ataque · espejo pos. 4 · línea = z1/z9/z2</span></span></span></div>
 <div class="grid3" id="row-punta"></div>
-<div class="rolehead">Centrales <span>ataque · primer tiempo · izq/recto/der (a confirmar)</span></div>
+<div class="rolehead"><span data-t="Centrales"><span data-t="Centrales">Centrales</span></span> <span>ataque · primer tiempo · izq/recto/der (a confirmar)</span></div>
 <div class="grid3" id="row-central"></div>
-<div class="rolehead">Opuestos <span>ataque · espejo invertido pos. 2 · línea = z5/z7/z4</span></div>
+<div class="rolehead"><span data-t="Opuestos"><span data-t="Opuestos">Opuestos</span></span> <span data-t="ataque · espejo invertido pos. 2 · línea = z5/z7/z4"><span data-t="ataque · espejo invertido pos. 2 · línea = z5/z7/z4"><span data-t="ataque · espejo invertido pos. 2 · línea = z5/z7/z4">ataque · espejo invertido pos. 2 · línea = z5/z7/z4</span></span></span></div>
 <div class="grid2" id="row-opuesto"></div>
-</div><div class="tabgroup" id="tab-saque"><div class="rolehead">Saque <span>dónde y cómo saca · azul · fuerza = fuerte/medio/fácil</span></div>
+<!-- ══ ARMADORES ═══════════════════════════════════════════════════════════
+     Faltaba el grupo. Los armadores atacan poco pero atacan —el segundo
+     toque, la finta— y sus ataques caian en el grupo de opuestos, que no es
+     donde van. Ahora tienen el suyo, con el acumulado del puesto arriba
+     igual que los otros tres. -->
+<div class="rolehead"><span data-t="Armadores"><span data-t="Armadores">Armadores</span></span> <span data-t="ataque · segundo toque y fintas"><span data-t="ataque · segundo toque y fintas"><span data-t="ataque · segundo toque y fintas">ataque · segundo toque y fintas</span></span></span></div>
+<div class="grid2" id="row-armador"></div>
+<!-- El libero no ataca. Si aparece algo aca es un error de tipeo en el
+     scout, y conviene que se vea en vez de quedar escondido entre los
+     puntas. Si no hay nada, la fila no se muestra. -->
+<div class="rolehead" id="head-libero" style="display:none">Líberos <span data-t="no deberían tener ataques · si aparece alguno, revisá el scout"><span data-t="no deberían tener ataques · si aparece alguno, revisá el scout"><span data-t="no deberían tener ataques · si aparece alguno, revisá el scout">no deberían tener ataques · si aparece alguno, revisá el scout</span></span></span></div>
+<div class="grid2" id="row-libero"></div>
+</div><div class="tabgroup" id="tab-saque"><div class="rolehead">Saque <span data-t="dónde y cómo saca · azul · fuerza = fuerte/medio/fácil"><span data-t="dónde y cómo saca · azul · fuerza = fuerte/medio/fácil"><span data-t="dónde y cómo saca · azul · fuerza = fuerte/medio/fácil">dónde y cómo saca · azul · fuerza = fuerte/medio/fácil</span></span></span></div>
 <div class="grid3" id="row-saque"></div>
-</div><div class="tabgroup" id="tab-recepcion"><div class="rolehead">Recepción <span>cómo recibe según el saque rival · naranja · zona donde recibe</span></div>
+</div><div class="tabgroup" id="tab-recepcion"><div class="rolehead"><span data-t="Recepción"><span data-t="Recepción">Recepción</span></span> <span data-t="cómo recibe según el saque rival · naranja · zona donde recibe"><span data-t="cómo recibe según el saque rival · naranja · zona donde recibe"><span data-t="cómo recibe según el saque rival · naranja · zona donde recibe">cómo recibe según el saque rival · naranja · zona donde recibe</span></span></span></div>
 <div class="grid3" id="row-reception"></div>
-</div><div class="tabgroup" id="tab-defensa"><div class="rolehead">Defensa <span>dónde y cómo defiende · verde · zona donde levanta la pelota</span></div>
+</div><div class="tabgroup" id="tab-defensa"><div class="rolehead"><span data-t="Defensa"><span data-t="Defensa">Defensa</span></span> <span data-t="dónde y cómo defiende · verde · zona donde levanta la pelota"><span data-t="dónde y cómo defiende · verde · zona donde levanta la pelota"><span data-t="dónde y cómo defiende · verde · zona donde levanta la pelota">dónde y cómo defiende · verde · zona donde levanta la pelota</span></span></span></div>
 <div class="grid3" id="row-defense"></div>
-</div><div class="tabgroup" id="tab-bloqueo"><div class="rolehead">Bloqueo <span>dónde bloquea según la zona de origen del ataque rival · celeste</span></div>
+</div><div class="tabgroup" id="tab-bloqueo"><div class="rolehead"><span data-t="Bloqueo"><span data-t="Bloqueo">Bloqueo</span></span> <span data-t="dónde bloquea según la zona de origen del ataque rival · celeste"><span data-t="dónde bloquea según la zona de origen del ataque rival · celeste"><span data-t="dónde bloquea según la zona de origen del ataque rival · celeste">dónde bloquea según la zona de origen del ataque rival · celeste</span></span></span></div>
 <div class="grid3" id="row-bloqueo"></div>
 </div><footer>Ataque (rojo): dirección según recepción. Saque (azul): tipo, zona de origen, momento (puntos del set) y fuerza sobre la recepción; / = vendido (2ª mejor). Recepción (naranja): según tipo/zona del saque rival; zona real de caída de la pelota (todas las zonas). Video por timestamp (reproduce en partidos publicados en la app). Muestras chicas = tomar con cuidado.</footer>
 </div>
@@ -276,18 +288,18 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
         <div class="vplayer"><div id="ytplayer"></div><div class="vshield" id="vshield" onclick="togglePlay()" title="Click o barra espaciadora: play/pausa"></div></div>
         <div class="vctrls">
           <button class="sec" onclick="prevClip()">◀</button>
-          <button onclick="replayCur()">↻ Repetir</button>
+          <button onclick="replayCur()" data-t="↻ Repetir"><span data-t="↻ Repetir"><span data-t="↻ Repetir">↻ Repetir</span></span></button>
           <button class="sec" onclick="nextClip()">▶</button>
-          <button class="sec" id="vfsbtn" onclick="toggleFullV()" title="Pantalla completa (tecla F)">⛶ Pantalla completa</button>
+          <button class="sec" id="vfsbtn" onclick="toggleFullV()" title="Pantalla completa (tecla F)" data-t="⛶ Pantalla completa"><span data-t="⛶ Pantalla completa"><span data-t="⛶ Pantalla completa">⛶ Pantalla completa</span></span></button>
           <span class="vcount" id="vcount"></span>
-          <label>Vel <select id="vspeed" onchange="setSpeed(this.value)" style="width:auto"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
-          <label>Antes <input id="vpre" type="number" value="2" min="0" max="20" onchange="pre=+this.value||2"></label>
-          <label>Después <input id="vpost" type="number" value="8" min="0" max="20" onchange="post=+this.value||8"></label>
+          <label><span data-t="Vel"><span data-t="Vel">Vel</span></span> <select id="vspeed" onchange="setSpeed(this.value)" style="width:auto"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
+          <label><span data-t="Antes"><span data-t="Antes">Antes</span></span> <input id="vpre" type="number" value="2" min="0" max="20" onchange="pre=+this.value||2"></label>
+          <label><span data-t="Después"><span data-t="Después">Después</span></span> <input id="vpost" type="number" value="8" min="0" max="20" onchange="post=+this.value||8"></label>
         </div>
       </div>
       <div class="vside">
-        <div class="vside-head"><b>Acciones</b><span id="vselcount"></span><button onclick="clipAll(1)">Todas</button><button onclick="clipAll(0)">Ninguna</button></div>
-        <div class="vside-head2"><button id="vsavebtn" onclick="saveSel()">💾 Guardar</button><label class="vonly"><input type="checkbox" id="vonly" onchange="toggleOnly()"> Solo seleccionadas</label></div>
+        <div class="vside-head"><b data-t="Acciones"><span data-t="Acciones"><span data-t="Acciones">Acciones</span></span></b><span id="vselcount"></span><button onclick="clipAll(1)" data-t="Todas"><span data-t="Todas"><span data-t="Todas">Todas</span></span></button><button onclick="clipAll(0)" data-t="Ninguna"><span data-t="Ninguna"><span data-t="Ninguna">Ninguna</span></span></button></div>
+        <div class="vside-head2"><button id="vsavebtn" onclick="saveSel()" data-t="💾 Guardar"><span data-t="💾 Guardar"><span data-t="💾 Guardar">💾 Guardar</span></span></button><label class="vonly"><input type="checkbox" id="vonly" onchange="toggleOnly()"> <span data-t="Solo seleccionadas"><span data-t="Solo seleccionadas">Solo seleccionadas</span></span></label></div>
         <div id="vlist" class="vlist"></div>
       </div>
     </div>
@@ -308,8 +320,8 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260916-2134"></script>
-<script src="filtro_tipo.js?v=20260916-2134" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260916-2140"></script>
+<script src="filtro_tipo.js?v=20260916-2140" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
   <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
        se cargaba SOLO el de partidos, asi que en una temporada sin partidos
@@ -324,12 +336,12 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20260916-2134"></script>
-<script src="firebase_por_categoria.js?v=20260916-2134"></script>
+<script src="firebase.js?v=20260916-2140"></script>
+<script src="firebase_por_categoria.js?v=20260916-2140"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20260916-2134" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20260916-2140" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -424,22 +436,6 @@ const DGS=[["all","Todas"],["#","Perfecta (#)"],["+","Buena (+)"],["!","Cubre (!
 const DAZ=[["all","Todas"],["4","z4"],["3","z3"],["2","z2"],["6","z6"],["1","z1"],["5","z5"]];
 const BLS=[["all","Todas"],["#","Kill (#)"],["+","Bueno (+)"],["!","Toque (!)"],["-","Malo (\u2212)"],["=","Error (=)"]];
 const ROLECFG={
-  /* ══ ESTE ROL DESAPARECIO EN UNA REGENERACION ════════════════════════════
-     Las tarjetas del armador se siguen creando con role:"armador", pero la
-     configuracion de ese rol no estaba. Al recorrer las tarjetas para
-     enganchar los filtros, ROLECFG["armador"] daba undefined y leer
-     .filters cortaba el script ENTERO, justo antes de la linea que declara
-     las variables del video.
-
-     Consecuencia: openZone existia —las funciones se adelantan solas— pero
-     curP y clips nunca se inicializaban. Por eso el doble clic no abria
-     ningun video, en ninguna seccion: ataque, saque, recepcion, defensa ni
-     bloqueo. Un solo rol faltante rompia toda la pantalla.
-
-     Recuperado tal cual estaba. */
-  armador:{court:4,evIdx:5,subIdx:6,tIdx:7,vIdx:8,tagIdx:0,stats:'atk',pal:'red',
-   filters:[{lab:'Combo',idx:0,opts:CB_O},{lab:'Fase',idx:1,opts:FASE},{lab:'Recepción',idx:1,opts:RECS},{lab:'Recep. desde',idx:3,opts:RECZ},{lab:'Resultado',idx:5,opts:RESS}],
-   dir:{L:["5","7","4"],C:["6","8","3"],D:["1","9","2"]},tiles:['Efic','Kill','Bloq','Línea','Centro','Diag','Hard','Soft','Tip'],hl:[0,3]},
  punta:{court:4,evIdx:5,subIdx:6,tIdx:7,vIdx:8,tagIdx:0,stats:'atk',pal:'red',
    filters:[{lab:'Combo',idx:0,opts:CB_P},{lab:'Fase',idx:1,opts:FASE},{lab:'Recepción',idx:1,opts:RECS},{lab:'Recibe',idx:9,opts:OWN},{lab:'Resultado',idx:5,opts:RESS}],
    dir:{L:["1","9","2"],C:["6","8","3"],D:["5","7","4"]},tiles:['Efic','Kill','Bloq','Línea','Centro','Diag','Hard','Soft','Tip'],hl:[0,3]},
@@ -449,6 +445,21 @@ const ROLECFG={
  opuesto:{court:4,evIdx:5,subIdx:6,tIdx:7,vIdx:8,tagIdx:0,stats:'atk',pal:'red',
    filters:[{lab:'Combo',idx:0,opts:CB_O},{lab:'Fase',idx:1,opts:FASE},{lab:'Recepción',idx:1,opts:RECS},{lab:'Recep. desde',idx:3,opts:RECZ},{lab:'Resultado',idx:5,opts:RESS}],
    dir:{L:["5","7","4"],C:["6","8","3"],D:["1","9","2"]},tiles:['Efic','Kill','Bloq','Línea','Centro','Diag','Hard','Soft','Tip'],hl:[0,3]},
+ /* ══ ARMADORES ════════════════════════════════════════════════════════════
+    Faltaba la configuracion del grupo, y sin ella buildSection reventaba:
+    "Cannot read properties of undefined (reading 'filters')". Por eso la fila
+    de armadores quedaba vacia aunque los datos estuvieran.
+
+    Un armador ataca desde la zona 2, como el opuesto: el segundo toque y la
+    finta salen de ahi. Se copia esa configuracion. */
+ armador:{court:4,evIdx:5,subIdx:6,tIdx:7,vIdx:8,tagIdx:0,stats:'atk',pal:'red',
+   filters:[{lab:'Combo',idx:0,opts:CB_O},{lab:'Fase',idx:1,opts:FASE},{lab:'Recepción',idx:1,opts:RECS},{lab:'Recep. desde',idx:3,opts:RECZ},{lab:'Resultado',idx:5,opts:RESS}],
+   dir:{L:["5","7","4"],C:["6","8","3"],D:["1","9","2"]},tiles:['Efic','Kill','Bloq','Línea','Centro','Diag','Hard','Soft','Tip'],hl:[0,3]},
+ /* El libero no ataca. Si aparece algo aca es un error de tipeo en el scout
+    y conviene verlo, no esconderlo entre los puntas. */
+ libero:{court:4,evIdx:5,subIdx:6,tIdx:7,vIdx:8,tagIdx:0,stats:'atk',pal:'red',
+   filters:[{lab:'Combo',idx:0,opts:CB_P},{lab:'Fase',idx:1,opts:FASE},{lab:'Resultado',idx:5,opts:RESS}],
+   dir:{L:["1","9","2"],C:["6","8","3"],D:["5","7","4"]},tiles:['Efic','Kill','Bloq','Línea','Centro','Diag','Hard','Soft','Tip'],hl:[0,3]},
  saque:{court:2,evIdx:3,tIdx:5,vIdx:6,tagIdx:0,stats:'srv',pal:'blue',
    filters:[{lab:'Tipo',idx:0,opts:STY},{lab:'Desde',idx:1,opts:SDZ},{lab:'Momento',idx:4,opts:SMO,range:true},{lab:'Resultado',idx:3,opts:SRS}],
    dir:null,tiles:['Efic','Aces','Err','Potencia','Flotado','N','Fuerte','Medio','Fácil'],hl:[0,6]},
@@ -619,9 +630,35 @@ function armSoloArmadores(T){
   C.setters = solo;
   return C;
 }
+/* ══ EL MISMO EQUIPO, DOS NOMBRES DISTINTOS ═══════════════════════════════
+   El plan de partido arma sus claves a partir del nombre que trae el .dvw:
+   "AXPO NAFELS" -> "axponafels". El motor de armadores usa la clave del club:
+   "nafels". Mientras hubo partidos de liga —donde el equipo figura como
+   "Näfels"— las dos coincidian y no se notaba.
+
+   Ahora la temporada arranco con entrenamientos solos, todos con el nombre
+   largo, y ARM_SLUG['axponafels'] no existe: la seccion de Distribucion del
+   armador quedaba VACIA aunque los datos estuvieran ahi (251 armados de
+   Vazquez).
+
+   Esta funcion prueba la clave tal cual y, si no encuentra, busca el equipo
+   cuyo nombre se parezca. Asi deja de importar como se llame el archivo. */
+function _armClave(slug, teams){
+  if(!teams) return null;
+  if(teams[slug]) return teams[slug];
+  var limpio = function(x){ return String(x||'').toLowerCase().replace(/[^a-z]/g,''); };
+  var s = limpio(slug);
+  for(var k in teams){
+    var a = limpio(k), b = limpio((teams[k]||{}).name);
+    if(a===s || b===s) return teams[k];
+    if(s && (s.indexOf(a)>=0 || a.indexOf(s)>=0) && a.length>3) return teams[k];
+    if(s && b && (s.indexOf(b)>=0 || b.indexOf(s)>=0) && b.length>3) return teams[k];
+  }
+  return null;
+}
 function armFuente(slug){
-  var P=(window.LIGA_DATA&&LIGA_DATA.teams)?LIGA_DATA.teams[slug]:null;
-  var E=(window.LIGA_DATA_ENT&&LIGA_DATA_ENT.teams)?LIGA_DATA_ENT.teams[slug]:null;
+  var P=(window.LIGA_DATA&&LIGA_DATA.teams)?_armClave(slug, LIGA_DATA.teams):null;
+  var E=(window.LIGA_DATA_ENT&&LIGA_DATA_ENT.teams)?_armClave(slug, LIGA_DATA_ENT.teams):null;
   var hayP=!!(P&&P.setters&&P.setters.length);
   var hayE=!!(E&&E.setters&&E.setters.length);
   var t=(typeof ppTipoActual==='function')?ppTipoActual():'todos';
@@ -631,7 +668,7 @@ function armFuente(slug){
 }
 function renderArmador(){
   var sec=document.getElementById("armsec");
-  var slug=(typeof VIVO!=='undefined'&&VIVO)?TEAM:ARM_SLUG[TEAM];
+  var slug=(typeof VIVO!=='undefined'&&VIVO)?TEAM:(ARM_SLUG[TEAM]||TEAM);
   armTeam=armFuente(slug);
   if(!armTeam||!(armTeam.setters&&armTeam.setters.length)){sec.classList.add("hidden");return;}
   sec.classList.remove("hidden");
@@ -733,7 +770,56 @@ function tiles3(p,cfg){var t=cfg.tiles.map(function(lb,i){var hl=cfg.hl.indexOf(
 function U(role){return role==='saque'?' saques':role==='reception'?' recep.':role==='defense'?' defensas':role==='bloqueo'?' bloqueos':' ataques';}
 function mAll(btn,val){var pop=btn.closest(".mpop");var cbs=pop.querySelectorAll('input[type=checkbox]');cbs.forEach(function(c){c.checked=!!val;});if(cbs[0])cbs[0].dispatchEvent(new Event("change",{bubbles:true}));}
 function _isMulti(fl){return fl.multi||fl.lab==="Resultado";}
-function filterOpts(p,fl){if(fl.lab==="Combo"&&fl.idx===0){var cm={};(p&&p.data||[]).forEach(function(a){if(a[0])cm[a[0]]=1;});return [["all","Todas"]].concat(Object.keys(cm).sort().map(function(c){return [c,c];}));}if(fl.lab==="Recibe"&&fl.idx===9){var NB={};((window.PP_DATA&&window.PP_DATA[TEAM]&&window.PP_DATA[TEAM].players)||[]).forEach(function(pp){NB[pp.num]=pp.name;});var rc={};(p&&p.data||[]).forEach(function(a){var rn=a[9];if(rn>0)rc[rn]=1;});return [["all","Todas"]].concat(Object.keys(rc).map(Number).sort(function(x,y){return x-y;}).map(function(n){return [String(n),"#"+n+" "+(NB[n]?apellidoJS(NB[n]):"")];}));}if(fl.dyn==='combo'){var cc={};(p&&p.data||[]).forEach(function(a){var cb=a[fl.idx]||'';if(cb)cc[cb]=(cc[cb]||0)+1;});return [["all","Todas"]].concat(Object.keys(cc).sort(function(x,y){return cc[y]-cc[x];}).map(function(c){return [c,c+" ("+cc[c]+")"];}));}return fl.opts;}
+
+/* ══ LAS COMBINACIONES, CON NOMBRE ════════════════════════════════════════
+   El menu mostraba el codigo tal cual —"W4", "J1", "Y9"—. El cuerpo tecnico
+   sabe que significa cada uno, pero el jugador no tiene por que, y esta
+   pantalla la miran ellos.
+
+   Cada jugada tiene DOS codigos, uno por familia de tipeo, y los dos son lo
+   mismo. Por eso cada opcion filtra los dos a la vez: el valor es una lista
+   y el filtro ya sabia trabajar con listas.
+
+   La tabla la dicto el cuerpo tecnico. */
+var COMBO_NOMBRES = [
+  [['X5','W4'], 'QUICK IN 4'],   [['V5','G4'], 'HIGH IN 4'],
+  [['X6','W2'], 'QUICK IN 2'],   [['V6','G2'], 'HIGH IN 2'],
+  [['X8','Y9'], 'QUICK IN 1'],   [['V8','G9'], 'HIGH IN 1'],
+  [['XP','Y8'], 'PIPE'],         [['XB','Y1'], 'PIPE 6-1'],
+  [['XR','Y7'], 'PIPE 6-5'],
+  /* Zona 3, confirmado por el cuerpo tecnico: el #5 CLEMENT atacando de
+     zona 3 con pelota alta en el entrenamiento del 09/09. Se agrega tambien
+     el par rapido —X3/W3— por simetria con las otras zonas. */
+  [['X3','W3'], 'QUICK IN 3'],   [['V7','G3'], 'HIGH IN 3'],
+  [['V4'],      'OVERPASS IN 4'],
+  [['V3'],      'OVERPASS IN 3'],[['V2'],      'OVERPASS IN 2'],
+  [['PP','JJ'], 'SETTER TIP'],   [['X1','J1'], 'CLOSE'],
+  [['X2','J3'], 'BEHIND'],       [['XM','J4'], 'PUSH'],
+  [['X7','J2'], 'SHOOT']
+];
+var COMBO_DE_CODIGO = (function(){ var m={}; COMBO_NOMBRES.forEach(function(par){
+  par[0].forEach(function(c){ m[c]=par[1]; }); }); return m; })();
+
+function filterOpts(p,fl){if(fl.lab==="Combo"&&fl.idx===0){
+  /* ══ EL MENU MUESTRA LA JUGADA, NO EL CODIGO ══════════════════════════
+     Antes listaba los codigos crudos que aparecian en los datos. Ahora los
+     traduce con COMBO_NOMBRES y JUNTA los dos codigos de cada jugada en una
+     sola opcion, asi el jugador elige "QUICK IN 4" y ve las dos familias.
+
+     Solo se ofrecen las jugadas que ESTE equipo hizo: cada club scoutea con
+     una familia distinta —Näfels usa W/G/Y/J— y listar las 34 haria que la
+     mitad de las opciones no devuelva nada. */
+  var cm={};(p&&p.data||[]).forEach(function(a){if(a[0])cm[String(a[0]).trim().toUpperCase()]=1;});
+  var out=[["all","Todas"]], usados={};
+  COMBO_NOMBRES.forEach(function(par){
+    var cods=par[0].filter(function(c){ return cm[c]; });
+    if(cods.length){ out.push([cods, par[1]]); cods.forEach(function(c){ usados[c]=1; }); }
+  });
+  /* Un codigo que no este en la tabla se muestra igual, con su codigo. Asi
+     no desaparece del menu una jugada que el equipo si hizo. */
+  Object.keys(cm).sort().forEach(function(c){ if(!usados[c]) out.push([c,c]); });
+  return out;
+}if(fl.lab==="Recibe"&&fl.idx===9){var NB={};((window.PP_DATA&&window.PP_DATA[TEAM]&&window.PP_DATA[TEAM].players)||[]).forEach(function(pp){NB[pp.num]=pp.name;});var rc={};(p&&p.data||[]).forEach(function(a){var rn=a[9];if(rn>0)rc[rn]=1;});return [["all","Todas"]].concat(Object.keys(rc).map(Number).sort(function(x,y){return x-y;}).map(function(n){return [String(n),"#"+n+" "+(NB[n]?apellidoJS(NB[n]):"")];}));}if(fl.dyn==='combo'){var cc={};(p&&p.data||[]).forEach(function(a){var cb=a[fl.idx]||'';if(cb)cc[cb]=(cc[cb]||0)+1;});return [["all","Todas"]].concat(Object.keys(cc).sort(function(x,y){return cc[y]-cc[x];}).map(function(c){return [c,c+" ("+cc[c]+")"];}));}return fl.opts;}
 /* refresca las opciones de "Tipo" (combos) de defensa según la zona elegida */
 function defRefreshTipo(p){var tsel=document.getElementById(p.id+'-f0'),zsel=document.getElementById(p.id+'-f1');if(!tsel||!zsel)return;var zv=zsel.value,prev=tsel.value,cc={};p.data.forEach(function(a){if(zv!=='all'&&String(a[1])!==zv)return;var cb=a[7]||'';if(cb)cc[cb]=(cc[cb]||0)+1;});var op=[["all","Todas"]].concat(Object.keys(cc).sort(function(x,y){return cc[y]-cc[x];}).map(function(c){return [c,c+" ("+cc[c]+")"];}));tsel.innerHTML=op.map(function(o){return '<option value="'+o[0]+'">'+o[1]+'</option>';}).join('');tsel.value=op.some(function(o){return o[0]===prev;})?prev:'all';}
 function filtCtrl(id,fl,onchg,op){op=op||fl.opts;
@@ -926,7 +1012,7 @@ function makeTeamPlayer(role){
   return {id:role.charAt(0)+'-equipo', num:'\u03a3', name:'EQUIPO', pos:'Acumulado', role:role, total:rows.length, read:'', data:rows, isTeam:true};
 }
 function buildTeam(){
-  ['punta','central','opuesto','saque','reception','defense','bloqueo'].forEach(function(r){var el=document.getElementById('row-'+r);if(el)el.innerHTML='';});
+  ['punta','central','opuesto','armador','libero','saque','reception','defense','bloqueo'].forEach(function(r){var el=document.getElementById('row-'+r);if(el)el.innerHTML='';});
   PLAYERS=TEAMS[TEAM].players;INFO=TEAMS[TEAM].info;computeMatchMeta();
   /* ── BLOQUEO: solo la temporada en curso, y solo quien tiene acciones ─────
      PP_BLOCK viene de datos_bloqueo.js, que se arma leyendo TODOS los .dvw de
@@ -959,6 +1045,8 @@ function buildTeam(){
   TEAMCARDS=[]; ['punta','central','opuesto','saque','reception','defense','bloqueo'].forEach(function(role){var tp=makeTeamPlayer(role); if(tp) TEAMCARDS.push(tp);});
   TEAMCARDS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('afterbegin',buildSection(p));});
   PLAYERS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('beforeend',buildSection(p));});
+  try{ var _hl=document.getElementById('head-libero'), _rl=document.getElementById('row-libero');
+       if(_hl&&_rl) _hl.style.display = _rl.children.length ? '' : 'none'; }catch(e){}
   TEAMCARDS.concat(PLAYERS).forEach(function(p){ROLECFG[p.role].filters.forEach(function(fl,i){var fe=document.getElementById(p.id+'-f'+i);if(fe)fe.addEventListener('change',function(){if(ROLECFG[p.role].stats==='dig'&&fl.lab==='Ataque desde'){defRefreshTipo(p);}render(p);});});var me=document.getElementById(p.id+'-min');if(me)me.addEventListener('input',function(){render(p);});render(p);});
   buildRivalPanel();buildMatchPanel();updateCounts();
   document.getElementById('teamname').textContent=TEAMS[TEAM].name;
@@ -1141,8 +1229,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20260916-2134" onerror="void 0"></script>
-<script src="lang.js?v=20260916-2134" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20260916-2140" onerror="void 0"></script>
+<script src="lang.js?v=20260916-2140" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -1160,7 +1248,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20260916-2134" onerror="void 0"></script>
-<script src="ayuda.js?v=20260916-2134"></script>
+<script src="volver_inicio.js?v=20260916-2140" onerror="void 0"></script>
+<script src="ayuda.js?v=20260916-2140"></script>
 </body>
 </html>
