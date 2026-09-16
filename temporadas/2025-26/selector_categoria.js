@@ -201,7 +201,7 @@
     sel.id = 'catSelGlobal';
     sel.title = 'Categoría';
     sel.style.cssText = 'background:var(--card2,#12132a);color:var(--txt,#e2e8f0);'
-      + 'border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:5px 9px;'
+      + 'border:1px solid rgba(255,255,255,.14);border-radius:6px;padding:2px 6px;'
       + 'font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;'
       + 'letter-spacing:.5px';
     sel.innerHTML = L.map(function(c){
@@ -265,12 +265,22 @@
        prevista. Y el rincon de abajo queda libre para el escudo. */
     var caja = document.createElement('div');
     caja.id = 'cat-flotante';
-    caja.style.cssText = 'position:relative;z-index:9998;margin:0 0 8px;'
-      + 'background:rgba(10,12,24,.94);border:1px solid rgba(255,255,255,.14);'
-      + 'border-radius:10px;padding:6px 10px;display:flex;align-items:center;gap:8px';
+    /* ══ CHICO, Y SIN COMERSE EL ENCABEZADO ═══════════════════════════════
+       Entrar en el flujo arriba de todo resolvia el problema de tapar
+       contenido, pero trajo otro: la caja ocupa el ancho completo y empuja
+       el encabezado hacia abajo. En el panel en vivo eso dejaba el titulo y
+       los botones de la derecha medio tapados.
+
+       Ahora ocupa SOLO lo que mide: se alinea a la izquierda, con la altura
+       justa del desplegable. Sigue arriba del contenido —no tapa nada— pero
+       empuja mucho menos. */
+    caja.style.cssText = 'position:relative;z-index:9998;margin:0 0 4px;'
+      + 'background:rgba(10,12,24,.94);border:1px solid rgba(255,255,255,.12);'
+      + 'border-radius:8px;padding:3px 8px;display:inline-flex;align-items:center;'
+      + 'gap:6px;font-size:11px;line-height:1';
     var et = document.createElement('span');
-    et.textContent = 'CATEGORÍA';
-    et.style.cssText = 'font-size:9px;letter-spacing:1.5px;color:#64748b';
+    et.textContent = 'CAT';
+    et.style.cssText = 'font-size:8px;letter-spacing:1.2px;color:#64748b';
     caja.appendChild(et);
     caja.appendChild(sel);
     document.body.insertBefore(caja, document.body.firstChild);

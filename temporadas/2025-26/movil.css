@@ -451,10 +451,21 @@ tr.mi-fila {
    10 + 38 en el telefono.
    ══════════════════════════════════════════════════════════════════════════ */
 /* Ya no flota: selector_categoria.js la mete en el flujo de la pagina cuando
-   no encuentra una barra de encabezado donde montarse. Se le deja el ancho
-   completo para que no quede un recuadro suelto al costado. */
+   no encuentra una barra de encabezado donde montarse.
+
+   ══ POR QUE YA NO VA AL ANCHO COMPLETO ════════════════════════════════════
+   Antes se le daba width:100% para que no quedara un recuadro suelto al
+   costado. El efecto no deseado: en la computadora la caja se estiraba a todo
+   lo ancho —1521 px para un contenido de 79— y empujaba el encabezado hacia
+   abajo. En el panel en vivo eso dejaba el titulo y los botones de la derecha
+   medio tapados.
+
+   Ahora ocupa lo que mide. Sigue arriba del contenido, asi que no tapa nada,
+   pero empuja apenas 29 px en vez de una franja entera. En el telefono se
+   mantiene el limite de ancho, que sigue estando en el @media de arriba. */
 #cat-flotante {
-  width: 100% !important;
+  width: auto !important;
+  max-width: 100%;
   box-sizing: border-box;
 }
 
