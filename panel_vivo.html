@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260918-0115"></script>
-<script src="selector_categoria.js?v=20260918-0115"></script>
-<script src="lang.js?v=20260918-0115"></script>
+<script src="categorias_club.js?v=20260918-0130"></script>
+<script src="selector_categoria.js?v=20260918-0130"></script>
+<script src="lang.js?v=20260918-0130"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260918-0115">
+<link rel="stylesheet" href="movil.css?v=20260918-0130">
 </head>
 <body>
 
@@ -1237,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260918-0115" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260918-0115"></script>
-<script src="objetivos.js?v=20260918-0115" onerror="void 0"></script>
-<script src="video_delay.js?v=20260918-0115" onerror="void 0"></script>
+<script src="firebase.js?v=20260918-0130" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260918-0130"></script>
+<script src="objetivos.js?v=20260918-0130" onerror="void 0"></script>
+<script src="video_delay.js?v=20260918-0130" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260918-0115" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260918-0115"></script>
+<script src="plantel_nafels.js?v=20260918-0130" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260918-0130"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -5427,7 +5427,17 @@ function saveSetup(){
   if(UNO && !LU.away.setter) LU.away.setter = la[0];
 
   M.home.name=(G('s-nmh')||'LOCAL').toUpperCase();
-  M.away.name=(G('s-nma')||(UNO?'ENTRENAMIENTO':'VISITANTE')).toUpperCase();
+  /* ══ EN ENTRENAMIENTO, EL VISITANTE ES EL MISMO CLUB ═══════════════════
+     Antes quedaba 'ENTRENAMIENTO' —o lo que el scout hubiera tipeado, que en
+     una sesion real quedo como 'PRUEBA'—. Ese nombre se arrastra despues a
+     las tablas, al .dvw y a los cortes de video, y ensucia todo con un equipo
+     que no existe.
+
+     Ahora en entrenamiento los dos lados llevan el nombre del club. Asi las
+     tablas quedan uniformes y los scouts viejos se pueden emparejar. */
+  M.away.name = UNO
+    ? (M.home.name || (window.FB_CLUB || 'ENTRENAMIENTO')).toUpperCase()
+    : (G('s-nma') || 'VISITANTE').toUpperCase();
   M.home.code=(G('s-cdh')||'LOC').toUpperCase();
   M.away.code=(G('s-cda')||(UNO?'ENT':'VIS')).toUpperCase();
   M.home.lineup=lh; M.away.lineup=la;
@@ -7496,6 +7506,24 @@ function renderInicio(){
 }
 
 function abrirInicio(){
+  /* ══ NUNCA TAPAR UN SCOUT CARGADO ═══════════════════════════════════════
+     La lista de scouts se abre sola al entrar, y eso esta bien cuando no hay
+     nada. Pero si hay un partido en curso queda ENCIMA y parece que se
+     perdio todo: el usuario ve la lista vacia y cree que su scout no esta.
+
+     Paso de verdad: una sesion de 828 codigos recuperada de la nube estaba
+     cargada —las acciones se veian debajo— y la lista la tapaba.
+
+     La comprobacion ya estaba en _inicioAlEntrar, pero aca se repite en el
+     momento exacto de abrir, que es cuando se sabe seguro cuantas acciones
+     hay. Si el usuario la pide a mano —desde el boton— pasa igual. */
+  try{
+    if(!arguments[0] && M && M.codes){
+      var _acc = M.codes.filter(function(c){ return c && c.k !== 'auto'; }).length;
+      if(_acc > 0) return;
+    }
+  }catch(e){}
+
   var acc=(M.codes||[]).filter(function(c){ return c.k!=='auto'; }).length;
   INI_TAB = (M.modo==='entrenamiento' && acc>0) ? 'entrenamiento' : INI_TAB;
   renderInicio();
@@ -8380,8 +8408,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260918-0115" onerror="void 0"></script>
-<script src="ayuda.js?v=20260918-0115"></script>
+<script src="volver_inicio.js?v=20260918-0130" onerror="void 0"></script>
+<script src="ayuda.js?v=20260918-0130"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
