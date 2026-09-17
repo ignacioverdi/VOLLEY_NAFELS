@@ -762,7 +762,12 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
            + 'text-underline-offset:3px">'+f[2]+'</span>'
          : '<span style="font-weight:900;color:#e2e8f0;min-width:30px;text-align:right;font-size:14px">'+f[2]+'</span>')
       + '<span style="color:#64748b;min-width:56px;text-align:right;font-size:11px">'
-      +    (f[2]/T*10).toFixed(1)+' '+ot('de cada 10')+'</span>'
+      /* Ataque cuenta pelotas enteras, asi que el decimal no aporta nada:
+      "2,0 de cada 10" es 2. En saque y recepcion los pesos son
+      fraccionarios y ahi el decimal si dice algo. */
+   +    (String(objDetId||'').indexOf('atq')===0
+          ? Math.round(f[2]/T*10)
+          : (f[2]/T*10).toFixed(1))+' '+ot('de cada 10')+'</span>'
       + '</div>';
   });
 
@@ -1093,8 +1098,122 @@ function objVerCuenta(){
   if(b) b.textContent = ab ? 'ocultar la cuenta' : 'ver la cuenta completa';
 }
 
+/* ══ EL DETALLE POR JUGADOR ═════════════════════════════════════════════════
+   La ventanita mostraba el porcentaje y su desglose, pero no habia forma de
+   ver DE DONDE sale: cuantos ataques de pelota alta hizo cada jugador, cuantos
+   terminaron en punto, cuantos los bloquearon.
+
+   Ninguna pantalla del sistema lo mostraba. El dato estaba guardado —cada
+   jugador tiene su atqD, sqD, recD, bqD— y nadie lo abria.
+
+   Ahora la ventanita trae un boton "ver jugador por jugador" que despliega la
+   tabla, con la misma cuenta que la bateria para que se pueda comprobar. */
+
+function objDetallePorJugador(id){
+  /* Los datos de cada jugador, de donde los tenga la pantalla. */
+  var jug = null;
+  try{
+    if(window.BAT_PARTIDOS && window.BAT_PARTIDOS.jug) jug = window.BAT_PARTIDOS.jug;
+  }catch(e){}
+  /* En el panel en vivo se calculan al momento. */
+  if(!jug){
+    try{
+      if(typeof window.bateriasVivo === 'function' && window.M && M.codes){
+        var lado = (window._batLado === 'away') ? 'a' : '*';
+        var r = window.bateriasVivo(M.codes.filter(function(c){ return c.k==='play'; }), lado);
+        jug = r.jugadores || null;
+      }
+    }catch(e){}
+  }
+  if(!jug) return '';
+
+  var cfg = OBJ_DETALLE[id];
+  if(!cfg) return '';
+
+  var filas = [];
+  Object.keys(jug).forEach(function(nom){
+    var v = jug[nom];
+    if(!v) return;
+    var D = v[cfg.d];
+    if(cfg.k && D) D = D[cfg.k];
+    if(!D || !D.t) return;
+    filas.push({ n:nom, D:D, pct:(v[id]!=null ? v[id] : null) });
+  });
+  if(!filas.length) return '';
+
+  /* de mayor a menor cantidad: primero el que mas participa */
+  filas.sort(function(a,b){ return (b.D.t||0) - (a.D.t||0); });
+
+  var esAtq = (String(id).indexOf('atq') === 0);
+  var enc = esAtq
+      ? ['', ot('Total'), ot('Punto'), ot('Bloq'), ot('Error'), '%']
+      : ['', ot('Total'), ot('Perfecta'), ot('Positiva'), ot('Error'), '%'];
+
+  var h = '<div style="margin-top:10px;border-top:1px solid rgba(148,163,184,.18);padding-top:9px">'
+        + '<div style="font-size:10px;letter-spacing:1.4px;color:#64748b;margin-bottom:6px">'
+        +   ot('JUGADOR POR JUGADOR') + '</div>'
+        + '<table style="width:100%;border-collapse:collapse;font-size:12px">'
+        + '<tr style="color:#64748b;font-size:10px">'
+        +   enc.map(function(e,i){
+              return '<th style="text-align:'+(i?'right':'left')+';padding:2px 4px;font-weight:600">'+e+'</th>';
+            }).join('')
+        + '</tr>';
+
+  var tot = {t:0,p:0,b:0,e:0};
+  filas.forEach(function(f){
+    var D=f.D;
+    var p = D.p||0, b = (D.b!=null?D.b:(D.s||0)), e = D.e||0, t = D.t||0;
+    tot.t+=t; tot.p+=p; tot.b+=b; tot.e+=e;
+    var pct = t ? Math.round((p - b - e)/t*100) : 0;
+    if(!esAtq && f.pct!=null) pct = f.pct;
+    h += '<tr style="border-top:1px solid rgba(148,163,184,.08)">'
+      +  '<td style="padding:3px 4px;color:#e2e8f0">'+f.n+'</td>'
+      +  '<td style="text-align:right;padding:3px 4px;color:#e2e8f0;font-weight:700">'+t+'</td>'
+      +  '<td style="text-align:right;padding:3px 4px;color:#4ade80">'+p+'</td>'
+      +  '<td style="text-align:right;padding:3px 4px;color:#fb923c">'+b+'</td>'
+      +  '<td style="text-align:right;padding:3px 4px;color:#f87171">'+e+'</td>'
+      +  '<td style="text-align:right;padding:3px 4px;color:#e2e8f0;font-weight:700">'+pct+'%</td>'
+      +  '</tr>';
+  });
+
+  var pctEq = tot.t ? Math.round((tot.p - tot.b - tot.e)/tot.t*100) : 0;
+  h += '<tr style="border-top:2px solid rgba(148,163,184,.25);font-weight:800">'
+    +  '<td style="padding:4px;color:#94a3b8">'+ot('EQUIPO')+'</td>'
+    +  '<td style="text-align:right;padding:4px;color:#fff">'+tot.t+'</td>'
+    +  '<td style="text-align:right;padding:4px;color:#4ade80">'+tot.p+'</td>'
+    +  '<td style="text-align:right;padding:4px;color:#fb923c">'+tot.b+'</td>'
+    +  '<td style="text-align:right;padding:4px;color:#f87171">'+tot.e+'</td>'
+    +  '<td style="text-align:right;padding:4px;color:#fff">'+(esAtq?pctEq+'%':'')+'</td>'
+    +  '</tr></table>';
+
+  if(esAtq){
+    h += '<div style="color:#64748b;font-size:10.5px;margin-top:6px;line-height:1.5">'
+      +  ot('El % sale de (punto − bloqueado − error) ÷ total.') + '</div>';
+  }
+  return h + '</div>';
+}
+
+/* Mostrar y ocultar la tabla */
+function objVerJugadores(id){
+  var c = document.getElementById('obj-porjug');
+  if(!c) return;
+  if(c.getAttribute('data-abierto') === '1'){
+    c.innerHTML = ''; c.setAttribute('data-abierto','0');
+    var b0 = document.getElementById('obj-btnjug');
+    if(b0) b0.textContent = ot('Ver jugador por jugador');
+    return;
+  }
+  c.innerHTML = objDetallePorJugador(id) ||
+    '<div style="color:#64748b;font-size:11.5px;padding:6px 0">'
+    + ot('No hay datos por jugador para este fundamento.') + '</div>';
+  c.setAttribute('data-abierto','1');
+  var b = document.getElementById('obj-btnjug');
+  if(b) b.textContent = ot('Ocultar el detalle');
+}
+
 function objAbrirDetalle(id, vals, meta, quien){
   objCerrarDetalle();
+  objDetId = id;
   var cfg = OBJ_DETALLE[id];
   var D   = cfg ? (vals && vals[cfg.d]) : null;
   /* Los ataques viven todos dentro de 'atqD', cada uno con su clave. */
@@ -1164,7 +1283,8 @@ function objAbrirDetalle(id, vals, meta, quien){
       /* SIEMPRE con un decimal. Con 1362 acciones, 260 y 336 pelotas daban
          "2 de 10" las dos: el redondeo borraba justo lo que se queria
          mostrar. Con decimal se ve 1.9 contra 2.5. */
-      +    de10.toFixed(1)+' '+ot('de cada 10')+'</span>'
+      +    (String(objDetId||'').indexOf('atq')===0
+          ? Math.round(de10) : de10.toFixed(1))+' '+ot('de cada 10')+'</span>'
       + '</div>';
   });
 
@@ -1322,6 +1442,8 @@ function objAbrirDetalle(id, vals, meta, quien){
   objPintarDetalle(nombre, obj, cuerpo, val, total, cfg.pl, quien);
 }
 
+var objDetId = null;   /* de que bateria es la ventana abierta */
+
 function objPintarDetalle(nombre, obj, cuerpo, val, total, pl, quien){
   var cab = ''
    + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;'
@@ -1353,6 +1475,17 @@ function objPintarDetalle(nombre, obj, cuerpo, val, total, pl, quien){
    +      'box-shadow:0 20px 55px rgba(0,0,0,.65);font-family:Barlow Condensed,sans-serif">'
    +   '<div style="position:sticky;top:0;background:#0f172a;z-index:1">'+cab+'</div>'
    +   '<div style="padding:12px 14px 14px">'+cuerpo+'</div>'
+   /* ══ EL BOTON QUE ABRE EL DETALLE ══════════════════════════════════
+      Para poder comprobar de donde sale el numero: cuantas acciones hizo
+      cada jugador y como terminaron. */
+   +   (objDetId ? '<div style="padding:0 14px 6px">'
+   +     '<button id="obj-btnjug" onclick="objVerJugadores(\''+objDetId+'\')" '
+   +       'style="width:100%;padding:7px;background:rgba(56,189,248,.10);'
+   +       'border:1px solid rgba(56,189,248,.28);border-radius:8px;color:#7dd3fc;'
+   +       'font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit">'
+   +       ot('Ver jugador por jugador')+'</button>'
+   +     '<div id="obj-porjug" data-abierto="0"></div>'
+   +   '</div>' : '')
    +   '<div style="padding:0 14px 13px">'
    +     '<button onclick="objCerrarDetalle()" style="width:100%;padding:8px;background:rgba(148,163,184,.1);'
    +        'border:1px solid rgba(148,163,184,.2);border-radius:8px;color:#cbd5e1;font-size:12px;'
