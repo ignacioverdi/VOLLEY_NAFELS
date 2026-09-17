@@ -447,7 +447,7 @@
   "tablas": {}
  },
  "cortes.html": {
-  "bytes": 70711,
+  "bytes": 72453,
   "funciones": [
    "_codigoNuevo",
    "_copiarYAvisar",
@@ -1206,14 +1206,20 @@
   "tablas": {}
  },
  "modelo_completo.html": {
-  "bytes": 575181,
+  "bytes": 749726,
   "funciones": [
    "bajar",
    "bloqueVolumen",
    "claveDe",
    "contactoDe",
+   "dbBorrar",
+   "dbCrear",
+   "dbEtiqueta",
+   "dbGuardar",
    "enlazarConfig",
    "estadoDe",
+   "iniciarDB",
+   "objEtapa",
    "pintarEstaticos",
    "pintarRuta",
    "plFiltrado",
@@ -1299,7 +1305,7 @@
   "tablas": {}
  },
  "panel_vivo.html": {
-  "bytes": 808711,
+  "bytes": 810104,
   "funciones": [
    "_aCp1252",
    "_alarmaGuardado",
