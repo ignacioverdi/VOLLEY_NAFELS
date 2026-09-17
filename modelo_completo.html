@@ -204,6 +204,23 @@ td.num{font-weight:600;white-space:nowrap}
 .lvl-sel{font-weight:700}
 .lvl-sel.l1{color:#0E2A8A} .lvl-sel.l2{color:#8E3374} .lvl-sel.l3{color:#EE4655}
 .lvl-sel.l4{color:#B4551F} .lvl-sel.l5{color:#8A7200}
+.tabla-lvl td{vertical-align:top;padding:12px 12px 12px 0}
+.lvl-celda{border-left:5px solid currentColor;padding-left:12px!important}
+.lvl-celda strong{display:block;font-family:var(--fd);font-size:21px;line-height:1}
+.lvl-celda span{display:block;font-family:var(--fn);font-size:13.5px;font-weight:600;color:var(--tinta);margin-top:2px}
+.lvl-celda.l1{color:#0E2A8A} .lvl-celda.l2{color:#8E3374} .lvl-celda.l3{color:#EE4655}
+.lvl-celda.l4{color:#B4551F} .lvl-celda.l5{color:#8A7200}
+.lvl-senal-td{font-style:italic;font-size:14.6px}
+.lvl-lista{margin:0;padding-left:17px}
+.lvl-lista li{margin-bottom:5px;font-size:14.6px;line-height:1.5}
+.lvl-lista b{font-weight:600}
+.lvl-bloque{border-top:1px solid var(--gris-claro);padding:14px 0 4px}
+.lvl-bloque h4{font-size:17px;margin:0 0 3px}
+.lvl-bloque h4.l1{color:#0E2A8A} .lvl-bloque h4.l2{color:#8E3374} .lvl-bloque h4.l3{color:#EE4655}
+.lvl-bloque h4.l4{color:#B4551F} .lvl-bloque h4.l5{color:#8A7200}
+.lvl-senal{margin:0 0 9px;font-style:italic;font-size:15.3px}
+.lvl-bloque table{font-size:14.6px}
+.lvl-bloque td{padding:5px 10px 5px 0;border-bottom:1px solid #EFEFEF}
 .lvl-def{margin-bottom:7px;font-size:14.6px}
 .lvl-def b{display:inline-block;min-width:152px}
 .lvl-def b.l1{color:#0E2A8A} .lvl-def b.l2{color:#8E3374} .lvl-def b.l3{color:#EE4655}
@@ -462,6 +479,11 @@ const BIBLIO = [
 const CONTENIDO = {};
 CONTENIDO.es = {
 sec:{
+ lvlTit:"Cómo etiquetar a un jugador",
+ lvlIntro:"Leé la señal y marcá. Si dudás entre dos levels, decidí por la recepción: es lo que más rápido los separa. Se etiqueta lo que el jugador hace hoy en el partido, no lo que puede llegar a hacer.",
+ lvlTh:["Level","La señal","Qué incluye ese level"],
+ lvlRegla:"<strong>El level dice cómo dividís hoy. La etapa dice qué contenido. La edad dice cuánto.</strong> El level lo asigna el entrenador y sirve para partir la cancha; la etapa define el instructivo; y el rango de horas sale de la edad, porque el cuerpo no sabe de levels.",
+ lvlDividir:"Cómo dividís hoy", lvlSin:"Sin asignar", lvlCol:"Level", lvlPor:"Level del jugador", lvlSinAsig:"Sin level asignado", lvlDesc:"Descripción",
  seisPr:"Seis principios", origen:"Origen", pendiente:"Pendiente",
  reglas:"Reglas de la etapa", reglasP:"Esto no lo decide el club: es el sistema de juego que Swiss Volley define para esta etapa.",
  madur:"Maduración en esta rama", prio:"Prioridades de temporada",
@@ -1212,6 +1234,11 @@ ref:{
 
 CONTENIDO.de = {
 sec:{
+ lvlTit:"Wie eine Person eingestuft wird",
+ lvlIntro:"Lies das Erkennungsmerkmal und stufe ein. Bei Zweifeln zwischen zwei Levels entscheidet die Annahme: Sie trennt am schnellsten. Eingestuft wird, was die Person heute im Spiel zeigt, nicht was sie einmal können könnte.",
+ lvlTh:["Level","Erkennungsmerkmal","Was dieses Level umfasst"],
+ lvlRegla:"<strong>Das Level sagt, wie du heute aufteilst. Die Stufe sagt, welcher Inhalt. Das Alter sagt, wie viel.</strong> Das Level vergibt die Trainerperson und es dient dazu, das Feld aufzuteilen; die Stufe bestimmt die Anleitung; und der Stundenbereich ergibt sich aus dem Alter, denn der Körper kennt keine Levels.",
+ lvlDividir:"Wie du heute aufteilst", lvlSin:"Nicht eingestuft", lvlCol:"Level", lvlPor:"Level der Person", lvlSinAsig:"Kein Level vergeben", lvlDesc:"Beschreibung",
  seisPr:"Sechs Grundsätze", origen:"Herkunft", pendiente:"Offen",
  reglas:"Regeln der Stufe", reglasP:"Das entscheidet nicht der Verein: Es ist das Spielsystem, das Swiss Volley für diese Stufe festlegt.",
  madur:"Reifung in dieser Sparte", prio:"Saisonschwerpunkte",
@@ -1951,6 +1978,11 @@ ref:{
 
 CONTENIDO.en = {
 sec:{
+ lvlTit:"How to tag a player",
+ lvlIntro:"Read the tell and tag. If you hesitate between two levels, decide on reception: it separates them fastest. Tag what the player does in a match today, not what they might be able to do.",
+ lvlTh:["Level","The tell","What that level covers"],
+ lvlRegla:"<strong>The level says how you split today. The stage says what content. Age says how much.</strong> The level is assigned by the coach and is there to split the court; the stage defines the guide; and the hours range comes from age, because the body does not know about levels.",
+ lvlDividir:"How you split today", lvlSin:"Not tagged", lvlCol:"Level", lvlPor:"Player level", lvlSinAsig:"No level assigned", lvlDesc:"Description",
  seisPr:"Six principles", origen:"Source", pendiente:"Pending",
  reglas:"Rules of the stage", reglasP:"This is not the club's decision: it is the playing system Swiss Volley defines for this stage.",
  madur:"Maturation in this branch", prio:"Season priorities",
@@ -2708,15 +2740,131 @@ function contactoDe(j){
 }
 
 const edadDe = j => j.jg ? TEMPORADA - j.jg : null;
+const LEVELS_DE = [
+ {n:1,t:"Leistungsträger:in",senal:"Das Niveau sinkt nicht, wenn das Spiel eng wird.",
+  obs:[["Annahme","Hält den Prozentsatz im dritten Satz und bei Rückstand"],
+   ["Zuspiel","Verteilt mit Plan: wählt die Angreiferin nach Rotation und nach dem, was gegenüber steht"],
+   ["Angriff","Löst gegen formierten Block. Nutzt den Hinterfeldangriff als Option, nicht als Ausweg"],
+   ["Service","Hält das aggressive Service bei 23:23, mit vereinbarter Fehlerquote"],
+   ["Block und Abwehr","Der Block lenkt den Ball ins gegnerische Feld. Sofortiger Übergang in den Gegenangriff"],
+   ["Taktik","Bereitet den Gegner mit Video vor und führt die Mannschaft im Spiel"]]},
+ {n:2,t:"Wettkampfreif",senal:"Verändert im Spiel etwas aus eigenem Entscheid, ohne Aufforderung.",
+  obs:[["Annahme","Hält gegen Service aus einer Aktivliga, nicht nur aus der eigenen Kategorie"],
+   ["Zuspiel","Hat eine Abmachung mit jeder Angreiferin: immer gleiche Höhe und gleicher Abstand"],
+   ["Angriff","Zwei Richtungen aus demselben Anlauf, dazu der Lob. Der Anlauf ändert sich nicht"],
+   ["Service","Aggressives Service von oben oder Sprungservice, mit gewählter Zone"],
+   ["Block","Lesend: erst der erste Kontakt, dann die Zuspielerin, und Entscheid vor dem Sprung"],
+   ["Taktik","Liest die gegnerische Zuspielerin und korrigiert die Position ohne Anweisung"]]},
+ {n:3,t:"Selbstständig",senal:"Der Ballwechsel geht weiter, auch wenn der Ball schlecht kommt.",
+  obs:[["Annahme","Die Hälfte der Annahmen bleibt im System gegen Wettkampfservice"],
+   ["Zuspiel","Spielt in der Verschiebung zu. Penetriert aus Position 1 und kommt im Gleichgewicht an"],
+   ["Angriff","Stabiler Dreischritt-Anlauf. Wählt eine Richtung vor dem Sprung"],
+   ["Service","Von oben, 7 von 10 im Feld, und kann die Zone ansagen"],
+   ["Block","Hände über dem Netz. Die Verschiebung endet vor dem Sprung"],
+   ["Taktik","Sichert die Angreiferin, ohne dass es jemand verlangt"]]},
+ {n:4,t:"In Ausbildung",senal:"Macht alles richtig, bis Druck dazukommt.",
+  obs:[["Annahme","Baut mit einfachem Ball auf; gegen Wettkampfservice bricht es zusammen"],
+   ["Zuspiel","Spielt aus dem Stand zu. Muss er sich verschieben, kommt der Ball flach heraus"],
+   ["Angriff","Zwei- oder Dreischritt-Anlauf, instabil. Kontakt hinter dem Kopf"],
+   ["Service","Von oben kommt es ins Feld, aber ohne Zonenwahl"],
+   ["Block","Springt nach vorne und berührt das Netz"],
+   ["Taktik","Erreicht drei Kontakte, wenn der Ball leicht ist, nicht wenn es schwierig wird"]]},
+ {n:5,t:"Einsteiger:in",senal:"Der Ballwechsel bricht beim ersten Kontakt ab.",
+  obs:[["Annahme","Der Ball erreicht die Zuspielerin nicht. Korrigiert mit den Armen, weil die Füsse zu spät kommen"],
+   ["Zuspiel","Spielt nicht zu: spielt ins gegnerische Feld zurück"],
+   ["Angriff","Schlägt aus dem Stand oder springt ohne Anlaufrhythmus"],
+   ["Service","Von unten, oder von oben ins Aus"],
+   ["Block","Wird noch nicht trainiert"],
+   ["Taktik","Geht zum Ball, der nicht ihr gehört, oder geht gar nicht"]]}
+];
+const LEVELS_EN = [
+ {n:1,t:"Reference player",senal:"The level does not drop when the match gets tight.",
+  obs:[["Reception","Holds the percentage in the third set and when behind on the scoreboard"],
+   ["Setting","Distributes with a plan: chooses the attacker by rotation and by what is in front"],
+   ["Attack","Solves against a formed block. Uses the back-row attack as an option, not as a way out"],
+   ["Serve","Holds the aggressive serve at 23-all, with an agreed error rate"],
+   ["Block and defence","The block directs the ball into the opponent's court. Immediate transition to counter-attack"],
+   ["Tactics","Prepares the opponent on video and leads the team inside the match"]]},
+ {n:2,t:"Competitive",senal:"Changes something in the match on their own decision, unprompted.",
+  obs:[["Reception","Holds against a senior-league serve, not only against their own category"],
+   ["Setting","Has an agreement with each attacker: same height and same distance every time"],
+   ["Attack","Two directions from the same approach, plus the tip. The approach does not change"],
+   ["Serve","Aggressive overhand or jump serve, with a chosen zone"],
+   ["Block","Reading: first contact, then the setter, and decides before the jump"],
+   ["Tactics","Reads the opposing setter and adjusts position without instruction"]]},
+ {n:3,t:"Autonomous",senal:"The rally continues even when the ball comes badly.",
+  obs:[["Reception","Half of their receptions stay in system against a match serve"],
+   ["Setting","Sets on the move. Penetrates from position 1 and arrives balanced"],
+   ["Attack","Stable three-step approach. Chooses a direction before the jump"],
+   ["Serve","Overhand, 7 out of 10 in court, and can call the zone"],
+   ["Block","Hands over the net. The footwork finishes before the jump"],
+   ["Tactics","Covers the attacker without being told"]]},
+ {n:4,t:"Developing",senal:"Does everything well until pressure appears.",
+  obs:[["Reception","Builds with an easy ball; it falls apart against a match serve"],
+   ["Setting","Sets from standing. If they have to move, the ball comes out flat"],
+   ["Attack","Two- or three-step approach, unstable. Contact behind the head"],
+   ["Serve","The overhand serve lands in court but without choosing a zone"],
+   ["Block","Jumps forward and touches the net"],
+   ["Tactics","Reaches three contacts when the ball is easy, not when it gets difficult"]]},
+ {n:5,t:"Beginner",senal:"The rally breaks down on the first contact.",
+  obs:[["Reception","The ball does not reach the setter. Corrects with the arms because the feet arrive late"],
+   ["Setting","Does not set: returns the ball over the net"],
+   ["Attack","Hits from standing, or jumps with no approach rhythm"],
+   ["Serve","Underhand, or overhand that goes out"],
+   ["Block","Not worked on yet"],
+   ["Tactics","Goes for the ball that is not theirs, or does not go at all"]]}
+];
+const LV = () => LANG==="de" ? LEVELS_DE : LANG==="en" ? LEVELS_EN : LEVELS;
+
 const LEVELS = [
- {n:1,t:"Referente",d:"Nivel de primer equipo. Sostiene su técnica en el punto 24 y con el marcador en contra. Juega con plan de partido."},
- {n:2,t:"Competitivo",d:"Resuelve bajo presión. Lee el bloqueo y ataca en dos direcciones desde el mismo impulso. Ya juega o está listo para jugar en liga de mayores."},
- {n:3,t:"Autónomo",d:"Sostiene tres toques con oposición real. Saque de arriba dentro 7 de 10. Carrera de tres pasos estable. Penetra y llega equilibrado."},
- {n:4,t:"En formación",d:"Construye tres toques con pelota fácil pero se le cae con saque de competencia. Ataca sin ritmo estable. El saque entra pero no elige zona."},
- {n:5,t:"Principiante",d:"Todavía no sostiene el rally. La recepción no llega al armador. Está aprendiendo el gesto, no la jugada."}
+ {n:1,t:"Referente",
+  senal:"El nivel no le baja cuando el partido se pone difícil.",
+  d:"Nivel de primer equipo. Conduce el juego y sostiene su técnica cuando el marcador aprieta.",
+  obs:[["Recepción","Sostiene el porcentaje en el tercer set y con el marcador en contra"],
+   ["Armado","Distribuye con plan: elige atacante según rotación y según lo que ve enfrente"],
+   ["Ataque","Resuelve contra bloqueo formado. Usa el ataque de zaga como opción, no como salida"],
+   ["Saque","Sostiene el saque agresivo a 23 iguales, con tasa de error acordada"],
+   ["Bloqueo y defensa","El bloqueo dirige la pelota al campo rival. Transición inmediata a contraataque"],
+   ["Táctica","Prepara al rival con video y conduce al equipo dentro del partido"]]},
+ {n:2,t:"Competitivo",
+  senal:"Cambia algo en el partido por decisión propia, sin que se lo pidan.",
+  d:"Resuelve bajo presión y toma decisiones tácticas. Ya juega o está listo para jugar en liga de mayores.",
+  obs:[["Recepción","Sostiene contra saque de liga de mayores, no solo de su categoría"],
+   ["Armado","Tiene contrato con cada atacante: misma altura y misma distancia siempre"],
+   ["Ataque","Dos direcciones desde el mismo impulso, más finta. La carrera no cambia"],
+   ["Saque","De arriba agresivo o en salto, con zona elegida"],
+   ["Bloqueo","Lector: mira el primer contacto, después al armador, y decide antes del salto"],
+   ["Táctica","Lee al armador rival y ajusta su posición sin instrucción"]]},
+ {n:3,t:"Autónomo",
+  senal:"El rally sigue aunque la pelota venga mal.",
+  d:"Sostiene la jugada completa con oposición real. Es el nivel donde el jugador deja de depender del entrenador dentro del punto.",
+  obs:[["Recepción","La mitad de sus recepciones quedan en sistema contra saque de competencia"],
+   ["Armado","Arma en desplazamiento. Penetra desde zona 1 y llega equilibrado"],
+   ["Ataque","Carrera de tres pasos estable. Elige una dirección antes del salto"],
+   ["Saque","De arriba, 7 de 10 dentro, y puede cantar la zona"],
+   ["Bloqueo","Manos sobre la red. El desplazamiento termina antes del salto"],
+   ["Táctica","Cubre al atacante sin que nadie se lo pida"]]},
+ {n:4,t:"En formación",
+  senal:"Hace todo bien hasta que aparece la presión.",
+  d:"Tiene los gestos pero no los sostiene contra oposición de competencia. Es el nivel más numeroso en formativas.",
+  obs:[["Recepción","Construye con pelota cómoda; se le cae con saque de competencia"],
+   ["Armado","Arma parado. Si tiene que desplazarse, la pelota sale plana"],
+   ["Ataque","Carrera de dos o tres pasos inestable. Contacto atrás de la cabeza"],
+   ["Saque","De arriba entra, pero no elige zona"],
+   ["Bloqueo","Salta hacia adelante y toca la red"],
+   ["Táctica","Llega a tres toques cuando la pelota es fácil, no cuando se complica"]]},
+ {n:5,t:"Principiante",
+  senal:"El rally se corta en el primer contacto.",
+  d:"Está aprendiendo el gesto, todavía no la jugada. Incluye al que llega tarde al vóley, que puede tener quince años y estar acá.",
+  obs:[["Recepción","La pelota no llega al armador. Corrige con los brazos porque llega tarde con los pies"],
+   ["Armado","No arma: devuelve al campo rival"],
+   ["Ataque","Golpea de pie, o salta sin ritmo de carrera"],
+   ["Saque","De abajo, o de arriba que se va afuera"],
+   ["Bloqueo","No lo trabaja todavía"],
+   ["Táctica","Va a la pelota que no le corresponde, o no va"]]}
 ];
 const lvlDe = j => j.lvl || 0;
-const lvlNom = n => { const L=LEVELS.find(x=>x.n===n); return L ? "Level "+n+" · "+L.t : "Sin nivel asignado"; };
+const lvlNom = n => { const L=LV().find(x=>x.n===n); return L ? "L"+n+" · "+L.t : S("lvlSinAsig"); };
 
 
 function rangoDe(j){
@@ -2784,8 +2932,8 @@ window.plExport = function(){
   bajar(JSON.stringify({temporada:TEMPORADA, plantel:PLANTEL}, null, 2), "plantel_naefels.json", "application/json");
 };
 window.plCSV = function(){
-  const filas = [[S("plNombre"),S("plAnio"),"Level","Descripción",S("plRama"),S("plGrupo"),S("plLiga"),"Posición","Licencia",S("plH"),S("plComp"),"Status","Teléfono","E-mail","Tel. madre","Tel. padre","Mail madre","Mail padre","Nota"]].concat(
-    PLANTEL.map(function(j){ return [j.nombre, j.jg||"", j.lvl?"L"+j.lvl:"", j.lvl?(LEVELS.find(function(L){return L.n===Number(j.lvl);})||{t:""}).t:"", j.rama==="f"?S("plF"):S("plM"),
+  const filas = [[S("plNombre"),S("plAnio"),S("lvlCol"),S("lvlDesc"),S("plRama"),S("plGrupo"),S("plLiga"),"Posición","Licencia",S("plH"),S("plComp"),"Status","Teléfono","E-mail","Tel. madre","Tel. padre","Mail madre","Mail padre","Nota"]].concat(
+    PLANTEL.map(function(j){ return [j.nombre, j.jg||"", j.lvl?"L"+j.lvl:"", j.lvl?(LV().find(function(L){return L.n===Number(j.lvl);})||{t:""}).t:"", j.rama==="f"?S("plF"):S("plM"),
       j.grupo||"", j.liga||"", j.pos||"", j.lic||"", j.h||0, j.comp||0, estadoDe(j)[1],
       j.tel||"", j.mail||"", j.telM||"", j.telP||"", j.mailM||"", j.mailP||"", j.nota||""]; }));
   const csv = filas.map(function(f){ return f.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(";"); }).join("\n");
@@ -3083,7 +3231,7 @@ function vPlantel(){
       + '<td><input class="pl-edit" type="number" style="width:74px" value="'+(j.jg||"")+'" onchange="plSet('+j.id+',\'jg\',this.value)"></td>'
       + '<td class="num">'+(e===null?"—":e)+'</td>'
       + '<td><select class="pl-edit lvl-sel'+(j.lvl?' l'+j.lvl:'')+'" onchange="plSet('+j.id+',\'lvl\',this.value)">'
-        +'<option value="">—</option>'+LEVELS.map(function(L){return '<option value="'+L.n+'"'+(Number(j.lvl)===L.n?" selected":"")+'>L'+L.n+'</option>';}).join("")+'</select></td>'
+        +'<option value="">—</option>'+LV().map(function(L){return '<option value="'+L.n+'"'+(Number(j.lvl)===L.n?" selected":"")+'>L'+L.n+'</option>';}).join("")+'</select></td>'
       + '<td><select class="pl-edit" onchange="plSet('+j.id+',\'rama\',this.value)">'+opt("m",S("plMasc"),j.rama)+opt("f",S("plFem"),j.rama)+'</select></td>'
       + '<td><select class="pl-edit" onchange="plSet('+j.id+',\'grupo\',this.value)">'+selGrupo(j)+'</select></td>'
       + '<td><select class="pl-edit" onchange="plSet('+j.id+',\'liga\',this.value)">'+selLiga(j)+'</select></td>'
@@ -3099,7 +3247,7 @@ function vPlantel(){
 
   const tabla = function(js){
     return '<div class="tabla-envoltura"><table><thead><tr>'
-      + S("plTh").slice(0,3).concat(["Nivel"]).concat(S("plTh").slice(3,6)).concat(["Posición"]).concat(S("plTh").slice(6)).concat([""]).map(function(x){ return "<th>"+x+"</th>"; }).join("")
+      + S("plTh").slice(0,3).concat([S("lvlCol")]).concat(S("plTh").slice(3,6)).concat(["Posición"]).concat(S("plTh").slice(6)).concat([""]).map(function(x){ return "<th>"+x+"</th>"; }).join("")
       + '</tr></thead><tbody>' + js.map(fila).join("") + '</tbody></table></div>';
   };
 
@@ -3122,17 +3270,17 @@ function vPlantel(){
     + '<div class="pl-campo"><label>'+S("plComp")+'</label><input type="number" step="1" id="plComp" value="1"></div>'
     + '<button class="btn-s" onclick="plAdd()">'+S("plAdd")+'</button></div>'
 
-    + '<div class="lvl-tablero no-imprimir"><b>Cómo dividís hoy</b>'
-      + LEVELS.map(function(L){
+    + '<div class="lvl-tablero no-imprimir"><b>'+S("lvlDividir")+'</b>'
+      + LV().map(function(L){
           const n = lista.filter(function(x){return Number(x.lvl)===L.n;}).length;
-          return '<span class="lvl-chip l'+L.n+'" title="'+L.d+'">L'+L.n+' '+L.t+' <i>'+n+'</i></span>';
+          return '<span class="lvl-chip l'+L.n+'" title="'+L.senal+'">L'+L.n+' '+L.t+' <i>'+n+'</i></span>';
         }).join("")
-      + '<span class="lvl-chip l0">Sin asignar <i>'+lista.filter(function(x){return !x.lvl;}).length+'</i></span></div>'
+      + '<span class="lvl-chip l0">'+S("lvlSin")+' <i>'+lista.filter(function(x){return !x.lvl;}).length+'</i></span></div>'
     + '<div class="pl-barra no-imprimir" style="border-color:var(--gris-claro)">'
     + '<div class="pl-campo"><label>'+S("plAgrupar")+'</label><select onchange="PL_AGRUPAR=this.value;render()">'
       + opt("grupo",S("plPorGrupo"),PL_AGRUPAR)+opt("liga",S("plPorLiga"),PL_AGRUPAR)
       + opt("jg",S("plPorAnio"),PL_AGRUPAR)+opt("rama",S("plPorRama"),PL_AGRUPAR)
-      + opt("estado",S("plPorEstado"),PL_AGRUPAR)+opt("niv","Level del jugador",PL_AGRUPAR)+opt("pos","Posición",PL_AGRUPAR)+opt("lic","Licencia",PL_AGRUPAR)+'</select></div>'
+      + opt("estado",S("plPorEstado"),PL_AGRUPAR)+opt("niv",S("lvlPor"),PL_AGRUPAR)+opt("pos","Posición",PL_AGRUPAR)+opt("lic","Licencia",PL_AGRUPAR)+'</select></div>'
     + '<div class="pl-campo"><label>'+S("plRama")+'</label><select onchange="PL_RAMA=this.value;render()">'
       + opt("todas",S("plTodas"),PL_RAMA)+opt("m",S("plM"),PL_RAMA)+opt("f",S("plF"),PL_RAMA)+'</select></div>'
     + '<div class="pl-campo"><label>'+S("plBuscar")+'</label><input class="txt" value="'+PL_BUSCA.replace(/"/g,"&quot;")+'" oninput="PL_BUSCA=this.value;render()" placeholder="'+S("plNombre")+'"></div>'
@@ -3151,8 +3299,16 @@ function vPlantel(){
               +' · '+S("plProm")+' '+(js.length?(hs/js.length).toFixed(1):0)+' '+S("plSem")+'</span></h4>'+tabla(js)+'</div>';
           }).join(""))
 
-    + '<div class="nota" style="margin-top:26px">'+LEVELS.map(function(L){return '<div class="lvl-def"><b class="l'+L.n+'">L'+L.n+' · '+L.t+'</b> '+L.d+'</div>';}).join("")
-      +'<p style="margin:12px 0 0"><strong>El level dice cómo dividís hoy. La etapa dice qué contenido. La edad dice cuánto.</strong> Son tres cosas distintas y las tres hacen falta: el level lo asigna el entrenador y sirve para partir la cancha; la etapa define el instructivo; y el rango de horas sale de la edad, porque el cuerpo no sabe de levels.</p></div>'
+    + '<div class="nota" style="margin-top:26px"><h3 style="margin:0 0 4px">'+S("lvlTit")+'</h3>'
+      +'<p style="margin:0 0 14px">'+S("lvlIntro")+'</p>'
+      +'<div class="tabla-envoltura"><table class="tabla-lvl"><thead><tr><th style="width:118px">'+S("lvlTh")[0]+'</th><th style="width:210px">'+S("lvlTh")[1]+'</th><th>'+S("lvlTh")[2]+'</th></tr></thead><tbody>'
+      + LV().map(function(L){
+          return '<tr><td class="lvl-celda l'+L.n+'"><strong>L'+L.n+'</strong><span>'+L.t+'</span></td>'
+            +'<td class="lvl-senal-td">'+L.senal+'</td>'
+            +'<td><ul class="lvl-lista">'+L.obs.map(function(o){return '<li><b>'+o[0]+'.</b> '+o[1]+'</li>';}).join("")+'</ul></td></tr>';
+        }).join("")
+      +'</tbody></table></div>'
+      +'<p style="margin:14px 0 0">'+S("lvlRegla")+'</p></div>'
     + '<div class="nota aviso">'+S("plNota1")+'</div>'
     + '<div class="nota">'+S("plNota2")+'</div>'
     + imprimir();
