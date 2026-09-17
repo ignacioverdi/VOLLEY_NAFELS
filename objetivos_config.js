@@ -1119,9 +1119,23 @@ function objDetallePorJugador(id){
   if(!jug){
     try{
       if(typeof window.bateriasVivo === 'function' && window.M && M.codes){
+        /* El panel guarda 'home' o 'away'; el motor espera '*' o 'a'. */
         var lado = (window._batLado === 'away') ? 'a' : '*';
         var r = window.bateriasVivo(M.codes.filter(function(c){ return c.k==='play'; }), lado);
         jug = r.jugadores || null;
+
+        /* En vivo los jugadores vienen por NUMERO —"11", "05"—. Se les pone
+           el nombre para que la tabla se pueda leer. */
+        if(jug && typeof window.nombreDe === 'function'){
+          var conNombre = {};
+          Object.keys(jug).forEach(function(n){
+            var nn = parseInt(n, 10);
+            var nom = '';
+            try{ nom = window.nombreDe(nn, window._batLado || 'home') || ''; }catch(e){}
+            conNombre['#' + nn + (nom ? ' ' + nom : '')] = jug[n];
+          });
+          jug = conNombre;
+        }
       }
     }catch(e){}
   }
