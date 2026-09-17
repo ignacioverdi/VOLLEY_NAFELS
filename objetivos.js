@@ -99,9 +99,29 @@ function objSingleBat(id, val, meta, cls, objLine, vals){
    Calcula las 11 baterías desde los códigos crudos del scout (M.codes).
    ════════════════════════════════════════════════════════════════════ */
 function _batNuevo(){
+  /* ══ SAQUE Y RECEPCION GUARDAN LAS SEIS VALORACIONES ══════════════════════
+     El contador suma con  if(res in P.S) P.S[res]++  — o sea que si la
+     valoracion NO tiene casilla, la accion se descarta ENTERA: no suma al
+     detalle y tampoco al total.
+
+     Saque y recepcion no tenian casilla para ! ni para -, que son las dos mas
+     usadas. Medido en la temporada:
+
+         saque      se perdia el 59%   (! 3.050 y - 7.857 de 18.528)
+         recepcion  se perdia el 38%   (! 3.139 y - 2.918 de 15.924)
+
+     Se veia asi: la tabla del panel marcaba 30 saques y la bateria 15, con
+     -18% contra el +37% de la tabla. No era otra formula: era la mitad de las
+     acciones, y encima la mitad cargada de errores.
+
+     La formula de saque y recepcion reparte puntaje por valoracion —el neutro
+     vale 50, el negativo 25—, asi que estas dos SI cuentan y cambian el
+     resultado, no solo el total.
+
+     Bloqueo y ataque quedan como estan por ahora, a pedido. */
   var na=function(){return {'#':0,'/':0,'=':0,'T':0};};
-  return {S:{'#':0,'+':0,'/':0,'=':0,'T':0},
-          R:{'#':0,'+':0,'/':0,'=':0,'T':0},
+  return {S:{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
+          R:{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
           B:{'#':0,'+':0,'T':0},
           Aall:na(), cent:na(), alta:na(), rap:na(),
           rp:na(), ri:na(), rm:na(), tr:na()};
@@ -198,8 +218,21 @@ function batToPcts(P){
     atqD: { q:detAtq(P.cent), hb:detAtq(P.alta), x:detAtq(P.rap),
             rp:detAtq(P.rp), ri:detAtq(P.ri), rm:detAtq(P.rm),
             tr:detAtq(P.tr) },
-    sq:    S.T ? roundPy((S['#']+0.5*S['/']+0.25*S['+']-S['='])/S.T*100) : null,
-    rec:   R.T ? roundPy((R['#']+0.5*R['+']-0.5*R['/']-R['='])/R.T*100) : null,
+    /* ══ LA MISMA FORMULA QUE EL DASHBOARD ════════════════════════════════
+       Habia DOS formulas de saque conviviendo. El dashboard reparte puntaje
+       por valoracion; esta, mas vieja, sumaba solo tres y restaba los errores:
+
+           antes   (# + 0,5x/ + 0,25x+ - =) / T
+           ahora   (#x100 + /x87,5 + +x75 + !x50 + -x25) / T
+
+       Se notaba en la ventanita del panel: el desglose mostraba los pesos del
+       dashboard —100, 87,5, 75...— y el porcentaje salia de la formula vieja.
+       En una sesion real el cartel decia "500 / 15 = -18%", y 500/15 da 33.
+
+       Copiadas tal cual de gen_baterias.py para que todo el sistema —tablas,
+       dashboard, panel en vivo y la ventanita— diga el mismo numero. */
+    sq:    S.T ? roundPy((S['#'] + 0.875*S['/'] + 0.75*S['+'] + 0.5*S['!'] + 0.25*S['-'])/S.T*100) : null,
+    rec:   R.T ? roundPy((R['#'] + 0.75*R['+'] + 0.5*R['!'] + 0.25*R['-'] + 0.125*R['/'])/R.T*100) : null,
     bqpos: B.T ? roundPy((B['#']+B['+'])/B.T*100) : null,
     bqpt:  B.T ? roundPy(B['#']/B.T*100) : null,
     atqq:  atk(P.cent),
