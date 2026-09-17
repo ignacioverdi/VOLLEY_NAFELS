@@ -1118,10 +1118,21 @@ function objDetallePorJugador(id){
   /* En el panel en vivo se calculan al momento. */
   if(!jug){
     try{
-      if(typeof window.bateriasVivo === 'function' && window.M && M.codes){
+      /* ══ 'M' NO VIVE EN window ══════════════════════════════════════════
+         El panel declara la sesion con  let M = load('pv_match', ...)  y las
+         variables declaradas con let NO quedan colgadas de window. Pedir
+         window.M daba siempre undefined, la condicion fallaba y la tabla
+         salia vacia aunque hubiera 828 codigos cargados.
+
+         Se busca M directamente: si existe en el ambito del script, se ve. */
+      var _M = null;
+      try{ _M = M; }catch(e){ _M = null; }
+      if(!_M){ try{ _M = window.M; }catch(e){} }
+
+      if(typeof window.bateriasVivo === 'function' && _M && _M.codes){
         /* El panel guarda 'home' o 'away'; el motor espera '*' o 'a'. */
         var lado = (window._batLado === 'away') ? 'a' : '*';
-        var r = window.bateriasVivo(M.codes.filter(function(c){ return c.k==='play'; }), lado);
+        var r = window.bateriasVivo(_M.codes.filter(function(c){ return c.k==='play'; }), lado);
         jug = r.jugadores || null;
 
         /* En vivo los jugadores vienen por NUMERO —"11", "05"—. Se les pone
