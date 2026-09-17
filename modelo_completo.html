@@ -191,6 +191,24 @@ td.num{font-weight:600;white-space:nowrap}
 .pl-cont a{color:var(--tinta);text-decoration:none;border-bottom:1px solid var(--gris-claro)}
 .pl-cont b{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);margin-right:5px}
 .sin-cont{color:#9E1F2C}
+.lvl-tablero{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 14px}
+.lvl-tablero b{font-family:var(--fn);font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--gris);margin-right:4px}
+.lvl-chip{font-family:var(--fn);font-size:13px;font-weight:600;padding:5px 11px;border-radius:99px;border:1.5px solid var(--gris-claro);background:#fff}
+.lvl-chip i{font-style:normal;font-weight:700;margin-left:6px}
+.lvl-chip.l1{border-color:#0E2A8A;color:#0E2A8A}
+.lvl-chip.l2{border-color:#8E3374;color:#8E3374}
+.lvl-chip.l3{border-color:#EE4655;color:#EE4655}
+.lvl-chip.l4{border-color:#FA844E;color:#B4551F}
+.lvl-chip.l5{border-color:#D9B300;color:#8A7200}
+.lvl-chip.l0{color:var(--gris)}
+.lvl-sel{font-weight:700}
+.lvl-sel.l1{color:#0E2A8A} .lvl-sel.l2{color:#8E3374} .lvl-sel.l3{color:#EE4655}
+.lvl-sel.l4{color:#B4551F} .lvl-sel.l5{color:#8A7200}
+.lvl-def{margin-bottom:7px;font-size:14.6px}
+.lvl-def b{display:inline-block;min-width:152px}
+.lvl-def b.l1{color:#0E2A8A} .lvl-def b.l2{color:#8E3374} .lvl-def b.l3{color:#EE4655}
+.lvl-def b.l4{color:#B4551F} .lvl-def b.l5{color:#8A7200}
+
 .err-dt{border-left:3px solid #9E1F2C;background:#FDF6F5;padding:10px 15px;margin-bottom:8px;font-size:15.3px}
 .nota-inline{font-size:14.6px;color:var(--gris)}
 .gesto{border-top:1px solid var(--gris-claro);padding:16px 0}
@@ -207,6 +225,7 @@ td.num{font-weight:600;white-space:nowrap}
 .prog-it p{margin:0}
 @media (max-width:720px){.prog-it{grid-template-columns:1fr;gap:3px}}
 .ens-nav{display:flex;flex-wrap:wrap;gap:7px;margin:22px 0 8px}
+.ens-tab .cg{font-weight:700;color:var(--c);margin-left:6px}
 .ens-tab{font-family:var(--fn);font-size:14px;font-weight:600;padding:7px 13px;border:1.5px solid var(--gris-claro);background:#fff;color:var(--gris);border-radius:99px;cursor:pointer}
 .ens-tab[aria-pressed="true"]{border-color:var(--c);color:var(--tinta);box-shadow:inset 0 -3px 0 var(--c)}
 .ens-obj{border-left:5px solid var(--c);background:#fff;padding:16px 20px;margin:22px 0 4px}
@@ -2689,6 +2708,17 @@ function contactoDe(j){
 }
 
 const edadDe = j => j.jg ? TEMPORADA - j.jg : null;
+const LEVELS = [
+ {n:1,t:"Referente",d:"Nivel de primer equipo. Sostiene su técnica en el punto 24 y con el marcador en contra. Juega con plan de partido."},
+ {n:2,t:"Competitivo",d:"Resuelve bajo presión. Lee el bloqueo y ataca en dos direcciones desde el mismo impulso. Ya juega o está listo para jugar en liga de mayores."},
+ {n:3,t:"Autónomo",d:"Sostiene tres toques con oposición real. Saque de arriba dentro 7 de 10. Carrera de tres pasos estable. Penetra y llega equilibrado."},
+ {n:4,t:"En formación",d:"Construye tres toques con pelota fácil pero se le cae con saque de competencia. Ataca sin ritmo estable. El saque entra pero no elige zona."},
+ {n:5,t:"Principiante",d:"Todavía no sostiene el rally. La recepción no llega al armador. Está aprendiendo el gesto, no la jugada."}
+];
+const lvlDe = j => j.lvl || 0;
+const lvlNom = n => { const L=LEVELS.find(x=>x.n===n); return L ? "Level "+n+" · "+L.t : "Sin nivel asignado"; };
+
+
 function rangoDe(j){
   const e = edadDe(j); if(e===null) return null;
   for(const r of RANGO_EDAD) if(e<=r[0]) return [r[1],r[2]];
@@ -2711,6 +2741,7 @@ function claveDe(j){
   if(PL_AGRUPAR==="liga")   return (j.liga && j.liga!=="—") ? j.liga : S("plSinLiga");
   if(PL_AGRUPAR==="jg")     return j.jg ? String(j.jg) : S("plSinAnio");
   if(PL_AGRUPAR==="rama")   return j.rama==="f" ? S("plF") : S("plM");
+  if(PL_AGRUPAR==="niv")    return lvlNom(lvlDe(j));
   if(PL_AGRUPAR==="pos")    return j.pos || "Sin posición definida";
   if(PL_AGRUPAR==="lic")    return j.lic || "Sin licencia registrada";
   if(PL_AGRUPAR==="estado") return estadoDe(j)[1];
@@ -2723,7 +2754,7 @@ window.plAdd = function(){
   PLANTEL.push({id:plSeq++, nombre:nombre, jg:parseInt(g("plJg").value)||null,
     rama:g("plRama").value, grupo:g("plGrupo").value, liga:g("plLiga").value,
     h:parseFloat(g("plH").value)||0, comp:parseFloat(g("plComp").value)||0,
-    pos:g("plPos")?g("plPos").value:"", lic:"", nota:"",
+    niv:"", pos:g("plPos")?g("plPos").value:"", lic:"", nota:"",
     tel:"", mail:"", telM:"", telP:"", mailM:"", mailP:""});
   g("plNombre").value=""; g("plJg").value="";
   render(); var n=document.getElementById("plNombre"); if(n) n.focus();
@@ -2753,8 +2784,8 @@ window.plExport = function(){
   bajar(JSON.stringify({temporada:TEMPORADA, plantel:PLANTEL}, null, 2), "plantel_naefels.json", "application/json");
 };
 window.plCSV = function(){
-  const filas = [[S("plNombre"),S("plAnio"),S("plRama"),S("plGrupo"),S("plLiga"),"Posición","Licencia",S("plH"),S("plComp"),"Status","Teléfono","E-mail","Tel. madre","Tel. padre","Mail madre","Mail padre","Nota"]].concat(
-    PLANTEL.map(function(j){ return [j.nombre, j.jg||"", j.rama==="f"?S("plF"):S("plM"),
+  const filas = [[S("plNombre"),S("plAnio"),"Level","Descripción",S("plRama"),S("plGrupo"),S("plLiga"),"Posición","Licencia",S("plH"),S("plComp"),"Status","Teléfono","E-mail","Tel. madre","Tel. padre","Mail madre","Mail padre","Nota"]].concat(
+    PLANTEL.map(function(j){ return [j.nombre, j.jg||"", j.lvl?"L"+j.lvl:"", j.lvl?(LEVELS.find(function(L){return L.n===Number(j.lvl);})||{t:""}).t:"", j.rama==="f"?S("plF"):S("plM"),
       j.grupo||"", j.liga||"", j.pos||"", j.lic||"", j.h||0, j.comp||0, estadoDe(j)[1],
       j.tel||"", j.mail||"", j.telM||"", j.telP||"", j.mailM||"", j.mailP||"", j.nota||""]; }));
   const csv = filas.map(function(f){ return f.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(";"); }).join("\n");
@@ -2771,7 +2802,7 @@ window.plImport = function(ev){
       PLANTEL = arr.map(function(j){ return {id:plSeq++, nombre:j.nombre||"", jg:j.jg||null,
         rama:j.rama==="f"?"f":"m", grupo:j.grupo||"", liga:j.liga||"—",
         h:parseFloat(j.h)||0, comp:parseFloat(j.comp)||0,
-        pos:j.pos||"", lic:j.lic||"", nota:j.nota||"",
+        niv:j.niv||"", pos:j.pos||"", lic:j.lic||"", nota:j.nota||"",
         tel:j.tel||"", mail:j.mail||"", telM:j.telM||"", telP:j.telP||"", mailM:j.mailM||"", mailP:j.mailP||""}; });
       render();
     }catch(err){ alert(S("plError")); }
@@ -3051,6 +3082,8 @@ function vPlantel(){
       + '<td><input class="pl-edit" value="'+(j.nombre||"").replace(/"/g,"&quot;")+'" onchange="plSet('+j.id+',\'nombre\',this.value)"></td>'
       + '<td><input class="pl-edit" type="number" style="width:74px" value="'+(j.jg||"")+'" onchange="plSet('+j.id+',\'jg\',this.value)"></td>'
       + '<td class="num">'+(e===null?"—":e)+'</td>'
+      + '<td><select class="pl-edit lvl-sel'+(j.lvl?' l'+j.lvl:'')+'" onchange="plSet('+j.id+',\'lvl\',this.value)">'
+        +'<option value="">—</option>'+LEVELS.map(function(L){return '<option value="'+L.n+'"'+(Number(j.lvl)===L.n?" selected":"")+'>L'+L.n+'</option>';}).join("")+'</select></td>'
       + '<td><select class="pl-edit" onchange="plSet('+j.id+',\'rama\',this.value)">'+opt("m",S("plMasc"),j.rama)+opt("f",S("plFem"),j.rama)+'</select></td>'
       + '<td><select class="pl-edit" onchange="plSet('+j.id+',\'grupo\',this.value)">'+selGrupo(j)+'</select></td>'
       + '<td><select class="pl-edit" onchange="plSet('+j.id+',\'liga\',this.value)">'+selLiga(j)+'</select></td>'
@@ -3066,7 +3099,7 @@ function vPlantel(){
 
   const tabla = function(js){
     return '<div class="tabla-envoltura"><table><thead><tr>'
-      + S("plTh").concat([""]).map(function(x){ return "<th>"+x+"</th>"; }).join("")
+      + S("plTh").slice(0,3).concat(["Nivel"]).concat(S("plTh").slice(3,6)).concat(["Posición"]).concat(S("plTh").slice(6)).concat([""]).map(function(x){ return "<th>"+x+"</th>"; }).join("")
       + '</tr></thead><tbody>' + js.map(fila).join("") + '</tbody></table></div>';
   };
 
@@ -3089,11 +3122,17 @@ function vPlantel(){
     + '<div class="pl-campo"><label>'+S("plComp")+'</label><input type="number" step="1" id="plComp" value="1"></div>'
     + '<button class="btn-s" onclick="plAdd()">'+S("plAdd")+'</button></div>'
 
+    + '<div class="lvl-tablero no-imprimir"><b>Cómo dividís hoy</b>'
+      + LEVELS.map(function(L){
+          const n = lista.filter(function(x){return Number(x.lvl)===L.n;}).length;
+          return '<span class="lvl-chip l'+L.n+'" title="'+L.d+'">L'+L.n+' '+L.t+' <i>'+n+'</i></span>';
+        }).join("")
+      + '<span class="lvl-chip l0">Sin asignar <i>'+lista.filter(function(x){return !x.lvl;}).length+'</i></span></div>'
     + '<div class="pl-barra no-imprimir" style="border-color:var(--gris-claro)">'
     + '<div class="pl-campo"><label>'+S("plAgrupar")+'</label><select onchange="PL_AGRUPAR=this.value;render()">'
       + opt("grupo",S("plPorGrupo"),PL_AGRUPAR)+opt("liga",S("plPorLiga"),PL_AGRUPAR)
       + opt("jg",S("plPorAnio"),PL_AGRUPAR)+opt("rama",S("plPorRama"),PL_AGRUPAR)
-      + opt("estado",S("plPorEstado"),PL_AGRUPAR)+opt("pos","Posición",PL_AGRUPAR)+opt("lic","Licencia",PL_AGRUPAR)+'</select></div>'
+      + opt("estado",S("plPorEstado"),PL_AGRUPAR)+opt("niv","Level del jugador",PL_AGRUPAR)+opt("pos","Posición",PL_AGRUPAR)+opt("lic","Licencia",PL_AGRUPAR)+'</select></div>'
     + '<div class="pl-campo"><label>'+S("plRama")+'</label><select onchange="PL_RAMA=this.value;render()">'
       + opt("todas",S("plTodas"),PL_RAMA)+opt("m",S("plM"),PL_RAMA)+opt("f",S("plF"),PL_RAMA)+'</select></div>'
     + '<div class="pl-campo"><label>'+S("plBuscar")+'</label><input class="txt" value="'+PL_BUSCA.replace(/"/g,"&quot;")+'" oninput="PL_BUSCA=this.value;render()" placeholder="'+S("plNombre")+'"></div>'
@@ -3112,7 +3151,9 @@ function vPlantel(){
               +' · '+S("plProm")+' '+(js.length?(hs/js.length).toFixed(1):0)+' '+S("plSem")+'</span></h4>'+tabla(js)+'</div>';
           }).join(""))
 
-    + '<div class="nota aviso" style="margin-top:26px">'+S("plNota1")+'</div>'
+    + '<div class="nota" style="margin-top:26px">'+LEVELS.map(function(L){return '<div class="lvl-def"><b class="l'+L.n+'">L'+L.n+' · '+L.t+'</b> '+L.d+'</div>';}).join("")
+      +'<p style="margin:12px 0 0"><strong>El level dice cómo dividís hoy. La etapa dice qué contenido. La edad dice cuánto.</strong> Son tres cosas distintas y las tres hacen falta: el level lo asigna el entrenador y sirve para partir la cancha; la etapa define el instructivo; y el rango de horas sale de la edad, porque el cuerpo no sabe de levels.</p></div>'
+    + '<div class="nota aviso">'+S("plNota1")+'</div>'
     + '<div class="nota">'+S("plNota2")+'</div>'
     + imprimir();
 }
@@ -4338,13 +4379,59 @@ RECURSOS.push({g:"Escuela italiana · Julio Velasco", l:[
  {t:"El entrenador es antes que nada un maestro", u:"https://sapere.virgilio.it/scuola/mondo-scuola/velasco-la-lezione-l-allenatore-e-prima-di-tutto-un-insegnante", d:"La declaración del día después del oro olímpico. Es la premisa de toda esta solapa."},
  {t:"Club Italia — el proyecto federal italiano de formativas", u:"https://en.wikipedia.org/wiki/Club_Italia_(women%27s_volleyball)", d:"Fundado por Velasco en 1998 como director técnico: desarrollar jóvenes compitiendo en liga de mayores. Por ahí pasaron Egonu, Danesi, Malinov y Orro."}]});
 
-const ENS_ORDEN = ["gen","kv1","kv2","kv3","r1","r2","r3","f1","f2","f3"];
+/* ── nombre del grupo en el club, igual en los tres idiomas ── */
+const CLUB_GRUPO = {gen:"", kv1:"Kids Volley", kv2:"Kids Volley", kv3:"Kids Volley",
+ r1:"KU16", r2:"KU16", r3:"KU16", f1:"U18 · U20", f2:"U18 · U20", f3:"U20", u20:"grupo mezclado"};
+
+ENSC.u20 = {
+ t:"U20: tres etapas en una cancha", sub:"Instructivo especial · para el grupo que mezcla Future 1, 2 y 3 más jugadores de mayores",
+ obj:"Hacer funcionar un grupo donde conviven cuatro niveles distintos, sin bajar a nadie al del más flojo ni perder al más chico.",
+ porque:"No es una situación transitoria ni un problema de organización: es la estructura del club. En el U20 de esta temporada hay dos jugadores en edad Future 1, tres en Future 2, tres en Future 3 y siete que ya pasaron los dieciocho. Cuatro instructivos distintos en la misma hora de gimnasio. La respuesta no es elegir uno y aplicarlo a todos, porque eso deja a la mitad del grupo entrenando algo que no le corresponde. La respuesta es saber qué comparten los cuatro y qué hay que separar, y tener el criterio para decidirlo cada martes.",
+ tecnica:[
+  {n:"Recepción contra saque de competencia",cad:"Común a las tres etapas · nadie queda afuera",int:"Es el único gesto que las cuatro franjas necesitan al mismo nivel de exigencia, y el que más define si el punto existe.",pts:["Plataforma formada antes.","Cuerpo detrás de la pelota.","Hombros dirigen al armador."],frase:"«Se entrena con el saque del sábado, no con uno más fácil.»",err:"Bajar la intensidad del saque para que los más chicos no sufran. Entonces los grandes no entrenan nada.",arreglo:"Misma intensidad para todos, y al más chico le bajás la zona, no la velocidad."},
+  {n:"Ataque con dirección",cad:"Future 1 lo consolida · Future 2 y 3 lo afinan",int:"Todos pueden trabajar el mismo gesto con exigencia distinta.",pts:["Carrera siempre igual.","La muñeca decide.","Decisión antes del salto."],frase:"«Misma carrera, distinta muñeca.»",err:"Dar la misma consigna a los cuatro niveles.",arreglo:"Al de Future 1 pedile una dirección; al de Future 3, dos y contra bloqueo formado."},
+  {n:"Defensa y transición",cad:"Es la brecha real con el vóley de mayores",int:"Los siete adultos del grupo son el mejor recurso que tenés: la transición se aprende jugando contra gente que la tiene.",pts:["Posición baja, peso adelante.","Salida inmediata al contraataque.","Aterrizar, girar, salir de la red."],frase:"«Defender es empezar a atacar.»",err:"Separar a los grandes de los chicos en los ejercicios de juego.",arreglo:"Mezclalos a propósito. Ahí el de Future 1 aprende de arrastre lo que no le podés explicar."},
+  {n:"Saque bajo presión",cad:"Escala sola con el nivel",int:"El mismo ejercicio sirve para los cuatro niveles cambiando solo la consecuencia.",pts:["Mismo lanzamiento siempre.","Tasa de error acordada por jugador, no por grupo."],frase:"«Nadie falla un saque en el minuto diez.»",err:"Una sola exigencia de saque para todo el grupo.",arreglo:"A cada uno su número, escrito. El de Future 1 con 3 de 10 agresivos, el de Future 3 con 7."},
+  {n:"Armado desde zaga",cad:"Future 1 lo necesita · Future 3 ya lo tiene",int:"Sostener que todos armen, aunque los de Future 3 ya estén especializados.",pts:["Frente alta y manos adelante antes del último paso.","Impulso de piernas.","Torso al destino."],frase:"«El que no arma hoy, no arma nunca.»",err:"Dejar que los de Future 3 se salten el bloque porque ya saben.",arreglo:"Ellos lo hacen igual, pero con pelota más difícil. No es repaso: es carga."}],
+ tactica:[
+  {n:"Cómo se parte la cancha",d:"Dos canchas con dos reglas distintas es la herramienta principal de este grupo, y conviene usarla la mitad de la sesión. No es dividir por edad: es dividir por lo que cada uno necesita ese día."},
+  {n:"Cuándo NO se parte",d:"En el juego final se mezcla siempre. Un chico de Future 1 jugando con adultos aprende ritmo y transición en veinte minutos lo que no aprende en un mes de ejercicios."},
+  {n:"Los siete de mayores no son un problema",d:"Son el recurso más valioso del grupo. Pero necesitan que alguien decida si están para desarrollarse o para sostener el equipo, porque no es lo mismo y cambia lo que se les pide."},
+  {n:"El sistema que se juega",d:"El U20 compite con un sistema y es el que se entrena. Pero el de Future 1 tiene que entender la penetración en las seis rotaciones antes de especializarse, así que en los bloques reducidos se vuelve al 6-6 aunque en el partido se juegue 5-1."},
+  {n:"Sin alibis",d:"En un grupo con cuatro niveles la cadena de culpas es más fácil de armar: el grande culpa al chico y el chico se achica. La regla de Velasco acá vale doble — nadie comenta la pelota que recibió, la resuelve."}],
+ sesion:[["20","Bloque preventivo, todos juntos. Es lo único que no se diferencia."],
+  ["20","Gesto del bloque, en dos canchas con exigencia distinta."],
+  ["20","Complejo, todavía separado por nivel."],
+  ["25","Juego mezclado. Acá se juntan y no se vuelve a separar."],
+  ["13","Juego con marcador, equipos mezclados a propósito."],
+  ["2","Cierre: habla uno de los chicos, no uno de los grandes."]],
+ anio:[
+  ["Agosto","Clasificar el grupo: quién está en qué etapa, con la fecha de nacimiento en la mano. Se hace en el Plantel y se imprime.","Lista de cuatro niveles, por nombre, pegada en la carpeta."],
+  ["Septiembre-octubre","Recepción contra saque real, con exigencia individual. Es el gesto que une al grupo entero.","Medición de octubre. Cada uno con su número de recepción, no un promedio del grupo."],
+  ["Noviembre-diciembre","Ataque con dirección y defensa-transición, mezclando con los adultos en el juego.","Los de Future 1 sostienen el ritmo en el juego mezclado sin esconderse."],
+  ["Enero","Vuelta progresiva. Revisar la carga de los que además juegan liga: acá es donde se acumula.","Ficha individual al día para todos los que suman liga."],
+  ["Febrero-marzo","Armado desde zaga y saque bajo presión, con número propio por jugador. Revisión de nivel.","Medición de marzo. Quién sube de etapa dentro del mismo grupo."],
+  ["Abril","Cierre. Conversación individual: los de Future 3 sobre transición, los de Future 1 sobre qué les falta.","Cada uno con destino escrito para la temporada siguiente."]],
+ errDT:[
+  "Entrenar para el promedio del grupo. En un grupo de cuatro niveles el promedio no le sirve a nadie.",
+  "Separar siempre por nivel. La parte más valiosa de este grupo es el rato en que se mezclan.",
+  "Tratar a los siete de mayores como si estuvieran de paso. O están para desarrollarse o están para sostener el equipo, y hay que decidirlo y decírselo."],
+ fis:"Cuatro niveles de maduración conviviendo. Los de Future 1 pueden seguir en pico de crecimiento y los de mayores están en ventana de fuerza abierta. El bloque preventivo es común; la carga no. Cada uno con su ficha individual.",
+ men:"Es el grupo donde más rápido se abandona, porque el chico se compara con un adulto y se siente lejos. El trabajo del entrenador es que el chico entienda que está entrenando con ellos, no compitiendo contra ellos.",
+ evalu:"Los estándares de salida no son los del grupo: son los de la etapa de cada jugador. Están en las fichas de Future 1, 2 y 3. Usá el Plantel para saber cuál le corresponde a cada uno.",
+ rec:[{t:"Ficha de Future 1 — estándares y reglas",u:"#"},{t:"Ficha de Future 2",u:"#"},{t:"Ficha de Future 3",u:"#"}]
+};
+
+const ENS_ORDEN = ["gen","kv1","kv2","kv3","r1","r2","r3","f1","f2","f3","u20"];
 
 function vEns(){
   const nav = ENS_ORDEN.map(id=>{
     const et = id==="gen" ? null : ETAPAS[id];
-    const eti = id==="gen" ? "General" : D().etapas[id].e.split("·")[0].trim();
-    return `<button class="ens-tab" onclick="setEns('${id}')" aria-pressed="${id===ENS_CAT}" style="--c:${et?et.c:"#1A1A1A"}">${eti}</button>`;
+    const cg = CLUB_GRUPO[id];
+    const base = id==="gen" ? "General" : id==="u20" ? "U20" : D().etapas[id].e.split("·")[0].trim();
+    const eti = (cg && id!=="u20") ? base+' <span class="cg">'+cg+'</span>' : base;
+    const col = id==="u20" ? "#8E3374" : (et?et.c:"#1A1A1A");
+    return `<button class="ens-tab" onclick="setEns('${id}')" aria-pressed="${id===ENS_CAT}" style="--c:${col}">${eti}</button>`;
   }).join("");
 
   const c = EC()[ENS_CAT];
@@ -4361,7 +4448,7 @@ function vEns(){
         ${RECURSOS.map(g=>`<h4 class="rec-grupo">${g.g}</h4>${g.l.map(r=>`<div class="rec"><a href="${r.u}" target="_blank" rel="noopener">${r.t}</a><p>${r.d}</p></div>`).join("")}`).join("")}
         <div class="nota aviso">La página de <strong>recepción lateral</strong>, que es tu segundo documento, figura en el índice de técnicas pero no pude confirmar su dirección exacta. Entrá por el índice y buscá «Manchette als Annahme seitlich»: está ahí.</div></section>`;
   } else if(EC()[ENS_CAT].tecnica){
-    const c2 = EC()[ENS_CAT], et = ETAPAS[ENS_CAT];
+    const c2 = EC()[ENS_CAT], et = ETAPAS[ENS_CAT] || {c:"#8E3374"};
     cuerpo = `<div class="ens-obj" style="--c:${et.c}"><span>Objetivo de la etapa</span><p>${c2.obj}</p></div>
       <section class="bloque"><h3>Por qué esta etapa importa</h3><p>${c2.porque}</p></section>
       <section class="bloque"><h3>Técnica: qué se enseña y cómo se corrige</h3>
@@ -4389,11 +4476,11 @@ function vEns(){
         <div class="tabla-envoltura"><table><thead><tr><th>Cuándo</th><th>Qué se trabaja</th><th>Control</th></tr></thead><tbody>
         ${(c2.anio||[]).map(x=>`<tr><td class="num"><strong>${x[0]}</strong></td><td>${x[1]}</td><td>${x[2]||""}</td></tr>`).join("")}
         </tbody></table></div></section>
-      <section class="bloque"><h3>Estándares de salida</h3>
+      ${D().etapas[ENS_CAT] ? `<section class="bloque"><h3>Estándares de salida</h3>
         <p>Se cambia de etapa cuando se cumplen, no cuando se cumplen años. Son los mismos de la ficha: se leen desde ahí y no pueden divergir.</p>
         <div class="tabla-envoltura"><table><thead><tr><th>Criterio</th><th>Estándar</th></tr></thead><tbody>
         ${D().etapas[ENS_CAT].est.map(e=>`<tr><td><strong>${e[0]}</strong></td><td>${e[1]}</td></tr>`).join("")}
-        </tbody></table></div></section>
+        </tbody></table></div></section>` : ""}
       <section class="bloque"><h3>Los errores del entrenador en esta etapa</h3>
         <p>No los del jugador: los tuyos.</p>
         ${(c2.errDT||[]).map(x=>`<div class="err-dt">${x}</div>`).join("")}</section>
