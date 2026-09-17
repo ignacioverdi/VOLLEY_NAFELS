@@ -191,6 +191,20 @@ td.num{font-weight:600;white-space:nowrap}
 .pl-cont a{color:var(--tinta);text-decoration:none;border-bottom:1px solid var(--gris-claro)}
 .pl-cont b{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);margin-right:5px}
 .sin-cont{color:#9E1F2C}
+.obj-h{font-family:var(--fn);font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--gris);margin:0 0 8px}
+.obj-ul{margin:0;padding-left:18px}
+.obj-ul li{margin-bottom:8px;font-size:15.3px;line-height:1.5}
+.obj-caja{border-left:5px solid var(--c);background:#fff;padding:17px 22px;margin:24px 0 6px}
+.obj-caja span{font-family:var(--fn);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gris)}
+.obj-caja p{margin:6px 0 0;font-size:20px;font-weight:600;letter-spacing:-.012em;line-height:1.35}
+.obj-lvls{margin-top:13px;display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.obj-lvls b{font-family:var(--fn);font-size:12.5px;font-weight:700;color:var(--gris)}
+.obj-lvls i{font-family:var(--fn);font-style:normal;font-size:12.5px;color:var(--gris);flex-basis:100%;margin-top:3px}
+.db-chip{font-family:var(--fn);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:7px 12px;border-radius:99px;margin-right:auto}
+.db-chip.viva{background:#EAF6EC;color:#1E6B33}
+.db-chip.local{background:#FDF6F5;color:#9E1F2C}
+.db-chip.lectura{background:#F2F4F6;color:#5C6B78}
+.db-chip.cargando{background:#F2F4F6;color:#8A949C}
 .lvl-tablero{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 14px}
 .lvl-tablero b{font-family:var(--fn);font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--gris);margin-right:4px}
 .lvl-chip{font-family:var(--fn);font-size:13px;font-weight:600;padding:5px 11px;border-radius:99px;border:1.5px solid var(--gris-claro);background:#fff}
@@ -479,6 +493,8 @@ const BIBLIO = [
 const CONTENIDO = {};
 CONTENIDO.es = {
 sec:{
+ objXLvl:"Objetivos por level", objXLvlP:"Elegí un level y vas a ver qué hay que trabajar con ese jugador, en técnica y en táctica, y qué le falta para pasar al siguiente. Sirve igual en cualquier grupo: en un mismo entrenamiento podés tener tres levels y esto te dice qué le pedís a cada uno.", objTec:"Objetivos técnicos", objTac:"Objetivos tácticos", objSig:"El salto al siguiente level.", objElegi:"Elegí un level arriba.",
+ objTit:"Para qué es esta etapa", lvlEsp:"Levels que vas a encontrar acá:", lvlEspP:"Si tenés a alguien muy por fuera de este rango, probablemente esté en el grupo equivocado.",
  lvlTit:"Cómo etiquetar a un jugador",
  lvlIntro:"Leé la señal y marcá. Si dudás entre dos levels, decidí por la recepción: es lo que más rápido los separa. Se etiqueta lo que el jugador hace hoy en el partido, no lo que puede llegar a hacer.",
  lvlTh:["Level","La señal","Qué incluye ese level"],
@@ -529,7 +545,7 @@ ui:{
  "doc.subtitulo":"Divisiones inferiores · Masculino y femenino · Temporada 2026/27",
  "doc.version":"v4.0 · agosto 2026<br>ES · DE · EN",
  "nav.g1":"El modelo","nav.g2":"Cómo se enseña","nav.g3":"Gestión","nav.g4":"Decisiones","nav.ens":"Enseñanza",
- "nav.resumen":"El proyecto","nav.juego":"Identidad","nav.m":"Masculino","nav.f":"Femenino","nav.matriz":"Contenidos",
+ "nav.resumen":"El proyecto","nav.juego":"Identidad","nav.m":"Masculino","nav.f":"Femenino","nav.matriz":"Técnica y sistemas",
  "nav.comp":"Competencia","nav.carga":"Carga","nav.plantel":"Plantel","nav.staff":"Entrenadores",
  "nav.herr":"Herramientas","nav.plan":"Plan","nav.foda":"FODA","nav.ref":"Referencias",
  "ruta.rotulo":"Ruta formativa según las categorías de Swiss Volley — el color marca la etapa · la edad núcleo orienta, el nivel decide",
@@ -1234,6 +1250,8 @@ ref:{
 
 CONTENIDO.de = {
 sec:{
+ objXLvl:"Ziele nach Level", objXLvlP:"Wähle ein Level und du siehst, was mit dieser Person zu erarbeiten ist, technisch und taktisch, und was ihr zum nächsten Level fehlt. Gilt in jeder Gruppe: In einer Einheit können drei Levels sitzen, und hier steht, was du von jedem verlangst.", objTec:"Technische Ziele", objTac:"Taktische Ziele", objSig:"Der Sprung zum nächsten Level.", objElegi:"Wähle oben ein Level.",
+ objTit:"Wofür diese Stufe da ist", lvlEsp:"Levels, die hier vorkommen:", lvlEspP:"Wer deutlich ausserhalb dieses Bereichs liegt, ist wahrscheinlich in der falschen Gruppe.",
  lvlTit:"Wie eine Person eingestuft wird",
  lvlIntro:"Lies das Erkennungsmerkmal und stufe ein. Bei Zweifeln zwischen zwei Levels entscheidet die Annahme: Sie trennt am schnellsten. Eingestuft wird, was die Person heute im Spiel zeigt, nicht was sie einmal können könnte.",
  lvlTh:["Level","Erkennungsmerkmal","Was dieses Level umfasst"],
@@ -1285,7 +1303,7 @@ ui:{
  "doc.version":"v4.0 · August 2026<br>ES · DE · EN",
  "nav.g1":"Das Konzept","nav.g2":"Wie unterrichtet wird","nav.g3":"Führung","nav.g4":"Entscheide","nav.ens":"Unterricht",
  "nav.resumen":"Das Projekt","nav.juego":"Identität","nav.m":"Männer","nav.f":"Frauen",
- "nav.matriz":"Rückgrat","nav.comp":"Wettkampf","nav.carga":"Belastung","nav.plantel":"Kader",
+ "nav.matriz":"Technik & Systeme","nav.comp":"Wettkampf","nav.carga":"Belastung","nav.plantel":"Kader",
  "nav.staff":"Trainerteam","nav.herr":"Werkzeuge","nav.plan":"Umsetzung","nav.foda":"SWOT","nav.ref":"Grundlagen",
  "ruta.rotulo":"Ausbildungsweg nach den Kategorien von Swiss Volley — die Farbe zeigt die Stufe · das Kernalter orientiert, das Niveau entscheidet",
  "pie.linea":"Axpo Volley Näfels · Arbeitsdokument. Jede Angabe nennt ihre Quelle. Gelb markierte Werte werden mit den Messungen des Vereins ergänzt.",
@@ -1352,7 +1370,7 @@ vol:{
 
 matriz:{
  eyebrow:"Das Stück, das aus neun Stufen ein Programm macht",
- titulo:"Rückgrat",
+ titulo:"Lerninhalte",
  intro:"Nichts davon hängt davon ab, wie viele Kinder da sind oder welche Hallenzeiten man bekommt. Es wird einmal festgelegt und ordnet die neun Stufen. Daraus ergeben sich die Schwerpunkte jedes Stufenblatts — deshalb wiederholt sich kein Inhalt und keiner fällt weg.",
  aviso:"<strong>Zwei Arten von Zeilen, und man sollte sie nicht verwechseln.</strong> Die mit Swiss Volley gekennzeichneten ergeben sich zwingend aus dem Spielsystem der jeweiligen Stufe: Sie werden nicht diskutiert, sondern eingehalten. Die mit Verein gekennzeichneten sind unser Entscheid und werden jede Saison überprüft. Vor dem Vorstand sind das zwei verschiedene Gespräche.",
  b1:"Technikmatrix",
@@ -1978,6 +1996,8 @@ ref:{
 
 CONTENIDO.en = {
 sec:{
+ objXLvl:"Objectives by level", objXLvlP:"Pick a level and you get what to work on with that player, technically and tactically, and what they need to move up. It applies in any group: one session can hold three levels, and this tells you what to ask of each.", objTec:"Technical objectives", objTac:"Tactical objectives", objSig:"The step to the next level.", objElegi:"Pick a level above.",
+ objTit:"What this stage is for", lvlEsp:"Levels you will find here:", lvlEspP:"Anyone well outside this range is probably in the wrong group.",
  lvlTit:"How to tag a player",
  lvlIntro:"Read the tell and tag. If you hesitate between two levels, decide on reception: it separates them fastest. Tag what the player does in a match today, not what they might be able to do.",
  lvlTh:["Level","The tell","What that level covers"],
@@ -2029,7 +2049,7 @@ ui:{
  "doc.version":"v4.0 · August 2026<br>ES · DE · EN",
  "nav.g1":"The framework","nav.g2":"How it is taught","nav.g3":"Management","nav.g4":"Decisions","nav.ens":"Teaching",
  "nav.resumen":"The project","nav.juego":"Identity","nav.m":"Men","nav.f":"Women",
- "nav.matriz":"Backbone","nav.comp":"Competition","nav.carga":"Load","nav.plantel":"Roster",
+ "nav.matriz":"Skills & Systems","nav.comp":"Competition","nav.carga":"Load","nav.plantel":"Roster",
  "nav.staff":"Coaching staff","nav.herr":"Tools","nav.plan":"Rollout","nav.foda":"SWOT","nav.ref":"Sources",
  "ruta.rotulo":"Development pathway following the Swiss Volley categories — colour marks the stage · core age guides, level decides",
  "pie.linea":"Axpo Volley Näfels · Working document. Every figure states its source. Values highlighted in yellow are completed with the club's own measurements.",
@@ -2096,7 +2116,7 @@ vol:{
 
 matriz:{
  eyebrow:"The piece that turns nine stages into a programme",
- titulo:"Backbone",
+ titulo:"Curriculum",
  intro:"None of this depends on how many players there are or what gym slots are available. It is set once and it orders the nine stages. The priorities on every stage sheet come from here — which is why no content is repeated twice and none is left out.",
  aviso:"<strong>Two kinds of row, and they should not be confused.</strong> Rows marked Swiss Volley are imposed by the playing system of each stage: they are not discussed, they are complied with. Rows marked Club are our decision and are reviewed every season. In front of the board these are two different conversations.",
  b1:"Technical matrix",
@@ -2728,6 +2748,44 @@ const EQUIPOS = {
 const RANGO_EDAD = [[10,1.5,3],[12,3,4.5],[14,4.5,6],[16,6,9],[18,7.5,10.5],[99,9,13.5]];
 const TEMPORADA = 2026;
 const POSICIONES = ["—","Armador","Punta","Central","Opuesto","Líbero","Polivalente"];
+
+/* ════════ BASE COMPARTIDA ════════ */
+let DB = null, DB_ESTADO = "cargando", DB_ESCRIBE = null, DB_UNSUB = null;
+function dbEtiqueta(){
+  if(DB_ESTADO==="cargando") return '<span class="db-chip cargando">Conectando…</span>';
+  if(DB_ESTADO==="local")    return '<span class="db-chip local">Sin conexión · los cambios no se guardan</span>';
+  if(DB_ESCRIBE===false)     return '<span class="db-chip lectura">Solo lectura</span>';
+  return '<span class="db-chip viva">Guardado compartido · en vivo</span>';
+}
+async function iniciarDB(){
+  try{
+    if(typeof claude === "undefined" || !claude.use){ DB_ESTADO="local"; render(); return; }
+    const u = await claude.use("user");
+    DB_ESCRIBE = u ? (u.can("data.write") ?? null) : null;
+    DB = await claude.use("db");
+    if(!DB){ DB_ESTADO="local"; render(); return; }
+    DB_UNSUB = DB.collection("plantel").onSnapshot(function(snap){
+      PLANTEL = snap.docs.map(function(d){ const v = d.data() || {}; v.id = d.id; return v; });
+      PLANTEL.sort(function(a,b){ return String(a.nombre||"").localeCompare(String(b.nombre||"")); });
+      DB_ESTADO="viva"; render();
+    }, function(){ DB_ESTADO="local"; render(); });
+  }catch(e){ DB_ESTADO="local"; render(); }
+}
+function dbGuardar(id, campos){
+  if(!DB) return;
+  DB.doc("plantel/"+id).update(campos).catch(function(e){
+    if(e && e.code==="invalid_argument"){ DB_ESCRIBE=false; render(); }
+  });
+}
+function dbCrear(j){
+  if(!DB) return;
+  const ref = DB.collection("plantel").doc();
+  j.id = ref.id;
+  ref.set(j).catch(function(){ DB_ESCRIBE=false; render(); });
+}
+function dbBorrar(id){ if(DB) DB.doc("plantel/"+id).delete().catch(function(){}); }
+
+const PLANTEL_INICIAL = [{"id": 1, "nombre": "Julen Karrer", "jg": 2004, "rama": "m", "grupo": "—", "liga": "2ª liga", "h": 0, "comp": 0, "pos": "Armador / Punta", "lic": "RLL", "nota": "Pass/Aussen / Coachingerfahrung im Team", "tel": "078 947 46 51", "mail": "Julen.karrer@gmail.com", "telM": "078 947 46 51", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 2, "nombre": "Amini Zekrullah", "jg": 2005, "rama": "m", "grupo": "—", "liga": "4ª liga", "h": 0, "comp": 0, "pos": "Líbero / Punta", "lic": "RLL", "nota": "Aussen/Libero: Super Defence / Asylbewerber", "tel": "077 957 60 07", "mail": "zikermohammadi895@gmail.com", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 3, "nombre": "Arianit Hajdari", "jg": 2005, "rama": "m", "grupo": "—", "liga": "3ª liga", "h": 0, "comp": 0, "pos": "Punta", "lic": "RLL", "nota": "Aussen: Wiedereinsteiger letztes Jahr - braucht noch Zeit", "tel": "079 942 20 05", "mail": "arianit.hajdari05@hotmail.com", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 4, "nombre": "Nicolo Karrer", "jg": 2005, "rama": "m", "grupo": "U23", "liga": "2ª liga", "h": 0, "comp": 0, "pos": "Armador / Punta", "lic": "RLL", "nota": "Pass - kann auch Aussen spielen (in 3L)", "tel": "076 721 72 03", "mail": "nicolokarrer@gmail.com", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 5, "nombre": "Raul Landlolt", "jg": 2006, "rama": "m", "grupo": "U23", "liga": "2ª liga", "h": 0, "comp": 0, "pos": "Líbero", "lic": "RLL", "nota": "Libero 2 / guter Typ fürs Team / Kapitän 3. Liga", "tel": "079 882 26 50", "mail": "raul.landolt@gmail.com", "telM": "079 882 26 50", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 6, "nombre": "Kevin Scherrer", "jg": 2006, "rama": "m", "grupo": "—", "liga": "3ª liga", "h": 0, "comp": 0, "pos": "Central", "lic": "RLL", "nota": "Mitte: Kein guter Spieler und unflexibel aber stört die anderen im Spiel nicht (Nur Mitte möglich)", "tel": "077 480 47 71", "mail": "michasche@hotmail.com", "telM": "077 465 52 32", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 7, "nombre": "Laurence von Ehren", "jg": 2007, "rama": "m", "grupo": "U23", "liga": "2ª liga", "h": 0, "comp": 0, "pos": "Central", "lic": "RLL", "nota": "Mitte -motiviert - lustiger Typ für die Mannschaft / voller Selbstkritik / scheiss Job \"Mitte\"", "tel": "079 854 46 57", "mail": "", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 8, "nombre": "Dennis Cattin", "jg": 2007, "rama": "m", "grupo": "U23", "liga": "2ª liga", "h": 0, "comp": 0, "pos": "Armador", "lic": "RLL", "nota": "Pass / fehlt im Jahresverlauf", "tel": "079 706 04 56", "mail": "denniscattin@gmx.ch", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 9, "nombre": "Nima Hauri", "jg": 2007, "rama": "m", "grupo": "U23", "liga": "1ª liga", "h": 0, "comp": 0, "pos": "Punta / Central / Opuesto", "lic": "NLL", "nota": "Dia / 1L - Niveau / Schulter verletzt (spielte zuletz wenig) Opt. Aussen & Mitte", "tel": "078 402 57 12", "mail": "", "telM": "079 905 79 52", "telP": "", "mailM": "audreyhauri@gmx.ch", "mailP": "", "lvl": ""}, {"id": 10, "nombre": "Janis Bruderer", "jg": 2007, "rama": "m", "grupo": "U23", "liga": "1ª liga", "h": 0, "comp": 0, "pos": "Líbero / Armador / Punta", "lic": "NLL", "nota": "Libero / Teamleader von Persönlichkeit / kompletter Volleyballer / Teamverantwortlicher? Spielte schon Pass und Aussen", "tel": "079 341 96 95", "mail": "", "telM": "079 101 13 38", "telP": "", "mailM": "bruderer-grosschedl@bluewin.ch", "mailP": "", "lvl": ""}, {"id": 11, "nombre": "Adrian Stevanovic", "jg": 2007, "rama": "m", "grupo": "U23", "liga": "1ª liga", "h": 0, "comp": 0, "pos": "Punta", "lic": "NLL", "nota": "Aussen 1L - Niveau - Spielt 2L-für Spielerfahrung", "tel": "079 598 75 56", "mail": "", "telM": "055 612 23 58", "telP": "", "mailM": "adrian07@bluewin.ch", "mailP": "", "lvl": ""}, {"id": 12, "nombre": "Kevin Meier", "jg": 2007, "rama": "m", "grupo": "—", "liga": "3ª liga", "h": 0, "comp": 0, "pos": "Opuesto", "lic": "RLL", "nota": "Dia: Solid / motiviert im Spiel - keine Ambitionen für ganz Hoches Niveau - wichtiger Spieler", "tel": "079 100 55 07", "mail": "", "telM": "079 561 16 76", "telP": "", "mailM": "barbarameierch@vtxmail.ch", "mailP": "", "lvl": ""}, {"id": 13, "nombre": "Gian Bruderer", "jg": 2008, "rama": "m", "grupo": "U20", "liga": "1ª liga", "h": 0, "comp": 0, "pos": "Líbero / Punta", "lic": "NLL", "nota": "Aussen 1L- Niveau - Ehrgeizig / besuchte schon NLA-Trainings / Spielte schon Libero", "tel": "079 474 41 67", "mail": "", "telM": "079 101 13 38", "telP": "", "mailM": "bruderer-grosschedl@bluewin.ch", "mailP": "", "lvl": ""}, {"id": 14, "nombre": "Linus Dürst", "jg": 2008, "rama": "m", "grupo": "U20", "liga": "2ª liga", "h": 0, "comp": 0, "pos": "Punta", "lic": "RLL", "nota": "Aussen / Top athletisch und talentiert - spielt erst seit 2 Jahren im Club / Leader in 3L", "tel": "076 407 56 86", "mail": "linus.duerst@stud.schulegl.ch", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 15, "nombre": "Busuioc Nikita", "jg": 2008, "rama": "m", "grupo": "U20", "liga": "2ª liga", "h": 0, "comp": 0, "pos": "Armador", "lic": "RLL", "nota": "Pass / Pizol Erstverein / Näfels Zweitverein", "tel": "076 741 91 11", "mail": "Solbus1987@gmail.com", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 16, "nombre": "Inderbitzin Jonas", "jg": 2008, "rama": "m", "grupo": "U20", "liga": "2ª liga", "h": 0, "comp": 0, "pos": "Punta / Opuesto", "lic": "RLL zweit-Verein", "nota": "Aussen / Dia?  Neu", "tel": "077 416 98 16", "mail": "", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 17, "nombre": "Beda Frank", "jg": 2009, "rama": "m", "grupo": "U20", "liga": "3ª liga", "h": 0, "comp": 0, "pos": "Central", "lic": "RLL", "nota": "Mitte: kommt sehr gut / letztes Jahr grosse Fortschritte trotz Kriesen / braucht Zuspruch", "tel": "077 493 50 77", "mail": "", "telM": "079 773 96 37 (Rita)", "telP": "", "mailM": "fam.frank@me.com", "mailP": "", "lvl": ""}, {"id": 18, "nombre": "Nino Hauser", "jg": 2009, "rama": "m", "grupo": "U20", "liga": "3ª liga", "h": 0, "comp": 0, "pos": "Líbero / Armador / Punta", "lic": "RLL", "nota": "Pass / Aussen: wäre option für 2L - ev. als Libero", "tel": "076 725 74 13", "mail": "", "telM": "078 719 73 58 (Mirjam)", "telP": "077 416 43 33 (René)", "mailM": "hausermirjam@gmx.ch", "mailP": "", "lvl": ""}, {"id": 19, "nombre": "Mattia Heer", "jg": 2009, "rama": "m", "grupo": "U20", "liga": "3ª liga", "h": 0, "comp": 0, "pos": "Central / Opuesto", "lic": "RLL", "nota": "Mitte 2L/Dia(3L): Technisch nicht auf der Höhe, dafür hat er Höhe / kräftiger Armzug/Schlag", "tel": "076 748 20 10", "mail": "", "telM": "079 638 59 93 (Karin)", "telP": "", "mailM": "karin@eglis.net", "mailP": "", "lvl": ""}, {"id": 20, "nombre": "Erlir Hajdari", "jg": 2010, "rama": "m", "grupo": "U20", "liga": "4ª liga", "h": 0, "comp": 0, "pos": "Central", "lic": "RLL", "nota": "Mitte: Neueinsteiger letztes Jahr - braucht noch viele Bälle", "tel": "076 270 20 10", "mail": "erhajdari@hotmail.com", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 21, "nombre": "Dmitro Ilinsky", "jg": 2010, "rama": "m", "grupo": "—", "liga": "4ª liga", "h": 0, "comp": 0, "pos": "", "lic": "keine", "nota": "Asylbewerber - unzuverlässig", "tel": "+380 67 587 3284", "mail": "kovalskaolga5@gmail.com", "telM": "079 367 13 75", "telP": "", "mailM": "kovalskaolga5@gmail.com", "mailP": "", "lvl": ""}, {"id": 22, "nombre": "Max Grassmann", "jg": 2010, "rama": "m", "grupo": "U20", "liga": "3ª liga", "h": 0, "comp": 0, "pos": "Armador / Punta / Opuesto", "lic": "RLL", "nota": "Aussen / Trainiert noch in Jona option als Pass oder Dia", "tel": "076 506 14 30", "mail": "", "telM": "078 942 58 25 (Christine)", "telP": "079 821 06 52 (Oliver)", "mailM": "oliver.grassmann@me.com", "mailP": "", "lvl": ""}, {"id": 23, "nombre": "Enes Aljilji", "jg": 2010, "rama": "m", "grupo": "U20", "liga": "4ª liga", "h": 0, "comp": 0, "pos": "", "lic": "RLL", "nota": "Neueinsteiger letztes Jahr - noch viele technische Mängel - motiviert", "tel": "076 217 63 71", "mail": "sultanije.aljilji88@gmail.com", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 24, "nombre": "Jaron Marco Beglinger", "jg": 2010, "rama": "m", "grupo": "—", "liga": "4ª liga", "h": 0, "comp": 0, "pos": "Armador / Punta", "lic": "RLL", "nota": "Aussen: Ihm macht es Spass Volleyball mit Kollegen zu spielen - wenn er will kann er gut 4L spielen", "tel": "079 882 26 54", "mail": "jaron.beglinger@gmail.com", "telM": "078 801 41 43 (Vera)", "telP": "079 432 38 04 (Jack)", "mailM": "", "mailP": "", "lvl": ""}, {"id": 25, "nombre": "Timo Schifferle", "jg": 2011, "rama": "m", "grupo": "U20", "liga": "3ª liga", "h": 0, "comp": 0, "pos": "Armador / Punta", "lic": "RLL", "nota": "Pass / Aussen: wäre option für 2L - aber noch sehr Jung / sollte Stammspieler 3L sein/werden / Trainiert noch in Jona", "tel": "076 740 54 88", "mail": "timo.schifferle@stud.schulegl.ch;", "telM": "079 227 44 40 (Fabia)", "telP": "079 471 29 73 (Marco)", "mailM": "", "mailP": "", "lvl": ""}, {"id": 26, "nombre": "Nevio Märchy", "jg": 2011, "rama": "m", "grupo": "U20", "liga": "4ª liga", "h": 0, "comp": 0, "pos": "Punta", "lic": "RLL", "nota": "Aussen: gute athletik - motiviert - kommt gut", "tel": "078 204 50 10", "mail": "nevio.maerchy@icloud. com", "telM": "078 891 92 53 (Mirjam)", "telP": "079 326 95 26 (Reto)", "mailM": "mirj_reto@bluewin.ch", "mailP": "", "lvl": ""}, {"id": 27, "nombre": "Andrin Holdener", "jg": 2012, "rama": "m", "grupo": "U16", "liga": "4ª liga", "h": 0, "comp": 0, "pos": "", "lic": "JLL", "nota": "", "tel": "", "mail": "", "telM": "078 648 58 94", "telP": "", "mailM": "chiara.holdener@bluewin.ch", "mailP": "", "lvl": ""}, {"id": 28, "nombre": "Jerome Cattin", "jg": 2012, "rama": "m", "grupo": "U16", "liga": "4ª liga", "h": 0, "comp": 0, "pos": "", "lic": "JLL", "nota": "fehlt oft - schafft es nicht ins Training", "tel": "", "mail": "", "telM": "079 728 33 93", "telP": "", "mailM": "lucattin@gmx.ch", "mailP": "", "lvl": ""}, {"id": 29, "nombre": "Sascha Gmür", "jg": 2012, "rama": "m", "grupo": "U16", "liga": "4ª liga", "h": 0, "comp": 0, "pos": "", "lic": "JLL", "nota": "", "tel": "", "mail": "", "telM": "078 677 10 50", "telP": "", "mailM": "gmuersandra@hotmail.com", "mailP": "", "lvl": ""}, {"id": 30, "nombre": "Nando Grossmann", "jg": 2012, "rama": "m", "grupo": "U16", "liga": "4ª liga", "h": 0, "comp": 0, "pos": "Armador / Punta", "lic": "JLL", "nota": "Pass / aussen: ev. für 4L Matches…", "tel": "078 244 15 91", "mail": "", "telM": "076 526 60 13", "telP": "076 526 60 13", "mailM": "regina.grossmann@gmail.com", "mailP": "", "lvl": ""}, {"id": 31, "nombre": "Matteo Pavin", "jg": 2014, "rama": "m", "grupo": "U16", "liga": "4ª liga", "h": 0, "comp": 0, "pos": "", "lic": "JLL", "nota": "", "tel": "079 561 44 25", "mail": "", "telM": "079 477 77 40", "telP": "", "mailM": "a.pavin@bluewin.ch", "mailP": "", "lvl": ""}, {"id": 32, "nombre": "Théo Duboulaz", "jg": 2012, "rama": "m", "grupo": "U16", "liga": "—", "h": 0, "comp": 0, "pos": "", "lic": "", "nota": "", "tel": "", "mail": "", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 33, "nombre": "Manuel Muhr", "jg": 2014, "rama": "m", "grupo": "U16", "liga": "—", "h": 0, "comp": 0, "pos": "", "lic": "", "nota": "", "tel": "", "mail": "", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 34, "nombre": "Fabio Zingg", "jg": 2015, "rama": "m", "grupo": "U16", "liga": "—", "h": 0, "comp": 0, "pos": "", "lic": "", "nota": "", "tel": "", "mail": "", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 35, "nombre": "Neue; sprich Eintritte in den Verein (nicht alle definifiv):", "jg": null, "rama": "m", "grupo": "—", "liga": "—", "h": 0, "comp": 0, "pos": "", "lic": "", "nota": "", "tel": "", "mail": "", "telM": "", "telP": "als Hilfe - sind schon oben erfasst", "mailM": "", "mailP": "", "lvl": ""}, {"id": 36, "nombre": "Inderbitzin Jonas", "jg": 2008, "rama": "m", "grupo": "—", "liga": "—", "h": 0, "comp": 0, "pos": "", "lic": "", "nota": "", "tel": "077 416 98 16", "mail": "", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 37, "nombre": "Busuioc Nikita", "jg": 2008, "rama": "m", "grupo": "—", "liga": "2ª liga", "h": 0, "comp": 0, "pos": "", "lic": "RLL", "nota": "Pizol Erstverein / Näfels Zweitverein", "tel": "076 741 91 11", "mail": "Solbus1987@gmail.com", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 38, "nombre": "eher nicht, denn er ist aus dem 4L Chat ausgetreten… Mahdi", "jg": null, "rama": "m", "grupo": "—", "liga": "—", "h": 0, "comp": 0, "pos": "", "lic": "", "nota": "", "tel": "", "mail": "", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 39, "nombre": "Kommt glaub noch Daten müssen von Ihm noch erfasst werden. Erfan", "jg": null, "rama": "m", "grupo": "—", "liga": "—", "h": 0, "comp": 0, "pos": "", "lic": "", "nota": "", "tel": "", "mail": "", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 40, "nombre": "Stand  Aug 26", "jg": null, "rama": "m", "grupo": "—", "liga": "—", "h": 0, "comp": 0, "pos": "", "lic": "", "nota": "", "tel": "", "mail": "", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 41, "nombre": "Austritte:", "jg": null, "rama": "m", "grupo": "—", "liga": "—", "h": 0, "comp": 0, "pos": "", "lic": "", "nota": "", "tel": "", "mail": "", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 42, "nombre": "(unsicher für mich, ob sie offiziell per Mail beim Präsidenten den Austritt erklärt haben)", "jg": null, "rama": "m", "grupo": "—", "liga": "—", "h": 0, "comp": 0, "pos": "", "lic": "", "nota": "", "tel": "", "mail": "", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 43, "nombre": "Maurice Crevena", "jg": 2007, "rama": "m", "grupo": "U20", "liga": "2ª liga", "h": 0, "comp": 0, "pos": "", "lic": "RLL", "nota": "1 Jahr Pause", "tel": "076 477 87 50", "mail": "maurice.crevena@icloud.com", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 44, "nombre": "Davide Scolieri", "jg": 2007, "rama": "m", "grupo": "U20", "liga": "2ª liga", "h": 0, "comp": 0, "pos": "", "lic": "RLL", "nota": "", "tel": "078 422 17 62", "mail": "davide.scolieri@bluewin.ch", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 45, "nombre": "Nevin Feuz", "jg": 2008, "rama": "m", "grupo": "U20", "liga": "1ª liga", "h": 0, "comp": 0, "pos": "", "lic": "NLL", "nota": "Nach Jona", "tel": "078 210 06 26", "mail": "nevin.feuz@icloud.com", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 46, "nombre": "Elias Vordermann", "jg": 2008, "rama": "m", "grupo": "—", "liga": "4ª liga", "h": 0, "comp": 0, "pos": "", "lic": "RLL", "nota": "Austritt", "tel": "076 446 90 54", "mail": "", "telM": "076 200 74 05 (Melinda)", "telP": "079 307 17 83 (Franco)", "mailM": "sternschnu8282@gmail.com", "mailP": "", "lvl": ""}, {"id": 47, "nombre": "Raffaele Rovitti", "jg": 2010, "rama": "m", "grupo": "U18", "liga": "—", "h": 0, "comp": 0, "pos": "", "lic": "JLL", "nota": "", "tel": "076 361 29 53", "mail": "raffaele.rovitti@icloud.com", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}, {"id": 48, "nombre": "ehemaliger Verantwortlicher Jungs", "jg": null, "rama": "m", "grupo": "—", "liga": "—", "h": 0, "comp": 0, "pos": "", "lic": "", "nota": "", "tel": "", "mail": "", "telM": "", "telP": "", "mailM": "", "mailP": "", "lvl": ""}];
 let PLANTEL = [], PL_AGRUPAR = "grupo", PL_RAMA = "todas", PL_BUSCA = "", plSeq = 1, PL_CONTACTO = false;
 window.plContacto = function(){ PL_CONTACTO = !PL_CONTACTO; render(); };
 function contactoDe(j){
@@ -2904,10 +2962,12 @@ window.plAdd = function(){
     h:parseFloat(g("plH").value)||0, comp:parseFloat(g("plComp").value)||0,
     niv:"", pos:g("plPos")?g("plPos").value:"", lic:"", nota:"",
     tel:"", mail:"", telM:"", telP:"", mailM:"", mailP:""});
+  const nuevo = PLANTEL[PLANTEL.length-1];
+  if(DB){ PLANTEL.pop(); dbCrear(nuevo); }
   g("plNombre").value=""; g("plJg").value="";
   render(); var n=document.getElementById("plNombre"); if(n) n.focus();
 };
-window.plDel = function(id){ PLANTEL = PLANTEL.filter(function(j){return j.id!==id;}); render(); };
+window.plDel = function(id){ dbBorrar(id); PLANTEL = PLANTEL.filter(function(j){return j.id!==id;}); render(); };
 window.plSet = function(id,campo,val){
   const j = PLANTEL.find(function(x){return x.id===id;}); if(!j) return;
   j[campo] = (campo==="h"||campo==="comp") ? (parseFloat(val)||0) : (campo==="jg") ? (parseInt(val)||null) : val;
@@ -2915,6 +2975,9 @@ window.plSet = function(id,campo,val){
     if(EQUIPOS[val].form.indexOf(j.grupo)<0) j.grupo = EQUIPOS[val].form[0];
     if(EQUIPOS[val].liga.indexOf(j.liga)<0) j.liga = "—";
   }
+  const cambio = {}; cambio[campo] = j[campo];
+  if(campo==="rama"){ cambio.grupo = j.grupo; cambio.liga = j.liga; }
+  dbGuardar(id, cambio);
   render();
 };
 window.plRamaForm = function(){
@@ -3057,6 +3120,16 @@ function vResumen(){
     <div class="nota">${r.cierre}</div></section>${imprimir()}`;
 }
 
+
+/* objetivo y levels esperados por etapa */
+const LVL_ETAPA = {kv1:[5],kv2:[5],kv3:[5,4],r1:[5,4],r2:[4],r3:[4,3],f1:[4,3],f2:[3,2],f3:[2,1]};
+function objEtapa(id){
+  const M = LANG==="de" ? (typeof ENSC_DE!=="undefined"?ENSC_DE:null)
+          : LANG==="en" ? (typeof ENSC_EN!=="undefined"?ENSC_EN:null) : null;
+  const src = (M && M[id]) ? M[id] : ENSC[id];
+  return src ? src.obj : "";
+}
+
 function vEtapa(br){
   const d = D().etapas[ET], rm = D().rama[br];
   const mixto = ["kv1","kv2","kv3","r1","r2"].includes(ET);
@@ -3067,6 +3140,13 @@ function vEtapa(br){
   return `<div class="enc"><div class="eyebrow">${d.e} · ${t("nav."+br)}</div>
     <h2>${d.n}</h2><p>${d.fil}</p></div>
 
+  <div class="obj-caja" style="--c:${ETAPAS[ET].c}">
+    <span>${S("objTit")}</span>
+    <p>${objEtapa(ET)}</p>
+    <div class="obj-lvls"><b>${S("lvlEsp")}</b>
+      ${(LVL_ETAPA[ET]||[]).map(n=>{const L=LV().find(x=>x.n===n);return `<span class="lvl-chip l${n}">L${n} ${L?L.t:""}</span>`;}).join("")}
+      <i>${S("lvlEspP")}</i></div>
+  </div>
   <section class="bloque"><h3><span class="n">01</span>${S("reglas")}</h3>
     ${leyenda()}
     <p>${S("reglasP")} ${F("of")}</p>
@@ -3130,6 +3210,75 @@ function vJuego(){
     </table></div></section>${imprimir()}`;
 }
 
+/* ── objetivos técnicos y tácticos por level ── */
+const OBJ_LVL = {
+es:[
+{n:1,meta:"Que conduzca el juego y sostenga su nivel cuando el partido aprieta.",
+ tec:["Ejecutar el mismo gesto en el tercer set que en el calentamiento, con las piernas cansadas.",
+  "Distribuir con plan: elegir atacante según la rotación y según el bloqueo que tiene enfrente.",
+  "Resolver el ataque contra bloqueo formado, con el ataque de zaga como opción real.",
+  "Sostener el saque agresivo a 23 iguales, respetando la tasa de error acordada.",
+  "Transición inmediata: aterrizar, girar, salir de la red y volver a atacar."],
+ tac:["Sistema 5-1 completo, con sus rotaciones, coberturas y transiciones.",
+  "Preparar al rival con video y llevar un plan de partido propio a la cancha.",
+  "Cambiar algo en el partido sin que el entrenador lo pida, y poder explicar por qué.",
+  "Controlar el ritmo del partido y decidir bien en los puntos que definen el set.",
+  "Sostener a un compañero en una mala racha dentro del juego."],
+ next:"Ya está en el techo formativo. Lo que sigue es competir en el primer equipo."},
+{n:2,meta:"Que resuelva contra oposición organizada y empiece a decidir solo.",
+ tec:["Dos direcciones desde el mismo impulso, más la finta, sin cambiar la carrera.",
+  "Bloqueo lector: mirar el primer contacto, después al armador, y decidir antes del salto.",
+  "Ataque de zaga arrancando desde detrás de los tres metros, sin pisar la línea.",
+  "Saque en salto con lanzamiento constante, o saque de arriba agresivo con zona elegida.",
+  "Armar con contrato: la misma pelota para el mismo atacante, siempre."],
+ tac:["Sistema 6-2 completo, con tres atacantes en las seis rotaciones.",
+  "Leer al armador rival y acomodar la posición sin instrucción.",
+  "Reconocer qué está pasando en el partido y ajustar algo por cuenta propia.",
+  "Usar video: un clip corto por semana y aplicarlo el fin de semana.",
+  "Coberturas y transiciones del 6-2, que es lo que más se descuida."],
+ next:"Para llegar a L1: sostener todo esto con el marcador en contra y en el tercer set."},
+{n:3,meta:"Que sostenga la jugada completa con oposición real y deje de depender del entrenador dentro del punto.",
+ tec:["Recepción que queda en sistema la mitad de las veces contra saque de competencia.",
+  "Penetración desde zona 1: salir a tiempo y llegar equilibrado, no llegar corriendo.",
+  "Carrera de tres pasos estable, con la dirección elegida antes del salto.",
+  "Saque de arriba con 7 de 10 dentro y capacidad de cantar la zona.",
+  "Bloqueo con las manos sobre la red y el desplazamiento terminado antes del salto."],
+ tac:["Penetración en las seis rotaciones, sin excepciones.",
+  "Sistema 6-6 completo: todos arman cuando la pelota no llega al armador.",
+  "Cubrir al atacante sin que nadie lo pida.",
+  "Arrancar la carrera según lo que ve en el primer contacto, no cuando sale el pase.",
+  "Empezar a leer al armador rival."],
+ next:"Para llegar a L2: decidir antes del salto y sumar una segunda dirección de ataque."},
+{n:4,meta:"Que sostenga bajo presión lo que ya hace bien con pelota cómoda.",
+ tec:["Recepción contra saque de competencia, no solo contra pelota lanzada.",
+  "Armar en desplazamiento: llegar y jugar sin que la pelota salga plana.",
+  "Estabilizar la carrera de tres pasos, siempre con el mismo ritmo.",
+  "Contacto arriba y adelante del cuerpo, con el brazo estirado.",
+  "Saque de arriba que además elija zona, no solo que entre."],
+ tac:["Construir tres toques también cuando la pelota viene difícil.",
+  "Acompañar al que ataca, siempre y sin que se lo recuerden.",
+  "Resolver la zona de conflicto: el que va hacia adentro la toma, el otro canta y se abre.",
+  "Ocupar su zona y volver a la posición después de cada acción.",
+  "Entender qué rotación se está jugando y quién arma en esa rotación."],
+ next:"Para llegar a L3: que la técnica no se caiga cuando aparece el saque de competencia."},
+{n:5,meta:"Que el rally exista: que la pelota sobreviva al primer contacto.",
+ tec:["Llevar la plataforma a la pelota moviendo los pies, no estirando los brazos.",
+  "Manos arriba y adelante de la cara antes de que la pelota llegue.",
+  "Golpear con la mano abierta y el brazo estirado, con la pelota adelante.",
+  "Caer sobre los dos pies con la rodilla alineada, siempre.",
+  "Saque que entre a la cancha, con el gesto que le salga."],
+ tac:["Pedir la pelota en voz alta antes de tocarla.",
+  "Entender que se juega en tres toques y no se devuelve de primera.",
+  "Ir a la pelota que es suya y no ir a la que no lo es.",
+  "Volver a la posición después de cada acción.",
+  "Jugar con el compañero en vez de resolver solo."],
+ next:"Para llegar a L4: que la recepción llegue al armador y la jugada de tres aparezca sola."}]
+};
+OBJ_LVL.de = OBJ_LVL.es; OBJ_LVL.en = OBJ_LVL.es;
+const OL = () => OBJ_LVL[LANG] || OBJ_LVL.es;
+let MAT_LVL = 0;
+window.setMatLvl = n => { MAT_LVL = Number(n); render(); };
+
 function vMatriz(){
   const m = D().matriz;
   const cab = `<tr><th></th>${COLS.map(c=>`<th style="text-align:center">${m.cols[c]}</th>`).join("")}<th style="text-align:center">${S("origen")}</th></tr>`;
@@ -3143,6 +3292,23 @@ function vMatriz(){
       .map(x=>`<span><b class="niv ${x[0]}" style="width:auto;padding:3px 9px;display:inline-block">${x[0]==="x"?"·":x[0]}</b> ${x[1]}</span>`).join("")}</div>`;
   return `<div class="enc"><div class="eyebrow">${m.eyebrow}</div><h2>${m.titulo}</h2><p>${m.intro}</p></div>
   <div class="nota of" style="margin-top:22px">${m.aviso}</div>
+  <section class="bloque"><h3><span class="n">00</span>${S("objXLvl")}</h3>
+    <p>${S("objXLvlP")}</p>
+    <div class="ens-nav no-imprimir">
+      ${LV().map(L=>`<button class="ens-tab" onclick="setMatLvl(${L.n})" aria-pressed="${MAT_LVL===L.n}" style="--c:${["","#0E2A8A","#8E3374","#EE4655","#FA844E","#D9B300"][L.n]}">L${L.n} <span class="cg">${L.t}</span></button>`).join("")}
+    </div>
+    ${(function(){
+      const L = LV().find(x=>x.n===MAT_LVL), O = OL().find(x=>x.n===MAT_LVL);
+      if(!L || !O) return `<div class="pl-vacio">${S("objElegi")}</div>`;
+      const col = ["","#0E2A8A","#8E3374","#EE4655","#FA844E","#D9B300"][L.n];
+      return `<div class="obj-caja" style="--c:${col}"><span>L${L.n} · ${L.t}</span><p>${O.meta}</p></div>
+        <div class="ens-dos" style="margin-top:20px">
+          <div><h4 class="obj-h">${S("objTec")}</h4><ul class="obj-ul">${O.tec.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+          <div><h4 class="obj-h">${S("objTac")}</h4><ul class="obj-ul">${O.tac.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+        </div>
+        <div class="nota" style="border-left-color:${col}"><strong>${S("objSig")}</strong> ${O.next}</div>`;
+    })()}
+  </section>
   <section class="bloque"><h3><span class="n">01</span>${m.b1}</h3><p>${m.b1p}</p>${leyMx}${tabla(MTEC)}</section>
   <section class="bloque"><h3><span class="n">02</span>${m.b2}</h3><p>${m.b2p} ${F("of")}</p>${leyMx}${tabla(MTAC)}
     <div class="nota of">${m.b2n2} ${F("of")}</div>
@@ -3284,10 +3450,11 @@ function vPlantel(){
     + '<div class="pl-campo"><label>'+S("plRama")+'</label><select onchange="PL_RAMA=this.value;render()">'
       + opt("todas",S("plTodas"),PL_RAMA)+opt("m",S("plM"),PL_RAMA)+opt("f",S("plF"),PL_RAMA)+'</select></div>'
     + '<div class="pl-campo"><label>'+S("plBuscar")+'</label><input class="txt" value="'+PL_BUSCA.replace(/"/g,"&quot;")+'" oninput="PL_BUSCA=this.value;render()" placeholder="'+S("plNombre")+'"></div>'
+    + dbEtiqueta()
     + '<button class="btn-s sec" onclick="plContacto()">'+(PL_CONTACTO?"Ocultar contactos":"Ver contactos")+'</button>'
     + '<button class="btn-s sec" onclick="plExport()">'+S("plGuardar")+'</button>'
     + '<button class="btn-s sec" onclick="plCSV()">'+S("plCSV")+'</button>'
-    + '<label class="btn-s sec" style="cursor:pointer">'+S("plCargar")+'<input type="file" accept=".json" style="display:none" onchange="plImport(event)"></label>'
+    + (DB ? '' : '<label class="btn-s sec" style="cursor:pointer">'+S("plCargar")+'<input type="file" accept=".json" style="display:none" onchange="plImport(event)"></label>')
     + '</div>'
 
     + (claves.length===0
@@ -3310,7 +3477,9 @@ function vPlantel(){
       +'</tbody></table></div>'
       +'<p style="margin:14px 0 0">'+S("lvlRegla")+'</p></div>'
     + '<div class="nota aviso">'+S("plNota1")+'</div>'
-    + '<div class="nota">'+S("plNota2")+'</div>'
+    + '<div class="nota">'+(DB
+        ? '<strong>Los datos son compartidos y quedan guardados.</strong> Lo que etiqueta cada entrenador lo ven todos, en vivo, sin exportar ni mandar archivos. Solo escriben las personas autorizadas del club; con el link de solo lectura se ve pero no se modifica. El botón de guardar JSON sirve para llevarte una copia de respaldo.'
+        : S("plNota2"))+'</div>'
     + imprimir();
 }
 
@@ -4761,7 +4930,9 @@ document.querySelectorAll(".idioma").forEach(b=>b.onclick=()=>{
   document.querySelectorAll(".idioma").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
   render();
 });
+if(!PLANTEL.length){ PLANTEL = PLANTEL_INICIAL.map(function(j){return Object.assign({},j);}); plSeq = PLANTEL.length+1; }
 render();
+iniciarDB();
 </script>
 </body>
 </html>
