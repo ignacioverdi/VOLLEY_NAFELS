@@ -1136,13 +1136,25 @@ function objDetallePorJugador(id){
     if(!v) return;
     var D = v[cfg.d];
     if(cfg.k && D) D = D[cfg.k];
-    if(!D || !D.t) return;
-    filas.push({ n:nom, D:D, pct:(v[id]!=null ? v[id] : null) });
+    if(!D) return;
+
+    /* ══ EL TOTAL NO SIEMPRE VIENE ════════════════════════════════════════
+       Los ataques traen 't'. Saque, recepcion, defensa y bloqueo NO: guardan
+       una casilla por valoracion y nada mas. Por eso la tabla salia "no hay
+       datos" en esos fundamentos, aunque el desglose estuviera completo.
+       Si falta, se suma. */
+    var t = D.t;
+    if(t == null){
+      t = 0;
+      for(var kk in D){ if(kk !== 't' && typeof D[kk] === 'number') t += D[kk]; }
+    }
+    if(!t) return;
+    filas.push({ n:nom, D:D, t:t, pct:(v[id]!=null ? v[id] : null) });
   });
   if(!filas.length) return '';
 
   /* de mayor a menor cantidad: primero el que mas participa */
-  filas.sort(function(a,b){ return (b.D.t||0) - (a.D.t||0); });
+  filas.sort(function(a,b){ return (b.t||0) - (a.t||0); });
 
   var esAtq = (String(id).indexOf('atq') === 0);
   var enc = esAtq
@@ -1162,17 +1174,23 @@ function objDetallePorJugador(id){
   var tot = {t:0,p:0,b:0,e:0};
   filas.forEach(function(f){
     var D=f.D;
-    var p = D.p||0, b = (D.b!=null?D.b:(D.s||0)), e = D.e||0, t = D.t||0;
+    /* ataque: p punto · b bloqueado · e error
+       saque y recepcion: p perfecta · o positiva · e error */
+    var p = D.p||0;
+    var b = esAtq ? (D.b!=null?D.b:(D.s||0)) : (D.o||0);
+    var e = D.e||0, t = f.t||0;
     tot.t+=t; tot.p+=p; tot.b+=b; tot.e+=e;
+    /* En ataque se calcula; en los demas se usa el que ya viene, que sale de
+       la formula con pesos y no de una resta. */
     var pct = t ? Math.round((p - b - e)/t*100) : 0;
-    if(!esAtq && f.pct!=null) pct = f.pct;
+    if(!esAtq) pct = (f.pct!=null ? f.pct : '\u2014');
     h += '<tr style="border-top:1px solid rgba(148,163,184,.08)">'
       +  '<td style="padding:3px 4px;color:#e2e8f0">'+f.n+'</td>'
       +  '<td style="text-align:right;padding:3px 4px;color:#e2e8f0;font-weight:700">'+t+'</td>'
       +  '<td style="text-align:right;padding:3px 4px;color:#4ade80">'+p+'</td>'
       +  '<td style="text-align:right;padding:3px 4px;color:#fb923c">'+b+'</td>'
       +  '<td style="text-align:right;padding:3px 4px;color:#f87171">'+e+'</td>'
-      +  '<td style="text-align:right;padding:3px 4px;color:#e2e8f0;font-weight:700">'+pct+'%</td>'
+      +  '<td style="text-align:right;padding:3px 4px;color:#e2e8f0;font-weight:700">'+pct+(pct==='\u2014'?'':'%')+'</td>'
       +  '</tr>';
   });
 
