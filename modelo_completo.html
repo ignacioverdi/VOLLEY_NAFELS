@@ -192,6 +192,10 @@ td.num{font-weight:600;white-space:nowrap}
 .pl-cont b{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);margin-right:5px}
 .sin-cont{color:#9E1F2C}
 .obj-h{font-family:var(--fn);font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--gris);margin:0 0 8px}
+.ref-lvl{border-left:4px solid #1E6B33;background:#F4F9F5;padding:14px 18px;margin:20px 0 0}
+.ref-lvl span{font-family:var(--fn);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#1E6B33}
+.ref-lvl b{display:block;font-size:16px;margin:4px 0 5px}
+.ref-lvl p{margin:0;font-size:14.8px;line-height:1.55}
 .obj-it{border-top:1px solid var(--gris-claro);padding:12px 0}
 .obj-it b{display:block;font-size:16px;font-weight:600;margin-bottom:4px}
 .obj-it p{margin:0;font-size:14.8px;line-height:1.55;color:var(--tinta)}
@@ -494,6 +498,8 @@ const BIBLIO = [
 const CONTENIDO = {};
 CONTENIDO.es = {
 sec:{
+ refInt:"Cómo lo hacen las potencias",
+ dosTablas:"<strong>Por qué esta tabla no coincide con la de etapas.</strong> Son dos preguntas distintas. La tabla por etapa dice qué sistema prescribe Swiss Volley en cada escalón de competencia: Future 1 juega 6-6, Future 2 juega 6-2 y Future 3 juega 5-1. Esta dice qué tiene que dominar un jugador según su capacidad, juegue donde juegue. Un L3 de diecisiete años compite en 4ª o 3ª liga, donde se juega 5-1, así que tiene que controlarlo aunque su etapa formativa todavía no lo prescriba.",
  objXLvl:"Objetivos por level", objXLvlP:"Elegí un level y vas a ver qué hay que trabajar con ese jugador, en técnica y en táctica, y qué le falta para pasar al siguiente. Sirve igual en cualquier grupo: en un mismo entrenamiento podés tener tres levels y esto te dice qué le pedís a cada uno.", objTec:"Objetivos técnicos", objTac:"Objetivos tácticos", objSig:"El salto al siguiente level.", objElegi:"Elegí un level arriba.",
  objTit:"Para qué es esta etapa", lvlEsp:"Levels que vas a encontrar acá:", lvlEspP:"Si tenés a alguien muy por fuera de este rango, probablemente esté en el grupo equivocado.",
  lvlTit:"Cómo etiquetar a un jugador",
@@ -1251,6 +1257,8 @@ ref:{
 
 CONTENIDO.de = {
 sec:{
+ refInt:"Wie es die führenden Nationen machen",
+ dosTablas:"<strong>Warum diese Tabelle nicht mit der Stufentabelle übereinstimmt.</strong> Es sind zwei verschiedene Fragen. Die Stufentabelle sagt, welches System Swiss Volley auf jeder Wettkampfstufe vorschreibt: Future 1 spielt 6-6, Future 2 spielt 6-2 und Future 3 spielt 5-1. Diese sagt, was eine Person nach ihrem Können beherrschen muss, egal wo sie spielt. Ein siebzehnjähriger L3 spielt in der 4. oder 3. Liga, wo 5-1 gespielt wird, also muss er es beherrschen, auch wenn seine Ausbildungsstufe es noch nicht vorschreibt.",
  objXLvl:"Ziele nach Level", objXLvlP:"Wähle ein Level und du siehst, was mit dieser Person zu erarbeiten ist, technisch und taktisch, und was ihr zum nächsten Level fehlt. Gilt in jeder Gruppe: In einer Einheit können drei Levels sitzen, und hier steht, was du von jedem verlangst.", objTec:"Technische Ziele", objTac:"Taktische Ziele", objSig:"Der Sprung zum nächsten Level.", objElegi:"Wähle oben ein Level.",
  objTit:"Wofür diese Stufe da ist", lvlEsp:"Levels, die hier vorkommen:", lvlEspP:"Wer deutlich ausserhalb dieses Bereichs liegt, ist wahrscheinlich in der falschen Gruppe.",
  lvlTit:"Wie eine Person eingestuft wird",
@@ -1997,6 +2005,8 @@ ref:{
 
 CONTENIDO.en = {
 sec:{
+ refInt:"How the leading nations do it",
+ dosTablas:"<strong>Why this table does not match the stage table.</strong> They answer two different questions. The stage table states which system Swiss Volley prescribes at each competitive tier: Future 1 plays 6-6, Future 2 plays 6-2 and Future 3 plays 5-1. This one states what a player has to master according to their ability, wherever they play. A seventeen-year-old L3 competes in the 4th or 3rd League, where the 5-1 is played, so they have to control it even if their development stage does not yet prescribe it.",
  objXLvl:"Objectives by level", objXLvlP:"Pick a level and you get what to work on with that player, technically and tactically, and what they need to move up. It applies in any group: one session can hold three levels, and this tells you what to ask of each.", objTec:"Technical objectives", objTac:"Tactical objectives", objSig:"The step to the next level.", objElegi:"Pick a level above.",
  objTit:"What this stage is for", lvlEsp:"Levels you will find here:", lvlEspP:"Anyone well outside this range is probably in the wrong group.",
  lvlTit:"How to tag a player",
@@ -3234,6 +3244,7 @@ const OBJ_LVL = {es:[
  {t:"Bloqueo lector",d:"Pasar de reaccionar a anticipar: mirar el primer contacto, después al armador, y decidir antes del salto. Se entrena obligando a cantar en voz alta qué van a hacer antes de que la armadora toque, y puntuando la decisión aunque el bloqueo salga mal."},
  {t:"Ataque de zaga",d:"Carrera desde detrás de la línea de tres metros, con despegue antes de la línea y contacto alto. Es un ataque de tiempo más lento que el de punta, así que el atacante arranca antes y el armador levanta más adelante en la red. El error típico es arrancar tarde y pisar: se corrige con una marca en el piso un metro más atrás que obliga a salir antes. Incluye la coordinación con el armado, que es distinta a la del ataque de punta."},
  {t:"Saque en salto o saque de arriba con zona",d:"El lanzamiento es el noventa por ciento del saque en salto, así que se entrena por separado: series de solo lanzamiento con una marca en el piso, sin golpear. Después se suma la carrera y recién al final el golpe. Si el jugador todavía no tiene el cuerpo para el salto, el objetivo equivalente es el saque de arriba agresivo con zona elegida."},
+ {t:"Tiempos de ataque",d:"Brasil los abre recién en la fase de rendimiento y en este orden: ataque por entrada y por salida, después media bola en el medio, y después tiempo de frente. Cada tiempo obliga al atacante a arrancar antes y al armador a acortar la trayectoria, y es lo que empieza a romper el bloqueo rival. El ataque de zaga viene después de todos ellos."},
  {t:"Armar con contrato",d:"Cada atacante define con el armador la altura, la distancia a la red y la velocidad de su pelota, y se escribe. Después se repite hasta que sale sin pensarlo. La descoordinación entre armador y atacante casi nunca es técnica: es que nunca se pusieron de acuerdo."}],
  tac:[
  {t:"Sistema 6-2 completo",d:"Dos armadoras que arman desde zaga y atacan cuando rotan adelante, con tres atacantes siempre en la red. Incluye las coberturas, que cambian en cada rotación y son lo que más se descuida de este sistema."},
@@ -3249,6 +3260,7 @@ const OBJ_LVL = {es:[
  {t:"Penetración desde zona 1",d:"Salir cuando el saque rival cruza la red, no cuando la recepción ya salió; recorrido recto hacia la zona 2-3; y el último paso es de freno. El error universal es salir tarde y compensar corriendo: llegan al balón pero llegan en movimiento. Se entrena sin pelota, cronometrado contra el saque, mirando solo los pies."},
  {t:"Sostener la carrera cuando el armado no es perfecto",d:"En este level el ritmo ya está; lo que se entrena es no cambiarlo cuando la pelota viene corta o separada. El paso largo de freno se hace con la pierna contraria al brazo que golpea, y es el que convierte la carrera horizontal en salto vertical: si se acorta, el jugador termina saltando hacia adelante y pegándole a la red. La dirección se decide antes del salto, no en el aire, y eso se corrige preguntando adónde apuntó, no cuán fuerte pegó."},
  {t:"Saque de arriba con 7 de 10 y zona cantada",d:"Primero la constancia, después la zona. Se mide en series de diez con registro, para que cada jugador conozca su número. Sin una tasa de error acordada, todos sacan flojo para no fallar."},
+ {t:"Armado de espaldas",d:"Brasil lo pone como paso explícito de la progresión: primero se arma solo de frente, después de frente y de espaldas, y recién al final libre. Sin el armado de espaldas el equipo es previsible, porque el bloqueo rival sabe que la pelota va siempre hacia donde mira el armador. Se entrena con el mismo criterio que el de frente: impulso de piernas y el arco de la espalda dando la dirección, no los brazos."},
  {t:"Bloqueo con manos sobre la red y orientadas al campo",d:"Manos penetrando por encima de la cinta, pulgares arriba y palmas giradas hacia adentro de la cancha rival: un bloqueo que mira al techo devuelve la pelota afuera y no suma. El salto es vertical y sale después del despegue del atacante, no junto con él. El desplazamiento termina antes del salto: el error más común es saltar todavía moviéndose de costado y desarmarse en el aire."}],
  tac:[
  {t:"Penetración en las seis rotaciones",d:"Sin excepciones. Se canta la rotación antes de cada punto hasta que sale solo. Todo el sistema posterior se apoya en esto."},
@@ -3386,6 +3398,7 @@ OBJ_LVL.en = [
  {t:"Reading block",d:"Moving from reacting to anticipating: watch the first contact, then the setter, and decide before the jump. Trained by making them call out loud what they will do before the setter touches the ball, and by scoring the decision even when the block fails."},
  {t:"Back-row attack",d:"Approach from behind the three-metre line, take-off before the line and a high contact. It is a slower tempo than the outside attack, so the hitter starts earlier and the setter delivers further forward along the net. The typical error is starting late and stepping on the line: a floor mark a metre further back forces the early start."},
  {t:"Jump serve, or overhand serve with a zone",d:"The toss is ninety per cent of the jump serve, so it is trained separately: series of tosses only, with a floor mark, without hitting. Then the approach is added, and the strike only at the end. If the player does not yet have the body for the jump, the equivalent objective is an aggressive overhand serve into a chosen zone."},
+ {t:"Attack tempos",d:"Brazil opens them only in the performance phase and in this order: attack from the outside and from the right, then the quick in the middle, then the front tempo. Each tempo forces the hitter to start earlier and the setter to shorten the trajectory, and it is what begins to break the opposing block. The back-row attack comes after all of them."},
  {t:"Setting to an agreement",d:"Each attacker settles with the setter the height, the distance from the net and the speed of their ball, and it gets written down. Then it is repeated until it comes without thinking. Setter-hitter mismatch is almost never technical: they simply never agreed."}],
  tac:[
  {t:"The complete 6-2 system",d:"Two setters who set from the back row and attack once they rotate front, with three attackers always at the net. It covers coverage, which changes every rotation and is the most neglected part of this system."},
@@ -3441,33 +3454,53 @@ OBJ_LVL.en = [
  next:"To reach L4: that the pass reaches the setter and the three-contact build appears by itself."}];
 
 const OL = () => OBJ_LVL[LANG] || OBJ_LVL.es;
+/* referencia internacional por level */
+const REF_LVL = {
+1:{t:"Sub-19 y Sub-21 en Brasil · fase de Performance",d:"Todo libre: sistema, saque, ataque, bloqueo y líbero sin restricciones. Es el único tramo donde Brasil quita todas las limitaciones, porque el jugador ya pasó por todas las etapas. La regla que sí mantiene: en esta fase se puede jugar solo <strong>una</strong> categoría por encima, no dos."},
+2:{t:"Sub-17 en Brasil · entrada a Performance",d:"Acá Brasil introduce el <strong>5-1</strong>, permite el <strong>líbero por primera vez</strong>, habilita el <strong>bloqueo doble en las puntas</strong> y abre los tiempos de ataque —entrada, salida, media bola en el medio y tiempo de frente—, pero <strong>sigue prohibiendo el ataque de zaga</strong>. El saque es de arriba sin salto y máximo cinco por jugador, para que nadie gane el partido solo sacando."},
+3:{t:"Sub-14 y Sub-15 en Brasil · fase de Desarrollo",d:"El sistema es <strong>4x2 simple y después 4x2 con infiltración</strong>, que es nuestro 4:4 con penetración. El líbero <strong>sigue prohibido</strong>. La recepción pasa a <strong>cinco jugadores en formación W o M</strong>, con un motivo explícito: repartir la cancha en partes iguales para que todos reciban y nadie se esconda. El bloqueo es simple. Se puede jugar hasta dos categorías por encima."},
+4:{t:"Sub-13 en Brasil · final de Iniciación",d:"Sistema <strong>6x0</strong>, sin cambio de posición entre frente y fondo: todos juegan en todas las posiciones. El <strong>bloqueo está prohibido</strong> y el saque es <strong>por abajo</strong>. El ataque es sin salto. El armado empieza a incluir la <strong>pelota de espaldas</strong>. La recepción es de dos o tres jugadores."},
+5:{t:"Sub-9 a Sub-11 en Brasil · Iniciación",d:"Cancha de 6x3 a 12x4,5 metros, red de 1,80 a 2,20 m, equipos de 1x1, 2x2 y 3x3. <strong>Prohibida la pelota de primera</strong> y prohibido el bloqueo. El saque es lanzado, de toque o por abajo, y el ataque es de toque. El armado es <strong>solo de frente</strong>. La razón que dan los entrevistados: si se permite el saque de arriba, un solo chico que saca fuerte termina el partido solo."}
+};
+/* dos conceptos que faltaban en el modelo y que Brasil explicita */
+ENSC_EXTRA_TEC = {
+3:{t:"Armado de espaldas",d:"Brasil lo pone como paso explícito de la progresión: primero se arma solo de frente, después de frente y de espaldas, y recién al final libre. Sin el armado de espaldas el equipo es previsible, porque el bloqueo rival sabe que la pelota va siempre hacia donde mira el armador. Se entrena con el mismo criterio que el de frente: impulso de piernas y el arco de la espalda dando la dirección, no los brazos."},
+2:{t:"Tiempos de ataque",d:"Brasil los abre recién en la fase de rendimiento y en este orden: ataque por entrada y por salida, después media bola en el medio, y después tiempo de frente. No es un detalle: cada tiempo obliga al atacante a arrancar antes y al armador a acortar la trayectoria, y es lo que empieza a romper el bloqueo rival. El ataque de zaga viene después de todos ellos."}
+};
+
 let MAT_LVL = 0;
 window.setMatLvl = n => { MAT_LVL = Number(n); render(); };
 
 
-/* las matrices por level se derivan de las de etapa: no pueden divergir */
+
+/* Matrices POR LEVEL — definidas aparte de las de etapa, a propósito.
+   La tabla por etapa dice qué prescribe Swiss Volley en cada escalón de competencia.
+   Esta dice qué tiene que dominar un jugador de esa capacidad, juegue donde juegue. */
 const LVL_COLS = ["L5","L4","L3","L2","L1"];
-const LVL_DE_ETAPA = [["kids"],["r12","r3"],["f1"],["f2"],["f3"]];
-const ORD_N = {x:0,I:1,D:2,C:3,M:4}, N_ORD = ["x","I","D","C","M"];
-function porLevel(M){
-  const ix = c => COLS.indexOf(c)+1;
-  return M.map(function(r){
-    const fila = [r[0]];
-    LVL_DE_ETAPA.forEach(function(ets){
-      const v = ets.map(function(e){ return ORD_N[r[ix(e)]] || 0; });
-      fila.push(N_ORD[Math.max.apply(null, v)]);
-    });
-    fila.push(r[7]);
-    return fila;
-  });
-}
+const MTEC_L = [
+ ["atrapar","C","M","M","M","M",0],["dedos","I","C","M","M","M",0],
+ ["antebrazos","I","D","C","M","M",0],["saque_abajo","D","M","M","M","M",0],
+ ["saque_arriba","x","I","C","M","M",0],["saque_salto","x","x","x","I","D",0],
+ ["ataque_pie","I","C","M","M","M",0],["ataque_salto","x","D","C","M","M",0],
+ ["ataque_zaga","x","x","x","I","C",0],["penetracion","x","D","C","M","M",1],
+ ["bloqueo_tec","x","I","C","M","M",0],["bloqueo_lector","x","x","I","C","M",0],
+ ["defensa","I","D","C","M","M",0],["aterrizaje","C","M","M","M","M",0]
+];
+const MTAC_L = [
+ ["s33","C","M","M","M","M",1],["s44","x","C","M","M","M",1],
+ ["s66","x","D","C","M","M",1],["s66p1","x","I","C","M","M",2],
+ ["s62","x","I","C","M","M",2],["s51","x","I","C","M","M",2],
+ ["tres","I","C","M","M","M",0],["cobertura","I","D","C","M","M",0],
+ ["lectura","x","x","I","D","C",0],["ajustes","x","x","I","D","C",0],
+ ["scouting","x","x","x","I","D",0]
+];
 
 function vMatriz(){
   const m = D().matriz;
   const tablaL = M => `<div class="tabla-envoltura"><table><thead><tr><th></th>
     ${LVL_COLS.map((c,i)=>`<th style="text-align:center;color:${["#D9B300","#B4551F","#EE4655","#8E3374","#0E2A8A"][i]}">${c}</th>`).join("")}
     <th style="text-align:center">${S("origen")}</th></tr></thead><tbody>
-    ${porLevel(M).map(f=>`<tr><td>${m.fund[f[0]]||f[0]}</td>
+    ${M.map(f=>`<tr><td>${m.fund[f[0]]||f[0]}</td>
       ${f.slice(1,6).map(v=>`<td style="text-align:center"><span class="cel ${v}">${v==="x"?"·":v}</span></td>`).join("")}
       <td style="text-align:center">${f[6]===2?F("of")+" "+F("club"):f[6]?F("of"):F("club")}</td></tr>`).join("")}
     </tbody></table></div>`;
@@ -3496,11 +3529,13 @@ function vMatriz(){
           <div><h4 class="obj-h">${S("objTec")}</h4>${O.tec.map(x=>`<div class="obj-it"><b>${x.t}</b><p>${x.d}</p></div>`).join("")}</div>
           <div><h4 class="obj-h">${S("objTac")}</h4>${O.tac.map(x=>`<div class="obj-it"><b>${x.t}</b><p>${x.d}</p></div>`).join("")}</div>
         </div>
+        <div class="ref-lvl"><span>${S("refInt")}</span><b>${REF_LVL[L.n].t}</b><p>${REF_LVL[L.n].d}</p></div>
         <div class="nota" style="border-left-color:${col}"><strong>${S("objSig")}</strong> ${O.next}</div>`;
     })()}
   </section>
-  <section class="bloque"><h3><span class="n">01</span>${m.b1}</h3><p>${m.b1p}</p>${leyMx}${tablaL(MTEC)}</section>
-  <section class="bloque"><h3><span class="n">02</span>${m.b2}</h3><p>${m.b2p} ${F("of")}</p>${leyMx}${tablaL(MTAC)}
+  <section class="bloque"><h3><span class="n">01</span>${m.b1}</h3><p>${m.b1p}</p>${leyMx}${tablaL(MTEC_L)}</section>
+  <section class="bloque"><h3><span class="n">02</span>${m.b2}</h3><p>${m.b2p} ${F("of")}</p>${leyMx}${tablaL(MTAC_L)}
+    <div class="nota aviso">${S("dosTablas")}</div>
     <div class="nota of">${m.b2n2} ${F("of")}</div>
     <div class="nota aviso">${m.b2n}</div></section>
   <section class="bloque"><h3><span class="n">03</span>${m.b3}</h3><p>${m.b3p} ${F("lit")}</p>
