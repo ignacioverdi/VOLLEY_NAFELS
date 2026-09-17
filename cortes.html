@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Cortes de Video · NAFELS VOLEY">Cortes de Video · NAFELS VOLEY</title>
-<script src="categorias_club.js?v=20260916-2140"></script>
-<script src="selector_categoria.js?v=20260916-2140"></script>
+<script src="categorias_club.js?v=20260917-0857"></script>
+<script src="selector_categoria.js?v=20260917-0857"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260916-2140"></script>
-<script src="filtro_tipo.js?v=20260916-2140" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260917-0857"></script>
+<script src="filtro_tipo.js?v=20260917-0857" onerror="void 0"></script>
   <!-- datos_video_25-26 sacado: es el video de la CAPSULA. Esta pantalla es
        de la 26-27, y cargarlo mezclaba jugadores nuevos con cortes de la
        temporada pasada. -->
@@ -33,8 +33,8 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="mapa_videos.js.enc?v=3" onerror="void 0"></script>
 <script src="mapa_videos_ent.js.enc?v=3" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20260916-2140" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260916-2140"></script>
+<script src="firebase.js?v=20260917-0857" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260917-0857"></script>
 <style>
   :root{--bg:#0b1017;--bg2:#0f172a;--card:#111a27;--card2:#16212f;--line:#1f2c3d;--txt:#e2e8f0;--muted:#7689a1;--muted2:#475569;--naf:#22c55e;--naf-dim:rgba(34,197,94,.12);--atk:#F97316;--srv:#22C55E;--rec:#818CF8;--set:#F59E0B;--blk:#ef4444;--def:#06b6d4;--free:#94a3b8;--ev-pos:#22c55e;--ev-plus:#84cc16;--ev-excl:#eab308;--ev-neg:#f97316;--ev-slash:#f59e0b;--ev-err:#ef4444;}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -150,7 +150,7 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260916-2140">
+<link rel="stylesheet" href="movil.css?v=20260917-0857">
 </head>
 <body>
 <div class="wrap">
@@ -666,6 +666,11 @@ window.__DESCIFRAR_SINCRONO = true;
     $('preoff').addEventListener('input',function(){$('prev').textContent=this.value;});
     $('postoff').addEventListener('input',function(){$('postv').textContent=this.value;});
     $('share').addEventListener('click',function(){var url=buildShareLink();
+    /* Se acorta antes de copiar. Si Firebase no contesta, copia el largo. */
+    if(typeof linkCorto==='function'){
+      linkCorto(url).then(function(corto){ _copiarYAvisar(corto); });
+      return;
+    }
       if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){toast('Link copiado ✓ — pegalo en WhatsApp');},function(){prompt('Copiá y compartí este link:',url);});}
       else prompt('Copiá y compartí este link:',url);});
     $('selAll').addEventListener('click',function(){filtered.forEach(function(a){selected[ckey(a)]=1;});render(selectedMatchCodes().length>1);});
@@ -674,16 +679,51 @@ window.__DESCIFRAR_SINCRONO = true;
       var r=e.target.closest('.row');if(r){var i=+r.dataset.i;if(ready&&filtered[i]._vid)playClip(i);else{current=i;setNow(filtered[i]);}}});
   }
   function buildShareLink(){
+    /* ══ EL LINK TIENE QUE LLEVAR TODO LO QUE SE ELIGIO ═══════════════════════
+       La pantalla LEE 13 filtros al abrir —num, sk, combo, ev, dz, oz, ph,
+       call, apos, rival, date, team, season— pero el link solo llevaba 5. El
+       que lo recibia veia otra cosa que el que lo mando.
+
+       El caso mas comun: se entra desde una bateria con sk=Ataque, se comparte,
+       y el otro abre y ve TODOS los fundamentos, no solo los ataques.
+
+       Ahora se manda cada filtro que este puesto. Y si ademas hay clips
+       tildados a mano, van los clips Y los filtros: antes los clips borraban
+       todo lo demas, asi que al abrirlo se perdia el contexto. */
     var base=location.origin+location.pathname, p=[];
-    var selK=Object.keys(selected).filter(function(k){return selected[k];});
-    if(selK.length){ var q='?clips='+encodeURIComponent(selK.join(';')); if(selTeam)q+='&team='+encodeURIComponent(selTeam); return base+q; }
+
     if(selTeam) p.push('team='+encodeURIComponent(selTeam));
     if(selSeason) p.push('season='+encodeURIComponent(selSeason));
+
     var ps=selectedPlayers(); if(ps.length) p.push('num='+ps.join(','));
+
+    /* el fundamento elegido, aunque no haya combos */
+    if(typeof fSk!=='undefined' && fSk) p.push('sk='+encodeURIComponent(fSk));
     var atk=Object.keys(selAct).filter(function(k){return k.indexOf('Ataque|')===0;});
     var atkOn=atk.filter(function(k){return selAct[k];});
-    if(atkOn.length && atkOn.length<atk.length){ p.push('sk=Ataque'); p.push('combo='+atkOn.map(function(k){return k.split('|')[1];}).join(',')); }
-    var evs=Object.keys(selEval); if(evs.length) p.push('ev='+encodeURIComponent(evs.join(',')));
+    if(atkOn.length && atkOn.length<atk.length){
+      if(p.indexOf('sk=Ataque')<0 && !(typeof fSk!=='undefined' && fSk)) p.push('sk=Ataque');
+      p.push('combo='+atkOn.map(function(k){return k.split('|')[1];}).join(','));
+    }
+
+    var evs=Object.keys(selEval).filter(function(k){return selEval[k];});
+    if(!evs.length) evs=Object.keys(selEval);
+    if(evs.length) p.push('ev='+encodeURIComponent(evs.join(',')));
+
+    /* los filtros finos: zona de defensa, de origen, fase, llamada, posicion */
+    function _lista(v){ return (v&&v.length)?v.join(','):''; }
+    if(typeof fDz!=='undefined'   && _lista(fDz))   p.push('dz='+encodeURIComponent(_lista(fDz)));
+    if(typeof fOz!=='undefined'   && _lista(fOz))   p.push('oz='+encodeURIComponent(_lista(fOz)));
+    if(typeof fPh!=='undefined'   && fPh)           p.push('ph='+encodeURIComponent(fPh));
+    if(typeof fCall!=='undefined' && _lista(fCall)) p.push('call='+encodeURIComponent(_lista(fCall)));
+    if(typeof fApos!=='undefined' && _lista(fApos)) p.push('apos='+encodeURIComponent(_lista(fApos)));
+    if(typeof fRival!=='undefined'&& fRival)        p.push('rival='+encodeURIComponent(fRival));
+    if(typeof fDate!=='undefined' && fDate)         p.push('date='+encodeURIComponent(fDate));
+
+    /* los clips tildados van ADEMAS de los filtros, no en vez de ellos */
+    var selK=Object.keys(selected).filter(function(k){return selected[k];});
+    if(selK.length) p.push('clips='+encodeURIComponent(selK.join(';')));
+
     return base+(p.length?'?'+p.join('&'):'');
   }
   function init(){
@@ -760,8 +800,110 @@ window.__DESCIFRAR_SINCRONO = true;
   document.addEventListener('DOMContentLoaded',init);
 })();
 </script>
-<script src="lang.js?v=20260916-2140" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260916-2140" onerror="void 0"></script>
-<script src="ayuda.js?v=20260916-2140"></script>
+<script src="lang.js?v=20260917-0857" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260917-0857" onerror="void 0"></script>
+<script src="ayuda.js?v=20260917-0857"></script>
+
+<script>
+/* ══ LINK CORTO PARA COMPARTIR ══════════════════════════════════════════════
+   Un recorte de 22 clips daba un link de 700 caracteres: WhatsApp lo muestra
+   entero y ocupa media pantalla. Ilegible y feo de mandar.
+
+   Ahora la seleccion se guarda en Firebase con un codigo de 5 letras y el
+   link queda en una linea:
+
+       volley-nafels.vercel.app/cortes.html?r=K7M2X
+
+   Se usa la misma base que ya usa el video en vivo (FB_URL), asi que no hay
+   nada nuevo que configurar.
+
+   Si Firebase no contesta, se manda el link largo de siempre: es feo pero
+   funciona, y es preferible a quedarse sin poder compartir. */
+
+/* Copiar al portapapeles y avisar. Es lo que hacia el boton antes, sacado
+   aparte para que lo puedan usar el camino corto y el largo. */
+function _copiarYAvisar(url){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(
+      function(){ toast('Link copiado \u2713 \u2014 pegalo en WhatsApp'); },
+      function(){ prompt('Copiá y compartí este link:', url); });
+  } else {
+    prompt('Copiá y compartí este link:', url);
+  }
+}
+
+function _fbURL(){
+  try{ if(typeof FB_URL!=='undefined' && FB_URL) return FB_URL; }catch(e){}
+  return 'https://nafels-voley-default-rtdb.firebaseio.com';
+}
+
+function _codigoNuevo(){
+  /* Sin vocales ni caracteres que se confunden (0/O, 1/I), para que se pueda
+     dictar por telefono sin errores. */
+  var abc = '23456789BCDFGHJKLMNPQRSTVWXZ', c = '';
+  for(var i=0;i<5;i++) c += abc.charAt(Math.floor(Math.random()*abc.length));
+  return c;
+}
+
+/* Guarda el recorte y devuelve el link corto. Si falla, devuelve el largo. */
+function linkCorto(largo){
+  var q = largo.split('?')[1] || '';
+  if(!q) return Promise.resolve(largo);
+
+  var base = location.origin + location.pathname;
+  var cuerpo = JSON.stringify({ q: q, fecha: Date.now() });
+
+  /* Con 5 letras hay 17 millones de combinaciones, pero repetir una pisaria
+     el recorte de otro. Antes de guardar se fija si el codigo esta libre; si
+     esta tomado, prueba con otro. Tres intentos alcanzan de sobra. */
+  function intentar(vuelta){
+    var cod = _codigoNuevo();
+    return fetch(_fbURL() + '/recortes/' + cod + '.json')
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(ya){
+        if(ya && ya.q){
+          if(vuelta < 3) return intentar(vuelta + 1);
+          return largo;                    /* rarisimo: se manda el largo */
+        }
+        return fetch(_fbURL() + '/recortes/' + cod + '.json',
+                     { method:'PUT', headers:{'Content-Type':'application/json'}, body: cuerpo })
+          .then(function(r){ return r.ok ? (base + '?r=' + cod) : largo; });
+      })
+      .catch(function(){ return largo; });
+  }
+  return intentar(1);
+}
+
+/* Al abrir con ?r=CODIGO, se busca el recorte y se entra con sus filtros. */
+(function(){
+  var m = location.search.match(/[?&]r=([A-Z0-9]{4,8})\b/i);
+  if(!m) return;
+  var cod = m[1].toUpperCase();
+
+  /* Un cartel mientras busca: si no, la pantalla queda en blanco y parece
+     que el link no sirve. */
+  var av = document.createElement('div');
+  av.style.cssText = 'position:fixed;inset:0;z-index:99999;display:flex;'
+    + 'align-items:center;justify-content:center;background:rgba(2,6,23,.92);'
+    + 'color:#e2e8f0;font-family:inherit;font-size:14px';
+  av.textContent = 'Abriendo el recorte ' + cod + '…';
+  document.addEventListener('DOMContentLoaded', function(){ document.body.appendChild(av); });
+
+  fetch(_fbURL() + '/recortes/' + cod + '.json')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(d && d.q){ location.replace(location.pathname + '?' + d.q); return; }
+      av.innerHTML = '<div style="text-align:center;line-height:1.6">'
+        + 'No encontré el recorte <b>' + cod + '</b>.<br>'
+        + '<span style="color:#94a3b8;font-size:13px">Puede que el link sea viejo.</span><br>'
+        + '<a href="' + location.pathname + '" style="color:#7dd3fc">Abrir cortes de video</a></div>';
+    })
+    .catch(function(){
+      av.innerHTML = '<div style="text-align:center;line-height:1.6">'
+        + 'No pude abrir el recorte.<br>'
+        + '<a href="' + location.pathname + '" style="color:#7dd3fc">Abrir cortes de video</a></div>';
+    });
+})();
+</script>
 </body>
 </html>

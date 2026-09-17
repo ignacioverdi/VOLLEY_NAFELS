@@ -387,6 +387,26 @@ echo.
 echo  ================= CONTROL DE CALIDAD =================
 if exist "AUDITAR.py" python AUDITAR.py --sin-pausa
 if exist "VERIFICAR_DATOS.py" python VERIFICAR_DATOS.py --sin-pausa
+
+REM ?? QUE NINGUNA PANTALLA SE PUBLIQUE ROTA ???????????????????????????????
+REM  El 16/09 plan_partido.html se subio cortado: 86 KB en vez de 98. Le
+REM  faltaban dos roles y una funcion, y eso dejo sin canchas ni videos a
+REM  TODAS las secciones. Se publico sin un solo error: el HTML era valido
+REM  y la pantalla abria; el problema solo se veia al hacer doble clic.
+REM
+REM  Este control compara cada pantalla contra la ultima version buena y
+REM  avisa si encogio, perdio funciones o perdio configuracion.
+if exist "CONTROL_PANTALLAS.py" (
+  echo.
+  python CONTROL_PANTALLAS.py
+  if errorlevel 1 (
+    echo.
+    echo     ^>^>^> Mira los avisos de arriba ANTES de publicar.
+    echo.
+    pause
+  )
+)
+
 echo.
 
 REM ================= CERRAR LOS DATOS =================
