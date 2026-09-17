@@ -192,8 +192,9 @@ td.num{font-weight:600;white-space:nowrap}
 .pl-cont b{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);margin-right:5px}
 .sin-cont{color:#9E1F2C}
 .obj-h{font-family:var(--fn);font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--gris);margin:0 0 8px}
-.obj-ul{margin:0;padding-left:18px}
-.obj-ul li{margin-bottom:8px;font-size:15.3px;line-height:1.5}
+.obj-it{border-top:1px solid var(--gris-claro);padding:12px 0}
+.obj-it b{display:block;font-size:16px;font-weight:600;margin-bottom:4px}
+.obj-it p{margin:0;font-size:14.8px;line-height:1.55;color:var(--tinta)}
 .obj-caja{border-left:5px solid var(--c);background:#fff;padding:17px 22px;margin:24px 0 6px}
 .obj-caja span{font-family:var(--fn);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gris)}
 .obj-caja p{margin:6px 0 0;font-size:20px;font-weight:600;letter-spacing:-.012em;line-height:1.35}
@@ -3211,76 +3212,114 @@ function vJuego(){
 }
 
 /* ── objetivos técnicos y tácticos por level ── */
-const OBJ_LVL = {
-es:[
+const OBJ_LVL = {es:[
 {n:1,meta:"Que conduzca el juego y sostenga su nivel cuando el partido aprieta.",
- tec:["Ejecutar el mismo gesto en el tercer set que en el calentamiento, con las piernas cansadas.",
-  "Distribuir con plan: elegir atacante según la rotación y según el bloqueo que tiene enfrente.",
-  "Resolver el ataque contra bloqueo formado, con el ataque de zaga como opción real.",
-  "Sostener el saque agresivo a 23 iguales, respetando la tasa de error acordada.",
-  "Transición inmediata: aterrizar, girar, salir de la red y volver a atacar."],
- tac:["Sistema 5-1 completo, con sus rotaciones, coberturas y transiciones.",
-  "Preparar al rival con video y llevar un plan de partido propio a la cancha.",
-  "Cambiar algo en el partido sin que el entrenador lo pida, y poder explicar por qué.",
-  "Controlar el ritmo del partido y decidir bien en los puntos que definen el set.",
-  "Sostener a un compañero en una mala racha dentro del juego."],
+ tec:[
+ {t:"Ejecutar igual en el tercer set que en el calentamiento",d:"El nivel técnico real de un jugador no es el que muestra fresco: es el que sostiene con las piernas cansadas y el marcador en contra. Se entrena empezando ejercicios en desventaja a propósito, con series al final de la sesión y con consecuencia por el error. Incluye recepción, armado y ataque bajo fatiga, y la capacidad de repetir el mismo gesto cuando el cuerpo pide acortarlo."},
+ {t:"Distribuir con plan, no por costumbre",d:"Elegir atacante según la rotación en la que está el equipo y según el bloqueo que tiene enfrente, no según quién pide más fuerte. Requiere conocer el porcentaje de cada atacante contra bloqueo formado y saber qué rotación del rival es la más débil. Se trabaja con el video de la semana y una hoja simple con la distribución prevista por rotación."},
+ {t:"Resolver contra bloqueo formado",d:"A este nivel el bloqueo llega siempre, así que pegar fuerte deja de alcanzar. Incluye las tres herramientas completas: usar las manos del bloqueo, atacar la costura entre los dos bloqueadores, y la finta larga detrás. Se entrena con bloqueo real y puntuando la decisión, no el punto."},
+ {t:"Sostener el saque agresivo en los puntos que definen",d:"Cualquiera saca fuerte a 10-5. Lo que define es el saque a 23 iguales. Se trabaja con series al final del entrenamiento, cansados, con una tasa de error acordada por jugador y con consecuencia cuando se afloja. El lanzamiento tiene que ser idéntico al del primer saque del partido."},
+ {t:"Transición inmediata después del bloqueo",d:"Aterrizar equilibrado, girar hacia la pelota, salir tres metros de la red y recién ahí correr. Es la diferencia más grande entre un juvenil y un jugador de mayores, y casi nunca se entrena. Todo ejercicio de bloqueo y defensa tiene que terminar en un ataque, sin excepción."}],
+ tac:[
+ {t:"Sistema 5-1 completo",d:"Las seis rotaciones con sus coberturas y transiciones, con una sola armadora. Incluye qué hacer cuando la armadora tiene que defender, quién arma en su lugar, y cómo se reacomoda el ataque en esa rotación. Es el sistema que va a encontrar en cualquier liga de mayores."},
+ {t:"Plan de partido propio",d:"Que llegue a la cancha con algo preparado: dos o tres cosas concretas del rival que vio en video y que puede aplicar. No es scouting profesional, es una hoja con tres puntos que el jugador entiende y usa."},
+ {t:"Ajustar sin que el entrenador lo pida",d:"Reconocer qué está pasando en el partido y cambiar algo por decisión propia, y poder explicar por qué lo cambió. Se entrena preguntando «¿qué viste?» antes de dar la solución, durante toda la temporada."},
+ {t:"Controlar el ritmo del partido",d:"Saber cuándo acelerar y cuándo frenar, cuándo pedir un balón alto para dar aire al equipo y cuándo arriesgar. Es una habilidad de conducción y se desarrolla dándole al jugador la responsabilidad de decidirlo en los entrenamientos con marcador."},
+ {t:"Sostener a un compañero en una mala racha",d:"El liderazgo en la cancha no es gritar: es hacerse cargo del punto siguiente cuando otro se cayó. Va de la mano con la regla de no buscar culpables: el que recibe mal no se comenta, se cubre."}],
  next:"Ya está en el techo formativo. Lo que sigue es competir en el primer equipo."},
+
 {n:2,meta:"Que resuelva contra oposición organizada y empiece a decidir solo.",
- tec:["Dos direcciones desde el mismo impulso, más la finta, sin cambiar la carrera.",
-  "Bloqueo lector: mirar el primer contacto, después al armador, y decidir antes del salto.",
-  "Ataque de zaga arrancando desde detrás de los tres metros, sin pisar la línea.",
-  "Saque en salto con lanzamiento constante, o saque de arriba agresivo con zona elegida.",
-  "Armar con contrato: la misma pelota para el mismo atacante, siempre."],
- tac:["Sistema 6-2 completo, con tres atacantes en las seis rotaciones.",
-  "Leer al armador rival y acomodar la posición sin instrucción.",
-  "Reconocer qué está pasando en el partido y ajustar algo por cuenta propia.",
-  "Usar video: un clip corto por semana y aplicarlo el fin de semana.",
-  "Coberturas y transiciones del 6-2, que es lo que más se descuida."],
+ tec:[
+ {t:"Dos direcciones desde el mismo impulso",d:"Diagonal, línea y finta saliendo de una carrera idéntica. Es lo que impide que el bloqueo rival lea la intención antes del salto. Incluye trabajo de muñeca y de punto de contacto, y se corrige filmando las tres opciones: cuando el jugador se ve cambiando la carrera, lo entiende al instante."},
+ {t:"Bloqueo lector",d:"Pasar de reaccionar a anticipar: mirar el primer contacto, después al armador, y decidir antes del salto. Se entrena obligando a cantar en voz alta qué van a hacer antes de que la armadora toque, y puntuando la decisión aunque el bloqueo salga mal."},
+ {t:"Ataque de zaga",d:"Carrera desde detrás de la línea de tres metros, con despegue antes de la línea y contacto alto. El error típico es arrancar tarde y pisar: se corrige con una marca en el piso un metro más atrás que obliga a salir antes. Incluye la coordinación con el armado, que es distinta a la del ataque de punta."},
+ {t:"Saque en salto o saque de arriba con zona",d:"El lanzamiento es el noventa por ciento del saque en salto, así que se entrena por separado: series de solo lanzamiento con una marca en el piso, sin golpear. Después se suma la carrera y recién al final el golpe. Si el jugador todavía no tiene el cuerpo para el salto, el objetivo equivalente es el saque de arriba agresivo con zona elegida."},
+ {t:"Armar con contrato",d:"Cada atacante define con el armador la altura, la distancia a la red y la velocidad de su pelota, y se escribe. Después se repite hasta que sale sin pensarlo. La descoordinación entre armador y atacante casi nunca es técnica: es que nunca se pusieron de acuerdo."}],
+ tac:[
+ {t:"Sistema 6-2 completo",d:"Dos armadoras que arman desde zaga y atacan cuando rotan adelante, con tres atacantes siempre en la red. Incluye las coberturas, que cambian en cada rotación y son lo que más se descuida de este sistema."},
+ {t:"Leer al armador rival",d:"Mirar el primer contacto del rival y después al armador, y acomodar la posición antes de que la pelota salga. Se trabaja en el bloqueo y en la defensa al mismo tiempo, porque la información es la misma."},
+ {t:"Reconocer y ajustar en partido",d:"Darse cuenta de que el rival está atacando siempre por el mismo lado, o de que el bloqueo está llegando tarde, y cambiar algo. Empieza acá y se consolida en L1."},
+ {t:"Usar video",d:"Un clip corto por semana, treinta segundos, con una sola cosa para corregir. Más que eso no se aplica. Apoyado en el sistema de datos que el club ya tiene en el primer equipo."},
+ {t:"Coberturas y transiciones del 6-2",d:"Con tres atacantes en red, quién cubre cambia en cada rotación. Es lo que decide los rallies largos y lo que menos se entrena."}],
  next:"Para llegar a L1: sostener todo esto con el marcador en contra y en el tercer set."},
+
 {n:3,meta:"Que sostenga la jugada completa con oposición real y deje de depender del entrenador dentro del punto.",
- tec:["Recepción que queda en sistema la mitad de las veces contra saque de competencia.",
-  "Penetración desde zona 1: salir a tiempo y llegar equilibrado, no llegar corriendo.",
-  "Carrera de tres pasos estable, con la dirección elegida antes del salto.",
-  "Saque de arriba con 7 de 10 dentro y capacidad de cantar la zona.",
-  "Bloqueo con las manos sobre la red y el desplazamiento terminado antes del salto."],
- tac:["Penetración en las seis rotaciones, sin excepciones.",
-  "Sistema 6-6 completo: todos arman cuando la pelota no llega al armador.",
-  "Cubrir al atacante sin que nadie lo pida.",
-  "Arrancar la carrera según lo que ve en el primer contacto, no cuando sale el pase.",
-  "Empezar a leer al armador rival."],
+ tec:[
+ {t:"Recepción en sistema contra saque de competencia",d:"El objetivo es que la mitad de las recepciones queden jugables. Se entrena siempre con saque real, nunca con pelota lanzada, y con desplazamiento: la plataforma se forma antes de que llegue la pelota y los hombros dirigen al armador. Si el ejercicio se ve bien es porque el saque está flojo."},
+ {t:"Penetración desde zona 1",d:"Salir cuando el saque rival cruza la red, no cuando la recepción ya salió; recorrido recto hacia la zona 2-3; y el último paso es de freno. El error universal es salir tarde y compensar corriendo: llegan al balón pero llegan en movimiento. Se entrena sin pelota, cronometrado contra el saque, mirando solo los pies."},
+ {t:"Carrera de tres pasos estable con dirección elegida",d:"El mismo ritmo siempre, aunque la pelota venga mal. Incluye el armado de brazos antes del despegue y el contacto arriba y adelante. La dirección se decide antes del salto, no en el aire, y eso se corrige preguntando adónde apuntó, no cuán fuerte pegó."},
+ {t:"Saque de arriba con 7 de 10 y zona cantada",d:"Primero la constancia, después la zona. Se mide en series de diez con registro, para que cada jugador conozca su número. Sin una tasa de error acordada, todos sacan flojo para no fallar."},
+ {t:"Bloqueo con manos sobre la red",d:"Manos penetrando, pulgares arriba, salto vertical y no hacia adelante. El desplazamiento termina antes del salto: el error más común es saltar todavía moviéndose de costado y desarmarse en el aire."}],
+ tac:[
+ {t:"Penetración en las seis rotaciones",d:"Sin excepciones. Se canta la rotación antes de cada punto hasta que sale solo. Todo el sistema posterior se apoya en esto."},
+ {t:"Sistema 6-6: todos arman",d:"Cuando la pelota no llega al armador, arma el que esté más cerca. Incluye el armado con manchette cuando no se llega con las manos. Se entrena con registro de cuántas veces armó cada uno."},
+ {t:"Cubrir al atacante siempre",d:"Si uno ataca, los demás acompañan a dos metros, cuerpo bajo y manos abiertas, mirando el bloqueo y no la pelota. Es la conducta que más rallies largos gana y la más barata de instalar."},
+ {t:"Arrancar según el primer contacto",d:"El atacante empieza la carrera por lo que ve en la recepción, no cuando el armador ya tocó. Si espera, llega tarde a todo lo que no sea pelota alta."},
+ {t:"Empezar a leer al armador rival",d:"Introducción: mirar dónde está el primer contacto y cómo está orientado el cuerpo del armador. No se le pide acertar todavía, se le pide mirar."}],
  next:"Para llegar a L2: decidir antes del salto y sumar una segunda dirección de ataque."},
+
 {n:4,meta:"Que sostenga bajo presión lo que ya hace bien con pelota cómoda.",
- tec:["Recepción contra saque de competencia, no solo contra pelota lanzada.",
-  "Armar en desplazamiento: llegar y jugar sin que la pelota salga plana.",
-  "Estabilizar la carrera de tres pasos, siempre con el mismo ritmo.",
-  "Contacto arriba y adelante del cuerpo, con el brazo estirado.",
-  "Saque de arriba que además elija zona, no solo que entre."],
- tac:["Construir tres toques también cuando la pelota viene difícil.",
-  "Acompañar al que ataca, siempre y sin que se lo recuerden.",
-  "Resolver la zona de conflicto: el que va hacia adentro la toma, el otro canta y se abre.",
-  "Ocupar su zona y volver a la posición después de cada acción.",
-  "Entender qué rotación se está jugando y quién arma en esa rotación."],
+ tec:[
+ {t:"Recepción contra saque de competencia",d:"Es el salto que define este level. El jugador ya recibe bien la pelota lanzada; ahora tiene que sostenerlo contra el saque del sábado. Nunca bajar la intensidad del saque para que el ejercicio salga mejor: si hace falta, se le baja la zona, no la velocidad."},
+ {t:"Armar en desplazamiento",d:"Llegar y jugar sin que la pelota salga plana. La pelota plana significa que llegó sin piernas: el impulso sale de la extensión, no de los brazos. Se entrena recibiendo siempre en movimiento, nunca armando parado."},
+ {t:"Estabilizar la carrera de tres pasos",d:"El mismo ritmo cada vez: orientación, freno y paso de cierre. Si el jugador está en pico de crecimiento la carrera se va a desarmar de manera temporal y previsible, y ahí se sostiene la técnica en vez de exigir más. Marca en el piso para el paso de freno."},
+ {t:"Contacto arriba y adelante",d:"El error más común del level es golpear con la pelota atrás de la cabeza, que limita todo lo que viene después. Se corrige con ataque desde un cajón bajo para aislar el brazo, y con autopases antes de sumar el armado."},
+ {t:"Saque de arriba que elija zona",d:"Ya entra; ahora tiene que caer donde se decidió. Dos zonas marcadas y que cante cuál antes de sacar. El objetivo no es el ace, es empezar el punto a favor."}],
+ tac:[
+ {t:"Construir tres toques también cuando se complica",d:"Con pelota fácil ya lo hacen. La conducta que hay que sacar es devolver de primera cuando el punto se pone difícil, y se saca con la regla del ejercicio —el punto no cuenta si no hubo tres— y no con el reto."},
+ {t:"Acompañar al que ataca, siempre",d:"Sin que se lo recuerden. Se instala como regla del juego reducido y no como ejercicio aislado."},
+ {t:"Resolver la zona de conflicto",d:"La pelota entre dos es del que se mueve hacia adentro de la cancha; el otro canta y se abre. Es un acuerdo, no una habilidad: se define antes de la temporada y no se cambia."},
+ {t:"Volver a la posición",d:"Después de cada acción se vuelve al lugar. Sin esto el equipo se convierte en gente persiguiendo la pelota."},
+ {t:"Saber la rotación y quién arma",d:"Antes del saque, que el equipo sepa en qué rotación está y quién penetra. Se dice en voz alta hasta que salga solo."}],
  next:"Para llegar a L3: que la técnica no se caiga cuando aparece el saque de competencia."},
+
 {n:5,meta:"Que el rally exista: que la pelota sobreviva al primer contacto.",
- tec:["Llevar la plataforma a la pelota moviendo los pies, no estirando los brazos.",
-  "Manos arriba y adelante de la cara antes de que la pelota llegue.",
-  "Golpear con la mano abierta y el brazo estirado, con la pelota adelante.",
-  "Caer sobre los dos pies con la rodilla alineada, siempre.",
-  "Saque que entre a la cancha, con el gesto que le salga."],
- tac:["Pedir la pelota en voz alta antes de tocarla.",
-  "Entender que se juega en tres toques y no se devuelve de primera.",
-  "Ir a la pelota que es suya y no ir a la que no lo es.",
-  "Volver a la posición después de cada acción.",
-  "Jugar con el compañero en vez de resolver solo."],
- next:"Para llegar a L4: que la recepción llegue al armador y la jugada de tres aparezca sola."}]
-};
+ tec:[
+ {t:"Llevar la plataforma a la pelota con los pies",d:"Casi todo lo que parece error de brazos a este level es error de pies. El jugador estira los brazos desde donde está en vez de moverse. Se corrige con juegos donde la pelota siempre cae lejos, obligando a desplazarse, y pidiendo que llegue quieto antes de tocar."},
+ {t:"Manos arriba y adelante de la cara",d:"Antes de que la pelota llegue, no cuando ya está encima. La pelota tiene que verse entre las manos antes del contacto: si el jugador no la ve, las manos están mal puestas. Empieza con autopases suaves antes de cualquier pelota que venga de otro."},
+ {t:"Golpear con la mano abierta y el brazo estirado",d:"Contacto adelante del cuerpo, no al costado ni atrás. Se trabaja primero sin salto, de pie y con autoelevación, para que controle la pelota antes de sumar la carrera."},
+ {t:"Caer sobre los dos pies con la rodilla alineada",d:"Se entrena desde el primer día y todos los días, dentro del juego de entrada. A esta edad no duele, y por eso justamente hay que corregirlo ahora: la rodilla que se va hacia adentro al caer es el gesto que después lesiona."},
+ {t:"Saque que entre a la cancha",d:"Con el gesto que le salga: de abajo está perfecto. El objetivo es que el punto empiece, no que el saque sea bonito. Se deriva del lanzamiento por abajo que el chico ya sabe hacer."}],
+ tac:[
+ {t:"Pedir la pelota en voz alta",d:"Antes de tocarla, no mientras. A esta edad todavía no da vergüenza gritar, así que se instala acá o no se instala nunca."},
+ {t:"Entender que se juega en tres toques",d:"Y que devolver de primera, aunque funcione hoy, es lo que hay que sacar. Se sostiene con la regla del juego."},
+ {t:"Ir a la pelota que es suya",d:"Y no ir a la que no lo es. Cada uno tiene una zona y una responsabilidad."},
+ {t:"Volver a la posición",d:"Después de cada acción. Sin esto, el 3:3 se convierte en tres chicos persiguiendo una pelota."},
+ {t:"Jugar con el compañero",d:"Construir con el otro en vez de resolver solo. Es la primera idea de equipo que entienden y la base de todo lo demás."}],
+ next:"Para llegar a L4: que la recepción llegue al armador y la jugada de tres aparezca sola."}]};
+
 OBJ_LVL.de = OBJ_LVL.es; OBJ_LVL.en = OBJ_LVL.es;
 const OL = () => OBJ_LVL[LANG] || OBJ_LVL.es;
 let MAT_LVL = 0;
 window.setMatLvl = n => { MAT_LVL = Number(n); render(); };
 
+
+/* las matrices por level se derivan de las de etapa: no pueden divergir */
+const LVL_COLS = ["L5","L4","L3","L2","L1"];
+const LVL_DE_ETAPA = [["kids"],["r12","r3"],["f1"],["f2"],["f3"]];
+const ORD_N = {x:0,I:1,D:2,C:3,M:4}, N_ORD = ["x","I","D","C","M"];
+function porLevel(M){
+  const ix = c => COLS.indexOf(c)+1;
+  return M.map(function(r){
+    const fila = [r[0]];
+    LVL_DE_ETAPA.forEach(function(ets){
+      const v = ets.map(function(e){ return ORD_N[r[ix(e)]] || 0; });
+      fila.push(N_ORD[Math.max.apply(null, v)]);
+    });
+    fila.push(r[7]);
+    return fila;
+  });
+}
+
 function vMatriz(){
   const m = D().matriz;
+  const tablaL = M => `<div class="tabla-envoltura"><table><thead><tr><th></th>
+    ${LVL_COLS.map((c,i)=>`<th style="text-align:center;color:${["#D9B300","#B4551F","#EE4655","#8E3374","#0E2A8A"][i]}">${c}</th>`).join("")}
+    <th style="text-align:center">${S("origen")}</th></tr></thead><tbody>
+    ${porLevel(M).map(f=>`<tr><td>${m.fund[f[0]]||f[0]}</td>
+      ${f.slice(1,6).map(v=>`<td style="text-align:center"><span class="cel ${v}">${v==="x"?"·":v}</span></td>`).join("")}
+      <td style="text-align:center">${f[6]===2?F("of")+" "+F("club"):f[6]?F("of"):F("club")}</td></tr>`).join("")}
+    </tbody></table></div>`;
   const cab = `<tr><th></th>${COLS.map(c=>`<th style="text-align:center">${m.cols[c]}</th>`).join("")}<th style="text-align:center">${S("origen")}</th></tr>`;
   const tabla = filas => `<div class="tabla-envoltura"><table class="mx"><thead>${cab}</thead><tbody>
     ${filas.map(f=>`<tr><td>${m.fund[f[0]]}</td>
@@ -3303,14 +3342,14 @@ function vMatriz(){
       const col = ["","#0E2A8A","#8E3374","#EE4655","#FA844E","#D9B300"][L.n];
       return `<div class="obj-caja" style="--c:${col}"><span>L${L.n} · ${L.t}</span><p>${O.meta}</p></div>
         <div class="ens-dos" style="margin-top:20px">
-          <div><h4 class="obj-h">${S("objTec")}</h4><ul class="obj-ul">${O.tec.map(x=>`<li>${x}</li>`).join("")}</ul></div>
-          <div><h4 class="obj-h">${S("objTac")}</h4><ul class="obj-ul">${O.tac.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+          <div><h4 class="obj-h">${S("objTec")}</h4>${O.tec.map(x=>`<div class="obj-it"><b>${x.t}</b><p>${x.d}</p></div>`).join("")}</div>
+          <div><h4 class="obj-h">${S("objTac")}</h4>${O.tac.map(x=>`<div class="obj-it"><b>${x.t}</b><p>${x.d}</p></div>`).join("")}</div>
         </div>
         <div class="nota" style="border-left-color:${col}"><strong>${S("objSig")}</strong> ${O.next}</div>`;
     })()}
   </section>
-  <section class="bloque"><h3><span class="n">01</span>${m.b1}</h3><p>${m.b1p}</p>${leyMx}${tabla(MTEC)}</section>
-  <section class="bloque"><h3><span class="n">02</span>${m.b2}</h3><p>${m.b2p} ${F("of")}</p>${leyMx}${tabla(MTAC)}
+  <section class="bloque"><h3><span class="n">01</span>${m.b1}</h3><p>${m.b1p}</p>${leyMx}${tablaL(MTEC)}</section>
+  <section class="bloque"><h3><span class="n">02</span>${m.b2}</h3><p>${m.b2p} ${F("of")}</p>${leyMx}${tablaL(MTAC)}
     <div class="nota of">${m.b2n2} ${F("of")}</div>
     <div class="nota aviso">${m.b2n}</div></section>
   <section class="bloque"><h3><span class="n">03</span>${m.b3}</h3><p>${m.b3p} ${F("lit")}</p>
