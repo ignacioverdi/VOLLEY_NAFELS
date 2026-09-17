@@ -447,8 +447,12 @@
   "tablas": {}
  },
  "cortes.html": {
-  "bytes": 64414,
+  "bytes": 70711,
   "funciones": [
+   "_codigoNuevo",
+   "_copiarYAvisar",
+   "_fbURL",
+   "_lista",
    "_rnorm",
    "akey",
    "allSeasons",
@@ -472,6 +476,8 @@
    "initSeasonSel",
    "initSideFilters",
    "initTeamSel",
+   "intentar",
+   "linkCorto",
    "loadCoachNote",
    "loadYT",
    "matchConds",
