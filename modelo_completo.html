@@ -196,6 +196,11 @@ td.num{font-weight:600;white-space:nowrap}
 .ref-lvl span{font-family:var(--fn);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#1E6B33}
 .ref-lvl b{display:block;font-size:16px;margin:4px 0 5px}
 .ref-lvl p{margin:0;font-size:14.8px;line-height:1.55}
+.pb-no{border-left:4px solid var(--cat);padding:12px 18px;margin-bottom:10px;background:#FAFAFA}
+.pb-no b{display:block;font-size:17px;font-weight:600;margin-bottom:4px}
+.pb-no p{margin:0;font-size:14.8px;line-height:1.55;color:var(--gris)}
+.pb-t td{vertical-align:top;font-size:13.8px;line-height:1.45;padding:9px 10px 9px 0}
+.pb-t td:first-child{width:152px}
 .obj-it{border-top:1px solid var(--gris-claro);padding:12px 0}
 .obj-it b{display:block;font-size:16px;font-weight:600;margin-bottom:4px}
 .obj-it p{margin:0;font-size:14.8px;line-height:1.55;color:var(--tinta)}
@@ -339,6 +344,7 @@ td.num{font-weight:600;white-space:nowrap}
     <div class="grupo-nav">
       <span class="grupo-eti" data-t="nav.g2"></span>
       <div class="grupo-btns">
+        <button class="solapa" role="tab" data-v="play" aria-selected="false" data-t="nav.play"></button>
         <button class="solapa" role="tab" data-v="ens" aria-selected="false" data-t="nav.ens"></button>
         <button class="solapa" role="tab" data-v="matriz" aria-selected="false" data-t="nav.matriz"></button>
         <button class="solapa" role="tab" data-v="m" aria-selected="false" data-t="nav.m"></button>
@@ -550,7 +556,7 @@ sec:{
  plSinFecha:"Sin año de nacimiento", plSupera:"Supera la edad en horas", plSobre:"Sobre el techo",
  plDebajo:"Por debajo", plRango:"En rango", plError:"No pude leer el archivo. Tiene que ser un JSON exportado desde esta misma pestaña."
 },
-ui:{
+ui:{"nav.play":"Cómo jugamos",
  "doc.titulo":"Modelo de Formación",
  "doc.subtitulo":"Divisiones inferiores · Masculino y femenino · Temporada 2026/27",
  "doc.version":"v4.0 · agosto 2026<br>ES · DE · EN",
@@ -1310,7 +1316,7 @@ sec:{
  plSinFecha:"Kein Jahrgang erfasst", plSupera:"Über den Lebensjahren", plSobre:"Über der Obergrenze",
  plDebajo:"Zu wenig", plRango:"Im Bereich", plError:"Datei konnte nicht gelesen werden. Es muss eine hier exportierte JSON-Datei sein."
 },
-ui:{
+ui:{"nav.play":"Wie wir spielen",
  "doc.titulo":"Ausbildungskonzept",
  "doc.subtitulo":"Nachwuchs · Männer und Frauen · Saison 2026/27",
  "doc.version":"v4.0 · August 2026<br>ES · DE · EN",
@@ -2059,7 +2065,7 @@ sec:{
  plSinFecha:"No year of birth", plSupera:"Exceeds age in hours", plSobre:"Over the ceiling",
  plDebajo:"Below range", plRango:"In range", plError:"Could not read the file. It has to be a JSON exported from this same tab."
 },
-ui:{
+ui:{"nav.play":"How we play",
  "doc.titulo":"Player Development Framework",
  "doc.subtitulo":"Youth programme · Men and women · Season 2026/27",
  "doc.version":"v4.0 · August 2026<br>ES · DE · EN",
@@ -3711,6 +3717,135 @@ const MTAC_L = [
  ["lectura","x","x","I","D","C",0],["ajustes","x","x","I","D","C",0],
  ["scouting","x","x","x","I","D",0]
 ];
+
+const PB_URL = "https://volley-nafels.vercel.app/Team_Playbook_Nafels.html";
+const PB = {es:{
+ t:"Cómo jugamos", sub:"El playbook del primer equipo, traducido a cada level",
+ intro:"El <strong>Team Playbook del NLA</strong> define cómo juega Axpo Volley Näfels. No es un documento del primer equipo: es hacia dónde juega todo el club. Esta solapa no lo repite —está publicado y se lee entero en el enlace— sino que lo baja a cada level: qué parte le toca instalar a cada entrenador para que el jugador llegue arriba sabiendo jugar así.",
+ verlo:"Leer el playbook completo",
+ nogo:"Lo que no se negocia, desde el primer día",
+ nogoP:"Cinco frases del playbook que un entrenador de Kids Volley ya puede instalar. No dependen del nivel ni del sistema: son la identidad del club y se enseñan desde que el chico entra.",
+ nogos:[
+  ["Ninguna pelota toca el piso sin que la hayamos ido a buscar","Es la línea del capítulo defensivo y funciona igual con seis años que en la NLA. Se mide: cuántas pelotas cayeron sin que nadie se moviera."],
+  ["El error es información. Nunca frena la agresividad. Siempre tené una razón","Distingue el error técnico —ejecución del gesto— del táctico —decisión en contexto. Un golpe fuerte y profundo es un buen error; una pelota bloqueada afuera por cerrar el brazo es un mal error."],
+  ["Entrenamos como jugamos, siempre al 100%","Del capítulo de principios. Es la que justifica que el juego con marcador esté en todas las sesiones, desde Kids Volley."],
+  ["La defensa canta cuando no hay bloqueo","Del capítulo de bloqueo, en mayúsculas en el original. Es comunicación pura y se instala antes que cualquier técnica de bloqueo."],
+  ["Siempre por Zona 3","El objetivo de la recepción en el playbook: pelota alta, estable y centrada para que el armador conserve dos opciones reales. Un chico de Rookie puede entender esto y perseguirlo."]],
+ tablaT:"Capítulo por capítulo, qué le toca a cada level",
+ tablaP:"Cada fila es un capítulo del playbook. Cada columna, qué construye ese level para llegar ahí. Leé tu columna de arriba abajo: eso es tu parte del playbook.",
+ th:["Capítulo del playbook","L5","L4","L3","L2","L1"],
+ filas:[
+  ["01 · Identidad",
+   "Que quiera volver el martes siguiente","Intensidad en cada acción, sin que se la pidan","Responsabilidad individual y colectiva","Humildad competitiva y profesionalismo","Mentalidad ganadora y búsqueda constante de mejora"],
+  ["02 · Principios de juego",
+   "Comunicación clara y constante","Disciplina de sistema: respetar la estructura acordada","Claridad táctica: cada uno sabe su rol y su prioridad","Leer el juego para decidir con ventaja","Estabilidad emocional bajo presión"],
+  ["03 · Sistema ofensivo",
+   "Construir en tres toques","Elegir el hueco antes de golpear","Armado según dónde cayó la recepción","El central como amenaza constante, tempos variados","Distribución equilibrada por rotación, lectura y contexto"],
+  ["03 · Ataque en sistema",
+   "—","Ataque en salto con dirección elegida","Recepción en tres, el armador con dos opciones","Cuatro opciones de ataque, dos atacantes por mitad","Pegar fuerte, alto y profundo sin cerrar el brazo; reciclar cuando hace falta"],
+  ["04 · Sistema defensivo",
+   "Ir a la pelota que es suya","La defensa termina en ataque, no en devolución","Posición base según dónde va a atacar el rival","Patrones por rotación y tendencias del rival","Transición rápida y ordenada a contraataque real"],
+  ["04 · Posiciones defensivas",
+   "—","—","Introducción: quién cubre la línea y quién la diagonal","Sistemas quick y high, defensa según el bloqueo","Los cinco esquemas completos con sus excepciones"],
+  ["05 · Sistema de bloqueo",
+   "—","Manos sobre la red, salto vertical","Bloqueo técnico: llegar formado y cerrar al punto de ataque","Bloqueo lector: decidir antes del salto. Read y calls","Bloqueamos la pelota, no una zona. Los cinco llamados"],
+  ["06 · Saque",
+   "Que el saque entre a la cancha","Saque de arriba que elija zona","7 de 10 dentro con zona cantada","Saque en salto o de arriba agresivo. Riesgo propio acordado","Modelo 3-3: grupo A 85-100% de riesgo, grupo B 70-85%"],
+  ["07 · Recepción",
+   "Que la pelota no toque el piso","Recepción contra saque de competencia","Tres receptores, siempre a Zona 3","Dos sistemas según saque flotado o en salto","El sistema cambia por rotación, momento y rendimiento"],
+  ["08 · Gestión del error",
+   "El error no se castiga","Distinguir error técnico de error táctico","Poder decir por qué eligió eso","En momentos críticos, simplificar","Comunicación breve, sin ruido, y ataque de máxima probabilidad"],
+  ["09 · Plan de partido",
+   "—","—","Escuchar el plan y saber su rol","Video una vez por semana y aplicarlo el fin de semana","Plan propio: explotar debilidades del rival sin adaptarse a él"],
+  ["10 · KPI y datos",
+   "Talla cada tres meses","Medición de octubre y marzo","Su número propio de saque y recepción, escrito","Ficha individual con estadística propia","Objetivos diarios de equipo y tabla interna"],
+  ["11 · Lenguaje común",
+   "Mía, tuya, va","Cantar la zona antes de sacar","Zona 3 como destino de la recepción","Zonas #, + y B con sus opciones de ataque","El vocabulario completo: #, +, B, +4, +2, 7/9/negativa"]],
+ cierre:"Un entrenador de Rookie 2 no enseña el modelo 3-3 de saque. Enseña que el saque entre y que se cante la zona, que es el escalón de abajo del mismo concepto. Lo que no puede pasar es que el jugador llegue a Future 3 escuchando por primera vez que existe una zona a la que apuntar."
+}};
+
+PB.de = {
+ t:"Wie wir spielen", sub:"Das Playbook der ersten Mannschaft, auf jedes Level übersetzt",
+ intro:"Das <strong>Team Playbook der NLA</strong> legt fest, wie Axpo Volley Näfels spielt. Es ist kein Dokument der ersten Mannschaft: Es ist die Richtung, in die der ganze Verein spielt. Dieser Reiter wiederholt es nicht — es ist veröffentlicht und vollständig über den Link zu lesen — sondern bricht es auf jedes Level herunter: welchen Teil jede Trainerperson einbauen muss, damit die Person oben ankommt und so zu spielen weiss.",
+ verlo:"Das vollständige Playbook lesen",
+ nogo:"Was ab dem ersten Tag nicht verhandelbar ist",
+ nogoP:"Fünf Sätze aus dem Playbook, die eine Kids-Volley-Trainerperson bereits einbauen kann. Sie hängen weder vom Niveau noch vom System ab: Sie sind die Identität des Vereins und werden ab dem Eintritt unterrichtet.",
+ nogos:[
+  ["Kein Ball berührt den Boden, ohne dass wir ihn geholt haben","Die Zeile aus dem Abwehrkapitel, und sie funktioniert mit sechs Jahren genauso wie in der NLA. Sie ist messbar: wie viele Bälle fielen, ohne dass sich jemand bewegte."],
+  ["Der Fehler ist Information. Er bremst die Aggressivität nie. Hab immer einen Grund","Er unterscheidet den technischen Fehler — Ausführung der Bewegung — vom taktischen — Entscheidung im Kontext. Ein harter, tiefer Schlag ist ein guter Fehler; ein Block-Out bei hohem Ball durch verkürzten Armzug ist ein schlechter."],
+  ["Wir trainieren, wie wir spielen, immer zu 100%","Aus dem Grundsatzkapitel. Sie begründet, warum das Spiel mit Resultat in jeder Einheit vorkommt, ab Kids Volley."],
+  ["Die Abwehr ruft, wenn kein Block steht","Aus dem Blockkapitel, im Original in Grossbuchstaben. Reine Kommunikation, und sie wird vor jeder Blocktechnik eingebaut."],
+  ["Immer über Zone 3","Das Annahmeziel des Playbooks: hoher, stabiler, zentrierter Ball, damit die Zuspielerin zwei echte Optionen behält. Ein Rookie-Kind versteht das und kann es anstreben."]],
+ tablaT:"Kapitel für Kapitel, was auf jedes Level entfällt",
+ tablaP:"Jede Zeile ist ein Kapitel des Playbooks. Jede Spalte, was dieses Level dafür aufbaut. Lies deine Spalte von oben nach unten: Das ist dein Teil des Playbooks.",
+ th:["Kapitel des Playbooks","L5","L4","L3","L2","L1"],
+ filas:[
+  ["01 · Identität","Dass sie am nächsten Dienstag wiederkommen will","Intensität in jeder Aktion, ohne Aufforderung","Individuelle und kollektive Verantwortung","Wettkampfdemut und Professionalität","Siegermentalität und ständiges Streben nach Verbesserung"],
+  ["02 · Spielgrundsätze","Klare, konstante Kommunikation","Systemdisziplin: die vereinbarte Struktur einhalten","Taktische Klarheit: jede kennt Rolle und Priorität","Das Spiel lesen, um mit Vorteil zu entscheiden","Emotionale Stabilität unter Druck"],
+  ["03 · Angriffssystem","In drei Kontakten aufbauen","Die Lücke vor dem Schlag wählen","Zuspiel danach, wo die Annahme hinfällt","Die Mitte als ständige Bedrohung, mit variablen Tempi","Ausgewogene Verteilung nach Rotation, Lesart und Kontext"],
+  ["03 · Angriff im System","—","Sprungangriff mit gewählter Richtung","Annahme zu dritt, die Zuspielerin mit zwei Optionen","Vier Angriffsoptionen, zwei Angreiferinnen pro Feldhälfte","Hart, hoch und tief schlagen ohne verkürzten Armzug; recyceln, wenn nötig"],
+  ["04 · Abwehrsystem","Zum eigenen Ball gehen","Die Abwehr endet im Angriff, nicht im Rückspiel","Grundposition danach, wo der Gegner angreifen wird","Muster nach Rotation und gegnerischen Tendenzen","Schneller, geordneter Übergang in echten Gegenangriff"],
+  ["04 · Abwehrpositionen","—","—","Einführung: wer deckt die Linie und wer die Diagonale","Systeme quick und high, Abwehr nach dem Block","Die fünf vollständigen Schemata mit ihren Ausnahmen"],
+  ["05 · Blocksystem","—","Hände über dem Netz, vertikaler Sprung","Technischer Block: formiert ankommen und zum Angriffspunkt schliessen","Lesender Block: vor dem Sprung entscheiden. Read und Calls","Wir blocken den Ball, nicht eine Zone. Die fünf Calls"],
+  ["06 · Service","Dass das Service ins Feld kommt","Service von oben mit Zonenwahl","7 von 10 im Feld mit angesagter Zone","Sprungservice oder aggressives Service von oben. Eigenes Risiko vereinbart","Modell 3-3: Gruppe A 85-100% Risiko, Gruppe B 70-85%"],
+  ["07 · Annahme","Dass der Ball den Boden nicht berührt","Annahme gegen Wettkampfservice","Drei Annahmespielerinnen, immer zur Zone 3","Zwei Systeme je nach Flatter- oder Sprungservice","Das System wechselt nach Rotation, Moment und Leistung"],
+  ["08 · Fehlermanagement","Der Fehler wird nicht bestraft","Technischen vom taktischen Fehler unterscheiden","Sagen können, warum sie sich so entschieden hat","In kritischen Momenten vereinfachen","Kurze Kommunikation ohne Lärm und Angriff mit höchster Wahrscheinlichkeit"],
+  ["09 · Matchplan","—","—","Den Plan hören und die eigene Rolle kennen","Video einmal pro Woche und am Wochenende angewendet","Eigener Plan: gegnerische Schwächen nutzen, ohne sich anzupassen"],
+  ["10 · KPI und Daten","Körpergrösse alle drei Monate","Messung im Oktober und März","Die eigene Service- und Annahmezahl, schriftlich","Individuelles Blatt mit eigener Statistik","Tägliche Mannschaftsziele und interne Tabelle"],
+  ["11 · Gemeinsame Sprache","Meiner, deiner, kommt","Die Zone vor dem Service ansagen","Zone 3 als Ziel der Annahme","Zonen #, + und B mit ihren Angriffsoptionen","Das vollständige Vokabular: #, +, B, +4, +2, 7/9/negativ"]],
+ cierre:"Eine Rookie-2-Trainerperson unterrichtet nicht das 3-3-Modell des Services. Sie unterrichtet, dass das Service ins Feld kommt und die Zone angesagt wird — die Stufe darunter desselben Konzepts. Was nicht passieren darf: dass eine Person in Future 3 zum ersten Mal hört, dass es eine Zielzone gibt."
+};
+PB.en = {
+ t:"How we play", sub:"The first team's playbook, translated to every level",
+ intro:"The <strong>NLA Team Playbook</strong> defines how Axpo Volley Näfels plays. It is not a first-team document: it is the direction the whole club plays in. This tab does not repeat it — it is published and can be read in full at the link — it brings it down to each level: which part each coach has to install so the player arrives at the top already knowing how to play this way.",
+ verlo:"Read the full playbook",
+ nogo:"What is not negotiable, from day one",
+ nogoP:"Five lines from the playbook that a Kids Volley coach can already install. They depend on neither level nor system: they are the club's identity and are taught from the moment a child arrives.",
+ nogos:[
+  ["No ball hits the floor without our players first going after it","The line from the defensive chapter, and it works the same at six years old as in the NLA. It is measurable: how many balls dropped without anybody moving."],
+  ["The error is information. It never stops aggression. Always have a reason why","It separates the technical error — execution of the movement — from the tactical one — the decision in context. A hard, deep hit is a good error; a block-out on a high ball from closing the swing is a bad one."],
+  ["We train the way we play, always at 100%","From the principles chapter. It is what justifies having a game with a score in every session, from Kids Volley on."],
+  ["The defense calls out when there is no block","From the blocking chapter, in capitals in the original. Pure communication, and it gets installed before any blocking technique."],
+  ["Always through Zone 3","The playbook's reception target: a high, stable, centred ball so the setter keeps two real options. A Rookie player can understand this and chase it."]],
+ tablaT:"Chapter by chapter, what falls to each level",
+ tablaP:"Each row is a chapter of the playbook. Each column, what that level builds towards it. Read your column top to bottom: that is your part of the playbook.",
+ th:["Playbook chapter","L5","L4","L3","L2","L1"],
+ filas:[
+  ["01 · Identity","That they want to come back next Tuesday","Intensity in every action, unprompted","Individual and collective responsibility","Competitive humility and professionalism","Winning mentality and relentless pursuit of improvement"],
+  ["02 · Playing principles","Clear, constant communication","System discipline: respect the agreed structure","Tactical clarity: everyone owns their role and priority","Reading the game to decide with an edge","Emotional stability under pressure"],
+  ["03 · Offensive system","Build over three contacts","Choose the gap before striking","Set according to where the pass dropped","The middle as a constant threat, with varied tempos","Balanced distribution by rotation, read and context"],
+  ["03 · In-system attack","—","Jump attack with a chosen direction","Reception in three, the setter with two options","Four attacking options, two hitters per court half","Hit hard, high and deep without closing the swing; recycle when needed"],
+  ["04 · Defensive system","Go for the ball that is yours","The dig ends in an attack, not a free ball","Base position according to where the opponent will attack","Patterns by rotation and opponent tendencies","Fast, orderly transition into a real counter-attack"],
+  ["04 · Defensive positions","—","—","Introduction: who covers the line and who the cross","Quick and high systems, defending off the block","The five complete schemes with their exceptions"],
+  ["05 · Blocking system","—","Hands over the net, vertical jump","Technical block: arrive formed and close to the point of attack","Reading block: decide before the jump. Read and calls","We block the ball, not a zone. The five calls"],
+  ["06 · Serve","That the serve lands in court","Overhand serve that chooses a zone","7 out of 10 in with a called zone","Jump serve or aggressive overhand. Individual risk agreed","The 3-3 model: group A 85-100% risk, group B 70-85%"],
+  ["07 · Reception","That the ball does not hit the floor","Passing against a match serve","Three passers, always to Zone 3","Two systems depending on float or jump serve","The system shifts by rotation, momentum and performance"],
+  ["08 · Error management","The error is not punished","Tell a technical error from a tactical one","Able to say why they chose that","Under pressure, simplify","Brief communication, no noise, and the highest-probability attack"],
+  ["09 · Game plan","—","—","Listen to the plan and know your role","Video once a week and applied at the weekend","Their own plan: exploit the opponent's weaknesses without adapting to them"],
+  ["10 · KPIs and data","Height every three months","October and March measurements","Their own serve and reception number, written down","Individual sheet with their own statistics","Daily team targets and an internal table"],
+  ["11 · Common language","Mine, yours, coming","Call the zone before serving","Zone 3 as the target of the pass","Zones #, + and B with their attacking options","The full vocabulary: #, +, B, +4, +2, 7/9/negative"]],
+ cierre:"A Rookie 2 coach does not teach the 3-3 serving model. They teach that the serve lands in and that the zone gets called, which is the step below the same concept. What cannot happen is a player reaching Future 3 and hearing for the first time that there is a zone to aim at."
+};
+
+function vPlay(){
+  const b = PB[LANG] || PB.es;
+  return `<div class="enc"><div class="eyebrow">NLA · 2026-27</div><h2>${b.t}</h2><p>${b.sub}</p></div>
+  <p>${b.intro}</p>
+  <p class="no-imprimir"><a class="btn-s" href="${PB_URL}" target="_blank" rel="noopener">${b.verlo} &rarr;</a></p>
+  <section class="bloque"><h3><span class="n">01</span>${b.nogo}</h3>
+    <p>${b.nogoP}</p>
+    ${b.nogos.map(x=>`<div class="pb-no"><b>${x[0]}</b><p>${x[1]}</p></div>`).join("")}
+  </section>
+  <section class="bloque"><h3><span class="n">02</span>${b.tablaT}</h3>
+    <p>${b.tablaP}</p>
+    <div class="tabla-envoltura"><table class="pb-t"><thead><tr>
+      ${b.th.map((h,i)=>`<th${i?' style="text-align:left;color:'+["","#8A7200","#B4551F","#EE4655","#8E3374","#0E2A8A"][i]+'"':''}>${h}</th>`).join("")}
+    </tr></thead><tbody>
+      ${b.filas.map(f=>`<tr><td><strong>${f[0]}</strong></td>${f.slice(1).map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}
+    </tbody></table></div>
+    <div class="nota">${b.cierre}</div>
+  </section>`;
+}
 
 function vMatriz(){
   const m = D().matriz;
@@ -5667,7 +5802,7 @@ function render(){
   const esEt = (VISTA==="m"||VISTA==="f");
   document.getElementById("ruta").hidden = !esEt;
   if(esEt) pintarRuta();
-  const vs = {resumen:vResumen, juego:vJuego, matriz:vMatriz, comp:vComp, carga:vCarga, plantel:vPlantel, staff:vStaff, herr:vHerr, plan:vPlan, foda:vFoda, ens:vEns, ref:vRef};
+  const vs = {play:vPlay, resumen:vResumen, juego:vJuego, matriz:vMatriz, comp:vComp, carga:vCarga, plantel:vPlantel, staff:vStaff, herr:vHerr, plan:vPlan, foda:vFoda, ens:vEns, ref:vRef};
   document.getElementById("contenido").innerHTML = esEt ? vEtapa(VISTA) : vs[VISTA]();
   document.querySelectorAll(".solapa").forEach(b=>b.setAttribute("aria-selected", String(b.dataset.v===VISTA)));
   enlazarConfig();
