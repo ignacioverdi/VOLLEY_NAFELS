@@ -1589,7 +1589,14 @@ function objPintarDetalle(nombre, obj, cuerpo, val, total, pl, quien){
    + '</div>';
 
   var html = ''
-   + '<div id="obj-detalle" style="position:fixed;inset:0;z-index:9000;display:flex;'
+   /* ══ POR ENCIMA DE TODO ════════════════════════════════════════════════════
+   Tenia z-index 9000. El panel de baterias de panel_voley usa 9999, asi que
+   la ventanita se abria DEBAJO: se tocaba una bateria, la ventana existia y
+   no se veia. En el dashboard funcionaba porque ahi no hay nada encima.
+
+   Se sube al tope para que ninguna pantalla la tape, esten como esten sus
+   capas. */
++ '<div id="obj-detalle" style="position:fixed;inset:0;z-index:2147483000;display:flex;'
    +      'align-items:center;justify-content:center;background:rgba(2,6,23,.74);padding:16px">'
    + '<div style="background:#0f172a;border:1px solid rgba(148,163,184,.25);border-radius:14px;'
    +      'max-width:340px;width:100%;max-height:88vh;overflow:auto;'
