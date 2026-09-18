@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260918-1550"></script>
-<script src="selector_categoria.js?v=20260918-1550"></script>
-<script src="lang.js?v=20260918-1550"></script>
+<script src="categorias_club.js?v=20260918-2146"></script>
+<script src="selector_categoria.js?v=20260918-2146"></script>
+<script src="lang.js?v=20260918-2146"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260918-1550">
+<link rel="stylesheet" href="movil.css?v=20260918-2146">
 </head>
 <body>
 
@@ -1237,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260918-1550" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260918-1550"></script>
-<script src="objetivos.js?v=20260918-1550" onerror="void 0"></script>
-<script src="video_delay.js?v=20260918-1550" onerror="void 0"></script>
+<script src="firebase.js?v=20260918-2146" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260918-2146"></script>
+<script src="objetivos.js?v=20260918-2146" onerror="void 0"></script>
+<script src="video_delay.js?v=20260918-2146" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260918-1550" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260918-1550"></script>
+<script src="plantel_nafels.js?v=20260918-2146" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260918-2146"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -7495,6 +7495,24 @@ function renderInicio(){
       cl.innerHTML=list.map(function(p){
         var r=p.resumen||{}, act=(p.id===M._id);
         var f=(r.fecha||'').split('-'); var fec=(f.length===3)?(f[2]+'/'+f[1]+'/'+f[0]):(r.fecha||'—');
+
+        /* ══ M DE MAÑANA, T DE TARDE ══════════════════════════════════════
+           Con dos entrenamientos el mismo dia las dos filas se veian iguales
+           —"08/09 · Näfels" las dos— y no habia forma de saber cual era cual.
+
+           La hora sale de 'guardado', que es cuando se cerro el scout y esta
+           SIEMPRE, sin depender de que alguien complete un campo. Si el scout
+           tiene hora cargada en sus notas, esa manda.
+
+           Corte a las 13: antes es M, despues T. */
+        var _turno = '';
+        try{
+          var _h = null;
+          var _n = (p.M && p.M.notas && p.M.notas.hora) || '';
+          if(/^\d{1,2}[:.]/.test(_n)) _h = parseInt(_n, 10);
+          if(_h === null && p.guardado) _h = new Date(p.guardado).getHours();
+          if(_h !== null && !isNaN(_h)) _turno = (_h < 13) ? 'M' : 'T';
+        }catch(e){}
         /* ══ UNA TILDE POR SCOUT ═══════════════════════════════════════════
            El asistente hace pruebas y despues quiere borrarlas. Hasta ahora
            tenia que entrar a cada una, ir a Partidos y borrarla desde ahi:
@@ -7508,7 +7526,11 @@ function renderInicio(){
           +   '<input type="checkbox" class="inicheck" value="'+p.id+'"'
           +   ' onclick="event.stopPropagation();iniPintarBorrar()"'
           +   ' style="width:15px;height:15px;cursor:pointer;accent-color:#ef4444"></div>'
-          + '<div class="f">'+iniEsc(fec)+'</div>'
+          + '<div class="f">'+iniEsc(fec)
+          +   (_turno ? ' <span style="font-size:10px;font-weight:800;padding:1px 5px;'
+          +     'border-radius:4px;background:' + (_turno==='M'?'rgba(250,204,21,.18)':'rgba(129,140,248,.18)')
+          +     ';color:' + (_turno==='M'?'#fbbf24':'#a5b4fc') + '">' + _turno + '</span>' : '')
+          +   '</div>'
           + '<div class="eq">'+iniEsc(r.home)+(act?' <span style="font-size:10px;color:#e6a743">● abierto</span>':'')+'</div>'
           + '<div class="rs">'+iniEsc(r.res||'')+'</div>'
           + '<div class="eq">'+iniEsc(r.away)+'</div>'
@@ -8498,8 +8520,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260918-1550" onerror="void 0"></script>
-<script src="ayuda.js?v=20260918-1550"></script>
+<script src="volver_inicio.js?v=20260918-2146" onerror="void 0"></script>
+<script src="ayuda.js?v=20260918-2146"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -8823,8 +8845,46 @@ function iniTildarTodos(){
       try{ renderAll(); }catch(e){}
     }catch(e){}
   }
-  document.addEventListener('DOMContentLoaded', function(){ setTimeout(emparejar, 1500); });
+  /* ══ Y TAMBIEN LOS QUE YA ESTAN GUARDADOS ════════════════════════════════
+     Arriba se corrige la sesion abierta. Pero los scouts que ya estan en la
+     lista siguen con el nombre viejo —'PRUEBA', 'ENTRENAMIENTO'— y eso es lo
+     que se ve en la pantalla de inicio y lo que se exporta despues.
+
+     Esto pasa una vez por todos y les pone el club en los dos lados. Solo
+     toca los entrenamientos: los partidos tienen un rival de verdad. */
+  function emparejarGuardados(){
+    var lista;
+    try{ lista = JSON.parse(localStorage.getItem('pv_partidos') || '[]'); }
+    catch(e){ return 0; }
+    if(!lista.length) return 0;
+
+    var tocados = 0;
+    lista.forEach(function(p){
+      var m = p && p.M;
+      if(!m || m.modo !== 'entrenamiento') return;
+      if(!m.home || !m.away) return;
+      var casa = (m.home.name || '').trim();
+      if(!casa || casa === 'LOCAL') return;
+      if((m.away.name || '').trim().toUpperCase() === casa.toUpperCase()) return;
+
+      m.away.name = casa.toUpperCase();
+      m.away.code = (m.home.code || 'ENT').toUpperCase();
+      if(p.resumen) p.resumen.away = casa.toUpperCase();
+      tocados++;
+    });
+
+    if(tocados){
+      try{ localStorage.setItem('pv_partidos', JSON.stringify(lista)); }catch(e){}
+      try{ if(typeof renderInicio === 'function') renderInicio(); }catch(e){}
+    }
+    return tocados;
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(function(){ emparejar(); emparejarGuardados(); }, 1500);
+  });
   window.emparejarEntrenamiento = emparejar;
+  window.emparejarGuardados = emparejarGuardados;
 })();
 </script>
 
