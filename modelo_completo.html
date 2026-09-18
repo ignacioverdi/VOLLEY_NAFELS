@@ -199,6 +199,8 @@ td.num{font-weight:600;white-space:nowrap}
 .obj-it{border-top:1px solid var(--gris-claro);padding:12px 0}
 .obj-it b{display:block;font-size:16px;font-weight:600;margin-bottom:4px}
 .obj-it p{margin:0;font-size:14.8px;line-height:1.55;color:var(--tinta)}
+.obj-ok{margin-top:8px;padding:8px 12px;background:#F4F9F5;border-left:3px solid #1E6B33;font-size:14px;line-height:1.5}
+.obj-ok span{display:block;font-family:var(--fn);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#1E6B33;margin-bottom:2px}
 .obj-caja{border-left:5px solid var(--c);background:#fff;padding:17px 22px;margin:24px 0 6px}
 .obj-caja span{font-family:var(--fn);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gris)}
 .obj-caja p{margin:6px 0 0;font-size:20px;font-weight:600;letter-spacing:-.012em;line-height:1.35}
@@ -498,6 +500,7 @@ const BIBLIO = [
 const CONTENIDO = {};
 CONTENIDO.es = {
 sec:{
+ okTit:"Cómo sabés que está conseguido",
  refInt:"Cómo lo hacen las potencias",
  dosTablas:"<strong>Por qué esta tabla no coincide con la de etapas.</strong> Son dos preguntas distintas. La tabla por etapa dice qué sistema prescribe Swiss Volley en cada escalón de competencia: Future 1 juega 6-6, Future 2 juega 6-2 y Future 3 juega 5-1. Esta dice qué tiene que dominar un jugador según su capacidad, juegue donde juegue. Un L3 de diecisiete años compite en 4ª o 3ª liga, donde se juega 5-1, así que tiene que controlarlo aunque su etapa formativa todavía no lo prescriba.",
  objXLvl:"Objetivos por level", objXLvlP:"Elegí un level y vas a ver qué hay que trabajar con ese jugador, en técnica y en táctica, y qué le falta para pasar al siguiente. Sirve igual en cualquier grupo: en un mismo entrenamiento podés tener tres levels y esto te dice qué le pedís a cada uno.", objTec:"Objetivos técnicos", objTac:"Objetivos tácticos", objSig:"El salto al siguiente level.", objElegi:"Elegí un level arriba.",
@@ -1257,6 +1260,7 @@ ref:{
 
 CONTENIDO.de = {
 sec:{
+ okTit:"Woran du erkennst, dass es erreicht ist",
  refInt:"Wie es die führenden Nationen machen",
  dosTablas:"<strong>Warum diese Tabelle nicht mit der Stufentabelle übereinstimmt.</strong> Es sind zwei verschiedene Fragen. Die Stufentabelle sagt, welches System Swiss Volley auf jeder Wettkampfstufe vorschreibt: Future 1 spielt 6-6, Future 2 spielt 6-2 und Future 3 spielt 5-1. Diese sagt, was eine Person nach ihrem Können beherrschen muss, egal wo sie spielt. Ein siebzehnjähriger L3 spielt in der 4. oder 3. Liga, wo 5-1 gespielt wird, also muss er es beherrschen, auch wenn seine Ausbildungsstufe es noch nicht vorschreibt.",
  objXLvl:"Ziele nach Level", objXLvlP:"Wähle ein Level und du siehst, was mit dieser Person zu erarbeiten ist, technisch und taktisch, und was ihr zum nächsten Level fehlt. Gilt in jeder Gruppe: In einer Einheit können drei Levels sitzen, und hier steht, was du von jedem verlangst.", objTec:"Technische Ziele", objTac:"Taktische Ziele", objSig:"Der Sprung zum nächsten Level.", objElegi:"Wähle oben ein Level.",
@@ -2005,6 +2009,7 @@ ref:{
 
 CONTENIDO.en = {
 sec:{
+ okTit:"How you know it is achieved",
  refInt:"How the leading nations do it",
  dosTablas:"<strong>Why this table does not match the stage table.</strong> They answer two different questions. The stage table states which system Swiss Volley prescribes at each competitive tier: Future 1 plays 6-6, Future 2 plays 6-2 and Future 3 plays 5-1. This one states what a player has to master according to their ability, wherever they play. A seventeen-year-old L3 competes in the 4th or 3rd League, where the 5-1 is played, so they have to control it even if their development stage does not yet prescribe it.",
  objXLvl:"Objectives by level", objXLvlP:"Pick a level and you get what to work on with that player, technically and tactically, and what they need to move up. It applies in any group: one session can hold three levels, and this tells you what to ask of each.", objTec:"Technical objectives", objTac:"Tactical objectives", objSig:"The step to the next level.", objElegi:"Pick a level above.",
@@ -3222,6 +3227,70 @@ function vJuego(){
 }
 
 /* ── objetivos técnicos y tácticos por level ── */
+/* Criterio de verificación por objetivo. La pregunta que contesta:
+   ¿cómo sé que este jugador ya lo consiguió? */
+const OK = {es:{
+"Llevar la plataforma a la pelota con los pies":"Sobre 10 pelotas lanzadas lejos, llega y frena antes del contacto en 7. Se mira los pies, no los brazos.",
+"Manos arriba y adelante de la cara, formando la ventana":"Le preguntás si vio la pelota entre las manos y contesta que sí sin dudar. Si duda, no la vio.",
+"Golpear con la mano abierta, envolviendo la pelota":"De 10 golpes de autoelevación, 6 caen dentro de la cancha rival. Se escucha el sonido seco del talón de la mano.",
+"Caer sobre los dos pies con la rodilla alineada":"Diez saltos seguidos sin que se le meta la rodilla hacia adentro, y sin que se lo recuerdes en ninguno.",
+"Saque que entre a la cancha":"5 de 10 dentro, con la pelota sostenida hasta el golpe. Si lanza la pelota al aire, todavía no está.",
+"Nadie espera en una fila":"Parás el cronómetro a los 5 minutos y contás: ningún grupo con más de 4 esperando, y cada chico tocó la pelota al menos 15 veces.",
+"Pedir la pelota en voz alta":"En un rally de 6 contactos se escucharon al menos 4 llamados, y todos antes del toque.",
+"Entender que se juega en tres toques":"En el juego libre del final, sin que nadie lo pida, el equipo intenta construir en más de la mitad de las pelotas.",
+"Ir a la pelota que es suya":"Cinco rallies seguidos sin una sola pelota que caiga entre dos, y sin dos chicos yendo a la misma.",
+"Volver a la posición":"Filmás 2 minutos y todos vuelven a su lugar después de cada acción. Sin volver, no cuenta.",
+"Jugar con el compañero":"Elige pasarle al compañero en vez de mandarla sola al otro lado, aunque devolver fuera más fácil.",
+"Recepción contra saque de competencia":"Sobre 20 saques de arriba reales, 10 quedan jugables. Con pelota lanzada no se mide.",
+"Armar en desplazamiento":"De 10 pelotas que lo obligan a moverse, 7 salen con altura, no planas. La pelota plana es el indicador.",
+"Estabilizar la carrera de tres pasos":"Diez carreras seguidas con el mismo ritmo y el mismo pie de freno, filmadas. Si cambia el ritmo, no está.",
+"Contacto arriba y adelante":"En el video, la pelota está adelante de la línea del hombro en 8 de 10 golpes. Atrás de la cabeza no cuenta.",
+"Saque de arriba que elija zona":"Canta la zona antes de sacar y acierta 4 de 10. El objetivo es la intención cumplida, no el ace.",
+"Construir tres toques también cuando se complica":"En 5 rallies con recepción mala, el equipo llega a tres contactos en al menos 3.",
+"Acompañar al que ataca, siempre":"Sobre 10 ataques del equipo, hay cobertura formada en 8, sin que nadie la pida.",
+"Resolver la zona de conflicto":"Diez pelotas al medio entre dos: en las 10 va uno solo, y es el que se mueve hacia adentro.",
+"Volver a la posición":"Dos minutos de juego filmado sin una sola acción en la que alguien se quede fuera de su zona.",
+"Saber la rotación y quién arma":"Los parás en medio del punto y todos saben en qué rotación están y quién penetra. Si dudan, todavía no.",
+"Competir seguido, y que el error no cueste":"Después de un error propio, el jugador va a buscar la pelota siguiente en vez de esconderse. Se cuenta: 3 de 3.",
+"Recepción en sistema contra saque de competencia":"Sobre 20 saques de competencia, 10 quedan en sistema: el armador juega el segundo balón moviéndose un paso o menos.",
+"Penetración desde zona 1":"De 10 saques rivales, sale a tiempo en 8 y llega frenado en 7. Se mide mirando solo los pies, sin pelota.",
+"Sostener la carrera cuando el armado no es perfecto":"Le das 10 armados deliberadamente cortos o separados y la carrera no cambia en 8.",
+"Saque de arriba con 7 de 10 y zona cantada":"Literal: 7 de 10 dentro, y en al menos 5 la pelota cae en la zona que cantó.",
+"Armado de espaldas":"Arma de espaldas con la misma altura y distancia que de frente, 6 de 10, y el atacante no tiene que corregir su carrera.",
+"Bloqueo con manos sobre la red y orientadas al campo":"De 10 bloqueos, en 8 las manos pasan la cinta con las palmas hacia adentro. Las pelotas que devuelve caen dentro, no afuera.",
+"Penetración en las seis rotaciones":"Un set completo con penetración en las seis rotaciones y cero excepciones. Una sola excepción invalida el criterio.",
+"Sistema 6-6: todos arman":"En el registro de la semana, los seis armaron al menos una vez, y nadie armó más del doble que el que menos armó.",
+"El club y la estructura regional no se eligen":"El jugador puede explicar, con sus palabras, que ir a la sichtung no significa dejar el club.",
+"Cubrir al atacante siempre":"Sobre 10 ataques, cobertura formada a dos metros en 9, con el cuerpo bajo y mirando el bloqueo.",
+"Arrancar según el primer contacto":"En el video, arranca la carrera antes de que el armador toque la pelota en 8 de 10.",
+"La defensa y el control como decisión":"Va al piso o se estira por una pelota que parecía perdida al menos 3 veces por set, sin que nadie se lo pida.",
+"Empezar a leer al armador rival":"Antes del toque del armador rival, canta en voz alta adónde cree que va. No hace falta que acierte: hace falta que mire.",
+"Dos direcciones desde el mismo impulso":"Filmás las tres opciones y la carrera es indistinguible entre ellas. Si se nota cuál va a hacer, no está.",
+"Bloqueo lector":"Canta su decisión antes del toque del armador en 8 de 10, y acierta en 5.",
+"Ataque de zaga":"De 10 ataques de zaga, 8 sin pisar la línea y con contacto por encima de la cinta.",
+"Saque en salto o saque de arriba con zona":"Lanzamiento dentro de un cuadrado de medio metro en 8 de 10, medido sin golpear. Después se suma el golpe.",
+"Tiempos de ataque":"Ejecuta entrada, salida y media bola en el medio con el mismo armador, sin que haya que avisar cuál viene.",
+"Armar con contrato":"El contrato está escrito y firmado por armador y atacante, y sobre 10 pelotas 8 salen dentro de lo acordado.",
+"Sistema 6-2 completo":"Un partido entero con las seis rotaciones y sus coberturas, sin que el entrenador tenga que corregir la ubicación.",
+"Leer al armador rival":"Acomoda su posición antes de que salga la pelota en 6 de 10, y puede explicar por qué.",
+"Reconocer y ajustar en partido":"Cambia algo por decisión propia al menos una vez por set y puede explicar qué vio.",
+"La carrera dual se organiza, no se improvisa":"Tiene el horario escolar y el de entrenamiento escritos en la misma hoja, y sabe si le corresponde Talent Card.",
+"Usar video":"Un clip de 30 segundos por semana, con una sola corrección, y se ve aplicada el fin de semana siguiente.",
+"Dirigir una serie vos mismo":"Dirige una serie completa: la organiza, corrige a un compañero y sostiene el ritmo, con el entrenador en silencio.",
+"Coberturas y transiciones del 6-2":"En las seis rotaciones la cobertura se forma sin instrucción. Se controla rotación por rotación, no en promedio.",
+"Ejecutar igual en el tercer set que en el calentamiento":"Empezás el ejercicio 18-22 abajo y su porcentaje no baja más de 10 puntos respecto del inicio de la sesión.",
+"Distribuir con plan, no por costumbre":"Antes del partido escribe a quién va a buscar en cada rotación, y en el partido lo cumple en 4 de 6.",
+"Resolver contra bloqueo formado":"Contra bloqueo doble formado, resuelve con las tres herramientas —manos del bloqueo, costura y finta larga— al menos una vez cada una por set.",
+"Sostener el saque agresivo en los puntos que definen":"Del punto 20 en adelante, su saque mantiene la misma velocidad y la misma tasa de error que en el primer set.",
+"Transición inmediata después del bloqueo":"Sobre 10 bloqueos, en 8 sale de la red y queda disponible para atacar antes de que llegue la pelota.",
+"Sistema 5-1 completo":"Sostiene las seis rotaciones con sus coberturas durante un partido entero sin intervención del entrenador.",
+"Plan de partido propio":"Llega con una hoja de tres puntos propios sobre el rival y puede decir cuáles aplicó.",
+"Ajustar sin que el entrenador lo pida":"Al menos dos cambios propios por partido, explicados después con lo que vio.",
+"Controlar el ritmo del partido":"En los últimos cinco puntos del set, elige bien entre acelerar y dar aire. Se evalúa la decisión, no el resultado.",
+"Entrar a la estructura no es el logro":"Puede decir cuál es su objetivo deportivo propio sin nombrar una convocatoria ni una selección.",
+"Sostener a un compañero en una mala racha":"Después de tres errores de un compañero, se hace cargo del punto siguiente en vez de mirarlo."
+}};
+
 const OBJ_LVL = {es:[
 {n:1,meta:"Que conduzca el juego y sostenga su nivel cuando el partido aprieta.",
  tec:[
@@ -3235,6 +3304,7 @@ const OBJ_LVL = {es:[
  {t:"Plan de partido propio",d:"Que llegue a la cancha con algo preparado: dos o tres cosas concretas del rival que vio en video y que puede aplicar. No es scouting profesional, es una hoja con tres puntos que el jugador entiende y usa."},
  {t:"Ajustar sin que el entrenador lo pida",d:"Reconocer qué está pasando en el partido y cambiar algo por decisión propia, y poder explicar por qué lo cambió. Se entrena preguntando «¿qué viste?» antes de dar la solución, durante toda la temporada."},
  {t:"Controlar el ritmo del partido",d:"Saber cuándo acelerar y cuándo frenar, cuándo pedir un balón alto para dar aire al equipo y cuándo arriesgar. Es una habilidad de conducción y se desarrolla dándole al jugador la responsabilidad de decidirlo en los entrenamientos con marcador."},
+ {t:"Entrar a la estructura no es el logro",d:"La frase es del documento federal francés y conviene tenerla escrita para la conversación con el jugador y con la familia: pertenecer a una selección o a un polo <strong>no es una finalidad en sí misma, sino un medio funcional</strong> para alcanzar el objetivo deportivo propio. Un L1 que entra al Talentpool y cree que ya llegó, se detiene ahí. El marco francés se apoya en tres patas —deportiva, escolar y personal— y ninguna sustituye a las otras."},
  {t:"Sostener a un compañero en una mala racha",d:"El liderazgo en la cancha no es gritar: es hacerse cargo del punto siguiente cuando otro se cayó. Va de la mano con la regla de no buscar culpables: el que recibe mal no se comenta, se cubre."}],
  next:"Ya está en el techo formativo. Lo que sigue es competir en el primer equipo."},
 
@@ -3250,6 +3320,7 @@ const OBJ_LVL = {es:[
  {t:"Sistema 6-2 completo",d:"Dos armadoras que arman desde zaga y atacan cuando rotan adelante, con tres atacantes siempre en la red. Incluye las coberturas, que cambian en cada rotación y son lo que más se descuida de este sistema."},
  {t:"Leer al armador rival",d:"Mirar el primer contacto del rival y después al armador, y acomodar la posición antes de que la pelota salga. Se trabaja en el bloqueo y en la defensa al mismo tiempo, porque la información es la misma."},
  {t:"Reconocer y ajustar en partido",d:"Darse cuenta de que el rival está atacando siempre por el mismo lado, o de que el bloqueo está llegando tarde, y cambiar algo. Empieza acá y se consolida en L1."},
+ {t:"La carrera dual se organiza, no se improvisa",d:"Es el level donde la escuela y el vóley empiezan a chocar de verdad. Polonia lo resuelve con escuelas deportivas de diez horas semanales de entrenamiento contra tres de educación física; Francia con polos de dieciséis horas y horario escolar adaptado, evaluados por el ministerio. Nuestro instrumento equivalente es la Talent Card de Swiss Olympic, y existe justamente para que la escuela acomode el horario. Casi nadie la pide."},
  {t:"Usar video",d:"Un clip corto por semana, treinta segundos, con una sola cosa para corregir. Más que eso no se aplica. Apoyado en el sistema de datos que el club ya tiene en el primer equipo."},
  {t:"Dirigir una serie vos mismo",d:"En Japón el entrenamiento lo dirigen principalmente los capitanes y la mayoría de los ejercicios los manejan los jugadores. Una serie por semana dirigida por un jugador desde este level: él la organiza, él corrige y él sostiene el ritmo mientras el entrenador mira. Es la forma más barata de construir el pensamiento táctico que este level tiene que producir."},
  {t:"Coberturas y transiciones del 6-2",d:"Con tres atacantes en red, quién cubre cambia en cada rotación. Es lo que decide los rallies largos y lo que menos se entrena."}],
@@ -3266,6 +3337,7 @@ const OBJ_LVL = {es:[
  tac:[
  {t:"Penetración en las seis rotaciones",d:"Sin excepciones. Se canta la rotación antes de cada punto hasta que sale solo. Todo el sistema posterior se apoya en esto."},
  {t:"Sistema 6-6: todos arman",d:"Cuando la pelota no llega al armador, arma el que esté más cerca. Incluye el armado con manchette cuando no se llega con las manos. Se entrena con registro de cuántas veces armó cada uno."},
+ {t:"El club y la estructura regional no se eligen",d:"En los polos franceses las jugadoras entrenan de lunes a viernes en la estructura federal y <strong>vuelven a su club el viernes</strong> para entrenar y competir el fin de semana, con la licencia siempre en el club de origen. Cuando un jugador nuestro entra a la sichtung de GSGL no lo perdemos: es la misma relación. Vale decírselo al jugador y a la familia antes de que alguien lo interprete como una despedida."},
  {t:"Cubrir al atacante siempre",d:"Si uno ataca, los demás acompañan a dos metros, cuerpo bajo y manos abiertas, mirando el bloqueo y no la pelota. Es la conducta que más rallies largos gana y la más barata de instalar."},
  {t:"Arrancar según el primer contacto",d:"El atacante empieza la carrera por lo que ve en la recepción, no cuando el armador ya tocó. Si espera, llega tarde a todo lo que no sea pelota alta."},
  {t:"La defensa y el control como decisión",d:"Japón explica su nivel diciendo que sus jugadores son más bajos y que por eso pusieron la defensa y el control de pelota por encima de todo. En este level se decide si un jugador va a la pelota o espera a ser lo bastante alto. El que no gana por altura gana porque la pelota no toca el piso."},
@@ -3296,6 +3368,7 @@ const OBJ_LVL = {es:[
  {t:"Caer sobre los dos pies con la rodilla alineada",d:"Se entrena desde el primer día y todos los días, dentro del juego de entrada. A esta edad no duele, y por eso justamente hay que corregirlo ahora: la rodilla que se va hacia adentro al caer es el gesto que después lesiona."},
  {t:"Saque que entre a la cancha",d:"Con el gesto que le salga: de abajo está perfecto. La clave es que la pelota se sostiene con la otra mano hasta el golpe en vez de lanzarla al aire, que es de donde salen casi todos los errores a esta edad. El brazo va como un péndulo y el cuerpo acompaña hacia adelante. El objetivo es que el punto empiece, no que el saque sea bonito. Brasil directamente prohíbe el saque de arriba en toda la fase de iniciación, y el motivo de sus entrevistados es contundente: si se permite, un solo chico que saca fuerte termina el partido solo y los demás dejan de jugar."}],
  tac:[
+ {t:"Nadie espera en una fila",d:"John Kessel, treinta años director de desarrollo de USA Volleyball, escribió su manual de minivóley para programas con doce a treinta y seis chicos y un solo entrenador, que es exactamente esta situación. Su regla: quien está parado en una fila esperando una pelota del entrenador no aprende nada y además le saca un contacto a otro. Varias pelotas, grupos de dos o tres, y si hay más de cuatro esperando, el ejercicio está mal armado."},
  {t:"Pedir la pelota en voz alta",d:"Antes de tocarla, no mientras. A esta edad todavía no da vergüenza gritar, así que se instala acá o no se instala nunca."},
  {t:"Entender que se juega en tres toques",d:"Y que devolver de primera, aunque funcione hoy, es lo que hay que sacar. Se sostiene con la regla del juego."},
  {t:"Ir a la pelota que es suya",d:"Y no ir a la que no lo es. Cada uno tiene una zona y una responsabilidad."},
@@ -3316,6 +3389,7 @@ OBJ_LVL.de = [
  {t:"Eigener Matchplan",d:"Dass sie mit etwas Vorbereitetem auf das Feld kommt: zwei oder drei konkrete Dinge über den Gegner, die sie im Video gesehen hat und anwenden kann. Kein professionelles Scouting, sondern ein Blatt mit drei Punkten, das die Person versteht und nutzt."},
  {t:"Anpassen, ohne dass die Trainerperson es verlangt",d:"Erkennen, was im Spiel passiert, aus eigenem Entscheid etwas ändern und erklären können warum. Trainiert wird, indem man die ganze Saison «Was hast du gesehen?» fragt, bevor man die Lösung gibt."},
  {t:"Das Tempo des Spiels steuern",d:"Wissen, wann beschleunigt und wann verlangsamt wird, wann ein hoher Ball der Mannschaft Luft verschafft und wann Risiko angebracht ist. Es ist eine Führungsfähigkeit und entsteht, wenn man der Person im Training mit Resultat die Verantwortung dafür gibt."},
+ {t:"Der Eintritt in die Struktur ist nicht die Leistung",d:"Der Satz stammt aus dem französischen Verbandsdokument und lohnt sich für das Gespräch mit der Person und der Familie: Die Zugehörigkeit zu einer Nationalmannschaft oder einem Zentrum <strong>ist kein Selbstzweck, sondern ein funktionales Mittel</strong>, um das eigene sportliche Ziel zu erreichen. Wer auf L1 in den Talentpool kommt und glaubt, angekommen zu sein, bleibt dort stehen. Der französische Rahmen steht auf drei Beinen — sportlich, schulisch und persönlich — und keines ersetzt die anderen."},
  {t:"Eine Mitspielerin durch eine schwache Phase tragen",d:"Führung auf dem Feld heisst nicht rufen, sondern den nächsten Punkt übernehmen, wenn eine andere eingebrochen ist. Gehört zur Regel, keine Schuldigen zu suchen: Wer schlecht annimmt, wird nicht kommentiert, sondern gedeckt."}],
  next:"Sie ist am oberen Ende der Ausbildung. Was folgt, ist der Wettkampf in der ersten Mannschaft."},
 
@@ -3331,6 +3405,7 @@ OBJ_LVL.de = [
  {t:"Vollständiges System 6-2",d:"Zwei Zuspielerinnen, die aus dem Hinterfeld zuspielen und angreifen, sobald sie nach vorne rotieren, mit immer drei Angreiferinnen am Netz. Umfasst die Sicherungen, die sich in jeder Rotation ändern und an diesem System am meisten vernachlässigt werden."},
  {t:"Die gegnerische Zuspielerin lesen",d:"Den ersten Kontakt des Gegners ansehen, dann die Zuspielerin, und die Position anpassen, bevor der Ball weg ist. Wird im Block und in der Abwehr gleichzeitig erarbeitet, weil die Information dieselbe ist."},
  {t:"Im Spiel erkennen und anpassen",d:"Merken, dass der Gegner immer über dieselbe Seite angreift, oder dass der Block zu spät kommt, und etwas ändern. Beginnt hier und wird in L1 gefestigt."},
+ {t:"Die duale Laufbahn wird organisiert, nicht improvisiert",d:"Auf diesem Level geraten Schule und Volleyball wirklich in Konflikt. Polen löst es mit Sportschulen mit zehn Trainingsstunden pro Woche gegenüber drei Stunden Sportunterricht; Frankreich mit Zentren mit sechzehn Stunden und angepasstem Stundenplan, vom Ministerium evaluiert. Unser entsprechendes Instrument ist die Talent Card von Swiss Olympic, und sie existiert genau dafür, dass die Schule den Stundenplan anpasst. Fast niemand beantragt sie."},
  {t:"Video nutzen",d:"Ein kurzer Clip pro Woche, dreissig Sekunden, mit genau einer Sache zum Korrigieren. Mehr wird nicht umgesetzt. Gestützt auf das Datensystem, das der Verein in der ersten Mannschaft bereits hat."},
  {t:"Eine Serie selbst leiten",d:"In Japan wird das Training hauptsächlich von den Captains geleitet, und die meisten Übungen führen die Spielenden. Eine Serie pro Woche, ab diesem Level von einer Spielerin geleitet: Sie organisiert, sie korrigiert und sie hält den Rhythmus, während die Trainerperson zuschaut. Es ist der günstigste Weg, das taktische Denken aufzubauen, das dieses Level erzeugen soll."},
  {t:"Sicherungen und Übergänge im 6-2",d:"Mit drei Angreiferinnen am Netz wechselt in jeder Rotation, wer sichert. Das entscheidet die langen Ballwechsel und wird am wenigsten trainiert."}],
@@ -3347,6 +3422,7 @@ OBJ_LVL.de = [
  tac:[
  {t:"Penetration in allen sechs Rotationen",d:"Ohne Ausnahmen. Die Rotation wird vor jedem Punkt angesagt, bis es von selbst geht. Das gesamte spätere System stützt sich darauf."},
  {t:"System 6-6: alle spielen zu",d:"Erreicht der Ball die Zuspielerin nicht, spielt die Nächststehende zu. Umfasst das Zuspiel mit Manchette, wenn es mit den Händen nicht reicht. Trainiert wird mit Erfassung, wie oft jede zugespielt hat."},
+ {t:"Verein und regionale Struktur sind keine Wahl",d:"In den französischen Zentren trainieren die Spielerinnen von Montag bis Freitag in der Verbandsstruktur und <strong>kehren am Freitag in ihren Verein zurück</strong>, um am Wochenende zu trainieren und zu spielen, mit der Lizenz stets im Stammverein. Wenn eine Person von uns zur GSGL-Sichtung geht, verlieren wir sie nicht: Es ist dieselbe Beziehung."},
  {t:"Die Angreiferin immer sichern",d:"Greift eine an, begleiten die anderen auf zwei Metern, tief und mit offenen Händen, den Blick auf dem Block und nicht auf dem Ball. Das Verhalten, das die meisten langen Ballwechsel gewinnt und am günstigsten zu installieren ist."},
  {t:"Nach dem ersten Kontakt starten",d:"Die Angreiferin beginnt den Anlauf nach dem, was sie in der Annahme sieht, nicht wenn die Zuspielerin schon berührt hat. Wer wartet, kommt bei allem ausser hohen Bällen zu spät."},
  {t:"Abwehr und Ballkontrolle als Entscheidung",d:"Japan begründet sein Niveau damit, dass seine Spielenden kleiner sind und es deshalb Abwehr und Ballkontrolle über alles stellte. Auf diesem Level entscheidet sich, ob eine Person zur Abwehr geht oder darauf wartet, gross genug zu werden. Wer nicht über die Grösse gewinnt, gewinnt darüber, dass der Ball nicht zu Boden fällt."},
@@ -3377,6 +3453,7 @@ OBJ_LVL.de = [
  {t:"Auf zwei Füssen mit ausgerichtetem Knie landen",d:"Wird ab dem ersten Tag und täglich trainiert, im Einstiegsspiel. In diesem Alter tut es nicht weh, und genau deshalb wird es jetzt korrigiert: das nach innen fallende Knie bei der Landung ist die Bewegung, die später verletzt."},
  {t:"Ein Service, das ins Feld kommt",d:"Mit der Bewegung, die gelingt: von unten ist völlig in Ordnung. Entscheidend ist, dass der Ball bis zum Schlag in der anderen Hand gehalten und nicht hochgeworfen wird — daher stammen in diesem Alter fast alle Fehler. Der Arm schwingt wie ein Pendel und der Körper geht nach vorne mit. Ziel ist, dass der Ballwechsel beginnt, nicht dass das Service schön aussieht. Brasilien verbietet das Service von oben in der gesamten Einführungsphase, und die Begründung der Befragten ist unmissverständlich: Erlaubt man es, entscheidet ein einziges Kind mit hartem Service das Spiel allein, und die anderen hören auf zu spielen."}],
  tac:[
+ {t:"Niemand wartet in einer Schlange",d:"John Kessel, dreissig Jahre Leiter Sportentwicklung bei USA Volleyball, schrieb sein Minivolley-Handbuch für Programme mit zwölf bis sechsunddreissig Kindern und einer einzigen Trainerperson — genau diese Situation. Seine Regel: Wer in einer Reihe auf einen Ball wartet, lernt nichts und nimmt jemand anderem einen Kontakt weg. Mehrere Bälle, Gruppen zu zweit oder zu dritt, und wenn mehr als vier warten, ist die Übung falsch gebaut."},
  {t:"Den Ball laut fordern",d:"Vor der Berührung, nicht währenddessen. In diesem Alter ist Rufen noch nicht peinlich, also wird es hier installiert oder gar nie."},
  {t:"Verstehen, dass über drei Kontakte gespielt wird",d:"Und dass das Direktrückspiel, auch wenn es heute funktioniert, abzustellen ist. Getragen von der Spielregel."},
  {t:"Zum eigenen Ball gehen",d:"Und nicht zu dem, der einem nicht gehört. Jede hat eine Zone und eine Verantwortung."},
@@ -3397,6 +3474,7 @@ OBJ_LVL.en = [
  {t:"Their own match plan",d:"That they arrive on court with something prepared: two or three concrete things about the opponent they saw on video and can apply. Not professional scouting — a sheet with three points the player understands and uses."},
  {t:"Adjust without the coach asking",d:"Recognise what is happening in the match, change something on their own decision, and be able to explain why. Trained by asking «what did you see?» before giving the solution, all season long."},
  {t:"Control the tempo of the match",d:"Know when to speed up and when to slow down, when a high ball gives the team air and when to take a risk. It is a leadership skill and it grows by handing the player that decision in training with a score."},
+ {t:"Getting into the structure is not the achievement",d:"The line comes from the French federal document and is worth having written down for the conversation with the player and the family: belonging to a national team or a centre <strong>is not an end in itself but a functional means</strong> of reaching your own sporting goal. An L1 who joins the Talentpool and believes they have arrived stops there. The French framework stands on three legs — sporting, academic and personal — and none replaces the others."},
  {t:"Carry a teammate through a bad spell",d:"Leadership on court is not shouting: it is taking the next point when somebody else has dropped off. It goes with the rule of not looking for culprits — the player who passes badly is not commented on, they are covered."}],
  next:"They are at the top of the development pathway. What follows is competing in the first team."},
 
@@ -3412,6 +3490,7 @@ OBJ_LVL.en = [
  {t:"The complete 6-2 system",d:"Two setters who set from the back row and attack once they rotate front, with three attackers always at the net. It covers coverage, which changes every rotation and is the most neglected part of this system."},
  {t:"Read the opposing setter",d:"Watch the opponent's first contact, then the setter, and adjust position before the ball leaves. Worked in blocking and in defence at the same time, because the information is the same."},
  {t:"Recognise and adjust in the match",d:"Notice that the opponent is always attacking down the same side, or that the block is arriving late, and change something. It starts here and is consolidated at L1."},
+ {t:"The dual career gets organised, not improvised",d:"This is the level where school and volleyball genuinely start to collide. Poland solves it with sport schools running ten hours of training a week against three of physical education; France with centres of sixteen hours and an adapted school timetable, assessed by the ministry. Our equivalent instrument is the Swiss Olympic Talent Card, and it exists precisely so the school adjusts the timetable. Almost nobody asks for it."},
  {t:"Use video",d:"One short clip a week, thirty seconds, with a single thing to correct. More than that does not get applied. Supported by the data system the club already runs in the first team."},
  {t:"Run a series yourself",d:"In Japan practice is run primarily by the captains and most drills are player-run. One series a week led by a player, from this level on: they organise it, they correct it and they hold the rhythm while the coach watches. It is the cheapest way to build the tactical thinking this level is supposed to produce."},
  {t:"Coverage and transitions in the 6-2",d:"With three attackers at the net, who covers changes every rotation. It decides the long rallies and it is the least trained."}],
@@ -3428,6 +3507,7 @@ OBJ_LVL.en = [
  tac:[
  {t:"Penetration in all six rotations",d:"No exceptions. The rotation is called before every point until it becomes automatic. Everything the system does later rests on this."},
  {t:"The 6-6 system: everyone sets",d:"When the ball does not reach the setter, whoever is nearest sets. It includes setting with the forearms when the hands cannot get there. Trained with a record of how often each player set."},
+ {t:"The club and the regional structure are not a choice",d:"In the French centres the players train Monday to Friday in the federal structure and <strong>return to their club on Friday</strong> to train and compete at the weekend, with the licence always at the home club. When one of our players enters the GSGL trial we do not lose them: it is the same relationship. Worth saying to the player and the family before somebody reads it as a goodbye."},
  {t:"Always cover the attacker",d:"When one attacks, the others follow at two metres, low and with open hands, watching the block rather than the ball. The behaviour that wins the most long rallies and the cheapest to install."},
  {t:"Start on the first contact",d:"The attacker begins the approach on what they see in the pass, not once the setter has touched the ball. Wait, and they are late to everything but a high ball."},
  {t:"Begin reading the opposing setter",d:"An introduction: look at where the first contact is and how the setter's body is oriented. Getting it right is not yet required; looking is."},
@@ -3458,6 +3538,7 @@ OBJ_LVL.en = [
  {t:"Land on both feet with the knee aligned",d:"Trained from day one and every day, inside the opening game. At this age it does not hurt, and that is exactly why it gets corrected now: the knee collapsing inward on landing is the movement that injures later."},
  {t:"A serve that lands in court",d:"With whatever action works: underhand is perfectly fine. The key is that the ball is held in the other hand until the strike rather than tossed, which is where almost every error at this age comes from. The arm swings like a pendulum and the body goes forward with it. The goal is that the rally starts, not that the serve looks good. Brazil bans the overhand serve outright through the whole initiation phase, and the reason their interviewees give is blunt: allow it and one child who serves hard finishes the match on their own while the rest stop playing."}],
  tac:[
+ {t:"Nobody waits in a line",d:"John Kessel, for thirty years director of sport development at USA Volleyball, wrote his minivolley manual for programmes with twelve to thirty-six children and a single coach, which is exactly this situation. His rule: anyone standing in a line waiting for a ball from the coach learns nothing and takes a contact away from somebody else. Several balls, groups of two or three, and if more than four are waiting, the drill is badly built."},
  {t:"Call for the ball out loud",d:"Before touching it, not during. At this age shouting is not yet embarrassing, so it gets installed here or never."},
  {t:"Understand that we play over three contacts",d:"And that returning first time, even when it works today, is what has to go. Held up by the rule of the game."},
  {t:"Go for the ball that is yours",d:"And not for the one that is not. Each player has a zone and a responsibility."},
@@ -3480,6 +3561,7 @@ ENSC_EXTRA_TEC = {
 2:{t:"Tiempos de ataque",d:"Brasil los abre recién en la fase de rendimiento y en este orden: ataque por entrada y por salida, después media bola en el medio, y después tiempo de frente. No es un detalle: cada tiempo obliga al atacante a arrancar antes y al armador a acortar la trayectoria, y es lo que empieza a romper el bloqueo rival. El ataque de zaga viene después de todos ellos."}
 };
 
+function OKC(t){ const m=(OK[LANG]||OK.es)[t]||OK.es[t]; return m?`<div class="obj-ok"><span>${S("okTit")}</span>${m}</div>`:""; }
 let MAT_LVL = 0;
 window.setMatLvl = n => { MAT_LVL = Number(n); render(); };
 
@@ -3538,8 +3620,8 @@ function vMatriz(){
       const col = ["","#0E2A8A","#8E3374","#EE4655","#FA844E","#D9B300"][L.n];
       return `<div class="obj-caja" style="--c:${col}"><span>L${L.n} · ${L.t}</span><p>${O.meta}</p></div>
         <div class="ens-dos" style="margin-top:20px">
-          <div><h4 class="obj-h">${S("objTec")}</h4>${O.tec.map(x=>`<div class="obj-it"><b>${x.t}</b><p>${x.d}</p></div>`).join("")}</div>
-          <div><h4 class="obj-h">${S("objTac")}</h4>${O.tac.map(x=>`<div class="obj-it"><b>${x.t}</b><p>${x.d}</p></div>`).join("")}</div>
+          <div><h4 class="obj-h">${S("objTec")}</h4>${O.tec.map(x=>`<div class="obj-it"><b>${x.t}</b><p>${x.d}</p>${OKC(x.t)}</div>`).join("")}</div>
+          <div><h4 class="obj-h">${S("objTac")}</h4>${O.tac.map(x=>`<div class="obj-it"><b>${x.t}</b><p>${x.d}</p>${OKC(x.t)}</div>`).join("")}</div>
         </div>
         <div class="ref-lvl"><span>${S("refInt")}</span><b>${REF_LVL[L.n].t}</b><p>${REF_LVL[L.n].d}</p></div>
         <div class="nota" style="border-left-color:${col}"><strong>${S("objSig")}</strong> ${O.next}</div>`;
