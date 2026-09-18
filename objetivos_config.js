@@ -450,6 +450,22 @@ function fmtEff(v){
    tienen. */
 var OBJ_T = {
   en: {
+    /* ══ LA TABLA JUGADOR POR JUGADOR ════════════════════════════════════
+       Se agrego despues y sus textos nunca entraron a esta tabla, asi que
+       quedaban en castellano aunque la app estuviera en ingles o aleman. */
+    'JUGADOR POR JUGADOR':'PLAYER BY PLAYER',
+    'Ver jugador por jugador':'See player by player',
+    'Ocultar el detalle':'Hide the detail',
+    'No hay datos por jugador para este fundamento.':'No per-player data for this skill.',
+    'Total':'Total',
+    'Punto':'Point',
+    'Sigue':'In play',
+    'Bloq':'Blocked',
+    'Error':'Error',
+    'Perfecta':'Perfect',
+    'Positiva':'Positive',
+    'EQUIPO':'TEAM',
+    'El % sale de (punto − bloqueado − error) ÷ total.':'The % comes from (point − blocked − error) ÷ total.',
     '% Blq #+':'% Block #+',
     '% Blq #':'% Block #',
     '% Atq R#+':'% Atk after R#+',
@@ -530,6 +546,20 @@ var OBJ_T = {
     'El reproductor no está cargado en esta pantalla.':'The player is not loaded on this screen.'
   },
   de: {
+    /* La tabla jugador por jugador, en aleman. */
+    'JUGADOR POR JUGADOR':'SPIELER FÜR SPIELER',
+    'Ver jugador por jugador':'Spieler für Spieler ansehen',
+    'Ocultar el detalle':'Detail ausblenden',
+    'No hay datos por jugador para este fundamento.':'Keine Spielerdaten für dieses Element.',
+    'Total':'Gesamt',
+    'Punto':'Punkt',
+    'Sigue':'Im Spiel',
+    'Bloq':'Geblockt',
+    'Error':'Fehler',
+    'Perfecta':'Perfekt',
+    'Positiva':'Positiv',
+    'EQUIPO':'TEAM',
+    'El % sale de (punto − bloqueado − error) ÷ total.':'Das % ergibt sich aus (Punkt − geblockt − Fehler) ÷ Gesamt.',
     '% Blq #+':'% Block #+',
     '% Blq #':'% Block #',
     '% Atq R#+':'% Angriff nach R#+',
