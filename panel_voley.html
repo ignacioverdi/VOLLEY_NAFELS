@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Stats Entrenamiento">Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20260918-0753"></script>
-<script src="selector_categoria.js?v=20260918-0753"></script>
+<script src="categorias_club.js?v=20260918-0757"></script>
+<script src="selector_categoria.js?v=20260918-0757"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -351,20 +351,20 @@ body::before{content:'';position:fixed;inset:0;
 
 select, select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20260918-0753"></script>
+<script src="objetivos_config.js?v=20260918-0757"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260918-0753"></script>
-<script src="firebase.js?v=20260918-0753" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260918-0753"></script>
-<script src="lang.js?v=20260918-0753"></script>
-<script src="objetivos.js?v=20260918-0753" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20260918-0753"></script>
-  <script src="video_delay.js?v=20260918-0753" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260918-0757"></script>
+<script src="firebase.js?v=20260918-0757" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260918-0757"></script>
+<script src="lang.js?v=20260918-0757"></script>
+<script src="objetivos.js?v=20260918-0757" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20260918-0757"></script>
+  <script src="video_delay.js?v=20260918-0757" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -653,7 +653,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260918-0753">
+<link rel="stylesheet" href="movil.css?v=20260918-0757">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase" data-t="← Dashboard"><span data-t="← Dashboard">← Dashboard</span></a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -2207,8 +2207,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20260918-0753" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260918-0753"></script>
+<script src="plantel_nafels.js?v=20260918-0757" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260918-0757"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2307,7 +2307,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20260918-0753"></script>
+<script src="ayuda.js?v=20260918-0757"></script>
 
 
 
@@ -2327,12 +2327,34 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
    pase lo que pase con el scroll. */
 (function(){
 
+  /* ══ LAS SECCIONES SE ABREN DE DOS FORMAS ════════════════════════════════
+     Podio y Tabla usan la clase 'open'. Baterias y Objetivos usan
+     style.display='block'. Mirar solo la clase dejaba el boton invisible
+     justo en las dos que mas se usan. */
+  var PANELES = ['bat', 'obj', 'podio', 'tabla', 'informe', 'tv'];
+
+  function visible(el){
+    if(!el) return false;
+    if(el.classList && el.classList.contains('open')) return true;
+    var d = el.style.display;
+    return !!(d && d !== 'none');
+  }
+
   function abierto(){
-    return document.querySelector('.open') ||
-           document.querySelector('.modal.open');
+    if(document.querySelector('.modal.open')) return true;
+    for(var i = 0; i < PANELES.length; i++){
+      if(visible(document.getElementById(PANELES[i]))) return true;
+    }
+    return !!document.querySelector('.open');
   }
 
   function cerrarTodo(){
+    PANELES.forEach(function(id){
+      var el = document.getElementById(id);
+      if(!el) return;
+      el.classList.remove('open');
+      if(el.style.display && el.style.display !== 'none') el.style.display = 'none';
+    });
     document.querySelectorAll('.open').forEach(function(el){
       el.classList.remove('open');
     });
@@ -2368,7 +2390,7 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
     crear(); pintar();
     try{
       new MutationObserver(pintar).observe(document.body, {
-        subtree:true, attributes:true, attributeFilter:['class']
+        subtree:true, attributes:true, attributeFilter:['class','style']
       });
     }catch(e){ setInterval(pintar, 600); }
   });
