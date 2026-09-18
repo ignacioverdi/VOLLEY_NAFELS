@@ -1308,7 +1308,7 @@
   "tablas": {}
  },
  "panel_vivo.html": {
-  "bytes": 820592,
+  "bytes": 823927,
   "funciones": [
    "_aCp1252",
    "_alarmaGuardado",
@@ -1459,6 +1459,7 @@
    "elegirEquipoSetup",
    "elegirMitad",
    "emparejar",
+   "emparejarGuardados",
    "endRally",
    "equipos",
    "esCentral",
@@ -1873,11 +1874,12 @@
   "tablas": {}
  },
  "plan_partido.html": {
-  "bytes": 100770,
+  "bytes": 102359,
   "funciones": [
    "U",
    "_armClave",
    "_isMulti",
+   "_ppTurno",
    "_ppVidPorFecha",
    "allMatchesSel",
    "allRivals",
