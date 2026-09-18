@@ -1,5 +1,5 @@
 window.HISTORIAL_DATA = {
-  "generado": "18/09/2026, 22:24:23",
+  "generado": "18/09/2026, 22:27:58",
   "entrenamientos": [
     {
       "fecha": "03/09/2026",
@@ -9884,9 +9884,9 @@ window.HISTORIAL_DATA = {
             "Err": 0,
             "Eff": 0
           },
-          "rT": 107,
-          "rEff": 8,
-          "rPunto": 21,
+          "rT": 108,
+          "rEff": 9,
+          "rPunto": 22,
           "rPos": 23,
           "rNeg": 7,
           "rErr": 18,
@@ -9903,14 +9903,14 @@ window.HISTORIAL_DATA = {
             "Eff": 19
           },
           "rPot": {
-            "T": 64,
-            "Punto": 11,
+            "T": 65,
+            "Punto": 12,
             "Pos": 13,
             "Adm": 16,
             "Neg": 3,
             "Vend": 9,
             "Err": 12,
-            "Eff": 2
+            "Eff": 3
           },
           "aT": 0,
           "aEff": 0,
@@ -10364,9 +10364,9 @@ window.HISTORIAL_DATA = {
             "Err": 0,
             "Eff": 0
           },
-          "rT": 95,
-          "rEff": 8,
-          "rPunto": 23,
+          "rT": 94,
+          "rEff": 7,
+          "rPunto": 22,
           "rPos": 12,
           "rNeg": 17,
           "rErr": 20,
@@ -10383,14 +10383,14 @@ window.HISTORIAL_DATA = {
             "Eff": 17
           },
           "rPot": {
-            "T": 56,
-            "Punto": 13,
+            "T": 55,
+            "Punto": 12,
             "Pos": 3,
             "Adm": 13,
             "Neg": 13,
             "Vend": 2,
             "Err": 12,
-            "Eff": 3
+            "Eff": 1
           },
           "aT": 0,
           "aEff": 0,
