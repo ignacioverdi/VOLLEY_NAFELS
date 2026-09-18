@@ -524,6 +524,44 @@ if __name__=='__main__':
 
     all_links=read_mapa_links(ent=ent)
 
+    # ══ LAS TEMPORADAS QUE YA NO TIENEN NI UN ARCHIVO ════════════════════════
+    # La limpieza de mas abajo recorre por_temp, o sea las temporadas que
+    # TIENEN archivos ahora. Si se borra el ultimo .dvw de una temporada —o si
+    # una sesion quedo guardada en datos_video_sin-fecha, que es donde caen las
+    # que no tienen fecha reconocible— ese archivo no se abre nunca y sus
+    # sesiones siguen apareciendo en "Cargar videos" para siempre.
+    #
+    # Aca se buscan esos archivos huerfanos y se vacian.
+    try:
+        import glob as _glob, os as _os, re as _re
+        _vivas = set(por_temp.keys())
+        for _f in _glob.glob(prefix + '_*.js'):
+            _s = _os.path.basename(_f)[len(prefix) + 1:-3]
+            # CUIDADO: para los partidos el prefijo es 'datos_video' y ese
+            # patron tambien agarra 'datos_video_ent_26-27.js', que es de los
+            # ENTRENAMIENTOS. Vaciarlo borraria todas sus sesiones.
+            if not ent and _s.startswith('ent_'):
+                continue
+            # y una temporada de verdad es '26-27' o 'sin-fecha', nada mas
+            if not (_s == 'sin-fecha' or _re.match(r'^\d\d-\d\d$', _s)):
+                continue
+            if _s in _vivas:
+                continue
+            _prev = load_existing_season(_os.path.basename(_f))
+            if not _prev:
+                continue
+            print('   La temporada %s ya no tiene ningun .dvw: saco sus %d sesion(es).'
+                  % (_s, len(_prev)))
+            _D = {'v': DATA_VERSION, 'season': _s, 'combos': COMBOS,
+                  'matches': {}, 'links': {}}
+            # el mismo formato que escribe el resto del archivo:
+            #   var D = {...}; var T=...
+            open(_f, 'w', encoding='utf-8').write(
+                'var D = ' + json.dumps(_D, ensure_ascii=False,
+                                        separators=(',', ':')) + '; var T=0;')
+    except Exception as _e:
+        print('   (aviso: no pude revisar las temporadas viejas):', _e)
+
     for season in sorted(por_temp.keys()):
         season_out=prefix+'_'+season+'.js'
         existentes=load_existing_season(season_out)
