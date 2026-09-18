@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260918-0749"></script>
-<script src="selector_categoria.js?v=20260918-0749"></script>
-<script src="lang.js?v=20260918-0749"></script>
+<script src="categorias_club.js?v=20260918-0753"></script>
+<script src="selector_categoria.js?v=20260918-0753"></script>
+<script src="lang.js?v=20260918-0753"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260918-0749">
+<link rel="stylesheet" href="movil.css?v=20260918-0753">
 </head>
 <body>
 
@@ -1237,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260918-0749" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260918-0749"></script>
-<script src="objetivos.js?v=20260918-0749" onerror="void 0"></script>
-<script src="video_delay.js?v=20260918-0749" onerror="void 0"></script>
+<script src="firebase.js?v=20260918-0753" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260918-0753"></script>
+<script src="objetivos.js?v=20260918-0753" onerror="void 0"></script>
+<script src="video_delay.js?v=20260918-0753" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260918-0749" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260918-0749"></script>
+<script src="plantel_nafels.js?v=20260918-0753" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260918-0753"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -8427,8 +8427,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260918-0749" onerror="void 0"></script>
-<script src="ayuda.js?v=20260918-0749"></script>
+<script src="volver_inicio.js?v=20260918-0753" onerror="void 0"></script>
+<script src="ayuda.js?v=20260918-0753"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -8653,72 +8653,7 @@ function iniTildarTodos(){
 }
 </script>
 
-<script>
-/* ══ VOLVER AL PANEL DESDE CUALQUIER VENTANA ════════════════════════════════
-   Los paneles de adentro —baterias, objetivos, exportar, teclado, ayuda,
-   tablas— se abren encima del scout. Algunos traen su boton de cerrar y otros
-   no, asi que segun cual abrieras te quedabas sin forma clara de volver: habia
-   que adivinar, tocar fuera, o recargar la pagina.
 
-   Esto le pone a TODAS una barra fija abajo con "← Volver al panel". No
-   reemplaza los botones que ya tienen; se suma, para que siempre haya una
-   salida visible en el mismo lugar.
-
-   Tambien se cierra con la tecla Escape. */
-(function(){
-
-  function cerrarTodo(){
-    document.querySelectorAll('.modal.open').forEach(function(m){
-      m.classList.remove('open');
-    });
-    /* las ventanas que no usan .modal */
-    var tw = document.getElementById('twin');
-    if(tw && !tw.hasAttribute('hidden')) tw.setAttribute('hidden','');
-    try{ if(typeof rvCerrar === 'function') rvCerrar(); }catch(e){}
-    try{ if(typeof objCerrarDetalle === 'function') objCerrarDetalle(); }catch(e){}
-  }
-  window.volverAlPanel = cerrarTodo;
-
-  function ponerBoton(m){
-    if(!m || m.querySelector('.volver-panel')) return;
-    var caja = m.querySelector('.mbox') || m.firstElementChild;
-    if(!caja) return;
-    var b = document.createElement('button');
-    b.className = 'tbtn volver-panel';
-    b.textContent = '\u2190 Volver al panel';
-    b.onclick = cerrarTodo;
-    b.style.cssText = 'display:block;width:calc(100% - 28px);margin:10px 14px 14px;'
-      + 'padding:9px;background:rgba(148,163,184,.12);'
-      + 'border:1px solid rgba(148,163,184,.3);border-radius:9px;'
-      + 'color:#cbd5e1;font-size:12.5px;font-weight:700;cursor:pointer;'
-      + 'font-family:inherit';
-    caja.appendChild(b);
-  }
-
-  /* Cuando una ventana se abre, se le pone el boton. Se vigila el documento
-     porque las ventanas se abren agregando la clase 'open', no creandolas. */
-  function revisar(){
-    document.querySelectorAll('.modal.open').forEach(ponerBoton);
-  }
-
-  document.addEventListener('DOMContentLoaded', function(){
-    revisar();
-    try{
-      new MutationObserver(revisar).observe(document.body, {
-        subtree:true, attributes:true, attributeFilter:['class']
-      });
-    }catch(e){ setInterval(revisar, 700); }
-  });
-
-  document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape'){
-      var hay = document.querySelector('.modal.open');
-      var tw  = document.getElementById('twin');
-      if(hay || (tw && !tw.hasAttribute('hidden'))){ e.preventDefault(); cerrarTodo(); }
-    }
-  });
-})();
-</script>
 
 <script>
 /* ══ SI ESTA VACIO Y HAY ALGO EN LA NUBE, AVISAR ════════════════════════════
@@ -8819,6 +8754,58 @@ function iniTildarTodos(){
   }
   document.addEventListener('DOMContentLoaded', function(){ setTimeout(emparejar, 1500); });
   window.emparejarEntrenamiento = emparejar;
+})();
+</script>
+
+<script>
+/* ══ VOLVER AL PANEL ════════════════════════════════════════════════════════
+   Las 21 ventanas del panel se abren encima del scout. Algunas traen su boton
+   de cerrar y otras no.
+
+   Va UNO SOLO, fijo abajo a la derecha, por encima de todo. El primer intento
+   lo pegaba adentro de cada ventana y quedaba tapado por la barra de arriba, y
+   ademas se movia con el scroll de la ventana. */
+(function(){
+  function abierto(){
+    if(document.querySelector('.modal.open')) return true;
+    var tw = document.getElementById('twin');
+    return !!(tw && !tw.hasAttribute('hidden'));
+  }
+  function cerrarTodo(){
+    document.querySelectorAll('.modal.open').forEach(function(m){ m.classList.remove('open'); });
+    var tw = document.getElementById('twin');
+    if(tw && !tw.hasAttribute('hidden')) tw.setAttribute('hidden','');
+    try{ if(typeof rvCerrar === 'function') rvCerrar(); }catch(e){}
+    try{ if(typeof objCerrarDetalle === 'function') objCerrarDetalle(); }catch(e){}
+    pintar();
+  }
+  window.volverAlPanel = cerrarTodo;
+
+  var btn = null;
+  function crear(){
+    if(btn) return btn;
+    btn = document.createElement('button');
+    btn.id = 'volver-panel';
+    btn.textContent = '\u2190 Volver';
+    btn.onclick = function(e){ e.stopPropagation(); cerrarTodo(); };
+    btn.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:2147483000;'
+      + 'padding:11px 18px;border-radius:999px;background:#e8192c;border:none;'
+      + 'color:#fff;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;'
+      + 'box-shadow:0 6px 20px rgba(0,0,0,.45);display:none';
+    document.body.appendChild(btn);
+    return btn;
+  }
+  function pintar(){ crear().style.display = abierto() ? 'block' : 'none'; }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    crear(); pintar();
+    try{ new MutationObserver(pintar).observe(document.body,
+      {subtree:true, attributes:true, attributeFilter:['class','hidden']}); }
+    catch(e){ setInterval(pintar, 600); }
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && abierto()){ e.preventDefault(); cerrarTodo(); }
+  });
 })();
 </script>
 </body>

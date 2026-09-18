@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Stats Entrenamiento">Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20260918-0749"></script>
-<script src="selector_categoria.js?v=20260918-0749"></script>
+<script src="categorias_club.js?v=20260918-0753"></script>
+<script src="selector_categoria.js?v=20260918-0753"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -351,20 +351,20 @@ body::before{content:'';position:fixed;inset:0;
 
 select, select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20260918-0749"></script>
+<script src="objetivos_config.js?v=20260918-0753"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260918-0749"></script>
-<script src="firebase.js?v=20260918-0749" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260918-0749"></script>
-<script src="lang.js?v=20260918-0749"></script>
-<script src="objetivos.js?v=20260918-0749" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20260918-0749"></script>
-  <script src="video_delay.js?v=20260918-0749" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260918-0753"></script>
+<script src="firebase.js?v=20260918-0753" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260918-0753"></script>
+<script src="lang.js?v=20260918-0753"></script>
+<script src="objetivos.js?v=20260918-0753" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20260918-0753"></script>
+  <script src="video_delay.js?v=20260918-0753" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -653,7 +653,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260918-0749">
+<link rel="stylesheet" href="movil.css?v=20260918-0753">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase" data-t="← Dashboard"><span data-t="← Dashboard">← Dashboard</span></a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -2207,8 +2207,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20260918-0749" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260918-0749"></script>
+<script src="plantel_nafels.js?v=20260918-0753" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260918-0753"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2307,63 +2307,74 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20260918-0749"></script>
+<script src="ayuda.js?v=20260918-0753"></script>
+
+
 
 <script>
-/* ══ VOLVER AL PANEL DESDE CUALQUIER SECCION ════════════════════════════════
+/* ══ VOLVER AL PANEL ════════════════════════════════════════════════════════
    Podio, Tabla, Baterias, Objetivos, TV, Informe y los detalles de jugador se
-   abren encima. Algunos traen su cierre y otros no, asi que segun cual abrieras
-   no habia forma clara de volver: quedaba tocar fuera, adivinar, o recargar.
+   abren encima. Algunos traen su cierre y otros no, asi que segun cual
+   abrieras no habia forma clara de volver.
 
-   Esto le agrega a TODAS una barra abajo con "← Volver". No saca los botones
-   que ya tienen: se suma, para que la salida este siempre en el mismo lugar.
-   Tambien cierra con Escape. */
+   ── POR QUE NO VA ADENTRO DE LA SECCION ──────────────────────────────────
+   El primer intento lo pegaba al final de cada panel. Quedaba mal: la barra
+   de arriba lo tapaba, y como esas secciones tienen scroll propio el boton se
+   iba moviendo con el contenido en vez de quedarse quieto.
+
+   Ahora es UNO SOLO, fijo abajo a la derecha, por encima de todo. Aparece
+   cuando hay algo abierto y desaparece al cerrarlo. Siempre en el mismo lugar,
+   pase lo que pase con el scroll. */
 (function(){
 
-  /* Las secciones de esta pantalla se muestran agregando la clase 'open'. */
+  function abierto(){
+    return document.querySelector('.open') ||
+           document.querySelector('.modal.open');
+  }
+
   function cerrarTodo(){
     document.querySelectorAll('.open').forEach(function(el){
-      if(el.id || el.className.indexOf('modal')>=0 || el.tagName==='SECTION' ||
-         el.tagName==='DIV') el.classList.remove('open');
+      el.classList.remove('open');
     });
     try{ if(typeof closeCanchaModal === 'function') closeCanchaModal(); }catch(e){}
     try{ if(typeof objCerrarDetalle === 'function') objCerrarDetalle(); }catch(e){}
+    pintar();
   }
   window.volverAlPanel = cerrarTodo;
 
-  function ponerBoton(el){
-    if(!el || el.querySelector('.volver-panel')) return;
-    /* si es muy chico no es una seccion: no molestar */
-    if(el.offsetHeight && el.offsetHeight < 80) return;
-    var b = document.createElement('button');
-    b.className = 'volver-panel';
-    b.textContent = '\u2190 Volver';
-    b.onclick = function(ev){ ev.stopPropagation(); cerrarTodo(); };
-    b.style.cssText = 'display:block;width:calc(100% - 24px);margin:12px;'
-      + 'padding:9px;background:rgba(148,163,184,.12);'
-      + 'border:1px solid rgba(148,163,184,.3);border-radius:9px;'
-      + 'color:#cbd5e1;font-size:12.5px;font-weight:700;cursor:pointer;'
-      + 'font-family:inherit';
-    el.appendChild(b);
+  var btn = null;
+  function crear(){
+    if(btn) return btn;
+    btn = document.createElement('button');
+    btn.id = 'volver-panel';
+    btn.textContent = '\u2190 Volver';
+    btn.onclick = function(e){ e.stopPropagation(); cerrarTodo(); };
+    btn.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:2147483000;'
+      + 'padding:11px 18px;border-radius:999px;'
+      + 'background:#e8192c;border:none;'
+      + 'color:#fff;font-size:13px;font-weight:800;cursor:pointer;'
+      + 'font-family:inherit;box-shadow:0 6px 20px rgba(0,0,0,.45);'
+      + 'display:none';
+    document.body.appendChild(btn);
+    return btn;
   }
 
-  function revisar(){
-    document.querySelectorAll('.open').forEach(ponerBoton);
+  function pintar(){
+    var b = crear();
+    b.style.display = abierto() ? 'block' : 'none';
   }
 
   document.addEventListener('DOMContentLoaded', function(){
-    revisar();
+    crear(); pintar();
     try{
-      new MutationObserver(revisar).observe(document.body, {
+      new MutationObserver(pintar).observe(document.body, {
         subtree:true, attributes:true, attributeFilter:['class']
       });
-    }catch(e){ setInterval(revisar, 700); }
+    }catch(e){ setInterval(pintar, 600); }
   });
 
   document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape' && document.querySelector('.open')){
-      e.preventDefault(); cerrarTodo();
-    }
+    if(e.key === 'Escape' && abierto()){ e.preventDefault(); cerrarTodo(); }
   });
 })();
 </script>

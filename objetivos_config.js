@@ -1116,6 +1116,38 @@ function objDetallePorJugador(id){
     if(window.BAT_PARTIDOS && window.BAT_PARTIDOS.jug) jug = window.BAT_PARTIDOS.jug;
   }catch(e){}
   /* En el panel en vivo se calculan al momento. */
+  /* ══ panel_voley NO TIENE NI BAT_PARTIDOS NI M ═══════════════════════════
+     Esa pantalla recibe los codigos por Firebase, en VOLEY_CODES, y de ahi
+     arma todo. Sin esto el detalle salia "no hay datos" aunque hubiera 778
+     acciones cargadas. */
+  if(!jug){
+    try{
+      if(typeof window.bateriasVivo === 'function' &&
+         window.VOLEY_CODES && window.VOLEY_CODES.codes){
+        var _cods = window.VOLEY_CODES.codes.map(function(x){
+          return { c:(x.c||x), k:'play' };
+        });
+        var _r = window.bateriasVivo(_cods, '*');
+        jug = _r.jugadores || null;
+
+        /* los numeros, con el nombre del plantel si se puede */
+        if(jug){
+          var _cn = {};
+          Object.keys(jug).forEach(function(n){
+            var nn = parseInt(n, 10);
+            var nom = '';
+            try{
+              var pl = (window.VOLEY_CODES.home && window.VOLEY_CODES.home.jug) || [];
+              pl.forEach(function(j){ if(parseInt(j.n||j.num,10)===nn) nom = j.nom||j.name||''; });
+            }catch(e){}
+            _cn['#' + nn + (nom ? ' ' + nom : '')] = jug[n];
+          });
+          jug = _cn;
+        }
+      }
+    }catch(e){}
+  }
+
   if(!jug){
     try{
       /* ══ 'M' NO VIVE EN window ══════════════════════════════════════════

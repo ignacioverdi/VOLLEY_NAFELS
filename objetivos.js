@@ -123,6 +123,11 @@ function _batNuevo(){
   return {S:{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
           R:{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
           B:{'#':0,'+':0,'T':0},
+          /* ══ LA DEFENSA NO TENIA DONDE GUARDARSE ═══════════════════════════
+             El motor no tenia casilla para la defensa, asi que esas acciones
+             se descartaban enteras y la bateria salia vacia. En una sesion
+             real habia 132 defensas y la bateria mostraba cero. */
+          D:{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
           Aall:na(), cent:na(), alta:na(), rap:na(),
           rp:na(), ri:na(), rm:na(), tr:na()};
 }
@@ -153,6 +158,12 @@ function calcBaterias(codes, side){
       rec_valida=false;
     } else if(skill==='B' && pfx===side){
       var Pb=get(num); Pb.B.T++; if(res in Pb.B) Pb.B[res]++;
+    } else if(skill==='D' && pfx===side){
+      /* ══ LA DEFENSA FALTABA ════════════════════════════════════════════
+         No habia rama para la defensa propia, asi que esas acciones no se
+         contaban en ningun lado y la bateria salia vacia. En una sesion real
+         eran 132 defensas mostrando cero. */
+      var Pd=get(num); Pd.D.T++; if(res in Pd.D) Pd.D[res]++;
     } else if(skill==='A' && pfx===side){
       var tipo=body[3];  /* Q=central · H=alta · T=rápida */
       var cat;
@@ -212,6 +223,12 @@ function batToPcts(P){
   };
 
   return {
+    /* La defensa: el desglose y su porcentaje, con los mismos pesos que el
+       dashboard —perfecta 100, positiva 75, neutra 50, negativa 25—. */
+    defD: (P.D ? det(P.D) : {p:0,o:0,n:0,m:0,s:0,e:0,t:0}),
+    def:  (P.D && P.D.T)
+            ? roundPy((P.D['#'] + 0.75*P.D['+'] + 0.5*P.D['!'] + 0.25*P.D['-'])/P.D.T*100)
+            : null,
     sqD:  det(S),
     recD: det(R),
     bqD:  det(B),
