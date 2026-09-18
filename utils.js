@@ -37,7 +37,20 @@ function effColor(v, meta){
   }
   return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#f97316':'#ef4444';
 }
-function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
+function fmtEff(v){
+  /* ══ SIEMPRE REDONDO ══════════════════════════════════════════════════════
+     Esta funcion esta escrita en cuatro archivos y solo una redondeaba. Las
+     otras devolvian el numero tal cual, asi que si la cuenta daba
+     -2.9850746268656714 eso era lo que se veia en pantalla.
+
+     Se veia en las baterias del panel: "-2.9850746268656714%" ocupando dos
+     renglones del cartel.
+
+     Ahora redondean todas igual. */
+  if(v === null || v === undefined || isNaN(v)) return '\u2014';
+  var n = Math.round(Number(v));
+  return (n < 0 ? '-' : '') + Math.abs(n) + '%';
+}
 
 // ── Acumular jugadores de múltiples sesiones ─────────────────
 function acumJugadores(sesiones){

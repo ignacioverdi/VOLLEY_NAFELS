@@ -63,7 +63,20 @@ function objClassifyVsTeam(val,teamVal){
 
 /* ── Dibujo de una batería (barra vertical + marca de objetivo) idéntico al dashboard ── */
 function objPct(v,mn,mx){return Math.max(0,Math.min(100,(v-mn)/(mx-mn)*100));}
-function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
+function fmtEff(v){
+  /* ══ SIEMPRE REDONDO ══════════════════════════════════════════════════════
+     Esta funcion esta escrita en cuatro archivos y solo una redondeaba. Las
+     otras devolvian el numero tal cual, asi que si la cuenta daba
+     -2.9850746268656714 eso era lo que se veia en pantalla.
+
+     Se veia en las baterias del panel: "-2.9850746268656714%" ocupando dos
+     renglones del cartel.
+
+     Ahora redondean todas igual. */
+  if(v === null || v === undefined || isNaN(v)) return '\u2014';
+  var n = Math.round(Number(v));
+  return (n < 0 ? '-' : '') + Math.abs(n) + '%';
+}
 /* ══ LAS BATERIAS VIVEN EN objetivos_config.js ══════════════════════════════
    Esta funcion estaba escrita CUATRO veces: aca, en objetivos.js, en utils.js
    y dentro de historial_voley.html. Las tres copias viejas eran identicas
