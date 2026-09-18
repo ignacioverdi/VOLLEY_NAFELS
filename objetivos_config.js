@@ -1136,9 +1136,13 @@ function objDetallePorJugador(id){
           Object.keys(jug).forEach(function(n){
             var nn = parseInt(n, 10);
             var nom = '';
+            /* Los nombres viajan en home.names, un objeto {numero: nombre}.
+               Antes se buscaba en home.jug, que no existe, y la tabla salia
+               con los numeros pelados aunque el plantel estuviera cargado. */
             try{
-              var pl = (window.VOLEY_CODES.home && window.VOLEY_CODES.home.jug) || [];
-              pl.forEach(function(j){ if(parseInt(j.n||j.num,10)===nn) nom = j.nom||j.name||''; });
+              var _nm = (window.VOLEY_CODES.home && window.VOLEY_CODES.home.names) || {};
+              nom = _nm[String(nn)] || _nm[nn] || '';
+              if(nom === String(nn)) nom = '';     /* el que no tiene nombre */
             }catch(e){}
             _cn['#' + nn + (nom ? ' ' + nom : '')] = jug[n];
           });
@@ -1214,8 +1218,16 @@ function objDetallePorJugador(id){
   filas.sort(function(a,b){ return (b.t||0) - (a.t||0); });
 
   var esAtq = (String(id).indexOf('atq') === 0);
+  /* ══ FALTABA "SIGUE EN JUEGO" ══════════════════════════════════════════
+     En ataque las columnas eran Total · Punto · Bloq · Error, y esas tres no
+     suman el total: los ataques que siguen en juego no entran en ninguna.
+
+     Se veia raro: 7 ataques con 2 puntos, 1 bloqueado y 1 error —suman 4— y
+     no habia forma de saber donde estaban los otros 3.
+
+     La ventana grande si la muestra ("▸ Sigue en juego"); faltaba aca. */
   var enc = esAtq
-      ? ['', ot('Total'), ot('Punto'), ot('Bloq'), ot('Error'), '%']
+      ? ['', ot('Total'), ot('Punto'), ot('Sigue'), ot('Bloq'), ot('Error'), '%']
       : ['', ot('Total'), ot('Perfecta'), ot('Positiva'), ot('Error'), '%'];
 
   var h = '<div style="margin-top:10px;border-top:1px solid rgba(148,163,184,.18);padding-top:9px">'
@@ -1241,10 +1253,12 @@ function objDetallePorJugador(id){
        la formula con pesos y no de una resta. */
     var pct = t ? Math.round((p - b - e)/t*100) : 0;
     if(!esAtq) pct = (f.pct!=null ? f.pct : '\u2014');
+    var sigue = esAtq ? Math.max(0, t - p - b - e) : null;
     h += '<tr style="border-top:1px solid rgba(148,163,184,.08)">'
       +  '<td style="padding:3px 4px;color:#e2e8f0">'+f.n+'</td>'
       +  '<td style="text-align:right;padding:3px 4px;color:#e2e8f0;font-weight:700">'+t+'</td>'
       +  '<td style="text-align:right;padding:3px 4px;color:#4ade80">'+p+'</td>'
+      +  (esAtq ? '<td style="text-align:right;padding:3px 4px;color:#94a3b8">'+sigue+'</td>' : '')
       +  '<td style="text-align:right;padding:3px 4px;color:#fb923c">'+b+'</td>'
       +  '<td style="text-align:right;padding:3px 4px;color:#f87171">'+e+'</td>'
       +  '<td style="text-align:right;padding:3px 4px;color:#e2e8f0;font-weight:700">'+pct+(pct==='\u2014'?'':'%')+'</td>'
@@ -1252,10 +1266,12 @@ function objDetallePorJugador(id){
   });
 
   var pctEq = tot.t ? Math.round((tot.p - tot.b - tot.e)/tot.t*100) : 0;
+  var sigueEq = Math.max(0, tot.t - tot.p - tot.b - tot.e);
   h += '<tr style="border-top:2px solid rgba(148,163,184,.25);font-weight:800">'
     +  '<td style="padding:4px;color:#94a3b8">'+ot('EQUIPO')+'</td>'
     +  '<td style="text-align:right;padding:4px;color:#fff">'+tot.t+'</td>'
     +  '<td style="text-align:right;padding:4px;color:#4ade80">'+tot.p+'</td>'
+    +  (esAtq ? '<td style="text-align:right;padding:4px;color:#94a3b8">'+sigueEq+'</td>' : '')
     +  '<td style="text-align:right;padding:4px;color:#fb923c">'+tot.b+'</td>'
     +  '<td style="text-align:right;padding:4px;color:#f87171">'+tot.e+'</td>'
     +  '<td style="text-align:right;padding:4px;color:#fff">'+(esAtq?pctEq+'%':'')+'</td>'
