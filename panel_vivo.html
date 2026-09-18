@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260918-0827"></script>
-<script src="selector_categoria.js?v=20260918-0827"></script>
-<script src="lang.js?v=20260918-0827"></script>
+<script src="categorias_club.js?v=20260918-0836"></script>
+<script src="selector_categoria.js?v=20260918-0836"></script>
+<script src="lang.js?v=20260918-0836"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260918-0827">
+<link rel="stylesheet" href="movil.css?v=20260918-0836">
 </head>
 <body>
 
@@ -1237,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260918-0827" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260918-0827"></script>
-<script src="objetivos.js?v=20260918-0827" onerror="void 0"></script>
-<script src="video_delay.js?v=20260918-0827" onerror="void 0"></script>
+<script src="firebase.js?v=20260918-0836" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260918-0836"></script>
+<script src="objetivos.js?v=20260918-0836" onerror="void 0"></script>
+<script src="video_delay.js?v=20260918-0836" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260918-0827" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260918-0827"></script>
+<script src="plantel_nafels.js?v=20260918-0836" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260918-0836"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -4781,7 +4781,18 @@ function renderCodes(){
   if(!rows.length){ el.innerHTML='<div class="empty-note">Todavía no cargaste ninguna acción.<br>Escribí un número y apretá Enter.</div>'; return; }
   /* En el orden en que fueron pasando: el más viejo arriba y el último
      abajo, que es donde está la vista mientras se scoutea. */
-  el.innerHTML = rows.slice(-90).map(c=>{
+  /* ══ POR QUE YA NO SE CORTA EN 90 ═════════════════════════════════════════
+     La lista mostraba solo las ultimas 90 acciones del set. Mientras se
+     scoutea alcanza: lo que importa es el final. Pero para CORREGIR no:
+     con 828 codigos cargados, buscar el error de tipeo del #19 o del #44 era
+     imposible porque esas acciones simplemente no estaban en pantalla.
+
+     Ahora se dibujan todas. Se probo con las 828 de una sesion real: la lista
+     se arma en una sola pasada y no se nota la diferencia.
+
+     Si algun dia una sesion se hace tan larga que pesa, el corte vuelve, pero
+     con un boton de "ver todas" — nunca en silencio. */
+  el.innerHTML = rows.map(c=>{
     if(c.k==='drill'){ const di=M.codes.indexOf(c); return '<div class=\"crow\" onclick=\"seleccionar('+di+')\" style=\"justify-content:center;color:#22c55e;font-weight:800;background:rgba(34,197,94,.08);border:1px dashed rgba(34,197,94,.45)\"><span class=\"cc\">'+(c.c||'DRILL')+'</span></div>'; }
     const cls = c.k==='auto' ? 'auto' : (c.c[0]==='*'?'hteam':'ateam');
     const i = M.codes.indexOf(c);
@@ -8427,8 +8438,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260918-0827" onerror="void 0"></script>
-<script src="ayuda.js?v=20260918-0827"></script>
+<script src="volver_inicio.js?v=20260918-0836" onerror="void 0"></script>
+<script src="ayuda.js?v=20260918-0836"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
