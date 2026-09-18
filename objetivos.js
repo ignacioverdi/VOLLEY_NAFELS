@@ -178,16 +178,29 @@ function calcBaterias(codes, side){
          eran 132 defensas mostrando cero. */
       var Pd=get(num); Pd.D.T++; if(res in Pd.D) Pd.D[res]++;
     } else if(skill==='A' && pfx===side){
-      var tipo=body[3];  /* Q=central · H=alta · T=rápida */
+      var tipo=body[3];  /* Q=central · H=alta · T/U/M=rápida · O=vendida */
       var cat;
-      if(last_rec!==null && rec_valida){
+
+      /* ══ LA PELOTA VENDIDA ES TRANSICION ══════════════════════════════════
+         El tipo O es ataque de pelota vendida: no sale de un armado de
+         side-out, aunque venga justo despues de una recepcion. Va a
+         transicion siempre, sin importar como fue la recepcion anterior. */
+      if(tipo === 'O'){
+        cat = 'tr';
+        rec_valida = false;
+      } else if(last_rec!==null && rec_valida){
         rec_valida=false;
         cat = (last_rec==='#'||last_rec==='+')?'rp' : last_rec==='!'?'ri' : last_rec==='-'?'rm' : 'tr';
       } else cat='tr';
       var Pa=get(num);
       Pa.Aall.T++; if(res in Pa.Aall) Pa.Aall[res]++;
       if(tipo==='Q'){ Pa.cent.T++; if(res in Pa.cent) Pa.cent[res]++; }
-      else if(tipo==='T'){ Pa.rap.T++; if(res in Pa.rap) Pa.rap[res]++; }
+      /* ══ U Y M TAMBIEN SON RAPIDA ═════════════════════════════════════
+         Vienen de los partidos scouteados con VolleyMetrics la temporada
+         pasada, donde la pelota rapida de puntas y opuestos se marcaba con
+         esas letras en vez de T. Son 1.087 ataques tipo U y 198 tipo M que
+         no caian en ninguna bateria: ni rapida, ni central, ni alta. */
+      else if(tipo==='T' || tipo==='U' || tipo==='M'){ Pa.rap.T++; if(res in Pa.rap) Pa.rap[res]++; }
       else if(tipo==='H'){ Pa.alta.T++; if(res in Pa.alta) Pa.alta[res]++; }
       Pa[cat].T++; if(res in Pa[cat]) Pa[cat][res]++;
     }
