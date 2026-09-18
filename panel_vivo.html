@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260918-0741"></script>
-<script src="selector_categoria.js?v=20260918-0741"></script>
-<script src="lang.js?v=20260918-0741"></script>
+<script src="categorias_club.js?v=20260918-0749"></script>
+<script src="selector_categoria.js?v=20260918-0749"></script>
+<script src="lang.js?v=20260918-0749"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260918-0741">
+<link rel="stylesheet" href="movil.css?v=20260918-0749">
 </head>
 <body>
 
@@ -1237,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260918-0741" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260918-0741"></script>
-<script src="objetivos.js?v=20260918-0741" onerror="void 0"></script>
-<script src="video_delay.js?v=20260918-0741" onerror="void 0"></script>
+<script src="firebase.js?v=20260918-0749" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260918-0749"></script>
+<script src="objetivos.js?v=20260918-0749" onerror="void 0"></script>
+<script src="video_delay.js?v=20260918-0749" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260918-0741" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260918-0741"></script>
+<script src="plantel_nafels.js?v=20260918-0749" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260918-0749"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -6238,6 +6238,25 @@ let _rallyN = 0;
 function publicarVivo(){
   if(CFG.publicarVivo===false) return;
   if(typeof fbSet!=='function') return;
+
+  /* ══ NO PISAR UN ENTRENAMIENTO CON UNA SESION VACIA ═══════════════════════
+     panel_voley lee de voley_live, y esto lo reescribia CADA VEZ que alguien
+     abria el panel, aunque no hubiera cargado una sola accion.
+
+     Paso de verdad: el entrenamiento se scouteo a las 08:00 y a la 01:17 del
+     dia siguiente alguien abrio el panel con la sesion vacia. voley_live quedo
+     en cero y panel_voley mostro "LOC 0 - 0 VIS": el entrenamiento habia
+     desaparecido de esa pantalla aunque estaba entero en pv_sesion.
+
+     Ahora, si no hay ninguna accion cargada, no se publica nada. Lo que ya
+     estaba se mantiene hasta que se arranque un partido o entrenamiento nuevo
+     —ahi nuevoPartido() limpia a proposito— o hasta que se cargue la primera
+     accion del siguiente. */
+  try{
+    var _acc = (M.codes||[]).filter(function(c){ return c && c.k==='play'; }).length;
+    if(!_acc) return;
+  }catch(e){}
+
   clearTimeout(_pubT);
   _pubT=setTimeout(function(){
     try{
@@ -8408,8 +8427,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260918-0741" onerror="void 0"></script>
-<script src="ayuda.js?v=20260918-0741"></script>
+<script src="volver_inicio.js?v=20260918-0749" onerror="void 0"></script>
+<script src="ayuda.js?v=20260918-0749"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -8769,6 +8788,37 @@ function iniTildarTodos(){
   }
 
   document.addEventListener('DOMContentLoaded', function(){ setTimeout(ofrecer, 1800); });
+})();
+</script>
+
+<script>
+/* ══ LAS SESIONES YA CREADAS TAMBIEN ════════════════════════════════════════
+   Al configurar un entrenamiento nuevo el visitante ya queda con el nombre del
+   club. Pero las sesiones creadas ANTES siguen con lo que se haya tipeado:
+   'PRUEBA', 'ENTRENAMIENTO' o cualquier cosa.
+
+   Eso se arrastra al marcador del panel, a panel_voley, al .dvw exportado y
+   despues a las tablas. Aca se corrige al abrir: si es entrenamiento y los dos
+   lados no coinciden, el visitante pasa a ser el club.
+
+   Se hace una sola vez por sesion y se guarda, asi no hay que acordarse. */
+(function(){
+  function emparejar(){
+    try{
+      if(!M || M.modo !== 'entrenamiento') return;
+      if(!M.home || !M.away) return;
+      var casa = (M.home.name || '').trim();
+      if(!casa || casa === 'LOCAL') return;
+      if((M.away.name || '').trim().toUpperCase() === casa.toUpperCase()) return;
+
+      M.away.name = casa.toUpperCase();
+      M.away.code = (M.home.code || 'ENT').toUpperCase();
+      try{ persist(); }catch(e){}
+      try{ renderAll(); }catch(e){}
+    }catch(e){}
+  }
+  document.addEventListener('DOMContentLoaded', function(){ setTimeout(emparejar, 1500); });
+  window.emparejarEntrenamiento = emparejar;
 })();
 </script>
 </body>
