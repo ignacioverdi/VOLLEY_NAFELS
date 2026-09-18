@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260918-0140"></script>
-<script src="selector_categoria.js?v=20260918-0140"></script>
-<script src="lang.js?v=20260918-0140"></script>
+<script src="categorias_club.js?v=20260918-0741"></script>
+<script src="selector_categoria.js?v=20260918-0741"></script>
+<script src="lang.js?v=20260918-0741"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260918-0140">
+<link rel="stylesheet" href="movil.css?v=20260918-0741">
 </head>
 <body>
 
@@ -1237,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260918-0140" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260918-0140"></script>
-<script src="objetivos.js?v=20260918-0140" onerror="void 0"></script>
-<script src="video_delay.js?v=20260918-0140" onerror="void 0"></script>
+<script src="firebase.js?v=20260918-0741" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260918-0741"></script>
+<script src="objetivos.js?v=20260918-0741" onerror="void 0"></script>
+<script src="video_delay.js?v=20260918-0741" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260918-0140" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260918-0140"></script>
+<script src="plantel_nafels.js?v=20260918-0741" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260918-0741"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -8408,8 +8408,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260918-0140" onerror="void 0"></script>
-<script src="ayuda.js?v=20260918-0140"></script>
+<script src="volver_inicio.js?v=20260918-0741" onerror="void 0"></script>
+<script src="ayuda.js?v=20260918-0741"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -8632,6 +8632,144 @@ function iniTildarTodos(){
   cs.forEach(function(c){ c.checked = !todos; });
   iniPintarBorrar();
 }
+</script>
+
+<script>
+/* ══ VOLVER AL PANEL DESDE CUALQUIER VENTANA ════════════════════════════════
+   Los paneles de adentro —baterias, objetivos, exportar, teclado, ayuda,
+   tablas— se abren encima del scout. Algunos traen su boton de cerrar y otros
+   no, asi que segun cual abrieras te quedabas sin forma clara de volver: habia
+   que adivinar, tocar fuera, o recargar la pagina.
+
+   Esto le pone a TODAS una barra fija abajo con "← Volver al panel". No
+   reemplaza los botones que ya tienen; se suma, para que siempre haya una
+   salida visible en el mismo lugar.
+
+   Tambien se cierra con la tecla Escape. */
+(function(){
+
+  function cerrarTodo(){
+    document.querySelectorAll('.modal.open').forEach(function(m){
+      m.classList.remove('open');
+    });
+    /* las ventanas que no usan .modal */
+    var tw = document.getElementById('twin');
+    if(tw && !tw.hasAttribute('hidden')) tw.setAttribute('hidden','');
+    try{ if(typeof rvCerrar === 'function') rvCerrar(); }catch(e){}
+    try{ if(typeof objCerrarDetalle === 'function') objCerrarDetalle(); }catch(e){}
+  }
+  window.volverAlPanel = cerrarTodo;
+
+  function ponerBoton(m){
+    if(!m || m.querySelector('.volver-panel')) return;
+    var caja = m.querySelector('.mbox') || m.firstElementChild;
+    if(!caja) return;
+    var b = document.createElement('button');
+    b.className = 'tbtn volver-panel';
+    b.textContent = '\u2190 Volver al panel';
+    b.onclick = cerrarTodo;
+    b.style.cssText = 'display:block;width:calc(100% - 28px);margin:10px 14px 14px;'
+      + 'padding:9px;background:rgba(148,163,184,.12);'
+      + 'border:1px solid rgba(148,163,184,.3);border-radius:9px;'
+      + 'color:#cbd5e1;font-size:12.5px;font-weight:700;cursor:pointer;'
+      + 'font-family:inherit';
+    caja.appendChild(b);
+  }
+
+  /* Cuando una ventana se abre, se le pone el boton. Se vigila el documento
+     porque las ventanas se abren agregando la clase 'open', no creandolas. */
+  function revisar(){
+    document.querySelectorAll('.modal.open').forEach(ponerBoton);
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    revisar();
+    try{
+      new MutationObserver(revisar).observe(document.body, {
+        subtree:true, attributes:true, attributeFilter:['class']
+      });
+    }catch(e){ setInterval(revisar, 700); }
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      var hay = document.querySelector('.modal.open');
+      var tw  = document.getElementById('twin');
+      if(hay || (tw && !tw.hasAttribute('hidden'))){ e.preventDefault(); cerrarTodo(); }
+    }
+  });
+})();
+</script>
+
+<script>
+/* ══ SI ESTA VACIO Y HAY ALGO EN LA NUBE, AVISAR ════════════════════════════
+   El scout se guarda en la nube y en el navegador. Si el entrenamiento lo
+   cargo el asistente en SU maquina, al abrir el panel en otra el scout no
+   esta: la copia local esta vacia aunque en la nube haya 828 codigos.
+
+   Paso de verdad: el entrenamiento estaba completo en la nube y desde otro
+   navegador se veia vacio. Habia que saber que existia el boton "Traer", y no
+   se encontraba facil.
+
+   Ahora, si al entrar no hay nada cargado y en la nube si, aparece un cartel
+   ofreciendolo. No se trae solo: se pregunta, para no pisar nada sin querer. */
+(function(){
+  function hayAcciones(){
+    try{ return (M.codes||[]).filter(function(c){ return c && c.k!=='auto'; }).length; }
+    catch(e){ return 0; }
+  }
+
+  function ofrecer(){
+    if(hayAcciones()) return;
+    if(typeof fbGet !== 'function') return;
+
+    fbGet('pv_sesion', function(d){
+      if(!d || !d.M || !(d.M.codes||[]).length) return;
+      if(hayAcciones()) return;           /* por si cargo algo mientras tanto */
+
+      var f = new Date(d.ts || Date.now());
+      var cuando = f.toLocaleDateString('es-AR') + ' ' +
+                   String(f.getHours()).padStart(2,'0') + ':' +
+                   String(f.getMinutes()).padStart(2,'0');
+
+      var caja = document.createElement('div');
+      caja.id = 'nube-aviso';
+      caja.style.cssText = 'position:fixed;left:50%;bottom:16px;transform:translateX(-50%);'
+        + 'z-index:99998;max-width:90vw;padding:12px 15px;border-radius:12px;'
+        + 'background:#0f172a;border:1px solid rgba(56,189,248,.35);'
+        + 'box-shadow:0 10px 30px rgba(0,0,0,.5);font-family:inherit;'
+        + 'display:flex;gap:10px;align-items:center;flex-wrap:wrap';
+      caja.innerHTML =
+          '<div style="font-size:12.5px;color:#e2e8f0;line-height:1.5;flex:1;min-width:190px">'
+        +   '<b style="color:#7dd3fc">Hay un scout en la nube</b><br>'
+        +   (d.marcador || '') + ' · ' + (d.acciones || 0) + ' acciones<br>'
+        +   '<span style="color:#94a3b8;font-size:11.5px">' + cuando
+        +   (d.por ? ' · ' + d.por : '') + '</span></div>'
+        + '<button id="nube-si" style="padding:7px 13px;border-radius:8px;'
+        +   'background:rgba(56,189,248,.18);border:1px solid rgba(56,189,248,.4);'
+        +   'color:#e0f2fe;font-size:12.5px;font-weight:700;cursor:pointer;'
+        +   'font-family:inherit">Abrirlo</button>'
+        + '<button id="nube-no" style="padding:7px 11px;border-radius:8px;'
+        +   'background:transparent;border:1px solid rgba(148,163,184,.25);'
+        +   'color:#94a3b8;font-size:12.5px;cursor:pointer;font-family:inherit">Ahora no</button>';
+      document.body.appendChild(caja);
+
+      document.getElementById('nube-no').onclick = function(){ caja.remove(); };
+      document.getElementById('nube-si').onclick = function(){
+        caja.remove();
+        try{
+          M = d.M;
+          SEL_I = -1; CALL_PEND = null;
+          var c = document.getElementById('code'); if(c) c.value = '';
+          renderAll(); persist();
+          toast('Scout abierto: ' + (d.acciones || 0) + ' acciones');
+        }catch(e){ toast('No pude abrirlo: ' + e.message, true); }
+      };
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){ setTimeout(ofrecer, 1800); });
+})();
 </script>
 </body>
 </html>
