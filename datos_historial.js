@@ -1,5 +1,5 @@
 window.HISTORIAL_DATA = {
-  "generado": "18/09/2026, 15:54:51",
+  "generado": "18/09/2026, 21:38:40",
   "entrenamientos": [
     {
       "fecha": "03/09/2026",
@@ -2844,23 +2844,23 @@ window.HISTORIAL_DATA = {
         {
           "c": 4,
           "n": "VAZQUEZ",
-          "sT": 40,
-          "sEff": 9,
+          "sT": 39,
+          "sEff": 10,
           "sPunto": 6,
           "sPos": 9,
-          "sNeg": 15,
+          "sNeg": 14,
           "sErr": 5,
           "sAdm": 4,
           "sVend": 1,
           "sFlo": {
-            "T": 26,
+            "T": 25,
             "Punto": 2,
             "Pos": 5,
             "Adm": 4,
-            "Neg": 14,
+            "Neg": 13,
             "Vend": 1,
             "Err": 0,
-            "Eff": 14
+            "Eff": 15
           },
           "sPot": {
             "T": 14,
@@ -2969,11 +2969,11 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 96,
-          "rEff": 27,
+          "rEff": 26,
           "rPunto": 29,
           "rPos": 22,
-          "rNeg": 16,
-          "rErr": 12,
+          "rNeg": 15,
+          "rErr": 13,
           "rAdm": 13,
           "rVend": 4,
           "rFlo": {
@@ -2981,10 +2981,10 @@ window.HISTORIAL_DATA = {
             "Punto": 11,
             "Pos": 13,
             "Adm": 5,
-            "Neg": 3,
+            "Neg": 2,
             "Vend": 1,
-            "Err": 4,
-            "Eff": 35
+            "Err": 5,
+            "Eff": 32
           },
           "rPot": {
             "T": 59,
@@ -3256,23 +3256,23 @@ window.HISTORIAL_DATA = {
             "Err": 0,
             "Eff": 0
           },
-          "rT": 89,
-          "rEff": 12,
-          "rPunto": 15,
+          "rT": 90,
+          "rEff": 13,
+          "rPunto": 16,
           "rPos": 20,
           "rNeg": 25,
           "rErr": 13,
           "rAdm": 14,
           "rVend": 2,
           "rFlo": {
-            "T": 38,
-            "Punto": 6,
+            "T": 39,
+            "Punto": 7,
             "Pos": 12,
             "Adm": 5,
             "Neg": 12,
             "Vend": 0,
             "Err": 3,
-            "Eff": 24
+            "Eff": 26
           },
           "rPot": {
             "T": 51,
@@ -3312,10 +3312,10 @@ window.HISTORIAL_DATA = {
             "Err": 0,
             "Eff": 0
           },
-          "bT": 1,
+          "bT": 0,
           "bPt": 0,
-          "bPtPos": 1,
-          "bEff": 100,
+          "bPtPos": 0,
+          "bEff": 0,
           "bAdm": 0,
           "bVend": 0,
           "bNeg": 0,
@@ -3324,23 +3324,23 @@ window.HISTORIAL_DATA = {
         {
           "c": 7,
           "n": "SCHMID R",
-          "sT": 42,
-          "sEff": -12,
-          "sPunto": 5,
-          "sPos": 6,
-          "sNeg": 14,
+          "sT": 43,
+          "sEff": -10,
+          "sPunto": 6,
+          "sPos": 5,
+          "sNeg": 15,
           "sErr": 12,
           "sAdm": 4,
           "sVend": 1,
           "sFlo": {
-            "T": 24,
-            "Punto": 2,
-            "Pos": 4,
+            "T": 25,
+            "Punto": 3,
+            "Pos": 3,
             "Adm": 2,
-            "Neg": 10,
+            "Neg": 11,
             "Vend": 0,
             "Err": 6,
-            "Eff": -12
+            "Eff": -9
           },
           "sPot": {
             "T": 18,
