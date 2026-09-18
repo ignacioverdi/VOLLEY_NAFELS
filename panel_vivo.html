@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260918-0905"></script>
-<script src="selector_categoria.js?v=20260918-0905"></script>
-<script src="lang.js?v=20260918-0905"></script>
+<script src="categorias_club.js?v=20260918-0920"></script>
+<script src="selector_categoria.js?v=20260918-0920"></script>
+<script src="lang.js?v=20260918-0920"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260918-0905">
+<link rel="stylesheet" href="movil.css?v=20260918-0920">
 </head>
 <body>
 
@@ -1237,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260918-0905" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260918-0905"></script>
-<script src="objetivos.js?v=20260918-0905" onerror="void 0"></script>
-<script src="video_delay.js?v=20260918-0905" onerror="void 0"></script>
+<script src="firebase.js?v=20260918-0920" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260918-0920"></script>
+<script src="objetivos.js?v=20260918-0920" onerror="void 0"></script>
+<script src="video_delay.js?v=20260918-0920" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260918-0905" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260918-0905"></script>
+<script src="plantel_nafels.js?v=20260918-0920" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260918-0920"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -8225,22 +8225,82 @@ function _filaOpc(o){
 /* Los numeros del plantel, para poder cambiarlos con las flechas. Si no hay
    plantel cargado se ofrecen del 1 al 20, que es lo que suele usarse. */
 function _filaNumeros(){
-  var r = [];
+  /* ══ TODOS LOS JUGADORES, NO LOS SEIS EN CANCHA ═══════════════════════════
+     Esta es la lista que sale al tocar "Nº" para corregir un codigo.
+
+     Antes caia en M[lado].lineup —la rotacion— asi que daba SEIS opciones. Y
+     justo lo que hay que corregir suele ser alguien que no estaba en cancha:
+     un numero mal tipeado, alguien que entro y salio en una practica.
+
+     Caso real: el scout tipeo #19 y #44 por error y no podia elegir el numero
+     correcto porque no aparecia en la lista.
+
+     Ahora se juntan cuatro fuentes:
+        1. el plantel cargado (PL_CACHE)
+        2. el plantel del equipo (M[lado].plantel)
+        3. los seis en cancha y el libero
+        4. TODOS los numeros que ya aparecen en los codigos cargados
+
+     La cuarta es la que salva: si un numero esta en el scout, existe y hay que
+     poder elegirlo. Se usa la misma idea que _wizJugadores. */
+  var vistos = {}, r = [];
+
+  function sumar(num, nombre){
+    var n = String(num == null ? '' : num).replace(/\D/g, '');
+    if(!n) return;
+    n = String(parseInt(n, 10));
+    /* el 0 no es un jugador: sale de codigos especiales como *P04>LUp, donde
+       las dos posiciones del numero no son digitos */
+    if(!n || n === 'NaN' || n === '0' || vistos[n]) return;
+    vistos[n] = 1;
+    r.push([n.padStart(2, '0'), nombre || ('#' + n)]);
+  }
+
   try{
     var d = _filaLeer();
     var lado = (d && d.eq === 'a') ? 'away' : 'home';
-    var pl = [];
-    try{ pl = (typeof plCargar === 'function' && PL_CACHE && PL_CACHE[lado]) || []; }catch(e){}
-    if(!pl.length && typeof M !== 'undefined' && M[lado] && M[lado].lineup){
-      M[lado].lineup.forEach(function(n){ if(n) pl.push({num:n}); });
+    var team = lado;
+
+    /* 1 · el plantel cargado */
+    try{
+      var pl = (typeof plCargar === 'function' && PL_CACHE && PL_CACHE[lado]) || [];
+      pl.forEach(function(j){ sumar(j.num || j, j.nombre || j.ap); });
+    }catch(e){}
+
+    var L = (typeof M !== 'undefined' && M[lado]) ? M[lado] : null;
+    if(L){
+      /* 2 · el plantel del equipo */
+      (L.plantel || []).forEach(function(j){ sumar(j.c || j.num, j.n || j.nombre || j.name); });
+      /* 3 · los seis y el libero */
+      (L.six || L.lineup || []).forEach(function(n){ sumar(n); });
+      if(L.libero) sumar(L.libero);
     }
-    pl.forEach(function(j){
-      var n = String(j.num || j).replace(/\D/g,'');
-      if(n) r.push([n.padStart(2,'0'), (j.nombre || j.ap || ('#'+n))]);
-    });
+
+    /* 4 · los que ya aparecen en los codigos */
+    try{
+      var marca = (team === 'away') ? 'a' : '*';
+      (M.codes || []).forEach(function(c){
+        var t = c && c.c;
+        if(!t || t.charAt(0) !== marca) return;
+        sumar(t.substr(1, 2));
+      });
+    }catch(e){}
+
+    /* el nombre, si la pantalla sabe darlo */
+    if(typeof nombreDe === 'function'){
+      r.forEach(function(x){
+        if(x[1].charAt(0) !== '#') return;
+        var nm = '';
+        try{ nm = nombreDe(parseInt(x[0], 10), team) || ''; }catch(e){}
+        if(nm && nm !== String(parseInt(x[0], 10))) x[1] = nm;
+      });
+    }
   }catch(e){}
+
+  r.sort(function(a, b){ return parseInt(a[0], 10) - parseInt(b[0], 10); });
+
   if(!r.length){
-    for(var i = 1; i <= 20; i++) r.push([String(i).padStart(2,'0'), '#' + i]);
+    for(var i = 1; i <= 20; i++) r.push([String(i).padStart(2, '0'), '#' + i]);
   }
   return r;
 }
@@ -8438,8 +8498,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260918-0905" onerror="void 0"></script>
-<script src="ayuda.js?v=20260918-0905"></script>
+<script src="volver_inicio.js?v=20260918-0920" onerror="void 0"></script>
+<script src="ayuda.js?v=20260918-0920"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
