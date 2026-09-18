@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260918-2146"></script>
-<script src="selector_categoria.js?v=20260918-2146"></script>
-<script src="lang.js?v=20260918-2146"></script>
+<script src="categorias_club.js?v=20260918-2156"></script>
+<script src="selector_categoria.js?v=20260918-2156"></script>
+<script src="lang.js?v=20260918-2156"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260918-2146">
+<link rel="stylesheet" href="movil.css?v=20260918-2156">
 </head>
 <body>
 
@@ -1237,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260918-2146" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260918-2146"></script>
-<script src="objetivos.js?v=20260918-2146" onerror="void 0"></script>
-<script src="video_delay.js?v=20260918-2146" onerror="void 0"></script>
+<script src="firebase.js?v=20260918-2156" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260918-2156"></script>
+<script src="objetivos.js?v=20260918-2156" onerror="void 0"></script>
+<script src="video_delay.js?v=20260918-2156" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260918-2146" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260918-2146"></script>
+<script src="plantel_nafels.js?v=20260918-2156" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260918-2156"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -6959,7 +6959,21 @@ function exportDVW(modo){
   var _comp = N.competencia || (_esEnt ? 'PRE-SEASON' : '');
   var _fase = N.fase        || (_esEnt ? 'Practice'   : '');
   var _temp = N.temporada   || (_esEnt ? _temporadaAuto() : '');
-  L.push('[3MATCH]', [N.fecha||fecha, N.hora||'', _temp, _comp, _fase,
+  /* ══ LA HORA VA SIEMPRE ═══════════════════════════════════════════════════
+     El campo de hora existe en el .dvw pero quedaba VACIO: el asistente no lo
+     completa y nadie lo llenaba solo. Sin hora, ninguna pantalla puede saber
+     si un entrenamiento fue de manana o de tarde; el unico dato era el nombre
+     del archivo, y los que genera DataVolley no lo llevan.
+
+     Ahora, si no hay hora cargada a mano, se escribe la del momento en que se
+     exporta, con el formato que usa DataVolley: 19.30.00 */
+  var _hora = (N.hora || '').trim();
+  if(!_hora){
+    var _d = new Date();
+    _hora = String(_d.getHours()).padStart(2,'0') + '.' +
+            String(_d.getMinutes()).padStart(2,'0') + '.00';
+  }
+  L.push('[3MATCH]', [N.fecha||fecha, _hora, _temp, _comp, _fase,
                       '', '', N.codigo||'', '65001', '1', 'Z', _esEnt?'1':'0',
                       hexSQ(_comp), hexSQ(_fase), '\x0f2', ''].join(';'),
                      ';;0;;;;;;;0;');   /* segunda línea de [3MATCH]: sin ella DataVolley tira "list index out of bounds (1)" */
@@ -8520,8 +8534,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260918-2146" onerror="void 0"></script>
-<script src="ayuda.js?v=20260918-2146"></script>
+<script src="volver_inicio.js?v=20260918-2156" onerror="void 0"></script>
+<script src="ayuda.js?v=20260918-2156"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
