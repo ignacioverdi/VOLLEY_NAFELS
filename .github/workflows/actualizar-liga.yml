@@ -40,7 +40,18 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           if [ -n "$(git status --porcelain nla_stats.json)" ]; then
             git add nla_stats.json
-            git commit -m "Auto: actualizar estadísticas de liga"
+            # ══ SIN DESPLIEGUE APARTE ════════════════════════════════════════
+            # Este robot se dispara con cada .dvw que se sube, o sea con cada
+            # HACER_TODO. Al publicar generaba un SEGUNDO despliegue en Vercel,
+            # ademas del que ya hizo el HACER_TODO.
+            #
+            # Resultado: el doble de despliegues y el doble de espacio. El
+            # 18/09 eso dejo la web con datos viejos por horas, con 47 GB
+            # usados sobre 10 permitidos y la cola trabada.
+            #
+            # Con [skip ci] en el mensaje, Vercel ignora este commit. Los datos
+            # igual llegan a la web: viajan en el despliegue del HACER_TODO.
+            git commit -m "Auto: actualizar estadísticas de liga [skip ci]"
             git push
             echo "nla_stats.json actualizado y publicado."
           else

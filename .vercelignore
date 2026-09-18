@@ -58,3 +58,27 @@ nla_full_stats.json
 # referencia, pero republicarlo para descarga desde el sitio es otra cosa.
 DVWin4_HandBook_Eng.pdf
 
+# ══ LO QUE ENGORDA CADA PUBLICACION Y NADIE USA ══════════════════════════════
+# Vercel guarda una copia COMPLETA del proyecto por cada publicacion. Con el
+# limite de 10 GB del plan, un proyecto de 145 MB se come el espacio en unas
+# pocas decenas de publicaciones y despues los despliegues quedan en cola.
+#
+# Paso de verdad el 18/09: 47 GB usados sobre 10 permitidos, la cola trabada y
+# la web mostrando datos viejos por horas.
+#
+# Todo lo de abajo SIGUE en el repo y en la PC: solo deja de copiarse a la web.
+# Se verifico una por una que ninguna pantalla los pida.
+
+# El manual de DataVolley: 22 MB de PDF que nadie abre desde la app
+DVWin4_HandBook_Eng.pdf
+
+# La base de jugadores de la liga: 18 MB que usan los motores, no las pantallas
+nla_players_db.json
+nla_players_db.json.enc
+
+# La base de entrenamientos: la usa update_db, que corre en la PC
+entrenamientos_nafels_db.json
+
+# Las copias de seguridad que van dejando los scripts
+*.bak
+*.json.bak
