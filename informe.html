@@ -90,13 +90,13 @@ tr.tot td{border-top:2px solid var(--b2);font-weight:800;background:var(--card2)
 }
 </style>
 <!-- Motor de idiomas (ES / EN / DE). Traduce por data-t y por texto. -->
-<script src="categorias_club.js?v=20260918-0805"></script>
-<script src="selector_categoria.js?v=20260918-0805"></script>
-<script src="lang.js?v=20260918-0805"></script>
+<script src="categorias_club.js?v=20260918-0818"></script>
+<script src="selector_categoria.js?v=20260918-0818"></script>
+<script src="lang.js?v=20260918-0818"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260918-0805">
+<link rel="stylesheet" href="movil.css?v=20260918-0818">
 </head>
 <body>
 
@@ -107,7 +107,7 @@ tr.tot td{border-top:2px solid var(--b2);font-weight:800;background:var(--card2)
   <div class="crece"></div>
   <span id="estado"></span>
   <button onclick="traerDeLaNube()" data-t="Traer de la nube"><span data-t="Traer de la nube">Traer de la nube</span></button>
-  <button onclick="compartir()">Compartir</button>
+  <button onclick="compartir()" data-t="Compartir"><span data-t="Compartir">Compartir</span></button>
   <button class="pri" onclick="window.print()" data-t="Descargar PDF">Descargar PDF</button>
 </div>
 
@@ -127,10 +127,10 @@ function vbLocale(){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260918-0805" onerror="void 0"></script>
-<script src="objetivos.js?v=20260918-0805" onerror="void 0"></script>
-<script src="firebase.js?v=20260918-0805" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260918-0805"></script>
+<script src="datos_seguros.js?v=20260918-0818" onerror="void 0"></script>
+<script src="objetivos.js?v=20260918-0818" onerror="void 0"></script>
+<script src="firebase.js?v=20260918-0818" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260918-0818"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
    INFORME DE PARTIDO
@@ -154,14 +154,14 @@ function local(){
   try{ return JSON.parse(localStorage.getItem('pv_match')||'null'); }catch(e){ return null; }
 }
 function traerDeLaNube(){
-  if(typeof FB_URL==='undefined' || typeof _fbSufijo!=='function'){ est('sin conexión','var(--bad)'); return; }
-  est('buscando…');
+  if(typeof FB_URL==='undefined' || typeof _fbSufijo!=='function'){ est(infT('sin conexión'),'var(--bad)'); return; }
+  est(infT('buscando…'));
   _fbSufijo().then(function(q){
     return fetch(FB_URL+'/pv_encurso.json'+q).then(function(r){ return r.json(); });
   }).then(function(d){
-    if(!d){ est('no hay partidos en la nube','var(--warn)'); return; }
+    if(!d){ est(infT('no hay partidos en la nube'),'var(--warn)'); return; }
     var ks = Object.keys(d).filter(function(k){ return d[k] && d[k].M; });
-    if(!ks.length){ est('no hay partidos en la nube','var(--warn)'); return; }
+    if(!ks.length){ est(infT('no hay partidos en la nube'),'var(--warn)'); return; }
     ks.sort(function(a,b){ return (d[b].actualizado||0)-(d[a].actualizado||0); });
     var elegido = ks[0];
     if(ks.length>1){
@@ -174,9 +174,9 @@ function traerDeLaNube(){
       elegido = ks[Math.max(0, Math.min(ks.length-1, parseInt(n,10)-1))];
     }
     M = d[elegido].M;
-    est('traído de la nube ✓','var(--ok)');
+    est(infT('traído de la nube ✓'),'var(--ok)');
     armarSets(); pintar();
-  }).catch(function(){ est('no pude conectarme','var(--bad)'); });
+  }).catch(function(){ est(infT('no pude conectarme'),'var(--bad)'); });
 }
 
 /* ── lectura de los códigos ────────────────────────────────────────────── */
@@ -396,7 +396,7 @@ function tabla(lado, datos, nSets, nombre){
   }).join('');
 
   var totFila = '<tr class="tot">'
-    + '<td colspan="2" class="jug">TOTALES</td>'
+    + '<td colspan="2" class="jug">'+infT('TOTALES')+'</td>'
     + '<td class="sep">' + T.pts + '</td>'
     + '<td class="sep">' + T.s_tot + '</td><td>' + T.s_err + '</td><td>' + T.s_pt + '</td>'
     + '<td class="sep">' + T.r_tot + '</td><td>' + T.r_err + '</td>'
@@ -406,9 +406,9 @@ function tabla(lado, datos, nSets, nombre){
     + '<td class="sep">' + T.b_pt + '</td><td class="sep">—</td></tr>';
 
   return '<table><thead>'
-    + '<tr class="grupos"><th colspan="2"></th><th class="sep">Puntos</th>'
+    + '<tr class="grupos"><th colspan="2"></th><th class="sep">'+infT('Puntos')+'</th>'
     + '<th colspan="3" class="sep">Saque</th><th colspan="4" class="sep">Recepción</th>'
-    + '<th colspan="5" class="sep">Ataque</th><th class="sep">Bloqueo</th><th class="sep">Nota</th></tr>'
+    + '<th colspan="5" class="sep">'+infT('Ataque')+'</th><th class="sep">'+infT('Bloqueo')+'</th><th class="sep">'+infT('Nota')+'</th></tr>'
     + '<tr><th>#</th><th style="text-align:left">Jugador</th><th class="sep">Tot</th>'
     + '<th class="sep">Tot</th><th>Err</th><th>Pts</th>'
     + '<th class="sep">Tot</th><th>Err</th><th>Pos%</th><th>Perf%</th>'
@@ -490,20 +490,99 @@ function compartir(){
     navigator.share({title:'Informe de partido', text:t, url:location.href})
       .catch(function(){});
   } else {
-    try{ navigator.clipboard.writeText(location.href); est('link copiado ✓','var(--ok)'); }
-    catch(e){ est('copiá el link de la barra'); }
+    try{ navigator.clipboard.writeText(location.href); est(infT('link copiado ✓'),'var(--ok)'); }
+    catch(e){ est(infT('copiá el link de la barra')); }
   }
 }
 
 function arrancar(){
   M = local();
-  if(M && M.codes && M.codes.length){ est('partido de esta PC'); armarSets(); pintar(); }
-  else { est('no hay partido acá — probá "Traer de la nube"','var(--warn)'); pintar(); }
+  if(M && M.codes && M.codes.length){ est(infT('partido de esta PC')); armarSets(); pintar(); return; }
+
+  /* ══ SI NO ESTA ACA, TRAERLO DE LA NUBE SOLO ═════════════════════════════
+     El informe leia unicamente pv_match, que vive en el navegador de quien
+     scouteo. Al abrirlo desde otra maquina salia vacio, con un aviso que
+     decia "probá Traer de la nube" — habia que saber que existia ese boton y
+     encontrarlo.
+
+     El scout se publica igual en la nube con cada accion, asi que se puede
+     traer sin preguntar. Si no hay nada, recien ahi queda el aviso. */
+  est(infT('buscando el partido…'));
+  try{
+    if(typeof traerDeLaNube === 'function'){ traerDeLaNube(); return; }
+  }catch(e){}
+  est(infT('no hay partido acá — probá "Traer de la nube"'),'var(--warn)');
+  pintar();
 }
 if(typeof _fbListo !== 'undefined' && _fbListo && _fbListo.then) _fbListo.then(arrancar).catch(arrancar);
 else window.addEventListener('load', arrancar);
 </script>
-<script src="volver_inicio.js?v=20260918-0805" onerror="void 0"></script>
-<script src="ayuda.js?v=20260918-0805"></script>
+<script src="volver_inicio.js?v=20260918-0818" onerror="void 0"></script>
+<script src="ayuda.js?v=20260918-0818"></script>
+
+<script>
+/* ══ TRADUCCION DEL INFORME ═════════════════════════════════════════════════
+   La pantalla tiene los botones con data-t, pero los avisos de estado y los
+   encabezados de las tablas se escriben desde el codigo y quedaban en
+   castellano aunque la app estuviera en ingles o aleman. */
+var INF_T = {
+  en: {
+    'sin conexión':'no connection',
+    'buscando…':'searching…',
+    'buscando el partido…':'looking for the match…',
+    'no hay partidos en la nube':'no matches in the cloud',
+    'traído de la nube ✓':'brought from the cloud ✓',
+    'no pude conectarme':'could not connect',
+    'link copiado ✓':'link copied ✓',
+    'copiá el link de la barra':'copy the link from the bar',
+    'partido de esta PC':'match from this computer',
+    'no hay partido acá — probá "Traer de la nube"':'no match here — try "Bring from the cloud"',
+    'Compartir':'Share',
+    'Baterías del equipo · alcanzado (objetivo)':'Team targets · reached (target)',
+    'TOTALES':'TOTALS',
+    'Puntos':'Points',
+    'Saque':'Serve',
+    'Recepción':'Reception',
+    'Ataque':'Attack',
+    'Bloqueo':'Block',
+    'Defensa':'Dig',
+    'Informe de partido':'Match report',
+    'Sin datos':'No data'
+  },
+  de: {
+    'sin conexión':'keine Verbindung',
+    'buscando…':'suche…',
+    'buscando el partido…':'suche das Spiel…',
+    'no hay partidos en la nube':'keine Spiele in der Cloud',
+    'traído de la nube ✓':'aus der Cloud geholt ✓',
+    'no pude conectarme':'keine Verbindung möglich',
+    'link copiado ✓':'Link kopiert ✓',
+    'copiá el link de la barra':'Link aus der Leiste kopieren',
+    'partido de esta PC':'Spiel von diesem Rechner',
+    'no hay partido acá — probá "Traer de la nube"':'kein Spiel hier — "Aus der Cloud holen" probieren',
+    'Compartir':'Teilen',
+    'Baterías del equipo · alcanzado (objetivo)':'Team-Ziele · erreicht (Ziel)',
+    'TOTALES':'GESAMT',
+    'Puntos':'Punkte',
+    'Saque':'Aufschlag',
+    'Recepción':'Annahme',
+    'Ataque':'Angriff',
+    'Bloqueo':'Block',
+    'Defensa':'Abwehr',
+    'Informe de partido':'Spielbericht',
+    'Sin datos':'Keine Daten'
+  }
+};
+
+function infT(txt){
+  var L = 'es';
+  try{ if(typeof getLang === 'function') L = getLang() || 'es'; }catch(e){}
+  if(L === 'es') return txt;
+  /* primero la tabla general de la app, despues la de esta pantalla */
+  try{ if(typeof t === 'function'){ var r = t(txt); if(r && r !== txt) return r; } }catch(e){}
+  var d = INF_T[L];
+  return (d && d[txt]) ? d[txt] : txt;
+}
+</script>
 </body>
 </html>

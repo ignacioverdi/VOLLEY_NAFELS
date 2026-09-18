@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Stats Entrenamiento">Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20260918-0805"></script>
-<script src="selector_categoria.js?v=20260918-0805"></script>
+<script src="categorias_club.js?v=20260918-0818"></script>
+<script src="selector_categoria.js?v=20260918-0818"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -351,20 +351,20 @@ body::before{content:'';position:fixed;inset:0;
 
 select, select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20260918-0805"></script>
+<script src="objetivos_config.js?v=20260918-0818"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260918-0805"></script>
-<script src="firebase.js?v=20260918-0805" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260918-0805"></script>
-<script src="lang.js?v=20260918-0805"></script>
-<script src="objetivos.js?v=20260918-0805" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20260918-0805"></script>
-  <script src="video_delay.js?v=20260918-0805" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260918-0818"></script>
+<script src="firebase.js?v=20260918-0818" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260918-0818"></script>
+<script src="lang.js?v=20260918-0818"></script>
+<script src="objetivos.js?v=20260918-0818" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20260918-0818"></script>
+  <script src="video_delay.js?v=20260918-0818" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -653,7 +653,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260918-0805">
+<link rel="stylesheet" href="movil.css?v=20260918-0818">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase" data-t="← Dashboard"><span data-t="← Dashboard">← Dashboard</span></a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -2212,8 +2212,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20260918-0805" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260918-0805"></script>
+<script src="plantel_nafels.js?v=20260918-0818" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260918-0818"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2312,7 +2312,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20260918-0805"></script>
+<script src="ayuda.js?v=20260918-0818"></script>
 
 
 
@@ -2336,7 +2336,15 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
      Podio y Tabla usan la clase 'open'. Baterias y Objetivos usan
      style.display='block'. Mirar solo la clase dejaba el boton invisible
      justo en las dos que mas se usan. */
-  var PANELES = ['bat', 'obj', 'podio', 'tabla', 'informe', 'tv'];
+  /* ══ FALTABA m-baterias ══════════════════════════════════════════════════
+     El boton "Baterías" de la barra llama a abrirBaterias(), que muestra el
+     panel 'm-baterias'. Ese id no estaba en la lista, asi que el vigia lo veia
+     como "algo abierto que no conozco" y lo cerraba apenas se abria: se tocaba
+     el boton y no pasaba nada.
+
+     'bat' es OTRO panel —el que abre toggleBat—, por eso el error no se veia
+     en las demas secciones. */
+  var PANELES = ['bat', 'm-baterias', 'obj', 'podio', 'tabla', 'informe', 'tv'];
 
   function visible(el){
     if(!el) return false;
@@ -2360,9 +2368,8 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
       el.classList.remove('open');
       if(el.style.display && el.style.display !== 'none') el.style.display = 'none';
     });
-    document.querySelectorAll('.open').forEach(function(el){
-      el.classList.remove('open');
-    });
+    /* Solo los paneles de la lista: recorrer TODOS los '.open' apagaba cosas
+       del scout que usan esa misma clase para otra cosa. */
     try{ if(typeof closeCanchaModal === 'function') closeCanchaModal(); }catch(e){}
     try{ if(typeof objCerrarDetalle === 'function') objCerrarDetalle(); }catch(e){}
     pintar();
