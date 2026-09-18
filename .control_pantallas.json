@@ -780,7 +780,7 @@
   "tablas": {}
  },
  "historial_voley.html": {
-  "bytes": 58202,
+  "bytes": 58738,
   "funciones": [
    "_go",
    "_plantelDelClub",
@@ -1109,7 +1109,7 @@
   "tablas": {}
  },
  "informe.html": {
-  "bytes": 24711,
+  "bytes": 28813,
   "funciones": [
    "armarSets",
    "arrancar",
@@ -1120,6 +1120,7 @@
    "est",
    "ficha",
    "fichaNota",
+   "infT",
    "jugadas",
    "leer",
    "local",
@@ -1206,8 +1207,9 @@
   "tablas": {}
  },
  "modelo_completo.html": {
-  "bytes": 749726,
+  "bytes": 805928,
   "funciones": [
+   "OKC",
    "bajar",
    "bloqueVolumen",
    "claveDe",
@@ -1236,6 +1238,7 @@
    "vMatriz",
    "vPlan",
    "vPlantel",
+   "vPlay",
    "vRef",
    "vResumen",
    "vStaff"
@@ -1305,7 +1308,7 @@
   "tablas": {}
  },
  "panel_vivo.html": {
-  "bytes": 810104,
+  "bytes": 820592,
   "funciones": [
    "_aCp1252",
    "_alarmaGuardado",
@@ -1342,6 +1345,7 @@
    "_wizOpt",
    "_wizSet",
    "_wizTipos",
+   "abierto",
    "abrirAyuda",
    "abrirBaterias",
    "abrirCombos",
@@ -1417,6 +1421,7 @@
    "cerrarPartidos",
    "cerrarScouting",
    "cerrarSubs",
+   "cerrarTodo",
    "cerrarVideoArchivo",
    "cerrarVideoVivo",
    "ciclarAnalisis",
@@ -1430,6 +1435,7 @@
    "comboValido",
    "commit",
    "confirmarCambio",
+   "crear",
    "curEval",
    "curSkill",
    "customFor",
@@ -1452,6 +1458,7 @@
    "efDe",
    "elegirEquipoSetup",
    "elegirMitad",
+   "emparejar",
    "endRally",
    "equipos",
    "esCentral",
@@ -1487,6 +1494,7 @@
    "guardarRutaVideo",
    "guardarTablas",
    "hacerCambio",
+   "hayAcciones",
    "hayVideo",
    "hexSQ",
    "hhmmss",
@@ -1536,6 +1544,7 @@
    "nuevoSetAmistoso",
    "objKPIS",
    "objRefrescar",
+   "ofrecer",
    "openConfig",
    "openSetup",
    "parejaDe",
@@ -1553,6 +1562,7 @@
    "pickEntra",
    "pickEntraManual",
    "pickSale",
+   "pintar",
    "pintarBarra",
    "pintarBatBotonesEquipo",
    "pintarEspejo",
@@ -1644,6 +1654,7 @@
    "stSetTipo",
    "subst",
    "substLado",
+   "sumar",
    "syncExtendido",
    "terminarEnCurso",
    "tiempoVideo",
@@ -1706,11 +1717,12 @@
   }
  },
  "panel_voley.html": {
-  "bytes": 437057,
+  "bytes": 443335,
   "funciones": [
    "_batCodes",
    "_batNombre",
    "_batNombreEquipo",
+   "abierto",
    "abrirBaterias",
    "abrirPlan",
    "abrirPlanPreparado",
@@ -1735,10 +1747,12 @@
    "cargarBatJugV",
    "cerrarBaterias",
    "cerrarPlan",
+   "cerrarTodo",
    "cerrarVideo",
    "closeCanchaModal",
    "closeJugDetail",
    "confirmReset",
+   "crear",
    "ec",
    "ef",
    "efA",
@@ -1768,6 +1782,7 @@
    "openSaqueCanchaModal",
    "pc",
    "pct",
+   "pintar",
    "pintarBatBotonesEquipo",
    "pintarBatEqV",
    "refrescarVista",
@@ -1803,7 +1818,8 @@
    "vdConectar",
    "vdMaximizar",
    "vdReplay",
-   "vdSlider"
+   "vdSlider",
+   "visible"
   ],
   "tablas": {}
  },
