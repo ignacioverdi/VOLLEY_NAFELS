@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260919-2059"></script>
-<script src="selector_categoria.js?v=20260919-2059"></script>
-<script src="lang.js?v=20260919-2059"></script>
+<script src="categorias_club.js?v=20260919-2110"></script>
+<script src="selector_categoria.js?v=20260919-2110"></script>
+<script src="lang.js?v=20260919-2110"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260919-2059">
+<link rel="stylesheet" href="movil.css?v=20260919-2110">
 </head>
 <body>
 
@@ -1237,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260919-2059" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260919-2059"></script>
-<script src="objetivos.js?v=20260919-2059" onerror="void 0"></script>
-<script src="video_delay.js?v=20260919-2059" onerror="void 0"></script>
+<script src="firebase.js?v=20260919-2110" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260919-2110"></script>
+<script src="objetivos.js?v=20260919-2110" onerror="void 0"></script>
+<script src="video_delay.js?v=20260919-2110" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260919-2059" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260919-2059"></script>
+<script src="plantel_nafels.js?v=20260919-2110" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260919-2110"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -3223,6 +3223,19 @@ function plDelClub(){
   }catch(e){ return []; }
 }
 
+/* ══ EL PUESTO QUE VIENE EN EL .sq ═════════════════════════════════════════
+   Data Volley lo guarda como numero. La tabla ya existe en este panel como
+   SQ_ROLES y es la que se usa para el resumen de la pantalla de Partido.
+
+   La escribi de memoria la primera vez y me cruce el 2 con el 4 —punta con
+   central—. Se usa SQ_ROLES, que es la unica fuente. */
+function plRolSQ(r){
+  try{
+    var t = SQ_ROLES[String(r||'').trim()];
+    return t ? t.toUpperCase() : '';
+  }catch(e){ return ''; }
+}
+
 function plCargar(side){
   const nombre = (M[side].name || '').toUpperCase();
   let lista = [];
@@ -3235,6 +3248,35 @@ function plCargar(side){
       id:   String(j.id || '').trim()
     }));
   }catch(e){}
+  /* ══ EL PLANTEL QUE DEJO EL .sq ══════════════════════════════════════════
+     Al importar un .sq, aplicarEquipo() guarda los jugadores en
+     M[side].plantel, pero NO en la base de equipos. Y esta pantalla buscaba
+     unicamente en esa base, por nombre.
+
+     Resultado: el equipo propio salia completo —porque tiene un segundo
+     origen, el plantel del club— y el rival importado salia vacio, con solo
+     los seis de la cancha y sin apellidos ni puestos.
+
+     Paso en un partido: el .sq de Colombier se leyo bien —la pantalla de
+     Partido mostraba "14 jugadores (2 liberos · 4 puntas · 3 opuestos...)"—
+     pero en Planteles aparecian 7 casilleros en blanco.
+
+     Aca se completa con ese plantel, para los dos equipos. */
+  try{
+    (M[side].plantel || []).forEach(p => {
+      const n = String(p.c || p.num || '').replace(/\D/g,'');
+      if(!n) return;
+      const ape = String(p.n || p.apellido || '').trim();
+      const y = lista.find(j => String(j.num) === n);
+      if(y){
+        if(!y.nombre && ape) y.nombre = ape;
+        if(!y.pos && p.rol) y.pos = plRolSQ(p.rol);
+      } else {
+        lista.push({num:n, nombre:ape, pos:plRolSQ(p.rol), pila:'', id:''});
+      }
+    });
+  }catch(e){}
+
   /* completar con el plantel del club (equipo propio = 'home', como en el resto
      del panel). Si el jugador ya está, sólo se rellena lo que falte. */
   if(side === 'home'){
@@ -8565,8 +8607,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260919-2059" onerror="void 0"></script>
-<script src="ayuda.js?v=20260919-2059"></script>
+<script src="volver_inicio.js?v=20260919-2110" onerror="void 0"></script>
+<script src="ayuda.js?v=20260919-2110"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
