@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260919-2142"></script>
-<script src="selector_categoria.js?v=20260919-2142"></script>
-<script src="lang.js?v=20260919-2142"></script>
+<script src="categorias_club.js?v=20260919-2200"></script>
+<script src="selector_categoria.js?v=20260919-2200"></script>
+<script src="lang.js?v=20260919-2200"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260919-2142">
+<link rel="stylesheet" href="movil.css?v=20260919-2200">
 </head>
 <body>
 
@@ -1237,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260919-2142" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260919-2142"></script>
-<script src="objetivos.js?v=20260919-2142" onerror="void 0"></script>
-<script src="video_delay.js?v=20260919-2142" onerror="void 0"></script>
+<script src="firebase.js?v=20260919-2200" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260919-2200"></script>
+<script src="objetivos.js?v=20260919-2200" onerror="void 0"></script>
+<script src="video_delay.js?v=20260919-2200" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260919-2142" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260919-2142"></script>
+<script src="plantel_nafels.js?v=20260919-2200" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260919-2200"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -5527,7 +5527,19 @@ function cerrarPartidoActual(){
   delete M._id;
   document.getElementById('code').value='';
   renderAll(); persist(); avisarMarcador();
+  SETUP_OBLIGATORIO = false;
   closeModal('m-setup');
+
+  /* ══ VOLVER AL MENU ═══════════════════════════════════════════════════════
+     Antes se cerraba el partido y la pantalla quedaba EXACTAMENTE igual: mismo
+     marcador, misma rotacion, mismo todo. El unico rastro era un cartelito que
+     decia «Partido cerrado».
+
+     Desde afuera parecia que no habia pasado nada, y se volvia a tocar Cerrar
+     una y otra vez.
+
+     Ahora se vuelve a la lista, que es de donde se arranca. */
+  try{ if(typeof abrirInicio === 'function') abrirInicio(true); }catch(e){}
 }
 function nuevoPartido(){
   const acc=(M.codes||[]).filter(c=>c.k!=='auto').length;
@@ -8677,8 +8689,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260919-2142" onerror="void 0"></script>
-<script src="ayuda.js?v=20260919-2142"></script>
+<script src="volver_inicio.js?v=20260919-2200" onerror="void 0"></script>
+<script src="ayuda.js?v=20260919-2200"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -8931,6 +8943,12 @@ function iniTildarTodos(){
       if(!d || !d.M || !(d.M.codes||[]).length) return;
       if(hayAcciones()) return;           /* por si cargo algo mientras tanto */
 
+      /* si este mismo scout ya se descarto, no insistir */
+      try{
+        var marca = (d.ts || '') + '|' + (d.acciones || 0);
+        if(localStorage.getItem('pv_nube_descartada') === marca) return;
+      }catch(e){}
+
       var f = new Date(d.ts || Date.now());
       var cuando = f.toLocaleDateString('es-AR') + ' ' +
                    String(f.getHours()).padStart(2,'0') + ':' +
@@ -8958,8 +8976,26 @@ function iniTildarTodos(){
         +   'color:#94a3b8;font-size:12.5px;cursor:pointer;font-family:inherit">Ahora no</button>';
       document.body.appendChild(caja);
 
-      document.getElementById('nube-no').onclick = function(){ caja.remove(); };
+      /* ══ «AHORA NO» ES PARA SIEMPRE ══════════════════════════════════════
+         Antes solo cerraba el cartel y al recargar volvia a salir. Y como el
+         panel republica la sesion sola cada pocos segundos, borrarla de la
+         nube tampoco alcanzaba: volvia a subir y el cartel reaparecia.
+
+         Se entraba en un circulo del que no se podia salir sin tocar la
+         consola.
+
+         Ahora se anota cual se descarto. Ese scout no se ofrece mas —ni
+         recargando— hasta que aparezca uno distinto. */
+      document.getElementById('nube-no').onclick = function(){
+        try{
+          var marca = (d.ts || '') + '|' + (d.acciones || 0);
+          localStorage.setItem('pv_nube_descartada', marca);
+        }catch(e){}
+        caja.remove();
+      };
+      /* al abrirlo, se olvida cualquier descarte anterior */
       document.getElementById('nube-si').onclick = function(){
+        try{ localStorage.removeItem('pv_nube_descartada'); }catch(e){}
         caja.remove();
         try{
           M = d.M;
