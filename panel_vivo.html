@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260919-2051"></script>
-<script src="selector_categoria.js?v=20260919-2051"></script>
-<script src="lang.js?v=20260919-2051"></script>
+<script src="categorias_club.js?v=20260919-2059"></script>
+<script src="selector_categoria.js?v=20260919-2059"></script>
+<script src="lang.js?v=20260919-2059"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260919-2051">
+<link rel="stylesheet" href="movil.css?v=20260919-2059">
 </head>
 <body>
 
@@ -1237,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260919-2051" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260919-2051"></script>
-<script src="objetivos.js?v=20260919-2051" onerror="void 0"></script>
-<script src="video_delay.js?v=20260919-2051" onerror="void 0"></script>
+<script src="firebase.js?v=20260919-2059" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260919-2059"></script>
+<script src="objetivos.js?v=20260919-2059" onerror="void 0"></script>
+<script src="video_delay.js?v=20260919-2059" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260919-2051" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260919-2051"></script>
+<script src="plantel_nafels.js?v=20260919-2059" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260919-2059"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -4168,7 +4168,24 @@ function hacerCambio(side,sale,entra){
   }
   const primero = levantarEstado();      /* el cambio va antes del bloque de estado */
   M[side].lineup[i]=entra; M[side].subs++;
-  var saleElArmador = (M[side].setter===sale);
+  /* ══ POR QUE NO SE COMPARA CON === ═══════════════════════════════════════
+     El armador se guarda de dos formas segun de donde venga:
+        del casillero de formacion  -> numero  (parseInt)
+        del plantel cargado         -> TEXTO   (LU[side].setter = arms[0].c)
+
+     Con === , '4' y 4 no son iguales. Resultado: salia el armador y el
+     programa no preguntaba quien quedaba armando.
+
+     Paso de verdad en un amistoso: cambio el #4 por el #13, el codigo quedo
+     como *P4 —o sea el armador seguia siendo el 4, que ya no estaba en
+     cancha— y toda la rotacion del set quedo mal.
+
+     El manual (4.6, P/aP) es explicito: "The specification of the new setter
+     is extremely important in order to avoid mistakes in the rotation
+     analysis".
+
+     Se comparan los dos como numero. */
+  var saleElArmador = (Number(M[side].setter) === Number(sale));
   const P2=n=>String(n).padStart(2,'0');
   pushCode((side==='home'?'*':'a')+'c'+P2(sale)+':'+P2(entra),'auto');
   if(primero) escribirEstado('', primero);   /* se reescribe, ya con el cambio hecho */
@@ -5366,9 +5383,21 @@ function openSetup(obligatorio){
   V('s-cdh',M.home.code); V('s-cda',M.away.code);
   V('s-libh',M.home.libero||''); V('s-liba',M.away.libero||'');
   V('s-serve',M.serving);
+  /* ══ QUE FORMACION SE MUESTRA AL REABRIR ══════════════════════════════════
+     Antes se mostraba M[side].lineup, o sea la rotacion COMO ESTA AHORA. Y al
+     dar Empezar, saveSetup la rota una vez mas —porque asume que lo que se
+     cargo es el seis inicial y que el que saca ya rota—.
+
+     Resultado: se abria el Partido para corregir un numero y salia con la
+     formacion corrida un lugar, distinta de la que se habia cargado. Paso en
+     un amistoso y dejo la rotacion del set entero mal.
+
+     Ahora se muestra el SEIS INICIAL del set (M[side].six), que es lo que
+     saveSetup espera recibir. Asi lo que se ve es lo que se guarda. */
   ['home','away'].forEach(side=>{
     LU[side]={n:{},setter:M[side].setter||0};
-    M[side].lineup.forEach((num,i)=>{ if(num) LU[side].n[i+1]=String(num); });
+    var base = (M[side].six && M[side].six.length===6) ? M[side].six : M[side].lineup;
+    base.forEach((num,i)=>{ if(num) LU[side].n[i+1]=String(num); });
     drawLineup(side);
   });
   setModo(M.modo||'partido');
@@ -8536,8 +8565,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260919-2051" onerror="void 0"></script>
-<script src="ayuda.js?v=20260919-2051"></script>
+<script src="volver_inicio.js?v=20260919-2059" onerror="void 0"></script>
+<script src="ayuda.js?v=20260919-2059"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
