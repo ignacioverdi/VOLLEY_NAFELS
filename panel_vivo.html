@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260919-2129"></script>
-<script src="selector_categoria.js?v=20260919-2129"></script>
-<script src="lang.js?v=20260919-2129"></script>
+<script src="categorias_club.js?v=20260919-2133"></script>
+<script src="selector_categoria.js?v=20260919-2133"></script>
+<script src="lang.js?v=20260919-2133"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260919-2129">
+<link rel="stylesheet" href="movil.css?v=20260919-2133">
 </head>
 <body>
 
@@ -1237,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260919-2129" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260919-2129"></script>
-<script src="objetivos.js?v=20260919-2129" onerror="void 0"></script>
-<script src="video_delay.js?v=20260919-2129" onerror="void 0"></script>
+<script src="firebase.js?v=20260919-2133" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260919-2133"></script>
+<script src="objetivos.js?v=20260919-2133" onerror="void 0"></script>
+<script src="video_delay.js?v=20260919-2133" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260919-2129" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260919-2129"></script>
+<script src="plantel_nafels.js?v=20260919-2133" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260919-2133"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -5173,7 +5173,31 @@ document.getElementById('e-code').addEventListener('keydown', function(e){ if(e.
 let SETUP_OBLIGATORIO=false;
 function closeModal(id){
   if(id==='m-armador'){ toast('Elegí quién arma para poder seguir',true); return; }
-  if(id==='m-setup' && SETUP_OBLIGATORIO){ toast('Cargá la formación del set '+M.set+' para seguir',true); return; }
+  if(id==='m-setup' && SETUP_OBLIGATORIO){
+    /* ══ SI YA ESTA CARGADA, GUARDARLA ══════════════════════════════════════
+       Este candado existe para que no se salga de un set nuevo sin cargar la
+       formacion. Pero frenaba SIEMPRE, incluso con los doce casilleros
+       completos: se tocaba «Cerrar» y salia «Cargá la formación del set N
+       para seguir», con la formacion cargada a la vista.
+
+       Paso en un partido, set tras set. El scout veia el cartel rojo y no
+       entendia que le faltaba, porque no le faltaba nada.
+
+       Ahora, si la formacion esta completa, Cerrar hace lo mismo que Empezar:
+       la guarda y sigue. Solo frena si de verdad falta algo. */
+    var _lista = false;
+    try{
+      var _u = (typeof unSoloEquipo==='function') && unSoloEquipo();
+      var _ok = function(sd){
+        for(var z=1; z<=6; z++){ if(!parseInt(LU[sd].n[z],10)) return false; }
+        return true;
+      };
+      _lista = _ok('home') && (_u || _ok('away'));
+    }catch(e){}
+
+    if(_lista && typeof saveSetup === 'function'){ saveSetup(); return; }
+    toast('Cargá la formación del set '+M.set+' para seguir',true); return;
+  }
   document.getElementById(id).classList.remove('open'); document.getElementById('code').focus();
 
   /* Al cerrar una ventana el cursor vuelve al campo de tipeo: si no,
@@ -8620,8 +8644,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260919-2129" onerror="void 0"></script>
-<script src="ayuda.js?v=20260919-2129"></script>
+<script src="volver_inicio.js?v=20260919-2133" onerror="void 0"></script>
+<script src="ayuda.js?v=20260919-2133"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
