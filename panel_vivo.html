@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260919-2133"></script>
-<script src="selector_categoria.js?v=20260919-2133"></script>
-<script src="lang.js?v=20260919-2133"></script>
+<script src="categorias_club.js?v=20260919-2142"></script>
+<script src="selector_categoria.js?v=20260919-2142"></script>
+<script src="lang.js?v=20260919-2142"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260919-2133">
+<link rel="stylesheet" href="movil.css?v=20260919-2142">
 </head>
 <body>
 
@@ -1237,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260919-2133" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260919-2133"></script>
-<script src="objetivos.js?v=20260919-2133" onerror="void 0"></script>
-<script src="video_delay.js?v=20260919-2133" onerror="void 0"></script>
+<script src="firebase.js?v=20260919-2142" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260919-2142"></script>
+<script src="objetivos.js?v=20260919-2142" onerror="void 0"></script>
+<script src="video_delay.js?v=20260919-2142" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260919-2133" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260919-2133"></script>
+<script src="plantel_nafels.js?v=20260919-2142" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260919-2142"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -1952,7 +1952,21 @@ async function borrarPartidosSel(){
   /* 2 ── el partido abierto, si es uno de los borrados */
   try{
     if(M && M._id && marc.includes(M._id)){
-      localStorage.removeItem('pv_match');
+      /* ══ TAMBIEN LA COPIA DE LA NUBE ══════════════════════════════════════════
+     El scout vive en dos lados: el navegador y la nube. Borrarlo de la lista
+     limpiaba solo el navegador, asi que al volver a entrar el cartel «Hay un
+     scout en la nube» lo ofrecia de nuevo.
+
+     Se veia como si no se pudiera borrar: lo sacabas de Partidos, volvias a
+     entrar y ahi estaba otra vez. */
+  try{
+    if(typeof FB_URL!=='undefined' && typeof _fbSufijo==='function'){
+      _fbSufijo().then(function(q){
+        fetch(FB_URL+'/pv_sesion.json'+q, {method:'DELETE'}).catch(function(){});
+      }).catch(function(){});
+    }
+  }catch(e){}
+  localStorage.removeItem('pv_match');
       localStorage.removeItem('pv_undo');
       localStorage.removeItem('pv_antes_drill');
     }
@@ -5485,7 +5499,26 @@ function openSetup(obligatorio){
 
 function cerrarPartidoActual(){
   const acc = (M.codes||[]).filter(c=>c.k!=='auto').length;
-  if(acc>0){ guardarPartidoEnLista(M); toast('Partido guardado en «Partidos» y cerrado'); }
+  /* ══ PREGUNTAR SI SE GUARDA ═══════════════════════════════════════════════
+     Antes guardaba SIEMPRE que hubiera acciones. Pero una prueba, un scout
+     mal arrancado o un partido que no interesa no tienen por que quedar en la
+     lista: despues hay que entrar a borrarlos uno por uno. */
+  if(acc>0){
+    if(confirm('¿Guardar este scout en «Partidos» antes de cerrarlo?\n\n'
+             + acc + ' acciones cargadas.\n\nAceptar = guardar · Cancelar = descartar')){
+      guardarPartidoEnLista(M); toast('Partido guardado en «Partidos» y cerrado');
+    } else {
+      toast('Partido cerrado sin guardar');
+      /* y que no vuelva desde la nube */
+      try{
+        if(typeof FB_URL!=='undefined' && typeof _fbSufijo==='function'){
+          _fbSufijo().then(function(q){
+            fetch(FB_URL+'/pv_sesion.json'+q, {method:'DELETE'}).catch(function(){});
+          }).catch(function(){});
+        }
+      }catch(e){}
+    }
+  }
   else { toast('Partido cerrado'); }
   M.codes = [];
   M.home.pts=0; M.home.sets=0; M.away.pts=0; M.away.sets=0;
@@ -8644,8 +8677,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260919-2133" onerror="void 0"></script>
-<script src="ayuda.js?v=20260919-2133"></script>
+<script src="volver_inicio.js?v=20260919-2142" onerror="void 0"></script>
+<script src="ayuda.js?v=20260919-2142"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
