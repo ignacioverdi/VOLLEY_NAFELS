@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260918-2339"></script>
-<script src="selector_categoria.js?v=20260918-2339"></script>
-<script src="lang.js?v=20260918-2339"></script>
+<script src="categorias_club.js?v=20260919-2051"></script>
+<script src="selector_categoria.js?v=20260919-2051"></script>
+<script src="lang.js?v=20260919-2051"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260918-2339">
+<link rel="stylesheet" href="movil.css?v=20260919-2051">
 </head>
 <body>
 
@@ -1237,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260918-2339" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260918-2339"></script>
-<script src="objetivos.js?v=20260918-2339" onerror="void 0"></script>
-<script src="video_delay.js?v=20260918-2339" onerror="void 0"></script>
+<script src="firebase.js?v=20260919-2051" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260919-2051"></script>
+<script src="objetivos.js?v=20260919-2051" onerror="void 0"></script>
+<script src="video_delay.js?v=20260919-2051" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260918-2339" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260918-2339"></script>
+<script src="plantel_nafels.js?v=20260919-2051" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260919-2051"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -7583,12 +7583,14 @@ function abrirInicio(){
      La comprobacion ya estaba en _inicioAlEntrar, pero aca se repite en el
      momento exacto de abrir, que es cuando se sabe seguro cuantas acciones
      hay. Si el usuario la pide a mano —desde el boton— pasa igual. */
-  try{
-    if(!arguments[0] && M && M.codes){
-      var _acc = M.codes.filter(function(c){ return c && c.k !== 'auto'; }).length;
-      if(_acc > 0) return;
-    }
-  }catch(e){}
+  /* ══ AL ENTRAR, SIEMPRE LA LISTA ══════════════════════════════════════════
+     Antes esto frenaba la apertura cuando habia acciones cargadas, para no
+     tapar un scout en curso. Pero en la practica es peor: se entra al panel y
+     aparece el partido de ayer ya abierto, y si no se mira con atencion se
+     empieza a cargar arriba de una sesion vieja.
+
+     El asistente lo pidio explicito: entrar SIEMPRE por el menu y elegir a
+     mano con que se trabaja. Mas seguro y mas claro. */
 
   var acc=(M.codes||[]).filter(function(c){ return c.k!=='auto'; }).length;
   INI_TAB = (M.modo==='entrenamiento' && acc>0) ? 'entrenamiento' : INI_TAB;
@@ -8534,8 +8536,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260918-2339" onerror="void 0"></script>
-<script src="ayuda.js?v=20260918-2339"></script>
+<script src="volver_inicio.js?v=20260919-2051" onerror="void 0"></script>
+<script src="ayuda.js?v=20260919-2051"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -8911,15 +8913,21 @@ function iniTildarTodos(){
    lo pegaba adentro de cada ventana y quedaba tapado por la barra de arriba, y
    ademas se movia con el scroll de la ventana. */
 (function(){
+  /* ══ LAS ESTADISTICAS NO SE TOCAN ═════════════════════════════════════════
+     La primera version de este boton cerraba tambien 'twin', la ventana de
+     tablas y distribuciones. Y la cerraba con Escape.
+
+     Eso rompio el scouteo en vivo: las tablas estan para mirarlas MIENTRAS se
+     tipea, y Escape es una tecla que se usa todo el tiempo cargando codigos.
+     El asistente se quedaba sin estadisticas en pleno partido.
+
+     Ahora el boton solo cierra las ventanas que tapan la pantalla, y Escape
+     no lo dispara nunca. */
   function abierto(){
-    if(document.querySelector('.modal.open')) return true;
-    var tw = document.getElementById('twin');
-    return !!(tw && !tw.hasAttribute('hidden'));
+    return !!document.querySelector('.modal.open');
   }
   function cerrarTodo(){
     document.querySelectorAll('.modal.open').forEach(function(m){ m.classList.remove('open'); });
-    var tw = document.getElementById('twin');
-    if(tw && !tw.hasAttribute('hidden')) tw.setAttribute('hidden','');
     try{ if(typeof rvCerrar === 'function') rvCerrar(); }catch(e){}
     try{ if(typeof objCerrarDetalle === 'function') objCerrarDetalle(); }catch(e){}
     pintar();
@@ -8948,9 +8956,8 @@ function iniTildarTodos(){
       {subtree:true, attributes:true, attributeFilter:['class','hidden']}); }
     catch(e){ setInterval(pintar, 600); }
   });
-  document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape' && abierto()){ e.preventDefault(); cerrarTodo(); }
-  });
+  /* Escape NO cierra nada: en el scouteo se usa para otras cosas y cerrar la
+     pantalla en medio de un rally es peor que cualquier comodidad. */
 })();
 </script>
 </body>
