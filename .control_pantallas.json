@@ -447,7 +447,7 @@
   "tablas": {}
  },
  "cortes.html": {
-  "bytes": 73124,
+  "bytes": 73792,
   "funciones": [
    "_codigoNuevo",
    "_copiarYAvisar",
@@ -1246,7 +1246,7 @@
   "tablas": {}
  },
  "nla_stats_table.html": {
-  "bytes": 51756,
+  "bytes": 58179,
   "funciones": [
    "_hexc",
    "_lerpc",

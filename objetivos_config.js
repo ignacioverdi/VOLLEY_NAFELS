@@ -1155,9 +1155,12 @@ function objVerVideo(id, clave, nombreFila, cuantas, jugNombre){
       if(_rq) q.push('rq=' + encodeURIComponent(_rq));
       else if(id === 'atqtr') q.push('ph=TR');
 
-      /* y el tipo de pelota, para las tres de tipo */
+      /* El tipo de pelota va como ty, NO como combo: en cortes.html 'combo' es
+         la combinacion de armado —X1, V5— y al no coincidir con nada el filtro
+         se ignoraba en silencio. La bateria «Atq Central» decia 4 puntos y el
+         video abria con los 88 ataques del equipo. */
       var _ty = ({atqq:'Q', atqhb:'H', atqx:'T'})[id];
-      if(_ty) q.push('combo=' + _ty);
+      if(_ty) q.push('ty=' + _ty);
     }catch(e){}
 
     window.open('cortes.html?' + q.join('&'), '_blank');
