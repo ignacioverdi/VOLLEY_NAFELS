@@ -1139,11 +1139,61 @@ function objVerCuenta(){
    Ahora la ventanita trae un boton "ver jugador por jugador" que despliega la
    tabla, con la misma cuenta que la bateria para que se pueda comprobar. */
 
+/* ══ LOS TOTALES POR JUGADOR DE LAS SESIONES ELEGIDAS ════════════════════════
+   El dashboard filtra por Partidos / Entrenamientos / sesión puntual, y el
+   encabezado de la ventanita ya respetaba ese filtro. El detalle de abajo NO:
+   leia BAT_PARTIDOS.jug, que es el acumulado de todo.
+
+   Se veia asi: arriba "71 saques que pega" —el partido— y abajo la tabla
+   sumando 1615, que es el partido mas los doce entrenamientos. Dos numeros
+   distintos para lo mismo, en la misma ventana.
+
+   getEqSesiones() devuelve las sesiones elegidas, cada una con sus jugadores
+   y los contadores crudos. Aca se suman y se arman en el mismo formato que
+   usa la tabla. */
+function _objJugDeSesiones(){
+  var ses = null;
+  try{ if(typeof getEqSesiones === 'function') ses = getEqSesiones(); }catch(e){}
+  if(!ses || !ses.length) return null;
+
+  /* que prefijo usa cada fundamento en los contadores por sesion */
+  var P = { sqD:'s', recD:'r', bqD:'b', atqD:'a' };
+
+  var out = {}, hubo = false;
+  ses.forEach(function(x){
+    (x.jugadores || []).forEach(function(j){
+      var nom = '#' + j.c + (j.n ? ' ' + j.n : '');
+      if(!out[nom]) out[nom] = {};
+      var o = out[nom];
+      Object.keys(P).forEach(function(k){
+        var pre = P[k];
+        if(j[pre + 'T'] === undefined) return;
+        hubo = true;
+        if(!o[k]) o[k] = {p:0,o:0,n:0,m:0,s:0,e:0,t:0,b:0};
+        var D = o[k];
+        D.t += (j[pre+'T']     || 0);
+        D.p += (j[pre+'Punto'] || 0);
+        D.o += (j[pre+'Pos']   || 0);
+        D.n += (j[pre+'Adm']   || 0);
+        D.m += (j[pre+'Neg']   || 0);
+        D.s += (j[pre+'Vend']  || 0);
+        D.e += (j[pre+'Err']   || 0);
+        D.b += (j[pre+'Vend']  || 0);   /* en ataque, la bloqueada */
+      });
+    });
+  });
+  return hubo ? out : null;
+}
+
 function objDetallePorJugador(id){
   /* Los datos de cada jugador, de donde los tenga la pantalla. */
   var jug = null;
+
+  /* primero, lo que corresponda al filtro de sesiones */
+  try{ jug = _objJugDeSesiones(); }catch(e){}
+
   try{
-    if(window.BAT_PARTIDOS && window.BAT_PARTIDOS.jug) jug = window.BAT_PARTIDOS.jug;
+    if(!jug && window.BAT_PARTIDOS && window.BAT_PARTIDOS.jug) jug = window.BAT_PARTIDOS.jug;
   }catch(e){}
   /* En el panel en vivo se calculan al momento. */
   /* ══ panel_voley NO TIENE NI BAT_PARTIDOS NI M ═══════════════════════════
