@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Cortes de Video · NAFELS VOLEY">Cortes de Video · NAFELS VOLEY</title>
-<script src="categorias_club.js?v=20260920-1348"></script>
-<script src="selector_categoria.js?v=20260920-1348"></script>
+<script src="categorias_club.js?v=20260920-0939"></script>
+<script src="selector_categoria.js?v=20260920-0939"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260920-1348"></script>
-<script src="filtro_tipo.js?v=20260920-1348" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260920-0939"></script>
+<script src="filtro_tipo.js?v=20260920-0939" onerror="void 0"></script>
   <!-- datos_video_25-26 sacado: es el video de la CAPSULA. Esta pantalla es
        de la 26-27, y cargarlo mezclaba jugadores nuevos con cortes de la
        temporada pasada. -->
@@ -33,8 +33,8 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="mapa_videos.js.enc?v=3" onerror="void 0"></script>
 <script src="mapa_videos_ent.js.enc?v=3" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20260920-1348" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260920-1348"></script>
+<script src="firebase.js?v=20260920-0939" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260920-0939"></script>
 <style>
   :root{--bg:#0b1017;--bg2:#0f172a;--card:#111a27;--card2:#16212f;--line:#1f2c3d;--txt:#e2e8f0;--muted:#7689a1;--muted2:#475569;--naf:#22c55e;--naf-dim:rgba(34,197,94,.12);--atk:#F97316;--srv:#22C55E;--rec:#818CF8;--set:#F59E0B;--blk:#ef4444;--def:#06b6d4;--free:#94a3b8;--ev-pos:#22c55e;--ev-plus:#84cc16;--ev-excl:#eab308;--ev-neg:#f97316;--ev-slash:#f59e0b;--ev-err:#ef4444;}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -150,7 +150,7 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260920-1348">
+<link rel="stylesheet" href="movil.css?v=20260920-0939">
 </head>
 <body>
 <div class="wrap">
@@ -376,6 +376,12 @@ window.__DESCIFRAR_SINCRONO = true;
   // estado
   var selMatch={}, selPlayers={}, selAct={}, selEval={}, selSet={}, selected={};
   var fDz=[], fOz=[], fPh="", fCall=[], fApos=[], fRival="", fDate="", fSk="";
+/* ══ CON QUE RECEPCION SE LLEGO AL ATAQUE ═══════════════════════════════
+   build_video.py ahora guarda en cada ataque la valoracion de la recepcion
+   que lo origino, en a.rq: #, +, ! o -. Vacio = vino de transicion.
+   Asi la bateria «Atq tras recepción #+» abre exactamente esos ataques y
+   no todos los del jugador. Se pueden pedir varias juntas: rq=%23,+ */
+var fRq=[];
   function _rnorm(s){return (''+(s||'')).toLowerCase().split(' ').pop();}
   var filtered=[], current=-1, playing=false, looping=false, timer=null, player=null, ready=false, loadedVid='';
 
@@ -512,6 +518,7 @@ window.__DESCIFRAR_SINCRONO = true;
       if(fDz.length&&(a.sk!==(fSk||"Ataque")||fDz.indexOf(a.dz)<0)) return false;
       if(fOz.length&&(a.sk!==(fSk||"Ataque")||fOz.indexOf(a.oz)<0)) return false;
       if(fPh&&(a.sk!=="Ataque"||a.ph!==fPh)) return false;
+  if(fRq.length && (a.sk!=="Ataque" || fRq.indexOf(a.rq||'') < 0)) return false;
       /* El filtro de valoracion. Los botones estaban en pantalla pero nunca se
          aplicaban: al pedir los ataques bloqueados venian todos mezclados. */
       if(evK.length && !selEval[a.ev]) return false;
@@ -665,7 +672,7 @@ window.__DESCIFRAR_SINCRONO = true;
     $('sitPanel').addEventListener('change',function(e){if(e.target.classList&&e.target.classList.contains('sitsk'))apply();});
     $('sBtn').addEventListener('click',function(){$('sPanel').classList.toggle('open');});
     $('sPanel').addEventListener('click',function(e){var c=e.target.closest('[data-set]');if(!c)return;var v=c.dataset.set;if(selSet[v])delete selSet[v];else selSet[v]=1;var bx=c.querySelector('.box');if(bx)bx.textContent=selSet[v]?'✓':'';c.classList.toggle('on',!!selSet[v]);updateSN();apply();});
-    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';fDate='';fSk='';resetSit();rebuildAll();});
+    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';fRq=[];fCall=[];fApos=[];fRival='';fDate='';fSk='';resetSit();rebuildAll();});
     $('btnPlay').addEventListener('click',togglePlay);
     $('btnNext').addEventListener('click',function(){if(ready)next();});
     $('btnPrev').addEventListener('click',prev);
@@ -753,6 +760,7 @@ window.__DESCIFRAR_SINCRONO = true;
     if(typeof fDz!=='undefined'   && _lista(fDz))   p.push('dz='+encodeURIComponent(_lista(fDz)));
     if(typeof fOz!=='undefined'   && _lista(fOz))   p.push('oz='+encodeURIComponent(_lista(fOz)));
     if(typeof fPh!=='undefined'   && fPh)           p.push('ph='+encodeURIComponent(fPh));
+    if(typeof fRq!=='undefined'   && fRq.length)    p.push('rq='+encodeURIComponent(fRq.join(',')));
     if(typeof fCall!=='undefined' && _lista(fCall)) p.push('call='+encodeURIComponent(_lista(fCall)));
     if(typeof fApos!=='undefined' && _lista(fApos)) p.push('apos='+encodeURIComponent(_lista(fApos)));
     if(typeof fRival!=='undefined'&& fRival)        p.push('rival='+encodeURIComponent(fRival));
@@ -787,12 +795,14 @@ window.__DESCIFRAR_SINCRONO = true;
     // preset desde URL (?num=6&sk=Ataque&combo=X5) — usado por el botón "Ver video" de los heatmaps
     var pNum=Q.get('num'), pSk=Q.get('sk'), pCombo=Q.get('combo'), pEv=Q.get('ev');
     var pDz=Q.get('dz'), pOz=Q.get('oz'), pPh=Q.get('ph'), pCall=Q.get('call'), pApos=Q.get('apos');
+  var pRq=Q.get('rq');
     var pRival=Q.get('rival'), pDate=Q.get('date');
     if(pRival) fRival=pRival;
     if(pDate) fDate=pDate;
     if(pDz) fDz=pDz.split(',').map(Number);
     if(pOz) fOz=pOz.split(',').map(Number);
     if(pPh) fPh=pPh;
+  if(pRq) fRq=pRq.split(',').map(function(x){return x.trim();}).filter(Boolean);
     if(pApos) fApos=pApos.split(',').map(Number);
     // la llamada se filtra por el árbol de acciones (selAct), no por fCall
     if((pDz||pOz||pPh)&&!pSk) pSk='Ataque';
@@ -842,9 +852,9 @@ window.__DESCIFRAR_SINCRONO = true;
   document.addEventListener('DOMContentLoaded',init);
 })();
 </script>
-<script src="lang.js?v=20260920-1348" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260920-1348" onerror="void 0"></script>
-<script src="ayuda.js?v=20260920-1348"></script>
+<script src="lang.js?v=20260920-0939" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260920-0939" onerror="void 0"></script>
+<script src="ayuda.js?v=20260920-0939"></script>
 
 <script>
 /* ══ LINK CORTO PARA COMPARTIR ══════════════════════════════════════════════

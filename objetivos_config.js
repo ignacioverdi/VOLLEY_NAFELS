@@ -1120,9 +1120,23 @@ function objVerVideo(id, clave, nombreFila, cuantas, jugNombre){
       }
     }catch(e){}
 
+    /* ══ LA RECEPCION QUE ORIGINO EL ATAQUE ═══════════════════════════════
+       Cada bateria de ataque tras recepcion tiene su valoracion:
+          atqrp  los que vienen de recepcion # o +
+          atqri  de !
+          atqrm  de -
+          atqtr  transicion: ninguna recepcion
+       build_video.py guarda esa valoracion en cada ataque y cortes.html la
+       filtra con rq. Asi el video trae EXACTAMENTE los que cuenta la bateria,
+       no todos los del jugador. */
     try{
-      var _fase = ({atqrp:'SO', atqri:'SO', atqrm:'SO', atqtr:'Tr'})[id];
-      if(_fase) q.push('ph=' + _fase);
+      var _rq = ({atqrp:'#,+', atqri:'!', atqrm:'-'})[id];
+      if(_rq) q.push('rq=' + encodeURIComponent(_rq));
+      else if(id === 'atqtr') q.push('ph=TR');
+
+      /* y el tipo de pelota, para las tres de tipo */
+      var _ty = ({atqq:'Q', atqhb:'H', atqx:'T'})[id];
+      if(_ty) q.push('combo=' + _ty);
     }catch(e){}
 
     window.open('cortes.html?' + q.join('&'), '_blank');

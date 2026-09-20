@@ -447,7 +447,7 @@
   "tablas": {}
  },
  "cortes.html": {
-  "bytes": 72453,
+  "bytes": 73124,
   "funciones": [
    "_codigoNuevo",
    "_copiarYAvisar",

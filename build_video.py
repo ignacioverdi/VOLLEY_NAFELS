@@ -251,6 +251,40 @@ def parse_dvw(path, ent=False, modo_high_set=False):
         players.setdefault(tslug,[])
         for n in plist:
             if n[0] not in seen: players[tslug].append(n); seen.add(n[0])
+        # ══ CON QUE RECEPCION SE LLEGA A CADA ATAQUE ══════════════════════
+        # gen_plan_partido.py ya calcula esto —por eso el filtro «Recepción»
+        # de Plan de Partido funciona— pero lo guarda agrupado en buena/mala.
+        # Aca se guarda la valoracion TAL CUAL: #, +, ! o -. Agrupar dos es
+        # facil desde la pantalla; separar lo agrupado, imposible.
+        #
+        # Sin esto, las baterias «Atq tras recepción #+» abrian el video con
+        # TODOS los ataques del jugador, sin distinguir de donde venian.
+        #
+        # Se recorre ANTES, sobre todas las lineas, porque una accion del
+        # rival tambien corta la fase de recepcion y este bucle solo mira las
+        # nuestras. Misma regla que usa el motor de baterias.
+        _recDe = {}
+        _ult = None
+        for _j, _l in enumerate(scout_lines):
+            _c0 = _l.split(';')[0]
+            _mm = re.match(r'^([*a])(\d{2})([SRABDEF])', _c0)
+            if not _mm:
+                continue
+            _pfx, _sk2 = _mm.group(1), _mm.group(3)
+            _ev2 = _c0[5] if len(_c0) > 5 else ''
+            if _sk2 == 'S':
+                _ult = None                      # arranca otro punto
+            elif _sk2 == 'R' and _pfx == sidech:
+                _ult = _ev2                      # nuestra recepcion
+            elif _sk2 == 'F':
+                _ult = None                      # free ball: ya no es side-out
+            elif _pfx != sidech and _sk2 in 'ADEB':
+                _ult = None                      # jugo el rival: se corto
+            elif _sk2 == 'A' and _pfx == sidech:
+                if _ult:
+                    _recDe[_j] = _ult
+                _ult = None                      # una recepcion, un ataque
+
         for _li,l in enumerate(scout_lines):
             c=l.split(';'); code0=c[0]
             m=re.match(r'^%s(\d{2})([SRABDEF])'%re.escape(sidech),code0)
@@ -292,6 +326,8 @@ def parse_dvw(path, ent=False, modo_high_set=False):
                 # fase: SO si saco el rival, TR si sacamos nosotros
                 _ss=_srv_side[_li] if _li<len(_srv_side) else ''
                 if _ss: a['ph']='SO' if _ss!=sidech else 'TR'
+                # la valoracion de la recepcion que dio origen a este ataque
+                if _li in _recDe: a['rq']=_recDe[_li]
             elif sk in ('S','R'):
                 tp=code0[4] if len(code0)>4 else ''
                 if tp and tp.isalpha(): a['x']=tp
