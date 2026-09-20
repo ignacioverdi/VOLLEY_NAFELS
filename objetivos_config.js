@@ -1088,6 +1088,43 @@ function objVerVideo(id, clave, nombreFila, cuantas, jugNombre){
     if(jug) q.push('num=' + jug);
     q.push('sk=' + encodeURIComponent(OBJ_SKILL_NOMBRE[id] || ''));
     q.push('ev=' + encodeURIComponent(sig));
+
+    /* ══ LA SESION Y LA FASE TAMBIEN ══════════════════════════════════════
+       Antes el link llevaba jugador, fundamento y valoracion, nada mas.
+
+       Se veia asi: la bateria "Atq tras recepcion #+" del partido contra
+       Rottenburg marcaba 7 ataques, se tocaba para ver el video y cortes
+       abria con 41 de DURDOS, de todos los partidos y entrenamientos, sin
+       distinguir side-out de transicion.
+
+       Ahora viajan dos cosas mas:
+         date  la fecha, cuando hay UNA sola sesion elegida
+         ph    SO para las baterias de side-out, Tr para la de transicion
+
+       Con varias sesiones elegidas no se manda fecha: filtrar por una sola
+       seria mentir sobre lo que muestra la bateria. */
+    try{
+      var _B = window.BAT_PARTIDOS;
+      var _i = (typeof EQ_SESION !== 'undefined' && EQ_SESION >= 0) ? EQ_SESION : -1;
+      if(_i < 0 && typeof EQ_SEL !== 'undefined' && EQ_SEL){
+        var _k = Object.keys(EQ_SEL).filter(function(x){ return EQ_SEL[x]; });
+        if(_k.length === 1) _i = Number(_k[0]);
+      }
+      if(_i >= 0 && _B && _B.meta && _B.meta[_i] && _B.meta[_i].fecha){
+        var _f = String(_B.meta[_i].fecha);
+        if(_f.indexOf('/') > 0){
+          var _p = _f.split('/');
+          if(_p.length === 3) _f = _p[2] + '-' + _p[1] + '-' + _p[0];
+        }
+        q.push('date=' + encodeURIComponent(_f));
+      }
+    }catch(e){}
+
+    try{
+      var _fase = ({atqrp:'SO', atqri:'SO', atqrm:'SO', atqtr:'Tr'})[id];
+      if(_fase) q.push('ph=' + _fase);
+    }catch(e){}
+
     window.open('cortes.html?' + q.join('&'), '_blank');
   }catch(e){}
 }
@@ -1139,50 +1176,75 @@ function objVerCuenta(){
    Ahora la ventanita trae un boton "ver jugador por jugador" que despliega la
    tabla, con la misma cuenta que la bateria para que se pueda comprobar. */
 
-/* ══ LOS TOTALES POR JUGADOR DE LAS SESIONES ELEGIDAS ════════════════════════
-   El dashboard filtra por Partidos / Entrenamientos / sesión puntual, y el
-   encabezado de la ventanita ya respetaba ese filtro. El detalle de abajo NO:
-   leia BAT_PARTIDOS.jug, que es el acumulado de todo.
+/* ══ LOS JUGADORES DE LAS SESIONES ELEGIDAS ══════════════════════════════════
+   El dashboard filtra por Partidos / Entrenamientos / una sesion puntual, y el
+   encabezado de la ventanita respeta ese filtro. La tabla de abajo no lo hacia.
 
-   Se veia asi: arriba "71 saques que pega" —el partido— y abajo la tabla
-   sumando 1615, que es el partido mas los doce entrenamientos. Dos numeros
-   distintos para lo mismo, en la misma ventana.
+   El primer intento leia getEqSesiones(), que devuelve contadores crudos con
+   prefijos —sT, sPunto, aT...— y ahi el ataque viene partido solo en side-out
+   y transicion. Por eso saque, recepcion y bloqueo salian bien y las siete
+   baterias de ataque y la de defensa salian cualquier cosa.
 
-   getEqSesiones() devuelve las sesiones elegidas, cada una con sus jugadores
-   y los contadores crudos. Aca se suman y se arman en el mismo formato que
-   usa la tabla. */
+   El desglose completo YA EXISTE y esta en otro lado: gen_baterias.py lo
+   guarda en BAT_PARTIDOS.ind, una entrada por sesion, con el MISMO formato
+   que el acumulado —sqD, recD, defD, bqD, y atqD con sus siete categorias:
+   q, hb, x, rp, ri, rm, tr—.
+
+   No habia que generar nada nuevo: habia que leer de ahi. */
 function _objJugDeSesiones(){
-  var ses = null;
-  try{ if(typeof getEqSesiones === 'function') ses = getEqSesiones(); }catch(e){}
-  if(!ses || !ses.length) return null;
+  var B = null;
+  try{ B = window.BAT_PARTIDOS; }catch(e){}
+  if(!B || !B.ind || !B.ind.length) return null;
 
-  /* que prefijo usa cada fundamento en los contadores por sesion */
-  var P = { sqD:'s', recD:'r', bqD:'b', atqD:'a' };
+  /* que sesiones estan elegidas, segun el estado del dashboard */
+  var idx = null;
+  try{
+    if(typeof EQ_SEL !== 'undefined' && EQ_SEL){
+      idx = Object.keys(EQ_SEL).filter(function(k){ return EQ_SEL[k]; }).map(Number);
+    }
+    if((!idx || !idx.length) && typeof EQ_SESION !== 'undefined' && EQ_SESION >= 0){
+      idx = [EQ_SESION];
+    }
+    if((!idx || !idx.length) && typeof EQ_FILTRO !== 'undefined' && EQ_FILTRO){
+      var t = (EQ_FILTRO === 'P') ? 'partido'
+            : (EQ_FILTRO === 'E') ? 'entrenamiento' : null;
+      if(t){
+        idx = [];
+        B.ind.forEach(function(x, i){ if(x && x.tipo === t) idx.push(i); });
+      }
+    }
+  }catch(e){}
 
-  var out = {}, hubo = false;
-  ses.forEach(function(x){
-    (x.jugadores || []).forEach(function(j){
-      var nom = '#' + j.c + (j.n ? ' ' + j.n : '');
+  /* sin filtro —o con todas elegidas— vale el acumulado de siempre */
+  if(!idx || !idx.length || idx.length === B.ind.length) return null;
+
+  var out = {};
+  idx.forEach(function(i){
+    var ses = B.ind[i];
+    if(!ses || !ses.jug) return;
+    Object.keys(ses.jug).forEach(function(nom){
       if(!out[nom]) out[nom] = {};
-      var o = out[nom];
-      Object.keys(P).forEach(function(k){
-        var pre = P[k];
-        if(j[pre + 'T'] === undefined) return;
-        hubo = true;
-        if(!o[k]) o[k] = {p:0,o:0,n:0,m:0,s:0,e:0,t:0,b:0};
-        var D = o[k];
-        D.t += (j[pre+'T']     || 0);
-        D.p += (j[pre+'Punto'] || 0);
-        D.o += (j[pre+'Pos']   || 0);
-        D.n += (j[pre+'Adm']   || 0);
-        D.m += (j[pre+'Neg']   || 0);
-        D.s += (j[pre+'Vend']  || 0);
-        D.e += (j[pre+'Err']   || 0);
-        D.b += (j[pre+'Vend']  || 0);   /* en ataque, la bloqueada */
-      });
+      _objSumarJug(out[nom], ses.jug[nom]);
     });
   });
-  return hubo ? out : null;
+  return Object.keys(out).length ? out : null;
+}
+
+/* Suma un jugador de una sesion sobre lo que se viene acumulando.
+   Los contadores se suman; los porcentajes se ignoran, porque promediar el
+   de dias distintos no significa nada. La tabla los recalcula desde los
+   totales ya sumados. */
+function _objSumarJug(acc, src){
+  var CONTADORES = {p:1, o:1, n:1, m:1, s:1, e:1, t:1, b:1};
+  Object.keys(src || {}).forEach(function(k){
+    var v = src[k];
+    if(v && typeof v === 'object'){
+      if(!acc[k]) acc[k] = {};
+      _objSumarJug(acc[k], v);
+    } else if(typeof v === 'number' && CONTADORES[k]){
+      acc[k] = (acc[k] || 0) + v;
+    }
+  });
 }
 
 function objDetallePorJugador(id){
