@@ -768,7 +768,11 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
      scout. "Sigue en juego" no tiene, porque no es una valoracion. */
   var FIL = [
     ['#', 'Punto',          P,     '#22c55e', 'p'],
-    ['\u25b8','Sigue en juego', sigue, '#64748b', null],
+    /* «Sigue en juego» no es una valoracion del scout: es lo que queda
+       despues de sacar el punto, la bloqueada y el error. Pero SI se puede
+       ver en video, porque son los ataques valorados + , ! y - . Se mandan
+       los tres juntos, igual que #,+ en las baterias tras recepcion. */
+    ['\u25b8','Sigue en juego', sigue, '#64748b', '+,!,-'],
     ['/', 'Bloqueado',      B,     '#fb923c', 'b'],
     ['=', 'Error',          E,     '#ef4444', 'e']
   ];
@@ -1086,6 +1090,23 @@ function objVerVideo(id, clave, nombreFila, cuantas, jugNombre){
 
     var q = [];
     if(jug) q.push('num=' + jug);
+
+    /* ══ DE QUE EQUIPO ════════════════════════════════════════════════════
+       Sin esto el link pedia «el #9» a secas, y los dos equipos suelen tener
+       un #9. Medido en el partido contra Rottenburg: se abrian 11 ataques
+       —8 nuestros y 3 del rival— cuando la bateria contaba 8.
+
+       cortes.html ya acepta ?team=, solo habia que mandarlo. */
+    try{
+      var _eq = '';
+      if(window.CLUB_SLUG) _eq = window.CLUB_SLUG;
+      else if(window.TEAM) _eq = window.TEAM;
+      else if(window.LIGA_DATA){
+        var _ks = Object.keys(window.LIGA_DATA);
+        if(_ks.length === 1) _eq = _ks[0];
+      }
+      if(_eq) q.push('team=' + encodeURIComponent(_eq));
+    }catch(e){}
     q.push('sk=' + encodeURIComponent(OBJ_SKILL_NOMBRE[id] || ''));
     q.push('ev=' + encodeURIComponent(sig));
 
