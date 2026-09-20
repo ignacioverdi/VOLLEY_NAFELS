@@ -38,6 +38,18 @@
 
   function dibujar() {
     if (document.getElementById('vb-volver')) return;
+
+    // ══ NO DIBUJAR DOS VECES EL MISMO BOTON ══════════════════════════════
+    // lang.js ya pone un escudo para volver al inicio, con id 'club-escudo',
+    // en left:12 bottom:12. Este archivo ponia otro en left:14 bottom:14.
+    //
+    // Dos pixeles de diferencia: se veian los DOS circulos, uno asomando por
+    // debajo del otro. Quedaba feo y confundia, porque parecia otro logo.
+    //
+    // Cada archivo revisaba solo SU propio boton, asi que ninguno se enteraba
+    // del otro. Si el de lang.js ya esta, este no hace nada.
+    if (document.getElementById('club-escudo')) return;
+
     if (!document.body) return;
 
     var a = document.createElement('a');
