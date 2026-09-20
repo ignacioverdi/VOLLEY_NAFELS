@@ -20,7 +20,19 @@ import os,re,sys,json,glob,unicodedata
 # 7: se guarda la zona del bloqueo. Los archivos hechos con la version
 #    anterior no la tienen, y sin ella el mapa de bloqueo pone todas las
 #    acciones en el medio de la red. Al subir el numero se regeneran solos.
-DATA_VERSION = 7
+# ══ POR QUE SUBE A 8 ════════════════════════════════════════════════════
+# build_video FUSIONA: un partido que ya esta guardado no se vuelve a
+# procesar, para no perder los links de video cargados a mano. Correcto.
+#
+# Pero entonces un campo NUEVO nunca llega a los partidos viejos. Paso
+# con 'rq' —la recepcion que origino cada ataque—: se agrego al codigo,
+# se publico, y los 173 ataques seguian sin el dato.
+#
+# Para eso existe este numero: al cambiarlo, load_existing_season
+# descarta lo guardado y rehace la temporada desde los .dvw.
+#
+# 7 -> 8 : cada ataque lleva la valoracion de su recepcion (#, +, !, -)
+DATA_VERSION = 8
 
 
 def _turno(nombre_archivo):
