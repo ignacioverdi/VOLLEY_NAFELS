@@ -133,7 +133,12 @@ def _bat_nuevo():
     # cuenta, cada saque neutro puntuaria 0 y el numero se hunde.
     return {'S':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
             'R':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
-            'B':{'#':0,'+':0,'T':0},
+            # El bloqueo guardaba solo # y +. El total contaba todo, pero las demas
+        # valoraciones no quedaban en ningun lado: la tabla por jugador
+        # mostraba la columna Error siempre vacia, aunque hubiera errores.
+        # Se agregan las cuatro que faltaban. No cambia ningun calculo:
+        # bqpos y bqpt siguen usando # , + y T.
+        'B':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
             'D':{'#':0,'+':0,'!':0,'-':0,'=':0,'T':0},
             'Aall':na(),'cent':na(),'alta':na(),'rap':na(),
             'rp':na(),'ri':na(),'rm':na(),'tr':na()}
@@ -245,7 +250,8 @@ def _bat_to_pcts(P):
                  's':R.get('/',0), 'e':R['=']},
         'defD': {'p':D['#'], 'o':D['+'], 'n':D.get('!',0), 'm':D.get('-',0),
                  'e':D['=']},
-        'bqD':  {'p':B['#'], 'o':B['+'], 't':B['T']},
+        'bqD':  {'p':B['#'], 'o':B['+'], 'n':B.get('!',0), 'm':B.get('-',0),
+                 's':B.get('/',0), 'e':B.get('=',0), 't':B['T']},
         'defT':    D['T'],
         'defPerf': D['#'],
         'defErr':  D['='],
