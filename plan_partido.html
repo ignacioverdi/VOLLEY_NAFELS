@@ -185,12 +185,12 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260921-0752">
+<link rel="stylesheet" href="movil.css?v=20260921-0826">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="categorias_club.js?v=20260921-0752"></script>
-<script src="selector_categoria.js?v=20260921-0752"></script>
-<script src="mi_fila.js?v=20260921-0752" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260921-0826"></script>
+<script src="selector_categoria.js?v=20260921-0826"></script>
+<script src="mi_fila.js?v=20260921-0826" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -320,8 +320,8 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260921-0752"></script>
-<script src="filtro_tipo.js?v=20260921-0752" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260921-0826"></script>
+<script src="filtro_tipo.js?v=20260921-0826" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
   <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
        se cargaba SOLO el de partidos, asi que en una temporada sin partidos
@@ -336,12 +336,12 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20260921-0752"></script>
-<script src="firebase_por_categoria.js?v=20260921-0752"></script>
+<script src="firebase.js?v=20260921-0826"></script>
+<script src="firebase_por_categoria.js?v=20260921-0826"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20260921-0752" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20260921-0826" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -1134,7 +1134,32 @@ function buildTeam(){
   PLAYERS=PLAYERS.concat(_bk);
   TEAMCARDS=[]; ['punta','central','opuesto','saque','reception','defense','bloqueo'].forEach(function(role){var tp=makeTeamPlayer(role); if(tp) TEAMCARDS.push(tp);});
   TEAMCARDS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('afterbegin',buildSection(p));});
-  PLAYERS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('beforeend',buildSection(p));});
+  /* ══ ORDENADOS POR PUESTO ═════════════════════════════════════════════════
+     El ataque ya viene partido en una fila por puesto. Saque, recepcion,
+     defensa y bloqueo son UNA fila cada uno, y los jugadores entraban en el
+     orden en que los dejo el generador: Central, Opuesto, Punta, Central,
+     Punta, Armador... Buscar a un jugador era recorrer la fila entera.
+
+     Se ordenan con el mismo criterio de las filas de ataque —Punta, Central,
+     Opuesto, Armador, Libero— y dentro de cada puesto por numero. El ataque
+     no se toca: ahi cada fila ya es un solo puesto. */
+  var _PP_ORD_ROLES = {saque:1, reception:1, defense:1, bloqueo:1};
+  function _ppRangoPuesto(p){
+    var v = String(p.pos || (typeof armPuestoDe==='function' ? armPuestoDe(p.num) : '') || '')
+              .toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    if(v.indexOf('punta')>=0)   return 0;
+    if(v.indexOf('central')>=0) return 1;
+    if(v.indexOf('opuesto')>=0) return 2;
+    if(v.indexOf('armador')>=0) return 3;
+    if(v.indexOf('libero')>=0)  return 4;
+    return 5;
+  }
+  var _ppLista = PLAYERS.filter(function(p){ return !_PP_ORD_ROLES[p.role]; })
+    .concat(PLAYERS.filter(function(p){ return _PP_ORD_ROLES[p.role]; }).slice().sort(function(a,b){
+      var d = _ppRangoPuesto(a) - _ppRangoPuesto(b);
+      return d || ((parseInt(a.num,10)||0) - (parseInt(b.num,10)||0));
+    }));
+  _ppLista.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('beforeend',buildSection(p));});
   try{ var _hl=document.getElementById('head-libero'), _rl=document.getElementById('row-libero');
        if(_hl&&_rl) _hl.style.display = _rl.children.length ? '' : 'none'; }catch(e){}
   TEAMCARDS.concat(PLAYERS).forEach(function(p){ROLECFG[p.role].filters.forEach(function(fl,i){var fe=document.getElementById(p.id+'-f'+i);if(fe)fe.addEventListener('change',function(){if(ROLECFG[p.role].stats==='dig'&&fl.lab==='Ataque desde'){defRefreshTipo(p);}render(p);});});var me=document.getElementById(p.id+'-min');if(me)me.addEventListener('input',function(){render(p);});render(p);});
@@ -1319,8 +1344,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20260921-0752" onerror="void 0"></script>
-<script src="lang.js?v=20260921-0752" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20260921-0826" onerror="void 0"></script>
+<script src="lang.js?v=20260921-0826" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -1338,7 +1363,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20260921-0752" onerror="void 0"></script>
-<script src="ayuda.js?v=20260921-0752"></script>
+<script src="volver_inicio.js?v=20260921-0826" onerror="void 0"></script>
+<script src="ayuda.js?v=20260921-0826"></script>
 </body>
 </html>
