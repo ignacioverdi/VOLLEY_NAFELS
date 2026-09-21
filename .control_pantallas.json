@@ -1246,7 +1246,7 @@
   "tablas": {}
  },
  "nla_stats_table.html": {
-  "bytes": 58179,
+  "bytes": 64698,
   "funciones": [
    "_hexc",
    "_lerpc",
@@ -1308,7 +1308,7 @@
   "tablas": {}
  },
  "panel_vivo.html": {
-  "bytes": 832645,
+  "bytes": 834133,
   "funciones": [
    "_aCp1252",
    "_alarmaGuardado",
