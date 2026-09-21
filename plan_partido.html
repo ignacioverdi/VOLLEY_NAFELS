@@ -185,12 +185,12 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260921-0742">
+<link rel="stylesheet" href="movil.css?v=20260921-0752">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="categorias_club.js?v=20260921-0742"></script>
-<script src="selector_categoria.js?v=20260921-0742"></script>
-<script src="mi_fila.js?v=20260921-0742" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260921-0752"></script>
+<script src="selector_categoria.js?v=20260921-0752"></script>
+<script src="mi_fila.js?v=20260921-0752" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -320,8 +320,8 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260921-0742"></script>
-<script src="filtro_tipo.js?v=20260921-0742" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260921-0752"></script>
+<script src="filtro_tipo.js?v=20260921-0752" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
   <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
        se cargaba SOLO el de partidos, asi que en una temporada sin partidos
@@ -336,12 +336,12 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20260921-0742"></script>
-<script src="firebase_por_categoria.js?v=20260921-0742"></script>
+<script src="firebase.js?v=20260921-0752"></script>
+<script src="firebase_por_categoria.js?v=20260921-0752"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20260921-0742" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20260921-0752" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -542,6 +542,35 @@ function apellidoJS(n){n=(n||"").trim();return n?n.split(" ").pop():"";}
 function apeArm(n){n=(n||"").trim();return n?n.split(/\s+/)[0]:"";}
 function armDates(){var d={};MATCHES.forEach(function(m){if(MSEL.has(m.mid))d[m.date]=1;});return d;}
 function midByDate(d){if(typeof MATCHES==="undefined")return"";var m=MATCHES.find(function(x){return x.date===d;});return m?m.mid:"";}
+
+/* ══ A QUE PARTIDO PERTENECE UN ARMADO ════════════════════════════════════════
+   La distribucion de armador lee LIGA_DATA, y ahi cada partido viene con fecha
+   y rival pero con 'code' vacio. Para encontrar su video se buscaba el partido
+   SOLO por fecha: midByDate() devuelve el primero que tenga esa fecha.
+
+   Con un partido por dia no se notaba. El 19/09 se jugaron tres amistosos
+   —Rottenburg, Colombier y Jona— y TODOS los armados, de los tres partidos,
+   caian en el video de Jona, que era el primero de la lista. VAZQUEZ, que jugo
+   solo contra Rottenburg, mostraba acciones de Jona. Y STEIMANN, que jugo Jona
+   y Colombier, mostraba solo las de Jona.
+
+   Ahora se busca por fecha Y rival. Si viniera el codigo, manda el codigo. */
+function _armNorm(x){return String(x||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,"");}
+function armMidDe(mm){
+  if(!mm) return "";
+  if(mm.code) return mm.code;
+  if(typeof MATCHES==="undefined") return "";
+  var riv=_armNorm(mm.rival||mm.opp);
+  if(riv){
+    var hit=MATCHES.find(function(x){
+      if(x.date!==mm.date) return false;
+      var o=_armNorm(x.opp);
+      return o && (o===riv || o.indexOf(riv)>=0 || riv.indexOf(o)>=0);
+    });
+    if(hit) return hit.mid;
+  }
+  return midByDate(mm.date);
+}
 function armRallies(setter,pos){var dates=armDates(),mt=(armTeam.matches||[]);
   return setter.s.filter(function(r){
     /* pos 0 = los armados SIN rotacion. Los archivos de practica de
@@ -553,7 +582,8 @@ function armRallies(setter,pos){var dates=armDates(),mt=(armTeam.matches||[]);
     if(armPhase==="SO"&&armRec!=="all"){var rq=r[7];if(armRec==="pos"&&!(rq===0||rq===2))return false;if(armRec==="neg"&&!(rq===3||rq===5))return false;}
     if(armRecZone){var _b=ARM_RECBANDS[armRecZone];if(!_b||_b.indexOf(r[15])<0)return false;}
     if(armRecNum!=null&&r[16]!==armRecNum)return false;
-    var mm=mt[r[12]];if(mm&&mm.date&&!dates[mm.date])return false;
+    /* partidos elegidos: por partido, no por fecha —tres el mismo dia se confundian— */
+    var mm=mt[r[12]];if(mm&&typeof MSEL!=="undefined"&&MSEL.size){var _mid=armMidDe(mm);if(_mid&&!MSEL.has(_mid))return false;}
     return true;});
 }
 /* De donde salen los armadores, segun el filtro de arriba.
@@ -691,7 +721,7 @@ function renderArmador(){
   if(armSetIdx>=armTeam.setters.length)armSetIdx=0;
   document.getElementById("armsetsel").innerHTML='<label>Armador</label>'+armTeam.setters.map(function(s,i){return '<button class="'+(i===armSetIdx?"on":"")+'" onclick="setArmSetter('+i+')">#'+s.num+" "+apeArm(s.name)+'</button>';}).join("");
   var setter=armTeam.setters[armSetIdx]||armTeam.setters[0];
-  if(typeof MSEL!=="undefined"&&typeof MATCHES!=="undefined"&&MSEL.size<MATCHES.length){var _ad=armDates();setter=Object.assign({},setter,{s:(setter.s||[]).filter(function(r){var _m=(armTeam.matches||[])[r[12]];return _m&&_ad[_m.date];})});}
+  if(typeof MSEL!=="undefined"&&typeof MATCHES!=="undefined"&&MSEL.size<MATCHES.length){setter=Object.assign({},setter,{s:(setter.s||[]).filter(function(r){var _m=(armTeam.matches||[])[r[12]];return _m&&MSEL.has(armMidDe(_m));})});}
   document.getElementById("armname").textContent=apeArm(setter.name)+" · "+setter.s.length+" armados";
   var callCount={};setter.s.forEach(function(r){if(r[5]>=0)callCount[r[5]]=(callCount[r[5]]||0)+1;});
   var callIdxs=Object.keys(callCount).map(Number).sort(function(a,b){return callCount[b]-callCount[a];});
@@ -753,10 +783,10 @@ function setArmRecNum(v){armRecNum=v?parseInt(v,10):null;renderArmador();}
 function setArmCall(v){armCall=(v==="all")?"all":parseInt(v,10);renderArmador();}
 function openArmZone(pos,zn){
   var setter=armTeam.setters[armSetIdx]||armTeam.setters[0];
-  if(typeof MSEL!=="undefined"&&typeof MATCHES!=="undefined"&&MSEL.size<MATCHES.length){var _ad=armDates();setter=Object.assign({},setter,{s:(setter.s||[]).filter(function(r){var _m=(armTeam.matches||[])[r[12]];return _m&&_ad[_m.date];})});}
+  if(typeof MSEL!=="undefined"&&typeof MATCHES!=="undefined"&&MSEL.size<MATCHES.length){setter=Object.assign({},setter,{s:(setter.s||[]).filter(function(r){var _m=(armTeam.matches||[])[r[12]];return _m&&MSEL.has(armMidDe(_m));})});}
   var rows=armRallies(setter,pos).filter(function(r){return String(gpGetZone(GP_COMBOS[r[8]]||"",r[11],r[6]))===zn;});
   var mt=(armTeam.matches||[]);
-  clips=rows.map(function(r){var mm=mt[r[12]]||{},mid=mm.code||midByDate(mm.date),yt=ppVid(mid);return {tag:GP_COMBOS[r[8]]||"",ev:RESARM[r[9]]||"",t:r[14]||r[13],vid:yt,sel:true};}).filter(function(c){return c.vid&&c.t;});
+  clips=rows.map(function(r){var mm=mt[r[12]]||{},mid=armMidDe(mm),yt=ppVid(mid);return {tag:GP_COMBOS[r[8]]||"",ev:RESARM[r[9]]||"",t:r[14]||r[13],vid:yt,sel:true};}).filter(function(c){return c.vid&&c.t;});
   curP=null;curZn=zn;curKey=TEAM+"|arm"+armSetIdx+"|P"+pos+"|"+zn;onlyShow=false;var _vo=document.getElementById("vonly");if(_vo)_vo.checked=false;applySavedSel();cur=firstSel();
   document.getElementById("vfilters").innerHTML="";
   document.getElementById("vtitle").textContent=setter.name+" · P"+pos+" · zona "+zn+" · "+rows.length+" armados"+(clips.length<rows.length?" ("+clips.length+" c/video)":"");
@@ -1289,8 +1319,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20260921-0742" onerror="void 0"></script>
-<script src="lang.js?v=20260921-0742" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20260921-0752" onerror="void 0"></script>
+<script src="lang.js?v=20260921-0752" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -1308,7 +1338,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20260921-0742" onerror="void 0"></script>
-<script src="ayuda.js?v=20260921-0742"></script>
+<script src="volver_inicio.js?v=20260921-0752" onerror="void 0"></script>
+<script src="ayuda.js?v=20260921-0752"></script>
 </body>
 </html>
