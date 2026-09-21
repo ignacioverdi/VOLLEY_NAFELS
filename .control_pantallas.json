@@ -1308,7 +1308,7 @@
   "tablas": {}
  },
  "panel_vivo.html": {
-  "bytes": 834133,
+  "bytes": 835772,
   "funciones": [
    "_aCp1252",
    "_alarmaGuardado",
@@ -1339,6 +1339,7 @@
    "_redAbrir",
    "_spanBarra",
    "_temporadaAuto",
+   "_ultimoEstado",
    "_wizActual",
    "_wizCola",
    "_wizJugadores",
