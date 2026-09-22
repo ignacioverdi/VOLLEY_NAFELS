@@ -1876,11 +1876,13 @@
   "tablas": {}
  },
  "plan_partido.html": {
-  "bytes": 102767,
+  "bytes": 105586,
   "funciones": [
    "U",
    "_armClave",
+   "_armNorm",
    "_isMulti",
+   "_ppRangoPuesto",
    "_ppTurno",
    "_ppVidPorFecha",
    "allMatchesSel",
@@ -1892,6 +1894,7 @@
    "armDates",
    "armFuente",
    "armHeat",
+   "armMidDe",
    "armPuestoDe",
    "armRallies",
    "armSoloArmadores",
