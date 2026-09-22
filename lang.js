@@ -4277,11 +4277,31 @@
     _obs.observe(document.body,{childList:true,subtree:true});
   }
 
+  /* ══ DOS DICCIONARIOS ═════════════════════════════════════════════════════
+     Hay dos: el de las claves data-t —tr()— y el de frases que usa el
+     traductor de textos —translateString()—. Muchos elementos llevan data-t
+     con una clave que SOLO esta en el de frases: "Todos", "Sesión",
+     "👥 Equipo". tr() devolvia null, y translateTextNodes los salta porque
+     tienen data-t. Quedaban en castellano aunque la traduccion existia.
+     Medido en el dashboard en aleman: 14 textos asi en la primera vista.
+
+     Si tr() no la tiene, se prueba con el de frases. Solo se aplica si
+     devuelve algo distinto de la clave: si ninguno la tiene, no se toca. */
+  function _trDataT(k, lang){
+    var v = tr(k, lang);
+    if (v !== null || lang === 'es' || !k) return v;
+    try{
+      var v2 = translateString(k, lang);
+      if (v2 && v2 !== k) return v2;
+    }catch(e){}
+    return null;
+  }
+
   function applyDataT(lang){
     var els = document.querySelectorAll('[data-t]');
     for (var i=0; i<els.length; i++){
       var k = els[i].getAttribute('data-t');
-      var v = tr(k, lang);
+      var v = _trDataT(k, lang);
       if (v !== null) {
         if (/<[a-z][\s\S]*>/i.test(v)) { if (els[i].innerHTML !== v) els[i].innerHTML = v; }
         else if (els[i].textContent !== v) els[i].textContent = v;
@@ -4302,7 +4322,7 @@
     var els = document.querySelectorAll('[data-t]');
     for (var i=0; i<els.length; i++){
       var k = els[i].getAttribute('data-t');
-      var v = tr(k, lang);
+      var v = _trDataT(k, lang);
       if (v !== null) {
         /* Si la traduccion trae etiquetas —negritas, colores— hay que
            escribirla como HTML. Con textContent se veria el codigo crudo:

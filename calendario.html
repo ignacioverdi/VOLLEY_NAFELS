@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20260922-1741"></script>
-<script src="selector_categoria.js?v=20260922-1741"></script>
-<script src="datos_seguros.js?v=20260922-1741"></script>
-<script src="firebase.js?v=20260922-1741" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260922-1741"></script>
+<script src="categorias_club.js?v=20260922-1752"></script>
+<script src="selector_categoria.js?v=20260922-1752"></script>
+<script src="datos_seguros.js?v=20260922-1752"></script>
+<script src="firebase.js?v=20260922-1752" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260922-1752"></script>
 <style>
   :root{--bg:#0a0f1a;--surface:#111827;--card:#0f1020;--card2:#151b2e;--border:rgba(255,255,255,.08);--b2:rgba(255,255,255,.13);
     --text:#e2e8f0;--muted:#64748b;--mut2:#94a3b8;--green:#22c55e;--amber:#f59e0b;--orange:#f97316;--red:#ef4444;--acc:#2dd4bf;--accd:#14b8a6}
@@ -210,7 +210,7 @@
   }
 }
 </style>
-<link rel="stylesheet" href="movil.css?v=20260922-1741">
+<link rel="stylesheet" href="movil.css?v=20260922-1752">
 <!-- El calendario ya no necesita redirigir: lo hace selector_categoria.js
      para todos los datos de equipo, en un solo lugar. -->
 
@@ -617,11 +617,16 @@ var FIXTURE_PRIMERA=[
       var ka=(a.fecha||'')+(a.hora||''), kb=(b.fecha||'')+(b.hora||'');
       return ka<kb?-1:(ka>kb?1:0);
     });
+    var _nPas = arr.filter(calEsPasado).length;
+    if(!CAL_VER_PASADOS) arr = arr.filter(function(e){ return !calEsPasado(e); });
+    var _tg = calBotonPasados(_nPas);
     if(arr.length===0){
-      list.innerHTML='<div class="empty">'+(tab==='partidos'?'No hay partidos cargados':'No hay entrenamientos cargados')+'</div>';
+      list.innerHTML=_tg+'<div class="empty">'+(_nPas && !CAL_VER_PASADOS
+        ? (tab==='partidos'?'No hay próximos partidos':'No hay próximos entrenamientos')
+        : (tab==='partidos'?'No hay partidos cargados':'No hay entrenamientos cargados'))+'</div>';
       retranslate(); return;
     }
-    var h='';
+    var h=_tg;
     arr.forEach(function(e){
       if(tab==='partidos'){
         var rival=e.rival||'—';
@@ -688,6 +693,36 @@ var FIXTURE_PRIMERA=[
 
   function pad2(n){ return (n<10?'0':'')+n; }
   function ymd(dt){ return dt.getFullYear()+'-'+pad2(dt.getMonth()+1)+'-'+pad2(dt.getDate()); }
+
+  /* ══ LO QUE YA PASO SE VA SOLO ════════════════════════════════════════════
+     La lista acumulaba todo: a mitad de temporada habia que bajar por
+     semanas de partidos jugados para llegar al proximo.
+
+     Ahora lo que ya paso no se muestra. NO se borra: sigue guardado en la
+     nube —lo usan el proximo rival y el historial— y un boton lo vuelve a
+     mostrar. Un evento de varios dias, como una concentracion, se va recien
+     cuando termina el ultimo dia. */
+  var CAL_VER_PASADOS = false;
+  try{ CAL_VER_PASADOS = localStorage.getItem('cal_pasados') === '1'; }catch(e){}
+  function calEsPasado(e){
+    if(!e) return false;
+    var fin = (e.fechaFin && e.fechaFin > (e.fecha||'')) ? e.fechaFin : (e.fecha||'');
+    return !!fin && fin < ymd(new Date());
+  }
+  function calTogglePasados(){
+    CAL_VER_PASADOS = !CAL_VER_PASADOS;
+    try{ localStorage.setItem('cal_pasados', CAL_VER_PASADOS ? '1' : '0'); }catch(e){}
+    render();
+  }
+  function calBotonPasados(n){
+    if(!n && !CAL_VER_PASADOS) return '';
+    return '<div style="display:flex;justify-content:flex-end;margin:0 0 10px">'
+         + '<button onclick="calTogglePasados()" style="padding:5px 12px;border-radius:8px;'
+         + 'border:1px solid rgba(148,163,184,.3);background:transparent;color:var(--muted,#94a3b8);'
+         + 'font:inherit;font-size:12px;cursor:pointer">'
+         + (CAL_VER_PASADOS ? 'Ocultar pasados' : 'Ver pasados (' + n + ')')
+         + '</button></div>';
+  }
   function addDays(dt,n){ var d=new Date(dt); d.setHours(0,0,0,0); d.setDate(d.getDate()+n); return d; }
   function startOfWeek(dt){ var d=new Date(dt); d.setHours(0,0,0,0); var wd=(d.getDay()+6)%7; d.setDate(d.getDate()-wd); return d; }
 
@@ -701,6 +736,11 @@ var FIXTURE_PRIMERA=[
       } else { (map[e.fecha]=map[e.fecha]||[]).push({type:'e',e:e}); }
     });
     Object.keys(map).forEach(function(k){ map[k].sort(function(a,b){ return (a.e.hora||'')<(b.e.hora||'')?-1:1; }); });
+    /* en la grilla tambien: los dias que ya pasaron quedan sin eventos */
+    if(!CAL_VER_PASADOS){
+      var _hoy = ymd(new Date());
+      Object.keys(map).forEach(function(k){ if(k < _hoy) delete map[k]; });
+    }
     return map;
   }
   function planCells(){
@@ -973,7 +1013,7 @@ window.temporadaAlCalendario = function(){
 };
 
 </script>
-<script src="lang.js?v=20260922-1741" onerror="void 0"></script>
+<script src="lang.js?v=20260922-1752" onerror="void 0"></script>
 <script>
 /* ══ DEL CALENDARIO AL RESTO DE LA APP ═══════════════════════════════════
    El calendario ya tiene el fixture cargado. Estas dos funciones lo usan:
@@ -1110,7 +1150,7 @@ window.temporadaAlCalendario = function(){
   else setTimeout(poner, 300);
 })();
 </script>
-<script src="ayuda.js?v=20260922-1741"></script>
+<script src="ayuda.js?v=20260922-1752"></script>
 </body></html>
 
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
