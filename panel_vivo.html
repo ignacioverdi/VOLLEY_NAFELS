@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260921-0826"></script>
-<script src="selector_categoria.js?v=20260921-0826"></script>
-<script src="lang.js?v=20260921-0826"></script>
+<script src="categorias_club.js?v=20260922-1741"></script>
+<script src="selector_categoria.js?v=20260922-1741"></script>
+<script src="lang.js?v=20260922-1741"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260921-0826">
+<link rel="stylesheet" href="movil.css?v=20260922-1741">
 </head>
 <body>
 
@@ -1237,16 +1237,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260921-0826" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260921-0826"></script>
-<script src="objetivos.js?v=20260921-0826" onerror="void 0"></script>
-<script src="video_delay.js?v=20260921-0826" onerror="void 0"></script>
+<script src="firebase.js?v=20260922-1741" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260922-1741"></script>
+<script src="objetivos.js?v=20260922-1741" onerror="void 0"></script>
+<script src="video_delay.js?v=20260922-1741" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260921-0826" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260921-0826"></script>
+<script src="plantel_nafels.js?v=20260922-1741" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260922-1741"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -5030,14 +5030,14 @@ function renderStats(){
 
     Object.keys(SKILLS).forEach(sk=>{
       /* ══ FILTRO POR TIPO, COMO EN EL DASHBOARD ═══════════════════════════
-       La cuarta letra del codigo es el TIPO: en saque Q es flotado y M
-       potencia; en ataque H alta, Q rapida, T tensa; en recepcion el tipo del
+       La cuarta letra del codigo es el TIPO: en saque M y H son flotado y Q
+       potencia (manual, pag. 52); en ataque H alta, Q rapida, T tensa; en recepcion el tipo del
        saque que se recibio. Sin filtro, un saque flotado y uno potencia caian
        en la misma fila y no habia forma de comparar.
 
        ST_TIPO guarda que boton esta elegido. Vacio = todos, como hasta hoy. */
       let acts = rows.filter(c=>c.c[3]===sk);
-      if(window.ST_TIPO && ST_TIPO[sk]) acts = acts.filter(c=>c.c[4]===ST_TIPO[sk]);
+      if(window.ST_TIPO && ST_TIPO[sk]) acts = acts.filter(c=>ST_TIPO[sk].indexOf(c.c[4])>=0);
       /* los botones se muestran aunque el filtro deje la tabla vacia: si no,
          al elegir un tipo sin acciones desaparecian y no se podia volver. */
       var _bt = (typeof stBotones==='function') ? stBotones(sk) : '';
@@ -5045,10 +5045,14 @@ function renderStats(){
       if(!acts.length) return;
       out.push(fila(SKILLS[sk], acts, 'fund', sk));
       /* desglose por jugador: quién está rindiendo y quién no */
-      const nums=[...new Set(acts.map(c=>parseInt(c.c.slice(1,3),10)))].filter(n=>n>=1);
-      nums.map(n=>({n, acts:acts.filter(c=>parseInt(c.c.slice(1,3),10)===n)}))
-          .sort((a,b)=>b.acts.length-a.acts.length)
-          .forEach(p=>out.push(fila('<span class="dor">'+p.n+'</span> '+nombreJug(side,p.n), p.acts, 'jug', sk)));
+      const porJugador = function(lista){
+        const nums=[...new Set(lista.map(c=>parseInt(c.c.slice(1,3),10)))].filter(n=>n>=1);
+        nums.map(n=>({n, acts:lista.filter(c=>parseInt(c.c.slice(1,3),10)===n)}))
+            .sort((a,b)=>b.acts.length-a.acts.length)
+            .forEach(p=>out.push(fila('<span class="dor">'+p.n+'</span> '+nombreJug(side,p.n), p.acts, 'jug', sk)));
+      };
+
+      porJugador(acts);
     });
     body.innerHTML = out.length? out.join('') : '<tr><td colspan="10" style="color:var(--dim);text-align:center;padding:18px">Sin acciones todavía</td></tr>';
   });
@@ -8757,8 +8761,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260921-0826" onerror="void 0"></script>
-<script src="ayuda.js?v=20260921-0826"></script>
+<script src="volver_inicio.js?v=20260922-1741" onerror="void 0"></script>
+<script src="ayuda.js?v=20260922-1741"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -8903,9 +8907,19 @@ function rvPintar(){
    Uno por fundamento, con los tipos que de verdad existen en el .dvw. */
 window.ST_TIPO = {};
 
+/* ══ LAS LETRAS DEL SAQUE, SEGUN EL MANUAL ════════════════════════════════════
+   Manual de Data Volley 4, pagina 52:
+      H  High    Floating serve      flotado de parado
+      M  Medium  Jump float serve    flotado en salto
+      Q  Quick   Jump serve          potencia
+   Aca estaba al reves —Q flotado, M potencia— y el filtro mostraba un tipo
+   con el nombre del otro. Los datos del club lo confirman: los centrales
+   (#05, #07) sacan casi todo M, y el opuesto y la maquina (#09, #08) sacan Q.
+   H y M se agrupan como flotado: los dos son saques sin efecto. */
 var ST_TIPOS = {
-  S: [['Q','Flotado'], ['M','Potencia'], ['T','Salto flotado']],
-  R: [['Q','Del flotado'], ['M','Del potencia']],
+  /* igual que el dashboard (update_db_nafels.py): M y H flotado, Q y T potencia */
+  S: [['MH','FLOTADO'], ['QT','POTENCIA']],
+  R: [['MH','FLOTADO'], ['QT','POTENCIA']],
   A: [['H','Alta'], ['Q','Rápida'], ['T','Tensa'], ['M','Media']],
   B: [], E: [], D: [], F: []
 };
@@ -8916,7 +8930,7 @@ function stBotones(sk){
   var act = window.ST_TIPO[sk] || '';
   var h = '<div style="display:flex;gap:4px;flex-wrap:wrap;padding:3px 0 5px">'
         + '<button onclick="stSetTipo(\''+sk+'\',\'\')" style="'
-        + stEstilo(!act) + '">Todos</button>';
+        + stEstilo(!act) + '">' + ((sk==='S'||sk==='R') ? 'TOTAL' : 'Todos') + '</button>';
   tipos.forEach(function(t){
     h += '<button onclick="stSetTipo(\''+sk+'\',\''+t[0]+'\')" style="'
        + stEstilo(act===t[0]) + '">' + t[1] + '</button>';
