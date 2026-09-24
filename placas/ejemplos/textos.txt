@@ -1,0 +1,101 @@
+TEXTOS DE LA FECHA 3 · 26-27
+
+Uno por publicación, en orden. Copiá y pegá.
+
+----------------------------------------------------------
+1 · El mejor saque de la fecha
+----------------------------------------------------------
+
+El mejor saque de la fecha · Roy Schmid
+
+Sus zonas de saque cuando complica al receptor, y qué rinde con cada tipo de servicio.
+
+El mapa deja solo los saques con los que complica al receptor. Esa es su zona: es adónde va a sacar el sábado.
+
+Volley-Stats · 3 partidos scouteados con nuestro sistema · 3 equipos · mínimo 6 saques, 8 jugadores lo superaron
+
+#volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats
+
+----------------------------------------------------------
+2 · El receptor más sólido
+----------------------------------------------------------
+
+El receptor más sólido · Valentin Durdos
+
+Sus zonas de recepción cuando la deja armable, y qué rinde contra potencia y contra flotado.
+
+El mapa deja solo la recepción perfecta y la positiva, que son las que dejan armar. Las zonas que quedan vacías son por donde hay que sacarle.
+
+Volley-Stats · 3 partidos scouteados con nuestro sistema · 3 equipos · mínimo 8 recepciones, 6 jugadores lo superaron
+
+#volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats
+
+----------------------------------------------------------
+3 · La distribución del armador en K1
+----------------------------------------------------------
+
+La distribución del armador en K1 · Gabriel Chancy
+
+Gabriel Chancy · Colombier. Cómo reparte el balón en cada rotación cuando la recepción es perfecta o positiva, es decir cuando tiene todas las opciones abiertas.
+
+Solo K1 con recepción # o +: esto es lo que elige cuando puede elegir. El K1 de emergencia y el K2 de transición responden a otra lógica, y promediarlos borra el patrón. La rotación se nombra por la posición del armador.
+
+Volley-Stats · 3 partidos scouteados con nuestro sistema · 3 equipos
+
+#volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats
+
+----------------------------------------------------------
+4 · El atacante más eficaz
+----------------------------------------------------------
+
+El atacante más eficaz · Karim Zerika
+
+Dónde ataca cuando hace daño, y la diferencia entre lo que rinde en side-out y en transición.
+
+Eficacia = (punto − error − bloqueado) / total, la fórmula estándar internacional. El mapa deja solo el ataque que gana el rally o deja al rival sin contraataque.
+
+Volley-Stats · 3 partidos scouteados con nuestro sistema · 3 equipos · mínimo 8 ataques, 15 jugadores lo superaron
+
+#volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats
+
+----------------------------------------------------------
+5 · El bloqueo de la fecha
+----------------------------------------------------------
+
+El bloqueo de la fecha · James Norris
+
+Los 8 mejores por bloqueo útil: punto directo (#) más bloqueo de control (+), el que deja el balón jugable para su equipo.
+
+El bloqueo-punto es solo una parte. El bloqueo que frena el balón y lo deja defendible gana el rally igual, y por eso la tabla ordena por # más +, no por punto directo.
+
+Volley-Stats · 3 partidos scouteados con nuestro sistema · 3 equipos
+
+#volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats
+
+----------------------------------------------------------
+6 · El siete ideal de la fecha
+----------------------------------------------------------
+
+El siete ideal de la fecha
+
+Puntas por ataque y recepción; centrales por bloqueo y ataque; opuesto por ataque; líbero por recepción. Ningún puesto se elige por un solo número.
+
+El punta pondera 60% ataque y 40% recepción; el central, mitad y mitad bloqueo y ataque. Cada componente se mide contra la media de la liga. El armador es el único sin estadística propia: va el del equipo con mejor ataque.
+
+Volley-Stats · 3 partidos scouteados con nuestro sistema · 3 equipos
+
+#volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats
+
+----------------------------------------------------------
+7 · El side-out, rotación por rotación
+----------------------------------------------------------
+
+El side-out, rotación por rotación
+
+Cuánto sostiene cada equipo su recepción en cada una de sus seis rotaciones. Es el número sobre el que se arma todo plan de partido.
+
+A Jona hay que sacarle en P1: ahí sostiene el 42% de su side-out, contra el 86% de su P4. Son 44 puntos de diferencia.
+
+Volley-Stats · 3 partidos scouteados con nuestro sistema · 3 equipos
+
+#volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats

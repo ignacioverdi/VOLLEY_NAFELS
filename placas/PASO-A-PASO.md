@@ -38,6 +38,8 @@ Te tiene que quedar así:
             rotacion.py
             club.py
             placas2.py
+            clips.py
+            publicar.py
             verificar.py
             PASO-A-PASO.md
             LEEME.md
@@ -58,12 +60,14 @@ Cuando diga **"Listo"**, ya está. No se repite nunca más.
 
 Doble clic en **`HACER_PLACAS.bat`**. Se abre este menú:
 
-    1. Una fecha           (el lunes, con los 4 partidos)
-    2. Acumulado hasta...  (durante la semana)
+    1. HACER TODO de una fecha
+       (placas + revision + videos + textos)
+    2. Acumulado hasta...   (durante la semana)
     3. Toda la temporada
     4. Ver que fechas detecta
-    5. Revisar una fecha antes de publicar
-    6. Salir
+    5. Solo revisar una fecha
+    6. Solo las placas, sin video  (mas rapido)
+    7. Salir
 
 **Elegí la 4 primero.** Te muestra cómo agrupó los partidos:
 
@@ -87,7 +91,22 @@ lee los 97 partidos. Al terminar se abre sola la carpeta con las siete imágenes
 1. Poné los `.dvw` en `DVW NAFELS 2027`, como hacés siempre.
 2. Doble clic en `HACER_PLACAS.bat`.
 3. Opción **1**, número de fecha, Enter.
-4. Se abre la carpeta con las seis placas.
+4. Se abre la carpeta con todo hecho.
+
+La opción 1 hace los cuatro pasos sola: las siete placas, la revisión, los
+videos de cada placa y los textos de cada publicación. Te deja esto:
+
+    salida\26-27\fecha-03\
+        1-saque.png        1-saque.mp4
+        2-recepcion.png    2-recepcion.mp4
+        3-armado.png       3-armado.mp4
+        ...
+        textos.txt         los textos, uno por publicacion
+        cortes.txt         set y minuto de cada accion
+        REVISION.txt       el chequeo completo
+
+Se publica **de arriba hacia abajo**: la placa 1, su video, la placa 2, su
+video. Sin decidir nada.
 
 **Antes de publicar**, opción **5**. Chequea tres cosas que no se ven mirando
 el PNG:
@@ -169,6 +188,40 @@ sale igual, sin escudo. Para agregar uno, poné el `.png` con el nombre del
 club en minúscula y sin acentos.
 
 ---
+
+## Los videos
+
+El sistema corta solo las mejores acciones del jugador que eligió cada placa.
+Si la placa del saque dice "Roy Schmid", el `1-saque.mp4` trae sus aces, uno
+atrás del otro.
+
+**De dónde salen los segundos.** Del mismo lugar que los usa tu app: el campo
+13 de cada línea del `[3SCOUT]` trae el segundo de video de esa acción, que
+DataVolley escribe **cuando scouteás con el video cargado**. Es exactamente lo
+que lee `build_video.py`, así que el corte cae en el mismo lugar que cuando un
+jugador abre esa acción en *Cortes de Video*. El margen también es el mismo:
+4 segundos antes del contacto y 5 después.
+
+**Qué hace falta.**
+
+1. Que el partido esté scouteado **con el video cargado** en DataVolley. Sin
+   eso no hay segundos, ni acá ni en la app.
+2. **ffmpeg** instalado (ffmpeg.org, y que quede en el PATH).
+3. El archivo de video de cada partido, con el **mismo nombre que el `.dvw`**:
+
+        DVW NAFELS 2027\&2026-09-19 #03 AXPO NAFELS vs JONA.dvw
+        DVW NAFELS 2027\&2026-09-19 #03 AXPO NAFELS vs JONA.mp4
+
+   También sirve una carpeta `VIDEOS` en el repo, o un `videos.json` adentro
+   de `placas` con la ruta de cada uno:
+
+        {"&2026-09-19 #03 AXPO NAFELS vs JONA.dvw": "D:/partidos/jona.mp4"}
+
+**Si falta algo**, igual te deja `cortes.txt` con el set y el minuto exacto de
+cada acción, para que abras el video y cortes a mano sin buscar nada.
+
+El menú te pregunta si querés los videos **también en vertical** (1080x1920,
+para historias y reels).
 
 ## Las siete placas
 

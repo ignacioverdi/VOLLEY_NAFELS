@@ -160,6 +160,10 @@ def ficha(fund, zona, hero, titulo, bajada, pie, EQ, NOM, minimo, fecha, fuente,
         v['etiqueta'] = '%d%%' % v['media']
     return {'tipo': 'ficha', 'slug': fund, 'fundamento': fund, 'liga': LIGA,
             'fecha': fecha, 'titulo': titulo, 'bajada': bajada,
+            # a quien eligio la placa: clips.py corta las acciones de este
+            # jugador, asi el video y la placa hablan siempre del mismo
+            'jugador': (eq, dor), 'quien': lindo(nom),
+            'nombre_archivo': fund,
             'fichas': [{'dorsal': int(dor), 'nombre': nom, 'equipo': eq,
                         'puesto': pos or 'NLA', 'total': '%d %s' % (total, PLURAL[fund]),
                         'zonas': zonas, 'podio': podio,
@@ -237,8 +241,10 @@ def construir(repo, carpeta, temporada, fecha, archivos=None):
     arm = None
     cands = [(J['armado']['T'], dor) for dor, J in EQ.get(mejor_eq, {}).get('jug', {}).items()
              if NOM.get((mejor_eq, dor), ('', '', None))[1] == 'ARMADOR']
+    arm_dor = None
     if cands:
-        arm = NOM[(mejor_eq, max(cands)[1])]
+        arm_dor = max(cands)[1]
+        arm = NOM[(mejor_eq, arm_dor)]
     P.append({'tipo': 'seis', 'slug': 'armado', 'fundamento': 'armado', 'liga': LIGA,
               'fecha': fecha, 'titulo': 'La distribución del armador en K1',
               'bajada': '%s · %s. Cómo reparte el balón en cada rotación cuando '
@@ -246,6 +252,9 @@ def construir(repo, carpeta, temporada, fecha, archivos=None):
                         'tiene todas las opciones abiertas.'
                         % (lindo(arm[0]) if arm else mejor_eq, mejor_eq),
               'rotaciones': rot, 'leyenda': armador.leyenda(rot), 'fuente': fuente,
+              'jugador': (mejor_eq, arm_dor) if arm_dor else None,
+              'quien': lindo(arm[0]) if arm else mejor_eq,
+              'nombre_archivo': 'armado',
               'filtro': {'izq': 'En las canchas',
                          'que': 'solo K1 con recepción # +',
                          'der': '%d de %d ataques' % (n_arm, n_todo)},
@@ -279,7 +288,7 @@ def construir(repo, carpeta, temporada, fecha, archivos=None):
             if (eq, dor) not in NOM or B['T'] < piso(EQ, NOM, 'bloqueo'):
                 continue
             nom, pos, _ = NOM[(eq, dor)]
-            filas.append({'nombre': lindo(nom), 'equipo': eq,
+            filas.append({'nombre': lindo(nom), 'equipo': eq, '_dor': dor,
                           # ordena por #+, no solo por punto: el bloqueo que
                           # deja la pelota jugable tambien gana el rally
                           'pct': '%d%%' % round(100.0 * (B['#'] + B['+']) / B['T']),
@@ -298,6 +307,9 @@ def construir(repo, carpeta, temporada, fecha, archivos=None):
                            {'t': '+ CONTROL', 'k': 'pos'},
                            {'t': '= ERROR', 'k': 'err', 'color': '#EF4444', 'fuerte': True}],
               'filas': filas[:8], 'fuente': fuente,
+              'jugador': (filas[0]['equipo'], filas[0]['_dor']) if filas else None,
+              'quien': filas[0]['nombre'] if filas else '',
+              'nombre_archivo': 'bloqueo',
               'pie': 'El bloqueo-punto es solo una parte. El bloqueo que frena el '
                      'balón y lo deja defendible gana el rally igual, y por eso la '
                      'tabla ordena por # más +, no por punto directo.'})
