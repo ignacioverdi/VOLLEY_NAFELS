@@ -354,7 +354,7 @@
   "tablas": {}
  },
  "calendario.html": {
-  "bytes": 67361,
+  "bytes": 69346,
   "funciones": [
    "_icsArchivo",
    "_icsBajar",
@@ -366,7 +366,10 @@
    "applyCalLang",
    "buildCustomEscudos",
    "buildEventsMap",
+   "calBotonPasados",
+   "calEsPasado",
    "calT",
+   "calTogglePasados",
    "closeForm",
    "cond",
    "crestHTML",
@@ -1069,7 +1072,7 @@
   "tablas": {}
  },
  "importar_video.html": {
-  "bytes": 26637,
+  "bytes": 27410,
   "funciones": [
    "avisarSinPublicar",
    "build",
@@ -1207,9 +1210,10 @@
   "tablas": {}
  },
  "modelo_completo.html": {
-  "bytes": 805928,
+  "bytes": 876413,
   "funciones": [
    "OKC",
+   "aplicarPerfil",
    "bajar",
    "bloqueVolumen",
    "claveDe",
@@ -1220,7 +1224,9 @@
    "dbGuardar",
    "enlazarConfig",
    "estadoDe",
+   "guardarPerfil",
    "iniciarDB",
+   "leerPerfil",
    "objEtapa",
    "pintarEstaticos",
    "pintarRuta",
@@ -1234,6 +1240,7 @@
    "vEtapa",
    "vFoda",
    "vHerr",
+   "vInicio",
    "vJuego",
    "vMatriz",
    "vPlan",
@@ -1308,7 +1315,7 @@
   "tablas": {}
  },
  "panel_vivo.html": {
-  "bytes": 835772,
+  "bytes": 836565,
   "funciones": [
    "_aCp1252",
    "_alarmaGuardado",
@@ -1720,11 +1727,13 @@
   }
  },
  "panel_voley.html": {
-  "bytes": 443335,
+  "bytes": 445312,
   "funciones": [
    "_batCodes",
    "_batNombre",
    "_batNombreEquipo",
+   "_pvArrTipo",
+   "_pvBotonesTipo",
    "abierto",
    "abrirBaterias",
    "abrirPlan",
@@ -1788,6 +1797,7 @@
    "pintar",
    "pintarBatBotonesEquipo",
    "pintarBatEqV",
+   "pvSetTipoSR",
    "refrescarVista",
    "render",
    "renderBatV",

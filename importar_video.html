@@ -45,14 +45,14 @@
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="categorias_club.js?v=20260924-1336"></script>
-<script src="selector_categoria.js?v=20260924-1336"></script>
-<script src="firebase.js?v=20260924-1336" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260924-1336"></script>
+<script src="categorias_club.js?v=20260924-0906"></script>
+<script src="selector_categoria.js?v=20260924-0906"></script>
+<script src="firebase.js?v=20260924-0906" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260924-0906"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260924-1336">
+<link rel="stylesheet" href="movil.css?v=20260924-0906">
 </head>
 <body>
   <h1 data-t="🎬 Cargar videos de los partidos"><span data-t="🎬 Cargar videos de los partidos">🎬 Cargar videos de los partidos</span></h1>
@@ -131,7 +131,7 @@
    Con los datos abriendose en segundo plano, se dibujaba vacia. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260924-1336"></script>
+<script src="datos_seguros.js?v=20260924-0906"></script>
   <!-- datos_video_25-26.js.enc: se carga SOLO si se pide esa temporada. Ver _cargarTemporada() -->
   <!-- Los datos del club se publican CIFRADOS: el archivo real se llama
        datos_video_ent_25-26.js.enc. Estas lineas pedian el .js pelado, que
@@ -272,6 +272,20 @@ window.__DESCIFRAR_SINCRONO = true;
       try{ Object.keys(VD).forEach(function(c){ enLista[c] = 1; }); }catch(e){}
 
       var pend = Object.keys(d).filter(function(k){
+        /* ══ SOLO LAS RESERVAS, NO LOS LINKS YA CARGADOS ═══════════════════
+           Este borrador guarda DOS cosas en el mismo lugar: las reservas que
+           se hacen aca —la clave es la fecha, 20260924 con M o T— y los links
+           de los partidos, cuya clave es el codigo del partido (636595).
+
+           Se listaba todo lo que no estuviera en la temporada actual, asi que
+           al pasar a 2026/27 los 27 partidos de la NLA 25-26 —archivados, con
+           sus links puestos y funcionando— aparecieron como «esperando el
+           .dvw». Y cada uno con su boton «quitar», que los habria borrado.
+
+           Una reserva es siempre una fecha de 8 numeros. */
+        var esReserva = /^(ENT)?\d{8}[MT]?$/.test(k);
+        if(!esReserva) return false;
+
         if(enLista[k]) return false;
         /* la clave corta se muestra solo si no esta la que tiene turno */
         if(!/[MT]$/.test(k) && d[k+'M'] === d[k]) return false;
@@ -389,9 +403,9 @@ window.__DESCIFRAR_SINCRONO = true;
     };
   })();
   </script>
-<script src="lang.js?v=20260924-1336" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260924-1336" onerror="void 0"></script>
-<script src="ayuda.js?v=20260924-1336"></script>
+<script src="lang.js?v=20260924-0906" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260924-0906" onerror="void 0"></script>
+<script src="ayuda.js?v=20260924-0906"></script>
 <script>
 /* La fecha arranca en hoy: es el caso normal, se reserva el mismo dia. */
 document.addEventListener('DOMContentLoaded', function(){

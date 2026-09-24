@@ -4184,6 +4184,25 @@
     var exact=trPhrase(text.trim(),lang);
     if(exact!==null) return text.replace(text.trim(), exact);
 
+    /* ══ EL EMOJI DE ADELANTE ═══════════════════════════════════════════════
+       Muchos titulos llevan un icono pegado: "👥 Equipo", "🏆 Partidos",
+       "🛡 Recepción". La frase del diccionario es "Equipo", y como aca se
+       exige la frase COMPLETA, el icono hacia que nunca coincidiera: el
+       dashboard en aleman mostraba las solapas en castellano aunque las
+       palabras estaban traducidas.
+
+       Se separa lo que no es texto —iconos y simbolos adelante; contadores,
+       flechas y signos atras— se traduce el nucleo SOLO si es una frase
+       entera del diccionario, y se vuelve a pegar. Sigue sin haber reemplazo
+       palabra por palabra: o coincide el nucleo completo, o no se toca. */
+    try{
+      var _m = text.trim().match(/^([^A-Za-z\u00C0-\u024F\u00BF\u00A1]*)(.*?)([\s\d()\[\]▾▸▶►▼·:,.+%#\/-]*)$/);
+      if(_m && _m[2] && (_m[1] || _m[3])){
+        var _core = trPhrase(_m[2].trim(), lang);
+        if(_core !== null) return text.replace(text.trim(), _m[1] + _core + _m[3]);
+      }
+    }catch(e){}
+
     /* ── PREFIJO CONOCIDO ──────────────────────────────────────────────────
        Algunos textos los arma el JavaScript pegando un valor al final:
        "Formación del set " + 3, "Importar fixture de " + "2026/27". La frase
@@ -4241,11 +4260,61 @@
       if(_pend) return;
       _pend=setTimeout(function(){ _pend=null;
         var lang=getLang(); if(lang==='es') return;
-        _obs.disconnect(); translateTextNodes(lang); _obs.observe(document.body,{childList:true,subtree:true});
+        _obs.disconnect();
+        /* ══ TAMBIEN LOS data-t QUE SE DIBUJAN DESPUES ═════════════════════
+           translateTextNodes SALTA los elementos con data-t, porque esos los
+           traduce applyLang con su clave. Pero applyLang corre una sola vez,
+           al elegir el idioma: todo lo que el JavaScript dibuja despues —las
+           solapas del dashboard, las tablas del panel, las ventanitas— trae
+           sus data-t en castellano y nadie volvia a pasar por ellos.
+           Se traducen aca tambien. Es por clave, asi que repetirlo no
+           cambia nada lo que ya estaba bien. */
+        try{ applyDataT(lang); }catch(e){}
+        translateTextNodes(lang);
+        _obs.observe(document.body,{childList:true,subtree:true});
       },200);
     });
     _obs.observe(document.body,{childList:true,subtree:true});
   }
+
+  /* ══ DOS DICCIONARIOS ═════════════════════════════════════════════════════
+     Hay dos: el de las claves data-t —tr()— y el de frases que usa el
+     traductor de textos —translateString()—. Muchos elementos llevan data-t
+     con una clave que SOLO esta en el de frases: "Todos", "Sesión",
+     "👥 Equipo". tr() devolvia null, y translateTextNodes los salta porque
+     tienen data-t. Quedaban en castellano aunque la traduccion existia.
+     Medido en el dashboard en aleman: 14 textos asi en la primera vista.
+
+     Si tr() no la tiene, se prueba con el de frases. Solo se aplica si
+     devuelve algo distinto de la clave: si ninguno la tiene, no se toca. */
+  function _trDataT(k, lang){
+    var v = tr(k, lang);
+    if (v !== null || lang === 'es' || !k) return v;
+    try{
+      var v2 = translateString(k, lang);
+      if (v2 && v2 !== k) return v2;
+    }catch(e){}
+    return null;
+  }
+
+  function applyDataT(lang){
+    var els = document.querySelectorAll('[data-t]');
+    for (var i=0; i<els.length; i++){
+      var k = els[i].getAttribute('data-t');
+      var v = _trDataT(k, lang);
+      if (v !== null) {
+        if (/<[a-z][\s\S]*>/i.test(v)) { if (els[i].innerHTML !== v) els[i].innerHTML = v; }
+        else if (els[i].textContent !== v) els[i].textContent = v;
+      }
+    }
+    var ph = document.querySelectorAll('[data-t-ph]');
+    for (var j=0; j<ph.length; j++){
+      var kp = ph[j].getAttribute('data-t-ph');
+      var vp = tr(kp, lang);
+      if (vp !== null && ph[j].getAttribute('placeholder') !== vp) ph[j].setAttribute('placeholder', vp);
+    }
+  }
+  window.applyDataT = applyDataT;
 
   function applyLang(lang){
     document.documentElement.setAttribute('lang', lang);
@@ -4253,7 +4322,7 @@
     var els = document.querySelectorAll('[data-t]');
     for (var i=0; i<els.length; i++){
       var k = els[i].getAttribute('data-t');
-      var v = tr(k, lang);
+      var v = _trDataT(k, lang);
       if (v !== null) {
         /* Si la traduccion trae etiquetas —negritas, colores— hay que
            escribirla como HTML. Con textContent se veria el codigo crudo:
