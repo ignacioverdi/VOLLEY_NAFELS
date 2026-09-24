@@ -64,7 +64,7 @@ Volley-Stats · 3 partidos scouteados con nuestro sistema · 3 equipos · mínim
 
 El bloqueo de la fecha · James Norris
 
-Los 8 mejores por bloqueo útil: punto directo (#) más bloqueo de control (+), el que deja el balón jugable para su equipo.
+Los 9 mejores por bloqueo útil: punto directo (#) más bloqueo de control (+), el que deja el balón jugable para su equipo.
 
 El bloqueo-punto es solo una parte. El bloqueo que frena el balón y lo deja defendible gana el rally igual, y por eso la tabla ordena por # más +, no por punto directo.
 

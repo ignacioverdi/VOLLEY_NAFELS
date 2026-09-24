@@ -34,6 +34,29 @@ def esc(s):
     return html.escape(str(s))
 
 
+def _fuentes():
+    """Las tipografías viajan con la carpeta, no se esperan del sistema.
+
+    Poppins está instalada en la máquina donde se diseñó esto, pero en un
+    Windows común no está: el navegador la reemplaza por otra y la placa sale
+    distinta de la que uno aprobó. Con las fuentes acá al lado, la placa se
+    ve igual en cualquier computadora.
+    """
+    carpeta = pathlib.Path(__file__).resolve().parent / 'fuentes'
+    caras = [('Placa', 'Poppins-Light.ttf', 300), ('Placa', 'Poppins-Regular.ttf', 400),
+             ('Placa', 'Poppins-Medium.ttf', 500), ('Placa', 'Poppins-Bold.ttf', 700),
+             ('PlacaMono', 'DejaVuSansMono.ttf', 400),
+             ('PlacaMono', 'DejaVuSansMono-Bold.ttf', 700)]
+    out = []
+    for familia, archivo, peso in caras:
+        f = carpeta / archivo
+        if f.exists():
+            out.append("@font-face{font-family:'%s';font-weight:%d;font-style:normal;"
+                       "src:url('%s') format('truetype')}"
+                       % (familia, peso, f.as_uri()))
+    return '\n'.join(out)
+
+
 def _rgb(h):
     h = h.lstrip('#')
     return '%d,%d,%d' % tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
@@ -64,6 +87,8 @@ def cancha(vals, color, mx=None, tam='', pct=False, red=True):
             bg = 'rgba(%s,%.2f)' % (_rgb(color), 0.16 + (n / mx) * 0.72)
             tint, sub = TEXT, 'rgba(255,255,255,.55)'
         extra = ('<u style="color:%s">%d%%</u>' % (sub, round(100 * n / tot))) if pct and n else ''
+        if n == mx and n >= CC_MIN:
+            cls += ' pico'
         out.append('<div class="%s" style="background:%s"><i>z%d</i>'
                    '<b style="color:%s">%d</b>%s</div>'
                    % (cls, bg, GRILLA[i], tint, n, extra))
@@ -318,38 +343,47 @@ VIZ = {'ficha': ficha, 'mapa': mapa, 'seis': seis, 'tabla': tabla,
 CSS = """
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{overflow:hidden}
-body{width:1080px;height:1350px;background:%(BG)s;color:%(TEXT)s;
-  font-family:'Poppins','DejaVu Sans',sans-serif;padding:60px 56px 46px;
+body{width:1080px;height:%(ALTO)dpx;background:%(BG)s;color:%(TEXT)s;
+  font-family:'Placa','Poppins',sans-serif;padding:%(PADY)dpx 56px 46px;
   display:flex;flex-direction:column}
-.eb{font-family:'DejaVu Sans Mono',monospace;font-size:18px;letter-spacing:.18em;
-  color:%(C)s;text-transform:uppercase;margin-bottom:20px}
-h1{font-size:56px;line-height:1.06;font-weight:700;letter-spacing:-.02em;margin-bottom:14px}
-.bj{color:%(MUTED)s;font-size:23px;line-height:1.4;margin-bottom:28px}
+.eb{font-family:'PlacaMono',monospace;font-size:17px;letter-spacing:.2em;
+  color:%(C)s;text-transform:uppercase;margin-bottom:16px;display:flex;
+  align-items:center;gap:14px}
+.eb::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,%(C)s,transparent);
+  opacity:.45}
+h1{font-size:58px;line-height:1.02;font-weight:700;letter-spacing:-.028em;
+  margin-bottom:13px}
+.bj{color:%(MUTED)s;font-size:22px;line-height:1.42;margin-bottom:26px;font-weight:300;
+  max-width:92%%}
 .zn{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
 .pi{font-size:20px;line-height:1.4;border-left:4px solid %(C)s;padding-left:19px;margin-top:20px}
 .ct{margin-top:22px;border-left:4px solid;background:%(CARD)s;border-radius:0 10px 10px 0;
   padding:15px 20px;display:flex;align-items:center;justify-content:space-between;gap:18px}
 .ctx b{display:block;font-size:22px;font-weight:600;line-height:1.25}
 .ctx span{display:block;color:%(MUTED)s;font-size:18px;line-height:1.3;margin-top:3px}
-.ctl{font-family:'DejaVu Sans Mono',monospace;font-size:16px;font-weight:700;
+.ctl{font-family:'PlacaMono',monospace;font-size:16px;font-weight:700;
   letter-spacing:.1em;white-space:nowrap}
 .ci{margin-top:auto;padding-top:18px;border-top:1px solid %(BD2)s;display:flex;
   justify-content:space-between;align-items:flex-end;
-  font-family:'DejaVu Sans Mono',monospace;font-size:15px;letter-spacing:.1em;color:%(MUTED)s}
+  font-family:'PlacaMono',monospace;font-size:15px;letter-spacing:.1em;color:%(MUTED)s}
 .ci b{color:%(TEXT)s;font-weight:700;letter-spacing:.2em;font-size:20px}
-.ci .dr{text-align:right;line-height:1.55;max-width:400px;font-size:13px}
+.ci .dr{text-align:right;line-height:1.6;max-width:520px;font-size:12.5px;
+  letter-spacing:.06em}
 
 /* la red y la linea de 3 metros: lo que hace que parezca una cancha */
 .red{border-bottom:3px solid;text-align:center;padding-bottom:5px;margin-bottom:8px}
-.red span{font-family:'DejaVu Sans Mono',monospace;font-size:11px;letter-spacing:.32em;
+.red span{font-family:'PlacaMono',monospace;font-size:11px;letter-spacing:.32em;
   color:%(MUTED)s}
 .cl.l3{border-top:2px dashed rgba(255,255,255,.22)}
 .cl.vacia{background:rgba(255,255,255,.015);border-style:dashed;
   border-color:rgba(255,255,255,.05)}
+.cl.pico{border-color:rgba(%(CRGB)s,.85);box-shadow:0 0 0 1px rgba(%(CRGB)s,.5),
+  0 6px 22px -6px rgba(%(CRGB)s,.55)}
+.cl b{font-variant-numeric:tabular-nums}
 
 /* leyenda de la escala de color */
 .esc{margin-left:auto;display:flex;align-items:center;gap:4px;
-  font-family:'DejaVu Sans Mono',monospace;font-size:11px;color:%(SUBTLE)s;
+  font-family:'PlacaMono',monospace;font-size:11px;color:%(SUBTLE)s;
   letter-spacing:.06em;text-transform:none}
 .esc i{width:19px;height:9px;border-radius:2px;display:block}
 
@@ -357,10 +391,10 @@ h1{font-size:56px;line-height:1.06;font-weight:700;letter-spacing:-.02em;margin-
 .gr{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
 .cl{aspect-ratio:1.42;border-radius:8px;border:1px solid %(BD)s;position:relative;
   display:flex;flex-direction:column;align-items:center;justify-content:center}
-.cl i{position:absolute;top:7px;left:9px;font-family:'DejaVu Sans Mono',monospace;
+.cl i{position:absolute;top:7px;left:9px;font-family:'PlacaMono',monospace;
   font-size:13px;font-style:normal;color:%(SUBTLE)s;letter-spacing:.08em}
-.cl b{font-family:'DejaVu Sans Mono',monospace;font-size:48px;font-weight:700;line-height:1}
-.cl u{font-family:'DejaVu Sans Mono',monospace;font-size:13px;text-decoration:none;margin-top:3px}
+.cl b{font-family:'PlacaMono',monospace;font-size:48px;font-weight:700;line-height:1}
+.cl u{font-family:'PlacaMono',monospace;font-size:13px;text-decoration:none;margin-top:3px}
 .gr.chico{gap:4px}
 .gr.chico .cl{aspect-ratio:1.5;border-radius:5px}
 .gr.chico .cl i{font-size:11px;top:5px;left:7px}
@@ -375,48 +409,48 @@ h1{font-size:56px;line-height:1.06;font-weight:700;letter-spacing:-.02em;margin-
 .fi{background:%(CARD)s;border:1px solid %(BD)s;border-radius:16px;padding:20px}
 .fh{display:flex;align-items:center;gap:14px;margin-bottom:16px}
 .dor{width:46px;height:46px;border-radius:9px;display:flex;align-items:center;
-  justify-content:center;font-family:'DejaVu Sans Mono',monospace;font-size:24px;
+  justify-content:center;font-family:'PlacaMono',monospace;font-size:24px;
   font-weight:700;color:#0A0500}
 .fn{flex:1}
 .fn b{display:block;font-size:32px;font-weight:700;line-height:1.1;letter-spacing:-.01em}
-.fn span{font-family:'DejaVu Sans Mono',monospace;font-size:14px;color:%(MUTED)s;
+.fn span{font-family:'PlacaMono',monospace;font-size:14px;color:%(MUTED)s;
   letter-spacing:.09em;text-transform:uppercase}
-.es{width:38px;height:38px;object-fit:contain;flex:none;border-radius:6px}
+.es{height:36px;width:auto;max-width:86px;object-fit:contain;flex:none}
 .fp{text-align:right}
-.fp em{display:inline-block;font-style:normal;font-family:'DejaVu Sans Mono',monospace;
+.fp em{display:inline-block;font-style:normal;font-family:'PlacaMono',monospace;
   font-size:12px;letter-spacing:.12em;border:1px solid;border-radius:99px;padding:3px 11px}
-.fp span{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:14px;
+.fp span{display:block;font-family:'PlacaMono',monospace;font-size:14px;
   color:%(MUTED)s;margin-top:6px}
 
 /* la linea que dice que esta mostrando el dibujo */
 .mapt{display:flex;align-items:baseline;gap:11px;margin-bottom:10px;
-  font-family:'DejaVu Sans Mono',monospace;font-size:14px;letter-spacing:.11em;
+  font-family:'PlacaMono',monospace;font-size:14px;letter-spacing:.11em;
   text-transform:uppercase;line-height:1.3}
 .mapt span{color:%(SUBTLE)s;white-space:nowrap}
 .mapt b{font-weight:700}
 .mapt u{margin-left:auto;text-decoration:none;color:%(MUTED)s;white-space:nowrap}
-.ftt{font-family:'DejaVu Sans Mono',monospace;font-size:14px;letter-spacing:.11em;
+.ftt{font-family:'PlacaMono',monospace;font-size:14px;letter-spacing:.11em;
   text-transform:uppercase;color:%(SUBTLE)s;margin-bottom:6px}
 
 .heros{display:flex;gap:9px;margin:11px 0 9px}
 .hm{flex:1;background:%(CARD2)s;border:1px solid %(BD)s;border-radius:9px;
   padding:11px 14px;text-align:center}
-.hm span{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:12px;
+.hm span{display:block;font-family:'PlacaMono',monospace;font-size:12px;
   letter-spacing:.15em;text-transform:uppercase;color:%(MUTED)s;margin-bottom:3px}
-.hm b{font-family:'DejaVu Sans Mono',monospace;font-size:30px;font-weight:700;line-height:1}
+.hm b{font-family:'PlacaMono',monospace;font-size:30px;font-weight:700;line-height:1}
 .hm b small{font-size:15px;font-weight:700;margin-left:7px;letter-spacing:.04em}
-.hm u{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:12px;
+.hm u{display:block;font-family:'PlacaMono',monospace;font-size:12px;
   text-decoration:none;color:%(SUBTLE)s;margin-top:6px;letter-spacing:.06em}
 /* la vara: donde cae el contra la media de la liga */
 .vara{position:relative;height:5px;border-radius:3px;background:rgba(255,255,255,.07);
   margin:8px 0 4px}
 .vb2{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
 .mk{position:absolute;top:-3px;width:2px;height:11px;background:%(TEXT)s;opacity:.85}
-.vtx{font-family:'DejaVu Sans Mono',monospace;font-size:11px;color:%(SUBTLE)s;
+.vtx{font-family:'PlacaMono',monospace;font-size:11px;color:%(SUBTLE)s;
   letter-spacing:.06em}
 /* el 2do y el 3ro, para que la placa sirva de ranking */
 .podio{margin-top:11px;display:flex;gap:26px;flex-wrap:wrap;
-  font-family:'DejaVu Sans Mono',monospace;font-size:14px;color:%(MUTED)s;
+  font-family:'PlacaMono',monospace;font-size:14px;color:%(MUTED)s;
   letter-spacing:.05em}
 .podio b{color:%(TEXT)s;font-weight:700}
 
@@ -424,12 +458,12 @@ h1{font-size:56px;line-height:1.06;font-weight:700;letter-spacing:-.02em;margin-
 .vals{display:flex;gap:9px}
 .vb{flex:1;background:%(CARD2)s;border:1px solid %(BD)s;border-radius:9px;
   padding:11px 6px;text-align:center}
-.vs{font-family:'DejaVu Sans Mono',monospace;font-size:26px;font-weight:700;line-height:1}
-.ve{font-family:'DejaVu Sans Mono',monospace;font-size:12px;letter-spacing:.14em;
+.vs{font-family:'PlacaMono',monospace;font-size:26px;font-weight:700;line-height:1}
+.ve{font-family:'PlacaMono',monospace;font-size:12px;letter-spacing:.14em;
   color:%(MUTED)s;margin:5px 0 8px}
-.vb b{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:33px;
+.vb b{display:block;font-family:'PlacaMono',monospace;font-size:33px;
   font-weight:700;line-height:1}
-.vb i{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:15px;
+.vb i{display:block;font-family:'PlacaMono',monospace;font-size:15px;
   font-style:normal;color:%(MUTED)s;margin-top:5px}
 
 /* B · mapa de la liga */
@@ -438,7 +472,7 @@ h1{font-size:56px;line-height:1.06;font-weight:700;letter-spacing:-.02em;margin-
 .mh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px}
 .mh span{text-align:center}
 .mh b{font-size:19px;font-weight:700}
-.mh span{font-family:'DejaVu Sans Mono',monospace;font-size:12px;color:%(MUTED)s}
+.mh span{font-family:'PlacaMono',monospace;font-size:12px;color:%(MUTED)s}
 
 /* C · las seis del armador */
 .aleg{display:flex;gap:22px;margin-bottom:14px;flex-wrap:wrap}
@@ -449,60 +483,63 @@ h1{font-size:56px;line-height:1.06;font-weight:700;letter-spacing:-.02em;margin-
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   background:rgba(255,255,255,.02)}
 .ac.vacia{opacity:.5}
-.ac i{position:absolute;top:4px;left:6px;font-family:'DejaVu Sans Mono',monospace;
+.ac i{position:absolute;top:4px;left:6px;font-family:'PlacaMono',monospace;
   font-size:10px;font-style:normal;color:%(SUBTLE)s}
-.ac b{font-family:'DejaVu Sans Mono',monospace;font-size:27px;font-weight:700;line-height:1}
-.ac u{font-family:'DejaVu Sans Mono',monospace;font-size:10px;text-decoration:none;
+.ac b{font-family:'PlacaMono',monospace;font-size:27px;font-weight:700;line-height:1}
+.ac u{font-family:'PlacaMono',monospace;font-size:10px;text-decoration:none;
   color:rgba(255,255,255,.72);margin-top:3px;letter-spacing:.02em}
-.anota{margin-top:13px;font-family:'DejaVu Sans Mono',monospace;font-size:13px;
+.anota{margin-top:13px;font-family:'PlacaMono',monospace;font-size:13px;
   color:%(SUBTLE)s;line-height:1.4}
 
 /* B · mapa de la liga */
 .seis{display:grid;grid-template-columns:repeat(3,1fr);gap:20px 16px}
 .sq{background:%(CARD)s;border:1px solid %(BD)s;border-radius:12px;padding:12px}
 .sh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px}
-.sh b{font-family:'DejaVu Sans Mono',monospace;font-size:14px;letter-spacing:.09em}
-.sh span{font-family:'DejaVu Sans Mono',monospace;font-size:12px;color:%(MUTED)s}
+.sh b{font-family:'PlacaMono',monospace;font-size:14px;letter-spacing:.09em}
+.sh span{font-family:'PlacaMono',monospace;font-size:12px;color:%(MUTED)s}
 
 /* equipo ideal */
-.cancha7{display:flex;flex-direction:column;gap:12px}
-.red7{font-family:'DejaVu Sans Mono',monospace;font-size:13px;letter-spacing:.3em;
+.cancha7{display:flex;flex-direction:column;gap:14px;
+  border-left:1px solid rgba(255,255,255,.10);border-right:1px solid rgba(255,255,255,.10);
+  border-bottom:1px solid rgba(255,255,255,.10);border-radius:0 0 16px 16px;
+  padding:0 16px 18px}
+.red7{font-family:'PlacaMono',monospace;font-size:13px;letter-spacing:.3em;
   color:%(MUTED)s;border-bottom:2px solid %(C)s;text-align:center;padding-bottom:7px;
   margin-bottom:4px}
-.f3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.f3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .lb{display:grid;max-width:33%%;margin:0 auto;width:100%%}
 .pz{background:%(CARD)s;border:1px solid %(BD)s;border-top:3px solid %(C)s;
-  border-radius:12px;padding:16px 13px 14px;text-align:center}
-.pu{font-family:'DejaVu Sans Mono',monospace;font-size:12px;letter-spacing:.15em;
+  border-radius:12px;padding:20px 13px 18px;text-align:center}
+.pu{font-family:'PlacaMono',monospace;font-size:12px;letter-spacing:.15em;
   text-transform:uppercase;color:%(MUTED)s;margin-bottom:8px}
-.pz b{display:block;font-size:24px;font-weight:700;line-height:1.15;margin-bottom:3px}
-.pz span{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:12px;
+.pz b{display:block;font-size:26px;font-weight:700;line-height:1.15;margin-bottom:3px}
+.pz span{display:block;font-family:'PlacaMono',monospace;font-size:12px;
   color:%(MUTED)s;letter-spacing:.06em;text-transform:uppercase}
 .pe{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:2px}
-.es3{width:19px;height:19px;object-fit:contain;flex:none;border-radius:4px}
-.st{margin-top:9px;font-family:'DejaVu Sans Mono',monospace;font-size:17px;font-weight:700}
+.es3{height:17px;width:auto;max-width:46px;object-fit:contain;flex:none}
+.st{margin-top:11px;font-family:'PlacaMono',monospace;font-size:19px;font-weight:700}
 .st u{display:block;text-decoration:none;font-size:14px;font-weight:400;
   color:%(MUTED)s;margin-top:4px;letter-spacing:.04em}
 
 .pz.vacio{border:1px dashed %(BD2)s;border-top:1px dashed %(BD2)s;background:transparent;
   display:flex;flex-direction:column;align-items:center;justify-content:center}
 .pz.vacio .pu{margin-bottom:12px}
-.nd{font-family:'DejaVu Sans Mono',monospace;font-size:13px;line-height:1.5;
+.nd{font-family:'PlacaMono',monospace;font-size:13px;line-height:1.5;
   color:%(SUBTLE)s;letter-spacing:.06em;text-transform:uppercase;text-align:center}
 
 /* E · side-out por rotacion */
 .rot{display:flex;flex-direction:column;gap:14px}
 .rf{background:%(CARD)s;border:1px solid %(BD)s;border-radius:13px;padding:15px 17px}
 .rh{display:flex;align-items:center;gap:13px;margin-bottom:11px}
-.es2{width:34px;height:34px;object-fit:contain;flex:none;border-radius:6px}
+.es2{height:32px;width:auto;max-width:74px;object-fit:contain;flex:none}
 .rn{flex:1}
 .rn b{display:block;font-size:24px;font-weight:700;line-height:1.1}
-.rn span{font-family:'DejaVu Sans Mono',monospace;font-size:12px;color:%(SUBTLE)s;
+.rn span{font-family:'PlacaMono',monospace;font-size:12px;color:%(SUBTLE)s;
   letter-spacing:.08em;text-transform:uppercase}
 .rg{text-align:center;min-width:104px}
-.rg em{display:block;font-style:normal;font-family:'DejaVu Sans Mono',monospace;
+.rg em{display:block;font-style:normal;font-family:'PlacaMono',monospace;
   font-size:30px;font-weight:700;line-height:1;color:%(TEXT)s}
-.rg span{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:11px;
+.rg span{display:block;font-family:'PlacaMono',monospace;font-size:11px;
   letter-spacing:.15em;color:%(MUTED)s;margin-top:5px}
 .rr{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
 .rc{background:%(CARD2)s;border:1px solid %(BD)s;border-top:3px solid %(SUBTLE)s;
@@ -510,24 +547,26 @@ h1{font-size:56px;line-height:1.06;font-weight:700;letter-spacing:-.02em;margin-
 .rc.vacia{opacity:.4;border-top-color:rgba(255,255,255,.08)}
 .rc.mejor{border-top-color:#22C55E}
 .rc.peor{border-top-color:#EF4444}
-.rc i{display:block;font-style:normal;font-family:'DejaVu Sans Mono',monospace;
+.rc i{display:block;font-style:normal;font-family:'PlacaMono',monospace;
   font-size:12px;letter-spacing:.12em;color:%(MUTED)s;margin-bottom:6px}
-.rc b{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:27px;
+.rc b{display:block;font-family:'PlacaMono',monospace;font-size:27px;
   font-weight:700;line-height:1}
-.rc u{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:11px;
+.rc u{display:block;font-family:'PlacaMono',monospace;font-size:11px;
   text-decoration:none;color:%(SUBTLE)s;margin-top:5px}
 
 /* D · tabla */
 .tb{width:100%%;border-collapse:collapse}
-.tb th{font-family:'DejaVu Sans Mono',monospace;font-size:13px;letter-spacing:.13em;
+.tb th{font-family:'PlacaMono',monospace;font-size:13px;letter-spacing:.13em;
   text-align:center;padding:0 9px 13px;font-weight:400}
 .tb th:nth-child(2){text-align:left}
-.tb td{padding:13px 9px;border-top:1px solid %(BD)s;text-align:center;
-  font-family:'DejaVu Sans Mono',monospace;font-size:23px}
+.tb td{padding:9px 9px;border-top:1px solid %(BD)s;text-align:center;
+  font-family:'PlacaMono',monospace;font-size:22px;font-variant-numeric:tabular-nums}
+.tb tbody tr:first-child td{border-top:none}
+.tb tbody tr:nth-child(-n+3) td{background:rgba(255,255,255,.018)}
 .tb .ix{color:%(SUBTLE)s;font-size:16px;width:34px;text-align:left}
-.tb .jg{text-align:left;font-family:'Poppins',sans-serif}
-.tb .jg b{display:block;font-size:25px;font-weight:600;line-height:1.15}
-.tb .jg span{font-family:'DejaVu Sans Mono',monospace;font-size:13px;color:%(MUTED)s;
+.tb .jg{text-align:left;font-family:'Placa',sans-serif}
+.tb .jg b{display:block;font-size:23px;font-weight:600;line-height:1.15}
+.tb .jg span{font-family:'PlacaMono',monospace;font-size:13px;color:%(MUTED)s;
   letter-spacing:.08em;text-transform:uppercase}
 """
 
@@ -551,10 +590,11 @@ CTA = {
 }
 
 
-def render(p):
+def render(p, alto=1350):
     c = FUNDA.get(p.get('fundamento', 'ataque'), ROJO)
     css = CSS % {'BG': BG, 'CARD': CARD, 'CARD2': CARD2, 'TEXT': TEXT, 'MUTED': MUTED,
-                 'SUBTLE': SUBTLE, 'BD': BD, 'BD2': BD2, 'C': c}
+                 'SUBTLE': SUBTLE, 'BD': BD, 'BD2': BD2, 'C': c, 'CRGB': _rgb(c),
+                 'ALTO': alto, 'PADY': 60 if alto <= 1400 else 150}
     bj = '<p class="bj">%s</p>' % esc(p['bajada']) if p.get('bajada') else ''
     ct = p.get('cta') or CTA.get(p['tipo'])
     cta = ('<div class="ct" style="border-color:%s">'
@@ -562,26 +602,27 @@ def render(p):
            '<div class="ctl" style="color:%s">volley-stats.com</div></div>'
            % (c, esc(ct[0]), esc(ct[1]), c)) if ct else ''
     pi = '<div class="pi">%s</div>' % esc(p['pie']) if p.get('pie') else ''
-    return ('<!doctype html><html lang="es"><meta charset="utf-8"><style>%s</style><body>'
+    return ('<!doctype html><html lang="es"><meta charset="utf-8"><style>%s\n%s</style><body>'
             '<div class="eb">%s &nbsp;·&nbsp; %s</div><h1>%s</h1>%s'
             '<div class="zn">%s</div>%s%s'
             '<div class="ci"><span><b>VOLLEY·STATS</b><br>%s</span>'
             '<span class="dr">%s:<br>%s</span></div></body></html>'
-            % (css, esc(p['liga']), esc(p['fecha']), esc(p['titulo']), bj,
+            % (_fuentes(), css, esc(p['liga']), esc(p['fecha']), esc(p['titulo']), bj,
                VIZ[p['tipo']](p), pi, cta,
                TXT['firma'], TXT['fuente'], esc(p.get('fuente', ''))))
 
 
-def generar(piezas, destino):
+def generar(piezas, destino, alto=1350):
+    """alto 1350 = el vertical de feed. 1920 = historias, reels y TikTok."""
     destino = pathlib.Path(destino); destino.mkdir(parents=True, exist_ok=True)
     out = []
     with sync_playwright() as pw:
         b = _navegador(pw)
-        pg = b.new_page(viewport={'width': 1080, 'height': 1350})
+        pg = b.new_page(viewport={'width': 1080, 'height': alto})
         for i, p in enumerate(piezas, 1):
             nom = '%s-%s' % (chr(64 + i), p.get('slug', p['tipo']))
             t = destino / (nom + '.html')
-            t.write_text(render(p), encoding='utf-8')
+            t.write_text(render(p, alto), encoding='utf-8')
             pg.goto(t.resolve().as_uri()); pg.wait_for_timeout(300)
             pg.screenshot(path=str(destino / (nom + '.png')))
             t.unlink()

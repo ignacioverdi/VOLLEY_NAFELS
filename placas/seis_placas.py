@@ -39,6 +39,10 @@ def fichas(EQ, NOM_json):
 # del pie: era una aclaración de manual, no de placa.
 PCT = {}
 
+# Cuántos entran en la tabla del bloqueo. Con 8 quedaban 730 píxeles de negro
+# abajo y la placa no parecía de la misma serie que las demás.
+TOPE_TABLA = 12
+
 
 def delta_de(ctx, fund, eq, dor, valor):
     """Cuánto subió o bajó contra la fecha anterior que jugó.
@@ -323,7 +327,7 @@ def construir(repo, carpeta, temporada, fecha, archivos=None, fecha_n=None):
               'fecha': fecha, 'titulo': 'El bloqueo de la fecha',
               'bajada': 'Los %d mejores por bloqueo útil: punto directo (#) más '
                         'bloqueo de control (+), el que deja el balón jugable para '
-                        'su equipo.' % min(8, len(filas)),
+                        'su equipo.' % min(TOPE_TABLA, len(filas)),
               'filtro': {'izq': 'La tabla', 'que': 'ordenada por % de bloqueo útil',
                          'der': 'desde %d bloqueos' % piso(EQ, NOM, 'bloqueo')},
               'columnas': [{'t': '% ÚTIL', 'k': 'pct', 'color': '#06B6D4', 'fuerte': True},
@@ -331,7 +335,7 @@ def construir(repo, carpeta, temporada, fecha, archivos=None, fecha_n=None):
                            {'t': '# PUNTO', 'k': 'pto', 'color': '#22C55E', 'fuerte': True},
                            {'t': '+ CONTROL', 'k': 'pos'},
                            {'t': '= ERROR', 'k': 'err', 'color': '#EF4444', 'fuerte': True}],
-              'filas': filas[:8], 'fuente': fuente,
+              'filas': filas[:TOPE_TABLA], 'fuente': fuente,
               'jugador': (filas[0]['equipo'], filas[0]['_dor']) if filas else None,
               'quien': filas[0]['nombre'] if filas else '',
               'nombre_archivo': 'bloqueo',

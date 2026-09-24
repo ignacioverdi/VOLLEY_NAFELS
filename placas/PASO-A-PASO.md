@@ -44,6 +44,7 @@ Te tiene que quedar así:
             verificar.py
             AUTOMATICO.bat
             VIGILAR_Y_PUBLICAR.ps1
+            fuentes\                <- las tipografias, no las borres
             PASO-A-PASO.md
             LEEME.md
 
@@ -209,6 +210,23 @@ querés los videos en vertical por defecto.
 > DataVolley al repo y lo sube; este mira el repo y arma la publicación.
 > Podés tener los dos abiertos.
 
+## Las tipografias
+
+La carpeta `fuentes` trae las tipografias que usan las placas. **No la
+borres.** Antes se esperaba que estuvieran instaladas en Windows, y como no
+lo estan, el navegador las reemplazaba por otras: las placas te salian con
+una letra distinta de la que ves cuando te las muestro. Ahora viajan con la
+carpeta y salen iguales en cualquier computadora.
+
+## Las historias (9:16)
+
+Cada corrida deja tambien las siete placas en **1080x1920** en la subcarpeta
+`historias`, para Instagram Stories, Reels y TikTok. Es el mismo contenido
+con el alto de pantalla completa: el dibujo queda centrado y las franjas de
+arriba y abajo quedan libres, que es donde las apps ponen sus botones.
+
+Si no las queres, la opcion es `--sin-historias`.
+
 ## El historial
 
 Cada corrida guarda los números de esa fecha en `historial.json`. Eso
@@ -242,10 +260,14 @@ jugador abre esa acción en *Cortes de Video*. El margen también es el mismo:
 3. El video del partido. Hay dos caminos y el sistema prueba los dos:
 
    **a) El link de YouTube que ya cargaste.** Si el partido está en *Cargar
-   Videos* como siempre, el cortador lee ese mismo `mapa_videos.js` y baja
-   **solo el tramo de cada acción** (no el partido entero). No tenés que
-   hacer nada distinto de lo que ya hacés. Para esto hace falta `yt-dlp`,
-   que lo instala `INSTALAR.bat`.
+   Videos* como siempre, el cortador lee ese mismo `mapa_videos.js`, baja el
+   partido **una sola vez**, corta las acciones y **lo borra al terminar**.
+   No tenés que hacer nada distinto de lo que ya hacés. Para esto hace falta
+   `yt-dlp`, que lo instala `INSTALAR.bat`.
+
+   Ocupa entre 300 y 600 MB por partido mientras dura, y te avisa cuántos MB
+   liberó al final. Si lo cortás con Ctrl+C también borra lo que bajó. Con
+   `--guardar-video` se quedan, por si vas a correr la misma fecha otra vez.
 
    **b) El archivo en el disco**, con el **mismo nombre que el `.dvw`**:
 

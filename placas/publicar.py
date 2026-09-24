@@ -69,6 +69,8 @@ def main():
     ap.add_argument('--hasta', default='')
     ap.add_argument('--salida', default='salida')
     ap.add_argument('--vertical', action='store_true')
+    ap.add_argument('--sin-historias', action='store_true', dest='sin_historias',
+                    help='no generar la version 1080x1920')
     ap.add_argument('--guardar-video', action='store_true', dest='guardar_video',
                     help='no borrar los partidos bajados de YouTube')
     ap.add_argument('--sin-video', action='store_true',
@@ -128,6 +130,20 @@ def main():
         nuevo = destino / h.split('-', 1)[1]
         if viejo.exists():
             viejo.replace(nuevo)
+
+    # las mismas placas en 1080x1920, para historias, reels y TikTok.
+    # Es el mismo HTML con otro alto: el contenido se centra solo y las
+    # franjas de arriba y abajo quedan libres, que es donde las apps ponen
+    # sus botones.
+    if not a.sin_historias:
+        hs = destino / 'historias'
+        hechos_h = placas2.generar(piezas, hs, alto=1920)
+        for h in hechos_h:
+            viejo = hs / h
+            nuevo = hs / h.split('-', 1)[1]
+            if viejo.exists():
+                viejo.replace(nuevo)
+        print('   %d en vertical 9:16 (carpeta historias)' % len(hechos_h))
 
     # ── 2 · el chequeo ────────────────────────────────────────────────────
     print()

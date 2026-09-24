@@ -27,17 +27,25 @@ import argparse, json, pathlib, sys
 
 import fechas, liga, placas2, seis_placas
 
+# Se mide la caja que ocupan TODOS los hijos de la zona del dibujo, no el
+# primero. La tabla y las seis canchitas devuelven varios bloques (la línea
+# del filtro, la leyenda, el dibujo), y midiendo solo el primero el chequeo
+# decía que sobraban 700 píxeles mientras la placa se estaba cortando.
 MEDIDA = """() => {
   const r = s => { const e = document.querySelector(s);
                    return e ? e.getBoundingClientRect() : null; };
   const arriba = r('.bj') || r('h1');
   const abajo  = r('.pi') || r('.ct');
-  const hijo   = document.querySelector('.zn>*');
-  const caja   = hijo ? hijo.getBoundingClientRect() : r('.zn');
+  const hijos  = [...document.querySelectorAll('.zn>*')];
+  let top = Infinity, bot = -Infinity;
+  for (const h of hijos) { const b = h.getBoundingClientRect();
+                           if (b.height || b.width) { top = Math.min(top, b.top);
+                                                      bot = Math.max(bot, b.bottom); } }
+  if (!hijos.length || top === Infinity) { const z = r('.zn'); top = z.top; bot = z.bottom; }
   document.body.style.height = 'auto';
   document.body.style.overflow = 'visible';
-  return {arriba: Math.round(caja.top - arriba.bottom),
-          abajo:  Math.round(abajo.top - caja.bottom),
+  return {arriba: Math.round(top - arriba.bottom),
+          abajo:  Math.round(abajo.top - bot),
           alto:   Math.round(document.body.getBoundingClientRect().height)};
 }"""
 
