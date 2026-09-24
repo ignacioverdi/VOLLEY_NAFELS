@@ -201,6 +201,22 @@ td.num{font-weight:600;white-space:nowrap}
 .pb-no p{margin:0;font-size:14.8px;line-height:1.55;color:var(--gris)}
 .pb-t td{vertical-align:top;font-size:13.8px;line-height:1.45;padding:9px 10px 9px 0}
 .pb-t td:first-child{width:152px}
+.cod-s{font-family:var(--fn);font-size:22px;font-weight:700;color:var(--cat);text-align:center}
+.pb-no.plg summary{padding-left:14px;border-left:4px solid var(--cat)}
+.plg{border-top:1px solid var(--gris-claro);background:transparent}
+.plg summary{list-style:none;cursor:pointer;padding:13px 30px 13px 0;position:relative;font-size:16.5px;font-weight:600;line-height:1.35}
+.plg summary::-webkit-details-marker{display:none}
+.plg summary::after{content:"+";position:absolute;right:6px;top:11px;font-family:var(--fn);font-size:21px;font-weight:400;color:var(--cat);line-height:1}
+.plg[open] summary::after{content:"\2013"}
+.plg summary:hover{color:var(--cat)}
+.plg summary em{display:block;font-style:normal;font-size:14px;font-weight:400;color:var(--gris);margin-top:3px}
+.plg summary .plg-n{font-family:var(--fn);font-size:12px;font-weight:700;color:var(--cat);margin-right:9px;letter-spacing:.05em}
+.plg-c{padding:0 0 15px}
+.plg-c p{margin:0 0 9px;font-size:14.8px;line-height:1.55}
+.plg-h{font-family:var(--fn);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gris);margin:0 0 5px!important}
+.plg-c ul{margin:0 0 11px;padding-left:18px}
+.plg-c li{margin-bottom:5px;font-size:14.8px;line-height:1.5}
+@media print{.plg{border-top:1px solid #ddd}.plg summary::after{display:none}.plg-c{display:block!important}}
 .obj-it{border-top:1px solid var(--gris-claro);padding:12px 0}
 .obj-it b{display:block;font-size:16px;font-weight:600;margin-bottom:4px}
 .obj-it p{margin:0;font-size:14.8px;line-height:1.55;color:var(--tinta)}
@@ -506,6 +522,7 @@ const BIBLIO = [
 const CONTENIDO = {};
 CONTENIDO.es = {
 sec:{
+ gQue:"Puntos de corrección", gErr:"El error:", gFix:"Cómo se arregla:", plgAbrir:"Tocá cada concepto para abrirlo",
  okTit:"Cómo sabés que está conseguido",
  refInt:"Cómo lo hacen las potencias",
  dosTablas:"<strong>Por qué esta tabla no coincide con la de etapas.</strong> Son dos preguntas distintas. La tabla por etapa dice qué sistema prescribe Swiss Volley en cada escalón de competencia: Future 1 juega 6-6, Future 2 juega 6-2 y Future 3 juega 5-1. Esta dice qué tiene que dominar un jugador según su capacidad, juegue donde juegue. Un L3 de diecisiete años compite en 4ª o 3ª liga, donde se juega 5-1, así que tiene que controlarlo aunque su etapa formativa todavía no lo prescriba.",
@@ -1266,6 +1283,7 @@ ref:{
 
 CONTENIDO.de = {
 sec:{
+ gQue:"Knotenpunkte", gErr:"Der Fehler:", gFix:"So wird es korrigiert:", plgAbrir:"Tippe auf einen Begriff, um ihn zu öffnen",
  okTit:"Woran du erkennst, dass es erreicht ist",
  refInt:"Wie es die führenden Nationen machen",
  dosTablas:"<strong>Warum diese Tabelle nicht mit der Stufentabelle übereinstimmt.</strong> Es sind zwei verschiedene Fragen. Die Stufentabelle sagt, welches System Swiss Volley auf jeder Wettkampfstufe vorschreibt: Future 1 spielt 6-6, Future 2 spielt 6-2 und Future 3 spielt 5-1. Diese sagt, was eine Person nach ihrem Können beherrschen muss, egal wo sie spielt. Ein siebzehnjähriger L3 spielt in der 4. oder 3. Liga, wo 5-1 gespielt wird, also muss er es beherrschen, auch wenn seine Ausbildungsstufe es noch nicht vorschreibt.",
@@ -2015,6 +2033,7 @@ ref:{
 
 CONTENIDO.en = {
 sec:{
+ gQue:"Correction points", gErr:"The error:", gFix:"How to fix it:", plgAbrir:"Tap a concept to open it",
  okTit:"How you know it is achieved",
  refInt:"How the leading nations do it",
  dosTablas:"<strong>Why this table does not match the stage table.</strong> They answer two different questions. The stage table states which system Swiss Volley prescribes at each competitive tier: Future 1 plays 6-6, Future 2 plays 6-2 and Future 3 plays 5-1. This one states what a player has to master according to their ability, wherever they play. A seventeen-year-old L3 competes in the 4th or 3rd League, where the 5-1 is played, so they have to control it even if their development stage does not yet prescribe it.",
@@ -3843,14 +3862,66 @@ PB.en = {
  cierre:"A Rookie 2 coach does not teach the 3-3 serving model. They teach that the serve lands in and that the zone gets called, which is the step below the same concept. What cannot happen is a player reaching Future 3 and hearing for the first time that there is a zone to aim at."
 };
 
+const SES_TIPO = {es:{
+ t:"Cómo se arma la sesión",
+ p:"El entrenador no elige «qué ejercicios hago»: elige <strong>en qué situación de juego entrena hoy</strong>. Las cinco de abajo son las que reconoce la investigación internacional y las que usa cualquier analista del mundo, así que no son nombre nuestro. Cada una se genera de una manera distinta y entrena cosas distintas.",
+ nota:"<strong>La proporción.</strong> La recomendación de la analítica de alto nivel es sencilla: de cada tres sesiones, <strong>dos apuntan a saque-recepción y side-out, y una a defensa y transición</strong>. El motivo tiene dato detrás: en categorías chicas se gana más en transición, pero a medida que sube el nivel el peso se corre al primer balón. Si entrenás al revés, preparás al equipo para el nivel que ya dejó atrás.",
+ th:["Situación","Qué es","Cómo la generás","Qué entrena"],
+ filas:[
+  ["K1 in-system","Side-out con recepción # o +: el armador juega el segundo balón sin moverse más de un paso y tiene las tres opciones abiertas.","Saque del entrenador cómodo, o free ball del rival.","Combinaciones de ataque contra bloqueo simple, primeros tiempos, cobertura."],
+  ["K1 semi-system","Side-out con recepción !: el armador todavía tiene opciones, pero no todas. No es lo mismo que estar fuera de sistema y merece entrenarse aparte.","Saque real de competencia, sin corregir la recepción.","Decidir con opciones limitadas, ataque de punta con dos direcciones, lectura del bloqueo."],
+  ["K1 out-of-system","Side-out con recepción -: el armador no llega, arma otro o se arma con antebrazos.","Saque agresivo, o recepción dirigida fuera de la zona del líbero.","Pelota alta, atacar contra bloqueo formado, que todos sepan armar."],
+  ["K2 transición","Somos nosotros los que sacamos: bloqueo, defensa y contraataque.","Vos ponés la pelota al otro lado y el equipo defiende y contraataca.","Bloqueo lector, defensa, y la transición aterrizar-girar-salir de la red."],
+  ["Juego completo","El partido con su ritmo y su alternancia de fases, amistosos incluidos.","Se juega. Con marcador y con rotaciones reales.","Todo junto, y sobre todo el índice: cuántas acciones necesitamos para hacer un punto."]],
+ codT:"El lenguaje de la pelota",
+ codP:"Estos cuatro símbolos son el estándar mundial de scouting y ya están en el playbook del primer equipo. Si el club los usa desde Rookie, el jugador llega arriba hablando el idioma.",
+ codTh:["Código","Recepción","Situación","Side-out esperado"],
+ cods:[["#","Perfecta","in-system","Alrededor de 67% en alto nivel"],["+","Desplazada, pero jugable","in-system","Alrededor de 60%"],["!","Separada de la red","semi-system","Alrededor de 60% en femenino, 67% en masculino de élite"],["-","Lejana, el armador no llega","out-of-system","Alrededor de 50%"]],
+ codN:"Los porcentajes son de NCAA femenino y FIVB masculino, y sirven como referencia, no como objetivo para formativas. Lo que importa del cuadro es otra cosa: <strong>entre una recepción mala y una media hay unos diez puntos de side-out, y entre una media y una buena, otros diez.</strong> Por eso se entrena la recepción antes que el ataque."
+}};
+SES_TIPO.de = {
+ t:"Wie die Einheit aufgebaut wird",
+ p:"Die Trainerperson wählt nicht «welche Übungen mache ich», sondern <strong>welche Spielsituation heute trainiert wird</strong>. Die fünf unten sind die, welche die internationale Forschung unterscheidet und die jede Analystin weltweit verwendet — es sind also keine Vereinsbegriffe. Jede wird anders erzeugt und trainiert anderes.",
+ nota:"<strong>Das Verhältnis.</strong> Die Empfehlung aus der Spitzenanalytik ist einfach: Von drei Einheiten zielen <strong>zwei auf Service-Annahme und Side-out und eine auf Abwehr und Übergang</strong>. Dahinter steht ein Befund: In jungen Kategorien wird mehr im Übergang gewonnen, doch mit steigendem Niveau verschiebt sich das Gewicht zum ersten Ball. Trainierst du umgekehrt, bereitest du die Mannschaft auf das Niveau vor, das sie schon hinter sich hat.",
+ th:["Situation","Was es ist","Wie du sie erzeugst","Was sie trainiert"],
+ filas:[
+  ["K1 in-system","Side-out mit Annahme # oder +: Die Zuspielerin spielt den zweiten Ball mit höchstens einem Schritt und hat alle drei Optionen offen.","Bequemes Service der Trainerperson oder ein Freeball des Gegners.","Angriffskombinationen gegen Einerblock, erste Tempi, Sicherung."],
+  ["K1 semi-system","Side-out mit Annahme !: Die Zuspielerin hat noch Optionen, aber nicht alle. Das ist nicht dasselbe wie out-of-system und gehört getrennt trainiert.","Echtes Wettkampfservice, ohne die Annahme zu erleichtern.","Entscheiden mit begrenzten Optionen, Aussenangriff mit zwei Richtungen, Blocklesen."],
+  ["K1 out-of-system","Side-out mit Annahme -: Die Zuspielerin kommt nicht hin, jemand anderes spielt zu oder es wird mit den Armen zugespielt.","Aggressives Service oder Annahme gezielt ausserhalb der Zone der Libera.","Hoher Ball, Angriff gegen formierten Block, und dass alle zuspielen können."],
+  ["K2 Übergang","Wir servieren: Block, Abwehr und Gegenangriff.","Du bringst den Ball auf die andere Seite, die Mannschaft verteidigt und kontert.","Lesender Block, Abwehr und der Übergang landen-drehen-vom-Netz-weg."],
+  ["Vollständiges Spiel","Das Spiel mit seinem Rhythmus und Phasenwechsel, Testspiele eingeschlossen.","Es wird gespielt. Mit Resultat und echten Rotationen.","Alles zusammen, vor allem die Kennzahl: wie viele Aktionen wir für einen Punkt brauchen."]],
+ codT:"Die Sprache des Balls",
+ codP:"Diese vier Zeichen sind der weltweite Scouting-Standard und stehen bereits im Playbook der ersten Mannschaft. Nutzt der Verein sie ab Rookie, kommt die Person oben an und spricht die Sprache.",
+ codTh:["Code","Annahme","Situation","Erwartetes Side-out"],
+ cods:[["#","Perfekt","in-system","Rund 67% auf hohem Niveau"],["+","Versetzt, aber spielbar","in-system","Rund 60%"],["!","Vom Netz abgesetzt","semi-system","Rund 60% bei den Frauen, 67% bei den Männern der Elite"],["-","Weit weg, die Zuspielerin kommt nicht hin","out-of-system","Rund 50%"]],
+ codN:"Die Prozentwerte stammen aus dem NCAA-Frauen- und dem FIVB-Männervolleyball und dienen als Referenz, nicht als Ziel für den Nachwuchs. Wichtig an der Tabelle ist etwas anderes: <strong>Zwischen einer schlechten und einer mittleren Annahme liegen rund zehn Prozentpunkte Side-out, und zwischen einer mittleren und einer guten nochmals zehn.</strong> Deshalb wird die Annahme vor dem Angriff trainiert."
+};
+SES_TIPO.en = {
+ t:"How a session is built",
+ p:"The coach does not choose «which drills do I run»: they choose <strong>which game situation they are training today</strong>. The five below are the ones international research distinguishes and the ones any analyst in the world uses — they are not our own labels. Each is generated differently and trains different things.",
+ nota:"<strong>The ratio.</strong> The recommendation from high-level analytics is simple: of every three sessions, <strong>two target serve-receive and side-out and one targets defence and transition</strong>. There is data behind it: at younger levels more balls are killed in transition, but as the level rises the weight shifts to the first ball. Train it the other way round and you are preparing the team for the level it has already left behind.",
+ th:["Situation","What it is","How you generate it","What it trains"],
+ filas:[
+  ["K1 in-system","Side-out off a # or + pass: the setter plays the second ball moving one step or less and has all three options open.","A comfortable serve from the coach, or a free ball from the opponent.","Attack combinations against a single block, first tempos, coverage."],
+  ["K1 semi-system","Side-out off a ! pass: the setter still has options, but not all of them. It is not the same as out-of-system and deserves its own training.","A real match serve, with no help given to the pass.","Deciding with limited options, outside attack in two directions, reading the block."],
+  ["K1 out-of-system","Side-out off a - pass: the setter cannot get there, somebody else sets or the set is made with the forearms.","An aggressive serve, or a pass deliberately aimed away from the libero's zone.","The high ball, attacking against a formed block, and everyone being able to set."],
+  ["K2 transition","We are the ones serving: block, defence and counter-attack.","You put the ball on the other side and the team digs and counters.","Reading block, defence, and the land-turn-clear-the-net transition."],
+  ["Full game","The match with its rhythm and alternation of phases, friendlies included.","You play. With a score and with real rotations.","Everything together, and above all the index: how many actions we need to win a point."]],
+ codT:"The language of the ball",
+ codP:"These four symbols are the worldwide scouting standard and already appear in the first team's playbook. If the club uses them from Rookie on, the player arrives at the top already speaking the language.",
+ codTh:["Code","Pass","Situation","Expected side-out"],
+ cods:[["#","Perfect","in-system","Around 67% at a high level"],["+","Off-target but playable","in-system","Around 60%"],["!","Off the net","semi-system","Around 60% in women's, 67% in elite men's"],["-","Far out, the setter cannot get there","out-of-system","Around 50%"]],
+ codN:"The percentages come from NCAA women's and FIVB men's volleyball and serve as a reference, not as a target for youth. What matters in the table is something else: <strong>the gap between a bad pass and a medium one is about ten points of side-out, and between a medium and a good one another ten.</strong> That is why passing is trained before attacking."
+};
+
 function vPlay(){
-  const b = PB[LANG] || PB.es;
+  const b = PB[LANG] || PB.es, st = SES_TIPO[LANG] || SES_TIPO.es;
   return `<div class="enc"><div class="eyebrow">NLA · 2026-27</div><h2>${b.t}</h2><p>${b.sub}</p></div>
   <p>${b.intro}</p>
   <p class="no-imprimir"><a class="btn-s" href="${PB_URL}" target="_blank" rel="noopener">${b.verlo} &rarr;</a></p>
   <section class="bloque"><h3><span class="n">01</span>${b.nogo}</h3>
     <p>${b.nogoP}</p>
-    ${b.nogos.map(x=>`<div class="pb-no"><b>${x[0]}</b><p>${x[1]}</p></div>`).join("")}
+    ${b.nogos.map(x=>`<details class="plg pb-no"><summary>${x[0]}</summary><div class="plg-c"><p>${x[1]}</p></div></details>`).join("")}
   </section>
   <section class="bloque"><h3><span class="n">02</span>${b.tablaT}</h3>
     <p>${b.tablaP}</p>
@@ -3860,6 +3931,20 @@ function vPlay(){
       ${b.filas.map(f=>`<tr><td><strong>${f[0]}</strong></td>${f.slice(1).map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}
     </tbody></table></div>
     <div class="nota">${b.cierre}</div>
+  </section>
+  <section class="bloque"><h3><span class="n">03</span>${st.t}</h3>
+    <p>${st.p}</p>
+    <div class="tabla-envoltura"><table class="pb-t"><thead><tr>${st.th.map((h,i)=>`<th${i?' style="text-align:left"':''}>${h}</th>`).join("")}</tr></thead><tbody>
+      ${st.filas.map(f=>`<tr><td><strong>${f[0]}</strong></td>${f.slice(1).map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}
+    </tbody></table></div>
+    <div class="nota">${st.nota}</div>
+  </section>
+  <section class="bloque"><h3><span class="n">04</span>${st.codT}</h3>
+    <p>${st.codP}</p>
+    <div class="tabla-envoltura"><table><thead><tr>${st.codTh.map((h,i)=>`<th${i?'':' style="width:70px"'}>${h}</th>`).join("")}</tr></thead><tbody>
+      ${st.cods.map(c=>`<tr><td class="cod-s">${c[0]}</td><td>${c[1]}</td><td><strong>${c[2]}</strong></td><td>${c[3]}</td></tr>`).join("")}
+    </tbody></table></div>
+    <div class="nota aviso">${st.codN}</div>
   </section>`;
 }
 
@@ -3894,8 +3979,8 @@ function vMatriz(){
       const col = ["","#0E2A8A","#8E3374","#EE4655","#FA844E","#D9B300"][L.n];
       return `<div class="obj-caja" style="--c:${col}"><span>L${L.n} · ${L.t}</span><p>${O.meta}</p></div>
         <div class="ens-dos" style="margin-top:20px">
-          <div><h4 class="obj-h">${S("objTec")}</h4>${O.tec.map(x=>`<div class="obj-it"><b>${x.t}</b><p>${x.d}</p>${OKC(x.t)}</div>`).join("")}</div>
-          <div><h4 class="obj-h">${S("objTac")}</h4>${O.tac.map(x=>`<div class="obj-it"><b>${x.t}</b><p>${x.d}</p>${OKC(x.t)}</div>`).join("")}</div>
+          <div><h4 class="obj-h">${S("objTec")}</h4>${O.tec.map(x=>`<details class="plg"><summary>${x.t}</summary><div class="plg-c"><p>${x.d}</p>${OKC(x.t)}</div></details>`).join("")}</div>
+          <div><h4 class="obj-h">${S("objTac")}</h4>${O.tac.map(x=>`<details class="plg"><summary>${x.t}</summary><div class="plg-c"><p>${x.d}</p>${OKC(x.t)}</div></details>`).join("")}</div>
         </div>
         <div class="ref-lvl"><span>${S("refInt")}</span><b>${RF[L.n].t}</b><p>${RF[L.n].d}</p></div>
         <div class="nota" style="border-left-color:${col}"><strong>${S("objSig")}</strong> ${O.next}</div>`;
@@ -5663,7 +5748,7 @@ function vEns(){
 
   if(ENS_CAT==="gen"){
     cuerpo = `<p class="entrada">${c.p}</p>`
-     + c.bloques.map(b=>`<section class="bloque"><h3>${b.h}</h3><p>${b.p}</p>${b.f?`<div class="clave-ens">${b.f}</div>`:""}</section>`).join("")
+     + '<section class="bloque">' + c.bloques.map(b=>`<details class="plg"><summary>${b.h}</summary><div class="plg-c"><p>${b.p}</p>${b.f?`<div class="clave-ens">${b.f}</div>`:""}</div></details>`).join("") + '</section>'
      + `<section class="bloque"><h3>${c.tabla}</h3><p>${c.tablaP}</p>
         <div class="tabla-envoltura"><table><thead><tr>${c.th.map(x=>`<th>${x}</th>`).join("")}</tr></thead>
         <tbody>${EQ().map(f=>`<tr><td><strong>${f[0]}</strong></td><td class="num">${f[1]}</td><td class="num">${f[2]}</td><td class="num">${f[3]}</td><td>${f[4]}</td></tr>`).join("")}</tbody></table></div></section>
@@ -5677,16 +5762,17 @@ function vEns(){
       <section class="bloque"><h3>Por qué esta etapa importa</h3><p>${c2.porque}</p></section>
       <section class="bloque"><h3>Técnica: qué se enseña y cómo se corrige</h3>
         <p>Los puntos de corrección son los de la oficina federal del deporte, así que coinciden con los videos oficiales.</p>
-        ${(c2.tecnica||[]).map((x,i)=>`<div class="gesto">
-          <h4><span>${String(i+1).padStart(2,"0")}</span>${x.n}</h4>
+        ${(c2.tecnica||[]).map((x,i)=>`<details class="plg gesto">
+          <summary><span class="plg-n">${String(i+1).padStart(2,"0")}</span>${x.n}<em>${x.int}</em></summary>
+          <div class="plg-c">
           ${x.cad?`<p class="cadena">${x.cad}</p>`:""}
-          <p class="gesto-int"><b>Para qué:</b> ${x.int}</p>
+          <p class="plg-h">${S("gQue")}</p>
           <ul>${x.pts.map(p=>`<li>${p}</li>`).join("")}</ul>
           <div class="frase">${x.frase}</div>
-          <p class="gesto-err"><b>El error:</b> ${x.err}</p>
-          <p class="gesto-fix"><b>Cómo se arregla:</b> ${x.arreglo}</p></div>`).join("")}</section>
+          <p class="gesto-err"><b>${S("gErr")}</b> ${x.err}</p>
+          <p class="gesto-fix"><b>${S("gFix")}</b> ${x.arreglo}</p></div></details>`).join("")}</section>
       <section class="bloque"><h3>Táctica</h3>
-        ${(c2.tactica||[]).map(x=>`<div class="tac-it"><h4>${x.n}</h4><p>${x.d}</p></div>`).join("")}</section>
+        ${(c2.tactica||[]).map(x=>`<details class="plg"><summary>${x.n}</summary><div class="plg-c"><p>${x.d}</p></div></details>`).join("")}</section>
       <div class="ens-dos">
         <section class="bloque"><h3>Físico</h3><p>${c2.fis}</p></section>
         <section class="bloque"><h3>Mental</h3><p>${c2.men}</p></section></div>
