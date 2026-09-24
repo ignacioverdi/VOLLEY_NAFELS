@@ -18,6 +18,16 @@ TIPO_SQ = {'Q': 'potencia', 'T': 'potencia', 'M': 'flotado', 'H': 'flotado'}
 POSITIVO = {'saque': '#/+', 'recepcion': '#+', 'ataque': '#+',
             'bloqueo': '#+', 'defensa': '#+', 'armado': '#+'}
 
+# Fase del ataque, campo 3 de la linea del [3SCOUT]. DataVolley la scoutea:
+#   'r'  ataque directo de la recepcion
+#   's'  segunda oportunidad dentro del mismo rally recibido
+#   'p'  contraataque: el equipo estaba sacando
+# K1 (side-out) = el rally lo recibimos nosotros, o sea 'r' mas 's'. Esa es
+# la definicion que usa update_db_nafels_FULL.py para atk_so/atk_tr, y hay
+# que respetarla: si las placas cortaran distinto que la app, el mismo
+# jugador tendria dos numeros y se cae el argumento de venta entero.
+FASE_K1 = ('r', 's')
+
 
 def _gl(repo):
     # absoluto a proposito: con una ruta relativa como '..' el import se
@@ -105,6 +115,15 @@ def leer(repo, carpeta, archivos=None):
             if equipo_:
                 eq[equipo_]['plantel'].update(plantel(lineas, seccion))
         sets = set()
+        # K1 vs transición NO se deduce: DataVolley ya scoutea la fase en el
+        # campo 3 de la línea ('r' = recepción/side-out, 'p' y 's' = el
+        # resto), y es exactamente lo que lee update_db_nafels_FULL.py:1912.
+        # Deducirlo por mi cuenta daba números parecidos pero distintos, que
+        # es el peor resultado posible: dos verdades para el mismo dato.
+        #
+        # Lo único que sí hay que seguir del rally es el TIPO del saque, para
+        # poder partir la recepción en "contra potencia" y "contra flotado".
+        srv_tipo, rec_pfx = None, None
         for l in scout:
             sc = l.split(';')
             cod = sc[0].strip()
@@ -117,6 +136,8 @@ def leer(repo, carpeta, archivos=None):
             if not cuerpo[:2].isdigit():
                 continue
             sk = cuerpo[2]
+            pfx = cod[0]
+            fase = sc[2].strip().lower() if len(sc) > 2 else ''
             if sk not in SKILLS:
                 continue
             dorsal, tipo, ev = cuerpo[:2], cuerpo[3], cuerpo[4]
@@ -124,8 +145,22 @@ def leer(repo, carpeta, archivos=None):
             nom = SKILLS[sk]
             J[nom][ev] += 1
             J[nom]['T'] += 1
+
             if sk == 'S':
-                J['tipo_saque'][TIPO_SQ.get(tipo, 'otro')] += 1
+                t = TIPO_SQ.get(tipo, 'otro')
+                J['tipo_saque'][t] += 1
+                J['sq_' + t][ev] += 1
+                J['sq_' + t]['T'] += 1
+                srv_tipo = t
+                rec_pfx = 'a' if pfx == '*' else '*'
+            elif sk == 'R':
+                if pfx == rec_pfx and srv_tipo and srv_tipo != 'otro':
+                    J['rec_vs_' + srv_tipo][ev] += 1
+                    J['rec_vs_' + srv_tipo]['T'] += 1
+            elif sk == 'A':
+                k = 'atk_k1' if fase in FASE_K1 else 'atk_k2'
+                J[k][ev] += 1
+                J[k]['T'] += 1
             o, d = _trayectoria(sk, cuerpo[5:])
             # el saque y el ataque se leen por donde CAEN; el armado, por
             # donde SALE la pelota, que es a quien se la puso
@@ -218,6 +253,43 @@ VALORACIONES = {
     'bloqueo':   [('#', 'PUNTO', '#22C55E'), ('+', 'CONTROL', '#4ADE80'),
                   ('!', 'TOQUE', '#64748B'), ('=', 'ERROR', '#EF4444')],
 }
+
+
+def _ef_ataque(C):
+    """(punto - error - bloqueado) / total. La fórmula estándar."""
+    return round((C['#'] - C['/'] - C['=']) / C['T'] * 100) if C['T'] else None
+
+
+def _ef_saque(C):
+    return round((C['#'] * 100 + C['/'] * 87.5 + C['+'] * 75 +
+                  C['!'] * 50 + C['-'] * 25) / C['T']) if C['T'] else None
+
+
+def _ef_recepcion(C):
+    return round((C['#'] * 100 + C['+'] * 75 + C['!'] * 50 +
+                  C['-'] * 25 + C['/'] * 12.5) / C['T']) if C['T'] else None
+
+
+def cortes(J, fund):
+    """Los dos cortes que le interesan a un entrenador, por fundamento.
+
+    Devuelve [(etiqueta, valor|None, n)]. Todo se calcula sobre los MISMOS
+    partidos que el resto de la placa: nla_stats.json trae estos cortes ya
+    hechos, pero acumulados de temporada, y mezclar una fecha con la
+    temporada da un número que no es ninguna de las dos cosas.
+    """
+    if fund == 'ataque':
+        return [('EN K1', _ef_ataque(J['atk_k1']), J['atk_k1']['T']),
+                ('EN TRANSICIÓN', _ef_ataque(J['atk_k2']), J['atk_k2']['T'])]
+    if fund == 'saque':
+        return [('DE POTENCIA', _ef_saque(J['sq_potencia']), J['sq_potencia']['T']),
+                ('FLOTADO', _ef_saque(J['sq_flotado']), J['sq_flotado']['T'])]
+    if fund == 'recepcion':
+        return [('VS POTENCIA', _ef_recepcion(J['rec_vs_potencia']),
+                 J['rec_vs_potencia']['T']),
+                ('VS FLOTADO', _ef_recepcion(J['rec_vs_flotado']),
+                 J['rec_vs_flotado']['T'])]
+    return []
 
 
 def valoraciones(J, fund):

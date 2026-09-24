@@ -12,7 +12,8 @@ echo    1. Una fecha           (lunes, con los 4 partidos)
 echo    2. Acumulado hasta...  (durante la semana)
 echo    3. Toda la temporada
 echo    4. Ver que fechas detecta
-echo    5. Salir
+echo    5. Revisar una fecha antes de publicar
+echo    6. Salir
 echo.
 set /p OP=  Opcion: 
 echo.
@@ -20,7 +21,8 @@ if "%OP%"=="1" goto una
 if "%OP%"=="2" goto hasta
 if "%OP%"=="3" goto todo
 if "%OP%"=="4" goto listar
-if "%OP%"=="5" exit /b 0
+if "%OP%"=="5" goto revisar
+if "%OP%"=="6" exit /b 0
 goto menu
 
 :una
@@ -39,6 +41,13 @@ goto fin
 
 :listar
 python seis_placas.py --listar
+echo.
+pause
+goto menu
+
+:revisar
+set /p F=  Numero de fecha a revisar: 
+python verificar.py --fecha %F%
 echo.
 pause
 goto menu

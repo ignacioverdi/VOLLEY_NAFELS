@@ -201,6 +201,52 @@ td.num{font-weight:600;white-space:nowrap}
 .pb-no p{margin:0;font-size:14.8px;line-height:1.55;color:var(--gris)}
 .pb-t td{vertical-align:top;font-size:13.8px;line-height:1.45;padding:9px 10px 9px 0}
 .pb-t td:first-child{width:152px}
+.ot{border:2px solid var(--cat);padding:19px 23px;margin:26px 0 8px;background:#fff}
+.ot span{font-family:var(--fn);font-size:10.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--cat)}
+.ot p{margin:7px 0 15px;font-size:22px;font-weight:600;letter-spacing:-.013em;line-height:1.3}
+.ot b{font-family:var(--fn);font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gris)}
+.ot ul{margin:7px 0 0;padding-left:19px}
+.ot li{margin-bottom:5px;font-size:15.3px;line-height:1.5}
+.ini{max-width:900px;margin:0 auto}
+.ini-top{padding:14px 0 30px}
+.ini h2{font-size:clamp(30px,4.6vw,46px);letter-spacing:-.03em;line-height:1.05;margin:0 0 9px}
+.ini-p{font-size:17.5px;color:var(--gris);margin:0;max-width:600px;line-height:1.5}
+.ini-eti{font-family:var(--fn);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:11px}
+.ini-eti span{font-size:11px;font-weight:700;color:var(--cat);letter-spacing:.1em}
+.ini-dt{border-top:2px solid var(--tinta);padding:20px 0 30px}
+.ini-sub{margin:9px 0 20px;font-size:15.3px;color:var(--gris);line-height:1.5;max-width:620px}
+.eq-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+.eq{border:1px solid var(--gris-claro);background:#fff;transition:border-color .18s,box-shadow .18s;align-self:start}
+.eq:hover{border-color:var(--c);box-shadow:0 2px 14px rgba(0,0,0,.06)}
+.eq[open]{border-color:var(--c)}
+.eq summary{list-style:none;cursor:pointer;padding:0}
+.eq summary::-webkit-details-marker{display:none}
+.eq-h{padding:17px 18px 15px;border-left:5px solid var(--c);position:relative}
+.eq-e{font-family:var(--fn);font-size:11px;font-weight:700;letter-spacing:.13em;color:var(--gris);display:block}
+.eq-h b{display:block;font-family:var(--fd);font-size:33px;line-height:1;letter-spacing:-.025em;color:var(--c);margin:4px 0 6px}
+.eq-n{font-family:var(--fn);font-size:12px;color:var(--gris)}
+.eq-h::after{content:"+";position:absolute;right:15px;top:16px;font-family:var(--fn);font-size:20px;color:var(--c)}
+.eq[open] .eq-h::after{content:"\2013"}
+.eq-c{border-top:1px solid var(--gris-claro)}
+.et-row{display:flex;align-items:baseline;gap:9px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #F0F0F0;padding:12px 16px;cursor:pointer;font:inherit;transition:background .14s}
+.et-row:last-child{border-bottom:0}
+.et-row:hover{background:var(--c);color:#fff}
+.et-row b{font-size:15.3px;font-weight:600;white-space:nowrap}
+.et-row span{font-size:13px;color:var(--gris);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.et-row:hover span,.et-row:hover i{color:#fff}
+.et-row i{font-style:normal;color:var(--c)}
+.ini-dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.ini-card{position:relative;display:block;width:100%;text-align:left;border:1px solid var(--gris-claro);border-top:2px solid var(--tinta);background:#fff;padding:20px 22px 44px;cursor:pointer;font:inherit;transition:border-color .18s,box-shadow .18s}
+.ini-card:hover{border-color:var(--cat);box-shadow:0 2px 14px rgba(0,0,0,.06)}
+.ini-card p{margin:9px 0 0;font-size:14.8px;color:var(--gris);line-height:1.5}
+.ini-card .fl{position:absolute;left:22px;bottom:16px;font-style:normal;font-size:19px;color:var(--cat)}
+.ini-todo{margin-top:26px;text-align:center}
+.ini-todo a{font-family:var(--fn);font-size:13px;color:var(--gris);cursor:pointer;text-decoration:underline}
+@media(max-width:700px){.ini-dos{grid-template-columns:1fr}}
+.perfil-bar{display:flex;align-items:center;gap:14px;padding:9px 0;border-bottom:1px solid var(--gris-claro);margin-bottom:6px;font-family:var(--fn);font-size:12.5px}
+.perfil-bar span{font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cat)}
+.perfil-bar a{color:var(--gris);cursor:pointer;text-decoration:underline}
+.est-c{font-size:14px;color:var(--gris);font-style:italic}
 .cod-s{font-family:var(--fn);font-size:22px;font-weight:700;color:var(--cat);text-align:center}
 .pb-no.plg summary{padding-left:14px;border-left:4px solid var(--cat)}
 .plg{border-top:1px solid var(--gris-claro);background:transparent}
@@ -522,6 +568,8 @@ const BIBLIO = [
 const CONTENIDO = {};
 CONTENIDO.es = {
 sec:{
+ mix:"Grupo mezclado: cuatro niveles en una cancha", et1:"etapa", etN:"etapas",
+ estDom:"Qué tiene que dominar", estComp:"Dónde se comprueba",
  gQue:"Puntos de corrección", gErr:"El error:", gFix:"Cómo se arregla:", plgAbrir:"Tocá cada concepto para abrirlo",
  okTit:"Cómo sabés que está conseguido",
  refInt:"Cómo lo hacen las potencias",
@@ -1283,6 +1331,8 @@ ref:{
 
 CONTENIDO.de = {
 sec:{
+ mix:"Gemischte Gruppe: vier Niveaus auf einem Feld", et1:"Stufe", etN:"Stufen",
+ estDom:"Was beherrscht werden muss", estComp:"Wo es überprüft wird",
  gQue:"Knotenpunkte", gErr:"Der Fehler:", gFix:"So wird es korrigiert:", plgAbrir:"Tippe auf einen Begriff, um ihn zu öffnen",
  okTit:"Woran du erkennst, dass es erreicht ist",
  refInt:"Wie es die führenden Nationen machen",
@@ -2033,6 +2083,8 @@ ref:{
 
 CONTENIDO.en = {
 sec:{
+ mix:"Mixed group: four levels on one court", et1:"stage", etN:"stages",
+ estDom:"What they must master", estComp:"Where you check it",
  gQue:"Correction points", gErr:"The error:", gFix:"How to fix it:", plgAbrir:"Tap a concept to open it",
  okTit:"How you know it is achieved",
  refInt:"How the leading nations do it",
@@ -3063,7 +3115,7 @@ window.plImport = function(ev){
 };
 
 /* ════════ RENDER ════════ */
-let LANG="es", VISTA="resumen", ET="kv1";
+let LANG="es", VISTA="inicio", ET="kv1";
 const D = () => CONTENIDO[LANG] || CONTENIDO.es;
 const t = k => (D().ui && D().ui[k]) || CONTENIDO.es.ui[k] || "⟨"+k+"⟩";
 const F = x => `<span class="fte ${x}">${t("fte."+x)}</span>`;
@@ -3171,6 +3223,142 @@ function objEtapa(id){
   return src ? src.obj : "";
 }
 
+/* Estándares de salida: qué domina al irse, y en qué situación se comprueba */
+const EST = {es:{
+kv1:[["Manos arriba","Atrapa por encima de la cabeza, con las manos formando el triángulo","En el juego 3:3, no en un ejercicio de a dos"],
+ ["Lanzamiento","Lanza con las dos manos desde arriba, con impulso de piernas, y la pelota llega jugable","El compañero no tiene que correr para alcanzarla"],
+ ["Desplazamiento","Se mueve a la pelota con pasos cortos y llega frenado antes de tocar","En juegos donde la pelota cae lejos a propósito"],
+ ["Aterrizaje","Cae sobre los dos pies con la rodilla alineada","Sin que se lo recuerden, en el juego de entrada de cualquier día"],
+ ["Permanencia","Quiere volver","Se vuelve a inscribir la temporada siguiente"]],
+kv2:[["Toque de arriba","Juega el primer contacto de arriba cuando la pelota viene alta, frente alta y manos adelante de la cara","En el juego, no solo en el ejercicio"],
+ ["Saque de abajo","Pone la pelota en juego sosteniéndola con la otra mano hasta el golpe","En partido, sin necesidad de repetir el saque"],
+ ["Desplazamiento","Llega en equilibrio y frena antes de tocar","Con la pelota lanzada lejos de su posición"],
+ ["Segundo balón","Juega el segundo contacto a un compañero en vez de mandarla al otro lado","En el juego libre del final, sin que se lo pidan"]],
+kv3:[["Tres contactos","El equipo construye la jugada completa: recibe, arma y ataca","En el juego con las reglas de la etapa, también cuando la pelota viene difícil"],
+ ["Ataque de pie","Elige un hueco antes de golpear y ejecuta con mano abierta y brazo estirado","Canta la zona antes de golpear y la pelota va ahí"],
+ ["Elección de contacto","Usa manchette con pelota baja o rápida y toque de arriba con pelota alta","Sin que el entrenador se lo indique"],
+ ["Cobertura","Acompaña al que ataca","En el juego, sin recordatorio"]],
+r1:[["Recepción","Sostiene la jugada con manchette: plataforma formada antes y cuerpo detrás de la pelota","Con saque real, nunca con pelota lanzada"],
+ ["Armado","Da al compañero una pelota atacable, con altura y separación de red suficientes","El atacante no tiene que corregir su carrera"],
+ ["Ataque en salto","Ataca por encima de la red con ritmo de carrera, aunque sean dos pasos","En el juego, no en ejercicio aislado"],
+ ["Construcción","El equipo llega a tres contactos también cuando la recepción sale mal","En juego con marcador"],
+ ["Aterrizaje","Cae con las dos piernas y la rodilla alineada","Después de cada ataque, sin recordatorio"]],
+r2:[["Penetración","Sale cuando el saque rival cruza la red, llega frenado y arma con opciones abiertas","En juego 4:4 con saque real. El último paso es de freno"],
+ ["Ataque en salto","Carrera de tres pasos con el mismo ritmo y contacto arriba y adelante","En el juego, aunque el armado no venga perfecto"],
+ ["Recepción a dos","Se reparte la cancha con el compañero, canta antes de tocar y no deja el medio libre","Con la regla acordada, la misma durante toda la temporada"],
+ ["Cobertura","Acompaña al atacante a dos metros, cuerpo bajo y manos abiertas","Sin que nadie lo pida"],
+ ["Carga","Atraviesa el pico de crecimiento sin dolor de rodilla sostenido","Talla cada tres meses y ficha individual al día"]],
+r3:[["Saque de arriba","Saca de arriba desde la línea de fondo y puede elegir la zona","En partido, con la tasa de error acordada antes"],
+ ["Carrera de tres pasos","Mantiene el ritmo y el pie de freno aunque el armado venga corto o separado","Con armados imperfectos puestos a propósito"],
+ ["Bloqueo","Llega formado, salta vertical y aparece con las manos sobre la red","El desplazamiento termina antes del salto"],
+ ["Recepción a tres","Ocupa su zona, canta antes de tocar, y el balón del medio lo toma quien va hacia adentro","Con la regla acordada, sin cambiarla en el año"],
+ ["Defensa","Toda defensa termina en ataque, no en devolución","En juego, no en ejercicio aislado de defensa"]],
+f1:[["Armado desde zaga","Cualquiera arma cuando la pelota no llega al armador, con pelota utilizable","Registro escrito: los seis armaron en las seis rotaciones"],
+ ["Recepción","Sostiene la recepción contra saque de competencia","Con el saque del sábado, sin bajarle la intensidad al ejercicio"],
+ ["Defensa sin líbero","Defiende su zona; nadie sale del fondo por su altura","Todo el año, porque el reglamento de la etapa no permite líbero"],
+ ["Penetración","Sale a tiempo en las seis rotaciones, sin excepciones","Se canta la rotación antes de cada punto"],
+ ["Bloqueo","Llega formado al punto de ataque contra red alta","Dos pasos y parada antes del salto"]],
+f2:[["Armado especializado","Las dos armadoras sostienen el sistema un partido completo","Contrato escrito con cada atacante: altura, distancia y velocidad"],
+ ["Ataque","Resuelve dos direcciones desde la misma carrera, más la finta","La carrera es indistinguible entre las tres opciones, filmada"],
+ ["Bloqueo lector","Mira el primer contacto, después al armador, y decide antes del salto","Canta su decisión antes del toque del armador rival"],
+ ["Sistema","Ejecuta el 6-2 con sus coberturas en las seis rotaciones","Sin que el entrenador corrija la ubicación"],
+ ["Carrera dual","Escuela y vóley organizados sin que uno destruya al otro","Horario escolar y de entrenamiento en la misma hoja"]],
+f3:[["Rendimiento","Sostiene su nivel técnico en el tercer set y con el marcador en contra","En ejercicios que empiezan en desventaja a propósito"],
+ ["Sistema","Ejecuta el 5-1 completo, con rotaciones y coberturas","Un partido entero sin asistencia del entrenador"],
+ ["Transición","Aterriza, gira, sale de la red y vuelve a atacar","Toda defensa y todo bloqueo terminan en ataque"],
+ ["Autonomía","Entrena solo con un plan escrito","El plan existe y puede decir qué hizo con él"],
+ ["Destino","Tiene definido primer equipo, estructura regional, o vóley con estudio","Escrito y conversado desde noviembre, no en abril"]]
+}};
+EST.de = {
+kv1:[["Hände oben","Fängt über dem Kopf, die Hände bilden das Dreieck","Im Spiel 3:3, nicht in einer Zweierübung"],
+ ["Wurf","Wirft beidhändig von oben mit Beinimpuls, und der Ball kommt spielbar an","Die Mitspielerin muss ihm nicht nachlaufen"],
+ ["Verschiebung","Bewegt sich mit kurzen Schritten zum Ball und kommt gebremst an","In Spielen, in denen der Ball absichtlich weit weg fällt"],
+ ["Landung","Landet auf beiden Füssen mit ausgerichtetem Knie","Ohne Erinnerung, im Einstiegsspiel an einem beliebigen Tag"],
+ ["Verbleib","Will wiederkommen","Meldet sich für die folgende Saison erneut an"]],
+kv2:[["Oberes Zuspiel","Spielt den ersten Kontakt oben, wenn der Ball hoch kommt, hohe Stirn und Hände vor dem Gesicht","Im Spiel, nicht nur in der Übung"],
+ ["Service von unten","Bringt den Ball ins Spiel und hält ihn bis zum Schlag in der anderen Hand","Im Spiel, ohne das Service wiederholen zu müssen"],
+ ["Verschiebung","Kommt im Gleichgewicht an und stoppt vor der Berührung","Mit einem Ball, der weit von der Position weg geworfen wird"],
+ ["Zweiter Ball","Spielt den zweiten Kontakt zur Mitspielerin statt direkt hinüber","Im freien Spiel am Schluss, ohne Aufforderung"]],
+kv3:[["Drei Kontakte","Die Mannschaft baut den ganzen Spielzug auf: Annahme, Zuspiel, Angriff","Im Spiel nach den Regeln der Stufe, auch wenn der Ball schwierig kommt"],
+ ["Angriff aus dem Stand","Wählt vor dem Schlag eine Lücke und schlägt mit offener Hand und gestrecktem Arm","Sagt die Zone vor dem Schlag an, und der Ball geht dorthin"],
+ ["Wahl des Kontakts","Nutzt die Manchette bei tiefem oder schnellem Ball und das obere Zuspiel bei hohem","Ohne Hinweis der Trainerperson"],
+ ["Sicherung","Begleitet die angreifende Person","Im Spiel, ohne Erinnerung"]],
+r1:[["Annahme","Hält den Spielzug mit der Manchette: Spielbrett vorher geformt, Körper hinter dem Ball","Mit echtem Service, nie mit zugeworfenem Ball"],
+ ["Zuspiel","Gibt der Mitspielerin einen angreifbaren Ball, mit genug Höhe und Netzabstand","Die Angreiferin muss ihren Anlauf nicht korrigieren"],
+ ["Sprungangriff","Greift über das Netz an, mit Anlaufrhythmus, und seien es zwei Schritte","Im Spiel, nicht in einer isolierten Übung"],
+ ["Aufbau","Die Mannschaft erreicht drei Kontakte auch bei misslungener Annahme","Im Spiel mit Resultat"],
+ ["Landung","Landet auf beiden Beinen mit ausgerichtetem Knie","Nach jedem Angriff, ohne Erinnerung"]],
+r2:[["Penetration","Startet, wenn das gegnerische Service das Netz überquert, kommt gebremst an und spielt mit offenen Optionen zu","Im Spiel 4:4 mit echtem Service. Der letzte Schritt ist ein Bremsschritt"],
+ ["Sprungangriff","Dreischritt-Anlauf mit gleichem Rhythmus, Kontakt oben und vorne","Im Spiel, auch wenn das Zuspiel nicht perfekt kommt"],
+ ["Annahme zu zweit","Teilt das Feld mit der Mitspielerin, ruft vor der Berührung und lässt die Mitte nicht offen","Mit der vereinbarten Regel, dieselbe die ganze Saison"],
+ ["Sicherung","Begleitet die Angreiferin auf zwei Metern, tiefer Körper und offene Hände","Ohne dass es jemand verlangt"],
+ ["Belastung","Übersteht den Wachstumsschub ohne anhaltende Knieschmerzen","Körpergrösse alle drei Monate und individuelles Blatt aktuell"]],
+r3:[["Service von oben","Serviert von oben von der Grundlinie und kann die Zone wählen","Im Spiel, mit der vorher vereinbarten Fehlerquote"],
+ ["Dreischritt-Anlauf","Hält Rhythmus und Bremsfuss, auch wenn das Zuspiel kurz oder abgesetzt kommt","Mit absichtlich unperfekten Zuspielen"],
+ ["Block","Kommt formiert an, springt vertikal und erscheint mit den Händen über dem Netz","Die Verschiebung endet vor dem Sprung"],
+ ["Annahme zu dritt","Besetzt die eigene Zone, ruft vor der Berührung, und den Ball in der Mitte nimmt, wer nach innen geht","Mit der vereinbarten Regel, ohne sie im Jahr zu ändern"],
+ ["Abwehr","Jede Abwehr endet im Angriff, nicht im Rückspiel","Im Spiel, nicht in einer isolierten Abwehrübung"]],
+f1:[["Zuspiel aus dem Hinterfeld","Jede spielt zu, wenn der Ball die Zuspielerin nicht erreicht, mit brauchbarem Ball","Schriftliche Erfassung: alle sechs haben in allen sechs Rotationen zugespielt"],
+ ["Annahme","Hält die Annahme gegen Wettkampfservice","Mit dem Service vom Samstag, ohne die Intensität der Übung zu senken"],
+ ["Abwehr ohne Libera","Verteidigt die eigene Zone; niemand geht wegen seiner Grösse aus dem Hinterfeld","Das ganze Jahr, denn das Reglement der Stufe erlaubt keine Libera"],
+ ["Penetration","Startet rechtzeitig in allen sechs Rotationen, ohne Ausnahme","Die Rotation wird vor jedem Punkt angesagt"],
+ ["Block","Kommt formiert am Angriffspunkt an, gegen hohes Netz","Zwei Schritte und Stopp vor dem Sprung"]],
+f2:[["Spezialisiertes Zuspiel","Die zwei Zuspielerinnen tragen das System ein ganzes Spiel","Schriftliche Abmachung mit jeder Angreiferin: Höhe, Abstand und Tempo"],
+ ["Angriff","Löst zwei Richtungen aus demselben Anlauf, dazu den Lob","Der Anlauf ist zwischen den drei Optionen nicht zu unterscheiden, gefilmt"],
+ ["Lesender Block","Schaut den ersten Kontakt an, dann die Zuspielerin, und entscheidet vor dem Sprung","Sagt die Entscheidung vor der Berührung der gegnerischen Zuspielerin an"],
+ ["System","Führt das 6-2 mit seinen Sicherungen in allen sechs Rotationen aus","Ohne dass die Trainerperson die Aufstellung korrigiert"],
+ ["Duale Laufbahn","Schule und Volleyball organisiert, ohne dass eines das andere zerstört","Schul- und Trainingsplan auf demselben Blatt"]],
+f3:[["Leistung","Hält das technische Niveau im dritten Satz und bei Rückstand","In Übungen, die absichtlich im Rückstand beginnen"],
+ ["System","Führt das vollständige 5-1 mit Rotationen und Sicherungen aus","Ein ganzes Spiel ohne Unterstützung der Trainerperson"],
+ ["Übergang","Landet, dreht, löst sich vom Netz und greift wieder an","Jede Abwehr und jeder Block enden im Angriff"],
+ ["Selbstständigkeit","Trainiert allein nach einem schriftlichen Plan","Der Plan existiert und sie kann sagen, was sie damit gemacht hat"],
+ ["Ziel","Hat erste Mannschaft, regionale Struktur oder Volleyball neben der Ausbildung definiert","Schriftlich und ab November besprochen, nicht im April"]]};
+EST.en = {
+kv1:[["Hands up","Catches above the head with the hands forming the triangle","In the 3v3 game, not in a drill in pairs"],
+ ["Throw","Throws two-handed from above with leg drive, and the ball arrives playable","The teammate does not have to run after it"],
+ ["Movement","Moves to the ball with short steps and arrives braked before contact","In games where the ball deliberately lands away from them"],
+ ["Landing","Lands on both feet with the knee aligned","Without being reminded, in the opening game on any given day"],
+ ["Staying","Wants to come back","Signs up again for the following season"]],
+kv2:[["Overhead touch","Plays the first contact overhead when the ball comes high, high forehead and hands in front of the face","In the game, not only in the drill"],
+ ["Underhand serve","Puts the ball in play holding it in the other hand until the strike","In a match, without needing to repeat the serve"],
+ ["Movement","Arrives balanced and stops before contact","With the ball thrown away from their position"],
+ ["Second ball","Plays the second contact to a teammate instead of sending it over","In the free play at the end, unprompted"]],
+kv3:[["Three contacts","The team builds the complete rally: pass, set, attack","In the game under the stage's rules, including when the ball comes hard"],
+ ["Standing attack","Chooses a gap before striking and executes with an open hand and straight arm","Calls the zone before striking and the ball goes there"],
+ ["Choice of contact","Uses the forearm pass on a low or fast ball and the overhead touch on a high one","Without the coach pointing it out"],
+ ["Coverage","Follows the attacker","In the game, without a reminder"]],
+r1:[["Passing","Keeps the rally alive with the forearm pass: platform formed early, body behind the ball","Against a real serve, never off a tossed ball"],
+ ["Setting","Gives a teammate an attackable ball, with enough height and distance from the net","The attacker does not have to correct their approach"],
+ ["Jump attack","Attacks above the net with approach rhythm, even if it is two steps","In the game, not in an isolated drill"],
+ ["Building","The team reaches three contacts even when the pass goes wrong","In a game with a score"],
+ ["Landing","Lands on both legs with the knee aligned","After every attack, without a reminder"]],
+r2:[["Penetration","Leaves as the opposing serve crosses the net, arrives braked and sets with the options open","In a 4v4 game with a real serve. The last step is a braking step"],
+ ["Jump attack","Three-step approach with the same rhythm, contact high and in front","In the game, even when the set is not perfect"],
+ ["Two-passer reception","Splits the court with their partner, calls before touching and does not leave the middle open","Under the agreed rule, the same one all season"],
+ ["Coverage","Follows the attacker at two metres, body low and hands open","Without anybody asking"],
+ ["Load","Gets through the growth spurt without persistent knee pain","Height every three months and the individual sheet up to date"]],
+r3:[["Overhand serve","Serves overhand from the baseline and can choose the zone","In a match, with the error rate agreed beforehand"],
+ ["Three-step approach","Holds the rhythm and the braking foot even when the set comes short or off the net","With deliberately imperfect sets"],
+ ["Block","Arrives formed, jumps vertically and appears with the hands over the net","The footwork finishes before the jump"],
+ ["Three-passer reception","Covers their zone, calls before touching, and the middle ball is taken by whoever moves inward","Under the agreed rule, unchanged all year"],
+ ["Defence","Every dig ends in an attack, not in a free ball","In the game, not in an isolated defensive drill"]],
+f1:[["Setting from the back row","Anyone sets when the ball does not reach the setter, with a usable ball","Written record: all six set in all six rotations"],
+ ["Passing","Holds the reception against a match serve","Against Saturday's serve, without lowering the drill's intensity"],
+ ["Defending without a libero","Covers their zone; nobody leaves the back court for their height","All year, because the stage's rules do not allow a libero"],
+ ["Penetration","Leaves on time in all six rotations, without exception","The rotation is called before every point"],
+ ["Block","Arrives formed at the point of attack against a high net","Two steps and a stop before the jump"]],
+f2:[["Specialised setting","The two setters hold the system for a whole match","Written agreement with each attacker: height, distance and speed"],
+ ["Attack","Solves two directions from the same approach, plus the tip","The approach is indistinguishable between the three options, on film"],
+ ["Reading block","Watches the first contact, then the setter, and decides before the jump","Calls the decision before the opposing setter's touch"],
+ ["System","Runs the 6-2 with its coverage in all six rotations","Without the coach correcting anyone's position"],
+ ["Dual career","School and volleyball organised without one destroying the other","School and training timetables on the same sheet"]],
+f3:[["Performance","Holds their technical level in the third set and when behind","In drills that deliberately start from behind"],
+ ["System","Runs the complete 5-1, with rotations and coverage","A whole match without help from the coach"],
+ ["Transition","Lands, turns, clears the net and attacks again","Every dig and every block end in an attack"],
+ ["Autonomy","Trains alone to a written plan","The plan exists and they can say what they did with it"],
+ ["Destination","Has first team, regional structure, or volleyball alongside studies defined","Written and discussed from November, not in April"]]};
+["es","de","en"].forEach(function(L){ Object.keys(EST[L]).forEach(function(k){ CONTENIDO[L].etapas[k].est = EST[L][k]; }); });
+
 function vEtapa(br){
   const d = D().etapas[ET], rm = D().rama[br];
   const mixto = ["kv1","kv2","kv3","r1","r2"].includes(ET);
@@ -3215,7 +3403,7 @@ function vEtapa(br){
   <section class="bloque"><h3><span class="n">05</span>${S("est")}</h3>
     <p>${S("estP")} ${F("club")}</p>
     <div class="tabla-envoltura"><table><thead><tr><th>${S("estTh1")}</th><th>${S("estTh2")}</th></tr></thead>
-      <tbody>${d.est.map(x=>`<tr><td>${x[0]}</td><td class="num">${x[1]}</td></tr>`).join("")}</tbody></table></div>
+      <tbody>${d.est.map(x=>`<tr><td><strong>${x[0]}</strong></td><td>${x[1]}</td><td class="est-c">${x[2]||""}</td></tr>`).join("")}</tbody></table></div>
     <div class="nota">${S("estN")}</div></section>
 
   <section class="bloque"><h3><span class="n">06</span>${S("fis")}</h3>
@@ -5733,6 +5921,43 @@ ENSC_EN.gen.bloques.push(
 
 const ENS_ORDEN = ["gen","kv1","kv2","kv3","r1","r2","r3","f1","f2","f3","u20"];
 
+const OT = {es:{
+ t:"Tu objetivo esta temporada", ok:"Se cumple si, en abril:",
+ d:{
+ kv1:["Que en abril se vuelvan a anotar ocho de cada diez.",["Cada chico toca la pelota 15 veces o más cada cinco minutos","Nadie esperó en una fila de más de cuatro en toda la temporada","Todos saben el nombre de todos"]],
+ kv2:["Que el toque de arriba entre al juego sin que el juego se caiga.",["8 de cada 10 juegan el primer contacto de arriba cuando la pelota viene alta","6 de cada 10 saques entran a la cancha","Siguen anotados los mismos que empezaron"]],
+ kv3:["Que tu grupo construya tres toques sin que se lo pidas.",["En el juego libre del final se construye en más de la mitad de las pelotas","Cada uno canta la zona antes de sacar","Llegan a Rookie sin devolver de primera"]],
+ r1:["Que la pelota sobreviva ahora que desapareció el atrapar.",["La mayoría sostiene la jugada con manchette contra saque real","Todos atacaron en salto al menos una vez por sesión","Nadie quedó nivelado para abajo: hubo dos canchas con dos reglas"]],
+ r2:["Que la penetración funcione, porque es la condición para pasar de etapa.",["8 de cada 10 salen a tiempo con el saque rival","7 de cada 10 llegan frenados al segundo balón","El equipo llega a tres contactos también con recepción mala"]],
+ r3:["Que el grupo entre a cancha completa con saque de arriba y tres receptores.",["7 de cada 10 saques dentro, desde la línea de fondo","Los tres receptores se reparten el campo sin chocarse ni dejar huecos","Todos los perfiles que corresponden fueron anotados a la sichtung"]],
+ f1:["Que todos sepan armar y todos sepan defender, porque es la última vez que el reglamento lo obliga.",["Los seis armaron en las seis rotaciones, con registro escrito","50% de recepciones en sistema sobre 20 saques de competencia","Nadie salió del fondo por su altura en todo el año"]],
+ f2:["Que las dos armadoras sostengan el 6-2 con contrato escrito.",["Contrato firmado con cada atacante y respetado 8 de cada 10 pelotas","Un ataque de zaga por rotación con recepción buena","Un clip de video por semana, aplicado el fin de semana siguiente"]],
+ f3:["Que lleguen al primer equipo sabiendo sostener el 5-1 bajo presión.",["Sostienen las seis rotaciones un partido entero sin que intervengas","Su porcentaje no baja más de 10 puntos en el tercer set","Cada uno con destino escrito para la temporada siguiente"]],
+ u20:["Que los cuatro niveles convivan sin que nadie entrene el promedio.",["Cada jugador con su level asignado y su número propio de saque","La mitad de la sesión en dos canchas con reglas distintas","El juego final siempre mezclado, jóvenes con adultos"]]}
+}};
+OT.de = {t:"Dein Ziel in dieser Saison", ok:"Es ist erreicht, wenn im April:", d:{
+ kv1:["Dass sich im April acht von zehn wieder anmelden.",["Jedes Kind berührt den Ball 15-mal oder öfter pro fünf Minuten","Niemand wartete die ganze Saison in einer Reihe von mehr als vier","Alle kennen die Namen aller"]],
+ kv2:["Dass das obere Zuspiel ins Spiel kommt, ohne dass das Spiel zerfällt.",["8 von 10 spielen den ersten Kontakt oben, wenn der Ball hoch kommt","6 von 10 Services kommen ins Feld","Es sind noch dieselben angemeldet, die angefangen haben"]],
+ kv3:["Dass deine Gruppe drei Kontakte aufbaut, ohne dass du es verlangst.",["Im freien Spiel am Schluss wird bei mehr als der Hälfte der Bälle aufgebaut","Jede sagt die Zone vor dem Service an","Sie kommen in Rookie an, ohne direkt zurückzuspielen"]],
+ r1:["Dass der Ball überlebt, jetzt wo das Fangen weg ist.",["Die Mehrheit hält den Spielzug mit der Manchette gegen echtes Service","Alle haben pro Einheit mindestens einmal im Sprung angegriffen","Niemand wurde nach unten nivelliert: Es gab zwei Felder mit zwei Regeln"]],
+ r2:["Dass die Penetration funktioniert, denn sie ist die Bedingung für den Übertritt.",["8 von 10 starten rechtzeitig beim gegnerischen Service","7 von 10 kommen gebremst zum zweiten Ball","Die Mannschaft erreicht drei Kontakte auch bei schlechter Annahme"]],
+ r3:["Dass die Gruppe mit Service von oben und drei Annahmespielerinnen aufs ganze Feld geht.",["7 von 10 Services im Feld, von der Grundlinie","Die drei Annahmespielerinnen teilen das Feld ohne Kollision und ohne Lücken","Alle passenden Profile wurden zur Sichtung angemeldet"]],
+ f1:["Dass alle zuspielen und alle verteidigen können, denn es ist das letzte Mal, dass das Reglement es verlangt.",["Alle sechs haben in allen sechs Rotationen zugespielt, schriftlich erfasst","50% der Annahmen im System bei 20 Wettkampfservices","Niemand ist das ganze Jahr wegen seiner Grösse aus dem Hinterfeld gegangen"]],
+ f2:["Dass die zwei Zuspielerinnen das 6-2 mit schriftlicher Abmachung tragen.",["Abmachung mit jeder Angreiferin unterzeichnet und bei 8 von 10 Bällen eingehalten","Ein Hinterfeldangriff pro Rotation bei guter Annahme","Ein Videoclip pro Woche, am folgenden Wochenende umgesetzt"]],
+ f3:["Dass sie in der ersten Mannschaft ankommen und das 5-1 unter Druck tragen können.",["Sie tragen die sechs Rotationen ein ganzes Spiel lang ohne dein Eingreifen","Ihre Quote sinkt im dritten Satz um höchstens 10 Punkte","Jede und jeder mit schriftlichem Ziel für die Folgesaison"]],
+ u20:["Dass die vier Niveaus nebeneinander bestehen, ohne dass jemand den Durchschnitt trainiert.",["Jede Person mit vergebenem Level und eigener Servicezahl","Die halbe Einheit auf zwei Feldern mit unterschiedlichen Regeln","Das Schlussspiel immer gemischt, Junge mit Erwachsenen"]]}};
+OT.en = {t:"Your objective this season", ok:"It is met if, in April:", d:{
+ kv1:["That eight out of ten sign up again in April.",["Every child touches the ball 15 times or more every five minutes","Nobody waited in a line of more than four all season","Everyone knows everyone's name"]],
+ kv2:["That the overhead touch enters the game without the game collapsing.",["8 out of 10 play the first contact overhead when the ball comes high","6 out of 10 serves land in court","The same children who started are still registered"]],
+ kv3:["That your group builds three contacts without you asking.",["In the free play at the end, more than half the balls get built","Everyone calls the zone before serving","They reach Rookie without returning the first ball"]],
+ r1:["That the ball survives now that catching has gone.",["Most of them keep the rally alive with the forearm pass against a real serve","Everyone jump-attacked at least once per session","Nobody was levelled down: there were two courts with two rules"]],
+ r2:["That penetration works, because it is the condition for moving up a stage.",["8 out of 10 leave on time on the opponent's serve","7 out of 10 arrive braked at the second ball","The team reaches three contacts even off a bad pass"]],
+ r3:["That the group moves onto the full court with an overhand serve and three passers.",["7 out of 10 serves in, from the baseline","The three passers split the court without colliding or leaving gaps","Every player who fits the profile was entered for the trial"]],
+ f1:["That everyone can set and everyone can defend, because it is the last time the rules require it.",["All six set in all six rotations, with a written record","50% of receptions in system over 20 match serves","Nobody left the back court because of their height all year"]],
+ f2:["That the two setters hold the 6-2 with a written agreement.",["Agreement signed with each attacker and respected on 8 out of 10 balls","One back-row attack per rotation off a good pass","One video clip a week, applied the following weekend"]],
+ f3:["That they reach the first team able to hold the 5-1 under pressure.",["They hold the six rotations for a whole match without you stepping in","Their percentage drops no more than 10 points in the third set","Each of them with a written destination for next season"]],
+ u20:["That the four levels coexist without anybody training the average.",["Every player with a level assigned and their own serving number","Half the session on two courts with different rules","The closing game always mixed, young players with adults"]]}};
+
 function vEns(){
   const nav = ENS_ORDEN.map(id=>{
     const et = id==="gen" ? null : ETAPAS[id];
@@ -5758,7 +5983,9 @@ function vEns(){
         <div class="nota aviso">La página de <strong>recepción lateral</strong>, que es tu segundo documento, figura en el índice de técnicas pero no pude confirmar su dirección exacta. Entrá por el índice y buscá «Manchette als Annahme seitlich»: está ahí.</div></section>`;
   } else if(EC()[ENS_CAT].tecnica){
     const c2 = EC()[ENS_CAT], et = ETAPAS[ENS_CAT] || {c:"#8E3374"};
-    cuerpo = `<div class="ens-obj" style="--c:${et.c}"><span>Objetivo de la etapa</span><p>${c2.obj}</p></div>
+    cuerpo = `${(function(){const o=(OT[LANG]||OT.es), q=o.d[ENS_CAT]; if(!q) return "";
+  return `<div class="ot"><span>${o.t}</span><p>${q[0]}</p><b>${o.ok}</b><ul>${q[1].map(x=>`<li>${x}</li>`).join("")}</ul></div>`;})()}
+<div class="ens-obj" style="--c:${et.c}"><span>${S("objTit")}</span><p>${c2.obj}</p></div>
       <section class="bloque"><h3>Por qué esta etapa importa</h3><p>${c2.porque}</p></section>
       <section class="bloque"><h3>Técnica: qué se enseña y cómo se corrige</h3>
         <p>Los puntos de corrección son los de la oficina federal del deporte, así que coinciden con los videos oficiales.</p>
@@ -5788,8 +6015,8 @@ function vEns(){
         </tbody></table></div></section>
       ${D().etapas[ENS_CAT] ? `<section class="bloque"><h3>Estándares de salida</h3>
         <p>Se cambia de etapa cuando se cumplen, no cuando se cumplen años. Son los mismos de la ficha: se leen desde ahí y no pueden divergir.</p>
-        <div class="tabla-envoltura"><table><thead><tr><th>Criterio</th><th>Estándar</th></tr></thead><tbody>
-        ${D().etapas[ENS_CAT].est.map(e=>`<tr><td><strong>${e[0]}</strong></td><td>${e[1]}</td></tr>`).join("")}
+        <div class="tabla-envoltura"><table><thead><tr><th>Criterio</th><th>${S("estDom")}</th><th>${S("estComp")}</th></tr></thead><tbody>
+        ${D().etapas[ENS_CAT].est.map(e=>`<tr><td><strong>${e[0]}</strong></td><td>${e[1]}</td><td class="est-c">${e[2]||""}</td></tr>`).join("")}
         </tbody></table></div></section>` : ""}
       <section class="bloque"><h3>Los errores del entrenador en esta etapa</h3>
         <p>No los del jugador: los tuyos.</p>
@@ -5899,13 +6126,96 @@ function vRef(){
     </tbody></table></div></section>${imprimir()}`;
 }
 
+/* ── Pantalla de entrada por perfil ── */
+let PERFIL = null;
+const PERFILES = {
+ dt:  ["play","ens","matriz","m","f","carga","plantel","herr"],
+ dir: ["resumen","juego","play","ens","matriz","m","f","comp","carga","plantel","staff","herr","plan","foda","ref"],
+ fam: ["resumen","juego","play","comp","ref"]
+};
+const INI = {es:{
+ t:"¿Con qué venís?",
+ p:"Elegí tu perfil y el documento se ordena para vos. Podés cambiarlo cuando quieras desde arriba.",
+ dt:["Entreno un grupo","Vas directo a tu categoría: tu objetivo de la temporada, qué enseñar, cuándo, y tu plantel.","Elegí tu grupo"],
+ dir:["Dirigencia y coordinación","El proyecto completo: modelo de juego, plan de temporada, carga, cuerpo técnico y FODA."],
+ fam:["Vengo a conocer el club","Qué es este proyecto, cómo jugamos y cómo se compite en Suiza."],
+ mix:"Grupo mezclado: cuatro niveles en una cancha", et1:"etapa", etN:"etapas", vol:"Cambiar perfil", per:{dt:"Entrenador",dir:"Dirigencia",fam:"Visitante"},
+ todo:"Ver todo el documento"
+}};
+INI.de={t:"Womit kommst du?",p:"Wähle dein Profil, und das Dokument ordnet sich für dich. Du kannst es jederzeit oben wechseln.",
+ dt:["Ich trainiere eine Gruppe","Direkt zu deiner Kategorie: dein Saisonziel, was zu unterrichten ist, wann, und dein Kader.","Wähle deine Gruppe"],
+ dir:["Vorstand und Koordination","Das vollständige Projekt: Spielmodell, Saisonplan, Belastung, Trainerstab und SWOT."],
+ fam:["Ich möchte den Verein kennenlernen","Was dieses Projekt ist, wie wir spielen und wie in der Schweiz gespielt wird."],
+ mix:"Gemischte Gruppe: vier Niveaus auf einem Feld", et1:"Stufe", etN:"Stufen", vol:"Profil wechseln", per:{dt:"Trainerperson",dir:"Vorstand",fam:"Besuch"}, todo:"Das ganze Dokument ansehen"};
+INI.en={t:"What brings you here?",p:"Pick your profile and the document arranges itself for you. You can change it any time from the top.",
+ dt:["I coach a group","Straight to your category: your objective for the season, what to teach, when, and your roster.","Pick your group"],
+ dir:["Board and coordination","The full project: playing model, season plan, load, coaching staff and SWOT."],
+ fam:["I want to know the club","What this project is, how we play and how competition works in Switzerland."],
+ mix:"Mixed group: four levels on one court", et1:"stage", etN:"stages", vol:"Change profile", per:{dt:"Coach",dir:"Board",fam:"Visitor"}, todo:"See the whole document"};
+window.setPerfil = function(p,cat){
+  PERFIL = p;
+  if(p==="dt" && cat){ ENS_CAT = cat; VISTA = "ens"; }
+  else if(p==="dt"){ VISTA = "ens"; }
+  else VISTA = "resumen";
+  aplicarPerfil(); render(); window.scrollTo(0,0);
+};
+window.volverInicio = function(){ PERFIL=null; VISTA="inicio"; aplicarPerfil(); render(); window.scrollTo(0,0); };
+window.verTodo = function(){ PERFIL="dir"; VISTA="resumen"; aplicarPerfil(); render(); window.scrollTo(0,0); };
+function aplicarPerfil(){
+  const nav=document.querySelector("nav.solapas"); if(nav) nav.hidden = (VISTA==="inicio");
+  const permitidas = PERFIL ? PERFILES[PERFIL] : null;
+  document.querySelectorAll(".solapa").forEach(function(b){
+    b.hidden = permitidas ? permitidas.indexOf(b.dataset.v)<0 : false;
+  });
+  document.querySelectorAll(".grupo-nav").forEach(function(g){
+    let vis=false, n=g.nextElementSibling;
+    while(n && !n.classList.contains("nav-grupo")){ if(n.classList.contains("solapa") && !n.hidden) vis=true; n=n.nextElementSibling; }
+    g.hidden = !vis;
+  });
+}
+/* Equipos reales del club: el entrenador entra por el suyo, no por nuestra etapa */
+const CLUBES = [
+ {id:"kids", nom:"Kids Volley", edad:"5–10", c:"#D9B300", etapas:["kv1","kv2","kv3"]},
+ {id:"ku16", nom:"KU16",        edad:"11–14", c:"#EE4655", etapas:["r1","r2","r3"]},
+ {id:"u18",  nom:"U18",         edad:"15–17", c:"#8E3374", etapas:["f1","f2"]},
+ {id:"u20",  nom:"U20",         edad:"15–20", c:"#0E2A8A", etapas:["u20","f1","f2","f3"]}
+];
+function vInicio(){
+  const i = INI[LANG] || INI.es;
+  const eq = CLUBES.map(function(cl){
+    const filas = cl.etapas.map(function(id){
+      const nom = id==="u20" ? (ENSC[id]?ENSC[id].t.split(":")[0]:"U20") : D().etapas[id].e.split("·")[0].trim();
+      const sub = id==="u20" ? i.mix : (D().etapas[id].n||"");
+      return `<button class="et-row" onclick="setPerfil('dt','${id}')"><b>${nom}</b><span>${sub}</span><i>\u2192</i></button>`;
+    }).join("");
+    return `<details class="eq" style="--c:${cl.c}">
+      <summary><div class="eq-h"><span class="eq-e">${cl.edad}</span><b>${cl.nom}</b>
+        <span class="eq-n">${cl.etapas.length} ${cl.etapas.length===1?i.et1:i.etN}</span></div></summary>
+      <div class="eq-c">${filas}</div></details>`;
+  }).join("");
+  return `<div class="ini">
+    <div class="ini-top"><h2>${i.t}</h2><p class="ini-p">${i.p}</p></div>
+    <div class="ini-dt">
+      <div class="ini-eti"><span>01</span>${i.dt[0]}</div>
+      <p class="ini-sub">${i.dt[1]}</p>
+      <div class="eq-wrap">${eq}</div>
+    </div>
+    <div class="ini-dos">
+      <button class="ini-card" onclick="setPerfil('dir')"><div class="ini-eti"><span>02</span>${i.dir[0]}</div><p>${i.dir[1]}</p><i class="fl">&rarr;</i></button>
+      <button class="ini-card" onclick="setPerfil('fam')"><div class="ini-eti"><span>03</span>${i.fam[0]}</div><p>${i.fam[1]}</p><i class="fl">&rarr;</i></button>
+    </div>
+    <p class="no-imprimir ini-todo"><a onclick="verTodo()">${i.todo} \u2192</a></p>
+  </div>`;
+}
+
 function render(){
   tema(); pintarEstaticos();
   const esEt = (VISTA==="m"||VISTA==="f");
   document.getElementById("ruta").hidden = !esEt;
   if(esEt) pintarRuta();
-  const vs = {play:vPlay, resumen:vResumen, juego:vJuego, matriz:vMatriz, comp:vComp, carga:vCarga, plantel:vPlantel, staff:vStaff, herr:vHerr, plan:vPlan, foda:vFoda, ens:vEns, ref:vRef};
-  document.getElementById("contenido").innerHTML = esEt ? vEtapa(VISTA) : vs[VISTA]();
+  const vs = {inicio:vInicio, play:vPlay, resumen:vResumen, juego:vJuego, matriz:vMatriz, comp:vComp, carga:vCarga, plantel:vPlantel, staff:vStaff, herr:vHerr, plan:vPlan, foda:vFoda, ens:vEns, ref:vRef};
+  aplicarPerfil();
+  document.getElementById("contenido").innerHTML = (PERFIL && VISTA!=="inicio" ? '<div class="perfil-bar no-imprimir"><span>'+((INI[LANG]||INI.es).per[PERFIL])+'</span><a onclick="volverInicio()">'+((INI[LANG]||INI.es).vol)+'</a></div>' : "") + (esEt ? vEtapa(VISTA) : vs[VISTA]());
   document.querySelectorAll(".solapa").forEach(b=>b.setAttribute("aria-selected", String(b.dataset.v===VISTA)));
   enlazarConfig();
 }

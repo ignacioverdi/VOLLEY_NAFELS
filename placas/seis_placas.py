@@ -8,7 +8,7 @@ Una por fundamento: saque, recepción, armado, ataque, bloqueo, equipo ideal.
 Entre placa y placa va el video de la mejor acción de ese fundamento.
 """
 import argparse, json, pathlib, re
-import armador, fechas, liga, placas2
+import armador, club, fechas, liga, placas2, rotacion
 
 LIGA = 'Liga Nacional A · Suiza'
 PLURAL = {'saque': 'saques', 'recepcion': 'recepciones',
@@ -32,6 +32,32 @@ def fichas(EQ, NOM_json):
             if nom:
                 out[(eq, dor)] = (nom, pos, viejo[2] if viejo else None)
     return out
+
+
+# Todas las pills llevan el signo %, que es como lo muestra DataVolley y
+# como lo lee un entrenador. La nota sobre el coeficiente ponderado se sacó
+# del pie: era una aclaración de manual, no de placa.
+PCT = {}
+
+
+def tiles(fund, principal, J, vara_, respaldo):
+    """Los tres tiles: el número grande con la vara, y los dos cortes.
+
+    Si un corte no tiene volumen (pasa en una fecha suelta), cae al respaldo
+    en vez de mostrar un porcentaje de dos acciones.
+    """
+    fmt = PCT.get(fund, '%d%%')
+    out = [(principal[0], fmt % principal[1], None, vara_ or None)]
+    # El corte se muestra solo si LOS DOS lados tienen volumen. Si el jugador
+    # sacó 34 flotados y ningún potencia, "FLOTADO 47" al lado de
+    # "EFICIENCIA 47" es el mismo número dos veces: no es un corte, es ruido.
+    cs = [(et, v, n) for et, v, n in liga.cortes(J, fund) if v is not None and n >= 4]
+    if len(cs) == 2:
+        out += [(et, fmt % v, '%d %s' % (n, PLURAL[fund]), None) for et, v, n in cs]
+    while len(out) < 3 and respaldo:
+        et, v = respaldo.pop(0)
+        out.append((et, v, None, None))
+    return out[:3]
 
 
 def lindo(n):
@@ -62,8 +88,9 @@ def piso(EQ, NOM, fund):
     return max(PISO[fund], int(vals[len(vals) // 2] * 0.4))
 
 
-def mejor(EQ, NOM, fund, minimo, zona):
-    """El mejor de la liga en un fundamento, con piso de volumen."""
+def ranking(EQ, NOM, fund, minimo, zona):
+    """Todos los que superan el piso, ordenados. El 1ro va a la ficha y el
+    2do y 3ro al podio: la placa sirve de ranking y nombra a más gente."""
     c = []
     for eq, d in EQ.items():
         for dor, J in d['jug'].items():
@@ -74,33 +101,52 @@ def mejor(EQ, NOM, fund, minimo, zona):
                 continue
             c.append((ef, eq, dor, J))
     c.sort(key=lambda x: -x[0])
+    return c
+
+
+def mejor(EQ, NOM, fund, minimo, zona):
+    c = ranking(EQ, NOM, fund, minimo, zona)
     return c[0] if c else None
 
 
 def ficha(fund, zona, hero, titulo, bajada, pie, EQ, NOM, minimo, fecha, fuente,
-          filtro):
-    m = mejor(EQ, NOM, fund, minimo, zona)
-    if not m:
+          filtro, ctx=None):
+    ctx = ctx or {}
+    orden = ranking(EQ, NOM, fund, minimo, zona)
+    if not orden:
         return None
-    ef, eq, dor, J = m
-    nom, pos, _ = NOM[(eq, dor)]
+    ef, eq, dor, J = orden[0]
+    nom, pos, st = NOM[(eq, dor)]
     zonas = liga.matriz(J[zona])
+    # el 2do y el 3ro al pie: la placa pasa de "el mejor" a ranking.
+    # Si en nla_stats.json la ficha vino sin nombre, va el dorsal: mejor
+    # "#14" que un renglón que empieza con un punto y nada.
+    podio = [('%dº' % (i + 2),
+              lindo(NOM[(e, d)][0]) or ('#%d' % int(d)), e, '%d%%' % v)
+             for i, (v, e, d, _J) in enumerate(orden[1:3])]
     # La cancha NO dibuja todo: dibuja lo filtrado. Los dos numeros van a la
     # vista, porque el que mira la placa no tiene otra forma de saberlo.
     n, total = sum(zonas), J[fund]['T']
+    # la vara: la media de la liga, para que el número tenga contra qué leerse
+    v = dict(ctx.get('varas', {}).get(fund) or {})
+    if v:
+        v['valor'] = ef
+        v['etiqueta'] = '%d%%' % v['media']
     return {'tipo': 'ficha', 'slug': fund, 'fundamento': fund, 'liga': LIGA,
             'fecha': fecha, 'titulo': titulo, 'bajada': bajada,
             'fichas': [{'dorsal': int(dor), 'nombre': nom, 'equipo': eq,
                         'puesto': pos or 'NLA', 'total': '%d %s' % (total, PLURAL[fund]),
-                        'zonas': zonas,
-                        'filtro': {'izq': 'En la cancha', 'que': filtro,
+                        'zonas': zonas, 'podio': podio,
+                        'escudo': club.escudo_de(ctx.get('escudos'), eq),
+                        'filtro': {'izq': 'En la cancha', 'que': filtro, 'escala': True,
                                    'der': '%d de %d %s' % (n, total, PLURAL[fund])},
                         'rotulo_tira': 'Escala DataVolley · sus %d %s'
                                        % (total, PLURAL[fund]),
-                        'hero': hero(J), 'valoraciones': liga.valoraciones(J, fund)}],
-            'fuente': fuente,
-            'pie': pie(ef, eq, J) + ' Volumen mínimo para entrar: %d %s.'
-                                    % (minimo, PLURAL[fund])}
+                        'hero': hero(J, st or {}, v),
+                        'valoraciones': liga.valoraciones(J, fund)}],
+            'fuente': fuente + ' · mínimo %d %s, %d jugadores lo superaron'
+                               % (minimo, PLURAL[fund], len(orden)),
+            'pie': pie(ef, eq, J)}
 
 
 def construir(repo, carpeta, temporada, fecha, archivos=None):
@@ -109,46 +155,47 @@ def construir(repo, carpeta, temporada, fecha, archivos=None):
     NOM = fichas(EQ, NOM_json)
     n_part = len(archivos) if archivos is not None else \
         sum(1 for _ in (pathlib.Path(repo) / carpeta).glob('*.dvw'))
-    fuente = 'Volley-Stats · %d partidos scouteados con nuestro sistema' % n_part
+    # la muestra, declarada: cuántos partidos y cuántos equipos de la liga
+    n_eq = len([e for e in EQ if EQ[e]['jug']])
+    fuente = ('Volley-Stats · %d partidos scouteados con nuestro sistema · '
+              '%d equipos' % (n_part, n_eq))
+    ctx = {'escudos': club.escudos(repo), 'varas': club.varas(repo, temporada)}
     P = []
 
     # 1 · SAQUE
     P.append(ficha('saque', 'z_saque_pos',
-                   lambda J: [('EFICIENCIA', '%d' % liga.eficacias(J)['saque']),
-                              ('ACE / ERROR', '%d-%d' % (J['saque']['#'], J['saque']['='])),
-                              ('% RUPTURA', '%d%%' % round(
-                                  100.0 * (J['saque']['#'] + J['saque']['/'] +
-                                           J['saque']['+']) / (J['saque']['T'] or 1)))],
-                   'El saque más determinante',
-                   'Arriba, dónde caen los saques que rompen el K1 rival: ace, '
-                   'saque sin ataque posible y saque positivo. Abajo, la escala '
-                   'completa de su servicio.',
-                   lambda ef, eq, J: 'El mapa excluye los saques que el rival recibió '
-                                     'bien: queda desde dónde condiciona el side-out '
-                                     'contrario. La eficiencia es un coeficiente '
-                                     'ponderado de la escala, no un porcentaje.',
+                   lambda J, st, v: tiles(
+                       'saque', ('EFICIENCIA', liga.eficacias(J)['saque']), J, v,
+                       [('ACE / ERROR', '%d-%d' % (J['saque']['#'], J['saque']['='])),
+                        ('% ACE', '%d%%' % round(
+                            100.0 * J['saque']['#'] / (J['saque']['T'] or 1)))]),
+                   'El mejor saque de la fecha',
+                   'Sus zonas de saque cuando complica al receptor, y qué rinde '
+                   'con cada tipo de servicio.',
+                   lambda ef, eq, J: 'El mapa deja solo los saques con los que '
+                                     'complica al receptor. Esa es su zona: es adónde '
+                                     'va a sacar el sábado.',
                    EQ, NOM, piso(EQ, NOM, 'saque'), fecha, fuente,
-                   'solo saque de ruptura · # / +'))
+                   'solo saque positivo · # / +', ctx))
 
     # 2 · RECEPCIÓN
     P.append(ficha('recepcion', 'z_recepcion_pos',
-                   lambda J: [('EFICIENCIA', '%d' % liga.eficacias(J)['recepcion']),
-                              ('% POSITIVA', '%d%%' % round(
-                                  100.0 * (J['recepcion']['#'] + J['recepcion']['+'])
-                                  / (J['recepcion']['T'] or 1))),
-                              ('% PERFECTA', '%d%%' % round(
-                                  100.0 * J['recepcion']['#']
-                                  / (J['recepcion']['T'] or 1)))],
+                   lambda J, st, v: tiles(
+                       'recepcion', ('EFICIENCIA', liga.eficacias(J)['recepcion']), J, v,
+                       [('% POSITIVA', '%d%%' % round(
+                           100.0 * (J['recepcion']['#'] + J['recepcion']['+'])
+                           / (J['recepcion']['T'] or 1))),
+                        ('% PERFECTA', '%d%%' % round(
+                            100.0 * J['recepcion']['#']
+                            / (J['recepcion']['T'] or 1)))]),
                    'El receptor más sólido',
-                   'Arriba, desde qué zonas sostiene el K1: recepción perfecta (#) '
-                   'y positiva (+), las que dejan al armador con todo el juego '
-                   'disponible. Abajo, la escala completa.',
-                   lambda ef, eq, J: '# es recepción perfecta: el armador tiene todas '
-                                     'las opciones. + es positiva: llega a la zona de '
-                                     'armado. Juntas deciden si se puede jugar rápido '
-                                     'por el centro.',
+                   'Sus zonas de recepción cuando la deja armable, y qué rinde '
+                   'contra potencia y contra flotado.',
+                   lambda ef, eq, J: 'El mapa deja solo la recepción perfecta y la '
+                                     'positiva, que son las que dejan armar. Las zonas '
+                                     'que quedan vacías son por donde hay que sacarle.',
                    EQ, NOM, piso(EQ, NOM, 'recepcion'), fecha, fuente,
-                   'solo recepción positiva · # +'))
+                   'solo recepción positiva · # +', ctx))
 
     # 3 · ARMADO — las seis canchitas
     mejor_eq = max(equipos, key=lambda t: t.get('atk_all') or 0)['team']
@@ -183,19 +230,20 @@ def construir(repo, carpeta, temporada, fecha, archivos=None):
 
     # 4 · ATAQUE — la cancha con los ataques # y + solamente
     P.append(ficha('ataque', 'z_ataque_pos',
-                   lambda J: [('EFICACIA', '%d%%' % liga.eficacias(J)['ataque']),
-                              ('% PUNTO', '%d%%' % round(
-                                  100.0 * J['ataque']['#'] / (J['ataque']['T'] or 1))),
-                              ('ERR + BLQ', '%d' % (J['ataque']['='] + J['ataque']['/']))],
+                   lambda J, st, v: tiles(
+                       'ataque', ('EFICACIA', liga.eficacias(J)['ataque']), J, v,
+                       [('% PUNTO', '%d%%' % round(
+                           100.0 * J['ataque']['#'] / (J['ataque']['T'] or 1))),
+                        ('ERR + BLQ', '%d' % (J['ataque']['='] + J['ataque']['/']))]),
                    'El atacante más eficaz',
-                   'Arriba, dónde termina sus ataques de punto (#) y positivos (+). '
-                   'Abajo, la escala completa de su remate.',
+                   'Dónde ataca cuando hace daño, y la diferencia entre lo que '
+                   'rinde en side-out y en transición.',
                    lambda ef, eq, J: 'Eficacia = (punto − error − bloqueado) / total, '
                                      'la fórmula estándar internacional. El mapa deja '
                                      'solo el ataque que gana el rally o deja al rival '
                                      'sin contraataque.',
                    EQ, NOM, piso(EQ, NOM, 'ataque'), fecha, fuente,
-                   'solo ataque # + · K1 y K2'))
+                   'solo ataque positivo · # +', ctx))
 
     # 5 · BLOQUEO — tabla, porque el bloqueo se cuenta, no se dibuja
     filas = []
@@ -228,12 +276,66 @@ def construir(repo, carpeta, temporada, fecha, archivos=None):
                      'balón y lo deja defendible gana el rally igual, y por eso la '
                      'tabla ordena por # más +, no por punto directo.'})
 
-    # 6 · EQUIPO IDEAL
-    P.append(equipo_ideal(EQ, NOM, equipos, fecha, fuente, n_part))
+    # 6 · SIDE-OUT POR ROTACIÓN — la métrica del vóley profesional
+    P.append(placa_rotaciones(repo, carpeta, archivos, fecha, fuente, ctx))
+
+    # 7 · EQUIPO IDEAL
+    P.append(equipo_ideal(EQ, NOM, equipos, fecha, fuente, n_part, ctx))
     return [x for x in P if x]
 
 
-def equipo_ideal(EQ, NOM, equipos, fecha, fuente, n_part=0):
+def placa_rotaciones(repo, carpeta, archivos, fecha, fuente, ctx):
+    """Side-out y break point por rotación, de cada equipo de la fecha.
+
+    Todo plan de partido se reduce a esto: dónde no sostiene el rival, y cuál
+    es la rotación propia que se rompe."""
+    datos = rotacion.por_equipo(repo, carpeta, archivos)
+    filas = rotacion.a_placa(datos)
+    if not filas:
+        return None
+    for f in filas:
+        f['escudo'] = club.escudo_de(ctx.get('escudos'), f['equipo'])
+    conclusion = rotacion.titular(filas)
+    total = sum(f['so_n'] for f in filas)
+    return {'tipo': 'rotaciones', 'slug': 'rotaciones', 'fundamento': 'saque',
+            'liga': LIGA, 'fecha': fecha,
+            'titulo': 'El side-out, rotación por rotación',
+            'bajada': 'Cuánto sostiene cada equipo su recepción en cada una de '
+                      'sus seis rotaciones. Es el número sobre el que se arma '
+                      'todo plan de partido.',
+            'filas': filas[:5],
+            'filtro': {'izq': 'Calculado sobre', 'que': '%d rallies con saque' % total,
+                       'der': 'mínimo 6 rallies por rotación'},
+            'fuente': fuente,
+            'pie': conclusion or ('Side-out alto significa que el equipo gana el '
+                                  'punto cuando recibe. Break point es lo mismo '
+                                  'del lado del que saca.')}
+
+
+# Cómo se arma un siete ideal en serio, que es como lo hacen la FIVB y las
+# ligas europeas: ningún puesto se elige por un solo número.
+#
+#   PUNTA    ataca Y recibe. Un punta que remata 35% pero recibe mal no le
+#            sirve a nadie; el que hace las dos cosas es el que vale.
+#   CENTRAL  bloquea Y ataca. El central es el jugador con mejor eficacia de
+#            ataque del equipo (la rápida es el balón más fácil), así que
+#            premiar solo el bloqueo deja afuera media función del puesto.
+#   OPUESTO  no recibe: se lo mide por ataque.
+#   LÍBERO   recepción.
+#   ARMADOR  no tiene estadística individual que lo mida; va por el ataque
+#            del equipo, y la placa lo dice.
+#
+# (fundamento, etiqueta, peso). El primero es el principal y es obligatorio.
+COMPUESTO = {
+    'PUNTA':   [('ataque', 'ATK', 0.6), ('recepcion', 'REC', 0.4)],
+    'CENTRAL': [('bloqueo', 'BLQ', 0.5), ('ataque', 'ATK', 0.5)],
+    'OPUESTO': [('ataque', 'ATK', 1.0)],
+    'LÍBERO':  [('recepcion', 'REC', 1.0)],
+}
+
+
+def equipo_ideal(EQ, NOM, equipos, fecha, fuente, n_part=0, ctx=None):
+    ctx = ctx or {}
     cand = {}
     for eq, d in EQ.items():
         for dor, J in d['jug'].items():
@@ -245,27 +347,52 @@ def equipo_ideal(EQ, NOM, equipos, fecha, fuente, n_part=0):
             ef = liga.eficacias(J)
             cand.setdefault(pos, []).append((eq, lindo(nom), J, ef))
 
-    def top(pos, fund, minimo, n, et, pct=True):
-        # el valor tiene que ser > 0: un puesto vacio dice la verdad, uno
-        # relleno con 0% de eficacia es peor que no poner nada
-        c = [x for x in cand.get(pos, [])
-             if x[2][fund]['T'] >= minimo and x[3].get(fund, 0) > 0]
-        c.sort(key=lambda x: -x[3][fund])
-        # la eficiencia de recepción es un coeficiente ponderado, no un
-        # porcentaje: se muestra sin el signo % a propósito
+    pa, pb, pr = piso(EQ, NOM, 'ataque'), piso(EQ, NOM, 'bloqueo'), piso(EQ, NOM, 'recepcion')
+    PISOS = {'ataque': pa, 'bloqueo': pb, 'recepcion': pr}
+    varas_ = ctx.get('varas') or {}
+
+    def top(pos, n):
+        """Ordena por el índice compuesto del puesto.
+
+        Cada componente se mide contra la media de la liga, así se pueden
+        sumar dos cosas que no están en la misma escala (un 30% de eficacia
+        de ataque y un 58% de recepción no se promedian a lo bruto). Si a un
+        jugador le falta volumen en un componente, el peso se reparte entre
+        los que sí tiene, y ese dato no se muestra.
+        """
+        comp = COMPUESTO[pos]
+        out = []
+        for eq, nm, J, e in cand.get(pos, []):
+            partes, peso, datos = 0.0, 0.0, []
+            for fund, et, w in comp:
+                v = e.get(fund)
+                if v is None or v <= 0 or J[fund]['T'] < PISOS[fund]:
+                    continue
+                base = (varas_.get(fund) or {}).get('media') or v
+                partes += w * (v / base)
+                peso += w
+                datos.append('%s %d%%' % (et, v))
+            if not peso or not datos:
+                continue
+            # exigir el componente principal: un punta sin volumen de ataque
+            # no es el mejor punta de la fecha por mucho que reciba
+            if comp[0][1] not in datos[0]:
+                continue
+            out.append((partes / peso, nm, eq, datos))
+        out.sort(key=lambda x: -x[0])
         return [{'jugador': nm, 'equipo': eq,
-                 'dato': '%s %d%s' % (et, e[fund], '%' if pct else '')}
-                for eq, nm, J, e in c[:n]]
+                 'escudo': club.escudo_de(ctx.get('escudos'), eq),
+                 'dato': d[0], 'dato2': d[1] if len(d) > 1 else ''}
+                for _sc, nm, eq, d in out[:n]]
 
     s = []
-    pa, pb, pr = piso(EQ, NOM, 'ataque'), piso(EQ, NOM, 'bloqueo'), piso(EQ, NOM, 'recepcion')
-    for i, x in enumerate(top('PUNTA', 'ataque', pa, 2, 'EFICACIA')):
+    for i, x in enumerate(top('PUNTA', 2)):
         s.append(dict(x, puesto='Punta %d' % (i + 1)))
-    for i, x in enumerate(top('CENTRAL', 'bloqueo', pb, 2, 'PUNTO BLQ')):
+    for i, x in enumerate(top('CENTRAL', 2)):
         s.append(dict(x, puesto='Central %d' % (i + 1)))
-    for x in top('OPUESTO', 'ataque', pa, 1, 'EFICACIA'):
+    for x in top('OPUESTO', 1):
         s.append(dict(x, puesto='Opuesto'))
-    for x in top('LÍBERO', 'recepcion', pr, 1, 'EFICIENCIA', pct=False):
+    for x in top('LÍBERO', 1):
         s.append(dict(x, puesto='Líbero'))
     atk = {t['team']: t.get('atk_all') or 0 for t in equipos}
     # el armador del equipo ideal: el que mas armo del club con mejor ataque
@@ -274,19 +401,21 @@ def equipo_ideal(EQ, NOM, equipos, fecha, fuente, n_part=0):
     if arms:
         eq, nm, _, _ = arms[0]
         s.append({'puesto': 'Armador', 'jugador': nm, 'equipo': eq,
-                  'dato': 'ATAQUE EQUIPO %d%%' % atk.get(eq, 0)})
+                  'escudo': club.escudo_de(ctx.get('escudos'), eq),
+                  'dato': 'ATAQUE EQUIPO %d%%' % atk.get(eq, 0), 'dato2': ''})
     return {'tipo': 'siete', 'slug': 'equipo-ideal', 'fundamento': 'armado', 'liga': LIGA,
             'fecha': fecha, 'titulo': 'El siete ideal de la fecha',
-            'bajada': 'Puntas y opuesto por eficacia de ataque; centrales por '
-                      'porcentaje de punto de bloqueo; líbero por eficiencia de '
-                      'recepción. Con volumen mínimo para entrar.',
+            'bajada': 'Puntas por ataque y recepción; centrales por bloqueo y '
+                      'ataque; opuesto por ataque; líbero por recepción. Ningún '
+                      'puesto se elige por un solo número.',
             'siete': s, 'fuente': fuente,
             'filtro': {'izq': 'Volumen mínimo',
                        'que': '%d ataques · %d bloqueos · %d recepciones' % (pa, pb, pr),
                        'der': 'por debajo, no entra'},
-            'pie': ('El armador es el único puesto sin estadística individual que lo '
-                    'mida: va el del equipo con mejor eficacia de ataque colectiva. '
-                    'Es una atribución, no una medición.')
+            'pie': ('El punta pondera 60% ataque y 40% recepción; el central, mitad '
+                    'y mitad bloqueo y ataque. Cada componente se mide contra la '
+                    'media de la liga. El armador es el único sin estadística propia: '
+                    'va el del equipo con mejor ataque.')
                    if len(s) >= 7 else
                    ('Con %d partidos todavía no hay volumen para llenar los siete '
                     'puestos. Los que faltan se completan solos a medida que avance '

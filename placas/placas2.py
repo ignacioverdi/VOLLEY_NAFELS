@@ -39,23 +39,44 @@ def _rgb(h):
     return '%d,%d,%d' % tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 
-def cancha(vals, color, mx=None, tam='', pct=False):
-    """hm_ataque.html ccGrid: alfa variable sobre el color del fundamento."""
+def cancha(vals, color, mx=None, tam='', pct=False, red=True):
+    """La cancha de nueve zonas, dibujada como una cancha.
+
+    Tres cosas respecto de la versión anterior:
+      · la red arriba y la línea de 3 metros punteada entre la primera línea
+        y la zaga. Sin eso son nueve cajas, no una cancha.
+      · las zonas en cero quedan VACÍAS, con borde punteado. El "0" gris
+        ocupaba el mismo peso visual que la información y ensuciaba el mapa.
+      · el alfa arranca de hm_ataque.html (ccGrid), como en el producto.
+    """
     mx = mx or max(vals) or 1
     tot = sum(vals) or 1
     out = []
     for i, n in enumerate(vals):
+        # las tres celdas de la fila del medio llevan la línea de 3 metros
+        cls = 'cl l3' if i in (3, 4, 5) else 'cl'
         if not n:
-            bg, tint, sub = 'rgba(255,255,255,.02)', SUBTLE, 'transparent'
-        elif n < CC_MIN:
+            out.append('<div class="%s vacia"><i>z%d</i></div>' % (cls, GRILLA[i]))
+            continue
+        if n < CC_MIN:
             bg, tint, sub = 'rgba(255,255,255,.05)', MUTED, SUBTLE
         else:
             bg = 'rgba(%s,%.2f)' % (_rgb(color), 0.16 + (n / mx) * 0.72)
             tint, sub = TEXT, 'rgba(255,255,255,.55)'
         extra = ('<u style="color:%s">%d%%</u>' % (sub, round(100 * n / tot))) if pct and n else ''
-        out.append('<div class="cl" style="background:%s"><i>z%d</i>'
-                   '<b style="color:%s">%d</b>%s</div>' % (bg, GRILLA[i], tint, n, extra))
-    return '<div class="gr %s">%s</div>' % (tam, ''.join(out))
+        out.append('<div class="%s" style="background:%s"><i>z%d</i>'
+                   '<b style="color:%s">%d</b>%s</div>'
+                   % (cls, bg, GRILLA[i], tint, n, extra))
+    neta = ('<div class="red" style="border-color:%s"><span>RED</span></div>'
+            % color) if red else ''
+    return '%s<div class="gr %s">%s</div>' % (neta, tam, ''.join(out))
+
+
+def escala_color(color):
+    """Leyenda del degradado. Sin esto no se sabe si el naranja son 7 o 70."""
+    pasos = ''.join('<i style="background:rgba(%s,%.2f)"></i>' % (_rgb(color), a)
+                    for a in (0.16, 0.34, 0.52, 0.70, 0.88))
+    return '<div class="esc"><span>menos</span>%s<span>más</span></div>' % pasos
 
 
 def tiles(ms, color):
@@ -73,8 +94,26 @@ def barra_filtro(f, color):
     if not f:
         return ''
     der = ('<u>%s</u>' % esc(f['der'])) if f.get('der') else ''
-    return ('<div class="mapt"><span>%s</span><b style="color:%s">%s</b>%s</div>'
-            % (esc(f.get('izq', 'En la cancha')), color, esc(f['que']), der))
+    leg = escala_color(color) if f.get('escala') else ''
+    return ('<div class="mapt"><span>%s</span><b style="color:%s">%s</b>%s%s</div>'
+            % (esc(f.get('izq', 'En la cancha')), color, esc(f['que']), der, leg))
+
+
+def vara(v, valor, color, tope=None):
+    """La media de la liga marcada debajo del número.
+
+    Un 43% no dice nada solo. Contra una media de 29% dice todo. La barra es
+    el jugador, la marquita blanca es la liga, y la escala se estira hasta
+    `tope` para que los dos entren siempre."""
+    if not v or valor is None:
+        return ''
+    tope = tope or max(60, valor * 1.25, v['media'] * 1.6)
+    return ('<div class="vara"><div class="vb2" style="width:%.0f%%;background:%s"></div>'
+            '<div class="mk" style="left:%.0f%%"></div></div>'
+            '<div class="vtx">media liga %s</div>'
+            % (max(0, min(100, 100.0 * valor / tope)), color,
+               max(0, min(100, 100.0 * v['media'] / tope)),
+               esc(v.get('etiqueta', '%d' % v['media']))))
 
 
 # ── A · FICHA DE JUGADOR ───────────────────────────────────────────────────
@@ -96,24 +135,40 @@ def ficha(p):
         '<div class="vb"><div class="vs" style="color:%s">%s</div>'
         '<div class="ve">%s</div><b>%d</b><i>%d%%</i></div>'
         % (col, esc(sim), esc(et), n, pc) for sim, et, col, n, pc in val)
-    hero = ''.join('<div class="hm"><span>%s</span><b style="color:%s">%s</b></div>'
-                   % (esc(k), c, esc(v)) for k, v in (j.get('hero') or []))
+    # cada tile puede traer un pie (el volumen) y, el primero, la vara de la
+    # liga. Formato: (etiqueta, valor, pie|None, vara|None)
+    hero = ''
+    for t in (j.get('hero') or []):
+        k, v = t[0], t[1]
+        pie = t[2] if len(t) > 2 else None
+        vr = t[3] if len(t) > 3 else None
+        extra = vara(vr, vr.get('valor') if vr else None, c) if vr else \
+            ('<u>%s</u>' % esc(pie) if pie else '')
+        hero += ('<div class="hm"><span>%s</span><b style="color:%s">%s</b>%s</div>'
+                 % (esc(k), c, esc(v), extra))
+
+    es = ('<img class="es" src="%s" alt="">' % j['escudo']) if j.get('escudo') else ''
+    podio = ''
+    if j.get('podio'):
+        podio = '<div class="podio">%s</div>' % ''.join(
+            '<span>%s <b>%s</b> · %s · %s</span>' % (esc(p[0]), esc(p[1]), esc(p[2]), esc(p[3]))
+            for p in j['podio'])
 
     return ('<div class="fi">'
             '<div class="fh"><div class="dor" style="background:%s">%s</div>'
-            '<div class="fn"><b>%s</b><span>%s</span></div>'
+            '<div class="fn"><b>%s</b><span>%s</span></div>%s'
             '<div class="fp"><em style="border-color:%s;color:%s">%s</em>'
             '<span>%s</span></div></div>'
             '%s%s'
             '<div class="heros">%s</div>'
             '<div class="ftt">%s</div>'
             '<div class="tira">%s</div>'
-            '<div class="vals">%s</div>'
+            '<div class="vals">%s</div>%s'
             '</div>'
-            % (c, esc(j['dorsal']), esc(j['nombre']), esc(j['equipo']),
+            % (c, esc(j['dorsal']), esc(j['nombre']), esc(j['equipo']), es,
                c, c, esc(j['puesto']), esc(j['total']),
                barra_filtro(j.get('filtro'), c), cancha(j['zonas'], c), hero,
-               esc(j.get('rotulo_tira', '')), barra, cajas))
+               esc(j.get('rotulo_tira', '')), barra, cajas, podio))
 
 
 # ── B · MAPA DE LA LIGA ────────────────────────────────────────────────────
@@ -193,9 +248,15 @@ def siete(p):
             return ('<div class="pz vacio"><div class="pu">%s</div>'
                     '<span class="nd">sin volumen<br>suficiente</span></div>' % esc(pu))
         c = COL.get(pu, FUNDA['ataque'])
+        es = ('<img class="es3" src="%s" alt="">' % x['escudo']) if x.get('escudo') else ''
+        # el segundo dato es el que hace honesta la elección: un punta entra
+        # por ataque Y recepción, y se ven las dos
+        d2 = ('<u>%s</u>' % esc(x['dato2'])) if x.get('dato2') else ''
         return ('<div class="pz" style="border-top-color:%s"><div class="pu">%s</div>'
-                '<b>%s</b><span>%s</span><div class="st" style="color:%s">%s</div></div>'
-                % (c, esc(pu), esc(x['jugador']), esc(x['equipo']), c, esc(x['dato'])))
+                '<b>%s</b><div class="pe">%s<span>%s</span></div>'
+                '<div class="st" style="color:%s">%s%s</div></div>'
+                % (c, esc(pu), esc(x['jugador']), es, esc(x['equipo']), c,
+                   esc(x['dato']), d2))
 
     return (barra_filtro(p.get('filtro'), FUNDA[p['fundamento']]) +
             '<div class="cancha7"><div class="red7">RED</div>'
@@ -207,7 +268,43 @@ def siete(p):
                cel('Central 2'), cel('Punta 2'), cel('Armador'), cel('Líbero')))
 
 
-VIZ = {'ficha': ficha, 'mapa': mapa, 'seis': seis, 'tabla': tabla, 'siete': siete}
+# ── E · SIDE-OUT POR ROTACIÓN ──────────────────────────────────────────────
+def rotaciones(p):
+    """Una fila por equipo: side-out global, break, y las seis rotaciones.
+
+    El verde y el rojo marcan la mejor y la peor rotación de cada equipo, que
+    es lo único que un entrenador busca acá: dónde presionar y qué arreglar.
+    """
+    c = FUNDA[p['fundamento']]
+    filas = []
+    for f in p['filas']:
+        cel = []
+        for x in f['celdas']:
+            if x['pct'] is None:
+                cel.append('<div class="rc vacia"><i>%s</i><b>—</b></div>' % x['rot'])
+                continue
+            marca = ' mejor' if x['mejor'] else (' peor' if x['peor'] else '')
+            cel.append('<div class="rc%s"><i>%s</i><b>%d%%</b><u>%d</u></div>'
+                       % (marca, x['rot'], x['pct'], x['n']))
+        es = ('<img class="es2" src="%s" alt="">' % f['escudo']) if f.get('escudo') else ''
+        filas.append(
+            '<div class="rf"><div class="rh">%s<div class="rn"><b>%s</b>'
+            '<span>%s</span></div>'
+            '<div class="rg"><em style="color:%s">%d%%</em><span>SIDE-OUT</span></div>'
+            '<div class="rg"><em>%d%%</em><span>BREAK</span></div></div>'
+            '<div class="rr">%s</div></div>'
+            % (es, esc(f['equipo']),
+               '%d partido%s' % (f['partidos'], '' if f['partidos'] == 1 else 's'),
+               c, f['so'], f['bp'], ''.join(cel)))
+    leyenda = ('<div class="anota">Side-out = porcentaje de rallies ganados '
+               'recibiendo, en cada rotación. La rotación se nombra por la '
+               'posición del armador. El número chico es cuántos rallies. '
+               'Verde: su mejor rotación. Rojo: su peor.</div>')
+    return '<div class="rot">%s</div>%s' % (''.join(filas), leyenda)
+
+
+VIZ = {'ficha': ficha, 'mapa': mapa, 'seis': seis, 'tabla': tabla,
+       'siete': siete, 'rotaciones': rotaciones}
 
 CSS = """
 *{margin:0;padding:0;box-sizing:border-box}
@@ -233,6 +330,20 @@ h1{font-size:56px;line-height:1.06;font-weight:700;letter-spacing:-.02em;margin-
 .ci b{color:%(TEXT)s;font-weight:700;letter-spacing:.2em;font-size:20px}
 .ci .dr{text-align:right;line-height:1.55;max-width:400px;font-size:13px}
 
+/* la red y la linea de 3 metros: lo que hace que parezca una cancha */
+.red{border-bottom:3px solid;text-align:center;padding-bottom:5px;margin-bottom:8px}
+.red span{font-family:'DejaVu Sans Mono',monospace;font-size:11px;letter-spacing:.32em;
+  color:%(MUTED)s}
+.cl.l3{border-top:2px dashed rgba(255,255,255,.22)}
+.cl.vacia{background:rgba(255,255,255,.015);border-style:dashed;
+  border-color:rgba(255,255,255,.05)}
+
+/* leyenda de la escala de color */
+.esc{margin-left:auto;display:flex;align-items:center;gap:4px;
+  font-family:'DejaVu Sans Mono',monospace;font-size:11px;color:%(SUBTLE)s;
+  letter-spacing:.06em;text-transform:none}
+.esc i{width:19px;height:9px;border-radius:2px;display:block}
+
 /* celdas de cancha */
 .gr{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
 .cl{aspect-ratio:1.42;border-radius:8px;border:1px solid %(BD)s;position:relative;
@@ -249,7 +360,7 @@ h1{font-size:56px;line-height:1.06;font-weight:700;letter-spacing:-.02em;margin-
 
 /* A · ficha */
 .fi .gr{gap:6px}
-.fi .gr .cl{aspect-ratio:3.1;border-radius:7px}
+.fi .gr .cl{aspect-ratio:4.1;border-radius:7px}
 .fi .gr .cl i{font-size:12px;top:6px;left:9px}
 .fi .gr .cl b{font-size:38px}
 .fi{background:%(CARD)s;border:1px solid %(BD)s;border-radius:16px;padding:20px}
@@ -261,6 +372,7 @@ h1{font-size:56px;line-height:1.06;font-weight:700;letter-spacing:-.02em;margin-
 .fn b{display:block;font-size:32px;font-weight:700;line-height:1.1;letter-spacing:-.01em}
 .fn span{font-family:'DejaVu Sans Mono',monospace;font-size:14px;color:%(MUTED)s;
   letter-spacing:.09em;text-transform:uppercase}
+.es{width:38px;height:38px;object-fit:contain;flex:none;border-radius:6px}
 .fp{text-align:right}
 .fp em{display:inline-block;font-style:normal;font-family:'DejaVu Sans Mono',monospace;
   font-size:12px;letter-spacing:.12em;border:1px solid;border-radius:99px;padding:3px 11px}
@@ -275,23 +387,37 @@ h1{font-size:56px;line-height:1.06;font-weight:700;letter-spacing:-.02em;margin-
 .mapt b{font-weight:700}
 .mapt u{margin-left:auto;text-decoration:none;color:%(MUTED)s;white-space:nowrap}
 .ftt{font-family:'DejaVu Sans Mono',monospace;font-size:14px;letter-spacing:.11em;
-  text-transform:uppercase;color:%(SUBTLE)s;margin-bottom:9px}
+  text-transform:uppercase;color:%(SUBTLE)s;margin-bottom:6px}
 
-.heros{display:flex;gap:9px;margin:14px 0 12px}
+.heros{display:flex;gap:9px;margin:11px 0 9px}
 .hm{flex:1;background:%(CARD2)s;border:1px solid %(BD)s;border-radius:9px;
   padding:11px 14px;text-align:center}
 .hm span{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:12px;
   letter-spacing:.15em;text-transform:uppercase;color:%(MUTED)s;margin-bottom:3px}
 .hm b{font-family:'DejaVu Sans Mono',monospace;font-size:30px;font-weight:700;line-height:1}
+.hm u{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:12px;
+  text-decoration:none;color:%(SUBTLE)s;margin-top:6px;letter-spacing:.06em}
+/* la vara: donde cae el contra la media de la liga */
+.vara{position:relative;height:5px;border-radius:3px;background:rgba(255,255,255,.07);
+  margin:8px 0 4px}
+.vb2{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.mk{position:absolute;top:-3px;width:2px;height:11px;background:%(TEXT)s;opacity:.85}
+.vtx{font-family:'DejaVu Sans Mono',monospace;font-size:11px;color:%(SUBTLE)s;
+  letter-spacing:.06em}
+/* el 2do y el 3ro, para que la placa sirva de ranking */
+.podio{margin-top:11px;display:flex;gap:26px;flex-wrap:wrap;
+  font-family:'DejaVu Sans Mono',monospace;font-size:14px;color:%(MUTED)s;
+  letter-spacing:.05em}
+.podio b{color:%(TEXT)s;font-weight:700}
 
-.tira{display:flex;height:16px;border-radius:4px;overflow:hidden;gap:2px;margin-bottom:14px}
+.tira{display:flex;height:16px;border-radius:4px;overflow:hidden;gap:2px;margin-bottom:11px}
 .vals{display:flex;gap:9px}
 .vb{flex:1;background:%(CARD2)s;border:1px solid %(BD)s;border-radius:9px;
-  padding:13px 6px;text-align:center}
+  padding:11px 6px;text-align:center}
 .vs{font-family:'DejaVu Sans Mono',monospace;font-size:26px;font-weight:700;line-height:1}
 .ve{font-family:'DejaVu Sans Mono',monospace;font-size:12px;letter-spacing:.14em;
   color:%(MUTED)s;margin:5px 0 8px}
-.vb b{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:36px;
+.vb b{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:33px;
   font-weight:700;line-height:1}
 .vb i{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:15px;
   font-style:normal;color:%(MUTED)s;margin-top:5px}
@@ -342,13 +468,44 @@ h1{font-size:56px;line-height:1.06;font-weight:700;letter-spacing:-.02em;margin-
 .pz b{display:block;font-size:24px;font-weight:700;line-height:1.15;margin-bottom:3px}
 .pz span{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:12px;
   color:%(MUTED)s;letter-spacing:.06em;text-transform:uppercase}
+.pe{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:2px}
+.es3{width:19px;height:19px;object-fit:contain;flex:none;border-radius:4px}
 .st{margin-top:9px;font-family:'DejaVu Sans Mono',monospace;font-size:17px;font-weight:700}
+.st u{display:block;text-decoration:none;font-size:14px;font-weight:400;
+  color:%(MUTED)s;margin-top:4px;letter-spacing:.04em}
 
 .pz.vacio{border:1px dashed %(BD2)s;border-top:1px dashed %(BD2)s;background:transparent;
   display:flex;flex-direction:column;align-items:center;justify-content:center}
 .pz.vacio .pu{margin-bottom:12px}
 .nd{font-family:'DejaVu Sans Mono',monospace;font-size:13px;line-height:1.5;
   color:%(SUBTLE)s;letter-spacing:.06em;text-transform:uppercase;text-align:center}
+
+/* E · side-out por rotacion */
+.rot{display:flex;flex-direction:column;gap:14px}
+.rf{background:%(CARD)s;border:1px solid %(BD)s;border-radius:13px;padding:15px 17px}
+.rh{display:flex;align-items:center;gap:13px;margin-bottom:11px}
+.es2{width:34px;height:34px;object-fit:contain;flex:none;border-radius:6px}
+.rn{flex:1}
+.rn b{display:block;font-size:24px;font-weight:700;line-height:1.1}
+.rn span{font-family:'DejaVu Sans Mono',monospace;font-size:12px;color:%(SUBTLE)s;
+  letter-spacing:.08em;text-transform:uppercase}
+.rg{text-align:center;min-width:104px}
+.rg em{display:block;font-style:normal;font-family:'DejaVu Sans Mono',monospace;
+  font-size:30px;font-weight:700;line-height:1;color:%(TEXT)s}
+.rg span{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:11px;
+  letter-spacing:.15em;color:%(MUTED)s;margin-top:5px}
+.rr{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+.rc{background:%(CARD2)s;border:1px solid %(BD)s;border-top:3px solid %(SUBTLE)s;
+  border-radius:8px;padding:9px 4px 8px;text-align:center}
+.rc.vacia{opacity:.4;border-top-color:rgba(255,255,255,.08)}
+.rc.mejor{border-top-color:#22C55E}
+.rc.peor{border-top-color:#EF4444}
+.rc i{display:block;font-style:normal;font-family:'DejaVu Sans Mono',monospace;
+  font-size:12px;letter-spacing:.12em;color:%(MUTED)s;margin-bottom:6px}
+.rc b{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:27px;
+  font-weight:700;line-height:1}
+.rc u{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:11px;
+  text-decoration:none;color:%(SUBTLE)s;margin-top:5px}
 
 /* D · tabla */
 .tb{width:100%%;border-collapse:collapse}
@@ -379,6 +536,8 @@ CTA = {
               'Sin cargar nada a mano: sale del scout del partido.'),
     'siete': ('Tu equipo medido con la misma vara, fecha a fecha.',
               'Y cada jugador viendo lo suyo en su celular.'),
+    'rotaciones': ('Las seis rotaciones del rival del sábado, antes de jugar.',
+                   'Dónde presionarlo con el saque, y cuál es la tuya que se rompe.'),
 }
 
 
