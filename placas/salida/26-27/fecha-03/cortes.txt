@@ -1,0 +1,45 @@
+CORTES DE VIDEO · Fecha 3 · 26-27
+==================================================================
+
+El mejor saque de la fecha · Roy Schmid
+   set 1   0:12:55   https://youtu.be/y-oB2py2sVc?t=775
+   set 1   0:13:19   https://youtu.be/y-oB2py2sVc?t=799
+   set 1   0:24:09   https://youtu.be/wA5RCJFFkYE?t=1449
+   set 1   0:24:31   https://youtu.be/wA5RCJFFkYE?t=1471
+   set 1   0:24:54   https://youtu.be/wA5RCJFFkYE?t=1494
+   set 2   0:51:09   https://youtu.be/wA5RCJFFkYE?t=3069
+
+El receptor más sólido · Valentin Durdos
+   set 1   0:14:35   https://youtu.be/OcAEwxiyq78?t=875
+   set 2   0:31:42   https://youtu.be/OcAEwxiyq78?t=1902
+   set 2   0:38:18   https://youtu.be/OcAEwxiyq78?t=2298
+   set 3   0:57:05   https://youtu.be/OcAEwxiyq78?t=3425
+   set 3   1:06:33   https://youtu.be/OcAEwxiyq78?t=3993
+   set 3   1:12:22   https://youtu.be/OcAEwxiyq78?t=4342
+
+La distribución del armador en K1 · Gabriel Chancy
+   set 1   0:03:36   https://youtu.be/y-oB2py2sVc?t=216
+   set 1   0:05:54   https://youtu.be/y-oB2py2sVc?t=354
+   set 1   0:07:28   https://youtu.be/y-oB2py2sVc?t=448
+   set 1   0:08:47   https://youtu.be/y-oB2py2sVc?t=527
+   set 1   0:10:39   https://youtu.be/y-oB2py2sVc?t=639
+   set 1   0:14:42   https://youtu.be/y-oB2py2sVc?t=882
+
+El atacante más eficaz · Karim Zerika
+   set 1   0:08:47   https://youtu.be/y-oB2py2sVc?t=527
+   set 1   0:18:47   https://youtu.be/y-oB2py2sVc?t=1127
+   set 1   0:25:32   https://youtu.be/y-oB2py2sVc?t=1532
+   set 2   0:33:03   https://youtu.be/y-oB2py2sVc?t=1983
+   set 2   0:50:09   https://youtu.be/y-oB2py2sVc?t=3009
+   set 3   1:03:21   https://youtu.be/y-oB2py2sVc?t=3801
+
+El bloqueo de la fecha · James Norris
+   set 1   0:03:53   https://youtu.be/OcAEwxiyq78?t=233
+   set 1   0:04:26   https://youtu.be/OcAEwxiyq78?t=266
+   set 2   0:29:11   https://youtu.be/OcAEwxiyq78?t=1751
+   set 3   0:53:32   https://youtu.be/OcAEwxiyq78?t=3212
+   set 1   0:11:35   https://youtu.be/y-oB2py2sVc?t=695
+   set 2   0:47:10   https://youtu.be/wA5RCJFFkYE?t=2830
+
+El minuto es la posición dentro del video de ese partido.
+El corte va de 4s antes a 5s después, igual que en la app.

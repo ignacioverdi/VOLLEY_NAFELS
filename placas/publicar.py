@@ -25,7 +25,7 @@ siguiente placa. Sin decidir nada.
 """
 import argparse, io, pathlib, shutil, sys, contextlib
 
-import clips, fechas, seis_placas, placas2, verificar
+import clips, fechas, historial, liga, rotacion, seis_placas, placas2, verificar
 
 # El orden de publicación. La conclusión fuerte (side-out) va al final, que
 # es donde queda la gente que llegó hasta ahí.
@@ -69,6 +69,8 @@ def main():
     ap.add_argument('--hasta', default='')
     ap.add_argument('--salida', default='salida')
     ap.add_argument('--vertical', action='store_true')
+    ap.add_argument('--guardar-video', action='store_true', dest='guardar_video',
+                    help='no borrar los partidos bajados de YouTube')
     ap.add_argument('--sin-video', action='store_true',
                     help='saltear el corte de video (es lo que más tarda)')
     a = ap.parse_args()
@@ -108,7 +110,8 @@ def main():
     # ── 1 · las placas ────────────────────────────────────────────────────
     print()
     print('[1/4] Placas')
-    piezas = seis_placas.construir(a.repo, a.carpeta, a.temporada, rotulo, archivos)
+    piezas = seis_placas.construir(a.repo, a.carpeta, a.temporada, rotulo,
+                                   archivos, fecha_n=a.fecha or None)
     orden = {s: i for i, s in enumerate(ORDEN)}
     piezas.sort(key=lambda p: orden.get(p.get('slug'), 99))
     destino.mkdir(parents=True, exist_ok=True)
@@ -165,6 +168,8 @@ def main():
             sys.argv += ['--hasta', a.hasta]
         if a.vertical:
             sys.argv += ['--vertical']
+        if a.guardar_video:
+            sys.argv += ['--guardar-video']
         try:
             clips.main()
         except SystemExit as e:
@@ -185,6 +190,22 @@ def main():
                 elif f.name == 'cortes.txt':
                     f.replace(destino / f.name)
             shutil.rmtree(vd, ignore_errors=True)
+
+    # ── 3b · el historial ─────────────────────────────────────────────────
+    # Se guarda SIEMPRE, incluso si la fecha no se publica: el valor está en
+    # tenerla, y la fecha 1 solo existe si se guardó en la fecha 1.
+    try:
+        EQ = liga.leer(a.repo, a.carpeta, archivos)
+        NOM_json, _eqs = seis_placas.nombres(a.repo, a.temporada)
+        NOM = seis_placas.fichas(EQ, NOM_json)
+        rot = rotacion.a_placa(rotacion.por_equipo(a.repo, a.carpeta, archivos))
+        clave = '%s/%s' % (a.temporada, destino.name)
+        n = historial.guardar(clave, a.temporada, archivos, EQ, NOM, rot)
+        print()
+        print('[+] Historial: %d fechas guardadas' % n)
+    except Exception as e:
+        print()
+        print('[+] Historial: no se pudo guardar (%s)' % str(e)[:60])
 
     # ── 4 · los textos ────────────────────────────────────────────────────
     print()

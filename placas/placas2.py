@@ -144,8 +144,17 @@ def ficha(p):
         vr = t[3] if len(t) > 3 else None
         extra = vara(vr, vr.get('valor') if vr else None, c) if vr else \
             ('<u>%s</u>' % esc(pie) if pie else '')
-        hero += ('<div class="hm"><span>%s</span><b style="color:%s">%s</b>%s</div>'
-                 % (esc(k), c, esc(v), extra))
+        # La variación contra la fecha anterior va PEGADA al número, no en
+        # un renglón propio: un renglón más acá hace desbordar la placa
+        # entera. Sale sola cuando el historial tiene con qué comparar.
+        suf = ''
+        if len(t) > 4 and t[4]:
+            d = t[4]
+            col = '#22C55E' if d['delta'] > 0 else ('#EF4444' if d['delta'] < 0 else MUTED)
+            suf = ('<small style="color:%s">%s%d</small>'
+                   % (col, '+' if d['delta'] > 0 else '', d['delta']))
+        hero += ('<div class="hm"><span>%s</span><b style="color:%s">%s%s</b>%s</div>'
+                 % (esc(k), c, esc(v), suf, extra))
 
     es = ('<img class="es" src="%s" alt="">' % j['escudo']) if j.get('escudo') else ''
     podio = ''
@@ -395,6 +404,7 @@ h1{font-size:56px;line-height:1.06;font-weight:700;letter-spacing:-.02em;margin-
 .hm span{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:12px;
   letter-spacing:.15em;text-transform:uppercase;color:%(MUTED)s;margin-bottom:3px}
 .hm b{font-family:'DejaVu Sans Mono',monospace;font-size:30px;font-weight:700;line-height:1}
+.hm b small{font-size:15px;font-weight:700;margin-left:7px;letter-spacing:.04em}
 .hm u{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:12px;
   text-decoration:none;color:%(SUBTLE)s;margin-top:6px;letter-spacing:.06em}
 /* la vara: donde cae el contra la media de la liga */

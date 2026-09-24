@@ -1,0 +1,8 @@
+   1-saque        aire arriba   29  abajo   21  alto 1349   ok
+   2-recepcion    aire arriba   29  abajo   21  alto 1349   ok
+   3-armado       aire arriba   79  abajo  698  alto 1247   ok
+   4-ataque       aire arriba   29  abajo   21  alto 1349   ok
+   5-bloqueo      aire arriba   29  abajo  777  alto 1348   ok
+   6-equipo-ideal aire arriba  134  abajo  644  alto 1138   ok
+   7-rotaciones   aire arriba  107  abajo  148  alto 1193   ok
+   19 jugadores coinciden con la app, 0 difieren

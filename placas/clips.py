@@ -38,7 +38,7 @@ para que abras el video y cortes a mano sin buscar nada.
     python clips.py --repo .. --fecha 3
     python clips.py --repo .. --fecha 3 --vertical
 """
-import argparse, json, os, pathlib, shutil, subprocess, sys
+import argparse, json, os, pathlib, re, shutil, subprocess, sys
 
 import fechas, seis_placas
 
@@ -176,26 +176,164 @@ def buscar_video(dvw, repo, mapa):
     return None
 
 
-def cortar(pack, videos, destino, vertical=False):
-    """Corta cada acción y las pega en un solo mp4."""
+def links_youtube(repo, archivos):
+    """{ruta del .dvw: link de YouTube}, leído del mapa de videos de la app.
+
+    Los partidos no están como archivo en el disco: están subidos a YouTube
+    sin listar, y el link lo cargaste vos en "Cargar Videos". Ese mapa ya
+    existe (mapa_videos.js, o su .enc si corriste el cifrado), así que se lee
+    de ahí en vez de pedirte los archivos de nuevo.
+
+    El identificador del partido lo calcula el propio build_video.py, para
+    que sea el mismo con el que se guardó el link.
+    """
+    repo = os.path.abspath(repo)
+    if repo not in sys.path:
+        sys.path.insert(0, repo)
+    # las rutas se resuelven ANTES del chdir: después, un '../DVW ...'
+    # apunta a otro lado y no se encuentra ningún partido
+    rutas = [(str(x), os.path.abspath(str(x))) for x in archivos]
+    cwd = os.getcwd()
+    out = {}
+    try:
+        os.chdir(repo)
+        import build_video
+        mapa = build_video.read_mapa_links()
+        if not mapa:
+            return {}
+        for fn, absoluta in rutas:
+            try:
+                r = build_video.parse_dvw(absoluta)
+            except Exception:
+                continue
+            if not r:
+                continue
+            code = r[0]
+            if code in mapa and mapa[code]:
+                out[fn] = mapa[code]
+    except Exception:
+        return {}
+    finally:
+        os.chdir(cwd)
+    return out
+
+
+def _id_youtube(url):
+    m = re.search(r'(?:v=|youtu\.be/|/embed/|/shorts/)([A-Za-z0-9_-]{11})', url or '')
+    return m.group(1) if m else None
+
+
+def link_en(url, seg):
+    """El link de YouTube abierto en ese segundo."""
+    vid = _id_youtube(url)
+    return ('https://youtu.be/%s?t=%d' % (vid, int(seg))) if vid else ''
+
+
+def ytdlp():
+    """Cómo invocar yt-dlp en esta máquina.
+
+    pip lo instala en la carpeta Scripts de Python, que en Windows muchas
+    veces NO está en el PATH — el propio instalador lo avisa. Buscarlo por
+    nombre falla y parece que no estuviera instalado.
+
+    Por eso se prueba primero el ejecutable y, si no aparece, se lo llama
+    como módulo del mismo Python que está corriendo este script, que es
+    donde pip lo dejó. Así funciona esté o no en el PATH.
+    """
+    exe = shutil.which('yt-dlp')
+    if exe:
+        return [exe]
+    try:
+        import yt_dlp            # noqa: F401
+        return [sys.executable, '-m', 'yt_dlp']
+    except ImportError:
+        return None
+
+
+def bajar_partido(url, destino):
+    """Baja el partido entero, una sola vez.
+
+    Por qué entero y no tramo por tramo: hay hasta seis acciones por placa y
+    cinco placas con video, o sea unas treinta descargas. Cada una arranca
+    una conexión nueva y obliga a recodificar para cortar en el lugar justo,
+    y eso son veinte minutos largos.
+
+    Bajando el partido una vez, los treinta cortes salen de un archivo local
+    en segundos y caen exactos. Son tres descargas en vez de treinta.
+
+    El archivo se borra solo al terminar (ver `limpiar`): ocupa entre 300 y
+    600 MB y no hace falta guardarlo.
+    """
+    base = ytdlp()
+    if not base:
+        return None
+    cmd = base + ['--no-playlist', '--no-warnings', '--no-part',
+                  '-f', 'bv*[height<=1080]+ba/b[height<=1080]/b',
+                  '--merge-output-format', 'mp4',
+                  '-o', str(destino), url]
+    try:
+        # a propósito SIN silenciar: una descarga de 40 minutos sin ninguna
+        # señal en pantalla parece un cuelgue
+        subprocess.run(cmd, check=True)
+    except (subprocess.CalledProcessError, FileNotFoundError, KeyboardInterrupt):
+        return None
+    return destino if destino.exists() and destino.stat().st_size > 0 else None
+
+
+def _bajar_tramo(url, ini, dur, destino):
+    """Baja solo ese pedacito del video de YouTube, con yt-dlp."""
+    base = ytdlp()
+    if not base:
+        return None
+    cmd = base + ['--quiet', '--no-warnings', '--no-playlist',
+           '-f', 'bv*[height<=1080]+ba/b[height<=1080]/b',
+           '--download-sections', '*%.2f-%.2f' % (ini, ini + dur),
+           '--force-keyframes-at-cuts',
+           '--merge-output-format', 'mp4',
+           '-o', str(destino), url]
+    try:
+        subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL,
+                       stderr=subprocess.DEVNULL)
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+    return destino if destino.exists() and destino.stat().st_size > 0 else None
+
+
+def cortar(pack, videos, links, destino, vertical=False):
+    """Corta cada acción y las pega en un solo mp4.
+
+    El video del partido puede venir de dos lados: un archivo en el disco, o
+    el link de YouTube que ya cargaste en la app. Con el link se baja SOLO el
+    pedacito de cada acción, no el partido entero."""
     tmp = destino / '_tmp'
     tmp.mkdir(parents=True, exist_ok=True)
     partes = []
     for i, a in enumerate(pack['acciones']):
-        vid = videos.get(a['archivo'])
-        if not vid:
-            continue
         ini = max(0, a['t'] - ANTES)
         dur = (a.get('hasta', a['t']) - a['t']) + ANTES + DESPUES
         seg = tmp / ('%s_%02d.mp4' % (pack['slug'], i))
         vf = ('scale=1080:-2,pad=1080:1920:0:(oh-ih)/2:%s' % FONDO.replace('#', '0x')) \
             if vertical else 'scale=1080:-2'
-        cmd = ['ffmpeg', '-y', '-loglevel', 'error',
-               '-ss', '%.2f' % ini, '-i', str(vid), '-t', '%.2f' % dur,
-               '-vf', vf, '-r', '30',
-               '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '21',
-               '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ar', '48000', '-ac', '2',
-               str(seg)]
+        base = ['-vf', vf, '-r', '30',
+                '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '21',
+                '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ar', '48000', '-ac', '2']
+
+        vid = videos.get(a['archivo'])
+        if vid:
+            cmd = ['ffmpeg', '-y', '-loglevel', 'error',
+                   '-ss', '%.2f' % ini, '-i', str(vid), '-t', '%.2f' % dur] \
+                + base + [str(seg)]
+        elif links.get(a['archivo']):
+            crudo = _bajar_tramo(links[a['archivo']], ini, dur,
+                                 tmp / ('crudo_%02d.mp4' % i))
+            if not crudo:
+                continue
+            # yt-dlp corta en el keyframe anterior, así que el tramo puede
+            # empezar antes: se recorta de nuevo para que quede parejo
+            cmd = ['ffmpeg', '-y', '-loglevel', 'error',
+                   '-i', str(crudo), '-t', '%.2f' % dur] + base + [str(seg)]
+        else:
+            continue
         try:
             subprocess.run(cmd, check=True)
         except (subprocess.CalledProcessError, FileNotFoundError):
@@ -229,6 +367,8 @@ def main():
     ap.add_argument('--salida', default='salida')
     ap.add_argument('--vertical', action='store_true',
                     help='1080x1920 para historias y reels')
+    ap.add_argument('--guardar-video', action='store_true', dest='guardar_video',
+                    help='no borrar los partidos bajados (por defecto se borran)')
     a = ap.parse_args()
 
     if not a.carpeta or not a.temporada:
@@ -263,21 +403,8 @@ def main():
             'DataVolley. Sin ese dato no hay cortes, ni acá ni en la app.')
     packs = elegir(piezas, acc)
 
-    # la lista para cortar a mano: sale siempre, haya video o no
-    txt = ['CORTES DE VIDEO · %s' % rotulo, '=' * 60, '']
-    for pk in packs:
-        txt.append('%s · %s' % (pk['titulo'], pk['quien']))
-        for x in pk['acciones']:
-            txt.append('   set %-2s  %s   %s'
-                       % (x['set'], hhmmss(x['t']), pathlib.Path(x['archivo']).name))
-        txt.append('')
-    txt.append('El minuto es la posición dentro del video de ese partido.')
-    txt.append('El corte va de %ds antes a %ds después, igual que en la app.'
-               % (ANTES, DESPUES))
-    (destino / 'cortes.txt').write_text('\n'.join(txt), encoding='utf-8')
-    print('cortes.txt  ->  %d placas con video' % len(packs))
-
-    # y ahora, si se puede, el mp4 hecho
+    # de dónde sale el video de cada partido: archivo en el disco, o el link
+    # de YouTube que ya está cargado en la app
     mapa = {}
     jm = pathlib.Path('videos.json')
     if jm.exists():
@@ -290,33 +417,104 @@ def main():
         v = buscar_video(fn, a.repo, mapa)
         if v:
             videos[fn] = v
+    links = links_youtube(a.repo, archivos)
+
+    # la lista para cortar a mano: sale siempre, haya o no con qué cortar.
+    # Con el link cargado, cada acción queda como un link que abre YouTube
+    # justo ahí: eso solo ya te ahorra buscar.
+    txt = ['CORTES DE VIDEO · %s' % rotulo, '=' * 66, '']
+    for pk in packs:
+        txt.append('%s · %s' % (pk['titulo'], pk['quien']))
+        for x in pk['acciones']:
+            l = link_en(links.get(x['archivo']), x['t'])
+            txt.append('   set %-2s  %s   %s'
+                       % (x['set'], hhmmss(x['t']),
+                          l or pathlib.Path(x['archivo']).name))
+        txt.append('')
+    txt.append('El minuto es la posición dentro del video de ese partido.')
+    txt.append('El corte va de %ds antes a %ds después, igual que en la app.'
+               % (ANTES, DESPUES))
+    (destino / 'cortes.txt').write_text('\n'.join(txt), encoding='utf-8')
+    print('cortes.txt  ->  %d placas con video' % len(packs))
+
     if not shutil.which('ffmpeg'):
         print()
         print('No tengo ffmpeg, así que no puedo cortar los videos solo.')
         print('Instalalo de ffmpeg.org y volvé a correr: el cortes.txt ya está.')
         return 0
-    if not videos:
+    hay_yt = ytdlp() is not None
+    if links and not hay_yt:
         print()
-        print('No encontré ningún archivo de video de estos partidos.')
-        print('Poné el video al lado del .dvw con el mismo nombre, o armá un')
-        print('videos.json acá con la ruta de cada uno. El cortes.txt ya está.')
+        print('Los partidos están en YouTube pero no tengo yt-dlp para bajarlos.')
+        print('Corré INSTALAR.bat de nuevo, o: python -m pip install yt-dlp')
+        print('Mientras tanto, cortes.txt trae el link de cada acción.')
+    if not videos and not (links and hay_yt):
+        print()
+        print('Sin video no puedo cortar. Tenés dos caminos:')
+        print('  · cargar el link del partido en Cargar Videos, como siempre;')
+        print('  · o poner el archivo al lado del .dvw con el mismo nombre.')
         return 0
 
-    print('videos encontrados: %d de %d partidos' % (len(videos), len(archivos)))
+    print('con video: %d de %d partidos  (%d por archivo, %d por link)'
+          % (len({*videos} | {*links}), len(archivos), len(videos), len(links)))
+
+    # Los partidos que hacen falta se bajan enteros, una vez cada uno, y se
+    # cortan localmente. Al terminar se borran.
+    cache = pathlib.Path('_videos_temporales')
+    shutil.rmtree(cache, ignore_errors=True)     # restos de una corrida cortada
+    necesarios = {x['archivo'] for pk in packs for x in pk['acciones']}
+    bajados = []
+    if hay_yt:
+        pend = [f for f in necesarios if f not in videos and links.get(f)]
+        for i, f in enumerate(pend, 1):
+            cache.mkdir(parents=True, exist_ok=True)
+            nom = pathlib.Path(f).stem[:40].replace(' ', '_')
+            destino_v = cache / ('%s.mp4' % nom)
+            print()
+            print('Bajando el partido %d de %d: %s' % (i, len(pend),
+                                                       pathlib.Path(f).name))
+            print('(se baja una sola vez y se borra al terminar)')
+            v = bajar_partido(links[f], destino_v)
+            if v:
+                videos[f] = v
+                bajados.append(v)
+            else:
+                print('   no se pudo bajar; voy a cortar por tramos, más lento')
+        if pend:
+            print()
     for pk in packs:
-        if not any(x['archivo'] in videos for x in pk['acciones']):
+        if not any(x['archivo'] in videos or x['archivo'] in links
+                   for x in pk['acciones']):
             continue
-        out, n = cortar(pk, videos, destino, a.vertical)
+        out, n = cortar(pk, videos, links, destino, a.vertical)
         # cuantas quedaron afuera por no tener el video de ESE partido
         falta = len(pk['acciones']) - n
         nota = ' (%d sin video del partido)' % falta if falta else ''
         print('   %-22s %s' % (pk['nombre'] + '.mp4',
                                ('%d acci%s%s' % (n, 'ón' if n == 1 else 'ones', nota))
                                if out else 'no se pudo cortar'))
+    # y se borran los partidos bajados: ya están los cortes, el original no
+    # hace falta y son cientos de megas cada uno
+    if bajados and not a.guardar_video:
+        libres = sum(v.stat().st_size for v in bajados if v.exists())
+        shutil.rmtree(cache, ignore_errors=True)
+        print()
+        print('Borré los %d partidos que bajé (%d MB liberados).'
+              % (len(bajados), libres // (1024 * 1024)))
+    elif bajados:
+        print()
+        print('Los partidos bajados quedan en %s (--guardar-video).' % cache)
+
     print()
     print('Todo en %s' % destino)
     return 0
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except KeyboardInterrupt:
+        # si lo cortás a mitad de una descarga, igual se limpia
+        shutil.rmtree(pathlib.Path('_videos_temporales'), ignore_errors=True)
+        print('\nCortado. Borré lo que había bajado.')
+        sys.exit(130)

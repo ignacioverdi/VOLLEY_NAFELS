@@ -8,7 +8,7 @@ Una por fundamento: saque, recepción, armado, ataque, bloqueo, equipo ideal.
 Entre placa y placa va el video de la mejor acción de ese fundamento.
 """
 import argparse, json, pathlib, re
-import armador, club, fechas, liga, placas2, rotacion
+import armador, club, fechas, historial, liga, placas2, rotacion
 
 LIGA = 'Liga Nacional A · Suiza'
 PLURAL = {'saque': 'saques', 'recepcion': 'recepciones',
@@ -40,14 +40,34 @@ def fichas(EQ, NOM_json):
 PCT = {}
 
 
-def tiles(fund, principal, J, vara_, respaldo):
+def delta_de(ctx, fund, eq, dor, valor):
+    """Cuánto subió o bajó contra la fecha anterior que jugó.
+
+    Sale del historial, que se guarda solo en cada corrida. Con una sola
+    fecha guardada no hay con qué comparar y no se muestra nada."""
+    if not ctx.get('temporada') or not ctx.get('fecha_n'):
+        return None
+    try:
+        s = historial.serie(ctx['temporada'], eq, dor, fund,
+                            hasta=int(ctx['fecha_n']) - 1)
+    except Exception:
+        return None
+    if not s:
+        return None
+    n_prev, v_prev = s[-1]
+    if v_prev is None or valor is None:
+        return None
+    return {'delta': int(round(valor - v_prev)), 'contra': 'fecha %d' % n_prev}
+
+
+def tiles(fund, principal, J, vara_, respaldo, delta=None):
     """Los tres tiles: el número grande con la vara, y los dos cortes.
 
     Si un corte no tiene volumen (pasa en una fecha suelta), cae al respaldo
     en vez de mostrar un porcentaje de dos acciones.
     """
     fmt = PCT.get(fund, '%d%%')
-    out = [(principal[0], fmt % principal[1], None, vara_ or None)]
+    out = [(principal[0], fmt % principal[1], None, vara_ or None, delta)]
     # El corte se muestra solo si LOS DOS lados tienen volumen. Si el jugador
     # sacó 34 flotados y ningún potencia, "FLOTADO 47" al lado de
     # "EFICIENCIA 47" es el mismo número dos veces: no es un corte, es ruido.
@@ -154,10 +174,14 @@ def ficha(fund, zona, hero, titulo, bajada, pie, EQ, NOM, minimo, fecha, fuente,
     # vista, porque el que mira la placa no tiene otra forma de saberlo.
     n, total = sum(zonas), J[fund]['T']
     # la vara: la media de la liga, para que el número tenga contra qué leerse
+    dl = delta_de(ctx, fund, eq, dor, ef)
     v = dict(ctx.get('varas', {}).get(fund) or {})
     if v:
         v['valor'] = ef
         v['etiqueta'] = '%d%%' % v['media']
+        if dl:
+            v['etiqueta'] += '  ·  %s%d vs %s' % ('+' if dl['delta'] > 0 else '',
+                                                  dl['delta'], dl['contra'])
     return {'tipo': 'ficha', 'slug': fund, 'fundamento': fund, 'liga': LIGA,
             'fecha': fecha, 'titulo': titulo, 'bajada': bajada,
             # a quien eligio la placa: clips.py corta las acciones de este
@@ -172,14 +196,14 @@ def ficha(fund, zona, hero, titulo, bajada, pie, EQ, NOM, minimo, fecha, fuente,
                                    'der': '%d de %d %s' % (n, total, PLURAL[fund])},
                         'rotulo_tira': 'Escala DataVolley · sus %d %s'
                                        % (total, PLURAL[fund]),
-                        'hero': hero(J, st or {}, v),
+                        'hero': hero(J, st or {}, v, dl),
                         'valoraciones': liga.valoraciones(J, fund)}],
             'fuente': fuente + ' · mínimo %d %s, %d jugadores lo superaron'
                                % (minimo, PLURAL[fund], len(orden)),
             'pie': pie(ef, eq, J)}
 
 
-def construir(repo, carpeta, temporada, fecha, archivos=None):
+def construir(repo, carpeta, temporada, fecha, archivos=None, fecha_n=None):
     NOM_json, equipos = nombres(repo, temporada)
     EQ = liga.leer(repo, carpeta, archivos)
     NOM = fichas(EQ, NOM_json)
@@ -189,16 +213,17 @@ def construir(repo, carpeta, temporada, fecha, archivos=None):
     n_eq = len([e for e in EQ if EQ[e]['jug']])
     fuente = ('Volley-Stats · %d partidos scouteados con nuestro sistema · '
               '%d equipos' % (n_part, n_eq))
-    ctx = {'escudos': club.escudos(repo), 'varas': club.varas(repo, temporada)}
+    ctx = {'escudos': club.escudos(repo), 'varas': club.varas(repo, temporada),
+           'temporada': temporada, 'fecha_n': fecha_n}
     P = []
 
     # 1 · SAQUE
     P.append(ficha('saque', 'z_saque_pos',
-                   lambda J, st, v: tiles(
+                   lambda J, st, v, dl: tiles(
                        'saque', ('EFICIENCIA', liga.eficacias(J)['saque']), J, v,
                        [('ACE / ERROR', '%d-%d' % (J['saque']['#'], J['saque']['='])),
                         ('% ACE', '%d%%' % round(
-                            100.0 * J['saque']['#'] / (J['saque']['T'] or 1)))]),
+                            100.0 * J['saque']['#'] / (J['saque']['T'] or 1)))], dl),
                    'El mejor saque de la fecha',
                    'Sus zonas de saque cuando complica al receptor, y qué rinde '
                    'con cada tipo de servicio.',
@@ -210,14 +235,14 @@ def construir(repo, carpeta, temporada, fecha, archivos=None):
 
     # 2 · RECEPCIÓN
     P.append(ficha('recepcion', 'z_recepcion_pos',
-                   lambda J, st, v: tiles(
+                   lambda J, st, v, dl: tiles(
                        'recepcion', ('EFICIENCIA', liga.eficacias(J)['recepcion']), J, v,
                        [('% POSITIVA', '%d%%' % round(
                            100.0 * (J['recepcion']['#'] + J['recepcion']['+'])
                            / (J['recepcion']['T'] or 1))),
                         ('% PERFECTA', '%d%%' % round(
                             100.0 * J['recepcion']['#']
-                            / (J['recepcion']['T'] or 1)))]),
+                            / (J['recepcion']['T'] or 1)))], dl),
                    'El receptor más sólido',
                    'Sus zonas de recepción cuando la deja armable, y qué rinde '
                    'contra potencia y contra flotado.',
@@ -265,11 +290,11 @@ def construir(repo, carpeta, temporada, fecha, archivos=None):
 
     # 4 · ATAQUE — la cancha con los ataques # y + solamente
     P.append(ficha('ataque', 'z_ataque_pos',
-                   lambda J, st, v: tiles(
+                   lambda J, st, v, dl: tiles(
                        'ataque', ('EFICACIA', liga.eficacias(J)['ataque']), J, v,
                        [('% PUNTO', '%d%%' % round(
                            100.0 * J['ataque']['#'] / (J['ataque']['T'] or 1))),
-                        ('ERR + BLQ', '%d' % (J['ataque']['='] + J['ataque']['/']))]),
+                        ('ERR + BLQ', '%d' % (J['ataque']['='] + J['ataque']['/']))], dl),
                    'El atacante más eficaz',
                    'Dónde ataca cuando hace daño, y la diferencia entre lo que '
                    'rinde en side-out y en transición.',
@@ -491,6 +516,8 @@ if __name__ == '__main__':
     ap.add_argument('--fecha', default='', help='solo los partidos de esa fecha')
     ap.add_argument('--hasta', default='', help='acumulado desde la 1 hasta esa fecha')
     ap.add_argument('--listar', action='store_true', help='mostrar las fechas y salir')
+    ap.add_argument('--ultima', action='store_true',
+                    help='imprimir solo el numero de la ultima fecha (para los .bat)')
     ap.add_argument('--salida', default='salida')
     a = ap.parse_args()
 
@@ -506,6 +533,9 @@ if __name__ == '__main__':
 
     ruta_dvw = pathlib.Path(a.repo) / a.carpeta
     grupos, sueltos = fechas.detectar(ruta_dvw)
+
+    if a.ultima:
+        print(max((g['n'] for g in grupos), default=0)); raise SystemExit(0)
 
     if a.listar:
         print(); print(fechas.resumen(grupos, sueltos)); raise SystemExit(0)

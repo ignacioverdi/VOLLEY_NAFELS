@@ -40,7 +40,10 @@ Te tiene que quedar así:
             placas2.py
             clips.py
             publicar.py
+            historial.py
             verificar.py
+            AUTOMATICO.bat
+            VIGILAR_Y_PUBLICAR.ps1
             PASO-A-PASO.md
             LEEME.md
 
@@ -189,6 +192,35 @@ club en minúscula y sin acentos.
 
 ---
 
+## Cero clics: que se haga solo
+
+`AUTOMATICO.bat` deja un vigilador andando. Mira la carpeta de los `.dvw` y,
+cuando llega uno nuevo, **espera 15 minutos a que dejen de llegar** (para que
+entre toda la fecha) y después hace todo solo: placas, revisión, videos y
+textos. Abrís la compu el lunes y está hecho.
+
+Lo dejás abierto, o lo ponés en el inicio de Windows. Todo lo que hace queda
+anotado en `auto.log`.
+
+Los 15 minutos se cambian arriba de `VIGILAR_Y_PUBLICAR.ps1`, igual que si
+querés los videos en vertical por defecto.
+
+> Esto convive con tu `VIGILAR_PARTIDOS.ps1`: ese copia el `.dvw` de
+> DataVolley al repo y lo sube; este mira el repo y arma la publicación.
+> Podés tener los dos abiertos.
+
+## El historial
+
+Cada corrida guarda los números de esa fecha en `historial.json`. Eso
+permite que la placa muestre **cuánto subió o bajó** cada jugador contra la
+fecha anterior — la flechita verde o roja al lado del número grande.
+
+Aparece sola a partir de la segunda fecha. No hay nada que hacer.
+
+**Esto conviene no borrarlo**: los números de la fecha 1 solo existen si se
+guardaron en la fecha 1. Igual, si se pierde, se rehace corriendo las fechas
+de nuevo.
+
 ## Los videos
 
 El sistema corta solo las mejores acciones del jugador que eligió cada placa.
@@ -207,7 +239,15 @@ jugador abre esa acción en *Cortes de Video*. El margen también es el mismo:
 1. Que el partido esté scouteado **con el video cargado** en DataVolley. Sin
    eso no hay segundos, ni acá ni en la app.
 2. **ffmpeg** instalado (ffmpeg.org, y que quede en el PATH).
-3. El archivo de video de cada partido, con el **mismo nombre que el `.dvw`**:
+3. El video del partido. Hay dos caminos y el sistema prueba los dos:
+
+   **a) El link de YouTube que ya cargaste.** Si el partido está en *Cargar
+   Videos* como siempre, el cortador lee ese mismo `mapa_videos.js` y baja
+   **solo el tramo de cada acción** (no el partido entero). No tenés que
+   hacer nada distinto de lo que ya hacés. Para esto hace falta `yt-dlp`,
+   que lo instala `INSTALAR.bat`.
+
+   **b) El archivo en el disco**, con el **mismo nombre que el `.dvw`**:
 
         DVW NAFELS 2027\&2026-09-19 #03 AXPO NAFELS vs JONA.dvw
         DVW NAFELS 2027\&2026-09-19 #03 AXPO NAFELS vs JONA.mp4
@@ -218,7 +258,8 @@ jugador abre esa acción en *Cortes de Video*. El margen también es el mismo:
         {"&2026-09-19 #03 AXPO NAFELS vs JONA.dvw": "D:/partidos/jona.mp4"}
 
 **Si falta algo**, igual te deja `cortes.txt` con el set y el minuto exacto de
-cada acción, para que abras el video y cortes a mano sin buscar nada.
+cada acción — y si el link de YouTube está cargado, cada acción queda como un
+link que abre el video justo en ese segundo. Eso solo ya te ahorra buscar.
 
 El menú te pregunta si querés los videos **también en vertical** (1080x1920,
 para historias y reels).
