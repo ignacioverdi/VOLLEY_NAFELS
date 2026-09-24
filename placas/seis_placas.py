@@ -74,18 +74,44 @@ def nombres(repo, temporada):
     return out, [t for t in d['teams'] if t['temporada'] == temporada]
 
 
-# Piso de volumen adaptativo. Un piso fijo sirve para una temporada entera y
-# deja sin placas a la fecha 3, donde nadie llego a 150 saques. Se toma el
-# mayor entre un piso minimo y el 40% de la mediana de los que jugaron.
-PISO = {'saque': 12, 'recepcion': 12, 'ataque': 15, 'bloqueo': 8}
+# PISO DE VOLUMEN
+# ---------------
+# Una fecha y una temporada no se pueden medir con la misma vara, y el piso
+# tiene que moverse solo. Medi el volumen real por jugador EN UN PARTIDO
+# sobre los 97 .dvw de la 25-26, y da esto:
+#
+#     saque      mediana  9    titulares 11
+#     recepcion  mediana 10    receptores 18
+#     ataque     mediana  9    titulares 12
+#     bloqueo    mediana  6    titulares  6
+#
+# O sea que un piso de 15 ataques, que es razonable para una temporada, en
+# una fecha deja afuera a mas de la mitad de los titulares, y a casi todos
+# los centrales. Los pisos de abajo son el MINIMO ABSOLUTO: por debajo de
+# esto un porcentaje no significa nada, porque una sola accion lo mueve diez
+# puntos o mas. Son para el caso chico (una fecha, un partido).
+MIN_ABS = {'saque': 6, 'recepcion': 8, 'ataque': 8, 'bloqueo': 6}
+
+# Para el caso grande manda la parte adaptativa: 40% del percentil 75 de los
+# que hicieron algo. Se usa el p75 y no la mediana porque la mediana la
+# hunden los que tocaron el fundamento de casualidad: en recepcion, un
+# central que recibio una sola pelota en toda la temporada cuenta igual que
+# un libero con 400, y la mediana termina en 19 sobre 97 partidos.
+FRACCION = 0.4
 
 
 def piso(EQ, NOM, fund):
+    """El mayor entre el minimo absoluto y el 40% del p75 de la muestra.
+
+    Con una fecha manda el minimo; con media temporada o mas manda el p75.
+    El numero sale impreso en la placa junto con cuantos lo superaron, asi
+    que el que la lee puede juzgar por su cuenta."""
     vals = sorted(J[fund]['T'] for d in EQ.values() for dor, J in d['jug'].items()
                   if J[fund]['T'] > 0)
     if not vals:
-        return PISO[fund]
-    return max(PISO[fund], int(vals[len(vals) // 2] * 0.4))
+        return MIN_ABS[fund]
+    p75 = vals[int(len(vals) * 0.75)]
+    return max(MIN_ABS[fund], int(p75 * FRACCION))
 
 
 def ranking(EQ, NOM, fund, minimo, zona):
@@ -378,12 +404,16 @@ def equipo_ideal(EQ, NOM, equipos, fecha, fuente, n_part=0, ctx=None):
             # no es el mejor punta de la fecha por mucho que reciba
             if comp[0][1] not in datos[0]:
                 continue
-            out.append((partes / peso, nm, eq, datos))
-        out.sort(key=lambda x: -x[0])
+            # y si el puesto se define por dos cosas, el que hizo las dos va
+            # primero. Si no, la placa dice "punta por ataque y recepción" y
+            # arriba de todo pone a uno que no recibió una pelota.
+            completo = 0 if len(datos) == len(comp) else 1
+            out.append((completo, -(partes / peso), nm, eq, datos))
+        out.sort()
         return [{'jugador': nm, 'equipo': eq,
                  'escudo': club.escudo_de(ctx.get('escudos'), eq),
                  'dato': d[0], 'dato2': d[1] if len(d) > 1 else ''}
-                for _sc, nm, eq, d in out[:n]]
+                for _comp, _sc, nm, eq, d in out[:n]]
 
     s = []
     for i, x in enumerate(top('PUNTA', 2)):

@@ -198,9 +198,20 @@ los códigos de punto del `.dvw`.
   `nla_stats.json`, que es la única con volumen para ser una media.
 - **La temporada se detecta sola:** busca la carpeta `DVW ...` con el año más
   alto que tenga archivos, con el mismo criterio de tu `gen_liga_stats.py`.
-- **El piso de volumen se adapta:** con tres partidos no exige lo mismo que con
-  noventa y siete. Es el mayor entre un piso mínimo y el 40% de la mediana.
-  Sin eso, el ranking lo ganaba el que hizo tres acciones y le salieron las tres.
+- **El piso de volumen se adapta a la muestra.** Una fecha y una temporada no
+  se pueden medir con la misma vara. Medí el volumen real por jugador en un
+  partido sobre tus 97 `.dvw` de la 25-26: la mediana es 9 saques, 10
+  recepciones, 9 ataques y 6 bloqueos. O sea que un piso de 15 ataques, que
+  está bien para una temporada, en una fecha deja afuera a la mitad de los
+  titulares y a casi todos los centrales.
+
+  Por eso el piso es el mayor entre un mínimo absoluto (6 saques, 8
+  recepciones, 8 ataques, 6 bloqueos — por debajo de eso un porcentaje no
+  significa nada) y el 40% del percentil 75 de la muestra. Con una fecha manda
+  el mínimo; con media temporada o más manda el percentil. En la temporada
+  entera eso da 101 saques y 106 ataques, igual de exigente que antes.
+
+  El piso sale impreso en cada placa junto con cuántos jugadores lo superaron.
 
 ## Para sumar otra liga
 
