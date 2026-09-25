@@ -1,0 +1,56 @@
+FOTOS DE LOS JUGADORES
+======================
+
+Para qué
+--------
+Cuando la placa de partido muestra la figura del partido, si el jugador
+tiene foto acá la pone en redondo al lado del nombre, con el dorsal en una
+chapita. Si no la tiene, va el dorsal en el cuadrado de siempre y la placa
+sale igual de bien. O sea: la foto la mejora, no la habilita. No hace falta
+tenerlas todas.
+
+Dónde va cada una
+-----------------
+    placas\jugadores\<club>\<apellido>.jpg
+
+Las ocho carpetas ya están hechas, una por club de la NLA. Arrastrás la
+foto adentro de la del club y listo.
+
+Cómo se llama el archivo
+------------------------
+Con el APELLIDO, no con el dorsal.
+
+    norris.jpg              ->  James Norris
+    robinson-dunning.jpg    ->  Kieran Robinson-Dunning
+    muller.jpg              ->  Tim Müller
+
+Sin acentos, sin mayúsculas, sin el número. Si en el mismo plantel hay dos
+apellidos iguales, le agregás el nombre y se arregla solo:
+
+    muller-tim.jpg
+    muller-jonas.jpg
+
+Valen .jpg, .png y .webp. No importa el tamaño: se recorta en cuadrado
+solo, un poco hacia arriba para que no le corte la frente.
+
+Por qué por apellido y no por dorsal
+------------------------------------
+Porque la federación publica el retrato con el nombre del jugador, no con
+su número. El apellido es el único dato que tienen en común el .dvw y la
+foto. Además el dorsal puede cambiar de temporada; el apellido no.
+
+De dónde salen
+--------------
+volleyball.ch -> Game Center -> el equipo -> pestaña TEAM. Botón derecho
+sobre el retrato -> Guardar imagen como.
+
+Dos cosas que conviene saber:
+  · Vienen a 300 px de ancho y no se pueden bajar más grandes. Alcanza de
+    sobra para el tamaño en que las usa la placa.
+  · Hoy no están todas cargadas: los clubes las van subiendo. Las que
+    falten, no pasa nada, va el dorsal.
+
+Las fotos son del club que las publicó y del fotógrafo que las sacó. Para
+una placa de resultado del propio partido es uso normal, pero lo prolijo,
+si la placa va a circular, es acreditar al club en el pie o pedirle permiso
+a la liga una vez y quedarse tranquilo.

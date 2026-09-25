@@ -44,6 +44,14 @@ _videos_temporales/
 placas/musica/*
 !placas/musica/LEEME.txt
 
+# Las fotos de los jugadores son del club que las publicó y del fotógrafo
+# que las sacó. Sirven para armar la placa acá, no para republicarlas
+# adentro de un repo público. Se quedan en tu máquina.
+placas/jugadores/**/*.jpg
+placas/jugadores/**/*.jpeg
+placas/jugadores/**/*.png
+placas/jugadores/**/*.webp
+
 # Copias de seguridad de las bases
 *.bak
 *.json.bak

@@ -500,6 +500,18 @@ def _marca_grande():
         return ''
 
 
+def _retrato(f, dor):
+    """La foto del jugador si la hay; si no, el dorsal en un cuadrado.
+
+    Nunca se cae por una foto que falta: la mitad de los planteles de la
+    federación todavía no la tienen cargada."""
+    if f.get('foto'):
+        chapa = ('<em>%s</em>' % esc(dor)) if dor else ''
+        return ('<span class="ptrt"><img src="%s" alt="">%s</span>'
+                % (f['foto'], chapa))
+    return ('<span class="ptdor">%s</span>' % esc(dor)) if dor else ''
+
+
 def partido(p):
     """Un partido, a sangre, con un cuadro del propio partido de fondo.
 
@@ -574,7 +586,7 @@ def partido(p):
                '<div><u>%d</u><span>%s</span></div>'
                '<div><u>%d</u><span>%s</span></div></div></div>'
                % (color_f, idioma.t('figura'),
-                  ('<span class="ptdor">%s</span>' % esc(dor)) if dor else '',
+                  _retrato(f, dor),
                   esc(f.get('corto') or f['nombre']),
                   esc(f.get('club') or f['equipo']),
                   f['pts'], idioma.t('pts'),
@@ -1096,6 +1108,19 @@ body.pt.alta .ptpt .cab b{font-size:30px}
   font-variant-numeric:tabular-nums}
 .ptfr .big span{display:block;font-family:'PlacaMono',monospace;font-size:13px;
   letter-spacing:.2em;color:%(MUTED)s;margin-top:4px}
+/* el retrato del jugador: redondo, con el dorsal como chapita.
+   La federacion los publica a 300 px, asi que a este tamano entran nitidos. */
+.ptrt{position:relative;flex:none}
+.ptrt img{width:104px;height:104px;border-radius:50%%;object-fit:cover;
+  object-position:50%% 25%%;
+  display:block;border:3px solid var(--c);background:#11141F}
+.ptrt em{position:absolute;right:-6px;bottom:-6px;font-style:normal;
+  font-family:'PlacaMono',monospace;font-size:17px;font-weight:700;color:#fff;
+  background:var(--c);min-width:34px;height:34px;padding:0 7px;border-radius:10px;
+  display:grid;place-items:center;border:3px solid #0A0C15;
+  font-variant-numeric:tabular-nums}
+body.pt.alta .ptrt img{width:150px;height:150px}
+body.pt.alta .ptrt em{font-size:21px;min-width:42px;height:42px;right:-8px;bottom:-8px}
 .ptst{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid %(BD)s}
 .ptst div{padding:15px 0;text-align:center;border-left:1px solid %(BD)s}
 .ptst div:first-child{border-left:none}

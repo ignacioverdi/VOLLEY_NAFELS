@@ -1,0 +1,12 @@
+Las fotos de los jugadores de este club van en esta carpeta.
+El archivo se llama como el apellido, sin acentos y sin el dorsal:
+
+    norris.jpg
+    robinson-dunning.jpg
+
+Si hay dos apellidos iguales en el plantel, se le agrega el nombre:
+
+    muller-tim.jpg
+    muller-jonas.jpg
+
+Valen .jpg, .png y .webp.

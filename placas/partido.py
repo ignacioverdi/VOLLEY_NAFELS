@@ -31,6 +31,7 @@ import shutil
 import subprocess
 
 import club
+import fotos
 import idioma
 import marcador
 
@@ -151,6 +152,13 @@ def placas_de(repo, archivos, fecha, fuente, ctx, video_dir=None):
                 x[lado]['club'] = corto
         cand = [f for f in (x.get('fig_l'), x.get('fig_v')) if f]
         x['figura'] = max(cand, key=lambda f: f['pts']) if cand else None
+        # el retrato de la figura, si está cargado en placas/jugadores/.
+        # Se busca por NOMBRE: la federación publica el retrato con el
+        # nombre, no con el dorsal. Si no hay, va el dorsal de siempre.
+        if x['figura']:
+            f = x['figura']
+            f['foto'] = fotos.foto_de(f.get('nombre'),
+                                      f.get('equipo') or f.get('club') or '')
 
         stem = pathlib.Path(x['archivo']).stem[:60]
         x['fondo'] = _uri(fot[stem]) if (FOTOGRAMA and stem in fot) else ''
