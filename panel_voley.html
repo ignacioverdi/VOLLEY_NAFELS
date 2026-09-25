@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Stats Entrenamiento">Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20260925-2347"></script>
-<script src="selector_categoria.js?v=20260925-2347"></script>
+<script src="categorias_club.js?v=20260925-2348"></script>
+<script src="selector_categoria.js?v=20260925-2348"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -351,20 +351,20 @@ body::before{content:'';position:fixed;inset:0;
 
 select, select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20260925-2347"></script>
+<script src="objetivos_config.js?v=20260925-2348"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260925-2347"></script>
-<script src="firebase.js?v=20260925-2347" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260925-2347"></script>
-<script src="lang.js?v=20260925-2347"></script>
-<script src="objetivos.js?v=20260925-2347" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20260925-2347"></script>
-  <script src="video_delay.js?v=20260925-2347" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260925-2348"></script>
+<script src="firebase.js?v=20260925-2348" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260925-2348"></script>
+<script src="lang.js?v=20260925-2348"></script>
+<script src="objetivos.js?v=20260925-2348" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20260925-2348"></script>
+  <script src="video_delay.js?v=20260925-2348" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -653,7 +653,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260925-2347">
+<link rel="stylesheet" href="movil.css?v=20260925-2348">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase" data-t="← Dashboard"><span data-t="← Dashboard">← Dashboard</span></a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -737,7 +737,23 @@ function renderObjetivosJugador(cid,nombre,extra){
 <div id="objetivos-panel" style="margin:12px 0"></div>
 <script>setTimeout(function(){renderObjetivos("objetivos-panel");},100);</script>
 <main class="main" id="main-content">
-  <div id="live-badge" style="display:none;align-items:center;justify-content:center;gap:18px;margin:0 0 16px;padding:12px 20px;background:linear-gradient(180deg,rgba(20,21,42,.9),rgba(13,14,26,.9));border:1px solid rgba(255,255,255,.1);border-radius:14px">
+  <!-- ══ TRAER DE NUEVO ══════════════════════════════════════════════════════
+     Los datos pesados se traen solo cuando cambia el contador de acciones del
+     scout. Si el companero todavia no publico —recien arranca, se le corto el
+     wifi, cerro el panel— esta pantalla sigue mostrando lo ultimo que hay en
+     la nube, que puede ser el entrenamiento de ayer. Y nada lo decia.
+
+     Paso de verdad: entrar a mitad de un entrenamiento y ver los numeros del
+     dia anterior sin saberlo.
+
+     El boton fuerza la lectura. Al lado, de que momento son los datos. -->
+<div id="pv-refresh" style="display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 10px;flex-wrap:wrap">
+  <button onclick="pvTraerAhora()" style="padding:7px 16px;border-radius:9px;cursor:pointer;
+    border:1px solid rgba(148,163,184,.3);background:rgba(148,163,184,.06);color:inherit;
+    font:inherit;font-size:13px">&#8635; Traer de nuevo</button>
+  <span id="pv-edad" style="font-size:12px;color:#64748b"></span>
+</div>
+<div id="live-badge" style="display:none;align-items:center;justify-content:center;gap:18px;margin:0 0 16px;padding:12px 20px;background:linear-gradient(180deg,rgba(20,21,42,.9),rgba(13,14,26,.9));border:1px solid rgba(255,255,255,.1);border-radius:14px">
     <span class="mk-dot" title="En vivo" style="width:9px;height:9px;border-radius:50%;background:#22d3ee;display:inline-block;flex-shrink:0;box-shadow:0 0 8px #22d3ee"></span>
     <div style="display:flex;align-items:center;gap:14px;font-family:'Barlow Condensed',sans-serif">
       <div style="text-align:right;min-width:130px">
@@ -1755,6 +1771,39 @@ function refrescarVista(D){
     if(document.getElementById('objetivos-panel') && typeof renderObjetivos==='function') renderObjetivos('objetivos-panel');
   }catch(e){}
 }
+/* ── traer ahora, sin esperar al proximo cambio ──────────────────────────── */
+function pvTraerAhora(){
+  var e = document.getElementById('pv-edad');
+  if(e) e.textContent = 'buscando...';
+  try{ _lastRally = null; _lastAcciones = null; }catch(x){}
+  traerEnVivo(true);
+  setTimeout(pvEdad, 900);
+}
+
+/* ── de cuando son los datos que se ven ──────────────────────────────────── */
+function pvEdad(){
+  var e = document.getElementById('pv-edad');
+  if(!e) return;
+  var ts = null;
+  try{ ts = _liveTS || (window.VOLEY_DATA && VOLEY_DATA.ts) || null; }catch(x){}
+  if(!ts){ e.textContent = 'sin datos en la nube'; e.style.color = '#64748b'; return; }
+
+  var d = new Date(ts), ahora = new Date();
+  var min = Math.round((ahora - d) / 60000);
+  var hoy = d.toDateString() === ahora.toDateString();
+
+  if(!hoy){
+    /* lo mas importante: que no se confunda con lo de hoy */
+    e.textContent = '⚠ estos datos son del ' + d.toLocaleDateString() + ', no de hoy';
+    e.style.color = '#f87171';
+    return;
+  }
+  if(min <= 1){ e.textContent = 'al día'; e.style.color = '#4ade80'; return; }
+  if(min < 10){ e.textContent = 'hace ' + min + ' min'; e.style.color = '#94a3b8'; return; }
+  e.textContent = '⚠ hace ' + min + ' min que no llega nada nuevo';
+  e.style.color = '#fbbf24';
+}
+
 function traerEnVivo(primera){
   if(typeof fbGet!=='function') return;
   /* El marcador se lee siempre (liviano). El nº de rally decide si hay que
@@ -2288,8 +2337,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20260925-2347" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260925-2347"></script>
+<script src="plantel_nafels.js?v=20260925-2348" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260925-2348"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2388,7 +2437,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20260925-2347"></script>
+<script src="ayuda.js?v=20260925-2348"></script>
 
 
 
@@ -2485,6 +2534,8 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
       });
     }catch(e){}
     setInterval(pintar, 500);
+  setInterval(pvEdad, 15000);   /* de cuando son los datos */
+  setTimeout(pvEdad, 2500);
     document.addEventListener('click', function(){ setTimeout(pintar, 120); }, true);
   });
 
