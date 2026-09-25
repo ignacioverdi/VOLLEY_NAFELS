@@ -6,6 +6,8 @@ ficha de jugador, mapa de la liga, las seis canchitas y la tabla de la fecha.
 Nada de barras. Todo cancha, celda y ficha, como en el producto.
 """
 import html, os, pathlib
+
+import idioma
 from playwright.sync_api import sync_playwright
 
 # En Windows y Mac, Playwright sabe solo donde dejo el Chromium que bajo
@@ -92,8 +94,8 @@ def cancha(vals, color, mx=None, tam='', pct=False, red=True):
         out.append('<div class="%s" style="background:%s"><i>z%d</i>'
                    '<b style="color:%s">%d</b>%s</div>'
                    % (cls, bg, GRILLA[i], tint, n, extra))
-    neta = ('<div class="red" style="border-color:%s"><span>RED</span></div>'
-            % color) if red else ''
+    neta = ('<div class="red" style="border-color:%s"><span>%s</span></div>'
+            % (color, idioma.t('red'))) if red else ''
     return '%s<div class="gr %s">%s</div>' % (neta, tam, ''.join(out))
 
 
@@ -101,7 +103,8 @@ def escala_color(color):
     """Leyenda del degradado. Sin esto no se sabe si el naranja son 7 o 70."""
     pasos = ''.join('<i style="background:rgba(%s,%.2f)"></i>' % (_rgb(color), a)
                     for a in (0.16, 0.34, 0.52, 0.70, 0.88))
-    return '<div class="esc"><span>menos</span>%s<span>más</span></div>' % pasos
+    return ('<div class="esc"><span>%s</span>%s<span>%s</span></div>'
+            % (idioma.t('menos'), pasos, idioma.t('mas')))
 
 
 def tiles(ms, color):
@@ -200,7 +203,7 @@ def ficha(p):
             '<div class="vals">%s</div>%s'
             '</div>'
             % (c, esc(j['dorsal']), esc(j['nombre']), esc(j['equipo']), es,
-               c, c, esc(j['puesto']), esc(j['total']),
+               c, c, esc(idioma.puesto_ficha(j['puesto'])), esc(j['total']),
                barra_filtro(j.get('filtro'), c), cancha(j['zonas'], c), hero,
                esc(j.get('rotulo_tira', '')), barra, cajas, podio))
 
@@ -221,6 +224,7 @@ def seis(p):
     % de distribución - % de punto. Color por zona = por quién remató."""
     c = FUNDA['armado']
     mx = max(x['n'] for r in p['rotaciones'] for x in r['celdas']) or 1
+    fuera = sum(r.get('fuera', 0) for r in p['rotaciones'])
     cajas = []
     for r in p['rotaciones']:
         cel = []
@@ -235,18 +239,19 @@ def seis(p):
                        % (_rgb(x['color']), a, _rgb(x['color']), x['z'], x['n'],
                           x['dist'], x['pto']))
         cajas.append('<div class="sq"><div class="sh">'
-                     '<b style="color:%s">ARMADOR EN %s</b>'
+                     '<b style="color:%s">%s</b>'
                      '<span>%d %s</span></div>'
                      '<div class="agr">%s</div></div>'
-                     % (c, esc(r['rot']), r['total'],
-                        'balón' if r['total'] == 1 else 'balones', ''.join(cel)))
+                     % (c, idioma.t('armador_en', esc(r['rot'])), r['total'],
+                        idioma.t('balon' if r['total'] == 1 else 'balones'),
+                        ''.join(cel)))
     leg = ''.join('<span><i style="background:%s"></i>%s</span>' % (col, esc(et))
                   for et, col in p.get('leyenda', []))
     return ('%s<div class="aleg">%s</div><div class="seis">%s</div>'
-            '<div class="anota">Por zona de salida del ataque: balones distribuidos '
-            'arriba, y abajo %% de distribución · %% de punto. Cancha en vista del '
-            'rival, como se scoutea.</div>'
-            % (barra_filtro(p.get('filtro'), c), leg, ''.join(cajas)))
+            '<div class="anota">%s%s</div>'
+            % (barra_filtro(p.get('filtro'), c), leg, ''.join(cajas),
+               esc(idioma.t('nota_seis')),
+               (' ' + esc(idioma.t('fuera_zona', fuera))) if fuera else ''))
 
 
 # ── D · TABLA DE LA FECHA ──────────────────────────────────────────────────
@@ -260,8 +265,11 @@ def tabla(p):
                       % (c.get('color', TEXT) if c.get('fuerte') else TEXT,
                          'font-weight:700' if c.get('fuerte') else '', esc(f[c['k']]))
                       for c in cols)
-        filas.append('<tr><td class="ix">%d</td><td class="jg"><b>%s</b><span>%s</span></td>%s</tr>'
-                     % (i + 1, esc(f['nombre']), esc(f['equipo']), tds))
+        es = ('<img class="jge" src="%s" alt="">' % f['escudo']) \
+            if f.get('escudo') else ''
+        filas.append('<tr><td class="ix">%d</td><td class="jg">%s'
+                     '<span class="jgt"><b>%s</b><span>%s</span></span></td>%s</tr>'
+                     % (i + 1, es, esc(f['nombre']), esc(f['equipo']), tds))
     return ('%s<table class="tb"><thead><tr><th></th><th>JUGADOR</th>%s</tr></thead>'
             '<tbody>%s</tbody></table>'
             % (barra_filtro(p.get('filtro'), FUNDA[p['fundamento']]),
@@ -280,7 +288,8 @@ def siete(p):
             # Un puesto vacio se explica, no se deja en blanco: con pocos
             # partidos puede no haber nadie que pase el piso de volumen.
             return ('<div class="pz vacio"><div class="pu">%s</div>'
-                    '<span class="nd">sin volumen<br>suficiente</span></div>' % esc(pu))
+                    '<span class="nd">%s</span></div>'
+                    % (esc(idioma.puesto(pu)), idioma.t('sin_volumen')))
         c = COL.get(pu, FUNDA['ataque'])
         es = ('<img class="es3" src="%s" alt="">' % x['escudo']) if x.get('escudo') else ''
         # el segundo dato es el que hace honesta la elección: un punta entra
@@ -289,16 +298,17 @@ def siete(p):
         return ('<div class="pz" style="border-top-color:%s"><div class="pu">%s</div>'
                 '<b>%s</b><div class="pe">%s<span>%s</span></div>'
                 '<div class="st" style="color:%s">%s%s</div></div>'
-                % (c, esc(pu), esc(x['jugador']), es, esc(x['equipo']), c,
+                % (c, esc(idioma.puesto(pu)), esc(x['jugador']), es,
+                   esc(x['equipo']), c,
                    esc(x['dato']), d2))
 
     return (barra_filtro(p.get('filtro'), FUNDA[p['fundamento']]) +
-            '<div class="cancha7"><div class="red7">RED</div>'
+            '<div class="cancha7"><div class="red7">%s</div>'
             '<div class="f3">%s%s%s</div><div class="f3">%s%s%s</div>'
             '<div class="lb">%s</div></div>'
             # formacion real en cancha: adelante punta-central-opuesto,
             # atras central-punta-armador, y el libero abajo
-            % (cel('Punta 1'), cel('Central 1'), cel('Opuesto'),
+            % (idioma.t('red'), cel('Punta 1'), cel('Central 1'), cel('Opuesto'),
                cel('Central 2'), cel('Punta 2'), cel('Armador'), cel('Líbero')))
 
 
@@ -321,28 +331,184 @@ def rotaciones(p):
             cel.append('<div class="rc%s"><i>%s</i><b>%d%%</b><u>%d</u></div>'
                        % (marca, x['rot'], x['pct'], x['n']))
         es = ('<img class="es2" src="%s" alt="">' % f['escudo']) if f.get('escudo') else ''
+        # Una sola línea por equipo. Antes iban dos (cabecera arriba, las
+        # seis rotaciones abajo) y con cinco equipos ya no entraba: en una
+        # fecha real hay ocho y la placa salía cortada.
         filas.append(
-            '<div class="rf"><div class="rh">%s<div class="rn"><b>%s</b>'
-            '<span>%s</span></div>'
-            '<div class="rg"><em style="color:%s">%d%%</em><span>SIDE-OUT</span></div>'
-            '<div class="rg"><em>%d%%</em><span>BREAK</span></div></div>'
-            '<div class="rr">%s</div></div>'
+            '<div class="rf">%s<div class="rn"><b>%s</b><span>%s</span></div>'
+            '<div class="rr">%s</div>'
+            '<div class="rg"><em style="color:%s">%d%%</em><span>%s</span></div>'
+            '<div class="rg"><em>%d%%</em><span>%s</span></div></div>'
             % (es, esc(f['equipo']),
-               '%d partido%s' % (f['partidos'], '' if f['partidos'] == 1 else 's'),
-               c, f['so'], f['bp'], ''.join(cel)))
-    leyenda = ('<div class="anota">Side-out = porcentaje de rallies ganados '
-               'recibiendo, en cada rotación. La rotación se nombra por la '
-               'posición del armador. El número chico es cuántos rallies. '
-               'Verde: su mejor rotación. Rojo: su peor.</div>')
-    return '<div class="rot">%s</div>%s' % (''.join(filas), leyenda)
+               '%d %s' % (f['partidos'], idioma.c('partido' if f['partidos'] == 1
+                                                  else 'partidos')),
+               ''.join(cel), c, f['so'], idioma.c('side_out'),
+               f['bp'], idioma.c('break')))
+    leyenda = '<div class="anota">%s</div>' % esc(idioma.t('nota_rot'))
+    return ('<div class="rot" data-n="%d">%s</div>%s'
+            % (len(filas), ''.join(filas), leyenda))
 
 
-VIZ = {'ficha': ficha, 'mapa': mapa, 'seis': seis, 'tabla': tabla,
+# ── F · PORTADA DE ENGANCHE (TikTok / Reels) ──────────────────────────────
+def portada(p):
+    """Los dos primeros segundos del corto.
+
+    Sin esto el video arranca con una ficha llena de números y el que pasa
+    scrolleando no entiende qué está mirando: sigue de largo antes de la
+    primera acción. Acá va una sola idea, enorme, y el dato que engancha.
+    """
+    c = FUNDA[p['fundamento']]
+    d = p.get('dato') or ''
+    return ('<div class="port">'
+            '<div class="pnum" style="color:%s">%s</div>'
+            '<h2>%s</h2>'
+            '<div class="pln" style="background:%s"></div>'
+            '<div class="pdato">%s</div>'
+            '</div>' % (c, esc(p.get('sobre', '')), esc(p.get('gancho', '')),
+                        c, esc(d)))
+
+
+def _fila_res(x, lado, color):
+    """Una línea de equipo: escudo, nombre, sus parciales y sus sets.
+
+    Así lo hace cualquier gráfico de resultados profesional: una línea por
+    equipo, con los parciales de cada set en columna. No '25-21' junto, que
+    obliga a leer dos veces para saber cuál número es de quién."""
+    es = x['esc_l'] if lado == 'l' else x['esc_v']
+    nom = x['corto_l'] if lado == 'l' else x['corto_v']
+    mio = x['sl'] if lado == 'l' else x['sv']
+    suyo = x['sv'] if lado == 'l' else x['sl']
+    gana = mio > suyo
+    sets = ''.join('<i class="%s">%d</i>'
+                   % ('g' if (a > b) == (lado == 'l') else '', a if lado == 'l' else b)
+                   for a, b in x['parciales'])
+    # sin escudo no se deja el hueco: va un disco con las iniciales en el
+    # color del club, que es lo que hace cualquier tabla de resultados
+    ini = ''.join(w[0] for w in str(nom).split()[:2]).upper() or '?'
+    img = ('<img src="%s" alt="">' % es) if es \
+        else ('<u style="background:%s">%s</u>' % (color, esc(ini)))
+    return ('<div class="rsl%s" style="--cc:%s">'
+            '<span class="rsi">%s</span>'
+            '<b>%s</b>'
+            '<span class="rsn">%s</span>'
+            '<em>%d</em></div>'
+            % (' gan' if gana else '', color, img, esc(nom), sets, mio))
+
+
+def resultados(p):
+    """Los partidos de la fecha, con el lenguaje de un gráfico de resultados.
+
+    Una línea por equipo, los parciales en columna, el marcador de sets
+    grande a la derecha y el color de cada club sacado de su propio escudo.
+    Abajo, quién lo definió."""
+    filas = []
+    for x in p['partidos']:
+        cl = x.get('color_l') or '#64748B'
+        cv = x.get('color_v') or '#64748B'
+        gana = cl if x['sl'] > x['sv'] else cv
+        f = x.get('figura')
+        fig = ''
+        if f:
+            fig = ('<div class="rsf"><span class="rsfe">%s</span>'
+                   '<b>%s</b><em>%s</em>'
+                   '<span class="rsfp"><u>%d</u>%s</span>'
+                   '<span class="rsfd">%s</span></div>'
+                   % (idioma.t('figura'), esc(f.get('corto') or f['nombre']),
+                      esc(f.get('club') or f['equipo']),
+                      f['pts'], idioma.t('pts'),
+                      idioma.t('desglose', f['atk'], f['blq'], f['ace'])))
+        filas.append('<div class="rsp" style="--cg:%s">%s%s%s</div>'
+                     % (gana, _fila_res(x, 'l', cl), _fila_res(x, 'v', cv), fig))
+    # con tres o cuatro partidos sobra aire: las bandas crecen para llenarlo
+    return ('%s<div class="rsc" data-n="%d">%s</div>'
+            % (barra_filtro(p.get('filtro'), FUNDA[p['fundamento']]),
+               len(filas), ''.join(filas)))
+
+
+def apertura(p):
+    """La primera del carrusel. Dice quién habla y de qué va, y nada más.
+
+    Sin esto el carrusel arranca con una tabla de resultados: el que no nos
+    conoce no sabe de dónde salió ni quién la hizo. Con esto, la primera
+    imagen que ve es la marca."""
+    return ('<div class="ap">'
+            '<div class="apl">%s</div>'
+            '<div class="apn">%s</div>'
+            '<div class="apr"></div>'
+            '<div class="apf">%s</div>'
+            '<div class="apt">%s</div>'
+            '<div class="apd">%s</div>'
+            '<div class="apx">%s</div>'
+            '</div>'
+            % (_marca_grande(), esc(p.get('nombre', 'VOLLEY·STATS')),
+               esc(p.get('fecha', '')), esc(p.get('lema', '')),
+               esc(_cuantas(p)), idioma.t('deslizar')))
+
+
+def _cuantas(p):  # noqa: E301
+    """'11 placas · 3 partidos · todo del scout'.
+
+    El número de placas se arma al renderizar, no al construir la pieza: en
+    ese momento todavía faltaban agregar la mitad y la portada anunciaba
+    nueve cuando eran once."""
+    return idioma.t('placas_partidos', p.get('total') or 0,
+                    p.get('partidos_n') or 0)
+
+
+def cierre_placa(p):
+    """La última. Una sola cosa para hacer y dónde está el producto."""
+    return ('<div class="ap">'
+            '<div class="apl">%s</div>'
+            '<div class="apn">%s</div>'
+            '<div class="apr"></div>'
+            '<div class="apt">%s</div>'
+            '<div class="apc">%s</div>'
+            '<div class="apw">%s<span>·</span>%s</div>'
+            '</div>'
+            % (_marca_grande(), esc(p.get('nombre', 'VOLLEY·STATS')),
+               esc(p.get('pitch', '')), esc(p.get('cta2', '')),
+               esc(p.get('web', '')), esc(p.get('handle', ''))))
+
+
+def _chip(p):
+    """La barra del jugador, para las placas que no llevan ficha.
+
+    La de armado era la única que no decía de quién hablaba con el mismo
+    formato que las demás: el nombre iba perdido adentro de la bajada, en
+    gris. Con esto las nueve se identifican igual."""
+    j = p.get('chip')
+    if not j:
+        return ''
+    c = FUNDA.get(p.get('fundamento', 'ataque'), ROJO)
+    es = ('<img src="%s" alt="">' % j['escudo']) if j.get('escudo') else ''
+    return ('<div class="chip" style="border-color:%s">'
+            '<span class="chd" style="background:%s">%s</span>'
+            '<span class="chn"><b>%s</b><i>%s</i></span>'
+            '<span class="che">%s</span>'
+            '<span class="chp" style="color:%s;border-color:%s">%s</span>'
+            '</div>'
+            % (c, c, esc(j.get('dorsal', '')), esc(j.get('nombre', '')),
+               esc(j.get('equipo', '')), es, c, c,
+               esc(idioma.puesto_ficha(j.get('puesto', '')))))
+
+
+def _marca_grande():
+    try:
+        import marca
+        return marca.simbolo(ROJO)
+    except Exception:
+        return ''
+
+
+VIZ = {'ficha': ficha, 'apertura': apertura, 'cierre': cierre_placa, 'mapa': mapa, 'seis': seis, 'tabla': tabla,
+       'resultados': resultados,
+       'portada': portada,
        'siete': siete, 'rotaciones': rotaciones}
 
 CSS = """
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{overflow:hidden}
+body.solo{padding:%(PADY)dpx 64px}
 body{width:1080px;height:%(ALTO)dpx;background:%(BG)s;color:%(TEXT)s;
   font-family:'Placa','Poppins',sans-serif;padding:%(PADY)dpx 56px 46px;
   display:flex;flex-direction:column}
@@ -367,7 +533,11 @@ h1{font-size:58px;line-height:1.02;font-weight:700;letter-spacing:-.028em;
   justify-content:space-between;align-items:flex-end;
   font-family:'PlacaMono',monospace;font-size:15px;letter-spacing:.1em;color:%(MUTED)s}
 .ci b{color:%(TEXT)s;font-weight:700;letter-spacing:.2em;font-size:20px}
-.ci .dr{text-align:right;line-height:1.6;max-width:520px;font-size:12.5px;
+/* ojo: .fi y .fm ya existen (la ficha). Clases propias, no reusadas. */
+.ci .mrc{display:flex;align-items:center;gap:13px}
+.ci .mrs{width:40px;height:40px;flex:none;display:block}
+.ci .mrs svg{width:100%%;height:100%%;display:block}
+.ci .dr{text-align:right;line-height:1.6;max-width:640px;font-size:12px;
   letter-spacing:.06em}
 
 /* la red y la linea de 3 metros: lo que hace que parezca una cancha */
@@ -479,7 +649,8 @@ h1{font-size:58px;line-height:1.02;font-weight:700;letter-spacing:-.028em;
 .aleg span{display:flex;align-items:center;gap:8px;font-size:17px;color:%(MUTED)s}
 .aleg i{width:13px;height:13px;border-radius:4px;display:block}
 .agr{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
-.ac{aspect-ratio:1.42;border-radius:6px;border:1px solid %(BD)s;position:relative;
+/* seis zonas, no nueve: las celdas crecen para llenar el mismo alto */
+.ac{aspect-ratio:1.05;border-radius:6px;border:1px solid %(BD)s;position:relative;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   background:rgba(255,255,255,.02)}
 .ac.vacia{opacity:.5}
@@ -527,34 +698,157 @@ h1{font-size:58px;line-height:1.02;font-weight:700;letter-spacing:-.028em;
 .nd{font-family:'PlacaMono',monospace;font-size:13px;line-height:1.5;
   color:%(SUBTLE)s;letter-spacing:.06em;text-transform:uppercase;text-align:center}
 
-/* E · side-out por rotacion */
-.rot{display:flex;flex-direction:column;gap:14px}
-.rf{background:%(CARD)s;border:1px solid %(BD)s;border-radius:13px;padding:15px 17px}
-.rh{display:flex;align-items:center;gap:13px;margin-bottom:11px}
-.es2{height:32px;width:auto;max-width:74px;object-fit:contain;flex:none}
-.rn{flex:1}
-.rn b{display:block;font-size:24px;font-weight:700;line-height:1.1}
-.rn span{font-family:'PlacaMono',monospace;font-size:12px;color:%(SUBTLE)s;
+/* F · portada de enganche */
+.port{display:flex;flex-direction:column;justify-content:center;height:100%%;
+  text-align:left}
+.pnum{font-family:'PlacaMono',monospace;font-size:26px;letter-spacing:.22em;
+  text-transform:uppercase;margin-bottom:26px;font-weight:700}
+.port h2{font-size:118px;line-height:.94;font-weight:700;letter-spacing:-.035em;
+  margin:0 0 34px;text-transform:uppercase}
+.pln{width:170px;height:8px;border-radius:4px;margin-bottom:30px}
+.pdato{font-size:40px;line-height:1.28;color:%(MUTED)s;font-weight:300;max-width:94%%}
+
+/* E · side-out por rotacion — una linea por equipo */
+.rot{display:flex;flex-direction:column;gap:10px}
+.rf{background:%(CARD)s;border:1px solid %(BD)s;border-radius:13px;
+  padding:11px 16px;display:grid;
+  grid-template-columns:56px minmax(128px,1fr) auto 78px 78px;
+  align-items:center;gap:11px}
+.es2{height:36px;width:auto;max-width:50px;object-fit:contain;
+  justify-self:center}
+.rn b{display:block;font-size:25px;font-weight:700;line-height:1.1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rn span{font-family:'PlacaMono',monospace;font-size:11.5px;color:%(SUBTLE)s;
   letter-spacing:.08em;text-transform:uppercase}
-.rg{text-align:center;min-width:104px}
+.rg{text-align:center}
 .rg em{display:block;font-style:normal;font-family:'PlacaMono',monospace;
-  font-size:30px;font-weight:700;line-height:1;color:%(TEXT)s}
-.rg span{display:block;font-family:'PlacaMono',monospace;font-size:11px;
-  letter-spacing:.15em;color:%(MUTED)s;margin-top:5px}
-.rr{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+  font-size:24px;font-weight:700;line-height:1;color:%(TEXT)s}
+.rg span{display:block;font-family:'PlacaMono',monospace;font-size:9.5px;
+  letter-spacing:.14em;color:%(MUTED)s;margin-top:4px}
+.rr{display:grid;grid-template-columns:repeat(6,78px);gap:5px}
 .rc{background:%(CARD2)s;border:1px solid %(BD)s;border-top:3px solid %(SUBTLE)s;
-  border-radius:8px;padding:9px 4px 8px;text-align:center}
+  border-radius:8px;padding:6px 3px 5px;text-align:center}
 .rc.vacia{opacity:.4;border-top-color:rgba(255,255,255,.08)}
 .rc.mejor{border-top-color:#22C55E}
 .rc.peor{border-top-color:#EF4444}
 .rc i{display:block;font-style:normal;font-family:'PlacaMono',monospace;
-  font-size:12px;letter-spacing:.12em;color:%(MUTED)s;margin-bottom:6px}
-.rc b{display:block;font-family:'PlacaMono',monospace;font-size:27px;
-  font-weight:700;line-height:1}
-.rc u{display:block;font-family:'PlacaMono',monospace;font-size:11px;
-  text-decoration:none;color:%(SUBTLE)s;margin-top:5px}
+  font-size:10.5px;letter-spacing:.1em;color:%(MUTED)s}
+.rc b{display:block;font-family:'PlacaMono',monospace;font-size:21px;
+  font-weight:700;line-height:1.15}
+.rc u{display:block;font-family:'PlacaMono',monospace;font-size:10px;
+  text-decoration:none;color:%(SUBTLE)s}
+/* con la fecha entera (siete u ocho equipos) se aprieta para que entre */
+.rot[data-n="7"],.rot[data-n="8"]{gap:7px}
+.rot[data-n="7"] .rf,.rot[data-n="8"] .rf{padding:8px 14px}
+.rot[data-n="7"] .rn b,.rot[data-n="8"] .rn b{font-size:23px}
+.rot[data-n="7"] .es2,.rot[data-n="8"] .es2{height:33px}
+.rot[data-n="7"] .rc b,.rot[data-n="8"] .rc b{font-size:21px}
+/* con pocos equipos sobra aire: las filas crecen para llenarlo */
+.rot[data-n="2"],.rot[data-n="3"],.rot[data-n="4"]{gap:16px}
+.rot[data-n="2"] .rf,.rot[data-n="3"] .rf,.rot[data-n="4"] .rf{padding:19px 18px}
+.rot[data-n="2"] .rc,.rot[data-n="3"] .rc,.rot[data-n="4"] .rc{padding:11px 4px 9px}
+.rot[data-n="2"] .rc b,.rot[data-n="3"] .rc b,.rot[data-n="4"] .rc b{font-size:27px}
+.rot[data-n="2"] .es2,.rot[data-n="3"] .es2,.rot[data-n="4"] .es2{height:46px}
 
 /* D · tabla */
+/* la barra del jugador en las placas sin ficha */
+.chip{display:flex;align-items:center;gap:16px;background:%(CARD)s;
+  border:1px solid;border-radius:14px;padding:12px 18px;margin-bottom:24px}
+.chd{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;
+  justify-content:center;font-weight:700;font-size:21px;color:#0B0C14;flex:none}
+.chn{flex:1;min-width:0}
+.chn b{display:block;font-size:27px;font-weight:700;letter-spacing:-.02em;
+  line-height:1.1}
+.chn i{font-style:normal;font-family:'PlacaMono',monospace;font-size:14px;
+  letter-spacing:.14em;color:%(MUTED)s;text-transform:uppercase}
+.che{width:40px;height:40px;flex:none;display:flex;align-items:center}
+.che img{max-width:100%%;max-height:100%%;display:block}
+.chp{font-family:'PlacaMono',monospace;font-size:13px;letter-spacing:.16em;
+  border:1px solid;border-radius:999px;padding:6px 14px;flex:none}
+
+/* la placa que abre y la que cierra */
+.ap{height:100%%;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;position:relative}
+.ap::before{content:'';position:absolute;left:50%%;top:44%%;width:1400px;
+  height:1400px;transform:translate(-50%%,-50%%);border-radius:50%%;
+  background:radial-gradient(circle,%(CRGB2)s 0%%,transparent 62%%);z-index:0}
+.ap>*{position:relative;z-index:1}
+.apl{width:232px;height:232px}
+.apl svg{width:100%%;height:100%%;display:block}
+.apn{font-size:84px;font-weight:700;letter-spacing:-.03em;margin-top:34px;
+  line-height:1}
+.apr{width:96px;height:5px;border-radius:3px;background:%(C)s;margin:26px 0}
+.apf{font-family:'PlacaMono',monospace;font-size:26px;letter-spacing:.24em;
+  color:%(TEXT)s;text-transform:uppercase}
+.apt{font-size:27px;color:%(MUTED)s;font-weight:300;margin-top:18px;
+  line-height:1.4;max-width:760px}
+.apd{font-family:'PlacaMono',monospace;font-size:17px;letter-spacing:.14em;
+  color:%(MUTED)s;margin-top:40px;text-transform:uppercase}
+.apx{position:absolute;bottom:%(APX)dpx;font-family:'PlacaMono',monospace;
+  font-size:17px;letter-spacing:.3em;color:%(C)s;border:1px solid %(C)s;
+  border-radius:999px;padding:11px 26px}
+.apc{margin-top:34px;background:%(C)s;color:#fff;font-weight:700;font-size:26px;
+  padding:19px 40px;border-radius:999px}
+.apw{position:absolute;bottom:%(APX)dpx;font-family:'PlacaMono',monospace;
+  font-size:17px;letter-spacing:.2em;color:%(TEXT)s;display:flex;gap:22px}
+.apw span{color:%(SUBTLE)s}
+
+/* el número de placa, para no perderse en el carrusel */
+.pg{position:absolute;top:%(PGY)dpx;right:56px;font-family:'PlacaMono',monospace;
+  font-size:15px;letter-spacing:.18em;color:%(SUBTLE)s;z-index:5}
+.pg b{color:%(TEXT)s;font-weight:700}
+
+/* los resultados de la fecha */
+.rsc{display:flex;flex-direction:column;gap:15px}
+.rsc[data-n="3"],.rsc[data-n="2"]{gap:20px}
+.rsc[data-n="3"] .rsl,.rsc[data-n="2"] .rsl{padding-top:17px;padding-bottom:17px}
+.rsc[data-n="3"] .rsl b,.rsc[data-n="2"] .rsl b{font-size:38px}
+.rsc[data-n="3"] .rsl em,.rsc[data-n="2"] .rsl em{font-size:64px}
+.rsc[data-n="3"] .rsn,.rsc[data-n="2"] .rsn{font-size:28px;grid-auto-columns:58px}
+.rsc[data-n="3"] .rsi,.rsc[data-n="2"] .rsi{width:58px;height:58px}
+.rsc[data-n="4"] .rsl{padding-top:13px;padding-bottom:13px}
+.rsp{border-radius:16px;padding:6px 0 0;overflow:hidden;
+  background:linear-gradient(100deg,color-mix(in srgb,var(--cg) 17%%,%(CARD)s) 0%%,
+    %(CARD)s 52%%);border:1px solid %(BD)s}
+.rsl{display:grid;grid-template-columns:58px 1fr auto 92px;align-items:center;
+  gap:18px;padding:11px 20px 11px 22px;position:relative}
+.rsl+.rsl{border-top:1px solid rgba(255,255,255,.055)}
+.rsl.gan::before{content:'';position:absolute;left:0;top:7px;bottom:7px;
+  width:5px;border-radius:0 4px 4px 0;background:var(--cc)}
+.rsl .rsi{width:52px;height:52px;display:flex;align-items:center;
+  justify-content:center;opacity:.45}
+.rsl.gan .rsi{opacity:1}
+.rsl .rsi img{max-width:100%%;max-height:100%%;display:block;border-radius:9px}
+.rsl .rsi u{text-decoration:none;width:46px;height:46px;border-radius:50%%;
+  display:flex;align-items:center;justify-content:center;color:#0B0C14;
+  font-family:'Placa',sans-serif;font-weight:700;font-size:19px;
+  letter-spacing:-.02em}
+.rsl b{font-size:34px;font-weight:600;letter-spacing:-.025em;color:%(SUBTLE)s;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.1}
+.rsl.gan b{color:%(TEXT)s;font-weight:700}
+.rsn{display:grid;grid-auto-flow:column;grid-auto-columns:54px;
+  font-family:'PlacaMono',monospace;font-size:25px;text-align:center}
+.rsn i{font-style:normal;color:%(SUBTLE)s;opacity:.7}
+.rsn i.g{color:%(TEXT)s;opacity:1;font-weight:700}
+.rsl em{font-style:normal;font-family:'PlacaMono',monospace;font-size:56px;
+  font-weight:700;line-height:.9;text-align:right;color:%(SUBTLE)s}
+.rsl.gan em{color:var(--cc)}
+
+/* quién lo definió */
+.rsf{display:flex;align-items:baseline;gap:11px;padding:11px 22px 12px;
+  background:rgba(255,255,255,.028);border-top:1px solid %(BD)s;
+  font-family:'Placa',sans-serif}
+.rsfe{font-family:'PlacaMono',monospace;font-size:11px;letter-spacing:.24em;
+  color:var(--cg);flex:none}
+.rsf b{font-size:21px;font-weight:700;letter-spacing:-.01em}
+.rsf em{font-style:normal;font-size:16px;color:%(MUTED)s;
+  font-family:'PlacaMono',monospace;letter-spacing:.08em}
+.rsfp{margin-left:auto;font-family:'PlacaMono',monospace;font-size:12px;
+  letter-spacing:.16em;color:%(MUTED)s;flex:none}
+.rsfp u{text-decoration:none;color:%(TEXT)s;font-size:22px;font-weight:700;
+  margin-right:6px}
+.rsfd{font-family:'PlacaMono',monospace;font-size:13px;color:%(SUBTLE)s;
+  letter-spacing:.06em;flex:none}
 .tb{width:100%%;border-collapse:collapse}
 .tb th{font-family:'PlacaMono',monospace;font-size:13px;letter-spacing:.13em;
   text-align:center;padding:0 9px 13px;font-weight:400}
@@ -564,38 +858,65 @@ h1{font-size:58px;line-height:1.02;font-weight:700;letter-spacing:-.028em;
 .tb tbody tr:first-child td{border-top:none}
 .tb tbody tr:nth-child(-n+3) td{background:rgba(255,255,255,.018)}
 .tb .ix{color:%(SUBTLE)s;font-size:16px;width:34px;text-align:left}
-.tb .jg{text-align:left;font-family:'Placa',sans-serif}
+.tb .jg{text-align:left;font-family:'Placa',sans-serif;display:flex;
+  align-items:center;gap:13px}
+.tb .jge{width:34px;height:34px;object-fit:contain;flex:none;display:block}
+.tb .jgt{display:block;min-width:0;font-family:'Placa',sans-serif;
+  letter-spacing:normal;font-size:inherit}
 .tb .jg b{display:block;font-size:23px;font-weight:600;line-height:1.15}
-.tb .jg span{font-family:'PlacaMono',monospace;font-size:13px;color:%(MUTED)s;
+.tb .jgt span{font-family:'PlacaMono',monospace;font-size:13px;color:%(MUTED)s;
   letter-spacing:.08em;text-transform:uppercase}
 """
 
-TXT = {'firma': 'Análisis: Ignacio Verdi', 'fuente': 'Fuente'}
+TXT = {'firma': idioma.t('firma'), 'fuente': idioma.t('fuente')}
 
 # El mensaje cambia segun lo que muestra la placa: no es el mismo gancho
 # ver la ficha de un jugador que el mapa entero de la liga.
-CTA = {
-    'ficha': ('Esta misma ficha, de cualquier jugador de tu próximo rival.',
-              'Y de cada jugador de tu plantel, en su celular.'),
-    'mapa':  ('Este mapa, de tu liga y del rival que te toca el sábado.',
-              'Actualizado solo, fecha a fecha.'),
-    'seis':  ('La distribución en K1 del armador rival, antes de jugar.',
-              'Con el video de cada balón, a un doble clic.'),
-    'tabla': ('Esta tabla, con tu plantel, todas las semanas.',
-              'Sin cargar nada a mano: sale del scout del partido.'),
-    'siete': ('Tu equipo medido con la misma vara, fecha a fecha.',
-              'Y cada jugador viendo lo suyo en su celular.'),
-    'rotaciones': ('Las seis rotaciones del rival del sábado, antes de jugar.',
-                   'Dónde presionarlo con el saque, y cuál es la tuya que se rompe.'),
-}
+CTA = {'ficha': idioma.t('cta_ficha'), 'mapa': idioma.t('cta_mapa'),
+       'seis': idioma.t('cta_seis'), 'tabla': idioma.t('cta_tabla'),
+       'siete': idioma.t('cta_siete'),
+       'rotaciones': idioma.t('cta_rotaciones')}
+
+
+def _marca(_c=None):
+    """El símbolo del canal, chiquito, en el pie de cada placa.
+
+    Va en todas para que la marca se reconozca sin leer: a la quinta placa
+    que ven, el símbolo ya dice de quién es. Se importa acá adentro y no
+    arriba porque marca.py importa este módulo."""
+    try:
+        import marca
+        # siempre en el rojo de la marca, no en el color de la placa: el
+        # símbolo tiene que ser siempre el mismo para que se reconozca
+        return '<i class="mrs">%s</i>' % marca.simbolo(ROJO)
+    except Exception:
+        return ''
 
 
 def render(p, alto=1350):
     c = FUNDA.get(p.get('fundamento', 'ataque'), ROJO)
     css = CSS % {'BG': BG, 'CARD': CARD, 'CARD2': CARD2, 'TEXT': TEXT, 'MUTED': MUTED,
                  'SUBTLE': SUBTLE, 'BD': BD, 'BD2': BD2, 'C': c, 'CRGB': _rgb(c),
-                 'ALTO': alto, 'PADY': 60 if alto <= 1400 else 150}
+                 'ALTO': alto, 'PADY': 60 if alto <= 1400 else 150,
+                 'CRGB2': 'rgba(%s,.13)' % _rgb(c),
+                 'APX': 74 if alto <= 1400 else 150,
+                 'PGY': 58 if alto <= 1400 else 130}
+    # el número de placa: en un carrusel de once, sin esto no sabés dónde
+    # estás ni cuánto falta
+    pg = ('<div class="pg"><b>%02d</b> / %02d</div>'
+          % (p['nro'], p['total'])) if p.get('nro') and p.get('total') else ''
+    if p.get('tipo') in ('apertura', 'cierre'):
+        return ('<!doctype html><html lang="es"><meta charset="utf-8">'
+                '<style>%s\n%s</style><body class="solo">%s%s</body></html>'
+                % (_fuentes(), css, pg, VIZ[p['tipo']](p)))
+    if p.get('tipo') == 'portada':
+        # el enganche ocupa toda la pantalla: cualquier cosa arriba o abajo
+        # le come tamaño al único mensaje que tiene que entrar de un vistazo
+        return ('<!doctype html><html lang="es"><meta charset="utf-8">'
+                '<style>%s\n%s</style><body class="solo">%s</body></html>'
+                % (_fuentes(), css, VIZ['portada'](p)))
     bj = '<p class="bj">%s</p>' % esc(p['bajada']) if p.get('bajada') else ''
+    bj += _chip(p)
     ct = p.get('cta') or CTA.get(p['tipo'])
     cta = ('<div class="ct" style="border-color:%s">'
            '<div class="ctx"><b>%s</b><span>%s</span></div>'
@@ -603,12 +924,14 @@ def render(p, alto=1350):
            % (c, esc(ct[0]), esc(ct[1]), c)) if ct else ''
     pi = '<div class="pi">%s</div>' % esc(p['pie']) if p.get('pie') else ''
     return ('<!doctype html><html lang="es"><meta charset="utf-8"><style>%s\n%s</style><body>'
-            '<div class="eb">%s &nbsp;·&nbsp; %s</div><h1>%s</h1>%s'
+            '%s<div class="eb">%s &nbsp;·&nbsp; %s</div><h1>%s</h1>%s'
             '<div class="zn">%s</div>%s%s'
-            '<div class="ci"><span><b>VOLLEY·STATS</b><br>%s</span>'
+            '<div class="ci"><span class="mrc">%s<span><b>VOLLEY·STATS</b><br>%s'
+            '</span></span>'
             '<span class="dr">%s:<br>%s</span></div></body></html>'
-            % (_fuentes(), css, esc(p['liga']), esc(p['fecha']), esc(p['titulo']), bj,
-               VIZ[p['tipo']](p), pi, cta,
+            % (_fuentes(), css, pg, esc(p['liga']), esc(p['fecha']),
+               esc(p['titulo']), bj,
+               VIZ[p['tipo']](p), pi, cta, _marca(),
                TXT['firma'], TXT['fuente'], esc(p.get('fuente', ''))))
 
 
@@ -620,6 +943,8 @@ def generar(piezas, destino, alto=1350):
         b = _navegador(pw)
         pg = b.new_page(viewport={'width': 1080, 'height': alto})
         for i, p in enumerate(piezas, 1):
+            p.setdefault('nro', i)
+            p.setdefault('total', len(piezas))
             nom = '%s-%s' % (chr(64 + i), p.get('slug', p['tipo']))
             t = destino / (nom + '.html')
             t.write_text(render(p, alto), encoding='utf-8')

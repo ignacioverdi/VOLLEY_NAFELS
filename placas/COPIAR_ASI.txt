@@ -1,0 +1,18 @@
+Ocho archivos, sueltos adentro de placas, pisando los que están.
+
+   limpiar.py      NUEVO. Borra lo viejo antes de escribir lo nuevo.
+   placas2.py      la placa de rotaciones, ahora una línea por equipo
+   seis_placas.py  muestra los ocho equipos, no cinco
+   verificar.py    ahora también chequea el ancho
+   fechas.py       detecta sola la última fecha
+   marcador.py     los nombres de los ocho clubes de la NLA
+   publicar.py     limpia antes de cada paso
+   redes.py        limpia antes de rehacer los videos
+
+LA PRIMERA VEZ QUE CORRAS
+-------------------------
+Te va a decir algo como "borré 28 archivos de la corrida anterior que ya no
+van". Eso está bien: son las placas viejas que quedaron con la numeración
+anterior. No borra nada que no haya generado él.
+
+Leé QUE_SIGUE.md.

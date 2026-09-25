@@ -1,0 +1,61 @@
+{
+ "slug": "armado",
+ "quien": "Gabriel Chancy",
+ "titulo": "La distribución del armador en K1",
+ "acciones": [
+  {
+   "archivo": "armado_01.mp4",
+   "n": 1,
+   "de": 6,
+   "set": "1",
+   "ev": "+",
+   "zona": 0,
+   "seg": 216
+  },
+  {
+   "archivo": "armado_02.mp4",
+   "n": 2,
+   "de": 6,
+   "set": "1",
+   "ev": "+",
+   "zona": 0,
+   "seg": 354
+  },
+  {
+   "archivo": "armado_03.mp4",
+   "n": 3,
+   "de": 6,
+   "set": "1",
+   "ev": "+",
+   "zona": 0,
+   "seg": 448
+  },
+  {
+   "archivo": "armado_04.mp4",
+   "n": 4,
+   "de": 6,
+   "set": "1",
+   "ev": "+",
+   "zona": 0,
+   "seg": 527
+  },
+  {
+   "archivo": "armado_05.mp4",
+   "n": 5,
+   "de": 6,
+   "set": "1",
+   "ev": "+",
+   "zona": 0,
+   "seg": 639
+  },
+  {
+   "archivo": "armado_06.mp4",
+   "n": 6,
+   "de": 6,
+   "set": "1",
+   "ev": "+",
+   "zona": 0,
+   "seg": 882
+  }
+ ]
+}

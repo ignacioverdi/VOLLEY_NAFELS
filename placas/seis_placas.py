@@ -8,12 +8,27 @@ Una por fundamento: saque, recepción, armado, ataque, bloqueo, equipo ideal.
 Entre placa y placa va el video de la mejor acción de ese fundamento.
 """
 import argparse, json, pathlib, re
-import armador, club, fechas, historial, liga, placas2, rotacion
+import armador, club, fechas, historial, idioma, liga, limpiar, marcador, placas2, rotacion
 
-LIGA = 'Liga Nacional A · Suiza'
-PLURAL = {'saque': 'saques', 'recepcion': 'recepciones',
-          'ataque': 'ataques', 'bloqueo': 'bloqueos'}
-PUESTOS = {'OH': 'PUNTA', 'OPP': 'OPUESTO', 'MB': 'CENTRAL', 'S': 'ARMADOR', 'L': 'LÍBERO'}
+LIGA = idioma.liga()
+class _Plural(dict):
+    """El plural de cada fundamento, resuelto al usarlo: así cambiar el
+    idioma no obliga a reimportar nada."""
+    def __getitem__(self, k):
+        return idioma.t('p_' + k)
+
+    def get(self, k, d=None):
+        return idioma.t('p_' + k)
+
+
+PLURAL = _Plural()
+
+
+# OJO: estas claves son INTERNAS y van siempre en español. El siete ideal
+# empareja los puestos por ellas (COMPUESTO), así que traducirlas acá dejaba
+# los siete casilleros vacíos. La traducción ocurre recién al dibujar.
+PUESTOS = {'OH': 'PUNTA', 'OPP': 'OPUESTO', 'MB': 'CENTRAL',
+           'S': 'ARMADOR', 'L': 'LÍBERO'}
 
 
 def fichas(EQ, NOM_json):
@@ -114,7 +129,8 @@ def nombres(repo, temporada):
 # los centrales. Los pisos de abajo son el MINIMO ABSOLUTO: por debajo de
 # esto un porcentaje no significa nada, porque una sola accion lo mueve diez
 # puntos o mas. Son para el caso chico (una fecha, un partido).
-MIN_ABS = {'saque': 6, 'recepcion': 8, 'ataque': 8, 'bloqueo': 6}
+MIN_ABS = {'saque': 6, 'recepcion': 8, 'ataque': 8, 'bloqueo': 6,
+           'defensa': 6}   # mediana real por partido: 5, titulares 7
 
 # Para el caso grande manda la parte adaptativa: 40% del percentil 75 de los
 # que hicieron algo. Se usa el p75 y no la mediana porque la mediana la
@@ -196,13 +212,13 @@ def ficha(fund, zona, hero, titulo, bajada, pie, EQ, NOM, minimo, fecha, fuente,
                         'puesto': pos or 'NLA', 'total': '%d %s' % (total, PLURAL[fund]),
                         'zonas': zonas, 'podio': podio,
                         'escudo': club.escudo_de(ctx.get('escudos'), eq),
-                        'filtro': {'izq': 'En la cancha', 'que': filtro, 'escala': True,
-                                   'der': '%d de %d %s' % (n, total, PLURAL[fund])},
-                        'rotulo_tira': 'Escala DataVolley · sus %d %s'
+                        'filtro': {'izq': idioma.t('en_la_cancha'), 'que': filtro, 'escala': True,
+                                   'der': idioma.t('de_de') % (n, total, PLURAL[fund])},
+                        'rotulo_tira': idioma.t('escala_tira')
                                        % (total, PLURAL[fund]),
                         'hero': hero(J, st or {}, v, dl),
                         'valoraciones': liga.valoraciones(J, fund)}],
-            'fuente': fuente + ' · mínimo %d %s, %d jugadores lo superaron'
+            'fuente': fuente + idioma.t('min_sup')
                                % (minimo, PLURAL[fund], len(orden)),
             'pie': pie(ef, eq, J)}
 
@@ -215,8 +231,11 @@ def construir(repo, carpeta, temporada, fecha, archivos=None, fecha_n=None):
         sum(1 for _ in (pathlib.Path(repo) / carpeta).glob('*.dvw'))
     # la muestra, declarada: cuántos partidos y cuántos equipos de la liga
     n_eq = len([e for e in EQ if EQ[e]['jug']])
-    fuente = ('Volley-Stats · %d partidos scouteados con nuestro sistema · '
-              '%d equipos' % (n_part, n_eq))
+    # La fuente iba con la frase entera en las once placas y se partía en dos
+    # renglones. El detalle va una sola vez, en la portada; el resto lleva la
+    # versión corta.
+    fuente = idioma.t('fuente_corta', n_part, n_eq)
+    fuente_larga = idioma.t('fuente_larga', n_part, n_eq)
     ctx = {'escudos': club.escudos(repo), 'varas': club.varas(repo, temporada),
            'temporada': temporada, 'fecha_n': fecha_n}
     P = []
@@ -224,37 +243,31 @@ def construir(repo, carpeta, temporada, fecha, archivos=None, fecha_n=None):
     # 1 · SAQUE
     P.append(ficha('saque', 'z_saque_pos',
                    lambda J, st, v, dl: tiles(
-                       'saque', ('EFICIENCIA', liga.eficacias(J)['saque']), J, v,
-                       [('ACE / ERROR', '%d-%d' % (J['saque']['#'], J['saque']['='])),
-                        ('% ACE', '%d%%' % round(
+                       'saque', (idioma.c('eficiencia'), liga.eficacias(J)['saque']), J, v,
+                       [(idioma.c('ace_error'), '%d-%d' % (J['saque']['#'], J['saque']['='])),
+                        (idioma.c('pct_ace'), '%d%%' % round(
                             100.0 * J['saque']['#'] / (J['saque']['T'] or 1)))], dl),
-                   'El mejor saque de la fecha',
-                   'Sus zonas de saque cuando complica al receptor, y qué rinde '
-                   'con cada tipo de servicio.',
-                   lambda ef, eq, J: 'El mapa deja solo los saques con los que '
-                                     'complica al receptor. Esa es su zona: es adónde '
-                                     'va a sacar el sábado.',
+                   idioma.t('tit_saque'),
+                   idioma.t('baj_saque'),
+                   lambda ef, eq, J: idioma.t('pie_saque'),
                    EQ, NOM, piso(EQ, NOM, 'saque'), fecha, fuente,
-                   'solo saque positivo · # / +', ctx))
+                   idioma.t('f_saque'), ctx))
 
     # 2 · RECEPCIÓN
     P.append(ficha('recepcion', 'z_recepcion_pos',
                    lambda J, st, v, dl: tiles(
-                       'recepcion', ('EFICIENCIA', liga.eficacias(J)['recepcion']), J, v,
+                       'recepcion', (idioma.c('eficiencia'), liga.eficacias(J)['recepcion']), J, v,
                        [('% POSITIVA', '%d%%' % round(
                            100.0 * (J['recepcion']['#'] + J['recepcion']['+'])
                            / (J['recepcion']['T'] or 1))),
-                        ('% PERFECTA', '%d%%' % round(
+                        (idioma.c('perfecta'), '%d%%' % round(
                             100.0 * J['recepcion']['#']
                             / (J['recepcion']['T'] or 1)))], dl),
-                   'El receptor más sólido',
-                   'Sus zonas de recepción cuando la deja armable, y qué rinde '
-                   'contra potencia y contra flotado.',
-                   lambda ef, eq, J: 'El mapa deja solo la recepción perfecta y la '
-                                     'positiva, que son las que dejan armar. Las zonas '
-                                     'que quedan vacías son por donde hay que sacarle.',
+                   idioma.t('tit_recepcion'),
+                   idioma.t('baj_recepcion'),
+                   lambda ef, eq, J: idioma.t('pie_recepcion'),
                    EQ, NOM, piso(EQ, NOM, 'recepcion'), fecha, fuente,
-                   'solo recepción positiva · # +', ctx))
+                   idioma.t('f_recepcion'), ctx))
 
     # 3 · ARMADO — las seis canchitas
     mejor_eq = max(equipos, key=lambda t: t.get('atk_all') or 0)['team']
@@ -275,39 +288,33 @@ def construir(repo, carpeta, temporada, fecha, archivos=None, fecha_n=None):
         arm_dor = max(cands)[1]
         arm = NOM[(mejor_eq, arm_dor)]
     P.append({'tipo': 'seis', 'slug': 'armado', 'fundamento': 'armado', 'liga': LIGA,
-              'fecha': fecha, 'titulo': 'La distribución del armador en K1',
-              'bajada': '%s · %s. Cómo reparte el balón en cada rotación cuando '
-                        'la recepción es perfecta o positiva, es decir cuando '
-                        'tiene todas las opciones abiertas.'
-                        % (lindo(arm[0]) if arm else mejor_eq, mejor_eq),
+              'fecha': fecha, 'titulo': idioma.t('tit_armado'),
+              'bajada': idioma.t('baj_armado'),
+              'chip': {'dorsal': str(int(arm_dor)) if arm_dor else '',
+                       'nombre': lindo(arm[0]) if arm else mejor_eq,
+                       'equipo': mejor_eq, 'puesto': 'ARMADOR',
+                       'escudo': club.escudo_de(ctx.get('escudos'), mejor_eq)},
               'rotaciones': rot, 'leyenda': armador.leyenda(rot), 'fuente': fuente,
               'jugador': (mejor_eq, arm_dor) if arm_dor else None,
               'quien': lindo(arm[0]) if arm else mejor_eq,
               'nombre_archivo': 'armado',
-              'filtro': {'izq': 'En las canchas',
-                         'que': 'solo K1 con recepción # +',
-                         'der': '%d de %d ataques' % (n_arm, n_todo)},
-              'pie': 'Solo K1 con recepción # o +: esto es lo que elige cuando puede '
-                     'elegir. El K1 de emergencia y el K2 de transición responden a '
-                     'otra lógica, y promediarlos borra el patrón. La rotación se '
-                     'nombra por la posición del armador.'})
+              'filtro': {'izq': idioma.t('en_las_canchas'),
+                         'que': idioma.t('solo_k1'),
+                         'der': idioma.t('de_ataques') % (n_arm, n_todo)},
+              'pie': idioma.t('pie_armado')})
 
     # 4 · ATAQUE — la cancha con los ataques # y + solamente
     P.append(ficha('ataque', 'z_ataque_pos',
                    lambda J, st, v, dl: tiles(
-                       'ataque', ('EFICACIA', liga.eficacias(J)['ataque']), J, v,
-                       [('% PUNTO', '%d%%' % round(
+                       'ataque', (idioma.c('eficacia'), liga.eficacias(J)['ataque']), J, v,
+                       [(idioma.c('pct_punto'), '%d%%' % round(
                            100.0 * J['ataque']['#'] / (J['ataque']['T'] or 1))),
-                        ('ERR + BLQ', '%d' % (J['ataque']['='] + J['ataque']['/']))], dl),
-                   'El atacante más eficaz',
-                   'Dónde ataca cuando hace daño, y la diferencia entre lo que '
-                   'rinde en side-out y en transición.',
-                   lambda ef, eq, J: 'Eficacia = (punto − error − bloqueado) / total, '
-                                     'la fórmula estándar internacional. El mapa deja '
-                                     'solo el ataque que gana el rally o deja al rival '
-                                     'sin contraataque.',
+                        (idioma.c('err_blq'), '%d' % (J['ataque']['='] + J['ataque']['/']))], dl),
+                   idioma.t('tit_ataque'),
+                   idioma.t('baj_ataque'),
+                   lambda ef, eq, J: idioma.t('pie_ataque'),
                    EQ, NOM, piso(EQ, NOM, 'ataque'), fecha, fuente,
-                   'solo ataque positivo · # +', ctx))
+                   idioma.t('f_ataque'), ctx))
 
     # 5 · BLOQUEO — tabla, porque el bloqueo se cuenta, no se dibuja
     filas = []
@@ -318,37 +325,111 @@ def construir(repo, carpeta, temporada, fecha, archivos=None, fecha_n=None):
                 continue
             nom, pos, _ = NOM[(eq, dor)]
             filas.append({'nombre': lindo(nom), 'equipo': eq, '_dor': dor,
+                          'escudo': club.escudo_de(ctx.get('escudos'), eq),
                           # ordena por #+, no solo por punto: el bloqueo que
                           # deja la pelota jugable tambien gana el rally
                           'pct': '%d%%' % round(100.0 * (B['#'] + B['+']) / B['T']),
                           'tot': B['T'], 'pto': B['#'], 'pos': B['+'], 'err': B['=']})
     filas.sort(key=lambda f: -int(f['pct'].rstrip('%')))
     P.append({'tipo': 'tabla', 'slug': 'bloqueo', 'fundamento': 'bloqueo', 'liga': LIGA,
-              'fecha': fecha, 'titulo': 'El bloqueo de la fecha',
-              'bajada': 'Los %d mejores por bloqueo útil: punto directo (#) más '
-                        'bloqueo de control (+), el que deja el balón jugable para '
-                        'su equipo.' % min(TOPE_TABLA, len(filas)),
-              'filtro': {'izq': 'La tabla', 'que': 'ordenada por % de bloqueo útil',
-                         'der': 'desde %d bloqueos' % piso(EQ, NOM, 'bloqueo')},
-              'columnas': [{'t': '% ÚTIL', 'k': 'pct', 'color': '#06B6D4', 'fuerte': True},
-                           {'t': 'TOTAL', 'k': 'tot', 'color': '#F59E0B', 'fuerte': True},
-                           {'t': '# PUNTO', 'k': 'pto', 'color': '#22C55E', 'fuerte': True},
-                           {'t': '+ CONTROL', 'k': 'pos'},
-                           {'t': '= ERROR', 'k': 'err', 'color': '#EF4444', 'fuerte': True}],
+              'fecha': fecha, 'titulo': idioma.t('tit_bloqueo'),
+              'bajada': idioma.t('baj_bloqueo', min(TOPE_TABLA, len(filas))),
+              'filtro': {'izq': idioma.t('la_tabla'), 'que': idioma.t('ordenada_blq'),
+                         'der': idioma.t('desde_blq') % piso(EQ, NOM, 'bloqueo')},
+              'columnas': [{'t': idioma.c('util'), 'k': 'pct', 'color': '#06B6D4', 'fuerte': True},
+                           {'t': idioma.c('total'), 'k': 'tot', 'color': '#F59E0B', 'fuerte': True},
+                           {'t': idioma.c('punto'), 'k': 'pto', 'color': '#22C55E', 'fuerte': True},
+                           {'t': idioma.c('control'), 'k': 'pos'},
+                           {'t': idioma.c('error'), 'k': 'err', 'color': '#EF4444', 'fuerte': True}],
               'filas': filas[:TOPE_TABLA], 'fuente': fuente,
               'jugador': (filas[0]['equipo'], filas[0]['_dor']) if filas else None,
               'quien': filas[0]['nombre'] if filas else '',
               'nombre_archivo': 'bloqueo',
-              'pie': 'El bloqueo-punto es solo una parte. El bloqueo que frena el '
-                     'balón y lo deja defendible gana el rally igual, y por eso la '
-                     'tabla ordena por # más +, no por punto directo.'})
+              'pie': idioma.t('pie_bloqueo')})
 
-    # 6 · SIDE-OUT POR ROTACIÓN — la métrica del vóley profesional
+    # 6 · DEFENSA — el fundamento que mejor se ve en video
+    P.append(ficha('defensa', 'z_defensa_pos',
+                   lambda J, st, v, dl: tiles(
+                       'defensa', (idioma.c('jugable'), liga.eficacias(J)['defensa']), J, v,
+                       [(idioma.c('perfecta'), '%d%%' % round(
+                           100.0 * J['defensa']['#'] / (J['defensa']['T'] or 1))),
+                        (idioma.c('levantadas'), '%d' % (J['defensa']['#'] + J['defensa']['+']))],
+                       dl),
+                   idioma.t('tit_defensa'),
+                   idioma.t('baj_defensa'),
+                   lambda ef, eq, J: idioma.t('pie_defensa'),
+                   EQ, NOM, piso(EQ, NOM, 'defensa'), fecha, fuente,
+                   idioma.t('f_defensa'), ctx))
+
+    # 0 · RESULTADOS DE LA FECHA — lo primero que la gente busca
+    P.insert(0, placa_resultados(repo, archivos, fecha, fuente, ctx))
+
+    # y antes que todo, la portada de marca; al final, el cierre
+    P.insert(0, placa_apertura(fecha, n_part, fuente_larga))
+    P.append(placa_cierre(fecha))
+
+    # 7 · SIDE-OUT POR ROTACIÓN — la métrica del vóley profesional
     P.append(placa_rotaciones(repo, carpeta, archivos, fecha, fuente, ctx))
 
-    # 7 · EQUIPO IDEAL
+    # 8 · EQUIPO IDEAL
     P.append(equipo_ideal(EQ, NOM, equipos, fecha, fuente, n_part, ctx))
     return [x for x in P if x]
+
+
+def placa_apertura(fecha, n_part, fuente=''):
+    """La portada del carrusel: el logo, el nombre y de qué fecha es esto."""
+    import marca
+    return {'tipo': 'apertura', 'slug': 'apertura', 'fundamento': 'marca',
+            'liga': LIGA, 'fecha': fecha, 'partidos_n': n_part or 0,
+            'fuente': fuente,
+            'nombre': marca.NOMBRE, 'lema': marca.LEMA, 'titulo': 'Portada'}
+
+
+def placa_cierre(fecha):
+    """La última del carrusel: qué es esto y qué hacer ahora."""
+    import marca
+    return {'tipo': 'cierre', 'slug': 'cierre', 'fundamento': 'marca',
+            'liga': LIGA, 'fecha': fecha,
+            'nombre': marca.NOMBRE, 'pitch': marca.PITCH,
+            'cta2': marca.CIERRE_TT, 'web': marca.WEB, 'handle': marca.HANDLE,
+            'titulo': 'Cierre'}
+
+
+def placa_resultados(repo, archivos, fecha, fuente, ctx):
+    """Cómo salió cada partido de la fecha, con el set a set.
+
+    Va primera: el que entra al perfil quiere saber cómo salió su equipo
+    antes que quién fue el mejor sacador."""
+    try:
+        partidos = marcador.de_la_fecha(repo, archivos)
+    except Exception:
+        return None
+    if not partidos:
+        return None
+    esc = ctx.get('escudos')
+    for x in partidos:
+        x['esc_l'] = club.escudo_de(esc, x['local'])
+        x['esc_v'] = club.escudo_de(esc, x['visita'])
+        # la figura es el que más puntos hizo en ese partido, de los dos
+        # lados: rematando, bloqueando o sacando, que es como se anota
+        x['color_l'] = club.color_escudo(x['esc_l'])
+        x['color_v'] = club.color_escudo(x['esc_v'])
+        for lado, corto in (('fig_l', x['corto_l']), ('fig_v', x['corto_v'])):
+            if x.get(lado):
+                x[lado]['club'] = corto
+        cand = [f for f in (x.get('fig_l'), x.get('fig_v')) if f]
+        x['figura'] = max(cand, key=lambda f: f['pts']) if cand else None
+    sets = sum(len(x['parciales']) for x in partidos)
+    return {'tipo': 'resultados', 'slug': 'resultados', 'fundamento': 'ataque',
+            'liga': LIGA, 'fecha': fecha,
+            'titulo': idioma.t('tit_resultados'),
+            'bajada': idioma.t('baj_resultados'),
+            'partidos': partidos[:6],
+            'filtro': {'izq': idioma.t('sobre'), 'que': idioma.t('partidos_sets')
+                              % (len(partidos), sets),
+                       'der': idioma.t('oficial')},
+            'fuente': fuente,
+            'pie': idioma.t('pie_resultados')}
 
 
 def placa_rotaciones(repo, carpeta, archivos, fecha, fuente, ctx):
@@ -366,17 +447,15 @@ def placa_rotaciones(repo, carpeta, archivos, fecha, fuente, ctx):
     total = sum(f['so_n'] for f in filas)
     return {'tipo': 'rotaciones', 'slug': 'rotaciones', 'fundamento': 'saque',
             'liga': LIGA, 'fecha': fecha,
-            'titulo': 'El side-out, rotación por rotación',
-            'bajada': 'Cuánto sostiene cada equipo su recepción en cada una de '
-                      'sus seis rotaciones. Es el número sobre el que se arma '
-                      'todo plan de partido.',
-            'filas': filas[:5],
-            'filtro': {'izq': 'Calculado sobre', 'que': '%d rallies con saque' % total,
-                       'der': 'mínimo 6 rallies por rotación'},
+            'titulo': idioma.t('tit_rotaciones'),
+            'bajada': idioma.t('baj_rotaciones'),
+            # ocho equipos = una fecha entera de la NLA; con el acumulado
+            # pueden ser más y ahí sí se recorta
+            'filas': filas[:8],
+            'filtro': {'izq': idioma.t('calculado'), 'que': idioma.t('rallies_saque') % total,
+                       'der': idioma.t('min_rot')},
             'fuente': fuente,
-            'pie': conclusion or ('Side-out alto significa que el equipo gana el '
-                                  'punto cuando recibe. Break point es lo mismo '
-                                  'del lado del que saca.')}
+            'pie': conclusion or idioma.t('pie_rotaciones')}
 
 
 # Cómo se arma un siete ideal en serio, que es como lo hacen la FIVB y las
@@ -394,10 +473,10 @@ def placa_rotaciones(repo, carpeta, archivos, fecha, fuente, ctx):
 #
 # (fundamento, etiqueta, peso). El primero es el principal y es obligatorio.
 COMPUESTO = {
-    'PUNTA':   [('ataque', 'ATK', 0.6), ('recepcion', 'REC', 0.4)],
-    'CENTRAL': [('bloqueo', 'BLQ', 0.5), ('ataque', 'ATK', 0.5)],
-    'OPUESTO': [('ataque', 'ATK', 1.0)],
-    'LÍBERO':  [('recepcion', 'REC', 1.0)],
+    'PUNTA':   [('ataque', idioma.s7('ATK'), 0.6), ('recepcion', idioma.s7('REC'), 0.4)],
+    'CENTRAL': [('bloqueo', idioma.s7('BLQ'), 0.5), ('ataque', idioma.s7('ATK'), 0.5)],
+    'OPUESTO': [('ataque', idioma.s7('ATK'), 1.0)],
+    'LÍBERO':  [('recepcion', idioma.s7('REC'), 1.0)],
 }
 
 
@@ -473,24 +552,20 @@ def equipo_ideal(EQ, NOM, equipos, fecha, fuente, n_part=0, ctx=None):
         eq, nm, _, _ = arms[0]
         s.append({'puesto': 'Armador', 'jugador': nm, 'equipo': eq,
                   'escudo': club.escudo_de(ctx.get('escudos'), eq),
-                  'dato': 'ATAQUE EQUIPO %d%%' % atk.get(eq, 0), 'dato2': ''})
+                  'dato': idioma.s7('equipo_atk', atk.get(eq, 0)),
+                  'dato2': ''})
     return {'tipo': 'siete', 'slug': 'equipo-ideal', 'fundamento': 'armado', 'liga': LIGA,
-            'fecha': fecha, 'titulo': 'El siete ideal de la fecha',
-            'bajada': 'Puntas por ataque y recepción; centrales por bloqueo y '
-                      'ataque; opuesto por ataque; líbero por recepción. Ningún '
-                      'puesto se elige por un solo número.',
+            'fecha': fecha, 'titulo': idioma.t('tit_siete'),
+            'bajada': idioma.t('baj_siete'),
             'siete': s, 'fuente': fuente,
-            'filtro': {'izq': 'Volumen mínimo',
-                       'que': '%d ataques · %d bloqueos · %d recepciones' % (pa, pb, pr),
-                       'der': 'por debajo, no entra'},
-            'pie': ('El punta pondera 60% ataque y 40% recepción; el central, mitad '
-                    'y mitad bloqueo y ataque. Cada componente se mide contra la '
-                    'media de la liga. El armador es el único sin estadística propia: '
-                    'va el del equipo con mejor ataque.')
-                   if len(s) >= 7 else
-                   ('Con %d partidos todavía no hay volumen para llenar los siete '
-                    'puestos. Los que faltan se completan solos a medida que avance '
-                    'la temporada.' % n_part)}
+            'filtro': {'izq': idioma.t('volumen_min'),
+                       'que': '%d %s · %d %s · %d %s'
+                              % (pa, idioma.t('p_ataque'), pb,
+                                 idioma.t('p_bloqueo'), pr,
+                                 idioma.t('p_recepcion')),
+                       'der': idioma.t('no_entra')},
+            'pie': (idioma.t('pie_siete') if len(s) >= 7
+                    else idioma.t('siete_faltan', n_part))}
 
 
 def detectar(repo):
@@ -550,13 +625,13 @@ if __name__ == '__main__':
         raise SystemExit('\nNo existe la fecha %s en esa carpeta.' % a.fecha)
 
     if a.fecha:
-        rotulo = 'Fecha %s · %s' % (a.fecha, a.temporada)
+        rotulo = idioma.rotulo('fecha', a.fecha, a.temporada)
         carpeta_sal = pathlib.Path(a.salida) / a.temporada / ('fecha-%02d' % int(a.fecha))
     elif a.hasta:
-        rotulo = 'Fechas 1 a %s · %s' % (a.hasta, a.temporada)
+        rotulo = idioma.rotulo('hasta', a.hasta, a.temporada)
         carpeta_sal = pathlib.Path(a.salida) / a.temporada / ('hasta-%02d' % int(a.hasta))
     else:
-        rotulo = 'Temporada %s' % a.temporada
+        rotulo = idioma.rotulo('temporada', a.temporada)
         carpeta_sal = pathlib.Path(a.salida) / a.temporada / 'acumulado'
 
     print('%d partidos:' % len(archivos))
@@ -566,8 +641,12 @@ if __name__ == '__main__':
         print('   ... y %d más' % (len(archivos) - 8))
 
     piezas = construir(a.repo, a.carpeta, a.temporada, rotulo, archivos)
+    carpeta_sal.mkdir(parents=True, exist_ok=True)
+    n_viejas = limpiar.limpiar(carpeta_sal, 'placas', 'textos')
     hechos = placas2.generar(piezas, carpeta_sal)
     print()
+    if n_viejas:
+        print(limpiar.aviso(n_viejas, 'la corrida anterior'))
     print('%d placas en %s' % (len(hechos), carpeta_sal))
     for n in hechos:
         print('  ', n)

@@ -1,0 +1,61 @@
+{
+ "slug": "defensa",
+ "quien": "Gabriel Chancy",
+ "titulo": "El mejor defensor de la fecha",
+ "acciones": [
+  {
+   "archivo": "defensa_01.mp4",
+   "n": 1,
+   "de": 6,
+   "set": "1",
+   "ev": "+",
+   "zona": 2,
+   "seg": 300
+  },
+  {
+   "archivo": "defensa_02.mp4",
+   "n": 2,
+   "de": 6,
+   "set": "1",
+   "ev": "+",
+   "zona": 9,
+   "seg": 1226
+  },
+  {
+   "archivo": "defensa_03.mp4",
+   "n": 3,
+   "de": 6,
+   "set": "1",
+   "ev": "+",
+   "zona": 1,
+   "seg": 1326
+  },
+  {
+   "archivo": "defensa_04.mp4",
+   "n": 4,
+   "de": 6,
+   "set": "2",
+   "ev": "#",
+   "zona": 1,
+   "seg": 1810
+  },
+  {
+   "archivo": "defensa_05.mp4",
+   "n": 5,
+   "de": 6,
+   "set": "2",
+   "ev": "#",
+   "zona": 2,
+   "seg": 2166
+  },
+  {
+   "archivo": "defensa_06.mp4",
+   "n": 6,
+   "de": 6,
+   "set": "2",
+   "ev": "#",
+   "zona": 9,
+   "seg": 2403
+  }
+ ]
+}

@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260924-1336"></script>
-<script src="selector_categoria.js?v=20260924-1336"></script>
-<script src="lang.js?v=20260924-1336"></script>
+<script src="categorias_club.js?v=20260925-0842"></script>
+<script src="selector_categoria.js?v=20260925-0842"></script>
+<script src="lang.js?v=20260925-0842"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260924-1336">
+<link rel="stylesheet" href="movil.css?v=20260925-0842">
 </head>
 <body>
 
@@ -556,7 +556,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <button class="tbtn" onclick="openConfig()" data-t="Teclado y códigos"><span data-t="Teclado y códigos"><span data-t="Teclado y códigos">Teclado y códigos</span></span></button>
   <button class="tbtn" onclick="abrirAyuda()" title="Cómo usar el scout — guía paso a paso" data-t="Cómo se usa"><span data-t="Cómo se usa"><span data-t="Cómo se usa">Cómo se usa</span></span></button>
   <button class="tbtn" onclick="abrirExportMode()" data-t="Exportar .dvw">Exportar .dvw</button>
-  <button class="tbtn" onclick="abrirBaterias()" title="Las 11 baterías calculadas de lo scouteado en vivo" data-t="Baterías"><span data-t="Baterías"><span data-t="Baterías">Baterías</span></span></button>
+  <button class="tbtn" onclick="abrirAnalisis()" title="El informe que se llena solo mientras scouteás" data-t="📊 Análisis"><span data-t="📊 Análisis"><span data-t="📊 Análisis">📊 Análisis</span></span></button><button class="tbtn" onclick="abrirBaterias()" title="Las 11 baterías calculadas de lo scouteado en vivo" data-t="Baterías"><span data-t="Baterías"><span data-t="Baterías">Baterías</span></span></button>
   <button class="tbtn" onclick="abrirVideoVivo()" title="Video en vivo con delay para revisar acciones"><span data-t="Video"><span data-t="Video">Video</span></span><br>delay</button>
   <span class="tbsep" style="width:1px;background:var(--b2);margin:0 4px"></span>
   <button class="tbtn" onclick="abrirPlan('armador')" title="Distribución del armador — en vivo" data-t="Distribución armador"><span data-t="Distribución armador"><span data-t="Distribución armador">Distribución armador</span></span></button>
@@ -759,6 +759,17 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <div class="sub" data-t="Tocá un partido para abrirlo. Tildá los que quieras borrar y usá el botón rojo."><span data-t="Tocá un partido para abrirlo. Tildá los que quieras borrar y usá el botón rojo."><span data-t="Tocá un partido para abrirlo. Tildá los que quieras borrar y usá el botón rojo.">Tocá un partido para abrirlo. Tildá los que quieras borrar y usá el botón rojo.</span></span></div>
   <div id="partidos-cont" style="margin-top:12px;max-height:60vh;overflow:auto"></div>
   <div class="brow" style="margin-top:12px"><button class="tbtn" onclick="cerrarPartidos()" data-t="Cerrar"><span data-t="Cerrar"><span data-t="Cerrar">Cerrar</span></span></button></div>
+</div></div>
+
+<div class="modal" id="m-analisis"><div class="sheet" style="max-width:980px">
+  <h2 data-t="📊 Análisis del partido"><span data-t="📊 Análisis del partido"><span data-t="📊 Análisis del partido">📊 Análisis del partido</span></span></h2>
+  <div class="sub" data-t="Lo mismo que arma Data Volley en sus informes, calculado en vivo con lo que vas tecleando."><span data-t="Lo mismo que arma Data Volley en sus informes, calculado en vivo con lo que vas tecleando."><span data-t="Lo mismo que arma Data Volley en sus informes, calculado en vivo con lo que vas tecleando.">Lo mismo que arma Data Volley en sus informes, calculado en vivo con lo que vas tecleando.</span></span></div>
+  <div class="brow" style="margin:8px 0 4px">
+    <button class="tbtn" id="an-lado" onclick="anCambiarLado()" title="Cambiar de equipo">Local</button>
+    <button class="tbtn" onclick="renderAnalisis()" data-t="Actualizar"><span data-t="Actualizar"><span data-t="Actualizar">Actualizar</span></span></button>
+  </div>
+  <div id="an-cont" style="max-height:66vh;overflow:auto;margin-top:6px"></div>
+  <div class="brow" style="margin-top:12px"><button class="tbtn" onclick="closeModal('m-analisis')" data-t="Cerrar"><span data-t="Cerrar"><span data-t="Cerrar">Cerrar</span></span></button></div>
 </div></div>
 
 <div class="modal" id="m-baterias"><div class="sheet" style="max-width:960px">
@@ -1237,16 +1248,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260924-1336" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260924-1336"></script>
-<script src="objetivos.js?v=20260924-1336" onerror="void 0"></script>
-<script src="video_delay.js?v=20260924-1336" onerror="void 0"></script>
+<script src="firebase.js?v=20260925-0842" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260925-0842"></script>
+<script src="objetivos.js?v=20260925-0842" onerror="void 0"></script>
+<script src="video_delay.js?v=20260925-0842" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260924-1336" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260924-1336"></script>
+<script src="plantel_nafels.js?v=20260925-0842" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260925-0842"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -8761,8 +8772,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260924-1336" onerror="void 0"></script>
-<script src="ayuda.js?v=20260924-1336"></script>
+<script src="volver_inicio.js?v=20260925-0842" onerror="void 0"></script>
+<script src="ayuda.js?v=20260925-0842"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -9218,6 +9229,663 @@ function iniTildarTodos(){
   /* Escape NO cierra nada: en el scouteo se usa para otras cosas y cerrar la
      pantalla en medio de un rally es peor que cualquier comodidad. */
 })();
+</script>
+<style>
+/* el analisis en vivo */
+.an-h{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;letter-spacing:1px;
+      text-transform:uppercase;color:var(--acc,#f59e0b);margin:18px 0 2px;padding-top:10px;
+      border-top:1px solid rgba(148,163,184,.14)}
+.an-h:first-child{border-top:0;padding-top:0;margin-top:4px}
+.an-s{color:var(--dim,#64748b);font-size:11.5px;margin-bottom:7px;line-height:1.45}
+.an-tot{color:var(--dim,#64748b);font-size:11px;margin-bottom:2px}
+.an-t{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:4px}
+.an-t td,.an-t th{padding:4px 6px;text-align:center;border-bottom:1px solid rgba(148,163,184,.08)}
+.an-t .an-hd th{color:var(--dim,#64748b);font-size:10px;letter-spacing:.6px;text-transform:uppercase;font-weight:700}
+.an-t .an-k{text-align:left;color:var(--txt,#cbd5e1);white-space:nowrap}
+.an-t .an-d{color:var(--dim,#475569)}
+.an-cajas{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.an-caja{flex:1;min-width:150px;background:rgba(148,163,184,.06);border-radius:10px;padding:10px 12px}
+.an-cn{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:800;line-height:1;color:var(--acc,#f59e0b)}
+.an-ct{font-size:11.5px;color:var(--txt,#cbd5e1);margin-top:2px}
+.an-cs{font-size:10.5px;color:var(--dim,#64748b);margin-top:2px}
+/* ── la cancha de la distribucion ───────────────────────────────────────────
+   Todo centrado: el scout lo pidio asi y tiene razon, alineado a la izquierda
+   la vista salta de un lado al otro y cuesta comparar dos zonas. */
+.an-cancha{margin:6px 0 10px;border:1px solid rgba(148,163,184,.18);border-radius:10px;
+           padding:8px;background:rgba(15,23,42,.35)}
+.an-red{text-align:center;font-size:9px;letter-spacing:2px;color:var(--dim,#64748b);
+        border-bottom:2px solid rgba(148,163,184,.35);padding-bottom:3px;margin-bottom:6px}
+.an-fila{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:5px}
+.an-z{border:1px solid rgba(148,163,184,.14);border-radius:8px;padding:6px 5px;min-height:78px;
+      display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center}
+.an-z0{opacity:.35;justify-content:center}
+.an-zn{font-size:9px;letter-spacing:1px;color:var(--dim,#64748b);text-transform:uppercase}
+.an-zv{font-family:'Barlow Condensed',sans-serif;font-size:25px;font-weight:800;line-height:1.05;
+       color:var(--txt,#cbd5e1)}
+.an-zp{font-size:11px;font-weight:700;color:var(--mut,#94a3b8);margin-left:5px}
+/* debajo del porcentaje: sobre cuantas pelotas se calculo */
+.an-zk{font-size:10px;font-weight:600;margin-top:1px;color:var(--dim,#64748b)}
+.an-zjs{margin-top:3px;display:flex;flex-direction:column;gap:1px;align-items:center;width:100%}
+.an-zj{font-size:9.5px;color:var(--mut,#94a3b8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.an-zj b{color:#93c5fd}
+
+/* ── las seis canchitas por rotacion ─────────────────────────────────────── */
+.an-minis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:4px 0 10px}
+.an-mini{border:1px solid rgba(148,163,184,.16);border-radius:8px;padding:5px;
+         background:rgba(15,23,42,.35)}
+.an-mt{text-align:center;font-size:10px;font-weight:800;letter-spacing:.8px;
+       color:var(--acc,#f59e0b);background:rgba(15,23,42,.6);border-radius:4px;
+       padding:1px 0;margin-bottom:4px}
+.an-mf{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;margin-bottom:3px}
+.an-mz{border:1px solid rgba(148,163,184,.14);border-radius:5px;min-height:36px;
+       display:flex;flex-direction:column;align-items:center;justify-content:center;
+       font-size:10px;color:var(--mut,#94a3b8)}
+/* el porcentaje manda; la cantidad va chica abajo */
+.an-mz b{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;line-height:1}
+.an-mz i{font-style:normal;font-size:9px;font-weight:600;color:var(--dim,#64748b)}
+.an-mz0{opacity:.3}
+
+/* ── el side-out abierto por valoracion ──────────────────────────────────── */
+.an-v{display:block;font-size:12px;color:var(--txt,#cbd5e1);line-height:1.1}
+.an-vp{display:block;font-size:9.5px;font-weight:700;line-height:1.1}
+
+@media(max-width:480px){
+  .an-minis{grid-template-columns:repeat(2,1fr)}
+  .an-zv{font-size:20px}.an-z{min-height:70px}.an-zj{font-size:9px}
+}
+
+/* ── el titulo de cada rotacion y la fila del equipo ──────────────────────── */
+.an-rt{font-family:'Barlow Condensed',sans-serif;font-size:12.5px;font-weight:800;
+       letter-spacing:1.2px;text-transform:uppercase;color:#93c5fd;
+       background:rgba(96,165,250,.1);border-radius:5px;
+       padding:3px 8px;margin:12px 0 3px;display:inline-block}
+.an-t tr.an-eq td{background:rgba(148,163,184,.07);font-weight:700}
+.an-t tr.an-eq .an-k{color:var(--acc,#f59e0b);letter-spacing:.5px;font-size:11px}
+</style>
+<script>
+/* ════════════════════════════════════════════════════════════════════════════
+   ANALISIS EN VIVO  ·  el informe que Data Volley arma mientras se scoutea
+
+   Data Volley 4 tiene sus "Storico Analisi": recepcion por rotacion, por zona
+   de saque, side-out segun quien recibio, distribucion del armador por momento
+   del set. Se llenan solos a medida que se teclea.
+
+   Esto hace lo mismo con lo que ya hay en M.codes. No necesita ningun dato
+   nuevo: la rotacion viaja con cada codigo (zh/za), la zona del saque esta en
+   la cola (*04SM+~~~15 = del 1 al 5) y la llamada del armado tambien
+   (*04ET+K1B).
+
+   Todo se calcula de nuevo en cada apertura: son pocos cientos de codigos y
+   asi nunca queda desfasado de lo que se acaba de cargar.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* ── leer un codigo ──────────────────────────────────────────────────────────
+   No se usa parseOne porque aca hacen falta solo cuatro cosas y se llama
+   miles de veces. */
+function anLeer(c){
+  var t = String(c && c.c || '');
+  var m = t.match(/^([*a])(\d{2})([SRABDEF])(.)(.)/);
+  if(!m) return null;
+  var cola = t.slice(6);
+  var pt = cola.split('~');
+  /* la cola es posicional: combo(2) destinatario zonaIni zonaFin subzona ... */
+  var zi = '', zf = '';
+  if(cola.indexOf('~') >= 0){
+    zi = (cola[3] && cola[3] !== '~') ? cola[3] : '';
+    zf = (cola[4] && cola[4] !== '~') ? cola[4] : '';
+  }
+  return {
+    lado:  m[1] === '*' ? 'home' : 'away',
+    num:   parseInt(m[2], 10),
+    sk:    m[3],
+    tipo:  m[4] === '~' ? '' : m[4],
+    ev:    m[5],
+    llam:  cola.slice(0,2).replace(/~/g,''),
+    zi:    zi,
+    zf:    zf,
+    zh:    c.zh || 0,
+    za:    c.za || 0,
+    set:   c.set
+  };
+}
+
+/* ── los rallies ─────────────────────────────────────────────────────────────
+   Un rally arranca con un saque y termina con el codigo de punto (*p12:10).
+   De cada uno se guarda lo que hace falta para todos los bloques. */
+function anRallies(){
+  var out = [], r = null;
+  (M.codes || []).forEach(function(c){
+    var t = String(c && c.c || '');
+
+    /* el punto cierra el rally */
+    var mp = t.match(/^([*a])p(\d{2}):(\d{2})/);
+    if(mp){
+      if(r){
+        r.gano   = mp[1] === '*' ? 'home' : 'away';
+        r.ptsH   = parseInt(mp[2], 10);
+        r.ptsA   = parseInt(mp[3], 10);
+        /* el maximo de los dos manda para el momento del set */
+        r.momento = Math.max(r.ptsH, r.ptsA);
+        out.push(r);
+        r = null;
+      }
+      return;
+    }
+
+    if(c.k !== 'play') return;
+    var a = anLeer(c);
+    if(!a) return;
+
+    if(a.sk === 'S'){
+      /* arranca el rally */
+      r = { set:a.set, saca:a.lado, recibe:(a.lado==='home'?'away':'home'),
+            saque:a, rec:null, atk1:null, acciones:[] };
+    }
+    if(!r) return;
+    r.acciones.push(a);
+
+    if(a.sk === 'R' && !r.rec) r.rec = a;
+    /* el primer ataque del equipo que recibio: el side-out */
+    if(a.sk === 'A' && !r.atk1 && a.lado === r.recibe) r.atk1 = a;
+  });
+  return out;
+}
+
+/* la rotacion del equipo en ese rally: la zona de su armador */
+function anRot(r, lado){
+  var a = r.acciones[0];
+  if(!a) return 0;
+  return lado === 'home' ? (a.zh || 0) : (a.za || 0);
+}
+
+/* ── una celda de porcentaje ─────────────────────────────────────────────── */
+function anPct(n, tot){
+  if(!tot) return '<td class="an-d">·</td>';
+  var v = Math.round(n / tot * 100);
+  var col = v >= 55 ? 'var(--ok)' : v >= 35 ? 'var(--warn)' : 'var(--bad)';
+  return '<td style="color:' + col + '"><b>' + v + '%</b></td>';
+}
+function anNum(n){ return '<td>' + (n || '·') + '</td>'; }
+
+/* cuenta las valoraciones de una lista de acciones */
+function anCuenta(lista){
+  var c = {'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,t:0};
+  lista.forEach(function(a){ if(c[a.ev] !== undefined) c[a.ev]++; c.t++; });
+  c.pos  = c['#'] + c['+'];
+  c.perf = c['#'];
+  return c;
+}
+
+/* ══ EFICACIA Y EFICIENCIA ═══════════════════════════════════════════════════
+   Dos cosas distintas, y las dos hacen falta:
+
+   EFICACIA    (# − errores) ÷ total. La de siempre: lo que salio perfecto
+               menos lo que se perdio. Puede dar negativo, y esta bien que de
+               negativo: significa que esa rotacion regala mas de lo que gana.
+
+   EFICIENCIA  la formula que ya usa tu app en las baterias y el dashboard,
+               copiada tal cual de objetivos.js:
+                  (# + 0.75·+ + 0.5·! + 0.25·- + 0.125·/) ÷ total
+               No se invento una nueva a proposito: si el analisis en vivo
+               diera un numero y la bateria otro para lo mismo, no se sabria
+               cual creer. */
+function anEficacia(c){
+  if(!c.t) return null;
+  return Math.round((c['#'] - c['=']) / c.t * 100);
+}
+function anEficiencia(c){
+  if(!c.t) return null;
+  var v = c['#'] + 0.75*c['+'] + 0.5*c['!'] + 0.25*c['-'] + 0.125*c['/'];
+  return Math.round(v / c.t * 100);
+}
+
+/* una celda de eficacia/eficiencia, con su color */
+function anPctV(v, buen, medio){
+  if(v === null) return '<td class="an-d">·</td>';
+  var col = v >= buen ? 'var(--ok)' : v >= medio ? 'var(--warn)' : 'var(--bad)';
+  return '<td style="color:' + col + '"><b>' + v + '%</b></td>';
+}
+
+/* una fila de recepcion: total, perfecta, positiva, error */
+function anFilaRec(nombre, lista){
+  var c = anCuenta(lista);
+  return '<tr><td class="an-k">' + nombre + '</td>'
+       + anNum(c.t)
+       + anPctV(anEficiencia(c), 62, 54)   /* el objetivo del club es 62 */
+       + anPctV(anEficacia(c), 20, 8)
+       + anPct(c.perf, c.t) + anPct(c.pos, c.t)
+       + anNum(c['!']) + anNum(c['-']) + anPct(c['='], c.t) + '</tr>';
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   1 · RECEPCION POR ROTACION
+   Data Volley la muestra P1 a P6. Es donde mas se ve que una rotacion no
+   sostiene: el mismo receptor rinde distinto segun desde donde le sacan.
+   ════════════════════════════════════════════════════════════════════════════ */
+function anBloqueRotacion(rs, lado){
+  /* ── el formato del informe de Data Volley, rotacion por rotacion ─────────
+     Mismas columnas que el "Storico Analisi per Fondamentale", menos las que
+     el scout marco como que no le sirven: Set, Ind, BP y pC.
+
+     Queda: P (la nota de 0 a 10), eficiencia, eficacia, el total, y el reparto
+     de cada valoracion en porcentaje.
+
+     El orden de las rotaciones es el de la rotacion en si —P1, P6, P5, P4, P3,
+     P2— y no el numerico: asi se sigue el ciclo como pasa en la cancha.
+
+     Primero la fila del equipo y debajo cada jugador, como en el informe. */
+  var ROT = [1,6,5,4,3,2];
+  var VALS = ['#','+','!','-','/','='];
+
+  var por = {};
+  rs.forEach(function(r){
+    if(r.recibe !== lado || !r.rec) return;
+    var p = anRot(r, lado); if(!p) return;
+    var R = por[p] = por[p] || {todas:[], jug:{}};
+    R.todas.push(r.rec);
+    var n = r.rec.num;
+    if(n) (R.jug[n] = R.jug[n] || []).push(r.rec);
+  });
+  if(!Object.keys(por).length) return '';
+
+  function fila(nombre, lista, esEquipo){
+    var c = anCuenta(lista);
+    var efi = anEficiencia(c), efa = anEficacia(c);
+    /* La columna "P" del informe de Data Volley no esta: es la eficiencia
+       dividida diez y redondeada —60% da 6, 75% da 8—, o sea la misma columna
+       de al lado con menos precision. */
+    var h = '<tr' + (esEquipo ? ' class="an-eq"' : '') + '>'
+          + '<td class="an-k">' + nombre + '</td>'
+          + anPctV(efi, 62, 54)
+          + anPctV(efa, 20, 8)
+          + anNum(c.t);
+    VALS.forEach(function(v){
+      if(!c.t || !c[v]){ h += '<td class="an-d">·</td>'; return; }
+      var pc = Math.round(c[v] / c.t * 100);
+      h += '<td><span class="an-v">' + c[v] + '</span>'
+         + '<span class="an-vp">' + pc + '%</span></td>';
+    });
+    return h + '</tr>';
+  }
+
+  var out = '<div class="an-h">Recepción por rotación</div>'
+          + '<div class="an-s">Una tabla por rotación, en el orden en que se rota. '
+          + 'Debajo de cada valoración, la cantidad y su porcentaje.</div>';
+
+  ROT.forEach(function(p){
+    var R = por[p];
+    if(!R || !R.todas.length) return;
+    out += '<div class="an-rt">Rotación P' + p + '</div>'
+         + '<table class="an-t"><tr class="an-hd"><th>Jugador</th>'
+         + '<th title="Eficiencia — la misma fórmula que usan las baterías">EFICIENCIA</th>'
+         + '<th title="Eficacia — perfectas menos errores, sobre el total">EFICACIA</th>'
+         + '<th>Tot</th>';
+    VALS.forEach(function(v){ out += '<th>' + v + '</th>'; });
+    out += '</tr>';
+    out += fila('EQUIPO', R.todas, true);
+    Object.keys(R.jug).sort(function(a,b){ return R.jug[b].length - R.jug[a].length; })
+      .forEach(function(n){
+        out += fila('<span class="dor">' + n + '</span> '
+                  + (typeof nombreJug === 'function' ? nombreJug(lado, parseInt(n,10)) : ''),
+                  R.jug[n], false);
+      });
+    out += '</table>';
+  });
+  return out;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   2 · RECEPCION SEGUN DE DONDE SACAN
+   El codigo del saque trae origen y destino: *04SM+~~~15 es del 1 al 5.
+   Sirve para decidir a quien conviene mandarle el saque.
+   ════════════════════════════════════════════════════════════════════════════ */
+function anBloqueZonaSaque(rs, lado){
+  var por = {};
+  rs.forEach(function(r){
+    if(r.recibe !== lado || !r.rec) return;
+    var zi = r.saque.zi || r.rec.zi;
+    if(!zi) return;
+    (por[zi] = por[zi] || []).push(r.rec);
+  });
+  var ks = Object.keys(por).sort();
+  if(!ks.length) return '';
+  var h = '<div class="an-h">Recepción según desde dónde sacan</div>'
+        + '<table class="an-t"><tr class="an-hd"><th>Desde</th><th>Tot</th><th title="Eficiencia — la misma fórmula que usan las baterías y el dashboard">EFICIENCIA</th>'
+        + '<th title="Eficacia — perfectas menos errores, sobre el total">EFICACIA</th><th>#</th><th>#+</th><th>!</th><th>–</th><th>Err</th></tr>';
+  ks.forEach(function(z){ h += anFilaRec('Zona ' + z, por[z]); });
+  return h + '</table>';
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   3 · SIDE-OUT SEGUN QUIEN RECIBIO
+   La pregunta del entrenador en el minuto 20: a quien le estan sacando, y que
+   pasa cuando recibe ese. Por eso se cruza receptor con el punto ganado.
+   ════════════════════════════════════════════════════════════════════════════ */
+function anBloqueSideOut(rs, lado){
+  /* ── el detalle por valoracion ──────────────────────────────────────────
+     Lo pidio el scout: no alcanza con "BARTHOLET recibe 28 y gana el 50%".
+     Lo que se decide en el partido es a QUIEN conviene sacarle, y eso se ve
+     cuando se abre por valoracion: uno puede tener 50% de recepciones buenas
+     y aun asi perder el punto, y otro salvar los rotos.
+
+     Por cada receptor y cada valoracion: cuantas, y que porcentaje de esas
+     termino en punto propio. */
+  var VALS = ['#','+','!','-','/','='];
+  var por = {};
+  rs.forEach(function(r){
+    if(r.recibe !== lado || !r.rec) return;
+    var n = r.rec.num; if(!n) return;
+    var d = por[n] = por[n] || {t:0, so:0, v:{}};
+    d.t++;
+    if(r.gano === lado) d.so++;
+    var e = r.rec.ev;
+    var vv = d.v[e] = d.v[e] || {t:0, so:0};
+    vv.t++;
+    if(r.gano === lado) vv.so++;
+  });
+  var ks = Object.keys(por).sort(function(a,b){ return por[b].t - por[a].t; });
+  if(!ks.length) return '';
+
+  var h = '<div class="an-h">Side-out según quién recibe</div>'
+        + '<div class="an-s">Por cada valoración: cuántas recepciones y qué porcentaje terminó en punto nuestro.</div>'
+        + '<table class="an-t"><tr class="an-hd"><th>Jugador</th><th>Rec</th><th>Side-out</th>';
+  VALS.forEach(function(v){ h += '<th>' + v + '</th>'; });
+  h += '</tr>';
+
+  ks.forEach(function(n){
+    var d = por[n];
+    h += '<tr><td class="an-k"><span class="dor">' + n + '</span> '
+       + (typeof nombreJug === 'function' ? nombreJug(lado, parseInt(n,10)) : '') + '</td>'
+       + anNum(d.t) + anPct(d.so, d.t);
+    VALS.forEach(function(v){
+      var x = d.v[v];
+      if(!x || !x.t){ h += '<td class="an-d">·</td>'; return; }
+      var pc = Math.round(x.so / x.t * 100);
+      var col = pc >= 55 ? 'var(--ok)' : pc >= 35 ? 'var(--warn)' : 'var(--bad)';
+      h += '<td><span class="an-v">' + x.t + '</span>'
+         + '<span class="an-vp" style="color:' + col + '">' + pc + '%</span></td>';
+    });
+    h += '</tr>';
+  });
+  return h + '</table>';
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   4 · EL ARMADOR, POR CALIDAD DE RECEPCION Y POR MOMENTO DEL SET
+   Con recepcion perfecta se puede jugar todo; con recepcion mala, no. Mezclar
+   las dos distribuciones esconde justamente lo que se quiere ver.
+   Los tramos son los de Data Volley: 0-11, 11-20, 20 al final.
+   ════════════════════════════════════════════════════════════════════════════ */
+function anDistrib(rs, lado, filtro){
+  var por = {}, zonas = {}, tot = 0;
+  rs.forEach(function(r){
+    if(r.recibe !== lado || !r.rec || !r.atk1) return;
+    if(!filtro(r)) return;
+    var n = r.atk1.num; if(!n) return;
+    var d = por[n] = por[n] || {t:0, pt:0};
+    d.t++; tot++;
+    if(r.atk1.ev === '#') d.pt++;
+
+    /* la zona desde donde ataco: 4-3-2 adelante, 9-8-7 de zaga */
+    var z = r.atk1.zi || '?';
+    var zz = zonas[z] = zonas[z] || {t:0, pt:0, err:0, jug:{}};
+    zz.t++;
+    if(r.atk1.ev === '#') zz.pt++;
+    if(r.atk1.ev === '=' || r.atk1.ev === '/') zz.err++;
+    zz.jug[n] = (zz.jug[n] || 0) + 1;
+  });
+  return {por:por, zonas:zonas, tot:tot};
+}
+
+/* ── la cancha ───────────────────────────────────────────────────────────────
+   El scout lo pidio asi: una tabla de numeros obliga a imaginarse donde pasa
+   cada cosa. En cancha se ve de un vistazo por que lado esta saliendo el juego.
+
+   Zonas de ataque de Data Volley:
+        red
+     4    3    2      <- delanteros
+     9    8    7      <- zaga (la 8 es el pipe)
+   Cada casillero muestra las pelotas, el % del total y el % de punto, y abajo
+   quien las jugo. El fondo se pinta segun el volumen: cuanto mas oscuro, mas
+   pelotas pasaron por ahi. */
+function anCancha(datos, lado){
+  if(!datos.tot) return '';
+  var Z = datos.zonas, max = 0;
+  Object.keys(Z).forEach(function(k){ if(Z[k].t > max) max = Z[k].t; });
+
+  function celda(z, nom){
+    var d = Z[z];
+    if(!d || !d.t) return '<div class="an-z an-z0"><div class="an-zn">' + nom + '</div>'
+                        + '<div class="an-zv">·</div></div>';
+    var pctTot = Math.round(d.t / datos.tot * 100);
+    var pctPt  = Math.round(d.pt / d.t * 100);
+    var fuerza = max ? (d.t / max) : 0;
+    var col = pctPt >= 55 ? 'var(--ok)' : pctPt >= 35 ? 'var(--warn)' : 'var(--bad)';
+    var js = Object.keys(d.jug).sort(function(a,b){ return d.jug[b] - d.jug[a]; }).slice(0,3);
+    var nombres = js.map(function(n){
+      var nm = (typeof nombreJug === 'function' ? nombreJug(lado, parseInt(n,10)) : '') || ('#' + n);
+      return '<span class="an-zj"><b>' + n + '</b> ' + nm.split(' ')[0] + ' ' + d.jug[n] + '</span>';
+    }).join('');
+    return '<div class="an-z" style="background:rgba(245,158,11,' + (0.06 + fuerza * 0.26).toFixed(2) + ')">'
+         + '<div class="an-zn">' + nom + '</div>'
+         + '<div class="an-zv" style="color:' + col + '">' + pctPt + '%</div>'
+         + '<div class="an-zk">' + d.t + ' pelotas · ' + pctTot + '% del total</div>'
+         + '<div class="an-zjs">' + nombres + '</div>'
+         + '</div>';
+  }
+
+  /* La zaga va 7-8-9 de izquierda a derecha, con el pipe en la 8.
+     Estaba al reves —9-8-7— y lo marco el scout. */
+  return '<div class="an-cancha">'
+       + '<div class="an-red">RED</div>'
+       + '<div class="an-fila">' + celda('4','4') + celda('3','3') + celda('2','2') + '</div>'
+       + '<div class="an-fila">' + celda('7','7') + celda('8','8 · pipe') + celda('9','9') + '</div>'
+       + '</div>';
+}
+
+function anTablaDistrib(titulo, sub, datos, lado){
+  if(!datos.tot) return '';
+  var ks = Object.keys(datos.por).sort(function(a,b){ return datos.por[b].t - datos.por[a].t; });
+  var h = '<div class="an-h">' + titulo + '</div>';
+  if(sub) h += '<div class="an-s">' + sub + '</div>';
+  h += anCancha(datos, lado);
+  h += '<table class="an-t"><tr class="an-hd"><th>Jugador</th><th>Pelotas</th>'
+     + '<th>% del total</th><th>Punto</th></tr>';
+  ks.forEach(function(n){
+    var d = datos.por[n];
+    h += '<tr><td class="an-k"><span class="dor">' + n + '</span> '
+       + (typeof nombreJug === 'function' ? nombreJug(lado, parseInt(n,10)) : '') + '</td>'
+       + anNum(d.t) + anPct(d.t, datos.tot) + anPct(d.pt, d.t) + '</tr>';
+  });
+  return h + '</table>';
+}
+
+/* ── una cancha chica, para las seis rotaciones ─────────────────────────────
+   La foto del scout: seis canchitas juntas, una por rotacion. Se ve de una
+   por donde sale el juego en cada una, que es lo que se decide en el tiempo
+   muerto. Solo el numero y el % de punto: mas texto no entra ni se lee. */
+function anMiniCancha(titulo, zonas, tot){
+  function celda(z){
+    var d = zonas[z];
+    if(!d || !d.t) return '<div class="an-mz an-mz0">·</div>';
+    var pctPt = Math.round(d.pt / d.t * 100);
+    var col = pctPt >= 55 ? 'var(--ok)' : pctPt >= 35 ? 'var(--warn)' : 'var(--bad)';
+    var fu = tot ? (d.t / tot) : 0;
+    /* el porcentaje manda: es lo que se lee de un vistazo. La cantidad va
+       abajo y chica, para saber sobre cuantas pelotas se calculo. */
+    return '<div class="an-mz" style="background:rgba(245,158,11,' + (0.06 + fu * 0.5).toFixed(2) + ')">'
+         + '<b style="color:' + col + '">' + pctPt + '%</b><i>' + d.t + '</i></div>';
+  }
+  return '<div class="an-mini">'
+       + '<div class="an-mt">' + titulo + '</div>'
+       + '<div class="an-mf">' + celda('4') + celda('3') + celda('2') + '</div>'
+       + '<div class="an-mf">' + celda('7') + celda('8') + celda('9') + '</div>'
+       + '</div>';
+}
+
+/* La distribucion rotacion por rotacion */
+function anBloqueRotArmador(rs, lado){
+  var porRot = {};
+  rs.forEach(function(r){
+    if(r.recibe !== lado || !r.rec || !r.atk1) return;
+    var p = anRot(r, lado); if(!p) return;
+    var z = r.atk1.zi || '?';
+    var R = porRot[p] = porRot[p] || {zonas:{}, tot:0};
+    var zz = R.zonas[z] = R.zonas[z] || {t:0, pt:0};
+    zz.t++; R.tot++;
+    if(r.atk1.ev === '#') zz.pt++;
+  });
+  var hay = Object.keys(porRot).length;
+  if(!hay) return '';
+  /* El orden NO es 1,2,3,4,5,6: las seis van como estan paradas en la cancha,
+     P4-P3-P2 arriba y P5-P6-P1 abajo. Asi la rotacion que se busca esta donde
+     el ojo la espera, sin traducir numeros a posiciones. */
+  var h = '<div class="an-h">Distribución por rotación</div>'
+        + '<div class="an-s">Una cancha por rotación, ordenadas como están paradas. '
+        + 'El número grande es el % que terminó en punto; abajo, las pelotas.</div>'
+        + '<div class="an-minis">';
+  [4,3,2,5,6,1].forEach(function(p){
+    var R = porRot[p] || {zonas:{}, tot:0};
+    h += anMiniCancha('P' + p + ' · ' + R.tot, R.zonas, R.tot);
+  });
+  return h + '</div>';
+}
+
+function anBloqueArmador(rs, lado){
+  var h = '';
+  h += anTablaDistrib('Distribución con recepción #+',
+        'A quién le juega cuando la recepción sale bien.',
+        anDistrib(rs, lado, function(r){ return r.rec.ev === '#' || r.rec.ev === '+'; }), lado);
+  h += anTablaDistrib('Distribución con recepción ! o –',
+        'Con la recepción rota casi siempre aparece un solo nombre: ahí está la lectura del rival.',
+        anDistrib(rs, lado, function(r){ return r.rec.ev === '!' || r.rec.ev === '-'; }), lado);
+  h += anBloqueRotArmador(rs, lado);
+  h += anTablaDistrib('Distribución 0 a 11',  '', anDistrib(rs, lado, function(r){ return r.momento <  11; }), lado);
+  h += anTablaDistrib('Distribución 11 a 20', '', anDistrib(rs, lado, function(r){ return r.momento >= 11 && r.momento < 20; }), lado);
+  h += anTablaDistrib('Distribución 20 al final', 'El final del set es donde se ve en quién confía de verdad.',
+        anDistrib(rs, lado, function(r){ return r.momento >= 20; }), lado);
+  return h;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   5 · EL CAMBIO DE PELOTA
+   Es el recuadro del tabellino: el primer ataque tras recepcion buena, tras
+   recepcion mala, y el contraataque. Tres numeros que resumen el partido.
+   ════════════════════════════════════════════════════════════════════════════ */
+function anBloqueCambioPelota(rs, lado){
+  function calc(cond){
+    var d = {t:0, pt:0, err:0, blk:0};
+    rs.forEach(function(r){
+      if(r.recibe !== lado || !r.rec || !r.atk1) return;
+      if(!cond(r.rec.ev)) return;
+      d.t++;
+      if(r.atk1.ev === '#') d.pt++;
+      if(r.atk1.ev === '=') d.err++;
+      if(r.atk1.ev === '/') d.blk++;
+    });
+    return d;
+  }
+  var buena = calc(function(e){ return e === '#' || e === '+'; });
+  var mala  = calc(function(e){ return e === '!' || e === '-'; });
+
+  /* el contraataque: los ataques que NO son el primero tras recepcion */
+  var cc = {t:0, pt:0, err:0, blk:0};
+  rs.forEach(function(r){
+    r.acciones.forEach(function(a){
+      if(a.sk !== 'A' || a.lado !== lado) return;
+      if(r.atk1 && a === r.atk1) return;
+      cc.t++;
+      if(a.ev === '#') cc.pt++;
+      if(a.ev === '=') cc.err++;
+      if(a.ev === '/') cc.blk++;
+    });
+  });
+
+  if(!buena.t && !mala.t && !cc.t) return '';
+  function fila(nom, d){
+    return '<tr><td class="an-k">' + nom + '</td>' + anNum(d.t)
+         + anPct(d.pt, d.t) + anNum(d.blk) + anNum(d.err) + '</tr>';
+  }
+  return '<div class="an-h">El cambio de pelota</div>'
+       + '<div class="an-s">Qué pasa con el primer ataque según cómo vino la recepción.</div>'
+       + '<table class="an-t"><tr class="an-hd"><th></th><th>Ataques</th>'
+       + '<th>Punto</th><th>Bloq</th><th>Error</th></tr>'
+       + fila('1er atq tras #+', buena)
+       + fila('1er atq tras !–', mala)
+       + fila('Contraataque', cc)
+       + '</table>';
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   6 · CADA CUANTO
+   Los dos numeros del pie del tabellino. Dicen mas que un porcentaje: "cada
+   1.8 recepciones, un punto" se entiende sin explicar nada.
+   ════════════════════════════════════════════════════════════════════════════ */
+function anBloqueCadaCuanto(rs, lado){
+  var rec = 0, ptsSO = 0, saq = 0, breaks = 0;
+  rs.forEach(function(r){
+    if(r.recibe === lado && r.rec){ rec++; if(r.gano === lado) ptsSO++; }
+    if(r.saca === lado){ saq++; if(r.gano === lado) breaks++; }
+  });
+  if(!rec && !saq) return '';
+  function caja(tit, tot, ganados, sufijo){
+    if(!tot) return '';
+    var cada = ganados ? (tot / ganados).toFixed(2) : '–';
+    return '<div class="an-caja"><div class="an-cn">' + cada + '</div>'
+         + '<div class="an-ct">' + tit + '</div>'
+         + '<div class="an-cs">' + ganados + ' de ' + tot + ' · ' + sufijo + '</div></div>';
+  }
+  return '<div class="an-h">Cada cuánto</div>'
+       + '<div class="an-cajas">'
+       + caja('recepciones por punto', rec, ptsSO, 'side-out')
+       + caja('saques por break', saq, breaks, 'break point')
+       + '</div>';
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   LA VENTANA
+   ════════════════════════════════════════════════════════════════════════════ */
+window.AN_LADO = 'home';
+
+function anCambiarLado(){
+  window.AN_LADO = window.AN_LADO === 'home' ? 'away' : 'home';
+  renderAnalisis();
+}
+
+function abrirAnalisis(){
+  document.getElementById('m-analisis').classList.add('open');
+  renderAnalisis();
+}
+
+function renderAnalisis(){
+  var caja = document.getElementById('an-cont');
+  if(!caja) return;
+  var lado = window.AN_LADO;
+  var btn = document.getElementById('an-lado');
+  if(btn) btn.textContent = lado === 'home'
+    ? (M.home.name || 'Local') : (M.away.name || 'Visitante');
+
+  var rs = anRallies();
+  if(!rs.length){
+    caja.innerHTML = '<div class="an-s" style="padding:14px 0">Todavía no hay puntos cargados. '
+                   + 'El análisis se llena solo mientras scouteás.</div>';
+    return;
+  }
+
+  var h = '';
+  h += anBloqueCadaCuanto(rs, lado);
+  h += anBloqueCambioPelota(rs, lado);
+  h += anBloqueRotacion(rs, lado);
+  h += anBloqueZonaSaque(rs, lado);
+  h += anBloqueSideOut(rs, lado);
+  h += anBloqueArmador(rs, lado);
+
+  if(!h) h = '<div class="an-s" style="padding:14px 0">Para este equipo todavía no hay '
+           + 'recepciones ni ataques cargados.</div>';
+
+  caja.innerHTML = '<div class="an-tot">' + rs.length + ' puntos jugados</div>' + h;
+}
+
 </script>
 </body>
 </html>

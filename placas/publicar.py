@@ -25,12 +25,12 @@ siguiente placa. Sin decidir nada.
 """
 import argparse, io, pathlib, shutil, sys, contextlib
 
-import clips, fechas, historial, liga, rotacion, seis_placas, placas2, verificar
+import clips, fechas, historial, idioma, liga, limpiar, publicacion, redes, rotacion, seis_placas, placas2, verificar
 
 # El orden de publicación. La conclusión fuerte (side-out) va al final, que
 # es donde queda la gente que llegó hasta ahí.
-ORDEN = ['saque', 'recepcion', 'armado', 'ataque', 'bloqueo',
-         'equipo-ideal', 'rotaciones']
+ORDEN = ['apertura', 'resultados', 'saque', 'recepcion', 'armado', 'ataque',
+         'bloqueo', 'defensa', 'equipo-ideal', 'rotaciones', 'cierre']
 
 HASHTAGS = ('#volleyball #voley #volleyballstats #analisis #scouting '
             '#datavolley #volleystats')
@@ -71,6 +71,8 @@ def main():
     ap.add_argument('--vertical', action='store_true')
     ap.add_argument('--sin-historias', action='store_true', dest='sin_historias',
                     help='no generar la version 1080x1920')
+    ap.add_argument('--sin-redes', action='store_true', dest='sin_redes',
+                    help='no armar los videos de YouTube y TikTok')
     ap.add_argument('--guardar-video', action='store_true', dest='guardar_video',
                     help='no borrar los partidos bajados de YouTube')
     ap.add_argument('--sin-video', action='store_true',
@@ -93,13 +95,13 @@ def main():
         raise SystemExit('\nNo existe la fecha %s.' % a.fecha)
 
     if a.fecha:
-        rotulo = 'Fecha %s · %s' % (a.fecha, a.temporada)
+        rotulo = idioma.rotulo('fecha', a.fecha, a.temporada)
         destino = pathlib.Path(a.salida) / a.temporada / ('fecha-%02d' % int(a.fecha))
     elif a.hasta:
-        rotulo = 'Fechas 1 a %s · %s' % (a.hasta, a.temporada)
+        rotulo = idioma.rotulo('hasta', a.hasta, a.temporada)
         destino = pathlib.Path(a.salida) / a.temporada / ('hasta-%02d' % int(a.hasta))
     else:
-        rotulo = 'Temporada %s' % a.temporada
+        rotulo = idioma.rotulo('temporada', a.temporada)
         destino = pathlib.Path(a.salida) / a.temporada / 'acumulado'
 
     print()
@@ -117,6 +119,12 @@ def main():
     orden = {s: i for i, s in enumerate(ORDEN)}
     piezas.sort(key=lambda p: orden.get(p.get('slug'), 99))
     destino.mkdir(parents=True, exist_ok=True)
+    # Lo viejo se borra ANTES de escribir lo nuevo. Los nombres llevan el
+    # número de orden, así que si cambia el orden los archivos viejos se
+    # quedarían ahí con otro nombre y nunca sabrías cuál es la buena.
+    n = limpiar.limpiar(destino, 'placas', 'textos')
+    if n:
+        print(limpiar.aviso(n, 'la corrida anterior'))
     # se numeran en orden de publicacion, no por fundamento
     for i, p in enumerate(piezas, 1):
         p['slug'] = '%d-%s' % (i, p['slug'])
@@ -175,6 +183,14 @@ def main():
     if a.sin_video:
         print('   salteado (--sin-video)')
     else:
+        # se vuelven a cortar, así que los recortes viejos ya no sirven
+        n = limpiar.limpiar(destino, 'videos')
+        if n:
+            print(limpiar.aviso(n, 'recortes anteriores'))
+        for vieja in (destino / 'acciones',):
+            if vieja.is_dir():
+                import shutil as _sh
+                _sh.rmtree(vieja, ignore_errors=True)
         argv = sys.argv
         sys.argv = ['clips.py', '--repo', a.repo, '--carpeta', a.carpeta,
                     '--temporada', a.temporada, '--salida', a.salida]
@@ -200,12 +216,46 @@ def main():
         numerado = {p['slug'].split('-', 1)[1]: p['slug'] for p in piezas}
         vd = destino / 'video'
         if vd.is_dir():
+            ac = vd / 'acciones'
+            if ac.is_dir():
+                dst = destino / 'acciones'
+                dst.mkdir(exist_ok=True)
+                for f in list(ac.iterdir()):
+                    base_n = f.stem.rsplit('_', 1)[0] if f.suffix == '.mp4' else f.stem
+                    nuevo = numerado.get(base_n, base_n)
+                    f.replace(dst / f.name.replace(base_n, nuevo, 1))
             for f in list(vd.iterdir()):
                 if f.suffix == '.mp4':
                     f.replace(destino / ((numerado.get(f.stem, f.stem)) + '.mp4'))
                 elif f.name == 'cortes.txt':
                     f.replace(destino / f.name)
             shutil.rmtree(vd, ignore_errors=True)
+
+    # ── 3c · YouTube y TikTok ─────────────────────────────────────────────
+    # Se arman con lo que ya está: las placas y sus recortes. No calcula
+    # nada nuevo, solo los pega en el formato de cada red.
+    if not a.sin_video and not a.sin_redes:
+        print()
+        print('[+] Redes')
+        n = limpiar.limpiar(destino, 'redes')
+        if n:
+            print(limpiar.aviso(n, 'videos de redes anteriores'))
+        argv = sys.argv
+        sys.argv = ['redes.py', '--repo', a.repo, '--carpeta', a.carpeta,
+                    '--temporada', a.temporada, '--salida', a.salida]
+        if a.fecha:
+            sys.argv += ['--fecha', a.fecha]
+        if a.hasta:
+            sys.argv += ['--hasta', a.hasta]
+        try:
+            redes.main()
+        except SystemExit as e:
+            if e.code:
+                print('   ' + str(e))
+        except Exception as e:
+            print('   no se pudieron armar (%s)' % str(e)[:70])
+        finally:
+            sys.argv = argv
 
     # ── 3b · el historial ─────────────────────────────────────────────────
     # Se guarda SIEMPRE, incluso si la fecha no se publica: el valor está en
@@ -226,12 +276,20 @@ def main():
     # ── 4 · los textos ────────────────────────────────────────────────────
     print()
     print('[4/4] Textos')
-    T = ['TEXTOS DE LA %s' % rotulo.upper(), '',
-         'Uno por publicación, en orden. Copiá y pegá.', '']
+    con = [p.get('slug') for p in piezas
+           if (destino / 'redes' / 'tiktok' / (str(p.get('slug')) + '.mp4')).exists()]
+    (destino / 'PUBLICAR.txt').write_text(
+        publicacion.plan(piezas, rotulo, seis_placas.LIGA.split(' · ')[0], con),
+        encoding='utf-8')
+    print('   PUBLICAR.txt  (el orden, los textos y el calendario)')
+    # el texto suelto de cada placa se sigue dejando, por si querés publicar
+    # alguna sola
+    T = ['TEXTOS SUELTOS DE LA %s' % rotulo.upper(), '',
+         'Por si publicás una placa sola. El plan está en PUBLICAR.txt.', '']
     for i, p in enumerate(piezas, 1):
         T.append(texto_de(p, i))
     (destino / 'textos.txt').write_text('\n'.join(T), encoding='utf-8')
-    print('   textos.txt')
+    print('   textos.txt   (una por una, por si hace falta)')
 
     print()
     print('=' * 58)
@@ -243,7 +301,8 @@ def main():
     print('Listo. Está todo en:')
     print('   %s' % destino.resolve())
     print()
-    print('Se publica de arriba hacia abajo: la placa 1, su video, la 2, y así.')
+    print('Abrí PUBLICAR.txt: ahí está el orden del carrusel, el texto para')
+    print('pegar, el de cada reel y el calendario de la semana.')
     return 1 if avisos else 0
 
 

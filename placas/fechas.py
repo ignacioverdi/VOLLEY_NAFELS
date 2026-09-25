@@ -104,9 +104,21 @@ def detectar(carpeta):
     return out, sueltos
 
 
+def ultima(carpeta):
+    """El número de la última fecha que hay en la carpeta, o None.
+
+    Sirve para no tener que escribirlo: el lunes la última fecha es la del
+    domingo, siempre."""
+    grupos, _ = detectar(carpeta)
+    return max((x['n'] for x in grupos), default=None)
+
+
 def archivos_de(carpeta, fecha=None, hasta=None):
     """Los .dvw de una fecha, o de todas hasta una, o todos."""
     grupos, sueltos = detectar(carpeta)
+    # 'ultima' o '.' = la última que haya; así el .bat puede aceptar Enter
+    if str(fecha).strip().lower() in ('ultima', 'última', '.', 'last'):
+        fecha = max((x['n'] for x in grupos), default=None)
     if fecha:
         g = [x for x in grupos if x['n'] == int(fecha)]
         if not g:

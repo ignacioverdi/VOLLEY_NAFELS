@@ -1,0 +1,68 @@
+MARCADOR EN LOS ROTULOS
+=======================
+
+Copiá estos 4 archivos adentro de la carpeta placas, pisando los que están.
+No borres nada más: el resto queda igual.
+
+   marcador.py   (NUEVO)
+   clips.py
+   edicion.py
+   redes.py
+
+
+QUE VAS A VER
+-------------
+Cada acción del video ahora sale rotulada así:
+
+   ROY SCHMID · #7 · NAFELS              16-17
+   ACE  ·  1° SET  ·  Z1
+   FINAL  NAFELS 2 - 1 ROTTENBURG
+
+El marcador (16-17) es el de ESE rally, con el equipo del jugador
+adelante. El de abajo es cómo terminó el partido.
+
+
+COMO LO SACA
+------------
+Del mismo .dvw, sin estimar nada:
+
+   [3TEAMS]  el campo 3 son los sets que ganó cada uno
+   [3SET]    los parciales y el resultado de cada set
+   [3SCOUT]  *p18:17  ->  el marcador queda LOCAL:VISITANTE
+
+El marcador de una acción es el del código de punto que cierra su rally.
+Un ace que hace el 18-17 se rotula 18-17, igual que en la tele.
+
+
+NO HACE FALTA VOLVER A BAJAR LOS VIDEOS
+---------------------------------------
+Los cortes que ya tenés no tienen el marcador adentro. Cuando corras la
+opción 7 (rehacer redes) se lo agrega solo, leyendo otra vez el .dvw que
+ya está en el disco. Te lo avisa en pantalla:
+
+   marcador: se lo agregué a 36 acciones que ya estaban cortadas
+
+O sea: opción 7 y listo. No baja un solo mega.
+
+
+DOS COSAS MAS QUE ARREGLE DE PASO
+---------------------------------
+1) Los saques decían PUNTO en vez de ACE. La placa se llama "A-1-saque"
+   y el código partía por el primer guión, así que le quedaba "1-saque"
+   y no coincidía con nada: caían todos en la etiqueta genérica.
+
+2) El rótulo estaba al 80% de la pantalla. En vertical eso es justo donde
+   TikTok e Instagram encajan el usuario, el texto del posteo y la
+   botonera. Ahora va apoyado abajo del video, al 66%.
+
+
+SI ALGUN NOMBRE DE EQUIPO QUEDA FEO
+-----------------------------------
+En marcador.py, arriba de todo:
+
+   NOMBRE_CORTO = {
+       'AXPO NAFELS': 'NAFELS',
+   }
+
+Agregale lo que quieras. La clave es el nombre tal como viene en el .dvw.
+Lo que pongas ahí manda sobre todo lo demás.

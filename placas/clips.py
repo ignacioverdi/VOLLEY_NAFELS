@@ -40,7 +40,7 @@ para que abras el video y cortes a mano sin buscar nada.
 """
 import argparse, json, os, pathlib, re, shutil, subprocess, sys
 
-import fechas, seis_placas
+import fechas, marcador, seis_placas
 
 # Mismo margen que la pantalla de Cortes de Video del sistema.
 ANTES, DESPUES = 4.0, 5.0
@@ -54,6 +54,7 @@ BUSCA = {
     'recepcion': ('R', ['#']),
     'ataque':    ('A', ['#']),
     'bloqueo':   ('B', ['#']),
+    'defensa':   ('D', ['#', '+']),
 }
 
 
@@ -77,7 +78,10 @@ def _motor(repo):
 def acciones(repo, archivos):
     """Todas las acciones con segundo de video, por partido.
 
-    [{'archivo','equipo','dorsal','skill','ev','set','t'}]"""
+    [{'archivo','equipo','dorsal','skill','ev','set','t','marcador','resultado'}]
+
+    El marcador y el resultado salen del mismo .dvw (ver marcador.py): el
+    rótulo del video los necesita para que la acción se entienda sola."""
     gl = _motor(repo)
     out = []
     for fn in [str(x) for x in archivos]:
@@ -87,7 +91,12 @@ def acciones(repo, archivos):
             scout = gl.get_scout(lineas)
         except Exception:
             continue
-        for l in scout:
+        # Los nombres para el rótulo salen del archivo tal cual, no de norm():
+        # norm() devuelve None para los equipos que no son de la liga.
+        crudos = gl.get_teams(lineas)
+        ctx = marcador.contexto(lineas, crudos[0], crudos[1])
+        pts = marcador.puntos(scout)
+        for i, l in enumerate(scout):
             c = l.split(';')
             cod = c[0].strip()
             if len(cod) < 6 or cod[0] not in '*a' or not cod[1:3].isdigit():
@@ -98,11 +107,22 @@ def acciones(repo, archivos):
                 continue
             if t <= 0:
                 continue
+            resto = cod[6:].split('~')
+            sk = cod[3]
+            traj = resto[1] if (sk in 'AE' and len(resto) > 1) else (
+                resto[3] if len(resto) > 3 else '')
+            oz = int(traj[0]) if traj and traj[0].isdigit() else 0
+            dz = int(traj[1]) if len(traj) > 1 and traj[1].isdigit() else 0
+            marca = marcador.cierra_el_rally(pts, i)
             out.append({'archivo': fn,
                         'equipo': local if cod[0] == '*' else visita,
-                        'lado': cod[0], 'dorsal': cod[1:3], 'skill': cod[3],
+                        'lado': cod[0], 'dorsal': cod[1:3], 'skill': sk,
                         'ev': cod[5] if len(cod) > 5 else '',
-                        'set': c[8] if len(c) > 8 else '', 't': t})
+                        'oz': oz, 'dz': dz,
+                        'set': c[8] if len(c) > 8 else '', 't': t,
+                        'marcador': marcador.como_va(ctx, marca, cod[0]),
+                        'resultado': marcador.resultado_visto(ctx, cod[0]),
+                        'club': ctx['corto_l'] if cod[0] == '*' else ctx['corto_v']})
     return out
 
 
@@ -343,6 +363,28 @@ def cortar(pack, videos, links, destino, vertical=False):
     if not partes:
         shutil.rmtree(tmp, ignore_errors=True)
         return None, 0
+    # Cada acción se guarda también por separado. Pegadas no se pueden
+    # editar: para el corto de TikTok hace falta poner un rótulo sobre cada
+    # una, contar "ace 2 de 4" y ajustar el arranque, y eso solo se puede
+    # con los pedazos sueltos.
+    sueltas = destino / 'acciones'
+    sueltas.mkdir(parents=True, exist_ok=True)
+    meta = []
+    for i, seg in enumerate(partes):
+        a = pack['acciones'][i] if i < len(pack['acciones']) else {}
+        dst = sueltas / ('%s_%02d.mp4' % (pack['nombre'], i + 1))
+        shutil.copy(seg, dst)
+        meta.append({'archivo': dst.name, 'n': i + 1, 'de': len(partes),
+                     'set': a.get('set', ''), 'ev': a.get('ev', ''),
+                     'zona': a.get('dz') or a.get('oz') or 0,
+                     'seg': a.get('t', 0),
+                     'dorsal': a.get('dorsal', ''), 'club': a.get('club', ''),
+                     'marcador': a.get('marcador', ''),
+                     'resultado': a.get('resultado', '')})
+    (sueltas / ('%s.json' % pack['nombre'])).write_text(
+        json.dumps({'slug': pack['slug'], 'quien': pack['quien'],
+                    'titulo': pack['titulo'], 'acciones': meta},
+                   ensure_ascii=False, indent=1), encoding='utf-8')
     lista = tmp / ('%s.txt' % pack['slug'])
     lista.write_text(''.join("file '%s'\n" % p.resolve().as_posix() for p in partes),
                      encoding='utf-8')

@@ -102,3 +102,48 @@ def varas(repo, temporada):
         if out:
             return out
     return {}
+
+
+# ── EL COLOR DEL CLUB, SACADO DE SU ESCUDO ─────────────────────────────────
+# Los colores de los clubes no están en ningún lado del repo, pero están
+# adentro de cada escudo. Se saca el color que más manda —ignorando el
+# blanco, el negro y los grises, que son de todos— y se lo lleva a un tono
+# que se lea sobre el fondo negro de las placas.
+_CACHE_COLOR = {}
+
+
+def color_escudo(datauri, defecto='#E8192C'):
+    if not datauri:
+        return defecto
+    if datauri in _CACHE_COLOR:
+        return _CACHE_COLOR[datauri]
+    try:
+        from PIL import Image
+        import colorsys, io
+        crudo = base64.b64decode(datauri.split(',', 1)[1])
+        im = Image.open(io.BytesIO(crudo)).convert('RGBA')
+        im.thumbnail((80, 80))
+        cuenta = {}
+        for r, g, b, a in im.getdata():
+            if a < 140:
+                continue
+            h, l, s = colorsys.rgb_to_hls(r / 255.0, g / 255.0, b / 255.0)
+            if s < 0.28 or l < 0.10 or l > 0.93:
+                continue          # gris, casi negro o casi blanco: no dice nada
+            clave = (int(h * 18), int(s * 3), int(l * 3))
+            d = cuenta.setdefault(clave, [0, 0.0, 0.0, 0.0])
+            d[0] += 1; d[1] += h; d[2] += s; d[3] += l
+        if not cuenta:
+            _CACHE_COLOR[datauri] = defecto
+            return defecto
+        n, hs, ss, ls = max(cuenta.values(), key=lambda d: d[0])
+        h, s, l = hs / n, ss / n, ls / n
+        # sobre negro, un color oscuro desaparece y uno pálido ensucia
+        s = min(0.95, max(0.55, s))
+        l = min(0.62, max(0.46, l))
+        r, g, b = colorsys.hls_to_rgb(h, l, s)
+        col = '#%02X%02X%02X' % (int(r * 255), int(g * 255), int(b * 255))
+    except Exception:
+        col = defecto
+    _CACHE_COLOR[datauri] = col
+    return col

@@ -1,101 +1,149 @@
-TEXTOS DE LA FECHA 3 · 26-27
+TEXTOS SUELTOS DE LA ROUND 3 · 26-27
 
-Uno por publicación, en orden. Copiá y pegá.
+Por si publicás una placa sola. El plan está en PUBLICAR.txt.
 
 ----------------------------------------------------------
-1 · El mejor saque de la fecha
+1 · Portada
 ----------------------------------------------------------
 
-El mejor saque de la fecha · Roy Schmid
+Portada
 
-Sus zonas de saque cuando complica al receptor, y qué rinde con cada tipo de servicio.
-
-El mapa deja solo los saques con los que complica al receptor. Esa es su zona: es adónde va a sacar el sábado.
-
-Volley-Stats · 3 partidos scouteados con nuestro sistema · 3 equipos · mínimo 6 saques, 8 jugadores lo superaron
+Volley-Stats · 3 matches scouted with our system · 3 teams
 
 #volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats
 
 ----------------------------------------------------------
-2 · El receptor más sólido
+2 · How the round finished
 ----------------------------------------------------------
 
-El receptor más sólido · Valentin Durdos
+How the round finished
 
-Sus zonas de recepción cuando la deja armable, y qué rinde contra potencia y contra flotado.
+Every match, set by set. Everything that follows comes from these same scouts.
 
-El mapa deja solo la recepción perfecta y la positiva, que son las que dejan armar. Las zonas que quedan vacías son por donde hay que sacarle.
+The set-by-set line is each set score, in order.
 
-Volley-Stats · 3 partidos scouteados con nuestro sistema · 3 equipos · mínimo 8 recepciones, 6 jugadores lo superaron
+3 matches · 3 teams
 
 #volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats
 
 ----------------------------------------------------------
-3 · La distribución del armador en K1
+3 · The best serve of the round
 ----------------------------------------------------------
 
-La distribución del armador en K1 · Gabriel Chancy
+The best serve of the round · Roy Schmid
 
-Gabriel Chancy · Colombier. Cómo reparte el balón en cada rotación cuando la recepción es perfecta o positiva, es decir cuando tiene todas las opciones abiertas.
+Where he serves when he hurts the passer, and what each type of serve returns.
 
-Solo K1 con recepción # o +: esto es lo que elige cuando puede elegir. El K1 de emergencia y el K2 de transición responden a otra lógica, y promediarlos borra el patrón. La rotación se nombra por la posición del armador.
+The map keeps only the serves that hurt the passer. That is his zone: that is where he will serve on Saturday.
 
-Volley-Stats · 3 partidos scouteados con nuestro sistema · 3 equipos
+3 matches · 3 teams · minimum 6 serves, 8 players above it
 
 #volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats
 
 ----------------------------------------------------------
-4 · El atacante más eficaz
+4 · The best receiver of the round
 ----------------------------------------------------------
 
-El atacante más eficaz · Karim Zerika
+The best receiver of the round · Valentin Durdos
 
-Dónde ataca cuando hace daño, y la diferencia entre lo que rinde en side-out y en transición.
+Where he receives when he leaves the setter in system, and how he holds up against jump and float serve.
 
-Eficacia = (punto − error − bloqueado) / total, la fórmula estándar internacional. El mapa deja solo el ataque que gana el rally o deja al rival sin contraataque.
+The map keeps only perfect and positive reception, the two that leave the setter in system. The empty zones are where he should be served.
 
-Volley-Stats · 3 partidos scouteados con nuestro sistema · 3 equipos · mínimo 8 ataques, 15 jugadores lo superaron
+3 matches · 3 teams · minimum 8 receptions, 6 players above it
 
 #volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats
 
 ----------------------------------------------------------
-5 · El bloqueo de la fecha
+5 · The setter in side-out
 ----------------------------------------------------------
 
-El bloqueo de la fecha · James Norris
+The setter in side-out · Gabriel Chancy
 
-Los 8 mejores por bloqueo útil: punto directo (#) más bloqueo de control (+), el que deja el balón jugable para su equipo.
+How he distributes the ball in each rotation on perfect or positive reception, that is, with every option open.
 
-El bloqueo-punto es solo una parte. El bloqueo que frena el balón y lo deja defendible gana el rally igual, y por eso la tabla ordena por # más +, no por punto directo.
+Side-out on # or + reception only: this is what he picks when he can pick. Out-of-system side-out and transition follow a different logic, and averaging them erases the pattern. Rotations are named after the setter position.
 
-Volley-Stats · 3 partidos scouteados con nuestro sistema · 3 equipos
+3 matches · 3 teams
 
 #volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats
 
 ----------------------------------------------------------
-6 · El siete ideal de la fecha
+6 · The most efficient attacker
 ----------------------------------------------------------
 
-El siete ideal de la fecha
+The most efficient attacker · Karim Zerika
 
-Puntas por ataque y recepción; centrales por bloqueo y ataque; opuesto por ataque; líbero por recepción. Ningún puesto se elige por un solo número.
+Where he attacks when he hurts, and the gap between what he returns in side-out and in transition.
 
-El punta pondera 60% ataque y 40% recepción; el central, mitad y mitad bloqueo y ataque. Cada componente se mide contra la media de la liga. El armador es el único sin estadística propia: va el del equipo con mejor ataque.
+Efficiency = (kill - error - blocked) / total, the standard international formula. The map keeps only the attacks that win the rally or leave the opponent with no counter-attack.
 
-Volley-Stats · 3 partidos scouteados con nuestro sistema · 3 equipos
+3 matches · 3 teams · minimum 8 attacks, 15 players above it
 
 #volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats
 
 ----------------------------------------------------------
-7 · El side-out, rotación por rotación
+7 · The block of the round
 ----------------------------------------------------------
 
-El side-out, rotación por rotación
+The block of the round · James Norris
 
-Cuánto sostiene cada equipo su recepción en cada una de sus seis rotaciones. Es el número sobre el que se arma todo plan de partido.
+The 9 best by useful block: kill block (#) plus control block (+), the one that keeps the ball playable for his own team.
 
-A Jona hay que sacarle en P1: ahí sostiene el 42% de su side-out, contra el 86% de su P4. Son 44 puntos de diferencia.
+The kill block is only part of it. A block that slows the ball down and leaves it defendable wins the rally just the same, which is why the table is ranked by # plus +, not by kill blocks alone.
 
-Volley-Stats · 3 partidos scouteados con nuestro sistema · 3 equipos
+3 matches · 3 teams
+
+#volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats
+
+----------------------------------------------------------
+8 · The best defender of the round
+----------------------------------------------------------
+
+The best defender of the round · Gabriel Chancy
+
+The zones he digs from when the ball stays playable. Below, the full scale of his defence.
+
+It is measured by the ball that stays playable, not by the one that merely gets up: a dig that saves the ball and sends it anywhere is no use. That is why it counts # plus +.
+
+3 matches · 3 teams · minimum 6 digs, 12 players above it
+
+#volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats
+
+----------------------------------------------------------
+9 · Team of the round
+----------------------------------------------------------
+
+Team of the round
+
+Outsides by attack and reception; middles by block and attack; opposite by attack; libero by reception. No position is picked on a single number.
+
+The outside weighs 60% attack and 40% reception; the middle, half block and half attack. Every component is measured against the league average. The setter is the only one with no statistic of his own: it goes to the best attacking team's.
+
+3 matches · 3 teams
+
+#volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats
+
+----------------------------------------------------------
+10 · Side-out, rotation by rotation
+----------------------------------------------------------
+
+Side-out, rotation by rotation
+
+How well each team holds its reception in each of its six rotations. This is the number every game plan is built on.
+
+Jona has to be served in P1: there it holds 42% of its side-out, against 86% in P4. That is a 44-point gap.
+
+3 matches · 3 teams
+
+#volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats
+
+----------------------------------------------------------
+11 · Cierre
+----------------------------------------------------------
+
+Cierre
+
+
 
 #volleyball #voley #volleyballstats #analisis #scouting #datavolley #volleystats

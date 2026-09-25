@@ -1,0 +1,61 @@
+{
+ "slug": "bloqueo",
+ "quien": "James Norris",
+ "titulo": "El bloqueo de la fecha",
+ "acciones": [
+  {
+   "archivo": "bloqueo_01.mp4",
+   "n": 1,
+   "de": 6,
+   "set": "1",
+   "ev": "#",
+   "zona": 0,
+   "seg": 233
+  },
+  {
+   "archivo": "bloqueo_02.mp4",
+   "n": 2,
+   "de": 6,
+   "set": "1",
+   "ev": "#",
+   "zona": 0,
+   "seg": 266
+  },
+  {
+   "archivo": "bloqueo_03.mp4",
+   "n": 3,
+   "de": 6,
+   "set": "2",
+   "ev": "#",
+   "zona": 0,
+   "seg": 1751
+  },
+  {
+   "archivo": "bloqueo_04.mp4",
+   "n": 4,
+   "de": 6,
+   "set": "3",
+   "ev": "#",
+   "zona": 0,
+   "seg": 3212
+  },
+  {
+   "archivo": "bloqueo_05.mp4",
+   "n": 5,
+   "de": 6,
+   "set": "1",
+   "ev": "#",
+   "zona": 0,
+   "seg": 695
+  },
+  {
+   "archivo": "bloqueo_06.mp4",
+   "n": 6,
+   "de": 6,
+   "set": "2",
+   "ev": "#",
+   "zona": 0,
+   "seg": 2830
+  }
+ ]
+}

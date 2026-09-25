@@ -26,6 +26,12 @@ ataque ya es K2 y no cuenta.
 import collections, glob, os, sys
 
 GRILLA = [4, 3, 2, 7, 8, 9, 5, 6, 1]
+
+# De estas seis sale TODO el ataque: las tres de red y las tres de zaga. Las
+# otras tres (z5 z6 z1) son posiciones de defensa, no de remate: dibujarlas
+# vacías en las seis rotaciones era media placa de cuadrados muertos. Si
+# alguna vez cae un balón ahí, se cuenta aparte y se avisa; nunca se pierde.
+GRILLA_ATAQUE = [4, 3, 2, 7, 8, 9]
 ROTACIONES = ['P4', 'P3', 'P2', 'P5', 'P6', 'P1']   # el orden de la pantalla
 
 # Color y nombre por zona de SALIDA del ataque: quién remató esa pelota.
@@ -41,9 +47,14 @@ ROTACIONES = ['P4', 'P3', 'P2', 'P5', 'P6', 'P1']   # el orden de la pantalla
 COLOR_ZONA = {4: '#22C55E', 3: '#F59E0B', 2: '#F97316',
               7: '#6366F1', 8: '#A78BFA', 9: '#818CF8',
               1: '#64748B', 6: '#64748B', 5: '#64748B'}
-ETIQUETA_ZONA = {4: 'Punta (z4)', 3: 'Central (z3)', 2: 'Opuesto (z2)',
-                 7: 'Zaga izq. (z7)', 8: 'Pipe (z8)', 9: 'Zaga der. (z9)',
-                 1: 'Otra', 6: 'Otra', 5: 'Otra'}
+# Las etiquetas viven en idioma.py; acá solo se piden.
+class _Etiquetas(dict):
+    def get(self, z, d=None):
+        import idioma
+        return idioma.zona(z)
+
+
+ETIQUETA_ZONA = _Etiquetas()
 
 
 def _motor(repo):
@@ -140,14 +151,19 @@ def a_placa(acum):
         zonas = acum[r]
         total = sum(c['tot'] for c in zonas.values())
         celdas = []
-        for z in GRILLA:
+        for z in GRILLA_ATAQUE:
             c = zonas.get(z, {'tot': 0, 'pt': 0})
             celdas.append({
                 'z': z, 'n': c['tot'],
                 'dist': round(100.0 * c['tot'] / total) if total and c['tot'] else 0,
                 'pto': round(100.0 * c['pt'] / c['tot']) if c['tot'] else 0,
                 'color': COLOR_ZONA.get(z, '#64748B')})
-        out.append({'rot': r, 'total': total, 'celdas': celdas})
+        # lo que caiga fuera de las seis zonas de ataque no se borra: se
+        # cuenta y la placa lo declara
+        fuera = sum(c['tot'] for z, c in zonas.items()
+                    if z not in GRILLA_ATAQUE)
+        out.append({'rot': r, 'total': total, 'celdas': celdas,
+                    'fuera': fuera})
     return out
 
 

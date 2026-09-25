@@ -223,6 +223,12 @@ def eficacias(J):
     B = J['bloqueo']
     if B['T']:
         out['bloqueo'] = _p(B['#'], B['T'])
+    # La defensa se mide por el porcentaje de balones que quedan jugables.
+    # Una defensa que salva la pelota pero la manda a cualquier lado no
+    # sirve de nada, y por eso cuenta # mas +, no el total levantado.
+    D = J['defensa']
+    if D['T']:
+        out['defensa'] = _p(D['#'] + D['+'], D['T'])
     return out
 
 
@@ -240,19 +246,35 @@ def eficacias(J):
 #              / bloqueado · = error
 #   BLOQUEO    # punto directo · + control (el balón queda jugable) ·
 #              ! toque · = error
-VALORACIONES = {
-    'saque':     [('#', 'ACE', '#22C55E'), ('/', 'SIN ATAQUE', '#86EFAC'),
-                  ('+', 'POSITIVO', '#4ADE80'), ('!', 'NEUTRO', '#64748B'),
-                  ('-', 'NEGATIVO', '#F59E0B'), ('=', 'ERROR', '#EF4444')],
-    'recepcion': [('#', 'PERFECTA', '#22C55E'), ('+', 'POSITIVA', '#4ADE80'),
-                  ('!', 'REGULAR', '#64748B'), ('-', 'NEGATIVA', '#F59E0B'),
-                  ('/', 'PASADA', '#F97316'), ('=', 'ERROR', '#EF4444')],
-    'ataque':    [('#', 'PUNTO', '#22C55E'), ('+', 'POSITIVO', '#4ADE80'),
-                  ('!', 'NEUTRO', '#64748B'), ('-', 'NEGATIVO', '#F59E0B'),
-                  ('/', 'BLOQUEADO', '#F97316'), ('=', 'ERROR', '#EF4444')],
-    'bloqueo':   [('#', 'PUNTO', '#22C55E'), ('+', 'CONTROL', '#4ADE80'),
-                  ('!', 'TOQUE', '#64748B'), ('=', 'ERROR', '#EF4444')],
-}
+# Los colores son del sistema y no cambian nunca. Las etiquetas salen de
+# idioma.py: la escala DataVolley es la misma en todo el mundo, lo que cambia
+# es cómo se llama cada símbolo.
+_COLOR_EV = {'#': '#22C55E', '+': '#4ADE80', '!': '#64748B', '-': '#F59E0B',
+             '/': '#F97316', '=': '#EF4444'}
+_COLOR_EV_SAQUE = dict(_COLOR_EV, **{'/': '#86EFAC'})
+
+
+def _valoraciones():
+    import idioma
+    out = {}
+    for fund in ('saque', 'recepcion', 'ataque', 'bloqueo', 'defensa'):
+        col = _COLOR_EV_SAQUE if fund == 'saque' else _COLOR_EV
+        out[fund] = [(ev, et, col.get(ev, '#64748B'))
+                     for ev, et in idioma.escala(fund)]
+    return out
+
+
+class _Val(dict):
+    """Se resuelve al usarla, no al importar: así cambiar idioma.IDIOMA en
+    caliente (por ejemplo desde un .bat) sigue funcionando."""
+    def __getitem__(self, k):
+        return _valoraciones()[k]
+
+    def get(self, k, d=None):
+        return _valoraciones().get(k, d)
+
+
+VALORACIONES = _Val()
 
 
 def _ef_ataque(C):
@@ -279,15 +301,18 @@ def cortes(J, fund):
     temporada da un número que no es ninguna de las dos cosas.
     """
     if fund == 'ataque':
-        return [('EN K1', _ef_ataque(J['atk_k1']), J['atk_k1']['T']),
-                ('EN TRANSICIÓN', _ef_ataque(J['atk_k2']), J['atk_k2']['T'])]
+        import idioma
+        return [(idioma.c('k1'), _ef_ataque(J['atk_k1']), J['atk_k1']['T']),
+                (idioma.c('k2'), _ef_ataque(J['atk_k2']), J['atk_k2']['T'])]
     if fund == 'saque':
-        return [('DE POTENCIA', _ef_saque(J['sq_potencia']), J['sq_potencia']['T']),
-                ('FLOTADO', _ef_saque(J['sq_flotado']), J['sq_flotado']['T'])]
+        import idioma
+        return [(idioma.c('potencia'), _ef_saque(J['sq_potencia']), J['sq_potencia']['T']),
+                (idioma.c('flotado'), _ef_saque(J['sq_flotado']), J['sq_flotado']['T'])]
     if fund == 'recepcion':
-        return [('VS POTENCIA', _ef_recepcion(J['rec_vs_potencia']),
+        import idioma
+        return [(idioma.c('vs_potencia'), _ef_recepcion(J['rec_vs_potencia']),
                  J['rec_vs_potencia']['T']),
-                ('VS FLOTADO', _ef_recepcion(J['rec_vs_flotado']),
+                (idioma.c('vs_flotado'), _ef_recepcion(J['rec_vs_flotado']),
                  J['rec_vs_flotado']['T'])]
     return []
 

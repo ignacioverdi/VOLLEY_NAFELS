@@ -44,8 +44,16 @@ MEDIDA = """() => {
   if (!hijos.length || top === Infinity) { const z = r('.zn'); top = z.top; bot = z.bottom; }
   document.body.style.height = 'auto';
   document.body.style.overflow = 'visible';
+  // el ancho tambien: una tabla que se pasa del margen no se ve cortada en
+  // el PNG, se ve apretada contra el borde, y eso no lo cazaba nadie
+  let ancho = 0;
+  for (const e of document.querySelectorAll('.zn *')) {
+    const b = e.getBoundingClientRect();
+    if (b.width) ancho = Math.max(ancho, b.right);
+  }
   return {arriba: Math.round(top - arriba.bottom),
           abajo:  Math.round(abajo.top - bot),
+          derecha: Math.round(document.body.clientWidth - 56 - ancho),
           alto:   Math.round(document.body.getBoundingClientRect().height)};
 }"""
 
@@ -58,13 +66,19 @@ def desborde(piezas):
         b = placas2._navegador(pw)
         pg = b.new_page(viewport={'width': 1080, 'height': 1350})
         for p in piezas:
+            # la portada y el cierre no tienen zona de dibujo ni bajada: no
+            # hay nada que se pueda pisar y la medición no aplica
+            if p.get('tipo') in ('apertura', 'cierre', 'portada'):
+                continue
             tmp.write_text(placas2.render(p), encoding='utf-8')
             pg.goto(tmp.resolve().as_uri())
             pg.wait_for_timeout(250)
             m = pg.evaluate(MEDIDA)
-            mal = m['arriba'] < 8 or m['abajo'] < 8 or m['alto'] > 1352
-            print('   %-14s aire arriba %4d  abajo %4d  alto %4d   %s'
-                  % (p['slug'], m['arriba'], m['abajo'], m['alto'],
+            mal = (m['arriba'] < 8 or m['abajo'] < 8 or m['alto'] > 1352
+                   or m.get('derecha', 0) < -2)
+            print('   %-14s arriba %4d  abajo %4d  derecha %4d  alto %4d   %s'
+                  % (p['slug'], m['arriba'], m['abajo'],
+                     m.get('derecha', 0), m['alto'],
                      'SE PISA' if mal else 'ok'))
             if mal:
                 malas.append(p['slug'])

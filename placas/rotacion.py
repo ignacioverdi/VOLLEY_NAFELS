@@ -176,6 +176,5 @@ def titular(filas):
     if not mejor or salto_minimo(mejor[0]):
         return None
     salto, eq, bajo, alto = mejor
-    return ('A %s hay que sacarle en %s: ahí sostiene el %d%% de su side-out, '
-            'contra el %d%% de su %s. Son %d puntos de diferencia.'
-            % (eq, bajo[1], bajo[0], alto[0], alto[1], salto))
+    import idioma
+    return idioma.t('titular_rot', eq, bajo[1], bajo[0], alto[0], alto[1], salto)

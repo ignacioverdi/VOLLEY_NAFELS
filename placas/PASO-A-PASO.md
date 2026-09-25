@@ -41,6 +41,8 @@ Te tiene que quedar así:
             clips.py
             publicar.py
             historial.py
+            redes.py
+            edicion.py
             verificar.py
             AUTOMATICO.bat
             VIGILAR_Y_PUBLICAR.ps1
@@ -97,7 +99,7 @@ lee los 97 partidos. Al terminar se abre sola la carpeta con las siete imágenes
 3. Opción **1**, número de fecha, Enter.
 4. Se abre la carpeta con todo hecho.
 
-La opción 1 hace los cuatro pasos sola: las siete placas, la revisión, los
+La opción 1 hace los cuatro pasos sola: las ocho placas, la revisión, los
 videos de cada placa y los textos de cada publicación. Te deja esto:
 
     salida\26-27\fecha-03\
@@ -181,9 +183,9 @@ La carpeta `placas` no está adentro del repo. Movela al lado de
 **"No existe la fecha 12 en esa carpeta"**
 Te lista las que sí existen. Usá la opción 4 del menú para verlas.
 
-**Salen menos de siete placas**
+**Salen menos de ocho placas**
 No hay volumen suficiente para algún fundamento. Con tres partidos jugados
-puede pasar. El acumulado siempre da las siete.
+puede pasar. El acumulado siempre da las ocho.
 
 **Los escudos no aparecen**
 Salen de la carpeta `escudos/` del repo, por nombre de archivo
@@ -218,9 +220,65 @@ lo estan, el navegador las reemplazaba por otras: las placas te salian con
 una letra distinta de la que ves cuando te las muestro. Ahora viajan con la
 carpeta y salen iguales en cualquier computadora.
 
+## YouTube, TikTok y Reels
+
+La misma corrida arma tambien los videos de cada red, en la carpeta `redes`.
+No calcula nada nuevo: pega las placas y los recortes que ya estan.
+
+    redes\
+        youtube\
+            resumen-fecha-03.mp4     ~4 min, 16:9
+            descripcion.txt          con los capitulos ya calculados
+        tiktok\
+            1-saque.mp4              47 s, 9:16
+            2-recepcion.mp4          20 s
+            3-armado.mp4             1:02
+            4-ataque.mp4             38 s
+            5-bloqueo.mp4            38 s
+
+**YouTube**: un solo video de la fecha, con presentacion y cierre de marca. Cada placa aparece en pantalla unos
+segundos y atras van sus acciones. El `descripcion.txt` ya trae los capitulos
+con el minuto exacto de cada fundamento: se pegan en la descripcion y YouTube
+los convierte en marcadores solo.
+
+**TikTok y Reels**: un corto por fundamento, **editado**:
+
+- arranca con una **portada de enganche**: una sola idea, enorme, con el
+  jugador y el dato que sorprende. Sin eso el video empieza con una ficha
+  llena de números y el que pasa scrolleando sigue de largo antes de la
+  primera acción;
+- después la placa, con un zoom lento, no como una foto colgada;
+- sobre cada accion va el jugador, que hizo, el set y la zona — el que cae
+  en el video por el medio igual entiende que esta mirando;
+- un contador **2 / 6** arriba a la derecha;
+- una barra de avance finita en el borde de arriba;
+- el arranque de cada accion se recorta: en TikTok cuatro segundos de espera
+  antes del saque es una eternidad;
+- cierra con la marca, segundo y medio.
+
+Son los mismos archivos para TikTok y para Reels.
+
+## La musica
+
+Pone los temas en la carpeta **`musica`** de `placas` (.mp3, .m4a, .wav). Se
+usa uno por corto, rotando, y arrancando en un punto distinto del tema, asi
+no salen todos iguales.
+
+La musica **no tapa el partido**: se mezcla por debajo y se comprime contra
+el sonido de cancha, asi cuando hay golpe o grito la musica cede sola.
+
+> Para TikTok e Instagram conviene ponerle la musica **desde la propia app**:
+> te da mas alcance y te evita problemas de derechos. Esta carpeta es sobre
+> todo para YouTube, o para temas que puedas usar.
+
+Si no queres musica, la opcion es `--sin-musica`.
+
+Si no los queres, la opcion es `--sin-redes`. Y la **opcion 7** del menu los
+rehace sin volver a generar las placas ni bajar los videos de nuevo.
+
 ## Las historias (9:16)
 
-Cada corrida deja tambien las siete placas en **1080x1920** en la subcarpeta
+Cada corrida deja tambien las ocho placas en **1080x1920** en la subcarpeta
 `historias`, para Instagram Stories, Reels y TikTok. Es el mismo contenido
 con el alto de pantalla completa: el dibujo queda centrado y las franjas de
 arriba y abajo quedan libres, que es donde las apps ponen sus botones.
@@ -286,7 +344,7 @@ link que abre el video justo en ese segundo. Eso solo ya te ahorra buscar.
 El menú te pregunta si querés los videos **también en vertical** (1080x1920,
 para historias y reels).
 
-## Las siete placas
+## Las ocho placas
 
 | # | Placa | Qué muestra |
 | - | ----- | ----------- |
@@ -295,8 +353,9 @@ para historias y reels).
 | C | Armado | La distribución en K1, rotación por rotación |
 | D | Ataque | Dónde termina, y cuánto cambia entre K1 y transición |
 | E | Bloqueo | La tabla por bloqueo útil (# más +) |
-| F | Side-out | Side-out y break point por rotación, de cada equipo |
-| G | Siete ideal | El equipo de la fecha |
+| F | Defensa | Desde dónde levanta los balones que quedan jugables |
+| G | Side-out | Side-out y break point por rotación, de cada equipo |
+| H | Siete ideal | El equipo de la fecha |
 
 La **F** es la más fuerte para un entrenador: dice en qué rotación no sostiene
 cada rival, que es sobre lo que se arma todo plan de partido. Sale exacta de
