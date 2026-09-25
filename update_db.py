@@ -198,7 +198,13 @@ def get_players(lines, section):
                 first=parts[10].strip() if len(parts)>10 else ''
                 role=parts[12].strip() if len(parts)>12 else ''
                 pc=parts[13].strip() if len(parts)>13 else ''
-                pm={'1':'OH','2':'OPP','3':'MB','4':'S','L':'L','5':'OH','':'?'}
+                # Los puestos del .dvw, columna 14: 1 libero · 2 punta · 3 opuesto ·
+                # 4 central · 5 armador. Es la misma tabla de los .sq (SQ_ROLES).
+                # Estaba cruzada: el 5 daba punta y el 4 daba armador, asi que los
+                # ARMADORES figuraban como puntas y los CENTRALES como armadores,
+                # en todos los equipos. Comprobado contra el plantel de Nafels:
+                # con la tabla corregida aciertan los 13 jugadores.
+                pm={'1':'L','2':'OH','3':'OPP','4':'MB','5':'S','L':'L','':'?'}
                 pos='L' if role=='L' else pm.get(pc,'?')
                 players[num]={'name':f"{last} {first}".strip(),'pos':pos,'num':num}
             except: pass

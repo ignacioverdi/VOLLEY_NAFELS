@@ -1320,7 +1320,7 @@
   "tablas": {}
  },
  "panel_vivo.html": {
-  "bytes": 867284,
+  "bytes": 868227,
   "funciones": [
    "_aCp1252",
    "_alarmaGuardado",
@@ -1759,7 +1759,7 @@
   }
  },
  "panel_voley.html": {
-  "bytes": 445312,
+  "bytes": 448302,
   "funciones": [
    "_batCodes",
    "_batNombre",
@@ -1829,7 +1829,9 @@
    "pintar",
    "pintarBatBotonesEquipo",
    "pintarBatEqV",
+   "pvEdad",
    "pvSetTipoSR",
+   "pvTraerAhora",
    "refrescarVista",
    "render",
    "renderBatV",
@@ -1918,7 +1920,7 @@
   "tablas": {}
  },
  "plan_partido.html": {
-  "bytes": 105586,
+  "bytes": 106727,
   "funciones": [
    "U",
    "_armClave",
