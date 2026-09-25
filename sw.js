@@ -32,7 +32,11 @@
    pegado, como los escudos o los estilos.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-var VERSION = 'v5';
+/* v5 -> v6 : el panel en vivo sumo el boton de Análisis y la app instalada
+   seguia mostrando el panel viejo. El telefono del asistente tenia guardada
+   la pantalla de antes y no habia forma de que apareciera el boton, por mas
+   que se recargara: lo guardado gana hasta que cambia este numero. */
+var VERSION = 'v6';
 var CAJA    = 'club-' + VERSION;
 
 /* Lo minimo para que la app abra sin senal la primera vez. Si alguno falla

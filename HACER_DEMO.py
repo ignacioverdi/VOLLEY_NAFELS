@@ -209,9 +209,38 @@ GUARD = r'''/* =================================================================
     document.body.appendChild(d);
     d.querySelector('.dm-x').onclick = function(){ d.remove(); };
   }
+  /* 5 · el sello. No impide una captura —nada lo impide— pero toda captura
+         sale con la fecha, la hora y un codigo de visita. Sirve para saber de
+         donde salio una imagen que aparezca dando vueltas, y para que el que
+         piense en llevarsela sepa que queda marcada. */
+  function sello(){
+    if(document.getElementById('demo-sello')) return;
+    var cod = '';
+    try{ cod = sessionStorage.getItem('demo_cod') || ''; }catch(e){}
+    if(!cod){
+      cod = Math.random().toString(36).slice(2, 6).toUpperCase();
+      try{ sessionStorage.setItem('demo_cod', cod); }catch(e){}
+    }
+    var f = new Date(), dd = function(n){ return (n < 10 ? '0' : '') + n; };
+    var cuando = dd(f.getDate()) + '/' + dd(f.getMonth() + 1) + '/' + f.getFullYear() +
+                 ' ' + dd(f.getHours()) + ':' + dd(f.getMinutes());
+    var d = document.createElement('div');
+    d.id = 'demo-sello';
+    d.textContent = 'DEMO · volley-stats.com · ' + cuando + ' · ' + cod;
+    var s = document.createElement('style');
+    s.textContent =
+      '#demo-sello{position:fixed;left:10px;bottom:8px;z-index:2147482000;pointer-events:none;' +
+      "font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:9px;letter-spacing:.09em;" +
+      'color:rgba(255,255,255,.26);text-shadow:0 1px 2px rgba(0,0,0,.8);user-select:none}' +
+      '@media print{#demo-sello{color:#666;position:fixed}}' +
+      '@media(max-width:560px){#demo-sello{font-size:8px;left:6px;bottom:4px}}';
+    document.head.appendChild(s);
+    document.body.appendChild(d);
+  }
+
   if(document.readyState === 'loading')
-    document.addEventListener('DOMContentLoaded', cartel);
-  else cartel();
+    document.addEventListener('DOMContentLoaded', function(){ cartel(); sello(); });
+  else { cartel(); sello(); }
 })();
 '''
 
@@ -375,7 +404,7 @@ def main():
 
     open(os.path.join(DESTINO, 'demo_guard.js'), 'w', encoding='utf-8').write(
         GUARD.replace('@@LLAVE@@', k_demo))
-    print('    demo_guard.js                     llave de la demo + corte de red')
+    print('    demo_guard.js                     llave, corte de red y sello de visita')
 
     fb = os.path.join(DESTINO, 'firebase.js')
     if os.path.exists(fb):

@@ -32,7 +32,8 @@ import os,re,sys,json,glob,unicodedata
 # descarta lo guardado y rehace la temporada desde los .dvw.
 #
 # 7 -> 8 : cada ataque lleva la valoracion de su recepcion (#, +, !, -)
-DATA_VERSION = 8
+# 8 -> 9: cambia la regla del High Set, hay que rehacer el archivo
+DATA_VERSION = 9
 
 
 def _turno(nombre_archivo):
@@ -375,41 +376,42 @@ def parse_dvw(path, ent=False, modo_high_set=False):
     #  proximo saque. Quedan solo los del ejercicio, que es lo que la pantalla
     #  dice medir.
     if modo_high_set or HIGH_SET_MODO:
-        _limpias = []
-        # 'skill' guarda la LETRA del fundamento (E, A, S...); 'sk' guarda el
-        # nombre largo ("Saque", "Armado"), que no sirve para comparar.
-        for _i, _a in enumerate(actions):
-            if _a.get('skill') != 'E':
-                _limpias.append(_a)
+        # ══ EL EJERCICIO ES UN BLOQUE, NO UN ARMADO SUELTO ══════════════════
+        #  El .dvw trae el entrenamiento ENTERO, con todos sus ejercicios. El
+        #  de High Set se reconoce solo: es una tirada larga de armados de
+        #  pelota alta uno atras del otro, sin ninguna otra accion en el medio.
+        #  Nadie saca, nadie ataca: arman y arman.
+        #
+        #  Medido en los ocho archivos de la carpeta, el patron es siempre el
+        #  mismo —una tirada larga y despues armados sueltos del juego normal:
+        #
+        #      03/09    255 seguidos                 y nada mas
+        #      08/09    219 seguidos   +  7 sueltos
+        #      09/09    202 seguidos   +  7 sueltos
+        #      24/09     95 · 45 · 10  +  7 sueltos
+        #
+        #  Antes se descartaba "el armado que termina en ataque". Servia, pero
+        #  desparejo: en el 23/09 sacaba 15 de 204 teniendo 152 ataques, asi
+        #  que se colaban armados del juego contados como del ejercicio.
+        #
+        #  Ahora se queda con las TIRADAS de MIN_BLOQUE o mas. Un armado suelto
+        #  entre un saque y un ataque no es el ejercicio, por buena que sea la
+        #  valoracion: son los 251 "+" que inflaban el reparto.
+        MIN_BLOQUE = 8
+        _limpias, _tirada = [], []
+
+        def _cerrar(t):
+            if len(t) >= MIN_BLOQUE:
+                _limpias.extend(t)
+
+        for _a in actions:
+            _esEH = (_a.get('skill') == 'E' and _a.get('ty') == 'H')
+            if _esEH:
+                _tirada.append(_a)
                 continue
-            # solo los armados de pelota alta: el tipo es H
-            if _a.get('ty') != 'H':
-                continue
-            # ¿este armado termino en ataque?
-            #
-            # Se mira hacia adelante hasta que empiece otra jugada, y se CORTA
-            # en cuanto aparece OTRO ARMADO: a partir de ahi el ataque ya no es
-            # de este, es del siguiente.
-            #
-            # Antes se miraban tres acciones sin frenar en el armado siguiente,
-            # y se descartaban de mas. Un caso real del 03/09:
-            #
-            #     *03EH=     <- este armado
-            #     *05EH-     *04EH-     *20AH/
-            #
-            # El ataque llega TRES armados despues y no tiene nada que ver con
-            # el primero, pero quedaba descartado igual. Eran 12 armados mal
-            # sacados de la tabla.
-            _hay_atk = False
-            for _j in range(_i + 1, len(actions)):
-                _sk = actions[_j].get('skill')
-                if _sk in ('S', 'E'):             # otra jugada, u otro armado
-                    break
-                if _sk == 'A':                    # este armado SI termino en ataque
-                    _hay_atk = True
-                    break
-            if not _hay_atk:
-                _limpias.append(_a)
+            _cerrar(_tirada); _tirada = []
+            # lo que no es armado de pelota alta no entra en High Set
+        _cerrar(_tirada)
         actions = _limpias
 
     if not actions: return None  # partido sin acciones con segundo -> se ignora
@@ -542,7 +544,7 @@ if __name__=='__main__':
     # que no terminan en ataque.
     HIGH_SET_MODO = ('high_set' in (out or '').lower()) or ('HIGH_SET' in (glob_name or ''))
     if HIGH_SET_MODO:
-        print('  [high set] solo cuento los armados que NO terminan en ataque')
+        print('  [high set] solo el bloque del ejercicio: tiradas de 8 o mas armados seguidos')
     ent=('ent' in sys.argv[4:]) if len(sys.argv)>4 else False
     # prefijo de salida: "datos_video.js" -> "datos_video" ; "datos_video_ent.js" -> "datos_video_ent"
     prefix=re.sub(r'\.js$','',out)
