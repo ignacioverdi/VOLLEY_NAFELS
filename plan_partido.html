@@ -185,12 +185,12 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260925-2354">
+<link rel="stylesheet" href="movil.css?v=20260925-2357">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="categorias_club.js?v=20260925-2354"></script>
-<script src="selector_categoria.js?v=20260925-2354"></script>
-<script src="mi_fila.js?v=20260925-2354" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260925-2357"></script>
+<script src="selector_categoria.js?v=20260925-2357"></script>
+<script src="mi_fila.js?v=20260925-2357" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -320,8 +320,8 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260925-2354"></script>
-<script src="filtro_tipo.js?v=20260925-2354" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260925-2357"></script>
+<script src="filtro_tipo.js?v=20260925-2357" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
   <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
        se cargaba SOLO el de partidos, asi que en una temporada sin partidos
@@ -336,12 +336,12 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20260925-2354"></script>
-<script src="firebase_por_categoria.js?v=20260925-2354"></script>
+<script src="firebase.js?v=20260925-2357"></script>
+<script src="firebase_por_categoria.js?v=20260925-2357"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20260925-2354" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20260925-2357" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -644,7 +644,7 @@ function armPuestoDe(num){
   }
   return '';
 }
-function armSoloArmadores(T, esMiClub){
+function armSoloArmadores(T){
   if(!T || !T.setters || !T.setters.length) return T;
 
   /* ══ EL PLANTEL ES SOLO DEL CLUB ══════════════════════════════════════════
@@ -658,18 +658,27 @@ function armSoloArmadores(T, esMiClub){
 
      Para el rival manda lo que detecto el motor, que es la unica fuente que
      hay de el. El plantel se usa solo para el propio club. */
-  if(esMiClub === false) return T;
-
   var solo = T.setters.filter(function(s){ return armPuestoDe(s.num) === 'ARMADOR'; });
+
+  /* ══ SI EL PLANTEL NO RECONOCE A NADIE, NO FILTRA ════════════════════════
+     El plantel cargado es el del club. Para un RIVAL ningun numero coincide
+     —su #1 no es nuestro #1— y antes eso dejaba la seccion vacia: Colombier,
+     Jona, Rottenburg y Freiburg no mostraban distribucion, con 216 armados
+     detectados y guardados.
+
+     El intento anterior fue preguntar "es mi club?" comparando con una
+     variable de club, pero en esta pantalla viene vacia y daba que SI para
+     todos. Asi que no se pregunta mas.
+
+     La regla ahora no necesita saber de quien es el plantel: si NINGUNO de
+     los armadores detectados figura en el, el plantel no habla de este equipo
+     y vale lo que leyo el motor de los .dvw. */
+  if(!solo.length) return T;
   /* Si el club TIENE el plantel cargado, manda el plantel: sin armadores, la
      seccion queda vacia y esta bien, porque ese dia no armo ningun armador.
      El respaldo es solo para un club que todavia no cargo los puestos: ahi se
      deja lo que detecto el motor, para no mostrar una pantalla vacia sin
      explicacion. */
-  var hayPlantel = !!((window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores &&
-                       window.EQUIPO_DATA.jugadores.length) ||
-                      Object.keys(window.PLANTEL_FIX||{}).length);
-  if(!solo.length) return hayPlantel ? null : T;
   var C = {}; for(var k in T) C[k] = T[k];
   C.setters = solo;
   return C;
@@ -706,19 +715,10 @@ function armFuente(slug){
   var hayP=!!(P&&P.setters&&P.setters.length);
   var hayE=!!(E&&E.setters&&E.setters.length);
 
-  /* Es nuestro club o un rival: el plantel cargado es el nuestro, asi que
-     solo sirve para filtrar nuestros armadores. */
-  var _mio = true;
-  try{
-    var _c = String(window.CLUB_SLUG || window.TEAM || '').toLowerCase();
-    var _s = String(slug || '').toLowerCase();
-    if(_c && _s) _mio = (_c === _s) || (_s.indexOf(_c) >= 0) || (_c.indexOf(_s) >= 0);
-  }catch(e){}
-
   var t=(typeof ppTipoActual==='function')?ppTipoActual():'todos';
-  if(t==='P') return hayP?armSoloArmadores(P,_mio):null;
-  if(t==='E') return hayE?armSoloArmadores(E,_mio):null;
-  return hayP?armSoloArmadores(P,_mio):(hayE?armSoloArmadores(E,_mio):null);
+  if(t==='P') return hayP?armSoloArmadores(P):null;
+  if(t==='E') return hayE?armSoloArmadores(E):null;
+  return hayP?armSoloArmadores(P):(hayE?armSoloArmadores(E):null);
 }
 function renderArmador(){
   var sec=document.getElementById("armsec");
@@ -1368,8 +1368,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20260925-2354" onerror="void 0"></script>
-<script src="lang.js?v=20260925-2354" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20260925-2357" onerror="void 0"></script>
+<script src="lang.js?v=20260925-2357" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -1387,7 +1387,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20260925-2354" onerror="void 0"></script>
-<script src="ayuda.js?v=20260925-2354"></script>
+<script src="volver_inicio.js?v=20260925-2357" onerror="void 0"></script>
+<script src="ayuda.js?v=20260925-2357"></script>
 </body>
 </html>
