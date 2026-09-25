@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="HIGH SET · NAFELS VOLEY">HIGH SET · NAFELS VOLEY</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="movil.css?v=20260925-0842">
-<script src="categorias_club.js?v=20260925-0842"></script>
-<script src="selector_categoria.js?v=20260925-0842"></script>
+<link rel="stylesheet" href="movil.css?v=20260925-2337">
+<script src="categorias_club.js?v=20260925-2337"></script>
+<script src="selector_categoria.js?v=20260925-2337"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260925-0842"></script>
-<script src="filtro_tipo.js?v=20260925-0842" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260925-2337"></script>
+<script src="filtro_tipo.js?v=20260925-2337" onerror="void 0"></script>
 <!-- HIGH SET tiene su PROPIA carpeta de .dvw y su propio archivo de datos.
      No lee los entrenamientos comunes ni los partidos de liga, a proposito:
      ahi el armado lo escribe el panel automaticamente con la valoracion por
@@ -26,8 +26,8 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Solo para las fotos del podio. Si no esta, el podio muestra el dorsal. -->
 <script src="datos_equipo.js.enc?v=1" onerror="window.EQUIPO_DATA=null"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20260925-0842" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260925-0842"></script>
+<script src="firebase.js?v=20260925-2337" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260925-2337"></script>
 <style>
   :root{--bg:#0b1017;--bg2:#0f172a;--card:#111a27;--card2:#16212f;--line:#1f2c3d;
         --txt:#e2e8f0;--muted:#7689a1;--muted2:#475569;--naf:#22c55e;--amber:#f59e0b;
@@ -119,7 +119,17 @@ window.__DESCIFRAR_SINCRONO = true;
   code{background:rgba(255,255,255,.06);padding:1px 5px;border-radius:4px;font-size:11px}
   @media(max-width:640px){ .podio{height:190px;gap:6px} .podio-base{width:82px} .p1{width:92px} }
 /* ── las sesiones, para tildar varias ─────────────────────────────────────── */
-.ses-caja{display:flex;flex-wrap:wrap;gap:5px;max-width:560px}
+.ses-wrap{position:relative;display:inline-block}
+.ses-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;
+         border:1px solid rgba(148,163,184,.28);background:rgba(148,163,184,.05);
+         color:inherit;font:inherit;font-size:13px;cursor:pointer;min-width:150px;
+         justify-content:space-between}
+.ses-btn i{font-style:normal;color:#94a3b8;font-size:11px}
+.ses-caja{display:none;position:absolute;z-index:60;top:calc(100% + 4px);left:0;
+          background:#0f172a;border:1px solid rgba(148,163,184,.3);border-radius:10px;
+          padding:8px;box-shadow:0 10px 30px rgba(0,0,0,.5);
+          max-height:280px;overflow:auto;min-width:190px}
+.ses-caja.abierta{display:flex;flex-direction:column;gap:3px}
 .ses-it{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:7px;
         border:1px solid rgba(148,163,184,.28);font-size:12px;cursor:pointer;
         background:rgba(148,163,184,.05);white-space:nowrap}
@@ -164,7 +174,15 @@ window.__DESCIFRAR_SINCRONO = true;
            entrenamientos habia que ir y volver anotando en un papel.
            Ahora se tildan las que se quieran; sin ninguna tildada, vale el
            acumulado de todas. -->
-      <div id="f-ses-caja" class="ses-caja"></div>
+      <!-- Desplegable: con un entrenamiento por dia, en un mes son treinta
+           casillas a la vista. Cerrado ocupa una linea y dice cuantas hay
+           elegidas; se abre solo cuando hace falta. -->
+      <div class="ses-wrap">
+        <button type="button" id="ses-btn" class="ses-btn" onclick="sesAbrir()">
+          <span id="ses-txt">Todas</span> <i>▾</i>
+        </button>
+        <div id="f-ses-caja" class="ses-caja"></div>
+      </div>
       <select id="f-ses" style="display:none"></select>
     </div>
     <div class="campo">
@@ -330,14 +348,45 @@ function sesTodas(on){
   document.querySelectorAll('.ses-ck').forEach(function(x){ x.checked = false; });
   var t = document.getElementById('ses-todas');
   if(t) t.checked = true;
+  sesTexto();
   pintar();
 }
 function sesCambio(){
   var hay = document.querySelectorAll('.ses-ck:checked').length;
   var t = document.getElementById('ses-todas');
   if(t) t.checked = !hay;
+  sesTexto();
   pintar();
 }
+
+/* lo que dice el boton cuando esta cerrado */
+function sesTexto(){
+  var el = document.getElementById('ses-txt');
+  if(!el) return;
+  var ck = [].slice.call(document.querySelectorAll('.ses-ck:checked'));
+  if(!ck.length){ el.textContent = 'Todas'; return; }
+  if(ck.length === 1){
+    var lab = ck[0].parentElement.querySelector('span');
+    el.textContent = lab ? lab.textContent : '1 sesión';
+    return;
+  }
+  el.textContent = ck.length + ' sesiones';
+}
+
+function sesAbrir(){
+  var c = document.getElementById('f-ses-caja');
+  if(!c) return;
+  c.classList.toggle('abierta');
+}
+
+/* al tocar afuera se cierra */
+document.addEventListener('click', function(e){
+  var w = e.target.closest ? e.target.closest('.ses-wrap') : null;
+  if(!w){
+    var c = document.getElementById('f-ses-caja');
+    if(c) c.classList.remove('abierta');
+  }
+});
 
 function pintar(){
   var A     = armados();
@@ -453,6 +502,6 @@ window.addEventListener('load', function(){
   pintar();
 });
 </script>
-<script src="lang.js?v=20260925-0842" onerror="void 0"></script>
+<script src="lang.js?v=20260925-2337" onerror="void 0"></script>
 </body>
 </html>
