@@ -54,6 +54,11 @@ placas/musica/*
 /.gitignore.txt
 /.gitattributes.txt
 
+# Donde el escritorio de Claude deja los archivos que te manda. Son
+# copias de cosas que ya están en el repo: no van dos veces.
+Claude outputs/
+claude outputs/
+
 # Basura del sistema
 *.pyo
 Thumbs.db
