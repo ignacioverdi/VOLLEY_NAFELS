@@ -1,3 +1,17 @@
+# ─────────────────────────────────────────────────────────────────────
+#  VOLLEY_NAFELS · qué NO sube a GitHub
+#
+#  Regla: si se puede volver a generar con un clic, o si es un secreto,
+#  no va al repo. Git guarda TODAS las versiones para siempre: lo que
+#  subís hoy y borrás mañana sigue ahí el resto de la vida.
+# ─────────────────────────────────────────────────────────────────────
+
+
+# ══ LO QUE YA TENÍAS. NO TOCAR ═══════════════════════════════════════
+
+# NUNCA subir la llave de los datos
+LLAVE.txt
+
 # Archivos temporales que NO se suben
 __pycache__/
 *.pyc
@@ -5,17 +19,43 @@ diagnostico.txt
 _gen_nafels.b64
 *.log
 
-# NUNCA subir la llave de los datos
-LLAVE.txt
 # copias de respaldo que dejan los scripts
 *.antes
-
+*.antes-suelta
+*.antes-*
 _ROTO-*/
 _ANTES-*/
-
-# copias de trabajo, no van al repositorio
-*.antes-suelta
 _RESPALDO-VIEJO*/
 
-# copias de trabajo, no van al repositorio
-*.antes-*
+
+# ══ LO NUEVO ═════════════════════════════════════════════════════════
+
+# Todo lo que genera HACER_PLACAS.bat: placas, historias, recortes,
+# videos de redes y textos. Se rehace en una corrida, y son 150 MB por
+# fecha que el repo se guardaría para siempre.
+placas/salida/
+
+# Los partidos que baja clips.py para cortar (300-600 MB cada uno).
+# Ya se borran solos, pero por las dudas.
+placas/_videos_temporales/
+_videos_temporales/
+
+# La música tiene licencia: no se distribuye adentro de un repo.
+placas/musica/*
+!placas/musica/LEEME.txt
+
+# Copias de seguridad de las bases
+*.bak
+*.json.bak
+
+# Sobras de esta instalación: si te olvidás de borrarlas, que al menos
+# no suban
+/gitignore
+/.gitignore.txt
+/.gitattributes.txt
+
+# Basura del sistema
+*.pyo
+Thumbs.db
+desktop.ini
+.DS_Store
