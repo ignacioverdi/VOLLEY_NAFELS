@@ -33,7 +33,8 @@ import os,re,sys,json,glob,unicodedata
 #
 # 7 -> 8 : cada ataque lleva la valoracion de su recepcion (#, +, !, -)
 # 8 -> 9: cambia la regla del High Set, hay que rehacer el archivo
-DATA_VERSION = 9
+# 9 -> 10: High Set acepta armados sin segundo de video
+DATA_VERSION = 10
 
 
 def _turno(nombre_archivo):
@@ -304,8 +305,25 @@ def parse_dvw(path, ent=False, modo_high_set=False):
             if not m: continue
             num,sk=m.group(1),m.group(2)
             if num not in pmap: continue
-            try: t=int(c[12])
-            except: continue
+            # ══ EL SEGUNDO DE VIDEO ══════════════════════════════════════
+            # Este programa arma cortes, asi que una accion sin segundo no
+            # sirve de nada y se descarta. Bien.
+            #
+            # Pero en HIGH SET la pantalla solo CUENTA armados: no reproduce
+            # nada. Y el ejercicio se tipea muchas veces sin video puesto.
+            #
+            # Paso de verdad: el 24/09 el scout cargo 156 armados sin video
+            # sincronizado; el .dvw los tenia bien, el generador los tiraba a
+            # todos y la tabla mostraba 150 en vez de 306. Lo mismo el 21 y el
+            # 23. Eran 728 armados que no aparecian en ningun lado.
+            #
+            # En High Set entran igual, con el segundo en cero.
+            try:
+                t = int(c[12])
+            except Exception:
+                if not (modo_high_set or HIGH_SET_MODO):
+                    continue
+                t = 0
             ev=code0[5] if len(code0)>5 else ''
             # 'ty' = el caracter que va entre el fundamento y la valoracion.
             # En *11ET#K1F~3C~~~-1  el fundamento es E, el tipo T y la
