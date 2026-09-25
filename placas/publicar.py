@@ -25,7 +25,7 @@ siguiente placa. Sin decidir nada.
 """
 import argparse, io, pathlib, shutil, sys, contextlib
 
-import clips, fechas, historial, idioma, liga, limpiar, publicacion, redes, rotacion, seis_placas, placas2, verificar
+import clips, club, fechas, historial, idioma, liga, limpiar, partido, publicacion, redes, rotacion, seis_placas, placas2, verificar
 
 # El orden de publicación. La conclusión fuerte (side-out) va al final, que
 # es donde queda la gente que llegó hasta ahí.
@@ -272,6 +272,49 @@ def main():
     except Exception as e:
         print()
         print('[+] Historial: no se pudo guardar (%s)' % str(e)[:60])
+
+    # ── 3b · una placa por partido ────────────────────────────────────────
+    # Van aparte, en su carpeta: no son del carrusel de la fecha. Cada una
+    # cuenta UN partido, con el fotograma de ese partido de fondo, para que
+    # la pueda compartir el club que lo jugó. Sin video salen igual, con el
+    # degradé de los dos escudos.
+    print()
+    print('[3b] Placas de partido')
+    try:
+        ctx_p = {'escudos': club.escudos(a.repo), 'liga': seis_placas.LIGA}
+        pp = partido.placas_de(a.repo, archivos, rotulo,
+                               (piezas[0].get('fuente') if piezas else ''),
+                               ctx_p, video_dir=destino / 'video')
+    except Exception as e:
+        pp = []
+        print('   no pude armarlas: %s' % e)
+    if pp:
+        carpeta_p = destino / 'partidos'
+        limpiar.limpiar(destino, 'partidos')
+        carpeta_p.mkdir(parents=True, exist_ok=True)
+        # sin numerar: acá el orden no importa, cada placa es de un club
+        for x in pp:
+            x['nro'] = x['total'] = 0
+        hechos_p = placas2.generar(pp, carpeta_p)
+        con_foto = sum(1 for x in pp if x['partido'].get('fondo'))
+        for h in hechos_p:
+            viejo = carpeta_p / h
+            nuevo_n = carpeta_p / h.split('-', 1)[1]
+            if viejo.exists():
+                viejo.replace(nuevo_n)
+            print('   partidos/' + h.split('-', 1)[1])
+        print('   %d placa%s (%d con fotograma del partido)'
+              % (len(pp), '' if len(pp) == 1 else 's', con_foto))
+        # y en 9:16, que es como las comparte un club en historias
+        if not a.sin_historias:
+            hp = carpeta_p / 'historias'
+            for h in placas2.generar(pp, hp, alto=1920):
+                viejo_h = hp / h
+                if viejo_h.exists():
+                    viejo_h.replace(hp / h.split('-', 1)[1])
+            print('   %d en vertical 9:16 (partidos/historias)' % len(pp))
+    else:
+        print('   sin partidos para placa')
 
     # ── 4 · los textos ────────────────────────────────────────────────────
     print()

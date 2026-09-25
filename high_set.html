@@ -118,6 +118,14 @@ window.__DESCIFRAR_SINCRONO = true;
         background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.35);color:#f6c667}
   code{background:rgba(255,255,255,.06);padding:1px 5px;border-radius:4px;font-size:11px}
   @media(max-width:640px){ .podio{height:190px;gap:6px} .podio-base{width:82px} .p1{width:92px} }
+/* ── las sesiones, para tildar varias ─────────────────────────────────────── */
+.ses-caja{display:flex;flex-wrap:wrap;gap:5px;max-width:560px}
+.ses-it{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:7px;
+        border:1px solid rgba(148,163,184,.28);font-size:12px;cursor:pointer;
+        background:rgba(148,163,184,.05);white-space:nowrap}
+.ses-it:has(input:checked){border-color:#f59e0b;background:rgba(245,158,11,.14);color:#f59e0b}
+.ses-it input{accent-color:#f59e0b;margin:0;cursor:pointer}
+.ses-todas{font-weight:700}
 </style>
 </head>
 <body>
@@ -151,7 +159,13 @@ window.__DESCIFRAR_SINCRONO = true;
     </div>
     <div class="campo">
       <label data-t="hs_sesion">Sesión</label>
-      <select id="f-ses" onchange="pintar()"></select>
+      <!-- ══ VARIAS SESIONES A LA VEZ ═══════════════════════════════════════
+           Antes era de una sola: o el acumulado, o un dia. Para comparar dos
+           entrenamientos habia que ir y volver anotando en un papel.
+           Ahora se tildan las que se quieran; sin ninguna tildada, vale el
+           acumulado de todas. -->
+      <div id="f-ses-caja" class="ses-caja"></div>
+      <select id="f-ses" style="display:none"></select>
     </div>
     <div class="campo">
       <label data-t="hs_minimo">Mínimo de armados</label>
@@ -249,6 +263,20 @@ function llenarFiltros(A){
     ordT.map(function(x){ return '<option value="'+esc(x)+'">'+esc(x)+'</option>'; }).join('');
   if(ordT.length) t.value = ordT[0];
 
+  /* las casillas, una por sesion */
+  var caja = document.getElementById('f-ses-caja');
+  if(caja){
+    var ordC = Object.keys(ses).sort(function(a,b){
+      return String(ses[b]).localeCompare(String(ses[a]));
+    });
+    caja.innerHTML = '<label class="ses-it ses-todas"><input type="checkbox" id="ses-todas" checked '
+      + 'onchange="sesTodas(this.checked)"> <span data-t="hs_acumulado">Todas</span></label>'
+      + ordC.map(function(c){
+          return '<label class="ses-it"><input type="checkbox" class="ses-ck" value="' + esc(c) + '" '
+               + 'onchange="sesCambio()"> <span>' + (fCorta(ses[c]) || esc(c)) + '</span></label>';
+        }).join('');
+  }
+
   var s = document.getElementById('f-ses');
   var ordS = Object.keys(ses).sort(function(a,b){
     return String(ses[b]).localeCompare(String(ses[a]));
@@ -297,13 +325,31 @@ function pintarPodio(lista){
   });
 }
 
+/* "Todas" destilda el resto; tildar una destilda "Todas" */
+function sesTodas(on){
+  document.querySelectorAll('.ses-ck').forEach(function(x){ x.checked = false; });
+  var t = document.getElementById('ses-todas');
+  if(t) t.checked = true;
+  pintar();
+}
+function sesCambio(){
+  var hay = document.querySelectorAll('.ses-ck:checked').length;
+  var t = document.getElementById('ses-todas');
+  if(t) t.checked = !hay;
+  pintar();
+}
+
 function pintar(){
   var A     = armados();
   var temp  = document.getElementById('f-temp').value;
   var ses   = document.getElementById('f-ses').value;
   var minim = parseInt(document.getElementById('f-min').value, 10) || 1;
   if(temp) A = A.filter(function(a){ return a.temp === temp; });
-  if(ses)  A = A.filter(function(a){ return a.cod  === ses;  });
+  /* las sesiones tildadas; ninguna tildada = todas */
+  var elegidas = [].slice.call(document.querySelectorAll('.ses-ck:checked'))
+                   .map(function(x){ return x.value; });
+  if(elegidas.length) A = A.filter(function(a){ return elegidas.indexOf(a.cod) >= 0; });
+  else if(ses)        A = A.filter(function(a){ return a.cod === ses; });
 
   var out = document.getElementById('salida');
 

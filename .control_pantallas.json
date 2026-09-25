@@ -765,7 +765,7 @@
   "tablas": {}
  },
  "high_set.html": {
-  "bytes": 20151,
+  "bytes": 22491,
   "funciones": [
    "armados",
    "baremoDe",
@@ -778,6 +778,8 @@
    "pintar",
    "pintarBaremo",
    "pintarPodio",
+   "sesCambio",
+   "sesTodas",
    "traducir"
   ],
   "tablas": {}

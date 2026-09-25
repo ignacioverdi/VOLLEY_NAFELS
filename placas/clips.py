@@ -535,6 +535,19 @@ def main():
         print('   %-22s %s' % (pk['nombre'] + '.mp4',
                                ('%d acci%s%s' % (n, 'ón' if n == 1 else 'ones', nota))
                                if out else 'no se pudo cortar'))
+    # Un fotograma de cada partido, para la placa de ese partido. Va ACÁ, con
+    # los videos todavía en la máquina: dos líneas abajo se borran y bajarlos
+    # de nuevo son cuarenta minutos.
+    try:
+        import partido
+        nf = partido.sacar_fondos(videos, packs, destino)
+        if nf:
+            print()
+            print('   %d fotograma%s para las placas de partido'
+                  % (nf, '' if nf == 1 else 's'))
+    except Exception as e:
+        print('   (no pude sacar los fotogramas: %s)' % e)
+
     # y se borran los partidos bajados: ya están los cortes, el original no
     # hace falta y son cientos de megas cada uno
     if bajados and not a.guardar_video:

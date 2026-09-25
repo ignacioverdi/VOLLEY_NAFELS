@@ -39,7 +39,8 @@ _T = {
 'deslizar': 'DESLIZÁ &rsaquo;',
 'armador_en': 'ARMADOR EN %s',
 'balon': 'balón', 'balones': 'balones',
-'figura': 'FIGURA', 'pts': 'PTS',
+'sets_cab': 'EQUIPO', 'sets_tot': 'SETS',
+       'figura': 'FIGURA', 'pts': 'PTS',
 'desglose': '%d atk · %d blq · %d ace',
 'nota_seis': ('Por zona de salida del ataque: balones distribuidos arriba, y '
               'abajo % de distribución · % de punto. Cancha en vista del '
@@ -164,7 +165,8 @@ _T = {
 'deslizar': 'SWIPE &rsaquo;',
 'armador_en': 'SETTER IN %s',
 'balon': 'ball', 'balones': 'balls',
-'figura': 'TOP SCORER', 'pts': 'PTS',
+'sets_cab': 'TEAM', 'sets_tot': 'SETS',
+       'figura': 'TOP SCORER', 'pts': 'PTS',
 'desglose': '%d att · %d blk · %d ace',
 'nota_seis': ('By attack start zone: balls distributed on top, distribution % '
               'and kill % below. Court seen from the opponent, the way it is '
@@ -335,7 +337,8 @@ _CORTES = {
 'es': {'k1': 'EN K1', 'k2': 'EN TRANSICIÓN', 'potencia': 'DE POTENCIA',
        'flotado': 'FLOTADO', 'vs_potencia': 'VS POTENCIA',
        'vs_flotado': 'VS FLOTADO', 'eficiencia': 'EFICIENCIA',
-       'eficacia': 'EFICACIA', 'ace_error': 'ACE / ERROR', 'pct_ace': '% ACE',
+       'eficacia': 'EFICACIA', 'd_atk': 'ATAQUE', 'd_blk': 'BLOQUEO', 'd_ace': 'ACE',
+       'ace_error': 'ACE / ERROR', 'pct_ace': '% ACE',
        'pct_punto': '% PUNTO', 'err_blq': 'ERR + BLQ', 'jugable': '% JUGABLE',
        'perfecta': '% PERFECTA', 'levantadas': 'LEVANTADAS',
        'util': '% ÚTIL', 'total': 'TOTAL', 'punto': '# PUNTO',
@@ -345,6 +348,7 @@ _CORTES = {
 'en': {'k1': 'IN SIDE-OUT', 'k2': 'IN TRANSITION', 'potencia': 'JUMP SERVE',
        'flotado': 'FLOAT SERVE', 'vs_potencia': 'VS JUMP', 'vs_flotado': 'VS FLOAT',
        'eficiencia': 'EFFICIENCY', 'eficacia': 'EFFICIENCY',
+       'd_atk': 'ATTACK', 'd_blk': 'BLOCK', 'd_ace': 'ACE',
        'ace_error': 'ACE / ERROR', 'pct_ace': 'ACE %', 'pct_punto': 'KILL %',
        'err_blq': 'ERR + BLK', 'jugable': 'PLAYABLE %',
        'perfecta': 'PERFECT %', 'levantadas': 'DIGS',

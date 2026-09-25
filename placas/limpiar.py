@@ -39,7 +39,8 @@ GRUPOS = {
     'placas': ['*.png', 'historias/*.png', 'historias/*.html', '*.html'],
     'textos': ['textos.txt', 'PUBLICAR.txt', 'REVISION.txt'],
     'redes':  ['redes/youtube/*', 'redes/tiktok/*'],
-    'videos': ['video/*.mp4', 'video/acciones/*'],
+    'videos': ['video/*.mp4', 'video/acciones/*', 'video/fondos/*'],
+    'partidos': ['partidos/*.png', 'partidos/*.html'],
 }
 
 

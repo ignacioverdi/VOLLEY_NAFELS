@@ -500,10 +500,138 @@ def _marca_grande():
         return ''
 
 
+def partido(p):
+    """Un partido, a sangre, con un cuadro del propio partido de fondo.
+
+    La de resultados cuenta la fecha entera: sirve para el que sigue la liga.
+    Esta cuenta UN partido, y por eso la puede compartir el club que lo jugó.
+    Son dos trabajos distintos y por eso son dos placas.
+
+    Está armada como las arman los clubes: el cartel de FINAL arriba, los
+    colores de los dos escudos como banda, el marcador grande, el set a set
+    en tabla y el goleador como bloque propio con su dorsal y sus números.
+    El fondo es un fotograma del partido; sin video, el degradé de los dos
+    clubes y la placa sale igual."""
+    x = p['partido']
+    cl, cv = x.get('color_l') or '#64748B', x.get('color_v') or '#64748B'
+    gana_l = x['sl'] > x['sv']
+
+    if x.get('fondo'):
+        fondo = ('<div class="ptf" style="background-image:url(%s)"></div>'
+                 '<div class="ptv"></div>' % x['fondo'])
+    else:
+        fondo = ('<div class="ptg" style="background:'
+                 'radial-gradient(880px 700px at 10% 20%,{cl}55,transparent 60%),'
+                 'radial-gradient(880px 700px at 90% 80%,{cv}55,transparent 60%),'
+                 'linear-gradient(160deg,#0D0E1A,#07080F)"></div>'
+                 .format(cl=cl, cv=cv))
+    fondo += ('<div class="ptbn"><i style="background:%s"></i>'
+              '<i style="background:%s"></i></div>' % (cl, cv))
+
+    def escudo(es, nom, color):
+        dentro = ('<img src="%s" alt="">' % es) if es else (
+            '<u>%s</u>' % esc(''.join(w[0] for w in str(nom).split()[:2]).upper() or '?'))
+        return '<span class="pthl" style="--c:%s">%s</span>' % (color, dentro)
+
+    # el set a set como tabla: una columna por set, una fila por equipo
+    n = len(x['parciales'])
+    cab = ''.join('<th>%d</th>' % (i + 1) for i in range(n))
+    def fila(lado, nom, color, sets, gana):
+        tds = ''.join('<td class="%s">%d</td>'
+                      % ('pt' if (a > b) == (lado == 'l') else '',
+                         a if lado == 'l' else b)
+                      for a, b in x['parciales'])
+        return ('<tr class="%s"><td class="eq" style="--c:%s">%s</td>%s'
+                '<td class="pt">%d</td></tr>'
+                % ('gan' if gana else '', color, esc(nom), tds, sets))
+    tabla_sets = ('<table class="ptt"><thead><tr><th class="eq">%s</th>%s'
+                  '<th>%s</th></tr></thead><tbody>%s%s</tbody></table>'
+                  % (idioma.t('sets_cab'), cab, idioma.t('sets_tot'),
+                     fila('l', x['corto_l'], cl, x['sl'], gana_l),
+                     fila('v', x['corto_v'], cv, x['sv'], not gana_l)))
+
+    # los puntos totales: el dato que no trae ningún gráfico de resultados
+    pt = x.get('puntos') or (0, 0)
+    puntos = ''
+    if pt[0] or pt[1]:
+        tot = float(pt[0] + pt[1]) or 1.0
+        puntos = ('<div class="ptpt"><div class="cab"><b>%d</b>&nbsp;%s'
+                  '<span class="der">%s&nbsp;<b>%d</b></span></div>'
+                  '<div class="br"><i style="width:%.1f%%;background:%s"></i>'
+                  '<i style="width:%.1f%%;background:%s"></i></div></div>'
+                  % (pt[0], esc(x['corto_l']), esc(x['corto_v']), pt[1],
+                     100.0 * pt[0] / tot, cl, 100.0 * pt[1] / tot, cv))
+
+    f = x.get('figura')
+    fig = ''
+    if f:
+        color_f = cl if (f.get('club') or f.get('equipo')) == x['corto_l'] else cv
+        dor = str(f.get('dorsal') or '').lstrip('0')
+        fig = ('<div class="ptfig" style="--c:%s"><span class="ptl">%s</span>'
+               '<div class="ptfr">%s<div class="nm"><b>%s</b><em>%s</em></div>'
+               '<div class="big"><u>%d</u><span>%s</span></div></div>'
+               '<div class="ptst"><div><u>%d</u><span>%s</span></div>'
+               '<div><u>%d</u><span>%s</span></div>'
+               '<div><u>%d</u><span>%s</span></div></div></div>'
+               % (color_f, idioma.t('figura'),
+                  ('<span class="ptdor">%s</span>' % esc(dor)) if dor else '',
+                  esc(f.get('corto') or f['nombre']),
+                  esc(f.get('club') or f['equipo']),
+                  f['pts'], idioma.t('pts'),
+                  f['atk'], idioma.c('d_atk'),
+                  f['blq'], idioma.c('d_blk'),
+                  f['ace'], idioma.c('d_ace')))
+
+    # ── las piezas, iguales para los tres estilos ─────────────────────────
+    cabecera = ('<div class="pte"><span class="ptfin" style="background:%s">%s</span>'
+                '%s<u></u>%s</div>'
+                % (cl if gana_l else cv, idioma.v('final'),
+                   esc(p.get('liga', '')), esc(p.get('fecha', ''))))
+    marcador_ = ('<div class="ptm">'
+                 '<div class="ptc%s">%s<b>%s</b></div>'
+                 '<div class="ptr"><span class="%s">%d</span><s>-</s>'
+                 '<span class="%s">%d</span></div>'
+                 '<div class="ptc%s">%s<b>%s</b></div></div>'
+                 % ('' if gana_l else ' perd',
+                    escudo(x.get('esc_l'), x['corto_l'], cl), esc(x['corto_l']),
+                    '' if gana_l else 'pierde', x['sl'],
+                    'pierde' if gana_l else '', x['sv'],
+                    ' perd' if gana_l else '',
+                    escudo(x.get('esc_v'), x['corto_v'], cv), esc(x['corto_v'])))
+    pie = ('<div class="ptpie"><span class="mrc">%s<span><b>VOLLEY&#183;STATS</b>'
+           '<br>%s</span></span><span class="dr">%s:<br>%s</span></div>'
+           % (_marca(), TXT['firma'], TXT['fuente'], esc(p.get('fuente', ''))))
+    datos = '%s%s<div class="ptx">%s%s</div>' % (tabla_sets, puntos, fig, pie)
+
+    estilo = p.get('estilo') or 'estadio'
+    img = x.get('fondo')
+
+    if estilo == 'panel' and img:
+        # la foto como panel con marco, y el marcador encima de la foto: se
+        # ve la jugada, que es lo que le falta a la version a sangre
+        return ('<div class="ptw panel">%s'
+                '<div class="ptpan"><div class="im" style="background-image:url(%s)">'
+                '</div><div class="vl"></div>%s</div>%s</div>'
+                % (cabecera, img, marcador_, datos))
+
+    if estilo == 'split' and img:
+        # la foto a lo alto de un lado. Es el armado de las plantillas de
+        # club: la imagen respira entera y los datos no la pisan
+        return ('<div class="ptw split">'
+                '<div class="izq"><div class="im" style="background-image:url(%s)">'
+                '</div><div class="vl"></div></div>'
+                '<div class="der">%s%s%s</div></div>'
+                % (img, cabecera, marcador_, datos))
+
+    # estadio (y el respaldo cuando no hay foto)
+    return ('%s<div class="ptw">%s%s%s</div>'
+            % (fondo, cabecera, marcador_, datos))
+
+
 VIZ = {'ficha': ficha, 'apertura': apertura, 'cierre': cierre_placa, 'mapa': mapa, 'seis': seis, 'tabla': tabla,
        'resultados': resultados,
        'portada': portada,
-       'siete': siete, 'rotaciones': rotaciones}
+       'siete': siete, 'rotaciones': rotaciones, 'partido': partido}
 
 CSS = """
 *{margin:0;padding:0;box-sizing:border-box}
@@ -866,6 +994,207 @@ h1{font-size:58px;line-height:1.02;font-weight:700;letter-spacing:-.028em;
 .tb .jg b{display:block;font-size:23px;font-weight:600;line-height:1.15}
 .tb .jgt span{font-family:'PlacaMono',monospace;font-size:13px;color:%(MUTED)s;
   letter-spacing:.08em;text-transform:uppercase}
+
+/* ══ LA PLACA DE UN PARTIDO ════════════════════════════════════════════════
+   A sangre, con el fotograma del propio partido. Lo que la hace parecer de
+   club y no de planilla, mirando como las hacen los clubes de verdad:
+     · el cartel FINAL, que ubica de que se trata antes de leer nada
+     · los colores de los dos clubes como banda, que es lo que ancla la
+       identidad cuando la foto es gris
+     · el set a set como TABLA, una columna por set: se lee de corrido
+     · el goleador como bloque con su dorsal y sus tres numeros, no como
+       una linea al pie
+   En 9:16 hay 570 px mas de alto: se los queda el bloque del jugador, que
+   es la parte que se comparte. */
+body.pt{padding:0;display:block;position:relative;overflow:hidden}
+.ptf{position:absolute;inset:0;background-size:cover;background-position:center;
+  filter:saturate(.9) contrast(1.06)}
+.ptv{position:absolute;inset:0;background:
+  linear-gradient(180deg,rgba(7,8,15,.88) 0%%,rgba(7,8,15,.42) 26%%,
+                  rgba(7,8,15,.78) 58%%,rgba(7,8,15,.985) 88%%)}
+.ptg{position:absolute;inset:0}
+/* la banda de los dos clubes: el recurso de toda grafica deportiva */
+.ptbn{position:absolute;left:0;right:0;top:0;height:9px;display:flex}
+.ptbn i{flex:1;display:block}
+.ptw{position:relative;height:100%%;display:flex;flex-direction:column;
+  padding:74px 60px 50px}
+
+.pte{display:flex;align-items:center;gap:16px;font-family:'PlacaMono',monospace;
+  font-size:16px;letter-spacing:.2em;text-transform:uppercase;color:%(SUBTLE)s}
+.ptfin{font-weight:700;letter-spacing:.24em;color:#fff;background:%(C)s;
+  padding:7px 15px;border-radius:8px;font-size:15px;flex:none}
+.pte u{flex:1;height:1px;background:%(BD2)s;text-decoration:none}
+
+.ptm{margin-top:auto;display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;gap:18px}
+.ptc{display:flex;flex-direction:column;align-items:center;gap:18px;min-width:0}
+.pthl{width:210px;height:210px;border-radius:50%%;display:grid;place-items:center;
+  background:rgba(7,8,15,.55);border:3px solid var(--c);
+  box-shadow:0 0 0 10px rgba(7,8,15,.35),0 16px 40px rgba(0,0,0,.6)}
+.pthl img{width:150px;height:150px;object-fit:contain;display:block}
+.pthl u{text-decoration:none;font-size:80px;font-weight:700;color:#fff}
+.ptc b{font-size:42px;font-weight:700;letter-spacing:-.025em;text-align:center;
+  line-height:1.04;text-shadow:0 3px 16px rgba(0,0,0,.85)}
+.ptc.perd{opacity:.55}
+.ptr{display:flex;align-items:center;gap:16px;font-weight:700;
+  font-size:150px;line-height:1;letter-spacing:-.055em;
+  font-variant-numeric:tabular-nums;text-shadow:0 6px 26px rgba(0,0,0,.9)}
+.ptr s{text-decoration:none;color:%(SUBTLE)s;font-size:70px;font-weight:500}
+.ptr .pierde{color:rgba(226,232,240,.45)}
+
+/* el set a set, como tabla: una columna por set */
+.ptt{width:100%%;border-collapse:collapse;margin-top:40px;
+  background:rgba(7,8,15,.62);border:1px solid %(BD2)s;border-radius:16px;
+  overflow:hidden;backdrop-filter:blur(7px)}
+.ptt th{font-family:'PlacaMono',monospace;font-size:13px;letter-spacing:.16em;
+  color:%(SUBTLE)s;font-weight:500;padding:12px 0 8px;text-transform:uppercase}
+.ptt th.eq{text-align:left;padding-left:22px}
+.ptt td{font-family:'PlacaMono',monospace;font-size:30px;font-weight:600;
+  font-variant-numeric:tabular-nums;text-align:center;padding:11px 0;
+  color:rgba(226,232,240,.5)}
+.ptt td.eq{text-align:left;padding-left:22px;font-family:'Placa',sans-serif;
+  font-size:25px;font-weight:600;letter-spacing:-.01em;color:%(TEXT)s;
+  border-left:5px solid var(--c)}
+.ptt tr.gan td{color:%(TEXT)s}
+.ptt tr.gan td.pt{color:#fff}
+.ptt tbody tr+tr td{border-top:1px solid %(BD)s}
+
+/* los puntos totales del partido: el dato que llena el medio y que ningun
+   grafico de resultados trae. Un set 25-23 y otro 25-12 dan el mismo 1-0 y
+   partidos completamente distintos; esto lo dice de un vistazo. */
+.ptpt{margin-top:26px;background:rgba(7,8,15,.62);border:1px solid %(BD2)s;
+  border-radius:16px;padding:18px 22px;backdrop-filter:blur(7px)}
+.ptpt .cab{display:flex;align-items:baseline;font-family:'PlacaMono',monospace;
+  font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:%(SUBTLE)s}
+.ptpt .cab b{color:%(TEXT)s;font-family:'Placa',sans-serif;font-size:26px;
+  font-weight:700;letter-spacing:-.01em}
+.ptpt .cab .der{margin-left:auto}
+.ptpt .br{display:flex;height:14px;border-radius:7px;overflow:hidden;margin-top:12px;
+  background:rgba(255,255,255,.06)}
+.ptpt .br i{display:block;height:100%%}
+body.pt.alta .ptpt{margin-top:34px;padding:22px 26px}
+body.pt.alta .ptpt .cab b{font-size:30px}
+
+/* el jugador del partido: bloque, con dorsal y sus tres numeros */
+.ptx{margin-top:auto;padding-top:34px}
+.ptfig{border-radius:20px;background:rgba(7,8,15,.74);border:1px solid %(BD2)s;
+  backdrop-filter:blur(9px);overflow:hidden}
+.ptfig .ptl{display:block;font-family:'PlacaMono',monospace;font-size:13px;
+  letter-spacing:.2em;text-transform:uppercase;color:#fff;background:var(--c);
+  padding:9px 22px}
+.ptfr{display:flex;align-items:center;gap:20px;padding:22px}
+.ptdor{font-family:'PlacaMono',monospace;font-size:38px;font-weight:700;
+  color:#fff;background:var(--c);width:74px;height:74px;border-radius:16px;
+  display:grid;place-items:center;flex:none;font-variant-numeric:tabular-nums}
+.ptfr .nm{min-width:0}
+.ptfr .nm b{display:block;font-size:38px;font-weight:700;letter-spacing:-.025em;
+  line-height:1.1}
+.ptfr .nm em{font-style:normal;font-family:'PlacaMono',monospace;font-size:15px;
+  color:%(MUTED)s;letter-spacing:.12em;text-transform:uppercase}
+.ptfr .big{margin-left:auto;text-align:right;flex:none}
+.ptfr .big u{text-decoration:none;font-size:58px;font-weight:700;line-height:1;
+  font-variant-numeric:tabular-nums}
+.ptfr .big span{display:block;font-family:'PlacaMono',monospace;font-size:13px;
+  letter-spacing:.2em;color:%(MUTED)s;margin-top:4px}
+.ptst{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid %(BD)s}
+.ptst div{padding:15px 0;text-align:center;border-left:1px solid %(BD)s}
+.ptst div:first-child{border-left:none}
+.ptst u{text-decoration:none;display:block;font-size:30px;font-weight:700;
+  font-variant-numeric:tabular-nums}
+.ptst span{font-family:'PlacaMono',monospace;font-size:12px;letter-spacing:.2em;
+  color:%(MUTED)s;text-transform:uppercase}
+
+/* 9:16 · el alto de mas va al bloque del jugador, que es lo que se comparte */
+body.pt.alta .ptw{padding:120px 60px 90px}
+body.pt.alta .pthl{width:250px;height:250px}
+body.pt.alta .pthl img{width:180px;height:180px}
+body.pt.alta .ptr{font-size:176px}
+body.pt.alta .ptc b{font-size:48px}
+body.pt.alta .ptt td{font-size:34px;padding:14px 0}
+body.pt.alta .ptfr{padding:28px}
+body.pt.alta .ptfr .nm b{font-size:44px}
+body.pt.alta .ptfr .big u{font-size:70px}
+body.pt.alta .ptst div{padding:20px 0}
+body.pt.alta .ptst u{font-size:36px}
+
+/* ══ TRES ESTILOS PARA LA MISMA PLACA ══════════════════════════════════════
+   Cambian donde vive la foto, que es lo unico que de verdad cambia como se
+   ve. Se elige en partido.ESTILO.
+
+     estadio  la foto a sangre detras de todo (la primera que hicimos)
+     panel    la foto como panel con marco arriba, y los datos debajo
+     split    la foto a lo alto de un lado, los datos del otro           */
+
+/* ── PANEL ─────────────────────────────────────────────────────────────── */
+.ptw.panel{padding:56px 52px 46px}
+.ptw.panel .ptpan{border-radius:20px;overflow:hidden;position:relative;
+  margin-top:22px;height:430px;flex:none;border:1px solid %(BD2)s}
+body.pt.alta .ptw.panel .ptpan{height:700px}
+.ptw.panel .ptpan .im{position:absolute;inset:0;background-size:cover;
+  background-position:center}
+.ptw.panel .ptpan .vl{position:absolute;inset:0;background:
+  linear-gradient(180deg,rgba(7,8,15,.22) 0%%,rgba(7,8,15,.05) 42%%,
+                  rgba(7,8,15,.92) 100%%)}
+/* el marcador vive DENTRO del panel, sobre la foto, abajo */
+.ptw.panel .ptm{position:absolute;left:0;right:0;bottom:26px;margin:0;
+  padding:0 28px;gap:12px}
+.ptw.panel .pthl{width:132px;height:132px;border-width:3px}
+.ptw.panel .pthl img{width:92px;height:92px}
+.ptw.panel .pthl u{font-size:52px}
+.ptw.panel .ptc{gap:11px}
+.ptw.panel .ptc b{font-size:31px}
+.ptw.panel .ptr{font-size:104px}
+.ptw.panel .ptr s{font-size:48px}
+body.pt.alta .ptw.panel .pthl{width:160px;height:160px}
+body.pt.alta .ptw.panel .pthl img{width:112px;height:112px}
+body.pt.alta .ptw.panel .ptr{font-size:126px}
+body.pt.alta .ptw.panel .ptc b{font-size:36px}
+.ptw.panel .ptt{margin-top:20px}
+.ptw.panel .ptx{padding-top:20px}
+
+/* ── SPLIT ─────────────────────────────────────────────────────────────── */
+.ptw.split{padding:0;display:grid;grid-template-columns:44%% 56%%;
+  grid-template-rows:100%%;height:100%%;align-items:stretch}
+.ptw.split .izq{position:relative;overflow:hidden;height:100%%;min-height:0}
+.ptw.split .izq .im{position:absolute;inset:0;background-size:cover;
+  background-position:center}
+.ptw.split .izq .vl{position:absolute;inset:0;background:
+  linear-gradient(90deg,rgba(7,8,15,.30),rgba(7,8,15,.05) 55%%,rgba(7,8,15,.55))}
+.ptw.split .der{padding:56px 46px 44px;display:flex;flex-direction:column;
+  background:linear-gradient(180deg,#0B0D18,#07080F);min-width:0}
+.ptw.split .pte{flex-wrap:wrap;gap:10px;font-size:13px}
+.ptw.split .pte u{flex-basis:100%%;height:0;background:none;margin:0}
+.ptw.split .ptm{grid-template-columns:1fr;gap:14px;text-align:center;margin-top:34px}
+.ptw.split .ptc{flex-direction:row;gap:14px;justify-content:center}
+.ptw.split .pthl{width:88px;height:88px;border-width:3px}
+.ptw.split .pthl img{width:60px;height:60px}
+.ptw.split .pthl u{font-size:34px}
+.ptw.split .ptc b{font-size:31px;text-align:left}
+.ptw.split .ptr{justify-content:center;font-size:110px}
+.ptw.split .ptr s{font-size:46px}
+.ptw.split .ptt,.ptw.split .ptpt,.ptw.split .ptfig{flex:none}
+.ptw.split .ptt td{font-size:24px}
+.ptw.split .ptt td.eq{font-size:20px}
+.ptw.split .ptfr{padding:18px}
+.ptw.split .ptfr .nm b{font-size:30px}
+.ptw.split .ptfr .big u{font-size:46px}
+.ptw.split .ptdor{width:60px;height:60px;font-size:30px}
+.ptw.split .ptst u{font-size:25px}
+body.pt.alta .ptw.split .der{padding:90px 46px 70px}
+body.pt.alta .ptw.split .ptr{font-size:132px}
+body.pt.alta .ptw.split .pthl{width:104px;height:104px}
+body.pt.alta .ptw.split .pthl img{width:72px;height:72px}
+
+.ptpie{display:flex;align-items:flex-end;gap:18px;margin-top:26px;
+  padding-top:18px;border-top:1px solid %(BD2)s}
+.ptpie .mrc{display:flex;align-items:center;gap:13px;
+  font-family:'PlacaMono',monospace;font-size:15px;letter-spacing:.1em;
+  color:%(MUTED)s}
+.ptpie .mrc b{color:%(TEXT)s;font-weight:700;letter-spacing:.2em;font-size:20px}
+.ptpie .mrs{width:40px;height:40px;flex:none;display:block}
+.ptpie .mrs svg{width:100%%;height:100%%;display:block}
+.ptpie .dr{margin-left:auto;font-family:'PlacaMono',monospace;font-size:13px;
+  color:%(SUBTLE)s;text-align:right;line-height:1.5}
 """
 
 TXT = {'firma': idioma.t('firma'), 'fuente': idioma.t('fuente')}
@@ -905,6 +1234,12 @@ def render(p, alto=1350):
     # estás ni cuánto falta
     pg = ('<div class="pg"><b>%02d</b> / %02d</div>'
           % (p['nro'], p['total'])) if p.get('nro') and p.get('total') else ''
+    if p.get('tipo') == 'partido':
+        # a sangre: el fotograma tiene que llegar a los cuatro bordes
+        return ('<!doctype html><html lang="es"><meta charset="utf-8">'
+                '<style>%s\n%s</style><body class="pt%s">%s%s</body></html>'
+                % (_fuentes(), css, ' alta' if alto > 1400 else '', pg,
+                   VIZ['partido'](p)))
     if p.get('tipo') in ('apertura', 'cierre'):
         return ('<!doctype html><html lang="es"><meta charset="utf-8">'
                 '<style>%s\n%s</style><body class="solo">%s%s</body></html>'
