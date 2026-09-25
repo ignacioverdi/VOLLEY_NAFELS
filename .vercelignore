@@ -82,3 +82,6 @@ entrenamientos_nafels_db.json
 # Las copias de seguridad que van dejando los scripts
 *.bak
 *.json.bak
+
+# La llave de la demo publica (la crea HACER_DEMO.py)
+LLAVE_DEMO.txt

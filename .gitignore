@@ -64,3 +64,6 @@ claude outputs/
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# La llave de la demo publica (la crea HACER_DEMO.py)
+LLAVE_DEMO.txt
