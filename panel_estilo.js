@@ -207,6 +207,22 @@
       '  font-size:11.5px;line-height:1.5;color:#6B7488}',
 
 
+      /* ── EL INTERRUPTOR DE EQUIPO ─────────────────────────────────── */
+      '.pe-lados{display:flex;gap:4px;margin:0 0 9px}',
+      '.pe-lb{flex:1 1 0;min-width:0;padding:4px 6px;border-radius:7px;cursor:pointer;',
+      '  background:transparent;border:1px solid var(--b,rgba(255,255,255,.1));',
+      '  color:var(--mut,#7b87a3);font-size:9.5px;font-weight:800;letter-spacing:.8px;',
+      '  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:inherit}',
+      '.pe-lb:hover{border-color:rgba(255,255,255,.28)}',
+      /* el elegido lleva el color de su equipo: el mismo de la cancha */
+      '.pe-lb.on:first-child{background:rgba(206,124,24,.16);border-color:#CE7C18;color:#E8A045}',
+      '.pe-lb.on:last-child{background:rgba(11,132,196,.16);border-color:#0B84C4;color:#4FB3E8}',
+      '#pe-cierran h3{display:flex;align-items:baseline;gap:7px}',
+      '.pe-cq{font-style:normal;font-size:9px;font-weight:800;letter-spacing:1px;',
+      '  margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:105px}',
+      '.pe-cq-h{color:#CE7C18}',
+      '.pe-cq-a{color:#0B84C4}',
+
       /* ── LA CANCHA UNICA ──────────────────────────────────────────────
          El de arriba gira 180 grados para quedar enfrentado; cada
          casillero gira otros 180 para que el numero se lea bien. El HTML
@@ -278,9 +294,11 @@
       '.pe-v-ok{background:#3d8ede;color:#05121f}',
       '.pe-v-flojo{background:#a87a20;color:#170f02}',
       '.pe-v-mal{background:#d42a70;color:#fff0f6}',
+      /* --dim en esta pagina es casi negro (42,42,58) y el codigo no se
+         leia. Con --mut se lee sin competir con el nombre del fundamento. */
       '.pe-ucod{margin-left:auto;font-family:ui-monospace,Consolas,monospace;font-size:11px;',
-      '  color:var(--dim,#5b6480);white-space:nowrap}',
-      '.pe-unota{margin-top:7px;font-size:10px;color:var(--dim,#5b6480);line-height:1.5}',
+      '  color:var(--mut,#7b87a3);opacity:.85;white-space:nowrap}',
+      '.pe-unota{margin-top:7px;font-size:10px;color:var(--mut,#7b87a3);opacity:.8;line-height:1.5}',
       '@media(max-width:820px){.pe-ucod,.pe-unom{display:none}}',
       /* en telefono la barra se parte en dos filas y el marcador manda */
       '@media(max-width:820px){',
@@ -419,13 +437,32 @@
     return null;
   }
 
+  /* ── DE QUE EQUIPO SON ESTOS NUMEROS ─────────────────────────────────
+     El cuadro miraba siempre al local. Pero la mitad de lo que un entrenador
+     quiere saber en vivo es del rival: si ELLOS estan haciendo side-out, si
+     el que cierra los puntos es siempre el mismo. Ahora se cambia con un
+     boton y los dos cuadros —"como venimos" y "quien esta cerrando"— siguen
+     al mismo.
+
+     Arranca en el local, y si la ventana de analisis ya tenia elegido un
+     lado, arranca con ese. De ahi en mas manda el boton. */
+  var PE_LADO = null;
+  function ladoPulso() {
+    if (PE_LADO) return PE_LADO;
+    try { if (window.AV && AV.lado) return (PE_LADO = AV.lado); } catch (e) {}
+    return (PE_LADO = 'home');
+  }
+  window.peLado = function (l) {
+    PE_LADO = (l === 'away') ? 'away' : 'home';
+    try { pintarPulso(); } catch (e) {}
+  };
+
   function calcular() {
     var rs;
     try { rs = anRallies(); } catch (e) { return null; }
     if (!rs || !rs.length) return null;
 
-    var lado = 'home';
-    try { if (window.AV && AV.lado) lado = AV.lado; } catch (e) {}
+    var lado = ladoPulso();
 
     var soTot = 0, soGan = 0, bpTot = 0, bpGan = 0, atk = 0, pts = 0, err = 0;
     var porJug = {};
@@ -471,12 +508,34 @@
     return '';
   }
 
+  /* Solo el apellido: "BARTHOLET CHRISTIAN" no entra en la columna y salia
+     cortado a la mitad. En la cancha a nadie se lo llama por el nombre. */
+  function apellido(q) {
+    q = String(q || '').trim();
+    if (!q) return '';
+    var p = q.split(/\s+/);
+    return (p.length > 1 && p[0].length >= 3) ? p[0] : q;
+  }
+
+  /* Los botones llevan el NOMBRE del equipo, no "local" y "visitante": en
+     el banco uno piensa en Freiburg, no en "el visitante". */
+  function interruptorLado() {
+    var t = L(), l = ladoPulso();
+    return '<div class="pe-lados">' +
+      ['home', 'away'].map(function (k) {
+        var nom = nombreEq(k, k === 'home' ? t.nosotros : t.ellos);
+        return '<button type="button" class="pe-lb' + (l === k ? ' on' : '') +
+               '" onclick="peLado(\'' + k + '\')" title="' + esc(nom) + '">' +
+               esc(nom) + '</button>';
+      }).join('') + '</div>';
+  }
+
   function pintarPulso() {
     var pane = document.getElementById('pe-pulso');
     if (!pane) return;
     var t = L(), d = calcular();
     if (!d) {
-      pane.innerHTML = '<h3 data-notr>' + esc(t.venimos) + '</h3>' +
+      pane.innerHTML = '<h3 data-notr>' + esc(t.venimos) + '</h3>' + interruptorLado() +
                        '<div style="font-size:12.5px;color:#6B7488;padding:6px 2px">' + esc(t.nada) + '</div>';
       return;
     }
@@ -486,7 +545,7 @@
              '<b class="pe-fdet">' + esc(det) + '</b></span></div>' +
              '<div class="pe-bar"><i style="width:' + ancho + '%;background:' + col + '"></i></div></div>';
     }
-    var h = '<h3 data-notr>' + esc(t.venimos) + '</h3>';
+    var h = '<h3 data-notr>' + esc(t.venimos) + '</h3>' + interruptorLado();
     h += fila(t.so, d.so.pct + '%', d.so.n + ' ' + t.de + ' ' + d.so.t,
               d.so.pct >= 60 ? '#0E9F6E' : d.so.pct >= 45 ? '#CE7C18' : '#DC2A5A', Math.min(100, d.so.pct));
     h += fila(t.bp, d.bp.pct + '%', d.bp.n + ' ' + t.de + ' ' + d.bp.t,
@@ -496,17 +555,19 @@
               Math.min(100, Math.max(0, d.ef.pct) * 2));
     pane.innerHTML = h;
 
-    var lado = 'home';
-    try { if (window.AV && AV.lado) lado = AV.lado; } catch (e) {}
+    var lado = ladoPulso();
     var pj = document.getElementById('pe-cierran');
     if (!pj) return;
-    if (!d.jug.length) { pj.innerHTML = '<h3 data-notr>' + esc(t.cierran) + '</h3>'; return; }
+    var quien = '<h3 data-notr>' + esc(t.cierran) +
+                '<i class="pe-cq pe-cq-' + (lado === 'home' ? 'h' : 'a') + '">' +
+                esc(nombreEq(lado, lado === 'home' ? t.nosotros : t.ellos)) + '</i></h3>';
+    if (!d.jug.length) { pj.innerHTML = quien; return; }
     var max = Math.max.apply(null, d.jug.map(function (j) { return j.a + j.e; })) || 1;
-    var c = '<h3 data-notr>' + esc(t.cierran) + '</h3>';
+    var c = quien;
     d.jug.forEach(function (j) {
       var sal = (j.saldo > 0 ? '+' : '') + j.saldo;
       c += '<div class="pe-cj"><span class="pe-cnum">' + esc(j.num) + '</span>' +
-           '<span class="pe-cnom">' + esc(nombreDeJug(j.num, lado)) + '</span>' +
+           '<span class="pe-cnom">' + esc(apellido(nombreDeJug(j.num, lado))) + '</span>' +
            '<span class="pe-cbar">' +
              '<i style="width:' + (j.a / max * 100).toFixed(1) + '%;background:#0E9F6E;border-radius:3px 0 0 3px"></i>' +
              '<i style="width:' + (j.e / max * 100).toFixed(1) + '%;background:#DC2A5A;border-radius:0 3px 3px 0"></i>' +
@@ -566,17 +627,7 @@
       '<div class="pe-eq pe-eq-h"><b></b></div>';
     pH.parentNode.insertBefore(caja, pH);
 
-    /* los nombres de los equipos, los de verdad si estan cargados */
-    function nombreEq(cual, porDefecto) {
-      try {
-        var o = (typeof M !== 'undefined' && M) ? M[cual] : null;
-        var v = o && (o.nombre || o.name || o.n);
-        if (v && String(v).trim()) return String(v).trim();
-      } catch (e) {}
-      return porDefecto;
-    }
-    caja.querySelector('.pe-eq-a b').textContent = nombreEq('away', t.ellos);
-    caja.querySelector('.pe-eq-h b').textContent = nombreEq('home', t.nosotros);
+    pintarNombresEq();
 
     /* las canchas, movidas tal cual */
     caja.querySelector('.pe-arriba').appendChild(ra);
@@ -592,6 +643,29 @@
     });
     pH.style.display = 'none';
     pA.style.display = 'none';
+  }
+
+  /* El nombre de cada equipo. Va aparte y se llama en cada vuelta porque
+     cuando la pagina abre todavia no hay partido: si se escribiera una sola
+     vez, los dos lados quedarian con el nombre del club para siempre, y al
+     traer otro partido tampoco cambiarian. */
+  function nombreEq(cual, porDefecto) {
+    try {
+      var o = (typeof M !== 'undefined' && M) ? M[cual] : null;
+      var v = o && (o.nombre || o.name || o.n);
+      if (v && String(v).trim()) return String(v).trim();
+    } catch (e) {}
+    return porDefecto;
+  }
+  function pintarNombresEq() {
+    var caja = document.getElementById('pe-cancha');
+    if (!caja) return;
+    var t = L();
+    [['.pe-eq-a b', 'away', t.ellos], ['.pe-eq-h b', 'home', t.nosotros]].forEach(function (x) {
+      var e = caja.querySelector(x[0]); if (!e) return;
+      var v = nombreEq(x[1], x[2]);
+      if (e.textContent !== v) e.textContent = v;
+    });
   }
 
   /* ══ 6 · LA BARRA DE "ACCIONES DEL SET" ══════════════════════════════
@@ -745,7 +819,8 @@
     try { redes(); }         catch (e) { try { console.error('[red]', e); } catch (_) {} }
     try { panelesPulso(); pintarPulso(); }
     catch (e) { try { console.error('[pulso]', e); } catch (_) {} }
-    try { unaCancha(); }     catch (e) { try { console.error('[cancha]', e); } catch (_) {} }
+    try { unaCancha(); pintarNombresEq(); }
+    catch (e) { try { console.error('[cancha]', e); } catch (_) {} }
     try { barraAcciones(); } catch (e) { try { console.error('[acciones]', e); } catch (_) {} }
     try { panelUltimo(); pintarUltimo(); }
     catch (e) { try { console.error('[ultimo]', e); } catch (_) {} }
@@ -753,7 +828,7 @@
     /* se repinta con lo que vas cargando. Medio segundo alcanza: no es un
        videojuego y no vale la pena hacer trabajar al navegador de más. */
     setInterval(function () {
-      try { redes(); pintarPulso(); pintarUltimo(); } catch (e) {}
+      try { redes(); pintarPulso(); pintarUltimo(); pintarNombresEq(); } catch (e) {}
     }, 700);
   }
 

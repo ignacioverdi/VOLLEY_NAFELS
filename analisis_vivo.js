@@ -87,6 +87,8 @@
           nadaQueBajar:'En esta solapa no hay tablas para bajar.',
           notaCancha:'Elegí uno o más jugadores y quedan sólo los puntos en los que estaban los seis en cancha a la vez. «Armador rival en» deja sólo los puntos con el armador de ellos en esa posición.',
           efArm:'Armado', ordenar:'Ordenar por', oFund:'Fundamento', oJug:'Jugador', oRot:'Rotación',
+          conRec:'Con recepción', recTodas:'Todas', fase2:'Fase', todoF:'Todo',
+          notaRec:'Tildá con qué recepciones querés ver el reparto. Se pueden tildar varias: «perfecta o buena» son dos. Sin tildar nada entran todas, también las pelotas de transición, que no vienen de una recepción.',
           sinE:'En este fundamento no hay armado antes.',
           notaTot:'Abajo el total del equipo. «Error rival» son los puntos que ganamos sin hacer nada: su error de saque, de ataque, de bloqueo o de defensa.',
           notaBP:'BP y SO son el saldo de puntos —ganados menos perdidos— en transition y en side out. Dicen si un jugador suma cuando sacamos, cuando recibimos, o en las dos.',
@@ -185,6 +187,8 @@
           nadaQueBajar:'In diesem Tab gibt es keine Tabellen.',
           notaCancha:'Spieler wählen: es bleiben nur Punkte, in denen sie gleichzeitig auf dem Feld waren.',
           efArm:'Zuspiel', ordenar:'Sortieren nach', oFund:'Element', oJug:'Spieler', oRot:'Rotation',
+          conRec:'Mit Annahme', recTodas:'Alle', fase2:'Phase', todoF:'Alles',
+          notaRec:'Wähle aus, mit welchen Annahmen du die Verteilung sehen willst. Mehrere sind möglich: «perfekt oder gut» sind zwei. Ohne Auswahl zählen alle, auch Transition-Bälle, die aus keiner Annahme kommen.',
           sinE:'Bei diesem Element gibt es kein Zuspiel davor.',
           notaTot:'Unten die Teamsumme. «Gegnerfehler» sind Punkte ohne eigene Aktion.',
           notaBP:'BP und SO sind der Punktesaldo in Transition und im Side Out.',
@@ -283,6 +287,8 @@
           nadaQueBajar:'No tables to download in this tab.',
           notaCancha:'Pick players: only rallies where they were all on court at once are kept.',
           efArm:'Set', ordenar:'Order by', oFund:'Skill', oJug:'Player', oRot:'Rotation',
+          conRec:'With reception', recTodas:'All', fase2:'Phase', todoF:'All',
+          notaRec:'Tick which receptions you want the distribution for. Several can be ticked: «perfect or good» is two. With none ticked all balls count, including transition balls, which come from no reception.',
           sinE:'This skill has no set before it.',
           notaTot:'Team totals at the bottom. «Opp. error» are points won without an action of ours.',
           notaBP:'BP and SO are the point balance in transition and in side out.',
@@ -365,6 +371,11 @@
     reglas: [],               /* el motor de reglas (manual 9.5, Code filter) */
     regY: true,               /* true = todas (Y) · false = alguna (O)       */
     earm: '',                 /* efecto del armado que precede (VolleyStation) */
+    /* Como vino la RECEPCION que dio origen a esta pelota. Guarda varias
+       valoraciones juntas ('#+' = perfecta o buena), porque lo que un
+       entrenador quiere ver no es "con recepcion #" sino "con recepcion
+       buena", que son dos o tres valoraciones. Vacio = todas. */
+    erec: '',
     enc: [],                  /* jugadores que tienen que estar en cancha    */
     rotR: '',                 /* rotacion del armador RIVAL                  */
     orden: 'fund',            /* como se agrupa la tabla: fund · jug · rot   */
@@ -604,6 +615,26 @@
             if (y.sk === 'E') { arm = y; break; }
           }
           if (!arm || arm.ev !== AV.earm) return;
+        }
+        /* ── SEGUN COMO VINO LA RECEPCION ──────────────────────────────
+           La pregunta de todo entrenador sobre el armador: con recepcion
+           perfecta, ¿a donde la manda? ¿y cuando la recepcion lo obliga?
+           Son dos armadores distintos y el promedio de los dos no es
+           ninguno de los dos.
+
+           Se busca hacia atras la recepcion del mismo equipo dentro del
+           mismo punto. Si no hay ninguna, esta pelota no viene de una
+           recepcion —es transicion— y queda afuera, que es justamente lo
+           que se pidio al elegir una valoracion de recepcion. */
+        if (AV.erec) {
+          var lst3 = r.acciones || [], idx3 = lst3.indexOf(a), rec = null;
+          for (var w = idx3 - 1; w >= 0; w--) {
+            var z2 = lst3[w];
+            if (!z2) continue;
+            if (z2.lado !== a.lado) break;
+            if (z2.sk === 'R') { rec = z2; break; }
+          }
+          if (!rec || AV.erec.indexOf(rec.ev) < 0) return;
         }
         if (AV.fila && a.zi) {
           var del = ('432'.indexOf(String(a.zi)) >= 0);
@@ -1134,7 +1165,8 @@
      y se avisa, en vez de fallar en silencio. */
   var LLAVE_G = 'av_guardados';
   var CAMPOS = ['lado','jug','fund','tipo','ev','rot','set','fase','zi','zf',
-                'sres','fila','d1','d2','marc','pt1','reglas','regY','earm','orden','enc','rotR'];
+                'sres','fila','d1','d2','marc','pt1','reglas','regY','earm','erec',
+                'orden','enc','rotR'];
 
   function leerGuardados() {
     try { if (typeof load === 'function') return load(LLAVE_G, []) || []; } catch (e) {}
@@ -1715,7 +1747,7 @@
      que son del partido entero. */
   AV.hayAvanzado = function () {
     return !!(AV.sres || AV.fila || AV.d1 !== '' || AV.d2 !== '' || AV.marc || AV.pt1 ||
-              AV.earm || AV.rotR || (AV.enc && AV.enc.length) ||
+              AV.earm || AV.erec || AV.rotR || (AV.enc && AV.enc.length) ||
               (AV.reglas && AV.reglas.length));
   };
 
@@ -1826,6 +1858,7 @@
                               cerca:t.mCerca, lejos:t.mLejos, final:t.mFinal}[AV.marc] || '');
     if (AV.pt1)  partes.push(t.primeraT);
     if (AV.earm) partes.push(t.efArm + ' ' + AV.earm);
+    if (AV.erec) partes.push(t.conRec + ' ' + AV.erec.split('').join(' '));
     if (AV.rotR) partes.push(t.rotRival + ' P' + AV.rotR);
     if (AV.enc && AV.enc.length) partes.push(t.enCancha + ' ' + AV.enc.join('+'));
     if (AV.reglas && AV.reglas.length)
@@ -1849,6 +1882,14 @@
            '</div>' + signo + nota;
   };
 
+  /* Tildar y destildar una valoracion de recepcion. Se acumulan: si el
+     entrenador quiere ver "recepcion perfecta o buena" tilda las dos. */
+  AV.togRec = function (e) {
+    var cur = AV.erec || '';
+    AV.erec = (cur.indexOf(e) >= 0) ? cur.split(e).join('') : (cur + e);
+    AV.pintar();
+  };
+
   AV.set_ = function (k, v) {
     AV[k] = v;
     /* al cambiar de equipo, el jugador elegido ya no existe de ese lado */
@@ -1866,7 +1907,7 @@
     AV.jug = ''; AV.fund = ''; AV.rot = ''; AV.set = ''; AV.fase = '';
     AV.tipo = ''; AV.ev = ''; AV.zi = ''; AV.zf = '';
     AV.sres = ''; AV.fila = ''; AV.d1 = ''; AV.d2 = ''; AV.marc = ''; AV.pt1 = false;
-    AV.reglas = []; AV.regY = true; AV.earm = ''; AV.enc = []; AV.rotR = '';
+    AV.reglas = []; AV.regY = true; AV.earm = ''; AV.erec = ''; AV.enc = []; AV.rotR = '';
     AV._abriendo = false;
     AV.pintar();
   };
@@ -2440,6 +2481,39 @@
     return h + '</div></div>';
   }
 
+  function ctrlArm() {
+    var t = L();
+  /* ── LOS DOS CONTROLES DE ESTA PANTALLA ───────────────────────────────
+     Estan aca y no solo en la barra de arriba porque son LA pregunta de
+     esta pantalla: el reparto del armador no se mira "en general", se
+     mira con recepcion perfecta, o en transicion, o en la rotacion 5.
+     Tenerlos a mano evita subir a la barra y bajar de nuevo.
+
+     Son los mismos AV.fase y AV.erec de siempre: lo que se tilde aca
+     queda tildado arriba, y al reves. No hay dos verdades. */
+  var recs = [['#', '#'], ['+', '+'], ['!', '!'], ['-', '−'], ['/', '/']];
+  var ctrl =
+    '<div class="av-armctrl">' +
+      '<div class="av-armg"><span>' + esc(t.fase2) + '</span>' +
+        /* 'bp' es como se llama la transicion adentro: el punto en el que
+           sacamos nosotros. El rotulo que ve el usuario es TRANSITION. */
+        [['', t.todoF], ['so', t.recib], ['bp', t.sacan]].map(function (x) {
+          return '<button class="av-plb' + (AV.fase === x[0] ? ' on' : '') +
+                 '" onclick="AV.set_(\'fase\',\'' + x[0] + '\')">' + esc(x[1]) + '</button>';
+        }).join('') +
+      '</div>' +
+      '<div class="av-armg"><span>' + esc(t.conRec) + '</span>' +
+        '<button class="av-plb' + (AV.erec ? '' : ' on') +
+          '" onclick="AV.set_(\'erec\',\'\')">' + esc(t.recTodas) + '</button>' +
+        recs.map(function (x) {
+          return '<button class="av-plb av-rec' + (AV.erec.indexOf(x[0]) >= 0 ? ' on' : '') +
+                 '" onclick="AV.togRec(\'' + x[0] + '\')">' + esc(x[1]) + '</button>';
+        }).join('') +
+      '</div>' +
+    '</div>';
+    return ctrl;
+  }
+
   AV.armador = function (rs) {
     var t = L(), l = AV.lado;
 
@@ -2449,7 +2523,10 @@
     AV.fund = gF;
 
     if (!todo.length) {
+      /* Con los controles puestos: si un filtro dejo la pantalla vacia, hay
+         que poder soltarlo sin salir de aca. */
       return '<div class="an-s av-arm" data-notr><h4>' + esc(t.distArm) + '</h4>' +
+             ctrlArm() +
              '<div class="av-vacio">' + esc(t.sinArm) + '</div></div>';
     }
 
@@ -2473,7 +2550,7 @@
       return sub;
     };
 
-    var h = '<div class="an-s av-arm" data-notr><h4>' + esc(t.distArm) + '</h4>' +
+    var h = '<div class="an-s av-arm" data-notr><h4>' + esc(t.distArm) + '</h4>' + ctrlArm() +
             '<div class="av-armwrap">';
 
     h += '<div class="av-armtot">' + canchaArm(todo, t.todasRot, todo.length) + '</div>';
@@ -2486,7 +2563,8 @@
     });
     h += '</div></div>';
 
-    return h + '<div class="av-nota">' + esc(t.notaArm) + '</div></div>';
+    return h + '<div class="av-nota">' + esc(t.notaArm) + ' ' + esc(t.notaRec) +
+           '</div></div>';
   };
 
   /* ── LOS GRAFICOS (manual 9.5.11, "Chart Analysis") ──────────────────────
@@ -3464,6 +3542,15 @@
     +   'clip-path:polygon(0 40%,100% 0,100% 100%,0 60%)}'
     + '.av-lc{width:26px;height:11px;flex:none;border-radius:3px;'
     +   'background:linear-gradient(90deg,rgba(56,189,248,.06),rgba(56,189,248,.4))}'
+    /* ── LOS CONTROLES DE LA PANTALLA DEL ARMADOR ──────────────────── */
+    + '.av-armctrl{display:flex;flex-wrap:wrap;gap:8px 26px;margin:0 0 13px;'
+    +   'padding-bottom:11px;border-bottom:1px solid var(--b)}'
+    + '.av-armg{display:flex;flex-wrap:wrap;gap:4px;align-items:center}'
+    + '.av-armg>span{font-size:10px;letter-spacing:.8px;text-transform:uppercase;'
+    +   'color:var(--mut);font-weight:700;margin-right:5px}'
+    /* las valoraciones son simbolos: sin ancho minimo quedan de tamanos
+       distintos segun el simbolo y la fila baila */
+    + '.av-rec{min-width:32px;text-align:center;font-weight:800}'
     + '.av-canchas{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}'
     + '.av-canchas .av-cancha{flex:1 1 255px;max-width:340px;min-width:225px}'
     + '.av-rot{font-size:9.5px;letter-spacing:.9px;text-transform:uppercase;'
