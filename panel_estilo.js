@@ -60,9 +60,11 @@
           leyenda:'Verde: puntos que hizo. Roja: puntos que regaló. El número es el saldo.',
           rotTit:'ROTACIONES EN CANCHA', nosotros:'LOCAL', ellos:'VISITANTE',
           red:'RED', saca:'saca',
-          ultimo:'LO ÚLTIMO QUE CARGASTE', sinUlt:'Todavía no cargaste ningún código.',
-          notaUlt:'Lo que acabás de escribir, en palabras. Si algo salió distinto de lo que quisiste, se ve acá sin buscar en la lista.',
-          punto:'punto', error:'error', bien:'bien', flojo:'flojo', mal:'mal',
+          atajos:'ATAJOS AL ANÁLISIS',
+          atArmT:'Reparto del armador', atArmS:'con recepción # o +',
+          atSoT:'Side out por la {z}', atSoS:'el saque entró por esa columna',
+          atDirT:'Direcciones de ataque', atDirS:'por dónde pasa la pelota',
+          notaAtajos:'Cada atajo deja los filtros puestos y abre el análisis donde corresponde. Las columnas son las tres calles de la cancha: la 1 son las zonas 1, 9 y 2; la 6 son la 6, la 8 y la 3; la 5 son la 5, la 7 y la 4.',
           masAcc:'Más' },
     en: { antes:'BEFORE THE MATCH', vivo:'WHILE YOU SCOUT', luego:'AFTERWARDS',
           antesD:'Touched once and never again', vivoD:'Analysis and Close set are outside, at hand',
@@ -73,9 +75,11 @@
           leyenda:'Green: points won. Red: points given away. The number is the balance.',
           rotTit:'ROTATIONS ON COURT', nosotros:'HOME', ellos:'AWAY',
           red:'NET', saca:'serving',
-          ultimo:'WHAT YOU JUST TYPED', sinUlt:'No codes entered yet.',
-          notaUlt:'What you just typed, in words. If something came out different from what you meant, you see it here without hunting the list.',
-          punto:'point', error:'error', bien:'good', flojo:'weak', mal:'bad',
+          atajos:'ANALYSIS SHORTCUTS',
+          atArmT:'Setter distribution', atArmS:'on reception # or +',
+          atSoT:'Side out down the {z}', atSoS:'the serve came into that column',
+          atDirT:'Attack directions', atDirS:'where the ball goes',
+          notaAtajos:'Each shortcut sets the filters and opens the analysis on the right screen. The columns are the three lanes of the court: the 1 is zones 1, 9 and 2; the 6 is 6, 8 and 3; the 5 is 5, 7 and 4.',
           masAcc:'More' },
     de: { antes:'VOR DEM SPIEL', vivo:'WÄHREND DU SCOUTEST', luego:'DANACH',
           antesD:'Einmal angetippt, nie wieder', vivoD:'Analyse und Satz schliessen sind draussen, griffbereit',
@@ -86,9 +90,11 @@
           leyenda:'Grün: erzielte Punkte. Rot: verschenkte Punkte. Die Zahl ist die Bilanz.',
           rotTit:'ROTATIONEN AUF DEM FELD', nosotros:'HEIM', ellos:'GAST',
           red:'NETZ', saca:'Aufschlag',
-          ultimo:'WAS DU GERADE EINGEGEBEN HAST', sinUlt:'Noch keine Codes eingegeben.',
-          notaUlt:'Was du gerade getippt hast, in Worten. Wenn etwas anders herauskam als gemeint, siehst du es hier ohne in der Liste zu suchen.',
-          punto:'Punkt', error:'Fehler', bien:'gut', flojo:'schwach', mal:'schlecht',
+          atajos:'SCHNELLZUGRIFF',
+          atArmT:'Zuspielverteilung', atArmS:'bei Annahme # oder +',
+          atSoT:'Side out über die {z}', atSoS:'der Aufschlag kam in diese Spalte',
+          atDirT:'Angriffsrichtungen', atDirS:'wo der Ball durchgeht',
+          notaAtajos:'Jeder Schnellzugriff setzt die Filter und öffnet die Analyse auf dem passenden Bildschirm. Die Spalten sind die drei Bahnen des Feldes: die 1 sind die Zonen 1, 9 und 2; die 6 sind 6, 8 und 3; die 5 sind 5, 7 und 4.',
           masAcc:'Mehr' }
   };
   function L() {
@@ -272,34 +278,30 @@
       '#pe-acc-panel button,#pe-acc-panel select{margin:0}',
       '.pe-acc-pri{border-color:rgba(232,25,44,.45)!important;color:#ff8d98!important}',
 
-      /* ── LO ULTIMO QUE CARGASTE ───────────────────────────────────── */
-      '#pe-ultimo{margin-top:12px;padding-top:11px;border-top:1px solid var(--b,rgba(255,255,255,.08))}',
-      '.pe-utit{font-size:10px;font-weight:800;letter-spacing:1.8px;color:var(--mut,#7b87a3);margin-bottom:7px}',
-      '.pe-unada{font-size:12px;color:var(--dim,#5b6480)}',
-      '.pe-ulist{display:flex;flex-direction:column;gap:2px}',
-      '.pe-u{display:flex;align-items:center;gap:9px;padding:5px 8px;border-radius:7px;',
-      '  background:rgba(255,255,255,.022);font-size:12px;opacity:.62}',
-      /* el ultimo, que es el que importa, se ve entero; los de atras se apagan */
-      '.pe-u1{opacity:1;background:rgba(255,255,255,.055)}',
-      '.pe-ulado{width:4px;height:17px;border-radius:2px;flex:0 0 auto}',
-      '.pe-loc{background:#CE7C18}',
-      '.pe-vis{background:#0B84C4}',
-      '.pe-unum{font-weight:800;font-size:14px;min-width:22px}',
-      '.pe-unom{color:var(--mut,#7b87a3);white-space:nowrap;overflow:hidden;',
-      '  text-overflow:ellipsis;max-width:120px}',
-      '.pe-usk{font-size:10px;font-weight:700;letter-spacing:1.2px;color:var(--fg,#e8edf5)}',
-      /* la valoracion lleva PALABRA y color, nunca color solo */
-      '.pe-uval{font-size:10px;font-weight:800;letter-spacing:.8px;padding:1px 7px;border-radius:5px}',
-      '.pe-v-bien{background:#0e9f6e;color:#04140d}',
-      '.pe-v-ok{background:#3d8ede;color:#05121f}',
-      '.pe-v-flojo{background:#a87a20;color:#170f02}',
-      '.pe-v-mal{background:#d42a70;color:#fff0f6}',
-      /* --dim en esta pagina es casi negro (42,42,58) y el codigo no se
-         leia. Con --mut se lee sin competir con el nombre del fundamento. */
-      '.pe-ucod{margin-left:auto;font-family:ui-monospace,Consolas,monospace;font-size:11px;',
-      '  color:var(--mut,#7b87a3);opacity:.85;white-space:nowrap}',
-      '.pe-unota{margin-top:7px;font-size:10px;color:var(--mut,#7b87a3);opacity:.8;line-height:1.5}',
-      '@media(max-width:820px){.pe-ucod,.pe-unom{display:none}}',
+      /* ── LOS ATAJOS AL ANALISIS ───────────────────────────────────── */
+      '#pe-atajos{margin-top:12px;padding-top:11px;',
+      '  border-top:1px solid var(--b,rgba(255,255,255,.08))}',
+      '.pe-atit{font-size:10px;font-weight:800;letter-spacing:1.8px;',
+      '  color:var(--mut,#7b87a3);margin-bottom:8px}',
+      /* en dos columnas: cinco botones en fila se hacen ilegibles, y uno
+         abajo del otro comen toda la altura que acabamos de ganar */
+      '.pe-alist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}',
+      '.pe-at{display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer;',
+      '  padding:9px 11px;border-radius:9px;font-family:inherit;',
+      '  background:rgba(255,255,255,.028);border:1px solid var(--b,rgba(255,255,255,.08));',
+      '  transition:border-color .12s,background .12s}',
+      '.pe-at:hover{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.2)}',
+      '.pe-aic{flex:0 0 auto;width:26px;height:26px;border-radius:7px;border:1px solid;',
+      '  display:flex;align-items:center;justify-content:center;',
+      '  font-size:12px;font-weight:800;line-height:1}',
+      '.pe-atx{min-width:0}',
+      '.pe-atx b{display:block;font-size:12px;font-weight:600;color:var(--fg,#e8edf5);',
+      '  line-height:1.25}',
+      '.pe-atx i{display:block;font-style:normal;font-size:10px;color:var(--mut,#7b87a3);',
+      '  margin-top:2px;line-height:1.3}',
+      '.pe-anota{margin-top:9px;font-size:10px;color:var(--mut,#7b87a3);opacity:.8;',
+      '  line-height:1.5}',
+      '@media(max-width:820px){.pe-alist{grid-template-columns:1fr}}',
       /* en telefono la barra se parte en dos filas y el marcador manda */
       '@media(max-width:820px){',
       '  .top{height:auto;flex-wrap:wrap;padding:8px 10px;gap:8px}',
@@ -726,89 +728,70 @@
     });
   }
 
-  /* ══ 7 · LO ÚLTIMO QUE CARGASTE ══════════════════════════════════════
-     El panel del medio —el que mirás mientras escribís— tenia 190px de
-     negro abajo de todo. Y el error mas caro de scoutear es el que no
-     ves: escribiste 11 donde querias 1, o A+ donde querias A#, y te
-     enteras tres puntos despues.
+  /* ══ 7 · LOS ATAJOS AL ANÁLISIS ══════════════════════════════════════
+     Acá había un rectángulo de 190px de negro, y después la lista de lo
+     último cargado —que estaba bien, pero repetía lo que ya muestra la
+     columna de la derecha.
 
-     Asi que ahi va el codigo traducido a palabras. No repite la lista de
-     la derecha, que muestra el codigo crudo: esto dice que significa.
-     Lee M.codes y lo decodifica con anLeer(), que es la MISMA funcion que
-     usa el analisis, para que nadie lea distinto. */
-  var SKN = {
-    es: { S:'SAQUE', R:'RECEPCIÓN', A:'ATAQUE', B:'BLOQUEO', D:'DEFENSA', E:'ARMADO', F:'FREEBALL' },
-    en: { S:'SERVE', R:'RECEPTION', A:'ATTACK', B:'BLOCK', D:'DIG', E:'SET', F:'FREEBALL' },
-    de: { S:'AUFSCHLAG', R:'ANNAHME', A:'ANGRIFF', B:'BLOCK', D:'ABWEHR', E:'ZUSPIEL', F:'FREEBALL' }
-  };
-  function skNom(sk) {
-    var l = 'es';
-    try { if (typeof getLang === 'function') l = getLang(); } catch (e) {}
-    return (SKN[l] || SKN.es)[sk] || sk;
-  }
-  /* la valoracion, con palabra Y color: el color solo no alcanza */
-  function valorDe(ev, sk, t) {
-    if (ev === '#') return { k:'bien',  txt: t.punto };
-    if (ev === '=') return { k:'mal',   txt: t.error };
-    if (ev === '/') return ('AB'.indexOf(sk) >= 0) ? { k:'mal', txt:t.error }
-                                                   : { k:'flojo', txt:t.flojo };
-    if (ev === '+') return { k:'bien',  txt: t.bien };
-    if (ev === '!') return { k:'ok',    txt: '!' };
-    if (ev === '-') return { k:'flojo', txt: t.flojo };
-    return { k:'ok', txt: ev };
+     Lo que de verdad hace falta en ese lugar es llegar rápido a las cuatro
+     preguntas que uno se hace en cada tiempo muerto. Cada botón deja los
+     filtros puestos y abre el análisis en la pantalla que corresponde: un
+     toque en vez de siete.
+
+     Los atajos son datos, no código: para agregar uno se agrega una línea
+     acá y nada más. */
+  var ATAJOS = [
+    { k:'arm', tab:'arm', erec:'#+',
+      ico:'&#9679;', col:'#8B5CF6' },
+    { k:'so1', tab:'jug', fase:'so', zrec:'1', ico:'1', col:'#0E9F6E' },
+    { k:'so6', tab:'jug', fase:'so', zrec:'6', ico:'6', col:'#0E9F6E' },
+    { k:'so5', tab:'jug', fase:'so', zrec:'5', ico:'5', col:'#0E9F6E' },
+    { k:'dir', tab:'dir', fund:'A', ico:'&#8599;', col:'#0B84C4' }
+  ];
+
+  function textoAtajo(a) {
+    var t = L();
+    if (a.k === 'arm') return { tit:t.atArmT, sub:t.atArmS };
+    if (a.k === 'dir') return { tit:t.atDirT, sub:t.atDirS };
+    return { tit:t.atSoT.replace('{z}', a.zrec), sub:t.atSoS.replace('{z}', a.zrec) };
   }
 
-  function panelUltimo() {
-    if (document.getElementById('pe-ultimo')) return;
+  function panelAtajos() {
+    if (document.getElementById('pe-atajos')) return;
     var w = document.querySelector('.wrap');
     if (!w) return;
-    /* el del medio: el que tiene la caja de escribir el codigo */
     var medio = null;
     [].slice.call(w.children).forEach(function (c) {
       if (c.querySelector && c.querySelector('.scoutbar')) medio = c;
     });
     if (!medio) return;
     var d = document.createElement('div');
-    d.id = 'pe-ultimo'; d.setAttribute('data-notr', '');
+    d.id = 'pe-atajos'; d.setAttribute('data-notr', '');
     medio.appendChild(d);
   }
 
-  function pintarUltimo() {
-    var d = document.getElementById('pe-ultimo');
+  function pintarAtajos() {
+    var d = document.getElementById('pe-atajos');
     if (!d) return;
-    var t = L(), codes = [];
-    try { codes = (typeof M !== 'undefined' && M && M.codes) ? M.codes : []; } catch (e) { codes = []; }
-
-    var filas = [], i;
-    for (i = codes.length - 1; i >= 0 && filas.length < 6; i--) {
-      var leido = null;
-      try { leido = (typeof anLeer === 'function') ? anLeer(codes[i]) : null; } catch (e) {}
-      if (!leido) continue;                       /* los codigos de punto no se leen */
-      filas.push({ a: leido, crudo: String(codes[i] && codes[i].c || '') });
-    }
-    var firma = filas.map(function (f) { return f.crudo; }).join('|');
-    if (d.getAttribute('data-firma') === firma) return;   /* sin cambios, no repinto */
+    var t = L();
+    /* se redibuja solo si cambio el idioma: no tiene datos adentro */
+    var firma = t.atajos;
+    if (d.getAttribute('data-firma') === firma) return;
     d.setAttribute('data-firma', firma);
 
-    if (!filas.length) {
-      d.innerHTML = '<div class="pe-utit">' + esc(t.ultimo) + '</div>' +
-                    '<div class="pe-unada">' + esc(t.sinUlt) + '</div>';
-      return;
-    }
-    var h = '<div class="pe-utit">' + esc(t.ultimo) + '</div><div class="pe-ulist">';
-    filas.forEach(function (f, idx) {
-      var a = f.a, v = valorDe(a.ev, a.sk, t);
-      var q = nombreDeJug(a.num, a.lado);
-      h += '<div class="pe-u' + (idx === 0 ? ' pe-u1' : '') + '">' +
-             '<span class="pe-ulado pe-' + (a.lado === 'home' ? 'loc' : 'vis') + '"></span>' +
-             '<span class="pe-unum">' + esc(a.num) + '</span>' +
-             (q ? '<span class="pe-unom">' + esc(q) + '</span>' : '') +
-             '<span class="pe-usk">' + esc(skNom(a.sk)) + '</span>' +
-             '<span class="pe-uval pe-v-' + v.k + '">' + esc(v.txt) + '</span>' +
-             '<span class="pe-ucod">' + esc(f.crudo) + '</span>' +
-           '</div>';
+    var h = '<div class="pe-atit">' + esc(t.atajos) + '</div><div class="pe-alist">';
+    ATAJOS.forEach(function (a) {
+      var x = textoAtajo(a);
+      var cfg = { tab:a.tab };
+      ['erec', 'zrec', 'fase', 'fund'].forEach(function (k) { if (a[k]) cfg[k] = a[k]; });
+      h += '<button type="button" class="pe-at" onclick=\'AV.atajo(' +
+             JSON.stringify(cfg).replace(/'/g, '&#39;') + ')\'>' +
+             '<span class="pe-aic" style="color:' + a.col + ';border-color:' + a.col + '33;' +
+               'background:' + a.col + '1f">' + a.ico + '</span>' +
+             '<span class="pe-atx"><b>' + esc(x.tit) + '</b><i>' + esc(x.sub) + '</i></span>' +
+           '</button>';
     });
-    h += '</div><div class="pe-unota">' + esc(t.notaUlt) + '</div>';
+    h += '</div><div class="pe-anota">' + esc(t.notaAtajos) + '</div>';
     d.innerHTML = h;
   }
 
@@ -822,13 +805,13 @@
     try { unaCancha(); pintarNombresEq(); }
     catch (e) { try { console.error('[cancha]', e); } catch (_) {} }
     try { barraAcciones(); } catch (e) { try { console.error('[acciones]', e); } catch (_) {} }
-    try { panelUltimo(); pintarUltimo(); }
-    catch (e) { try { console.error('[ultimo]', e); } catch (_) {} }
+    try { panelAtajos(); pintarAtajos(); }
+    catch (e) { try { console.error('[atajos]', e); } catch (_) {} }
 
     /* se repinta con lo que vas cargando. Medio segundo alcanza: no es un
        videojuego y no vale la pena hacer trabajar al navegador de más. */
     setInterval(function () {
-      try { redes(); pintarPulso(); pintarUltimo(); pintarNombresEq(); } catch (e) {}
+      try { redes(); pintarPulso(); pintarAtajos(); pintarNombresEq(); } catch (e) {}
     }, 700);
   }
 

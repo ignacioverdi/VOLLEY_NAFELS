@@ -145,6 +145,16 @@ button{font-family:inherit;cursor:pointer}
 .serveball{width:13px;height:13px;border-radius:50%;background:var(--dim);flex:0 0 auto}
 .serveball.on{background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.18)}
 .setbox{text-align:center;padding:3px 10px}
+/* ── LOS SETS QUE YA SE JUGARON ────────────────────────────────────────────
+   Chicos y en una fila: son para mirar de reojo, no para leer. Verde el que
+   se gano, rojo el que se perdio; el numero esta igual, asi que el color no
+   es lo unico que distingue. */
+.parciales{display:flex;gap:5px;justify-content:center;margin-top:3px}
+.parciales .pz{font-family:'Barlow Condensed';font-weight:700;font-size:11px;
+  letter-spacing:.5px;padding:1px 5px;border-radius:4px;white-space:nowrap}
+.parciales .pz.g{color:#6ee7b7;background:rgba(14,159,110,.16)}
+.parciales .pz.p{color:#fda4b8;background:rgba(212,42,112,.16)}
+@media(max-width:820px){.parciales{display:none}}
 .setnum{font-family:'Barlow Condensed';font-weight:800;letter-spacing:2px;font-size:12px;color:var(--mut)}
 .sets{font-family:'Barlow Condensed';font-weight:900;font-size:19px;letter-spacing:2px}
 
@@ -558,13 +568,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260926-2013"></script>
-<script src="selector_categoria.js?v=20260926-2013"></script>
-<script src="lang.js?v=20260926-2013"></script>
+<script src="categorias_club.js?v=20260926-2044"></script>
+<script src="selector_categoria.js?v=20260926-2044"></script>
+<script src="lang.js?v=20260926-2044"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260926-2013">
+<link rel="stylesheet" href="movil.css?v=20260926-2044">
 </head>
 <body>
 
@@ -606,6 +616,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   <div class="setbox">
     <div class="setnum">SET <span id="setno">1</span></div>
     <div class="sets"><span id="sw-h">0</span>–<span id="sw-a">0</span></div>
+    <div class="parciales" id="parciales" data-notr></div>
   </div>
   <div class="tside away">
     <span class="serveball" id="sb-a"></span>
@@ -1286,16 +1297,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260926-2013" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260926-2013"></script>
-<script src="objetivos.js?v=20260926-2013" onerror="void 0"></script>
-<script src="video_delay.js?v=20260926-2013" onerror="void 0"></script>
+<script src="firebase.js?v=20260926-2044" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-2044"></script>
+<script src="objetivos.js?v=20260926-2044" onerror="void 0"></script>
+<script src="video_delay.js?v=20260926-2044" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260926-2013" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260926-2013"></script>
+<script src="plantel_nafels.js?v=20260926-2044" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260926-2044"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -5217,15 +5228,30 @@ function renderStats(){
     function fila(nombre, acts, clase, sk){
       const n=acts.length, cnt={};
       EVALS.forEach(e=>cnt[e]=acts.filter(c=>c.c[5]===e).length);
-      const usaPos = 'SRDF'.indexOf(sk)>=0;
+      /* ── LAS DOS COLUMNAS, SIEMPRE LAS DOS ─────────────────────────
+         Antes cada fundamento mostraba UNA sola: positividad en saque,
+         recepcion, defensa y freeball, y eficacia en ataque y bloqueo. La
+         otra casilla iba con un punto. Pero las dos se calculan igual para
+         todos y las dos dicen algo distinto:
+
+           POS%  = cuantas salieron bien           (# + ‹+› , y ‹/› en saque)
+           EF%   = cuantas ganaron menos las que perdieron   (# − errores)
+
+         Un saque con 10% de positividad y −21% de eficacia no es lo mismo
+         que uno con 10% y −5%: el segundo arriesga igual y regala la mitad.
+         Con una sola columna eso no se veia.
+
+         La formula de EF% es la MISMA en toda la app —tabla, cancha,
+         comparador, direcciones y el analisis— asi que ningun numero puede
+         discutir con otro. */
       const pos  = cnt['#']+cnt['+']+(sk==='S'?cnt['/']:0);
       const posP = Math.round(pos/n*100);
       const errs = cnt['='] + (['A','B'].indexOf(sk)>=0?cnt['/']:0);
       const efP  = Math.round((cnt['#']-errs)/n*100);
       return '<tr class="'+clase+'"><td class="k">'+nombre+'</td><td><span class="num">'+n+'</span></td>'+
         EVALS.map(e=>'<td><span class="num">'+(cnt[e]||'·')+'</span></td>').join('')+
-        '<td><span class="num pos">'+(usaPos?posP+'%':'·')+'</span></td>'+
-        '<td><span class="num '+(efP<0?'neg':'pos')+'">'+(usaPos?'·':efP+'%')+'</span></td></tr>';
+        '<td><span class="num '+(posP<0?'neg':'pos')+'">'+posP+'%</span></td>'+
+        '<td><span class="num '+(efP<0?'neg':'pos')+'">'+efP+'%</span></td></tr>';
     }
 
     Object.keys(SKILLS).forEach(sk=>{
@@ -5267,6 +5293,43 @@ function nombreJug(side,num){
   return '';
 }
 
+/* ══ LOS SETS QUE YA SE JUGARON ══════════════════════════════════════════════
+   El marcador decia "SET 5 · 0-4" y nada mas: para saber como se perdieron
+   esos cuatro sets habia que abrir el analisis. En el banco eso se mira de
+   reojo entre punto y punto.
+
+   No hay que guardar nada nuevo: el resultado de cada set ES el ultimo codigo
+   de punto de ese set. Se recorre la lista una sola vez y se anota, por set,
+   el ultimo marcador visto. Se rehace solo cuando cambia la cantidad de
+   codigos. */
+var _PARC_CACHE=null, _PARC_N=-1;
+function parcialesDeSets(){
+  const cods = (M.codes||[]);
+  if(_PARC_N === cods.length && _PARC_CACHE) return _PARC_CACHE;
+  const porSet = {};
+  for(let i=0;i<cods.length;i++){
+    const c = cods[i], t = String(c && c.c || '');
+    const mp = t.match(/^([*a])p(\d{2}):(\d{2})/);
+    if(!mp) continue;
+    const st = c.set || 1;
+    porSet[st] = { h: parseInt(mp[2],10), a: parseInt(mp[3],10) };
+  }
+  const out = Object.keys(porSet).map(Number).sort((x,y)=>x-y)
+    .map(st => ({ set:st, h:porSet[st].h, a:porSet[st].a }));
+  _PARC_N = cods.length; _PARC_CACHE = out;
+  return out;
+}
+function renderParciales(){
+  const el = document.getElementById('parciales'); if(!el) return;
+  /* el set que se esta jugando no es un parcial: ese numero ya esta grande
+     en el marcador y repetirlo confunde */
+  const hechos = parcialesDeSets().filter(p => p.set < (M.set||1));
+  if(!hechos.length){ el.innerHTML=''; return; }
+  el.innerHTML = hechos.map(p =>
+    '<span class="pz '+(p.h>p.a?'g':'p')+'" title="Set '+p.set+'">'+p.h+'-'+p.a+'</span>'
+  ).join('');
+}
+
 function renderAll(){
   try{ objRefrescar(); }catch(e){}   /* objetivos: se actualizan solos si están abiertos */
   document.getElementById('nm-h').textContent = M.home.name;
@@ -5278,6 +5341,7 @@ function renderAll(){
   document.getElementById('sw-h').textContent = M.home.sets;
   document.getElementById('sw-a').textContent = M.away.sets;
   document.getElementById('setno').textContent = M.set;
+  try{ renderParciales(); }catch(e){}
   document.getElementById('to-h').textContent = M.home.to;
   document.getElementById('to-a').textContent = M.away.to;
   document.getElementById('sub-h').textContent = M.home.subs;
@@ -9031,8 +9095,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260926-2013" onerror="void 0"></script>
-<script src="ayuda.js?v=20260926-2013"></script>
+<script src="volver_inicio.js?v=20260926-2044" onerror="void 0"></script>
+<script src="ayuda.js?v=20260926-2044"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -10148,11 +10212,11 @@ function renderAnalisis(){
 </script>
 <!-- La barra de analisis (manual 9.5). Va en su propio archivo a proposito:
      solo lee y dibuja, y si no carga el panel sigue igual que siempre. -->
-<script src="analisis_vivo.js?v=20260926-2013" onerror="void 0"></script>
+<script src="analisis_vivo.js?v=20260926-2044" onerror="void 0"></script>
 <!-- El rediseno del panel: la barra agrupada, el marcador en la barra,
      las rotaciones legibles y el cuadro de "como venimos". Va en su
      propio archivo a proposito: solo reacomoda y pinta, y si no carga
      el panel queda exactamente como estaba. -->
-<script src="panel_estilo.js?v=20260926-2013" onerror="void 0"></script>
+<script src="panel_estilo.js?v=20260926-2044" onerror="void 0"></script>
 </body>
 </html>

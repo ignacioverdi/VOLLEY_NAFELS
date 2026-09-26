@@ -88,6 +88,10 @@
           notaCancha:'Elegí uno o más jugadores y quedan sólo los puntos en los que estaban los seis en cancha a la vez. «Armador rival en» deja sólo los puntos con el armador de ellos en esa posición.',
           efArm:'Armado', ordenar:'Ordenar por', oFund:'Fundamento', oJug:'Jugador', oRot:'Rotación',
           conRec:'Con recepción', recTodas:'Todas', fase2:'Fase', todoF:'Todo',
+          recEn:'Recibida en', colum:'columna', atajos:'ATAJOS',
+          atArm:'Reparto del armador con recepción perfecta o buena',
+          atSo:'Side out por la columna donde entró el saque',
+          atDir:'Por dónde pasa la pelota en ataque',
           notaRec:'Tildá con qué recepciones querés ver el reparto. Se pueden tildar varias: «perfecta o buena» son dos. Sin tildar nada entran todas, también las pelotas de transición, que no vienen de una recepción.',
           sinE:'En este fundamento no hay armado antes.',
           notaTot:'Abajo el total del equipo. «Error rival» son los puntos que ganamos sin hacer nada: su error de saque, de ataque, de bloqueo o de defensa.',
@@ -188,6 +192,10 @@
           notaCancha:'Spieler wählen: es bleiben nur Punkte, in denen sie gleichzeitig auf dem Feld waren.',
           efArm:'Zuspiel', ordenar:'Sortieren nach', oFund:'Element', oJug:'Spieler', oRot:'Rotation',
           conRec:'Mit Annahme', recTodas:'Alle', fase2:'Phase', todoF:'Alles',
+          recEn:'Angenommen in', colum:'Spalte', atajos:'SCHNELLZUGRIFF',
+          atArm:'Zuspielverteilung bei perfekter oder guter Annahme',
+          atSo:'Side out nach der Spalte, in der der Aufschlag ankam',
+          atDir:'Wo der Ball im Angriff durchgeht',
           notaRec:'Wähle aus, mit welchen Annahmen du die Verteilung sehen willst. Mehrere sind möglich: «perfekt oder gut» sind zwei. Ohne Auswahl zählen alle, auch Transition-Bälle, die aus keiner Annahme kommen.',
           sinE:'Bei diesem Element gibt es kein Zuspiel davor.',
           notaTot:'Unten die Teamsumme. «Gegnerfehler» sind Punkte ohne eigene Aktion.',
@@ -288,6 +296,10 @@
           notaCancha:'Pick players: only rallies where they were all on court at once are kept.',
           efArm:'Set', ordenar:'Order by', oFund:'Skill', oJug:'Player', oRot:'Rotation',
           conRec:'With reception', recTodas:'All', fase2:'Phase', todoF:'All',
+          recEn:'Received in', colum:'column', atajos:'SHORTCUTS',
+          atArm:'Setter distribution on perfect or good reception',
+          atSo:'Side out by the column the serve came into',
+          atDir:'Where the ball goes on attack',
           notaRec:'Tick which receptions you want the distribution for. Several can be ticked: «perfect or good» is two. With none ticked all balls count, including transition balls, which come from no reception.',
           sinE:'This skill has no set before it.',
           notaTot:'Team totals at the bottom. «Opp. error» are points won without an action of ours.',
@@ -376,6 +388,21 @@
        entrenador quiere ver no es "con recepcion #" sino "con recepcion
        buena", que son dos o tres valoraciones. Vacio = todas. */
     erec: '',
+    /* En que COLUMNA de la cancha se recibio la pelota que dio origen a esta
+       accion. Son las tres calles de la cancha, no las nueve zonas sueltas:
+
+             4  3  2      <- la red
+             7  8  9
+             5  6  1      <- el fondo
+
+       columna de la 1  = 1 + 9 + 2   (la derecha mirando a la red)
+       columna de la 6  = 6 + 8 + 3   (el medio)
+       columna de la 5  = 5 + 7 + 4   (la izquierda)
+
+       Asi es como se mira de verdad: importa por que calle entro el saque,
+       no si la pelota cayo dos metros mas adelante. Guarda '1', '6' o '5'.
+       Vacio = todas. */
+    zrec: '',
     enc: [],                  /* jugadores que tienen que estar en cancha    */
     rotR: '',                 /* rotacion del armador RIVAL                  */
     orden: 'fund',            /* como se agrupa la tabla: fund · jug · rot   */
@@ -431,6 +458,11 @@
     B: { zi:'',  zf:'p' },
     E: null, F: null
   };
+
+  /* Las tres calles de la cancha, de derecha a izquierda mirando a la red.
+     Se nombran con la zona de fondo porque es como las llama el entrenador:
+     "el saque le entro por la 5". */
+  var COL_REC = { '1':'192', '6':'683', '5':'574' };
 
   function esc(s){
     return String(s == null ? '' : s)
@@ -636,6 +668,28 @@
           }
           if (!rec || AV.erec.indexOf(rec.ev) < 0) return;
         }
+        /* ── OJO: ESTE MIRA EL PUNTO ENTERO, NO LA JUGADA ─────────────
+           El de arriba (AV.erec) se queda en la MISMA posesion: corta
+           cuando aparece una accion del rival. Tiene que ser asi, porque
+           "el reparto del armador con recepcion perfecta" es la pelota de
+           K1, no el contraataque de tres intercambios despues.
+
+           Este es al reves a proposito. "Side out por la columna donde
+           entro el saque" es una pregunta sobre el PUNTO entero: si el
+           saque entro por la 5, todo lo que pase despues en ese punto
+           pasa por haber recibido en la 5, aunque se haya defendido dos
+           veces. Asi que se busca la recepcion nuestra en todo el punto.
+
+           Y como es una por punto, las tres columnas suman el side out
+           completo sin repetir ni perder nada. */
+        if (AV.zrec) {
+          var lst4 = r.acciones || [], rec2 = null;
+          for (var w2 = 0; w2 < lst4.length; w2++) {
+            var z3 = lst4[w2];
+            if (z3 && z3.sk === 'R' && z3.lado === a.lado) { rec2 = z3; break; }
+          }
+          if (!rec2 || !rec2.zf || COL_REC[AV.zrec].indexOf(String(rec2.zf)) < 0) return;
+        }
         if (AV.fila && a.zi) {
           var del = ('432'.indexOf(String(a.zi)) >= 0);
           if (AV.fila === 'd' && !del) return;
@@ -791,12 +845,16 @@
     if (TAB_NUEVA !== null) {
       TAB_NUEVA += filaNueva(rot, acc, porEv, c, sk, usaPos, posP, efP);
     }
+    /* Las dos columnas van SIEMPRE las dos, con la misma cuenta en toda la
+       app: POS% es cuantas salieron bien y EF% cuantas ganaron menos las que
+       perdieron. Antes cada fundamento mostraba una sola y la otra iba con
+       un punto; el numero que faltaba es justo el que a veces hace falta
+       (la eficacia del saque, por ejemplo, que dice cuanto se regala). */
     return '<tr><td class="k">' + esc(rot) + '</td>' +
            numClic(n, acc) +
            EV.map(function (e) { return numClic(c[e], porEv[e]); }).join('') +
-           '<td><span class="num pos">' + (usaPos ? posP + '%' : '·') + '</span></td>' +
-           '<td><span class="num ' + (efP < 0 ? 'neg' : 'pos') + '">' +
-             (usaPos ? '·' : efP + '%') + '</span></td></tr>';
+           '<td><span class="num ' + (posP < 0 ? 'neg' : 'pos') + '">' + posP + '%</span></td>' +
+           '<td><span class="num ' + (efP < 0 ? 'neg' : 'pos') + '">' + efP + '%</span></td></tr>';
   }
 
   AV.tabla = function (rs) {
@@ -1166,7 +1224,7 @@
   var LLAVE_G = 'av_guardados';
   var CAMPOS = ['lado','jug','fund','tipo','ev','rot','set','fase','zi','zf',
                 'sres','fila','d1','d2','marc','pt1','reglas','regY','earm','erec',
-                'orden','enc','rotR'];
+                'zrec','orden','enc','rotR'];
 
   function leerGuardados() {
     try { if (typeof load === 'function') return load(LLAVE_G, []) || []; } catch (e) {}
@@ -1747,7 +1805,7 @@
      que son del partido entero. */
   AV.hayAvanzado = function () {
     return !!(AV.sres || AV.fila || AV.d1 !== '' || AV.d2 !== '' || AV.marc || AV.pt1 ||
-              AV.earm || AV.erec || AV.rotR || (AV.enc && AV.enc.length) ||
+              AV.earm || AV.erec || AV.zrec || AV.rotR || (AV.enc && AV.enc.length) ||
               (AV.reglas && AV.reglas.length));
   };
 
@@ -1859,6 +1917,7 @@
     if (AV.pt1)  partes.push(t.primeraT);
     if (AV.earm) partes.push(t.efArm + ' ' + AV.earm);
     if (AV.erec) partes.push(t.conRec + ' ' + AV.erec.split('').join(' '));
+    if (AV.zrec) partes.push(t.recEn + ' ' + t.colum + ' ' + AV.zrec);
     if (AV.rotR) partes.push(t.rotRival + ' P' + AV.rotR);
     if (AV.enc && AV.enc.length) partes.push(t.enCancha + ' ' + AV.enc.join('+'));
     if (AV.reglas && AV.reglas.length)
@@ -1890,6 +1949,32 @@
     AV.pintar();
   };
 
+  /* ══ LOS ATAJOS ════════════════════════════════════════════════════════
+     Una pregunta que se hace siempre no deberia costar siete clicks. Cada
+     atajo deja los filtros EXACTAMENTE como hacen falta para esa pregunta
+     —ni uno mas— abre el analisis y cae en la pantalla correcta.
+
+     Primero limpia todo: si no, el atajo arrastraria el filtro que habia
+     puesto antes y mostraria otra cosa de la que dice el boton. Lo unico
+     que se respeta es el equipo elegido, que es de quien uno quiere ver
+     los numeros. */
+  AV.atajo = function (cfg) {
+    cfg = cfg || {};
+    var lado = AV.lado;
+    AV.limpiar();               /* deja todo en cero y repinta */
+    AV.lado = lado;
+    Object.keys(cfg).forEach(function (k) {
+      if (k !== 'tab') AV[k] = cfg[k];
+    });
+    /* abrir la ventana si todavia no esta */
+    try { if (typeof abrirAnalisis === 'function') abrirAnalisis(); } catch (e) {}
+    var ir = function () {
+      try { AV.verTab(cfg.tab || 'jug'); } catch (e) { try { AV.pintar(); } catch (_) {} }
+    };
+    /* un respiro: abrirAnalisis() puede estar armando la ventana todavia */
+    if (document.getElementById('m-analisis')) setTimeout(ir, 60); else ir();
+  };
+
   AV.set_ = function (k, v) {
     AV[k] = v;
     /* al cambiar de equipo, el jugador elegido ya no existe de ese lado */
@@ -1907,7 +1992,8 @@
     AV.jug = ''; AV.fund = ''; AV.rot = ''; AV.set = ''; AV.fase = '';
     AV.tipo = ''; AV.ev = ''; AV.zi = ''; AV.zf = '';
     AV.sres = ''; AV.fila = ''; AV.d1 = ''; AV.d2 = ''; AV.marc = ''; AV.pt1 = false;
-    AV.reglas = []; AV.regY = true; AV.earm = ''; AV.erec = ''; AV.enc = []; AV.rotR = '';
+    AV.reglas = []; AV.regY = true; AV.earm = ''; AV.erec = ''; AV.zrec = '';
+    AV.enc = []; AV.rotR = '';
     AV._abriendo = false;
     AV.pintar();
   };
