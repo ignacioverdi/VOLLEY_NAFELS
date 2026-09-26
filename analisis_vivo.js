@@ -62,9 +62,53 @@
           clicNum:'Tocá cualquier número para ver esas acciones en el video.',
           tResumen:'Resumen', tJug:'Jugadores', tCancha:'La cancha', tAtaque:'Ataque',
           tComp:'Comparar', tDir:'Direcciones',
+          tPlan:'Planilla', tGraf:'Gráficos', tArm:'El armador',
+          distArm:'Distribución del armador', todasRot:'Todas', reparto2:'del total',
+          notaArm:'Una cancha por rotación, con el armador en esa posición. En cada zona: cuántas pelotas fue, qué porcentaje del reparto de esa rotación, y abajo cuánto rindió ese ataque. Tocá una zona para ver esas pelotas.',
+          sinArm:'Todavía no hay ataques con zona de salida para repartir.',
+          armadorEs:'Armador', pelotasRot:'pelotas',
+          evolucion:'Cómo se fue el set', ventaja:'Ventaja', parciales:'Parciales',
+          notaGraf:'La diferencia de puntos a lo largo de cada set. Arriba de la línea vamos ganando, abajo perdiendo. Las marcas son los parciales de 8, 16 y 21. Tocá cualquier punto para ver esa jugada.',
+          sinGraf:'Todavía no hay puntos para dibujar.',
+          planilla:'La planilla', porJug:'Por jugador', porRot:'Por rotación', porSet:'Por set',
+          mostrar:'Mostrar', bajar:'Bajar en Excel', filas:'Filas',
+          cTot:'Tot', cAce:'Ace', cErr:'Err', cPunto:'Pto', cBloq:'Bloq', cPos:'Pos%',
+          cEfi:'Efic%', cPer:'Perf', cGan:'Ganados', cSaldo:'Saldo', gPuntos:'Puntos', cBP:'BP', cSO:'SO',
+          cExc:'Exc%', totalEq:'TOTAL', opErr:'Error rival',
+          enCancha:'En cancha', rotRival:'Armador rival en', quitarTodos:'Ninguno',
+          tBusc:'Buscar',
+          buscar:'Buscar en los códigos', buscarPh:'Escribí parte de un código: *11A · W4 · AT# · a13',
+          encontradas:'encontradas', verTodas:'Ver todas', jugadaAJugada:'Jugada por jugada',
+          ganoPunto:'Ganó', nadaEncontrado:'Ningún código tiene eso.',
+          notaBusc:'La búsqueda mira TODOS los códigos del partido, sin los filtros de arriba: si buscás un código es porque lo querés encontrar. La lista de abajo sí respeta los filtros.',
+          notaJugadas:'Cada punto con su marcador y cómo terminó. Tocá uno para verlo entero en el video.',
+          excel:'Excel', imprimir:'Imprimir', filtros:'Filtros', sinFiltro:'Partido completo',
+          nadaQueBajar:'En esta solapa no hay tablas para bajar.',
+          notaCancha:'Elegí uno o más jugadores y quedan sólo los puntos en los que estaban los seis en cancha a la vez. «Armador rival en» deja sólo los puntos con el armador de ellos en esa posición.',
+          efArm:'Armado', ordenar:'Ordenar por', oFund:'Fundamento', oJug:'Jugador', oRot:'Rotación',
+          sinE:'En este fundamento no hay armado antes.',
+          notaTot:'Abajo el total del equipo. «Error rival» son los puntos que ganamos sin hacer nada: su error de saque, de ataque, de bloqueo o de defensa.',
+          notaBP:'BP y SO son el saldo de puntos —ganados menos perdidos— en transition y en side out. Dicen si un jugador suma cuando sacamos, cuando recibimos, o en las dos.',
+          notaPlan:'Armá la planilla que necesites: elegí las filas y qué fundamentos mostrar. Respeta todos los filtros de arriba y cualquier número se toca para ver el video.',
+          sinPlan:'Con estos filtros no quedó nada para la planilla.',
+          reglas:'Sólo cuando…', agregarR:'+ Agregar condición', quitarR:'Quitar',
+          rAntes:'justo antes hubo', rDesp:'justo después hubo',
+          rAAntes:'antes en el punto hubo', rADesp:'después en el punto hubo',
+          rEn:'en el punto hubo', rNoEn:'en el punto NO hubo',
+          rNos:'nuestro', rEllos:'del rival', rCualq:'de cualquiera',
+          rY:'Y', rO:'O', rCualqJ:'cualquiera', rCualqF:'cualquier fundamento',
+          rCualqV:'cualquier valoración',
+          notaReglas:'Cada condición mira el punto alrededor de la acción. Con Y tienen que cumplirse todas; con O alcanza una. Filtran las acciones, igual que jugador y fundamento.',
+          avanzado:'Filtro avanzado', sets2:'Sets', setsG:'Ganados', setsP:'Perdidos',
+          fila:'Fila', filaD:'Delantera', filaZ:'Zaguera',
+          tramo:'Tramo del set', desde:'desde', hasta:'hasta',
+          marcador:'Marcador', mEmpate:'Empatados', mGana:'Vamos ganando',
+          mPierde:'Vamos perdiendo', mCerca:'Diferencia 1 o 2', mLejos:'Diferencia 3 o más',
+          mFinal:'Los dos en 20 o más', primeraT:'Sólo el primer contraataque',
+          cerrar2:'Ocultar',
           direcciones:'Por dónde pasa la pelota', pelotas:'pelotas',
           lRinde:'Rinde', lNoRinde:'No rinde', lNormal:'Parejo o pocas pelotas',
-          lGrosor:'El grosor es la cantidad', promedio:'Promedio del equipo:',
+          lGrosor:'El grosor es la cantidad', promedio:'Promedio del equipo:', lCalor:'El fondo es dónde cae',
           sinDir:'Para dibujar las direcciones hacen falta la zona de origen y la de destino. En estas acciones no están las dos.',
           notaDir:'Una flecha por cada camino de la pelota. El grosor es cuántas pelotas fueron por ahí; el color, si ese camino rinde más o menos que el promedio del equipo en ese fundamento. Tocá una flecha para ver esas pelotas.',
           soloTop:'Se dibujan los {n} caminos más usados para que se lea.',
@@ -111,9 +155,53 @@
           clicNum:'Auf eine Zahl tippen, um diese Aktionen im Video zu sehen.',
           tResumen:'Übersicht', tJug:'Spieler', tCancha:'Das Feld', tAtaque:'Angriff',
           tComp:'Vergleich', tDir:'Richtungen',
+          tPlan:'Tabelle', tGraf:'Grafiken', tArm:'Zuspiel',
+          distArm:'Zuspielverteilung', todasRot:'Alle', reparto2:'vom Gesamt',
+          notaArm:'Ein Feld pro Rotation. Je Zone: Anzahl, Anteil an der Verteilung dieser Rotation und darunter der Ertrag des Angriffs.',
+          sinArm:'Noch keine Angriffe mit Startzone.',
+          armadorEs:'Zuspieler', pelotasRot:'Bälle',
+          evolucion:'Satzverlauf', ventaja:'Vorsprung', parciales:'Zwischenstände',
+          notaGraf:'Die Punktedifferenz im Satzverlauf. Über der Linie in Führung, darunter im Rückstand. Die Marken sind die Zwischenstände 8, 16 und 21.',
+          sinGraf:'Noch keine Punkte zum Zeichnen.',
+          planilla:'Die Tabelle', porJug:'Nach Spieler', porRot:'Nach Rotation', porSet:'Nach Satz',
+          mostrar:'Anzeigen', bajar:'Als Excel laden', filas:'Zeilen',
+          cTot:'Ges', cAce:'Ass', cErr:'Feh', cPunto:'Pkt', cBloq:'Block', cPos:'Pos%',
+          cEfi:'Eff%', cPer:'Perf', cGan:'Gewonnen', cSaldo:'Saldo', gPuntos:'Punkte', cBP:'BP', cSO:'SO',
+          cExc:'Exz%', totalEq:'GESAMT', opErr:'Gegnerfehler',
+          enCancha:'Auf dem Feld', rotRival:'Gegn. Zuspieler auf', quitarTodos:'Keiner',
+          tBusc:'Suche',
+          buscar:'In den Codes suchen', buscarPh:'Teil eines Codes: *11A · W4 · AT# · a13',
+          encontradas:'gefunden', verTodas:'Alle ansehen', jugadaAJugada:'Punkt für Punkt',
+          ganoPunto:'Gewann', nadaEncontrado:'Kein Code enthält das.',
+          notaBusc:'Die Suche geht über ALLE Codes des Spiels, ohne die Filter oben.',
+          notaJugadas:'Jeder Punkt mit Spielstand und Ausgang. Antippen für das ganze Video.',
+          excel:'Excel', imprimir:'Drucken', filtros:'Filter', sinFiltro:'Ganzes Spiel',
+          nadaQueBajar:'In diesem Tab gibt es keine Tabellen.',
+          notaCancha:'Spieler wählen: es bleiben nur Punkte, in denen sie gleichzeitig auf dem Feld waren.',
+          efArm:'Zuspiel', ordenar:'Sortieren nach', oFund:'Element', oJug:'Spieler', oRot:'Rotation',
+          sinE:'Bei diesem Element gibt es kein Zuspiel davor.',
+          notaTot:'Unten die Teamsumme. «Gegnerfehler» sind Punkte ohne eigene Aktion.',
+          notaBP:'BP und SO sind der Punktesaldo in Transition und im Side Out.',
+          notaPlan:'Die Tabelle selbst zusammenstellen: Zeilen und Elemente wählen. Alle Filter oben gelten, und jede Zahl öffnet das Video.',
+          sinPlan:'Mit diesen Filtern bleibt nichts für die Tabelle.',
+          reglas:'Nur wenn…', agregarR:'+ Bedingung', quitarR:'Entfernen',
+          rAntes:'direkt davor war', rDesp:'direkt danach war',
+          rAAntes:'vorher im Punkt war', rADesp:'danach im Punkt war',
+          rEn:'im Punkt war', rNoEn:'im Punkt war NICHT',
+          rNos:'eigen', rEllos:'gegnerisch', rCualq:'egal wer',
+          rY:'UND', rO:'ODER', rCualqJ:'egal wer', rCualqF:'egal welches Element',
+          rCualqV:'egal welche Bewertung',
+          notaReglas:'Jede Bedingung prüft den Punkt rund um die Aktion. Mit UND müssen alle zutreffen, mit ODER genügt eine.',
+          avanzado:'Erweiterter Filter', sets2:'Sätze', setsG:'Gewonnen', setsP:'Verloren',
+          fila:'Reihe', filaD:'Vorne', filaZ:'Hinten',
+          tramo:'Satzabschnitt', desde:'von', hasta:'bis',
+          marcador:'Spielstand', mEmpate:'Gleichstand', mGana:'In Führung',
+          mPierde:'Im Rückstand', mCerca:'1 oder 2 Punkte', mLejos:'3 oder mehr',
+          mFinal:'Beide ab 20', primeraT:'Nur erster Gegenangriff',
+          cerrar2:'Ausblenden',
           direcciones:'Wohin der Ball geht', pelotas:'Bälle',
           lRinde:'Bringt', lNoRinde:'Bringt nichts', lNormal:'Neutral oder wenige Bälle',
-          lGrosor:'Die Dicke ist die Anzahl', promedio:'Team-Durchschnitt:',
+          lGrosor:'Die Dicke ist die Anzahl', promedio:'Team-Durchschnitt:', lCalor:'Der Hintergrund ist, wo er landet',
           sinDir:'Für die Richtungen braucht es Start- und Zielzone. In diesen Aktionen fehlt eine davon.',
           notaDir:'Ein Pfeil pro Weg des Balls. Die Dicke ist die Anzahl; die Farbe zeigt, ob dieser Weg über oder unter dem Team-Durchschnitt liegt. Pfeil antippen für die Bälle.',
           soloTop:'Es werden die {n} häufigsten Wege gezeigt.',
@@ -160,9 +248,53 @@
           clicNum:'Tap any number to watch those actions on video.',
           tResumen:'Overview', tJug:'Players', tCancha:'The court', tAtaque:'Attack',
           tComp:'Compare', tDir:'Directions',
+          tPlan:'Worksheet', tGraf:'Charts', tArm:'The setter',
+          distArm:'Setter distribution', todasRot:'All', reparto2:'of total',
+          notaArm:'One court per rotation. In each zone: how many balls, the share of that rotation, and below the efficiency of that attack.',
+          sinArm:'No attacks with a starting zone yet.',
+          armadorEs:'Setter', pelotasRot:'balls',
+          evolucion:'How the set went', ventaja:'Lead', parciales:'Partials',
+          notaGraf:'The point difference through each set. Above the line you are ahead, below behind. The marks are the 8, 16 and 21 partials. Tap any point for that rally.',
+          sinGraf:'No points to draw yet.',
+          planilla:'The worksheet', porJug:'By player', porRot:'By rotation', porSet:'By set',
+          mostrar:'Show', bajar:'Download for Excel', filas:'Rows',
+          cTot:'Tot', cAce:'Ace', cErr:'Err', cPunto:'Pt', cBloq:'Blk', cPos:'Pos%',
+          cEfi:'Eff%', cPer:'Perf', cGan:'Won', cSaldo:'Net', gPuntos:'Points', cBP:'BP', cSO:'SO',
+          cExc:'Exc%', totalEq:'TOTAL', opErr:'Opp. error',
+          enCancha:'On court', rotRival:'Their setter in', quitarTodos:'None',
+          tBusc:'Search',
+          buscar:'Search the codes', buscarPh:'Part of a code: *11A · W4 · AT# · a13',
+          encontradas:'found', verTodas:'Watch all', jugadaAJugada:'Point by point',
+          ganoPunto:'Won', nadaEncontrado:'No code contains that.',
+          notaBusc:'The search looks at ALL codes of the match, ignoring the filters above.',
+          notaJugadas:'Every rally with its score and how it ended. Tap one to watch it whole.',
+          excel:'Excel', imprimir:'Print', filtros:'Filters', sinFiltro:'Whole match',
+          nadaQueBajar:'No tables to download in this tab.',
+          notaCancha:'Pick players: only rallies where they were all on court at once are kept.',
+          efArm:'Set', ordenar:'Order by', oFund:'Skill', oJug:'Player', oRot:'Rotation',
+          sinE:'This skill has no set before it.',
+          notaTot:'Team totals at the bottom. «Opp. error» are points won without an action of ours.',
+          notaBP:'BP and SO are the point balance in transition and in side out.',
+          notaPlan:'Build the worksheet you need: pick the rows and which skills to show. It respects every filter above, and any number opens the video.',
+          sinPlan:'Nothing left for the worksheet with these filters.',
+          reglas:'Only when…', agregarR:'+ Add condition', quitarR:'Remove',
+          rAntes:'right before there was', rDesp:'right after there was',
+          rAAntes:'earlier in the rally there was', rADesp:'later in the rally there was',
+          rEn:'in the rally there was', rNoEn:'in the rally there was NO',
+          rNos:'ours', rEllos:'theirs', rCualq:'either team',
+          rY:'AND', rO:'OR', rCualqJ:'anyone', rCualqF:'any skill',
+          rCualqV:'any evaluation',
+          notaReglas:'Each condition looks at the rally around the action. With AND all must hold; with OR one is enough.',
+          avanzado:'Advanced filter', sets2:'Sets', setsG:'Won', setsP:'Lost',
+          fila:'Row', filaD:'Front', filaZ:'Back',
+          tramo:'Part of the set', desde:'from', hasta:'to',
+          marcador:'Score', mEmpate:'Tied', mGana:'Ahead',
+          mPierde:'Behind', mCerca:'1 or 2 apart', mLejos:'3 or more apart',
+          mFinal:'Both at 20 or more', primeraT:'First transition only',
+          cerrar2:'Hide',
           direcciones:'Where the ball goes', pelotas:'balls',
           lRinde:'Pays off', lNoRinde:'Does not', lNormal:'Even or few balls',
-          lGrosor:'Thickness is the count', promedio:'Team average:',
+          lGrosor:'Thickness is the count', promedio:'Team average:', lCalor:'The shading is where it lands',
           sinDir:'Directions need both the starting and the landing zone. These actions do not have both.',
           notaDir:'One arrow per path of the ball. Thickness is how many went that way; colour says whether that path is above or below the team average for that skill. Tap an arrow for those balls.',
           soloTop:'Showing the {n} most used paths so it stays readable.',
@@ -206,7 +338,21 @@
     tipo: '',     /* letras del tipo, p.ej. 'MH' = flotado. '' = todos */
     ev: '',       /* # + ! - / = ,  '' = todas        */
     zi: '',       /* zona de origen,  '' = todas      */
-    zf: ''        /* zona de destino, '' = todas      */
+    zf: '',       /* zona de destino, '' = todas      */
+    /* los del filtro avanzado (manual 9.5, "Advanced filter") */
+    sres: '',     /* '' todos · 'g' sets ganados · 'p' perdidos */
+    fila: '',     /* '' todas · 'd' delantera · 'z' zaguera     */
+    d1: '', d2: '',   /* tramo del set: del punto d1 al d2      */
+    marc: '',     /* '' · 'eq' · 'gana' · 'pierde' · 'cerca' · 'lejos' · 'final' */
+    pt1: false,   /* solo el primer contraataque del punto      */
+    pFilas: 'jug',            /* la planilla: filas por jugador/rotacion/set */
+    pCols: 'S,R,A,B,P',       /* que fundamentos muestra                    */
+    reglas: [],               /* el motor de reglas (manual 9.5, Code filter) */
+    regY: true,               /* true = todas (Y) · false = alguna (O)       */
+    earm: '',                 /* efecto del armado que precede (VolleyStation) */
+    enc: [],                  /* jugadores que tienen que estar en cancha    */
+    rotR: '',                 /* rotacion del armador RIVAL                  */
+    orden: 'fund'             /* como se agrupa la tabla: fund · jug · rot   */
   };
   window.AV = AV;
 
@@ -277,6 +423,38 @@
                       defensa y contraataque (el complejo K2)
      Son dos cosas distintas y se miran distinto: en side out se mide cuanto
      rendis con la pelota servida; en transition, cuanto convertis jugando. */
+  /* ── EL MARCADOR ANTES DE CADA PUNTO ─────────────────────────────────────
+     anRallies guarda el marcador DESPUES del punto (el codigo *p12:10 se
+     escribe al cerrarlo). Para filtrar por "cuando ibamos perdiendo por 3"
+     hace falta el marcador con el que se JUGO ese punto, que es el del punto
+     anterior del mismo set. Se calcula una vez por dibujado y se cuelga de
+     cada rally como propiedad no enumerable, igual que el codigo de cada
+     accion: nada de lo que ya existe se entera. */
+  function marcar(rs) {
+    var antesH = 0, antesA = 0, setAct = null;
+    var finSet = {};
+    (rs || []).forEach(function (r) {
+      if (r.set !== setAct) { setAct = r.set; antesH = 0; antesA = 0; }
+      try {
+        Object.defineProperty(r, '_mh', { value:antesH, enumerable:false, configurable:true });
+        Object.defineProperty(r, '_ma', { value:antesA, enumerable:false, configurable:true });
+      } catch (e) {}
+      antesH = r.ptsH; antesA = r.ptsA;
+      finSet[r.set] = [r.ptsH, r.ptsA];
+    });
+    /* quien gano cada set, con el marcador del ultimo punto de ese set */
+    var gano = {};
+    Object.keys(finSet).forEach(function (st) {
+      gano[st] = (finSet[st][0] > finSet[st][1]) ? 'home' : 'away';
+    });
+    (rs || []).forEach(function (r) {
+      try { Object.defineProperty(r, '_gs', { value:gano[r.set], enumerable:false, configurable:true }); }
+      catch (e) {}
+    });
+    return rs;
+  }
+  AV.marcar = marcar;
+
   AV.filtrar = function (rs) {
     var l = AV.lado;
     return (rs || []).filter(function (r) {
@@ -288,6 +466,54 @@
         try { rr = (typeof anRot === 'function') ? anRot(r, l) : 0; } catch (e) { rr = 0; }
         if (String(rr) !== String(AV.rot)) return false;
       }
+      /* ── EL ARMADOR RIVAL Y LOS JUGADORES EN CANCHA ─────────────────────
+         Las dos cosas salen de datos que ya viajan en cada codigo y que
+         nadie estaba usando: la rotacion del otro equipo (columnas 9 y 10
+         del .dvw) y las dos alineaciones completas (columnas 14 a 25).
+
+         "Armador rival en 2" es la pregunta de scouting de siempre: contra
+         que rotacion de ellos rendimos mejor. Y "en cancha" contesta la otra:
+         con este seis adentro, ¿como nos fue? */
+      if (AV.rotR) {
+        var otro = (l === 'home') ? 'away' : 'home';
+        var rr2 = 0;
+        try { rr2 = (typeof anRot === 'function') ? anRot(r, otro) : 0; } catch (e) { rr2 = 0; }
+        if (String(rr2) !== String(AV.rotR)) return false;
+      }
+      if (AV.enc && AV.enc.length) {
+        var a0 = (r.acciones || [])[0];
+        var lu = null;
+        try { lu = a0 && a0._c ? (l === 'home' ? a0._c.hl : a0._c.al) : null; } catch (e) { lu = null; }
+        if (!lu || !lu.some(Boolean)) return false;
+        for (var q2 = 0; q2 < AV.enc.length; q2++) {
+          if (lu.indexOf(Number(AV.enc[q2])) < 0) return false;
+        }
+      }
+      /* ── el filtro avanzado ──────────────────────────────────────────── */
+      if (AV.sres) {
+        var g = r._gs;
+        if (!g) return false;
+        if (AV.sres === 'g' && g !== l) return false;
+        if (AV.sres === 'p' && g === l) return false;
+      }
+      if (AV.d1 || AV.d2) {
+        /* el tramo se mide con el marcador mas alto de los dos, que es como
+           uno piensa el momento del set: "del 20 al 25" */
+        var m = Math.max(r._mh || 0, r._ma || 0);
+        if (AV.d1 !== '' && m < Number(AV.d1)) return false;
+        if (AV.d2 !== '' && m > Number(AV.d2)) return false;
+      }
+      if (AV.marc) {
+        var mios  = (l === 'home') ? (r._mh || 0) : (r._ma || 0);
+        var dellos = (l === 'home') ? (r._ma || 0) : (r._mh || 0);
+        var dif = mios - dellos, ad = Math.abs(dif);
+        if (AV.marc === 'eq'     && dif !== 0) return false;
+        if (AV.marc === 'gana'   && dif <= 0) return false;
+        if (AV.marc === 'pierde' && dif >= 0) return false;
+        if (AV.marc === 'cerca'  && !(ad === 1 || ad === 2)) return false;
+        if (AV.marc === 'lejos'  && ad < 3) return false;
+        if (AV.marc === 'final'  && !(mios >= 20 && dellos >= 20)) return false;
+      }
       return true;
     });
   };
@@ -296,8 +522,23 @@
   AV.acciones = function (rs) {
     var out = [];
     (rs || []).forEach(function (r) {
-      (r.acciones || []).forEach(function (a) {
+      /* "Sólo el primer contraataque" (manual 9.5, Only first transition):
+         en los puntos que sacamos nosotros, se queda con las acciones hasta
+         el primer ataque nuestro inclusive. Sirve para saber cuánto break
+         point se saca con la primera pelota, sin que lo tapen los rallies
+         largos. */
+      var acts = r.acciones || [];
+      if (AV.pt1) {
+        if (r.saca !== AV.lado) return;
+        var corte = -1;
+        for (var i = 0; i < acts.length; i++) {
+          if (acts[i] && acts[i].sk === 'A' && acts[i].lado === AV.lado) { corte = i; break; }
+        }
+        acts = (corte >= 0) ? acts.slice(0, corte + 1) : acts;
+      }
+      acts.forEach(function (a, _i) {
         if (!a || a.lado !== AV.lado) return;
+        if (!pasaReglas(r.acciones || [], (r.acciones || []).indexOf(a))) return;
         if (AV.jug  && String(a.num) !== String(AV.jug)) return;
         if (AV.fund && a.sk !== AV.fund) return;
         /* el tipo viene agrupado: 'MH' quiere decir M o H */
@@ -305,6 +546,33 @@
         if (AV.ev   && a.ev !== AV.ev) return;
         if (AV.zi   && String(a.zi) !== String(AV.zi)) return;
         if (AV.zf   && String(a.zf) !== String(AV.zf)) return;
+        /* Delantera o zaguera, por la zona desde donde salio el golpe.
+           Manual 9.5: "Attack row - front row / back row". Las zonas 4, 3 y 2
+           son la red; 7, 8 y 9 son los ataques de zaguero. */
+        /* ── EFECTO DEL ARMADO (de VolleyStation) ────────────────────────
+           Filtra por como vino el armado que precedio a esta accion, dentro
+           del mismo punto y del mismo equipo. Sirve para separar lo que el
+           atacante resuelve de lo que le dan: un 10% de eficacia con armado
+           perfecto y un 10% con armado forzado no son el mismo jugador.
+
+           Lo que NO se puede hacer es el "Set from zone 3" de VolleyStation:
+           en estos codigos el armado no lleva zona (187 de 187 vacias), asi
+           que no hay de donde sacarla. Cuando el scout la escriba, se agrega. */
+        if (AV.earm) {
+          var lst2 = r.acciones || [], idx = lst2.indexOf(a), arm = null;
+          for (var q = idx - 1; q >= 0; q--) {
+            var y = lst2[q];
+            if (!y) continue;
+            if (y.lado !== a.lado) break;
+            if (y.sk === 'E') { arm = y; break; }
+          }
+          if (!arm || arm.ev !== AV.earm) return;
+        }
+        if (AV.fila && a.zi) {
+          var del = ('432'.indexOf(String(a.zi)) >= 0);
+          if (AV.fila === 'd' && !del) return;
+          if (AV.fila === 'z' &&  del) return;
+        } else if (AV.fila && !a.zi) { return; }
         out.push(a);
       });
     });
@@ -402,7 +670,55 @@
               '<th>' + esc(t.pos) + '</th><th>' + esc(t.efi) + '</th></tr>';
     var cuerpo = '';
 
-    if (AV.jug) {
+    /* ── EL TERCER ORDENAMIENTO (manual 9.5.2) ─────────────────────────────
+       El Data ofrece la misma tabla ordenada de tres maneras, y dice que lo
+       unico que cambia es el orden en que se presentan los datos:
+         por jugador    -> jugador / fundamento / rotacion
+         por fundamento -> fundamento / jugador / rotacion
+         por rotacion   -> rotacion / jugador / fundamento
+       Faltaba la tercera. Aca se elige con un selector arriba de la tabla en
+       vez de con tres entradas distintas del menu, que es lo mismo con un
+       paso menos. */
+    if (AV.orden === 'rot') {
+      for (var rr = 1; rr <= 6; rr++) {
+        (function (rr) {
+          var gR = AV.rot; AV.rot = String(rr);
+          var accR = AV.acciones(AV.filtrar(AV.todos()));
+          AV.rot = gR;
+          if (!accR.length) return;
+          cuerpo += '<tr class="av-grp"><td class="k" colspan="11">P' + rr +
+                    ' <i>' + accR.length + ' ' + esc(t.acciones) + '</i></td></tr>';
+          if (AV.fund) {
+            var nums2 = [];
+            accR.forEach(function (a) { if (nums2.indexOf(a.num) < 0) nums2.push(a.num); });
+            nums2.sort(function (x, y) { return x - y; });
+            nums2.forEach(function (nu) {
+              var q = nom(nu, AV.lado);
+              cuerpo += filaDe('#' + nu + (q ? ' ' + q : ''),
+                               accR.filter(function (a) { return a.num === nu; }), AV.fund);
+            });
+          } else {
+            FUNDS().forEach(function (f) {
+              cuerpo += filaDe(f[1], accR.filter(function (a) { return a.sk === f[0]; }), f[0]);
+            });
+          }
+        })(rr);
+      }
+    } else if (AV.orden === 'jug' && !AV.jug) {
+      /* por jugador: cada jugador con sus fundamentos debajo */
+      var nums3 = [];
+      acc.forEach(function (a) { if (nums3.indexOf(a.num) < 0) nums3.push(a.num); });
+      nums3.sort(function (x, y) { return x - y; });
+      nums3.forEach(function (nu) {
+        var accJ = acc.filter(function (a) { return a.num === nu; });
+        var q = nom(nu, AV.lado);
+        cuerpo += '<tr class="av-grp"><td class="k" colspan="11">#' + nu + (q ? ' ' + esc(q) : '') +
+                  ' <i>' + accJ.length + ' ' + esc(t.acciones) + '</i></td></tr>';
+        FUNDS().forEach(function (f) {
+          cuerpo += filaDe(f[1], accJ.filter(function (a) { return a.sk === f[0]; }), f[0]);
+        });
+      });
+    } else if (AV.jug) {
       /* un jugador: una fila por fundamento */
       FUNDS().forEach(function (f) {
         cuerpo += filaDe(f[1], acc.filter(function (a) { return a.sk === f[0]; }), f[0]);
@@ -425,10 +741,18 @@
     }
     if (!cuerpo) return '<div class="av-vacio">' + esc(t.vacio) + '</div>';
 
+    var porOrden = { fund:t.porFund, jug:t.porJug, rot:t.porRot };
     var tit = AV.jug ? ('#' + AV.jug + ' ' + nom(AV.jug, AV.lado))
-            : (AV.fund ? (t[AV.fund] || '') + ' · ' + t.porJug
-                       : t.porFund);
-    return '<div class="an-s av-tabla" data-notr><h4>' + esc(tit) + '</h4>' +
+            : (AV.fund ? (t[AV.fund] || '') + ' · ' +
+                         (AV.orden === 'rot' ? t.oRot : t.porJug).toLowerCase()
+                       : (porOrden[AV.orden] || t.porFund));
+    var sel = AV.jug ? '' :
+      ('<div class="av-orden"><span>' + esc(t.ordenar) + '</span>' +
+       [['fund', t.oFund], ['jug', t.oJug], ['rot', t.oRot]].map(function (x) {
+         return '<button class="av-plb' + (AV.orden === x[0] ? ' on' : '') +
+                '" onclick="AV.set_(\'orden\',\'' + x[0] + '\')">' + esc(x[1]) + '</button>';
+       }).join('') + '</div>');
+    return '<div class="an-s av-tabla" data-notr><h4>' + esc(tit) + '</h4>' + sel +
            '<table class="st">' + cab + cuerpo + '</table></div>';
   };
 
@@ -680,7 +1004,8 @@
      mismas del panel: si el navegador no deja guardar, save() devuelve false
      y se avisa, en vez de fallar en silencio. */
   var LLAVE_G = 'av_guardados';
-  var CAMPOS = ['lado','jug','fund','tipo','ev','rot','set','fase','zi','zf'];
+  var CAMPOS = ['lado','jug','fund','tipo','ev','rot','set','fase','zi','zf',
+                'sres','fila','d1','d2','marc','pt1','reglas','regY','earm','orden','enc','rotR'];
 
   function leerGuardados() {
     try { if (typeof load === 'function') return load(LLAVE_G, []) || []; } catch (e) {}
@@ -1088,6 +1413,221 @@
     return h;
   };
 
+
+  /* ── EL MOTOR DE REGLAS (manual 9.5, "Code filter") ──────────────────────
+     Es la herramienta mas potente del Data y la mas dificil de usar: te abre
+     una ventana donde armas reglas con siete tipos —"it is previous", "it is
+     successive", "it is included in the rally", "it is not included", "it is
+     equal", "it is in previous ball possession", "it is in successive ball
+     possession"— hasta diez a la vez, unidas con AND, OR o una formula a
+     mano. Potentisimo. Nadie que recien empieza lo toca.
+
+     Aca es lo mismo escrito como se habla:
+
+         Solo cuando   [justo antes hubo]  [del rival]  [Recepcion]  [#]
+
+     Las cuatro opciones cubren lo mismo que las siete del Data: "justo antes"
+     y "justo despues" son previous y successive; "en el punto" y "en el punto
+     NO" cubren included, not included y las dos de ball possession, porque el
+     equipo ya se elige en la propia condicion; y "es igual" es la barra de
+     filtros de arriba, que ya existe.
+
+     Las condiciones filtran ACCIONES, igual que jugador y fundamento. */
+
+  function coincideReg(x, g) {
+    if (!x) return false;
+    if (g.lado === 'p' && x.lado !== AV.lado) return false;
+    if (g.lado === 'r' && x.lado === AV.lado) return false;
+    if (g.jug && String(x.num) !== String(g.jug)) return false;
+    if (g.sk  && x.sk !== g.sk) return false;
+    if (g.ev  && x.ev !== g.ev) return false;
+    return true;
+  }
+
+  /* ¿esta accion pasa las reglas? acts es la lista del punto, i su posicion */
+  function pasaReglas(acts, i) {
+    var gs = AV.reglas || [];
+    if (!gs.length) return true;
+    var res = gs.map(function (g) {
+      if (g.cuando === 'antes')  return coincideReg(acts[i-1], g);
+      if (g.cuando === 'desp')   return coincideReg(acts[i+1], g);
+      /* "antes en el punto" y "despues en el punto" no estan en el Data, y
+         son las que la gente quiere de verdad. Ejemplo del propio manual:
+         "todos los ataques rapidos despues de la recepcion del libero". Con
+         "justo antes" da CERO, porque justo antes del ataque esta el ARMADO,
+         no la recepcion. Mirando todo lo anterior del punto, funciona. */
+      if (g.cuando === 'aantes') {
+        for (var k = 0; k < i; k++) if (coincideReg(acts[k], g)) return true;
+        return false;
+      }
+      if (g.cuando === 'adesp') {
+        for (var k2 = i + 1; k2 < acts.length; k2++) if (coincideReg(acts[k2], g)) return true;
+        return false;
+      }
+      var hay = acts.some(function (x, k) { return k !== i && coincideReg(x, g); });
+      if (g.cuando === 'noen') return !hay;
+      return hay;
+    });
+    return AV.regY ? res.every(Boolean) : res.some(Boolean);
+  }
+
+  AV.masRegla = function () {
+    AV.reglas = (AV.reglas || []).concat([{ cuando:'aantes', lado:'', jug:'', sk:'', ev:'' }]);
+    AV._avAbierto = true;
+    AV.pintar();
+  };
+  AV.menosRegla = function (i) {
+    AV.reglas.splice(i, 1);
+    AV.pintar();
+  };
+  AV.setRegla = function (i, k, v) {
+    if (!AV.reglas[i]) return;
+    AV.reglas[i][k] = v;
+    AV.pintar();
+  };
+  AV.setY = function (v) { AV.regY = !!v; AV.pintar(); };
+
+  AV.verReglas = function (rsTodo) {
+    var t = L();
+    var gs = AV.reglas || [];
+    var nums = [];
+    (rsTodo || []).forEach(function (r) {
+      (r.acciones || []).forEach(function (a) { if (a && nums.indexOf(a.num) < 0) nums.push(a.num); });
+    });
+    nums.sort(function (x, y) { return x - y; });
+
+    var h = '<div class="av-reg"><div class="av-reghd">' +
+            '<span>' + esc(t.reglas) + '</span>';
+    if (gs.length > 1) {
+      h += '<div class="av-fase av-regyo">' +
+           '<button class="av-f' + (AV.regY ? ' on' : '') + '" onclick="AV.setY(true)">' + esc(t.rY) + '</button>' +
+           '<button class="av-f' + (!AV.regY ? ' on' : '') + '" onclick="AV.setY(false)">' + esc(t.rO) + '</button>' +
+           '</div>';
+    }
+    h += '</div>';
+
+    gs.forEach(function (g, i) {
+      h += '<div class="av-regfila">' +
+        '<select onchange="AV.setRegla(' + i + ',\'cuando\',this.value)">' +
+          opt('antes', t.rAntes, g.cuando) + opt('aantes', t.rAAntes, g.cuando) +
+          opt('desp', t.rDesp, g.cuando) + opt('adesp', t.rADesp, g.cuando) +
+          opt('en', t.rEn, g.cuando) + opt('noen', t.rNoEn, g.cuando) + '</select>' +
+        '<select onchange="AV.setRegla(' + i + ',\'lado\',this.value)">' +
+          opt('', t.rCualq, g.lado) + opt('p', t.rNos, g.lado) + opt('r', t.rEllos, g.lado) + '</select>' +
+        '<select onchange="AV.setRegla(' + i + ',\'jug\',this.value)">' +
+          opt('', t.rCualqJ, g.jug) +
+          nums.map(function (n) { return opt(n, '#' + n, g.jug); }).join('') + '</select>' +
+        '<select onchange="AV.setRegla(' + i + ',\'sk\',this.value)">' +
+          opt('', t.rCualqF, g.sk) +
+          FUNDS().map(function (f) { return opt(f[0], f[1], g.sk); }).join('') + '</select>' +
+        '<select class="av-ev" onchange="AV.setRegla(' + i + ',\'ev\',this.value)">' +
+          opt('', t.rCualqV, g.ev) +
+          EV.map(function (e) { return opt(e, e, g.ev); }).join('') + '</select>' +
+        '<button class="av-regx" onclick="AV.menosRegla(' + i + ')" title="' + esc(t.quitarR) +
+          '">&times;</button>' +
+        '</div>';
+    });
+
+    h += '<button class="av-mas" onclick="AV.masRegla()">' + esc(t.agregarR) + '</button>';
+    if (gs.length) h += '<div class="av-nota">' + esc(t.notaReglas) + '</div>';
+    return h + '</div>';
+  };
+
+  /* ── EL FILTRO AVANZADO (manual 9.5, "Advanced filter") ──────────────────
+     Va plegado: son cinco cosas que no se usan todos los dias, y la barra de
+     arriba ya tiene siete selectores. Cuando hay algo puesto se abre solo y
+     el boton queda marcado, para que nadie mire numeros filtrados creyendo
+     que son del partido entero. */
+  AV.hayAvanzado = function () {
+    return !!(AV.sres || AV.fila || AV.d1 !== '' || AV.d2 !== '' || AV.marc || AV.pt1 ||
+              AV.earm || AV.rotR || (AV.enc && AV.enc.length) ||
+              (AV.reglas && AV.reglas.length));
+  };
+
+  AV.avanzado = function () {
+    var t = L();
+    var abierto = AV._avAbierto || AV.hayAvanzado();
+    var h = '<div class="av-avwrap">' +
+            '<button class="av-mas av-avbtn' + (AV.hayAvanzado() ? ' on' : '') +
+            '" onclick="AV.verAv()">' + (abierto ? '▾ ' : '▸ ') + esc(t.avanzado) + '</button>';
+    if (!abierto) return h + '</div>';
+
+    h += '<div class="av-avcaja"><div class="av-av">';
+    h += '<label>' + esc(t.sets2) + '<select onchange="AV.set_(\'sres\',this.value)">' +
+         opt('', t.todos, AV.sres) + opt('g', t.setsG, AV.sres) + opt('p', t.setsP, AV.sres) +
+         '</select></label>';
+
+    h += '<label>' + esc(t.fila) + '<select onchange="AV.set_(\'fila\',this.value)">' +
+         opt('', t.todas, AV.fila) + opt('d', t.filaD, AV.fila) + opt('z', t.filaZ, AV.fila) +
+         '</select></label>';
+
+    h += '<label>' + esc(t.tramo) +
+         '<span class="av-dos">' +
+         '<input type="number" min="0" max="40" placeholder="' + esc(t.desde) + '" value="' +
+           esc(AV.d1) + '" onchange="AV.set_(\'d1\',this.value)">' +
+         '<input type="number" min="0" max="40" placeholder="' + esc(t.hasta) + '" value="' +
+           esc(AV.d2) + '" onchange="AV.set_(\'d2\',this.value)">' +
+         '</span></label>';
+
+    h += '<label>' + esc(t.marcador) + '<select onchange="AV.set_(\'marc\',this.value)">' +
+         opt('', t.todo, AV.marc) + opt('eq', t.mEmpate, AV.marc) +
+         opt('gana', t.mGana, AV.marc) + opt('pierde', t.mPierde, AV.marc) +
+         opt('cerca', t.mCerca, AV.marc) + opt('lejos', t.mLejos, AV.marc) +
+         opt('final', t.mFinal, AV.marc) + '</select></label>';
+
+    h += '<label>' + esc(t.rotRival) + '<select onchange="AV.set_(\'rotR\',this.value)">' +
+         opt('', t.todas, AV.rotR);
+    for (var rv = 1; rv <= 6; rv++) h += opt(rv, 'P' + rv, AV.rotR);
+    h += '</select></label>';
+
+    h += '<label>' + esc(t.efArm) + '<select class="av-ev" onchange="AV.set_(\'earm\',this.value)">' +
+         opt('', t.todos, AV.earm) +
+         EV.map(function (e) { return opt(e, e, AV.earm); }).join('') + '</select></label>';
+
+    h += '<label class="av-chk"><input type="checkbox"' + (AV.pt1 ? ' checked' : '') +
+         ' onchange="AV.set_(\'pt1\',this.checked)">' + esc(t.primeraT) + '</label>';
+    h += '</div>';
+
+    /* los dorsales que estuvieron en cancha alguna vez, como botones */
+    var enCancha = [];
+    (AV.todos() || []).forEach(function (r) {
+      var a0 = (r.acciones || [])[0];
+      var lu = null;
+      try { lu = a0 && a0._c ? (AV.lado === 'home' ? a0._c.hl : a0._c.al) : null; } catch (e) {}
+      (lu || []).forEach(function (n) { if (n && enCancha.indexOf(n) < 0) enCancha.push(n); });
+    });
+    enCancha.sort(function (x, y) { return x - y; });
+    if (enCancha.length) {
+      h += '<div class="av-canc"><span>' + esc(t.enCancha) + '</span>' +
+        enCancha.map(function (n) {
+          var on = (AV.enc || []).indexOf(n) >= 0;
+          var q = nom(n, AV.lado);
+          return '<button class="av-plb' + (on ? ' on' : '') + '" title="' + esc(q) +
+                 '" onclick="AV.tocarEnc(' + n + ')">' + n + '</button>';
+        }).join('') +
+        ((AV.enc && AV.enc.length)
+          ? '<button class="av-mas" onclick="AV.set_(\'enc\',[])">' + esc(t.quitarTodos) + '</button>'
+          : '') +
+        '</div>';
+    }
+
+    h += AV.verReglas(AV.todos()) + '</div>';
+    return h;
+  };
+
+  AV.tocarEnc = function (n) {
+    var l = (AV.enc || []).slice();
+    var i = l.indexOf(n);
+    if (i >= 0) l.splice(i, 1); else l.push(n);
+    AV.enc = l;
+    AV.pintar();
+  };
+
+  AV.verAv = function () {
+    AV._avAbierto = !(AV._avAbierto || AV.hayAvanzado());
+    AV.pintar();
+  };
+
   AV.resumen = function (rsTodo, rsFil) {
     var acc = AV.acciones(rsFil), t = L();
     var partes = [];
@@ -1103,6 +1643,18 @@
     if (AV.ev)   partes.push(AV.ev);
     if (AV.zi)   partes.push(t.desde + ' ' + AV.zi);
     if (AV.zf)   partes.push(t.zona + ' ' + AV.zf);
+    if (AV.sres) partes.push(AV.sres === 'g' ? t.setsG : t.setsP);
+    if (AV.fila) partes.push(AV.fila === 'd' ? t.filaD : t.filaZ);
+    if (AV.d1 !== '' || AV.d2 !== '')
+      partes.push(t.tramo + ' ' + (AV.d1 === '' ? '0' : AV.d1) + '-' + (AV.d2 === '' ? '∞' : AV.d2));
+    if (AV.marc) partes.push({eq:t.mEmpate, gana:t.mGana, pierde:t.mPierde,
+                              cerca:t.mCerca, lejos:t.mLejos, final:t.mFinal}[AV.marc] || '');
+    if (AV.pt1)  partes.push(t.primeraT);
+    if (AV.earm) partes.push(t.efArm + ' ' + AV.earm);
+    if (AV.rotR) partes.push(t.rotRival + ' P' + AV.rotR);
+    if (AV.enc && AV.enc.length) partes.push(t.enCancha + ' ' + AV.enc.join('+'));
+    if (AV.reglas && AV.reglas.length)
+      partes.push(t.reglas.replace('…','') + ' (' + AV.reglas.length + ')');
     var nota = '<div class="av-nota">' +
                ((AV.jug || AV.fund) ? esc(t.nota) + ' ' : '') + esc(t.clicNum) + '</div>';
     /* el significado exacto del simbolo, tal cual lo dice el manual: sale de
@@ -1138,6 +1690,8 @@
   AV.limpiar = function () {
     AV.jug = ''; AV.fund = ''; AV.rot = ''; AV.set = ''; AV.fase = '';
     AV.tipo = ''; AV.ev = ''; AV.zi = ''; AV.zf = '';
+    AV.sres = ''; AV.fila = ''; AV.d1 = ''; AV.d2 = ''; AV.marc = ''; AV.pt1 = false;
+    AV.reglas = []; AV.regY = true; AV.earm = ''; AV.enc = []; AV.rotR = '';
     AV._abriendo = false;
     AV.pintar();
   };
@@ -1267,12 +1821,43 @@
     var base = rinde(acc.filter(function (a) { return a.zi && a.zf; }));
     var MARGEN = 6;   /* seis puntos de diferencia para pintar algo */
 
-    /* la cancha */
+    /* ── EL CALOR, DEBAJO DE LAS FLECHAS ───────────────────────────────────
+       Un mapa de calor y una flecha contestan cosas distintas: el calor dice
+       DONDE cae la pelota, la flecha dice DE DONDE SALIO la que cayo ahi. El
+       calor solo pierde el par origen-destino, que es justamente el dato; las
+       flechas solas cuestan mas de leer cuando uno quiere ver la zona mas
+       castigada de un vistazo.
+
+       Asi que van las dos cosas en el mismo dibujo: el fondo de cada casilla
+       pintado por cuanta pelota cae ahi, y las flechas encima. Una sola
+       imagen y las dos lecturas.
+
+       Nota sobre la resolucion: el .dvw guarda tambien SUBZONA (A, B, C, D
+       dentro de cada zona), que permitiria un calor cuatro veces mas fino.
+       En este partido la subzona esta escrita en el 24% de los ataques y en
+       el 1% de los saques, asi que dibujarla seria pintar un cuarto de las
+       pelotas como si fueran todas. Cuando el scout la escriba siempre, se
+       hace y queda mejor que cualquiera de los dos programas. */
+    var calor = {}, maxCal = 0;
+    acc.forEach(function (a) {
+      if (!a.zi || !a.zf) return;
+      calor[a.zf] = (calor[a.zf] || 0) + 1;
+    });
+    Object.keys(calor).forEach(function (z) { if (calor[z] > maxCal) maxCal = calor[z]; });
+
     var g = '';
     for (var f = 0; f < 6; f++) for (var c = 0; c < 3; c++) {
+      var zz = (f < 3 ? FILA_LEJOS[f] : FILA_CERCA[f-3])[c];
+      /* solo se pinta el campo donde CAE la pelota */
+      var esDestino = (z.zf === 'r') ? (f < 3) : (f >= 3);
+      var n = esDestino ? (calor[zz] || 0) : 0;
+      var op = (n && maxCal) ? (0.06 + 0.34 * (n / maxCal)) : 0;
+      if (op) {
+        g += '<rect x="' + (c*DC.c) + '" y="' + (f*DC.c) + '" width="' + DC.c +
+             '" height="' + DC.c + '" fill="#38bdf8" opacity="' + op.toFixed(3) + '"/>';
+      }
       g += '<rect class="av-cz" x="' + (c*DC.c) + '" y="' + (f*DC.c) + '" width="' + DC.c +
            '" height="' + DC.c + '"/>';
-      var zz = (f < 3 ? FILA_LEJOS[f] : FILA_CERCA[f-3])[c];
       g += '<text class="av-cn" x="' + (c*DC.c + 6) + '" y="' + (f*DC.c + 14) + '">' + zz + '</text>';
     }
     /* las lineas de 3 m y la red */
@@ -1321,6 +1906,7 @@
       '<div><span class="av-ls pun" style="background:' + ROJO + '"></span>' + esc(t.lNoRinde) + '</div>' +
       '<div><span class="av-ls" style="background:' + GRIS + '"></span>' + esc(t.lNormal) + '</div>' +
       '<div class="av-lg"><span class="av-lf"></span>' + esc(t.lGrosor) + '</div>' +
+      '<div class="av-lg"><span class="av-lc"></span>' + esc(t.lCalor) + '</div>' +
       '<div class="av-lb">' + esc(t.promedio) + ' <b>' + base + '%</b></div>' +
       '</div>';
 
@@ -1329,6 +1915,769 @@
            '<div class="av-nota">' + esc(t.notaDir) +
            (cortado ? ' ' + esc(t.soloTop.replace('{n}', TOPE)) : '') +
            (AV.fund ? '' : ' ' + esc(t.verAtaque)) + '</div></div>';
+  };
+
+
+  /* ── LA PLANILLA (manual 9.5.8, "Worksheet") ─────────────────────────────
+     El Worksheet del Data es una planilla PROGRAMABLE: celdas vacias donde el
+     entrenador escribe formulas algebraicas, con un asistente de formulas,
+     funciones matematicas y macros. Es potentisimo y no lo usa casi nadie:
+     hay que aprender un lenguaje de formulas para sacarle algo.
+
+     Lo que la gente de verdad quiere del Worksheet es una sola cosa: "armame
+     la tabla que YO necesito". Asi que eso es lo que hay aca, sin lenguaje:
+     se elige que va en las filas —jugadores, rotaciones o sets— y que
+     fundamentos aparecen como columnas. Respeta todos los filtros de arriba,
+     cualquier numero se toca para ver el video, y se baja en un archivo que
+     abre Excel.
+
+     Lo que NO tiene, y lo digo para que nadie lo busque: formulas propias,
+     funciones matematicas y macros. Si alguna vez hace falta una cuenta que
+     no este, se agrega como columna de verdad y no como formula escrita a
+     mano, que es donde el Data se vuelve inmanejable. */
+
+  var COLS = [
+    ['S', 'S', ['cTot','cAce','cErr','cPos']],
+    ['R', 'R', ['cTot','cPer','cErr','cPos','cExc']],
+    ['A', 'A', ['cTot','cPunto','cBloq','cErr','cEfi']],
+    ['B', 'B', ['cTot','cPunto','cErr']],
+    ['D', 'D', ['cTot','cPos']],
+    ['E', 'E', ['cTot']],
+    /* ── DE VOLLEYSTATION: BP Y SO ─────────────────────────────────────────
+       VolleyStation parte los puntos de cada jugador en break point y side
+       out (su manual, 4.2: "BP - Points won or lost break point · pS - Points
+       won or lost side out"). Ni el Data ni nosotros lo teniamos, y es una
+       pregunta que un entrenador se hace todo el tiempo: este jugador, ¿suma
+       cuando sacamos nosotros o solo cuando recibimos?
+       Aca va como saldo —ganados menos perdidos— en cada fase. */
+    ['P', 'P', ['cGan','cErr','cSaldo','cBP','cSO']]
+  ];
+
+  function colsOn() {
+    var l = String(AV.pCols || '').split(',');
+    return COLS.filter(function (c) { return l.indexOf(c[0]) >= 0; });
+  }
+
+  /* las celdas de un fundamento para una lista de acciones */
+  function celdasSk(acc, sk, campos) {
+    var n = acc.length;
+    var c = {}, por = {};
+    EV.forEach(function (e) {
+      por[e] = acc.filter(function (a) { return a.ev === e; });
+      c[e] = por[e].length;
+    });
+    var pos = c['#'] + c['+'] + (sk === 'S' ? c['/'] : 0);
+    var err = c['='] + (['A','B'].indexOf(sk) >= 0 ? c['/'] : 0);
+    var out = [];
+    campos.forEach(function (k) {
+      if (k === 'cTot')   out.push([n, acc]);
+      else if (k === 'cAce' || k === 'cPunto' || k === 'cPer') out.push([c['#'], por['#']]);
+      else if (k === 'cErr')  out.push([c['='], por['=']]);
+      else if (k === 'cBloq') out.push([c['/'], por['/']]);
+      else if (k === 'cPos')  out.push([n ? Math.round(pos/n*100) + '%' : null, null]);
+      /* Exc% es de VolleyStation: Pos% mete # y +, Exc% cuenta solo las
+         perfectas. Separadas dicen cosas distintas: un equipo puede recibir
+         muy positivo y perfecto casi nunca, y el armador lo sufre. */
+      else if (k === 'cExc')  out.push([n ? Math.round(c['#']/n*100) + '%' : null, null]);
+      else if (k === 'cEfi')  out.push([n ? Math.round((c['#'] - err)/n*100) + '%' : null, null]);
+      else out.push([null, null]);
+    });
+    return out;
+  }
+
+  /* ── las filas ──────────────────────────────────────────────────────────
+     Cada fila es un conjunto de puntos y, dentro, sus acciones. Con eso
+     alcanza para las tres maneras de partir la planilla. */
+  function filasPlan(rs) {
+    var l = AV.lado, out = [];
+    if (AV.pFilas === 'rot') {
+      for (var i = 1; i <= 6; i++) {
+        (function (i) {
+          var sub = (rs || []).filter(function (r) {
+            var rr = 0;
+            try { rr = (typeof anRot === 'function') ? anRot(r, l) : 0; } catch (e) {}
+            return String(rr) === String(i);
+          });
+          if (sub.length) out.push({ et:'P' + i, rs:sub, num:null });
+        })(i);
+      }
+    } else if (AV.pFilas === 'set') {
+      var sets = [];
+      (rs || []).forEach(function (r) { if (sets.indexOf(r.set) < 0) sets.push(r.set); });
+      sets.sort();
+      sets.forEach(function (st) {
+        out.push({ et:L().se + ' ' + st, num:null,
+                   rs:(rs || []).filter(function (r) { return r.set === st; }) });
+      });
+    } else {
+      /* por jugador: los dorsales que aparecen de verdad */
+      var nums = [];
+      AV.acciones(rs).forEach(function (a) { if (nums.indexOf(a.num) < 0) nums.push(a.num); });
+      nums.sort(function (x, y) { return x - y; });
+      nums.forEach(function (nu) {
+        var q = nom(nu, l);
+        out.push({ et:'#' + nu + (q ? ' ' + q : ''), rs:rs, num:nu });
+      });
+    }
+    return out;
+  }
+
+  /* las acciones de una fila, de un fundamento */
+  function accFila(fila, sk) {
+    var gF = AV.fund, gJ = AV.jug;
+    AV.fund = sk;
+    if (fila.num !== null && fila.num !== undefined) AV.jug = fila.num;
+    var r = AV.acciones(fila.rs);
+    AV.fund = gF; AV.jug = gJ;
+    return r;
+  }
+
+  /* los puntos ganados y los errores que se le acreditan a una fila */
+  function puntosFila(fila) {
+    var l = AV.lado, gan = [], err = [], bp = 0, so = 0;
+    (fila.rs || []).forEach(function (r) {
+      var c = cierre(r);
+      if (!c || c.a.lado !== l) return;
+      if (fila.num !== null && fila.num !== undefined && String(c.a.num) !== String(fila.num)) return;
+      var signo = c.acierto ? 1 : -1;
+      if (c.acierto) gan.push(c.a); else err.push(c.a);
+      /* en que fase paso: sacabamos nosotros (transition) o recibiamos */
+      if (r.saca === l) bp += signo; else so += signo;
+    });
+    return [gan, err, bp, so];
+  }
+
+  AV.planilla = function (rs) {
+    var t = L();
+    var cols = colsOn();
+    var filas = filasPlan(rs);
+
+    /* los controles */
+    var ctrl = '<div class="av-plctrl">' +
+      '<label>' + esc(t.filas) + '<select onchange="AV.set_(\'pFilas\',this.value)">' +
+        opt('jug', t.porJug, AV.pFilas) + opt('rot', t.porRot, AV.pFilas) +
+        opt('set', t.porSet, AV.pFilas) + '</select></label>' +
+      '<div class="av-plsk"><span>' + esc(t.mostrar) + '</span>' +
+        COLS.map(function (c) {
+          var on = String(AV.pCols || '').split(',').indexOf(c[0]) >= 0;
+          var nm = (c[0] === 'P') ? t.gPuntos : t[c[0]];
+          return '<button class="av-plb' + (on ? ' on' : '') +
+                 '" onclick="AV.colPlan(\'' + c[0] + '\')">' + esc(nm) + '</button>';
+        }).join('') + '</div>' +
+      '<button class="av-mas av-baja" onclick="AV.bajarPlan()">&#8681; ' + esc(t.bajar) + '</button>' +
+      '</div>';
+
+    if (!filas.length || !cols.length) {
+      return '<div class="an-s av-plan" data-notr><h4>' + esc(t.planilla) + '</h4>' + ctrl +
+             '<div class="av-vacio">' + esc(t.sinPlan) + '</div></div>';
+    }
+
+    /* dos filas de encabezado: el fundamento arriba y sus columnas abajo */
+    var h1 = '<tr><th class="k" rowspan="2"></th>', h2 = '<tr>';
+    cols.forEach(function (c) {
+      var nm = (c[0] === 'P') ? t.gPuntos : t[c[0]];
+      h1 += '<th class="grp" colspan="' + c[2].length + '">' + esc(nm) + '</th>';
+      c[2].forEach(function (k) { h2 += '<th>' + esc(t[k]) + '</th>'; });
+    });
+    h1 += '</tr>'; h2 += '</tr>';
+
+    var cuerpo = '', plano = [];
+    filas.forEach(function (f) {
+      var fila = '<tr><td class="k">' + esc(f.et) + '</td>';
+      var linea = [f.et];
+      cols.forEach(function (c) {
+        if (c[0] === 'P') {
+          var pe = puntosFila(f), sal = pe[0].length - pe[1].length;
+          var sg = function (v) {
+            return '<td><span class="num ' + (v > 0 ? 'pos' : (v < 0 ? 'neg' : '')) + '">' +
+                   (v > 0 ? '+' : '') + v + '</span></td>';
+          };
+          fila += numClic(pe[0].length, pe[0], '', 'bien') +
+                  numClic(pe[1].length, pe[1], '', 'mal') +
+                  sg(sal) + sg(pe[2]) + sg(pe[3]);
+          linea.push(pe[0].length, pe[1].length, sal, pe[2], pe[3]);
+          return;
+        }
+        var acc = accFila(f, c[0]);
+        celdasSk(acc, c[0], c[2]).forEach(function (cel) {
+          if (cel[1]) { fila += numClic(cel[0], cel[1]); }
+          else { fila += '<td><span class="num">' + (cel[0] == null || cel[0] === 0 ? '·' : cel[0]) + '</span></td>'; }
+          linea.push(cel[0] == null ? '' : cel[0]);
+        });
+      });
+      cuerpo += fila + '</tr>';
+      plano.push(linea);
+    });
+
+    /* ── EL TOTAL DEL EQUIPO Y EL ERROR RIVAL ────────────────────────────
+       VolleyStation cierra su tabla de equipo con la suma de todas las
+       columnas y una de mas: "Op. Err.", los puntos ganados sin que nadie
+       nuestro hiciera nada, porque se equivoco el rival. En un partido
+       parejo esa columna explica media diferencia y no aparece en ninguna
+       fila de jugador, asi que sin ella las filas no suman el partido. */
+    var todoF = { et:t.totalEq, rs:rs, num:null };
+    var filaT = '<tr class="av-pltot"><td class="k">' + esc(t.totalEq) + '</td>';
+    var lineaT = [t.totalEq];
+    cols.forEach(function (c) {
+      if (c[0] === 'P') {
+        var pe = puntosFila(todoF), sal = pe[0].length - pe[1].length;
+        var sg = function (v) {
+          return '<td><span class="num ' + (v > 0 ? 'pos' : (v < 0 ? 'neg' : '')) + '">' +
+                 (v > 0 ? '+' : '') + v + '</span></td>';
+        };
+        filaT += numClic(pe[0].length, pe[0], '', 'bien') +
+                 numClic(pe[1].length, pe[1], '', 'mal') + sg(sal) + sg(pe[2]) + sg(pe[3]);
+        lineaT.push(pe[0].length, pe[1].length, sal, pe[2], pe[3]);
+        return;
+      }
+      var accT = accFila(todoF, c[0]);
+      celdasSk(accT, c[0], c[2]).forEach(function (cel) {
+        if (cel[1]) { filaT += numClic(cel[0], cel[1]); }
+        else { filaT += '<td><span class="num">' + (cel[0] == null || cel[0] === 0 ? '·' : cel[0]) + '</span></td>'; }
+        lineaT.push(cel[0] == null ? '' : cel[0]);
+      });
+    });
+    cuerpo += filaT + '</tr>';
+    plano.push(lineaT);
+
+    /* los puntos que ganamos porque se equivocaron ellos */
+    if (String(AV.pCols || '').indexOf('P') >= 0) {
+      var opE = [];
+      (rs || []).forEach(function (r) {
+        var c = cierre(r);
+        if (c && !c.acierto && c.a.lado !== AV.lado) opE.push(c.a);
+      });
+      var vacias = 0;
+      cols.forEach(function (c) { vacias += (c[0] === 'P') ? 0 : c[2].length; });
+      cuerpo += '<tr class="av-plop"><td class="k">' + esc(t.opErr) + '</td>' +
+                (vacias ? '<td colspan="' + vacias + '"></td>' : '') +
+                numClic(opE.length, opE, '', 'bien') +
+                '<td colspan="4"></td></tr>';
+      plano.push([t.opErr, opE.length]);
+    }
+
+    /* el encabezado plano, para el archivo */
+    var cab = [''];
+    cols.forEach(function (c) {
+      var nm = (c[0] === 'P') ? t.gPuntos : t[c[0]];
+      c[2].forEach(function (k) { cab.push(nm + ' ' + t[k]); });
+    });
+    AV._plan = [cab].concat(plano);
+
+    return '<div class="an-s av-plan" data-notr><h4>' + esc(t.planilla) + '</h4>' + ctrl +
+           '<div class="av-plscroll"><table class="st av-pltab">' + h1 + h2 + cuerpo + '</table></div>' +
+           '<div class="av-nota">' + esc(t.notaPlan) + ' ' + esc(t.notaTot) +
+           (String(AV.pCols || '').indexOf('P') >= 0 ? ' ' + esc(t.notaBP) : '') +
+           '</div></div>';
+  };
+
+  AV.colPlan = function (k) {
+    var l = String(AV.pCols || '').split(',').filter(Boolean);
+    var i = l.indexOf(k);
+    if (i >= 0) l.splice(i, 1); else l.push(k);
+    AV.pCols = l.join(',');
+    AV.pintar();
+  };
+
+  /* el archivo: CSV con punto y coma y BOM, que es lo que abre Excel en
+     castellano y en aleman sin preguntar nada ni romper los acentos */
+  AV.bajarPlan = function () {
+    var d = AV._plan || [];
+    if (!d.length) return;
+    var txt = d.map(function (f) {
+      return f.map(function (x) {
+        var v = (x == null) ? '' : String(x);
+        return /[";\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+      }).join(';');
+    }).join('\r\n');
+    try {
+      var blob = new Blob(['\ufeff' + txt], { type:'text/csv;charset=utf-8;' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'planilla.csv';
+      document.body.appendChild(a); a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 400);
+    } catch (e) { try { toast('No se pudo bajar', true); } catch (e2) {} }
+  };
+
+
+
+  /* ── LA DISTRIBUCION DEL ARMADOR ─────────────────────────────────────────
+     Una cancha chica por rotacion, con el armador en esa posicion, y en cada
+     zona de ataque cuanta pelota fue por ahi. Es el informe que todo
+     entrenador mira antes de jugar contra alguien: "cuando el armador esta en
+     1, ¿a quien le da?".
+
+     Son las MISMAS seis zonas desde las que se ataca: 4, 3 y 2 en la red, y
+     7, 8 y 9 de zaguero. Las de fondo (5, 6, 1) no se dibujan porque de ahi
+     no se ataca nunca, y dejar tres casillas vacias en cada una de las seis
+     canchas era ocupar media pantalla con nada.
+
+     VolleyStation hace algo parecido y lo mezcla con las direcciones en un
+     informe de 18 canchas (su manual, 4.2). Aca va separado: el reparto es
+     una pregunta y las direcciones son otra, y mezcladas no se lee ninguna.
+
+     Tres numeros por zona, que son los tres que hacen falta:
+       · cuantas pelotas fueron
+       · que parte del reparto de esa rotacion es
+       · cuanto rindio ese ataque
+     Y se toca para ver el video. */
+
+  var AR = [['4','3','2'], ['7','8','9']];
+
+  function canchaArm(acc, etiqueta, tot) {
+    var t = L();
+    var por = {}, maxN = 0;
+    acc.forEach(function (a) { if (a.zi) (por[a.zi] = por[a.zi] || []).push(a); });
+    Object.keys(por).forEach(function (z) { if (por[z].length > maxN) maxN = por[z].length; });
+
+    var h = '<div class="av-arcaja">' +
+            '<div class="av-arrot"><b>' + esc(etiqueta) + '</b> ' +
+              '<span>' + acc.length + ' ' + esc(t.pelotasRot) + '</span></div>' +
+            '<div class="av-arred">' + esc(t.red) + '</div><div class="av-armedia">';
+    AR.forEach(function (f) {
+      h += '<div class="av-arfila">';
+      f.forEach(function (z) {
+        var lst = por[z] || [], n = lst.length;
+        if (!n) { h += '<div class="av-az vacia"><span class="zn">' + z + '</span></div>'; return; }
+        var cc = {};
+        EV.forEach(function (e) { cc[e] = lst.filter(function (a) { return a.ev === e; }).length; });
+        var err = cc['='] + cc['/'];
+        var ef = Math.round((cc['#'] - err) / n * 100);
+        var col = n < 3 ? 'poco' : (ef >= 35 ? 'ok' : (ef >= 10 ? 'med' : 'mal'));
+        var peso = maxN ? (0.10 + 0.55 * (n / maxN)) : 0.10;
+        var pct = tot ? Math.round(n / tot * 100) : 0;
+        var id = lote(lst);
+        h += '<div class="av-az" style="background:rgba(56,189,248,' + peso.toFixed(2) + ')"' +
+             (id ? ' onclick="AV.ver(' + id + ')"' : '') +
+             ' title="' + esc(t.zona + ' ' + z + ' · ' + n + ' · ' + pct + '%') + '">' +
+             '<span class="zn">' + z + '</span>' +
+             '<span class="zpc">' + pct + '%</span>' +
+             '<span class="zc">' + n + '</span>' +
+             '<span class="zp ' + col + '">' + ef + '%</span></div>';
+      });
+      h += '</div>';
+    });
+    return h + '</div></div>';
+  }
+
+  AV.armador = function (rs) {
+    var t = L(), l = AV.lado;
+
+    /* siempre ataque: el reparto del armador es a donde van los ataques */
+    var gF = AV.fund; AV.fund = 'A';
+    var todo = AV.acciones(rs).filter(function (a) { return a.zi; });
+    AV.fund = gF;
+
+    if (!todo.length) {
+      return '<div class="an-s av-arm" data-notr><h4>' + esc(t.distArm) + '</h4>' +
+             '<div class="av-vacio">' + esc(t.sinArm) + '</div></div>';
+    }
+
+    /* ── EL ORDEN DE LAS SEIS CANCHAS ──────────────────────────────────────
+       No van 1, 2, 3, 4, 5, 6 sino puestas COMO ESTAN EN LA CANCHA:
+
+             P4  P3  P2      <- la fila de la red
+             P5  P6  P1      <- el fondo
+
+       El nombre de la rotacion ES la posicion del armador, asi que ponerlas
+       en ese orden hace que el dibujo coincida con lo que el entrenador ve
+       desde el banco: no hay que traducir nada. El total va aparte, a un
+       costado, para no meterse en esa figura. */
+    var ORDEN = ['4','3','2','5','6','1'];
+
+    var canchaRot = function (i) {
+      var gR = AV.rot, gF2 = AV.fund;
+      AV.rot = String(i); AV.fund = 'A';
+      var sub = AV.acciones(AV.filtrar(rs)).filter(function (a) { return a.zi; });
+      AV.rot = gR; AV.fund = gF2;
+      return sub;
+    };
+
+    var h = '<div class="an-s av-arm" data-notr><h4>' + esc(t.distArm) + '</h4>' +
+            '<div class="av-armwrap">';
+
+    h += '<div class="av-armtot">' + canchaArm(todo, t.todasRot, todo.length) + '</div>';
+
+    h += '<div class="av-armgrid">';
+    ORDEN.forEach(function (i) {
+      var sub = canchaRot(i);
+      h += sub.length ? canchaArm(sub, 'P' + i, sub.length)
+                      : '<div class="av-arcaja av-arvacia"><div class="av-arrot"><b>P' + i + '</b></div></div>';
+    });
+    h += '</div></div>';
+
+    return h + '<div class="av-nota">' + esc(t.notaArm) + '</div></div>';
+  };
+
+  /* ── LOS GRAFICOS (manual 9.5.11, "Chart Analysis") ──────────────────────
+     Un grafico por set con la DIFERENCIA de puntos, no con los dos marcadores
+     por separado. Dos lineas subiendo juntas no dicen nada: hay que restarlas
+     con la vista. Una sola linea alrededor del cero se lee sola —arriba
+     vamos ganando, abajo perdiendo— y las rachas saltan a la cara.
+
+     Las marcas verticales son los parciales de 8, 16 y 21, que es como los
+     anota VolleyStation en su informe de partido y como los mira cualquier
+     entrenador: si a los 8 ya ibas cinco abajo, el set se fue temprano.
+
+     Y cada punto se toca para ver esa jugada, que es lo que uno quiere hacer
+     justo cuando ve la caida. */
+
+  var GF = { w:250, h:150, mx:6, my:12 };
+
+  AV.graficos = function (rs) {
+    var t = L(), l = AV.lado;
+    var sets = [];
+    (rs || []).forEach(function (r) { if (sets.indexOf(r.set) < 0) sets.push(r.set); });
+    sets.sort();
+    if (!sets.length) {
+      return '<div class="an-s av-graf" data-notr><h4>' + esc(t.evolucion) + '</h4>' +
+             '<div class="av-vacio">' + esc(t.sinGraf) + '</div></div>';
+    }
+
+    var VERDE = '#4ade80', ROJO = '#f87171';
+
+    /* ── UNA SOLA ESCALA PARA LOS CUATRO ───────────────────────────────────
+       Si cada set se dibuja con su propia escala, un set perdido por 2 y otro
+       perdido por 12 salen con la misma pinta y los graficos, que estan al
+       lado justamente para compararse, mienten. Asi que la escala sale del
+       partido entero. Y no se centra el cero a la fuerza: si nunca se fue
+       arriba de +1, no tiene sentido gastar media caja en dibujar el vacio,
+       se usa el maximo y el minimo de verdad con un margen. */
+    var topA = 0, topB = 0;
+    (rs || []).forEach(function (r) {
+      var d = ((l === 'home') ? r.ptsH : r.ptsA) - ((l === 'home') ? r.ptsA : r.ptsH);
+      if (d > topA) topA = d;
+      if (d < topB) topB = d;
+    });
+    topA = Math.max(1, topA + 1); topB = Math.min(-1, topB - 1);
+
+    var h = '<div class="an-s av-graf" data-notr><h4>' + esc(t.evolucion) + '</h4><div class="av-grafs">';
+
+    sets.forEach(function (st) {
+      var pts = (rs || []).filter(function (r) { return r.set === st; });
+      if (!pts.length) return;
+
+      /* la diferencia despues de cada punto, desde nuestro lado */
+      var dif = [], finH = 0, finA = 0;
+      pts.forEach(function (r) {
+        var mios = (l === 'home') ? r.ptsH : r.ptsA;
+        var dellos = (l === 'home') ? r.ptsA : r.ptsH;
+        dif.push({ d:mios - dellos, r:r, m:Math.max(r.ptsH, r.ptsA) });
+        finH = r.ptsH; finA = r.ptsA;
+      });
+
+      var n = dif.length;
+      var W = GF.w - GF.mx*2, H = GF.h - GF.my*2;
+      var x = function (i) { return GF.mx + (n <= 1 ? W/2 : (i/(n-1)) * W); };
+      var y = function (d) { return GF.my + H - ((d - topB) / (topA - topB)) * H; };
+      var y0 = y(0);
+
+      /* el area partida en cero: arriba verde, abajo roja */
+      var arriba = 'M' + x(0).toFixed(1) + ',' + y0.toFixed(1);
+      dif.forEach(function (p, i) { arriba += ' L' + x(i).toFixed(1) + ',' + y(p.d).toFixed(1); });
+      arriba += ' L' + x(n-1).toFixed(1) + ',' + y0.toFixed(1) + ' Z';
+
+      var g = '';
+      /* dos clips: uno para lo de arriba del cero y otro para lo de abajo */
+      var uid = 'g' + st + '_' + Math.floor(Math.random()*100000);
+      g += '<defs>' +
+           '<clipPath id="' + uid + 'a"><rect x="0" y="0" width="' + GF.w + '" height="' + y0.toFixed(1) + '"/></clipPath>' +
+           '<clipPath id="' + uid + 'b"><rect x="0" y="' + y0.toFixed(1) + '" width="' + GF.w + '" height="' + GF.h + '"/></clipPath>' +
+           '</defs>';
+      g += '<path d="' + arriba + '" fill="' + VERDE + '" opacity=".20" clip-path="url(#' + uid + 'a)"/>';
+      g += '<path d="' + arriba + '" fill="' + ROJO  + '" opacity=".20" clip-path="url(#' + uid + 'b)"/>';
+
+      /* los parciales de 8, 16 y 21 */
+      [8, 16, 21].forEach(function (p) {
+        var i = -1;
+        for (var k = 0; k < n; k++) { if (dif[k].m >= p) { i = k; break; } }
+        if (i < 0) return;
+        g += '<line class="av-gp" x1="' + x(i).toFixed(1) + '" y1="' + GF.my +
+             '" x2="' + x(i).toFixed(1) + '" y2="' + (GF.h - GF.my) + '"/>' +
+             '<text class="av-gpt" x="' + x(i).toFixed(1) + '" y="' + (GF.my - 3) + '">' + p + '</text>';
+      });
+
+      g += '<line class="av-g0" x1="' + GF.mx + '" y1="' + y0.toFixed(1) +
+           '" x2="' + (GF.w - GF.mx) + '" y2="' + y0.toFixed(1) + '"/>';
+
+      /* la linea */
+      var d2 = dif.map(function (p, i) {
+        return (i ? 'L' : 'M') + x(i).toFixed(1) + ',' + y(p.d).toFixed(1);
+      }).join(' ');
+      g += '<path class="av-gl" d="' + d2 + '"/>';
+
+      /* los puntos, tocables. Solo se dibuja el circulo cada tantos para no
+         llenar de bolitas, pero el area de toque cubre todo */
+      dif.forEach(function (p, i) {
+        var lot = lote((p.r.acciones || []).filter(function (a) { return a.lado === l; }));
+        var tit = p.r.ptsH + '-' + p.r.ptsA + ' · ' + (p.d > 0 ? '+' : '') + p.d;
+        g += '<g class="av-gpt2"' + (lot ? ' onclick="AV.ver(' + lot + ')"' : '') + '>' +
+             '<title>' + esc(tit) + '</title>' +
+             '<rect x="' + (x(i)-4).toFixed(1) + '" y="' + GF.my + '" width="8" height="' + H + '" fill="transparent"/>' +
+             (i === n-1 ? '<circle class="av-gc" cx="' + x(i).toFixed(1) + '" cy="' + y(p.d).toFixed(1) + '" r="3"/>' : '') +
+             '</g>';
+      });
+
+      var miosF = (l === 'home') ? finH : finA, ellosF = (l === 'home') ? finA : finH;
+      h += '<div class="av-gcaja">' +
+           '<div class="av-grot"><b>' + esc(t.se + ' ' + st) + '</b> ' +
+             '<span class="' + (miosF > ellosF ? 'ok' : 'mal') + '">' + miosF + '-' + ellosF + '</span></div>' +
+           '<svg class="av-gsvg" viewBox="0 0 ' + GF.w + ' ' + GF.h + '" width="' + GF.w +
+             '" height="' + GF.h + '" role="img">' + g +
+             '<text class="av-gej" x="3" y="' + (GF.my + 7) + '">+' + topA + '</text>' +
+             '<text class="av-gej" x="3" y="' + (GF.h - GF.my - 1) + '">' + topB + '</text>' +
+             '</svg></div>';
+    });
+
+    return h + '</div><div class="av-nota">' + esc(t.notaGraf) + '</div></div>';
+  };
+
+
+
+  /* ── LA BUSQUEDA (manual 9.6) ────────────────────────────────────────────
+     El Data parte esto en cuatro entradas de menu —Busqueda Libre, Statistics
+     Search, Rotations Search y Busqueda Avanzada— pero tres de las cuatro son
+     lo mismo que la barra de filtros de arriba, que ya esta y filtra todo a
+     la vez. La que faltaba de verdad es la LIBRE: escribir un pedazo de
+     codigo y encontrarlo.
+
+     Y abajo va el punto por punto (manual 9.7.3, "Play by Play"): cada punto
+     con su marcador, como termino y quien lo gano, tocable para ver el rally
+     entero en el video. Es la lista que uno recorre entre set y set.
+
+     La busqueda NO usa los filtros de arriba a proposito: si alguien escribe
+     un codigo es porque lo quiere encontrar, no porque quiera encontrarlo
+     sólo si ademas pasa seis filtros. La lista de puntos sí los respeta. */
+
+  AV.q = '';
+
+  AV.buscarTxt = function (v) {
+    AV.q = String(v || '');
+    try {
+      var caja = document.getElementById('av-res-busc');
+      if (caja) {
+        /* si esto se llamo desde afuera y no tecleando, la cajita de texto
+           quedaria mostrando lo anterior: se la pone al dia */
+        var inp = document.getElementById('av-q');
+        if (inp && inp.value !== AV.q) inp.value = AV.q;
+        caja.innerHTML = AV.resultados();
+        return;
+      }
+    } catch (e) {}
+    AV.pintar();
+  };
+
+  AV.resultados = function () {
+    var t = L();
+    var q = AV.q.trim().toUpperCase();
+    if (!q) return '';
+    var codes = [];
+    try { codes = (typeof M !== 'undefined' && M && M.codes) ? M.codes : []; } catch (e) {}
+
+    var hits = [];
+    codes.forEach(function (c, i) {
+      if (!c || c.k !== 'play' || !c.c) return;
+      if (String(c.c).toUpperCase().indexOf(q) < 0) return;
+      hits.push({ i:i, t:(c.t || 0), cod:String(c.c), set:c.set });
+    });
+
+    if (!hits.length) return '<div class="av-vacio">' + esc(t.nadaEncontrado) + '</div>';
+
+    AV._hits = hits;
+    var h = '<div class="av-bres"><b>' + hits.length + '</b> ' + esc(t.encontradas) +
+            ' <button class="av-mas" onclick="AV.verHits()">&#9654; ' + esc(t.verTodas) + '</button></div>';
+    h += '<div class="av-blista">';
+    hits.slice(0, 200).forEach(function (x, k) {
+      h += '<div class="av-bfila" onclick="AV.verHit(' + k + ')">' +
+           '<span class="s">' + esc(t.se + ' ' + (x.set || '-')) + '</span>' +
+           '<span class="c">' + esc(x.cod) + '</span>' +
+           '<span class="m">' + esc(hhmm(x.t)) + '</span></div>';
+    });
+    if (hits.length > 200) h += '<div class="av-nota">+' + (hits.length - 200) + '</div>';
+    return h + '</div>';
+  };
+
+  function hhmm(seg) {
+    seg = Math.max(0, Math.round(seg || 0));
+    var m = Math.floor(seg / 60), g = seg % 60;
+    return m + ':' + (g < 10 ? '0' : '') + g;
+  }
+
+  AV.verHits = function () {
+    if (!AV._hits || !AV._hits.length) return;
+    try { rvAbrir(AV._hits.slice(), AV.q.toUpperCase()); } catch (e) {}
+  };
+  AV.verHit = function (k) {
+    if (!AV._hits || !AV._hits[k]) return;
+    try { rvAbrir([AV._hits[k]], AV._hits[k].cod); } catch (e) {}
+  };
+
+  /* ── PUNTO POR PUNTO ──────────────────────────────────────────────────── */
+  AV.jugadas = function (rs) {
+    var t = L(), l = AV.lado;
+    if (!rs || !rs.length) return '';
+    var codes = [];
+    try { codes = (typeof M !== 'undefined' && M && M.codes) ? M.codes : []; } catch (e) {}
+
+    var h = '<div class="an-s av-jug2" data-notr><h4>' + esc(t.jugadaAJugada) + '</h4>' +
+            '<div class="av-jlista">';
+    rs.forEach(function (r) {
+      var c = cierre(r);
+      var quien = r.gano === l ? 'gana' : 'pierde';
+      var comoC = c ? ((c.acierto ? '' : '') + (L()[c.sk] || '')) : '';
+      /* el nombre solo si aporta algo: los rivales suelen venir sin plantel
+         cargado y nombreDe devuelve el propio dorsal, asi que quedaba "#22 22" */
+      var nn = c ? (nom(c.a.num, c.a.lado) || '') : '';
+      if (nn && String(nn).trim() === String(c.a.num)) nn = '';
+      var quienN = c ? ('#' + c.a.num + (nn ? ' ' + nn : '')) : '';
+      /* los clips del punto entero: todas sus acciones, de los dos equipos */
+      var todas = (r.acciones || []).map(function (a) {
+        var cc = a._c; if (!cc) return null;
+        var i = codes.indexOf(cc);
+        return i < 0 ? null : { i:i, t:(cc.t || 0), cod:String(cc.c || ''), set:a.set };
+      }).filter(Boolean);
+      var id = todas.length ? lote(r.acciones || []) : 0;
+      h += '<div class="av-jfila ' + quien + '"' +
+           (todas.length ? ' onclick="AV.verRally(' + (r.ptsH || 0) + ',' + (r.ptsA || 0) + ',' + r.set + ')"' : '') + '>' +
+           '<span class="s">' + esc(t.se + ' ' + r.set) + '</span>' +
+           '<span class="p">' + (r.ptsH || 0) + '-' + (r.ptsA || 0) + '</span>' +
+           '<span class="q">' + esc(comoC) + '</span>' +
+           '<span class="n">' + esc(quienN) + '</span>' +
+           '<span class="g">' + (r.gano === l ? '+' : '−') + '</span>' +
+           '</div>';
+    });
+    return h + '</div><div class="av-nota">' + esc(t.notaJugadas) + '</div></div>';
+  };
+
+  /* abre el punto entero en el reproductor */
+  AV.verRally = function (ph, pa, st) {
+    var codes = [], rs = [];
+    try { codes = (typeof M !== 'undefined' && M && M.codes) ? M.codes : []; } catch (e) {}
+    try { rs = AV.todos(); } catch (e) {}
+    var r = rs.filter(function (x) {
+      return x.set === st && x.ptsH === ph && x.ptsA === pa;
+    })[0];
+    if (!r) return;
+    var clips = (r.acciones || []).map(function (a) {
+      var cc = a._c; if (!cc) return null;
+      var i = codes.indexOf(cc);
+      return i < 0 ? null : { i:i, t:(cc.t || 0), cod:String(cc.c || ''), set:a.set };
+    }).filter(Boolean);
+    if (!clips.length) return;
+    try { rvAbrir(clips, L().se + ' ' + st + ' · ' + ph + '-' + pa); } catch (e) {}
+  };
+
+  AV.busqueda = function (rs) {
+    var t = L();
+    var h = '<div class="an-s av-busc" data-notr><h4>' + esc(t.buscar) + '</h4>' +
+            '<input class="av-binput" id="av-q" value="' + esc(AV.q) + '" placeholder="' +
+              esc(t.buscarPh) + '" oninput="AV.buscarTxt(this.value)">' +
+            '<div id="av-res-busc">' + AV.resultados() + '</div>' +
+            '<div class="av-nota">' + esc(t.notaBusc) + '</div></div>';
+    return h + AV.jugadas(rs);
+  };
+
+  /* ── BAJAR E IMPRIMIR CUALQUIER ANALISIS ─────────────────────────────────
+     El Data tiene, en el menu de cada analisis, "Export" a Excel e "Imprimir
+     con vista previa". Aca son dos botones al lado de las solapas y valen
+     para LA SOLAPA QUE ESTES MIRANDO, con los filtros puestos.
+
+     El archivo sale en CSV con punto y coma y BOM: es lo que abre Excel en
+     castellano y en aleman de un doble clic, sin asistente de importacion y
+     sin romper los acentos. Un .xlsx de verdad obligaria a meter una libreria
+     entera en el panel, que es lo que justamente no queremos.
+
+     Al imprimir se arma una cabecera con el partido, el marcador y los
+     filtros que estan puestos, porque una hoja de numeros sin decir de que
+     partido y con que filtros es papel tirado. */
+
+  function tablasVisibles() {
+    var pane = document.querySelector('[data-av-pane="' + AV.tab + '"]');
+    if (!pane) return [];
+    return [].slice.call(pane.querySelectorAll('table.st'));
+  }
+
+  function tituloDe(tb) {
+    var caja = tb.closest ? tb.closest('.an-s') : null;
+    var h = caja ? caja.querySelector('h4') : null;
+    return h ? h.textContent.trim() : '';
+  }
+
+  AV.textoFiltros = function () {
+    var caja = document.getElementById('av-bar');
+    var r = caja ? caja.querySelector('.av-res') : null;
+    return r ? r.innerText.replace(/\s+/g, ' ').trim() : '';
+  };
+
+  AV.excel = function () {
+    var t = L();
+    var tbs = tablasVisibles();
+    if (!tbs.length) { try { toast(t.nadaQueBajar, true); } catch (e) {} return; }
+
+    var lineas = [];
+    var M_ = {}; try { M_ = (typeof M !== 'undefined' && M) ? M : {}; } catch (e) {}
+    lineas.push([ ((M_.home && M_.home.name) || '') + ' - ' + ((M_.away && M_.away.name) || '') ]);
+    lineas.push([ AV.textoFiltros() ]);
+    lineas.push([]);
+
+    tbs.forEach(function (tb) {
+      var tit = tituloDe(tb);
+      if (tit) lineas.push([tit]);
+      [].slice.call(tb.querySelectorAll('tr')).forEach(function (tr) {
+        var fila = [].slice.call(tr.querySelectorAll('th,td')).map(function (c) {
+          return c.innerText.replace(/\s+/g, ' ').trim();
+        });
+        lineas.push(fila);
+      });
+      lineas.push([]);
+    });
+
+    var txt = lineas.map(function (f) {
+      return f.map(function (x) {
+        var v = (x == null) ? '' : String(x);
+        return /[";\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+      }).join(';');
+    }).join('\r\n');
+
+    try {
+      var blob = new Blob(['\ufeff' + txt], { type:'text/csv;charset=utf-8;' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'analisis-' + AV.tab + '.csv';
+      document.body.appendChild(a); a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 400);
+    } catch (e) { try { toast('No se pudo bajar', true); } catch (e2) {} }
+  };
+
+  AV.imprimir = function () {
+    var t = L();
+    var M_ = {}; try { M_ = (typeof M !== 'undefined' && M) ? M : {}; } catch (e) {}
+    var cab = document.getElementById('av-print');
+    if (!cab) {
+      cab = document.createElement('div');
+      cab.id = 'av-print';
+      var cont = document.getElementById('an-cont');
+      if (cont && cont.parentNode) cont.parentNode.insertBefore(cab, cont);
+    }
+    var sets = (M_.parciales || []).join('  ·  ');
+    var nombreTab = (TABS.filter(function (x) { return x[0] === AV.tab; })[0] || ['', ''])[1];
+    cab.innerHTML =
+      '<div class="pcab"><b>' + esc((M_.home && M_.home.name) || '') + '</b> ' +
+        ((M_.home && M_.home.sets) || 0) + ' - ' + ((M_.away && M_.away.sets) || 0) +
+        ' <b>' + esc((M_.away && M_.away.name) || '') + '</b></div>' +
+      (sets ? '<div class="ppar">' + esc(sets) + '</div>' : '') +
+      '<div class="pfil"><b>' + esc(t[nombreTab] || '') + '</b> · ' +
+        esc(AV.textoFiltros() || t.sinFiltro) + '</div>';
+    try { window.print(); } catch (e) {}
+  };
+
+  AV.barraAcc = function () {
+    var t = L();
+    return '<div class="av-acc">' +
+      '<button class="av-mas" onclick="AV.excel()">&#8681; ' + esc(t.excel) + '</button>' +
+      '<button class="av-mas" onclick="AV.imprimir()">&#9113; ' + esc(t.imprimir) + '</button>' +
+      '</div>';
   };
 
   /* ── LAS SOLAPAS ─────────────────────────────────────────────────────────
@@ -1346,7 +2695,8 @@
   AV.tab = 'resumen';
 
   var TABS = [['resumen','tResumen'], ['jug','tJug'], ['cancha','tCancha'],
-              ['dir','tDir'], ['ataque','tAtaque'], ['comp','tComp']];
+              ['dir','tDir'], ['ataque','tAtaque'], ['comp','tComp'],
+              ['arm','tArm'], ['graf','tGraf'], ['plan','tPlan'], ['busc','tBusc']];
 
   function panel(id, html) {
     if (!html) return '';
@@ -1359,7 +2709,7 @@
       return '<button class="av-tab' + (AV.tab === x[0] ? ' on' : '') +
              '" data-av-tab="' + x[0] + '" onclick="AV.verTab(\'' + x[0] + '\')">' +
              esc(t[x[1]]) + '</button>';
-    }).join('') + '</div>';
+    }).join('') + AV.barraAcc() + '</div>';
   };
 
   AV.verTab = function (id) {
@@ -1422,7 +2772,7 @@
 
     _rallies = window.anRallies;
     window.anRallies = function () {
-      var todo = _rallies();
+      var todo = marcar(_rallies());
       if (_dentro) return todo;         /* llamadas internas: sin filtrar */
       return AV.filtrar(todo);
     };
@@ -1450,7 +2800,7 @@
 
     AV._lotes = {}; AV._lote = 0;   /* se rearman en cada dibujado */
     _dentro = true;
-    var todo = AV.todos();
+    var todo = marcar(AV.todos());
     _dentro = false;
     var fil = AV.filtrar(todo);
 
@@ -1461,7 +2811,8 @@
       caja.setAttribute('data-notr', '');   /* ya viene traducido de arriba */
       cont.parentNode.insertBefore(caja, cont);
     }
-    caja.innerHTML = AV.barra(todo) + AV.chips() + AV.resumen(todo, fil) + AV.solapas();
+    caja.innerHTML = AV.barra(todo) + AV.avanzado() + AV.chips() +
+                     AV.resumen(todo, fil) + AV.solapas();
 
     /* la tabla arriba de todo, que es donde se mira primero, y abajo la
        cancha; los bloques de siempre quedan despues, intactos */
@@ -1475,7 +2826,11 @@
         + panel('cancha',  AV.mapa(fil))
         + panel('dir',     AV.direcciones(fil))
         + panel('ataque',  AV.combis(fil) + AV.trasRec(fil) + AV.llamadas(fil))
-        + panel('comp',    AV.comparar(todo));
+        + panel('comp',    AV.comparar(todo))
+        + panel('arm',     AV.armador(fil))
+        + panel('graf',    AV.graficos(fil))
+        + panel('plan',    AV.planilla(fil))
+        + panel('busc',    AV.busqueda(fil));
       AV.verTab(AV.tab);
     }
   };
@@ -1492,6 +2847,75 @@
     + '.av-tab:hover{color:var(--fg,#e8edf5)}'
     + '.av-tab.on{color:var(--k-zone,#38bdf8);border-bottom-color:var(--k-zone,#38bdf8)}'
     + '.av-pane{padding-top:4px}'
+    /* ── LA BUSQUEDA Y EL PUNTO POR PUNTO ─────────────────────────────────── */
+    + '.av-busc h4,.av-jug2 h4{margin:0 0 8px;font-size:11px;letter-spacing:1px;'
+    +   'text-transform:uppercase;color:var(--k-zone,#38bdf8)}'
+    + '.av-binput{width:100%;max-width:520px;background:var(--card);color:var(--fg,#e8edf5);'
+    +   'border:1px solid var(--b);border-radius:8px;padding:10px 12px;font-size:13px;'
+    +   'font-family:ui-monospace,monospace}'
+    + '.av-binput:focus{outline:0;border-color:var(--k-zone,#38bdf8)}'
+    + '.av-bres{margin:10px 0 6px;font-size:12px;color:var(--mut);display:flex;'
+    +   'align-items:center;gap:10px}'
+    + '.av-bres b{color:var(--fg,#e8edf5);font-size:14px}'
+    + '.av-blista,.av-jlista{max-width:560px;max-height:320px;overflow:auto;'
+    +   'border:1px solid var(--b);border-radius:8px}'
+    + '.av-bfila,.av-jfila{display:flex;gap:10px;align-items:center;padding:6px 10px;'
+    +   'font-size:12px;cursor:pointer;border-bottom:1px solid var(--b)}'
+    + '.av-bfila:last-child,.av-jfila:last-child{border-bottom:0}'
+    + '.av-bfila:hover,.av-jfila:hover{background:var(--card2)}'
+    + '.av-bfila .s,.av-jfila .s{color:var(--mut);min-width:44px;font-size:11px}'
+    + '.av-bfila .c{font-family:ui-monospace,monospace;color:var(--fg,#e8edf5);flex:1}'
+    + '.av-bfila .m{color:var(--mut);font-size:11px}'
+    + '.av-jfila .p{font-family:ui-monospace,monospace;color:var(--fg,#e8edf5);min-width:50px}'
+    + '.av-jfila .q{color:var(--mut);min-width:78px;font-size:11px}'
+    + '.av-jfila .n{color:var(--mut);flex:1;font-size:11px;overflow:hidden;'
+    +   'text-overflow:ellipsis;white-space:nowrap}'
+    + '.av-jfila .g{font-weight:800;min-width:14px;text-align:center}'
+    + '.av-jfila.gana .g{color:var(--ok,#22c55e)}'
+    + '.av-jfila.pierde .g{color:var(--bad,#ef4444)}'
+    + '.av-jug2{margin-top:16px}'
+    + '.av-acc{margin-left:auto;display:flex;gap:5px;align-items:center;padding-bottom:5px}'
+    + '.av-acc .av-mas{padding:5px 11px}'
+    + '#av-print{display:none}'
+    /* ── LA HOJA IMPRESA ───────────────────────────────────────────────────
+       Se imprime SOLO la solapa que se esta mirando, con una cabecera que
+       dice de que partido es y con que filtros. Todo lo demas del panel —la
+       cancha, la lista de codigos, los botones— se esconde: si no, salen
+       ocho hojas de cosas que nadie pidio. Los colores se fuerzan a tinta
+       oscura sobre blanco, porque el tema del panel es negro y en papel
+       saldria una mancha. */
+    + '@media print{'
+    +   'body>*{display:none!important}'
+    +   '#m-analisis{display:block!important;position:static!important;background:#fff!important;'
+    +     'padding:0!important;inset:auto!important;z-index:auto!important}'
+    +   '#m-analisis .sheet{background:#fff!important;border:0!important;max-width:none!important;'
+    +     'max-height:none!important;overflow:visible!important;padding:0!important;'
+    +     'box-shadow:none!important}'
+    +   '#m-analisis h2,#m-analisis .sub,#av-bar .av-bar,#av-bar .av-avwrap,#av-bar .av-guard,'
+    +     '#av-bar .av-tabs,.av-acc,.av-nota,.av-vacio{display:none!important}'
+    +   '#av-bar .av-res{display:none!important}'
+    +   '#m-analisis .modal,#m-analisis button,#m-analisis select,#m-analisis input{display:none!important}'
+    +   '.av-orden,.av-plctrl,.av-ley,.av-guard,.av-canc,.av-reg{display:none!important}'
+    +   '#av-print{display:block!important;margin:0 0 14px;color:#000}'
+    +   '#av-print .pcab{font-size:17px;font-weight:800;letter-spacing:.5px}'
+    +   '#av-print .ppar{font-size:11px;color:#444;margin-top:2px}'
+    +   '#av-print .pfil{font-size:11px;color:#222;margin-top:6px;padding-top:6px;'
+    +     'border-top:1px solid #bbb}'
+    +   '.av-pane{color:#000}'
+    +   '.an-s h4,.av-tabla h4,.av-punto h4,.av-combi h4,.av-comp h4,.av-plan h4,'
+    +     '.av-graf h4,.av-arm h4,.av-dir h4,.av-mapa h4{color:#000!important}'
+    +   'table.st th{color:#444!important}'
+    +   'table.st td,table.st td .num,table.st td.k{color:#000!important}'
+    +   'table.st td .num.pos,table.st td.bien .num,.cp.ok,.zp.ok{color:#137333!important}'
+    +   'table.st td .num.neg,table.st td.mal .num,.cp.mal,.zp.mal{color:#a50e0e!important}'
+    +   '.av-z,.av-az{border-color:#999!important}'
+    +   '.av-svg,.av-gsvg{background:#fff!important;border-color:#999!important}'
+    +   '.av-cz{stroke:#bbb!important}.av-cn{fill:#000!important;opacity:.55!important}'
+    +   '.av-cred,.av-g0,.av-gl{stroke:#000!important;opacity:1!important}'
+    +   '.av-fltxt{fill:#000!important}.av-flr rect{fill:#fff!important;opacity:.9!important}'
+    +   '.av-gej,.av-gpt{fill:#555!important}'
+    +   '@page{margin:14mm}'
+    + '}'
     /* ── TODO CENTRADO Y JUNTO ─────────────────────────────────────────────
        Las tablas se estiraban a todo el ancho de la ventana: el nombre del
        jugador quedaba a la izquierda del todo y su eficiencia a mil pixeles
@@ -1538,6 +2962,13 @@
     + '.av-vacio{padding:14px 0;color:var(--mut);font-size:12px}'
     + '.av-tabla table.st td.k{color:var(--fg,#e8edf5);font-weight:600}'
     + '.av-tabla table.st td .num{color:var(--fg,#e8edf5)}'
+    + '.av-orden{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin:0 0 9px}'
+    + '.av-orden>span{font-size:10px;letter-spacing:.8px;text-transform:uppercase;'
+    +   'color:var(--mut);font-weight:700;margin-right:4px}'
+    + '.av-tabla tr.av-grp td{padding-top:11px;color:var(--k-zone,#38bdf8);font-weight:800;'
+    +   'letter-spacing:.5px;text-align:left}'
+    + '.av-tabla tr.av-grp td i{font-style:normal;color:var(--mut);font-weight:400;'
+    +   'font-size:11px;margin-left:7px}'
     + '.av-tabla table.st td .num.pos{color:var(--ok,#22c55e)}'
     + '.av-tabla table.st td .num.neg{color:var(--bad,#ef4444)}'
     + '.av-tabla table.st th{color:var(--mut)}'
@@ -1602,6 +3033,128 @@
     + '.av-comp td.cc i.cp.med{color:var(--warn,#f59e0b)}'
     + '.av-comp td.cc i.cp.mal{color:var(--bad,#ef4444)}'
     + '.av-comp td.cc i.cp.poco{color:var(--mut)}'
+    /* ── LA PLANILLA ──────────────────────────────────────────────────── */
+    + '.av-plan h4{margin:0 0 8px;font-size:11px;letter-spacing:1px;text-transform:uppercase;'
+    +   'color:var(--k-zone,#38bdf8)}'
+    + '.av-plctrl{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:10px}'
+    + '.av-plctrl label{display:flex;flex-direction:column;gap:4px;font-size:10px;'
+    +   'letter-spacing:.8px;text-transform:uppercase;color:var(--mut);font-weight:700}'
+    + '.av-plctrl select{background:var(--card);color:var(--fg,#e8edf5);border:1px solid var(--b);'
+    +   'border-radius:7px;padding:6px 8px;font-size:12px;font-family:inherit;min-height:32px}'
+    + '.av-plsk{display:flex;flex-wrap:wrap;gap:4px;align-items:center}'
+    + '.av-plsk>span{font-size:10px;letter-spacing:.8px;text-transform:uppercase;'
+    +   'color:var(--mut);font-weight:700;margin-right:3px}'
+    + '.av-plb{background:transparent;border:1px solid var(--b);border-radius:20px;'
+    +   'padding:5px 11px;font-size:11px;font-family:inherit;color:var(--mut);cursor:pointer}'
+    + '.av-plb.on{background:var(--k-zone,#38bdf8);border-color:var(--k-zone,#38bdf8);'
+    +   'color:#04121c;font-weight:800}'
+    + '.av-baja{margin-left:auto;align-self:center}'
+    + '.av-plscroll{overflow-x:auto;padding-bottom:4px}'
+    + '.av-pltab{min-width:100%;width:auto}'
+    + '.av-pltab th,.av-pltab td{text-align:center;white-space:nowrap;padding-left:7px;padding-right:7px}'
+    + '.av-pltab th.k,.av-pltab td.k{text-align:left;white-space:nowrap;padding-right:16px}'
+    + '.av-pltab td.k{color:var(--fg,#e8edf5);font-weight:600}'
+    + '.av-pltab th{color:var(--mut);font-size:9.5px}'
+    + '.av-pltab th.grp{color:var(--k-zone,#38bdf8);font-size:10px;letter-spacing:1px;'
+    +   'border-bottom:1px solid var(--b);padding-bottom:3px}'
+    + '.av-pltab td .num{color:var(--fg,#e8edf5)}'
+    + '.av-pltab td.bien .num{color:var(--ok,#22c55e)}'
+    + '.av-pltab td.mal .num{color:var(--bad,#ef4444)}'
+    + '.av-pltab td .num.pos{color:var(--ok,#22c55e)}'
+    + '.av-pltab td .num.neg{color:var(--bad,#ef4444)}'
+    + '.av-pltab tr.av-pltot td{border-top:1px solid var(--b2,#1e293b);padding-top:9px}'
+    + '.av-pltab tr.av-pltot td.k{color:var(--k-zone,#38bdf8);font-weight:800;letter-spacing:.6px}'
+    + '.av-pltab tr.av-pltot .num{font-weight:800}'
+    + '.av-pltab tr.av-plop td.k{color:var(--mut);font-weight:600}'
+    /* ── LOS GRAFICOS ─────────────────────────────────────────────────── */
+    + '.av-graf h4{margin:0 0 10px;font-size:11px;letter-spacing:1px;text-transform:uppercase;'
+    +   'color:var(--k-zone,#38bdf8)}'
+    + '.av-grafs{display:flex;flex-wrap:wrap;gap:14px}'
+    + '.av-gcaja{flex:0 0 auto}'
+    + '.av-grot{font-size:11px;color:var(--mut);margin-bottom:3px;letter-spacing:.4px}'
+    + '.av-grot b{color:var(--fg,#e8edf5);font-weight:700;margin-right:5px}'
+    + '.av-grot .ok{color:var(--ok,#22c55e);font-weight:800}'
+    + '.av-grot .mal{color:var(--bad,#ef4444);font-weight:800}'
+    + '.av-gsvg{display:block;background:var(--card2);border:1px solid var(--b);border-radius:8px}'
+    + '.av-g0{stroke:var(--fg,#e8edf5);stroke-width:1.2;opacity:.45}'
+    + '.av-gp{stroke:var(--b2,rgba(255,255,255,.14));stroke-width:1;stroke-dasharray:2 3}'
+    + '.av-gpt{fill:var(--mut);font-size:8px;text-anchor:middle;font-family:inherit}'
+    + '.av-gl{fill:none;stroke:var(--fg,#e8edf5);stroke-width:2;stroke-linejoin:round;'
+    +   'stroke-linecap:round;opacity:.92}'
+    + '.av-gc{fill:var(--fg,#e8edf5)}'
+    + '.av-gej{fill:var(--mut);font-size:8px;font-family:inherit;opacity:.8}'
+    + '.av-gpt2{cursor:pointer}'
+    + '.av-gpt2:hover rect{fill:rgba(255,255,255,.07)}'
+    + '.av-avcaja{margin-top:8px;padding:9px 10px;background:var(--card2);'
+    +   'border:1px solid var(--b);border-radius:10px}'
+    + '.av-avcaja .av-av{margin-top:0;padding:0;background:transparent;border:0;border-radius:0}'
+    + '.av-canc{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-top:10px;'
+    +   'padding-top:9px;border-top:1px solid var(--b)}'
+    + '.av-canc>span{font-size:10px;letter-spacing:.8px;text-transform:uppercase;'
+    +   'color:var(--mut);font-weight:700;margin-right:4px}'
+    + '.av-canc .av-plb{min-width:34px;padding:5px 8px;font-weight:700}'
+    + '.av-canc .av-mas{margin-left:6px;padding:4px 10px}'
+    + '.av-reg{margin-top:11px;padding-top:10px;border-top:1px solid var(--b)}'
+    + '.av-reghd{display:flex;align-items:center;gap:10px;margin-bottom:7px}'
+    + '.av-reghd>span{font-size:10px;letter-spacing:.8px;text-transform:uppercase;'
+    +   'color:var(--mut);font-weight:700}'
+    + '.av-regyo .av-f{padding:5px 10px;min-height:26px}'
+    + '.av-regfila{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-bottom:5px}'
+    + '.av-regfila select{background:var(--card);color:var(--fg,#e8edf5);border:1px solid var(--b);'
+    +   'border-radius:7px;padding:5px 7px;font-size:11.5px;font-family:inherit;min-height:30px}'
+    + '.av-regx{background:transparent;border:1px solid var(--b);border-radius:7px;'
+    +   'color:var(--mut);width:30px;height:30px;font-size:15px;cursor:pointer;line-height:1}'
+    + '.av-regx:hover{color:var(--bad,#ef4444);border-color:var(--bad,#ef4444)}'
+    /* ── LA DISTRIBUCION DEL ARMADOR ──────────────────────────────────── */
+    + '.av-arm h4{margin:0 0 10px;font-size:11px;letter-spacing:1px;text-transform:uppercase;'
+    +   'color:var(--k-zone,#38bdf8)}'
+    + '.av-armwrap{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start}'
+    + '.av-armtot{padding-right:20px;border-right:1px solid var(--b)}'
+    + '.av-armgrid{display:grid;grid-template-columns:repeat(3,186px);gap:10px 12px}'
+    + '.av-arvacia{opacity:.4}'
+    + '@media(max-width:820px){.av-armtot{padding-right:0;border-right:0;'
+    +   'padding-bottom:14px;border-bottom:1px solid var(--b)}'
+    +   '.av-armgrid{grid-template-columns:repeat(2,minmax(150px,186px))}}'
+    + '.av-arcaja{flex:0 0 auto;width:186px}'
+    + '.av-arrot{font-size:11px;color:var(--mut);margin-bottom:3px}'
+    + '.av-arrot b{color:var(--fg,#e8edf5);font-weight:800;margin-right:6px;font-size:12px}'
+    + '.av-arred{font-size:7.5px;letter-spacing:3px;color:var(--mut);text-align:center;'
+    +   'border-bottom:2px solid var(--b2,#1e293b);padding-bottom:2px;margin-bottom:3px}'
+    + '.av-armedia{display:flex;flex-direction:column;gap:3px}'
+    + '.av-arfila{display:flex;gap:3px}'
+    + '.av-az{flex:1;min-height:56px;border:1px solid var(--b);border-radius:6px;position:relative;'
+    +   'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;'
+    +   'cursor:pointer;transition:border-color .12s}'
+    + '.av-az:hover{border-color:rgba(255,255,255,.45)}'
+    + '.av-az.vacia{background:transparent;cursor:default;opacity:.4}'
+    + '.av-az .zn{position:absolute;top:3px;left:5px;font-size:9.5px;color:var(--fg,#e8edf5);'
+    +   'opacity:.5;font-weight:700}'
+    + '.av-az .zpc{position:absolute;top:3px;right:5px;font-size:9.5px;font-weight:800;'
+    +   'color:var(--k-zone,#38bdf8)}'
+    + '.av-az .zc{font-size:17px;font-weight:800;color:var(--fg,#e8edf5);line-height:1;margin-top:5px}'
+    + '.av-az .zp{font-size:9.5px;font-weight:700;margin-top:1px}'
+    + '.av-az .zp.ok{color:var(--ok,#22c55e)}'
+    + '.av-az .zp.med{color:var(--warn,#f59e0b)}'
+    + '.av-az .zp.mal{color:var(--bad,#ef4444)}'
+    + '.av-az .zp.poco{color:var(--mut)}'
+    + '.av-avwrap{margin-top:8px}'
+    + '.av-avbtn.on{color:var(--k-zone,#38bdf8);border-color:var(--k-zone,#38bdf8);'
+    +   'border-style:solid}'
+    + '.av-av{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-top:8px;'
+    +   'padding:9px 10px;background:var(--card2);border:1px solid var(--b);border-radius:10px}'
+    + '.av-av label{display:flex;flex-direction:column;gap:4px;font-size:10px;'
+    +   'letter-spacing:.8px;text-transform:uppercase;color:var(--mut);font-weight:700}'
+    + '.av-av select,.av-av input[type=number]{background:var(--card);color:var(--fg,#e8edf5);'
+    +   'border:1px solid var(--b);border-radius:7px;padding:6px 8px;font-size:12px;'
+    +   'font-family:inherit;min-height:32px}'
+    + '.av-av select{min-width:120px}'
+    + '.av-dos{display:flex;gap:5px}'
+    + '.av-dos input{width:72px}'
+    + '.av-av label.av-chk{flex-direction:row;align-items:center;gap:7px;text-transform:none;'
+    +   'letter-spacing:0;font-size:11.5px;font-weight:600;color:var(--fg,#e8edf5);'
+    +   'min-height:32px;cursor:pointer}'
+    + '.av-av label.av-chk input{width:16px;height:16px;accent-color:var(--k-zone,#38bdf8);'
+    +   'cursor:pointer}'
     + '.av-guard{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:7px}'
     + '.av-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;font-size:11px;'
     +   'border:1px solid var(--b);border-radius:20px;background:var(--card2);cursor:pointer;'
@@ -1649,6 +3202,8 @@
     + '.av-lb b{color:var(--fg,#e8edf5)}'
     + '.av-lf{width:26px;height:9px;flex:none;background:var(--mut);'
     +   'clip-path:polygon(0 40%,100% 0,100% 100%,0 60%)}'
+    + '.av-lc{width:26px;height:11px;flex:none;border-radius:3px;'
+    +   'background:linear-gradient(90deg,rgba(56,189,248,.06),rgba(56,189,248,.4))}'
     + '.av-canchas{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}'
     + '.av-canchas .av-cancha{flex:1 1 255px;max-width:340px;min-width:225px}'
     + '.av-rot{font-size:9.5px;letter-spacing:.9px;text-transform:uppercase;'

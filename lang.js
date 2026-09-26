@@ -3358,6 +3358,40 @@
     "· clickeá un casillero o una llamada para ver el video 🎬":{en:"· click a cell or a call to see the video 🎬",de:"· klicke auf eine Zelle oder einen Call, um das Video zu sehen 🎬"},
     "· cómo distribuye en juego corrido (defensa/contraataque) ·":{en:"· how they distribute in transition (defense/counterattack) ·",de:"· wie sie in der Transition verteilen (Abwehr/Gegenangriff) ·"},
     "· distribución en K1 (recepción positiva) ·":{en:"· distribution in K1 (positive reception) ·",de:"· Verteilung in K1 (positive Annahme) ·"},
+    /* ── seccion ROTACIONES DEL ARMADOR (agregado 26/09/2026) ────────── */
+    "· distribución en TRANSICIÓN (juego corrido) ·":{en:"· distribution in TRANSITION (open play) ·",de:"· Verteilung in der TRANSITION (laufendes Spiel) ·"},
+    "ROTACIONES DEL ARMADOR":{en:"SETTER ROTATIONS",de:"ROTATIONEN DES ZUSPIELERS"},
+    /* ── frases tacticas con huecos (ver PLANTILLAS CON HUECOS) ──────── */
+    "punta (z4)":{en:"outside (z4)",de:"Außen (z4)"},
+    "central (z3)":{en:"middle (z3)",de:"Mitte (z3)"},
+    "pipe (z8)":{en:"pipe (z8)",de:"Pipe (z8)"},
+    "zaguero (z9)":{en:"back row (z9)",de:"Hinterreihe (z9)"},
+    /* el pie de cada tarjeta de rotacion */
+    "{1} K1 · {2}% ef ·":{en:"{1} K1 · {2}% eff ·",de:"{1} K1 · {2}% Eff ·"},
+    "{1} pelotas · {2}% ef ·":{en:"{1} balls · {2}% eff ·",de:"{1} Bälle · {2}% Eff ·"},
+    "concentrada":{en:"concentrated",de:"konzentriert"},
+    "repartida":{en:"spread",de:"verteilt"},
+    "ATACAR ACÁ":{en:"SERVE HERE",de:"HIER AUFSCHLAGEN"},
+    "CUIDADO":{en:"CAREFUL",de:"VORSICHT"},
+    "muestra insuficiente":{en:"not enough data",de:"zu wenig Daten"},
+    "opuesto (z2)":{en:"opposite (z2)",de:"Diagonal (z2)"},
+    "rotación S{1}":{en:"rotation S{1}",de:"Rotation S{1}"},
+    "(K1 más flojo, {1}% ef.). Rotaciones repartidas → lectura de bloqueo; concentradas → anticipar.":{en:"(weakest K1, {1}% eff.). Spread rotations → read the block; concentrated ones → anticipate.",de:"(schwächstes K1, {1}% Eff.). Verteilte Rotationen → Block lesen; konzentrierte → antizipieren."},
+    "Cargan al {1} ({2}%) → bloqueo anticipa ahí":{en:"They load the {1} ({2}%) → block anticipates there",de:"Sie spielen auf {1} ({2}%) → Block antizipiert dort"},
+    "Reparte {1} y {2} → leer salida del armador":{en:"Splits between {1} and {2} → read the setter\u2019s release",de:"Verteilt auf {1} und {2} → Auslage des Zuspielers lesen"},
+    "Busca {1} + {2} → central lee 2da línea":{en:"Looks for {1} + {2} → middle reads the back row",de:"Sucht {1} + {2} → Mittelblocker liest die Hinterreihe"},
+    "Resuelve por {1} ({2}%) y mata → no especular":{en:"Solves through {1} ({2}%) and kills → do not gamble",de:"Löst über {1} ({2}%) und punktet → nicht spekulieren"},
+    "Le cuesta el contraataque ({1}%) → presionar saque/bloqueo":{en:"Struggles in counter-attack ({1}%) → press serve and block",de:"Tut sich im Gegenangriff schwer ({1}%) → Aufschlag und Block unter Druck setzen"},
+    "Prioriza {1} ({2}%)":{en:"Prioritizes {1} ({2}%)",de:"Bevorzugt {1} ({2}%)"},
+    "FLOJA EN TR":{en:"WEAK IN TR",de:"SCHWACH IN TR"},
+    "FUERTE EN TR":{en:"STRONG IN TR",de:"STARK IN TR"},
+    "En qué rotación conviene apretar el saque":{en:"Which rotation to serve hard at",de:"In welcher Rotation der Aufschlag Druck machen soll"},
+    "Side-out":{en:"Side-out",de:"Side-out"},
+    "PLAN DE SAQUE":{en:"SERVE PLAN",de:"AUFSCHLAGPLAN"},
+    "LECTURA DE BLOQUEO EN TRANSICIÓN":{en:"BLOCK READ IN TRANSITION",de:"BLOCKLESEN IN DER TRANSITION"},
+    "pelotas / puntos":{en:"balls / points",de:"Bälle / Punkte"},
+    "Sin suficientes pelotas de transición":{en:"Not enough transition balls",de:"Nicht genug Transition-Bälle"},
+    "Sin suficientes pelotas de side-out":{en:"Not enough side-out balls",de:"Nicht genug Side-out-Bälle"},
     "◀ / ▶ marca quién está mejor en cada métrica · el borde brillante es el mejor valor":{en:"◀ / ▶ marks who is better in each metric · the glowing border is the best value",de:"◀ / ▶ zeigt, wer in jeder Metrik besser ist · der leuchtende Rand ist der beste Wert"},
     "★ = lo hizo en el último partido.":{en:"★ = did it in the last match.",de:"★ = im letzten Spiel gemacht."},
     "🎯 = receptor más vulnerable ·":{en:"🎯 = most vulnerable receiver ·",de:"🎯 = anfälligster Annahmespieler ·"},
@@ -4136,13 +4170,23 @@
     'Exploit rival weaknesses': { en:'Exploit rival weaknesses', de:'Schwächen des Gegners nutzen' },
   };
   var PHRASE_LC = {};
+  /* Indice exacto, respetando mayusculas. Hace falta porque el
+     diccionario tiene frases que solo se diferencian en eso —"CENTRAL" y
+     "central", "Punto" y "punto"— y en el indice en minusculas las dos
+     caen en el mismo lugar: gana la ultima del archivo y la otra sale
+     con la forma equivocada ("central" salia "MIDDLE"). */
+  var PHRASE_CS = {};
   (function(){
-    Object.keys(T).forEach(function(k){ var e=T[k]; if(e&&e.es) PHRASE_LC[String(e.es).toLowerCase()]={en:e.en,de:e.de}; });
-    Object.keys(PHRASES_EXTRA).forEach(function(es){ PHRASE_LC[es.toLowerCase()]=PHRASES_EXTRA[es]; });
+    Object.keys(T).forEach(function(k){ var e=T[k]; if(e&&e.es){
+      var v={en:e.en,de:e.de};
+      PHRASE_LC[String(e.es).toLowerCase()]=v; PHRASE_CS[String(e.es)]=v; }; });
+    Object.keys(PHRASES_EXTRA).forEach(function(es){
+      PHRASE_LC[es.toLowerCase()]=PHRASES_EXTRA[es]; PHRASE_CS[es]=PHRASES_EXTRA[es]; });
   })();
   function trPhrase(es, lang){
     var raw=(es||'').trim(); if(!raw) return null;
-    var e=PHRASE_LC[raw.toLowerCase()]; if(!e) return null;
+    /* primero tal cual esta escrita; si no esta, sin mirar mayusculas */
+    var e=PHRASE_CS[raw] || PHRASE_LC[raw.toLowerCase()]; if(!e) return null;
     var out=e[lang]||raw;
     if(raw===raw.toUpperCase() && raw!==raw.toLowerCase()) out=out.toUpperCase();
     return out;
@@ -4167,6 +4211,36 @@
   }
   /* Frases pensadas para llevar un valor pegado atras: terminan en espacio,
      en dos puntos o en "de ". Solo estas se prueban como prefijo. */
+  /* ── PLANTILLAS CON HUECOS ──────────────────────────────────────────────
+     Una entrada del diccionario puede llevar {1}, {2}, … donde va un dato
+     que cambia. Aca se convierte cada una en una expresion regular para
+     reconocerla en el texto y sacar los valores.
+     Si el hueco esta pegado a un "%", solo acepta numeros: asi
+     "Prioriza punta (z4) (56%)" separa bien "punta (z4)" de "56" y no se
+     confunde con los parentesis del nombre.                              */
+  var PLANTILLAS=null;
+  function buildPlantillas(){
+    PLANTILLAS=[];
+    if(!PHRASE_MAP) buildPhraseIndex();
+    if(!PHRASE_MAP) return;
+    Object.keys(PHRASE_MAP).forEach(function(k){
+      if(k.indexOf('{')<0) return;
+      var partes=k.split(/(\{\d+\})/), orden=[], re='';
+      for(var i=0;i<partes.length;i++){
+        var p=partes[i];
+        if(/^\{\d+\}$/.test(p)){
+          orden.push(parseInt(p.slice(1,-1),10));
+          var sigue=partes[i+1]||'';
+          re += (sigue.charAt(0)==='%') ? '([\\d.,+-]+)' : '(.+?)';
+        } else {
+          re += p.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+        }
+      }
+      try{ PLANTILLAS.push({re:new RegExp('^'+re+'$'), orden:orden, e:PHRASE_MAP[k]}); }
+      catch(err){}
+    });
+  }
+
   var PREFIJOS=null;
   function buildPrefijos(){
     if(!PHRASE_MAP) buildPhraseIndex();
@@ -4240,6 +4314,33 @@
         }
       }
     }
+
+    /* ── FRASE CON HUECOS ───────────────────────────────────────────────
+       Ultimo recurso, para las frases que llevan un dato en el medio.
+       Tiene que encajar la plantilla ENTERA, de punta a punta: o coincide
+       todo, o no se toca nada.                                          */
+    if(!PLANTILLAS) buildPlantillas();
+    if(PLANTILLAS && PLANTILLAS.length){
+      for(var z=0; z<PLANTILLAS.length; z++){
+        var pl=PLANTILLAS[z];
+        var m=t2.match(pl.re);
+        if(!m) continue;
+        var dest=pl.e && pl.e[lang];
+        if(!dest) continue;
+        var vals={};
+        for(var w=0; w<pl.orden.length; w++){
+          var v=m[w+1];
+          /* si el dato es a su vez una frase conocida, se traduce */
+          var vt=trPhrase(v, lang);
+          vals[pl.orden[w]] = (vt===null) ? v : vt;
+        }
+        return text.replace(t2, dest.replace(/\{(\d+)\}/g, function(_, nn){
+          var x=vals[parseInt(nn,10)];
+          return (x===undefined||x===null) ? '' : x;
+        }));
+      }
+    }
+
     return text;
   }
   window.translateString=translateString;

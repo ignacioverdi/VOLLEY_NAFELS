@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Cortes de Video · NAFELS VOLEY">Cortes de Video · NAFELS VOLEY</title>
-<script src="categorias_club.js?v=20260926-0757"></script>
-<script src="selector_categoria.js?v=20260926-0757"></script>
+<script src="categorias_club.js?v=20260926-1606"></script>
+<script src="selector_categoria.js?v=20260926-1606"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260926-0757"></script>
-<script src="filtro_tipo.js?v=20260926-0757" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260926-1606"></script>
+<script src="filtro_tipo.js?v=20260926-1606" onerror="void 0"></script>
   <!-- datos_video_25-26 sacado: es el video de la CAPSULA. Esta pantalla es
        de la 26-27, y cargarlo mezclaba jugadores nuevos con cortes de la
        temporada pasada. -->
@@ -33,8 +33,8 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="mapa_videos.js.enc?v=3" onerror="void 0"></script>
 <script src="mapa_videos_ent.js.enc?v=3" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20260926-0757" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260926-0757"></script>
+<script src="firebase.js?v=20260926-1606" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-1606"></script>
 <style>
   :root{--bg:#0b1017;--bg2:#0f172a;--card:#111a27;--card2:#16212f;--line:#1f2c3d;--txt:#e2e8f0;--muted:#7689a1;--muted2:#475569;--naf:#22c55e;--naf-dim:rgba(34,197,94,.12);--atk:#F97316;--srv:#22C55E;--rec:#818CF8;--set:#F59E0B;--blk:#ef4444;--def:#06b6d4;--free:#94a3b8;--ev-pos:#22c55e;--ev-plus:#84cc16;--ev-excl:#eab308;--ev-neg:#f97316;--ev-slash:#f59e0b;--ev-err:#ef4444;}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -150,7 +150,7 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260926-0757">
+<link rel="stylesheet" href="movil.css?v=20260926-1606">
 </head>
 <body>
 <div class="wrap">
@@ -269,7 +269,7 @@ window.__DESCIFRAR_SINCRONO = true;
         <button class="qr" data-sk="Bloqueo" data-ev="#" data-t="🛑 Bloqueos punto"><span data-t="🛑 Bloqueos punto">🛑 Bloqueos punto</span></button>
         <button class="qr" data-sk="Recepción" data-ev="=,-,/" data-t="📉 Recepciones rotas"><span data-t="📉 Recepciones rotas">📉 Recepciones rotas</span></button>
       </div>
-      <div class="listhead"><h2><span data-t="Clips">Clips</span> <span style="font-weight:400;color:var(--muted);font-size:11px" data-t="— tildá para armar tu recorte"><span data-t="— tildá para armar tu recorte">— tildá para armar tu recorte</span></span></h2><div class="x"><button id="selAll" data-t="Marcar todos"><span data-t="Marcar todos">Marcar todos</span></button><button id="clearSel" data-t="Limpiar"><span data-t="Limpiar">Limpiar</span></button><button id="share" data-t="🔗 Compartir recorte"><span data-t="🔗 Compartir recorte">🔗 Compartir recorte</span></button></div></div>
+      <div class="listhead"><h2><span data-t="Clips">Clips</span> <span style="font-weight:400;color:var(--muted);font-size:11px" data-t="— tildá para armar tu recorte"><span data-t="— tildá para armar tu recorte">— tildá para armar tu recorte</span></span></h2><div class="x"><button id="selAll" data-t="Marcar todos"><span data-t="Marcar todos">Marcar todos</span></button><button id="clearSel" data-t="Limpiar"><span data-t="Limpiar">Limpiar</span></button><button id="expCsv" title="Bajar los clips elegidos en un archivo para el editor de video" data-t="⇩ CSV para el editor"><span data-t="⇩ CSV para el editor">⇩ CSV para el editor</span></button><button id="share" data-t="🔗 Compartir recorte"><span data-t="🔗 Compartir recorte">🔗 Compartir recorte</span></button></div></div>
       <div class="listwrap" id="list"></div>
     </div>
   </div>
@@ -727,6 +727,13 @@ var fTy=[];
       else prompt('Copiá y compartí este link:',url);});
     $('selAll').addEventListener('click',function(){filtered.forEach(function(a){selected[ckey(a)]=1;});render(selectedMatchCodes().length>1);});
     $('clearSel').addEventListener('click',function(){selected={};render(selectedMatchCodes().length>1);});
+    /* ── EL CSV PARA EL EDITOR ─────────────────────────────────────────────
+       exportCSV() estaba escrita entera desde el principio —arma una linea
+       por clip con inicio y fin en segundos, jugador, accion, detalle,
+       valoracion y set— y no la llamaba nadie: le faltaba el boton. Es el
+       archivo que se le pasa al que edita el video para que arme el
+       compilado sin tener que buscar las jugadas a mano. */
+    $('expCsv').addEventListener('click',function(){ exportCSV(); });
     $('list').addEventListener('click',function(e){var ck=e.target.closest('[data-chk]');if(ck){var a=filtered[+ck.dataset.chk];if(selected[ckey(a)])delete selected[ckey(a)];else selected[ckey(a)]=1;render(selectedMatchCodes().length>1);return;}
       var r=e.target.closest('.row');if(r){var i=+r.dataset.i;if(ready&&filtered[i]._vid)playClip(i);else{current=i;setNow(filtered[i]);}}});
   }
@@ -861,9 +868,9 @@ var fTy=[];
   document.addEventListener('DOMContentLoaded',init);
 })();
 </script>
-<script src="lang.js?v=20260926-0757" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260926-0757" onerror="void 0"></script>
-<script src="ayuda.js?v=20260926-0757"></script>
+<script src="lang.js?v=20260926-1606" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260926-1606" onerror="void 0"></script>
+<script src="ayuda.js?v=20260926-1606"></script>
 
 <script>
 /* ══ LINK CORTO PARA COMPARTIR ══════════════════════════════════════════════

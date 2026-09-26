@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20260926-0757"></script>
-<script src="selector_categoria.js?v=20260926-0757"></script>
-<script src="objetivos_config.js?v=20260926-0757"></script>
+<script src="categorias_club.js?v=20260926-1606"></script>
+<script src="selector_categoria.js?v=20260926-1606"></script>
+<script src="objetivos_config.js?v=20260926-1606"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -312,28 +312,28 @@ select, select option {
   }
 }
 </style>
-<script src="lang.js?v=20260926-0757" onerror="void 0"></script>
+<script src="lang.js?v=20260926-1606" onerror="void 0"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260926-0757"></script>
-<script src="filtro_tipo.js?v=20260926-0757" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260926-1606"></script>
+<script src="filtro_tipo.js?v=20260926-1606" onerror="void 0"></script>
   <script src="liga_data.js.enc"></script>
 <script src="liga_data_entrenamientos.js.enc" onerror="void 0"></script>
-<script src="firebase.js?v=20260926-0757" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260926-0757"></script>
+<script src="firebase.js?v=20260926-1606" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-1606"></script>
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
   <script>abrirDatos();</script>
-<script src="videos.js?v=20260926-0757" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="videos.js?v=20260926-1606" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260926-0757">
+<link rel="stylesheet" href="movil.css?v=20260926-1606">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260926-0757" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260926-1606" onerror="void 0"></script>
 </head>
 <body>
 
@@ -367,6 +367,18 @@ window.__DESCIFRAR_SINCRONO = true;
     <div id="seccion-armador"></div>
   </div>
 
+
+
+  <!-- ROTACIONES DEL ARMADOR RIVAL ─────────────────────────────────────
+       renderRotaciones() escribe aca. El bloque arranca tapado y se
+       destapa solo si la funcion dejo contenido (ver el arranque). -->
+  <div style="margin-top:32px;display:none" id="seccion-rotaciones">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:#e2e8f0;margin-bottom:16px">
+      <span data-t="ROTACIONES DEL ARMADOR">ROTACIONES DEL ARMADOR</span>
+      <span style="font-size:11px;font-family:'Barlow Condensed',sans-serif;color:#475569;letter-spacing:1px;margin-left:12px;font-weight:400" data-t="En qué rotación conviene apretar el saque"><span data-t="En qué rotación conviene apretar el saque">En qué rotación conviene apretar el saque</span></span>
+    </div>
+    <div id="rot-content"></div>
+  </div>
 
   <!-- RECEPCIÓN RIVAL -->
   <div style="margin-top:32px;display:none" id="seccion-recepcion">
@@ -2387,8 +2399,19 @@ function renderArmador(){
         var card=document.createElement('div');
         card.style.cssText='background:var(--card);display:flex;flex-direction:column';
         var rh=document.createElement('div');
-        rh.style.cssText='padding:7px 11px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between';
-        rh.innerHTML='<div style="font-family:Bebas Neue,sans-serif;font-size:17px;color:'+color+'">'+key+'</div><div style="font-size:8px;color:#475569">'+dd.total+' acc</div>';
+        rh.style.cssText='padding:7px 11px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer';
+        rh.title='Ver la distribución de esta rotación en side-out y en transición';
+        rh.innerHTML='<div style="font-family:Bebas Neue,sans-serif;font-size:17px;color:'+color+'">'+key+'</div><div style="display:flex;align-items:baseline;gap:6px"><div style="font-size:8px;color:#475569">'+dd.total+' acc</div><div style="font-size:8px;color:'+color+';opacity:.75;letter-spacing:.5px">SO/TR &#9656;</div></div>';
+        /* clic en el encabezado: abre abrirModalArmador(), que estaba
+           escrita y nunca se llamaba. Va solo en el encabezado para no
+           pisar los selectores de bloqueo ni la nota de abajo. */
+        rh.addEventListener('click',(function(pKey,pIdx,pCol){
+          return function(ev){
+            ev.stopPropagation();
+            try{ abrirModalArmador({pos:pKey, armIdx:pIdx}, pCol); }
+            catch(e){ try{ console.error('[modal rotacion]', e); }catch(_){} }
+          };
+        })(key, setterIdx, color));
         card.appendChild(rh);
         var cvW=document.createElement('div');
         cvW.style.cssText='padding:5px;background:rgba(0,0,0,.2)';
@@ -2451,6 +2474,12 @@ function renderArmador(){
 
 
 // ── redrawArmadorCourt (from armadores.html) ──
+/* ── NO SE USA (a proposito) ───────────────────────────────────────────
+   Esta era la canchita de rotacion dibujada en canvas. La reemplazo
+   gpCourtSVG(), que es la que dibuja hoy las seis canchitas dentro de
+   renderArmador() y ademas se ve nitida en cualquier pantalla y sale
+   bien al imprimir. Se deja el codigo por si hace falta comparar, pero
+   llamarla seria volver atras. NO ES un pendiente.                    */
 function redrawArmadorCourt(canvas,rot,color,blqData){
   var dprA=window.devicePixelRatio||2;
   var W=canvas.offsetWidth||200, H=canvas.offsetHeight||220;
@@ -2617,13 +2646,27 @@ function gpAnalizarRotaciones(filtroExcluir){
   return {rots:rots, debil:sorted[0], fuerte:sorted[sorted.length-1], setter:s.name};
 }
 
+/* SO = side-out (recepcion #/+) · TR = transicion (juego corrido).
+   Lo guarda afuera de la funcion para que el interruptor se acuerde. */
+var GP_ROT_FASE = 'SO';
+function gpRotFase(f){ GP_ROT_FASE = (f==='TR') ? 'TR' : 'SO'; renderRotaciones(); }
+
 function renderRotaciones(){
   var cont=document.getElementById('rot-content');
   if(!cont) return;
-  var data=gpAnalizarRotaciones();
-  if(!data){ return; }
-  var POSCOL={P4:'#22c55e',P3:'#f59e0b',P2:'#818cf8',P8:'#06b6d4'};
-  var html='<div style="font-size:11px;color:#94a3b8;margin-bottom:14px;font-family:Barlow Condensed,sans-serif;letter-spacing:.5px">Armador rival: <b style="color:#fbbf24">'+data.setter+'</b> · distribución en K1 (recepción positiva) · <span style="color:#64748b">pelotas / puntos</span></div>';
+  var esTR = (GP_ROT_FASE === 'TR');
+  /* en transicion usa gpAnalizarTransicion(), que devuelve lo mismo */
+  var data = esTR ? gpAnalizarTransicion() : gpAnalizarRotaciones();
+  if(!data){
+    /* si la fase elegida no tiene datos, avisa en vez de dejar lo de antes */
+    cont.innerHTML = gpRotInterruptor() +
+      '<div style="color:#475569;font-family:Barlow Condensed,sans-serif;font-size:13px;padding:22px;border:1px solid rgba(255,255,255,.06);border-radius:12px;text-align:center">'+
+      (esTR ? 'Sin suficientes pelotas de transici\u00f3n' : 'Sin suficientes pelotas de side-out')+'</div>';
+    return;
+  }
+  var POSCOL={P4:'#22c55e',P3:'#f59e0b',P2:'#818cf8',P8:'#06b6d4',P9:'#a78bfa'};
+  var html = gpRotInterruptor();
+  html+='<div style="font-size:11px;color:#94a3b8;margin-bottom:14px;font-family:Barlow Condensed,sans-serif;letter-spacing:.5px">Armador rival: <b style="color:#fbbf24">'+data.setter+'</b> \u00b7 '+(esTR?'distribuci\u00f3n en TRANSICI\u00d3N (juego corrido)':'distribuci\u00f3n en K1 (recepci\u00f3n positiva)')+' \u00b7 <span style="color:#64748b">pelotas / puntos</span></div>';
   html+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px">';
   data.rots.forEach(function(r){
     if(r.vacio){
@@ -2637,8 +2680,10 @@ function renderRotaciones(){
     html+='<div style="border:1px solid '+borde+';background:'+bg+';border-radius:11px;padding:12px">';
     html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">';
     html+='<div style="font-family:Bebas Neue,sans-serif;font-size:20px;letter-spacing:1px;color:#e2e8f0">S'+r.pos+'</div>';
-    if(esDebil) html+='<div style="font-size:8px;font-weight:700;letter-spacing:1px;color:#22c55e;background:rgba(34,197,94,.15);padding:2px 6px;border-radius:4px">ATACAR ACÁ</div>';
-    else if(esFuerte) html+='<div style="font-size:8px;font-weight:700;letter-spacing:1px;color:#ef4444;background:rgba(239,68,68,.12);padding:2px 6px;border-radius:4px">CUIDADO</div>';
+    /* en side-out el cartel es lectura de SAQUE; en transicion no hay
+       saque, asi que dice como resuelve el contraataque */
+    if(esDebil) html+='<div style="font-size:8px;font-weight:700;letter-spacing:1px;color:#22c55e;background:rgba(34,197,94,.15);padding:2px 6px;border-radius:4px">'+(esTR?'FLOJA EN TR':'ATACAR ACÁ')+'</div>';
+    else if(esFuerte) html+='<div style="font-size:8px;font-weight:700;letter-spacing:1px;color:#ef4444;background:rgba(239,68,68,.12);padding:2px 6px;border-radius:4px">'+(esTR?'FUERTE EN TR':'CUIDADO')+'</div>';
     html+='</div>';
     r.dist.forEach(function(x){
       var col=POSCOL[x.p]||'#64748b';
@@ -2647,22 +2692,54 @@ function renderRotaciones(){
       html+='<div style="flex:1;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden"><div style="width:'+x.pct+'%;height:100%;background:'+col+'"></div></div>';
       html+='<span style="font-size:10px;color:#cbd5e1;width:54px;text-align:right">'+x.n+'/'+x.pts+' ('+x.pct+'%)</span></div>';
     });
-    html+='<div style="font-size:9px;color:#64748b;margin-top:5px">'+r.n+' K1 · '+r.eff+'% ef · '+(r.concentrada?'<span style="color:#fbbf24">concentrada</span>':'<span style="color:#22c55e">repartida</span>')+'</div>';
+    /* K1 es palabra de side-out: en transicion son pelotas de juego corrido */
+    html+='<div style="font-size:9px;color:#64748b;margin-top:5px">'+r.n+(esTR?' pelotas · ':' K1 · ')+r.eff+'% ef · '+(r.concentrada?'<span style="color:#fbbf24">concentrada</span>':'<span style="color:#22c55e">repartida</span>')+'</div>';
     html+='</div>';
   });
   html+='</div>';
   if(data.debil&&data.fuerte){
-    html+='<div style="margin-top:14px;padding:12px 14px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:10px">';
-    html+='<div style="font-size:10px;letter-spacing:1px;color:#22c55e;font-weight:700;margin-bottom:4px">◆ PLAN DE SAQUE</div>';
-    html+='<div style="font-size:13px;color:#dbe4f0;line-height:1.4">Apretar el saque en <b style="color:#22c55e">rotación S'+data.debil.pos+'</b> (K1 más flojo, '+data.debil.eff+'% ef.). Rotaciones repartidas → lectura de bloqueo; concentradas → anticipar.</div>';
-    html+='</div>';
+    if(esTR){
+      /* en transicion no hay saque que apretar: lo que sirve es la
+         lectura del bloqueo, que la escribe gpRecomTransicion() */
+      html+='<div style="margin-top:14px;padding:12px 14px;background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.25);border-radius:10px">';
+      html+='<div style="font-size:10px;letter-spacing:1px;color:#06b6d4;font-weight:700;margin-bottom:6px">\u25c6 LECTURA DE BLOQUEO EN TRANSICI\u00d3N</div>';
+      data.rots.forEach(function(r){
+        if(r.vacio) return;
+        var linea='';
+        try{ linea=gpRecomTransicion(r.dist, r.eff); }catch(e){ linea=''; }
+        if(!linea) return;
+        html+='<div style="display:flex;gap:8px;align-items:baseline;font-size:13px;color:#dbe4f0;line-height:1.5;margin-bottom:2px">'+
+              '<b style="color:#06b6d4;min-width:26px">S'+r.pos+'</b><span>'+linea+'</span></div>';
+      });
+      html+='</div>';
+    } else {
+      html+='<div style="margin-top:14px;padding:12px 14px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:10px">';
+      html+='<div style="font-size:10px;letter-spacing:1px;color:#22c55e;font-weight:700;margin-bottom:4px">\u25c6 PLAN DE SAQUE</div>';
+      html+='<div style="font-size:13px;color:#dbe4f0;line-height:1.4">Apretar el saque en <b style="color:#22c55e">rotaci\u00f3n S'+data.debil.pos+'</b> (K1 m\u00e1s flojo, '+data.debil.eff+'% ef.). Rotaciones repartidas \u2192 lectura de bloqueo; concentradas \u2192 anticipar.</div>';
+      html+='</div>';
+    }
   }
   cont.innerHTML=html;
 }
 
+/* El interruptor SIDE-OUT / TRANSICION de la seccion de rotaciones. */
+function gpRotInterruptor(){
+  function b(f,txt,col){
+    var on = (GP_ROT_FASE===f);
+    return '<button onclick="gpRotFase(\''+f+'\')" style="border:none;background:'+(on?col:'transparent')+
+      ';color:'+(on?'#0a0e15':'#94a3b8')+';font-family:Barlow Condensed,sans-serif;font-size:12px;font-weight:700;'+
+      'letter-spacing:1px;padding:5px 14px;border-radius:6px;cursor:pointer;text-transform:uppercase">'+txt+'</button>';
+  }
+  return '<div style="display:inline-flex;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);'+
+         'border-radius:8px;padding:2px;gap:2px;margin-bottom:12px">'+
+         b('SO','Side-out','#22c55e')+b('TR','Transici\u00f3n','#06b6d4')+'</div>';
+}
+
 function gpRecomTransicion(dist, eff){
   if(!dist || !dist.length) return '';
-  var NOM={'P4':'punta (z4)','P3':'central','P2':'opuesto (z2)','P8':'pipe','P9':'zaguero z9'};
+  /* cada posicion lleva su zona: se lee mejor y ademas evita que
+     "central" o "pipe" sueltos choquen con otras frases del diccionario */
+  var NOM={'P4':'punta (z4)','P3':'central (z3)','P2':'opuesto (z2)','P8':'pipe (z8)','P9':'zaguero (z9)'};
   var top=dist[0], seg=dist.length>1?dist[1]:null;
   // 1) Muy concentrada → anticipar
   if(top.pct>=50) return 'Cargan al '+NOM[top.p]+' ('+top.pct+'%) \u2192 bloqueo anticipa ah\u00ed';
@@ -2913,6 +2990,9 @@ function jCard(title,color){
   var body=document.createElement('div');body.className='jb';body.style.cssText='padding:14px 16px';card.appendChild(body);
   return card;
 }
+/* jLbl / jInput / jArea: ayudantes para armar formularios a mano.
+   Quedaron sin uso cuando los paneles pasaron a HTML armado con
+   strings. No son un pendiente: activarlos no agrega nada.            */
 function jLbl(text,color){
   var l=document.createElement('div');l.style.cssText='font-size:8px;color:'+(color||'#475569')+';letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;opacity:.8';l.textContent=text;return l;
 }
@@ -3021,17 +3101,73 @@ function renderRecepcionRival(){
 }
 
 
-// Llamar armador y juego
-(function(){var _f=function(){
-  setTimeout(function(){renderArmador();},100);
-};if(document.fonts&&document.fonts.ready){document.fonts.ready.then(_f).catch(_f);}else{setTimeout(_f,80);}})();
 
-function gpDistRotacionValidada(rotPos){
+/* ── ARRANQUE DE LA PANTALLA ──────────────────────────────────────────
+   Antes se llamaba solo a una parte de los render, asi que habia
+   bloques escritos que nunca se dibujaban y quedaban tapados para
+   siempre. Ahora se llaman los cuatro:
+     renderArmador()        distribucion del armador (ya funcionaba)
+     renderRotaciones()     rotaciones + plan de saque
+     renderRecepcionRival() como recibe el rival
+     renderJuego()          como vamos a jugar
+   Cada uno va en su propio try/catch: si a uno le faltan datos falla
+   solo y los demas siguen dibujando, igual que antes.
+   Y cada seccion se destapa SOLO si su render dejo contenido de
+   verdad, para no mostrar un hueco vacio. El minimo de 600 caracteres
+   esta puesto arriba del cartel de "sin datos" (que son unos 300) y
+   muy por debajo de cualquier dibujo real (5.000 para arriba). */
+(function(){
+
+  function destapar(idBloque, idContenido, antes){
+    var bloque = document.getElementById(idBloque);
+    var cont   = document.getElementById(idContenido || idBloque);
+    if(!bloque || !cont) return false;
+    var ahora = cont.innerHTML || '';
+    if(ahora === antes) return false;          /* el render no escribio nada */
+    if(ahora.replace(/\s+/g,'').length < 600) return false;  /* solo el cartel */
+    bloque.style.display = 'block';
+    return true;
+  }
+  function contenido(id){
+    var e = document.getElementById(id);
+    return e ? (e.innerHTML || '') : '';
+  }
+
+  function arrancar(){
+    try{ renderArmador(); }
+    catch(e){ try{ console.error('[armador]', e); }catch(_){} }
+
+    try{ var a1 = contenido('rot-content');
+         renderRotaciones();
+         destapar('seccion-rotaciones','rot-content', a1); }
+    catch(e){ try{ console.error('[rotaciones]', e); }catch(_){} }
+
+    try{ var a2 = contenido('rec-rival-content');
+         renderRecepcionRival();
+         destapar('seccion-recepcion','rec-rival-content', a2); }
+    catch(e){ try{ console.error('[recepcion rival]', e); }catch(_){} }
+
+    /* el bloque de "como vamos a jugar" es #anchor-juego; el render
+       escribe adentro, en #seccion-juego */
+    try{ var a3 = contenido('seccion-juego');
+         renderJuego();
+         destapar('anchor-juego','seccion-juego', a3); }
+    catch(e){ try{ console.error('[juego]', e); }catch(_){} }
+  }
+
+  var _f = function(){ setTimeout(arrancar, 100); };
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(_f).catch(_f); }
+  else { setTimeout(_f, 80); }
+})();
+
+function gpDistRotacionValidada(rotPos, armIdx){
   // Recalcula distribución de una rotación con el sistema VALIDADO (P4/P3/P2/P8/P9)
   // Separado en SIDE-OUT (rec #/+) y TRANSICIÓN (sin recepción)
   var setters=GP_TD.setters||[];
-  if(!setters.length||!setters[0].s) return null;
-  var s0=setters[0];
+  /* armIdx: 0 = titular, 1 = suplente. Sin el, miraba siempre al
+     titular aunque estuvieras en la pestana del suplente. */
+  var s0=setters[armIdx||0];
+  if(!s0||!s0.s) return null;
   var RES=['#','/','+','!','=','-'];
   var posNum=parseInt(rotPos.replace('P',''));
   function calc(rallies){
@@ -3067,7 +3203,7 @@ function abrirModalArmador(rot, color, pills){
   title.textContent=rot.pos+' — Distribución del armador';
   title.style.color=color;
   var sub=document.getElementById('modal-arm-sub');
-  var data=gpDistRotacionValidada(rot.pos);
+  var data=gpDistRotacionValidada(rot.pos, rot.armIdx);
   if(sub) sub.textContent='Adónde arma cuando el equipo rota en '+rot.pos+' · validado contra DataVolley';
   var body=document.getElementById('modal-arm-body');
   if(!data||(!data.sideout&&!data.transicion)){ body.innerHTML='<div style="color:#475569;padding:20px;text-align:center">Sin datos suficientes en esta rotación</div>'; return; }
@@ -3086,7 +3222,8 @@ function abrirModalArmador(rot, color, pills){
       h+='<div style="margin-bottom:10px">';
       h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">';
       h+='<span style="font-size:13px;color:'+(esTop?'#fff':'#cbd5e1')+';font-weight:'+(esTop?'700':'500')+'">'+('Zona '+d.pos)+(esTop?' ◀':'')+'</span>';
-      h+='<span style="font-size:11px;color:#94a3b8">'+d.tot+' ataques · '+d.pts+' pts</span></div>';
+      /* 1 ataque, 2 ataques */
+      h+='<span style="font-size:11px;color:#94a3b8">'+d.tot+(d.tot===1?' ataque · ':' ataques · ')+d.pts+' pts</span></div>';
       // barra de distribución
       h+='<div style="display:flex;align-items:center;gap:8px">';
       h+='<div style="flex:1;height:14px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;position:relative">';
@@ -3107,6 +3244,11 @@ function abrirModalArmador(rot, color, pills){
   body.innerHTML=html;
 }
 
+/* ── NO SE USA (a proposito) ───────────────────────────────────────────
+   La version grande de la canchita en canvas, para el modal. El modal
+   de rotacion (abrirModalArmador) hoy muestra barras con el % de
+   distribucion y el kill% al lado, que es mas facil de leer que los
+   circulos. Mismo caso que redrawArmadorCourt: NO ES un pendiente.    */
 function redrawArmadorCourtLarge(ctx, W, H, rot, color){
   var PAD=10,CL=PAD,CR=W-PAD,CT=PAD,CB=H-PAD,CW=CR-CL,CH=CB-CT;
   var NET=CT+CH*0.18,OWN=CB-NET,c1=CL+CW/3,c2=CL+CW*2/3;
@@ -3222,6 +3364,14 @@ function dibujarIconoBloqueo(ctx, x, y, r, tipo, color){
 }
 
 
+/* ── OJO: ESTA VERSION NO CORRE ────────────────────────────────────────
+   abrirModalSOTR esta definida DOS veces en este archivo. En JavaScript
+   gana la ultima, que es la de mas abajo — la que recibe
+   (tipo, arm, color) y es la que abre el modal cuando haces doble clic
+   en la pildora SO o TR. Esta de aca, la de (data, tipo, color), quedo
+   tapada y no se ejecuta nunca.
+   Si hay que cambiar el modal SO/TR, hay que editar LA DE ABAJO.
+   Se deja para no borrar codigo sin que Nacho lo decida.              */
 // ═══ MODAL SO / TR ══════════════════════════════════════════════
 function abrirModalSOTR(data, tipo, color){
   var modal = document.getElementById('modal-armador');
@@ -3585,9 +3735,9 @@ function _initModoBtns(){
 }
 document.addEventListener('DOMContentLoaded', _initModoBtns);
 </script>
-<script src="temporadas_menu.js?v=20260926-0757"></script>
-<script src="volver_inicio.js?v=20260926-0757" onerror="void 0"></script>
-<script src="ayuda.js?v=20260926-0757"></script>
+<script src="temporadas_menu.js?v=20260926-1606"></script>
+<script src="volver_inicio.js?v=20260926-1606" onerror="void 0"></script>
+<script src="ayuda.js?v=20260926-1606"></script>
 </body>
 </html>
 

@@ -16,13 +16,13 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260926-0757" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260926-0757" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260926-0757"></script>
-<script src="filtro_tipo.js?v=20260926-0757" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260926-1606" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260926-1606" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260926-1606"></script>
+<script src="filtro_tipo.js?v=20260926-1606" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
-  <script src="objetivos_config.js?v=20260926-0757" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260926-1606" onerror="void 0"></script>
 
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -40,7 +40,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20260926-0757" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260926-1606" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   
@@ -230,6 +230,9 @@ td.dbat-clic:active .dbat-n{
 // ================================================================
 
 // ── Eficiencias ──────────────────────────────────────────────
+/* effSaque / effRecepcion / effAtaque / effBloqueo: atajos de una línea
+   que nadie llama. El resto de la página usa VB_EFF.saque(...) directo.
+   No son un pendiente: activarlos no cambia ningún número.             */
 function effSaque(j){
   return j.sT>0 ? VB_EFF.saque(j) : null;
 }
@@ -279,6 +282,11 @@ function effColor(v, meta){
 }
 
 
+/* ── NO SE USA ─────────────────────────────────────────────────────────
+   Es una copia de la acumulación que hoy corre dentro de renderEqStats()
+   (la misma estructura acum[j.c] = {c,n,PJ,...}). Quedó suelta cuando esa
+   lógica se metió adentro. Activarla duplicaría el cálculo. NO es un
+   pendiente.                                                           */
 // ── Acumular jugadores de múltiples sesiones ─────────────────
 function acumJugadores(sesiones){
   var acum={};
@@ -308,6 +316,9 @@ function acumJugadores(sesiones){
 }
 
 // ── Filtrar historial ────────────────────────────────────────
+/* ── NO SE USA ─────────────────────────────────────────────────────────
+   El filtro por tipo de sesión hoy lo maneja filtro_tipo.js, que se carga
+   arriba. Esta quedó de la versión anterior.                           */
 function filtrarSesiones(sesiones, tipo){
   if(!tipo||tipo==='todos') return sesiones||[];
   return (sesiones||[]).filter(function(s){ return (s.tipo||'P')===tipo; });
@@ -631,15 +642,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260926-0757" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260926-0757"></script>
+<script src="firebase.js?v=20260926-1606" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-1606"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260926-0757">
+<link rel="stylesheet" href="movil.css?v=20260926-1606">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260926-0757" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260926-1606" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -880,6 +891,11 @@ var EQUIPO       = window.EQUIPO_DATA    || null;
 
    Al jugador le pasa mas seguido que al entrenador: pide ademas su rol y
    su categoria, asi que todo lo demas llega un poco mas tarde. */
+/* ── OJO: ESTA SÍ CORRE ────────────────────────────────────────────────
+   Parece muerta porque el nombre aparece una sola vez, pero es una
+   función que se invoca a sí misma: fijate el  })();  del final. Es la
+   que vuelve a dibujar cuando terminan de abrirse los datos grandes.
+   NO BORRAR.                                                           */
 (function esperarDatosDash(){
   /* Los archivos grandes ahora se abren de a pedazos, y avisan al terminar.
      Escuchar ese aviso es mas directo que esperar a que el vigia mire. */
@@ -961,6 +977,9 @@ function showTab(id, btn){
   if(id==='gameplans') renderGamePlans();
 }
 
+/* ── NO SE USA ─────────────────────────────────────────────────────────
+   La reemplazó loadIframe() (ver renderBaggerone y renderPrep, que están
+   vacías justamente porque loadIframe hace el trabajo).                */
 function renderIframe(iframeId, src){
   var el = document.getElementById(iframeId);
   if(!el) return;
@@ -1869,6 +1888,9 @@ function renderJugGrid(){
   }).join('');
 }
 
+/* ── NO SE USA ─────────────────────────────────────────────────────────
+   Las tarjetas de jugador de renderJugGrid() ya son un <a href="
+   jugador.html?num=...">, que además deja abrir en pestaña nueva.      */
 function selectJugador(num,btn){
   // Redirect to jugador.html profile page
   window.location.href = 'jugador.html?num=' + num;
@@ -2299,45 +2321,15 @@ function renderRankingHTML(data, highlightNum){
 
 
 
-// ── NOVEDADES / ÚLTIMA ACTUALIZACIÓN ─────────────────────────────────
-function renderNovedades(){
-  var cont = document.getElementById('novedades-cont');
-  if(!cont) return;
-  
-  var items = [];
-  
-  // Last datos_partidos update
-  if(typeof PARTIDOS_GENERADO !== 'undefined'){
-    items.push({
-      icon: '🏆',
-      txt:  'Partidos actualizados: ' + PARTIDOS_GENERADO,
-      color: '#E8192C'
-    });
-  }
-  if(typeof PARTIDOS_TOTAL !== 'undefined'){
-    items.push({
-      icon: '📊',
-      txt:  PARTIDOS_TOTAL + ' partidos cargados',
-      color: '#818CF8'
-    });
-  }
-  if(typeof ENTRENAMIENTOS_GENERADO !== 'undefined'){
-    items.push({
-      icon: '🏋️',
-      txt:  'Entrenamientos actualizados: ' + ENTRENAMIENTOS_GENERADO,
-      color: '#22C55E'
-    });
-  }
-  
-  if(!items.length){ cont.style.display='none'; return; }
-  
-  cont.innerHTML = items.map(function(it){
-    return '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)">'
-      + '<span style="font-size:14px">'+it.icon+'</span>'
-      + '<span style="font-size:14px;color:#94a3b8">'+it.txt+'</span>'
-      + '</div>';
-  }).join('');
-}
+/* ── renderNovedades() SE BORRÓ el 26/09/2026 ──────────────────────────
+   Escribía un panel de "novedades" en un div #novedades-cont que nunca
+   existió en el HTML, y leía tres variables —PARTIDOS_GENERADO,
+   PARTIDOS_TOTAL y ENTRENAMIENTOS_GENERADO— que no las define ninguna
+   página, ningún .py y ningún archivo de datos del proyecto. Nunca se
+   llamó y, si se hubiera llamado, no habría mostrado nada.
+   Lo que quería mostrar ya está arriba: la barra dice
+   "Actualizado: <fecha>" con DATA.generado (ver init()).
+   La versión anterior del archivo quedó en _respaldo_26sep.           */
 
 </script>
 
@@ -2374,11 +2366,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260926-0757"></script>
-<script src="lang.js?v=20260926-0757"></script>
-<script src="temporadas_menu.js?v=20260926-0757"></script>
-<script src="app_offline.js?v=20260926-0757"></script>
-<script src="ayuda.js?v=20260926-0757"></script>
+<script src="chat_nafels.js?v=20260926-1606"></script>
+<script src="lang.js?v=20260926-1606"></script>
+<script src="temporadas_menu.js?v=20260926-1606"></script>
+<script src="app_offline.js?v=20260926-1606"></script>
+<script src="ayuda.js?v=20260926-1606"></script>
 
 <!-- Los archivos de video (datos_video_*.js.enc) se sacaron de esta
      pantalla: pesan unos 15 MB por temporada, descifrarlos son mas de
