@@ -54,18 +54,15 @@ codigo se ve en pantalla y el registro no sirve para nada.
 
 
 ──────────────────────────────────────────────────────────────────────────────
-  PASO 1 — EL DOMINIO           (lo tenes que comprar vos)
+  PASO 1 — EL DOMINIO           YA LO TENES, NO HAY NADA QUE HACER
 ──────────────────────────────────────────────────────────────────────────────
 
-No existe info@ sin un dominio propio. Hoy la app vive en volley-nafels.vercel.app,
-que es de Vercel y no te deja tener correo.
+volley-stats.com es tuyo hasta el 25/09/2027 con renovacion automatica, y
+info@volley-stats.com ya esta activo y verificado (te llega al Gmail).
 
-Compra el dominio que quieras usar de marca (volley-stats.com, .ch, el que
-consigas). Sale entre 10 y 20 por año. Namecheap, Porkbun o Infomaniak si lo
-queres suizo.
-
-Necesitas poder entrar a la configuracion DNS de ese dominio. Sin eso el
-correo no se puede firmar y los codigos van a spam.
+Lo unico: para MANDAR desde esa casilla con Resend hay que cargar tres o
+cuatro registros DNS en volley-stats.com. Recibir ya funciona; mandar desde
+un servidor es otra cosa y necesita esa firma. Va en el paso 2.
 
 
 ──────────────────────────────────────────────────────────────────────────────
@@ -75,7 +72,7 @@ correo no se puede firmar y los codigos van a spam.
 Entra a resend.com y crea una cuenta. Es gratis hasta 3.000 mails por mes,
 que para demos te sobra de lejos.
 
-Adentro: "Domains" -> agregar tu dominio. Te va a mostrar tres o cuatro
+Adentro: "Domains" -> agregar volley-stats.com. Te va a mostrar tres o cuatro
 registros DNS (se llaman SPF, DKIM y DMARC) para copiar y pegar donde
 compraste el dominio. Cuando le pongas verificar, queda listo.
 
@@ -94,7 +91,7 @@ Variables. Cargá estas cuatro y sacá DEMO_MODO_PRUEBA:
 
     DEMO_SECRET        csrCycmEsgitDviw4HInHycIrVl8rcysuW0gWH8a-ko1P4ByfwfEcjuC5KJZ7_9f
     RESEND_API_KEY     (la que copiaste de Resend)
-    MAIL_FROM          Volley-Stats <info@TUDOMINIO>
+    MAIL_FROM          Volley-Stats <info@volley-stats.com>
     MAIL_AVISO         (tu mail, donde queres recibir los contactos)
 
 DEMO_SECRET ya lo genere yo, ahi arriba: copialo tal cual. Con ese secreto se
@@ -131,11 +128,13 @@ borrar su propio registro y darse 5 dias nuevos.
    se haga tres Gmail. Sube el costo de cero a "anda a crearte otra cuenta",
    que a un entrenador lo frena, y de paso te deja el contacto igual.
 
-2. Estas juntando mails de gente en Europa. Eso entra en GDPR y en la ley
-   suiza de datos: hay que decir para que los usas, pedir el visto bueno y
-   poder borrarlos si te lo piden. Son tres lineas y una casilla en el
-   formulario. Va junto con legales-BORRADOR.html, que ya estaba pendiente.
-   Avisame y lo armo.
+2. Lo legal YA ESTA HECHO (26/09): el formulario tiene la casilla de
+   consentimiento, que arranca destildada y sin tildar no deja seguir, y
+   linkea a volley-stats.com/legales.html#privacidad. La pagina legal quedo
+   con la seccion de datos personales en castellano, ingles y aleman.
+   Sigue valiendo lo que vos mismo escribiste: no somos abogados. Que lo
+   lea uno cuando puedas, sobre todo por facturar desde Argentina a clubes
+   suizos y europeos.
 
 
 ──────────────────────────────────────────────────────────────────────────────

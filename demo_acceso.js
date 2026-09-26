@@ -33,7 +33,9 @@
           muchos:'Demasiados pedidos desde acá. Probá más tarde.',
           ups:'No se pudo. Probá de nuevo en un momento.',
           spam:'Si no llega en un minuto, mirá en correo no deseado.',
-          yaTenia:'Ya tenías una prueba empezada: te mandamos el mismo código.' },
+          yaTenia:'Ya tenías una prueba empezada: te mandamos el mismo código.',
+          ok1:'Acepto que guarden mi mail para mandarme el código y para escribirme sobre Volley-Stats.',
+          ok2:'Cómo tratamos tus datos', faltaOk:'Te falta tildar la casilla' },
     en: { t1:'Try Volley-Stats', p1:'Leave your email and we send you a code. The trial lasts 5 days.',
           mail:'Your email', club:'Your club (optional)', pedir:'Send me the code',
           t2:'Check your inbox', p2:'We sent a 6-digit code to',
@@ -43,7 +45,9 @@
           muchos:'Too many requests from here. Try later.',
           ups:'It did not work. Try again in a moment.',
           spam:'If it does not arrive within a minute, check your spam folder.',
-          yaTenia:'You already had a trial running: we sent the same code.' },
+          yaTenia:'You already had a trial running: we sent the same code.',
+          ok1:'I agree to my email being stored to send me the code and to write to me about Volley-Stats.',
+          ok2:'How we handle your data', faltaOk:'Please tick the box' },
     de: { t1:'Volley-Stats testen', p1:'Hinterlasse deine E-Mail, du bekommst einen Code. Der Test dauert 5 Tage.',
           mail:'Deine E-Mail', club:'Dein Verein (optional)', pedir:'Code schicken',
           t2:'Schau in dein Postfach', p2:'Wir haben einen 6-stelligen Code geschickt an',
@@ -53,7 +57,9 @@
           muchos:'Zu viele Anfragen von hier. Versuche es später.',
           ups:'Hat nicht geklappt. Versuche es gleich nochmal.',
           spam:'Wenn nichts ankommt, schau im Spam-Ordner.',
-          yaTenia:'Du hattest schon einen Test: wir haben denselben Code geschickt.' }
+          yaTenia:'Du hattest schon einen Test: wir haben denselben Code geschickt.',
+          ok1:'Ich bin einverstanden, dass meine E-Mail gespeichert wird, um mir den Code zu schicken und mir über Volley-Stats zu schreiben.',
+          ok2:'Wie wir deine Daten behandeln', faltaOk:'Bitte das Häkchen setzen' }
   };
   function L() {
     var l = 'es';
@@ -138,6 +144,30 @@
     if (paso === 1) {
       var iMail = campo(t.mail, 'email', 'dm-mail');
       var iClub = campo(t.club, 'text', 'dm-club');
+
+      /* ── La casilla de consentimiento ──────────────────────────────────
+         No es decorado: sin esto no se puede guardar el mail de alguien en
+         Europa. Arranca DESTILDADA a proposito —una casilla ya tildada no
+         vale como consentimiento— y el boton no hace nada hasta que la
+         tilden. */
+      var okWrap = document.createElement('label');
+      css(okWrap, 'display:flex;gap:10px;align-items:flex-start;cursor:pointer;margin:2px 0 16px');
+      var okBox = document.createElement('input');
+      okBox.type = 'checkbox'; okBox.id = 'dm-ok';
+      css(okBox, 'width:17px;height:17px;flex-shrink:0;margin-top:1px;accent-color:#e8192c;cursor:pointer');
+      var okTxt = document.createElement('span');
+      css(okTxt, 'font-size:12.5px;line-height:1.5;color:#94a3b8');
+      okTxt.textContent = t.ok1 + ' ';
+      var okLink = document.createElement('a');
+      okLink.href = 'https://volley-stats.com/legales.html#privacidad';
+      okLink.target = '_blank'; okLink.rel = 'noopener';
+      css(okLink, 'color:#e8192c;text-decoration:underline');
+      okLink.textContent = t.ok2;
+      okLink.addEventListener('click', function (e) { e.stopPropagation(); });
+      okTxt.appendChild(okLink);
+      okWrap.appendChild(okBox); okWrap.appendChild(okTxt);
+      w.appendChild(okWrap);
+
       w.appendChild(err); w.appendChild(aviso); w.appendChild(btn);
       btn.textContent = t.pedir;
       var mandar = async function () {
@@ -145,6 +175,7 @@
         err.textContent = ''; aviso.textContent = '';
         var m = iMail.value.trim();
         if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(m)) { err.textContent = t.malMail; iMail.focus(); return; }
+        if (!okBox.checked) { err.textContent = t.faltaOk; okBox.focus(); return; }
         trabar(true);
         var r;
         try { r = await pedirJSON('demo-pedir', { mail: m, club: iClub.value }); }
