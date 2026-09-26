@@ -92,3 +92,11 @@ entrenamientos_nafels_db.json
 
 # La llave de la demo publica (la crea HACER_DEMO.py)
 LLAVE_DEMO.txt
+
+# ── Los archivos de la DEMO ─────────────────────────────────────────────────
+# demo_acceso.js (la puerta: mail y codigo) y demo_tope.js (tope de 100,
+# marca de agua, nada se baja) son SOLO de la demo publica. Viven aca porque
+# HACER_DEMO.py los copia desde esta carpeta, pero el sitio del club no los
+# carga en ninguna pagina y no tiene por que publicarlos.
+demo_acceso.js
+demo_tope.js

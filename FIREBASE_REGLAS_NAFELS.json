@@ -2,23 +2,71 @@
   "rules": {
     ".read": true,
     ".write": false,
-    "baggerone":    { ".write": true },
-    "calendario":   { ".write": true },
-    "clip_notas":   { ".write": true },
-    "horarios":     { ".write": true },
-    "notas":        { ".write": true },
-    "notas_pf":     { ".write": true },
-    "obs":          { ".write": true },
-    "pesos":        { ".write": true },
-    "prep_hist":    { ".write": true },
-    "prep_rutinas": { ".write": true },
-    "rm":           { ".write": true },
-    "wellness":     { ".write": true },
-    "voley_codes":  { ".write": true },
-    "voley_live":   { ".write": true },
-    "voley_data":   { ".write": true },
-    "pv_partidos":  { ".write": true },
-    "video_salas":  { ".write": true },
-    "video_signal": { ".write": true }
+    "baggerone": {
+      ".write": true
+    },
+    "calendario": {
+      ".write": true
+    },
+    "clip_notas": {
+      ".write": true
+    },
+    "horarios": {
+      ".write": true
+    },
+    "notas": {
+      ".write": true
+    },
+    "notas_pf": {
+      ".write": true
+    },
+    "obs": {
+      ".write": true
+    },
+    "pesos": {
+      ".write": true
+    },
+    "prep_hist": {
+      ".write": true
+    },
+    "prep_rutinas": {
+      ".write": true
+    },
+    "rm": {
+      ".write": true
+    },
+    "wellness": {
+      ".write": true
+    },
+    "voley_codes": {
+      ".write": true
+    },
+    "voley_live": {
+      ".write": true
+    },
+    "voley_data": {
+      ".write": true
+    },
+    "pv_partidos": {
+      ".write": true
+    },
+    "video_salas": {
+      ".write": true
+    },
+    "video_signal": {
+      ".write": true
+    },
+    "demo_acceso": {
+      "$h": {
+        ".write": "!data.exists()"
+      }
+    },
+    "demo_ip": {
+      "$d": {
+        "$k": {
+          ".write": "!data.exists()"
+        }
+      }
+    }
   }
 }

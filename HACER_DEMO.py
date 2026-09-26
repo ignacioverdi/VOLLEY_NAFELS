@@ -54,6 +54,9 @@ ARCHIVOS_FUERA = [
     'modelo_completo.html', 'diagnostico.txt', '_gen_nafels.b64',
     '.vercelignore', '.gitignore', '.gitattributes',
     'error consola.png', 'analisis superpuesto.png',
+    # El calendario es del club: en una demo publica no va.
+    # Las funciones de la puerta (api/demo-*.js y api/_demo_comun.js) SI van.
+    'calendario.js',
 ]
 # lo unico que se copia: extensiones que la app realmente sirve
 EXT_OK = {'.html','.js','.css','.json','.enc','.png','.jpg','.jpeg','.gif',
@@ -292,13 +295,23 @@ def copiable(nombre):
 RX_HEAD = re.compile(r'<head[^>]*>', re.I)
 
 def poner_guardia(html, prefijo):
-    """Mete demo_guard.js como el PRIMER script de la pagina."""
+    """Mete los scripts de la demo como los PRIMEROS de la pagina.
+
+    demo_guard.js  llave de la demo, corte de red, sello de visita
+    demo_acceso.js la puerta: mail -> codigo por correo -> 5 dias
+    demo_tope.js   tope de 100 codigos, marca de agua, nada se baja
+
+    El orden importa: acceso antes que tope, porque el tope lee la fecha de
+    vencimiento que deja la puerta (window.__DEMO_FIN).
+    """
     if 'demo_guard.js' in html:
         return html, True
     m = RX_HEAD.search(html)
     if not m:
         return html, False
-    ins = '\n  <script src="%sdemo_guard.js"></script>' % prefijo
+    ins = ''
+    for f in ('demo_guard.js', 'demo_acceso.js', 'demo_tope.js'):
+        ins += '\n  <script src="%s%s"></script>' % (prefijo, f)
     return html[:m.end()] + ins + html[m.end():], True
 
 
@@ -429,6 +442,24 @@ def main():
             print('    %-34s%s' % (nombre, 'sin notificaciones' if 'one' in nombre else 'sin cache'))
 
     open(os.path.join(DESTINO, 'robots.txt'), 'w', encoding='utf-8').write(ROBOTS)
+
+    # ── la puerta de registro ───────────────────────────────────────────────
+    # demo_acceso.js y demo_tope.js se copian como cualquier .js. Aca solo se
+    # avisa si falta alguno, porque sin ellos la demo queda abierta de par en
+    # par y es mejor enterarse ahora que despues.
+    faltan = [f for f in ('demo_acceso.js', 'demo_tope.js')
+              if not os.path.exists(os.path.join(DESTINO, f))]
+    if faltan:
+        print('')
+        print('  [OJO] Faltan en la demo: %s' % ', '.join(faltan))
+        print('  Sin eso no hay registro ni tope: cualquiera escautea sin limite.')
+    else:
+        print('    demo_acceso.js                    mail, codigo por correo, 5 dias')
+        print('    demo_tope.js                      tope de 100, marca de agua, no se baja nada')
+
+    api_ok = [f for f in ('_demo_comun.js', 'demo-pedir.js', 'demo-validar.js')
+              if os.path.exists(os.path.join(DESTINO, 'api', f))]
+    print('    api/                              %d de 3 funciones' % len(api_ok))
 
     # ── que LLAVE_DEMO.txt no se publique con la app ────────────────────────
     # No es secreta (viaja dentro de demo_guard.js), pero es un archivo interno

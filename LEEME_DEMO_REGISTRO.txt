@@ -1,0 +1,154 @@
+══════════════════════════════════════════════════════════════════════════════
+  LA DEMO CON REGISTRO — que falta para prenderla
+  26/09/2026
+══════════════════════════════════════════════════════════════════════════════
+
+Esta todo escrito y probado. Lo que falta son tres cosas que solo podes hacer
+vos, porque son compras y cuentas a tu nombre.
+
+Mientras tanto podes probarlo entero HOY, sin comprar nada: mira el PASO 0.
+
+
+──────────────────────────────────────────────────────────────────────────────
+  COMO QUEDO
+──────────────────────────────────────────────────────────────────────────────
+
+El visitante abre la demo y no ve nada hasta que deja su mail y su club.
+Le llega un codigo de 6 numeros desde info@. Lo escribe y entra.
+A vos te llega, al mismo tiempo, un mail con ese contacto: esa es tu lista.
+
+Desde ese momento:
+  · tiene 5 dias, contados desde el primer registro
+  · puede escautear hasta 100 codigos (un set entero)
+  · no puede bajar NADA: ni el .dvw, ni el .sq, ni ningun CSV, ni imprimir
+  · ve una marca "DEMO" con los dias que le quedan
+
+Borrar los datos del navegador YA NO sirve para empezar de cero: el reloj
+corre contra el mail, del lado del servidor, no contra la computadora.
+Si vuelve a pedir el codigo, le llega EL MISMO y los 5 dias no se reinician.
+
+Lo que NO se guarda en ningun lado: el mail del visitante no va a Firebase.
+Ahi solo queda un resumen ilegible y una fecha. El mail te llega a vos por
+correo. Esto es a proposito: la base del club tiene lectura publica, y una
+lista de contactos a la vista de cualquiera seria un problema.
+
+
+──────────────────────────────────────────────────────────────────────────────
+  PASO 0 — PROBARLO HOY, SIN COMPRAR NADA  (10 minutos)
+──────────────────────────────────────────────────────────────────────────────
+
+1. Corre HACER_DEMO.bat como siempre.
+2. Subi la carpeta "DEMO VOLLEY-STATS" a Vercel como proyecto nuevo.
+3. En ese proyecto de Vercel: Settings -> Environment Variables, y carga:
+
+       DEMO_SECRET        csrCycmEsgitDviw4HInHycIrVl8rcysuW0gWH8a-ko1P4ByfwfEcjuC5KJZ7_9f
+       DEMO_MODO_PRUEBA   1
+
+4. Volve a publicar (Redeploy) y abri la demo.
+
+En modo prueba el codigo NO se manda por mail: aparece en la pantalla. Sirve
+para ver el circuito completo andando antes de gastar un peso.
+
+CUANDO TERMINES DE PROBAR, SACA DEMO_MODO_PRUEBA. Si queda prendido, el
+codigo se ve en pantalla y el registro no sirve para nada.
+
+
+──────────────────────────────────────────────────────────────────────────────
+  PASO 1 — EL DOMINIO           (lo tenes que comprar vos)
+──────────────────────────────────────────────────────────────────────────────
+
+No existe info@ sin un dominio propio. Hoy la app vive en volley-nafels.vercel.app,
+que es de Vercel y no te deja tener correo.
+
+Compra el dominio que quieras usar de marca (volley-stats.com, .ch, el que
+consigas). Sale entre 10 y 20 por año. Namecheap, Porkbun o Infomaniak si lo
+queres suizo.
+
+Necesitas poder entrar a la configuracion DNS de ese dominio. Sin eso el
+correo no se puede firmar y los codigos van a spam.
+
+
+──────────────────────────────────────────────────────────────────────────────
+  PASO 2 — LA CUENTA DE CORREO  (la tenes que crear vos)
+──────────────────────────────────────────────────────────────────────────────
+
+Entra a resend.com y crea una cuenta. Es gratis hasta 3.000 mails por mes,
+que para demos te sobra de lejos.
+
+Adentro: "Domains" -> agregar tu dominio. Te va a mostrar tres o cuatro
+registros DNS (se llaman SPF, DKIM y DMARC) para copiar y pegar donde
+compraste el dominio. Cuando le pongas verificar, queda listo.
+
+Despues: "API Keys" -> crear una. Copiala, que se muestra una sola vez.
+
+Esos registros DNS son los que hacen que el mail llegue a la bandeja de
+entrada y no a correo no deseado. No los saltees.
+
+
+──────────────────────────────────────────────────────────────────────────────
+  PASO 3 — LAS VARIABLES EN VERCEL  (dos minutos)
+──────────────────────────────────────────────────────────────────────────────
+
+En el proyecto de la DEMO (no en el de Nafels): Settings -> Environment
+Variables. Cargá estas cuatro y sacá DEMO_MODO_PRUEBA:
+
+    DEMO_SECRET        csrCycmEsgitDviw4HInHycIrVl8rcysuW0gWH8a-ko1P4ByfwfEcjuC5KJZ7_9f
+    RESEND_API_KEY     (la que copiaste de Resend)
+    MAIL_FROM          Volley-Stats <info@TUDOMINIO>
+    MAIL_AVISO         (tu mail, donde queres recibir los contactos)
+
+DEMO_SECRET ya lo genere yo, ahi arriba: copialo tal cual. Con ese secreto se
+arman los codigos y se firman los pases. Si lo cambias, los codigos que ya
+mandaste dejan de servir.
+
+NUNCA pongas ninguna de estas en un archivo. Tu repo es publico: si sube la
+clave de Resend, cualquiera manda mails desde tu casilla.
+
+Despues de cargarlas hay que hacer Redeploy: las variables entran recien en la
+publicacion siguiente.
+
+
+──────────────────────────────────────────────────────────────────────────────
+  PASO 4 — FIREBASE  (un minuto, y hay que hacerlo)
+──────────────────────────────────────────────────────────────────────────────
+
+En la consola de Firebase -> Realtime Database -> Reglas, pega el contenido de
+FIREBASE_REGLAS_NAFELS.json, que ya lo deje actualizado en esta carpeta.
+
+Lo unico que agregue son dos nodos nuevos con esta regla:
+
+    ".write": "!data.exists()"
+
+Quiere decir: se puede CREAR pero no pisar ni borrar. Sin eso, alguien podria
+borrar su propio registro y darse 5 dias nuevos.
+
+
+──────────────────────────────────────────────────────────────────────────────
+  DOS COSAS QUE TE TENGO QUE DECIR
+──────────────────────────────────────────────────────────────────────────────
+
+1. El codigo por mail confirma que esa casilla existe. No impide que alguien
+   se haga tres Gmail. Sube el costo de cero a "anda a crearte otra cuenta",
+   que a un entrenador lo frena, y de paso te deja el contacto igual.
+
+2. Estas juntando mails de gente en Europa. Eso entra en GDPR y en la ley
+   suiza de datos: hay que decir para que los usas, pedir el visto bueno y
+   poder borrarlos si te lo piden. Son tres lineas y una casilla en el
+   formulario. Va junto con legales-BORRADOR.html, que ya estaba pendiente.
+   Avisame y lo armo.
+
+
+──────────────────────────────────────────────────────────────────────────────
+  ARCHIVOS NUEVOS
+──────────────────────────────────────────────────────────────────────────────
+
+  demo_acceso.js            la puerta: mail, codigo, 5 dias
+  demo_tope.js              tope de 100, marca de agua, nada se baja
+  api/_demo_comun.js        lo que comparten las dos funciones
+  api/demo-pedir.js         genera el codigo y manda los dos mails
+  api/demo-validar.js       revisa el codigo y entrega el pase
+  HACER_DEMO.py             ahora mete los dos scripts en cada pagina
+  FIREBASE_REGLAS_NAFELS.json   con los dos nodos nuevos
+  .vercelignore             los dos .js de la demo no se publican con la app
+
+Lo de antes quedo respaldado en _respaldo_26sep.

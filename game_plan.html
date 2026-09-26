@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20260926-1713"></script>
-<script src="selector_categoria.js?v=20260926-1713"></script>
-<script src="objetivos_config.js?v=20260926-1713"></script>
+<script src="categorias_club.js?v=20260926-1808"></script>
+<script src="selector_categoria.js?v=20260926-1808"></script>
+<script src="objetivos_config.js?v=20260926-1808"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -321,16 +321,16 @@ select, select option {
   }
 }
 </style>
-<script src="lang.js?v=20260926-1713" onerror="void 0"></script>
+<script src="lang.js?v=20260926-1808" onerror="void 0"></script>
 <script src="liga_data.js.enc"></script>
-<script src="firebase.js?v=20260926-1713" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260926-1713"></script>
+<script src="firebase.js?v=20260926-1808" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-1808"></script>
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
-<script src="videos.js?v=20260926-1713" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="videos.js?v=20260926-1808" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260926-1713">
+<link rel="stylesheet" href="movil.css?v=20260926-1808">
 </head>
 <body>
 
@@ -2682,27 +2682,32 @@ function gpAnalizarRotaciones(filtroExcluir){
     var all=porRot[pos]||[]; if(!all.length){ rots.push({pos:pos,vacio:true}); return; }
     // Side-out con recepción # o + (índices 0,2)
     var k1=all.filter(function(r){ return r[7]===0 || r[7]===2; });
-    // Filtro opcional: excluir un combo/posición (simular sacarle a un jugador)
+    // Filtro opcional: excluir una posición (simular sacarle a un jugador)
     if(filtroExcluir){
       k1=k1.filter(function(r){
         var c=(r[8]>=0&&r[8]<GP_COMBOS.length)?GP_COMBOS[r[8]]:'?';
-        return gpComboAPos(c)!==filtroExcluir;
+        return gpZonaAtaque(c,r[11])!==filtroExcluir;
       });
     }
     if(k1.length<3){ rots.push({pos:pos,n:k1.length,vacio:true}); return; }
-    var dist={P4:0,P3:0,P2:0,P8:0}, pts={P4:0,P3:0,P2:0,P8:0};
+    var dist={P4:0,P3:0,P2:0,P8:0,P9:0}, pts={P4:0,P3:0,P2:0,P8:0,P9:0};
     var kills=0,errs=0;
     k1.forEach(function(r){
       var c=(r[8]>=0&&r[8]<GP_COMBOS.length)?GP_COMBOS[r[8]]:'?';
-      var p=gpComboAPos(c);
+      /* gpZonaAtaque y no gpComboAPos: cuando el scouting no trae la
+         combinación —que es casi siempre— gpComboAPos devuelve null y la
+         pelota se perdía. gpZonaAtaque cae a la zona de origen del ataque.
+         Es la misma que usa gpAnalizarTransicion, por eso transición se veía
+         bien y side-out salía con las tarjetas vacías. */
+      var p=gpZonaAtaque(c,r[11]);
       var res=RES[r[9]];
-      if(p){ dist[p]++; if(res==='#')pts[p]++; }
+      if(p && dist[p]!==undefined){ dist[p]++; if(res==='#')pts[p]++; }
       if(res==='#')kills++; else if(res==='='||res==='/')errs++;
     });
     var n=k1.length;
     var eff=n?Math.round((kills-errs)/n*100):0;
     // armas ordenadas por volumen
-    var arr=['P4','P3','P2','P8'].map(function(p){return {p:p,n:dist[p],pts:pts[p],pct:Math.round(dist[p]/n*100)};}).filter(function(x){return x.n>0;}).sort(function(a,b){return b.n-a.n;});
+    var arr=['P4','P3','P2','P8','P9'].map(function(p){return {p:p,n:dist[p],pts:pts[p],pct:Math.round(dist[p]/n*100)};}).filter(function(x){return x.n>0;}).sort(function(a,b){return b.n-a.n;});
     var concentrada = arr.length && arr[0].pct>=45;
     rots.push({pos:pos,n:n,eff:eff,dist:arr,concentrada:concentrada});
   });
@@ -3785,8 +3790,8 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20260926-1713"></script>
-<script src="ayuda.js?v=20260926-1713"></script>
+<script src="temporadas_menu.js?v=20260926-1808"></script>
+<script src="ayuda.js?v=20260926-1808"></script>
 </body>
 </html>
 
