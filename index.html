@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20260926-2156"></script>
-<script src="selector_categoria.js?v=20260926-2156"></script>
+<script src="categorias_club.js?v=20260926-2227"></script>
+<script src="selector_categoria.js?v=20260926-2227"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -248,11 +248,11 @@ select, select option {
   background-color: #ffffff !important;
 }
 </style>
-<script src="datos_seguros.js?v=20260926-2156"></script>
-<script src="firebase.js?v=20260926-2156" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260926-2156"></script>
-<script src="lang.js?v=20260926-2156"></script>
-<script src="plantel_nafels.js?v=20260926-2156"></script>
+<script src="datos_seguros.js?v=20260926-2227"></script>
+<script src="firebase.js?v=20260926-2227" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-2227"></script>
+<script src="lang.js?v=20260926-2227"></script>
+<script src="plantel_nafels.js?v=20260926-2227"></script>
 
 <style>
 @media(max-width:768px){
@@ -351,7 +351,166 @@ select, select option {
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260926-2156">
+<link rel="stylesheet" href="movil.css?v=20260926-2227">
+<style>
+/* ══════════════════════════════════════════════════════════════════════════
+   LA PORTADA, DE MENU A TABLERO
+
+   Antes la portada eran treinta tarjetas iguales en siete secciones, con un
+   parrafo de tres lineas cada una. Servia la primera vez. Despues, el que
+   entra todos los dias ya sabe que hace cada pantalla y lo unico que quiere
+   es llegar rapido a las cuatro que usa.
+
+   Lo que cambia:
+     · arriba, una franja que dice como esta el equipo HOY —proximo partido,
+       ultimo resultado, y como venimos— en vez de repetir el escudo
+     · un buscador: con treinta pantallas, escribir "scout" le gana siempre
+       a scrollear siete secciones
+     · la descripcion de cada tarjeta aparece al pasar por encima, asi entran
+       cuatro por fila y la portada baja de cinco pantallazos a uno y medio
+     · una fila propia arriba, que cada uno arma con la estrellita
+     · la portada se ordena distinto para un jugador que para el entrenador
+     · las tarjetas cuyo dato quedo viejo lo avisan
+
+   Todo esto se arma con JavaScript sobre las tarjetas que ya estaban: no se
+   reescribio ninguna. Si manana agregas una tarjeta nueva a mano, entra en
+   el buscador, en los favoritos y en el resto sin tocar nada.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── EL TABLERO ─────────────────────────────────────────────────────────── */
+#tablero{max-width:1400px;margin:0 auto;width:100%;padding:0 40px;
+  display:grid;grid-template-columns:1.25fr 1fr 1.15fr;gap:12px}
+.tb-box{background:var(--card,#0d0e1a);border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;padding:13px 16px;position:relative;overflow:hidden;
+  text-decoration:none;color:inherit;display:block;transition:border-color .18s,transform .18s}
+a.tb-box:hover{border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
+.tb-lbl{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#64748b;
+  margin-bottom:7px;display:flex;align-items:center;gap:6px;
+  font-family:'Rajdhani','Barlow Condensed',sans-serif;font-weight:700}
+.tb-big{font-family:'Bebas Neue',sans-serif;font-size:27px;line-height:1;letter-spacing:1px}
+.tb-sub{font-size:12px;color:#94a3b8;letter-spacing:.3px;margin-top:4px;
+  font-family:'Rajdhani','Barlow Condensed',sans-serif;font-weight:600}
+.tb-mut{font-size:11px;color:#64748b;letter-spacing:.3px;margin-top:3px;
+  font-family:'Rajdhani','Barlow Condensed',sans-serif}
+.tb-cuenta{margin-left:auto;font-size:10px;font-weight:800;letter-spacing:1px;
+  padding:2px 8px;border-radius:20px;background:rgba(232,25,44,.12);color:#e8192c;
+  border:1px solid rgba(232,25,44,.28)}
+.tb-sets{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.tb-set{font-size:10px;font-weight:700;letter-spacing:.5px;padding:2px 6px;border-radius:4px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#94a3b8}
+.tb-set.gano{color:#22c55e;border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.08)}
+.tb-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tb-3>div{min-width:0}
+.tb-n{font-family:'Bebas Neue',sans-serif;font-size:25px;line-height:1}
+.tb-nl{font-size:9px;color:#64748b;letter-spacing:.8px;text-transform:uppercase;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-fl{font-size:10px;font-weight:800;margin-left:3px;vertical-align:2px}
+.tb-vacio{font-size:11px;color:#64748b;letter-spacing:.3px;padding:4px 0 2px}
+
+/* ── BUSCADOR Y FILA PROPIA ─────────────────────────────────────────────── */
+#hub-top{display:flex;flex-direction:column;gap:12px}
+.hb-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+/* Fondo SOLIDO, no translucido: la portada tiene un degrade rojo y naranja
+   detras, y sobre esa zona el casillero translucido desaparecia —el texto
+   gris sobre naranja no se leia—. Lo mismo los dos botones de modo. */
+/* La tipografia, escrita y no heredada: un <input> y un <button> no heredan
+   la fuente de la pagina, se quedan con la del sistema. Sin esto el buscador
+   y los dos botones salian en Arial en el medio de una portada que usa
+   Rajdhani y Bebas. */
+#hb-find{flex:1;min-width:180px;padding:11px 14px;border-radius:11px;
+  border:1px solid rgba(255,255,255,.12);background:#0d0e1a;
+  color:#e2e8f0;font-family:'Rajdhani','Barlow Condensed',sans-serif;font-weight:600;
+  font-size:14px;letter-spacing:.3px;outline:none}
+#hb-find:focus{border-color:rgba(230,167,67,.55);box-shadow:0 0 0 3px rgba(230,167,67,.12)}
+#hb-find::placeholder{color:#64748b}
+.hb-cnt{font-size:10px;color:#64748b;letter-spacing:1px;white-space:nowrap}
+.hb-modo{display:flex;gap:4px}
+.hb-mb{padding:9px 13px;border-radius:9px;border:1px solid rgba(255,255,255,.12);
+  background:#0d0e1a;color:#64748b;font-family:'Rajdhani','Barlow Condensed',sans-serif;font-size:12px;
+  font-weight:700;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;transition:all .15s}
+.hb-mb.on{background:#1a1408;border-color:rgba(230,167,67,.45);color:#e6a743}
+.hb-chips{display:flex;gap:8px;flex-wrap:wrap}
+.hb-vacio,.hb-cnt{background:rgba(7,8,15,.65);padding:2px 8px;border-radius:6px}
+/* vacio no es una pastilla gris al lado del buscador: es nada */
+.hb-cnt:empty,.hb-vacio:empty{display:none}
+.hb-chip{display:flex;align-items:center;gap:7px;padding:7px 13px 7px 10px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.12);background:#0d0e1a;
+  text-decoration:none;color:#e2e8f0;
+  font-family:'Rajdhani','Barlow Condensed',sans-serif;font-size:13px;font-weight:600;
+  letter-spacing:.3px;transition:all .15s}
+.hb-chip:hover{border-color:var(--chip,#e6a743);transform:translateY(-1px)}
+.hb-chip i{font-style:normal;font-size:15px}
+.hb-vacio{font-size:11px;color:#475569;letter-spacing:.3px}
+
+/* ── LA ESTRELLA DE CADA TARJETA ────────────────────────────────────────── */
+.card{position:relative}
+.card-fav{position:absolute;top:8px;right:8px;z-index:3;width:26px;height:26px;
+  border-radius:8px;border:1px solid transparent;background:transparent;cursor:pointer;
+  color:#475569;font-size:13px;line-height:1;padding:0;opacity:0;transition:all .15s}
+.card:hover .card-fav,.card-fav.on{opacity:1}
+.card-fav:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);color:#e6a743}
+.card-fav.on{color:#e6a743}
+
+/* ── LA DESCRIPCION, SOLO CUANDO HACE FALTA ─────────────────────────────── */
+body.hb-compacto .cards-grid{grid-template-columns:repeat(auto-fill,minmax(232px,1fr))}
+body.hb-compacto .card-desc{max-height:0;opacity:0;overflow:hidden;
+  transition:max-height .22s ease,opacity .18s ease,margin-top .22s ease}
+body.hb-compacto .card:hover .card-desc,
+body.hb-compacto .card:focus-within .card-desc{max-height:180px;opacity:1}
+body.hb-compacto .card-body{padding:12px 18px 14px}
+/* Un titulo de dos renglones —"Game Plan vs STV St.Gallen"— estiraba toda
+   la fila. Se le reserva el alto de dos renglones a todos, asi quedan
+   parejas con o sin titulo largo. */
+body.hb-compacto .card-title{min-height:2.1em;display:flex;align-items:center}
+/* la estrella vive arriba a la derecha: se le deja lugar a la etiqueta para
+   que no queden pegadas ("NUEVO★") */
+.card-badge{margin-right:22px}
+body.hb-compacto .card-top{padding:12px 18px 0}
+body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
+
+/* ── LO QUE QUEDO VIEJO ─────────────────────────────────────────────────── */
+.card-viejo .card-badge{background:rgba(239,68,68,.1)!important;color:#ef4444!important;
+  border-color:rgba(239,68,68,.28)!important}
+.hb-viejo{display:inline-flex;align-items:center;gap:4px;margin-left:6px;
+  font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#ef4444}
+.hb-viejo::before{content:'';width:5px;height:5px;border-radius:50%;background:#ef4444}
+
+/* ── SECCION PLEGADA ────────────────────────────────────────────────────── */
+.section.hb-plegada .cards-grid{display:none}
+.hb-desplegar{margin-left:auto;padding:5px 12px;border-radius:8px;
+  border:1px solid rgba(255,255,255,.1);background:rgba(7,8,15,.6);
+  color:#64748b;font-family:'Rajdhani','Barlow Condensed',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:1.2px;
+  text-transform:uppercase;cursor:pointer;flex-shrink:0}
+.hb-desplegar:hover{color:#e2e8f0;border-color:rgba(255,255,255,.2)}
+.section.hb-oculta{display:none}
+
+@media (max-width:900px){
+  #tablero{grid-template-columns:1fr;padding:0 16px;gap:10px}
+}
+@media (max-width:480px){
+  .tb-big{font-size:23px}.tb-n{font-size:22px}
+  body.hb-compacto .cards-grid{grid-template-columns:1fr!important}
+}
+/* ── EL ENCABEZADO EN EL TELEFONO ─────────────────────────────────────────
+   Medido en un telefono de 390 px: entre el escudo, el nombre del club, los
+   tres idiomas, "Sistema activo", la fecha larga y los dos botones, el
+   encabezado se comia 500 px. Es decir: pantalla y media de scroll antes de
+   llegar a la primera cosa util, todos los dias, para volver a leer que el
+   club se llama Näfels.
+
+   En el telefono se achica. En la computadora queda igual que siempre.     */
+@media (max-width:600px){
+  header{padding:14px 16px!important;gap:10px!important}
+  .logo-wrap{width:42px!important;height:42px!important}
+  .club-name{font-size:21px!important;letter-spacing:3px!important}
+  .club-sub{display:none}
+  .live-badge{display:none}
+  .fecha-txt{font-size:9px}
+  #tablero .tb-box{padding:11px 14px}
+  #tablero .tb-lbl{margin-bottom:5px}
+}
+</style>
 </head>
 <body>
 <div id="fx"><div class="grid"></div><div class="sweep"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="vig"></div></div>
@@ -373,7 +532,13 @@ select, select option {
   </div>
 </header>
 
+<!-- La franja de estado del equipo. La llena hbTablero(); si no hay datos
+     no se muestra nada y la portada queda como antes. -->
+<div id="tablero" style="display:none"></div>
+
 <main>
+  <!-- Buscador y la fila que cada uno se arma. Los llena hbTop(). -->
+  <div id="hub-top"></div>
 
   <div class="section"><div class="sec-head"><span class="sec-ic">🎯</span><div><div class="sec-title" data-t="El próximo rival"><span data-t="El próximo rival">El próximo rival</span></div><div class="sec-sub" data-t="Todo para llegar preparado al partido"><span data-t="Todo para llegar preparado al partido">Todo para llegar preparado al partido</span></div></div></div><div class="cards-grid"><a href="Team_Playbook_Nafels.html" class="card" style="--card-color:#e6a743;grid-column:1/-1"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">📖</div><div class="card-badge" data-t="Equipo"><span data-t="Equipo">Equipo</span></div></div><div class="card-body"><div class="card-title" data-t="Team Playbook"><span data-t="Team Playbook">Team Playbook</span></div><div class="card-desc" data-t="Nuestra identidad, principios y sistemas de juego. Cómo jugamos — para todo el equipo."><span data-t="Nuestra identidad, principios y sistemas de juego. Cómo jugamos — para todo el equipo.">Nuestra identidad, principios y sistemas de juego. Cómo jugamos — para todo el equipo.</span></div></div><div class="card-arrow">→</div></a><a href="plan_partido.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
@@ -1403,9 +1568,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260926-2156"></script>
+<script src="chat_nafels.js?v=20260926-2227"></script>
 
-<script src="proximo_rival.js?v=20260926-2156" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js?v=20260926-2227" onerror="window.FIXTURE_DATA=null"></script>
 <script>
 /* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
    proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
@@ -1463,12 +1628,12 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   }catch(e){}
 })();
 </script>
-<script src="temporadas_menu.js?v=20260926-2156"></script>
+<script src="temporadas_menu.js?v=20260926-2227"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20260926-2156" defer></script>
+<script src="onesignal_push.js?v=20260926-2227" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -1540,7 +1705,573 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   }catch(e){}
 })();
 </script>
-<script src="ayuda.js?v=20260926-2156"></script>
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   LA PORTADA VIVA
+
+   Este bloque no reescribe ninguna tarjeta: las lee de la pagina tal como
+   estan y les agrega encima el tablero, el buscador, los favoritos, el orden
+   segun quien entro y el aviso de dato viejo. Si manana agregas una tarjeta
+   nueva a mano, entra sola en todo esto.
+
+   Nada de lo de aca es obligatorio para que la portada funcione: cada pieza
+   esta envuelta en su try y si algo falla, esa pieza no aparece y el resto
+   sigue igual. Una portada sin tablero es una molestia; una portada en
+   blanco es un problema.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  var COL = { sq:'#CE7C18', rec:'#0E9F6E', atq:'#0B84C4' };
+  var VERDE = '#22c55e', ROJO = '#ef4444';
+  function $(id){ return document.getElementById(id); }
+  function esc(t){ return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function hoyISO(){ var d=new Date();
+    return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+  function dmy(iso){ var p=String(iso||'').split('-');
+    return p.length===3 ? p[2]+'/'+p[1]+'/'+p[0] : (iso||''); }
+  /* "03/09/2026" -> 20260903 */
+  function nDMY(f){ var p=String(f||'').split('/');
+    return p.length===3 ? (+p[2])*10000+(+p[1])*100+(+p[0]) : 0; }
+  function diasHasta(iso){
+    try{
+      var a=new Date(iso+'T00:00:00'), b=new Date(); b.setHours(0,0,0,0);
+      return Math.round((a-b)/86400000);
+    }catch(e){ return null; }
+  }
+  function slug(t){ return String(t||'').toLowerCase().normalize('NFD')
+      .replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+
+  /* ════════════════════════════════════════════════════════════════════════
+     1) EL TABLERO
+     ════════════════════════════════════════════════════════════════════════ */
+
+  /* ── el proximo partido, del calendario ──────────────────────────────────
+     Sale de calendario/partidos, que es lo que el cuerpo tecnico mantiene al
+     dia, y se toma el primer partido que todavia no se jugo. Antes la portada
+     dependia de que alguien apretara "Usar este fixture" en el calendario:
+     como nadie lo apreto esta temporada, el inicio anunciaba como proximo
+     partido uno de junio. Ahora se lee solo.
+
+     fbGet trae lo de la categoria elegida arriba, asi que Primera, H1L y H2L
+     ven cada una su propio calendario sin hacer nada especial.              */
+  var PROX = null, ULT = null, NUM = null;
+
+  function pedirProximo(listo){
+    var h = hoyISO(), hecho = false;
+    function con(arr){
+      if(hecho) return; hecho = true;
+      var fut = (arr||[]).filter(function(p){ return p && p.fecha && p.fecha >= h && p.rival; })
+                         .sort(function(a,b){ return a.fecha < b.fecha ? -1 : 1; });
+      PROX = fut.length ? fut[0] : null;
+      listo();
+    }
+    var pedido = false;
+    try{
+      if(window.fbGet){
+        pedido = true;
+        fbGet('calendario/partidos', function(d){ con(Array.isArray(d)?d:[]); });
+      }
+    }catch(e){}
+    /* Si Firebase no contesta —sin internet, o el club todavia no lo uso—
+       vale lo que haya dejado el boton del calendario. Y si tampoco, nada. */
+    setTimeout(function(){
+      if(hecho) return;
+      var F = null;
+      try{ F = JSON.parse(localStorage.getItem('vb_fixture')||'null'); }catch(e){}
+      if(!F) F = window.FIXTURE_DATA;
+      var p = F && F.proximo;
+      con(p && p.fecha >= h ? [p] : []);
+    }, pedido ? 2500 : 0);
+  }
+
+  /* ── el ultimo resultado y como venimos, del historial ─────────────────── */
+  function conHistorial(listo){
+    var H = window.HISTORIAL_DATA;
+    if(!H || !H.entrenamientos){ listo(); return; }
+    var P = H.entrenamientos.filter(function(e){ return (e.tipo||'P')==='P'; })
+             .sort(function(a,b){ return nDMY(a.fecha)-nDMY(b.fecha); });
+    if(!P.length){ listo(); return; }
+    ULT = P[P.length-1];
+
+    /* Los tres numeros: la suma de TODOS los jugadores de cada partido, con
+       VB_EFF —la formula unica—. La flecha compara los ultimos partidos
+       contra los anteriores, igual que en el perfil de cada jugador. */
+    if(!window.VB_EFF){ listo(); return; }
+    var K = ['sT','sPunto','sPos','sAdm','sNeg','sVend','sErr',
+             'rT','rPunto','rPos','rAdm','rNeg','rVend','rErr',
+             'aT','aPunto','aVend','aErr'];
+    function sum(lista){
+      var o={}; K.forEach(function(k){ o[k]=0; });
+      lista.forEach(function(e){ (e.jugadores||[]).forEach(function(j){
+        K.forEach(function(k){ o[k]+=j[k]||0; }); }); });
+      return o;
+    }
+    var NUL = Math.max(2, Math.min(3, Math.floor(P.length/2)));
+    var tot = sum(P), ult = null, ant = null;
+    if(P.length > NUL){ ult = sum(P.slice(-NUL)); ant = sum(P.slice(0,-NUL)); }
+    function uno(k, nom, tv, col){
+      var v = VB_EFF[k](tot); if(v===null) return null;
+      var d = null;
+      if(ult && ant && ult[tv]>=10 && ant[tv]>=10){
+        var a = VB_EFF[k](ult), b = VB_EFF[k](ant);
+        if(a!==null && b!==null) d = a-b;
+      }
+      return { nom:nom, v:v, d:d, col:col };
+    }
+    NUM = { NUL:NUL, items:[
+      uno('saque','Saque','sT',COL.sq),
+      uno('recepcion','Recepción','rT',COL.rec),
+      uno('ataque','Ataque','aT',COL.atq)
+    ].filter(Boolean) };
+    listo();
+  }
+
+  function pintarTablero(){
+    var box = $('tablero'); if(!box) return;
+    var h = '';
+
+    /* ── proximo partido ── */
+    if(PROX){
+      var d = diasHasta(PROX.fecha);
+      var cuenta = d===0 ? 'HOY' : d===1 ? 'MAÑANA' : (d>0 ? 'EN '+d+' DÍAS' : '');
+      var cond = PROX.condicion || PROX.cond || '';
+      h += '<a class="tb-box" href="game_plan.html?rival='+encodeURIComponent(PROX.slug||slug(PROX.rival))+'">'
+         + '<div class="tb-lbl">Próximo partido'
+         +   (cuenta?'<span class="tb-cuenta">'+cuenta+'</span>':'')+'</div>'
+         + '<div class="tb-big">vs '+esc(String(PROX.rival).toUpperCase())+'</div>'
+         + '<div class="tb-sub">'+esc(dmy(PROX.fecha))
+         +   (PROX.hora?' · '+esc(PROX.hora):'')
+         +   (cond?' · '+esc(cond):'')+'</div>'
+         + (PROX.lugar?'<div class="tb-mut">'+esc(PROX.lugar)+'</div>':'')
+         + '</a>';
+    } else {
+      h += '<a class="tb-box" href="calendario.html">'
+         + '<div class="tb-lbl">Próximo partido</div>'
+         + '<div class="tb-big" style="color:#475569">—</div>'
+         + '<div class="tb-vacio">No hay partidos futuros en el calendario. '
+         + 'Cargalos ahí y esto se completa solo.</div></a>';
+    }
+
+    /* ── ultimo resultado ── */
+    if(ULT && ULT.resultado){
+      var r = ULT.resultado, gano = (r.nafels||0) > (r.rival||0);
+      h += '<a class="tb-box" href="analisis.html">'
+         + '<div class="tb-lbl">Último partido</div>'
+         + '<div class="tb-big"><span style="color:'+(gano?VERDE:ROJO)+'">'
+         +   (r.nafels||0)+'–'+(r.rival||0)+'</span> '
+         +   '<span style="font-size:19px;color:#94a3b8">vs '+esc(String(ULT.rival||'').toUpperCase())+'</span></div>'
+         + '<div class="tb-sets">'
+         +   (r.sets||[]).map(function(x){
+               var p = String(x).split('-'), g = (+p[0]) > (+p[1]);
+               return '<span class="tb-set'+(g?' gano':'')+'">'+esc(x)+'</span>';
+             }).join('')
+         + '</div>'
+         + '<div class="tb-mut">'+esc(ULT.fecha||'')+' · ya procesado</div>'
+         + '</a>';
+    }
+
+    /* ── como venimos ── */
+    if(NUM && NUM.items.length){
+      h += '<a class="tb-box" href="dashboard.html">'
+         + '<div class="tb-lbl">Cómo venimos</div><div class="tb-3">'
+         + NUM.items.map(function(x){
+             var fl = '';
+             if(x.d!==null && Math.abs(x.d)>=3)
+               fl = '<span class="tb-fl" style="color:'+(x.d>0?VERDE:ROJO)+'">'
+                  + (x.d>0?'▲':'▼')+Math.abs(x.d)+'</span>';
+             return '<div><div class="tb-n" style="color:'+x.col+'">'
+                  + (x.v<0?'−':'')+Math.abs(x.v)+'%'+fl+'</div>'
+                  + '<div class="tb-nl">'+x.nom+'</div></div>';
+           }).join('')
+         + '</div><div class="tb-mut">la flecha compara los últimos '+NUM.NUL
+         + ' partidos con los anteriores</div></a>';
+    }
+
+    if(!h) return;
+    box.innerHTML = h;
+    box.style.display = '';
+  }
+
+  /* ── LA TARJETA DE GAME PLAN, AL DIA ──────────────────────────────────────
+     Esa tarjeta apuntaba al rival que dice proximo_rival.js, un archivo que
+     genera el Excel y que quedo congelado en junio: en setiembre seguia
+     mandando a todos al Game Plan de Jona. Habia una forma de arreglarlo
+     —el boton "Usar este fixture" del calendario— pero hay que acordarse de
+     apretarlo despues de cada partido, y por eso llevaba tres meses mal.
+
+     Ahora que el proximo partido sale del calendario, la tarjeta lo sigue.
+     Ya no hay nada que apretar.                                             */
+  function arreglarGamePlan(){
+    if(!PROX) return;
+    var sl = PROX.slug || slug(PROX.rival);
+    var f  = dmy(PROX.fecha);
+    var cond = PROX.condicion || PROX.cond || '';
+    document.querySelectorAll('#card-gameplan').forEach(function(c){
+      if(c.tagName === 'A') c.href = 'game_plan.html?rival=' + encodeURIComponent(sl);
+      var ti = c.querySelector('.card-title');
+      if(ti){
+        var av = ti.querySelector('.hb-viejo');
+        ti.textContent = 'Game Plan vs ' + PROX.rival;
+        if(av) ti.appendChild(av);
+      }
+      var de = c.querySelector('.card-desc');
+      if(de) de.textContent = 'Próximo partido (' + f + ')'
+           + (cond ? ' · ' + cond.toLowerCase() : '')
+           + ': defensa, armadores, recepción y videos.';
+      var ba = c.querySelector('.card-badge');
+      if(ba) ba.textContent = f;
+      /* el texto es nuestro y cambia con cada partido: el traductor
+         automatico no tiene que meterse con el */
+      [ti, de, ba].forEach(function(e){ if(e) e.setAttribute('data-notr',''); });
+    });
+  }
+
+  /* ════════════════════════════════════════════════════════════════════════
+     2) LAS TARJETAS: buscador, favoritos, orden y aviso de dato viejo
+     ════════════════════════════════════════════════════════════════════════ */
+  /* ══ LO QUE EL JUGADOR NO TIENE QUE VER, NO SE VE ════════════════════════
+     Arriba, en el bloque que ya estaba, hay una lista blanca: si el que
+     inicio sesion es un jugador, se le esconden todas las tarjetas que no
+     estan en esa lista —Scout en Vivo, Scouting Rival, Subir partido, Alta
+     de Jugadores...— y las secciones que quedan sin nada.
+
+     Ese bloque corre ANTES que este y esconde con style.display='none'. Y
+     el buscador de aca, tal como lo escribi primero, le devolvia el display
+     a toda tarjeta que coincidiera con lo buscado: un jugador escribia
+     "scout" y le aparecian las herramientas del cuerpo tecnico. El buscador
+     no puede ser una puerta de atras.
+
+     Entonces lo primero que se hace es anotar cuales ya venian escondidas.
+     A partir de ahi son invisibles para TODO lo de este bloque: no reciben
+     estrella, no entran en la fila de atajos, no las cuenta el buscador y
+     el buscador nunca les toca el display.
+
+     Ojo si agregas una pantalla nueva: sigue mandando la lista blanca de
+     arriba. Una tarjeta nueva no la ve ningun jugador hasta que la sumes
+     ahi. Este bloque no afloja esa regla ni la endurece: la obedece.       */
+  var VEDADAS = null;
+  function anotarVedadas(){
+    VEDADAS = [];
+    [].slice.call(document.querySelectorAll('main .card')).forEach(function(c){
+      if(c.style.display === 'none'){ c.setAttribute('data-hb-vedada','1'); VEDADAS.push(c); }
+    });
+    [].slice.call(document.querySelectorAll('main .section')).forEach(function(s){
+      if(s.style.display === 'none') s.setAttribute('data-hb-vedada','1');
+    });
+  }
+  function vedada(el){ return el.getAttribute('data-hb-vedada') === '1'; }
+  /* Es jugador si el bloque de arriba le escondio aunque sea una tarjeta. No
+     se lee el rol de nuevo: lo que vale es lo que quedo en la pantalla. */
+  function esJugador(){ return !!(VEDADAS && VEDADAS.length); }
+
+  function tarjetas(){
+    return [].slice.call(document.querySelectorAll('main .card'))
+             .filter(function(c){ return !vedada(c); });
+  }
+  function txtDe(c){
+    var t = (c.querySelector('.card-title')||{}).textContent || '';
+    var d = (c.querySelector('.card-desc') ||{}).textContent || '';
+    var b = (c.querySelector('.card-badge')||{}).textContent || '';
+    var s = c.closest('.section');
+    var sec = s ? ((s.querySelector('.sec-title')||{}).textContent||'') : '';
+    return (t+' '+d+' '+b+' '+sec).toLowerCase()
+            .normalize('NFD').replace(/[̀-ͯ]/g,'');
+  }
+
+  /* ── favoritos ──────────────────────────────────────────────────────────
+     Se guardan en ESTE dispositivo (localStorage): el telefono de cada
+     jugador arma su propia fila. No van a Firebase a proposito — son cuatro
+     atajos personales, no un dato del club. */
+  function favsLeer(){
+    try{ return JSON.parse(localStorage.getItem('vb_favs')||'[]') || []; }catch(e){ return []; }
+  }
+  function favsGuardar(a){ try{ localStorage.setItem('vb_favs', JSON.stringify(a)); }catch(e){} }
+
+  /* ── LA CLAVE DE UN FAVORITO ES LA PAGINA, NO EL LINK ────────────────────
+     Guardarlos por el link entero parecia lo obvio y estaba mal: el link de
+     la tarjeta de Game Plan lleva el rival adentro —game_plan.html?rival=
+     jona— y cambia con cada partido. Al jugador que la fijaba se le caia de
+     la fila de arriba el lunes siguiente, sin motivo visible.
+
+     La clave es el archivo, que no cambia nunca. El link del atajo se saca
+     de la tarjeta en el momento de dibujarlo, asi que siempre lleva al
+     rival correcto.                                                         */
+  function clave(c){
+    var hr = c.getAttribute('href') || '';
+    var k = hr.split('?')[0].split('#')[0];
+    /* Heat Maps no es una pagina: es href="#" con un onclick que abre el
+       menu de mapas ahi mismo. Sin esto se quedaba sin estrella —la unica
+       de las treinta— porque su clave daba vacia. Se le arma una con el
+       titulo, y el atajo de arriba copia su onclick para que haga lo mismo
+       que la tarjeta. */
+    if(!k){
+      var t = (c.querySelector('.card-title')||{}).textContent || '';
+      k = t.trim() ? ('#' + slug(t)) : '';
+    }
+    return k;
+  }
+
+  function pintarChips(){
+    var cont = $('hb-chips'); if(!cont) return;
+    var favs = favsLeer();
+    if(!favs.length){
+      cont.innerHTML = '<span class="hb-vacio">Tocá la estrellita de una tarjeta '
+                     + 'para tenerla acá arriba.</span>';
+      return;
+    }
+    var porClave = {};
+    /* solo las que este usuario puede ver: un atajo guardado de antes no
+       vale como permiso */
+    tarjetas().forEach(function(c){ porClave[clave(c)] = c; });
+    cont.innerHTML = favs.map(function(k){
+      var c = porClave[k]; if(!c) return '';
+      var ic  = (c.querySelector('.card-icon') ||{}).textContent || '•';
+      var ti  = (c.querySelector('.card-title')||{}).textContent || k;
+      var col = c.style.getPropertyValue('--card-color') || '#e6a743';
+      /* el link, de la tarjeta y en este momento: si el rival cambio, el
+         atajo cambia con el */
+      var on = c.getAttribute('onclick');
+      return '<a class="hb-chip" href="'+esc(c.getAttribute('href'))+'"'
+           + (on ? ' onclick="'+esc(on)+'"' : '')
+           + ' style="--chip:'+esc(col)+'">'
+           + '<i>'+esc(ic.replace(/desactualizado/,'').trim())+'</i>'
+           + esc(ti.replace(/desactualizado/,'').trim())+'</a>';
+    }).join('');
+  }
+
+  function ponerEstrellas(){
+    tarjetas().forEach(function(c){
+      if(c.querySelector('.card-fav')) return;
+      var k = clave(c); if(!k) return;
+      var b = document.createElement('button');
+      b.className = 'card-fav';
+      b.type = 'button';
+      b.setAttribute('aria-label','Fijar arriba');
+      b.textContent = '★';
+      if(favsLeer().indexOf(k) >= 0) b.classList.add('on');
+      b.onclick = function(ev){
+        ev.preventDefault(); ev.stopPropagation();
+        var f = favsLeer(), i = f.indexOf(k);
+        if(i >= 0) f.splice(i,1); else f.push(k);
+        favsGuardar(f);
+        b.classList.toggle('on', i < 0);
+        b.title = i<0 ? 'Fijada arriba' : 'Fijar arriba';
+        pintarChips();
+      };
+      b.title = 'Fijar arriba';
+      c.appendChild(b);
+    });
+  }
+
+  /* ── el buscador ──────────────────────────────────────────────────────── */
+  function buscar(q){
+    q = String(q||'').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+    var partes = q ? q.split(/\s+/) : [];
+    var n = 0;
+    /* tarjetas() ya deja afuera las vedadas: al buscar ni se las mira */
+    tarjetas().forEach(function(c){
+      var t = txtDe(c);
+      var ok = partes.every(function(p){ return t.indexOf(p) >= 0; });
+      c.style.display = ok ? '' : 'none';
+      if(ok) n++;
+    });
+    /* una seccion sin ninguna tarjeta a la vista no tiene por que ocupar
+       lugar con su titulo */
+    [].slice.call(document.querySelectorAll('main .section')).forEach(function(s){
+      if(vedada(s)) return;
+      var vis = [].slice.call(s.querySelectorAll('.card'))
+                  .filter(function(c){ return !vedada(c); })
+                  .some(function(c){ return c.style.display !== 'none'; });
+      s.classList.toggle('hb-oculta', !vis && !!q);
+    });
+    var cnt = $('hb-cnt');
+    if(cnt) cnt.textContent = q ? (n + (n===1?' pantalla':' pantallas')) : '';
+    return n;
+  }
+  function primeraVisible(){
+    var l = tarjetas().filter(function(c){ return c.style.display !== 'none'; });
+    return l.length ? l[0] : null;
+  }
+
+  /* ── quien entro ──────────────────────────────────────────────────────── */
+  function modoLeer(){
+    if(esJugador()) return 'jugador';
+    var m = null;
+    try{ m = localStorage.getItem('vb_hub_modo'); }catch(e){}
+    if(m === 'jugador' || m === 'dt') return m;
+    /* Por defecto: si el que inicio sesion es un jugador del plantel, la
+       portada se ordena para el. El boton de arriba deja cambiarlo cuando
+       uno quiera, asi que nadie queda encerrado en el modo equivocado. */
+    var num = null;
+    try{ num = localStorage.getItem('casla_player_num'); }catch(e){}
+    return num ? 'jugador' : 'dt';
+  }
+  function aplicarModo(m){
+    try{ localStorage.setItem('vb_hub_modo', m); }catch(e){}
+    document.querySelectorAll('.hb-mb').forEach(function(b){
+      b.classList.toggle('on', b.getAttribute('data-modo') === m);
+    });
+    var main = document.querySelector('main');
+    var secs = [].slice.call(document.querySelectorAll('main .section'));
+    function porTitulo(t){
+      return secs.filter(function(s){
+        var e = s.querySelector('.sec-title');
+        return e && e.textContent.toLowerCase().indexOf(t) >= 0;
+      })[0];
+    }
+    var dt   = document.querySelector('main .dt-sec');
+    var mio  = porTitulo('rendimiento');
+    var cuer = porTitulo('físico') || porTitulo('fisico');
+    var top  = $('hub-top');
+
+    if(m === 'jugador'){
+      /* lo suyo primero, las herramientas del cuerpo tecnico plegadas */
+      [cuer, mio].forEach(function(s){
+        if(s && top && main) main.insertBefore(s, top.nextSibling);
+      });
+      if(dt) dt.classList.add('hb-plegada');
+    } else {
+      /* el entrenador arranca con las herramientas a mano */
+      if(dt && top && main) main.insertBefore(dt, top.nextSibling);
+      if(dt) dt.classList.remove('hb-plegada');
+    }
+    ponerDesplegar();
+  }
+  function ponerDesplegar(){
+    var dt = document.querySelector('main .dt-sec'); if(!dt) return;
+    var head = dt.querySelector('.sec-head'); if(!head) return;
+    var b = head.querySelector('.hb-desplegar');
+    if(!b){
+      b = document.createElement('button');
+      b.className = 'hb-desplegar'; b.type = 'button';
+      b.onclick = function(){
+        dt.classList.toggle('hb-plegada');
+        b.textContent = dt.classList.contains('hb-plegada') ? 'Mostrar' : 'Ocultar';
+      };
+      head.appendChild(b);
+    }
+    b.textContent = dt.classList.contains('hb-plegada') ? 'Mostrar' : 'Ocultar';
+  }
+
+  /* ── lo que quedo viejo ────────────────────────────────────────────────
+     Una tarjeta que dice "Próximo partido (14/06/2026)" en setiembre no esta
+     rota: esta mintiendo, que es peor, porque parece al dia. Se le busca una
+     fecha al texto y si ya paso, se avisa.                                  */
+  function marcarViejas(){
+    var hoyN = (function(){ var d=new Date();
+      return d.getFullYear()*10000 + (d.getMonth()+1)*100 + d.getDate(); })();
+    tarjetas().forEach(function(c){
+      var tx = ((c.querySelector('.card-badge')||{}).textContent||'') + ' '
+             + ((c.querySelector('.card-desc') ||{}).textContent||'');
+      var m = tx.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+      if(!m) return;
+      var f = (+m[3])*10000 + (+m[2])*100 + (+m[1]);
+      var vieja = f < hoyN;
+      c.classList.toggle('card-viejo', vieja);
+      var ti = c.querySelector('.card-title'); if(!ti) return;
+      var av = ti.querySelector('.hb-viejo');
+      if(vieja && !av){
+        av = document.createElement('span');
+        av.className = 'hb-viejo';
+        av.setAttribute('data-notr','');
+        av.textContent = 'desactualizado';
+        av.title = 'La fecha de esta tarjeta ya pasó';
+        ti.appendChild(av);
+      } else if(!vieja && av){ av.remove(); }
+    });
+  }
+
+  /* ── la fila de arriba ─────────────────────────────────────────────────── */
+  function hbTop(){
+    var top = $('hub-top'); if(!top) return;
+    top.innerHTML =
+        '<div class="hb-row">'
+      +   '<input id="hb-find" type="search" autocomplete="off" data-notr '
+      +     'placeholder="Buscar una pantalla… (escribí y listo)">'
+      +   '<span class="hb-cnt" id="hb-cnt"></span>'
+      /* Al jugador no se le ofrece "ver como entrenador": la lista blanca
+         ya decidio que ve, y un boton que promete otra cosa solo confunde.
+         Para el cuerpo tecnico el boton ordena la portada, no da permisos:
+         el DT ve todas las tarjetas en los dos modos. */
+      +   (esJugador() ? '' :
+          '<div class="hb-modo">'
+      +     '<button class="hb-mb" type="button" data-modo="jugador">Jugador</button>'
+      +     '<button class="hb-mb" type="button" data-modo="dt">Entrenador</button>'
+      +   '</div>')
+      + '</div>'
+      + '<div class="hb-chips" id="hb-chips"></div>';
+
+    var inp = $('hb-find');
+    inp.addEventListener('input', function(){ buscar(inp.value); });
+    inp.addEventListener('keydown', function(ev){
+      if(ev.key === 'Escape'){ inp.value=''; buscar(''); inp.blur(); }
+      if(ev.key === 'Enter'){
+        var c = primeraVisible();
+        if(c){ var hr=c.getAttribute('href'); if(hr) location.href = hr; }
+      }
+    });
+    /* Escribir en cualquier lado empieza a buscar, sin tener que apuntarle
+       al casillero. Se saltean los atajos con Ctrl/Cmd y todo lo que uno
+       escriba dentro de otro casillero. */
+    document.addEventListener('keydown', function(ev){
+      if(ev.ctrlKey || ev.metaKey || ev.altKey) return;
+      var a = document.activeElement;
+      if(a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return;
+      if(a && a.isContentEditable) return;
+      if(ev.key && ev.key.length === 1 && /[\wáéíóúñ]/i.test(ev.key)){
+        inp.focus(); 
+      } else if(ev.key === '/' ){ ev.preventDefault(); inp.focus(); }
+    });
+
+    document.querySelectorAll('.hb-mb').forEach(function(b){
+      b.onclick = function(){ aplicarModo(b.getAttribute('data-modo')); };
+    });
+  }
+
+  /* ════════════════════════════════════════════════════════════════════════
+     ARRANQUE
+     ════════════════════════════════════════════════════════════════════════ */
+  function arrancar(){
+    try{ document.body.classList.add('hb-compacto'); }catch(e){}
+    /* PRIMERO de todo: fotografiar que quedo escondido para este usuario.
+       Todo lo de abajo depende de esta foto. */
+    try{ anotarVedadas(); }catch(e){}
+    try{ hbTop(); }catch(e){}
+    try{ ponerEstrellas(); pintarChips(); }catch(e){}
+    try{ aplicarModo(modoLeer()); }catch(e){}
+    try{ marcarViejas(); }catch(e){}
+    try{ pedirProximo(function(){
+      try{ pintarTablero(); arreglarGamePlan(); marcarViejas(); }catch(e){}
+    }); }catch(e){}
+
+    /* ── los numeros del equipo llegan despues, a proposito ────────────────
+       datos_historial.js y objetivos_config.js son medio mega entre los dos.
+       Cargarlos con el resto retrasaria la portada entera —que es lo primero
+       que abre todo el mundo, muchas veces con el telefono en la puerta del
+       gimnasio— para tres numeros que se pueden completar un segundo
+       despues. Se piden cuando la pagina ya se dibujo.                      */
+    function traer(src, listo){
+      var s = document.createElement('script');
+      s.src = src; s.async = true;
+      s.onload = listo; s.onerror = listo;
+      document.head.appendChild(s);
+    }
+    setTimeout(function(){
+      traer('objetivos_config.js', function(){
+        traer('datos_historial.js', function(){
+          try{ conHistorial(function(){ pintarTablero(); }); }catch(e){}
+        });
+      });
+    }, 350);
+  }
+
+  if(document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+</script>
+<script src="ayuda.js?v=20260926-2227"></script>
 </body>
 </html>
 
