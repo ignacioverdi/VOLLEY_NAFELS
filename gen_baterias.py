@@ -141,6 +141,12 @@ def _bat_nuevo():
         'B':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
             'D':{'#':0,'+':0,'!':0,'-':0,'=':0,'T':0},
             'Aall':na(),'cent':na(),'alta':na(),'rap':na(),
+            # 'zag' es el ataque DESDE EL FONDO: zonas de salida 7, 8 y 9.
+            # Es un corte por DONDE se pega, no por que pelota le llego, asi
+            # que se cruza con los otros: un pipe tras recepcion perfecta
+            # cuenta en 'zag' y tambien en 'rp'. Es a proposito: son dos
+            # preguntas distintas sobre la misma pelota.
+            'zag':na(),
             'rp':na(),'ri':na(),'rm':na(),'tr':na()}
 
 def _calc_baterias(codes, side):
@@ -197,6 +203,14 @@ def _calc_baterias(codes, side):
             if res in Pb['B']: Pb['B'][res]+=1
         elif skill=='A' and pfx==side:
             tipo=body[3]  # Q=central · H=alta · T=rápida
+            # ══ DE DONDE SALIO EL ATAQUE ════════════════════════════════════
+            #  La zona de salida es la cuarta letra de la cola, o sea body[8]:
+            #      *17AH/G4~41~H2
+            #       ^^ ^^^        num, skill, tipo, valoracion
+            #              ^      body[8] = zona de salida = 4
+            #  Es el mismo lugar del que la lee anLeer() en el panel.
+            #  4, 3 y 2 son la red; 7, 8 y 9 son ataque de zaguero.
+            zsal = body[8] if len(body)>8 else ''
             if last_rec is not None and rec_valida:
                 rec_valida=False
                 cat='rp' if last_rec in ('#','+') else 'ri' if last_rec=='!' else 'rm' if last_rec=='-' else 'tr'
@@ -205,6 +219,9 @@ def _calc_baterias(codes, side):
             Pa=get(num)
             Pa['Aall']['T']+=1
             if res in Pa['Aall']: Pa['Aall'][res]+=1
+            if zsal in ('7','8','9'):
+                Pa['zag']['T']+=1
+                if res in Pa['zag']: Pa['zag'][res]+=1
             if tipo=='Q':
                 Pa['cent']['T']+=1
                 if res in Pa['cent']: Pa['cent'][res]+=1
@@ -319,6 +336,7 @@ def _bat_to_pcts(P):
         'atqri': atk(P['ri']),
         'atqrm': atk(P['rm']),
         'atqtr': atk(P['tr']),
+        'atqz':  atk(P['zag']),
         # ══ SOBRE CUANTAS ACCIONES ESTA HECHA CADA CUENTA ═══════════════════
         # Un 40% de 5 acciones y un 20% de 238 no valen lo mismo. Mostrar los
         # dos iguales engana. No se filtra ni se esconde nada —el numero es
@@ -347,6 +365,7 @@ def _bat_to_pcts(P):
             'ri': {'p':P['ri']['#'],   'b':P['ri']['/'],   'e':P['ri']['='],   't':P['ri']['T']},
             'rm': {'p':P['rm']['#'],   'b':P['rm']['/'],   'e':P['rm']['='],   't':P['rm']['T']},
             'tr': {'p':P['tr']['#'],   'b':P['tr']['/'],   'e':P['tr']['='],   't':P['tr']['T']},
+            'z':  {'p':P['zag']['#'],  'b':P['zag']['/'],  'e':P['zag']['='],  't':P['zag']['T']},
         },
         'n_atqq':  P['cent']['T'],
         'n_atqhb': P['alta']['T'],
@@ -355,6 +374,7 @@ def _bat_to_pcts(P):
         'n_atqri': P['ri']['T'],
         'n_atqrm': P['rm']['T'],
         'n_atqtr': P['tr']['T'],
+        'n_atqz':  P['zag']['T'],
     }
 
 # ══════════ LECTURA DVW ══════════
