@@ -332,6 +332,12 @@ function setIdioma(l){
   });
   document.documentElement.lang = l;
   try{ localStorage.setItem('bienvenida_idioma', l); }catch(e){}
+  /* Y tambien el que usa TODA la app (lang.js lee 'vb_lang').
+     Antes el jugador nuevo llegaba aca, elegia Deutsch, entraba a la app
+     ...y la app estaba en castellano: esta eleccion se guardaba en una
+     clave que ningun otro lado miraba. La primera decision que tomaba el
+     jugador se tiraba a la basura. */
+  try{ localStorage.setItem('vb_lang', l); }catch(e){}
 }
 (function(){
   var l = null;

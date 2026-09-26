@@ -34,7 +34,11 @@ for %%F in (ARREGLAR_*.py MEJORAS_*.py PASAR_*.py PREPARAR_*.py REPARAR_*.py ARM
     set /a N+=1
   )
 )
-for %%F in (*.antes *.antes-* *.original *.bak) do (
+REM  OJO: *.bak NO va en esta lista. entrenamientos_nafels_db.json.bak es
+REM  el unico respaldo automatico de las bases (lo crea el motor de
+REM  entrenamientos antes de reescribirlas). Borrarlo dejaba al sistema
+REM  sin ninguna copia de seguridad.
+for %%F in (*.antes *.antes-* *.original) do (
   if exist "%%F" (
     echo        %%F
     set /a N+=1
@@ -64,7 +68,11 @@ echo.
 for %%F in (ARREGLAR_*.py MEJORAS_*.py PASAR_*.py PREPARAR_*.py REPARAR_*.py ARMADORAS_*.py NOMBRES_*.py LIMPIAR_COPIAS.py) do (
   if exist "%%F" del /q "%%F"
 )
-for %%F in (*.antes *.antes-* *.original *.bak) do (
+REM  OJO: *.bak NO va en esta lista. entrenamientos_nafels_db.json.bak es
+REM  el unico respaldo automatico de las bases (lo crea el motor de
+REM  entrenamientos antes de reescribirlas). Borrarlo dejaba al sistema
+REM  sin ninguna copia de seguridad.
+for %%F in (*.antes *.antes-* *.original) do (
   if exist "%%F" del /q "%%F"
 )
 

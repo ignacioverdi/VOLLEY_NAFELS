@@ -1,6 +1,6 @@
 {
  "BIENVENIDA.html": {
-  "bytes": 26706,
+  "bytes": 27083,
   "funciones": [
    "setIdioma"
   ],
@@ -145,7 +145,7 @@
   "tablas": {}
  },
  "armadores.html": {
-  "bytes": 196563,
+  "bytes": 196574,
   "funciones": [
    "_initModoBtns",
    "abrirModalArmador",
@@ -527,7 +527,7 @@
   "tablas": {}
  },
  "dashboard.html": {
-  "bytes": 130014,
+  "bytes": 130025,
   "funciones": [
    "_batMatchName",
    "_curSeason",
@@ -642,7 +642,7 @@
   "tablas": {}
  },
  "game_plan.html": {
-  "bytes": 197928,
+  "bytes": 197939,
   "funciones": [
    "abrirModalArmador",
    "abrirModalDefensa",
@@ -1057,7 +1057,7 @@
   "tablas": {}
  },
  "importar_dvw.html": {
-  "bytes": 27970,
+  "bytes": 27981,
   "funciones": [
    "addStat",
    "calcEff",
@@ -1320,10 +1320,11 @@
   "tablas": {}
  },
  "panel_vivo.html": {
-  "bytes": 868686,
+  "bytes": 876235,
   "funciones": [
    "_aCp1252",
    "_alarmaGuardado",
+   "_basura",
    "_cajaNegra",
    "_contarCodigos",
    "_esExtendido",
@@ -1657,6 +1658,7 @@
    "resetConfig",
    "restaurarCombos",
    "resumenPartido",
+   "rotDelCodigo",
    "rotarCancha",
    "rotate",
    "rowOf",
@@ -1871,7 +1873,7 @@
   "tablas": {}
  },
  "pizarron.html": {
-  "bytes": 39861,
+  "bytes": 39872,
   "funciones": [
    "abrirJugs",
    "armarPrep",
@@ -2037,7 +2039,7 @@
   }
  },
  "prep_builder.html": {
-  "bytes": 46037,
+  "bytes": 46048,
   "funciones": [
    "a",
    "abrirMes",
@@ -2233,7 +2235,7 @@
   "tablas": {}
  },
  "recuperar.html": {
-  "bytes": 12259,
+  "bytes": 12517,
   "funciones": [
    "bajarCodigos",
    "bajarJSON",

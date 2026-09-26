@@ -258,16 +258,56 @@ def datos_de(nombre):
     return None
 
 
-def auditar_los_demas(en_dvw, propio_slug):
-    """Los otros archivos de datos, contra la misma fuente.
+def _cobertura(hay, esp):
+    """Cuanto del crudo llego al archivo. Devuelve (esta_bien, texto).
+
+    No se pide igualdad: el plan de partido y el bloqueo filtran por plantel,
+    asi que tener un poco menos que el crudo es lo correcto. Se avisa solo
+    cuando el numero es imposible (mas que la fuente) o cuando falta tanto
+    que ya no se explica por el filtro."""
+    if esp <= 0:
+        return (hay == 0), '--'
+    pct = 100.0 * hay / esp
+    if hay > esp:
+        return False, '%.0f%% (mas que la fuente)' % pct
+    return (pct >= 60.0), '%.0f%% del crudo' % pct
+
+
+def auditar_los_demas(en_dvw, propio_slug, en_dvw_todo=None, blq_total=None):
+    """Los otros archivos de datos, cada uno contra SU fuente.
 
     liga_data es el principal, pero no el unico: la base de jugadores, el plan
     de partido y el bloqueo tienen sus propias copias de las acciones. Si una
     se desincroniza, esa pantalla muestra numeros distintos de las demas y no
     hay forma de saber cual es la buena.
+
+    ══ POR QUE ANTES AVISABA SIEMPRE ══════════════════════════════════════
+    Se comparaba todo contra los PARTIDOS solos. Pero plan_partido_data.js y
+    datos_bloqueo.js se arman con partidos MAS entrenamientos (26/09: 4 + 13
+    = 17 .dvw). La cuenta no podia dar nunca: salia "NO COINCIDE" en cada
+    corrida, con la app perfecta. Un control que grita siempre se deja de
+    mirar, y el dia que marque algo de verdad no le va a dar bola nadie.
+
+    Ahora cada archivo se mide contra lo que lo genera:
+
+      liga_data, base de jugadores  ->  partidos          · exacto
+      plan de partido, bloqueo      ->  partidos + entren · por cobertura
+
+    Por que "por cobertura" y no exacto: el plan se queda SOLO con los
+    jugadores que estan en plantel_<club>.js (esta explicado en
+    gen_plan_partido.py). En los entrenamientos juegan chicos de inferiores
+    e invitados que no estan en el plantel, y sus acciones quedan afuera a
+    proposito. Por eso el plan siempre tiene un poco menos que el crudo, y
+    ese "poco menos" es correcto, no un error.
+
+    Se avisa cuando el numero no puede ser: si el archivo tiene MAS acciones
+    que la fuente (imposible: algo se duplico) o si tiene menos del 60%
+    (ahi si se perdio algo de verdad).
     """
+    if en_dvw_todo is None:
+        en_dvw_todo = en_dvw
     print()
-    print('  LOS DEMAS ARCHIVOS, CONTRA LA MISMA FUENTE')
+    print('  LOS DEMAS ARCHIVOS, CADA UNO CONTRA SU FUENTE')
     print('  ' + '-' * 68)
 
     lios = []
@@ -335,10 +375,12 @@ def auditar_los_demas(en_dvw, propio_slug):
                         ('recepcion', 'rec', por_rol['reception']),
                         ('defensa', 'dig', por_rol['defense'])]
                 for nom, clave, hay in comp:
-                    esp = sum(en_dvw.get(clave, Counter()).values())
-                    ok = (esp == hay)
-                    print('     plan de partido   · %-11s %5d / %-5d %s'
-                          % (nom, hay, esp, 'ok' if ok else '<-- NO COINCIDE'))
+                    # el plan se arma con partidos + entrenamientos, y se
+                    # queda solo con los jugadores del plantel
+                    esp = sum(en_dvw_todo.get(clave, Counter()).values())
+                    ok, pct = _cobertura(hay, esp)
+                    print('     plan de partido   · %-11s %5d / %-5d  %s'
+                          % (nom, hay, esp, pct if ok else pct + ' <-- REVISAR'))
                     if not ok:
                         lios.append(('plan de partido', nom, esp, hay))
         except Exception as e:
@@ -358,10 +400,10 @@ def auditar_los_demas(en_dvw, propio_slug):
                         break
             if eq is not None:
                 hay = sum(len(j.get('data') or []) for j in eq)
-                esp = _bloqueos_en_dvw
-                ok = (esp == hay)
-                print('     bloqueo           · %-11s %5d / %-5d %s'
-                      % ('bloqueo', hay, esp, 'ok' if ok else '<-- NO COINCIDE'))
+                esp = _bloqueos_en_dvw if blq_total is None else blq_total
+                ok, pct = _cobertura(hay, esp)
+                print('     bloqueo           · %-11s %5d / %-5d  %s'
+                      % ('bloqueo', hay, esp, pct if ok else pct + ' <-- REVISAR'))
                 if not ok:
                     lios.append(('bloqueo', 'bloqueo', esp, hay))
         except Exception as e:
@@ -463,6 +505,21 @@ def main():
 
     # el nombre largo es el que aparece en los .dvw
     en_dvw = contar_en_dvw(carpetas, propios, _archivos)
+
+    # ══ LA SEGUNDA VARA: PARTIDOS + ENTRENAMIENTOS ════════════════════════
+    # plan_partido_data.js y datos_bloqueo.js les suman los entrenamientos.
+    # High Set queda afuera a proposito: no entra en ninguno de los dos.
+    _blq_partidos = _bloqueos_en_dvw
+    en_dvw_todo = dict((k, Counter(v)) for k, v in en_dvw.items())
+    _carp_ent = [d for d in sorted(glob.glob(os.path.join(AQUI, 'DVW*')))
+                 if os.path.isdir(d)
+                 and 'ENTREN' in os.path.basename(d).upper()
+                 and glob.glob(os.path.join(d, '*.dvw'))]
+    if _carp_ent:
+        _extra = contar_en_dvw(_carp_ent, propios)
+        for _k, _c in _extra.items():
+            en_dvw_todo.setdefault(_k, Counter()).update(_c)
+    _blq_todo = _bloqueos_en_dvw          # la llamada de arriba ya lo sumo
     en_datos = contar_en_datos(plano(corto))
 
     if en_datos == '__CIFRADO__':
@@ -513,7 +570,7 @@ def main():
             linea.append('%s %d%s' % (v, na, '' if na == nb else '/%d!' % nb))
         print('  %-12s %s' % (nom, '  ·  '.join(linea)))
 
-    problemas += auditar_los_demas(en_dvw, plano(corto))
+    problemas += auditar_los_demas(en_dvw, plano(corto), en_dvw_todo, _blq_todo)
 
     print()
     print('  ' + '=' * 70)

@@ -437,6 +437,30 @@ if exist "CONTROL_PANTALLAS.py" (
 echo.
 
 REM ================= CERRAR LOS DATOS =================
+REM ================= EL FRENO DE MANO =================
+REM  Ultimo control antes de publicar: que la base no haya ENCOGIDO.
+REM
+REM  El motor tiene una regla correcta (si un partido de la base no esta en
+REM  la carpeta, rehace la base desde cero) que se vuelve peligrosa cuando
+REM  la carpeta quedo vacia o renombrada por un descuido: la base se rehace
+REM  sin nada, se cifra vacia y se publica. La web queda en blanco y nadie
+REM  se entera hasta que alguien la abre.
+REM
+REM  Va ANTES de cifrar, que es cuando la base todavia se puede leer.
+if not exist "REVISAR_BASE.py" goto SINFRENO
+python REVISAR_BASE.py
+if not errorlevel 1 goto SINFRENO
+set "IGUAL="
+set /p "IGUAL=  Publicar igual? (S/N): "
+if /i "!IGUAL!"=="S" goto SINFRENO
+echo.
+echo  OK, NO se publico. Revisa la carpeta de partidos y volve a correr esto.
+echo.
+pause
+exit /b 1
+:SINFRENO
+echo.
+
 if exist "LLAVE.txt" (
     echo  Protegiendo los datos antes de publicar...
     python cifrar_datos.py

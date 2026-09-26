@@ -346,7 +346,18 @@
   function getLang(){
     var l = null;
     try { l = localStorage.getItem(STORE); } catch(e){}
-    return (LANGS.indexOf(l) >= 0) ? l : 'es';
+    if (LANGS.indexOf(l) >= 0) return l;
+    /* Si nunca eligieron, manda el idioma del dispositivo. El club es
+       suizo-aleman: un jugador con el telefono en aleman abria la app en
+       castellano y la veia asi hasta encontrar el selector, que ademas no
+       esta en wellness ni en jugador, que es donde mas vive.
+       Esta misma deteccion ya estaba escrita en BIENVENIDA.html, en el chat
+       y en las cuatro pantallas hm_*: faltaba justo en el motor. */
+    try {
+      var nav = (navigator.language || navigator.userLanguage || '').slice(0,2).toLowerCase();
+      if (LANGS.indexOf(nav) >= 0) return nav;
+    } catch(e){}
+    return 'es';
   }
   window.getLang = getLang;
 
@@ -4297,9 +4308,33 @@
     return null;
   }
 
+  /* == NO PISAR UN DATO CON SU ETIQUETA ================================
+     Hay elementos que llevan data-t como rotulo inicial y que el JavaScript
+     despues rellena con un dato: el nombre del equipo en el marcador en
+     vivo, la ficha del rival, el contador de sesiones. applyDataT los volvia
+     a escribir con la traduccion fija, asi que en aleman el nombre del
+     equipo se convertia en "HEIM" y el visitante en "GAST", y el contador
+     de sesiones perdia el numero.
+
+     Solo pasaba en ingles y aleman (el observador arranca con
+     if(lang==='es') return), o sea que era invisible en castellano y le
+     pegaba justo a quien necesita la traduccion.
+
+     data-t-dyn marca esos elementos: "el rotulo es solo para arrancar, lo
+     que vale es lo que escribe el JS". No se usa data-notr a proposito,
+     porque el recorrido de textos TAMBIEN lo respeta y entonces el dato
+     escrito por el JS se quedaria sin traducir aunque el diccionario lo
+     tenga. Con data-t-dyn, applyDataT no lo pisa y el recorrido de textos
+     igual lo traduce. */
+  function _soloRotulo(el){
+    try { return el.hasAttribute('data-t-dyn') || el.hasAttribute('data-notr'); }
+    catch(e){ return false; }
+  }
+
   function applyDataT(lang){
     var els = document.querySelectorAll('[data-t]');
     for (var i=0; i<els.length; i++){
+      if (_soloRotulo(els[i])) continue;
       var k = els[i].getAttribute('data-t');
       var v = _trDataT(k, lang);
       if (v !== null) {
@@ -4321,6 +4356,7 @@
     // textos
     var els = document.querySelectorAll('[data-t]');
     for (var i=0; i<els.length; i++){
+      if (_soloRotulo(els[i])) continue;
       var k = els[i].getAttribute('data-t');
       var v = _trDataT(k, lang);
       if (v !== null) {

@@ -22,6 +22,8 @@ DVW*
 LLAVE.txt
 *.antes
 _RESPALDO
+_respaldo_*/
+_respaldo*/
 
 # ── Documentos internos (no son parte de la app) ────────────────────────────
 *.pptx
@@ -37,10 +39,15 @@ _gen_nafels.b64
 # texto plano: eficacias, totales y jugadores de los ocho equipos. Es el
 # producto del sistema, y se bajaba con solo pedir la direccion, sin pasar por
 # la pantalla de ingreso.
+# CORREGIDO 26/09/2026: los dos estaban excluidos y las pantallas los piden
+# con fetch(). Probado contra el sitio: nla_stats.json y nla_full_stats.json
+# daban 404, la tabla de la liga mostraba su cartel de error y el chat se
+# quedaba sin ningun jugador. Pesan 83 KB y 36 KB: no son un problema de
+# cuota, y son estadisticas agregadas de toda la liga, lo menos sensible
+# que hay. Ahora SI se publican.
+#
 # OJO: nla_full_stats.json lo pide el CHAT con fetch(). Si el chat deja de
 # traer datos, sacar esa linea y cifrarlo en su lugar.
-nla_stats.json
-nla_full_stats.json
 
 # ── Documentacion interna ───────────────────────────────────────────────────
 # Los .md son las notas del proyecto: como esta armado, que falta, decisiones

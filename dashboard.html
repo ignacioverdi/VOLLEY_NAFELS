@@ -727,7 +727,7 @@ function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
          pantalla leen su valor. -->
     <select id="eq-ses-sel" onchange="setEqSesion(parseInt(this.value))" style="display:none"></select>
     <div style="position:relative;display:inline-block">
-      <button class="ftag" id="eq-multi-btn" onclick="eqTogglePanel()">📋 <b id="eq-multi-n" data-t="Todas las sesiones"><span data-t="Todas las sesiones">Todas las sesiones</span></b> ▾</button>
+      <button class="ftag" id="eq-multi-btn" onclick="eqTogglePanel()">📋 <b id="eq-multi-n" data-t-dyn data-t="Todas las sesiones"><span data-t="Todas las sesiones">Todas las sesiones</span></b> ▾</button>
       <div id="eq-multi-panel" style="display:none;position:absolute;z-index:9999;top:110%;left:0;
            min-width:280px;max-height:320px;overflow:auto;background:var(--card,#111a27);
            border:1px solid var(--b,#1f2c3d);border-radius:10px;padding:8px;

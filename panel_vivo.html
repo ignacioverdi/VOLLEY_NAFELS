@@ -513,6 +513,22 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 .lutitle{font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.2px;font-size:13px;margin:0 0 6px;text-transform:uppercase}
 .crow{cursor:pointer}
 .crow.sel{outline:1px solid var(--k-zone);background:rgba(56,189,248,.09)}
+/* Un codigo con caracteres que el programa no supo leer: se pinta toda la
+   linea en rojo, como hace DataVolley en su lista (manual 4.5.3). En el
+   partido del 25/09 habia 4 asi entre 875 y nadie los vio: a09SQ-~~~12~~~~SM,
+   a11SQ!~~~66~~~~SQ, a91SM=~~~53~~~~Q, a08AT#W4~49BH2~#. Son errores de tipeo
+   que el parser absorbia en silencio y cada uno es un dato perdido. */
+.crow.mal{background:rgba(232,25,44,.13);outline:1px solid rgba(232,25,44,.55)}
+.crow.mal .cc{color:#ff8a94}
+.crow.mal.sel{outline:2px solid rgba(232,25,44,.85)}
+.rotcod{margin-top:8px;padding:9px 10px;border-top:1px solid var(--b);
+  display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rotcod .sc-grid{gap:3px;margin-bottom:0}
+.rotcod .sc-z{padding:5px 2px;border-radius:6px}
+.rotcod .sc-num{font-size:13px}
+.rotcod .sc-zn{font-size:8px}
+.rotcod .sc-tit{font-size:10px;margin-bottom:4px}
+@media(max-width:700px){ .rotcod{grid-template-columns:1fr} }
 .edec{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
 .eseg{background:var(--card2);border:1px solid var(--b);border-radius:8px;padding:6px 10px;min-width:84px}
 .eseg b{display:block;font-size:8.5px;letter-spacing:.7px;text-transform:uppercase;color:var(--mut);font-weight:600}
@@ -572,7 +588,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <div class="board">
   <div class="tside home">
     <span class="serveball" id="sb-h"></span>
-    <div><div class="tname" id="nm-h" data-t="LOCAL">LOCAL</div><div class="tmeta"><span id="to-h">0</span> TO · <span id="sub-h">0</span> cambios</div></div>
+    <div><div class="tname" id="nm-h" data-t-dyn data-t="LOCAL">LOCAL</div><div class="tmeta"><span id="to-h">0</span> TO · <span id="sub-h">0</span> cambios</div></div>
     <div class="spacer"></div>
     <div class="pts" id="pt-h">0</div>
   </div>
@@ -582,7 +598,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   </div>
   <div class="tside away">
     <span class="serveball" id="sb-a"></span>
-    <div><div class="tname" id="nm-a" data-t="VISITANTE">VISITANTE</div><div class="tmeta"><span id="to-a">0</span> TO · <span id="sub-a">0</span> cambios</div></div>
+    <div><div class="tname" id="nm-a" data-t-dyn data-t="VISITANTE">VISITANTE</div><div class="tmeta"><span id="to-a">0</span> TO · <span id="sub-a">0</span> cambios</div></div>
     <div class="spacer"></div>
     <div class="pts" id="pt-a">0</div>
   </div>
@@ -672,6 +688,10 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
       <button class="hbtn" onclick="window.open('unir_video.html','_blank')" title="Unir los archivos de un partido que la cámara cortó en varios">Unir videos</button>
       <span id="codes-n" class="cnt" title="Cuántas acciones lleva el partido"></span><button class="hbtn" onclick="undoLast()" title="Borra el último código (Ctrl+Z)" data-t="Deshacer código"><span data-t="Deshacer código"><span data-t="Deshacer código">Deshacer código</span></span></button></h3>
     <div class="codes" id="codes" data-notr></div>
+    <!-- La rotacion del momento de la accion elegida. DataVolley la muestra
+         en su lista (manual 4.5); el panel ya guardaba las dos formaciones en
+         cada codigo (hl/al) y solo faltaba dibujarlas. -->
+    <div class="rotcod" id="rot-codigo" hidden data-notr></div>
   </div>
 </div>
 
@@ -687,11 +707,11 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
   </div>
   <div class="twin">
     <div class="pane">
-      <div class="tbl-head"><span class="tag" style="color:var(--loc)" id="st-nm-h" data-t="LOCAL">LOCAL</span></div>
+      <div class="tbl-head"><span class="tag" style="color:var(--loc)" id="st-nm-h" data-t-dyn data-t="LOCAL">LOCAL</span></div>
       <table><thead><tr><th data-t="Fund.">Fund.</th><th data-t="Tot">Tot</th><th>#</th><th>+</th><th>!</th><th>−</th><th>/</th><th>=</th><th data-t="Pos%">Pos%</th><th>Ef%</th></tr></thead><tbody id="st-h"></tbody></table>
     </div>
     <div class="pane">
-      <div class="tbl-head"><span class="tag" style="color:var(--vis)" id="st-nm-a" data-t="VISITANTE">VISITANTE</span></div>
+      <div class="tbl-head"><span class="tag" style="color:var(--vis)" id="st-nm-a" data-t-dyn data-t="VISITANTE">VISITANTE</span></div>
       <table><thead><tr><th data-t="Fund.">Fund.</th><th data-t="Tot">Tot</th><th>#</th><th>+</th><th>!</th><th>−</th><th>/</th><th>=</th><th data-t="Pos%">Pos%</th><th>Ef%</th></tr></thead><tbody id="st-a"></tbody></table>
     </div>
   </div>
@@ -730,7 +750,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="modal" id="m-subs"><div class="sheet" style="max-width:560px">
-  <h2>Cambio · <span id="subs-team" data-t="Equipo"><span data-t="Equipo"><span data-t="Equipo">Equipo</span></span></span></h2>
+  <h2>Cambio · <span id="subs-team" data-t-dyn data-t="Equipo"><span data-t="Equipo"><span data-t="Equipo">Equipo</span></span></span></h2>
   <div id="subs-cancha"></div>
   <div class="brow" style="gap:6px;margin:8px 0"><button class="tbtn" id="subs-th" onclick="substLado('home')" data-t="Local">Local</button><button class="tbtn" id="subs-ta" onclick="substLado('away')" data-t="Visitante">Visitante</button></div>
   <div class="sub"><span data-t="Elegí quién sale (izquierda) y quién entra (derecha). Cambios restantes:"><span data-t="Elegí quién sale (izquierda) y quién entra (derecha). Cambios restantes:">Elegí quién sale (izquierda) y quién entra (derecha). Cambios restantes:</span></span> <b id="subs-restantes">6</b>.</div>
@@ -846,6 +866,12 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <div><label class="f" data-t="N° de partido"><span data-t="N° de partido"><span data-t="N° de partido">N° de partido</span></span></label><input class="f mono" id="n-codigo" placeholder="636643"></div>
     <div style="grid-column:1/-1"><label class="f" data-t="Competencia">Competencia</label><input class="f" id="n-competencia" placeholder="NLA Volleyball League Men"></div>
     <div style="grid-column:1/-1"><label class="f" data-t="Fase"><span data-t="Fase"><span data-t="Fase">Fase</span></span></label><input class="f" id="n-fase" placeholder="8th Finals"></div>
+    <!-- Entrenador y ayudante: los archivos de la liga los traen en [3TEAMS],
+         columnas 4 y 5, y el panel los dejaba vacios. -->
+    <div><label class="f" data-t="Entrenador local">Entrenador local</label><input class="f" id="n-dtloc" placeholder="Apellido Nombre"></div>
+    <div><label class="f" data-t="Ayudante local">Ayudante local</label><input class="f" id="n-ayloc" placeholder="Apellido Nombre"></div>
+    <div><label class="f" data-t="Entrenador visitante">Entrenador visitante</label><input class="f" id="n-dtvis" placeholder="Apellido Nombre"></div>
+    <div><label class="f" data-t="Ayudante visitante">Ayudante visitante</label><input class="f" id="n-ayvis" placeholder="Apellido Nombre"></div>
     <div style="grid-column:1/-1"><label class="f" data-t="Comentario"><span data-t="Comentario"><span data-t="Comentario">Comentario</span></span></label><input class="f" id="n-comentario"></div>
   </div>
   <div class="brow">
@@ -1074,7 +1100,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 
 <div class="modal inicio" id="m-inicio"><div class="sheet">
   <div class="ini-top">
-    <h2><span class="hb">≡</span> <span id="ini-temp" data-t="Temporada"><span data-t="Temporada"><span data-t="Temporada">Temporada</span></span></span></h2>
+    <h2><span class="hb">≡</span> <span id="ini-temp" data-t-dyn data-t="Temporada"><span data-t="Temporada"><span data-t="Temporada">Temporada</span></span></span></h2>
     <div class="ini-acc">
       <button class="tbtn" onclick="abrirEquipos()" title="Base de equipos" data-t="Equipos">Equipos</button>
       <button class="tbtn" onclick="abrirCombos()" title="Combinaciones de ataque y llamadas" data-t="Combinaciones">Combinaciones</button>
@@ -1122,7 +1148,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="modal" id="m-setup"><div class="sheet">
-  <h2 id="setup-titulo" data-t="Partido"><span data-t="Partido"><span data-t="Partido">Partido</span></span></h2>
+  <h2 id="setup-titulo" data-t-dyn data-t="Partido"><span data-t="Partido"><span data-t="Partido">Partido</span></span></h2>
   <div class="sub" id="setup-sub" data-t="Cargá los dos equipos, el seis inicial y quién saca."><span data-t="Cargá los dos equipos, el seis inicial y quién saca."><span data-t="Cargá los dos equipos, el seis inicial y quién saca.">Cargá los dos equipos, el seis inicial y quién saca.</span></span></div>
   <div style="display:flex;gap:8px;margin-bottom:14px">
     <button type="button" id="modo-partido" class="tbtn" onclick="setModo('partido')" style="flex:1;background:#2563eb;color:#fff;border-color:#2563eb" data-t="Partido"><span data-t="Partido"><span data-t="Partido">Partido</span></span></button>
@@ -2860,13 +2886,15 @@ function abrirLista(side){
 /* manual 4.6 NOTES: los datos del partido */
 function abrirNotas(){
   const n = M.notas;
-  ['fecha','hora','temporada','competencia','fase','codigo','comentario'].forEach(k=>{
+  ['fecha','hora','temporada','competencia','fase','codigo','comentario',
+   'dtloc','ayloc','dtvis','ayvis'].forEach(k=>{
     const el=document.getElementById('n-'+k); if(el) el.value = n[k]||'';
   });
   document.getElementById('m-notas').classList.add('open');
 }
 function guardarNotas(){
-  ['fecha','hora','temporada','competencia','fase','codigo','comentario'].forEach(k=>{
+  ['fecha','hora','temporada','competencia','fase','codigo','comentario',
+   'dtloc','ayloc','dtvis','ayvis'].forEach(k=>{
     const el=document.getElementById('n-'+k); if(el) M.notas[k]=el.value.trim();
   });
   closeModal('m-notas'); persist(); toast('Datos del partido guardados');
@@ -4348,7 +4376,36 @@ function parseCommand(raw){
      Acepta $$& suelto o con tipo y evaluación: $$&H=  ·  a$$&H#
      El punto lo asigna después el End Rally, como en los archivos reales. */
   /* ══ comandos de la ventana de comandos (manual 4.6) ══ */
-  const CMD = c.toUpperCase();
+  /* == LOS COMANDOS, TAMBIEN EN CASTELLANO Y EN ALEMAN ====================
+     El manual (4.4 y 4.5.2) ya admite dos alias que faltaban: FORM por LINEUP
+     y AGGIO por UPDATE.
+
+     Y se agregan los mismos comandos en los otros dos idiomas de la app. El
+     club es suizo-aleman y el panel se usa en castellano: no hay razon para
+     obligar a acordarse del ingles.
+
+     Van TODOS disponibles siempre, no solo los del idioma elegido: un alias
+     de mas no molesta a nadie, y si alguien cambia el idioma no se le
+     desaparece el comando que venia usando.
+
+     Sin riesgo de chocar con un codigo de scouteo: son palabras de 3 letras o
+     mas, sin digitos, y entran solo con coincidencia exacta. */
+  const ALIAS = {
+    'FORM':'LINEUP', 'AGGIO':'UPDATE',
+    'FORMACION':'LINEUP', 'ACTUALIZAR':'UPDATE', 'VERIFICAR':'VER',
+    'LISTA':'LIST', 'NOTAS':'NOTES', 'INVERTIR':'INV', 'ROTAR':'ROT',
+    'FIN':'END', 'INFORME':'REPORT', 'PARAR':'STOP',
+    'AUFSTELLUNG':'LINEUP', 'AKTUALISIEREN':'UPDATE', 'PRUEFEN':'VER',
+    'PRUFEN':'VER', 'LISTE':'LIST', 'NOTIZEN':'NOTES', 'DREHEN':'ROT',
+    'ENDE':'END', 'BERICHT':'REPORT', 'STOPP':'STOP'
+  };
+  /* Ojo con el prefijo del visitante: cuando el comando empieza con "a"
+     —AGGIO, ACTUALIZAR, AUFSTELLUNG— la linea de arriba ya se comio esa
+     primera letra creyendo que era el prefijo del equipo visitante. Por eso
+     se busca PRIMERO la palabra entera y despues la recortada. Los comandos
+     que si aceptan prefijo (aLIST, aLISTA) siguen andando igual, porque la
+     palabra entera no esta en la tabla y cae en la segunda busqueda. */
+  const CMD = ALIAS[t.toUpperCase()] || ALIAS[c.toUpperCase()] || c.toUpperCase();
   const limpiar = ()=>{ document.getElementById('code').value=''; };
   if(CMD==='VER'){ limpiar(); abrirVerificacion(); return true; }
   if(CMD==='UPDATE'){ limpiar(); actualizarTablas(); return true; }
@@ -4935,6 +4992,18 @@ function codigoEnColumnas(cod){
       + ext + '</span>';
 }
 
+/* ¿Este codigo tiene caracteres colgados que el programa no interpreto?
+   parseTail mete en 'custom' todo lo que no supo leer (manual 4.1.4, hasta 5
+   caracteres personalizados). Eso es legitimo si se usan a proposito, asi que
+   si el llenado automatico esta encendido no se marca nada. */
+function _basura(cod){
+  try{
+    if(CFG && CFG.customAuto) return false;
+    const p = parseOne(cod);
+    return !!(p && !p.err && p.d && p.d.custom && p.d.custom.length);
+  }catch(e){ return false; }
+}
+
 function renderCodes(){
   const el = document.getElementById('codes');
   const rows = M.codes.filter(c=>c.set===M.set);
@@ -4954,7 +5023,7 @@ function renderCodes(){
      con un boton de "ver todas" — nunca en silencio. */
   el.innerHTML = rows.map(c=>{
     if(c.k==='drill'){ const di=M.codes.indexOf(c); return '<div class=\"crow\" onclick=\"seleccionar('+di+')\" style=\"justify-content:center;color:#22c55e;font-weight:800;background:rgba(34,197,94,.08);border:1px dashed rgba(34,197,94,.45)\"><span class=\"cc\">'+(c.c||'DRILL')+'</span></div>'; }
-    const cls = c.k==='auto' ? 'auto' : (c.c[0]==='*'?'hteam':'ateam');
+    const cls = (c.k==='auto' ? 'auto' : (c.c[0]==='*'?'hteam':'ateam')) + (_basura(c.c) ? ' mal' : '');
     const i = M.codes.indexOf(c);
     const sel = (i===SEL_I) ? ' sel' : '';
     /* ── EL TIEMPO DE VIDEO DE CADA ACCION ──────────────────────────
@@ -5743,7 +5812,35 @@ function arrancarPartido(){
    ataque↔defensa rival, ataque↔armado previo.
    ============================================================ */
 let EDIT_I = -1, EDIT_MODE = 'edit', SEL_I = -1;
-function seleccionar(i){ SEL_I = (SEL_I===i) ? -1 : i; renderCodes(); if(SEL_I>=0) irAlVideo(SEL_I); }
+function seleccionar(i){ SEL_I = (SEL_I===i) ? -1 : i; renderCodes(); rotDelCodigo(); if(SEL_I>=0) irAlVideo(SEL_I); }
+
+/* == LA ROTACION DE LA ACCION ELEGIDA ===================================
+   Cada codigo ya guarda las dos formaciones del momento (hl/al) y la zona de
+   cada armador (zh/za): con eso alcanza para dibujar las dos canchas tal como
+   estaban cuando paso esa accion, sin tocar nada del partido.
+
+   Reusa las mismas clases que la cancha de la ventana de cambios, asi que no
+   hay estilos nuevos que mantener. */
+function rotDelCodigo(){
+  const cont = document.getElementById('rot-codigo');
+  if(!cont) return;
+  const c = (SEL_I>=0) ? M.codes[SEL_I] : null;
+  if(!c || c.k==='drill' || !c.hl || !c.al){ cont.hidden = true; cont.innerHTML=''; return; }
+  const una = (lineup, nombre, zArm)=>{
+    const orden = [4,3,2,5,6,1];
+    let h = '<div><div class="sc-tit">' + esc(nombre||'')
+          + (zArm ? ' <b class="rotnum">P' + zArm + '</b>' : '') + '</div><div class="sc-grid">';
+    orden.forEach(function(z){
+      const n = (lineup && lineup[z-1]) || '';
+      const arm = (zArm && z === zArm);
+      h += '<div class="sc-z' + (arm?' arm':'') + '"><span class="sc-num">' + (n||'\u00b7')
+         + '</span><span class="sc-zn">z' + z + '</span></div>';
+    });
+    return h + '</div></div>';
+  };
+  cont.innerHTML = una(c.hl, M.home.name, c.zh) + una(c.al, M.away.name, c.za);
+  cont.hidden = false;
+}
 
 /* manual 4.5.2: INS inserta un código en cualquier punto de la lista */
 function insertarEn(i){
@@ -6948,7 +7045,14 @@ function dvwAPartido(txt){
                  al: c.slice(20,26).map(x => parseInt(x,10) || 0),
                  zh: parseInt(c[9],10) || 0,
                  za: parseInt(c[10],10) || 0,
-                 vid: c[12] ? (parseInt(c[12],10) || undefined) : undefined });
+                 /* El segundo del video va en 't', que es como lo guarda el
+                    resto del panel (pushCode, exportDVW, irAlVideo, smartTime,
+                    la lista de codigos y el reproductor por bateria).
+                    Antes entraba como 'vid', que no lo lee nadie: al importar
+                    un .dvw y volver a exportarlo, los 875 segundos del partido
+                    salian vacios y se perdia toda la sincronizacion con el
+                    video. Comprobado con el AXP-FRE del 25/09. */
+                 t: c[12] ? (parseInt(c[12],10) || undefined) : undefined });
   });
   if(!codes.length) return null;
 
@@ -7191,7 +7295,14 @@ function exportDVW(modo){
          'GENERATOR-NAM: Panel en Vivo','LASTCHANGE-DAY: '+_hms,
          'LASTCHANGE-IDP: ','LASTCHANGE-PRG: ','LASTCHANGE-REL: ','LASTCHANGE-VER: ','LASTCHANGE-NAM: ');
   /* [3MATCH]: [0] fecha · [1] hora · [2] temporada · [3] competencia · [4] fase
-     [7] n° de partido · [8] codepage (65001 = UTF-8, que es como grabamos)
+     [7] n° de partido · [8] codepage
+     OJO: aca decia 65001 (UTF-8) pero el archivo se graba en Windows-1252
+     (lo hace _aCp1252, abajo). Comprobado byte a byte: la "ä" de Näfels sale
+     como 0xE4, que es 1252; en UTF-8 serian dos bytes. O sea que el archivo
+     declaraba una cosa y era otra. Los .dvw de la liga declaran 1252.
+     Hoy no molestaba porque Data Volley lo corrige al reabrir y volver a
+     guardar; en una instalacion que no lo regrabe, los nombres con tilde
+     podian salir mal.
      [12] y [13] = competencia y fase en hexadecimal                            */
   const N = M.notas || {};
   /* ══ ENTRENAMIENTO, NO PARTIDO ═══════════════════════════════════════════
@@ -7229,7 +7340,7 @@ function exportDVW(modo){
             String(_d.getMinutes()).padStart(2,'0') + '.00';
   }
   L.push('[3MATCH]', [N.fecha||fecha, _hora, _temp, _comp, _fase,
-                      '', '', N.codigo||'', '65001', '1', 'Z', _esEnt?'1':'0',
+                      '', '', N.codigo||'', '1252', '1', 'Z', _esEnt?'1':'0',
                       hexSQ(_comp), hexSQ(_fase), '\x0f2', ''].join(';'),
                      ';;0;;;;;;;0;');   /* segunda línea de [3MATCH]: sin ella DataVolley tira "list index out of bounds (1)" */
   /* Formato real: [0] id del equipo · [1] nombre · [2] sets ganados */
@@ -7239,8 +7350,10 @@ function exportDVW(modo){
      "AXPO NAFELS vs PRUEBA" y parecia un partido contra un rival. */
   var _awName = _esEnt ? M.home.name : M.away.name;
   var _awId   = _esEnt ? (M.home.id||'') : (M.away.id||'');
-  L.push([M.home.id||'', M.home.name, M.home.sets, '', '', '', '', '', '', ''].join(';'));
-  L.push([_awId, _awName, M.away.sets, '', '', '', '', '', '', ''].join(';'));
+  /* columnas 4 y 5 = entrenador y ayudante, como en los archivos de la liga */
+  var _nt = M.notas || {};
+  L.push([M.home.id||'', M.home.name, M.home.sets, _nt.dtloc||'', _nt.ayloc||'', '', '', '', '', ''].join(';'));
+  L.push([_awId, _awName, M.away.sets, _nt.dtvis||'', _nt.ayvis||'', '', '', '', '', ''].join(';'));
   L.push('[3MORE]',';;;;;Panel en Vivo;;;;');
   L.push('[3COMMENTS]', (M.notas && M.notas.comentario) ? M.notas.comentario+';;;;' : ';;;;');
 
@@ -7405,7 +7518,16 @@ function exportDVW(modo){
     const zh = c.zh || (M.home.lineup.indexOf(M.home.setter)+1) || '';
     const za = c.za || (M.away.lineup.indexOf(M.away.setter)+1) || '';
     const tv = (c.t===undefined || c.t===null) ? '' : String(Math.max(0,Math.round(c.t)));
-    L.push([applyComboMode(c.c,modo),'','','','','','','',c.set,zh,za,'',tv,'',...hl,...al,''].join(';'));
+    /* La hora de reloj de la accion (columna 8). Los archivos de DataVolley la
+       traen en cada linea; el panel la dejaba vacia aunque ya tenia la funcion
+       hecha: se usaba solo para las marcas de drill.
+       Se escribe SOLO si se puede calcular de verdad: hace falta el momento en
+       que arranco el partido (M.t0) y el segundo de esta accion. Sin eso,
+       _horaDVW devolveria la hora de AHORA, que es la hora de exportar y no la
+       de la jugada: preferimos el campo vacio a un dato falso, igual que con
+       las coordenadas. */
+    const hh = (M.t0 && c.t!==undefined && c.t!==null) ? _horaDVW(c.t) : '';
+    L.push([applyComboMode(c.c,modo),'','','','','','',hh,c.set,zh,za,'',tv,'',...hl,...al,''].join(';'));
   });
 
   /* ══ El .dvw se escribe en Windows-1252, no en UTF-8 ══════════════════════
@@ -9912,5 +10034,8 @@ function renderAnalisis(){
 }
 
 </script>
+<!-- La barra de analisis (manual 9.5). Va en su propio archivo a proposito:
+     solo lee y dibuja, y si no carga el panel sigue igual que siempre. -->
+<script src="analisis_vivo.js" onerror="void 0"></script>
 </body>
 </html>

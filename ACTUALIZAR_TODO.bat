@@ -25,7 +25,9 @@ if errorlevel 1 (
 REM --- Verificar que esten los motores ---
 if not exist "update_db_nafels_FULL.py" (
     echo  [ERROR] Falta update_db_nafels_FULL.py en esta carpeta.
-    echo          Corre una vez ACTUALIZAR_NAFELS.bat (genera ese motor) y volve.
+    echo          Recuperalo con: git checkout update_db_nafels_FULL.py
+    echo          (NO uses ACTUALIZAR_NAFELS.bat: reescribe el motor con una
+    echo           version vieja de 1.700 lineas y te come los arreglos).
     echo.
     pause & exit /b
 )

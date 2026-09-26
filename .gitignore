@@ -75,3 +75,8 @@ desktop.ini
 
 # La llave de la demo publica (la crea HACER_DEMO.py)
 LLAVE_DEMO.txt
+
+# Las copias de seguridad que deja Claude antes de tocar un archivo.
+# Son copias de cosas que ya estan en el historial: no van dos veces.
+_respaldo_*/
+_respaldo*/
