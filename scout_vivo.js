@@ -94,7 +94,7 @@
   function procesarEntrada(VD, codigo){
     codigo = String(codigo||'').toLowerCase().trim();
     var partes = codigo.split(',');
-    var aplicadas = 0, reconocidas = 0;
+    var aplicadas = 0, reconocidas = 0, malas = 0;
 
     // saque pendiente (local a la entrada, como el VBA)
     var sk_tipo='', sk_cam='', sk_orig=0, sk_dest=0, sk_hay=false;
@@ -122,13 +122,14 @@
               inc(je['s'+sT], 6); inc(je.sT, 6);
               pushAccion({c:parseInt(camErr,10),k:'S',t:sT,v:6,combo:'',orig:0,dest:0});
               aplicadas++;
-            }
+            } else malas++;
           } else {
             // saque normal: se guarda y se puntúa con la recepción siguiente
             var camResto;
             if (resto.length>2 && isNum(resto)) camResto = resto.slice(0,-2);
             else camResto = resto;
             sk_hay=true; sk_tipo=sT; sk_cam=camResto; sk_orig=0; sk_dest=0;
+            if (!isNum(camResto)) malas++;
             var zoCam = camResto.length;
             if (resto.length >= zoCam+2){
               var zo = resto.charAt(zoCam), zd = resto.charAt(zoCam+1);
@@ -136,11 +137,11 @@
               if (zd>='1'&&zd<='9') sk_dest=parseInt(zd,10);
             }
           }
-        }
+        } else malas++;
 
       } else if (f==='r'){
         reconocidas++;
-        if (procRecepcion(VD, p)) aplicadas++;
+        if (procRecepcion(VD, p)) aplicadas++; else malas++;
         // deducir saque pendiente
         if (sk_hay && isNum(sk_cam)){
           var rv = valLetra(p.slice(-1));
@@ -157,14 +158,14 @@
 
       } else if (f==='a'){
         reconocidas++;
-        if (procAtaque(VD, p)) aplicadas++;
+        if (procAtaque(VD, p)) aplicadas++; else malas++;
 
       } else if (f==='b'){
         reconocidas++;
-        if (procBloqueo(VD, p)) aplicadas++;
+        if (procBloqueo(VD, p)) aplicadas++; else malas++;
       }
     }
-    return { estado: (reconocidas>0 ? 'OK' : 'REVISAR'), aplicadas: aplicadas };
+    return { estado: ((reconocidas>0 && malas===0) ? 'OK' : 'REVISAR'), aplicadas: aplicadas };
   }
 
   function procRecepcion(VD, p){

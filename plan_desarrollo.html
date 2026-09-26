@@ -64,7 +64,7 @@
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260925-2357">
+<link rel="stylesheet" href="movil.css?v=20260926-0757">
 </head>
 <body>
 <div class="wrap">
@@ -83,19 +83,19 @@
   <div id="skills"></div>
 </div>
 
-<script src="categorias_club.js?v=20260925-2357"></script>
-<script src="selector_categoria.js?v=20260925-2357"></script>
+<script src="categorias_club.js?v=20260926-0757"></script>
+<script src="selector_categoria.js?v=20260926-0757"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260925-2357"></script>
-<script src="firebase.js?v=20260925-2357" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260925-2357"></script>
-<script src="lang.js?v=20260925-2357" onerror="void 0"></script>
-<script src="correcciones_tecnicas.js?v=20260925-2357" onerror="void 0"></script>
-<script src="plantel_nafels.js?v=20260925-2357" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260926-0757"></script>
+<script src="firebase.js?v=20260926-0757" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-0757"></script>
+<script src="lang.js?v=20260926-0757" onerror="void 0"></script>
+<script src="correcciones_tecnicas.js?v=20260926-0757" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20260926-0757" onerror="void 0"></script>
 <script src="datos_casla.js.enc" onerror="void 0"></script>
 <script>
 (function(){
@@ -131,6 +131,45 @@ window.__DESCIFRAR_SINCRONO = true;
   };
   function catL(c){ if(LANG==='es')return c; return (CATT[c]&&CATT[c][LANG])||c; }
   function corrText(c){ return c[LANG]||c.es||c.t||''; }
+
+  /* ══ LOS OBJETIVOS DE LA BIBLIOTECA, EN EL IDIOMA DE QUIEN MIRA ══════════
+     Al elegir uno de la biblioteca se guardaba el TEXTO ya traducido al
+     idioma del momento. Despues no habia forma de mostrarlo en otro: un plan
+     armado en castellano se veia en castellano aunque el jugador tuviera la
+     app en aleman, y la biblioteca esta escrita en los tres idiomas.
+
+     Ahora se guarda ademas la referencia (skill + posicion), y al pintar se
+     busca el texto en el idioma actual.
+
+     Para los que YA estaban guardados no hay referencia, asi que se los busca
+     en la biblioteca por su texto, en cualquiera de los tres idiomas. Si
+     aparece, se muestra traducido; si es uno escrito a mano, queda tal cual,
+     que es lo correcto. */
+  function objTexto(it){
+    if(!it) return '';
+    /* con referencia: directo */
+    try{
+      if(it.libSkill != null && it.libIx != null){
+        var c0 = (CORR[it.libSkill]||[])[it.libIx];
+        if(c0) return corrText(c0);
+      }
+    }catch(e){}
+    /* sin referencia: se lo busca por el texto guardado */
+    var t = it.texto || '';
+    if(!t) return '';
+    try{
+      var listas = CORR[it.skill] ? [CORR[it.skill]] : [];
+      if(!listas.length) for(var k in CORR) listas.push(CORR[k]);
+      for(var i=0;i<listas.length;i++){
+        var L = listas[i] || [];
+        for(var j=0;j<L.length;j++){
+          var c = L[j];
+          if(c && (c.es===t || c.en===t || c.de===t)) return corrText(c);
+        }
+      }
+    }catch(e){}
+    return t;   /* escrito a mano: no se toca */
+  }
 
   /* ---------- estado ---------- */
   var ST={r:{col:'#ef4444'},a:{col:'#f59e0b'},v:{col:'#22c55e'}};
@@ -211,7 +250,7 @@ window.__DESCIFRAR_SINCRONO = true;
         var st=ST[i.estado]||ST.r, stl=(L().st[i.estado]||L().st.r);
         return '<div class="item">'+
           '<div class="state'+(ED?' ed':'')+'" style="border-color:'+st.col+';color:'+st.col+'"'+(ED?' onclick="PD.cycle(\''+i.id+'\')"':'')+' title="'+stl+'">'+(i.estado==='v'?'✓':'')+'</div>'+
-          '<div class="item-body"><div class="item-txt">'+esc(i.texto)+'</div>'+
+          '<div class="item-body"><div class="item-txt">'+esc(objTexto(i))+'</div>'+
             '<div class="item-meta">'+(i.cat?'<span class="cat">'+esc(catL(i.cat))+'</span>':'')+'<span style="font-size:10px;color:'+st.col+';font-weight:700">'+stl+'</span>'+histDots(i)+'</div>'+
           '</div>'+
           (ED?'<span class="del" onclick="PD.del(\''+i.id+'\')" title="✕">✕</span>':'')+
@@ -244,7 +283,8 @@ window.__DESCIFRAR_SINCRONO = true;
     toggleLib:function(skill){ OPEN[skill]=!OPEN[skill]; render(); },
     addLib:function(skill,ix){ var c=(CORR[skill]||[])[ix]; if(!c)return; var txt=corrText(c);
       if(DATA.items.some(function(i){return i.skill===skill&&i.texto===txt;})) return;
-      DATA.items.push({id:uid(),skill:skill,texto:txt,cat:c.c,estado:'r',hist:[{f:today(),e:'r'}]}); OPEN[skill]=true; save(); render(); },
+      /* se guarda la referencia para poder mostrarlo en cualquier idioma */
+      DATA.items.push({id:uid(),skill:skill,texto:txt,cat:c.c,libSkill:skill,libIx:ix,estado:'r',hist:[{f:today(),e:'r'}]}); OPEN[skill]=true; save(); render(); },
     custom:function(skill){ var inp=document.getElementById('cust-'+skill); var t=(inp.value||'').trim(); if(!t)return;
       inp.value=''; DATA.items.push({id:uid(),skill:skill,texto:t,cat:'',estado:'r',hist:[{f:today(),e:'r'}]}); save(); render(); },
     cycle:function(id){ var i=DATA.items.filter(function(x){return x.id===id;})[0]; if(!i)return;
@@ -262,6 +302,6 @@ window.__DESCIFRAR_SINCRONO = true;
   } else { render(); }
 })();
 </script>
-<script src="ayuda.js?v=20260925-2357"></script>
+<script src="ayuda.js?v=20260926-0757"></script>
 </body>
 </html>

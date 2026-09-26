@@ -424,7 +424,7 @@ function _fbToken(){
 var _fbCuenta = 0, _fbCortado = false;
 function _fbCorta(){
   if(_fbCortado) return true;
-  if(++_fbCuenta > 1200){
+  if(++_fbCuenta > 5000){
     _fbCortado = true;
     try{ console.warn('Volley-Stats: demasiados pedidos seguidos, se corto para no colgar la pagina.'); }catch(e){}
     return true;

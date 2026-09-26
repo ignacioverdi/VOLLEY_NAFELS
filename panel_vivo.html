@@ -531,13 +531,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260925-2357"></script>
-<script src="selector_categoria.js?v=20260925-2357"></script>
-<script src="lang.js?v=20260925-2357"></script>
+<script src="categorias_club.js?v=20260926-0757"></script>
+<script src="selector_categoria.js?v=20260926-0757"></script>
+<script src="lang.js?v=20260926-0757"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260925-2357">
+<link rel="stylesheet" href="movil.css?v=20260926-0757">
 </head>
 <body>
 
@@ -1248,16 +1248,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260925-2357" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260925-2357"></script>
-<script src="objetivos.js?v=20260925-2357" onerror="void 0"></script>
-<script src="video_delay.js?v=20260925-2357" onerror="void 0"></script>
+<script src="firebase.js?v=20260926-0757" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-0757"></script>
+<script src="objetivos.js?v=20260926-0757" onerror="void 0"></script>
+<script src="video_delay.js?v=20260926-0757" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260925-2357" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260925-2357"></script>
+<script src="plantel_nafels.js?v=20260926-0757" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260926-0757"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -8459,7 +8459,13 @@ var MODO_SIN_SENAL = false;
 (function(){
   if(!('serviceWorker' in navigator)) return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js').catch(function(){ /* sin drama */ });
+    /* OJO: tiene que ser el MISMO archivo que registra el resto de la app
+       (onesignal_push.js usa OneSignalSDKWorker.js). El navegador deja UN
+       service worker por carpeta: si aca se registraba sw.js, cada vez que
+       se abria el panel reemplazaba al de OneSignal y se cortaban los
+       avisos; al volver al inicio se invertia. Registrando el mismo, no hay
+       pelea y el panel sigue abriendo sin senal igual que antes. */
+    navigator.serviceWorker.register('./OneSignalSDKWorker.js').catch(function(){ /* sin drama */ });
   });
 })();
 
@@ -8791,8 +8797,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260925-2357" onerror="void 0"></script>
-<script src="ayuda.js?v=20260925-2357"></script>
+<script src="volver_inicio.js?v=20260926-0757" onerror="void 0"></script>
+<script src="ayuda.js?v=20260926-0757"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
