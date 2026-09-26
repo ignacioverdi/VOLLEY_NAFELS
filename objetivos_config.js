@@ -147,6 +147,20 @@ OBJETIVOS_CONFIG={metas:{
   atqri:{ label:'% Atq R! (44)', obj:44, min:15,max:58, g2:44, g1:37, y:26},
   atqrm:{ label:'% Atq R- (23)', obj:23, min:0,max:38, g2:23, g1:20, y:14},
   atqtr:{ label:'% Atq Transición (33)', obj:33, min:10,max:46, g2:33, g1:29, y:22},
+  /* ══ ATAQUE DE ZAGUERO ═══════════════════════════════════════════════════
+     Salido de los 88 partidos de LIGA de la 25-26 (los 11 de copa europea
+     quedan afuera, igual que en los otros doce objetivos), con la misma
+     cuenta que el resto del ataque: (# - / - =) / total.
+
+       el mejor    Volley Amriswil   37%  sobre 428 ataques
+       segundo     Biogas Näfels     33%  sobre 510
+       promedio de la liga           27%  sobre 3.220
+       el peor     St Gallen         16%  sobre 404
+
+     El objetivo es el mejor: 37. El amarillo se pone en el promedio de la
+     liga (27) y el verde claro a mitad de camino entre los dos (33), que es
+     el mismo criterio de las otras baterias de ataque. */
+  atqz: { label:'% Atq Zaguero (37)', obj:37, min:15,max:50, g2:37, g1:33, y:27},
   def: { label:'% Defensa (60)', obj:60, min:40,max:72, g2:60, g1:56, y:52}
 }};
 
@@ -286,7 +300,7 @@ function objCalcVals(nombreJugador){
     // Found source but no data for this jugador — return nulls instead of falling to DVW
     if(window.currentObjTipo === 'entrenamiento'){
       return {sq:null,rec:null,bqpos:null,bqpt:null,atqq:null,atqhb:null,
-              atqx:null,atqrp:null,atqri:null,atqrm:null,atqtr:null};
+              atqx:null,atqrp:null,atqri:null,atqrm:null,atqtr:null,atqz:null};
     }
   }
   // Equipo acumulado
@@ -296,13 +310,13 @@ function objCalcVals(nombreJugador){
   // If entrenamiento mode and no data found, return nulls (don't show fake data)
   if(window.currentObjTipo === 'entrenamiento'){
     return {sq:null,rec:null,bqpos:null,bqpt:null,atqq:null,atqhb:null,
-            atqx:null,atqrp:null,atqri:null,atqrm:null,atqtr:null};
+            atqx:null,atqrp:null,atqri:null,atqrm:null,atqtr:null,atqz:null};
   }
   // Fallback: calculate from HISTORIAL_DATA (DVW)
   var D=window.HISTORIAL_DATA;
   if(!D){
     if(nombreJugador) return {sq:-5,rec:29,bqpos:38,bqpt:18,atqq:41,atqhb:14,atqx:34,atqrp:42,atqri:27,atqrm:19,atqtr:28};
-    return {sq:-5,rec:29,bqpos:38,bqpt:18,atqq:null,atqhb:14,atqx:null,atqrp:null,atqri:null,atqrm:null,atqtr:null};
+    return {sq:-5,rec:29,bqpos:38,bqpt:18,atqq:null,atqhb:14,atqx:null,atqrp:null,atqri:null,atqrm:null,atqtr:null,atqz:null};
   }
   var a={sT:0,sPunto:0,sPos:0,sVend:0,sErr:0,rT:0,rPunto:0,rPos:0,rVend:0,rErr:0,
          aT:0,aPunto:0,aVend:0,aErr:0,bT:0,bPt:0,bPtPos:0,mbT:0,mbPt:0,mbVnd:0,mbErr:0};
@@ -683,6 +697,7 @@ var OBJ_DETALLE = {
   atqri:{d:'atqD', k:'ri', nom:'Atq tras recepción !',  tipo:'atq', pl:'ataques'},
   atqrm:{d:'atqD', k:'rm', nom:'Atq tras recepción -',  tipo:'atq', pl:'ataques'},
   atqtr:{d:'atqD', k:'tr', nom:'Atq en transición',     tipo:'atq', pl:'ataques'},
+  atqz: {d:'atqD', k:'z',  nom:'Atq de zaguero',        tipo:'atq', pl:'ataques de zaguero'},
   bqpt: {d:'bqD',  nom:'Bloqueo #',  tipo:'bqpt',pl:'bloqueos',
          filas:[['p','Punto',null,'#22c55e','#']]}
 };
@@ -941,7 +956,7 @@ function objPlural(p, n){
        valoracion   la letra del scout: # + ! - / = */
 var OBJ_FUND = { sq:'sq', rec:'rec', def:'def', bqpos:'blq', bqpt:'blq',
                  atqq:'atk', atqhb:'atk', atqx:'atk',
-                 atqrp:'atk', atqri:'atk', atqrm:'atk', atqtr:'atk' };
+                 atqrp:'atk', atqri:'atk', atqrm:'atk', atqtr:'atk', atqz:'atk' };
 
 
 /* Del nombre que muestra la pantalla al numero de camiseta que necesita el
@@ -1171,7 +1186,7 @@ function objVerVideo(id, clave, nombreFila, cuantas, jugNombre){
 var OBJ_SKILL_NOMBRE = {
   sq:'Saque', rec:'Recepción', def:'Defensa', bqpos:'Bloqueo', bqpt:'Bloqueo',
   atqq:'Ataque', atqhb:'Ataque', atqx:'Ataque',
-  atqrp:'Ataque', atqri:'Ataque', atqrm:'Ataque', atqtr:'Ataque'
+  atqrp:'Ataque', atqri:'Ataque', atqrm:'Ataque', atqtr:'Ataque', atqz:'Ataque'
 };
 
 

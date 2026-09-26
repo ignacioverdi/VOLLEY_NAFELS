@@ -7,18 +7,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 
 <!-- Datos (cada uno se carga si existe; si no, el onerror lo deja en null) -->
-<script src="categorias_club.js?v=20260926-2122"></script>
-<script src="selector_categoria.js?v=20260926-2122"></script>
-<script src="game_plans.js?v=20260926-2122" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260926-2122" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260926-2156"></script>
+<script src="selector_categoria.js?v=20260926-2156"></script>
+<script src="game_plans.js?v=20260926-2156" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260926-2156" onerror="void 0"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260926-2122"></script>
-<script src="filtro_tipo.js?v=20260926-2122" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260926-2156"></script>
+<script src="filtro_tipo.js?v=20260926-2156" onerror="void 0"></script>
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
      las que no existen las descarta el onerror, sin ruido. Y todas con
      .enc, que es como se publican los datos del club. -->
@@ -28,10 +28,10 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="datos_video_ent_28-29.js.enc" onerror="void 0"></script>
   <script src="datos_partidos.js.enc" onerror="void 0"></script>
 <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
-<script src="firebase.js?v=20260926-2122" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260926-2122"></script>
-<script src="lang.js?v=20260926-2122" onerror="void 0"></script>
-<script src="datos_historial.js?v=20260926-2122" onerror="window.HISTORIAL_DATA=null"></script>
+<script src="firebase.js?v=20260926-2156" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-2156"></script>
+<script src="lang.js?v=20260926-2156" onerror="void 0"></script>
+<script src="datos_historial.js?v=20260926-2156" onerror="window.HISTORIAL_DATA=null"></script>
 <script src="datos_gameplan.js.enc" onerror="window.GAMEPLAN_DATA=null"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
@@ -123,6 +123,40 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 .hm-sub{font-size:9px;color:#64748b;text-align:center}
 @media(min-width:600px){.main{padding:24px 20px;}.accesos-grid{grid-template-columns:repeat(2,1fr);}.hero-badge{width:72px;height:72px;}.hero-nombre{font-size:40px;}}
 
+/* ══ LOS TRES NUMEROS DE ABAJO DE CADA TARJETA ════════════════════════════
+   Van en una clase y NO en el style de la etiqueta a proposito.
+
+   movil.css, hasta 480 px, apila en una sola columna cualquier elemento que
+   tenga grid-template-columns escrito en su atributo style. Esa regla esta
+   bien y resuelve un problema real —cuatro numeros con sus etiquetas no
+   entran en dos columnas de telefono—, pero aca se lleva puesta tambien a
+   esta fila de tres, que sí entra: son tres numeros cortos en 100 px cada
+   uno. Sin esto, en el telefono la tarjeta de Saque medía cuatro renglones
+   de alto y habia que hacer scroll para ver los cinco fundamentos.
+
+   Escrito como clase, el selector de movil.css no lo alcanza y la fila
+   queda en tres columnas en cualquier pantalla. La grilla de AFUERA —las
+   cinco tarjetas— sigue inline a proposito: ahi apilar en el telefono es
+   justo lo que se quiere.
+   ════════════════════════════════════════════════════════════════════════ */
+.qs-3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding-top:9px;border-top:1px solid var(--border)}
+.qs-3>div{min-width:0;text-align:center}
+.qs-3 .n{font-family:'Bebas Neue',sans-serif;font-size:18px;line-height:1}
+.qs-3 .l{font-size:9.5px;color:var(--mut);letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ── CÓMO VIENE: una linea de tiempo por fundamento ── */
+.cv-grid{display:grid;grid-template-columns:1fr;gap:9px}
+.cv-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 12px 8px}
+.cv-top{display:flex;align-items:baseline;gap:7px}
+.cv-nom{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+.cv-big{font-family:'Bebas Neue',sans-serif;font-size:25px;line-height:1;margin-left:auto}
+.cv-chip{font-size:10px;font-weight:800;letter-spacing:.4px;padding:2px 6px;border-radius:5px;white-space:nowrap}
+.cv-cap{font-size:9.5px;color:var(--mut);letter-spacing:.3px;min-height:13px;margin-top:1px}
+.cv-svg{display:block;width:100%;height:auto;margin:3px 0 0}
+.cv-dot{cursor:pointer}
+.cv-res{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:9px 12px;margin-bottom:9px;font-size:12px;line-height:1.5}
+@media(min-width:600px){.cv-grid{grid-template-columns:1fr 1fr}}
+
 /* === ENCABEZADO: QUE NO SE ENCIME === */
 /* La barra de arriba es un flex en una sola fila. Cuando el titulo es
    largo, los botones de idioma y la etiqueta de temporada se le montan
@@ -172,10 +206,10 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260926-2122">
+<link rel="stylesheet" href="movil.css?v=20260926-2156">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260926-2122" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260926-2156" onerror="void 0"></script>
 </head>
 <body>
 <div class="page-header">
@@ -203,6 +237,8 @@ select, select option{color:#111 !important;background-color:#fff !important;}
   </div>
   <div id="obj-partido-row" style="display:none;gap:5px;flex-wrap:wrap;margin-bottom:10px;padding:0 4px"></div>
   <div id="objetivos-jugador" style="margin-bottom:20px"></div>
+
+  <div id="como-viene" style="display:none;margin-bottom:22px"></div>
 
   <div class="section-lbl" style="margin-bottom:12px;" data-t="Acceso rápido">Acceso rápido</div>
   <div class="accesos-grid" id="accesos-grid"></div>
@@ -585,6 +621,9 @@ function objSetTipo(tipo, btn){
   if(btn) btn.classList.add('on', tipo==='partido'?'partido':'ent');
   objBuildSubfiltro();
   objRenderBaterias();
+  /* «Cómo viene» mira las mismas sesiones que las baterias: si cambia el
+     filtro, cambia con ellas. */
+  try{ renderComoViene(window._curJug||jugador); }catch(e){}
 }
 </script>
 
@@ -614,10 +653,10 @@ function renderComparativaJugador(){
   function posDe(x){ return POS_BY_NUM[x.num] || x.pos || ''; }
 
   var FUND=[
-    {k:'sq',   l:'Saque',     c:'#f97316'},
-    {k:'rec',  l:'Recepción', c:'#22c55e'},
-    {k:'atk',  l:'Ataque',    c:'#818cf8'},
-    {k:'bqpos',l:'Bloqueo',   c:'#06b6d4'}
+    {k:'sq',   l:'Saque',     c:VB_COL.sq},
+    {k:'rec',  l:'Recepción', c:VB_COL.rec},
+    {k:'atk',  l:'Ataque',    c:VB_COL.atq},
+    {k:'bqpos',l:'Bloqueo',   c:VB_COL.blq}
   ];
   function cell(v){ return (v===null||v===undefined)?'—':(v+'%'); }
   function colorEff(v){ if(v===null||v===undefined) return '#475569'; return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'#e2e8f0':'#ef4444'; }
@@ -692,6 +731,16 @@ var params = new URLSearchParams(window.location.search);
 var numJug = parseInt(params.get('num')) || 0;
 
 var POS_COLOR = {'ARMADOR':'#f59e0b','CENTRAL':'#f97316','PUNTA':'#22c55e','OPUESTO':'#818cf8','LIBERO':'#06b6d4'};
+
+/* ── UN COLOR POR FUNDAMENTO, EN UN SOLO LUGAR ────────────────────────────
+   Los mismos cinco que el dashboard y el panel en vivo. Antes cada bloque de
+   esta pagina elegia el suyo: la tarjeta de ataque era naranja, la
+   comparativa lo pintaba violeta y la tabla de abajo azul; los tres eran el
+   mismo ataque. Pasaron el validador de daltonismo y de contraste sobre
+   fondo oscuro.
+   ─────────────────────────────────────────────────────────────────────── */
+var VB_COL = { sq:'#CE7C18', rec:'#0E9F6E', atq:'#0B84C4', blq:'#8B5CF6', def:'#DC2A5A' };
+var VB_VERDE='#22c55e', VB_ROJO='#ef4444';
 
 /* Respaldo, solo si no se pudo abrir datos_equipo.js.enc. Las fotos van en
    null a proposito: se llaman por el numero de camiseta (fotos/01.jpg), y el
@@ -793,17 +842,30 @@ function renderQuickStats(j){
   window._curJug=j;
   function nm1(x){return (x||'').replace(/^\d+\s*/,'').toLowerCase().split(' ')[0];}
   function fmtE(v){ return v===null?'—':(v<0?'-':'')+Math.abs(v)+'%'; }
-  function effC(v){ if(v===null) return '#64748b'; if(v>=40) return '#22c55e'; if(v>=20) return '#86efac'; if(v>=0) return '#e2e8f0'; if(v>=-15) return '#f97316'; return '#ef4444'; }
+  /* Las cinco tarjetas decian cosas distintas y con colores distintos: el
+     ataque no traia el total, el bloqueo tenia dos casilleros de cuatro y
+     parecia roto, y saque, ataque y defensa eran tres naranjas que se
+     confundian entre si.
+
+     Ahora son las MISMAS que el dashboard: igual forma —EFF arriba y solo,
+     y abajo total / lo que gana / lo que pierde en tres columnas— e igual
+     color por fundamento, el que usa tambien el panel en vivo y que paso
+     las pruebas de daltonismo y contraste. */
   function mkRect(color,title,stats){
-    var h='<div style="background:#0d0e1a;border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden">'
+    var h='<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden">'
       +'<div style="padding:7px 14px;background:'+color+'14;border-bottom:1px solid '+color+'2a;display:flex;align-items:center;gap:6px">'
       +'<div style="width:5px;height:5px;border-radius:50%;background:'+color+'"></div>'
-      +'<span style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:'+color+'">'+title+'</span></div>'
-      +'<div style="padding:11px 10px;display:flex;gap:14px;align-items:center;justify-content:center">';
-    stats.forEach(function(s){ h+='<div style="display:flex;flex-direction:column;align-items:center;gap:2px">'
-      +'<div style="font-family:Bebas Neue,sans-serif;font-size:23px;line-height:1;color:'+(s.c||'#e2e8f0')+'">'+s.v+'</div>'
-      +'<div style="font-size:9px;color:#64748b;letter-spacing:.5px;white-space:nowrap">'+s.l+'</div></div>'; });
-    return h+'</div></div>';
+      +'<span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:'+color+'">'+title+'</span></div>'
+      +'<div style="padding:11px 13px 12px">';
+    var eff=stats[0], resto=stats.slice(1);
+    h+='<div style="display:flex;align-items:baseline;gap:7px;margin-bottom:9px">'
+      +'<span style="font-family:Bebas Neue,sans-serif;font-size:32px;line-height:.9;color:'+(eff.c||'var(--txt)')+'">'+eff.v+'</span>'
+      +'<span style="font-size:10px;font-weight:700;letter-spacing:1.4px;color:var(--mut)">'+eff.l+'</span></div>'
+      +'<div class="qs-3">';
+    resto.forEach(function(x){ h+='<div>'
+      +'<div class="n" style="color:'+(x.c||'var(--txt)')+'">'+x.v+'</div>'
+      +'<div class="l">'+x.l+'</div></div>'; });
+    return h+'</div></div></div>';
   }
   if(!window.HISTORIAL_DATA||!window.HISTORIAL_DATA.entrenamientos||!window.HISTORIAL_DATA.entrenamientos.length){ qs.style.display='none'; return; }
   var nmC=nm1(j.nombre), found=false;
@@ -841,15 +903,265 @@ function renderQuickStats(j){
   var rPos=t.rT>0?Math.round((t.rPunto+t.rPos)/t.rT*100):null;
   var rNeg=t.rT>0?Math.round((t.rVend+t.rErr)/t.rT*100):null;
   var dEff=dT>0?VB_EFF.defensa({dT:dT,dPerf:dPerf,dBuena:dBuena,dMala:dMala}):null;
-  var html='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px">';
-  html+=mkRect('#F59E0B','Saque',[{v:fmtE(sEff),l:'EFF',c:effC(sEff)},{v:t.sT,l:'Total'},{v:t.sPunto,l:'Puntos'},{v:t.sErr,l:'Errores'}]);
-  html+=mkRect('#F97316','Ataque',[{v:fmtE(aEff),l:'EFF',c:effC(aEff)},{v:t.aPunto,l:'Puntos'},{v:t.aVend,l:'Bloqueados'},{v:t.aErr,l:'Errores'}]);
-  html+=mkRect('#22C55E','Recepción',[{v:fmtE(rEff),l:'EFF',c:effC(rEff)},{v:t.rT,l:'Total'},{v:fmtE(rPos),l:'Rec. #+'},{v:fmtE(rNeg),l:'Rec. /='}]);
-  html+=mkRect('#06B6D4','Bloqueo',[{v:fmtE(bEff),l:'EFF #+',c:effC(bEff)},{v:t.bT,l:'Total'}]);
-  if(hasD) html+=mkRect('#EF4444','Defensa',[{v:fmtE(dEff),l:'EFF',c:effC(dEff)},{v:dT,l:'Total'},{v:dPerf,l:'Perfectas',c:'#22c55e'},{v:dErr,l:'Errores',c:'#ef4444'}]);
-  html+='</div>';
+  var html='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:8px">';
+  html+=mkRect(VB_COL.sq,'Saque',[
+    {v:fmtE(sEff),l:'EFF',c:VB_COL.sq},{v:t.sT,l:'Total'},
+    {v:t.sPunto||0,l:'Aces',c:VB_VERDE},{v:t.sErr||0,l:'Errores',c:VB_ROJO}]);
+  html+=mkRect(VB_COL.rec,'Recepción',[
+    {v:fmtE(rEff),l:'EFF',c:VB_COL.rec},{v:t.rT,l:'Total'},
+    {v:fmtE(rPos),l:'#+ perfectas',c:VB_VERDE},{v:fmtE(rNeg),l:'/= perdidas',c:VB_ROJO}]);
+  html+=mkRect(VB_COL.atq,'Ataque',[
+    {v:fmtE(aEff),l:'EFF',c:VB_COL.atq},{v:t.aT,l:'Total'},
+    {v:t.aPunto||0,l:'Puntos',c:VB_VERDE},
+    /* bloqueados y errores son las dos maneras de perder la pelota: van
+       juntas, para que la tarjeta tenga la misma forma que las otras */
+    {v:(t.aVend||0)+(t.aErr||0),l:'Perdidas',c:VB_ROJO}]);
+  html+=mkRect(VB_COL.blq,'Bloqueo',[
+    {v:fmtE(bEff),l:'EFF #+',c:VB_COL.blq},{v:t.bT,l:'Total'},
+    {v:t.bPt||0,l:'Puntos',c:VB_VERDE},
+    {v:Math.max(0,(t.bT||0)-(t.bPt||0)-(t.bPtPos||0)),l:'Sin blq',c:VB_ROJO}]);
+  if(hasD) html+=mkRect(VB_COL.def,'Defensa',[
+    {v:fmtE(dEff),l:'EFF',c:VB_COL.def},{v:dT,l:'Total'},
+    {v:dPerf,l:'Perfectas',c:VB_VERDE},{v:dErr,l:'Errores',c:VB_ROJO}]);
+  html+='</div>'
+    /* De donde sale esta fila: la temporada entera, partidos y practicas
+       juntos. Los botones de arriba filtran las baterias, no esto. */
+    +'<div style="font-size:9px;color:var(--mut);letter-spacing:1.4px;'
+    +'text-transform:uppercase;text-align:center;padding:9px 0 3px">'
+    +'Temporada completa \u00b7 partidos + entrenamientos</div>';
   qs.className=''; qs.style.cssText='display:block;padding:12px 12px 2px;background:transparent;border:0';
   qs.innerHTML=html;
+}
+
+/* ══ CÓMO VIENE ════════════════════════════════════════════════════════════
+   Las baterias de arriba dicen DONDE ESTA. Ninguna pantalla decia si viene
+   subiendo o bajando, que es lo primero que quiere saber el jugador cuando
+   abre su perfil.
+
+   Un panel por fundamento y un punto por sesion, en orden de fecha. El EFF de
+   cada sesion se calcula con VB_EFF —la formula unica— asi que estos numeros
+   y los de la bateria de arriba salen de la misma cuenta.
+
+   La linea punteada es SU PROMEDIO, no el objetivo del club. La pregunta aca
+   es si mejora respecto de si mismo; el objetivo ya esta en la bateria, dos
+   centimetros mas arriba.
+
+   El punto HUECO avisa que en esa sesion toco menos de cinco pelotas. Un 100%
+   de dos saques no es una buena sesion, es una muestra chica: sin esa marca
+   la linea pega saltos que no significan nada.
+
+   El ▲▼ compara las ULTIMAS TRES sesiones contra TODAS LAS ANTERIORES. No
+   contra el promedio general, porque el promedio general ya incluye esas
+   tres y se come justo la diferencia que uno quiere ver.
+
+   Respeta el filtro PARTIDO / ENTRENAMIENTO de arriba: son dos cosas
+   distintas y promediarlas juntas no describe bien a ninguna de las dos.
+   ══════════════════════════════════════════════════════════════════════════ */
+window._CVCAP = {};
+function cvCap(id, i){
+  var el = document.getElementById(id), L = window._CVCAP[id];
+  if(el && L && L.length) el.textContent = L[ i<0 ? L.length-1 : i ];
+}
+/* "03/09/2026" → 20260903, para poder ordenar */
+function cvFnum(f){
+  var p = String(f||'').split('/');
+  return p.length===3 ? (+p[2])*10000 + (+p[1])*100 + (+p[0]) : 0;
+}
+function cvPc(v){ return (v===null||v===undefined) ? '—' : (v<0?'−':'')+Math.abs(v)+'%'; }
+
+function renderComoViene(j){
+  var box = document.getElementById('como-viene');
+  if(!box) return;
+  box.style.display='none';
+  if(!j || !window.VB_EFF) return;
+  var H = window.HISTORIAL_DATA;
+  if(!H || !H.entrenamientos || !H.entrenamientos.length) return;
+
+  var tipo = (window._objTipo==='entrenamiento') ? 'E' : 'P';
+  var nmC  = (j.nombre||'').replace(/^\d+\s*/,'').toLowerCase().split(' ')[0];
+
+  /* una entrada por sesion del tipo elegido en la que jugo */
+  var ses = [];
+  H.entrenamientos.forEach(function(e){
+    if((e.tipo||'P') !== tipo) return;
+    (e.jugadores||[]).forEach(function(jh){
+      if((jh.n||'').replace(/^\d+\s*/,'').toLowerCase().split(' ')[0] !== nmC) return;
+      ses.push({ f:e.fecha||'', r:String(e.rival||'').toUpperCase(), h:jh });
+    });
+  });
+  ses.sort(function(a,b){ return cvFnum(a.f)-cvFnum(b.f); });
+  if(ses.length < 2) return;
+
+  var FU = [
+    {k:'sq',  nom:'Saque',      c:VB_COL.sq,  u:'saques',
+     T:function(h){ return h.sT||0; },
+     E:function(o){ return o.sT>0 ? VB_EFF.saque(o) : null; }},
+    {k:'rec', nom:'Recepción',  c:VB_COL.rec, u:'recepciones',
+     T:function(h){ return h.rT||0; },
+     E:function(o){ return o.rT>0 ? VB_EFF.recepcion(o) : null; }},
+    {k:'atq', nom:'Ataque',     c:VB_COL.atq, u:'ataques',
+     T:function(h){ return h.aT||0; },
+     E:function(o){ return o.aT>0 ? VB_EFF.ataque(o) : null; }},
+    {k:'blq', nom:'Bloqueo #+', c:VB_COL.blq, u:'bloqueos',
+     T:function(h){ return h.bT||0; },
+     E:function(o){ return o.bT>0 ? Math.round(((o.bPt||0)+(o.bPtPos||0))/o.bT*100) : null; }}
+  ];
+  /* Se suman los CONTEOS y el porcentaje se calcula una sola vez al final:
+     promediar porcentajes de sesion le da el mismo peso a la sesion de dos
+     pelotas que a la de cuarenta. */
+  var SUMA = ['sT','sPunto','sPos','sAdm','sNeg','sVend','sErr',
+              'rT','rPunto','rPos','rAdm','rNeg','rVend','rErr',
+              'aT','aPunto','aVend','aErr','bT','bPt','bPtPos'];
+  function sumar(lista){
+    var o = {}; SUMA.forEach(function(x){ o[x]=0; });
+    lista.forEach(function(x){ SUMA.forEach(function(y){ o[y] += x.h[y]||0; }); });
+    return o;
+  }
+  function esc(t){ return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function ddmm(f){ var p=String(f||'').split('/'); return p.length===3 ? p[0]+'/'+p[1] : (f||''); }
+
+  /* ══ CUANTAS SON "LAS ULTIMAS" ═════════════════════════════════════════
+     Tres, salvo que haya pocas sesiones. En setiembre, con cuatro partidos
+     jugados, "las ultimas tres contra las anteriores" es tres contra una:
+     la comparacion depende entera de un partido. Con pocas sesiones se
+     parte al medio —las dos ultimas contra las dos primeras— que es lo mas
+     parejo que se puede hacer con lo que hay.
+     ════════════════════════════════════════════════════════════════════ */
+  var NUL = Math.max(2, Math.min(3, Math.floor(ses.length/2)));
+  var nUlt = (tipo==='P') ? ('los últimos '+NUL+' partidos') : ('las últimas '+NUL+' sesiones');
+
+  var cards=[], caps={}, sube=[], baja=[];
+
+  FU.forEach(function(f){
+    var con = ses.filter(function(x){ return f.T(x.h) > 0; });
+    var pts = [];
+    con.forEach(function(x){
+      var v = f.E(x.h);
+      if(v!==null) pts.push({ v:v, t:f.T(x.h), f:x.f, r:x.r });
+    });
+    if(pts.length < 2) return;
+
+    var prom = f.E(sumar(con));
+    if(prom===null) return;
+
+    /* ══ EL ▲▼, Y CUANDO NO ════════════════════════════════════════════
+       Ultimas tres sesiones contra todas las anteriores. Pero solo si hay
+       al menos DIEZ acciones de cada lado.
+
+       Sin ese freno, el bloqueo de un punta —ocho pelotas de un lado, trece
+       del otro— marcaba "▲ +16" porque bloqueo una mas. Una flecha verde
+       grande sobre dos bloqueos de diferencia es exactamente lo que hace
+       que alguien cambie un entrenamiento por ruido.
+
+       Cuando no alcanza, la linea igual se dibuja —los puntos son datos
+       reales— pero sin flecha y sin entrar en el resumen de arriba.        */
+    var d=null, eA=null, eB=null, vA=0, vB=0;
+    if(con.length > NUL){
+      var ult = con.slice(-NUL), ant = con.slice(0, -NUL);
+      var sU = sumar(ult), sA = sumar(ant);
+      vA = f.T(sU); vB = f.T(sA);
+      if(vA >= 10 && vB >= 10){
+        eA = f.E(sU); eB = f.E(sA);
+        if(eA!==null && eB!==null) d = eA - eB;
+      }
+    }
+
+    /* la escala vertical: los valores y el promedio, con aire */
+    var vv = pts.map(function(p){ return p.v; }).concat([prom]);
+    var lo = Math.min.apply(null, vv), hi = Math.max.apply(null, vv);
+    var sp = hi - lo;
+    if(sp < 18){ var mid=(hi+lo)/2; lo=mid-9; hi=mid+9; }
+    else { lo -= sp*0.14; hi += sp*0.14; }
+    function Y(v){ return (40 - (v-lo)/(hi-lo)*32).toFixed(1); }
+    function X(i){ return (10 + (pts.length===1 ? 140 : i*(280/(pts.length-1)))).toFixed(1); }
+
+    var idCap = 'cv-cap-'+f.k;
+    caps[idCap] = pts.map(function(p){
+      return ddmm(p.f) + (p.r ? ' vs '+p.r : '') + ' · ' + cvPc(p.v)
+           + ' (' + p.t + ' ' + (p.t===1 ? f.u1 : f.u) + ')';
+    });
+
+    var poly = pts.map(function(p,i){ return X(i)+','+Y(p.v); }).join(' ');
+    var dots = pts.map(function(p,i){
+      var ult = (i===pts.length-1), chico = (p.t < 5), r = ult?5:3.6;
+      var st = chico
+        ? 'fill:var(--card);stroke:'+f.c+';stroke-width:1.8'
+        : 'fill:'+f.c+';stroke:var(--card);stroke-width:1.6';
+      return '<circle class="cv-dot" cx="'+X(i)+'" cy="'+Y(p.v)+'" r="'+r+'" style="'+st+'"'
+           + ' onmouseover="cvCap(\'' + idCap + '\','+i+')" onmouseout="cvCap(\'' + idCap + '\',-1)"'
+           + ' ontouchstart="cvCap(\'' + idCap + '\','+i+')">'
+           + '<title>'+esc(caps[idCap][i])+'</title></circle>';
+    }).join('');
+
+    var chip = '';
+    if(d!==null){
+      var mueve = Math.abs(d) >= 3;
+      var col = !mueve ? '#64748b' : (d>0 ? VB_VERDE : VB_ROJO);
+      /* sin flecha cuando no se movio: un "= +2" es una contradiccion */
+      var fle = !mueve ? '' : (d>0 ? '▲ ' : '▼ ');
+      chip = '<span class="cv-chip" style="color:'+col+';background:'+col+'18;border:1px solid '+col+'33"'
+           + ' title="'+nUlt+': '+cvPc(eA)+' ('+vA+' '+f.u+') · antes: '+cvPc(eB)+' ('+vB+' '+f.u+')">'
+           + fle + (d>0?'+':(d<0?'−':'')) + Math.abs(d) + '</span>';
+      if(d>=3) sube.push({nom:f.nom, d:d, c:f.c});
+      if(d<=-3) baja.push({nom:f.nom, d:d, c:f.c});
+    }
+
+    cards.push('<div class="cv-card">'
+      + '<div class="cv-top">'
+        + '<span style="width:6px;height:6px;border-radius:50%;background:'+f.c+';display:inline-block"></span>'
+        + '<span class="cv-nom" style="color:'+f.c+'">'+f.nom+'</span>'
+        + '<span class="cv-big" style="color:'+f.c+'">'+cvPc(prom)+'</span>'
+        + chip
+      + '</div>'
+      + '<svg class="cv-svg" viewBox="0 0 300 48" preserveAspectRatio="xMidYMid meet" role="img">'
+        + '<line x1="10" y1="'+Y(prom)+'" x2="290" y2="'+Y(prom)+'" stroke="#475569" stroke-width="1" stroke-dasharray="3 3">'
+        + '<title>su promedio: '+cvPc(prom)+'</title></line>'
+        + '<polyline fill="none" stroke="'+f.c+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="'+poly+'"/>'
+        + dots
+      + '</svg>'
+      + '<div class="cv-cap" id="'+idCap+'"></div>'
+      + '</div>');
+  });
+
+  if(!cards.length) return;
+
+  /* EN UNA LÍNEA: solo lo que se movio de verdad, con el numero al lado. */
+  /* el nombre con el color de SU fundamento —para encontrarlo abajo de un
+     vistazo— y el numero en verde o rojo, que es lo que dice si subio. */
+  function lista(L){
+    return L.sort(function(a,b){ return Math.abs(b.d)-Math.abs(a.d); })
+            .map(function(x){
+              return '<b style="color:'+x.c+'">'+x.nom.toLowerCase()+'</b> '
+                   + '<b style="color:'+(x.d>0?VB_VERDE:VB_ROJO)+'">'
+                   + (x.d>0?'+':'−')+Math.abs(x.d)+'</b>';
+            }).join(', ');
+  }
+  var res;
+  if(!sube.length && !baja.length){
+    res = 'Viene <b>parejo</b>: en '+nUlt+' no hay diferencias grandes con lo anterior.';
+  } else {
+    res = '';
+    if(sube.length) res += 'En '+nUlt+' viene <b style="color:'+VB_VERDE+'">mejor</b> en '+lista(sube)+'. ';
+    if(baja.length) res += (sube.length?'Viene ':'En '+nUlt+' viene ')
+                        + '<b style="color:'+VB_ROJO+'">peor</b> en '+lista(baja)+'.';
+  }
+
+  box.innerHTML =
+      '<div class="section-lbl">Cómo viene · '+(tipo==='P'?'partidos':'entrenamientos')+'</div>'
+    + '<div class="cv-res">'+res+'</div>'
+    + '<div class="cv-grid">'+cards.join('')+'</div>'
+    + '<div style="font-size:9px;color:var(--mut);letter-spacing:.4px;padding:8px 2px 0;line-height:1.6">'
+    + 'Un punto por '+(tipo==='P'?'partido':'entrenamiento')+', en orden de fecha · '
+    + 'la línea punteada es su promedio · '
+    + 'punto hueco = menos de 5 acciones en esa sesión · '
+    + 'el ▲▼ compara '+nUlt+' con lo anterior, y solo aparece si hay al menos '
+    + '10 acciones de cada lado · '
+    + 'tocá un punto para ver de qué sesión es'
+    + '</div>';
+
+  window._CVCAP = caps;
+  Object.keys(caps).forEach(function(id){ cvCap(id, -1); });
+  box.style.display='block';
 }
 
 function renderAccesos(j){
@@ -888,35 +1200,45 @@ function renderAccesos(j){
 function renderStats(j){
   var grid=document.getElementById('stats-grid');
   if(!window.HISTORIAL_DATA) return;
-  var acc={P:{sT:0,sEff:0,rT:0,rEff:0,aT:0,aEff:0,aPunto:0,count:0},E:{sT:0,sEff:0,rT:0,rEff:0,aT:0,aEff:0,aPunto:0,count:0}};
+  /* ══ LA MISMA FORMULA QUE ARRIBA ════════════════════════════════════════
+     Estas tres tarjetas promediaban el campo jh.sEff que viene grabado en el
+     historial, que es la cuenta VIEJA. Resultado: en la misma pantalla el
+     saque de un jugador decia 40% en la bateria, 40% en la tarjeta de la
+     cabecera y -14% aca abajo, sin ninguna pista de a cual creerle.
+
+     Ahora se suman los CONTEOS —cada valoracion por separado— y el
+     porcentaje se calcula una sola vez al final con VB_EFF, la formula
+     unica. Los tres numeros de la pantalla salen de la misma cuenta.       */
+  var CNT=['sT','sPunto','sPos','sAdm','sNeg','sVend','sErr',
+           'rT','rPunto','rPos','rAdm','rNeg','rVend','rErr',
+           'aT','aPunto','aPos','aAdm','aNeg','aVend','aErr'];
+  var acc={P:{count:0},E:{count:0}};
+  ['P','E'].forEach(function(k){ CNT.forEach(function(x){ acc[k][x]=0; }); });
   var nmC=(j.nombre||'').replace(/^\d+\s*/,'').toLowerCase().split(' ')[0];
   window.HISTORIAL_DATA.entrenamientos.forEach(function(e){
     var t=e.tipo||'P'; if(!acc[t]) return;
     e.jugadores.forEach(function(jh){
       var jn=(jh.n||'').replace(/^\d+\s*/,'').toLowerCase().split(' ')[0];
-      if(jn===nmC){
-        acc[t].sT+=jh.sT||0; acc[t].sEff+=(jh.sEff||0)*(jh.sT||0);
-        acc[t].rT+=jh.rT||0; acc[t].rEff+=(jh.rEff||0)*(jh.rT||0);
-        acc[t].aT+=jh.aT||0; acc[t].aEff+=(jh.aEff||0)*(jh.aT||0);
-        acc[t].aPunto+=jh.aPunto||0; acc[t].count++;
-      }
+      if(jn===nmC){ CNT.forEach(function(x){ acc[t][x]+=jh[x]||0; }); acc[t].count++; }
     });
   });
   if(acc.P.count===0 && acc.E.count===0) return;
-  var color=POS_COLOR[j.pos]||'#64748b';
+  function pc(v){ return v===null?'—':(v<0?'-':'')+Math.abs(v)+'%'; }
   function makeCards(a,label,lc){
     if(a.count===0) return '';
-    return '<div style="grid-column:1/-1;font-size:9px;font-weight:800;letter-spacing:2px;color:'+lc+';text-transform:uppercase;padding:4px 0 2px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:2px">'+label+'</div>'+
-    '<div class="stat-card"><div class="stat-card-title" style="color:'+color+'">⬆️ Saque</div>'+
-      '<div class="stat-row"><span class="stat-row-lbl">Total</span><span class="stat-row-val" style="color:'+color+'">'+a.sT+'</span></div>'+
-      '<div class="stat-row"><span class="stat-row-lbl">EFF</span><span class="stat-row-val">'+(a.sT>0?Math.round(a.sEff/a.sT)+'%':'—')+'</span></div></div>'+
-    '<div class="stat-card"><div class="stat-card-title" style="color:#22c55e">🛡 Recepción</div>'+
-      '<div class="stat-row"><span class="stat-row-lbl">Total</span><span class="stat-row-val" style="color:#22c55e">'+a.rT+'</span></div>'+
-      '<div class="stat-row"><span class="stat-row-lbl">EFF</span><span class="stat-row-val">'+(a.rT>0?Math.round(a.rEff/a.rT)+'%':'—')+'</span></div></div>'+
-    '<div class="stat-card"><div class="stat-card-title" style="color:#818cf8">⚡ Ataque</div>'+
-      '<div class="stat-row"><span class="stat-row-lbl">Total</span><span class="stat-row-val" style="color:#818cf8">'+a.aT+'</span></div>'+
-      '<div class="stat-row"><span class="stat-row-lbl">Puntos</span><span class="stat-row-val" style="color:#22c55e">'+a.aPunto+'</span></div>'+
-      '<div class="stat-row"><span class="stat-row-lbl">EFF</span><span class="stat-row-val">'+(a.aT>0?Math.round(a.aEff/a.aT)+'%':'—')+'</span></div></div>';
+    var sE=a.sT>0?VB_EFF.saque(a):null, rE=a.rT>0?VB_EFF.recepcion(a):null,
+        aE=a.aT>0?VB_EFF.ataque(a):null;
+    return '<div style="grid-column:1/-1;font-size:9px;font-weight:800;letter-spacing:2px;color:'+lc+';text-transform:uppercase;padding:4px 0 2px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:2px">'+label+' <span style="color:var(--mut);font-weight:700">· '+a.count+(a.count===1?' sesión':' sesiones')+'</span></div>'+
+    '<div class="stat-card"><div class="stat-card-title" style="color:'+VB_COL.sq+'">⬆️ Saque</div>'+
+      '<div class="stat-row"><span class="stat-row-lbl">Total</span><span class="stat-row-val" style="color:'+VB_COL.sq+'">'+a.sT+'</span></div>'+
+      '<div class="stat-row"><span class="stat-row-lbl">EFF</span><span class="stat-row-val">'+pc(sE)+'</span></div></div>'+
+    '<div class="stat-card"><div class="stat-card-title" style="color:'+VB_COL.rec+'">🛡 Recepción</div>'+
+      '<div class="stat-row"><span class="stat-row-lbl">Total</span><span class="stat-row-val" style="color:'+VB_COL.rec+'">'+a.rT+'</span></div>'+
+      '<div class="stat-row"><span class="stat-row-lbl">EFF</span><span class="stat-row-val">'+pc(rE)+'</span></div></div>'+
+    '<div class="stat-card"><div class="stat-card-title" style="color:'+VB_COL.atq+'">⚡ Ataque</div>'+
+      '<div class="stat-row"><span class="stat-row-lbl">Total</span><span class="stat-row-val" style="color:'+VB_COL.atq+'">'+a.aT+'</span></div>'+
+      '<div class="stat-row"><span class="stat-row-lbl">Puntos</span><span class="stat-row-val" style="color:'+VB_VERDE+'">'+a.aPunto+'</span></div>'+
+      '<div class="stat-row"><span class="stat-row-lbl">EFF</span><span class="stat-row-val">'+pc(aE)+'</span></div></div>';
   }
   grid.innerHTML=makeCards(acc.P,'🏆 PARTIDOS','#e8192c')+makeCards(acc.E,'🏋️ ENTRENAMIENTOS','#22c55e');
 }
@@ -956,6 +1278,7 @@ if(jugador){
   objBuildSubfiltro();
   objRenderBaterias();
   renderQuickStats(jugador);
+  try{ renderComoViene(jugador); }catch(e){}
   renderNextMatch();
   renderAccesos(jugador);
   renderStats(jugador);
@@ -1055,6 +1378,6 @@ try{
   else window.addEventListener('load', function(){ setTimeout(poner, 400); });
 })();
 </script>
-<script src="ayuda.js?v=20260926-2122"></script>
+<script src="ayuda.js?v=20260926-2156"></script>
 </body>
 </html>

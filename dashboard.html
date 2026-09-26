@@ -16,13 +16,13 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260926-2122" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260926-2122" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260926-2122"></script>
-<script src="filtro_tipo.js?v=20260926-2122" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260926-2156" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260926-2156" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260926-2156"></script>
+<script src="filtro_tipo.js?v=20260926-2156" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
-  <script src="objetivos_config.js?v=20260926-2122" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260926-2156" onerror="void 0"></script>
 
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -39,11 +39,11 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
   <!-- modo_toggle.js: el cartelito de PARTIDO / ENTRENAMIENTO. Antes era
        una barra arriba en el medio y chocaba con el selector de idioma;
        ahora es un cartel chico abajo a la izquierda. -->
-  <script src="modo_toggle.js?v=20260926-2122" onerror="void 0"></script>
+  <script src="modo_toggle.js?v=20260926-2156" onerror="void 0"></script>
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20260926-2122" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260926-2156" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   
@@ -123,6 +123,37 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 0%,rgb
 .tabla-wrap th{padding:10px 14px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);border-bottom:1px solid var(--b);background:var(--sur);text-align:center;}
 .tabla-wrap th:first-child{text-align:left;}
 .tabla-wrap td{padding:10px 14px;font-size:13px;text-align:center;border-bottom:1px solid rgba(255,255,255,.03);}
+/* ── LA TABLA DEL EQUIPO ───────────────────────────────────────────────────
+   El EFF% manda, pero sin barra debajo.
+
+   La primera version llevaba una barrita bajo el EFF% —con la marca del
+   objetivo— y otra bajo el TOT con el volumen. Decian algo cierto y aun asi
+   ensuciaban: ocho columnas por diez jugadores son ochenta celdas, y meterle
+   dos rayitas a cada renglon convierte la tabla en un grafico de barras que
+   nadie pidio. Fuera las dos.
+
+   Lo que la barra del EFF explicaba —si ese 40% esta bien o mal— lo dice
+   ahora el COLOR del propio numero, con el mismo semaforo de las baterias
+   (objClassify, sobre el recorrido real de la liga). Cero pixeles de mas y
+   la tabla no puede contradecir a la bateria. El globito al pasar el mouse
+   dice el objetivo y donde cae.
+
+   El TOT vuelve a ser el numero pelado.
+
+   Las seis valoraciones bajan un escalon para no competir: siguen con su
+   color, que si significa algo, pero mas chicas. */
+.tabla-nueva td.tb-c0{padding-top:8px;padding-bottom:8px;min-width:70px}
+.tabla-nueva .tb-eff{display:block;font-size:19px;font-weight:900;line-height:1.05;
+  letter-spacing:-.3px}
+.tabla-nueva td.tb-c1{min-width:56px}
+.tabla-nueva .tb-volN{display:block;font-size:16px;font-weight:800;line-height:1.05}
+.tabla-nueva td.tb-cn{font-size:13px;font-weight:700;opacity:.82}
+.tabla-nueva tbody tr:hover{background:rgba(255,255,255,.04)!important}
+/* la fila de tres de las tarjetas (ver el comentario en mkRect) */
+.mk3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding-top:9px;border-top:1px solid var(--b)}
+.mk3>div{min-width:0;text-align:center}
+.mk3 .n{font-family:'Bebas Neue',sans-serif;font-size:19px;line-height:1}
+.mk3 .l{font-size:9.5px;color:var(--mut);letter-spacing:.6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tabla-wrap td:first-child{text-align:left;}
 .tabla-wrap tr:last-child td{border-bottom:none;}
 .tabla-wrap tr:hover td{background:rgba(255,255,255,.02);}
@@ -645,15 +676,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260926-2122" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260926-2122"></script>
+<script src="firebase.js?v=20260926-2156" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-2156"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260926-2122">
+<link rel="stylesheet" href="movil.css?v=20260926-2156">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260926-2122" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260926-2156" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -1268,14 +1299,35 @@ function renderEqStats(){
     html += '<div style="width:5px;height:5px;border-radius:50%;background:'+color+'"></div>';
     html += '<span style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:'+color+'">'+title+'</span>';
     html += '</div>';
-    html += '<div style="padding:12px 16px;display:flex;gap:20px;align-items:center;justify-content:center">';
-    stats.forEach(function(s){
-      html += '<div style="display:flex;flex-direction:column;align-items:center;gap:2px">';
-      html += '<div style="font-family:Bebas Neue,sans-serif;font-size:26px;line-height:1;color:'+(s.c||'var(--text)')+'">'+s.v+'</div>';
-      html += '<div style="font-size:12px;color:var(--mut);letter-spacing:1px;white-space:nowrap">'+s.l+'</div>';
+    /* ══ EL EFF ARRIBA Y SOLO ═══════════════════════════════════════════════
+       Los cuatro numeros en una fila no entraban: con cinco tarjetas al lado
+       las etiquetas largas —"Perfectas #+", "Sin bloqueo"— se cortaban y las
+       tarjetas se pisaban entre si.
+
+       El EFF es el titular y va en su propio renglon, grande. Los otros tres
+       —total, lo que gana, lo que pierde— van abajo repartidos en tres
+       columnas iguales, que entran siempre porque cada una tiene su tercio. */
+    html += '<div style="padding:11px 14px 12px">';
+    var eff = stats[0], resto = stats.slice(1);
+    html += '<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:9px">';
+    html += '<span style="font-family:Bebas Neue,sans-serif;font-size:34px;line-height:.9;'
+          + 'color:'+(eff.c||'var(--text)')+'">'+eff.v+'</span>';
+    html += '<span style="font-size:10px;font-weight:700;letter-spacing:1.4px;color:var(--mut)">'+eff.l+'</span>';
+    html += '</div>';
+    /* La fila de tres va en una CLASE y no en el style de la etiqueta:
+       movil.css, hasta 480 px, apila en una sola columna todo lo que tenga
+       grid-template-columns escrito inline. Esa regla resuelve un problema
+       real, pero aca se llevaba puesta a esta fila —tres numeros cortos que
+       entran de sobra— y en el telefono cada tarjeta medía cuatro renglones
+       de alto. Como clase, el selector no la alcanza. */
+    html += '<div class="mk3">';
+    resto.forEach(function(s){
+      html += '<div>';
+      html += '<div class="n" style="color:'+(s.c||'var(--text)')+'">'+s.v+'</div>';
+      html += '<div class="l">'+s.l+'</div>';
       html += '</div>';
     });
-    html += '</div></div>';
+    html += '</div></div></div>';
     return html;
   }
 
@@ -1417,34 +1469,50 @@ function renderEqStats(){
 
   var dEff_str=dEff!==null?fmt(dEff):'—';
 
+  /* ══ LAS CINCO TARJETAS, TODAS IGUALES ═══════════════════════════════════
+     Cada una mostraba cosas distintas: el ataque no traia el total, el
+     bloqueo tenia dos casilleros de cuatro y parecia rota, y saque, ataque y
+     defensa eran tres tonos de naranja-rojo que se confundian entre si.
+
+     Ahora las cinco dicen lo mismo, en el mismo orden:
+         EFF · TOTAL · lo que gana · lo que pierde
+     y cada fundamento tiene SU color, el mismo que usa el panel en vivo y
+     que paso las pruebas de daltonismo y contraste. */
+  var C_SQ='#CE7C18', C_REC='#0E9F6E', C_ATQ='#0B84C4', C_BLQ='#8B5CF6', C_DEF='#DC2A5A';
+  var VERDE='#22c55e', ROJO='#ef4444';
+
   var rectHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:12px">';
-  rectHTML += mkRect('#F59E0B','Saque',[
-    {v:sEff_str, l:'EFF', c:'#F59E0B'},
+  rectHTML += mkRect(C_SQ,'Saque',[
+    {v:sEff_str, l:'EFF', c:C_SQ},
     {v:sT,       l:'Total'},
-    {v:sPunto||0,l:'Puntos'},
-    {v:sErr||0,  l:'Errores'},
+    {v:sPunto||0,l:'Aces', c:VERDE},
+    {v:sErr||0,  l:'Errores', c:ROJO},
   ]);
-  rectHTML += mkRect('#F97316','Ataque',[
-    {v:aEff_str, l:'EFF', c:'#F97316'},
-    {v:aPunto||0,l:'Puntos'},
-    {v:aVend||0, l:'Bloqueados'},
-    {v:aErr||0,  l:'Errores'},
-  ]);
-  rectHTML += mkRect('#22C55E','Recepción',[
-    {v:rEff_str, l:'EFF', c:'#22C55E'},
+  rectHTML += mkRect(C_REC,'Recepción',[
+    {v:rEff_str, l:'EFF', c:C_REC},
     {v:rT,       l:'Total'},
-    {v:rPos_str, l:'Rec. #+'},
-    {v:rNeg_str, l:'Rec. /='},
+    {v:rPos_str, l:'#+ perfectas', c:VERDE},
+    {v:rNeg_str, l:'/= perdidas', c:ROJO},
   ]);
-  rectHTML += mkRect('#06B6D4','Bloqueo',[
-    {v:bEff_str, l:'EFF #+', c:'#06B6D4'},
+  rectHTML += mkRect(C_ATQ,'Ataque',[
+    {v:aEff_str, l:'EFF', c:C_ATQ},
+    {v:aT,       l:'Total'},
+    {v:aPunto||0,l:'Puntos', c:VERDE},
+    /* bloqueados y errores son las dos maneras de perder la pelota: van
+       juntas, para que la tarjeta tenga la misma forma que las otras */
+    {v:(aVend||0)+(aErr||0), l:'Perdidas', c:ROJO},
+  ]);
+  rectHTML += mkRect(C_BLQ,'Bloqueo',[
+    {v:bEff_str, l:'EFF #+', c:C_BLQ},
     {v:bT,       l:'Total'},
+    {v:bPt||0,   l:'Puntos', c:VERDE},
+    {v:(bT-bPt-bPtPos)>0?(bT-bPt-bPtPos):0, l:'Sin blq', c:ROJO},
   ]);
-  rectHTML += mkRect('#EF4444','Defensa',[
-    {v:dEff_str, l:'EFF', c:'#EF4444'},
+  rectHTML += mkRect(C_DEF,'Defensa',[
+    {v:dEff_str, l:'EFF', c:C_DEF},
     {v:dT,       l:'Total'},
-    {v:dPerf||0, l:'Perfectas', c:'#22c55e'},
-    {v:dErr||0,  l:'Errores', c:'#ef4444'},
+    {v:dPerf||0, l:'Perfectas', c:VERDE},
+    {v:dErr||0,  l:'Errores', c:ROJO},
   ]);
   rectHTML += '</div>';
 
@@ -1485,7 +1553,7 @@ function renderEqContent(){
   if(EQ_TAB==='dv4'){cont.innerHTML=renderDV4(ses);return;}
   if(EQ_TAB==='defensa'){cont.innerHTML=renderDefensaTabla();return;}
   var configs={
-    saque:{color:'#f59e0b',ths:['EFF%','TOT','# Pto','/ Vnd','+ Pos','! Ntr','– Neg','= Err'],
+    saque:{color:'#CE7C18',ths:['EFF%','TOT','# Pto','/ Vnd','+ Pos','! Ntr','– Neg','= Err'],
       getData:function(j){
         var src;
         if(SAQUE_TIPO==='flotado'&&j.sFlo) src={T:j.sFlo.T,Punto:j.sFlo.Punto,Vend:j.sFlo.Vend,Pos:j.sFlo.Pos,Adm:j.sFlo.Adm,Neg:j.sFlo.Neg,Err:j.sFlo.Err};
@@ -1501,7 +1569,7 @@ function renderEqContent(){
         else src={T:a.sT,Punto:a.sPunto,Vend:a.sVend,Pos:a.sPos,Adm:a.sAdm||0,Neg:a.sNeg,Err:a.sErr};
         var e=src.T>0?VB_EFF.saque(src):null;
         return[{v:e!==null?fmt(e):'—',c:effColor(e,'sq'),b:true},{v:src.T,c:'#f59e0b',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Vend,c:'#86efac'},{v:src.Pos,c:'#86efac'},{v:src.Adm,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Err,c:'#ef4444'}];}},
-    recepcion:{color:'#22c55e',ths:['EFF%','TOT','# Perf','+ Pos','! Ntr','– Neg','/ Vnd','= Err'],
+    recepcion:{color:'#0E9F6E',ths:['EFF%','TOT','# Perf','+ Pos','! Ntr','– Neg','/ Vnd','= Err'],
       getData:function(j){
         var src; // elegir total / flotado / potencia
         if(RECEP_TIPO==='flotado'&&j.rFlo) src={T:j.rFlo.T,Punto:j.rFlo.Punto,Pos:j.rFlo.Pos,Adm:j.rFlo.Adm,Neg:j.rFlo.Neg,Vend:j.rFlo.Vend,Err:j.rFlo.Err};
@@ -1517,7 +1585,7 @@ function renderEqContent(){
         else src={T:a.rT,Punto:a.rPunto,Pos:a.rPos,Adm:a.rAdm||0,Neg:a.rNeg,Vend:a.rVend,Err:a.rErr};
         var e=src.T>0?VB_EFF.recepcion(src):null;
         return[{v:e!==null?fmt(e):'—',c:effColor(e,'rec'),b:true},{v:src.T,c:'#22c55e',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Pos,c:'#86efac'},{v:src.Adm,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Vend,c:'#fbbf24'},{v:src.Err,c:'#ef4444'}];}},
-    ataque:{color:'#818cf8',ths:['EFF%','TOT','# Pto','+ Pos','! Ntr','– Neg','/ Blq','= Err'],
+    ataque:{color:'#0B84C4',ths:['EFF%','TOT','# Pto','+ Pos','! Ntr','– Neg','/ Blq','= Err'],
       getData:function(j){
         var src;
         if(ATK_FASE==='so'&&j.aSo) src={T:j.aSo.T,Punto:j.aSo.Punto,Pos:j.aSo.Pos,Adm:j.aSo.Adm,Neg:j.aSo.Neg,Vend:j.aSo.Vend,Err:j.aSo.Err};
@@ -1533,7 +1601,7 @@ function renderEqContent(){
         else src={T:a.aT,Punto:a.aPunto,Pos:a.aPos,Adm:a.aAdm||0,Neg:a.aNeg,Vend:a.aVend,Err:a.aErr};
         var e=src.T>0?VB_EFF.ataque(src):null;
         return[{v:e!==null?fmt(e):'—',c:effColor(e,'atqq'),b:true},{v:src.T,c:'#818cf8',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Pos,c:'#86efac'},{v:src.Adm,c:'#94a3b8'},{v:src.Neg,c:'#f97316'},{v:src.Vend,c:'#fbbf24'},{v:src.Err,c:'#ef4444'}];}},
-    bloqueo:{color:'#06b6d4',ths:['EFF%','TOT','# Pto','+ Pos','! Ntr','– Neg','/ Toq','= Err'],
+    bloqueo:{color:'#8B5CF6',ths:['EFF%','TOT','# Pto','+ Pos','! Ntr','– Neg','/ Toq','= Err'],
       getData:function(j){if(!j.bT)return null;
         var e=Math.round((j.bPt+j.bPtPos)/j.bT*100);
         return[{v:fmt(e),c:effColor(e,'bqpos'),b:true},{v:j.bT,c:'#06b6d4',b:true},{v:j.bPt,c:'#22c55e'},{v:j.bPtPos,c:'#86efac'},{v:j.bAdm||0,c:'#94a3b8'},{v:j.bNeg||0,c:'#f97316'},{v:j.bVend||0,c:'#fbbf24'},{v:j.bErr||0,c:'#ef4444'}];},
@@ -1596,7 +1664,44 @@ function renderEqContent(){
     rFlo:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},rPot:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},
     sFlo:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},sPot:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},
     aSo:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0},aTr:{T:0,Punto:0,Pos:0,Adm:0,Neg:0,Vend:0,Err:0}};
-  var html=recepSelector+'<div class="tabla-wrap"><table><thead><tr>'
+  /* ══ LAS DOS COLUMNAS QUE SE MIRAN ═══════════════════════════════════════
+     La tabla tenia ocho columnas pintadas de ocho colores. Cuando TODO esta
+     pintado, el color deja de informar: el EFF% —el unico numero por el que
+     uno abre esta tabla— pesaba lo mismo que "= Err".
+
+     Ahora el EFF% lleva una barra debajo que dice donde cae entre el peor de
+     la liga y el objetivo, con la marca blanca del objetivo. Es la MISMA
+     escala de las baterias (sale de OBJETIVOS_CONFIG), asi que la tabla y la
+     bateria no pueden decir cosas distintas.
+
+     Y el TOT lleva una barra de fondo con el volumen: de un vistazo se ve
+     quien juega mucho y quien jugo dos pelotas, que es lo que hace que un
+     40% signifique algo o nada. */
+  /* ══ QUE OBJETIVO LE CORRESPONDE A CADA SOLAPA ══════════════════════════
+     ATAQUE va en null A PROPOSITO. En la lista de objetivos no hay un
+     "% Ataque" general: hay % Atq Central (55), % Atq Alta (18), % Atq
+     Rapida (40), % Atq Transicion (33)... cada uno con su bar de exigencia.
+     Pintar el ataque general de un punta contra el 55 del central diria
+     "rojo" en un ataque que esta perfectamente bien. Sin objetivo que sea
+     el correcto, el numero va sin semaforo: mejor sin color que con el
+     color equivocado.                                                      */
+  var META_TAB = { saque:'sq', recepcion:'rec', ataque:null, bloqueo:'bqpos' };
+
+  /* El EFF% con el color del semaforo de las baterias. Sin barra: el color
+     del numero ya dice donde cae. */
+  function numEff(txt, color){
+    var id = META_TAB[EQ_TAB];
+    var v  = parseFloat(String(txt).replace('%','').replace('\u2212','-'));
+    if(!id || isNaN(v) || typeof objClassify!=='function')
+      return '<span class="tb-eff">'+txt+'</span>';
+    var m=null; try{ m = window.OBJETIVOS_CONFIG.metas[id]; }catch(e){}
+    var cl; try{ cl = objClassify(id, v); }catch(e){}
+    if(!cl) return '<span class="tb-eff">'+txt+'</span>';
+    return '<span class="tb-eff" style="color:'+cl.color+'" title="'+cl.label
+         + (m ? ' \u00b7 objetivo '+m.obj+'%' : '')+'">'+txt+'</span>';
+  }
+
+  var html=recepSelector+'<div class="tabla-wrap tabla-nueva"><table><thead><tr>'
     +'<th style="text-align:left">Jugador</th>'+(isAcum?'<th>Ses.</th>':'')
     +cfg.ths.map(function(t,i){return'<th style="color:'+cfg.color+';'+(i===0?'border-left:2px solid '+cfg.color+'33':'')+'">'+t+'</th>';}).join('')
     +'</tr></thead><tbody>';
@@ -1624,7 +1729,9 @@ function renderEqContent(){
                 + ' title="Ver estas acciones en video"';
           }
           var _cont = (_val && c.v) ? '<span class="dbat-n">'+c.v+'</span>' : c.v;
-          return'<td'+_cl+' style="font-size:'+(c.b?'16':'13')+'px;font-weight:'+(c.b?900:700)+';color:'+c.c+';'+(i===0?'border-left:2px solid '+cfg.color+'22':'')+'">'+_cont+'</td>';}).join('')
+          if(i===0) _cont = numEff(c.v, c.c);
+          else if(i===1) _cont = '<span class="tb-volN">'+c.v+'</span>';
+          return'<td'+_cl+' class="'+(i===0?'tb-c0':(i===1?'tb-c1':'tb-cn'))+(_cl?'':'')+'" style="color:'+c.c+';'+(i===0?'border-left:2px solid '+cfg.color+'22':'')+'">'+_cont+'</td>';}).join('')
       +'</tr>';
   });
   if(!hasData)html+='<tr><td colspan="20" class="empty">Sin datos</td></tr>';
@@ -1632,7 +1739,9 @@ function renderEqContent(){
   html+='<tr style="background:rgba(99,102,241,.06);border-top:2px solid rgba(99,102,241,.2)">'
     +'<td style="font-size:12px;font-weight:800;letter-spacing:1px;color:var(--indigo)"><span data-t="d_totales">TOTALES</span></td>'
     +(isAcum?'<td></td>':'')
-    +tcells.map(function(c,i){return'<td style="font-size:'+(c.b?'16':'13')+'px;font-weight:'+(c.b?900:700)+';color:'+c.c+';'+(i===0?'border-left:2px solid '+cfg.color+'44':'')+'">'+c.v+'</td>';}).join('')
+    +tcells.map(function(c,i){
+        var _t = (i===0) ? numEff(c.v, c.c) : c.v;
+        return'<td class="'+(i===0?'tb-c0':'tb-cn')+'" style="color:'+c.c+';'+(i===0?'border-left:2px solid '+cfg.color+'44':'')+'">'+_t+'</td>';}).join('')
     +'</tr>';
   html+='</tbody></table></div>';
   cont.innerHTML=html;
@@ -2369,11 +2478,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260926-2122"></script>
-<script src="lang.js?v=20260926-2122"></script>
-<script src="temporadas_menu.js?v=20260926-2122"></script>
-<script src="app_offline.js?v=20260926-2122"></script>
-<script src="ayuda.js?v=20260926-2122"></script>
+<script src="chat_nafels.js?v=20260926-2156"></script>
+<script src="lang.js?v=20260926-2156"></script>
+<script src="temporadas_menu.js?v=20260926-2156"></script>
+<script src="app_offline.js?v=20260926-2156"></script>
+<script src="ayuda.js?v=20260926-2156"></script>
 
 <!-- Los archivos de video (datos_video_*.js.enc) se sacaron de esta
      pantalla: pesan unos 15 MB por temporada, descifrarlos son mas de
