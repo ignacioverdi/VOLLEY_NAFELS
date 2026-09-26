@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20260926-2243"></script>
-<script src="selector_categoria.js?v=20260926-2243"></script>
+<script src="categorias_club.js?v=20260926-2257"></script>
+<script src="selector_categoria.js?v=20260926-2257"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -248,11 +248,11 @@ select, select option {
   background-color: #ffffff !important;
 }
 </style>
-<script src="datos_seguros.js?v=20260926-2243"></script>
-<script src="firebase.js?v=20260926-2243" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260926-2243"></script>
-<script src="lang.js?v=20260926-2243"></script>
-<script src="plantel_nafels.js?v=20260926-2243"></script>
+<script src="datos_seguros.js?v=20260926-2257"></script>
+<script src="firebase.js?v=20260926-2257" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-2257"></script>
+<script src="lang.js?v=20260926-2257"></script>
+<script src="plantel_nafels.js?v=20260926-2257"></script>
 
 <style>
 @media(max-width:768px){
@@ -351,7 +351,7 @@ select, select option {
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260926-2243">
+<link rel="stylesheet" href="movil.css?v=20260926-2257">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    LA PORTADA, DE MENU A TABLERO
@@ -1568,9 +1568,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260926-2243"></script>
+<script src="chat_nafels.js?v=20260926-2257"></script>
 
-<script src="proximo_rival.js?v=20260926-2243" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js?v=20260926-2257" onerror="window.FIXTURE_DATA=null"></script>
 <script>
 /* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
    proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
@@ -1628,12 +1628,12 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   }catch(e){}
 })();
 </script>
-<script src="temporadas_menu.js?v=20260926-2243"></script>
+<script src="temporadas_menu.js?v=20260926-2257"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20260926-2243" defer></script>
+<script src="onesignal_push.js?v=20260926-2257" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -1756,33 +1756,56 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
      fbGet trae lo de la categoria elegida arriba, asi que Primera, H1L y H2L
      ven cada una su propio calendario sin hacer nada especial.              */
   var PROX = null, ULT = null, NUM = null;
+  /* Mientras el calendario del club no contesto, la portada NO puede decir
+     que no hay partidos: todavia no lo sabe. Dice que esta buscando. */
+  var BUSCANDO = true;
 
+  /* ══ NADA DE PLAZOS ══════════════════════════════════════════════════════
+     La primera version pedia el calendario a Firebase y, si en 2,5 segundos
+     no habia contestado, se quedaba con lo que hubiera guardado localmente
+     y CERRABA la puerta. Resultado en la vida real: el calendario del club
+     estaba perfecto —30/09 vs St. Gallen— y la portada anunciaba que no
+     habia partidos cargados, porque fbGet tarda mas que eso: primero
+     arranca Firebase, despues autentica y recien ahi pide los datos.
+
+     Un plazo esta bien para DEJAR DE ESPERAR. Esta mal para DESCARTAR una
+     respuesta que llega tarde. Ahora se pinta enseguida con lo que haya a
+     mano, y cuando llega la respuesta buena se vuelve a pintar. Pintar de
+     nuevo no cuesta nada y siempre gana el dato mas fresco.
+     ═══════════════════════════════════════════════════════════════════════ */
   function pedirProximo(listo){
-    var h = hoyISO(), hecho = false;
-    function con(arr){
-      if(hecho) return; hecho = true;
+    var h = hoyISO();
+    function elegir(arr){
       var fut = (arr||[]).filter(function(p){ return p && p.fecha && p.fecha >= h && p.rival; })
                          .sort(function(a,b){ return a.fecha < b.fecha ? -1 : 1; });
-      PROX = fut.length ? fut[0] : null;
-      listo();
+      return fut.length ? fut[0] : null;
     }
-    var pedido = false;
+    /* 1) ya: lo que dejo el boton "Usar este fixture", si todavia sirve */
+    var F = null;
+    try{ F = JSON.parse(localStorage.getItem('vb_fixture')||'null'); }catch(e){}
+    if(!F) F = window.FIXTURE_DATA;
+    var guardado = F && F.proximo ? elegir([F.proximo]) : null;
+    if(!guardado && F && F.fixture) guardado = elegir(F.fixture);
+    PROX = guardado;
+    listo();
+
+    /* 2) y cuando llegue: el calendario del club, que es el que vale.
+          Tarde nunca es demasiado tarde: se vuelve a pintar. */
     try{
       if(window.fbGet){
-        pedido = true;
-        fbGet('calendario/partidos', function(d){ con(Array.isArray(d)?d:[]); });
-      }
-    }catch(e){}
-    /* Si Firebase no contesta —sin internet, o el club todavia no lo uso—
-       vale lo que haya dejado el boton del calendario. Y si tampoco, nada. */
-    setTimeout(function(){
-      if(hecho) return;
-      var F = null;
-      try{ F = JSON.parse(localStorage.getItem('vb_fixture')||'null'); }catch(e){}
-      if(!F) F = window.FIXTURE_DATA;
-      var p = F && F.proximo;
-      con(p && p.fecha >= h ? [p] : []);
-    }, pedido ? 2500 : 0);
+        fbGet('calendario/partidos', function(d){
+          BUSCANDO = false;
+          if(!Array.isArray(d)){ listo(); return; }
+          var nuevo = elegir(d);
+          if(nuevo) PROX = nuevo;       /* sin partidos futuros: queda lo que habia */
+          listo();
+        });
+        /* Si Firebase no contesta nunca —sin internet, por ejemplo— el cartel
+           de "buscando" no puede quedarse girando para siempre. A los 15
+           segundos se da por perdido y se dice lo que se sabe. */
+        setTimeout(function(){ if(BUSCANDO){ BUSCANDO = false; listo(); } }, 15000);
+      } else { BUSCANDO = false; }
+    }catch(e){ BUSCANDO = false; }
   }
 
   /* ── el ultimo resultado y como venimos, del historial ─────────────────── */
@@ -1845,6 +1868,11 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
          +   (cond?' · '+esc(cond):'')+'</div>'
          + (PROX.lugar?'<div class="tb-mut">'+esc(PROX.lugar)+'</div>':'')
          + '</a>';
+    } else if(BUSCANDO){
+      h += '<div class="tb-box">'
+         + '<div class="tb-lbl">Próximo partido</div>'
+         + '<div class="tb-big" style="color:#475569">…</div>'
+         + '<div class="tb-vacio">Buscando en el calendario del club…</div></div>';
     } else {
       h += '<a class="tb-box" href="calendario.html">'
          + '<div class="tb-lbl">Próximo partido</div>'
@@ -2271,7 +2299,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   else arrancar();
 })();
 </script>
-<script src="ayuda.js?v=20260926-2243"></script>
+<script src="ayuda.js?v=20260926-2257"></script>
 </body>
 </html>
 
