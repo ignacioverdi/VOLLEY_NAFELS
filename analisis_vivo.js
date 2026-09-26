@@ -80,6 +80,7 @@
           buscar:'Buscar en los códigos', buscarPh:'Escribí parte de un código: *11A · W4 · AT# · a13',
           encontradas:'encontradas', verTodas:'Ver todas', jugadaAJugada:'Jugada por jugada',
           ganoPunto:'Ganó', nadaEncontrado:'Ningún código tiene eso.',
+          ganamos2:'GANAMOS', perdimos2:'PERDIMOS',
           notaBusc:'La búsqueda mira TODOS los códigos del partido, sin los filtros de arriba: si buscás un código es porque lo querés encontrar. La lista de abajo sí respeta los filtros.',
           notaJugadas:'Cada punto con su marcador y cómo terminó. Tocá uno para verlo entero en el video.',
           excel:'Excel', imprimir:'Imprimir', filtros:'Filtros', sinFiltro:'Partido completo',
@@ -125,11 +126,15 @@
           notaUlt:'A favor: el punto que ganó con esa acción. En contra: el error con el que lo perdió.',
           notaTras:'Las filas son la recepción y las columnas lo que armó después, en el mismo punto. Debajo de cada cantidad, el punto% del ataque que siguió.',
           sinRec:'En estos puntos no hay recepciones con ataque después.',
-          notaComp:'Cada casilla: cuántas pelotas y qué rindieron. Positividad en saque, recepción, defensa y freeball; eficiencia en ataque y bloqueo. La columna que se compara no se filtra.',
+          notaComp:'Cada casilla: cuántas pelotas y qué rindieron. Positividad en todo menos ataque y bloqueo, que van por eficacia porque ahí el error cuesta el punto. La columna que se compara no se filtra.',
           verAtaque:'Mostrando el ataque. Elegí otro fundamento arriba para cambiarlo.',
           clicZona:'Tocá una zona para filtrar por ella. Tocala de nuevo para soltarla.',
           porFund:'Por fundamento', porJug:'por jugador',
           ptsDe:'de', puntos:'puntos', acciones:'acciones',
+          nBuenas:'buenas', nCorrectas:'correctas', nFlojas:'flojas', nPerdidas:'perdidas',
+          nEfic:'EFICACIA', nPos:'POSITIVAS', nVerDet:'Ver el detalle',
+          nOcultarDet:'Ocultar el detalle',
+          nLeyenda:'Cada tramo lleva su número adentro. Tocalo para ver esas pelotas en el video.',
           vacio:'Con estos filtros no quedó ninguna acción.',
           nota:'Jugador y fundamento filtran la tabla de arriba. Equipo, rotación, set y fase filtran todo.' },
     de: { eq:'Team', ju:'Spieler', fu:'Element', ro:'Rotation', se:'Satz',
@@ -173,6 +178,7 @@
           buscar:'In den Codes suchen', buscarPh:'Teil eines Codes: *11A · W4 · AT# · a13',
           encontradas:'gefunden', verTodas:'Alle ansehen', jugadaAJugada:'Punkt für Punkt',
           ganoPunto:'Gewann', nadaEncontrado:'Kein Code enthält das.',
+          ganamos2:'GEWONNEN', perdimos2:'VERLOREN',
           notaBusc:'Die Suche geht über ALLE Codes des Spiels, ohne die Filter oben.',
           notaJugadas:'Jeder Punkt mit Spielstand und Ausgang. Antippen für das ganze Video.',
           excel:'Excel', imprimir:'Drucken', filtros:'Filter', sinFiltro:'Ganzes Spiel',
@@ -218,11 +224,15 @@
           notaUlt:'Die letzte Aktion jedes Punktes. Dafür: damit gewonnen. Dagegen: damit verloren.',
           notaTras:'Zeilen: die Annahme. Spalten: was danach gespielt wurde. Darunter Punkt% des folgenden Angriffs.',
           sinRec:'In diesen Punkten gibt es keine Annahme mit folgendem Angriff.',
-          notaComp:'Jede Zelle: wie viele Bälle und was sie gebracht haben. Positivität bei Aufschlag, Annahme, Abwehr und Freeball; Effizienz bei Angriff und Block.',
+          notaComp:'Jede Zelle: wie viele Bälle und was sie gebracht haben. Positivität überall außer bei Angriff und Block: dort zählt Effizienz, weil der Fehler den Punkt kostet.',
           verAtaque:'Angriff wird gezeigt. Oben ein anderes Element wählen.',
           clicZona:'Zone antippen, um danach zu filtern. Nochmal antippen zum Lösen.',
           porFund:'Nach Element', porJug:'nach Spieler',
           ptsDe:'von', puntos:'Punkten', acciones:'Aktionen',
+          nBuenas:'gut', nCorrectas:'ok', nFlojas:'schwach', nPerdidas:'verloren',
+          nEfic:'EFFIZIENZ', nPos:'POSITIV', nVerDet:'Details zeigen',
+          nOcultarDet:'Details ausblenden',
+          nLeyenda:'Jeder Abschnitt zeigt seine Zahl. Antippen zeigt diese Bälle im Video.',
           vacio:'Mit diesen Filtern bleibt keine Aktion übrig.',
           nota:'Spieler und Element filtern die Tabelle oben. Team, Rotation, Satz und Phase filtern alles.' },
     en: { eq:'Team', ju:'Player', fu:'Skill', ro:'Rotation', se:'Set',
@@ -266,6 +276,7 @@
           buscar:'Search the codes', buscarPh:'Part of a code: *11A · W4 · AT# · a13',
           encontradas:'found', verTodas:'Watch all', jugadaAJugada:'Point by point',
           ganoPunto:'Won', nadaEncontrado:'No code contains that.',
+          ganamos2:'WE WON', perdimos2:'WE LOST',
           notaBusc:'The search looks at ALL codes of the match, ignoring the filters above.',
           notaJugadas:'Every rally with its score and how it ended. Tap one to watch it whole.',
           excel:'Excel', imprimir:'Print', filtros:'Filters', sinFiltro:'Whole match',
@@ -311,11 +322,15 @@
           notaUlt:'The last action of each point. For: it won the point. Against: it lost it.',
           notaTras:'Rows: the reception. Columns: what was run next. Below each count, the kill% of the attack that followed.',
           sinRec:'No receptions with a following attack in these points.',
-          notaComp:'Each cell: how many balls and how they went. Positivity for serve, reception, dig and freeball; efficiency for attack and block.',
+          notaComp:'Each cell: how many balls and how they went. Positivity everywhere except attack and block, which use efficiency because there the error costs the point.',
           verAtaque:'Showing attack. Pick another skill above to change it.',
           clicZona:'Tap a zone to filter by it. Tap again to release.',
           porFund:'By skill', porJug:'by player',
           ptsDe:'of', puntos:'points', acciones:'actions',
+          nBuenas:'good', nCorrectas:'ok', nFlojas:'weak', nPerdidas:'lost',
+          nEfic:'EFFICIENCY', nPos:'POSITIVE', nVerDet:'Show detail',
+          nOcultarDet:'Hide detail',
+          nLeyenda:'Every segment carries its own number. Tap it to see those balls on video.',
           vacio:'No action left with these filters.',
           nota:'Player and skill filter the table above. Team, rotation, set and phase filter everything.' }
   };
@@ -352,7 +367,9 @@
     earm: '',                 /* efecto del armado que precede (VolleyStation) */
     enc: [],                  /* jugadores que tienen que estar en cancha    */
     rotR: '',                 /* rotacion del armador RIVAL                  */
-    orden: 'fund'             /* como se agrupa la tabla: fund · jug · rot   */
+    orden: 'fund',            /* como se agrupa la tabla: fund · jug · rot   */
+    det: false,               /* la tabla de las seis valoraciones, plegada  */
+    pdet: false               /* idem para "cómo termina el punto"           */
   };
   window.AV = AV;
 
@@ -408,9 +425,29 @@
     return String(s == null ? '' : s)
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
+  /* ── POSITIVIDAD O EFICACIA ──────────────────────────────────────────────
+     Que numero resume cada fundamento. Es una sola regla y la usan las
+     cuatro pantallas que la necesitan —la tabla, el mapa de la cancha, el
+     comparador y las direcciones— para que nunca se contradigan.
+
+     Ataque y bloqueo van por eficacia: ahi el error cuesta el punto y tiene
+     que restar.
+
+     El armado va por POSITIVIDAD y no por eficacia, aunque el Data Volley lo
+     saque por eficacia. La eficacia se calcula con el "#", y un armado casi
+     nunca se scoutea con "#": de 94 armados del partido contra Freiburg, 82
+     estan bien y el numero igual daba 0%. Positividad dice lo que uno quiere
+     saber: de todas las que toco, cuantas dejo jugables. */
+  function usaPositividad(sk){ return 'SRDFE'.indexOf(sk) >= 0; }
+
   function nom(num, lado){
-    try { return (typeof nombreDe === 'function') ? (nombreDe(num, lado) || '') : ''; }
+    var q = '';
+    try { q = (typeof nombreDe === 'function') ? (nombreDe(num, lado) || '') : ''; }
     catch (e) { return ''; }
+    /* Cuando no hay plantel cargado, nombreDe devuelve el propio dorsal, y en
+       las tablas quedaba "#11 11". Si el nombre ES el numero, no es un nombre. */
+    if (String(q).trim() === String(num).trim()) return '';
+    return q;
   }
 
   /* ── EL FILTRO ────────────────────────────────────────────────────────────
@@ -638,6 +675,74 @@
      números no discutan entre pantallas:
        positividad = (# + +)  / total      (y el / del saque, que es punto)
        eficiencia  = (# - errores) / total */
+  /* ── LA TABLA QUE SE MIRA PRIMERO ────────────────────────────────────────
+     La tabla de siempre —las seis valoraciones del Data Volley— tiene todo,
+     pero todo pesa lo mismo y el numero que uno busca queda al final. Asi
+     que arriba va otra vista: el numero que importa grande, y al lado una
+     barra que parte las acciones en cuatro tramos que se entienden sin
+     saber Data Volley (buenas, correctas, flojas, perdidas).
+
+     Los cuatro tramos suman EXACTAMENTE el total, y salen de la misma
+     pasada que la tabla de abajo: filaDe escribe en las dos, asi que no
+     pueden discutir. Cada tramo lleva su numero adentro, asi que el color
+     no es lo unico que distingue —para un daltonico verde y rojo es el par
+     mas dificil— y se toca igual que cualquier numero para ver el video.
+
+     El detalle completo sigue estando, abajo, plegado. */
+  var TAB_NUEVA = null;
+
+  /* Las seis valoraciones repartidas en cuatro tramos. El "/" cambia de
+     significado segun el fundamento: en saque es bueno, en ataque y bloqueo
+     es pelota perdida, en el resto es una pelota floja. Es la misma regla
+     que ya usa filaDe para contar positivas y errores. */
+  function tramosDe(c, sk) {
+    var t = L();
+    var esAtk = 'AB'.indexOf(sk) >= 0, esSaq = sk === 'S';
+    return [
+      { k:'bien', lbl:t.nBuenas,    ev:['#','+'].concat(esSaq ? ['/'] : []) },
+      { k:'ok',   lbl:t.nCorrectas, ev:['!'] },
+      { k:'floj', lbl:t.nFlojas,    ev:['-'].concat((!esSaq && !esAtk) ? ['/'] : []) },
+      { k:'perd', lbl:t.nPerdidas,  ev:['='].concat(esAtk ? ['/'] : []) }
+    ];
+  }
+
+  function filaNueva(rot, acc, porEv, c, sk, usaPos, posP, efP) {
+    var t = L(), tot = acc.length, tr = tramosDe(c, sk);
+    var clave = usaPos ? posP : efP;
+    var barra = '';
+    tr.forEach(function (g) {
+      var lista = [], cn = 0;
+      g.ev.forEach(function (e) { cn += c[e]; lista = lista.concat(porEv[e] || []); });
+      if (!cn) return;
+      var id = lote(lista);
+      /* el title dice que es el tramo: el color y el numero no alcanzan para
+         alguien que abre esto por primera vez */
+      barra += '<span class="avn-t avn-' + g.k + '" style="flex:' + cn + ' 0 0"' +
+               ' title="' + esc(g.lbl + (id ? ' · ' + t.verVideo : '')) + '"' +
+               (id ? ' onclick="AV.ver(' + id + ')"' : '') +
+               '>' + cn + '</span>';
+    });
+    return '<div class="avn-f">' +
+      '<div class="avn-nom"><b>' + esc(rot) + '</b>' +
+        '<i>' + tot + ' ' + esc(t.acciones) + '</i></div>' +
+      '<div class="avn-cl"><span class="avn-n ' + (clave < 0 ? 'neg' : 'pos') + '">' +
+        clave + '%</span><span class="avn-l">' +
+        esc(usaPos ? t.nPos : t.nEfic) + '</span></div>' +
+      '<div class="avn-b"><div class="avn-tt">' + barra + '</div></div>' +
+    '</div>';
+  }
+
+  /* El encabezado de grupo, para las dos vistas de una vez. */
+  function grpTab(txt, cuantas) {
+    var t = L();
+    if (TAB_NUEVA !== null) {
+      TAB_NUEVA += '<div class="avn-g">' + esc(txt) +
+                   ' <i>' + cuantas + ' ' + esc(t.acciones) + '</i></div>';
+    }
+    return '<tr class="av-grp"><td class="k" colspan="11">' + esc(txt) +
+           ' <i>' + cuantas + ' ' + esc(t.acciones) + '</i></td></tr>';
+  }
+
   function filaDe(rot, acc, sk) {
     var n = acc.length;
     if (!n) return '';
@@ -646,11 +751,15 @@
       porEv[e] = acc.filter(function (a) { return a.ev === e; });
       c[e] = porEv[e].length;
     });
-    var usaPos = 'SRDF'.indexOf(sk) >= 0;
+    var usaPos = usaPositividad(sk);
     var pos = c['#'] + c['+'] + (sk === 'S' ? c['/'] : 0);
     var err = c['='] + (['A','B'].indexOf(sk) >= 0 ? c['/'] : 0);
     var posP = Math.round(pos / n * 100);
     var efP  = Math.round((c['#'] - err) / n * 100);
+    /* la misma fila, en la vista de arriba */
+    if (TAB_NUEVA !== null) {
+      TAB_NUEVA += filaNueva(rot, acc, porEv, c, sk, usaPos, posP, efP);
+    }
     return '<tr><td class="k">' + esc(rot) + '</td>' +
            numClic(n, acc) +
            EV.map(function (e) { return numClic(c[e], porEv[e]); }).join('') +
@@ -669,6 +778,8 @@
               EV.map(function (e) { return '<th>' + e + '</th>'; }).join('') +
               '<th>' + esc(t.pos) + '</th><th>' + esc(t.efi) + '</th></tr>';
     var cuerpo = '';
+    /* de aca en adelante filaDe y grpTab escriben tambien la vista nueva */
+    TAB_NUEVA = '';
 
     /* ── EL TERCER ORDENAMIENTO (manual 9.5.2) ─────────────────────────────
        El Data ofrece la misma tabla ordenada de tres maneras, y dice que lo
@@ -686,8 +797,7 @@
           var accR = AV.acciones(AV.filtrar(AV.todos()));
           AV.rot = gR;
           if (!accR.length) return;
-          cuerpo += '<tr class="av-grp"><td class="k" colspan="11">P' + rr +
-                    ' <i>' + accR.length + ' ' + esc(t.acciones) + '</i></td></tr>';
+          cuerpo += grpTab('P' + rr, accR.length);
           if (AV.fund) {
             var nums2 = [];
             accR.forEach(function (a) { if (nums2.indexOf(a.num) < 0) nums2.push(a.num); });
@@ -712,8 +822,7 @@
       nums3.forEach(function (nu) {
         var accJ = acc.filter(function (a) { return a.num === nu; });
         var q = nom(nu, AV.lado);
-        cuerpo += '<tr class="av-grp"><td class="k" colspan="11">#' + nu + (q ? ' ' + esc(q) : '') +
-                  ' <i>' + accJ.length + ' ' + esc(t.acciones) + '</i></td></tr>';
+        cuerpo += grpTab('#' + nu + (q ? ' ' + q : ''), accJ.length);
         FUNDS().forEach(function (f) {
           cuerpo += filaDe(f[1], accJ.filter(function (a) { return a.sk === f[0]; }), f[0]);
         });
@@ -739,6 +848,7 @@
         cuerpo += filaDe(f[1], acc.filter(function (a) { return a.sk === f[0]; }), f[0]);
       });
     }
+    var nueva = TAB_NUEVA; TAB_NUEVA = null;
     if (!cuerpo) return '<div class="av-vacio">' + esc(t.vacio) + '</div>';
 
     var porOrden = { fund:t.porFund, jug:t.porJug, rot:t.porRot };
@@ -752,8 +862,23 @@
          return '<button class="av-plb' + (AV.orden === x[0] ? ' on' : '') +
                 '" onclick="AV.set_(\'orden\',\'' + x[0] + '\')">' + esc(x[1]) + '</button>';
        }).join('') + '</div>');
+    /* El detalle arranca plegado a proposito: las seis valoraciones son la
+       razon por la que la tabla del Data Volley cansa, y el 90% de las veces
+       lo que se busca es el numero grande. Sigue estando a un toque. */
+    var det = '<div class="avn-det' + (AV.det ? '' : ' cerrado') + '">' +
+      '<button class="av-plb avn-dbt" onclick="AV.set_(\'det\',' +
+        (AV.det ? 'false' : 'true') + ')">' +
+        esc(AV.det ? t.nOcultarDet : t.nVerDet) + (AV.det ? ' \u25B4' : ' \u25BE') + '</button>' +
+      '<table class="st">' + cab + cuerpo + '</table></div>';
     return '<div class="an-s av-tabla" data-notr><h4>' + esc(tit) + '</h4>' + sel +
-           '<table class="st">' + cab + cuerpo + '</table></div>';
+           '<div class="avn-ref">' +
+             [['bien',t.nBuenas],['ok',t.nCorrectas],['floj',t.nFlojas],['perd',t.nPerdidas]]
+               .map(function (x) {
+                 return '<span class="avn-rf"><i class="avn-' + x[0] + '"></i>' +
+                        esc(x[1]) + '</span>';
+               }).join('') + '</div>' +
+           '<div class="avn">' + nueva + '</div>' +
+           '<div class="avn-ley">' + esc(t.nLeyenda) + '</div>' + det + '</div>';
   };
 
 
@@ -776,7 +901,7 @@
     rgb = rgb || '56,189,248';
     var c = {};
     EV.forEach(function (e) { c[e] = lista.filter(function (a) { return a.ev === e; }).length; });
-    var usaPos = 'SRDF'.indexOf(sk) >= 0;
+    var usaPos = usaPositividad(sk);
     var pos = c['#'] + c['+'] + (sk === 'S' ? c['/'] : 0);
     var err = c['='] + (['A','B'].indexOf(sk) >= 0 ? c['/'] : 0);
     var v = usaPos ? Math.round(pos / n * 100) : Math.round((c['#'] - err) / n * 100);
@@ -790,13 +915,17 @@
     /* tocar la casilla filtra por la zona; el triangulito de la esquina abre
        esas mismas pelotas en el video, sin tocar el filtro */
     var id = lote(lista);
+    /* El numero crece con el VOLUMEN: 49 pelotas y 1 pelota no pueden verse
+       igual. Raiz cuadrada y no proporcional directo, porque si no la zona
+       mas cargada se come a todas las demas. Entre 15 y 30 px. */
+    var tam = maxN ? (15 + Math.round(15 * Math.sqrt(n / maxN))) : 16;
     return '<div class="av-z' + act + '" style="background:rgba(' + rgb + ',' + peso.toFixed(2) + ')"' +
            ' onclick="AV.zona(\'' + cual + '\',\'' + esc(z) + '\')"' +
            ' title="' + esc(t.zona + ' ' + z + ' · ' + n) + '">' +
            '<span class="zn">' + esc(z) + '</span>' +
            (id ? '<span class="zv" title="' + esc(t.verVideo) + '"' +
                  ' onclick="event.stopPropagation();AV.ver(' + id + ')">&#9654;</span>' : '') +
-           '<span class="zc">' + n + '</span>' +
+           '<span class="zc" style="font-size:' + tam + 'px">' + n + '</span>' +
            '<span class="zp ' + col + '">' + v + '%</span></div>';
   }
 
@@ -1145,7 +1274,50 @@
     var claves = SK.filter(function (k) { return fil[k]; });
     if (!claves.length && !sinCerrar) return '';
 
-    var h = '<div class="an-s av-punto" data-notr><h4>' + esc(t.elPunto) + '</h4><table class="st">' +
+    /* ── EL TITULAR ───────────────────────────────────────────────────────
+       La tabla tiene los cuatro numeros que importan, pero repartidos en
+       veinte casillas y con el total al final. Arriba va lo mismo de un
+       vistazo: cuantos puntos se ganaron y cuantos se perdieron, y una
+       barra que muestra POR QUE. Los cuatro tramos son los mismos cuatro
+       colores del resto de la app y cada uno lleva su numero adentro.
+
+       La lectura que se busca: verde es lo que hiciste bien y rojo lo que
+       regalaste; azul y ambar son merito y error del rival. Si el rojo es
+       grande, el partido lo perdiste vos. */
+    var gan = tot[0] + tot[1], per = tot[2] + tot[3], tt = gan + per;
+    var titular = '';
+    if (tt) {
+      var tramos = [
+        { k:'bien', nn:tot[0], lbl:t.gAcierto },
+        { k:'ok',   nn:tot[1], lbl:t.gError },
+        { k:'floj', nn:tot[2], lbl:t.pAcierto },
+        { k:'perd', nn:tot[3], lbl:t.pError }
+      ];
+      var barra = '', refs = '';
+      tramos.forEach(function (g) {
+        if (!g.nn) return;
+        barra += '<span class="avn-t avn-' + g.k + '" style="flex:' + g.nn + ' 0 0"' +
+                 ' title="' + esc(g.lbl) + '">' + g.nn + '</span>';
+        refs  += '<span class="avn-rf"><i class="avn-' + g.k + '"></i>' + esc(g.lbl) + '</span>';
+      });
+      titular =
+        '<div class="av-titular">' +
+          '<div class="av-tcif">' +
+            '<div class="av-tc av-tc-g"><b>' + gan + '</b><i>' + esc(t.ganamos2) + '</i></div>' +
+            '<div class="av-tc av-tc-p"><b>' + per + '</b><i>' + esc(t.perdimos2) + '</i></div>' +
+            '<div class="av-tct">' + tt + ' ' + esc(t.puntos) + '</div>' +
+          '</div>' +
+          '<div class="avn-tt">' + barra + '</div>' +
+          '<div class="avn-ref av-tref">' + refs + '</div>' +
+        '</div>';
+    }
+
+    var h = '<div class="an-s av-punto" data-notr><h4>' + esc(t.elPunto) + '</h4>' + titular +
+            '<div class="avn-det' + (AV.pdet ? '' : ' cerrado') + '">' +
+            '<button class="av-plb avn-dbt" onclick="AV.set_(\'pdet\',' +
+              (AV.pdet ? 'false' : 'true') + ')">' +
+              esc(AV.pdet ? t.nOcultarDet : t.nVerDet) + (AV.pdet ? ' ▴' : ' ▾') +
+            '</button>' + '<table class="st">' +
             '<tr><th class="k"></th><th>' + esc(t.gAcierto) + '</th><th>' + esc(t.gError) + '</th>' +
             '<th>' + esc(t.pAcierto) + '</th><th>' + esc(t.pError) + '</th></tr>';
     claves.forEach(function (k) {
@@ -1158,7 +1330,7 @@
     h += '<tr class="av-tot"><td class="k">' + esc(t.total) + '</td>' +
          tot.map(function (n) { return '<td><span class="num">' + (n || '·') + '</span></td>'; }).join('') +
          '</tr>';
-    h += '</table>';
+    h += '</table></div>';
     if (sinCerrar) h += '<div class="av-nota">' + esc(t.sinCerrar) + ': ' + sinCerrar + '</div>';
     return h + '<div class="av-nota">' + esc(t.notaPunto) + '</div></div>';
   };
@@ -1266,12 +1438,15 @@
     if (!n) return '<td><span class="num">·</span></td>';
     var c = {};
     EV.forEach(function (e) { c[e] = acc.filter(function (a) { return a.ev === e; }).length; });
-    var usaPos = 'SRDF'.indexOf(sk) >= 0;
+    var usaPos = usaPositividad(sk);
     var pos = c['#'] + c['+'] + (sk === 'S' ? c['/'] : 0);
     var err = c['='] + (['A','B'].indexOf(sk) >= 0 ? c['/'] : 0);
     var v = usaPos ? Math.round(pos / n * 100) : Math.round((c['#'] - err) / n * 100);
     var col = n < 3 ? 'poco' : (v >= 45 ? 'ok' : (v >= 20 ? 'med' : 'mal'));
-    return numClic(n, acc, '<i class="cp ' + col + '">' + v + '%</i>', 'cc');
+    /* la clase tambien en la casilla: asi el fondo se tine y la grilla se
+       barre de un vistazo, sin leer numero por numero. El numero sigue
+       estando, que es lo que la hace leible para un daltonico. */
+    return numClic(n, acc, '<i class="cp ' + col + '">' + v + '%</i>', 'cc cc-' + col);
   }
 
   AV.comparar = function (rsTodo) {
@@ -1799,7 +1974,7 @@
     claves = claves.slice(0, TOPE);
     var maxN = pares[claves[0]].length;
 
-    var usaPos = 'SRDF'.indexOf(sk) >= 0;
+    var usaPos = usaPositividad(sk);
     var VERDE = '#4ade80', ROJO = '#f87171', GRIS = '#7b8bb5';
 
     /* ── EL COLOR ES CONTRA EL PROMEDIO DEL PROPIO EQUIPO ───────────────────
@@ -1898,8 +2073,12 @@
     });
     g += rotulos;
 
-    var svg = '<svg class="av-svg" viewBox="0 0 ' + DC.w + ' ' + DC.h + '" width="' + DC.w +
-              '" height="' + DC.h + '" role="img">' + g + '</svg>';
+    /* sin width/height fijos: los pone el CSS y el dibujo crece con el
+       lugar disponible. La proporcion la cuida el viewBox, asi que la
+       cancha sigue siendo una cancha de 9 x 18 y las flechas no se
+       deforman; solo se separan, que es lo que hacia falta para leerlas. */
+    var svg = '<svg class="av-svg" viewBox="0 0 ' + DC.w + ' ' + DC.h +
+              '" preserveAspectRatio="xMidYMid meet" role="img">' + g + '</svg>';
 
     var leyenda = '<div class="av-ley">' +
       '<div><span class="av-ls" style="background:' + VERDE + '"></span>' + esc(t.lRinde) + '</div>' +
@@ -2323,7 +2502,9 @@
      Y cada punto se toca para ver esa jugada, que es lo que uno quiere hacer
      justo cuando ve la caida. */
 
-  var GF = { w:250, h:150, mx:6, my:12 };
+  /* Eran 250x150 fijos, cuatro en fila, y la caida de un set no se veia.
+     Ahora la caja escala con el lugar: el viewBox manda la forma. */
+  var GF = { w:330, h:180, mx:8, my:14 };
 
   AV.graficos = function (rs) {
     var t = L(), l = AV.lado;
@@ -2385,8 +2566,8 @@
            '<clipPath id="' + uid + 'a"><rect x="0" y="0" width="' + GF.w + '" height="' + y0.toFixed(1) + '"/></clipPath>' +
            '<clipPath id="' + uid + 'b"><rect x="0" y="' + y0.toFixed(1) + '" width="' + GF.w + '" height="' + GF.h + '"/></clipPath>' +
            '</defs>';
-      g += '<path d="' + arriba + '" fill="' + VERDE + '" opacity=".20" clip-path="url(#' + uid + 'a)"/>';
-      g += '<path d="' + arriba + '" fill="' + ROJO  + '" opacity=".20" clip-path="url(#' + uid + 'b)"/>';
+      g += '<path d="' + arriba + '" fill="' + VERDE + '" opacity=".26" clip-path="url(#' + uid + 'a)"/>';
+      g += '<path d="' + arriba + '" fill="' + ROJO  + '" opacity=".26" clip-path="url(#' + uid + 'b)"/>';
 
       /* los parciales de 8, 16 y 21 */
       [8, 16, 21].forEach(function (p) {
@@ -2423,8 +2604,8 @@
       h += '<div class="av-gcaja">' +
            '<div class="av-grot"><b>' + esc(t.se + ' ' + st) + '</b> ' +
              '<span class="' + (miosF > ellosF ? 'ok' : 'mal') + '">' + miosF + '-' + ellosF + '</span></div>' +
-           '<svg class="av-gsvg" viewBox="0 0 ' + GF.w + ' ' + GF.h + '" width="' + GF.w +
-             '" height="' + GF.h + '" role="img">' + g +
+           '<svg class="av-gsvg" viewBox="0 0 ' + GF.w + ' ' + GF.h +
+             '" preserveAspectRatio="xMidYMid meet" role="img">' + g +
              '<text class="av-gej" x="3" y="' + (GF.my + 7) + '">+' + topA + '</text>' +
              '<text class="av-gej" x="3" y="' + (GF.h - GF.my - 1) + '">' + topB + '</text>' +
              '</svg></div>';
@@ -2896,6 +3077,9 @@
     +   '#av-bar .av-res{display:none!important}'
     +   '#m-analisis .modal,#m-analisis button,#m-analisis select,#m-analisis input{display:none!important}'
     +   '.av-orden,.av-plctrl,.av-ley,.av-guard,.av-canc,.av-reg{display:none!important}'
+    +   '.avn-det.cerrado table{display:table!important}'
+    +   '.avn-t{color:#000!important;background:#fff!important;'
+    +     'border:1px solid #999!important}'
     +   '#av-print{display:block!important;margin:0 0 14px;color:#000}'
     +   '#av-print .pcab{font-size:17px;font-weight:800;letter-spacing:.5px}'
     +   '#av-print .ppar{font-size:11px;color:#444;margin-top:2px}'
@@ -2971,6 +3155,67 @@
     +   'font-size:11px;margin-left:7px}'
     + '.av-tabla table.st td .num.pos{color:var(--ok,#22c55e)}'
     + '.av-tabla table.st td .num.neg{color:var(--bad,#ef4444)}'
+    /* ── LA VISTA NUEVA DE LA TABLA ───────────────────────────────────────
+       Tres columnas por fila: quien es, el numero que importa, y la barra.
+       El numero de la barra va ADENTRO de su tramo: asi el color no es lo
+       unico que distingue, que es lo que la hace leible para un daltonico
+       (verde y rojo son justo el par mas dificil).
+       Los cuatro colores son los mismos que el resto de la app usa para
+       bien / correcto / flojo / mal, y pasan las pruebas de contraste. */
+    + '.avn{display:flex;flex-direction:column}'
+    + '.avn-g{margin:13px 0 2px;color:var(--k-zone,#38bdf8);font-weight:800;'
+    +   'font-size:12px;letter-spacing:.8px}'
+    + '.avn-g i{font-style:normal;color:var(--mut);font-weight:400;font-size:11px;'
+    +   'margin-left:7px}'
+    + '.avn-f{display:flex;align-items:center;gap:14px;padding:9px 0;'
+    +   'border-top:1px solid var(--b)}'
+    + '.avn-nom{width:150px;flex:0 0 auto;min-width:0}'
+    + '.avn-nom b{display:block;font-size:14px;font-weight:600;color:var(--fg,#e8edf5);'
+    +   'line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
+    + '.avn-nom i{font-style:normal;font-size:11px;color:var(--mut)}'
+    + '.avn-cl{width:92px;flex:0 0 auto;display:flex;flex-direction:column;'
+    +   'align-items:flex-end;line-height:1}'
+    + '.avn-n{font-size:27px;font-weight:800;letter-spacing:-.5px}'
+    + '.avn-n.pos{color:var(--ok,#22c55e)}'
+    + '.avn-n.neg{color:var(--bad,#ef4444)}'
+    + '.avn-l{font-size:9px;font-weight:700;letter-spacing:1.1px;color:var(--dim);'
+    +   'margin-top:3px}'
+    + '.avn-b{flex:1 1 auto;min-width:0}'
+    /* gap de 2px entre tramos: el fondo hace de separador y no hay que
+       inventar un borde que despues no imprime */
+    + '.avn-tt{display:flex;gap:2px;height:21px;border-radius:5px;overflow:hidden}'
+    + '.avn-t{display:flex;align-items:center;justify-content:center;font-size:11px;'
+    +   'font-weight:700;min-width:0;overflow:hidden;cursor:pointer;'
+    +   'transition:filter .12s}'
+    + '.avn-t:hover{filter:brightness(1.18)}'
+    + '.avn-bien{background:#0e9f6e;color:#04140d}'
+    + '.avn-ok{background:#3d8ede;color:#05121f}'
+    + '.avn-floj{background:#a87a20;color:#170f02}'
+    + '.avn-perd{background:#d42a70;color:#fff0f6}'
+    + '.avn-ref{display:flex;flex-wrap:wrap;gap:14px;margin:0 0 4px;padding-bottom:7px}'
+    + '.avn-rf{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;'
+    +   'letter-spacing:.6px;color:var(--mut)}'
+    + '.avn-rf i{width:11px;height:11px;border-radius:3px;display:inline-block}'
+    + '.avn-ley{margin:11px 0 0;padding-top:9px;border-top:1px solid var(--b);'
+    +   'font-size:10.5px;color:var(--dim);letter-spacing:.2px}'
+    /* ── EL TITULAR DE "CÓMO TERMINA EL PUNTO" ─────────────────────── */
+    + '.av-titular{margin:0 0 4px}'
+    + '.av-tcif{display:flex;align-items:baseline;gap:22px;margin-bottom:9px}'
+    + '.av-tc b{font-size:32px;font-weight:800;letter-spacing:-1px;line-height:1}'
+    + '.av-tc i{font-style:normal;font-size:9.5px;font-weight:700;letter-spacing:1.4px;'
+    +   'color:var(--dim);margin-left:8px}'
+    + '.av-tc-g b{color:var(--ok,#22c55e)}'
+    + '.av-tc-p b{color:var(--bad,#ef4444)}'
+    + '.av-tct{margin-left:auto;font-size:11px;color:var(--mut)}'
+    + '.av-tref{margin:7px 0 0}'
+    + '.av-punto .avn-tt{height:24px}'
+    + '.avn-det{margin-top:9px}'
+    + '.avn-dbt{font-size:10px}'
+    + '.avn-det.cerrado table{display:none}'
+    /* la barra se cae a dos lineas en pantallas chicas antes que aplastar
+       el nombre del jugador */
+    + '@media(max-width:620px){.avn-f{flex-wrap:wrap;gap:8px}'
+    +   '.avn-nom{width:auto;flex:1 1 140px}.avn-b{flex:1 1 100%}}'
     + '.av-tabla table.st th{color:var(--mut)}'
     + '.av-nota{margin-top:5px;font-size:10px;color:var(--dim);letter-spacing:.2px}'
     + '.av-combi h4{margin:0 0 6px;font-size:11px;letter-spacing:1px;text-transform:uppercase;'
@@ -3027,6 +3272,12 @@
     + '.av-comp table.st td.k{color:var(--fg,#e8edf5);font-weight:600}'
     + '.av-comp table.st th{color:var(--mut)}'
     + '.av-comp td.cc .num{color:var(--fg,#e8edf5)}'
+    /* el fondo de cada casilla, muy suave: ordena la lectura sin gritar */
+    + '.av-comp td.cc{border-radius:7px}'
+    + '.av-comp td.cc-ok{background:rgba(14,159,110,.15)}'
+    + '.av-comp td.cc-med{background:rgba(168,122,32,.15)}'
+    + '.av-comp td.cc-mal{background:rgba(212,42,112,.15)}'
+    + '.av-comp td.cc-poco{background:rgba(255,255,255,.025)}'
     + '.av-comp td.cc i.cp{display:block;font-style:normal;font-size:10px;font-weight:700;'
     +   'margin-top:1px}'
     + '.av-comp td.cc i.cp.ok{color:var(--ok,#22c55e)}'
@@ -3069,13 +3320,20 @@
     /* ── LOS GRAFICOS ─────────────────────────────────────────────────── */
     + '.av-graf h4{margin:0 0 10px;font-size:11px;letter-spacing:1px;text-transform:uppercase;'
     +   'color:var(--k-zone,#38bdf8)}'
-    + '.av-grafs{display:flex;flex-wrap:wrap;gap:14px}'
-    + '.av-gcaja{flex:0 0 auto}'
-    + '.av-grot{font-size:11px;color:var(--mut);margin-bottom:3px;letter-spacing:.4px}'
-    + '.av-grot b{color:var(--fg,#e8edf5);font-weight:700;margin-right:5px}'
+    + '.av-grafs{display:flex;flex-wrap:wrap;gap:16px}'
+    /* mismo tamaño los cuatro: si el ultimo se estira porque quedo solo en
+       su fila, los graficos dejan de poder compararse de un vistazo, que es
+       para lo unico que estan uno al lado del otro. */
+    + '.av-gcaja{flex:0 1 300px;width:300px;max-width:100%}'
+    + '.av-grot{font-size:11px;color:var(--mut);margin-bottom:4px;letter-spacing:.4px}'
+    + '.av-grot b{color:var(--fg,#e8edf5);font-weight:700;margin-right:6px;'
+    +   'font-size:12px;letter-spacing:.8px}'
+    /* el resultado del set, que es el titular de cada grafico */
+    + '.av-grot .ok,.av-grot .mal{font-size:15px;letter-spacing:.3px}'
     + '.av-grot .ok{color:var(--ok,#22c55e);font-weight:800}'
     + '.av-grot .mal{color:var(--bad,#ef4444);font-weight:800}'
-    + '.av-gsvg{display:block;background:var(--card2);border:1px solid var(--b);border-radius:8px}'
+    + '.av-gsvg{display:block;background:var(--card2);border:1px solid var(--b);'
+    +   'border-radius:10px;width:100%;height:auto}'
     + '.av-g0{stroke:var(--fg,#e8edf5);stroke-width:1.2;opacity:.45}'
     + '.av-gp{stroke:var(--b2,rgba(255,255,255,.14));stroke-width:1;stroke-dasharray:2 3}'
     + '.av-gpt{fill:var(--mut);font-size:8px;text-anchor:middle;font-family:inherit}'
@@ -3176,8 +3434,10 @@
     + '.av-mapa h4{margin:0 0 8px;font-size:11px;letter-spacing:1px;text-transform:uppercase;'
     +   'color:var(--k-zone,#38bdf8)}'
     /* ── LAS DIRECCIONES ────────────────────────────────────────────────── */
-    + '.av-dirwrap{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}'
-    + '.av-svg{display:block;background:var(--card2);border:1px solid var(--b);border-radius:8px}'
+    + '.av-dirwrap{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}'
+    + '.av-svg{display:block;background:var(--card2);border:1px solid var(--b);'
+    +   'border-radius:10px;width:100%;max-width:400px;height:auto;flex:1 1 300px}'
+    + '.av-ley{flex:0 1 210px}'
     + '.av-cz{fill:none;stroke:var(--b);stroke-width:1}'
     + '.av-cn{fill:var(--fg,#e8edf5);opacity:.3;font-size:10px;font-weight:700;'
     +   'font-family:inherit}'
@@ -3208,26 +3468,44 @@
     + '.av-canchas .av-cancha{flex:1 1 255px;max-width:340px;min-width:225px}'
     + '.av-rot{font-size:9.5px;letter-spacing:.9px;text-transform:uppercase;'
     +   'font-weight:800;margin:0 0 3px}'
+    /* la red: una cinta de verdad, no un borde con un rotulo */
     + '.av-redline{font-size:8px;letter-spacing:3px;color:var(--mut);text-align:center;'
-    +   'border-bottom:2px solid var(--b2,#1e293b);padding-bottom:2px;margin-bottom:3px}'
-    + '.av-media{display:flex;flex-direction:column;gap:3px;margin-bottom:4px}'
-    + '.av-fila{display:flex;gap:3px}'
-    + '.av-z{flex:1;min-height:50px;border:1px solid var(--b);border-radius:6px;position:relative;'
+    +   'padding-bottom:5px;margin-bottom:0;position:relative}'
+    + '.av-redline:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;'
+    +   'border-radius:2px;background:linear-gradient(90deg,rgba(255,255,255,.06),'
+    +   'rgba(255,255,255,.38),rgba(255,255,255,.06))}'
+    /* ── LA CANCHA ES UNA CANCHA ──────────────────────────────────────
+       Antes eran nueve cajas redondeadas sueltas, todas del mismo tamano
+       tuvieran 49 pelotas o 1, y habia que leer el rotulo "RED" para saber
+       la orientacion. Ahora es un solo rectangulo dividido con lineas
+       punteadas, como una cancha dibujada: el ojo la reconoce sin leer. */
+    + '.av-media{display:flex;flex-direction:column;gap:0;margin-bottom:4px;'
+    +   'border:1px solid rgba(255,255,255,.14);border-top:none;'
+    +   'border-radius:0 0 7px 7px;overflow:hidden}'
+    + '.av-fila{display:flex;gap:0}'
+    + '.av-fila:not(:last-child){border-bottom:1px dashed rgba(255,255,255,.09)}'
+    + '.av-z{flex:1;min-height:56px;border:none;border-radius:0;position:relative;'
     +   'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;'
-    +   'cursor:pointer;transition:border-color .12s}'
-    + '.av-z:hover{border-color:rgba(255,255,255,.45)}'
-    + '.av-z.vacia{background:transparent;cursor:default;opacity:.45}'
+    +   'cursor:pointer;transition:box-shadow .12s}'
+    + '.av-z:not(:last-child){border-right:1px dashed rgba(255,255,255,.09)}'
+    + '.av-z:hover{box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}'
+    + '.av-z.vacia{background:transparent!important;cursor:default}'
+    + '.av-z.vacia .zn{opacity:.3}'
     + '.av-z.on{border-color:var(--k-zone,#38bdf8);box-shadow:inset 0 0 0 1px var(--k-zone,#38bdf8)}'
     + '.av-z .zn{position:absolute;top:3px;left:5px;font-size:10px;color:var(--fg,#e8edf5);'
     +   'opacity:.55;font-weight:700}'
     + '.av-z .zp.poco{color:var(--mut)}'
-    + '.av-z .zc{font-size:16px;font-weight:800;color:var(--fg,#e8edf5);line-height:1}'
-    + '.av-z .zp{font-size:10px;font-weight:700}'
+    + '.av-z .zc{font-weight:800;color:var(--fg,#e8edf5);line-height:.95;'
+    +   'font-family:"Bebas Neue",sans-serif;letter-spacing:.5px}'
+    + '.av-z .zp{font-size:11px;font-weight:700;letter-spacing:.3px}'
     + '.av-z .zp.ok{color:var(--ok,#22c55e)}'
     + '.av-z .zp.med{color:var(--warn,#f59e0b)}'
     + '.av-z .zp.mal{color:var(--bad,#ef4444)}'
     + '.av-red{text-align:center;font-size:9px;letter-spacing:3px;color:var(--mut);'
-    +   'border-top:2px solid var(--b);margin:2px 0 9px;padding-top:4px}'
+    +   'margin:0 0 9px;padding-top:7px;position:relative}'
+    + '.av-red:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;'
+    +   'border-radius:2px;background:linear-gradient(90deg,rgba(255,255,255,.06),'
+    +   'rgba(255,255,255,.38),rgba(255,255,255,.06))}'
     + '@media(max-width:700px){.av-bar select{min-width:88px}.av-limpiar{margin-left:0}}';
 
   function estilos() {

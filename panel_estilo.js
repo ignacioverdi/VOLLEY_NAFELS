@@ -1,0 +1,764 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   panel_estilo.js — el rediseño del Panel en Vivo
+   ----------------------------------------------------------------------------
+   Va en su propio archivo A PROPOSITO, igual que analisis_vivo.js: solo lee,
+   reacomoda y pinta. Si este archivo no carga, el panel queda exactamente
+   como estaba. No hay una sola linea de panel_vivo.html que dependa de el.
+
+   QUE CAMBIA, Y POR QUE
+
+   1. LA BARRA DE ARRIBA. Habia 19 botones iguales: "Analisis", que se toca
+      cada set, pesaba lo mismo que "Como se usa", que se toca una vez en la
+      vida. Ahora quedan afuera el marcador y tres cosas; el resto se agrupa
+      en un menu POR CUANDO SE USA: antes del partido, mientras scouteas,
+      despues. Los botones no se recrean: se MUEVEN, con su onclick puesto,
+      asi que siguen haciendo exactamente lo mismo.
+
+   2. EL MARCADOR. Estaba en su propia franja, alto y con poca informacion.
+      Ahora entra en la misma barra: se mira de reojo y no se come una franja
+      entera de pantalla.
+
+   3. LAS ROTACIONES. Eran cuadraditos con un punto. Ahora se leen: la red
+      dibujada arriba, la fila de red mas clara que el fondo, el armador
+      marcado y el numero grande.
+
+   4. COMO VENIMOS. El panel tenia media pantalla vacia y habia que abrir el
+      analisis para saber como venia el partido. Ahora hay un cuadro fijo con
+      side-out, break point, eficacia de ataque y quien esta cerrando los
+      puntos, que se actualiza solo mientras scouteas. Los numeros salen de
+      anRallies(), la MISMA fuente que usa la ventana de analisis, asi que no
+      pueden decir cosas distintas.
+
+   Los colores salieron de un validador de daltonismo y contraste: los dos
+   equipos se distinguen con delta-E 23 (con 8 ya alcanza). Donde hay verde y
+   rojo —que es el par mas dificil— el numero va SIEMPRE al lado, nunca el
+   color solo.
+   ════════════════════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  /* ── los tres momentos del partido ────────────────────────────────────
+     La clasificacion es por la funcion que llama el boton, no por su texto:
+     el texto cambia con el idioma, la funcion no. */
+  var MOMENTOS = {
+    antes: ['openSetup', 'abrirEquipos', 'abrirCombos', 'toggleObj', 'abrirPlanPreparado',
+            'openConfig', 'abrirAyuda'],
+    vivo:  ['abrirAnalisis', 'closeSet', 'flotReset', 'nuevoSetAmistoso'],
+    luego: ['abrirExportMode', 'abrirVideo', 'abrirVideoVivo', 'traerSesion', 'abrirPartidos',
+            'abrirPlan']
+  };
+  /* lo que queda afuera del menu, a mano */
+  var AFUERA = ['abrirAnalisis', 'closeSet'];
+
+  var TXT = {
+    es: { antes:'ANTES DEL PARTIDO', vivo:'MIENTRAS SCOUTEÁS', luego:'DESPUÉS',
+          antesD:'Se toca una vez y no se vuelve', vivoD:'Análisis y Cerrar set están afuera, a mano',
+          luegoD:'Cuando terminó el partido', mas:'Más', menu:'Todo lo demás',
+          venimos:'CÓMO VENIMOS', cierran:'QUIÉN ESTÁ CERRANDO',
+          so:'SIDE-OUT', bp:'BREAK POINT', ef:'EFICACIA DE ATAQUE',
+          de:'de', nada:'Todavía no hay puntos cargados.',
+          leyenda:'Verde: puntos que hizo. Roja: puntos que regaló. El número es el saldo.',
+          rotTit:'ROTACIONES EN CANCHA', nosotros:'LOCAL', ellos:'VISITANTE',
+          red:'RED', saca:'saca',
+          ultimo:'LO ÚLTIMO QUE CARGASTE', sinUlt:'Todavía no cargaste ningún código.',
+          notaUlt:'Lo que acabás de escribir, en palabras. Si algo salió distinto de lo que quisiste, se ve acá sin buscar en la lista.',
+          punto:'punto', error:'error', bien:'bien', flojo:'flojo', mal:'mal',
+          masAcc:'Más' },
+    en: { antes:'BEFORE THE MATCH', vivo:'WHILE YOU SCOUT', luego:'AFTERWARDS',
+          antesD:'Touched once and never again', vivoD:'Analysis and Close set are outside, at hand',
+          luegoD:'When the match is over', mas:'More', menu:'Everything else',
+          venimos:'HOW WE ARE DOING', cierran:'WHO IS CLOSING',
+          so:'SIDE-OUT', bp:'BREAK POINT', ef:'ATTACK EFFICIENCY',
+          de:'of', nada:'No points loaded yet.',
+          leyenda:'Green: points won. Red: points given away. The number is the balance.',
+          rotTit:'ROTATIONS ON COURT', nosotros:'HOME', ellos:'AWAY',
+          red:'NET', saca:'serving',
+          ultimo:'WHAT YOU JUST TYPED', sinUlt:'No codes entered yet.',
+          notaUlt:'What you just typed, in words. If something came out different from what you meant, you see it here without hunting the list.',
+          punto:'point', error:'error', bien:'good', flojo:'weak', mal:'bad',
+          masAcc:'More' },
+    de: { antes:'VOR DEM SPIEL', vivo:'WÄHREND DU SCOUTEST', luego:'DANACH',
+          antesD:'Einmal angetippt, nie wieder', vivoD:'Analyse und Satz schliessen sind draussen, griffbereit',
+          luegoD:'Wenn das Spiel vorbei ist', mas:'Mehr', menu:'Alles andere',
+          venimos:'WIE WIR STEHEN', cierran:'WER PUNKTET',
+          so:'SIDE-OUT', bp:'BREAK POINT', ef:'ANGRIFFSEFFIZIENZ',
+          de:'von', nada:'Noch keine Punkte geladen.',
+          leyenda:'Grün: erzielte Punkte. Rot: verschenkte Punkte. Die Zahl ist die Bilanz.',
+          rotTit:'ROTATIONEN AUF DEM FELD', nosotros:'HEIM', ellos:'GAST',
+          red:'NETZ', saca:'Aufschlag',
+          ultimo:'WAS DU GERADE EINGEGEBEN HAST', sinUlt:'Noch keine Codes eingegeben.',
+          notaUlt:'Was du gerade getippt hast, in Worten. Wenn etwas anders herauskam als gemeint, siehst du es hier ohne in der Liste zu suchen.',
+          punto:'Punkt', error:'Fehler', bien:'gut', flojo:'schwach', mal:'schlecht',
+          masAcc:'Mehr' }
+  };
+  function L() {
+    var l = 'es';
+    try { if (typeof getLang === 'function') l = getLang(); } catch (e) {}
+    return TXT[l] || TXT.es;
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' })[c];
+    });
+  }
+
+  /* ══ 1 · LA HOJA DE ESTILO ═══════════════════════════════════════════ */
+  function estilo() {
+    if (document.getElementById('pe-css')) return;
+    var s = document.createElement('style');
+    s.id = 'pe-css';
+    s.textContent = [
+      /* la barra: una sola franja, con el marcador adentro */
+      '.top{height:58px;padding:0 14px;gap:12px;align-items:center;background:#0E1120;',
+      '  border-bottom:1px solid rgba(255,255,255,.07)}',
+      '.top h1{font-size:0;width:0;overflow:hidden;margin:0;padding:0}',
+      '.pe-vivo{display:flex;align-items:center;gap:8px;flex-shrink:0}',
+      '.pe-vivo i{width:6px;height:6px;border-radius:50%;background:#E8192C;display:block;',
+      '  animation:pe-lat 2.4s ease-in-out infinite}',
+      '@keyframes pe-lat{0%,100%{opacity:1}50%{opacity:.35}}',
+      '.pe-vivo b{font-family:"Barlow Condensed",sans-serif;font-size:11px;font-weight:800;',
+      '  letter-spacing:2.5px;color:#E8192C}',
+      '.pe-sep{width:1px;height:24px;background:rgba(255,255,255,.09);flex-shrink:0}',
+
+      /* el marcador, metido en la barra */
+      '.board{background:none;border:none;padding:0;margin:0;gap:14px;flex-grow:1;',
+      '  justify-content:center;min-width:0}',
+      '.board .tside{background:none;border:none;padding:0;gap:10px;flex:0 1 auto;min-width:0}',
+      '.board .tname{font-family:"Barlow Condensed",sans-serif;font-size:14px;font-weight:700;',
+      '  letter-spacing:1.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}',
+      '.board .tmeta{display:none}',
+      '.board .pts{font-family:"Bebas Neue",sans-serif;font-size:36px;line-height:.82}',
+      '.board .spacer{display:none}',
+      '.board .setbox{background:none;border:none;padding:0 4px;flex-shrink:0}',
+      '.board .setnum{font-family:"Barlow Condensed",sans-serif;font-size:10px;font-weight:700;',
+      '  letter-spacing:2px;color:#5C6880}',
+      '.board .sets{font-family:"Barlow Condensed",sans-serif;font-size:12px;font-weight:700;color:#8A93A8}',
+      '.board .serveball{width:7px;height:7px}',
+
+      /* los botones que quedan afuera */
+      '.top .tbtn{height:34px;padding:0 14px;border-radius:9px;font-family:"Barlow Condensed",sans-serif;',
+      '  font-size:12.5px;font-weight:700;letter-spacing:1px;white-space:nowrap;max-width:none}',
+      /* un solo boton rojo: el que se toca todo el tiempo. "Cerrar set" es
+         importante pero se toca cuatro veces por partido, y ademas cierra
+         algo: que no grite mas que el otro. */
+      '.top .tbtn.pri{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.16);',
+      '  color:#C3CBD9;font-weight:700}',
+      '.top .tbtn.pri:hover{border-color:rgba(232,25,44,.55);color:#FF6B79}',
+      '#pe-analisis{background:#E8192C;border:none;color:#fff;font-weight:800}',
+      '#pe-analisis:hover{background:#FF2A3E}',
+
+      /* el menú */
+      '.pe-mas{position:relative;flex-shrink:0}',
+      '#pe-mas-btn{height:34px;padding:0 13px;border:1px solid rgba(232,25,44,.45);border-radius:9px;',
+      '  background:rgba(232,25,44,.12);color:#FF6B79;font-family:"Barlow Condensed",sans-serif;',
+      '  font-size:12.5px;font-weight:700;letter-spacing:1px;display:flex;align-items:center;gap:6px}',
+      '#pe-panel{position:absolute;right:0;top:42px;z-index:900;width:min(92vw,720px);display:none;',
+      '  background:#0E1120;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:16px;',
+      '  box-shadow:0 26px 70px rgba(0,0,0,.65)}',
+      '#pe-panel.abierto{display:block}',
+      '.pe-grupo{margin-bottom:16px}.pe-grupo:last-child{margin-bottom:0}',
+      '.pe-gtit{display:flex;align-items:center;gap:7px;margin-bottom:3px}',
+      '.pe-gtit i{width:5px;height:5px;border-radius:50%;display:block}',
+      '.pe-gtit b{font-family:"Barlow Condensed",sans-serif;font-size:11px;font-weight:800;letter-spacing:2px}',
+      '.pe-gsub{font-size:12px;color:#5C6880;margin-bottom:9px}',
+      '.pe-gbtns{display:flex;flex-wrap:wrap;gap:6px}',
+      '#pe-panel .tbtn{height:32px;padding:0 12px;max-width:none;font-size:12px}',
+
+      /* las rotaciones, legibles */
+      '.rot{gap:5px}',
+      '.rot .zone{min-height:52px;border-radius:9px;background:rgba(255,255,255,.022);',
+      '  border:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;',
+      '  align-items:center;justify-content:center;gap:1px;position:relative}',
+      /* la fila de red (las tres primeras) va mas clara: se lee donde esta la red */
+      '.rot .zone:nth-child(-n+3){background:rgba(255,255,255,.055)}',
+      '.rot .zn{position:absolute;top:4px;left:6px;font-family:"Barlow Condensed",sans-serif;',
+      '  font-size:9px;font-weight:700;color:#4A5468}',
+      '.rot .pn{font-family:"Bebas Neue",sans-serif;font-size:23px;line-height:.9;color:#E7EBF3}',
+      '.rot .zone.setter{background:rgba(232,25,44,.13);border-color:rgba(232,25,44,.45)}',
+      '.rot .zone.setter .pn{color:#FF6B79}',
+      '.rot .zone.serving{box-shadow:inset 0 0 0 1px rgba(78,212,154,.5)}',
+      '.pe-red{height:3px;border-radius:2px;margin:0 0 6px;',
+      '  background:linear-gradient(90deg,rgba(255,255,255,.05),rgba(255,255,255,.32),rgba(255,255,255,.05))}',
+
+      /* Las columnas se estiran. Antes quedaban pegadas arriba (align-items
+         start) y media pantalla quedaba negra por debajo. */
+      '.wrap{align-items:stretch}',
+      '.wrap > .col{min-height:0}',
+      '.wrap > .col > .pane:last-child{flex-grow:1}',
+
+      /* el cuadro de "cómo venimos" */
+      '#pe-pulso .pe-fila{margin-bottom:12px}#pe-pulso .pe-fila:last-child{margin-bottom:0}',
+      '.pe-flbl{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:5px}',
+      '.pe-flbl span{font-family:"Barlow Condensed",sans-serif;font-size:12px;font-weight:700;',
+      '  letter-spacing:.8px;color:#9AA3B5}',
+      '.pe-fval{font-family:"Bebas Neue",sans-serif;font-size:24px;line-height:.85}',
+      '.pe-fdet{font-family:"Barlow Condensed",sans-serif;font-size:11px;font-weight:700;color:#4A5468;margin-left:6px}',
+      '.pe-bar{height:5px;border-radius:3px;background:rgba(255,255,255,.05);overflow:hidden}',
+      '.pe-bar i{display:block;height:100%;border-radius:3px}',
+      '.pe-cj{display:flex;align-items:center;gap:9px;margin-bottom:8px}',
+      '.pe-cnum{font-family:"Bebas Neue",sans-serif;font-size:16px;color:#5C6880;width:24px;flex-shrink:0}',
+      '.pe-cnom{font-size:12.5px;font-weight:600;color:#C3CBD9;flex-shrink:0;max-width:78px;',
+      '  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
+      '.pe-cbar{flex-grow:1;display:flex;gap:2px;align-items:center;min-width:0}',
+      '.pe-cbar i{height:14px;display:block}',
+      '.pe-csal{font-family:"Bebas Neue",sans-serif;font-size:17px;width:32px;text-align:right;flex-shrink:0}',
+      '.pe-nota{margin-top:11px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);',
+      '  font-size:11.5px;line-height:1.5;color:#6B7488}',
+
+
+      /* ── LA CANCHA UNICA ──────────────────────────────────────────────
+         El de arriba gira 180 grados para quedar enfrentado; cada
+         casillero gira otros 180 para que el numero se lea bien. El HTML
+         no se toca: renderRot() sigue escribiendo donde siempre. */
+      '#pe-cancha h3{margin:0 0 7px}',
+      '#pe-cancha .pe-eq{margin:3px 0 2px}',
+      '#pe-cancha .pe-eq b{font-size:10px;font-weight:800;letter-spacing:1.4px;',
+      '  display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
+      '#pe-cancha .pe-eq-h b{color:#CE7C18}',
+      '#pe-cancha .pe-eq-a b{color:#0B84C4}',
+      /* los cuatro botones en una fila entera y del mismo ancho: apretados
+         contra el nombre del equipo no entraban y se partian en tres filas */
+      '#pe-cancha .pe-bot{display:flex;gap:3px;margin:0 0 5px}',
+      '#pe-cancha .pe-bot button{flex:1 1 0;min-width:0;font-size:9px;padding:3px 2px;',
+      '  line-height:1.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
+      '#pe-cancha .pe-ring{display:block}',
+      /* OJO: esto arregla algo que YA estaba mal. .zone tiene aspect-ratio,
+         y como la altura se la daba el contenedor, cada casillero terminaba
+         midiendo 62px de ancho dentro de una grilla de 116px: la columna de
+         las zonas 2 y 1 se salia del cuadro y quedaba tapada por el panel
+         del medio. Aca la cancha ocupa el ancho entero y la altura es fija,
+         asi que no se sale nada. Solo aplica dentro de #pe-cancha: no toco
+         ninguna otra pantalla. */
+      '#pe-cancha .rot{max-width:none;width:100%;margin:0;gap:4px}',
+      /* el min-height de 52px sale de movil.css, pensado para tocar con el
+         dedo. Aca son dos canchas en una columna angosta: 40px sigue siendo
+         comodo de tocar y devuelve casi 50px de alto a la columna. */
+      '#pe-cancha .rot .zone{aspect-ratio:auto;height:40px;min-height:0}',
+      '#pe-cancha .rot .zn{font-size:9px}',
+      '#pe-cancha .rot .pn{font-size:15px;font-weight:800}',
+      '#pe-cancha .pe-arriba .rot{transform:rotate(180deg)}',
+      '#pe-cancha .pe-arriba .rot .zone{transform:rotate(180deg)}',
+      '#pe-cancha .pe-redline{display:flex;align-items:center;gap:7px;margin:3px 0}',
+      '#pe-cancha .pe-redline i{flex:1 1 auto;height:2px;border-radius:2px;',
+      '  background:linear-gradient(90deg,rgba(255,255,255,.08),rgba(255,255,255,.4),rgba(255,255,255,.08))}',
+      '#pe-cancha .pe-redline s{text-decoration:none;font-size:8px;font-weight:700;',
+      '  letter-spacing:2.2px;color:var(--mut,#7b87a3)}',
+
+      /* ── LA BARRA DE ACCIONES DEL SET ─────────────────────────────── */
+      '.pe-accmas{position:relative;display:inline-block}',
+      '#pe-acc-btn{white-space:nowrap}',
+      '#pe-acc-panel{display:none;position:absolute;right:0;top:calc(100% + 6px);',
+      '  min-width:190px;padding:8px;border-radius:11px;z-index:900;',
+      '  background:#0d1220;border:1px solid rgba(255,255,255,.12);',
+      '  box-shadow:0 16px 40px rgba(0,0,0,.6)}',
+      '#pe-acc-panel.abierto{display:flex;flex-wrap:wrap;gap:5px}',
+      '#pe-acc-panel button,#pe-acc-panel select{margin:0}',
+      '.pe-acc-pri{border-color:rgba(232,25,44,.45)!important;color:#ff8d98!important}',
+
+      /* ── LO ULTIMO QUE CARGASTE ───────────────────────────────────── */
+      '#pe-ultimo{margin-top:12px;padding-top:11px;border-top:1px solid var(--b,rgba(255,255,255,.08))}',
+      '.pe-utit{font-size:10px;font-weight:800;letter-spacing:1.8px;color:var(--mut,#7b87a3);margin-bottom:7px}',
+      '.pe-unada{font-size:12px;color:var(--dim,#5b6480)}',
+      '.pe-ulist{display:flex;flex-direction:column;gap:2px}',
+      '.pe-u{display:flex;align-items:center;gap:9px;padding:5px 8px;border-radius:7px;',
+      '  background:rgba(255,255,255,.022);font-size:12px;opacity:.62}',
+      /* el ultimo, que es el que importa, se ve entero; los de atras se apagan */
+      '.pe-u1{opacity:1;background:rgba(255,255,255,.055)}',
+      '.pe-ulado{width:4px;height:17px;border-radius:2px;flex:0 0 auto}',
+      '.pe-loc{background:#CE7C18}',
+      '.pe-vis{background:#0B84C4}',
+      '.pe-unum{font-weight:800;font-size:14px;min-width:22px}',
+      '.pe-unom{color:var(--mut,#7b87a3);white-space:nowrap;overflow:hidden;',
+      '  text-overflow:ellipsis;max-width:120px}',
+      '.pe-usk{font-size:10px;font-weight:700;letter-spacing:1.2px;color:var(--fg,#e8edf5)}',
+      /* la valoracion lleva PALABRA y color, nunca color solo */
+      '.pe-uval{font-size:10px;font-weight:800;letter-spacing:.8px;padding:1px 7px;border-radius:5px}',
+      '.pe-v-bien{background:#0e9f6e;color:#04140d}',
+      '.pe-v-ok{background:#3d8ede;color:#05121f}',
+      '.pe-v-flojo{background:#a87a20;color:#170f02}',
+      '.pe-v-mal{background:#d42a70;color:#fff0f6}',
+      '.pe-ucod{margin-left:auto;font-family:ui-monospace,Consolas,monospace;font-size:11px;',
+      '  color:var(--dim,#5b6480);white-space:nowrap}',
+      '.pe-unota{margin-top:7px;font-size:10px;color:var(--dim,#5b6480);line-height:1.5}',
+      '@media(max-width:820px){.pe-ucod,.pe-unom{display:none}}',
+      /* en telefono la barra se parte en dos filas y el marcador manda */
+      '@media(max-width:820px){',
+      '  .top{height:auto;flex-wrap:wrap;padding:8px 10px;gap:8px}',
+      '  .board{order:-1;width:100%;flex-basis:100%}',
+      '  .board .pts{font-size:30px}',
+      '  .top .tbtn{height:32px;padding:0 11px;font-size:12px}',
+      '}'
+    ].join('');
+    document.head.appendChild(s);
+  }
+
+  /* ══ 2 · AGRUPAR LA BARRA ════════════════════════════════════════════ */
+  function fnDe(b) {
+    var o = b.getAttribute('onclick') || '';
+    var m = o.match(/([A-Za-z_$][\w$]*)\s*\(/);
+    return m ? m[1] : '';
+  }
+  function momentoDe(fn) {
+    for (var k in MOMENTOS) if (MOMENTOS[k].indexOf(fn) >= 0) return k;
+    return 'luego';   /* lo que no conozco va al cajón de después, nunca se pierde */
+  }
+
+  function agrupar() {
+    var top = document.querySelector('.top');
+    if (!top || document.getElementById('pe-mas-btn')) return;
+    var t = L();
+
+    /* el cartel de EN VIVO, en lugar del título */
+    var h1 = top.querySelector('h1');
+    if (h1 && !document.querySelector('.pe-vivo')) {
+      var v = document.createElement('div');
+      v.className = 'pe-vivo'; v.setAttribute('data-notr', '');
+      v.innerHTML = '<i></i><b>EN VIVO</b>';
+      top.insertBefore(v, h1.nextSibling);
+      var sp = document.createElement('div'); sp.className = 'pe-sep';
+      top.insertBefore(sp, v.nextSibling);
+    }
+
+    /* el marcador entra en la barra */
+    var board = document.querySelector('.board');
+    if (board && board.parentNode !== top) {
+      var sp2 = top.querySelector('.spacer');
+      top.insertBefore(board, sp2 || null);
+    }
+
+    /* el menú */
+    var caja = document.createElement('div');
+    caja.className = 'pe-mas'; caja.setAttribute('data-notr', '');
+    var btn = document.createElement('button');
+    btn.id = 'pe-mas-btn'; btn.type = 'button';
+    btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = '<span>' + esc(t.mas) + '</span><span style="font-size:14px;line-height:1">&#8943;</span>';
+    var panel = document.createElement('div');
+    panel.id = 'pe-panel';
+    caja.appendChild(btn); caja.appendChild(panel);
+    top.appendChild(caja);
+
+    var COL = { antes: '#8B5CF6', vivo: '#0E9F6E', luego: '#0B84C4' };
+    var cajas = {};
+    ['antes', 'vivo', 'luego'].forEach(function (k) {
+      var g = document.createElement('div');
+      g.className = 'pe-grupo';
+      g.innerHTML = '<div class="pe-gtit"><i style="background:' + COL[k] + '"></i>' +
+                    '<b style="color:' + COL[k] + '">' + esc(t[k]) + '</b></div>' +
+                    '<div class="pe-gsub">' + esc(t[k + 'D']) + '</div>' +
+                    '<div class="pe-gbtns"></div>';
+      panel.appendChild(g);
+      cajas[k] = g.querySelector('.pe-gbtns');
+    });
+
+    /* Los botones se MUEVEN, no se copian: conservan su onclick y su id, así
+       que todo lo que el panel ya hacía con ellos sigue funcionando. */
+    var botones = [].slice.call(top.querySelectorAll('.tbtn'));
+    botones.forEach(function (b) {
+      var fn = fnDe(b);
+      if (AFUERA.indexOf(fn) >= 0) {
+        if (fn === 'abrirAnalisis') b.id = b.id || 'pe-analisis';
+        return;
+      }
+      cajas[momentoDe(fn)].appendChild(b);
+    });
+    /* las rayitas separadoras ya no separan nada */
+    [].slice.call(top.querySelectorAll('.tbsep')).forEach(function (s) { s.style.display = 'none'; });
+    /* el menú queda último */
+    top.appendChild(caja);
+
+    ['antes', 'vivo', 'luego'].forEach(function (k) {
+      if (!cajas[k].children.length) cajas[k].parentNode.style.display = 'none';
+    });
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var ab = panel.classList.toggle('abierto');
+      btn.setAttribute('aria-expanded', ab ? 'true' : 'false');
+    });
+    document.addEventListener('click', function (e) {
+      if (!caja.contains(e.target)) {
+        panel.classList.remove('abierto');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { panel.classList.remove('abierto'); btn.setAttribute('aria-expanded','false'); }
+    });
+  }
+
+  /* ══ 3 · LA RED ARRIBA DE CADA ROTACIÓN ══════════════════════════════ */
+  function redes() {
+    ['rot-h', 'rot-a'].forEach(function (id) {
+      var r = document.getElementById(id);
+      if (!r || !r.parentNode) return;
+      if (r.previousElementSibling && r.previousElementSibling.classList.contains('pe-red')) return;
+      var d = document.createElement('div');
+      d.className = 'pe-red'; d.setAttribute('data-notr', '');
+      r.parentNode.insertBefore(d, r);
+    });
+  }
+
+  /* ══ 4 · CÓMO VENIMOS ════════════════════════════════════════════════
+     Los números salen de anRallies(), que es la misma fuente de la ventana
+     de análisis. Si esa función no está, el cuadro no se dibuja y listo. */
+  function cierre(r) {
+    if (!r || !r.gano) return null;
+    var acc = r.acciones || [], gana = r.gano;
+    var pierde = (gana === 'home') ? 'away' : 'home';
+    var W = null, E = null;
+    for (var i = acc.length - 1; i >= 0; i--) {
+      var a = acc[i]; if (!a) continue;
+      if (!W && a.lado === gana && a.ev === '#' && 'SABDF'.indexOf(a.sk) >= 0) W = a;
+      if (!E && a.lado === pierde && (a.ev === '=' || (a.ev === '/' && (a.sk === 'A' || a.sk === 'B')))) E = a;
+    }
+    /* anLeer() devuelve el dorsal en .num */
+    if (W) return { jug: W.num, lado: gana, aFavor: true };
+    if (E) return { jug: E.num, lado: pierde, aFavor: false };
+    return null;
+  }
+
+  function calcular() {
+    var rs;
+    try { rs = anRallies(); } catch (e) { return null; }
+    if (!rs || !rs.length) return null;
+
+    var lado = 'home';
+    try { if (window.AV && AV.lado) lado = AV.lado; } catch (e) {}
+
+    var soTot = 0, soGan = 0, bpTot = 0, bpGan = 0, atk = 0, pts = 0, err = 0;
+    var porJug = {};
+
+    rs.forEach(function (r) {
+      if (r.recibe === lado) { soTot++; if (r.gano === lado) soGan++; }
+      if (r.saca === lado)   { bpTot++; if (r.gano === lado) bpGan++; }
+      (r.acciones || []).forEach(function (a) {
+        if (a.lado !== lado || a.sk !== 'A') return;
+        atk++;
+        if (a.ev === '#') pts++;
+        else if (a.ev === '=' || a.ev === '/') err++;
+      });
+      var c = cierre(r);
+      if (c && c.lado === lado && c.jug) {
+        var j = porJug[c.jug] || (porJug[c.jug] = { num: c.jug, a: 0, e: 0 });
+        if (c.aFavor) j.a++; else j.e++;
+      }
+    });
+
+    var lista = Object.keys(porJug).map(function (k) { return porJug[k]; });
+    lista.forEach(function (j) { j.saldo = j.a - j.e; });
+    lista.sort(function (x, y) { return y.saldo - x.saldo || y.a - x.a; });
+
+    return {
+      so: { n: soGan, t: soTot, pct: soTot ? Math.round(soGan / soTot * 100) : 0 },
+      bp: { n: bpGan, t: bpTot, pct: bpTot ? Math.round(bpGan / bpTot * 100) : 0 },
+      ef: { n: pts, t: atk, pct: atk ? Math.round((pts - err) / atk * 100) : 0 },
+      jug: lista.slice(0, 5)
+    };
+  }
+
+  /* nombreDe() necesita el lado para buscar en el plantel correcto, y si no
+     hay plantel cargado devuelve el propio numero. En ese caso no se muestra
+     nada: seria el dorsal repetido dos veces. */
+  function nombreDeJug(num, lado) {
+    try {
+      if (typeof nombreDe === 'function') {
+        var n = nombreDe(num, lado);
+        if (n && String(n) !== String(num)) return n;
+      }
+    } catch (e) {}
+    return '';
+  }
+
+  function pintarPulso() {
+    var pane = document.getElementById('pe-pulso');
+    if (!pane) return;
+    var t = L(), d = calcular();
+    if (!d) {
+      pane.innerHTML = '<h3 data-notr>' + esc(t.venimos) + '</h3>' +
+                       '<div style="font-size:12.5px;color:#6B7488;padding:6px 2px">' + esc(t.nada) + '</div>';
+      return;
+    }
+    function fila(lbl, v, det, col, ancho) {
+      return '<div class="pe-fila"><div class="pe-flbl"><span>' + esc(lbl) + '</span>' +
+             '<span><b class="pe-fval" style="color:' + col + '">' + v + '</b>' +
+             '<b class="pe-fdet">' + esc(det) + '</b></span></div>' +
+             '<div class="pe-bar"><i style="width:' + ancho + '%;background:' + col + '"></i></div></div>';
+    }
+    var h = '<h3 data-notr>' + esc(t.venimos) + '</h3>';
+    h += fila(t.so, d.so.pct + '%', d.so.n + ' ' + t.de + ' ' + d.so.t,
+              d.so.pct >= 60 ? '#0E9F6E' : d.so.pct >= 45 ? '#CE7C18' : '#DC2A5A', Math.min(100, d.so.pct));
+    h += fila(t.bp, d.bp.pct + '%', d.bp.n + ' ' + t.de + ' ' + d.bp.t,
+              d.bp.pct >= 40 ? '#0E9F6E' : d.bp.pct >= 25 ? '#CE7C18' : '#DC2A5A', Math.min(100, d.bp.pct));
+    h += fila(t.ef, d.ef.pct + '%', d.ef.n + ' ' + t.de + ' ' + d.ef.t,
+              d.ef.pct >= 25 ? '#0E9F6E' : d.ef.pct >= 10 ? '#CE7C18' : '#DC2A5A',
+              Math.min(100, Math.max(0, d.ef.pct) * 2));
+    pane.innerHTML = h;
+
+    var lado = 'home';
+    try { if (window.AV && AV.lado) lado = AV.lado; } catch (e) {}
+    var pj = document.getElementById('pe-cierran');
+    if (!pj) return;
+    if (!d.jug.length) { pj.innerHTML = '<h3 data-notr>' + esc(t.cierran) + '</h3>'; return; }
+    var max = Math.max.apply(null, d.jug.map(function (j) { return j.a + j.e; })) || 1;
+    var c = '<h3 data-notr>' + esc(t.cierran) + '</h3>';
+    d.jug.forEach(function (j) {
+      var sal = (j.saldo > 0 ? '+' : '') + j.saldo;
+      c += '<div class="pe-cj"><span class="pe-cnum">' + esc(j.num) + '</span>' +
+           '<span class="pe-cnom">' + esc(nombreDeJug(j.num, lado)) + '</span>' +
+           '<span class="pe-cbar">' +
+             '<i style="width:' + (j.a / max * 100).toFixed(1) + '%;background:#0E9F6E;border-radius:3px 0 0 3px"></i>' +
+             '<i style="width:' + (j.e / max * 100).toFixed(1) + '%;background:#DC2A5A;border-radius:0 3px 3px 0"></i>' +
+           '</span>' +
+           '<b class="pe-csal" style="color:' + (j.saldo >= 0 ? '#0E9F6E' : '#DC2A5A') + '">' + sal + '</b></div>';
+    });
+    c += '<div class="pe-nota">' + esc(t.leyenda) + '</div>';
+    pj.innerHTML = c;
+  }
+
+  function panelesPulso() {
+    if (document.getElementById('pe-pulso')) return;
+    /* va en la tercera columna, al lado de "Acciones del set" */
+    var cols = document.querySelectorAll('.wrap > .col');
+    var col = cols[cols.length - 1];
+    if (!col) return;
+    ['pe-pulso', 'pe-cierran'].forEach(function (id) {
+      var p = document.createElement('div');
+      p.className = 'pane'; p.id = id; p.setAttribute('data-notr', '');
+      col.appendChild(p);
+    });
+  }
+
+  /* ══ 5 · UNA SOLA CANCHA CON LOS DOS EQUIPOS ═════════════════════════
+     Habia dos cuadros iguales, uno sobre otro, que entre los dos se comian
+     380px de alto de la columna izquierda para decir seis numeros cada uno.
+     Y estaban al derecho los dos, asi que el 4 de uno quedaba arriba del 4
+     del otro, cuando en la cancha real el 4 de uno esta enfrente del 2 del
+     otro.
+
+     Ahora es UNA cancha: el visitante arriba, la red, nosotros abajo. El de
+     arriba se gira 180 grados con CSS —y cada casillero se gira otros 180
+     para que el numero no quede cabeza abajo—, asi que el dibujo queda
+     fisicamente bien SIN tocar el orden del HTML. Eso importa: renderRot()
+     sigue escribiendo en los mismos .pn de siempre y no se entera de nada.
+
+     Los .rot no se copian: se MUEVEN, con su id puesto. */
+  function unaCancha() {
+    if (document.getElementById('pe-cancha')) return;
+    var rh = document.getElementById('rot-h'), ra = document.getElementById('rot-a');
+    if (!rh || !ra) return;
+    var pH = rh.closest ? rh.closest('.pane') : null;
+    var pA = ra.closest ? ra.closest('.pane') : null;
+    if (!pH || !pA || pH === pA) return;
+    var t = L();
+
+    var caja = document.createElement('div');
+    caja.className = 'pane'; caja.id = 'pe-cancha'; caja.setAttribute('data-notr', '');
+    caja.innerHTML =
+      '<h3>' + esc(t.rotTit) + '</h3>' +
+      '<div class="pe-eq pe-eq-a"><b></b></div>' +
+      '<div class="pe-bot" id="pe-bot-a"></div>' +
+      '<div class="pe-ring pe-arriba"></div>' +
+      '<div class="pe-redline"><i></i><s>' + esc(t.red) + '</s><i></i></div>' +
+      '<div class="pe-ring pe-abajo"></div>' +
+      '<div class="pe-bot" id="pe-bot-h"></div>' +
+      '<div class="pe-eq pe-eq-h"><b></b></div>';
+    pH.parentNode.insertBefore(caja, pH);
+
+    /* los nombres de los equipos, los de verdad si estan cargados */
+    function nombreEq(cual, porDefecto) {
+      try {
+        var o = (typeof M !== 'undefined' && M) ? M[cual] : null;
+        var v = o && (o.nombre || o.name || o.n);
+        if (v && String(v).trim()) return String(v).trim();
+      } catch (e) {}
+      return porDefecto;
+    }
+    caja.querySelector('.pe-eq-a b').textContent = nombreEq('away', t.ellos);
+    caja.querySelector('.pe-eq-h b').textContent = nombreEq('home', t.nosotros);
+
+    /* las canchas, movidas tal cual */
+    caja.querySelector('.pe-arriba').appendChild(ra);
+    caja.querySelector('.pe-abajo').appendChild(rh);
+
+    /* y los botones de cada equipo, al lado de su nombre */
+    [[pA, 'pe-bot-a'], [pH, 'pe-bot-h']].forEach(function (par) {
+      var destino = document.getElementById(par[1]);
+      [].slice.call(par[0].querySelectorAll('button')).forEach(function (b) {
+        if (b.classList.contains('fbtn')) return;   /* el de "ventana aparte" no viene */
+        destino.appendChild(b);
+      });
+    });
+    pH.style.display = 'none';
+    pA.style.display = 'none';
+  }
+
+  /* ══ 6 · LA BARRA DE "ACCIONES DEL SET" ══════════════════════════════
+     Ocho botones chiquitos en una sola fila: en una pantalla de 1500px el
+     ultimo —"Deshacer codigo", que es el que MAS se toca— se salia del
+     borde y no se podia ni ver. Mismo criterio que arriba: los tres que se
+     usan cada punto quedan afuera, el resto pasa a un menu.
+
+     Los botones se mueven con su onclick puesto. */
+  var ACC_AFUERA = ['undoLast', 'undoRally', 'buscarCodigo'];
+
+  function barraAcciones() {
+    if (document.getElementById('pe-acc-btn')) return;
+    var cab = null;
+    [].slice.call(document.querySelectorAll('.pane > h3')).forEach(function (h) {
+      if (h.querySelector('#codes-h')) cab = h;
+    });
+    if (!cab) return;
+    var t = L();
+
+    var caja = document.createElement('span');
+    caja.className = 'pe-accmas'; caja.setAttribute('data-notr', '');
+    var btn = document.createElement('button');
+    btn.id = 'pe-acc-btn'; btn.type = 'button'; btn.className = 'hbtn';
+    btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = esc(t.masAcc) + ' &#8943;';
+    var pan = document.createElement('div');
+    pan.id = 'pe-acc-panel';
+    caja.appendChild(btn); caja.appendChild(pan);
+
+    var mueve = [].slice.call(cab.querySelectorAll('button.hbtn, select.hsel'));
+    cab.appendChild(caja);
+    mueve.forEach(function (b) {
+      if (b === btn) return;
+      var fn = fnDe(b);
+      if (b.tagName === 'BUTTON' && ACC_AFUERA.indexOf(fn) >= 0) {
+        /* el que mas se usa, primero de los que quedan afuera */
+        if (fn === 'undoLast') { b.classList.add('pe-acc-pri'); cab.insertBefore(b, caja); }
+        return;
+      }
+      pan.appendChild(b);
+    });
+    /* el orden de los que quedaron afuera: deshacer codigo, deshacer punto, buscar */
+    ['undoLast', 'undoRally', 'buscarCodigo'].forEach(function (fn) {
+      var b = [].slice.call(cab.children).filter(function (x) { return fnDe(x) === fn; })[0];
+      if (b) cab.insertBefore(b, caja);
+    });
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var ab = pan.classList.toggle('abierto');
+      btn.setAttribute('aria-expanded', ab ? 'true' : 'false');
+    });
+    document.addEventListener('click', function (e) {
+      if (!caja.contains(e.target)) {
+        pan.classList.remove('abierto'); btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  /* ══ 7 · LO ÚLTIMO QUE CARGASTE ══════════════════════════════════════
+     El panel del medio —el que mirás mientras escribís— tenia 190px de
+     negro abajo de todo. Y el error mas caro de scoutear es el que no
+     ves: escribiste 11 donde querias 1, o A+ donde querias A#, y te
+     enteras tres puntos despues.
+
+     Asi que ahi va el codigo traducido a palabras. No repite la lista de
+     la derecha, que muestra el codigo crudo: esto dice que significa.
+     Lee M.codes y lo decodifica con anLeer(), que es la MISMA funcion que
+     usa el analisis, para que nadie lea distinto. */
+  var SKN = {
+    es: { S:'SAQUE', R:'RECEPCIÓN', A:'ATAQUE', B:'BLOQUEO', D:'DEFENSA', E:'ARMADO', F:'FREEBALL' },
+    en: { S:'SERVE', R:'RECEPTION', A:'ATTACK', B:'BLOCK', D:'DIG', E:'SET', F:'FREEBALL' },
+    de: { S:'AUFSCHLAG', R:'ANNAHME', A:'ANGRIFF', B:'BLOCK', D:'ABWEHR', E:'ZUSPIEL', F:'FREEBALL' }
+  };
+  function skNom(sk) {
+    var l = 'es';
+    try { if (typeof getLang === 'function') l = getLang(); } catch (e) {}
+    return (SKN[l] || SKN.es)[sk] || sk;
+  }
+  /* la valoracion, con palabra Y color: el color solo no alcanza */
+  function valorDe(ev, sk, t) {
+    if (ev === '#') return { k:'bien',  txt: t.punto };
+    if (ev === '=') return { k:'mal',   txt: t.error };
+    if (ev === '/') return ('AB'.indexOf(sk) >= 0) ? { k:'mal', txt:t.error }
+                                                   : { k:'flojo', txt:t.flojo };
+    if (ev === '+') return { k:'bien',  txt: t.bien };
+    if (ev === '!') return { k:'ok',    txt: '!' };
+    if (ev === '-') return { k:'flojo', txt: t.flojo };
+    return { k:'ok', txt: ev };
+  }
+
+  function panelUltimo() {
+    if (document.getElementById('pe-ultimo')) return;
+    var w = document.querySelector('.wrap');
+    if (!w) return;
+    /* el del medio: el que tiene la caja de escribir el codigo */
+    var medio = null;
+    [].slice.call(w.children).forEach(function (c) {
+      if (c.querySelector && c.querySelector('.scoutbar')) medio = c;
+    });
+    if (!medio) return;
+    var d = document.createElement('div');
+    d.id = 'pe-ultimo'; d.setAttribute('data-notr', '');
+    medio.appendChild(d);
+  }
+
+  function pintarUltimo() {
+    var d = document.getElementById('pe-ultimo');
+    if (!d) return;
+    var t = L(), codes = [];
+    try { codes = (typeof M !== 'undefined' && M && M.codes) ? M.codes : []; } catch (e) { codes = []; }
+
+    var filas = [], i;
+    for (i = codes.length - 1; i >= 0 && filas.length < 6; i--) {
+      var leido = null;
+      try { leido = (typeof anLeer === 'function') ? anLeer(codes[i]) : null; } catch (e) {}
+      if (!leido) continue;                       /* los codigos de punto no se leen */
+      filas.push({ a: leido, crudo: String(codes[i] && codes[i].c || '') });
+    }
+    var firma = filas.map(function (f) { return f.crudo; }).join('|');
+    if (d.getAttribute('data-firma') === firma) return;   /* sin cambios, no repinto */
+    d.setAttribute('data-firma', firma);
+
+    if (!filas.length) {
+      d.innerHTML = '<div class="pe-utit">' + esc(t.ultimo) + '</div>' +
+                    '<div class="pe-unada">' + esc(t.sinUlt) + '</div>';
+      return;
+    }
+    var h = '<div class="pe-utit">' + esc(t.ultimo) + '</div><div class="pe-ulist">';
+    filas.forEach(function (f, idx) {
+      var a = f.a, v = valorDe(a.ev, a.sk, t);
+      var q = nombreDeJug(a.num, a.lado);
+      h += '<div class="pe-u' + (idx === 0 ? ' pe-u1' : '') + '">' +
+             '<span class="pe-ulado pe-' + (a.lado === 'home' ? 'loc' : 'vis') + '"></span>' +
+             '<span class="pe-unum">' + esc(a.num) + '</span>' +
+             (q ? '<span class="pe-unom">' + esc(q) + '</span>' : '') +
+             '<span class="pe-usk">' + esc(skNom(a.sk)) + '</span>' +
+             '<span class="pe-uval pe-v-' + v.k + '">' + esc(v.txt) + '</span>' +
+             '<span class="pe-ucod">' + esc(f.crudo) + '</span>' +
+           '</div>';
+    });
+    h += '</div><div class="pe-unota">' + esc(t.notaUlt) + '</div>';
+    d.innerHTML = h;
+  }
+
+  /* ══ ARRANQUE ════════════════════════════════════════════════════════ */
+  function arrancar() {
+    try { estilo(); }        catch (e) { try { console.error('[estilo]', e); } catch (_) {} }
+    try { agrupar(); }       catch (e) { try { console.error('[barra]', e); } catch (_) {} }
+    try { redes(); }         catch (e) { try { console.error('[red]', e); } catch (_) {} }
+    try { panelesPulso(); pintarPulso(); }
+    catch (e) { try { console.error('[pulso]', e); } catch (_) {} }
+    try { unaCancha(); }     catch (e) { try { console.error('[cancha]', e); } catch (_) {} }
+    try { barraAcciones(); } catch (e) { try { console.error('[acciones]', e); } catch (_) {} }
+    try { panelUltimo(); pintarUltimo(); }
+    catch (e) { try { console.error('[ultimo]', e); } catch (_) {} }
+
+    /* se repinta con lo que vas cargando. Medio segundo alcanza: no es un
+       videojuego y no vale la pena hacer trabajar al navegador de más. */
+    setInterval(function () {
+      try { redes(); pintarPulso(); pintarUltimo(); } catch (e) {}
+    }, 700);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+
+/* © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados */
