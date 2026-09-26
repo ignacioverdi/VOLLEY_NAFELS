@@ -27,6 +27,33 @@ if errorlevel 1 (
     goto LINKS
 )
 
+REM ================= TRAER LO QUE HAYA EN GITHUB =================
+REM  El robot de GitHub procesa los partidos que se suben desde la app y
+REM  deja el .dvw escrito en la carpeta. Si arrancamos sin traer eso, el
+REM  motor rehace la base SIN esos partidos (el .dvw no esta todavia) y al
+REM  final el push la pisa: el partido desaparece de la web aunque su .dvw
+REM  este ahi. Probado con dos clones y un repo de prueba: sin este paso la
+REM  base publicada quedaba en [p1] teniendo p1 y p2; con el paso, [p1,p2].
+REM
+REM  Trayendo PRIMERO se puede tirar HACER_TODO cuando uno quiera, sin
+REM  mirar el reloj ni esperar al robot. Va -X ours para que nunca frene
+REM  por un choque: lo unico que hace falta traer son los .dvw, y todo lo
+REM  demas se vuelve a generar mas abajo igual.
+git --version >nul 2>&1
+if errorlevel 1 goto YATRAJE
+if not exist ".git" goto YATRAJE
+set GIT_MERGE_AUTOEDIT=no
+echo  Trayendo lo ultimo de GitHub (por si el robot publico un partido)...
+git pull --no-rebase --no-edit -X ours
+if not errorlevel 1 goto TRAJEOK
+echo.
+echo  [ATENCION] No pude traer lo de GitHub. Sigo igual, pero si el robot
+echo             publico algo recien, puede que no entre en esta vuelta.
+echo             Revisa la conexion y, si hace falta, volve a tirar esto.
+:TRAJEOK
+echo.
+:YATRAJE
+
 REM ================= ABRIR LOS DATOS =================
 REM  Los datos estan cifrados en el repo. El motor necesita leerlos,
 REM  asi que los abrimos antes de procesar y los volvemos a cerrar al final.
@@ -446,6 +473,13 @@ git add -A
 git commit -m "Actualizacion %DATE%"
 git pull --no-rebase --no-edit -X ours
 git push
+REM  si el robot publico justo mientras corria esto, el push sale rechazado.
+REM  Se junta de nuevo y se reintenta una vez, en vez de quedar sin subir.
+if not errorlevel 1 goto SUBIDO
+echo  Alguien publico mientras corria esto: lo junto y reintento...
+git pull --no-rebase --no-edit -X ours
+git push
+:SUBIDO
 echo.
 echo  ==================================================
 echo      Si arriba NO hay errores en rojo, se publico OK.

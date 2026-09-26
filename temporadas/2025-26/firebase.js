@@ -421,12 +421,26 @@ function _fbToken(){
 
    5000 deja pasar el uso normal con margen de sobra y sigue frenando los
    bucles de verdad, que hacen decenas de miles (el de hoy: 8886). */
-var _fbCuenta = 0, _fbCortado = false;
+/* EL TOPE ES POR MINUTO, NO POR CARGA DE PAGINA.
+   Contarlo por carga de pagina castigaba al que hace bien su trabajo: el panel
+   en vivo publica 3 veces por accion y el panel que mira pregunta 3 veces por
+   cada accion que llega. Un partido de 4 sets son ~875 acciones: el que
+   escribe gasta ~2.600 pedidos y el que mira ~3.800. Con un tope fijo, a la
+   mitad del partido los dos paneles se apagaban solos y nadie se enteraba
+   (el unico aviso es esta linea de consola).
+
+   Un bucle de verdad no hace 3.000 pedidos en un minuto: hace decenas de
+   miles en segundos (el del incidente: 8.886). Asi que mirando la ventana de
+   un minuto se lo caza ANTES que con el tope fijo, y el uso normal —por largo
+   que sea el partido— no lo toca nunca. */
+var _fbCuenta = 0, _fbCortado = false, _fbDesde = Date.now();
 function _fbCorta(){
   if(_fbCortado) return true;
-  if(++_fbCuenta > 1200){
+  var _ahora = Date.now();
+  if(_ahora - _fbDesde >= 60000){ _fbDesde = _ahora; _fbCuenta = 0; }
+  if(++_fbCuenta > 3000){
     _fbCortado = true;
-    try{ console.warn('Volley-Stats: demasiados pedidos seguidos, se corto para no colgar la pagina.'); }catch(e){}
+    try{ console.warn('Volley-Stats: mas de 3000 pedidos en un minuto, se corto para no colgar la pagina.'); }catch(e){}
     return true;
   }
   return false;
@@ -737,3 +751,81 @@ function fbPush(path, value){
   if(document.readyState!=='loading') init();
   else document.addEventListener('DOMContentLoaded', init);
 })();
+
+
+/* ══ UNA TEMPORADA CERRADA ES UN MUSEO, NO UN PANEL ═══════════════════════
+   Las temporadas archivadas (temporadas/2025-26/...) son una copia completa
+   de la app, y esa copia apunta a la MISMA base que la temporada de hoy, con
+   las MISMAS rutas. La pieza que las separaria —fbRuta()— nunca se escribio:
+   en todo el proyecto solo se la invoca detras de un "si existe", que siempre
+   da que no.
+
+   Resultado: abrir el panel en vivo de 2025-26 mientras se juega un partido
+   le escribia encima al partido de verdad, y compartia la lista de partidos
+   guardados con el panel actual. No tienen nada que ver entre si: no deberia
+   haber ninguna vinculacion.
+
+   Esto lo corta de raiz, y va en la raiz A PROPOSITO: SOLTAR_TEMPORADAS.py
+   copia este archivo a cada temporada archivada en cada corrida, asi que la
+   proteccion viaja sola a todas —incluidas las que se archiven manana— y no
+   hay nada que recordar hacer.
+
+   Lo que se mira sigue funcionando igual: los analisis, los videos, las
+   estadisticas de esa temporada. Lo unico que no hace es escribir. */
+var FB_TEMP_CERRADA = (function(){
+  try{
+    var m = String(location.pathname || '').match(/\/temporadas\/([^\/]+)\//);
+    return m ? m[1] : '';
+  }catch(e){ return ''; }
+})();
+
+if(FB_TEMP_CERRADA){ (function(){
+  /* las rutas del partido en curso: la temporada vieja no las mira ni las toca */
+  var VIVO = /^(voley_live|voley_data|voley_codes|pv_sesion|pv_encurso|pv_partidos|video_salas|video_signal)(\/|$)/;
+
+  /* 1. nada de escribir. Ni por fbSet/fbPush (que ademas dejan copia en el
+        navegador, que es compartida con la temporada de hoy)... */
+  try{
+    window.fbSet  = function(){ /* temporada cerrada: no se guarda */ };
+    window.fbPush = function(){ /* temporada cerrada: no se guarda */ };
+  }catch(e){}
+
+  /* ...ni por los fetch sueltos que no pasan por fbSet (el panel en vivo
+     archivado y video_delay.js escriben con su propio fetch). Se contesta
+     que si, con un "null", para que nadie se cuelgue esperando. */
+  try{
+    var _fetch = window.fetch;
+    if(typeof _fetch === 'function'){
+      window.fetch = function(url, opc){
+        try{
+          var u = (typeof url === 'string') ? url : ((url && url.url) || '');
+          var m = String((opc && opc.method) || (url && url.method) || 'GET').toUpperCase();
+          if(m !== 'GET' && u.indexOf(FB_URL) === 0){
+            try{ console.warn('[temporada ' + FB_TEMP_CERRADA + '] es una temporada cerrada: no se escribe', m, u.split('?')[0]); }catch(e){}
+            return Promise.resolve(new Response('null', { status:200, headers:{'Content-Type':'application/json'} }));
+          }
+        }catch(e){}
+        return _fetch.apply(this, arguments);
+      };
+    }
+  }catch(e){}
+
+  /* 2. tampoco se lee el partido de hoy: si no, el panel de la temporada
+        vieja mostraba el partido en curso adentro de la capsula. */
+  try{
+    var _get = window.fbGet;
+    window.fbGet = function(path, cb){
+      if(VIVO.test(String(path || ''))){ try{ cb(null); }catch(e){} return; }
+      return _get(path, cb);
+    };
+    var _stream = window.fbStream;
+    if(typeof _stream === 'function'){
+      window.fbStream = function(path, cb){
+        if(VIVO.test(String(path || ''))) return null;
+        return _stream(path, cb);
+      };
+    }
+  }catch(e){}
+
+  try{ console.info('[temporada ' + FB_TEMP_CERRADA + '] modo museo: se mira, no se escribe.'); }catch(e){}
+})(); }

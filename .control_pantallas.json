@@ -1320,7 +1320,7 @@
   "tablas": {}
  },
  "panel_vivo.html": {
-  "bytes": 868227,
+  "bytes": 868686,
   "funciones": [
    "_aCp1252",
    "_alarmaGuardado",
@@ -1900,7 +1900,7 @@
   "tablas": {}
  },
  "plan_desarrollo.html": {
-  "bytes": 18419,
+  "bytes": 20073,
   "funciones": [
    "L",
    "buildLangSw",
@@ -1910,6 +1910,7 @@
    "corrText",
    "esc",
    "histDots",
+   "objTexto",
    "progress",
    "render",
    "roster",
