@@ -142,7 +142,18 @@ function _batNuevo(){
              real habia 132 defensas y la bateria mostraba cero. */
           D:{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
           Aall:na(), cent:na(), alta:na(), rap:na(),
-          rp:na(), ri:na(), rm:na(), tr:na()};
+          rp:na(), ri:na(), rm:na(), tr:na(),
+          /* ══ EL ATAQUE DE ZAGUERO, TAMBIEN EN VIVO ═══════════════════════
+             La bateria "% Atq Zaguero" ya existe en el dashboard y en el
+             perfil del jugador, porque gen_baterias.py la calcula sobre los
+             .dvw al procesar. Pero el panel en vivo arma sus baterias leyendo
+             los codigos crudos, y aca no habia casilla para el zaguero: por
+             eso, mientras el partido pasa, esa bateria mostraba una rayita.
+
+             La pelota de zaguero sale de las zonas 7, 8 o 9, que viajan en el
+             mismo codigo, en body[8]. Es exactamente la cuenta que hace
+             gen_baterias.py. */
+          zag:na()};
 }
 /* calcula acumuladores por jugador para un lado ('*' local, 'a' visitante) */
 function calcBaterias(codes, side){
@@ -201,6 +212,10 @@ function calcBaterias(codes, side){
          esas letras en vez de T. Son 1.087 ataques tipo U y 198 tipo M que
          no caian en ninguna bateria: ni rapida, ni central, ni alta. */
       else if(tipo==='T' || tipo==='U' || tipo==='M'){ Pa.rap.T++; if(res in Pa.rap) Pa.rap[res]++; }
+      /* zona de salida 7, 8 o 9 = pelota de zaguero. Va aparte de central /
+         alta / rapida: un zaguero puede ser cualquiera de esas. */
+      var _zs = body.length>8 ? body[8] : '';
+      if(_zs==='7' || _zs==='8' || _zs==='9'){ Pa.zag.T++; if(res in Pa.zag) Pa.zag[res]++; }
       else if(tipo==='H'){ Pa.alta.T++; if(res in Pa.alta) Pa.alta[res]++; }
       Pa[cat].T++; if(res in Pa[cat]) Pa[cat][res]++;
     }
@@ -260,7 +275,7 @@ function batToPcts(P){
     bqD:  det(B),
     atqD: { q:detAtq(P.cent), hb:detAtq(P.alta), x:detAtq(P.rap),
             rp:detAtq(P.rp), ri:detAtq(P.ri), rm:detAtq(P.rm),
-            tr:detAtq(P.tr) },
+            tr:detAtq(P.tr), z:detAtq(P.zag||{}) },
     /* ══ LA MISMA FORMULA QUE EL DASHBOARD ════════════════════════════════
        Habia DOS formulas de saque conviviendo. El dashboard reparte puntaje
        por valoracion; esta, mas vieja, sumaba solo tres y restaba los errores:
@@ -284,7 +299,8 @@ function batToPcts(P){
     atqrp: atk(P.rp),
     atqri: atk(P.ri),
     atqrm: atk(P.rm),
-    atqtr: atk(P.tr)
+    atqtr: atk(P.tr),
+    atqz:  atk(P.zag||{})
   };
 }
 /* API para el panel: dado el lado, devuelve {jugadores:{num:vals}, equipo:vals} */

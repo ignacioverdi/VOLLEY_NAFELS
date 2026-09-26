@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Stats Entrenamiento">Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20260926-2319"></script>
-<script src="selector_categoria.js?v=20260926-2319"></script>
+<script src="categorias_club.js?v=20260926-2333"></script>
+<script src="selector_categoria.js?v=20260926-2333"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -355,20 +355,20 @@ body::before{content:'';position:fixed;inset:0;
 
 select, select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20260926-2319"></script>
+<script src="objetivos_config.js?v=20260926-2333"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260926-2319"></script>
-<script src="firebase.js?v=20260926-2319" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260926-2319"></script>
-<script src="lang.js?v=20260926-2319"></script>
-<script src="objetivos.js?v=20260926-2319" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20260926-2319"></script>
-  <script src="video_delay.js?v=20260926-2319" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260926-2333"></script>
+<script src="firebase.js?v=20260926-2333" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-2333"></script>
+<script src="lang.js?v=20260926-2333"></script>
+<script src="objetivos.js?v=20260926-2333" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20260926-2333"></script>
+  <script src="video_delay.js?v=20260926-2333" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -657,7 +657,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260926-2319">
+<link rel="stylesheet" href="movil.css?v=20260926-2333">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase" data-t="← Dashboard"><span data-t="← Dashboard">← Dashboard</span></a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -2250,13 +2250,24 @@ function render(){
       ${teamEf===null
         ? (function(){
             /* ganadas - regaladas, sobre TODOS los fundamentos */
+            /* ══ QUE CUENTA COMO REGALADA ══════════════════════════════
+               La primera version metia adentro los errores de defensa. Y un
+               error de defensa casi nunca es un regalo: es un ataque del
+               rival que entro. Contarlo como pelota regalada le echaba al
+               equipo la culpa de los puntos que le hicieron, y el saldo
+               salia mucho peor de lo que fue.
+
+               Quedan las que se pierden SIN que el rival haga nada bien: el
+               saque afuera, el ataque afuera o bloqueado, la recepcion
+               errada y el bloqueo errado. Es la cuenta de la planilla de
+               toda la vida: puntos hechos contra errores propios.       */
             let gana=0, pierde=0;
             act.forEach(p=>{
               gana   += (p.aT[0]||0)+(p.bT[0]||0)+(p.sT[0]||0);
-              pierde += (p.aT[5]||0)+(p.aT[4]||0)+(p.sT[5]||0)+(p.rT[5]||0)+(p.bT[5]||0)+((p.dT||[])[5]||0);
+              pierde += (p.aT[5]||0)+(p.aT[4]||0)+(p.sT[5]||0)+(p.rT[5]||0)+(p.bT[5]||0);
             });
             const saldo=gana-pierde;
-            return `<div class=tstat><div class=tstat-n style="color:${saldo>=0?C.green:C.red}">${saldo>0?'+':''}${saldo}</div><div class=tstat-l>ganadas − regaladas</div></div>`;
+            return `<div class=tstat title="Ganadas: aces + puntos de ataque + bloqueos (${gana}). Regaladas: saques afuera, ataques afuera o bloqueados, recepciones y bloqueos errados (${pierde})."><div class=tstat-n style="color:${saldo>=0?C.green:C.red}">${saldo>0?'+':''}${saldo}</div><div class=tstat-l>ganadas − regaladas</div></div>`;
           })()
         : `<div class=tstat><div class=tstat-n style="color:${ec(teamEf,cF)}">${teamEfNum}%</div><div class=tstat-l>${(EFF_NOMBRE[cF]||'EFF').replace(/^EFF /,'EFF ')}</div></div>`}`;
   } else tb.style.display='none';
@@ -2580,8 +2591,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20260926-2319" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260926-2319"></script>
+<script src="plantel_nafels.js?v=20260926-2333" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260926-2333"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2680,7 +2691,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20260926-2319"></script>
+<script src="ayuda.js?v=20260926-2333"></script>
 
 
 

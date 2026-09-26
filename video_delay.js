@@ -33,11 +33,50 @@
   var playTimer = null;
   var connected = false;
 
+  /* ══ QUE PASA CUANDO SE CAE EL WIFI DEL GIMNASIO ═════════════════════════
+     Hasta ahora, nada. onconnectionstatechange miraba 'connected' y 'failed'
+     y se olvidaba de 'disconnected', que es justo lo que manda el navegador
+     cuando la red parpadea un segundo —lo normal en un gimnasio con el wifi
+     compartido por todos—. La imagen se congelaba y habia que darse cuenta,
+     cerrar, volver a escribir el codigo de sala y esperar. En medio de un set.
+
+     Ahora la conexion se rearma sola. Se espera un poco mas en cada intento
+     —3, 6, 12, hasta 20 segundos— para no castigar una red que ya esta
+     sufriendo, y el cartel dice en cual va, asi uno sabe si esperar o ir a
+     mover el telefono de lugar.
+
+     Si el que cierra es el usuario, no se reintenta nada: queremos() pasa a
+     false y los reintentos pendientes se descartan.                         */
+  var queremos = false;        /* el usuario pidio estar conectado */
+  var reintento = 0;
+  var reTimer = null;
+  var RE_MAX = 12;
+
+  function programarReintento(motivo){
+    if(!queremos) return;
+    if(reTimer) return;                    /* ya hay uno en camino */
+    if(reintento >= RE_MAX){
+      setEstado('Se cortó y no pudo volver después de '+RE_MAX+' intentos. Tocá Conectar.', 'err');
+      return;
+    }
+    reintento++;
+    var espera = Math.min(3000 * Math.pow(2, reintento-1), 20000);
+    setEstado(motivo+' · reintento '+reintento+' en '+Math.round(espera/1000)+' s…', 'wait');
+    reTimer = setTimeout(function(){
+      reTimer = null;
+      if(!queremos) return;
+      var sala = salaId;
+      _cerrarConexion();
+      if(sala) conectar(sala, true);
+    }, espera);
+  }
+
   function $(id){ return document.getElementById(id); }
 
   /* ── conectar a una sala ── */
-  function conectar(sala){
-    if(connected) desconectar();
+  function conectar(sala, esReintento){
+    if(!esReintento){ queremos = true; reintento = 0; }
+    if(connected) _cerrarConexion();
     salaId = String(sala).trim();
     viewerId = 'v'+Math.floor(Math.random()*1e9);
     setEstado('Conectando a la sala '+salaId+'…', 'wait');
@@ -55,15 +94,62 @@
       onStreamRecibido(liveStream);
     };
     pc.onconnectionstatechange = function(){
-      if(pc.connectionState==='connected'){ connected=true; setEstado('Conectado · en vivo', 'ok'); }
-      else if(pc.connectionState==='failed'){ setEstado('No se pudo conectar. Revisá la sala y el WiFi.', 'err'); }
+      var st = pc.connectionState;
+      if(st==='connected'){
+        connected=true; reintento=0;
+        if(reTimer){ clearTimeout(reTimer); reTimer=null; }
+        setEstado('Conectado · en vivo', 'ok');
+      }
+      else if(st==='disconnected'){
+        /* Un parpadeo de red: muchas veces vuelve solo en uno o dos segundos.
+           Se le da esa chance antes de rearmar todo. */
+        connected=false;
+        setEstado('Se cortó la señal… esperando que vuelva', 'wait');
+        setTimeout(function(){
+          if(pc && pc.connectionState==='disconnected') programarReintento('Se perdió la conexión');
+        }, 4000);
+      }
+      else if(st==='failed'){
+        connected=false;
+        /* ══ EL 90% DE LAS VECES ES LA RED, NO LA SALA ═══════════════════
+           El mensaje viejo —"Revisá la sala y el WiFi"— manda a revisar el
+           codigo, que casi nunca es el problema. Cuando WebRTC llega a
+           'failed' despues de juntar candidatos, lo que pasa es que los dos
+           aparatos no se ven entre si: wifi de invitados con los clientes
+           aislados, o cada uno en una red distinta. Eso se arregla poniendo
+           los dos en la misma red o compartiendo datos del celular, y
+           conviene que lo diga el cartel. */
+        /* El primer intento se hace callado: muchas veces 'failed' es un
+           tropiezo y vuelve enseguida. Del segundo en adelante ya no es
+           casualidad, y ahi si conviene decir que es la red. Ponerlo antes
+           de programarReintento no servia de nada: el cartel del reintento
+           lo tapaba a los milisegundos. */
+        programarReintento(reintento >= 1
+          ? 'La cámara y esta pantalla no se ven en esta red — poné las dos en la misma WiFi o compartí datos del celular'
+          : 'Sin conexión');
+      }
     };
 
     /* esperar la oferta del emisor */
-    var tries=0;
-    var wait = setInterval(function(){
+    /* ══ ESPERAR A LA CAMARA SIN RENDIRSE ═══════════════════════════════
+       Antes esto probaba 40 veces cada 800 ms y a los 32 segundos se daba
+       por vencido para siempre. Pero el orden natural es abrir el panel
+       PRIMERO y prender la camara despues, cuando el equipo sale a la
+       cancha: a los 32 segundos la camara todavia no empezo y el panel ya
+       se rindio, sin que nadie se entere hasta que mira la pantalla.
+
+       Ahora sigue esperando. Pasados los primeros 30 segundos baja el
+       ritmo a una consulta cada 3 segundos —para no castigar la red ni la
+       base— y el cartel dice que sigue esperando a la camara.             */
+    var tries=0, wait=null;
+    function _mirar(){
       tries++;
-      if(tries>40 || connected){ clearInterval(wait); if(!connected && tries>40) setEstado('El emisor no respondió. ¿La cámara está transmitiendo?', 'err'); return; }
+      if(connected || !queremos){ clearInterval(wait); wait=null; return; }
+      if(tries===38){
+        setEstado('Esperando a que la cámara empiece a transmitir…', 'wait');
+        clearInterval(wait);
+        wait = setInterval(_mirar, 3000);
+      }
       videoGet('video_signal/'+salaId+'/offer/'+viewerId, function(offer){
         if(offer && offer.sdp && !pc.currentRemoteDescription){
           pc.setRemoteDescription(new RTCSessionDescription(offer))
@@ -78,8 +164,11 @@
           cands.forEach(function(c){ try{ pc.addIceCandidate(new RTCIceCandidate(c)); }catch(e){} });
         }
       });
-    }, 800);
+    }
+    wait = setInterval(_mirar, 800);
+    _espTimer = wait;
   }
+  var _espTimer = null;
 
   /* ═══════════════════════════════════════════════════════════════════
      GRABACIÓN EN CICLOS CERRADOS (para que cada clip sea REPRODUCIBLE).
@@ -301,11 +390,25 @@
     });
   }
 
+  /* El usuario se va: no se reintenta mas nada. */
   function desconectar(){
+    queremos = false;
+    reintento = 0;
+    if(reTimer){ clearTimeout(reTimer); reTimer=null; }
+    _cerrarConexion();
+    setEstado('Desconectado.', '');
+  }
+
+  /* Solo cierra lo tecnico. Lo usa tambien el reintento, que SI quiere
+     volver a conectarse enseguida. */
+  function _cerrarConexion(){
     connected=false;
     if(playTimer){ clearInterval(playTimer); playTimer=null; }
     if(recTimer){ clearTimeout(recTimer); recTimer=null; }
     if(_ralloTimer){ clearInterval(_ralloTimer); _ralloTimer=null; }
+    /* el reloj que espera la oferta de la camara tambien se apaga: si no,
+       queda uno nuevo corriendo por cada reintento */
+    if(_espTimer){ clearInterval(_espTimer); _espTimer=null; }
     if(recorder && recorder.state!=='inactive'){ try{ recorder.stop(); }catch(e){} }
     recorder=null;
     if(pc){ try{ pc.close(); }catch(e){} pc=null; }
@@ -315,7 +418,7 @@
     var vLive=$('vd-live'), vDelay=$('vd-delay');
     if(vLive){ vLive.srcObject=null; vLive.style.display='none'; }
     if(vDelay){ vDelay.src=''; vDelay.srcObject=null; vDelay.style.display='none'; }
-    setEstado('Desconectado.', '');
+    if(BD){ try{ BD.parar && BD.parar(); }catch(e){} BD=null; }
   }
 
   function setEstado(msg, cls){
