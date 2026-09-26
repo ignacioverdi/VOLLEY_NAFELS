@@ -61,8 +61,9 @@
           rotTit:'ROTACIONES EN CANCHA', nosotros:'LOCAL', ellos:'VISITANTE',
           red:'RED', saca:'saca',
           atajos:'ATAJOS AL ANÁLISIS',
-          atArmT:'Reparto del armador', atArmS:'con recepción # o +',
-          atSoT:'Side out por la {z}', atSoS:'el saque entró por esa columna',
+          atArmT:'Distribución del armador', atArmS:'con recepción # y +',
+          atSoT:'Side out con recepción previa de Z{z}',
+          atSoS:'la columna: Z{z} es {zz}',
           atDirT:'Direcciones de ataque', atDirS:'por dónde pasa la pelota',
           notaAtajos:'Cada atajo deja los filtros puestos y abre el análisis donde corresponde. Las columnas son las tres calles de la cancha: la 1 son las zonas 1, 9 y 2; la 6 son la 6, la 8 y la 3; la 5 son la 5, la 7 y la 4.',
           masAcc:'Más' },
@@ -76,8 +77,9 @@
           rotTit:'ROTATIONS ON COURT', nosotros:'HOME', ellos:'AWAY',
           red:'NET', saca:'serving',
           atajos:'ANALYSIS SHORTCUTS',
-          atArmT:'Setter distribution', atArmS:'on reception # or +',
-          atSoT:'Side out down the {z}', atSoS:'the serve came into that column',
+          atArmT:'Setter distribution', atArmS:'on reception # and +',
+          atSoT:'Side out with previous reception in Z{z}',
+          atSoS:'the column: Z{z} is {zz}',
           atDirT:'Attack directions', atDirS:'where the ball goes',
           notaAtajos:'Each shortcut sets the filters and opens the analysis on the right screen. The columns are the three lanes of the court: the 1 is zones 1, 9 and 2; the 6 is 6, 8 and 3; the 5 is 5, 7 and 4.',
           masAcc:'More' },
@@ -91,8 +93,9 @@
           rotTit:'ROTATIONEN AUF DEM FELD', nosotros:'HEIM', ellos:'GAST',
           red:'NETZ', saca:'Aufschlag',
           atajos:'SCHNELLZUGRIFF',
-          atArmT:'Zuspielverteilung', atArmS:'bei Annahme # oder +',
-          atSoT:'Side out über die {z}', atSoS:'der Aufschlag kam in diese Spalte',
+          atArmT:'Zuspielverteilung', atArmS:'bei Annahme # und +',
+          atSoT:'Side out mit vorheriger Annahme in Z{z}',
+          atSoS:'die Spalte: Z{z} ist {zz}',
           atDirT:'Angriffsrichtungen', atDirS:'wo der Ball durchgeht',
           notaAtajos:'Jeder Schnellzugriff setzt die Filter und öffnet die Analyse auf dem passenden Bildschirm. Die Spalten sind die drei Bahnen des Feldes: die 1 sind die Zonen 1, 9 und 2; die 6 sind 6, 8 und 3; die 5 sind 5, 7 und 4.',
           masAcc:'Mehr' }
@@ -281,8 +284,11 @@
       /* ── LOS ATAJOS AL ANALISIS ───────────────────────────────────── */
       '#pe-atajos{margin-top:12px;padding-top:11px;',
       '  border-top:1px solid var(--b,rgba(255,255,255,.08))}',
+      '.pe-ahd{display:flex;align-items:center;gap:12px;margin-bottom:9px;flex-wrap:wrap}',
       '.pe-atit{font-size:10px;font-weight:800;letter-spacing:1.8px;',
-      '  color:var(--mut,#7b87a3);margin-bottom:8px}',
+      '  color:var(--mut,#7b87a3)}',
+      '.pe-alados{display:flex;gap:4px;margin-left:auto}',
+      '.pe-alados .pe-lb{flex:0 0 auto;max-width:130px}',
       /* en dos columnas: cinco botones en fila se hacen ilegibles, y uno
          abajo del otro comen toda la altura que acabamos de ganar */
       '.pe-alist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}',
@@ -749,11 +755,16 @@
     { k:'dir', tab:'dir', fund:'A', ico:'&#8599;', col:'#0B84C4' }
   ];
 
+  /* que zonas son cada columna, para decirlo en el propio boton en vez de
+     obligar a leer la nota de abajo */
+  var COL_TXT = { '1':'1 + 9 + 2', '6':'6 + 8 + 3', '5':'5 + 7 + 4' };
+
   function textoAtajo(a) {
     var t = L();
     if (a.k === 'arm') return { tit:t.atArmT, sub:t.atArmS };
     if (a.k === 'dir') return { tit:t.atDirT, sub:t.atDirS };
-    return { tit:t.atSoT.replace('{z}', a.zrec), sub:t.atSoS.replace('{z}', a.zrec) };
+    return { tit: t.atSoT.split('{z}').join(a.zrec),
+             sub: t.atSoS.split('{z}').join(a.zrec).split('{zz}').join(COL_TXT[a.zrec]) };
   }
 
   function panelAtajos() {
@@ -770,19 +781,49 @@
     medio.appendChild(d);
   }
 
-  function pintarAtajos() {
+  /* ── DE QUE EQUIPO ────────────────────────────────────────────────────
+     El mismo atajo sirve para las dos preguntas: "¿a donde reparte NUESTRO
+     armador?" y "¿a donde reparte el de ellos?". Asi que el equipo se elige
+     aca, y el atajo lo lleva puesto.
+
+     Tiene interruptor propio, separado del de "como venimos": uno quiere
+     poder mirar como venimos NOSOTROS y al mismo tiempo abrir la
+     distribucion del armador DE ELLOS. */
+  var PE_ATL = null;
+  function ladoAtajo() {
+    if (PE_ATL) return PE_ATL;
+    return (PE_ATL = 'home');
+  }
+  window.peAtajoLado = function (l) {
+    PE_ATL = (l === 'away') ? 'away' : 'home';
+    pintarAtajos(true);
+  };
+
+  function pintarAtajos(forzar) {
     var d = document.getElementById('pe-atajos');
     if (!d) return;
     var t = L();
-    /* se redibuja solo si cambio el idioma: no tiene datos adentro */
-    var firma = t.atajos;
+    /* se redibuja solo si cambio el idioma o el equipo: no tiene datos adentro */
+    var firma = t.atajos + '|' + ladoAtajo() + '|' +
+                nombreEq('home', '') + '|' + nombreEq('away', '');
+    if (forzar) d.removeAttribute('data-firma');
     if (d.getAttribute('data-firma') === firma) return;
     d.setAttribute('data-firma', firma);
 
-    var h = '<div class="pe-atit">' + esc(t.atajos) + '</div><div class="pe-alist">';
+    var l = ladoAtajo();
+    var h = '<div class="pe-ahd"><span class="pe-atit">' + esc(t.atajos) + '</span>' +
+              '<span class="pe-alados">' +
+                ['home', 'away'].map(function (k) {
+                  var nom = nombreEq(k, k === 'home' ? t.nosotros : t.ellos);
+                  return '<button type="button" class="pe-lb' + (l === k ? ' on' : '') +
+                         '" onclick="peAtajoLado(\'' + k + '\')" title="' + esc(nom) + '">' +
+                         esc(nom) + '</button>';
+                }).join('') +
+              '</span></div>' +
+            '<div class="pe-alist">';
     ATAJOS.forEach(function (a) {
       var x = textoAtajo(a);
-      var cfg = { tab:a.tab };
+      var cfg = { tab:a.tab, lado:l };
       ['erec', 'zrec', 'fase', 'fund'].forEach(function (k) { if (a[k]) cfg[k] = a[k]; });
       h += '<button type="button" class="pe-at" onclick=\'AV.atajo(' +
              JSON.stringify(cfg).replace(/'/g, '&#39;') + ')\'>' +
@@ -805,13 +846,13 @@
     try { unaCancha(); pintarNombresEq(); }
     catch (e) { try { console.error('[cancha]', e); } catch (_) {} }
     try { barraAcciones(); } catch (e) { try { console.error('[acciones]', e); } catch (_) {} }
-    try { panelAtajos(); pintarAtajos(); }
+    try { panelAtajos(); pintarAtajos(false); }
     catch (e) { try { console.error('[atajos]', e); } catch (_) {} }
 
     /* se repinta con lo que vas cargando. Medio segundo alcanza: no es un
        videojuego y no vale la pena hacer trabajar al navegador de más. */
     setInterval(function () {
-      try { redes(); pintarPulso(); pintarAtajos(); pintarNombresEq(); } catch (e) {}
+      try { redes(); pintarPulso(); pintarAtajos(false); pintarNombresEq(); } catch (e) {}
     }, 700);
   }
 

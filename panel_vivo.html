@@ -568,13 +568,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260926-2044"></script>
-<script src="selector_categoria.js?v=20260926-2044"></script>
-<script src="lang.js?v=20260926-2044"></script>
+<script src="categorias_club.js?v=20260926-2049"></script>
+<script src="selector_categoria.js?v=20260926-2049"></script>
+<script src="lang.js?v=20260926-2049"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260926-2044">
+<link rel="stylesheet" href="movil.css?v=20260926-2049">
 </head>
 <body>
 
@@ -722,7 +722,6 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <span id="tabarrow">▸</span> <span data-t="Tablas y análisis — mismas referencias para los dos equipos"><span data-t="Tablas y análisis — mismas referencias para los dos equipos">Tablas y análisis — mismas referencias para los dos equipos</span></span>
   </h3>
   <div class="anwrap" id="twin" hidden>
-  <div class="anfase" id="an-fase" data-notr></div>
   <div class="pane" id="pane-an">
     <h3><span data-t="Análisis en vivo"><span data-t="Análisis en vivo">Análisis en vivo</span></span>
       <button class="hbtn" onclick="ciclarAnalisis()" id="anbtn" data-t="Local">Local</button></h3>
@@ -1297,16 +1296,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260926-2044" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260926-2044"></script>
-<script src="objetivos.js?v=20260926-2044" onerror="void 0"></script>
-<script src="video_delay.js?v=20260926-2044" onerror="void 0"></script>
+<script src="firebase.js?v=20260926-2049" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-2049"></script>
+<script src="objetivos.js?v=20260926-2049" onerror="void 0"></script>
+<script src="video_delay.js?v=20260926-2049" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260926-2044" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260926-2044"></script>
+<script src="plantel_nafels.js?v=20260926-2049" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260926-2049"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -5160,20 +5159,10 @@ function filtrarFase(rows, pre){
 }
 function setAnFase(f){
   AN_FASE = f;
-  pintarAnFase(); renderStats(); renderMiniAn();
+  renderStats();
   try{ localStorage.setItem('pv_anfase', f); }catch(e){}
 }
-function pintarAnFase(){
-  const el=document.getElementById('an-fase'); if(!el) return;
-  const T = (typeof getLang==='function' && getLang()==='de')
-    ? {f:'PHASE', t:'Alles'} : (typeof getLang==='function' && getLang()==='en')
-    ? {f:'PHASE', t:'All'} : {f:'FASE', t:'Todo'};
-  el.innerHTML = '<span>'+T.f+'</span>' +
-    [['',T.t],['so','SIDE OUT'],['bp','TRANSITION']].map(x=>
-      '<button class="hbtn'+(AN_FASE===x[0]?' on':'')+'" onclick="setAnFase(\''+x[0]+'\')">'+x[1]+'</button>'
-    ).join('') +
-    '<i>El side out y la transición son dos juegos distintos: conviene mirarlos por separado.</i>';
-}
+
 function ciclarAnalisis(){
   AN_SIDE = AN_SIDE==='home' ? 'away' : 'home';
   document.getElementById('anbtn').textContent = AN_SIDE==='home' ? 'Local' : 'Visitante';
@@ -5190,7 +5179,7 @@ function renderMiniAn(){
   const tw=document.getElementById('twin'); if(tw && tw.hasAttribute('hidden')) return;
   const pre = AN_SIDE==='home'?'*':'a';
   const col = AN_SIDE==='home'?'var(--loc)':'var(--vis)';
-  const rows = filtrarFase(M.codes.filter(c=>c.k==='play' && c.c[0]===pre), pre);
+  const rows = M.codes.filter(c=>c.k==='play' && c.c[0]===pre);
   if(!rows.length){ el.innerHTML='<div style="color:var(--dim);font-size:11px;padding:8px 0">Sin acciones todavía</div>'; return; }
   let html='';
   Object.keys(SKILLS).forEach(sk=>{
@@ -5220,7 +5209,7 @@ function renderStats(){
   if(tw && tw.hasAttribute('hidden')) return;
   ['home','away'].forEach(side=>{
     const pre = side==='home'?'*':'a';
-    const rows = filtrarFase(M.codes.filter(c=>c.k==='play' && c.c[0]===pre), pre);
+    const rows = M.codes.filter(c=>c.k==='play' && c.c[0]===pre);
     const body = document.getElementById(side==='home'?'st-h':'st-a');
     const out=[];
 
@@ -5263,6 +5252,14 @@ function renderStats(){
 
        ST_TIPO guarda que boton esta elegido. Vacio = todos, como hasta hoy. */
       let acts = rows.filter(c=>c.c[3]===sk);
+      /* ══ LA FASE, SOLO EN EL ATAQUE ═════════════════════════════════════
+         Side out y transicion parten el ATAQUE en dos juegos distintos: con
+         la pelota servida y despues de defender. En los demas fundamentos la
+         division no dice nada util —el saque es siempre transicion y la
+         recepcion es siempre side out, por definicion— y encima escondia
+         filas enteras. Asi que el interruptor vive en la fila del ataque y
+         solo manda ahi. */
+      if(sk==='A') acts = filtrarFase(acts, pre);
       if(window.ST_TIPO && ST_TIPO[sk]) acts = acts.filter(c=>ST_TIPO[sk].indexOf(c.c[4])>=0);
       /* los botones se muestran aunque el filtro deje la tabla vacia: si no,
          al elegir un tipo sin acciones desaparecian y no se podia volver. */
@@ -5376,31 +5373,18 @@ document.addEventListener('keydown', e=>{
      lo que se esta escribiendo. */
   if(e.key==='Enter' && SEL_I>=0 && !document.getElementById('code').value.trim()){ e.preventDefault(); editCode(SEL_I); return; }
   if((e.ctrlKey||e.metaKey) && e.code==='Space'){ e.preventDefault(); abrirExtensiones(); return; }
-  if(e.key==='Escape'){ cerrarExtensiones(); }
-  if((e.ctrlKey||e.metaKey) && (e.key==='z'||e.key==='Z')){
-    e.preventDefault();
-    if(e.shiftKey) undoRally(); else undoLast();
-    return;
-  }
-  /* Un panel SOLTADO (clase 'suelto') sigue teniendo 'open', pero está pensado
-     justamente para seguir scouteando con él a la vista: su propio botón dice
-     «Dejalo flotando y seguí scouteando», y flotModal() devuelve el foco al
-     campo de tipeo. Sin el :not(.suelto) la guarda cortaba acá y las teclas de
-     los valores quedaban muertas: se podía escribir, pero ningún atajo respondía. */
-  if(document.querySelector('.modal.open:not(.suelto)')) return;
-  const k = keyName(e), K = CFG.keys;
+  /* ══ ESC, EL CICLO DE TRES ════════════════════════════════════════════════
+       cursor afuera   ->  ESC lo pone en el codigo de la jugada
+       cursor adentro  ->  ESC abre la ventana de cambios
+       en los cambios  ->  ESC vuelve al codigo de la jugada
 
-  /* manual 2.5.6: la tecla de alineación pega el código elegido al frame del video */
-  if(e.key===CFG.keys.sync){ e.preventDefault(); alinearCodigo(); return; }
-
-  /* ══ Esc, en tres pasos ═══════════════════════════════════════════════════
-     1) si hay una ventana abierta, la cierra
-     2) si el cursor NO está en el campo de tipeo, lo devuelve ahí
-     3) y recién si ya estabas tipeando, abre los cambios (estilo Data Volley)
-     Antes iba directo al paso 3, así que si te habías ido del campo —por
-     tocar un botón o abrir los objetivos— no había forma de volver sin el
-     mouse, y encima se abría una ventana que no habías pedido. */
+     OJO CON EL ORDEN: esto tiene que estar ANTES de la guarda de mas abajo
+     —la que corta cuando hay una ventana abierta—. Estaba despues, asi que
+     con la ventana de cambios abierta la guarda cortaba primero y Escape no
+     hacia nada: habia que salir con el mouse. El paso tres del ciclo,
+     justamente el que cierra los cambios, no se ejecutaba nunca. */
   if(e.key==='Escape'){
+    cerrarExtensiones();
     const om=document.querySelector('.modal.open');
     if(om){
       e.preventDefault();
@@ -5418,6 +5402,21 @@ document.addEventListener('keydown', e=>{
     subst(SUBS_SIDE||'home');
     return;
   }
+  if((e.ctrlKey||e.metaKey) && (e.key==='z'||e.key==='Z')){
+    e.preventDefault();
+    if(e.shiftKey) undoRally(); else undoLast();
+    return;
+  }
+  /* Un panel SOLTADO (clase 'suelto') sigue teniendo 'open', pero está pensado
+     justamente para seguir scouteando con él a la vista: su propio botón dice
+     «Dejalo flotando y seguí scouteando», y flotModal() devuelve el foco al
+     campo de tipeo. Sin el :not(.suelto) la guarda cortaba acá y las teclas de
+     los valores quedaban muertas: se podía escribir, pero ningún atajo respondía. */
+  if(document.querySelector('.modal.open:not(.suelto)')) return;
+  const k = keyName(e), K = CFG.keys;
+
+  /* manual 2.5.6: la tecla de alineación pega el código elegido al frame del video */
+  if(e.key===CFG.keys.sync){ e.preventDefault(); alinearCodigo(); return; }
 
   /* manual 2.6.1: atajos de fábrica de Data Volley */
   if((e.ctrlKey||e.metaKey) && (e.key==='v'||e.key==='V')){ e.preventDefault(); abrirVerificacion(); return; }   /* = VER */
@@ -7751,7 +7750,7 @@ function toggleTablas(){
   const abrir = t.hasAttribute('hidden');
   if(abrir){ t.removeAttribute('hidden'); a.textContent='▾';
              try{ AN_FASE = localStorage.getItem('pv_anfase') || ''; }catch(e){}
-             pintarAnFase(); renderStats(); renderMiniAn(); }
+             renderStats(); renderMiniAn(); }
   else { t.setAttribute('hidden',''); a.textContent='▸'; }
   try{ localStorage.setItem('pv_tab', abrir?'1':'0'); }catch(e){}
 }
@@ -9095,8 +9094,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260926-2044" onerror="void 0"></script>
-<script src="ayuda.js?v=20260926-2044"></script>
+<script src="volver_inicio.js?v=20260926-2049" onerror="void 0"></script>
+<script src="ayuda.js?v=20260926-2049"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -9262,8 +9261,16 @@ function stBotones(sk){
   var tipos = ST_TIPOS[sk] || [];
   if(!tipos.length) return '';
   var act = window.ST_TIPO[sk] || '';
-  var h = '<div style="display:flex;gap:4px;flex-wrap:wrap;padding:3px 0 5px">'
-        + '<button onclick="stSetTipo(\''+sk+'\',\'\')" style="'
+  var h = '<div style="display:flex;gap:4px;flex-wrap:wrap;padding:3px 0 5px">';
+  /* en el ataque, PRIMERO en que fase y despues de que tipo: son dos
+     preguntas encadenadas, no dos listas sueltas */
+  if(sk==='A'){
+    h += [['','TODO'],['so','SIDE OUT'],['bp','TRANSITION']].map(function(x){
+      return '<button onclick="setAnFase(\''+x[0]+'\')" style="'
+           + stEstilo(AN_FASE===x[0]) + '">' + x[1] + '</button>';
+    }).join('') + '<span style="width:1px;background:rgba(148,163,184,.25);margin:0 5px"></span>';
+  }
+  h += '<button onclick="stSetTipo(\''+sk+'\',\'\')" style="'
         + stEstilo(!act) + '">' + ((sk==='S'||sk==='R') ? 'TOTAL' : 'Todos') + '</button>';
   tipos.forEach(function(t){
     h += '<button onclick="stSetTipo(\''+sk+'\',\''+t[0]+'\')" style="'
@@ -10212,11 +10219,11 @@ function renderAnalisis(){
 </script>
 <!-- La barra de analisis (manual 9.5). Va en su propio archivo a proposito:
      solo lee y dibuja, y si no carga el panel sigue igual que siempre. -->
-<script src="analisis_vivo.js?v=20260926-2044" onerror="void 0"></script>
+<script src="analisis_vivo.js?v=20260926-2049" onerror="void 0"></script>
 <!-- El rediseno del panel: la barra agrupada, el marcador en la barra,
      las rotaciones legibles y el cuadro de "como venimos". Va en su
      propio archivo a proposito: solo reacomoda y pinta, y si no carga
      el panel queda exactamente como estaba. -->
-<script src="panel_estilo.js?v=20260926-2044" onerror="void 0"></script>
+<script src="panel_estilo.js?v=20260926-2049" onerror="void 0"></script>
 </body>
 </html>

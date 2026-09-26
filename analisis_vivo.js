@@ -89,6 +89,8 @@
           efArm:'Armado', ordenar:'Ordenar por', oFund:'Fundamento', oJug:'Jugador', oRot:'Rotación',
           conRec:'Con recepción', recTodas:'Todas', fase2:'Fase', todoF:'Todo',
           recEn:'Recibida en', colum:'columna', atajos:'ATAJOS',
+          vMapa:'Una cancha por salida', vFlechas:'Todas las flechas',
+          notaMapa:'Una cancha chica por cada zona desde la que se golpea, ordenadas por cuántas pelotas salen de ahí. Adentro, dónde cae cada una: el número grande es la cantidad y el chico cuánto rindió, medido contra el promedio del equipo. El borde marca el camino más usado de esa zona. Tocá una casilla para ver esas pelotas.',
           atArm:'Reparto del armador con recepción perfecta o buena',
           atSo:'Side out por la columna donde entró el saque',
           atDir:'Por dónde pasa la pelota en ataque',
@@ -113,7 +115,7 @@
           mPierde:'Vamos perdiendo', mCerca:'Diferencia 1 o 2', mLejos:'Diferencia 3 o más',
           mFinal:'Los dos en 20 o más', primeraT:'Sólo el primer contraataque',
           cerrar2:'Ocultar',
-          direcciones:'Por dónde pasa la pelota', pelotas:'pelotas',
+          direcciones:'Por dónde pasa la pelota', pelotas:'pelotas', pelota1:'pelota',
           lRinde:'Rinde', lNoRinde:'No rinde', lNormal:'Parejo o pocas pelotas',
           lGrosor:'El grosor es la cantidad', promedio:'Promedio del equipo:', lCalor:'El fondo es dónde cae',
           sinDir:'Para dibujar las direcciones hacen falta la zona de origen y la de destino. En estas acciones no están las dos.',
@@ -193,6 +195,8 @@
           efArm:'Zuspiel', ordenar:'Sortieren nach', oFund:'Element', oJug:'Spieler', oRot:'Rotation',
           conRec:'Mit Annahme', recTodas:'Alle', fase2:'Phase', todoF:'Alles',
           recEn:'Angenommen in', colum:'Spalte', atajos:'SCHNELLZUGRIFF',
+          vMapa:'Ein Feld pro Abschlagzone', vFlechas:'Alle Pfeile',
+          notaMapa:'Ein kleines Feld pro Zone, aus der geschlagen wird, sortiert nach Anzahl der Bälle. Darin, wo jeder landet: die grosse Zahl ist die Menge, die kleine der Ertrag, gemessen am Schnitt des Teams. Der Rahmen markiert den meistgenutzten Weg dieser Zone. Antippen zeigt diese Bälle.',
           atArm:'Zuspielverteilung bei perfekter oder guter Annahme',
           atSo:'Side out nach der Spalte, in der der Aufschlag ankam',
           atDir:'Wo der Ball im Angriff durchgeht',
@@ -217,7 +221,7 @@
           mPierde:'Im Rückstand', mCerca:'1 oder 2 Punkte', mLejos:'3 oder mehr',
           mFinal:'Beide ab 20', primeraT:'Nur erster Gegenangriff',
           cerrar2:'Ausblenden',
-          direcciones:'Wohin der Ball geht', pelotas:'Bälle',
+          direcciones:'Wohin der Ball geht', pelotas:'Bälle', pelota1:'Ball',
           lRinde:'Bringt', lNoRinde:'Bringt nichts', lNormal:'Neutral oder wenige Bälle',
           lGrosor:'Die Dicke ist die Anzahl', promedio:'Team-Durchschnitt:', lCalor:'Der Hintergrund ist, wo er landet',
           sinDir:'Für die Richtungen braucht es Start- und Zielzone. In diesen Aktionen fehlt eine davon.',
@@ -297,6 +301,8 @@
           efArm:'Set', ordenar:'Order by', oFund:'Skill', oJug:'Player', oRot:'Rotation',
           conRec:'With reception', recTodas:'All', fase2:'Phase', todoF:'All',
           recEn:'Received in', colum:'column', atajos:'SHORTCUTS',
+          vMapa:'One court per origin', vFlechas:'All the arrows',
+          notaMapa:'One small court per hitting zone, ordered by how many balls come from there. Inside, where each one lands: the big number is the count and the small one the return, measured against the team average. The outline marks that zone\'s most used path. Tap a cell to see those balls.',
           atArm:'Setter distribution on perfect or good reception',
           atSo:'Side out by the column the serve came into',
           atDir:'Where the ball goes on attack',
@@ -321,7 +327,7 @@
           mPierde:'Behind', mCerca:'1 or 2 apart', mLejos:'3 or more apart',
           mFinal:'Both at 20 or more', primeraT:'First transition only',
           cerrar2:'Hide',
-          direcciones:'Where the ball goes', pelotas:'balls',
+          direcciones:'Where the ball goes', pelotas:'balls', pelota1:'ball',
           lRinde:'Pays off', lNoRinde:'Does not', lNormal:'Even or few balls',
           lGrosor:'Thickness is the count', promedio:'Team average:', lCalor:'The shading is where it lands',
           sinDir:'Directions need both the starting and the landing zone. These actions do not have both.',
@@ -403,6 +409,9 @@
        no si la pelota cayo dos metros mas adelante. Guarda '1', '6' o '5'.
        Vacio = todas. */
     zrec: '',
+    /* como se dibujan las direcciones: 'mapa' (una cancha por zona de salida)
+       o 'flechas' (el dibujo de siempre, con todos los caminos encima) */
+    dirVista: 'mapa',
     enc: [],                  /* jugadores que tienen que estar en cancha    */
     rotR: '',                 /* rotacion del armador RIVAL                  */
     orden: 'fund',            /* como se agrupa la tabla: fund · jug · rot   */
@@ -1960,11 +1969,13 @@
      los numeros. */
   AV.atajo = function (cfg) {
     cfg = cfg || {};
-    var lado = AV.lado;
+    /* el equipo: el que diga el atajo, y si no dice nada el que ya estaba */
+    var lado = cfg.lado || AV.lado;
     AV.limpiar();               /* deja todo en cero y repinta */
     AV.lado = lado;
+    try { window.AN_LADO = lado; } catch (e) {}
     Object.keys(cfg).forEach(function (k) {
-      if (k !== 'tab') AV[k] = cfg[k];
+      if (k !== 'tab' && k !== 'lado') AV[k] = cfg[k];
     });
     /* abrir la ventana si todavia no esta */
     try { if (typeof abrirAnalisis === 'function') abrirAnalisis(); } catch (e) {}
@@ -2216,12 +2227,127 @@
       '<div class="av-lb">' + esc(t.promedio) + ' <b>' + base + '%</b></div>' +
       '</div>';
 
+    /* ── DOS MANERAS DE DIBUJAR LO MISMO ──────────────────────────────────
+       Las flechas tienen un problema que no se arregla afinandolas: con 16
+       caminos cruzandose sobre una sola cancha, el dibujo se convierte en un
+       ovillo. Se ve que hay movimiento, pero no se puede leer NINGUN camino
+       en particular, que es para lo que uno lo abre.
+
+       El mapa parte el ovillo: una cancha chica por cada zona de salida, y
+       adentro, donde cae la pelota que sale de ahi. Ningun trazo se cruza
+       con otro porque cada salida tiene su propio dibujo. Se lee "desde la 4
+       pegan 49 y la mitad cae en la 5" sin seguir una linea con el dedo.
+
+       Las flechas quedan, a un toque: sirven cuando lo que se busca es la
+       forma general del juego y no un camino. */
+    var selector =
+      '<div class="av-dirsel">' +
+        [['mapa', t.vMapa], ['flechas', t.vFlechas]].map(function (x) {
+          return '<button class="av-plb' + (AV.dirVista === x[0] ? ' on' : '') +
+                 '" onclick="AV.set_(\'dirVista\',\'' + x[0] + '\')">' + esc(x[1]) + '</button>';
+        }).join('') +
+      '</div>';
+
+    var cuerpo = (AV.dirVista === 'flechas')
+      ? '<div class="av-dirwrap">' + svg + leyenda + '</div>'
+      : mapaSalidas(pares, claves, rinde, base, MARGEN, z, sk, t);
+
     return '<div class="an-s av-dir" data-notr><h4>' + esc(t.direcciones) + '</h4>' +
-           '<div class="av-dirwrap">' + svg + leyenda + '</div>' +
-           '<div class="av-nota">' + esc(t.notaDir) +
-           (cortado ? ' ' + esc(t.soloTop.replace('{n}', TOPE)) : '') +
+           selector + cuerpo +
+           '<div class="av-nota">' +
+           esc(AV.dirVista === 'flechas' ? t.notaDir : t.notaMapa) +
+           (cortado && AV.dirVista === 'flechas' ? ' ' + esc(t.soloTop.replace('{n}', TOPE)) : '') +
            (AV.fund ? '' : ' ' + esc(t.verAtaque)) + '</div></div>';
   };
+
+  /* ══ EL MAPA DE SALIDAS ══════════════════════════════════════════════════
+     Una cancha chica por cada zona desde la que se golpea, ordenadas por
+     cuantas pelotas salen de ahi. Adentro de cada una, las nueve zonas del
+     campo que recibe, pintadas por cuantas pelotas cayeron.
+
+     Lo que se lee de un vistazo:
+       · el titulo dice cuantas pelotas salen de esa zona y cuanto rinden
+       · el fondo de cada casilla dice adonde van
+       · el numero grande es la cantidad; el chico, el rendimiento
+       · la casilla con mas pelotas lleva un borde: es el camino de memoria
+
+     El color del rendimiento se mide contra el promedio del propio equipo,
+     igual que en las flechas, asi que las dos vistas no pueden discutir. */
+  function mapaSalidas(pares, clavesTodas, rinde, base, MARGEN, z, sk, t) {
+    /* todos los caminos, no solo los 16 mas usados: aca no se encima nada */
+    var porOrigen = {};
+    Object.keys(pares).forEach(function (k) {
+      var pa = k.split('>');
+      var o = porOrigen[pa[0]] || (porOrigen[pa[0]] = { total:0, dest:{}, todas:[] });
+      o.dest[pa[1]] = pares[k];
+      o.total += pares[k].length;
+      o.todas = o.todas.concat(pares[k]);
+    });
+    var origenes = Object.keys(porOrigen).sort(function (x, y) {
+      return porOrigen[y].total - porOrigen[x].total;
+    });
+    if (!origenes.length) return '<div class="av-vacio">' + esc(t.sinDir) + '</div>';
+
+    /* las filas del campo que RECIBE la pelota */
+    var filas = (z.zf === 'r') ? FILA_LEJOS : FILA_CERCA;
+    var netAbajo = (z.zf === 'r');
+
+    var h = '<div class="av-msal">';
+    origenes.forEach(function (o) {
+      var d = porOrigen[o], v = rinde(d.todas);
+      var maxD = 0;
+      Object.keys(d.dest).forEach(function (zz) {
+        if (d.dest[zz].length > maxD) maxD = d.dest[zz].length;
+      });
+      /* Si dos caminos van iguales se marcan LOS DOS. Marcar solo el primero
+         seria inventar una preferencia que el jugador no tuvo: de la zona 4
+         pegaron 14 a la 1 y 14 a la 6, y eso es justamente el dato. */
+      var esMejor = function (zz) {
+        return maxD > 0 && d.dest[zz] && d.dest[zz].length === maxD;
+      };
+      h += '<div class="av-msc">';
+      h += '<div class="av-mshd">' +
+             '<b>' + esc(t.zona) + ' ' + esc(o) + '</b>' +
+             '<span>' + d.total + ' ' + esc(d.total === 1 ? t.pelota1 : t.pelotas) + '</span>' +
+             '<i class="' + (v < base - MARGEN ? 'mal' : (v > base + MARGEN ? 'ok' : '')) + '">' +
+               v + '%</i>' +
+           '</div>';
+      /* ── DE QUE LADO VA LA RED ──────────────────────────────────────
+         Estas canchitas tienen que leerse igual que la cancha grande, si no
+         una dice una cosa y la otra la contraria.
+
+         Si la pelota va al campo RIVAL, las filas son 1-6-5 / 9-8-7 / 2-3-4:
+         la fila pegada a la red (2-3-4) queda ABAJO, asi que la red se
+         dibuja abajo. Si la pelota viene a NUESTRO campo, las filas son
+         4-3-2 / 7-8-9 / 5-6-1 y la red queda arriba. */
+      if (!netAbajo) h += '<div class="av-msred arriba"><s>' + esc(t.red) + '</s></div>';
+      h += '<div class="av-msgrid' + (netAbajo ? ' abajo' : '') + '">';
+      filas.forEach(function (fila) {
+        fila.forEach(function (zz) {
+          var lst = d.dest[zz] || [];
+          var nn = lst.length;
+          var op = nn ? (0.10 + 0.55 * (nn / (maxD || 1))) : 0;
+          var vv = nn ? rinde(lst) : null;
+          var cls = 'av-msz' + (nn ? '' : ' vacia') + (esMejor(zz) ? ' mejor' : '');
+          var id = nn ? lote(lst) : '';
+          h += '<div class="' + cls + '"' +
+               (op ? ' style="background:rgba(56,189,248,' + op.toFixed(3) + ')"' : '') +
+               (id ? ' onclick="AV.ver(' + id + ')" title="' + esc(o + ' → ' + zz + ' · ' +
+                     nn + ' ' + t.pelotas + ' · ' + vv + '%') + '"' : '') + '>' +
+                 '<span class="zn">' + esc(zz) + '</span>' +
+                 (nn ? '<b>' + nn + '</b>' +
+                       '<i class="' + (vv < base - MARGEN ? 'mal' : (vv > base + MARGEN ? 'ok' : '')) + '">' +
+                       vv + '%</i>'
+                     : '') +
+               '</div>';
+        });
+      });
+      h += '</div>';
+      if (netAbajo) h += '<div class="av-msred abajo"><s>' + esc(t.red) + '</s></div>';
+      h += '</div>';
+    });
+    return h + '</div>';
+  }
 
 
   /* ── LA PLANILLA (manual 9.5.8, "Worksheet") ─────────────────────────────
@@ -3598,6 +3724,50 @@
     + '.av-mapa h4{margin:0 0 8px;font-size:11px;letter-spacing:1px;text-transform:uppercase;'
     +   'color:var(--k-zone,#38bdf8)}'
     /* ── LAS DIRECCIONES ────────────────────────────────────────────────── */
+    /* ── EL MAPA DE SALIDAS ─────────────────────────────────────────── */
+    + '.av-dirsel{display:flex;gap:5px;margin:0 0 12px}'
+    + '.av-msal{display:flex;flex-wrap:wrap;gap:14px}'
+    + '.av-msc{flex:0 1 188px;background:var(--card2);border:1px solid var(--b);'
+    +   'border-radius:11px;padding:11px 12px 12px}'
+    + '.av-mshd{display:flex;align-items:baseline;gap:7px;margin-bottom:8px}'
+    + '.av-mshd b{font-size:12.5px;font-weight:800;letter-spacing:.6px;'
+    +   'color:var(--k-zone,#38bdf8)}'
+    + '.av-mshd span{font-size:10.5px;color:var(--mut)}'
+    + '.av-mshd i{margin-left:auto;font-style:normal;font-size:13px;font-weight:800;'
+    +   'color:var(--mut)}'
+    + '.av-mshd i.ok{color:var(--ok,#22c55e)}'
+    + '.av-mshd i.mal{color:var(--bad,#ef4444)}'
+    /* la red del campo que recibe, para no leer el dibujo al reves */
+    + '.av-msred{text-align:center;font-size:7.5px;letter-spacing:2.5px;color:var(--dim);'
+    +   'position:relative}'
+    + '.av-msred s{text-decoration:none}'
+    + '.av-msred.arriba{padding-bottom:4px}'
+    + '.av-msred.abajo{padding-top:4px}'
+    + '.av-msred:after{content:"";position:absolute;left:0;right:0;height:2px;'
+    +   'border-radius:2px;background:linear-gradient(90deg,rgba(255,255,255,.06),'
+    +   'rgba(255,255,255,.34),rgba(255,255,255,.06))}'
+    + '.av-msred.arriba:after{bottom:0}'
+    + '.av-msred.abajo:after{top:0}'
+    + '.av-msgrid{display:grid;grid-template-columns:repeat(3,1fr);'
+    +   'border:1px solid rgba(255,255,255,.1);border-top:none;'
+    +   'border-radius:0 0 6px 6px;overflow:hidden}'
+    + '.av-msgrid.abajo{border-top:1px solid rgba(255,255,255,.1);border-bottom:none;'
+    +   'border-radius:6px 6px 0 0}'
+    + '.av-msz{position:relative;min-height:46px;display:flex;flex-direction:column;'
+    +   'align-items:center;justify-content:center;gap:1px;cursor:pointer;'
+    +   'border-right:1px dashed rgba(255,255,255,.08);'
+    +   'border-bottom:1px dashed rgba(255,255,255,.08)}'
+    + '.av-msz:hover{filter:brightness(1.25)}'
+    + '.av-msz.vacia{cursor:default;background:transparent}'
+    + '.av-msz.vacia:hover{filter:none}'
+    /* el camino de memoria de esa zona: el que mas se repite */
+    + '.av-msz.mejor{box-shadow:inset 0 0 0 1.5px rgba(206,124,24,.75)}'
+    + '.av-msz .zn{position:absolute;top:3px;left:5px;font-size:8.5px;font-weight:700;'
+    +   'color:var(--dim)}'
+    + '.av-msz b{font-size:17px;font-weight:800;line-height:1;color:var(--fg,#e8edf5)}'
+    + '.av-msz i{font-style:normal;font-size:9.5px;font-weight:700;color:var(--mut)}'
+    + '.av-msz i.ok{color:var(--ok,#22c55e)}'
+    + '.av-msz i.mal{color:var(--bad,#ef4444)}'
     + '.av-dirwrap{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}'
     + '.av-svg{display:block;background:var(--card2);border:1px solid var(--b);'
     +   'border-radius:10px;width:100%;max-width:400px;height:auto;flex:1 1 300px}'
