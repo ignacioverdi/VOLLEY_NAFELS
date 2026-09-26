@@ -492,6 +492,50 @@
      saber: de todas las que toco, cuantas dejo jugables. */
   function usaPositividad(sk){ return 'SRDFE'.indexOf(sk) >= 0; }
 
+  /* ── LA EFICACIA: LA MISMA FUNCION QUE EL DASHBOARD ──────────────────────
+     El panel tenia su propia cuenta —(# menos errores) sobre el total— y el
+     dashboard otra, con pesos. Las dos se llamaban "EFF" y daban numeros
+     distintos para el mismo equipo. En el ataque coincidian de casualidad,
+     porque ahi las dos son la eficacia clasica.
+
+     Esto NO copia la formula del dashboard: LLAMA a la suya. window.VB_EFF
+     vive en objetivos_config.js, que el panel ya carga, y es donde estan las
+     cuatro cuentas. El archivo avisa que antes habia 28 copias repartidas en
+     ocho archivos y que tres veces una pantalla mostro un numero distinto
+     sin que nadie entendiera por que. No vamos a agregar la copia 29.
+
+     La escala de saque, recepcion y defensa va de 0 a 100: el error vale 0,
+     la perfecta 100 y el neutro 50. El ataque es la eficacia de siempre y
+     puede dar negativo, que es como se mide en todos lados.
+
+     Bloqueo, armado y freeball no tienen indice en el dashboard, asi que se
+     quedan con la cuenta clasica del panel. */
+  function efFundamento(sk, c, n) {
+    if (!n) return 0;
+    /* un solo objeto sirve para las cuatro: VB_EFF acepta estos nombres */
+    var o = { total:n, Punto:c['#'], Pos:c['+'], Adm:c['!'],
+              Neg:c['-'], Vend:c['/'], Err:c['='] };
+    try {
+      var V = window.VB_EFF;
+      if (V) {
+        if (sk === 'S' && V.saque)     return V.saque(o);
+        if (sk === 'R' && V.recepcion) return V.recepcion(o);
+        if (sk === 'D' && V.defensa)   return V.defensa(o);
+        if (sk === 'A' && V.ataque)    return V.ataque(o);
+      }
+    } catch (e) {}
+    /* ── BLOQUEO ────────────────────────────────────────────────────────
+       No tiene indice ponderado: el sistema lo mide con dos porcentajes
+       simples, que son las dos baterias del dashboard.
+           POS% = (# + ‹+›) / total   -> la bateria "Blq #+"
+           EF%  =  #        / total   -> la bateria "% Blq #"
+       Asi el panel dice exactamente los mismos dos numeros que el
+       dashboard, con los mismos objetivos ya calibrados. */
+    if (sk === 'B') return Math.round(c['#'] / n * 100);
+    var err = c['='] + (('AB'.indexOf(sk) >= 0) ? c['/'] : 0);
+    return Math.round((c['#'] - err) / n * 100);
+  }
+
   function nom(num, lado){
     var q = '';
     try { q = (typeof nombreDe === 'function') ? (nombreDe(num, lado) || '') : ''; }
@@ -849,7 +893,7 @@
     var pos = c['#'] + c['+'] + (sk === 'S' ? c['/'] : 0);
     var err = c['='] + (['A','B'].indexOf(sk) >= 0 ? c['/'] : 0);
     var posP = Math.round(pos / n * 100);
-    var efP  = Math.round((c['#'] - err) / n * 100);
+    var efP  = efFundamento(sk, c, n);
     /* la misma fila, en la vista de arriba */
     if (TAB_NUEVA !== null) {
       TAB_NUEVA += filaNueva(rot, acc, porEv, c, sk, usaPos, posP, efP);
@@ -1002,7 +1046,7 @@
     var usaPos = usaPositividad(sk);
     var pos = c['#'] + c['+'] + (sk === 'S' ? c['/'] : 0);
     var err = c['='] + (['A','B'].indexOf(sk) >= 0 ? c['/'] : 0);
-    var v = usaPos ? Math.round(pos / n * 100) : Math.round((c['#'] - err) / n * 100);
+    var v = usaPos ? Math.round(pos / n * 100) : efFundamento(sk, c, n);
     /* con menos de 3 pelotas el porcentaje no dice nada: se muestra igual,
        pero apagado, para que nadie lea un -100% de una sola bola como un dato */
     var col = n < 3 ? 'poco' : (v >= 45 ? 'ok' : (v >= 20 ? 'med' : 'mal'));
@@ -1135,7 +1179,7 @@
     return { n:n, pt:c['#'], err:err,
              kill: n ? Math.round(c['#'] / n * 100) : 0,
              erp:  n ? Math.round(err / n * 100) : 0,
-             efi:  n ? Math.round((c['#'] - err) / n * 100) : 0 };
+             efi:  efFundamento(sk, c, n) };
   }
   function pinta(v, bueno, malo) {
     return '<span class="num ' + (v >= bueno ? 'pos' : (v <= malo ? 'neg' : '')) + '">' + v + '%</span>';
@@ -1540,7 +1584,7 @@
     var usaPos = usaPositividad(sk);
     var pos = c['#'] + c['+'] + (sk === 'S' ? c['/'] : 0);
     var err = c['='] + (['A','B'].indexOf(sk) >= 0 ? c['/'] : 0);
-    var v = usaPos ? Math.round(pos / n * 100) : Math.round((c['#'] - err) / n * 100);
+    var v = usaPos ? Math.round(pos / n * 100) : efFundamento(sk, c, n);
     var col = n < 3 ? 'poco' : (v >= 45 ? 'ok' : (v >= 20 ? 'med' : 'mal'));
     /* la clase tambien en la casilla: asi el fondo se tine y la grilla se
        barre de un vistazo, sin leer numero por numero. El numero sigue
@@ -2129,7 +2173,7 @@
       EV.forEach(function (e) { cc[e] = lst.filter(function (a) { return a.ev === e; }).length; });
       var pos = cc['#'] + cc['+'] + (sk === 'S' ? cc['/'] : 0);
       var err = cc['='] + (['A','B'].indexOf(sk) >= 0 ? cc['/'] : 0);
-      return usaPos ? Math.round(pos/n*100) : Math.round((cc['#'] - err)/n*100);
+      return usaPos ? Math.round(pos/n*100) : efFundamento(sk, cc, n);
     }
     var base = rinde(acc.filter(function (a) { return a.zi && a.zf; }));
     var MARGEN = 6;   /* seis puntos de diferencia para pintar algo */
@@ -2411,7 +2455,7 @@
          perfectas. Separadas dicen cosas distintas: un equipo puede recibir
          muy positivo y perfecto casi nunca, y el armador lo sufre. */
       else if (k === 'cExc')  out.push([n ? Math.round(c['#']/n*100) + '%' : null, null]);
-      else if (k === 'cEfi')  out.push([n ? Math.round((c['#'] - err)/n*100) + '%' : null, null]);
+      else if (k === 'cEfi')  out.push([n ? efFundamento(sk, c, n) + '%' : null, null]);
       else out.push([null, null]);
     });
     return out;
@@ -2674,8 +2718,9 @@
         if (!n) { h += '<div class="av-az vacia"><span class="zn">' + z + '</span></div>'; return; }
         var cc = {};
         EV.forEach(function (e) { cc[e] = lst.filter(function (a) { return a.ev === e; }).length; });
-        var err = cc['='] + cc['/'];
-        var ef = Math.round((cc['#'] - err) / n * 100);
+        /* acá SIEMPRE son ataques: esta cancha es el reparto del armador.
+           No hay un 'sk' en este alcance y no tiene que haberlo. */
+        var ef = efFundamento('A', cc, n);
         var col = n < 3 ? 'poco' : (ef >= 35 ? 'ok' : (ef >= 10 ? 'med' : 'mal'));
         var peso = maxN ? (0.10 + 0.55 * (n / maxN)) : 0.10;
         var pct = tot ? Math.round(n / tot * 100) : 0;

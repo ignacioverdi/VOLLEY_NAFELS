@@ -1820,26 +1820,42 @@ function objSingleBat(id,val,meta,cls,objLine,vals){
   try{ window.__objMeta = window.__objMeta || {}; window.__objMeta[_mid] = {id:id, meta:meta, vals:vals||null,
       quien:(meta&&meta.__fila)||null,
       jug:(meta&&meta.__jug)||null}; }catch(e){}
+  /* ══ POR QUE YA NO ES UNA PILA ════════════════════════════════════════════
+     La pila vertical se comia 72px de alto para decir UN numero, y ese numero
+     ya estaba escrito arriba en letra grande. Con trece fundamentos en una
+     sola fila, esos 72px salian de algun lado: del nombre. Y el nombre
+     terminaba cortado —"% ATQ RÁPID…", "% RECEPCIÓ…"—, que en un televisor,
+     a cinco metros, no se puede ni adivinar.
+
+     La barra horizontal dice exactamente lo mismo —donde estas entre el peor
+     de la liga y el mejor, con la marca del objetivo— y ocupa 8px en vez de
+     72. Con esos 64px de sobra el nombre entra ENTERO, en dos renglones si
+     hace falta, y el numero puede ser mas grande.
+
+     Sigue siendo una sola fila de trece: la restriccion del televisor no se
+     toca. Lo unico que cambia es en que se gasta el alto. */
   return '<div id="'+_mid+'" title="'+tip+'" onclick="objTocarBat(\''+_mid+'\')" '
-    + 'style="flex:1;min-width:60px;max-width:110px;display:flex;cursor:pointer;'
-    + 'flex-direction:column;align-items:center;gap:3px;padding:7px 3px 6px;'
-    + 'border:1px solid '+cls.border+';border-radius:9px;background:'+cls.bg+';'
+    + 'style="flex:1;min-width:64px;max-width:120px;display:flex;cursor:pointer;'
+    + 'flex-direction:column;align-items:center;gap:4px;padding:9px 6px 7px;'
+    + 'border:1px solid '+cls.border+';border-radius:10px;background:'+cls.bg+';'
     + 'position:relative;overflow:hidden;font-family:Barlow Condensed,sans-serif">'
     + '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+cls.color+'"></div>'
-    + '<div style="font-size:10px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;'
-    + 'color:#94a3b8;line-height:1.1;text-align:center;white-space:nowrap;overflow:hidden;'
-    + 'text-overflow:ellipsis;max-width:100%">'+nombre+'</div>'
-    + '<div style="font-size:22px;font-weight:900;line-height:1;color:'+cls.color+'">'+txt+'</div>'
-    + '<div style="width:32px;height:72px;display:flex;flex-direction:column;align-items:center">'
-      + '<div style="width:14px;height:5px;border-radius:3px 3px 0 0;background:'+cls.color+';opacity:.7;flex-shrink:0"></div>'
-      + '<div style="position:relative;width:32px;flex:1;border-radius:4px;overflow:hidden;border:2px solid '+cls.color+'">'
-        + '<div style="position:absolute;inset:0;background:#07080f"></div>'
-        + (val!==null ? '<div style="position:absolute;bottom:0;left:0;right:0;height:'+fh+'%;background:'+cls.color+';opacity:.85"></div>' : '')
-        + '<div style="position:absolute;left:0;right:0;bottom:'+oh+'%;height:2px;background:#fff;opacity:.85"></div>'
-      + '</div>'
+    /* el nombre entero: dos renglones si hace falta, y nada de recortes */
+    + '<div style="font-size:11px;font-weight:800;letter-spacing:.2px;text-transform:uppercase;'
+    + 'color:#c3cbd9;line-height:1.15;text-align:center;min-height:2.3em;display:flex;'
+    + 'align-items:center;justify-content:center;word-break:break-word;hyphens:auto">'+nombre+'</div>'
+    + '<div style="font-size:26px;font-weight:900;line-height:1;color:'+cls.color+'">'+txt+'</div>'
+    /* la barra: el relleno es donde estas, la marca blanca es el objetivo */
+    + '<div style="position:relative;width:100%;height:8px;border-radius:4px;'
+    + 'background:rgba(255,255,255,.07);overflow:hidden;margin-top:1px">'
+      + (val!==null ? '<div style="position:absolute;top:0;bottom:0;left:0;width:'+fh+'%;'
+                    + 'background:'+cls.color+';opacity:.9;border-radius:4px"></div>' : '')
+      + '<div style="position:absolute;top:-1px;bottom:-1px;left:'+oh+'%;width:2px;'
+      + 'background:#fff;opacity:.9"></div>'
     + '</div>'
-    + (n!=null ? '<div style="font-size:8px;font-weight:700;color:#8395ac">'+n+' '+ot('acc.')+'</div>' : '')
-    + '<div style="font-size:8px;font-weight:700;color:#64748b">'+ot('obj')+' '+objLine+'</div>'
+    + '<div style="font-size:9px;font-weight:700;color:#7b87a3;white-space:nowrap">'
+      + ot('obj')+' '+objLine+(n!=null ? ' · '+n+' '+ot('acc.') : '')
+    + '</div>'
     + '</div>';
 }
 

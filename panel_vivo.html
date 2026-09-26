@@ -568,13 +568,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260926-2049"></script>
-<script src="selector_categoria.js?v=20260926-2049"></script>
-<script src="lang.js?v=20260926-2049"></script>
+<script src="categorias_club.js?v=20260926-2116"></script>
+<script src="selector_categoria.js?v=20260926-2116"></script>
+<script src="lang.js?v=20260926-2116"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260926-2049">
+<link rel="stylesheet" href="movil.css?v=20260926-2116">
 </head>
 <body>
 
@@ -1296,16 +1296,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260926-2049" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260926-2049"></script>
-<script src="objetivos.js?v=20260926-2049" onerror="void 0"></script>
-<script src="video_delay.js?v=20260926-2049" onerror="void 0"></script>
+<script src="firebase.js?v=20260926-2116" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-2116"></script>
+<script src="objetivos.js?v=20260926-2116" onerror="void 0"></script>
+<script src="video_delay.js?v=20260926-2116" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260926-2049" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260926-2049"></script>
+<script src="plantel_nafels.js?v=20260926-2116" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260926-2116"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -5168,11 +5168,48 @@ function ciclarAnalisis(){
   document.getElementById('anbtn').textContent = AN_SIDE==='home' ? 'Local' : 'Visitante';
   renderMiniAn();
 }
+/* ══ LA EFICACIA, LA MISMA DE TODA LA APP ═══════════════════════════════════
+   window.VB_EFF vive en objetivos_config.js, que esta pagina ya carga, y es
+   donde estan las cuatro cuentas del dashboard y de las baterias. Se LLAMA,
+   no se copia: ese archivo avisa que antes habia 28 copias repartidas en
+   ocho archivos y que tres veces una pantalla mostro un numero distinto al
+   resto sin que nadie entendiera por que.
+
+   Saque, recepcion y defensa van en escala 0 a 100 (error 0, perfecta 100,
+   neutro 50). El ataque es la eficacia clasica y puede dar negativo.
+   Bloqueo, armado y freeball no tienen indice en el dashboard: se quedan con
+   la cuenta de siempre. */
+function efFund(sk, cnt, n){
+  if(!n) return null;
+  var o = { total:n, Punto:cnt['#'], Pos:cnt['+'], Adm:cnt['!'],
+            Neg:cnt['-'], Vend:cnt['/'], Err:cnt['='] };
+  try{
+    var V = window.VB_EFF;
+    if(V){
+      if(sk==='S' && V.saque)     return V.saque(o);
+      if(sk==='R' && V.recepcion) return V.recepcion(o);
+      if(sk==='D' && V.defensa)   return V.defensa(o);
+      if(sk==='A' && V.ataque)    return V.ataque(o);
+    }
+  }catch(e){}
+  /* ── BLOQUEO ────────────────────────────────────────────────────────
+     No tiene indice ponderado: el sistema lo mide con dos porcentajes
+     simples, que son las dos baterias del dashboard.
+       POS% = (# + ‹+›) / total   -> la bateria "Blq #+"
+       EF%  =  #    / total   -> la bateria "% Blq #"
+     Asi el panel dice exactamente los mismos dos numeros que el
+     dashboard, con los mismos objetivos ya calibrados. */
+  if (sk === 'B') return Math.round(cnt['#'] / n * 100);
+  var errs = cnt['='] + (('AB'.indexOf(sk)>=0)?cnt['/']:0);
+  return Math.round((cnt['#']-errs)/n*100);
+}
+
+/* La barra chica de "análisis en vivo": muestra POSITIVIDAD, que es lo que
+   se mira de reojo mientras se carga —cuántas salieron bien—, no el índice. */
 function efDe(sk,cnt,n){
   if(!n) return null;
   if('SRDF'.indexOf(sk)>=0) return Math.round((cnt['#']+cnt['+']+(sk==='S'?cnt['/']:0))/n*100);
-  const errs = cnt['='] + (('AB'.indexOf(sk)>=0)?cnt['/']:0);
-  return Math.round((cnt['#']-errs)/n*100);
+  return efFund(sk, cnt, n);
 }
 function renderMiniAn(){
   const el=document.getElementById('mini-an'); if(!el) return;
@@ -5235,8 +5272,7 @@ function renderStats(){
          discutir con otro. */
       const pos  = cnt['#']+cnt['+']+(sk==='S'?cnt['/']:0);
       const posP = Math.round(pos/n*100);
-      const errs = cnt['='] + (['A','B'].indexOf(sk)>=0?cnt['/']:0);
-      const efP  = Math.round((cnt['#']-errs)/n*100);
+      const efP  = efFund(sk, cnt, n);
       return '<tr class="'+clase+'"><td class="k">'+nombre+'</td><td><span class="num">'+n+'</span></td>'+
         EVALS.map(e=>'<td><span class="num">'+(cnt[e]||'·')+'</span></td>').join('')+
         '<td><span class="num '+(posP<0?'neg':'pos')+'">'+posP+'%</span></td>'+
@@ -9094,8 +9130,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260926-2049" onerror="void 0"></script>
-<script src="ayuda.js?v=20260926-2049"></script>
+<script src="volver_inicio.js?v=20260926-2116" onerror="void 0"></script>
+<script src="ayuda.js?v=20260926-2116"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -10219,11 +10255,11 @@ function renderAnalisis(){
 </script>
 <!-- La barra de analisis (manual 9.5). Va en su propio archivo a proposito:
      solo lee y dibuja, y si no carga el panel sigue igual que siempre. -->
-<script src="analisis_vivo.js?v=20260926-2049" onerror="void 0"></script>
+<script src="analisis_vivo.js?v=20260926-2116" onerror="void 0"></script>
 <!-- El rediseno del panel: la barra agrupada, el marcador en la barra,
      las rotaciones legibles y el cuadro de "como venimos". Va en su
      propio archivo a proposito: solo reacomoda y pinta, y si no carga
      el panel queda exactamente como estaba. -->
-<script src="panel_estilo.js?v=20260926-2049" onerror="void 0"></script>
+<script src="panel_estilo.js?v=20260926-2116" onerror="void 0"></script>
 </body>
 </html>
