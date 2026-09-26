@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Stats Entrenamiento">Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20260926-2257"></script>
-<script src="selector_categoria.js?v=20260926-2257"></script>
+<script src="categorias_club.js?v=20260926-2319"></script>
+<script src="selector_categoria.js?v=20260926-2319"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -216,6 +216,10 @@ body::before{content:'';position:fixed;inset:0;
 .fund-val-sym{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800}
 .fund-val-pct{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700}
 .fund-val-n{font-size:8px;color:var(--mut)}
+.fund-linea{display:flex;gap:2px;padding:4px 8px 6px;flex-wrap:nowrap;justify-content:space-between}
+.fund-linea .fv{display:flex;align-items:baseline;gap:3px;padding:1px 5px;border-radius:5px;background:rgba(255,255,255,.025);min-width:0}
+.fund-linea .fv b{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;line-height:1}
+.fund-linea .fv i{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;font-style:normal;line-height:1}
 .fund-val-bar{width:100%;height:2px;border-radius:2px;margin-top:2px;background:rgba(255,255,255,.05);overflow:hidden}
 .fund-val-fill{height:100%;border-radius:2px}
 
@@ -351,20 +355,20 @@ body::before{content:'';position:fixed;inset:0;
 
 select, select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20260926-2257"></script>
+<script src="objetivos_config.js?v=20260926-2319"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260926-2257"></script>
-<script src="firebase.js?v=20260926-2257" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260926-2257"></script>
-<script src="lang.js?v=20260926-2257"></script>
-<script src="objetivos.js?v=20260926-2257" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20260926-2257"></script>
-  <script src="video_delay.js?v=20260926-2257" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260926-2319"></script>
+<script src="firebase.js?v=20260926-2319" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-2319"></script>
+<script src="lang.js?v=20260926-2319"></script>
+<script src="objetivos.js?v=20260926-2319" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20260926-2319"></script>
+  <script src="video_delay.js?v=20260926-2319" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -653,7 +657,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260926-2257">
+<link rel="stylesheet" href="movil.css?v=20260926-2319">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase" data-t="← Dashboard"><span data-t="← Dashboard">← Dashboard</span></a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -717,6 +721,10 @@ function renderObjetivosJugador(cid,nombre,extra){
   <button class="fb" id="bt-C" onclick="setT('C',this)"><span data-t="pos_central"><span data-t="Central">Central</span></span></button>
   <div class="fsep"></div>
   <button class="fb tq" id="bt-T" onclick="setT('T',this)">&#x25CF; Toque</button>
+  <div class="fsep"></div>
+  <!-- Compacto o completo. Se guarda en el dispositivo: la tele del gimnasio
+       y el telefono del entrenador pueden estar en modos distintos. -->
+  <button class="fb" id="bt-det" onclick="setDetalle()" title="Cuántos números muestra cada tarjeta">🔍 Detalle</button>
 </div>
 
 <!-- BARRA DV4: aparece solo cuando filtro = Ataque -->
@@ -835,14 +843,29 @@ function renderObjetivosJugador(cid,nombre,extra){
 
 <script>
 const C={green:'#22c55e',lgreen:'#86efac',amber:'#fbbf24',orange:'#f97316',red:'#ef4444',dred:'#991b1b',purple:'#a78bfa',blue:'#38bdf8',indigo:'#818cf8'};
+/* ══ UN COLOR POR FUNDAMENTO, EL MISMO DE TODA LA APP ═══════════════════
+   Estos cinco —saque, recepcion, ataque, bloqueo, defensa— son los mismos
+   que usan el dashboard, el perfil del jugador y el panel de scout. Que el
+   ataque sea del mismo azul en las cinco pantallas es lo que hace que uno
+   aprenda a leerlas sin pensar.
+
+   El armado lleva un sexto que pasa las pruebas de daltonismo y de
+   contraste junto a los otros cinco; el freeball va en gris a proposito:
+   no es un fundamento del idioma de la app y no merece un color propio
+   compitiendo con los que si significan algo.
+
+   Igual, aca el color NUNCA es lo unico: cada bloque lleva su nombre
+   escrito al lado. Si dos tonos se parecen en una pantalla mala o para
+   alguien que no distingue el rojo del verde, el rotulo sigue estando.
+   ═══════════════════════════════════════════════════════════════════════ */
 const FUNDS=[
-  {k:'R',l:'RECEPCION',c:C.green,bc:'rgba(34,197,94,.08)',bc2:'rgba(34,197,94,.2)'},
-  {k:'S',l:'SAQUE',c:C.amber,bc:'rgba(251,191,36,.06)',bc2:'rgba(251,191,36,.2)'},
-  {k:'A',l:'ATAQUE',c:C.indigo,bc:'rgba(129,140,248,.06)',bc2:'rgba(129,140,248,.2)'},
-  {k:'B',l:'BLOQUEO',c:C.purple,bc:'rgba(167,139,250,.06)',bc2:'rgba(167,139,250,.2)'},
-  {k:'D',l:'DEFENSA',c:'#38bdf8',bc:'rgba(56,189,248,.06)',bc2:'rgba(56,189,248,.2)'},
-  {k:'E',l:'ARMADO',c:'#c084fc',bc:'rgba(192,132,252,.06)',bc2:'rgba(192,132,252,.2)'},
-  {k:'F',l:'FREEBALL',c:'#a3e635',bc:'rgba(163,230,53,.06)',bc2:'rgba(163,230,53,.2)'}
+  {k:'R',l:'RECEPCION',c:'#0E9F6E',bc:'rgba(14,159,110,.08)', bc2:'rgba(14,159,110,.22)'},
+  {k:'S',l:'SAQUE',    c:'#CE7C18',bc:'rgba(206,124,24,.07)', bc2:'rgba(206,124,24,.22)'},
+  {k:'A',l:'ATAQUE',   c:'#0B84C4',bc:'rgba(11,132,196,.07)', bc2:'rgba(11,132,196,.22)'},
+  {k:'B',l:'BLOQUEO',  c:'#8B5CF6',bc:'rgba(139,92,246,.07)', bc2:'rgba(139,92,246,.22)'},
+  {k:'D',l:'DEFENSA',  c:'#DC2A5A',bc:'rgba(220,42,90,.07)',  bc2:'rgba(220,42,90,.22)'},
+  {k:'E',l:'ARMADO',   c:'#0FA3B1',bc:'rgba(15,163,177,.07)', bc2:'rgba(15,163,177,.22)'},
+  {k:'F',l:'FREEBALL', c:'#94A3B8',bc:'rgba(148,163,184,.06)',bc2:'rgba(148,163,184,.2)'}
 ];
 const Q=[{sym:'#',name:'Punto',c:C.green,i:0},{sym:'+',name:'Positivo',c:C.lgreen,i:1},{sym:'!',name:'Admiracion',c:C.amber,i:2},{sym:'-',name:'Negativo',c:C.orange,i:3},{sym:'/',name:'Vendida',c:C.red,i:4},{sym:'=',name:'Error',c:C.dred,i:5}];
 const QB=[{sym:'#',name:'Punto',c:C.green,i:0},{sym:'+',name:'Positivo',c:C.lgreen,i:1},{sym:'-',name:'Negativo',c:C.orange,i:3},{sym:'=',name:'Error',c:C.dred,i:5}];
@@ -979,29 +1002,124 @@ function getFD(p,k){if(k==='R')return p.rT;if(k==='S')return p.sT;if(k==='A')ret
   if(k==='E')return p.eT||[0,0,0,0,0,0,0];
   if(k==='F')return p.fT||[0,0,0,0,0,0,0];
   return [0,0,0,0,0,0,0];}
-// Eficiencia Saque: (1×# + 0.5×/ + 0.25×+ - 1×=) / total
+/* ══════════════════════════════════════════════════════════════════════════
+   UN SOLO IDIOMA DE NUMEROS
+
+   Este panel tenia sus propias cuentas y no coincidian con el resto de la
+   app. Lo que habia, y por que cada cosa estaba mal:
+
+     BLOQUEO    (# + 0,5·+) / total
+                En todas las demas pantallas —dashboard, perfil, baterias,
+                panel de scout— el Blq #+ es (# + +) / total. Lo gracioso es
+                que ESTE MISMO archivo tiene una funcion effBloqueo() con la
+                cuenta correcta, doscientas lineas mas arriba, y las
+                tarjetas llamaban a la otra.
+
+     EL NUMERO GRANDE de cada jugador era (# - =) / total, una cuenta que no
+                existe en ninguna otra pantalla. Era el numero mas visible
+                del panel y el unico que no se podia cruzar con nada.
+
+     ARMADO     usaba la eficacia de ataque. El armado se mide en
+                positividad, que fue lo que quedo decidido para toda la app.
+
+     LOS COLORES tenian su propia escala (70 / 40 / 0), sin relacion con el
+                semaforo de las baterias. El mismo numero salia ambar aca y
+                verde en la bateria de al lado.
+
+     LOS COMENTARIOS describian formulas viejas arriba de funciones que ya
+                llamaban a VB_EFF. Un comentario que miente es peor que
+                ninguno: se le cree.
+
+   Ahora todo sale de VB_EFF —la definicion unica— y los colores de
+   objClassify, el mismo que pinta las baterias. Si manana se cambia un peso,
+   se cambia en un solo lugar y esta pantalla cambia con las demas.
+   ══════════════════════════════════════════════════════════════════════════ */
+/* SAQUE  # 100 · / 87,5 · + 75 · ! 50 · - 25 · = 0 */
 function efS(d){if(!d||!d[6])return null;return VB_EFF.saque({T:d[6],Punto:d[0],Vend:d[4],Pos:d[1],Adm:d[2]||0,Neg:d[3]||0});}
-// Eficiencia Recepcion: (1×# + 0.5×+ - 0.5×/ - 1×=) / total
+/* RECEPCION  # 100 · + 75 · ! 50 · - 25 · / 12,5 · = 0 */
 function efR(d){if(!d||!d[6])return null;return VB_EFF.recepcion({T:d[6],Punto:d[0],Pos:d[1],Adm:d[2]||0,Neg:d[3]||0,Vend:d[4]});}
-// Eficiencia Ataque: (# - / - =) / total
+/* ATAQUE  (# - / - =) / total, la eficacia clasica del voley */
 function efA(d){if(!d||!d[6])return null;return VB_EFF.ataque({T:d[6],Punto:d[0],Vend:d[4],Err:d[5]});}
-// Eficiencia Bloqueo: (# + 0.5×+) / total
-function efB(d){if(!d||!d[6])return null;return Math.round((d[0] + d[1]*0.5)/d[6]*100);}
-// Defensa y Freeball: positividad (# y +). Armado: eficiencia (# menos = y /). Manual DV4 2.3.4.4
-function efD(d){if(!d||!d[6])return null;return Math.round((d[0] + d[1])/d[6]*100);}
-function efE(d){if(!d||!d[6])return null;return VB_EFF.ataque({T:d[6],Punto:d[0],Vend:d[4],Err:d[5]});}
+/* BLOQUEO  Blq #+ = (# + +) / total, igual que en toda la app */
+function efB(d){if(!d||!d[6])return null;return Math.round((d[0] + d[1])/d[6]*100);}
+/* DEFENSA  # 100 · + 75 · ! 50 · - 25 · = 0 */
+function efD(d){if(!d||!d[6])return null;return VB_EFF.defensa({T:d[6],Punto:d[0],Pos:d[1],Adm:d[2]||0,Neg:d[3]||0});}
+/* ARMADO  positividad (# + +) / total */
+function efE(d){if(!d||!d[6])return null;return Math.round((d[0] + d[1])/d[6]*100);}
+/* FREEBALL  positividad, igual que el armado */
 function efFB(d){if(!d||!d[6])return null;return Math.round((d[0] + d[1])/d[6]*100);}
 function efF(d,k){if(k==='R')return efR(d);if(k==='S')return efS(d);if(k==='A')return efA(d);if(k==='B')return efB(d);
   if(k==='D')return efD(d);if(k==='E')return efE(d);if(k==='F')return efFB(d);
-  // Para "todos" usamos promedio ponderado
   return null;}
-function ef(d){if(!d||!d[6])return null;return Math.round((d[0] - d[5])/d[6]*100);}
-function ec(v){if(v===null)return C.indigo;if(v>=70)return C.green;if(v>=40)return C.amber;if(v>=0)return C.orange;return C.red;}
+
+/* Que bateria le corresponde a cada fundamento, para el color y el objetivo */
+const META_FUND={R:'rec',S:'sq',B:'bqpos',D:'def',A:null,E:null,F:null};
+/* Como se llama el numero de cada fundamento, para que el titular de la
+   tarjeta nunca sea un porcentaje sin apellido */
+const EFF_NOMBRE={R:'EFF Recepción',S:'EFF Saque',A:'EFF Ataque',B:'Blq #+',
+                  D:'EFF Defensa',E:'Armado #+',F:'Freeball #+',all:'EFF'};
+
+/* ══ EL FUNDAMENTO PRINCIPAL DE CADA JUGADOR ════════════════════════════
+   Con el filtro en TODOS hacia falta un solo numero por jugador. Antes era
+   una cuenta inventada sobre la suma de todo junto —sumar recepciones con
+   bloqueos no describe nada—. Ahora es el EFF del fundamento que mas toco
+   en esta sesion, con su nombre al lado: el libero va a mostrar recepcion,
+   el armador armado y el punta ataque, solos, sin tabla de posiciones.   */
+function fundPrincipal(p){
+  let mejor=null, max=0;
+  FUNDS.forEach(f=>{ const d=getFD(p,f.k); const t=d&&d[6]||0; if(t>max){max=t;mejor=f.k;} });
+  return mejor;
+}
+function efPrincipal(p){
+  const k=fundPrincipal(p); if(!k) return {v:null,k:null,n:0};
+  const d=getFD(p,k);
+  return {v:efF(d,k), k:k, n:d[6]||0};
+}
+/* ══ CUANTAS PELOTAS HACEN FALTA PARA QUE UN PORCENTAJE SIGNIFIQUE ALGO ══
+   Con el panel abierto en el banco, el que toco UNA pelota y la metio
+   aparecia primero con 100%, arriba del punta que lleva veintidos ataques.
+   El numero no esta mal; lo que esta mal es tratarlo como comparable.
+
+   Desde cinco acciones el numero entra en el orden y puede llevarse una
+   medalla. Con menos, se muestra igual —es un dato real— pero va al final
+   de la lista, sin medalla y con el porcentaje atenuado, con el total al
+   lado para que se vea de donde sale.                                    */
+const MIN_ACC = 5;
+
+/* ══ COMPACTO POR DEFECTO ════════════════════════════════════════════════
+   Cada tarjeta traia treinta y seis numeros: seis fundamentos por seis
+   valoraciones, cada una con su porcentaje, su cantidad y su barrita. Para
+   revisar un entrenamiento sentado esta bien. Para mirar el panel entre dos
+   rotaciones, con el partido andando, no se lee: es una pared.
+
+   Por defecto ahora se ve lo que se decide en el banco —cuanto jugo, como
+   le esta yendo, cuanto regala— y el detalle completo queda a un toque del
+   boton "Detalle". La eleccion se guarda en el dispositivo.
+   ═══════════════════════════════════════════════════════════════════════ */
+let PV_DETALLE = (function(){
+  try{ return localStorage.getItem('pv_detalle') === '1'; }catch(e){ return false; }
+})();
+function setDetalle(){
+  PV_DETALLE = !PV_DETALLE;
+  try{ localStorage.setItem('pv_detalle', PV_DETALLE?'1':'0'); }catch(e){}
+  const b = document.getElementById('bt-det');
+  if(b) b.classList.toggle('on', PV_DETALLE);
+  try{ render(); }catch(e){}
+}
+/* El color sale del semaforo de las baterias cuando el fundamento tiene
+   objetivo; si no lo tiene —ataque, armado, freeball— se usa la escala de
+   eficacia de ataque, que es la que ya conocen todas las pantallas. */
+function ec(v,k){
+  if(v===null||v===undefined) return C.indigo;
+  const meta = k ? META_FUND[k] : null;
+  try{ if(typeof effColor==='function') return effColor(v, meta||undefined); }catch(e){}
+  return v>=40?C.green:v>=20?C.amber:v>=0?C.orange:C.red;
+}
 function teamAvg(act){const o=[0,0,0,0,0,0,0];act.forEach(p=>{const d=gd(p);for(let i=0;i<7;i++)o[i]+=(d[i]||0);});return o;}
 
 function fundBlock(p,fnd,teamFD){
   const d=getFD(p,fnd.k);if(!d[6])return '';
-  const tot=d[6];const efv=efF(d,fnd.k);const efColor=ec(efv);
+  const tot=d[6];const efv=efF(d,fnd.k);const efColor=ec(efv,fnd.k);
   const quals=fnd.k==='B'?QB:fnd.k==='S'?QS:Q;
   const teamTot=teamFD[6]||0;
   const tqBadge=fnd.k==='A'&&p.aTT[6]>0?`<span style="font-size:9px;color:${C.purple}"> &#x25CF;${p.aTT[6]}TCQ</span>`:'';
@@ -1014,13 +1132,28 @@ function fundBlock(p,fnd,teamFD){
       <div class=fund-val-bar><div class=fund-val-fill style="width:${pc}%;background:${q.c}"></div></div>
     </div>`;
   }).join('');
+
+  /* ── la version compacta: una linea de cantidades ──────────────────────
+     Cantidades y no porcentajes a proposito. El porcentaje ya esta arriba,
+     en el EFF; lo que falta saber es QUE PASO, y eso se dice contando:
+     "cuatro errores" es una frase que se puede decir en el banco, "14% de
+     errores" no. */
+  const linea=quals.map(q=>{
+    const v=d[q.i]||0;
+    const pc=tot?Math.round(v/tot*100):0;
+    return `<span class=fv title="${q.name}: ${v} de ${tot} (${pc}%)">`
+         + `<b style="color:${q.c}">${q.sym}</b>`
+         + `<i style="color:${v>0?'var(--txt,#e2e8f0)':'var(--dim)'}">${v}</i></span>`;
+  }).join('');
+
   return `<div class=fund-block style="border-color:${fnd.bc2}">
     <div class=fund-block-hdr style="background:${fnd.bc}">
       <span class=fund-block-label style="color:${fnd.c}">${fnd.l}</span>
       <span class=fund-block-acc>${tot}acc${tqBadge}</span>
       <span class=fund-block-ef style="color:${efColor}">${efv===null?'--':efv+'%'}</span>
     </div>
-    <div class=fund-block-body>${vals}</div>
+    ${PV_DETALLE ? `<div class=fund-block-body>${vals}</div>`
+                 : `<div class=fund-linea>${linea}</div>`}
   </div>`;
 }
 
@@ -1043,14 +1176,27 @@ function barsHTML(d,quals,teamD){
 function card(p,rank,worstRank,teamD,teamFDs,sz){
   const d=gd(p);const tot=d[6]||0;
   const isBlq=cF==='B';
-  const ev=isBlq?efB(d):ef(d);
-  const ecv=ec(ev);const evs=ev===null?'--':ev+'%';
+  /* ══ EL TITULAR DE LA TARJETA ═══════════════════════════════════════
+     Con un fundamento elegido arriba, el numero grande es el EFF de ESE
+     fundamento —el mismo que muestran la bateria y el dashboard—. Con el
+     filtro en TODOS, el del fundamento que mas toco en la sesion.
+
+     Y siempre con su nombre debajo. Un porcentaje grande sin apellido en
+     el medio de un partido es una invitacion a leerlo como lo que uno
+     espera que sea.                                                     */
+  const _pr = (cF==='all') ? efPrincipal(p) : {v:efF(d,cF), k:cF};
+  const ev=_pr.v, evK=_pr.k;
+  const ecv=ec(ev,evK);const evs=ev===null?'--':ev+'%';
+  const evLbl=EFF_NOMBRE[evK||'all']||'EFF';
   const flbl=(FL[cF]||'Todos')+(cT!=='all'&&cT!=='T'?' · '+(TL[cT]||''):'')+(cDV4!=='all'?' · '+cDV4:'');
   const quals=isBlq?QB:cF==='S'?QS:Q;
 
   // Rank badges
   let rankClass='';let rankBadge='';
-  const withData=rank>0;
+  /* sin muestra suficiente no hay medalla: un #1 con una pelota es una
+     mentira con forma de premio */
+  const _accTit = (cF==='all') ? (_pr.n||0) : tot;
+  const withData=rank>0 && _accTit>=MIN_ACC;
   if(withData&&rank===1){rankClass=' top1';rankBadge=`<div class="rank-badge rank-1">#1</div>`;}
   else if(withData&&rank===2){rankClass=' top2';rankBadge=`<div class="rank-badge rank-2">#2</div>`;}
   else if(withData&&rank===3){rankBadge=`<div class="rank-badge rank-3">#3</div>`;}
@@ -1059,7 +1205,10 @@ function card(p,rank,worstRank,teamD,teamFDs,sz){
   // Efi bar
   const efNum=ev===null?0:Math.max(-100,Math.min(100,ev));
   const efBarW=Math.max(0,Math.min(100,(efNum+100)/2));
-  const teamEf=isBlq?efB(teamD):ef(teamD);
+  /* la referencia del equipo, en el MISMO fundamento que el titular: antes
+     se comparaba el numero del jugador contra una cuenta distinta del
+     equipo, asi que la marquita no queria decir nada */
+  const teamEf = evK ? efF(teamFDs[evK]||teamD, evK) : null;
   const teamEfNum=teamEf===null?0:teamEf;
   const tRefW=Math.max(0,Math.min(100,(teamEfNum+100)/2));
   const efiBar=tot>0?`<div class=efi-bar-wrap>
@@ -1117,9 +1266,21 @@ function card(p,rank,worstRank,teamD,teamFDs,sz){
     </div>`;
   }
 
-  const totalAcc=cF==='all'?(p.rT[6]+p.sT[6]+p.aT[6]+p.bT[6]):tot;
-  const totalPts=cF==='all'?(p.aT[0]+p.bT[0]):d[0];
-  const totalErr=cF==='all'?(p.rT[5]+p.sT[5]+p.aT[5]+p.bT[5]):d[5];
+  /* ══ "17 acc." AL LADO DE UN 79% DE 56 ACCIONES ═════════════════════════
+     El contador de acciones sumaba solo cuatro fundamentos —recepcion,
+     saque, ataque y bloqueo— y se dejaba afuera la defensa, el armado y el
+     freeball. En la tarjeta del armador quedaba "17 acc." arriba de un
+     bloque de ARMADO que decia 56acc. Dos numeros contradiciendose en la
+     misma tarjeta, a tres centimetros uno del otro.
+
+     Ahora se cuentan LOS SIETE, que es lo que el jugador efectivamente
+     toco. Los errores igual. Los puntos siguen siendo los que ganan el
+     rally —ataque, bloqueo y saque—: un armado bueno no suma un punto al
+     marcador, y contarlo como tal seria inventar.                        */
+  const _todosFD = FUNDS.map(f=>getFD(p,f.k));
+  const totalAcc=cF==='all'?_todosFD.reduce((a,x)=>a+(x[6]||0),0):tot;
+  const totalPts=cF==='all'?((p.aT[0]||0)+(p.bT[0]||0)+(p.sT[0]||0)):d[0];
+  const totalErr=cF==='all'?_todosFD.reduce((a,x)=>a+(x[5]||0),0):d[5];
 
   return `<div class="card${rankClass}${tot===0?' dim':''}" onclick="showJugDetail('${p.n||''}',${p.c||0})" style="cursor:pointer">
     ${rankBadge}
@@ -1133,8 +1294,8 @@ function card(p,rank,worstRank,teamD,teamFDs,sz){
         </div>
       </div>
       <div class=ef-box>
-        <div class="ev ${sz}" style="color:${ecv}">${evs}</div>
-        <div class=el>${cF==='all'?'global':'efic.'}</div>
+        <div class="ev ${sz}" style="color:${ecv};${_accTit>0&&_accTit<MIN_ACC?'opacity:.45':''}">${evs}</div>
+        <div class=el>${evLbl}${_accTit>0&&_accTit<MIN_ACC?' <span style="color:var(--dim)">· '+_accTit+' acc</span>':''}</div>
       </div>
     </div>
     ${efiBar}${body}
@@ -1142,7 +1303,7 @@ function card(p,rank,worstRank,teamD,teamFDs,sz){
       <div class=fs><div class="fn ${sz}">${totalAcc}</div><div class=fl>acciones</div></div>
       <div class=fs><div class="fn ${sz}" style="color:${C.green}">${totalPts}</div><div class=fl>puntos</div></div>
       <div class=fs><div class="fn ${sz}" style="color:${C.dred}">${totalErr}</div><div class=fl>errores</div></div>
-      <div class=fs><div class="fn ${sz}" style="color:${ecv}">${evs}</div><div class=fl>efic.</div></div>
+      <div class=fs><div class="fn ${sz}" style="color:${ecv}">${evs}</div><div class=fl>${evLbl.replace(/^EFF /,'')}</div></div>
     </div>
   </div>`;
 }
@@ -1165,7 +1326,7 @@ function renderPodio(){
       <div class=podio-cam>${r.p.c}</div>
       <div class=podio-name>${r.p.n}</div>
       <div>
-        <div class=podio-ef style="color:${ec(r.ef)}">${r.ef}%</div>
+        <div class=podio-ef style="color:${ec(r.ef,fnd.k)}">${r.ef}%</div>
         <div class=podio-acc>${r.tot} acc.</div>
       </div>
     </div>`).join('');
@@ -1781,6 +1942,18 @@ function pvTraerAhora(){
 }
 
 /* ── de cuando son los datos que se ven ──────────────────────────────────── */
+/* Cuantos minutos pasaron desde el sello de hora del ultimo dato. Vive
+   aparte porque ahora lo usan dos cosas: el cartel de "hace X min" y el
+   marcador, que necesita saber si el partido sigue o ya termino. */
+function pvMinutosDe(ts){
+  var m = String(ts||'').match(/(\d{1,2}):(\d{2})/);
+  if(!m) return null;
+  var ahora = new Date();
+  var dif = (ahora.getHours()*60 + ahora.getMinutes()) - (parseInt(m[1],10)*60 + parseInt(m[2],10));
+  if(dif < 0) dif += 24*60;            /* paso la medianoche */
+  return dif;
+}
+
 function pvEdad(){
   var e = document.getElementById('pv-edad');
   if(!e) return;
@@ -1795,14 +1968,8 @@ function pvEdad(){
      Sin fecha igual se puede saber si es viejo: se compara con la hora de
      ahora. Si el sello marca mas de seis horas atras, no es de este
      entrenamiento —ningun entrenamiento dura tanto—. */
-  var m = String(ts).match(/^(\d{1,2}):(\d{2})/);
-  if(!m){ e.textContent = 'último dato: ' + ts; e.style.color = '#94a3b8'; return; }
-
-  var ahora = new Date();
-  var minDato  = parseInt(m[1],10) * 60 + parseInt(m[2],10);
-  var minAhora = ahora.getHours() * 60 + ahora.getMinutes();
-  var dif = minAhora - minDato;
-  if(dif < 0) dif += 24 * 60;          /* paso la medianoche */
+  var dif = pvMinutosDe(ts);
+  if(dif === null){ e.textContent = 'último dato: ' + ts; e.style.color = '#94a3b8'; return; }
 
   if(dif <= 1){ e.textContent = 'al día · ' + ts; e.style.color = '#4ade80'; return; }
   if(dif < 10){ e.textContent = 'hace ' + dif + ' min · ' + ts; e.style.color = '#94a3b8'; return; }
@@ -1827,9 +1994,41 @@ function traerEnVivo(primera){
       if(g('mk-an')) g('mk-an').textContent = abr3(L.visitante.n);
       if(g('mk-hp')) g('mk-hp').textContent = L.local.pts||0;
       if(g('mk-ap')) g('mk-ap').textContent = L.visitante.pts||0;
-      if(g('mk-hs')) g('mk-hs').textContent = (L.local.sets||0)+' SETS';
-      if(g('mk-as')) g('mk-as').textContent = (L.visitante.sets||0)+' SETS';
-      if(g('mk-set')) g('mk-set').textContent = 'SET '+(L.set||1);
+      /* ══ EN VIVO O TERMINADO ═══════════════════════════════════════════
+         El tablero mostraba siempre los puntos del set en curso. Cuando un
+         partido termina, el scout cierra y en la base queda el estado del
+         final: puntos 0-0 y un set que nunca se jugo. Asi, dos horas
+         despues, el panel decia "AXP 0 – 0 · SET 5" con Freiburg 4 sets
+         arriba. No estaba roto: estaba mostrando un partido terminado con
+         cara de partido en curso, que es peor, porque uno le cree.
+
+         Si hace mas de quince minutos que no entra una accion, el partido
+         no esta en curso. Entonces el tablero muestra el RESULTADO —los
+         sets— y lo dice: FINAL. El puntito deja de latir.               */
+      var _min = pvMinutosDe((window.VOLEY_DATA && VOLEY_DATA.ts) || '');
+      var _vivo = (_min === null) || (_min <= 15);
+      var _sl = L.local.sets||0, _sv = L.visitante.sets||0;
+
+      if(_vivo){
+        if(g('mk-hs')) g('mk-hs').textContent = _sl+' SETS';
+        if(g('mk-as')) g('mk-as').textContent = _sv+' SETS';
+        if(g('mk-set')){ g('mk-set').textContent = 'SET '+(L.set||1);
+          g('mk-set').style.color='#94a3b8'; g('mk-set').style.background='rgba(255,255,255,.05)'; }
+      } else {
+        /* los numeros grandes pasan a ser los SETS, que es el resultado */
+        if(g('mk-hp')) g('mk-hp').textContent = _sl;
+        if(g('mk-ap')) g('mk-ap').textContent = _sv;
+        if(g('mk-hs')) g('mk-hs').textContent = 'SETS';
+        if(g('mk-as')) g('mk-as').textContent = 'SETS';
+        if(g('mk-set')){
+          var _hs = Math.floor(_min/60);
+          g('mk-set').textContent = 'FINAL' + (_hs>=1 ? ' · hace '+_hs+'h' : ' · hace '+_min+' min');
+          g('mk-set').style.color='#f87171';
+          g('mk-set').style.background='rgba(239,68,68,.12)';
+        }
+        var _dot = document.querySelector('#live-badge .mk-dot');
+        if(_dot){ _dot.style.background='#475569'; _dot.style.boxShadow='none'; _dot.title='Terminado'; }
+      }
       /* marcador compacto del header (siempre visible) */
       var abr=function(n){ n=(n||'').trim(); return n?n.substring(0,3).toUpperCase():'---'; };
       if(g('hs-hn')) g('hs-hn').textContent = abr(L.local.n);
@@ -1981,6 +2180,8 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 else iniciarEnVivo();
 
 function render(){
+  const _bd=document.getElementById('bt-det');
+  if(_bd) _bd.classList.toggle('on', PV_DETALLE);
   const D=window.VOLEY_DATA;
   if(!D){document.getElementById('grid').innerHTML='<div class=empty><h2>Sin datos</h2><p>Tipea un codigo en CARGA</p></div>';return;}
   document.getElementById('ts').textContent=D.ts;
@@ -1988,16 +2189,29 @@ function render(){
   const isBlq=cF==='B';
   const teamD=teamAvg(act);
   const teamFDs={};FUNDS.forEach(f=>{const o=[0,0,0,0,0,0,0];act.forEach(p=>{const d=getFD(p,f.k);for(let i=0;i<7;i++)o[i]+=(d[i]||0);});teamFDs[f.k]=o;});
-  const teamEf=isBlq?efB(teamD):ef(teamD);
+  /* El numero de "eficiencia" del equipo: con un fundamento elegido, el de
+     ese fundamento. Con TODOS, no se inventa un promedio de cosas que no se
+     promedian —recepciones con bloqueos—: se muestra el saldo de pelotas
+     ganadas menos regaladas, que es una cuenta honesta y se lee sola.    */
+  const teamEf = (cF==='all') ? null : efF(teamD, cF);
   const teamEfNum=teamEf===null?0:teamEf;
   const allPts=act.reduce((s,p)=>s+(p.aT[0]||0)+(p.bT[0]||0),0);
   document.getElementById('pts-total').textContent=allPts;
 
   // Sort
+  /* Se ordena por el MISMO numero que se muestra en grande. Antes se
+     ordenaba por una cuenta y se mostraba otra, asi que la tarjeta de
+     arriba no era siempre la del numero mas alto y parecia un error. */
+  const _evDe=p=>{ const r=(cF==='all')?efPrincipal(p):{v:efF(gd(p),cF)}; return r.v; };
+  const _accDe=p=>(cF==='all')?(efPrincipal(p).n||0):(gd(p)[6]||0);
   const sorted=[...act].sort((a,b)=>{
-    const da=gd(a),db=gd(b);const ta=da[6]||0,tb=db[6]||0;
+    const ta=gd(a)[6]||0, tb=gd(b)[6]||0;
     if(!ta&&!tb)return 0;if(!ta)return 1;if(!tb)return -1;
-    return((isBlq?efB(db):ef(db))||0)-((isBlq?efB(da):ef(da))||0);
+    /* los de muestra chica, al final: su porcentaje es real pero no es
+       comparable con el de alguien que jugo veinte pelotas */
+    const fa=_accDe(a)>=MIN_ACC, fb=_accDe(b)>=MIN_ACC;
+    if(fa!==fb) return fa?-1:1;
+    return (_evDe(b)||0)-(_evDe(a)||0);
   });
 
   // Find worst rank (last with data)
@@ -2011,9 +2225,17 @@ function render(){
     const quals=isBlq?QB:cF==='S'?QS:Q;
     let pills='';
     if(cF==='all'){
+      /* El numero del equipo tambien con el semaforo de las baterias: antes
+         cada uno iba pintado del color de su fundamento, que es lindo y no
+         dice nada. Ahora el color responde a la unica pregunta que importa
+         en el banco: ¿esto esta bien o esta mal? El nombre del fundamento
+         va abajo, asi que el color no tiene que identificarlo.            */
       pills=FUNDS.filter(f=>teamFDs[f.k][6]>0).map(f=>{
         const efv=efF(teamFDs[f.k],f.k);
-        return `<div class=tstat><div class=tstat-n style="color:${f.c}">${efv===null?'--':efv+'%'}</div><div class=tstat-l>${f.l.substring(0,3)}</div></div>`;
+        const nAcc=teamFDs[f.k][6]||0;
+        return `<div class=tstat title="${f.l} · ${nAcc} acciones">
+          <div class=tstat-n style="color:${ec(efv,f.k)}">${efv===null?'--':efv+'%'}</div>
+          <div class=tstat-l><span style="color:${f.c}">\u25CF</span> ${f.l.substring(0,3)} <span style="opacity:.55">${nAcc}</span></div></div>`;
       }).join('');
     } else {
       pills=quals.map(q=>{
@@ -2025,7 +2247,18 @@ function render(){
     tb.innerHTML=`<span class=team-bar-title>Equipo</span>
       <div class=tstat><div class=tstat-n>${teamTot}</div><div class=tstat-l>acciones</div></div>
       <div class=tsep></div>${pills}<div class=tsep></div>
-      <div class=tstat><div class=tstat-n style="color:${ec(teamEf)}">${teamEfNum}%</div><div class=tstat-l>eficiencia</div></div>`;
+      ${teamEf===null
+        ? (function(){
+            /* ganadas - regaladas, sobre TODOS los fundamentos */
+            let gana=0, pierde=0;
+            act.forEach(p=>{
+              gana   += (p.aT[0]||0)+(p.bT[0]||0)+(p.sT[0]||0);
+              pierde += (p.aT[5]||0)+(p.aT[4]||0)+(p.sT[5]||0)+(p.rT[5]||0)+(p.bT[5]||0)+((p.dT||[])[5]||0);
+            });
+            const saldo=gana-pierde;
+            return `<div class=tstat><div class=tstat-n style="color:${saldo>=0?C.green:C.red}">${saldo>0?'+':''}${saldo}</div><div class=tstat-l>ganadas − regaladas</div></div>`;
+          })()
+        : `<div class=tstat><div class=tstat-n style="color:${ec(teamEf,cF)}">${teamEfNum}%</div><div class=tstat-l>${(EFF_NOMBRE[cF]||'EFF').replace(/^EFF /,'EFF ')}</div></div>`}`;
   } else tb.style.display='none';
 
   renderTeamDV4(act);
@@ -2347,8 +2580,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20260926-2257" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20260926-2257"></script>
+<script src="plantel_nafels.js?v=20260926-2319" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20260926-2319"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2447,7 +2680,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20260926-2257"></script>
+<script src="ayuda.js?v=20260926-2319"></script>
 
 
 
