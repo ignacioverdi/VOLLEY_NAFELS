@@ -185,12 +185,137 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260926-2333">
+<link rel="stylesheet" href="movil.css?v=20260927-0006">
+<style>
+/* ══════════════════════════════════════════════════════════════════════════
+   EL ROJO, SOLO PARA EL DATO
+
+   La pantalla usaba el rojo del club para todo: el titulo, la pestana
+   activa, el nombre del equipo, el dorsal de cada jugador, la etiqueta de
+   posicion, el aviso de doble-click, el Efic... y TAMBIEN para la escala de
+   calor de las canchas, que es el unico lugar donde el rojo significa algo:
+   cuanto le pega a esa zona.
+
+   Cuando el 80% de la pantalla es rojo, la celda con 32 ataques deja de
+   saltar, porque compite contra el encabezado. La escala en si estaba bien
+   hecha —un solo tono, de oscuro a claro, que es como se debe— pero
+   necesitaba ser lo unico rojo fuerte.
+
+   Asi que el cromo se va a gris y el rojo queda para las canchas.
+   ══════════════════════════════════════════════════════════════════════════ */
+.pnum{background:#1e2130!important;color:#cbd5e1!important;border:1px solid rgba(255,255,255,.12)}
+.prole{background:rgba(255,255,255,.06)!important;color:#94a3b8!important;border:1px solid rgba(255,255,255,.1)}
+header.masthead h1{font-size:30px!important;letter-spacing:1px}
+.eyebrow{opacity:.75}
+
+/* La leyenda se lee una vez en la vida: no tiene por que ocupar un renglon
+   en las seis pestanas, todos los dias. */
+details.leyenda{margin:6px 0 0}
+details.leyenda>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--faint);
+  border:1px solid var(--border);border-radius:7px;padding:3px 10px}
+details.leyenda>summary::-webkit-details-marker{display:none}
+details.leyenda>summary:hover{color:var(--txt)}
+details.leyenda .legend{margin-top:7px}
+
+/* ── LOS FILTROS, PLEGADOS ─────────────────────────────────────────────────
+   Seis controles por tarjeta. Con ocho jugadores en pantalla son cuarenta y
+   ocho cajitas de filtro antes de llegar a un dato. Se pliegan, y el resumen
+   dice que esta aplicado para no tener que abrirlos a ver. */
+details.fdet{margin-bottom:8px}
+details.fdet>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:9px}
+details.fdet>summary::-webkit-details-marker{display:none}
+.fbtn{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#94a3b8;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:5px 11px;
+  white-space:nowrap}
+details.fdet[open]>summary .fbtn{color:#e2e8f0;border-color:rgba(255,255,255,.22)}
+/* El min-width:0 no sobra: sin el, el texto del resumen —que va en una sola
+   linea— estira el resumen, el resumen estira la tarjeta y la tarjeta estira
+   la pagina. Medido: 126 px de scroll horizontal en una pantalla de 1500.
+   Con min-width:0 el texto se corta con puntos suspensivos, que es lo que
+   se queria. */
+.fres{font-size:11px;color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1}
+details.fdet>summary{min-width:0}
+.player{min-width:0}
+
+/* ══ LA COLUMNA DE LOS NUEVE NUMEROS SE HABIA ACHICADO ═════════════════════
+   .stats pide 255 px pero con flex-shrink:1, o sea "si falta lugar, achicate".
+   Al ponerle marco, rotulo y red a la cancha, la cancha paso a pedir mas
+   ancho y la que cedio fue la columna de numeros: quedo en 111 px, cada
+   casillero en 28, y los tres porcentajes de cada terna se montaron uno
+   arriba del otro —"11%33%11%"—.
+
+   Se le pone un piso a la columna de numeros y se deja que ceda la cancha,
+   que es elastica: sus nueve zonas se achican parejo y se siguen leyendo. */
+/* Y si aun con el piso no entran las dos columnas, que la de numeros BAJE
+   debajo de la cancha en vez de quedar cortada. Antes, con tres tarjetas por
+   fila en 1500 px, la tercera columna de cada terna —BLOQ, DIAG, TIP— quedaba
+   tapada por el borde de la tarjeta: los numeros estaban ahi, no se veian.  */
+/* La cancha cede ancho primero —sus nueve celdas se achican parejo y se
+   siguen leyendo— y la columna de numeros tiene su ancho fijo, que es el
+   que necesita para que los tres de cada terna entren de verdad. Recien
+   cuando la tarjeta baja de unos 370 px, la columna se va abajo en vez de
+   quedar cortada. */
+/* ══ LA CANCHA TENIA EL ANCHO CLAVADO ═════════════════════════════════════
+   .court estaba en repeat(3, 92px): tres columnas de 92 px fijos, 286 px pase
+   lo que pase. Al dejar que su contenedor se achicara, la cancha NO se
+   achicaba con el: se salia por arriba de la columna de numeros y le tapaba
+   el primero de cada terna. Los numeros estaban ahi, debajo de la cancha.
+
+   Ahora las tres columnas son elasticas —minmax(0,1fr)— y la cancha se
+   adapta al lugar que le toca, que es lo que uno esperaba que hiciera.     */
+.body{flex-wrap:wrap}
+.body .courtwrap{flex:1 1 200px;min-width:150px}
+.body .stats{flex:0 0 184px;min-width:184px}
+.courtbox .court{grid-template-columns:repeat(3,minmax(0,1fr))}
+.courtbox .cell{min-width:0}
+details.fdet .filters{margin-top:8px}
+
+/* ── LA CANCHA SE VE COMO UNA CANCHA ───────────────────────────────────────
+   Antes la grilla de zonas y la grilla de porcentajes eran dos cuadriculas
+   identicas, del mismo tamano y del mismo color, una al lado de la otra. De
+   un vistazo no se sabia cual era cual. Ahora la cancha tiene marco, rotulo
+   y la red dibujada arriba. */
+.courtbox{border:1px solid rgba(255,255,255,.14);border-radius:9px;padding:7px;background:rgba(0,0,0,.25)}
+.crot{font-size:9.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--faint);
+  margin-bottom:5px;display:flex;gap:6px;align-items:baseline}
+.crot b{color:#94a3b8;font-weight:700}
+.cnet{height:3px;border-radius:2px;margin-bottom:5px;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.45) 0 3px,transparent 3px 6px)}
+
+/* ── LOS NUEVE PORCENTAJES, AGRUPADOS Y CON NOMBRE ─────────────────────────
+   Eran nueve cuadraditos iguales con etiquetas de 8 px. Ahora van en tres
+   grupos con titulo, y la etiqueta crece: en una tablet a un brazo de
+   distancia, 8 px no se leen. */
+.sgrupo{background:rgba(255,255,255,.028);border:1px solid var(--border);border-radius:8px;
+  padding:7px 8px;margin-bottom:6px}
+.sgl{font-size:9.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--faint);margin-bottom:5px}
+.stats .tile .l{font-size:10px!important;letter-spacing:.7px;color:#94a3b8!important;font-weight:600}
+.stats .tile.hl .l{color:#cbd5e1!important}
+/* El casillero destacado se pintaba de rojo de fondo. Ahora que el rojo es
+   del dato, destacar con rojo vuelve a ensuciar: el destacado pasa a ser un
+   tono neutro un poco mas claro que el resto, que alcanza y de sobra. */
+.stats .tile.hl{background:rgba(255,255,255,.07)!important}
+.tile .v .sem{display:inline-block;padding:1px 7px;border-radius:7px;border:1px solid transparent}
+
+/* ── EL TITULAR DE CADA TARJETA ────────────────────────────────────────────
+   Seis pestanas por N tarjetas y nada decia donde estaba la historia. Esta
+   linea sale de los MISMOS numeros de la tarjeta: no agrega informacion, la
+   pone adelante. */
+.titular{background:rgba(255,255,255,.035);border-left:3px solid var(--red);border-radius:0 8px 8px 0;
+  padding:7px 11px;margin-bottom:9px;font-size:13px;line-height:1.45;color:#cbd5e1}
+.titular b{color:#fff;font-weight:700}
+.titular:empty{display:none}
+@media(max-width:680px){ header.masthead h1{font-size:26px!important} .titular{font-size:12.5px} }
+</style>
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="categorias_club.js?v=20260926-2333"></script>
-<script src="selector_categoria.js?v=20260926-2333"></script>
-<script src="mi_fila.js?v=20260926-2333" onerror="void 0"></script>
+<!-- La definicion unica de las eficiencias de todo el sistema. Esta pagina
+     tenia las suyas propias y no coincidian con el resto. -->
+<script src="objetivos_config.js?v=20260927-0006" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260927-0006"></script>
+<script src="selector_categoria.js?v=20260927-0006"></script>
+<script src="mi_fila.js?v=20260927-0006" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -198,11 +323,12 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
   <div class="eyebrow">NÄFELS · DataVolley 4</div>
   <h1 data-t="Plan de partido"><span data-t="Plan de partido"><span data-t="Plan de partido">Plan de partido</span></span></h1>
   <div class="sub"><span data-t="Análisis de:"><span data-t="Análisis de:">Análisis de:</span></span> <b id="teamname" style="color:var(--red)">—</b></div>
+  <details class="leyenda"><summary>Cómo leer esta pantalla</summary>
   <div class="legend">
     <span><span class="sw" style="background:var(--h1)"></span><span data-t="poco"><span data-t="poco">poco</span></span> <span class="sw" style="background:var(--h2);margin-left:5px"></span><span data-t="medio"><span data-t="medio">medio</span></span> <span class="sw" style="background:var(--h3);margin-left:5px"></span><span data-t="mucho"><span data-t="mucho">mucho</span></span></span>
     <span><b style="color:var(--red)" data-t="▶ doble-click"><span data-t="▶ doble-click"><span data-t="▶ doble-click">▶ doble-click</span></span></b> <span data-t="en una zona = video"><span data-t="en una zona = video">en una zona = video</span></span></span>
     <span data-t="el número = golpes/saques, no puntos"><span data-t="el número = golpes/saques, no puntos"><span data-t="el número = golpes/saques, no puntos">el número = golpes/saques, no puntos</span></span></span>
-  </div>
+  </div></details>
 </header>
 <div class="matchbar"><span class="mlab" data-t="Equipo"><span data-t="Equipo"><span data-t="Equipo">Equipo</span></span></span>
   <span id="teambtns" class="teambtns" style="display:none"></span>
@@ -320,8 +446,8 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260926-2333"></script>
-<script src="filtro_tipo.js?v=20260926-2333" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260927-0006"></script>
+<script src="filtro_tipo.js?v=20260927-0006" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
   <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
        se cargaba SOLO el de partidos, asi que en una temporada sin partidos
@@ -336,12 +462,12 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20260926-2333"></script>
-<script src="firebase_por_categoria.js?v=20260926-2333"></script>
+<script src="firebase.js?v=20260927-0006"></script>
+<script src="firebase_por_categoria.js?v=20260927-0006"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20260926-2333" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20260927-0006" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -820,7 +946,32 @@ function openArmZone(pos,zn){
 }
 
 function evLabel(ev){if(ev==="#")return'<span class="r-pt">punto</span>';if(ev==="/")return'<span class="r-bl">bloq</span>';if(ev==="=")return'<span class="r-er">error</span>';return ev;}
-function tiles3(p,cfg){var t=cfg.tiles.map(function(lb,i){var hl=cfg.hl.indexOf(i)>=0?' hl':'';return '<div class="tile'+hl+'"><div class="l">'+lb+'</div><div class="v" id="'+p.id+'-s'+i+'"></div></div>';});return '<div class="row3">'+t.slice(0,3).join('')+'</div><div class="row3">'+t.slice(3,6).join('')+'</div><div class="row3">'+t.slice(6,9).join('')+'</div>';}
+/* ══ COMO SE LLAMA CADA TERNA ═══════════════════════════════════════════
+   Los nueve numeros siempre fueron tres grupos de tres, pero no lo decian:
+   salian como nueve cuadraditos iguales y habia que saberse el orden. Los
+   nombres salen de lo que mide cada terna en cada fundamento.
+
+   "A dónde ataca" es el nombre que pidio el cuerpo tecnico para linea,
+   centro y diagonal.                                                     */
+function gruposDe(cfg){
+  if(cfg.stats==='srv') return ['Cómo le va','Qué saque usa','Con qué intensidad'];
+  if(cfg.stats==='rec') return ['Cómo le va','Qué le tiran','Cómo la deja'];
+  if(cfg.stats==='dig') return ['Cómo le va','Qué le tiran','Cómo la deja'];
+  if(cfg.stats==='blk') return ['Cómo le va','Cuántos','Qué hizo'];
+  return ['Cómo le va','A dónde ataca','Con qué golpe'];
+}
+function tiles3(p,cfg){
+  var t=cfg.tiles.map(function(lb,i){
+    var hl=cfg.hl.indexOf(i)>=0?' hl':'';
+    return '<div class="tile'+hl+'"><div class="l">'+lb+'</div><div class="v" id="'+p.id+'-s'+i+'"></div></div>';
+  });
+  var g=gruposDe(cfg);
+  function grupo(nom, desde){
+    return '<div class="sgrupo"><div class="sgl">'+nom+'</div>'
+         + '<div class="row3">'+t.slice(desde,desde+3).join('')+'</div></div>';
+  }
+  return grupo(g[0],0)+grupo(g[1],3)+grupo(g[2],6);
+}
 function U(role){return role==='saque'?' saques':role==='reception'?' recep.':role==='defense'?' defensas':role==='bloqueo'?' bloqueos':' ataques';}
 function mAll(btn,val){var pop=btn.closest(".mpop");var cbs=pop.querySelectorAll('input[type=checkbox]');cbs.forEach(function(c){c.checked=!!val;});if(cbs[0])cbs[0].dispatchEvent(new Event("change",{bubbles:true}));}
 function _isMulti(fl){return fl.multi||fl.lab==="Resultado";}
@@ -952,12 +1103,81 @@ function ppVid(code){
 function readKey(pid){return "ppread:"+(typeof TEAM!=="undefined"?TEAM:"")+":"+pid;}
 function readVal(p){try{var v=localStorage.getItem(readKey(p.id));if(v!==null)return v;}catch(e){}return p.read||"";}
 function saveRead(el){try{localStorage.setItem(readKey(el.getAttribute("data-pid")),el.innerHTML);}catch(e){}}
+/* Que muestra la cancha en cada fundamento. El ataque cae en la cancha del
+   rival; el saque tambien; la recepcion y la defensa pasan en la propia. */
+/* ══════════════════════════════════════════════════════════════════════════
+   EL MISMO IDIOMA DE NUMEROS QUE EL RESTO DE LA APP
+
+   Esta pantalla tenia sus propias cuentas de eficiencia, y no coincidian con
+   las del dashboard, el perfil del jugador, las baterias ni el panel en vivo.
+   Lo que habia:
+
+     SAQUE      (aces - errores) / total
+                Cuenta solo los dos extremos. Un saque que deja al rival sin
+                armar vale lo mismo que uno comodo: cero. En el resto de la
+                app cada valoracion tiene su peso —#100 · /87,5 · +75 · !50 ·
+                -25 · =0— justamente porque la mayoria de los saques no son
+                ni ace ni error.
+
+     RECEPCION  (positivas - errores - sobrepases) / total
+                Tambien de a saltos: una recepcion neutra vale cero, igual que
+                una mala. El resto de la app le da 50.
+
+     DEFENSA    la misma cuenta que recepcion, sobrepases incluidos.
+
+     BLOQUEO    tambien la misma, cuando el numero del bloqueo en todas las
+                demas pantallas es Blq #+ = (# + +) / total.
+
+   Ahora las cuatro salen de VB_EFF —la definicion unica— y el bloqueo de la
+   misma cuenta que usan el dashboard y las baterias. Un mismo jugador dice el
+   mismo numero en las cinco pantallas.
+   ══════════════════════════════════════════════════════════════════════════ */
+function ppEfic(stats, o){
+  if(!o.T) return '\u2013';
+  var v = null;
+  try{
+    var V = window.VB_EFF;
+    if(V){
+      if(stats==='srv') v = V.saque(o);
+      else if(stats==='rec') v = V.recepcion(o);
+      else if(stats==='dig') v = V.defensa(o);
+    }
+  }catch(e){}
+  /* El bloqueo no tiene indice ponderado en ningun lado: su numero es Blq #+ */
+  if(stats==='blk') v = Math.round(((o.Punto||0)+(o.Pos||0))/o.T*100);
+  /* Si por lo que sea no esta la definicion unica cargada, no se inventa otra
+     cuenta: se dice que no hay dato. Es preferible a mostrar un numero que no
+     es el de ninguna pantalla. */
+  if(v===null || v===undefined || isNaN(v)) return '\u2013';
+  return v+'%';
+}
+/* A que bateria mira cada fundamento para pintar su semaforo */
+function ppMeta(stats){
+  return stats==='srv'?'sq' : stats==='rec'?'rec' : stats==='dig'?'def' : stats==='blk'?'bqpos' : null;
+}
+function canchaDe(cfg){
+  return (cfg.stats==='rec'||cfg.stats==='dig') ? 'su propia cancha' : 'cancha del rival';
+}
+function rotuloCancha(cfg){
+  if(cfg.stats==='srv') return 'En qué zona cae el saque';
+  if(cfg.stats==='rec') return 'Desde dónde recibe';
+  if(cfg.stats==='dig') return 'Desde dónde defiende';
+  return 'En qué zona cae';
+}
 function buildSection(p){var cfg=ROLECFG[p.role];
   var fh=cfg.filters.map(function(fl,i){return filtCtrl(p.id+'-f'+i,fl,'',filterOpts(p,fl));}).join('');
   if(cfg.stats==='atk'||cfg.stats==='srv'||cfg.stats==='dig'){fh+='<div class="fgroup"><label title="Mín. pelotas">Mín.</label><input type="number" min="0" value="0" id="'+p.id+'-min" style="background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:7px;font-family:inherit;font-weight:700"></div>';}
   return '<div class="player" data-num="'+p.num+'" data-pid="'+p.id+'"><div class="phead"><div class="pnum">'+p.num+'</div><div class="pname">'+p.name+'</div><div class="prole">'+(p.pos||p.role)+'</div><div class="pmeta">'+p.total+U(p.role)+'</div><button class="vtodo" onclick="openZone(\''+p.id+'\',\'*\')" title="Ver todos los videos juntos, de todas las zonas">&#9654; Ver todo</button></div>'
-   +'<div class="filters">'+fh+'</div><div class="natt" id="'+p.id+'-n"></div>'
-   +'<div class="body"><div class="courtwrap"><div class="court" id="'+p.id+'-court"></div><div class="cnote">Doble-click en zona con ▶ → video (partidos con 🎥)</div></div>'
+   +'<details class="fdet"><summary><span class="fbtn">\u2699 Filtros</span>'
+   +   '<span class="fres" id="'+p.id+'-fres">sin filtrar</span></summary>'
+   +   '<div class="filters">'+fh+'</div></details>'
+   +'<div class="natt" id="'+p.id+'-n"></div>'
+   +'<div class="titular" id="'+p.id+'-tit"></div>'
+   +'<div class="body"><div class="courtwrap"><div class="courtbox">'
+   +   '<div class="crot"><b>'+rotuloCancha(cfg)+'</b><span>\u00b7 '+canchaDe(cfg)+'</span></div>'
+   +   '<div class="cnet"></div>'
+   +   '<div class="court" id="'+p.id+'-court"></div></div>'
+   +   '<div class="cnote">Doble-click en zona con \u25b6 \u2192 video (partidos con \ud83c\udfa5)</div></div>'
    +'<div class="stats">'+tiles3(p,cfg)+'</div></div>'+'<div class="read" contenteditable="true" spellcheck="false" data-pid="'+p.id+'" data-ph="Escribí tu análisis…" title="Click para editar" oninput="saveRead(this)">'+readVal(p)+'</div>'+'</div>';
 }
 function render(p){var cfg=ROLECFG[p.role];
@@ -1009,14 +1229,100 @@ function render(p){var cfg=ROLECFG[p.role];
   if(cfg.stats==='atk'){var k=0,e=0,b=0,hd=0,sf=0,tp=0,d0=0,d1=0,d2=0;
     f.forEach(function(a){var ev=a[cfg.evIdx];if(ev==='#')k++;else if(ev==='=')e++;else if(ev==='/')b++;var sb=a[cfg.subIdx];if(sb==='H')hd++;else if(sb==='P')sf++;else if(sb==='T')tp++;var dz=a[cfg.court];if(cfg.dir.L.indexOf(dz)>=0)d0++;else if(cfg.dir.C.indexOf(dz)>=0)d1++;else if(cfg.dir.D.indexOf(dz)>=0)d2++;});
     v=[n?Math.round((k-e-b)/n*100)+'%':'–',P(k),P(b),P(d0),P(d1),P(d2),P(hd),P(sf),P(tp)];
-  }else if(cfg.stats==='srv'){var ace=0,err=0,fu=0,me=0,fa=0,pot=0,flo=0;
-    f.forEach(function(a){var ev=a[cfg.evIdx];if(ev==='#'){ace++;fu++;}else if(ev==='/')fu++;else if(ev==='+')fu++;else if(ev==='!')me++;else if(ev==='-')fa++;else if(ev==='=')err++;var ty=a[0];if(ty==='pot')pot++;else if(ty==='flo')flo++;});
-    v=[n?Math.round((ace-err)/n*100)+'%':'–',P(ace),P(err),P(pot),P(flo),String(n),P(fu),P(me),P(fa)];
+  }else if(cfg.stats==='srv'){var ace=0,err=0,fu=0,me=0,fa=0,pot=0,flo=0,sOv=0,sPos=0;
+    f.forEach(function(a){var ev=a[cfg.evIdx];
+      if(ev==='#'){ace++;fu++;}
+      else if(ev==='/'){fu++;sOv++;}
+      else if(ev==='+'){fu++;sPos++;}
+      else if(ev==='!')me++;else if(ev==='-')fa++;else if(ev==='=')err++;
+      var ty=a[0];if(ty==='pot')pot++;else if(ty==='flo')flo++;});
+    v=[ppEfic('srv',{T:n,Punto:ace,Vend:sOv,Pos:sPos,Adm:me,Neg:fa,Err:err}),
+       P(ace),P(err),P(pot),P(flo),String(n),P(fu),P(me),P(fa)];
   }else{var perf=0,pos=0,ok=0,ov=0,bad=0,rerr=0,rpot=0,rflo=0;
     f.forEach(function(a){var ev=a[cfg.evIdx];if(ev==='#'){perf++;pos++;}else if(ev==='+')pos++;else if(ev==='!')ok++;else if(ev==='/')ov++;else if(ev==='-')bad++;else if(ev==='=')rerr++;var ty=a[0];if(ty==='pot')rpot++;else if(ty==='flo')rflo++;});
-    v=[n?Math.round((pos-rerr-ov)/n*100)+'%':'–',P(pos),P(ov+rerr),P(rpot),P(rflo),String(n),P(perf),P(ok),P(ov+bad)];
+    v=[ppEfic(cfg.stats,{T:n,Punto:perf,Pos:pos-perf,Adm:ok,Neg:bad,Vend:ov,Err:rerr}),
+       P(pos),P(ov+rerr),P(rpot),P(rflo),String(n),P(perf),P(ok),P(ov+bad)];
   }
   for(var i=0;i<9;i++)document.getElementById(p.id+'-s'+i).textContent=v[i];
+
+  /* ══ EL COLOR DEL EFIC ══════════════════════════════════════════════════
+     Solo en ATAQUE, y con motivo: la cuenta del Efic de ataque de esta
+     pantalla —(punto - bloqueado - error) / total— es exactamente la misma
+     que usa el resto de la app, asi que la escala de siempre —40 / 20 / 0—
+     significa aca lo mismo que en el dashboard.
+
+     En saque, recepcion y defensa esta pantalla usa cuentas PROPIAS, que no
+     son las del resto del sistema. Pintarlas con el semaforo de las
+     baterias seria decir "esto esta verde segun el objetivo del club" sobre
+     un numero que no es el del club. Quedan sin color hasta que se decida
+     unificar la cuenta, que es otra conversacion.                        */
+  (function(){
+    var el=document.getElementById(p.id+'-s0'); if(!el) return;
+    el.innerHTML='';
+    var num=parseFloat(String(v[0]).replace('%',''));
+    if(isNaN(num)){ el.textContent=v[0]; return; }
+    /* Ahora que las cuatro cuentas son las del club, el semaforo puede ser el
+       de las baterias en las cuatro: mismo numero, mismo corte, mismo color.
+       El ataque sigue sin bateria propia —no existe un "% Ataque" general en
+       los objetivos— asi que usa la escala de eficacia de siempre. */
+    var c;
+    var meta = ppMeta(cfg.stats);
+    if(meta && typeof objClassify==='function'){
+      try{ c = objClassify(meta, num).color; }catch(e){}
+    }
+    if(!c) c = num>=40?'#22c55e' : num>=20?'#86efac' : num>=0?'#fbbf24' : '#ef4444';
+    var sp=document.createElement('span');
+    sp.className='sem';
+    sp.style.color=c; sp.style.background=c+'18'; sp.style.borderColor=c+'33';
+    sp.textContent=v[0];
+    sp.title = ppMeta(cfg.stats)
+      ? 'El mismo número y el mismo semáforo que la batería de este fundamento'
+      : 'Eficacia de ataque · la misma escala que el resto de la app (40 / 20 / 0)';
+    el.appendChild(sp);
+  })();
+
+  /* ══ EL TITULAR ═════════════════════════════════════════════════════════
+     Sale de los numeros que ya estan en la tarjeta: la zona mas golpeada y
+     su porcentaje, la direccion que mas usa, y como le esta yendo. No
+     agrega un dato nuevo, lo pone adelante. Si hay muy pocas acciones no se
+     escribe nada: una frase afirmativa sobre tres pelotas es peor que el
+     silencio. */
+  (function(){
+    var t=document.getElementById(p.id+'-tit'); if(!t) return;
+    t.innerHTML='';
+    if(n < 8) return;
+    var zt=null, zv=-1;
+    for(var k in z){ if(z[k]>zv){ zv=z[k]; zt=k; } }
+    var partes=[];
+    if(zt && zv>0) partes.push('Su zona es la <b>'+zt+'</b> ('+Math.round(zv/n*100)+'% de '+n+')');
+    if(cfg.stats==='atk'){
+      var dirs=[[cfg.tiles[3],parseFloat(v[3])],[cfg.tiles[4],parseFloat(v[4])],[cfg.tiles[5],parseFloat(v[5])]]
+                 .filter(function(d){ return !isNaN(d[1]); })
+                 .sort(function(a,b){ return b[1]-a[1]; });
+      if(dirs.length && dirs[0][1]>=35) partes.push('pega <b>'+dirs[0][1]+'% por '+String(dirs[0][0]).toLowerCase()+'</b>');
+      var ef=parseFloat(String(v[0]).replace('%',''));
+      if(!isNaN(ef)) partes.push('eficacia <b>'+v[0]+'</b>');
+    }
+    if(partes.length) t.innerHTML = partes.join(' \u00b7 ') + '.';
+  })();
+
+  /* el resumen de los filtros plegados: que se ve sin tener que abrirlos */
+  (function(){
+    var r=document.getElementById(p.id+'-fres'); if(!r) return;
+    var act=[];
+    cfg.filters.forEach(function(fl,i){
+      var el=document.getElementById(p.id+'-f'+i);
+      var txt='';
+      try{
+        if(el && el.tagName==='SELECT') txt = el.selectedIndex>0 ? el.options[el.selectedIndex].text : '';
+        else if(el){ var s2=el.querySelector('.msum'); txt = (s2 && !/^Todas?$/i.test(s2.textContent.trim())) ? s2.textContent.trim() : ''; }
+      }catch(e){}
+      if(txt) act.push(fl.lab+': '+txt);
+    });
+    var mn=document.getElementById(p.id+'-min');
+    if(mn && parseInt(mn.value,10)>0) act.push('mín. '+mn.value);
+    r.textContent = act.length ? act.join(' \u00b7 ') : 'sin filtrar';
+  })();
   (function(){
     /* El rotulo tiene que describir la cancha que se esta viendo. Antes decia
        el total y los cuadrantes sumaban menos: parecia que faltaban datos. */
@@ -1368,8 +1674,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20260926-2333" onerror="void 0"></script>
-<script src="lang.js?v=20260926-2333" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20260927-0006" onerror="void 0"></script>
+<script src="lang.js?v=20260927-0006" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -1387,7 +1693,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20260926-2333" onerror="void 0"></script>
-<script src="ayuda.js?v=20260926-2333"></script>
+<script src="volver_inicio.js?v=20260927-0006" onerror="void 0"></script>
+<script src="ayuda.js?v=20260927-0006"></script>
 </body>
 </html>
