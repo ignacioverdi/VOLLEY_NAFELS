@@ -16,13 +16,13 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260926-2227" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260926-2227" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260926-2227"></script>
-<script src="filtro_tipo.js?v=20260926-2227" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260926-2243" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260926-2243" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260926-2243"></script>
+<script src="filtro_tipo.js?v=20260926-2243" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
-  <script src="objetivos_config.js?v=20260926-2227" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260926-2243" onerror="void 0"></script>
 
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -39,11 +39,11 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
   <!-- modo_toggle.js: el cartelito de PARTIDO / ENTRENAMIENTO. Antes era
        una barra arriba en el medio y chocaba con el selector de idioma;
        ahora es un cartel chico abajo a la izquierda. -->
-  <script src="modo_toggle.js?v=20260926-2227" onerror="void 0"></script>
+  <script src="modo_toggle.js?v=20260926-2243" onerror="void 0"></script>
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20260926-2227" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260926-2243" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   
@@ -142,13 +142,40 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 0%,rgb
 
    Las seis valoraciones bajan un escalon para no competir: siguen con su
    color, que si significa algo, pero mas chicas. */
-.tabla-nueva td.tb-c0{padding-top:8px;padding-bottom:8px;min-width:70px}
-.tabla-nueva .tb-eff{display:block;font-size:19px;font-weight:900;line-height:1.05;
-  letter-spacing:-.3px}
-.tabla-nueva td.tb-c1{min-width:56px}
-.tabla-nueva .tb-volN{display:block;font-size:16px;font-weight:800;line-height:1.05}
-.tabla-nueva td.tb-cn{font-size:13px;font-weight:700;opacity:.82}
-.tabla-nueva tbody tr:hover{background:rgba(255,255,255,.04)!important}
+.tabla-nueva td{padding:13px 14px}
+/* ══ LOS NUMEROS, EN COLUMNA ════════════════════════════════════════════
+   tabular-nums hace que todos los digitos midan lo mismo. Sin eso, en una
+   tipografia proporcional el 1 es mas angosto que el 8 y las unidades de
+   una columna quedan desalineadas de renglon a renglon: 208 arriba de 111
+   no coinciden en ningun digito. Es invisible hasta que se ve, y despues no
+   se puede dejar de ver. */
+.tabla-nueva td, .tabla-nueva th{font-variant-numeric:tabular-nums;
+  font-feature-settings:'tnum' 1}
+.tabla-nueva td.tb-c0{padding-top:9px;padding-bottom:9px;min-width:82px}
+/* El EFF% es el unico numero por el que uno abre esta tabla: va en una
+   pastilla del color de su semaforo, no suelto entre otros seis numeros. */
+.tabla-nueva .tb-eff{display:inline-block;font-size:17px;font-weight:900;line-height:1;
+  letter-spacing:-.2px;padding:5px 10px;border-radius:8px;border:1px solid transparent}
+.tabla-nueva td.tb-c1{min-width:60px}
+.tabla-nueva .tb-volN{display:block;font-size:16px;font-weight:800;line-height:1.05;
+  color:var(--mut)}
+/* Las seis valoraciones bajan un escalon mas: estan para mirarlas cuando uno
+   ya eligio a quien mirar, no para competir con el EFF. */
+.tabla-nueva td.tb-cn{font-size:13px;font-weight:600;opacity:.66}
+.tabla-nueva tbody tr:hover td.tb-cn{opacity:1}
+.tabla-nueva tbody tr{transition:background .12s}
+.tabla-nueva tbody tr:hover{background:rgba(255,255,255,.045)!important}
+/* ══ EL ENCABEZADO SE QUEDA A LA VISTA ═══════════════════════════════════
+   Con trece jugadores y ocho columnas, al llegar a ROFFLER ya no se sabe si
+   la columna que uno esta mirando es "+ POS" o "! NTR". */
+.tabla-nueva thead th{position:sticky;top:0;z-index:2;background:#0f1020;
+  cursor:pointer;user-select:none;white-space:nowrap}
+.tabla-nueva thead th:hover{color:#e2e8f0}
+.tabla-nueva thead th::after{content:'\2195';opacity:.25;margin-left:5px;font-size:10px}
+.tabla-nueva thead th.orden-desc::after{content:'\25bc';opacity:.95;font-size:9px}
+.tabla-nueva thead th.orden-asc::after{content:'\25b2';opacity:.95;font-size:9px}
+.tabla-nueva thead th:first-child{cursor:default}
+.tabla-nueva thead th:first-child::after{content:''}
 /* la fila de tres de las tarjetas (ver el comentario en mkRect) */
 .mk3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding-top:9px;border-top:1px solid var(--b)}
 .mk3>div{min-width:0;text-align:center}
@@ -676,15 +703,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260926-2227" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260926-2227"></script>
+<script src="firebase.js?v=20260926-2243" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-2243"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260926-2227">
+<link rel="stylesheet" href="movil.css?v=20260926-2243">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260926-2227" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260926-2243" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -1697,7 +1724,10 @@ function renderEqContent(){
     var m=null; try{ m = window.OBJETIVOS_CONFIG.metas[id]; }catch(e){}
     var cl; try{ cl = objClassify(id, v); }catch(e){}
     if(!cl) return '<span class="tb-eff">'+txt+'</span>';
-    return '<span class="tb-eff" style="color:'+cl.color+'" title="'+cl.label
+    /* el fondo y el borde salen del MISMO objClassify que la bateria: si
+       manana cambia un objetivo, cambian juntos */
+    return '<span class="tb-eff" style="color:'+cl.color+';background:'+cl.bg
+         + ';border-color:'+cl.border+'" title="'+cl.label
          + (m ? ' \u00b7 objetivo '+m.obj+'%' : '')+'">'+txt+'</span>';
   }
 
@@ -1745,6 +1775,55 @@ function renderEqContent(){
     +'</tr>';
   html+='</tbody></table></div>';
   cont.innerHTML=html;
+  try{ ordenable(cont); }catch(e){}
+}
+
+/* ══ ORDENAR POR CUALQUIER COLUMNA ═══════════════════════════════════════
+   La pregunta "quien saca mejor" se contestaba leyendo trece numeros y
+   acordandose del mayor. Un clic en EFF% y la tabla se ordena.
+
+   Un clic ordena de mayor a menor —que es como uno mira una tabla de
+   rendimiento—, el segundo al reves y el tercero devuelve el orden
+   original, el del numero de camiseta.
+
+   La fila de TOTALES no se mueve nunca: no es un jugador. Y las filas se
+   mueven enteras, con su onclick al video adentro, asi que despues de
+   ordenar cada fila sigue abriendo los cortes del jugador correcto.        */
+function ordenable(cont){
+  var tabla = cont.querySelector('table'); if(!tabla) return;
+  var tb = tabla.tBodies[0]; if(!tb) return;
+  var filas = [].slice.call(tb.rows);
+  /* la ultima es TOTALES: se la guarda aparte */
+  var totales = filas.filter(function(f){ return /TOTALES/i.test(f.cells[0].textContent); });
+  var jugs = filas.filter(function(f){ return totales.indexOf(f) < 0; });
+  if(jugs.length < 3) return;
+  jugs.forEach(function(f,i){ f.setAttribute('data-orden', i); });
+
+  function num(td){
+    if(!td) return -Infinity;
+    var t = td.textContent.replace(/[^\d.,\-\u2212]/g,'').replace('\u2212','-').replace(',','.');
+    var v = parseFloat(t);
+    return isNaN(v) ? -Infinity : v;
+  }
+  var ths = tabla.tHead ? [].slice.call(tabla.tHead.rows[0].cells) : [];
+  ths.forEach(function(th, col){
+    if(col === 0) return;          /* la columna del nombre no se ordena */
+    th.title = 'Ordenar por ' + th.textContent.trim();
+    th.onclick = function(){
+      var modo = th.classList.contains('orden-desc') ? 'asc'
+               : th.classList.contains('orden-asc')  ? 'no'
+               : 'desc';
+      ths.forEach(function(x){ x.classList.remove('orden-desc','orden-asc'); });
+      var orden = jugs.slice();
+      if(modo === 'desc'){ th.classList.add('orden-desc');
+        orden.sort(function(a,b){ return num(b.cells[col]) - num(a.cells[col]); }); }
+      else if(modo === 'asc'){ th.classList.add('orden-asc');
+        orden.sort(function(a,b){ return num(a.cells[col]) - num(b.cells[col]); }); }
+      else orden.sort(function(a,b){ return (+a.getAttribute('data-orden')) - (+b.getAttribute('data-orden')); });
+      orden.forEach(function(f){ tb.appendChild(f); });
+      totales.forEach(function(f){ tb.appendChild(f); });
+    };
+  });
 }
 
 function renderDefensaTabla(){
@@ -2478,11 +2557,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260926-2227"></script>
-<script src="lang.js?v=20260926-2227"></script>
-<script src="temporadas_menu.js?v=20260926-2227"></script>
-<script src="app_offline.js?v=20260926-2227"></script>
-<script src="ayuda.js?v=20260926-2227"></script>
+<script src="chat_nafels.js?v=20260926-2243"></script>
+<script src="lang.js?v=20260926-2243"></script>
+<script src="temporadas_menu.js?v=20260926-2243"></script>
+<script src="app_offline.js?v=20260926-2243"></script>
+<script src="ayuda.js?v=20260926-2243"></script>
 
 <!-- Los archivos de video (datos_video_*.js.enc) se sacaron de esta
      pantalla: pesan unos 15 MB por temporada, descifrarlos son mas de

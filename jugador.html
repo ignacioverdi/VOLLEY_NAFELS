@@ -7,18 +7,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 
 <!-- Datos (cada uno se carga si existe; si no, el onerror lo deja en null) -->
-<script src="categorias_club.js?v=20260926-2227"></script>
-<script src="selector_categoria.js?v=20260926-2227"></script>
-<script src="game_plans.js?v=20260926-2227" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260926-2227" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260926-2243"></script>
+<script src="selector_categoria.js?v=20260926-2243"></script>
+<script src="game_plans.js?v=20260926-2243" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260926-2243" onerror="void 0"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260926-2227"></script>
-<script src="filtro_tipo.js?v=20260926-2227" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260926-2243"></script>
+<script src="filtro_tipo.js?v=20260926-2243" onerror="void 0"></script>
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
      las que no existen las descarta el onerror, sin ruido. Y todas con
      .enc, que es como se publican los datos del club. -->
@@ -28,10 +28,10 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="datos_video_ent_28-29.js.enc" onerror="void 0"></script>
   <script src="datos_partidos.js.enc" onerror="void 0"></script>
 <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
-<script src="firebase.js?v=20260926-2227" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260926-2227"></script>
-<script src="lang.js?v=20260926-2227" onerror="void 0"></script>
-<script src="datos_historial.js?v=20260926-2227" onerror="window.HISTORIAL_DATA=null"></script>
+<script src="firebase.js?v=20260926-2243" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-2243"></script>
+<script src="lang.js?v=20260926-2243" onerror="void 0"></script>
+<script src="datos_historial.js?v=20260926-2243" onerror="window.HISTORIAL_DATA=null"></script>
 <script src="datos_gameplan.js.enc" onerror="window.GAMEPLAN_DATA=null"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
@@ -67,10 +67,28 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
 .qs-item{background:var(--card);padding:14px 8px;text-align:center;}
 .qs-val{font-family:'Bebas Neue',sans-serif;font-size:24px;line-height:1;margin-bottom:3px;}
 .qs-lbl{font-size:7px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase;}
-.main{padding:20px 16px;max-width:600px;margin:0 auto;}
+/* ══ TODO EL ANCHO DE LA PANTALLA ═════════════════════════════════════════
+   Esta pagina nacio para el telefono y se quedo con una columna de 600 px
+   en el medio. En una notebook de 1500 eso son 900 px de fondo vacio a los
+   costados, y todo lo que podria ir al lado de otra cosa —las cuatro lineas
+   de «Cómo viene», las doce tarjetas de acceso— va uno abajo del otro. El
+   jugador termina scrolleando cinco pantallas para ver algo que entra en
+   una y media.
+
+   Ahora el ancho es el de la pantalla, con un tope de 1240 px para que en un
+   monitor grande las lineas de texto no queden de punta a punta, que es
+   incomodo de leer. En el telefono no cambia nada: ahi 600 px nunca fue el
+   limite.
+   ═══════════════════════════════════════════════════════════════════════ */
+.main{padding:20px 16px;max-width:1240px;margin:0 auto;}
 .section-lbl{font-size:9px;color:var(--mut);letter-spacing:3px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
 .section-lbl::after{content:'';flex:1;height:1px;background:var(--border);}
 .accesos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:24px;}
+.acceso-card.full{grid-column:auto}
+/* Sin esto las dos columnas del telefono salian de 187 y 175 px en vez de
+   iguales: una tarjeta de grilla mide por defecto lo que mide su contenido
+   y estira su columna. El texto ya podia achicarse, la tarjeta no. */
+.acceso-card{min-width:0}
 .acceso-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 14px;text-decoration:none;color:var(--txt);transition:all .18s;display:flex;align-items:center;gap:12px;}
 .acceso-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.15);background:var(--card2);}
 .acceso-card.full{grid-column:span 2;}
@@ -79,7 +97,12 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
 .acceso-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1.5px;line-height:1;margin-bottom:2px;}
 .acceso-desc{font-size:9px;color:var(--mut);letter-spacing:.3px;}
 .acceso-arrow{font-size:14px;color:var(--mut);opacity:.5;flex-shrink:0;}
+/* Partidos y entrenamientos eran dos bloques de tres, uno abajo del otro.
+   Con el ancho nuevo entran los dos en la misma fila: seis columnas, y el
+   titulo de cada bloque ocupa sus tres. Asi se comparan de un vistazo, que
+   es exactamente para lo que estan separados. */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
+@media(min-width:860px){ .stats-grid{grid-template-columns:repeat(6,1fr)} }
 .obj-sfbtn{padding:4px 11px;border-radius:6px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);color:#64748b;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
 .obj-sfbtn.on{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.35);color:#e8192c}
 .obj-tfbtn{padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
@@ -121,7 +144,18 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 .hm-icon{font-size:28px}
 .hm-lbl{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px}
 .hm-sub{font-size:9px;color:#64748b;text-align:center}
-@media(min-width:600px){.main{padding:24px 20px;}.accesos-grid{grid-template-columns:repeat(2,1fr);}.hero-badge{width:72px;height:72px;}.hero-nombre{font-size:40px;}}
+@media(min-width:600px){.main{padding:24px 20px;}.hero-badge{width:72px;height:72px;}.hero-nombre{font-size:40px;}}
+/* Las tarjetas de acceso: las que entren, no dos fijas. En el telefono sigue
+   siendo una sola columna; en una notebook entran cuatro o cinco por fila. */
+/* Dos tramos explicitos en vez de un auto-fit para todo. El auto-fit con un
+   minimo de 215 px hacia algo raro en el telefono —dos columnas, una de 215
+   y otra de 169, con la segunda por debajo de su propio minimo— y no vale la
+   pena pelearse con eso: en un telefono el ancho se sabe de antemano.
+   Hasta 560 px, dos columnas, como estuvo siempre. De ahi para arriba, las
+   que entren. */
+@media(min-width:561px){
+  .accesos-grid{grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
+}
 
 /* ══ LOS TRES NUMEROS DE ABAJO DE CADA TARJETA ════════════════════════════
    Van en una clase y NO en el style de la etiqueta a proposito.
@@ -155,7 +189,10 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 .cv-svg{display:block;width:100%;height:auto;margin:3px 0 0}
 .cv-dot{cursor:pointer}
 .cv-res{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:9px 12px;margin-bottom:9px;font-size:12px;line-height:1.5}
-@media(min-width:600px){.cv-grid{grid-template-columns:1fr 1fr}}
+/* Las cuatro lineas de «Cómo viene», una al lado de la otra: comparar el
+   saque con el ataque es justo para lo que sirven, y con dos arriba y dos
+   abajo hay que acordarse de la de arriba mientras se mira la de abajo. */
+@media(min-width:600px){.cv-grid{grid-template-columns:repeat(auto-fit,minmax(min(268px,100%),1fr))}}
 
 /* === ENCABEZADO: QUE NO SE ENCIME === */
 /* La barra de arriba es un flex en una sola fila. Cuando el titulo es
@@ -206,10 +243,10 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260926-2227">
+<link rel="stylesheet" href="movil.css?v=20260926-2243">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260926-2227" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260926-2243" onerror="void 0"></script>
 </head>
 <body>
 <div class="page-header">
@@ -853,12 +890,15 @@ function renderQuickStats(j){
      las pruebas de daltonismo y contraste. */
   function mkRect(color,title,stats){
     var h='<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden">'
-      +'<div style="padding:7px 14px;background:'+color+'14;border-bottom:1px solid '+color+'2a;display:flex;align-items:center;gap:6px">'
+      +'<div style="padding:7px 14px;background:'+color+'14;border-bottom:1px solid '+color+'2a;display:flex;align-items:center;justify-content:center;gap:6px">'
       +'<div style="width:5px;height:5px;border-radius:50%;background:'+color+'"></div>'
       +'<span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:'+color+'">'+title+'</span></div>'
       +'<div style="padding:11px 13px 12px">';
     var eff=stats[0], resto=stats.slice(1);
-    h+='<div style="display:flex;align-items:baseline;gap:7px;margin-bottom:9px">'
+    /* El EFF iba pegado al borde izquierdo y los tres numeros de abajo
+       centrados: cada tarjeta tenia dos ejes distintos y se notaba. Va
+       centrado como el resto. */
+    h+='<div style="display:flex;align-items:baseline;justify-content:center;gap:7px;margin-bottom:9px">'
       +'<span style="font-family:Bebas Neue,sans-serif;font-size:32px;line-height:.9;color:'+(eff.c||'var(--txt)')+'">'+eff.v+'</span>'
       +'<span style="font-size:10px;font-weight:700;letter-spacing:1.4px;color:var(--mut)">'+eff.l+'</span></div>'
       +'<div class="qs-3">';
@@ -1230,7 +1270,7 @@ function renderStats(j){
     if(a.count===0) return '';
     var sE=a.sT>0?VB_EFF.saque(a):null, rE=a.rT>0?VB_EFF.recepcion(a):null,
         aE=a.aT>0?VB_EFF.ataque(a):null;
-    return '<div style="grid-column:1/-1;font-size:9px;font-weight:800;letter-spacing:2px;color:'+lc+';text-transform:uppercase;padding:4px 0 2px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:2px">'+label+' <span style="color:var(--mut);font-weight:700">· '+a.count+(a.count===1?' sesión':' sesiones')+'</span></div>'+
+    return '<div style="grid-column:span 3;font-size:9px;font-weight:800;letter-spacing:2px;color:'+lc+';text-transform:uppercase;padding:4px 0 2px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:2px">'+label+' <span style="color:var(--mut);font-weight:700">· '+a.count+(a.count===1?' sesión':' sesiones')+'</span></div>'+
     '<div class="stat-card"><div class="stat-card-title" style="color:'+VB_COL.sq+'">⬆️ Saque</div>'+
       '<div class="stat-row"><span class="stat-row-lbl">Total</span><span class="stat-row-val" style="color:'+VB_COL.sq+'">'+a.sT+'</span></div>'+
       '<div class="stat-row"><span class="stat-row-lbl">EFF</span><span class="stat-row-val">'+pc(sE)+'</span></div></div>'+
@@ -1380,6 +1420,6 @@ try{
   else window.addEventListener('load', function(){ setTimeout(poner, 400); });
 })();
 </script>
-<script src="ayuda.js?v=20260926-2227"></script>
+<script src="ayuda.js?v=20260926-2243"></script>
 </body>
 </html>
