@@ -244,12 +244,6 @@ def get_players(lines, section):
                 first=parts[10].strip() if len(parts)>10 else ''
                 role=parts[12].strip() if len(parts)>12 else ''
                 pc=parts[13].strip() if len(parts)>13 else ''
-                # Los puestos del .dvw, columna 14: 1 libero · 2 punta · 3 opuesto ·
-                # 4 central · 5 armador. Es la misma tabla de los .sq (SQ_ROLES).
-                # Estaba cruzada: el 5 daba punta y el 4 daba armador, asi que los
-                # ARMADORES figuraban como puntas y los CENTRALES como armadores,
-                # en todos los equipos. Comprobado contra el plantel de Nafels:
-                # con la tabla corregida aciertan los 13 jugadores.
                 pm={'1':'L','2':'OH','3':'OPP','4':'MB','5':'S','L':'L','':'?'}
                 pos='L' if role=='L' else pm.get(pc,'?')
                 players[num]={'name':f"{first} {last}".strip(),'apellido':last,'nombre':first,'pos':pos,'num':num}
@@ -862,9 +856,27 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         # Roster de posiciones — jerarquía: setter→libero→central→outside/opposite
         roster={}
         team_setters = set(str(s['num']) for s in setters_list)
+        # ══ EL PUESTO SALE DEL .dvw ══════════════════════════════════════════
+        #  Data Volley lo trae en [3PLAYERS-H] y [3PLAYERS-V], columna 14:
+        #  1 libero · 2 punta · 3 opuesto · 4 central · 5 armador. Ya se lee
+        #  en get_players y queda en el 'info' de cada jugador.
+        #
+        #  Hasta ahora no se usaba: el puesto se DEDUCIA de las acciones
+        #  —quien recibe mucho es punta, quien ataca de central es central—.
+        #  Eso necesita volumen: con un amistoso de 60 acciones salia '?' y la
+        #  distribucion de armador de los rivales quedaba vacia.
+        #
+        #  Ahora manda el archivo. La deduccion queda de respaldo, para el
+        #  jugador que el .dvw no traiga con puesto.
+        _DEL_DVW = {'S':'SETTER', 'L':'LIBERO', 'MB':'MIDDLE',
+                    'OH':'OUTSIDE', 'OPP':'OPPOSITE'}
         for ns0, pd0 in td.items():
             atk0 = pd0.get('atk',[]); rec0 = len(pd0.get('rec',[]))
             nser = str(ns0)
+            _p = (pd0.get('info') or {}).get('pos', '')
+            if _p in _DEL_DVW:
+                roster[nser] = _DEL_DVW[_p]
+                continue
             if nser in team_setters: roster[nser]='SETTER'; continue
             if rec0 > 15 and len(atk0) <= max(2, rec0*0.05): roster[nser]='LIBERO'; continue
             if len(atk0) < 5: roster[nser]='OTRO'; continue

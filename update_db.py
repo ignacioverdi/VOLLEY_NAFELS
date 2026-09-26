@@ -198,12 +198,6 @@ def get_players(lines, section):
                 first=parts[10].strip() if len(parts)>10 else ''
                 role=parts[12].strip() if len(parts)>12 else ''
                 pc=parts[13].strip() if len(parts)>13 else ''
-                # Los puestos del .dvw, columna 14: 1 libero · 2 punta · 3 opuesto ·
-                # 4 central · 5 armador. Es la misma tabla de los .sq (SQ_ROLES).
-                # Estaba cruzada: el 5 daba punta y el 4 daba armador, asi que los
-                # ARMADORES figuraban como puntas y los CENTRALES como armadores,
-                # en todos los equipos. Comprobado contra el plantel de Nafels:
-                # con la tabla corregida aciertan los 13 jugadores.
                 pm={'1':'L','2':'OH','3':'OPP','4':'MB','5':'S','L':'L','':'?'}
                 pos='L' if role=='L' else pm.get(pc,'?')
                 players[num]={'name':f"{last} {first}".strip(),'pos':pos,'num':num}
@@ -760,9 +754,19 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         # Roster de posiciones (profesional) — jerarquía: setter→libero→central→outside/opposite
         roster={}
         team_setters = set(str(s['num']) for s in setters_list)
+        # El puesto sale del .dvw ([3PLAYERS-H/V], columna 14: 1 libero,
+        # 2 punta, 3 opuesto, 4 central, 5 armador). Deducirlo de las
+        # acciones necesita volumen y con pocos partidos daba '?'.
+        # La deduccion queda de respaldo, para el que no traiga puesto.
+        _DEL_DVW = {'S':'SETTER', 'L':'LIBERO', 'MB':'MIDDLE',
+                    'OH':'OUTSIDE', 'OPP':'OPPOSITE'}
         for ns0, pd0 in td.items():
             atk0 = pd0.get('atk',[]); rec0 = len(pd0.get('rec',[]))
             nser = str(ns0)
+            _p = (pd0.get('info') or {}).get('pos', '')
+            if _p in _DEL_DVW:
+                roster[nser] = _DEL_DVW[_p]
+                continue
             # 1) SETTER
             if nser in team_setters: roster[nser]='SETTER'; continue
             # 2) LIBERO: recibe mucho, casi no ataca
