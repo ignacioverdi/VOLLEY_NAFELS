@@ -37,7 +37,16 @@ COMO SE USA
 """
 import io, os, re, sys, json, glob, subprocess
 
-FOTO = '.control_pantallas.json'
+# ══ DONDE BUSCA LAS PANTALLAS ═══════════════════════════════════════════
+# Antes buscaba los .html en la carpeta ACTUAL de la consola. Desde
+# HACER_TODO andaba —el .bat hace cd a la carpeta del proyecto primero—,
+# pero corriendolo a mano desde cualquier otro lado decia "No hay pantallas
+# .html en esta carpeta" y no hacia nada.
+# Ahora mira siempre la carpeta donde esta ESTE archivo, que es la del
+# proyecto, venga de donde venga la llamada.
+BASE = os.path.dirname(os.path.abspath(__file__)) or '.'
+
+FOTO = os.path.join(BASE, '.control_pantallas.json')
 ENCOGIO = 0.92          # menos del 92% del tamanio anterior = sospechoso
 TABLAS = ['ROLECFG', 'SKILLS', 'OBJ_DETALLE', 'DBAT_VALOR', 'ST_TIPOS']
 
@@ -47,7 +56,52 @@ def bloques_js(html):
 
 
 def funciones(html):
-    return set(re.findall(r'function\s+(\w+)\s*\(', html))
+    """Los nombres de funcion de una pantalla.
+
+    ══ EL PUNTO CIEGO ═══════════════════════════════════════════════════════
+    Antes solo reconocia la forma clasica:
+
+        function cambiarModo(m){ ... }
+
+    En esta app muchas funciones se publican de otra manera —porque viven
+    adentro de un IIFE y se exponen al final—:
+
+        window.vbSetModo = cambiarModo;
+        var objTexto = function(it){ ... };
+        const rkColor = (v, meta) => { ... };
+
+    Todas esas le parecian PERDIDAS aunque estuvieran andando, y el aviso
+    terminaba gritando por cosas sanas: si avisa de lo que esta bien, uno
+    deja de leerlo, y el dia que avise de algo roto tampoco lo va a leer.
+
+    Ahora reconoce las cuatro formas. Se sacan los comentarios antes de
+    mirar, porque en este proyecto estan llenos de nombres de funcion.  """
+    # ══ SACAR LOS COMENTARIOS SIN COMERSE EL CODIGO ══════════════════════
+    # Hay que sacarlos porque en este proyecto los comentarios nombran
+    # funciones a proposito -"renderNovedades() SE BORRO el 26/09"-, y si se
+    # cuentan, una funcion borrada sigue pareciendo viva.
+    #
+    # Pero borrar todo lo que haya entre /* y */ es peligroso: calendario.html
+    # arma un archivo .ics con la linea
+    #     'PRODID:-//Volley Nafels//Calendario//ES'
+    # y otras pantallas llevan barras dentro de textos y de expresiones
+    # regulares. Un /* suelto adentro de un texto abre un comentario falso y
+    # se traga cientos de lineas de codigo de verdad: probado, asi
+    # desaparecian seis funciones sanas de calendario.
+    #
+    # Por eso solo se sacan los comentarios que EMPIEZAN RENGLON -que es como
+    # estan escritos los de este proyecto-. Lo que esta en el medio de una
+    # linea se deja: ahi vive el codigo.
+    limpio = re.sub(r'(?m)^[ \t]*/\*[\s\S]*?\*/', ' ', html)
+    limpio = re.sub(r'(?m)^[ \t]*//[^\n]*', ' ', limpio)
+
+    f = set()
+    f |= set(re.findall(r'function\s+(\w+)\s*\(', limpio))                 # function x(
+    f |= set(re.findall(r'window\.(\w+)\s*=', limpio))                      # window.x =
+    f |= set(re.findall(r'(?:var|let|const)\s+(\w+)\s*=\s*function\b', limpio))
+    f |= set(re.findall(r'(?:var|let|const)\s+(\w+)\s*=\s*(?:async\s*)?\([^)]*\)\s*=>', limpio))
+    f |= set(re.findall(r'(?:var|let|const)\s+(\w+)\s*=\s*(?:async\s*)?\w+\s*=>', limpio))
+    return f
 
 
 def entradas_de_tabla(html, nombre):
@@ -130,10 +184,13 @@ def compila(html):
 def main():
     guardar = '--guardar' in sys.argv
 
-    pantallas = sorted(glob.glob('*.html'))
-    if not pantallas:
-        print('  No hay pantallas .html en esta carpeta.')
+    rutas = sorted(glob.glob(os.path.join(BASE, '*.html')))
+    if not rutas:
+        print('  No hay pantallas .html en %s' % BASE)
         return 0
+    # la clave de la foto es el nombre a secas, no el camino entero
+    pantallas = [os.path.basename(x) for x in rutas]
+    CAMINO = dict(zip(pantallas, rutas))
 
     vieja = {}
     if os.path.exists(FOTO):
@@ -152,7 +209,7 @@ def main():
     avisos = []
 
     for p in pantallas:
-        r, html = radiografia(p)
+        r, html = radiografia(CAMINO[p])
         nueva[p] = r
         v = vieja.get(p)
 
@@ -190,6 +247,7 @@ def main():
         json.dump(nueva, io.open(FOTO, 'w', encoding='utf-8'),
                   ensure_ascii=False, indent=1)
         print('  Foto guardada: %d pantallas.' % len(nueva))
+        print('  Carpeta: %s' % BASE)
         print('  A partir de ahora se comparan contra esta version.')
         print()
         return 0

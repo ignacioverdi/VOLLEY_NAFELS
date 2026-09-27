@@ -1,88 +1,156 @@
 {
+  "_LEEME": [
+    "ESTE ARCHIVO ES UNA COPIA DE LAS REGLAS QUE ESTAN PUBLICADAS.",
+    "Sirve de respaldo y para leerlas sin entrar a la consola.",
+    "",
+    "La version anterior de este archivo NO era la publicada: tenia caminos",
+    "con .write:true sueltos, sin pedir sesion ni rol. Pegarla en la consola",
+    "habria reemplazado las reglas buenas por otras mucho mas abiertas.",
+    "Copiado de la consola el 27/09/2026."
+  ],
   "rules": {
-    ".read": true,
-    ".write": false,
-    "baggerone": {
-      ".write": true
-    },
+    ".read": "auth != null && root.child('usuarios').child(auth.uid).exists()",
+    ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && root.child('roles').child(auth.uid).val() != 'player'",
     "calendario": {
-      ".write": true
+      ".read": true
     },
-    "clip_notas": {
-      ".write": true
-    },
-    "horarios": {
-      ".write": true
-    },
-    "notas": {
-      ".write": true
-    },
-    "notas_pf": {
-      ".write": true
-    },
-    "obs": {
-      ".write": true
-    },
-    "pesos": {
-      ".write": true
-    },
-    "prep_hist": {
-      ".write": true
-    },
-    "prep_rutinas": {
-      ".write": true
-    },
-    "rm": {
-      ".write": true
-    },
-    "wellness": {
-      ".write": true
-    },
-    "voley_codes": {
-      ".write": true
-    },
-    "voley_live": {
-      ".write": true
-    },
-    "voley_data": {
-      ".write": true
-    },
-    "pv_partidos": {
-      ".write": true
-    },
-    "video_salas": {
-      ".write": true
-    },
-    "video_signal": {
-      ".write": true
-    },
-    "cuerpo_tecnico": {
-      ".write": true
-    },
-    "fixture": {
-      ".write": true
-    },
-    "plan_desarrollo": {
-      ".write": true
-    },
-    "plantel_pos": {
-      ".write": true
-    },
-    "pp_vsel": {
-      ".write": true
-    },
-    "pv_sesion": {
-      ".write": true
-    },
-    "demo_acceso": {
-      "$h": {
-        ".write": "!data.exists()"
+    "sesiones": {
+      "dispositivos": {
+        "$uid": {
+          "$disp": {
+            ".write": "auth != null && auth.uid === $uid"
+          }
+        },
+        ".write": "auth != null && root.child('admins').child(auth.uid).exists()"
+      },
+      "accesos": {
+        "$id": {
+          ".write": "auth != null && !data.exists()"
+        }
+      },
+      "corte": {
+        ".write": "auth != null && root.child('admins').child(auth.uid).exists()"
+      },
+      "corte_uid": {
+        ".write": "auth != null && root.child('admins').child(auth.uid).exists()"
+      },
+      "corte_disp": {
+        ".write": "auth != null && root.child('admins').child(auth.uid).exists()"
       }
     },
-    "demo_ip": {
-      "$d": {
-        "$k": {
-          ".write": "!data.exists()"
+    "pesos": {
+      "$k": {
+        ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && $k.beginsWith('prep_' + root.child('jugador_num').child(auth.uid).val() + '_')"
+      }
+    },
+    "obs": {
+      "$k": {
+        ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && $k.beginsWith('prep_obs_' + root.child('jugador_num').child(auth.uid).val() + '_')"
+      }
+    },
+    "rm": {
+      "$k": {
+        ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && $k.beginsWith('prep_rm_' + root.child('jugador_num').child(auth.uid).val() + '_')"
+      }
+    },
+    "wellness": {
+      "$num": {
+        ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && $num === root.child('jugador_num').child(auth.uid).val()"
+      }
+    },
+    "prep_hist": {
+      "$num": {
+        ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && $num === root.child('jugador_num').child(auth.uid).val()"
+      }
+    },
+    "notas": {
+      "$num": {
+        ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && $num === root.child('jugador_num').child(auth.uid).val()"
+      }
+    },
+    "video_salas": {
+      ".write": "auth != null && root.child('usuarios').child(auth.uid).exists()"
+    },
+    "video_signal": {
+      ".write": "auth != null && root.child('usuarios').child(auth.uid).exists()"
+    },
+    "admins": {
+      ".write": false
+    },
+    "usuarios": {
+      ".write": "auth != null && (root.child('usuarios').child(auth.uid).exists() || !root.child('usuarios').exists())"
+    },
+    "roles": {
+      ".write": "auth != null && (root.child('usuarios').child(auth.uid).exists() || !root.child('usuarios').exists())"
+    },
+    "jugador_num": {
+      ".write": "auth != null && (root.child('usuarios').child(auth.uid).exists() || !root.child('usuarios').exists())"
+    },
+    "jugador_cat": {
+      ".write": "auth != null && (root.child('usuarios').child(auth.uid).exists() || !root.child('usuarios').exists())"
+    },
+    "jugador_foto": {
+      ".write": "auth != null && root.child('usuarios').child(auth.uid).exists()"
+    },
+    "prep_rutinas": {
+      ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && root.child('roles').child(auth.uid).val() != 'player'"
+    },
+    "pendientes": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "pv_sesion": {
+      ".write": "auth != null && root.child('usuarios').child(auth.uid).exists()"
+    },
+    "voley_live": {
+      ".write": "auth != null && root.child('usuarios').child(auth.uid).exists()"
+    },
+    "voley_data": {
+      ".write": "auth != null && root.child('usuarios').child(auth.uid).exists()"
+    },
+    "plantel_pos": {
+      ".write": "auth != null && root.child('usuarios').child(auth.uid).exists()"
+    },
+    "cat": {
+      "$categoria": {
+        ".read": "auth != null && root.child('usuarios').child(auth.uid).exists()",
+        ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && root.child('roles').child(auth.uid).val() != 'player'",
+        "calendario": {
+          ".read": true
+        },
+        "wellness": {
+          "$num": {
+            ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && $num === root.child('jugador_num').child(auth.uid).val()"
+          }
+        },
+        "prep_hist": {
+          "$num": {
+            ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && $num === root.child('jugador_num').child(auth.uid).val()"
+          }
+        },
+        "notas": {
+          "$num": {
+            ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && $num === root.child('jugador_num').child(auth.uid).val()"
+          }
+        },
+        "pesos": {
+          "$k": {
+            ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && $k.beginsWith('prep_' + root.child('jugador_num').child(auth.uid).val() + '_')"
+          }
+        },
+        "obs": {
+          "$k": {
+            ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && $k.beginsWith('prep_obs_' + root.child('jugador_num').child(auth.uid).val() + '_')"
+          }
+        },
+        "rm": {
+          "$k": {
+            ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && $k.beginsWith('prep_rm_' + root.child('jugador_num').child(auth.uid).val() + '_')"
+          }
+        },
+        "pendientes": {
+          ".read": "auth != null",
+          ".write": "auth != null"
         }
       }
     }

@@ -78,6 +78,25 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 .cc-cell .zn{position:absolute;top:3px;left:5px;font-size:9px;opacity:.5;font-family:'Bebas Neue',sans-serif}
 .cc-cell .cn{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;color:#fff}
 .cc-cell .pc{position:absolute;bottom:3px;right:5px;font-size:9px;opacity:.8;color:#fff}
+/* ── EL CUARTO DE ZONA ──────────────────────────────────────────────────
+   Cuando se prenden las subzonas, la celda se parte en cuatro como la
+   parte DataVolley mirando desde la red:  A B  /  D C. */
+.cc-cell.con-sz{height:104px;justify-content:flex-start;padding-top:4px}
+.cc-cell .sz-tot{font-size:17px;opacity:.85;line-height:1;margin-bottom:3px}
+.sz-g{display:grid;grid-template-columns:1fr 1fr;gap:2px;width:100%;padding:0 4px}
+.sz-c{position:relative;height:21px;border-radius:3px;border:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:center}
+.sz-l{position:absolute;top:1px;left:3px;font-size:7.5px;letter-spacing:.5px;color:rgba(255,255,255,.55)}
+.sz-v{font-family:'Bebas Neue',sans-serif;font-size:14px;line-height:1;color:#fff}
+.sz-no{font-size:9px;color:#64748b;margin-top:2px;letter-spacing:.3px}
+.sz-n{font-size:8px;color:rgba(255,255,255,.45);margin-top:2px;letter-spacing:.3px}
+.sz-nota{font-size:10px;color:#64748b;margin-top:6px;text-align:center;letter-spacing:.3px}
+/* el boton de prender y apagar */
+.sz-btn{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:#94a3b8;
+  border-radius:9px;padding:7px 13px;font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:12px;letter-spacing:.5px;cursor:pointer;white-space:nowrap}
+.sz-btn:hover{color:#e2e8f0}
+.sz-btn.on{background:rgba(249,115,22,.14);border-color:rgba(249,115,22,.45);color:#F97316}
 
 /* === ENCABEZADO: QUE NO SE ENCIME === */
 /* La barra de arriba es un flex en una sola fila. Cuando el titulo es
@@ -199,6 +218,9 @@ window.__DESCIFRAR_SINCRONO = true;
     <select class="fsel" id="fsel-rec_player"><option value="all" data-t="Todos">Todos</option></select>
   </div></div>
   <div class="counter"><div class="counter-n" id="cnt">0</div><div class="counter-l" data-t="acciones filtradas"><span data-t="acciones filtradas">acciones filtradas</span></div></div>
+  <!-- Partir cada zona en sus cuatro cuartos. Va apagado por defecto: el
+       dato lo marca el scout a mano y todavia no esta en todas. -->
+  <div style="margin-top:10px"><button class="sz-btn" id="szBtn" onclick="subToggle()" data-t="Ver cuartos de zona">Ver cuartos de zona</button></div>
   <button class="reset-btn" onclick="resetFilters()" data-t="Limpiar filtros"><span data-t="Limpiar filtros">Limpiar filtros</span></button>
 </div>
 <div class="content" id="content"><div class="nodata" data-t="Selecciona un jugador para comenzar"><span data-t="Selecciona un jugador para comenzar">Selecciona un jugador para comenzar</span></div></div>
@@ -255,6 +277,10 @@ var GAMES  = RAW.games;
 var RES_DECODE  = ['#','/','+','!','=','-'];
 var MOM_DECODE  = ['early','mid','late'];
 var ATYPE_DECODE= ['SO','TR'];
+/* El cuarto de zona. 0 = el scout no lo marco. Va con las otras tablas
+   porque las filas se leen mas abajo y en javascript un 'var' de mas
+   adelante existe pero vale undefined: puesto despues, reventaba. */
+var SUB_DECODE  = {0:null, 1:'A', 2:'B', 3:'C', 4:'D'};
 
 var REC_DECODE=['#','+','!','-','/','=',null];
 var PLAYERS = {};
@@ -279,6 +305,9 @@ Object.keys(RAW.players).forEach(function(num){
         rec_quality: REC_DECODE[r[9]],
         rec_player_num: recParts[0]?parseInt(recParts[0]):null,
         rec_player_name: recParts[1]||null,
+        /* El cuarto de zona donde cayo: lo agrega el motor al final de la
+           fila, asi que las pantallas viejas no se enteran y siguen igual. */
+        subz:    SUB_DECODE[r[11]||0] || null,
       };
     })
   };
@@ -522,12 +551,96 @@ function getMainOrigin(acts){
 /* === Canchita estilo Plan de Partido (una cancha + linea de origen) === */
 var CC_MIN=2;
 function _ccRGB(c){if(!c)return '129,140,248';c=String(c);if(c.charAt(0)==='#'){var x=c.slice(1);if(x.length===3)x=x.charAt(0)+x.charAt(0)+x.charAt(1)+x.charAt(1)+x.charAt(2)+x.charAt(2);var n=parseInt(x,16);return ((n>>16)&255)+','+((n>>8)&255)+','+(n&255);}var m=c.match(/(\d+)\D+(\d+)\D+(\d+)/);return m?(m[1]+','+m[2]+','+m[3]):'129,140,248';}
-function ccGrid(zones,layout,color,total,opts){opts=opts||{};var minN=opts.minN||0,esOrig=!!opts.origen,rgb=_ccRGB(color);var vals=[];layout.forEach(function(r){r.forEach(function(z){vals.push(zones[z]||0);});});var mx=Math.max.apply(null,vals)||1;var h="<div class='cc-grid'>";layout.forEach(function(row){row.forEach(function(z){var cnt=zones[z]||0,low=(minN>0&&cnt>0&&cnt<minN),bg,inner='';if(cnt<=0){bg='rgba(255,255,255,.02)';}else if(low){bg='rgba(255,255,255,.05)';inner="<div class='cn' style='color:#64748b;font-size:20px'>"+cnt+"</div>";}else{var a=0.16+(cnt/mx)*0.72;bg='rgba('+rgb+','+a.toFixed(2)+')';inner="<div class='cn'>"+cnt+"</div>"+((total>0)?"<div class='pc'>"+Math.round(cnt/total*100)+"%</div>":'');}/* Si la zona tiene acciones, se puede tocar para ver esos videos.
+/* ══ LA SUBZONA: EN QUE CUARTO DE LA ZONA CAYO LA PELOTA ══════════════════
+   DataVolley guarda, pegada a la zona de destino, una letra A/B/C/D que
+   parte esa zona en cuatro. Estaba en los .dvw desde siempre y el motor la
+   tiraba: ahora la guarda, y aca se puede mirar.
+
+   IMPORTANTE, Y POR ESO ESTA A LA VISTA: la subzona la marca el scout a
+   mano, accion por accion, y no siempre la marca. Hoy esta en 4 de cada 10
+   ataques. Un mapa que no diga eso miente: mostraria ocho pelotas por
+   casillero como si fueran todas. Por eso cada cancha dice sobre cuantas
+   acciones esta hecha, y si son pocas lo avisa en vez de dibujar.
+
+   Las cuatro letras se dibujan como el cuarto de cancha que son:
+       A B
+       D C
+   que es como las numera DataVolley mirando desde la red.                */
+var SUB_ON = false;
+try{ SUB_ON = localStorage.getItem('hm_subzona') === '1'; }catch(e){}
+/* Debajo de esto no se parte la zona: con cuatro pelotas repartidas en
+   cuatro cuartos no hay nada que leer. Medido con la temporada actual,
+   las zonas 6, 1 y 5 pasan de veinte marcadas; el resto viene mas flaco.
+   Igual cada cuarto muestra cuantas son, para que se pueda desconfiar. */
+var SUB_MIN = 8;
+function subToggle(){
+  SUB_ON = !SUB_ON;
+  try{ localStorage.setItem('hm_subzona', SUB_ON ? '1' : '0'); }catch(e){}
+  if(typeof render === 'function') render();
+}
+/* Cuenta, para cada zona, cuantas cayeron en cada cuarto. */
+function subContar(acciones, campo){
+  var m = {};
+  (acciones||[]).forEach(function(a){
+    var z = a[campo||'dest'], sz = a.subz;
+    if(!z || !sz) return;
+    if(!m[z]) m[z] = {A:0,B:0,C:0,D:0,n:0};
+    m[z][sz]++; m[z].n++;
+  });
+  return m;
+}
+function subMini(d, rgb){
+  if(!d || d.n < 1) return '';
+  var mx = Math.max(d.A,d.B,d.C,d.D) || 1;
+  var cel = function(k){
+    var v = d[k]||0, a = v ? (0.18 + (v/mx)*0.62) : 0;
+    return "<div class='sz-c' style='background:rgba("+rgb+","+a.toFixed(2)+")'>"
+         + "<span class='sz-l'>"+k+"</span>" + (v ? "<span class='sz-v'>"+v+"</span>" : "")
+         + "</div>";
+  };
+  return "<div class='sz-g'>"+cel('A')+cel('B')+cel('D')+cel('C')+"</div>";
+}
+
+function ccGrid(zones,layout,color,total,opts){
+  opts=opts||{};
+  var minN=opts.minN||0, esOrig=!!opts.origen, rgb=_ccRGB(color);
+  var sub = (SUB_ON && opts.sub) ? opts.sub : null;
+  var vals=[];
+  layout.forEach(function(r){ r.forEach(function(z){ vals.push(zones[z]||0); }); });
+  var mx=Math.max.apply(null,vals)||1;
+  var h="<div class='cc-grid'>";
+  layout.forEach(function(row){ row.forEach(function(z){
+    var cnt=zones[z]||0, low=(minN>0&&cnt>0&&cnt<minN), bg, inner='';
+    if(cnt<=0){
+      bg='rgba(255,255,255,.02)';
+    } else if(low){
+      bg='rgba(255,255,255,.05)';
+      inner="<div class='cn' style='color:#64748b;font-size:20px'>"+cnt+"</div>";
+    } else {
+      var a=0.16+(cnt/mx)*0.72;
+      bg='rgba('+rgb+','+a.toFixed(2)+')';
+      inner="<div class='cn'>"+cnt+"</div>"+((total>0)?"<div class='pc'>"+Math.round(cnt/total*100)+"%</div>":'');
+    }
+    /* Con las subzonas prendidas, la celda se parte en cuatro. Solo si hay
+       suficientes marcadas: con tres pelotas no se dibuja un mapa. */
+    if(sub && cnt>0){
+      var d = sub[z];
+      if(d && d.n >= SUB_MIN){
+        inner = "<div class='cn sz-tot'>"+cnt+"</div>" + subMini(d, rgb)
+              + "<div class='sz-n'>"+d.n+" marcadas</div>";
+      } else if(cnt >= SUB_MIN){
+        inner += "<div class='sz-no'>sin marcar</div>";
+      }
+    }
+    /* Si la zona tiene acciones, se puede tocar para ver esos videos.
        El heatmap deja de ser un cuadro y pasa a ser una puerta al video. */
     var _clic = (cnt>0 && typeof verVideoDest==='function')
       ? " onclick=\"verVideoDest("+z+","+(esOrig?"1":"0")+")\" style=\"background:"+bg+";cursor:pointer\" title=\"Ver los videos de esta zona\""
       : " style='background:"+bg+"'";
-    h+="<div class='cc-cell'"+_clic+"><div class='zn'>"+z+"</div>"+inner+"</div>";});});return h+"</div>";}
+    h+="<div class='cc-cell"+(sub?' con-sz':'')+"'"+_clic+"><div class='zn'>"+z+"</div>"+inner+"</div>";
+  });});
+  return h+"</div>";
+}
 function ccOriginLine(zones,total){
   /* El cartel "Zona de origen: Z2" quedaba arriba de cada cancha con la zona
      mas frecuente, y hacia parecer que TODOS los ataques salieron de ahi
@@ -602,7 +715,21 @@ function verVideoDest(zone, esOrigen){
   window.open(u + _vfilt(), '_blank');
 }
 
-function courtSVG(destZones,originZone,total,color,title){
+/* El cartel que dice sobre cuantas acciones esta hecho el mapa de cuartos.
+   Va SIEMPRE que las subzonas esten prendidas: sin este numero, cuatro
+   pelotas en un casillero parecen una tendencia. */
+function subNota(acciones){
+  if(!SUB_ON) return '';
+  var tot=(acciones||[]).length, con=0;
+  (acciones||[]).forEach(function(a){ if(a.subz) con++; });
+  if(!tot) return '';
+  var pct=Math.round(con/tot*100);
+  var txt = con
+    ? 'cuartos marcados en ' + con + ' de ' + tot + ' (' + pct + '%)'
+    : 'ninguna marcada con el cuarto de zona';
+  return "<div class='sz-nota'>" + txt + "</div>";
+}
+function courtSVG(destZones,originZone,total,color,title,acciones){
   /* La cancha del rival, como se ve desde el banco: la red arriba y la
      fila delantera 4-3-2. Antes estaba invertida en los dos ejes, así que
      los números caían en el lugar equivocado de la cancha. */
@@ -613,7 +740,8 @@ function courtSVG(destZones,originZone,total,color,title){
      ademas filtra de verdad. La linea vacia mantiene las canchas alineadas. */
   h+="<div class='cc-origin' style='visibility:hidden'>&nbsp;</div>";
   h+="<div class='cc-lbl' style='color:rgba(232,25,44,.6)'>"+title+"</div>";
-  h+=ccGrid(destZones,RIVAL,color,total,{minN:CC_MIN});
+  h+=ccGrid(destZones,RIVAL,color,total,{minN:CC_MIN, sub:subContar(acciones)});
+  h+=subNota(acciones);
   return h+"</div>";
 }
 
@@ -644,6 +772,9 @@ function scard(label,color,val,sub){
 }
 
 function render(){
+  /* el boton refleja si estan prendidas */
+  try{ var _b=document.getElementById('szBtn');
+       if(_b){ _b.classList.toggle('on', SUB_ON); } }catch(e){}
   var content=document.getElementById("content");
   var acts=getFiltered();
   document.getElementById("cnt").textContent=acts.length;
@@ -716,13 +847,13 @@ function render(){
   html+="<div class='sec'>Mapas de destino</div><div class='court-row'>";
   var withDest=acts.filter(function(a){return a.dest;});
   var orig=getMainOrigin(acts);
-  if(withDest.length>0) html+="<div class='court-block'><div class='court-title' style='color:#F97316'>Todos ("+total+")</div>"+courtSVG(buildDestZones(withDest),orig,withDest.length,"#F97316","▲ RIVAL")+"</div>";
+  if(withDest.length>0) html+="<div class='court-block'><div class='court-title' style='color:#F97316'>Todos ("+total+")</div>"+courtSVG(buildDestZones(withDest),orig,withDest.length,"#F97316","▲ RIVAL",withDest)+"</div>";
   var soWD=soActs.filter(function(a){return a.dest;});
-  if(soWD.length>0) html+="<div class='court-block'><div class='court-title' style='color:#22C55E'>Side Out ("+soActs.length+")</div>"+courtSVG(buildDestZones(soWD),getMainOrigin(soActs),soWD.length,"#22C55E","▲ RIVAL")+"</div>";
+  if(soWD.length>0) html+="<div class='court-block'><div class='court-title' style='color:#22C55E'>Side Out ("+soActs.length+")</div>"+courtSVG(buildDestZones(soWD),getMainOrigin(soActs),soWD.length,"#22C55E","▲ RIVAL",soWD)+"</div>";
   var trWD=trActs.filter(function(a){return a.dest;});
-  if(trWD.length>0) html+="<div class='court-block'><div class='court-title' style='color:#818CF8'>Transicion ("+trActs.length+")</div>"+courtSVG(buildDestZones(trWD),getMainOrigin(trActs),trWD.length,"#818CF8","▲ RIVAL")+"</div>";
+  if(trWD.length>0) html+="<div class='court-block'><div class='court-title' style='color:#818CF8'>Transicion ("+trActs.length+")</div>"+courtSVG(buildDestZones(trWD),getMainOrigin(trActs),trWD.length,"#818CF8","▲ RIVAL",trWD)+"</div>";
   var killWD=acts.filter(function(a){return a.result=="#"&&a.dest;});
-  if(killWD.length>0) html+="<div class='court-block'><div class='court-title' style='color:#22c55e'>Kills ("+kills+")</div>"+courtSVG(buildDestZones(killWD),orig,killWD.length,"#22c55e","▲ RIVAL")+"</div>";
+  if(killWD.length>0) html+="<div class='court-block'><div class='court-title' style='color:#22c55e'>Kills ("+kills+")</div>"+courtSVG(buildDestZones(killWD),orig,killWD.length,"#22c55e","▲ RIVAL",killWD)+"</div>";
   // Blocked attacks - show ORIGIN zones (where they were attacking from when blocked)
   /* Los ataques bloqueados, por la zona DESDE DONDE se atacaba: en que zona lo
      bloquean mas. Un ataque bloqueado no tiene destino —la pelota nunca paso—,

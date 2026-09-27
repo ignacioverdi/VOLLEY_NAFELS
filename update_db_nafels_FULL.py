@@ -546,6 +546,11 @@ def parse_dvw_both(fpath, temporada):
 
             orig=int(traj[0]) if traj and traj[0].isdigit() else 0
             dest=int(traj[1]) if traj and len(traj)>1 and traj[1].isdigit() else 0
+            # La SUBZONA: la letra que va justo despues de la zona de destino
+            # -en '42C' el 4 es de donde salio, el 2 adonde fue y la C el
+            # cuarto de esa zona-. Estaba en el archivo y se descartaba.
+            subz=traj[2].upper() if traj and len(traj)>2 and traj[2].isalpha() else ''
+            if subz not in ('A','B','C','D'): subz=''
             sc=l.split(';')
             # Campo de fase de DataVolley (sc[2]): 'r' = side-out (reception), resto = transición
             fase_dv=sc[2].strip() if len(sc)>2 else ''
@@ -566,7 +571,7 @@ def parse_dvw_both(fpath, temporada):
             if not _MISMO_EQUIPO and t!=pfx: continue
 
             action={'pnum':pnum,'stype':stype,'effect':effect,'combo': normalize_combo(combo),
-                    'orig':orig,'dest':dest,'setter_pos':setter_pos,'set_num':set_num,
+                    'orig':orig,'dest':dest,'subz':subz,'setter_pos':setter_pos,'set_num':set_num,
                     'date':date,'rival':rival,'atype':current_atype,'fase_dv':fase_dv,
                     'srv_orig':prev_srv_orig,'temporada':temporada}
 
@@ -1335,6 +1340,8 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
     COMBO_IDX={c:i for i,c in enumerate(combos)}
     RES_IDX={'#':0,'/':1,'+':2,'!':3,'=':4,'-':5}
     REC_IDX={'#':0,'+':1,'!':2,'-':3,'/':4,'=':5}
+    # La subzona: el cuarto de la zona de destino. 0 es "el scout no la marco".
+    SUB_IDX={'':0,'A':1,'B':2,'C':3,'D':4}
     CALL_LIST=['K1','K7','KM','K2','KC','KP','KE','KB','KO','KS']
     CALL_IDX={c:i for i,c in enumerate(CALL_LIST)}
     setters=setters or {}; rallies=rallies or {}
@@ -1372,15 +1379,16 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
             if dig:
                 dig_p[ns]={'name':name,'apellido':ape,'num':num,
                     'd':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,
-                           RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0)]
+                           RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),
+                           SUB_IDX.get(a.get('subz',''),0)]
                           for a in dig]}
-            if atk: atk_p[ns]={'name':name,'num':num,'a':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,a.get('atype',0),COMBO_IDX.get(a.get('combo',''),-1),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),6,-1] for a in atk]}
+            if atk: atk_p[ns]={'name':name,'num':num,'a':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,a.get('atype',0),COMBO_IDX.get(a.get('combo',''),-1),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),6,-1,SUB_IDX.get(a.get('subz',''),0)] for a in atk]}
             if srv:
                 stl=list(dict.fromkeys('S'+a.get('stype','Q') for a in srv)) or ['SQ']; sidx={s:i for i,s in enumerate(stl)}
-                srv_p[ns]={'name':name,'num':num,'stypes':stl,'s':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,sidx.get('S'+a.get('stype','Q'),0),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0)] for a in srv]}
+                srv_p[ns]={'name':name,'num':num,'stypes':stl,'s':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,sidx.get('S'+a.get('stype','Q'),0),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),SUB_IDX.get(a.get('subz',''),0)] for a in srv]}
             if rec:
                 rtl=list(dict.fromkeys('R'+a.get('stype','M') for a in rec)) or ['RM']; rtidx={r:i for i,r in enumerate(rtl)}
-                rec_p[ns]={'name':name,'apellido':ape,'num':num,'rtypes':rtl,'r':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,rtidx.get('R'+a.get('stype','M'),0),REC_IDX.get(a.get('effect','-'),3),a.get('orig',0),a.get('dest',0)] for a in rec]}
+                rec_p[ns]={'name':name,'apellido':ape,'num':num,'rtypes':rtl,'r':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,rtidx.get('R'+a.get('stype','M'),0),REC_IDX.get(a.get('effect','-'),3),a.get('orig',0),a.get('dest',0),SUB_IDX.get(a.get('subz',''),0)] for a in rec]}
         # Armar AMBOS armadores (estructura setters array que usa el game plan)
         team_setters = setters.get(team, [])
         if not isinstance(team_setters, list): team_setters = [team_setters]

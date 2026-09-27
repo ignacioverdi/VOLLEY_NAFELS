@@ -37,7 +37,7 @@ import os,re,sys,json,glob,unicodedata
 # 10 -> 11: la combinacion del ataque se guardaba solo si el codigo
 #           empezaba con X/V/P/C. Este club tipea con la otra familia
 #           (W4, G4, Y8...) y se perdian 681 de 702 ataques.
-DATA_VERSION = 11
+DATA_VERSION = 12
 
 
 def _turno(nombre_archivo):
@@ -343,6 +343,14 @@ def parse_dvw(path, ent=False, modo_high_set=False):
                 _traj=_tp[_ti] if len(_tp)>_ti else ''
                 if _traj and len(_traj)>0 and _traj[0].isdigit(): a['oz']=int(_traj[0])
                 if _traj and len(_traj)>1 and _traj[1].isdigit(): a['dz']=int(_traj[1])
+                # ══ EL CUARTO DE ZONA ═════════════════════════════════════
+                # Pegada a la zona de destino viene una letra A/B/C/D que
+                # parte esa zona en cuatro -en '42C' el 4 es de donde salio,
+                # el 2 adonde fue y la C el cuarto-. Estaba en el archivo
+                # desde siempre y se descartaba: sin ella el mapa de calor
+                # no puede afinar mas alla de las nueve zonas grandes.
+                if _traj and len(_traj)>2 and _traj[2].upper() in ('A','B','C','D'):
+                    a['sz']=_traj[2].upper()
             elif sk=='B':
                 # ══ La zona del bloqueo ═══════════════════════════════════
                 # No se guardaba. Sin ella, el mapa de bloqueo ponia TODAS las

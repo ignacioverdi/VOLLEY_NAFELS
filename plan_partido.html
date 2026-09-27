@@ -947,20 +947,37 @@ function setBlq(pos,val){
   blqVerificar();
   renderArmador();
 }
-/* Se pregunta a la base, sin pasar por el cache local, si lo guardado llego.
-   Si no llego, la pantalla lo dice: "solo en esta computadora". */
+/* ══ PREGUNTARLE A LA BASE SI LLEGO — CON LA LLAVE PUESTA ═══════════════
+   Esto vuelve a leer lo guardado salteando el cache local, para poder
+   avisar si quedo solo en esta computadora.
+
+   La primera version preguntaba SIN credencial, y las reglas de la base
+   piden estar identificado hasta para leer. O sea: la lectura la rechazaban
+   siempre, y la pantalla avisaba "no se pudo compartir" aunque el bloqueo
+   hubiera llegado perfecto. Un aviso que grita cuando todo esta bien es
+   peor que no tener aviso.
+
+   Ahora va con el mismo sufijo de credencial que usa el resto de la app.
+   Y si no hay credencial a mano, NO se avisa nada: que no se pueda
+   comprobar no es lo mismo que haber fallado.                            */
 function blqVerificar(){
   if(typeof FB_URL==='undefined' || typeof fetch!=='function') return;
+  if(typeof _fbSufijo!=='function') return;
   setTimeout(function(){
-    fetch(FB_URL+'/'+BLQ_RUTA+'.json?_='+Date.now())
-      .then(function(r){ return r.ok?r.json():null; })
-      .then(function(d){
-        var antes=BLQ_SOLO_ACA;
-        BLQ_SOLO_ACA = !(d && typeof d==='object' && Object.keys(BLQ).every(function(k){ return d[k]===BLQ[k]; }));
-        if(antes!==BLQ_SOLO_ACA) renderArmador();
-      })
-      .catch(function(){});
-  }, 900);
+    var p;
+    try{ p=_fbSufijo(); }catch(e){ return; }
+    if(!p || typeof p.then!=='function') return;
+    p.then(function(q){
+      if(!q) return;                       /* sin credencial: no se opina */
+      return fetch(FB_URL+'/'+BLQ_RUTA+'.json'+q+'&_='+Date.now())
+        .then(function(r){ return r.ok?r.json():null; })
+        .then(function(d){
+          var antes=BLQ_SOLO_ACA;
+          BLQ_SOLO_ACA = !(d && typeof d==='object' && Object.keys(BLQ).every(function(k){ return d[k]===BLQ[k]; }));
+          if(antes!==BLQ_SOLO_ACA) renderArmador();
+        });
+    }).catch(function(){});
+  }, 1200);
 }
 if(typeof fbGet==='function'){
   fbGet(BLQ_RUTA, function(d){

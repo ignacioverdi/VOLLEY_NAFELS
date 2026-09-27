@@ -55,6 +55,12 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 .fsel{width:100%;background:var(--card2);border:1px solid var(--border2);color:var(--txt);padding:7px 10px;border-radius:8px;font-family:"Barlow Condensed",sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:6px}
 .fsel:last-child{margin-bottom:0}
 .fsel option{background:#0D0E1A}
+  .sz-nota{font-size:10px;color:#64748b;margin-top:4px;text-align:center;letter-spacing:.3px}
+  .sz-btn{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:#94a3b8;
+    border-radius:9px;padding:7px 13px;font-family:'Barlow Condensed',sans-serif;font-weight:700;
+    font-size:12px;letter-spacing:.5px;cursor:pointer;white-space:nowrap}
+  .sz-btn:hover{color:#e2e8f0}
+  .sz-btn.on{background:rgba(249,115,22,.14);border-color:rgba(249,115,22,.45);color:#F97316}
 </style>
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
 <script src="categorias_club.js?v=20260927-0943" onerror="void 0"></script>
@@ -82,7 +88,7 @@ window.__DESCIFRAR_SINCRONO = true;
 <body>
 <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
 
-<div class="hdr"><div><div class="hdr-t" data-t="NAFELS — ANALISIS DE RECEPCION 2026"><span data-t="NAFELS — ANALISIS DE RECEPCION 2026">NAFELS — ANALISIS DE RECEPCION 2026</span></div><div class="hdr-s" data-t="26 partidos NLA · EFF = (1x# + 0.5x+ - 0.5x/ - 1x=) / total"><span data-t="26 partidos NLA · EFF = (1x# + 0.5x+ - 0.5x/ - 1x=) / total">26 partidos NLA · EFF = (1x# + 0.5x+ - 0.5x/ - 1x=) / total</span></div></div>
+<div class="hdr"><div><div class="hdr-t" data-t="NAFELS — ANALISIS DE RECEPCION 2026"><span data-t="NAFELS — ANALISIS DE RECEPCION 2026">NAFELS — ANALISIS DE RECEPCION 2026</span></div><div class="hdr-s" data-t="26 partidos NLA · EFF = (100x# + 75x+ + 50x! + 25x- + 12,5x/) / total"><span data-t="26 partidos NLA · EFF = (100x# + 75x+ + 50x! + 25x- + 12,5x/) / total">26 partidos NLA · EFF = (100x# + 75x+ + 50x! + 25x- + 12,5x/) / total</span></div></div>
 </div>
 <div class="layout">
 <div class="sidebar">
@@ -119,6 +125,7 @@ window.__DESCIFRAR_SINCRONO = true;
     <select class="fsel" id="fsel-origin"><option value="all" data-t="Todos">Todos</option></select>
   </div></div>
   <div class="counter"><div class="counter-n" id="cnt">0</div><div class="counter-l" data-t="acciones filtradas"><span data-t="acciones filtradas">acciones filtradas</span></div></div>
+  <div style="margin-top:10px"><button class="sz-btn" id="szBtn" onclick="subToggle()" data-t="Ver cuartos de zona">Ver cuartos de zona</button></div>
   <button class="reset-btn" onclick="resetFilters()" data-t="Limpiar filtros"><span data-t="Limpiar filtros">Limpiar filtros</span></button>
 </div>
 <div class="content" id="content"><div class="nodata" data-t="Selecciona un jugador"><span data-t="Selecciona un jugador">Selecciona un jugador</span></div></div>
@@ -146,6 +153,8 @@ function translatePage(){document.querySelectorAll('[data-i18n]').forEach(functi
 
 var RIVALS=RAW.rivals,GAMES=RAW.games;
 var RES_D=['#','+','!','-','/','='],MOM_D=['early','mid','late'];
+/* El cuarto de zona; 0 = el scout no lo marco. Va antes de usarse. */
+var SUB_DECODE={0:null,1:'A',2:'B',3:'C',4:'D'};
 var OBJ_VAL=50;
 var T1K='RM',T2K='RQ';
 var TKEY='r',TYPESKEY='rtypes';
@@ -158,7 +167,7 @@ Object.keys(RAW.players).forEach(function(num){
   var p=RAW.players[num],types=p[TYPESKEY]||[];
   PLAYERS[num]={name:p.name,num:p.num,actions:(p[TKEY]||[]).map(function(r){
     return {rival:RIVALS[r[0]],gi:r[1],set:r[2],moment:MOM_D[r[3]],
-      stype:types[r[4]]||'',result:RES_D[r[5]],origin:r[6]||null,dest:r[7]||null,
+      stype:types[r[4]]||'',result:RES_D[r[5]],origin:r[6]||null,dest:r[7]||null,subz:SUB_DECODE[r[8]||0]||null,
       date:GAMES[r[1]]?GAMES[r[1]].date:''};
   })};
 });
@@ -274,7 +283,63 @@ function buildZones(acts,key){
 // Single court SVG: shows both origin and destination on correct halves
 // RIVAL field (top): zones [[1,6,5],[9,8,7],[2,3,4]]
 // OWN field (bottom): zones [[4,3,2],[7,8,9],[5,6,1]]
-function singleCourtSVG(origZones, destZones, origColor, destColor, total, extra){
+/* ══ LOS CUARTOS DE ZONA ═══════════════════════════════════════════════════
+   DataVolley guarda, pegada a la zona de destino, una letra A/B/C/D que
+   parte esa zona en cuatro. La marca el scout a mano y no siempre la marca:
+   por eso cada cancha dice sobre cuantas acciones esta hecho el dibujo, y
+   si son pocas no se parte nada. Un mapa de cuartos con cuatro pelotas no
+   es un mapa, es ruido con forma de mapa.
+
+   Los cuartos se ubican como los numera DataVolley mirando desde la red:
+       A B
+       D C                                                               */
+var SUB_ON = false;
+try{ SUB_ON = localStorage.getItem('hm_subzona') === '1'; }catch(e){}
+var SUB_MIN = 8;
+function subToggle(){
+  SUB_ON = !SUB_ON;
+  try{ localStorage.setItem('hm_subzona', SUB_ON ? '1' : '0'); }catch(e){}
+  if(typeof render === 'function') render();
+}
+function subContar(acciones){
+  var m = {};
+  (acciones||[]).forEach(function(a){
+    var z = a.dest, sz = a.subz;
+    if(!z || !sz) return;
+    if(!m[z]) m[z] = {A:0,B:0,C:0,D:0,n:0};
+    m[z][sz]++; m[z].n++;
+  });
+  return m;
+}
+/* Los cuatro rectangulos adentro de una celda de la cancha SVG. */
+function subSVG(x, y, CW, CH, d, color){
+  if(!d || d.n < SUB_MIN) return '';
+  var mx = Math.max(d.A,d.B,d.C,d.D) || 1;
+  var w = (CW-4)/2, h = (CH-4)/2, s = '';
+  [['A',0,0],['B',1,0],['D',0,1],['C',1,1]].forEach(function(q){
+    var k=q[0], cx=x+2+q[1]*w, cy=y+2+q[2]*h, v=d[k]||0;
+    var op = v ? (0.12 + (v/mx)*0.72) : 0.03;
+    s += "<rect x='"+(cx+0.4)+"' y='"+(cy+0.4)+"' width='"+(w-0.8)+"' height='"+(h-0.8)
+       + "' fill='"+color+"' opacity='"+op.toFixed(2)+"' rx='1.5'/>";
+    s += "<text x='"+(cx+2)+"' y='"+(cy+5)+"' font-size='4' fill='rgba(255,255,255,.45)'"
+       + " font-family='Barlow Condensed,sans-serif'>"+k+"</text>";
+    if(v) s += "<text x='"+(cx+w/2)+"' y='"+(cy+h/2+4)+"' font-size='8' fill='white'"
+       + " text-anchor='middle' font-family='Bebas Neue,sans-serif'>"+v+"</text>";
+  });
+  return s;
+}
+/* El cartel que dice sobre cuantas acciones esta hecho el dibujo. */
+function subNota(acciones){
+  if(!SUB_ON) return '';
+  var tot=0, con=0;
+  (acciones||[]).forEach(function(a){ if(a.dest){ tot++; if(a.subz) con++; } });
+  if(!tot) return '';
+  var txt = con ? ('cuartos marcados en '+con+' de '+tot+' ('+Math.round(con/tot*100)+'%)')
+                : 'ninguna marcada con el cuarto de zona';
+  return "<div class='sz-nota'>"+txt+"</div>";
+}
+function singleCourtSVG(origZones, destZones, origColor, destColor, total, extra, acciones){
+  var _sub = SUB_ON ? subContar(acciones) : null;
   var RIVAL=[[1,6,5],[9,8,7],[2,3,4]];
   var OWN=[[4,3,2],[7,8,9],[5,6,1]];
   var maxO=Math.max.apply(null,Object.values(origZones))||1;
@@ -318,8 +383,16 @@ function singleCourtSVG(origZones, destZones, origColor, destColor, total, extra
       if(cnt>0){
         var op=0.08+(cnt/maxD)*0.7;
         s+="<rect x='"+(x+1.5)+"' y='"+(y+1.5)+"' width='"+(CW-3)+"' height='"+(CH-3)+"' fill='"+destColor+"' opacity='"+op+"' rx='3' onclick=\"verVideoDest("+zone+",'"+(extra||'')+"')\" style=\"cursor:pointer\"/>";
-        s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+5)+"' font-family='Bebas Neue,sans-serif' font-size='11' fill='white' text-anchor='middle'>"+cnt+"</text>";
-        if(total>0) s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+15)+"' font-size='6' fill='rgba(255,255,255,.5)' text-anchor='middle'>"+Math.round(cnt/total*100)+"%</text>";
+        /* Con los cuartos prendidos y datos suficientes, la celda se parte
+           en cuatro y el total pasa arriba, chiquito. */
+        var _d = _sub ? _sub[zone] : null;
+        if(_d && _d.n >= SUB_MIN){
+          s+=subSVG(x, y, CW, CH, _d, destColor);
+          s+="<text x='"+(x+CW-3)+"' y='"+(y+CH-2)+"' font-size='5' fill='rgba(255,255,255,.5)' text-anchor='end' font-family='Barlow Condensed,sans-serif'>"+cnt+"</text>";
+        } else {
+          s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+5)+"' font-family='Bebas Neue,sans-serif' font-size='11' fill='white' text-anchor='middle'>"+cnt+"</text>";
+          if(total>0) s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+15)+"' font-size='6' fill='rgba(255,255,255,.5)' text-anchor='middle'>"+Math.round(cnt/total*100)+"%</text>";
+        }
       }
       s+="<text x='"+(x+5)+"' y='"+(y+11)+"' font-size='6' fill='rgba(255,255,255,.2)' font-family='Bebas Neue,sans-serif'>"+zone+"</text>";
     });
@@ -327,7 +400,7 @@ function singleCourtSVG(origZones, destZones, origColor, destColor, total, extra
   s+="<text x='"+(W/2)+"' y='"+(P+9)+"' font-size='6' fill='rgba(232,25,44,.5)' text-anchor='middle' font-family='Barlow Condensed,sans-serif' font-weight='800' letter-spacing='2'>▲ RIVAL</text>";
   s+="<text x='"+(W/2)+"' y='"+(H-3)+"' font-size='6' fill='rgba(129,140,248,.35)' text-anchor='middle' font-family='Barlow Condensed,sans-serif' font-weight='800' letter-spacing='2'>▼ PROPIO</text>";
   s+='</svg>';
-  return s;
+  return s + subNota(acciones);
 }
 function buildZonesFrom(acts,key){
   var z={1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0};
@@ -344,6 +417,7 @@ function verVideoOrig(zone,extra){ if(!_vchk())return; window.open('cortes.html?
 function abrirVideo(){ if(!_vchk())return; window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk='+encodeURIComponent(VSK),'_blank'); }
 function accToggle(id){ var hdr=document.getElementById('acc-hdr-'+id); if(!hdr) return; hdr.classList.toggle('active'); }
 function render(){
+  try{ var _b=document.getElementById('szBtn'); if(_b) _b.classList.toggle('on', SUB_ON); }catch(e){}
   var content=document.getElementById('content');
   var acts=getFiltered();
   document.getElementById('cnt').textContent=acts.length;
@@ -384,7 +458,7 @@ function render(){
     var origZ=buildZonesFrom(wO,'origin'),destZones=buildZonesFrom(wD,'dest');
     html+="<div style='text-align:center'>";
     html+="<div class='court-title' style='color:#94a3b8'>Todos ("+total+")</div>";
-    html+=singleCourtSVG(origZ,destZones,'#818CF8','#F97316',Math.max(wO.length,wD.length),'');
+    html+=singleCourtSVG(origZ,destZones,'#818CF8','#F97316',Math.max(wO.length,wD.length),'',wD);
     html+="<div class='legend' style='justify-content:center'>";
     html+="<div class='leg-item'><div class='leg-dot' style='background:#818CF8'></div>Origen</div>";
     html+="<div class='leg-item'><div class='leg-dot' style='background:#F97316'></div>Destino</div>";
@@ -398,7 +472,7 @@ function render(){
     var rD=buildZonesFrom(rA.filter(function(a){return a.dest;}),'dest');
     html+="<div style='text-align:center'>";
     html+="<div class='court-title' style='color:"+(RES_COLOR[r]||'#94a3b8')+"'>"+(RES_LABEL[r]||r)+' ('+rA.length+")</div>";
-    html+=singleCourtSVG(rO,rD,'rgba(129,140,248,0.5)',RES_COLOR[r]||'#F97316',rA.length,'&ev='+encodeURIComponent(r));
+    html+=singleCourtSVG(rO,rD,'rgba(129,140,248,0.5)',RES_COLOR[r]||'#F97316',rA.length,'&ev='+encodeURIComponent(r),rA);
     html+='</div>';
   });
   html+='</div></div>';

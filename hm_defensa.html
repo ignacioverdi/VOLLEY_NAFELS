@@ -109,6 +109,12 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
     align-items: flex-start;
   }
 }
+.sz-nota{font-size:10px;color:#64748b;margin-top:4px;text-align:center;letter-spacing:.3px}
+.sz-btn{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:#94a3b8;
+  border-radius:9px;padding:7px 13px;font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:12px;letter-spacing:.5px;cursor:pointer;white-space:nowrap}
+.sz-btn:hover{color:#e2e8f0}
+.sz-btn.on{background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.45);color:#22C55E}
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
@@ -126,7 +132,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   <!-- PARTIDO / ENTRENAMIENTO, igual que en las otras pantallas -->
   <div style="display:flex;gap:6px;margin-left:auto" id="modo-def-wrap"></div>
   <a href="index.html" class="back" data-t="← Inicio"><span data-t="← Inicio">← Inicio</span></a>
-  <div><div class="hdr-t" id="hdr-t" data-t="ANALISIS DE DEFENSA"><span data-t="ANALISIS DE DEFENSA">ANALISIS DE DEFENSA</span></div><div class="hdr-s" id="hdr-s" data-t="EFF = (1x# + 0.5x+ − 0.5x− − 1x=) / total"><span data-t="EFF = (1x# + 0.5x+ − 0.5x− − 1x=) / total">EFF = (1x# + 0.5x+ − 0.5x− − 1x=) / total</span></div></div>
+  <div><div class="hdr-t" id="hdr-t" data-t="ANALISIS DE DEFENSA"><span data-t="ANALISIS DE DEFENSA">ANALISIS DE DEFENSA</span></div><div class="hdr-s" id="hdr-s" data-t="EFF = (100x# + 75x+ + 50x! + 25x−) / total"><span data-t="EFF = (100x# + 75x+ + 50x! + 25x−) / total">EFF = (100x# + 75x+ + 50x! + 25x−) / total</span></div></div>
 </div>
 <div class="layout">
   <div class="sidebar">
@@ -153,6 +159,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
       <select class="fsel" id="fsel-res"><option value="all" data-t="Todas">Todas</option></select>
     </div></div>
     <div class="counter"><div class="counter-n" id="cnt">0</div><div class="counter-l" data-t="defensas mostradas"><span data-t="defensas mostradas">defensas mostradas</span></div></div>
+    <div style="margin-top:10px"><button class="sz-btn" id="szBtn" onclick="subToggle()" data-t="Ver cuartos de zona">Ver cuartos de zona</button></div>
     <button class="reset-btn" onclick="resetF()" data-t="Limpiar filtros"><span data-t="Limpiar filtros">Limpiar filtros</span></button>
   </div>
   <div class="content" id="content"><div class="nodata" data-t="Elegí un jugador para ver su defensa"><span data-t="Elegí un jugador para ver su defensa">Elegí un jugador para ver su defensa</span></div></div>
@@ -252,7 +259,7 @@ function __defensaMain(){
   (function(){ for(var _k in VD){ var _m=VD[_k]; if(_m.home===EQ){ NAME=_m.homeName||NAME; break; } if(_m.away===EQ){ NAME=_m.awayName||NAME; break; } } })();
   var _nm=0; (function(){ var seen={}; ALL.forEach(function(a){ if(!seen[a.code]){seen[a.code]=1;_nm++;} }); })();
   var _th=document.getElementById('hdr-t'); if(_th) _th.textContent=NAME+' — ANALISIS DE DEFENSA';
-  var _ts=document.getElementById('hdr-s'); if(_ts) _ts.textContent=_nm+' partidos · EFF = (1x# + 0.5x+ − 0.5x− − 1x=) / total';
+  var _ts=document.getElementById('hdr-s'); if(_ts) _ts.textContent=_nm+' partidos · EFF = (100x# + 75x+ + 50x! + 25x−) / total';
 
   var F={player:'',rival:'all',gi:'all',set:'all',res:'all'};
   var $=function(id){return document.getElementById(id);};
@@ -325,7 +332,58 @@ function __defensaMain(){
 }
   function pct(n,t){ return t>0?Math.round(n/t*100):0; }
 
-  function courtSVG(origZ,destZ,total){
+  /* ══ LOS CUARTOS DE ZONA ═══════════════════════════════════════════════
+     Pegada a la zona donde cayo la pelota, DataVolley guarda una letra
+     A/B/C/D que parte esa zona en cuatro. La marca el scout a mano y no
+     siempre la marca, asi que cada cancha dice sobre cuantas defensas esta
+     hecho el dibujo, y si son pocas no se parte nada.
+         A B
+         D C   (como las numera DataVolley mirando desde la red)          */
+  var SUB_ON = false;
+  try{ SUB_ON = localStorage.getItem('hm_subzona') === '1'; }catch(e){}
+  var SUB_MIN = 8;
+  window.subToggle = function(){
+    SUB_ON = !SUB_ON;
+    try{ localStorage.setItem('hm_subzona', SUB_ON ? '1' : '0'); }catch(e){}
+    render();
+  };
+  function subContar(acciones){
+    var m = {};
+    (acciones||[]).forEach(function(a){
+      var z = a.dz, sz = a.sz;
+      if(!z || !sz) return;
+      if(!m[z]) m[z] = {A:0,B:0,C:0,D:0,n:0};
+      if(m[z][sz] === undefined) return;
+      m[z][sz]++; m[z].n++;
+    });
+    return m;
+  }
+  function subSVG(x, y, CW, CH, d, color){
+    if(!d || d.n < SUB_MIN) return '';
+    var mx = Math.max(d.A,d.B,d.C,d.D) || 1;
+    var w = (CW-4)/2, h = (CH-4)/2, out = '';
+    [['A',0,0],['B',1,0],['D',0,1],['C',1,1]].forEach(function(q){
+      var k=q[0], cx=x+2+q[1]*w, cy=y+2+q[2]*h, v=d[k]||0;
+      var op = v ? (0.12 + (v/mx)*0.74) : 0.03;
+      out += "<rect x='"+(cx+0.4)+"' y='"+(cy+0.4)+"' width='"+(w-0.8)+"' height='"+(h-0.8)
+           + "' fill='"+color+"' opacity='"+op.toFixed(2)+"' rx='1.5'/>";
+      out += "<text x='"+(cx+2)+"' y='"+(cy+5.5)+"' font-size='4.5' fill='rgba(255,255,255,.45)'>"+k+"</text>";
+      if(v) out += "<text x='"+(cx+w/2)+"' y='"+(cy+h/2+4)+"' font-size='9' fill='white'"
+           + " text-anchor='middle' font-family='Bebas Neue,sans-serif'>"+v+"</text>";
+    });
+    return out;
+  }
+  function subNota(acciones){
+    if(!SUB_ON) return '';
+    var tot=0, con=0;
+    (acciones||[]).forEach(function(a){ if(a.dz){ tot++; if(a.sz) con++; } });
+    if(!tot) return '';
+    var txt = con ? ('cuartos marcados en '+con+' de '+tot+' ('+Math.round(con/tot*100)+'%)')
+                  : 'ninguna marcada con el cuarto de zona';
+    return "<div class='sz-nota'>"+txt+"</div>";
+  }
+  function courtSVG(origZ,destZ,total,acciones){
+    var _sub = SUB_ON ? subContar(acciones) : null;
     var W=180,H=218,P=5,BAND=13,CH=32,CW=(W-P*2)/3;
     /* La cancha del rival, como se ve desde el banco: la red arriba y la
      fila delantera 4-3-2. Antes estaba invertida en los dos ejes, así que
@@ -362,13 +420,18 @@ function __defensaMain(){
     OWN.forEach(function(row,ri){ row.forEach(function(zone,ci){
       var cnt=destZ[zone]||0,x=P+ci*CW,y=H/2+ri*CH, op=cnt>0?0.12+(cnt/maxD)*0.78:0.03;
       s+="<rect x='"+(x+1.5)+"' y='"+(y+1.5)+"' width='"+(CW-3)+"' height='"+(CH-3)+"' fill='#22C55E' opacity='"+op+"' rx='3'"+(cnt>0?" onclick=\"verZona("+zone+",'dz')\" style=\"cursor:pointer\"":"")+"/>";
-      if(cnt>0){ s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+4)+"' font-family='Bebas Neue,sans-serif' font-size='15' fill='white' text-anchor='middle'>"+cnt+"</text>";
+      var _d = (_sub && cnt>0) ? _sub[zone] : null;
+      if(_d && _d.n >= SUB_MIN){
+        /* la celda se parte en cuatro y el total pasa abajo, chiquito */
+        s+=subSVG(x, y, CW, CH, _d, '#22C55E');
+        s+="<text x='"+(x+CW-3)+"' y='"+(y+CH-3)+"' font-size='5.5' fill='rgba(255,255,255,.55)' text-anchor='end'>"+cnt+"</text>";
+      } else if(cnt>0){ s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+4)+"' font-family='Bebas Neue,sans-serif' font-size='15' fill='white' text-anchor='middle'>"+cnt+"</text>";
         if(total>0)s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+13)+"' font-size='6.5' fill='rgba(255,255,255,.6)' text-anchor='middle'>"+pct(cnt,total)+"%</text>"; }
       s+="<text x='"+(x+4)+"' y='"+(y+9)+"' font-size='6' fill='rgba(255,255,255,.18)'>"+zone+"</text>";
     }); });
     s+="<text x='"+(W/2)+"' y='10' font-size='6.5' fill='rgba(232,25,44,.7)' text-anchor='middle' font-weight='800' letter-spacing='2'>ATAQUE RIVAL</text>";
     s+="<text x='"+(W/2)+"' y='"+(H-4)+"' font-size='6.5' fill='rgba(34,197,94,.65)' text-anchor='middle' font-weight='800' letter-spacing='2'>DESTINO DEFENSA</text>";
-    s+="</svg>"; return s;
+    s+="</svg>"; return s + subNota(acciones);
   }
 
   function _vf(){ var s=''; if(F.rival&&F.rival!=='all')s+='&rival='+encodeURIComponent(F.rival); if(F.gi&&F.gi!=='all'){ var m=VD[F.gi]; if(m&&m.date)s+='&date='+encodeURIComponent(m.date); } return s; }
@@ -376,6 +439,7 @@ function __defensaMain(){
   window.abrirVideo=function(){ if(!F.player){alert('Elegí un jugador primero.');return;} window.open('cortes.html?num='+encodeURIComponent(F.player)+'&sk=Defensa&equipo='+EQ+_vf(),'_blank'); };
 
   function render(){
+    try{ var _b=document.getElementById('szBtn'); if(_b) _b.classList.toggle('on', SUB_ON); }catch(e){}
     var c=$('content'), acts=filtered();
     $('cnt').textContent=acts.length;
     if(!F.player){ c.innerHTML="<div class='nodata'>Elegí un jugador para ver su defensa</div>"; return; }
@@ -404,7 +468,7 @@ function __defensaMain(){
     html+="<div class='panel' style='max-width:360px'>";
     if(_hasZ){
       html+="<div class='court-title'>Origen del ataque ↔ destino de la defensa</div>";
-      html+=courtSVG(origZ,destZ,total);
+      html+=courtSVG(origZ,destZ,total,acts);
       html+="<div class='legend'><div class='leg-item'><div class='leg-dot' style='background:#E8192C'></div>De dónde atacaron</div><div class='leg-item'><div class='leg-dot' style='background:#22C55E'></div>A dónde defendió</div></div>";
       html+="<div style='font-size:11px;color:var(--muted);text-align:center;margin-top:8px'>Clickeá un casillero para ver esas defensas en video 🎬</div>";
     } else {
