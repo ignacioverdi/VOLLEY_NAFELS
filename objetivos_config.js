@@ -234,6 +234,71 @@ function objClassifyVsTeam(val,teamVal){
   if(d>=-8) return{color:'#fbbf24',bg:'rgba(251,191,36,.1)',  border:'rgba(251,191,36,.3)',  label:'Neutro'};
   return         {color:'#ef4444',bg:'rgba(239,68,68,.1)',   border:'rgba(239,68,68,.3)',   label:'Bajo equipo'};
 }
+/* ══ DOS JUGADORES CON EL MISMO APELLIDO ═══════════════════════════════════
+   Este es EL arreglo de los dos SCHMID, en el archivo que carga toda la app.
+
+       #7  SCHMID R   (Roy,   central)
+       #20 SCHMID J   (Jonas, libero)
+
+   Buscando por apellido suelto, "SCHMID R" devolvia el primero que encontraba
+   -el libero-, asi que al central se le mostraban los numeros del otro.
+
+   El orden es: primero el NUMERO de camiseta, que es unico y no se puede
+   confundir; despues el nombre entero; despues que uno sea el principio del
+   otro -"schmid r" contra "schmid roy"-; y recien al final el apellido suelto,
+   pidiendo que no haya dos candidatos: si hay mas de uno se prefiere NO mostrar
+   nada antes que mostrar los datos del jugador equivocado.
+
+   Vive aca para que sea uno solo. Las pantallas que traian su propia copia
+   siguen andando igual: la copia de la pantalla se define despues y gana, y
+   hace exactamente lo mismo. */
+function VB_matchName(nombre, keys){
+  keys = keys || [];
+  var num = null, i;
+  try{
+    var mn = String(nombre||'').match(/^\s*#?(\d{1,2})\b/);
+    if(mn) num = parseInt(mn[1], 10);
+    if(num === null && window.JUG_NUM != null) num = parseInt(window.JUG_NUM, 10);
+  }catch(e){}
+  if(num !== null && !isNaN(num)){
+    for(i=0;i<keys.length;i++){
+      var mk = String(keys[i]||'').match(/^\s*#?(\d{1,2})\b/);
+      if(mk && parseInt(mk[1],10) === num) return keys[i];
+    }
+  }
+  var b  = String(nombre||'').replace(/^\d+\s*/,'').toLowerCase().trim();
+  var bs = b.split(' ')[0];
+  if(!b) return null;
+
+  /* 1) el nombre entero, igual */
+  for(i=0;i<keys.length;i++){
+    if(String(keys[i]||'').toLowerCase().replace(/^\d+\s*/,'').trim() === b) return keys[i];
+  }
+  /* 2) empieza igual */
+  var porPrefijo = [];
+  for(i=0;i<keys.length;i++){
+    var k = String(keys[i]||'').toLowerCase().replace(/^\d+\s*/,'').trim();
+    if(b.length > 2 && (k.indexOf(b) === 0 || b.indexOf(k) === 0)) porPrefijo.push(keys[i]);
+  }
+  if(porPrefijo.length === 1) return porPrefijo[0];
+  /* 3) solo el apellido: si hay dos, ninguno */
+  var porApellido = [];
+  for(i=0;i<keys.length;i++){
+    var k2 = String(keys[i]||'').toLowerCase().replace(/^\d+\s*/,'').trim();
+    if(k2.split(' ')[0] === bs) porApellido.push(keys[i]);
+  }
+  if(porApellido.length === 1) return porApellido[0];
+  return null;
+}
+/* Buscar un jugador dentro de una lista de objetos que tienen .nombre */
+function VB_buscarJugador(nombre, lista){
+  if(!lista || !lista.length) return null;
+  var nombres = lista.map(function(x){ return (x && x.nombre) || ''; });
+  var k = VB_matchName(nombre, nombres);
+  return k ? lista[nombres.indexOf(k)] : null;
+}
+try{ window.VB_matchName = VB_matchName; window.VB_buscarJugador = VB_buscarJugador; }catch(e){}
+
 function objCalcVals(nombreJugador){
   // Use per-partido data if selected
   if(false){ // handled above with INDIVIDUAL_SRC
@@ -241,12 +306,7 @@ function objCalcVals(nombreJugador){
     if(pd){
       if(nombreJugador){
         // Find jugador in this partido by name
-        var nmC2 = nombreJugador.replace(/^\d+\s*/,'').toLowerCase();
-        var pj2 = pd.jugadores ? pd.jugadores.find(function(x){
-          if(!x.nombre) return false;
-          var xC2 = x.nombre.replace(/^\d+\s*/,'').toLowerCase();
-          return xC2 === nmC2 || xC2.split(' ')[0] === nmC2.split(' ')[0];
-        }) : null;
+        var pj2 = VB_buscarJugador(nombreJugador, pd.jugadores);
         if(pj2 && pj2.objetivos && Object.keys(pj2.objetivos).length > 0) return pj2.objetivos;
       } else {
         // Equipo for this partido
@@ -271,12 +331,7 @@ function objCalcVals(nombreJugador){
     var pd2 = INDIVIDUAL_SRC.find(function(p){ return p.nombre === currentObjPartido; });
     if(pd2){
       if(nombreJugador){
-        var nmC3 = nombreJugador.replace(/^\d+\s*/,'').toLowerCase();
-        var pj3 = pd2.jugadores ? pd2.jugadores.find(function(x){
-          if(!x.nombre) return false;
-          var xC3 = x.nombre.replace(/^\d+\s*/,'').toLowerCase();
-          return xC3 === nmC3 || xC3.split(' ')[0] === nmC3.split(' ')[0];
-        }) : null;
+        var pj3 = VB_buscarJugador(nombreJugador, pd2.jugadores);
         if(pj3 && pj3.objetivos && Object.keys(pj3.objetivos).length>0) return pj3.objetivos;
       } else {
         if(pd2.equipo_obj && Object.keys(pd2.equipo_obj).length>0) return pd2.equipo_obj;
@@ -286,14 +341,7 @@ function objCalcVals(nombreJugador){
 
   // Acumulado from datos_partidos.js or datos_entrenamientos.js
   if(JUGADORES_SRC && nombreJugador){
-    var nmClean = nombreJugador.replace(/^\d+\s*/,'').toLowerCase();
-    var pj = JUGADORES_SRC.find(function(x){
-      if(!x.nombre) return false;
-      var xClean = x.nombre.replace(/^\d+\s*/,'').toLowerCase();
-      var nmApellido = nmClean.split(' ')[0];
-      var xApellido  = xClean.split(' ')[0];
-      return xClean === nmClean || nmApellido === xApellido;
-    });
+    var pj = VB_buscarJugador(nombreJugador, JUGADORES_SRC);
     if(pj && pj.objetivos && Object.keys(pj.objetivos).length > 0){
       return pj.objetivos;
     }
@@ -320,7 +368,26 @@ function objCalcVals(nombreJugador){
   }
   var a={sT:0,sPunto:0,sPos:0,sVend:0,sErr:0,rT:0,rPunto:0,rPos:0,rVend:0,rErr:0,
          aT:0,aPunto:0,aVend:0,aErr:0,bT:0,bPt:0,bPtPos:0,mbT:0,mbPt:0,mbVnd:0,mbErr:0};
-  var CENT=[2,10,15,17];
+  /* ══ QUIENES SON LOS CENTRALES ═══════════════════════════════════════
+     Aca habia una lista escrita a mano -[2, 10, 15, 17]- que es de otro
+     club: en este plantel el 2 y el 20 son liberos, el 10 y el 17 son
+     puntas y el 15 no existe. Los centrales son los que el plantel marca
+     como CENTRAL. Si no hay plantel cargado se queda con la lista vieja,
+     para no cambiar el comportamiento sin datos. */
+  var CENT = (function(){
+    try{
+      var P = window.PLANTEL_NAFELS || window.PLANTEL_CLUB;
+      var js = (P && (P.jugadores || P.lista)) || (window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores) || [];
+      var l = [];
+      js.forEach(function(j){
+        if(String(j.pos || j.rol || '').toUpperCase().indexOf('CENTRAL') >= 0){
+          var n = parseInt(j.num, 10); if(n) l.push(n);
+        }
+      });
+      if(l.length) return l;
+    }catch(e){}
+    return [2,10,15,17];
+  })();
   D.entrenamientos.forEach(function(s){
     s.jugadores.forEach(function(j){
       if(j.n==='TOTALES EQUIPO') return;
@@ -337,7 +404,15 @@ function objCalcVals(nombreJugador){
   v.rec  =a.rT>0?VB_EFF.recepcion(a):null;
   v.bqpos=a.bT>0?Math.round((a.bPt+a.bPtPos)/a.bT*100):null;
   v.bqpt =a.bT>0?Math.round(a.bPt/a.bT*100):null;
-  v.atqhb=a.mbT>0?Math.round((a.mbPt-a.mbVnd-a.mbErr)/a.mbT*100):null;
+  /* ══ EL ATAQUE DE LOS CENTRALES ES 'ATQ CENTRAL', NO 'ATQ ALTA' ═══════
+     Este numero se acumula sobre los CENTRALES, pero se publicaba como
+     atqhb, que en las metas es '% Atq Alta' con objetivo 18 -la pelota alta
+     de punta y opuesto-. La del central es atqq, '% Atq Central', objetivo
+     55. O sea: el numero del central se comparaba contra el objetivo
+     equivocado, y le daba siempre por arriba.
+     La pelota alta no se calcula aca, asi que queda sin valor, que es mejor
+     que mostrar uno que no es. */
+  v.atqq=a.mbT>0?Math.round((a.mbPt-a.mbVnd-a.mbErr)/a.mbT*100):null;
   return v;
 }
 
@@ -986,13 +1061,16 @@ function objNumeroDe(nombre){
 
   /* 1. el plantel del club */
   try{
-    var P = window.PLANTEL || window.PLANTEL_NAFELS || window.PLANTEL_CLUB;
-    if(P && P.length){
-      for(var i=0;i<P.length;i++){
-        var j = P[i];
-        if(_cmp(j.ap, n) || _cmp(j.nombre, n) || _cmp(j.name, n)
-           || _cmp((j.ap||'') + ' ' + (j.nom||''), n)) return Number(j.num);
-      }
+    /* PLANTEL_NAFELS es un objeto -{temporada, jugadores, staff, lista}-, no
+       una lista: preguntarle .length daba undefined y este paso no corria
+       nunca, asi que siempre caia a comparar por texto. Y el nombre de pila
+       esta en 'nombre', no en 'nom'. */
+    var _p = window.PLANTEL || window.PLANTEL_NAFELS || window.PLANTEL_CLUB;
+    var P = (_p && (_p.jugadores || _p.lista)) || (Array.isArray(_p) ? _p : []);
+    for(var i=0;i<P.length;i++){
+      var j = P[i];
+      if(_cmp(j.ap, n) || _cmp(j.nombre, n) || _cmp(j.name, n)
+         || _cmp((j.ap||'') + ' ' + (j.nombre||''), n)) return Number(j.num);
     }
   }catch(e){}
 

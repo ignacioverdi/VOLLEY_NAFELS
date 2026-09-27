@@ -15,7 +15,7 @@
   :root{--bg:#07080f;--card:#0d0e1a;--card2:#12131f;--border:rgba(255,255,255,.07);
     --txt:#e2e8f0;--mut:#64748b;--r:#8ca0b8;--a:#f59e0b;--v:#22c55e;--red:#E8192C;}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{margin:0;background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',sans-serif;padding-bottom:60px;font-size:14.5px}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',sans-serif;padding-bottom:60px;font-size:15.5px}
   button,select,input,textarea{font-family:'Barlow Condensed',sans-serif}
   /* La lista de objetivos es texto: una columna muy ancha se lee mal. En
      vez de estirar la linea, en pantalla grande van DOS fundamentos por
@@ -32,33 +32,33 @@
   .back{padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);
     color:var(--mut);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
   .back:hover{color:var(--txt);border-color:var(--red)}
-  h1{font-family:'Bebas Neue',sans-serif;font-size:22px;margin:0;font-weight:400;letter-spacing:3px}
+  h1{font-family:'Bebas Neue',sans-serif;font-size:23px;margin:0;font-weight:400;letter-spacing:3px}
   /* En el celular 'Plan de Desarrollo Individual' entraba en tres
      renglones y empujaba todo el encabezado hacia abajo. */
   @media(max-width:480px){
     .wrap{padding:14px 14px}
-    h1{font-size:17px;letter-spacing:1.5px;line-height:1.05}
+    h1{font-size:18px;letter-spacing:1.5px;line-height:1.05}
   }
   .langsw{margin-left:auto;display:flex;gap:4px}
   .langsw button{background:transparent;border:1px solid var(--border);color:var(--mut);border-radius:7px;padding:4px 8px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit}
   .langsw button.on{background:rgba(232,25,44,.12);color:var(--red);border-color:rgba(232,25,44,.35)}
-  .sub{color:var(--mut);font-size:12.5px;margin:2px 0 16px 2px}
+  .sub{color:var(--mut);font-size:13.5px;margin:2px 0 16px 2px}
   .selrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
   /* Los campos eran BLANCOS con texto negro en una app toda oscura: era
      lo primero que saltaba a la vista y no pasa en ninguna otra pantalla. */
   select,input[type=text]{background:var(--card2);color:var(--txt);border:1px solid rgba(255,255,255,.14);
-    border-radius:9px;padding:9px 11px;font-size:13.5px;font-weight:600}
+    border-radius:9px;padding:9px 11px;font-size:14.5px;font-weight:600}
   select:focus,input[type=text]:focus{outline:none;border-color:var(--red)}
   .prog{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:18px}
   .prog-bar{height:9px;border-radius:6px;background:#1e2130;overflow:hidden;display:flex;margin-top:8px}
   .prog-bar span{display:block;height:100%}
-  .prog-lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--mut)}
+  .prog-lbl{display:flex;justify-content:space-between;font-size:13px;color:var(--mut)}
   .skill{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;
     margin-bottom:14px;break-inside:avoid;-webkit-column-break-inside:avoid;page-break-inside:avoid}
   /* Cuanto de ese fundamento ya esta consolidado, en su propio color. */
   .skill-prog{height:3px;background:#1e2130}
   .skill-prog span{display:block;height:100%;border-radius:0 2px 2px 0}
-  .skill-head{padding:13px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);font-weight:800;font-size:15px}
+  .skill-head{padding:13px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);font-weight:800;font-size:16px}
   .skill-ic{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
   .skill-count{margin-left:auto;font-size:11px;color:var(--mut);font-weight:600}
   .items{padding:6px 12px 12px}
@@ -67,7 +67,7 @@
   .state{flex-shrink:0;width:26px;height:26px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:default;background:transparent}
   .state.ed{cursor:pointer}
   .item-body{flex:1;min-width:0}
-  .item-txt{font-size:13.5px;line-height:1.4}
+  .item-txt{font-size:14.5px;line-height:1.4}
   .item-meta{display:flex;gap:8px;align-items:center;margin-top:5px;flex-wrap:wrap}
   .cat{font-size:9px;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border-radius:20px;font-weight:700;background:rgba(255,255,255,.05);color:var(--mut)}
   .hist{display:flex;gap:3px;align-items:center}
@@ -77,11 +77,11 @@
   .add{padding:10px 12px 4px;display:flex;flex-direction:column;gap:8px}
   .add-row{display:flex;gap:8px;flex-wrap:wrap}
   .add-row input{flex:1;min-width:120px}
-  .btn{background:#1e2130;border:1px solid var(--border);color:var(--txt);border-radius:9px;padding:9px 13px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer}
+  .btn{background:#1e2130;border:1px solid var(--border);color:var(--txt);border-radius:9px;padding:9px 13px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
   .btn.p{background:var(--red);color:#fff;border-color:var(--red)}
   .lib-toggle{width:100%;text-align:left;background:#1a1d2b}
   .lib-panel{max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:10px;margin-top:8px;background:var(--card2)}
-  .lib-row{display:flex;gap:9px;align-items:flex-start;padding:10px 11px;border-bottom:1px solid var(--border);cursor:pointer;font-size:12.5px;line-height:1.4}
+  .lib-row{display:flex;gap:9px;align-items:flex-start;padding:10px 11px;border-bottom:1px solid var(--border);cursor:pointer;font-size:13.5px;line-height:1.4}
   .lib-row:last-child{border-bottom:none}
   .lib-row:active,.lib-row:hover{background:rgba(255,255,255,.05)}
   .lib-row .lib-txt{flex:1;min-width:0}
@@ -89,25 +89,25 @@
   .lib-row.dup{opacity:.42;cursor:default}
   .lib-row.dup .lib-add{color:var(--mut)}
   .lib-row .cat{flex-shrink:0;align-self:flex-start;margin-top:1px}
-  .empty{color:var(--mut);font-size:12.5px;padding:10px 4px;font-style:italic}
+  .empty{color:var(--mut);font-size:13.5px;padding:10px 4px;font-style:italic}
   .roview{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:20px;padding:4px 11px;font-size:10px;color:var(--mut);display:inline-flex;gap:5px;align-items:center}
   /* Al jugador no se le da el desplegable del plantel: se le dice quien es. */
   .quien{background:var(--card2);border:1px solid rgba(255,255,255,.14);border-radius:9px;
-    padding:9px 11px;font-size:13.5px;font-weight:700;color:var(--txt)}
+    padding:9px 11px;font-size:14.5px;font-weight:700;color:var(--txt)}
   /* == EL FOCO DE LA SEMANA ==============================================
      Con veinte objetivos cargados, un jugador no sabe por donde empezar.
      El entrenador marca dos o tres con la estrella y son los que aparecen
      arriba de todo, antes de los fundamentos. */
   .foco{background:linear-gradient(180deg,rgba(245,158,11,.10),rgba(245,158,11,.03));
     border:1px solid rgba(245,158,11,.30);border-radius:14px;padding:13px 16px;margin-bottom:18px}
-  .foco-t{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;color:var(--a);margin-bottom:9px}
+  .foco-t{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--a);margin-bottom:9px}
   .foco-i{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05)}
   .foco-i:last-child{border-bottom:none}
   .foco-d{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px}
-  .foco-x{flex:1;min-width:0;font-size:13.5px;line-height:1.4}
+  .foco-x{flex:1;min-width:0;font-size:14.5px;line-height:1.4}
   .foco-e{font-size:10px;font-weight:700;flex-shrink:0;margin-top:2px}
   .foco-vac{background:var(--card);border:1px dashed var(--border);border-radius:14px;
-    padding:12px 16px;margin-bottom:18px;color:var(--mut);font-size:12.5px}
+    padding:12px 16px;margin-bottom:18px;color:var(--mut);font-size:13.5px}
   .foco-av{color:var(--a);font-size:11.5px;margin-top:9px}
   .fstar{flex-shrink:0;font-size:15px;line-height:1;padding:2px 5px;color:var(--mut);cursor:pointer;user-select:none}
   .fstar:hover{color:var(--a)}
@@ -120,7 +120,7 @@
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260927-0943">
+<link rel="stylesheet" href="movil.css?v=20260926-2156">
 </head>
 <body>
 <div class="wrap">
@@ -140,19 +140,19 @@
   <div id="skills" class="skills"></div>
 </div>
 
-<script src="categorias_club.js?v=20260927-0943"></script>
-<script src="selector_categoria.js?v=20260927-0943"></script>
+<script src="categorias_club.js?v=20260926-2156"></script>
+<script src="selector_categoria.js?v=20260926-2156"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260927-0943"></script>
-<script src="firebase.js?v=20260927-0943" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260927-0943"></script>
-<script src="lang.js?v=20260927-0943" onerror="void 0"></script>
-<script src="correcciones_tecnicas.js?v=20260927-0943" onerror="void 0"></script>
-<script src="plantel_nafels.js?v=20260927-0943" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260926-2156"></script>
+<script src="firebase.js?v=20260926-2156" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-2156"></script>
+<script src="lang.js?v=20260926-2156" onerror="void 0"></script>
+<script src="correcciones_tecnicas.js?v=20260926-2156" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20260926-2156" onerror="void 0"></script>
 <script src="datos_casla.js.enc" onerror="void 0"></script>
 <script>
 (function(){
@@ -448,6 +448,6 @@ window.__DESCIFRAR_SINCRONO = true;
   } else { render(); }
 })();
 </script>
-<script src="ayuda.js?v=20260927-0943"></script>
+<script src="ayuda.js?v=20260926-2156"></script>
 </body>
 </html>

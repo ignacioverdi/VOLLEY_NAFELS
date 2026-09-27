@@ -158,7 +158,26 @@ function objCalcVals(nombreJugador){
   }
   var a={sT:0,sPunto:0,sPos:0,sVend:0,sErr:0,rT:0,rPunto:0,rPos:0,rVend:0,rErr:0,
          aT:0,aPunto:0,aVend:0,aErr:0,bT:0,bPt:0,bPtPos:0,mbT:0,mbPt:0,mbVnd:0,mbErr:0};
-  var CENT=[2,10,15,17];
+  /* ══ QUIENES SON LOS CENTRALES ═══════════════════════════════════════
+     Aca habia una lista escrita a mano -[2, 10, 15, 17]- que es de otro
+     club: en este plantel el 2 y el 20 son liberos, el 10 y el 17 son
+     puntas y el 15 no existe. Los centrales son los que el plantel marca
+     como CENTRAL. Si no hay plantel cargado se queda con la lista vieja,
+     para no cambiar el comportamiento sin datos. */
+  var CENT = (function(){
+    try{
+      var P = window.PLANTEL_NAFELS || window.PLANTEL_CLUB;
+      var js = (P && (P.jugadores || P.lista)) || (window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores) || [];
+      var l = [];
+      js.forEach(function(j){
+        if(String(j.pos || j.rol || '').toUpperCase().indexOf('CENTRAL') >= 0){
+          var n = parseInt(j.num, 10); if(n) l.push(n);
+        }
+      });
+      if(l.length) return l;
+    }catch(e){}
+    return [2,10,15,17];
+  })();
   D.entrenamientos.forEach(function(s){
     s.jugadores.forEach(function(j){
       if(j.n==='TOTALES EQUIPO') return;
@@ -175,7 +194,15 @@ function objCalcVals(nombreJugador){
   v.rec  =a.rT>0?VB_EFF.recepcion(a):null;
   v.bqpos=a.bT>0?Math.round((a.bPt+a.bPtPos)/a.bT*100):null;
   v.bqpt =a.bT>0?Math.round(a.bPt/a.bT*100):null;
-  v.atqhb=a.mbT>0?Math.round((a.mbPt-a.mbVnd-a.mbErr)/a.mbT*100):null;
+  /* ══ EL ATAQUE DE LOS CENTRALES ES 'ATQ CENTRAL', NO 'ATQ ALTA' ═══════
+     Este numero se acumula sobre los CENTRALES, pero se publicaba como
+     atqhb, que en las metas es '% Atq Alta' con objetivo 18 -la pelota alta
+     de punta y opuesto-. La del central es atqq, '% Atq Central', objetivo
+     55. O sea: el numero del central se comparaba contra el objetivo
+     equivocado, y le daba siempre por arriba.
+     La pelota alta no se calcula aca, asi que queda sin valor, que es mejor
+     que mostrar uno que no es. */
+  v.atqq=a.mbT>0?Math.round((a.mbPt-a.mbVnd-a.mbErr)/a.mbT*100):null;
   return v;
 }
 

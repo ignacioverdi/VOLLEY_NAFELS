@@ -8,6 +8,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  /* En esta app los controles no heredan la tipografia: sin esta linea
+     los botones y los desplegables salen en Arial. */
+  button,select,input,textarea{font-family:'Barlow Condensed',sans-serif}
+
 :root{--bg:#07080f;--card:#0d0e1a;--card2:#12132a;--border:rgba(255,255,255,.07);--red:#e8192c;--txt:#e2e8f0;--mut:#8791a3;--faint:#5b6474;--h0:#171826;--h1:#5c2531;--h2:#a02335;--h3:#e8192c}
 *{box-sizing:border-box}
 html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -55,7 +59,15 @@ header.masthead .sub{color:var(--mut);font-size:13.5px}
 @media(max-width:900px){.armgrid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.armgrid{grid-template-columns:1fr}}
 .armrot{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:11px}
-.armrot .rt{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.armrot .rt{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;flex-wrap:wrap;gap:6px}
+/* El bloqueo que se decidio para esta rotacion, entre el titulo y el total. */
+.blqsel{display:flex;align-items:center;gap:6px}
+.blqsel label{font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--faint);font-weight:700}
+.blqsel select{background:var(--card);color:var(--txt);border:1px solid var(--border);border-radius:7px;
+  padding:3px 7px;font-family:'Barlow Condensed',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;max-width:132px}
+.blqsel select:focus{outline:none}
+.blqsel select:disabled{cursor:default;opacity:1}
+.blqaviso{font-size:11px;color:#f59e0b;margin-top:8px}
 .armrot .rt b{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.03em;color:var(--txt)}
 .armrot .rt span{font-size:12px;color:var(--faint)}
 .armcourt{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
@@ -173,7 +185,11 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 .mopt{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text)}
 .mopt input{width:auto;min-width:0;margin:0;padding:0}
 .msel{position:relative}
-#focusSel,#focusSel option{color:#111 !important;background:#fff !important;font-weight:700}
+/* El control cerrado lo dibuja la pagina: va con el tema de la app.
+   La lista que se abre la dibuja el sistema operativo, y ahi conviene
+   fondo claro con texto negro, que se lee bien en todos lados. */
+#focusSel{color:var(--txt) !important;background:var(--card2) !important;font-weight:700}
+#focusSel option{color:#111 !important;background:#fff !important;font-weight:700}
 </style>
 <style>
 .tabsbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 12px 0;align-items:center}
@@ -188,7 +204,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260927-0943">
+<link rel="stylesheet" href="movil.css?v=20260927-0006">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    EL ROJO, SOLO PARA EL DATO
@@ -336,10 +352,10 @@ details.fdet .filters{margin-top:8px}
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
 <!-- La definicion unica de las eficiencias de todo el sistema. Esta pagina
      tenia las suyas propias y no coincidian con el resto. -->
-<script src="objetivos_config.js?v=20260927-0943" onerror="void 0"></script>
-<script src="categorias_club.js?v=20260927-0943"></script>
-<script src="selector_categoria.js?v=20260927-0943"></script>
-<script src="mi_fila.js?v=20260927-0943" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260927-0006" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260927-0006"></script>
+<script src="selector_categoria.js?v=20260927-0006"></script>
+<script src="mi_fila.js?v=20260927-0006" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -379,7 +395,7 @@ details.fdet .filters{margin-top:8px}
   <span class="mhint" id="mhint"></span></div>
 <div class="tabsbar" id="tabsbar">
   <span class="tabteam" id="tabteam">—</span>
-  <select id="focusSel" onchange="applyFocus()" style="margin-left:8px;background:#fff;color:#111;border:1px solid var(--border);border-radius:8px;padding:5px 9px;font-family:inherit;font-weight:700;font-size:12px;max-width:220px"><option value="all" data-t="Todos los jugadores">Todos los jugadores</option></select>
+  <select id="focusSel" onchange="applyFocus()" style="margin-left:8px;background:var(--card2);color:var(--txt);border:1px solid var(--border);border-radius:8px;padding:5px 9px;font-family:inherit;font-weight:700;font-size:12px;max-width:220px"><option value="all" data-t="Todos los jugadores">Todos los jugadores</option></select>
   <button class="ptab active" data-tab="armador" onclick="setTab('armador')"><span data-t="Distribución armador"><span data-t="Distribución armador">Distribución armador</span></span></button>
   <button class="ptab" data-tab="ataque" onclick="setTab('ataque')"><span data-t="Direcciones ataque"><span data-t="Direcciones ataque">Direcciones ataque</span></span></button>
   <button class="ptab" data-tab="saque" onclick="setTab('saque')"><span data-t="Direcciones saque"><span data-t="Direcciones saque">Direcciones saque</span></span></button>
@@ -472,8 +488,8 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260927-0943"></script>
-<script src="filtro_tipo.js?v=20260927-0943" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260927-0006"></script>
+<script src="filtro_tipo.js?v=20260927-0006" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
   <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
        se cargaba SOLO el de partidos, asi que en una temporada sin partidos
@@ -488,12 +504,12 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20260927-0943"></script>
-<script src="firebase_por_categoria.js?v=20260927-0943"></script>
+<script src="firebase.js?v=20260927-0006"></script>
+<script src="firebase_por_categoria.js?v=20260927-0006"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20260927-0943" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20260927-0006" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -872,6 +888,90 @@ function armFuente(slug){
   if(t==='E') return hayE?armSoloArmadores(E):null;
   return hayP?armSoloArmadores(P):(hayE?armSoloArmadores(E):null);
 }
+/* ══ QUE BLOQUEO SE JUEGA EN CADA ROTACION ══════════════════════════════
+   La cancha de cada rotacion dice a donde arma el armador rival, pero no
+   decia que hacemos nosotros con eso. Esto agrega, en cada rotacion, el
+   sistema de bloqueo elegido, para que quede escrito y no en la cabeza del
+   entrenador: el jugador abre el plan de partido y lo ve.
+
+   Se guarda por RIVAL + ARMADOR + ROTACION, porque contra el mismo equipo
+   puede cambiar segun que armador este en cancha, y obviamente cambia de
+   rotacion en rotacion.
+
+   Se guarda en dos lados: en la computadora (que nunca falla) y en
+   Firebase (para que lo vea el equipo). Si Firebase no lo acepta, se
+   avisa abajo de las canchas en vez de perderlo en silencio. */
+var BLQ_OPC=[
+  {k:'read',   ic:'🖐️', n:'Read',      c:'#0E9F6E'},
+  {k:'call1',  ic:'☝️',       n:'Call 1',    c:'#0B84C4'},
+  {k:'call2',  ic:'✌️',       n:'Call 2',    c:'#8B5CF6'},
+  {k:'commit', ic:'✊️',       n:'Commit',    c:'#DC2A5A'},
+  {k:'pin',    ic:'🤘️', n:'Pin & pin', c:'#CE7C18'}
+];
+var BLQ_RUTA='pp_bloqueo';
+var BLQ={};try{BLQ=JSON.parse(localStorage.getItem(BLQ_RUTA)||"{}")||{};}catch(e){BLQ={};}
+var BLQ_SOLO_ACA=false;
+/* El jugador mira, no decide. Firebase igual le bloquea la escritura, pero
+   es mejor que el desplegable no se pueda tocar a que parezca que cambio
+   algo y despues no. */
+function blqPuedeEditar(){
+  try{ if(typeof window.VB_esEditor==='function') return !!window.VB_esEditor(); }catch(e){}
+  try{ return (localStorage.getItem('vb_role')||'').toLowerCase()!=='player'; }catch(e){ return true; }
+}
+function blqClave(pos){
+  var st=(armTeam&&armTeam.setters&&armTeam.setters[armSetIdx])||null;
+  return TEAM+'|#'+(st?st.num:'?')+'|P'+pos;
+}
+function blqOpc(k){ for(var i=0;i<BLQ_OPC.length;i++) if(BLQ_OPC[i].k===k) return BLQ_OPC[i]; return null; }
+/* Pase lo que pase aca adentro, la distribucion del armador se tiene que
+   seguir viendo: si esto falla, devuelve vacio y la cancha queda igual. */
+function blqSelect(pos){
+  try{ return _blqSelect(pos); }catch(e){ return ''; }
+}
+function _blqSelect(pos){
+  var cl=blqClave(pos), val=BLQ[cl]||'', o=blqOpc(val), ed=blqPuedeEditar();
+  var est=o?(' style="border-color:'+o.c+'88;color:'+o.c+'"'):'';
+  var h='<div class="blqsel"><label>Bloqueo</label><select'+est
+      + (ed?' onchange="setBlq('+pos+',this.value)"':' disabled')+'>';
+  h+='<option value=""'+(val?'':' selected')+'>—</option>';
+  BLQ_OPC.forEach(function(x){
+    h+='<option value="'+x.k+'"'+(val===x.k?' selected':'')+'>'+x.ic+' '+x.n+'</option>';
+  });
+  return h+'</select></div>';
+}
+function setBlq(pos,val){
+  var cl=blqClave(pos);
+  if(val) BLQ[cl]=val; else delete BLQ[cl];
+  try{ localStorage.setItem(BLQ_RUTA, JSON.stringify(BLQ)); }catch(e){}
+  if(typeof fbSet==='function'){ try{ fbSet(BLQ_RUTA, BLQ); }catch(e){} }
+  blqVerificar();
+  renderArmador();
+}
+/* Se pregunta a la base, sin pasar por el cache local, si lo guardado llego.
+   Si no llego, la pantalla lo dice: "solo en esta computadora". */
+function blqVerificar(){
+  if(typeof FB_URL==='undefined' || typeof fetch!=='function') return;
+  setTimeout(function(){
+    fetch(FB_URL+'/'+BLQ_RUTA+'.json?_='+Date.now())
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(d){
+        var antes=BLQ_SOLO_ACA;
+        BLQ_SOLO_ACA = !(d && typeof d==='object' && Object.keys(BLQ).every(function(k){ return d[k]===BLQ[k]; }));
+        if(antes!==BLQ_SOLO_ACA) renderArmador();
+      })
+      .catch(function(){});
+  }, 900);
+}
+if(typeof fbGet==='function'){
+  fbGet(BLQ_RUTA, function(d){
+    if(d && typeof d==='object'){
+      BLQ=d;
+      try{ localStorage.setItem(BLQ_RUTA, JSON.stringify(BLQ)); }catch(e){}
+      if(typeof renderArmador==='function' && document.getElementById('armgrid')) renderArmador();
+    }
+  });
+}
+
 function renderArmador(){
   var sec=document.getElementById("armsec");
   var slug=(typeof VIVO!=='undefined'&&VIVO)?TEAM:(ARM_SLUG[TEAM]||TEAM);
@@ -948,8 +1048,14 @@ function renderArmador(){
     var _esSin = (pos===0);
     var _tit = _esSin ? 'Sin rotación' : ('Rotación P'+pos);
     var _sub = _esSin ? (tot+' armados · el archivo no guarda rotación') : (tot+' armados');
-    grid.insertAdjacentHTML("beforeend",'<div class="armrot"><div class="rt"><b>'+_tit+'</b><span>'+_sub+'</span></div><div class="armcourt">'+cells+'</div></div>');
+    grid.insertAdjacentHTML("beforeend",'<div class="armrot"><div class="rt"><b>'+_tit+'</b>'+blqSelect(pos)+'<span>'+_sub+'</span></div><div class="armcourt">'+cells+'</div></div>');
   });
+  var _av=document.getElementById('blqaviso');
+  if(!_av){ _av=document.createElement('div'); _av.id='blqaviso'; _av.className='blqaviso';
+            grid.parentNode.insertBefore(_av, grid.nextSibling); }
+  _av.textContent = BLQ_SOLO_ACA
+    ? 'El bloqueo elegido quedó guardado en esta computadora, pero no se pudo compartir con el equipo. Hay que habilitar pp_bloqueo en las reglas de Firebase.'
+    : '';
 }
 function setArmSetter(i){armSetIdx=i;renderArmador();}
 function setArmPhase(f){armPhase=f;renderArmador();}
@@ -1711,8 +1817,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20260927-0943" onerror="void 0"></script>
-<script src="lang.js?v=20260927-0943" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20260927-0006" onerror="void 0"></script>
+<script src="lang.js?v=20260927-0006" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -1730,7 +1836,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20260927-0943" onerror="void 0"></script>
-<script src="ayuda.js?v=20260927-0943"></script>
+<script src="volver_inicio.js?v=20260927-0006" onerror="void 0"></script>
+<script src="ayuda.js?v=20260927-0006"></script>
 </body>
 </html>

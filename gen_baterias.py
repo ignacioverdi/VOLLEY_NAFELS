@@ -250,7 +250,10 @@ def _roundpy(x):
 def _bat_to_pcts(P):
     def atk(d): return _roundpy((d['#']-d['/']-d['='])/d['T']*100) if d['T'] else None
     S,R,B=P['S'],P['R'],P['B']
-    D=P.get('D') or {'#':0,'+':0,'-':0,'=':0,'T':0}
+    # El respaldo tiene que traer TODAS las letras que usa la formula de
+    # abajo, incluido el '!': sin el, el dia que llegue un jugador sin
+    # defensa cargada, la cuenta revienta.
+    D=P.get('D') or {'#':0,'+':0,'!':0,'-':0,'=':0,'T':0}
     return {
         # El dashboard ya buscaba defT / defPerf / defErr / def: estaba escrito
         # el lector pero nadie generaba el dato.

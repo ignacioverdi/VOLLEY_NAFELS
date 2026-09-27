@@ -26,11 +26,17 @@ GZONE = {'1':'Z1','2':'Z1','9':'Z1','6':'Z6','3':'Z6','8':'Z6','5':'Z5','4':'Z5'
 def ipct(n, d): return round(n/d*100) if d else 0
 def rint(x):    return round(x) if x is not None else 0
 def hit(acts):
-    """Rendimiento de ataque (kills - errores)/total — para SO/TR."""
+    """Eficacia de ataque del club: (puntos - bloqueados - errores) / total.
+
+       Antes esta funcion no restaba los BLOQUEADOS ('/'), y el resultado se
+       publicaba rotulado 'eficacia' al lado del ataque general, que si los
+       resta. El side-out del rival salia inflado contra su propio ataque.
+       Es la misma cuenta que eff_atk del motor y que VB_EFF.ataque de la app."""
     if not acts: return 0
     k = sum(1 for a in acts if a['effect']=='#')
+    b = sum(1 for a in acts if a['effect']=='/')
     e = sum(1 for a in acts if a['effect']=='=')
-    return round((k-e)/len(acts)*100)
+    return round((k-b-e)/len(acts)*100)
 
 def display_name(raw):
     """Quita el sufijo de liga: 'Volley Amriswil (NLA Men)' -> 'Volley Amriswil'."""

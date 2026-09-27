@@ -1250,3 +1250,23 @@
 
   window.abrirAyuda = abrir;      // por si se quiere llamar desde otro boton
 })();
+
+/* ── LA CAMPANA DE NOVEDADES ───────────────────────────────────────────
+   Vive en su propio archivo (novedades.js) y se carga desde aca porque
+   ayuda.js ya esta en las 28 pantallas de la app y es el ultimo script
+   del cuerpo, con la pagina ya armada.
+
+   Va en su propio archivo a proposito: si algun dia la campana falla, la
+   ayuda tiene que seguir andando igual. Por eso esto es lo ultimo del
+   archivo, envuelto en un try, y con onerror vacio: si novedades.js no
+   existe -o el navegador no lo puede bajar- no pasa nada. */
+try{
+  if(!window.__VB_NOV_CARGA){
+    window.__VB_NOV_CARGA = 1;
+    var _vbNov = document.createElement('script');
+    _vbNov.src = 'novedades.js?v=20260927';
+    _vbNov.defer = true;
+    _vbNov.onerror = function(){};
+    (document.body || document.documentElement).appendChild(_vbNov);
+  }
+}catch(_e){}

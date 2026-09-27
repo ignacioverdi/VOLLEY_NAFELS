@@ -16,13 +16,16 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260927-0943" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260927-0943" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260927-0943"></script>
-<script src="filtro_tipo.js?v=20260927-0943" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260926-2227" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260926-2227" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260926-2227"></script>
+<script src="filtro_tipo.js?v=20260926-2227" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
-  <script src="objetivos_config.js?v=20260927-0943" onerror="void 0"></script>
+  <!-- El plantel del club: de aca salen el puesto y el apellido de cada
+       dorsal. Entre otras cosas, es lo que dice quienes son los centrales. -->
+  <script src="plantel_nafels.js?v=20260926-2227" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260926-2227" onerror="void 0"></script>
 
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -39,11 +42,11 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
   <!-- modo_toggle.js: el cartelito de PARTIDO / ENTRENAMIENTO. Antes era
        una barra arriba en el medio y chocaba con el selector de idioma;
        ahora es un cartel chico abajo a la izquierda. -->
-  <script src="modo_toggle.js?v=20260927-0943" onerror="void 0"></script>
+  <script src="modo_toggle.js?v=20260926-2227" onerror="void 0"></script>
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20260927-0943" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260926-2227" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   
@@ -74,6 +77,10 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <script>window.firebase=window.firebase||null;</script>
 <script>window.LANG=window.LANG||{};</script>
 <style>
+  /* En esta app los controles no heredan la tipografia: sin esta linea
+     los botones y los desplegables salen en Arial. */
+  button,select,input,textarea{font-family:'Barlow Condensed',sans-serif}
+
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#07080f;--sur:#0d0e1a;--card:#0f1020;--card2:#12132a;
@@ -646,7 +653,19 @@ function dbatBuildSubfiltro(){
     if(_P.some(function(x){ return (x.id||x.nombre) === (m.id||m.nombre); })) return;
     META.push(Object.assign({}, m, {tipo:t}));
   });
-  META.sort(function(a,b){ return String(b.fecha||'').localeCompare(String(a.fecha||'')); });
+  /* ══ LAS FECHAS NO SE ORDENAN COMO TEXTO ═══════════════════════════════
+     El motor guarda la fecha como 03/09/2026 -dia/mes/año-. Comparadas como
+     texto, se ordenan por el DIA primero: el 03/09 quedaba antes que el
+     26/08, y el desplegable de partidos salia desordenado. Se pasa a un
+     numero aaaammdd, que si ordena bien. */
+  function _fnum(f){
+    var p = String(f||'').split('/');
+    if(p.length === 3) return (+p[2])*10000 + (+p[1])*100 + (+p[0]);
+    p = String(f||'').split('-');                     /* por si viene aaaa-mm-dd */
+    if(p.length === 3) return (+p[0])*10000 + (+p[1])*100 + (+p[2]);
+    return 0;
+  }
+  META.sort(function(a,b){ return _fnum(b.fecha) - _fnum(a.fecha); });
   if(!META.length){ row.style.display='none'; return; }
   row.innerHTML=''; row.style.display='flex';
   var lbl=document.createElement('span');
@@ -715,15 +734,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260927-0943" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260927-0943"></script>
+<script src="firebase.js?v=20260926-2227" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-2227"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260927-0943">
+<link rel="stylesheet" href="movil.css?v=20260926-2227">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260927-0943" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260926-2227" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -2027,10 +2046,28 @@ function renderEqObjetivos(){
 // ════════════════════════════════════════════════════════════
 // TAB JUGADORES
 // ════════════════════════════════════════════════════════════
+/* ══ EL PLANTEL NO ES UNA LISTA ════════════════════════════════════════
+   PLANTEL_NAFELS es un objeto -{temporada, jugadores, staff, lista}-, no un
+   arreglo: preguntarle .length da undefined y pedirle .find revienta. Dos
+   funciones de esta pantalla lo trataban como lista. Hasta ahora no pasaba
+   nada porque el plantel ni siquiera se cargaba aca; al cargarlo para saber
+   los puestos, habia que arreglarlo. */
+function _plantelLista(){
+  try{
+    var P = window.PLANTEL_NAFELS || window.PLANTEL_CLUB;
+    var j = P && (P.jugadores || P.lista);
+    if(j && j.length) return j.map(function(x){
+      return {num:x.num, c:x.num, nombre:(x.ap || x.nombre || ''), pos:x.pos, foto:x.foto};
+    });
+  }catch(e){}
+  try{ if(typeof EQUIPO!=='undefined' && EQUIPO && (EQUIPO.jugadores||[]).length) return EQUIPO.jugadores; }catch(e){}
+  try{ if(window.EQUIPO_DATA && (window.EQUIPO_DATA.jugadores||[]).length) return window.EQUIPO_DATA.jugadores; }catch(e){}
+  return [];
+}
+
 function renderJugGrid(){
   var grid=document.getElementById('jug-grid');
-  var jugs = typeof PLANTEL_NAFELS!=='undefined' ? PLANTEL_NAFELS :
-             (EQUIPO ? EQUIPO.jugadores : (window.EQUIPO_DATA ? window.EQUIPO_DATA.jugadores : []));
+  var jugs = _plantelLista();
   if(!jugs||!jugs.length){grid.innerHTML='<div class="empty">Sin datos de equipo</div>';return;}
   grid.innerHTML=jugs.map(function(j){
     var col=POS_COLOR[j.pos]||'#64748b';
@@ -2385,8 +2422,7 @@ function renderGamePlans(){
 function buildRankingData(){
   var D = window.HISTORIAL_DATA;
   if(!D) return null;
-  var jugs = typeof PLANTEL_NAFELS !== 'undefined' ? PLANTEL_NAFELS :
-             (window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores ? window.EQUIPO_DATA.jugadores : []);
+  var jugs = _plantelLista();
   var POS_COLOR = {ARMADOR:'#F59E0B',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};
 
   // Aggregate from historial partidos only
@@ -2517,11 +2553,13 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260927-0943"></script>
-<script src="lang.js?v=20260927-0943"></script>
-<script src="temporadas_menu.js?v=20260927-0943"></script>
-<script src="app_offline.js?v=20260927-0943"></script>
-<script src="ayuda.js?v=20260927-0943"></script>
+<script src="chat_nafels.js?v=20260926-2227"></script>
+<script src="lang.js?v=20260926-2227"></script>
+<script src="temporadas_menu.js?v=20260926-2227"></script>
+<!-- Este archivo no esta en el proyecto. Sin el onerror, el navegador
+     marcaba un error de carga en cada visita al tablero. -->
+<script src="app_offline.js?v=20260926-2227" onerror="void 0"></script>
+<script src="ayuda.js?v=20260926-2227"></script>
 
 <!-- Los archivos de video (datos_video_*.js.enc) se sacaron de esta
      pantalla: pesan unos 15 MB por temporada, descifrarlos son mas de

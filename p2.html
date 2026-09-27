@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-t="Planilla P-2">Planilla P-2 · NAFELS VOLEY</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  /* En esta app los controles no heredan la tipografia. */
+  button,select,input,textarea{font-family:'Barlow Condensed',sans-serif}
+
+  /* ══ DOS PANTALLAS EN UNA ════════════════════════════════════════════════
+     En el monitor esto es una pantalla mas de la app: fondo oscuro, las
+     tipografias de siempre, todo editable.
+
+     En el PAPEL tiene que ser lo contrario: blanco, negro, lineas finas y
+     una sola hoja A4. Para eso esta el bloque @media print del final, que
+     apaga los colores y esconde los botones. No son dos archivos: es el
+     mismo, visto de dos maneras.                                          */
+  :root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.06);
+        --txt:#E2E8F0;--mut:#64748B;--red:#E8192C;--ok:#22C55E;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',sans-serif;
+       font-size:15px;padding:18px 16px 70px}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:900px;margin:0 auto}
+
+  .top{display:flex;align-items:center;gap:12px;margin-bottom:4px;flex-wrap:wrap}
+  .back{padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.14);
+        background:rgba(255,255,255,.04);color:var(--mut);font-size:10px;font-weight:700;
+        letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+  .back:hover{color:var(--txt);border-color:var(--red)}
+  h1{font-family:'Bebas Neue',sans-serif;font-size:24px;margin:0;font-weight:400;letter-spacing:3px}
+  .sub{color:var(--mut);font-size:13px;margin:2px 0 16px 2px}
+  .acciones{margin-left:auto;display:flex;gap:8px}
+  .btn{background:#1e2130;border:1px solid var(--border);color:var(--txt);border-radius:9px;
+       padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer}
+  .btn:hover{border-color:rgba(255,255,255,.2)}
+  .btn.p{background:var(--red);border-color:var(--red);color:#fff}
+
+  .hoja{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px}
+
+  /* ── la cabecera del partido ── */
+  .cab{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+  .campo{display:flex;flex-direction:column;gap:3px}
+  .campo label{font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--mut);font-weight:700}
+  .campo input{background:var(--card2);color:var(--txt);border:1px solid rgba(255,255,255,.14);
+               border-radius:8px;padding:7px 9px;font-size:14px;font-weight:600;width:100%}
+  .campo input:focus{outline:none;border-color:var(--red)}
+
+  h2{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2.5px;margin:20px 0 8px;
+     font-weight:400;color:var(--txt)}
+
+  /* ── el plantel ── */
+  table{width:100%;border-collapse:collapse}
+  th{font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--mut);
+     font-weight:700;text-align:left;padding:6px 7px;border-bottom:1px solid var(--border)}
+  td{padding:5px 7px;border-bottom:1px solid rgba(255,255,255,.04);font-size:14px}
+  tr.fuera td{opacity:.38}
+  .num{font-family:'Bebas Neue',sans-serif;font-size:19px;line-height:1;width:44px}
+  .chk{width:34px;text-align:center}
+  .chk input{width:15px;height:15px;accent-color:var(--red);cursor:pointer}
+  .pue{font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--mut);white-space:nowrap}
+
+  /* ── los seis iniciales por set ── */
+  .sets{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  .set{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:9px 10px}
+  .set-t{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--mut);
+         margin-bottom:6px;display:flex;align-items:center;gap:6px}
+  .set-t .n{color:var(--txt)}
+  /* La cancha del P-2: arriba los delanteros IV-III-II, abajo los zagueros
+     V-VI-I, que es como la lee el arbitro. */
+  .cancha{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+  .pos{background:#0b0c16;border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:4px 3px;text-align:center}
+  .pos .r{font-size:8.5px;letter-spacing:1px;color:var(--mut);font-weight:700}
+  .pos select{width:100%;background:transparent;color:var(--txt);border:none;
+              font-family:'Bebas Neue',sans-serif;font-size:19px;text-align:center;cursor:pointer;padding:0}
+  .pos select:focus{outline:none}
+  .pos.rep{border-color:rgba(232,25,44,.55)}
+  .aviso{color:var(--red);font-size:12px;margin-top:8px;min-height:16px}
+
+  /* ── el cuerpo tecnico ── */
+  .staff{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .firma{border-top:1px solid var(--border);margin-top:26px;padding-top:6px;
+         font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--mut)}
+  .firmas{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:10px}
+
+  .nota{color:var(--mut);font-size:12px;margin-top:14px;line-height:1.45}
+
+  @media(max-width:900px){
+    .cab{grid-template-columns:repeat(2,1fr)}
+    .sets{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:520px){ .sets{grid-template-columns:1fr} }
+
+  /* ══ EL PAPEL ════════════════════════════════════════════════════════════
+     Una hoja A4 en vertical, en blanco y negro, sin nada de la app. Los
+     desplegables se imprimen como texto: en papel no se eligen. */
+  @media print{
+    @page{ size:A4 portrait; margin:11mm 10mm; }
+    body{background:#fff;color:#000;padding:0;font-size:10.5pt}
+    .wrap{max-width:none}
+    /* Fuera de la hoja: los botones, la nota y el escudo flotante que
+       lang.js pone en todas las pantallas. */
+    .top .back,.acciones,.nota,.aviso,#club-escudo,#ayuda-btn,#vb-nov-btn,#vb-nov-pan{display:none!important}
+    h1{font-size:19pt;letter-spacing:2px}
+    .sub{color:#444;font-size:9pt;margin-bottom:8pt}
+    .hoja{background:#fff;border:1px solid #000;border-radius:0;padding:8pt 10pt}
+    h2{font-size:11pt;letter-spacing:1.5px;margin:10pt 0 4pt;color:#000}
+    .campo label{color:#000;font-size:7pt}
+    .campo input{background:#fff;color:#000;border:none;border-bottom:1px solid #000;
+                 border-radius:0;padding:1pt 2pt;font-size:10pt}
+    th{color:#000;border-bottom:1px solid #000;font-size:7pt;padding:2pt 3pt}
+    td{border-bottom:1px solid #bbb;padding:1.5pt 3pt;font-size:9.5pt}
+    tr.fuera{display:none}          /* en el papel solo van los convocados */
+    .num{font-size:11pt}
+    .chk input{-webkit-appearance:none;appearance:none;width:9pt;height:9pt;border:1px solid #000}
+    .chk input:checked{background:#000}
+    .pue{color:#000;font-size:7.5pt}
+    .set{background:#fff;border:1px solid #000;border-radius:0;padding:3pt 4pt}
+    .set-t,.set-t .n{color:#000;font-size:9pt;margin-bottom:2pt}
+    .pos{background:#fff;border:1px solid #666;border-radius:0;padding:1pt}
+    .pos.rep{border-color:#666}
+    .pos .r{color:#000;font-size:6.5pt}
+    .pos select{-webkit-appearance:none;appearance:none;color:#000;font-size:12pt;background:#fff}
+    .firma{border-top:1px solid #000;color:#000;font-size:7.5pt}
+    .firmas{gap:14pt;margin-top:8pt}
+    /* ── QUE ENTRE EN UNA HOJA ─────────────────────────────────────────
+       Al imprimir, el ancho de la pagina es mas chico que el de un monitor,
+       asi que se disparaban las reglas de celular y los cinco sets salian
+       en dos columnas: la planilla se iba a dos hojas. Aca se fuerzan los
+       cinco en fila y se aprieta todo lo que sobra. Una hoja, una planilla. */
+    .cab{grid-template-columns:repeat(4,1fr)!important;gap:7pt;margin-bottom:7pt}
+    .sets{grid-template-columns:repeat(5,1fr)!important;gap:4pt}
+    .cancha{gap:2pt}
+    h2{margin:8pt 0 3pt}
+    .hoja{padding:6pt 8pt}
+    td{padding:1pt 3pt;font-size:9pt}
+    .num{font-size:10.5pt}
+    .pos select{font-size:11pt}
+    .set-t{font-size:8pt}
+    .pos .r{font-size:6pt}
+  }
+</style>
+<link rel="stylesheet" href="movil.css?v=20260927">
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a href="index.html" class="back">‹</a>
+    <h1 data-t="Planilla P-2">Planilla P-2</h1>
+    <div class="acciones">
+      <button class="btn" onclick="P2.limpiar()" data-t="Vaciar">Vaciar</button>
+      <button class="btn p" onclick="window.print()" data-t="Imprimir">Imprimir</button>
+    </div>
+  </div>
+  <div class="sub" id="sub"></div>
+
+  <div class="hoja">
+    <div class="cab" id="cab"></div>
+
+    <h2 data-t="Plantel">Plantel</h2>
+    <table><thead><tr>
+      <th class="chk" title="Convocado">✓</th>
+      <th style="width:44px" data-t="N°">N°</th>
+      <th data-t="Apellido y nombre">Apellido y nombre</th>
+      <th data-t="Puesto">Puesto</th>
+      <th data-t="Nacimiento">Nacimiento</th>
+      <th data-t="Altura">Altura</th>
+      <th class="chk" title="Capitán">C</th>
+      <th class="chk" title="Líbero">L</th>
+    </tr></thead><tbody id="plantel"></tbody></table>
+
+    <h2 data-t="Formación inicial por set">Formación inicial por set</h2>
+    <div class="sets" id="sets"></div>
+    <div class="aviso" id="aviso"></div>
+
+    <h2 data-t="Cuerpo técnico">Cuerpo técnico</h2>
+    <div class="staff" id="staff"></div>
+
+    <div class="firmas">
+      <div class="firma" data-t="Firma del entrenador">Firma del entrenador</div>
+      <div class="firma" data-t="Firma del capitán">Firma del capitán</div>
+      <div class="firma" data-t="Firma del árbitro">Firma del árbitro</div>
+    </div>
+  </div>
+
+  <div class="nota" data-t="nota_p2">Se completa sola con el plantel del club y con la formación
+  que ya cargaste en Rotaciones. Lo que cambies acá queda guardado en esta computadora, por partido.
+  Para el papel, usá Imprimir: sale en una hoja A4, en blanco y negro, sin los botones.</div>
+</div>
+
+<script src="categorias_club.js?v=20260927" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260927" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20260927" onerror="void 0"></script>
+<script src="firebase.js?v=20260927" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260927" onerror="void 0"></script>
+<script src="lang.js?v=20260927" onerror="void 0"></script>
+<script src="proximo_rival.js?v=20260927" onerror="void 0"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ══ DE DONDE SALE CADA COSA ═══════════════════════════════════════════
+     El plantel, del archivo del club. La formación inicial, de lo que ya
+     cargaste en Rotaciones —la misma clave, rot_seis_nos—, así no hay que
+     escribir dos veces lo mismo. El rival y la fecha, del próximo partido
+     del fixture si está. Todo lo demás se escribe acá y queda guardado.  */
+
+  var ZONAS = [4,3,2,5,6,1];                 /* como se lee la cancha */
+  var ROMANO = {1:'I',2:'II',3:'III',4:'IV',5:'V',6:'VI'};
+  var SETS = [1,2,3,4,5];
+
+  function plantel(){
+    try{
+      var P = window.PLANTEL_NAFELS || window.PLANTEL_CLUB;
+      var js = (P && (P.jugadores || P.lista)) || [];
+      if(js.length) return js.map(function(j){
+        return {num:+j.num, ape:(j.ap||''), nom:(j.nombre||''), pos:(j.pos||''),
+                nacim:(j.nacim||''), altura:(j.altura||''), nac:(j.nac||'')};
+      }).sort(function(a,b){ return a.num-b.num; });
+    }catch(e){}
+    try{
+      var E = (window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores) || [];
+      return E.map(function(j){ return {num:+j.num, ape:(j.nombre||''), nom:'', pos:(j.pos||''),
+                                        nacim:'', altura:'', nac:''}; });
+    }catch(e){}
+    return [];
+  }
+  function staff(){
+    try{
+      var P = window.PLANTEL_NAFELS || {};
+      return (P.staff || []).map(function(s){
+        return {rol:(s.rol||''), nombre:((s.ap||'')+' '+(s.nombre||'')).trim()};
+      });
+    }catch(e){ return []; }
+  }
+  var PL = plantel(), ST = staff();
+  var PORNUM = {}; PL.forEach(function(j){ PORNUM[j.num]=j; });
+
+  /* ── el partido que se está preparando ── */
+  function proximo(){
+    try{
+      var F = window.FIXTURE_DATA;
+      if(F && F.proximo) return F.proximo;
+    }catch(e){}
+    return null;
+  }
+  function hoyISO(){
+    var d=new Date();
+    return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+  }
+
+  var CAMPOS = [
+    ['comp','Competencia', function(){ try{ return 'NLA ' + ((window.PLANTEL_NAFELS||{}).temporada || ''); }catch(e){ return 'NLA'; } }],
+    ['fecha','Fecha',      function(){ var p=proximo(); return (p && p.fecha) || hoyISO(); }],
+    ['lugar','Lugar',      function(){ var p=proximo(); return (p && (p.lugar||p.sede)) || ''; }],
+    ['rival','Rival',      function(){ var p=proximo(); return (p && (p.rival||p.equipo)) || ''; }]
+  ];
+
+  /* ── lo que se guarda ──
+     Una ficha por partido: la clave junta la fecha y el rival, así preparar
+     el próximo no pisa la del anterior. */
+  var D = {campos:{}, convocados:{}, cap:null, liberos:{}, sets:{}, staff:{}};
+  /* ══ UNA SOLA FICHA, LA QUE SE ESTA PREPARANDO ═══════════════════════
+     La clave era la fecha mas el rival. Parecia prolijo -una ficha por
+     partido- pero al recargar la pagina los campos arrancan vacios, la
+     clave daba otra cosa y no encontraba nada: todo lo cargado se perdia.
+     Es una ficha por vez, la del proximo partido. Cuando termina ese
+     partido se vacia con el boton y se arma la siguiente. */
+  var CLAVE = 'p2_ficha';
+  function clave(){ return CLAVE; }
+  function guardar(){ try{ localStorage.setItem(clave(), JSON.stringify(D)); }catch(e){} }
+  function cargar(){
+    try{
+      var g = localStorage.getItem(clave());
+      if(g){ var o=JSON.parse(g); if(o && typeof o==='object'){
+        ['campos','convocados','liberos','sets','staff'].forEach(function(k){ if(o[k]) D[k]=o[k]; });
+        if(o.cap!=null) D.cap=o.cap;
+      }}
+    }catch(e){}
+  }
+
+  /* La formación que ya está cargada en Rotaciones. Si no hay nada, se arma
+     con el primero de cada puesto, igual que hace esa pantalla. */
+  function seisDeRotaciones(){
+    try{
+      var g = localStorage.getItem('rot_seis_nos');
+      if(g){ var z=JSON.parse(g); if(z && z[1]) return z; }
+    }catch(e){}
+    function por(p){ return PL.filter(function(x){ return String(x.pos||'').toUpperCase().indexOf(p)>=0; }); }
+    var arm=por('ARMADOR'), op=por('OPUESTO'), ce=por('CENTRAL'), pu=por('PUNTA');
+    var resto = PL.filter(function(x){ return String(x.pos||'').toUpperCase().indexOf('LIBERO')<0; });
+    function el(a,i){ return ((a&&a[0]) || resto[i] || PL[i] || {num:''}).num; }
+    return {1:el(arm,0), 4:el(op,1), 2:el(pu,2), 5:el(pu[1]?[pu[1]]:null,3),
+            3:el(ce,4),  6:el(ce[1]?[ce[1]]:null,5)};
+  }
+  function liberoDeRotaciones(){
+    try{ var v = localStorage.getItem('rot_libero_nos'); if(v) return +v; }catch(e){}
+    var l = PL.filter(function(x){ return String(x.pos||'').toUpperCase().indexOf('LIBERO')>=0; });
+    return l.length ? l[0].num : null;
+  }
+
+  function arranque(){
+    CAMPOS.forEach(function(c){ if(D.campos[c[0]]==null) D.campos[c[0]] = c[2](); });
+    cargar();
+    CAMPOS.forEach(function(c){ if(!D.campos[c[0]]) D.campos[c[0]] = c[2](); });
+    if(!Object.keys(D.convocados).length) PL.forEach(function(j){ D.convocados[j.num]=true; });
+    if(!Object.keys(D.liberos).length){
+      var l = liberoDeRotaciones(); if(l) D.liberos[l]=true;
+    }
+    if(!Object.keys(D.sets).length){
+      var base = seisDeRotaciones();
+      SETS.forEach(function(s){ D.sets[s] = Object.assign({}, base); });
+    }
+    if(!Object.keys(D.staff).length){
+      ST.forEach(function(s,i){ D.staff['r'+i]=s.rol; D.staff['n'+i]=s.nombre; });
+    }
+  }
+
+  /* ── dibujar ── */
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  function pintarCab(){
+    document.getElementById('cab').innerHTML = CAMPOS.map(function(c){
+      return '<div class="campo"><label>'+esc(c[1])+'</label>'
+           + '<input type="text" id="c-'+c[0]+'" value="'+esc(D.campos[c[0]])+'"></div>';
+    }).join('');
+    CAMPOS.forEach(function(c){
+      var e = document.getElementById('c-'+c[0]);
+      e.addEventListener('input', function(){ D.campos[c[0]] = e.value; guardar(); pintarSub(); });
+    });
+  }
+  function pintarSub(){
+    var r = D.campos.rival || '—', f = D.campos.fecha || '';
+    document.getElementById('sub').textContent =
+      'Axpo Volley Näfels vs ' + r + (f ? '  ·  ' + f : '');
+  }
+  function pintarPlantel(){
+    document.getElementById('plantel').innerHTML = PL.map(function(j){
+      var conv = D.convocados[j.num] !== false;
+      return '<tr class="'+(conv?'':'fuera')+'" data-num="'+j.num+'">'
+        + '<td class="chk"><input type="checkbox" data-k="conv" data-n="'+j.num+'"'+(conv?' checked':'')+'></td>'
+        + '<td class="num">'+j.num+'</td>'
+        + '<td>'+esc((j.ape+' '+j.nom).trim())+'</td>'
+        + '<td class="pue">'+esc(j.pos)+'</td>'
+        + '<td>'+esc(j.nacim)+'</td>'
+        + '<td>'+esc(j.altura ? j.altura+' cm' : '')+'</td>'
+        + '<td class="chk"><input type="radio" name="cap" data-k="cap" data-n="'+j.num+'"'+(D.cap===j.num?' checked':'')+'></td>'
+        + '<td class="chk"><input type="checkbox" data-k="lib" data-n="'+j.num+'"'+(D.liberos[j.num]?' checked':'')+'></td>'
+        + '</tr>';
+    }).join('');
+    document.querySelectorAll('#plantel input').forEach(function(e){
+      e.addEventListener('change', function(){
+        var n = +e.getAttribute('data-n'), k = e.getAttribute('data-k');
+        if(k==='conv') D.convocados[n] = e.checked;
+        else if(k==='cap') D.cap = n;
+        else if(k==='lib'){ if(e.checked) D.liberos[n]=true; else delete D.liberos[n]; }
+        guardar(); pintar();
+      });
+    });
+  }
+  function opciones(sel){
+    return PL.filter(function(j){ return D.convocados[j.num]!==false; })
+      .map(function(j){
+        return '<option value="'+j.num+'"'+(+sel===j.num?' selected':'')+'>'+j.num+'</option>';
+      }).join('');
+  }
+  function pintarSets(){
+    document.getElementById('sets').innerHTML = SETS.map(function(s){
+      var z = D.sets[s] || {};
+      var cel = ZONAS.map(function(n){
+        return '<div class="pos" data-set="'+s+'" data-z="'+n+'">'
+             + '<div class="r">'+ROMANO[n]+'</div>'
+             + '<select data-set="'+s+'" data-z="'+n+'">'+opciones(z[n])+'</select></div>';
+      }).join('');
+      return '<div class="set"><div class="set-t">SET <span class="n">'+s+'</span></div>'
+           + '<div class="cancha">'+cel+'</div></div>';
+    }).join('');
+    document.querySelectorAll('#sets select').forEach(function(e){
+      e.addEventListener('change', function(){
+        var s = +e.getAttribute('data-set'), z = +e.getAttribute('data-z');
+        D.sets[s] = D.sets[s] || {};
+        D.sets[s][z] = +e.value;
+        guardar(); pintarSets(); revisar();
+      });
+    });
+    revisar();
+  }
+  /* Un jugador no puede estar dos veces en la misma cancha. Se marca en rojo
+     y se avisa, pero no se bloquea: el que decide es el entrenador. */
+  function revisar(){
+    var malos = [];
+    document.querySelectorAll('#sets .pos').forEach(function(p){ p.classList.remove('rep'); });
+    SETS.forEach(function(s){
+      var visto = {}, z = D.sets[s]||{};
+      ZONAS.forEach(function(n){
+        var v = z[n];
+        if(!v) return;
+        if(visto[v]){
+          malos.push(s);
+          document.querySelectorAll('#sets .pos[data-set="'+s+'"]').forEach(function(p){
+            if(+((D.sets[s]||{})[+p.getAttribute('data-z')]) === +v) p.classList.add('rep');
+          });
+        }
+        visto[v]=1;
+      });
+    });
+    var u = [...new Set(malos)];
+    document.getElementById('aviso').textContent = u.length
+      ? (u.length===1 ? 'En el set '+u[0]+' hay un jugador repetido.'
+                      : 'Hay jugadores repetidos en los sets '+u.join(', ')+'.')
+      : '';
+  }
+  function pintarStaff(){
+    var n = Math.max(ST.length, 2);
+    var h = '';
+    for(var i=0;i<n;i++){
+      h += '<div class="campo"><label>'+(i===0?'Entrenador':'Asistente / staff')+'</label>'
+         + '<input type="text" data-s="n'+i+'" value="'+esc(D.staff['n'+i]||'')+'"></div>';
+    }
+    document.getElementById('staff').innerHTML = h;
+    document.querySelectorAll('#staff input').forEach(function(e){
+      e.addEventListener('input', function(){ D.staff[e.getAttribute('data-s')] = e.value; guardar(); });
+    });
+  }
+  function pintar(){ pintarSub(); pintarPlantel(); pintarSets(); pintarStaff(); }
+
+  window.P2 = {
+    limpiar: function(){
+      if(!confirm('¿Vaciar esta planilla y volver a empezar?')) return;
+      try{ localStorage.removeItem(clave()); }catch(e){}
+      D = {campos:{}, convocados:{}, cap:null, liberos:{}, sets:{}, staff:{}};
+      arranque(); pintarCab(); pintar();
+    }
+  };
+
+  arranque();
+  pintarCab();
+  pintar();
+})();
+</script>
+<script src="volver_inicio.js?v=20260927" onerror="void 0"></script>
+<script src="ayuda.js?v=20260927" onerror="void 0"></script>
+</body>
+</html>

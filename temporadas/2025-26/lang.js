@@ -221,7 +221,9 @@
     pin_num_camiseta: { es:'número de camiseta',    en:'jersey number',              de:'Trikotnummer' },
     pin_ej_camiseta:  { es:'Ej: camiseta',          en:'E.g. jersey',                de:'z.B. Trikot' },
     pin_elegi_nombre: { es:'— Elegí tu nombre —',   en:'— Select your name —',       de:'— Wähle deinen Namen —' },
-    pin_entrar:       { es:'ENTRAR',                en:'ENTER',                      de:'EINTRETEN' },
+    /* En aleman 'eintreten' es entrar a una habitacion, no iniciar sesion.
+       Este es el boton de la pantalla de login, asi que va 'Anmelden'. */
+    pin_entrar:       { es:'ENTRAR',                en:'SIGN IN',                    de:'ANMELDEN' },
     pin_continuar:    { es:'Continuar sin ingresar',en:'Continue without signing in',de:'Ohne Anmeldung fortfahren' },
     selecciona_jugador_rut:  { es:'Seleccioná tu nombre para ver tu rutina personalizada',
                                en:'Select your name to see your personalized routine',
@@ -367,6 +369,134 @@
     return e[lang] || e.es || null;
   }
   window.tr = tr;
+
+  /* ═══ LO QUE FALTABA, MEDIDO EN LA APP ══════════════════════════════════
+     Estas frases salieron de abrir cada pantalla y anotar todo lo que
+     quedaba en castellano con la app en aleman. No son frases inventadas:
+     cada una se vio en pantalla.
+
+     Las que llevan {0} son PLANTILLAS: el dato del medio -un apellido, un
+     numero- se deja como esta y se traduce el resto. */
+  var PHRASES_MEDIDAS = {
+    /* --- el plan de partido --- */
+    'Cómo leer esta pantalla': { en:'How to read this screen', de:'Wie man diesen Bildschirm liest' },
+    '¿Cómo funciona esta pantalla?': { en:'How does this screen work?', de:'Wie funktioniert dieser Bildschirm?' },
+    'Líberos': { en:'Liberos', de:'Liberos' },
+    'Oculta a los jugadores con menos acciones que este número': { en:'Hides players with fewer actions than this number', de:'Blendet Spieler mit weniger Aktionen als dieser Zahl aus' },
+    'Segundos de video ANTES de la accion': { en:'Seconds of video BEFORE the action', de:'Videosekunden VOR der Aktion' },
+    'Segundos de video DESPUES de la accion': { en:'Seconds of video AFTER the action', de:'Videosekunden NACH der Aktion' },
+    'cambiar acción': { en:'change action', de:'Aktion wechseln' },
+    'ataque · primer tiempo · izq/recto/der (a confirmar)': { en:'attack · first tempo · left/straight/right (to confirm)', de:'Angriff · erstes Tempo · links/gerade/rechts (zu bestätigen)' },
+    'Abre el análisis de defensa': { en:'Opens the defence analysis', de:'Öffnet die Abwehranalyse' },
+    'Bloqueo': { en:'Block', de:'Block' },
+
+    /* --- los cortes de video --- */
+    'Qué miro': { en:'What I look at', de:'Worauf ich schaue' },
+    'Qué busco': { en:'What I look for', de:'Wonach ich suche' },
+    'Momento del contacto': { en:'Moment of contact', de:'Moment des Kontakts' },
+    'Tocá para saltar dentro del clip': { en:'Tap to jump inside the clip', de:'Tippen, um im Clip zu springen' },
+    'Re-ver: retroceder 2s (Z)': { en:'Replay: back 2s (Z)', de:'Nochmal: 2s zurück (Z)' },
+    'Nota para este clip (la ven los jugadores)…': { en:'Note for this clip (players can see it)…', de:'Notiz zu diesem Clip (für die Spieler sichtbar)…' },
+    'CSV para el editor': { en:'CSV for the editor', de:'CSV für den Schnitt' },
+    'Bajar los clips elegidos en un archivo para el editor de video': { en:'Download the selected clips as a file for the video editor', de:'Die ausgewählten Clips als Datei für den Videoschnitt herunterladen' },
+
+    /* --- el analisis y el tablero --- */
+    'Total ataques': { en:'Total attacks', de:'Angriffe gesamt' },
+    'Puntos directos': { en:'Direct points', de:'Direkte Punkte' },
+    'Ranking Ataque': { en:'Attack ranking', de:'Angriffs-Rangliste' },
+    'Ranking Saque': { en:'Serve ranking', de:'Aufschlag-Rangliste' },
+    'Ranking Recepción': { en:'Reception ranking', de:'Annahme-Rangliste' },
+    'Ranking Bloqueo': { en:'Block ranking', de:'Block-Rangliste' },
+    'Ranking Defensa': { en:'Defence ranking', de:'Abwehr-Rangliste' },
+    'Sin blq': { en:'No block', de:'Ohne Block' },
+    'Ver estas acciones en video': { en:'Watch these actions on video', de:'Diese Aktionen im Video ansehen' },
+    'Ver video de {0}': { en:'Watch video of {0}', de:'Video ansehen von {0}' },
+    'Objetivo · objetivo': { en:'On target · target', de:'Ziel erreicht · Ziel' },
+    'Cerca · objetivo': { en:'Close · target', de:'Nah dran · Ziel' },
+    'Neutro · objetivo': { en:'Neutral · target', de:'Neutral · Ziel' },
+    'Lejos · objetivo': { en:'Far off · target', de:'Weit weg · Ziel' },
+    'Mañana — Entrenamiento': { en:'Morning — Training', de:'Vormittag — Training' },
+    'Tarde — Entrenamiento': { en:'Afternoon — Training', de:'Nachmittag — Training' },
+    'Noche — Entrenamiento': { en:'Evening — Training', de:'Abend — Training' },
+
+    /* --- las categorias de los objetivos --- */
+    'Errores comunes': { en:'Common mistakes', de:'Häufige Fehler' },
+    'Físico/Coordinación': { en:'Physical / Coordination', de:'Physis / Koordination' },
+    'Qué NO hacer': { en:'What NOT to do', de:'Was NICHT zu tun ist' },
+    'Poner en el foco de la semana': { en:"Add to this week's focus", de:'In den Fokus der Woche' },
+    'Sacar del foco': { en:'Remove from focus', de:'Aus dem Fokus nehmen' },
+    'Foco de la semana': { en:'Focus of the week', de:'Fokus der Woche' },
+
+    /* --- la puerta de entrada ---
+       La pantalla de login la dibuja firebase.js antes que nada. Un jugador
+       nuevo todavia no eligio idioma, asi que la app toma el del navegador:
+       si abre desde un telefono en aleman, lo primero que ve tiene que estar
+       en aleman, y era justo lo unico que quedaba en castellano. */
+    'Tu numero o tu mail': { en:'Your number or your email', de:'Deine Nummer oder deine E-Mail' },
+    'Codigo': { en:'Code', de:'Code' },
+    'Código': { en:'Code', de:'Code' },
+    'Los jugadores entran con su numero de camiseta.': { en:'Players sign in with their shirt number.', de:'Spieler melden sich mit ihrer Trikotnummer an.' },
+    'Los jugadores entran con su número de camiseta.': { en:'Players sign in with their shirt number.', de:'Spieler melden sich mit ihrer Trikotnummer an.' },
+    'Completa los dos campos': { en:'Fill in both fields', de:'Bitte beide Felder ausfüllen' },
+    'Entrando...': { en:'Signing in...', de:'Anmeldung läuft...' },
+    'Jugador · solo lectura': { en:'Player · read only', de:'Spieler · nur Lesen' },
+    'Cerrar sesión': { en:'Sign out', de:'Abmelden' },
+    'Salir': { en:'Sign out', de:'Abmelden' },
+
+    /* --- la planilla P-2 --- */
+    'Planilla P-2': { en:'P-2 line-up sheet', de:'Aufstellungsbogen P-2' },
+    'Plantel': { en:'Squad', de:'Kader' },
+    'Apellido y nombre': { en:'Surname and name', de:'Name und Vorname' },
+    'Puesto': { en:'Position', de:'Position' },
+    'Nacimiento': { en:'Date of birth', de:'Geburtsdatum' },
+    'Altura': { en:'Height', de:'Größe' },
+    'Formación inicial por set': { en:'Starting line-up by set', de:'Startaufstellung pro Satz' },
+    'Cuerpo técnico': { en:'Coaching staff', de:'Trainerstab' },
+    'Firma del entrenador': { en:'Coach signature', de:'Unterschrift Trainer' },
+    'Firma del capitán': { en:'Captain signature', de:'Unterschrift Kapitän' },
+    'Firma del árbitro': { en:'Referee signature', de:'Unterschrift Schiedsrichter' },
+    'Entrenador': { en:'Coach', de:'Trainer' },
+    'Asistente / staff': { en:'Assistant / staff', de:'Assistent / Staff' },
+    'Competencia': { en:'Competition', de:'Wettbewerb' },
+    'Vaciar': { en:'Clear', de:'Leeren' },
+    'Capitán': { en:'Captain', de:'Kapitän' },
+    'Convocado': { en:'Called up', de:'Aufgeboten' },
+    'Líbero': { en:'Libero', de:'Libero' },
+    '¿Vaciar esta planilla y volver a empezar?': { en:'Clear this sheet and start over?', de:'Diesen Bogen leeren und neu beginnen?' },
+    'En el set {0} hay un jugador repetido.': { en:'In set {0} a player is repeated.', de:'In Satz {0} ist ein Spieler doppelt.' },
+
+    /* --- el comparador --- */
+    'JUGADOR A': { en:'PLAYER A', de:'SPIELER A' },
+    'JUGADOR B': { en:'PLAYER B', de:'SPIELER B' },
+
+    /* --- la campana de novedades --- */
+    'Novedades': { en:"What's new", de:'Neuigkeiten' },
+    'Listo, lo vi': { en:'Got it', de:'Alles klar' },
+    'Ya están las estadísticas': { en:'The stats are in', de:'Die Statistiken sind da' },
+    'En tu plan de desarrollo': { en:'In your development plan', de:'In deinem Entwicklungsplan' },
+    'Nuevo foco de la semana': { en:'New focus of the week', de:'Neuer Fokus der Woche' },
+    'Tu entrenador marcó en qué enfocarte': { en:'Your coach set what to focus on', de:'Dein Trainer hat den Fokus gesetzt' },
+    'Cambios en el calendario': { en:'Calendar changes', de:'Änderungen im Kalender' },
+    'Hay partidos o entrenamientos nuevos': { en:'New matches or trainings', de:'Neue Spiele oder Trainings' },
+    '{0} entrenamiento nuevo': { en:'{0} new training', de:'{0} neues Training' },
+    '{0} entrenamientos nuevos': { en:'{0} new trainings', de:'{0} neue Trainings' },
+    '{0} partido nuevo': { en:'{0} new match', de:'{0} neues Spiel' },
+    '{0} partidos nuevos': { en:'{0} new matches', de:'{0} neue Spiele' },
+    '{0} objetivo nuevo': { en:'{0} new goal', de:'{0} neues Ziel' },
+    '{0} objetivos nuevos': { en:'{0} new goals', de:'{0} neue Ziele' },
+
+    /* --- el bloqueo por rotacion --- */
+    'Bloqueo:': { en:'Block:', de:'Block:' },
+    'Rotación P{0}': { en:'Rotation P{0}', de:'Rotation P{0}' },
+    'Sin rotación': { en:'No rotation', de:'Ohne Rotation' },
+    '{0} armados': { en:'{0} sets', de:'{0} Zuspiele' },
+    '{0} armado': { en:'{0} set', de:'{0} Zuspiel' },
+
+    /* --- la leyenda larga del plan de partido --- */
+    'Ataque (rojo): dirección según recepción. Saque (azul): tipo, zona de origen, momento (puntos del set) y fuerza sobre la recepción; / = vendido (2ª mejor). Recepción (naranja): según tipo/zona del saque rival; zona real de caída de la pelota (todas las zonas). Video por timestamp (reproduce en partidos publicados en la app). Muestras chicas = tomar con cuidado':
+      { en:'Attack (red): direction by reception. Serve (blue): type, origin zone, moment (points in the set) and pressure on the reception; / = overpass (2nd best). Reception (orange): by type/zone of the opponent serve; real landing zone of the ball (all zones). Video by timestamp (plays on matches published in the app). Small samples = take with care',
+        de:'Angriff (rot): Richtung je nach Annahme. Aufschlag (blau): Art, Ausgangszone, Moment (Punkte im Satz) und Druck auf die Annahme; / = Überpass (zweitbeste). Annahme (orange): nach Art/Zone des gegnerischen Aufschlags; echte Auftreffzone des Balls (alle Zonen). Video per Zeitstempel (läuft bei in der App veröffentlichten Spielen). Kleine Stichproben = mit Vorsicht lesen' }
+  };
 
   // ═══ MOTOR DE TRADUCCIÓN POR TEXTO (sin necesidad de data-t) ═══════════════
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
@@ -3358,6 +3488,40 @@
     "· clickeá un casillero o una llamada para ver el video 🎬":{en:"· click a cell or a call to see the video 🎬",de:"· klicke auf eine Zelle oder einen Call, um das Video zu sehen 🎬"},
     "· cómo distribuye en juego corrido (defensa/contraataque) ·":{en:"· how they distribute in transition (defense/counterattack) ·",de:"· wie sie in der Transition verteilen (Abwehr/Gegenangriff) ·"},
     "· distribución en K1 (recepción positiva) ·":{en:"· distribution in K1 (positive reception) ·",de:"· Verteilung in K1 (positive Annahme) ·"},
+    /* ── seccion ROTACIONES DEL ARMADOR (agregado 26/09/2026) ────────── */
+    "· distribución en TRANSICIÓN (juego corrido) ·":{en:"· distribution in TRANSITION (open play) ·",de:"· Verteilung in der TRANSITION (laufendes Spiel) ·"},
+    "ROTACIONES DEL ARMADOR":{en:"SETTER ROTATIONS",de:"ROTATIONEN DES ZUSPIELERS"},
+    /* ── frases tacticas con huecos (ver PLANTILLAS CON HUECOS) ──────── */
+    "punta (z4)":{en:"outside (z4)",de:"Außen (z4)"},
+    "central (z3)":{en:"middle (z3)",de:"Mitte (z3)"},
+    "pipe (z8)":{en:"pipe (z8)",de:"Pipe (z8)"},
+    "zaguero (z9)":{en:"back row (z9)",de:"Hinterreihe (z9)"},
+    /* el pie de cada tarjeta de rotacion */
+    "{1} K1 · {2}% ef ·":{en:"{1} K1 · {2}% eff ·",de:"{1} K1 · {2}% Eff ·"},
+    "{1} pelotas · {2}% ef ·":{en:"{1} balls · {2}% eff ·",de:"{1} Bälle · {2}% Eff ·"},
+    "concentrada":{en:"concentrated",de:"konzentriert"},
+    "repartida":{en:"spread",de:"verteilt"},
+    "ATACAR ACÁ":{en:"SERVE HERE",de:"HIER AUFSCHLAGEN"},
+    "CUIDADO":{en:"CAREFUL",de:"VORSICHT"},
+    "muestra insuficiente":{en:"not enough data",de:"zu wenig Daten"},
+    "opuesto (z2)":{en:"opposite (z2)",de:"Diagonal (z2)"},
+    "rotación S{1}":{en:"rotation S{1}",de:"Rotation S{1}"},
+    "(K1 más flojo, {1}% ef.). Rotaciones repartidas → lectura de bloqueo; concentradas → anticipar.":{en:"(weakest K1, {1}% eff.). Spread rotations → read the block; concentrated ones → anticipate.",de:"(schwächstes K1, {1}% Eff.). Verteilte Rotationen → Block lesen; konzentrierte → antizipieren."},
+    "Cargan al {1} ({2}%) → bloqueo anticipa ahí":{en:"They load the {1} ({2}%) → block anticipates there",de:"Sie spielen auf {1} ({2}%) → Block antizipiert dort"},
+    "Reparte {1} y {2} → leer salida del armador":{en:"Splits between {1} and {2} → read the setter\u2019s release",de:"Verteilt auf {1} und {2} → Auslage des Zuspielers lesen"},
+    "Busca {1} + {2} → central lee 2da línea":{en:"Looks for {1} + {2} → middle reads the back row",de:"Sucht {1} + {2} → Mittelblocker liest die Hinterreihe"},
+    "Resuelve por {1} ({2}%) y mata → no especular":{en:"Solves through {1} ({2}%) and kills → do not gamble",de:"Löst über {1} ({2}%) und punktet → nicht spekulieren"},
+    "Le cuesta el contraataque ({1}%) → presionar saque/bloqueo":{en:"Struggles in counter-attack ({1}%) → press serve and block",de:"Tut sich im Gegenangriff schwer ({1}%) → Aufschlag und Block unter Druck setzen"},
+    "Prioriza {1} ({2}%)":{en:"Prioritizes {1} ({2}%)",de:"Bevorzugt {1} ({2}%)"},
+    "FLOJA EN TR":{en:"WEAK IN TR",de:"SCHWACH IN TR"},
+    "FUERTE EN TR":{en:"STRONG IN TR",de:"STARK IN TR"},
+    "En qué rotación conviene apretar el saque":{en:"Which rotation to serve hard at",de:"In welcher Rotation der Aufschlag Druck machen soll"},
+    "Side-out":{en:"Side-out",de:"Side-out"},
+    "PLAN DE SAQUE":{en:"SERVE PLAN",de:"AUFSCHLAGPLAN"},
+    "LECTURA DE BLOQUEO EN TRANSICIÓN":{en:"BLOCK READ IN TRANSITION",de:"BLOCKLESEN IN DER TRANSITION"},
+    "pelotas / puntos":{en:"balls / points",de:"Bälle / Punkte"},
+    "Sin suficientes pelotas de transición":{en:"Not enough transition balls",de:"Nicht genug Transition-Bälle"},
+    "Sin suficientes pelotas de side-out":{en:"Not enough side-out balls",de:"Nicht genug Side-out-Bälle"},
     "◀ / ▶ marca quién está mejor en cada métrica · el borde brillante es el mejor valor":{en:"◀ / ▶ marks who is better in each metric · the glowing border is the best value",de:"◀ / ▶ zeigt, wer in jeder Metrik besser ist · der leuchtende Rand ist der beste Wert"},
     "★ = lo hizo en el último partido.":{en:"★ = did it in the last match.",de:"★ = im letzten Spiel gemacht."},
     "🎯 = receptor más vulnerable ·":{en:"🎯 = most vulnerable receiver ·",de:"🎯 = anfälligster Annahmespieler ·"},
@@ -4135,14 +4299,30 @@
     'Rival analysis:': { en:'Rival analysis:', de:'Gegneranalyse:' },
     'Exploit rival weaknesses': { en:'Exploit rival weaknesses', de:'Schwächen des Gegners nutzen' },
   };
+  /* Las frases medidas en la app se suman al mismo diccionario. Van en su
+     propio objeto para que se vea de donde salieron y sea facil seguir
+     agregando. Si una frase ya estaba arriba, la de arriba manda. */
+  Object.keys(PHRASES_MEDIDAS).forEach(function(k){
+    if(!PHRASES_EXTRA[k]) PHRASES_EXTRA[k] = PHRASES_MEDIDAS[k];
+  });
   var PHRASE_LC = {};
+  /* Indice exacto, respetando mayusculas. Hace falta porque el
+     diccionario tiene frases que solo se diferencian en eso —"CENTRAL" y
+     "central", "Punto" y "punto"— y en el indice en minusculas las dos
+     caen en el mismo lugar: gana la ultima del archivo y la otra sale
+     con la forma equivocada ("central" salia "MIDDLE"). */
+  var PHRASE_CS = {};
   (function(){
-    Object.keys(T).forEach(function(k){ var e=T[k]; if(e&&e.es) PHRASE_LC[String(e.es).toLowerCase()]={en:e.en,de:e.de}; });
-    Object.keys(PHRASES_EXTRA).forEach(function(es){ PHRASE_LC[es.toLowerCase()]=PHRASES_EXTRA[es]; });
+    Object.keys(T).forEach(function(k){ var e=T[k]; if(e&&e.es){
+      var v={en:e.en,de:e.de};
+      PHRASE_LC[String(e.es).toLowerCase()]=v; PHRASE_CS[String(e.es)]=v; }; });
+    Object.keys(PHRASES_EXTRA).forEach(function(es){
+      PHRASE_LC[es.toLowerCase()]=PHRASES_EXTRA[es]; PHRASE_CS[es]=PHRASES_EXTRA[es]; });
   })();
   function trPhrase(es, lang){
     var raw=(es||'').trim(); if(!raw) return null;
-    var e=PHRASE_LC[raw.toLowerCase()]; if(!e) return null;
+    /* primero tal cual esta escrita; si no esta, sin mirar mayusculas */
+    var e=PHRASE_CS[raw] || PHRASE_LC[raw.toLowerCase()]; if(!e) return null;
     var out=e[lang]||raw;
     if(raw===raw.toUpperCase() && raw!==raw.toLowerCase()) out=out.toUpperCase();
     return out;
@@ -4167,6 +4347,36 @@
   }
   /* Frases pensadas para llevar un valor pegado atras: terminan en espacio,
      en dos puntos o en "de ". Solo estas se prueban como prefijo. */
+  /* ── PLANTILLAS CON HUECOS ──────────────────────────────────────────────
+     Una entrada del diccionario puede llevar {1}, {2}, … donde va un dato
+     que cambia. Aca se convierte cada una en una expresion regular para
+     reconocerla en el texto y sacar los valores.
+     Si el hueco esta pegado a un "%", solo acepta numeros: asi
+     "Prioriza punta (z4) (56%)" separa bien "punta (z4)" de "56" y no se
+     confunde con los parentesis del nombre.                              */
+  var PLANTILLAS=null;
+  function buildPlantillas(){
+    PLANTILLAS=[];
+    if(!PHRASE_MAP) buildPhraseIndex();
+    if(!PHRASE_MAP) return;
+    Object.keys(PHRASE_MAP).forEach(function(k){
+      if(k.indexOf('{')<0) return;
+      var partes=k.split(/(\{\d+\})/), orden=[], re='';
+      for(var i=0;i<partes.length;i++){
+        var p=partes[i];
+        if(/^\{\d+\}$/.test(p)){
+          orden.push(parseInt(p.slice(1,-1),10));
+          var sigue=partes[i+1]||'';
+          re += (sigue.charAt(0)==='%') ? '([\\d.,+-]+)' : '(.+?)';
+        } else {
+          re += p.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+        }
+      }
+      try{ PLANTILLAS.push({re:new RegExp('^'+re+'$'), orden:orden, e:PHRASE_MAP[k]}); }
+      catch(err){}
+    });
+  }
+
   var PREFIJOS=null;
   function buildPrefijos(){
     if(!PHRASE_MAP) buildPhraseIndex();
@@ -4240,6 +4450,33 @@
         }
       }
     }
+
+    /* ── FRASE CON HUECOS ───────────────────────────────────────────────
+       Ultimo recurso, para las frases que llevan un dato en el medio.
+       Tiene que encajar la plantilla ENTERA, de punta a punta: o coincide
+       todo, o no se toca nada.                                          */
+    if(!PLANTILLAS) buildPlantillas();
+    if(PLANTILLAS && PLANTILLAS.length){
+      for(var z=0; z<PLANTILLAS.length; z++){
+        var pl=PLANTILLAS[z];
+        var m=t2.match(pl.re);
+        if(!m) continue;
+        var dest=pl.e && pl.e[lang];
+        if(!dest) continue;
+        var vals={};
+        for(var w=0; w<pl.orden.length; w++){
+          var v=m[w+1];
+          /* si el dato es a su vez una frase conocida, se traduce */
+          var vt=trPhrase(v, lang);
+          vals[pl.orden[w]] = (vt===null) ? v : vt;
+        }
+        return text.replace(t2, dest.replace(/\{(\d+)\}/g, function(_, nn){
+          var x=vals[parseInt(nn,10)];
+          return (x===undefined||x===null) ? '' : x;
+        }));
+      }
+    }
+
     return text;
   }
   window.translateString=translateString;

@@ -19,6 +19,10 @@
   ══════════════════════════════════════════════════════════════════════════
 -->
 <style>
+  /* En esta app los controles no heredan la tipografia: sin esta linea
+     los botones y los desplegables salen en Arial. */
+  button,select,input,textarea{font-family:'Barlow Condensed',sans-serif}
+
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.08);
       --red:#E8192C;--green:#22C55E;--indigo:#818CF8;--amber:#F59E0B;
@@ -332,12 +336,6 @@ function setIdioma(l){
   });
   document.documentElement.lang = l;
   try{ localStorage.setItem('bienvenida_idioma', l); }catch(e){}
-  /* Y tambien el que usa TODA la app (lang.js lee 'vb_lang').
-     Antes el jugador nuevo llegaba aca, elegia Deutsch, entraba a la app
-     ...y la app estaba en castellano: esta eleccion se guardaba en una
-     clave que ningun otro lado miraba. La primera decision que tomaba el
-     jugador se tiraba a la basura. */
-  try{ localStorage.setItem('vb_lang', l); }catch(e){}
 }
 (function(){
   var l = null;
@@ -349,6 +347,6 @@ function setIdioma(l){
   setIdioma(l);
 })();
 </script>
-<script src="ayuda.js?v=20260927-0943"></script>
+<script src="ayuda.js?v=20260926-0757"></script>
 </body>
 </html>

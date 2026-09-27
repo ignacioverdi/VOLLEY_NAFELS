@@ -1,5 +1,5 @@
 window.HISTORIAL_DATA = {
-  "generado": "26/09/2026, 11:25:34",
+  "generado": "27/09/2026, 11:49:19",
   "entrenamientos": [
     {
       "fecha": "03/09/2026",
@@ -17,7 +17,7 @@ window.HISTORIAL_DATA = {
           "c": 10,
           "n": "BOGDANOVSKI",
           "sT": 19,
-          "sEff": -14,
+          "sEff": 28,
           "sPunto": 0,
           "sPos": 1,
           "sNeg": 12,
@@ -32,7 +32,7 @@ window.HISTORIAL_DATA = {
             "Neg": 12,
             "Vend": 0,
             "Err": 3,
-            "Eff": -14
+            "Eff": 28
           },
           "sPot": {
             "T": 0,
@@ -45,7 +45,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 27,
-          "rEff": 35,
+          "rEff": 64,
           "rPunto": 10,
           "rPos": 6,
           "rNeg": 3,
@@ -60,7 +60,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 0,
-            "Eff": 55
+            "Eff": 73
           },
           "rPot": {
             "T": 16,
@@ -70,7 +70,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 1,
             "Err": 3,
-            "Eff": 22
+            "Eff": 59
           },
           "aT": 0,
           "aEff": 0,
@@ -141,7 +141,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 27,
-          "rEff": 31,
+          "rEff": 62,
           "rPunto": 5,
           "rPos": 8,
           "rNeg": 4,
@@ -156,7 +156,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 0,
-            "Eff": 25
+            "Eff": 58
           },
           "rPot": {
             "T": 17,
@@ -166,7 +166,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 1,
             "Err": 0,
-            "Eff": 35
+            "Eff": 64
           },
           "aT": 0,
           "aEff": 0,
@@ -209,7 +209,7 @@ window.HISTORIAL_DATA = {
           "c": 17,
           "n": "ROFFLER",
           "sT": 19,
-          "sEff": -9,
+          "sEff": 34,
           "sPunto": 1,
           "sPos": 1,
           "sNeg": 9,
@@ -224,7 +224,7 @@ window.HISTORIAL_DATA = {
             "Neg": 9,
             "Vend": 0,
             "Err": 3,
-            "Eff": -9
+            "Eff": 34
           },
           "sPot": {
             "T": 0,
@@ -237,7 +237,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 29,
-          "rEff": 16,
+          "rEff": 53,
           "rPunto": 5,
           "rPos": 5,
           "rNeg": 5,
@@ -252,7 +252,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 0,
             "Err": 0,
-            "Eff": 25
+            "Eff": 56
           },
           "rPot": {
             "T": 17,
@@ -262,7 +262,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 2,
             "Err": 2,
-            "Eff": 9
+            "Eff": 50
           },
           "aT": 0,
           "aEff": 0,
@@ -305,7 +305,7 @@ window.HISTORIAL_DATA = {
           "c": 11,
           "n": "BARTHOLET",
           "sT": 18,
-          "sEff": -12,
+          "sEff": 33,
           "sPunto": 0,
           "sPos": 3,
           "sNeg": 9,
@@ -320,7 +320,7 @@ window.HISTORIAL_DATA = {
             "Neg": 9,
             "Vend": 0,
             "Err": 3,
-            "Eff": -13
+            "Eff": 32
           },
           "sPot": {
             "T": 1,
@@ -330,10 +330,10 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "rT": 29,
-          "rEff": 12,
+          "rEff": 54,
           "rPunto": 4,
           "rPos": 7,
           "rNeg": 1,
@@ -348,7 +348,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": 23
+            "Eff": 61
           },
           "rPot": {
             "T": 18,
@@ -358,7 +358,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 2,
             "Err": 2,
-            "Eff": 6
+            "Eff": 50
           },
           "aT": 0,
           "aEff": 0,
@@ -401,7 +401,7 @@ window.HISTORIAL_DATA = {
           "c": 1,
           "n": "DURDOS",
           "sT": 18,
-          "sEff": 0,
+          "sEff": 43,
           "sPunto": 1,
           "sPos": 4,
           "sNeg": 7,
@@ -416,7 +416,7 @@ window.HISTORIAL_DATA = {
             "Neg": 7,
             "Vend": 0,
             "Err": 2,
-            "Eff": 0
+            "Eff": 43
           },
           "sPot": {
             "T": 0,
@@ -429,7 +429,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 29,
-          "rEff": 3,
+          "rEff": 50,
           "rPunto": 3,
           "rPos": 13,
           "rNeg": 2,
@@ -444,7 +444,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 50
+            "Eff": 75
           },
           "rPot": {
             "T": 18,
@@ -454,7 +454,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 1,
             "Err": 8,
-            "Eff": -25
+            "Eff": 34
           },
           "aT": 0,
           "aEff": 0,
@@ -525,7 +525,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 24,
-          "rEff": 12,
+          "rEff": 51,
           "rPunto": 2,
           "rPos": 8,
           "rNeg": 5,
@@ -540,7 +540,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 1,
-            "Eff": 29
+            "Eff": 57
           },
           "rPot": {
             "T": 17,
@@ -550,7 +550,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 0,
             "Err": 2,
-            "Eff": 6
+            "Eff": 49
           },
           "aT": 0,
           "aEff": 0,
@@ -607,7 +607,7 @@ window.HISTORIAL_DATA = {
           "c": 9,
           "n": "NORRIS",
           "sT": 38,
-          "sEff": -14,
+          "sEff": 34,
           "sPunto": 2,
           "sPos": 3,
           "sNeg": 16,
@@ -622,7 +622,7 @@ window.HISTORIAL_DATA = {
             "Neg": 16,
             "Vend": 2,
             "Err": 9,
-            "Eff": -14
+            "Eff": 34
           },
           "sPot": {
             "T": 0,
@@ -703,7 +703,7 @@ window.HISTORIAL_DATA = {
           "c": 11,
           "n": "BARTHOLET",
           "sT": 19,
-          "sEff": -11,
+          "sEff": 37,
           "sPunto": 1,
           "sPos": 4,
           "sNeg": 8,
@@ -718,7 +718,7 @@ window.HISTORIAL_DATA = {
             "Neg": 8,
             "Vend": 0,
             "Err": 4,
-            "Eff": -11
+            "Eff": 37
           },
           "sPot": {
             "T": 0,
@@ -731,7 +731,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 43,
-          "rEff": 24,
+          "rEff": 56,
           "rPunto": 12,
           "rPos": 8,
           "rNeg": 10,
@@ -746,7 +746,7 @@ window.HISTORIAL_DATA = {
             "Neg": 8,
             "Vend": 0,
             "Err": 3,
-            "Eff": 36
+            "Eff": 60
           },
           "rPot": {
             "T": 18,
@@ -756,7 +756,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 1,
             "Err": 2,
-            "Eff": 8
+            "Eff": 51
           },
           "aT": 0,
           "aEff": 0,
@@ -799,7 +799,7 @@ window.HISTORIAL_DATA = {
           "c": 1,
           "n": "DURDOS",
           "sT": 18,
-          "sEff": -8,
+          "sEff": 31,
           "sPunto": 0,
           "sPos": 2,
           "sNeg": 12,
@@ -814,7 +814,7 @@ window.HISTORIAL_DATA = {
             "Neg": 12,
             "Vend": 0,
             "Err": 2,
-            "Eff": -8
+            "Eff": 31
           },
           "sPot": {
             "T": 0,
@@ -827,7 +827,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 52,
-          "rEff": 31,
+          "rEff": 62,
           "rPunto": 13,
           "rPos": 16,
           "rNeg": 6,
@@ -842,7 +842,7 @@ window.HISTORIAL_DATA = {
             "Neg": 5,
             "Vend": 1,
             "Err": 4,
-            "Eff": 29
+            "Eff": 61
           },
           "rPot": {
             "T": 14,
@@ -852,7 +852,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 1,
             "Err": 0,
-            "Eff": 36
+            "Eff": 65
           },
           "aT": 0,
           "aEff": 0,
@@ -923,7 +923,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 89,
-          "rEff": 22,
+          "rEff": 56,
           "rPunto": 23,
           "rPos": 16,
           "rNeg": 16,
@@ -938,7 +938,7 @@ window.HISTORIAL_DATA = {
             "Neg": 12,
             "Vend": 4,
             "Err": 4,
-            "Eff": 22
+            "Eff": 54
           },
           "rPot": {
             "T": 38,
@@ -948,7 +948,7 @@ window.HISTORIAL_DATA = {
             "Neg": 4,
             "Vend": 4,
             "Err": 3,
-            "Eff": 24
+            "Eff": 58
           },
           "aT": 0,
           "aEff": 0,
@@ -991,7 +991,7 @@ window.HISTORIAL_DATA = {
           "c": 13,
           "n": "STEIMANN",
           "sT": 42,
-          "sEff": -18,
+          "sEff": 33,
           "sPunto": 2,
           "sPos": 9,
           "sNeg": 17,
@@ -1006,7 +1006,7 @@ window.HISTORIAL_DATA = {
             "Neg": 17,
             "Vend": 0,
             "Err": 12,
-            "Eff": -18
+            "Eff": 33
           },
           "sPot": {
             "T": 0,
@@ -1115,7 +1115,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 83,
-          "rEff": 16,
+          "rEff": 50,
           "rPunto": 16,
           "rPos": 19,
           "rNeg": 23,
@@ -1130,7 +1130,7 @@ window.HISTORIAL_DATA = {
             "Neg": 18,
             "Vend": 2,
             "Err": 9,
-            "Eff": 13
+            "Eff": 49
           },
           "rPot": {
             "T": 20,
@@ -1140,7 +1140,7 @@ window.HISTORIAL_DATA = {
             "Neg": 5,
             "Vend": 1,
             "Err": 2,
-            "Eff": 25
+            "Eff": 56
           },
           "aT": 0,
           "aEff": 0,
@@ -1183,7 +1183,7 @@ window.HISTORIAL_DATA = {
           "c": 17,
           "n": "ROFFLER",
           "sT": 27,
-          "sEff": 6,
+          "sEff": 45,
           "sPunto": 2,
           "sPos": 2,
           "sNeg": 10,
@@ -1198,7 +1198,7 @@ window.HISTORIAL_DATA = {
             "Neg": 10,
             "Vend": 2,
             "Err": 2,
-            "Eff": 6
+            "Eff": 45
           },
           "sPot": {
             "T": 0,
@@ -1211,7 +1211,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 47,
-          "rEff": 16,
+          "rEff": 52,
           "rPunto": 7,
           "rPos": 14,
           "rNeg": 11,
@@ -1226,7 +1226,7 @@ window.HISTORIAL_DATA = {
             "Neg": 11,
             "Vend": 0,
             "Err": 5,
-            "Eff": 14
+            "Eff": 50
           },
           "rPot": {
             "T": 9,
@@ -1236,7 +1236,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 1,
             "Err": 1,
-            "Eff": 22
+            "Eff": 60
           },
           "aT": 0,
           "aEff": 0,
@@ -1279,7 +1279,7 @@ window.HISTORIAL_DATA = {
           "c": 10,
           "n": "BOGDANOVSKI",
           "sT": 17,
-          "sEff": 10,
+          "sEff": 54,
           "sPunto": 2,
           "sPos": 7,
           "sNeg": 4,
@@ -1294,7 +1294,7 @@ window.HISTORIAL_DATA = {
             "Neg": 4,
             "Vend": 0,
             "Err": 2,
-            "Eff": 10
+            "Eff": 54
           },
           "sPot": {
             "T": 0,
@@ -1307,7 +1307,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 52,
-          "rEff": 37,
+          "rEff": 66,
           "rPunto": 16,
           "rPos": 14,
           "rNeg": 3,
@@ -1322,7 +1322,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 2,
             "Err": 2,
-            "Eff": 36
+            "Eff": 67
           },
           "rPot": {
             "T": 13,
@@ -1332,7 +1332,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 1,
-            "Eff": 38
+            "Eff": 65
           },
           "aT": 0,
           "aEff": 0,
@@ -1375,7 +1375,7 @@ window.HISTORIAL_DATA = {
           "c": 7,
           "n": "SCHMID R",
           "sT": 46,
-          "sEff": -10,
+          "sEff": 39,
           "sPunto": 4,
           "sPos": 4,
           "sNeg": 14,
@@ -1390,7 +1390,7 @@ window.HISTORIAL_DATA = {
             "Neg": 14,
             "Vend": 3,
             "Err": 11,
-            "Eff": -10
+            "Eff": 39
           },
           "sPot": {
             "T": 0,
@@ -1471,7 +1471,7 @@ window.HISTORIAL_DATA = {
           "c": 4,
           "n": "VAZQUEZ",
           "sT": 44,
-          "sEff": -2,
+          "sEff": 39,
           "sPunto": 8,
           "sPos": 3,
           "sNeg": 19,
@@ -1486,7 +1486,7 @@ window.HISTORIAL_DATA = {
             "Neg": 19,
             "Vend": 1,
             "Err": 10,
-            "Eff": -2
+            "Eff": 39
           },
           "sPot": {
             "T": 0,
@@ -1567,7 +1567,7 @@ window.HISTORIAL_DATA = {
           "c": 3,
           "n": "SCHWITTER",
           "sT": 40,
-          "sEff": -44,
+          "sEff": 22,
           "sPunto": 1,
           "sPos": 6,
           "sNeg": 12,
@@ -1582,7 +1582,7 @@ window.HISTORIAL_DATA = {
             "Neg": 12,
             "Vend": 0,
             "Err": 20,
-            "Eff": -44
+            "Eff": 22
           },
           "sPot": {
             "T": 0,
@@ -1663,7 +1663,7 @@ window.HISTORIAL_DATA = {
           "c": 5,
           "n": "CLEMENT",
           "sT": 44,
-          "sEff": -2,
+          "sEff": 48,
           "sPunto": 4,
           "sPos": 14,
           "sNeg": 9,
@@ -1678,7 +1678,7 @@ window.HISTORIAL_DATA = {
             "Neg": 9,
             "Vend": 1,
             "Err": 9,
-            "Eff": -2
+            "Eff": 48
           },
           "sPot": {
             "T": 0,
@@ -1773,7 +1773,7 @@ window.HISTORIAL_DATA = {
           "c": 1,
           "n": "DURDOS",
           "sT": 4,
-          "sEff": 25,
+          "sEff": 56,
           "sPunto": 1,
           "sPos": 0,
           "sNeg": 1,
@@ -1788,7 +1788,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 25
+            "Eff": 56
           },
           "sPot": {
             "T": 0,
@@ -1801,7 +1801,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 6,
-          "rEff": 42,
+          "rEff": 71,
           "rPunto": 3,
           "rPos": 1,
           "rNeg": 0,
@@ -1816,7 +1816,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": 42
+            "Eff": 71
           },
           "rPot": {
             "T": 0,
@@ -1897,7 +1897,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 11,
-          "rEff": 18,
+          "rEff": 59,
           "rPunto": 2,
           "rPos": 2,
           "rNeg": 0,
@@ -1912,7 +1912,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": 18
+            "Eff": 59
           },
           "rPot": {
             "T": 0,
@@ -1965,7 +1965,7 @@ window.HISTORIAL_DATA = {
           "c": 7,
           "n": "SCHMID R",
           "sT": 8,
-          "sEff": 12,
+          "sEff": 53,
           "sPunto": 2,
           "sPos": 0,
           "sNeg": 1,
@@ -1980,7 +1980,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 1,
-            "Eff": 12
+            "Eff": 53
           },
           "sPot": {
             "T": 0,
@@ -2061,7 +2061,7 @@ window.HISTORIAL_DATA = {
           "c": 11,
           "n": "BARTHOLET",
           "sT": 8,
-          "sEff": 16,
+          "sEff": 59,
           "sPunto": 2,
           "sPos": 1,
           "sNeg": 1,
@@ -2076,7 +2076,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 25
           },
           "sPot": {
             "T": 7,
@@ -2086,10 +2086,10 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 2,
             "Err": 2,
-            "Eff": 18
+            "Eff": 64
           },
           "rT": 2,
-          "rEff": 50,
+          "rEff": 75,
           "rPunto": 1,
           "rPos": 0,
           "rNeg": 0,
@@ -2104,7 +2104,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 50
+            "Eff": 75
           },
           "rPot": {
             "T": 0,
@@ -2157,7 +2157,7 @@ window.HISTORIAL_DATA = {
           "c": 3,
           "n": "SCHWITTER",
           "sT": 4,
-          "sEff": -25,
+          "sEff": 31,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 1,
@@ -2172,7 +2172,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 1,
-            "Eff": -25
+            "Eff": 31
           },
           "sPot": {
             "T": 0,
@@ -2253,7 +2253,7 @@ window.HISTORIAL_DATA = {
           "c": 5,
           "n": "CLEMENT",
           "sT": 6,
-          "sEff": 0,
+          "sEff": 46,
           "sPunto": 1,
           "sPos": 0,
           "sNeg": 1,
@@ -2268,7 +2268,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 1,
-            "Eff": 0
+            "Eff": 46
           },
           "sPot": {
             "T": 0,
@@ -2349,7 +2349,7 @@ window.HISTORIAL_DATA = {
           "c": 9,
           "n": "NORRIS",
           "sT": 6,
-          "sEff": -62,
+          "sEff": 17,
           "sPunto": 0,
           "sPos": 1,
           "sNeg": 1,
@@ -2364,7 +2364,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 2,
-            "Eff": -67
+            "Eff": 8
           },
           "sPot": {
             "T": 3,
@@ -2374,7 +2374,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 2,
-            "Eff": -58
+            "Eff": 25
           },
           "rT": 0,
           "rEff": 0,
@@ -2445,7 +2445,7 @@ window.HISTORIAL_DATA = {
           "c": 17,
           "n": "ROFFLER",
           "sT": 5,
-          "sEff": 10,
+          "sEff": 48,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 2,
@@ -2460,7 +2460,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 1,
             "Err": 0,
-            "Eff": 10
+            "Eff": 48
           },
           "sPot": {
             "T": 0,
@@ -2473,7 +2473,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 5,
-          "rEff": -30,
+          "rEff": 25,
           "rPunto": 0,
           "rPos": 1,
           "rNeg": 1,
@@ -2488,7 +2488,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": -25
+            "Eff": 38
           },
           "rPot": {
             "T": 3,
@@ -2498,7 +2498,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 2,
             "Err": 0,
-            "Eff": -33
+            "Eff": 17
           },
           "aT": 10,
           "aEff": 50,
@@ -2569,7 +2569,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 11,
-          "rEff": -23,
+          "rEff": 35,
           "rPunto": 1,
           "rPos": 0,
           "rNeg": 1,
@@ -2584,7 +2584,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 1,
             "Err": 1,
-            "Eff": -6
+            "Eff": 43
           },
           "rPot": {
             "T": 2,
@@ -2594,7 +2594,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 2,
-            "Eff": -100
+            "Eff": 0
           },
           "aT": 0,
           "aEff": 0,
@@ -2637,7 +2637,7 @@ window.HISTORIAL_DATA = {
           "c": 10,
           "n": "BOGDANOVSKI",
           "sT": 7,
-          "sEff": -29,
+          "sEff": 18,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 5,
@@ -2652,7 +2652,7 @@ window.HISTORIAL_DATA = {
             "Neg": 5,
             "Vend": 0,
             "Err": 1,
-            "Eff": -17
+            "Eff": 21
           },
           "sPot": {
             "T": 1,
@@ -2662,10 +2662,10 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": -100
+            "Eff": 0
           },
           "rT": 3,
-          "rEff": 67,
+          "rEff": 75,
           "rPunto": 2,
           "rPos": 0,
           "rNeg": 1,
@@ -2690,7 +2690,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 25
           },
           "aT": 7,
           "aEff": 71,
@@ -2733,7 +2733,7 @@ window.HISTORIAL_DATA = {
           "c": 13,
           "n": "STEIMANN",
           "sT": 1,
-          "sEff": 25,
+          "sEff": 75,
           "sPunto": 0,
           "sPos": 1,
           "sNeg": 0,
@@ -2748,7 +2748,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 25
+            "Eff": 75
           },
           "sPot": {
             "T": 0,
@@ -2845,7 +2845,7 @@ window.HISTORIAL_DATA = {
           "c": 4,
           "n": "VAZQUEZ",
           "sT": 39,
-          "sEff": 10,
+          "sEff": 49,
           "sPunto": 6,
           "sPos": 9,
           "sNeg": 14,
@@ -2860,7 +2860,7 @@ window.HISTORIAL_DATA = {
             "Neg": 13,
             "Vend": 1,
             "Err": 0,
-            "Eff": 15
+            "Eff": 48
           },
           "sPot": {
             "T": 14,
@@ -2870,7 +2870,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 5,
-            "Eff": 0
+            "Eff": 52
           },
           "rT": 0,
           "rEff": 0,
@@ -2969,7 +2969,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 96,
-          "rEff": 26,
+          "rEff": 59,
           "rPunto": 29,
           "rPos": 22,
           "rNeg": 15,
@@ -2984,7 +2984,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 1,
             "Err": 5,
-            "Eff": 32
+            "Eff": 65
           },
           "rPot": {
             "T": 59,
@@ -2994,7 +2994,7 @@ window.HISTORIAL_DATA = {
             "Neg": 13,
             "Vend": 3,
             "Err": 8,
-            "Eff": 22
+            "Eff": 55
           },
           "aT": 0,
           "aEff": 0,
@@ -3037,7 +3037,7 @@ window.HISTORIAL_DATA = {
           "c": 9,
           "n": "NORRIS",
           "sT": 44,
-          "sEff": -34,
+          "sEff": 28,
           "sPunto": 5,
           "sPos": 1,
           "sNeg": 11,
@@ -3052,7 +3052,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 1,
-            "Eff": -19
+            "Eff": 38
           },
           "sPot": {
             "T": 40,
@@ -3062,7 +3062,7 @@ window.HISTORIAL_DATA = {
             "Neg": 10,
             "Vend": 2,
             "Err": 20,
-            "Eff": -35
+            "Eff": 27
           },
           "rT": 0,
           "rEff": 0,
@@ -3133,7 +3133,7 @@ window.HISTORIAL_DATA = {
           "c": 5,
           "n": "CLEMENT",
           "sT": 41,
-          "sEff": -18,
+          "sEff": 32,
           "sPunto": 3,
           "sPos": 6,
           "sNeg": 17,
@@ -3148,7 +3148,7 @@ window.HISTORIAL_DATA = {
             "Neg": 17,
             "Vend": 0,
             "Err": 12,
-            "Eff": -18
+            "Eff": 32
           },
           "sPot": {
             "T": 0,
@@ -3257,7 +3257,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 90,
-          "rEff": 13,
+          "rEff": 49,
           "rPunto": 16,
           "rPos": 20,
           "rNeg": 25,
@@ -3272,7 +3272,7 @@ window.HISTORIAL_DATA = {
             "Neg": 12,
             "Vend": 0,
             "Err": 3,
-            "Eff": 26
+            "Eff": 55
           },
           "rPot": {
             "T": 51,
@@ -3282,7 +3282,7 @@ window.HISTORIAL_DATA = {
             "Neg": 13,
             "Vend": 2,
             "Err": 10,
-            "Eff": 4
+            "Eff": 45
           },
           "aT": 0,
           "aEff": 0,
@@ -3325,7 +3325,7 @@ window.HISTORIAL_DATA = {
           "c": 7,
           "n": "SCHMID R",
           "sT": 43,
-          "sEff": -10,
+          "sEff": 38,
           "sPunto": 6,
           "sPos": 5,
           "sNeg": 15,
@@ -3340,7 +3340,7 @@ window.HISTORIAL_DATA = {
             "Neg": 11,
             "Vend": 0,
             "Err": 6,
-            "Eff": -9
+            "Eff": 36
           },
           "sPot": {
             "T": 18,
@@ -3350,7 +3350,7 @@ window.HISTORIAL_DATA = {
             "Neg": 4,
             "Vend": 1,
             "Err": 6,
-            "Eff": -11
+            "Eff": 41
           },
           "rT": 0,
           "rEff": 0,
@@ -3435,7 +3435,7 @@ window.HISTORIAL_DATA = {
           "c": 1,
           "n": "DURDOS",
           "sT": 3,
-          "sEff": -33,
+          "sEff": 33,
           "sPunto": 1,
           "sPos": 0,
           "sNeg": 0,
@@ -3460,10 +3460,10 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 2,
-            "Eff": -33
+            "Eff": 33
           },
           "rT": 2,
-          "rEff": 0,
+          "rEff": 50,
           "rPunto": 1,
           "rPos": 0,
           "rNeg": 0,
@@ -3478,7 +3478,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": -100
+            "Eff": 0
           },
           "rPot": {
             "T": 1,
@@ -3627,7 +3627,7 @@ window.HISTORIAL_DATA = {
           "c": 4,
           "n": "VAZQUEZ",
           "sT": 3,
-          "sEff": -33,
+          "sEff": 33,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 0,
@@ -3652,7 +3652,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": -33
+            "Eff": 33
           },
           "rT": 0,
           "rEff": 0,
@@ -3723,7 +3723,7 @@ window.HISTORIAL_DATA = {
           "c": 10,
           "n": "BOGDANOVSKI",
           "sT": 2,
-          "sEff": 62,
+          "sEff": 88,
           "sPunto": 1,
           "sPos": 1,
           "sNeg": 0,
@@ -3738,7 +3738,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 62
+            "Eff": 88
           },
           "sPot": {
             "T": 0,
@@ -3751,7 +3751,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 1,
-          "rEff": 50,
+          "rEff": 75,
           "rPunto": 0,
           "rPos": 1,
           "rNeg": 0,
@@ -3766,7 +3766,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 50
+            "Eff": 75
           },
           "rPot": {
             "T": 0,
@@ -3819,7 +3819,7 @@ window.HISTORIAL_DATA = {
           "c": 3,
           "n": "SCHWITTER",
           "sT": 4,
-          "sEff": 0,
+          "sEff": 44,
           "sPunto": 1,
           "sPos": 0,
           "sNeg": 1,
@@ -3834,7 +3834,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 1,
-            "Eff": 0
+            "Eff": 44
           },
           "sPot": {
             "T": 0,
@@ -3915,7 +3915,7 @@ window.HISTORIAL_DATA = {
           "c": 9,
           "n": "NORRIS",
           "sT": 3,
-          "sEff": -33,
+          "sEff": 17,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 2,
@@ -3940,7 +3940,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 1,
-            "Eff": -33
+            "Eff": 17
           },
           "rT": 0,
           "rEff": 0,
@@ -4107,7 +4107,7 @@ window.HISTORIAL_DATA = {
           "c": 11,
           "n": "BARTHOLET",
           "sT": 3,
-          "sEff": -67,
+          "sEff": 17,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 0,
@@ -4132,10 +4132,10 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 2,
-            "Eff": -67
+            "Eff": 17
           },
           "rT": 1,
-          "rEff": 0,
+          "rEff": 50,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 0,
@@ -4160,7 +4160,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "aT": 34,
           "aEff": 12,
@@ -4203,7 +4203,7 @@ window.HISTORIAL_DATA = {
           "c": 17,
           "n": "ROFFLER",
           "sT": 3,
-          "sEff": -33,
+          "sEff": 17,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 2,
@@ -4218,7 +4218,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 1,
-            "Eff": -33
+            "Eff": 17
           },
           "sPot": {
             "T": 0,
@@ -4231,7 +4231,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 2,
-          "rEff": 50,
+          "rEff": 75,
           "rPunto": 1,
           "rPos": 0,
           "rNeg": 0,
@@ -4256,7 +4256,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "aT": 24,
           "aEff": -4,
@@ -4299,7 +4299,7 @@ window.HISTORIAL_DATA = {
           "c": 13,
           "n": "STEIMANN",
           "sT": 2,
-          "sEff": 0,
+          "sEff": 25,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 2,
@@ -4314,7 +4314,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 25
           },
           "sPot": {
             "T": 0,
@@ -4423,7 +4423,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 5,
-          "rEff": 20,
+          "rEff": 55,
           "rPunto": 1,
           "rPos": 2,
           "rNeg": 1,
@@ -4438,7 +4438,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 1,
-            "Eff": 20
+            "Eff": 55
           },
           "rPot": {
             "T": 0,
@@ -4519,7 +4519,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 4,
-          "rEff": 0,
+          "rEff": 50,
           "rPunto": 1,
           "rPos": 0,
           "rNeg": 0,
@@ -4534,7 +4534,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "rPot": {
             "T": 3,
@@ -4544,7 +4544,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": 0
+            "Eff": 50
           },
           "aT": 0,
           "aEff": 0,
@@ -4601,7 +4601,7 @@ window.HISTORIAL_DATA = {
           "c": 11,
           "n": "BARTHOLET",
           "sT": 41,
-          "sEff": -12,
+          "sEff": 43,
           "sPunto": 5,
           "sPos": 6,
           "sNeg": 6,
@@ -4616,7 +4616,7 @@ window.HISTORIAL_DATA = {
             "Neg": 5,
             "Vend": 1,
             "Err": 4,
-            "Eff": -2
+            "Eff": 46
           },
           "sPot": {
             "T": 20,
@@ -4626,10 +4626,10 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 2,
             "Err": 9,
-            "Eff": -22
+            "Eff": 40
           },
           "rT": 47,
-          "rEff": 20,
+          "rEff": 55,
           "rPunto": 6,
           "rPos": 17,
           "rNeg": 8,
@@ -4644,7 +4644,7 @@ window.HISTORIAL_DATA = {
             "Neg": 5,
             "Vend": 1,
             "Err": 2,
-            "Eff": 19
+            "Eff": 53
           },
           "rPot": {
             "T": 26,
@@ -4654,7 +4654,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 1,
             "Err": 2,
-            "Eff": 21
+            "Eff": 57
           },
           "aT": 18,
           "aEff": 17,
@@ -4725,7 +4725,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 88,
-          "rEff": -1,
+          "rEff": 46,
           "rPunto": 9,
           "rPos": 14,
           "rNeg": 12,
@@ -4740,7 +4740,7 @@ window.HISTORIAL_DATA = {
             "Neg": 6,
             "Vend": 1,
             "Err": 5,
-            "Eff": 0
+            "Eff": 44
           },
           "rPot": {
             "T": 60,
@@ -4750,7 +4750,7 @@ window.HISTORIAL_DATA = {
             "Neg": 6,
             "Vend": 4,
             "Err": 9,
-            "Eff": -1
+            "Eff": 46
           },
           "aT": 0,
           "aEff": 0,
@@ -4793,7 +4793,7 @@ window.HISTORIAL_DATA = {
           "c": 17,
           "n": "ROFFLER",
           "sT": 41,
-          "sEff": -17,
+          "sEff": 36,
           "sPunto": 1,
           "sPos": 4,
           "sNeg": 12,
@@ -4808,7 +4808,7 @@ window.HISTORIAL_DATA = {
             "Neg": 12,
             "Vend": 2,
             "Err": 10,
-            "Eff": -17
+            "Eff": 36
           },
           "sPot": {
             "T": 0,
@@ -4821,7 +4821,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 50,
-          "rEff": 6,
+          "rEff": 48,
           "rPunto": 3,
           "rPos": 13,
           "rNeg": 9,
@@ -4836,7 +4836,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 0,
             "Err": 5,
-            "Eff": 0
+            "Eff": 47
           },
           "rPot": {
             "T": 26,
@@ -4846,7 +4846,7 @@ window.HISTORIAL_DATA = {
             "Neg": 6,
             "Vend": 1,
             "Err": 1,
-            "Eff": 12
+            "Eff": 50
           },
           "aT": 16,
           "aEff": -12,
@@ -4889,7 +4889,7 @@ window.HISTORIAL_DATA = {
           "c": 6,
           "n": "ADRIAN",
           "sT": 56,
-          "sEff": 9,
+          "sEff": 53,
           "sPunto": 10,
           "sPos": 9,
           "sNeg": 10,
@@ -4904,7 +4904,7 @@ window.HISTORIAL_DATA = {
             "Neg": 9,
             "Vend": 4,
             "Err": 9,
-            "Eff": 10
+            "Eff": 54
           },
           "sPot": {
             "T": 1,
@@ -4914,7 +4914,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 25
           },
           "rT": 0,
           "rEff": 0,
@@ -5013,7 +5013,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 77,
-          "rEff": -1,
+          "rEff": 44,
           "rPunto": 10,
           "rPos": 13,
           "rNeg": 15,
@@ -5028,7 +5028,7 @@ window.HISTORIAL_DATA = {
             "Neg": 7,
             "Vend": 1,
             "Err": 5,
-            "Eff": -2
+            "Eff": 42
           },
           "rPot": {
             "T": 52,
@@ -5038,7 +5038,7 @@ window.HISTORIAL_DATA = {
             "Neg": 8,
             "Vend": 4,
             "Err": 10,
-            "Eff": -1
+            "Eff": 45
           },
           "aT": 0,
           "aEff": 0,
@@ -5081,7 +5081,7 @@ window.HISTORIAL_DATA = {
           "c": 10,
           "n": "BOGDANOVSKI",
           "sT": 33,
-          "sEff": -2,
+          "sEff": 44,
           "sPunto": 5,
           "sPos": 6,
           "sNeg": 10,
@@ -5096,7 +5096,7 @@ window.HISTORIAL_DATA = {
             "Neg": 10,
             "Vend": 0,
             "Err": 7,
-            "Eff": -2
+            "Eff": 44
           },
           "sPot": {
             "T": 0,
@@ -5109,7 +5109,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 45,
-          "rEff": 17,
+          "rEff": 55,
           "rPunto": 8,
           "rPos": 10,
           "rNeg": 3,
@@ -5124,7 +5124,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 3,
             "Err": 3,
-            "Eff": 0
+            "Eff": 47
           },
           "rPot": {
             "T": 24,
@@ -5134,7 +5134,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 2,
             "Err": 0,
-            "Eff": 31
+            "Eff": 62
           },
           "aT": 17,
           "aEff": 18,
@@ -5177,7 +5177,7 @@ window.HISTORIAL_DATA = {
           "c": 1,
           "n": "DURDOS",
           "sT": 31,
-          "sEff": -4,
+          "sEff": 38,
           "sPunto": 4,
           "sPos": 3,
           "sNeg": 14,
@@ -5192,7 +5192,7 @@ window.HISTORIAL_DATA = {
             "Neg": 12,
             "Vend": 0,
             "Err": 3,
-            "Eff": 7
+            "Eff": 43
           },
           "sPot": {
             "T": 6,
@@ -5202,10 +5202,10 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 3,
-            "Eff": -50
+            "Eff": 17
           },
           "rT": 51,
-          "rEff": 20,
+          "rEff": 57,
           "rPunto": 11,
           "rPos": 10,
           "rNeg": 4,
@@ -5220,7 +5220,7 @@ window.HISTORIAL_DATA = {
             "Neg": 4,
             "Vend": 1,
             "Err": 2,
-            "Eff": 2
+            "Eff": 46
           },
           "rPot": {
             "T": 31,
@@ -5230,7 +5230,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 3,
             "Err": 2,
-            "Eff": 31
+            "Eff": 64
           },
           "aT": 18,
           "aEff": 50,
@@ -5273,7 +5273,7 @@ window.HISTORIAL_DATA = {
           "c": 9,
           "n": "NORRIS",
           "sT": 1,
-          "sEff": 0,
+          "sEff": 25,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 1,
@@ -5298,7 +5298,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 25
           },
           "rT": 0,
           "rEff": 0,
@@ -5767,7 +5767,7 @@ window.HISTORIAL_DATA = {
           "c": 4,
           "n": "VAZQUEZ",
           "sT": 38,
-          "sEff": -5,
+          "sEff": 42,
           "sPunto": 2,
           "sPos": 2,
           "sNeg": 11,
@@ -5782,7 +5782,7 @@ window.HISTORIAL_DATA = {
             "Neg": 5,
             "Vend": 2,
             "Err": 2,
-            "Eff": 6
+            "Eff": 50
           },
           "sPot": {
             "T": 13,
@@ -5792,7 +5792,7 @@ window.HISTORIAL_DATA = {
             "Neg": 6,
             "Vend": 1,
             "Err": 4,
-            "Eff": -27
+            "Eff": 26
           },
           "rT": 0,
           "rEff": 0,
@@ -5863,7 +5863,7 @@ window.HISTORIAL_DATA = {
           "c": 11,
           "n": "BARTHOLET",
           "sT": 24,
-          "sEff": -24,
+          "sEff": 33,
           "sPunto": 4,
           "sPos": 1,
           "sNeg": 5,
@@ -5878,7 +5878,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 0,
             "Err": 0,
-            "Eff": 18
+            "Eff": 50
           },
           "sPot": {
             "T": 17,
@@ -5888,10 +5888,10 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 10,
-            "Eff": -41
+            "Eff": 26
           },
           "rT": 35,
-          "rEff": 13,
+          "rEff": 54,
           "rPunto": 4,
           "rPos": 13,
           "rNeg": 4,
@@ -5906,7 +5906,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 5,
-            "Eff": 12
+            "Eff": 54
           },
           "rPot": {
             "T": 6,
@@ -5916,7 +5916,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 1,
-            "Eff": 17
+            "Eff": 50
           },
           "aT": 0,
           "aEff": 0,
@@ -5959,7 +5959,7 @@ window.HISTORIAL_DATA = {
           "c": 13,
           "n": "STEIMANN",
           "sT": 41,
-          "sEff": -16,
+          "sEff": 35,
           "sPunto": 4,
           "sPos": 6,
           "sNeg": 15,
@@ -5974,7 +5974,7 @@ window.HISTORIAL_DATA = {
             "Neg": 15,
             "Vend": 0,
             "Err": 12,
-            "Eff": -16
+            "Eff": 35
           },
           "sPot": {
             "T": 0,
@@ -6055,7 +6055,7 @@ window.HISTORIAL_DATA = {
           "c": 9,
           "n": "NORRIS",
           "sT": 39,
-          "sEff": -18,
+          "sEff": 37,
           "sPunto": 5,
           "sPos": 4,
           "sNeg": 8,
@@ -6070,7 +6070,7 @@ window.HISTORIAL_DATA = {
             "Neg": 5,
             "Vend": 0,
             "Err": 5,
-            "Eff": -22
+            "Eff": 32
           },
           "sPot": {
             "T": 22,
@@ -6080,7 +6080,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 0,
             "Err": 8,
-            "Eff": -15
+            "Eff": 41
           },
           "rT": 0,
           "rEff": 0,
@@ -6151,7 +6151,7 @@ window.HISTORIAL_DATA = {
           "c": 7,
           "n": "SCHMID R",
           "sT": 32,
-          "sEff": 12,
+          "sEff": 51,
           "sPunto": 7,
           "sPos": 3,
           "sNeg": 8,
@@ -6166,7 +6166,7 @@ window.HISTORIAL_DATA = {
             "Neg": 8,
             "Vend": 0,
             "Err": 4,
-            "Eff": 12
+            "Eff": 51
           },
           "sPot": {
             "T": 0,
@@ -6247,7 +6247,7 @@ window.HISTORIAL_DATA = {
           "c": 17,
           "n": "ROFFLER",
           "sT": 12,
-          "sEff": 0,
+          "sEff": 41,
           "sPunto": 0,
           "sPos": 2,
           "sNeg": 6,
@@ -6262,7 +6262,7 @@ window.HISTORIAL_DATA = {
             "Neg": 6,
             "Vend": 1,
             "Err": 1,
-            "Eff": 0
+            "Eff": 41
           },
           "sPot": {
             "T": 0,
@@ -6275,7 +6275,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 38,
-          "rEff": 20,
+          "rEff": 56,
           "rPunto": 8,
           "rPos": 8,
           "rNeg": 6,
@@ -6290,7 +6290,7 @@ window.HISTORIAL_DATA = {
             "Neg": 5,
             "Vend": 1,
             "Err": 1,
-            "Eff": 27
+            "Eff": 59
           },
           "rPot": {
             "T": 8,
@@ -6300,7 +6300,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 3,
-            "Eff": -6
+            "Eff": 44
           },
           "aT": 0,
           "aEff": 0,
@@ -6343,7 +6343,7 @@ window.HISTORIAL_DATA = {
           "c": 1,
           "n": "DURDOS",
           "sT": 19,
-          "sEff": -13,
+          "sEff": 41,
           "sPunto": 4,
           "sPos": 2,
           "sNeg": 3,
@@ -6358,7 +6358,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 38
           },
           "sPot": {
             "T": 17,
@@ -6368,10 +6368,10 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 7,
-            "Eff": -15
+            "Eff": 41
           },
           "rT": 27,
-          "rEff": 22,
+          "rEff": 59,
           "rPunto": 6,
           "rPos": 5,
           "rNeg": 2,
@@ -6386,7 +6386,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 1,
             "Err": 1,
-            "Eff": 22
+            "Eff": 59
           },
           "rPot": {
             "T": 9,
@@ -6396,7 +6396,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 1,
-            "Eff": 22
+            "Eff": 58
           },
           "aT": 0,
           "aEff": 0,
@@ -6439,7 +6439,7 @@ window.HISTORIAL_DATA = {
           "c": 3,
           "n": "SCHWITTER",
           "sT": 35,
-          "sEff": -1,
+          "sEff": 41,
           "sPunto": 3,
           "sPos": 3,
           "sNeg": 14,
@@ -6454,7 +6454,7 @@ window.HISTORIAL_DATA = {
             "Neg": 14,
             "Vend": 2,
             "Err": 5,
-            "Eff": -1
+            "Eff": 41
           },
           "sPot": {
             "T": 0,
@@ -6563,7 +6563,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 55,
-          "rEff": -12,
+          "rEff": 41,
           "rPunto": 3,
           "rPos": 12,
           "rNeg": 6,
@@ -6578,7 +6578,7 @@ window.HISTORIAL_DATA = {
             "Neg": 6,
             "Vend": 3,
             "Err": 11,
-            "Eff": -7
+            "Eff": 43
           },
           "rPot": {
             "T": 4,
@@ -6588,7 +6588,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 3,
-            "Eff": -75
+            "Eff": 12
           },
           "aT": 0,
           "aEff": 0,
@@ -6631,7 +6631,7 @@ window.HISTORIAL_DATA = {
           "c": 5,
           "n": "CLEMENT",
           "sT": 38,
-          "sEff": 3,
+          "sEff": 43,
           "sPunto": 4,
           "sPos": 4,
           "sNeg": 16,
@@ -6646,7 +6646,7 @@ window.HISTORIAL_DATA = {
             "Neg": 16,
             "Vend": 2,
             "Err": 5,
-            "Eff": 3
+            "Eff": 43
           },
           "sPot": {
             "T": 0,
@@ -6659,7 +6659,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 1,
-          "rEff": -100,
+          "rEff": 0,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 0,
@@ -6674,7 +6674,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": -100
+            "Eff": 0
           },
           "rPot": {
             "T": 0,
@@ -6755,7 +6755,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 53,
-          "rEff": 29,
+          "rEff": 61,
           "rPunto": 15,
           "rPos": 12,
           "rNeg": 6,
@@ -6770,7 +6770,7 @@ window.HISTORIAL_DATA = {
             "Neg": 6,
             "Vend": 2,
             "Err": 4,
-            "Eff": 30
+            "Eff": 61
           },
           "rPot": {
             "T": 5,
@@ -6780,7 +6780,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 1,
             "Err": 0,
-            "Eff": 20
+            "Eff": 58
           },
           "aT": 0,
           "aEff": 0,
@@ -6823,7 +6823,7 @@ window.HISTORIAL_DATA = {
           "c": 10,
           "n": "BOGDANOVSKI",
           "sT": 19,
-          "sEff": 4,
+          "sEff": 45,
           "sPunto": 1,
           "sPos": 3,
           "sNeg": 8,
@@ -6838,7 +6838,7 @@ window.HISTORIAL_DATA = {
             "Neg": 8,
             "Vend": 2,
             "Err": 2,
-            "Eff": 4
+            "Eff": 45
           },
           "sPot": {
             "T": 0,
@@ -6851,7 +6851,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 20,
-          "rEff": 8,
+          "rEff": 48,
           "rPunto": 2,
           "rPos": 7,
           "rNeg": 4,
@@ -6866,7 +6866,7 @@ window.HISTORIAL_DATA = {
             "Neg": 4,
             "Vend": 2,
             "Err": 0,
-            "Eff": 25
+            "Eff": 54
           },
           "rPot": {
             "T": 6,
@@ -6876,7 +6876,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 3,
-            "Eff": -33
+            "Eff": 33
           },
           "aT": 0,
           "aEff": 0,
@@ -7059,7 +7059,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 1,
-          "rEff": 0,
+          "rEff": 50,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 0,
@@ -7084,7 +7084,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "aT": 14,
           "aEff": 29,
@@ -7319,7 +7319,7 @@ window.HISTORIAL_DATA = {
           "c": 1,
           "n": "DURDOS",
           "sT": 6,
-          "sEff": -67,
+          "sEff": 12,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 1,
@@ -7344,10 +7344,10 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 4,
-            "Eff": -67
+            "Eff": 12
           },
           "rT": 1,
-          "rEff": 50,
+          "rEff": 75,
           "rPunto": 0,
           "rPos": 1,
           "rNeg": 0,
@@ -7372,7 +7372,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 50
+            "Eff": 75
           },
           "aT": 14,
           "aEff": 14,
@@ -7415,7 +7415,7 @@ window.HISTORIAL_DATA = {
           "c": 11,
           "n": "BARTHOLET",
           "sT": 5,
-          "sEff": -20,
+          "sEff": 25,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 3,
@@ -7440,10 +7440,10 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 0,
             "Err": 1,
-            "Eff": -20
+            "Eff": 25
           },
           "rT": 1,
-          "rEff": 0,
+          "rEff": 50,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 0,
@@ -7468,7 +7468,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "aT": 20,
           "aEff": 5,
@@ -7539,7 +7539,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 1,
-          "rEff": 50,
+          "rEff": 75,
           "rPunto": 0,
           "rPos": 1,
           "rNeg": 0,
@@ -7564,7 +7564,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 50
+            "Eff": 75
           },
           "aT": 13,
           "aEff": 8,
@@ -8005,7 +8005,7 @@ window.HISTORIAL_DATA = {
           "c": 1,
           "n": "DURDOS",
           "sT": 49,
-          "sEff": 4,
+          "sEff": 46,
           "sPunto": 6,
           "sPos": 6,
           "sNeg": 15,
@@ -8020,7 +8020,7 @@ window.HISTORIAL_DATA = {
             "Neg": 15,
             "Vend": 1,
             "Err": 6,
-            "Eff": 4
+            "Eff": 46
           },
           "sPot": {
             "T": 0,
@@ -8033,7 +8033,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 47,
-          "rEff": 33,
+          "rEff": 63,
           "rPunto": 13,
           "rPos": 14,
           "rNeg": 4,
@@ -8048,7 +8048,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 2,
             "Err": 2,
-            "Eff": 25
+            "Eff": 58
           },
           "rPot": {
             "T": 25,
@@ -8058,7 +8058,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 3,
             "Err": 0,
-            "Eff": 40
+            "Eff": 68
           },
           "aT": 1,
           "aEff": 0,
@@ -8101,7 +8101,7 @@ window.HISTORIAL_DATA = {
           "c": 10,
           "n": "BOGDANOVSKI",
           "sT": 51,
-          "sEff": 0,
+          "sEff": 43,
           "sPunto": 7,
           "sPos": 5,
           "sNeg": 18,
@@ -8116,7 +8116,7 @@ window.HISTORIAL_DATA = {
             "Neg": 18,
             "Vend": 2,
             "Err": 9,
-            "Eff": 0
+            "Eff": 43
           },
           "sPot": {
             "T": 0,
@@ -8129,7 +8129,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 39,
-          "rEff": 10,
+          "rEff": 49,
           "rPunto": 9,
           "rPos": 6,
           "rNeg": 8,
@@ -8144,7 +8144,7 @@ window.HISTORIAL_DATA = {
             "Neg": 5,
             "Vend": 2,
             "Err": 5,
-            "Eff": -7
+            "Eff": 39
           },
           "rPot": {
             "T": 18,
@@ -8154,7 +8154,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 0,
             "Err": 2,
-            "Eff": 31
+            "Eff": 61
           },
           "aT": 0,
           "aEff": 0,
@@ -8225,7 +8225,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 85,
-          "rEff": 18,
+          "rEff": 57,
           "rPunto": 21,
           "rPos": 13,
           "rNeg": 5,
@@ -8240,7 +8240,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 1,
             "Err": 6,
-            "Eff": 17
+            "Eff": 56
           },
           "rPot": {
             "T": 43,
@@ -8250,7 +8250,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 3,
             "Err": 4,
-            "Eff": 20
+            "Eff": 58
           },
           "aT": 0,
           "aEff": 0,
@@ -8321,7 +8321,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 79,
-          "rEff": 13,
+          "rEff": 50,
           "rPunto": 13,
           "rPos": 10,
           "rNeg": 20,
@@ -8336,7 +8336,7 @@ window.HISTORIAL_DATA = {
             "Neg": 11,
             "Vend": 1,
             "Err": 4,
-            "Eff": 4
+            "Eff": 44
           },
           "rPot": {
             "T": 42,
@@ -8346,7 +8346,7 @@ window.HISTORIAL_DATA = {
             "Neg": 9,
             "Vend": 2,
             "Err": 2,
-            "Eff": 21
+            "Eff": 55
           },
           "aT": 0,
           "aEff": 0,
@@ -8389,7 +8389,7 @@ window.HISTORIAL_DATA = {
           "c": 11,
           "n": "BARTHOLET",
           "sT": 51,
-          "sEff": -8,
+          "sEff": 42,
           "sPunto": 6,
           "sPos": 8,
           "sNeg": 13,
@@ -8404,7 +8404,7 @@ window.HISTORIAL_DATA = {
             "Neg": 13,
             "Vend": 2,
             "Err": 13,
-            "Eff": -8
+            "Eff": 42
           },
           "sPot": {
             "T": 0,
@@ -8417,7 +8417,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 47,
-          "rEff": 20,
+          "rEff": 57,
           "rPunto": 11,
           "rPos": 10,
           "rNeg": 4,
@@ -8432,7 +8432,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 1,
             "Err": 3,
-            "Eff": 19
+            "Eff": 57
           },
           "rPot": {
             "T": 23,
@@ -8442,7 +8442,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 2,
             "Err": 2,
-            "Eff": 22
+            "Eff": 58
           },
           "aT": 0,
           "aEff": 0,
@@ -8485,7 +8485,7 @@ window.HISTORIAL_DATA = {
           "c": 17,
           "n": "ROFFLER",
           "sT": 53,
-          "sEff": 3,
+          "sEff": 47,
           "sPunto": 5,
           "sPos": 9,
           "sNeg": 15,
@@ -8500,7 +8500,7 @@ window.HISTORIAL_DATA = {
             "Neg": 15,
             "Vend": 3,
             "Err": 7,
-            "Eff": 3
+            "Eff": 47
           },
           "sPot": {
             "T": 0,
@@ -8513,7 +8513,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 39,
-          "rEff": 4,
+          "rEff": 49,
           "rPunto": 5,
           "rPos": 9,
           "rNeg": 4,
@@ -8528,7 +8528,7 @@ window.HISTORIAL_DATA = {
             "Neg": 4,
             "Vend": 1,
             "Err": 4,
-            "Eff": 0
+            "Eff": 44
           },
           "rPot": {
             "T": 19,
@@ -8538,7 +8538,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 1,
             "Err": 3,
-            "Eff": 8
+            "Eff": 53
           },
           "aT": 1,
           "aEff": -100,
@@ -8595,7 +8595,7 @@ window.HISTORIAL_DATA = {
           "c": 3,
           "n": "SCHWITTER",
           "sT": 3,
-          "sEff": 0,
+          "sEff": 50,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 0,
@@ -8610,7 +8610,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "sPot": {
             "T": 0,
@@ -8691,7 +8691,7 @@ window.HISTORIAL_DATA = {
           "c": 10,
           "n": "BOGDANOVSKI",
           "sT": 4,
-          "sEff": 6,
+          "sEff": 50,
           "sPunto": 1,
           "sPos": 1,
           "sNeg": 1,
@@ -8706,7 +8706,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 1,
-            "Eff": 6
+            "Eff": 50
           },
           "sPot": {
             "T": 0,
@@ -8719,7 +8719,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 3,
-          "rEff": -83,
+          "rEff": 4,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 0,
@@ -8744,7 +8744,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 1,
             "Err": 2,
-            "Eff": -83
+            "Eff": 4
           },
           "aT": 22,
           "aEff": 14,
@@ -8979,7 +8979,7 @@ window.HISTORIAL_DATA = {
           "c": 1,
           "n": "DURDOS",
           "sT": 4,
-          "sEff": 12,
+          "sEff": 53,
           "sPunto": 1,
           "sPos": 0,
           "sNeg": 1,
@@ -9004,10 +9004,10 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 1,
             "Err": 1,
-            "Eff": 12
+            "Eff": 53
           },
           "rT": 4,
-          "rEff": 25,
+          "rEff": 50,
           "rPunto": 1,
           "rPos": 0,
           "rNeg": 2,
@@ -9022,7 +9022,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 38
           },
           "rPot": {
             "T": 2,
@@ -9032,7 +9032,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 50
+            "Eff": 62
           },
           "aT": 35,
           "aEff": 6,
@@ -9075,7 +9075,7 @@ window.HISTORIAL_DATA = {
           "c": 9,
           "n": "NORRIS",
           "sT": 4,
-          "sEff": -19,
+          "sEff": 31,
           "sPunto": 0,
           "sPos": 1,
           "sNeg": 2,
@@ -9100,7 +9100,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 1,
-            "Eff": -19
+            "Eff": 31
           },
           "rT": 0,
           "rEff": 0,
@@ -9171,7 +9171,7 @@ window.HISTORIAL_DATA = {
           "c": 11,
           "n": "BARTHOLET",
           "sT": 3,
-          "sEff": 75,
+          "sEff": 92,
           "sPunto": 2,
           "sPos": 1,
           "sNeg": 0,
@@ -9196,10 +9196,10 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 75
+            "Eff": 92
           },
           "rT": 1,
-          "rEff": 0,
+          "rEff": 50,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 0,
@@ -9214,7 +9214,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "rPot": {
             "T": 0,
@@ -9267,7 +9267,7 @@ window.HISTORIAL_DATA = {
           "c": 17,
           "n": "ROFFLER",
           "sT": 3,
-          "sEff": 8,
+          "sEff": 58,
           "sPunto": 0,
           "sPos": 1,
           "sNeg": 0,
@@ -9282,7 +9282,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 8
+            "Eff": 58
           },
           "sPot": {
             "T": 0,
@@ -9295,7 +9295,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 5,
-          "rEff": -60,
+          "rEff": 15,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 1,
@@ -9310,7 +9310,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": -50
+            "Eff": 25
           },
           "rPot": {
             "T": 3,
@@ -9320,7 +9320,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 2,
-            "Eff": -67
+            "Eff": 8
           },
           "aT": 18,
           "aEff": 28,
@@ -9363,7 +9363,7 @@ window.HISTORIAL_DATA = {
           "c": 4,
           "n": "VAZQUEZ",
           "sT": 4,
-          "sEff": -25,
+          "sEff": 31,
           "sPunto": 1,
           "sPos": 0,
           "sNeg": 1,
@@ -9388,7 +9388,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 2,
-            "Eff": -25
+            "Eff": 31
           },
           "rT": 0,
           "rEff": 0,
@@ -9459,7 +9459,7 @@ window.HISTORIAL_DATA = {
           "c": 13,
           "n": "STEIMANN",
           "sT": 4,
-          "sEff": -50,
+          "sEff": 25,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 0,
@@ -9474,7 +9474,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": -33
+            "Eff": 33
           },
           "sPot": {
             "T": 1,
@@ -9484,7 +9484,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": -100
+            "Eff": 0
           },
           "rT": 0,
           "rEff": 0,
@@ -9583,7 +9583,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 4,
-          "rEff": 50,
+          "rEff": 75,
           "rPunto": 1,
           "rPos": 2,
           "rNeg": 0,
@@ -9598,7 +9598,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "rPot": {
             "T": 3,
@@ -9608,7 +9608,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 67
+            "Eff": 83
           },
           "aT": 0,
           "aEff": 0,
@@ -9679,7 +9679,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 5,
-          "rEff": 10,
+          "rEff": 50,
           "rPunto": 0,
           "rPos": 1,
           "rNeg": 1,
@@ -9694,7 +9694,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 10
+            "Eff": 50
           },
           "rPot": {
             "T": 0,
@@ -9761,7 +9761,7 @@ window.HISTORIAL_DATA = {
           "c": 4,
           "n": "VAZQUEZ",
           "sT": 41,
-          "sEff": -13,
+          "sEff": 37,
           "sPunto": 4,
           "sPos": 2,
           "sNeg": 13,
@@ -9776,7 +9776,7 @@ window.HISTORIAL_DATA = {
             "Neg": 4,
             "Vend": 0,
             "Err": 0,
-            "Eff": 4
+            "Eff": 39
           },
           "sPot": {
             "T": 34,
@@ -9786,7 +9786,7 @@ window.HISTORIAL_DATA = {
             "Neg": 9,
             "Vend": 2,
             "Err": 11,
-            "Eff": -17
+            "Eff": 36
           },
           "rT": 0,
           "rEff": 0,
@@ -9885,7 +9885,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 108,
-          "rEff": 9,
+          "rEff": 52,
           "rPunto": 22,
           "rPos": 23,
           "rNeg": 7,
@@ -9900,7 +9900,7 @@ window.HISTORIAL_DATA = {
             "Neg": 4,
             "Vend": 2,
             "Err": 6,
-            "Eff": 19
+            "Eff": 56
           },
           "rPot": {
             "T": 65,
@@ -9910,7 +9910,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 9,
             "Err": 12,
-            "Eff": 3
+            "Eff": 49
           },
           "aT": 0,
           "aEff": 0,
@@ -9953,7 +9953,7 @@ window.HISTORIAL_DATA = {
           "c": 7,
           "n": "SCHMID R",
           "sT": 43,
-          "sEff": -22,
+          "sEff": 33,
           "sPunto": 4,
           "sPos": 3,
           "sNeg": 12,
@@ -9968,7 +9968,7 @@ window.HISTORIAL_DATA = {
             "Neg": 8,
             "Vend": 0,
             "Err": 10,
-            "Eff": -19
+            "Eff": 36
           },
           "sPot": {
             "T": 10,
@@ -9978,7 +9978,7 @@ window.HISTORIAL_DATA = {
             "Neg": 4,
             "Vend": 0,
             "Err": 4,
-            "Eff": -30
+            "Eff": 25
           },
           "rT": 0,
           "rEff": 0,
@@ -10049,7 +10049,7 @@ window.HISTORIAL_DATA = {
           "c": 13,
           "n": "STEIMANN",
           "sT": 40,
-          "sEff": -14,
+          "sEff": 34,
           "sPunto": 5,
           "sPos": 3,
           "sNeg": 16,
@@ -10064,7 +10064,7 @@ window.HISTORIAL_DATA = {
             "Neg": 14,
             "Vend": 1,
             "Err": 7,
-            "Eff": -8
+            "Eff": 34
           },
           "sPot": {
             "T": 12,
@@ -10074,7 +10074,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 5,
-            "Eff": -29
+            "Eff": 33
           },
           "rT": 0,
           "rEff": 0,
@@ -10145,7 +10145,7 @@ window.HISTORIAL_DATA = {
           "c": 5,
           "n": "CLEMENT",
           "sT": 39,
-          "sEff": 3,
+          "sEff": 45,
           "sPunto": 7,
           "sPos": 3,
           "sNeg": 13,
@@ -10160,7 +10160,7 @@ window.HISTORIAL_DATA = {
             "Neg": 13,
             "Vend": 1,
             "Err": 7,
-            "Eff": 3
+            "Eff": 45
           },
           "sPot": {
             "T": 0,
@@ -10241,7 +10241,7 @@ window.HISTORIAL_DATA = {
           "c": 9,
           "n": "NORRIS",
           "sT": 41,
-          "sEff": -18,
+          "sEff": 41,
           "sPunto": 8,
           "sPos": 3,
           "sNeg": 4,
@@ -10266,7 +10266,7 @@ window.HISTORIAL_DATA = {
             "Neg": 4,
             "Vend": 4,
             "Err": 18,
-            "Eff": -18
+            "Eff": 41
           },
           "rT": 0,
           "rEff": 0,
@@ -10365,7 +10365,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 94,
-          "rEff": 7,
+          "rEff": 49,
           "rPunto": 22,
           "rPos": 12,
           "rNeg": 17,
@@ -10380,7 +10380,7 @@ window.HISTORIAL_DATA = {
             "Neg": 4,
             "Vend": 0,
             "Err": 8,
-            "Eff": 17
+            "Eff": 56
           },
           "rPot": {
             "T": 55,
@@ -10390,7 +10390,7 @@ window.HISTORIAL_DATA = {
             "Neg": 13,
             "Vend": 2,
             "Err": 12,
-            "Eff": 1
+            "Eff": 44
           },
           "aT": 0,
           "aEff": 0,
@@ -10449,7 +10449,7 @@ window.HISTORIAL_DATA = {
           "c": 13,
           "n": "STEIMANN",
           "sT": 13,
-          "sEff": 13,
+          "sEff": 50,
           "sPunto": 1,
           "sPos": 3,
           "sNeg": 5,
@@ -10464,7 +10464,7 @@ window.HISTORIAL_DATA = {
             "Neg": 5,
             "Vend": 0,
             "Err": 0,
-            "Eff": 13
+            "Eff": 50
           },
           "sPot": {
             "T": 0,
@@ -10545,7 +10545,7 @@ window.HISTORIAL_DATA = {
           "c": 9,
           "n": "NORRIS",
           "sT": 10,
-          "sEff": -35,
+          "sEff": 29,
           "sPunto": 1,
           "sPos": 0,
           "sNeg": 2,
@@ -10570,7 +10570,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 1,
             "Err": 5,
-            "Eff": -35
+            "Eff": 29
           },
           "rT": 0,
           "rEff": 0,
@@ -10641,7 +10641,7 @@ window.HISTORIAL_DATA = {
           "c": 1,
           "n": "DURDOS",
           "sT": 19,
-          "sEff": -1,
+          "sEff": 36,
           "sPunto": 0,
           "sPos": 3,
           "sNeg": 12,
@@ -10656,7 +10656,7 @@ window.HISTORIAL_DATA = {
             "Neg": 12,
             "Vend": 0,
             "Err": 0,
-            "Eff": 3
+            "Eff": 35
           },
           "sPot": {
             "T": 2,
@@ -10666,10 +10666,10 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": -38
+            "Eff": 38
           },
           "rT": 17,
-          "rEff": 53,
+          "rEff": 75,
           "rPunto": 6,
           "rPos": 6,
           "rNeg": 1,
@@ -10684,7 +10684,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 70
+            "Eff": 85
           },
           "rPot": {
             "T": 12,
@@ -10694,7 +10694,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 46
+            "Eff": 71
           },
           "aT": 19,
           "aEff": 11,
@@ -10737,7 +10737,7 @@ window.HISTORIAL_DATA = {
           "c": 11,
           "n": "BARTHOLET",
           "sT": 6,
-          "sEff": -58,
+          "sEff": 25,
           "sPunto": 0,
           "sPos": 2,
           "sNeg": 0,
@@ -10752,7 +10752,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": -100
+            "Eff": 0
           },
           "sPot": {
             "T": 5,
@@ -10762,10 +10762,10 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 3,
-            "Eff": -50
+            "Eff": 30
           },
           "rT": 15,
-          "rEff": 20,
+          "rEff": 55,
           "rPunto": 4,
           "rPos": 2,
           "rNeg": 3,
@@ -10780,7 +10780,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 0,
-            "Eff": 39
+            "Eff": 64
           },
           "rPot": {
             "T": 6,
@@ -10790,7 +10790,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 2,
-            "Eff": -8
+            "Eff": 42
           },
           "aT": 27,
           "aEff": 30,
@@ -10833,7 +10833,7 @@ window.HISTORIAL_DATA = {
           "c": 7,
           "n": "SCHMID",
           "sT": 12,
-          "sEff": -12,
+          "sEff": 35,
           "sPunto": 0,
           "sPos": 2,
           "sNeg": 5,
@@ -10848,7 +10848,7 @@ window.HISTORIAL_DATA = {
             "Neg": 5,
             "Vend": 0,
             "Err": 2,
-            "Eff": -12
+            "Eff": 35
           },
           "sPot": {
             "T": 0,
@@ -10861,7 +10861,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 1,
-          "rEff": 50,
+          "rEff": 75,
           "rPunto": 0,
           "rPos": 1,
           "rNeg": 0,
@@ -10886,7 +10886,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 50
+            "Eff": 75
           },
           "aT": 4,
           "aEff": 0,
@@ -10929,7 +10929,7 @@ window.HISTORIAL_DATA = {
           "c": 5,
           "n": "CLEMENT",
           "sT": 10,
-          "sEff": 5,
+          "sEff": 48,
           "sPunto": 0,
           "sPos": 2,
           "sNeg": 3,
@@ -10944,7 +10944,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 0,
             "Err": 0,
-            "Eff": 5
+            "Eff": 48
           },
           "sPot": {
             "T": 0,
@@ -11053,7 +11053,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 10,
-          "rEff": 20,
+          "rEff": 58,
           "rPunto": 4,
           "rPos": 0,
           "rNeg": 1,
@@ -11068,7 +11068,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": 25
+            "Eff": 62
           },
           "rPot": {
             "T": 6,
@@ -11078,7 +11078,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 1,
-            "Eff": 17
+            "Eff": 54
           },
           "aT": 0,
           "aEff": 0,
@@ -11121,7 +11121,7 @@ window.HISTORIAL_DATA = {
           "c": 10,
           "n": "BOGDANOVSKI",
           "sT": 1,
-          "sEff": 0,
+          "sEff": 25,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 1,
@@ -11136,7 +11136,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 25
           },
           "sPot": {
             "T": 0,
@@ -11217,7 +11217,7 @@ window.HISTORIAL_DATA = {
           "c": 17,
           "n": "ROFFLER",
           "sT": 1,
-          "sEff": 0,
+          "sEff": 50,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 0,
@@ -11232,7 +11232,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "sPot": {
             "T": 0,
@@ -11329,7 +11329,7 @@ window.HISTORIAL_DATA = {
           "c": 4,
           "n": "VAZQUEZ",
           "sT": 1,
-          "sEff": 25,
+          "sEff": 75,
           "sPunto": 0,
           "sPos": 1,
           "sNeg": 0,
@@ -11344,7 +11344,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 25
+            "Eff": 75
           },
           "sPot": {
             "T": 0,
@@ -11425,7 +11425,7 @@ window.HISTORIAL_DATA = {
           "c": 1,
           "n": "DURDOS",
           "sT": 5,
-          "sEff": -40,
+          "sEff": 20,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 2,
@@ -11440,7 +11440,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 38
           },
           "sPot": {
             "T": 3,
@@ -11450,10 +11450,10 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 2,
-            "Eff": -67
+            "Eff": 8
           },
           "rT": 7,
-          "rEff": 50,
+          "rEff": 75,
           "rPunto": 2,
           "rPos": 3,
           "rNeg": 0,
@@ -11468,7 +11468,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 50
+            "Eff": 75
           },
           "rPot": {
             "T": 4,
@@ -11478,7 +11478,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 50
+            "Eff": 75
           },
           "aT": 5,
           "aEff": 60,
@@ -11521,7 +11521,7 @@ window.HISTORIAL_DATA = {
           "c": 9,
           "n": "NORRIS",
           "sT": 3,
-          "sEff": -67,
+          "sEff": 17,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 0,
@@ -11546,7 +11546,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 2,
-            "Eff": -67
+            "Eff": 17
           },
           "rT": 0,
           "rEff": 0,
@@ -11617,7 +11617,7 @@ window.HISTORIAL_DATA = {
           "c": 7,
           "n": "SCHMID",
           "sT": 11,
-          "sEff": 16,
+          "sEff": 51,
           "sPunto": 1,
           "sPos": 1,
           "sNeg": 4,
@@ -11632,7 +11632,7 @@ window.HISTORIAL_DATA = {
             "Neg": 4,
             "Vend": 1,
             "Err": 0,
-            "Eff": 16
+            "Eff": 51
           },
           "sPot": {
             "T": 0,
@@ -11645,7 +11645,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 1,
-          "rEff": 50,
+          "rEff": 75,
           "rPunto": 0,
           "rPos": 1,
           "rNeg": 0,
@@ -11660,7 +11660,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 50
+            "Eff": 75
           },
           "rPot": {
             "T": 0,
@@ -11741,7 +11741,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 13,
-          "rEff": 23,
+          "rEff": 58,
           "rPunto": 1,
           "rPos": 4,
           "rNeg": 2,
@@ -11756,7 +11756,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 42
+            "Eff": 71
           },
           "rPot": {
             "T": 7,
@@ -11766,7 +11766,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 0,
-            "Eff": 7
+            "Eff": 46
           },
           "aT": 0,
           "aEff": 0,
@@ -11809,7 +11809,7 @@ window.HISTORIAL_DATA = {
           "c": 11,
           "n": "BARTHOLET",
           "sT": 5,
-          "sEff": -80,
+          "sEff": 5,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 1,
@@ -11834,10 +11834,10 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 4,
-            "Eff": -80
+            "Eff": 5
           },
           "rT": 15,
-          "rEff": 23,
+          "rEff": 58,
           "rPunto": 1,
           "rPos": 6,
           "rNeg": 2,
@@ -11852,7 +11852,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 0,
-            "Eff": 28
+            "Eff": 58
           },
           "rPot": {
             "T": 6,
@@ -11862,7 +11862,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 1,
             "Err": 0,
-            "Eff": 17
+            "Eff": 56
           },
           "aT": 17,
           "aEff": 41,
@@ -11905,7 +11905,7 @@ window.HISTORIAL_DATA = {
           "c": 5,
           "n": "CLEMENT",
           "sT": 6,
-          "sEff": -12,
+          "sEff": 38,
           "sPunto": 0,
           "sPos": 1,
           "sNeg": 2,
@@ -11920,7 +11920,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 1,
-            "Eff": -12
+            "Eff": 38
           },
           "sPot": {
             "T": 0,
@@ -11933,7 +11933,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 1,
-          "rEff": 0,
+          "rEff": 50,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 0,
@@ -11948,7 +11948,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "rPot": {
             "T": 0,
@@ -12001,7 +12001,7 @@ window.HISTORIAL_DATA = {
           "c": 13,
           "n": "STEIMANN",
           "sT": 13,
-          "sEff": 0,
+          "sEff": 40,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 5,
@@ -12016,7 +12016,7 @@ window.HISTORIAL_DATA = {
             "Neg": 5,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 40
           },
           "sPot": {
             "T": 0,
@@ -12097,7 +12097,7 @@ window.HISTORIAL_DATA = {
           "c": 10,
           "n": "BOGDANOVSKI",
           "sT": 8,
-          "sEff": 6,
+          "sEff": 47,
           "sPunto": 0,
           "sPos": 2,
           "sNeg": 3,
@@ -12112,7 +12112,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 0,
             "Err": 0,
-            "Eff": 6
+            "Eff": 47
           },
           "sPot": {
             "T": 0,
@@ -12125,7 +12125,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 12,
-          "rEff": 29,
+          "rEff": 60,
           "rPunto": 2,
           "rPos": 3,
           "rNeg": 2,
@@ -12140,7 +12140,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 14
+            "Eff": 54
           },
           "rPot": {
             "T": 5,
@@ -12150,7 +12150,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 50
+            "Eff": 70
           },
           "aT": 13,
           "aEff": 15,
@@ -12193,7 +12193,7 @@ window.HISTORIAL_DATA = {
           "c": 17,
           "n": "ROFFLER",
           "sT": 4,
-          "sEff": 0,
+          "sEff": 38,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 2,
@@ -12208,7 +12208,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 38
           },
           "sPot": {
             "T": 0,
@@ -12221,7 +12221,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 5,
-          "rEff": 0,
+          "rEff": 50,
           "rPunto": 0,
           "rPos": 2,
           "rNeg": 0,
@@ -12236,7 +12236,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": 0
+            "Eff": 50
           },
           "rPot": {
             "T": 1,
@@ -12246,7 +12246,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "aT": 4,
           "aEff": -25,
@@ -12289,7 +12289,7 @@ window.HISTORIAL_DATA = {
           "c": 3,
           "n": "SCHWITTER",
           "sT": 7,
-          "sEff": -29,
+          "sEff": 25,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 3,
@@ -12304,7 +12304,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 0,
             "Err": 2,
-            "Eff": -29
+            "Eff": 25
           },
           "sPot": {
             "T": 0,
@@ -12413,7 +12413,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 1,
-          "rEff": -100,
+          "rEff": 0,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 0,
@@ -12438,7 +12438,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": -100
+            "Eff": 0
           },
           "aT": 0,
           "aEff": 0,
@@ -12497,7 +12497,7 @@ window.HISTORIAL_DATA = {
           "c": 4,
           "n": "VAZQUEZ",
           "sT": 15,
-          "sEff": 3,
+          "sEff": 44,
           "sPunto": 0,
           "sPos": 4,
           "sNeg": 7,
@@ -12512,7 +12512,7 @@ window.HISTORIAL_DATA = {
             "Neg": 7,
             "Vend": 1,
             "Err": 1,
-            "Eff": 3
+            "Eff": 44
           },
           "sPot": {
             "T": 0,
@@ -12593,7 +12593,7 @@ window.HISTORIAL_DATA = {
           "c": 1,
           "n": "DURDOS",
           "sT": 11,
-          "sEff": -32,
+          "sEff": 30,
           "sPunto": 1,
           "sPos": 2,
           "sNeg": 3,
@@ -12608,7 +12608,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 1,
-            "Eff": -33
+            "Eff": 17
           },
           "sPot": {
             "T": 8,
@@ -12618,10 +12618,10 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 4,
-            "Eff": -31
+            "Eff": 34
           },
           "rT": 13,
-          "rEff": 31,
+          "rEff": 62,
           "rPunto": 4,
           "rPos": 3,
           "rNeg": 1,
@@ -12636,7 +12636,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 1,
             "Err": 0,
-            "Eff": 10
+            "Eff": 52
           },
           "rPot": {
             "T": 8,
@@ -12646,7 +12646,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 1,
-            "Eff": 44
+            "Eff": 69
           },
           "aT": 28,
           "aEff": 29,
@@ -12689,7 +12689,7 @@ window.HISTORIAL_DATA = {
           "c": 9,
           "n": "NORRIS",
           "sT": 8,
-          "sEff": -84,
+          "sEff": 9,
           "sPunto": 0,
           "sPos": 1,
           "sNeg": 0,
@@ -12704,7 +12704,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 2,
-            "Eff": -100
+            "Eff": 0
           },
           "sPot": {
             "T": 6,
@@ -12714,10 +12714,10 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 5,
-            "Eff": -79
+            "Eff": 12
           },
           "rT": 1,
-          "rEff": -100,
+          "rEff": 0,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 0,
@@ -12732,7 +12732,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": -100
+            "Eff": 0
           },
           "rPot": {
             "T": 0,
@@ -12785,7 +12785,7 @@ window.HISTORIAL_DATA = {
           "c": 11,
           "n": "BARTHOLET",
           "sT": 11,
-          "sEff": 5,
+          "sEff": 41,
           "sPunto": 0,
           "sPos": 2,
           "sNeg": 6,
@@ -12800,7 +12800,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 25
           },
           "sPot": {
             "T": 10,
@@ -12810,10 +12810,10 @@ window.HISTORIAL_DATA = {
             "Neg": 5,
             "Vend": 0,
             "Err": 0,
-            "Eff": 5
+            "Eff": 42
           },
           "rT": 28,
-          "rEff": 20,
+          "rEff": 57,
           "rPunto": 4,
           "rPos": 10,
           "rNeg": 3,
@@ -12828,7 +12828,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 1,
             "Err": 2,
-            "Eff": 12
+            "Eff": 51
           },
           "rPot": {
             "T": 11,
@@ -12838,7 +12838,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": 32
+            "Eff": 66
           },
           "aT": 23,
           "aEff": 22,
@@ -12881,7 +12881,7 @@ window.HISTORIAL_DATA = {
           "c": 7,
           "n": "SCHMID",
           "sT": 11,
-          "sEff": 9,
+          "sEff": 57,
           "sPunto": 3,
           "sPos": 0,
           "sNeg": 0,
@@ -12896,7 +12896,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 2,
             "Err": 3,
-            "Eff": 9
+            "Eff": 57
           },
           "sPot": {
             "T": 0,
@@ -12909,7 +12909,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 2,
-          "rEff": 0,
+          "rEff": 50,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 0,
@@ -12934,7 +12934,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "aT": 6,
           "aEff": 17,
@@ -13005,7 +13005,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 16,
-          "rEff": 19,
+          "rEff": 51,
           "rPunto": 2,
           "rPos": 3,
           "rNeg": 5,
@@ -13020,7 +13020,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 0,
-            "Eff": 50
+            "Eff": 67
           },
           "rPot": {
             "T": 10,
@@ -13030,7 +13030,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 1,
             "Err": 0,
-            "Eff": 0
+            "Eff": 41
           },
           "aT": 0,
           "aEff": 0,
@@ -13073,7 +13073,7 @@ window.HISTORIAL_DATA = {
           "c": 5,
           "n": "CLEMENT",
           "sT": 9,
-          "sEff": -11,
+          "sEff": 28,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 6,
@@ -13088,7 +13088,7 @@ window.HISTORIAL_DATA = {
             "Neg": 6,
             "Vend": 0,
             "Err": 1,
-            "Eff": -11
+            "Eff": 28
           },
           "sPot": {
             "T": 0,
@@ -13169,7 +13169,7 @@ window.HISTORIAL_DATA = {
           "c": 13,
           "n": "STEIMANN",
           "sT": 5,
-          "sEff": 10,
+          "sEff": 45,
           "sPunto": 0,
           "sPos": 2,
           "sNeg": 3,
@@ -13184,7 +13184,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 0,
             "Err": 0,
-            "Eff": 10
+            "Eff": 45
           },
           "sPot": {
             "T": 0,
@@ -13265,7 +13265,7 @@ window.HISTORIAL_DATA = {
           "c": 10,
           "n": "BOGDANOVSKI",
           "sT": 1,
-          "sEff": 0,
+          "sEff": 50,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 0,
@@ -13280,7 +13280,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "sPot": {
             "T": 0,
@@ -13405,7 +13405,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 1,
-          "rEff": 50,
+          "rEff": 75,
           "rPunto": 0,
           "rPos": 1,
           "rNeg": 0,
@@ -13420,7 +13420,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 50
+            "Eff": 75
           },
           "rPot": {
             "T": 0,
@@ -13473,7 +13473,7 @@ window.HISTORIAL_DATA = {
           "c": 17,
           "n": "ROFFLER",
           "sT": 3,
-          "sEff": 0,
+          "sEff": 33,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 2,
@@ -13488,7 +13488,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 33
           },
           "sPot": {
             "T": 0,
@@ -13501,7 +13501,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 6,
-          "rEff": -17,
+          "rEff": 31,
           "rPunto": 0,
           "rPos": 1,
           "rNeg": 2,
@@ -13516,7 +13516,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 0,
-            "Eff": 12
+            "Eff": 44
           },
           "rPot": {
             "T": 2,
@@ -13526,7 +13526,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 1,
             "Err": 1,
-            "Eff": -75
+            "Eff": 6
           },
           "aT": 17,
           "aEff": 6,
@@ -13569,7 +13569,7 @@ window.HISTORIAL_DATA = {
           "c": 9,
           "n": "NORRIS",
           "sT": 4,
-          "sEff": -62,
+          "sEff": 22,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 0,
@@ -13594,7 +13594,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 1,
             "Err": 3,
-            "Eff": -62
+            "Eff": 22
           },
           "rT": 0,
           "rEff": 0,
@@ -13665,7 +13665,7 @@ window.HISTORIAL_DATA = {
           "c": 3,
           "n": "SCHWITTER",
           "sT": 3,
-          "sEff": 0,
+          "sEff": 25,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 3,
@@ -13680,7 +13680,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 25
           },
           "sPot": {
             "T": 0,
@@ -13857,7 +13857,7 @@ window.HISTORIAL_DATA = {
           "c": 1,
           "n": "DURDOS",
           "sT": 4,
-          "sEff": 0,
+          "sEff": 50,
           "sPunto": 1,
           "sPos": 0,
           "sNeg": 0,
@@ -13882,10 +13882,10 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": 0
+            "Eff": 50
           },
           "rT": 4,
-          "rEff": 0,
+          "rEff": 44,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 1,
@@ -13900,7 +13900,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "rPot": {
             "T": 3,
@@ -13910,7 +13910,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 42
           },
           "aT": 20,
           "aEff": 5,
@@ -13953,7 +13953,7 @@ window.HISTORIAL_DATA = {
           "c": 6,
           "n": "6",
           "sT": 3,
-          "sEff": 8,
+          "sEff": 50,
           "sPunto": 0,
           "sPos": 1,
           "sNeg": 1,
@@ -13968,7 +13968,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 8
+            "Eff": 50
           },
           "sPot": {
             "T": 0,
@@ -14049,7 +14049,7 @@ window.HISTORIAL_DATA = {
           "c": 11,
           "n": "BARTHOLET",
           "sT": 4,
-          "sEff": -6,
+          "sEff": 53,
           "sPunto": 0,
           "sPos": 1,
           "sNeg": 0,
@@ -14074,10 +14074,10 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 1,
             "Err": 1,
-            "Eff": -6
+            "Eff": 53
           },
           "rT": 4,
-          "rEff": 25,
+          "rEff": 62,
           "rPunto": 0,
           "rPos": 2,
           "rNeg": 0,
@@ -14092,7 +14092,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 50
+            "Eff": 75
           },
           "rPot": {
             "T": 2,
@@ -14102,7 +14102,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "aT": 25,
           "aEff": 48,
@@ -14145,7 +14145,7 @@ window.HISTORIAL_DATA = {
           "c": 13,
           "n": "STEIMANN",
           "sT": 3,
-          "sEff": 8,
+          "sEff": 50,
           "sPunto": 0,
           "sPos": 1,
           "sNeg": 1,
@@ -14160,7 +14160,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 8
+            "Eff": 50
           },
           "sPot": {
             "T": 0,
@@ -14241,7 +14241,7 @@ window.HISTORIAL_DATA = {
           "c": 4,
           "n": "VAZQUEZ",
           "sT": 4,
-          "sEff": -25,
+          "sEff": 38,
           "sPunto": 1,
           "sPos": 0,
           "sNeg": 0,
@@ -14266,7 +14266,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 2,
-            "Eff": -25
+            "Eff": 38
           },
           "rT": 0,
           "rEff": 0,
@@ -14461,7 +14461,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 3,
-          "rEff": 33,
+          "rEff": 62,
           "rPunto": 1,
           "rPos": 1,
           "rNeg": 0,
@@ -14476,7 +14476,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 75
+            "Eff": 88
           },
           "rPot": {
             "T": 1,
@@ -14486,7 +14486,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 1,
             "Err": 0,
-            "Eff": -50
+            "Eff": 12
           },
           "aT": 0,
           "aEff": 0,
@@ -14557,7 +14557,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 2,
-          "rEff": -50,
+          "rEff": 25,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 0,
@@ -14572,7 +14572,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "rPot": {
             "T": 1,
@@ -14582,7 +14582,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": -100
+            "Eff": 0
           },
           "aT": 0,
           "aEff": 0,
@@ -14639,7 +14639,7 @@ window.HISTORIAL_DATA = {
           "c": 9,
           "n": "NORRIS",
           "sT": 39,
-          "sEff": -32,
+          "sEff": 29,
           "sPunto": 3,
           "sPos": 4,
           "sNeg": 11,
@@ -14654,7 +14654,7 @@ window.HISTORIAL_DATA = {
             "Neg": 4,
             "Vend": 0,
             "Err": 3,
-            "Eff": -22
+            "Eff": 32
           },
           "sPot": {
             "T": 29,
@@ -14664,7 +14664,7 @@ window.HISTORIAL_DATA = {
             "Neg": 7,
             "Vend": 1,
             "Err": 14,
-            "Eff": -35
+            "Eff": 27
           },
           "rT": 0,
           "rEff": 0,
@@ -14763,7 +14763,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 50,
-          "rEff": 24,
+          "rEff": 56,
           "rPunto": 12,
           "rPos": 12,
           "rNeg": 12,
@@ -14778,7 +14778,7 @@ window.HISTORIAL_DATA = {
             "Neg": 10,
             "Vend": 0,
             "Err": 2,
-            "Eff": 33
+            "Eff": 59
           },
           "rPot": {
             "T": 17,
@@ -14788,7 +14788,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 4,
-            "Eff": 6
+            "Eff": 50
           },
           "aT": 0,
           "aEff": 0,
@@ -14831,7 +14831,7 @@ window.HISTORIAL_DATA = {
           "c": 7,
           "n": "SCHMID R",
           "sT": 40,
-          "sEff": 10,
+          "sEff": 49,
           "sPunto": 6,
           "sPos": 8,
           "sNeg": 14,
@@ -14846,7 +14846,7 @@ window.HISTORIAL_DATA = {
             "Neg": 14,
             "Vend": 2,
             "Err": 5,
-            "Eff": 10
+            "Eff": 49
           },
           "sPot": {
             "T": 0,
@@ -14955,7 +14955,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 38,
-          "rEff": 16,
+          "rEff": 51,
           "rPunto": 5,
           "rPos": 12,
           "rNeg": 9,
@@ -14970,7 +14970,7 @@ window.HISTORIAL_DATA = {
             "Neg": 6,
             "Vend": 1,
             "Err": 4,
-            "Eff": 6
+            "Eff": 46
           },
           "rPot": {
             "T": 14,
@@ -14980,7 +14980,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 1,
             "Err": 0,
-            "Eff": 32
+            "Eff": 60
           },
           "aT": 0,
           "aEff": 0,
@@ -15023,7 +15023,7 @@ window.HISTORIAL_DATA = {
           "c": 4,
           "n": "VAZQUEZ",
           "sT": 40,
-          "sEff": -6,
+          "sEff": 41,
           "sPunto": 1,
           "sPos": 10,
           "sNeg": 15,
@@ -15038,7 +15038,7 @@ window.HISTORIAL_DATA = {
             "Neg": 9,
             "Vend": 0,
             "Err": 1,
-            "Eff": 1
+            "Eff": 41
           },
           "sPot": {
             "T": 23,
@@ -15048,7 +15048,7 @@ window.HISTORIAL_DATA = {
             "Neg": 6,
             "Vend": 0,
             "Err": 5,
-            "Eff": -12
+            "Eff": 40
           },
           "rT": 0,
           "rEff": 0,
@@ -15147,7 +15147,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 1,
-          "rEff": -50,
+          "rEff": 12,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 0,
@@ -15162,7 +15162,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 1,
             "Err": 0,
-            "Eff": -50
+            "Eff": 12
           },
           "rPot": {
             "T": 0,
@@ -15232,7 +15232,7 @@ window.HISTORIAL_DATA = {
           "c": 4,
           "n": "VAZQUEZ",
           "sT": 11,
-          "sEff": -9,
+          "sEff": 30,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 7,
@@ -15247,7 +15247,7 @@ window.HISTORIAL_DATA = {
             "Neg": 7,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 32
           },
           "sPot": {
             "T": 1,
@@ -15257,10 +15257,10 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": -100
+            "Eff": 0
           },
           "rT": 1,
-          "rEff": 0,
+          "rEff": 50,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 0,
@@ -15275,7 +15275,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "rPot": {
             "T": 0,
@@ -15328,7 +15328,7 @@ window.HISTORIAL_DATA = {
           "c": 3,
           "n": "SCHWITTER",
           "sT": 15,
-          "sEff": -7,
+          "sEff": 32,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 9,
@@ -15343,7 +15343,7 @@ window.HISTORIAL_DATA = {
             "Neg": 9,
             "Vend": 0,
             "Err": 1,
-            "Eff": -7
+            "Eff": 32
           },
           "sPot": {
             "T": 0,
@@ -15356,7 +15356,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 1,
-          "rEff": 0,
+          "rEff": 25,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 1,
@@ -15381,7 +15381,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 25
           },
           "aT": 22,
           "aEff": 0,
@@ -15424,7 +15424,7 @@ window.HISTORIAL_DATA = {
           "c": 11,
           "n": "BARTHOLET",
           "sT": 10,
-          "sEff": -15,
+          "sEff": 38,
           "sPunto": 0,
           "sPos": 2,
           "sNeg": 3,
@@ -15439,7 +15439,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "sPot": {
             "T": 9,
@@ -15449,10 +15449,10 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 0,
             "Err": 2,
-            "Eff": -17
+            "Eff": 36
           },
           "rT": 21,
-          "rEff": 0,
+          "rEff": 43,
           "rPunto": 4,
           "rPos": 1,
           "rNeg": 5,
@@ -15467,7 +15467,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 0,
             "Err": 0,
-            "Eff": 25
+            "Eff": 50
           },
           "rPot": {
             "T": 17,
@@ -15477,7 +15477,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 1,
             "Err": 4,
-            "Eff": -6
+            "Eff": 42
           },
           "aT": 22,
           "aEff": 36,
@@ -15548,7 +15548,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 16,
-          "rEff": 22,
+          "rEff": 56,
           "rPunto": 2,
           "rPos": 5,
           "rNeg": 2,
@@ -15563,7 +15563,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 50
+            "Eff": 75
           },
           "rPot": {
             "T": 14,
@@ -15573,7 +15573,7 @@ window.HISTORIAL_DATA = {
             "Neg": 2,
             "Vend": 2,
             "Err": 0,
-            "Eff": 18
+            "Eff": 54
           },
           "aT": 0,
           "aEff": 0,
@@ -15616,7 +15616,7 @@ window.HISTORIAL_DATA = {
           "c": 1,
           "n": "DURDOS",
           "sT": 9,
-          "sEff": -56,
+          "sEff": 19,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 1,
@@ -15641,10 +15641,10 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 5,
-            "Eff": -56
+            "Eff": 19
           },
           "rT": 13,
-          "rEff": 12,
+          "rEff": 49,
           "rPunto": 4,
           "rPos": 0,
           "rNeg": 3,
@@ -15669,7 +15669,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 1,
             "Err": 2,
-            "Eff": 4
+            "Eff": 45
           },
           "aT": 20,
           "aEff": 15,
@@ -15712,7 +15712,7 @@ window.HISTORIAL_DATA = {
           "c": 7,
           "n": "SCHMID",
           "sT": 10,
-          "sEff": -20,
+          "sEff": 25,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 6,
@@ -15727,7 +15727,7 @@ window.HISTORIAL_DATA = {
             "Neg": 6,
             "Vend": 0,
             "Err": 2,
-            "Eff": -20
+            "Eff": 25
           },
           "sPot": {
             "T": 0,
@@ -15740,7 +15740,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 1,
-          "rEff": 0,
+          "rEff": 50,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 0,
@@ -15755,7 +15755,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 50
           },
           "rPot": {
             "T": 0,
@@ -15808,7 +15808,7 @@ window.HISTORIAL_DATA = {
           "c": 5,
           "n": "CLEMENT",
           "sT": 9,
-          "sEff": -31,
+          "sEff": 25,
           "sPunto": 0,
           "sPos": 1,
           "sNeg": 4,
@@ -15823,7 +15823,7 @@ window.HISTORIAL_DATA = {
             "Neg": 3,
             "Vend": 0,
             "Err": 3,
-            "Eff": -34
+            "Eff": 25
           },
           "sPot": {
             "T": 1,
@@ -15833,10 +15833,10 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 25
           },
           "rT": 2,
-          "rEff": 0,
+          "rEff": 38,
           "rPunto": 0,
           "rPos": 0,
           "rNeg": 1,
@@ -15861,7 +15861,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 38
           },
           "aT": 8,
           "aEff": 12,
@@ -15904,7 +15904,7 @@ window.HISTORIAL_DATA = {
           "c": 13,
           "n": "STEIMANN",
           "sT": 2,
-          "sEff": 12,
+          "sEff": 50,
           "sPunto": 0,
           "sPos": 1,
           "sNeg": 1,
@@ -15919,7 +15919,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 12
+            "Eff": 50
           },
           "sPot": {
             "T": 0,
@@ -16000,7 +16000,7 @@ window.HISTORIAL_DATA = {
           "c": 17,
           "n": "ROFFLER",
           "sT": 2,
-          "sEff": -50,
+          "sEff": 12,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 1,
@@ -16015,7 +16015,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 1,
-            "Eff": -50
+            "Eff": 12
           },
           "sPot": {
             "T": 0,
@@ -16028,7 +16028,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 11,
-          "rEff": 9,
+          "rEff": 51,
           "rPunto": 3,
           "rPos": 1,
           "rNeg": 1,
@@ -16043,7 +16043,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 1,
-            "Eff": 0
+            "Eff": 50
           },
           "rPot": {
             "T": 9,
@@ -16053,7 +16053,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 1,
             "Err": 1,
-            "Eff": 11
+            "Eff": 51
           },
           "aT": 6,
           "aEff": 0,
@@ -16096,7 +16096,7 @@ window.HISTORIAL_DATA = {
           "c": 10,
           "n": "BOGDANOVSKI",
           "sT": 2,
-          "sEff": 0,
+          "sEff": 38,
           "sPunto": 0,
           "sPos": 0,
           "sNeg": 1,
@@ -16111,7 +16111,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 0,
             "Err": 0,
-            "Eff": 0
+            "Eff": 38
           },
           "sPot": {
             "T": 0,
@@ -16124,7 +16124,7 @@ window.HISTORIAL_DATA = {
             "Eff": 0
           },
           "rT": 4,
-          "rEff": 0,
+          "rEff": 41,
           "rPunto": 0,
           "rPos": 1,
           "rNeg": 1,
@@ -16139,7 +16139,7 @@ window.HISTORIAL_DATA = {
             "Neg": 0,
             "Vend": 0,
             "Err": 0,
-            "Eff": 50
+            "Eff": 75
           },
           "rPot": {
             "T": 3,
@@ -16149,7 +16149,7 @@ window.HISTORIAL_DATA = {
             "Neg": 1,
             "Vend": 1,
             "Err": 0,
-            "Eff": -17
+            "Eff": 29
           },
           "aT": 7,
           "aEff": -57,

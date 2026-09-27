@@ -6,6 +6,10 @@
 <title data-t="Recepción — NAFELS Voley">Recepción — NAFELS Voley</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+  /* En esta app los controles no heredan la tipografia: sin esta linea
+     los botones y los desplegables salen en Arial. */
+  button,select,input,textarea{font-family:'Barlow Condensed',sans-serif}
+
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#07080f;--card:#0d0e1a;--card2:#111220;
@@ -197,10 +201,11 @@ canvas { image-rendering: -webkit-optimize-contrast; }
 
 
 /* ── DROPDOWNS — texto siempre negro ── */
-select, select option {
-  color: #111111 !important;
-  background-color: #ffffff !important;
-}
+/* El control cerrado lo dibuja la pagina: va con el tema de la app.
+   La lista que se abre la dibuja el sistema operativo, y ahi conviene
+   fondo claro con texto negro, que se lee bien en todos lados. */
+select { color: var(--txt) !important; background-color: var(--card2) !important; }
+select option { color: #111111 !important; background-color: #ffffff !important; }
 
 .pdf-btn {
   padding: 7px 16px;
@@ -285,15 +290,15 @@ canvas.panel-court{position:absolute;inset:0;width:100%;height:100%;opacity:.28;
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260927-0943" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260927-0943"></script>
+<script src="firebase.js?v=20260926-2156" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-2156"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260927-0943">
+<link rel="stylesheet" href="movil.css?v=20260926-2156">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260927-0943" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260926-2156" onerror="void 0"></script>
 </head>
 <body>
 <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
@@ -313,7 +318,10 @@ canvas.panel-court{position:absolute;inset:0;width:100%;height:100%;opacity:.28;
 <div class="content" id="content"></div>
 
 <!-- VB: selector PARTIDO/ENTRENAMIENTO - carga los datos segun el modo elegido -->
-<script src="objetivos_config.js?v=20260927-0943"></script>
+<!-- El plantel del club: de aca sale el PUESTO de cada dorsal, que es lo
+     que decide quien recibe. -->
+<script src="plantel_nafels.js?v=20260926-2156" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260926-2156"></script>
 <script>
 (function(){var ent=false;try{ent=(localStorage.getItem('vb_modo')||'partido')==='entrenamiento';}catch(e){}
 function w(s){document.write('<scr'+'ipt src="'+s+'" onerror="void 0"><\/scr'+'ipt>');}
@@ -321,14 +329,14 @@ if(ent){ w('datos_entrenamientos.js'); w('datos_recepcion_ent.js'); w('adapter_e
 else   { w('datos_partidos.js'); w('datos_recepcion.js'); }
 })();</script>
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260927-0943" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260927-0943" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260926-2156" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260926-2156" onerror="void 0"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260927-0943"></script>
+<script src="datos_seguros.js?v=20260926-2156"></script>
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
@@ -362,14 +370,70 @@ window.__DESCIFRAR_SINCRONO = true;
 // Datos cargados dinámicamente desde datos_partidos.js
 window.RECEPCION_DATA = {};
 
+/* ══ DOS JUGADORES CON EL MISMO APELLIDO ══════════════════════════════════
+   La clave de cada receptor era el APELLIDO suelto, y el plantel tiene dos
+   SCHMID: #7 SCHMID R (punta/central) y #20 SCHMID J (libero). Los dos daban
+   la misma clave "SCHMID", asi que el segundo PISABA al primero: se perdia
+   la recepcion entera de uno de los dos y en la lista aparecia un solo boton.
+
+   Ahora, si un apellido se repite en el plantel, la clave lleva el nombre
+   entero -"SCHMID R"-. Los apellidos que no se repiten quedan igual que
+   siempre, para no tocar nada de lo que ya andaba. */
+function _apellidosRepetidos(){
+  if(_apellidosRepetidos._m) return _apellidosRepetidos._m;
+  var cuenta = {}, m = {};
+  try{
+    var P = window.PLANTEL_NAFELS || window.PLANTEL_CLUB;
+    var js = (P && (P.jugadores || P.lista)) || (window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores) || [];
+    js.forEach(function(j){
+      var ape = String(j.ap || j.nombre || '').replace(/^\d+\s*/,'').trim().toUpperCase().split(' ')[0];
+      if(ape) cuenta[ape] = (cuenta[ape] || 0) + 1;
+    });
+  }catch(e){}
+  Object.keys(cuenta).forEach(function(k){ if(cuenta[k] > 1) m[k] = 1; });
+  _apellidosRepetidos._m = m;
+  return m;
+}
+function _claveReceptor(nombre){
+  var limpio = String(nombre||'').replace(/^\d+\s*/,'').trim().toUpperCase();
+  var ape = limpio.split(' ')[0];
+  return _apellidosRepetidos()[ape] ? limpio : ape;
+}
+
+/* Los dorsales que reciben, sacados del plantel del club: puntas y liberos.
+   Se calcula una sola vez y queda guardado. */
+function _receptoresDelPlantel(){
+  if(_receptoresDelPlantel._l) return _receptoresDelPlantel._l;
+  var l = [];
+  try{
+    var P = window.PLANTEL_NAFELS || window.PLANTEL_CLUB;
+    var js = (P && (P.jugadores || P.lista)) || (window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores) || [];
+    js.forEach(function(j){
+      var pos = String(j.pos || j.rol || '').toUpperCase();
+      if(pos.indexOf('PUNTA') >= 0 || pos.indexOf('LIBERO') >= 0 || pos.indexOf('L\u00cdBERO') >= 0){
+        var n = parseInt(j.num, 10); if(n) l.push(n);
+      }
+    });
+  }catch(e){}
+  _receptoresDelPlantel._l = l;
+  return l;
+}
 function cargarRecepcionPropia(){
   if(typeof PARTIDOS_JUGADORES === 'undefined') return;
   PARTIDOS_JUGADORES.forEach(function(j){
     if(!j.recepcion || !j.recepcion.flotado) return;
-    // Solo receptores reales (definidos en RECEPCION_RIVAL_DATA): #8,#9,#10,#11,#14
-    var RECEPTOR_NUMS = [8,9,10,11,14];
-    if(RECEPTOR_NUMS.indexOf(j.num) < 0) return;
-    var apellido = j.nombre.replace(/^\d+\s*/,'').split(' ')[0].toUpperCase();
+    /* ══ LOS RECEPTORES SALEN DEL PLANTEL, NO DE UNA LISTA ════════════════
+       Aca habia una lista escrita a mano: [8, 9, 10, 11, 14]. Es de OTRO
+       club: en este plantel el 8, el 9 y el 14 no reciben, y los receptores
+       de verdad -las puntas y los liberos- quedaban todos afuera, asi que
+       la pantalla descartaba casi todo en silencio.
+
+       Ahora se pregunta el puesto: recibe el que es PUNTA o LIBERO. Si por
+       lo que sea no hay plantel cargado, no se filtra a nadie, que es mejor
+       que filtrar a los equivocados. */
+    var RECEPTOR_NUMS = _receptoresDelPlantel();
+    if(RECEPTOR_NUMS.length && RECEPTOR_NUMS.indexOf(j.num) < 0) return;
+    var apellido = _claveReceptor(j.nombre);
     var rec = j.recepcion;
     // Convertir estructura desde_z1/z6/z5 → desde_z1/z6/z5 con p1/p6/p5
     function convZona(zd){
@@ -450,7 +514,7 @@ function cargarRecepcionFromSource(jugadores){
   if(!jugadores) return;
   jugadores.forEach(function(j){
     if(!j.recepcion || !j.recepcion.flotado) return;
-    var apellido = j.nombre.replace(/^\d+\s*/,'').split(' ')[0].toUpperCase();
+    var apellido = _claveReceptor(j.nombre);
     var rec = j.recepcion;
     // Copy structure from PARTIDOS_JUGADORES format
     if(typeof RECEPCION_DATA !== 'undefined'){
@@ -940,8 +1004,8 @@ function recBtnOn(b){ b.classList.add('on'); }
 function recBtnOff(b){ b.classList.remove('on'); }
 </script>
 
-<script src="lang.js?v=20260927-0943"></script>
-<script src="temporadas_menu.js?v=20260927-0943"></script>
+<script src="lang.js?v=20260926-2156"></script>
+<script src="temporadas_menu.js?v=20260926-2156"></script>
 <script>
 </script>
 <script>
@@ -1000,7 +1064,7 @@ function recBtnOff(b){ b.classList.remove('on'); }
   })();
 })();
 </script>
-<script src="ayuda.js?v=20260927-0943"></script>
+<script src="ayuda.js?v=20260926-2156"></script>
 </body>
 </html>
 <!-- © 2025-2026 Volley-Stats · Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->

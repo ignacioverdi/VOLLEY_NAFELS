@@ -1713,9 +1713,20 @@ def calc_match_skill(acts, skill_type):
     k=sum(1 for a in acts if a['effect']=='#'); pp=sum(1 for a in acts if a['effect']=='+')
     exc=sum(1 for a in acts if a['effect']=='!'); sl=sum(1 for a in acts if a['effect']=='/')
     e=sum(1 for a in acts if a['effect']=='='); minus=sum(1 for a in acts if a['effect']=='-')
+    # -- LA CUENTA DEL CLUB, UNA SOLA ------------------------------------
+    # Estas eran las formulas viejas, de antes de unificar la escala:
+    #     saque      (k + 0.5*/ + 0.25*+ - =) / t
+    #     recepcion  (k + 0.5*+ - 0.5*/ - =) / t
+    # Daban un numero DISTINTO al de las baterias y al de las pantallas.
+    # Medido: BOGDANOVSKI, 19 saques -> la vieja daba -14, la buena 28.
+    # Ahora es la misma escala de 0 a 100 que usa toda la app:
+    #     saque      # 100 . / 87,5 . + 75 . ! 50 . - 25 . = 0
+    #     recepcion  # 100 . + 75 . ! 50 . - 25 . / 12,5 . = 0
+    # El ataque NO se toca: (# - / - =) / t es el estandar del voley.
     if   skill_type=='a': eff=round((k-sl-e)/t*100)
-    elif skill_type=='s': eff=round((k+0.5*sl+0.25*pp-e)/t*100)
-    elif skill_type=='r': eff=round((k+0.5*pp-0.5*sl-e)/t*100)
+    elif skill_type=='s': eff=round((k*100 + sl*87.5 + pp*75 + exc*50 + minus*25)/t)
+    elif skill_type=='r': eff=round((k*100 + pp*75 + exc*50 + minus*25 + sl*12.5)/t)
+    elif skill_type=='d': eff=round((k*100 + pp*75 + exc*50 + minus*25)/t)
     else: eff=0
     # Neg = '-' (recepción negativa), Vend = '/' (overpass/vendido)
     return {'T':t,'Eff':eff,'Punto':k,'Pos':pp,'Adm':exc,'Neg':minus,'Err':e,'Vend':sl}
@@ -1771,8 +1782,10 @@ def calc_baterias(scout, side):
     Devuelve {num: baterias} con num='__EQUIPO__' para el total del equipo."""
     # acumuladores por jugador
     def nuevo():
-        return {'S':{'#':0,'+':0,'/':0,'=':0,'T':0},
-                'R':{'#':0,'+':0,'/':0,'=':0,'T':0},
+        # El '!' (neutro) y el '-' (negativo) hacen falta para la cuenta
+        # del club; antes no se contaban y la formula no salia bien.
+        return {'S':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
+                'R':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
                 'B':{'#':0,'+':0,'T':0},
                 'Aall':_na(),
                 'cent':_na(),'alta':_na(),'rap':_na(),
@@ -1936,8 +1949,9 @@ def to_pcts(P):
     def atk(d): return round((d['#']-d['/']-d['='])/d['T']*100) if d['T'] else None
     S=P['S']; R=P['R']; B=P['B']
     return {
-        'sq':    round((S['#']+0.5*S['/']+0.25*S['+']-S['='])/S['T']*100) if S['T'] else None,
-        'rec':   round((R['#']+0.5*R['+']-0.5*R['/']-R['='])/R['T']*100) if R['T'] else None,
+        # la misma escala de 0 a 100 de las baterias y de toda la app
+        'sq':    round((S['#']*100 + S['/']*87.5 + S['+']*75 + S.get('!',0)*50 + S.get('-',0)*25)/S['T']) if S['T'] else None,
+        'rec':   round((R['#']*100 + R['+']*75 + R.get('!',0)*50 + R.get('-',0)*25 + R['/']*12.5)/R['T']) if R['T'] else None,
         'bqpos': round((B['#']+B['+'])/B['T']*100) if B['T'] else None,
         'bqpt':  round(B['#']/B['T']*100) if B['T'] else None,
         'atk':   atk(P['Aall']) if 'Aall' in P else None,
@@ -1953,7 +1967,9 @@ def to_pcts(P):
 def merge_acum(lista_pl):
     """Suma acumuladores de varios partidos (lista de dicts {num:acums})."""
     def nuevo():
-        return {'S':{'#':0,'+':0,'/':0,'=':0,'T':0},'R':{'#':0,'+':0,'/':0,'=':0,'T':0},
+        # El '!' (neutro) y el '-' (negativo) hacen falta para la cuenta
+        # del club; antes no se contaban y la formula no salia bien.
+        return {'S':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},'R':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
                 'B':{'#':0,'+':0,'T':0},'Aall':_na(),'cent':_na(),'alta':_na(),'rap':_na(),
                 'rp':_na(),'ri':_na(),'rm':_na(),'tr':_na(),
                 '_sq_dest':{},'_sq_tipo':{},'_atk_combo':{},'_atk_so':{},'_atk_tr':{},'_rec':{}}
@@ -2046,7 +2062,8 @@ def to_canchitas(P):
         if not t: return {'tot':0,'eff':0,'pos':0,'neg':0,'pt':0,'mas':0,'neu':0,'med':0,'ovp':0,'err':0}
         npt=d.get('#',0); nmas=d.get('+',0); nneu=d.get('!',0)
         nmed=d.get('-',0); novp=d.get('/',0); nerr=d.get('=',0)
-        eff=round((npt*1 + nmas*0.5 - novp*0.5 - nerr)/t*100)
+        # misma escala: # 100 . + 75 . ! 50 . - 25 . / 12,5 . = 0
+        eff=round((npt*100 + nmas*75 + nneu*50 + nmed*25 + novp*12.5)/t)
         pos=round((npt+nmas)/t*100); neg=round((novp+nerr)/t*100)
         return {'tot':t,'eff':eff,'pos':pos,'neg':neg,
                 'pt':npt,'mas':nmas,'neu':nneu,'med':nmed,'ovp':novp,'err':nerr}
@@ -2368,13 +2385,16 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         M={'X5':4,'V5':4,'X6':2,'V6':2,'X8':9,'V8':9,'X1':3,'X7':3,'XM':3,'X2':3,'XP':8,'X4':4,'X3':2}
         return M.get(combo, orig if orig else 3)
     def _eff(acts, kind):
+        # Misma cuenta que calc_match_skill y que to_pcts: una sola escala.
         t=len(acts)
         if not t: return 0
         k=sum(1 for a in acts if a['effect']=='#'); pp=sum(1 for a in acts if a['effect']=='+')
+        exc=sum(1 for a in acts if a['effect']=='!'); mns=sum(1 for a in acts if a['effect']=='-')
         sl=sum(1 for a in acts if a['effect']=='/'); e=sum(1 for a in acts if a['effect']=='=')
         if kind=='a': return round((k-sl-e)/t*100)
-        if kind=='s': return round((k+0.5*sl+0.25*pp-e)/t*100)
-        if kind=='r': return round((k+0.5*pp-0.5*sl-e)/t*100)
+        if kind=='s': return round((k*100 + sl*87.5 + pp*75 + exc*50 + mns*25)/t)
+        if kind=='r': return round((k*100 + pp*75 + exc*50 + mns*25 + sl*12.5)/t)
+        if kind=='d': return round((k*100 + pp*75 + exc*50 + mns*25)/t)
         return 0
 
     partidos_meta=[{'id':g['rival']+'__'+g['date'],'nombre':g['rival'],'rival':g['rival'],'fecha':'/'.join(reversed(g['date'].split('-'))),'torneo':f'NLA {temporada}','resultado':g['result'],'sets_club':str(g['tsets']),'sets_rival':str(g['rsets'])} for g in sorted(games,key=lambda x:x['date']) if g['date']]

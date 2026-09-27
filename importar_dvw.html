@@ -6,10 +6,18 @@
 <title>Importar DVW — NAFELS VOLEY</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
+  /* En esta app los controles no heredan la tipografia: sin esta linea
+     los botones y los desplegables salen en Arial. */
+  button,select,input,textarea{font-family:'Barlow Condensed',sans-serif}
+
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#07080f;--card:#0d0e1a;--card2:#111220;--border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.12);--red:#e8192c;--green:#22c55e;--amber:#f59e0b;--indigo:#818cf8;--mut:#475569;--txt:#e2e8f0;}
 body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--txt);min-height:100vh;}
-select,select option{color:#111!important;background:#fff!important;}
+/* El control cerrado lo dibuja la pagina: va con el tema de la app.
+   La lista que se abre la dibuja el sistema operativo, y ahi conviene
+   fondo claro con texto negro, que se lee bien en todos lados. */
+select{color:var(--txt)!important;background:var(--card2)!important;}
+select option{color:#111!important;background:#fff!important;}
 .page-header{padding:14px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.01);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);}
 .page-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:5px;background:linear-gradient(120deg,#e8192c,#fff 50%,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .back-btn{padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--mut);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase;}
@@ -59,14 +67,14 @@ select,select option{color:#111!important;background:#fff!important;}
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="categorias_club.js?v=20260927-0943"></script>
-<script src="selector_categoria.js?v=20260927-0943"></script>
-<script src="firebase.js?v=20260927-0943" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260927-0943"></script>
+<script src="categorias_club.js?v=20260926-0757"></script>
+<script src="selector_categoria.js?v=20260926-0757"></script>
+<script src="firebase.js?v=20260926-0757" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260926-0757"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260927-0943">
+<link rel="stylesheet" href="movil.css?v=20260926-0757">
 </head>
 <body>
 <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
@@ -135,7 +143,7 @@ select,select option{color:#111!important;background:#fff!important;}
     <div class="res-header">
       <span style="font-size:22px">✅</span>
       <div>
-        <div class="res-titulo" id="res-titulo" data-t-dyn data-t="Partido procesado">Partido procesado</div>
+        <div class="res-titulo" id="res-titulo" data-t="Partido procesado">Partido procesado</div>
         <div style="font-size:11px;color:var(--mut)" id="res-sub"></div>
       </div>
     </div>
@@ -159,7 +167,7 @@ select,select option{color:#111!important;background:#fff!important;}
 
 <div class="toast" id="toast"></div>
 
-<script src="objetivos_config.js?v=20260927-0943"></script>
+<script src="objetivos_config.js?v=20260926-0757"></script>
 <script>
 /* El idioma para fechas: seguia fijo en es-AR, asi que en ingles y aleman
    la fecha aparecia igual en castellano. */
@@ -592,9 +600,9 @@ function showToast(msg){
   setTimeout(function(){ t.classList.remove('show'); }, 2800);
 }
 </script>
-<script src="lang.js?v=20260927-0943"></script>
-<script src="temporadas_menu.js?v=20260927-0943"></script>
-<script src="ayuda.js?v=20260927-0943"></script>
+<script src="lang.js?v=20260926-0757"></script>
+<script src="temporadas_menu.js?v=20260926-0757"></script>
+<script src="ayuda.js?v=20260926-0757"></script>
 </body>
 </html>
 
