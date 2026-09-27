@@ -106,18 +106,36 @@ publicacion siguiente.
 
 
 ──────────────────────────────────────────────────────────────────────────────
-  PASO 4 — FIREBASE  (un minuto, y hay que hacerlo)
+  PASO 4 — FIREBASE  (un minuto, y SIN ESTO LA DEMO NO ARRANCA)
 ──────────────────────────────────────────────────────────────────────────────
 
+La demo necesita dos nodos que hoy NO existen en las reglas publicadas:
+demo_acceso y demo_ip. Las funciones de Vercel los leen y escriben sin
+sesion, y la regla de raiz pide sesion para todo. Con las reglas de hoy, el
+visitante deja el mail y le vuelve un error al pedir el codigo.
+
 En la consola de Firebase -> Realtime Database -> Reglas, pega el contenido de
-FIREBASE_REGLAS_NAFELS.json, que ya lo deje actualizado en esta carpeta.
+FIREBASE_REGLAS_NAFELS.json de esta carpeta.
 
-Lo unico que agregue son dos nodos nuevos con esta regla:
+ESTA VEZ SI SE PUEDE PEGAR ENTERO, y esta verificado:
+ese archivo es EXACTAMENTE lo que hay hoy en la consola mas esos dos nodos.
+Se compararon nodo por nodo: ninguno quitado, ninguno cambiado. Si alguna vez
+un archivo de reglas no dice esa frase, NO lo pegues encima: agrega el bloque
+a mano. Pegar reglas sin haber leido las que estan es como deployar a ciegas.
 
-    ".write": "!data.exists()"
+Los dos nodos nuevos:
 
-Quiere decir: se puede CREAR pero no pisar ni borrar. Sin eso, alguien podria
-borrar su propio registro y darse 5 dias nuevos.
+    ".write": "!data.exists()"     se puede CREAR pero no pisar ni borrar,
+                                   asi nadie borra su registro y se da 5 dias
+                                   nuevos
+    ".read" a nivel de cada llave  se puede leer UNA llave que ya se conoce,
+                                   pero no listar el nodo: la lista de quien
+                                   se registro no queda a la vista
+    ".validate"                    solo entra un registro con la forma
+                                   correcta, asi el nodo no se usa de deposito
+
+DESPUES DE PEGAR, PROBALO: deja tu mail en la demo. Si te vuelve el codigo,
+las reglas entraron. Si te dice error al guardar, quedo algo mal pegado.
 
 
 ──────────────────────────────────────────────────────────────────────────────

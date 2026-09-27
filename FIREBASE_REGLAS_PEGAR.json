@@ -1,25 +1,4 @@
 {
-  "_LEEME": [
-    "ESTE ARCHIVO ES UNA COPIA DE LAS REGLAS QUE ESTAN PUBLICADAS.",
-    "Sirve de respaldo y para leerlas sin entrar a la consola.",
-    "",
-    "La version anterior de este archivo NO era la publicada: tenia caminos",
-    "con .write:true sueltos, sin pedir sesion ni rol. Pegarla en la consola",
-    "habria reemplazado las reglas buenas por otras mucho mas abiertas.",
-    "Copiado de la consola el 27/09/2026.",
-    "",
-    "27/09 - SE AGREGARON DOS NODOS: demo_acceso y demo_ip.",
-    "Son los de la demo con registro. Las funciones de Vercel los leen y",
-    "escriben SIN sesion, asi que necesitan regla propia: con las reglas",
-    "de antes la demo no podia registrar a nadie y tiraba error al pedir",
-    "el codigo.",
-    "Se puede CREAR pero no pisar ni borrar (!data.exists()), asi nadie se",
-    "regala 5 dias nuevos. La lectura esta a nivel de cada llave, no del",
-    "nodo: no se puede listar quien se registro, solo leer una llave que",
-    "ya se conoce.",
-    "Lo demas quedo EXACTAMENTE igual que en la consola: verificado nodo",
-    "por nodo, cero cambios fuera de esos dos."
-  ],
   "rules": {
     ".read": "auth != null && root.child('usuarios').child(auth.uid).exists()",
     ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && root.child('roles').child(auth.uid).val() != 'player'",
