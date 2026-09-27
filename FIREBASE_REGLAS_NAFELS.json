@@ -56,6 +56,24 @@
     "video_signal": {
       ".write": true
     },
+    "cuerpo_tecnico": {
+      ".write": true
+    },
+    "fixture": {
+      ".write": true
+    },
+    "plan_desarrollo": {
+      ".write": true
+    },
+    "plantel_pos": {
+      ".write": true
+    },
+    "pp_vsel": {
+      ".write": true
+    },
+    "pv_sesion": {
+      ".write": true
+    },
     "demo_acceso": {
       "$h": {
         ".write": "!data.exists()"
