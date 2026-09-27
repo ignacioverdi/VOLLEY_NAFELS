@@ -33,17 +33,17 @@
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="categorias_club.js?v=20260927-0006"></script>
-<script src="selector_categoria.js?v=20260927-0006"></script>
-<script src="firebase.js?v=20260927-0006" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260927-0006"></script>
+<script src="categorias_club.js?v=20260927-0832"></script>
+<script src="selector_categoria.js?v=20260927-0832"></script>
+<script src="firebase.js?v=20260927-0832" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260927-0832"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260927-0006">
+<link rel="stylesheet" href="movil.css?v=20260927-0832">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260927-0006" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260927-0832" onerror="void 0"></script>
 </head>
 <body>
   <div class="hdr">
@@ -57,7 +57,9 @@
   <div id="strip" class="strip"></div>
   <div id="cards" class="cards"></div>
 
-  <script src="datos_historial.js?v=20260927-0006"></script>
+  <!-- VB_EFF y las metas: esta pantalla hacia sus propias cuentas -->
+  <script src="objetivos_config.js?v=20260927-0832"></script>
+  <script src="datos_historial.js?v=20260927-0832"></script>
   <script>
   (function(){
     var H=window.HISTORIAL_DATA||{};
@@ -86,28 +88,43 @@
     }
   }, 200);
 })();
-    var M=(H.entrenamientos||[]).filter(function(m){return m && m.jugadores && m.resultado;});
+    /* == ENTRABAN LOS ENTRENAMIENTOS TAMBIEN ==============================
+       El filtro pedia "que tenga resultado", y los entrenamientos traen
+       resultado 0-0. Entonces esta pantalla —que se llama "partido a
+       partido"— dibujaba 17 puntos donde hay 4 partidos, y como 0 no es
+       mayor que 0, los 13 entrenamientos salian marcados como PERDIDOS en
+       la tira de arriba. Ahora entran solo los partidos.              */
+    var M=(H.entrenamientos||[]).filter(function(m){return m && m.tipo==='P' && m.jugadores && m.resultado;});
     function pd(s){var p=(s||'').split('/');return p.length===3?new Date(+p[2],+p[1]-1,+p[0]):new Date(0);}
     M.sort(function(a,b){return pd(a.fecha)-pd(b.fecha);});
     if(!M.length){document.getElementById('cards').innerHTML='<div class="empty">No hay partidos en el historial.</div>';return;}
 
+    /* == LAS MISMAS CUENTAS QUE EL RESTO DE LA APP ========================
+       Aca habia cuatro cuentas propias. La de ataque promediaba el aEff ya
+       redondeado de cada jugador pesandolo por sus ataques; las otras tres
+       ni siquiera eran eficacias: eran aces%, errores% y % positiva. Ahora
+       se suman los conteos crudos de los doce jugadores y la cuenta la hace
+       VB_EFF una sola vez, igual que en el panel, la ficha y el plan.    */
+    var TCAMPOS=['sT','sPunto','sPos','sAdm','sNeg','sVend','sErr',
+                 'rT','rPunto','rPos','rAdm','rNeg','rVend','rErr',
+                 'aT','aPunto','aPos','aAdm','aNeg','aVend','aErr',
+                 'bT','bPt','bPtPos'];
+    function tpc(a,b){ return b>0?Math.round(a/b*100):0; }
     function agg(m){
-      var J=m.jugadores, s={sT:0,sP:0,sE:0,rT:0,rP:0,rPos:0,aT:0,aP:0,aErr:0,aEffW:0,bPt:0};
-      J.forEach(function(j){
-        s.sT+=j.sT||0; s.sP+=j.sPunto||0; s.sE+=j.sErr||0;
-        s.rT+=j.rT||0; s.rP+=j.rPunto||0; s.rPos+=j.rPos||0;
-        s.aT+=j.aT||0; s.aP+=j.aPunto||0; s.aErr+=j.aErr||0; s.aEffW+=(j.aEff||0)*(j.aT||0);
-        s.bPt+=j.bPt||0;
-      });
+      var s={}; TCAMPOS.forEach(function(k){s[k]=0;});
+      (m.jugadores||[]).forEach(function(j){ TCAMPOS.forEach(function(k){ s[k]+=(j[k]||0); }); });
+      var V=window.VB_EFF||{};
       var won=m.resultado.nafels>m.resultado.rival;
       return {
         fecha:m.fecha, rival:m.rival, won:won,
         score:m.resultado.nafels+'-'+m.resultado.rival,
-        atk_eff: s.aT? Math.round(s.aEffW/s.aT):0,
-        atk_kill: s.aT? Math.round(s.aP/s.aT*100):0,
-        srv_ace: s.sT? Math.round(s.sP/s.sT*100):0,
-        srv_err: s.sT? Math.round(s.sE/s.sT*100):0,
-        rec_pos: s.rT? Math.round((s.rP+s.rPos)/s.rT*100):0,
+        atk_eff: s.aT&&V.ataque? V.ataque(s):0,
+        atk_kill: tpc(s.aPunto,s.aT),
+        srv_eff: s.sT&&V.saque? V.saque(s):0,
+        srv_err: tpc(s.sErr,s.sT),
+        rec_eff: s.rT&&V.recepcion? V.recepcion(s):0,
+        rec_pos: tpc(s.rPunto+s.rPos,s.rT),
+        blk_pos: tpc(s.bPt+s.bPtPos,s.bT),
         blk: s.bPt
       };
     }
@@ -123,10 +140,14 @@
     // chart: dibuja una o varias series sobre el mismo eje
     function chart(series, opts){
       opts=opts||{};
-      var W=440,Hh=150,pl=30,pr=8,pt=12,pb=22, n=D.length;
+      var W=440,Hh=156,pl=30,pr=8,pt=12,pb=30, n=D.length;
       var allv=[]; series.forEach(function(s){allv=allv.concat(s.data);});
       var mn=opts.min!=null?opts.min:Math.min.apply(null,allv);
       var mx=opts.max!=null?opts.max:Math.max.apply(null,allv);
+      /* si el objetivo queda arriba del mejor partido, la escala se estira
+         hasta el: asi la linea entra siempre en el cuadro y se ve cuanto
+         falta, en vez de desaparecer justo cuando mas importa. */
+      if(opts.meta!=null){ mx=Math.max(mx,opts.meta); mn=Math.min(mn,opts.meta); }
       if(mx===mn){mx=mn+1;}
       var iw=W-pl-pr, ih=Hh-pt-pb;
       function X(i){return pl + (n<=1?iw/2:iw*i/(n-1));}
@@ -138,34 +159,59 @@
         svg+='<text x="'+(pl-5)+'" y="'+(y+3)+'" fill="#475569" font-size="9" text-anchor="end">'+val+'</text>';});
       // zero line si aplica
       if(mn<0&&mx>0){var y0=Y(0);svg+='<line x1="'+pl+'" y1="'+y0+'" x2="'+(W-pr)+'" y2="'+y0+'" stroke="#334155" stroke-width="1" stroke-dasharray="3 3"/>';}
-      series.forEach(function(s){
+      /* la primera serie es la que manda: llena y gruesa. La segunda es el
+         detalle: mas fina y punteada, para que no le gane de un vistazo. */
+      series.forEach(function(s,si){
+        var sec=si>0;
         var pts=s.data.map(function(v,i){return X(i)+','+Y(v);}).join(' ');
-        svg+='<polyline points="'+pts+'" fill="none" stroke="'+s.color+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
-        s.data.forEach(function(v,i){svg+='<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="2.6" fill="'+s.color+'"/>';});
+        svg+='<polyline points="'+pts+'" fill="none" stroke="'+s.color+'" stroke-width="'+(sec?1.8:2.5)+'"'
+             +(sec?' stroke-dasharray="5 4"':'')+' stroke-linejoin="round" stroke-linecap="round"/>';
+        s.data.forEach(function(v,i){svg+='<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="'+(sec?2:2.8)+'" fill="'+s.color+'"/>';});
       });
+      /* la linea del objetivo del club, la misma de las baterias */
+      if(opts.meta!=null && opts.meta>=mn && opts.meta<=mx){
+        var ym=Y(opts.meta);
+        svg+='<line x1="'+pl+'" y1="'+ym+'" x2="'+(W-pr)+'" y2="'+ym+'" stroke="rgba(255,255,255,.34)" stroke-width="1" stroke-dasharray="5 4"/>';
+        svg+='<text x="'+(W-pr)+'" y="'+(ym-4)+'" fill="#94a3b8" font-size="8" text-anchor="end">objetivo '+opts.meta+'%</text>';
+      }
       // marcas G/P abajo
-      D.forEach(function(d,i){svg+='<text x="'+X(i)+'" y="'+(Hh-7)+'" fill="'+(d.won?'#4ade80':'#f87171')+'" font-size="8" text-anchor="middle" font-weight="700">'+(d.won?'G':'P')+'</text>';});
+      /* debajo de cada punto, contra quien fue: con cuatro partidos, una G
+         suelta no dice nada. */
+      D.forEach(function(d,i){
+        svg+='<text x="'+X(i)+'" y="'+(Hh-12)+'" fill="'+(d.won?'#4ade80':'#f87171')+'" font-size="8" text-anchor="middle" font-weight="700">'+(d.won?'G':'P')+'</text>';
+        var nom=String(d.rival||'').substring(0,9);
+        /* el primero y el ultimo se alinean hacia adentro: centrados se
+           salian del cuadro y se veian cortados */
+        var anc=(i===0)?'start':(i===n-1)?'end':'middle';
+        svg+='<text x="'+X(i)+'" y="'+(Hh-2)+'" fill="#64748b" font-size="7.5" text-anchor="'+anc+'">'+nom+'</text>';
+      });
       svg+='</svg>';
       return svg;
     }
 
+    /* Los colores son los de la paleta validada del resto de la app y el
+       numero que manda en cada tarjeta es el del club; el segundo es el
+       detalle, en gris, para que no compitan. */
+    var CAT='#0B84C4', CSQ='#CE7C18', CRE='#0E9F6E', CBL='#8B5CF6', CGR='#94a3b8', CER='#DC2A5A';
+    var MT=(window.OBJETIVOS_CONFIG&&window.OBJETIVOS_CONFIG.metas)||{};
+    function obj(k){ return MT[k]?MT[k].obj:null; }
     var cards=[
-      {t:'Ataque', ic:'var(--ataque)', leg:'<b style="color:#F97316">Eficacia</b> · <b style="color:#fbbf24">Punto%</b>',
-       series:[{data:D.map(function(d){return d.atk_eff;}),color:'#F97316'},{data:D.map(function(d){return d.atk_kill;}),color:'#fbbf24'}],
-       avg:'Promedio eficacia <b>'+avg('atk_eff')+'%</b> · punto <b>'+avg('atk_kill')+'%</b>'},
-      {t:'Saque', ic:'var(--saque)', leg:'<b style="color:#22C55E">Aces%</b> · <b style="color:#ef4444">Errores%</b>',
-       series:[{data:D.map(function(d){return d.srv_ace;}),color:'#22C55E'},{data:D.map(function(d){return d.srv_err;}),color:'#ef4444'}], min:0,
-       avg:'Promedio aces <b>'+avg('srv_ace')+'%</b> · errores <b>'+avg('srv_err')+'%</b>'},
-      {t:'Recepción', ic:'var(--recep)', leg:'<b style="color:#22C55E">% Positiva</b>',
-       series:[{data:D.map(function(d){return d.rec_pos;}),color:'#22C55E'}], min:0, max:100,
-       avg:'Promedio positiva <b>'+avg('rec_pos')+'%</b>'},
-      {t:'Bloqueo', ic:'var(--bloqueo)', leg:'<b style="color:#06B6D4">Puntos de bloqueo por partido</b>',
-       series:[{data:D.map(function(d){return d.blk;}),color:'#06B6D4'}], min:0,
-       avg:'Promedio <b>'+avg('blk')+'</b> puntos de bloqueo/partido'}
+      {t:'Ataque', ic:CAT, leg:'<b style="color:'+CAT+'">Eficacia</b> · <b style="color:'+CGR+'">Punto%</b>',
+       series:[{data:D.map(function(d){return d.atk_eff;}),color:CAT},{data:D.map(function(d){return d.atk_kill;}),color:CGR}],
+       avg:'Promedio por partido \u00b7 eficacia <b>'+avg('atk_eff')+'%</b> · punto <b>'+avg('atk_kill')+'%</b>'},
+      {t:'Saque', ic:CSQ, leg:'<b style="color:'+CSQ+'">Eficacia</b> · <b style="color:'+CER+'">Errores%</b>',
+       series:[{data:D.map(function(d){return d.srv_eff;}),color:CSQ},{data:D.map(function(d){return d.srv_err;}),color:CER}], min:0, meta:obj('sq'),
+       avg:'Promedio por partido \u00b7 eficacia <b>'+avg('srv_eff')+'%</b> (obj. '+obj('sq')+'%) · errores <b>'+avg('srv_err')+'%</b>'},
+      {t:'Recepción', ic:CRE, leg:'<b style="color:'+CRE+'">Eficacia</b> · <b style="color:'+CGR+'">% Positiva</b>',
+       series:[{data:D.map(function(d){return d.rec_eff;}),color:CRE},{data:D.map(function(d){return d.rec_pos;}),color:CGR}], min:0, max:100, meta:obj('rec'),
+       avg:'Promedio por partido \u00b7 eficacia <b>'+avg('rec_eff')+'%</b> (obj. '+obj('rec')+'%) · positiva <b>'+avg('rec_pos')+'%</b>'},
+      {t:'Bloqueo', ic:CBL, leg:'<b style="color:'+CBL+'">Blq #+</b>',
+       series:[{data:D.map(function(d){return d.blk_pos;}),color:CBL}], min:0, meta:obj('bqpos'),
+       avg:'Promedio por partido \u00b7 Blq #+ <b>'+avg('blk_pos')+'%</b> (obj. '+obj('bqpos')+'%) · <b>'+avg('blk')+'</b> puntos de bloqueo por partido'}
     ];
     document.getElementById('cards').innerHTML=cards.map(function(c){
       return '<div class="card"><div class="ch-t"><span class="ic" style="background:'+c.ic+'"></span>'+c.t+'</div>'
-        +'<div class="leg">'+c.leg+'</div>'+chart(c.series,{min:c.min,max:c.max})
+        +'<div class="leg">'+c.leg+'</div>'+chart(c.series,{min:c.min,max:c.max,meta:c.meta})
         +'<div class="avg">'+c.avg+'</div></div>';
     }).join('');
   })();
@@ -217,9 +263,9 @@
   }
 }
 </style>
-<script src="lang.js?v=20260927-0006" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260927-0006" onerror="void 0"></script>
-<script src="ayuda.js?v=20260927-0006"></script>
+<script src="lang.js?v=20260927-0832" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260927-0832" onerror="void 0"></script>
+<script src="ayuda.js?v=20260927-0832"></script>
 </body>
 </html>
 

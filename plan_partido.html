@@ -96,7 +96,7 @@ select:hover{border-color:var(--red)}select:focus{outline:none;border-color:var(
 .cell .zn{font-size:10px;opacity:.8}
 .cell .cn{font-family:'Bebas Neue',sans-serif;font-size:25px;margin-top:2px}
 .novid{padding:16px;color:var(--mut);font-size:12px;line-height:1.5}
-.cnote{font-size:9.5px;color:var(--faint);margin-top:6px;max-width:290px;line-height:1.35}
+.cnote{font-size:9px;color:var(--faint);margin-top:6px;line-height:1.3;max-width:none}
 .stats{flex:0 1 255px;min-width:0;display:flex;flex-direction:column;gap:5px}
 .row3{display:flex;gap:5px}
 .tile{flex:1;background:var(--card2);border-radius:6px;height:54px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0}
@@ -114,6 +114,9 @@ select:hover{border-color:var(--red)}select:focus{outline:none;border-color:var(
 
 footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:var(--faint)}
 .vmodal{display:none;position:fixed;inset:0;background:rgba(4,5,9,.8);z-index:99998;align-items:center;justify-content:center;padding:16px}
+.vseg{font-size:9px;color:var(--faint);margin-left:3px;letter-spacing:.5px}
+.vtips{font-size:10px;color:var(--faint);letter-spacing:.3px;padding:6px 2px 0;text-align:center}
+.vtips b{color:var(--mut);font-weight:700}
 .vpanel{background:var(--card);border:1px solid var(--border);border-radius:12px;width:min(1060px,100%);max-height:95vh;overflow:auto}
 .vhead{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)}
 .vtitle{font-family:'Bebas Neue',sans-serif;font-size:20px;flex:1;letter-spacing:.02em}
@@ -185,7 +188,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260927-0006">
+<link rel="stylesheet" href="movil.css?v=20260927-0832">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    EL ROJO, SOLO PARA EL DATO
@@ -287,16 +290,37 @@ details.fdet .filters{margin-top:8px}
    Eran nueve cuadraditos iguales con etiquetas de 8 px. Ahora van en tres
    grupos con titulo, y la etiqueta crece: en una tablet a un brazo de
    distancia, 8 px no se leen. */
-.sgrupo{background:rgba(255,255,255,.028);border:1px solid var(--border);border-radius:8px;
-  padding:7px 8px;margin-bottom:6px}
-.sgl{font-size:9.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--faint);margin-bottom:5px}
+.sgrupo{background:rgba(255,255,255,.028);border:1px solid var(--border);border-radius:7px;
+  padding:5px 6px;margin-bottom:0}
+.sgl{font-size:9px;letter-spacing:1.4px;text-transform:uppercase;color:var(--faint);margin-bottom:4px}
 .stats .tile .l{font-size:10px!important;letter-spacing:.7px;color:#94a3b8!important;font-weight:600}
 .stats .tile.hl .l{color:#cbd5e1!important}
 /* El casillero destacado se pintaba de rojo de fondo. Ahora que el rojo es
    del dato, destacar con rojo vuelve a ensuciar: el destacado pasa a ser un
    tono neutro un poco mas claro que el resto, que alcanza y de sobra. */
 .stats .tile.hl{background:rgba(255,255,255,.07)!important}
-.tile .v .sem{display:inline-block;padding:1px 7px;border-radius:7px;border:1px solid transparent}
+.tile .v .sem{display:inline-block;padding:1px 5px;border-radius:6px;border:1px solid transparent}
+
+/* == LA COLUMNA DE NUMEROS TERMINABA MAS ABAJO QUE LA CANCHA =============
+   Las tres ternas pedian unos 370 px de alto y la cancha 292: la tarjeta
+   quedaba con un escalon de casi 80 px del lado derecho. La cancha esta
+   bien como esta, asi que la que se adapta es la columna de numeros: sus
+   tres grupos piden poco alto y CRECEN hasta el alto de la cancha, sea el
+   que sea. Los dos lados terminan a la misma altura solos, sin medidas
+   clavadas que se rompan cuando cambie la cancha.                      */
+.body{align-items:stretch}
+.stats{gap:6px}
+.sgrupo{display:flex;flex-direction:column;flex:1 1 auto;margin-bottom:0;min-height:0}
+.sgrupo .row3{flex:1 1 auto;align-items:stretch}
+/* == LOS CASILLEROS PESABAN MAS QUE LA CANCHA ===========================
+   Los numeros iban a 22 px con 80 px de alto cada uno: la columna de la
+   derecha le ganaba de lejos a la cancha, que es el dato principal de la
+   tarjeta. Ahora el numero baja a 19, el rotulo y los margenes se
+   ajustan, y los tres grupos se reparten el alto de la cancha: los dos
+   lados terminan a la misma altura y la cancha vuelve a mandar.      */
+.stats .tile{height:auto;min-height:40px}
+.stats .tile .v{font-size:19px!important}
+.stats .tile .l{font-size:9.5px!important}
 
 /* ── EL TITULAR DE CADA TARJETA ────────────────────────────────────────────
    Seis pestanas por N tarjetas y nada decia donde estaba la historia. Esta
@@ -312,10 +336,10 @@ details.fdet .filters{margin-top:8px}
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
 <!-- La definicion unica de las eficiencias de todo el sistema. Esta pagina
      tenia las suyas propias y no coincidian con el resto. -->
-<script src="objetivos_config.js?v=20260927-0006" onerror="void 0"></script>
-<script src="categorias_club.js?v=20260927-0006"></script>
-<script src="selector_categoria.js?v=20260927-0006"></script>
-<script src="mi_fila.js?v=20260927-0006" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260927-0832" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260927-0832"></script>
+<script src="selector_categoria.js?v=20260927-0832"></script>
+<script src="mi_fila.js?v=20260927-0832" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -419,9 +443,11 @@ details.fdet .filters{margin-top:8px}
           <button class="sec" id="vfsbtn" onclick="toggleFullV()" title="Pantalla completa (tecla F)" data-t="⛶ Pantalla completa"><span data-t="⛶ Pantalla completa"><span data-t="⛶ Pantalla completa">⛶ Pantalla completa</span></span></button>
           <span class="vcount" id="vcount"></span>
           <label><span data-t="Vel"><span data-t="Vel">Vel</span></span> <select id="vspeed" onchange="setSpeed(this.value)" style="width:auto"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
-          <label><span data-t="Antes"><span data-t="Antes">Antes</span></span> <input id="vpre" type="number" value="2" min="0" max="20" onchange="pre=+this.value||2"></label>
-          <label><span data-t="Después"><span data-t="Después">Después</span></span> <input id="vpost" type="number" value="8" min="0" max="20" onchange="post=+this.value||8"></label>
+          <label title="Segundos de video ANTES de la accion"><span data-t="Antes"><span data-t="Antes">Antes</span></span> <input id="vpre" type="number" value="2" min="0" max="20" onchange="pre=+this.value||2"><span class="vseg">seg</span></label>
+          <label title="Segundos de video DESPUES de la accion"><span data-t="Después"><span data-t="Después">Después</span></span> <input id="vpost" type="number" value="8" min="0" max="20" onchange="post=+this.value||8"><span class="vseg">seg</span></label>
         </div>
+        <!-- Los atajos existian desde siempre y no los sabia nadie. -->
+        <div class="vtips"><b>← →</b> cambiar acción &middot; <b>espacio</b> pausa &middot; <b>F</b> pantalla completa &middot; <b>Esc</b> salir</div>
       </div>
       <div class="vside">
         <div class="vside-head"><b data-t="Acciones"><span data-t="Acciones"><span data-t="Acciones">Acciones</span></span></b><span id="vselcount"></span><button onclick="clipAll(1)" data-t="Todas"><span data-t="Todas"><span data-t="Todas">Todas</span></span></button><button onclick="clipAll(0)" data-t="Ninguna"><span data-t="Ninguna"><span data-t="Ninguna">Ninguna</span></span></button></div>
@@ -446,8 +472,8 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260927-0006"></script>
-<script src="filtro_tipo.js?v=20260927-0006" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260927-0832"></script>
+<script src="filtro_tipo.js?v=20260927-0832" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
   <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
        se cargaba SOLO el de partidos, asi que en una temporada sin partidos
@@ -462,12 +488,12 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20260927-0006"></script>
-<script src="firebase_por_categoria.js?v=20260927-0006"></script>
+<script src="firebase.js?v=20260927-0832"></script>
+<script src="firebase_por_categoria.js?v=20260927-0832"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20260927-0006" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20260927-0832" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -1176,8 +1202,8 @@ function buildSection(p){var cfg=ROLECFG[p.role];
    +'<div class="body"><div class="courtwrap"><div class="courtbox">'
    +   '<div class="crot"><b>'+rotuloCancha(cfg)+'</b><span>\u00b7 '+canchaDe(cfg)+'</span></div>'
    +   '<div class="cnet"></div>'
-   +   '<div class="court" id="'+p.id+'-court"></div></div>'
-   +   '<div class="cnote">Doble-click en zona con \u25b6 \u2192 video (partidos con \ud83c\udfa5)</div></div>'
+   +   '<div class="court" id="'+p.id+'-court"></div>'
+   +   '<div class="cnote">Doble-click en zona con \u25b6 \u2192 video (partidos con \ud83c\udfa5)</div></div></div>'
    +'<div class="stats">'+tiles3(p,cfg)+'</div></div>'+'<div class="read" contenteditable="true" spellcheck="false" data-pid="'+p.id+'" data-ph="Escribí tu análisis…" title="Click para editar" oninput="saveRead(this)">'+readVal(p)+'</div>'+'</div>';
 }
 function render(p){var cfg=ROLECFG[p.role];
@@ -1653,8 +1679,19 @@ function applySavedSel(){var s=VSEL[curKey];if(s&&s.length){var set={};for(var i
 function saveSel(){if(!clips.length)return;var a=[];for(var i=0;i<clips.length;i++)if(clips[i].sel)a.push(clipId(clips[i]));VSEL[curKey]=a;try{localStorage.setItem("pp_vsel",JSON.stringify(VSEL));}catch(e){}if(typeof fbSet==="function"){fbSet("pp_vsel",VSEL);}var b=document.getElementById("vsavebtn");if(b){b.textContent="✓ Guardado";b.classList.add("saved");setTimeout(function(){b.textContent="💾 Guardar";b.classList.remove("saved");},1500);}}
 function toggleOnly(){var vo=document.getElementById("vonly");onlyShow=vo?vo.checked:false;renderList();}
 function renderList(){var sel=0;for(var k=0;k<clips.length;k++)if(clips[k].sel)sel++;var sc=document.getElementById("vselcount");if(sc)sc.textContent=sel+"/"+clips.length;
-  document.getElementById("vlist").innerHTML=clips.map(function(c,i){if(onlyShow&&!c.sel)return "";return '<label class="vitem'+(i===cur?" playing":"")+(c.sel?"":" off")+'"><input type="checkbox" '+(c.sel?"checked":"")+' onclick="event.stopPropagation();toggleClip('+i+')"><span class="vlbl" onclick="jump('+i+')">'+(i+1)+". "+(TAGFMT[c.tag]||c.tag)+" "+evLabel(c.ev)+'</span></label>';}).join("");}
+  document.getElementById("vlist").innerHTML=clips.map(function(c,i){if(onlyShow&&!c.sel)return "";return '<label class="vitem'+(i===cur?" playing":"")+(c.sel?"":" off")+'"><input type="checkbox" '+(c.sel?"checked":"")+' onclick="event.stopPropagation();toggleClip('+i+')"><span class="vlbl" onclick="jump('+i+')">'+(i+1)+". "+vNombre(c.tag)+" "+evLabel(c.ev)+'</span></label>';}).join("");}
 function playCur(){if(!YTReady||!clips.length)return;var a=clips[cur],start=Math.max(0,a.t-pre);if(a.vid!==loadedVid){loadedVid=a.vid;YTP.loadVideoById({videoId:a.vid,startSeconds:start});}else{YTP.seekTo(start,true);var _st=(YTP.getPlayerState?YTP.getPlayerState():-1);if(_st!==1&&_st!==3)YTP.playVideo();}try{YTP.setPlaybackRate(speed);}catch(e){}document.getElementById("vcount").textContent=(cur+1)+" / "+clips.length;renderList();clearInterval(vtimer);var end=a.t+post;vtimer=setInterval(function(){if(YTP&&YTP.getCurrentTime&&YTP.getCurrentTime()>=end){var n=nextSel(cur,1);if(n>=0){cur=n;playCur();}else{clearInterval(vtimer);try{YTP.pauseVideo();}catch(e){}}}},200);}
+/* == LA LISTA DECIA EL CODIGO, NO LA JUGADA ============================
+   Salia "1. W4 -", "3. Y8 punto". La tabla COMBO_NOMBRES -la que confirmo
+   el cuerpo tecnico y ya usa el menu de filtros- traduce esos codigos a
+   "QUICK IN 4" y "PIPE". Es la misma tabla: aca no se inventa ningun
+   nombre, y si un codigo no esta, se muestra tal cual como antes.    */
+function vNombre(tag){
+  if(!tag) return "";
+  if(TAGFMT[tag]) return TAGFMT[tag];
+  try{ if(window.COMBO_DE_CODIGO && COMBO_DE_CODIGO[tag]) return COMBO_DE_CODIGO[tag]; }catch(e){}
+  return tag;
+}
 function jump(i){cur=i;playCur();}
 function nextClip(){var n=nextSel(cur,1);if(n>=0){cur=n;playCur();}}
 function prevClip(){var n=nextSel(cur,-1);if(n>=0){cur=n;playCur();}}
@@ -1674,8 +1711,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20260927-0006" onerror="void 0"></script>
-<script src="lang.js?v=20260927-0006" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20260927-0832" onerror="void 0"></script>
+<script src="lang.js?v=20260927-0832" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -1693,7 +1730,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20260927-0006" onerror="void 0"></script>
-<script src="ayuda.js?v=20260927-0006"></script>
+<script src="volver_inicio.js?v=20260927-0832" onerror="void 0"></script>
+<script src="ayuda.js?v=20260927-0832"></script>
 </body>
 </html>

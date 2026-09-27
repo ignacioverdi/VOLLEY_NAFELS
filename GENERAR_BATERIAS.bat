@@ -18,8 +18,15 @@ echo.
 echo  [2/4] Baterias de los partidos - capsula 25-26...
 python gen_baterias.py "DVW NAFELS 2026" "temporadas\2025-26\datos_baterias.js"
 echo.
-echo  [3/4] Baterias de los entrenamientos - 26-27...
-python gen_baterias.py "DVW ENTRENAMIENTOS NAFELS 2026" "datos_baterias.js"
+echo  [3/4] Baterias de la 26-27: PARTIDOS + ENTRENAMIENTOS...
+echo.
+echo       Antes esta linea mandaba SOLO la carpeta de entrenamientos, y
+echo       como pisa datos_baterias.js, los partidos de la temporada nunca
+echo       entraban: en la ficha del jugador el filtro PARTIDO quedaba vacio
+echo       y el acumulado no los contaba. El motor acepta las dos carpetas
+echo       en una sola corrida y las separa por tipo el solo.
+echo.
+python gen_baterias.py --partidos "DVW NAFELS 2027" --entrenamientos "DVW ENTRENAMIENTOS NAFELS 2026" --out "datos_baterias.js"
 echo.
 echo  [4/4] Protegiendo los datos...
 python cifrar_datos.py

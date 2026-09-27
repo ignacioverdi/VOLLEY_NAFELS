@@ -6,8 +6,8 @@
 <title data-t="Mi Performance — NAFELS Voley">Mi Performance — NAFELS Voley</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260927-0006" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260927-0006" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260927-0832" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260927-0832" onerror="void 0"></script>
 <script>
 /* DOBLE TURNO: manana y tarde el mismo dia. El turno llega desde el motor
    como 'M' o 'T'; sin marca no muestra nada. */
@@ -22,18 +22,18 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260927-0006"></script>
+<script src="datos_seguros.js?v=20260927-0832"></script>
   <!-- El historial y los entrenamientos: la pagina los usa pero no los
        pedia, asi que la lista salia vacia. -->
-  <script src="datos_historial.js?v=20260927-0006" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260927-0832" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
   <!-- El plantel del club. La lista de jugadores sale de EQUIPO_DATA, que
        viene cifrado y a veces no llega: sin eso la pagina queda en blanco. -->
-  <script src="objetivos_config.js?v=20260927-0006"></script>
-  <script src="plantel_nafels.js?v=20260927-0006" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260927-0832"></script>
+  <script src="plantel_nafels.js?v=20260927-0832" onerror="void 0"></script>
   <script>abrirDatos();</script>
 <!-- VB: selector PARTIDO/ENTRENAMIENTO - carga los datos segun el modo elegido -->
 <script>(function(){var ent=false;try{ent=(localStorage.getItem('vb_modo')||'partido')==='entrenamiento';}catch(e){}
@@ -118,7 +118,23 @@ html,body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',
 .evol-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px}
 .evol-title{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
 .evol-bars{display:flex;gap:8px;align-items:flex-end;height:120px;margin-bottom:8px}
-.evol-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+/* == LAS BARRAS NO SE VEIAN ==============================================
+   La barra se dibuja con height en PORCENTAJE, pero el porcentaje se mide
+   contra el alto de la columna que la contiene, y esa columna no tenia
+   alto: se lo daba su contenido. Sin alto de referencia, el navegador
+   ignora el porcentaje y queda el min-height de 3 px. Resultado: la
+   pantalla de evolucion mostraba los numeros flotando sobre una rayita,
+   con la tarjeta vacia debajo.
+
+   Ahora la columna ocupa los 120 px de la fila y se apoya abajo, asi el
+   porcentaje tiene contra que medirse. El tope deja lugar al numero y al
+   rotulo para que la barra mas alta no los empuje afuera.             */
+.evol-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;height:100%;justify-content:flex-end}
+.evol-track{flex:1 1 auto;width:100%;min-height:0;display:flex;align-items:flex-end;position:relative}
+/* la linea del objetivo, a la altura que le toca: se ve de un vistazo que
+   partidos lo pasaron y cuales no */
+.evol-meta{position:absolute;left:0;right:0;border-top:1px dashed rgba(255,255,255,.3);pointer-events:none}
+.evol-bar{width:100%}
 .evol-bar{width:100%;border-radius:4px 4px 0 0;min-height:3px;transition:height .4s}
 .evol-val{font-family:'Bebas Neue',sans-serif;font-size:16px;text-align:center;line-height:1}
 .evol-lbl{font-size:8px;color:var(--muted);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%}
@@ -137,15 +153,15 @@ html,body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260927-0006" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260927-0006"></script>
+<script src="firebase.js?v=20260927-0832" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260927-0832"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260927-0006">
+<link rel="stylesheet" href="movil.css?v=20260927-0832">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260927-0006" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260927-0832" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -240,7 +256,10 @@ function tryInit(n){
   if(ready){
     buildSelector();
     var p=new URLSearchParams(window.location.search);
-    var n2=parseInt(p.get('num'))||0;
+    /* El boton STATS del Equipo y de la ficha mandan ?player=APELLIDO, no
+       ?num=. Aca solo se leia num, asi que el boton caia siempre en el
+       primer jugador del plantel en vez del que se habia tocado.  */
+    var n2=parseInt(p.get('num'))||histNumDe(p.get('player'))||0;
     if(n2){ selectJug(n2); }
     else {
       // auto-select first player with match data
@@ -257,19 +276,44 @@ function tryInit(n){
   else { document.addEventListener("DOMContentLoaded", function(){ setTimeout(_go,50); }); }
 })();
 
+/* == DE NOMBRE A DORSAL ==================================================
+   Se compara sin acentos, sin mayusculas y sin signos, y se acepta que
+   uno sea el principio del otro —'SCHMID R' contra 'SCHMID R.'— para que
+   un cambio menor de como se escribe el nombre no rompa el enlace.    */
+function _histNorm(x){
+  return String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+         .toUpperCase().replace(/[^A-Z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+}
+function histNumDe(nombre){
+  var n=_histNorm(nombre); if(!n) return 0;
+  var P=[]; try{ P=_plantelDelClub()||[]; }catch(e){}
+  var j=P.find(function(x){return _histNorm(x.nombre)===n;});
+  if(!j) j=P.find(function(x){var a=_histNorm(x.nombre); return a && (a.indexOf(n)===0||n.indexOf(a)===0);});
+  if(!j){ var tok=n.split(' ')[0];
+    j=P.find(function(x){return _histNorm(x.nombre).split(' ').indexOf(tok)>=0;}); }
+  return j?j.num:0;
+}
 function checkURL(){
   var p=new URLSearchParams(window.location.search);
-  var n=parseInt(p.get('num'))||0;
+  var n=parseInt(p.get('num'))||histNumDe(p.get('player'))||0;
   if(n) selectJug(n);
 }
 
 function buildSelector(){
   var el=document.getElementById('jug-scroller');
   if(!el) return;
-  var jugs=[];
-  if(typeof PLANTEL_NAFELS!=='undefined') jugs=PLANTEL_NAFELS;
-  else if(typeof PARTIDOS_JUGADORES!=='undefined') jugs=PARTIDOS_JUGADORES;
-  else jugs=_plantelDelClub();
+  /* == LA PANTALLA NO ABRIA ============================================
+     Aca decia: si existe PLANTEL_NAFELS, usalo. Pero PLANTEL_NAFELS no es
+     una lista: es un objeto {temporada, jugadores:[...]}. Entonces el
+     jugs.map() de abajo tiraba 'jugs.map is not a function', y como esto
+     corre dentro del arranque, se cortaba TODO: no salia ni un boton de
+     jugador y la pantalla quedaba en el encabezado, en blanco. Pasaba
+     siempre, tambien entrando con ?num= desde el boton STATS de la ficha.
+
+     _plantelDelClub() ya hace bien las tres cosas —prueba
+     PARTIDOS_JUGADORES, despues EQUIPO_DATA, despues PLANTEL_NAFELS.jugadores
+     y normaliza el formato—, asi que se usa esa y nada mas.            */
+  var jugs=_plantelDelClub();
   el.innerHTML=jugs.map(function(j){
     var nm=j.nombre?j.nombre.replace(/^\d+\s*/,'').split(' ')[0]:'#'+j.num;
     return '<button class="jbtn" onclick="selectJug('+j.num+')">#'+j.num+' '+nm+'</button>';
@@ -479,10 +523,15 @@ function renderCalendario(c){
     html+='<div class="cal-fecha">'+s.fecha+(isP?(' · '+s.rival):'')+'</div>';
     if(jug){
       html+='<div class="cal-stats">';
-      if(jug.aT) html+='<div class="cal-stat">ATQ <b>'+jug.aEff+'%</b> ('+jug.aT+')</div>';
-      if(jug.sT) html+='<div class="cal-stat">SQ <b>'+jug.sEff+'%</b> ('+jug.sT+')</div>';
-      if(jug.rT) html+='<div class="cal-stat">REC <b>'+jug.rEff+'%</b> ('+jug.rT+')</div>';
-      if(jug.bT) html+='<div class="cal-stat">BLQ <b>'+jug.bPt+'/'+jug.bT+'</b></div>';
+      /* el numero sale de VB_EFF y el color del mismo semaforo que las
+         baterias, para que coincida con la ficha del jugador */
+      [['a','ATQ'],['s','SQ'],['r','REC'],['b','BLQ']].forEach(function(par){
+        var f=par[0], tot=jug[f==='b'?'bT':f+'T']||0;
+        if(!tot) return;
+        var v=histEff(jug,f);
+        if(v===null) return;
+        html+='<div class="cal-stat">'+par[1]+' <b style="color:'+effColor(v,histMeta(f))+'">'+fmtEff(v)+'</b> ('+tot+')</div>';
+      });
       html+='</div>';
     } else {
       html+='<div class="cal-fecha" style="margin-top:4px;color:var(--muted)">Sin participación registrada</div>';
@@ -524,38 +573,60 @@ function renderRendimiento(c){
   var ses=D.entrenamientos.filter(function(e){
     return G.tipo==='partido'?e.tipo==='P':e.tipo==='E';
   });
+  /* Los objetivos salen de OBJETIVOS_CONFIG —los mismos de las baterias—
+     en vez de estar escritos aca. El de saque decia 3%: era el objetivo
+     de la cuenta vieja, que ya no existe. Los colores son los de la
+     paleta validada del resto de la app. */
+  var _MT=(window.OBJETIVOS_CONFIG&&window.OBJETIVOS_CONFIG.metas)||{};
   var metricas=[
-    {key:'aEff',lbl:'EFF Ataque',color:'#F97316',obj:44},
-    {key:'sEff',lbl:'EFF Saque', color:'#F59E0B',obj:3},
-    {key:'rEff',lbl:'EFF Recep.',color:'#22C55E',obj:36},
-    {key:'bEff',lbl:'EFF Bloq.', color:'#818CF8',obj:23},
+    {f:'a',lbl:'EFF Ataque',color:'#0B84C4'},
+    {f:'s',lbl:'EFF Saque', color:'#CE7C18'},
+    {f:'r',lbl:'EFF Recep.',color:'#0E9F6E'},
+    {f:'b',lbl:'Blq #+',    color:'#8B5CF6'}
   ];
   var html='<div class="evol-grid">';
   metricas.forEach(function(m){
-    var data=[];
+    var data=[], crudos=[];
     ses.forEach(function(s){
       var jug=(s.jugadores||[]).find(function(j){return j.c===G.num;});
-      if(jug&&jug[m.key]!==undefined&&jug[m.key]!==null) data.push({v:jug[m.key],lbl:s.rival||s.fecha||''});
+      if(!jug) return;
+      var v=histEff(jug,m.f);
+      if(v===null||v===undefined||isNaN(v)) return;
+      data.push({v:v,lbl:s.rival||s.fecha||''});
+      crudos.push(jug);
     });
     if(!data.length) return;
     var vals=data.map(function(d){return d.v;});
     var mn=Math.min.apply(null,vals);
     var mx=Math.max.apply(null,vals);
     var range=Math.max(Math.abs(mx),Math.abs(mn),1);
-    var avg=Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length);
+    var meta=histMeta(m.f);
+    var avg=histAcumEff(crudos,m.f);
+    var objTxt=(meta&&_MT[meta])?(' \u00b7 Obj: '+_MT[meta].obj+'%'):'';
+    var avgCol=meta?effColor(avg,meta):m.color;
+    /* la altura de la linea se mide con la misma escala que las barras */
+    /* si el objetivo esta por encima del mejor partido, la escala se estira
+       hasta el objetivo: asi la linea entra siempre en el cuadro y se ve
+       cuanto falta, en vez de quedar pegada al techo. */
+    var escala=Math.max(range,(meta&&_MT[meta])?_MT[meta].obj:0);
+    var lineaMeta=(meta&&_MT[meta])?Math.round(_MT[meta].obj/escala*100):null;
 
     html+='<div class="evol-card">';
     html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">';
     html+='<div class="evol-title" style="margin:0">'+m.lbl+'</div>';
-    html+='<div style="font-size:9px;color:var(--muted)">Promedio: <b style="color:'+m.color+'">'+avg+'%</b> · Obj: '+m.obj+'%</div>';
+    html+='<div style="font-size:9px;color:var(--muted)">Acumulado: <b style="color:'+avgCol+'">'+fmtEff(avg)+'</b>'+objTxt+'</div>';
     html+='</div>';
     html+='<div class="evol-bars">';
     data.forEach(function(d){
-      var pct=Math.abs(d.v)/range*100;
-      var barColor=d.v>=m.obj?m.color:'rgba(239,68,68,.7)';
+      var pct=Math.abs(d.v)/escala*100;
+      /* el color de cada barra sale del mismo semaforo que las baterias;
+         el ataque no tiene bateria general, asi que va con su color */
+      var barColor=meta?effColor(d.v,meta):(d.v>=0?m.color:'rgba(239,68,68,.75)');
       html+='<div class="evol-col">';
-      html+='<div class="evol-val" style="color:'+barColor+'">'+d.v+'%</div>';
-      html+='<div class="evol-bar" style="height:'+pct+'%;background:'+barColor+'33;border:1px solid '+barColor+'66;border-bottom:none"></div>';
+      html+='<div class="evol-val" style="color:'+barColor+'">'+fmtEff(d.v)+'</div>';
+      html+='<div class="evol-track">'
+         +(lineaMeta!==null?'<div class="evol-meta" style="bottom:'+lineaMeta+'%" title="Objetivo"></div>':'')
+         +'<div class="evol-bar" style="height:'+pct+'%;background:'+barColor+'33;border:1px solid '+barColor+'66;border-bottom:none"></div></div>';
       html+='<div class="evol-lbl">'+d.lbl.substring(0,6)+'</div>';
       html+='</div>';
     });
@@ -716,6 +787,40 @@ function renderRecepcion(c,sesData){
 </script>
 
 <script>
+/* == LA MISMA CUENTA DE EFICACIA QUE EL RESTO DE LA APP ==================
+   Esta pantalla mostraba el campo sEff/rEff que viene precalculado en
+   datos_historial.js con la cuenta VIEJA —(punto - error) / total—, que
+   no es la del club. Un jugador entraba desde el boton STATS de su ficha
+   y veia un numero distinto al de la ficha de la que venia.
+
+   Ahora sale de VB_EFF, la definicion unica, usando los conteos crudos que
+   el mismo archivo ya trae. Ataque y bloqueo ya coincidian; se pasan por
+   aca igual para que no puedan volver a separarse.                      */
+function histEff(j, f){
+  if(!j) return null;
+  var V = window.VB_EFF;
+  try{
+    if(f==='s') return (j.sT && V) ? V.saque(j) : null;
+    if(f==='r') return (j.rT && V) ? V.recepcion(j) : null;
+    if(f==='a') return (j.aT && V) ? V.ataque(j) : null;
+    if(f==='b') return j.bT ? Math.round(((j.bPt||0)+(j.bPtPos||0))/j.bT*100) : null;
+  }catch(e){}
+  return null;
+}
+function histMeta(f){ return f==='s'?'sq' : f==='r'?'rec' : f==='b'?'bqpos' : null; }
+/* El promedio de una columna de porcentajes no es el porcentaje del total:
+   un partido de 3 saques pesaba lo mismo que uno de 30. Se suman los
+   conteos y recien ahi se hace la cuenta, una sola vez. */
+var HIST_CAMPOS=['sT','sPunto','sPos','sAdm','sNeg','sVend','sErr',
+                 'rT','rPunto','rPos','rAdm','rNeg','rVend','rErr',
+                 'aT','aPunto','aVend','aErr',
+                 'bT','bPt','bPtPos'];
+function histAcumEff(lista, f){
+  var a={}; HIST_CAMPOS.forEach(function(k){a[k]=0;});
+  (lista||[]).forEach(function(j){ HIST_CAMPOS.forEach(function(k){ a[k]+=(j[k]||0); }); });
+  return histEff(a, f);
+}
+
 function pct(a,b){return b>0?Math.round(a*100/b):0;}
 
 function effColor(v, meta){
@@ -1065,9 +1170,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260927-0006"></script>
-<script src="lang.js?v=20260927-0006"></script>
-<script src="temporadas_menu.js?v=20260927-0006"></script>
+<script src="chat_nafels.js?v=20260927-0832"></script>
+<script src="lang.js?v=20260927-0832"></script>
+<script src="temporadas_menu.js?v=20260927-0832"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
    EL PLANTEL, VENGA DE DONDE VENGA
@@ -1097,7 +1202,7 @@ function _plantelDelClub(){
   return [];
 }
 </script>
-<script src="ayuda.js?v=20260927-0006"></script>
+<script src="ayuda.js?v=20260927-0832"></script>
 </body>
 </html>
 

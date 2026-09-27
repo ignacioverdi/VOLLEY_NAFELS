@@ -5,16 +5,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="EQUIPO — NAFELS VOLEY">EQUIPO — NAFELS VOLEY</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="lang.js?v=20260927-0006" onerror="void 0"></script>
-<script src="utils.js?v=20260927-0006" onerror="void 0"></script>
+<script src="lang.js?v=20260927-0832" onerror="void 0"></script>
+<script src="utils.js?v=20260927-0832" onerror="void 0"></script>
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260927-0006" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260927-0006" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20260927-0006"></script>
+<script src="categorias_club.js?v=20260927-0832" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260927-0832" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260927-0832"></script>
   <!-- El plantel del club, con nombre y apellido. Es la lista de verdad:
      datos_equipo.js.enc solo trae a los que YA JUGARON, asi que un
      jugador nuevo no aparecia hasta su debut. -->
-<script src="plantel_nafels.js?v=20260927-0006" onerror="void 0"></script>
+<!-- Las metas, el semaforo (objClassify) y VB_EFF: la tarjeta de cada
+     jugador ahora muestra sus numeros, con el mismo criterio que el resto. -->
+<script src="objetivos_config.js?v=20260927-0832" onerror="void 0"></script>
+<!-- Las baterias: de ahi salen los numeros y tambien CUANTAS acciones hay
+     detras de cada uno (n_sq, n_rec, ...). Es la misma fuente que usa el
+     Ranking, para que las dos pantallas no puedan discrepar. -->
+<script src="datos_baterias.js.enc" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20260927-0832" onerror="void 0"></script>
 <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
   <script>abrirDatos();</script>
 <style>
@@ -52,6 +59,31 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 20%,rg
 .jug-card-body{padding:12px 14px;}
 .jug-card-nombre{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.1;margin-bottom:4px;}
 .jug-card-meta{font-size:10px;color:var(--mut);letter-spacing:.5px;}
+/* -- LOS TRES NUMEROS, LA BARRA Y EL RESUMEN ------------------------- */
+.eq-pills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:9px}
+.eq-pill{background:rgba(255,255,255,.035);border:1px solid var(--border);border-radius:8px;
+  padding:5px 3px;text-align:center;min-width:0}
+.eq-pill.chica{opacity:.6}
+.eq-pl{font-size:8px;font-weight:700;letter-spacing:.7px;color:var(--mut);text-transform:uppercase;font-family:'Barlow Condensed',sans-serif}
+.eq-pv{font-family:'Bebas Neue',sans-serif;font-size:18px;line-height:1.05}
+.eq-pn{font-size:8px;color:var(--mut);opacity:.75;font-family:'Barlow Condensed',sans-serif}
+.eq-barra{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}
+.eq-fb{font-family:'Barlow Condensed',sans-serif;font-size:9.5px;font-weight:800;letter-spacing:1.2px;
+  text-transform:uppercase;padding:4px 12px;border-radius:20px;border:1px solid var(--border);
+  color:var(--mut);background:transparent;cursor:pointer;transition:all .15s}
+.eq-fb:hover{color:var(--txt);border-color:rgba(255,255,255,.2)}
+.eq-fb.on{color:var(--red);border-color:rgba(232,25,44,.35);background:rgba(232,25,44,.1)}
+.eq-fb.eq-ord{margin-left:auto}
+.eq-resumen{display:flex;gap:24px;flex-wrap:wrap;align-items:center;background:var(--card);
+  border:1px solid var(--border);border-radius:12px;padding:12px 18px;margin:0 0 14px}
+.eq-rz{min-width:76px}
+.eq-rv{font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1}
+.eq-rl{font-size:9px;letter-spacing:1.4px;text-transform:uppercase;color:var(--mut)}
+.eq-fuente{flex:1;min-width:180px;text-align:right;font-size:10.5px;color:var(--mut);opacity:.85}
+@media(max-width:560px){.eq-fuente{text-align:left;margin-top:4px}.eq-fb.eq-ord{margin-left:0}
+  /* en el celular la tarjeta va a media pantalla: el rotulo se achica para
+     que "BLQ #+" y "DEFENSA" entren enteros en vez de quedar cortados */
+  .eq-pl{font-size:7.5px;letter-spacing:.2px}.eq-pv{font-size:16px}.eq-pills{gap:4px}}
 .jug-card-links{display:flex;gap:6px;margin-top:10px;}
 .jug-link{flex:1;padding:5px 4px;border-radius:6px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--mut);font-size:9px;font-weight:700;letter-spacing:.8px;text-align:center;cursor:pointer;transition:all .15s;text-decoration:none;text-transform:uppercase;}
 .jug-link:hover{background:rgba(255,255,255,.08);color:var(--txt);}
@@ -74,15 +106,15 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 20%,rg
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260927-0006" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260927-0006"></script>
+<script src="firebase.js?v=20260927-0832" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260927-0832"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260927-0006">
+<link rel="stylesheet" href="movil.css?v=20260927-0832">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260927-0006" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260927-0832" onerror="void 0"></script>
 </head>
 <body>
 
@@ -100,6 +132,8 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 20%,rg
 
 <div class="main">
   <div class="section-lbl" data-t="Plantel NLA 2026/27"><span data-t="Plantel NLA 2026/27">Plantel NLA 2026/27</span></div>
+  <div class="eq-resumen" id="eq-resumen"></div>
+  <div class="eq-barra" id="eq-barra"></div>
   <div class="jugadores-grid" id="jugadores-grid"></div>
 
   <div class="section-lbl" style="margin-top:8px;" data-t="Cuerpo Técnico"><span data-t="Cuerpo Técnico">Cuerpo Técnico</span></div>
@@ -160,9 +194,15 @@ var DATA = (function(){
       pila: p.nombre || '',              /* el nombre de pila */
       pos: p.pos || extra.pos || '',
       foto: extra.foto || null,
-      pais: extra.pais || '',
-      altura: extra.altura || '',
-      edad: extra.edad || 0
+      /* La altura venia vacia y la edad en 0 en datos_equipo, asi que la
+         linea de la tarjeta quedaba en la bandera y un punto suelto. Los
+         dos datos estan en plantel_nafels.js, que es la lista real del
+         club: se usan de respaldo cuando los de los partidos no vienen. */
+      nac: p.nac || '',
+      nacim: p.nacim || '',
+      pais: extra.pais || eqBandera(p.nac),
+      altura: extra.altura || p.altura || '',
+      edad: extra.edad || eqEdad(p.nacim)
     };
   });
   return { jugadores: jugadores, staff: base.staff || EQUIPO_DEMO.staff };
@@ -189,7 +229,9 @@ var DATA = (function(){
                    var e = dePartidos[p.num] || {};
                    return { num:p.num, nombre:p.ap || e.nombre || '', pila:p.nombre || '',
                             pos:p.pos || e.pos || '', foto:e.foto || null,
-                            pais:e.pais || '', altura:e.altura || '', edad:e.edad || 0 };
+                            nac:p.nac || '', nacim:p.nacim || '',
+                            pais:e.pais || eqBandera(p.nac), altura:e.altura || p.altura || '',
+                            edad:e.edad || eqEdad(p.nacim) };
                  }),
                  staff: base.staff || EQUIPO_DEMO.staff };
       }
@@ -212,11 +254,247 @@ var POS_COLOR = {
   'PUNTA':'#22c55e','OPUESTO':'#818cf8','LIBERO':'#06b6d4'
 };
 
+/* == BANDERA, EDAD Y LA LINEA DE LA TARJETA ==============================
+   datos_equipo.js.enc trae la bandera pero la altura vacia y la edad en 0,
+   asi que la linea de la tarjeta era "(bandera) ·" y nada mas. Los dos
+   datos estan en plantel_nafels.js. Aca se arma la linea con lo que haya,
+   sin dejar puntos sueltos cuando falta algo. */
+/* La tabla se arma dentro de la funcion y queda cacheada: este bloque de
+   codigo se lee DESPUES del armado del plantel, que ya llama a eqBandera,
+   y una variable suelta todavia estaba vacia en ese momento. */
+function eqBandera(nac){
+  if(!nac) return '';
+  if(!eqBandera._t) eqBandera._t = {
+
+  'argentina':'🇦🇷', 'suiza':'🇨🇭',
+
+  'ee.uu.':'🇺🇸', 'estados unidos':'🇺🇸',
+
+  'suecia':'🇸🇪', 'alemania':'🇩🇪',
+
+  'francia':'🇫🇷', 'italia':'🇮🇹',
+
+  'brasil':'🇧🇷', 'españa':'🇪🇸',
+
+  'polonia':'🇵🇱', 'serbia':'🇷🇸',
+
+  'croacia':'🇭🇷', 'holanda':'🇳🇱',
+
+  'paises bajos':'🇳🇱', 'austria':'🇦🇹',
+
+  'canada':'🇨🇦', 'cuba':'🇨🇺',
+
+  'japon':'🇯🇵', 'japón':'🇯🇵',
+
+  'chile':'🇨🇱', 'uruguay':'🇺🇾',
+
+  'venezuela':'🇻🇪', 'eslovenia':'🇸🇮',
+
+  'republica checa':'🇨🇿', 'belgica':'🇧🇪'
+
+};
+  return eqBandera._t[String(nac).toLowerCase().trim()] || '';
+}
+/* La fecha viene como dd/mm/aaaa. Si no se puede leer, devuelve 0 y la
+   tarjeta simplemente no muestra la edad. */
+function eqEdad(nacim){
+  try{
+    var p = String(nacim||'').split('/');
+    if(p.length !== 3) return 0;
+    var d = +p[0], m = +p[1], y = +p[2];
+    if(!y || !m || !d) return 0;
+    var h = new Date(), e = h.getFullYear() - y;
+    if(h.getMonth()+1 < m || (h.getMonth()+1 === m && h.getDate() < d)) e--;
+    return (e > 0 && e < 70) ? e : 0;
+  }catch(err){ return 0; }
+}
+function eqMeta(j){
+  var partes = [];
+  if(j.pais || j.nac) partes.push(((j.pais||'') + ' ' + (j.nac||'')).trim());
+  if(j.altura) partes.push(j.altura + (String(j.altura).indexOf('cm') < 0 ? ' cm' : ''));
+  if(j.edad)   partes.push(j.edad + ' años');
+  return partes.join(' · ');
+}
+
+/* == LOS TRES NUMEROS DE CADA JUGADOR ====================================
+   Salen de las baterias -la misma fuente que el Ranking y el dashboard-,
+   que ademas traen cuantas acciones hay detras de cada numero (n_sq,
+   n_rec, ...). Se muestran los TRES FUNDAMENTOS QUE MAS JUGO, no una lista
+   fija: al libero le tocan recepcion y defensa, al opuesto ataque y saque.
+
+   El color sale de objClassify, el mismo semaforo de las baterias. El
+   ataque no tiene bateria general -sus objetivos son por tipo de pelota-,
+   asi que usa la escala clasica de eficacia. */
+/* == DOS JUGADORES CON EL MISMO APELLIDO ================================
+   El plantel tiene dos SCHMID: el #7 Roy (central) y el #20 Jonas
+   (libero). Buscando por apellido suelto, al #7 le salian los numeros
+   del #20: un central con 418 recepciones. Se prueba el nombre entero,
+   despues que uno sea el principio del otro -'schmid r' contra 'schmid
+   roy'- y recien al final el apellido, pidiendo que no haya dos
+   candidatos: antes que mostrar los numeros del jugador equivocado, no
+   se muestra ninguno. Es la misma funcion de la ficha y del ranking. */
+function _eqMatchName(nombre, keys){
+  var b  = (nombre||'').replace(/^\d+\s*/,'').toLowerCase().trim();
+  var bs = b.split(' ')[0];
+  var i, k;
+  for(i=0;i<keys.length;i++){
+    if(keys[i].toLowerCase().replace(/^\d+\s*/,'').trim() === b) return keys[i];
+  }
+  var porPrefijo = [];
+  for(i=0;i<keys.length;i++){
+    k = keys[i].toLowerCase().replace(/^\d+\s*/,'').trim();
+    if(b.length > 2 && (k.indexOf(b) === 0 || b.indexOf(k) === 0)) porPrefijo.push(keys[i]);
+  }
+  if(porPrefijo.length === 1) return porPrefijo[0];
+  var porApellido = [];
+  for(i=0;i<keys.length;i++){
+    k = keys[i].toLowerCase().replace(/^\d+\s*/,'').trim();
+    if(k.split(' ')[0] === bs) porApellido.push(keys[i]);
+  }
+  if(porApellido.length === 1) return porApellido[0];
+  return null;
+}
+function eqBat(nombre){
+  var B = window.BAT_PARTIDOS;
+  if(!B || !B.jug) return null;
+  var k = _eqMatchName(nombre, Object.keys(B.jug));
+  return k ? B.jug[k] : null;
+}
+function eqColor(v, meta){
+  if(v === null || v === undefined || isNaN(v)) return 'var(--mut)';
+  if(meta && typeof objClassify === 'function' && window.OBJETIVOS_CONFIG
+          && OBJETIVOS_CONFIG.metas && OBJETIVOS_CONFIG.metas[meta]){
+    try{ return objClassify(meta, v).color; }catch(e){}
+  }
+  return v>=40 ? '#22c55e' : v>=20 ? '#86efac' : v>=0 ? 'var(--txt)' : v>=-20 ? '#f97316' : '#ef4444';
+}
+var EQ_MIN_ACC = 15;
+function eqFunds(nombre){
+  var b = eqBat(nombre);
+  if(!b) return [];
+  var lista = [
+    {l:'SAQUE',   v:b.sq,    n:b.n_sq,    meta:'sq'},
+    {l:'RECEP.',  v:b.rec,   n:b.n_rec,   meta:'rec'},
+    {l:'BLQ #+',  v:b.bqpos, n:b.n_bqpos, meta:'bqpos'},
+    {l:'DEFENSA', v:b.def,   n:b.n_def,   meta:'def'}
+  ];
+  /* el ataque general: se suman los tipos de pelota y se hace la cuenta del
+     club una sola vez, (# - / - =) / total */
+  if(b.atqD){
+    var t=0, pt=0, bl=0, er=0;
+    Object.keys(b.atqD).forEach(function(k){
+      var d = b.atqD[k] || {};
+      t += d.t||0; pt += d.p||0; bl += d.b||0; er += d.e||0;
+    });
+    if(t) lista.push({l:'ATAQUE', v:Math.round((pt-bl-er)/t*100), n:t, meta:null});
+  }
+  return lista.filter(function(x){
+      return x.n > 0 && x.v !== null && x.v !== undefined && !isNaN(x.v);
+    })
+    .sort(function(a,b2){ return b2.n - a.n; })
+    .slice(0,3);
+}
+function eqPills(j){
+  var f = eqFunds(j.nombre);
+  if(!f.length) return '';
+  var h = '<div class="eq-pills">';
+  f.forEach(function(x){
+    var chica = x.n < EQ_MIN_ACC;
+    var val = (x.v < 0 ? '-' : '') + Math.abs(x.v) + '%';
+    h += '<div class="eq-pill' + (chica ? ' chica' : '') + '" title="' + x.n
+       + ' acciones' + (chica ? ' — muestra chica' : '') + '">'
+       + '<div class="eq-pl">' + x.l + '</div>'
+       + '<div class="eq-pv" style="color:' + eqColor(x.v, x.meta) + '">' + val + '</div>'
+       + '<div class="eq-pn">' + x.n + '</div></div>';
+  });
+  return h + '</div>';
+}
+
+/* == FILTRAR POR PUESTO Y ORDENAR ======================================== */
+var EQ_POS = null, EQ_ORD = 'dorsal';
+function eqAcciones(nombre){
+  var s = 0;
+  eqFunds(nombre).forEach(function(x){ s += x.n; });
+  return s;
+}
+function eqPuestoDe(j){
+  return (window.PLANTEL_FIX && window.PLANTEL_FIX[String(j.num)]) || j.pos || '';
+}
+function eqVisibles(){
+  var l = ((typeof DATA!=='undefined' && DATA.jugadores) || []).slice();
+  if(EQ_POS) l = l.filter(function(j){ return eqPuestoDe(j) === EQ_POS; });
+  if(EQ_ORD === 'puesto')        l.sort(function(a,b){ return String(eqPuestoDe(a)).localeCompare(String(eqPuestoDe(b))) || a.num - b.num; });
+  else if(EQ_ORD === 'acciones') l.sort(function(a,b){ return eqAcciones(b.nombre) - eqAcciones(a.nombre); });
+  else                           l.sort(function(a,b){ return a.num - b.num; });
+  return l;
+}
+function eqSetPos(pos){ EQ_POS = pos; render(); }
+function eqSetOrd(){
+  EQ_ORD = EQ_ORD === 'dorsal' ? 'puesto' : EQ_ORD === 'puesto' ? 'acciones' : 'dorsal';
+  render();
+}
+function eqBarra(){
+  var el = document.getElementById('eq-barra');
+  if(!el) return;
+  var puestos = [];
+  ((typeof DATA!=='undefined' && DATA.jugadores) || []).forEach(function(j){
+    var p = eqPuestoDe(j);
+    if(p && puestos.indexOf(p) < 0) puestos.push(p);
+  });
+  puestos.sort();
+  var h = '<button class="eq-fb' + (EQ_POS === null ? ' on' : '') + '" onclick="eqSetPos(null)">Todos</button>';
+  puestos.forEach(function(p){
+    var on = EQ_POS === p, col = POS_COLOR[p] || '#64748b';
+    h += '<button class="eq-fb' + (on ? ' on' : '') + '" onclick="eqSetPos(\'' + p + '\')"'
+       + (on ? ' style="color:' + col + ';border-color:' + col + '55;background:' + col + '18"' : '')
+       + '>' + p + '</button>';
+  });
+  var ord = EQ_ORD === 'dorsal' ? 'Dorsal' : EQ_ORD === 'puesto' ? 'Puesto' : 'Acciones';
+  h += '<button class="eq-fb eq-ord" onclick="eqSetOrd()" title="Cambiar el orden">⇅ ' + ord + '</button>';
+  el.innerHTML = h;
+}
+
+/* == EL PLANTEL DE UN VISTAZO ============================================
+   Cuatro numeros sacados del propio plantel, y una linea que dice de donde
+   salen los numeros de las tarjetas: si las baterias se generaron solo con
+   entrenamientos, que se vea, en vez de que parezcan de partido. */
+function eqResumen(){
+  var el = document.getElementById('eq-resumen');
+  if(!el) return;
+  var l = (typeof DATA!=='undefined' && DATA.jugadores) || [];
+  if(!l.length){ el.innerHTML = ''; return; }
+  var alt = l.map(function(j){ return parseInt(j.altura,10) || 0; }).filter(function(x){ return x > 0; });
+  var ed  = l.map(function(j){ return j.edad || 0; }).filter(function(x){ return x > 0; });
+  var nacs = {};
+  l.forEach(function(j){ if(j.nac) nacs[j.nac] = 1; });
+  function prom(a){ return a.length ? Math.round(a.reduce(function(x,y){ return x+y; },0)/a.length) : null; }
+  var cajas = [{v:l.length, t:'Jugadores'}];
+  if(alt.length) cajas.push({v:prom(alt) + ' cm', t:'Altura media'});
+  if(ed.length)  cajas.push({v:prom(ed),          t:'Edad media'});
+  var nn = Object.keys(nacs).length;
+  if(nn) cajas.push({v:nn, t:(nn === 1 ? 'Nacionalidad' : 'Nacionalidades')});
+
+  var B = window.BAT_PARTIDOS, fuente = '';
+  if(B && B.meta && B.meta.length){
+    var tp = {};
+    B.meta.forEach(function(m){ tp[m.tipo] = (tp[m.tipo]||0) + 1; });
+    var partes = [];
+    if(tp.partido)       partes.push(tp.partido + (tp.partido === 1 ? ' partido' : ' partidos'));
+    if(tp.entrenamiento) partes.push(tp.entrenamiento + (tp.entrenamiento === 1 ? ' entrenamiento' : ' entrenamientos'));
+    if(partes.length) fuente = 'Los números de cada tarjeta son el acumulado de ' + partes.join(' y ') + '.';
+  }
+  el.innerHTML = cajas.map(function(c){
+      return '<div class="eq-rz"><div class="eq-rv">' + c.v + '</div><div class="eq-rl">' + c.t + '</div></div>';
+    }).join('')
+    + (fuente ? '<div class="eq-fuente">' + fuente + '</div>' : '');
+}
+
 function render(){
   var grid = document.getElementById('jugadores-grid');
   grid.innerHTML = '';
+  eqBarra(); eqResumen();
 
-  DATA.jugadores.forEach(function(j){
+  eqVisibles().forEach(function(j){
     var color = POS_COLOR[j.pos] || '#64748b';
     var card = document.createElement('a');
     card.className = 'jug-card';
@@ -266,7 +544,7 @@ function render(){
         (j.pila ? '<div style="font-size:11px;font-weight:400;opacity:.6;'
                 + 'letter-spacing:.5px;margin-top:2px">' + j.pila + '</div>' : '') +
       '</div>' +
-      '<div class="jug-card-meta">' + (j.pais||'') + ' · ' + (j.altura||'') + '</div>';
+      '<div class="jug-card-meta">' + eqMeta(j) + '</div>' + eqPills(j);
 
     // Links rápidos
     var links = document.createElement('div');
@@ -387,9 +665,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260927-0006"></script>
-<script src="temporadas_menu.js?v=20260927-0006"></script>
-<script src="ayuda.js?v=20260927-0006"></script>
+<script src="chat_nafels.js?v=20260927-0832"></script>
+<script src="temporadas_menu.js?v=20260927-0832"></script>
+<script src="ayuda.js?v=20260927-0832"></script>
 
 <script>
 /* ══ EL CUERPO TECNICO ═══════════════════════════════════════════════════

@@ -7,18 +7,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 
 <!-- Datos (cada uno se carga si existe; si no, el onerror lo deja en null) -->
-<script src="categorias_club.js?v=20260927-0006"></script>
-<script src="selector_categoria.js?v=20260927-0006"></script>
-<script src="game_plans.js?v=20260927-0006" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260927-0006" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260927-0832"></script>
+<script src="selector_categoria.js?v=20260927-0832"></script>
+<script src="game_plans.js?v=20260927-0832" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260927-0832" onerror="void 0"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260927-0006"></script>
-<script src="filtro_tipo.js?v=20260927-0006" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260927-0832"></script>
+<script src="filtro_tipo.js?v=20260927-0832" onerror="void 0"></script>
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
      las que no existen las descarta el onerror, sin ruido. Y todas con
      .enc, que es como se publican los datos del club. -->
@@ -28,10 +28,10 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="datos_video_ent_28-29.js.enc" onerror="void 0"></script>
   <script src="datos_partidos.js.enc" onerror="void 0"></script>
 <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
-<script src="firebase.js?v=20260927-0006" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260927-0006"></script>
-<script src="lang.js?v=20260927-0006" onerror="void 0"></script>
-<script src="datos_historial.js?v=20260927-0006" onerror="window.HISTORIAL_DATA=null"></script>
+<script src="firebase.js?v=20260927-0832" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260927-0832"></script>
+<script src="lang.js?v=20260927-0832" onerror="void 0"></script>
+<script src="datos_historial.js?v=20260927-0832" onerror="window.HISTORIAL_DATA=null"></script>
 <script src="datos_gameplan.js.enc" onerror="window.GAMEPLAN_DATA=null"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
@@ -55,44 +55,8 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
 .page-header{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(7,8,15,.9);backdrop-filter:blur(20px);position:sticky;top:0;z-index:100;}
 .back-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--mut);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase;transition:all .15s;}
 .back-btn:hover{color:var(--txt);border-color:var(--border2);}
-/* ══ LA FOTO, NO EL NUMERO GIGANTE ═══════════════════════════════════════
-   Arriba a la derecha habia un dorsal enorme al 4% de opacidad: decoracion,
-   y encima repetia el numero que ya esta en el recuadro de la izquierda. Al
-   costado, la foto del jugador en una estampilla de 72x94.
-
-   Se dieron vuelta los papeles. La foto pasa a ser grande y ocupa esa
-   esquina, fundida con el fondo por un degrade —no cortada con un borde
-   duro, que es lo que hace que una foto pegada arriba parezca pegada
-   arriba—. Asi el perfil se identifica de un vistazo, que es justo lo que
-   uno espera de la pantalla de un jugador.
-
-   El numero gigante queda como respaldo: cuando un jugador no tiene foto
-   cargada, la esquina no se queda vacia.
-   ═══════════════════════════════════════════════════════════════════════ */
-.hero{position:relative;overflow:hidden;padding:28px 20px 0;min-height:186px}
+.hero{position:relative;overflow:hidden;padding:28px 20px 0;}
 .hero-bg-num{position:absolute;right:-10px;top:-20px;font-family:'Bebas Neue',sans-serif;font-size:200px;line-height:1;opacity:.04;color:#fff;pointer-events:none;user-select:none;letter-spacing:-10px;}
-/* El height:100% no sobra aunque esten top:0 y bottom:0: una imagen es un
-   elemento reemplazado y en ese caso el navegador NO la estira, se queda con
-   su alto natural. Sin esto la foto salia de 540 px de alto en un hero de
-   186 y se desbordaba por abajo. */
-.hero-foto{position:absolute;right:0;top:0;bottom:0;height:100%;width:min(40%,360px);
-  /* Casi desde arriba, como la estampilla que habia antes: las fotos del
-     plantel son verticales y la cara esta en el tercio de arriba. */
-  object-fit:cover;object-position:50% 6%;pointer-events:none;user-select:none;
-  opacity:.92;z-index:0;
-  /* ── EL DEGRADE ES LO QUE HACE QUE NO PAREZCA PEGADA ──────────────────
-     Una mascara sola, en diagonal: transparente arriba a la izquierda y
-     opaca abajo a la derecha. Probe primero con dos mascaras cruzadas
-     —una horizontal y otra vertical con mask-composite— y el navegador
-     descartaba la declaracion entera: la foto salia con el borde duro y
-     sin ningun aviso. Una sola capa, que funciona en todos lados.        */
-  -webkit-mask-image:linear-gradient(255deg,#000 30%,rgba(0,0,0,.55) 62%,transparent 92%);
-  mask-image:linear-gradient(255deg,#000 30%,rgba(0,0,0,.55) 62%,transparent 92%)}
-.hero .hero-top{position:relative;z-index:1}
-/* el texto no se mete abajo de la foto */
-.hero.con-foto .hero-info{padding-right:14px}
-@media(min-width:600px){ .hero.con-foto .hero-top{padding-right:200px} }
-@media(max-width:480px){ .hero-foto{width:44%;opacity:.8} }
 .hero-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px;}
 .hero-badge{width:64px;height:64px;border-radius:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:28px;border:2px solid;}
 .hero-info{flex:1;min-width:0;}
@@ -137,8 +101,16 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
    Con el ancho nuevo entran los dos en la misma fila: seis columnas, y el
    titulo de cada bloque ocupa sus tres. Asi se comparan de un vistazo, que
    es exactamente para lo que estan separados. */
-.stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
-@media(min-width:860px){ .stats-grid{grid-template-columns:repeat(6,1fr)} }
+/* == LOS BLOQUES ARRANCABAN A MITAD DE RENGLON =========================
+   El titulo de cada bloque ocupaba 3 columnas de una grilla de 6, asi que
+   las tarjetas empezaban en la cuarta y el bloque quedaba partido en
+   diagonal. Ahora el titulo ocupa el ancho entero y abajo van las cinco
+   tarjetas en una sola linea: todo PARTIDOS en un renglon y todo
+   ENTRENAMIENTOS en el otro.                                          */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:24px;}
+@media(min-width:620px){ .stats-grid{grid-template-columns:repeat(3,1fr)} }
+@media(min-width:1060px){ .stats-grid{grid-template-columns:repeat(5,1fr)} }
+.stats-grid .stat-lbl{grid-column:1/-1}
 .obj-sfbtn{padding:4px 11px;border-radius:6px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);color:#64748b;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
 .obj-sfbtn.on{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.35);color:#e8192c}
 .obj-tfbtn{padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
@@ -225,14 +197,6 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 .cv-svg{display:block;width:100%;height:auto;margin:3px 0 0}
 .cv-dot{cursor:pointer}
 .cv-res{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:9px 12px;margin-bottom:9px;font-size:12px;line-height:1.5}
-.cv-sw{display:flex;gap:5px;margin:0 0 9px}
-.cv-swb{padding:5px 13px;border-radius:8px;border:1px solid rgba(255,255,255,.1);
-  background:rgba(255,255,255,.03);color:#64748b;font-family:'Barlow Condensed',sans-serif;
-  font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;cursor:pointer;
-  transition:all .15s}
-.cv-swb.on.p{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:#e8192c}
-.cv-swb.on.e{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:#22c55e}
-.cv-swb:disabled{opacity:.35;cursor:default}
 /* Las cuatro lineas de «Cómo viene», una al lado de la otra: comparar el
    saque con el ataque es justo para lo que sirven, y con dos arriba y dos
    abajo hay que acordarse de la de arriba mientras se mira la de abajo. */
@@ -287,10 +251,10 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260927-0006">
+<link rel="stylesheet" href="movil.css?v=20260927-0832">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260927-0006" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260927-0832" onerror="void 0"></script>
 </head>
 <body>
 <div class="page-header">
@@ -702,10 +666,8 @@ function objSetTipo(tipo, btn){
   if(btn) btn.classList.add('on', tipo==='partido'?'partido':'ent');
   objBuildSubfiltro();
   objRenderBaterias();
-  /* Al mover el filtro grande, «Cómo viene» vuelve a acompañarlo: se olvida
-     de lo que hayan elegido en sus propios botones. Si no, uno cambia
-     arriba, abajo no se mueve y parece que algo esta roto. */
-  window._cvTipo = null;
+  /* «Cómo viene» mira las mismas sesiones que las baterias: si cambia el
+     filtro, cambia con ellas. */
   try{ renderComoViene(window._curJug||jugador); }catch(e){}
 }
 </script>
@@ -909,26 +871,7 @@ function renderHero(j){
         '<a href="prep_fisica.html" style="padding:6px 14px;border-radius:8px;background:rgba(232,25,44,.12);border:1px solid rgba(232,25,44,.25);color:#e8192c;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;text-decoration:none;">💪 RUTINA</a>'+
       '</div>'+
     '</div>'+
-    '</div>';
-
-  /* La foto va en el hero, no adentro de la fila: tiene que poder salirse
-     del renglon y ocupar toda la esquina. */
-  var hero = document.getElementById('hero');
-  var vieja = hero && hero.querySelector('.hero-foto');
-  if(vieja) vieja.remove();
-  if(hero){
-    hero.classList.remove('con-foto');
-    if(j.foto){
-      var im = document.createElement('img');
-      im.className = 'hero-foto';
-      im.src = j.foto;
-      im.alt = j.nombre;
-      /* si la foto no esta, se saca sola y vuelve el numero gigante */
-      im.onerror = function(){ im.remove(); hero.classList.remove('con-foto'); };
-      im.onload  = function(){ hero.classList.add('con-foto'); };
-      hero.appendChild(im);
-    }
-  }
+    (j.foto?'<img src="'+j.foto+'" alt="'+j.nombre+'" onerror="this.style.display=\'none\'" style="width:72px;height:94px;object-fit:cover;object-position:top;border-radius:12px;flex-shrink:0;border:2px solid '+color+'40;box-shadow:0 4px 14px rgba(0,0,0,.45)">':'');
 }
 
 function renderNextMatch(){
@@ -1082,31 +1025,8 @@ function renderComoViene(j){
   var H = window.HISTORIAL_DATA;
   if(!H || !H.entrenamientos || !H.entrenamientos.length) return;
 
-  /* ══ SU PROPIO PARTIDO / ENTRENAMIENTO ═══════════════════════════════
-     Antes este bloque seguia al filtro grande de arriba, el que manda las
-     baterias. Para comparar como viene en partidos y como viene en
-     practicas habia que mover ese filtro y perder de vista lo otro.
-
-     Ahora el bloque tiene sus dos botones. Arranca donde esta el filtro de
-     arriba —para que al abrir la pagina las dos cosas digan lo mismo— y
-     desde que se toca uno de estos, manda el del bloque: se pasa de
-     partidos a entrenamientos sin mover nada mas de la pantalla.
-
-     Si el jugador no tiene sesiones suficientes de un tipo, ese boton se ve
-     apagado y no hace nada: mejor que llevarlo a un bloque vacio.        */
-  var tipo = window._cvTipo || ((window._objTipo==='entrenamiento') ? 'E' : 'P');
+  var tipo = (window._objTipo==='entrenamiento') ? 'E' : 'P';
   var nmC  = (j.nombre||'').replace(/^\d+\s*/,'').toLowerCase().split(' ')[0];
-
-  /* cuantas sesiones de cada tipo tiene: decide si cada boton se puede
-     tocar, y si el tipo pedido no alcanza, se cae al otro */
-  var cuenta = {P:0, E:0};
-  H.entrenamientos.forEach(function(e){
-    var t = (e.tipo||'P'); if(t!=='P' && t!=='E') return;
-    (e.jugadores||[]).forEach(function(jh){
-      if((jh.n||'').replace(/^\d+\s*/,'').toLowerCase().split(' ')[0] === nmC) cuenta[t]++;
-    });
-  });
-  if(cuenta[tipo] < 2 && cuenta[tipo==='P'?'E':'P'] >= 2) tipo = (tipo==='P'?'E':'P');
 
   /* una entrada por sesion del tipo elegido en la que jugo */
   var ses = [];
@@ -1277,13 +1197,7 @@ function renderComoViene(j){
   }
 
   box.innerHTML =
-      '<div class="section-lbl">Cómo viene</div>'
-    + '<div class="cv-sw">'
-    +   '<button class="cv-swb p'+(tipo==='P'?' on':'')+'" type="button" data-cv="P"'
-    +     (cuenta.P<2?' disabled title="todavía no hay suficientes partidos cargados"':'')+'>🏆 Partidos</button>'
-    +   '<button class="cv-swb e'+(tipo==='E'?' on':'')+'" type="button" data-cv="E"'
-    +     (cuenta.E<2?' disabled title="todavía no hay suficientes entrenamientos cargados"':'')+'>🏋️ Entrenamientos</button>'
-    + '</div>'
+      '<div class="section-lbl">Cómo viene · '+(tipo==='P'?'partidos':'entrenamientos')+'</div>'
     + '<div class="cv-res">'+res+'</div>'
     + '<div class="cv-grid">'+cards.join('')+'</div>'
     + '<div style="font-size:9px;color:var(--mut);letter-spacing:.4px;padding:8px 2px 0;line-height:1.6">'
@@ -1297,13 +1211,6 @@ function renderComoViene(j){
 
   window._CVCAP = caps;
   Object.keys(caps).forEach(function(id){ cvCap(id, -1); });
-  box.querySelectorAll('.cv-swb').forEach(function(b){
-    b.onclick = function(){
-      if(b.disabled) return;
-      window._cvTipo = b.getAttribute('data-cv');
-      renderComoViene(j);
-    };
-  });
   box.style.display='block';
 }
 
@@ -1352,9 +1259,13 @@ function renderStats(j){
      Ahora se suman los CONTEOS —cada valoracion por separado— y el
      porcentaje se calcula una sola vez al final con VB_EFF, la formula
      unica. Los tres numeros de la pantalla salen de la misma cuenta.       */
+  /* Se suma tambien el BLOQUEO, que el historial ya traia y no se usaba:
+     bT (total), bPt (punto #) y bPtPos (positivo +). La DEFENSA no esta
+     en el historial, sale de las baterias mas abajo. */
   var CNT=['sT','sPunto','sPos','sAdm','sNeg','sVend','sErr',
            'rT','rPunto','rPos','rAdm','rNeg','rVend','rErr',
-           'aT','aPunto','aPos','aAdm','aNeg','aVend','aErr'];
+           'aT','aPunto','aPos','aAdm','aNeg','aVend','aErr',
+           'bT','bPt','bPtPos'];
   var acc={P:{count:0},E:{count:0}};
   ['P','E'].forEach(function(k){ CNT.forEach(function(x){ acc[k][x]=0; }); });
   var nmC=(j.nombre||'').replace(/^\d+\s*/,'').toLowerCase().split(' ')[0];
@@ -1367,11 +1278,27 @@ function renderStats(j){
   });
   if(acc.P.count===0 && acc.E.count===0) return;
   function pc(v){ return v===null?'—':(v<0?'-':'')+Math.abs(v)+'%'; }
-  function makeCards(a,label,lc){
+  /* La defensa la traen las baterias, separadas por tipo igual que este
+     bloque. Se busca al jugador con la misma funcion que el resto de la
+     pagina, que no confunde a los dos SCHMID. */
+  function statsDefensa(tipo){
+    try{
+      var B=window.BAT_PARTIDOS; if(!B) return null;
+      var fuente=(B.porTipo && B.porTipo[tipo]) ? B.porTipo[tipo] : null;
+      if(!fuente || !fuente.jug) return null;
+      var k=_batMatchName(j.nombre, Object.keys(fuente.jug));
+      var d=k?fuente.jug[k]:null;
+      if(!d || !d.n_def) return null;
+      return {v:(d.def!=null?d.def:null), n:d.n_def};
+    }catch(e){ return null; }
+  }
+  function makeCards(a,label,lc,tipoBat){
     if(a.count===0) return '';
     var sE=a.sT>0?VB_EFF.saque(a):null, rE=a.rT>0?VB_EFF.recepcion(a):null,
-        aE=a.aT>0?VB_EFF.ataque(a):null;
-    return '<div style="grid-column:span 3;font-size:9px;font-weight:800;letter-spacing:2px;color:'+lc+';text-transform:uppercase;padding:4px 0 2px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:2px">'+label+' <span style="color:var(--mut);font-weight:700">· '+a.count+(a.count===1?' sesión':' sesiones')+'</span></div>'+
+        aE=a.aT>0?VB_EFF.ataque(a):null,
+        bE=a.bT>0?Math.round(((a.bPt||0)+(a.bPtPos||0))/a.bT*100):null;
+    var dfe=statsDefensa(tipoBat);
+    return '<div class="stat-lbl" style="font-size:9px;font-weight:800;letter-spacing:2px;color:'+lc+';text-transform:uppercase;padding:4px 0 2px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:2px">'+label+' <span style="color:var(--mut);font-weight:700">· '+a.count+(a.count===1?' sesión':' sesiones')+'</span></div>'+
     '<div class="stat-card"><div class="stat-card-title" style="color:'+VB_COL.sq+'">⬆️ Saque</div>'+
       '<div class="stat-row"><span class="stat-row-lbl">Total</span><span class="stat-row-val" style="color:'+VB_COL.sq+'">'+a.sT+'</span></div>'+
       '<div class="stat-row"><span class="stat-row-lbl">EFF</span><span class="stat-row-val">'+pc(sE)+'</span></div></div>'+
@@ -1381,9 +1308,20 @@ function renderStats(j){
     '<div class="stat-card"><div class="stat-card-title" style="color:'+VB_COL.atq+'">⚡ Ataque</div>'+
       '<div class="stat-row"><span class="stat-row-lbl">Total</span><span class="stat-row-val" style="color:'+VB_COL.atq+'">'+a.aT+'</span></div>'+
       '<div class="stat-row"><span class="stat-row-lbl">Puntos</span><span class="stat-row-val" style="color:'+VB_VERDE+'">'+a.aPunto+'</span></div>'+
-      '<div class="stat-row"><span class="stat-row-lbl">EFF</span><span class="stat-row-val">'+pc(aE)+'</span></div></div>';
+      '<div class="stat-row"><span class="stat-row-lbl">EFF</span><span class="stat-row-val">'+pc(aE)+'</span></div></div>'+
+    /* BLOQUEO: el dato estaba en el historial desde siempre. EFF es Blq #+,
+       (# + +) / total, la misma cuenta del dashboard y de las baterias. */
+    (a.bT>0 ? '<div class="stat-card"><div class="stat-card-title" style="color:'+VB_COL.blq+'">🧱 Bloqueo</div>'+
+      '<div class="stat-row"><span class="stat-row-lbl">Total</span><span class="stat-row-val" style="color:'+VB_COL.blq+'">'+a.bT+'</span></div>'+
+      '<div class="stat-row"><span class="stat-row-lbl">Puntos</span><span class="stat-row-val" style="color:'+VB_VERDE+'">'+a.bPt+'</span></div>'+
+      '<div class="stat-row"><span class="stat-row-lbl">Blq #+</span><span class="stat-row-val">'+pc(bE)+'</span></div></div>' : '')+
+    /* DEFENSA: no viene en el historial. Sale de las baterias, separadas por
+       tipo igual que este bloque. Si todavia no estan, la tarjeta no sale. */
+    (dfe && dfe.n>0 ? '<div class="stat-card"><div class="stat-card-title" style="color:'+VB_COL.def+'">🧤 Defensa</div>'+
+      '<div class="stat-row"><span class="stat-row-lbl">Total</span><span class="stat-row-val" style="color:'+VB_COL.def+'">'+dfe.n+'</span></div>'+
+      '<div class="stat-row"><span class="stat-row-lbl">EFF</span><span class="stat-row-val">'+pc(dfe.v)+'</span></div></div>' : '');
   }
-  grid.innerHTML=makeCards(acc.P,'🏆 PARTIDOS','#e8192c')+makeCards(acc.E,'🏋️ ENTRENAMIENTOS','#22c55e');
+  grid.innerHTML=makeCards(acc.P,'🏆 PARTIDOS','#e8192c','partido')+makeCards(acc.E,'🏋️ ENTRENAMIENTOS','#22c55e','entrenamiento');
 }
 
 function renderRutina(j){
@@ -1521,6 +1459,6 @@ try{
   else window.addEventListener('load', function(){ setTimeout(poner, 400); });
 })();
 </script>
-<script src="ayuda.js?v=20260927-0006"></script>
+<script src="ayuda.js?v=20260927-0832"></script>
 </body>
 </html>
