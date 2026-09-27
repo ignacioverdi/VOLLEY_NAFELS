@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20260927-1307"></script>
-<script src="selector_categoria.js?v=20260927-1307"></script>
+<script src="categorias_club.js?v=20260927-1352"></script>
+<script src="selector_categoria.js?v=20260927-1352"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -253,11 +253,11 @@ footer{
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="datos_seguros.js?v=20260927-1307"></script>
-<script src="firebase.js?v=20260927-1307" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260927-1307"></script>
-<script src="lang.js?v=20260927-1307"></script>
-<script src="plantel_nafels.js?v=20260927-1307"></script>
+<script src="datos_seguros.js?v=20260927-1352"></script>
+<script src="firebase.js?v=20260927-1352" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260927-1352"></script>
+<script src="lang.js?v=20260927-1352"></script>
+<script src="plantel_nafels.js?v=20260927-1352"></script>
 
 <style>
 @media(max-width:768px){
@@ -356,7 +356,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260927-1307">
+<link rel="stylesheet" href="movil.css?v=20260927-1352">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    LA PORTADA, DE MENU A TABLERO
@@ -728,6 +728,16 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div class="card-body">
           <div class="card-title" style="color:#e6a743"><span data-t="Planilla P-2">Planilla P-2</span></div>
           <div class="card-desc"><span data-t="d_p2">La planilla de formación inicial para entregar antes del partido. Se completa sola con el plantel y con lo que ya cargaste en Rotaciones, y sale en una hoja A4.</span></div>
+        </div>
+      </a><a href="radar_saque.html" class="card" style="--card-color:#CE7C18">
+        <div class="card-glow"></div>
+        <div class="card-top">
+          <div class="card-icon" style="background:rgba(206,124,24,.1);border-color:rgba(206,124,24,.2)">⚡</div>
+          <div class="card-badge" style="background:rgba(206,124,24,.1);color:#CE7C18;border:1px solid rgba(206,124,24,.2)"><span data-t="Nuevo">Nuevo</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-title" style="color:#CE7C18"><span data-t="Radar de saque">Radar de saque</span></div>
+          <div class="card-desc"><span data-t="d_radar">Cuánto sale el saque, en km/h. Se marca el golpe y el cruce de red sobre el video —de un archivo o de la cámara en vivo— y sale la velocidad, corregida por el rozamiento del aire.</span></div>
         </div>
       </a><a href="rotaciones.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
@@ -1583,9 +1593,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260927-1307"></script>
+<script src="chat_nafels.js?v=20260927-1352"></script>
 
-<script src="proximo_rival.js?v=20260927-1307" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js?v=20260927-1352" onerror="window.FIXTURE_DATA=null"></script>
 <script>
 /* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
    proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
@@ -1643,12 +1653,12 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   }catch(e){}
 })();
 </script>
-<script src="temporadas_menu.js?v=20260927-1307"></script>
+<script src="temporadas_menu.js?v=20260927-1352"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20260927-1307" defer></script>
+<script src="onesignal_push.js?v=20260927-1352" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -2286,7 +2296,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   else arrancar();
 })();
 </script>
-<script src="ayuda.js?v=20260927-1307"></script>
+<script src="ayuda.js?v=20260927-1352"></script>
 </body>
 </html>
 

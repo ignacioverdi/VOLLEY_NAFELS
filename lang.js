@@ -443,6 +443,15 @@
     'Cerrar sesión': { en:'Sign out', de:'Abmelden' },
     'Salir': { en:'Sign out', de:'Abmelden' },
 
+    /* --- el radar de saque --- */
+    'Radar de saque': { en:'Serve speed radar', de:'Aufschlag-Radar' },
+    'd_radar': {
+      en:'How fast the serve leaves, in km/h. Mark the contact and the net crossing on the video \u2014from a file or from the live camera\u2014 and it gives you the speed, corrected for air drag.',
+      de:'Wie schnell der Aufschlag abgeht, in km/h. Markiere den Schlag und den Netz\u00fcbergang im Video \u2014 aus einer Datei oder von der Live-Kamera \u2014 und du bekommst die Geschwindigkeit, um den Luftwiderstand korrigiert.' },
+    'd_p2': {
+      en:'The starting line-up sheet to hand in before the match. It fills itself from the squad and from what you already set in Rotations, and prints on one A4 page.',
+      de:'Der Aufstellungsbogen, der vor dem Spiel abgegeben wird. Er f\u00fcllt sich selbst aus dem Kader und aus dem, was du in Rotationen eingetragen hast, und passt auf eine A4-Seite.' },
+
     /* --- la planilla P-2 --- */
     'Planilla P-2': { en:'P-2 line-up sheet', de:'Aufstellungsbogen P-2' },
     'Plantel': { en:'Squad', de:'Kader' },

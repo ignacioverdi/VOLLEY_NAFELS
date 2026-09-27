@@ -1255,7 +1255,7 @@
   "tablas": {}
  },
  "index.html": {
-  "bytes": 145972,
+  "bytes": 146823,
   "funciones": [
    "FIXTURE_DATA",
    "anotarVedadas",
@@ -1608,7 +1608,7 @@
   "tablas": {}
  },
  "panel_vivo.html": {
-  "bytes": 887140,
+  "bytes": 887266,
   "funciones": [
    "AN_LADO",
    "G",
@@ -2094,7 +2094,7 @@
   }
  },
  "panel_voley.html": {
-  "bytes": 463404,
+  "bytes": 463530,
   "funciones": [
    "OBJETIVOS_CONFIG",
    "PV_TIPO_SR",
@@ -2531,6 +2531,63 @@
    "marcar",
    "refrescar",
    "repetir"
+  ],
+  "tablas": {}
+ },
+ "radar_saque.html": {
+  "bytes": 45409,
+  "funciones": [
+   "aDibujo",
+   "aMetros",
+   "alternarPlay",
+   "alturaGolpe",
+   "avisoFps",
+   "borrar",
+   "borrarTodo",
+   "calibrar",
+   "cargarArchivo",
+   "cargarPlantel",
+   "cb",
+   "cdActual",
+   "cdQueExplica",
+   "congelar",
+   "cuadroActual",
+   "densidadAire",
+   "dibujarCancha",
+   "dibujarCancha_si",
+   "engancharCuadros",
+   "esc",
+   "estado",
+   "exportar",
+   "fuente",
+   "guardar",
+   "guardarDisco",
+   "irACuadro",
+   "irAFraccion",
+   "kDe",
+   "leerDisco",
+   "limpiarMarcas",
+   "marcar",
+   "medirFps",
+   "pararCamara",
+   "pintarLinea",
+   "pintarMarcas",
+   "pintarTabla",
+   "prenderCamara",
+   "recalcular",
+   "recorrido",
+   "redondearFps",
+   "saltar",
+   "seguirVivo",
+   "setFps",
+   "setRetraso",
+   "setTipo",
+   "setVel",
+   "textoFpsMedido",
+   "tiempoActual",
+   "tiempoDelCuadroEn",
+   "una",
+   "v0De"
   ],
   "tablas": {}
  },
