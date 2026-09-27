@@ -24,24 +24,24 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20260927-1257" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20260927-1257" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260927-1307" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260927-1307" onerror="void 0"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260927-1257"></script>
-<script src="filtro_tipo.js?v=20260927-1257" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260927-1307"></script>
+<script src="filtro_tipo.js?v=20260927-1307" onerror="void 0"></script>
   <script src="datos_baterias.js.enc" onerror="void 0"></script>
-  <script src="objetivos_config.js?v=20260927-1257" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20260927-1307" onerror="void 0"></script>
 
-  <script src="datos_historial.js?v=20260927-1257" onerror="void 0"></script>
-  <script src="utils.js?v=20260927-1257" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20260927-1307" onerror="void 0"></script>
+  <script src="utils.js?v=20260927-1307" onerror="void 0"></script>
   <!-- El plantel del club: de aca salen el apellido y el PUESTO de cada
        dorsal. Sin esto, las solapas Comparativa y Ranking no tenian de
        donde sacar el puesto y quedaban vacias. -->
-  <script src="plantel_nafels.js?v=20260927-1257" onerror="void 0"></script>
+  <script src="plantel_nafels.js?v=20260927-1307" onerror="void 0"></script>
   <!-- modo_toggle.js sacado: se superponia con el selector de idioma. -->
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -61,7 +61,7 @@ window.__DESCIFRAR_SINCRONO = true;
   --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.12);
   --red:#e8192c;--green:#22c55e;--amber:#f59e0b;
   --indigo:#818cf8;--orange:#f97316;--cyan:#06b6d4;
-  --mut:#475569;--txt:#e2e8f0;
+  --mut:#64748b;--txt:#e2e8f0;
 }
 body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--txt);min-height:100vh;}
 .header{padding:14px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.01);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);}
@@ -277,15 +277,15 @@ window.OBJETIVOS_CONFIG = (window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.me
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20260927-1257" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260927-1257"></script>
+<script src="firebase.js?v=20260927-1307" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260927-1307"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260927-1257">
+<link rel="stylesheet" href="movil.css?v=20260927-1307">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20260927-1257" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260927-1307" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -416,11 +416,11 @@ setTimeout(_refrescarBaterias, 150);
   </div>
   <div id="cancha-stats-wrap" style="display:none;justify-content:center;margin-top:12px;width:100%"></div>
   <div class="cancha-modal-legend">
-    <div class="cml-item"><div class="cml-dot" style="background:#00bfff"></div><span data-t="Rápida">Rápida</span></div>
-    <div class="cml-item"><div class="cml-dot" style="background:#ff3030"></div>Alta</div>
-    <div class="cml-item"><div class="cml-dot" style="background:#ff8c00"></div><span data-t="pos_central"><span data-t="Central">Central</span></span></div>
-    <div class="cml-item"><div class="cml-dot" style="background:#ff8c00"></div><span data-t="1° zona">1° zona</span></div>
-    <div class="cml-item"><div class="cml-dot" style="background:#a855f7"></div><span data-t="2° zona">2° zona</span></div>
+    <div class="cml-item"><div class="cml-dot" style="background:#06b6d4"></div><span data-t="Rápida">Rápida</span></div>
+    <div class="cml-item"><div class="cml-dot" style="background:#ec4899"></div>Alta</div>
+    <div class="cml-item"><div class="cml-dot" style="background:#f59e0b"></div><span data-t="pos_central"><span data-t="Central">Central</span></span></div>
+    <div class="cml-item"><div class="cml-dot" style="background:#f59e0b"></div><span data-t="1° zona">1° zona</span></div>
+    <div class="cml-item"><div class="cml-dot" style="background:#8b5cf6"></div><span data-t="2° zona">2° zona</span></div>
   </div>
 </div>
 
@@ -1080,8 +1080,8 @@ const DV4_ORIG_MAP={
   X3:2,X4:2,X6:2,C6:2,V6:2,W2:2,G2:2,V2:2,
   X8:9,C8:9,V8:9,Y9:9,G9:9
 };
-const CC_CAT_COLOR={C:'#ff8c00',V:'#ff3030',X:'#00bfff'};
-const CC_CONE_COLS=['#ff8c00','#a855f7'];
+const CC_CAT_COLOR={C:'#f59e0b',V:'#ec4899',X:'#06b6d4'};
+const CC_CONE_COLS=['#f59e0b','#8b5cf6'];
 
 let canchaAnimFrame=null,canchaAnimStart=null;
 
@@ -1132,7 +1132,7 @@ function canchaDrawCourt(ctx){
   netG.addColorStop(0.85,'#7070a0');netG.addColorStop(1,'#2a2a3a');
   ctx.fillStyle=netG;ctx.beginPath();ctx.roundRect(CL-6,NET-8,CW+12,16,3);ctx.fill();
   ctx.fillStyle='rgba(255,255,255,.22)';ctx.beginPath();ctx.roundRect(CL-4,NET-7,CW+8,5,2);ctx.fill();
-  ctx.fillStyle='#cc1515';ctx.beginPath();ctx.roundRect(CL-6,NET-11,CW+12,4,2);ctx.fill();
+  ctx.fillStyle='#e8192c';ctx.beginPath();ctx.roundRect(CL-6,NET-11,CW+12,4,2);ctx.fill();
   ctx.fillStyle='rgba(255,255,255,.7)';ctx.fillRect(CL-5,NET+9,CW+10,2);
   // Líneas cancha
   ctx.save();ctx.setLineDash([]);ctx.strokeStyle='#fff';ctx.lineWidth=3;
@@ -1156,7 +1156,7 @@ function canchaDrawCourt(ctx){
     const hg=ctx.createRadialGradient(px+5,NET-44,1,px+5,NET-44,7);
     hg.addColorStop(0,'#888');hg.addColorStop(1,'#333');
     ctx.fillStyle=hg;ctx.beginPath();ctx.arc(px+5,NET-44,6,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#cc1515';ctx.fillRect(px+3,NET-70,4,14);
+    ctx.fillStyle='#e8192c';ctx.fillRect(px+3,NET-70,4,14);
     ctx.fillStyle='#fff';ctx.fillRect(px+3,NET-56,4,8);
   });
 }
@@ -1267,7 +1267,7 @@ function openCanchaModal(cod, destinos, playerName, stats){
   const cat=DV4_CAT_MAP[cod]||'C';
   const catNom={C:'Central',V:'Alta',X:'Rápida'}[cat];
   const origZ=DV4_ORIG_MAP[cod]||0;
-  const arrowCol=CC_CAT_COLOR[cat]||'#ff8c00';
+  const arrowCol=CC_CAT_COLOR[cat]||'#f59e0b';
   document.getElementById('cancha-modal-title').textContent=cod+' — '+catNom;
   document.getElementById('cancha-modal-info').textContent=
     (playerName?playerName+' · ':'')+
@@ -1361,7 +1361,7 @@ function openSaqueCanchaModal(destinos,origZone,stats){
 
 function canchaDrawSaque(ctx,origZone,destinos,pct){
   const SC='#f59e0b';
-  const CONE_COLS=['#ff8c00','#a855f7'];
+  const CONE_COLS=['#f59e0b','#8b5cf6'];
   pct=pct===undefined?1:pct;
   const orig=origZone>0?canchaRivalZone(origZone):canchaRivalZone(1);
   destinos.forEach(function(d,i){
@@ -1682,12 +1682,12 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20260927-1257"></script>
-<script src="lang.js?v=20260927-1257"></script>
-<script src="temporadas_menu.js?v=20260927-1257"></script>
+<script src="chat_nafels.js?v=20260927-1307"></script>
+<script src="lang.js?v=20260927-1307"></script>
+<script src="temporadas_menu.js?v=20260927-1307"></script>
 
 <!-- ════════════════════════════════════════════════════════════════════════
-     Este codigo estaba adentro de <script src="temporadas_menu.js?v=20260927-1257">, y el
+     Este codigo estaba adentro de <script src="temporadas_menu.js?v=20260927-1307">, y el
      navegador ignora por completo lo que hay adentro de una etiqueta que
      carga un archivo: las funciones nunca se definian y las tablas de
      saque, recepcion y ataque fallaban al llamarlas.
@@ -2092,7 +2092,7 @@ try{
   }
 }catch(e){}
 </script>
-<script src="ayuda.js?v=20260927-1257"></script>
+<script src="ayuda.js?v=20260927-1307"></script>
 </body>
 </html>
 <!-- © 2025-2026 Volley-Stats · Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->

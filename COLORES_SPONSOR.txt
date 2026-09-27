@@ -1,0 +1,53 @@
+==============================================================================
+  COLORES DEL SPONSOR  -  que se puede hacer con ellos y que no
+  27/09/2026
+==============================================================================
+
+LOS CINCO
+
+    #E75373   rosa coral        RGB 231 / 83 / 115
+    #C74D86   magenta           RGB 199 / 77 / 134
+    #8F48A6   violeta           RGB 143 / 72 / 166
+    #DE5179   rosa              RGB 222 / 81 / 121
+    #FF8E5B   naranja coral     RGB 255 / 142 / 91
+
+Los cinco se leen bien sobre el fondo oscuro de la app (#07080F):
+
+    #FF8E5B   8,83:1    texto ok
+    #E75373   5,60:1    texto ok
+    #DE5179   5,29:1    texto ok
+    #C74D86   4,60:1    texto ok
+    #8F48A6   3,47:1    alcanza para titulos y fondos, no para texto chico
+
+
+DONDE SI
+
+  - la pagina de venta volley-stats.com
+  - la pantalla de registro de la demo
+  - las placas de redes
+  - los one-pagers en castellano, ingles y aleman
+  - una franja de sponsor en el pie de la app
+
+  Ahi no hay ningun numero que dependa del color: son superficies de marca.
+  Como rampa funcionan bien en ese orden: rosa -> magenta -> violeta, con el
+  naranja coral de acento.
+
+
+DONDE NO, Y POR QUE
+
+  NO van en ningun grafico, cancha, tabla de valoraciones ni barra de datos.
+  En esta app el color ES el dato: verde bueno, rojo error, naranja negativo.
+  Medida la distancia de cada uno contra los colores que ya significan algo
+  (en OKLab; por debajo de 15 el ojo los confunde):
+
+    #FF8E5B  contra  #FB923C  "bloqueada (/)"   dE  3,3   es casi el mismo
+    #E75373  contra  #EF4444  "ERROR (=)"       dE  5,6   se confunden
+    #DE5179  contra  #EC4899  "Alta"            dE  5,7   se confunden
+    #C74D86  contra  #EC4899  "Alta"            dE  7,4   se confunden
+    #8F48A6  contra  #8B5CF6  "bloqueo"         dE 12,6   se confunden
+
+  Los cinco caen encima de un color que ya quiere decir otra cosa. Si un
+  ataque bloqueado y el color del sponsor son el mismo naranja, el entrenador
+  lee mal la cancha. La marca va alrededor del dato, nunca adentro.
+
+==============================================================================

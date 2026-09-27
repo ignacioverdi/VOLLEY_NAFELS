@@ -11,7 +11,7 @@
   button,select,input,textarea{font-family:'Barlow Condensed',sans-serif}
 
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#07080f;--card:#0d0e1a;--card2:#111220;--border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.12);--red:#e8192c;--green:#22c55e;--amber:#f59e0b;--indigo:#818cf8;--mut:#475569;--txt:#e2e8f0;}
+:root{--bg:#07080f;--card:#0d0e1a;--card2:#111220;--border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.12);--red:#e8192c;--green:#22c55e;--amber:#f59e0b;--indigo:#818cf8;--mut:#64748b;--txt:#e2e8f0;}
 body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--txt);min-height:100vh;}
 /* El control cerrado lo dibuja la pagina: va con el tema de la app.
    La lista que se abre la dibuja el sistema operativo, y ahi conviene
@@ -67,14 +67,14 @@ select option{color:#111!important;background:#fff!important;}
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="categorias_club.js?v=20260927-1257"></script>
-<script src="selector_categoria.js?v=20260927-1257"></script>
-<script src="firebase.js?v=20260927-1257" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260927-1257"></script>
+<script src="categorias_club.js?v=20260927-1307"></script>
+<script src="selector_categoria.js?v=20260927-1307"></script>
+<script src="firebase.js?v=20260927-1307" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260927-1307"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260927-1257">
+<link rel="stylesheet" href="movil.css?v=20260927-1307">
 </head>
 <body>
 <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
@@ -167,7 +167,7 @@ select option{color:#111!important;background:#fff!important;}
 
 <div class="toast" id="toast"></div>
 
-<script src="objetivos_config.js?v=20260927-1257"></script>
+<script src="objetivos_config.js?v=20260927-1307"></script>
 <script>
 /* El idioma para fechas: seguia fijo en es-AR, asi que en ingles y aleman
    la fecha aparecia igual en castellano. */
@@ -600,9 +600,9 @@ function showToast(msg){
   setTimeout(function(){ t.classList.remove('show'); }, 2800);
 }
 </script>
-<script src="lang.js?v=20260927-1257"></script>
-<script src="temporadas_menu.js?v=20260927-1257"></script>
-<script src="ayuda.js?v=20260927-1257"></script>
+<script src="lang.js?v=20260927-1307"></script>
+<script src="temporadas_menu.js?v=20260927-1307"></script>
+<script src="ayuda.js?v=20260927-1307"></script>
 </body>
 </html>
 
