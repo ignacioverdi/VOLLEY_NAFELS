@@ -34,7 +34,10 @@ import os,re,sys,json,glob,unicodedata
 # 7 -> 8 : cada ataque lleva la valoracion de su recepcion (#, +, !, -)
 # 8 -> 9: cambia la regla del High Set, hay que rehacer el archivo
 # 9 -> 10: High Set acepta armados sin segundo de video
-DATA_VERSION = 10
+# 10 -> 11: la combinacion del ataque se guardaba solo si el codigo
+#           empezaba con X/V/P/C. Este club tipea con la otra familia
+#           (W4, G4, Y8...) y se perdian 681 de 702 ataques.
+DATA_VERSION = 11
 
 
 def _turno(nombre_archivo):
@@ -353,7 +356,20 @@ def parse_dvw(path, ent=False, modo_high_set=False):
                     a['oz'] = int(_cola[-1])
             if sk=='A':
                 cb=code0[6:8]
-                if cb and cb[0] in 'XVPC' and '~' not in cb: a['x']=cb
+                # == LA COMBINACION SE PERDIA EN CASI TODOS LOS ATAQUES ====
+                # El filtro pedia que el codigo empezara con X, V, P o C.
+                # Pero cada jugada tiene DOS codigos, uno por familia de
+                # tipeo, y este club escribe con la otra: W4, G4, Y8, J3.
+                #
+                # Resultado medido sobre los 4 partidos de la 26-27:
+                # 21 ataques con combinacion guardada de 702. Los otros
+                # 681 quedaban sin jugada, y por eso el editor de cortes
+                # no podia separar el ataque por combinacion.
+                #
+                # Ahora entra cualquier codigo de dos caracteres que
+                # empiece con letra: las dos familias, como hace el plan
+                # de partido, que si las lee.
+                if cb and len(cb)==2 and cb[0].isalpha() and '~' not in cb: a['x']=cb
                 # fase: SO si saco el rival, TR si sacamos nosotros
                 _ss=_srv_side[_li] if _li<len(_srv_side) else ''
                 if _ss: a['ph']='SO' if _ss!=sidech else 'TR'

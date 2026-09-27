@@ -4,15 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Cortes de Video · NAFELS VOLEY">Cortes de Video · NAFELS VOLEY</title>
-<script src="categorias_club.js?v=20260927-0832"></script>
-<script src="selector_categoria.js?v=20260927-0832"></script>
+<!-- Las fuentes de la app. Esta pantalla era la unica que salia con la
+     fuente del sistema, y por eso parecia de otro programa. -->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="categorias_club.js?v=20260927-0904"></script>
+<script src="selector_categoria.js?v=20260927-0904"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260927-0832"></script>
-<script src="filtro_tipo.js?v=20260927-0832" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260927-0904"></script>
+<script src="filtro_tipo.js?v=20260927-0904" onerror="void 0"></script>
   <!-- datos_video_25-26 sacado: es el video de la CAPSULA. Esta pantalla es
        de la 26-27, y cargarlo mezclaba jugadores nuevos con cortes de la
        temporada pasada. -->
@@ -33,19 +36,56 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="mapa_videos.js.enc?v=3" onerror="void 0"></script>
 <script src="mapa_videos_ent.js.enc?v=3" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20260927-0832" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260927-0832"></script>
+<script src="firebase.js?v=20260927-0904" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260927-0904"></script>
 <style>
-  :root{--bg:#0b1017;--bg2:#0f172a;--card:#111a27;--card2:#16212f;--line:#1f2c3d;--txt:#e2e8f0;--muted:#7689a1;--muted2:#475569;--naf:#22c55e;--naf-dim:rgba(34,197,94,.12);--atk:#F97316;--srv:#22C55E;--rec:#818CF8;--set:#F59E0B;--blk:#ef4444;--def:#06b6d4;--free:#94a3b8;--ev-pos:#22c55e;--ev-plus:#84cc16;--ev-excl:#eab308;--ev-neg:#f97316;--ev-slash:#f59e0b;--ev-err:#ef4444;}
+  /* == LOS COLORES DE LA APP, NO LOS DE ESTA PANTALLA =====================
+     El acento era verde y el fondo tenia degrade: entrabas de cualquier
+     otra pantalla y parecia otro programa. Ahora son los mismos tokens
+     del resto -fondo plano, rojo del club- y los fundamentos usan la
+     paleta validada que ya usan el panel, el plan y el dashboard.      */
+  :root{--bg:#07080F;--bg2:#07080F;--card:#0D0E1A;--card2:#111220;
+    --line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.14);
+    --txt:#E2E8F0;--muted:#64748B;--muted2:#475569;
+    --naf:#E8192C;--naf-dim:rgba(232,25,44,.12);
+    --atk:#0B84C4;--srv:#CE7C18;--rec:#0E9F6E;--set:#0FA3B1;--blk:#8B5CF6;--def:#DC2A5A;--free:#94a3b8;
+    --ev-pos:#22c55e;--ev-plus:#86efac;--ev-excl:#fbbf24;--ev-neg:#f97316;--ev-slash:#f59e0b;--ev-err:#ef4444;}
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(160deg,var(--bg),var(--bg2));color:var(--txt);min-height:100vh;padding:16px;font-size:14px}
-  .wrap{max-width:1200px;margin:0 auto}
-  .brand{font-weight:800;letter-spacing:1px;font-size:13px;color:var(--naf)}.brand span{color:var(--muted)}
-  h1{font-size:22px;font-weight:800;margin-top:2px}.sub{color:var(--muted);font-size:12px;margin:2px 0 16px}
-  .vtabs{display:flex;gap:8px;margin:10px 0 14px}
-  .vtab{flex:1;background:var(--card);border:1px solid var(--line);color:var(--muted);font-family:inherit;font-weight:800;font-size:13px;letter-spacing:.5px;padding:9px 12px;border-radius:9px;cursor:pointer}
-  .vtab.on{background:var(--naf);color:#06210f;border-color:var(--naf)}
-  .grid{display:grid;grid-template-columns:310px 1fr;gap:16px}@media(max-width:880px){.grid{grid-template-columns:1fr}.grid>.card.filters{order:2}.grid>.card:not(.filters){order:1}}
+  body{font-family:'Barlow Condensed',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;padding:0 0 40px;font-size:14.5px}
+  /* Los controles no heredan la fuente: hay que nombrarla o salen en Arial. */
+  button,select,input,textarea{font-family:'Barlow Condensed',sans-serif}
+  /* == LOS DOS MARGENES NEGROS AL COSTADO ================================
+     La pagina estaba clavada en 1200 px: en una pantalla ancha quedaban
+     160 px de fondo muerto de cada lado. Ahora usa todo el ancho.
+
+     El unico que no se estira es el reproductor: un video de 16:9 a 1700
+     px de ancho mide 950 de alto y los controles se van abajo de todo.
+     Se lo limita por ALTO y queda centrado en su tarjeta.            */
+  .wrap{max-width:none;margin:0;padding:16px 20px}
+  /* == EL ENCABEZADO, IGUAL QUE EL RESTO =================================
+     No tenia forma de volver: entrabas y la unica salida era la flecha del
+     navegador. Ahora lleva la misma barra que el dashboard y el ranking. */
+  .hdr{background:rgba(7,8,15,.97);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
+  .hdr-in{max-width:none;margin:0;display:flex;align-items:center;gap:12px;padding:10px 20px;flex-wrap:wrap}
+  .back-btn{padding:5px 14px;border-radius:8px;border:1px solid var(--line2);background:rgba(255,255,255,.04);
+    color:var(--muted);font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase;white-space:nowrap}
+  .back-btn:hover{color:var(--txt);border-color:var(--naf)}
+  h1{font-family:'Bebas Neue',sans-serif;font-size:22px;font-weight:400;letter-spacing:3px;margin:0}
+  .sub{color:var(--muted);font-size:12px;margin:0 0 14px}
+  /* Dos pildoras chicas, no dos bloques de ancho completo. */
+  .vtabs{display:flex;gap:6px;margin-left:auto}
+  .vtab{background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:700;font-size:10px;
+    letter-spacing:1.2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;cursor:pointer;transition:.15s}
+  .vtab:hover{color:var(--txt);border-color:var(--line2)}
+  .vtab.on{background:var(--naf-dim);color:var(--naf);border-color:rgba(232,25,44,.35)}
+  /* En el celular la columna se calculaba por el contenido mas ancho y daba
+     435 px en una pantalla de 390: el cuerpo lo tapaba con overflow hidden,
+     asi que la barra de controles y el titulo de la lista quedaban cortados
+     y no habia forma de llegar a ellos. minmax(0,1fr) deja que la columna
+     se achique de verdad. */
+  .grid{display:grid;grid-template-columns:310px minmax(0,1fr);gap:16px}
+  .card{min-width:0}
+  @media(max-width:880px){.grid{grid-template-columns:minmax(0,1fr)}.grid>.card.filters{order:2}.grid>.card:not(.filters){order:1}}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
   .filters{padding:14px}
   .flabel{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted2);margin:15px 0 6px}.flabel:first-child{margin-top:0}
@@ -57,7 +97,9 @@ window.__DESCIFRAR_SINCRONO = true;
   /* desplegable de acciones */
   .dd{position:relative}
   .dd-btn{width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--card2);border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:9px 10px;font-size:13px;cursor:pointer;font-weight:600}
-  .dd-btn .n{color:var(--naf);font-weight:800}
+  /* El valor del desplegable iba en rojo: cuatro 'Todos' rojos apilados
+     gritaban sin decir nada. El estado ahora lo cuenta la linea de arriba. */
+  .dd-btn .n{color:var(--muted);font-weight:700;font-size:12px;letter-spacing:.5px}
   .dd-panel{display:none;margin-top:6px;border:1px solid var(--line);border-radius:10px;background:var(--card2);max-height:300px;overflow-y:auto}
   .dd-panel.open{display:block}
   .dd-tools{display:flex;gap:6px;padding:8px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--card2)}
@@ -65,7 +107,7 @@ window.__DESCIFRAR_SINCRONO = true;
   .dd-tools button:hover{border-color:var(--naf);color:var(--naf)}
   .ck{display:flex;align-items:center;gap:9px;padding:8px 10px;cursor:pointer;font-size:13px;user-select:none}
   .ck:hover{background:rgba(255,255,255,.03)}
-  .ck .box{flex:none;width:17px;height:17px;border:1.5px solid var(--muted2);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#04210f}
+  .ck .box{flex:none;width:17px;height:17px;border:1.5px solid var(--muted2);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}
   .ck.on .box{background:var(--naf);border-color:var(--naf)}
   .ck.parent{font-weight:800;border-top:1px solid var(--line)}
   .ck.parent:first-child{border-top:0}
@@ -73,10 +115,20 @@ window.__DESCIFRAR_SINCRONO = true;
   .ck .dotc{flex:none;width:8px;height:8px;border-radius:2px;margin-left:auto}
   .ck .cc{margin-left:auto;font-size:11px;color:var(--muted2);font-variant-numeric:tabular-nums}
   .ck.child .cc{margin-left:0}
-  .counter{margin-top:16px;text-align:center;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px}
-  .counter b{font-size:24px;color:var(--naf);font-weight:800;display:block}.counter span{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted2)}
-  .reset{width:100%;margin-top:10px;background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:9px;padding:9px;font-size:12px;font-weight:700;cursor:pointer}.reset:hover{border-color:var(--naf);color:var(--naf)}
-  .player-box{position:relative;aspect-ratio:16/9;background:#000}
+  /* -- LOS FILTROS, EN DOS BLOQUES ------------------------------------- */
+  .fsec{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2.5px;color:var(--muted);
+    text-transform:uppercase;margin:18px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+  .fsec:first-child{margin-top:0}
+  .fsum{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:14px;min-height:18px}
+  .fsum b{color:var(--txt);font-weight:600}
+  .fsum .none{color:var(--muted2);font-style:italic}
+  .counter{margin-top:16px;text-align:center;background:transparent;border:0;padding:4px 0;font-size:11px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
+  .counter b{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--txt);font-weight:400;display:inline}
+  .counter span{font-size:11px;letter-spacing:.5px;color:var(--muted)}
+  .lcnt{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--naf);font-weight:400;margin-left:3px}
+  .reset{width:100%;margin-top:10px;background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:9px;padding:9px;font-size:11.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer}.reset:hover{border-color:var(--naf);color:var(--naf)}
+  .player-box{position:relative;aspect-ratio:16/9;background:#000;
+    max-height:62vh;max-width:calc(62vh*16/9);margin:0 auto}
   .vidtitle{position:absolute;top:0;left:0;right:0;z-index:4;padding:9px 14px 22px;font-size:13px;line-height:1.3;color:#fff;background:linear-gradient(180deg,rgba(0,0,0,.82),rgba(0,0,0,0));pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .25s}
   .vidtitle.show{opacity:1}
   .vidtitle b{color:#fff;font-weight:700}
@@ -87,7 +139,8 @@ window.__DESCIFRAR_SINCRONO = true;
   .clipbar .cb-head{position:absolute;top:0;bottom:0;width:2px;background:var(--naf);transform:translateX(-50%);left:0}
   #player,.player-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
   .ytguard{position:absolute;inset:0;z-index:2;cursor:pointer;background:transparent}
-  .empty{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:repeating-linear-gradient(45deg,#0d1623,#0d1623 12px,#0f1a2a 12px,#0f1a2a 24px)}
+  /* Tenia un fondo a rayas diagonales que no se usa en ningun otro lado. */
+  .empty{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:var(--card2)}
   .empty .ic{font-size:32px;margin-bottom:8px}.empty b{font-size:14px}.empty p{color:var(--muted);font-size:12px;margin-top:6px;max-width:340px;line-height:1.5}
   .empty code{background:#0b1320;border:1px solid var(--line);padding:1px 6px;border-radius:5px;color:var(--naf);font-size:11px}
   .nowbar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid var(--line);background:var(--card2);min-height:44px}
@@ -96,38 +149,56 @@ window.__DESCIFRAR_SINCRONO = true;
   .nowbar .pos{margin-left:auto;font-size:11.5px;color:var(--muted2);flex:none;font-variant-numeric:tabular-nums}
   .ctrls{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;border-top:1px solid var(--line);align-items:center}
   button.ct{background:var(--card2);border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:9px 13px;font-size:13px;cursor:pointer;font-weight:600}
-  button.ct:hover{border-color:var(--naf);color:var(--naf)}button.ct.primary{background:var(--naf);color:#04210f;border-color:var(--naf)}
+  button.ct:hover{border-color:var(--naf);color:var(--naf)}button.ct.primary{background:var(--naf);color:#fff;border-color:var(--naf)}
   button.ct.on{border-color:var(--naf);color:var(--naf);background:var(--naf-dim)}button.ct:disabled{opacity:.4;cursor:not-allowed}
   .ct-spacer{flex:1}.seg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
   .seg select{background:var(--card2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:6px 8px;font-size:12px}
   .offset{padding:9px 14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;font-size:11.5px;color:var(--muted)}
   .kbhint{padding:7px 14px 9px;font-size:10.5px;color:var(--muted);line-height:1.6;border-top:1px solid var(--line)}
   .kbhint b{color:var(--text,#e8edf7);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-weight:700;font-size:10px}
-  .qreels{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:9px 14px;border-top:1px solid var(--line)}
-  .qr-lbl{font-size:11px;color:var(--muted);font-weight:700;margin-right:2px}
-  .qr{background:var(--card2,#0d1322);border:1px solid var(--line);color:var(--text,#e8edf7);border-radius:8px;padding:6px 10px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer}
-  .qr:hover{border-color:var(--accent,#F97316);color:#fff}
+  .qdet{border-top:1px solid var(--line)}
+  .qdet>summary{list-style:none;cursor:pointer;padding:9px 14px;font-size:11px;font-weight:700;letter-spacing:1.2px;
+    text-transform:uppercase;color:var(--muted);user-select:none}
+  .qdet>summary::-webkit-details-marker{display:none}
+  .qdet>summary:before{content:'\25b8';display:inline-block;margin-right:7px;transition:transform .15s;color:var(--muted2)}
+  .qdet[open]>summary:before{transform:rotate(90deg)}
+  .qdet>summary:hover{color:var(--txt)}
+  .qreels{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:0 14px 11px}
+  .qr-lbl{display:none}
+  /* Todos del mismo tamano y sin emojis de colores: eran seis botones
+     con un emoji distinto cada uno y no formaban un sistema. */
+  .qr{background:var(--card2);border:1px solid var(--line);color:var(--muted);border-radius:20px;padding:5px 13px;
+    font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;transition:.15s}
+  .qr:hover{border-color:var(--naf);color:var(--txt)}
   .offset input[type=range]{flex:1;accent-color:var(--naf)}.offset b{color:var(--txt);font-variant-numeric:tabular-nums}
   .listhead{display:flex;align-items:center;padding:12px 14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .listhead h2{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+  .listhead h2{font-family:'Bebas Neue',sans-serif;font-size:14px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);font-weight:400}
   .listhead .x{margin-left:auto;display:flex;gap:8px}
   .listhead button{background:var(--card2);border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:6px 10px;font-size:11.5px;cursor:pointer;font-weight:600}.listhead button:hover{border-color:var(--naf);color:var(--naf)}
   .listwrap{max-height:330px;overflow-y:auto}
   .row{display:flex;align-items:center;gap:9px;padding:9px 14px;border-bottom:1px solid var(--line);cursor:pointer}
   .row:hover{background:var(--card2)}.row.active{background:var(--naf-dim);box-shadow:inset 3px 0 0 var(--naf)}
   .row.novid{opacity:.5}
-  .row .chk{flex:none;width:17px;height:17px;border:1.5px solid var(--muted2);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#04210f}.row .chk.on{background:var(--naf);border-color:var(--naf)}
-  .row .tc{flex:none;font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--muted);width:44px}
+  .row .chk{flex:none;width:17px;height:17px;border:1.5px solid var(--muted2);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}.row .chk.on{background:var(--naf);border-color:var(--naf)}
+  .row .tc{flex:none;font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--muted);width:42px}
   .row .mt{flex:none;font-size:10px;color:var(--muted2);width:38px}
   .row .pill{flex:none;font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px}
   .row .nm{font-weight:600;font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-  .row .det{flex:none;font-size:11px;color:var(--muted)}
+  /* El detalle -la jugada, el tipo de saque, la llamada del armador- iba
+     pegado al nombre y sobraba lugar en el medio de la fila. */
+  .row .det{flex:1 1 auto;min-width:0;font-size:11.5px;color:var(--muted);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .row .nm{flex:none;max-width:44%}
   .row .ev{flex:none;margin-left:auto;font-weight:800;font-size:14px;width:18px;text-align:center}
-  .grphdr{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--card2);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);position:sticky;top:0;z-index:2}
+  .grphdr{display:flex;align-items:center;gap:8px;padding:7px 14px;background:var(--card2);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.4px;color:var(--muted);position:sticky;top:0;z-index:2}
   .grphdr span:first-child{font-size:15px;font-weight:800}
   .grcnt{margin-left:auto;color:var(--naf);font-weight:800}
   .listempty{padding:34px 20px;text-align:center;color:var(--muted);font-size:13px}
-  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--naf);color:#04210f;padding:11px 20px;border-radius:10px;font-weight:700;font-size:13px;opacity:0;transition:.3s;z-index:50}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .vermas{padding:12px 14px;text-align:center;border-top:1px solid var(--line)}
+  .vermas button{background:var(--card2);border:1px solid var(--line2);color:var(--txt);border-radius:9px;
+    padding:8px 18px;font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;cursor:pointer}
+  .vermas button:hover{border-color:var(--naf);color:var(--naf)}
+  .vermas span{color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--naf);color:#fff;padding:11px 20px;border-radius:10px;font-weight:700;font-size:13px;opacity:0;transition:.3s;z-index:50}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   /* --- celular --- */
   @media(max-width:560px){
     body{padding:10px;font-size:13.5px}
@@ -146,24 +217,45 @@ window.__DESCIFRAR_SINCRONO = true;
     .listhead{flex-wrap:wrap;gap:8px}.listhead .x{margin-left:0;width:100%}.listhead .x button{flex:1}
     .filters{padding:12px}
   }
+  /* En pantallas de 360 px la fila no entraba y la valoracion quedaba
+     colgando del borde: se achica el espaciado y se saca la fecha, que
+     solo aparece cuando hay varios partidos. */
+  @media(max-width:400px){
+    .row{gap:7px;padding:9px 10px}
+    .row .mt{display:none}
+    .row .nm{max-width:38%}
+    .row .tc{width:38px;font-size:12px}
+    /* los botones del titulo de la lista se pasaban 3 px en 320 */
+    .listhead .x{flex-wrap:wrap}
+    .listhead button{font-size:11px;padding:6px 8px}
+  }
 </style>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260927-0832">
+<link rel="stylesheet" href="movil.css?v=20260927-0904">
 </head>
 <body>
-<div class="wrap">
-  <div class="brand">NAFELS <span>VOLEY</span></div>
-  <h1 data-t="Cortes de Video"><span data-t="Cortes de Video">Cortes de Video</span></h1>
+<div class="hdr"><div class="hdr-in">
+  <a href="dashboard.html" class="back-btn" data-t="← Dashboard"><span data-t="← Dashboard">← Dashboard</span></a>
+  <h1 data-t="✂ CORTES DE VIDEO"><span data-t="✂ CORTES DE VIDEO">✂ CORTES DE VIDEO</span></h1>
   <div class="vtabs">
-    <button class="vtab" id="vtab-p" onclick="vbSetModo('partido')" data-t="🏐 Partidos"><span data-t="🏐 Partidos">🏐 Partidos</span></button>
-    <button class="vtab" id="vtab-e" onclick="vbSetModo('ent')" data-t="🏋️ Entrenamientos"><span data-t="🏋️ Entrenamientos">🏋️ Entrenamientos</span></button>
+    <button class="vtab" id="vtab-p" onclick="vbSetModo('partido')" data-t="Partidos"><span data-t="Partidos">Partidos</span></button>
+    <button class="vtab" id="vtab-e" onclick="vbSetModo('ent')" data-t="Entrenamientos"><span data-t="Entrenamientos">Entrenamientos</span></button>
   </div>
-  <script>function vbSetModo(m){try{localStorage.setItem('cortes_modo',m);}catch(e){}location.reload();}(function(){var m=(localStorage.getItem('cortes_modo')==='ent')?'e':'p';var b=document.getElementById('vtab-'+m);if(b)b.classList.add('on');})();</script>
+</div></div>
+<div class="wrap">
+  <!-- El cambio de modo lo maneja la pagina (cambiarModo, mas abajo): este
+       respaldo solo actua si el script principal todavia no cargo. -->
+  <script>window.vbSetModo=window.vbSetModo||function(m){try{localStorage.setItem('cortes_modo',m);}catch(e){}location.reload();};
+  (function(){var m=(localStorage.getItem('cortes_modo')==='ent')?'e':'p';var b=document.getElementById('vtab-'+m);if(b)b.classList.add('on');})();</script>
   <div class="sub" id="sub">—</div>
   <div class="grid">
     <div class="card filters">
+      <!-- Que hay puesto ahora mismo, en una linea. Antes habia que abrir
+           los ocho desplegables para saber que estabas mirando. -->
+      <div class="fsum" id="fsum"></div>
+      <div class="fsec" data-t="Qué miro"><span data-t="Qué miro">Qué miro</span></div>
       <div class="flabel" data-t="Equipo"><span data-t="Equipo">Equipo</span></div>
       <select id="teamSel" style="margin-bottom:12px"></select>
       <div class="flabel" data-t="Temporada"><span data-t="Temporada">Temporada</span></div>
@@ -173,6 +265,7 @@ window.__DESCIFRAR_SINCRONO = true;
         <div class="dd-btn" id="mBtn"><span data-t="Elegir partidos">Elegir partidos</span> <span class="n" id="mN">—</span></div>
         <div class="dd-panel" id="mPanel"></div>
       </div>
+      <div class="fsec" data-t="Qué busco"><span data-t="Qué busco">Qué busco</span></div>
       <div class="flabel" data-t="Acciones a mostrar"><span data-t="Acciones a mostrar">Acciones a mostrar</span></div>
       <div class="dd">
         <div class="dd-btn" id="ddBtn"><span data-t="Elegir acciones">Elegir acciones</span> <span class="n" id="ddN">—</span></div>
@@ -228,7 +321,9 @@ window.__DESCIFRAR_SINCRONO = true;
           </div>
         </div>
       </div>
-      <div class="counter"><b id="cnt">0</b><span data-t="clips filtrados"><span data-t="clips filtrados">clips filtrados</span></span></div>
+      <!-- El numero era lo mas grande de la pantalla y nadie decide con el.
+           Queda como una linea, y el dato util va al lado de la lista. -->
+      <div class="counter"><b id="cnt">0</b> <span data-t="clips filtrados"><span data-t="clips filtrados">clips filtrados</span></span></div>
       <button class="reset" id="reset" data-t="Limpiar filtros"><span data-t="Limpiar filtros">Limpiar filtros</span></button>
     </div>
     <div class="card">
@@ -261,15 +356,18 @@ window.__DESCIFRAR_SINCRONO = true;
       </div>
       <div class="offset">antes <input type="range" id="preoff" min="0" max="10" step="0.5" value="4"> <b><span id="prev">4</span>s</b> <span data-t="· contacto ·">· contacto ·</span> <b><span id="postv">5</span>s</b> <input type="range" id="postoff" min="0" max="10" step="0.5" value="5"> <span data-t="después">después</span></div>
       <div class="kbhint">⌨ <b data-t="Espacio"><span data-t="Espacio">Espacio</span></b> <span data-t="play/pausa ·">play/pausa ·</span> <b>← →</b> <span data-t="clip anterior/siguiente ·">clip anterior/siguiente ·</span> <b>R</b> <span data-t="repetir ·">repetir ·</span> <b>Z X</b> <span data-t="re-ver ±2s ·">re-ver ±2s ·</span> <b>↑ ↓</b> <span data-t="velocidad ·">velocidad ·</span> <b>L</b> <span data-t="loop ·">loop ·</span> <b>F</b> <span data-t="pantalla ·">pantalla ·</span> <b>M</b> <span data-t="mute">mute</span></div>
-      <div class="qreels"><span class="qr-lbl" data-t="⚡ Reels rápidos:"><span data-t="⚡ Reels rápidos:">⚡ Reels rápidos:</span></span>
-        <button class="qr" data-sk="Saque" data-ev="#" data-t="🎯 Aces"><span data-t="🎯 Aces">🎯 Aces</span></button>
-        <button class="qr" data-sk="Saque" data-ev="=" data-t="❌ Errores de saque"><span data-t="❌ Errores de saque">❌ Errores de saque</span></button>
-        <button class="qr" data-sk="Ataque" data-ev="#" data-t="💥 Ataques punto"><span data-t="💥 Ataques punto">💥 Ataques punto</span></button>
-        <button class="qr" data-sk="Ataque" data-ev="=,/" data-t="🧱 Ataques fallados/bloqueados"><span data-t="🧱 Ataques fallados/bloqueados">🧱 Ataques fallados/bloqueados</span></button>
-        <button class="qr" data-sk="Bloqueo" data-ev="#" data-t="🛑 Bloqueos punto"><span data-t="🛑 Bloqueos punto">🛑 Bloqueos punto</span></button>
-        <button class="qr" data-sk="Recepción" data-ev="=,-,/" data-t="📉 Recepciones rotas"><span data-t="📉 Recepciones rotas">📉 Recepciones rotas</span></button>
-      </div>
-      <div class="listhead"><h2><span data-t="Clips">Clips</span> <span style="font-weight:400;color:var(--muted);font-size:11px" data-t="— tildá para armar tu recorte"><span data-t="— tildá para armar tu recorte">— tildá para armar tu recorte</span></span></h2><div class="x"><button id="selAll" data-t="Marcar todos"><span data-t="Marcar todos">Marcar todos</span></button><button id="clearSel" data-t="Limpiar"><span data-t="Limpiar">Limpiar</span></button><button id="expCsv" title="Bajar los clips elegidos en un archivo para el editor de video" data-t="⇩ CSV para el editor"><span data-t="⇩ CSV para el editor">⇩ CSV para el editor</span></button><button id="share" data-t="🔗 Compartir recorte"><span data-t="🔗 Compartir recorte">🔗 Compartir recorte</span></button></div></div>
+      <!-- Ocupaba dos renglones enteros para seis botones que se usan de
+           vez en cuando. Ahora es un desplegable: una linea. -->
+      <details class="qdet"><summary data-t="Reels rápidos"><span data-t="Reels rápidos">Reels rápidos</span></summary>
+      <div class="qreels">
+        <button class="qr" data-sk="Saque" data-ev="#" data-t="Aces"><span data-t="Aces">Aces</span></button>
+        <button class="qr" data-sk="Saque" data-ev="=" data-t="Errores de saque"><span data-t="Errores de saque">Errores de saque</span></button>
+        <button class="qr" data-sk="Ataque" data-ev="#" data-t="Ataques punto"><span data-t="Ataques punto">Ataques punto</span></button>
+        <button class="qr" data-sk="Ataque" data-ev="=,/" data-t="Ataques fallados"><span data-t="Ataques fallados">Ataques fallados</span></button>
+        <button class="qr" data-sk="Bloqueo" data-ev="#" data-t="Bloqueos punto"><span data-t="Bloqueos punto">Bloqueos punto</span></button>
+        <button class="qr" data-sk="Recepción" data-ev="=,-,/" data-t="Recepciones rotas"><span data-t="Recepciones rotas">Recepciones rotas</span></button>
+      </div></details>
+      <div class="listhead"><h2><span data-t="Clips">Clips</span> <b id="cnt2" class="lcnt">0</b> <span style="font-weight:400;color:var(--muted);font-size:11px" data-t="— tildá para armar tu recorte"><span data-t="— tildá para armar tu recorte">— tildá para armar tu recorte</span></span></h2><div class="x"><button id="selAll" data-t="Marcar todos"><span data-t="Marcar todos">Marcar todos</span></button><button id="clearSel" data-t="Limpiar"><span data-t="Limpiar">Limpiar</span></button><button id="expCsv" title="Bajar los clips elegidos en un archivo para el editor de video" data-t="⇩ CSV para el editor"><span data-t="⇩ CSV para el editor">⇩ CSV para el editor</span></button><button id="share" data-t="🔗 Compartir recorte"><span data-t="🔗 Compartir recorte">🔗 Compartir recorte</span></button></div></div>
       <div class="listwrap" id="list"></div>
     </div>
   </div>
@@ -321,10 +419,24 @@ window.__DESCIFRAR_SINCRONO = true;
       }
     }catch(e){}
 
+    /* == LA PESTANIA DE ESTA PANTALLA NO HACIA NADA =======================
+       El filtro global de la app (vbTipo) se miraba ANTES que la eleccion
+       hecha aca. Con el filtro global en Entrenamientos, apretar PARTIDOS
+       guardaba la eleccion, recargaba... y el filtro global la volvia a
+       pisar. La pantalla no mostraba los partidos nunca.
+
+       Medido en la app: vbTipo()='E' y cortes_modo='partido'. El click
+       estaba guardado y no se usaba.
+
+       Ahora lo que se toco ACA gana; el filtro global queda como valor
+       inicial para el que nunca eligio nada en esta pantalla. */
+    try{ var propio=localStorage.getItem('cortes_modo');
+         if(propio==='ent') return 'ent';
+         if(propio==='partido') return 'partido'; }catch(e){}
     try{ var t=(typeof vbTipo==='function') ? vbTipo() : 'todos';
          if(t==='E') return 'ent';
          if(t==='P') return 'partido'; }catch(e){}
-    return (localStorage.getItem('cortes_modo')==='ent') ? 'ent' : 'partido';
+    return 'partido';
   })();
   var VD=(MODO==='ent'?window.VIDEO_DATA_ENT:window.VIDEO_DATA)||{combos:{},matches:{}}, COMBOS=VD.combos||{};
   var MAP=Object.assign({}, VD.links||{}); (function(){var _mv=(MODO==='ent'?window.MAPA_VIDEOS_ENT:window.MAPA_VIDEOS)||{};for(var _k in _mv){if(_mv[_k])MAP[_k]=_mv[_k];}})();
@@ -371,7 +483,35 @@ window.__DESCIFRAR_SINCRONO = true;
   function preOff(){return parseFloat($('preoff').value);}function postOff(){return parseFloat($('postoff').value);}
   function sub(a){return (a.sk==='Ataque'||a.sk==='Saque'||a.sk==='Recepción')?(a.x||'*'):(a.sk==='Armado'?(a.call||'*'):'*');}
   function akey(sk,s){return sk+'|'+s;}
-  function subName(sk,s){if(s==='*')return '';return sk==='Ataque'?((COMBOS[s]||s)+' ('+s+')'):(sk==='Armado'?s:(TYPE_NAME[s]||s));}
+  /* == LAS JUGADAS, CON EL NOMBRE DEL PLAN DE PARTIDO ====================
+     Es la misma tabla que confirmo el cuerpo tecnico y que usa el plan.
+     Cada jugada tiene DOS codigos, uno por familia de tipeo, y los dos
+     apuntan al mismo nombre: el club escribe W4/G4/Y8 y la otra familia
+     es X5/V5/XP. Si un codigo no esta en la tabla se usa el nombre que
+     trae el DataVolley, y si tampoco, el codigo crudo. No se inventa.  */
+  var COMBO_NOMBRES = [
+    [['X5','W4'], 'QUICK IN 4'],   [['V5','G4'], 'HIGH IN 4'],
+    [['X6','W2'], 'QUICK IN 2'],   [['V6','G2'], 'HIGH IN 2'],
+    [['X8','Y9'], 'QUICK IN 1'],   [['V8','G9'], 'HIGH IN 1'],
+    [['XP','Y8'], 'PIPE'],         [['XB','Y1'], 'PIPE 6-1'],
+    [['XR','Y7'], 'PIPE 6-5'],
+    [['X3','W3'], 'QUICK IN 3'],   [['V7','G3'], 'HIGH IN 3'],
+    [['V4'],      'OVERPASS IN 4'],
+    [['V3'],      'OVERPASS IN 3'],[['V2'],      'OVERPASS IN 2'],
+    [['PP','JJ'], 'SETTER TIP'],   [['X1','J1'], 'CLOSE'],
+    [['X2','J3'], 'BEHIND'],       [['XM','J4'], 'PUSH'],
+    [['X7','J2'], 'SHOOT']
+  ];
+  var PLAY_NOM = (function(){ var m={}; COMBO_NOMBRES.forEach(function(par){
+    par[0].forEach(function(c){ m[c]=par[1]; }); }); return m; })();
+  /* los dos codigos de una misma jugada, para que un link viejo que pide
+     ?combo=X5 tambien encienda el W4 que es lo que hay en los datos */
+  var PLAY_HERMANOS = (function(){ var m={}; COMBO_NOMBRES.forEach(function(par){
+    par[0].forEach(function(c){ m[c]=par[0]; }); }); return m; })();
+  function subName(sk,s){if(s==='*')return '';
+    if(sk==='Ataque') return (PLAY_NOM[s]||COMBOS[s]||s)+' ('+s+')';
+    if(sk==='Armado') return (PLAY_NOM[s]||COMBOS[s]||s);
+    return TYPE_NAME[s]||s;}
 
   // estado
   var selMatch={}, selPlayers={}, selAct={}, selEval={}, selSet={}, selected={};
@@ -452,7 +592,8 @@ var fTy=[];
       html+='<div class="ck parent'+(allOn?' on':'')+'" data-sk="'+sk+'"><span class="box">'+(allOn?'✓':'')+'</span>'+
             '<span style="color:'+col+'">'+sk+'</span><span class="cc">'+node.count+'</span></div>';
       if(hasReal){
-        subs.sort(function(a,b){return (subName(sk,b)? -1:1)- (subName(sk,a)?-1:1);});
+        /* ordenadas por volumen: la jugada que mas se repite, arriba */
+        subs.sort(function(a,b){return (node.subs[b]||0)-(node.subs[a]||0);});
         subs.forEach(function(s){var k=akey(sk,s);
           html+='<div class="ck child'+(selAct[k]?' on':'')+'" data-k="'+k+'"><span class="box">'+(selAct[k]?'✓':'')+'</span>'+
                 '<span>'+(subName(sk,s)||'(sin detalle)')+'</span><span class="cc">'+node.subs[s]+'</span></div>';
@@ -533,29 +674,54 @@ var fTy=[];
       if(fRival && _rnorm(oppName(a.mc))!==_rnorm(fRival)) return false;
       if(fApos.length&&(a.sk!=="Armado"||fApos.indexOf(a.apos)<0)) return false;
       if(fCall.length&&(a.sk!=="Armado"||fCall.indexOf(a.call)<0)) return false;
-      if(evK.length&&evK.indexOf(a.ev)<0) return false;
+      /* La valoracion ya se filtro mas arriba con selEval. Esta linea era
+         exactamente la misma condicion escrita de nuevo. */
       if(stK.length&&stK.indexOf(a.set)<0) return false;
       if(CONDS.length && !matchConds(a,CTX,CONDS)) return false;
       return true;
     }).sort(function(a,b){ var ra=evRank(a.ev),rb=evRank(b.ev); if(ra!==rb)return ra-rb; if(a.mc!==b.mc)return a.mc<b.mc?-1:1; return a.t-b.t;});
-    filtered.forEach(function(a){a._vid=ytId(MAP[a.mc]||'');});
-    current=-1; render(multi);
+    /* Antes esto corria la expresion regular una vez por ACCION: con 8180
+       acciones son 8180 regex en cada filtrada, para 13 partidos. Ahora se
+       resuelve una vez por partido y se reparte. */
+    var _vidPorPartido={};
+    filtered.forEach(function(a){
+      if(!(a.mc in _vidPorPartido)) _vidPorPartido[a.mc]=ytId(MAP[a.mc]||'');
+      a._vid=_vidPorPartido[a.mc];
+    });
+    mostrados=LOTE;
+    current=-1; render(multi); fSummary();
     var playable=filtered.some(function(a){return a._vid;});
     $('btnPlay').disabled=!playable; $('btnNext').disabled=!playable; $('btnPrev').disabled=true;
   }
+  /* == DIBUJABA LAS 8180 FILAS DE UNA ====================================
+     La lista quedaba de 300.000 px y la pagina con 61.000 nodos. Cambiar
+     un filtro costaba 314 ms de freeze en una computadora; en el celular
+     de un jugador, mas de un segundo cada vez que toca algo.
+
+     Ahora se dibujan de a 200, con un boton para traer mas. El reproductor
+     sigue recorriendo la lista ENTERA: esto es solo lo que se pinta.    */
+  var LOTE=200, mostrados=LOTE;
   function render(multi){
     $('cnt').textContent=filtered.length;
+    var _c2=$('cnt2'); if(_c2)_c2.textContent=filtered.length;
     var L=$('list');
     if(!filtered.length){L.innerHTML='<div class="listempty">No hay acciones con esos filtros.</div>';return;}
+    /* cuantas hay de cada valoracion: UNA pasada, no una por grupo */
+    var porEv={}; filtered.forEach(function(x){porEv[x.ev]=(porEv[x.ev]||0)+1;});
+    var hasta=Math.min(mostrados, filtered.length);
     var html='', lastEv='__INIT__';
-    filtered.forEach(function(a,i){
+    filtered.slice(0,hasta).forEach(function(a,i){
       if(a.ev!==lastEv){ lastEv=a.ev;
-        var gc=filtered.filter(function(x){return x.ev===a.ev;}).length;
+        var gc=porEv[a.ev]||0;
         var gec='var('+(EVAL_COLOR[a.ev]||'--muted')+')';
         html+='<div class="grphdr" style="box-shadow:inset 3px 0 0 '+gec+'"><span style="color:'+gec+'">'+(a.ev||'·')+'</span>'+(EVAL_NAME[a.ev]||'Sin valoración')+'<span class="grcnt">'+gc+'</span></div>';
       }
       var col='var('+(SKILL_COLOR[a.sk]||'--free')+')', ec='var('+(EVAL_COLOR[a.ev]||'--muted')+')';
-      var det=a.sk==='Ataque'?(COMBOS[a.x]||''):((a.sk==='Saque'||a.sk==='Recepción')?(TYPE_NAME[a.x]||''):'');
+      /* El armado no decia nada en la fila aunque el dato estaba: la
+         llamada es justo lo que uno busca cuando mira cortes de armador. */
+      var det=a.sk==='Ataque'?(COMBOS[a.x]||''):
+              (a.sk==='Saque'||a.sk==='Recepción')?(TYPE_NAME[a.x]||''):
+              (a.sk==='Armado')?(COMBOS[a.call]||a.call||''):'';
       var sel=selected[a.mc+'-'+a.t+'-'+a.num]?' on':'';
       var mt=multi?'<div class="mt">'+(VD.matches[a.mc].date||'').slice(5)+'</div>':'';
       html+='<div class="row'+(a._vid?'':' novid')+'" data-i="'+i+'"><div class="chk'+sel+'" data-chk="'+i+'">'+(sel?'✓':'')+'</div>'+
@@ -563,6 +729,11 @@ var fTy=[];
         '<div class="nm">#'+parseInt(a.num,10)+' '+a.name+'</div>'+(det?'<div class="det">'+det+'</div>':'')+
         '<div class="ev" style="color:'+ec+'">'+(a.ev||'·')+'</div></div>';
     });
+    if(filtered.length>hasta){
+      var quedan=filtered.length-hasta;
+      html+='<div class="vermas"><button id="verMas">Ver '+Math.min(LOTE,quedan)+' m\u00e1s'
+           +' <span>(quedan '+quedan+')</span></button></div>';
+    }
     L.innerHTML=html;
   }
 
@@ -574,6 +745,9 @@ var fTy=[];
       _vt.innerHTML='<span class="vs">'+(_me?_me+' vs '+oppName(a.mc):'')+'</span>'+(_me?' · ':'')+'<b>#'+parseInt(a.num,10)+' '+a.name+'</b> · '+a.sk+(det?' '+det:'')+(_ev?' · '+_ev:'')+' · S'+a.set;
       _vt.classList.add('show');}
     $('nowpos').textContent=(current+1)+' / '+filtered.length+' ('+mmss(a.t)+')';
+    /* Si el clip que esta sonando todavia no se dibujo -esta mas abajo del
+       lote-, se estira la lista hasta el, para que se vea marcado. */
+    if(current>=mostrados){ mostrados=Math.ceil((current+1)/LOTE)*LOTE; render(selectedMatchCodes().length>1); }
     document.querySelectorAll('.row').forEach(function(r){r.classList.toggle('active',+r.dataset.i===current);});
     var act=document.querySelector('.row.active');if(act){var w=$('list');var wr=w.getBoundingClientRect(),ar=act.getBoundingClientRect();if(ar.top<wr.top)w.scrollTop-=(wr.top-ar.top)+8;else if(ar.bottom>wr.bottom)w.scrollTop+=(ar.bottom-wr.bottom)+8;}
     loadCoachNote(a);}
@@ -734,7 +908,10 @@ var fTy=[];
        archivo que se le pasa al que edita el video para que arme el
        compilado sin tener que buscar las jugadas a mano. */
     $('expCsv').addEventListener('click',function(){ exportCSV(); });
-    $('list').addEventListener('click',function(e){var ck=e.target.closest('[data-chk]');if(ck){var a=filtered[+ck.dataset.chk];if(selected[ckey(a)])delete selected[ckey(a)];else selected[ckey(a)]=1;render(selectedMatchCodes().length>1);return;}
+    $('list').addEventListener('click',function(e){
+      var vm=e.target.closest('#verMas');
+      if(vm){ mostrados+=LOTE; render(selectedMatchCodes().length>1); return; }
+      var ck=e.target.closest('[data-chk]');if(ck){var a=filtered[+ck.dataset.chk];if(selected[ckey(a)])delete selected[ckey(a)];else selected[ckey(a)]=1;render(selectedMatchCodes().length>1);return;}
       var r=e.target.closest('.row');if(r){var i=+r.dataset.i;if(ready&&filtered[i]._vid)playClip(i);else{current=i;setNow(filtered[i]);}}});
   }
   function buildShareLink(){
@@ -791,6 +968,94 @@ var fTy=[];
 
     return base+(p.length?'?'+p.join('&'):'');
   }
+  /* == QUE HAY FILTRADO, EN UNA LINEA ====================================
+     La columna eran ocho cajas identicas que decian "Elegir X / Todos": para
+     saber que estabas mirando habia que abrirlas una por una. Esta linea lo
+     dice de una, y se arma con el mismo estado que usa el filtro. */
+  function fSummary(){
+    var el = $('fsum'); if(!el) return;
+    var ES_ENT = (MODO === 'ent');
+    var partes = [];
+
+    var mc = selectedMatchCodes().length, mtot = seasonCodes().length;
+    var pal = ES_ENT ? (mc === 1 ? 'entrenamiento' : 'entrenamientos')
+                     : (mc === 1 ? 'partido' : 'partidos');
+    if(mtot && mc === mtot) partes.push('<b>todos</b> los ' + mtot + ' ' + (ES_ENT ? 'entrenamientos' : 'partidos'));
+    else if(mc)            partes.push('<b>' + mc + '</b> ' + pal);
+    else                   partes.push('<span class="none">ningún ' + (ES_ENT ? 'entrenamiento' : 'partido') + ' elegido</span>');
+
+    var actKeys = Object.keys(selAct), actOn = actKeys.filter(function(k){ return selAct[k]; });
+    if(actKeys.length && actOn.length !== actKeys.length){
+      var sks = {}; actOn.forEach(function(k){ sks[k.split('|')[0]] = 1; });
+      var lista = Object.keys(sks);
+      partes.push('<b>' + (lista.length <= 2 ? lista.join(' y ') : lista.length + ' fundamentos') + '</b>');
+    }
+
+    var ps = selectedPlayers();
+    if(ps.length) partes.push(ps.length <= 3
+      ? ps.map(function(n){ return '<b>#' + parseInt(n, 10) + '</b>'; }).join(' ')
+      : '<b>' + ps.length + '</b> jugadores');
+
+    var ev = Object.keys(selEval).filter(function(k){ return selEval[k]; });
+    if(ev.length && ev.length < 6) partes.push('valoración <b>' + ev.join(' ') + '</b>');
+
+    var st = Object.keys(selSet).filter(function(k){ return selSet[k]; });
+    if(st.length) partes.push('set <b>' + st.join(', ') + '</b>');
+
+    try{
+      var cs = sitConds().length;
+      if(cs) partes.push('<b>' + cs + '</b> ' + (cs === 1 ? 'condición' : 'condiciones') + ' de jugada');
+    }catch(e){}
+
+    if(fRival) partes.push('vs <b>' + fRival + '</b>');
+    if(fDate)  partes.push('del <b>' + fDate + '</b>');
+
+    el.innerHTML = partes.join(' · ');
+  }
+
+  /* == CAMBIAR DE PARTIDOS A ENTRENAMIENTOS SIN RECARGAR ==================
+     Antes el boton guardaba la eleccion y hacia location.reload(): la pagina
+     arrancaba de cero, volvia a descifrar los ocho archivos de video y de
+     paso te borraba todos los filtros que habias puesto.
+
+     Los dos juegos de datos YA estan cargados en la pagina -VIDEO_DATA y
+     VIDEO_DATA_ENT se piden juntos arriba-, asi que alcanza con apuntar a
+     la otra fuente y volver a armar las listas. */
+  function cambiarModo(m){
+    var nuevo = (m === 'ent' || m === 'entrenamiento') ? 'ent' : 'partido';
+    if(nuevo === MODO){ marcarTab(); return; }
+    MODO = nuevo;
+    try{ localStorage.setItem('cortes_modo', MODO === 'ent' ? 'ent' : 'partido'); }catch(e){}
+
+    VD = (MODO === 'ent' ? window.VIDEO_DATA_ENT : window.VIDEO_DATA) || {combos:{}, matches:{}};
+    COMBOS = VD.combos || {};
+    MAP = Object.assign({}, VD.links || {});
+    var _mv = (MODO === 'ent' ? window.MAPA_VIDEOS_ENT : window.MAPA_VIDEOS) || {};
+    for(var _k in _mv){ if(_mv[_k]) MAP[_k] = _mv[_k]; }
+
+    /* se sale de cero: los partidos, jugadores y acciones del otro modo no
+       existen en este */
+    selMatch = {}; selPlayers = {}; selAct = {}; selEval = {}; selSet = {}; selected = {};
+    fDz = []; fOz = []; fPh = ''; fRq = []; fTy = []; fCall = []; fApos = [];
+    fRival = ''; fDate = ''; fSk = ''; selSeason = '';
+    try{ resetSit(); }catch(e){}
+    current = -1; try{ stop(); }catch(e){}
+
+    var n = Object.keys(VD.matches || {}).length;
+    $('sub').textContent = n + (MODO === 'ent' ? ' entrenamiento(s)' : ' partido(s)')
+      + ' cargado(s) · tildá ' + (MODO === 'ent' ? 'sesiones' : 'partidos')
+      + ' y acciones, y armá tu reel';
+
+    initTeamSel(); initSeasonSel(); initMatches(); applySeason();
+    marcarTab();
+  }
+  function marcarTab(){
+    var p = $('vtab-p'), e = $('vtab-e');
+    if(p) p.classList.toggle('on', MODO !== 'ent');
+    if(e) e.classList.toggle('on', MODO === 'ent');
+  }
+  window.vbSetModo = cambiarModo;
+
   function init(){
     if(!Object.keys(VD.matches).length){$('sub').textContent='No se encontró la planilla de datos.';return;}
     var n=Object.keys(VD.matches).length;
@@ -825,7 +1090,7 @@ var fTy=[];
     if((pCall||pApos)&&!pSk) pSk='Armado';
     if(pSk) fSk=pSk;
     if(pNum){ pNum.split(',').forEach(function(x){x=(''+x).replace(/[^0-9]/g,'');if(x)selPlayers[x.padStart(2,'0')]=true;}); }
-    bind(); rebuildAll();
+    bind(); rebuildAll(); marcarTab();
     /* La valoracion va DESPUES de rebuildAll: esa funcion vacia selEval y lo
        vuelve a llenar con todas las que existen, asi que puesta antes se
        perdia y venian los cortes de todos los resultados mezclados. */
@@ -858,7 +1123,15 @@ var fTy=[];
     } else if(pSk){
       var skName={ATAQUE:'Ataque',SAQUE:'Saque',RECEPCION:'Recepción','RECEPCIÓN':'Recepción',ARMADO:'Armado',BLOQUEO:'Bloqueo',DEFENSA:'Defensa',FREEBALL:'Freeball'};
       var sk=skName[pSk.toUpperCase()]||pSk, any=false;
-      var pSub=pCombo||pCall; Object.keys(selAct).forEach(function(k){var pp=k.split('|');var on=(pp[0]===sk)&&(!pSub||pSub.split(',').indexOf(pp[1])>=0);selAct[k]=on;if(on)any=true;});
+      var pSub=pCombo||pCall;
+      /* Un link viejo puede pedir ?combo=X5 mientras en los datos figura
+         W4: son la misma jugada escrita con la otra familia. Se aceptan
+         los dos. */
+      var _quiere={};
+      if(pSub) pSub.split(',').forEach(function(c){ c=c.trim(); if(!c) return;
+        (PLAY_HERMANOS[c]||[c]).forEach(function(h){ _quiere[h]=1; }); });
+      Object.keys(selAct).forEach(function(k){var pp=k.split('|');
+        var on=(pp[0]===sk)&&(!pSub||!!_quiere[pp[1]]);selAct[k]=on;if(on)any=true;});
       if(any){ buildActionTree(); $('ddPanel').classList.add('open'); apply(); }
       var fl=[]; if(fDz.length)fl.push('zona destino '+fDz.join('/')); if(fOz.length)fl.push('zona origen '+fOz.join('/')); if(fPh)fl.push('fase '+(fPh==='SO'?'Side-Out':'Transición')); if(fApos.length)fl.push('armado a zona '+fApos.join('/')); if(pCall)fl.push('llamada '+pCall.split(',').join('/'));
       if(fl.length) $('sub').textContent='Filtrado por '+fl.join(' · ')+' · '+filtered.length+' clip(s)';
@@ -868,9 +1141,9 @@ var fTy=[];
   document.addEventListener('DOMContentLoaded',init);
 })();
 </script>
-<script src="lang.js?v=20260927-0832" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260927-0832" onerror="void 0"></script>
-<script src="ayuda.js?v=20260927-0832"></script>
+<script src="lang.js?v=20260927-0904" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260927-0904" onerror="void 0"></script>
+<script src="ayuda.js?v=20260927-0904"></script>
 
 <script>
 /* ══ LINK CORTO PARA COMPARTIR ══════════════════════════════════════════════
