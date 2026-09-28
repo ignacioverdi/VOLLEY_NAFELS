@@ -161,7 +161,33 @@ OBJETIVOS_CONFIG={metas:{
      liga (27) y el verde claro a mitad de camino entre los dos (33), que es
      el mismo criterio de las otras baterias de ataque. */
   atqz: { label:'% Atq Zaguero (37)', obj:37, min:15,max:50, g2:37, g1:33, y:27},
-  def: { label:'% Defensa (60)', obj:60, min:40,max:72, g2:60, g1:56, y:52}
+  def: { label:'% Defensa (60)', obj:60, min:40,max:72, g2:60, g1:56, y:52},
+  /* == ARMADO DE ALTA =======================================================
+     Sale del ejercicio de HIGH SET, no de la liga: este fundamento no se
+     scoutea en los partidos de nadie, asi que no hay con quien compararse
+     afuera. Es el mismo caso de la defensa, donde el mejor tambien eramos
+     nosotros, y se resuelve igual: se toma el mejor de casa y se sube un
+     poco, para que quede algo por delante.
+
+     Medido sobre los 2.420 armados de alta de las ocho sesiones de 2026:
+
+       el mejor     #4 VAZQUEZ    67   sobre 285 armados
+       segundo      #13 STEIMANN  56   sobre 277
+       promedio del plantel       53   sobre 2.420
+       el ultimo    #9 NORRIS     45   sobre 172
+
+     El objetivo es 70: el mejor, redondeado hacia arriba. El amarillo se
+     pone en el promedio del plantel (53) y el verde claro a mitad de camino
+     entre los dos (61), que es el criterio de las otras baterias.
+
+     LA ESCALA. La pantalla de high set puntua cada armado de -2 a +2
+     (# +2, + +1, ! +0,5, - -1, / -1,5, = -2) y muestra el promedio por
+     armado. Aca se lleva a la escala 0 a 100 del resto con (p + 2) / 4 * 100,
+     donde el error vale 0, lo perfecto 100 y el neutro 50. Los 70 del
+     objetivo son +0,80 puntos por armado; VAZQUEZ esta hoy en +0,68.
+
+     Revisar cuando haya una temporada entera de high set cargada.          */
+  hset: { label:'% Armado de Alta (70)', obj:70, min:45,max:82, g2:70, g1:61, y:53}
 }};
 
 window.currentObjPartido = window.currentObjPartido || 'acumulado';

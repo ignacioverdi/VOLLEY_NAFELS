@@ -213,6 +213,39 @@ tr.tot td{border-top:1px solid var(--border2);font-weight:800}
 
   <!-- ══ DERECHA: cancha, física y registro ═══════════════════════════ -->
   <div>
+    <div class="card" id="cTanda" style="display:none">
+      <div class="sec">Medición en tanda</div>
+      <input type="file" id="tMapa" accept=".json" style="display:none" onchange="cargarMapa(this)">
+      <button class="btn" style="width:100%;margin-bottom:8px" onclick="document.getElementById('tMapa').click()">Cargar mapa de saques (.json)</button>
+      <label class="f ancho"><span>Partido</span>
+        <select id="tPartido" onchange="tandaPartido()"></select></label>
+      <label class="f ancho"><span>Saques de</span>
+        <select id="tQuienes" onchange="tandaLista()">
+          <option value="propio" selected>Nosotros</option>
+          <option value="rival">El rival</option>
+          <option value="todos">Los dos</option>
+        </select></label>
+      <div class="barra" style="margin-top:8px">
+        <button class="btn pri" onclick="tandaIr(0)">Empezar</button>
+        <button class="btn chico" onclick="tandaMover(-1)">◀ anterior</button>
+        <button class="btn chico" onclick="tandaMover(1)">siguiente ▶</button>
+      </div>
+      <div class="aviso" id="tEstado">Abrí el video del partido para empezar.</div>
+
+      <div class="sec" style="margin-top:12px">Desfase del video</div>
+      <label class="f"><span>Corrimiento</span>
+        <input type="number" id="tDesfase" value="0" step="0.1" oninput="tandaDesfase()"> </label>
+      <button class="btn chico" style="width:100%" onclick="tandaAjustar()">Ajustar con el saque actual</button>
+      <div class="aviso" id="tAvisoDesfase">
+        Los segundos vienen del .dvw. Si el archivo que bajaste de YouTube arranca en otro lado,
+        todos los saltos caen corridos lo mismo. Marcá el golpe del primer saque y apretá
+        <b>Ajustar</b>: el corrimiento se calcula solo y se aplica a los 168.
+      </div>
+
+      <div class="sec" style="margin-top:12px">Los saques <span id="tCuenta" style="color:var(--saque)"></span></div>
+      <div style="max-height:240px;overflow:auto" id="tLista"></div>
+    </div>
+
     <div class="card">
       <div class="sec">Dónde pegó y dónde cruzó</div>
       <svg id="cancha" viewBox="0 0 200 250" style="width:100%;max-width:300px;display:block;margin:0 auto;cursor:crosshair"></svg>
@@ -302,9 +335,18 @@ tr.tot td{border-top:1px solid var(--border2);font-weight:800}
 </div>
 </div>
 
-<script src="radar_motor.js?v=20260927-1352"></script>
-<script src="plantel_nafels.js?v=20260927-1352" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20260927-1352" onerror="void 0"></script>
+<!-- Los datos de video: de aca salen los 168 saques de cada partido con su
+     segundo exacto. Son los MISMOS que usa la pantalla de Cortes. -->
+<script src="datos_video_25-26.js.enc" onerror="void 0"></script>
+<script src="datos_video_26-27.js.enc" onerror="void 0"></script>
+<script src="datos_video_27-28.js.enc" onerror="void 0"></script>
+<script src="datos_video_28-29.js.enc" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260928-0851" onerror="void 0"></script>
+<script src="firebase.js?v=20260928-0851" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260928-0851" onerror="void 0"></script>
+<script src="radar_motor.js?v=20260928-0851"></script>
+<script src="plantel_nafels.js?v=20260928-0851" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20260928-0851" onerror="void 0"></script>
 <script>
 /* ════════════════════════════════════════════════════════════════════════════
    RADAR DE SAQUE — medir la velocidad del saque desde el video
@@ -834,8 +876,31 @@ function guardar(){
     d: +ULTIMA.d.toFixed(2), media: +ULTIMA.media.toFixed(1),
     cd: +ULTIMA.cd.toFixed(3), fps: ULTIMA.fps
   });
-  guardarDisco(); pintarTabla(); limpiarMarcas();
+  /* Si venimos de la tanda, se anota a que saque corresponde y se pasa solo
+     al siguiente. Eso es lo que convierte 168 saques en once minutos: no hay
+     que volver a buscar nada ni elegir al jugador. */
+  if (TANDA.i >= 0 && TANDA.saques[TANDA.i]){
+    MEDIDOS[0].clave = claveSaque(TANDA.saques[TANDA.i]);
+    MEDIDOS[0].partido = $('tPartido').value;
+  }
+  guardarDisco(); aFirebase(MEDIDOS[0]); pintarTabla(); limpiarMarcas();
   $('nota').value = '';
+  if (TANDA.i >= 0 && TANDA.i + 1 < TANDA.saques.length) tandaIr(TANDA.i + 1);
+  else if (TANDA.i >= 0) $('tEstado').innerHTML = '<b>Listo: mediste los ' + TANDA.saques.length + '.</b>';
+}
+
+/* ── que lo vea el plantel ────────────────────────────────────────────────
+   La medicion va a Firebase, no al archivo de datos. Asi el jugador la ve en
+   el telefono en el momento, sin que haya que publicar nada. Las reglas ya
+   estan bien como estan: la raiz deja escribir al cuerpo tecnico y leer a
+   todo el que tenga sesion, asi que este nodo no necesita regla propia. */
+function aFirebase(m){
+  if (!m || typeof fbSet !== 'function' || !m.clave) return;
+  try {
+    fbSet('saque_kmh/' + m.clave.replace(/[.#$\[\]\/]/g, '_'),
+          { kmh:m.kmh, err:m.err, num:m.num, ap:m.ap, ms:m.ms, fps:m.fps,
+            d:m.d, cd:m.cd, cuando:Date.now() });
+  } catch(e){}
 }
 function guardarDisco(){ try{ localStorage.setItem(CLAVE, JSON.stringify(MEDIDOS)); }catch(e){} }
 function leerDisco(){ try{ MEDIDOS = JSON.parse(localStorage.getItem(CLAVE) || '[]') || []; }catch(e){ MEDIDOS = []; } }
@@ -906,12 +971,231 @@ document.addEventListener('keydown', function(ev){
   else if (ev.key === 'Enter'){ if (ULTIMA) guardar(); ev.preventDefault(); }
 });
 
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MEDICION EN TANDA — los 168 saques de un partido, uno atras del otro
+
+   DE DONDE SALEN LOS SAQUES
+     Del mismo lugar que la pantalla de Cortes: window.VIDEO_DATA, que arma
+     build_video.py leyendo el campo 12 de cada linea del .dvw. Ese campo es
+     el SEGUNDO del video en que paso la accion. Comprobado sobre el .dvw de
+     Nafels-Freiburg del 25/09: 168 saques, los 168 con su segundo.
+
+     Asi que no hay nada que buscar. La pantalla salta al segundo, marcas dos
+     veces, y salta sola al siguiente.
+
+   EL DESFASE, QUE ES LO QUE SIEMPRE FALLA
+     Esos segundos estan medidos contra el video con el que se scouteo. Si el
+     archivo que uno abre hoy no empieza en el mismo cuadro —porque se recorto
+     el calentamiento antes de subirlo, o porque YouTube devuelve otra cosa—
+     TODOS los saltos caen corridos lo mismo. No un poco cada uno: todos igual.
+     Por eso alcanza con medir el corrimiento UNA vez, en el primer saque, y
+     aplicarlo a los 168. Eso hace el boton Ajustar.
+   ══════════════════════════════════════════════════════════════════════════ */
+var TANDA = { partidos: [], saques: [], i: -1, desfase: 0, equipo: '' };
+
+function vdatos(){
+  /* window.VIDEO_DATA lo arma datos_seguros.js al abrir los .enc. Si no hay
+     sesion iniciada no hay llave, no hay datos, y la tanda no se ofrece. */
+  return (window.VIDEO_DATA && window.VIDEO_DATA.matches) ? window.VIDEO_DATA : null;
+}
+function equipoPropio(){
+  /* el slug del club sale del plantel o del primero que aparezca */
+  try { if (window.CLUB_SLUG) return window.CLUB_SLUG; } catch(e){}
+  return 'volley-nafels';
+}
+
+function tandaArrancar(){
+  var VD = vdatos();
+  if (!VD){ return; }                       /* sin datos, el panel no aparece */
+  var codes = Object.keys(VD.matches);
+  if (!codes.length) return;
+
+  /* los partidos, del mas nuevo al mas viejo */
+  TANDA.partidos = codes.map(function(c){
+    var m = VD.matches[c] || {};
+    var tm = m.teams || {};
+    var slugs = Object.keys(tm);
+    var mio = equipoPropio();
+    var rival = slugs.filter(function(s){ return s !== mio; })[0];
+    return { code:c, date:(m.date||''), rival:(rival ? tm[rival] : (m.awayName||'')),
+             n:(m.actions||[]).filter(function(a){ return a.sk === 'Saque'; }).length };
+  }).filter(function(p){ return p.n > 0; })
+    .sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
+
+  if (!TANDA.partidos.length) return;
+  var sel = $('tPartido');
+  sel.innerHTML = TANDA.partidos.map(function(p){
+    return '<option value="' + p.code + '">' + (p.date||'') + '  ' + (p.rival||'') + '  ·  ' + p.n + ' saques</option>';
+  }).join('');
+  $('cTanda').style.display = 'block';
+  tandaPartido();
+}
+
+/* ══ MODO MONTAJE ══════════════════════════════════════════════════════════
+   Cuando se exporta el montaje de saques de DataVolley, cada clip ES un saque
+   y vienen en el orden del .dvw. Verificado sobre el partido con Rottenburg:
+   48 clips, 48 saques, y las 48 valoraciones del rotulo coinciden con las del
+   .dvw. Con eso no hay nada que alinear: el clip 12 es el saque 12.
+
+   Ventaja sobre trabajar con el video original del partido: ahi los segundos
+   del .dvw estan medidos contra OTRO archivo y hay que calcular el desfase.
+   Aca no existe ese problema. */
+var MAPA = null;
+
+function cargarMapa(inp){
+  var f = inp.files && inp.files[0];
+  if (!f) return;
+  var fr = new FileReader();
+  fr.onload = function(){
+    try { MAPA = JSON.parse(fr.result); } catch(e){ MAPA = null; }
+    if (!MAPA || !MAPA.clips || !MAPA.clips.length){
+      $('tEstado').innerHTML = 'Ese archivo no tiene una lista de clips.'; return;
+    }
+    var sel = $('tPartido');
+    sel.innerHTML = '<option value="MAPA">' + (MAPA.partido || 'montaje') + ' \u00b7 '
+                  + MAPA.clips.length + ' saques</option>';
+    sel.value = 'MAPA';
+    TANDA.desfase = 0; $('tDesfase').value = '0';
+    /* en modo montaje tandaPartido() sale antes, asi que el equipo propio
+       hay que fijarlo aca o el filtro 'Nosotros' queda vacio */
+    TANDA.equipo = equipoPropio();
+    TANDA.todas = MAPA.clips.map(function(c){
+      return { t:c.ini, num:c.num, name:(c.ape||''), sk:'Saque', set:c.set,
+               tm:(c.equipo === 'NAF' ? equipoPropio() : 'rival'), ev:c.val, _clip:c };
+    });
+    $('cTanda').style.display = 'block';
+    tandaLista();
+    var v = (MAPA.verificacion||{});
+    $('tEstado').innerHTML = '<b>Montaje cargado.</b> ' + MAPA.clips.length + ' saques'
+      + (v.valoraciones_ok ? (', ' + v.valoraciones_ok + ' verificados contra el .dvw') : '')
+      + '. Abr\u00ed el video del montaje y apret\u00e1 Empezar.';
+  };
+  fr.readAsText(f);
+}
+
+function tandaPartido(){
+  if ($('tPartido').value === 'MAPA' && MAPA){ tandaLista(); return; }
+  var VD = vdatos(); if (!VD) return;
+  var code = $('tPartido').value;
+  var m = VD.matches[code] || {};
+  TANDA.equipo = equipoPropio();
+  TANDA.todas = (m.actions || []).filter(function(a){ return a.sk === 'Saque' && a.t > 0; })
+                                 .sort(function(a,b){ return a.t - b.t; });
+  tandaLista();
+}
+
+function tandaLista(){
+  var q = $('tQuienes').value;
+  var mio = TANDA.equipo;
+  TANDA.saques = (TANDA.todas || []).filter(function(a){
+    if (q === 'propio') return a.tm === mio;
+    if (q === 'rival')  return a.tm !== mio;
+    return true;
+  });
+  TANDA.i = -1;
+  $('tCuenta').textContent = TANDA.saques.length ? ('· ' + TANDA.saques.length) : '';
+  pintarTanda();
+}
+
+function pintarTanda(){
+  var e = $('tLista');
+  if (!TANDA.saques.length){ e.innerHTML = '<div style="color:var(--subtle);padding:8px 2px">No hay saques con video en este partido.</div>'; return; }
+  var yaMedidos = medidosDelPartido();
+  e.innerHTML = TANDA.saques.map(function(a, i){
+    var clave = claveSaque(a);
+    var v = yaMedidos[clave];
+    var act = (i === TANDA.i);
+    return '<div onclick="tandaIr(' + i + ')" style="display:flex;justify-content:space-between;gap:8px;'
+      + 'padding:4px 6px;border-radius:6px;cursor:pointer;font-size:13px;'
+      + (act ? 'background:rgba(206,124,24,.14);' : '')
+      + 'border-bottom:1px solid rgba(255,255,255,.035)">'
+      + '<span style="color:' + (act ? 'var(--txt)' : 'var(--mut)') + '">'
+      +   (i+1) + '. #' + parseInt(a.num,10) + ' ' + (a.name || '') + ' <span style="color:var(--subtle)">S' + (a.set||'') + ' · ' + mmss(a.t) + '</span></span>'
+      + (v != null ? ('<b style="font-family:Bebas Neue,sans-serif;font-size:15px;color:var(--saque)">' + v.toFixed(1) + '</b>')
+                   : '<span style="color:var(--subtle)">—</span>')
+      + '</div>';
+  }).join('');
+}
+function mmss(s){ s = Math.max(0, Math.round(s)); return Math.floor(s/60) + ':' + ('0' + (s%60)).slice(-2); }
+
+/* La clave de un saque: partido + segundo + camiseta. Con eso se sabe si ya
+   fue medido, aunque se vuelva a abrir la pantalla otro dia. */
+function claveSaque(a){
+  if (a && a._clip && MAPA) return (MAPA.archivo||'montaje') + '|' + a._clip.clip + '|' + a._clip.saque;
+  return $('tPartido').value + '|' + Math.round(a.t) + '|' + parseInt(a.num,10);
+}
+function medidosDelPartido(){
+  var out = {};
+  MEDIDOS.forEach(function(m){ if (m.clave) out[m.clave] = m.kmh; });
+  return out;
+}
+
+function tandaIr(i){
+  if (!TANDA.saques.length) return;
+  if (i < 0) i = 0;
+  if (i >= TANDA.saques.length) i = TANDA.saques.length - 1;
+  TANDA.i = i;
+  var a = TANDA.saques[i];
+  /* En el montaje, el clip ya arranca antes del saque: se salta al principio.
+     Con el video original hay que retroceder dos segundos a mano. */
+  var t = a._clip ? (a.t + 0.3) : (a.t + TANDA.desfase - 2);
+  if (!(FPS > 0)){ $('tEstado').innerHTML = 'Abrí primero el video del partido.'; return; }
+  irACuadro(Math.max(0, Math.round(t * FPS)));
+  limpiarMarcas();
+  /* el jugador queda elegido solo: es el que dice el .dvw */
+  try {
+    var sel = $('quien'), n = String(parseInt(a.num, 10));
+    for (var k = 0; k < sel.options.length; k++){
+      if ((sel.options[k].value || '').split('|')[0] === n){ sel.selectedIndex = k; break; }
+    }
+  } catch(e){}
+  $('nota').value = 'S' + (a.set || '') + ' · ' + mmss(a.t);
+  $('tEstado').innerHTML = 'Saque <b>' + (i+1) + ' de ' + TANDA.saques.length + '</b> — #'
+    + parseInt(a.num,10) + ' ' + (a.name||'') + '. Marcá <b>1</b> en el golpe y <b>2</b> en la red.';
+  pintarTanda();
+}
+function tandaMover(d){ tandaIr(TANDA.i + d); }
+
+function tandaDesfase(){
+  TANDA.desfase = parseFloat($('tDesfase').value) || 0;
+  $('tAvisoDesfase').innerHTML = TANDA.desfase
+    ? ('Corrimiento aplicado: <b>' + TANDA.desfase.toFixed(1) + ' s</b> a todos los saques.')
+    : 'Sin corrimiento.';
+}
+function tandaAjustar(){
+  /* El corrimiento = donde esta el golpe de verdad menos donde decia el .dvw */
+  if (TANDA.i < 0 || MARCA.golpe == null || !(FPS > 0)){
+    $('tAvisoDesfase').innerHTML = 'Primero andá a un saque y marcá el golpe con <b>1</b>.';
+    return;
+  }
+  var a = TANDA.saques[TANDA.i];
+  var real = MARCA.golpe / FPS;
+  TANDA.desfase = real - a.t;
+  $('tDesfase').value = TANDA.desfase.toFixed(1);
+  $('tAvisoDesfase').innerHTML = 'El golpe estaba <b>' + TANDA.desfase.toFixed(1)
+    + ' s</b> ' + (TANDA.desfase >= 0 ? 'más adelante' : 'más atrás')
+    + ' de lo que decía el .dvw. Aplicado a los ' + TANDA.saques.length + '.';
+}
+
 /* ── arranque ─────────────────────────────────────────────────────────── */
 if (!HAY_RVFC){
   avisoFps('Este navegador no sabe decir qué cuadro está mostrando, así que la medición '
          + 'va a ser gruesa. Usá Chrome o Edge.', true);
 }
 cargarPlantel(); leerDisco(); pintarTabla(); dibujarCancha(); pintarMarcas(); recalcular();
+
+/* Los datos de video llegan cifrados y se abren cuando Firebase entrega la
+   llave, asi que pueden tardar. Se espera hasta 10 s y se escucha el aviso
+   'datos-listos' que manda datos_seguros.js al terminar cada archivo. */
+try { window.addEventListener('datos-listos', function(){ tandaArrancar(); }); } catch(e){}
+(function esperarDatos(){
+  var intentos = 0;
+  var t = setInterval(function(){
+    if (++intentos > 50){ clearInterval(t); return; }
+    if (vdatos()){ clearInterval(t); tandaArrancar(); }
+  }, 200);
+})();
 V.addEventListener('seeked', pintarLinea);
 V.addEventListener('timeupdate', pintarLinea);
 window.addEventListener('beforeunload', pararCamara);
