@@ -36,6 +36,7 @@ import json
 import shutil
 import zipfile
 import subprocess
+import time
 import tempfile
 
 try:
@@ -250,18 +251,65 @@ def main():
     print()
     print('     En total: %s  ·  %.0f MB' % (mmss(total), peso))
 
-    iguales = bool(formatos[0]) and all(f == formatos[0] for f in formatos if f)
+    # Que dos partes no den EXACTAMENTE el mismo formato casi nunca importa:
+    # en un .MTS ffprobe estima los cuadros por segundo del propio contenido y
+    # puede darle 60 a un pedazo y 59,94 a otro. Eso no impide pegarlos.
+    #
+    # Lo que SI importa es el codec y el tamanio de imagen. Si esos cambian de
+    # un pedazo a otro, no son partes de la misma grabacion, y pegarlas tal
+    # cual da un archivo que parece bien (dura lo que tiene que durar) pero
+    # esta roto adentro. Por eso se miran las dos cosas por separado.
+    esenciales = [f[0:3] for f in formatos if f]
+    mismo_video = bool(esenciales) and all(e == esenciales[0] for e in esenciales) \
+                  and len(esenciales) == len(formatos)
+    iguales = bool(formatos[0]) and all(f == formatos[0] for f in formatos)
+
+    # Antes se decidia aca si pegar o recomprimir, y si los formatos no daban
+    # identicos se recomprimia TODO el partido con libx264: veinte minutos o
+    # varias horas. Eso no hace falta casi nunca.
+    #
+    # Ahora se PRUEBA pegar sin recomprimir igual, y recien si eso falla se va
+    # bajando de escalon. Pegar sin recomprimir va a la velocidad del disco:
+    # unos 350 MB por segundo, o sea un partido de 25 GB en poco mas de un
+    # minuto. Recomprimir va a la velocidad del procesador, que es entre cien
+    # y mil veces mas lento.
     print()
     if iguales:
-        print('     Son del mismo formato: las pego SIN volver a comprimir.')
-        print('     Tarda segundos y no se pierde nada de calidad.')
+        print('     Todas las partes son del mismo formato.')
+    elif mismo_video:
+        print('     Las partes no se declaran identicas, pero el codec y el')
+        print('     tamanio de imagen coinciden: son la misma grabacion. Eso')
+        print('     alcanza para pegarlas sin recomprimir.')
     else:
-        print('     [ATENCION] Las partes NO tienen el mismo formato.')
-        print('     Hay que unificarlas y eso tarda: un partido largo puede')
-        print('     llevar veinte minutos o mas, segun la computadora.')
+        print('     [ATENCION] Las partes NO son la misma grabacion: cambia el')
+        print('     codec o el tamanio de imagen de una a otra.')
+        for f in formatos:
+            print('        %s' % ('desconocido' if not f else
+                                  '%s  %sx%s' % (f[0], f[1], f[2])))
+        print()
+        print('     Pegarlas tal cual daria un archivo roto, asi que en este')
+        print('     caso hay que recomprimir, que es el camino lento.')
+    if mismo_video:
+        print('     Voy a pegarlas SIN recomprimir: a velocidad de disco, no de')
+        print('     procesador. No se pierde ni un poco de calidad.')
 
     base = os.path.splitext(archivos[0])[0]
+    carpeta_de = os.path.dirname(os.path.abspath(archivos[0]))
     base = re.sub(r'[_\- ]*\(?\d+\)?$', '', base)
+    # Las camaras numeran los archivos 00000.MTS, 00001.MTS... Sacarle los
+    # numeros a "00000" no deja nada, y el resultado quedaba llamandose
+    # "_completo.mp4" a secas. En ese caso se usa el nombre de la carpeta,
+    # que es donde el que filma pone de que partido se trata.
+    if not os.path.basename(base).strip(' _-'):
+        base = os.path.join(carpeta_de, os.path.basename(carpeta_de) or 'PARTIDO')
+    ext = os.path.splitext(archivos[0])[1].lower()
+    # Si las partes vienen de la camara (.MTS de AVCHD), dejar la salida en el
+    # mismo envase evita cualquier conversion de contenedor. Si son otra cosa,
+    # mp4, que es lo que veniamos usando.
+    de_camara = ext in ('.mts', '.m2ts', '.ts')
+    # La salida sigue siendo .mp4 como siempre: es lo que ya venia usando el
+    # sistema y lo que abren DataVolley y los sitios de video. El envase no
+    # cuesta nada de tiempo; lo caro es recomprimir, y eso no se hace.
     salida = base + '_completo.mp4'
     print()
     print('     Va a quedar como:')
@@ -277,27 +325,17 @@ def main():
         input('\n  Enter para cerrar...')
         return 0
 
-    # ── unir ────────────────────────────────────────────────────────────────
+    # \u2500\u2500 unir \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
     print()
     print('  Uniendo... (no cierres esta ventana)')
     print()
 
     carpeta_salida = os.path.dirname(salida) or '.'
     lista_txt = os.path.join(carpeta_salida, '_partes.txt')
-    try:
-        with io.open(lista_txt, 'w', encoding='utf-8') as f:
-            for a in archivos:
-                ruta = os.path.abspath(a).replace('\\', '/').replace("'", "'\\''")
-                f.write("file '%s'\n" % ruta)
 
-        if iguales:
-            orden = [cmd, '-f', 'concat', '-safe', '0', '-i', lista_txt,
-                     '-c', 'copy', '-movflags', '+faststart', salida, '-y']
-        else:
-            orden = [cmd, '-f', 'concat', '-safe', '0', '-i', lista_txt,
-                     '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23',
-                     '-c:a', 'aac', '-movflags', '+faststart', salida, '-y']
-
+    def correr(orden, etiqueta):
+        """Corre ffmpeg mostrando el avance. Devuelve True si salio bien."""
+        t0 = time.time()
         p = subprocess.Popen(orden, stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT, universal_newlines=True,
                              encoding='utf-8', errors='replace')
@@ -307,22 +345,104 @@ def main():
             if m:
                 seg = int(m.group(1)) * 3600 + int(m.group(2)) * 60 + int(m.group(3))
                 pct = min(100, int(seg * 100 / total)) if total else 0
-                print('\r  Uniendo... %d%%  (%s de %s)' % (pct, mmss(seg), mmss(total)),
+                pasado = time.time() - t0
+                # cuantas veces mas rapido que el tiempo real va: con copia da
+                # cientos, recomprimiendo da menos de diez. Sirve para ver de
+                # un vistazo por que camino esta yendo.
+                x = (seg / pasado) if pasado > 0.5 else 0
+                print('\r  %s %d%%  (%s de %s)   %.0fx ' %
+                      (etiqueta, pct, mmss(seg), mmss(total), x),
                       end='', flush=True)
             if linea and linea.strip():
                 ultimo = linea.strip()
         p.wait()
         print()
-
         if p.returncode != 0:
+            return False, ultimo
+        if not os.path.exists(salida) or os.path.getsize(salida) < 100000:
+            return False, 'el archivo salio vacio'
+        return True, ''
+
+    def bien():
+        """El resultado dura lo que suman las partes y es el mismo video?
+
+        Las dos cosas, no una. Un archivo mal pegado puede durar exactamente
+        lo que tiene que durar y estar roto adentro.
+        """
+        f, d = datos_de(cmd, salida)
+        if formatos[0] and (not f or f[0:3] != formatos[0][0:3]):
+            return False
+        if not total:
+            return d > 0
+        return d > 0 and abs(d - total) <= max(5.0, total * 0.01)
+
+    base_ff = [cmd, '-hide_banner', '-f', 'concat', '-safe', '0', '-i', lista_txt]
+    # +faststart obliga a reescribir el archivo entero una segunda vez para
+    # mover el indice al principio. En un archivo de 25 GB eso es leer y
+    # escribir 25 GB de mas, al pedo: sirve para ver el video por internet
+    # mientras se descarga, no para abrirlo del disco.
+    grande = peso > 4000   # MB
+    fast = [] if (grande or de_camara) else ['-movflags', '+faststart']
+
+    intentos = [
+        (base_ff + ['-c', 'copy'] + fast + [salida, '-y'],
+         'Pegando (sin recomprimir)...'),
+        # Si el envase de salida no se lleva con el audio del original, se
+        # rehace SOLO el audio. El video, que es el 99% del archivo, sigue
+        # copiandose tal cual: sigue tardando segundos.
+        (base_ff + ['-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k'] + fast + [salida, '-y'],
+         'Pegando (rehaciendo solo el audio)...'),
+        (base_ff + ['-c:v', 'copy', '-an'] + fast + [salida, '-y'],
+         'Pegando (sin audio)...'),
+    ]
+
+    ok, ultimo = False, ''
+    if not mismo_video:
+        intentos = []          # no tiene sentido probar la copia
+    try:
+        with io.open(lista_txt, 'w', encoding='utf-8') as f:
+            for a in archivos:
+                ruta = os.path.abspath(a).replace('\\', '/').replace("'", "'\\''")
+                f.write("file '%s'\n" % ruta)
+
+        for orden, etiqueta in intentos:
+            ok, ultimo = correr(orden, etiqueta)
+            if ok and bien():
+                break
+            ok = False
+
+        if not ok:
+            # Ultimo recurso. Esto SI tarda, y por eso se avisa y se pregunta:
+            # nadie deberia arrancar una hora de recompresion sin saberlo.
+            print()
+            print('  ' + '-' * 66)
+            print('  No se pudieron pegar tal cual. Queda recomprimir, que es')
+            print('  el camino lento: para un partido de dos horas en 1080p')
+            print('  puede llevar de una a varias horas, y ademas pierde algo')
+            print('  de calidad.')
+            if ultimo:
+                print('     (el motivo: %s)' % ultimo[:60])
+            print('  ' + '-' * 66)
+            print()
+            try:
+                r = input('  Recomprimir igual? (s/n): ').strip().lower()
+            except Exception:
+                r = 'n'
+            if r != 's':
+                print()
+                print('  No toque nada. Las partes estan intactas.')
+                input('\n  Enter para cerrar...')
+                return 0
+            ok, ultimo = correr(
+                base_ff + ['-c:v', 'libx264', '-preset', 'veryfast', '-crf', '20',
+                           '-c:a', 'aac'] + fast + [salida, '-y'],
+                'Recomprimiendo...')
+
+        if not ok:
             print()
             print('  No pude unirlas.')
             if ultimo:
                 print('     %s' % ultimo[:70])
-            print()
-            if iguales:
-                print('  Proba de nuevo: puede que las partes tengan diferencias')
-                print('  que no se ven a simple vista. Va a tardar mas.')
             input('\n  Enter para cerrar...')
             return 1
     finally:
@@ -330,6 +450,7 @@ def main():
             os.remove(lista_txt)
         except Exception:
             pass
+
 
     _fmt, dur = datos_de(cmd, salida)
     tam = os.path.getsize(salida) / 1048576

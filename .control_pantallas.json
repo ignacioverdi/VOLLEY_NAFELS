@@ -1255,8 +1255,9 @@
   "tablas": {}
  },
  "index.html": {
-  "bytes": 146823,
+  "bytes": 150802,
   "funciones": [
+   "EQUIPO_DATA",
    "FIXTURE_DATA",
    "anotarVedadas",
    "aplicarModo",
@@ -1367,7 +1368,7 @@
   "tablas": {}
  },
  "jugador.html": {
-  "bytes": 87067,
+  "bytes": 87759,
   "funciones": [
    "EQUIPO_DATA",
    "GAMEPLAN_DATA",
@@ -1579,8 +1580,16 @@
   ],
   "tablas": {}
  },
+ "objetivos_equipo.html": {
+  "bytes": 4643,
+  "funciones": [
+   "EQUIPO_DATA",
+   "__DESCIFRAR_SINCRONO"
+  ],
+  "tablas": {}
+ },
  "p2.html": {
-  "bytes": 21154,
+  "bytes": 21204,
   "funciones": [
    "P2",
    "arranque",
@@ -2535,7 +2544,7 @@
   "tablas": {}
  },
  "radar_saque.html": {
-  "bytes": 59141,
+  "bytes": 59205,
   "funciones": [
    "aDibujo",
    "aFirebase",

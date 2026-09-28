@@ -414,6 +414,12 @@ var TXT = {
   vsDia:'vs el %1 pasado', vsSemana:'vs la semana pasada', igual:'igual que el %1 pasado',
   cerroCorto:'cerr&oacute; %1',
   tJugador:'Jugador', tCumplidos:'objetivos cumplidos',
+  tObjetivos:'Objetivos', tPlantel:'Objetivos del plantel',
+  tVerTodos:'ver', tDetPlantel:'Todo el plantel en una hoja: qu&eacute; se le pidi&oacute; a cada uno esta semana y c&oacute;mo viene.',
+  tIrPlantel:'Ver el plantel &rarr;', tIrMios:'Ver mis objetivos &rarr;',
+  tDetOk:'<b>%1</b> vas en <b>%2</b> &middot; ya est&aacute;', tDetFalta:'<b>%1</b> vas en <b>%2</b> &middot; te faltan %3',
+  tArranca:'La semana arranca. Tu objetivo de <b>%1</b> te espera.',
+  tSinNada:'Todav&iacute;a no hay nada cargado esta semana.', tCumplidosC:'cumplidos',
   tConAcciones:'<b>%1 jugadores</b> con acciones esta semana',
   tSemana:'semana del %1', tPrimera:'1&ordf; semana', tSinAcc:'sin acciones',
   tLlego:'lleg&oacute; al objetivo', tFalta:'le falta',
@@ -450,6 +456,12 @@ var TXT = {
   vsDia:'vs last %1', vsSemana:'vs last week', igual:'same as last %1',
   cerroCorto:'closed %1',
   tJugador:'Player', tCumplidos:'goals met',
+  tObjetivos:'Goals', tPlantel:'Squad goals',
+  tVerTodos:'see', tDetPlantel:'The whole squad on one sheet: what each one was asked for this week and how it is going.',
+  tIrPlantel:'See the squad &rarr;', tIrMios:'See my goals &rarr;',
+  tDetOk:'<b>%1</b> you are at <b>%2</b> &middot; done', tDetFalta:'<b>%1</b> you are at <b>%2</b> &middot; %3 to go',
+  tArranca:'The week is starting. Your <b>%1</b> goal is waiting.',
+  tSinNada:'Nothing loaded yet this week.', tCumplidosC:'met',
   tConAcciones:'<b>%1 players</b> with actions this week',
   tSemana:'week of %1', tPrimera:'1st week', tSinAcc:'no actions',
   tLlego:'reached the goal', tFalta:'short',
@@ -486,6 +498,12 @@ var TXT = {
   vsDia:'vs. letzten %1', vsSemana:'vs. letzte Woche', igual:'gleich wie letzten %1',
   cerroCorto:'Abschluss %1',
   tJugador:'Spieler', tCumplidos:'Ziele erreicht',
+  tObjetivos:'Ziele', tPlantel:'Ziele des Kaders',
+  tVerTodos:'ansehen', tDetPlantel:'Der ganze Kader auf einem Blatt: was diese Woche verlangt wurde und wie es l&auml;uft.',
+  tIrPlantel:'Kader ansehen &rarr;', tIrMios:'Meine Ziele ansehen &rarr;',
+  tDetOk:'<b>%1</b> du stehst bei <b>%2</b> &middot; geschafft', tDetFalta:'<b>%1</b> du stehst bei <b>%2</b> &middot; noch %3',
+  tArranca:'Die Woche beginnt. Dein Ziel in <b>%1</b> wartet.',
+  tSinNada:'Diese Woche noch nichts geladen.', tCumplidosC:'erreicht',
   tConAcciones:'<b>%1 Spieler</b> mit Aktionen diese Woche',
   tSemana:'Woche vom %1', tPrimera:'1. Woche', tSinAcc:'keine Aktionen',
   tLlego:'Ziel erreicht', tFalta:'fehlt noch',
@@ -918,18 +936,26 @@ function nombreDelQueEntro(){
   }
   return null;
 }
-/* El modo que tenga acciones esta semana. Si los dos tienen, el partido. */
+/* ── QUE MODO MUESTRA LA PORTADA ───────────────────────────────────────────
+   El perfil del jugador tiene su propio filtro de partido/entrenamiento. La
+   portada no, asi que elige sola: el modo que esta semana tenga MAS
+   fundamentos con acciones. Al principio ponia partido siempre que hubiera
+   uno, y el lunes despues de un partido eso dejaba la portada en blanco
+   —cuatro acciones sueltas y ningun objetivo con numero— mientras la semana
+   de entrenamiento estaba llena. Nunca se mezclan los dos: se elige uno.   */
 function modoConAcciones(nombre){
-  var hay = {};
-  ['partido','entrenamiento'].forEach(function(md){
-    hay[md] = ['sq','rec','def','bqpos','atqrp','atqtr','atqq','hset'].some(function(id){
+  var pue = puestoDe(nombre);
+  var ids = PUESTOS[pue] || POR_DEFECTO;
+  var mejor = 'entrenamiento', cuenta = -1;
+  ['entrenamiento', 'partido'].forEach(function(md){
+    var n = 0;
+    ids.forEach(function(id){
       var r = serie(nombre, md, id);
-      return r.hay && r.ultima && r.ultima.n > 0;
+      if(r.hay && r.ultima && r.ultima.n > 0 && r.ultima.objetivo != null) n++;
     });
+    if(n > cuenta){ cuenta = n; mejor = md; }
   });
-  if(hay.partido) return 'partido';
-  if(hay.entrenamiento) return 'entrenamiento';
-  return 'entrenamiento';
+  return mejor;
 }
 
 function render(){
@@ -970,25 +996,143 @@ function render(){
   cont.innerHTML = html;
 }
 
+/* ── LA TARJETA DE ACCESO EN LA PORTADA ────────────────────────────────────
+   El hueco lo deja index.html, escondido y con id="tb-objetivos". Aca se
+   llena y recien ahi se muestra: si los datos no abren, no aparece nada y la
+   portada queda como siempre.
+
+   Es una tarjeta del mismo tamanio que «Proximo partido» y va primera. Antes
+   habia probado meterlo como un numero mas adentro de «Como venimos» y no
+   servia: para encontrarlo habia que saber que estaba.                     */
+function tarjetaPortada(){
+  var caja = document.getElementById('tb-objetivos');
+  if(!caja || caja.getAttribute('data-os') === '1' || !listo()) return;
+
+  var num = document.getElementById('tb-obj-n');
+  var det = document.getElementById('tb-obj-d');
+  var ir  = document.getElementById('tb-obj-ir');
+  var nombre = window._objNombre || nombreDelQueEntro();
+
+  if(!nombre){
+    /* cuerpo tecnico: la hoja con todo el plantel */
+    caja.setAttribute('data-os', '1');
+    caja.setAttribute('href', 'objetivos_equipo.html');
+    caja.querySelector('.tb-lbl').innerHTML = T('tPlantel');
+    if(num){ num.className = 'tb-obj-n'; num.innerHTML = '<span style="font-size:.6em">' + T('tVerTodos') + '</span>'; }
+    if(det) det.innerHTML = T('tDetPlantel');
+    if(ir)  ir.innerHTML = T('tIrPlantel');
+    caja.style.display = '';
+    return;
+  }
+
+  var modo = modoConAcciones(nombre);
+  var pue  = puestoDe(nombre);
+  var ids  = PUESTOS[pue] || POR_DEFECTO;
+  var cump = 0, tot = 0, rs = [];
+  ids.forEach(function(id){
+    var r = serie(nombre, modo, id);
+    rs.push(r);
+    if(r.hay && r.ultima && r.ultima.n > 0 && r.ultima.objetivo != null){
+      tot++; if(r.ultima.val >= r.ultima.objetivo) cump++;
+    }
+  });
+  caja.setAttribute('data-os', '1');
+  caja.setAttribute('href', 'jugador.html');
+  if(ir) ir.innerHTML = T('tIrMios');
+
+  if(!tot){
+    /* la semana todavia no arranco: se muestra igual, con el objetivo que le
+       toca, porque eso es justamente lo que tiene que ir a hacer */
+    var con = rs.filter(function(r){ return r.hay && r.ultima && r.ultima.objetivo != null; })[0];
+    if(num){ num.className = 'tb-obj-n'; num.innerHTML = con ? n1(con.ultima.objetivo) : '&mdash;'; }
+    if(det){
+      det.innerHTML = con
+        ? T('tArranca', nombreDe(con.id, con.meta)) 
+        : T('tSinNada');
+    }
+    caja.style.display = '';
+    return;
+  }
+
+  /* el que va primero en su puesto y tiene acciones esta semana */
+  var head = rs.filter(function(r){ return r.hay && r.ultima && r.ultima.n > 0 && r.ultima.objetivo != null; })[0];
+  if(num){
+    num.className = 'tb-obj-n' + (cump === tot ? '' : ' falta');
+    num.innerHTML = cump + '<s>/' + tot + '</s>';
+  }
+  if(det && head){
+    var c = head.ultima;
+    det.innerHTML = c.val >= c.objetivo
+      ? T('tDetOk', nombreDe(head.id, head.meta), n1(c.val))
+      : T('tDetFalta', nombreDe(head.id, head.meta), n1(c.val), n1(c.objetivo - c.val));
+  }
+  caja.style.display = '';
+}
+
 /* ── Enganche ───────────────────────────────────────────────────────────────
    No se toca ninguna funcion de la pantalla: se envuelve la que ya redibuja
    las baterias, asi el cambio de partido/entrenamiento arrastra a esta
-   tarjeta sin que haya que acordarse de llamarla. Si esa funcion no existe,
-   se dibuja igual al cargar.                                                */
+   tarjeta sin que haya que acordarse de llamarla.
+
+   Y SE ESPERA A QUE LOS DATOS ESTEN ABIERTOS. datos_baterias.js.enc pesa
+   240 KB, y datos_seguros.js abre los archivos grandes EN SEGUNDO PLANO para
+   no congelar el telefono: cuando termina cada uno avisa con el evento
+   'datos-listos'. Dibujar una sola vez al cargar la pagina era dibujar antes
+   de que existiera window.BAT_PARTIDOS, y la tarjeta no aparecia nunca en la
+   portada. Ahora se escucha ese aviso y ademas se reintenta un rato por si
+   el aviso no llega.                                                        */
+function listo(){
+  return !!(window.BAT_PARTIDOS && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas);
+}
+function pintarTodo(){
+  try{ render(); }catch(e){ if(window.console) console.warn('[obj-semana]', e); }
+  try{ tarjetaPortada(); }catch(e){ if(window.console) console.warn('[obj-semana]', e); }
+}
 function enganchar(){
   if(typeof window.objRenderBaterias === 'function' && !window.objRenderBaterias._os){
     var orig = window.objRenderBaterias;
     var envuelta = function(){
       var r = orig.apply(this, arguments);
-      try{ render(); }catch(e){ if(window.console) console.warn('[obj-semana]', e); }
+      pintarTodo();
       return r;
     };
     envuelta._os = true;
     window.objRenderBaterias = envuelta;
   }
-  try{ render(); }catch(e){ if(window.console) console.warn('[obj-semana]', e); }
+  pintarTodo();
+  /* Se sigue intentando hasta que esten las DOS cosas: los datos abiertos y
+     el hueco de la pastilla dibujado. El hueco lo pone hbTop(), que corre
+     cuando quiere, asi que cortar apenas llegan los datos dejaba la pastilla
+     en blanco. */
+  var intentos = 0, hechos = 0;
+  var t = setInterval(function(){
+    intentos++;
+    var hay = listo();
+    var hueco = document.getElementById('tb-objetivos');
+    if(hay) pintarTodo();
+    if(hay && (hueco || intentos > 12)) hechos++;
+    if(hechos >= 3 || intentos > 60) clearInterval(t);   /* 24 segundos y se deja */
+  }, 400);
+  try{
+    window.addEventListener('datos-listos', function(){ setTimeout(pintarTodo, 0); });
+  }catch(e){}
+  /* Y un vigia, por si el tablero se redibuja mucho despues: cuando aparece
+     un hueco de pastilla sin marcar, se llena. */
+  try{
+    if(window.MutationObserver && document.body){
+      var esperando = false;
+      new MutationObserver(function(){
+        if(esperando) return;
+        var a = document.getElementById('tb-objetivos');
+        if(!a || a.getAttribute('data-os') === '1') return;
+        esperando = true;
+        setTimeout(function(){ esperando = false;
+          try{ tarjetaPortada(); }catch(e){} }, 60);
+      }).observe(document.body, {childList:true, subtree:true});
+    }
+  }catch(e){}
 }
-window.OBJ_SEMANA = {render:render, serie:serie, semanas:semanas, PUESTOS:PUESTOS, CUENTA:CUENTA,
+window.OBJ_SEMANA = {render:render, pastilla:tarjetaPortada, serie:serie, semanas:semanas, PUESTOS:PUESTOS, CUENTA:CUENTA,
                      /* la tabla del cuerpo tecnico usa el mismo diccionario:
                         si hubiera dos, un dia dirian cosas distintas */
                      T:T, idioma:idioma, nombreDe:nombreDe, cortoDe:cortoDe,

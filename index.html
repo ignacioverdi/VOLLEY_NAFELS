@@ -418,6 +418,23 @@ a.tb-box:hover{border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
   background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#94a3b8}
 .tb-set.gano{color:#22c55e;border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.08)}
 .tb-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+/* == LA TARJETA DE OBJETIVOS DE LA SEMANA ==================================
+   Va primera en el tablero y del mismo tamanio que las otras: es lo primero
+   que el jugador tiene que ver al entrar, porque es lo que le dice que hacer
+   hoy. Metida como un numero mas adentro de «Como venimos» no la encontraba
+   nadie.
+   Arranca escondida y la muestra objetivos_semanales.js cuando termina de
+   abrir los datos. Si esos datos no llegan, no aparece y la portada queda
+   igual que siempre. */
+a.tb-obj{border-color:rgba(34,197,94,.3)}
+a.tb-obj .tb-lbl{color:#22c55e}
+.tb-obj-n{font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:1;color:#22c55e}
+.tb-obj-n s{text-decoration:none;font-size:.55em;color:#64748b}
+.tb-obj-n.falta{color:#E8192C}
+.tb-obj-d{font-size:15px;color:#94a3b8;margin-top:3px;line-height:1.35}
+.tb-obj-d b{color:#e2e8f0}
+.tb-obj-ir{margin-top:7px;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;
+  color:#22c55e;font-weight:800}
 .tb-3>div{min-width:0}
 .tb-n{font-family:'Bebas Neue',sans-serif;font-size:25px;line-height:1}
 .tb-nl{font-size:9px;color:#64748b;letter-spacing:.8px;text-transform:uppercase;
@@ -507,7 +524,7 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
   #tablero{grid-template-columns:1fr;padding:0 16px;gap:10px}
 }
 @media (max-width:480px){
-  .tb-big{font-size:23px}.tb-n{font-size:22px}
+  .tb-big{font-size:23px}.tb-n{font-size:22px}.tb-obj-n{font-size:34px}
   body.hb-compacto .cards-grid{grid-template-columns:1fr!important}
 }
 /* ── EL ENCABEZADO EN EL TELEFONO ─────────────────────────────────────────
@@ -1886,6 +1903,15 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   function pintarTablero(){
     var box = $('tablero'); if(!box) return;
     var h = '';
+
+    /* == OBJETIVOS DE LA SEMANA, PRIMERA DE TODAS =========================
+       El hueco lo llena objetivos_semanales.js: pone el numero, el detalle y
+       a donde va el link, y recien ahi la muestra. */
+    h += '<a class="tb-box tb-obj" id="tb-objetivos" href="jugador.html" style="display:none">'
+       + '<div class="tb-lbl">Objetivos de la semana</div>'
+       + '<div class="tb-obj-n" id="tb-obj-n">—</div>'
+       + '<div class="tb-obj-d" id="tb-obj-d"></div>'
+       + '<div class="tb-obj-ir" id="tb-obj-ir">Ver mis objetivos →</div></a>';
 
     /* ── proximo partido ── */
     if(PROX){
