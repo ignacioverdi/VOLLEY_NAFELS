@@ -568,13 +568,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20260928-0903"></script>
-<script src="selector_categoria.js?v=20260928-0903"></script>
-<script src="lang.js?v=20260928-0903"></script>
+<script src="categorias_club.js?v=20260928-2252"></script>
+<script src="selector_categoria.js?v=20260928-2252"></script>
+<script src="lang.js?v=20260928-2252"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260928-0903">
+<link rel="stylesheet" href="movil.css?v=20260928-2252">
 </head>
 <body>
 
@@ -1012,6 +1012,21 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
           <div class="sub" data-t="Así vas alineando el rally entero sin tocar la lista."><span data-t="Así vas alineando el rally entero sin tocar la lista."><span data-t="Así vas alineando el rally entero sin tocar la lista.">Así vas alineando el rally entero sin tocar la lista.</span></span></div>
         </div>
 
+        <div style="margin-top:14px">
+          <label class="f">Intervalos de Smart Time</label>
+          <div class="sub">Los segundos que el programa deja entre una acción y la
+            siguiente cuando alineás un rally entero de una. El manual trae 3 / 3,2 / 3;
+            estos son los que usa el DataVolley con el que scouteamos.</div>
+          <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:6px">
+            <label style="display:flex;align-items:center;gap:6px">saque → ataque
+              <input type="number" id="cfg-smart-sa" min="0" max="15" step="0.1" style="width:64px"> s</label>
+            <label style="display:flex;align-items:center;gap:6px">ataque → ataque
+              <input type="number" id="cfg-smart-aa" min="0" max="15" step="0.1" style="width:64px"> s</label>
+            <label style="display:flex;align-items:center;gap:6px">último golpe → fin
+              <input type="number" id="cfg-smart-fin" min="0" max="15" step="0.1" style="width:64px"> s</label>
+          </div>
+        </div>
+
         <div style="margin-top:8px">
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
             <input type="checkbox" id="cfg-video-salta">
@@ -1296,16 +1311,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20260928-0903" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260928-0903"></script>
-<script src="objetivos.js?v=20260928-0903" onerror="void 0"></script>
-<script src="video_delay.js?v=20260928-0903" onerror="void 0"></script>
+<script src="firebase.js?v=20260928-2252" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260928-2252"></script>
+<script src="objetivos.js?v=20260928-2252" onerror="void 0"></script>
+<script src="video_delay.js?v=20260928-2252" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20260928-0903" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20260928-0903"></script>
+<script src="plantel_nafels.js?v=20260928-2252" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260928-2252"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -1445,6 +1460,17 @@ if(CFG.autoLineup===undefined) CFG.autoLineup = false;
 if(CFG.videoAvanza===undefined) CFG.videoAvanza = true;   /* tras alinear, pasa al siguiente código */
 if(CFG.videoSalta===undefined)  CFG.videoSalta  = true;   /* al elegir un código, el video salta ahí */
 if(CFG.gapArmado===undefined)   CFG.gapArmado   = 1;      /* intervalo recepción/defensa -> armado */
+/* Los tres intervalos de Smart Time (manual 2.5.6 · 2). El manual trae 3 / 3,2 / 3
+   pero aclara que se cambian en Scouting Options, y cada scout los tiene como
+   quiere. Estos defaults salen de medir los .dvw que produce el DataVolley con
+   el que scouteamos: 575 rallies, fin de jugada +5 s en 337 de 415 casos y
+   ataque->ataque +4. Con estos valores lo que genera el panel cae dentro de un
+   segundo de lo que pone DataVolley en el 89% de los codigos; con 3 / 3,2 / 3
+   caia en el 73%. Si el dia de maniana cambia su configuracion, se cambian
+   aca —o en la ventana de Configuracion— y listo. */
+if(CFG.smartSaqueAtaque===undefined)  CFG.smartSaqueAtaque  = 3;
+if(CFG.smartAtaqueAtaque===undefined) CFG.smartAtaqueAtaque = 4;
+if(CFG.smartFinJugada===undefined)    CFG.smartFinJugada    = 5;
 if(!CFG.keys.sync) CFG.keys.sync = 'F2';
   if(!CFG.keys.undo) CFG.keys.undo = 'F4';                  /* deshacer la ultima accion (Ctrl+A quedo para reabrir el punto) */                  /* tecla de alineación (manual 2.5.6) */
 /* Atajos propios (manual 2.6, botón [Add]): una tecla escribe un texto en la barra.
@@ -3936,7 +3962,11 @@ function irAlVideo(i){
    3 s entre el saque y el ataque rival · 3,2 s entre ataques seguidos ·
    3 s entre el último golpe de la jugada y el fin de jugada.
    Se puede agregar un intervalo entre recepción/defensa y el armado. */
-const SMART = {saqueAtaque:3.0, ataqueAtaque:3.2, finJugada:3.0};
+function smartVals(){
+  return { saqueAtaque:  +CFG.smartSaqueAtaque  || 3,
+           ataqueAtaque: +CFG.smartAtaqueAtaque || 4,
+           finJugada:    +CFG.smartFinJugada    || 5 };
+}
 function smartTime(){
   if(!M.codes.length){ toast('No hay códigos',true); return; }
   /* Los intervalos del manual se miden desde un ancla, no se acumulan:
@@ -3944,6 +3974,7 @@ function smartTime(){
        · cada ataque siguiente, 3,2 s después DEL ATAQUE ANTERIOR
        · el fin de jugada, 3 s después DEL ÚLTIMO ATAQUE O BLOQUEO
        · el armado, un intervalo después de la recepción o defensa            */
+  const SMART = smartVals();
   let t = M.codes[0].t || 0;
   let tSaque=null, tAtaque=null, tRecDef=null;
   M.codes.forEach((row,i)=>{
@@ -3961,11 +3992,46 @@ function smartTime(){
       else                   t = t + SMART.saqueAtaque;
       tAtaque = t;
     }
+    /* EL FREEBALL SE SEPARA COMO UN ATAQUE.
+       El manual habla del intervalo «between the successive Attacks and/or
+       Freeballs», pero aca no habia rama para F: el freeball se quedaba con el
+       segundo del codigo anterior. Medido contra el DataVolley real, el
+       freeball va +3 s del codigo anterior (n=50, mediana 3), y el error del
+       panel era de casi cinco segundos. */
+    else if(sk==='F'){
+      if(tAtaque!==null)     t = tAtaque + SMART.ataqueAtaque;
+      else if(tSaque!==null) t = tSaque + SMART.saqueAtaque;
+      else                   t = t + SMART.saqueAtaque;
+      tAtaque = t;
+    }
     else if(sk==='B'){ if(tAtaque!==null) t = tAtaque; tAtaque = t; }
     else if(finJugada){ t = (tAtaque!==null ? tAtaque : t) + SMART.finJugada; tSaque=null; tAtaque=null; tRecDef=null; }
     row.t = Math.round(t);
     t = row.t;
   });
+  /* EL ARMADO VA 1 SEGUNDO ANTES DEL ATAQUE, no un segundo despues de la
+     recepcion. Parecen lo mismo y no lo son: como el saque y la recepcion
+     comparten el segundo, poner el armado en recepcion+1 lo dejaba DOS
+     segundos antes del ataque, y 2,2 en los ataques del medio del rally.
+
+     El manual (9.1.4.4) lo dice al reves de como estaba: «it will give the Set
+     [E] 1 second before the attack». Y el DataVolley real lo confirma: ataque
+     menos armado da +1 s, tanto en el primer ataque del rally (289 de 402)
+     como en los siguientes (154 de 266).
+
+     Se resuelve mirando hacia adelante, una vez que los ataques ya tienen su
+     tiempo. Con esto el armado pasa de caer exacto en el 5% de los casos
+     al 45%, y dentro de un segundo del 49% al 79%. */
+  for(let i=0;i<M.codes.length;i++){
+    const ci = M.codes[i];
+    if(!(ci.k==='play' && ci.c.length>3 && ci.c[3]==='E')) continue;
+    for(let j=i+1;j<M.codes.length;j++){
+      const cj = M.codes[j], c = cj.c;
+      if(/^[*a]p\d\d:\d\d$/.test(c)) break;                 /* se acabo el rally */
+      if(cj.k==='play' && c.length>3 && c[3]==='S') break;    /* empezo otro */
+      if(cj.k==='play' && c.length>3 && c[3]==='A'){ ci.t = Math.round(cj.t - 1); break; }
+    }
+  }
   /* El bloque automático que sigue al punto (*P08 *z5 aP04 az3) lleva el tiempo
      del SAQUE SIGUIENTE, no el del punto. Verificado en el archivo oficial. */
   for(let i=0;i<M.codes.length;i++){
@@ -5600,6 +5666,12 @@ function openConfig(){
     if(_va) _va.checked = CFG.videoAvanza !== false;
     var _vs=document.getElementById('cfg-video-salta');
     if(_vs) _vs.checked = CFG.videoSalta !== false;
+    var _sa=document.getElementById('cfg-smart-sa');
+    if(_sa) _sa.value = CFG.smartSaqueAtaque;
+    var _aa=document.getElementById('cfg-smart-aa');
+    if(_aa) _aa.value = CFG.smartAtaqueAtaque;
+    var _fi=document.getElementById('cfg-smart-fin');
+    if(_fi) _fi.value = CFG.smartFinJugada;
   }catch(e){}
   const ev = document.getElementById('cfg-eval');
   ev.innerHTML = EVALS.map(e=>'<div><label class="f">'+e+' &nbsp;<span style="color:var(--dim)">'+EVAL_MEAN.A[e]+' en ataque</span></label>'+
@@ -5655,6 +5727,14 @@ function saveConfig(){
     if(_va) CFG.videoAvanza=_va.checked;
     var _vs=document.getElementById('cfg-video-salta');
     if(_vs) CFG.videoSalta=_vs.checked;
+    /* Un campo vacio o con cualquier cosa no tiene que romper el Smart Time:
+       si no sale un numero, se deja el que estaba. */
+    var _sa=document.getElementById('cfg-smart-sa');
+    if(_sa && !isNaN(parseFloat(_sa.value))) CFG.smartSaqueAtaque=parseFloat(_sa.value);
+    var _aa=document.getElementById('cfg-smart-aa');
+    if(_aa && !isNaN(parseFloat(_aa.value))) CFG.smartAtaqueAtaque=parseFloat(_aa.value);
+    var _fi=document.getElementById('cfg-smart-fin');
+    if(_fi && !isNaN(parseFloat(_fi.value))) CFG.smartFinJugada=parseFloat(_fi.value);
   }catch(e){}   /* sin la ventana abierta no hay nada que leer */
   let choque=false;
   document.querySelectorAll('#cfg-eval .keycap, #cfg-cmd .keycap').forEach(el=>{
@@ -9130,8 +9210,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20260928-0903" onerror="void 0"></script>
-<script src="ayuda.js?v=20260928-0903"></script>
+<script src="volver_inicio.js?v=20260928-2252" onerror="void 0"></script>
+<script src="ayuda.js?v=20260928-2252"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -10255,13 +10335,13 @@ function renderAnalisis(){
 </script>
 <!-- La barra de analisis (manual 9.5). Va en su propio archivo a proposito:
      solo lee y dibuja, y si no carga el panel sigue igual que siempre. -->
-<script src="analisis_vivo.js?v=20260928-0903" onerror="void 0"></script>
+<script src="analisis_vivo.js?v=20260928-2252" onerror="void 0"></script>
 <!-- El rediseno del panel: la barra agrupada, el marcador en la barra,
      las rotaciones legibles y el cuadro de "como venimos". Va en su
      propio archivo a proposito: solo reacomoda y pinta, y si no carga
      el panel queda exactamente como estaba. -->
-<script src="panel_estilo.js?v=20260928-0903" onerror="void 0"></script>
-<script src="radar_motor.js?v=20260928-0903"></script>
-<script src="radar_vivo.js?v=20260928-0903" onerror="void 0"></script>
+<script src="panel_estilo.js?v=20260928-2252" onerror="void 0"></script>
+<script src="radar_motor.js?v=20260928-2252"></script>
+<script src="radar_vivo.js?v=20260928-2252" onerror="void 0"></script>
 </body>
 </html>
