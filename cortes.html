@@ -7,15 +7,15 @@
 <!-- Las fuentes de la app. Esta pantalla era la unica que salia con la
      fuente del sistema, y por eso parecia de otro programa. -->
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20260928-2252"></script>
-<script src="selector_categoria.js?v=20260928-2252"></script>
+<script src="categorias_club.js?v=20260928-2315"></script>
+<script src="selector_categoria.js?v=20260928-2315"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260928-2252"></script>
-<script src="filtro_tipo.js?v=20260928-2252" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260928-2315"></script>
+<script src="filtro_tipo.js?v=20260928-2315" onerror="void 0"></script>
   <!-- datos_video_25-26 sacado: es el video de la CAPSULA. Esta pantalla es
        de la 26-27, y cargarlo mezclaba jugadores nuevos con cortes de la
        temporada pasada. -->
@@ -36,8 +36,8 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="mapa_videos.js.enc?v=3" onerror="void 0"></script>
 <script src="mapa_videos_ent.js.enc?v=3" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20260928-2252" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260928-2252"></script>
+<script src="firebase.js?v=20260928-2315" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260928-2315"></script>
 <style>
   /* == LOS COLORES DE LA APP, NO LOS DE ESTA PANTALLA =====================
      El acento era verde y el fondo tenia degrade: entrabas de cualquier
@@ -233,7 +233,7 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260928-2252">
+<link rel="stylesheet" href="movil.css?v=20260928-2315">
 </head>
 <body>
 <div class="hdr"><div class="hdr-in">
@@ -354,7 +354,7 @@ window.__DESCIFRAR_SINCRONO = true;
         <div class="ct-spacer"></div>
         <div class="seg"><span data-t="Velocidad">Velocidad</span> <select id="speed"><option>0.25</option><option>0.5</option><option>0.75</option><option selected>1</option><option>1.5</option><option>2</option></select></div>
       </div>
-      <div class="offset">antes <input type="range" id="preoff" min="0" max="10" step="0.5" value="4"> <b><span id="prev">4</span>s</b> <span data-t="· contacto ·">· contacto ·</span> <b><span id="postv">5</span>s</b> <input type="range" id="postoff" min="0" max="10" step="0.5" value="5"> <span data-t="después">después</span></div>
+      <div class="offset">antes <input type="range" id="preoff" min="0" max="10" step="0.5" value="4"> <b><span id="prev">4</span>s</b> <span data-t="· contacto ·">· contacto ·</span> <b><span id="postv">5</span>s</b> <input type="range" id="postoff" min="0" max="20" step="0.5" value="5"> <span data-t="después">después</span></div>
       <div class="kbhint">⌨ <b data-t="Espacio"><span data-t="Espacio">Espacio</span></b> <span data-t="play/pausa ·">play/pausa ·</span> <b>← →</b> <span data-t="clip anterior/siguiente ·">clip anterior/siguiente ·</span> <b>R</b> <span data-t="repetir ·">repetir ·</span> <b>Z X</b> <span data-t="re-ver ±2s ·">re-ver ±2s ·</span> <b>↑ ↓</b> <span data-t="velocidad ·">velocidad ·</span> <b>L</b> <span data-t="loop ·">loop ·</span> <b>F</b> <span data-t="pantalla ·">pantalla ·</span> <b>M</b> <span data-t="mute">mute</span></div>
       <!-- Ocupaba dos renglones enteros para seis botones que se usan de
            vez en cuando. Ahora es un desplegable: una linea. -->
@@ -367,7 +367,7 @@ window.__DESCIFRAR_SINCRONO = true;
         <button class="qr" data-sk="Bloqueo" data-ev="#" data-t="Bloqueos punto"><span data-t="Bloqueos punto">Bloqueos punto</span></button>
         <button class="qr" data-sk="Recepción" data-ev="=,-,/" data-t="Recepciones rotas"><span data-t="Recepciones rotas">Recepciones rotas</span></button>
       </div></details>
-      <div class="listhead"><h2><span data-t="Clips">Clips</span> <b id="cnt2" class="lcnt">0</b> <span style="font-weight:400;color:var(--muted);font-size:11px" data-t="— tildá para armar tu recorte"><span data-t="— tildá para armar tu recorte">— tildá para armar tu recorte</span></span></h2><div class="x"><button id="selAll" data-t="Marcar todos"><span data-t="Marcar todos">Marcar todos</span></button><button id="clearSel" data-t="Limpiar"><span data-t="Limpiar">Limpiar</span></button><button id="expCsv" title="Bajar los clips elegidos en un archivo para el editor de video" data-t="⇩ CSV para el editor"><span data-t="⇩ CSV para el editor">⇩ CSV para el editor</span></button><button id="share" data-t="🔗 Compartir recorte"><span data-t="🔗 Compartir recorte">🔗 Compartir recorte</span></button></div></div>
+      <div class="listhead"><h2><span data-t="Clips">Clips</span> <b id="cnt2" class="lcnt">0</b> <span style="font-weight:400;color:var(--muted);font-size:11px" data-t="— tildá para armar tu recorte"><span data-t="— tildá para armar tu recorte">— tildá para armar tu recorte</span></span></h2><div class="x"><button id="selAll" data-t="Marcar todos"><span data-t="Marcar todos">Marcar todos</span></button><button id="clearSel" data-t="Limpiar"><span data-t="Limpiar">Limpiar</span></button><button id="cortarYa" title="Cortar los clips elegidos en tu computadora" style="display:none">✂ Cortar ahora</button><button id="expCsv" title="Bajar los clips elegidos en un archivo para el editor de video" data-t="⇩ CSV para el editor"><span data-t="⇩ CSV para el editor">⇩ CSV para el editor</span></button><button id="share" data-t="🔗 Compartir recorte"><span data-t="🔗 Compartir recorte">🔗 Compartir recorte</span></button></div></div>
       <div class="listwrap" id="list"></div>
     </div>
   </div>
@@ -821,11 +821,119 @@ var fTy=[];
   (function(){ var b=$('coachNoteSave'); if(b) b.onclick=saveCoachNote; })();
   function exportCSV(){var ch=Object.keys(selected).length?filtered.filter(function(a){return selected[ckey(a)];}):filtered;
     if(!ch.length){toast('No hay clips');return;}var pre=preOff(),post=postOff();
-    var csv='partido,fecha,inicio_seg,fin_seg,inicio,fin,jugador,numero,accion,detalle,valoracion,set\n'+ch.map(function(a){var s=Math.max(0,a.t-pre),e=a.t+post;var det=a.sk==='Ataque'?(COMBOS[a.x]||''):(TYPE_NAME[a.x]||'');
-      return [a.mc,VD.matches[a.mc].date,s,e,mmss(s),mmss(e),'"'+a.name+'"',parseInt(a.num,10),a.sk,'"'+det+'"',a.ev,a.set].join(',');}).join('\n');
+    /* La columna 'video' la agrega CORTAR_SELECCION: sin ella, si la seleccion
+       mezcla dos partidos, el programa no sabe que archivo pedir para cada uno.
+       'repetir' sale en 1 y se puede poner en 2 o 3 a mano en el Excel: es el
+       equivalente al 'clone a code' del montaje de DataVolley (manual 9.6.5.3). */
+    var csv='partido,fecha,video,inicio_seg,fin_seg,inicio,fin,jugador,numero,accion,detalle,valoracion,set,repetir\n'+ch.map(function(a){var s=Math.max(0,a.t-pre),e=a.t+post;var det=a.sk==='Ataque'?(COMBOS[a.x]||''):(TYPE_NAME[a.x]||'');
+      return [a.mc,VD.matches[a.mc].date,(a._vid||''),s,e,mmss(s),mmss(e),'"'+a.name+'"',parseInt(a.num,10),a.sk,'"'+det+'"',a.ev,a.set,1].join(',');}).join('\n');
     var b=new Blob([csv],{type:'text/csv'}),u=URL.createObjectURL(b),l=document.createElement('a');l.href=u;l.download='cortes.csv';l.click();URL.revokeObjectURL(u);toast(ch.length+' clips exportados');}
 
   function rebuildAll(){initPlayers();buildActionTree();initSideFilters();apply();}
+
+  /* ── CORTAR ACA MISMO ──────────────────────────────────────────────────
+     Una pagina web no puede abrir archivos del disco ni correr ffmpeg. Por
+     eso hay un programita —el Ayudante— que corre en la computadora y hace
+     ese trabajo; esta pagina solo le manda la lista de lo que hay que
+     cortar.
+
+     Se le habla por http aunque la pagina sea https. Eso normalmente el
+     navegador lo bloquea, pero hace una excepcion con lo que va a la propia
+     maquina (127.0.0.1), porque no sale de ahi. Comprobado en Chrome: una
+     conexion insegura a un sitio de afuera la rechaza con SecurityError y a
+     127.0.0.1 la deja pasar.
+
+     El boton aparece SOLO si el Ayudante contesta. Si no esta prendido, la
+     pagina queda exactamente como estaba y sigue el CSV de siempre. */
+  var AYUDANTE = 'http://127.0.0.1:8765';
+
+  function clipsElegidos(){
+    var ch = Object.keys(selected).length
+           ? filtered.filter(function(a){ return selected[ckey(a)]; })
+           : filtered;
+    var pre = preOff(), post = postOff();
+    return ch.filter(function(a){ return a._vid; }).map(function(a){
+      var det = a.sk==='Ataque' ? (COMBOS[a.x]||'') : (TYPE_NAME[a.x]||'');
+      return { partido:a.mc, video:a._vid,
+               inicio_seg:Math.max(0, a.t-pre), fin_seg:a.t+post,
+               jugador:a.name, numero:a.num, accion:a.sk, detalle:det,
+               valoracion:a.ev, set:a.set, repetir:1 };
+    });
+  }
+
+  function avisoCorte(txt, cargando){
+    var d = $('avisoCorte');
+    if(!d){ d=document.createElement('div'); d.id='avisoCorte';
+      d.style.cssText='position:fixed;left:50%;bottom:26px;transform:translateX(-50%);'
+        +'background:var(--card);border:1px solid var(--line);border-radius:10px;'
+        +'padding:12px 18px;font-size:13px;color:var(--txt);z-index:9999;max-width:82vw;'
+        +'box-shadow:0 8px 30px rgba(0,0,0,.45)';
+      document.body.appendChild(d); }
+    d.textContent = (cargando ? '✂ ' : '') + txt;
+    d.style.display = txt ? 'block' : 'none';
+  }
+
+  function seguirTrabajo(id){
+    var t = setInterval(function(){
+      fetch(AYUDANTE + '/estado?t=' + id).then(function(r){ return r.json(); }).then(function(j){
+        if(j.estado === 'cortando'){
+          avisoCorte('Cortando ' + (j.hechos||0) + ' de ' + (j.total||0) + '\u2026', true);
+        } else if(j.estado === 'listo'){
+          clearInterval(t);
+          avisoCorte('Listo: ' + j.hechos + ' clips en ' + (j.carpeta||'la carpeta de cortes'));
+          setTimeout(function(){ avisoCorte(''); }, 12000);
+        } else if(j.estado === 'falta_video'){
+          clearInterval(t);
+          avisoCorte(j.error + '. Copia ese video a la carpeta que configuraste en el Ayudante.');
+        } else if(j.estado === 'error'){
+          clearInterval(t);
+          avisoCorte('No se pudo: ' + (j.error||''));
+        }
+      }).catch(function(){ clearInterval(t); avisoCorte('Se corto la conexion con el Ayudante.'); });
+    }, 900);
+  }
+
+  /* Esto va en su propia funcion y no suelto adentro de bind(), porque
+     bind() corre recien cuando la pagina termino de abrir los datos. Si algo
+     de eso tarda o falla, el boton igual tiene que aparecer: no depende de
+     los datos, depende de que el Ayudante conteste. */
+  function arrancarAyudante(){
+    if(window.__ayudanteListo) return;     /* una sola vez */
+    window.__ayudanteListo = true;
+    var b = $('cortarYa');
+    if(!b) return;
+    b.addEventListener('click', alCortar);
+    /* Se pregunta una sola vez. Si no contesta en dos segundos se da por no
+       prendido y el boton no aparece: nada de la pagina depende de el. */
+    var corta = new AbortController();
+    setTimeout(function(){ corta.abort(); }, 2000);
+    fetch(AYUDANTE + '/ping', {signal: corta.signal})
+      .then(function(r){ return r.json(); })
+      .then(function(j){ if(j && j.ok) b.style.display=''; })
+      .catch(function(){});
+  }
+  function alCortar(){
+    var clips = clipsElegidos();
+    if(!clips.length){ toast('No hay clips con video'); return; }
+    avisoCorte('Mandandole ' + clips.length + ' clips al Ayudante\u2026', true);
+    fetch(AYUDANTE + '/cortar', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ modo:'rapido', clips:clips })
+    }).then(function(r){ return r.json(); }).then(function(j){
+      if(j.trabajo) seguirTrabajo(j.trabajo);
+      else avisoCorte('El Ayudante no lo acepto: ' + (j.error||''));
+    }).catch(function(){
+      avisoCorte('No pude hablar con el Ayudante. Fijate que la ventana siga abierta.');
+    });
+  }
+  arrancarAyudante();
+
+  /* El boton de cortar no necesita los datos del partido para existir: solo
+     necesita saber si el Ayudante esta prendido. Asi que se intenta enganchar
+     apenas carga la pagina, aunque bind() todavia no haya corrido. */
+  if(document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', function(){ try{ arrancarAyudante(); }catch(e){} });
+  else setTimeout(function(){ try{ arrancarAyudante(); }catch(e){} }, 0);
 
   function bind(){
     $('teamSel').addEventListener('change',function(){selTeam=this.value;initSeasonSel();applyTeam();loadYT();});
@@ -908,6 +1016,8 @@ var fTy=[];
        archivo que se le pasa al que edita el video para que arme el
        compilado sin tener que buscar las jugadas a mano. */
     $('expCsv').addEventListener('click',function(){ exportCSV(); });
+
+
     $('list').addEventListener('click',function(e){
       var vm=e.target.closest('#verMas');
       if(vm){ mostrados+=LOTE; render(selectedMatchCodes().length>1); return; }
@@ -1141,9 +1251,9 @@ var fTy=[];
   document.addEventListener('DOMContentLoaded',init);
 })();
 </script>
-<script src="lang.js?v=20260928-2252" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20260928-2252" onerror="void 0"></script>
-<script src="ayuda.js?v=20260928-2252"></script>
+<script src="lang.js?v=20260928-2315" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260928-2315" onerror="void 0"></script>
+<script src="ayuda.js?v=20260928-2315"></script>
 
 <script>
 /* ══ LINK CORTO PARA COMPARTIR ══════════════════════════════════════════════
