@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title data-t="Objetivos del plantel — NAFELS Voley">Objetivos del plantel — NAFELS Voley</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Anton&family=Barlow+Condensed:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="categorias_club.js?v=20260928-0903"></script>
+<script src="selector_categoria.js?v=20260928-0903"></script>
+<script>
+/* Pantalla de escritorio: necesita sus datos completos al abrir, igual que
+   ranking.html. Las pantallas de los jugadores no llevan esta marca. */
+window.__DESCIFRAR_SINCRONO = true;
+</script>
+<script src="datos_seguros.js?v=20260928-0903"></script>
+  <script src="datos_baterias.js.enc" onerror="void 0"></script>
+  <script src="plantel_nafels.js?v=20260928-0903" onerror="void 0"></script>
+  <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
+  <!-- El ejercicio de armado de alta, los mismos archivos que lee high_set.html -->
+  <script src="datos_high_set_25-26.js.enc?v=1" onerror="void 0"></script>
+  <script src="datos_high_set_26-27.js.enc?v=1" onerror="void 0"></script>
+  <script src="datos_high_set_27-28.js.enc?v=1" onerror="void 0"></script>
+  <script src="datos_high_set_28-29.js.enc?v=1" onerror="void 0"></script>
+  <script>abrirDatos();</script>
+<script src="objetivos_config.js?v=20260928-0903" onerror="void 0"></script>
+<style>
+  button,select,input,textarea{font-family:'Barlow Condensed',sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#07080F;--card:#0D0E1A;--b:rgba(255,255,255,.06);--b2:rgba(255,255,255,.12);
+        --red:#E8192C;--txt:#E2E8F0;--mut:#64748B}
+  html,body{background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',sans-serif;min-height:100vh}
+  .hdr{background:rgba(7,8,15,.97);border-bottom:1px solid var(--b);position:sticky;top:0;z-index:100}
+  .hdr-top{max-width:1240px;margin:0 auto;padding:11px 16px;display:flex;align-items:center;gap:12px}
+  .back-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1px solid var(--b2);
+            background:rgba(255,255,255,.04);color:var(--mut);font-size:11px;font-weight:700;letter-spacing:1px;
+            text-decoration:none;text-transform:uppercase}
+  .main{max-width:1240px;margin:0 auto;padding:18px 16px 70px}
+  h1{font-family:Anton,'Bebas Neue',sans-serif;font-weight:400;font-size:28px;letter-spacing:.01em;margin:0 0 4px}
+  p.lead{margin:0 0 18px;color:#94A3B8;font-size:17px;line-height:1.45;max-width:72ch}
+  .nota{margin:22px 0 0;padding:14px 16px;background:var(--card);border:1px solid rgba(148,163,184,.16);
+        border-radius:12px;color:#94A3B8;font-size:15px;line-height:1.55;max-width:82ch}
+  .nota b{color:var(--txt)}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hdr-top">
+    <a id="back-link" href="dashboard.html" class="back-btn" data-t="← Dashboard"><span data-t="← Dashboard">← Dashboard</span></a>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px" data-t="🎯 OBJETIVOS DEL PLANTEL"><span data-t="🎯 OBJETIVOS DEL PLANTEL">🎯 OBJETIVOS DEL PLANTEL</span></div>
+  </div>
+</div>
+<div class="main">
+  <h1>Los objetivos del plantel, en una hoja</h1>
+  <p class="lead">Una fila por jugador, una columna por fundamento. Arriba el número de esta semana,
+     abajo lo que le falta para su objetivo, y más abajo sobre cuántas acciones está hecho.
+     Ordenado de peor a mejor: los que hay que mirar primero quedan arriba. Son los mismos
+     números que ve cada jugador en su perfil.</p>
+  <div id="obj-equipo"></div>
+  <div class="nota"><b>Cómo leer una casilla.</b> El número grande es lo que lleva hecho esta semana;
+     abajo dice <i>de 42</i> si ya llegó o <i>falta 1,7</i> si no; y el número chiquito es cuántas
+     acciones lo sostienen — un 100% de un ataque y uno de treinta se ven iguales si no lo mirás.
+     Un punto gris significa que ese fundamento no le corresponde al puesto. La cuenta de arriba
+     —<i>objetivos cumplidos</i>— solo mira los que tienen acciones cargadas esta semana: un objetivo
+     sin acciones todavía no está ni cumplido ni fallado.</div>
+</div>
+<script src="objetivos_semanales.js?v=20260928-0903" onerror="void 0"></script>
+<script src="objetivos_equipo.js?v=20260928-0903" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20260928-0903" onerror="void 0"></script>
+<script src="lang.js?v=20260928-0903" onerror="void 0"></script>
+<script src="ayuda.js?v=20260928-0903" onerror="void 0"></script>
+</body>
+</html>

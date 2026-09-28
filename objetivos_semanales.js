@@ -339,6 +339,16 @@ function serie(nombre, modo, id){
         if(salto > falta) salto = falta;
       }
       var o = prev + salto;
+      /* ══ EL OBJETIVO VIVE DENTRO DEL RECORRIDO DE LA LIGA ═══════════════
+         El ataque se cuenta como (punto - bloqueado - error) / total, asi que
+         una semana de UN solo ataque bloqueado cierra en -100. Sin tope, el
+         objetivo de la semana siguiente salia «-29,3», que no significa nada
+         para el que lo lee.
+         El piso es el min de la bateria: lo que hace el PEOR equipo de la
+         liga en ese fundamento. Por abajo de eso no tiene sentido pedir, y
+         por arriba de la bateria tampoco. */
+      var piso = (meta && meta.min != null) ? meta.min : null;
+      if(piso !== null && o < piso) o = piso;
       if(o > bat) o = bat;
       if(prevObj !== null && o < prevObj) o = prevObj;   /* nunca baja */
       c.objetivo = Math.round(o * 10) / 10;
@@ -403,6 +413,13 @@ var TXT = {
   faltaPara:'te falta <b>%1</b> para el objetivo de <b>%2</b>', logrado:'&iexcl;logrado!',
   vsDia:'vs el %1 pasado', vsSemana:'vs la semana pasada', igual:'igual que el %1 pasado',
   cerroCorto:'cerr&oacute; %1',
+  tJugador:'Jugador', tCumplidos:'objetivos cumplidos',
+  tConAcciones:'<b>%1 jugadores</b> con acciones esta semana',
+  tSemana:'semana del %1', tPrimera:'1&ordf; semana', tSinAcc:'sin acciones',
+  tLlego:'lleg&oacute; al objetivo', tFalta:'le falta',
+  tSinSem:'sin acciones esta semana', tNoCorresponde:'no le corresponde al puesto',
+  tChiquito:'el n&uacute;mero chiquito de abajo es sobre cu&aacute;ntas acciones est&aacute; hecho',
+  tCerrada:'cerrada', tDe:'de %1', tFaltaN:'falta %1',
   cerroEn:'cerr&oacute; el domingo en %1', batPie:'bater&iacute;a %1',
   diaADia:'D&iacute;a a d&iacute;a de la semana', estaSemana:'esta semana', laPasada:'la pasada',
   objLbl:'objetivo %1', faltaN:'falta %1', sinArranque:'Todav&iacute;a sin acciones esta semana',
@@ -432,6 +449,13 @@ var TXT = {
   faltaPara:'<b>%1</b> to go for the goal of <b>%2</b>', logrado:'done!',
   vsDia:'vs last %1', vsSemana:'vs last week', igual:'same as last %1',
   cerroCorto:'closed %1',
+  tJugador:'Player', tCumplidos:'goals met',
+  tConAcciones:'<b>%1 players</b> with actions this week',
+  tSemana:'week of %1', tPrimera:'1st week', tSinAcc:'no actions',
+  tLlego:'reached the goal', tFalta:'short',
+  tSinSem:'no actions this week', tNoCorresponde:'not part of the position',
+  tChiquito:'the small number below is how many actions it is based on',
+  tCerrada:'closed', tDe:'of %1', tFaltaN:'%1 to go',
   cerroEn:'closed Sunday at %1', batPie:'target %1',
   diaADia:'Day by day this week', estaSemana:'this week', laPasada:'last week',
   objLbl:'goal %1', faltaN:'%1 to go', sinArranque:'No actions yet this week',
@@ -461,6 +485,13 @@ var TXT = {
   faltaPara:'noch <b>%1</b> bis zum Ziel von <b>%2</b>', logrado:'geschafft!',
   vsDia:'vs. letzten %1', vsSemana:'vs. letzte Woche', igual:'gleich wie letzten %1',
   cerroCorto:'Abschluss %1',
+  tJugador:'Spieler', tCumplidos:'Ziele erreicht',
+  tConAcciones:'<b>%1 Spieler</b> mit Aktionen diese Woche',
+  tSemana:'Woche vom %1', tPrimera:'1. Woche', tSinAcc:'keine Aktionen',
+  tLlego:'Ziel erreicht', tFalta:'fehlt noch',
+  tSinSem:'diese Woche keine Aktionen', tNoCorresponde:'nicht f&uuml;r diese Position',
+  tChiquito:'die kleine Zahl darunter ist die Anzahl Aktionen',
+  tCerrada:'abgeschlossen', tDe:'von %1', tFaltaN:'noch %1',
   cerroEn:'Sonntag mit %1 abgeschlossen', batPie:'Ziel %1',
   diaADia:'Tag f&uuml;r Tag diese Woche', estaSemana:'diese Woche', laPasada:'letzte Woche',
   objLbl:'Ziel %1', faltaN:'noch %1', sinArranque:'Diese Woche noch keine Aktionen',
@@ -483,6 +514,24 @@ var NOMBRES = {
   atqtr:['Ataque Transici&oacute;n','Transition attack','Angriff &Uuml;bergang'],
   atqz: ['Ataque Zaguero','Back-row attack','Angriff hinten'],
   hset: ['Armado de Alta','High set','Hohes Zuspiel']
+};
+/* Los mismos fundamentos, abreviados: en un encabezado de tabla «Ataque
+   Transicion» no entra, y con catorce columnas cada caracter cuenta. */
+var CORTOS = {
+  sq:   ['Saque','Serve','Aufschl.'],
+  rec:  ['Recep.','Rec.','Annahme'],
+  def:  ['Defensa','Defense','Abwehr'],
+  bqpos:['Blq #+','Blk #+','Block #+'],
+  bqpt: ['Blq #','Blk #','Block #'],
+  atqq: ['Atq Q','Att Q','Angr. Q'],
+  atqx: ['Atq X','Att X','Angr. X'],
+  atqhb:['Atq Alta','Att High','Angr. hoch'],
+  atqrp:['Atq R#+','Att R#+','Angr. R#+'],
+  atqri:['Atq R!','Att R!','Angr. R!'],
+  atqrm:['Atq R-','Att R-','Angr. R-'],
+  atqtr:['Atq Tr','Att Tr','Angr. Tr'],
+  atqz: ['Atq Zag','Att Back','Angr. hint.'],
+  hset: ['Arm. Alta','High set','Zuspiel']
 };
 var NOMBRE_PUESTO = {
   PUNTA:   ['punta','outside','aussen'],
@@ -509,6 +558,14 @@ function nombreDe(id, meta){
   return String(l).replace(/^%\s*/,'').replace(/\s*\(\d+\)\s*$/,'').trim();
 }
 function cuantas(n){ return n === 1 ? T('accion', n) : T('acciones', n); }
+function cortoDe(id, meta){
+  var c = CORTOS[id];
+  return c ? c[{es:0,en:1,de:2}[idioma()]] : nombreDe(id, meta);
+}
+function puestoTxt(pue){
+  var p = NOMBRE_PUESTO[pue];
+  return p ? p[{es:0,en:1,de:2}[idioma()]] : String(pue||'').toLowerCase();
+}
 
 /* ════════════════════════════════════════════════════════════════════════
    DIBUJO
@@ -931,7 +988,11 @@ function enganchar(){
   }
   try{ render(); }catch(e){ if(window.console) console.warn('[obj-semana]', e); }
 }
-window.OBJ_SEMANA = {render:render, serie:serie, semanas:semanas, PUESTOS:PUESTOS, CUENTA:CUENTA};
+window.OBJ_SEMANA = {render:render, serie:serie, semanas:semanas, PUESTOS:PUESTOS, CUENTA:CUENTA,
+                     /* la tabla del cuerpo tecnico usa el mismo diccionario:
+                        si hubiera dos, un dia dirian cosas distintas */
+                     T:T, idioma:idioma, nombreDe:nombreDe, cortoDe:cortoDe,
+                     puestoTxt:puestoTxt, lunesDe:lunesDe, hoy:hoy, clave:clave};
 if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(enganchar, 0); });
 else setTimeout(enganchar, 0);
 })();
