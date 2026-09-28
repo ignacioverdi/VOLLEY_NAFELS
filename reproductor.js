@@ -28,6 +28,35 @@
   /* ── LAS VARIABLES, IGUAL QUE EN PLAN DE PARTIDO ────────────────────────── */
   var YTP=null, YTReady=false, clips=[], cur=0, loadedVid="", vtimer=null;
   var pre=2, post=8, speed=1, curKey='', VSEL={}, onlyShow=false;
+  /* Cuanto se sigue mostrando despues del segundo de la accion.
+
+     No es lo mismo para todos los fundamentos. Los tiempos del .dvw no se
+     miden accion por accion: DataVolley alinea un punto por rally y genera el
+     resto con un algoritmo fijo (manual 9.1.4.4, Alignment Smart Time), asi
+     que el segundo anotado cae cerca del principio de la jugada.
+
+     Medido sobre los 574 rallies de los cuatro partidos de la temporada: el
+     rally dura 8 s de mediana desde el saque, 11 en el percentil 75 y 16 en el
+     90. Con los 8 s que habia para todo, el clip se cortaba antes de que la
+     jugada terminara en el 42% de los saques y el 53% de las recepciones.
+
+     Para un ataque o un bloqueo no molesta: lo que hay que ver ya paso. Para
+     un saque, una recepcion o una defensa si, porque lo que interesa es como
+     termino. De ahi los dos numeros. */
+  var POST_FUND = { sq:14, rec:14, def:14, atk:8, blq:8 };
+  var postTocado = false;     // si el usuario lo cambia a mano, manda el suyo
+  function postDe(a){
+    if(postTocado) return post;
+    return (a && POST_FUND[a.fund]) || post;
+  }
+  /* Las casillas "Antes" y "Despues" del reproductor cambiaban estos valores
+     desde un onchange del HTML, es decir desde el ambito global. Pero pre y
+     post viven dentro de la funcion que envuelve todo este archivo, asi que
+     esa asignacion creaba una variable global nueva y el reproductor seguia
+     usando la suya: las dos casillas se movian y no pasaba nada. Por eso ahora
+     pasan por estas dos funciones, que si estan expuestas. */
+  function setPre(v){ pre = (+v || 2); }
+  function setPost(v){ post = (+v || 8); postTocado = true; }
   /* TAGFMT en plan_partido traduce el codigo de la jugada a nombre legible.
      Aca la etiqueta ya viene armada (la fecha de la sesion), asi que va vacio
      y la funcion usa el valor tal cual, que es lo que queremos. */
@@ -108,7 +137,7 @@
           var vid = ppVid(code); if(!vid) return;
           var t = Number(a[C.t]); if(!t && t!==0) return;
           out.push({ vid:vid, t:t, code:code, ses:_sesionTxt(code),
-                     name:p.name || ('#'+p.num), num:p.num,
+                     name:p.name || ('#'+p.num), num:p.num, fund:f.fund,
                      ev:String(a[C.ev]||''), tag:_sesionTxt(code), sel:true });
         });
       });
@@ -139,7 +168,7 @@
   function renderList(){var sel=0;for(var k=0;k<clips.length;k++)if(clips[k].sel)sel++;var sc=document.getElementById("vselcount");if(sc)sc.textContent=sel+"/"+clips.length;
     document.getElementById("vlist").innerHTML=clips.map(function(c,i){if(onlyShow&&!c.sel)return "";return '<label class="vitem'+(i===cur?" playing":"")+(c.sel?"":" off")+'"><input type="checkbox" '+(c.sel?"checked":"")+' onclick="event.stopPropagation();toggleClip('+i+')"><span class="vlbl" onclick="jump('+i+')">'+(i+1)+". "+(TAGFMT[c.tag]||c.tag)+" "+evLabel(c.ev)+'</span></label>';}).join("");}
 
-  function playCur(){if(!YTReady||!clips.length)return;var a=clips[cur],start=Math.max(0,a.t-pre);if(a.vid!==loadedVid){loadedVid=a.vid;YTP.loadVideoById({videoId:a.vid,startSeconds:start});}else{YTP.seekTo(start,true);var _st=(YTP.getPlayerState?YTP.getPlayerState():-1);if(_st!==1&&_st!==3)YTP.playVideo();}try{YTP.setPlaybackRate(speed);}catch(e){}document.getElementById("vcount").textContent=(cur+1)+" / "+clips.length;renderList();clearInterval(vtimer);var end=a.t+post;vtimer=setInterval(function(){if(YTP&&YTP.getCurrentTime&&YTP.getCurrentTime()>=end){var n=nextSel(cur,1);if(n>=0){cur=n;playCur();}else{clearInterval(vtimer);try{YTP.pauseVideo();}catch(e){}}}},200);}
+  function playCur(){if(!YTReady||!clips.length)return;var a=clips[cur],start=Math.max(0,a.t-pre);if(a.vid!==loadedVid){loadedVid=a.vid;YTP.loadVideoById({videoId:a.vid,startSeconds:start});}else{YTP.seekTo(start,true);var _st=(YTP.getPlayerState?YTP.getPlayerState():-1);if(_st!==1&&_st!==3)YTP.playVideo();}try{YTP.setPlaybackRate(speed);}catch(e){}document.getElementById("vcount").textContent=(cur+1)+" / "+clips.length;renderList();clearInterval(vtimer);var end=a.t+postDe(a);vtimer=setInterval(function(){if(YTP&&YTP.getCurrentTime&&YTP.getCurrentTime()>=end){var n=nextSel(cur,1);if(n>=0){cur=n;playCur();}else{clearInterval(vtimer);try{YTP.pauseVideo();}catch(e){}}}},200);}
 
   function nextClip(){var n=nextSel(cur,1);if(n>=0){cur=n;playCur();}}
 
@@ -176,7 +205,7 @@
   function fbSet(){ return null; }
 
   var REP_CSS = ".vmodal{display:none;position:fixed;inset:0;background:rgba(4,5,9,.8);z-index:99998;align-items:center;justify-content:center;padding:16px}\n.vpanel{background:var(--card);border:1px solid var(--border);border-radius:12px;width:min(1060px,100%);max-height:95vh;overflow:auto}\n.vhead{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)}\n.vtitle{font-family:'Bebas Neue',sans-serif;font-size:20px;flex:1;letter-spacing:.02em}\n.vclose{background:var(--card2);color:var(--txt);border:1px solid var(--border);border-radius:7px;width:32px;height:32px;font-size:15px;cursor:pointer}\n.vfilters{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--border)}\n.vplayer{position:relative;width:100%;aspect-ratio:16/9;background:#000}\n.vplayer iframe,.vplayer>div{position:absolute;inset:0;width:100%;height:100%}\n.vshield{position:absolute;inset:0;width:100%;height:100%;z-index:5;cursor:pointer;background:transparent}\n.vmain:fullscreen{background:#000;display:flex;flex-direction:column;justify-content:center}\n.vmain:fullscreen .vplayer{flex:1;min-height:0;aspect-ratio:auto}\n.vmain:fullscreen #ytplayer,.vmain:fullscreen #ytplayer iframe{width:100%!important;height:100%!important}\n.vmain:fullscreen .vctrls{flex:none;background:#0b0e14}\n.vmain:-webkit-full-screen{background:#000;display:flex;flex-direction:column;justify-content:center}\n.vmain:-webkit-full-screen .vplayer{flex:1;min-height:0;aspect-ratio:auto}\n.vmain:-webkit-full-screen #ytplayer iframe{width:100%!important;height:100%!important}\n.vmain:-webkit-full-screen .vctrls{flex:none;background:#0b0e14}\n.vctrls{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:11px 14px;color:var(--mut);font-size:12.5px}\n.vctrls button{background:var(--red);color:#fff;border:none;border-radius:7px;padding:7px 11px;font-family:'Barlow Condensed';font-weight:600;font-size:13px;cursor:pointer}\n.vctrls button.sec{background:var(--card2);color:var(--txt);border:1px solid var(--border)}\n.vctrls .vcount{font-weight:700;color:var(--txt);min-width:52px;text-align:center}\n.vctrls label{display:flex;align-items:center;gap:4px;color:var(--faint)}\n.vctrls input{width:46px;background:var(--card2);color:var(--txt);border:1px solid var(--border);border-radius:6px;padding:4px 6px;font-size:12px}\n.vbody{display:flex;align-items:stretch}\n.vmain{flex:1;min-width:0}\n.vside{width:290px;border-left:1px solid var(--border);display:flex;flex-direction:column;max-height:72vh}\n.vside-head{display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid var(--border)}\n.vside-head b{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.03em;flex:1}\n.vside-head #vselcount{font-size:12px;color:var(--faint);margin-right:4px}\n.vside-head button{font-size:10px;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--mut);cursor:pointer}\n.vside-head button:hover{border-color:var(--red);color:var(--txt)}\n.vside-head2{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border)}\n.vonly{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mut);cursor:pointer}\n.vonly input{accent-color:var(--red);cursor:pointer}\n.vlist{display:flex;flex-direction:column;gap:2px;padding:8px;overflow:auto}\n.vbody{flex-direction:column}\n.vside{width:auto;border-left:none;border-top:1px solid var(--border);max-height:230px}\n.vmodal{display:none!important}\n.vmain\"); if(!el) return;\n  if(enPantallaCompleta()){ (document.exitFullscreen||document.webkitExitFullscreen).call(document); }";
-  var REP_HTML = "<div id=\"vmodal\" class=\"vmodal\" onclick=\"if(event.target===this)closeV()\">\n  <div class=\"vpanel\">\n    <div class=\"vhead\"><div id=\"vtitle\" class=\"vtitle\"></div><button class=\"vclose\" onclick=\"closeV()\">\u2715</button></div>\n    <div class=\"vfilters\" id=\"vfilters\"></div>\n    <div class=\"vbody\">\n      <div class=\"vmain\">\n        <div class=\"vplayer\"><div id=\"ytplayer\"></div><div class=\"vshield\" id=\"vshield\" onclick=\"togglePlay()\" title=\"Click o barra espaciadora: play/pausa\"></div></div>\n        <div class=\"vctrls\">\n          <button class=\"sec\" onclick=\"prevClip()\">\u25c0</button>\n          <button onclick=\"replayCur()\">\u21bb Repetir</button>\n          <button class=\"sec\" onclick=\"nextClip()\">\u25b6</button>\n          <button class=\"sec\" id=\"vfsbtn\" onclick=\"toggleFullV()\" title=\"Pantalla completa (tecla F)\">\u26f6 Pantalla completa</button>\n          <span class=\"vcount\" id=\"vcount\"></span>\n          <label>Vel <select id=\"vspeed\" onchange=\"setSpeed(this.value)\" style=\"width:auto\"><option value=\"0.5\">0.5\u00d7</option><option value=\"1\" selected>1\u00d7</option><option value=\"1.5\">1.5\u00d7</option><option value=\"2\">2\u00d7</option></select></label>\n          <label>Antes <input id=\"vpre\" type=\"number\" value=\"2\" min=\"0\" max=\"20\" onchange=\"pre=+this.value||2\"></label>\n          <label>Despu\u00e9s <input id=\"vpost\" type=\"number\" value=\"8\" min=\"0\" max=\"20\" onchange=\"post=+this.value||8\"></label>\n        </div>\n      </div>\n      <div class=\"vside\">\n        <div class=\"vside-head\"><b>Acciones</b><span id=\"vselcount\"></span><button onclick=\"clipAll(1)\">Todas</button><button onclick=\"clipAll(0)\">Ninguna</button></div>\n        <div class=\"vside-head2\"><button id=\"vsavebtn\" onclick=\"saveSel()\">\ud83d\udcbe Guardar</button><label class=\"vonly\"><input type=\"checkbox\" id=\"vonly\" onchange=\"toggleOnly()\"> Solo seleccionadas</label></div>\n        <div id=\"vlist\" class=\"vlist\"></div>\n      </div>\n    </div>\n  </div>\n</div>";
+  var REP_HTML = "<div id=\"vmodal\" class=\"vmodal\" onclick=\"if(event.target===this)closeV()\">\n  <div class=\"vpanel\">\n    <div class=\"vhead\"><div id=\"vtitle\" class=\"vtitle\"></div><button class=\"vclose\" onclick=\"closeV()\">\u2715</button></div>\n    <div class=\"vfilters\" id=\"vfilters\"></div>\n    <div class=\"vbody\">\n      <div class=\"vmain\">\n        <div class=\"vplayer\"><div id=\"ytplayer\"></div><div class=\"vshield\" id=\"vshield\" onclick=\"togglePlay()\" title=\"Click o barra espaciadora: play/pausa\"></div></div>\n        <div class=\"vctrls\">\n          <button class=\"sec\" onclick=\"prevClip()\">\u25c0</button>\n          <button onclick=\"replayCur()\">\u21bb Repetir</button>\n          <button class=\"sec\" onclick=\"nextClip()\">\u25b6</button>\n          <button class=\"sec\" id=\"vfsbtn\" onclick=\"toggleFullV()\" title=\"Pantalla completa (tecla F)\">\u26f6 Pantalla completa</button>\n          <span class=\"vcount\" id=\"vcount\"></span>\n          <label>Vel <select id=\"vspeed\" onchange=\"setSpeed(this.value)\" style=\"width:auto\"><option value=\"0.5\">0.5\u00d7</option><option value=\"1\" selected>1\u00d7</option><option value=\"1.5\">1.5\u00d7</option><option value=\"2\">2\u00d7</option></select></label>\n          <label>Antes <input id=\"vpre\" type=\"number\" value=\"2\" min=\"0\" max=\"20\" onchange=\"setPre(this.value)\"></label>\n          <label>Despu\u00e9s <input id=\"vpost\" type=\"number\" value=\"8\" min=\"0\" max=\"20\" onchange=\"setPost(this.value)\"></label>\n        </div>\n      </div>\n      <div class=\"vside\">\n        <div class=\"vside-head\"><b>Acciones</b><span id=\"vselcount\"></span><button onclick=\"clipAll(1)\">Todas</button><button onclick=\"clipAll(0)\">Ninguna</button></div>\n        <div class=\"vside-head2\"><button id=\"vsavebtn\" onclick=\"saveSel()\">\ud83d\udcbe Guardar</button><label class=\"vonly\"><input type=\"checkbox\" id=\"vonly\" onchange=\"toggleOnly()\"> Solo seleccionadas</label></div>\n        <div id=\"vlist\" class=\"vlist\"></div>\n      </div>\n    </div>\n  </div>\n</div>";
 
   /* ══ LA ENTRADA — lo unico nuevo ══════════════════════════════════════════
      Arma los clips y abre el reproductor de siempre. */
@@ -252,4 +281,5 @@
   window.toggleClip=toggleClip; window.clipAll=clipAll; window.saveSel=saveSel;
   window.toggleOnly=toggleOnly; window.toggleFullV=toggleFullV;
   window.repCerrar=closeV;
+  window.setPre=setPre; window.setPost=setPost;
 })();
