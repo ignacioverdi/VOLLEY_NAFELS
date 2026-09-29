@@ -66,6 +66,28 @@ var PUESTOS = {
 };
 var POR_DEFECTO = ['sq','rec','def','atqrp','bqpos'];
 
+/* ── LO QUE SOLO EXISTE EN ENTRENAMIENTO ───────────────────────────────────
+   El armado de alta es un ejercicio: en partido no se tipea. Todo lo demas
+   existe en los dos lados.
+
+   Esto importa por lo siguiente. En el perfil el jugador elige con el filtro
+   si mira partido o entrenamiento, y ese filtro manda: ahi no se toca nada.
+   Pero en la PORTADA no hay filtro, y el modo lo elige el programa solo,
+   contando en cual de los dos tiene mas fundamentos con datos.
+
+   Al armador esa cuenta le daba partido —tiene bloqueo, bloqueo punto,
+   defensa y saque de los partidos contra un solo fundamento de
+   entrenamiento— y el armado de alta desaparecia de su tarjeta, aunque
+   hubiera armado 21 pelotas la noche anterior. Al libero, que en partido
+   solo tiene recepcion y defensa, le daba entrenamiento y si lo veia. Por eso
+   pasaba en unos si y en otros no.
+
+   Se arregla en dos lugares: estos fundamentos no votan que modo elegir, y
+   cuando el modo lo elige el programa se leen siempre del entrenamiento. Con
+   el filtro puesto a mano no cambia nada: si el jugador pidio partido, ve
+   partido.                                                                 */
+var SOLO_ENTRENAMIENTO = { hset: 1 };
+
 /* ── Como se reconstruye cada fundamento desde los contadores ──────────────
    Todos terminan en num/tot*100. Para el armado de alta se usa el truco de
    sumar (puntos + 2) contra 4 por accion, que da exactamente la misma cuenta
@@ -950,6 +972,7 @@ function modoConAcciones(nombre){
   ['entrenamiento', 'partido'].forEach(function(md){
     var n = 0;
     ids.forEach(function(id){
+      if(SOLO_ENTRENAMIENTO[id]) return;      /* no vota: solo existe de un lado */
       var r = serie(nombre, md, id);
       if(r.hay && r.ultima && r.ultima.n > 0 && r.ultima.objetivo != null) n++;
     });
@@ -976,7 +999,12 @@ function render(){
   var pue  = puestoDe(nombre);
   var ids  = PUESTOS[pue] || POR_DEFECTO;
 
-  var rs = ids.map(function(id){ return serie(nombre, modo, id); });
+  /* Con el filtro puesto a mano manda el filtro. Cuando el modo lo eligio el
+     programa, los fundamentos de entrenamiento se leen de entrenamiento
+     aunque el resto de la tarjeta este en partido. */
+  var auto = !window._objTipo;
+  function modoDe(id){ return (auto && SOLO_ENTRENAMIENTO[id]) ? 'entrenamiento' : modo; }
+  var rs = ids.map(function(id){ return serie(nombre, modoDe(id), id); });
   var conDatos = rs.filter(function(r){ return r.hay; });
   if(!conDatos.length){
     cont.innerHTML = '<div class="os-wrap" data-notr><div class="os-card"><div class="os-vacio">'
@@ -990,7 +1018,7 @@ function render(){
   var resto = rs.filter(function(r){ return r !== head; });
 
   var html = '<div class="os-wrap" data-notr>'
-           + tarjeta(head, modo, serie(null, modo, head.id), nombre, dorsalDe(nombre))
+           + tarjeta(head, modoDe(head.id), serie(null, modoDe(head.id), head.id), nombre, dorsalDe(nombre))
            + resto.map(fila).join('')
            + '</div></div>';
   cont.innerHTML = html;

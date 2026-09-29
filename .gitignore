@@ -40,6 +40,41 @@ placas/salida/
 placas/_videos_temporales/
 _videos_temporales/
 
+# ══ NINGÚN VIDEO, ESTÉ DONDE ESTÉ ════════════════════════════════════
+# Antes solo estaban tapadas las carpetas de videos temporales. Alcanza con
+# dejar un .mp4 suelto en la carpeta —el _completo de la cámara son 10 GB—
+# para que PUBLICAR intente subirlo: tarda una eternidad y GitHub además
+# rechaza cualquier archivo de más de 100 MB, así que la publicación falla
+# a la mitad. Los videos van a YouTube o al disco, nunca al repo.
+*.mp4
+*.MP4
+*.mts
+*.MTS
+*.m2ts
+*.M2TS
+*.mov
+*.MOV
+*.mkv
+*.MKV
+*.avi
+*.AVI
+*.wmv
+*.WMV
+*.webm
+
+# Los recortes que dejan CORTAR_SAQUES, CORTAR_SELECCION y el Ayudante.
+CORTES/
+*_clips/
+*_montaje.mp4
+*_saques.json
+_cortes_tmp/
+
+# El motor de video que se baja solo la primera vez (unos 80 MB).
+_ffmpeg/
+
+# La libreta del Ayudante: dice dónde están los videos de ESTA máquina.
+ayudante_config.json
+
 # La música tiene licencia: no se distribuye adentro de un repo.
 placas/musica/*
 !placas/musica/LEEME.txt

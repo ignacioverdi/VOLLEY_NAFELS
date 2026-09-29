@@ -316,6 +316,9 @@ def _arranque_real(ff, p):
         return None, None
 
 
+DESFASE = [0.0]      # lo que se corrigio entre el reloj del scout y el del video
+
+
 def cortar(ff, video, saques, salida_base, carpeta, datos=None):
     """Un archivo por set, con todos los saques de ese set pegados.
 
@@ -428,6 +431,7 @@ def cortar(ff, video, saques, salida_base, carpeta, datos=None):
                      duracion=round(acum, 3),
                      saques_totales_del_partido=len(saques),
                      origen='corte directo del video original (sin exportar de DataVolley)',
+                     desfase_aplicado=round(DESFASE[0], 2),
                      clips=mapa)
         with io.open(os.path.join(carpeta, '%s_set%d_saques.json' % (salida_base, st)),
                      'w', encoding='utf-8') as f:
@@ -447,6 +451,28 @@ def cortar(ff, video, saques, salida_base, carpeta, datos=None):
     return hechos
 
 
+def mmss(seg):
+    seg = int(seg or 0)
+    h, r = divmod(seg, 3600)
+    m, s = divmod(r, 60)
+    return ('%d:%02d:%02d' % (h, m, s)) if h else ('%d:%02d' % (m, s))
+
+
+def a_segundos_simple(txt):
+    """4:35 · 1:04:35 · 275. None si no se entiende."""
+    p = [x for x in str(txt).replace('.', ':').strip().split(':') if x.strip()]
+    try:
+        p = [int(x) for x in p]
+    except ValueError:
+        return None
+    if not p or len(p) > 3 or any(x < 0 for x in p):
+        return None
+    s = 0
+    for x in p:
+        s = s * 60 + x
+    return s
+
+
 def pedir(txt):
     r = input(txt).strip()
     return r.strip('"').strip("'")
@@ -459,7 +485,10 @@ def main():
     print('     exportacion de DataVolley')
     print('  ' + '=' * 68)
 
-    args = [a for a in sys.argv[1:] if a.lower().endswith('.dvw')]
+    # Se acepta tambien un archivo sin extension: el panel a veces guarda el
+    # scout sin el .dvw y arrastrarlo no hacia nada, sin decir por que.
+    args = [a for a in sys.argv[1:]
+            if os.path.isfile(a) and (a.lower().endswith('.dvw') or '.' not in os.path.basename(a))]
     dvw = args[0] if args else pedir('\n     Arrastra el .dvw del partido y apreta Enter: ')
     if not dvw or not os.path.exists(dvw):
         print('     No encuentro ese archivo.')
@@ -512,6 +541,46 @@ def main():
     base = re.sub(r'^[&\s]+', '', base)
     base = re.sub(r'[^A-Za-z0-9]+', '_', base).strip('_').upper()[:40] or 'PARTIDO'
     carpeta = os.path.dirname(os.path.abspath(dvw))
+
+    # ── EL DESFASE ENTRE EL RELOJ DEL .dvw Y EL DEL VIDEO ──────────────────
+    # Cuando el scouting se hace en DataVolley con el video puesto, los dos
+    # relojes son el mismo y no hay nada que hacer. Pero cuando se scoutea EN
+    # VIVO —en el panel, o en DataVolley sin video— el reloj arranca cuando se
+    # carga el primer codigo, y la camara arranco antes o despues. Ese desfase
+    # es el mismo para todo el partido, asi que con decir donde cae UN saque
+    # queda resuelto para los 240.
+    #
+    # Sin esto, la primera corrida sobre un scout en vivo saldria entera vacia
+    # y sin ningun mensaje de error: los recortes caerian en otro momento del
+    # video y nadie se enteraria hasta abrirlos.
+    prim = min(s['seg'] for s in saques)
+    print()
+    print('     El primer saque, segun el scout, esta en el segundo %d (%s).'
+          % (prim, mmss(prim)))
+    print('     Si el scouting se hizo EN VIVO, ese numero es del reloj del')
+    print('     panel y no del video. Decime en que momento del video cae ese')
+    print('     primer saque y corrijo todos de una.')
+    print()
+    r = pedir('     Momento en el video (4:35, o Enter si ya coinciden): ')
+    desfase = 0.0
+    if r:
+        m = a_segundos_simple(r)
+        if m is None:
+            print('     No entendi, sigo sin corregir.')
+        else:
+            desfase = m - prim
+            for s in saques:
+                s['seg'] = s['seg'] + desfase
+            DESFASE[0] = desfase
+            print('     Corrijo %+.0f segundos en los %d saques.' % (desfase, len(saques)))
+            ult = max(s['seg'] for s in saques)
+            if d and d.get('dur') and ult > d['dur']:
+                print()
+                print('     [OJO] Con esa correccion el ultimo saque caeria en %s'
+                      % mmss(ult))
+                print('     y el video dura %s. Algo no cierra: revisa el momento'
+                      % mmss(d['dur']))
+                print('     que pusiste, o cortalo igual y fijate el primer clip.')
 
     print()
     print('     Corto %.1f s antes y %.1f s despues de cada saque.' % (ANTES, DESPUES))

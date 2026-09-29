@@ -489,19 +489,23 @@
   "tablas": {}
  },
  "cortes.html": {
-  "bytes": 89618,
+  "bytes": 95124,
   "funciones": [
    "__DESCIFRAR_SINCRONO",
+   "__ayudanteListo",
    "_codigoNuevo",
    "_copiarYAvisar",
    "_fbURL",
    "_lista",
    "_rnorm",
    "akey",
+   "alCortar",
    "allSeasons",
    "apply",
    "applySeason",
    "applyTeam",
+   "arrancarAyudante",
+   "avisoCorte",
    "basePool",
    "bind",
    "buildActionTree",
@@ -510,6 +514,7 @@
    "cambiarModo",
    "ckey",
    "clipBounds",
+   "clipsElegidos",
    "contextualize",
    "evRank",
    "exportCSV",
@@ -549,6 +554,7 @@
    "seasonCodes",
    "seasonDe",
    "seasonOf",
+   "seguirTrabajo",
    "selectedMatchCodes",
    "selectedPlayers",
    "setNow",
@@ -1617,7 +1623,7 @@
   "tablas": {}
  },
  "panel_vivo.html": {
-  "bytes": 887266,
+  "bytes": 892000,
   "funciones": [
    "AN_LADO",
    "G",
@@ -2029,6 +2035,7 @@
    "signOf",
    "sincronizarEnCurso",
    "smartTime",
+   "smartVals",
    "snapshotRally",
    "specialsFor",
    "splitCode",
