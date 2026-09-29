@@ -109,6 +109,13 @@ DESPUES = 4.0    # segundos despues
 # chicos, y una perdida chica pero real de calidad.
 COPIA = True
 
+# ── EN CUANTOS ARCHIVOS SE PARTE ─────────────────────────────────────────
+# Un entrenamiento de saque puede tener 240 saques en un solo "set", y eso
+# daria un archivo de varios gigas que despues no se puede mandar a ningun
+# lado. Asi que el montaje se parte en tandas de esta cantidad de clips: con
+# 20 clips de 7 segundos cada archivo queda en unos 350 MB.
+MAX_POR_ARCHIVO = 20
+
 # ── LA CALIDAD (solo si COPIA = False) ──────────────────────────────
 # 20 es practicamente igual al original y da la mitad del tamanio. Si los
 # archivos quedan muy pesados para mandar, subir a 23. Nunca pasar de 26: ahi
@@ -407,38 +414,64 @@ def cortar(ff, video, saques, salida_base, carpeta, datos=None):
                 print('     %d de %d' % (k, len(de_este)), flush=True)
         if not partes:
             continue
-        lista = os.path.join(tmp, 'lista.txt')
-        with io.open(lista, 'w', encoding='utf-8') as f:
-            for p in partes:
-                f.write("file '%s'\n" % p.replace('\\', '/').replace("'", "'\\''"))
-        destino = os.path.join(carpeta, '%s_set%d.mp4' % (salida_base, st))
-        r = subprocess.run([ff, '-hide_banner', '-loglevel', 'error', '-y',
-                            '-f', 'concat', '-safe', '0', '-i', lista,
-                            '-c', 'copy', destino], capture_output=True)
-        if r.returncode != 0:
-            print('     no se pudo pegar el set %d' % st)
-            continue
-        # La fps va en el mapa porque la medicion la usa para pasar de pixeles
-        # por cuadro a metros por segundo: equivocarla corre la velocidad en la
-        # misma proporcion.
-        jmapa = dict(partido=salida_base, archivo=os.path.basename(destino),
-                     sets_en_este_archivo=[st],
-                     fps=round(fps_src, 4) or None,
-                     entrelazado_de_origen=entrelazado,
-                     fps_si_se_desentrelaza=(round(fps_src * 2, 4) if entrelazado else None),
-                     sin_recomprimir=bool(COPIA),
-                     ventana=dict(antes=ANTES, despues=DESPUES),
-                     duracion=round(acum, 3),
-                     saques_totales_del_partido=len(saques),
-                     origen='corte directo del video original (sin exportar de DataVolley)',
-                     desfase_aplicado=round(DESFASE[0], 2),
-                     clips=mapa)
-        with io.open(os.path.join(carpeta, '%s_set%d_saques.json' % (salida_base, st)),
-                     'w', encoding='utf-8') as f:
-            f.write(json.dumps(jmapa, ensure_ascii=False, indent=1))
-        mb = os.path.getsize(destino) / 1e6
-        print('     -> %s  (%.0f MB)' % (os.path.basename(destino), mb))
-        hechos.append(destino)
+
+        # ── SE PEGA EN TANDAS ─────────────────────────────────────────
+        # Un ejercicio de saque puede tener 240 clips en un solo set. Pegarlos
+        # todos juntos da un archivo de varios gigas que despues no hay forma
+        # de mandar, asi que se parten de a MAX_POR_ARCHIVO. Cada tanda lleva
+        # su propio mapa, con los tiempos contados desde el principio de ESA
+        # tanda: cada archivo se explica solo, sin depender de los otros.
+        tandas = [(k, k + MAX_POR_ARCHIVO) for k in range(0, len(partes), MAX_POR_ARCHIVO)]
+        if len(tandas) > 1:
+            print('     Son %d clips: los parto en %d archivos de hasta %d.'
+                  % (len(partes), len(tandas), MAX_POR_ARCHIVO))
+        for nt, (a, b) in enumerate(tandas, 1):
+            trozo = partes[a:b]
+            mtro = mapa[a:b]
+            # los tiempos vuelven a cero en cada tanda
+            desp = mtro[0]['ini'] if mtro else 0.0
+            mm = []
+            for q, c in enumerate(mtro, 1):
+                d = dict(c)
+                d['clip'] = q
+                d['ini'] = round(c['ini'] - desp, 3)
+                d['fin'] = round(c['fin'] - desp, 3)
+                d['golpe_en_el_montaje'] = round(c['golpe_en_el_montaje'] - desp, 3)
+                mm.append(d)
+            sufijo = '' if len(tandas) == 1 else '_tanda%02d' % nt
+            lista = os.path.join(tmp, 'lista.txt')
+            with io.open(lista, 'w', encoding='utf-8') as f:
+                for p in trozo:
+                    f.write("file '%s'\n" % p.replace('\\', '/').replace("'", "'\\''"))
+            destino = os.path.join(carpeta, '%s_set%d%s.mp4' % (salida_base, st, sufijo))
+            r = subprocess.run([ff, '-hide_banner', '-loglevel', 'error', '-y',
+                                '-f', 'concat', '-safe', '0', '-i', lista,
+                                '-c', 'copy', destino], capture_output=True)
+            if r.returncode != 0:
+                print('     no se pudo pegar la tanda %d del set %d' % (nt, st))
+                continue
+            # La fps va en el mapa porque la medicion la usa para pasar de
+            # pixeles por cuadro a metros por segundo.
+            jmapa = dict(partido=salida_base, archivo=os.path.basename(destino),
+                         sets_en_este_archivo=[st],
+                         tanda=nt, de_tandas=len(tandas),
+                         saques_en_este_archivo=[c['saque'] for c in mm],
+                         fps=round(fps_src, 4) or None,
+                         entrelazado_de_origen=entrelazado,
+                         fps_si_se_desentrelaza=(round(fps_src * 2, 4) if entrelazado else None),
+                         sin_recomprimir=bool(COPIA),
+                         ventana=dict(antes=ANTES, despues=DESPUES),
+                         desfase_aplicado=round(DESFASE[0], 2),
+                         duracion=round(mm[-1]['fin'], 3) if mm else 0,
+                         saques_totales_del_partido=len(saques),
+                         origen='corte directo del video original (sin exportar de DataVolley)',
+                         clips=mm)
+            with io.open(os.path.join(carpeta, '%s_set%d%s_saques.json' % (salida_base, st, sufijo)),
+                         'w', encoding='utf-8') as f:
+                f.write(json.dumps(jmapa, ensure_ascii=False, indent=1))
+            mb = os.path.getsize(destino) / 1e6
+            print('     -> %s  (%.0f MB)' % (os.path.basename(destino), mb))
+            hechos.append(destino)
         for p in partes:
             try:
                 os.remove(p)
@@ -581,6 +614,29 @@ def main():
                 print('     y el video dura %s. Algo no cierra: revisa el momento'
                       % mmss(d['dur']))
                 print('     que pusiste, o cortalo igual y fijate el primer clip.')
+
+    # ── SE PUEDEN CORTAR SOLO ALGUNOS ─────────────────────────────────
+    # Para probar que esta todo bien no hace falta cortar los 240: con los
+    # primeros veinte ya se ve si el momento y la imagen estan bien.
+    print()
+    print('     Son %d saques. Podes cortarlos todos o solo un rango.' % len(saques))
+    r = pedir('     Cuales? (Enter = todos  ·  o por ejemplo  1-20  o  41-80 ): ')
+    if r:
+        m = re.match(r'^\s*(\d+)\s*[-a]\s*(\d+)\s*$', r)
+        if m:
+            a, b = int(m.group(1)), int(m.group(2))
+            saques = saques[max(0, a - 1):b]
+            print('     Corto del saque %d al %d: %d en total.' % (a, b, len(saques)))
+        else:
+            try:
+                saques = saques[:int(r.strip())]
+                print('     Corto los primeros %d.' % len(saques))
+            except ValueError:
+                print('     No entendi, los corto todos.')
+        if not saques:
+            print('     Ese rango no tiene saques.')
+            input('\n     Enter para cerrar. ')
+            return
 
     print()
     print('     Corto %.1f s antes y %.1f s despues de cada saque.' % (ANTES, DESPUES))
