@@ -1,13 +1,9 @@
 {
  "partido": "PRA_AXPO_NAFELS_2026_09_29_M",
- "video": "PRUEBA UNIR_completo.mp4",
- "calibracion": "ENTRENAMIENTO",
+ "origen": "pistola de radar (medicion manual)",
  "desfase_aplicado": 0.0,
- "fps_medicion": 59.9401,
- "entrelazado_de_origen": true,
- "correccion_de_estela": true,
- "medidos": 161,
- "pedidos": 240,
+ "medidos": 240,
+ "de_saques": 240,
  "saques": {
   "1": {
    "saque": 1,
@@ -19,51 +15,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 137,
-   "kmh": 65.5,
-   "alto_del_golpe": 2.76,
-   "altura_en_la_red": 2.65,
-   "kmh_en_la_red": 57.3,
-   "residuo_px": 1.61,
-   "cuadros": 42,
-   "arranque_en_la_ventana": 1.552,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.552,
-     "kmh": 65.5,
-     "res_uv": 1.61,
-     "cuadros": 42,
-     "z_golpe": 2.76,
-     "z_red": 2.65,
-     "puntaje": 1.518
-    },
-    {
-     "arranque_s": 1.485,
-     "kmh": 70.4,
-     "res_uv": 2.01,
-     "cuadros": 46,
-     "z_golpe": 2.87,
-     "z_red": 2.65,
-     "puntaje": 2.032
-    },
-    {
-     "arranque_s": 1.418,
-     "kmh": 71.3,
-     "res_uv": 2.26,
-     "cuadros": 50,
-     "z_golpe": 2.88,
-     "z_red": 2.68,
-     "puntaje": 2.405
-    },
-    {
-     "arranque_s": 1.318,
-     "kmh": 73.7,
-     "res_uv": 4.9,
-     "cuadros": 56,
-     "z_golpe": 2.75,
-     "z_red": 2.77,
-     "puntaje": 5.23
-    }
-   ]
+   "kmh": 62.0,
+   "fuente": "pistola"
   },
   "2": {
    "saque": 2,
@@ -75,8 +28,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 150,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 97.0,
+   "fuente": "pistola"
   },
   "3": {
    "saque": 3,
@@ -88,8 +41,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 166,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 65.0,
+   "fuente": "pistola"
   },
   "4": {
    "saque": 4,
@@ -101,51 +54,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 174,
-   "kmh": 55.8,
-   "alto_del_golpe": 2.55,
-   "altura_en_la_red": 3.25,
-   "kmh_en_la_red": 47.1,
-   "residuo_px": 2.09,
-   "cuadros": 44,
-   "arranque_en_la_ventana": 1.335,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.335,
-     "kmh": 55.8,
-     "res_uv": 2.09,
-     "cuadros": 44,
-     "z_golpe": 2.55,
-     "z_red": 3.25,
-     "puntaje": 2.609
-    },
-    {
-     "arranque_s": 1.268,
-     "kmh": 56.0,
-     "res_uv": 2.07,
-     "cuadros": 48,
-     "z_golpe": 2.58,
-     "z_red": 3.24,
-     "puntaje": 2.71
-    },
-    {
-     "arranque_s": 1.201,
-     "kmh": 58.6,
-     "res_uv": 2.42,
-     "cuadros": 52,
-     "z_golpe": 2.66,
-     "z_red": 3.3,
-     "puntaje": 3.18
-    },
-    {
-     "arranque_s": 1.101,
-     "kmh": 62.0,
-     "res_uv": 3.07,
-     "cuadros": 58,
-     "z_golpe": 2.72,
-     "z_red": 3.37,
-     "puntaje": 4.008
-    }
-   ]
+   "kmh": 60.0,
+   "fuente": "pistola"
   },
   "5": {
    "saque": 5,
@@ -157,51 +67,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 182,
-   "kmh": 66.3,
-   "alto_del_golpe": 2.55,
-   "altura_en_la_red": 2.8,
-   "kmh_en_la_red": 57.3,
-   "residuo_px": 2.44,
-   "cuadros": 42,
-   "arranque_en_la_ventana": 1.001,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.001,
-     "kmh": 66.3,
-     "res_uv": 2.44,
-     "cuadros": 42,
-     "z_golpe": 2.55,
-     "z_red": 2.8,
-     "puntaje": 3.995
-    },
-    {
-     "arranque_s": 0.934,
-     "kmh": 73.9,
-     "res_uv": 2.75,
-     "cuadros": 46,
-     "z_golpe": 2.72,
-     "z_red": 2.79,
-     "puntaje": 4.427
-    },
-    {
-     "arranque_s": 0.868,
-     "kmh": 77.5,
-     "res_uv": 3.29,
-     "cuadros": 50,
-     "z_golpe": 2.76,
-     "z_red": 2.83,
-     "puntaje": 5.089
-    },
-    {
-     "arranque_s": 0.767,
-     "kmh": 72.6,
-     "res_uv": 6.12,
-     "cuadros": 56,
-     "z_golpe": 2.62,
-     "z_red": 2.87,
-     "puntaje": 8.102
-    }
-   ]
+   "kmh": 61.0,
+   "fuente": "pistola"
   },
   "6": {
    "saque": 6,
@@ -213,33 +80,8 @@
    "tipo": "M",
    "val": "+",
    "seg": 197,
-   "kmh": 71.0,
-   "alto_del_golpe": 3.03,
-   "altura_en_la_red": 3.03,
-   "kmh_en_la_red": 61.8,
-   "residuo_px": 1.95,
-   "cuadros": 50,
-   "arranque_en_la_ventana": 2.436,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.436,
-     "kmh": 71.0,
-     "res_uv": 1.95,
-     "cuadros": 50,
-     "z_golpe": 3.03,
-     "z_red": 3.03,
-     "puntaje": 2.859
-    },
-    {
-     "arranque_s": 2.369,
-     "kmh": 70.1,
-     "res_uv": 6.76,
-     "cuadros": 54,
-     "z_golpe": 2.95,
-     "z_red": 3.11,
-     "puntaje": 7.388
-    }
-   ]
+   "kmh": 63.0,
+   "fuente": "pistola"
   },
   "7": {
    "saque": 7,
@@ -251,33 +93,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 205,
-   "kmh": 68.8,
-   "alto_del_golpe": 2.79,
-   "altura_en_la_red": 2.9,
-   "kmh_en_la_red": 59.8,
-   "residuo_px": 1.79,
-   "cuadros": 41,
-   "arranque_en_la_ventana": 3.02,
-   "otros_vuelos": [
-    {
-     "arranque_s": 3.02,
-     "kmh": 68.8,
-     "res_uv": 1.79,
-     "cuadros": 41,
-     "z_golpe": 2.79,
-     "z_red": 2.9,
-     "puntaje": 4.631
-    },
-    {
-     "arranque_s": 2.953,
-     "kmh": 71.7,
-     "res_uv": 2.78,
-     "cuadros": 45,
-     "z_golpe": 2.79,
-     "z_red": 2.96,
-     "puntaje": 5.338
-    }
-   ]
+   "kmh": 66.0,
+   "fuente": "pistola"
   },
   "8": {
    "saque": 8,
@@ -289,24 +106,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 218,
-   "kmh": 128.5,
-   "alto_del_golpe": 3.14,
-   "altura_en_la_red": 3.01,
-   "kmh_en_la_red": 111.9,
-   "residuo_px": 2.76,
-   "cuadros": 16,
-   "arranque_en_la_ventana": 1.201,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.201,
-     "kmh": 128.5,
-     "res_uv": 2.76,
-     "cuadros": 16,
-     "z_golpe": 3.14,
-     "z_red": 3.01,
-     "puntaje": 4.236
-    }
-   ]
+   "kmh": 87.0,
+   "fuente": "pistola"
   },
   "9": {
    "saque": 9,
@@ -318,33 +119,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 230,
-   "kmh": 64.6,
-   "alto_del_golpe": 2.89,
-   "altura_en_la_red": 2.8,
-   "kmh_en_la_red": 56.3,
-   "residuo_px": 1.89,
-   "cuadros": 29,
-   "arranque_en_la_ventana": 1.518,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.518,
-     "kmh": 64.6,
-     "res_uv": 1.89,
-     "cuadros": 29,
-     "z_golpe": 2.89,
-     "z_red": 2.8,
-     "puntaje": 2.16
-    },
-    {
-     "arranque_s": 1.451,
-     "kmh": 60.7,
-     "res_uv": 4.26,
-     "cuadros": 33,
-     "z_golpe": 2.83,
-     "z_red": 2.76,
-     "puntaje": 4.643
-    }
-   ]
+   "kmh": 71.0,
+   "fuente": "pistola"
   },
   "10": {
    "saque": 10,
@@ -356,33 +132,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 239,
-   "kmh": 56.8,
-   "alto_del_golpe": 2.83,
-   "altura_en_la_red": 2.93,
-   "kmh_en_la_red": 49.2,
-   "residuo_px": 1.68,
-   "cuadros": 42,
-   "arranque_en_la_ventana": 1.301,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.301,
-     "kmh": 56.8,
-     "res_uv": 1.68,
-     "cuadros": 42,
-     "z_golpe": 2.83,
-     "z_red": 2.93,
-     "puntaje": 2.341
-    },
-    {
-     "arranque_s": 1.235,
-     "kmh": 57.1,
-     "res_uv": 2.79,
-     "cuadros": 46,
-     "z_golpe": 2.81,
-     "z_red": 2.96,
-     "puntaje": 3.571
-    }
-   ]
+   "kmh": 57.0,
+   "fuente": "pistola"
   },
   "11": {
    "saque": 11,
@@ -394,51 +145,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 250,
-   "kmh": 62.9,
-   "alto_del_golpe": 2.38,
-   "altura_en_la_red": 3.09,
-   "kmh_en_la_red": 53.3,
-   "residuo_px": 1.58,
-   "cuadros": 34,
-   "arranque_en_la_ventana": 1.518,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.518,
-     "kmh": 62.9,
-     "res_uv": 1.58,
-     "cuadros": 34,
-     "z_golpe": 2.38,
-     "z_red": 3.09,
-     "puntaje": 1.745
-    },
-    {
-     "arranque_s": 1.451,
-     "kmh": 63.1,
-     "res_uv": 2.21,
-     "cuadros": 38,
-     "z_golpe": 2.48,
-     "z_red": 3.04,
-     "puntaje": 2.491
-    },
-    {
-     "arranque_s": 1.385,
-     "kmh": 64.2,
-     "res_uv": 2.45,
-     "cuadros": 42,
-     "z_golpe": 2.57,
-     "z_red": 3.01,
-     "puntaje": 2.856
-    },
-    {
-     "arranque_s": 1.285,
-     "kmh": 62.5,
-     "res_uv": 2.39,
-     "cuadros": 48,
-     "z_golpe": 2.55,
-     "z_red": 2.98,
-     "puntaje": 2.979
-    }
-   ]
+   "kmh": 66.0,
+   "fuente": "pistola"
   },
   "12": {
    "saque": 12,
@@ -450,51 +158,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 256,
-   "kmh": 54.4,
-   "alto_del_golpe": 3.02,
-   "altura_en_la_red": 2.48,
-   "kmh_en_la_red": 48.7,
-   "residuo_px": 2.29,
-   "cuadros": 43,
-   "arranque_en_la_ventana": 1.201,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.201,
-     "kmh": 54.4,
-     "res_uv": 2.29,
-     "cuadros": 43,
-     "z_golpe": 3.02,
-     "z_red": 2.48,
-     "puntaje": 3.225
-    },
-    {
-     "arranque_s": 1.134,
-     "kmh": 55.2,
-     "res_uv": 2.22,
-     "cuadros": 47,
-     "z_golpe": 3.01,
-     "z_red": 2.54,
-     "puntaje": 3.276
-    },
-    {
-     "arranque_s": 1.068,
-     "kmh": 59.0,
-     "res_uv": 2.77,
-     "cuadros": 51,
-     "z_golpe": 3.02,
-     "z_red": 2.64,
-     "puntaje": 3.949
-    },
-    {
-     "arranque_s": 0.968,
-     "kmh": 58.0,
-     "res_uv": 7.0,
-     "cuadros": 57,
-     "z_golpe": 2.8,
-     "z_red": 2.81,
-     "puntaje": 8.359
-    }
-   ]
+   "kmh": 60.0,
+   "fuente": "pistola"
   },
   "13": {
    "saque": 13,
@@ -506,42 +171,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 264,
-   "kmh": 62.2,
-   "alto_del_golpe": 2.84,
-   "altura_en_la_red": 2.78,
-   "kmh_en_la_red": 54.3,
-   "residuo_px": 1.62,
-   "cuadros": 49,
-   "arranque_en_la_ventana": 1.018,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.018,
-     "kmh": 62.2,
-     "res_uv": 1.62,
-     "cuadros": 49,
-     "z_golpe": 2.84,
-     "z_red": 2.78,
-     "puntaje": 2.987
-    },
-    {
-     "arranque_s": 0.951,
-     "kmh": 62.2,
-     "res_uv": 2.62,
-     "cuadros": 53,
-     "z_golpe": 2.81,
-     "z_red": 2.83,
-     "puntaje": 4.108
-    },
-    {
-     "arranque_s": 0.884,
-     "kmh": 61.9,
-     "res_uv": 2.94,
-     "cuadros": 57,
-     "z_golpe": 2.79,
-     "z_red": 2.84,
-     "puntaje": 4.545
-    }
-   ]
+   "kmh": 59.0,
+   "fuente": "pistola"
   },
   "14": {
    "saque": 14,
@@ -553,8 +184,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 277,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 57.0,
+   "fuente": "pistola"
   },
   "15": {
    "saque": 15,
@@ -566,42 +197,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 291,
-   "kmh": 65.5,
-   "alto_del_golpe": 3.28,
-   "altura_en_la_red": 3.33,
-   "kmh_en_la_red": 56.9,
-   "residuo_px": 1.91,
-   "cuadros": 36,
-   "arranque_en_la_ventana": 0.984,
-   "otros_vuelos": [
-    {
-     "arranque_s": 0.984,
-     "kmh": 65.5,
-     "res_uv": 1.91,
-     "cuadros": 36,
-     "z_golpe": 3.28,
-     "z_red": 3.33,
-     "puntaje": 3.636
-    },
-    {
-     "arranque_s": 0.918,
-     "kmh": 62.4,
-     "res_uv": 2.12,
-     "cuadros": 40,
-     "z_golpe": 3.07,
-     "z_red": 3.21,
-     "puntaje": 3.962
-    },
-    {
-     "arranque_s": 0.817,
-     "kmh": 58.4,
-     "res_uv": 2.36,
-     "cuadros": 46,
-     "z_golpe": 2.84,
-     "z_red": 3.08,
-     "puntaje": 4.389
-    }
-   ]
+   "kmh": 43.0,
+   "fuente": "pistola"
   },
   "16": {
    "saque": 16,
@@ -613,51 +210,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 299,
-   "kmh": 59.7,
-   "alto_del_golpe": 2.92,
-   "altura_en_la_red": 2.93,
-   "kmh_en_la_red": 52.0,
-   "residuo_px": 2.11,
-   "cuadros": 47,
-   "arranque_en_la_ventana": 1.718,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.718,
-     "kmh": 59.7,
-     "res_uv": 2.11,
-     "cuadros": 47,
-     "z_golpe": 2.92,
-     "z_red": 2.93,
-     "puntaje": 1.416
-    },
-    {
-     "arranque_s": 1.652,
-     "kmh": 59.9,
-     "res_uv": 2.18,
-     "cuadros": 51,
-     "z_golpe": 2.95,
-     "z_red": 2.89,
-     "puntaje": 1.603
-    },
-    {
-     "arranque_s": 1.585,
-     "kmh": 59.4,
-     "res_uv": 2.21,
-     "cuadros": 55,
-     "z_golpe": 2.95,
-     "z_red": 2.85,
-     "puntaje": 1.755
-    },
-    {
-     "arranque_s": 1.485,
-     "kmh": 58.9,
-     "res_uv": 5.6,
-     "cuadros": 61,
-     "z_golpe": 2.88,
-     "z_red": 2.89,
-     "puntaje": 5.323
-    }
-   ]
+   "kmh": 58.0,
+   "fuente": "pistola"
   },
   "17": {
    "saque": 17,
@@ -669,42 +223,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 308,
-   "kmh": 74.4,
-   "alto_del_golpe": 2.8,
-   "altura_en_la_red": 3.38,
-   "kmh_en_la_red": 63.8,
-   "residuo_px": 1.87,
-   "cuadros": 47,
-   "arranque_en_la_ventana": 1.852,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.852,
-     "kmh": 74.4,
-     "res_uv": 1.87,
-     "cuadros": 47,
-     "z_golpe": 2.8,
-     "z_red": 3.38,
-     "puntaje": 1.089
-    },
-    {
-     "arranque_s": 1.785,
-     "kmh": 72.7,
-     "res_uv": 2.25,
-     "cuadros": 51,
-     "z_golpe": 2.72,
-     "z_red": 3.4,
-     "puntaje": 1.278
-    },
-    {
-     "arranque_s": 1.718,
-     "kmh": 71.4,
-     "res_uv": 4.72,
-     "cuadros": 55,
-     "z_golpe": 2.58,
-     "z_red": 3.43,
-     "puntaje": 3.869
-    }
-   ]
+   "kmh": 63.0,
+   "fuente": "pistola"
   },
   "18": {
    "saque": 18,
@@ -716,51 +236,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 315,
-   "kmh": 70.4,
-   "alto_del_golpe": 2.84,
-   "altura_en_la_red": 3.35,
-   "kmh_en_la_red": 60.3,
-   "residuo_px": 2.52,
-   "cuadros": 47,
-   "arranque_en_la_ventana": 2.035,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.035,
-     "kmh": 70.4,
-     "res_uv": 2.52,
-     "cuadros": 47,
-     "z_golpe": 2.84,
-     "z_red": 3.35,
-     "puntaje": 2.29
-    },
-    {
-     "arranque_s": 1.969,
-     "kmh": 64.8,
-     "res_uv": 5.01,
-     "cuadros": 51,
-     "z_golpe": 2.55,
-     "z_red": 3.43,
-     "puntaje": 4.497
-    },
-    {
-     "arranque_s": 1.902,
-     "kmh": 72.7,
-     "res_uv": 5.58,
-     "cuadros": 55,
-     "z_golpe": 2.73,
-     "z_red": 3.47,
-     "puntaje": 4.789
-    },
-    {
-     "arranque_s": 1.802,
-     "kmh": 70.0,
-     "res_uv": 7.02,
-     "cuadros": 61,
-     "z_golpe": 2.57,
-     "z_red": 3.49,
-     "puntaje": 5.81
-    }
-   ]
+   "kmh": 61.0,
+   "fuente": "pistola"
   },
   "19": {
    "saque": 19,
@@ -772,42 +249,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 322,
-   "kmh": 58.0,
-   "alto_del_golpe": 2.75,
-   "altura_en_la_red": 2.72,
-   "kmh_en_la_red": 50.7,
-   "residuo_px": 1.59,
-   "cuadros": 50,
-   "arranque_en_la_ventana": 2.286,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.286,
-     "kmh": 58.0,
-     "res_uv": 1.59,
-     "cuadros": 50,
-     "z_golpe": 2.75,
-     "z_red": 2.72,
-     "puntaje": 2.047
-    },
-    {
-     "arranque_s": 2.219,
-     "kmh": 55.8,
-     "res_uv": 3.41,
-     "cuadros": 54,
-     "z_golpe": 2.58,
-     "z_red": 2.79,
-     "puntaje": 3.587
-    },
-    {
-     "arranque_s": 2.152,
-     "kmh": 56.0,
-     "res_uv": 6.12,
-     "cuadros": 58,
-     "z_golpe": 2.54,
-     "z_red": 2.83,
-     "puntaje": 6.018
-    }
-   ]
+   "kmh": 62.0,
+   "fuente": "pistola"
   },
   "20": {
    "saque": 20,
@@ -819,8 +262,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 334,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 96.0,
+   "fuente": "pistola"
   },
   "21": {
    "saque": 21,
@@ -832,8 +275,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 347,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 73.0,
+   "fuente": "pistola"
   },
   "22": {
    "saque": 22,
@@ -845,8 +288,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 355,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 59.0,
+   "fuente": "pistola"
   },
   "23": {
    "saque": 23,
@@ -858,42 +301,8 @@
    "tipo": "M",
    "val": "+",
    "seg": 365,
-   "kmh": 60.4,
-   "alto_del_golpe": 2.78,
-   "altura_en_la_red": 2.54,
-   "kmh_en_la_red": 53.2,
-   "residuo_px": 1.58,
-   "cuadros": 31,
-   "arranque_en_la_ventana": 1.335,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.335,
-     "kmh": 60.4,
-     "res_uv": 1.58,
-     "cuadros": 31,
-     "z_golpe": 2.78,
-     "z_red": 2.54,
-     "puntaje": 2.356
-    },
-    {
-     "arranque_s": 1.268,
-     "kmh": 59.9,
-     "res_uv": 1.8,
-     "cuadros": 35,
-     "z_golpe": 2.76,
-     "z_red": 2.54,
-     "puntaje": 2.697
-    },
-    {
-     "arranque_s": 1.201,
-     "kmh": 64.0,
-     "res_uv": 2.27,
-     "cuadros": 39,
-     "z_golpe": 2.76,
-     "z_red": 2.65,
-     "puntaje": 3.291
-    }
-   ]
+   "kmh": 56.0,
+   "fuente": "pistola"
   },
   "24": {
    "saque": 24,
@@ -905,42 +314,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 373,
-   "kmh": 82.2,
-   "alto_del_golpe": 2.97,
-   "altura_en_la_red": 2.77,
-   "kmh_en_la_red": 71.8,
-   "residuo_px": 2.97,
-   "cuadros": 47,
-   "arranque_en_la_ventana": 1.585,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.585,
-     "kmh": 82.2,
-     "res_uv": 2.97,
-     "cuadros": 47,
-     "z_golpe": 2.97,
-     "z_red": 2.77,
-     "puntaje": 2.674
-    },
-    {
-     "arranque_s": 1.518,
-     "kmh": 80.9,
-     "res_uv": 3.27,
-     "cuadros": 51,
-     "z_golpe": 2.93,
-     "z_red": 2.79,
-     "puntaje": 3.091
-    },
-    {
-     "arranque_s": 1.451,
-     "kmh": 75.5,
-     "res_uv": 7.41,
-     "cuadros": 55,
-     "z_golpe": 2.8,
-     "z_red": 2.85,
-     "puntaje": 7.353
-    }
-   ]
+   "kmh": 62.0,
+   "fuente": "pistola"
   },
   "25": {
    "saque": 25,
@@ -952,42 +327,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 386,
-   "kmh": 65.3,
-   "alto_del_golpe": 2.96,
-   "altura_en_la_red": 2.78,
-   "kmh_en_la_red": 57.3,
-   "residuo_px": 2.6,
-   "cuadros": 47,
-   "arranque_en_la_ventana": 1.435,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.435,
-     "kmh": 65.3,
-     "res_uv": 2.6,
-     "cuadros": 47,
-     "z_golpe": 2.96,
-     "z_red": 2.78,
-     "puntaje": 2.756
-    },
-    {
-     "arranque_s": 1.368,
-     "kmh": 67.6,
-     "res_uv": 3.95,
-     "cuadros": 51,
-     "z_golpe": 2.9,
-     "z_red": 2.87,
-     "puntaje": 4.227
-    },
-    {
-     "arranque_s": 1.301,
-     "kmh": 67.7,
-     "res_uv": 5.22,
-     "cuadros": 55,
-     "z_golpe": 2.74,
-     "z_red": 2.95,
-     "puntaje": 5.612
-    }
-   ]
+   "kmh": 58.0,
+   "fuente": "pistola"
   },
   "26": {
    "saque": 26,
@@ -999,33 +340,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 397,
-   "kmh": 81.2,
-   "alto_del_golpe": 3.58,
-   "altura_en_la_red": 2.62,
-   "kmh_en_la_red": 72.2,
-   "residuo_px": 7.98,
-   "cuadros": 35,
-   "arranque_en_la_ventana": 2.219,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.219,
-     "kmh": 81.2,
-     "res_uv": 7.98,
-     "cuadros": 35,
-     "z_golpe": 3.58,
-     "z_red": 2.62,
-     "puntaje": 8.541
-    },
-    {
-     "arranque_s": 2.152,
-     "kmh": 85.6,
-     "res_uv": 8.81,
-     "cuadros": 39,
-     "z_golpe": 3.42,
-     "z_red": 2.6,
-     "puntaje": 9.086
-    }
-   ]
+   "kmh": 93.0,
+   "fuente": "pistola"
   },
   "27": {
    "saque": 27,
@@ -1037,24 +353,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 411,
-   "kmh": 57.2,
-   "alto_del_golpe": 1.9,
-   "altura_en_la_red": 3.76,
-   "kmh_en_la_red": 45.5,
-   "residuo_px": 3.2,
-   "cuadros": 61,
-   "arranque_en_la_ventana": 1.168,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.168,
-     "kmh": 57.2,
-     "res_uv": 3.2,
-     "cuadros": 61,
-     "z_golpe": 1.9,
-     "z_red": 3.76,
-     "puntaje": 3.879
-    }
-   ]
+   "kmh": 36.0,
+   "fuente": "pistola"
   },
   "28": {
    "saque": 28,
@@ -1066,51 +366,8 @@
    "tipo": "M",
    "val": "+",
    "seg": 421,
-   "kmh": 70.2,
-   "alto_del_golpe": 2.93,
-   "altura_en_la_red": 2.7,
-   "kmh_en_la_red": 61.5,
-   "residuo_px": 3.13,
-   "cuadros": 42,
-   "arranque_en_la_ventana": 1.418,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.418,
-     "kmh": 70.2,
-     "res_uv": 3.13,
-     "cuadros": 42,
-     "z_golpe": 2.93,
-     "z_red": 2.7,
-     "puntaje": 3.435
-    },
-    {
-     "arranque_s": 1.485,
-     "kmh": 72.2,
-     "res_uv": 3.29,
-     "cuadros": 38,
-     "z_golpe": 2.97,
-     "z_red": 2.7,
-     "puntaje": 3.476
-    },
-    {
-     "arranque_s": 1.351,
-     "kmh": 68.4,
-     "res_uv": 3.16,
-     "cuadros": 46,
-     "z_golpe": 2.87,
-     "z_red": 2.73,
-     "puntaje": 3.586
-    },
-    {
-     "arranque_s": 1.251,
-     "kmh": 66.6,
-     "res_uv": 3.05,
-     "cuadros": 52,
-     "z_golpe": 2.83,
-     "z_red": 2.73,
-     "puntaje": 3.656
-    }
-   ]
+   "kmh": 55.0,
+   "fuente": "pistola"
   },
   "29": {
    "saque": 29,
@@ -1122,51 +379,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 430,
-   "kmh": 70.5,
-   "alto_del_golpe": 2.67,
-   "altura_en_la_red": 3.48,
-   "kmh_en_la_red": 59.9,
-   "residuo_px": 2.38,
-   "cuadros": 49,
-   "arranque_en_la_ventana": 1.818,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.818,
-     "kmh": 70.5,
-     "res_uv": 2.38,
-     "cuadros": 49,
-     "z_golpe": 2.67,
-     "z_red": 3.48,
-     "puntaje": 1.46
-    },
-    {
-     "arranque_s": 1.752,
-     "kmh": 70.3,
-     "res_uv": 3.18,
-     "cuadros": 53,
-     "z_golpe": 2.63,
-     "z_red": 3.51,
-     "puntaje": 2.266
-    },
-    {
-     "arranque_s": 1.685,
-     "kmh": 70.2,
-     "res_uv": 3.27,
-     "cuadros": 57,
-     "z_golpe": 2.57,
-     "z_red": 3.54,
-     "puntaje": 2.471
-    },
-    {
-     "arranque_s": 1.585,
-     "kmh": 69.1,
-     "res_uv": 3.4,
-     "cuadros": 63,
-     "z_golpe": 2.47,
-     "z_red": 3.57,
-     "puntaje": 2.782
-    }
-   ]
+   "kmh": 45.0,
+   "fuente": "pistola"
   },
   "30": {
    "saque": 30,
@@ -1178,33 +392,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 438,
-   "kmh": 69.3,
-   "alto_del_golpe": 2.98,
-   "altura_en_la_red": 3.07,
-   "kmh_en_la_red": 60.2,
-   "residuo_px": 2.19,
-   "cuadros": 43,
-   "arranque_en_la_ventana": 2.302,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.302,
-     "kmh": 69.3,
-     "res_uv": 2.19,
-     "cuadros": 43,
-     "z_golpe": 2.98,
-     "z_red": 3.07,
-     "puntaje": 2.841
-    },
-    {
-     "arranque_s": 2.236,
-     "kmh": 64.9,
-     "res_uv": 5.12,
-     "cuadros": 47,
-     "z_golpe": 2.83,
-     "z_red": 3.11,
-     "puntaje": 5.488
-    }
-   ]
+   "kmh": 62.0,
+   "fuente": "pistola"
   },
   "31": {
    "saque": 31,
@@ -1216,42 +405,8 @@
    "tipo": "M",
    "val": "/",
    "seg": 447,
-   "kmh": 59.3,
-   "alto_del_golpe": 2.83,
-   "altura_en_la_red": 2.56,
-   "kmh_en_la_red": 52.2,
-   "residuo_px": 2.01,
-   "cuadros": 47,
-   "arranque_en_la_ventana": 1.435,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.435,
-     "kmh": 59.3,
-     "res_uv": 2.01,
-     "cuadros": 47,
-     "z_golpe": 2.83,
-     "z_red": 2.56,
-     "puntaje": 2.163
-    },
-    {
-     "arranque_s": 1.368,
-     "kmh": 60.0,
-     "res_uv": 2.17,
-     "cuadros": 51,
-     "z_golpe": 2.86,
-     "z_red": 2.54,
-     "puntaje": 2.443
-    },
-    {
-     "arranque_s": 1.301,
-     "kmh": 59.7,
-     "res_uv": 5.74,
-     "cuadros": 55,
-     "z_golpe": 2.73,
-     "z_red": 2.57,
-     "puntaje": 6.138
-    }
-   ]
+   "kmh": 60.0,
+   "fuente": "pistola"
   },
   "32": {
    "saque": 32,
@@ -1263,8 +418,8 @@
    "tipo": "Q",
    "val": "!",
    "seg": 458,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 89.0,
+   "fuente": "pistola"
   },
   "33": {
    "saque": 33,
@@ -1276,33 +431,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 476,
-   "kmh": 68.0,
-   "alto_del_golpe": 3.14,
-   "altura_en_la_red": 2.7,
-   "kmh_en_la_red": 60.0,
-   "residuo_px": 2.79,
-   "cuadros": 46,
-   "arranque_en_la_ventana": 1.902,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.902,
-     "kmh": 68.0,
-     "res_uv": 2.79,
-     "cuadros": 46,
-     "z_golpe": 3.14,
-     "z_red": 2.7,
-     "puntaje": 2.176
-    },
-    {
-     "arranque_s": 1.835,
-     "kmh": 69.4,
-     "res_uv": 4.45,
-     "cuadros": 50,
-     "z_golpe": 3.13,
-     "z_red": 2.75,
-     "puntaje": 3.553
-    }
-   ]
+   "kmh": 58.0,
+   "fuente": "pistola"
   },
   "34": {
    "saque": 34,
@@ -1314,51 +444,8 @@
    "tipo": "M",
    "val": "+",
    "seg": 486,
-   "kmh": 67.8,
-   "alto_del_golpe": 2.66,
-   "altura_en_la_red": 2.87,
-   "kmh_en_la_red": 58.5,
-   "residuo_px": 2.39,
-   "cuadros": 49,
-   "arranque_en_la_ventana": 1.869,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.869,
-     "kmh": 67.8,
-     "res_uv": 2.39,
-     "cuadros": 49,
-     "z_golpe": 2.66,
-     "z_red": 2.87,
-     "puntaje": 1.614
-    },
-    {
-     "arranque_s": 1.969,
-     "kmh": 66.7,
-     "res_uv": 2.15,
-     "cuadros": 43,
-     "z_golpe": 2.61,
-     "z_red": 2.89,
-     "puntaje": 1.8
-    },
-    {
-     "arranque_s": 2.035,
-     "kmh": 68.5,
-     "res_uv": 2.3,
-     "cuadros": 39,
-     "z_golpe": 2.71,
-     "z_red": 2.87,
-     "puntaje": 2.23
-    },
-    {
-     "arranque_s": 2.102,
-     "kmh": 71.2,
-     "res_uv": 2.36,
-     "cuadros": 35,
-     "z_golpe": 2.77,
-     "z_red": 2.85,
-     "puntaje": 2.57
-    }
-   ]
+   "kmh": 67.0,
+   "fuente": "pistola"
   },
   "35": {
    "saque": 35,
@@ -1370,42 +457,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 498,
-   "kmh": 64.3,
-   "alto_del_golpe": 2.39,
-   "altura_en_la_red": 2.98,
-   "kmh_en_la_red": 54.6,
-   "residuo_px": 1.62,
-   "cuadros": 44,
-   "arranque_en_la_ventana": 1.485,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.485,
-     "kmh": 64.3,
-     "res_uv": 1.62,
-     "cuadros": 44,
-     "z_golpe": 2.39,
-     "z_red": 2.98,
-     "puntaje": 1.686
-    },
-    {
-     "arranque_s": 1.418,
-     "kmh": 64.7,
-     "res_uv": 1.77,
-     "cuadros": 48,
-     "z_golpe": 2.37,
-     "z_red": 3.0,
-     "puntaje": 1.955
-    },
-    {
-     "arranque_s": 1.351,
-     "kmh": 64.6,
-     "res_uv": 3.8,
-     "cuadros": 52,
-     "z_golpe": 2.28,
-     "z_red": 3.03,
-     "puntaje": 4.106
-    }
-   ]
+   "kmh": 63.0,
+   "fuente": "pistola"
   },
   "36": {
    "saque": 36,
@@ -1417,42 +470,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 506,
-   "kmh": 67.7,
-   "alto_del_golpe": 2.85,
-   "altura_en_la_red": 2.71,
-   "kmh_en_la_red": 59.3,
-   "residuo_px": 2.14,
-   "cuadros": 39,
-   "arranque_en_la_ventana": 2.619,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.619,
-     "kmh": 67.7,
-     "res_uv": 2.14,
-     "cuadros": 39,
-     "z_golpe": 2.85,
-     "z_red": 2.71,
-     "puntaje": 3.817
-    },
-    {
-     "arranque_s": 2.553,
-     "kmh": 71.8,
-     "res_uv": 2.52,
-     "cuadros": 43,
-     "z_golpe": 2.91,
-     "z_red": 2.73,
-     "puntaje": 3.913
-    },
-    {
-     "arranque_s": 2.486,
-     "kmh": 70.8,
-     "res_uv": 3.92,
-     "cuadros": 47,
-     "z_golpe": 2.86,
-     "z_red": 2.79,
-     "puntaje": 5.04
-    }
-   ]
+   "kmh": 64.0,
+   "fuente": "pistola"
   },
   "37": {
    "saque": 37,
@@ -1464,8 +483,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 515,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 80.0,
+   "fuente": "pistola"
   },
   "38": {
    "saque": 38,
@@ -1477,8 +496,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 530,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 99.0,
+   "fuente": "pistola"
   },
   "39": {
    "saque": 39,
@@ -1490,8 +509,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 545,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 77.0,
+   "fuente": "pistola"
   },
   "40": {
    "saque": 40,
@@ -1503,42 +522,8 @@
    "tipo": "M",
    "val": "/",
    "seg": 557,
-   "kmh": 57.8,
-   "alto_del_golpe": 2.64,
-   "altura_en_la_red": 2.85,
-   "kmh_en_la_red": 50.0,
-   "residuo_px": 1.78,
-   "cuadros": 45,
-   "arranque_en_la_ventana": 1.318,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.318,
-     "kmh": 57.8,
-     "res_uv": 1.78,
-     "cuadros": 45,
-     "z_golpe": 2.64,
-     "z_red": 2.85,
-     "puntaje": 2.328
-    },
-    {
-     "arranque_s": 1.251,
-     "kmh": 61.3,
-     "res_uv": 2.48,
-     "cuadros": 49,
-     "z_golpe": 2.76,
-     "z_red": 2.86,
-     "puntaje": 3.148
-    },
-    {
-     "arranque_s": 1.185,
-     "kmh": 60.4,
-     "res_uv": 6.15,
-     "cuadros": 53,
-     "z_golpe": 2.7,
-     "z_red": 2.9,
-     "puntaje": 6.936
-    }
-   ]
+   "kmh": 65.0,
+   "fuente": "pistola"
   },
   "41": {
    "saque": 41,
@@ -1550,8 +535,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 605,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 61.0,
+   "fuente": "pistola"
   },
   "42": {
    "saque": 42,
@@ -1563,42 +548,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 648,
-   "kmh": 52.9,
-   "alto_del_golpe": 2.84,
-   "altura_en_la_red": 2.57,
-   "kmh_en_la_red": 46.9,
-   "residuo_px": 3.14,
-   "cuadros": 51,
-   "arranque_en_la_ventana": 1.251,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.251,
-     "kmh": 52.9,
-     "res_uv": 3.14,
-     "cuadros": 51,
-     "z_golpe": 2.84,
-     "z_red": 2.57,
-     "puntaje": 3.762
-    },
-    {
-     "arranque_s": 1.185,
-     "kmh": 52.9,
-     "res_uv": 3.93,
-     "cuadros": 55,
-     "z_golpe": 2.83,
-     "z_red": 2.61,
-     "puntaje": 4.679
-    },
-    {
-     "arranque_s": 1.118,
-     "kmh": 53.6,
-     "res_uv": 4.37,
-     "cuadros": 59,
-     "z_golpe": 2.89,
-     "z_red": 2.54,
-     "puntaje": 5.239
-    }
-   ]
+   "kmh": 62.0,
+   "fuente": "pistola"
   },
   "43": {
    "saque": 43,
@@ -1610,8 +561,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 591,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 81.0,
+   "fuente": "pistola"
   },
   "44": {
    "saque": 44,
@@ -1623,42 +574,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 621,
-   "kmh": 67.2,
-   "alto_del_golpe": 2.76,
-   "altura_en_la_red": 2.89,
-   "kmh_en_la_red": 58.2,
-   "residuo_px": 1.78,
-   "cuadros": 46,
-   "arranque_en_la_ventana": 1.635,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.635,
-     "kmh": 67.2,
-     "res_uv": 1.78,
-     "cuadros": 46,
-     "z_golpe": 2.76,
-     "z_red": 2.89,
-     "puntaje": 1.357
-    },
-    {
-     "arranque_s": 1.568,
-     "kmh": 68.8,
-     "res_uv": 1.85,
-     "cuadros": 50,
-     "z_golpe": 2.78,
-     "z_red": 2.91,
-     "puntaje": 1.548
-    },
-    {
-     "arranque_s": 1.501,
-     "kmh": 65.8,
-     "res_uv": 7.2,
-     "cuadros": 54,
-     "z_golpe": 2.66,
-     "z_red": 2.96,
-     "puntaje": 7.012
-    }
-   ]
+   "kmh": 107.0,
+   "fuente": "pistola"
   },
   "45": {
    "saque": 45,
@@ -1670,24 +587,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 631,
-   "kmh": 74.0,
-   "alto_del_golpe": 2.73,
-   "altura_en_la_red": 2.97,
-   "kmh_en_la_red": 64.0,
-   "residuo_px": 3.38,
-   "cuadros": 15,
-   "arranque_en_la_ventana": 1.635,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.635,
-     "kmh": 74.0,
-     "res_uv": 3.38,
-     "cuadros": 15,
-     "z_golpe": 2.73,
-     "z_red": 2.97,
-     "puntaje": 3.578
-    }
-   ]
+   "kmh": 66.0,
+   "fuente": "pistola"
   },
   "46": {
    "saque": 46,
@@ -1699,42 +600,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 641,
-   "kmh": 74.9,
-   "alto_del_golpe": 2.82,
-   "altura_en_la_red": 3.31,
-   "kmh_en_la_red": 64.4,
-   "residuo_px": 3.23,
-   "cuadros": 47,
-   "arranque_en_la_ventana": 1.134,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.134,
-     "kmh": 74.9,
-     "res_uv": 3.23,
-     "cuadros": 47,
-     "z_golpe": 2.82,
-     "z_red": 3.31,
-     "puntaje": 4.287
-    },
-    {
-     "arranque_s": 1.068,
-     "kmh": 77.2,
-     "res_uv": 4.61,
-     "cuadros": 51,
-     "z_golpe": 2.79,
-     "z_red": 3.36,
-     "puntaje": 5.787
-    },
-    {
-     "arranque_s": 1.001,
-     "kmh": 74.5,
-     "res_uv": 7.78,
-     "cuadros": 55,
-     "z_golpe": 2.64,
-     "z_red": 3.39,
-     "puntaje": 9.08
-    }
-   ]
+   "kmh": 62.0,
+   "fuente": "pistola"
   },
   "47": {
    "saque": 47,
@@ -1746,42 +613,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 648,
-   "kmh": 52.9,
-   "alto_del_golpe": 2.84,
-   "altura_en_la_red": 2.57,
-   "kmh_en_la_red": 46.9,
-   "residuo_px": 3.14,
-   "cuadros": 51,
-   "arranque_en_la_ventana": 1.251,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.251,
-     "kmh": 52.9,
-     "res_uv": 3.14,
-     "cuadros": 51,
-     "z_golpe": 2.84,
-     "z_red": 2.57,
-     "puntaje": 3.762
-    },
-    {
-     "arranque_s": 1.185,
-     "kmh": 52.9,
-     "res_uv": 3.93,
-     "cuadros": 55,
-     "z_golpe": 2.83,
-     "z_red": 2.61,
-     "puntaje": 4.679
-    },
-    {
-     "arranque_s": 1.118,
-     "kmh": 53.6,
-     "res_uv": 4.37,
-     "cuadros": 59,
-     "z_golpe": 2.89,
-     "z_red": 2.54,
-     "puntaje": 5.239
-    }
-   ]
+   "kmh": 63.0,
+   "fuente": "pistola"
   },
   "48": {
    "saque": 48,
@@ -1793,24 +626,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 660,
-   "kmh": 71.1,
-   "alto_del_golpe": 1.81,
-   "altura_en_la_red": 2.71,
-   "kmh_en_la_red": 60.2,
-   "residuo_px": 5.87,
-   "cuadros": 27,
-   "arranque_en_la_ventana": 1.301,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.301,
-     "kmh": 71.1,
-     "res_uv": 5.87,
-     "cuadros": 27,
-     "z_golpe": 1.81,
-     "z_red": 2.71,
-     "puntaje": 6.828
-    }
-   ]
+   "kmh": 50.0,
+   "fuente": "pistola"
   },
   "49": {
    "saque": 49,
@@ -1822,24 +639,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 675,
-   "kmh": 47.2,
-   "alto_del_golpe": 3.27,
-   "altura_en_la_red": 2.47,
-   "kmh_en_la_red": 43.4,
-   "residuo_px": 3.14,
-   "cuadros": 43,
-   "arranque_en_la_ventana": 1.952,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.952,
-     "kmh": 47.2,
-     "res_uv": 3.14,
-     "cuadros": 43,
-     "z_golpe": 3.27,
-     "z_red": 2.47,
-     "puntaje": 2.735
-    }
-   ]
+   "kmh": 24.0,
+   "fuente": "pistola"
   },
   "50": {
    "saque": 50,
@@ -1851,33 +652,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 688,
-   "kmh": 85.0,
-   "alto_del_golpe": 3.12,
-   "altura_en_la_red": 2.48,
-   "kmh_en_la_red": 74.9,
-   "residuo_px": 3.72,
-   "cuadros": 27,
-   "arranque_en_la_ventana": 1.618,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.618,
-     "kmh": 85.0,
-     "res_uv": 3.72,
-     "cuadros": 27,
-     "z_golpe": 3.12,
-     "z_red": 2.48,
-     "puntaje": 3.727
-    },
-    {
-     "arranque_s": 1.552,
-     "kmh": 90.7,
-     "res_uv": 3.93,
-     "cuadros": 31,
-     "z_golpe": 3.1,
-     "z_red": 2.52,
-     "puntaje": 4.057
-    }
-   ]
+   "kmh": 60.0,
+   "fuente": "pistola"
   },
   "51": {
    "saque": 51,
@@ -1889,33 +665,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 697,
-   "kmh": 72.1,
-   "alto_del_golpe": 3.01,
-   "altura_en_la_red": 2.83,
-   "kmh_en_la_red": 63.1,
-   "residuo_px": 2.36,
-   "cuadros": 48,
-   "arranque_en_la_ventana": 1.485,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.485,
-     "kmh": 72.1,
-     "res_uv": 2.36,
-     "cuadros": 48,
-     "z_golpe": 3.01,
-     "z_red": 2.83,
-     "puntaje": 2.346
-    },
-    {
-     "arranque_s": 1.418,
-     "kmh": 72.8,
-     "res_uv": 2.39,
-     "cuadros": 52,
-     "z_golpe": 3.02,
-     "z_red": 2.84,
-     "puntaje": 2.497
-    }
-   ]
+   "kmh": 71.0,
+   "fuente": "pistola"
   },
   "52": {
    "saque": 52,
@@ -1927,24 +678,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 706,
-   "kmh": 78.4,
-   "alto_del_golpe": 2.69,
-   "altura_en_la_red": 2.61,
-   "kmh_en_la_red": 68.4,
-   "residuo_px": 3.3,
-   "cuadros": 34,
-   "arranque_en_la_ventana": 0.517,
-   "otros_vuelos": [
-    {
-     "arranque_s": 0.517,
-     "kmh": 78.4,
-     "res_uv": 3.3,
-     "cuadros": 34,
-     "z_golpe": 2.69,
-     "z_red": 2.61,
-     "puntaje": 6.47
-    }
-   ]
+   "kmh": 62.0,
+   "fuente": "pistola"
   },
   "53": {
    "saque": 53,
@@ -1956,42 +691,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 714,
-   "kmh": 60.9,
-   "alto_del_golpe": 2.39,
-   "altura_en_la_red": 3.39,
-   "kmh_en_la_red": 51.0,
-   "residuo_px": 2.03,
-   "cuadros": 45,
-   "arranque_en_la_ventana": 1.919,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.919,
-     "kmh": 60.9,
-     "res_uv": 2.03,
-     "cuadros": 45,
-     "z_golpe": 2.39,
-     "z_red": 3.39,
-     "puntaje": 1.483
-    },
-    {
-     "arranque_s": 1.985,
-     "kmh": 61.4,
-     "res_uv": 2.0,
-     "cuadros": 41,
-     "z_golpe": 2.38,
-     "z_red": 3.39,
-     "puntaje": 1.736
-    },
-    {
-     "arranque_s": 1.852,
-     "kmh": 61.8,
-     "res_uv": 2.77,
-     "cuadros": 49,
-     "z_golpe": 2.41,
-     "z_red": 3.4,
-     "puntaje": 1.943
-    }
-   ]
+   "kmh": 65.0,
+   "fuente": "pistola"
   },
   "54": {
    "saque": 54,
@@ -2003,8 +704,8 @@
    "tipo": "M",
    "val": "/",
    "seg": 726,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 69.0,
+   "fuente": "pistola"
   },
   "55": {
    "saque": 55,
@@ -2016,33 +717,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 741,
-   "kmh": 86.5,
-   "alto_del_golpe": 3.59,
-   "altura_en_la_red": 2.59,
-   "kmh_en_la_red": 76.7,
-   "residuo_px": 6.82,
-   "cuadros": 32,
-   "arranque_en_la_ventana": 1.668,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.668,
-     "kmh": 86.5,
-     "res_uv": 6.82,
-     "cuadros": 32,
-     "z_golpe": 3.59,
-     "z_red": 2.59,
-     "puntaje": 6.578
-    },
-    {
-     "arranque_s": 1.602,
-     "kmh": 78.7,
-     "res_uv": 8.08,
-     "cuadros": 36,
-     "z_golpe": 3.37,
-     "z_red": 2.48,
-     "puntaje": 7.955
-    }
-   ]
+   "kmh": 84.0,
+   "fuente": "pistola"
   },
   "56": {
    "saque": 56,
@@ -2054,42 +730,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 755,
-   "kmh": 62.4,
-   "alto_del_golpe": 3.06,
-   "altura_en_la_red": 2.53,
-   "kmh_en_la_red": 55.4,
-   "residuo_px": 2.26,
-   "cuadros": 34,
-   "arranque_en_la_ventana": 1.568,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.568,
-     "kmh": 62.4,
-     "res_uv": 2.26,
-     "cuadros": 34,
-     "z_golpe": 3.06,
-     "z_red": 2.53,
-     "puntaje": 2.279
-    },
-    {
-     "arranque_s": 1.501,
-     "kmh": 65.6,
-     "res_uv": 3.54,
-     "cuadros": 38,
-     "z_golpe": 3.06,
-     "z_red": 2.47,
-     "puntaje": 3.679
-    },
-    {
-     "arranque_s": 1.435,
-     "kmh": 61.9,
-     "res_uv": 3.76,
-     "cuadros": 42,
-     "z_golpe": 3.01,
-     "z_red": 2.43,
-     "puntaje": 4.019
-    }
-   ]
+   "kmh": 103.0,
+   "fuente": "pistola"
   },
   "57": {
    "saque": 57,
@@ -2101,8 +743,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 765,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 74.0,
+   "fuente": "pistola"
   },
   "58": {
    "saque": 58,
@@ -2114,51 +756,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 772,
-   "kmh": 80.5,
-   "alto_del_golpe": 2.27,
-   "altura_en_la_red": 3.31,
-   "kmh_en_la_red": 68.3,
-   "residuo_px": 3.78,
-   "cuadros": 48,
-   "arranque_en_la_ventana": 1.718,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.718,
-     "kmh": 80.5,
-     "res_uv": 3.78,
-     "cuadros": 48,
-     "z_golpe": 2.27,
-     "z_red": 3.31,
-     "puntaje": 3.066
-    },
-    {
-     "arranque_s": 1.652,
-     "kmh": 80.5,
-     "res_uv": 4.33,
-     "cuadros": 52,
-     "z_golpe": 2.23,
-     "z_red": 3.34,
-     "puntaje": 3.732
-    },
-    {
-     "arranque_s": 1.585,
-     "kmh": 83.1,
-     "res_uv": 4.55,
-     "cuadros": 56,
-     "z_golpe": 2.13,
-     "z_red": 3.34,
-     "puntaje": 4.079
-    },
-    {
-     "arranque_s": 1.485,
-     "kmh": 81.7,
-     "res_uv": 7.91,
-     "cuadros": 62,
-     "z_golpe": 1.93,
-     "z_red": 3.33,
-     "puntaje": 7.614
-    }
-   ]
+   "kmh": 60.0,
+   "fuente": "pistola"
   },
   "59": {
    "saque": 59,
@@ -2170,33 +769,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 781,
-   "kmh": 60.9,
-   "alto_del_golpe": 2.79,
-   "altura_en_la_red": 2.71,
-   "kmh_en_la_red": 53.3,
-   "residuo_px": 1.62,
-   "cuadros": 47,
-   "arranque_en_la_ventana": 1.435,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.435,
-     "kmh": 60.9,
-     "res_uv": 1.62,
-     "cuadros": 47,
-     "z_golpe": 2.79,
-     "z_red": 2.71,
-     "puntaje": 1.775
-    },
-    {
-     "arranque_s": 1.368,
-     "kmh": 59.4,
-     "res_uv": 2.99,
-     "cuadros": 51,
-     "z_golpe": 2.73,
-     "z_red": 2.73,
-     "puntaje": 3.265
-    }
-   ]
+   "kmh": 59.0,
+   "fuente": "pistola"
   },
   "60": {
    "saque": 60,
@@ -2208,8 +782,8 @@
    "tipo": "M",
    "val": "/",
    "seg": 909,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 62.0,
+   "fuente": "pistola"
   },
   "61": {
    "saque": 61,
@@ -2221,8 +795,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 924,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 74.0,
+   "fuente": "pistola"
   },
   "62": {
    "saque": 62,
@@ -2234,51 +808,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 937,
-   "kmh": 49.8,
-   "alto_del_golpe": 2.76,
-   "altura_en_la_red": 2.94,
-   "kmh_en_la_red": 42.7,
-   "residuo_px": 4.38,
-   "cuadros": 63,
-   "arranque_en_la_ventana": 1.752,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.752,
-     "kmh": 49.8,
-     "res_uv": 4.38,
-     "cuadros": 63,
-     "z_golpe": 2.76,
-     "z_red": 2.94,
-     "puntaje": 3.262
-    },
-    {
-     "arranque_s": 1.818,
-     "kmh": 51.4,
-     "res_uv": 4.6,
-     "cuadros": 59,
-     "z_golpe": 2.71,
-     "z_red": 3.11,
-     "puntaje": 3.479
-    },
-    {
-     "arranque_s": 1.885,
-     "kmh": 53.3,
-     "res_uv": 4.58,
-     "cuadros": 55,
-     "z_golpe": 2.64,
-     "z_red": 3.31,
-     "puntaje": 3.733
-    },
-    {
-     "arranque_s": 1.652,
-     "kmh": 49.3,
-     "res_uv": 4.91,
-     "cuadros": 69,
-     "z_golpe": 2.67,
-     "z_red": 2.95,
-     "puntaje": 3.976
-    }
-   ]
+   "kmh": 104.0,
+   "fuente": "pistola"
   },
   "63": {
    "saque": 63,
@@ -2290,51 +821,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 948,
-   "kmh": 85.1,
-   "alto_del_golpe": 2.54,
-   "altura_en_la_red": 3.47,
-   "kmh_en_la_red": 71.7,
-   "residuo_px": 1.69,
-   "cuadros": 46,
-   "arranque_en_la_ventana": 1.385,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.385,
-     "kmh": 85.1,
-     "res_uv": 1.69,
-     "cuadros": 46,
-     "z_golpe": 2.54,
-     "z_red": 3.47,
-     "puntaje": 2.014
-    },
-    {
-     "arranque_s": 1.318,
-     "kmh": 84.0,
-     "res_uv": 2.56,
-     "cuadros": 50,
-     "z_golpe": 2.51,
-     "z_red": 3.48,
-     "puntaje": 3.009
-    },
-    {
-     "arranque_s": 1.251,
-     "kmh": 82.8,
-     "res_uv": 2.5,
-     "cuadros": 54,
-     "z_golpe": 2.47,
-     "z_red": 3.49,
-     "puntaje": 3.068
-    },
-    {
-     "arranque_s": 1.151,
-     "kmh": 83.2,
-     "res_uv": 2.58,
-     "cuadros": 60,
-     "z_golpe": 2.5,
-     "z_red": 3.49,
-     "puntaje": 3.323
-    }
-   ]
+   "kmh": 43.0,
+   "fuente": "pistola"
   },
   "64": {
    "saque": 64,
@@ -2346,8 +834,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 957,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 51.0,
+   "fuente": "pistola"
   },
   "65": {
    "saque": 65,
@@ -2359,8 +847,8 @@
    "tipo": "M",
    "val": "+",
    "seg": 966,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 62.0,
+   "fuente": "pistola"
   },
   "66": {
    "saque": 66,
@@ -2372,8 +860,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 977,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 64.0,
+   "fuente": "pistola"
   },
   "67": {
    "saque": 67,
@@ -2385,24 +873,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 991,
-   "kmh": 78.2,
-   "alto_del_golpe": 3.83,
-   "altura_en_la_red": 2.98,
-   "kmh_en_la_red": 69.4,
-   "residuo_px": 6.16,
-   "cuadros": 36,
-   "arranque_en_la_ventana": 2.186,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.186,
-     "kmh": 78.2,
-     "res_uv": 6.16,
-     "cuadros": 36,
-     "z_golpe": 3.83,
-     "z_red": 2.98,
-     "puntaje": 6.595
-    }
-   ]
+   "kmh": 90.0,
+   "fuente": "pistola"
   },
   "68": {
    "saque": 68,
@@ -2414,8 +886,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 1010,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 99.0,
+   "fuente": "pistola"
   },
   "69": {
    "saque": 69,
@@ -2427,51 +899,8 @@
    "tipo": "M",
    "val": "+",
    "seg": 1019,
-   "kmh": 76.6,
-   "alto_del_golpe": 3.0,
-   "altura_en_la_red": 2.89,
-   "kmh_en_la_red": 66.7,
-   "residuo_px": 1.83,
-   "cuadros": 40,
-   "arranque_en_la_ventana": 1.435,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.435,
-     "kmh": 76.6,
-     "res_uv": 1.83,
-     "cuadros": 40,
-     "z_golpe": 3.0,
-     "z_red": 2.89,
-     "puntaje": 2.127
-    },
-    {
-     "arranque_s": 1.368,
-     "kmh": 74.5,
-     "res_uv": 2.16,
-     "cuadros": 44,
-     "z_golpe": 2.97,
-     "z_red": 2.83,
-     "puntaje": 2.572
-    },
-    {
-     "arranque_s": 1.301,
-     "kmh": 74.3,
-     "res_uv": 2.26,
-     "cuadros": 48,
-     "z_golpe": 2.95,
-     "z_red": 2.84,
-     "puntaje": 2.794
-    },
-    {
-     "arranque_s": 1.201,
-     "kmh": 71.0,
-     "res_uv": 6.76,
-     "cuadros": 54,
-     "z_golpe": 2.75,
-     "z_red": 2.84,
-     "puntaje": 7.481
-    }
-   ]
+   "kmh": 73.0,
+   "fuente": "pistola"
   },
   "70": {
    "saque": 70,
@@ -2483,42 +912,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 1028,
-   "kmh": 80.0,
-   "alto_del_golpe": 2.78,
-   "altura_en_la_red": 2.3,
-   "kmh_en_la_red": 70.3,
-   "residuo_px": 3.55,
-   "cuadros": 32,
-   "arranque_en_la_ventana": 1.385,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.385,
-     "kmh": 80.0,
-     "res_uv": 3.55,
-     "cuadros": 32,
-     "z_golpe": 2.78,
-     "z_red": 2.3,
-     "puntaje": 4.157
-    },
-    {
-     "arranque_s": 1.318,
-     "kmh": 76.6,
-     "res_uv": 4.09,
-     "cuadros": 36,
-     "z_golpe": 2.72,
-     "z_red": 2.35,
-     "puntaje": 4.812
-    },
-    {
-     "arranque_s": 1.251,
-     "kmh": 78.0,
-     "res_uv": 4.71,
-     "cuadros": 40,
-     "z_golpe": 2.65,
-     "z_red": 2.44,
-     "puntaje": 5.554
-    }
-   ]
+   "kmh": 54.0,
+   "fuente": "pistola"
   },
   "71": {
    "saque": 71,
@@ -2530,42 +925,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 1037,
-   "kmh": 62.0,
-   "alto_del_golpe": 2.9,
-   "altura_en_la_red": 2.94,
-   "kmh_en_la_red": 53.8,
-   "residuo_px": 1.7,
-   "cuadros": 54,
-   "arranque_en_la_ventana": 1.852,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.852,
-     "kmh": 62.0,
-     "res_uv": 1.7,
-     "cuadros": 54,
-     "z_golpe": 2.9,
-     "z_red": 2.94,
-     "puntaje": 0.775
-    },
-    {
-     "arranque_s": 1.919,
-     "kmh": 62.6,
-     "res_uv": 1.75,
-     "cuadros": 50,
-     "z_golpe": 2.9,
-     "z_red": 2.95,
-     "puntaje": 1.109
-    },
-    {
-     "arranque_s": 1.785,
-     "kmh": 61.0,
-     "res_uv": 6.59,
-     "cuadros": 58,
-     "z_golpe": 2.81,
-     "z_red": 2.99,
-     "puntaje": 5.479
-    }
-   ]
+   "kmh": 66.0,
+   "fuente": "pistola"
   },
   "72": {
    "saque": 72,
@@ -2577,8 +938,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 1047,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 60.0,
+   "fuente": "pistola"
   },
   "73": {
    "saque": 73,
@@ -2590,8 +951,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 1063,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 87.0,
+   "fuente": "pistola"
   },
   "74": {
    "saque": 74,
@@ -2603,8 +964,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 1076,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 74.0,
+   "fuente": "pistola"
   },
   "75": {
    "saque": 75,
@@ -2616,42 +977,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 1086,
-   "kmh": 63.6,
-   "alto_del_golpe": 2.99,
-   "altura_en_la_red": 2.8,
-   "kmh_en_la_red": 55.3,
-   "residuo_px": 1.73,
-   "cuadros": 43,
-   "arranque_en_la_ventana": 1.952,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.952,
-     "kmh": 63.6,
-     "res_uv": 1.73,
-     "cuadros": 43,
-     "z_golpe": 2.99,
-     "z_red": 2.8,
-     "puntaje": 1.329
-    },
-    {
-     "arranque_s": 1.885,
-     "kmh": 63.3,
-     "res_uv": 2.1,
-     "cuadros": 47,
-     "z_golpe": 2.98,
-     "z_red": 2.78,
-     "puntaje": 1.412
-    },
-    {
-     "arranque_s": 2.019,
-     "kmh": 65.2,
-     "res_uv": 1.61,
-     "cuadros": 39,
-     "z_golpe": 3.01,
-     "z_red": 2.85,
-     "puntaje": 1.484
-    }
-   ]
+   "kmh": 50.0,
+   "fuente": "pistola"
   },
   "76": {
    "saque": 76,
@@ -2663,51 +990,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 1095,
-   "kmh": 70.6,
-   "alto_del_golpe": 2.79,
-   "altura_en_la_red": 3.23,
-   "kmh_en_la_red": 60.3,
-   "residuo_px": 1.69,
-   "cuadros": 37,
-   "arranque_en_la_ventana": 1.618,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.618,
-     "kmh": 70.6,
-     "res_uv": 1.69,
-     "cuadros": 37,
-     "z_golpe": 2.79,
-     "z_red": 3.23,
-     "puntaje": 1.495
-    },
-    {
-     "arranque_s": 1.552,
-     "kmh": 66.8,
-     "res_uv": 1.75,
-     "cuadros": 41,
-     "z_golpe": 2.71,
-     "z_red": 3.2,
-     "puntaje": 1.674
-    },
-    {
-     "arranque_s": 1.485,
-     "kmh": 65.4,
-     "res_uv": 1.98,
-     "cuadros": 45,
-     "z_golpe": 2.66,
-     "z_red": 3.19,
-     "puntaje": 2.027
-    },
-    {
-     "arranque_s": 1.385,
-     "kmh": 68.4,
-     "res_uv": 2.41,
-     "cuadros": 51,
-     "z_golpe": 2.61,
-     "z_red": 3.28,
-     "puntaje": 2.634
-    }
-   ]
+   "kmh": 62.0,
+   "fuente": "pistola"
   },
   "77": {
    "saque": 77,
@@ -2719,42 +1003,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 1105,
-   "kmh": 73.1,
-   "alto_del_golpe": 2.89,
-   "altura_en_la_red": 2.82,
-   "kmh_en_la_red": 63.7,
-   "residuo_px": 1.68,
-   "cuadros": 32,
-   "arranque_en_la_ventana": 1.485,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.485,
-     "kmh": 73.1,
-     "res_uv": 1.68,
-     "cuadros": 32,
-     "z_golpe": 2.89,
-     "z_red": 2.82,
-     "puntaje": 1.988
-    },
-    {
-     "arranque_s": 1.418,
-     "kmh": 74.6,
-     "res_uv": 1.88,
-     "cuadros": 36,
-     "z_golpe": 2.91,
-     "z_red": 2.84,
-     "puntaje": 2.305
-    },
-    {
-     "arranque_s": 1.351,
-     "kmh": 75.1,
-     "res_uv": 3.01,
-     "cuadros": 40,
-     "z_golpe": 2.89,
-     "z_red": 2.87,
-     "puntaje": 3.558
-    }
-   ]
+   "kmh": 64.0,
+   "fuente": "pistola"
   },
   "78": {
    "saque": 78,
@@ -2766,8 +1016,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 1115,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 67.0,
+   "fuente": "pistola"
   },
   "79": {
    "saque": 79,
@@ -2779,8 +1029,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 1129,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 90.0,
+   "fuente": "pistola"
   },
   "80": {
    "saque": 80,
@@ -2792,42 +1042,8 @@
    "tipo": "Q",
    "val": "!",
    "seg": 1142,
-   "kmh": 68.0,
-   "alto_del_golpe": 2.88,
-   "altura_en_la_red": 2.81,
-   "kmh_en_la_red": 59.1,
-   "residuo_px": 3.16,
-   "cuadros": 52,
-   "arranque_en_la_ventana": 1.335,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.335,
-     "kmh": 68.0,
-     "res_uv": 3.16,
-     "cuadros": 52,
-     "z_golpe": 2.88,
-     "z_red": 2.81,
-     "puntaje": 3.512
-    },
-    {
-     "arranque_s": 1.268,
-     "kmh": 67.0,
-     "res_uv": 3.2,
-     "cuadros": 56,
-     "z_golpe": 2.84,
-     "z_red": 2.85,
-     "puntaje": 3.673
-    },
-    {
-     "arranque_s": 1.201,
-     "kmh": 66.4,
-     "res_uv": 3.91,
-     "cuadros": 60,
-     "z_golpe": 2.76,
-     "z_red": 2.92,
-     "puntaje": 4.504
-    }
-   ]
+   "kmh": 101.0,
+   "fuente": "pistola"
   },
   "81": {
    "saque": 81,
@@ -2839,42 +1055,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 1152,
-   "kmh": 63.1,
-   "alto_del_golpe": 2.9,
-   "altura_en_la_red": 3.2,
-   "kmh_en_la_red": 53.9,
-   "residuo_px": 1.77,
-   "cuadros": 49,
-   "arranque_en_la_ventana": 2.002,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.002,
-     "kmh": 63.1,
-     "res_uv": 1.77,
-     "cuadros": 49,
-     "z_golpe": 2.9,
-     "z_red": 3.2,
-     "puntaje": 1.398
-    },
-    {
-     "arranque_s": 2.069,
-     "kmh": 63.5,
-     "res_uv": 1.73,
-     "cuadros": 45,
-     "z_golpe": 2.92,
-     "z_red": 3.2,
-     "puntaje": 1.635
-    },
-    {
-     "arranque_s": 1.935,
-     "kmh": 63.6,
-     "res_uv": 2.33,
-     "cuadros": 53,
-     "z_golpe": 2.88,
-     "z_red": 3.23,
-     "puntaje": 1.68
-    }
-   ]
+   "kmh": 54.0,
+   "fuente": "pistola"
   },
   "82": {
    "saque": 82,
@@ -2886,42 +1068,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 1162,
-   "kmh": 70.4,
-   "alto_del_golpe": 2.44,
-   "altura_en_la_red": 2.91,
-   "kmh_en_la_red": 60.1,
-   "residuo_px": 1.7,
-   "cuadros": 47,
-   "arranque_en_la_ventana": 1.418,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.418,
-     "kmh": 70.4,
-     "res_uv": 1.7,
-     "cuadros": 47,
-     "z_golpe": 2.44,
-     "z_red": 2.91,
-     "puntaje": 1.906
-    },
-    {
-     "arranque_s": 1.351,
-     "kmh": 71.2,
-     "res_uv": 1.78,
-     "cuadros": 51,
-     "z_golpe": 2.47,
-     "z_red": 2.92,
-     "puntaje": 2.102
-    },
-    {
-     "arranque_s": 1.285,
-     "kmh": 72.7,
-     "res_uv": 1.93,
-     "cuadros": 55,
-     "z_golpe": 2.45,
-     "z_red": 2.95,
-     "puntaje": 2.374
-    }
-   ]
+   "kmh": 59.0,
+   "fuente": "pistola"
   },
   "83": {
    "saque": 83,
@@ -2933,8 +1081,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 1171,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 64.0,
+   "fuente": "pistola"
   },
   "84": {
    "saque": 84,
@@ -2946,8 +1094,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 1180,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 65.0,
+   "fuente": "pistola"
   },
   "85": {
    "saque": 85,
@@ -2959,33 +1107,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 1195,
-   "kmh": 101.2,
-   "alto_del_golpe": 3.41,
-   "altura_en_la_red": 2.36,
-   "kmh_en_la_red": 89.2,
-   "residuo_px": 5.2,
-   "cuadros": 28,
-   "arranque_en_la_ventana": 1.001,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.001,
-     "kmh": 101.2,
-     "res_uv": 5.2,
-     "cuadros": 28,
-     "z_golpe": 3.41,
-     "z_red": 2.36,
-     "puntaje": 7.037
-    },
-    {
-     "arranque_s": 0.934,
-     "kmh": 98.0,
-     "res_uv": 7.69,
-     "cuadros": 32,
-     "z_golpe": 3.26,
-     "z_red": 2.33,
-     "puntaje": 9.643
-    }
-   ]
+   "kmh": 93.0,
+   "fuente": "pistola"
   },
   "86": {
    "saque": 86,
@@ -2997,8 +1120,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 1210,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 90.0,
+   "fuente": "pistola"
   },
   "87": {
    "saque": 87,
@@ -3010,42 +1133,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 1220,
-   "kmh": 75.7,
-   "alto_del_golpe": 3.0,
-   "altura_en_la_red": 2.33,
-   "kmh_en_la_red": 66.8,
-   "residuo_px": 3.74,
-   "cuadros": 34,
-   "arranque_en_la_ventana": 1.401,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.401,
-     "kmh": 75.7,
-     "res_uv": 3.74,
-     "cuadros": 34,
-     "z_golpe": 3.0,
-     "z_red": 2.33,
-     "puntaje": 4.259
-    },
-    {
-     "arranque_s": 1.335,
-     "kmh": 71.1,
-     "res_uv": 3.98,
-     "cuadros": 38,
-     "z_golpe": 2.96,
-     "z_red": 2.31,
-     "puntaje": 4.619
-    },
-    {
-     "arranque_s": 1.268,
-     "kmh": 69.9,
-     "res_uv": 4.37,
-     "cuadros": 42,
-     "z_golpe": 2.92,
-     "z_red": 2.37,
-     "puntaje": 5.127
-    }
-   ]
+   "kmh": 71.0,
+   "fuente": "pistola"
   },
   "88": {
    "saque": 88,
@@ -3057,42 +1146,8 @@
    "tipo": "M",
    "val": "+",
    "seg": 1229,
-   "kmh": 56.9,
-   "alto_del_golpe": 2.54,
-   "altura_en_la_red": 2.97,
-   "kmh_en_la_red": 48.4,
-   "residuo_px": 1.74,
-   "cuadros": 41,
-   "arranque_en_la_ventana": 1.335,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.335,
-     "kmh": 56.9,
-     "res_uv": 1.74,
-     "cuadros": 41,
-     "z_golpe": 2.54,
-     "z_red": 2.97,
-     "puntaje": 2.316
-    },
-    {
-     "arranque_s": 1.268,
-     "kmh": 57.6,
-     "res_uv": 2.02,
-     "cuadros": 45,
-     "z_golpe": 2.63,
-     "z_red": 2.94,
-     "puntaje": 2.715
-    },
-    {
-     "arranque_s": 1.201,
-     "kmh": 59.2,
-     "res_uv": 2.43,
-     "cuadros": 49,
-     "z_golpe": 2.65,
-     "z_red": 2.98,
-     "puntaje": 3.247
-    }
-   ]
+   "kmh": 64.0,
+   "fuente": "pistola"
   },
   "89": {
    "saque": 89,
@@ -3105,50 +1160,7 @@
    "val": "/",
    "seg": 1239,
    "kmh": 62.0,
-   "alto_del_golpe": 2.42,
-   "altura_en_la_red": 3.16,
-   "kmh_en_la_red": 52.2,
-   "residuo_px": 1.62,
-   "cuadros": 38,
-   "arranque_en_la_ventana": 1.685,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.685,
-     "kmh": 62.0,
-     "res_uv": 1.62,
-     "cuadros": 38,
-     "z_golpe": 2.42,
-     "z_red": 3.16,
-     "puntaje": 1.203
-    },
-    {
-     "arranque_s": 1.618,
-     "kmh": 61.6,
-     "res_uv": 1.63,
-     "cuadros": 42,
-     "z_golpe": 2.46,
-     "z_red": 3.13,
-     "puntaje": 1.34
-    },
-    {
-     "arranque_s": 1.552,
-     "kmh": 62.5,
-     "res_uv": 1.89,
-     "cuadros": 46,
-     "z_golpe": 2.56,
-     "z_red": 3.12,
-     "puntaje": 1.72
-    },
-    {
-     "arranque_s": 1.451,
-     "kmh": 63.9,
-     "res_uv": 2.89,
-     "cuadros": 52,
-     "z_golpe": 2.6,
-     "z_red": 3.12,
-     "puntaje": 2.892
-    }
-   ]
+   "fuente": "pistola"
   },
   "90": {
    "saque": 90,
@@ -3160,33 +1172,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 1249,
-   "kmh": 87.1,
-   "alto_del_golpe": 3.53,
-   "altura_en_la_red": 3.29,
-   "kmh_en_la_red": 74.9,
-   "residuo_px": 6.06,
-   "cuadros": 46,
-   "arranque_en_la_ventana": 0.817,
-   "otros_vuelos": [
-    {
-     "arranque_s": 0.817,
-     "kmh": 87.1,
-     "res_uv": 6.06,
-     "cuadros": 46,
-     "z_golpe": 3.53,
-     "z_red": 3.29,
-     "puntaje": 8.088
-    },
-    {
-     "arranque_s": 0.751,
-     "kmh": 82.0,
-     "res_uv": 7.94,
-     "cuadros": 50,
-     "z_golpe": 3.31,
-     "z_red": 3.08,
-     "puntaje": 10.092
-    }
-   ]
+   "kmh": 66.0,
+   "fuente": "pistola"
   },
   "91": {
    "saque": 91,
@@ -3198,8 +1185,8 @@
    "tipo": "Q",
    "val": "!",
    "seg": 1263,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 89.0,
+   "fuente": "pistola"
   },
   "92": {
    "saque": 92,
@@ -3211,42 +1198,8 @@
    "tipo": "Q",
    "val": "/",
    "seg": 1278,
-   "kmh": 57.0,
-   "alto_del_golpe": 2.84,
-   "altura_en_la_red": 3.11,
-   "kmh_en_la_red": 49.0,
-   "residuo_px": 1.97,
-   "cuadros": 46,
-   "arranque_en_la_ventana": 1.752,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.752,
-     "kmh": 57.0,
-     "res_uv": 1.97,
-     "cuadros": 46,
-     "z_golpe": 2.84,
-     "z_red": 3.11,
-     "puntaje": 1.191
-    },
-    {
-     "arranque_s": 1.685,
-     "kmh": 55.0,
-     "res_uv": 2.23,
-     "cuadros": 50,
-     "z_golpe": 2.78,
-     "z_red": 3.08,
-     "puntaje": 1.574
-    },
-    {
-     "arranque_s": 1.618,
-     "kmh": 53.7,
-     "res_uv": 4.16,
-     "cuadros": 54,
-     "z_golpe": 2.67,
-     "z_red": 3.1,
-     "puntaje": 3.625
-    }
-   ]
+   "kmh": 66.0,
+   "fuente": "pistola"
   },
   "93": {
    "saque": 93,
@@ -3258,51 +1211,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 1289,
-   "kmh": 73.1,
-   "alto_del_golpe": 1.81,
-   "altura_en_la_red": 4.05,
-   "kmh_en_la_red": 58.5,
-   "residuo_px": 2.48,
-   "cuadros": 61,
-   "arranque_en_la_ventana": 1.785,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.785,
-     "kmh": 73.1,
-     "res_uv": 2.48,
-     "cuadros": 61,
-     "z_golpe": 1.81,
-     "z_red": 4.05,
-     "puntaje": 1.306
-    },
-    {
-     "arranque_s": 1.718,
-     "kmh": 73.8,
-     "res_uv": 2.8,
-     "cuadros": 65,
-     "z_golpe": 1.9,
-     "z_red": 4.06,
-     "puntaje": 1.746
-    },
-    {
-     "arranque_s": 1.652,
-     "kmh": 74.9,
-     "res_uv": 3.03,
-     "cuadros": 69,
-     "z_golpe": 2.03,
-     "z_red": 4.07,
-     "puntaje": 2.098
-    },
-    {
-     "arranque_s": 1.552,
-     "kmh": 78.3,
-     "res_uv": 3.75,
-     "cuadros": 75,
-     "z_golpe": 2.22,
-     "z_red": 4.08,
-     "puntaje": 2.995
-    }
-   ]
+   "kmh": 44.0,
+   "fuente": "pistola"
   },
   "94": {
    "saque": 94,
@@ -3314,51 +1224,8 @@
    "tipo": "M",
    "val": "+",
    "seg": 1298,
-   "kmh": 62.8,
-   "alto_del_golpe": 2.69,
-   "altura_en_la_red": 2.63,
-   "kmh_en_la_red": 54.6,
-   "residuo_px": 1.31,
-   "cuadros": 41,
-   "arranque_en_la_ventana": 1.668,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.668,
-     "kmh": 62.8,
-     "res_uv": 1.31,
-     "cuadros": 41,
-     "z_golpe": 2.69,
-     "z_red": 2.63,
-     "puntaje": 0.89
-    },
-    {
-     "arranque_s": 1.602,
-     "kmh": 63.0,
-     "res_uv": 1.64,
-     "cuadros": 45,
-     "z_golpe": 2.73,
-     "z_red": 2.57,
-     "puntaje": 1.337
-    },
-    {
-     "arranque_s": 1.535,
-     "kmh": 62.8,
-     "res_uv": 1.79,
-     "cuadros": 49,
-     "z_golpe": 2.75,
-     "z_red": 2.52,
-     "puntaje": 1.608
-    },
-    {
-     "arranque_s": 1.435,
-     "kmh": 64.4,
-     "res_uv": 2.26,
-     "cuadros": 55,
-     "z_golpe": 2.76,
-     "z_red": 2.53,
-     "puntaje": 2.252
-    }
-   ]
+   "kmh": 51.0,
+   "fuente": "pistola"
   },
   "95": {
    "saque": 95,
@@ -3370,51 +1237,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 1308,
-   "kmh": 85.0,
-   "alto_del_golpe": 2.75,
-   "altura_en_la_red": 3.26,
-   "kmh_en_la_red": 73.0,
-   "residuo_px": 1.06,
-   "cuadros": 36,
-   "arranque_en_la_ventana": 1.585,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.585,
-     "kmh": 85.0,
-     "res_uv": 1.06,
-     "cuadros": 36,
-     "z_golpe": 2.75,
-     "z_red": 3.26,
-     "puntaje": 0.984
-    },
-    {
-     "arranque_s": 1.518,
-     "kmh": 85.4,
-     "res_uv": 1.37,
-     "cuadros": 40,
-     "z_golpe": 2.78,
-     "z_red": 3.26,
-     "puntaje": 1.415
-    },
-    {
-     "arranque_s": 1.451,
-     "kmh": 85.8,
-     "res_uv": 2.23,
-     "cuadros": 44,
-     "z_golpe": 2.77,
-     "z_red": 3.28,
-     "puntaje": 2.391
-    },
-    {
-     "arranque_s": 1.351,
-     "kmh": 87.0,
-     "res_uv": 4.49,
-     "cuadros": 50,
-     "z_golpe": 2.67,
-     "z_red": 3.31,
-     "puntaje": 4.837
-    }
-   ]
+   "kmh": 55.0,
+   "fuente": "pistola"
   },
   "96": {
    "saque": 96,
@@ -3426,8 +1250,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 1316,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 68.0,
+   "fuente": "pistola"
   },
   "97": {
    "saque": 97,
@@ -3439,8 +1263,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 1331,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 90.0,
+   "fuente": "pistola"
   },
   "98": {
    "saque": 98,
@@ -3452,33 +1276,8 @@
    "tipo": "Q",
    "val": "+",
    "seg": 1344,
-   "kmh": 68.8,
-   "alto_del_golpe": 2.97,
-   "altura_en_la_red": 2.66,
-   "kmh_en_la_red": 60.1,
-   "residuo_px": 1.81,
-   "cuadros": 42,
-   "arranque_en_la_ventana": 1.418,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.418,
-     "kmh": 68.8,
-     "res_uv": 1.81,
-     "cuadros": 42,
-     "z_golpe": 2.97,
-     "z_red": 2.66,
-     "puntaje": 2.117
-    },
-    {
-     "arranque_s": 1.351,
-     "kmh": 69.3,
-     "res_uv": 3.74,
-     "cuadros": 46,
-     "z_golpe": 2.96,
-     "z_red": 2.7,
-     "puntaje": 4.169
-    }
-   ]
+   "kmh": 94.0,
+   "fuente": "pistola"
   },
   "99": {
    "saque": 99,
@@ -3490,51 +1289,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 1354,
-   "kmh": 62.9,
-   "alto_del_golpe": 2.87,
-   "altura_en_la_red": 2.93,
-   "kmh_en_la_red": 54.2,
-   "residuo_px": 1.54,
-   "cuadros": 45,
-   "arranque_en_la_ventana": 1.268,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.268,
-     "kmh": 62.9,
-     "res_uv": 1.54,
-     "cuadros": 45,
-     "z_golpe": 2.87,
-     "z_red": 2.93,
-     "puntaje": 2.239
-    },
-    {
-     "arranque_s": 1.201,
-     "kmh": 61.5,
-     "res_uv": 1.59,
-     "cuadros": 49,
-     "z_golpe": 2.87,
-     "z_red": 2.87,
-     "puntaje": 2.402
-    },
-    {
-     "arranque_s": 1.134,
-     "kmh": 61.5,
-     "res_uv": 1.61,
-     "cuadros": 53,
-     "z_golpe": 2.84,
-     "z_red": 2.89,
-     "puntaje": 2.551
-    },
-    {
-     "arranque_s": 1.034,
-     "kmh": 61.6,
-     "res_uv": 7.08,
-     "cuadros": 59,
-     "z_golpe": 2.77,
-     "z_red": 2.95,
-     "puntaje": 8.195
-    }
-   ]
+   "kmh": 68.0,
+   "fuente": "pistola"
   },
   "100": {
    "saque": 100,
@@ -3546,51 +1302,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 1364,
-   "kmh": 71.7,
-   "alto_del_golpe": 2.46,
-   "altura_en_la_red": 2.94,
-   "kmh_en_la_red": 61.2,
-   "residuo_px": 1.85,
-   "cuadros": 41,
-   "arranque_en_la_ventana": 1.185,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.185,
-     "kmh": 71.7,
-     "res_uv": 1.85,
-     "cuadros": 41,
-     "z_golpe": 2.46,
-     "z_red": 2.94,
-     "puntaje": 2.876
-    },
-    {
-     "arranque_s": 1.118,
-     "kmh": 71.9,
-     "res_uv": 2.4,
-     "cuadros": 45,
-     "z_golpe": 2.46,
-     "z_red": 2.96,
-     "puntaje": 3.549
-    },
-    {
-     "arranque_s": 1.051,
-     "kmh": 72.7,
-     "res_uv": 2.42,
-     "cuadros": 49,
-     "z_golpe": 2.4,
-     "z_red": 3.01,
-     "puntaje": 3.691
-    },
-    {
-     "arranque_s": 0.951,
-     "kmh": 75.3,
-     "res_uv": 2.44,
-     "cuadros": 55,
-     "z_golpe": 2.34,
-     "z_red": 3.06,
-     "puntaje": 3.886
-    }
-   ]
+   "kmh": 51.0,
+   "fuente": "pistola"
   },
   "101": {
    "saque": 101,
@@ -3602,42 +1315,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 1373,
-   "kmh": 78.0,
-   "alto_del_golpe": 2.99,
-   "altura_en_la_red": 3.14,
-   "kmh_en_la_red": 67.6,
-   "residuo_px": 1.72,
-   "cuadros": 37,
-   "arranque_en_la_ventana": 1.835,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.835,
-     "kmh": 78.0,
-     "res_uv": 1.72,
-     "cuadros": 37,
-     "z_golpe": 2.99,
-     "z_red": 3.14,
-     "puntaje": 1.09
-    },
-    {
-     "arranque_s": 1.768,
-     "kmh": 73.0,
-     "res_uv": 2.86,
-     "cuadros": 41,
-     "z_golpe": 2.92,
-     "z_red": 3.15,
-     "puntaje": 2.132
-    },
-    {
-     "arranque_s": 1.702,
-     "kmh": 75.8,
-     "res_uv": 3.32,
-     "cuadros": 45,
-     "z_golpe": 2.91,
-     "z_red": 3.2,
-     "puntaje": 2.712
-    }
-   ]
+   "kmh": 63.0,
+   "fuente": "pistola"
   },
   "102": {
    "saque": 102,
@@ -3649,8 +1328,8 @@
    "tipo": "M",
    "val": "+",
    "seg": 1382,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 65.0,
+   "fuente": "pistola"
   },
   "103": {
    "saque": 103,
@@ -3662,24 +1341,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 1398,
-   "kmh": 120.8,
-   "alto_del_golpe": 3.22,
-   "altura_en_la_red": 2.85,
-   "kmh_en_la_red": 104.6,
-   "residuo_px": 7.5,
-   "cuadros": 18,
-   "arranque_en_la_ventana": 0.651,
-   "otros_vuelos": [
-    {
-     "arranque_s": 0.651,
-     "kmh": 120.8,
-     "res_uv": 7.5,
-     "cuadros": 18,
-     "z_golpe": 3.22,
-     "z_red": 2.85,
-     "puntaje": 10.593
-    }
-   ]
+   "kmh": 96.0,
+   "fuente": "pistola"
   },
   "104": {
    "saque": 104,
@@ -3691,33 +1354,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 1411,
-   "kmh": 45.8,
-   "alto_del_golpe": 3.02,
-   "altura_en_la_red": 3.61,
-   "kmh_en_la_red": 38.5,
-   "residuo_px": 2.7,
-   "cuadros": 42,
-   "arranque_en_la_ventana": 1.151,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.151,
-     "kmh": 45.8,
-     "res_uv": 2.7,
-     "cuadros": 42,
-     "z_golpe": 3.02,
-     "z_red": 3.61,
-     "puntaje": 3.804
-    },
-    {
-     "arranque_s": 1.084,
-     "kmh": 42.3,
-     "res_uv": 4.64,
-     "cuadros": 46,
-     "z_golpe": 2.63,
-     "z_red": 3.44,
-     "puntaje": 5.864
-    }
-   ]
+   "kmh": 100.0,
+   "fuente": "pistola"
   },
   "105": {
    "saque": 105,
@@ -3729,42 +1367,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 1423,
-   "kmh": 74.6,
-   "alto_del_golpe": 2.91,
-   "altura_en_la_red": 3.06,
-   "kmh_en_la_red": 64.3,
-   "residuo_px": 2.51,
-   "cuadros": 43,
-   "arranque_en_la_ventana": 1.785,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.785,
-     "kmh": 74.6,
-     "res_uv": 2.51,
-     "cuadros": 43,
-     "z_golpe": 2.91,
-     "z_red": 3.06,
-     "puntaje": 1.696
-    },
-    {
-     "arranque_s": 1.718,
-     "kmh": 72.7,
-     "res_uv": 2.51,
-     "cuadros": 47,
-     "z_golpe": 2.86,
-     "z_red": 3.05,
-     "puntaje": 1.818
-    },
-    {
-     "arranque_s": 1.652,
-     "kmh": 72.1,
-     "res_uv": 2.74,
-     "cuadros": 51,
-     "z_golpe": 2.83,
-     "z_red": 3.06,
-     "puntaje": 2.164
-    }
-   ]
+   "kmh": 42.0,
+   "fuente": "pistola"
   },
   "106": {
    "saque": 106,
@@ -3776,51 +1380,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 1435,
-   "kmh": 79.5,
-   "alto_del_golpe": 2.75,
-   "altura_en_la_red": 3.43,
-   "kmh_en_la_red": 68.0,
-   "residuo_px": 1.94,
-   "cuadros": 46,
-   "arranque_en_la_ventana": 0.384,
-   "otros_vuelos": [
-    {
-     "arranque_s": 0.384,
-     "kmh": 79.5,
-     "res_uv": 1.94,
-     "cuadros": 46,
-     "z_golpe": 2.75,
-     "z_red": 3.43,
-     "puntaje": 5.274
-    },
-    {
-     "arranque_s": 0.317,
-     "kmh": 77.6,
-     "res_uv": 2.06,
-     "cuadros": 50,
-     "z_golpe": 2.68,
-     "z_red": 3.45,
-     "puntaje": 5.508
-    },
-    {
-     "arranque_s": 0.25,
-     "kmh": 77.1,
-     "res_uv": 2.51,
-     "cuadros": 54,
-     "z_golpe": 2.59,
-     "z_red": 3.48,
-     "puntaje": 6.081
-    },
-    {
-     "arranque_s": 0.15,
-     "kmh": 78.1,
-     "res_uv": 4.62,
-     "cuadros": 60,
-     "z_golpe": 2.4,
-     "z_red": 3.51,
-     "puntaje": 8.373
-    }
-   ]
+   "kmh": 63.0,
+   "fuente": "pistola"
   },
   "107": {
    "saque": 107,
@@ -3832,33 +1393,8 @@
    "tipo": "M",
    "val": "+",
    "seg": 1443,
-   "kmh": 77.6,
-   "alto_del_golpe": 3.02,
-   "altura_en_la_red": 2.71,
-   "kmh_en_la_red": 68.0,
-   "residuo_px": 2.94,
-   "cuadros": 46,
-   "arranque_en_la_ventana": 1.952,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.952,
-     "kmh": 77.6,
-     "res_uv": 2.94,
-     "cuadros": 46,
-     "z_golpe": 3.02,
-     "z_red": 2.71,
-     "puntaje": 2.473
-    },
-    {
-     "arranque_s": 1.885,
-     "kmh": 75.3,
-     "res_uv": 3.63,
-     "cuadros": 50,
-     "z_golpe": 2.91,
-     "z_red": 2.74,
-     "puntaje": 2.887
-    }
-   ]
+   "kmh": 51.0,
+   "fuente": "pistola"
   },
   "108": {
    "saque": 108,
@@ -3870,8 +1406,8 @@
    "tipo": "M",
    "val": "/",
    "seg": 1456,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 68.0,
+   "fuente": "pistola"
   },
   "109": {
    "saque": 109,
@@ -3883,33 +1419,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 1478,
-   "kmh": 79.3,
-   "alto_del_golpe": 3.59,
-   "altura_en_la_red": 2.68,
-   "kmh_en_la_red": 69.8,
-   "residuo_px": 5.63,
-   "cuadros": 32,
-   "arranque_en_la_ventana": 0.918,
-   "otros_vuelos": [
-    {
-     "arranque_s": 0.918,
-     "kmh": 79.3,
-     "res_uv": 5.63,
-     "cuadros": 32,
-     "z_golpe": 3.59,
-     "z_red": 2.68,
-     "puntaje": 7.642
-    },
-    {
-     "arranque_s": 0.851,
-     "kmh": 83.5,
-     "res_uv": 8.56,
-     "cuadros": 36,
-     "z_golpe": 3.43,
-     "z_red": 2.69,
-     "puntaje": 10.687
-    }
-   ]
+   "kmh": 94.0,
+   "fuente": "pistola"
   },
   "110": {
    "saque": 110,
@@ -3921,42 +1432,8 @@
    "tipo": "Q",
    "val": "!",
    "seg": 1493,
-   "kmh": 73.7,
-   "alto_del_golpe": 3.12,
-   "altura_en_la_red": 2.38,
-   "kmh_en_la_red": 65.0,
-   "residuo_px": 1.16,
-   "cuadros": 15,
-   "arranque_en_la_ventana": 1.451,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.451,
-     "kmh": 73.7,
-     "res_uv": 1.16,
-     "cuadros": 15,
-     "z_golpe": 3.12,
-     "z_red": 2.38,
-     "puntaje": 1.902
-    },
-    {
-     "arranque_s": 1.385,
-     "kmh": 71.3,
-     "res_uv": 1.56,
-     "cuadros": 19,
-     "z_golpe": 3.08,
-     "z_red": 2.39,
-     "puntaje": 2.424
-    },
-    {
-     "arranque_s": 1.318,
-     "kmh": 68.5,
-     "res_uv": 3.29,
-     "cuadros": 23,
-     "z_golpe": 3.03,
-     "z_red": 2.41,
-     "puntaje": 4.281
-    }
-   ]
+   "kmh": 101.0,
+   "fuente": "pistola"
   },
   "111": {
    "saque": 111,
@@ -3968,42 +1445,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 1504,
-   "kmh": 72.2,
-   "alto_del_golpe": 2.86,
-   "altura_en_la_red": 3.06,
-   "kmh_en_la_red": 62.2,
-   "residuo_px": 1.82,
-   "cuadros": 30,
-   "arranque_en_la_ventana": 1.652,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.652,
-     "kmh": 72.2,
-     "res_uv": 1.82,
-     "cuadros": 30,
-     "z_golpe": 2.86,
-     "z_red": 3.06,
-     "puntaje": 1.666
-    },
-    {
-     "arranque_s": 1.585,
-     "kmh": 67.1,
-     "res_uv": 4.02,
-     "cuadros": 34,
-     "z_golpe": 2.76,
-     "z_red": 3.06,
-     "puntaje": 3.981
-    },
-    {
-     "arranque_s": 1.518,
-     "kmh": 70.7,
-     "res_uv": 3.93,
-     "cuadros": 38,
-     "z_golpe": 2.74,
-     "z_red": 3.13,
-     "puntaje": 4.014
-    }
-   ]
+   "kmh": 73.0,
+   "fuente": "pistola"
   },
   "112": {
    "saque": 112,
@@ -4015,8 +1458,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 1515,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 56.0,
+   "fuente": "pistola"
   },
   "113": {
    "saque": 113,
@@ -4028,8 +1471,8 @@
    "tipo": "Q",
    "val": "!",
    "seg": 1526,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 78.0,
+   "fuente": "pistola"
   },
   "114": {
    "saque": 114,
@@ -4041,8 +1484,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 1535,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 66.0,
+   "fuente": "pistola"
   },
   "115": {
    "saque": 115,
@@ -4054,33 +1497,8 @@
    "tipo": "Q",
    "val": "!",
    "seg": 1551,
-   "kmh": 99.9,
-   "alto_del_golpe": 3.72,
-   "altura_en_la_red": 2.82,
-   "kmh_en_la_red": 87.4,
-   "residuo_px": 6.69,
-   "cuadros": 29,
-   "arranque_en_la_ventana": 1.084,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.084,
-     "kmh": 99.9,
-     "res_uv": 6.69,
-     "cuadros": 29,
-     "z_golpe": 3.72,
-     "z_red": 2.82,
-     "puntaje": 8.253
-    },
-    {
-     "arranque_s": 1.018,
-     "kmh": 103.0,
-     "res_uv": 10.2,
-     "cuadros": 33,
-     "z_golpe": 3.44,
-     "z_red": 2.73,
-     "puntaje": 11.885
-    }
-   ]
+   "kmh": 94.0,
+   "fuente": "pistola"
   },
   "116": {
    "saque": 116,
@@ -4092,42 +1510,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 1564,
-   "kmh": 49.0,
-   "alto_del_golpe": 2.94,
-   "altura_en_la_red": 2.43,
-   "kmh_en_la_red": 44.0,
-   "residuo_px": 4.43,
-   "cuadros": 41,
-   "arranque_en_la_ventana": 1.318,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.318,
-     "kmh": 49.0,
-     "res_uv": 4.43,
-     "cuadros": 41,
-     "z_golpe": 2.94,
-     "z_red": 2.43,
-     "puntaje": 5.055
-    },
-    {
-     "arranque_s": 1.385,
-     "kmh": 51.9,
-     "res_uv": 4.66,
-     "cuadros": 37,
-     "z_golpe": 3.02,
-     "z_red": 2.52,
-     "puntaje": 5.165
-    },
-    {
-     "arranque_s": 1.251,
-     "kmh": 47.2,
-     "res_uv": 5.94,
-     "cuadros": 45,
-     "z_golpe": 2.83,
-     "z_red": 2.45,
-     "puntaje": 6.685
-    }
-   ]
+   "kmh": 90.0,
+   "fuente": "pistola"
   },
   "117": {
    "saque": 117,
@@ -4139,42 +1523,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 1575,
-   "kmh": 82.5,
-   "alto_del_golpe": 2.93,
-   "altura_en_la_red": 2.51,
-   "kmh_en_la_red": 71.9,
-   "residuo_px": 1.99,
-   "cuadros": 18,
-   "arranque_en_la_ventana": 1.635,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.635,
-     "kmh": 82.5,
-     "res_uv": 1.99,
-     "cuadros": 18,
-     "z_golpe": 2.93,
-     "z_red": 2.51,
-     "puntaje": 2.129
-    },
-    {
-     "arranque_s": 1.568,
-     "kmh": 74.5,
-     "res_uv": 1.95,
-     "cuadros": 22,
-     "z_golpe": 2.87,
-     "z_red": 2.44,
-     "puntaje": 2.208
-    },
-    {
-     "arranque_s": 1.501,
-     "kmh": 80.5,
-     "res_uv": 3.27,
-     "cuadros": 26,
-     "z_golpe": 2.8,
-     "z_red": 2.6,
-     "puntaje": 3.647
-    }
-   ]
+   "kmh": 45.0,
+   "fuente": "pistola"
   },
   "118": {
    "saque": 118,
@@ -4186,51 +1536,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 1583,
-   "kmh": 66.6,
-   "alto_del_golpe": 2.66,
-   "altura_en_la_red": 2.5,
-   "kmh_en_la_red": 58.1,
-   "residuo_px": 6.45,
-   "cuadros": 39,
-   "arranque_en_la_ventana": 0.817,
-   "otros_vuelos": [
-    {
-     "arranque_s": 0.817,
-     "kmh": 66.6,
-     "res_uv": 6.45,
-     "cuadros": 39,
-     "z_golpe": 2.66,
-     "z_red": 2.5,
-     "puntaje": 8.613
-    },
-    {
-     "arranque_s": 0.751,
-     "kmh": 68.5,
-     "res_uv": 6.43,
-     "cuadros": 43,
-     "z_golpe": 2.66,
-     "z_red": 2.51,
-     "puntaje": 8.723
-    },
-    {
-     "arranque_s": 0.884,
-     "kmh": 67.9,
-     "res_uv": 6.76,
-     "cuadros": 35,
-     "z_golpe": 2.71,
-     "z_red": 2.5,
-     "puntaje": 8.804
-    },
-    {
-     "arranque_s": 0.651,
-     "kmh": 66.6,
-     "res_uv": 7.05,
-     "cuadros": 49,
-     "z_golpe": 2.6,
-     "z_red": 2.52,
-     "puntaje": 9.523
-    }
-   ]
+   "kmh": 67.0,
+   "fuente": "pistola"
   },
   "119": {
    "saque": 119,
@@ -4242,8 +1549,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 1591,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 64.0,
+   "fuente": "pistola"
   },
   "120": {
    "saque": 120,
@@ -4255,42 +1562,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 1846,
-   "kmh": 107.6,
-   "alto_del_golpe": 3.36,
-   "altura_en_la_red": 2.88,
-   "kmh_en_la_red": 93.7,
-   "residuo_px": 5.12,
-   "cuadros": 29,
-   "arranque_en_la_ventana": 1.368,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.368,
-     "kmh": 107.6,
-     "res_uv": 5.12,
-     "cuadros": 29,
-     "z_golpe": 3.36,
-     "z_red": 2.88,
-     "puntaje": 5.838
-    },
-    {
-     "arranque_s": 1.301,
-     "kmh": 103.1,
-     "res_uv": 7.75,
-     "cuadros": 33,
-     "z_golpe": 3.19,
-     "z_red": 2.8,
-     "puntaje": 8.581
-    },
-    {
-     "arranque_s": 1.235,
-     "kmh": 98.5,
-     "res_uv": 9.54,
-     "cuadros": 37,
-     "z_golpe": 3.01,
-     "z_red": 2.75,
-     "puntaje": 10.494
-    }
-   ]
+   "kmh": 69.0,
+   "fuente": "pistola"
   },
   "121": {
    "saque": 121,
@@ -4302,24 +1575,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 1860,
-   "kmh": 51.8,
-   "alto_del_golpe": 3.14,
-   "altura_en_la_red": 2.39,
-   "kmh_en_la_red": 46.9,
-   "residuo_px": 3.61,
-   "cuadros": 50,
-   "arranque_en_la_ventana": 1.068,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.068,
-     "kmh": 51.8,
-     "res_uv": 3.61,
-     "cuadros": 50,
-     "z_golpe": 3.14,
-     "z_red": 2.39,
-     "puntaje": 4.805
-    }
-   ]
+   "kmh": 91.0,
+   "fuente": "pistola"
   },
   "122": {
    "saque": 122,
@@ -4331,42 +1588,8 @@
    "tipo": "Q",
    "val": "+",
    "seg": 1874,
-   "kmh": 86.6,
-   "alto_del_golpe": 2.8,
-   "altura_en_la_red": 2.93,
-   "kmh_en_la_red": 74.3,
-   "residuo_px": 2.87,
-   "cuadros": 24,
-   "arranque_en_la_ventana": 1.935,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.935,
-     "kmh": 86.6,
-     "res_uv": 2.87,
-     "cuadros": 24,
-     "z_golpe": 2.8,
-     "z_red": 2.93,
-     "puntaje": 2.8
-    },
-    {
-     "arranque_s": 1.869,
-     "kmh": 78.7,
-     "res_uv": 3.28,
-     "cuadros": 28,
-     "z_golpe": 2.66,
-     "z_red": 2.86,
-     "puntaje": 2.93
-    },
-    {
-     "arranque_s": 1.802,
-     "kmh": 76.9,
-     "res_uv": 8.25,
-     "cuadros": 32,
-     "z_golpe": 2.57,
-     "z_red": 2.9,
-     "puntaje": 7.616
-    }
-   ]
+   "kmh": 54.0,
+   "fuente": "pistola"
   },
   "123": {
    "saque": 123,
@@ -4378,33 +1601,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 1884,
-   "kmh": 73.7,
-   "alto_del_golpe": 3.01,
-   "altura_en_la_red": 2.73,
-   "kmh_en_la_red": 64.6,
-   "residuo_px": 7.75,
-   "cuadros": 40,
-   "arranque_en_la_ventana": 1.635,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.635,
-     "kmh": 73.7,
-     "res_uv": 7.75,
-     "cuadros": 40,
-     "z_golpe": 3.01,
-     "z_red": 2.73,
-     "puntaje": 7.448
-    },
-    {
-     "arranque_s": 1.568,
-     "kmh": 66.3,
-     "res_uv": 8.28,
-     "cuadros": 44,
-     "z_golpe": 2.92,
-     "z_red": 2.65,
-     "puntaje": 8.094
-    }
-   ]
+   "kmh": 68.0,
+   "fuente": "pistola"
   },
   "124": {
    "saque": 124,
@@ -4416,42 +1614,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 1892,
-   "kmh": 67.1,
-   "alto_del_golpe": 2.39,
-   "altura_en_la_red": 2.86,
-   "kmh_en_la_red": 57.1,
-   "residuo_px": 1.86,
-   "cuadros": 42,
-   "arranque_en_la_ventana": 1.685,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.685,
-     "kmh": 67.1,
-     "res_uv": 1.86,
-     "cuadros": 42,
-     "z_golpe": 2.39,
-     "z_red": 2.86,
-     "puntaje": 1.369
-    },
-    {
-     "arranque_s": 1.618,
-     "kmh": 70.1,
-     "res_uv": 2.59,
-     "cuadros": 46,
-     "z_golpe": 2.41,
-     "z_red": 2.9,
-     "puntaje": 2.214
-    },
-    {
-     "arranque_s": 1.552,
-     "kmh": 68.7,
-     "res_uv": 2.91,
-     "cuadros": 50,
-     "z_golpe": 2.37,
-     "z_red": 2.9,
-     "puntaje": 2.657
-    }
-   ]
+   "kmh": 58.0,
+   "fuente": "pistola"
   },
   "125": {
    "saque": 125,
@@ -4463,42 +1627,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 1901,
-   "kmh": 72.6,
-   "alto_del_golpe": 2.98,
-   "altura_en_la_red": 2.62,
-   "kmh_en_la_red": 63.4,
-   "residuo_px": 3.32,
-   "cuadros": 46,
-   "arranque_en_la_ventana": 2.419,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.419,
-     "kmh": 72.6,
-     "res_uv": 3.32,
-     "cuadros": 46,
-     "z_golpe": 2.98,
-     "z_red": 2.62,
-     "puntaje": 4.257
-    },
-    {
-     "arranque_s": 2.352,
-     "kmh": 69.2,
-     "res_uv": 3.74,
-     "cuadros": 50,
-     "z_golpe": 2.93,
-     "z_red": 2.58,
-     "puntaje": 4.395
-    },
-    {
-     "arranque_s": 2.286,
-     "kmh": 67.5,
-     "res_uv": 7.41,
-     "cuadros": 54,
-     "z_golpe": 2.83,
-     "z_red": 2.6,
-     "puntaje": 7.782
-    }
-   ]
+   "kmh": 61.0,
+   "fuente": "pistola"
   },
   "126": {
    "saque": 126,
@@ -4510,24 +1640,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 1910,
-   "kmh": 144.6,
-   "alto_del_golpe": 2.76,
-   "altura_en_la_red": 3.09,
-   "kmh_en_la_red": 124.8,
-   "residuo_px": 3.58,
-   "cuadros": 15,
-   "arranque_en_la_ventana": 1.468,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.468,
-     "kmh": 144.6,
-     "res_uv": 3.58,
-     "cuadros": 15,
-     "z_golpe": 2.76,
-     "z_red": 3.09,
-     "puntaje": 4.28
-    }
-   ]
+   "kmh": 71.0,
+   "fuente": "pistola"
   },
   "127": {
    "saque": 127,
@@ -4539,8 +1653,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 1925,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 92.0,
+   "fuente": "pistola"
   },
   "128": {
    "saque": 128,
@@ -4552,51 +1666,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 1937,
-   "kmh": 62.9,
-   "alto_del_golpe": 2.73,
-   "altura_en_la_red": 3.09,
-   "kmh_en_la_red": 53.9,
-   "residuo_px": 1.68,
-   "cuadros": 40,
-   "arranque_en_la_ventana": 1.852,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.852,
-     "kmh": 62.9,
-     "res_uv": 1.68,
-     "cuadros": 40,
-     "z_golpe": 2.73,
-     "z_red": 3.09,
-     "puntaje": 1.033
-    },
-    {
-     "arranque_s": 1.752,
-     "kmh": 65.2,
-     "res_uv": 1.86,
-     "cuadros": 46,
-     "z_golpe": 2.74,
-     "z_red": 3.24,
-     "puntaje": 1.08
-    },
-    {
-     "arranque_s": 1.919,
-     "kmh": 63.4,
-     "res_uv": 1.48,
-     "cuadros": 36,
-     "z_golpe": 2.85,
-     "z_red": 2.94,
-     "puntaje": 1.12
-    },
-    {
-     "arranque_s": 1.985,
-     "kmh": 65.2,
-     "res_uv": 1.49,
-     "cuadros": 32,
-     "z_golpe": 2.92,
-     "z_red": 2.91,
-     "puntaje": 1.409
-    }
-   ]
+   "kmh": 103.0,
+   "fuente": "pistola"
   },
   "129": {
    "saque": 129,
@@ -4608,51 +1679,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 1948,
-   "kmh": 69.6,
-   "alto_del_golpe": 2.95,
-   "altura_en_la_red": 2.85,
-   "kmh_en_la_red": 60.7,
-   "residuo_px": 1.86,
-   "cuadros": 48,
-   "arranque_en_la_ventana": 1.401,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.401,
-     "kmh": 69.6,
-     "res_uv": 1.86,
-     "cuadros": 48,
-     "z_golpe": 2.95,
-     "z_red": 2.85,
-     "puntaje": 2.097
-    },
-    {
-     "arranque_s": 1.335,
-     "kmh": 70.7,
-     "res_uv": 1.94,
-     "cuadros": 52,
-     "z_golpe": 2.99,
-     "z_red": 2.83,
-     "puntaje": 2.298
-    },
-    {
-     "arranque_s": 1.268,
-     "kmh": 68.9,
-     "res_uv": 2.29,
-     "cuadros": 56,
-     "z_golpe": 2.96,
-     "z_red": 2.81,
-     "puntaje": 2.761
-    },
-    {
-     "arranque_s": 1.168,
-     "kmh": 66.3,
-     "res_uv": 6.3,
-     "cuadros": 62,
-     "z_golpe": 2.83,
-     "z_red": 2.72,
-     "puntaje": 6.958
-    }
-   ]
+   "kmh": 41.0,
+   "fuente": "pistola"
   },
   "130": {
    "saque": 130,
@@ -4664,8 +1692,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 1957,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 62.0,
+   "fuente": "pistola"
   },
   "131": {
    "saque": 131,
@@ -4677,51 +1705,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 1966,
-   "kmh": 74.4,
-   "alto_del_golpe": 2.91,
-   "altura_en_la_red": 2.57,
-   "kmh_en_la_red": 65.1,
-   "residuo_px": 3.12,
-   "cuadros": 44,
-   "arranque_en_la_ventana": 2.402,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.402,
-     "kmh": 74.4,
-     "res_uv": 3.12,
-     "cuadros": 44,
-     "z_golpe": 2.91,
-     "z_red": 2.57,
-     "puntaje": 4.049
-    },
-    {
-     "arranque_s": 2.502,
-     "kmh": 75.9,
-     "res_uv": 3.2,
-     "cuadros": 38,
-     "z_golpe": 2.96,
-     "z_red": 2.46,
-     "puntaje": 4.543
-    },
-    {
-     "arranque_s": 2.569,
-     "kmh": 79.7,
-     "res_uv": 3.11,
-     "cuadros": 34,
-     "z_golpe": 2.99,
-     "z_red": 2.44,
-     "puntaje": 4.736
-    },
-    {
-     "arranque_s": 2.636,
-     "kmh": 84.8,
-     "res_uv": 2.87,
-     "cuadros": 30,
-     "z_golpe": 3.0,
-     "z_red": 2.36,
-     "puntaje": 4.778
-    }
-   ]
+   "kmh": 67.0,
+   "fuente": "pistola"
   },
   "132": {
    "saque": 132,
@@ -4733,42 +1718,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 1976,
-   "kmh": 97.1,
-   "alto_del_golpe": 3.45,
-   "altura_en_la_red": 2.56,
-   "kmh_en_la_red": 84.9,
-   "residuo_px": 3.13,
-   "cuadros": 29,
-   "arranque_en_la_ventana": 1.001,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.001,
-     "kmh": 97.1,
-     "res_uv": 3.13,
-     "cuadros": 29,
-     "z_golpe": 3.45,
-     "z_red": 2.56,
-     "puntaje": 4.95
-    },
-    {
-     "arranque_s": 0.934,
-     "kmh": 97.7,
-     "res_uv": 4.95,
-     "cuadros": 33,
-     "z_golpe": 3.35,
-     "z_red": 2.55,
-     "puntaje": 6.892
-    },
-    {
-     "arranque_s": 0.868,
-     "kmh": 92.5,
-     "res_uv": 7.46,
-     "cuadros": 37,
-     "z_golpe": 3.2,
-     "z_red": 2.5,
-     "puntaje": 9.515
-    }
-   ]
+   "kmh": 68.0,
+   "fuente": "pistola"
   },
   "133": {
    "saque": 133,
@@ -4780,51 +1731,8 @@
    "tipo": "Q",
    "val": "/",
    "seg": 1990,
-   "kmh": 61.3,
-   "alto_del_golpe": 3.74,
-   "altura_en_la_red": 2.97,
-   "kmh_en_la_red": 54.6,
-   "residuo_px": 3.5,
-   "cuadros": 40,
-   "arranque_en_la_ventana": 1.702,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.702,
-     "kmh": 61.3,
-     "res_uv": 3.5,
-     "cuadros": 40,
-     "z_golpe": 3.74,
-     "z_red": 2.97,
-     "puntaje": 2.998
-    },
-    {
-     "arranque_s": 1.635,
-     "kmh": 60.3,
-     "res_uv": 3.91,
-     "cuadros": 44,
-     "z_golpe": 3.67,
-     "z_red": 2.91,
-     "puntaje": 3.522
-    },
-    {
-     "arranque_s": 1.568,
-     "kmh": 59.1,
-     "res_uv": 4.61,
-     "cuadros": 48,
-     "z_golpe": 3.61,
-     "z_red": 2.85,
-     "puntaje": 4.342
-    },
-    {
-     "arranque_s": 1.468,
-     "kmh": 57.5,
-     "res_uv": 7.66,
-     "cuadros": 54,
-     "z_golpe": 3.5,
-     "z_red": 2.77,
-     "puntaje": 7.577
-    }
-   ]
+   "kmh": 85.0,
+   "fuente": "pistola"
   },
   "134": {
    "saque": 134,
@@ -4836,8 +1744,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 2002,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 77.0,
+   "fuente": "pistola"
   },
   "135": {
    "saque": 135,
@@ -4849,8 +1757,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 2012,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 71.0,
+   "fuente": "pistola"
   },
   "136": {
    "saque": 136,
@@ -4862,8 +1770,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 2021,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 67.0,
+   "fuente": "pistola"
   },
   "137": {
    "saque": 137,
@@ -4875,51 +1783,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 2029,
-   "kmh": 66.9,
-   "alto_del_golpe": 2.94,
-   "altura_en_la_red": 2.94,
-   "kmh_en_la_red": 58.0,
-   "residuo_px": 1.47,
-   "cuadros": 29,
-   "arranque_en_la_ventana": 2.269,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.269,
-     "kmh": 66.9,
-     "res_uv": 1.47,
-     "cuadros": 29,
-     "z_golpe": 2.94,
-     "z_red": 2.94,
-     "puntaje": 2.299
-    },
-    {
-     "arranque_s": 2.202,
-     "kmh": 64.9,
-     "res_uv": 1.95,
-     "cuadros": 33,
-     "z_golpe": 2.92,
-     "z_red": 2.91,
-     "puntaje": 2.5
-    },
-    {
-     "arranque_s": 2.135,
-     "kmh": 65.0,
-     "res_uv": 2.44,
-     "cuadros": 37,
-     "z_golpe": 2.92,
-     "z_red": 2.88,
-     "puntaje": 2.708
-    },
-    {
-     "arranque_s": 2.035,
-     "kmh": 63.9,
-     "res_uv": 8.71,
-     "cuadros": 43,
-     "z_golpe": 2.77,
-     "z_red": 2.91,
-     "puntaje": 8.554
-    }
-   ]
+   "kmh": 81.0,
+   "fuente": "pistola"
   },
   "138": {
    "saque": 138,
@@ -4931,33 +1796,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 2039,
-   "kmh": 152.8,
-   "alto_del_golpe": 3.06,
-   "altura_en_la_red": 3.29,
-   "kmh_en_la_red": 132.6,
-   "residuo_px": 4.16,
-   "cuadros": 16,
-   "arranque_en_la_ventana": 1.285,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.285,
-     "kmh": 152.8,
-     "res_uv": 4.16,
-     "cuadros": 16,
-     "z_golpe": 3.06,
-     "z_red": 3.29,
-     "puntaje": 5.389
-    },
-    {
-     "arranque_s": 1.218,
-     "kmh": 146.0,
-     "res_uv": 8.91,
-     "cuadros": 20,
-     "z_golpe": 2.67,
-     "z_red": 3.23,
-     "puntaje": 10.255
-    }
-   ]
+   "kmh": 67.0,
+   "fuente": "pistola"
   },
   "139": {
    "saque": 139,
@@ -4969,8 +1809,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 2058,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 86.0,
+   "fuente": "pistola"
   },
   "140": {
    "saque": 140,
@@ -4982,42 +1822,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 2069,
-   "kmh": 51.5,
-   "alto_del_golpe": 2.77,
-   "altura_en_la_red": 3.13,
-   "kmh_en_la_red": 43.8,
-   "residuo_px": 1.99,
-   "cuadros": 57,
-   "arranque_en_la_ventana": 1.869,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.869,
-     "kmh": 51.5,
-     "res_uv": 1.99,
-     "cuadros": 57,
-     "z_golpe": 2.77,
-     "z_red": 3.13,
-     "puntaje": 1.052
-    },
-    {
-     "arranque_s": 1.935,
-     "kmh": 52.5,
-     "res_uv": 1.9,
-     "cuadros": 53,
-     "z_golpe": 2.78,
-     "z_red": 3.18,
-     "puntaje": 1.248
-    },
-    {
-     "arranque_s": 1.802,
-     "kmh": 51.1,
-     "res_uv": 3.45,
-     "cuadros": 61,
-     "z_golpe": 2.72,
-     "z_red": 3.13,
-     "puntaje": 2.232
-    }
-   ]
+   "kmh": 86.0,
+   "fuente": "pistola"
   },
   "141": {
    "saque": 141,
@@ -5029,51 +1835,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 2080,
-   "kmh": 73.5,
-   "alto_del_golpe": 2.83,
-   "altura_en_la_red": 3.54,
-   "kmh_en_la_red": 62.4,
-   "residuo_px": 1.9,
-   "cuadros": 47,
-   "arranque_en_la_ventana": 1.668,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.668,
-     "kmh": 73.5,
-     "res_uv": 1.9,
-     "cuadros": 47,
-     "z_golpe": 2.83,
-     "z_red": 3.54,
-     "puntaje": 1.359
-    },
-    {
-     "arranque_s": 1.602,
-     "kmh": 72.3,
-     "res_uv": 2.44,
-     "cuadros": 51,
-     "z_golpe": 2.76,
-     "z_red": 3.56,
-     "puntaje": 2.016
-    },
-    {
-     "arranque_s": 1.535,
-     "kmh": 72.6,
-     "res_uv": 2.34,
-     "cuadros": 55,
-     "z_golpe": 2.75,
-     "z_red": 3.57,
-     "puntaje": 2.032
-    },
-    {
-     "arranque_s": 1.435,
-     "kmh": 72.0,
-     "res_uv": 6.05,
-     "cuadros": 61,
-     "z_golpe": 2.76,
-     "z_red": 3.56,
-     "puntaje": 5.927
-    }
-   ]
+   "kmh": 42.0,
+   "fuente": "pistola"
   },
   "142": {
    "saque": 142,
@@ -5085,42 +1848,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 2089,
-   "kmh": 67.6,
-   "alto_del_golpe": 3.1,
-   "altura_en_la_red": 3.32,
-   "kmh_en_la_red": 58.4,
-   "residuo_px": 4.41,
-   "cuadros": 29,
-   "arranque_en_la_ventana": 1.368,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.368,
-     "kmh": 67.6,
-     "res_uv": 4.41,
-     "cuadros": 29,
-     "z_golpe": 3.1,
-     "z_red": 3.32,
-     "puntaje": 5.125
-    },
-    {
-     "arranque_s": 1.301,
-     "kmh": 86.8,
-     "res_uv": 5.79,
-     "cuadros": 33,
-     "z_golpe": 3.48,
-     "z_red": 3.02,
-     "puntaje": 6.629
-    },
-    {
-     "arranque_s": 1.235,
-     "kmh": 103.8,
-     "res_uv": 7.03,
-     "cuadros": 37,
-     "z_golpe": 3.4,
-     "z_red": 2.82,
-     "puntaje": 7.991
-    }
-   ]
+   "kmh": 63.0,
+   "fuente": "pistola"
   },
   "143": {
    "saque": 143,
@@ -5132,33 +1861,8 @@
    "tipo": "Q",
    "val": "!",
    "seg": 2098,
-   "kmh": 77.9,
-   "alto_del_golpe": 2.83,
-   "altura_en_la_red": 2.69,
-   "kmh_en_la_red": 67.6,
-   "residuo_px": 5.17,
-   "cuadros": 49,
-   "arranque_en_la_ventana": 1.869,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.869,
-     "kmh": 77.9,
-     "res_uv": 5.17,
-     "cuadros": 49,
-     "z_golpe": 2.83,
-     "z_red": 2.69,
-     "puntaje": 4.393
-    },
-    {
-     "arranque_s": 1.802,
-     "kmh": 74.3,
-     "res_uv": 7.54,
-     "cuadros": 53,
-     "z_golpe": 2.73,
-     "z_red": 2.73,
-     "puntaje": 6.489
-    }
-   ]
+   "kmh": 82.0,
+   "fuente": "pistola"
   },
   "144": {
    "saque": 144,
@@ -5170,8 +1874,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 2109,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 71.0,
+   "fuente": "pistola"
   },
   "145": {
    "saque": 145,
@@ -5183,33 +1887,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 2123,
-   "kmh": 101.1,
-   "alto_del_golpe": 3.58,
-   "altura_en_la_red": 2.33,
-   "kmh_en_la_red": 88.5,
-   "residuo_px": 6.62,
-   "cuadros": 31,
-   "arranque_en_la_ventana": 1.451,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.451,
-     "kmh": 101.1,
-     "res_uv": 6.62,
-     "cuadros": 31,
-     "z_golpe": 3.58,
-     "z_red": 2.33,
-     "puntaje": 7.046
-    },
-    {
-     "arranque_s": 1.385,
-     "kmh": 102.6,
-     "res_uv": 8.17,
-     "cuadros": 35,
-     "z_golpe": 3.55,
-     "z_red": 2.42,
-     "puntaje": 8.713
-    }
-   ]
+   "kmh": 80.0,
+   "fuente": "pistola"
   },
   "146": {
    "saque": 146,
@@ -5221,8 +1900,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 2138,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 99.0,
+   "fuente": "pistola"
   },
   "147": {
    "saque": 147,
@@ -5234,51 +1913,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 2147,
-   "kmh": 65.6,
-   "alto_del_golpe": 2.57,
-   "altura_en_la_red": 2.65,
-   "kmh_en_la_red": 56.3,
-   "residuo_px": 4.62,
-   "cuadros": 43,
-   "arranque_en_la_ventana": 1.668,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.668,
-     "kmh": 65.6,
-     "res_uv": 4.62,
-     "cuadros": 43,
-     "z_golpe": 2.57,
-     "z_red": 2.65,
-     "puntaje": 4.154
-    },
-    {
-     "arranque_s": 1.802,
-     "kmh": 63.6,
-     "res_uv": 5.03,
-     "cuadros": 35,
-     "z_golpe": 2.62,
-     "z_red": 2.49,
-     "puntaje": 4.337
-    },
-    {
-     "arranque_s": 1.568,
-     "kmh": 65.1,
-     "res_uv": 4.63,
-     "cuadros": 49,
-     "z_golpe": 2.62,
-     "z_red": 2.57,
-     "puntaje": 4.348
-    },
-    {
-     "arranque_s": 1.735,
-     "kmh": 62.2,
-     "res_uv": 4.94,
-     "cuadros": 39,
-     "z_golpe": 2.52,
-     "z_red": 2.54,
-     "puntaje": 4.35
-    }
-   ]
+   "kmh": 80.0,
+   "fuente": "pistola"
   },
   "148": {
    "saque": 148,
@@ -5290,24 +1926,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 2158,
-   "kmh": 101.7,
-   "alto_del_golpe": 3.27,
-   "altura_en_la_red": 2.72,
-   "kmh_en_la_red": 89.1,
-   "residuo_px": 7.22,
-   "cuadros": 39,
-   "arranque_en_la_ventana": 0.968,
-   "otros_vuelos": [
-    {
-     "arranque_s": 0.968,
-     "kmh": 101.7,
-     "res_uv": 7.22,
-     "cuadros": 39,
-     "z_golpe": 3.27,
-     "z_red": 2.72,
-     "puntaje": 8.94
-    }
-   ]
+   "kmh": 66.0,
+   "fuente": "pistola"
   },
   "149": {
    "saque": 149,
@@ -5319,8 +1939,8 @@
    "tipo": "Q",
    "val": "!",
    "seg": 2166,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 82.0,
+   "fuente": "pistola"
   },
   "150": {
    "saque": 150,
@@ -5332,33 +1952,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 2175,
-   "kmh": 89.8,
-   "alto_del_golpe": 3.76,
-   "altura_en_la_red": 2.97,
-   "kmh_en_la_red": 78.9,
-   "residuo_px": 5.23,
-   "cuadros": 37,
-   "arranque_en_la_ventana": 1.518,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.518,
-     "kmh": 89.8,
-     "res_uv": 5.23,
-     "cuadros": 37,
-     "z_golpe": 3.76,
-     "z_red": 2.97,
-     "puntaje": 5.331
-    },
-    {
-     "arranque_s": 1.451,
-     "kmh": 91.6,
-     "res_uv": 6.81,
-     "cuadros": 41,
-     "z_golpe": 3.64,
-     "z_red": 2.96,
-     "puntaje": 7.032
-    }
-   ]
+   "kmh": 65.0,
+   "fuente": "pistola"
   },
   "151": {
    "saque": 151,
@@ -5370,33 +1965,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 2189,
-   "kmh": 109.0,
-   "alto_del_golpe": 3.72,
-   "altura_en_la_red": 3.0,
-   "kmh_en_la_red": 95.0,
-   "residuo_px": 4.31,
-   "cuadros": 28,
-   "arranque_en_la_ventana": 1.151,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.151,
-     "kmh": 109.0,
-     "res_uv": 4.31,
-     "cuadros": 28,
-     "z_golpe": 3.72,
-     "z_red": 3.0,
-     "puntaje": 5.692
-    },
-    {
-     "arranque_s": 1.084,
-     "kmh": 120.5,
-     "res_uv": 7.4,
-     "cuadros": 32,
-     "z_golpe": 3.6,
-     "z_red": 3.02,
-     "puntaje": 8.904
-    }
-   ]
+   "kmh": 86.0,
+   "fuente": "pistola"
   },
   "152": {
    "saque": 152,
@@ -5408,33 +1978,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 2201,
-   "kmh": 88.6,
-   "alto_del_golpe": 2.53,
-   "altura_en_la_red": 3.29,
-   "kmh_en_la_red": 75.6,
-   "residuo_px": 1.38,
-   "cuadros": 15,
-   "arranque_en_la_ventana": 0.968,
-   "otros_vuelos": [
-    {
-     "arranque_s": 0.968,
-     "kmh": 88.6,
-     "res_uv": 1.38,
-     "cuadros": 15,
-     "z_golpe": 2.53,
-     "z_red": 3.29,
-     "puntaje": 3.582
-    },
-    {
-     "arranque_s": 0.901,
-     "kmh": 93.6,
-     "res_uv": 4.81,
-     "cuadros": 19,
-     "z_golpe": 2.59,
-     "z_red": 3.3,
-     "puntaje": 7.127
-    }
-   ]
+   "kmh": 97.0,
+   "fuente": "pistola"
   },
   "153": {
    "saque": 153,
@@ -5446,51 +1991,8 @@
    "tipo": "M",
    "val": "+",
    "seg": 2212,
-   "kmh": 87.2,
-   "alto_del_golpe": 2.98,
-   "altura_en_la_red": 2.78,
-   "kmh_en_la_red": 75.8,
-   "residuo_px": 2.09,
-   "cuadros": 36,
-   "arranque_en_la_ventana": 1.018,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.018,
-     "kmh": 87.2,
-     "res_uv": 2.09,
-     "cuadros": 36,
-     "z_golpe": 2.98,
-     "z_red": 2.78,
-     "puntaje": 3.718
-    },
-    {
-     "arranque_s": 0.951,
-     "kmh": 82.9,
-     "res_uv": 2.11,
-     "cuadros": 40,
-     "z_golpe": 2.9,
-     "z_red": 2.79,
-     "puntaje": 3.857
-    },
-    {
-     "arranque_s": 0.884,
-     "kmh": 82.0,
-     "res_uv": 2.36,
-     "cuadros": 44,
-     "z_golpe": 2.79,
-     "z_red": 2.87,
-     "puntaje": 4.232
-    },
-    {
-     "arranque_s": 0.784,
-     "kmh": 80.3,
-     "res_uv": 3.33,
-     "cuadros": 50,
-     "z_golpe": 2.72,
-     "z_red": 2.89,
-     "puntaje": 5.381
-    }
-   ]
+   "kmh": 55.0,
+   "fuente": "pistola"
   },
   "154": {
    "saque": 154,
@@ -5502,42 +2004,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 2222,
-   "kmh": 114.7,
-   "alto_del_golpe": 2.97,
-   "altura_en_la_red": 3.17,
-   "kmh_en_la_red": 99.4,
-   "residuo_px": 3.75,
-   "cuadros": 16,
-   "arranque_en_la_ventana": 1.251,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.251,
-     "kmh": 114.7,
-     "res_uv": 3.75,
-     "cuadros": 16,
-     "z_golpe": 2.97,
-     "z_red": 3.17,
-     "puntaje": 5.073
-    },
-    {
-     "arranque_s": 1.185,
-     "kmh": 119.1,
-     "res_uv": 6.63,
-     "cuadros": 20,
-     "z_golpe": 2.71,
-     "z_red": 3.21,
-     "puntaje": 8.077
-    },
-    {
-     "arranque_s": 1.118,
-     "kmh": 105.9,
-     "res_uv": 8.49,
-     "cuadros": 24,
-     "z_golpe": 2.66,
-     "z_red": 3.21,
-     "puntaje": 10.059
-    }
-   ]
+   "kmh": 66.0,
+   "fuente": "pistola"
   },
   "155": {
    "saque": 155,
@@ -5549,42 +2017,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 2232,
-   "kmh": 76.7,
-   "alto_del_golpe": 2.85,
-   "altura_en_la_red": 2.73,
-   "kmh_en_la_red": 66.6,
-   "residuo_px": 1.76,
-   "cuadros": 43,
-   "arranque_en_la_ventana": 1.652,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.652,
-     "kmh": 76.7,
-     "res_uv": 1.76,
-     "cuadros": 43,
-     "z_golpe": 2.85,
-     "z_red": 2.73,
-     "puntaje": 1.347
-    },
-    {
-     "arranque_s": 1.585,
-     "kmh": 72.3,
-     "res_uv": 2.74,
-     "cuadros": 47,
-     "z_golpe": 2.78,
-     "z_red": 2.7,
-     "puntaje": 2.45
-    },
-    {
-     "arranque_s": 1.518,
-     "kmh": 69.8,
-     "res_uv": 6.59,
-     "cuadros": 51,
-     "z_golpe": 2.73,
-     "z_red": 2.68,
-     "puntaje": 6.411
-    }
-   ]
+   "kmh": 81.0,
+   "fuente": "pistola"
   },
   "156": {
    "saque": 156,
@@ -5596,8 +2030,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 2243,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 70.0,
+   "fuente": "pistola"
   },
   "157": {
    "saque": 157,
@@ -5609,8 +2043,8 @@
    "tipo": "Q",
    "val": "+",
    "seg": 2265,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 92.0,
+   "fuente": "pistola"
   },
   "158": {
    "saque": 158,
@@ -5622,33 +2056,8 @@
    "tipo": "Q",
    "val": "+",
    "seg": 2284,
-   "kmh": 143.0,
-   "alto_del_golpe": 3.08,
-   "altura_en_la_red": 2.97,
-   "kmh_en_la_red": 124.4,
-   "residuo_px": 3.37,
-   "cuadros": 15,
-   "arranque_en_la_ventana": 1.602,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.602,
-     "kmh": 143.0,
-     "res_uv": 3.37,
-     "cuadros": 15,
-     "z_golpe": 3.08,
-     "z_red": 2.97,
-     "puntaje": 3.663
-    },
-    {
-     "arranque_s": 1.535,
-     "kmh": 85.0,
-     "res_uv": 7.76,
-     "cuadros": 19,
-     "z_golpe": 2.94,
-     "z_red": 2.84,
-     "puntaje": 8.18
-    }
-   ]
+   "kmh": 93.0,
+   "fuente": "pistola"
   },
   "159": {
    "saque": 159,
@@ -5660,51 +2069,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 2295,
-   "kmh": 62.0,
-   "alto_del_golpe": 1.95,
-   "altura_en_la_red": 3.24,
-   "kmh_en_la_red": 50.9,
-   "residuo_px": 1.85,
-   "cuadros": 58,
-   "arranque_en_la_ventana": 1.451,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.451,
-     "kmh": 62.0,
-     "res_uv": 1.85,
-     "cuadros": 58,
-     "z_golpe": 1.95,
-     "z_red": 3.24,
-     "puntaje": 1.736
-    },
-    {
-     "arranque_s": 1.385,
-     "kmh": 62.8,
-     "res_uv": 2.09,
-     "cuadros": 62,
-     "z_golpe": 2.13,
-     "z_red": 3.21,
-     "puntaje": 2.095
-    },
-    {
-     "arranque_s": 1.318,
-     "kmh": 64.9,
-     "res_uv": 2.98,
-     "cuadros": 66,
-     "z_golpe": 2.32,
-     "z_red": 3.19,
-     "puntaje": 3.105
-    },
-    {
-     "arranque_s": 1.218,
-     "kmh": 64.8,
-     "res_uv": 4.17,
-     "cuadros": 72,
-     "z_golpe": 2.37,
-     "z_red": 3.17,
-     "puntaje": 4.473
-    }
-   ]
+   "kmh": 74.0,
+   "fuente": "pistola"
   },
   "160": {
    "saque": 160,
@@ -5716,33 +2082,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 2305,
-   "kmh": 113.5,
-   "alto_del_golpe": 3.06,
-   "altura_en_la_red": 3.01,
-   "kmh_en_la_red": 98.2,
-   "residuo_px": 2.52,
-   "cuadros": 17,
-   "arranque_en_la_ventana": 1.118,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.118,
-     "kmh": 113.5,
-     "res_uv": 2.52,
-     "cuadros": 17,
-     "z_golpe": 3.06,
-     "z_red": 3.01,
-     "puntaje": 4.224
-    },
-    {
-     "arranque_s": 1.051,
-     "kmh": 115.2,
-     "res_uv": 5.54,
-     "cuadros": 21,
-     "z_golpe": 2.8,
-     "z_red": 2.92,
-     "puntaje": 7.37
-    }
-   ]
+   "kmh": 69.0,
+   "fuente": "pistola"
   },
   "161": {
    "saque": 161,
@@ -5754,51 +2095,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 2314,
-   "kmh": 76.4,
-   "alto_del_golpe": 2.36,
-   "altura_en_la_red": 3.18,
-   "kmh_en_la_red": 64.7,
-   "residuo_px": 1.76,
-   "cuadros": 55,
-   "arranque_en_la_ventana": 1.902,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.902,
-     "kmh": 76.4,
-     "res_uv": 1.76,
-     "cuadros": 55,
-     "z_golpe": 2.36,
-     "z_red": 3.18,
-     "puntaje": 0.969
-    },
-    {
-     "arranque_s": 1.969,
-     "kmh": 74.1,
-     "res_uv": 1.5,
-     "cuadros": 51,
-     "z_golpe": 2.17,
-     "z_red": 3.17,
-     "puntaje": 0.986
-    },
-    {
-     "arranque_s": 1.835,
-     "kmh": 78.6,
-     "res_uv": 2.15,
-     "cuadros": 59,
-     "z_golpe": 2.5,
-     "z_red": 3.19,
-     "puntaje": 1.079
-    },
-    {
-     "arranque_s": 1.735,
-     "kmh": 82.2,
-     "res_uv": 3.44,
-     "cuadros": 65,
-     "z_golpe": 2.49,
-     "z_red": 3.26,
-     "puntaje": 2.33
-    }
-   ]
+   "kmh": 73.0,
+   "fuente": "pistola"
   },
   "162": {
    "saque": 162,
@@ -5810,33 +2108,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 2323,
-   "kmh": 106.0,
-   "alto_del_golpe": 3.16,
-   "altura_en_la_red": 2.38,
-   "kmh_en_la_red": 92.4,
-   "residuo_px": 9.51,
-   "cuadros": 27,
-   "arranque_en_la_ventana": 1.101,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.101,
-     "kmh": 106.0,
-     "res_uv": 9.51,
-     "cuadros": 27,
-     "z_golpe": 3.16,
-     "z_red": 2.38,
-     "puntaje": 11.062
-    },
-    {
-     "arranque_s": 1.034,
-     "kmh": 99.1,
-     "res_uv": 10.8,
-     "cuadros": 31,
-     "z_golpe": 3.07,
-     "z_red": 2.37,
-     "puntaje": 12.479
-    }
-   ]
+   "kmh": 70.0,
+   "fuente": "pistola"
   },
   "163": {
    "saque": 163,
@@ -5848,8 +2121,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 2342,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 90.0,
+   "fuente": "pistola"
   },
   "164": {
    "saque": 164,
@@ -5861,24 +2134,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 2353,
-   "kmh": 135.7,
-   "alto_del_golpe": 2.81,
-   "altura_en_la_red": 3.27,
-   "kmh_en_la_red": 117.2,
-   "residuo_px": 4.7,
-   "cuadros": 15,
-   "arranque_en_la_ventana": 1.635,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.635,
-     "kmh": 135.7,
-     "res_uv": 4.7,
-     "cuadros": 15,
-     "z_golpe": 2.81,
-     "z_red": 3.27,
-     "puntaje": 4.894
-    }
-   ]
+   "kmh": 67.0,
+   "fuente": "pistola"
   },
   "165": {
    "saque": 165,
@@ -5890,51 +2147,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 2365,
-   "kmh": 61.4,
-   "alto_del_golpe": 2.6,
-   "altura_en_la_red": 2.71,
-   "kmh_en_la_red": 53.0,
-   "residuo_px": 1.5,
-   "cuadros": 37,
-   "arranque_en_la_ventana": 1.335,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.335,
-     "kmh": 61.4,
-     "res_uv": 1.5,
-     "cuadros": 37,
-     "z_golpe": 2.6,
-     "z_red": 2.71,
-     "puntaje": 2.156
-    },
-    {
-     "arranque_s": 1.268,
-     "kmh": 65.1,
-     "res_uv": 1.7,
-     "cuadros": 41,
-     "z_golpe": 2.75,
-     "z_red": 2.73,
-     "puntaje": 2.474
-    },
-    {
-     "arranque_s": 1.201,
-     "kmh": 67.1,
-     "res_uv": 1.92,
-     "cuadros": 45,
-     "z_golpe": 2.79,
-     "z_red": 2.73,
-     "puntaje": 2.819
-    },
-    {
-     "arranque_s": 1.101,
-     "kmh": 66.8,
-     "res_uv": 3.07,
-     "cuadros": 51,
-     "z_golpe": 2.78,
-     "z_red": 2.74,
-     "puntaje": 4.151
-    }
-   ]
+   "kmh": 72.0,
+   "fuente": "pistola"
   },
   "166": {
    "saque": 166,
@@ -5946,42 +2160,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 2376,
-   "kmh": 86.5,
-   "alto_del_golpe": 3.6,
-   "altura_en_la_red": 2.86,
-   "kmh_en_la_red": 76.1,
-   "residuo_px": 3.24,
-   "cuadros": 28,
-   "arranque_en_la_ventana": 0.934,
-   "otros_vuelos": [
-    {
-     "arranque_s": 0.934,
-     "kmh": 86.5,
-     "res_uv": 3.24,
-     "cuadros": 28,
-     "z_golpe": 3.6,
-     "z_red": 2.86,
-     "puntaje": 5.28
-    },
-    {
-     "arranque_s": 0.868,
-     "kmh": 84.8,
-     "res_uv": 4.23,
-     "cuadros": 32,
-     "z_golpe": 3.52,
-     "z_red": 2.94,
-     "puntaje": 6.39
-    },
-    {
-     "arranque_s": 0.801,
-     "kmh": 86.8,
-     "res_uv": 5.94,
-     "cuadros": 36,
-     "z_golpe": 3.4,
-     "z_red": 2.91,
-     "puntaje": 8.215
-    }
-   ]
+   "kmh": 63.0,
+   "fuente": "pistola"
   },
   "167": {
    "saque": 167,
@@ -5993,8 +2173,8 @@
    "tipo": "Q",
    "val": "!",
    "seg": 2385,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 75.0,
+   "fuente": "pistola"
   },
   "168": {
    "saque": 168,
@@ -6006,42 +2186,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 2394,
-   "kmh": 88.8,
-   "alto_del_golpe": 3.35,
-   "altura_en_la_red": 2.58,
-   "kmh_en_la_red": 77.9,
-   "residuo_px": 3.19,
-   "cuadros": 28,
-   "arranque_en_la_ventana": 0.651,
-   "otros_vuelos": [
-    {
-     "arranque_s": 0.651,
-     "kmh": 88.8,
-     "res_uv": 3.19,
-     "cuadros": 28,
-     "z_golpe": 3.35,
-     "z_red": 2.58,
-     "puntaje": 6.079
-    },
-    {
-     "arranque_s": 0.584,
-     "kmh": 97.5,
-     "res_uv": 4.83,
-     "cuadros": 32,
-     "z_golpe": 3.3,
-     "z_red": 2.62,
-     "puntaje": 7.836
-    },
-    {
-     "arranque_s": 0.517,
-     "kmh": 95.4,
-     "res_uv": 7.95,
-     "cuadros": 36,
-     "z_golpe": 3.17,
-     "z_red": 2.57,
-     "puntaje": 11.083
-    }
-   ]
+   "kmh": 66.0,
+   "fuente": "pistola"
   },
   "169": {
    "saque": 169,
@@ -6053,8 +2199,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 2410,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 90.0,
+   "fuente": "pistola"
   },
   "170": {
    "saque": 170,
@@ -6066,42 +2212,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 2423,
-   "kmh": 104.4,
-   "alto_del_golpe": 3.31,
-   "altura_en_la_red": 3.06,
-   "kmh_en_la_red": 90.9,
-   "residuo_px": 4.28,
-   "cuadros": 51,
-   "arranque_en_la_ventana": 1.752,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.752,
-     "kmh": 104.4,
-     "res_uv": 4.28,
-     "cuadros": 51,
-     "z_golpe": 3.31,
-     "z_red": 3.06,
-     "puntaje": 3.401
-    },
-    {
-     "arranque_s": 1.685,
-     "kmh": 100.9,
-     "res_uv": 4.82,
-     "cuadros": 55,
-     "z_golpe": 3.24,
-     "z_red": 3.07,
-     "puntaje": 4.063
-    },
-    {
-     "arranque_s": 1.618,
-     "kmh": 95.6,
-     "res_uv": 5.38,
-     "cuadros": 59,
-     "z_golpe": 3.17,
-     "z_red": 3.03,
-     "puntaje": 4.743
-    }
-   ]
+   "kmh": 60.0,
+   "fuente": "pistola"
   },
   "171": {
    "saque": 171,
@@ -6113,8 +2225,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 2435,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 74.0,
+   "fuente": "pistola"
   },
   "172": {
    "saque": 172,
@@ -6126,24 +2238,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 2445,
-   "kmh": 82.6,
-   "alto_del_golpe": 3.24,
-   "altura_en_la_red": 2.31,
-   "kmh_en_la_red": 72.7,
-   "residuo_px": 6.66,
-   "cuadros": 37,
-   "arranque_en_la_ventana": 0.851,
-   "otros_vuelos": [
-    {
-     "arranque_s": 0.851,
-     "kmh": 82.6,
-     "res_uv": 6.66,
-     "cuadros": 37,
-     "z_golpe": 3.24,
-     "z_red": 2.31,
-     "puntaje": 8.763
-    }
-   ]
+   "kmh": 65.0,
+   "fuente": "pistola"
   },
   "173": {
    "saque": 173,
@@ -6155,8 +2251,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 2455,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 80.0,
+   "fuente": "pistola"
   },
   "174": {
    "saque": 174,
@@ -6168,42 +2264,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 2464,
-   "kmh": 109.4,
-   "alto_del_golpe": 3.79,
-   "altura_en_la_red": 2.88,
-   "kmh_en_la_red": 95.8,
-   "residuo_px": 5.79,
-   "cuadros": 37,
-   "arranque_en_la_ventana": 0.984,
-   "otros_vuelos": [
-    {
-     "arranque_s": 0.984,
-     "kmh": 109.4,
-     "res_uv": 5.79,
-     "cuadros": 37,
-     "z_golpe": 3.79,
-     "z_red": 2.88,
-     "puntaje": 7.496
-    },
-    {
-     "arranque_s": 0.918,
-     "kmh": 101.4,
-     "res_uv": 6.2,
-     "cuadros": 41,
-     "z_golpe": 3.61,
-     "z_red": 2.83,
-     "puntaje": 8.023
-    },
-    {
-     "arranque_s": 0.851,
-     "kmh": 101.4,
-     "res_uv": 7.09,
-     "cuadros": 45,
-     "z_golpe": 3.49,
-     "z_red": 2.81,
-     "puntaje": 9.038
-    }
-   ]
+   "kmh": 68.0,
+   "fuente": "pistola"
   },
   "175": {
    "saque": 175,
@@ -6215,24 +2277,8 @@
    "tipo": "Q",
    "val": "!",
    "seg": 2478,
-   "kmh": 103.3,
-   "alto_del_golpe": 3.58,
-   "altura_en_la_red": 2.48,
-   "kmh_en_la_red": 90.9,
-   "residuo_px": 5.33,
-   "cuadros": 28,
-   "arranque_en_la_ventana": 1.285,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.285,
-     "kmh": 103.3,
-     "res_uv": 5.33,
-     "cuadros": 28,
-     "z_golpe": 3.58,
-     "z_red": 2.48,
-     "puntaje": 6.313
-    }
-   ]
+   "kmh": 93.0,
+   "fuente": "pistola"
   },
   "176": {
    "saque": 176,
@@ -6244,42 +2290,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 2492,
-   "kmh": 99.1,
-   "alto_del_golpe": 3.43,
-   "altura_en_la_red": 2.9,
-   "kmh_en_la_red": 86.0,
-   "residuo_px": 4.76,
-   "cuadros": 30,
-   "arranque_en_la_ventana": 0.851,
-   "otros_vuelos": [
-    {
-     "arranque_s": 0.851,
-     "kmh": 99.1,
-     "res_uv": 4.76,
-     "cuadros": 30,
-     "z_golpe": 3.43,
-     "z_red": 2.9,
-     "puntaje": 7.01
-    },
-    {
-     "arranque_s": 0.784,
-     "kmh": 103.7,
-     "res_uv": 6.27,
-     "cuadros": 34,
-     "z_golpe": 3.45,
-     "z_red": 3.06,
-     "puntaje": 8.642
-    },
-    {
-     "arranque_s": 0.717,
-     "kmh": 99.7,
-     "res_uv": 7.83,
-     "cuadros": 38,
-     "z_golpe": 3.29,
-     "z_red": 2.95,
-     "puntaje": 10.32
-    }
-   ]
+   "kmh": 95.0,
+   "fuente": "pistola"
   },
   "177": {
    "saque": 177,
@@ -6291,42 +2303,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 2503,
-   "kmh": 62.5,
-   "alto_del_golpe": 3.03,
-   "altura_en_la_red": 2.72,
-   "kmh_en_la_red": 54.9,
-   "residuo_px": 2.77,
-   "cuadros": 27,
-   "arranque_en_la_ventana": 0.801,
-   "otros_vuelos": [
-    {
-     "arranque_s": 0.801,
-     "kmh": 62.5,
-     "res_uv": 2.77,
-     "cuadros": 27,
-     "z_golpe": 3.03,
-     "z_red": 2.72,
-     "puntaje": 5.23
-    },
-    {
-     "arranque_s": 0.734,
-     "kmh": 57.6,
-     "res_uv": 5.52,
-     "cuadros": 31,
-     "z_golpe": 2.91,
-     "z_red": 2.64,
-     "puntaje": 8.095
-    },
-    {
-     "arranque_s": 0.667,
-     "kmh": 60.1,
-     "res_uv": 10.13,
-     "cuadros": 35,
-     "z_golpe": 2.83,
-     "z_red": 2.63,
-     "puntaje": 12.827
-    }
-   ]
+   "kmh": 75.0,
+   "fuente": "pistola"
   },
   "178": {
    "saque": 178,
@@ -6338,51 +2316,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 2513,
-   "kmh": 89.6,
-   "alto_del_golpe": 3.52,
-   "altura_en_la_red": 2.55,
-   "kmh_en_la_red": 78.7,
-   "residuo_px": 3.94,
-   "cuadros": 29,
-   "arranque_en_la_ventana": 1.501,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.501,
-     "kmh": 89.6,
-     "res_uv": 3.94,
-     "cuadros": 29,
-     "z_golpe": 3.52,
-     "z_red": 2.55,
-     "puntaje": 4.252
-    },
-    {
-     "arranque_s": 1.435,
-     "kmh": 87.6,
-     "res_uv": 4.26,
-     "cuadros": 33,
-     "z_golpe": 3.41,
-     "z_red": 2.53,
-     "puntaje": 4.699
-    },
-    {
-     "arranque_s": 1.368,
-     "kmh": 86.7,
-     "res_uv": 5.5,
-     "cuadros": 37,
-     "z_golpe": 3.33,
-     "z_red": 2.56,
-     "puntaje": 6.06
-    },
-    {
-     "arranque_s": 1.268,
-     "kmh": 81.5,
-     "res_uv": 8.5,
-     "cuadros": 43,
-     "z_golpe": 3.15,
-     "z_red": 2.48,
-     "puntaje": 9.241
-    }
-   ]
+   "kmh": 60.0,
+   "fuente": "pistola"
   },
   "179": {
    "saque": 179,
@@ -6394,42 +2329,8 @@
    "tipo": "Q",
    "val": "!",
    "seg": 2523,
-   "kmh": 66.0,
-   "alto_del_golpe": 2.83,
-   "altura_en_la_red": 2.88,
-   "kmh_en_la_red": 57.0,
-   "residuo_px": 1.55,
-   "cuadros": 42,
-   "arranque_en_la_ventana": 1.818,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.818,
-     "kmh": 66.0,
-     "res_uv": 1.55,
-     "cuadros": 42,
-     "z_golpe": 2.83,
-     "z_red": 2.88,
-     "puntaje": 0.764
-    },
-    {
-     "arranque_s": 1.752,
-     "kmh": 66.0,
-     "res_uv": 1.64,
-     "cuadros": 46,
-     "z_golpe": 2.8,
-     "z_red": 2.91,
-     "puntaje": 0.868
-    },
-    {
-     "arranque_s": 1.685,
-     "kmh": 64.6,
-     "res_uv": 3.94,
-     "cuadros": 50,
-     "z_golpe": 2.7,
-     "z_red": 2.95,
-     "puntaje": 3.285
-    }
-   ]
+   "kmh": 80.0,
+   "fuente": "pistola"
   },
   "180": {
    "saque": 180,
@@ -6441,42 +2342,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 2533,
-   "kmh": 89.9,
-   "alto_del_golpe": 3.74,
-   "altura_en_la_red": 2.75,
-   "kmh_en_la_red": 78.9,
-   "residuo_px": 4.23,
-   "cuadros": 29,
-   "arranque_en_la_ventana": 1.552,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.552,
-     "kmh": 89.9,
-     "res_uv": 4.23,
-     "cuadros": 29,
-     "z_golpe": 3.74,
-     "z_red": 2.75,
-     "puntaje": 4.398
-    },
-    {
-     "arranque_s": 1.485,
-     "kmh": 94.6,
-     "res_uv": 6.6,
-     "cuadros": 33,
-     "z_golpe": 3.55,
-     "z_red": 2.66,
-     "puntaje": 6.884
-    },
-    {
-     "arranque_s": 1.418,
-     "kmh": 91.9,
-     "res_uv": 9.55,
-     "cuadros": 37,
-     "z_golpe": 3.32,
-     "z_red": 2.49,
-     "puntaje": 9.959
-    }
-   ]
+   "kmh": 63.0,
+   "fuente": "pistola"
   },
   "181": {
    "saque": 181,
@@ -6488,51 +2355,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 2716,
-   "kmh": 86.2,
-   "alto_del_golpe": 2.94,
-   "altura_en_la_red": 3.17,
-   "kmh_en_la_red": 74.6,
-   "residuo_px": 3.09,
-   "cuadros": 43,
-   "arranque_en_la_ventana": 1.201,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.201,
-     "kmh": 86.2,
-     "res_uv": 3.09,
-     "cuadros": 43,
-     "z_golpe": 2.94,
-     "z_red": 3.17,
-     "puntaje": 4.029
-    },
-    {
-     "arranque_s": 1.134,
-     "kmh": 84.0,
-     "res_uv": 3.13,
-     "cuadros": 47,
-     "z_golpe": 2.9,
-     "z_red": 3.11,
-     "puntaje": 4.183
-    },
-    {
-     "arranque_s": 1.068,
-     "kmh": 79.6,
-     "res_uv": 3.21,
-     "cuadros": 51,
-     "z_golpe": 2.81,
-     "z_red": 3.07,
-     "puntaje": 4.39
-    },
-    {
-     "arranque_s": 0.968,
-     "kmh": 76.1,
-     "res_uv": 3.12,
-     "cuadros": 57,
-     "z_golpe": 2.78,
-     "z_red": 3.02,
-     "puntaje": 4.477
-    }
-   ]
+   "kmh": 61.0,
+   "fuente": "pistola"
   },
   "182": {
    "saque": 182,
@@ -6544,33 +2368,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 2734,
-   "kmh": 48.4,
-   "alto_del_golpe": 2.96,
-   "altura_en_la_red": 3.28,
-   "kmh_en_la_red": 41.6,
-   "residuo_px": 2.41,
-   "cuadros": 37,
-   "arranque_en_la_ventana": 3.187,
-   "otros_vuelos": [
-    {
-     "arranque_s": 3.187,
-     "kmh": 48.4,
-     "res_uv": 2.41,
-     "cuadros": 37,
-     "z_golpe": 2.96,
-     "z_red": 3.28,
-     "puntaje": 5.826
-    },
-    {
-     "arranque_s": 3.12,
-     "kmh": 44.1,
-     "res_uv": 3.6,
-     "cuadros": 41,
-     "z_golpe": 2.32,
-     "z_red": 3.03,
-     "puntaje": 6.735
-    }
-   ]
+   "kmh": 94.0,
+   "fuente": "pistola"
   },
   "183": {
    "saque": 183,
@@ -6582,42 +2381,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 2751,
-   "kmh": 81.8,
-   "alto_del_golpe": 2.85,
-   "altura_en_la_red": 2.85,
-   "kmh_en_la_red": 71.2,
-   "residuo_px": 2.92,
-   "cuadros": 46,
-   "arranque_en_la_ventana": 1.251,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.251,
-     "kmh": 81.8,
-     "res_uv": 2.92,
-     "cuadros": 46,
-     "z_golpe": 2.85,
-     "z_red": 2.85,
-     "puntaje": 3.643
-    },
-    {
-     "arranque_s": 1.185,
-     "kmh": 73.4,
-     "res_uv": 4.22,
-     "cuadros": 50,
-     "z_golpe": 2.64,
-     "z_red": 2.88,
-     "puntaje": 5.065
-    },
-    {
-     "arranque_s": 1.118,
-     "kmh": 71.2,
-     "res_uv": 7.87,
-     "cuadros": 54,
-     "z_golpe": 2.49,
-     "z_red": 2.96,
-     "puntaje": 8.841
-    }
-   ]
+   "kmh": 64.0,
+   "fuente": "pistola"
   },
   "184": {
    "saque": 184,
@@ -6629,33 +2394,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 2763,
-   "kmh": 73.9,
-   "alto_del_golpe": 2.8,
-   "altura_en_la_red": 2.54,
-   "kmh_en_la_red": 64.8,
-   "residuo_px": 3.36,
-   "cuadros": 31,
-   "arranque_en_la_ventana": 0.651,
-   "otros_vuelos": [
-    {
-     "arranque_s": 0.651,
-     "kmh": 73.9,
-     "res_uv": 3.36,
-     "cuadros": 31,
-     "z_golpe": 2.8,
-     "z_red": 2.54,
-     "puntaje": 6.192
-    },
-    {
-     "arranque_s": 0.584,
-     "kmh": 67.0,
-     "res_uv": 3.82,
-     "cuadros": 35,
-     "z_golpe": 2.73,
-     "z_red": 2.46,
-     "puntaje": 6.769
-    }
-   ]
+   "kmh": 65.0,
+   "fuente": "pistola"
   },
   "185": {
    "saque": 185,
@@ -6667,42 +2407,8 @@
    "tipo": "Q",
    "val": "/",
    "seg": 2774,
-   "kmh": 88.8,
-   "alto_del_golpe": 3.11,
-   "altura_en_la_red": 2.61,
-   "kmh_en_la_red": 78.0,
-   "residuo_px": 2.78,
-   "cuadros": 33,
-   "arranque_en_la_ventana": 3.02,
-   "otros_vuelos": [
-    {
-     "arranque_s": 3.02,
-     "kmh": 88.8,
-     "res_uv": 2.78,
-     "cuadros": 33,
-     "z_golpe": 3.11,
-     "z_red": 2.61,
-     "puntaje": 5.779
-    },
-    {
-     "arranque_s": 2.953,
-     "kmh": 96.0,
-     "res_uv": 3.94,
-     "cuadros": 37,
-     "z_golpe": 3.08,
-     "z_red": 2.54,
-     "puntaje": 6.661
-    },
-    {
-     "arranque_s": 2.886,
-     "kmh": 96.2,
-     "res_uv": 6.05,
-     "cuadros": 41,
-     "z_golpe": 3.0,
-     "z_red": 2.5,
-     "puntaje": 8.486
-    }
-   ]
+   "kmh": 84.0,
+   "fuente": "pistola"
   },
   "186": {
    "saque": 186,
@@ -6714,33 +2420,8 @@
    "tipo": "M",
    "val": "+",
    "seg": 2784,
-   "kmh": 79.2,
-   "alto_del_golpe": 2.95,
-   "altura_en_la_red": 2.98,
-   "kmh_en_la_red": 68.9,
-   "residuo_px": 4.49,
-   "cuadros": 55,
-   "arranque_en_la_ventana": 2.119,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.119,
-     "kmh": 79.2,
-     "res_uv": 4.49,
-     "cuadros": 55,
-     "z_golpe": 2.95,
-     "z_red": 2.98,
-     "puntaje": 4.345
-    },
-    {
-     "arranque_s": 2.052,
-     "kmh": 77.5,
-     "res_uv": 5.83,
-     "cuadros": 59,
-     "z_golpe": 2.87,
-     "z_red": 3.02,
-     "puntaje": 5.402
-    }
-   ]
+   "kmh": 62.0,
+   "fuente": "pistola"
   },
   "187": {
    "saque": 187,
@@ -6752,8 +2433,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 2793,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 82.0,
+   "fuente": "pistola"
   },
   "188": {
    "saque": 188,
@@ -6765,8 +2446,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 2811,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 94.0,
+   "fuente": "pistola"
   },
   "189": {
    "saque": 189,
@@ -6778,33 +2459,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 2826,
-   "kmh": 61.3,
-   "alto_del_golpe": 3.07,
-   "altura_en_la_red": 2.8,
-   "kmh_en_la_red": 54.0,
-   "residuo_px": 2.97,
-   "cuadros": 40,
-   "arranque_en_la_ventana": 2.753,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.753,
-     "kmh": 61.3,
-     "res_uv": 2.97,
-     "cuadros": 40,
-     "z_golpe": 3.07,
-     "z_red": 2.8,
-     "puntaje": 5.025
-    },
-    {
-     "arranque_s": 2.686,
-     "kmh": 55.3,
-     "res_uv": 3.37,
-     "cuadros": 44,
-     "z_golpe": 3.0,
-     "z_red": 2.66,
-     "puntaje": 5.145
-    }
-   ]
+   "kmh": 41.0,
+   "fuente": "pistola"
   },
   "190": {
    "saque": 190,
@@ -6816,33 +2472,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 2837,
-   "kmh": 82.5,
-   "alto_del_golpe": 2.7,
-   "altura_en_la_red": 2.98,
-   "kmh_en_la_red": 71.3,
-   "residuo_px": 3.94,
-   "cuadros": 30,
-   "arranque_en_la_ventana": 2.819,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.819,
-     "kmh": 82.5,
-     "res_uv": 3.94,
-     "cuadros": 30,
-     "z_golpe": 2.7,
-     "z_red": 2.98,
-     "puntaje": 6.395
-    },
-    {
-     "arranque_s": 2.753,
-     "kmh": 63.9,
-     "res_uv": 9.17,
-     "cuadros": 34,
-     "z_golpe": 2.17,
-     "z_red": 2.97,
-     "puntaje": 11.347
-    }
-   ]
+   "kmh": 61.0,
+   "fuente": "pistola"
   },
   "191": {
    "saque": 191,
@@ -6854,24 +2485,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 2846,
-   "kmh": 127.6,
-   "alto_del_golpe": 2.86,
-   "altura_en_la_red": 2.8,
-   "kmh_en_la_red": 110.9,
-   "residuo_px": 8.19,
-   "cuadros": 16,
-   "arranque_en_la_ventana": 3.804,
-   "otros_vuelos": [
-    {
-     "arranque_s": 3.804,
-     "kmh": 127.6,
-     "res_uv": 8.19,
-     "cuadros": 16,
-     "z_golpe": 2.86,
-     "z_red": 2.8,
-     "puntaje": 13.88
-    }
-   ]
+   "kmh": 85.0,
+   "fuente": "pistola"
   },
   "192": {
    "saque": 192,
@@ -6883,8 +2498,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 2856,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 65.0,
+   "fuente": "pistola"
   },
   "193": {
    "saque": 193,
@@ -6896,33 +2511,8 @@
    "tipo": "Q",
    "val": "/",
    "seg": 2866,
-   "kmh": 69.1,
-   "alto_del_golpe": 3.27,
-   "altura_en_la_red": 2.5,
-   "kmh_en_la_red": 61.6,
-   "residuo_px": 4.03,
-   "cuadros": 31,
-   "arranque_en_la_ventana": 2.986,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.986,
-     "kmh": 69.1,
-     "res_uv": 4.03,
-     "cuadros": 31,
-     "z_golpe": 3.27,
-     "z_red": 2.5,
-     "puntaje": 6.969
-    },
-    {
-     "arranque_s": 2.92,
-     "kmh": 69.1,
-     "res_uv": 5.78,
-     "cuadros": 35,
-     "z_golpe": 3.17,
-     "z_red": 2.34,
-     "puntaje": 8.434
-    }
-   ]
+   "kmh": 86.0,
+   "fuente": "pistola"
   },
   "194": {
    "saque": 194,
@@ -6934,8 +2524,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 2882,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 100.0,
+   "fuente": "pistola"
   },
   "195": {
    "saque": 195,
@@ -6947,8 +2537,8 @@
    "tipo": "M",
    "val": "+",
    "seg": 2898,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 76.0,
+   "fuente": "pistola"
   },
   "196": {
    "saque": 196,
@@ -6960,33 +2550,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 2907,
-   "kmh": 89.2,
-   "alto_del_golpe": 2.48,
-   "altura_en_la_red": 3.22,
-   "kmh_en_la_red": 76.4,
-   "residuo_px": 5.35,
-   "cuadros": 27,
-   "arranque_en_la_ventana": 3.337,
-   "otros_vuelos": [
-    {
-     "arranque_s": 3.337,
-     "kmh": 89.2,
-     "res_uv": 5.35,
-     "cuadros": 27,
-     "z_golpe": 2.48,
-     "z_red": 3.22,
-     "puntaje": 9.418
-    },
-    {
-     "arranque_s": 3.27,
-     "kmh": 80.2,
-     "res_uv": 7.43,
-     "cuadros": 31,
-     "z_golpe": 2.33,
-     "z_red": 3.21,
-     "puntaje": 11.224
-    }
-   ]
+   "kmh": 64.0,
+   "fuente": "pistola"
   },
   "197": {
    "saque": 197,
@@ -6998,8 +2563,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 2919,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 78.0,
+   "fuente": "pistola"
   },
   "198": {
    "saque": 198,
@@ -7011,33 +2576,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 2926,
-   "kmh": 88.7,
-   "alto_del_golpe": 2.85,
-   "altura_en_la_red": 3.36,
-   "kmh_en_la_red": 76.4,
-   "residuo_px": 3.69,
-   "cuadros": 49,
-   "arranque_en_la_ventana": 3.003,
-   "otros_vuelos": [
-    {
-     "arranque_s": 3.003,
-     "kmh": 88.7,
-     "res_uv": 3.69,
-     "cuadros": 49,
-     "z_golpe": 2.85,
-     "z_red": 3.36,
-     "puntaje": 6.32
-    },
-    {
-     "arranque_s": 2.936,
-     "kmh": 79.0,
-     "res_uv": 5.07,
-     "cuadros": 53,
-     "z_golpe": 2.57,
-     "z_red": 3.39,
-     "puntaje": 7.423
-    }
-   ]
+   "kmh": 63.0,
+   "fuente": "pistola"
   },
   "199": {
    "saque": 199,
@@ -7049,8 +2589,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 2934,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 95.0,
+   "fuente": "pistola"
   },
   "200": {
    "saque": 200,
@@ -7062,8 +2602,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 2948,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 85.0,
+   "fuente": "pistola"
   },
   "201": {
    "saque": 201,
@@ -7075,8 +2615,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 2964,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 76.0,
+   "fuente": "pistola"
   },
   "202": {
    "saque": 202,
@@ -7088,42 +2628,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 2980,
-   "kmh": 83.7,
-   "alto_del_golpe": 2.82,
-   "altura_en_la_red": 2.81,
-   "kmh_en_la_red": 72.8,
-   "residuo_px": 3.58,
-   "cuadros": 36,
-   "arranque_en_la_ventana": 1.852,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.852,
-     "kmh": 83.7,
-     "res_uv": 3.58,
-     "cuadros": 36,
-     "z_golpe": 2.82,
-     "z_red": 2.81,
-     "puntaje": 3.011
-    },
-    {
-     "arranque_s": 1.919,
-     "kmh": 86.5,
-     "res_uv": 3.46,
-     "cuadros": 32,
-     "z_golpe": 2.83,
-     "z_red": 2.85,
-     "puntaje": 3.173
-    },
-    {
-     "arranque_s": 1.785,
-     "kmh": 81.4,
-     "res_uv": 3.95,
-     "cuadros": 40,
-     "z_golpe": 2.82,
-     "z_red": 2.78,
-     "puntaje": 3.191
-    }
-   ]
+   "kmh": 65.0,
+   "fuente": "pistola"
   },
   "203": {
    "saque": 203,
@@ -7135,42 +2641,8 @@
    "tipo": "Q",
    "val": "!",
    "seg": 2991,
-   "kmh": 75.9,
-   "alto_del_golpe": 2.34,
-   "altura_en_la_red": 2.92,
-   "kmh_en_la_red": 65.1,
-   "residuo_px": 1.85,
-   "cuadros": 43,
-   "arranque_en_la_ventana": 2.035,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.035,
-     "kmh": 75.9,
-     "res_uv": 1.85,
-     "cuadros": 43,
-     "z_golpe": 2.34,
-     "z_red": 2.92,
-     "puntaje": 1.697
-    },
-    {
-     "arranque_s": 1.969,
-     "kmh": 74.5,
-     "res_uv": 4.52,
-     "cuadros": 47,
-     "z_golpe": 2.34,
-     "z_red": 2.91,
-     "puntaje": 4.09
-    },
-    {
-     "arranque_s": 1.902,
-     "kmh": 71.1,
-     "res_uv": 7.31,
-     "cuadros": 51,
-     "z_golpe": 2.08,
-     "z_red": 2.93,
-     "puntaje": 6.592
-    }
-   ]
+   "kmh": 65.0,
+   "fuente": "pistola"
   },
   "204": {
    "saque": 204,
@@ -7182,33 +2654,8 @@
    "tipo": "M",
    "val": "+",
    "seg": 3002,
-   "kmh": 70.6,
-   "alto_del_golpe": 2.28,
-   "altura_en_la_red": 3.14,
-   "kmh_en_la_red": 59.9,
-   "residuo_px": 3.09,
-   "cuadros": 42,
-   "arranque_en_la_ventana": 2.636,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.636,
-     "kmh": 70.6,
-     "res_uv": 3.09,
-     "cuadros": 42,
-     "z_golpe": 2.28,
-     "z_red": 3.14,
-     "puntaje": 4.757
-    },
-    {
-     "arranque_s": 2.569,
-     "kmh": 69.5,
-     "res_uv": 3.72,
-     "cuadros": 46,
-     "z_golpe": 2.19,
-     "z_red": 3.16,
-     "puntaje": 5.103
-    }
-   ]
+   "kmh": 62.0,
+   "fuente": "pistola"
   },
   "205": {
    "saque": 205,
@@ -7220,24 +2667,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 3011,
-   "kmh": 102.4,
-   "alto_del_golpe": 3.56,
-   "altura_en_la_red": 2.95,
-   "kmh_en_la_red": 89.9,
-   "residuo_px": 6.59,
-   "cuadros": 32,
-   "arranque_en_la_ventana": 3.02,
-   "otros_vuelos": [
-    {
-     "arranque_s": 3.02,
-     "kmh": 102.4,
-     "res_uv": 6.59,
-     "cuadros": 32,
-     "z_golpe": 3.56,
-     "z_red": 2.95,
-     "puntaje": 9.613
-    }
-   ]
+   "kmh": 88.0,
+   "fuente": "pistola"
   },
   "206": {
    "saque": 206,
@@ -7249,8 +2680,8 @@
    "tipo": "Q",
    "val": "!",
    "seg": 3028,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 105.0,
+   "fuente": "pistola"
   },
   "207": {
    "saque": 207,
@@ -7262,33 +2693,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 3047,
-   "kmh": 83.4,
-   "alto_del_golpe": 2.8,
-   "altura_en_la_red": 3.45,
-   "kmh_en_la_red": 71.5,
-   "residuo_px": 3.24,
-   "cuadros": 39,
-   "arranque_en_la_ventana": 2.769,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.769,
-     "kmh": 83.4,
-     "res_uv": 3.24,
-     "cuadros": 39,
-     "z_golpe": 2.8,
-     "z_red": 3.45,
-     "puntaje": 5.371
-    },
-    {
-     "arranque_s": 2.703,
-     "kmh": 78.3,
-     "res_uv": 5.06,
-     "cuadros": 43,
-     "z_golpe": 2.72,
-     "z_red": 3.46,
-     "puntaje": 6.904
-    }
-   ]
+   "kmh": 74.0,
+   "fuente": "pistola"
   },
   "208": {
    "saque": 208,
@@ -7300,42 +2706,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 3062,
-   "kmh": 63.4,
-   "alto_del_golpe": 2.62,
-   "altura_en_la_red": 3.07,
-   "kmh_en_la_red": 54.2,
-   "residuo_px": 2.88,
-   "cuadros": 35,
-   "arranque_en_la_ventana": 2.452,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.452,
-     "kmh": 63.4,
-     "res_uv": 2.88,
-     "cuadros": 35,
-     "z_golpe": 2.62,
-     "z_red": 3.07,
-     "puntaje": 4.142
-    },
-    {
-     "arranque_s": 2.519,
-     "kmh": 66.9,
-     "res_uv": 2.87,
-     "cuadros": 31,
-     "z_golpe": 2.64,
-     "z_red": 3.13,
-     "puntaje": 4.411
-    },
-    {
-     "arranque_s": 2.386,
-     "kmh": 61.5,
-     "res_uv": 9.01,
-     "cuadros": 39,
-     "z_golpe": 2.3,
-     "z_red": 3.17,
-     "puntaje": 9.99
-    }
-   ]
+   "kmh": 64.0,
+   "fuente": "pistola"
   },
   "209": {
    "saque": 209,
@@ -7347,42 +2719,8 @@
    "tipo": "M",
    "val": "+",
    "seg": 3073,
-   "kmh": 118.7,
-   "alto_del_golpe": 3.25,
-   "altura_en_la_red": 2.63,
-   "kmh_en_la_red": 103.8,
-   "residuo_px": 3.74,
-   "cuadros": 38,
-   "arranque_en_la_ventana": 2.302,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.302,
-     "kmh": 118.7,
-     "res_uv": 3.74,
-     "cuadros": 38,
-     "z_golpe": 3.25,
-     "z_red": 2.63,
-     "puntaje": 4.491
-    },
-    {
-     "arranque_s": 2.236,
-     "kmh": 116.8,
-     "res_uv": 6.02,
-     "cuadros": 42,
-     "z_golpe": 3.15,
-     "z_red": 2.59,
-     "puntaje": 6.483
-    },
-    {
-     "arranque_s": 2.169,
-     "kmh": 107.1,
-     "res_uv": 7.41,
-     "cuadros": 46,
-     "z_golpe": 3.01,
-     "z_red": 2.52,
-     "puntaje": 7.595
-    }
-   ]
+   "kmh": 88.0,
+   "fuente": "pistola"
   },
   "210": {
    "saque": 210,
@@ -7394,42 +2732,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 3083,
-   "kmh": 95.1,
-   "alto_del_golpe": 2.92,
-   "altura_en_la_red": 2.84,
-   "kmh_en_la_red": 82.8,
-   "residuo_px": 2.65,
-   "cuadros": 34,
-   "arranque_en_la_ventana": 2.352,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.352,
-     "kmh": 95.1,
-     "res_uv": 2.65,
-     "cuadros": 34,
-     "z_golpe": 2.92,
-     "z_red": 2.84,
-     "puntaje": 3.63
-    },
-    {
-     "arranque_s": 2.286,
-     "kmh": 84.4,
-     "res_uv": 3.85,
-     "cuadros": 38,
-     "z_golpe": 2.83,
-     "z_red": 2.84,
-     "puntaje": 4.551
-    },
-    {
-     "arranque_s": 2.219,
-     "kmh": 75.4,
-     "res_uv": 7.4,
-     "cuadros": 42,
-     "z_golpe": 2.69,
-     "z_red": 2.87,
-     "puntaje": 7.82
-    }
-   ]
+   "kmh": 65.0,
+   "fuente": "pistola"
   },
   "211": {
    "saque": 211,
@@ -7441,33 +2745,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 3093,
-   "kmh": 149.5,
-   "alto_del_golpe": 2.87,
-   "altura_en_la_red": 2.82,
-   "kmh_en_la_red": 130.1,
-   "residuo_px": 7.34,
-   "cuadros": 31,
-   "arranque_en_la_ventana": 1.752,
-   "otros_vuelos": [
-    {
-     "arranque_s": 1.752,
-     "kmh": 149.5,
-     "res_uv": 7.34,
-     "cuadros": 31,
-     "z_golpe": 2.87,
-     "z_red": 2.82,
-     "puntaje": 6.864
-    },
-    {
-     "arranque_s": 1.685,
-     "kmh": 136.5,
-     "res_uv": 7.48,
-     "cuadros": 35,
-     "z_golpe": 2.81,
-     "z_red": 2.83,
-     "puntaje": 7.121
-    }
-   ]
+   "kmh": 87.0,
+   "fuente": "pistola"
   },
   "212": {
    "saque": 212,
@@ -7479,8 +2758,8 @@
    "tipo": "Q",
    "val": "!",
    "seg": 3107,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 99.0,
+   "fuente": "pistola"
   },
   "213": {
    "saque": 213,
@@ -7492,42 +2771,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 3124,
-   "kmh": 79.7,
-   "alto_del_golpe": 2.97,
-   "altura_en_la_red": 2.87,
-   "kmh_en_la_red": 69.6,
-   "residuo_px": 1.73,
-   "cuadros": 31,
-   "arranque_en_la_ventana": 2.953,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.953,
-     "kmh": 79.7,
-     "res_uv": 1.73,
-     "cuadros": 31,
-     "z_golpe": 2.97,
-     "z_red": 2.87,
-     "puntaje": 4.57
-    },
-    {
-     "arranque_s": 2.886,
-     "kmh": 79.9,
-     "res_uv": 2.6,
-     "cuadros": 35,
-     "z_golpe": 2.96,
-     "z_red": 2.8,
-     "puntaje": 5.157
-    },
-    {
-     "arranque_s": 2.819,
-     "kmh": 69.7,
-     "res_uv": 6.81,
-     "cuadros": 39,
-     "z_golpe": 2.83,
-     "z_red": 2.8,
-     "puntaje": 9.092
-    }
-   ]
+   "kmh": 64.0,
+   "fuente": "pistola"
   },
   "214": {
    "saque": 214,
@@ -7539,8 +2784,8 @@
    "tipo": "M",
    "val": "/",
    "seg": 3135,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 70.0,
+   "fuente": "pistola"
   },
   "215": {
    "saque": 215,
@@ -7552,8 +2797,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 3147,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 76.0,
+   "fuente": "pistola"
   },
   "216": {
    "saque": 216,
@@ -7565,42 +2810,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 3157,
-   "kmh": 102.5,
-   "alto_del_golpe": 3.05,
-   "altura_en_la_red": 2.79,
-   "kmh_en_la_red": 89.6,
-   "residuo_px": 2.02,
-   "cuadros": 39,
-   "arranque_en_la_ventana": 2.92,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.92,
-     "kmh": 102.5,
-     "res_uv": 2.02,
-     "cuadros": 39,
-     "z_golpe": 3.05,
-     "z_red": 2.79,
-     "puntaje": 4.598
-    },
-    {
-     "arranque_s": 2.786,
-     "kmh": 82.3,
-     "res_uv": 4.41,
-     "cuadros": 47,
-     "z_golpe": 2.87,
-     "z_red": 2.81,
-     "puntaje": 6.431
-    },
-    {
-     "arranque_s": 2.853,
-     "kmh": 89.9,
-     "res_uv": 4.62,
-     "cuadros": 43,
-     "z_golpe": 2.96,
-     "z_red": 2.82,
-     "puntaje": 6.915
-    }
-   ]
+   "kmh": 66.0,
+   "fuente": "pistola"
   },
   "217": {
    "saque": 217,
@@ -7612,8 +2823,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 3166,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 90.0,
+   "fuente": "pistola"
   },
   "218": {
    "saque": 218,
@@ -7625,8 +2836,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 3182,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 57.0,
+   "fuente": "pistola"
   },
   "219": {
    "saque": 219,
@@ -7638,8 +2849,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 3197,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 64.0,
+   "fuente": "pistola"
   },
   "220": {
    "saque": 220,
@@ -7651,8 +2862,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 3208,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 60.0,
+   "fuente": "pistola"
   },
   "221": {
    "saque": 221,
@@ -7664,8 +2875,8 @@
    "tipo": "Q",
    "val": "-",
    "seg": 3218,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 87.0,
+   "fuente": "pistola"
   },
   "222": {
    "saque": 222,
@@ -7677,8 +2888,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 3228,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 61.0,
+   "fuente": "pistola"
   },
   "223": {
    "saque": 223,
@@ -7690,33 +2901,8 @@
    "tipo": "Q",
    "val": "!",
    "seg": 3237,
-   "kmh": 91.5,
-   "alto_del_golpe": 3.39,
-   "altura_en_la_red": 2.9,
-   "kmh_en_la_red": 80.3,
-   "residuo_px": 4.95,
-   "cuadros": 34,
-   "arranque_en_la_ventana": 2.586,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.586,
-     "kmh": 91.5,
-     "res_uv": 4.95,
-     "cuadros": 34,
-     "z_golpe": 3.39,
-     "z_red": 2.9,
-     "puntaje": 6.625
-    },
-    {
-     "arranque_s": 2.519,
-     "kmh": 98.2,
-     "res_uv": 7.36,
-     "cuadros": 38,
-     "z_golpe": 3.21,
-     "z_red": 2.75,
-     "puntaje": 8.755
-    }
-   ]
+   "kmh": 91.0,
+   "fuente": "pistola"
   },
   "224": {
    "saque": 224,
@@ -7728,33 +2914,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 3252,
-   "kmh": 60.8,
-   "alto_del_golpe": 3.56,
-   "altura_en_la_red": 3.05,
-   "kmh_en_la_red": 53.7,
-   "residuo_px": 4.13,
-   "cuadros": 39,
-   "arranque_en_la_ventana": 2.719,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.719,
-     "kmh": 60.8,
-     "res_uv": 4.13,
-     "cuadros": 39,
-     "z_golpe": 3.56,
-     "z_red": 3.05,
-     "puntaje": 6.11
-    },
-    {
-     "arranque_s": 2.653,
-     "kmh": 63.0,
-     "res_uv": 6.76,
-     "cuadros": 43,
-     "z_golpe": 3.5,
-     "z_red": 2.79,
-     "puntaje": 8.457
-    }
-   ]
+   "kmh": 93.0,
+   "fuente": "pistola"
   },
   "225": {
    "saque": 225,
@@ -7766,42 +2927,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 3272,
-   "kmh": 66.1,
-   "alto_del_golpe": 2.69,
-   "altura_en_la_red": 2.93,
-   "kmh_en_la_red": 57.2,
-   "residuo_px": 1.96,
-   "cuadros": 37,
-   "arranque_en_la_ventana": 2.135,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.135,
-     "kmh": 66.1,
-     "res_uv": 1.96,
-     "cuadros": 37,
-     "z_golpe": 2.69,
-     "z_red": 2.93,
-     "puntaje": 2.224
-    },
-    {
-     "arranque_s": 2.069,
-     "kmh": 62.5,
-     "res_uv": 2.48,
-     "cuadros": 41,
-     "z_golpe": 2.58,
-     "z_red": 2.92,
-     "puntaje": 2.466
-    },
-    {
-     "arranque_s": 2.002,
-     "kmh": 54.7,
-     "res_uv": 5.01,
-     "cuadros": 45,
-     "z_golpe": 2.09,
-     "z_red": 2.98,
-     "puntaje": 4.717
-    }
-   ]
+   "kmh": 51.0,
+   "fuente": "pistola"
   },
   "226": {
    "saque": 226,
@@ -7813,51 +2940,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 3282,
-   "kmh": 65.9,
-   "alto_del_golpe": 2.8,
-   "altura_en_la_red": 3.28,
-   "kmh_en_la_red": 56.5,
-   "residuo_px": 2.07,
-   "cuadros": 39,
-   "arranque_en_la_ventana": 2.87,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.87,
-     "kmh": 65.9,
-     "res_uv": 2.07,
-     "cuadros": 39,
-     "z_golpe": 2.8,
-     "z_red": 3.28,
-     "puntaje": 4.497
-    },
-    {
-     "arranque_s": 2.736,
-     "kmh": 64.0,
-     "res_uv": 2.87,
-     "cuadros": 47,
-     "z_golpe": 2.89,
-     "z_red": 3.03,
-     "puntaje": 4.737
-    },
-    {
-     "arranque_s": 2.803,
-     "kmh": 65.3,
-     "res_uv": 2.64,
-     "cuadros": 43,
-     "z_golpe": 2.86,
-     "z_red": 3.14,
-     "puntaje": 4.786
-    },
-    {
-     "arranque_s": 2.636,
-     "kmh": 63.7,
-     "res_uv": 3.65,
-     "cuadros": 53,
-     "z_golpe": 2.89,
-     "z_red": 3.0,
-     "puntaje": 5.099
-    }
-   ]
+   "kmh": 64.0,
+   "fuente": "pistola"
   },
   "227": {
    "saque": 227,
@@ -7869,8 +2953,8 @@
    "tipo": "Q",
    "val": "=",
    "seg": 3292,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 60.0,
+   "fuente": "pistola"
   },
   "228": {
    "saque": 228,
@@ -7882,8 +2966,8 @@
    "tipo": "M",
    "val": "#",
    "seg": 3302,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 67.0,
+   "fuente": "pistola"
   },
   "229": {
    "saque": 229,
@@ -7895,24 +2979,8 @@
    "tipo": "Q",
    "val": "/",
    "seg": 3312,
-   "kmh": 71.9,
-   "alto_del_golpe": 3.52,
-   "altura_en_la_red": 2.96,
-   "kmh_en_la_red": 63.6,
-   "residuo_px": 5.94,
-   "cuadros": 35,
-   "arranque_en_la_ventana": 3.337,
-   "otros_vuelos": [
-    {
-     "arranque_s": 3.337,
-     "kmh": 71.9,
-     "res_uv": 5.94,
-     "cuadros": 35,
-     "z_golpe": 3.52,
-     "z_red": 2.96,
-     "puntaje": 9.845
-    }
-   ]
+   "kmh": 86.0,
+   "fuente": "pistola"
   },
   "230": {
    "saque": 230,
@@ -7924,8 +2992,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 3332,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 105.0,
+   "fuente": "pistola"
   },
   "231": {
    "saque": 231,
@@ -7937,33 +3005,8 @@
    "tipo": "M",
    "val": "-",
    "seg": 3353,
-   "kmh": 63.9,
-   "alto_del_golpe": 2.76,
-   "altura_en_la_red": 2.95,
-   "kmh_en_la_red": 55.4,
-   "residuo_px": 3.08,
-   "cuadros": 29,
-   "arranque_en_la_ventana": 2.853,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.853,
-     "kmh": 63.9,
-     "res_uv": 3.08,
-     "cuadros": 29,
-     "z_golpe": 2.76,
-     "z_red": 2.95,
-     "puntaje": 5.661
-    },
-    {
-     "arranque_s": 2.786,
-     "kmh": 53.4,
-     "res_uv": 6.19,
-     "cuadros": 33,
-     "z_golpe": 2.46,
-     "z_red": 2.85,
-     "puntaje": 8.485
-    }
-   ]
+   "kmh": 47.0,
+   "fuente": "pistola"
   },
   "232": {
    "saque": 232,
@@ -7975,24 +3018,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 3364,
-   "kmh": 72.4,
-   "alto_del_golpe": 2.97,
-   "altura_en_la_red": 2.38,
-   "kmh_en_la_red": 63.3,
-   "residuo_px": 5.23,
-   "cuadros": 41,
-   "arranque_en_la_ventana": 2.269,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.269,
-     "kmh": 72.4,
-     "res_uv": 5.23,
-     "cuadros": 41,
-     "z_golpe": 2.97,
-     "z_red": 2.38,
-     "puntaje": 5.816
-    }
-   ]
+   "kmh": 58.0,
+   "fuente": "pistola"
   },
   "233": {
    "saque": 233,
@@ -8004,33 +3031,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 3373,
-   "kmh": 80.3,
-   "alto_del_golpe": 2.46,
-   "altura_en_la_red": 2.74,
-   "kmh_en_la_red": 69.5,
-   "residuo_px": 1.28,
-   "cuadros": 31,
-   "arranque_en_la_ventana": 2.302,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.302,
-     "kmh": 80.3,
-     "res_uv": 1.28,
-     "cuadros": 31,
-     "z_golpe": 2.46,
-     "z_red": 2.74,
-     "puntaje": 2.164
-    },
-    {
-     "arranque_s": 2.236,
-     "kmh": 76.8,
-     "res_uv": 1.62,
-     "cuadros": 35,
-     "z_golpe": 2.43,
-     "z_red": 2.72,
-     "puntaje": 2.231
-    }
-   ]
+   "kmh": 66.0,
+   "fuente": "pistola"
   },
   "234": {
    "saque": 234,
@@ -8042,8 +3044,8 @@
    "tipo": "M",
    "val": "+",
    "seg": 3383,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 61.0,
+   "fuente": "pistola"
   },
   "235": {
    "saque": 235,
@@ -8055,24 +3057,8 @@
    "tipo": "Q",
    "val": "/",
    "seg": 3392,
-   "kmh": 111.6,
-   "alto_del_golpe": 3.07,
-   "altura_en_la_red": 2.7,
-   "kmh_en_la_red": 97.5,
-   "residuo_px": 6.45,
-   "cuadros": 30,
-   "arranque_en_la_ventana": 3.42,
-   "otros_vuelos": [
-    {
-     "arranque_s": 3.42,
-     "kmh": 111.6,
-     "res_uv": 6.45,
-     "cuadros": 30,
-     "z_golpe": 3.07,
-     "z_red": 2.7,
-     "puntaje": 10.707
-    }
-   ]
+   "kmh": 94.0,
+   "fuente": "pistola"
   },
   "236": {
    "saque": 236,
@@ -8084,33 +3070,8 @@
    "tipo": "Q",
    "val": "#",
    "seg": 3410,
-   "kmh": 54.1,
-   "alto_del_golpe": 3.3,
-   "altura_en_la_red": 2.59,
-   "kmh_en_la_red": 48.9,
-   "residuo_px": 4.44,
-   "cuadros": 39,
-   "arranque_en_la_ventana": 3.353,
-   "otros_vuelos": [
-    {
-     "arranque_s": 3.353,
-     "kmh": 54.1,
-     "res_uv": 4.44,
-     "cuadros": 39,
-     "z_golpe": 3.3,
-     "z_red": 2.59,
-     "puntaje": 8.321
-    },
-    {
-     "arranque_s": 3.287,
-     "kmh": 50.5,
-     "res_uv": 5.11,
-     "cuadros": 43,
-     "z_golpe": 3.25,
-     "z_red": 2.37,
-     "puntaje": 8.713
-    }
-   ]
+   "kmh": 48.0,
+   "fuente": "pistola"
   },
   "237": {
    "saque": 237,
@@ -8122,8 +3083,8 @@
    "tipo": "M",
    "val": "=",
    "seg": 3426,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 51.0,
+   "fuente": "pistola"
   },
   "238": {
    "saque": 238,
@@ -8135,51 +3096,8 @@
    "tipo": "M",
    "val": "/",
    "seg": 3437,
-   "kmh": 64.7,
-   "alto_del_golpe": 3.57,
-   "altura_en_la_red": 3.58,
-   "kmh_en_la_red": 56.4,
-   "residuo_px": 1.75,
-   "cuadros": 35,
-   "arranque_en_la_ventana": 2.953,
-   "otros_vuelos": [
-    {
-     "arranque_s": 2.953,
-     "kmh": 64.7,
-     "res_uv": 1.75,
-     "cuadros": 35,
-     "z_golpe": 3.57,
-     "z_red": 3.58,
-     "puntaje": 4.507
-    },
-    {
-     "arranque_s": 2.886,
-     "kmh": 58.9,
-     "res_uv": 2.32,
-     "cuadros": 39,
-     "z_golpe": 3.32,
-     "z_red": 3.58,
-     "puntaje": 4.795
-    },
-    {
-     "arranque_s": 2.819,
-     "kmh": 59.0,
-     "res_uv": 2.94,
-     "cuadros": 43,
-     "z_golpe": 3.34,
-     "z_red": 3.44,
-     "puntaje": 5.139
-    },
-    {
-     "arranque_s": 2.719,
-     "kmh": 54.5,
-     "res_uv": 4.39,
-     "cuadros": 49,
-     "z_golpe": 3.27,
-     "z_red": 3.15,
-     "puntaje": 6.169
-    }
-   ]
+   "kmh": 34.0,
+   "fuente": "pistola"
   },
   "239": {
    "saque": 239,
@@ -8191,8 +3109,8 @@
    "tipo": "Q",
    "val": "!",
    "seg": 3450,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 76.0,
+   "fuente": "pistola"
   },
   "240": {
    "saque": 240,
@@ -8204,8 +3122,8 @@
    "tipo": "M",
    "val": "!",
    "seg": 3461,
-   "kmh": null,
-   "motivo": "no se encontro un vuelo de saque"
+   "kmh": 63.0,
+   "fuente": "pistola"
   }
  }
 }
