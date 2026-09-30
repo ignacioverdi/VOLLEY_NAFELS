@@ -156,7 +156,7 @@
   "tablas": {}
  },
  "armadores.html": {
-  "bytes": 205793,
+  "bytes": 206050,
   "funciones": [
    "MAPA_VIDEOS",
    "RECEPCION_RIVAL_DATA",
@@ -723,7 +723,7 @@
   "tablas": {}
  },
  "game_plan.html": {
-  "bytes": 207220,
+  "bytes": 207477,
   "funciones": [
    "MAPA_VIDEOS",
    "RECEPCION_RIVAL_DATA",
@@ -2290,7 +2290,7 @@
   "tablas": {}
  },
  "plan_partido.html": {
-  "bytes": 131313,
+  "bytes": 135280,
   "funciones": [
    "EQUIPO_DATA",
    "LIGA_DATA",
@@ -2316,6 +2316,7 @@
    "apellidoJS",
    "applyFocus",
    "applySavedSel",
+   "armCandidatas",
    "armDates",
    "armFuente",
    "armHeat",
@@ -2369,6 +2370,7 @@
    "opts",
    "passes",
    "pintarBotonesEquipo",
+   "pintarKmh",
    "playCur",
    "ppCuenta",
    "ppEfic",

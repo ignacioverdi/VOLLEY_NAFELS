@@ -135,6 +135,31 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 .vclose{background:var(--card2);color:var(--txt);border:1px solid var(--border);border-radius:7px;width:32px;height:32px;font-size:15px;cursor:pointer}
 .vfilters{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--border)}
 .vplayer{position:relative;width:100%;aspect-ratio:16/9;background:#000}
+/* --- EL KM/H DEL SAQUE, ARRIBA A LA DERECHA -------------------------------
+   Va DENTRO del reproductor para que en pantalla completa se agrande con el
+   video. No recibe clicks (pointer-events:none): abajo esta la lamina que
+   maneja play/pausa, y si el recuadro se los comiera, tocar ahi no pausaria.
+   El tamano va en em sobre un font-size en vw, asi que en pantalla completa
+   crece solo, sin una sola linea de javascript. */
+.vplayer>.vkmh{position:absolute;inset:auto;top:2.2%;right:2.2%;
+  width:auto;height:auto;z-index:4;pointer-events:none;
+  display:none;font-size:clamp(11px,1.45vw,22px);line-height:1;
+  background:rgba(7,8,15,.72);border:1px solid rgba(255,255,255,.18);
+  border-radius:.5em;padding:.42em .62em;text-align:center;
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  box-shadow:0 .2em .7em rgba(0,0,0,.45)}
+/* OJO: la regla de arriba tiene que ser ".vplayer>.vkmh" y no ".vkmh" a secas.
+   Tres lineas mas arriba hay un ".vplayer>div{inset:0;width:100%;height:100%}"
+   que agarra a CUALQUIER div hijo del reproductor. Con el selector corto ganaba
+   esa y el recuadro se estiraba a todo el video: en vez de un cartelito en la
+   esquina quedaba una lamina oscura tapando la imagen entera. */
+.vplayer>.vkmh.on{display:block}
+/* el mismo numero, chiquito, al lado de cada saque de la lista */
+.vkm{color:#93c5fd;font-weight:700}
+.vkmh .n{font-family:'Bebas Neue',sans-serif;font-size:1.85em;letter-spacing:.02em;
+  color:#fff;display:block}
+.vkmh .u{font-size:.82em;font-weight:700;letter-spacing:.14em;color:#8791a3;
+  display:block;margin-top:.15em}
 .vplayer iframe,.vplayer>div{position:absolute;inset:0;width:100%;height:100%}
 .vshield{position:absolute;inset:0;width:100%;height:100%;z-index:5;cursor:pointer;background:transparent}
 /* Pantalla completa del video: se agranda la zona del reproductor junto con sus
@@ -204,7 +229,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260930-2113">
+<link rel="stylesheet" href="movil.css?v=20260928-2315">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    EL ROJO, SOLO PARA EL DATO
@@ -352,10 +377,10 @@ details.fdet .filters{margin-top:8px}
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
 <!-- La definicion unica de las eficiencias de todo el sistema. Esta pagina
      tenia las suyas propias y no coincidian con el resto. -->
-<script src="objetivos_config.js?v=20260930-2113" onerror="void 0"></script>
-<script src="categorias_club.js?v=20260930-2113"></script>
-<script src="selector_categoria.js?v=20260930-2113"></script>
-<script src="mi_fila.js?v=20260930-2113" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260928-2315" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260928-2315"></script>
+<script src="selector_categoria.js?v=20260928-2315"></script>
+<script src="mi_fila.js?v=20260928-2315" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -451,7 +476,7 @@ details.fdet .filters{margin-top:8px}
     <div class="vfilters" id="vfilters"></div>
     <div class="vbody">
       <div class="vmain">
-        <div class="vplayer"><div id="ytplayer"></div><div class="vshield" id="vshield" onclick="togglePlay()" title="Click o barra espaciadora: play/pausa"></div></div>
+        <div class="vplayer"><div id="ytplayer"></div><div class="vshield" id="vshield" onclick="togglePlay()" title="Click o barra espaciadora: play/pausa"></div><div class="vkmh" id="vkmh"><span class="n" id="vkmhn"></span><span class="u">KM/H</span></div></div>
         <div class="vctrls">
           <button class="sec" onclick="prevClip()">◀</button>
           <button onclick="replayCur()" data-t="↻ Repetir"><span data-t="↻ Repetir"><span data-t="↻ Repetir">↻ Repetir</span></span></button>
@@ -488,8 +513,8 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260930-2113"></script>
-<script src="filtro_tipo.js?v=20260930-2113" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260928-2315"></script>
+<script src="filtro_tipo.js?v=20260928-2315" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
   <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
        se cargaba SOLO el de partidos, asi que en una temporada sin partidos
@@ -504,12 +529,12 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20260930-2113"></script>
-<script src="firebase_por_categoria.js?v=20260930-2113"></script>
+<script src="firebase.js?v=20260928-2315"></script>
+<script src="firebase_por_categoria.js?v=20260928-2315"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20260930-2113" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20260928-2315" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -1117,7 +1142,7 @@ function openArmZone(pos,zn){
   document.getElementById("vfilters").innerHTML="";
   document.getElementById("vtitle").textContent=setter.name+" · P"+pos+" · zona "+zn+" · "+rows.length+" armados"+(clips.length<rows.length?" ("+clips.length+" c/video)":"");
   document.getElementById("vmodal").style.display="flex";renderList();
-  if(!clips.length){document.getElementById("vcount").textContent="sin video";document.getElementById("vlist").innerHTML='<div class="novid">No hay video de esta zona/rotación en los partidos con 🎥. Probá una celda con ▶ o cambiá el filtro.</div>';return;}
+  if(!clips.length){pintarKmh(null);document.getElementById("vcount").textContent="sin video";document.getElementById("vlist").innerHTML='<div class="novid">No hay video de esta zona/rotación en los partidos con 🎥. Probá una celda con ▶ o cambiá el filtro.</div>';return;}
   ensureYT(function(){if(!YTP){YTP=new YT.Player("ytplayer",{playerVars:{rel:0,modestbranding:1,controls:0,playsinline:1},events:{onReady:function(){YTReady=true;playCur();}}});}else{playCur();}});
 }
 
@@ -1816,9 +1841,9 @@ function recompute(){if(!curP)return;var cfg=ROLECFG[curP.role];
     return String((blq && a[10]) ? a[10] : a[cfg.court]);
   };
   var all=curP.data.filter(function(a){return (todas||_zonaDe(a)===curZn)&&MSEL.has(a[cfg.vIdx])&&passes(a,cfg,vals);});
-  clips=all.map(function(a){return {tag:(cfg.stats==='dig'?(a[7]||a[cfg.tagIdx]):a[cfg.tagIdx]),ev:a[cfg.evIdx],t:a[cfg.tIdx],vid:ppVid(a[cfg.vIdx]),sel:true};}).filter(function(c){return c.vid;});
+  clips=all.map(function(a){return {tag:(cfg.stats==='dig'?(a[7]||a[cfg.tagIdx]):a[cfg.tagIdx]),ev:a[cfg.evIdx],t:a[cfg.tIdx],vid:ppVid(a[cfg.vIdx]),kmh:(cfg.stats==='srv'?(+a[7]||0):0),sel:true};}).filter(function(c){return c.vid;});
   applySavedSel();cur=firstSel();document.getElementById("vtitle").textContent=curP.name+" · "+(todas?"todas las zonas":"zona "+curZn)+" · "+all.length+U(curP.role)+(clips.length<all.length?' ('+clips.length+' c/video)':'');renderList();
-  if(!clips.length){document.getElementById("vcount").textContent="sin video";document.getElementById("vlist").innerHTML='<div class="novid">No hay video en los partidos seleccionados con 🎥. Probá otra zona, destildá «Solo esta zona» o cambiá el filtro de Partido.</div>';return;}
+  if(!clips.length){pintarKmh(null);document.getElementById("vcount").textContent="sin video";document.getElementById("vlist").innerHTML='<div class="novid">No hay video en los partidos seleccionados con 🎥. Probá otra zona, destildá «Solo esta zona» o cambiá el filtro de Partido.</div>';return;}
   ensureYT(function(){if(!YTP){YTP=new YT.Player("ytplayer",{playerVars:{rel:0,modestbranding:1,controls:0,playsinline:1},events:{onReady:function(){YTReady=true;playCur();}}});}else{playCur();}});}
 function nextSel(from,dir){var i=from;for(var k=0;k<clips.length;k++){i+=dir;if(i<0||i>=clips.length)return -1;if(clips[i].sel)return i;}return -1;}
 function firstSel(){for(var i=0;i<clips.length;i++)if(clips[i].sel)return i;return 0;}
@@ -1829,8 +1854,18 @@ function applySavedSel(){var s=VSEL[curKey];if(s&&s.length){var set={};for(var i
 function saveSel(){if(!clips.length)return;var a=[];for(var i=0;i<clips.length;i++)if(clips[i].sel)a.push(clipId(clips[i]));VSEL[curKey]=a;try{localStorage.setItem("pp_vsel",JSON.stringify(VSEL));}catch(e){}if(typeof fbSet==="function"){fbSet("pp_vsel",VSEL);}var b=document.getElementById("vsavebtn");if(b){b.textContent="✓ Guardado";b.classList.add("saved");setTimeout(function(){b.textContent="💾 Guardar";b.classList.remove("saved");},1500);}}
 function toggleOnly(){var vo=document.getElementById("vonly");onlyShow=vo?vo.checked:false;renderList();}
 function renderList(){var sel=0;for(var k=0;k<clips.length;k++)if(clips[k].sel)sel++;var sc=document.getElementById("vselcount");if(sc)sc.textContent=sel+"/"+clips.length;
-  document.getElementById("vlist").innerHTML=clips.map(function(c,i){if(onlyShow&&!c.sel)return "";return '<label class="vitem'+(i===cur?" playing":"")+(c.sel?"":" off")+'"><input type="checkbox" '+(c.sel?"checked":"")+' onclick="event.stopPropagation();toggleClip('+i+')"><span class="vlbl" onclick="jump('+i+')">'+(i+1)+". "+vNombre(c.tag)+" "+evLabel(c.ev)+'</span></label>';}).join("");}
-function playCur(){if(!YTReady||!clips.length)return;var a=clips[cur],start=Math.max(0,a.t-pre);if(a.vid!==loadedVid){loadedVid=a.vid;YTP.loadVideoById({videoId:a.vid,startSeconds:start});}else{YTP.seekTo(start,true);var _st=(YTP.getPlayerState?YTP.getPlayerState():-1);if(_st!==1&&_st!==3)YTP.playVideo();}try{YTP.setPlaybackRate(speed);}catch(e){}document.getElementById("vcount").textContent=(cur+1)+" / "+clips.length;renderList();clearInterval(vtimer);var end=a.t+post;vtimer=setInterval(function(){if(YTP&&YTP.getCurrentTime&&YTP.getCurrentTime()>=end){var n=nextSel(cur,1);if(n>=0){cur=n;playCur();}else{clearInterval(vtimer);try{YTP.pauseVideo();}catch(e){}}}},200);}
+  document.getElementById("vlist").innerHTML=clips.map(function(c,i){if(onlyShow&&!c.sel)return "";return '<label class="vitem'+(i===cur?" playing":"")+(c.sel?"":" off")+'"><input type="checkbox" '+(c.sel?"checked":"")+' onclick="event.stopPropagation();toggleClip('+i+')"><span class="vlbl" onclick="jump('+i+')">'+(i+1)+". "+vNombre(c.tag)+" "+evLabel(c.ev)+(c.kmh?' <b class="vkm">'+(Math.round(c.kmh*10)/10).toFixed(1)+'</b>':"")+'</span></label>';}).join("");}
+/* == EL KM/H DEL SAQUE QUE SE ESTA VIENDO =====================================
+   Se prende solo cuando ESE saque tiene velocidad medida. Un saque sin medir
+   no muestra un cero ni un guion: no muestra nada, porque un cero se lee como
+   "saco a cero" y no como "no lo medimos". */
+function pintarKmh(c){
+  var caja=document.getElementById("vkmh"); if(!caja) return;
+  var v=(c&&c.kmh)||0;
+  if(v>0){document.getElementById("vkmhn").textContent=(Math.round(v*10)/10).toFixed(1);caja.classList.add("on");}
+  else caja.classList.remove("on");
+}
+function playCur(){if(!YTReady||!clips.length)return;var a=clips[cur],start=Math.max(0,a.t-pre);pintarKmh(a);if(a.vid!==loadedVid){loadedVid=a.vid;YTP.loadVideoById({videoId:a.vid,startSeconds:start});}else{YTP.seekTo(start,true);var _st=(YTP.getPlayerState?YTP.getPlayerState():-1);if(_st!==1&&_st!==3)YTP.playVideo();}try{YTP.setPlaybackRate(speed);}catch(e){}document.getElementById("vcount").textContent=(cur+1)+" / "+clips.length;renderList();clearInterval(vtimer);var end=a.t+post;vtimer=setInterval(function(){if(YTP&&YTP.getCurrentTime&&YTP.getCurrentTime()>=end){var n=nextSel(cur,1);if(n>=0){cur=n;playCur();}else{clearInterval(vtimer);try{YTP.pauseVideo();}catch(e){}}}},200);}
 /* == LA LISTA DECIA EL CODIGO, NO LA JUGADA ============================
    Salia "1. W4 -", "3. Y8 punto". La tabla COMBO_NOMBRES -la que confirmo
    el cuerpo tecnico y ya usa el menu de filtros- traduce esos codigos a
@@ -1848,7 +1883,7 @@ function prevClip(){var n=nextSel(cur,-1);if(n>=0){cur=n;playCur();}}
 function replayCur(){playCur();}
 function setSpeed(v){speed=parseFloat(v);if(YTP&&YTP.setPlaybackRate){try{YTP.setPlaybackRate(speed);}catch(e){}}}
 function togglePlay(){if(!YTP||!YTP.getPlayerState)return;var st=YTP.getPlayerState();if(st===1)YTP.pauseVideo();else YTP.playVideo();}
-function closeV(){document.getElementById("vmodal").style.display="none";clearInterval(vtimer);if(YTP&&YTP.pauseVideo)YTP.pauseVideo();}
+function closeV(){document.getElementById("vmodal").style.display="none";clearInterval(vtimer);if(YTP&&YTP.pauseVideo)YTP.pauseVideo();pintarKmh(null);}
 function enPantallaCompleta(){return !!(document.fullscreenElement||document.webkitFullscreenElement);}
 function toggleFullV(){
   var el=document.querySelector(".vmain"); if(!el) return;
@@ -1861,8 +1896,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20260930-2113" onerror="void 0"></script>
-<script src="lang.js?v=20260930-2113" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20260928-2315" onerror="void 0"></script>
+<script src="lang.js?v=20260928-2315" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -1880,7 +1915,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20260930-2113" onerror="void 0"></script>
-<script src="ayuda.js?v=20260930-2113"></script>
+<script src="volver_inicio.js?v=20260928-2315" onerror="void 0"></script>
+<script src="ayuda.js?v=20260928-2315"></script>
 </body>
 </html>

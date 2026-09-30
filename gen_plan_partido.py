@@ -203,6 +203,99 @@ def _temp_de_carpeta(folder):
     if not m: return None
     y=int(m.group(1)); return "%d/%02d"%(y,(y+1)%100)
 
+def _poner_velocidades_srv(path_dvw, mid, DATA):
+    """Pegarle a cada saque los km/h que se midieron, si estan medidos.
+
+    VELOCIDADES.py deja un velocidades_<PARTIDO>.json al lado del .dvw, con el
+    numero que marco la pistola para cada saque. Aca ese numero se le cuelga a
+    la fila del saque, en el lugar 7, que estaba libre.
+
+    COMO SE RECONOCE CADA SAQUE
+    ---------------------------
+    Por el SEGUNDO DE VIDEO, que es lo unico que las dos fuentes comparten sin
+    interpretacion. Si en ese segundo hay un solo saque medido, es ese. Si hay
+    mas de uno —dos saques en el mismo segundo de video, que en la practica no
+    pasa pero podria—, se desempata por el dorsal.
+
+    El dorsal NO se usa como llave principal a proposito: cuando una jugadora
+    cambia de numero, el plan de partido la muestra con el numero nuevo y el
+    archivo de velocidades la tiene con el viejo, y por dorsal no se
+    encontrarian nunca.
+
+    Si el scouting se hizo en vivo, el reloj del panel no es el del video y los
+    segundos vienen corridos; el desfase queda anotado en el propio archivo y
+    se descuenta antes de comparar.
+
+    SI NO HAY ARCHIVO DE VELOCIDADES NO PASA NADA: las filas quedan de 7
+    lugares, como siempre, y ninguna pantalla se entera. Es el caso de casi
+    todas las sesiones, asi que tiene que ser gratis.
+    """
+    base = os.path.splitext(os.path.basename(path_dvw))[0]
+    base = re.sub(r'^[&\s]+', '', base)
+    base = re.sub(r'[^A-Za-z0-9]+', '_', base).strip('_').upper()[:40]
+    ruta = os.path.join(os.path.dirname(os.path.abspath(path_dvw)),
+                        'velocidades_%s.json' % base)
+    if not os.path.exists(ruta):
+        return 0
+    try:
+        with open(ruta, encoding='utf-8') as f:
+            doc = json.load(f)
+    except Exception as e:
+        print('   [aviso] no pude leer %s: %s' % (os.path.basename(ruta), e))
+        return 0
+
+    try:
+        desfase = float(doc.get('desfase_aplicado') or 0.0)
+    except Exception:
+        desfase = 0.0
+
+    por_seg = {}
+    for x in (doc.get('saques') or {}).values():
+        try:
+            kmh = float(x.get('kmh') or 0)
+            seg = int(round(float(x['seg']) - desfase))
+        except Exception:
+            continue
+        if kmh <= 0:
+            continue
+        por_seg.setdefault(seg, []).append((str(x.get('num') or '').zfill(2), kmh))
+    if not por_seg:
+        return 0
+
+    puestos = 0
+    for D in DATA.values():
+        for num, filas in (D.get('srv') or {}).items():
+            dorsal = str(num).zfill(2)
+            for fila in filas:
+                # solo las filas de ESTE archivo
+                if len(fila) < 7 or fila[6] != mid:
+                    continue
+                try:
+                    seg = int(fila[5] or 0)
+                except Exception:
+                    continue
+                cand = por_seg.get(seg)
+                if not cand:
+                    continue
+                if len(cand) == 1:
+                    kmh = cand[0][1]
+                else:
+                    iguales = [k for d, k in cand if d == dorsal]
+                    if len(iguales) != 1:
+                        continue
+                    kmh = iguales[0]
+                while len(fila) < 7:
+                    fila.append('')
+                if len(fila) == 7:
+                    fila.append(round(kmh, 1))
+                else:
+                    fila[7] = round(kmh, 1)
+                puestos += 1
+    if puestos:
+        print('      %d saques con velocidad' % puestos)
+    return puestos
+
+
 def _slug_txt(t):
     import unicodedata as _u
     t=_u.normalize('NFKD', t or '').encode('ascii','ignore').decode()
@@ -487,6 +580,9 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
                             # el turno, para que el video no se mezcle entre las
                             # dos sesiones de un mismo dia
                             'turno':_turno(fn)}
+        # La velocidad del saque, si esa sesion se midio con la pistola.
+        # Va despues de walk() porque necesita las filas ya armadas.
+        _poner_velocidades_srv(fp, mid, DATA)
         nf+=1
 
     # normalizar claves a string (como cuando pasaba por JSON)
