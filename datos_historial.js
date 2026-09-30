@@ -1,5 +1,5 @@
 window.HISTORIAL_DATA = {
-  "generado": "30/09/2026, 19:50:38",
+  "generado": "30/09/2026, 19:52:58",
   "entrenamientos": [
     {
       "fecha": "03/09/2026",
@@ -16976,8 +16976,8 @@ window.HISTORIAL_DATA = {
       "fecha": "29/09/2026",
       "tipo": "E",
       "rival": "Nafels",
-      "turno": "",
-      "turnoTxt": "",
+      "turno": "T",
+      "turnoTxt": "Tarde",
       "resultado": {
         "nafels": 1,
         "rival": 0,
