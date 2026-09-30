@@ -1186,9 +1186,25 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         _all_rl = []
         for _sn in team_setters:
             _all_rl.extend(team_rallies.get(str(_sn), []) if isinstance(team_rallies, dict) else [])
-        _seen = sorted(set((r.get('date',''), r.get('rival','')) for r in _all_rl))
+        # ══ DOS ENTRENAMIENTOS EL MISMO DIA SON DOS SESIONES ═════════════════
+        #  La sesion se identificaba por FECHA + RIVAL. En un entrenamiento el
+        #  rival es siempre el propio club, asi que la manana y la tarde del
+        #  mismo dia quedaban como UNA sola sesion.
+        #
+        #  El 29/09 se entreno manana y tarde. Plan de partido lista las dos
+        #  (cada .dvw tiene su propio identificador) pero Distribucion del
+        #  armador solo conocia "29/09", que resolvia a la primera de la lista
+        #  —la manana—. Al elegir la TARDE, el filtro de sesiones descartaba
+        #  TODOS los armados y la pantalla quedaba vacia en los seis
+        #  fundamentos. Al elegir la manana, mostraba los de la tarde.
+        #
+        #  Ahora el turno ('M', 'T' o vacio) entra en la identidad de la
+        #  sesion y viaja hasta la pagina. Lo calcula la misma funcion
+        #  _turno() que usa gen_plan_partido, asi que las dos puntas del
+        #  camino dicen lo mismo.
+        _seen = sorted(set((r.get('date',''), r.get('turno','') or '', r.get('rival','')) for r in _all_rl))
         match_idx = {dk: i for i, dk in enumerate(_seen)}
-        matches = [{'i': i, 'date': d, 'rival': (rv or 'Entrenamiento'), 'code': ''} for i, (d, rv) in enumerate(_seen)]
+        matches = [{'i': i, 'date': d, 'turno': tn, 'rival': (rv or 'Entrenamiento'), 'code': ''} for i, (d, tn, rv) in enumerate(_seen)]
         setters_list = []
         for sn in team_setters:
             rl = team_rallies.get(str(sn), []) if isinstance(team_rallies, dict) else []
@@ -1199,7 +1215,7 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
             # cadena vacia, y el armador aparecia sin nombre en la pantalla de
             # Distribucion. Con 'or' se cubre tambien el caso vacio.
             sname = (td.get(str(sn),{}).get('info',{}).get('name') or '').strip() or f'#{sn}'
-            arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1),r.get('t_start',0),r.get('t_atk',0),r.get('rec_zone',0),r.get('rec_num',0),r.get('atk_num',0),r.get('rec_type','')] for r in rl]
+            arm = [[ridx.get(r['rival'],0),0,r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('turno','') or '',r.get('rival','')),-1),r.get('t_start',0),r.get('t_atk',0),r.get('rec_zone',0),r.get('rec_num',0),r.get('atk_num',0),r.get('rec_type','')] for r in rl]
             setters_list.append({'num':sn,'name':sname,'s':arm,'total':len(rl)})
         setters_list.sort(key=lambda x:-x['total'])
         # Roster de posiciones — jerarquía: setter→libero→central→outside/opposite

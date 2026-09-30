@@ -204,7 +204,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260928-2315">
+<link rel="stylesheet" href="movil.css?v=20260930-2113">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    EL ROJO, SOLO PARA EL DATO
@@ -352,10 +352,10 @@ details.fdet .filters{margin-top:8px}
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
 <!-- La definicion unica de las eficiencias de todo el sistema. Esta pagina
      tenia las suyas propias y no coincidian con el resto. -->
-<script src="objetivos_config.js?v=20260928-2315" onerror="void 0"></script>
-<script src="categorias_club.js?v=20260928-2315"></script>
-<script src="selector_categoria.js?v=20260928-2315"></script>
-<script src="mi_fila.js?v=20260928-2315" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260930-2113" onerror="void 0"></script>
+<script src="categorias_club.js?v=20260930-2113"></script>
+<script src="selector_categoria.js?v=20260930-2113"></script>
+<script src="mi_fila.js?v=20260930-2113" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -488,8 +488,8 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260928-2315"></script>
-<script src="filtro_tipo.js?v=20260928-2315" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260930-2113"></script>
+<script src="filtro_tipo.js?v=20260930-2113" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
   <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
        se cargaba SOLO el de partidos, asi que en una temporada sin partidos
@@ -504,12 +504,12 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20260928-2315"></script>
-<script src="firebase_por_categoria.js?v=20260928-2315"></script>
+<script src="firebase.js?v=20260930-2113"></script>
+<script src="firebase_por_categoria.js?v=20260930-2113"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20260928-2315" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20260930-2113" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -578,7 +578,7 @@ function ppPintarTipo(){
 function computeMatchMeta(){
   var CLAVES = Object.keys(INFO).filter(ppEsDelTipo);
   RIVALS=Array.from(new Set(CLAVES.map(function(k){return INFO[k].opp;}))).sort();
-  MATCHES=CLAVES.map(function(k){return {mid:k,opp:INFO[k].opp,date:INFO[k].date,res:INFO[k].res,yt:ppVid(k)};}).sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0;});
+  MATCHES=CLAVES.map(function(k){return {mid:k,opp:INFO[k].opp,date:INFO[k].date,turno:(INFO[k].turno||""),res:INFO[k].res,yt:ppVid(k)};}).sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0;});
   RSEL=new Set(RIVALS);MSEL=new Set(MATCHES.map(function(m){return m.mid;}));
   /* La barra se pinta ACA y no al final de la pagina: los datos llegan
      despues de que se dibuja el HTML, asi que al arrancar INFO todavia esta
@@ -709,7 +709,29 @@ function gpGetZone(c,orig,sp){
 function apellidoJS(n){n=(n||"").trim();return n?n.split(" ").pop():"";}
 function apeArm(n){n=(n||"").trim();return n?n.split(/\s+/)[0]:"";}
 function armDates(){var d={};MATCHES.forEach(function(m){if(MSEL.has(m.mid))d[m.date]=1;});return d;}
-function midByDate(d){if(typeof MATCHES==="undefined")return"";var m=MATCHES.find(function(x){return x.date===d;});return m?m.mid:"";}
+/* ══ DOS SESIONES EL MISMO DIA ════════════════════════════════════════════════
+   Se entrena manana y tarde, y cada .dvw es su propia sesion en Plan de
+   partido. Pero la distribucion del armador buscaba la sesion SOLO por fecha,
+   asi que devolvia siempre la primera del dia. Los armados de la tarde del
+   29/09 apuntaban a la sesion de la manana: al elegir la tarde no quedaba ni
+   un armado y la pantalla salia vacia en los seis fundamentos.
+
+   El turno lo calcula la misma funcion _turno() en los dos generadores, asi
+   que las dos puntas del camino dicen lo mismo. */
+function midByDate(d,tn){if(typeof MATCHES==="undefined")return"";
+  var c=armCandidatas(d,tn);return c.length?c[0].mid:"";}
+/* Las sesiones de un dia que pueden ser LA de este armado.
+   Si ese dia hubo una sola, es esa. Si hubo mas, manda el turno —y el turno
+   vacio tambien cuenta como turno: el 08/09 hubo una sesion marcada MORNING y
+   otra sin marca, y "la primera del dia" mandaba los armados de la sin marca
+   a la de la manana. Si el turno no desempata, quedan todas y desempata el
+   rival, como antes. */
+function armCandidatas(d,tn){
+  if(typeof MATCHES==="undefined") return [];
+  var c=MATCHES.filter(function(x){return x.date===d;});
+  if(c.length<2) return c;
+  var ex=c.filter(function(x){return (x.turno||"")===(tn||"");});
+  return ex.length?ex:c;}
 
 /* ══ A QUE PARTIDO PERTENECE UN ARMADO ════════════════════════════════════════
    La distribucion de armador lee LIGA_DATA, y ahi cada partido viene con fecha
@@ -728,16 +750,21 @@ function armMidDe(mm){
   if(!mm) return "";
   if(mm.code) return mm.code;
   if(typeof MATCHES==="undefined") return "";
+  /* El turno separa la manana de la tarde del mismo dia. En un entrenamiento
+     el rival es el propio club en los dos turnos, asi que sin el turno las dos
+     sesiones del 29/09 eran la misma y la tarde quedaba vacia. */
+  var cand=armCandidatas(mm.date,mm.turno||"");
+  if(!cand.length) return "";
+  if(cand.length===1) return cand[0].mid;
   var riv=_armNorm(mm.rival||mm.opp);
   if(riv){
-    var hit=MATCHES.find(function(x){
-      if(x.date!==mm.date) return false;
+    var hit=cand.find(function(x){
       var o=_armNorm(x.opp);
       return o && (o===riv || o.indexOf(riv)>=0 || riv.indexOf(o)>=0);
     });
     if(hit) return hit.mid;
   }
-  return midByDate(mm.date);
+  return cand[0].mid;
 }
 function armRallies(setter,pos){var dates=armDates(),mt=(armTeam.matches||[]);
   return setter.s.filter(function(r){
@@ -1058,7 +1085,7 @@ function renderArmador(){
 
   _POSICIONES.forEach(function(pos){
     var rows=armRallies(setter,pos),tot=rows.length,zc={};
-    var zp={},zvc={},_mt=(armTeam.matches||[]);rows.forEach(function(r){var z=gpGetZone(GP_COMBOS[r[8]]||"",r[11],r[6]);if(z>0){zc[z]=(zc[z]||0)+1;if(r[9]===0)zp[z]=(zp[z]||0)+1;var _mm=_mt[r[12]]||{},_yt=ppVid(_mm.code||midByDate(_mm.date)),_tt=r[14]||r[13];if(_yt&&_tt)zvc[z]=(zvc[z]||0)+1;}});
+    var zp={},zvc={},_mt=(armTeam.matches||[]);rows.forEach(function(r){var z=gpGetZone(GP_COMBOS[r[8]]||"",r[11],r[6]);if(z>0){zc[z]=(zc[z]||0)+1;if(r[9]===0)zp[z]=(zp[z]||0)+1;var _mm=_mt[r[12]]||{},_yt=ppVid(_mm.code||midByDate(_mm.date,_mm.turno||"")),_tt=r[14]||r[13];if(_yt&&_tt)zvc[z]=(zvc[z]||0)+1;}});
     var mx=1;ARMZ.forEach(function(z){if((zc[z]||0)>mx)mx=zc[z];});
     var cells=ARMZ.map(function(z){var v=zc[z]||0,has=v>0,hasVid=(zvc[z]||0)>0,pct=tot?Math.round(v/tot*100):0,kp=v?Math.round((zp[z]||0)/v*100):0,h=armHeat(z,v,pct);
       return '<div class="cell'+(hasVid?" has vid":"")+'" style="background:'+h[0]+';border:'+h[2]+'"'+(hasVid?' ondblclick="openArmZone('+pos+",'"+z+"')\"":"")+'>'+(has?'<div class="cn-n" style="color:'+h[1]+'">'+v+'</div><div class="cn-p" style="color:'+h[1]+'">'+pct+'% · '+kp+'%</div>':"")+'</div>';}).join("");
@@ -1834,8 +1861,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20260928-2315" onerror="void 0"></script>
-<script src="lang.js?v=20260928-2315" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20260930-2113" onerror="void 0"></script>
+<script src="lang.js?v=20260930-2113" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -1853,7 +1880,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20260928-2315" onerror="void 0"></script>
-<script src="ayuda.js?v=20260928-2315"></script>
+<script src="volver_inicio.js?v=20260930-2113" onerror="void 0"></script>
+<script src="ayuda.js?v=20260930-2113"></script>
 </body>
 </html>
