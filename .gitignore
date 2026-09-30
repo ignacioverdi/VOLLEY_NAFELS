@@ -115,3 +115,7 @@ LLAVE_DEMO.txt
 # Son copias de cosas que ya estan en el historial: no van dos veces.
 _respaldo_*/
 _respaldo*/
+
+# Las detecciones que guarda MEDIR_SAQUES para no volver a mirar el video cada
+# vez que se afina una regla. Son 20 MB por entrenamiento y se rehacen solas.
+_radar_cache_*/

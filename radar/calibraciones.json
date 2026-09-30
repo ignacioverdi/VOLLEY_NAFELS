@@ -1,0 +1,15 @@
+{
+ "ENTRENAMIENTO": {
+  "nombre": "Naefels - entrenamiento - camara detras de los sacadores",
+  "desde": "2026-09-29",
+  "video_de_referencia": "1280x720 progresivo, desentrelazado de 1080/60i",
+  "focal_px": 966.2,
+  "altura_camara_m": 3.077,
+  "distancia_a_la_linea_central_m": 15.719,
+  "desplazamiento_lateral_m": 0.09,
+  "inclinacion_grados": 6.389,
+  "peor_residuo_px": 0.3,
+  "comprobacion": "el borde de arriba de la red (2,43 m) no se uso para calibrar y cae a 0,1 px de donde se ve",
+  "vale_mientras": "el tripode no se mueva de su marca y no se toque el zoom"
+ }
+}

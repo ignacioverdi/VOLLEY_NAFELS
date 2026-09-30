@@ -52,7 +52,7 @@ PERMITIDOS = {
 CONFIG = os.path.join(AQUI, 'ayudante_config.json')
 
 try:
-    from CORTAR_SAQUES import buscar_ffmpeg, bajar_ffmpeg, datos_del_video
+    from CORTAR_SAQUES import buscar_ffmpeg, bajar_ffmpeg, datos_del_video, leer_dvw
     from CORTAR_SELECCION import cortar, pegar, arranque_real, limpio, VALOR, fuente
 except Exception as e:
     print('  Faltan CORTAR_SAQUES.py y CORTAR_SELECCION.py en esta carpeta.')
@@ -74,6 +74,8 @@ def leer_config():
     c.setdefault('videos', {})     # id de YouTube o codigo de partido -> ruta
     c.setdefault('carpetas', [])   # donde buscar solo, ej el disco extraible
     c.setdefault('salida', '')     # donde dejar los cortes
+    c.setdefault('medir_saques_solo', True)   # medir la velocidad sin que nadie apriete nada
+    c.setdefault('medidos', {})               # libreta: que .dvw ya se midio
     return c
 
 
@@ -326,6 +328,162 @@ def preguntar_carpetas(c):
     guardar_config(c)
 
 
+# ══════════════════════════════════════════════════════════════════════════
+#   medir los saques sin que nadie apriete nada
+# ══════════════════════════════════════════════════════════════════════════
+#
+# Cuando aparece un .dvw nuevo en una carpeta DVW, con su video al lado, no
+# hay ninguna razon para que alguien tenga que venir a apretar un boton: el
+# ayudante ya esta abierto y la maquina esta libre. Asi que lo hace solo.
+#
+# SOLO cuando el .dvw trae adentro la ruta de su video y esa ruta existe. Eso
+# significa que el scouting se hizo CON el video puesto, y entonces el reloj
+# del scout y el del video son el mismo: el desfase es cero y no hay nada que
+# preguntar. Si el scouting fue en vivo, el reloj arranca en otro lado y hay
+# que decirle a mano donde cae el primer saque; esos quedan para MEDIR_SAQUES
+# a mano, porque medirlos con el desfase equivocado daria numeros que parecen
+# buenos y no lo son.
+
+def _slug(dvw):
+    b = os.path.splitext(os.path.basename(dvw))[0]
+    b = re.sub(r'^[&\s]+', '', b)
+    return re.sub(r'[^A-Za-z0-9]+', '_', b).strip('_').upper()[:40] or 'PARTIDO'
+
+
+def _falta_medir(dvw):
+    """(video, cuantos saques) si hay que medirlo; None si no."""
+    try:
+        video, saques, _eq = leer_dvw(dvw)
+    except Exception:
+        return None
+    if not saques:
+        return None
+    if not video or not os.path.exists(video):
+        return None                      # scouting en vivo o video en otra maquina
+    salida = os.path.join(os.path.dirname(os.path.abspath(dvw)),
+                          'velocidades_%s.json' % _slug(dvw))
+    if os.path.exists(salida):
+        try:
+            with io.open(salida, encoding='utf-8') as f:
+                d = json.load(f)
+            if len(d.get('saques') or {}) >= len(saques):
+                return None              # ya esta entero
+        except Exception:
+            pass
+    return video, len(saques)
+
+
+def _cuantos_medidos(dvw):
+    salida = os.path.join(os.path.dirname(os.path.abspath(dvw)),
+                          'velocidades_%s.json' % _slug(dvw))
+    try:
+        with io.open(salida, encoding='utf-8') as f:
+            return len(json.load(f).get('saques') or {})
+    except Exception:
+        return 0
+
+
+def _trabajando(dvw, minutos=3):
+    """Si el archivo de velocidades se movio recien, alguien ya lo esta
+    midiendo —MEDIR_SAQUES a mano, por ejemplo— y no hay que arrancar otro."""
+    salida = os.path.join(os.path.dirname(os.path.abspath(dvw)),
+                          'velocidades_%s.json' % _slug(dvw))
+    try:
+        return (time.time() - os.path.getmtime(salida)) < minutos * 60
+    except OSError:
+        return False
+
+
+def _intentos(c, dvw):
+    return int((c['medidos'].get(os.path.abspath(dvw)) or {}).get('intentos') or 0)
+
+
+def _anotar(dvw, ok, cuantos):
+    """Que paso con este .dvw, para no volver a intentarlo eternamente.
+
+    Un .dvw que no se puede medir —el video esta cortado, el scout esta en otro
+    reloj— fallaria igual la proxima vez. Sin esta libreta el vigilante lo
+    reintentaria cada minuto para siempre, tapando la ventana de mensajes y
+    ocupando la maquina al pedo.
+    """
+    c = leer_config()
+    k = os.path.abspath(dvw)
+    d = c['medidos'].get(k) or {}
+    # Si en este intento se midio alguno mas que en el anterior, el contador
+    # vuelve a cero: una corrida que quedo por la mitad —porque cerraron la
+    # ventana— tiene que poder seguir, y eso no es un fallo.
+    hechos = _cuantos_medidos(dvw)
+    if hechos > int(d.get('hechos') or 0):
+        d['intentos'] = 0
+    d['hechos'] = hechos
+    d['intentos'] = int(d.get('intentos') or 0) + 1
+    d['ultimo'] = time.strftime('%Y-%m-%d %H:%M')
+    d['ok'] = bool(ok)
+    d['saques'] = cuantos
+    c['medidos'][k] = d
+    guardar_config(c)
+
+
+def _medir(dvw, video, cuantos):
+    """Corre MEDIR_SAQUES como lo correria una persona, contestando que si."""
+    guion = os.path.join(AQUI, 'MEDIR_SAQUES.py')
+    if not os.path.exists(guion):
+        return False
+    print()
+    print('     [medir] %s — %d saques. Esto tarda un rato; el ayudante sigue'
+          % (os.path.basename(dvw), cuantos))
+    print('     [medir] atendiendo la pagina mientras tanto.')
+    try:
+        p = subprocess.Popen([sys.executable, guion, dvw, video],
+                             stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                             stderr=subprocess.STDOUT,
+                             cwd=AQUI, universal_newlines=True)
+        # las respuestas: desfase (ninguno), rango (todos), calibracion (la de
+        # siempre) y el Enter del final
+        p.communicate(input='\n\n\n\n', timeout=6 * 3600)
+        ok = (p.returncode == 0)
+    except Exception as e:
+        _anotar(dvw, False, cuantos)
+        print('     [medir] no pude: %s' % e)
+        return False
+    _anotar(dvw, ok, cuantos)
+    print('     [medir] listo: velocidades_%s.json' % _slug(dvw))
+    return ok
+
+
+def vigilar():
+    """Cada tanto mira las carpetas DVW y mide lo que falte."""
+    time.sleep(20)                        # que el ayudante termine de levantar
+    while True:
+        try:
+            c = leer_config()
+            if c.get('medir_saques_solo'):
+                for carpeta in sorted(d for d in os.listdir(AQUI)
+                                      if d.upper().startswith('DVW ')
+                                      and os.path.isdir(os.path.join(AQUI, d))):
+                    ruta = os.path.join(AQUI, carpeta)
+                    for f in sorted(os.listdir(ruta)):
+                        if not f.lower().endswith('.dvw'):
+                            continue
+                        dvw = os.path.join(ruta, f)
+                        r = _falta_medir(dvw)
+                        if not r:
+                            continue
+                        if _intentos(c, dvw) >= 2:
+                            continue        # ya fallo dos veces: no insisto mas
+                        if _trabajando(dvw):
+                            continue        # ya lo esta midiendo alguien
+                        # que no se haya copiado a medias
+                        t1 = os.path.getsize(dvw)
+                        time.sleep(3)
+                        if os.path.getsize(dvw) != t1:
+                            continue
+                        _medir(dvw, r[0], r[1])
+        except Exception as e:
+            print('     [medir] %s' % e)
+        time.sleep(60)
+
+
 def main():
     print()
     print('  ' + '=' * 68)
@@ -347,8 +505,13 @@ def main():
     print('     Ya podes ir a Cortes, elegir lo que quieras y apretar')
     print('     "Cortar ahora". Esta ventana tiene que quedar abierta.')
     print()
+    if leer_config().get('medir_saques_solo'):
+        print('     Ademas mido la velocidad de los saques sola, cuando aparece')
+        print('     un .dvw nuevo que tenga su video al lado.')
+        print()
     print('     (para cambiar las carpetas, borra ayudante_config.json)')
     print('  ' + '=' * 68)
+    threading.Thread(target=vigilar, daemon=True).start()
     try:
         ThreadingHTTPServer(('127.0.0.1', PUERTO), Mozo).serve_forever()
     except OSError as e:
