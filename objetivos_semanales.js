@@ -382,6 +382,26 @@ function dorsalDe(nombre){
 /* ── La cuenta del objetivo, semana por semana ─────────────────────────────
    Se recorre toda la historia desde la primera semana con acciones. El
    objetivo de cada semana sale del cierre de la anterior, y nunca baja.     */
+/* ── ¿CUMPLIO O NO? UN SOLO LUGAR ──────────────────────────────────
+   La pregunta se hacia en cinco lugares distintos (la tarjeta, las filas, las
+   barras del dibujo, la racha y el recuadro de la portada) y cada uno la
+   respondia por su cuenta. Ahora la responde esta.
+
+   El caso que la hizo falta: en ataque el piso de la liga puede ser NEGATIVO
+   —en Ataque Alta es -5— asi que la escalera llegaba a poner un objetivo de
+   -5 %, y un jugador que iba en 0 leia «0 % ¡logrado!». Cumplir estando en
+   cero no empuja a nada. Un objetivo de cero o menos no es un objetivo: es el
+   arranque, y lo que corresponde decir ahi es que se esta midiendo. */
+function cumplio(c){
+  if(!c || c.objetivo == null || c.val === null) return false;
+  if(c.objetivo <= 0 && c.val <= 0) return false;
+  return c.val >= c.objetivo;
+}
+/* Todavia sin piso del que partir: el objetivo es cero o menos y no hizo nada. */
+function enArranque(c){
+  return !!(c && c.objetivo != null && c.objetivo <= 0 && c.val !== null && c.val <= 0);
+}
+
 function serie(nombre, modo, id, periodo){
   periodo = periodo || 'semana';
   var meta = (window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas[id]) || null;
@@ -439,6 +459,11 @@ function serie(nombre, modo, id, periodo){
          por arriba de la bateria tampoco. */
       var piso = (meta && meta.min != null) ? meta.min : null;
       if(piso !== null && o < piso) o = piso;
+      /* El piso de la liga puede ser negativo (Ataque Alta: -5). Pedirle a un
+         jugador que llegue a -5 no es pedirle nada, asi que el objetivo que se
+         le muestra nunca baja de cero. Las baterias no se tocan: esto es el
+         objetivo semanal, no el valor de la liga. */
+      if(o < 0) o = 0;
       if(o > bat) o = bat;
       if(prevObj !== null && o < prevObj) o = prevObj;   /* nunca baja */
       c.objetivo = Math.round(o * 10) / 10;
@@ -460,7 +485,7 @@ function serie(nombre, modo, id, periodo){
   for(var q = S.length - 2; q >= 0; q--){
     var c2 = S[q];
     if(c2.val === null) continue;
-    if(c2.objetivo != null && c2.val >= c2.objetivo) racha++; else break;
+    if(cumplio(c2)) racha++; else break;
   }
   return {id:id, meta:meta, bat:bat, semanas:S, hay:true, mejor:mejor, mejorSem:mejorSem,
           racha:racha, ultima:S[S.length-1], sostenidas:seguidas, periodo:periodo};
@@ -796,6 +821,7 @@ var CSS = ''
 +   'font-weight:800;letter-spacing:.05em;text-transform:uppercase;'
 +   'background:rgba(56,189,248,.13);border:1px solid rgba(56,189,248,.4);color:#38BDF8}'
 + '.os-pill.ok{background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.45);color:#22c55e}'
++ '.os-pill.mid{background:rgba(148,163,184,.1);border-color:rgba(148,163,184,.3);color:#94A3B8}'
 /* ── LA FRASE QUE DICE QUE HACER ─────────────────────────────────────────── */
 + '.os-paso{margin:12px 16px 0;font-size:17px;line-height:1.42;color:#CBD5E1;text-align:center}'
 + '.os-paso b{color:#F1F5F9;font-weight:800}'
@@ -810,7 +836,7 @@ var CSS = ''
    Celeste la que no, verde la que si. Cual es HOY se marca con la tipografia
    —numero mas grande y la fecha en blanco— y no con un tercer color, que
    mezclaba dos cosas distintas en el mismo lugar. */
-+ '.os-sescol i{display:block;width:100%;max-width:40px;min-height:4px;border-radius:5px 5px 0 0;'
++ '.os-sescol i{display:block;width:100%;max-width:54px;min-height:4px;border-radius:5px 5px 0 0;'
 +   'background:linear-gradient(180deg,#38BDF8,#0284C7);font-style:normal}'
 + '.os-sescol.ok i{background:linear-gradient(180deg,#4ADE80,#16A34A)}'
 /* El numero va en una chapita con el fondo de la tarjeta. Con solo una sombra,
@@ -867,6 +893,7 @@ var CSS = ''
 + '.os-fila .b s.ok{background:#22c55e}'
 + '.os-fila .r{text-align:right;white-space:nowrap;font-size:14px;color:#64748B;flex:0 0 auto}'
 + '.os-fila .r em{font-style:normal;color:#475569}'
++ '.os-fila .r em.n{color:#64748B;font-size:13px;margin-right:7px;margin-left:-3px}'
 + '.os-fila .r u{font-family:Anton,"Bebas Neue",system-ui,sans-serif;font-size:23px;text-decoration:none;color:#E2E8F0;margin-right:6px;vertical-align:-1px;letter-spacing:-.01em}'
 + '.os-fila .r u s{text-decoration:none;font-family:inherit;font-size:.56em;color:#7C8AA0;margin-left:2px;vertical-align:.12em}'
 + '.os-fila .r u.ok{color:#22c55e}'
@@ -978,7 +1005,7 @@ function sesiones(cur, r){
   }
   ss.forEach(function(x){
     var h = alto(x.v);
-    var cl = (obj != null && x.v >= obj) ? ' ok' : '';
+    var cl = (obj != null && x.v >= obj && !(obj <= 0 && x.v <= 0)) ? ' ok' : '';
     if(x.hoy) cl += ' hoy';
     o += '<div class="os-sescol' + cl + '">'
        + '<u style="bottom:calc(' + h.toFixed(1) + '% + 6px)"><s>' + n1(x.v) + '</s></u>'
@@ -1130,7 +1157,8 @@ function tarjeta(r, modo, eqSerie, nombre, dorsal){
     o += '<div class="os-racha">' + lblRacha + '<span class="pts">' + pts + '</span></div>';
   }
 
-  var logro = (cur.n > 0 && cur.objetivo != null && cur.val !== null && cur.val >= cur.objetivo);
+  var logro = (cur.n > 0 && cumplio(cur));
+  var arranque = (cur.n > 0 && enArranque(cur));
   o += '<div class="os-foco' + (logro ? ' ok' : '') + '">'
      + '<p class="os-q">' + T(per === 'dia' ? 'tituloDia' : (per === 'mes' ? 'tituloMes' : 'titulo'))
      + ' &middot; <b>' + nombreDe(r.id, r.meta) + '</b>'
@@ -1150,8 +1178,9 @@ function tarjeta(r, modo, eqSerie, nombre, dorsal){
     if(cur.objetivo == null){
       o += '<p class="os-sub">' + cuantas(cur.n) + ' &middot; ' + T('arranca') + '</p>';
     } else {
-      o += '<div><span class="os-pill' + (logro ? ' ok' : '') + '">'
-         + (logro ? '&#10003; ' + T('logrado') : T('objLbl', n1(cur.objetivo) + '&nbsp;%')) + '</span></div>';
+      o += '<div><span class="os-pill' + (logro ? ' ok' : (arranque ? ' mid' : '')) + '">'
+         + (logro ? '&#10003; ' + T('logrado')
+                  : (arranque ? T('midiendo') : T('objLbl', n1(cur.objetivo) + '&nbsp;%'))) + '</span></div>';
     }
     o += pastilla(r.semanas, cur, per);
   }
@@ -1164,7 +1193,7 @@ function tarjeta(r, modo, eqSerie, nombre, dorsal){
      tiempo y el jugador no sabe cual mirar. */
   if(cur.n > 0 && cur.val !== null){
     var paso = '';
-    if(cur.objetivo == null){
+    if(cur.objetivo == null || arranque){
       var k0 = (r.bat == null) ? null : cuantasFaltan(cur, r.id, r.bat);
       if(k0 > 0) paso = T('pBatK', cuantasB(k0), n1(r.bat) + '&nbsp;%');
       else if(r.bat != null && cur.val >= r.bat) paso = T('pBatYa').replace('Y ya', 'Ya');
@@ -1212,10 +1241,17 @@ function fila(r){
     return o;
   }
   var cur = r.ultima, v = cur.val, obj = cur.objetivo;
-  var listo = (obj != null && v >= obj);
+  var listo = cumplio(cur);
   o += '<span class="b">' + marcas(r, cur) + '</span>';
+  /* ══ SOBRE CUANTAS ACCIONES ESTA HECHO ══════════════════════════════════
+     Un 100 % sobre UNA accion se leia exactamente igual que un 100 % sobre
+     cuarenta. En la tarjeta grande la cantidad siempre estuvo; aca abajo no,
+     y es donde mas se presta a confusion porque hay una fila por fundamento.
+     Va chiquita y en gris: no compite con el numero, pero esta. */
   o += '<span class="r"><u class="' + (listo ? 'ok' : '') + '">' + n1(v) + '<s>%</s></u>'
-     + (obj == null ? T('midiendo') : (listo ? T('logrado') : T('faltaN', n1(obj - v) + '&nbsp;%')));
+     + '<em class="n">(' + n0(cur.n) + ')</em>'
+     + (obj == null || enArranque(cur) ? T('midiendo')
+        : (listo ? T('logrado') : T('faltaN', n1(obj - v) + '&nbsp;%')));
   var d = (cur.desde == null) ? null : v - cur.desde;
   if(d !== null && Math.abs(d) >= 0.05){
     o += '<i class="' + (d > 0 ? 'up' : 'dn') + '">' + (d > 0 ? '&#9650;' : '&#9660;') + n1(Math.abs(d)) + '</i>';
@@ -1406,8 +1442,8 @@ function tarjetaPortada(){
   ids.forEach(function(id){
     var r = serie(nombre, modo, id);
     rs.push(r);
-    if(r.hay && r.ultima && r.ultima.n > 0 && r.ultima.objetivo != null){
-      tot++; if(r.ultima.val >= r.ultima.objetivo) cump++;
+    if(r.hay && r.ultima && r.ultima.n > 0 && r.ultima.objetivo != null && !enArranque(r.ultima)){
+      tot++; if(cumplio(r.ultima)) cump++;
     }
   });
   caja.setAttribute('data-os', '1');
@@ -1429,14 +1465,14 @@ function tarjetaPortada(){
   }
 
   /* el que va primero en su puesto y tiene acciones esta semana */
-  var head = rs.filter(function(r){ return r.hay && r.ultima && r.ultima.n > 0 && r.ultima.objetivo != null; })[0];
+  var head = rs.filter(function(r){ return r.hay && r.ultima && r.ultima.n > 0 && r.ultima.objetivo != null && !enArranque(r.ultima); })[0];
   if(num){
     num.className = 'tb-obj-n' + (cump === tot ? '' : ' falta');
     num.innerHTML = cump + '<s>/' + tot + '</s>';
   }
   if(det && head){
     var c = head.ultima;
-    det.innerHTML = c.val >= c.objetivo
+    det.innerHTML = cumplio(c)
       ? T('tDetOk', nombreDe(head.id, head.meta), n1(c.val) + '&nbsp;%')
       : T('tDetFalta', nombreDe(head.id, head.meta), n1(c.val) + '&nbsp;%', n1(c.objetivo - c.val));
   }
