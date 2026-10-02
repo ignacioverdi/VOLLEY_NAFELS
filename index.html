@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261002-0849"></script>
-<script src="selector_categoria.js?v=20261002-0849"></script>
+<script src="categorias_club.js?v=20261002-0854"></script>
+<script src="selector_categoria.js?v=20261002-0854"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -253,17 +253,17 @@ footer{
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="datos_seguros.js?v=20261002-0849"></script>
-<script src="firebase.js?v=20261002-0849" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261002-0849"></script>
-<script src="lang.js?v=20261002-0849"></script>
-<script src="plantel_nafels.js?v=20261002-0849"></script>
+<script src="datos_seguros.js?v=20261002-0854"></script>
+<script src="firebase.js?v=20261002-0854" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261002-0854"></script>
+<script src="lang.js?v=20261002-0854"></script>
+<script src="plantel_nafels.js?v=20261002-0854"></script>
 <!-- == EL OBJETIVO DE LA SEMANA, ARRIBA DE TODO ========================
      Es lo primero que ve el jugador al entrar. Necesita las baterias, el
      plantel y el ejercicio de armado de alta. Todos van con onerror: si
      alguno no carga, la tarjeta no se dibuja y la portada queda igual que
      siempre. -->
-<script src="objetivos_config.js?v=20261002-0849" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261002-0854" onerror="void 0"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
 <!-- ══ ABRIR LOS DATOS ═══════════════════════════════════════════════════
@@ -285,7 +285,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <script src="datos_high_set_26-27.js.enc?v=1" onerror="void 0"></script>
 <script src="datos_high_set_27-28.js.enc?v=1" onerror="void 0"></script>
 <script src="datos_high_set_28-29.js.enc?v=1" onerror="void 0"></script>
-<script src="objetivos_semanales.js?v=20261002-0849" onerror="void 0"></script>
+<script src="objetivos_semanales.js?v=20261002-0854" onerror="void 0"></script>
 
 <style>
 @media(max-width:768px){
@@ -384,7 +384,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261002-0849">
+<link rel="stylesheet" href="movil.css?v=20261002-0854">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    LA PORTADA, DE MENU A TABLERO
@@ -419,10 +419,29 @@ select option { color: #111111 !important; background-color: #ffffff !important;
    le pone esta clase al tablero y los cuatro se reparten el ancho.
    Se achican los tres de siempre en vez de mandar el nuevo a una segunda
    fila, que lo dejaria abajo de todo y nadie lo veria. */
-#tablero.con-obj{grid-template-columns:1fr 1.15fr .95fr 1.05fr}
-/* En pantallas medianas cuatro columnas quedan muy flacas: mejor dos y dos. */
-@media (max-width:1240px){
-  #tablero.con-obj{grid-template-columns:1fr 1fr}
+/* EN LA COMPUTADORA, SIEMPRE UNA SOLA FILA. Cuatro columnas iguales con
+   minmax(0,1fr): el 0 es lo que importa —sin el, una tarjeta con texto largo
+   empuja a las demas y termina rompiendo la fila. Y como ahora entran cuatro
+   donde habia tres, la tarjeta se compacta: menos aire adentro y numeros un
+   poco mas chicos. Antes sobraba lugar vacio y igual no entraban. */
+#tablero.con-obj{grid-template-columns:repeat(4, minmax(0,1fr))}
+#tablero.con-obj .tb-box{padding:10px 13px}
+#tablero.con-obj .tb-lbl{margin-bottom:5px}
+#tablero.con-obj .tb-big{font-size:23px}
+#tablero.con-obj .tb-obj-n{font-size:31px}
+#tablero.con-obj .tb-n{font-size:21px}
+#tablero.con-obj .tb-sub,#tablero.con-obj .tb-mut,#tablero.con-obj .tb-obj-d{font-size:11.5px;line-height:1.3}
+#tablero.con-obj .tb-set{font-size:10.5px;padding:1px 5px}
+#tablero.con-obj .tb-obj-ir{margin-top:5px}
+/* EN EL TELEFONO, uno abajo del otro pero mas bajos, para que la tira no se
+   coma la pantalla antes de llegar al buscador. */
+@media (max-width:900px){
+  #tablero.con-obj{grid-template-columns:1fr;gap:8px}
+  #tablero.con-obj .tb-box{padding:8px 12px}
+  #tablero.con-obj .tb-big{font-size:20px}
+  #tablero.con-obj .tb-obj-n{font-size:26px}
+  #tablero.con-obj .tb-n{font-size:19px}
+  #tablero.con-obj .tb-mut{display:none}
 }
 .tb-box{background:var(--card,#0d0e1a);border:1px solid rgba(255,255,255,.08);
   border-radius:14px;padding:13px 16px;position:relative;overflow:hidden;
@@ -1667,9 +1686,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261002-0849"></script>
+<script src="chat_nafels.js?v=20261002-0854"></script>
 
-<script src="proximo_rival.js?v=20261002-0849" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js?v=20261002-0854" onerror="window.FIXTURE_DATA=null"></script>
 <script>
 /* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
    proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
@@ -1727,12 +1746,12 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   }catch(e){}
 })();
 </script>
-<script src="temporadas_menu.js?v=20261002-0849"></script>
+<script src="temporadas_menu.js?v=20261002-0854"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20261002-0849" defer></script>
+<script src="onesignal_push.js?v=20261002-0854" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -2386,7 +2405,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   else arrancar();
 })();
 </script>
-<script src="ayuda.js?v=20261002-0849"></script>
+<script src="ayuda.js?v=20261002-0854"></script>
 </body>
 </html>
 

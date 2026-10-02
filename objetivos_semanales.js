@@ -1166,6 +1166,17 @@ function render(){
   cont.innerHTML = html;
 }
 
+/* Mostrar el recuadro y avisarle a la tira que ahora son CUATRO, para que se
+   reparta el ancho entre los cuatro en una sola fila. Sin esto el nuevo caia
+   en un segundo renglon, abajo de todo, con los tres de arriba a medio llenar. */
+function mostrar(caja){
+  caja.style.display = '';
+  try{
+    var tb = document.getElementById('tablero');
+    if(tb) tb.classList.add('con-obj');
+  }catch(e){}
+}
+
 /* ── LA TARJETA DE ACCESO EN LA PORTADA ────────────────────────────────────
    El hueco lo deja index.html, escondido y con id="tb-objetivos". Aca se
    llena y recien ahi se muestra: si los datos no abren, no aparece nada y la
@@ -1191,7 +1202,7 @@ function tarjetaPortada(){
     if(num){ num.className = 'tb-obj-n'; num.innerHTML = '<span style="font-size:.6em">' + T('tVerTodos') + '</span>'; }
     if(det) det.innerHTML = T('tDetPlantel');
     if(ir)  ir.innerHTML = T('tIrPlantel');
-    caja.style.display = '';
+    mostrar(caja);
     return;
   }
 
@@ -1220,7 +1231,7 @@ function tarjetaPortada(){
         ? T('tArranca', nombreDe(con.id, con.meta)) 
         : T('tSinNada');
     }
-    caja.style.display = '';
+    mostrar(caja);
     return;
   }
 
@@ -1236,7 +1247,7 @@ function tarjetaPortada(){
       ? T('tDetOk', nombreDe(head.id, head.meta), n1(c.val))
       : T('tDetFalta', nombreDe(head.id, head.meta), n1(c.val), n1(c.objetivo - c.val));
   }
-  caja.style.display = '';
+  mostrar(caja);
 }
 
 /* ── Enganche ───────────────────────────────────────────────────────────────
