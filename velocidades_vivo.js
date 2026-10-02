@@ -55,6 +55,9 @@ var ESPERA_AMBAR = 120000;   /* ms que puede esperar una velocidad antes de duda
 var LS_KEY = 'vel_vivo_v1';
 
 var SAQUES = [];      /* [{i, c, num, ap, tipo, val, set, t, kmh}] los saques nuestros */
+var DESDE  = null;    /* cuantos saques ya habia cuando se abrio la pantalla */
+var ATRAS  = false;   /* true = tambien se miden los que ya estaban */
+var ELEGIDO= null;    /* i de un saque marcado a mano, para el proximo numero */
 var COLA   = [];      /* [{kmh, ts}] velocidades esperando saque */
 var CODES  = [];      /* la ultima lista cruda recibida */
 var LADO   = null;    /* '*' o 'a': cual de los dos lados es el nuestro */
@@ -141,6 +144,19 @@ function alLlegar(d){
   });
   if (sueltas.length) COLA = sueltas.concat(COLA);
 
+  /* ══ LA LINEA DE LARGADA ═══════════════════════════════════════════════
+     Cuando esta pantalla se abre a mitad del entrenamiento, el panel ya tiene
+     cargados todos los saques de antes —en la primera prueba eran SETENTA—.
+     Sin esta marca, el primer numero que se tipeaba se le pegaba al saque 1,
+     el de hace una hora, porque la cola reparte desde el mas viejo sin
+     velocidad. Y el jugador que estaba sacando en ese momento se quedaba sin
+     el suyo.
+
+     Asi que lo que ya estaba cuando se abrio NO entra en el reparto: queda a
+     la vista, en gris, y si de verdad se los quiere medir hay un boton que
+     los abre. Lo normal es que no: esos saques ya pasaron. */
+  if (DESDE === null) DESDE = nuevos.length;
+
   SAQUES = nuevos;
   repartir();
   guardar();
@@ -149,12 +165,22 @@ function alLlegar(d){
 
 /* ── darle a cada saque sin velocidad la primera que esta esperando ───── */
 function repartir(){
-  for (var i = 0; i < SAQUES.length && COLA.length; i++){
-    if (SAQUES[i].kmh != null) continue;
-    var v = COLA.shift();
-    if (v.sinMedir){ SAQUES[i].kmh = 0; SAQUES[i].sinMedir = true; }
-    else SAQUES[i].kmh = v.kmh;
+  /* un saque marcado a mano se lleva el proximo numero, pase lo que pase */
+  if (ELEGIDO !== null && COLA.length){
+    for (var e = 0; e < SAQUES.length; e++){
+      if (SAQUES[e].i === ELEGIDO){ poner(SAQUES[e], COLA.shift()); break; }
+    }
+    ELEGIDO = null;
   }
+  var inicio = (ATRAS || DESDE === null) ? 0 : DESDE;
+  for (var i = inicio; i < SAQUES.length && COLA.length; i++){
+    if (SAQUES[i].kmh != null) continue;
+    poner(SAQUES[i], COLA.shift());
+  }
+}
+function poner(s, v){
+  if (v.sinMedir){ s.kmh = 0; s.sinMedir = true; }
+  else { s.kmh = v.kmh; s.sinMedir = false; }
 }
 
 /* ── guardar: Firebase para que quede con la sesion, y local por las dudas ── */
@@ -184,12 +210,59 @@ function mediana(a){
 }
 function n1(v){ return (Math.round(v*10)/10).toString().replace('.', ','); }
 
+/* ── DE QUIEN VA A SER EL QUE VIENE ───────────────────────────────────────
+   No hace falta cargar a mano quienes estan ni cuantos saca cada uno: la
+   rueda se lee sola de lo que ya paso. En la tanda de saque los jugadores se
+   turnan, asi que si los ultimos fueron 5 10 3 7 17 13 y antes tambien fueron
+   5 10 3 7 17 13, el que viene es el 5.
+
+   Es una AYUDA para que el entrenador se de cuenta si se desincronizo, no una
+   decision: la velocidad se le pega igual al saque que publique el panel, se
+   haya adivinado bien o mal. Si la rueda no se repite, no se muestra nada. */
+function proximo(){
+  var n = SAQUES.length;
+  if (n < 4) return null;
+  var ult = SAQUES.map(function(s){ return s.num; });
+  for (var L = 3; L <= 8; L++){
+    if (n < L * 2) break;
+    var ok = true;
+    for (var k = 0; k < L; k++){
+      if (ult[n-1-k] !== ult[n-1-k-L]){ ok = false; break; }
+    }
+    if (ok){
+      var num = ult[n-L];
+      return { num:num, ap: APE[String(num)] || '' };
+    }
+  }
+  return null;
+}
+
 /* ══ PINTAR ══════════════════════════════════════════════════════════════ */
+/* ── FLOTANTE Y POTENCIA SON DOS SAQUES DISTINTOS ─────────────────────────
+   El quinto caracter del codigo dice con que saco: M y H son flotante, Q y T
+   potencia. Juntarlos en un solo promedio no sirve: un jugador que flota a 60
+   y salta a 95 queda con un 77 que no describe ninguno de los dos saques.   */
+var TIPO = { M:'flo', H:'flo', Q:'pot', T:'pot' };
+var TIPO_NOM = { flo:'Flotante', pot:'Potencia', otro:'Otro' };
+function tipoDe(t){ return TIPO[t] || 'otro'; }
+
 var VALS = ['#', '+', '!', '-', '/', '='];
 var CLASE = {'#':'val1','+':'val2','!':'val3','-':'val4','/':'val5','=':'val6'};
 
 function pintar(){
-  pintarCola(); pintarLista(); pintarTabla();
+  pintarCola(); pintarLista(); pintarTabla(); pintarDetalle(); pintarProximo();
+}
+function pintarProximo(){
+  var e = document.getElementById('viene'); if (!e) return;
+  if (ELEGIDO !== null){
+    var el = null;
+    for (var k = 0; k < SAQUES.length; k++) if (SAQUES[k].i === ELEGIDO) el = SAQUES[k];
+    e.innerHTML = el ? ('<b class="marc">el próximo número va al saque de <u>' + el.num + ' '
+                        + (el.ap || '') + '</u></b>') : '';
+    return;
+  }
+  var p = proximo();
+  e.innerHTML = p ? ('deberia sacar <b>' + p.num + ' ' + (p.ap || '') + '</b>') : '';
 }
 function pintarCola(){
   var e = document.getElementById('cola'); if (!e) return;
@@ -207,10 +280,12 @@ function pintarLista(){
   var ult = SAQUES.slice(-14).reverse();
   if (!ult.length){ e.innerHTML = '<div style="padding:15px;color:#475569">Todavía no entró ningún saque.</div>'; return; }
   e.innerHTML = ult.map(function(s, k){
+    var viejo = (!ATRAS && DESDE !== null && SAQUES.indexOf(s) < DESDE);
     var kk = s.sinMedir ? '<span class="k no">sin medir</span>'
            : (s.kmh != null ? '<span class="k">' + n1(s.kmh) + '<s>km/h</s></span>'
-                            : '<span class="k no">—</span>');
-    return '<div class="sq' + (k === 0 ? ' nuevo' : '') + '">'
+                            : '<span class="k no">' + (viejo ? 'de antes' : '—') + '</span>');
+    return '<div class="sq' + (k === 0 ? ' nuevo' : '') + (viejo ? ' viejo' : '')
+         + (s.i === ELEGIDO ? ' marcado' : '') + '" data-i="' + s.i + '">'
          + '<span class="n">' + (s.num >= 0 ? s.num : '?') + '</span>'
          + '<span class="ap">' + (s.ap || '') + '</span>'
          + '<span class="v ' + (CLASE[s.val] || '') + '">' + (s.val || '') + '</span>'
@@ -218,9 +293,21 @@ function pintarLista(){
   }).join('');
   var c = document.getElementById('cnt');
   if (c){
-    var con = SAQUES.filter(function(s){ return s.kmh != null && !s.sinMedir; }).length;
-    c.textContent = con + ' de ' + SAQUES.length + ' con velocidad';
+    /* El denominador son los saques que ESTA pantalla tiene que medir: los que
+       entraron desde que se abrio, mas cualquiera de los de antes que se haya
+       medido a mano. Sin esta cuenta salia "2 de 1". */
+    var base = (ATRAS || DESDE === null) ? 0 : DESDE;
+    var con = 0, deben = SAQUES.length - base;
+    SAQUES.forEach(function(s, k){
+      var medido = (s.kmh != null && !s.sinMedir);
+      if (medido) con++;
+      if (medido && k < base) deben++;
+    });
+    c.textContent = con + ' de ' + deben + ' con velocidad'
+                  + (base ? ('  ·  ' + base + ' de antes') : '');
   }
+  var ba = document.getElementById('b-atras');
+  if (ba) ba.style.display = (!ATRAS && DESDE) ? '' : 'none';
 }
 function pintarTabla(){
   var t = document.getElementById('tabla'); if (!t) return;
@@ -228,29 +315,78 @@ function pintarTabla(){
   SAQUES.forEach(function(s){
     if (s.kmh == null || s.sinMedir || s.num < 0) return;
     var k = s.num;
-    if (!porJ[k]) porJ[k] = { num:s.num, ap:s.ap, v:{} };
-    (porJ[k].v[s.val] = porJ[k].v[s.val] || []).push(s.kmh);
+    if (!porJ[k]) porJ[k] = { num:s.num, ap:s.ap, todo:{tot:[], v:{}}, tipos:{} };
+    var J = porJ[k], tp = tipoDe(s.tipo);
+    if (!J.tipos[tp]) J.tipos[tp] = { tot:[], v:{} };
+    J.todo.tot.push(s.kmh);
+    (J.todo.v[s.val] = J.todo.v[s.val] || []).push(s.kmh);
+    J.tipos[tp].tot.push(s.kmh);
+    (J.tipos[tp].v[s.val] = J.tipos[tp].v[s.val] || []).push(s.kmh);
   });
   var filas = Object.keys(porJ).map(function(k){ return porJ[k]; })
     .sort(function(a,b){ return a.num - b.num; });
-  var h = '<tr><th>Jugador</th>' + VALS.map(function(v){
-        return '<th class="' + CLASE[v] + '">' + (v === '=' ? 'error' : v) + '</th>'; }).join('') + '</tr>';
+
+  var h = '<tr><th class="izq">Jugador</th><th>Saque</th><th class="gen">General</th>'
+        + VALS.map(function(v){
+            return '<th class="' + CLASE[v] + '">' + (v === '=' ? 'error' : v) + '</th>'; }).join('')
+        + '</tr>';
   if (!filas.length){
-    h += '<tr><td colspan="7" style="color:#475569;text-align:left">Cuando entre el primer saque con velocidad aparece acá.</td></tr>';
+    h += '<tr><td colspan="9" class="izq" style="color:#475569">Cuando entre el primer saque con velocidad aparece acá.</td></tr>';
+    t.innerHTML = h; return;
   }
   filas.forEach(function(f){
-    h += '<tr><td class="j"><b>' + f.num + '</b>' + (f.ap || '') + '</td>';
-    VALS.forEach(function(v){
-      var a = f.v[v] || [];
-      if (!a.length){ h += '<td class="vacio">·</td>'; return; }
-      var m = mediana(a);
-      var flojo = a.length < 3;
-      h += '<td><span class="kk"' + (flojo ? ' style="color:#64748B"' : '') + '>' + n1(m) + '</span>'
-         + '<span class="nn">' + a.length + '</span></td>';
+    var tps = Object.keys(f.tipos);
+    /* la fila TODOS solo tiene sentido si el jugador saco de las dos formas:
+       con un solo tipo repetiria exactamente la misma linea */
+    var lineas = [];
+    if (tps.length > 1) lineas.push({ nom:'Todos', d:f.todo, fuerte:true });
+    tps.sort().forEach(function(tp){ lineas.push({ nom:TIPO_NOM[tp], d:f.tipos[tp], fuerte:(tps.length === 1) }); });
+
+    lineas.forEach(function(L, k){
+      h += '<tr class="' + (k === 0 ? 'primera' : '') + (L.fuerte ? ' fuerte' : '') + '">';
+      h += '<td class="izq j">' + (k === 0 ? ('<b>' + f.num + '</b>' + (f.ap || '')) : '') + '</td>';
+      h += '<td class="tp">' + L.nom + '</td>';
+      h += celda(L.d.tot, 'gen');
+      VALS.forEach(function(v){ h += celda(L.d.v[v] || [], ''); });
+      h += '</tr>';
     });
-    h += '</tr>';
   });
   t.innerHTML = h;
+}
+function celda(a, cls){
+  if (!a || !a.length) return '<td class="vacio ' + cls + '">·</td>';
+  var m = mediana(a), flojo = a.length < 3;
+  return '<td class="' + cls + '"><span class="kk"' + (flojo ? ' style="color:#64748B"' : '') + '>'
+       + n1(m) + '</span><span class="nn">' + a.length + '</span></td>';
+}
+
+/* ── SAQUE POR SAQUE ──────────────────────────────────────────────────────
+   La tabla de arriba resume; esto muestra el detalle, que es lo que sirve
+   para mirar con el jugador al lado: cada saque suyo en orden, con cuanto
+   salio, como salio y con que saque lo hizo. La F y la P chiquitas distinguen
+   flotante de potencia sin ocupar una columna. */
+function pintarDetalle(){
+  var e = document.getElementById('detalle'); if (!e) return;
+  var porJ = {};
+  SAQUES.forEach(function(s){
+    if (s.kmh == null || s.sinMedir || s.num < 0) return;
+    (porJ[s.num] = porJ[s.num] || { num:s.num, ap:s.ap, l:[] }).l.push(s);
+  });
+  var filas = Object.keys(porJ).map(function(k){ return porJ[k]; })
+    .sort(function(a,b){ return a.num - b.num; });
+  if (!filas.length){ e.innerHTML = '<div class="nada">Acá va cada saque, uno por uno.</div>'; return; }
+  e.innerHTML = filas.map(function(f){
+    var vs = f.l.map(function(s){ return s.kmh; });
+    return '<div class="dj">'
+      + '<div class="dj-cab"><b>' + f.num + '</b><span>' + (f.ap || '') + '</span>'
+      + '<em>' + f.l.length + (f.l.length === 1 ? ' saque' : ' saques')
+      + ' · mediana ' + n1(mediana(vs)) + ' · máx ' + n1(Math.max.apply(null, vs)) + '</em></div>'
+      + '<div class="dj-l">' + f.l.map(function(s){
+          return '<i class="' + (CLASE[s.val] || '') + '" title="' + (s.val || '') + '">'
+               + n1(s.kmh) + '<u>' + (tipoDe(s.tipo) === 'pot' ? 'P' : (tipoDe(s.tipo) === 'flo' ? 'F' : '')) + '</u>'
+               + '<s>' + (s.val || '') + '</s></i>'; }).join('')
+      + '</div></div>';
+  }).join('');
 }
 
 /* ══ TECLADO Y BOTONES ═══════════════════════════════════════════════════ */
@@ -287,6 +423,27 @@ function arrancar(){
       aviso('');
     });
   }
+  /* ── MARCAR UN SAQUE A MANO ──────────────────────────────────────────
+     La cola va en orden y eso cubre el 99% del tiempo. Pero si por lo que sea
+     se desacomoda —mediste uno y entraron dos— tocando el renglon se le pone
+     el proximo numero a ESE saque, sin tener que vaciar nada. */
+  var lista = document.getElementById('lista');
+  if (lista) lista.addEventListener('click', function(ev){
+    var fila = ev.target; 
+    while (fila && fila !== lista && !fila.hasAttribute('data-i')) fila = fila.parentNode;
+    if (!fila || fila === lista) return;
+    var i = parseInt(fila.getAttribute('data-i'), 10);
+    ELEGIDO = (ELEGIDO === i) ? null : i;
+    repartir(); guardar(); pintar();
+    var k = document.getElementById('kmh'); if (k) k.focus();
+  });
+
+  var ba = document.getElementById('b-atras');
+  if (ba) ba.addEventListener('click', function(){
+    ATRAS = true; repartir(); guardar(); pintar();
+    var k = document.getElementById('kmh'); if (k) k.focus();
+  });
+
   var bs = document.getElementById('b-sin');
   if (bs) bs.addEventListener('click', function(){ encolar(0, true); if (inp) inp.focus(); });
   var bu = document.getElementById('b-undo');
@@ -330,6 +487,6 @@ else arrancar();
 
 /* para poder probarla sin panel y sin Firebase */
 global.VEL_VIVO = { alLlegar:alLlegar, encolar:encolar, deshacer:deshacer,
-                    estado:function(){ return { saques:SAQUES, cola:COLA }; } };
+                    estado:function(){ return { saques:SAQUES, cola:COLA, desde:DESDE, elegido:ELEGIDO }; } };
 
 })(window);

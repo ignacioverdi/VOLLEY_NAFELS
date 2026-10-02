@@ -52,21 +52,56 @@ h1{font-family:Anton,'Bebas Neue',sans-serif;font-size:27px;margin:0;letter-spac
 .sq .k{flex:0 0 92px;text-align:right;font-family:Anton,sans-serif;font-size:21px;color:#F1F5F9}
 .sq .k s{text-decoration:none;font-size:.55em;color:var(--faint);margin-left:3px}
 .sq .k.no{color:#334155;font-size:17px}
+.sq{cursor:pointer}
+.sq:hover{background:rgba(148,163,184,.05)}
+.sq.viejo{opacity:.4}
+.sq.marcado{background:rgba(56,189,248,.14);box-shadow:inset 3px 0 0 var(--yo)}
 .sq.nuevo{animation:entra .45s ease}
+.viene{margin:7px 0 0;font-size:15px;color:var(--faint);min-height:20px}
+.viene b{color:#CBD5E1;font-weight:700}
+.viene b.marc{color:var(--yo)}
+.viene u{text-decoration:none}
 @keyframes entra{from{background:rgba(56,189,248,.16)}to{background:transparent}}
 
 /* ── la tabla por valoracion ────────────────────────────────── */
+/* ── TODO CENTRADO ───────────────────────────────────────────────────────
+   Los numeros estaban alineados a la derecha y el nombre a la izquierda, asi
+   que cada columna arrancaba en un lugar distinto y la tabla se leia torcida.
+   Ahora todo va centrado salvo el nombre del jugador, que centrado queda peor
+   porque los apellidos miden cosas muy distintas. */
 table{width:100%;border-collapse:collapse;font-size:16px}
-th,td{padding:7px 9px;text-align:right;border-bottom:1px solid rgba(148,163,184,.08)}
+th,td{padding:6px 8px;text-align:center;border-bottom:1px solid rgba(148,163,184,.07)}
 th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#7C8AA0;font-weight:700}
-th:first-child,td:first-child{text-align:left}
-td.j{color:#CBD5E1;white-space:nowrap}
+th.izq,td.izq{text-align:left}
+tr.primera td{border-top:1px solid rgba(148,163,184,.16)}
+tr.fuerte td .kk{color:#fff}
+td.j{color:#CBD5E1;white-space:nowrap;padding-left:15px}
 td.j b{font-family:Anton,sans-serif;color:var(--club);margin-right:6px}
+td.tp{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+tr.fuerte td.tp{color:#CBD5E1;font-weight:700}
+th.gen,td.gen{background:rgba(148,163,184,.05)}
+th.gen{color:#CBD5E1}
 td .kk{font-family:Anton,sans-serif;font-size:19px;color:#F1F5F9;display:block;line-height:1}
+td.gen .kk{font-size:22px}
 td .nn{font-size:12px;color:var(--faint)}
-td.vacio{color:#334155}
+td.vacio{color:#2B3648}
 .leyenda{padding:9px 15px;font-size:13px;color:var(--faint);line-height:1.5;border-top:1px solid var(--bd)}
 .val1{color:#4ADE80}.val2{color:#86EFAC}.val3{color:#CBD5E1}.val4{color:#FBBF24}.val5{color:#FB923C}.val6{color:#F87171}
+/* ── SAQUE POR SAQUE ─────────────────────────────────────────────────── */
+#detalle{padding:4px 0 6px;max-height:420px;overflow:auto}
+.dj{padding:10px 15px;border-bottom:1px solid rgba(148,163,184,.07)}
+.dj:last-child{border-bottom:none}
+.dj-cab{display:flex;align-items:baseline;gap:8px;margin:0 0 7px}
+.dj-cab b{font-family:Anton,sans-serif;font-size:19px;color:var(--club)}
+.dj-cab span{color:#CBD5E1;font-size:16px}
+.dj-cab em{font-style:normal;margin-left:auto;font-size:13px;color:var(--faint);white-space:nowrap}
+.dj-l{display:flex;gap:6px;flex-wrap:wrap}
+.dj-l i{font-style:normal;display:flex;align-items:baseline;gap:2px;background:rgba(148,163,184,.07);
+        border:1px solid rgba(148,163,184,.14);border-radius:8px;padding:3px 7px;
+        font-family:Anton,sans-serif;font-size:17px;color:#E2E8F0}
+.dj-l i u{text-decoration:none;font-size:.52em;color:var(--faint);font-family:'Barlow Condensed',sans-serif;font-weight:700}
+.dj-l i s{text-decoration:none;font-size:.62em;font-family:'Barlow Condensed',sans-serif;font-weight:800;margin-left:1px}
+#detalle .nada{padding:15px;color:#475569;font-size:15px}
 </style>
 </head>
 <body>
@@ -83,11 +118,13 @@ td.vacio{color:#334155}
       <div class="tipeo">
         <input id="kmh" type="text" inputmode="decimal" autocomplete="off" placeholder="—">
         <p class="pista" id="pista">Escribí el número y Enter. No esperes a que entre el saque.</p>
+        <p class="viene" id="viene"></p>
         <div class="cola" id="cola"></div>
         <div class="acc">
           <button type="button" id="b-sin" class="sin">Saque sin medir</button>
           <button type="button" id="b-undo">Deshacer</button>
           <button type="button" id="b-borrar">Vaciar la cola</button>
+          <button type="button" id="b-atras" style="display:none">Medir también los de antes</button>
         </div>
       </div>
     </div>
@@ -101,15 +138,22 @@ td.vacio{color:#334155}
     <h2>Velocidad por valoración <em>hoy</em></h2>
     <div style="overflow:auto"><table id="tabla"></table></div>
     <div class="leyenda">
-      El número grande es la <b>mediana</b> de ese jugador en esa valoración, y abajo sobre cuántos saques está hecho.
+      El número grande es la <b>mediana</b> de ese jugador, y abajo sobre cuántos saques está hecho.
       La mediana y no el promedio: un saque mal medido no te mueve la fila entera.
-      Con menos de 3 saques se muestra el número en gris, porque todavía no dice nada.
+      Con menos de 3 saques el número va en gris, porque todavía no dice nada.
+      <b>Flotante y potencia van separados</b>: juntarlos da un número que no describe ninguno de los dos.
+    </div>
+    <h2 style="border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)">Saque por saque</h2>
+    <div id="detalle"></div>
+    <div class="leyenda">
+      Cada chip es un saque, en el orden en que salieron: la velocidad, <b>F</b> o <b>P</b> según
+      haya sido flotante o potencia, y cómo terminó.
     </div>
   </div>
 </div>
 
-<script src="firebase.js?v=20261002-1240" onerror="void 0"></script>
-<script src="plantel_nafels.js?v=20261002-1240" onerror="void 0"></script>
-<script src="velocidades_vivo.js?v=20261002-1240"></script>
+<script src="firebase.js?v=20261002-1255" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20261002-1255" onerror="void 0"></script>
+<script src="velocidades_vivo.js?v=20261002-1255"></script>
 </body>
 </html>
