@@ -512,7 +512,7 @@ var TXT = {
   tObjetivos:'Objetivos', tPlantel:'Objetivos del plantel',
   tVerTodos:'ver', tDetPlantel:'Todo el plantel en una hoja: qu&eacute; se le pidi&oacute; a cada uno esta semana y c&oacute;mo viene.',
   tIrPlantel:'Ver el plantel &rarr;', tIrMios:'Ver mis objetivos &rarr;',
-  tDetOk:'<b>%1</b> vas en <b>%2</b> &middot; ya est&aacute;', tDetFalta:'<b>%1</b> vas en <b>%2</b> &middot; te faltan %3',
+  tDetOk:'<b>%1</b> vas en <b>%2</b> &middot; ya est&aacute;', tDetFalta:'<b>%1</b> vas en <b>%2</b> &middot; te faltan %3 puntos',
   tArranca:'La semana arranca. Tu objetivo de <b>%1</b> te espera.',
   tSinNada:'Todav&iacute;a no hay nada cargado esta semana.', tCumplidosC:'cumplidos',
   tConAcciones:'<b>%1 jugadores</b> con acciones esta semana',
@@ -524,6 +524,21 @@ var TXT = {
   cerroEn:'cerr&oacute; el domingo en %1', batPie:'bater&iacute;a %1',
   diaADia:'D&iacute;a a d&iacute;a de la semana', estaSemana:'esta semana', laPasada:'la pasada',
   objLbl:'objetivo %1', faltaN:'falta %1', sinArranque:'Todav&iacute;a sin acciones esta semana',
+  /* ── LO QUE TIENE QUE HACER, DICHO EN ACCIONES ──────────────────────────
+     «te falta 7,5 para el objetivo» no le dice a nadie que hacer. «con 2
+     acciones buenas mas llegas» si. */
+  pObjetivo:'tu objetivo', pBateria:'bater&iacute;a',
+  tituloDia:'Tu objetivo de hoy', tituloMes:'Tu objetivo del mes',
+  igualAyer:'igual que ayer', igualMes:'igual que el mes pasado',
+  cerroPrev:'el anterior cerr&oacute; en %1',
+  pPase:'Le pasaste tu objetivo por <b>%1 puntos</b>.',
+  pConK:'Con <b class="k">%1 m&aacute;s</b> lleg&aacute;s a tu objetivo de <b>%2</b>.',
+  pFalta:'Te faltan <b class="k">%1 puntos</b> para tu objetivo de <b>%2</b>.',
+  pBatYa:'Y ya est&aacute;s arriba de la bater&iacute;a del equipo.',
+  pBatK:'Con <b class="g">%1 m&aacute;s</b> alcanz&aacute;s la bater&iacute;a del equipo (%2).',
+  pBatPts:'Te faltan <b class="g">%1 puntos</b> para la bater&iacute;a del equipo (%2).',
+  accB1:'%1 acci&oacute;n buena', accBn:'%1 acciones buenas',
+  sesTit:'Sesi&oacute;n por sesi&oacute;n', sesUna:'%1 sesiones', sesHoy:'hoy',
   arranca:'El objetivo se activa el domingo que viene, cuando haya un cierre del que partir'
  },
  en:{
@@ -559,7 +574,7 @@ var TXT = {
   tObjetivos:'Goals', tPlantel:'Squad goals',
   tVerTodos:'see', tDetPlantel:'The whole squad on one sheet: what each one was asked for this week and how it is going.',
   tIrPlantel:'See the squad &rarr;', tIrMios:'See my goals &rarr;',
-  tDetOk:'<b>%1</b> you are at <b>%2</b> &middot; done', tDetFalta:'<b>%1</b> you are at <b>%2</b> &middot; %3 to go',
+  tDetOk:'<b>%1</b> you are at <b>%2</b> &middot; done', tDetFalta:'<b>%1</b> you are at <b>%2</b> &middot; %3 points to go',
   tArranca:'The week is starting. Your <b>%1</b> goal is waiting.',
   tSinNada:'Nothing loaded yet this week.', tCumplidosC:'met',
   tConAcciones:'<b>%1 players</b> with actions this week',
@@ -571,6 +586,18 @@ var TXT = {
   cerroEn:'closed Sunday at %1', batPie:'target %1',
   diaADia:'Day by day this week', estaSemana:'this week', laPasada:'last week',
   objLbl:'goal %1', faltaN:'%1 to go', sinArranque:'No actions yet this week',
+  pObjetivo:'your goal', pBateria:'target',
+  tituloDia:'Your goal for today', tituloMes:'Your goal for the month',
+  igualAyer:'same as yesterday', igualMes:'same as last month',
+  cerroPrev:'the previous one closed at %1',
+  pPase:'You beat your goal by <b>%1 points</b>.',
+  pConK:'With <b class="k">%1 more</b> you reach your goal of <b>%2</b>.',
+  pFalta:'<b class="k">%1 points</b> to go for your goal of <b>%2</b>.',
+  pBatYa:'And you are already above the team target.',
+  pBatK:'With <b class="g">%1 more</b> you reach the team target (%2).',
+  pBatPts:'<b class="g">%1 points</b> to go for the team target (%2).',
+  accB1:'%1 good action', accBn:'%1 good actions',
+  sesTit:'Session by session', sesUna:'%1 sessions', sesHoy:'today',
   arranca:'The goal switches on next Sunday, once there is a close to start from'
  },
  de:{
@@ -606,7 +633,7 @@ var TXT = {
   tObjetivos:'Ziele', tPlantel:'Ziele des Kaders',
   tVerTodos:'ansehen', tDetPlantel:'Der ganze Kader auf einem Blatt: was diese Woche verlangt wurde und wie es l&auml;uft.',
   tIrPlantel:'Kader ansehen &rarr;', tIrMios:'Meine Ziele ansehen &rarr;',
-  tDetOk:'<b>%1</b> du stehst bei <b>%2</b> &middot; geschafft', tDetFalta:'<b>%1</b> du stehst bei <b>%2</b> &middot; noch %3',
+  tDetOk:'<b>%1</b> du stehst bei <b>%2</b> &middot; geschafft', tDetFalta:'<b>%1</b> du stehst bei <b>%2</b> &middot; noch %3 Punkte',
   tArranca:'Die Woche beginnt. Dein Ziel in <b>%1</b> wartet.',
   tSinNada:'Diese Woche noch nichts geladen.', tCumplidosC:'erreicht',
   tConAcciones:'<b>%1 Spieler</b> mit Aktionen diese Woche',
@@ -618,6 +645,18 @@ var TXT = {
   cerroEn:'Sonntag mit %1 abgeschlossen', batPie:'Ziel %1',
   diaADia:'Tag f&uuml;r Tag diese Woche', estaSemana:'diese Woche', laPasada:'letzte Woche',
   objLbl:'Ziel %1', faltaN:'noch %1', sinArranque:'Diese Woche noch keine Aktionen',
+  pObjetivo:'dein Ziel', pBateria:'Batterie',
+  tituloDia:'Dein Tagesziel', tituloMes:'Dein Monatsziel',
+  igualAyer:'gleich wie gestern', igualMes:'gleich wie letzter Monat',
+  cerroPrev:'der vorherige schloss mit %1',
+  pPase:'Du hast dein Ziel um <b>%1 Punkte</b> &uuml;bertroffen.',
+  pConK:'Mit <b class="k">%1 mehr</b> erreichst du dein Ziel von <b>%2</b>.',
+  pFalta:'Noch <b class="k">%1 Punkte</b> bis zu deinem Ziel von <b>%2</b>.',
+  pBatYa:'Und du liegst bereits &uuml;ber der Batterie des Teams.',
+  pBatK:'Mit <b class="g">%1 mehr</b> erreichst du die Batterie des Teams (%2).',
+  pBatPts:'Noch <b class="g">%1 Punkte</b> bis zur Batterie des Teams (%2).',
+  accB1:'%1 gute Aktion', accBn:'%1 gute Aktionen',
+  sesTit:'Einheit f&uuml;r Einheit', sesUna:'%1 Einheiten', sesHoy:'heute',
   arranca:'Das Ziel startet n&auml;chsten Sonntag, sobald es einen Abschluss als Ausgangspunkt gibt'
  }
 };
@@ -716,34 +755,86 @@ var CSS = ''
 /* el numero grande */
 + '.os-foco{padding:20px 16px 16px;text-align:center;position:relative;overflow:hidden}'
 + '.os-foco:before{content:"";position:absolute;left:50%;top:-58%;width:130%;height:150%;transform:translateX(-50%);'
-+   'background:radial-gradient(ellipse at 50% 42%,rgba(232,25,44,.16),rgba(232,25,44,0) 62%);pointer-events:none}'
++   'background:radial-gradient(ellipse at 50% 42%,rgba(56,189,248,.15),rgba(56,189,248,0) 62%);pointer-events:none}'
++ '.os-foco.ok:before{background:radial-gradient(ellipse at 50% 42%,rgba(34,197,94,.17),rgba(34,197,94,0) 62%)}'
 + '.os-foco>*{position:relative}'
 + '.os-q{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:#7C8AA0;font-weight:700;margin:0 0 6px}'
 + '.os-q b{color:#E2E8F0}'
 + '.os-num{font-family:Anton,"Bebas Neue",system-ui,sans-serif;font-size:82px;line-height:.9;color:#F1F5F9;letter-spacing:-.02em}'
 + '.os-num u{text-decoration:none;font-size:.32em;color:#7C8AA0;margin-left:3px;letter-spacing:0;vertical-align:.22em}'
 + '.os-num.no{color:#475569;font-size:58px}'
++ '.os-num.vas{color:#38BDF8} .os-num.ok{color:#4ADE80}'
 + '.os-sub{font-size:17px;font-weight:500;color:#94A3B8;margin:7px 0 0}'
 + '.os-sub b{color:#E2E8F0}'
 + '.os-sub.ok b,.os-sub.ok{color:#22c55e}'
-+ '.os-delta{display:inline-block;margin:11px 0 0;font-size:16px;font-weight:700;border-radius:999px;padding:5px 15px}'
-+ '.os-delta.up{color:#052e16;background:#86efac}'
-+ '.os-delta.dn{color:#450a0a;background:#fca5a5}'
-+ '.os-delta.eq{color:#CBD5E1;background:rgba(148,163,184,.18)}'
+/* Mas liviana que antes: arriba tiene la pastilla de estado, y dos pastillas
+   macizas una debajo de la otra se peleaban por la atencion. */
++ '.os-delta{display:inline-block;margin:9px 0 0;font-size:14.5px;font-weight:700;border-radius:999px;padding:3px 12px}'
++ '.os-delta.up{color:#86efac;background:rgba(34,197,94,.13)}'
++ '.os-delta.dn{color:#fca5a5;background:rgba(248,113,113,.13)}'
++ '.os-delta.eq{color:#94A3B8;background:rgba(148,163,184,.14)}'
 /* la barra de recorrido */
-+ '.os-bar{margin:15px 16px 0;height:13px;border-radius:7px;background:rgba(148,163,184,.13);position:relative}'
-+ '.os-bar s{position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:#E8192C;text-decoration:none}'
-+ '.os-bar s.ok{background:#22c55e}'
++ '.os-bar{margin:9px 16px 0;height:13px;border-radius:7px;background:rgba(148,163,184,.13);position:relative}'
+/* ══ EL COLOR DE LA BARRA NO ES ROJO ════════════════════════════════════════
+   El rojo es color de ESTADO: dice «esto esta mal». Estaba puesto en la barra
+   del propio jugador, asi que su avance se leia como un error aunque estuviera
+   arriba del objetivo. Ahora: celeste mientras va en camino, verde cuando
+   llego. El rojo del club queda donde corresponde, en el dorsal. */
++ '.os-bar s{position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:linear-gradient(90deg,#0EA5E9,#38BDF8);text-decoration:none}'
++ '.os-bar s.ok{background:linear-gradient(90deg,#16A34A,#22C55E)}'
 + '.os-bar b{position:absolute;top:-4px;bottom:-4px;width:3px;border-radius:2px;background:#22c55e}'
 + '.os-bar b.bat{background:rgba(226,232,240,.55);width:2px;top:-2px;bottom:-2px}'
 + '.os-barpie{display:flex;justify-content:space-between;gap:10px;margin:6px 16px 0;font-size:14px;color:#64748B}'
-/* grafico */
-+ '.os-graf{margin:16px 0 0;padding:14px 16px 4px;border-top:1px solid rgba(148,163,184,.1)}'
-+ '.os-gtit{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 6px}'
-+ '.os-gtit h4{margin:0;font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:#7C8AA0;font-weight:700}'
-+ '.os-leg{margin-left:auto;display:flex;gap:12px;font-size:14px;color:#94A3B8;align-items:center}'
-+ '.os-leg span{display:flex;align-items:center;gap:6px}'
-+ '.os-leg s{width:17px;height:3px;border-radius:2px;text-decoration:none;display:block}'
+/* los rotulos arriba de la barra: sin esto las dos marcas son dos rayitas
+   mudas y hay que adivinar cual es cual */
++ '.os-rot{position:relative;height:15px;margin:16px 16px 0;font-size:11.5px;letter-spacing:.09em;'
++   'text-transform:uppercase;font-weight:700;white-space:nowrap}'
++ '.os-rot b,.os-rot i{position:absolute;top:0;font-style:normal}'
++ '.os-rot b{color:#22c55e} .os-rot i{color:#CBD5E1}'
+/* ── LA PASTILLA DE ESTADO ───────────────────────────────────────────────── */
++ '.os-pill{display:inline-block;margin:10px 0 0;border-radius:999px;padding:5px 15px;font-size:15px;'
++   'font-weight:800;letter-spacing:.05em;text-transform:uppercase;'
++   'background:rgba(56,189,248,.13);border:1px solid rgba(56,189,248,.4);color:#38BDF8}'
++ '.os-pill.ok{background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.45);color:#22c55e}'
+/* ── LA FRASE QUE DICE QUE HACER ─────────────────────────────────────────── */
++ '.os-paso{margin:12px 16px 0;font-size:17px;line-height:1.42;color:#CBD5E1;text-align:center}'
++ '.os-paso b{color:#F1F5F9;font-weight:800}'
++ '.os-paso .k{color:#38BDF8}'
++ '.os-paso .g{color:#22c55e}'
+/* ── SESION POR SESION ───────────────────────────────────────────────────── */
++ '.os-ses{margin:16px 0 0;padding:14px 16px 10px;border-top:1px solid rgba(148,163,184,.1)}'
++ '.os-sesplot{position:relative;display:flex;align-items:flex-end;gap:6px;height:116px}'
++ '.os-sescol{flex:1 1 0;min-width:0;position:relative;height:100%;display:flex;'
++   'flex-direction:column;justify-content:flex-end;align-items:center}'
+/* EL COLOR DICE UNA SOLA COSA: si esa sesion llego al objetivo o no.
+   Celeste la que no, verde la que si. Cual es HOY se marca con la tipografia
+   —numero mas grande y la fecha en blanco— y no con un tercer color, que
+   mezclaba dos cosas distintas en el mismo lugar. */
++ '.os-sescol i{display:block;width:100%;max-width:40px;min-height:4px;border-radius:5px 5px 0 0;'
++   'background:linear-gradient(180deg,#38BDF8,#0284C7);font-style:normal}'
++ '.os-sescol.ok i{background:linear-gradient(180deg,#4ADE80,#16A34A)}'
+/* El numero va en una chapita con el fondo de la tarjeta. Con solo una sombra,
+   cuando la sesion daba cerca de cero —o negativa, que en ataque pasa— el
+   numero caia justo sobre la raya punteada del objetivo y parecia que era el
+   rotulo de la raya y no el de la barra. La chapita corta la raya y deja claro
+   de quien es el numero. */
++ '.os-sescol u{position:absolute;left:0;right:0;z-index:3;text-decoration:none;'
++   'display:flex;justify-content:center}'
++ '.os-sescol u s{text-decoration:none;display:block;background:#0D0E1A;border-radius:5px;padding:0 5px;'
++   'font-family:Anton,"Bebas Neue",system-ui,sans-serif;font-size:16px;color:#CBD5E1;letter-spacing:-.01em}'
++ '.os-sescol.hoy u s{color:#F1F5F9;font-size:19px}'
++ '.os-seslin{position:absolute;left:0;right:0;border-top:2px dashed rgba(34,197,94,.65);z-index:2;pointer-events:none}'
++ '.os-sesdias{display:flex;gap:6px;margin:8px 0 0}'
++ '.os-sesdias span{flex:1 1 0;min-width:0;text-align:center;font-size:12px;letter-spacing:.07em;'
++   'text-transform:uppercase;color:#64748B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
++ '.os-sesdias span.hoy{color:#E2E8F0;font-weight:800}'
++ '.os-sestit{display:flex;align-items:center;gap:12px;margin:0 0 14px;white-space:nowrap}'
++ '.os-sestit h4{margin:0;font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:#7C8AA0;font-weight:700;'
++   'overflow:hidden;text-overflow:ellipsis;min-width:0}'
++ '.os-sestit .lin{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#22c55e;font-weight:800;'
++   'display:flex;align-items:center;gap:6px;margin-left:auto;flex:0 0 auto}'
++ '.os-sestit .lin:before{content:"";display:block;width:18px;border-top:2px dashed #22c55e}'
+
 /* las filas de abajo */
 + /* ══ LOS BOTONES DE FUNDAMENTO ══════════════════════════════════════════
      El grande de arriba lo elegia el programa: el primero del puesto con
@@ -770,20 +861,24 @@ var CSS = ''
 + '.os-fila{display:flex;align-items:center;gap:11px;padding:11px 16px;border-top:1px solid rgba(148,163,184,.1)}'
 + '.os-fila .l{font-size:17px;color:#CBD5E1;flex:1 1 44%;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
 + '.os-fila .b{flex:0 1 26%;height:7px;border-radius:4px;background:rgba(148,163,184,.13);position:relative;min-width:44px}'
-+ '.os-fila .b s{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:#E8192C;text-decoration:none}'
++ '.os-fila .b s{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:#38BDF8;text-decoration:none}'
 + '.os-fila .b b{position:absolute;top:-3px;bottom:-3px;width:3px;border-radius:2px;background:#22c55e}'
 + '.os-fila .b b.bat{background:rgba(226,232,240,.45);width:2px;top:-1px;bottom:-1px}'
 + '.os-fila .b s.ok{background:#22c55e}'
 + '.os-fila .r{text-align:right;white-space:nowrap;font-size:14px;color:#64748B;flex:0 0 auto}'
 + '.os-fila .r em{font-style:normal;color:#475569}'
 + '.os-fila .r u{font-family:Anton,"Bebas Neue",system-ui,sans-serif;font-size:23px;text-decoration:none;color:#E2E8F0;margin-right:6px;vertical-align:-1px;letter-spacing:-.01em}'
++ '.os-fila .r u s{text-decoration:none;font-family:inherit;font-size:.56em;color:#7C8AA0;margin-left:2px;vertical-align:.12em}'
 + '.os-fila .r u.ok{color:#22c55e}'
 + '.os-fila .r i{font-style:normal;font-weight:700;margin-left:7px}'
 + '.os-fila .r i.up{color:#86efac} .os-fila .r i.dn{color:#fca5a5}'
-+ '.os-eq{margin:2px 16px 12px;font-size:15px;color:#64748B;text-align:center}'
++ '.os-eq{margin:0;padding:10px 16px 11px;font-size:15px;color:#64748B;text-align:center;'
++   'border-top:1px solid rgba(148,163,184,.1)}'
 + '.os-vacio{font-size:15px;color:#64748B;padding:14px 16px;line-height:1.45}'
 + '@media(max-width:400px){.os-num{font-size:66px}.os-fila .l{font-size:16px}.os-fila .b{min-width:40px}'
-+   '.os-head .cu{font-size:11px;letter-spacing:.08em}}';
++   '.os-head .cu{font-size:11px;letter-spacing:.08em}'
++   '.os-paso{font-size:16px}.os-sesplot{height:96px}.os-sescol u{font-size:14px}'
++   '.os-sescol.hoy u{font-size:16px}.os-sesdias span{font-size:11px;letter-spacing:.02em}}';
 
 /* ── LA TIPOGRAFIA ─────────────────────────────────────────────────────────
    Anton para los numeros: es la hermana pesada de Bebas Neue, la que ya usa
@@ -819,94 +914,145 @@ function nombreCorto(nombre){
   return cap(t[0]) + ' ' + t[1].charAt(0).toUpperCase() + '.';
 }
 
-/* ── EL DIA A DIA ──────────────────────────────────────────────────────────
-   Linea, nunca barras: con la base corrida —que es lo que hace falta para que
-   se note algo— una diferencia de un punto parece el doble de alto que otra. */
-function grafico(S, cur){
-  /* Ojo con los nombres: T es la funcion de los textos. El margen de arriba
-     se llama Tp. Llamarlo T lo tapaba adentro de esta funcion y el grafico
-     reventaba entero. */
-  var W = 520, H = 150, L = 12, R = 14, Tp = 20, Bm = 26;
-  var prevSem = null;
-  for(var i=S.length-2;i>=0;i--){ if(S[i].tot){ prevSem = S[i]; break; } }
-  var vals = [];
-  cur.acum.forEach(function(v){ if(v!==null) vals.push(v); });
-  if(prevSem) prevSem.acum.forEach(function(v){ if(v!==null) vals.push(v); });
-  if(cur.objetivo != null) vals.push(cur.objetivo);
-  if(!vals.length) return '';
-  var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
-  var pad = Math.max(3, (mx - mn) * 0.35);
-  mn -= pad; mx += pad;
-  if(mx - mn < 6){ var c = (mx+mn)/2; mn = c-3; mx = c+3; }
-  function X(i){ return L + i * (W - L - R) / 6; }
-  function Y(v){ return Tp + (mx - v) / (mx - mn) * (H - Tp - Bm); }
+/* ── LAS SESIONES, NO LOS DIAS ───────────────────────────────
+   Antes se dibujaban los SIETE DIAS de la semana, de lunes a domingo. Con dos
+   o tres entrenamientos por semana, cuatro de esos siete dias estaban vacios:
+   la linea se quedaba horizontal y las letras L M M J V S D no significaban
+   nada. Eso es exactamente lo que no se entendia.
 
-  var o = '<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block;overflow:visible" aria-hidden="true">';
-  if(prevSem){
-    var dp = '', ab = false;
-    prevSem.acum.forEach(function(v,i){
-      if(v===null) return;
-      dp += (ab?'L':'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1) + ' '; ab = true;
-    });
-    if(dp) o += '<path d="'+dp+'" fill="none" stroke="#94A3B8" stroke-width="2.5" stroke-opacity=".75" stroke-linejoin="round"/>';
+   Ahora el eje son LAS SESIONES QUE DE VERDAD HUBO. Cada barra es un
+   entrenamiento o un partido, con su fecha y su numero escrito arriba. No hay
+   huecos porque no se dibujan dias, se dibujan sesiones.
+
+   Dos decisiones que no se tocan:
+     1. Las barras arrancan en CERO. Correr la base para «que se note la
+        diferencia» hace que dos puntos parezcan el doble que uno. Lo que hay
+        que mirar es la raya verde del objetivo cruzando las barras, y eso se
+        ve igual.
+     2. Con menos de dos sesiones no se dibuja nada. Una barra sola no es una
+        tendencia y el numero grande de arriba ya lo dice mejor.            */
+function sesiones(cur, r){
+  if(!r || !r.semanas || !r.semanas.length) return '';
+  /* ══ LAS ULTIMAS SEIS, NO LAS DE ESTA SEMANA ══════════════════════════════
+     Probado contra los datos del club: mirando SOLO el cajon actual, de 371
+     combinaciones de jugador y fundamento, 268 tenian UNA sola sesion y el
+     dibujo no se iba a ver casi nunca —en modo PARTIDO, nunca: una semana
+     tiene un partido—. Asi que se recorre hacia atras y se juntan las ultimas
+     seis sesiones con acciones, crucen o no el borde de la semana. Es mas
+     util: seis puntos son una tendencia y dos no. */
+  var ss = [], hy = clave(hoy()), TOPE = 6;
+  for(var w = r.semanas.length - 1; w >= 0 && ss.length < TOPE; w--){
+    var c = r.semanas[w];
+    if(!c || !c.dias || !c.dom) continue;
+    for(var i = c.dias.length - 1; i >= 0 && ss.length < TOPE; i--){
+      var d = c.dias[i];
+      if(!d || !d.tot) continue;
+      var f = new Date(c.dom.getFullYear(), c.dom.getMonth(), c.dom.getDate() + i);
+      ss.push({f:f, v:d.num / d.tot * 100, n:d.tot, hoy:(clave(f) === hy)});
+    }
   }
-  var yo = null;
-  if(cur.objetivo != null){
-    yo = Y(cur.objetivo);
-    o += '<line x1="'+L+'" y1="'+yo.toFixed(1)+'" x2="'+(W-R)+'" y2="'+yo.toFixed(1)+'" stroke="#22c55e" stroke-width="2" stroke-dasharray="6 5" stroke-opacity=".85"/>';
-    /* El rotulo va a la IZQUIERDA: el ultimo punto de la linea roja cae a la
-       derecha y los dos numeros se pisaban. */
-    o += '<text x="'+L+'" y="'+(yo-8).toFixed(1)+'" fill="#22c55e" font-size="14" font-weight="700"'
-       + ' stroke="#0D0E1A" stroke-width="4" paint-order="stroke">'
-       + T('objLbl', n1(cur.objetivo)) + '</text>';
+  ss.reverse();
+  if(ss.length < 2) return '';
+
+  /* La raya de referencia es el objetivo de la semana. Cuando todavia no hay
+     objetivo —la primera semana con datos— se usa la bateria del equipo, que
+     es el norte igual. Sin ninguna de las dos, las barras van sin raya y sin
+     color de estado: no hay contra que decir si estuvo bien o mal. */
+  var obj = (cur.objetivo != null) ? cur.objetivo : ((r && r.bat != null) ? r.bat : null);
+  var esObj = (cur.objetivo != null);
+  /* La MISMA escala para las barras y para la raya. Con dos formulas distintas
+     una barra de 95 quedaba por debajo de una raya de 93. */
+  function alto(v){ return Math.max(3, Math.min(86, v)); }
+
+  /* El rotulo va en el encabezado, no adentro del dibujo: pegado a la raya se
+     montaba justo arriba del numero de la ultima sesion, que es el que mas
+     importa, y no se leia ninguno de los dos. */
+  var o = '<div class="os-ses"><div class="os-sestit"><h4>' + T('sesTit') + '</h4>'
+        + (obj == null ? '' : '<b class="lin">'
+            + (esObj ? T('objLbl', n1(obj) + '&nbsp;%')
+                     : T('pBateria') + ' ' + n1(obj) + '&nbsp;%') + '</b>')
+        + '</div>';
+  o += '<div class="os-sesplot">';
+  if(obj != null){
+    o += '<div class="os-seslin" style="bottom:' + alto(obj).toFixed(1) + '%"></div>';
   }
-  var d = '', abierto = false, ult = null, ultI = 0;
-  cur.acum.forEach(function(v,i){
-    if(v===null) return;
-    d += (abierto?'L':'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1) + ' '; abierto = true;
-    ult = v; ultI = i;
+  ss.forEach(function(x){
+    var h = alto(x.v);
+    var cl = (obj != null && x.v >= obj) ? ' ok' : '';
+    if(x.hoy) cl += ' hoy';
+    o += '<div class="os-sescol' + cl + '">'
+       + '<u style="bottom:calc(' + h.toFixed(1) + '% + 6px)"><s>' + n1(x.v) + '</s></u>'
+       + '<i style="height:' + h.toFixed(1) + '%"></i></div>';
   });
-  if(d) o += '<path d="'+d+'" fill="none" stroke="#E8192C" stroke-width="3" stroke-linejoin="round"/>';
-  cur.acum.forEach(function(v,i){
-    if(v===null) return;
-    o += '<circle cx="'+X(i).toFixed(1)+'" cy="'+Y(v).toFixed(1)+'" r="4.5" fill="#E8192C" stroke="#0D0E1A" stroke-width="2"/>';
+  o += '</div><div class="os-sesdias">';
+  ss.forEach(function(x){
+    o += '<span class="' + (x.hoy ? 'hoy' : '') + '">'
+       + (x.hoy ? T('sesHoy') : fecha_corta(x.f)) + '</span>';
   });
-  if(ult !== null){
-    /* ══ LA ETIQUETA NO SE MONTA SOBRE LA DEL OBJETIVO ══════════════════════
-       Cuando el valor de hoy y el objetivo quedan cerca, los dos numeros se
-       escribian uno encima del otro y no se leia ninguno. Si estan a menos de
-       18 px, el de hoy baja. Y si el punto esta contra el borde derecho, el
-       texto se ancla al final para no salirse del dibujo. */
-    var yv = Y(ult), dy = -12;
-    if(yo !== null && Math.abs(yv - yo) < 18) dy = 20;
-    var anc = (ultI >= 6) ? 'end' : (ultI === 0 ? 'start' : 'middle');
-    o += '<text x="'+X(ultI).toFixed(1)+'" y="'+(yv+dy).toFixed(1)+'" fill="#F1F5F9" font-size="17" font-family="Anton, sans-serif"'
-       + ' stroke="#0D0E1A" stroke-width="4" paint-order="stroke" text-anchor="'+anc+'">'+n1(ult)+'</text>';
-  }
-  var DIAS = T('dias'), hd = diaSemana(hoy());
-  for(var k=0;k<7;k++){
-    o += '<text x="'+X(k).toFixed(1)+'" y="'+(H-7)+'" fill="'+(k===hd?'#E2E8F0':'#64748B')+'" font-size="13"'
-       + (k===hd?' font-weight="700"':'') + ' text-anchor="middle">'+DIAS[k]+'</text>';
-  }
-  o += '</svg>';
+  o += '</div></div>';
   return o;
 }
 
+/* ── CUANTAS ACCIONES FALTAN, DE VERDAD ────────────────────────────
+   «te falta 7,5 para el objetivo» no le dice a nadie que tiene que hacer.
+   Cuantas acciones buenas seguidas lo ponen ahi, si.
+
+     val = num / tot * 100.  Con k acciones buenas mas:
+     (num + k) / (tot + k) * 100 >= O   =>   k >= (O*tot - 100*num) / (100 - O)
+
+   El armado de alta suma (puntos+2) sobre 4 por accion, asi que ahi cada
+   accion vale 4 y la cuenta se divide por ese paso.
+
+   Devuelve null cuando el numero no sirve: objetivo de 100 (no hay k), sin
+   acciones todavia, o mas de doce acciones. Doce es, mas o menos, lo que da
+   una sesion: arriba de eso el numero deja de ser un paso que se puede dar
+   hoy y pasa a desanimar («te faltan 37 recepciones buenas» no empuja a
+   nadie). En ese caso la tarjeta dice los puntos que faltan y listo.       */
+function cuantasFaltan(cur, id, meta){
+  if(meta == null || !cur || !cur.tot) return null;
+  if(meta >= 99.5) return null;
+  var k = (meta * cur.tot - 100 * cur.num) / (100 - meta);
+  if(k <= 0) return 0;
+  var paso = (id === 'hset') ? 4 : 1;
+  k = Math.ceil(k / paso);
+  if(k > 12 || !isFinite(k)) return null;
+  return k;
+}
+function cuantasB(n){ return n === 1 ? T('accB1', n) : T('accBn', n); }
+
 /* La pastilla verde/roja: cuanto mejor o peor va que el mismo dia de la
    semana pasada. Comparar el cierre entero contra un miercoles no diria nada. */
-function pastilla(S, cur){
-  var prevSem = null;
-  for(var i=S.length-2;i>=0;i--){ if(S[i].tot){ prevSem = S[i]; break; } }
-  if(!prevSem || cur.val === null) return '';
-  var hd = diaSemana(hoy());
-  var a = null;
-  for(var k=hd;k>=0;k--){ if(prevSem.acum[k] !== null){ a = prevSem.acum[k]; break; } }
-  if(a === null) a = prevSem.val;
-  if(a === null) return '';
-  var d = cur.val - a, dia = T('diasLargos')[hd];
-  if(Math.abs(d) < 0.05) return '<span class="os-delta eq">' + T('igual', dia) + '</span>';
+/* ══ EL NaN DEL MODO DIA ═══════════════════════════════════════════════════
+   Esta pastilla se escribio cuando el unico periodo era la semana: buscaba el
+   acumulado del MISMO dia de la semana pasada, con el indice del dia (0 a 6).
+   En DIA el cajon tiene UNA sola casilla, asi que acum[4] no existe, y como la
+   guarda era «!== null» —y undefined no es null— se colaba: la resta daba NaN
+   y en pantalla aparecia «NaN vs el viernes pasado». En MES pasaba parecido.
+   Ahora: en semana sigue comparando contra el mismo dia, y en dia y en mes
+   compara contra el cajon anterior entero, que es lo que corresponde. */
+function pastilla(S, cur, per){
+  per = per || 'semana';
+  var prev = null;
+  for(var i=S.length-2;i>=0;i--){ if(S[i].tot){ prev = S[i]; break; } }
+  if(!prev || cur.val === null) return '';
+  var a = null, lbl = '', lblIgual = '';
+  if(per === 'semana'){
+    var hd = diaSemana(hoy());
+    for(var k=hd;k>=0;k--){ if(prev.acum[k] != null){ a = prev.acum[k]; break; } }
+    if(a == null) a = prev.val;
+    lbl = T('vsDia', T('diasLargos')[hd]);
+    lblIgual = T('igual', T('diasLargos')[hd]);
+  } else {
+    a = prev.val;
+    lbl = T(per === 'dia' ? 'ayer' : 'mesPasado');
+    lblIgual = T(per === 'dia' ? 'igualAyer' : 'igualMes');
+  }
+  if(a == null) return '';
+  var d = cur.val - a;
+  if(!isFinite(d)) return '';
+  if(Math.abs(d) < 0.05) return '<span class="os-delta eq">' + lblIgual + '</span>';
   return '<span class="os-delta ' + (d > 0 ? 'up' : 'dn') + '">'
-       + (d > 0 ? '&#9650; ' : '&#9660; ') + n1(Math.abs(d)) + ' ' + T('vsDia', dia) + '</span>';
+       + (d > 0 ? '&#9650; ' : '&#9660; ') + n1(Math.abs(d)) + ' ' + lbl + '</span>';
 }
 
 /* ── LA BARRA ──────────────────────────────────────────────────────────────
@@ -932,10 +1078,32 @@ function marcas(r, cur, alto){
     o += '<b style="left:calc(' + P(cur.objetivo).toFixed(1) + '% - 1.5px)"></b>';
   return o;
 }
+/* Las dos marcas de la barra eran dos rayitas sin nombre: habia que saber de
+   antes cual era el objetivo y cual la bateria. Ahora van rotuladas, y el
+   rotulo se ancla al borde cuando la marca queda contra una punta, para que
+   no se salga de la tarjeta. */
 function barra(r, cur){
-  var o = '<div class="os-bar">' + marcas(r, cur) + '</div>';
-  o += '<div class="os-barpie"><span>' + (cur.desde == null ? '' : T('cerroEn', n1(cur.desde))) + '</span>'
-     + '<span>' + (r.bat == null ? '' : T('batPie', n0(r.bat))) + '</span></div>';
+  var m = r.meta || {};
+  var lo = (m.min != null) ? m.min : 0;
+  var hi = (m.max != null) ? m.max : 100;
+  if(hi <= lo){ lo = 0; hi = 100; }
+  function P(v){ return Math.max(0, Math.min(100, (v - lo) / (hi - lo) * 100)); }
+  function pos(p){
+    if(p < 14) return 'left:0';
+    if(p > 86) return 'right:0';
+    return 'left:' + p.toFixed(1) + '%;transform:translateX(-50%)';
+  }
+  var rot = '';
+  if(cur.objetivo != null)
+    rot += '<b style="' + pos(P(cur.objetivo)) + '">' + T('pObjetivo') + ' ' + n1(cur.objetivo) + '&nbsp;%</b>';
+  if(r.bat != null && (cur.objetivo == null || Math.abs(r.bat - cur.objetivo) > 5))
+    rot += '<i style="' + pos(P(r.bat)) + '">' + T('pBateria') + ' ' + n0(r.bat) + '&nbsp;%</i>';
+
+  var o = (rot ? '<div class="os-rot">' + rot + '</div>' : '')
+        + '<div class="os-bar">' + marcas(r, cur) + '</div>';
+  o += '<div class="os-barpie"><span>'
+     + (cur.desde == null ? '' : T((r.periodo || 'semana') === 'semana' ? 'cerroEn' : 'cerroPrev', n1(cur.desde) + '&nbsp;%'))
+     + '</span><span>' + (cur.n ? cuantas(cur.n) : '') + '</span></div>';
   return o;
 }
 
@@ -962,44 +1130,69 @@ function tarjeta(r, modo, eqSerie, nombre, dorsal){
     o += '<div class="os-racha">' + lblRacha + '<span class="pts">' + pts + '</span></div>';
   }
 
-  o += '<div class="os-foco">'
-     + '<p class="os-q">' + T('titulo') + ' &middot; <b>' + nombreDe(r.id, r.meta) + '</b>'
+  var logro = (cur.n > 0 && cur.objetivo != null && cur.val !== null && cur.val >= cur.objetivo);
+  o += '<div class="os-foco' + (logro ? ' ok' : '') + '">'
+     + '<p class="os-q">' + T(per === 'dia' ? 'tituloDia' : (per === 'mes' ? 'tituloMes' : 'titulo'))
+     + ' &middot; <b>' + nombreDe(r.id, r.meta) + '</b>'
      + ' <span style="color:#475569">&middot; ' + T(modo === 'partido' ? 'partido' : 'entrenamiento') + '</span></p>';
 
   if(cur.n === 0){
     o += '<div class="os-num no">&mdash;</div>'
        + '<p class="os-sub">' + T('sinArranque')
-       + (cur.desde == null ? '' : ' &middot; ' + T('cerroEn', n1(cur.desde))) + '</p>';
+       + (cur.desde == null ? '' : ' &middot; ' + T(per === 'semana' ? 'cerroEn' : 'cerroPrev', n1(cur.desde) + '&nbsp;%')) + '</p>';
   } else {
-    o += '<div class="os-num">' + n1(cur.val) + '<u>%</u></div>';
+    /* ══ EL NUMERO LLEVA EL % PEGADO Y EL COLOR DEL ESTADO ═════════════════
+       Un «62,5» suelto no se sabe si son puntos, acciones o por ciento. Y el
+       color: celeste mientras va en camino, verde cuando llego. Nunca rojo,
+       que es lo que estaba y hacia leer su propio avance como un error. */
+    o += '<div class="os-num ' + (cur.objetivo == null ? '' : (logro ? 'ok' : 'vas')) + '">'
+       + n1(cur.val) + '<u>%</u></div>';
     if(cur.objetivo == null){
       o += '<p class="os-sub">' + cuantas(cur.n) + ' &middot; ' + T('arranca') + '</p>';
-    } else if(cur.val >= cur.objetivo){
-      o += '<p class="os-sub ok"><b>' + T('logrado') + '</b> <span style="color:#64748B">'
-         + T('objLbl', n1(cur.objetivo)) + ' &middot; ' + cuantas(cur.n) + '</span></p>';
     } else {
-      o += '<p class="os-sub">' + T('faltaPara', n1(cur.objetivo - cur.val), n1(cur.objetivo))
-         + ' <span style="color:#64748B">&middot; ' + cuantas(cur.n) + '</span></p>';
+      o += '<div><span class="os-pill' + (logro ? ' ok' : '') + '">'
+         + (logro ? '&#10003; ' + T('logrado') : T('objLbl', n1(cur.objetivo) + '&nbsp;%')) + '</span></div>';
     }
-    o += pastilla(r.semanas, cur);
+    o += pastilla(r.semanas, cur, per);
   }
   o += '</div>';
 
+  /* ══ EL PASO SIGUIENTE, EN ACCIONES ══════════════════════════════════════
+     Una sola cosa por vez. Si todavia no llego al objetivo, el paso es el
+     objetivo. Si ya lo paso, el paso pasa a ser la bateria del equipo, que es
+     el norte. Las dos juntas confunden: son dos metas distintas al mismo
+     tiempo y el jugador no sabe cual mirar. */
+  if(cur.n > 0 && cur.val !== null){
+    var paso = '';
+    if(cur.objetivo == null){
+      var k0 = (r.bat == null) ? null : cuantasFaltan(cur, r.id, r.bat);
+      if(k0 > 0) paso = T('pBatK', cuantasB(k0), n1(r.bat) + '&nbsp;%');
+      else if(r.bat != null && cur.val >= r.bat) paso = T('pBatYa').replace('Y ya', 'Ya');
+    } else if(!logro){
+      var k = cuantasFaltan(cur, r.id, cur.objetivo);
+      paso = (k > 0) ? T('pConK', cuantasB(k), n1(cur.objetivo) + '&nbsp;%')
+                     : T('pFalta', n1(cur.objetivo - cur.val), n1(cur.objetivo) + '&nbsp;%');
+    } else {
+      paso = T('pPase', n1(cur.val - cur.objetivo));
+      if(r.bat != null){
+        if(cur.val >= r.bat){ paso += ' ' + T('pBatYa'); }
+        else {
+          var kb = cuantasFaltan(cur, r.id, r.bat);
+          paso += ' ' + ((kb > 0) ? T('pBatK', cuantasB(kb), n1(r.bat) + '&nbsp;%')
+                                  : T('pBatPts', n1(r.bat - cur.val), n1(r.bat) + '&nbsp;%'));
+        }
+      }
+    }
+    if(paso) o += '<p class="os-paso">' + paso + '</p>';
+  }
+
   o += barra(r, cur);
 
-  /* El dia a dia. En DIA no se dibuja: un solo cajon no es una linea, es un
-     punto, y una linea de un punto no dice nada. */
-  var g = per === 'dia' ? null : grafico(r.semanas, cur);
-  if(g){
-    var tit = per === 'mes' ? T('diaADiaMes') : T('diaADia');
-    var act = per === 'mes' ? T('esteMes') : T('estaSemana');
-    var ant = per === 'mes' ? T('elPasado') : T('laPasada');
-    o += '<div class="os-graf"><div class="os-gtit"><h4>' + tit + '</h4>'
-       + '<span class="os-leg"><span><s style="background:#E8192C"></s>' + act + '</span>'
-       + '<span><s style="background:#94A3B8"></s>' + ant + '</span></span></div>' + g + '</div>';
-  }
+  /* Sesion por sesion. Se dibuja solo si hubo dos o mas; la propia funcion
+     devuelve vacio cuando no, asi que en DIA (un solo cajon) no sale nada. */
+  o += sesiones(cur, r);
   if(eqSerie && eqSerie.ultima && eqSerie.ultima.val !== null){
-    o += '<p class="os-eq">' + T('equipo', n1(eqSerie.ultima.val)) + '</p>';
+    o += '<p class="os-eq">' + T('equipo', n1(eqSerie.ultima.val) + '&nbsp;%') + '</p>';
   }
   return o;   /* el cierre del os-card lo pone render(), despues de las filas */
 }
@@ -1012,7 +1205,7 @@ function fila(r){
        semana» en cada fila y el renglon entero se iba en eso; en un telefono
        el nombre del fundamento quedaba cortado. */
     var c = (r.hay && r.ultima && r.ultima.desde != null)
-            ? '<em>' + T('cerroCorto', n1(r.ultima.desde)) + '</em>'
+            ? '<em>' + T('cerroCorto', n1(r.ultima.desde) + '&nbsp;%') + '</em>'
             : '<em>' + ((r.hay && r.ultima) ? T('sinSemana') : T('sinDatos')) + '</em>';
     o += '<span class="b">' + ((r.hay && r.ultima) ? marcas(r, r.ultima) : '') + '</span>'
        + '<span class="r">' + c + '</span></div>';
@@ -1021,8 +1214,8 @@ function fila(r){
   var cur = r.ultima, v = cur.val, obj = cur.objetivo;
   var listo = (obj != null && v >= obj);
   o += '<span class="b">' + marcas(r, cur) + '</span>';
-  o += '<span class="r"><u class="' + (listo ? 'ok' : '') + '">' + n1(v) + '</u>'
-     + (obj == null ? T('midiendo') : (listo ? T('logrado') : T('faltaN', n1(obj - v))));
+  o += '<span class="r"><u class="' + (listo ? 'ok' : '') + '">' + n1(v) + '<s>%</s></u>'
+     + (obj == null ? T('midiendo') : (listo ? T('logrado') : T('faltaN', n1(obj - v) + '&nbsp;%')));
   var d = (cur.desde == null) ? null : v - cur.desde;
   if(d !== null && Math.abs(d) >= 0.05){
     o += '<i class="' + (d > 0 ? 'up' : 'dn') + '">' + (d > 0 ? '&#9650;' : '&#9660;') + n1(Math.abs(d)) + '</i>';
@@ -1225,7 +1418,7 @@ function tarjetaPortada(){
     /* la semana todavia no arranco: se muestra igual, con el objetivo que le
        toca, porque eso es justamente lo que tiene que ir a hacer */
     var con = rs.filter(function(r){ return r.hay && r.ultima && r.ultima.objetivo != null; })[0];
-    if(num){ num.className = 'tb-obj-n'; num.innerHTML = con ? n1(con.ultima.objetivo) : '&mdash;'; }
+    if(num){ num.className = 'tb-obj-n'; num.innerHTML = con ? (n1(con.ultima.objetivo) + '<s>%</s>') : '&mdash;'; }
     if(det){
       det.innerHTML = con
         ? T('tArranca', nombreDe(con.id, con.meta)) 
@@ -1244,8 +1437,8 @@ function tarjetaPortada(){
   if(det && head){
     var c = head.ultima;
     det.innerHTML = c.val >= c.objetivo
-      ? T('tDetOk', nombreDe(head.id, head.meta), n1(c.val))
-      : T('tDetFalta', nombreDe(head.id, head.meta), n1(c.val), n1(c.objetivo - c.val));
+      ? T('tDetOk', nombreDe(head.id, head.meta), n1(c.val) + '&nbsp;%')
+      : T('tDetFalta', nombreDe(head.id, head.meta), n1(c.val) + '&nbsp;%', n1(c.objetivo - c.val));
   }
   mostrar(caja);
 }
@@ -1326,6 +1519,11 @@ function fundamento(id){
 }
 
 window.OBJ_SEMANA = {render:render, fundamento:fundamento, periodo:periodo, pastilla:tarjetaPortada, serie:serie, semanas:semanas, PUESTOS:PUESTOS, CUENTA:CUENTA,
+                     /* plan_desarrollo.html la llama para dejar marcado el boton
+                        —PARTIDO o ENTRENAMIENTO— que corresponde al abrir. No
+                        estaba exportada, asi que la llamada caia en el catch y
+                        la pagina abria sin ninguno de los dos marcado. */
+                     modoConAcciones:modoConAcciones,
                      /* la tabla del cuerpo tecnico usa el mismo diccionario:
                         si hubiera dos, un dia dirian cosas distintas */
                      T:T, idioma:idioma, nombreDe:nombreDe, cortoDe:cortoDe,
