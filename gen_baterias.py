@@ -536,7 +536,11 @@ def _turno(nombre_archivo):
 
 
 def _plantel_club():
-    """Los numeros del plantel del club, de plantel_<club>.js."""
+    """Los numeros del plantel del club, de plantel_<club>.js.
+
+    Devuelve {numero: apellido}. Se usa para dos cosas distintas: filtrar los
+    numeros que no son jugadores (la maquina de saque, un invitado) y, desde
+    _nombre_oficial(), escribir bien el apellido."""
     global _PC
     try:
         return _PC
@@ -551,6 +555,58 @@ def _plantel_club():
             out[int(m.group(1))] = m.group(2).strip()
     _PC = out
     return out
+
+
+def _plantel_nombres():
+    """{numero: "APELLIDO NOMBRE"} del plantel maestro, en mayusculas."""
+    global _PN
+    try:
+        return _PN
+    except NameError:
+        pass
+    import glob as _g, re as _r, os as _o
+    out = {}
+    for f in _g.glob(_o.path.join(_o.path.dirname(_o.path.abspath(__file__)), 'plantel_*.js')):
+        try: t = open(f, encoding='utf-8', errors='replace').read()
+        except Exception: continue
+        for m in _r.finditer(r'\{\s*num:\s*(\d+)\s*,\s*ap:\s*"([^"]*)"\s*,\s*nombre:\s*"([^"]*)"', t):
+            ap = m.group(2).strip(); nom = m.group(3).strip()
+            if ap:
+                out[int(m.group(1))] = (ap + (' ' + nom if nom else '')).upper()
+    _PN = out
+    return out
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  EL APELLIDO LO DICE EL PLANTEL, NO EL .DVW
+#  ------------------------------------------------------------------------
+#  Arriba, _unificar_por_numero() elige entre las formas que escribio el
+#  scout: la que mas veces aparece. Eso arregla los errores de tipeo sueltos
+#  —SCHIMD una vez contra SCHMID cuatro— pero NO arregla el apellido que
+#  esta mal escrito SIEMPRE. Si el asistente tipeo JOHANNSEN en los veinte
+#  archivos, JOHANNSEN gana por veinte a cero.
+#
+#  Y no es cosmetico. La app busca al jugador por nombre contra el plantel
+#  para sacarle el dorsal y el puesto. Con el apellido mal no lo encuentra:
+#  el #12 entraba a su plan de desarrollo SIN numero de camiseta y con la
+#  lista de fundamentos generica —recepcion y ataque— en vez de la de un
+#  central. Lo mismo que ya se arreglo en gen_plan_partido.py y en
+#  update_db_nafels_FULL.py; faltaba aca, que es de donde salen las
+#  baterias, el dashboard y la ficha del jugador.
+#
+#  plantel_<club>.js es la fuente unica: si manda el plantel, el .dvw no
+#  decide. De los RIVALES no se toca nada: no tenemos su plantel.
+# ══════════════════════════════════════════════════════════════════════════
+def _nombre_oficial(num, dvw, nuestro=True):
+    """El nombre que va a la app. Si el numero esta en el plantel y la sesion
+    es nuestra, manda el plantel; si no, queda lo que trae el .dvw."""
+    if not nuestro:
+        return dvw
+    try:
+        n = int(str(num).lstrip('0') or str(num))
+    except Exception:
+        return dvw
+    return _plantel_nombres().get(n) or dvw
 
 
 def _es_nuestro_equipo(nombre):
@@ -682,11 +738,20 @@ def _unificar_por_numero(matches):
             cuenta[n][nom] += 1
 
     canon = {}
+    _maestro = _plantel_nombres()
     for n, opciones in cuenta.items():
-        canon[n] = sorted(
+        elegido = sorted(
             opciones.items(),
             key=lambda x: (-x[1], 0 if x[0].isupper() else 1, -len(x[0]), x[0])
         )[0][0]
+        # Si el numero esta en el plantel del club, manda el plantel. La
+        # votacion entre las formas del .dvw solo decide cuando el numero NO
+        # es nuestro (un rival) o no esta cargado en el plantel.
+        try:
+            _n = int(str(n).lstrip('0') or str(n))
+        except Exception:
+            _n = None
+        canon[n] = (_maestro.get(_n) if _n is not None else None) or elegido
     for m in matches:
         nombres = m.get('names') or {}
         nuevo = {}
@@ -763,6 +828,7 @@ def build(fuentes, out='datos_baterias.js', filtro_temp=None):
                         continue
                 nom=r['names'].get(num)
                 if not nom: continue
+                nom=_nombre_oficial(num, nom, _es_nuestro_equipo(r.get('nuestro') or r.get('rival')))
                 jug[nom]=_bat_to_pcts(P)
             eq=_bat_to_pcts(pl['__EQUIPO__']) if '__EQUIPO__' in pl else {}
             matches.append({'id':sid,'tipo':tipo,'rival':r['rival'],'fecha':r['date'],'turno':r.get('turno',''),

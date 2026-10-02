@@ -369,7 +369,15 @@ function dorsalDe(nombre){
     for(var i=0;i<L.length;i++){
       var j = L[i];
       if(j.num == null) continue;
-      if(parecido(j.nombre, nombre) || mismoNombre(j.ap, nombre)) return String(j.num);
+      /* ══ EL APELLIDO SOLO, TAMBIEN POR PRINCIPIO ════════════════════════
+         Esta comparacion era EXACTA: el plantel dice "BRUDERER" y las
+         baterias "BRUDERER GIAN", asi que no era igual y no lo encontraba.
+         Al #2 le faltaba el dorsal y le caia la lista generica de
+         fundamentos, igual que al #12 pero por otro motivo. Con principio
+         —la misma regla que ya se usa para el nombre— lo encuentra, y no
+         confunde a los dos SCHMID porque el plantel los distingue como
+         "SCHMID R" y "SCHMID J". */
+      if(parecido(j.nombre, nombre) || parecido(j.ap, nombre)) return String(j.num);
     }
   }
   if(window._curJug && window._curJug.num != null && parecido(window._curJug.nombre, nombre))
@@ -1269,7 +1277,7 @@ function puestoDe(nombre){
     for(var i=0;i<L.length;i++){
       var j = L[i];
       var nm = j.nombre || j.ap || '';
-      if(parecido(nm, nombre) || mismoNombre((j.ap||''), nombre)){
+      if(parecido(nm, nombre) || parecido((j.ap||''), nombre)){
         if(j.pos) return String(j.pos).toUpperCase();
       }
     }
