@@ -438,7 +438,7 @@ var TXT = {
   tJugador:'Jugador', tCumplidos:'objetivos cumplidos',
   tObjetivos:'Objetivos', tPlantel:'Objetivos del plantel',
   tVerTodos:'ver', tDetPlantel:'Todo el plantel en una hoja: qu&eacute; se le pidi&oacute; a cada uno esta semana y c&oacute;mo viene.',
-  tIrPlantel:'Ver el plantel &rarr;', tIrMios:'Mis objetivos y mi plan &rarr;',
+  tIrPlantel:'Ver el plantel &rarr;', tIrMios:'Ver mis objetivos &rarr;',
   tDetOk:'<b>%1</b> vas en <b>%2</b> &middot; ya est&aacute;', tDetFalta:'<b>%1</b> vas en <b>%2</b> &middot; te faltan %3',
   tArranca:'La semana arranca. Tu objetivo de <b>%1</b> te espera.',
   tSinNada:'Todav&iacute;a no hay nada cargado esta semana.', tCumplidosC:'cumplidos',
@@ -480,7 +480,7 @@ var TXT = {
   tJugador:'Player', tCumplidos:'goals met',
   tObjetivos:'Goals', tPlantel:'Squad goals',
   tVerTodos:'see', tDetPlantel:'The whole squad on one sheet: what each one was asked for this week and how it is going.',
-  tIrPlantel:'See the squad &rarr;', tIrMios:'My goals and my plan &rarr;',
+  tIrPlantel:'See the squad &rarr;', tIrMios:'See my goals &rarr;',
   tDetOk:'<b>%1</b> you are at <b>%2</b> &middot; done', tDetFalta:'<b>%1</b> you are at <b>%2</b> &middot; %3 to go',
   tArranca:'The week is starting. Your <b>%1</b> goal is waiting.',
   tSinNada:'Nothing loaded yet this week.', tCumplidosC:'met',
@@ -522,7 +522,7 @@ var TXT = {
   tJugador:'Spieler', tCumplidos:'Ziele erreicht',
   tObjetivos:'Ziele', tPlantel:'Ziele des Kaders',
   tVerTodos:'ansehen', tDetPlantel:'Der ganze Kader auf einem Blatt: was diese Woche verlangt wurde und wie es l&auml;uft.',
-  tIrPlantel:'Kader ansehen &rarr;', tIrMios:'Meine Ziele und mein Plan &rarr;',
+  tIrPlantel:'Kader ansehen &rarr;', tIrMios:'Meine Ziele ansehen &rarr;',
   tDetOk:'<b>%1</b> du stehst bei <b>%2</b> &middot; geschafft', tDetFalta:'<b>%1</b> du stehst bei <b>%2</b> &middot; noch %3',
   tArranca:'Die Woche beginnt. Dein Ziel in <b>%1</b> wartet.',
   tSinNada:'Diese Woche noch nichts geladen.', tCumplidosC:'erreicht',
@@ -662,6 +662,19 @@ var CSS = ''
 + '.os-leg span{display:flex;align-items:center;gap:6px}'
 + '.os-leg s{width:17px;height:3px;border-radius:2px;text-decoration:none;display:block}'
 /* las filas de abajo */
++ /* ══ LOS BOTONES DE FUNDAMENTO ══════════════════════════════════════════
+     El grande de arriba lo elegia el programa: el primero del puesto con
+     acciones esta semana. Para el armador eso daba BLOQUEO, y si queria ver
+     su SAQUE en grande no habia forma: aparecia abajo, chiquito, en la lista.
+     Ahora elige el jugador. El que el programa hubiera elegido sigue siendo
+     el que viene marcado al abrir. */
+  '.os-fund{display:flex;gap:6px;flex-wrap:wrap;padding:11px 16px 0}'
++ '.os-fund button{padding:5px 12px;border-radius:8px;border:1px solid rgba(148,163,184,.18);'
++ 'background:rgba(148,163,184,.06);color:#94A3B8;font-size:12px;font-weight:700;letter-spacing:.9px;'
++ 'cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:inherit}'
++ '.os-fund button:hover{border-color:rgba(148,163,184,.4);color:#CBD5E1}'
++ '.os-fund button.on{background:rgba(232,25,44,.14);border-color:rgba(232,25,44,.45);color:#F87171}'
++ '.os-fund button.sin{opacity:.45}'
 + '.os-fila{display:flex;align-items:center;gap:11px;padding:11px 16px;border-top:1px solid rgba(148,163,184,.1)}'
 + '.os-fila .l{font-size:17px;color:#CBD5E1;flex:1 1 44%;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
 + '.os-fila .b{flex:0 1 26%;height:7px;border-radius:4px;background:rgba(148,163,184,.13);position:relative;min-width:44px}'
@@ -1014,25 +1027,30 @@ function render(){
   /* El grande de arriba es el primero de su puesto con acciones ESTA semana.
      Si todavia no hizo ninguna de ninguno, va el primero que tenga historia,
      para que igual vea su objetivo. */
-  var head = conDatos.filter(function(r){ return r.ultima && r.ultima.n > 0; })[0] || conDatos[0];
+  var auto_head = conDatos.filter(function(r){ return r.ultima && r.ultima.n > 0; })[0] || conDatos[0];
+
+  /* ══ CUAL VA EN GRANDE ════════════════════════════════════════════════════
+     Manda el boton que toco el jugador. Si no toco ninguno —o si el que eligio
+     no tiene datos en el modo que esta mirando, por ejemplo saque en un
+     entrenamiento donde no saco— vuelve a mandar el automatico, para que
+     nunca quede la pantalla en blanco. */
+  var elegido = conDatos.filter(function(r){ return r.id === window._objFund; })[0];
+  var head = elegido || auto_head;
   var resto = rs.filter(function(r){ return r !== head; });
 
+  var botones = '<div class="os-fund">' + rs.map(function(r){
+      var vacio = !r.hay;
+      return '<button type="button" class="' + (r === head ? 'on' : '') + (vacio ? ' sin' : '')
+           + '" onclick="window.OBJ_SEMANA.fundamento(\'' + r.id + '\')">'
+           + cortoDe(r.id, r.meta) + '</button>';
+    }).join('') + '</div>';
+
   var html = '<div class="os-wrap" data-notr>'
+           + botones
            + tarjeta(head, modoDe(head.id), serie(null, modoDe(head.id), head.id), nombre, dorsalDe(nombre))
            + resto.map(fila).join('')
            + '</div></div>';
   cont.innerHTML = html;
-}
-
-/* Mostrar el recuadro y avisarle a la tira que ahora son CUATRO, para que se
-   reparta el ancho entre los cuatro. Sin esto el nuevo caia en una segunda
-   fila, abajo de todo, donde no lo ve nadie. */
-function mostrar(caja){
-  caja.style.display = '';
-  try{
-    var tb = document.getElementById('tablero');
-    if(tb) tb.classList.add('con-obj');
-  }catch(e){}
 }
 
 /* ── LA TARJETA DE ACCESO EN LA PORTADA ────────────────────────────────────
@@ -1060,7 +1078,7 @@ function tarjetaPortada(){
     if(num){ num.className = 'tb-obj-n'; num.innerHTML = '<span style="font-size:.6em">' + T('tVerTodos') + '</span>'; }
     if(det) det.innerHTML = T('tDetPlantel');
     if(ir)  ir.innerHTML = T('tIrPlantel');
-    mostrar(caja);
+    caja.style.display = '';
     return;
   }
 
@@ -1076,14 +1094,7 @@ function tarjetaPortada(){
     }
   });
   caja.setAttribute('data-os', '1');
-  /* ══ A DONDE LLEVA ════════════════════════════════════════════════════════
-     Antes iba a jugador.html, la pantalla larga del jugador: ahi el plan de
-     desarrollo quedaba enterrado entre las estadisticas, la comparativa y la
-     rutina. El recuadro promete "objetivos y cosas a mejorar", asi que ahora
-     abre la pantalla que es exactamente eso: el plan de desarrollo con la fila
-     de objetivos arriba de todo. En una pantalla y sin scrollear: cuanto le
-     falta esta semana y que tiene que mejorar. */
-  caja.setAttribute('href', 'plan_desarrollo.html');
+  caja.setAttribute('href', 'jugador.html');
   if(ir) ir.innerHTML = T('tIrMios');
 
   if(!tot){
@@ -1096,7 +1107,7 @@ function tarjetaPortada(){
         ? T('tArranca', nombreDe(con.id, con.meta)) 
         : T('tSinNada');
     }
-    mostrar(caja);
+    caja.style.display = '';
     return;
   }
 
@@ -1112,7 +1123,7 @@ function tarjetaPortada(){
       ? T('tDetOk', nombreDe(head.id, head.meta), n1(c.val))
       : T('tDetFalta', nombreDe(head.id, head.meta), n1(c.val), n1(c.objetivo - c.val));
   }
-  mostrar(caja);
+  caja.style.display = '';
 }
 
 /* ── Enganche ───────────────────────────────────────────────────────────────
@@ -1178,10 +1189,13 @@ function enganchar(){
     }
   }catch(e){}
 }
-window.OBJ_SEMANA = {render:render, pastilla:tarjetaPortada, serie:serie, semanas:semanas, PUESTOS:PUESTOS, CUENTA:CUENTA,
-                     /* para que una pantalla pueda arrancar en el modo que
-                        el programa elegiria solo, en vez de clavar uno */
-                     modoConAcciones:modoConAcciones,
+/* La llaman los botones de fundamento desde el HTML que dibuja render(). */
+function fundamento(id){
+  window._objFund = (window._objFund === id) ? null : id;   /* tocar el mismo, vuelve al automatico */
+  try{ render(); }catch(e){}
+}
+
+window.OBJ_SEMANA = {render:render, fundamento:fundamento, pastilla:tarjetaPortada, serie:serie, semanas:semanas, PUESTOS:PUESTOS, CUENTA:CUENTA,
                      /* la tabla del cuerpo tecnico usa el mismo diccionario:
                         si hubiera dos, un dia dirian cosas distintas */
                      T:T, idioma:idioma, nombreDe:nombreDe, cortoDe:cortoDe,

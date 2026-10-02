@@ -266,6 +266,21 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <script src="objetivos_config.js?v=20261002-0824" onerror="void 0"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
+<!-- ══ ABRIR LOS DATOS ═══════════════════════════════════════════════════
+     La portada DECLARABA los dos archivos cifrados de arriba pero nunca
+     llamaba a abrirDatos(), asi que se bajaban y quedaban sin descifrar:
+     BAT_PARTIDOS y EQUIPO_DATA no existian en esta pantalla.
+
+     Consecuencia: el recuadro de objetivos NUNCA pudo aparecer. Lo primero
+     que hace es preguntar si los datos estan, y la respuesta era que no.
+     No estaba escondido por una decision: era codigo muerto.
+
+     Son solo esos dos archivos, y los grandes se abren en segundo plano
+     —de a pedazos, sin congelar la pantalla— y avisan con el evento
+     "datos-listos", que objetivos_semanales.js ya escucha. La portada no
+     usa ninguno de los dos por su cuenta, asi que esto enciende una sola
+     cosa: el recuadro. -->
+<script>abrirDatos();</script>
 <script src="datos_high_set_25-26.js.enc?v=1" onerror="void 0"></script>
 <script src="datos_high_set_26-27.js.enc?v=1" onerror="void 0"></script>
 <script src="datos_high_set_27-28.js.enc?v=1" onerror="void 0"></script>
@@ -1752,7 +1767,14 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
        'player' se oculta TODO lo que no este aca adentro, asi que una tarjeta
        nueva es invisible para los jugadores hasta que se la sume. Le paso a
        HIGH SET: la tarjeta estaba, pero solo la veia el cuerpo tecnico. */
-    var SHOW = ['plan_partido.html','equipo.html','nla_stats_table.html','analisis.html','prep_fisica.html','wellness.html','dashboard.html','calendario.html','horarios.html','cortes.html','baggerone.html','high_set.html'];
+    var SHOW = ['plan_partido.html','equipo.html','nla_stats_table.html','analisis.html','prep_fisica.html','wellness.html','dashboard.html','calendario.html','horarios.html','cortes.html','baggerone.html','high_set.html',
+                /* El plan de desarrollo es DEL JUGADOR: sus objetivos de la
+                   semana y lo que tiene que mejorar. Estaba afuera de esta
+                   lista, asi que la tarjeta existia pero el jugador no la
+                   veia. Es el mismo descuido que cuenta el comentario de
+                   arriba con HIGH SET. Y ahora importa el doble, porque el
+                   recuadro de objetivos de la portada lleva justamente ahi. */
+                'plan_desarrollo.html'];
     function keep(card){
       var oc = (card.getAttribute('onclick')||'');
       if(oc.indexOf('showHeatmapMenu')>=0) return true;  // Heat Maps: sí
