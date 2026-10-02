@@ -16,16 +16,16 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20261002-1320" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20261002-1320" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20261002-1320"></script>
-<script src="filtro_tipo.js?v=20261002-1320" onerror="void 0"></script>
+<script src="categorias_club.js?v=20261002-1326" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20261002-1326" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261002-1326"></script>
+<script src="filtro_tipo.js?v=20261002-1326" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
   <!-- El plantel del club: de aca salen el puesto y el apellido de cada
        dorsal. Entre otras cosas, es lo que dice quienes son los centrales. -->
-  <script src="plantel_nafels.js?v=20261002-1320" onerror="void 0"></script>
-  <script src="objetivos_config.js?v=20261002-1320" onerror="void 0"></script>
+  <script src="plantel_nafels.js?v=20261002-1326" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20261002-1326" onerror="void 0"></script>
 
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -42,11 +42,11 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
   <!-- modo_toggle.js: el cartelito de PARTIDO / ENTRENAMIENTO. Antes era
        una barra arriba en el medio y chocaba con el selector de idioma;
        ahora es un cartel chico abajo a la izquierda. -->
-  <script src="modo_toggle.js?v=20261002-1320" onerror="void 0"></script>
+  <script src="modo_toggle.js?v=20261002-1326" onerror="void 0"></script>
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20261002-1320" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20261002-1326" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   
@@ -734,15 +734,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20261002-1320" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261002-1320"></script>
+<script src="firebase.js?v=20261002-1326" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261002-1326"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261002-1320">
+<link rel="stylesheet" href="movil.css?v=20261002-1326">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261002-1320" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261002-1326" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -841,6 +841,23 @@ function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
   <!-- Objetivos del equipo -->
   <div class="sec-lbl" style="margin-top:24px" data-t="Objetivos"><span data-t="Objetivos">Objetivos</span></div>
   <div id="eq-objetivos"></div>
+
+  <!-- ══ VELOCIDAD DE SAQUE DEL PLANTEL ══════════════════════════════════════
+       Lo mismo que ve cada jugador en su plan de desarrollo, pero de todos
+       juntos y ordenado. Las dos columnas que mas dicen son "en punto" y "en
+       error": si un jugador erra mas rapido de lo que acierta, esta sacando
+       de mas.
+
+       Igual que en la pantalla del jugador, el detalle de los saques (710 KB)
+       se baja recien al tocar el boton: el dashboard ya carga bastante. -->
+  <div id="velp-caja" style="margin:18px 0 0;background:#0D0E1A;border:1px solid rgba(148,163,184,.16);border-radius:15px;overflow:hidden">
+    <div style="padding:11px 15px;border-bottom:1px solid rgba(148,163,184,.16);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#7C8AA0;font-weight:700">Velocidad de saque del plantel</div>
+    <div id="velp-cuerpo">
+      <div style="padding:16px 15px;text-align:center">
+        <button type="button" id="velp-btn" style="background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.45);color:#38BDF8;border-radius:11px;padding:10px 20px;font-family:inherit;font-size:16px;font-weight:700;letter-spacing:.04em;cursor:pointer">Ver la velocidad de saque</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -2553,13 +2570,39 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261002-1320"></script>
-<script src="lang.js?v=20261002-1320"></script>
-<script src="temporadas_menu.js?v=20261002-1320"></script>
+<script src="chat_nafels.js?v=20261002-1326"></script>
+<script src="lang.js?v=20261002-1326"></script>
+<script src="temporadas_menu.js?v=20261002-1326"></script>
 <!-- Este archivo no esta en el proyecto. Sin el onerror, el navegador
      marcaba un error de carga en cada visita al tablero. -->
-<script src="app_offline.js?v=20261002-1320" onerror="void 0"></script>
-<script src="ayuda.js?v=20261002-1320"></script>
+<script src="app_offline.js?v=20261002-1326" onerror="void 0"></script>
+<script src="ayuda.js?v=20261002-1326"></script>
+<script src="velocidades_saque.js?v=20261002-1326" onerror="void 0"></script>
+<script>
+/* El boton de la velocidad del plantel. Si el modulo no cargo, el recuadro se
+   esconde y el dashboard queda como antes. */
+(function(){
+  function arrancar(){
+    var caja = document.getElementById('velp-caja');
+    var btn  = document.getElementById('velp-btn');
+    if (!caja) return;
+    if (!btn || !window.VEL_SAQUE){ caja.style.display = 'none'; return; }
+    btn.addEventListener('click', function(){
+      var cu = document.getElementById('velp-cuerpo');
+      cu.innerHTML = '<div style="padding:18px 15px;color:#64748B;font-size:15px;text-align:center">Buscando los saques\u2026</div>';
+      window.VEL_SAQUE.pedirDatos(function(ok){
+        if (!ok){
+          cu.innerHTML = '<div style="padding:16px 15px;color:#64748B;font-size:15px">No pude abrir el detalle de los saques. Prob\u00e1 de nuevo en un rato.</div>';
+          return;
+        }
+        window.VEL_SAQUE.pintarPlantel(cu);
+      });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(arrancar, 600); });
+  else setTimeout(arrancar, 600);
+})();
+</script>
 
 <!-- Los archivos de video (datos_video_*.js.enc) se sacaron de esta
      pantalla: pesan unos 15 MB por temporada, descifrarlos son mas de
