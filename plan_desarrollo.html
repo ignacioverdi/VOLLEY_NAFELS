@@ -116,11 +116,16 @@
   .legend{display:flex;gap:14px;font-size:11px;color:var(--mut);margin:0 0 16px 2px;flex-wrap:wrap}
   .legend span{display:inline-flex;gap:5px;align-items:center}
   .ldot{width:11px;height:11px;border-radius:50%;border:2px solid}
+/* Los dos botones de PARTIDO / ENTRENAMIENTO: el mismo estilo que en la
+   pantalla del jugador, para que sean el mismo boton y no dos parecidos. */
+.obj-tfbtn{padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
+.obj-tfbtn.on.partido{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:#e8192c}
+.obj-tfbtn.on.ent{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:#22c55e}
 </style>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20260930-2113">
+<link rel="stylesheet" href="movil.css?v=20261002-0824">
 </head>
 <body>
 <div class="wrap">
@@ -134,6 +139,15 @@
     <span id="roChip"></span>
   </div>
 
+  <!-- ══ PARTIDO O ENTRENAMIENTO ═══════════════════════════════════════════
+       Los mismos dos botones que la pantalla del jugador. Sin ellos la fila
+       elegia sola y el jugador no podia mirar el otro lado: si esta semana
+       jugo, veia partido y no habia forma de ver como venia entrenando.
+       Son dos cosas distintas y conviene verlas por separado. -->
+  <div id="obj-tipo-row" style="display:none;gap:6px;margin:0 0 10px">
+    <button class="obj-tfbtn" id="obj-tbtn-partido" onclick="objTipoPlan('partido')">🏆 PARTIDO</button>
+    <button class="obj-tfbtn" id="obj-tbtn-entrenamiento" onclick="objTipoPlan('entrenamiento')">🏋️ ENTRENAMIENTO</button>
+  </div>
   <!-- Lo llena objetivos_semanales.js. Si los datos no abren, queda vacio y
        la pantalla se ve como antes. -->
   <div id="obj-semana" style="margin:0 0 18px"></div>
@@ -144,19 +158,19 @@
   <div id="skills" class="skills"></div>
 </div>
 
-<script src="categorias_club.js?v=20260930-2113"></script>
-<script src="selector_categoria.js?v=20260930-2113"></script>
+<script src="categorias_club.js?v=20261002-0824"></script>
+<script src="selector_categoria.js?v=20261002-0824"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20260930-2113"></script>
-<script src="firebase.js?v=20260930-2113" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20260930-2113"></script>
-<script src="lang.js?v=20260930-2113" onerror="void 0"></script>
-<script src="correcciones_tecnicas.js?v=20260930-2113" onerror="void 0"></script>
-<script src="plantel_nafels.js?v=20260930-2113" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261002-0824"></script>
+<script src="firebase.js?v=20261002-0824" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261002-0824"></script>
+<script src="lang.js?v=20261002-0824" onerror="void 0"></script>
+<script src="correcciones_tecnicas.js?v=20261002-0824" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20261002-0824" onerror="void 0"></script>
 <script src="datos_casla.js.enc" onerror="void 0"></script>
 <!-- ══ LA FILA DE OBJETIVOS DE LA SEMANA ═════════════════════════════════
      Los numeros y lo tecnico son dos mitades de lo mismo: cuanto le falta
@@ -166,10 +180,10 @@ window.__DESCIFRAR_SINCRONO = true;
      una copia—, asi que las dos no pueden decir cosas distintas. Solo hace
      falta darle de comer: las metas, las baterias y el plantel.
      El mismo orden que usa equipo.html. -->
-<script src="objetivos_config.js?v=20260930-2113" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261002-0824" onerror="void 0"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
-<script src="objetivos_semanales.js?v=20260930-2113" onerror="void 0"></script>
+<script src="objetivos_semanales.js?v=20261002-0824" onerror="void 0"></script>
 <script>abrirDatos();</script>
 <script>
 (function(){
@@ -303,9 +317,36 @@ window.__DESCIFRAR_SINCRONO = true;
     try{
       var nom=_nombreDelNum(NUM);
       if(nom) window._objNombre=nom;
+      /* La primera vez se arranca en el modo que el programa elegiria solo:
+         el que tenga acciones esta semana, y si los dos tienen, partido. Asi
+         lo primero que se ve nunca esta vacio. Despues manda el boton. */
+      if(!window._objTipo && nom && window.OBJ_SEMANA && window.OBJ_SEMANA.modoConAcciones){
+        try{ window._objTipo = window.OBJ_SEMANA.modoConAcciones(nom); }catch(e){}
+      }
+      _marcarTipo();
       if(window.OBJ_SEMANA && window.OBJ_SEMANA.render) window.OBJ_SEMANA.render();
     }catch(e){}
   }
+  function _marcarTipo(){
+    var fila=document.getElementById('obj-tipo-row');
+    if(!fila) return;
+    fila.style.display='flex';
+    var t=window._objTipo==='entrenamiento'?'entrenamiento':'partido';
+    [['partido','partido'],['entrenamiento','ent']].forEach(function(par){
+      var b=document.getElementById('obj-tbtn-'+par[0]);
+      if(!b) return;
+      b.className='obj-tfbtn'+(par[0]===t?(' on '+par[1]):'');
+    });
+  }
+  /* Global a proposito: lo llaman los botones desde el HTML. */
+  window.objTipoPlan=function(tipo){
+    window._objTipo=tipo;
+    /* El resto del sistema comparte este filtro: si existe, se le avisa, para
+       que al salir de aca el analisis y los cortes lleguen con lo mismo. */
+    try{ if(typeof vbSetTipo==='function') vbSetTipo(tipo); }catch(e){}
+    _marcarTipo();
+    try{ if(window.OBJ_SEMANA && window.OBJ_SEMANA.render) window.OBJ_SEMANA.render(); }catch(e){}
+  };
 
   function roster(){
     var raw=(typeof PLANTEL_NAFELS!=='undefined'&&PLANTEL_NAFELS)||window.PLANTEL_NAFELS||(typeof ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[])!=='undefined'&&((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]))||((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[])||null;
@@ -494,6 +535,6 @@ window.__DESCIFRAR_SINCRONO = true;
   } else { render(); }
 })();
 </script>
-<script src="ayuda.js?v=20260930-2113"></script>
+<script src="ayuda.js?v=20261002-0824"></script>
 </body>
 </html>
