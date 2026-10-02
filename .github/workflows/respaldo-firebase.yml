@@ -1,0 +1,99 @@
+# =============================================================================
+#  RESPALDO DE FIREBASE — la copia diaria de lo que no sale de ningun .dvw
+# -----------------------------------------------------------------------------
+#  Los .dvw estan versionados en git y de ahi se reconstruye casi todo. Pero el
+#  wellness, los pesos, las rutinas del PF, las notas, el calendario, los
+#  usuarios y los roles viven SOLO en Firebase. Si alguien borra un nodo por
+#  error, eso no vuelve.
+#
+#  Este flujo baja la base entera una vez por dia, la cifra con la llave del
+#  club y la deja en respaldos/. Con dos reglas que importan mas que el
+#  respaldo en si:
+#
+#    . va CIFRADO           tiene datos personales del plantel
+#    . FRENA si encogio     un respaldo que pisa al bueno con una base a
+#                           medias es peor que no tener respaldo
+#
+#  Para abrir uno:
+#      python RESPALDAR_FIREBASE.py --abrir respaldos/firebase_2026-10-02.resp
+# =============================================================================
+name: Respaldo de Firebase
+
+on:
+  schedule:
+    - cron: '17 3 * * *'        # todos los dias, 03:17 UTC
+  workflow_dispatch:
+    inputs:
+      igual_guardo:
+        description: 'Guardar aunque la base haya encogido (solo si sabes por que)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: motores-del-club       # el mismo que los otros robots: nunca se pisan
+  cancel-in-progress: false
+
+jobs:
+  respaldar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Traer el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # La llave nunca vive en el repositorio: se escribe aca desde un secreto,
+      # se usa para cifrar el respaldo, y se borra antes de publicar.
+      - name: Preparar la llave de los datos
+        env:
+          LLAVE_DATOS: ${{ secrets.LLAVE_DATOS }}
+        run: |
+          if [ -n "$LLAVE_DATOS" ]; then
+            printf '%s' "$LLAVE_DATOS" > LLAVE.txt
+            echo "Llave puesta."
+          else
+            echo "Sin llave configurada: no se puede respaldar cifrado."
+            exit 1
+          fi
+
+      - name: Bajar la base y guardarla cifrada
+        env:
+          FB_URL:      ${{ secrets.FB_URL }}
+          FB_KEY:      ${{ secrets.FB_KEY }}
+          ROBOT_MAIL:  ${{ secrets.ROBOT_MAIL }}
+          ROBOT_CLAVE: ${{ secrets.ROBOT_CLAVE }}
+          CLUB_ID:     ${{ secrets.CLUB_ID }}
+          FB_REFERER:  ${{ secrets.FB_REFERER }}
+        run: |
+          if [ "${{ inputs.igual_guardo }}" = "true" ]; then
+            python RESPALDAR_FIREBASE.py --igual-guardo
+          else
+            python RESPALDAR_FIREBASE.py
+          fi
+
+      - name: Sacar la llave de en medio
+        if: always()
+        run: rm -f LLAVE.txt
+
+      - name: Publicar el respaldo
+        run: |
+          git config user.name  "Asistente del club"
+          git config user.email "actions@users.noreply.github.com"
+          rm -f LLAVE.txt
+          if [ -z "$(git status --porcelain respaldos)" ]; then
+            echo "El respaldo de hoy ya estaba: no hay nada que publicar."
+            exit 0
+          fi
+          git add respaldos
+          git commit -m "Respaldo de Firebase $(date -u +%Y-%m-%d)"
+          git pull --no-rebase --no-edit -X ours || true
+          git push
+          echo "Respaldo publicado."

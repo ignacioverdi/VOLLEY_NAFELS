@@ -1,6 +1,6 @@
 {
  "BIENVENIDA.html": {
-  "bytes": 26908,
+  "bytes": 26968,
   "funciones": [
    "setIdioma"
   ],
@@ -28,7 +28,7 @@
   "tablas": {}
  },
  "alta_jugadores.html": {
-  "bytes": 35499,
+  "bytes": 35540,
   "funciones": [
    "CAT_ELEGIDA",
    "__DVW",
@@ -297,7 +297,7 @@
   "tablas": {}
  },
  "asociar_codigos.html": {
-  "bytes": 28162,
+  "bytes": 28203,
   "funciones": [
    "asociar",
    "aviso",
@@ -319,39 +319,6 @@
    "tocarDer",
    "tocarIzq",
    "verSeccion"
-  ],
-  "tablas": {}
- },
- "ataque_jugador.html": {
-  "bytes": 34507,
-  "funciones": [
-   "HISTORIAL_DATA",
-   "__DESCIFRAR_SINCRONO",
-   "buildCanchita",
-   "buildFromHistorial",
-   "buildSubfiltro",
-   "calcTeamAtqAvg",
-   "drawAtaqueCourt",
-   "drawCone",
-   "drawNet",
-   "drawWood",
-   "effColor",
-   "effColorCmp",
-   "getJugadorPartido",
-   "getJugadoresPosicion",
-   "getPosFromData",
-   "openModal",
-   "renderComparativa",
-   "renderComparativaPosicion",
-   "renderPage",
-   "renderPanelAtaque",
-   "setFaseAtaque",
-   "setFiltro",
-   "step",
-   "updateSfBtns",
-   "vbAlCambiarTipo",
-   "w",
-   "waitAndInit"
   ],
   "tablas": {}
  },
@@ -385,7 +352,7 @@
   "tablas": {}
  },
  "calendario.html": {
-  "bytes": 69548,
+  "bytes": 71345,
   "funciones": [
    "FIXTURE",
    "__FIX_CARGADO",
@@ -460,7 +427,7 @@
   "tablas": {}
  },
  "camara.html": {
-  "bytes": 22951,
+  "bytes": 27912,
   "funciones": [
    "_cajaYouTube",
    "_claveSesion",
@@ -469,14 +436,19 @@
    "_idDeYoutube",
    "_marcarArranque",
    "_nombreDeArchivo",
+   "arrancarVigilante",
    "calidadConstraints",
    "conectarViewer",
    "detener",
    "dos",
    "escucharViewers",
    "listarCamaras",
+   "pedirWakeLock",
+   "recuperarCamara",
    "setStatus",
-   "transmitir"
+   "soltarWakeLock",
+   "transmitir",
+   "vigilarPista"
   ],
   "tablas": {}
  },
@@ -577,7 +549,7 @@
   "tablas": {}
  },
  "dashboard.html": {
-  "bytes": 140829,
+  "bytes": 146533,
   "funciones": [
    "ENTRENAMIENTOS_DATA",
    "LANG",
@@ -598,6 +570,7 @@
    "_t",
    "acumJugadores",
    "addOpt",
+   "arrancar",
    "batGet",
    "buildRankingData",
    "closeHeatmapMenu",
@@ -612,7 +585,12 @@
    "effRecepcion",
    "effSaque",
    "eqBuildPanel",
+   "eqEsc",
    "eqHaySeleccion",
+   "eqMes",
+   "eqMesClave",
+   "eqMesNombre",
+   "eqOrdenFecha",
    "eqPintarMulti",
    "eqSelNinguna",
    "eqSelTodas",
@@ -684,7 +662,7 @@
   "tablas": {}
  },
  "equipo.html": {
-  "bytes": 39080,
+  "bytes": 39728,
   "funciones": [
    "EQUIPO_DATA",
    "PLANTEL_FIX",
@@ -703,6 +681,7 @@
    "eqEdad",
    "eqFunds",
    "eqMeta",
+   "eqNacim",
    "eqPills",
    "eqPuestoDe",
    "eqResumen",
@@ -859,7 +838,7 @@
   "tablas": {}
  },
  "high_set.html": {
-  "bytes": 24601,
+  "bytes": 26921,
   "funciones": [
    "EQUIPO_DATA",
    "__DESCIFRAR_SINCRONO",
@@ -868,6 +847,9 @@
    "esc",
    "fCorta",
    "fotoDe",
+   "hsMes",
+   "hsMesClave",
+   "hsMesNombre",
    "llenarFiltros",
    "nota",
    "num",
@@ -1261,7 +1243,7 @@
   "tablas": {}
  },
  "index.html": {
-  "bytes": 152805,
+  "bytes": 153944,
   "funciones": [
    "EQUIPO_DATA",
    "FIXTURE_DATA",
@@ -1587,7 +1569,7 @@
   "tablas": {}
  },
  "objetivos_equipo.html": {
-  "bytes": 4643,
+  "bytes": 4684,
   "funciones": [
    "EQUIPO_DATA",
    "__DESCIFRAR_SINCRONO"
@@ -1595,7 +1577,7 @@
   "tablas": {}
  },
  "p2.html": {
-  "bytes": 21204,
+  "bytes": 22213,
   "funciones": [
    "P2",
    "arranque",
@@ -1607,6 +1589,7 @@
    "hoyISO",
    "liberoDeRotaciones",
    "opciones",
+   "p2Nacim",
    "pintar",
    "pintarCab",
    "pintarPlantel",
@@ -1623,7 +1606,7 @@
   "tablas": {}
  },
  "panel_vivo.html": {
-  "bytes": 892000,
+  "bytes": 891874,
   "funciones": [
    "AN_LADO",
    "G",
@@ -2110,7 +2093,7 @@
   }
  },
  "panel_voley.html": {
-  "bytes": 463530,
+  "bytes": 463404,
   "funciones": [
    "OBJETIVOS_CONFIG",
    "PV_TIPO_SR",
@@ -2265,7 +2248,7 @@
   "tablas": {}
  },
  "plan_desarrollo.html": {
-  "bytes": 35534,
+  "bytes": 38664,
   "funciones": [
    "EQUIPO_DATA",
    "L",
@@ -2276,6 +2259,7 @@
    "_objNombre",
    "_objTipo",
    "_pintarObjetivos",
+   "arrancar",
    "buildLangSw",
    "buildLegend",
    "buildSel",
@@ -2286,6 +2270,7 @@
    "objTexto",
    "objTipoPlan",
    "progress",
+   "quien",
    "render",
    "renderFoco",
    "roster",
@@ -2559,79 +2544,6 @@
   ],
   "tablas": {}
  },
- "radar_saque.html": {
-  "bytes": 59205,
-  "funciones": [
-   "aDibujo",
-   "aFirebase",
-   "aMetros",
-   "alternarPlay",
-   "alturaGolpe",
-   "avisoFps",
-   "borrar",
-   "borrarTodo",
-   "calibrar",
-   "cargarArchivo",
-   "cargarMapa",
-   "cargarPlantel",
-   "cb",
-   "cdActual",
-   "cdQueExplica",
-   "claveSaque",
-   "congelar",
-   "cuadroActual",
-   "densidadAire",
-   "dibujarCancha",
-   "dibujarCancha_si",
-   "engancharCuadros",
-   "equipoPropio",
-   "esc",
-   "esperarDatos",
-   "estado",
-   "exportar",
-   "fuente",
-   "guardar",
-   "guardarDisco",
-   "irACuadro",
-   "irAFraccion",
-   "kDe",
-   "leerDisco",
-   "limpiarMarcas",
-   "marcar",
-   "medidosDelPartido",
-   "medirFps",
-   "mmss",
-   "pararCamara",
-   "pintarLinea",
-   "pintarMarcas",
-   "pintarTabla",
-   "pintarTanda",
-   "prenderCamara",
-   "recalcular",
-   "recorrido",
-   "redondearFps",
-   "saltar",
-   "seguirVivo",
-   "setFps",
-   "setRetraso",
-   "setTipo",
-   "setVel",
-   "tandaAjustar",
-   "tandaArrancar",
-   "tandaDesfase",
-   "tandaIr",
-   "tandaLista",
-   "tandaMover",
-   "tandaPartido",
-   "textoFpsMedido",
-   "tiempoActual",
-   "tiempoDelCuadroEn",
-   "una",
-   "v0De",
-   "vdatos"
-  ],
-  "tablas": {}
- },
  "ranking.html": {
   "bytes": 22441,
   "funciones": [
@@ -2702,41 +2614,8 @@
   ],
   "tablas": {}
  },
- "recepcion_jugador.html": {
-  "bytes": 28189,
-  "funciones": [
-   "HISTORIAL_DATA",
-   "__DESCIFRAR_SINCRONO",
-   "bdc",
-   "bgc",
-   "buildRecepcionFromHistorial",
-   "buildSubfiltro",
-   "cell",
-   "colorEff",
-   "cv",
-   "ec",
-   "effDe",
-   "effV",
-   "getJugadorPartidoRec",
-   "makeZonePanel",
-   "recEffByTipo",
-   "renderComparativaRecepcion",
-   "renderPage",
-   "renderPanelRecepcion",
-   "setFiltro",
-   "suma",
-   "totalPorDestino",
-   "updateSfBtns",
-   "vbAlCambiarTipo",
-   "w",
-   "waitAndInit",
-   "zoneCard",
-   "zv"
-  ],
-  "tablas": {}
- },
  "recuperar.html": {
-  "bytes": 12674,
+  "bytes": 12715,
   "funciones": [
    "_A",
    "_C",
@@ -2792,40 +2671,8 @@
   ],
   "tablas": {}
  },
- "saque_jugador.html": {
-  "bytes": 33079,
-  "funciones": [
-   "HISTORIAL_DATA",
-   "__DESCIFRAR_SINCRONO",
-   "buildCanchita",
-   "buildSaqueFromHistorial",
-   "buildSubfiltro",
-   "calcPct",
-   "calcTeamSqAvg",
-   "drawCone",
-   "drawNet",
-   "drawSaqueCourt",
-   "drawWood",
-   "effColor",
-   "effColorCmp",
-   "getJugadorPartido",
-   "getJugadoresPosicion",
-   "openModal",
-   "renderComparativaPosicion",
-   "renderComparativaSaque",
-   "renderPage",
-   "renderPanelSaque",
-   "setFiltro",
-   "step",
-   "updateSfBtns",
-   "vbAlCambiarTipo",
-   "w",
-   "waitAndInit"
-  ],
-  "tablas": {}
- },
  "scouting_rival.html": {
-  "bytes": 55144,
+  "bytes": 55185,
   "funciones": [
    "ZN",
    "badge",
@@ -2915,7 +2762,12 @@
   "tablas": {}
  },
  "unir_video.html": {
-  "bytes": 18239,
+  "bytes": 18299,
+  "funciones": [],
+  "tablas": {}
+ },
+ "velocidades_vivo.html": {
+  "bytes": 9444,
   "funciones": [],
   "tablas": {}
  },

@@ -7,9 +7,14 @@
    letras y los botones de la derecha suman mas de 500 px, y como el desborde
    esta oculto, lo que sobra NO baja a otro renglon — se corta.
 
-   Este archivo solo actua en pantallas de menos de 768 px y toca unicamente el
-   encabezado y las barras de herramientas. No cambia colores, ni tipografias,
-   ni el contenido de ninguna pantalla. En la computadora no hace nada.
+   Hace DOS cosas, y cada una en su propio tamanio de pantalla:
+
+     · hasta 768 px  — que el encabezado y las barras entren en un telefono.
+       No cambia colores, ni tipografias, ni el contenido de ninguna pantalla.
+
+     · desde 769 px  — que el contenido ocupe el ancho de la pantalla. Esta
+       parte esta al final del archivo y se agrego despues; la razon esta
+       explicada ahi.
 
    Va cargado DESPUES de los estilos de cada pagina para poder corregirlos, y
    por eso usa !important: los estilos propios de cada pantalla son mas
@@ -691,3 +696,39 @@ tr.mi-fila {
    ancho, que en un telefono es lo unico que escasea.
    ══════════════════════════════════════════════════════════════════════════ */
 
+/* ══════════════════════════════════════════════════════════════════════════
+   EL ANCHO EN LA COMPUTADORA
+   --------------------------------------------------------------------------
+   Cada pantalla se habia hecho con su propio tope de ancho, y con el tiempo
+   quedaron veinte topes distintos. Medido sobre las 49 paginas:
+
+       Comparador                                840 px
+       Sesiones · Planilla P-2 · Ranking         960 - 1000 px
+       Wellness · High Set · Equipo · Baggerone  1080 - 1200 px
+       Jugador · Plan de Desarrollo · Rotaciones 1240 - 1280 px
+       Portada · Dashboard · Analisis            1400 px
+       Game Plan · Armadores · Recepcion         1600 px
+
+   En un monitor de 1920 eso deja entre 300 y 1000 px de fondo vacio a los
+   costados, distinto en cada pantalla: al cambiar de una a otra el contenido
+   cambia de ancho y se nota. Soltando el tope, cada pagina usa lo que hay.
+
+   POR QUE ACA Y NO EN CADA PAGINA
+   41 de las 49 paginas cargan este archivo, y lo cargan DESPUES de sus
+   propios estilos. Un solo lugar, un solo cambio, y se saca igual de facil.
+
+   LA EXCEPCION
+   La Planilla P-2 es la hoja que se imprime en A4: lo que se ve en pantalla
+   es la vista previa de esa hoja, asi que si se estira deja de coincidir con
+   lo que sale impreso. Esa pagina lleva class="ancho-fijo" en el body y
+   conserva su tope. Cualquier otra que necesite lo mismo se marca igual.
+   ══════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 769px){
+  body:not(.ancho-fijo),
+  body:not(.ancho-fijo) .main,
+  body:not(.ancho-fijo) .wrap,
+  body:not(.ancho-fijo) .content,
+  body:not(.ancho-fijo) .dossier,
+  body:not(.ancho-fijo) .hdr-top,
+  body:not(.ancho-fijo) #tablero{ max-width: none !important; }
+}

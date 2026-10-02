@@ -345,51 +345,6 @@
         ojo:'Nützlich in beide Richtungen: den gegnerischen Zuspieler lesen und den eigenen prüfen.' }
     },
 
-    'ataque_jugador': {
-      es: { titulo:'Ataque del Jugador',
-        que:'Todo el ataque de un jugador: combinaciones, zonas y eficacia.',
-        pasos:['Elegí el jugador.','Mirá qué combinación usa más y cuál le rinde mejor.'],
-        ojo:'Una combinación con pocas pelotas puede mostrar un porcentaje engañoso. Fijate el volumen.' },
-      en: { titulo:'Player Attack',
-        que:'A player\u2019s full attack: combinations, zones and efficiency.',
-        pasos:['Pick the player.','See which combination they use most and which pays off best.'],
-        ojo:'A combination with few balls can show a misleading percentage. Check the volume.' },
-      de: { titulo:'Angriff des Spielers',
-        que:'Der gesamte Angriff eines Spielers: Kombinationen, Zonen und Effizienz.',
-        pasos:['Wähle den Spieler.','Sieh, welche Kombination er am meisten nutzt und welche am besten läuft.'],
-        ojo:'Eine Kombination mit wenigen Bällen kann irreführend sein. Prüfe das Volumen.' }
-    },
-
-    'saque_jugador': {
-      es: { titulo:'Saque del Jugador',
-        que:'El saque de un jugador en detalle: puntos, positivos y errores.',
-        pasos:['Elegí el jugador.','Mirá el balance entre riesgo y resultado.'],
-        ojo:'Cero errores suele significar que saca demasiado suave. El saque bueno tiene errores.' },
-      en: { titulo:'Player Serve',
-        que:'One player\u2019s serve in detail: aces, positives and errors.',
-        pasos:['Pick the player.','Look at the balance between risk and outcome.'],
-        ojo:'Zero errors usually means serving too softly. A good serve has errors.' },
-      de: { titulo:'Aufschlag des Spielers',
-        que:'Der Aufschlag eines Spielers im Detail: Asse, positive und Fehler.',
-        pasos:['Wähle den Spieler.','Achte auf das Verhältnis von Risiko und Ergebnis.'],
-        ojo:'Null Fehler heisst meist zu weich aufgeschlagen. Ein guter Aufschlag hat Fehler.' }
-    },
-
-    'recepcion_jugador': {
-      es: { titulo:'Recepción del Jugador',
-        que:'La recepción de un jugador en detalle, saque por saque.',
-        pasos:['Elegí el jugador.','Mirá su porcentaje positivo y sus errores.'],
-        ojo:'Compará contra los otros receptores del equipo, no contra un número absoluto.' },
-      en: { titulo:'Player Reception',
-        que:'One player\u2019s reception in detail, serve by serve.',
-        pasos:['Pick the player.','Look at their positive percentage and their errors.'],
-        ojo:'Compare against the team\u2019s other passers, not against an absolute number.' },
-      de: { titulo:'Annahme des Spielers',
-        que:'Die Annahme eines Spielers im Detail, Aufschlag für Aufschlag.',
-        pasos:['Wähle den Spieler.','Sieh dir seine positive Quote und seine Fehler an.'],
-        ojo:'Vergleiche mit den anderen Annahmespielern, nicht mit einem absoluten Wert.' }
-    },
-
     'armadores': {
       es: { titulo:'Armadores',
         que:'La distribución de los armadores del equipo y de los rivales.',

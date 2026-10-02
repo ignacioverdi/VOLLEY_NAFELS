@@ -205,7 +205,7 @@ def _sumar_al_historial(entrenamientos, output_dir='.'):
     }
     with open(destino, 'w', encoding='utf-8') as f:
         f.write('window.HISTORIAL_DATA = ')
-        json.dump(salida, f, ensure_ascii=False, indent=2)
+        json.dump(salida, f, ensure_ascii=False, separators=(',', ':'))
         f.write(';\n')
     print('   %s: %d sesiones' % (_os.path.basename(destino), len(previo)))
 
@@ -2127,7 +2127,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
             'resultado':{'nafels':g['tsets'],'rival':g['rsets'],'sets':g['set_strings']},'jugadores':jugs})
 
     now = datetime.now().strftime('%d/%m/%Y, %H:%M:%S')
-    hist_js = 'window.HISTORIAL_DATA_ENT = ' + json.dumps({'generado':now,'entrenamientos':historial}, ensure_ascii=False, indent=2) + ';\n'
+    hist_js = 'window.HISTORIAL_DATA_ENT = ' + json.dumps({'generado':now,'entrenamientos':historial}, ensure_ascii=False, separators=(',', ':')) + ';\n'
     with open(os.path.join(output_dir,'datos_historial_ent.js'),'w',encoding='utf-8') as f: f.write(hist_js)
 
     # Y al historial que leen las pantallas: el dashboard, el analisis
@@ -2266,10 +2266,10 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
     pjs = f'// datos_entrenamientos.js — {now}\n'
     pjs += f'const ENTRENAMIENTOS_GENERADO = "{now}";\n'
     pjs += f'const ENTRENAMIENTOS_TOTAL = {len(partidos_meta)};\n'
-    pjs += 'const ENTRENAMIENTOS_META = ' + json.dumps(partidos_meta, ensure_ascii=False, indent=2) + ';\n'
-    pjs += 'const ENTRENAMIENTOS_JUGADORES = ' + json.dumps(partidos_jug, ensure_ascii=False, indent=2) + ';\n'
+    pjs += 'const ENTRENAMIENTOS_META = ' + json.dumps(partidos_meta, ensure_ascii=False, separators=(',', ':')) + ';\n'
+    pjs += 'const ENTRENAMIENTOS_JUGADORES = ' + json.dumps(partidos_jug, ensure_ascii=False, separators=(',', ':')) + ';\n'
     pjs += 'const ENTRENAMIENTOS_EQUIPO_OBJ = ' + json.dumps(equipo_obj_acum, ensure_ascii=False) + ';\n'
-    pjs += 'const ENTRENAMIENTOS_INDIVIDUAL = ' + json.dumps(partidos_individual, ensure_ascii=False, indent=2) + ';\n'
+    pjs += 'const ENTRENAMIENTOS_INDIVIDUAL = ' + json.dumps(partidos_individual, ensure_ascii=False, separators=(',', ':')) + ';\n'
     # Armador acumulado (todos los partidos) — mismo formato que el de cada partido
     _arm_acum = build_armador_data(_arm_acum_rallies, _arm_acum_names) if _arm_acum_rallies else {'titular':None,'suplente':None}
     pjs += 'const ENTRENAMIENTOS_ARMADOR = ' + json.dumps(_arm_acum, ensure_ascii=False) + ';\n'
@@ -2303,7 +2303,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         recep_data[nombre]={'num':pj['num'],'pos':pos,
             'acumulado':{'flotado':_rc_tipo(rec.get('flotado',{})),'potencia':_rc_tipo(rec.get('potencia',{}))},
             'por_rival':{}}
-    rjs='window.RECEPCION_RIVAL_DATA_ENT = '+json.dumps(recep_data,ensure_ascii=False,indent=2)+';\n'
+    rjs='window.RECEPCION_RIVAL_DATA_ENT = '+json.dumps(recep_data,ensure_ascii=False,separators=(',', ':'))+';\n'
     with open(os.path.join(output_dir,'datos_recepcion_ent.js'),'w',encoding='utf-8') as f: f.write(rjs)
 
     return len(historial), len(games)

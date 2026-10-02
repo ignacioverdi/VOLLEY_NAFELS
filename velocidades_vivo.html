@@ -103,6 +103,7 @@ td.vacio{color:#2B3648}
 .dj-l i s{text-decoration:none;font-size:.62em;font-family:'Barlow Condensed',sans-serif;font-weight:800;margin-left:1px}
 #detalle .nada{padding:15px;color:#475569;font-size:15px}
 </style>
+<link rel="stylesheet" href="movil.css">
 </head>
 <body>
 
@@ -137,7 +138,7 @@ td.vacio{color:#2B3648}
   <div class="caja">
     <h2>Velocidad por valoración <em>hoy</em></h2>
     <div style="overflow:auto"><table id="tabla"></table></div>
-    <div class="leyenda">
+    <div class="leyenda" data-t="vv_leyenda1">
       El número grande es la <b>mediana</b> de ese jugador, y abajo sobre cuántos saques está hecho.
       La mediana y no el promedio: un saque mal medido no te mueve la fila entera.
       Con menos de 3 saques el número va en gris, porque todavía no dice nada.
@@ -145,7 +146,7 @@ td.vacio{color:#2B3648}
     </div>
     <h2 style="border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)">Saque por saque</h2>
     <div id="detalle"></div>
-    <div class="leyenda">
+    <div class="leyenda" data-t="vv_leyenda2">
       Cada chip es un saque, en el orden en que salieron: la velocidad, <b>F</b> o <b>P</b> según
       haya sido flotante o potencia, y cómo terminó.
     </div>
@@ -154,6 +155,7 @@ td.vacio{color:#2B3648}
 
 <script src="firebase.js?v=20261002-1334" onerror="void 0"></script>
 <script src="plantel_nafels.js?v=20261002-1334" onerror="void 0"></script>
+<script src="lang.js" onerror="void 0"></script>
 <script src="velocidades_vivo.js?v=20261002-1334"></script>
 </body>
 </html>

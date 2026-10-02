@@ -5,24 +5,27 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="EQUIPO — NAFELS VOLEY">EQUIPO — NAFELS VOLEY</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="lang.js?v=20261002-1334" onerror="void 0"></script>
-<script src="utils.js?v=20261002-1334" onerror="void 0"></script>
+<script src="lang.js?v=20260928-0903" onerror="void 0"></script>
+<script src="utils.js?v=20260928-0903" onerror="void 0"></script>
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20261002-1334" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20261002-1334" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20261002-1334"></script>
+<script src="categorias_club.js?v=20260928-0903" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20260928-0903" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20260928-0903"></script>
   <!-- El plantel del club, con nombre y apellido. Es la lista de verdad:
      datos_equipo.js.enc solo trae a los que YA JUGARON, asi que un
      jugador nuevo no aparecia hasta su debut. -->
 <!-- Las metas, el semaforo (objClassify) y VB_EFF: la tarjeta de cada
      jugador ahora muestra sus numeros, con el mismo criterio que el resto. -->
-<script src="objetivos_config.js?v=20261002-1334" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260928-0903" onerror="void 0"></script>
 <!-- Las baterias: de ahi salen los numeros y tambien CUANTAS acciones hay
      detras de cada uno (n_sq, n_rec, ...). Es la misma fuente que usa el
      Ranking, para que las dos pantallas no puedan discrepar. -->
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
-<script src="plantel_nafels.js?v=20261002-1334" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20260928-0903" onerror="void 0"></script>
 <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
+<!-- Las fechas de nacimiento viven aca, cifradas. Si no se puede abrir,
+     se usa lo que traiga el plantel, que es como funcionaba antes. -->
+<script src="datos_plantel.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
 <style>
   /* En esta app los controles no heredan la tipografia: sin esta linea
@@ -110,15 +113,15 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 20%,rg
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20261002-1334" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261002-1334"></script>
+<script src="firebase.js?v=20260928-0903" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20260928-0903"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261002-1334">
+<link rel="stylesheet" href="movil.css?v=20260928-0903">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261002-1334" onerror="void 0"></script>
+<script src="mi_fila.js?v=20260928-0903" onerror="void 0"></script>
 </head>
 <body>
 
@@ -203,10 +206,10 @@ var DATA = (function(){
          dos datos estan en plantel_nafels.js, que es la lista real del
          club: se usan de respaldo cuando los de los partidos no vienen. */
       nac: p.nac || '',
-      nacim: p.nacim || '',
+      nacim: eqNacim(p) || '',
       pais: extra.pais || eqBandera(p.nac),
       altura: extra.altura || p.altura || '',
-      edad: extra.edad || eqEdad(p.nacim)
+      edad: extra.edad || eqEdad(eqNacim(p))
     };
   });
   return { jugadores: jugadores, staff: base.staff || EQUIPO_DEMO.staff };
@@ -233,9 +236,9 @@ var DATA = (function(){
                    var e = dePartidos[p.num] || {};
                    return { num:p.num, nombre:p.ap || e.nombre || '', pila:p.nombre || '',
                             pos:p.pos || e.pos || '', foto:e.foto || null,
-                            nac:p.nac || '', nacim:p.nacim || '',
+                            nac:p.nac || '', nacim:eqNacim(p) || '',
                             pais:e.pais || eqBandera(p.nac), altura:e.altura || p.altura || '',
-                            edad:e.edad || eqEdad(p.nacim) };
+                            edad:e.edad || eqEdad(eqNacim(p)) };
                  }),
                  staff: base.staff || EQUIPO_DEMO.staff };
       }
@@ -301,6 +304,17 @@ function eqBandera(nac){
 }
 /* La fecha viene como dd/mm/aaaa. Si no se puede leer, devuelve 0 y la
    tarjeta simplemente no muestra la edad. */
+/* La fecha de nacimiento sale de datos_plantel.js.enc (cifrado). Si no
+   esta —todavia no se cifro, o no hay llave— se usa la del plantel, que
+   es como venia funcionando. Asi nunca queda una tarjeta sin edad. */
+function eqNacim(p){
+  try{
+    var P = window.PLANTEL_PRIVADO;
+    var f = P && P.jugadores && P.jugadores[String(p && p.num)];
+    if(f && f.nacim) return f.nacim;
+  }catch(e){}
+  return (p && p.nacim) || "";
+}
 function eqEdad(nacim){
   try{
     var p = String(nacim||'').split('/');
@@ -669,9 +683,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261002-1334"></script>
-<script src="temporadas_menu.js?v=20261002-1334"></script>
-<script src="ayuda.js?v=20261002-1334"></script>
+<script src="chat_nafels.js?v=20260928-0903"></script>
+<script src="temporadas_menu.js?v=20260928-0903"></script>
+<script src="ayuda.js?v=20260928-0903"></script>
 
 <script>
 /* ══ EL CUERPO TECNICO ═══════════════════════════════════════════════════

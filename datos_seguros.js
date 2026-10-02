@@ -67,14 +67,42 @@
     for(var i=7;i>=0;i--){ b[i]=n & 255; n=Math.floor(n/256); }
     return b;
   }
-  /* la llave propia de cada archivo (igual que en Python) */
-  function claveArchivo(llaveHex, nombre){
+  /* ── LA LLAVE PROPIA DE CADA ARCHIVO (igual que en Python) ─────────────
+     Sale de la llave del club, del nombre del archivo Y de un numero al azar
+     distinto en cada cifrado. Ese numero es lo que arregla el agujero de
+     fondo: antes la corriente de bytes de un archivo era SIEMPRE la misma,
+     y con el repositorio publico guardando todas las versiones alcanzaba con
+     tener una sola version en claro para abrir la de hoy sin la llave.
+
+     Los archivos viejos no traen numero y se abren igual que siempre: por eso
+     esto no rompe nada mientras no se vuelvan a cifrar. */
+  function claveArchivo(llaveHex, nombre, nonceHex){
     var k=hexABytes(llaveHex);
     var n=[]; var enc=unescape(encodeURIComponent(nombre));
     for(var i=0;i<enc.length;i++) n.push(enc.charCodeAt(i));
-    var ent=new Uint8Array(k.length+1+n.length);
+    var extra = nonceHex ? hexABytes(nonceHex) : null;
+    var largo = k.length + 1 + n.length + (extra ? 1 + extra.length : 0);
+    var ent=new Uint8Array(largo);
     ent.set(k); ent[k.length]=124; ent.set(n, k.length+1);   /* 124 = | */
+    if(extra){
+      ent[k.length+1+n.length]=124;
+      ent.set(extra, k.length+2+n.length);
+    }
     return sha256(ent);
+  }
+
+  /* El valor guardado puede venir en dos formatos:
+       viejo:  "<base64>"
+       nuevo:  "2:<numero al azar en hexa>:<base64>"
+     Los dos puntos no existen en base64, asi que distinguirlos no tiene
+     vuelta. */
+  function partes(valor){
+    var s = String(valor == null ? '' : valor);
+    if(s.slice(0,2) === '2:'){
+      var corte = s.indexOf(':', 2);
+      if(corte > 2) return { nonce: s.slice(2, corte), b64: s.slice(corte+1) };
+    }
+    return { nonce: '', b64: s };
   }
 
   /* ── DESCIFRAR ─────────────────────────────────────────────────────────
@@ -185,9 +213,10 @@
 
          Las pantallas de los jugadores no ponen esa marca, asi que siguen
          abriendo en segundo plano y no se les cuelga el telefono. */
-      if(b64 && b64.length > CHICO && !window.__DESCIFRAR_SINCRONO) { pendientes.push(nombre); continue; }
+      var p = partes(b64);
+      if(p.b64 && p.b64.length > CHICO && !window.__DESCIFRAR_SINCRONO) { pendientes.push(nombre); continue; }
       try{
-        (0, eval)(descifrar(b64, claveArchivo(llave, nombre)));
+        (0, eval)(descifrar(p.b64, claveArchivo(llave, nombre, p.nonce)));
         abiertos++;
       }catch(e){
         try{ console.warn('[datos] no pude abrir', nombre); }catch(_){}
@@ -197,7 +226,8 @@
     /* los grandes, de a uno y sin congelar la pantalla */
     pendientes.forEach(function(nombre){
       try{
-        descifrarDeAPoco(window.__D[nombre], claveArchivo(llave, nombre),
+        var g = partes(window.__D[nombre]);
+        descifrarDeAPoco(g.b64, claveArchivo(llave, nombre, g.nonce),
           function(texto){
             try{
               (0, eval)(texto);

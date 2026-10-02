@@ -118,4 +118,28 @@ _respaldo*/
 
 # Las detecciones que guarda MEDIR_SAQUES para no volver a mirar el video cada
 # vez que se afina una regla. Son 20 MB por entrenamiento y se rehacen solas.
-_radar_cache_*/
+
+# ── Las revisiones de la app ───────────────────────────────────────
+# Explican, con detalle, por donde se rompe la app. Son notas para vos, no
+# para el repositorio: el repo es publico. Las que ya estan subidas hay que
+# sacarlas a mano con  git rm --cached <archivo>  (git no olvida el historial).
+REVISION_APP_*.md
+ANALISIS_COMPLETO_*.md
+AUDITORIA_APP_*.md
+QUE_SE_HIZO_*.md
+
+# ── Donde estan las copias de la llave ───────────────────────────────
+# No tiene la llave adentro, pero dice donde buscarla. En un repo publico eso
+# es un mapa. Se queda en la PC.
+LLAVE_DONDE_ESTA.txt
+
+# ── Las fechas de nacimiento ─────────────────────────────────────
+# Son la clave de cada jugador. Al repositorio va SOLO la version cifrada
+# (datos_plantel.js.enc, que la arma cifrar_datos.py). El .js en claro, nunca.
+datos_plantel.js
+
+# ── Lo que esta esperando que lo borres ───────────────────────────────
+# TERMINAR_LO_DE_HOY.bat aparta aca lo que se da de baja, en vez de borrarlo:
+# si algo hiciera falta, se vuelve a sacar. Al repositorio no va.
+_PARA_BORRAR/
+_workflows_nuevos/

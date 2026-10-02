@@ -72,24 +72,50 @@ def flujo(llave_bytes, largo):
         n += 1
     return salida[:largo]
 
-def clave_archivo(llave_hex, nombre):
-    """Cada archivo se cifra con una llave propia, derivada de la llave del club
-       y del nombre del archivo. Asi dos archivos nunca comparten la misma
-       corriente de bytes (que es lo que permitiria descifrar uno con otro)."""
-    return hashlib.sha256(bytes.fromhex(llave_hex) + b'|' + nombre.encode('utf-8')).digest()
+def clave_archivo(llave_hex, nombre, nonce=b''):
+    """La llave propia de cada archivo.
+
+    Sale de la llave del club, del nombre del archivo Y de un numero al azar
+    distinto en cada cifrado (el nonce). Ese numero es lo que arregla el
+    agujero de fondo: antes la corriente de bytes de un archivo era SIEMPRE
+    la misma, hoy y el ano que viene. Con el repositorio publico y todas las
+    versiones guardadas, alcanzaba con tener UNA version en claro —o adivinar
+    una cabecera fija, que los generadores escriben— para sacar la corriente
+    entera y abrir la version de hoy sin la llave. Probado y confirmado.
+
+    Con un nonce por archivo y por cifrado, dos versiones del mismo archivo ya
+    no comparten un solo byte de corriente, asi que ese camino se cierra.
+
+    Lo que esto NO es: no es AES ni lleva firma, asi que protege el contenido
+    pero no detecta si alguien lo modifico. Para eso habria que pasar a
+    AES-GCM, que en el navegador es asincronico y obliga a rehacer como cargan
+    las 40 pantallas. Esto se puede hacer hoy, sin tocar ninguna.
+    """
+    ent = bytes.fromhex(llave_hex) + b'|' + nombre.encode('utf-8')
+    if nonce:
+        ent += b'|' + nonce
+    return hashlib.sha256(ent).digest()
 
 def cifrar(texto, llave_hex, nombre):
     datos = texto.encode('utf-8')
-    k = clave_archivo(llave_hex, nombre)
+    nonce = os.urandom(16)
+    k = clave_archivo(llave_hex, nombre, nonce)
     f = flujo(k, len(datos))
     mezcla = bytes(a ^ b for a, b in zip(datos, f))
-    return base64.b64encode(mezcla).decode('ascii')
+    # formato 2: "2:<nonce en hexa>:<base64>". Los dos puntos no existen en
+    # base64, asi que distinguir un formato del otro no tiene vuelta.
+    return '2:' + nonce.hex() + ':' + base64.b64encode(mezcla).decode('ascii')
 
 def descifrar(b64, llave_hex, nombre):
+    nonce = b''
+    if b64.startswith('2:'):
+        _, hx, b64 = b64.split(':', 2)
+        nonce = bytes.fromhex(hx)
     mezcla = base64.b64decode(b64)
-    k = clave_archivo(llave_hex, nombre)
+    k = clave_archivo(llave_hex, nombre, nonce)
     f = flujo(k, len(mezcla))
     return bytes(a ^ b for a, b in zip(mezcla, f)).decode('utf-8')
+
 
 def llave_guardada(carpeta):
     ruta = os.path.join(carpeta, 'LLAVE.txt')
@@ -97,8 +123,42 @@ def llave_guardada(carpeta):
         t = open(ruta, encoding='utf-8').read().strip()
         if len(t) == 64:
             return t
+
+    # ══ NO INVENTAR UNA LLAVE SI YA HAY DATOS CIFRADOS ════════════════════
+    #    Antes, si no encontraba LLAVE.txt, generaba una nueva y seguia como
+    #    si nada. El escenario real: clonas el repo en otra maquina (LLAVE.txt
+    #    esta en el .gitignore, y eso esta bien), corres el .bat, y terminas
+    #    con la mitad de los datos cifrados con la llave vieja y la otra mitad
+    #    con una nueva. En la app se ve como "no pude abrir este archivo" y
+    #    nada mas. No hay forma de adivinarlo y no hay vuelta atras.
+    #
+    #    Que haya un .enc en la carpeta significa que YA existe una llave.
+    #    Entonces no se inventa ninguna: se corta y se dice que hay que traer
+    #    la de siempre. Para un club nuevo, sin un solo .enc, generarla sigue
+    #    siendo lo correcto.
+    ya = hay_datos_cifrados(carpeta)
+    if ya:
+        print()
+        print('  ' + '=' * 66)
+        print('    FALTA LLAVE.txt Y YA HAY DATOS CIFRADOS')
+        print('  ' + '=' * 66)
+        print()
+        print('    Encontre datos ya cifrados (por ejemplo %s)' % ya)
+        print('    pero no encuentro LLAVE.txt en esta carpeta.')
+        print()
+        print('    NO genero una llave nueva: cifrar con otra llave deja los')
+        print('    datos viejos imposibles de abrir, sin aviso y sin vuelta.')
+        print()
+        print('    Trae la llave de siempre y volve a correr esto.')
+        print('    Donde buscarla: LLAVE_DONDE_ESTA.txt, al lado de este')
+        print('    archivo, lo explica paso a paso.')
+        print()
+        raise SystemExit(2)
+
     nueva = secrets.token_hex(32)
     open(ruta, 'w', encoding='utf-8').write(nueva)
+    print('  Club nuevo: no habia datos cifrados, asi que cree LLAVE.txt.')
+    print('  GUARDALA: sin ella los datos no se abren nunca mas.')
     return nueva
 
 def main():

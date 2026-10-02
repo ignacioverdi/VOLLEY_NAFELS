@@ -100,3 +100,32 @@ LLAVE_DEMO.txt
 # carga en ninguna pagina y no tiene por que publicarlos.
 demo_acceso.js
 demo_tope.js
+
+# ── Lo que se dio de baja el 02/10 ─────────────────────────────────
+# La medicion de velocidad por video se probo y se descarto (+-22 km/h contra
+# la pistola). No la pide ninguna pantalla: ni el inicio, ni el panel, ni el
+# idioma, ni la ayuda. Y estas tres paginas de jugador quedaron sin ningun
+# enlace desde que el jugador se mira en plan_desarrollo y en jugador.html.
+# Siguen en la PC hasta que las borres a mano; a la web ya no van.
+radar_saque.html
+radar_motor.js
+radar_vivo.js
+radar/
+saque_jugador.html
+recepcion_jugador.html
+ataque_jugador.html
+
+# ── El reproductor que quedo al costado ───────────────────────────────
+# Se escribio uno aparte y despues se decidio usar el de cortes.html, que ya
+# estaba probado. Ninguna pantalla lo pide y nadie llama a repAbrir(). No va a
+# la web; en la PC queda hasta que lo borres.
+reproductor.js
+
+# ── Donde estan las copias de la llave ───────────────────────────────
+# Es una nota para vos, no una pagina. A la web no va.
+LLAVE_DONDE_ESTA.txt
+
+# ── Los respaldos diarios de Firebase ───────────────────────────────
+# Van al repositorio a proposito (son la red de seguridad), pero no son
+# paginas: a la web no tienen nada que hacer.
+respaldos/

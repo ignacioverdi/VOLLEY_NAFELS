@@ -67,22 +67,47 @@ def flujo(llave_bytes, largo):
         n += 1
     return salida[:largo]
 
-def clave_archivo(llave_hex, nombre):
-    """Cada archivo se cifra con una llave propia, derivada de la llave del club
-       y del nombre del archivo. Asi dos archivos nunca comparten la misma
-       corriente de bytes (que es lo que permitiria descifrar uno con otro)."""
-    return hashlib.sha256(bytes.fromhex(llave_hex) + b'|' + nombre.encode('utf-8')).digest()
+def clave_archivo(llave_hex, nombre, nonce=b''):
+    """La llave propia de cada archivo.
+
+    Sale de la llave del club, del nombre del archivo Y de un numero al azar
+    distinto en cada cifrado (el nonce). Ese numero es lo que arregla el
+    agujero de fondo: antes la corriente de bytes de un archivo era SIEMPRE
+    la misma, hoy y el ano que viene. Con el repositorio publico y todas las
+    versiones guardadas, alcanzaba con tener UNA version en claro —o adivinar
+    una cabecera fija, que los generadores escriben— para sacar la corriente
+    entera y abrir la version de hoy sin la llave. Probado y confirmado.
+
+    Con un nonce por archivo y por cifrado, dos versiones del mismo archivo ya
+    no comparten un solo byte de corriente, asi que ese camino se cierra.
+
+    Lo que esto NO es: no es AES ni lleva firma, asi que protege el contenido
+    pero no detecta si alguien lo modifico. Para eso habria que pasar a
+    AES-GCM, que en el navegador es asincronico y obliga a rehacer como cargan
+    las 40 pantallas. Esto se puede hacer hoy, sin tocar ninguna.
+    """
+    ent = bytes.fromhex(llave_hex) + b'|' + nombre.encode('utf-8')
+    if nonce:
+        ent += b'|' + nonce
+    return hashlib.sha256(ent).digest()
 
 def cifrar(texto, llave_hex, nombre):
     datos = texto.encode('utf-8')
-    k = clave_archivo(llave_hex, nombre)
+    nonce = os.urandom(16)
+    k = clave_archivo(llave_hex, nombre, nonce)
     f = flujo(k, len(datos))
     mezcla = bytes(a ^ b for a, b in zip(datos, f))
-    return base64.b64encode(mezcla).decode('ascii')
+    # formato 2: "2:<nonce en hexa>:<base64>". Los dos puntos no existen en
+    # base64, asi que distinguir un formato del otro no tiene vuelta.
+    return '2:' + nonce.hex() + ':' + base64.b64encode(mezcla).decode('ascii')
 
 def descifrar(b64, llave_hex, nombre):
+    nonce = b''
+    if b64.startswith('2:'):
+        _, hx, b64 = b64.split(':', 2)
+        nonce = bytes.fromhex(hx)
     mezcla = base64.b64decode(b64)
-    k = clave_archivo(llave_hex, nombre)
+    k = clave_archivo(llave_hex, nombre, nonce)
     f = flujo(k, len(mezcla))
     return bytes(a ^ b for a, b in zip(mezcla, f)).decode('utf-8')
 

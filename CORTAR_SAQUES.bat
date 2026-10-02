@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 >nul
-title Cortar saques para el radar
+title Cortar saques
 cd /d "%~dp0"
 python "%~dp0CORTAR_SAQUES.py" %*
 if errorlevel 1 (

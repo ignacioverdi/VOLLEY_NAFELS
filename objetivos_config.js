@@ -1161,7 +1161,7 @@ function objVerVideo(id, clave, nombreFila, cuantas, jugNombre){
   /* ══ AL REPRODUCTOR QUE YA EXISTE ═════════════════════════════════════════
      cortes.html ya hace TODO esto: tiene las acciones filtradas, ordenadas,
      con su video, y el reproductor armado. Lo usan 9 pantallas del sistema
-     —dashboard, los mapas de calor, informe de equipo, ataque_jugador—.
+     —dashboard, los mapas de calor, informe de equipo—.
 
      Yo habia escrito un reproductor entero al lado. Era trabajo de mas y
      traia errores nuevos. Lo unico que hacia falta era pasarle los filtros.

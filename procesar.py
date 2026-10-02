@@ -130,6 +130,27 @@ def main():
         return 0
 
     archivos = glob.glob(os.path.join(dvw, '*.dvw')) + glob.glob(os.path.join(dvw, '*.DVW'))
+
+    # ══ FRENO: carpeta sin partidos, no se toca nada ══════════════════════
+    #    La carpeta elegida es la del año más alto. Si alguien crea
+    #    "DVW NAFELS 2028" vacía para tenerla lista, o renombra la que está
+    #    en uso, esta carpeta existe pero no tiene un solo .dvw.
+    #
+    #    Siguiendo de largo, el motor rehace la base desde cero —porque
+    #    ningún partido de la base aparece en la carpeta—, la deja vacía, se
+    #    cifra vacía y se publica. La web queda en blanco sola.
+    #
+    #    Una carpeta sin partidos no es un error: es que todavía no hay nada
+    #    que procesar. Se termina bien y sin tocar un solo archivo.
+    if not archivos:
+        print('  La carpeta %s no tiene ningún .dvw: no hay nada que procesar.'
+              % os.path.basename(dvw))
+        print('  (no se tocó la base; si esperabas partidos, fijate la carpeta)')
+        if args.json:
+            print(json.dumps({'ok': True, 'partidos': 0,
+                              'nota': 'carpeta sin .dvw: no se toco nada'}))
+        return 0
+
     temporada = temporada_de(dvw)
     t0 = time.time()
 

@@ -138,6 +138,13 @@ window.__DESCIFRAR_SINCRONO = true;
 .ses-it:has(input:checked){border-color:#f59e0b;background:rgba(245,158,11,.14);color:#f59e0b}
 .ses-it input{accent-color:#f59e0b;margin:0;cursor:pointer}
 .ses-todas{font-weight:700}
+.ses-mes{display:flex;align-items:center;justify-content:space-between;gap:6px;
+         cursor:pointer;padding:5px 4px 3px;margin-top:4px;font-size:10px;
+         letter-spacing:.07em;text-transform:uppercase;color:#94a3b8;
+         border-top:1px solid rgba(148,163,184,.22);user-select:none}
+.ses-mes:first-of-type{border-top:0;margin-top:0}
+.ses-mes b{font-size:9px}
+.ses-mes i{font-style:normal;font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
@@ -284,17 +291,34 @@ function llenarFiltros(A){
   if(ordT.length) t.value = ordT[0];
 
   /* las casillas, una por sesion */
+  /* Agrupadas por mes: con una temporada entera la lista se hacia eterna.
+     Abierto el mes mas nuevo, los de antes plegados. Plegar y desplegar solo
+     esconde las filas, no las vuelve a dibujar, asi no se pierde lo tildado. */
   var caja = document.getElementById('f-ses-caja');
   if(caja){
     var ordC = Object.keys(ses).sort(function(a,b){
       return String(ses[b]).localeCompare(String(ses[a]));
     });
-    caja.innerHTML = '<label class="ses-it ses-todas"><input type="checkbox" id="ses-todas" checked '
-      + 'onchange="sesTodas(this.checked)"> <span data-t="hs_acumulado">Todas</span></label>'
-      + ordC.map(function(c){
-          return '<label class="ses-it"><input type="checkbox" class="ses-ck" value="' + esc(c) + '" '
-               + 'onchange="sesCambio()"> <span>' + (fCorta(ses[c]) || esc(c)) + '</span></label>';
-        }).join('');
+    var meses = [], porMes = {};
+    ordC.forEach(function(c){
+      var k = hsMesClave(ses[c]);
+      if(!porMes[k]){ porMes[k] = []; meses.push(k); }
+      porMes[k].push(c);
+    });
+    var html = '<label class="ses-it ses-todas"><input type="checkbox" id="ses-todas" checked '
+             + 'onchange="sesTodas(this.checked)"> <span data-t="hs_acumulado">Todas</span></label>';
+    meses.forEach(function(k, gi){
+      var ab = (gi === 0);
+      html += '<div class="ses-mes" data-ab="' + (ab?'1':'0') + '" onclick="hsMes(\'' + k + '\',this)">'
+            + '<span><b>' + (ab?'\u25be':'\u25b8') + '</b> ' + hsMesNombre(k) + '</span>'
+            + '<i>' + porMes[k].length + '</i></div>';
+      porMes[k].forEach(function(c){
+        html += '<label class="ses-it" data-mes="' + k + '"' + (ab?'':' style="display:none"') + '>'
+              + '<input type="checkbox" class="ses-ck" value="' + esc(c) + '" onchange="sesCambio()"> '
+              + '<span>' + (fCorta(ses[c]) || esc(c)) + '</span></label>';
+      });
+    });
+    caja.innerHTML = html;
   }
 
   var s = document.getElementById('f-ses');
@@ -375,6 +399,29 @@ function sesTexto(){
   el.textContent = ck.length + ' sesiones';
 }
 
+var HS_MESES_NOM = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio',
+                    'Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+function hsMesClave(f){
+  var s = String(f == null ? '' : f).trim(), m;
+  if((m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return m[1] + '-' + ('0'+m[2]).slice(-2);
+  if((m = s.match(/^(\d{1,2})[\/\.](\d{1,2})[\/\.](\d{2,4})/))){
+    var a = m[3].length === 2 ? ('20'+m[3]) : m[3];
+    return a + '-' + ('0'+m[2]).slice(-2);
+  }
+  return '';
+}
+function hsMesNombre(k){
+  var q = String(k||'').split('-');
+  if(q.length !== 2) return 'Sin fecha';
+  return (HS_MESES_NOM[parseInt(q[1],10)-1] || q[1]) + ' ' + q[0];
+}
+function hsMes(k, el){
+  var abierto = el.getAttribute('data-ab') === '1';
+  el.setAttribute('data-ab', abierto ? '0' : '1');
+  var f = el.querySelector('b'); if(f) f.textContent = abierto ? '\u25b8' : '\u25be';
+  [].slice.call(document.querySelectorAll('.ses-it[data-mes="' + k + '"]'))
+    .forEach(function(x){ x.style.display = abierto ? 'none' : 'inline-flex'; });
+}
 function sesAbrir(){
   var c = document.getElementById('f-ses-caja');
   if(!c) return;

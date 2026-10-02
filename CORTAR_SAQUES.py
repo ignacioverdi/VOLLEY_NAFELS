@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 ════════════════════════════════════════════════════════════════════════════
-  CORTAR SAQUES — el montaje para el radar, sacado del video ORIGINAL
+  CORTAR SAQUES — el montaje de los saques, sacado del video ORIGINAL
 ════════════════════════════════════════════════════════════════════════════
 
   QUE PROBLEMA RESUELVE
@@ -82,8 +82,8 @@ URL_FFMPEG = 'https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip'
 #
 # O sea que el golpe cae alrededor de UN SEGUNDO DESPUES del segundo anotado,
 # con un error de alineacion de un par de segundos para cualquier lado. Con la
-# ventana de 2,5 + 1,5 el vuelo se podia quedar afuera del recorte y el radar
-# no habria tenido nada que medir.
+# ventana de 2,5 + 1,5 el vuelo se podia quedar afuera del recorte y no
+# habria quedado nada para medir.
 #
 # Por eso va ancha hasta que midamos el desfase real en un partido. Una vez
 # medido se puede achicar y los archivos bajan a la mitad.
@@ -304,7 +304,7 @@ def _arranque_real(ff, p):
     Eso no es un problema mientras se sepa. Con -copyts los tiempos del recorte
     quedan en la escala del original, asi que alcanza con leer el primero. Con
     ese numero, la posicion del golpe dentro del clip queda exacta, que es lo
-    unico que el radar necesita.
+    unico que la medicion necesita.
 
     Devuelve (arranque, duracion) en segundos, o (None, None) si no se pudo leer.
     """
@@ -342,7 +342,7 @@ def cortar(ff, video, saques, salida_base, carpeta, datos=None):
     (una media imagen con las lineas pares y otra con las impares, tomadas con
     1/60 de segundo de diferencia). Separarlos es una decision que pierde algo
     —hay que inventar las lineas que faltan— asi que conviene hacerla del lado
-    de la medicion, con el codigo del radar, y no aca. En el mapa queda anotado
+    de la medicion y no aca. En el mapa queda anotado
     que el origen viene entrelazado para que la medicion lo sepa.
     """
     tmp = os.path.join(carpeta, '_cortes_tmp')
@@ -353,7 +353,7 @@ def cortar(ff, video, saques, salida_base, carpeta, datos=None):
     if entrelazado:
         print()
         print('     El video viene ENTRELAZADO (60i). Lo dejo asi y lo anoto en')
-        print('     el mapa: separar los campos lo hace el radar al medir, que')
+        print('     el mapa: separar los campos se hace al medir, que')
         print('     es donde menos se pierde.')
     if COPIA:
         print()
@@ -396,7 +396,7 @@ def cortar(ff, video, saques, salida_base, carpeta, datos=None):
 
             partes.append(p)
             # El golpe, medido desde el arranque REAL del clip. Este es el
-            # numero que usa el radar: sin el, el corte en cuadro clave correria
+            # numero que usa la medicion: sin el, el corte en cuadro clave correria
             # la busqueda hasta medio segundo.
             en_clip = round(s['seg'] - t0, 3)
             mapa.append(dict(clip=len(partes),

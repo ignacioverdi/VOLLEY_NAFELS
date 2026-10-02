@@ -849,7 +849,14 @@ var FIXTURE_PRIMERA=[
     if(tab==='partidos'){ e.rival=document.getElementById('f-rival').value.trim(); e.condicion=formCond; e.escudo=FORM_ESCUDO||''; }
     else { e.tipo=document.getElementById('f-tipo').value; var _hf=document.getElementById('f-horafin'); if(_hf) e.horaFin=_hf.value; var _ff=document.getElementById('f-fechafin'); if(_ff) e.fechaFin=_ff.value; }
     var arr=data[tab], found=false;
-    for(var i=0;i<arr.length;i++){ if(arr[i].id===e.id){ arr[i]=e; found=true; break; } }
+    for(var i=0;i<arr.length;i++){
+      if(arr[i].id===e.id){
+        var mezcla={}, k;
+        for(k in arr[i]) if(Object.prototype.hasOwnProperty.call(arr[i],k)) mezcla[k]=arr[i][k];
+        for(k in e)      if(Object.prototype.hasOwnProperty.call(e,k))      mezcla[k]=e[k];
+        arr[i]=mezcla; found=true; break;
+      }
+    }
     if(!found) arr.push(e);
     fbSet('calendario/'+tab, arr);
     closeForm(); render();
@@ -958,9 +965,14 @@ function _icsDeEntreno(e){
   if(e.fechaFin && e.fechaFin > e.fecha){
     /* varios dias: evento de dia completo. DTEND va al dia SIGUIENTE al ultimo,
        que es como lo pide el formato. */
+    /* El dia se arma con la fecha LOCAL, no con toISOString: en Suiza (UTC+1)
+       pasar una medianoche local a UTC devuelve el dia anterior, y las
+       vacaciones del 20 al 25 se exportaban terminando el 24. Probado. */
     var f = new Date(e.fechaFin + 'T00:00:00');
     f.setDate(f.getDate() + 1);
-    var finExcl = f.toISOString().slice(0,10).replace(/-/g,'');
+    var finExcl = String(f.getFullYear())
+                + ('0' + (f.getMonth() + 1)).slice(-2)
+                + ('0' + f.getDate()).slice(-2);
     cuerpo = ['DTSTART;VALUE=DATE:' + e.fecha.replace(/-/g,''),
               'DTEND;VALUE=DATE:' + finExcl];
   } else {
@@ -1095,14 +1107,37 @@ window.temporadaAlCalendario = function(){
                 'Continuo?')) return;
 
     var anio = (viejos[0].fecha || '').slice(0, 4) || 'anterior';
+    /* ══ PRIMERO GUARDAR, DESPUES BORRAR ══════════════════════════════
+       Eran dos escrituras sueltas y un "Listo" que salia siempre. Si la
+       primera fallaba y la segunda andaba, los partidos se iban del
+       calendario y no quedaban archivados en ningun lado: el cartel decia
+       que estaban guardados y no estaban.
+
+       Ahora la segunda espera a la primera. Si el archivo no se pudo
+       guardar, el calendario no se toca y el cartel lo dice.              */
     fbGet('calendario/archivo_' + anio, function(previo){
       var todo = (Array.isArray(previo) ? previo : []).concat(viejos);
-      fbSet('calendario/archivo_' + anio, todo);
-      data.partidos = quedan;
-      fbSet('calendario/partidos', quedan);
-      if(window.render) render();
-      alert('Listo.\n\n' + viejos.length + ' partido(s) archivado(s) en ' + anio +
-            '.\nEl calendario quedo con ' + quedan.length + ' por jugar.');
+      Promise.resolve(fbSet('calendario/archivo_' + anio, todo)).then(function(ok){
+        if(ok === false){
+          alert('NO pude guardar el archivo de ' + anio + '.\n\n' +
+                'No toque el calendario: los ' + viejos.length + ' partidos siguen ahi.\n' +
+                'Fijate la conexion y volve a intentar.');
+          return;
+        }
+        data.partidos = quedan;
+        return Promise.resolve(fbSet('calendario/partidos', quedan)).then(function(ok2){
+          if(window.render) render();
+          if(ok2 === false){
+            alert('Archive los ' + viejos.length + ' partido(s) en ' + anio + ',\n' +
+                  'pero NO pude actualizar el calendario en el servidor.\n\n' +
+                  'En esta computadora ya se ve bien. Abri el calendario con\n' +
+                  'conexion para que termine de sincronizar.');
+            return;
+          }
+          alert('Listo.\n\n' + viejos.length + ' partido(s) archivado(s) en ' + anio +
+                '.\nEl calendario quedo con ' + quedan.length + ' por jugar.');
+        });
+      });
     });
   };
 })();

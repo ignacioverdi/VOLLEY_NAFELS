@@ -1189,6 +1189,7 @@ function setEqFiltro(f,btn){
   /* Los indices son posiciones dentro de la lista del tipo actual: al cambiar
      de Partidos a Entrenamientos apuntarian a otras sesiones. */
   EQ_FILTRO=f; EQ_SESION=-2; EQ_SEL=null;
+  EQ_MES_ABIERTO={};
   /* La eleccion vale para todo el sistema, no solo para esta pantalla. */
   try{ if(typeof vbSetTipo==='function') vbSetTipo(f); }catch(e){}
 
@@ -1219,40 +1220,113 @@ function eqTogglePanel(){
   if(p.style.display==='none'){ eqBuildPanel(); p.style.display='block'; }
   else p.style.display='none';
 }
+/* ══ EL PANEL DE SESIONES ════════════════════════════════════════════════════
+   Antes arrancaba con las cinco tildadas, porque "todas" se dibujaba como
+   "todas tildadas". Para mirar UNA habia que destildar las otras cuatro, y al
+   destildar la ultima el panel decia "ninguna" mientras la pantalla mostraba
+   todas. Ahora es como en High Set: arriba una casilla TODAS, y las sesiones
+   arrancan sin tildar. Tocar una es elegir esa; no tildar ninguna es todas.
+   Y las filas van agrupadas por mes —el mes mas nuevo abierto, los viejos
+   plegados— para que la lista no se haga eterna cuando haya cien sesiones. */
+var EQ_MES_ABIERTO = {};
+var EQ_MESES_NOM = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio',
+                    'Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+/* La fecha llega como 2026-09-29 o como 29/09/2026 segun de donde salga. */
+function eqMesClave(f){
+  var s=String(f==null?'':f).trim(), m;
+  if((m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return m[1]+'-'+('0'+m[2]).slice(-2);
+  if((m=s.match(/^(\d{1,2})[\/\.](\d{1,2})[\/\.](\d{2,4})/))){
+    var a=m[3].length===2?('20'+m[3]):m[3];
+    return a+'-'+('0'+m[2]).slice(-2);
+  }
+  return '';
+}
+function eqMesNombre(k){
+  var q=String(k||'').split('-');
+  if(q.length!==2) return 'Sin fecha';
+  return (EQ_MESES_NOM[parseInt(q[1],10)-1]||q[1])+' '+q[0];
+}
+function eqOrdenFecha(f){
+  var s=String(f==null?'':f).trim(), m;
+  if((m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return parseInt(m[1]+('0'+m[2]).slice(-2)+('0'+m[3]).slice(-2),10);
+  if((m=s.match(/^(\d{1,2})[\/\.](\d{1,2})[\/\.](\d{2,4})/))){
+    var a=m[3].length===2?('20'+m[3]):m[3];
+    return parseInt(a+('0'+m[2]).slice(-2)+('0'+m[1]).slice(-2),10);
+  }
+  return 0;
+}
+function eqEsc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function eqMes(k){
+  if(EQ_MES_ABIERTO[k]) delete EQ_MES_ABIERTO[k]; else EQ_MES_ABIERTO[k]=1;
+  eqBuildPanel();
+}
 function eqBuildPanel(){
   var p=document.getElementById('eq-multi-panel'); if(!p) return;
   var ses=getSesiones(EQ_FILTRO)||[];
   if(!ses.length){ p.innerHTML='<div style="padding:10px;color:var(--mut,#8395ac);font-size:12px">No hay sesiones para este filtro.</div>'; return; }
-  var h='<div style="display:flex;gap:6px;margin-bottom:8px">'
-      + '<button class="ftag" onclick="eqSelTodas()">Todas</button>'
-      + '<button class="ftag" onclick="eqSelNinguna()">Ninguna</button></div>';
-  ses.forEach(function(x,i){
-    var esP = !!(x && x.rival);
-    var etiqueta = (x.fecha||'') + turnoTxt(x) + ' · ' + (esP ? ('vs '+(x.rival||'RIVAL')) : 'Entrenamiento');
-    var on = EQ_SEL ? EQ_SEL.has(i) : true;
-    h += '<label style="display:flex;gap:8px;align-items:center;padding:6px 4px;font-size:13px;cursor:pointer">'
-       + '<input type="checkbox" '+(on?'checked':'')+' onchange="eqTildar('+i+',this.checked)">'
-       + '<span>'+etiqueta+'</span></label>';
+
+  /* cada fila se queda con su indice real: el orden de la lista no lo cambia */
+  var filas=ses.map(function(x,i){
+    return { i:i, x:x||{}, k:eqMesClave(x&&x.fecha), o:eqOrdenFecha(x&&x.fecha) };
+  });
+  filas.sort(function(a,b){ return (b.o-a.o) || (b.i-a.i); });
+
+  var meses=[], porMes={};
+  filas.forEach(function(f){
+    if(!porMes[f.k]){ porMes[f.k]=[]; meses.push(f.k); }
+    porMes[f.k].push(f);
+  });
+
+  /* sin eleccion, abierto el mes mas nuevo; con eleccion, los meses elegidos */
+  var abiertos=0, mk;
+  for(mk in EQ_MES_ABIERTO) if(EQ_MES_ABIERTO[mk]) abiertos++;
+  if(!abiertos && meses.length) EQ_MES_ABIERTO[meses[0]]=1;
+  if(EQ_SEL) filas.forEach(function(f){ if(EQ_SEL.has(f.i)) EQ_MES_ABIERTO[f.k]=1; });
+
+  var IT='display:flex;gap:8px;align-items:center;padding:6px 4px;font-size:13px;cursor:pointer';
+  var h='<label style="'+IT+';border-bottom:1px solid var(--b,#1f2c3d);margin-bottom:4px;font-weight:700">'
+      + '<input type="checkbox" '+(EQ_SEL?'':'checked')+' onchange="eqSelTodas()">'
+      + '<span>Todas las sesiones ('+ses.length+')</span></label>';
+
+  meses.forEach(function(k){
+    var g=porMes[k], ab=!!EQ_MES_ABIERTO[k], nSel=0;
+    if(EQ_SEL) g.forEach(function(f){ if(EQ_SEL.has(f.i)) nSel++; });
+    h+='<div onclick="eqMes(\''+k+'\')" style="display:flex;justify-content:space-between;'
+     +  'align-items:center;cursor:pointer;padding:5px 4px;margin-top:4px;font-size:11px;'
+     +  'letter-spacing:.06em;text-transform:uppercase;color:var(--mut,#8395ac);'
+     +  'border-top:1px solid var(--b,#1f2c3d)">'
+     +  '<span>'+(ab?'\u25be':'\u25b8')+' '+eqMesNombre(k)+'</span>'
+     +  '<span style="font-variant-numeric:tabular-nums">'+(nSel?(nSel+'/'+g.length):g.length)+'</span></div>';
+    if(!ab) return;
+    g.forEach(function(f){
+      var esP=!!(f.x && f.x.rival);
+      var et=eqEsc(f.x.fecha||'')+eqEsc(turnoTxt(f.x))+' \u00b7 '
+           + (esP?('vs '+eqEsc(f.x.rival||'RIVAL')):'Entrenamiento');
+      h+='<label style="'+IT+'">'
+       +  '<input type="checkbox" '+((EQ_SEL&&EQ_SEL.has(f.i))?'checked':'')
+       +  ' onchange="eqTildar('+f.i+',this.checked)">'
+       +  '<span>'+(esP?'\ud83c\udfc6':'\ud83c\udfcb\ufe0f')+' '+et+'</span></label>';
+    });
   });
   p.innerHTML=h;
 }
 function eqTildar(i, on){
-  if(!EQ_SEL){
-    /* Primera vez: se parte de todas tildadas, que es lo que se ve. */
-    EQ_SEL=new Set(); (getSesiones(EQ_FILTRO)||[]).forEach(function(_s,k){ EQ_SEL.add(k); });
-  }
+  if(!EQ_SEL) EQ_SEL=new Set();          /* se arranca de vacio: tildar es elegir */
   if(on) EQ_SEL.add(i); else EQ_SEL.delete(i);
-  if(!EQ_SEL.size) EQ_SEL=null;      /* ninguna tildada = como si no hubiera filtro */
+  /* ni ninguna ni todas son un filtro: las dos son "todas" */
+  if(!EQ_SEL.size) EQ_SEL=null;
+  else if(EQ_SEL.size>=(getSesiones(EQ_FILTRO)||[]).length) EQ_SEL=null;
   EQ_SESION=-2;
   var d=document.getElementById('eq-ses-sel'); if(d) d.value='-2';
-  eqPintarMulti(); renderEqTab();
-}
-function eqSelTodas(){ EQ_SEL=null; EQ_SESION=-2; eqBuildPanel(); eqPintarMulti(); renderEqTab(); }
-function eqSelNinguna(){
-  EQ_SEL=new Set(); var ses=getSesiones(EQ_FILTRO)||[];
-  if(ses.length) EQ_SEL.add(0);      /* al menos una, si no no hay nada que mostrar */
   eqBuildPanel(); eqPintarMulti(); renderEqTab();
 }
+function eqSelTodas(){
+  EQ_SEL=null; EQ_SESION=-2;
+  var d=document.getElementById('eq-ses-sel'); if(d) d.value='-2';
+  eqBuildPanel(); eqPintarMulti(); renderEqTab();
+}
+function eqSelNinguna(){ eqSelTodas(); }   /* quedo por compatibilidad */
 function eqPintarMulti(){
   var b=document.getElementById('eq-multi-n'); if(!b) return;
   var ses=getSesiones(EQ_FILTRO)||[];
@@ -2573,9 +2647,6 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 <script src="chat_nafels.js?v=20261002-1334"></script>
 <script src="lang.js?v=20261002-1334"></script>
 <script src="temporadas_menu.js?v=20261002-1334"></script>
-<!-- Este archivo no esta en el proyecto. Sin el onerror, el navegador
-     marcaba un error de carga en cada visita al tablero. -->
-<script src="app_offline.js?v=20261002-1334" onerror="void 0"></script>
 <script src="ayuda.js?v=20261002-1334"></script>
 <script src="velocidades_saque.js?v=20261002-1334" onerror="void 0"></script>
 <script>

@@ -664,17 +664,31 @@ function _fbArrancar(){
 _fbArrancar();
 
 /* ── API de siempre, ahora firmada (y con los permisos por rol intactos) ── */
+/* ══ fbSet AHORA CONTESTA ══════════════════════════════════════════════════
+   Antes no devolvia nada: el que escribia no tenia forma de saber si el dato
+   llego al servidor o se perdio. Eso se nota sobre todo al archivar la
+   temporada, donde hay DOS escrituras y la segunda borra lo que guardo la
+   primera: si la primera fallaba y la segunda andaba, los partidos
+   desaparecian de los dos lados y el cartel decia "Listo" igual.
+
+   Ahora devuelve una promesa que termina en true (quedo guardado) o false
+   (no pude). NUNCA falla: siempre resuelve, asi el que no la mira no se
+   entera de nada y nada cambia para las otras 55 llamadas que ya existen.
+
+   Lo de siempre sigue igual: primero se escribe en esta maquina, asi que sin
+   senal el dato no se pierde.                                             */
 function fbSet(path, value){
-  if(_fbCorta()) return Promise.resolve();
-  if(vbEdicionBloqueada(path)){ try{ console.warn('[permisos] escritura bloqueada para jugador:', path); }catch(e){} return; }
+  if(_fbCorta()) return Promise.resolve(true);
+  if(vbEdicionBloqueada(path)){ try{ console.warn('[permisos] escritura bloqueada para jugador:', path); }catch(e){} return Promise.resolve(false); }
   try{ localStorage.setItem(fbKey(path), JSON.stringify(value)); }catch(e){}
-  _fbArrancar().then(_fbSufijo).then(function(q){
-    if(FB_OFF) return;
-    fetch(FB_URL + '/' + path + '.json' + q, {
+  return _fbArrancar().then(_fbSufijo).then(function(q){
+    if(FB_OFF) return false;
+    return fetch(FB_URL + '/' + path + '.json' + q, {
       method:'PUT', headers:{'Content-Type':'application/json'},
       body: JSON.stringify(value)
-    }).catch(function(){});
-  });
+    }).then(function(r){ return !!(r && r.ok); })
+      .catch(function(){ return false; });
+  }).catch(function(){ return false; });
 }
 
 function fbGet(path, callback){

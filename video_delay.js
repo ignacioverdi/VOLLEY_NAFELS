@@ -75,7 +75,7 @@
 
   /* ── conectar a una sala ── */
   function conectar(sala, esReintento){
-    if(!esReintento){ queremos = true; reintento = 0; }
+    if(!esReintento){ queremos = true; reintento = 0; _rearmes = 0; }
     if(connected) _cerrarConexion();
     salaId = String(sala).trim();
     viewerId = 'v'+Math.floor(Math.random()*1e9);
@@ -194,6 +194,7 @@
      dentro de el. Si el navegador no lo soporta, arrancar() devuelve false y
      se sigue con los clips: nadie se queda sin video.                       */
   var BD = null;
+  var _rearmes = 0;        /* cuantas veces se rearmo el motor sin exito */
 
   function onStreamRecibido(stream){
     var vLive = $('vd-live'), vDelay = $('vd-delay');
@@ -207,6 +208,24 @@
     if(typeof BufferDelay === 'function' && vDelay){
       BD = new BufferDelay(vDelay);
       BD.onEstado = setEstado;
+      /* ══ SI DEJA DE ENTRAR IMAGEN, SE REARMA SOLO ════════════════════════
+         El motor avisa cuando el final del buffer deja de moverse. Eso quiere
+         decir que no llega nada: o se murio el grabador de esta maquina, o el
+         celular dejo de mandar. Rearmar el motor con el mismo video que ya
+         esta llegando cuesta un segundo y arregla el primer caso. Si el que
+         no manda es el celular, el cartel lo dice y hay que ir hasta alla.
+         Se intenta tres veces y despues se deja de insistir. */
+      BD.onMuerto = function(){
+        if(_rearmes >= 3){ setEstado('No entra imagen. Fijate el celular: pantalla prendida y transmitiendo.', 'err'); return; }
+        _rearmes++;
+        setEstado('Se cortó la imagen · rearmando el video con retraso ('+_rearmes+' de 3)…', 'wait');
+        setTimeout(function(){
+          if(!liveStream) return;
+          try{ if(BD){ BD.parar(); } }catch(e){}
+          BD = null;
+          onStreamRecibido(liveStream);
+        }, 500);
+      };
       if(BD.arrancar(stream)){
         escucharCierreDeRally();
         return;                      /* motor nuevo andando */

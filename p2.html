@@ -142,7 +142,7 @@
     .pos .r{font-size:6pt}
   }
 </style>
-<link rel="stylesheet" href="movil.css?v=20261002-1334">
+<link rel="stylesheet" href="movil.css?v=20261002-1255">
 </head>
 <!-- ancho-fijo: esta pagina es la vista previa de la hoja A4 que se
      imprime. Si se estira al ancho del monitor deja de coincidir con lo
@@ -193,13 +193,18 @@
   Para el papel, usá Imprimir: sale en una hoja A4, en blanco y negro, sin los botones.</div>
 </div>
 
-<script src="categorias_club.js?v=20261002-1334" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20261002-1334" onerror="void 0"></script>
-<script src="plantel_nafels.js?v=20261002-1334" onerror="void 0"></script>
-<script src="firebase.js?v=20261002-1334" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261002-1334" onerror="void 0"></script>
-<script src="lang.js?v=20261002-1334" onerror="void 0"></script>
-<script src="proximo_rival.js?v=20261002-1334" onerror="void 0"></script>
+<script src="categorias_club.js?v=20261002-1255" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20261002-1255" onerror="void 0"></script>
+<script src="datos_seguros.js"></script>
+<script src="plantel_nafels.js?v=20261002-1255" onerror="void 0"></script>
+<!-- Las fechas de nacimiento, cifradas. La P-2 las necesita para el papel.
+     Si no se pueden abrir, se usa lo que traiga el plantel. -->
+<script src="datos_plantel.js.enc" onerror="void 0"></script>
+<script>try{ if(typeof abrirDatos==="function") abrirDatos(); }catch(e){}</script>
+<script src="firebase.js?v=20261002-1255" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261002-1255" onerror="void 0"></script>
+<script src="lang.js?v=20261002-1255" onerror="void 0"></script>
+<script src="proximo_rival.js?v=20261002-1255" onerror="void 0"></script>
 <script>
 (function(){
   "use strict";
@@ -214,13 +219,24 @@
   var ROMANO = {1:'I',2:'II',3:'III',4:'IV',5:'V',6:'VI'};
   var SETS = [1,2,3,4,5];
 
+  /* La fecha sale de datos_plantel.js.enc. Si no esta —no se cifro todavia,
+     o esta computadora no tiene la llave— se usa la del plantel, que es como
+     venia funcionando. La planilla nunca sale sin fechas por esto. */
+  function p2Nacim(j){
+    try{
+      var P = window.PLANTEL_PRIVADO;
+      var f = P && P.jugadores && P.jugadores[String(j && j.num)];
+      if(f && f.nacim) return f.nacim;
+    }catch(e){}
+    return (j && j.nacim) || '';
+  }
   function plantel(){
     try{
       var P = window.PLANTEL_NAFELS || window.PLANTEL_CLUB;
       var js = (P && (P.jugadores || P.lista)) || [];
       if(js.length) return js.map(function(j){
         return {num:+j.num, ape:(j.ap||''), nom:(j.nombre||''), pos:(j.pos||''),
-                nacim:(j.nacim||''), altura:(j.altura||''), nac:(j.nac||'')};
+                nacim:p2Nacim(j), altura:(j.altura||''), nac:(j.nac||'')};
       }).sort(function(a,b){ return a.num-b.num; });
     }catch(e){}
     try{
@@ -444,7 +460,7 @@
   pintar();
 })();
 </script>
-<script src="volver_inicio.js?v=20261002-1334" onerror="void 0"></script>
-<script src="ayuda.js?v=20261002-1334" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20261002-1255" onerror="void 0"></script>
+<script src="ayuda.js?v=20261002-1255" onerror="void 0"></script>
 </body>
 </html>

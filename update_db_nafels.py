@@ -1743,7 +1743,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
             'resultado':{'nafels':g['tsets'],'rival':g['rsets'],'sets':g['set_strings']},'jugadores':jugs})
 
     now = datetime.now().strftime('%d/%m/%Y, %H:%M:%S')
-    hist_js = 'window.HISTORIAL_DATA = ' + json.dumps({'generado':now,'entrenamientos':historial}, ensure_ascii=False, indent=2) + ';\n'
+    hist_js = 'window.HISTORIAL_DATA = ' + json.dumps({'generado':now,'entrenamientos':historial}, ensure_ascii=False, separators=(',', ':')) + ';\n'
     with open(os.path.join(output_dir,'datos_historial.js'),'w',encoding='utf-8') as f: f.write(hist_js)
 
     # ── DATOS_PARTIDOS.JS (ataques, saques, recepciones por jugador acumulado) ──
@@ -1876,10 +1876,10 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
     pjs = f'// datos_partidos.js — {now}\n'
     pjs += f'const PARTIDOS_GENERADO = "{now}";\n'
     pjs += f'const PARTIDOS_TOTAL = {len(partidos_meta)};\n'
-    pjs += 'const PARTIDOS_META = ' + json.dumps(partidos_meta, ensure_ascii=False, indent=2) + ';\n'
-    pjs += 'const PARTIDOS_JUGADORES = ' + json.dumps(partidos_jug, ensure_ascii=False, indent=2) + ';\n'
+    pjs += 'const PARTIDOS_META = ' + json.dumps(partidos_meta, ensure_ascii=False, separators=(',', ':')) + ';\n'
+    pjs += 'const PARTIDOS_JUGADORES = ' + json.dumps(partidos_jug, ensure_ascii=False, separators=(',', ':')) + ';\n'
     pjs += 'const PARTIDOS_EQUIPO_OBJ = ' + json.dumps(equipo_obj_acum, ensure_ascii=False) + ';\n'
-    pjs += 'const PARTIDOS_INDIVIDUAL = ' + json.dumps(partidos_individual, ensure_ascii=False, indent=2) + ';\n'
+    pjs += 'const PARTIDOS_INDIVIDUAL = ' + json.dumps(partidos_individual, ensure_ascii=False, separators=(',', ':')) + ';\n'
     # Armador acumulado (todos los partidos) — mismo formato que el de cada partido
     _arm_acum = build_armador_data(_arm_acum_rallies, _arm_acum_names) if _arm_acum_rallies else {'titular':None,'suplente':None}
     pjs += 'const PARTIDOS_ARMADOR = ' + json.dumps(_arm_acum, ensure_ascii=False) + ';\n'
@@ -1910,7 +1910,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         recep_data[nombre]={'num':pj['num'],'pos':pos,
             'acumulado':{'flotado':_rc_tipo(rec.get('flotado',{})),'potencia':_rc_tipo(rec.get('potencia',{}))},
             'por_rival':{}}
-    rjs='window.RECEPCION_RIVAL_DATA = '+json.dumps(recep_data,ensure_ascii=False,indent=2)+';\n'
+    rjs='window.RECEPCION_RIVAL_DATA = '+json.dumps(recep_data,ensure_ascii=False,separators=(',', ':'))+';\n'
     with open(os.path.join(output_dir,'datos_recepcion.js'),'w',encoding='utf-8') as f: f.write(rjs)
 
     return len(historial), len(games)

@@ -82,6 +82,19 @@ jobs:
           FORZAR:      ${{ inputs.forzar }}
         run: python procesar_pendientes.py
 
+      # El mismo freno de mano que corre HACER_TODO.bat en la PC del club:
+      # si la base nueva tiene menos partidos que la publicada, NO se publica.
+      # Va antes de sacar la llave, que es cuando la base todavia se puede
+      # leer. Si el chequeo no aplica (no hay base en claro, no hay llave),
+      # REVISAR_BASE.py devuelve 0 y la corrida sigue.
+      - name: Freno de mano — que la base no haya encogido
+        run: |
+          if [ -f REVISAR_BASE.py ]; then
+            python REVISAR_BASE.py
+          else
+            echo "Sin REVISAR_BASE.py: no hay nada que chequear."
+          fi
+
       - name: Sacar la llave de en medio
         if: always()
         run: rm -f LLAVE.txt

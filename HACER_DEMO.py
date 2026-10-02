@@ -70,12 +70,30 @@ def flujo(llave_bytes, largo):
         n += 1
     return salida[:largo]
 
-def clave_archivo(llave_hex, nombre):
-    return hashlib.sha256(bytes.fromhex(llave_hex) + b'|' + nombre.encode('utf-8')).digest()
+def clave_archivo(llave_hex, nombre, nonce=b''):
+    ent = bytes.fromhex(llave_hex) + b'|' + nombre.encode('utf-8')
+    if nonce:
+        ent += b'|' + nonce
+    return hashlib.sha256(ent).digest()
 
 def descifrar(b64, llave_hex, nombre):
+    """Abre los dos formatos.
+
+    Los datos del club ahora se cifran con un numero al azar por archivo
+    ("2:<hexa>:<base64>"). La demo los LEE para volver a cifrarlos con su
+    propia llave, asi que tiene que entender ese formato o se queda sin datos.
+
+    Lo que la demo ESCRIBE sigue en el formato de antes a proposito: su llave
+    viaja publica dentro de demo_guard.js, asi que el numero al azar no
+    agregaria nada, y asi no hay que tocar demo_guard.js ni las funciones de
+    api/.
+    """
+    nonce = b''
+    if b64.startswith('2:'):
+        _, hx, b64 = b64.split(':', 2)
+        nonce = bytes.fromhex(hx)
     mezcla = base64.b64decode(b64)
-    k = clave_archivo(llave_hex, nombre)
+    k = clave_archivo(llave_hex, nombre, nonce)
     return bytes(a ^ b for a, b in zip(mezcla, flujo(k, len(mezcla)))).decode('utf-8')
 
 def cifrar(texto, llave_hex, nombre):

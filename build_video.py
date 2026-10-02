@@ -520,26 +520,25 @@ def parse_dvw(path, ent=False, modo_high_set=False):
     return code,{'home':home_slug,'away':away_slug,'homeName':home_name,'awayName':away_name,
                  'date':date,'result':_res,'teams':teams_meta,'players':players,'actions':actions}
 
-def _es_del_radar_descartado(doc):
-    """Si este archivo de velocidades lo escribio el radar por video.
+def _es_medido_por_video_descartado(doc):
+    """Si este archivo de velocidades lo calculo la medicion por video.
 
     HAY DOS COSAS QUE ESCRIBEN velocidades_<PARTIDO>.json
     ------------------------------------------------------
       - VELOCIDADES.py, con lo que marco la PISTOLA. Es el bueno.
-      - MEDIR_SAQUES.py, con lo que calculo el radar por video.
+      - la medicion por video, que se saco del sistema.
 
-    El radar se PROBO Y SE DESCARTO: sobre 240 saques dio +-22 km/h contra la
+    Esa medicion se PROBO Y SE DESCARTO: sobre 240 saques dio +-22 km/h contra la
     pistola, y llego a marcar 152,8 km/h en un saque, mas rapido que el record
     del mundo. Ese numero llego a publicarse en la app.
 
     Los dos archivos se llaman IGUAL, asi que uno puede pisar al otro sin que
-    nadie se entere. Por eso se mira ADENTRO y no el nombre: el del radar trae
+    nadie se entere. Por eso se mira ADENTRO y no el nombre: el de video trae
     los datos de la camara (calibracion, fps, entrelazado) que la pistola no
     tiene de donde sacar.
 
-    Si algun dia el radar pasa la prueba de la sesion controlada, lo que hay
-    que cambiar es MEDIR_SAQUES para que escriba su propio 'origen', no borrar
-    esta funcion.
+    Si algun dia vuelve una medicion por video que pase la prueba de la sesion
+    controlada, tiene que escribir su propio 'origen'; esta funcion no se borra.
     """
     if (doc.get('origen') or '').strip():
         return False
@@ -548,13 +547,13 @@ def _es_del_radar_descartado(doc):
 
 
 def _poner_velocidades(path_dvw, actions):
-    """Pegarle a cada saque los km/h que midio el radar, si estan medidos.
+    """Pegarle a cada saque los km/h medidos, si estan medidos.
 
-    MEDIR_SAQUES.py deja un velocidades_<PARTIDO>.json al lado del .dvw. Aca se
+    VELOCIDADES.py deja un velocidades_<PARTIDO>.json al lado del .dvw. Aca se
     lee y se le cuelga el numero a la accion del saque que le corresponde.
 
     El saque se reconoce por el segundo de video y el dorsal, que es lo unico
-    que las dos fuentes comparten. Si el radar corrio con un desfase —scouting
+    que las dos fuentes comparten. Si la medicion corrio con un desfase —scouting
     en vivo, donde el reloj del panel no es el del video— los segundos del
     archivo estan corridos y hay que devolverlos a la escala del .dvw antes de
     comparar; por eso el desfase queda anotado en el propio archivo.
@@ -575,8 +574,8 @@ def _poner_velocidades(path_dvw, actions):
             doc = _json.load(f)
     except Exception:
         return 0
-    if _es_del_radar_descartado(doc):
-        print('      [ATENCION] %s lo escribio el radar por video, que se '
+    if _es_medido_por_video_descartado(doc):
+        print('      [ATENCION] %s lo calculo la medicion por video, que se '
               'descarto. NO lo uso.' % os.path.basename(ruta))
         return 0
     desfase = float(doc.get('desfase_aplicado') or 0.0)
@@ -603,7 +602,7 @@ def _poner_velocidades(path_dvw, actions):
             a['h_red'] = x['altura_en_la_red']
         puestos += 1
     if puestos:
-        print('      %d saques con velocidad del radar' % puestos)
+        print('      %d saques con velocidad medida' % puestos)
     return puestos
 
 
