@@ -81,6 +81,11 @@ header.masthead .sub{color:var(--mut);font-size:13.5px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .player{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 15px;break-inside:avoid}
+/* El cuadro de velocidad del saque: ocupa las columnas que deja libres la
+   tarjeta del jugador cuando se esta mirando a uno solo. */
+#vel-saque{grid-column:span 2;min-width:0;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;break-inside:avoid}
+.vshead{padding:11px 15px;border-bottom:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.vshead i{font-style:normal;letter-spacing:0;text-transform:none;font-size:12px;font-weight:500;color:var(--faint)}
 .phead{display:flex;align-items:center;gap:10px}
 .pnum{font-family:'Bebas Neue',sans-serif;font-size:19px;background:var(--red);color:#fff;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center}
 .pname{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;letter-spacing:.02em}
@@ -201,7 +206,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 .r-pt{color:#4ade80}.r-er{color:#f87171}.r-bl{color:#e879a9}.vitem.playing .r-pt,.vitem.playing .r-er,.vitem.playing .r-bl{color:#fff}
 @media(max-width:760px){.vbody{flex-direction:column}.vside{width:auto;border-left:none;border-top:1px solid var(--border);max-height:230px}}
 @media(max-width:1000px){.grid3{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:680px){.grid3,.grid2{grid-template-columns:1fr}header.masthead h1{font-size:36px}}
+@media(max-width:680px){.grid3,.grid2{grid-template-columns:1fr}#vel-saque{grid-column:span 1}header.masthead h1{font-size:36px}}
 @media print{body{background:#fff;color:#111}.player{background:#fff;border-color:#ccc}.filters,.vmodal{display:none!important}.cell.vid::after{display:none}}
 .mdd{width:100%}
 .msum{list-style:none;cursor:pointer;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:5px 6px;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box}
@@ -229,7 +234,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261002-1334">
+<link rel="stylesheet" href="movil.css?v=20261002-2201">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    EL ROJO, SOLO PARA EL DATO
@@ -377,10 +382,10 @@ details.fdet .filters{margin-top:8px}
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
 <!-- La definicion unica de las eficiencias de todo el sistema. Esta pagina
      tenia las suyas propias y no coincidian con el resto. -->
-<script src="objetivos_config.js?v=20261002-1334" onerror="void 0"></script>
-<script src="categorias_club.js?v=20261002-1334"></script>
-<script src="selector_categoria.js?v=20261002-1334"></script>
-<script src="mi_fila.js?v=20261002-1334" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261002-2201" onerror="void 0"></script>
+<script src="categorias_club.js?v=20261002-2201"></script>
+<script src="selector_categoria.js?v=20261002-2201"></script>
+<script src="mi_fila.js?v=20261002-2201" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -461,6 +466,15 @@ details.fdet .filters{margin-top:8px}
 <div class="grid2" id="row-libero"></div>
 </div><div class="tabgroup" id="tab-saque"><div class="rolehead">Saque <span data-t="dónde y cómo saca · azul · fuerza = fuerte/medio/fácil"><span data-t="dónde y cómo saca · azul · fuerza = fuerte/medio/fácil"><span data-t="dónde y cómo saca · azul · fuerza = fuerte/medio/fácil">dónde y cómo saca · azul · fuerza = fuerte/medio/fácil</span></span></span></div>
 <div class="grid3" id="row-saque"></div>
+<!-- ══ A CUANTO SACA ════════════════════════════════════════════════════
+     Vive aca afuera y ppVelSaque() lo mete adentro de #row-saque cuando se
+     esta mirando a UN jugador: asi cae al lado de su tarjeta y llena el
+     ancho de la hoja. Afuera, porque buildTeam() vacia #row-saque de un
+     innerHTML y se lo llevaria puesto. -->
+<div id="vel-saque" style="display:none">
+  <div class="vshead"><span data-t="Tu saque — a cuánto sacás">Tu saque &mdash; a cu&aacute;nto sac&aacute;s</span> <i data-t="todas las sesiones medidas · no depende del filtro de arriba">todas las sesiones medidas &middot; no depende del filtro de arriba</i></div>
+  <div id="vel-saque-cuerpo"></div>
+</div>
 </div><div class="tabgroup" id="tab-recepcion"><div class="rolehead"><span data-t="Recepción"><span data-t="Recepción">Recepción</span></span> <span data-t="cómo recibe según el saque rival · naranja · zona donde recibe"><span data-t="cómo recibe según el saque rival · naranja · zona donde recibe"><span data-t="cómo recibe según el saque rival · naranja · zona donde recibe">cómo recibe según el saque rival · naranja · zona donde recibe</span></span></span></div>
 <div class="grid3" id="row-reception"></div>
 </div><div class="tabgroup" id="tab-defensa"><div class="rolehead"><span data-t="Defensa"><span data-t="Defensa">Defensa</span></span> <span data-t="dónde y cómo defiende · verde · zona donde levanta la pelota"><span data-t="dónde y cómo defiende · verde · zona donde levanta la pelota"><span data-t="dónde y cómo defiende · verde · zona donde levanta la pelota">dónde y cómo defiende · verde · zona donde levanta la pelota</span></span></span></div>
@@ -513,8 +527,8 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261002-1334"></script>
-<script src="filtro_tipo.js?v=20261002-1334" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261002-2201"></script>
+<script src="filtro_tipo.js?v=20261002-2201" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
   <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
        se cargaba SOLO el de partidos, asi que en una temporada sin partidos
@@ -529,12 +543,13 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20261002-1334"></script>
-<script src="firebase_por_categoria.js?v=20261002-1334"></script>
+<script src="firebase.js?v=20261002-2201"></script>
+<script src="firebase_por_categoria.js?v=20261002-2201"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20261002-1334" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20261002-2201" onerror="void 0"></script>
+<script src="velocidades_saque.js?v=20261002-2201" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -1633,6 +1648,11 @@ function makeTeamPlayer(role){
   return {id:role.charAt(0)+'-equipo', num:'\u03a3', name:'EQUIPO', pos:'Acumulado', role:role, total:rows.length, read:'', data:rows, isTeam:true};
 }
 function buildTeam(){
+  /* PRIMERO poner a salvo la ficha de velocidad: cuando esta a la vista vive
+     DENTRO de #row-saque, y la linea de abajo vacia esa fila de un innerHTML.
+     Sin este rescate, al cambiar de equipo la ficha desaparecia para siempre. */
+  try{ var _vs=document.getElementById('vel-saque'), _ts=document.getElementById('tab-saque');
+       if(_vs&&_ts&&_vs.parentElement!==_ts){ _vs.style.display='none'; _ts.appendChild(_vs); } }catch(e){}
   ['punta','central','opuesto','armador','libero','saque','reception','defense','bloqueo'].forEach(function(r){var el=document.getElementById('row-'+r);if(el)el.innerHTML='';});
   PLAYERS=TEAMS[TEAM].players;INFO=TEAMS[TEAM].info;computeMatchMeta();
   /* ── BLOQUEO: solo la temporada en curso, y solo quien tiene acciones ─────
@@ -1698,6 +1718,8 @@ function buildTeam(){
   document.getElementById('teamname').textContent=TEAMS[TEAM].name;
   var tt=document.getElementById('tabteam'); if(tt) tt.textContent=TEAMS[TEAM].name;
   renderArmador();
+  /* buildTeam vacia #row-saque, asi que la ficha hay que volver a meterla */
+  try{ ppVelSaque(); }catch(e){}
 }
 function setTeam(slug){TEAM=slug;document.querySelectorAll('.mpanel').forEach(function(x){x.classList.remove('open');});pintarBotonesEquipo();buildTeam();}
 /* ── SOLAPAS ── */
@@ -1732,6 +1754,53 @@ function ppVisibilidad(){
     var okMin=(!p) || (ppCuenta(p)>=min);
     el.style.display=(okJug&&okMin)?"":"none";
   });
+  try{ ppVelSaque(); }catch(e){}
+}
+/* ══ A CUANTO SACA ═══════════════════════════════════════════════════════════
+   Lo mismo que mostraba el plan de desarrollo, pero aca: cuando un jugador
+   entra a su acceso directo de Saque (plan_partido.html?jug=N#saque) queda una
+   sola tarjeta y dos tercios de la fila vacios. Ahi va la ficha.
+
+   Tres condiciones para que aparezca, y si falla una no se muestra nada —el
+   cuadrante queda como hasta hoy, no aparece un cuadro vacio:
+
+     . hay UN jugador elegido          con el plantel entero no hay lugar libre
+     . este equipo mide saques         los rivales no: no tenemos su pistola
+     . el jugador tiene mediciones     o, si no, al menos un compañero las
+                                       tiene, y entonces vale explicarle que
+                                       las suyas van a aparecer solas
+
+   El numero NO sigue el filtro de partidos de arriba: las mediciones salen de
+   entrenamientos, asi que filtrarlas por los partidos elegidos dejaria la
+   ficha vacia casi siempre. Por eso el titulo lo dice.
+
+   No se descifra nada nuevo: plan_partido_data.js.enc ya esta abierto en esta
+   pagina (y de forma sincronica), que es justo el archivo del que sale el dato. */
+function ppVelSaque(){
+  var row=document.getElementById('row-saque'), caja=document.getElementById('vel-saque');
+  if(!row||!caja) return;
+  caja.style.display='none';
+  var VS=window.VEL_SAQUE;
+  if(!VS||typeof VS.deJugador!=='function'||typeof VS.hayMedidos!=='function') return;
+
+  var sol=document.getElementById('tab-saque');
+  if(!sol||!sol.classList.contains('show')) return;   /* otra solapa: no hay nada que pintar */
+
+  var sel=document.getElementById('focusSel'); var v=sel?sel.value:'all';
+  if(!v||v==='all') return;
+
+  /* que no se confunda de equipo: aca estan cargados el club y los rivales */
+  window.VEL_SAQUE_CLUB=TEAM;
+  if(!VS.hayMedidos()) return;
+
+  /* una sola tarjeta visible: es la condicion de que haya cuadrante libre */
+  var vis=0, cards=row.querySelectorAll('.player');
+  for(var i=0;i<cards.length;i++){ if(cards[i].style.display!=='none') vis++; }
+  if(vis!==1) return;
+
+  row.appendChild(caja);
+  caja.style.display='';
+  VS.pintarJugador(document.getElementById('vel-saque-cuerpo'), v);
 }
 function applyFocus(){ ppVisibilidad(); if(typeof renderArmador==="function")renderArmador(); }
 function setTab(t){
@@ -1896,8 +1965,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20261002-1334" onerror="void 0"></script>
-<script src="lang.js?v=20261002-1334" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20261002-2201" onerror="void 0"></script>
+<script src="lang.js?v=20261002-2201" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -1915,7 +1984,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20261002-1334" onerror="void 0"></script>
-<script src="ayuda.js?v=20261002-1334"></script>
+<script src="volver_inicio.js?v=20261002-2201" onerror="void 0"></script>
+<script src="ayuda.js?v=20261002-2201"></script>
 </body>
 </html>

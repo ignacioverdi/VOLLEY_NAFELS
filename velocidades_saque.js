@@ -37,16 +37,43 @@ var ENC  = 'plan_partido_data.js.enc';
 var estado = 'nada';          /* nada | cargando | listo | error */
 var esperando = [];
 
+function tieneMedidos(T){
+  return !!(T && T.players && T.players.some(function(j){
+    return j.role === 'saque' && (j.data || []).some(function(f){
+      return f.length > 7 && typeof f[7] === 'number' && f[7] > 0;
+    });
+  }));
+}
 function clubPP(){
   var P = global.PP_DATA;
   if (!P) return null;
-  /* el club es el unico que trae players con role 'saque' */
-  var ks = Object.keys(P);
+
+  /* ══ DE QUE EQUIPO ESTAMOS HABLANDO ═══════════════════════════════════════
+     Antes se agarraba "el primero que tenga jugadores con role 'saque'". Eso
+     alcanza en el plan de desarrollo y en el dashboard, donde el unico que
+     importa es el club. Pero plan_partido.html tiene cargados el club Y TODOS
+     LOS RIVALES, y los rivales tambien traen jugadores con role 'saque': ahi
+     "el primero" puede ser cualquiera, y la ficha terminaria leyendo la fila
+     de un rival.
+
+     Dos arreglos, ninguno de los dos cambia lo que ya funciona:
+
+       1. si la pagina deja dicho el equipo en VEL_SAQUE_CLUB, se usa ese y
+          no hay nada que adivinar;
+       2. si no lo dice, se prefiere el equipo que REALMENTE tenga saques con
+          velocidad medida. Antes, si el primero no tenia ninguna medicion, la
+          ficha salia vacia aunque el club si las tuviera. */
+  var pedido = global.VEL_SAQUE_CLUB;
+  if (pedido && P[pedido] && P[pedido].players) return P[pedido];
+
+  var ks = Object.keys(P), primero = null;
   for (var i = 0; i < ks.length; i++){
     var T = P[ks[i]];
-    if (T && T.players && T.players.some(function(j){ return j.role === 'saque'; })) return T;
+    if (!(T && T.players && T.players.some(function(j){ return j.role === 'saque'; }))) continue;
+    if (!primero) primero = T;
+    if (tieneMedidos(T)) return T;
   }
-  return null;
+  return primero;
 }
 
 function hayDatos(){ return !!clubPP(); }
@@ -131,6 +158,11 @@ var CSS = ''
 + '.vs-t th,.vs-t td{padding:6px 8px;text-align:center;border-bottom:1px solid rgba(148,163,184,.07)}'
 + '.vs-t th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#7C8AA0;font-weight:700}'
 + '.vs-t th.izq,.vs-t td.izq{text-align:left;padding-left:14px}'
+/* Cuando la tabla se corre de costado, la primera columna —el nombre de la
+   fila— se queda quieta: si no, uno termina mirando numeros sin saber de
+   que fila son. El fondo tiene que ser opaco, igual que el del marco. */
++ '.vs-scroll .vs-t th.izq,.vs-scroll .vs-t td.izq{position:sticky;left:0;background:#0D0E1A;'
++   'box-shadow:1px 0 0 rgba(148,163,184,.10)}'
 + '.vs-t tr.fuerte td .kk{color:#fff}'
 + '.vs-t td.j{color:#CBD5E1;white-space:nowrap}'
 + '.vs-t td.j b{font-family:Anton,sans-serif;color:#E8192C;margin-right:6px}'
@@ -143,6 +175,7 @@ var CSS = ''
 + '.vs-t td .nn{font-size:12px;color:#64748B}'
 + '.vs-t td.vacio{color:#2B3648}'
 + '.vs1{color:#4ADE80}.vs2{color:#86EFAC}.vs3{color:#CBD5E1}.vs4{color:#FBBF24}.vs5{color:#FB923C}.vs6{color:#F87171}'
++ '.vs-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}'
 + '.vs-pie{margin:10px 14px 12px;font-size:13px;color:#64748B;line-height:1.5}'
 + '.vs-pie b{color:#94A3B8}'
 + '.vs-nada{padding:16px 14px;color:#475569;font-size:15px;line-height:1.5}'
@@ -250,7 +283,10 @@ function pintarJugador(caja, quien){
         + (c ? '<p class="vs-cons ' + c.tono + '">' + c.txt + '</p>' : '')
         + '</div>';
 
-  h += '<table class="vs-t"><tr><th class="izq">Saque</th><th class="gen">General</th>'
+  /* La tabla tiene ocho columnas: en un telefono no entra. Se corre de costado
+     ELLA SOLA, dentro de su marco, para que el numero grande y el consejo —que
+     es lo que de verdad hay que leer— se queden quietos. */
+  h += '<div class="vs-scroll"><table class="vs-t"><tr><th class="izq">Saque</th><th class="gen">General</th>'
      + VALS.map(function(v){ return '<th class="' + CLASE[v] + '">' + (v === '=' ? 'error' : v) + '</th>'; }).join('')
      + '</tr>';
   var tps = Object.keys(g.tipos);
@@ -263,7 +299,7 @@ function pintarJugador(caja, quien){
     VALS.forEach(function(v){ h += celda(L.d.v[v] || [], ''); });
     h += '</tr>';
   });
-  h += '</table>';
+  h += '</table></div>';
   h += '<p class="vs-pie">El número es la <b>mediana</b>: un saque mal medido no te mueve la fila. '
      + 'Debajo, sobre cuántos saques está hecho. Con menos de 3 va en gris.</p>';
   caja.innerHTML = h;
@@ -289,7 +325,7 @@ function pintarPlantel(caja){
     caja.innerHTML = '<div class="vs-nada">Todavía no hay saques con velocidad medida.</div>';
     return;
   }
-  var h = '<table class="vs-t"><tr><th class="izq">Jugador</th><th class="gen">General</th>'
+  var h = '<div class="vs-scroll"><table class="vs-t"><tr><th class="izq">Jugador</th><th class="gen">General</th>'
         + '<th>Flotante</th><th>Potencia</th><th class="vs1">en punto</th><th class="vs6">en error</th>'
         + '<th>Máx</th></tr>';
   L.forEach(function(x){
@@ -302,13 +338,14 @@ function pintarPlantel(caja){
     h += celda(g.v['='] || [], '');
     h += '<td><span class="kk">' + n1(Math.max.apply(null, g.tot)) + '</span></td></tr>';
   });
-  h += '</table>';
+  h += '</table></div>';
   h += '<p class="vs-pie">Ordenado por velocidad habitual. <b>En punto</b> y <b>en error</b> son las dos '
      + 'columnas que más dicen: si un jugador erra más rápido de lo que acierta, está sacando de más.</p>';
   caja.innerHTML = h;
 }
 
 global.VEL_SAQUE = { pedirDatos:pedirDatos, hayDatos:hayDatos, deJugador:deJugador,
+                     hayMedidos:function(){ return tieneMedidos(clubPP()); },
                      pintarJugador:pintarJugador, pintarPlantel:pintarPlantel,
                      mediana:mediana, sacadores:sacadores };
 

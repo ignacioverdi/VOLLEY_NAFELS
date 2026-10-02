@@ -125,7 +125,7 @@
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261002-1334">
+<link rel="stylesheet" href="movil.css?v=20261002-2201">
 </head>
 <body>
 <div class="wrap">
@@ -152,22 +152,10 @@
        la pantalla se ve como antes. -->
   <div id="obj-semana" style="margin:0 0 18px"></div>
 
-  <!-- ══ TU SAQUE ════════════════════════════════════════════════════════════
-       La velocidad acumulada del jugador, de todas las sesiones medidas.
-
-       NO se carga sola. El detalle de los saques uno por uno vive en
-       plan_partido_data.js.enc, que pesa 710 KB, y esta pantalla la abre un
-       jugador desde el telefono: cargarlo siempre la llevaba de 300 KB a mas
-       de un mega, para todos, miren el saque o no. Se baja al tocar el boton
-       y tarda menos de medio segundo (medido: 268 ms). -->
-  <div id="vel-caja" style="display:none;margin:0 0 18px;background:#0D0E1A;border:1px solid rgba(148,163,184,.16);border-radius:15px;overflow:hidden">
-    <div style="padding:11px 15px;border-bottom:1px solid rgba(148,163,184,.16);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#7C8AA0;font-weight:700">Tu saque &mdash; a cu&aacute;nto sac&aacute;s</div>
-    <div id="vel-cuerpo">
-      <div style="padding:16px 15px;text-align:center">
-        <button type="button" id="vel-btn" style="background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.45);color:#38BDF8;border-radius:11px;padding:10px 20px;font-family:inherit;font-size:16px;font-weight:700;letter-spacing:.04em;cursor:pointer">Ver mi velocidad de saque</button>
-      </div>
-    </div>
-  </div>
+  <!-- La velocidad del saque ya no vive aca: se mudo al acceso directo de
+       Saque del perfil del jugador —plan_partido.html?jug=N#saque—, donde cae
+       al lado de su tarjeta y usa el ancho de la hoja. El modulo es el mismo
+       (velocidades_saque.js), no hay dos versiones de la misma tabla. -->
 
   <div class="legend" id="legend"></div>
   <div id="prog"></div>
@@ -175,19 +163,19 @@
   <div id="skills" class="skills"></div>
 </div>
 
-<script src="categorias_club.js?v=20261002-1334"></script>
-<script src="selector_categoria.js?v=20261002-1334"></script>
+<script src="categorias_club.js?v=20261002-2201"></script>
+<script src="selector_categoria.js?v=20261002-2201"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261002-1334"></script>
-<script src="firebase.js?v=20261002-1334" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261002-1334"></script>
-<script src="lang.js?v=20261002-1334" onerror="void 0"></script>
-<script src="correcciones_tecnicas.js?v=20261002-1334" onerror="void 0"></script>
-<script src="plantel_nafels.js?v=20261002-1334" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261002-2201"></script>
+<script src="firebase.js?v=20261002-2201" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261002-2201"></script>
+<script src="lang.js?v=20261002-2201" onerror="void 0"></script>
+<script src="correcciones_tecnicas.js?v=20261002-2201" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20261002-2201" onerror="void 0"></script>
 <script src="datos_casla.js.enc" onerror="void 0"></script>
 <!-- ══ LA FILA DE OBJETIVOS DE LA SEMANA ═════════════════════════════════
      Los numeros y lo tecnico son dos mitades de lo mismo: cuanto le falta
@@ -197,51 +185,11 @@ window.__DESCIFRAR_SINCRONO = true;
      una copia—, asi que las dos no pueden decir cosas distintas. Solo hace
      falta darle de comer: las metas, las baterias y el plantel.
      El mismo orden que usa equipo.html. -->
-<script src="objetivos_config.js?v=20261002-1334" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261002-2201" onerror="void 0"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
-<script src="objetivos_semanales.js?v=20261002-1334" onerror="void 0"></script>
-<script src="velocidades_saque.js?v=20261002-1334" onerror="void 0"></script>
+<script src="objetivos_semanales.js?v=20261002-2201" onerror="void 0"></script>
 <script>abrirDatos();</script>
-<script>
-/* ── "TU SAQUE" ────────────────────────────────────────────────────────────
-   De que jugador es la pantalla: en modo entrenador viene en la direccion
-   (?num=7), porque el selector de arriba navega asi. En modo jugador lo pone
-   objetivos_semanales.js en _objNombre, pero eso tarda un momento en estar,
-   de ahi la espera corta antes de mirar. */
-(function(){
-  function quien(){
-    try{
-      var u = new URLSearchParams(location.search).get('num');
-      if (u) return u;
-      if (window._objNombre) return window._objNombre;
-      if (window._curJug && window._curJug.num != null) return window._curJug.num;
-      var n = localStorage.getItem('vb_num') || localStorage.getItem('jugador_num');
-      if (n) return n;
-    }catch(e){}
-    return null;
-  }
-  function arrancar(){
-    var caja = document.getElementById('vel-caja');
-    var btn  = document.getElementById('vel-btn');
-    if (!caja || !btn || !window.VEL_SAQUE || quien() == null) return;
-    caja.style.display = '';
-    btn.addEventListener('click', function(){
-      var cu = document.getElementById('vel-cuerpo');
-      cu.innerHTML = '<div style="padding:18px 15px;color:#64748B;font-size:15px;text-align:center">Buscando tus saques\u2026</div>';
-      window.VEL_SAQUE.pedirDatos(function(ok){
-        if (!ok){
-          cu.innerHTML = '<div style="padding:16px 15px;color:#64748B;font-size:15px">No pude abrir el detalle de los saques. Prob\u00e1 de nuevo en un rato.</div>';
-          return;
-        }
-        window.VEL_SAQUE.pintarJugador(cu, quien());
-      });
-    });
-  }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(arrancar, 600); });
-  else setTimeout(arrancar, 600);
-})();
-</script>
 <script>
 (function(){
   /* ---------- i18n ---------- */
@@ -592,6 +540,6 @@ window.__DESCIFRAR_SINCRONO = true;
   } else { render(); }
 })();
 </script>
-<script src="ayuda.js?v=20261002-1334"></script>
+<script src="ayuda.js?v=20261002-2201"></script>
 </body>
 </html>

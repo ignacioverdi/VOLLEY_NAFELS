@@ -492,6 +492,23 @@ git --version >nul 2>&1
 if errorlevel 1 goto NOGIT
 if not exist ".git" goto NOREPO
 set GIT_MERGE_AUTOEDIT=no
+REM ===================================================================
+REM   SELLAR LA VERSION ANTES DE SUBIR
+REM
+REM   Esto estaba SOLO en PUBLICAR_EN_GITHUB.bat, y casi nadie publica
+REM   por ahi: se publica desde aca. Resultado: los .js y .css subian
+REM   nuevos pero las paginas los seguian pidiendo con el numero de
+REM   version viejo, asi que el navegador servia el que tenia guardado.
+REM
+REM   El 02/10 eso casi rompe la app: se cambio el lector de datos
+REM   cifrados y los navegadores con el anterior guardado no habrian
+REM   podido abrir un solo archivo.
+REM ===================================================================
+if exist "sellar_version.py" (
+    python sellar_version.py
+    echo.
+)
+
 echo  Subiendo a GitHub... (la primera vez puede pedir login)
 git add -A
 git commit -m "Actualizacion %DATE%"
