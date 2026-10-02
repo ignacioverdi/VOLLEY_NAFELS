@@ -11,6 +11,60 @@ import json, re, os, glob, sys, argparse
 from collections import defaultdict, Counter
 
 import unicodedata
+
+# ── LA FECHA DE UNA SESION ───────────────────────────────────────────────────
+_FECHAS_ADENTRO = {}
+
+def _fecha_adentro_del_dvw(ruta):
+    """La fecha que trae el .dvw adentro, cuando el nombre del archivo no la tiene.
+
+    LA CONVENCION Y SU AGUJERO
+    --------------------------
+    Todos los motores sacan la fecha del NOMBRE del archivo, que por convencion
+    empieza con ella: "&2026-09-30 AXPO NAFELS vs ST GALLEN.dvw".
+
+    El 30/09/2026 el archivo quedo guardado como "&206-09-30 ...": un digito de
+    menos. Para los motores ese partido no tenia fecha, y un partido sin fecha
+    se descarta de la lista de partidos. Resultado: no aparecia en Dashboard,
+    ni en Analisis, ni en la pantalla para cargarle el video, ni en la
+    distribucion del armador. Sin un solo mensaje de error.
+
+    DE DONDE SALE AHORA
+    -------------------
+    DataVolley escribe la fecha adentro del archivo, en [3MATCH], primer campo,
+    como dd/mm/aaaa. Esa la pone el programa solo, asi que no depende de como
+    alguien haya nombrado el archivo.
+
+    EL ORDEN IMPORTA: primero el nombre del archivo, despues el .dvw. Hay
+    sesiones renombradas a mano justamente para corregirle la fecha a un
+    archivo, y ese arreglo tiene que seguir mandando.
+
+    Si no se puede leer, devuelve cadena vacia y todo queda como estaba.
+    """
+    try:
+        clave = os.path.abspath(ruta)
+    except Exception:
+        clave = str(ruta)
+    if clave in _FECHAS_ADENTRO:
+        return _FECHAS_ADENTRO[clave]
+    fecha = ''
+    try:
+        with open(ruta, 'rb') as _fh:
+            cabecera = _fh.read(4096).decode('latin-1', 'replace')
+        i = cabecera.find('[3MATCH]')
+        if i >= 0:
+            renglones = cabecera[i:].replace('\r\n', '\n').split('\n')
+            campo = renglones[1].split(';')[0].strip() if len(renglones) > 1 else ''
+            m = re.match(r'^(\d{1,2})[/\-.](\d{1,2})[/\-.](\d{4})$', campo)
+            if m:
+                d, mes, anio = m.groups()
+                fecha = '%s-%02d-%02d' % (anio, int(mes), int(d))
+    except Exception:
+        fecha = ''
+    _FECHAS_ADENTRO[clave] = fecha
+    return fecha
+
+
 # ── Los equipos ─────────────────────────────────────────────────────────────
 # Antes esta tabla traia los de la liga del club de origen escritos a mano, y
 # un cliente de otra liga no reconocia a ninguno de los suyos.
@@ -524,6 +578,7 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
         fn=os.path.basename(fp)
         m=re.search(r'\b(\d{6})\b',fn) or re.search(r'\b(\d{5})\b',fn)
         dm0=re.search(r'(20\d\d-\d\d-\d\d)',fn)
+        _f_adentro=_fecha_adentro_del_dvw(fp)
         # El codigo oficial del partido tiene 5 o 6 digitos. Los entrenamientos
         # no lo traen, y antes eso los descartaba de una: el plan de partido no
         # tenia ni una practica. Sin codigo, el identificador se arma con el
@@ -531,7 +586,7 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
         # con ninguno.
         if m: mid=m.group(1)
         else:
-            _b=(dm0.group(1) if dm0 else 'sinfecha')
+            _b=(dm0.group(1) if dm0 else (_f_adentro or 'sinfecha'))
             mid=('E' if TIPO=='entrenamiento' else 'P')+_b+'-'+_slug_txt(os.path.splitext(fn)[0])
         _i, _k = mid, 2
         while _i in _usados: _i='%s-%d'%(mid,_k); _k+=1
@@ -544,7 +599,7 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
         home=tl[0].split(';'); away=tl[1].split(';')
         hname=home[1].strip() if len(home)>1 else ''; aname=away[1].strip() if len(away)>1 else ''
         hslug=name_to_slug(hname); aslug=name_to_slug(aname)
-        dm=re.search(r'(20\d\d-\d\d-\d\d)',fn); date=dm.group(1) if dm else '?'
+        dm=re.search(r'(20\d\d-\d\d-\d\d)',fn); date=dm.group(1) if dm else (_f_adentro or '?')
         if filter_temp:
             # La temporada de una PRACTICA sale de la carpeta, no de la fecha:
             # la pretemporada de julio pertenece al anio que arranca. Es el

@@ -17,6 +17,60 @@ Uso:
 """
 import os,re,sys,json,glob,unicodedata
 
+# ── LA FECHA DE UNA SESION ───────────────────────────────────────────────────
+_FECHAS_ADENTRO = {}
+
+def _fecha_adentro_del_dvw(ruta):
+    """La fecha que trae el .dvw adentro, cuando el nombre del archivo no la tiene.
+
+    LA CONVENCION Y SU AGUJERO
+    --------------------------
+    Todos los motores sacan la fecha del NOMBRE del archivo, que por convencion
+    empieza con ella: "&2026-09-30 AXPO NAFELS vs ST GALLEN.dvw".
+
+    El 30/09/2026 el archivo quedo guardado como "&206-09-30 ...": un digito de
+    menos. Para los motores ese partido no tenia fecha, y un partido sin fecha
+    se descarta de la lista de partidos. Resultado: no aparecia en Dashboard,
+    ni en Analisis, ni en la pantalla para cargarle el video, ni en la
+    distribucion del armador. Sin un solo mensaje de error.
+
+    DE DONDE SALE AHORA
+    -------------------
+    DataVolley escribe la fecha adentro del archivo, en [3MATCH], primer campo,
+    como dd/mm/aaaa. Esa la pone el programa solo, asi que no depende de como
+    alguien haya nombrado el archivo.
+
+    EL ORDEN IMPORTA: primero el nombre del archivo, despues el .dvw. Hay
+    sesiones renombradas a mano justamente para corregirle la fecha a un
+    archivo, y ese arreglo tiene que seguir mandando.
+
+    Si no se puede leer, devuelve cadena vacia y todo queda como estaba.
+    """
+    try:
+        clave = os.path.abspath(ruta)
+    except Exception:
+        clave = str(ruta)
+    if clave in _FECHAS_ADENTRO:
+        return _FECHAS_ADENTRO[clave]
+    fecha = ''
+    try:
+        with open(ruta, 'rb') as _fh:
+            cabecera = _fh.read(4096).decode('latin-1', 'replace')
+        i = cabecera.find('[3MATCH]')
+        if i >= 0:
+            renglones = cabecera[i:].replace('\r\n', '\n').split('\n')
+            campo = renglones[1].split(';')[0].strip() if len(renglones) > 1 else ''
+            m = re.match(r'^(\d{1,2})[/\-.](\d{1,2})[/\-.](\d{4})$', campo)
+            if m:
+                d, mes, anio = m.groups()
+                fecha = '%s-%02d-%02d' % (anio, int(mes), int(d))
+    except Exception:
+        fecha = ''
+    _FECHAS_ADENTRO[clave] = fecha
+    return fecha
+
+
+
 # 7: se guarda la zona del bloqueo. Los archivos hechos con la version
 #    anterior no la tienen, y sin ella el mapa de bloqueo pone todas las
 #    acciones en el medio de la red. Al subir el numero se regeneran solos.
@@ -73,8 +127,10 @@ def _sin_repetidos(archivos):
     for f in archivos:
         b = os.path.basename(f)
         mfe = re.search(r'(\d{4}-\d{2}-\d{2})', b)
+        # Sin fecha en el nombre, se busca adentro del .dvw antes de rendirse.
+        _fecha = mfe.group(1) if mfe else (_fecha_adentro_del_dvw(f) or b)
         base = re.sub(r'\s*\(\d+\)(?=\.dvw$)', '', b, flags=re.I)
-        g.setdefault((mfe.group(1) if mfe else b, _turno(b), base.lower()), []).append(f)
+        g.setdefault((_fecha, _turno(b), base.lower()), []).append(f)
     out = []
     for k, l in g.items():
         if len(l) == 1: out.append(l[0]); continue
@@ -214,7 +270,7 @@ def parse_dvw(path, ent=False, modo_high_set=False):
     # TODOS en silencio: el paso no imprimia ni un error y el archivo de video
     # salia vacio. El resto del sistema ya aceptaba las dos formas.
     mcode=re.search(r'&?[\s_]*(\d{5,6})(?!\d)',base); mdate=re.search(r'(\d{4}-\d{2}-\d{2})',base)
-    date=mdate.group(1) if mdate else ''
+    date=mdate.group(1) if mdate else _fecha_adentro_del_dvw(path)
     if mcode: code=mcode.group(1)
     # El turno entra en el codigo. Sin el, los dos entrenamientos del mismo
     # dia compartian el codigo ENT20260908 y en la pantalla de videos
@@ -458,9 +514,67 @@ def parse_dvw(path, ent=False, modo_high_set=False):
 
     if not actions: return None  # partido sin acciones con segundo -> se ignora
 
+    _poner_velocidades(path, actions)
+
     _res=parse_set_result(txt)
     return code,{'home':home_slug,'away':away_slug,'homeName':home_name,'awayName':away_name,
                  'date':date,'result':_res,'teams':teams_meta,'players':players,'actions':actions}
+
+def _poner_velocidades(path_dvw, actions):
+    """Pegarle a cada saque los km/h que midio el radar, si estan medidos.
+
+    MEDIR_SAQUES.py deja un velocidades_<PARTIDO>.json al lado del .dvw. Aca se
+    lee y se le cuelga el numero a la accion del saque que le corresponde.
+
+    El saque se reconoce por el segundo de video y el dorsal, que es lo unico
+    que las dos fuentes comparten. Si el radar corrio con un desfase —scouting
+    en vivo, donde el reloj del panel no es el del video— los segundos del
+    archivo estan corridos y hay que devolverlos a la escala del .dvw antes de
+    comparar; por eso el desfase queda anotado en el propio archivo.
+
+    Si no hay archivo de velocidades, no pasa nada: las acciones quedan como
+    estaban y ninguna pantalla se entera.
+    """
+    import json as _json
+    base = os.path.splitext(os.path.basename(path_dvw))[0]
+    base = re.sub(r'^[&\s]+', '', base)
+    base = re.sub(r'[^A-Za-z0-9]+', '_', base).strip('_').upper()[:40]
+    ruta = os.path.join(os.path.dirname(os.path.abspath(path_dvw)),
+                        'velocidades_%s.json' % base)
+    if not os.path.exists(ruta):
+        return 0
+    try:
+        with open(ruta, encoding='utf-8') as f:
+            doc = _json.load(f)
+    except Exception:
+        return 0
+    desfase = float(doc.get('desfase_aplicado') or 0.0)
+    porllave = {}
+    for x in (doc.get('saques') or {}).values():
+        if not x.get('kmh'):
+            continue
+        try:
+            seg = int(round(float(x['seg']) - desfase))
+        except Exception:
+            continue
+        porllave[(seg, str(x.get('num')).zfill(2))] = x
+    if not porllave:
+        return 0
+    puestos = 0
+    for a in actions:
+        if a.get('skill') != 'S':
+            continue
+        x = porllave.get((int(a.get('t') or 0), str(a.get('num')).zfill(2)))
+        if not x:
+            continue
+        a['kmh'] = x['kmh']
+        if x.get('altura_en_la_red') is not None:
+            a['h_red'] = x['altura_en_la_red']
+        puestos += 1
+    if puestos:
+        print('      %d saques con velocidad del radar' % puestos)
+    return puestos
+
 
 def season_of(date, carpeta=''):
     """La temporada de una sesion, para el nombre del archivo.

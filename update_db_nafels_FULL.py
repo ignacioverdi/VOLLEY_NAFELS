@@ -24,6 +24,60 @@ ESTRUCTURA DE ARCHIVOS:
 import os, re, json, argparse, shutil, glob
 from collections import defaultdict, Counter
 
+# ── LA FECHA DE UNA SESION ───────────────────────────────────────────────────
+_FECHAS_ADENTRO = {}
+
+def _fecha_adentro_del_dvw(ruta):
+    """La fecha que trae el .dvw adentro, cuando el nombre del archivo no la tiene.
+
+    LA CONVENCION Y SU AGUJERO
+    --------------------------
+    Todos los motores sacan la fecha del NOMBRE del archivo, que por convencion
+    empieza con ella: "&2026-09-30 AXPO NAFELS vs ST GALLEN.dvw".
+
+    El 30/09/2026 el archivo quedo guardado como "&206-09-30 ...": un digito de
+    menos. Para los motores ese partido no tenia fecha, y un partido sin fecha
+    se descarta de la lista de partidos. Resultado: no aparecia en Dashboard,
+    ni en Analisis, ni en la pantalla para cargarle el video, ni en la
+    distribucion del armador. Sin un solo mensaje de error.
+
+    DE DONDE SALE AHORA
+    -------------------
+    DataVolley escribe la fecha adentro del archivo, en [3MATCH], primer campo,
+    como dd/mm/aaaa. Esa la pone el programa solo, asi que no depende de como
+    alguien haya nombrado el archivo.
+
+    EL ORDEN IMPORTA: primero el nombre del archivo, despues el .dvw. Hay
+    sesiones renombradas a mano justamente para corregirle la fecha a un
+    archivo, y ese arreglo tiene que seguir mandando.
+
+    Si no se puede leer, devuelve cadena vacia y todo queda como estaba.
+    """
+    try:
+        clave = os.path.abspath(ruta)
+    except Exception:
+        clave = str(ruta)
+    if clave in _FECHAS_ADENTRO:
+        return _FECHAS_ADENTRO[clave]
+    fecha = ''
+    try:
+        with open(ruta, 'rb') as _fh:
+            cabecera = _fh.read(4096).decode('latin-1', 'replace')
+        i = cabecera.find('[3MATCH]')
+        if i >= 0:
+            renglones = cabecera[i:].replace('\r\n', '\n').split('\n')
+            campo = renglones[1].split(';')[0].strip() if len(renglones) > 1 else ''
+            m = re.match(r'^(\d{1,2})[/\-.](\d{1,2})[/\-.](\d{4})$', campo)
+            if m:
+                d, mes, anio = m.groups()
+                fecha = '%s-%02d-%02d' % (anio, int(mes), int(d))
+    except Exception:
+        fecha = ''
+    _FECHAS_ADENTRO[clave] = fecha
+    return fecha
+
+
+
 
 # ── NOMBRES CORTOS DE LOS CLUBES ──────────────────────────────────────────
 # Los .dvw traen el nombre completo del club. En pantalla no entra y se lee
@@ -268,7 +322,61 @@ def get_teams(lines):
         if in_t and ';' in l and not l.startswith('['): tl.append(l.split(';'))
     return (tl[0][1].strip() if tl else ''), (tl[1][1].strip() if len(tl)>1 else '')
 
-def get_players(lines, section):
+def _es_nuestro_club(nombre):
+    """Si este nombre de equipo es el club del sistema."""
+    if not nombre:
+        return False
+    import unicodedata as _u, re as _r
+    def _p(x):
+        x = _u.normalize('NFKD', x or '').encode('ascii','ignore').decode()
+        return _r.sub(r'[^a-z0-9]', '', x.lower())
+    try:
+        import config_club as _cc
+        clave = _p(_cc.club())
+    except Exception:
+        clave = ''
+    if not clave:
+        clave = 'nafels'
+    n = _p(nombre)
+    return bool(clave) and (clave in n or n in clave)
+
+def _plantel_maestro():
+    """El plantel del club, leido de plantel_<club>.js.
+
+    Es la FUENTE UNICA: ahi estan el apellido, el nombre y el puesto reales.
+    Sirve de respaldo cuando un .dvw viene incompleto, y para saber quien es
+    del plantel y quien es un invitado.
+    """
+    global _PM_CACHE
+    try:
+        return _PM_CACHE
+    except NameError:
+        pass
+    import glob as _g, re as _r, os as _o
+    out = {}
+    for f in _g.glob(_o.path.join(_o.path.dirname(_o.path.abspath(__file__)), 'plantel_*.js')):
+        try:
+            t = open(f, encoding='utf-8', errors='replace').read()
+        except Exception:
+            continue
+        for m in _r.finditer(r'\{\s*num:\s*(\d+)[^}]*?ap:\s*"([^"]*)"[^}]*?nombre:\s*"([^"]*)"[^}]*?pos:\s*"([^"]*)"', t):
+            n = int(m.group(1)); ape = m.group(2).strip(); nmb = m.group(3).strip()
+            pos = {'LIBERO':'L','PUNTA':'OH','OPUESTO':'OPP','CENTRAL':'MB','ARMADOR':'S'}.get(
+                  m.group(4).strip().upper(), '?')
+            out[n] = {'apellido': ape, 'nombre': (ape + ' ' + nmb).strip(), 'pos': pos}
+    _PM_CACHE = out
+    return out
+
+def get_players(lines, section, equipo=None):
+    # 'equipo' sirve para saber si es NUESTRO club: solo a los nuestros se les
+    # aplica el plantel maestro. De los rivales se lee el .dvw tal cual, que es
+    # lo unico que tenemos de ellos.
+    #
+    # Esto ya estaba en el motor de ENTRENAMIENTOS y faltaba en el de PARTIDOS:
+    # por eso los apellidos salian bien en las pantallas de practica y mal en
+    # las de partido. El .sq que carga el asistente trae los apellidos como el
+    # los escribio, y ese texto llegaba hasta la app.
+    _es_nuestro = _es_nuestro_club(equipo)
     in_sec=False; players={}
     for line in lines:
         l=line.strip()
@@ -296,7 +404,19 @@ def get_players(lines, section):
                 # scoutea un club, cargado.
                 pm={'1':'L','2':'OH','3':'OPP','4':'MB','5':'S','L':'L','':'?'}
                 pos='L' if role=='L' else pm.get(pc,'?')
-                players[num]={'name':f"{last} {first}".strip(),'apellido':last,'pos':pos,'num':num}
+                nom = f"{last} {first}".strip()
+                # ══ PARA NUESTRO CLUB MANDA EL PLANTEL MAESTRO ═════════════
+                # plantel_<club>.js es la FUENTE UNICA del apellido, el nombre
+                # y el puesto. Si el scout escribio mal un apellido en el .sq,
+                # o dejo el puesto vacio, la app igual muestra lo correcto.
+                # En los partidos de liga el mismo numero es otro jugador en
+                # cada equipo, asi que esto se aplica SOLO a los nuestros.
+                _m = _plantel_maestro().get(num) if _es_nuestro else None
+                if _m:
+                    nom  = _m['nombre']
+                    last = _m['apellido']
+                    pos  = _m['pos']
+                players[num]={'name':nom,'apellido':last,'pos':pos,'num':num}
             except: pass
     return players
 
@@ -487,7 +607,7 @@ def parse_dvw_both(fpath, temporada):
     home_raw, away_raw = get_teams(lines)
     home = norm(home_raw); away = norm(away_raw)
     m = re.search(r'(\d{4}-\d{2}-\d{2})', os.path.basename(fpath))
-    date = m.group(1) if m else ''
+    date = m.group(1) if m else _fecha_adentro_del_dvw(fpath)
 
     # La temporada de ESTE partido, segun su torneo. Si el club no configuro
     # torneos, queda la que vino por parametro y nada cambia.
@@ -503,7 +623,7 @@ def parse_dvw_both(fpath, temporada):
         if _MISMO_EQUIPO and pfx == 'a':
             continue   # ya se tomaron las dos mitades en la primera vuelta
         if not team: continue
-        players = get_players(lines, section)
+        players = get_players(lines, section, team)
         rival = away if pfx=='*' else home
 
         idx = content.find('[3SCOUT]\n')
@@ -1295,7 +1415,7 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
         h_raw, a_raw = get_teams(lines)
         home = norm(h_raw); away = norm(a_raw)
         m = re.search(r'(\d{4}-\d{2}-\d{2})', fname)
-        date = m.group(1) if m else ''
+        date = m.group(1) if m else _fecha_adentro_del_dvw(os.path.join(dvw_dir, fname))
         mc = re.search(r'\d{4}-\d{2}-\d{2}\s+(\d{3,})', fname)
         code = mc.group(1) if mc else ''
         sig = (date, tuple(sorted([home, away])))
@@ -2278,7 +2398,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
 
         sets = parse_set_scores(content)
         m = re.search(r'(\d{4}-\d{2}-\d{2})', fname)
-        date = m.group(1) if m else ''
+        date = m.group(1) if m else _fecha_adentro_del_dvw(os.path.join(dvw_dir, fname))
         team_home = home == team_name
         rival = away if team_home else home
 
@@ -2308,7 +2428,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         team_home = norm(home_raw)==team_name
         pfx = '*' if team_home else 'a'
         section = '[3PLAYERS-H]' if team_home else '[3PLAYERS-V]'
-        players = get_players(lines, section)
+        players = get_players(lines, section, team_name)
 
         idx = content.find('[3SCOUT]\n')
         scout = content[idx+9:content.find('\n[3',idx+9)].strip().split('\n')
@@ -2409,13 +2529,24 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
 
     # ═══ BATERÍAS (objetivos) por partido, jugador y acumulado ═══
     def _bat_name_map(content, side):
+        # Los dos que llaman a esta funcion le pasan SIEMPRE el lado de nuestro
+        # club, asi que lo que sale de aca son nuestros jugadores.
         psec = '[3PLAYERS-H]' if side=='*' else '[3PLAYERS-V]'
         pi=content.find(psec); pe=content.find('[3',pi+5)
+        _maestro = _plantel_maestro()
         nm={}
         for l in content[pi:pe].split('\n'):
             p=l.split(';')
             if len(p)>10 and p[1].isdigit():
-                nm[p[1].zfill(2)]=f"{p[1]} {(p[9]+' '+p[10]).strip().title()}"
+                # ══ EL APELLIDO, DEL PLANTEL MAESTRO ══════════════════════
+                # Este era el SEGUNDO camino por el que el nombre llegaba a la
+                # app, y no pasaba por get_players. Por eso, aun con el plantel
+                # maestro puesto, las baterias seguian mostrando "JOHANNSEN
+                # PATRICK" en vez de JOHANSSON Patrik, y los dos SCHMID
+                # quedaban indistinguibles.
+                _m = _maestro.get(int(p[1]))
+                _nom = _m['nombre'] if _m else (p[9]+' '+p[10]).strip().title()
+                nm[p[1].zfill(2)]=f"{p[1]} {_nom}"
         return nm
 
     bat_all_pl=[]              # acumuladores por partido (para merge)

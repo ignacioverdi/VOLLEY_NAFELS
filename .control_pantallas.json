@@ -323,7 +323,7 @@
   "tablas": {}
  },
  "ataque_jugador.html": {
-  "bytes": 33954,
+  "bytes": 34507,
   "funciones": [
    "HISTORIAL_DATA",
    "__DESCIFRAR_SINCRONO",
@@ -2696,7 +2696,7 @@
   "tablas": {}
  },
  "recepcion_jugador.html": {
-  "bytes": 27636,
+  "bytes": 28189,
   "funciones": [
    "HISTORIAL_DATA",
    "__DESCIFRAR_SINCRONO",
@@ -2786,7 +2786,7 @@
   "tablas": {}
  },
  "saque_jugador.html": {
-  "bytes": 32526,
+  "bytes": 33079,
   "funciones": [
    "HISTORIAL_DATA",
    "__DESCIFRAR_SINCRONO",

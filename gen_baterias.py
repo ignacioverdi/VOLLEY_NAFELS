@@ -9,6 +9,60 @@ Salida: datos_baterias.js  ->  window.BAT_PARTIDOS = {total, meta, jug, ind, eq}
 """
 import os, re, sys, json, glob, unicodedata
 
+# ── LA FECHA DE UNA SESION ───────────────────────────────────────────────────
+_FECHAS_ADENTRO = {}
+
+def _fecha_adentro_del_dvw(ruta):
+    """La fecha que trae el .dvw adentro, cuando el nombre del archivo no la tiene.
+
+    LA CONVENCION Y SU AGUJERO
+    --------------------------
+    Todos los motores sacan la fecha del NOMBRE del archivo, que por convencion
+    empieza con ella: "&2026-09-30 AXPO NAFELS vs ST GALLEN.dvw".
+
+    El 30/09/2026 el archivo quedo guardado como "&206-09-30 ...": un digito de
+    menos. Para los motores ese partido no tenia fecha, y un partido sin fecha
+    se descarta de la lista de partidos. Resultado: no aparecia en Dashboard,
+    ni en Analisis, ni en la pantalla para cargarle el video, ni en la
+    distribucion del armador. Sin un solo mensaje de error.
+
+    DE DONDE SALE AHORA
+    -------------------
+    DataVolley escribe la fecha adentro del archivo, en [3MATCH], primer campo,
+    como dd/mm/aaaa. Esa la pone el programa solo, asi que no depende de como
+    alguien haya nombrado el archivo.
+
+    EL ORDEN IMPORTA: primero el nombre del archivo, despues el .dvw. Hay
+    sesiones renombradas a mano justamente para corregirle la fecha a un
+    archivo, y ese arreglo tiene que seguir mandando.
+
+    Si no se puede leer, devuelve cadena vacia y todo queda como estaba.
+    """
+    try:
+        clave = os.path.abspath(ruta)
+    except Exception:
+        clave = str(ruta)
+    if clave in _FECHAS_ADENTRO:
+        return _FECHAS_ADENTRO[clave]
+    fecha = ''
+    try:
+        with open(ruta, 'rb') as _fh:
+            cabecera = _fh.read(4096).decode('latin-1', 'replace')
+        i = cabecera.find('[3MATCH]')
+        if i >= 0:
+            renglones = cabecera[i:].replace('\r\n', '\n').split('\n')
+            campo = renglones[1].split(';')[0].strip() if len(renglones) > 1 else ''
+            m = re.match(r'^(\d{1,2})[/\-.](\d{1,2})[/\-.](\d{4})$', campo)
+            if m:
+                d, mes, anio = m.groups()
+                fecha = '%s-%02d-%02d' % (anio, int(mes), int(d))
+    except Exception:
+        fecha = ''
+    _FECHAS_ADENTRO[clave] = fecha
+    return fecha
+
+
+
 # ── equipos (igual que build_video.py) ──
 # ── LOS EQUIPOS ────────────────────────────────────────────────────────────
 #    Antes iba la tabla de un club escrita a mano. Ahora los nombres salen de
@@ -401,7 +455,7 @@ def parse_dvw(path):
     # desaparecia sin aviso. Ahora, sin codigo, el id se arma con fecha+rival.
     mcode=re.search(r'&?\s*(\d{5,6})\b', base)
     mdate=re.search(r'(\d{4}-\d{2}-\d{2})',base)
-    date=mdate.group(1) if mdate else ''
+    date=mdate.group(1) if mdate else _fecha_adentro_del_dvw(path)
     code=mcode.group(1) if mcode else ''
 
     # roster CASLA: num -> nombre (para keyear por nombre como el perfil)
