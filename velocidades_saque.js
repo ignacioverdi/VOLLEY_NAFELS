@@ -57,19 +57,43 @@ function pedirDatos(listo){
   if (estado === 'cargando') return;
   estado = 'cargando';
 
+  /* ══ DE UNA, NO DE A PEDAZOS ═══════════════════════════════════════════
+     datos_seguros.js abre los archivos de mas de 64 KB en segundo plano, de a
+     pedazos, para no congelar la pantalla. Para los datos que una pagina
+     necesita al arrancar eso esta bien. Para este caso, no.
+
+     Medido en el dashboard: el archivo tardo VEINTINUEVE SEGUNDOS en abrirse,
+     porque esa pantalla esta descifrando al mismo tiempo 1,65 MB de
+     entrenamientos y el reparto por pedazos los hace pelear entre si. Con la
+     espera cortada a los 25 segundos, el boton terminaba diciendo que no pudo.
+
+     El mismo archivo, abierto DE UNA con __DESCIFRAR_SINCRONO —la marca que
+     ya usa "Cargar videos"— tarda 62 ms. Bloquea esos 62 ms y listo.
+
+     El vigia de abajo queda igual por si algo cambia: si el camino directo no
+     dejara los datos puestos, se sigue esperando el aviso en segundo plano,
+     ahora con un minuto de paciencia en vez de 25 segundos. */
   function abrir(){
     try {
       var todo = global.__D || {};
       if (!todo[ARCH]){ fin(false); return; }
+      var antes = global.__DESCIFRAR_SINCRONO;
       global.__D = {}; global.__D[ARCH] = todo[ARCH];
-      try { global.abrirDatos(); } finally { global.__D = todo; }
-      /* los archivos grandes se abren en segundo plano y avisan al terminar */
+      global.__DESCIFRAR_SINCRONO = true;
+      try { global.abrirDatos(); }
+      finally { global.__D = todo; global.__DESCIFRAR_SINCRONO = antes; }
       if (hayDatos()){ fin(true); return; }
       var t0 = Date.now();
+      function mirar(){ if (hayDatos()){ limpiar(); fin(true); } }
+      function limpiar(){
+        clearInterval(vigia);
+        try{ global.removeEventListener('datos-listos', mirar); }catch(e){}
+      }
+      try{ global.addEventListener('datos-listos', mirar); }catch(e){}
       var vigia = setInterval(function(){
-        if (hayDatos()){ clearInterval(vigia); fin(true); }
-        else if (Date.now() - t0 > 25000){ clearInterval(vigia); fin(false); }
-      }, 250);
+        if (hayDatos()){ limpiar(); fin(true); }
+        else if (Date.now() - t0 > 60000){ limpiar(); fin(false); }
+      }, 300);
     } catch(e){ fin(false); }
   }
   function fin(ok){
