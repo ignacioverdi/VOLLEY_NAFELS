@@ -134,6 +134,10 @@
     <span id="roChip"></span>
   </div>
 
+  <!-- Lo llena objetivos_semanales.js. Si los datos no abren, queda vacio y
+       la pantalla se ve como antes. -->
+  <div id="obj-semana" style="margin:0 0 18px"></div>
+
   <div class="legend" id="legend"></div>
   <div id="prog"></div>
   <div id="foco"></div>
@@ -154,6 +158,19 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="correcciones_tecnicas.js?v=20260930-2113" onerror="void 0"></script>
 <script src="plantel_nafels.js?v=20260930-2113" onerror="void 0"></script>
 <script src="datos_casla.js.enc" onerror="void 0"></script>
+<!-- ══ LA FILA DE OBJETIVOS DE LA SEMANA ═════════════════════════════════
+     Los numeros y lo tecnico son dos mitades de lo mismo: cuanto le falta
+     esta semana y que tiene que mejorar. Estaban en pantallas distintas.
+
+     Es el MISMO codigo que dibuja la fila en la pantalla del jugador —no
+     una copia—, asi que las dos no pueden decir cosas distintas. Solo hace
+     falta darle de comer: las metas, las baterias y el plantel.
+     El mismo orden que usa equipo.html. -->
+<script src="objetivos_config.js?v=20260930-2113" onerror="void 0"></script>
+<script src="datos_baterias.js.enc" onerror="void 0"></script>
+<script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
+<script src="objetivos_semanales.js?v=20260930-2113" onerror="void 0"></script>
+<script>abrirDatos();</script>
 <script>
 (function(){
   /* ---------- i18n ---------- */
@@ -262,6 +279,34 @@ window.__DESCIFRAR_SINCRONO = true;
   var PATH='plan_desarrollo/'+NUM;
   var DATA={items:[]};
 
+  /* ══ DE QUIEN SON LOS OBJETIVOS QUE SE DIBUJAN ARRIBA ═══════════════════
+     La fila se dibuja sola para el jugador que inicio sesion. Pero cuando el
+     entrenador abre el plan de OTRO (plan_desarrollo.html?num=12), la fila
+     tiene que mostrar los objetivos de ESE, no los suyos.
+
+     Se busca el nombre igual que lo busca objetivos_semanales.js —la misma
+     expresion, nombre o apellido— para que las dos puntas digan lo mismo. */
+  function _nombreDelNum(n){
+    if(!n) return null;
+    var fuentes=[];
+    if(window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores) fuentes.push(window.EQUIPO_DATA.jugadores);
+    if(window.PLANTEL_NAFELS && window.PLANTEL_NAFELS.jugadores) fuentes.push(window.PLANTEL_NAFELS.jugadores);
+    for(var f=0;f<fuentes.length;f++){
+      var L=fuentes[f];
+      for(var i=0;i<L.length;i++){
+        if(String(L[i].num)===String(n)) return L[i].nombre || L[i].ap || null;
+      }
+    }
+    return null;
+  }
+  function _pintarObjetivos(){
+    try{
+      var nom=_nombreDelNum(NUM);
+      if(nom) window._objNombre=nom;
+      if(window.OBJ_SEMANA && window.OBJ_SEMANA.render) window.OBJ_SEMANA.render();
+    }catch(e){}
+  }
+
   function roster(){
     var raw=(typeof PLANTEL_NAFELS!=='undefined'&&PLANTEL_NAFELS)||window.PLANTEL_NAFELS||(typeof ((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[])!=='undefined'&&((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[]))||((window.PLANTEL_NAFELS&&window.PLANTEL_NAFELS.jugadores)||window.CASLA_JUGADORES||[])||null;
     var r=Array.isArray(raw)?raw:((raw&&(raw.jugadores||raw.lista))||[]);
@@ -346,6 +391,7 @@ window.__DESCIFRAR_SINCRONO = true;
   }
 
   function render(){
+    _pintarObjetivos();
     document.getElementById('h1').textContent=L().title;
     document.getElementById('subt').textContent = NUM ? L().subJ(NOM||('#'+NUM), ED) : L().subNone;
     buildLegend(); progress(); renderFoco();

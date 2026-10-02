@@ -398,6 +398,17 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 /* ── EL TABLERO ─────────────────────────────────────────────────────────── */
 #tablero{max-width:1400px;margin:0 auto;width:100%;padding:0 40px;
   display:grid;grid-template-columns:1.25fr 1fr 1.15fr;gap:12px}
+/* ── CUANDO ENTRA EL RECUADRO DE OBJETIVOS ────────────────────────────────
+   La tira tiene tres huecos. El de objetivos esta en el HTML pero escondido,
+   y objetivos_semanales.js lo muestra recien cuando tiene datos: ahi tambien
+   le pone esta clase al tablero y los cuatro se reparten el ancho.
+   Se achican los tres de siempre en vez de mandar el nuevo a una segunda
+   fila, que lo dejaria abajo de todo y nadie lo veria. */
+#tablero.con-obj{grid-template-columns:1fr 1.15fr .95fr 1.05fr}
+/* En pantallas medianas cuatro columnas quedan muy flacas: mejor dos y dos. */
+@media (max-width:1240px){
+  #tablero.con-obj{grid-template-columns:1fr 1fr}
+}
 .tb-box{background:var(--card,#0d0e1a);border:1px solid rgba(255,255,255,.08);
   border-radius:14px;padding:13px 16px;position:relative;overflow:hidden;
   text-decoration:none;color:inherit;display:block;transition:border-color .18s,transform .18s}

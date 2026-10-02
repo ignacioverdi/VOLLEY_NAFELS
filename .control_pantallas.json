@@ -1261,7 +1261,7 @@
   "tablas": {}
  },
  "index.html": {
-  "bytes": 150802,
+  "bytes": 151459,
   "funciones": [
    "EQUIPO_DATA",
    "FIXTURE_DATA",
@@ -2265,11 +2265,15 @@
   "tablas": {}
  },
  "plan_desarrollo.html": {
-  "bytes": 30703,
+  "bytes": 32877,
   "funciones": [
+   "EQUIPO_DATA",
    "L",
    "PD",
    "__DESCIFRAR_SINCRONO",
+   "_nombreDelNum",
+   "_objNombre",
+   "_pintarObjetivos",
    "buildLangSw",
    "buildLegend",
    "buildSel",

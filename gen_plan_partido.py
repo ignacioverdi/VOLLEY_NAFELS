@@ -257,6 +257,33 @@ def _temp_de_carpeta(folder):
     if not m: return None
     y=int(m.group(1)); return "%d/%02d"%(y,(y+1)%100)
 
+def _es_del_radar_descartado(doc):
+    """Si este archivo de velocidades lo escribio el radar por video.
+
+    HAY DOS COSAS QUE ESCRIBEN velocidades_<PARTIDO>.json
+    ------------------------------------------------------
+      - VELOCIDADES.py, con lo que marco la PISTOLA. Es el bueno.
+      - MEDIR_SAQUES.py, con lo que calculo el radar por video.
+
+    El radar se PROBO Y SE DESCARTO: sobre 240 saques dio +-22 km/h contra la
+    pistola, y llego a marcar 152,8 km/h en un saque, mas rapido que el record
+    del mundo. Ese numero llego a publicarse en la app.
+
+    Los dos archivos se llaman IGUAL, asi que uno puede pisar al otro sin que
+    nadie se entere. Por eso se mira ADENTRO y no el nombre: el del radar trae
+    los datos de la camara (calibracion, fps, entrelazado) que la pistola no
+    tiene de donde sacar.
+
+    Si algun dia el radar pasa la prueba de la sesion controlada, lo que hay
+    que cambiar es MEDIR_SAQUES para que escriba su propio 'origen', no borrar
+    esta funcion.
+    """
+    if (doc.get('origen') or '').strip():
+        return False
+    return any(k in doc for k in ('calibracion', 'fps_medicion',
+                                  'entrelazado_de_origen', 'correccion_de_estela'))
+
+
 def _poner_velocidades_srv(path_dvw, mid, DATA):
     """Pegarle a cada saque los km/h que se midieron, si estan medidos.
 
@@ -296,6 +323,13 @@ def _poner_velocidades_srv(path_dvw, mid, DATA):
             doc = json.load(f)
     except Exception as e:
         print('   [aviso] no pude leer %s: %s' % (os.path.basename(ruta), e))
+        return 0
+
+    if _es_del_radar_descartado(doc):
+        print('   [ATENCION] %s lo escribio el radar por video, que se descarto'
+              % os.path.basename(ruta))
+        print('              por error de +-22 km/h. NO lo uso. Para cargar las')
+        print('              velocidades de verdad, corre VELOCIDADES.bat.')
         return 0
 
     try:
@@ -858,7 +892,26 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
         def add(pfx,num,role,data,read):
             if _es_nuestro and _pm and int(num) not in _pm:
                 return
-            players.append({"id":pfx+str(num),"num":num,"name":apellido(D['names'].get(str(num),'')),
+            # ══ EL APELLIDO, DEL PLANTEL MAESTRO ══════════════════════════
+            # El nombre salia del .dvw, que lo escribe el scout. Si lo tipeo
+            # mal, el error llegaba hasta la pantalla del jugador: el #12
+            # aparecia como JOHANNSEN en vez de JOHANSSON, y los dos SCHMID
+            # —Roy y Jonas— salian los dos como "SCHMID", sin forma de saber
+            # cual era cual.
+            #
+            # No se usa apellido() con este valor: esa funcion se queda con la
+            # ULTIMA palabra para sacarle el nombre de pila, y "SCHMID R"
+            # quedaria en "R". El plantel ya trae el apellido como se muestra.
+            # OJO con el "es nuestro": arriba se compara el slug con la clave
+            # del club por IGUALDAD EXACTA, y en la practica no coinciden: el
+            # .dvw dice "AXPO NAFELS" -> slug "axponafels", y la clave del club
+            # es "nafels". Por eso aca se compara por contenido. No toco la
+            # comparacion de arriba para no cambiar que jugadores se listan.
+            _cl = _clave_club()
+            _nuestro_ap = bool(_cl) and (_cl in slug or slug in _cl)
+            _ap = (_pm.get(int(num)) or {}).get('apellido') if (_nuestro_ap and _pm) else None
+            _nombre = (_ap[:14] if _ap else apellido(D['names'].get(str(num),'')))
+            players.append({"id":pfx+str(num),"num":num,"name":_nombre,
                             "pos":pos.get(num,'\u2014'),"role":role,"total":len(data),"read":read,"data":data})
         for n in atacan:
             d=D['atk'].get(str(n),[])

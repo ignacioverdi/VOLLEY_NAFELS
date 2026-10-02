@@ -520,6 +520,33 @@ def parse_dvw(path, ent=False, modo_high_set=False):
     return code,{'home':home_slug,'away':away_slug,'homeName':home_name,'awayName':away_name,
                  'date':date,'result':_res,'teams':teams_meta,'players':players,'actions':actions}
 
+def _es_del_radar_descartado(doc):
+    """Si este archivo de velocidades lo escribio el radar por video.
+
+    HAY DOS COSAS QUE ESCRIBEN velocidades_<PARTIDO>.json
+    ------------------------------------------------------
+      - VELOCIDADES.py, con lo que marco la PISTOLA. Es el bueno.
+      - MEDIR_SAQUES.py, con lo que calculo el radar por video.
+
+    El radar se PROBO Y SE DESCARTO: sobre 240 saques dio +-22 km/h contra la
+    pistola, y llego a marcar 152,8 km/h en un saque, mas rapido que el record
+    del mundo. Ese numero llego a publicarse en la app.
+
+    Los dos archivos se llaman IGUAL, asi que uno puede pisar al otro sin que
+    nadie se entere. Por eso se mira ADENTRO y no el nombre: el del radar trae
+    los datos de la camara (calibracion, fps, entrelazado) que la pistola no
+    tiene de donde sacar.
+
+    Si algun dia el radar pasa la prueba de la sesion controlada, lo que hay
+    que cambiar es MEDIR_SAQUES para que escriba su propio 'origen', no borrar
+    esta funcion.
+    """
+    if (doc.get('origen') or '').strip():
+        return False
+    return any(k in doc for k in ('calibracion', 'fps_medicion',
+                                  'entrelazado_de_origen', 'correccion_de_estela'))
+
+
 def _poner_velocidades(path_dvw, actions):
     """Pegarle a cada saque los km/h que midio el radar, si estan medidos.
 
@@ -547,6 +574,10 @@ def _poner_velocidades(path_dvw, actions):
         with open(ruta, encoding='utf-8') as f:
             doc = _json.load(f)
     except Exception:
+        return 0
+    if _es_del_radar_descartado(doc):
+        print('      [ATENCION] %s lo escribio el radar por video, que se '
+              'descarto. NO lo uso.' % os.path.basename(ruta))
         return 0
     desfase = float(doc.get('desfase_aplicado') or 0.0)
     porllave = {}
