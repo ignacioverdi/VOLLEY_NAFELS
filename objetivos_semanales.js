@@ -159,17 +159,59 @@ function ddmm(d){ return d.getDate() + '/' + (d.getMonth()+1); }
    Devuelve una lista ordenada de semanas. Cada una trae el acumulado de la
    semana entera y, ademas, el acumulado dia por dia, que es lo que deja ver
    si la semana viene subiendo o bajando.                                    */
-function semanas(nombre, modo, id){
+/* ══ EL PERIODO: DIA, SEMANA O MES ═══════════════════════════════════════════
+   Todo esto nacio pensado en semanas y sigue siendo lo normal: el objetivo es
+   semanal y cierra el domingo. Pero mirar el mismo numero por DIA o por MES
+   responde otras preguntas —como vengo hoy, como vengo contra el mes pasado—
+   y los datos para eso ya estaban; lo unico que cambiaba era en que cajones se
+   agrupaban las sesiones.
+
+   Por eso el recorrido de sesiones es UNO SOLO y el periodo solo decide tres
+   cosas: donde empieza cada cajon, en que casillero de adentro cae la sesion,
+   y de a cuanto se avanza al rellenar los cajones vacios.
+
+   DIA: las dos sesiones de un mismo dia caen en el mismo cajon. Eso ya pasaba
+   —cada sesion caia en su dia de la semana y se sumaban— y aca sigue igual. */
+function inicioDe(f, periodo){
+  if(periodo === 'dia') return new Date(f.getFullYear(), f.getMonth(), f.getDate());
+  if(periodo === 'mes') return new Date(f.getFullYear(), f.getMonth(), 1);
+  return lunesDe(f);
+}
+/* En que casillero DE ADENTRO del cajon cae la sesion. Es lo que despues
+   dibuja el grafico de "dia a dia": en la semana son los 7 dias, en el mes los
+   dias del mes, y en el dia hay uno solo. */
+function casillaDe(f, periodo){
+  if(periodo === 'dia') return 0;
+  if(periodo === 'mes') return f.getDate() - 1;
+  return diaSemana(f);
+}
+function cuantasCasillas(periodo){
+  return periodo === 'dia' ? 1 : (periodo === 'mes' ? 31 : 7);
+}
+function siguiente(d, periodo){
+  var x = new Date(d.getTime());
+  if(periodo === 'dia') x.setDate(x.getDate() + 1);
+  else if(periodo === 'mes') x.setMonth(x.getMonth() + 1);
+  else x.setDate(x.getDate() + 7);
+  return x;
+}
+
+/* La vista de siempre. Queda como el nombre que usa el resto del archivo. */
+function semanas(nombre, modo, id){ return tramos(nombre, modo, id, 'semana'); }
+
+function tramos(nombre, modo, id, periodo){
+  periodo = periodo || 'semana';
   var B = window.BAT_PARTIDOS;
   if(!B || !B.meta || !B.ind) return [];
   var porId = {};
   B.ind.forEach(function(m){ porId[String(m.id)] = m; });
 
-  var sem = {};   /* clave de domingo -> {dias:[{num,tot} x7], num, tot} */
+  var NCAS = cuantasCasillas(periodo);
+  var sem = {};   /* clave del cajon -> {dias:[{num,tot}], num, tot} */
   function caja(k){
     if(!sem[k]){
       var ds = [];
-      for(var i=0;i<7;i++) ds.push({num:0, tot:0});
+      for(var i=0;i<NCAS;i++) ds.push({num:0, tot:0});
       sem[k] = {k:k, dias:ds, num:0, tot:0, dom:null};
     }
     return sem[k];
@@ -189,7 +231,7 @@ function semanas(nombre, modo, id){
     Object.keys(H).forEach(function(cod){
       var s = H[cod] || {};
       var f = aFecha(s.date); if(!f) return;
-      var k = clave(lunesDe(f));
+      var k = clave(inicioDe(f, periodo));
       (s.actions || []).forEach(function(a){
         if(a.skill !== 'E' || a.ty !== 'H') return;
         if(cl && a.tm && a.tm !== cl) return;
@@ -199,9 +241,9 @@ function semanas(nombre, modo, id){
         }
         var p = HS_PTS[a.ev];
         if(p === undefined) return;
-        sumar(k, diaSemana(f), p + 2, 4);
+        sumar(k, casillaDe(f, periodo), p + 2, 4);
       });
-      var c = sem[k]; if(c) c.dom = lunesDe(f);
+      var c = sem[k]; if(c) c.dom = inicioDe(f, periodo);
     });
   } else {
     var C = CUENTA[id]; if(!C) return [];
@@ -217,9 +259,9 @@ function semanas(nombre, modo, id){
       if(!det) return;
       var tot = C.sub ? C.tot(det) : (V[C.tot] || 0);
       if(!tot) return;
-      var k = clave(lunesDe(f));
-      sumar(k, diaSemana(f), C.num(det), tot);
-      sem[k].dom = lunesDe(f);
+      var k = clave(inicioDe(f, periodo));
+      sumar(k, casillaDe(f, periodo), C.num(det), tot);
+      sem[k].dom = inicioDe(f, periodo);
     });
   }
 
@@ -233,9 +275,11 @@ function semanas(nombre, modo, id){
      aunque esten vacias.                                                  */
   var pk = llaves[0].split('-');
   var cur = new Date(+pk[0], (+pk[1])-1, +pk[2]);
-  var fin = lunesDe(hoy());
+  var fin = inicioDe(hoy(), periodo);
+  /* El tope sube con el periodo: en dias, un ano entero son 366 cajones. */
+  var TOPE = periodo === 'dia' ? 800 : (periodo === 'mes' ? 60 : 400);
   var guarda = 0;
-  while(cur <= fin && guarda++ < 400){ caja(clave(cur)).dom = new Date(cur); cur.setDate(cur.getDate()+7); }
+  while(cur <= fin && guarda++ < TOPE){ caja(clave(cur)).dom = new Date(cur); cur = siguiente(cur, periodo); }
 
   var out = Object.keys(sem).sort().map(function(k){ return sem[k]; });
   out.forEach(function(c){
@@ -338,10 +382,11 @@ function dorsalDe(nombre){
 /* ── La cuenta del objetivo, semana por semana ─────────────────────────────
    Se recorre toda la historia desde la primera semana con acciones. El
    objetivo de cada semana sale del cierre de la anterior, y nunca baja.     */
-function serie(nombre, modo, id){
+function serie(nombre, modo, id, periodo){
+  periodo = periodo || 'semana';
   var meta = (window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas[id]) || null;
   var bat  = meta && meta.obj != null ? meta.obj : null;
-  var S = semanas(nombre, modo, id);
+  var S = tramos(nombre, modo, id, periodo);
   if(!S.length) return {id:id, meta:meta, semanas:[], hay:false};
 
   var hubo = S.some(function(c){ return c.tot > 0; });
@@ -350,6 +395,29 @@ function serie(nombre, modo, id){
   var prev = null, prevObj = null, seguidas = 0, mejor = null, mejorSem = null;
   S.forEach(function(c){
     c.objetivo = null; c.estado = null; c.desde = prev;
+
+    /* ══ CONTRA QUE SE COMPARA, SEGUN EL PERIODO ═══════════════════════════
+       SEMANA: el objetivo sube de a poco desde lo que cerro la semana pasada
+       hacia la bateria del equipo. Es una escalera, y es lo que le da sentido
+       a la racha: cumplir esta semana es superarse a si mismo.
+
+       DIA y MES: no hay escalera. La referencia es DIRECTO la bateria del
+       equipo —el norte— y lo que se compara es contra el dia o el mes
+       anterior de el mismo. Una escalera diaria daria un objetivo nuevo cada
+       dia, movido por el ruido de dos o tres acciones, y no significaria
+       nada. */
+    if(periodo !== 'semana'){
+      if(bat !== null) c.objetivo = Math.round(bat * 10) / 10;
+      c.estado = (prev !== null && bat !== null && prev >= bat) ? 'sostener' : 'subir';
+      if(c.val !== null){
+        if(bat !== null && c.val >= bat) seguidas++; else seguidas = 0;
+        prev = c.val;
+        if(mejor === null || c.val > mejor){ mejor = c.val; mejorSem = c; }
+      }
+      c.seguidas = seguidas;
+      return;
+    }
+
     if(prev !== null && bat !== null){
       var falta = bat - prev;
       var salto;
@@ -395,7 +463,7 @@ function serie(nombre, modo, id){
     if(c2.objetivo != null && c2.val >= c2.objetivo) racha++; else break;
   }
   return {id:id, meta:meta, bat:bat, semanas:S, hay:true, mejor:mejor, mejorSem:mejorSem,
-          racha:racha, ultima:S[S.length-1], sostenidas:seguidas};
+          racha:racha, ultima:S[S.length-1], sostenidas:seguidas, periodo:periodo};
 }
 
 /* ════════════════════════════════════════════════════════════════════════
@@ -432,6 +500,11 @@ var TXT = {
   dias:['L','M','M','J','V','S','D'],
   diasLargos:['lunes','martes','mi&eacute;rcoles','jueves','viernes','s&aacute;bado','domingo'],
   cierra:'cierra el domingo', racha:'Semanas seguidas cumpliendo',
+  perDia:'D&iacute;a', perSem:'Semana', perMes:'Mes',
+  cierraDia:'el d&iacute;a de hoy', cierraMes:'cierra a fin de mes',
+  rachaDia:'D&iacute;as seguidos en la bater&iacute;a', rachaMes:'Meses seguidos en la bater&iacute;a',
+  diaADiaMes:'D&iacute;a a d&iacute;a del mes', esteMes:'este mes', elPasado:'el pasado',
+  ayer:'vs ayer', mesPasado:'vs el mes pasado', norte:'bater&iacute;a del equipo',
   faltaPara:'te falta <b>%1</b> para el objetivo de <b>%2</b>', logrado:'&iexcl;logrado!',
   vsDia:'vs el %1 pasado', vsSemana:'vs la semana pasada', igual:'igual que el %1 pasado',
   cerroCorto:'cerr&oacute; %1',
@@ -474,6 +547,11 @@ var TXT = {
   dias:['M','T','W','T','F','S','S'],
   diasLargos:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
   cierra:'closes on Sunday', racha:'Weeks in a row on target',
+  perDia:'Day', perSem:'Week', perMes:'Month',
+  cierraDia:'today', cierraMes:'closes at month end',
+  rachaDia:'Days in a row on the battery', rachaMes:'Months in a row on the battery',
+  diaADiaMes:'Day by day of the month', esteMes:'this month', elPasado:'last one',
+  ayer:'vs yesterday', mesPasado:'vs last month', norte:'team battery',
   faltaPara:'<b>%1</b> to go for the goal of <b>%2</b>', logrado:'done!',
   vsDia:'vs last %1', vsSemana:'vs last week', igual:'same as last %1',
   cerroCorto:'closed %1',
@@ -516,6 +594,11 @@ var TXT = {
   dias:['M','D','M','D','F','S','S'],
   diasLargos:['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'],
   cierra:'schliesst am Sonntag', racha:'Wochen in Folge erreicht',
+  perDia:'Tag', perSem:'Woche', perMes:'Monat',
+  cierraDia:'heute', cierraMes:'schliesst am Monatsende',
+  rachaDia:'Tage in Folge auf der Batterie', rachaMes:'Monate in Folge auf der Batterie',
+  diaADiaMes:'Tag f&uuml;r Tag im Monat', esteMes:'dieser Monat', elPasado:'der letzte',
+  ayer:'vs gestern', mesPasado:'vs letzter Monat', norte:'Batterie des Teams',
   faltaPara:'noch <b>%1</b> bis zum Ziel von <b>%2</b>', logrado:'geschafft!',
   vsDia:'vs. letzten %1', vsSemana:'vs. letzte Woche', igual:'gleich wie letzten %1',
   cerroCorto:'Abschluss %1',
@@ -668,7 +751,16 @@ var CSS = ''
      su SAQUE en grande no habia forma: aparecia abajo, chiquito, en la lista.
      Ahora elige el jugador. El que el programa hubiera elegido sigue siendo
      el que viene marcado al abrir. */
-  '.os-fund{display:flex;gap:6px;flex-wrap:wrap;padding:11px 16px 0}'
+  /* Los botones de periodo: mismo molde que los de fundamento, redondeados y
+     en otro color, para que se lea de un vistazo que son dos filtros
+     distintos y no una fila de ocho botones iguales. */
+  '.os-per{display:flex;gap:6px;flex-wrap:wrap;padding:13px 16px 0}'
++ '.os-per button{padding:5px 14px;border-radius:999px;border:1px solid rgba(148,163,184,.18);'
++ 'background:rgba(148,163,184,.06);color:#94A3B8;font-size:12px;font-weight:700;letter-spacing:1px;'
++ 'cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:inherit}'
++ '.os-per button:hover{border-color:rgba(148,163,184,.4);color:#CBD5E1}'
++ '.os-per button.on{background:rgba(56,189,248,.14);border-color:rgba(56,189,248,.45);color:#38BDF8}'
++ '.os-fund{display:flex;gap:6px;flex-wrap:wrap;padding:11px 16px 0}'
 + '.os-fund button{padding:5px 12px;border-radius:8px;border:1px solid rgba(148,163,184,.18);'
 + 'background:rgba(148,163,184,.06);color:#94A3B8;font-size:12px;font-weight:700;letter-spacing:.9px;'
 + 'cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:inherit}'
@@ -849,19 +941,25 @@ function barra(r, cur){
 
 function tarjeta(r, modo, eqSerie, nombre, dorsal){
   var cur = r.ultima;
+  var per = r.periodo || 'semana';
   var hd = diaSemana(hoy());
   var o = '<div class="os-card">';
 
+  /* El encabezado dice de que periodo se esta hablando. Sin esto, mirando el
+     mes seguia diciendo "cierra el domingo" y confundia. */
+  var cierre = per === 'dia' ? T('cierraDia') : (per === 'mes' ? T('cierraMes') : T('cierra'));
   o += '<div class="os-head"><div class="q1">'
      + (dorsal ? '<span class="dor">' + esc(dorsal) + '</span>' : '')
      + '<span class="nom">' + esc(nombreCorto(nombre)) + '</span></div>'
-     + '<span class="cu">' + T('diasLargos')[hd] + ' &middot; ' + T('cierra') + '</span></div>';
+     + '<span class="cu">' + T('diasLargos')[hd] + ' &middot; ' + cierre + '</span></div>';
 
-  /* la racha de semanas cumplidas */
+  /* la racha: en semana son semanas cumpliendo su objetivo; en dia y en mes,
+     dias o meses seguidos llegando a la bateria del equipo */
   if(r.racha !== undefined && cur.objetivo != null){
     var pts = '';
     for(var i=0;i<5;i++) pts += '<i class="' + (i < r.racha ? 'on' : '') + '"></i>';
-    o += '<div class="os-racha">' + T('racha') + '<span class="pts">' + pts + '</span></div>';
+    var lblRacha = per === 'dia' ? T('rachaDia') : (per === 'mes' ? T('rachaMes') : T('racha'));
+    o += '<div class="os-racha">' + lblRacha + '<span class="pts">' + pts + '</span></div>';
   }
 
   o += '<div class="os-foco">'
@@ -889,12 +987,16 @@ function tarjeta(r, modo, eqSerie, nombre, dorsal){
 
   o += barra(r, cur);
 
-  /* el dia a dia */
-  var g = grafico(r.semanas, cur);
+  /* El dia a dia. En DIA no se dibuja: un solo cajon no es una linea, es un
+     punto, y una linea de un punto no dice nada. */
+  var g = per === 'dia' ? null : grafico(r.semanas, cur);
   if(g){
-    o += '<div class="os-graf"><div class="os-gtit"><h4>' + T('diaADia') + '</h4>'
-       + '<span class="os-leg"><span><s style="background:#E8192C"></s>' + T('estaSemana') + '</span>'
-       + '<span><s style="background:#94A3B8"></s>' + T('laPasada') + '</span></span></div>' + g + '</div>';
+    var tit = per === 'mes' ? T('diaADiaMes') : T('diaADia');
+    var act = per === 'mes' ? T('esteMes') : T('estaSemana');
+    var ant = per === 'mes' ? T('elPasado') : T('laPasada');
+    o += '<div class="os-graf"><div class="os-gtit"><h4>' + tit + '</h4>'
+       + '<span class="os-leg"><span><s style="background:#E8192C"></s>' + act + '</span>'
+       + '<span><s style="background:#94A3B8"></s>' + ant + '</span></span></div>' + g + '</div>';
   }
   if(eqSerie && eqSerie.ultima && eqSerie.ultima.val !== null){
     o += '<p class="os-eq">' + T('equipo', n1(eqSerie.ultima.val)) + '</p>';
@@ -1017,7 +1119,8 @@ function render(){
      aunque el resto de la tarjeta este en partido. */
   var auto = !window._objTipo;
   function modoDe(id){ return (auto && SOLO_ENTRENAMIENTO[id]) ? 'entrenamiento' : modo; }
-  var rs = ids.map(function(id){ return serie(nombre, modoDe(id), id); });
+  var per = window._objPeriodo || 'semana';
+  var rs = ids.map(function(id){ return serie(nombre, modoDe(id), id, per); });
   var conDatos = rs.filter(function(r){ return r.hay; });
   if(!conDatos.length){
     cont.innerHTML = '<div class="os-wrap" data-notr><div class="os-card"><div class="os-vacio">'
@@ -1038,6 +1141,15 @@ function render(){
   var head = elegido || auto_head;
   var resto = rs.filter(function(r){ return r !== head; });
 
+  /* ══ DIA / SEMANA / MES ═════════════════════════════════════════════════
+     La semana va al medio porque es la de siempre y la unica con objetivo
+     propio que sube. El dia es para mirar de cerca y el mes de lejos. */
+  var periodos = '<div class="os-per">' + [['dia','perDia'],['semana','perSem'],['mes','perMes']]
+    .map(function(par){
+      return '<button type="button" class="' + (per === par[0] ? 'on' : '') + '"'
+           + ' onclick="window.OBJ_SEMANA.periodo(\'' + par[0] + '\')">' + T(par[1]) + '</button>';
+    }).join('') + '</div>';
+
   var botones = '<div class="os-fund">' + rs.map(function(r){
       var vacio = !r.hay;
       return '<button type="button" class="' + (r === head ? 'on' : '') + (vacio ? ' sin' : '')
@@ -1046,8 +1158,9 @@ function render(){
     }).join('') + '</div>';
 
   var html = '<div class="os-wrap" data-notr>'
+           + periodos
            + botones
-           + tarjeta(head, modoDe(head.id), serie(null, modoDe(head.id), head.id), nombre, dorsalDe(nombre))
+           + tarjeta(head, modoDe(head.id), serie(null, modoDe(head.id), head.id, per), nombre, dorsalDe(nombre))
            + resto.map(fila).join('')
            + '</div></div>';
   cont.innerHTML = html;
@@ -1189,13 +1302,19 @@ function enganchar(){
     }
   }catch(e){}
 }
+/* La llaman los botones de DIA / SEMANA / MES. */
+function periodo(p){
+  window._objPeriodo = (p === 'semana') ? null : p;   /* semana es lo normal */
+  try{ render(); }catch(e){}
+}
+
 /* La llaman los botones de fundamento desde el HTML que dibuja render(). */
 function fundamento(id){
   window._objFund = (window._objFund === id) ? null : id;   /* tocar el mismo, vuelve al automatico */
   try{ render(); }catch(e){}
 }
 
-window.OBJ_SEMANA = {render:render, fundamento:fundamento, pastilla:tarjetaPortada, serie:serie, semanas:semanas, PUESTOS:PUESTOS, CUENTA:CUENTA,
+window.OBJ_SEMANA = {render:render, fundamento:fundamento, periodo:periodo, pastilla:tarjetaPortada, serie:serie, semanas:semanas, PUESTOS:PUESTOS, CUENTA:CUENTA,
                      /* la tabla del cuerpo tecnico usa el mismo diccionario:
                         si hubiera dos, un dia dirian cosas distintas */
                      T:T, idioma:idioma, nombreDe:nombreDe, cortoDe:cortoDe,
