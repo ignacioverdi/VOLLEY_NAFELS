@@ -38,6 +38,18 @@
 import os, re, sys, json, shutil, hashlib, base64, secrets, fnmatch
 
 AQUI   = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, AQUI)
+
+# ── EL RECORTE ──────────────────────────────────────────────────────────────
+# Que se muestra y que no en la demo vive en DEMO_RECORTE.py, al lado de este
+# archivo. Esta separado a proposito: es la parte que vas a querer tocar (un
+# partido mas, una pantalla menos) sin meterte con el motor de la demo.
+# Si falta, la demo se arma igual pero COMPLETA, y se avisa fuerte.
+try:
+    import DEMO_RECORTE as RECORTE
+except Exception as _e:
+    RECORTE = None
+    _ERROR_RECORTE = str(_e)
 DESTINO = os.path.join(os.path.dirname(AQUI), 'DEMO VOLLEY-STATS')
 
 # ── QUE SE COPIA Y QUE NO ───────────────────────────────────────────────────
@@ -303,6 +315,18 @@ Disallow: /
 '''
 
 # ── UTILIDADES ──────────────────────────────────────────────────────────────
+def recortada(nombre_archivo):
+    """True si el recorte dice que este archivo no va a la demo."""
+    if not RECORTE:
+        return False
+    base = nombre_archivo
+    sin = base[:-4] if base.endswith('.enc') else base
+    for patron in RECORTE.EXCLUIR:
+        if fnmatch.fnmatch(base, patron) or fnmatch.fnmatch(sin, patron):
+            return True
+    return False
+
+
 def descartada(nombre):
     n = nombre.lower()
     return any(fnmatch.fnmatch(n, p.lower()) for p in ARCHIVOS_FUERA)
@@ -318,6 +342,7 @@ def poner_guardia(html, prefijo):
     demo_guard.js  llave de la demo, corte de red, sello de visita
     demo_acceso.js la puerta: mail -> codigo por correo -> 5 dias
     demo_tope.js   tope de 100 codigos, marca de agua, nada se baja
+    demo_tour.js   la visita guiada (se muestra sola en la portada)
 
     El orden importa: acceso antes que tope, porque el tope lee la fecha de
     vencimiento que deja la puerta (window.__DEMO_FIN).
@@ -328,9 +353,95 @@ def poner_guardia(html, prefijo):
     if not m:
         return html, False
     ins = ''
-    for f in ('demo_guard.js', 'demo_acceso.js', 'demo_tope.js'):
+    for f in ('demo_guard.js', 'demo_acceso.js', 'demo_tope.js', 'demo_tour.js'):
         ins += '\n  <script src="%s%s"></script>' % (prefijo, f)
     return html[:m.end()] + ins + html[m.end():], True
+
+
+# ── EL TITULO DE LA PESTANA ─────────────────────────────────────────────────
+# Todas las paginas de la app llevan el nombre del club en el <title>, que es
+# lo que se lee en la pestana del navegador y lo que muestra Google. En la
+# demo eso tiene que decir Volley-Stats: la demo es la cara del producto.
+#
+# Se cambia SOLO el primer <title> que aparece antes de <body>, que es el de
+# verdad. Hay tres paginas (armadores, game_plan, jugador) que ademas escriben
+# "<title>...</title>" dentro de JavaScript para las ventanitas de video: esos
+# no se tocan, porque son codigo, no el titulo de la pagina.
+TITULO_DEMO = 'Volley-Stats \u2014 Demo'
+RX_TITULO = re.compile(r'<title\b[^>]*>.*?</title>', re.S | re.I)
+
+def poner_titulo(html):
+    """Devuelve (html, cambiado)."""
+    corte = html.lower().find('<body')
+    if corte < 0:
+        corte = len(html)
+    m = RX_TITULO.search(html)
+    if not m or m.start() >= corte:
+        return html, False
+    return html[:m.start()] + '<title>' + TITULO_DEMO + '</title>' + html[m.end():], True
+
+
+# ── LA MARCA DE LA DEMO ─────────────────────────────────────────────────────
+# La demo vive en demo.volley-stats.com: es la cara del producto, no la del
+# club. Por eso el icono de la pestana, el icono de instalacion y el escudo
+# del encabezado tienen que ser los de Volley-Stats, aunque los datos que se
+# muestren adentro sean los de Nafels.
+#
+# Los archivos salen de la carpeta de la web de venta, que es la unica fuente
+# de la marca. No se copian a VOLLEY_NAFELS a proposito: ese repositorio es
+# del club y no tiene por que llevar la marca del producto adentro.
+MARCA = os.path.join(os.path.dirname(AQUI), 'WEB VOLLEY-STATS', 'marca', 'app')
+
+MARCA_PARES = [
+    ('icon-180.png',          'icon-180.png'),
+    ('icon-192.png',          'icon-192.png'),
+    ('icon-512.png',          'icon-512.png'),
+    ('icon-maskable-512.png', 'icon-maskable-512.png'),
+    ('escudo-volley-stats.png', 'escudo.png'),
+]
+
+MANIFIESTO_DEMO = {
+    "name": "Volley-Stats — Demo",
+    "short_name": "Volley-Stats",
+    "description": "Demo publica de Volley-Stats: scouting en vivo, analisis y video para clubes de voley.",
+    "lang": "es",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "any",
+    "background_color": "#07080F",
+    "theme_color": "#07080F",
+    "icons": [
+        {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+        {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+        {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
+    ],
+}
+
+def poner_marca():
+    """Cambia el escudo del club por el de Volley-Stats en la copia de la demo.
+
+    Devuelve (cuantos, aviso). Si falta la carpeta de la marca no corta nada:
+    avisa y sigue, porque una demo con el icono equivocado igual sirve y es
+    peor quedarse sin demo.
+    """
+    if not os.path.isdir(MARCA):
+        return 0, 'no encontre %s' % MARCA
+    puestos, faltan = 0, []
+    for origen, destino in MARCA_PARES:
+        o = os.path.join(MARCA, origen)
+        if not os.path.exists(o):
+            faltan.append(origen); continue
+        shutil.copy2(o, os.path.join(DESTINO, destino))
+        puestos += 1
+    mani = os.path.join(DESTINO, 'manifest.json')
+    try:
+        with open(mani, 'w', encoding='utf-8') as f:
+            json.dump(MANIFIESTO_DEMO, f, ensure_ascii=False, indent=2)
+        puestos += 1
+    except Exception as e:
+        faltan.append('manifest.json (%s)' % e)
+    return puestos, ('faltan: ' + ', '.join(faltan)) if faltan else ''
 
 
 def main():
@@ -368,12 +479,16 @@ def main():
     print('  Copiando la app...')
 
     copiados = recifrados = paginas = 0
+    recortados = carteles = 0
     saltadas = []
     pesos = 0
 
     for raiz, dirs, archivos in os.walk(AQUI):
+        _fuera = set(CARPETAS_FUERA)
+        if RECORTE:
+            _fuera |= set(x.lower() for x in RECORTE.CARPETAS_EXCLUIR)
         dirs[:] = [d for d in dirs
-                   if d.lower() not in CARPETAS_FUERA
+                   if d.lower() not in _fuera
                    and not d.lower().startswith('dvw ')
                    and not d.lower().startswith('_')]
         rel = os.path.relpath(raiz, AQUI)
@@ -381,6 +496,9 @@ def main():
 
         for a in archivos:
             if descartada(a) or not copiable(a):
+                continue
+            if recortada(a):
+                recortados += 1
                 continue
             os.makedirs(destino_dir, exist_ok=True)
             origen = os.path.join(raiz, a)
@@ -401,6 +519,11 @@ def main():
                     txt = open(origen, encoding='utf-8').read()
                     ini, b64, fin = envoltura(txt)
                     claro = descifrar(b64, k_real, nombre)
+                    if RECORTE:
+                        claro = RECORTE.podar(nombre, claro)
+                        if claro is None:
+                            recortados += 1
+                            continue
                     open(salida, 'w', encoding='utf-8').write(
                         ini + cifrar(claro, k_demo, nombre) + fin)
                     recifrados += 1
@@ -411,20 +534,54 @@ def main():
 
             # 2 · las paginas: se les agrega la guardia
             if a.lower().endswith('.html'):
-                try:
-                    html = open(origen, encoding='utf-8').read()
-                except Exception as e:
-                    saltadas.append('%s  (%s)' % (a, e)); continue
                 prof = os.path.relpath(AQUI, raiz).replace('\\', '/')
                 prefijo = '' if prof == '.' else prof + '/'
+                es_cartel = bool(RECORTE and a in RECORTE.CARTEL)
+                if es_cartel:
+                    # la pagina sigue existiendo: el que mira la demo tiene
+                    # que VER que la funcion esta, no encontrarse un 404.
+                    # Lleva la guardia como cualquier otra, asi la puerta de
+                    # registro vale tambien aca y el control final no tiene
+                    # que hacer excepciones.
+                    html = RECORTE.pagina_cartel(a, prefijo)
+                    carteles += 1
+                else:
+                    try:
+                        html = open(origen, encoding='utf-8').read()
+                    except Exception as e:
+                        saltadas.append('%s  (%s)' % (a, e)); continue
                 html, ok = poner_guardia(html, prefijo)
                 if not ok:
                     saltadas.append('%s  (no encontre <head>)' % a); continue
+                if not es_cartel:
+                    html, _tit = poner_titulo(html)
+                    # y los nombres: el plantel y los rivales estan escritos a
+                    # mano en muchas paginas (titulos, encabezados, data-t).
+                    # Se cambian aca, con la misma tabla que los datos, para
+                    # que la pantalla y el dato digan lo mismo.
+                    if RECORTE:
+                        html = RECORTE.renombrar(html)
                 open(salida, 'w', encoding='utf-8').write(html)
                 paginas += 1
                 pesos += os.path.getsize(salida)
                 continue
 
+            # 3 · el resto. Los de texto pasan por el recorte igual que los
+            #     cifrados: ahi viven el plantel, el historial y el fixture.
+            if RECORTE and a.lower().endswith(('.js', '.json')):
+                try:
+                    txt = open(origen, encoding='utf-8').read()
+                    rel_j = os.path.relpath(origen, AQUI).replace(os.sep, '/')
+                    txt = RECORTE.podar(rel_j, txt)
+                    if txt is None:
+                        recortados += 1
+                        continue
+                    open(salida, 'w', encoding='utf-8').write(txt)
+                    copiados += 1
+                    pesos += os.path.getsize(salida)
+                    continue
+                except Exception as e:
+                    saltadas.append('%s  (recorte: %s)' % (a, e))
             shutil.copy2(origen, salida)
             copiados += 1
             pesos += os.path.getsize(salida)
@@ -459,7 +616,28 @@ def main():
             open(os.path.join(DESTINO, nombre), 'w', encoding='utf-8').write(contenido)
             print('    %-34s%s' % (nombre, 'sin notificaciones' if 'one' in nombre else 'sin cache'))
 
+    if RECORTE and getattr(RECORTE, 'TOUR', None):
+        open(os.path.join(DESTINO, 'demo_tour.js'), 'w', encoding='utf-8').write(RECORTE.TOUR)
+        print('    demo_tour.js                      la visita guiada de la portada')
+
     open(os.path.join(DESTINO, 'robots.txt'), 'w', encoding='utf-8').write(ROBOTS)
+
+    if RECORTE is None:
+        print('')
+        print('  [PARE] No encontre DEMO_RECORTE.py (%s).' % _ERROR_RECORTE)
+        print('  Sin ese archivo la demo sale COMPLETA: con el plantel real,')
+        print('  el scouting de los rivales y el playbook del club adentro.')
+        print('  Pone DEMO_RECORTE.py al lado de este archivo y volve a correr.')
+        print('')
+        input('  Enter para cerrar...')
+        return 1
+
+    puestos_marca, aviso_marca = poner_marca()
+    if aviso_marca:
+        print('    [OJO] marca de Volley-Stats: %s' % aviso_marca)
+    if puestos_marca:
+        print('    icono y escudo                    %d archivos: la demo lleva la marca Volley-Stats'
+              % puestos_marca)
 
     # ── la puerta de registro ───────────────────────────────────────────────
     # demo_acceso.js y demo_tope.js se copian como cualquier .js. Aca solo se
@@ -565,7 +743,10 @@ def main():
         print('  Todo en orden.')
     print('  ' + '-' * 64)
     print('')
-    print('    paginas preparadas   %d' % paginas)
+    print('    paginas preparadas   %d  (%d son cartel)' % (paginas, carteles))
+    print('    archivos recortados  %d  (no viajan a la demo)' % recortados)
+    for _av in (getattr(RECORTE, 'AVISOS', None) or []):
+        print('    [OJO] %s' % _av)
     print('    datos recifrados     %d' % recifrados)
     print('    otros archivos       %d' % copiados)
     print('    peso total           %.1f MB' % (pesos / 1048576.0))
@@ -576,16 +757,35 @@ def main():
         for s in saltadas[:10]:
             print('      %s' % s)
     print('')
-    print('  PARA PROBARLA ACA, ANTES DE SUBIRLA:')
-    print('    1. Abri una consola en  DEMO VOLLEY-STATS')
-    print('    2. python -m http.server 8000')
-    print('    3. Entra a  http://localhost:8000')
-    print('    No tiene que pedirte usuario ni clave. Si te lo pide, avisame.')
+    # ── QUE HACER AHORA ────────────────────────────────────────────────────
+    #  Ojo con el orden. Desde que la demo lleva puerta de registro, subirla
+    #  sin la cuenta de correo y sin las reglas de Firebase la deja INUTIL: al
+    #  visitante le pide el mail y despues le vuelve un error al pedir el
+    #  codigo. Es peor que la demo abierta de antes.
+    print('  ANTES DE SUBIRLA — esto va una sola vez, y es obligatorio:')
+    print('')
+    print('    La demo ahora tiene puerta: pide mail y manda un codigo. Si')
+    print('    subis sin preparar el servidor, el visitante queda trabado')
+    print('    afuera. Los pasos estan en LEEME_DEMO_REGISTRO.txt:')
+    print('')
+    print('      1. Firebase -> Realtime Database -> Reglas')
+    print('         pegar FIREBASE_REGLAS_NAFELS.json      (sin esto no anda)')
+    print('      2. Vercel, proyecto volley-stats-demo -> Settings ->')
+    print('         Environment Variables:  DEMO_SECRET  y  DEMO_MODO_PRUEBA=1')
+    print('      3. Cuando quieras que el codigo salga por mail de verdad:')
+    print('         cuenta en resend.com, cargar RESEND_API_KEY, MAIL_FROM y')
+    print('         MAIL_AVISO, y SACAR DEMO_MODO_PRUEBA.')
+    print('')
+    print('    Con DEMO_MODO_PRUEBA=1 el codigo no se manda: aparece en la')
+    print('    pantalla. Sirve para probar el circuito entero sin gastar nada.')
     print('')
     print('  PARA SUBIRLA:')
-    print('    Vercel -> Add New -> Project -> Deploy without Git')
-    print('    Arrastra la carpeta DEMO VOLLEY-STATS. Nombre: volley-stats-demo')
-    print('    Despues: Settings -> Domains -> demo.volley-stats.com')
+    print('    Doble clic en  PUBLICAR_DEMO.bat')
+    print('    (esta en STATS VOLEY APP, al lado de las carpetas)')
+    print('')
+    print('    Va derecho al proyecto volley-stats-demo que ya existe: no crea')
+    print('    proyectos nuevos y no hay que tocar el dominio. La primera vez')
+    print('    se enlaza solo y despues no pregunta mas nada.')
     print('')
     input('  Enter para cerrar...')
     return 0

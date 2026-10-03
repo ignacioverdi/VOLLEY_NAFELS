@@ -23,6 +23,7 @@ _gen_nafels.b64
 *.antes
 *.antes-suelta
 *.antes-*
+*.antes_*
 _ROTO-*/
 _ANTES-*/
 _RESPALDO-VIEJO*/
@@ -134,6 +135,11 @@ QUE_SE_HIZO_*.md
 LLAVE_DONDE_ESTA.txt
 
 # ── Las fechas de nacimiento ─────────────────────────────────────
+# La copia que deja SACAR_NACIM.py SI las tiene. Si se subiera, el arreglo no
+# serviria de nada: quedarian publicas igual, y encima para siempre en el
+# historial de git.
+plantel_nafels.js.antes_de_sacar_nacim
+
 # Son la clave de cada jugador. Al repositorio va SOLO la version cifrada
 # (datos_plantel.js.enc, que la arma cifrar_datos.py). El .js en claro, nunca.
 datos_plantel.js

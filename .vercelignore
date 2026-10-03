@@ -21,6 +21,8 @@ DVW*
 # ── Llave y respaldos que dejan los scripts ─────────────────────────────────
 LLAVE.txt
 *.antes
+*.antes_*
+plantel_nafels.js.antes_de_sacar_nacim
 _RESPALDO
 _respaldo_*/
 _respaldo*/

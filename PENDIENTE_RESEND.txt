@@ -1,0 +1,112 @@
+══════════════════════════════════════════════════════════════════════════════
+  PENDIENTE — el mail de la demo (Resend)
+  3 de octubre de 2026
+══════════════════════════════════════════════════════════════════════════════
+
+Esto quedo a mitad de camino a proposito: la demo YA FUNCIONA, nada mas que el
+codigo de ingreso se muestra en la pantalla en vez de llegar por correo. Lo que
+falta es la ultima pieza, la que convierte la demo en una lista de contactos.
+
+Calculado: 20 a 30 minutos de trabajo, mas la espera de la verificacion del
+dominio (suele ser de 5 a 30 minutos).
+
+
+──────────────────────────────────────────────────────────────────────────────
+  LO QUE YA ESTA HECHO — no rehacer nada de esto
+──────────────────────────────────────────────────────────────────────────────
+
+  [OK]  Reglas de Firebase          los nodos demo_acceso y demo_ip estan
+                                    vivos. Se comparo regla por regla contra
+                                    FIREBASE_REGLAS_NAFELS.json: identicas,
+                                    50 y 50, cero diferencias. NO TOCAR.
+
+  [OK]  DEMO_SECRET                 cargado en Vercel, proyecto
+                                    volley-stats-demo, en los tres entornos,
+                                    como Secret.
+
+  [OK]  DEMO_MODO_PRUEBA = 1        cargado. Es lo que hace que el codigo
+                                    aparezca en pantalla en vez de mandarse.
+
+  [OK]  La demo publicada           con la app al dia: velocidad de saque,
+                                    los arreglos de idioma, todo.
+                                    Se verifico que la puerta aparece y que
+                                    api/demo-pedir responde (405 a un GET,
+                                    que es lo correcto: solo acepta POST).
+
+
+──────────────────────────────────────────────────────────────────────────────
+  LO QUE FALTA, EN ORDEN
+──────────────────────────────────────────────────────────────────────────────
+
+  1. Crear la cuenta en resend.com. Gratis hasta 3.000 mails por mes.
+
+  2. Adentro: Domains -> agregar volley-stats.com.
+     Te va a mostrar unos registros DNS para copiar.
+
+  3. Cargar esos registros en Vercel.
+     Domains -> volley-stats.com -> DNS Records. El dominio se compro EN
+     Vercel y los nameservers son de Vercel, asi que se cargan ahi mismo:
+     no hay que entrar a ningun otro panel ni esperar a nadie.
+
+  4. Esperar a que Resend diga "verificado".
+
+  5. Resend -> API Keys -> crear una. SE MUESTRA UNA SOLA VEZ: copiarla.
+
+  6. Vercel, volley-stats-demo -> Settings -> Environment Variables.
+     Agregar tres, en los tres entornos:
+
+         RESEND_API_KEY     la que copiaste en el paso 5   (tipo Secret)
+         MAIL_FROM          Volley-Stats <info@volley-stats.com>
+         MAIL_AVISO         el mail donde queres recibir los contactos
+
+     Y BORRAR DEMO_MODO_PRUEBA. Si queda, el codigo se sigue viendo en la
+     pantalla y el registro no sirve para juntar contactos.
+
+  7. Doble clic en PUBLICAR_DEMO.bat (las variables entran recien en la
+     publicacion siguiente).
+
+  8. Probar con un mail de verdad: tiene que llegar el codigo al correo, y a
+     vos te tiene que llegar el aviso con el contacto.
+
+
+──────────────────────────────────────────────────────────────────────────────
+  EL UNICO PELIGRO DE TODO ESTO — leer antes del paso 3
+──────────────────────────────────────────────────────────────────────────────
+
+Hoy, volley-stats.com tiene estos registros, que son los que hacen que
+info@volley-stats.com te llegue al Gmail:
+
+    TXT   v=spf1 include:spf.improvmx.com ~all
+    MX    mx1.improvmx.com.   (prioridad 10)
+    MX    mx2.improvmx.com.   (prioridad 20)
+
+Eso es ImprovMX, el reenvio de correo. FUNCIONA. No se toca.
+
+El riesgo: si Resend pide un SPF y se agrega como un TXT nuevo, quedan DOS
+registros "v=spf1" en el mismo dominio. Eso no son dos reglas: es un error de
+configuracion, y el resultado es que los mails —los de Resend Y los que ya
+recibis hoy— empiezan a caer en spam o a rebotar.
+
+Dos salidas, las dos sirven:
+
+  a) Dejar que Resend verifique un SUBDOMINIO (suele proponer
+     send.volley-stats.com). Sus registros no tocan nada de lo que ya hay.
+     Es lo mas limpio.
+
+  b) Si insiste con el dominio raiz: FUSIONAR el SPF en un solo TXT que
+     incluya los dos servicios. Nunca agregar un segundo.
+
+Cual corresponde se ve recien cuando Resend muestre la pantalla.
+
+
+──────────────────────────────────────────────────────────────────────────────
+  Y APARTE, LAS DOS DE SEGURIDAD QUE SIGUEN ABIERTAS
+──────────────────────────────────────────────────────────────────────────────
+
+  . El repositorio de GitHub sigue PUBLICO
+    github.com/ignacioverdi/VOLLEY_NAFELS abre sin cuenta.
+
+  . plantel_nafels.js sigue publicando las 15 FECHAS DE NACIMIENTO.
+    Se arregla con:  python SACAR_NACIM.py  y publicar.
+    Las fechas ya estan a salvo en datos_plantel.js.enc, que si se cifra, y
+    la planilla P-2 y la pantalla de Equipo ya las leen de ahi.

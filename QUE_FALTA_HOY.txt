@@ -1,0 +1,82 @@
+================================================================================
+  QUE FALTA — 3 de octubre de 2026
+  (reemplaza a PENDIENTE_RESEND.txt: eso ya esta terminado)
+================================================================================
+
+LO QUE QUEDO HECHO HOY
+----------------------
+
+  Resend
+    - dominio volley-stats.com VERIFICADO (DKIM + SPF + DMARC en el subdominio
+      "send", para no tocar el MX de ImprovMX que lleva info@ a tu Gmail)
+    - API key "demo volley-stats", permiso minimo: Sending access, solo
+      volley-stats.com
+    - RESEND_API_KEY / MAIL_FROM / MAIL_AVISO cargadas en Vercel, 3 entornos
+    - probado: el codigo llega por mail
+
+  Seguridad
+    - plantel_nafels.js ya NO lleva las fechas de nacimiento (eran la clave de
+      cada jugador, y uno del plantel es menor). Copia en
+      plantel_nafels.js.antes_de_sacar_nacim
+    - volley-stats.com dejo de servir las notas internas (.vercelignore)
+
+  La demo
+    - DEMO_RECORTE.py: que se muestra y que no. 21 archivos que no viajan,
+      20 pantallas que pasan a ser un cartel, los datos podados y toda la
+      gente con nombre inventado
+    - demo_tour.js: la visita guiada de la portada, en los tres idiomas
+    - la demo lleva la marca Volley-Stats (icono, manifest, escudo, titulo)
+
+  La web de venta
+    - seccion "Como funciona": ocho capturas de la demo, paso a paso, sin
+      registro
+    - icono propio en la pestana y en las vistas previas de WhatsApp
+    - la cinta decia 48 pantallas y la seccion 57; ahora dice 57 en las dos
+
+
+LO QUE FALTA — EN ORDEN
+-----------------------
+
+  1. BORRAR DEMO_MODO_PRUEBA (lo tenes que hacer vos)
+     Vercel -> volley-stats-demo -> Settings -> Environment Variables ->
+     los tres puntitos de DEMO_MODO_PRUEBA -> Delete.
+
+     Por que importa: esa variable hace que, SI el mail falla, el codigo se
+     muestre en la pantalla. Hoy el mail anda, asi que ya no hace falta y es
+     mejor que no este: si manana Resend se cae, cualquiera entraria sin mail.
+
+  2. ROTAR LA API KEY DE RESEND
+     La clave quedo escrita en el chat. Es de permiso minimo (solo enviar,
+     solo desde volley-stats.com), asi que el riesgo es bajo, pero sale gratis
+     cambiarla: Resend -> API keys -> borrar "demo volley-stats" -> crear otra
+     igual (Sending access + volley-stats.com) -> cambiar el valor de
+     RESEND_API_KEY en Vercel -> Redeploy.
+
+  3. EL REPOSITORIO DE GITHUB SIGUE PUBLICO
+     github.com/ignacioverdi/VOLLEY_NAFELS -> Settings -> abajo de todo ->
+     Change visibility -> Private.
+     Hasta que eso pase, cualquiera puede leer el codigo del sistema.
+
+  4. LAS DOCE CAPTURAS VIEJAS DE LA WEB DE VENTA
+     Siguen mostrando apellidos reales de Nafels y de otros clubes de la NLA.
+     Ahora que la demo esta anonimizada se pueden rehacer todas desde ahi.
+     Es un rato de trabajo y ninguna decision.
+
+  5. TRES PANTALLAS QUE YA FALLABAN (no son del recorte)
+     - jugador.html    "callback is not a function"
+     - game_plan.html  "Cannot read properties of undefined (reading 'teams')"
+     - informe.html    se queda en "Buscando el partido...", INFORME_DATA nunca
+                       carga
+     Fallan igual con todos los datos, en la demo publicada de hoy.
+
+
+COMO SE PUBLICA CADA COSA
+-------------------------
+
+  La app del club   ACTUALIZAR_NAFELS.bat        -> nafels.volley-stats.com
+  La demo           HACER_DEMO.py + PUBLICAR_DEMO.bat -> demo.volley-stats.com
+  La web de venta   PUBLICAR_WEB.bat             -> volley-stats.com
+
+  OJO con el orden de la demo: HACER_DEMO.py borra y rehace la carpeta
+  DEMO VOLLEY-STATS entera. PUBLICAR_DEMO.bat ya se encarga de guardar y
+  reponer el enlace con Vercel, asi que no hay que tocar nada.
