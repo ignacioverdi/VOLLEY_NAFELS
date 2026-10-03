@@ -568,13 +568,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20261004-0006"></script>
-<script src="selector_categoria.js?v=20261004-0006"></script>
-<script src="lang.js?v=20261004-0006"></script>
+<script src="categorias_club.js?v=20261004-0013"></script>
+<script src="selector_categoria.js?v=20261004-0013"></script>
+<script src="lang.js?v=20261004-0013"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261004-0006">
+<link rel="stylesheet" href="movil.css?v=20261004-0013">
 </head>
 <body>
 
@@ -1314,16 +1314,16 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20261004-0006" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261004-0006"></script>
-<script src="objetivos.js?v=20261004-0006" onerror="void 0"></script>
-<script src="video_delay.js?v=20261004-0006" onerror="void 0"></script>
+<script src="firebase.js?v=20261004-0013" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261004-0013"></script>
+<script src="objetivos.js?v=20261004-0013" onerror="void 0"></script>
+<script src="video_delay.js?v=20261004-0013" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20261004-0006" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20261004-0006"></script>
+<script src="plantel_nafels.js?v=20261004-0013" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261004-0013"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -9213,8 +9213,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20261004-0006" onerror="void 0"></script>
-<script src="ayuda.js?v=20261004-0006"></script>
+<script src="volver_inicio.js?v=20261004-0013" onerror="void 0"></script>
+<script src="ayuda.js?v=20261004-0013"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -9868,9 +9868,11 @@ function anCuenta(lista){
 /* ══ EFICACIA Y EFICIENCIA ═══════════════════════════════════════════════════
    Dos cosas distintas, y las dos hacen falta:
 
-   EFICACIA    (# − errores) ÷ total. La de siempre: lo que salio perfecto
-               menos lo que se perdio. Puede dar negativo, y esta bien que de
-               negativo: significa que esa rotacion regala mas de lo que gana.
+   EFICACIA    (# − errores) ÷ total. Se calcula pero YA NO SE MUESTRA en las
+               tablas del analisis en vivo: dos columnas de porcentaje una al
+               lado de la otra confundian, y en ingles y aleman las dos caian
+               con el mismo nombre. Queda la funcion por si algun dia hace
+               falta, pero la unica columna que se muestra es la eficiencia.
 
    EFICIENCIA  la formula que ya usa tu app en las baterias y el dashboard,
                copiada tal cual de objetivos.js:
@@ -9901,7 +9903,6 @@ function anFilaRec(nombre, lista){
   return '<tr><td class="an-k">' + nombre + '</td>'
        + anNum(c.t)
        + anPctV(anEficiencia(c), 62, 54)   /* el objetivo del club es 62 */
-       + anPctV(anEficacia(c), 20, 8)
        + anPct(c.perf, c.t) + anPct(c.pos, c.t)
        + anNum(c['!']) + anNum(c['-']) + anPct(c['='], c.t) + '</tr>';
 }
@@ -9939,14 +9940,13 @@ function anBloqueRotacion(rs, lado){
 
   function fila(nombre, lista, esEquipo){
     var c = anCuenta(lista);
-    var efi = anEficiencia(c), efa = anEficacia(c);
+    var efi = anEficiencia(c);
     /* La columna "P" del informe de Data Volley no esta: es la eficiencia
        dividida diez y redondeada —60% da 6, 75% da 8—, o sea la misma columna
        de al lado con menos precision. */
     var h = '<tr' + (esEquipo ? ' class="an-eq"' : '') + '>'
           + '<td class="an-k">' + nombre + '</td>'
           + anPctV(efi, 62, 54)
-          + anPctV(efa, 20, 8)
           + anNum(c.t);
     VALS.forEach(function(v){
       if(!c.t || !c[v]){ h += '<td class="an-d">·</td>'; return; }
@@ -9967,7 +9967,6 @@ function anBloqueRotacion(rs, lado){
     out += '<div class="an-rt">Rotación P' + p + '</div>'
          + '<table class="an-t"><tr class="an-hd"><th>Jugador</th>'
          + '<th title="Eficiencia — la misma fórmula que usan las baterías">EFICIENCIA</th>'
-         + '<th title="Eficacia — perfectas menos errores, sobre el total">EFICACIA</th>'
          + '<th>Tot</th>';
     VALS.forEach(function(v){ out += '<th>' + v + '</th>'; });
     out += '</tr>';
@@ -10000,7 +9999,7 @@ function anBloqueZonaSaque(rs, lado){
   if(!ks.length) return '';
   var h = '<div class="an-h">Recepción según desde dónde sacan</div>'
         + '<table class="an-t"><tr class="an-hd"><th>Desde</th><th>Tot</th><th title="Eficiencia — la misma fórmula que usan las baterías y el dashboard">EFICIENCIA</th>'
-        + '<th title="Eficacia — perfectas menos errores, sobre el total">EFICACIA</th><th>#</th><th>#+</th><th>!</th><th>–</th><th>Err</th></tr>';
+        + '<th>#</th><th>#+</th><th>!</th><th>–</th><th>Err</th></tr>';
   ks.forEach(function(z){ h += anFilaRec('Zona ' + z, por[z]); });
   return h + '</table>';
 }
@@ -10338,11 +10337,11 @@ function renderAnalisis(){
 </script>
 <!-- La barra de analisis (manual 9.5). Va en su propio archivo a proposito:
      solo lee y dibuja, y si no carga el panel sigue igual que siempre. -->
-<script src="analisis_vivo.js?v=20261004-0006" onerror="void 0"></script>
+<script src="analisis_vivo.js?v=20261004-0013" onerror="void 0"></script>
 <!-- El rediseno del panel: la barra agrupada, el marcador en la barra,
      las rotaciones legibles y el cuadro de "como venimos". Va en su
      propio archivo a proposito: solo reacomoda y pinta, y si no carga
      el panel queda exactamente como estaba. -->
-<script src="panel_estilo.js?v=20261004-0006" onerror="void 0"></script>
+<script src="panel_estilo.js?v=20261004-0013" onerror="void 0"></script>
 </body>
 </html>
