@@ -6,6 +6,23 @@
 LO QUE QUEDO HECHO HOY
 ----------------------
 
+  El modelo de formacion — DOS SOLAPAS NUEVAS
+    - "Los mejores": lo que sale de haber leido enteras las 122 entrevistas,
+      masterclasses y practicas de volleybrains.com. Nueve bloques: los seis
+      principios confirmados desde afuera, quince reglas para un gimnasio de
+      pocas horas, veintiocho rutinas de costo cero, catorce ejercicios y
+      sesiones copiables, lo que NO se copia y por que, diez debates abiertos,
+      veinticinco frases para el pizarron, el argumento institucional y los
+      limites de la lectura.
+    - "Captacion": las 48 acciones del documento que ya tenias, mas catorce
+      nuevas (49 a 62) que salen de esa lectura, el calendario de la campana,
+      como se mide si funciono y lo que no se hace.
+    - Las dos en espanol, aleman e ingles.
+    - "Captacion" NO aparece en el perfil de visitante: es de uso interno.
+      "Los mejores" si aparece en el perfil de entrenador.
+    - Probado: las 16 solapas que ya existian renderizan exactamente igual que
+      antes, en los tres idiomas. No se toco una sola linea de lo que andaba.
+
   Resend
     - dominio volley-stats.com VERIFICADO (DKIM + SPF + DMARC en el subdominio
       "send", para no tocar el MX de ImprovMX que lleva info@ a tu Gmail)
@@ -37,7 +54,12 @@ LO QUE QUEDO HECHO HOY
 LO QUE FALTA — EN ORDEN
 -----------------------
 
-  1. BORRAR DEMO_MODO_PRUEBA (lo tenes que hacer vos)
+  1. PUBLICAR EL MODELO CON LAS SOLAPAS NUEVAS
+     Doble clic en PUBLICAR_EN_GITHUB.bat. Vercel lo sube solo en uno o dos
+     minutos. Despues abri nafels.volley-stats.com/modelo_completo.html y
+     fijate que aparezcan "Los mejores" y "Captacion" en la barra de arriba.
+
+  2. BORRAR DEMO_MODO_PRUEBA (lo tenes que hacer vos)
      Vercel -> volley-stats-demo -> Settings -> Environment Variables ->
      los tres puntitos de DEMO_MODO_PRUEBA -> Delete.
 
@@ -45,24 +67,24 @@ LO QUE FALTA — EN ORDEN
      muestre en la pantalla. Hoy el mail anda, asi que ya no hace falta y es
      mejor que no este: si manana Resend se cae, cualquiera entraria sin mail.
 
-  2. ROTAR LA API KEY DE RESEND
+  3. ROTAR LA API KEY DE RESEND
      La clave quedo escrita en el chat. Es de permiso minimo (solo enviar,
      solo desde volley-stats.com), asi que el riesgo es bajo, pero sale gratis
      cambiarla: Resend -> API keys -> borrar "demo volley-stats" -> crear otra
      igual (Sending access + volley-stats.com) -> cambiar el valor de
      RESEND_API_KEY en Vercel -> Redeploy.
 
-  3. EL REPOSITORIO DE GITHUB SIGUE PUBLICO
+  4. EL REPOSITORIO DE GITHUB SIGUE PUBLICO
      github.com/ignacioverdi/VOLLEY_NAFELS -> Settings -> abajo de todo ->
      Change visibility -> Private.
      Hasta que eso pase, cualquiera puede leer el codigo del sistema.
 
-  4. LAS DOCE CAPTURAS VIEJAS DE LA WEB DE VENTA
+  5. LAS DOCE CAPTURAS VIEJAS DE LA WEB DE VENTA
      Siguen mostrando apellidos reales de Nafels y de otros clubes de la NLA.
      Ahora que la demo esta anonimizada se pueden rehacer todas desde ahi.
      Es un rato de trabajo y ninguna decision.
 
-  5. TRES PANTALLAS QUE YA FALLABAN (no son del recorte)
+  6. TRES PANTALLAS QUE YA FALLABAN (no son del recorte)
      - jugador.html    "callback is not a function"
      - game_plan.html  "Cannot read properties of undefined (reading 'teams')"
      - informe.html    se queda en "Buscando el partido...", INFORME_DATA nunca
@@ -73,10 +95,24 @@ LO QUE FALTA — EN ORDEN
 COMO SE PUBLICA CADA COSA
 -------------------------
 
-  La app del club   ACTUALIZAR_NAFELS.bat        -> nafels.volley-stats.com
+  La app del club   PUBLICAR_EN_GITHUB.bat       -> nafels.volley-stats.com
   La demo           HACER_DEMO.py + PUBLICAR_DEMO.bat -> demo.volley-stats.com
   La web de venta   PUBLICAR_WEB.bat             -> volley-stats.com
+
+  OJO — ACTUALIZAR_NAFELS.bat NO SE USA. Esta desactivado a proposito desde el
+  26/09: pisaba el motor de la app con una copia vieja (borraba 1.002 lineas y
+  15 funciones). Para publicar la app del club es PUBLICAR_EN_GITHUB.bat, que
+  hace git add / commit / pull / push, y Vercel despliega solo.
 
   OJO con el orden de la demo: HACER_DEMO.py borra y rehace la carpeta
   DEMO VOLLEY-STATS entera. PUBLICAR_DEMO.bat ya se encarga de guardar y
   reponer el enlace con Vercel, asi que no hay que tocar nada.
+
+
+DONDE QUEDO EL TRABAJO DE VOLLEYBRAINS
+--------------------------------------
+
+  Las 122 fichas de lectura (una por pagina, con quien lo dijo, que se lleva el
+  modelo, que ejercicios describe, con que choca y que se descarta) estan en el
+  chat como archivos. Si alguna vez queres rehacer o ampliar las solapas, ese
+  es el material de origen: aprox. 1 MB de notas, mas cuatro sintesis por tema.
