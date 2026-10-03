@@ -690,6 +690,104 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    /* ══ AGUJEROS TAPADOS · 03-10-2026 ══════════════════════════════════════
+       Medido pantalla por pantalla: se cargo cada una en castellano, se paso a
+       aleman y se anoto lo que NO cambio, descontando nombres de jugadores,
+       rivales y pabellones. Esto es esa lista.
+
+       Van arriba de todo a proposito: si alguna clave ya existia mas abajo,
+       gana la de abajo y no se pisa nada de lo que ya funcionaba. */
+    "/= perdidas": { en:"/= lost", de:"/= verloren" },
+    "Perdidas": { en:"Lost", de:"Verloren" },
+    "Temporada completa · partidos + entrenamientos": { en:"Full season · matches + training", de:"Ganze Saison · Spiele + Training" },
+    "Atq Zaguero": { en:"Back-row attack", de:"Hinterfeldangriff" },
+    "Armado de Alta": { en:"High set", de:"Hohes Zuspiel" },
+    "% Atq Zaguero": { en:"% Back-row attack", de:"% Hinterfeldangriff" },
+    "% Armado de Alta": { en:"% High set", de:"% Hohes Zuspiel" },
+    "Cómo viene · entrenamientos": { en:"How it is going · training", de:"Wie es läuft · Training" },
+    "En las últimas {0} sesiones viene": { en:"Over the last {0} sessions he has been", de:"In den letzten {0} Einheiten ist er" },
+    "peor": { en:"worse", de:"schlechter" },
+    "mejor": { en:"better", de:"besser" },
+    "igual": { en:"the same", de:"gleich" },
+    "Un punto por entrenamiento, en orden de fecha · la línea punteada es su promedio · punto hueco = menos de 5 acciones en esa sesión · el ▲▼ compara las últimas 3 sesiones con lo anterior, y solo aparece si hay al menos 10 acciones de cada lado · tocá un punto para ver de qué sesión es": { en:"One dot per training session, in date order · the dotted line is his average · a hollow dot means fewer than 5 actions in that session · the ▲▼ compares the last 3 sessions with what came before, and only appears with at least 10 actions on each side · tap a dot to see which session it is", de:"Ein Punkt pro Training, nach Datum · die gestrichelte Linie ist sein Schnitt · ein hohler Punkt bedeutet weniger als 5 Aktionen in dieser Einheit · das ▲▼ vergleicht die letzten 3 Einheiten mit dem davor und erscheint nur ab 10 Aktionen je Seite · tippe auf einen Punkt, um die Einheit zu sehen" },
+    "Mis objetivos técnicos a mejorar": { en:"My technical goals to improve", de:"Meine technischen Ziele" },
+    "Mis saques y a cuánto saco": { en:"My serves and how fast I hit them", de:"Meine Aufschläge und wie schnell" },
+    "Mi mapa de defensa": { en:"My defence map", de:"Meine Abwehrkarte" },
+    "Dónde bloqueo": { en:"Where I block", de:"Wo ich blocke" },
+    "Sobre {0} registros": { en:"Based on {0} entries", de:"Aus {0} Einträgen" },
+    "Tu tendencia (últimos {0}) ·": { en:"Your trend (last {0}) ·", de:"Dein Trend (letzte {0}) ·" },
+    "Último partido": { en:"Last match", de:"Letztes Spiel" },
+    "{0} · ya procesado": { en:"{0} · already processed", de:"{0} · bereits verarbeitet" },
+    "Cómo venimos": { en:"How we are doing", de:"Wie wir dastehen" },
+    "la flecha compara los últimos 2 partidos con los anteriores": { en:"the arrow compares the last 2 matches with the ones before", de:"der Pfeil vergleicht die letzten 2 Spiele mit den vorherigen" },
+    "Tocá la estrellita de una tarjeta para tenerla acá arriba.": { en:"Tap the star on a card to keep it up here.", de:"Tippe auf den Stern einer Karte, um sie hier oben zu behalten." },
+    "Ocultar": { en:"Hide", de:"Ausblenden" },
+    "local": { en:"home", de:"Heim" },
+    "visitante": { en:"away", de:"Auswärts" },
+    "Próximo partido ({0}) · {1}: defensa, armadores, recepción y videos.": { en:"Next match ({0}) · {1}: defence, setters, reception and videos.", de:"Nächstes Spiel ({0}) · {1}: Abwehr, Zuspieler, Annahme und Videos." },
+    "Próximo partido ({0}): defensa, armadores, recepción y videos.": { en:"Next match ({0}): defence, setters, reception and videos.", de:"Nächstes Spiel ({0}): Abwehr, Zuspieler, Annahme und Videos." },
+    "deberia sacar": { en:"should be serving", de:"sollte aufschlagen" },
+    "debería sacar": { en:"should be serving", de:"sollte aufschlagen" },
+    "de antes": { en:"from before", de:"von vorher" },
+    "{0} de {1} con velocidad · {2} de antes": { en:"{0} of {1} with speed · {2} from before", de:"{0} von {1} mit Tempo · {2} von vorher" },
+    "{0} de {1} con velocidad  ·  {2} de antes": { en:"{0} of {1} with speed  ·  {2} from before", de:"{0} von {1} mit Tempo  ·  {2} von vorher" },
+    "General": { en:"Overall", de:"Gesamt" },
+    "Ver pasados": { en:"See past ones", de:"Vergangene anzeigen" },
+    "Velocidad de saque del plantel": { en:"Squad serve speed", de:"Aufschlagtempo des Kaders" },
+    "Ver la velocidad de saque": { en:"See serve speed", de:"Aufschlagtempo ansehen" },
+    "{0} armados · el archivo no guarda rotación": { en:"{0} sets · the file does not store rotation", de:"{0} Zuspiele · die Datei speichert keine Rotation" },
+    "z4 (punta)": { en:"z4 (outside)", de:"z4 (Aussen)" },
+    "z3 (central)": { en:"z3 (middle)", de:"z3 (Mitte)" },
+    "z2 (opuesto)": { en:"z2 (opposite)", de:"z2 (Diagonal)" },
+    "z8 (pipe)": { en:"z8 (pipe)", de:"z8 (Pipe)" },
+    "z9 (zaguero)": { en:"z9 (back row)", de:"z9 (Hinterfeld)" },
+    "Cerrar sus {0} sesión(es)": { en:"Close their {0} session(s)", de:"{0} Sitzung(en) schliessen" },
+    "Entró hoy {0} · última vez hoy {1}": { en:"Signed in today {0} · last seen today {1}", de:"Angemeldet heute {0} · zuletzt heute {1}" },
+    "Entró {0} · última vez hoy {1}": { en:"Signed in {0} · last seen today {1}", de:"Angemeldet {0} · zuletzt heute {1}" },
+    "Entró hoy {0} · última vez {1}": { en:"Signed in today {0} · last seen {1}", de:"Angemeldet heute {0} · zuletzt {1}" },
+    "Entró {0} · última vez {1}": { en:"Signed in {0} · last seen {1}", de:"Angemeldet {0} · zuletzt {1}" },
+    "hoy {0}": { en:"today {0}", de:"heute {0}" },
+    "player": { en:"player", de:"Spieler" },
+    "coach": { en:"coach", de:"Trainer" },
+    "admins": { en:"admins", de:"Admins" },
+    "Altura media": { en:"Average height", de:"Durchschnittsgrösse" },
+    "Edad media": { en:"Average age", de:"Durchschnittsalter" },
+    "Nacionalidades": { en:"Nationalities", de:"Nationalitäten" },
+    "Dorsal": { en:"Number", de:"Nummer" },
+    "Perfil": { en:"Profile", de:"Profil" },
+    "Rutina": { en:"Routine", de:"Programm" },
+    "Quitar": { en:"Remove", de:"Entfernen" },
+    "Head Coach": { en:"Head Coach", de:"Cheftrainer" },
+    "Assistant Coach": { en:"Assistant Coach", de:"Co-Trainer" },
+    "Statistician": { en:"Statistician", de:"Statistiker" },
+    "Team Manager": { en:"Team Manager", de:"Teammanager" },
+    "President": { en:"President", de:"Präsident" },
+    "{0} · {1} cm · {2} años": { en:"{0} · {1} cm · {2} years", de:"{0} · {1} cm · {2} Jahre" },
+    "🇨🇭 Suiza · {0} años": { en:"🇨🇭 Switzerland · {0} years", de:"🇨🇭 Schweiz · {0} Jahre" },
+    "🇨🇭 Suiza": { en:"🇨🇭 Switzerland", de:"🇨🇭 Schweiz" },
+    "🇦🇷 Argentina": { en:"🇦🇷 Argentina", de:"🇦🇷 Argentinien" },
+    "🇺🇸 EE.UU.": { en:"🇺🇸 USA", de:"🇺🇸 USA" },
+    "🇸🇪 Suecia": { en:"🇸🇪 Sweden", de:"🇸🇪 Schweden" },
+    "Suiza": { en:"Switzerland", de:"Schweiz" },
+    "Suecia": { en:"Sweden", de:"Schweden" },
+    "EE.UU.": { en:"USA", de:"USA" },
+    "Alemania": { en:"Germany", de:"Deutschland" },
+    "Francia": { en:"France", de:"Frankreich" },
+    "Italia": { en:"Italy", de:"Italien" },
+    "Brasil": { en:"Brazil", de:"Brasilien" },
+    "Países Bajos": { en:"Netherlands", de:"Niederlande" },
+    "Polonia": { en:"Poland", de:"Polen" },
+    "Serbia": { en:"Serbia", de:"Serbien" },
+    "Bélgica": { en:"Belgium", de:"Belgien" },
+    "Eslovenia": { en:"Slovenia", de:"Slowenien" },
+    "República Checa": { en:"Czech Republic", de:"Tschechien" },
+    "España": { en:"Spain", de:"Spanien" },
+    "Portugal": { en:"Portugal", de:"Portugal" },
+    "Finlandia": { en:"Finland", de:"Finnland" },
+    "Japón": { en:"Japan", de:"Japan" },
+    "Cuba": { en:"Cuba", de:"Kuba" },
+    "Austria": { en:"Austria", de:"Österreich" },
+
     /* Posiciones y rotulos del panel por jugador. */
     'EQUIPO': { en:'TEAM', de:'TEAM' },
     'JUGADOR': { en:'PLAYER', de:'SPIELER' },
@@ -4780,16 +4878,61 @@
     catch(e){ return false; }
   }
 
+  /* ══ EL CAMINO DE VUELTA ═══════════════════════════════════════════════════
+     Pasabas la app a aleman y volvias al castellano SIN RECARGAR, y media
+     pantalla se quedaba en aleman: el menu del dashboard entero —"Spieler",
+     "Analyse", "Verlauf"— no volvia nunca.
+
+     El motivo: _trDataT corta en seco cuando el idioma es castellano. Eso esta
+     bien para las claves que SI estan en el diccionario de claves, porque ahi
+     tr() devuelve el castellano. Pero las que solo viven en el diccionario de
+     FRASES se habian escrito en aleman por el camino alternativo, y al volver
+     tr() devolvia null y nadie las tocaba: se quedaban como estaban.
+
+     Arreglo: la primera vez que se toca un elemento con data-t se guarda lo que
+     decia —que es el castellano del HTML— y, si el diccionario no tiene nada
+     para el idioma pedido, se le devuelve eso.
+
+     Es el mismo truco que ya usaba el recorrido de textos con node.__es; no
+     estaba del lado de los data-t. Medido en el dashboard: 19 textos que
+     quedaban trabados, ahora 0. */
+  function _guardarOriginal(el){
+    try{
+      if (el.__tes != null) return;
+      el.__tes = el.firstElementChild ? el.innerHTML : el.textContent;
+    }catch(e){}
+  }
+  function _escribir(el, v){
+    try{
+      if (/<[a-z][\s\S]*>/i.test(v)) { if (el.innerHTML !== v) el.innerHTML = v; }
+      else if (el.textContent !== v) el.textContent = v;
+      el.__tpuesto = v;                 /* lo ultimo que escribimos NOSOTROS */
+    }catch(e){}
+  }
+  /* ══ NO PISAR UN DATO EN VIVO ══════════════════════════════════════════════
+     Volver al castellano solo deshace lo que escribio este motor. Si despues de
+     traducir el JavaScript de la pagina escribio otra cosa encima —el marcador
+     del partido, el nombre del rival, un contador— eso es un dato, no un rotulo,
+     y se deja como esta. Sin este freno, en el panel en vivo volver al
+     castellano podia tapar el marcador con su etiqueta. */
+  function _volverAlOriginal(el){
+    try{
+      if (el.__tes == null || el.__tpuesto == null) return;
+      var ahora = el.firstElementChild ? el.innerHTML : el.textContent;
+      if (ahora !== el.__tpuesto) return;
+      _escribir(el, el.__tes);
+    }catch(e){}
+  }
+
   function applyDataT(lang){
     var els = document.querySelectorAll('[data-t]');
     for (var i=0; i<els.length; i++){
       if (_soloRotulo(els[i])) continue;
       var k = els[i].getAttribute('data-t');
+      _guardarOriginal(els[i]);
       var v = _trDataT(k, lang);
-      if (v !== null) {
-        if (/<[a-z][\s\S]*>/i.test(v)) { if (els[i].innerHTML !== v) els[i].innerHTML = v; }
-        else if (els[i].textContent !== v) els[i].textContent = v;
-      }
+      if (v !== null) _escribir(els[i], v);
+      else if (lang === 'es') _volverAlOriginal(els[i]);
     }
     var ph = document.querySelectorAll('[data-t-ph]');
     for (var j=0; j<ph.length; j++){
@@ -4807,15 +4950,17 @@
     for (var i=0; i<els.length; i++){
       if (_soloRotulo(els[i])) continue;
       var k = els[i].getAttribute('data-t');
+      _guardarOriginal(els[i]);
       var v = _trDataT(k, lang);
       if (v !== null) {
         /* Si la traduccion trae etiquetas —negritas, colores— hay que
            escribirla como HTML. Con textContent se veria el codigo crudo:
            "# ace <b>100</b>" en vez de "# ace 100" con el 100 en negrita.
            Sin etiquetas se sigue usando textContent, que es mas seguro. */
-        if (/<[a-z][\s\S]*>/i.test(v)) els[i].innerHTML = v;
-        else els[i].textContent = v;
-      }   // si no está en el diccionario, no toca nada
+        _escribir(els[i], v);
+      }
+      else if (lang === 'es') _volverAlOriginal(els[i]);
+      /* si no está en el diccionario y no es castellano, no toca nada */
     }
     // placeholders
     var ph = document.querySelectorAll('[data-t-ph]');
@@ -4839,11 +4984,44 @@
   }
   window.setLang = setLang;
 
+  /* ══ EL SELECTOR DONDE NO ESTABA ═══════════════════════════════════════════
+     De las 54 pantallas, 24 tenian el hueco #lang-wrap y 30 no. En esas 30 la
+     app igual se traducia —el idioma queda guardado en el aparato— pero no
+     habia forma de CAMBIARLO sin volver al inicio. Y un jugador que entra
+     derecho a su perfil desde el acceso directo no pasa por el inicio nunca.
+
+     Antes hubo un selector flotante arriba a la derecha y se saco porque tapaba
+     botones, el de CERRAR SET entre ellos. Asi que este va ABAJO A LA IZQUIERDA,
+     apoyado sobre el escudo del club, que ya vive ahi en todas las pantallas y
+     nunca molesto. Y no va en las dos pantallas del partido en vivo: ahi se
+     scoutea contrarreloj y no se toca nada.
+
+     Donde el hueco ya existe, manda el hueco: esto no cambia ni una de las 24
+     pantallas que ya lo tenian. */
+  var SIN_FLOTANTE = { 'panel_vivo.html':1, 'panel_voley.html':1,
+                       'camara.html':1 };   /* el telefono filmando: pantalla limpia */
+  function _wrapFlotante(){
+    try{
+      if (!document.body) return null;
+      var archivo = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+      if (SIN_FLOTANTE[archivo]) return null;
+      var w = document.createElement('div');
+      w.id = 'lang-wrap';
+      w.setAttribute('data-notr','');
+      w.style.cssText = 'position:fixed;left:12px;bottom:66px;z-index:99990;display:flex;gap:4px;'
+        + 'padding:4px;border-radius:10px;background:rgba(7,8,15,.86);'
+        + 'border:1px solid rgba(255,255,255,.12);box-shadow:0 2px 10px rgba(0,0,0,.5)';
+      document.body.appendChild(w);
+      /* la planilla P-2 se imprime: el selector no va al papel */
+      var st = document.createElement('style');
+      st.textContent = '@media print{#lang-wrap{display:none!important}}';
+      document.head.appendChild(st);
+      return w;
+    }catch(e){ return null; }
+  }
+
   function paintSelector(active){
-    var wrap = document.getElementById('lang-wrap');
-    // El idioma se elige UNA vez en el inicio y queda guardado para todo el sitio.
-    // Las demás páginas se traducen igual, pero sin mostrar el selector: antes se
-    // creaba uno flotante arriba a la derecha y tapaba botones (ej. CERRAR SET).
+    var wrap = document.getElementById('lang-wrap') || _wrapFlotante();
     if (!wrap) return;
     wrap.innerHTML = '';
     LANGS.forEach(function(l){
