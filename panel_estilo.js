@@ -313,7 +313,8 @@
       '@media(max-width:820px){.pe-alist{grid-template-columns:1fr}}',
       /* en telefono la barra se parte en dos filas y el marcador manda */
       '@media(max-width:820px){',
-      '  .top{height:auto;flex-wrap:wrap;padding:8px 10px;gap:8px}',
+      '  .top{height:auto;flex-wrap:wrap;padding:8px 10px;gap:4px}',
+      '  #btn-menu-salir{max-width:44px;padding:0 4px;font-size:10px}',
       '  .board{order:-1;width:100%;flex-basis:100%}',
       '  .board .pts{font-size:30px}',
       '  .top .tbtn{height:32px;padding:0 11px;font-size:12px}',
