@@ -568,13 +568,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20261004-1535"></script>
-<script src="selector_categoria.js?v=20261004-1535"></script>
-<script src="lang.js?v=20261004-1535"></script>
+<script src="categorias_club.js?v=20261004-1616"></script>
+<script src="selector_categoria.js?v=20261004-1616"></script>
+<script src="lang.js?v=20261004-1616"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261004-1535">
+<link rel="stylesheet" href="movil.css?v=20261004-1616">
 </head>
 <body>
 
@@ -1314,9 +1314,9 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20261004-1535" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261004-1535"></script>
-<script src="objetivos.js?v=20261004-1535" onerror="void 0"></script>
+<script src="firebase.js?v=20261004-1616" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261004-1616"></script>
+<script src="objetivos.js?v=20261004-1616" onerror="void 0"></script>
 <!-- ══ EL MOTOR BUENO DEL DELAY, QUE EN ESTA PAGINA NO ESTABA ═══════════
      video_delay.js tiene dos motores: el de clips de 12 segundos y el de
      buffer continuo (delay_buffer.js), que es el que deja elegir el retraso
@@ -1325,14 +1325,14 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
      Resultado: el panel que usa el scout siempre caia al motor viejo, que es
      el que se siente como que "se traba". panel_voley.html si lo carga, por
      eso ahi se veia mejor. -->
-<script src="delay_buffer.js?v=20261004-1535" onerror="void 0"></script>
-<script src="video_delay.js?v=20261004-1535" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20261004-1616" onerror="void 0"></script>
+<script src="video_delay.js?v=20261004-1616" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20261004-1535" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20261004-1535"></script>
+<script src="plantel_nafels.js?v=20261004-1616" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261004-1616"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -2116,7 +2116,7 @@ function renderTablaPartidos(){
   const cont=document.getElementById('partidos-cont');
   const list=partidos().slice().sort((a,b)=>(b.guardado||0)-(a.guardado||0));
   if(!list.length){ cont.innerHTML='<div class="empty-note">Todavía no hay partidos guardados.<br>Cuando scoutees uno, va a aparecer acá.</div>'; return; }
-  let html='<table style="width:100%;border-collapse:collapse;font-size:14px"><thead><tr style="text-align:left;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:1px"><th style="padding:8px 6px;width:32px"></th><th style="padding:8px 6px">Fecha</th><th style="padding:8px 6px">Partido</th><th style="padding:8px 6px;text-align:center">Resultado</th><th style="padding:8px 6px;text-align:center">Acciones</th><th style="padding:8px 6px;width:70px"></th></tr></thead><tbody>';
+  let html='<table style="width:100%;border-collapse:collapse;font-size:14px"><thead><tr style="text-align:left;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:1px"><th style="padding:8px 6px;width:32px"></th><th style="padding:8px 6px" data-t="Fecha">Fecha</th><th style="padding:8px 6px" data-t="Partido">Partido</th><th style="padding:8px 6px;text-align:center" data-t="Resultado">Resultado</th><th style="padding:8px 6px;text-align:center" data-t="Acciones">Acciones</th><th style="padding:8px 6px;width:70px"></th></tr></thead><tbody>';
   list.forEach(p=>{const r=p.resumen,actual=(p.id===M._id);
     /* Quién lo scouteó: lo que va antes del @ del mail, en mayúscula (at@... -> AT).
        Con ☁ los que están en la nube y no en esta PC: los de otro. */
@@ -5820,6 +5820,50 @@ function luSetter(side,z){
   drawLineup(side);
 }
 
+/* ══ LOS TEXTOS QUE ARMA EL JS TAMBIEN SE TRADUCEN ═════════════════════════
+   El titulo del cuadro de formacion lleva data-t-dyn, que significa "esto lo
+   reescribe el JS, no lo toques". Correcto — pero entonces el JS tiene que
+   traducirlo el, y lo escribia en castellano fijo. Resultado: con la pantalla
+   en ingles, el cuadro que se abre al empezar un set decia "Partido" y
+   "Cargá los dos equipos".
+   _tt() busca el texto en el diccionario y, si no esta, lo deja como viene.
+   El {n} es para los que llevan el numero de set adentro, que en aleman va en
+   otro lugar de la frase. */
+function _tt(s, n){
+  /* lang.js busca en dos lugares: el diccionario exacto (tr) y, si ahi no
+     esta, el traductor de frases (translateString). applyDataT usa los dos;
+     si aca usaramos solo el primero, la mitad de los textos volveria sin
+     traducir —'Partido' es uno de ellos—. */
+  var r = s;
+  try{
+    var l = (window.getLang ? getLang() : 'es');
+    if(l !== 'es'){
+      var v = (window.tr ? tr(s, l) : null);
+      if(!v && window.translateString){ var v2 = translateString(s, l); if(v2 && v2 !== s) v = v2; }
+      if(v) r = v;
+    }
+  }catch(e){ r = s; }
+  if(n !== undefined && n !== null) r = String(r).replace('{n}', n);
+  return r;
+}
+
+/* ══ Y SE VUELVEN A ESCRIBIR CUANDO CAMBIA EL IDIOMA ══════════════════════
+   Dos motivos. Uno: al abrir la pagina, el cuadro puede dibujarse antes de
+   que lang.js termine de cargar, y entonces _tt no tiene con que traducir.
+   Dos: si el entrenador toca EN en el medio del partido, este cuadro no se
+   enteraba, porque lleva data-t-dyn y el traductor no lo toca.
+   lang.js avisa con el evento 'langchange'. No se reescribe cuando el cuadro
+   esta en modo obligatorio —formacion de set nuevo—, porque ahi el titulo es
+   otro y setModo lo pisaria. */
+var _setupObligatorio = false;
+window.addEventListener('langchange', function(){
+  try{
+    var m = document.getElementById('m-setup');
+    if(!m || !m.classList.contains('open') || _setupObligatorio) return;
+    setModo((typeof M !== 'undefined' && M.modo) || 'partido');
+  }catch(e){}
+});
+
 function setModo(modo){
   M.modo = modo;
   var bp=document.getElementById('modo-partido'), be=document.getElementById('modo-entrenamiento');
@@ -5827,14 +5871,14 @@ function setModo(modo){
   if(modo==='entrenamiento'){
     if(bp){ bp.style.background=''; bp.style.color=''; bp.style.borderColor=''; }
     if(be){ be.style.background='#16a34a'; be.style.color='#fff'; be.style.borderColor='#16a34a'; }
-    if(tit) tit.textContent='Entrenamiento';
-    if(sub) sub.textContent='Un solo equipo: cargá tu plantel y el seis. Todas las acciones se anotan a tus jugadores (*), aunque escribas la «a» o uses códigos compuestos.';
+    if(tit) tit.textContent=_tt('Entrenamiento');
+    if(sub) sub.textContent=_tt('Un solo equipo: cargá tu plantel y el seis. Todas las acciones se anotan a tus jugadores (*), aunque escribas la «a» o uses códigos compuestos.');
   } else {
     M.modo='partido';
     if(be){ be.style.background=''; be.style.color=''; be.style.borderColor=''; }
     if(bp){ bp.style.background='#2563eb'; bp.style.color='#fff'; bp.style.borderColor='#2563eb'; }
-    if(tit) tit.textContent='Partido';
-    if(sub) sub.textContent='Cargá los dos equipos, el seis inicial y quién saca.';
+    if(tit) tit.textContent=_tt('Partido');
+    if(sub) sub.textContent=_tt('Cargá los dos equipos, el seis inicial y quién saca.');
   }
   reflejarUnEquipo();
 }
@@ -5942,18 +5986,19 @@ function openSetup(obligatorio){
     drawLineup(side);
   });
   setModo(M.modo||'partido');
+  _setupObligatorio = !!obligatorio;
   /* Estilo Data Volley: al cerrar un set, la formación del set nuevo es OBLIGATORIA.
      Se oculta «Cancelar» y sólo se sale confirmando el seis con «Empezar». */
   const tit=document.getElementById('setup-titulo'), sub=document.getElementById('setup-sub');
   const bCancel=document.getElementById('setup-cancelar'), bEmpezar=document.getElementById('setup-empezar');
   if(obligatorio){
-    if(tit) tit.textContent='Formación del set '+M.set;
-    if(sub) sub.textContent='Cargá el seis inicial de cada equipo para arrancar el set '+M.set+'. Data Volley propone el del set anterior — cambialo si hubo modificaciones.';
+    if(tit) tit.textContent=_tt('Formación del set {n}', M.set);
+    if(sub) sub.textContent=_tt('Cargá el seis inicial de cada equipo para arrancar el set {n}. Data Volley propone el del set anterior — cambialo si hubo modificaciones.', M.set);
     if(bCancel) bCancel.style.display='none';
-    if(bEmpezar) bEmpezar.textContent='Empezar set '+M.set;
+    if(bEmpezar) bEmpezar.textContent=_tt('Empezar set {n}', M.set);
   } else {
     if(bCancel) bCancel.style.display='';
-    if(bEmpezar) bEmpezar.textContent='Empezar';
+    if(bEmpezar) bEmpezar.textContent=_tt('Empezar');
   }
   document.getElementById('m-setup').classList.add('open');
 }
@@ -9319,8 +9364,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20261004-1535" onerror="void 0"></script>
-<script src="ayuda.js?v=20261004-1535"></script>
+<script src="volver_inicio.js?v=20261004-1616" onerror="void 0"></script>
+<script src="ayuda.js?v=20261004-1616"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -10443,11 +10488,11 @@ function renderAnalisis(){
 </script>
 <!-- La barra de analisis (manual 9.5). Va en su propio archivo a proposito:
      solo lee y dibuja, y si no carga el panel sigue igual que siempre. -->
-<script src="analisis_vivo.js?v=20261004-1535" onerror="void 0"></script>
+<script src="analisis_vivo.js?v=20261004-1616" onerror="void 0"></script>
 <!-- El rediseno del panel: la barra agrupada, el marcador en la barra,
      las rotaciones legibles y el cuadro de "como venimos". Va en su
      propio archivo a proposito: solo reacomoda y pinta, y si no carga
      el panel queda exactamente como estaba. -->
-<script src="panel_estilo.js?v=20261004-1535" onerror="void 0"></script>
+<script src="panel_estilo.js?v=20261004-1616" onerror="void 0"></script>
 </body>
 </html>

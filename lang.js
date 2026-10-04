@@ -942,6 +942,143 @@
   'O SI NO': { en:'OR ELSE', de:'ODER' },
   'Teléfono por wifi': { en:'Phone over wifi', de:'Handy über WLAN' },
   'Abrir en el televisor': { en:'Open on the TV', de:'Auf dem Fernseher öffnen' },
+  /* ══════════════════════════════════════════════════════════════════════════
+     LO QUE ESTABA MARCADO PARA TRADUCIR Y NO TENIA TRADUCCION
+     Auditoria del 4/10/2026: de los 1.604 textos marcados con data-t en las
+     pantallas, 66 no tenian entrada en este diccionario. Marcados si, cargados
+     no: el sistema los buscaba, no los encontraba y los dejaba en castellano.
+
+     Se notaba apenas entrabas: la portada en ingles mostraba el titulo de la
+     tarjeta "Squad objectives" traducido y el texto de abajo en castellano. Es
+     lo primero que ve un club de afuera.
+
+     La mayoria son del panel en vivo —toda la ayuda de "sin senal"— y de la
+     portada. El aleman esta escrito para Suiza: ss en lugar de ß, y Service
+     en lugar de Aufschlag, que es como se dice en las ligas suizas.
+     ══════════════════════════════════════════════════════════════════════════ */
+
+  /* ── palabras sueltas de tablas y filtros ─────────────────────────────── */
+  'Error': { en:'Error', de:'Fehler' },
+  'Saque': { en:'Serve', de:'Service' },
+  'Freeball': { en:'Freeball', de:'Freeball' },
+  'Entrenamientos': { en:'Training sessions', de:'Trainings' },
+  'Tipo': { en:'Type', de:'Art' },
+  'Sesión': { en:'Session', de:'Einheit' },
+  'Fecha': { en:'Date', de:'Datum' },
+  'Resultado': { en:'Result', de:'Resultat' },
+  'Un solo equipo: cargá tu plantel y el seis. Todas las acciones se anotan a tus jugadores (*), aunque escribas la «a» o uses códigos compuestos.':
+    { en:'One team only: load your squad and the starting six. Every action is credited to your players (*), even if you type the «a» or use compound codes.',
+      de:'Nur eine Mannschaft: Lade dein Kader und die Startsechs. Jede Aktion wird deinen Spielenden (*) gutgeschrieben, auch wenn du das «a» tippst oder zusammengesetzte Codes verwendest.' },
+  'Formación del set {n}': { en:'Line-up for set {n}', de:'Aufstellung für Satz {n}' },
+  'Empezar set {n}': { en:'Start set {n}', de:'Satz {n} starten' },
+  'Cargá el seis inicial de cada equipo para arrancar el set {n}. Data Volley propone el del set anterior — cambialo si hubo modificaciones.':
+    { en:'Load the starting six of each team to begin set {n}. Data Volley suggests the one from the previous set — change it if there were any changes.',
+      de:'Lade die Startsechs beider Mannschaften, um Satz {n} zu beginnen. Data Volley schlägt die des vorherigen Satzes vor — ändere sie, falls es Wechsel gab.' },
+  'Zona': { en:'Zone', de:'Zone' },
+  'N°': { en:'No.', de:'Nr.' },
+  'Ranking': { en:'Ranking', de:'Rangliste' },
+  'Opuesto': { en:'Opposite', de:'Diagonal' },
+  'Pesas': { en:'Weights', de:'Krafttraining' },
+  'Compartir': { en:'Share', de:'Teilen' },
+  'PARTIDO': { en:'MATCH', de:'SPIEL' },
+  'Semana a semana': { en:'Week by week', de:'Woche für Woche' },
+
+  /* ── la portada ───────────────────────────────────────────────────────── */
+  'Objetivos del plantel': { en:'Squad objectives', de:'Kaderziele' },
+  'Todo el plantel en una hoja: qué se le pidió a cada uno esta semana y cómo viene. Ordenado de peor a mejor.':
+    { en:'The whole squad on one sheet: what each player was asked for this week and how it is going. Worst to best.',
+      de:'Das ganze Kader auf einem Blatt: was diese Woche von jeder Person verlangt wurde und wie es läuft. Von schlecht nach gut sortiert.' },
+  'Objetivos del plantel — NAFELS Voley': { en:'Squad objectives — NAFELS Voley', de:'Kaderziele — NAFELS Voley' },
+  '🎯 OBJETIVOS DEL PLANTEL': { en:'🎯 SQUAD OBJECTIVES', de:'🎯 KADERZIELE' },
+
+  /* ── cortes de video ──────────────────────────────────────────────────── */
+  '✂ CORTES DE VIDEO': { en:'✂ VIDEO CLIPS', de:'✂ VIDEOSCHNITTE' },
+  'Ataques punto': { en:'Kill attacks', de:'Punktangriffe' },
+  'Ataques fallados': { en:'Attack errors', de:'Angriffsfehler' },
+  'Bloqueos punto': { en:'Block kills', de:'Blockpunkte' },
+  'Errores de saque': { en:'Serve errors', de:'Servicefehler' },
+  'Recepciones rotas': { en:'Broken passes', de:'Zerrissene Annahmen' },
+  '⇩ CSV para el editor': { en:'⇩ CSV for the editor', de:'⇩ CSV für den Schnitt' },
+  '⇩ Traer el plantel de un partido': { en:'⇩ Bring in the squad from a match', de:'⇩ Kader aus einem Spiel übernehmen' },
+
+  /* ── mapas de calor ───────────────────────────────────────────────────── */
+  'Ver cuartos de zona': { en:'Show quarter zones', de:'Viertelzonen anzeigen' },
+  '▶ Ver los videos': { en:'▶ Watch the clips', de:'▶ Videos ansehen' },
+  'EFF = (100x# + 75x+ + 50x! + 25x−) / total':
+    { en:'EFF = (100x# + 75x+ + 50x! + 25x−) / total', de:'EFF = (100x# + 75x+ + 50x! + 25x−) / Total' },
+  '26 partidos NLA · EFF = (100x# + 75x+ + 50x! + 25x- + 12,5x/) / total':
+    { en:'26 NLA matches · EFF = (100x# + 75x+ + 50x! + 25x- + 12.5x/) / total',
+      de:'26 NLA-Spiele · EFF = (100x# + 75x+ + 50x! + 25x- + 12,5x/) / Total' },
+  '26 partidos NLA · EFF = (100x# + 87,5x/ + 75x+ + 50x! + 25x-) / total':
+    { en:'26 NLA matches · EFF = (100x# + 87.5x/ + 75x+ + 50x! + 25x-) / total',
+      de:'26 NLA-Spiele · EFF = (100x# + 87,5x/ + 75x+ + 50x! + 25x-) / Total' },
+
+  /* ── plan de partido ──────────────────────────────────────────────────── */
+  'Tu saque — a cuánto sacás': { en:'Your serve — how hard you hit it', de:'Dein Service — wie hart du schlägst' },
+  'todas las sesiones medidas · no depende del filtro de arriba':
+    { en:'every measured session · not affected by the filter above',
+      de:'alle gemessenen Einheiten · unabhängig vom Filter oben' },
+
+  /* ── el panel en vivo: roles ──────────────────────────────────────────── */
+  'Entrenador local': { en:'Home coach', de:'Trainer Heim' },
+  'Entrenador visitante': { en:'Away coach', de:'Trainer Gast' },
+  'Ayudante local': { en:'Home assistant', de:'Assistenz Heim' },
+  'Ayudante visitante': { en:'Away assistant', de:'Assistenz Gast' },
+  '📊 Análisis': { en:'📊 Analysis', de:'📊 Analyse' },
+  '📊 Análisis del partido': { en:'📊 Match analysis', de:'📊 Spielanalyse' },
+  'Ver el código': { en:'Show the code', de:'Code anzeigen' },
+  'Hay que elegir uno: de esto dependen las rotaciones y todo el análisis del armador.':
+    { en:'You have to pick one: the rotations and the whole setter analysis depend on it.',
+      de:'Du musst eine auswählen: Davon hängen die Rotationen und die ganze Zuspielanalyse ab.' },
+  'Lo mismo que arma Data Volley en sus informes, calculado en vivo con lo que vas tecleando.':
+    { en:'The same figures Data Volley builds in its reports, worked out live from what you type.',
+      de:'Dieselben Zahlen, die Data Volley in seinen Berichten erstellt, live aus dem berechnet, was du tippst.' },
+
+  /* ── el panel en vivo: el gimnasio sin señal ──────────────────────────── */
+  'Un partido se juega donde se juega, y en muchos clubes ahí no hay señal. El panel funciona igual — sólo hay que prepararlo antes de salir.':
+    { en:'A match is played where it is played, and in plenty of clubs there is no signal there. The panel works all the same — you just have to set it up before you leave.',
+      de:'Ein Spiel findet dort statt, wo es stattfindet, und in vielen Hallen gibt es dort keinen Empfang. Das Panel funktioniert trotzdem — du musst es nur vorher vorbereiten.' },
+  '1 · Antes de ir': { en:'1 · Before you go', de:'1 · Bevor du losgehst' },
+  '2 · En el partido': { en:'2 · At the match', de:'2 · Im Spiel' },
+  'Con señal': { en:'With signal', de:'Mit Empfang' },
+  'Sin señal · se guarda igual': { en:'No signal · it still saves', de:'Ohne Empfang · wird trotzdem gespeichert' },
+  ', abrí el panel en la computadora que vas a llevar y esperá unos diez segundos.':
+    { en:', open the panel on the computer you are taking and wait about ten seconds.',
+      de:', öffne das Panel auf dem Computer, den du mitnimmst, und warte etwa zehn Sekunden.' },
+  'Ahí se guarda solo. No vas a ver ningún aviso: pasa de fondo.':
+    { en:'That is when it saves itself. You will not see any message: it happens in the background.',
+      de:'Dann speichert es sich von selbst. Du siehst keine Meldung: Es läuft im Hintergrund.' },
+  'Es cuando se guarda. Después no.': { en:'That is when it saves. Not afterwards.', de:'Dann wird gespeichert. Danach nicht mehr.' },
+  'La primera vez sí hace falta señal.': { en:'The first time you do need signal.', de:'Beim ersten Mal brauchst du Empfang.' },
+  'Abrí la misma dirección de siempre. El panel abre normal.':
+    { en:'Open the same address as always. The panel opens normally.',
+      de:'Öffne dieselbe Adresse wie immer. Das Panel öffnet sich normal.' },
+  'Scouteá como siempre: no cambia nada.': { en:'Scout as always: nothing changes.', de:'Scoute wie immer: Es ändert sich nichts.' },
+  'Con señal, el cartel desaparece solo.': { en:'With signal, the notice disappears on its own.', de:'Mit Empfang verschwindet der Hinweis von selbst.' },
+  'De ahí en adelante el sistema hace el resto.': { en:'From there the system does the rest.', de:'Ab da erledigt das System den Rest.' },
+  'Exportá con': { en:'Export with', de:'Exportiere mit' },
+  'y subí el archivo desde': { en:'and upload the file from', de:'und lade die Datei hoch von' },
+  'Lo guardado vive en esa máquina. Si empezás en una y querés seguir en otra, exportá y abrí el .dvw.':
+    { en:'What you saved lives on that machine. If you start on one and want to carry on with another, export and open the .dvw.',
+      de:'Das Gespeicherte liegt auf diesem Gerät. Wenn du auf einem anfängst und auf einem anderen weitermachen willst, exportiere und öffne das .dvw.' },
+  'Ahí queda lo que scouteaste: limpiar el historial con la opción de datos de sitios se lleva lo que no hayas exportado.':
+    { en:'That is where your scouting sits: clearing the history with the site-data option takes away anything you have not exported.',
+      de:'Dort liegt dein Scouting: Wenn du den Verlauf mit der Option für Website-Daten löschst, ist alles weg, was du nicht exportiert hast.' },
+  'Si publicamos una corrección, se actualiza sola':
+    { en:'If we publish a fix, it updates itself', de:'Wenn wir eine Korrektur veröffentlichen, aktualisiert es sich selbst' },
+  'la próxima vez que abras con señal. No hay que borrar nada.':
+    { en:'the next time you open it with signal. There is nothing to clear.',
+      de:'beim nächsten Öffnen mit Empfang. Du musst nichts löschen.' },
+  'Para que quede como una aplicación': { en:'To keep it as an app', de:'Damit es wie eine App bleibt' },
+  'No es obligatorio, pero es más cómodo: abre en su propia ventana, sin la barra del navegador, y queda como un ícono más.':
+    { en:'Not compulsory, but handier: it opens in its own window, without the browser bar, and sits there as one more icon.',
+      de:'Nicht zwingend, aber bequemer: Es öffnet sich in einem eigenen Fenster, ohne Browserleiste, und liegt als weiteres Symbol da.' },
+  '— con el panel abierto, mirá el final de la barra de direcciones: aparece un ícono de pantallita con una flecha. Clic ahí y':
+    { en:'— with the panel open, look at the end of the address bar: a little screen icon with an arrow appears. Click it and',
+      de:'— mit geöffnetem Panel schau ans Ende der Adressleiste: Dort erscheint ein kleines Bildschirmsymbol mit einem Pfeil. Klick darauf und' },
+  'Si no lo ves: menú de tres puntos → Enviar, guardar y compartir → Instalar página como aplicación.':
+    { en:'If you cannot see it: three-dot menu → Cast, save and share → Install page as app.',
+      de:'Falls du es nicht siehst: Drei-Punkte-Menü → Streamen, speichern und teilen → Seite als App installieren.' },
     'Volver al menú de partidos. No se pierde nada de lo que ya cargaste.': { en:'Back to the match menu. Nothing you have entered is lost.', de:'Zurück zum Spielmenü. Nichts von dem, was du erfasst hast, geht verloren.' },
     'Volver a revisar': { en:'Check again', de:'Nochmals prüfen' },
     'alto ·': { en:'high ·', de:'hoch ·' },
