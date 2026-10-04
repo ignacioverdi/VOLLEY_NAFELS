@@ -592,13 +592,13 @@ sec:{
  okTit:"Cómo sabés que está conseguido",
  refInt:"Cómo lo hacen las potencias",
  dosTablas:"<strong>Por qué esta tabla no coincide con la de etapas.</strong> Son dos preguntas distintas. La tabla por etapa dice qué sistema prescribe Swiss Volley en cada escalón de competencia: Future 1 juega 6-6, Future 2 juega 6-2 y Future 3 juega 5-1. Esta dice qué tiene que dominar un jugador según su capacidad, juegue donde juegue. Un L3 de diecisiete años compite en 4ª o 3ª liga, donde se juega 5-1, así que tiene que controlarlo aunque su etapa formativa todavía no lo prescriba.",
- objXLvl:"Objetivos por level", objXLvlP:"Elegí un level y vas a ver qué hay que trabajar con ese jugador, en técnica y en táctica, y qué le falta para pasar al siguiente. Sirve igual en cualquier grupo: en un mismo entrenamiento podés tener tres levels y esto te dice qué le pedís a cada uno.", objTec:"Objetivos técnicos", objTac:"Objetivos tácticos", objSig:"El salto al siguiente level.", objElegi:"Elegí un level arriba.",
- objTit:"Para qué es esta etapa", lvlEsp:"Levels que vas a encontrar acá:", lvlEspP:"Si tenés a alguien muy por fuera de este rango, probablemente esté en el grupo equivocado.",
+ objXLvl:"Objetivos por nivel", objXLvlP:"Elegí un nivel y vas a ver qué hay que trabajar con ese jugador, en técnica y en táctica, y qué le falta para pasar al siguiente. Sirve igual en cualquier grupo: en un mismo entrenamiento podés tener tres niveles y esto te dice qué le pedís a cada uno.", objTec:"Objetivos técnicos", objTac:"Objetivos tácticos", objSig:"El salto al siguiente nivel.", objElegi:"Elegí un nivel arriba.",
+ objTit:"Para qué es esta etapa", lvlEsp:"Niveles que vas a encontrar acá:", lvlEspP:"Si tenés a alguien muy por fuera de este rango, probablemente esté en el grupo equivocado.",
  lvlTit:"Cómo etiquetar a un jugador",
- lvlIntro:"Leé la señal y marcá. Si dudás entre dos levels, decidí por la recepción: es lo que más rápido los separa. Se etiqueta lo que el jugador hace hoy en el partido, no lo que puede llegar a hacer.",
- lvlTh:["Level","La señal","Qué incluye ese level"],
- lvlRegla:"<strong>El level dice cómo dividís hoy. La etapa dice qué contenido. La edad dice cuánto.</strong> El level lo asigna el entrenador y sirve para partir la cancha; la etapa define el instructivo; y el rango de horas sale de la edad, porque el cuerpo no sabe de levels.",
- lvlDividir:"Cómo dividís hoy", lvlSin:"Sin asignar", lvlCol:"Level", lvlPor:"Level del jugador", lvlSinAsig:"Sin level asignado", lvlDesc:"Descripción",
+ lvlIntro:"Leé la señal y marcá. Si dudás entre dos niveles, decidí por la recepción: es lo que más rápido los separa. Se etiqueta lo que el jugador hace hoy en el partido, no lo que puede llegar a hacer.",
+ lvlTh:["Nivel","La señal","Qué incluye ese nivel"],
+ lvlRegla:"<strong>El nivel dice cómo dividís hoy. La etapa dice qué contenido. La edad dice cuánto.</strong> El nivel lo asigna el entrenador y sirve para partir la cancha; la etapa define el instructivo; y el rango de horas sale de la edad, porque el cuerpo no sabe de niveles.",
+ lvlDividir:"Cómo dividís hoy", lvlSin:"Sin asignar", lvlCol:"Nivel", lvlPor:"Nivel del jugador", lvlSinAsig:"Sin nivel asignado", lvlDesc:"Descripción",
  seisPr:"Seis principios", origen:"Origen", pendiente:"Pendiente",
  reglas:"Reglas de la etapa", reglasP:"Esto no lo decide el club: es el sistema de juego que Swiss Volley define para esta etapa.",
  madur:"Maduración en esta rama", prio:"Prioridades de temporada",
@@ -5133,6 +5133,28 @@ function contactoDe(j){
   return (pr?'<b>Jugador</b> '+pr:"") + (pr&&fa?"<br>":"") + (fa?'<b>Familia</b> '+fa:"");
 }
 
+
+/* textos de la escalera de niveles */
+CONTENIDO.es.sec.puertaA     = "Para subir a";
+CONTENIDO.es.sec.puertaTecho = "Lo que sostiene este nivel";
+CONTENIDO.es.sec.puertaTec   = "Lo técnico";
+CONTENIDO.es.sec.puertaTac   = "Lo táctico";
+CONTENIDO.es.sec.puertaNota  = "Rama masculina. La liga de cada nivel es el equipo del club donde ese nivel juega hoy. La femenina tiene otra estructura y se escribe aparte.";
+if (typeof CONTENIDO.de === "object" && CONTENIDO.de.sec) {
+  CONTENIDO.de.sec.puertaA     = "Um aufzusteigen nach";
+  CONTENIDO.de.sec.puertaTecho = "Was dieses Niveau trägt";
+  CONTENIDO.de.sec.puertaTec   = "Technisch";
+  CONTENIDO.de.sec.puertaTac   = "Taktisch";
+  CONTENIDO.de.sec.puertaNota  = "Männerbereich. Die Liga jedes Levels ist die Mannschaft des Vereins, in der dieses Level heute spielt. Der Frauenbereich hat eine andere Struktur und wird separat geschrieben.";
+}
+if (typeof CONTENIDO.en === "object" && CONTENIDO.en.sec) {
+  CONTENIDO.en.sec.puertaA     = "To move up to";
+  CONTENIDO.en.sec.puertaTecho = "What holds this level up";
+  CONTENIDO.en.sec.puertaTec   = "Technical";
+  CONTENIDO.en.sec.puertaTac   = "Tactical";
+  CONTENIDO.en.sec.puertaNota  = "Men's side. The league on each level is the club team where that level plays today. The women's side has a different structure and is written separately.";
+}
+
 const edadDe = j => j.jg ? TEMPORADA - j.jg : null;
 const LEVELS_DE = [
  {n:1,t:"Leistungsträger:in",senal:"Das Niveau sinkt nicht, wenn das Spiel eng wird.",
@@ -5257,8 +5279,165 @@ const LEVELS = [
    ["Bloqueo","No lo trabaja todavía"],
    ["Táctica","Va a la pelota que no le corresponde, o no va"]]}
 ];
+
+/* ════════════════════════════════════════════════════════════════════════════
+   NIVEL ↔ LIGA  ·  rama masculina del club
+   El nivel se muestra como N0 a N4 y se ancla a la liga en la que ese nivel
+   juega hoy en Näfels: N0 es NLA y N4 es 4ª liga. La numeración interna de
+   LEVELS (1 a 5) no cambia, para no tocar la matriz ni las etapas.
+   La puerta es lo que hay que demostrar para subir un escalón.
+   Rama femenina pendiente: el club tiene otra estructura y se escribe aparte.
+   ════════════════════════════════════════════════════════════════════════════ */
+const LIGA_N = {
+ es:{1:"NLA",2:"1ª liga",3:"2ª liga",4:"3ª liga",5:"4ª liga"},
+ de:{1:"NLA",2:"1. Liga",3:"2. Liga",4:"3. Liga",5:"4. Liga"},
+ en:{1:"NLA",2:"1. Liga",3:"2. Liga",4:"3. Liga",5:"4. Liga"}
+};
+const NIVN = n => "N" + (n - 1);
+const NIVL = n => (LIGA_N[LANG] || LIGA_N.es)[n] || "";
+
+const PUERTA = {es:{
+ 1:{techo:true,
+  tec:["Sostener el nivel técnico con el volumen de entrenamiento del primer equipo, no sólo en la semana cómoda.",
+       "Conducir el calentamiento de su puesto sin que nadie se lo organice."],
+  tac:["Preparar al rival con video y conducir al equipo dentro del partido.",
+       "Entrar al Talentpool o al primer equipo no es el logro: es un medio, no una finalidad."]},
+ 2:{tec:["Ejecutar en el tercer set como en el calentamiento: recepción, armado y ataque con las piernas cansadas.",
+         "Resolver contra bloqueo formado — manos del bloqueo, costura entre los dos, finta larga detrás.",
+         "Sostener el saque agresivo a 23 iguales, con la tasa de error acordada.",
+         "Transición inmediata después del bloqueo: aterrizar equilibrado, girar, salir tres metros y recién correr.",
+         "Distribuir según la rotación y el bloqueo que tiene enfrente, no según quién pide más fuerte."],
+  tac:["Llegar a la cancha con plan propio: dos o tres cosas del rival vistas en video.",
+       "Cambiar algo en el partido por decisión propia y poder explicar por qué lo cambió.",
+       "Hacerse cargo del punto siguiente cuando un compañero se cayó."]},
+ 3:{tec:["Dos direcciones y finta desde la misma carrera, para que el bloqueo no lea la intención antes del salto.",
+         "Bloqueo lector: primer contacto, después el armador, y la decisión antes del salto.",
+         "Ataque de zaga con despegue antes de la línea de tres metros y contacto alto.",
+         "Saque en salto, o saque de arriba con la zona elegida de antemano.",
+         "Armado con contrato: la misma altura y la misma distancia para cada atacante, siempre."],
+  tac:["Jugar el 5-1 completo, con sus coberturas y sus transiciones en las seis rotaciones.",
+       "Leer al armador rival y corregir su posición sin que se lo indiquen.",
+       "Sostener su nivel contra oposición de liga de mayores, no sólo contra su categoría."]},
+ 4:{tec:["Recepción que aguanta el saque de arriba de competencia, no sólo la pelota cómoda: la mitad queda en sistema.",
+         "Armado en desplazamiento — llegar equilibrado y que la pelota salga con altura, no plana.",
+         "Carrera de tres pasos estable y una dirección elegida antes del salto.",
+         "Saque de arriba, siete de diez dentro, cantando la zona antes de sacar.",
+         "Bloqueo con las manos sobre la red y el desplazamiento terminado antes de saltar, sin tocar la red."],
+  tac:["Que el rally siga aunque la pelota venga mal: el punto no se corta en el primer contacto feo.",
+       "Cubrir al atacante propio sin que nadie se lo pida.",
+       "Saber en qué rotación está y adónde le toca ir, sin mirar al banco."]},
+ 5:{tec:["Llegar con los pies antes que con los brazos: la plataforma quieta y los hombros apuntando al armador.",
+         "Armar de dedos de frente en vez de devolver la pelota al campo rival. Que la pelota se pueda atacar.",
+         "Carrera de tres pasos completa y contacto arriba y adelante de la cabeza, no atrás.",
+         "Diez saques de arriba seguidos dentro de la cancha, con el mismo lanzamiento siempre."],
+  tac:["Construir con tres toques cuando la pelota viene fácil, sin que nadie se lo recuerde.",
+       "Saber qué pelota es suya y cuál no, y cantarla en voz alta.",
+       "Ocupar su zona de recepción sin que haya que marcarla en el piso."]}
+},de:{
+ 1:{techo:true,
+  tec:["Das technische Niveau mit dem Trainingsvolumen der ersten Mannschaft halten, nicht nur in der ruhigen Woche.",
+       "Das Aufwärmen der eigenen Position führen, ohne dass es jemand organisiert."],
+  tac:["Den Gegner mit Video vorbereiten und die Mannschaft im Spiel führen.",
+       "Der Eintritt in den Talentpool oder in die erste Mannschaft ist nicht die Leistung: Er ist ein Mittel, kein Selbstzweck."]},
+ 2:{tec:["Im dritten Satz so ausführen wie im Einlaufen: Annahme, Zuspiel und Angriff mit müden Beinen.",
+         "Gegen formierten Block lösen — Blockhände, Lücke zwischen beiden, langer Lob dahinter.",
+         "Den aggressiven Service bei 23:23 halten, mit der vereinbarten Fehlerquote.",
+         "Sofortige Umschaltung nach dem Block: ausbalanciert landen, drehen, drei Meter herauslösen und erst dann laufen.",
+         "Nach Rotation und gegnerischem Block verteilen, nicht danach, wer am lautesten ruft."],
+  tac:["Mit eigenem Plan ins Spiel kommen: zwei oder drei Dinge des Gegners, im Video gesehen.",
+       "Im Spiel aus eigenem Entscheid etwas verändern und erklären können, warum.",
+       "Den nächsten Punkt übernehmen, wenn eine Mitspielerin oder ein Mitspieler eingebrochen ist."]},
+ 3:{tec:["Zwei Richtungen und Lob aus demselben Anlauf, damit der Block die Absicht nicht vor dem Absprung liest.",
+         "Lesender Block: erster Kontakt, dann die Zuspielperson, und der Entscheid vor dem Absprung.",
+         "Hinterfeldangriff mit Absprung vor der Drei-Meter-Linie und hohem Kontakt.",
+         "Sprungservice oder Service von oben mit vorher gewählter Zone.",
+         "Zuspiel mit Vertrag: für jede angreifende Person immer dieselbe Höhe und derselbe Abstand."],
+  tac:["Das volle 5-1 spielen, mit Sicherung und Umschaltung in allen sechs Rotationen.",
+       "Das gegnerische Zuspiel lesen und die eigene Position ohne Anweisung korrigieren.",
+       "Das Niveau gegen Aktivligen halten, nicht nur gegen die eigene Alterskategorie."]},
+ 4:{tec:["Annahme, die den Service von oben im Wettkampf aushält, nicht nur den bequemen Ball: die Hälfte bleibt im System.",
+         "Zuspiel in der Bewegung — ausbalanciert ankommen, und der Ball kommt mit Höhe heraus, nicht flach.",
+         "Stabiler Dreischrittanlauf und eine vor dem Absprung gewählte Richtung.",
+         "Service von oben, sieben von zehn drin, mit vorher angesagter Zone.",
+         "Block mit den Händen über dem Netz und abgeschlossener Verschiebung vor dem Absprung, ohne Netzberührung."],
+  tac:["Der Ballwechsel geht weiter, auch wenn der Ball schlecht kommt: Der Punkt bricht nicht beim ersten schlechten Kontakt ab.",
+       "Die eigene angreifende Person sichern, ohne dass es jemand verlangt.",
+       "Wissen, in welcher Rotation man steht und wohin man gehört, ohne zur Bank zu schauen."]},
+ 5:{tec:["Mit den Füssen vor den Armen ankommen: ruhiges Spielbrett und Schultern zur Zuspielposition.",
+         "Von vorne oben zuspielen statt den Ball ins gegnerische Feld zurückzugeben. Der Ball muss angreifbar sein.",
+         "Vollständiger Dreischrittanlauf und Kontakt oben und vor dem Kopf, nicht dahinter.",
+         "Zehn Services von oben nacheinander im Feld, immer mit demselben Anwurf."],
+  tac:["Mit drei Kontakten aufbauen, wenn der Ball einfach kommt, ohne Erinnerung.",
+       "Wissen, welcher Ball der eigene ist und welcher nicht, und ihn laut ansagen.",
+       "Die eigene Annahmezone einnehmen, ohne dass sie auf dem Boden markiert wird."]}
+},en:{
+ 1:{techo:true,
+  tec:["Hold the technical level at first-team training volume, not only in the easy week.",
+       "Run the warm-up for their own position without anyone organising it."],
+  tac:["Prepare the opponent with video and lead the team inside the match.",
+       "Getting into the Talentpool or the first team is not the achievement: it is a means, not an end."]},
+ 2:{tec:["Execute in the third set the way they did in the warm-up: reception, setting and attack on tired legs.",
+         "Solve against a formed block — block hands, the seam between the two, the long tip behind.",
+         "Hold the aggressive serve at 23-all, within the agreed error rate.",
+         "Immediate transition after the block: land balanced, turn, get three metres off the net and only then run.",
+         "Distribute by rotation and by the block in front, not by who shouts loudest."],
+  tac:["Arrive with a plan of their own: two or three things about the opponent seen on video.",
+       "Change something in the match on their own decision, and explain why they changed it.",
+       "Take charge of the next point when a team-mate has dropped."]},
+ 3:{tec:["Two directions and a tip from the same approach, so the block cannot read the intention before take-off.",
+         "Reading block: first contact, then the setter, and the decision before take-off.",
+         "Back-row attack taking off before the three-metre line, with a high contact.",
+         "Jump serve, or overhand serve with the zone chosen beforehand.",
+         "Setting with a contract: the same height and the same distance for each attacker, every time."],
+  tac:["Play the full 5-1, with its coverage and its transitions in all six rotations.",
+       "Read the opposing setter and correct their own position without being told.",
+       "Hold their level against senior-league opposition, not only against their own age group."]},
+ 4:{tec:["Reception that holds against a competition overhand serve, not only a comfortable ball: half of it stays in system.",
+         "Setting on the move — arrive balanced, and the ball leaves with height, not flat.",
+         "Stable three-step approach and one direction chosen before take-off.",
+         "Overhand serve, seven out of ten in, calling the zone before serving.",
+         "Block with the hands over the net and the movement finished before the jump, without touching the net."],
+  tac:["The rally continues even when the ball comes badly: the point does not break on the first ugly contact.",
+       "Cover their own attacker without being asked.",
+       "Know which rotation they are in and where they belong, without looking at the bench."]},
+ 5:{tec:["Arrive with the feet before the arms: a still platform and the shoulders pointing at the setter.",
+         "Set overhand facing the target instead of returning the ball to the other court. The ball has to be attackable.",
+         "A complete three-step approach and contact high and in front of the head, not behind it.",
+         "Ten overhand serves in a row inside the court, with the same toss every time."],
+  tac:["Build with three contacts when the ball comes easy, without being reminded.",
+       "Know which ball is theirs and which is not, and call it out loud.",
+       "Take up their reception zone without having it marked on the floor."]}
+}};
+(function(){
+ [[LEVELS,"es"],[typeof LEVELS_DE!=="undefined"?LEVELS_DE:null,"de"],[typeof LEVELS_EN!=="undefined"?LEVELS_EN:null,"en"]]
+ .forEach(function(par){
+   var arr = par[0], idioma = par[1];
+   if(!arr) return;
+   arr.forEach(function(L){
+     L.liga   = (LIGA_N[idioma]||LIGA_N.es)[L.n] || "";
+     L.puerta = (PUERTA[idioma]||PUERTA.es)[L.n] || null;
+   });
+ });
+})();
+
+/* el bloque «qué hace falta para subir», que se dibuja debajo de los objetivos
+   del nivel elegido en la solapa Matriz */
+function puertaHTML(L, col, lead){
+  var P = L.puerta; if(!P) return "";
+  var lig = LIGA_N[LANG] || LIGA_N.es;
+  var tit = P.techo ? S("puertaTecho")
+          : S("puertaA") + " " + NIVN(L.n - 1) + " · " + (lig[L.n - 1] || "");
+  function lista(a){ return '<ul class="lvl-lista">' + a.map(function(x){ return "<li>" + x + "</li>"; }).join("") + '</ul>'; }
+  return '<div class="nota" style="border-left-color:' + col + ';margin-top:14px"><strong>' + tit + '</strong>'
+   + (lead ? '<p style="margin:5px 0 0;font-size:15.3px">' + lead + '</p>' : '')
+   + '<div class="ens-dos" style="margin-top:12px">'
+   + '<div><h4 class="obj-h">' + S("puertaTec") + '</h4>' + lista(P.tec) + '</div>'
+   + '<div><h4 class="obj-h">' + S("puertaTac") + '</h4>' + lista(P.tac) + '</div>'
+   + '</div><p style="margin:12px 0 0;font-size:14px;color:var(--gris)">' + S("puertaNota") + '</p></div>';
+}
+
 const lvlDe = j => j.lvl || 0;
-const lvlNom = n => { const L=LV().find(x=>x.n===n); return L ? "L"+n+" · "+L.t : S("lvlSinAsig"); };
+const lvlNom = n => { const L=LV().find(x=>x.n===n); return L ? NIVN(n)+" · "+NIVL(n)+" · "+L.t : S("lvlSinAsig"); };
 
 
 function rangoDe(j){
@@ -5616,7 +5795,7 @@ function vEtapa(br){
     <span>${S("objTit")}</span>
     <p>${objEtapa(ET)}</p>
     <div class="obj-lvls"><b>${S("lvlEsp")}</b>
-      ${(LVL_ETAPA[ET]||[]).map(n=>{const L=LV().find(x=>x.n===n);return `<span class="lvl-chip l${n}">L${n} ${L?L.t:""}</span>`;}).join("")}
+      ${(LVL_ETAPA[ET]||[]).map(n=>{const L=LV().find(x=>x.n===n);return `<span class="lvl-chip l${n}">${NIVN(n)} ${L?L.t:""}</span>`;}).join("")}
       <i>${S("lvlEspP")}</i></div>
   </div>
   <section class="bloque"><h3><span class="n">01</span>${S("reglas")}</h3>
@@ -5903,7 +6082,7 @@ const OBJ_LVL = {es:[
  {t:"Usar video",d:"Un clip corto por semana, treinta segundos, con una sola cosa para corregir. Más que eso no se aplica. Apoyado en el sistema de datos que el club ya tiene en el primer equipo."},
  {t:"Dirigir una serie vos mismo",d:"En Japón el entrenamiento lo dirigen principalmente los capitanes y la mayoría de los ejercicios los manejan los jugadores. Una serie por semana dirigida por un jugador desde este level: él la organiza, él corrige y él sostiene el ritmo mientras el entrenador mira. Es la forma más barata de construir el pensamiento táctico que este level tiene que producir."},
  {t:"Coberturas y transiciones del 6-2",d:"Con tres atacantes en red, quién cubre cambia en cada rotación. Es lo que decide los rallies largos y lo que menos se entrena."}],
- next:"Para llegar a L1: sostener todo esto con el marcador en contra y en el tercer set."},
+ next:"Sostener todo esto con el marcador en contra y en el tercer set."},
 
 {n:3,meta:"Que sostenga la jugada completa con oposición real y deje de depender del entrenador dentro del punto.",
  tec:[
@@ -5921,7 +6100,7 @@ const OBJ_LVL = {es:[
  {t:"Arrancar según el primer contacto",d:"El atacante empieza la carrera por lo que ve en la recepción, no cuando el armador ya tocó. Si espera, llega tarde a todo lo que no sea pelota alta."},
  {t:"La defensa y el control como decisión",d:"Japón explica su nivel diciendo que sus jugadores son más bajos y que por eso pusieron la defensa y el control de pelota por encima de todo. En este level se decide si un jugador va a la pelota o espera a ser lo bastante alto. El que no gana por altura gana porque la pelota no toca el piso."},
  {t:"Empezar a leer al armador rival",d:"Introducción: mirar dónde está el primer contacto y cómo está orientado el cuerpo del armador. No se le pide acertar todavía, se le pide mirar."}],
- next:"Para llegar a L2: decidir antes del salto y sumar una segunda dirección de ataque."},
+ next:"Decidir antes del salto y sumar una segunda dirección de ataque."},
 
 {n:4,meta:"Que sostenga bajo presión lo que ya hace bien con pelota cómoda.",
  tec:[
@@ -5937,7 +6116,7 @@ const OBJ_LVL = {es:[
  {t:"Volver a la posición",d:"Después de cada acción se vuelve al lugar. Sin esto el equipo se convierte en gente persiguiendo la pelota."},
  {t:"Saber la rotación y quién arma",d:"Antes del saque, que el equipo sepa en qué rotación está y quién penetra. Se dice en voz alta hasta que salga solo."},
  {t:"Competir seguido, y que el error no cueste",d:"Polonia sostiene que la exposición temprana a la competencia, en un ambiente que la banca, es lo que enseña a manejar la presión y a recuperarse del error. Es el level donde eso se instala. Y la advertencia que va con esto: es exactamente la edad donde el efecto de la edad relativa decide quién sigue, así que antes de bajar a alguien de level, mirá su fecha de nacimiento."}],
- next:"Para llegar a L3: que la técnica no se caiga cuando aparece el saque de competencia."},
+ next:"Que la técnica no se caiga cuando aparece el saque de competencia."},
 
 {n:5,meta:"Que el rally exista: que la pelota sobreviva al primer contacto.",
  tec:[
@@ -5953,7 +6132,7 @@ const OBJ_LVL = {es:[
  {t:"Ir a la pelota que es suya",d:"Y no ir a la que no lo es. Cada uno tiene una zona y una responsabilidad."},
  {t:"Volver a la posición",d:"Después de cada acción. Sin esto, el 3:3 se convierte en tres chicos persiguiendo una pelota."},
  {t:"Jugar con el compañero",d:"Construir con el otro en vez de resolver solo. Es la primera idea de equipo que entienden y la base de todo lo demás. Polonia lo lleva al extremo con casi cuarenta y siete mil chicos jugando 1:1, 2:2, 3:3 y 4:4 en cancha reducida: cuantos menos hay en la cancha, más veces tiene que resolver cada uno y más rápido aparece la idea de construir."}],
- next:"Para llegar a L4: que la recepción llegue al armador y la jugada de tres aparezca sola."}]};
+ next:"Que la recepción llegue al armador y la jugada de tres aparezca sola."}]};
 
 OBJ_LVL.de = [
 {n:1,meta:"Dass sie das Spiel führt und ihr Niveau hält, wenn es eng wird.",
@@ -5988,7 +6167,7 @@ OBJ_LVL.de = [
  {t:"Video nutzen",d:"Ein kurzer Clip pro Woche, dreissig Sekunden, mit genau einer Sache zum Korrigieren. Mehr wird nicht umgesetzt. Gestützt auf das Datensystem, das der Verein in der ersten Mannschaft bereits hat."},
  {t:"Eine Serie selbst leiten",d:"In Japan wird das Training hauptsächlich von den Captains geleitet, und die meisten Übungen führen die Spielenden. Eine Serie pro Woche, ab diesem Level von einer Spielerin geleitet: Sie organisiert, sie korrigiert und sie hält den Rhythmus, während die Trainerperson zuschaut. Es ist der günstigste Weg, das taktische Denken aufzubauen, das dieses Level erzeugen soll."},
  {t:"Sicherungen und Übergänge im 6-2",d:"Mit drei Angreiferinnen am Netz wechselt in jeder Rotation, wer sichert. Das entscheidet die langen Ballwechsel und wird am wenigsten trainiert."}],
- next:"Für L1: all das auch bei Rückstand und im dritten Satz halten."},
+ next:"All das auch bei Rückstand und im dritten Satz halten."},
 
 {n:3,meta:"Dass sie den vollständigen Spielzug gegen echten Widerstand hält und im Ballwechsel nicht mehr von der Trainerperson abhängt.",
  tec:[
@@ -6006,7 +6185,7 @@ OBJ_LVL.de = [
  {t:"Nach dem ersten Kontakt starten",d:"Die Angreiferin beginnt den Anlauf nach dem, was sie in der Annahme sieht, nicht wenn die Zuspielerin schon berührt hat. Wer wartet, kommt bei allem ausser hohen Bällen zu spät."},
  {t:"Abwehr und Ballkontrolle als Entscheidung",d:"Japan begründet sein Niveau damit, dass seine Spielenden kleiner sind und es deshalb Abwehr und Ballkontrolle über alles stellte. Auf diesem Level entscheidet sich, ob eine Person zur Abwehr geht oder darauf wartet, gross genug zu werden. Wer nicht über die Grösse gewinnt, gewinnt darüber, dass der Ball nicht zu Boden fällt."},
  {t:"Beginnen, die gegnerische Zuspielerin zu lesen",d:"Einführung: schauen, wo der erste Kontakt ist und wie der Körper der Zuspielerin ausgerichtet ist. Richtig liegen wird noch nicht verlangt, hinschauen schon."}],
- next:"Für L2: vor dem Sprung entscheiden und eine zweite Angriffsrichtung dazunehmen."},
+ next:"Vor dem Sprung entscheiden und eine zweite Angriffsrichtung dazunehmen."},
 
 {n:4,meta:"Dass sie unter Druck hält, was mit bequemem Ball schon gelingt.",
  tec:[
@@ -6022,7 +6201,7 @@ OBJ_LVL.de = [
  {t:"Auf die Position zurück",d:"Nach jeder Aktion zurück an den Platz. Ohne das wird die Mannschaft zu Leuten, die dem Ball hinterherlaufen."},
  {t:"Rotation und Zuspielerin kennen",d:"Vor dem Service weiss die Mannschaft, in welcher Rotation sie steht und wer einläuft. Wird laut gesagt, bis es von selbst geht."},
  {t:"Oft wettkämpfen, und der Fehler darf nichts kosten",d:"Polen hält fest, dass frühe Wettkampferfahrung in einem tragenden Umfeld genau das ist, was den Umgang mit Druck und die Erholung vom Fehler lehrt. Auf diesem Level wird das verankert. Und die Warnung dazu: Es ist genau das Alter, in dem der Relative Alterseffekt entscheidet, wer weitermacht — bevor du also jemanden ein Level zurückstufst, schau auf das Geburtsdatum."}],
- next:"Für L3: dass die Technik nicht zerfällt, sobald das Wettkampfservice auftaucht."},
+ next:"Dass die Technik nicht zerfällt, sobald das Wettkampfservice auftaucht."},
 
 {n:5,meta:"Dass der Ballwechsel überhaupt entsteht: dass der Ball den ersten Kontakt überlebt.",
  tec:[
@@ -6038,7 +6217,7 @@ OBJ_LVL.de = [
  {t:"Zum eigenen Ball gehen",d:"Und nicht zu dem, der einem nicht gehört. Jede hat eine Zone und eine Verantwortung."},
  {t:"Auf die Position zurück",d:"Nach jeder Aktion. Ohne das wird aus dem 3:3 ein Rudel, das einem Ball hinterherläuft."},
  {t:"Mit der Mitspielerin spielen",d:"Mit der anderen aufbauen statt allein zu lösen. Die erste Mannschaftsidee, die sie verstehen, und die Grundlage für alles Weitere. Polen treibt es auf die Spitze mit fast siebenundvierzigtausend Kindern, die 1:1, 2:2, 3:3 und 4:4 auf kleinem Feld spielen: Je weniger auf dem Feld stehen, desto öfter muss jede lösen und desto schneller entsteht die Idee des Aufbauens."}],
- next:"Für L4: dass die Annahme die Zuspielerin erreicht und der Dreier-Aufbau von selbst entsteht."}];
+ next:"Dass die Annahme die Zuspielerin erreicht und der Dreier-Aufbau von selbst entsteht."}];
 
 OBJ_LVL.en = [
 {n:1,meta:"That they run the game and hold their level when the match tightens.",
@@ -6073,7 +6252,7 @@ OBJ_LVL.en = [
  {t:"Use video",d:"One short clip a week, thirty seconds, with a single thing to correct. More than that does not get applied. Supported by the data system the club already runs in the first team."},
  {t:"Run a series yourself",d:"In Japan practice is run primarily by the captains and most drills are player-run. One series a week led by a player, from this level on: they organise it, they correct it and they hold the rhythm while the coach watches. It is the cheapest way to build the tactical thinking this level is supposed to produce."},
  {t:"Coverage and transitions in the 6-2",d:"With three attackers at the net, who covers changes every rotation. It decides the long rallies and it is the least trained."}],
- next:"To reach L1: hold all of this with the scoreboard against them and in the third set."},
+ next:"Hold all of this with the scoreboard against them and in the third set."},
 
 {n:3,meta:"That they hold the complete rally against real opposition and stop depending on the coach inside the point.",
  tec:[
@@ -6091,7 +6270,7 @@ OBJ_LVL.en = [
  {t:"Start on the first contact",d:"The attacker begins the approach on what they see in the pass, not once the setter has touched the ball. Wait, and they are late to everything but a high ball."},
  {t:"Begin reading the opposing setter",d:"An introduction: look at where the first contact is and how the setter's body is oriented. Getting it right is not yet required; looking is."},
  {t:"Defence and ball control as a decision",d:"Japan explains its level by saying its players are shorter and that it therefore put defence and ball control above everything else. This is the level where a player decides whether they go to the ball or wait to become tall enough. Whoever does not win on height wins because the ball does not hit the floor."}],
- next:"To reach L2: decide before the jump and add a second attacking direction."},
+ next:"Decide before the jump and add a second attacking direction."},
 
 {n:4,meta:"That they hold under pressure what they already do well with a comfortable ball.",
  tec:[
@@ -6107,7 +6286,7 @@ OBJ_LVL.en = [
  {t:"Return to position",d:"After every action, back to your place. Without it the team becomes people chasing a ball."},
  {t:"Know the rotation and who sets",d:"Before the serve, the team knows which rotation it is in and who penetrates. Said out loud until it becomes automatic."},
  {t:"Compete often, and let the error cost nothing",d:"Poland holds that early exposure to competition, in an environment that supports it, is what teaches players to handle pressure and recover from errors. This is the level where that gets installed. And the warning that goes with it: this is exactly the age at which the relative age effect decides who carries on, so before you move anyone down a level, look at their date of birth."}],
- next:"To reach L3: that the technique does not fall apart the moment a match serve appears."},
+ next:"That the technique does not fall apart the moment a match serve appears."},
 
 {n:5,meta:"That the rally exists at all: that the ball survives the first contact.",
  tec:[
@@ -6123,7 +6302,7 @@ OBJ_LVL.en = [
  {t:"Go for the ball that is yours",d:"And not for the one that is not. Each player has a zone and a responsibility."},
  {t:"Return to position",d:"After every action. Without it, 3v3 turns into three children chasing a ball."},
  {t:"Play with your teammate",d:"Build with the other rather than solving alone. The first team idea they understand and the basis of everything else. Poland takes it to the extreme with nearly forty-seven thousand children playing 1v1, 2v2, 3v3 and 4v4 on reduced courts: the fewer there are on court, the more often each one has to solve it and the faster the idea of building appears."}],
- next:"To reach L4: that the pass reaches the setter and the three-contact build appears by itself."}];
+ next:"That the pass reaches the setter and the three-contact build appears by itself."}];
 
 const OL = () => OBJ_LVL[LANG] || OBJ_LVL.es;
 /* referencia internacional por level */
@@ -6165,7 +6344,7 @@ window.setMatLvl = n => { MAT_LVL = Number(n); render(); };
 /* Matrices POR LEVEL — definidas aparte de las de etapa, a propósito.
    La tabla por etapa dice qué prescribe Swiss Volley en cada escalón de competencia.
    Esta dice qué tiene que dominar un jugador de esa capacidad, juegue donde juegue. */
-const LVL_COLS = ["L5","L4","L3","L2","L1"];
+const LVL_COLS = ["N4","N3","N2","N1","N0"];
 const MTEC_L = [
  ["atrapar","C","M","M","M","M",0],["dedos","I","C","M","M","M",0],
  ["antebrazos","I","D","C","M","M",0],["saque_abajo","D","M","M","M","M",0],
@@ -6711,19 +6890,19 @@ function vMatriz(){
   <section class="bloque"><h3><span class="n">00</span>${S("objXLvl")}</h3>
     <p>${S("objXLvlP")}</p>
     <div class="ens-nav no-imprimir">
-      ${LV().map(L=>`<button class="ens-tab" onclick="setMatLvl(${L.n})" aria-pressed="${MAT_LVL===L.n}" style="--c:${["","#0E2A8A","#8E3374","#EE4655","#FA844E","#D9B300"][L.n]}">L${L.n} <span class="cg">${L.t}</span></button>`).join("")}
+      ${LV().map(L=>`<button class="ens-tab" onclick="setMatLvl(${L.n})" aria-pressed="${MAT_LVL===L.n}" style="--c:${["","#0E2A8A","#8E3374","#EE4655","#FA844E","#D9B300"][L.n]}">${NIVN(L.n)} <span class="cg">${L.liga} · ${L.t}</span></button>`).join("")}
     </div>
     ${(function(){
       const L = LV().find(x=>x.n===MAT_LVL), O = OL().find(x=>x.n===MAT_LVL); const RF = RL();
       if(!L || !O) return `<div class="pl-vacio">${S("objElegi")}</div>`;
       const col = ["","#0E2A8A","#8E3374","#EE4655","#FA844E","#D9B300"][L.n];
-      return `<div class="obj-caja" style="--c:${col}"><span>L${L.n} · ${L.t}</span><p>${O.meta}</p></div>
+      return `<div class="obj-caja" style="--c:${col}"><span>${NIVN(L.n)} · ${L.liga} · ${L.t}</span><p>${O.meta}</p></div>
         <div class="ens-dos" style="margin-top:20px">
           <div><h4 class="obj-h">${S("objTec")}</h4>${O.tec.map(x=>`<details class="plg"><summary>${x.t}</summary><div class="plg-c"><p>${x.d}</p>${OKC(x.t)}</div></details>`).join("")}</div>
           <div><h4 class="obj-h">${S("objTac")}</h4>${O.tac.map(x=>`<details class="plg"><summary>${x.t}</summary><div class="plg-c"><p>${x.d}</p>${OKC(x.t)}</div></details>`).join("")}</div>
         </div>
         <div class="ref-lvl"><span>${S("refInt")}</span><b>${RF[L.n].t}</b><p>${RF[L.n].d}</p></div>
-        <div class="nota" style="border-left-color:${col}"><strong>${S("objSig")}</strong> ${O.next}</div>`;
+        ${puertaHTML(L, col, O.next)}`;
     })()}
   </section>
   <section class="bloque"><h3><span class="n">01</span>${m.b1}</h3><p>${m.b1p}</p>${leyMx}${tablaL(MTEC_L)}</section>
@@ -6815,7 +6994,7 @@ function vPlantel(){
       + '<td><input class="pl-edit" type="number" style="width:74px" value="'+(j.jg||"")+'" onchange="plSet('+j.id+',\'jg\',this.value)"></td>'
       + '<td class="num">'+(e===null?"—":e)+'</td>'
       + '<td><select class="pl-edit lvl-sel'+(j.lvl?' l'+j.lvl:'')+'" onchange="plSet('+j.id+',\'lvl\',this.value)">'
-        +'<option value="">—</option>'+LV().map(function(L){return '<option value="'+L.n+'"'+(Number(j.lvl)===L.n?" selected":"")+'>L'+L.n+'</option>';}).join("")+'</select></td>'
+        +'<option value="">—</option>'+LV().map(function(L){return '<option value="'+L.n+'"'+(Number(j.lvl)===L.n?" selected":"")+'>'+NIVN(L.n)+'</option>';}).join("")+'</select></td>'
       + '<td><select class="pl-edit" onchange="plSet('+j.id+',\'rama\',this.value)">'+opt("m",S("plMasc"),j.rama)+opt("f",S("plFem"),j.rama)+'</select></td>'
       + '<td><select class="pl-edit" onchange="plSet('+j.id+',\'grupo\',this.value)">'+selGrupo(j)+'</select></td>'
       + '<td><select class="pl-edit" onchange="plSet('+j.id+',\'liga\',this.value)">'+selLiga(j)+'</select></td>'
@@ -6857,7 +7036,7 @@ function vPlantel(){
     + '<div class="lvl-tablero no-imprimir"><b>'+S("lvlDividir")+'</b>'
       + LV().map(function(L){
           const n = lista.filter(function(x){return Number(x.lvl)===L.n;}).length;
-          return '<span class="lvl-chip l'+L.n+'" title="'+L.senal+'">L'+L.n+' '+L.t+' <i>'+n+'</i></span>';
+          return '<span class="lvl-chip l'+L.n+'" title="'+L.senal+'">'+NIVN(L.n)+' '+L.t+' <i>'+n+'</i></span>';
         }).join("")
       + '<span class="lvl-chip l0">'+S("lvlSin")+' <i>'+lista.filter(function(x){return !x.lvl;}).length+'</i></span></div>'
     + '<div class="pl-barra no-imprimir" style="border-color:var(--gris-claro)">'
@@ -6888,7 +7067,7 @@ function vPlantel(){
       +'<p style="margin:0 0 14px">'+S("lvlIntro")+'</p>'
       +'<div class="tabla-envoltura"><table class="tabla-lvl"><thead><tr><th style="width:118px">'+S("lvlTh")[0]+'</th><th style="width:210px">'+S("lvlTh")[1]+'</th><th>'+S("lvlTh")[2]+'</th></tr></thead><tbody>'
       + LV().map(function(L){
-          return '<tr><td class="lvl-celda l'+L.n+'"><strong>L'+L.n+'</strong><span>'+L.t+'</span></td>'
+          return '<tr><td class="lvl-celda l'+L.n+'"><strong>'+NIVN(L.n)+'</strong><span>'+L.liga+'</span><span style="color:var(--gris);font-weight:600">'+L.t+'</span></td>'
             +'<td class="lvl-senal-td">'+L.senal+'</td>'
             +'<td><ul class="lvl-lista">'+L.obs.map(function(o){return '<li><b>'+o[0]+'.</b> '+o[1]+'</li>';}).join("")+'</ul></td></tr>';
         }).join("")
