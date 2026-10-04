@@ -344,7 +344,9 @@
     if (h1 && !document.querySelector('.pe-vivo')) {
       var v = document.createElement('div');
       v.className = 'pe-vivo'; v.setAttribute('data-notr', '');
-      v.innerHTML = '<i></i><b>EN VIVO</b>';
+      /* el rotulo va marcado: es lo primero que se ve en el panel y en la
+         captura de la pagina de venta, y quedaba en castellano en ingles */
+      v.innerHTML = '<i></i><b data-t="EN VIVO">EN VIVO</b>';
       top.insertBefore(v, h1.nextSibling);
       var sp = document.createElement('div'); sp.className = 'pe-sep';
       top.insertBefore(sp, v.nextSibling);
