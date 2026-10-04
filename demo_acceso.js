@@ -61,11 +61,20 @@
           ok1:'Ich bin einverstanden, dass meine E-Mail gespeichert wird, um mir den Code zu schicken und mir über Volley-Stats zu schreiben.',
           ok2:'Wie wir deine Daten behandeln', faltaOk:'Bitte das Häkchen setzen' }
   };
+  /* El idioma de la demo. Lo que NO es castellano, ingles o aleman entra en
+     INGLES, no en castellano: a un entrenador de Luxemburgo, de Holanda o de
+     Francia el castellano no le dice nada y el ingles si. Antes cualquier
+     idioma que no fuera uno de los tres caia en castellano. */
   function L() {
-    var l = 'es';
-    try { if (typeof getLang === 'function') l = getLang(); } catch (e) {}
-    try { if (l === 'es' && localStorage.getItem('vb_lang')) l = localStorage.getItem('vb_lang'); } catch (e) {}
-    return TXT[l] || TXT.es;
+    /* El orden importa. getLang() de lang.js devuelve 'es' cuando el idioma
+       del aparato no es ninguno de los tres, y eso hacia que un navegador en
+       frances o en holandes viera la puerta en castellano. Aca se mira primero
+       la eleccion explicita del visitante (vb_lang, que es lo que guarda el
+       selector) y si no eligio nada, el idioma del aparato tal cual viene. */
+    var l = '';
+    try { l = localStorage.getItem('vb_lang') || ''; } catch (e) {}
+    if (!l) { try { l = (navigator.language || '').slice(0, 2).toLowerCase(); } catch (e) {} }
+    return TXT[l] || TXT.en || TXT.es;
   }
 
   function guardado() { try { return localStorage.getItem(LLAVE); } catch (e) { return null; } }

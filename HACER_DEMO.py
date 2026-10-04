@@ -212,15 +212,43 @@ GUARD = r'''/* =================================================================
     }
   }catch(e){}
 
-  /* 4 · el cartel */
+  /* 4 · el cartel
+         Los textos van en los tres idiomas. Lo que NO es castellano, ingles o
+         aleman entra en INGLES: a un entrenador de Luxemburgo, de Holanda o de
+         Francia el castellano no le dice nada y el ingles si. Y si el visitante
+         toca el selector de idioma, esto se repinta: lang.js avisa del cambio
+         con el evento «langchange». */
+  var DM_TXT = {
+    es:{ t:'Datos reales de la NLA · nada de lo que toques se guarda',
+         a:'Quiero la de mi club', x:'Cerrar' },
+    en:{ t:'Real top-division data · nothing you touch is saved',
+         a:'I want this for my club', x:'Close' },
+    de:{ t:'Echte Daten aus der höchsten Liga · nichts, was du anfasst, wird gespeichert',
+         a:'Ich will das für meinen Verein', x:'Schliessen' }
+  };
+  function dmIdioma(){
+    var l = '';
+    try{ l = localStorage.getItem('vb_lang') || ''; }catch(e){}
+    if(!l){ try{ l = (navigator.language || '').slice(0,2).toLowerCase(); }catch(e){} }
+    return DM_TXT[l] ? l : 'en';
+  }
+  function dmPintar(){
+    var d = document.getElementById('demo-cartel'); if(!d) return;
+    var t = DM_TXT[dmIdioma()];
+    var et = d.querySelector('.dm-t'); if(et) et.textContent = t.t;
+    var ea = d.querySelector('.dm-a'); if(ea) ea.textContent = t.a;
+    var ex = d.querySelector('.dm-x'); if(ex) ex.setAttribute('aria-label', t.x);
+  }
   function cartel(){
     if(document.getElementById('demo-cartel')) return;
     var d = document.createElement('div');
     d.id = 'demo-cartel';
+    /* data-notr: los textos los maneja dmPintar(), no el traductor de la app */
+    d.setAttribute('data-notr', '');
     d.innerHTML =
       '<span class="dm-p">DEMO</span>' +
-      '<span class="dm-t">Datos reales de la NLA · nada de lo que toques se guarda</span>' +
-      '<a class="dm-a" href="https://volley-stats.com" target="_blank" rel="noopener">Quiero la de mi club</a>' +
+      '<span class="dm-t"></span>' +
+      '<a class="dm-a" href="https://volley-stats.com" target="_blank" rel="noopener"></a>' +
       '<button class="dm-x" aria-label="Cerrar">&times;</button>';
     var s = document.createElement('style');
     s.textContent =
@@ -240,8 +268,10 @@ GUARD = r'''/* =================================================================
       '@media(max-width:640px){#demo-cartel .dm-t{display:none}}';
     document.head.appendChild(s);
     document.body.appendChild(d);
+    dmPintar();
     d.querySelector('.dm-x').onclick = function(){ d.remove(); };
   }
+  try{ window.addEventListener('langchange', dmPintar); }catch(e){}
   /* 5 · el sello. No impide una captura —nada lo impide— pero toda captura
          sale con la fecha, la hora y un codigo de visita. Sirve para saber de
          donde salio una imagen que aparezca dando vueltas, y para que el que

@@ -396,7 +396,7 @@ a{display:inline-block;background:var(--red);color:#fff;text-decoration:none;
 </div>
 <script>
 (function(){
-  var L='es'; try{ L=(localStorage.getItem('vb_lang')||navigator.language||'es').slice(0,2);}catch(e){}
+  var L=''; try{ L=(localStorage.getItem('vb_lang')||navigator.language||'').slice(0,2).toLowerCase();}catch(e){}
   var T={en:{t:'This screen is not in the demo',
              club:'It shows a real club\\u2019s own material \\u2014 roster, video, opponent scouting. The demo runs on sample data, so this screen stays in the full version.',
              carga:'This is a loading and administration tool: it writes to the club\\u2019s database. The demo is read-only, so it stays in the full version.',
@@ -405,7 +405,10 @@ a{display:inline-block;background:var(--red);color:#fff;text-decoration:none;
              club:'Er zeigt vereinseigenes Material \\u2014 Kader, Video, Gegnerscouting. Die Demo l\\u00e4uft mit Beispieldaten, daher bleibt dieser Bildschirm der Vollversion vorbehalten.',
              carga:'Das ist ein Eingabe- und Verwaltungswerkzeug: es schreibt in die Vereinsdatenbank. Die Demo ist nur lesend, daher bleibt es der Vollversion vorbehalten.',
              volver:'\\u2190 Zur\\u00fcck zur Demo', planes:'Preise ansehen'}};
-  var t=T[L]; if(!t) return;
+  /* el castellano es el que ya esta escrito en la pagina; el resto de los
+     idiomas que no son aleman van en ingles, no en castellano */
+  var t = T[L] || (L==='es' ? null : T.en); if(!t) return;
+  document.documentElement.setAttribute('lang', T[L] ? L : 'en');
   document.getElementById('t').textContent=t.t;
   document.getElementById('d').textContent=t['@@TIPO@@'];
   var a=document.querySelectorAll('a');
@@ -522,10 +525,13 @@ TOUR = r'''/* ══════════════════════
     }
   };
 
+  /* Lo que no es castellano, ingles o aleman entra en INGLES: a un entrenador
+     de Luxemburgo o de Francia el castellano no le dice nada. */
   function idioma() {
-    var l = 'es';
-    try { l = localStorage.getItem('vb_lang') || (navigator.language || 'es').slice(0, 2); } catch (e) {}
-    return TXT[l] ? l : 'es';
+    var l = '';
+    try { l = localStorage.getItem('vb_lang') || ''; } catch (e) {}
+    if (!l) { try { l = (navigator.language || '').slice(0, 2).toLowerCase(); } catch (e) {} }
+    return TXT[l] ? l : 'en';
   }
 
   /* ── el armazon ──────────────────────────────────────────────────── */

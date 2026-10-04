@@ -542,6 +542,14 @@
     try {
       var nav = (navigator.language || navigator.userLanguage || '').slice(0,2).toLowerCase();
       if (LANGS.indexOf(nav) >= 0) return nav;
+      /* ── EL IDIOMA DE LOS QUE NO HABLAN NINGUNO DE LOS TRES ─────────────
+         Si el aparato esta en frances, holandes, italiano o luxemburgues, no
+         hay traduccion para ofrecerle: antes caia en CASTELLANO y veia la app
+         entera en un idioma que no entiende. Cae en INGLES, que es el idioma
+         en el que se habla de voley entre paises.
+         El castellano sigue siendo lo que ve un aparato en castellano, y la
+         eleccion del selector manda siempre sobre esto. */
+      if (nav) return 'en';
     } catch(e){}
     return 'es';
   }

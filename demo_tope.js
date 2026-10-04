@@ -61,10 +61,20 @@
           imprimir:'In der Demo ist Drucken deaktiviert',
           marca:'DEMO' }
   };
+  /* El idioma de la demo. Lo que NO es castellano, ingles o aleman entra en
+     INGLES, no en castellano: a un entrenador de Luxemburgo, de Holanda o de
+     Francia el castellano no le dice nada y el ingles si. Antes cualquier
+     idioma que no fuera uno de los tres caia en castellano. */
   function L() {
-    var l = 'es';
-    try { if (typeof getLang === 'function') l = getLang(); } catch (e) {}
-    return TXT[l] || TXT.es;
+    /* El orden importa. getLang() de lang.js devuelve 'es' cuando el idioma
+       del aparato no es ninguno de los tres, y eso hacia que un navegador en
+       frances o en holandes viera la puerta en castellano. Aca se mira primero
+       la eleccion explicita del visitante (vb_lang, que es lo que guarda el
+       selector) y si no eligio nada, el idioma del aparato tal cual viene. */
+    var l = '';
+    try { l = localStorage.getItem('vb_lang') || ''; } catch (e) {}
+    if (!l) { try { l = (navigator.language || '').slice(0, 2).toLowerCase(); } catch (e) {} }
+    return TXT[l] || TXT.en || TXT.es;
   }
 
   /* ── 3) los cinco días ──────────────────────────────────────────────
