@@ -1130,6 +1130,196 @@ function _esJugadorFila(t){
   return /jugador|player|spieler|joueur/i.test(String(t||''));
 }
 
+
+/* ══════════════════════════════════════════════════════════════════════════
+   QUE SESION ESTA ELEGIDA, UNA SOLA RESPUESTA PARA TODAS LAS PANTALLAS
+   Cada pantalla guarda la eleccion a su manera:
+     · el perfil del jugador y el analisis la ponen en _objPartido, ya con el
+       id del archivo de baterias adentro;
+     · el dashboard usa el tab Equipo —EQ_SESION y EQ_SEL—, que son POSICIONES
+       dentro de DATA.entrenamientos, una lista distinta y en otro orden que
+       BAT_PARTIDOS.meta.
+   Por eso las baterias del dashboard mostraban el acumulado eligieras lo que
+   eligieras: leian _dbatPartido, que ese desplegable nunca tocaba.
+   Aca se traduce la sesion elegida al id de las baterias, que es lo unico que
+   batGet entiende.
+   ══════════════════════════════════════════════════════════════════════════ */
+function batFechaISO(f){
+  var s = String(f || '').trim(), m;
+  m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})/);  if(m) return m[3] + '-' + m[2] + '-' + m[1];
+  m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);    if(m) return m[0];
+  return '';
+}
+function _batNorm(x){ return String(x || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
+function _batTipo(t){
+  return (t === 'entrenamiento' || t === 'E') ? 'entrenamiento' : 'partido';
+}
+
+/* una sesion de DATA.entrenamientos -> el id de BAT_PARTIDOS */
+function batIdDeSesion(s){
+  var B = window.BAT_PARTIDOS;
+  if(!B || !B.meta || !s) return null;
+  var f = batFechaISO(s.fecha); if(!f) return null;
+  var t = _batTipo(s.tipo || 'P');
+  var c = B.meta.filter(function(m){
+    return batFechaISO(m.fecha) === f && _batTipo(m.tipo) === t;
+  });
+  if(c.length === 1) return c[0].id;
+  if(c.length > 1){
+    /* mismo dia: primero el rival —tres partidos el 19/09— */
+    var r = _batNorm(s.rival);
+    var p = c.filter(function(m){
+      var q = _batNorm(m.rival);
+      return r && q && (q.indexOf(r) >= 0 || r.indexOf(q) >= 0 || _batNorm(m.id).indexOf(r) >= 0);
+    });
+    if(p.length === 1) return p[0].id;
+    /* y si no, el turno: dos practicas el mismo dia, mañana y tarde */
+    var base = p.length ? p : c;
+    var tu = _batNorm(s.turno);
+    var q2 = base.filter(function(m){ return _batNorm(m.turno) === tu; });
+    if(q2.length === 1) return q2[0].id;
+  }
+  return null;
+}
+
+function batMetaDe(id){
+  var B = window.BAT_PARTIDOS;
+  if(!B || !B.meta) return null;
+  for(var i = 0; i < B.meta.length; i++) if(String(B.meta[i].id) === String(id)) return B.meta[i];
+  return null;
+}
+
+/* cuantas sesiones del mismo tipo caen el mismo dia */
+function batMismoDia(m){
+  var B = window.BAT_PARTIDOS;
+  if(!B || !B.meta || !m) return 0;
+  var f = batFechaISO(m.fecha), t = _batTipo(m.tipo);
+  return B.meta.filter(function(x){
+    return batFechaISO(x.fecha) === f && _batTipo(x.tipo) === t;
+  }).length;
+}
+
+/* los ids elegidos, o null cuando esta todo el acumulado */
+function batSesionIds(){
+  var B = window.BAT_PARTIDOS;
+  if(!B || !B.meta) return null;
+  /* 1 · el desplegable propio del perfil y del analisis */
+  var p = (window._dbatPartido && window._dbatPartido !== 'acumulado') ? window._dbatPartido
+        : (window._objPartido  && window._objPartido  !== 'acumulado') ? window._objPartido : null;
+  if(p) return [String(p)];
+  /* 2 · el tab Equipo del dashboard */
+  try{
+    if(typeof getEqSesiones === 'function' && typeof getSesiones === 'function'){
+      var filtro = (typeof EQ_FILTRO !== 'undefined') ? EQ_FILTRO : 'todos';
+      var todas  = getSesiones(filtro) || [];
+      var ses    = getEqSesiones() || [];
+      if(ses.length && ses.length < todas.length){
+        var ids = ses.map(batIdDeSesion).filter(Boolean);
+        if(ids.length) return ids;
+      }
+    }
+  }catch(e){}
+  return null;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   VARIAS SESIONES A LA VEZ
+   batGet sabe traer UNA sesion o el acumulado de todas, nada en el medio. Con
+   tres entrenamientos tildados no habia de donde sacar el numero.
+   No se promedian los porcentajes de cada dia —eso daria cualquier cosa—: se
+   suman los contadores en crudo y recien ahi se calcula, con las mismas
+   formulas del generador. Verificado: sumando las 22 sesiones da exactamente
+   el acumulado del archivo, campo por campo.
+   ══════════════════════════════════════════════════════════════════════════ */
+var BAT_CUENTA = {
+  sq:    {d:'sqD',  t:'n_sq',    f:function(x){ return x.p + .875*(x.f||0) + .75*(x.o||0) + .5*(x.n||0) + .25*(x.m||0); }},
+  rec:   {d:'recD', t:'n_rec',   f:function(x){ return x.p + .75*(x.o||0) + .5*(x.n||0) + .25*(x.m||0) + .125*(x.s||0); }},
+  def:   {d:'defD', t:'n_def',   f:function(x){ return x.p + .75*(x.o||0) + .5*(x.n||0) + .25*(x.m||0); }},
+  bqpos: {d:'bqD',  t:'n_bqpos', f:function(x){ return x.p + (x.o||0); }},
+  bqpt:  {d:'bqD',  t:'n_bqpt',  f:function(x){ return x.p; }}
+};
+var BAT_DETS = ['sqD','recD','defD','bqD'];
+var BAT_ATQ  = ['q','hb','x','rp','ri','rm','tr','z'];
+
+function batSuma(nombre, ids){
+  var B = window.BAT_PARTIDOS;
+  if(!B || !B.ind || !ids || !ids.length) return (typeof _OBJ_NULOS !== 'undefined') ? _OBJ_NULOS : {};
+  var quiero = {};
+  ids.forEach(function(x){ quiero[String(x)] = 1; });
+  var acc = {}, n = {}, atq = {}, hubo = false;
+  B.ind.forEach(function(s){
+    if(!quiero[String(s.id)]) return;
+    var V;
+    if(nombre){
+      var keys = Object.keys(s.jug || {});
+      var k = (typeof window._batMatchName === 'function') ? window._batMatchName(nombre, keys) : null;
+      if(!k){
+        var bn = _batNorm(nombre);
+        for(var i = 0; i < keys.length; i++) if(_batNorm(keys[i]).indexOf(bn) >= 0){ k = keys[i]; break; }
+      }
+      V = k ? s.jug[k] : null;
+    }else{
+      V = s.eq;
+    }
+    if(!V) return;
+    hubo = true;
+    BAT_DETS.forEach(function(dn){
+      var D = V[dn]; if(!D) return;
+      acc[dn] = acc[dn] || {};
+      Object.keys(D).forEach(function(c){ if(typeof D[c] === 'number') acc[dn][c] = (acc[dn][c] || 0) + D[c]; });
+    });
+    Object.keys(BAT_CUENTA).forEach(function(k2){
+      var tk = BAT_CUENTA[k2].t; n[tk] = (n[tk] || 0) + (V[tk] || 0);
+    });
+    var A = V.atqD || {};
+    BAT_ATQ.forEach(function(k3){
+      var D = A[k3]; if(!D) return;
+      atq[k3] = atq[k3] || {};
+      Object.keys(D).forEach(function(c){ if(typeof D[c] === 'number') atq[k3][c] = (atq[k3][c] || 0) + D[c]; });
+    });
+    ['defT','defPerf','defErr','defBuena','defMala'].forEach(function(k4){ n[k4] = (n[k4] || 0) + (V[k4] || 0); });
+  });
+  if(!hubo) return (typeof _OBJ_NULOS !== 'undefined') ? _OBJ_NULOS : {};
+  var v = {};
+  Object.keys(BAT_CUENTA).forEach(function(k){
+    var C = BAT_CUENTA[k], D = acc[C.d], T = n[C.t] || 0;
+    v[k] = (D && T) ? Math.round(C.f(D) / T * 100) : null;
+    v['n_' + k] = T;
+    if(D) v[C.d] = D;
+  });
+  v.atqD = {};
+  BAT_ATQ.forEach(function(k){
+    var D = atq[k], id = 'atq' + k, T = D ? (D.t || 0) : 0;
+    v[id] = (D && T) ? Math.round((D.p - (D.b || 0) - (D.e || 0)) / T * 100) : null;
+    v['n_' + id] = T;
+    if(D) v.atqD[k] = D;
+  });
+  ['defT','defPerf','defErr','defBuena','defMala'].forEach(function(k){ v[k] = n[k] || 0; });
+  return v;
+}
+
+/* Lo que hay que mandarle a cortes.html para que traiga SOLO la sesion que
+   esta mirando el entrenador. Vacio cuando hay varias elegidas o es el
+   acumulado: filtrar por una sola seria mentir sobre lo que cuenta la
+   bateria. El rival va solo cuando ese dia hubo mas de un partido —el 19/09
+   se jugaron tres—, porque con un solo partido la fecha ya alcanza y no
+   dependemos de que los dos archivos escriban el nombre igual. */
+function batFiltroSesion(){
+  var out = [];
+  try{
+    var ids = batSesionIds();
+    if(ids && ids.length === 1){
+      var m = batMetaDe(ids[0]);
+      if(m && m.fecha){
+        var f = batFechaISO(m.fecha);
+        if(f) out.push(['date', f]);
+        if(f && m.rival && _batTipo(m.tipo) === 'partido' && batMismoDia(m) > 1) out.push(['rival', m.rival]);
+      }
+    }
+  }catch(e){}
+  return out;
+}
+
 function objVerVideo(id, clave, nombreFila, cuantas, jugNombre){
   /* ══ EN EL PANEL EN VIVO, EL REPRODUCTOR DE AL LADO ══════════════════════
      Durante el partido cortes.html no sirve: necesita el .dvw ya subido y
@@ -1243,21 +1433,22 @@ function objVerVideo(id, clave, nombreFila, cuantas, jugNombre){
 
        Con varias sesiones elegidas no se manda fecha: filtrar por una sola
        seria mentir sobre lo que muestra la bateria. */
+    /* ══ EL VIDEO TIENE QUE ABRIR EN LA SESION QUE ESTA EN PANTALLA ═══════
+       Aca decia _B.meta[EQ_SESION]. EQ_SESION es la POSICION dentro de
+       DATA.entrenamientos —la lista de la pantalla— y se usaba para buscar
+       en BAT_PARTIDOS.meta, que es otra lista y en otro orden. Medido: con
+       el partido contra VCS del 3 de octubre elegido, el link se iba con
+       date=2026-09-07, un entrenamiento de hacia un mes.
+
+       Ahora la sesion se traduce a su id de baterias —por fecha, rival y
+       turno— y de ahi sale la fecha. Y en el analisis, que guarda la
+       eleccion en _objPartido y no tiene EQ_SESION, antes no viajaba fecha
+       ninguna: por eso el video abria con las acciones de todos los
+       partidos. */
     try{
-      var _B = window.BAT_PARTIDOS;
-      var _i = (typeof EQ_SESION !== 'undefined' && EQ_SESION >= 0) ? EQ_SESION : -1;
-      if(_i < 0 && typeof EQ_SEL !== 'undefined' && EQ_SEL){
-        var _k = Object.keys(EQ_SEL).filter(function(x){ return EQ_SEL[x]; });
-        if(_k.length === 1) _i = Number(_k[0]);
-      }
-      if(_i >= 0 && _B && _B.meta && _B.meta[_i] && _B.meta[_i].fecha){
-        var _f = String(_B.meta[_i].fecha);
-        if(_f.indexOf('/') > 0){
-          var _p = _f.split('/');
-          if(_p.length === 3) _f = _p[2] + '-' + _p[1] + '-' + _p[0];
-        }
-        q.push('date=' + encodeURIComponent(_f));
-      }
+      batFiltroSesion().forEach(function(par){
+        q.push(par[0] + '=' + encodeURIComponent(par[1]));
+      });
     }catch(e){}
 
     /* ══ LA RECEPCION QUE ORIGINO EL ATAQUE ═══════════════════════════════
