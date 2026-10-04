@@ -211,10 +211,106 @@ function deJugador(quien){
     if (parecido(L[i].name, quien)){ j = L[i]; break; }
   }
   if (!j) return null;
-  var filas = (j.data || []).filter(function(f){
+  var filas = _vsFiltrar((j.data || []).filter(function(f){
     return f.length > 7 && typeof f[7] === 'number' && f[7] > 0;
-  });
+  }));
   return { num:j.num, name:j.name, saques:filas };
+}
+
+
+/* ══ SOLO LA SESION QUE SE ESTA MIRANDO ═══════════════════════════════════════
+   Esta tabla mostraba SIEMPRE todos los saques medidos, pasara lo que pasara
+   arriba. Con el partido contra VCS elegido en el dashboard seguian saliendo
+   los 240 saques del entrenamiento del 29 de septiembre, que es el unico dia
+   que se midio con radar.
+
+   La sesion elegida la sabe batSesionIds() —la misma que usan las baterias—,
+   pero devuelve el id del archivo de baterias, y aca cada saque viene marcado
+   con el id del plan de partido. Son dos nomenclaturas distintas para la
+   misma sesion:
+       baterias        E2026-09-29-AXPONAFELS
+       plan de partido E2026-09-29-PRAAXPONAFEL
+   Lo unico que comparten, y que identifica la sesion, es la letra del tipo y
+   la fecha: E2026-09-29. Por eso se compara eso.
+
+   Dos sesiones el mismo dia —pasa con los entrenamientos de mañana y tarde—
+   no se pueden separar: ningun de los dos archivos escribe el turno de la
+   misma forma. En ese caso se muestran las dos y el pie de la tabla lo dice.
+
+   Si la pantalla no eligio nada, o no tiene baterias cargadas, no se filtra y
+   queda todo como estaba. */
+function _vsClave(id){
+  var m = String(id || '').match(/^([EP])(\d{4}-\d{2}-\d{2})/);
+  return m ? (m[1] + m[2]) : '';
+}
+function sesionesPedidas(){
+  try{
+    if (typeof global.batSesionIds !== 'function') return null;
+    var ids = global.batSesionIds();
+    if (!ids || !ids.length) return null;
+    var set = {}, hay = false;
+    ids.forEach(function(id){
+      var m = (typeof global.batMetaDe === 'function') ? global.batMetaDe(id) : null;
+      var k = _vsClave(m ? m.id : id);
+      if (!k && m && m.fecha){
+        k = ((m.tipo === 'entrenamiento' || m.tipo === 'E') ? 'E' : 'P') + String(m.fecha).slice(0, 10);
+      }
+      if (k){ set[k] = 1; hay = true; }
+    });
+    return hay ? set : null;
+  }catch(e){ return null; }
+}
+function _vsFiltrar(filas){
+  var S = sesionesPedidas();
+  if (!S) return filas;
+  return filas.filter(function(f){ return !!S[_vsClave(f[6])]; });
+}
+/* como se llama la sesion elegida, para decirlo en pantalla */
+function _vsRotulo(){
+  try{
+    if (typeof global.batSesionIds !== 'function') return '';
+    var ids = global.batSesionIds();
+    if (!ids || !ids.length) return '';
+    if (ids.length > 1) return ids.length + ' sesiones elegidas';
+    var m = (typeof global.batMetaDe === 'function') ? global.batMetaDe(ids[0]) : null;
+    if (!m) return '';
+    var f = String(m.fecha || '');
+    if (/^\d{4}-\d{2}-\d{2}/.test(f)) f = f.slice(8,10) + '/' + f.slice(5,7) + '/' + f.slice(0,4);
+    var q = (m.tipo === 'entrenamiento' || m.tipo === 'E') ? 'el entrenamiento' : 'el partido vs ' + (m.rival || '');
+    return q + ' del ' + f;
+  }catch(e){ return ''; }
+}
+/* cuantas sesiones de las baterias caen el mismo dia que la elegida */
+function _vsDiaCompartido(){
+  try{
+    if (typeof global.batSesionIds !== 'function' || typeof global.batMetaDe !== 'function') return false;
+    var ids = global.batSesionIds();
+    if (!ids || ids.length !== 1) return false;
+    var m = global.batMetaDe(ids[0]);
+    return !!(m && typeof global.batMismoDia === 'function' && global.batMismoDia(m) > 1);
+  }catch(e){ return false; }
+}
+/* los dias que SI tienen saques medidos, para avisar bien cuando no hay */
+function _vsDiasMedidos(){
+  var dias = {};
+  sacadores().forEach(function(j){
+    (j.data || []).forEach(function(f){
+      if (f.length > 7 && typeof f[7] === 'number' && f[7] > 0){
+        var k = _vsClave(f[6]); if (k) dias[k] = 1;
+      }
+    });
+  });
+  return Object.keys(dias).sort().map(function(k){
+    return k.slice(9,11) + '/' + k.slice(6,8) + '/' + k.slice(1,5);
+  });
+}
+function _vsSinSesion(caja){
+  var rot = _vsRotulo();
+  var dias = _vsDiasMedidos();
+  var h = '<div class="vs-nada">No hay saques con velocidad medida en ' + (rot || 'la sesión elegida') + '.';
+  if (dias.length) h += '<br><span style="opacity:.75">Hay radar en: ' + dias.join(' · ') + '.</span>';
+  h += '</div>';
+  caja.innerHTML = h;
 }
 
 /* ── cuentas ─────────────────────────────────────────────────────────── */
@@ -268,6 +364,7 @@ function pintarJugador(caja, quien){
   estilo();
   var J = deJugador(quien);
   if (!J || !J.saques.length){
+    if (J && sesionesPedidas()){ _vsSinSesion(caja); return; }
     caja.innerHTML = '<div class="vs-nada">Todavía no hay saques tuyos con velocidad medida. '
                    + 'Aparecen solos en cuanto se cargue una sesión con la pistola.</div>';
     return;
@@ -316,12 +413,13 @@ function pintarPlantel(caja){
   if (!caja) return;
   estilo();
   var L = sacadores().map(function(j){
-    var f = (j.data || []).filter(function(x){ return x.length > 7 && typeof x[7] === 'number' && x[7] > 0; });
+    var f = _vsFiltrar((j.data || []).filter(function(x){ return x.length > 7 && typeof x[7] === 'number' && x[7] > 0; }));
     return { num:j.num, name:j.name, g:agrupar(f), n:f.length };
   }).filter(function(x){ return x.n > 0; })
     .sort(function(a,b){ return (mediana(b.g.tot)||0) - (mediana(a.g.tot)||0); });
 
   if (!L.length){
+    if (sesionesPedidas()){ _vsSinSesion(caja); return; }
     caja.innerHTML = '<div class="vs-nada">Todavía no hay saques con velocidad medida.</div>';
     return;
   }
@@ -339,14 +437,19 @@ function pintarPlantel(caja){
     h += '<td><span class="kk">' + n1(Math.max.apply(null, g.tot)) + '</span></td></tr>';
   });
   h += '</table></div>';
-  h += '<p class="vs-pie">Ordenado por velocidad habitual. <b>En punto</b> y <b>en error</b> son las dos '
-     + 'columnas que más dicen: si un jugador erra más rápido de lo que acierta, está sacando de más.</p>';
+  var _rot = _vsRotulo();
+  h += '<p class="vs-pie">' + (_rot ? 'Solo <b>' + _rot + '</b>. ' : 'Todas las sesiones medidas. ')
+     + 'Ordenado por velocidad habitual. <b>En punto</b> y <b>en error</b> son las dos '
+     + 'columnas que más dicen: si un jugador erra más rápido de lo que acierta, está sacando de más.'
+     + (_vsDiaCompartido() ? ' Ese día hubo más de una sesión y los dos archivos no guardan el turno igual, así que se muestran las dos.' : '')
+     + '</p>';
   caja.innerHTML = h;
 }
 
 global.VEL_SAQUE = { pedirDatos:pedirDatos, hayDatos:hayDatos, deJugador:deJugador,
                      hayMedidos:function(){ return tieneMedidos(clubPP()); },
                      pintarJugador:pintarJugador, pintarPlantel:pintarPlantel,
-                     mediana:mediana, sacadores:sacadores };
+                     mediana:mediana, sacadores:sacadores,
+                     sesionesPedidas:sesionesPedidas, rotulo:_vsRotulo };
 
 })(window);
