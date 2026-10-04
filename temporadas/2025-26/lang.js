@@ -933,6 +933,8 @@
     'Total': { en:'Total', de:'Gesamt' },
     'ULTIMO PUNTO': { en:'LAST POINT', de:'LETZTER PUNKT' },
     'Volver': { en:'Back', de:'Zurück' },
+    '≡ Menú': { en:'≡ Menu', de:'≡ Menü' },
+    'Volver al menú de partidos. No se pierde nada de lo que ya cargaste.': { en:'Back to the match menu. Nothing you have entered is lost.', de:'Zurück zum Spielmenü. Nichts von dem, was du erfasst hast, geht verloren.' },
     'Volver a revisar': { en:'Check again', de:'Nochmals prüfen' },
     'alto ·': { en:'high ·', de:'hoch ·' },
     'medio ·': { en:'medium ·', de:'mittel ·' },
@@ -4992,8 +4994,8 @@
 
      Antes hubo un selector flotante arriba a la derecha y se saco porque tapaba
      botones, el de CERRAR SET entre ellos. Asi que este va ABAJO A LA IZQUIERDA,
-     apoyado sobre el escudo del club, que ya vive ahi en todas las pantallas y
-     nunca molesto. Y no va en las dos pantallas del partido en vivo: ahi se
+     arriba a la derecha, que es el lugar que ya usan las pantallas que traen
+     el suyo propio y donde no tapa nada. Y no va en las dos pantallas del partido en vivo: ahi se
      scoutea contrarreloj y no se toca nada.
 
      Donde el hueco ya existe, manda el hueco: esto no cambia ni una de las 24
@@ -5008,7 +5010,13 @@
       var w = document.createElement('div');
       w.id = 'lang-wrap';
       w.setAttribute('data-notr','');
-      w.style.cssText = 'position:fixed;left:12px;bottom:66px;z-index:99990;display:flex;gap:4px;'
+      /* Arriba a la derecha, que es donde la propia ayuda de la app dice que
+         esta («se cambia con los botones de arriba a la derecha») y donde ya
+         lo tienen las 38 pantallas que traen el suyo en el encabezado. Abajo
+         a la izquierda quedaba encima del escudo y tapaba contenido.
+         El env() es por el notch del telefono con la app en pantalla completa. */
+      w.style.cssText = 'position:fixed;top:calc(8px + env(safe-area-inset-top,0px));right:12px;'
+        + 'z-index:99990;display:flex;gap:4px;'
         + 'padding:4px;border-radius:10px;background:rgba(7,8,15,.86);'
         + 'border:1px solid rgba(255,255,255,.12);box-shadow:0 2px 10px rgba(0,0,0,.5)';
       document.body.appendChild(w);
