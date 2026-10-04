@@ -568,13 +568,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20261004-0918"></script>
-<script src="selector_categoria.js?v=20261004-0918"></script>
-<script src="lang.js?v=20261004-0918"></script>
+<script src="categorias_club.js?v=20261004-1535"></script>
+<script src="selector_categoria.js?v=20261004-1535"></script>
+<script src="lang.js?v=20261004-1535"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261004-0918">
+<link rel="stylesheet" href="movil.css?v=20261004-1535">
 </head>
 <body>
 
@@ -1314,16 +1314,25 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20261004-0918" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261004-0918"></script>
-<script src="objetivos.js?v=20261004-0918" onerror="void 0"></script>
-<script src="video_delay.js?v=20261004-0918" onerror="void 0"></script>
+<script src="firebase.js?v=20261004-1535" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261004-1535"></script>
+<script src="objetivos.js?v=20261004-1535" onerror="void 0"></script>
+<!-- ══ EL MOTOR BUENO DEL DELAY, QUE EN ESTA PAGINA NO ESTABA ═══════════
+     video_delay.js tiene dos motores: el de clips de 12 segundos y el de
+     buffer continuo (delay_buffer.js), que es el que deja elegir el retraso
+     de verdad y no corta en cada empalme. El segundo se usa SOLO si la clase
+     BufferDelay existe en la pagina... y este archivo nunca la cargaba.
+     Resultado: el panel que usa el scout siempre caia al motor viejo, que es
+     el que se siente como que "se traba". panel_voley.html si lo carga, por
+     eso ahi se veia mejor. -->
+<script src="delay_buffer.js?v=20261004-1535" onerror="void 0"></script>
+<script src="video_delay.js?v=20261004-1535" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20261004-0918" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20261004-0918"></script>
+<script src="plantel_nafels.js?v=20261004-1535" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261004-1535"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -8486,14 +8495,39 @@ if(M.home.lineup.every(x=>!x)) openSetup();
   <div style="height:100%;display:flex;flex-direction:column;max-width:1100px;margin:0 auto">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
       <h2 style="font-family:Barlow Condensed,sans-serif;color:#e2e8f0;margin:0;font-size:20px" data-t="Video en vivo (delay)">Video en vivo (delay)</h2>
+      <button id="vd-tv-btn" onclick="vdTelevisor()" title="Abre el video solo, en su propia ventana, para arrastrarla al televisor. Vos seguís scouteando acá." style="background:rgba(230,167,67,.15);color:#e6a743;border:1px solid rgba(230,167,67,.4);border-radius:8px;padding:8px 16px;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-weight:700;font-size:14px" data-t="Abrir en el televisor">Abrir en el televisor</button>
       <button id="vd-dock-btn" onclick="vdDock()" title="Achicá el video a un costado para poder tipear y ver el video a la vez" style="background:rgba(34,211,238,.15);color:#22d3ee;border:1px solid rgba(34,211,238,.35);border-radius:8px;padding:8px 16px;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-weight:700;font-size:14px">⧉ Acoplar</button>
       <button onclick="cerrarVideoVivo()" style="background:rgba(255,255,255,.06);color:#e2e8f0;border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:8px 18px;cursor:pointer;font-family:Barlow Condensed,sans-serif;font-weight:700;font-size:14px" data-t="Cerrar"><span data-t="Cerrar"><span data-t="Cerrar">Cerrar</span></span></button>
     </div>
-    <div id="vdv-conectar" style="padding:20px;display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;flex:1">
-      <div style="font-size:13px;color:#8a8ba0;text-align:center;max-width:340px;line-height:1.6"><span data-t="Abrí"><span data-t="Abrí">Abrí</span></span> <b style="color:#e2e8f0">camara.html</b> <span data-t="en el celular que apunta a la cancha, tocá Transmitir, y escribí acá el código de sala."><span data-t="en el celular que apunta a la cancha, tocá Transmitir, y escribí acá el código de sala.">en el celular que apunta a la cancha, tocá Transmitir, y escribí acá el código de sala.</span></span></div>
-      <input id="vd-sala" inputmode="numeric" maxlength="4" placeholder="0000" style="width:180px;text-align:center;font-family:Barlow Condensed,monospace;font-size:40px;font-weight:800;letter-spacing:8px;background:#1a1b2b;border:1px solid rgba(255,255,255,.1);color:#e6a743;border-radius:12px;padding:12px;outline:none">
-      <button onclick="vdConectar()" style="background:#22d3ee;color:#04212a;border:0;border-radius:12px;padding:14px 30px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit" data-t="Conectar">Conectar</button>
-      <div id="vd-estado" class="vd-estado" style="font-size:13px;color:#8a8ba0;min-height:20px"></div>
+    <div id="vdv-conectar" style="padding:20px;display:flex;flex-direction:column;gap:18px;align-items:center;justify-content:center;flex:1;overflow-y:auto">
+
+      <!-- ══ CAMARA ENCHUFADA A ESTA COMPUTADORA ══════════════════════════════
+           Es el camino bueno: sin red en el medio y sin la primera compresion.
+           Sirve una webcam USB, una capturadora de HDMI, o la camara virtual de
+           OBS, que es la puerta para meter cualquier camara buena. -->
+      <div style="width:100%;max-width:420px;background:#12131f;border:1px solid rgba(34,211,238,.35);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-family:Barlow Condensed,sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#22d3ee" data-t="Cámara de esta computadora">Cámara de esta computadora</div>
+        <div style="font-size:12.5px;color:#8a8ba0;line-height:1.55" data-t="Webcam, capturadora de HDMI o cámara virtual de OBS. Es la que mejor se ve: el video no pasa por la red.">Webcam, capturadora de HDMI o cámara virtual de OBS. Es la que mejor se ve: el video no pasa por la red.</div>
+        <select id="vd-cam" style="width:100%;background:#1a1b2b;border:1px solid rgba(255,255,255,.12);color:#e2e8f0;border-radius:10px;padding:11px;font-family:inherit;font-size:14px">
+          <option value="" data-t="Buscá las cámaras primero">Buscá las cámaras primero</option>
+        </select>
+        <div style="display:flex;gap:8px">
+          <button onclick="vdBuscarCamaras()" style="flex:1;background:rgba(34,211,238,.12);color:#22d3ee;border:1px solid rgba(34,211,238,.35);border-radius:10px;padding:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit" data-t="Buscar cámaras">Buscar cámaras</button>
+          <button onclick="vdConectarLocal()" style="flex:1;background:#22d3ee;color:#04212a;border:0;border-radius:10px;padding:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit" data-t="Usar esta cámara">Usar esta cámara</button>
+        </div>
+      </div>
+
+      <div style="font-family:Barlow Condensed,sans-serif;font-size:12px;letter-spacing:3px;color:#5a5b70" data-t="O SI NO">O SI NO</div>
+
+      <!-- ══ EL TELEFONO POR WIFI, COMO HASTA AHORA ═══════════════════════════ -->
+      <div style="width:100%;max-width:420px;background:#12131f;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;align-items:center">
+        <div style="font-family:Barlow Condensed,sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#e6a743" data-t="Teléfono por wifi">Teléfono por wifi</div>
+        <div style="font-size:12.5px;color:#8a8ba0;text-align:center;line-height:1.55"><span data-t="Abrí"><span data-t="Abrí">Abrí</span></span> <b style="color:#e2e8f0">camara.html</b> <span data-t="en el celular que apunta a la cancha, tocá Transmitir, y escribí acá el código de sala."><span data-t="en el celular que apunta a la cancha, tocá Transmitir, y escribí acá el código de sala.">en el celular que apunta a la cancha, tocá Transmitir, y escribí acá el código de sala.</span></span></div>
+        <input id="vd-sala" inputmode="numeric" maxlength="4" placeholder="0000" style="width:180px;text-align:center;font-family:Barlow Condensed,monospace;font-size:40px;font-weight:800;letter-spacing:8px;background:#1a1b2b;border:1px solid rgba(255,255,255,.1);color:#e6a743;border-radius:12px;padding:12px;outline:none">
+        <button onclick="vdConectar()" style="background:#e6a743;color:#1a1200;border:0;border-radius:12px;padding:12px 30px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit" data-t="Conectar">Conectar</button>
+      </div>
+
+      <div id="vd-estado" class="vd-estado" style="font-size:13px;color:#8a8ba0;min-height:20px;text-align:center"></div>
     </div>
     <div id="vdv-player" style="display:none;flex-direction:column;padding:14px;gap:12px;overflow-y:auto;flex:1">
       <div id="vd-videowrap" style="position:relative;background:#000;border-radius:14px;overflow:hidden;width:100%;max-height:45vh;aspect-ratio:16/9;flex-shrink:0">
@@ -8509,6 +8543,9 @@ if(M.home.lineup.every(x=>!x)) openSetup();
           <input type="range" id="vd-slider" min="0" max="25" step="1" value="0" oninput="vdSlider(this.value)" style="flex:1;accent-color:#22d3ee">
           <span id="vd-slider-val" style="font-family:Barlow Condensed,monospace;font-size:18px;font-weight:800;color:#22d3ee;min-width:44px;text-align:right">0 s</span>
         </div>
+        <!-- con qué está andando de verdad: resolución, códec, megabits y los
+             tres contadores que distinguen «entra mal» de «se traba» -->
+        <div id="vd-diag" style="font-family:Barlow Condensed,monospace;font-size:11.5px;letter-spacing:.5px;color:#6b7a93;text-align:center;min-height:16px"></div>
       </div>
     </div>
   </div>
@@ -8549,6 +8586,75 @@ function vdAplicarModo(){
   }
 }
 function vdConectar(){ var sala=(document.getElementById('vd-sala').value||'').trim(); if(sala.length<4){ document.getElementById('vd-estado').textContent='Escribí el código de 4 dígitos.'; return; } if(!window.VideoDelay){ document.getElementById('vd-estado').textContent='Falta video_delay.js'; return; } VideoDelay.conectar(sala); VideoDelay.setDelay(0); document.getElementById('vdv-conectar').style.display='none'; document.getElementById('vdv-player').style.display='flex'; }
+
+/* ══ LA CAMARA DE ESTA COMPUTADORA ════════════════════════════════════════════
+   Los nombres de las camaras solo aparecen DESPUES de que el navegador dio
+   permiso: antes la lista viene con los nombres vacios y no se puede elegir.
+   Por eso el boton primero pide permiso con una camara cualquiera, la apaga
+   enseguida, y recien ahi arma la lista. */
+function vdBuscarCamaras(){
+  var sel=document.getElementById('vd-cam'), est=document.getElementById('vd-estado');
+  if(!window.VideoDelay || !VideoDelay.camaras){ if(est) est.textContent='Falta video_delay.js'; return; }
+  if(est) est.textContent='Buscando cámaras…';
+  var pedirPermiso = (navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
+    ? navigator.mediaDevices.getUserMedia({video:true}).then(function(st){
+        try{ st.getTracks().forEach(function(t){ t.stop(); }); }catch(e){}
+      }).catch(function(){})
+    : Promise.resolve();
+  pedirPermiso.then(function(){ return VideoDelay.camaras(); }).then(function(cs){
+    sel.innerHTML='';
+    if(!cs.length){
+      sel.innerHTML='<option value="">No encontré ninguna cámara</option>';
+      if(est) est.textContent='No hay cámaras conectadas a esta computadora.';
+      return;
+    }
+    cs.forEach(function(c,i){
+      var o=document.createElement('option');
+      o.value=c.deviceId;
+      o.textContent=c.label || ('Cámara '+(i+1));
+      sel.appendChild(o);
+    });
+    if(est) est.textContent=cs.length+(cs.length===1?' cámara encontrada.':' cámaras encontradas.');
+  });
+}
+/* ══ EL VIDEO SE VA AL TELEVISOR ══════════════════════════════════════════════
+   El delay vive adentro de este panel, y eso para el televisor no sirve: con el
+   HDMI enchufado los jugadores verian los codigos y las tablas.
+
+   pantalla_delay.html es la misma maquinaria pero sola: se abre en su propia
+   ventana, se arrastra al televisor y se pone en pantalla completa. Vos seguis
+   scouteando en la pantalla de la notebook. Una computadora, dos ventanas.
+
+   Antes de abrirla se suelta la conexion de acá: dos ventanas no pueden abrir
+   la misma camara, y la segunda daria «ocupada» sin explicar por que. */
+function vdTelevisor(){
+  var sala=(document.getElementById('vd-sala').value||'').trim();
+  var cam=document.getElementById('vd-cam');
+  var sl=document.getElementById('vd-slider');
+  var q=[];
+  if(/^\d{4}$/.test(sala)) q.push('sala='+sala);
+  else if(cam && cam.value) q.push('cam=1');
+  if(sl && Number(sl.value)>0) q.push('delay='+Number(sl.value));
+  if(window.VideoDelay && VideoDelay.estaConectado()){
+    VideoDelay.desconectar();
+    document.getElementById('vdv-player').style.display='none';
+    document.getElementById('vdv-conectar').style.display='flex';
+    document.getElementById('vd-estado').textContent='El video pasó a la ventana del televisor.';
+  }
+  var w = window.open('pantalla_delay.html'+(q.length?'?'+q.join('&'):''), 'pantallaDelay',
+                      'width=1280,height=760,noopener=no');
+  if(!w) document.getElementById('vd-estado').textContent=
+    'El navegador bloqueó la ventana nueva. Permití las ventanas emergentes de este sitio y probá otra vez.';
+}
+
+function vdConectarLocal(){
+  var sel=document.getElementById('vd-cam'), est=document.getElementById('vd-estado');
+  if(!window.VideoDelay || !VideoDelay.conectarLocal){ if(est) est.textContent='Falta video_delay.js'; return; }
+  VideoDelay.conectarLocal(sel ? sel.value : '');
+  VideoDelay.setDelay(0);
+  document.getElementById('vdv-conectar').style.display='none';
+  document.getElementById('vdv-player').style.display='flex';
+}
 function vdSlider(v){ document.getElementById('vd-slider-val').textContent=v+' s'; if(window.VideoDelay) VideoDelay.setDelay(parseInt(v,10)); }
 function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
@@ -9213,8 +9319,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20261004-0918" onerror="void 0"></script>
-<script src="ayuda.js?v=20261004-0918"></script>
+<script src="volver_inicio.js?v=20261004-1535" onerror="void 0"></script>
+<script src="ayuda.js?v=20261004-1535"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -10337,11 +10443,11 @@ function renderAnalisis(){
 </script>
 <!-- La barra de analisis (manual 9.5). Va en su propio archivo a proposito:
      solo lee y dibuja, y si no carga el panel sigue igual que siempre. -->
-<script src="analisis_vivo.js?v=20261004-0918" onerror="void 0"></script>
+<script src="analisis_vivo.js?v=20261004-1535" onerror="void 0"></script>
 <!-- El rediseno del panel: la barra agrupada, el marcador en la barra,
      las rotaciones legibles y el cuadro de "como venimos". Va en su
      propio archivo a proposito: solo reacomoda y pinta, y si no carga
      el panel queda exactamente como estaba. -->
-<script src="panel_estilo.js?v=20261004-0918" onerror="void 0"></script>
+<script src="panel_estilo.js?v=20261004-1535" onerror="void 0"></script>
 </body>
 </html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pantalla con delay — NAFELS VOLEY</title>
+<!--
+  ════════════════════════════════════════════════════════════════════════════
+  PANTALLA CON DELAY — la ventana que va al televisor del gimnasio
+  ----------------------------------------------------------------------------
+  Hasta ahora el delay vivia DENTRO del panel de scouting. Eso funciona para el
+  que scoutea, pero no sirve para el televisor: enchufas el HDMI y los
+  jugadores ven el panel entero, con los codigos y las tablas.
+
+  Esta pagina es solo el video. Se abre en su propia ventana, se arrastra al
+  televisor, se pone en pantalla completa y queda. El panel de scouting sigue
+  en la pantalla de la notebook, sin tocar. Una sola computadora, dos ventanas.
+
+  Usa el mismo motor que el panel —video_delay.js y delay_buffer.js—, asi que
+  todo lo que se arregle alla vale aca tambien.
+
+  Se le puede pasar la sesion por la direccion:
+      pantalla_delay.html?sala=1234   se conecta solo a esa sala
+      pantalla_delay.html?cam=1       usa la primera camara de esta computadora
+      pantalla_delay.html?delay=6     arranca con 6 segundos de retraso
+  ════════════════════════════════════════════════════════════════════════════
+-->
+<style>
+  :root{
+    --fondo:#000; --tinta:#e9edf3; --apagado:#7b8899; --linea:rgba(255,255,255,.14);
+    --cian:#22d3ee; --ambar:#e6a743; --rojo:#e8192c;
+    --fc:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--fondo);color:var(--tinta);
+    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;overflow:hidden}
+  #escena{position:fixed;inset:0;background:#000}
+  video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+  #vd-live{display:none}
+
+  /* ── los carteles que se leen desde cinco metros ───────────────────────── */
+  .placa{position:absolute;top:calc(18px + env(safe-area-inset-top,0px));
+    font-family:var(--fc);font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    padding:10px 20px;border-radius:999px;backdrop-filter:blur(8px);font-size:26px;line-height:1}
+  #placa-delay{right:22px;background:rgba(0,0,0,.55);border:1px solid var(--linea);color:var(--cian)}
+  #vd-estado-replay{left:22px;background:rgba(230,167,67,.92);color:#1a1200;display:none}
+
+  /* ── la barra de abajo, que se esconde sola ────────────────────────────── */
+  #barra{position:absolute;left:0;right:0;bottom:0;
+    padding:16px 22px calc(16px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(to top,rgba(0,0,0,.92),rgba(0,0,0,0));
+    display:flex;flex-direction:column;gap:12px;
+    transition:opacity .35s ease, transform .35s ease}
+  #barra.oculta{opacity:0;transform:translateY(14px);pointer-events:none}
+  .fila{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .btn{font-family:var(--fc);font-size:19px;font-weight:700;letter-spacing:.06em;
+    text-transform:uppercase;border-radius:11px;padding:12px 22px;cursor:pointer;
+    border:1px solid var(--linea);background:rgba(255,255,255,.07);color:var(--tinta)}
+  .btn:hover{background:rgba(255,255,255,.14)}
+  .btn.pri{background:var(--cian);border-color:var(--cian);color:#04212a}
+  .btn.amb{background:var(--ambar);border-color:var(--ambar);color:#1a1200}
+  .btn:focus-visible{outline:3px solid var(--cian);outline-offset:2px}
+  select,input{font-family:inherit;font-size:16px;background:#12131f;color:var(--tinta);
+    border:1px solid var(--linea);border-radius:10px;padding:11px 13px}
+  select{max-width:300px}
+  #vd-sala{width:132px;text-align:center;font-family:var(--fc);font-size:30px;
+    font-weight:800;letter-spacing:7px;color:var(--ambar)}
+  #vd-slider{flex:1;min-width:160px;accent-color:var(--cian)}
+  .rot{font-family:var(--fc);font-size:14px;font-weight:700;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--apagado);white-space:nowrap}
+  #vd-estado{font-size:14px;color:var(--apagado);min-height:18px}
+  #vd-diag{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:#5c6b7f;min-height:15px}
+
+  /* ── el cartel de bienvenida, mientras no hay video ────────────────────── */
+  #vacio{position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px}
+  #vacio h1{font-family:var(--fc);font-size:clamp(34px,6vw,64px);font-weight:700;
+    letter-spacing:.02em;margin:0;text-transform:uppercase}
+  #vacio p{margin:0;color:var(--apagado);font-size:17px;max-width:30rem;line-height:1.6}
+  .marca{position:absolute;left:22px;bottom:92px;font-family:var(--fc);font-size:15px;
+    letter-spacing:.24em;text-transform:uppercase;color:#3f4a5a}
+  @media (max-width:640px){
+    .placa{font-size:19px;padding:8px 15px}
+    .btn{font-size:16px;padding:10px 16px}
+  }
+</style>
+</head>
+<body>
+
+<div id="escena">
+  <video id="vd-live" autoplay muted playsinline></video>
+  <video id="vd-delay" autoplay muted playsinline></video>
+
+  <div id="vacio">
+    <h1>Pantalla con delay</h1>
+    <p>Elegí abajo de dónde sale el video: una cámara enchufada a esta computadora,
+       o el celular que ya está transmitiendo. Después poné esta ventana en pantalla
+       completa y arrastrala al televisor.</p>
+  </div>
+
+  <div class="placa" id="placa-delay">Delay <span id="vd-delay-lbl">0 s</span></div>
+  <div class="placa" id="vd-estado-replay">Último punto</div>
+  <div class="marca">Axpo Volley Näfels</div>
+
+  <div id="barra">
+    <div class="fila" id="fila-fuente">
+      <span class="rot">Cámara</span>
+      <select id="vd-cam"><option value="">Buscá las cámaras</option></select>
+      <button class="btn" onclick="vdBuscarCamaras()">Buscar</button>
+      <button class="btn pri" onclick="vdConectarLocal()">Usar</button>
+      <span class="rot" style="margin-left:14px">o celular</span>
+      <input id="vd-sala" inputmode="numeric" maxlength="4" placeholder="0000">
+      <button class="btn amb" onclick="vdConectar()">Conectar</button>
+    </div>
+    <div class="fila">
+      <span class="rot">Retraso</span>
+      <input type="range" id="vd-slider" min="0" max="25" step="1" value="0" oninput="vdSlider(this.value)">
+      <span id="vd-slider-val" class="rot" style="color:var(--cian);font-size:22px;min-width:58px;text-align:right">0 s</span>
+      <button class="btn amb" onclick="vdReplay()">Último punto</button>
+      <button class="btn" id="btn-pantalla" onclick="vdPantallaCompleta()">Pantalla completa</button>
+      <button class="btn" onclick="vdSoltar()">Soltar cámara</button>
+    </div>
+    <div id="vd-estado"></div>
+    <div id="vd-diag"></div>
+  </div>
+</div>
+
+<script src="firebase.js?v=20261004-1535" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261004-1535" onerror="void 0"></script>
+<script src="lang.js?v=20261004-1535" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20261004-1535" onerror="void 0"></script>
+<script src="video_delay.js?v=20261004-1535" onerror="void 0"></script>
+<script>
+/* ── lo que el motor espera encontrar ─────────────────────────────────────── */
+function $(id){ return document.getElementById(id); }
+function hayVideo(){ var v=$('vacio'); if(v) v.style.display='none'; }
+
+function vdBuscarCamaras(){
+  var sel=$('vd-cam'), est=$('vd-estado');
+  if(!window.VideoDelay || !VideoDelay.camaras){ est.textContent='Falta video_delay.js'; return; }
+  est.textContent='Buscando cámaras…';
+  /* los nombres solo aparecen despues de dar permiso: se pide una cualquiera,
+     se apaga enseguida, y recien ahi se arma la lista */
+  var permiso = (navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
+    ? navigator.mediaDevices.getUserMedia({video:true}).then(function(st){
+        try{ st.getTracks().forEach(function(t){ t.stop(); }); }catch(e){}
+      }).catch(function(){})
+    : Promise.resolve();
+  return permiso.then(function(){ return VideoDelay.camaras(); }).then(function(cs){
+    sel.innerHTML='';
+    if(!cs.length){ sel.innerHTML='<option value="">No hay cámaras</option>';
+      est.textContent='No encontré ninguna cámara en esta computadora.'; return []; }
+    cs.forEach(function(c,i){
+      var o=document.createElement('option');
+      o.value=c.deviceId; o.textContent=c.label || ('Cámara '+(i+1));
+      sel.appendChild(o);
+    });
+    est.textContent=cs.length+(cs.length===1?' cámara encontrada.':' cámaras encontradas.');
+    return cs;
+  });
+}
+function vdConectarLocal(){
+  if(!window.VideoDelay || !VideoDelay.conectarLocal){ $('vd-estado').textContent='Falta video_delay.js'; return; }
+  VideoDelay.conectarLocal($('vd-cam').value);
+  hayVideo();
+}
+function vdConectar(){
+  var sala=($('vd-sala').value||'').trim();
+  if(sala.length<4){ $('vd-estado').textContent='Escribí el código de 4 dígitos que muestra el celular.'; return; }
+  if(!window.VideoDelay){ $('vd-estado').textContent='Falta video_delay.js'; return; }
+  VideoDelay.conectar(sala);
+  hayVideo();
+}
+function vdSlider(v){
+  $('vd-slider-val').textContent = v+' s';
+  if(window.VideoDelay) VideoDelay.setDelay(Number(v));
+}
+function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(); }
+function vdSoltar(){
+  if(window.VideoDelay) VideoDelay.desconectar();
+  var v=$('vacio'); if(v) v.style.display='flex';
+  $('vd-estado').textContent='Cámara soltada. Podés volver a elegir una.';
+}
+function vdPantallaCompleta(){
+  var e=document.documentElement;
+  if(document.fullscreenElement){ document.exitFullscreen().catch(function(){}); return; }
+  (e.requestFullscreen ? e.requestFullscreen() : Promise.reject()).catch(function(){
+    $('vd-estado').textContent='Este navegador no me dejó poner pantalla completa. Usá la tecla F11.';
+  });
+}
+document.addEventListener('fullscreenchange', function(){
+  $('btn-pantalla').textContent = document.fullscreenElement ? 'Salir de pantalla completa' : 'Pantalla completa';
+});
+
+/* ── la barra se esconde sola, como en cualquier reproductor ──────────────── */
+var _ocultar=null;
+function _mostrarBarra(){
+  var b=$('barra'); if(!b) return;
+  b.classList.remove('oculta');
+  document.body.style.cursor='';
+  if(_ocultar) clearTimeout(_ocultar);
+  _ocultar=setTimeout(function(){
+    /* no se esconde mientras alguien esta usando un control */
+    if(document.activeElement && /SELECT|INPUT|BUTTON/.test(document.activeElement.tagName)) return;
+    b.classList.add('oculta');
+    document.body.style.cursor='none';
+  }, 5000);
+}
+['mousemove','touchstart','keydown','click'].forEach(function(ev){
+  document.addEventListener(ev, _mostrarBarra, {passive:true});
+});
+_mostrarBarra();
+
+/* ── atajos, para no tener que buscar el mouse en el gimnasio ─────────────── */
+document.addEventListener('keydown', function(e){
+  if(e.target && /INPUT|SELECT/.test(e.target.tagName)) return;
+  if(e.key==='f' || e.key==='F'){ vdPantallaCompleta(); }
+  else if(e.key===' '){ e.preventDefault(); vdReplay(); }
+  else if(e.key==='ArrowUp' || e.key==='ArrowRight'){
+    var s=$('vd-slider'); s.value=Math.min(25, Number(s.value)+1); vdSlider(s.value); }
+  else if(e.key==='ArrowDown' || e.key==='ArrowLeft'){
+    var s2=$('vd-slider'); s2.value=Math.max(0, Number(s2.value)-1); vdSlider(s2.value); }
+});
+
+/* ── arranque: lo que venga en la direccion ───────────────────────────────── */
+(function(){
+  var q = new URLSearchParams(location.search);
+  var d = q.get('delay');
+  if(d !== null && !isNaN(Number(d))){
+    var s=$('vd-slider'); s.value=String(Math.max(0, Math.min(25, Number(d))));
+    $('vd-slider-val').textContent = s.value+' s';
+  }
+  var sala = q.get('sala');
+  if(sala && /^\d{4}$/.test(sala)){
+    $('vd-sala').value = sala;
+    setTimeout(function(){ vdConectar(); if(d) vdSlider($('vd-slider').value); }, 900);
+    return;
+  }
+  if(q.get('cam')){
+    setTimeout(function(){
+      var p = vdBuscarCamaras();
+      if(p && p.then) p.then(function(cs){
+        if(cs && cs.length){ vdConectarLocal(); if(d) setTimeout(function(){ vdSlider($('vd-slider').value); }, 1200); }
+      });
+    }, 700);
+  }
+})();
+</script>
+</body>
+</html>

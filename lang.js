@@ -934,6 +934,14 @@
     'ULTIMO PUNTO': { en:'LAST POINT', de:'LETZTER PUNKT' },
     'Volver': { en:'Back', de:'Zurück' },
     '≡ Menú': { en:'≡ Menu', de:'≡ Menü' },
+  'Cámara de esta computadora': { en:'Camera on this computer', de:'Kamera an diesem Computer' },
+  'Webcam, capturadora de HDMI o cámara virtual de OBS. Es la que mejor se ve: el video no pasa por la red.': { en:'Webcam, HDMI capture card or the OBS virtual camera. This is the one that looks best: the video never goes over the network.', de:'Webcam, HDMI-Capture-Karte oder die virtuelle OBS-Kamera. Das ist die beste Bildqualität: Das Video läuft nicht über das Netz.' },
+  'Buscá las cámaras primero': { en:'Search for cameras first', de:'Zuerst nach Kameras suchen' },
+  'Buscar cámaras': { en:'Search for cameras', de:'Kameras suchen' },
+  'Usar esta cámara': { en:'Use this camera', de:'Diese Kamera verwenden' },
+  'O SI NO': { en:'OR ELSE', de:'ODER' },
+  'Teléfono por wifi': { en:'Phone over wifi', de:'Handy über WLAN' },
+  'Abrir en el televisor': { en:'Open on the TV', de:'Auf dem Fernseher öffnen' },
     'Volver al menú de partidos. No se pierde nada de lo que ya cargaste.': { en:'Back to the match menu. Nothing you have entered is lost.', de:'Zurück zum Spielmenü. Nichts von dem, was du erfasst hast, geht verloren.' },
     'Volver a revisar': { en:'Check again', de:'Nochmals prüfen' },
     'alto ·': { en:'high ·', de:'hoch ·' },
@@ -5001,7 +5009,8 @@
      Donde el hueco ya existe, manda el hueco: esto no cambia ni una de las 24
      pantallas que ya lo tenian. */
   var SIN_FLOTANTE = { 'panel_vivo.html':1, 'panel_voley.html':1,
-                       'camara.html':1 };   /* el telefono filmando: pantalla limpia */
+                       'camara.html':1,      /* el telefono filmando: pantalla limpia */
+                       'pantalla_delay.html':1 };  /* el televisor del gimnasio: solo video */
   function _wrapFlotante(){
     try{
       if (!document.body) return null;

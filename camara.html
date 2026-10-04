@@ -51,7 +51,7 @@
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261004-0918">
+<link rel="stylesheet" href="movil.css?v=20261004-1535">
 </head>
 <body>
   <div class="top">
@@ -86,6 +86,26 @@
       <div class="viewers hidden" id="viewers">👁 0 viendo</div>
     </div>
 
+    <!-- ══ ZOOM Y LO QUE DE VERDAD SE ESTA MANDANDO ═══════════════════════
+         El zoom del navegador no es el de la app de Camara, pero en Android
+         SI se puede manejar: Chrome expone la capacidad 'zoom' de la pista y
+         se aplica en caliente, sin cortar la transmision. En iPhone no existe
+         —Safari no lo implementa— y entonces la tarjeta avisa por que, en vez
+         de mostrar un control que no hace nada.
+
+         Debajo va la resolucion real que esta saliendo. Es el dato que mas
+         sirve en la cancha: si pediste 1080p y dice 1280x720, el telefono no
+         pudo, y eso explica lo que se ve en la tablet. -->
+    <div class="card hidden" id="zoomCard">
+      <div class="lbl" style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--mut)">Zoom</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:8px">
+        <input type="range" id="zoomsel" min="1" max="4" step="0.1" value="1"
+               style="flex:1;accent-color:var(--accent)">
+        <span id="zoomval" style="font-family:'Barlow Condensed',monospace;font-size:20px;font-weight:800;color:var(--accent);min-width:48px;text-align:right">1,0×</span>
+      </div>
+      <div id="zoomnota" style="font-size:12px;color:var(--mut);line-height:1.5;margin-top:8px"></div>
+    </div>
+
     <div class="status" id="status" data-t="Elegí la cámara y tocá Transmitir."><span data-t="Elegí la cámara y tocá Transmitir.">Elegí la cámara y tocá Transmitir.</span></div>
 
     <button class="btn go" id="startBtn">▶ Transmitir</button>
@@ -98,11 +118,11 @@
     </div>
   </div>
 
-<script src="categorias_club.js?v=20261004-0918"></script>
-<script src="selector_categoria.js?v=20261004-0918"></script>
-<script src="datos_seguros.js?v=20261004-0918"></script>
-<script src="firebase.js?v=20261004-0918"></script>
-<script src="firebase_por_categoria.js?v=20261004-0918"></script>
+<script src="categorias_club.js?v=20261004-1535"></script>
+<script src="selector_categoria.js?v=20261004-1535"></script>
+<script src="datos_seguros.js?v=20261004-1535"></script>
+<script src="firebase.js?v=20261004-1535"></script>
+<script src="firebase_por_categoria.js?v=20261004-1535"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════
    CÁMARA — Emisor de video por WebRTC hacia la(s) tablet(s).
@@ -254,6 +274,7 @@ async function recuperarCamara(){
     localStream = nuevo;
     $('preview').srcObject = nuevo;
     vigilarPista(pista);
+    montarZoom(pista);
     _sinImagen = 0; _ultimoCuadro = -1;
     $('badge').textContent = 'TRANSMITIENDO';
     $('badge').classList.add('live');
@@ -265,6 +286,60 @@ async function recuperarCamara(){
               'Tocá Detener y después Transmitir de nuevo.', 'err');
   }
   _recuperando = false;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   EL ZOOM, DONDE SE PUEDE
+   Chrome en Android deja mover el zoom de la camara en caliente: se lee la
+   capacidad de la pista y se aplica con applyConstraints, sin cortar la
+   transmision ni volver a pedir permiso. Safari del iPhone no lo implementa,
+   asi que ahi la tarjeta explica por que no hay control en lugar de dejar un
+   deslizador muerto.
+
+   Importante: es zoom OPTICO solo si la camara lo tiene; en la mayoria de los
+   telefonos es recorte digital. Recortar pierde definicion, asi que conviene
+   usarlo poco y acercar el tripode cuando se pueda.
+   ══════════════════════════════════════════════════════════════════════════ */
+var _pistaZoom = null;
+
+function _textoResolucion(t){
+  try{
+    var g = t.getSettings();
+    return 'Mandando ' + (g.width||'?') + '×' + (g.height||'?') +
+           (g.frameRate ? ' a ' + Math.round(g.frameRate) + ' cuadros' : '');
+  }catch(e){ return ''; }
+}
+
+function montarZoom(t){
+  _pistaZoom = t || null;
+  var card = $('zoomCard'), sl = $('zoomsel'), val = $('zoomval'), nota = $('zoomnota');
+  if(!card || !t) return;
+  card.classList.remove('hidden');
+  var cap = null;
+  try{ cap = (t.getCapabilities ? t.getCapabilities() : null); }catch(e){}
+  var z = cap && cap.zoom;
+  if(!z || z.max == null || z.max <= (z.min == null ? 1 : z.min)){
+    sl.style.display = 'none'; val.style.display = 'none';
+    nota.textContent = 'Esta cámara no deja manejar el zoom desde el navegador. ' +
+                       'En iPhone no se puede, es una limitación de Safari. ' +
+                       _textoResolucion(t);
+    return;
+  }
+  sl.style.display = ''; val.style.display = '';
+  sl.min = z.min; sl.max = z.max;
+  sl.step = z.step || ((z.max - z.min) / 20) || 0.1;
+  var actual = 1;
+  try{ actual = t.getSettings().zoom || z.min; }catch(e){ actual = z.min; }
+  sl.value = actual;
+  val.textContent = String(Math.round(actual*10)/10).replace('.', ',') + '×';
+  nota.textContent = 'Hasta ' + (Math.round(z.max*10)/10) + '× · es recorte, así que a más zoom menos definición. ' +
+                     _textoResolucion(t);
+  sl.oninput = function(){
+    var v = Number(sl.value);
+    val.textContent = String(Math.round(v*10)/10).replace('.', ',') + '×';
+    if(!_pistaZoom) return;
+    try{ _pistaZoom.applyConstraints({ advanced:[{ zoom: v }] }).catch(function(){}); }catch(e){}
+  };
 }
 
 /* — arrancar la transmisión — */
@@ -283,6 +358,7 @@ async function transmitir(){
   }
   $('preview').srcObject = localStream;
   vigilarPista(localStream.getVideoTracks()[0]);
+  montarZoom(localStream.getVideoTracks()[0]);
 
   /* sala corta y fácil de tipear */
   salaId = String(Math.floor(1000 + Math.random()*9000));
@@ -331,7 +407,31 @@ function escucharViewers(){
 async function conectarViewer(viewerId){
   var pc = new RTCPeerConnection(ICE);
   peers[viewerId] = pc;
-  localStream.getTracks().forEach(function(t){ pc.addTrack(t, localStream); });
+  /* ══ POR QUE SE VEIA BIEN AL PRINCIPIO Y PEOR A LOS DIEZ MINUTOS ══════════
+     Aca solo se agregaba la pista y listo. Sin tope de bitrate y con la
+     preferencia en su valor por defecto, ante la primera congestion del wifi
+     el navegador baja la RESOLUCION —de 1080p a 540p, a 360p— y despues no la
+     recupera, aunque la red se libere.
+
+     Ahora se le dice lo que queremos: mantener la resolucion y, si hay que
+     resignar algo, que sean cuadros por segundo. Y el tope se sube a 10 Mbps,
+     que es lo que hace falta para 1080p con movimiento rapido.
+
+     contentHint 'motion' le avisa que esto es deporte y no una cara hablando. */
+  localStream.getTracks().forEach(function(t){
+    if(t.kind === 'video'){ try{ t.contentHint = 'motion'; }catch(e){} }
+    pc.addTrack(t, localStream);
+  });
+  try{
+    var _s = pc.getSenders().filter(function(x){ return x.track && x.track.kind === 'video'; })[0];
+    if(_s && _s.getParameters){
+      var _p = _s.getParameters();
+      if(!_p.encodings || !_p.encodings.length) _p.encodings = [{}];
+      _p.encodings[0].maxBitrate = 10000000;
+      _p.degradationPreference = 'maintain-resolution';
+      _s.setParameters(_p).catch(function(){});
+    }
+  }catch(e){}
 
   var myCands = [];
   pc.onicecandidate = function(ev){
@@ -611,9 +711,9 @@ function _cajaYouTube(){
 }
 
 </script>
-<script src="lang.js?v=20261004-0918"></script>
-<script src="volver_inicio.js?v=20261004-0918" onerror="void 0"></script>
-<script src="ayuda.js?v=20261004-0918">
+<script src="lang.js?v=20261004-1535"></script>
+<script src="volver_inicio.js?v=20261004-1535" onerror="void 0"></script>
+<script src="ayuda.js?v=20261004-1535">
 
 </script>
 </body>

@@ -1540,39 +1540,56 @@ function objVerCuenta(){
 
    No habia que generar nada nuevo: habia que leer de ahi. */
 function _objJugDeSesiones(){
+  /* ══ EL DETALLE POR JUGADOR SE QUEDABA EN EL ACUMULADO ═══════════════════
+     Esta funcion buscaba las sesiones elegidas por su POSICION: tomaba
+     EQ_SESION —o las claves de EQ_SEL— y las usaba como indice dentro de
+     BAT_PARTIDOS.ind. Dos problemas, los dos reales:
+
+       · EQ_SESION es la posicion dentro de la lista de la PANTALLA
+         (DATA.entrenamientos), que no es la misma lista ni el mismo orden
+         que BAT_PARTIDOS.ind. La posicion 3 de una no es la 3 de la otra.
+       · EQ_SEL es un Set, no un objeto. Object.keys() de un Set devuelve
+         una lista vacia, asi que la eleccion multiple no entraba nunca.
+
+     Y en el Analisis directamente no existe ninguna de las dos: ahi la sesion
+     se guarda en _objPartido. Resultado: elegias un partido, abrias una
+     bateria, pedias el detalle por jugador y te salia el acumulado de la
+     temporada entera.
+
+     batSesionIds() ya traduce cualquiera de las tres formas de elegir al id
+     del archivo de baterias, que es lo unico que identifica la sesion sin
+     depender del orden. */
   var B = null;
   try{ B = window.BAT_PARTIDOS; }catch(e){}
   if(!B || !B.ind || !B.ind.length) return null;
 
-  /* que sesiones estan elegidas, segun el estado del dashboard */
-  var idx = null;
-  try{
-    if(typeof EQ_SEL !== 'undefined' && EQ_SEL){
-      idx = Object.keys(EQ_SEL).filter(function(k){ return EQ_SEL[k]; }).map(Number);
-    }
-    if((!idx || !idx.length) && typeof EQ_SESION !== 'undefined' && EQ_SESION >= 0){
-      idx = [EQ_SESION];
-    }
-    if((!idx || !idx.length) && typeof EQ_FILTRO !== 'undefined' && EQ_FILTRO){
-      var t = (EQ_FILTRO === 'P') ? 'partido'
-            : (EQ_FILTRO === 'E') ? 'entrenamiento' : null;
-      if(t){
-        idx = [];
-        B.ind.forEach(function(x, i){ if(x && x.tipo === t) idx.push(i); });
-      }
-    }
-  }catch(e){}
+  var ids = null;
+  try{ if(typeof batSesionIds === 'function') ids = batSesionIds(); }catch(e){}
+  /* sin eleccion —o con todas— vale el acumulado de siempre */
+  if(!ids || !ids.length || ids.length === B.ind.length) return null;
 
-  /* sin filtro —o con todas elegidas— vale el acumulado de siempre */
-  if(!idx || !idx.length || idx.length === B.ind.length) return null;
+  var quiero = {};
+  ids.forEach(function(x){ quiero[String(x)] = 1; });
+  var sesiones = B.ind.filter(function(x){ return x && quiero[String(x.id)]; });
+  if(!sesiones.length) return null;
 
+  /* UNA sola sesion: se devuelve tal cual. Trae los contadores y tambien los
+     porcentajes ya calculados por el generador, que es mejor que recalcularlos. */
+  if(sesiones.length === 1) return sesiones[0].jug || null;
+
+  /* VARIAS: se suman los contadores en crudo y se recalculan los porcentajes
+     sobre el total sumado. Promediar los porcentajes de dias distintos daria
+     un numero que no existe. Es la misma cuenta que usan las baterias. */
+  var nombres = {};
+  sesiones.forEach(function(ses){
+    Object.keys(ses.jug || {}).forEach(function(n){ nombres[n] = 1; });
+  });
   var out = {};
-  idx.forEach(function(i){
-    var ses = B.ind[i];
-    if(!ses || !ses.jug) return;
-    Object.keys(ses.jug).forEach(function(nom){
-      if(!out[nom]) out[nom] = {};
-      _objSumarJug(out[nom], ses.jug[nom]);
+  Object.keys(nombres).forEach(function(n){
+    if(typeof batSuma === 'function'){ out[n] = batSuma(n, ids); return; }
+    out[n] = {};
+    sesiones.forEach(function(ses){
+      if(ses.jug && ses.jug[n]) _objSumarJug(out[n], ses.jug[n]);
     });
   });
   return Object.keys(out).length ? out : null;
