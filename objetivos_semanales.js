@@ -1574,4 +1574,20 @@ window.OBJ_SEMANA = {render:render, fundamento:fundamento, periodo:periodo, past
                      puestoTxt:puestoTxt, lunesDe:lunesDe, hoy:hoy, clave:clave};
 if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(enganchar, 0); });
 else setTimeout(enganchar, 0);
+
+/* ── SI CAMBIAN EL IDIOMA, LA TARJETA SE REPINTA ───────────────────────────
+   tarjetaPortada() se marca con data-os="1" para no dibujarse dos veces, y esa
+   marca la dejaba congelada en el idioma en que se abrio la pagina. Entrar en
+   castellano y APRETAR el boton de ingles dejaba esta tarjeta —la primera de
+   la portada— en castellano, aunque la traduccion esta escrita aca mismo.
+   Es exactamente lo que hace un club de afuera: entra, ve castellano, toca EN.
+   lang.js avisa del cambio con el evento «langchange»: se borra la marca y se
+   vuelve a dibujar. Si todavia no hay datos, no hace nada, como siempre.   */
+window.addEventListener('langchange', function(){
+  try{
+    var caja = document.getElementById('tb-objetivos');
+    if(caja) caja.removeAttribute('data-os');
+    tarjetaPortada();
+  }catch(e){}
+});
 })();

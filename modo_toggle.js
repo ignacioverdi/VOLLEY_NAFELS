@@ -92,6 +92,18 @@
   function arrancar() { pintar(); setTimeout(pintar, 900); setTimeout(pintar, 2500); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
   else arrancar();
+
+  /* ── SI CAMBIAN EL IDIOMA, EL CHIP SE REPINTA ────────────────────────────
+     pintar() se va si el chip ya existe, asi que el rotulo quedaba congelado
+     en el idioma en que se abrio la pantalla: entrar en castellano y apretar
+     EN dejaba «PARTIDO» en vez de «MATCH». El chip lleva data-notr —lo dibuja
+     este archivo y tiene su propio diccionario— asi que el traductor no lo
+     toca: hay que redibujarlo. lang.js avisa con el evento «langchange». */
+  window.addEventListener('langchange', function () {
+    var c = document.getElementById('vb-modo-chip');
+    if (c && c.parentNode) c.parentNode.removeChild(c);
+    try { pintar(); } catch (e) {}
+  });
 })();
 
 /* © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados */

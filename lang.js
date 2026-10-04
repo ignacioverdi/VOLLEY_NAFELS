@@ -1042,6 +1042,35 @@
     { en:'Won: aces + attack points + blocks ({1}). Given away: serves out, attacks out or blocked, missed receptions and blocking errors ({2}).',
       de:'Gewonnen: Asse + Angriffspunkte + Blocks ({1}). Verschenkt: Aufschlagfehler, Angriffe ins Aus oder geblockt, Annahme- und Blockfehler ({2}).' },
   'Ataque sin combinación': { en:'Attack with no combination', de:'Angriff ohne Kombination' },
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     CUARTA BARRIDA — 4/10/2026, CAMBIANDO EL IDIOMA CON LA PANTALLA ABIERTA
+     Un club de afuera entra, ve castellano y aprieta EN: ese camino no era el
+     mismo que abrir la pagina ya en ingles. Lo que faltaba son frases que el
+     JavaScript arma con un numero adentro, asi que van con huecos {1}, {2}.
+     El valor de cada hueco tambien pasa por el diccionario, de modo que
+     "% Saque" adentro de la frase sale traducido.
+     ══════════════════════════════════════════════════════════════════════════ */
+  '{1}: {2}% sobre {3} acciones · el peor de la liga {4}%, el mejor {5}% · estás al {6}% del recorrido':
+    { en:'{1}: {2}% over {3} actions · worst in the league {4}%, best {5}% · you are {6}% of the way there',
+      de:'{1}: {2}% auf {3} Aktionen · Schlechtester der Liga {4}%, Bester {5}% · du bist bei {6}% des Wegs' },
+  '{1}: {2}% · el peor de la liga {3}%, el mejor {4}% · estás al {5}% del recorrido':
+    { en:'{1}: {2}% · worst in the league {3}%, best {4}% · you are {5}% of the way there',
+      de:'{1}: {2}% · Schlechtester der Liga {3}%, Bester {4}% · du bist bei {5}% des Wegs' },
+  'Acumulado de {1} partidos y {2} entrenamientos.':
+    { en:'Adding up {1} matches and {2} training sessions.',
+      de:'Summe aus {1} Spielen und {2} Trainings.' },
+  '{1} acciones · obj {2}%': { en:'{1} actions · tgt {2}%', de:'{1} Aktionen · Ziel {2}%' },
+  '{1} acciones — muestra chica': { en:'{1} actions — small sample', de:'{1} Aktionen — kleine Stichprobe' },
+  '▼ Ver todos ({1})': { en:'▼ See all ({1})', de:'▼ Alle anzeigen ({1})' },
+  'zona {1} contra {2}': { en:'zone {1} against {2}', de:'Zone {1} gegen {2}' },
+  'Zona preferida: {1}': { en:'Preferred zone: {1}', de:'Bevorzugte Zone: {1}' },
+  /* el ranking usa el rotulo corto, sin el % adelante */
+  'Atq Rápida': { en:'Quick atk', de:'Schneller Angriff' },
+  'Atq Alta': { en:'High-ball atk', de:'Hoher Angriff' },
+  'Atq Central': { en:'Middle atk', de:'Mittelangriff' },
+  'Atq Transición': { en:'Atk in transition', de:'Angriff im Umschalten' },
+  'Atq Zaguero': { en:'Back-row atk', de:'Hinterfeldangriff' },
   'Girar las posiciones a la izquierda':
     { en:'Rotate the positions to the left', de:'Die Positionen nach links drehen' },
   'Girar las posiciones a la derecha':
@@ -5332,6 +5361,12 @@
     try { localStorage.setItem(STORE, lang); } catch(e){}
     applyLang(lang);
     paintSelector(lang);
+    /* La misma repasada que al arrancar. Sin esto, entrar en castellano y
+       APRETAR el boton de ingles no daba el mismo resultado que entrar
+       directo en ingles: lo que el JavaScript vuelve a dibujar despues del
+       cambio —las tarjetas de la portada, entre otras— quedaba en castellano.
+       Es justo lo que hace un club de afuera: entra, ve castellano, toca EN. */
+    _repasar(lang);
   }
   window.setLang = setLang;
 
