@@ -233,10 +233,10 @@ function pintar(){
   h += '</tbody></table></div>';
 
   h += '<p class="oe-pie">'
-     + '<span><s style="background:rgba(34,197,94,.35)"></s>lleg&oacute; al objetivo</span>'
-     + '<span><s style="background:rgba(232,25,44,.3)"></s>le falta</span>'
-     + '<span><s style="background:rgba(148,163,184,.18)"></s>sin acciones esta semana</span>'
-+ '<span style="color:#64748B">el n&uacute;mero chiquito de abajo es sobre cu&aacute;ntas acciones est&aacute; hecho</span>'
+     + '<span><s style="background:rgba(34,197,94,.35)"></s><i data-t="lleg&oacute; al objetivo" style="font-style:normal">lleg&oacute; al objetivo</i></span>'
+     + '<span><s style="background:rgba(232,25,44,.3)"></s><i data-t="le falta" style="font-style:normal">le falta</i></span>'
+     + '<span><s style="background:rgba(148,163,184,.18)"></s><i data-t="sin acciones esta semana" style="font-style:normal">sin acciones esta semana</i></span>'
++ '<span style="color:#64748B" data-t="el n&uacute;mero chiquito de abajo es sobre cu&aacute;ntas acciones est&aacute; hecho">el n&uacute;mero chiquito de abajo es sobre cu&aacute;ntas acciones est&aacute; hecho</span>'
      + '<span><s style="background:transparent;border:1px solid rgba(148,163,184,.25)"></s>no le corresponde al puesto</span>'
      + '</p></div>';
   cont.innerHTML = h;
