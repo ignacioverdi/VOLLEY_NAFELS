@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Calendario masculino — Axpo Volley Näfels 2026/27</title>
+<style>
+html,body{margin:0;background:#0d1117}
+body{padding:18px}
+@media(max-width:640px){body{padding:8px}}
+.cal-idiomas{display:flex;gap:6px;justify-content:flex-end;margin:0 0 10px}
+.cal-idiomas button{background:#141b24;border:1px solid #242e3c;color:#94a3b8;
+  border-radius:7px;padding:5px 11px;font:700 11.5px/1 system-ui,sans-serif;cursor:pointer}
+.cal-idiomas button[aria-pressed="true"]{background:#1a2330;color:#e8edf5;border-color:#3b4858}
+</style>
+<style id="cal-css">
+/* ══ CALENDARIO MASCULINO · AXPO VOLLEY NÄFELS ════════════════════════════
+   Todo con prefijo .cal- para no pisar nada de modelo_completo.
+   Los colores de los equipos son una rampa de un solo tono, de claro a
+   oscuro, porque las cinco ligas son una escala (NLA arriba, 4L abajo) y no
+   cinco categorias sueltas: cinco tonos distintos no se distinguen entre si
+   con seguridad, una rampa ordenada si. Y la sigla va escrita en cada chapa,
+   asi que el color nunca es lo unico que identifica al equipo. */
+.cal-root{--bg:#0d1117;--card:#141b24;--card2:#1a2330;--linea:#242e3c;
+  --tinta:#e8edf5;--mut:#94a3b8;--mut2:#64748b;--rojo:#ef2740;
+  --aviso:#fab219;--grave:#d03b3b;
+  color-scheme:dark;background:var(--bg);color:var(--tinta);
+  font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  padding:22px 18px 40px;border-radius:12px;line-height:1.45;text-align:left}
+.cal-root *{box-sizing:border-box}
+.cal-h1{margin:0 0 4px;font-size:clamp(20px,3.4vw,27px);font-weight:800;
+  letter-spacing:-.4px;color:var(--tinta);border:0;padding:0}
+.cal-sub{margin:0 0 18px;color:var(--mut);font-size:13.5px}
+.cal-sub a{color:#6da7ec}
+.cal-kpis{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 18px}
+.cal-kpi{background:var(--card);border:1px solid var(--linea);border-radius:9px;
+  padding:9px 13px;min-width:92px}
+.cal-kpi b{display:block;font-size:21px;font-weight:800;line-height:1.1;color:var(--tinta)}
+.cal-kpi span{font-size:10.5px;color:var(--mut);text-transform:uppercase;letter-spacing:.6px}
+.cal-barra{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 7px}
+.cal-barra>em{font-style:normal;font-size:10.5px;color:var(--mut2);
+  text-transform:uppercase;letter-spacing:.8px;font-weight:700;margin-right:3px}
+.cal-tg{display:inline-flex;align-items:center;gap:6px;background:transparent;
+  border:1px solid var(--linea);border-radius:20px;padding:5px 11px 5px 8px;
+  color:var(--mut);font-size:12px;font-family:inherit;cursor:pointer;font-weight:600}
+.cal-tg:hover{border-color:#3b4858;color:var(--tinta)}
+.cal-tg .pt{width:10px;height:10px;border-radius:3px;flex:0 0 10px;opacity:.35}
+.cal-tg.on{color:var(--tinta);border-color:#3b4858;background:var(--card)}
+.cal-tg.on .pt{opacity:1}
+.cal-tg2{padding:5px 12px}
+.cal-tg2.on{background:rgba(250,178,25,.15);border-color:rgba(250,178,25,.5);color:#fab219}
+.cal-busca{flex:1 1 170px;min-width:140px;background:var(--card);color:var(--tinta);
+  border:1px solid var(--linea);border-radius:8px;padding:7px 11px;font-size:12.5px;
+  font-family:inherit;outline:none}
+.cal-busca:focus{border-color:#3987e5}
+.cal-cuenta{font-size:12px;color:var(--mut2);margin:0 0 13px}
+.cal-wrap{overflow-x:auto;border:1px solid var(--linea);border-radius:10px;background:var(--card);
+  -webkit-overflow-scrolling:touch}
+table.cal{width:100%;border-collapse:collapse;font-size:13px;min-width:700px;margin:0}
+table.cal thead th{position:sticky;top:0;z-index:2;background:#0f1620;
+  text-align:left;font-size:10px;letter-spacing:.9px;text-transform:uppercase;
+  color:var(--mut);font-weight:700;padding:9px 11px;border-bottom:1px solid var(--linea);
+  white-space:nowrap}
+table.cal td{padding:8px 11px;border-bottom:1px solid rgba(36,46,60,.6);
+  vertical-align:middle;background:transparent}
+tr.cal-mes td{background:#0f1620;padding:7px 11px;border-bottom:1px solid var(--linea)}
+tr.cal-mes b{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#6da7ec;font-weight:800}
+tr.cal-mes span{color:var(--mut2);font-size:11px;margin-left:9px;font-weight:600}
+tr.cal-g.multi td{background:rgba(250,178,25,.045)}
+tr.cal-g.multi td:first-child{box-shadow:inset 3px 0 0 var(--aviso)}
+tr.cal-g:hover td{background:var(--card2)}
+tr.cal-g.d0 td{border-top:1px solid var(--linea)}
+.cal-f{white-space:nowrap}
+.cal-f b{font-size:14px;font-weight:800}
+.cal-f i{font-style:normal;color:var(--mut);font-size:11px;display:block;margin-top:1px}
+.cal-hora{font-variant-numeric:tabular-nums;font-weight:800;font-size:14px;white-space:nowrap}
+.cal-bd{display:inline-block;min-width:34px;text-align:center;border-radius:5px;
+  padding:3px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
+.cal-copa{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.6px;
+  border-radius:4px;padding:2px 6px;margin-left:6px;vertical-align:1px;
+  background:rgba(250,178,25,.14);color:#fac44f;border:1px solid rgba(250,178,25,.34)}
+.cal-eq{font-weight:500}
+.cal-eq.nos{font-weight:800;color:#fff}
+.cal-eq.nos::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;
+  background:var(--rojo);margin-right:6px;vertical-align:1px}
+.cal-casa{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.6px;
+  border-radius:4px;padding:2px 5px;margin-left:7px;vertical-align:1px;
+  background:rgba(239,39,64,.14);color:#ff8095;border:1px solid rgba(239,39,64,.3)}
+.cal-sede{color:var(--mut);font-size:12px}
+.cal-sede a{color:var(--tinta);text-decoration:none;font-weight:600;
+  border-bottom:1px dotted #3b4858}
+.cal-sede a:hover{color:#6da7ec;border-bottom-color:#6da7ec}
+.cal-sede i{font-style:normal;display:block;color:var(--mut2);font-size:11px;margin-top:1px}
+.cal-av{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;
+  border-radius:5px;padding:2px 6px;margin-top:3px;white-space:nowrap}
+.cal-av.pisa{background:rgba(208,59,59,.16);color:#f08a8a;border:1px solid rgba(208,59,59,.35)}
+.cal-av.sede{background:rgba(250,178,25,.14);color:#fac44f;border:1px solid rgba(250,178,25,.32)}
+.cal-vacio{padding:34px 16px;text-align:center;color:var(--mut)}
+.cal-pie{margin-top:14px;font-size:11.5px;color:var(--mut2);line-height:1.6}
+.cal-pie b{color:var(--mut)}
+/* en pantalla ancha la fecha repetida se calla: la tabla ya agrupa por dia */
+@media(min-width:701px){ td.cal-f.cal-rep > *{display:none} }
+
+/* ══ EN EL TELEFONO NO ES UNA TABLA ═══════════════════════════════════════
+   Seis columnas en 390 px obligan a arrastrar de costado para llegar al rival
+   y al gimnasio, que es justo lo que uno mira parado en el club. Asi que
+   abajo de 700 px cada partido pasa a ser una ficha: fecha arriba, hora y
+   equipo en una linea, los dos rivales debajo y el gimnasio al pie. Mismo
+   marcado, mismos datos; cambia solo como se acomoda. */
+@media(max-width:700px){
+  .cal-root{padding:16px 12px 30px}
+  .cal-kpi{min-width:0;flex:1 1 44%;padding:8px 10px}
+  .cal-wrap{overflow-x:visible;border:0;background:transparent;border-radius:0}
+  table.cal{min-width:0;font-size:13px;display:block}
+  table.cal thead{display:none}
+  table.cal tbody{display:block}
+  tr.cal-mes{display:block;background:transparent;border:0;margin:14px 0 7px;padding:0}
+  tr.cal-mes td{display:block;background:transparent;border:0;padding:0}
+  tr.cal-g{display:grid;grid-template-columns:max-content 1fr;gap:3px 10px;
+    grid-template-areas:'f f' 'hora eq' 'loc loc' 'vis vis' 'sede sede';
+    background:var(--card);border:1px solid var(--linea);border-radius:10px;
+    padding:10px 12px;margin:0 0 8px}
+  tr.cal-g.multi{border-color:rgba(250,178,25,.45)}
+  tr.cal-g.multi td:first-child{box-shadow:none}
+  /* el borde que en la tabla separa un dia del siguiente no corresponde
+     acá: con las celdas en bloque dibujaba una raya entre cada renglon */
+  tr.cal-g td,
+  tr.cal-g.d0 td,
+  tr.cal-g.multi td{display:block;border:0;padding:0;background:transparent}
+  tr.cal-g:hover td{background:transparent}
+  td.cal-f{grid-area:f;margin-bottom:3px}
+  td.cal-f b{font-size:13.5px}
+  td.cal-f i{display:inline;margin-left:7px;font-size:11.5px}
+  td.cal-hora{grid-area:hora;font-size:17px}
+  tr.cal-g td:nth-child(3){grid-area:eq;align-self:center}
+  tr.cal-g td:nth-child(4){grid-area:loc;margin-top:4px}
+  tr.cal-g td:nth-child(5){grid-area:vis}
+  td.cal-sede{grid-area:sede;margin-top:6px;padding-top:6px;
+    border-top:1px solid rgba(36,46,60,.8)}
+  .cal-av{margin-top:5px;margin-right:4px}
+}
+@media print{
+  .cal-root{background:#fff;color:#000;padding:0}
+  .cal-barra,.cal-busca,.cal-kpis{display:none}
+  .cal-wrap{overflow:visible;border:0}
+  table.cal thead th{position:static;background:#eee;color:#000}
+  tr.cal-g.multi td{background:#fff8e6}
+  .cal-sede a{color:#000}
+}
+
+</style>
+<script id="cal-js">
+window.__CAL_DATOS={"juegos":[{"eq":"1L","iso":"2026-10-03T16:00:00","fecha":"2026-10-03","hora":"16:00","liga":"1L","loc":"STV St.Gallen Volleyball","vis":"Axpo Volley Näfels","hall":"Sporthalle Schönenwegen 1-2","calle":"Zürcherstrasse 67","ciudad":"9000 St. Gallen","lat":"47.41701","lon":"9.34981","hid":"2","mesKey":"2026-10"},{"eq":"1L","iso":"2026-10-09T20:00:00","fecha":"2026-10-09","hora":"20:00","liga":"1L","loc":"Axpo Volley Näfels","vis":"VBC Galina","hall":"Novalishalle, Lintharena SGU","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10599","lon":"9.06517","hid":"9","mesKey":"2026-10"},{"eq":"1L","iso":"2026-10-11T17:15:00","fecha":"2026-10-11","hora":"17:15","liga":"1L","loc":"Axpo Volley Näfels","vis":"VC Smash Winterthur","hall":"Novalishalle, Lintharena SGU","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10599","lon":"9.06517","hid":"9","mesKey":"2026-10"},{"eq":"2L","iso":"2026-10-16T20:30:00","fecha":"2026-10-16","hora":"20:30","liga":"2L","loc":"VBC Chur H1","vis":"Axpo Volley Näfels H3","hall":"Sportanlage Sand 1","calle":"Sandstrasse 35","ciudad":"7000 Chur","lat":"46.84561","lon":"9.53940","hid":"21","mesKey":"2026-10"},{"eq":"3L","iso":"2026-10-16T20:30:00","fecha":"2026-10-16","hora":"20:30","liga":"3L","loc":"Volley Pizol H2","vis":"Axpo Volley Näfels H4","hall":"Sporthalle Badrieb 1","calle":"Badriebweg 2","ciudad":"7310 Bad Ragaz","lat":"47.01466","lon":"9.49520","hid":"23","mesKey":"2026-10"},{"eq":"NLA","iso":"2026-10-17T17:30:00","fecha":"2026-10-17","hora":"17:30","liga":"Supercup","loc":"Volley Amriswil","vis":"Axpo Volley Näfels","hall":"Mobiliar Arena","calle":"Rohrmattstrasse 12","ciudad":"3073 Muri bei Bern","lat":"46.93163","lon":"7.50594","hid":"0","mesKey":"2026-10"},{"eq":"NLA","iso":"2026-10-18T17:00:00","fecha":"2026-10-18","hora":"17:00","liga":"NLA","loc":"Axpo Volley Näfels","vis":"Lausanne UC","hall":"Linthhalle SGU 1-3","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10819","lon":"9.06569","hid":"1","mesKey":"2026-10"},{"eq":"4L","iso":"2026-10-20T20:00:00","fecha":"2026-10-20","hora":"20:00","liga":"4L","loc":"Axpo Volley Näfels H5","vis":"VBC March H3","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2026-10"},{"eq":"4L","iso":"2026-10-22T20:30:00","fecha":"2026-10-22","hora":"20:30","liga":"4L","loc":"VBC Linth H1","vis":"Axpo Volley Näfels H5","hall":"Haslen 1-3","calle":"Herrenackerstrasse 29","ciudad":"8730 Uznach","lat":"47.22624","lon":"8.98476","hid":"30","mesKey":"2026-10"},{"eq":"4L","iso":"2026-10-23T20:30:00","fecha":"2026-10-23","hora":"20:30","liga":"4L","loc":"VBC Walenstadt H2","vis":"Axpo Volley Näfels H5","hall":"Mehrzweckhalle am See 1","calle":"Waffenplatzstrasse","ciudad":"8880 Walenstadt","lat":"47.12474","lon":"9.30384","hid":"31","mesKey":"2026-10"},{"eq":"1L","iso":"2026-10-24T16:00:00","fecha":"2026-10-24","hora":"16:00","liga":"1L","loc":"Volley Oerlikon","vis":"Axpo Volley Näfels","hall":"Sportanlage Schauenberg","calle":"Lerchenhalde 40","ciudad":"8046 Zürich","lat":"47.41374","lon":"8.51043","hid":"10","mesKey":"2026-10"},{"eq":"NLA","iso":"2026-10-24T18:00:00","fecha":"2026-10-24","hora":"18:00","liga":"NLA","loc":"STV St.Gallen Volleyball","vis":"Axpo Volley Näfels","hall":"Sporthalle Schönenwegen 1-2","calle":"Zürcherstrasse 67","ciudad":"9000 St. Gallen","lat":"47.41701","lon":"9.34981","hid":"2","mesKey":"2026-10"},{"eq":"3L","iso":"2026-10-27T20:30:00","fecha":"2026-10-27","hora":"20:30","liga":"3L","loc":"VBC March H2","vis":"Axpo Volley Näfels H4","hall":"Sek1 March Siebnen 1-2","calle":"Äussere Bahnhofstrasse 45","ciudad":"8854 Siebnen","lat":"47.18154","lon":"8.90103","hid":"22","mesKey":"2026-10"},{"eq":"2L","iso":"2026-10-28T20:30:00","fecha":"2026-10-28","hora":"20:30","liga":"2L","loc":"VBC March-Pfäffikon H1","vis":"Axpo Volley Näfels H3","hall":"Sek1 March Siebnen 1-2","calle":"Äussere Bahnhofstrasse 45","ciudad":"8854 Siebnen","lat":"47.18154","lon":"8.90103","hid":"22","mesKey":"2026-10"},{"eq":"1L","iso":"2026-10-31T14:00:00","fecha":"2026-10-31","hora":"14:00","liga":"1L","loc":"Pallavolo Kreuzlingen","vis":"Axpo Volley Näfels","hall":"Turnhalle Remisberg 1-2","calle":"Rothausstrasse 14","ciudad":"8280 Kreuzlingen","lat":"47.63825","lon":"9.18480","hid":"11","mesKey":"2026-10"},{"eq":"NLA","iso":"2026-10-31T17:00:00","fecha":"2026-10-31","hora":"17:00","liga":"NLA","loc":"Axpo Volley Näfels","vis":"TSV Jona Volleyball","hall":"Linthhalle SGU 1-3","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10819","lon":"9.06569","hid":"1","mesKey":"2026-10"},{"eq":"2L","iso":"2026-11-03T20:00:00","fecha":"2026-11-03","hora":"20:00","liga":"2L","loc":"Axpo Volley Näfels H3","vis":"TSV Jona Volleyball H3","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2026-11"},{"eq":"3L","iso":"2026-11-03T20:30:00","fecha":"2026-11-03","hora":"20:30","liga":"3L","loc":"VBC Walenstadt H1","vis":"Axpo Volley Näfels H4","hall":"Camilun","calle":"Unterdorfstrasse 14","ciudad":"8892 Berschis","lat":"47.10733","lon":"9.34527","hid":"26","mesKey":"2026-11"},{"eq":"4L","iso":"2026-11-07T13:00:00","fecha":"2026-11-07","hora":"13:00","liga":"4L","loc":"Axpo Volley Näfels H5","vis":"VBC Walenstadt H2","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2026-11"},{"eq":"3L","iso":"2026-11-07T16:00:00","fecha":"2026-11-07","hora":"16:00","liga":"3L","loc":"Axpo Volley Näfels H4","vis":"TSV Jona Volleyball H5","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2026-11"},{"eq":"NLA","iso":"2026-11-07T18:00:00","fecha":"2026-11-07","hora":"18:00","liga":"NLA","loc":"Chênois Genève Volleyball","vis":"Axpo Volley Näfels","hall":"Centre Sportif Sous-Moulin 1-3","calle":"Route de Sous-Moulin 39","ciudad":"1226 Thônex","lat":"46.18867","lon":"6.19263","hid":"3","mesKey":"2026-11"},{"eq":"1L","iso":"2026-11-08T16:00:00","fecha":"2026-11-08","hora":"16:00","liga":"1L","loc":"Axpo Volley Näfels","vis":"VBC Voléro Zürich","hall":"Novalishalle, Lintharena SGU","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10599","lon":"9.06517","hid":"9","mesKey":"2026-11"},{"eq":"4L","iso":"2026-11-12T20:30:00","fecha":"2026-11-12","hora":"20:30","liga":"4L","loc":"VBC Linth H1","vis":"Axpo Volley Näfels H5","hall":"Breiten","calle":"Rickenstrasse 31","ciudad":"8733 Eschenbach","lat":"47.24168","lon":"8.92543","hid":"32","mesKey":"2026-11"},{"eq":"1L","iso":"2026-11-14T13:00:00","fecha":"2026-11-14","hora":"13:00","liga":"1L","loc":"Axpo Volley Näfels","vis":"VBC Schaffhausen","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2026-11"},{"eq":"NLA","iso":"2026-11-14T17:30:00","fecha":"2026-11-14","hora":"17:30","liga":"NLA","loc":"Volley Schönenwerd","vis":"Axpo Volley Näfels","hall":"Betoncoupe Arena 1-3","calle":"Aarestrasse 20","ciudad":"5012 Schönenwerd","lat":"47.37974","lon":"8.00393","hid":"4","mesKey":"2026-11"},{"eq":"1L","iso":"2026-11-21T16:00:00","fecha":"2026-11-21","hora":"16:00","liga":"1L","loc":"VBC Andwil-Arnegg","vis":"Axpo Volley Näfels","hall":"Doppelturnhalle Ebnet 1-3","calle":"Arneggerstrasse 14","ciudad":"9204 Andwil","lat":"47.44059","lon":"9.26697","hid":"13","mesKey":"2026-11"},{"eq":"2L","iso":"2026-11-21T16:00:00","fecha":"2026-11-21","hora":"16:00","liga":"2L","loc":"Volley Pizol H1","vis":"Axpo Volley Näfels H3","hall":"Sporthalle Badrieb 1","calle":"Badriebweg 2","ciudad":"7310 Bad Ragaz","lat":"47.01466","lon":"9.49520","hid":"23","mesKey":"2026-11"},{"eq":"NLA","iso":"2026-11-21T17:00:00","fecha":"2026-11-21","hora":"17:00","liga":"NLA","loc":"Axpo Volley Näfels","vis":"Volley Amriswil","hall":"Linthhalle SGU 1-3","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10819","lon":"9.06569","hid":"1","mesKey":"2026-11"},{"eq":"3L","iso":"2026-11-23T20:30:00","fecha":"2026-11-23","hora":"20:30","liga":"3L","loc":"VBC Chur H4","vis":"Axpo Volley Näfels H4","hall":"Lachen unten","calle":"Belmontstrasse 11","ciudad":"7000 Chur","lat":"46.86201","lon":"9.52774","hid":"27","mesKey":"2026-11"},{"eq":"2L","iso":"2026-11-27T20:30:00","fecha":"2026-11-27","hora":"20:30","liga":"2L","loc":"VBC Chur H2","vis":"Axpo Volley Näfels H3","hall":"Sportanlage Sand 1","calle":"Sandstrasse 35","ciudad":"7000 Chur","lat":"46.84561","lon":"9.53940","hid":"21","mesKey":"2026-11"},{"eq":"1L","iso":"2026-11-28T14:00:00","fecha":"2026-11-28","hora":"14:00","liga":"1L","loc":"NNV Volleytalents Rapperswil-Jona","vis":"Axpo Volley Näfels","hall":"Grünfeld 3 (Ost)","calle":"Grünfeldstrasse 8","ciudad":"8645 Jona","lat":"47.22208","lon":"8.84406","hid":"14","mesKey":"2026-11"},{"eq":"4L","iso":"2026-11-28T14:00:00","fecha":"2026-11-28","hora":"14:00","liga":"4L","loc":"Axpo Volley Näfels H5","vis":"TSV Jona Volleyball H6","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2026-11"},{"eq":"NLA","iso":"2026-11-28T17:00:00","fecha":"2026-11-28","hora":"17:00","liga":"NLA","loc":"Axpo Volley Näfels","vis":"Colombier Volley","hall":"Linthhalle SGU 1-3","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10819","lon":"9.06569","hid":"1","mesKey":"2026-11"},{"eq":"3L","iso":"2026-11-28T17:00:00","fecha":"2026-11-28","hora":"17:00","liga":"3L","loc":"Axpo Volley Näfels H4","vis":"VBC Galina H2","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2026-11"},{"eq":"2L","iso":"2026-12-01T20:00:00","fecha":"2026-12-01","hora":"20:00","liga":"2L","loc":"Axpo Volley Näfels H3","vis":"TSV Jona Volleyball H4","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2026-12"},{"eq":"3L","iso":"2026-12-04T20:45:00","fecha":"2026-12-04","hora":"20:45","liga":"3L","loc":"VBC Davos H1","vis":"Axpo Volley Näfels H4","hall":"Tobelmühle","calle":"Tobelmühlestrasse 4","ciudad":"7270 Davos Platz","lat":"46.79677","lon":"9.82411","hid":"28","mesKey":"2026-12"},{"eq":"4L","iso":"2026-12-05T16:00:00","fecha":"2026-12-05","hora":"16:00","liga":"4L","loc":"VBC March H3","vis":"Axpo Volley Näfels H5","hall":"KV Turnhalle Lachen","calle":"Rosengartenstrasse 12","ciudad":"8853 Lachen","lat":"47.19036","lon":"8.84942","hid":"33","mesKey":"2026-12"},{"eq":"NLA","iso":"2026-12-05T17:30:00","fecha":"2026-12-05","hora":"17:30","liga":"NLA","loc":"Lausanne UC","vis":"Axpo Volley Näfels","hall":"Centre Sportif Unil SOS II Dorigny 1-3","calle":"Route Cantonale 11","ciudad":"1015 Lausanne","lat":"46.51927","lon":"6.57915","hid":"5","mesKey":"2026-12"},{"eq":"1L","iso":"2026-12-06T13:00:00","fecha":"2026-12-06","hora":"13:00","liga":"1L","loc":"Axpo Volley Näfels","vis":"VBC Züri Unterland","hall":"Novalishalle, Lintharena SGU","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10599","lon":"9.06517","hid":"9","mesKey":"2026-12"},{"eq":"2L","iso":"2026-12-11T20:00:00","fecha":"2026-12-11","hora":"20:00","liga":"2L","loc":"Axpo Volley Näfels H3","vis":"Volley Pizol H1","hall":"Novalishalle, Lintharena SGU","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10599","lon":"9.06517","hid":"9","mesKey":"2026-12"},{"eq":"4L","iso":"2026-12-12T14:00:00","fecha":"2026-12-12","hora":"14:00","liga":"4L","loc":"Axpo Volley Näfels H5","vis":"VBC March H3","hall":"Klosterturnhalle","calle":"Burgstrasse 11","ciudad":"8752 Näfels","lat":"47.09686","lon":"9.06138","hid":"34","mesKey":"2026-12"},{"eq":"1L","iso":"2026-12-12T15:00:00","fecha":"2026-12-12","hora":"15:00","liga":"1L","loc":"VBC Glaronia","vis":"Axpo Volley Näfels","hall":"Kantonsschule 1-3 (A-C)","calle":"Winkelstrasse 1","ciudad":"8750 Glarus","lat":"47.04365","lon":"9.06597","hid":"15","mesKey":"2026-12"},{"eq":"3L","iso":"2026-12-12T17:00:00","fecha":"2026-12-12","hora":"17:00","liga":"3L","loc":"Axpo Volley Näfels H4","vis":"Volley Pizol H2","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2026-12"},{"eq":"NLA","iso":"2026-12-13T17:00:00","fecha":"2026-12-13","hora":"17:00","liga":"NLA","loc":"Axpo Volley Näfels","vis":"STV St.Gallen Volleyball","hall":"Linthhalle SGU 1-3","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10819","lon":"9.06569","hid":"1","mesKey":"2026-12"},{"eq":"NLA","iso":"2026-12-19T17:00:00","fecha":"2026-12-19","hora":"17:00","liga":"NLA","loc":"TSV Jona Volleyball","vis":"Axpo Volley Näfels","hall":"Grünfeld Doppelhalle West (1+2)","calle":"Grünfeldstrasse 8","ciudad":"8645 Jona","lat":"47.22208","lon":"8.84406","hid":"6","mesKey":"2026-12"},{"eq":"1L","iso":"2026-12-20T13:00:00","fecha":"2026-12-20","hora":"13:00","liga":"1L","loc":"Axpo Volley Näfels","vis":"STV St.Gallen Volleyball","hall":"Novalishalle, Lintharena SGU","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10599","lon":"9.06517","hid":"9","mesKey":"2026-12"},{"eq":"NLA","iso":"2027-01-03T17:00:00","fecha":"2027-01-03","hora":"17:00","liga":"NLA","loc":"Axpo Volley Näfels","vis":"Chênois Genève Volleyball","hall":"Linthhalle SGU 1-3","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10819","lon":"9.06569","hid":"1","mesKey":"2027-01"},{"eq":"1L","iso":"2027-01-08T20:00:00","fecha":"2027-01-08","hora":"20:00","liga":"1L","loc":"VBC Galina","vis":"Axpo Volley Näfels","hall":"Sporthalle Mühleholz 2","calle":"Marianumstrasse 43","ciudad":"9490 Vaduz","lat":"47.15566","lon":"9.50598","hid":"16","mesKey":"2027-01"},{"eq":"2L","iso":"2027-01-15T20:00:00","fecha":"2027-01-15","hora":"20:00","liga":"2L","loc":"Axpo Volley Näfels H3","vis":"VBC March-Pfäffikon H1","hall":"Novalishalle, Lintharena SGU","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10599","lon":"9.06517","hid":"9","mesKey":"2027-01"},{"eq":"4L","iso":"2027-01-16T13:00:00","fecha":"2027-01-16","hora":"13:00","liga":"4L","loc":"Axpo Volley Näfels H5","vis":"TSV Jona Volleyball H6","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2027-01"},{"eq":"NLA","iso":"2027-01-16T17:00:00","fecha":"2027-01-16","hora":"17:00","liga":"NLA","loc":"Axpo Volley Näfels","vis":"Volley Schönenwerd","hall":"Linthhalle SGU 1-3","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10819","lon":"9.06569","hid":"1","mesKey":"2027-01"},{"eq":"3L","iso":"2027-01-16T17:00:00","fecha":"2027-01-16","hora":"17:00","liga":"3L","loc":"Axpo Volley Näfels H4","vis":"VBC March H2","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2027-01"},{"eq":"1L","iso":"2027-01-16T18:30:00","fecha":"2027-01-16","hora":"18:30","liga":"1L","loc":"VC Smash Winterthur","vis":"Axpo Volley Näfels","hall":"Zinzikon 1-2","calle":"Ruchwiesenstrasse 1","ciudad":"8404 Winterthur","lat":"47.51860","lon":"8.75344","hid":"17","mesKey":"2027-01"},{"eq":"4L","iso":"2027-01-22T20:30:00","fecha":"2027-01-22","hora":"20:30","liga":"4L","loc":"VBC Walenstadt H2","vis":"Axpo Volley Näfels H5","hall":"Camilun","calle":"Unterdorfstrasse 14","ciudad":"8892 Berschis","lat":"47.10733","lon":"9.34527","hid":"26","mesKey":"2027-01"},{"eq":"1L","iso":"2027-01-23T13:00:00","fecha":"2027-01-23","hora":"13:00","liga":"1L","loc":"Axpo Volley Näfels","vis":"Volley Oerlikon","hall":"Novalishalle, Lintharena SGU","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10599","lon":"9.06517","hid":"9","mesKey":"2027-01"},{"eq":"3L","iso":"2027-01-28T20:30:00","fecha":"2027-01-28","hora":"20:30","liga":"3L","loc":"VBC Chur H3","vis":"Axpo Volley Näfels H4","hall":"Lachen unten","calle":"Belmontstrasse 11","ciudad":"7000 Chur","lat":"46.86201","lon":"9.52774","hid":"27","mesKey":"2027-01"},{"eq":"NLA","iso":"2027-01-30T17:00:00","fecha":"2027-01-30","hora":"17:00","liga":"NLA","loc":"Volley Amriswil","vis":"Axpo Volley Näfels","hall":"Tellenfeld B 1-3","calle":"Untere Grenzstrasse 10","ciudad":"8580 Amriswil","lat":"47.54861","lon":"9.28934","hid":"7","mesKey":"2027-01"},{"eq":"3L","iso":"2027-01-30T17:00:00","fecha":"2027-01-30","hora":"17:00","liga":"3L","loc":"Axpo Volley Näfels H4","vis":"VBC Walenstadt H1","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2027-01"},{"eq":"1L","iso":"2027-01-31T13:00:00","fecha":"2027-01-31","hora":"13:00","liga":"1L","loc":"Axpo Volley Näfels","vis":"Pallavolo Kreuzlingen","hall":"Novalishalle, Lintharena SGU","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10599","lon":"9.06517","hid":"9","mesKey":"2027-01"},{"eq":"2L","iso":"2027-02-05T20:15:00","fecha":"2027-02-05","hora":"20:15","liga":"2L","loc":"TSV Jona Volleyball H3","vis":"Axpo Volley Näfels H3","hall":"Grünfeld 2 (Mitte)","calle":"Grünfeldstrasse 8","ciudad":"8645 Jona","lat":"47.22208","lon":"8.84406","hid":"24","mesKey":"2027-02"},{"eq":"3L","iso":"2027-02-05T20:15:00","fecha":"2027-02-05","hora":"20:15","liga":"3L","loc":"TSV Jona Volleyball H5","vis":"Axpo Volley Näfels H4","hall":"Grünfeld 1 (West)","calle":"Grünfeldstrasse 8","ciudad":"8645 Jona","lat":"47.22208","lon":"8.84406","hid":"25","mesKey":"2027-02"},{"eq":"1L","iso":"2027-02-06T14:30:00","fecha":"2027-02-06","hora":"14:30","liga":"1L","loc":"VBC Voléro Zürich","vis":"Axpo Volley Näfels","hall":"Im Birch 1-3","calle":"Margrit-Rainer-Strasse 5","ciudad":"8050 Zürich","lat":"47.41637","lon":"8.54025","hid":"18","mesKey":"2027-02"},{"eq":"3L","iso":"2027-02-09T20:00:00","fecha":"2027-02-09","hora":"20:00","liga":"3L","loc":"Axpo Volley Näfels H4","vis":"VBC Davos H1","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2027-02"},{"eq":"4L","iso":"2027-02-12T20:15:00","fecha":"2027-02-12","hora":"20:15","liga":"4L","loc":"TSV Jona Volleyball H6","vis":"Axpo Volley Näfels H5","hall":"Grünfeld 1 (West)","calle":"Grünfeldstrasse 8","ciudad":"8645 Jona","lat":"47.22208","lon":"8.84406","hid":"25","mesKey":"2027-02"},{"eq":"1L","iso":"2027-02-13T16:00:00","fecha":"2027-02-13","hora":"16:00","liga":"1L","loc":"VBC Schaffhausen","vis":"Axpo Volley Näfels","hall":"Sporthalle BBZ Mühlental","calle":"Mühlentalstrasse 7","ciudad":"8200 Schaffhausen","lat":"47.69976","lon":"8.63123","hid":"19","mesKey":"2027-02"},{"eq":"NLA","iso":"2027-02-13T17:30:00","fecha":"2027-02-13","hora":"17:30","liga":"NLA","loc":"Colombier Volley","vis":"Axpo Volley Näfels","hall":"Fontenelle nouvelle 1","calle":"Rue de Chasseral 3","ciudad":"2053 Cernier","lat":"47.06290","lon":"6.90382","hid":"8","mesKey":"2027-02"},{"eq":"2L","iso":"2027-02-19T20:00:00","fecha":"2027-02-19","hora":"20:00","liga":"2L","loc":"Axpo Volley Näfels H3","vis":"VBC Chur H2","hall":"Linthhalle SGU 1-3","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10819","lon":"9.06569","hid":"1","mesKey":"2027-02"},{"eq":"1L","iso":"2027-02-20T13:00:00","fecha":"2027-02-20","hora":"13:00","liga":"1L","loc":"Axpo Volley Näfels","vis":"VBC Andwil-Arnegg","hall":"Linthhalle SGU 1-3","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10819","lon":"9.06569","hid":"1","mesKey":"2027-02"},{"eq":"3L","iso":"2027-02-20T13:00:00","fecha":"2027-02-20","hora":"13:00","liga":"3L","loc":"Axpo Volley Näfels H4","vis":"VBC Chur H4","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2027-02"},{"eq":"3L","iso":"2027-02-23T20:30:00","fecha":"2027-02-23","hora":"20:30","liga":"3L","loc":"VBC Galina H2","vis":"Axpo Volley Näfels H4","hall":"WST Triesen 1 (Nord)","calle":"Dominik Banzer Strasse 10","ciudad":"9495 Triesen","lat":"47.10474","lon":"9.52602","hid":"29","mesKey":"2027-02"},{"eq":"2L","iso":"2027-02-26T20:15:00","fecha":"2027-02-26","hora":"20:15","liga":"2L","loc":"TSV Jona Volleyball H4","vis":"Axpo Volley Näfels H3","hall":"Grünfeld 1 (West)","calle":"Grünfeldstrasse 8","ciudad":"8645 Jona","lat":"47.22208","lon":"8.84406","hid":"25","mesKey":"2027-02"},{"eq":"2L","iso":"2027-02-27T14:00:00","fecha":"2027-02-27","hora":"14:00","liga":"2L","loc":"Axpo Volley Näfels H3","vis":"VBC Chur H1","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2027-02"},{"eq":"1L","iso":"2027-02-28T13:00:00","fecha":"2027-02-28","hora":"13:00","liga":"1L","loc":"Axpo Volley Näfels","vis":"NNV Volleytalents Rapperswil-Jona","hall":"Novalishalle, Lintharena SGU","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10599","lon":"9.06517","hid":"9","mesKey":"2027-02"},{"eq":"3L","iso":"2027-03-02T20:00:00","fecha":"2027-03-02","hora":"20:00","liga":"3L","loc":"Axpo Volley Näfels H4","vis":"VBC Chur H3","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2027-03"},{"eq":"1L","iso":"2027-03-06T13:30:00","fecha":"2027-03-06","hora":"13:30","liga":"1L","loc":"VBC Züri Unterland","vis":"Axpo Volley Näfels","hall":"Sporthalle Ruebisbach Feld 1-2","calle":"Talacherstrasse 2","ciudad":"8302 Kloten","lat":"47.46214","lon":"8.57791","hid":"20","mesKey":"2027-03"},{"eq":"4L","iso":"2027-03-06T16:00:00","fecha":"2027-03-06","hora":"16:00","liga":"4L","loc":"Axpo Volley Näfels H5","vis":"VBC Linth H1","hall":"Obererlen 1-2","calle":"Obererlen 8","ciudad":"8752 Glarus Nord","lat":"47.09680","lon":"9.06761","hid":"12","mesKey":"2027-03"},{"eq":"1L","iso":"2027-03-13T13:00:00","fecha":"2027-03-13","hora":"13:00","liga":"1L","loc":"Axpo Volley Näfels","vis":"VBC Glaronia","hall":"Novalishalle, Lintharena SGU","calle":"Oberurnerstrasse 14","ciudad":"8752 Näfels","lat":"47.10599","lon":"9.06517","hid":"9","mesKey":"2027-03"}],"equipos":{"NLA":{"corto":"NLA","largo":"Axpo Volley Näfels — NLA","bg":"#cde2fb","fg":"#0b1220"},"1L":{"corto":"1L","largo":"Axpo Volley Näfels — 1. Liga","bg":"#9ec5f4","fg":"#0b1220"},"2L":{"corto":"H3","largo":"Axpo Volley Näfels H3 — 2. Liga","bg":"#6da7ec","fg":"#0b1220"},"3L":{"corto":"H4","largo":"Axpo Volley Näfels H4 — 3. Liga","bg":"#3987e5","fg":"#0b1220"},"4L":{"corto":"H5","largo":"Axpo Volley Näfels H5 — 4. Liga","bg":"#256abf","fg":"#ffffff"}},"orden":["NLA","1L","2L","3L","4L"],"nDias":54,"nMulti":16,"nCruce":12,"generado":"2026-10-05"};
+window.__CAL_TXT={"es":{"tit":"Calendario masculino · Axpo Volley Näfels","sub":"Los cinco equipos masculinos del club en una sola tabla, temporada 2026/27. Datos de {fuente} · al {fecha}.","k1":"Partidos","k2":"Días con partido","k3":"Días con 2 o más","k4":"Días con cruce","equipos":"Equipos","cruces":"solo cruces","cruceTit":"Dejar solo los partidos que se pisan en el horario o comparten gimnasio","buscar":"Buscar rival, gimnasio o ciudad…","buscarAria":"Buscar","cuenta":"{n} de {t} partidos","cFecha":"Fecha","cHora":"Hora","cEquipo":"Equipo","cLocal":"Local","cVisit":"Visitante","cSede":"Gimnasio","casa":"CASA","casaTit":"Näfels juega de local","pisa":"se pisa con","pisaTit":"Se superpone en el horario","sede":"mismo gimnasio","sedeTit":"Dos equipos nuestros en el mismo gimnasio ese día","vacio":"Ningún partido con esos filtros.","uno":"partido","varios":"partidos","mapa":"Abrir en el mapa","copa":"No es partido de liga","fdia":"{d} {m}","dias":["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"],"meses":["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],"ligas":{"NLA":"NLA","1L":"1ª liga","2L":"2ª liga","3L":"3ª liga","4L":"4ª liga"},"pieTit":"Cómo leerlo.","pie":"Las filas con el borde amarillo son días con más de un partido del club. <b>&#9888; se pisa con</b> marca los que se superponen en el horario (se le cuentan dos horas a cada partido). <b>&#9679; mismo gimnasio</b>, dos equipos nuestros en la misma sede ese día. El punto rojo señala a Näfels y <b>CASA</b>, que juega de local. El nombre del gimnasio abre el mapa en el punto exacto.","pie2":"Los avisos se recalculan con los filtros: si apagás un equipo, deja de contar como cruce."},"en":{"tit":"Men's calendar · Axpo Volley Näfels","sub":"All five men's teams of the club in one table, 2026/27 season. Data from {fuente} · as of {fecha}.","k1":"Matches","k2":"Match days","k3":"Days with 2 or more","k4":"Days with a clash","equipos":"Teams","cruces":"clashes only","cruceTit":"Show only matches that overlap in time or share a hall","buscar":"Search opponent, hall or town…","buscarAria":"Search","cuenta":"{n} of {t} matches","cFecha":"Date","cHora":"Time","cEquipo":"Team","cLocal":"Home","cVisit":"Away","cSede":"Hall","casa":"HOME","casaTit":"Näfels plays at home","pisa":"overlaps with","pisaTit":"Overlapping kick-off times","sede":"same hall","sedeTit":"Two of our teams in the same hall that day","vacio":"No matches with these filters.","uno":"match","varios":"matches","mapa":"Open in maps","copa":"Not a league match","fdia":"{d} {m}","dias":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"meses":["January","February","March","April","May","June","July","August","September","October","November","December"],"ligas":{"NLA":"NLA","1L":"1. Liga","2L":"2. Liga","3L":"3. Liga","4L":"4. Liga"},"pieTit":"How to read it.","pie":"Rows with a yellow edge are days with more than one club match. <b>&#9888; overlaps with</b> marks the ones that clash in time (each match is counted as two hours). <b>&#9679; same hall</b>, two of our teams in the same venue that day. The red dot marks Näfels, and <b>HOME</b> that it plays at home. The hall name opens the map on the exact spot.","pie2":"The warnings follow the filters: switch a team off and it stops counting as a clash."},"de":{"tit":"Spielplan Männer · Axpo Volley Näfels","sub":"Alle fünf Männerteams des Vereins in einer Tabelle, Saison 2026/27. Daten von {fuente} · Stand {fecha}.","k1":"Spiele","k2":"Spieltage","k3":"Tage mit 2 oder mehr","k4":"Tage mit Konflikt","equipos":"Teams","cruces":"nur Konflikte","cruceTit":"Nur Spiele zeigen, die sich zeitlich überschneiden oder dieselbe Halle teilen","buscar":"Gegner, Halle oder Ort suchen…","buscarAria":"Suchen","cuenta":"{n} von {t} Spielen","cFecha":"Datum","cHora":"Zeit","cEquipo":"Team","cLocal":"Heim","cVisit":"Auswärts","cSede":"Halle","casa":"HEIM","casaTit":"Näfels spielt zu Hause","pisa":"überschneidet sich mit","pisaTit":"Überschneidende Anspielzeiten","sede":"gleiche Halle","sedeTit":"Zwei unserer Teams am selben Tag in derselben Halle","vacio":"Keine Spiele mit diesen Filtern.","uno":"Spiel","varios":"Spiele","mapa":"In Karte öffnen","copa":"Kein Ligaspiel","fdia":"{d}. {m}","dias":["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"],"meses":["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],"ligas":{"NLA":"NLA","1L":"1. Liga","2L":"2. Liga","3L":"3. Liga","4L":"4. Liga"},"pieTit":"So liest man ihn.","pie":"Zeilen mit gelbem Rand sind Tage mit mehr als einem Vereinsspiel. <b>&#9888; überschneidet sich mit</b> markiert zeitliche Konflikte (pro Spiel werden zwei Stunden gerechnet). <b>&#9679; gleiche Halle</b>, zwei unserer Teams am selben Tag in derselben Halle. Der rote Punkt steht für Näfels und <b>HEIM</b> dafür, dass es zu Hause spielt. Der Hallenname öffnet die Karte am genauen Punkt.","pie2":"Die Hinweise folgen den Filtern: Team ausschalten und es zählt nicht mehr als Konflikt."}};
+/* ══ CALENDARIO MASCULINO · la logica ══════════════════════════════════════
+   Un solo bloque que sirve suelto y pegado adentro de modelo_completo.
+
+   El idioma sale de window.LANG cuando existe —modelo_completo lo define y lo
+   cambia con sus botones ES/DE/EN— y si no, del navegador. Asi el mismo
+   archivo anda en los dos lados sin una linea distinta.
+
+   Los listeners van DELEGADOS en document y se enganchan una sola vez: dentro
+   de modelo_completo el render() reemplaza #contenido entero cada vez que
+   cambia de solapa o de idioma, y unos listeners puestos sobre los botones se
+   perderian en el primer cambio. */
+(function () {
+  if (window.CALENDARIO) return;              /* ya montado */
+  var D = window.__CAL_DATOS, TXT = window.__CAL_TXT;
+  if (!D || !TXT) return;
+
+  var EST = { eq: {}, soloCruce: false, texto: '' };
+  D.orden.forEach(function (k) { EST.eq[k] = true; });
+
+  /* El idioma puede venir de tres lados, en este orden:
+       1. el que nos pasen con setLang() — es el caso de modelo_completo, que
+          declara su LANG con 'let' y por eso NO queda colgado de window:
+          leerlo de ahi no funciona y hay que recibirlo;
+       2. lo que haya guardado la app en vb_lang;
+       3. el idioma del dispositivo, y si no es uno de los tres, ingles. */
+  var FORZADO = null;
+  function idioma() {
+    if (FORZADO && TXT[FORZADO]) return FORZADO;
+    var l = (typeof window.LANG === 'string' && window.LANG) || '';
+    if (!l) { try { l = (localStorage.getItem('vb_lang') || ''); } catch (e) {} }
+    if (!l) { try { l = (navigator.language || '').slice(0, 2).toLowerCase(); } catch (e) {} }
+    return TXT[l] ? l : (TXT.en ? 'en' : 'es');
+  }
+  function setLang(l) { FORZADO = (l && TXT[l]) ? l : null; }
+  function t() { return TXT[idioma()]; }
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  /* El punto exacto que registra la federacion. Buscar por nombre y direccion
+     devuelve a veces otra cosa a 300 m —probado—, asi que va por coordenadas. */
+  function mapa(g) {
+    return 'https://www.google.com/maps/search/?api=1&query=' + g.lat + ',' + g.lon;
+  }
+  function minutos(h) { return (+h.slice(0, 2)) * 60 + (+h.slice(3)); }
+
+  /* ── EL CRUCE SE CALCULA SOBRE LO QUE SE ESTA VIENDO ────────────────────
+     Si apagas un equipo, sus cruces dejan de ser cruces. Por eso esto corre
+     despues de filtrar y no sobre la temporada entera. */
+  function cruces(lista) {
+    var dia = {};
+    lista.forEach(function (g) { (dia[g.fecha] = dia[g.fecha] || []).push(g); });
+    lista.forEach(function (g) {
+      var v = dia[g.fecha], gm = minutos(g.hora);
+      g._pisa = v.filter(function (o) {
+        return o !== g && Math.abs(gm - minutos(o.hora)) < 120;
+      }).map(function (o) { return D.equipos[o.eq].corto; });
+      g._sede = v.filter(function (o) { return o.hid === g.hid; }).length > 1;
+      g._nDia = v.length;
+    });
+    return dia;
+  }
+  function visibles() {
+    var q = EST.texto.trim().toLowerCase();
+    var base = D.juegos.filter(function (g) {
+      if (!EST.eq[g.eq]) return false;
+      if (q) {
+        var h = (g.loc + ' ' + g.vis + ' ' + g.hall + ' ' + g.ciudad + ' ' + g.liga).toLowerCase();
+        if (h.indexOf(q) < 0) return false;
+      }
+      return true;
+    });
+    cruces(base);
+    if (!EST.soloCruce) return base;
+    var fin = base.filter(function (g) { return g._pisa.length || g._sede; });
+    cruces(fin);
+    return fin;
+  }
+
+  function filas() {
+    var T = t(), lista = visibles();
+    if (!lista.length)
+      return '<tr><td colspan="6" class="cal-vacio">' + esc(T.vacio) + '</td></tr>';
+
+    var porDia = {};
+    lista.forEach(function (g) { (porDia[g.fecha] = porDia[g.fecha] || []).push(g); });
+
+    var h = '', mes = '', fecha = '';
+    lista.forEach(function (g) {
+      var d = new Date(g.fecha + 'T00:00:00');
+      var mk = g.fecha.slice(0, 7);
+      if (mk !== mes) {
+        mes = mk;
+        var nM = lista.filter(function (x) { return x.fecha.slice(0, 7) === mes; }).length;
+        h += '<tr class="cal-mes"><td colspan="6"><b>' +
+             esc(T.meses[d.getMonth()] + ' ' + d.getFullYear()) + '</b><span>' +
+             nM + ' ' + esc(nM === 1 ? T.uno : T.varios) + '</span></td></tr>';
+        fecha = '';
+      }
+      var nd = porDia[g.fecha].length, nuevo = (g.fecha !== fecha);
+      if (nuevo) fecha = g.fecha;
+
+      var E = D.equipos[g.eq];
+      var mio = function (n) {
+        var nuestro = n.indexOf('Axpo Volley Näfels') === 0;
+        return '<span class="cal-eq' + (nuestro ? ' nos' : '') + '">' + esc(n) + '</span>';
+      };
+      var casa = g.loc.indexOf('Axpo Volley Näfels') === 0;
+      /* casi siempre la competencia ES la liga del equipo; cuando no (la
+         Supercup) hay que decirlo o se lee como un partido de liga */
+      var copa = (g.liga !== g.eq)
+        ? '<span class="cal-copa" title="' + esc(T.copa) + '">' + esc(g.liga) + '</span>' : '';
+      var dow = T.dias[(d.getDay() + 6) % 7];
+
+      h += '<tr class="cal-g' + (nd > 1 ? ' multi' : '') + (nuevo ? ' d0' : '') + '">';
+      /* La fecha se escribe SIEMPRE, aunque la fila repita dia: en el telefono
+         cada partido es una ficha suelta y sin fecha no se entiende. En
+         pantalla ancha la repetida se oculta por CSS, que es donde la tabla
+         agrupa por dia. */
+      h += '<td class="cal-f' + (nuevo ? '' : ' cal-rep') + '">' +
+            '<b>' + esc(T.fdia.replace('{d}', d.getDate()).replace('{m}', T.meses[d.getMonth()])) +
+            '</b><i>' + esc(dow) + (nd > 1 ? ' · ' + nd + ' ' + esc(T.varios) : '') + '</i></td>';
+      h += '<td class="cal-hora">' + esc(g.hora) + '</td>';
+      h += '<td style="white-space:nowrap"><span class="cal-bd" style="background:' + E.bg +
+             ';color:' + E.fg + '" title="' + esc('Axpo Volley Näfels — ' + T.ligas[g.eq]) +
+             '">' + esc(E.corto) + '</span>' + copa + '</td>';
+      h += '<td>' + mio(g.loc) +
+             (casa ? '<span class="cal-casa" title="' + esc(T.casaTit) + '">' + esc(T.casa) + '</span>' : '') + '</td>';
+      h += '<td>' + mio(g.vis) + '</td>';
+      h += '<td class="cal-sede"><a href="' + mapa(g) + '" target="_blank" rel="noopener" title="' +
+             esc(T.mapa + ': ' + g.calle + ', ' + g.ciudad) + '">' + esc(g.hall) + '</a><i>' +
+             esc(g.ciudad) + '</i>';
+      if (g._pisa.length)
+        h += '<span class="cal-av pisa" title="' + esc(T.pisaTit) + '">&#9888; ' +
+             esc(T.pisa + ' ' + g._pisa.join(', ')) + '</span>';
+      if (g._sede)
+        h += '<span class="cal-av sede" title="' + esc(T.sedeTit) + '">&#9679; ' +
+             esc(T.sede) + '</span>';
+      h += '</td></tr>';
+    });
+    return h;
+  }
+
+  function pintar() {
+    var cuerpo = document.getElementById('cal-body');
+    if (!cuerpo) return;
+    cuerpo.innerHTML = filas();
+    var c = document.getElementById('cal-cuenta');
+    if (c) c.textContent = t().cuenta
+      .replace('{n}', visibles().length).replace('{t}', D.juegos.length);
+  }
+
+  function html() {
+    var T = t();
+    var tg = D.orden.map(function (k) {
+      var E = D.equipos[k];
+      return '<button type="button" class="cal-tg' + (EST.eq[k] ? ' on' : '') +
+             '" data-cal-eq="' + k + '" title="' + esc('Axpo Volley Näfels — ' + T.ligas[k]) + '">' +
+             '<span class="pt" style="background:' + E.bg + '"></span>' + esc(E.corto) + '</button>';
+    }).join('');
+
+    var fuente = '<a href="https://www.volleyball.ch/de/game-center/club/914190/team/1" ' +
+                 'target="_blank" rel="noopener">volleyball.ch</a>';
+
+    return '<div class="cal-root" id="cal-nafels">' +
+      '<h1 class="cal-h1">' + esc(T.tit) + '</h1>' +
+      '<p class="cal-sub">' + esc(T.sub).replace('{fuente}', fuente)
+          .replace('{fecha}', esc(D.generado)) + '</p>' +
+      '<div class="cal-kpis">' +
+        '<div class="cal-kpi"><b>' + D.juegos.length + '</b><span>' + esc(T.k1) + '</span></div>' +
+        '<div class="cal-kpi"><b>' + D.nDias + '</b><span>' + esc(T.k2) + '</span></div>' +
+        '<div class="cal-kpi"><b>' + D.nMulti + '</b><span>' + esc(T.k3) + '</span></div>' +
+        '<div class="cal-kpi"><b>' + D.nCruce + '</b><span>' + esc(T.k4) + '</span></div>' +
+      '</div>' +
+      '<div class="cal-barra"><em>' + esc(T.equipos) + '</em>' + tg +
+        '<button type="button" class="cal-tg cal-tg2' + (EST.soloCruce ? ' on' : '') +
+          '" data-cal-cruce="1" title="' + esc(T.cruceTit) + '">&#9888; ' + esc(T.cruces) + '</button>' +
+        '<input id="cal-busca" class="cal-busca" type="search" value="' + esc(EST.texto) +
+          '" placeholder="' + esc(T.buscar) + '" aria-label="' + esc(T.buscarAria) + '">' +
+      '</div>' +
+      '<p class="cal-cuenta" id="cal-cuenta"></p>' +
+      '<div class="cal-wrap"><table class="cal"><thead><tr>' +
+        '<th>' + esc(T.cFecha) + '</th><th>' + esc(T.cHora) + '</th><th>' + esc(T.cEquipo) + '</th>' +
+        '<th>' + esc(T.cLocal) + '</th><th>' + esc(T.cVisit) + '</th><th>' + esc(T.cSede) + '</th>' +
+      '</tr></thead><tbody id="cal-body"></tbody></table></div>' +
+      '<p class="cal-pie"><b>' + esc(T.pieTit) + '</b> ' + T.pie + '<br>' + esc(T.pie2) + '</p>' +
+    '</div>';
+  }
+
+  var montado = false;
+  function montar() {
+    if (montado) return;
+    montado = true;
+    document.addEventListener('click', function (e) {
+      var b = e.target && e.target.closest
+            ? e.target.closest('[data-cal-eq],[data-cal-cruce]') : null;
+      if (!b) return;
+      if (b.hasAttribute('data-cal-eq')) {
+        var k = b.getAttribute('data-cal-eq');
+        EST.eq[k] = !EST.eq[k];
+        b.classList.toggle('on', EST.eq[k]);
+      } else {
+        EST.soloCruce = !EST.soloCruce;
+        b.classList.toggle('on', EST.soloCruce);
+      }
+      pintar();
+    });
+    document.addEventListener('input', function (e) {
+      if (e.target && e.target.id === 'cal-busca') { EST.texto = e.target.value; pintar(); }
+    });
+  }
+
+  window.CALENDARIO = { html: html, pintar: pintar, montar: montar,
+                        setLang: setLang, idioma: idioma, estado: EST };
+
+  /* Suelto: si la pagina trae el hueco, se dibuja solo. Dentro de
+     modelo_completo no hay hueco y lo llama vCal(). */
+  function solo() {
+    var h = document.getElementById('cal-hueco');
+    if (!h) return;
+    h.innerHTML = html();
+    montar(); pintar();
+  }
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', solo);
+  else solo();
+})();
+
+</script>
+</head>
+<body>
+<div class="cal-idiomas">
+  <button data-l="es" aria-pressed="false">ES</button>
+  <button data-l="en" aria-pressed="false">EN</button>
+  <button data-l="de" aria-pressed="false">DE</button>
+</div>
+<div id="cal-hueco"></div>
+<script>
+/* El selector de idioma de la version suelta. Adentro de modelo_completo no
+   hace falta: alli manda el ES/DE/EN que ya tiene la cabecera. */
+(function(){
+  function actual(){
+    var l=''; try{ l=localStorage.getItem('vb_lang')||''; }catch(e){}
+    if(!l){ try{ l=(navigator.language||'').slice(0,2).toLowerCase(); }catch(e){} }
+    return ({es:1,en:1,de:1})[l] ? l : 'en';
+  }
+  function poner(l){
+    window.LANG = l;
+    try{ localStorage.setItem('vb_lang', l); }catch(e){}
+    document.documentElement.lang = l;
+    document.querySelectorAll('.cal-idiomas button').forEach(function(b){
+      b.setAttribute('aria-pressed', String(b.dataset.l===l));
+    });
+    var h=document.getElementById('cal-hueco');
+    h.innerHTML = CALENDARIO.html(); CALENDARIO.montar(); CALENDARIO.pintar();
+  }
+  document.querySelectorAll('.cal-idiomas button').forEach(function(b){
+    b.onclick=function(){ poner(b.dataset.l); };
+  });
+  poner(actual());
+})();
+</script>
+</body>
+</html>
