@@ -65,8 +65,8 @@
           red:'RED', saca:'saca',
           atajos:'ATAJOS AL ANÁLISIS',
           atArmT:'Distribución del armador', atArmS:'con recepción # y +',
-          atSoT:'Side out con recepción previa de Z{z}',
-          atSoS:'la columna: Z{z} es {zz}',
+          atSoT:'Reparto del armador con recepción de Z{z}',
+          atSoS:'side out · la columna: Z{z} es {zz}',
           atDirT:'Direcciones de ataque', atDirS:'por dónde pasa la pelota',
           notaAtajos:'Cada atajo deja los filtros puestos y abre el análisis donde corresponde. Las columnas son las tres calles de la cancha: la 1 son las zonas 1, 9 y 2; la 6 son la 6, la 8 y la 3; la 5 son la 5, la 7 y la 4.',
           masAcc:'Más' },
@@ -81,8 +81,8 @@
           red:'NET', saca:'serving',
           atajos:'ANALYSIS SHORTCUTS',
           atArmT:'Setter distribution', atArmS:'on reception # and +',
-          atSoT:'Side out with previous reception in Z{z}',
-          atSoS:'the column: Z{z} is {zz}',
+          atSoT:'Setter distribution on reception from Z{z}',
+          atSoS:'side out · the column: Z{z} is {zz}',
           atDirT:'Attack directions', atDirS:'where the ball goes',
           notaAtajos:'Each shortcut sets the filters and opens the analysis on the right screen. The columns are the three lanes of the court: the 1 is zones 1, 9 and 2; the 6 is 6, 8 and 3; the 5 is 5, 7 and 4.',
           masAcc:'More' },
@@ -97,8 +97,8 @@
           red:'NETZ', saca:'Aufschlag',
           atajos:'SCHNELLZUGRIFF',
           atArmT:'Zuspielverteilung', atArmS:'bei Annahme # und +',
-          atSoT:'Side out mit vorheriger Annahme in Z{z}',
-          atSoS:'die Spalte: Z{z} ist {zz}',
+          atSoT:'Zuspielverteilung bei Annahme aus Z{z}',
+          atSoS:'Side out · die Spalte: Z{z} ist {zz}',
           atDirT:'Angriffsrichtungen', atDirS:'wo der Ball durchgeht',
           notaAtajos:'Jeder Schnellzugriff setzt die Filter und öffnet die Analyse auf dem passenden Bildschirm. Die Spalten sind die drei Bahnen des Feldes: die 1 sind die Zonen 1, 9 und 2; die 6 sind 6, 8 und 3; die 5 sind 5, 7 und 4.',
           masAcc:'Mehr' }
@@ -755,9 +755,14 @@
   var ATAJOS = [
     { k:'arm', tab:'arm', erec:'#+',
       ico:'&#9679;', col:'#8B5CF6' },
-    { k:'so1', tab:'jug', fase:'so', zrec:'1', ico:'1', col:'#0E9F6E' },
-    { k:'so6', tab:'jug', fase:'so', zrec:'6', ico:'6', col:'#0E9F6E' },
-    { k:'so5', tab:'jug', fase:'so', zrec:'5', ico:'5', col:'#0E9F6E' },
+    /* Estos tres abren LA DISTRIBUCION DEL ARMADOR, no la tabla de
+       jugadores: la pregunta es "cuando la recepcion viene de esta calle,
+       ¿a quien le da el armador?". Y filtran por zarm —la recepcion de la
+       misma posesion, la que precede al armado— y no por zrec, que mira el
+       punto entero y se traeria el contraataque de dos defensas despues. */
+    { k:'so1', tab:'arm', fase:'so', zarm:'1', ico:'1', col:'#0E9F6E' },
+    { k:'so6', tab:'arm', fase:'so', zarm:'6', ico:'6', col:'#0E9F6E' },
+    { k:'so5', tab:'arm', fase:'so', zarm:'5', ico:'5', col:'#0E9F6E' },
     { k:'dir', tab:'dir', fund:'A', ico:'&#8599;', col:'#0B84C4' }
   ];
 
@@ -769,8 +774,8 @@
     var t = L();
     if (a.k === 'arm') return { tit:t.atArmT, sub:t.atArmS };
     if (a.k === 'dir') return { tit:t.atDirT, sub:t.atDirS };
-    return { tit: t.atSoT.split('{z}').join(a.zrec),
-             sub: t.atSoS.split('{z}').join(a.zrec).split('{zz}').join(COL_TXT[a.zrec]) };
+    return { tit: t.atSoT.split('{z}').join(a.zarm),
+             sub: t.atSoS.split('{z}').join(a.zarm).split('{zz}').join(COL_TXT[a.zarm]) };
   }
 
   function panelAtajos() {
@@ -830,7 +835,7 @@
     ATAJOS.forEach(function (a) {
       var x = textoAtajo(a);
       var cfg = { tab:a.tab, lado:l };
-      ['erec', 'zrec', 'fase', 'fund'].forEach(function (k) { if (a[k]) cfg[k] = a[k]; });
+      ['erec', 'zrec', 'zarm', 'fase', 'fund'].forEach(function (k) { if (a[k]) cfg[k] = a[k]; });
       h += '<button type="button" class="pe-at" onclick=\'AV.atajo(' +
              JSON.stringify(cfg).replace(/'/g, '&#39;') + ')\'>' +
              '<span class="pe-aic" style="color:' + a.col + ';border-color:' + a.col + '33;' +

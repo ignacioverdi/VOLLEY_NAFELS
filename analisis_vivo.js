@@ -89,6 +89,8 @@
           efArm:'Armado', ordenar:'Ordenar por', oFund:'Fundamento', oJug:'Jugador', oRot:'Rotación',
           conRec:'Con recepción', recTodas:'Todas', fase2:'Fase', todoF:'Todo',
           recEn:'Recibida en', colum:'columna', atajos:'ATAJOS',
+          recPrev:'Recepción previa en',
+          recVarias:'(podés tildar varias)',
           vMapa:'Una cancha por salida', vFlechas:'Todas las flechas',
           notaMapa:'Una cancha chica por cada zona desde la que se golpea, ordenadas por cuántas pelotas salen de ahí. Adentro, dónde cae cada una: el número grande es la cantidad y el chico cuánto rindió, medido contra el promedio del equipo. El borde marca el camino más usado de esa zona. Tocá una casilla para ver esas pelotas.',
           atArm:'Reparto del armador con recepción perfecta o buena',
@@ -195,6 +197,8 @@
           efArm:'Zuspiel', ordenar:'Sortieren nach', oFund:'Element', oJug:'Spieler', oRot:'Rotation',
           conRec:'Mit Annahme', recTodas:'Alle', fase2:'Phase', todoF:'Alles',
           recEn:'Angenommen in', colum:'Spalte', atajos:'SCHNELLZUGRIFF',
+          recPrev:'Vorherige Annahme in',
+          recVarias:'(mehrere möglich)',
           vMapa:'Ein Feld pro Abschlagzone', vFlechas:'Alle Pfeile',
           notaMapa:'Ein kleines Feld pro Zone, aus der geschlagen wird, sortiert nach Anzahl der Bälle. Darin, wo jeder landet: die grosse Zahl ist die Menge, die kleine der Ertrag, gemessen am Schnitt des Teams. Der Rahmen markiert den meistgenutzten Weg dieser Zone. Antippen zeigt diese Bälle.',
           atArm:'Zuspielverteilung bei perfekter oder guter Annahme',
@@ -301,6 +305,8 @@
           efArm:'Set', ordenar:'Order by', oFund:'Skill', oJug:'Player', oRot:'Rotation',
           conRec:'With reception', recTodas:'All', fase2:'Phase', todoF:'All',
           recEn:'Received in', colum:'column', atajos:'SHORTCUTS',
+          recPrev:'Previous reception in',
+          recVarias:'(tick as many as you want)',
           vMapa:'One court per origin', vFlechas:'All the arrows',
           notaMapa:'One small court per hitting zone, ordered by how many balls come from there. Inside, where each one lands: the big number is the count and the small one the return, measured against the team average. The outline marks that zone\'s most used path. Tap a cell to see those balls.',
           atArm:'Setter distribution on perfect or good reception',
@@ -409,6 +415,19 @@
        no si la pelota cayo dos metros mas adelante. Guarda '1', '6' o '5'.
        Vacio = todas. */
     zrec: '',
+    /* ── LA COLUMNA DE LA RECEPCION QUE PRECEDE AL ARMADO ──────────────
+       Hermano de zrec, y la diferencia es a proposito.
+
+       zrec   mira el PUNTO entero: "si el saque entro por la 5, todo lo que
+              pase despues en ese punto pasa por haber recibido en la 5".
+       zarm   se queda en la MISMA posesion: la recepcion que viene justo
+              antes de ese armado. Es la pregunta del armador —"cuando la
+              recepcion viene de esta calle, ¿a quien le da?"— y por eso deja
+              afuera el contraataque de tres intercambios despues, que no
+              viene de ninguna recepcion.
+
+       Mismas tres columnas que zrec. Guarda '1', '6' o '5'. Vacio = todas. */
+    zarm: '',
     /* como se dibujan las direcciones: 'mapa' (una cancha por zona de salida)
        o 'flechas' (el dibujo de siempre, con todos los caminos encima) */
     dirVista: 'mapa',
@@ -742,6 +761,21 @@
             if (z3 && z3.sk === 'R' && z3.lado === a.lado) { rec2 = z3; break; }
           }
           if (!rec2 || !rec2.zf || COL_REC[AV.zrec].indexOf(String(rec2.zf)) < 0) return;
+        }
+        /* ── LA RECEPCION QUE PRECEDE A ESTE ARMADO ───────────────────
+           Como el de AV.erec y al reves que el de arriba: se queda en la
+           misma posesion y corta apenas aparece una accion del rival. Sin
+           recepcion propia por delante no es K1 —es transicion— y queda
+           afuera, que es justo lo que se pide al elegir una columna. */
+        if (AV.zarm) {
+          var lst5 = r.acciones || [], idx5 = lst5.indexOf(a), rec3 = null;
+          for (var w3 = idx5 - 1; w3 >= 0; w3--) {
+            var z4 = lst5[w3];
+            if (!z4) continue;
+            if (z4.lado !== a.lado) break;
+            if (z4.sk === 'R') { rec3 = z4; break; }
+          }
+          if (!rec3 || !rec3.zf || COL_REC[AV.zarm].indexOf(String(rec3.zf)) < 0) return;
         }
         if (AV.fila && a.zi) {
           var del = ('432'.indexOf(String(a.zi)) >= 0);
@@ -1277,7 +1311,7 @@
   var LLAVE_G = 'av_guardados';
   var CAMPOS = ['lado','jug','fund','tipo','ev','rot','set','fase','zi','zf',
                 'sres','fila','d1','d2','marc','pt1','reglas','regY','earm','erec',
-                'zrec','orden','enc','rotR'];
+                'zrec','zarm','orden','enc','rotR'];
 
   function leerGuardados() {
     try { if (typeof load === 'function') return load(LLAVE_G, []) || []; } catch (e) {}
@@ -1858,7 +1892,7 @@
      que son del partido entero. */
   AV.hayAvanzado = function () {
     return !!(AV.sres || AV.fila || AV.d1 !== '' || AV.d2 !== '' || AV.marc || AV.pt1 ||
-              AV.earm || AV.erec || AV.zrec || AV.rotR || (AV.enc && AV.enc.length) ||
+              AV.earm || AV.erec || AV.zrec || AV.zarm || AV.rotR || (AV.enc && AV.enc.length) ||
               (AV.reglas && AV.reglas.length));
   };
 
@@ -1971,6 +2005,7 @@
     if (AV.earm) partes.push(t.efArm + ' ' + AV.earm);
     if (AV.erec) partes.push(t.conRec + ' ' + AV.erec.split('').join(' '));
     if (AV.zrec) partes.push(t.recEn + ' ' + t.colum + ' ' + AV.zrec);
+    if (AV.zarm) partes.push(t.recPrev + ' ' + t.colum + ' ' + AV.zarm);
     if (AV.rotR) partes.push(t.rotRival + ' P' + AV.rotR);
     if (AV.enc && AV.enc.length) partes.push(t.enCancha + ' ' + AV.enc.join('+'));
     if (AV.reglas && AV.reglas.length)
@@ -2047,7 +2082,7 @@
     AV.jug = ''; AV.fund = ''; AV.rot = ''; AV.set = ''; AV.fase = '';
     AV.tipo = ''; AV.ev = ''; AV.zi = ''; AV.zf = '';
     AV.sres = ''; AV.fila = ''; AV.d1 = ''; AV.d2 = ''; AV.marc = ''; AV.pt1 = false;
-    AV.reglas = []; AV.regY = true; AV.earm = ''; AV.erec = ''; AV.zrec = '';
+    AV.reglas = []; AV.regY = true; AV.earm = ''; AV.erec = ''; AV.zrec = ''; AV.zarm = '';
     AV.enc = []; AV.rotR = '';
     AV._abriendo = false;
     AV.pintar();
@@ -2759,7 +2794,8 @@
                  '" onclick="AV.set_(\'fase\',\'' + x[0] + '\')">' + esc(x[1]) + '</button>';
         }).join('') +
       '</div>' +
-      '<div class="av-armg"><span>' + esc(t.conRec) + '</span>' +
+      '<div class="av-armg"><span>' + esc(t.conRec) +
+        '<i class="av-hint">' + esc(t.recVarias) + '</i></span>' +
         '<button class="av-plb' + (AV.erec ? '' : ' on') +
           '" onclick="AV.set_(\'erec\',\'\')">' + esc(t.recTodas) + '</button>' +
         recs.map(function (x) {
@@ -3851,7 +3887,20 @@
     +   'color:var(--mut);font-weight:700;margin-right:5px}'
     /* las valoraciones son simbolos: sin ancho minimo quedan de tamanos
        distintos segun el simbolo y la fila baila */
-    + '.av-rec{min-width:32px;text-align:center;font-weight:800}'
+    /* ── QUE SE VEA QUE ENTRAN VARIAS ──────────────────────────────────
+       Estos botones aceptan varios a la vez desde siempre —AV.togRec los
+       suma y los resta— pero estaban dibujados igual que los de FASE, que
+       son excluyentes. Dos filas identicas, una excluyente y la otra no,
+       y nada que lo dijera: parecian radio buttons y nadie probaba a
+       tildar el segundo. La casilla lo dice sin leer nada. */
+    + '.av-rec{min-width:42px;text-align:center;font-weight:800;'
+    +   'display:inline-flex;align-items:center;justify-content:center;gap:5px}'
+    + '.av-rec::before{content:"";width:9px;height:9px;flex:0 0 9px;'
+    +   'border:1.5px solid currentColor;border-radius:2.5px;opacity:.45}'
+    + '.av-rec.on::before{opacity:1;background:currentColor;'
+    +   'box-shadow:inset 0 0 0 1.5px var(--card,#0f172a)}'
+    + '.av-hint{font-size:9.5px;font-style:normal;color:var(--mut);'
+    +   'opacity:.75;margin-left:4px;letter-spacing:.2px}'
     + '.av-canchas{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}'
     + '.av-canchas .av-cancha{flex:1 1 255px;max-width:340px;min-width:225px}'
     + '.av-rot{font-size:9.5px;letter-spacing:.9px;text-transform:uppercase;'
