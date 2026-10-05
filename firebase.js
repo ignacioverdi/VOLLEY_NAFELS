@@ -16,6 +16,42 @@ var FB_KEY  = 'AIzaSyDsl7RZkk0vuPUP0IADZcf6cgrv5_Wp5Fg';   // clave pública del
 var FB_DOM  = 'nafels.app';       // dominio interno de las cuentas de jugadores
 var FB_CLUB = 'NÄFELS';
 
+/* ══ DÓNDE VIVEN LOS DATOS DE ESTE CLUB ═════════════════════════════
+   NÄFELS tiene su base entera para sí: sus datos cuelgan de la raíz y FB_RAMA
+   queda vacía. Los clubes que vengan después comparten UNA base, cada uno en
+   su propia rama:
+
+       clubes/<club>/roles/...      clubes/<club>/sesiones/...
+
+   Las reglas sólo dejan leer y escribir adentro de la rama propia: nadie ve
+   los datos de otro club. Por eso toda ruta pasa por fbRuta().
+
+   En un cliente, GENERAR_PLANTILLA cambia la línea de abajo por '{{club}}'.
+   Acá queda vacía y fbRuta() devuelve la ruta tal cual: para NÄFELS no cambia
+   absolutamente nada.
+
+   POR QUÉ VIVE ACÁ Y NO EN UNA COPIA APARTE
+   Hasta hoy el cliente tenía su propio firebase.js, a mano, en
+   CLIENTE VOLEY STATS\EXTRAS. Esa copia se congeló el 29/07 y se quedó sin 22
+   funciones que esta app fue ganando: fbStream, la categoría del jugador, la
+   llave guardada para scoutear sin señal, el registro de actividad. Nadie se
+   enteraba porque no fallaba nada: al cliente nuevo simplemente le faltaban
+   cosas. Con la rama acá adentro hay un solo archivo y no vuelve a pasar.
+   ═══════════════════════════════════════════════════════════════════════ */
+var FB_RAMA = '';   /* el nombre corto del club, en minúscula. Vacía = la raíz */
+
+function fbRuta(camino){
+  var c = String(camino || '').replace(/^\/+/, '');
+  if (!FB_RAMA || FB_RAMA.charAt(0) === '{') return c;   /* sin rama: la raíz */
+  if (c.indexOf('clubes/') === 0) return c;              /* ya viene armada */
+  return 'clubes/' + FB_RAMA + '/' + c;
+}
+
+/* Arma la dirección completa de un pedido a la base. */
+function fbURL(camino, sufijo){
+  return FB_URL + '/' + fbRuta(camino) + '.json' + (sufijo || '');
+}
+
 function fbKey(path){
   return 'fb_' + path.replace(/[^a-zA-Z0-9]/g, '_');
 }
@@ -121,7 +157,7 @@ function _fbTraerLlave(){
   if(typeof guardarLlave !== 'function') return Promise.resolve();
   try{ if(localStorage.getItem('club_llave')) return Promise.resolve(); }catch(e){}
   return _fbSufijo().then(function(q){
-    return fetch(FB_URL + '/' + (typeof fbRuta === 'function' ? fbRuta('llave') : 'llave') + '.json' + q)
+    return fetch(fbURL('llave', q))
       .then(function(r){ return r.json(); })
       .then(function(k){ if(typeof k === 'string' && k.length >= 32) guardarLlave(k); })
       .catch(function(){});
@@ -190,7 +226,7 @@ function _fbRegistrarDisp(){
   var tipo = /iPad|Tablet/i.test(ua) ? 'Tablet'
            : /Android|iPhone|Mobile/i.test(ua) ? 'Celular' : 'Computadora';
   return _fbSufijo().then(function(q){
-    return fetch(FB_URL + '/sesiones/dispositivos/' + FB_SES.uid + '/' + _fbDispId() + '.json' + q, {
+    return fetch(fbURL('sesiones/dispositivos/' + FB_SES.uid + '/' + _fbDispId(), q), {
       method:'PATCH', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ tipo:tipo, mail:FB_SES.email||'',
                              desde:(FB_SES.emitido||Date.now()), ultimo:Date.now() })
@@ -210,7 +246,7 @@ function _fbRegistrarAcceso(){
            : /Android|iPhone|Mobile/i.test(ua) ? 'Celular' : 'Computadora';
   var id = 'a' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
   _fbSufijo().then(function(q){
-    return fetch(FB_URL + '/sesiones/accesos/' + id + '.json' + q, {
+    return fetch(fbURL('sesiones/accesos/' + id, q), {
       method:'PUT', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ uid:FB_SES.uid, mail:FB_SES.email||'',
                              cuando:Date.now(), tipo:tipo, disp:_fbDispId() })
@@ -226,7 +262,7 @@ function _fbControlSesion(){
   if(_fbCtrlHecho && (Date.now() - _fbCtrlHecho) < 60000) return Promise.resolve();
   _fbCtrlHecho = Date.now();
   return _fbSufijo().then(function(q){
-    return fetch(FB_URL + '/sesiones.json' + q).then(function(r){ return r.json(); });
+    return fetch(fbURL('sesiones', q)).then(function(r){ return r.json(); });
   }).then(function(d){
     if(!d || d.error) return _fbRegistrarDisp();
     /* ── SI NO SE SABE CUANDO SE CREO, NO SE CIERRA ────────────────────
@@ -298,8 +334,8 @@ function _fbCargarRolReal(){
   return _fbSufijo().then(function(q){
     /* Rol (coach/at/pf/player) y numero de camiseta, los dos atados al UID.
        El numero lo necesitan la vista por jugador y los avisos personales. */
-    var pRol = fetch(FB_URL + '/roles/' + FB_SES.uid + '.json' + q).then(function(r){ return r.json(); });
-    var pNum = fetch(FB_URL + '/jugador_num/' + FB_SES.uid + '.json' + q).then(function(r){ return r.json(); });
+    var pRol = fetch(fbURL('roles/' + FB_SES.uid, q)).then(function(r){ return r.json(); });
+    var pNum = fetch(fbURL('jugador_num/' + FB_SES.uid, q)).then(function(r){ return r.json(); });
     return Promise.all([pRol, pNum]).then(function(res){
       var rol = res[0], num = res[1];
       try{
@@ -472,7 +508,7 @@ function fbStream(path, callback){
     _fbArrancar().then(_fbSufijo).then(function(q){
       if(muerto) return;
       try{
-        es = new EventSource(FB_URL + '/' + path + '.json' + q);
+        es = new EventSource(fbURL(path, q));
       }catch(e){ return; }
 
       function leer(ev){
@@ -683,7 +719,7 @@ function fbSet(path, value){
   try{ localStorage.setItem(fbKey(path), JSON.stringify(value)); }catch(e){}
   return _fbArrancar().then(_fbSufijo).then(function(q){
     if(FB_OFF) return false;
-    return fetch(FB_URL + '/' + path + '.json' + q, {
+    return fetch(fbURL(path, q), {
       method:'PUT', headers:{'Content-Type':'application/json'},
       body: JSON.stringify(value)
     }).then(function(r){ return !!(r && r.ok); })
@@ -701,7 +737,7 @@ function fbGet(path, callback){
   }
   _fbArrancar().then(_fbSufijo).then(function(q){
     if(FB_OFF) return local();
-    fetch(FB_URL + '/' + path + '.json' + q)
+    fetch(fbURL(path, q))
       .then(function(r){ return r.json(); })
       .then(function(data){
         if(data !== null && data !== undefined && !(data && data.error)){
@@ -723,7 +759,7 @@ function fbPush(path, value){
   }catch(e){}
   _fbArrancar().then(_fbSufijo).then(function(q){
     if(FB_OFF) return;
-    fetch(FB_URL + '/' + path + '.json' + q, {
+    fetch(fbURL(path, q), {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify(value)
     }).catch(function(){});
@@ -921,7 +957,7 @@ if(FB_TEMP_CERRADA){ (function(){
       var opc = { method:'PATCH', headers:{'Content-Type':'application/json'},
                   body: JSON.stringify(valor) };
       if(final) opc.keepalive = true;   /* para que salga aunque se cierre la pestaña */
-      return window.fetch(FB_URL + '/' + ruta + '.json' + q, opc);
+      return window.fetch(fbURL(ruta, q), opc);
     }).catch(function(){});
   }
 
@@ -951,8 +987,8 @@ if(FB_TEMP_CERRADA){ (function(){
     if(baseP) return baseP;
     baseDia = actDia();
     baseP = _fbSufijo().then(function(q){
-      return window.fetch(FB_URL + '/sesiones/videos/' + baseDia + '/'
-                        + FB_SES.uid + '/' + actPant() + '.json' + q)
+      return window.fetch(fbURL('sesiones/videos/' + baseDia + '/'
+                              + FB_SES.uid + '/' + actPant(), q))
         .then(function(r){ return r.json(); });
     }).then(function(v){ base = Number(v) || 0; })
       .catch(function(){ base = 0; });
