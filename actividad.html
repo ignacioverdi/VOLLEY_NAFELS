@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title data-t="Quién entra y qué mira">Quién entra y qué mira</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07080F;--sur:#0D0E1A;--card:#0D0E1A;--card2:#111220;--b:rgba(255,255,255,.06);--b2:rgba(255,255,255,.10);
+      --txt:#E2E8F0;--mut:#64748B;--dim:#475569;--ok:#22C55E;--bad:#E8192C;--warn:#F59E0B;
+      /* Rampa de actividad: UN solo tono, del mas oscuro al mas claro. No son
+         cuatro colores distintos: es "poco / medio / mucho". Los tres pasos
+         tienen contraste de sobra contra el fondo (3,8 / 8,4 / 13,7 a 1) y la
+         claridad sube parejo, asi se leen en orden y no por el color. */
+      --a1:#15803D;--a2:#22C55E;--a3:#86EFAC}
+*{box-sizing:border-box}
+button,select,input{font-family:'Barlow Condensed',sans-serif}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',sans-serif}
+.top{display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--sur);border-bottom:1px solid var(--b);flex-wrap:wrap}
+.top h1{margin:0;font-size:17px;letter-spacing:1px;text-transform:uppercase}
+.wrap{max-width:1080px;margin:0 auto;padding:22px 18px 70px}
+button,select{background:var(--card2);border:1px solid var(--b2);color:var(--txt);border-radius:8px;
+  padding:7px 13px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s}
+button:hover,select:hover{border-color:var(--ok)}
+button.on{border-color:var(--ok);color:var(--ok)}
+
+/* ── los cuatro numeros de arriba ─────────────────────────────────────── */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.tile{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:14px 16px}
+.tile .n{font-family:'Bebas Neue',sans-serif;font-size:34px;line-height:1;letter-spacing:1px}
+.tile .r{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--mut);margin-top:5px}
+
+/* ── la tabla ─────────────────────────────────────────────────────────── */
+.caja{background:var(--card);border:1px solid var(--b);border-radius:12px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead th{background:var(--card2);color:var(--mut);font-size:10.5px;letter-spacing:1px;text-transform:uppercase;
+  font-weight:700;text-align:right;padding:10px 12px;border-bottom:1px solid var(--b);white-space:nowrap}
+thead th:first-child{text-align:left}
+tbody td{padding:10px 12px;border-top:1px solid var(--b);text-align:right;white-space:nowrap}
+tbody td:first-child{text-align:left}
+tbody tr.f{cursor:pointer}
+tbody tr.f:hover td{background:rgba(255,255,255,.025)}
+.nom{font-weight:700}
+.dor{color:var(--dim);font-weight:700;margin-right:7px;font-variant-numeric:tabular-nums}
+.rol{font-size:9.5px;letter-spacing:1px;text-transform:uppercase;color:var(--dim);
+  border:1px solid var(--b2);border-radius:5px;padding:1px 6px;margin-left:7px}
+.num{font-variant-numeric:tabular-nums}
+.cero{color:var(--dim)}
+.frio{color:var(--warn)}
+.helado{color:var(--bad);font-weight:700}
+
+/* ── la tira de dias ──────────────────────────────────────────────────── */
+.tira{display:flex;gap:3px;justify-content:flex-end;align-items:center}
+.d{width:13px;height:17px;border-radius:2.5px;background:transparent;border:1px solid var(--b2)}
+.d.v1{background:var(--a1);border-color:var(--a1)}
+.d.v2{background:var(--a2);border-color:var(--a2)}
+.d.v3{background:var(--a3);border-color:var(--a3)}
+.d.hoy{outline:1px solid var(--mut);outline-offset:1.5px}
+
+/* ── el detalle que se abre ───────────────────────────────────────────── */
+tr.det td{background:#0A0B14;border-top:none;padding:0}
+.det-in{padding:14px 16px 18px}
+.det-t{font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);margin:0 0 9px}
+.pants{display:flex;flex-wrap:wrap;gap:6px}
+.p{font-size:12px;background:var(--card2);border:1px solid var(--b);border-radius:7px;padding:5px 9px}
+.p b{font-weight:700}
+.p i{font-style:normal;color:var(--dim);margin-left:6px}
+.p.convid{border-color:var(--a1)}
+.p.convid i{color:var(--a2)}
+.nada{color:var(--dim);font-size:12.5px}
+
+.leyenda{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin:14px 0 0;color:var(--mut);font-size:12px}
+.leyenda span{display:inline-flex;align-items:center;gap:6px}
+.vacio{color:var(--dim);text-align:center;padding:46px 20px;font-size:14px;line-height:1.6}
+.pie{margin-top:26px;padding-top:18px;border-top:1px solid var(--b);color:var(--dim);font-size:12.5px;line-height:1.65}
+.pie b{color:var(--mut)}
+
+/* ── telefono: la tabla pasa a fichas ─────────────────────────────────── */
+.et{display:none}
+@media(max-width:760px){
+  .et{display:inline;font-style:normal;color:var(--dim);font-size:10.5px;letter-spacing:.8px;
+      text-transform:uppercase;margin-right:7px}
+  .tiles{grid-template-columns:repeat(2,1fr)}
+  thead{display:none}
+  /* La tabla deja de ser tabla: si no, los 30 cuadritos de la tira (480px)
+     le imponen el ancho a todas las celdas y los datos quedan fuera de la
+     pantalla, invisibles. Ademas la tira se parte en dos filas. */
+  table,tbody{display:block;width:100%}
+  tr.det{display:block}
+  .tira{flex-wrap:wrap;justify-content:flex-start;gap:3px 2px}
+  .d{width:9px;height:15px}
+  tbody td{display:block;border:none;padding:1px 14px;text-align:left}
+  tbody tr.f{display:block;border-top:1px solid var(--b);padding:11px 0}
+  tbody td.c-nom{padding-bottom:6px}
+  tbody td.c-dat{color:var(--mut);font-size:12.5px;display:flex;justify-content:space-between;
+    align-items:baseline;padding:2px 14px}
+  tbody td.c-tira{padding-top:8px}
+  .tira{justify-content:flex-start}
+  tr.det td{display:block;padding:0}
+}
+</style>
+<script src="categorias_club.js?v=20261005-2225"></script>
+<script src="selector_categoria.js?v=20261005-2225"></script>
+<script src="plantel_nafels.js?v=20261005-2225" onerror="void 0"></script>
+<script src="lang.js?v=20261005-2225"></script>
+<link rel="stylesheet" href="movil.css?v=20261005-2225">
+</head>
+<body>
+
+<div class="top">
+  <h1><span data-t="Quién entra y qué mira">Quién entra y qué mira</span></h1>
+  <div style="flex:1"></div>
+  <button id="r7"  onclick="rango(7)"  data-t="7 días">7 días</button>
+  <button id="r14" onclick="rango(14)" data-t="14 días">14 días</button>
+  <button id="r30" onclick="rango(30)" class="on" data-t="30 días">30 días</button>
+  <button id="soloj" class="on" onclick="soloJug()" data-t="Sólo jugadores">Sólo jugadores</button>
+  <select id="orden" onchange="pintar()">
+    <option value="video" data-t="Los que menos video miran">Los que menos video miran</option>
+    <option value="ult" data-t="Los que hace más que no entran">Los que hace más que no entran</option>
+    <option value="nom" data-t="Por nombre">Por nombre</option>
+  </select>
+  <button onclick="cargar()" data-t="Actualizar">Actualizar</button>
+</div>
+
+<div class="wrap">
+  <div class="tiles">
+    <div class="tile"><div class="n" id="t-hoy">—</div><div class="r" data-t="Entraron hoy">Entraron hoy</div></div>
+    <div class="tile"><div class="n" id="t-sem">—</div><div class="r" data-t="Entraron esta semana">Entraron esta semana</div></div>
+    <div class="tile"><div class="n" id="t-vid">—</div><div class="r" data-t="Minutos de video en el período">Minutos de video en el período</div></div>
+    <div class="tile"><div class="n" id="t-sin">—</div><div class="r" data-t="Sin mirar un solo video">Sin mirar un solo video</div></div>
+  </div>
+
+  <div class="caja" id="caja"><div class="vacio"><span data-t="Cargando…">Cargando…</span></div></div>
+
+  <div class="leyenda">
+    <span data-t="Cada cuadrito es un día:">Cada cuadrito es un día:</span>
+    <span><i class="d" style="display:inline-block"></i> <span data-t="no entró">no entró</span></span>
+    <span><i class="d v1" style="display:inline-block"></i> <span data-t="entró, sin video">entró, sin video</span></span>
+    <span><i class="d v2" style="display:inline-block"></i> <span data-t="hasta 5 min de video">hasta 5 min de video</span></span>
+    <span><i class="d v3" style="display:inline-block"></i> <span data-t="5 min de video o más">5 min de video o más</span></span>
+  </div>
+
+  <div class="pie">
+    <b data-t="Qué anota la app">Qué anota la app</b><span data-t=": qué pantalla abrió cada uno y a qué hora, y cuántos segundos de video reprodujo en cada pantalla. Nada más: ni qué miró dentro de la pantalla, ni qué tocó, ni dónde estaba.">: qué pantalla abrió cada uno y a qué hora, y cuántos segundos de video
+    reprodujo en cada pantalla. Nada más: ni qué miró dentro de la pantalla, ni qué tocó, ni dónde estaba.</span>
+    <br><br>
+    <span data-t="Los segundos se cuentan sólo cuando el video avanza de verdad. Adelantar, saltar de corte o arrastrar la barra no suma nada, así que el número es piso, no techo.">Los segundos se cuentan sólo cuando el video avanza de verdad. Adelantar, saltar de corte o
+    arrastrar la barra no suma nada, así que el número es piso, no techo.</span>
+    <br><br>
+    <b data-t="Decíselo al plantel."><span data-t="Decíselo al plantel.">Decíselo al plantel.</span></b>
+    <span data-t="Que sepan que queda registrado cambia para qué sirve: pasa de ser un control a ser una herramienta — &quot;el martes no lo vio nadie, lo vemos juntos&quot;.">Que sepan que queda registrado cambia para qué sirve: pasa de ser un control
+    a ser una herramienta — "el martes no lo vio nadie, lo vemos juntos".</span>
+  </div>
+</div>
+
+<script src="datos_seguros.js?v=20261005-2225" onerror="void 0"></script>
+<script src="firebase.js?v=20261005-2225"></script>
+<script src="firebase_por_categoria.js?v=20261005-2225"></script>
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   QUIÉN ENTRA Y QUÉ MIRA
+   ══════════════════════════════════════════════════════════════════════════
+   Lee los tres nodos que escribe el registro de actividad de firebase.js:
+
+     sesiones/activo/<uid>                           -> última vez, por persona
+     sesiones/pantallas/<AAAAMMDD>/<uid>/<pantalla>  -> cuándo abrió cada una
+     sesiones/videos/<AAAAMMDD>/<uid>/<pantalla>     -> segundos reproducidos
+
+   Los dos historiales están ordenados por fecha, así que se leen con
+   orderBy="$key"&startAt="<primer día>": en diciembre no se baja septiembre.
+   ══════════════════════════════════════════════════════════════════════════ */
+var DIAS = 30, ACT = {}, PANT = {}, VID = {}, ROLES = {}, NUMS = {}, NOMS = {};
+
+/* Traduce una frase con el diccionario de lang.js. El mismo helper que usa
+   sintesis.html: si lang.js no cargo, devuelve el castellano y listo. */
+function T(es){
+  try{
+    var v = window.translateString
+          ? window.translateString(es, window.getLang ? getLang() : 'es') : null;
+    return v || es;
+  }catch(e){ return es; }
+}
+
+/* ── el plantel, para poner nombres en vez de mails ───────────────────── */
+(function(){
+  try{
+    var p = window.PLANTEL_NAFELS || window.PLANTEL || window.PLANTEL_CLUB || {};
+    var L = p.jugadores || p.lista || [];
+    for(var i=0;i<L.length;i++) if(L[i] && L[i].num != null)
+      NOMS[String(L[i].num)] = (L[i].ap || L[i].nombre || '');
+  }catch(e){}
+})();
+
+function esc(t){ return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function dia(d){ return String(d.getFullYear()) + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0'); }
+function hoy(){ return dia(new Date()); }
+
+/* la lista de días del período, del más viejo al más nuevo */
+function diasDelRango(){
+  var out = [], d = new Date();
+  d.setHours(0,0,0,0);
+  for(var i = DIAS - 1; i >= 0; i--){
+    var x = new Date(d.getTime() - i*86400000);
+    out.push(dia(x));
+  }
+  return out;
+}
+
+function leer(ruta, extra){
+  return _fbSufijo().then(function(q){
+    var u = FB_URL + '/' + ruta + '.json' + q;
+    if(extra) u += (q ? '&' : '?') + extra;
+    return fetch(u).then(function(r){ return r.json(); });
+  });
+}
+
+function nombre(uid){
+  var n = NUMS[uid];
+  if(n != null && NOMS[String(n)]) return NOMS[String(n)];
+  var m = (ACT[uid] && ACT[uid].mail) || '';
+  /* el mail de un jugador es j<dorsal>@... : si no está en el plantel, al
+     menos se muestra el dorsal y no una dirección */
+  var g = m.match(/^j(\d{1,2})@/);
+  if(g && NOMS[g[1]]) return NOMS[g[1]];
+  return m ? m.split('@')[0] : uid.slice(0,8);
+}
+function dorsal(uid){
+  var n = NUMS[uid];
+  if(n == null){
+    var m = ((ACT[uid] && ACT[uid].mail) || '').match(/^j(\d{1,2})@/);
+    if(m) n = m[1];
+  }
+  return n == null ? '' : ('#' + n);
+}
+
+function cuando(ms){
+  if(!ms) return '—';
+  var d = new Date(Number(ms)), h = new Date();
+  var hh = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+  if(d.toDateString() === h.toDateString()) return T('hoy') + ' ' + hh;
+  var dd = Math.round((new Date(h.getFullYear(),h.getMonth(),h.getDate()) - new Date(d.getFullYear(),d.getMonth(),d.getDate()))/86400000);
+  if(dd === 1) return T('ayer') + ' ' + hh;
+  return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
+}
+function diasSin(ms){
+  if(!ms) return 999;
+  var d = new Date(Number(ms)), h = new Date();
+  return Math.round((new Date(h.getFullYear(),h.getMonth(),h.getDate()) - new Date(d.getFullYear(),d.getMonth(),d.getDate()))/86400000);
+}
+function mins(s){ return Math.round((Number(s)||0)/60); }
+function linda(p){ return String(p||'').replace(/_html$/,'').replace(/_/g,' '); }
+
+/* ── traer todo ───────────────────────────────────────────────────────── */
+function cargar(){
+  document.getElementById('caja').innerHTML = '<div class="vacio">' + T('Cargando…') + '</div>';
+  var desde = diasDelRango()[0];
+  var filtro = 'orderBy=' + encodeURIComponent('"$key"') + '&startAt=' + encodeURIComponent('"' + desde + '"');
+  Promise.all([
+    leer('sesiones/activo'),
+    leer('sesiones/pantallas', filtro),
+    leer('sesiones/videos', filtro),
+    leer('roles'),
+    leer('jugador_num')
+  ]).then(function(r){
+    ACT   = r[0] || {};
+    PANT  = r[1] || {};
+    VID   = r[2] || {};
+    ROLES = r[3] || {};
+    NUMS  = r[4] || {};
+    pintar();
+  }).catch(function(){
+    document.getElementById('caja').innerHTML =
+      '<div class="vacio">' + T('No pude leer la base. ¿Estás con tu sesión iniciada?') + '</div>';
+  });
+}
+
+/* ── juntar, por persona, lo del período ──────────────────────────────── */
+function resumen(){
+  var ds = diasDelRango(), uids = {};
+  Object.keys(ACT).forEach(function(u){ uids[u] = 1; });
+  ds.forEach(function(d){
+    Object.keys(PANT[d] || {}).forEach(function(u){ uids[u] = 1; });
+    Object.keys(VID[d]  || {}).forEach(function(u){ uids[u] = 1; });
+  });
+  return Object.keys(uids).map(function(u){
+    var p = {}, v = {}, tira = [], segTot = 0, diasCon = 0;
+    ds.forEach(function(d){
+      var pd = (PANT[d] || {})[u] || {}, vd = (VID[d] || {})[u] || {};
+      var seg = 0;
+      Object.keys(vd).forEach(function(k){ seg += Number(vd[k]) || 0; v[k] = (v[k]||0) + (Number(vd[k])||0); });
+      Object.keys(pd).forEach(function(k){ if(!p[k] || pd[k] > p[k]) p[k] = pd[k]; });
+      var entro = Object.keys(pd).length > 0;
+      if(entro || seg > 0) diasCon++;
+      segTot += seg;
+      tira.push({ d:d, nivel: (seg >= 300 ? 3 : seg > 0 ? 2 : entro ? 1 : 0) });
+    });
+    return { uid:u, rol:(ROLES[u]||''), ult:(ACT[u] && ACT[u].ult) || 0,
+             pants:p, vids:v, tira:tira, seg:segTot, dias:diasCon,
+             cuantas:Object.keys(p).length };
+  });
+}
+
+var SOLOJ = true;
+function soloJug(){
+  SOLOJ = !SOLOJ;
+  document.getElementById('soloj').className = SOLOJ ? 'on' : '';
+  pintar();
+}
+
+function pintar(){
+  var fs = resumen();
+  /* el cuerpo tecnico tambien queda registrado, pero la pregunta de todos los
+     dias es por los jugadores: por eso arranca filtrado */
+  if(SOLOJ) fs = fs.filter(function(f){ return (f.rol||'').toLowerCase() === 'player'; });
+  if(!fs.length){
+    document.getElementById('caja').innerHTML = '<div class="vacio">'
+      + T('Todavía no hay nada anotado.') + '<br>'
+      + T('Se empieza a registrar a partir de ahora, cada vez que alguien abra una pantalla.')
+      + '</div>';
+    tiles(fs); return;
+  }
+  var o = document.getElementById('orden').value;
+  fs.sort(function(a,b){
+    if(o === 'nom') return nombre(a.uid).localeCompare(nombre(b.uid));
+    if(o === 'ult') return (a.ult||0) - (b.ult||0);
+    if(a.seg !== b.seg) return a.seg - b.seg;      /* los que menos miran, arriba */
+    return (a.ult||0) - (b.ult||0);
+  });
+
+  var h = '<table><thead><tr>'
+    + '<th data-t="Persona">Persona</th>'
+    + '<th data-t="Última vez">Última vez</th>'
+    + '<th data-t="Días">Días</th>'
+    + '<th data-t="Pantallas">Pantallas</th>'
+    + '<th data-t="Video">Video</th>'
+    + '<th data-t="Día por día">Día por día</th>'
+    + '</tr></thead><tbody>';
+
+  fs.forEach(function(f, i){
+    var sin = diasSin(f.ult);
+    var cls = sin >= 14 ? 'helado' : sin >= 4 ? 'frio' : '';
+    var m = mins(f.seg);
+    h += '<tr class="f" onclick="abrir(' + i + ')">'
+      +   '<td class="c-nom"><span class="dor">' + esc(dorsal(f.uid)) + '</span>'
+      +     '<span class="nom">' + esc(nombre(f.uid)) + '</span>'
+      +     (f.rol ? '<span class="rol">' + esc(f.rol) + '</span>' : '') + '</td>'
+      +   '<td class="c-dat num ' + cls + '"><i class="et" data-t="Última vez">Última vez</i>' + esc(cuando(f.ult)) + '</td>'
+      +   '<td class="c-dat num"><i class="et" data-t="Días">Días</i>' + f.dias + '/' + DIAS + '</td>'
+      +   '<td class="c-dat num"><i class="et" data-t="Pantallas">Pantallas</i>' + f.cuantas + '</td>'
+      +   '<td class="c-dat num' + (m ? '' : ' cero') + '"><i class="et" data-t="Video">Video</i>' + (m ? m + "'" : '0') + '</td>'
+      +   '<td class="c-tira">' + tiraHTML(f.tira) + '</td>'
+      + '</tr>'
+      + '<tr class="det" id="det' + i + '" style="display:none"><td colspan="6">'
+      +   '<div class="det-in">' + detalle(f) + '</div></td></tr>';
+  });
+  h += '</tbody></table>';
+  document.getElementById('caja').innerHTML = h;
+  tiles(fs);
+  /* la tabla se dibuja desde JavaScript, asi que hay que volver a pasar el
+     traductor por lo recien escrito: data-t primero y despues los textos. */
+  try{
+    var L = window.getLang ? getLang() : 'es';
+    if(window.applyDataT) applyDataT(L);
+    if(L !== 'es' && window.translateTextNodes) translateTextNodes(L);
+  }catch(e){}
+}
+
+function tiraHTML(t){
+  var hy = hoy();
+  return '<div class="tira">' + t.map(function(x){
+    var f = x.d.slice(6,8) + '/' + x.d.slice(4,6);
+    return '<i class="d' + (x.nivel ? ' v' + x.nivel : '') + (x.d === hy ? ' hoy' : '')
+         + '" title="' + f + '"></i>';
+  }).join('') + '</div>';
+}
+
+function detalle(f){
+  var ks = Object.keys(f.pants);
+  /* las que tienen video primero, y dentro de cada grupo la más reciente */
+  ks.sort(function(a,b){
+    var va = f.vids[a]||0, vb = f.vids[b]||0;
+    if((va>0) !== (vb>0)) return vb>0 ? 1 : -1;
+    if(va !== vb) return vb - va;
+    return (f.pants[b]||0) - (f.pants[a]||0);
+  });
+  var h = '<p class="det-t" data-t="Pantallas que abrió en el período">Pantallas que abrió en el período</p>';
+  if(!ks.length) h += '<p class="nada" data-t="Ninguna.">Ninguna.</p>';
+  else h += '<div class="pants">' + ks.map(function(k){
+    var m = mins(f.vids[k]);
+    return '<span class="p' + (m ? ' convid' : '') + '"><b>' + esc(linda(k)) + '</b>'
+         + '<i>' + esc(cuando(f.pants[k])) + (m ? ' · ' + m + "'" : '') + '</i></span>';
+  }).join('') + '</div>';
+  return h;
+}
+
+function abrir(i){
+  var e = document.getElementById('det' + i);
+  if(e) e.style.display = (e.style.display === 'none' ? '' : 'none');
+}
+
+function tiles(fs){
+  var hy = hoy(), ds = diasDelRango(), sem = ds.slice(-7);
+  function activos(lista){
+    var s = {};
+    lista.forEach(function(d){
+      Object.keys(PANT[d] || {}).forEach(function(u){ s[u] = 1; });
+    });
+    return Object.keys(s).length;
+  }
+  var seg = 0, sinVideo = 0;
+  fs.forEach(function(f){ seg += f.seg; if(!f.seg) sinVideo++; });
+  document.getElementById('t-hoy').textContent = activos([hy]);
+  document.getElementById('t-sem').textContent = activos(sem);
+  document.getElementById('t-vid').textContent = mins(seg);
+  document.getElementById('t-sin').textContent = sinVideo;
+}
+
+function rango(n){
+  DIAS = n;
+  ['r7','r14','r30'].forEach(function(id){
+    var b = document.getElementById(id);
+    if(b) b.className = (id === ('r' + n) ? 'on' : '');
+  });
+  cargar();
+}
+
+/* ── sólo cuerpo técnico ──────────────────────────────────────────────── */
+function arrancar(){
+  try{
+    if(typeof vbEsJugador === 'function' && vbEsJugador()){
+      document.querySelector('.wrap').innerHTML =
+        '<div class="vacio">' + T('Esta pantalla es sólo para el cuerpo técnico.') + '</div>';
+      document.querySelector('.top').innerHTML = '<h1>Actividad</h1>';
+      return;
+    }
+  }catch(e){}
+  cargar();
+}
+/* igual que en sesiones.html: firebase.js deja la promesa en _fbListo y
+   recién cuando resuelve hay permiso para leer la base */
+function esperarSesion(){
+  if(typeof _fbListo !== 'undefined' && _fbListo && typeof _fbListo.then === 'function')
+    _fbListo.then(arrancar).catch(arrancar);
+  else setTimeout(esperarSesion, 120);
+}
+esperarSesion();
+</script>
+<script src="volver_inicio.js?v=20261005-2225" onerror="void 0"></script>
+<script src="ayuda.js?v=20261005-2225"></script>
+</body>
+</html>

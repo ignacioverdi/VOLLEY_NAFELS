@@ -698,6 +698,53 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    /* ══ PANTALLA DE ACTIVIDAD · 05-10-2026 ════════════════════════════════
+       "Quién entra y qué mira". Van acá arriba, igual que el bloque de abajo:
+       si alguna de estas frases ya existiera más abajo, gana la de abajo. */
+    "Quién entra y qué mira": { en:"Who logs in and what they watch", de:"Wer sich einloggt und was er anschaut" },
+    "7 días": { en:"7 days", de:"7 Tage" },
+    "14 días": { en:"14 days", de:"14 Tage" },
+    "30 días": { en:"30 days", de:"30 Tage" },
+    "Los que menos video miran": { en:"Who watches the least video", de:"Wer am wenigsten Video schaut" },
+    "Los que hace más que no entran": { en:"Who has been away the longest", de:"Wer am längsten nicht da war" },
+    "Por nombre": { en:"By name", de:"Nach Name" },
+    "Entraron hoy": { en:"Logged in today", de:"Heute eingeloggt" },
+    "Entraron esta semana": { en:"Logged in this week", de:"Diese Woche eingeloggt" },
+    "Minutos de video en el período": { en:"Minutes of video in the period", de:"Videominuten im Zeitraum" },
+    "Sin mirar un solo video": { en:"Have not watched any video", de:"Haben kein Video angeschaut" },
+    "Cada cuadrito es un día:": { en:"Each square is one day:", de:"Jedes Kästchen ist ein Tag:" },
+    "no entró": { en:"did not log in", de:"nicht eingeloggt" },
+    "entró, sin video": { en:"logged in, no video", de:"eingeloggt, kein Video" },
+    "hasta 5 min de video": { en:"up to 5 min of video", de:"bis 5 Min Video" },
+    "5 min de video o más": { en:"5 min of video or more", de:"5 Min Video oder mehr" },
+    "Qué anota la app": { en:"What the app records", de:"Was die App aufzeichnet" },
+    ": qué pantalla abrió cada uno y a qué hora, y cuántos segundos de video reprodujo en cada pantalla. Nada más: ni qué miró dentro de la pantalla, ni qué tocó, ni dónde estaba.":
+      { en:": which screen each person opened and at what time, and how many seconds of video they played on each screen. Nothing else: not what they looked at inside the screen, not what they tapped, not where they were.",
+        de:": welchen Bildschirm jede Person geöffnet hat und wann, und wie viele Sekunden Video sie auf jedem Bildschirm abgespielt hat. Nichts weiter: nicht, was sie im Bildschirm angesehen hat, nicht, was sie angetippt hat, nicht, wo sie war." },
+    "Los segundos se cuentan sólo cuando el video avanza de verdad. Adelantar, saltar de corte o arrastrar la barra no suma nada, así que el número es piso, no techo.":
+      { en:"Seconds only count while the video actually advances. Skipping ahead, jumping to another clip or dragging the bar adds nothing, so the number is a floor, not a ceiling.",
+        de:"Sekunden zählen nur, während das Video wirklich läuft. Vorspulen, zu einem anderen Schnitt springen oder die Leiste ziehen zählt nicht, die Zahl ist also eine Untergrenze, keine Obergrenze." },
+    "Decíselo al plantel.": { en:"Tell the squad.", de:"Sag es dem Kader." },
+    "Que sepan que queda registrado cambia para qué sirve: pasa de ser un control a ser una herramienta — \"el martes no lo vio nadie, lo vemos juntos\".":
+      { en:"Knowing it is recorded changes what it is for: it stops being surveillance and becomes a tool — \"nobody watched it on Tuesday, let us watch it together\".",
+        de:"Zu wissen, dass es aufgezeichnet wird, ändert den Zweck: aus Kontrolle wird ein Werkzeug — \"am Dienstag hat es niemand angesehen, schauen wir es gemeinsam\"." },
+    "Persona": { en:"Person", de:"Person" },
+    "Última vez": { en:"Last seen", de:"Zuletzt" },
+    "Pantallas": { en:"Screens", de:"Bildschirme" },
+    "Día por día": { en:"Day by day", de:"Tag für Tag" },
+    "Pantallas que abrió en el período": { en:"Screens opened in the period", de:"Im Zeitraum geöffnete Bildschirme" },
+    "Ninguna.": { en:"None.", de:"Keine." },
+    "ayer": { en:"yesterday", de:"gestern" },
+    "No pude leer la base. ¿Estás con tu sesión iniciada?": { en:"I could not read the database. Are you signed in?", de:"Ich konnte die Datenbank nicht lesen. Bist du angemeldet?" },
+    "Todavía no hay nada anotado.": { en:"Nothing recorded yet.", de:"Noch nichts aufgezeichnet." },
+    "Se empieza a registrar a partir de ahora, cada vez que alguien abra una pantalla.": { en:"Recording starts from now on, every time someone opens a screen.", de:"Die Aufzeichnung beginnt ab jetzt, jedes Mal wenn jemand einen Bildschirm öffnet." },
+    "Esta pantalla es sólo para el cuerpo técnico.": { en:"This screen is for the coaching staff only.", de:"Dieser Bildschirm ist nur für das Trainerteam." },
+    "Qué pantallas abre cada uno y cuántos minutos de video mira. Día por día, para saber a quién hay que sentarse a mirar el video al lado.":
+      { en:"Which screens each person opens and how many minutes of video they watch. Day by day, so you know who you need to sit down and watch video with.",
+        de:"Welche Bildschirme jede Person öffnet und wie viele Videominuten sie schaut. Tag für Tag, damit du weißt, mit wem du dich zum Videoschauen hinsetzen musst." },
+    "Ver quién entra y qué mira": { en:"See who logs in and what they watch", de:"Sehen, wer sich einloggt und was er anschaut" },
+    "Sólo jugadores": { en:"Players only", de:"Nur Spieler" },
+
     /* ══ AGUJEROS TAPADOS · 03-10-2026 ══════════════════════════════════════
        Medido pantalla por pantalla: se cargo cada una en castellano, se paso a
        aleman y se anoto lo que NO cambio, descontando nombres de jugadores,
@@ -5564,14 +5611,36 @@
     });
   }
 
+  /* ══ UNA REPASADA VIEJA NO LE PUEDE GANAR A UN CAMBIO NUEVO ══════════════
+     La repasada se hacia con dos setTimeout a 700 y 2000 ms y nadie los
+     cancelaba. Si alguien pasaba la app a aleman y a los dos segundos volvia
+     al castellano, el castellano se aplicaba bien... y un rato despues
+     entraba la repasada en aleman, programada ANTES, y volvia a traducir
+     todo. La pantalla se daba vuelta sola delante del jugador.
+
+     Era el agujero que quedaba del arreglo del camino de vuelta: ese arreglo
+     hizo que applyDataT('es') devolviera el castellano —y lo devuelve bien,
+     medido—, pero la repasada vieja lo pisaba despues.
+
+     Dos frenos, a proposito, porque cada uno tapa un caso distinto:
+       1. al pedir un idioma nuevo se cancelan las repasadas pendientes
+          (tambien cuando el idioma nuevo es el castellano, que sale por el
+          return de abajo sin programar nada);
+       2. y cada repasada, antes de tocar algo, se fija si el idioma sigue
+          siendo el suyo. Si entre medio hubo otro cambio por un camino que
+          no pase por aca, igual no hace nada. */
+  var _repasoTimers = [];
   function _repasar(lang){
+    try{ _repasoTimers.forEach(function(h){ clearTimeout(h); }); }catch(e){}
+    _repasoTimers = [];
     if (lang === 'es') return;
     [700, 2000].forEach(function(ms){
-      setTimeout(function(){
+      _repasoTimers.push(setTimeout(function(){
+        try{ if (getLang() !== lang) return; }catch(e){}
         try{ applyDataT(lang); }catch(e){}
         try{ translateTextNodes(lang); }catch(e){}
         try{ translateAttrs(lang); }catch(e){}
-      }, ms);
+      }, ms));
     });
   }
 

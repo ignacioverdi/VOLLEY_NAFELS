@@ -18,7 +18,22 @@
     "nodo: no se puede listar quien se registro, solo leer una llave que",
     "ya se conoce.",
     "Lo demas quedo EXACTAMENTE igual que en la consola: verificado nodo",
-    "por nodo, cero cambios fuera de esos dos."
+    "por nodo, cero cambios fuera de esos dos.",
+    "",
+    "05/10 - SE AGREGARON TRES NODOS DENTRO DE sesiones: pantallas, videos y",
+    "activo. Son el registro de actividad: que pantalla abrio cada uno y cuantos",
+    "segundos de video reprodujo.",
+    "Cada uno escribe SOLO lo suyo (auth.uid === $uid), igual que en",
+    "sesiones/dispositivos. Un jugador no puede tocar el registro de otro ni",
+    "borrar el propio historial de dias anteriores... si puede pisar el dia de",
+    "hoy, porque es su propia llave. Para esto alcanza.",
+    "El dia va como AAAAMMDD y se valida el largo (8) para que no entre",
+    "cualquier cosa como llave.",
+    "La LECTURA la hereda del .read de la raiz: cualquiera con sesion la puede",
+    "leer, jugadores incluidos. En RTDB un .read concedido arriba no se puede",
+    "revocar mas abajo, asi que esto no se arregla sin tocar la raiz. La pantalla",
+    "de actividad igual se les esconde a los jugadores.",
+    "Lo demas quedo EXACTAMENTE igual: verificado nodo por nodo abajo."
   ],
   "rules": {
     ".read": "auth != null && root.child('usuarios').child(auth.uid).exists()",
@@ -38,6 +53,25 @@
       "accesos": {
         "$id": {
           ".write": "auth != null && !data.exists()"
+        }
+      },
+      "pantallas": {
+        "$dia": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && $dia.length === 8"
+          }
+        }
+      },
+      "videos": {
+        "$dia": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && $dia.length === 8"
+          }
+        }
+      },
+      "activo": {
+        "$uid": {
+          ".write": "auth != null && auth.uid === $uid"
         }
       },
       "corte": {
@@ -128,9 +162,15 @@
         ".read": true,
         ".write": "!data.exists()",
         ".validate": "$llave.length === 32 && newData.hasChildren(['ini','sig'])",
-        "ini": { ".validate": "newData.isNumber()" },
-        "sig": { ".validate": "newData.isString() && newData.val().length <= 32" },
-        "$otro": { ".validate": false }
+        "ini": {
+          ".validate": "newData.isNumber()"
+        },
+        "sig": {
+          ".validate": "newData.isString() && newData.val().length <= 32"
+        },
+        "$otro": {
+          ".validate": false
+        }
       }
     },
     "demo_ip": {
