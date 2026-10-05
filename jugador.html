@@ -7,19 +7,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 
 <!-- Datos (cada uno se carga si existe; si no, el onerror lo deja en null) -->
-<script src="categorias_club.js?v=20261005-1610"></script>
-<script src="selector_categoria.js?v=20261005-1610"></script>
-<script src="game_plans.js?v=20261005-1610" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20261005-1610" onerror="void 0"></script>
-<script src="objetivos_semanales.js?v=20261005-1610" onerror="void 0"></script>
+<script src="categorias_club.js?v=20261005-2033"></script>
+<script src="selector_categoria.js?v=20261005-2033"></script>
+<script src="game_plans.js?v=20261005-2033" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261005-2033" onerror="void 0"></script>
+<script src="objetivos_semanales.js?v=20261005-2033" onerror="void 0"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261005-1610"></script>
-<script src="filtro_tipo.js?v=20261005-1610" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261005-2033"></script>
+<script src="filtro_tipo.js?v=20261005-2033" onerror="void 0"></script>
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
      las que no existen las descarta el onerror, sin ruido. Y todas con
      .enc, que es como se publican los datos del club. -->
@@ -29,10 +29,10 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="datos_video_ent_28-29.js.enc" onerror="void 0"></script>
   <script src="datos_partidos.js.enc" onerror="void 0"></script>
 <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
-<script src="firebase.js?v=20261005-1610" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261005-1610"></script>
-<script src="lang.js?v=20261005-1610" onerror="void 0"></script>
-<script src="datos_historial.js?v=20261005-1610" onerror="window.HISTORIAL_DATA=null"></script>
+<script src="firebase.js?v=20261005-2033" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261005-2033"></script>
+<script src="lang.js?v=20261005-2033" onerror="void 0"></script>
+<script src="datos_historial.js?v=20261005-2033" onerror="window.HISTORIAL_DATA=null"></script>
 <script src="datos_gameplan.js.enc" onerror="window.GAMEPLAN_DATA=null"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <!-- El ejercicio de ARMADO DE ALTA, para el objetivo semanal de armadores y
@@ -266,10 +266,10 @@ select option{color:#111 !important;background-color:#fff !important;}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261005-1610">
+<link rel="stylesheet" href="movil.css?v=20261005-2033">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261005-1610" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261005-2033" onerror="void 0"></script>
 </head>
 <body>
 <div class="page-header">
@@ -1450,11 +1450,25 @@ try{
   window.fotoDelAlta = function(num, listo){
     if (num === null || num === undefined || !window.fbGet) { listo(null); return; }
     var nn = String(num).padStart(2, '0');
-    try {
-      Promise.resolve(fbGet('jugador_foto/' + cat() + '/' + nn))
-        .then(function(v){ listo(typeof v === 'string' && v.indexOf('data:image') === 0 ? v : null); })
-        .catch(function(){ listo(null); });
-    } catch(e){ listo(null); }
+    /* ══ fbGet VA CON CALLBACK, NO DEVUELVE PROMESA ═══════════════════════
+       Esto llamaba fbGet(ruta) sin segundo argumento y envolvia el resultado
+       en Promise.resolve(). Adentro de fbGet, callback(...) era undefined:
+       tiraba "callback is not a function" cada vez que se abria una ficha, y
+       ademas la foto no llegaba nunca, porque fbGet devuelve undefined y la
+       promesa resolvia con eso.
+
+       Se contesta una sola vez: fbGet corta sin avisar si la sesion todavia
+       no esta lista, asi que a los 4 segundos se responde igual y la ficha
+       se queda con la foto de siempre en vez de esperando para siempre. */
+    var contestado = false;
+    function responder(v){
+      if (contestado) return;
+      contestado = true;
+      listo(typeof v === 'string' && v.indexOf('data:image') === 0 ? v : null);
+    }
+    try { fbGet('jugador_foto/' + cat() + '/' + nn, responder); }
+    catch(e){ responder(null); }
+    setTimeout(function(){ responder(null); }, 4000);
   };
 })();
 </script>
@@ -1477,6 +1491,6 @@ try{
   else window.addEventListener('load', function(){ setTimeout(poner, 400); });
 })();
 </script>
-<script src="ayuda.js?v=20261005-1610"></script>
+<script src="ayuda.js?v=20261005-2033"></script>
 </body>
 </html>

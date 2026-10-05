@@ -1,0 +1,78 @@
+═══════════════════════════════════════════════════════════════════════════
+  QUE SE PUEDE BORRAR DE LA CARPETA VOLLEY_NAFELS
+  Revisado el 5 de octubre de 2026
+═══════════════════════════════════════════════════════════════════════════
+
+  Como lo revise: busque cada archivo mencionado dentro de TODOS los .html y
+  .js de la carpeta. Los del grupo 1 no los nombra nadie. Si algo de esto se
+  usara, aparecia en esa busqueda.
+
+  Igual, antes de borrar: copia la carpeta entera a un pendrive. Son cinco
+  minutos y te deja dormir tranquilo.
+
+
+───────────────────────────────────────────────────────────────────────────
+  1 · SEGURO — copias viejas y basura, nadie las usa          ~37 MB
+───────────────────────────────────────────────────────────────────────────
+
+  codigos consola.log                       34,6 MB   ← el mas grande de todos
+  panel_vivo-1.html                          922 KB   copia vieja del panel
+  volley-stats.html                          850 KB   version vieja, sin uso
+  entrenamientos_nafels_db.json.bak          1,4 MB   respaldo de un .json que esta al lado
+  codigo extendido.zip                       265 KB
+  panel_estilo-1.js                           45 KB   copia vieja
+  plantel_nafels.js.antes_de_sacar_nacim      3,1 KB
+  error consola.png                          628 KB
+  diagnostico.txt                            1,7 KB
+
+  Y estos tres son duplicados de archivos que ya existen con el nombre bueno
+  (los de verdad empiezan con punto y son los que usa Git):
+
+  .gitattributes.txt                         1,2 KB
+  .gitignore.txt                             1,2 KB
+  gitignore                                  828 B    (sin punto, no sirve)
+
+
+───────────────────────────────────────────────────────────────────────────
+  2 · SEGURO — la carpeta de capturas viejas de la web
+───────────────────────────────────────────────────────────────────────────
+
+  STATS VOLEY APP\WEB VOLLEY-STATS\shots\    36 archivos .webp
+
+  Son las capturas que usaba la pagina de venta antes de que unificaramos las
+  dos secciones. Comprobe en la pagina publicada que ya no queda ni una sola
+  referencia a shots/. Se borra la carpeta entera.
+
+
+───────────────────────────────────────────────────────────────────────────
+  3 · MIRALO VOS — probablemente sobra, pero decidilo
+───────────────────────────────────────────────────────────────────────────
+
+  _PARA_BORRAR\                 carpeta que ya habias apartado
+  _respaldo_26sep\              respaldo del 26 de septiembre
+  __pycache__\                  cache de Python, se regenera sola
+  DVWin4_HandBook_Eng.pdf       23 MB, el manual de Data Volley
+
+  En DVW NAFELS 2027 hay dos archivos casi iguales:
+      &2026-09-30 AXPO NAFELS vs ST GALLEN.dvw
+      &206-09-30 AXPO NAFELS vs ST GALLEN.dvw     <- le falta un 2 al año
+  Abri los dos y quedate con el que tenga el partido completo.
+
+
+───────────────────────────────────────────────────────────────────────────
+  4 · NO TOCAR
+───────────────────────────────────────────────────────────────────────────
+
+  LLAVE.txt            sin esto no se abre ningun dato del club
+  LLAVE_DEMO.txt       la de la demo publica
+  .git\                el historial entero del proyecto
+  respaldos\           los respaldos de Firebase, son los recientes
+  todo lo que termine en .js.enc, que son los datos cifrados
+
+
+───────────────────────────────────────────────────────────────────────────
+  DESPUES DE BORRAR
+───────────────────────────────────────────────────────────────────────────
+
+  Abri la app y date una vuelta por las pantallas. Si algo quedara colgado se
+  nota al toque. Y si borraste algo de mas, esta en el .git o en el pendrive.
