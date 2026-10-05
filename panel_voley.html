@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Stats Entrenamiento">Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20261005-2033"></script>
-<script src="selector_categoria.js?v=20261005-2033"></script>
+<script src="categorias_club.js?v=20261005-2141"></script>
+<script src="selector_categoria.js?v=20261005-2141"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -359,20 +359,30 @@ body::before{content:'';position:fixed;inset:0;
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20261005-2033"></script>
+<script src="objetivos_config.js?v=20261005-2141"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261005-2033"></script>
-<script src="firebase.js?v=20261005-2033" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261005-2033"></script>
-<script src="lang.js?v=20261005-2033"></script>
-<script src="objetivos.js?v=20261005-2033" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20261005-2033"></script>
-  <script src="video_delay.js?v=20261005-2033" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261005-2141"></script>
+<!-- ══ ABRIR LOS DATOS ════════════════════════════════════════════════════
+     datos_voley.js.enc se carga arriba de todo, pero el .enc solo deja el
+     texto cifrado en window.__D: hace falta abrirDatos() para que aparezca
+     window.VOLEY_DATA. Faltaba esta linea, asi que VOLEY_DATA nunca se
+     armaba desde el archivo.
+
+     No se notaba porque la pantalla NO tira error: se queda esperando y se
+     alimenta de Firebase, que publica VOLEY_DATA en cada accion. Pero sin
+     Firebase —o antes de que conteste— el panel quedaba sin nada. -->
+<script>try{ abrirDatos(); }catch(e){ try{console.error('[panel_voley] abrirDatos',e);}catch(_){} }</script>
+<script src="firebase.js?v=20261005-2141" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261005-2141"></script>
+<script src="lang.js?v=20261005-2141"></script>
+<script src="objetivos.js?v=20261005-2141" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20261005-2141"></script>
+  <script src="video_delay.js?v=20261005-2141" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -669,7 +679,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261005-2033">
+<link rel="stylesheet" href="movil.css?v=20261005-2141">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase" data-t="← Dashboard"><span data-t="← Dashboard">← Dashboard</span></a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -1322,7 +1332,7 @@ function card(p,rank,worstRank,teamD,teamFDs,sz){
 
 function renderPodio(){
   const D=window.VOLEY_DATA;
-  if(!D){document.getElementById('podio-grid').innerHTML='<p style="color:var(--mut)">Sin datos</p>';return;}
+  if(!D || !Array.isArray(D.j)){document.getElementById('podio-grid').innerHTML='<p style="color:var(--mut)">Sin datos</p>';return;}
   const act=D.j.filter(p=>p.a);
   const posEmojis=['🥇','🥈','🥉'];
 
@@ -1430,7 +1440,7 @@ function _pvBotonesTipo(){
 
 function renderTabla(){
   const D=window.VOLEY_DATA;
-  if(!D){document.getElementById('tabla-content').innerHTML='<p style="color:var(--mut);padding:2rem">Sin datos</p>';return;}
+  if(!D || !Array.isArray(D.j)){document.getElementById('tabla-content').innerHTML='<p style="color:var(--mut);padding:2rem">Sin datos</p>';return;}
   const act=D.j.filter(p=>p.a&&(p.rT[6]+p.sT[6]+p.aT[6]+p.bT[6])>0);
 
   function row(p, isTeam){
@@ -2195,7 +2205,12 @@ function render(){
   const _bd=document.getElementById('bt-det');
   if(_bd) _bd.classList.toggle('on', PV_DETALLE);
   const D=window.VOLEY_DATA;
-  if(!D){document.getElementById('grid').innerHTML='<div class=empty><h2>Sin datos</h2><p>Tipea un codigo en CARGA</p></div>';return;}
+  /* El archivo datos_voley.js y lo que publica Firebase NO tienen la misma
+   forma: el archivo trae {generado, jugadores, sesiones} y el codigo de
+   aca espera D.j. Con solo preguntar por !D se pasaba de largo y reventaba
+   en la linea siguiente. Se pide D.j como ya hace el bloque de los
+   destinos, que es el unico que lo tenia bien. */
+  if(!D || !Array.isArray(D.j)){document.getElementById('grid').innerHTML='<div class=empty><h2>Sin datos</h2><p>Tipea un codigo en CARGA</p></div>';return;}
   document.getElementById('ts').textContent=D.ts;
   const act=D.j.filter(p=>p.a);
   const isBlq=cF==='B';
@@ -2603,8 +2618,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20261005-2033" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20261005-2033"></script>
+<script src="plantel_nafels.js?v=20261005-2141" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20261005-2141"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2703,7 +2718,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20261005-2033"></script>
+<script src="ayuda.js?v=20261005-2141"></script>
 
 
 
