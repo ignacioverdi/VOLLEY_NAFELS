@@ -76,6 +76,10 @@ CARTEL_CLUB = [            # muestra datos del club que no van a una demo
     'scouting_rival.html', 'recepcion.html', 'Team_Playbook_Nafels.html',
     'MANUAL_NAFELS_VOLEY.html', 'horarios.html', 'videos.html', 'cortes.html',
     'calendario.html', 'nla_stats_table.html',
+    # La sintesis reproduce el VIDEO del partido entero. Es material del club
+    # —la cancha, los rivales, el link de YouTube— y no va a una demo publica,
+    # por el mismo motivo que Cortes de Video.
+    'sintesis.html',
 ]
 CARTEL_CARGA = [           # herramientas de carga y administracion
     'alta_jugadores.html', 'asociar_codigos.html', 'subir_partido.html',

@@ -1079,6 +1079,31 @@
   'Mapas de destino': { en:'Target maps', de:'Zielkarten' },
   'Bloqueados - Origen ({1})': { en:'Blocked - Origin ({1})', de:'Geblockt - Ursprung ({1})' },
   'MI PERFORMANCE VS OBJETIVO': { en:'MY PERFORMANCE VS TARGET', de:'MEINE LEISTUNG VS ZIEL' },
+
+  /* ── LA SINTESIS DEL PARTIDO ──────────────────────────────────────────── */
+  'Síntesis del partido': { en:'Match synthesis', de:'Spielzusammenfassung' },
+  'Síntesis del partido · NAFELS': { en:'Match synthesis · NAFELS', de:'Spielzusammenfassung · NAFELS' },
+  'El partido entero sin los tiempos muertos: de saque a saque, un rally atrás del otro y en orden. Como la síntesis del Data Volley, pero sin generar un archivo.':
+    { en:'The whole match with the dead time taken out: serve to serve, one rally after another, in order. Like the Data Volley synthesis, but without generating a file.',
+      de:'Das ganze Spiel ohne Leerlauf: von Aufschlag zu Aufschlag, ein Ballwechsel nach dem anderen, der Reihe nach. Wie die Data-Volley-Zusammenfassung, nur ohne Datei.' },
+  'Los rallies': { en:'The rallies', de:'Die Ballwechsel' },
+  'Cargando el video…': { en:'Loading the video…', de:'Video wird geladen…' },
+  'Seguido': { en:'Continuous', de:'Durchgehend' },
+  'Todos los sets': { en:'All sets', de:'Alle Sätze' },
+  'rallies': { en:'rallies', de:'Ballwechsel' },
+  'de juego': { en:'of play', de:'Spielzeit' },
+  'Elegí un partido': { en:'Pick a match', de:'Wähle ein Spiel' },
+  'Se necesitan los cortes de ese partido y el link del video.':
+    { en:'That match needs its clips and the video link.',
+      de:'Dieses Spiel braucht seine Clips und den Video-Link.' },
+  'Todavía no hay partidos con video': { en:'No matches with video yet', de:'Noch keine Spiele mit Video' },
+  'Hace falta un partido con sus cortes y el link del video cargado.':
+    { en:'A match needs its clips and its video link loaded.',
+      de:'Ein Spiel braucht seine Clips und den eingetragenen Video-Link.' },
+  'nota.sintesis': {
+    es:'Es el partido entero sin los tiempos muertos: arranca en el saque y corta cuando termina la jugada. Los rallies van en orden, uno atrás del otro, como la síntesis del Data Volley. Con <b>Seguido</b> no para entre rally y rally.',
+    en:'It is the whole match with the dead time taken out: it starts on the serve and cuts when the rally ends. The rallies run in order, one after another, like the Data Volley synthesis. With <b>Continuous</b> it does not stop between rallies.',
+    de:'Es ist das ganze Spiel ohne Leerlauf: es beginnt beim Aufschlag und schneidet ab, wenn der Ballwechsel endet. Die Ballwechsel laufen der Reihe nach, einer nach dem anderen, wie die Data-Volley-Zusammenfassung. Mit <b>Durchgehend</b> hält es zwischen den Ballwechseln nicht an.' },
   /* El parrafo de arriba de «Objetivos del plantel». Por clave, como la nota:
      es largo y el traductor de frases deja afuera los textos muy largos. */
   'lead.objetivos': {

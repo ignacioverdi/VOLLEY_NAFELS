@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261005-0813"></script>
-<script src="selector_categoria.js?v=20261005-0813"></script>
+<script src="categorias_club.js?v=20261005-0916"></script>
+<script src="selector_categoria.js?v=20261005-0916"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -253,17 +253,17 @@ footer{
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="datos_seguros.js?v=20261005-0813"></script>
-<script src="firebase.js?v=20261005-0813" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261005-0813"></script>
-<script src="lang.js?v=20261005-0813"></script>
-<script src="plantel_nafels.js?v=20261005-0813"></script>
+<script src="datos_seguros.js?v=20261005-0916"></script>
+<script src="firebase.js?v=20261005-0916" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261005-0916"></script>
+<script src="lang.js?v=20261005-0916"></script>
+<script src="plantel_nafels.js?v=20261005-0916"></script>
 <!-- == EL OBJETIVO DE LA SEMANA, ARRIBA DE TODO ========================
      Es lo primero que ve el jugador al entrar. Necesita las baterias, el
      plantel y el ejercicio de armado de alta. Todos van con onerror: si
      alguno no carga, la tarjeta no se dibuja y la portada queda igual que
      siempre. -->
-<script src="objetivos_config.js?v=20261005-0813" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261005-0916" onerror="void 0"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
 <!-- ══ ABRIR LOS DATOS ═══════════════════════════════════════════════════
@@ -285,7 +285,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <script src="datos_high_set_26-27.js.enc?v=1" onerror="void 0"></script>
 <script src="datos_high_set_27-28.js.enc?v=1" onerror="void 0"></script>
 <script src="datos_high_set_28-29.js.enc?v=1" onerror="void 0"></script>
-<script src="objetivos_semanales.js?v=20261005-0813" onerror="void 0"></script>
+<script src="objetivos_semanales.js?v=20261005-0916" onerror="void 0"></script>
 
 <style>
 @media(max-width:768px){
@@ -384,7 +384,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261005-0813">
+<link rel="stylesheet" href="movil.css?v=20261005-0916">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    LA PORTADA, DE MENU A TABLERO
@@ -764,6 +764,17 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div class="card-body">
           <div class="card-title" style="color:#F97316" data-t="Cortes de Video"><span data-t="Cortes de Video">Cortes de Video</span></div>
           <div class="card-desc" data-t="Filtrá acciones como en los heatmaps y mirá los clips de video sincronizados. Armá recortes para mostrarles a los jugadores."><span data-t="Filtrá acciones como en los heatmaps y mirá los clips de video sincronizados. Armá recortes para mostrarles a los jugadores.">Filtrá acciones como en los heatmaps y mirá los clips de video sincronizados. Armá recortes para mostrarles a los jugadores.</span></div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a><a href="sintesis.html" class="card" style="--card-color:#e6a743">
+        <div class="card-glow"></div>
+        <div class="card-top">
+          <div class="card-icon" style="background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.2)">⏩</div>
+          <div class="card-badge" style="background:rgba(56,189,248,.1);color:#38BDF8;border:1px solid rgba(56,189,248,.2)" data-t="Nuevo"><span data-t="Nuevo">Nuevo</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-title" style="color:#38BDF8" data-t="Síntesis del partido"><span data-t="Síntesis del partido">Síntesis del partido</span></div>
+          <div class="card-desc" data-t="El partido entero sin los tiempos muertos: de saque a saque, un rally atrás del otro y en orden. Como la síntesis del Data Volley, pero sin generar un archivo."><span data-t="El partido entero sin los tiempos muertos: de saque a saque, un rally atrás del otro y en orden. Como la síntesis del Data Volley, pero sin generar un archivo.">El partido entero sin los tiempos muertos: de saque a saque, un rally atrás del otro y en orden. Como la síntesis del Data Volley, pero sin generar un archivo.</span></div>
         </div>
         <div class="card-arrow">→</div>
       </a><a href="high_set.html" class="card" style="--card-color:#e6a743">
@@ -1687,9 +1698,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261005-0813"></script>
+<script src="chat_nafels.js?v=20261005-0916"></script>
 
-<script src="proximo_rival.js?v=20261005-0813" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js?v=20261005-0916" onerror="window.FIXTURE_DATA=null"></script>
 <script>
 /* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
    proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
@@ -1747,12 +1758,12 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   }catch(e){}
 })();
 </script>
-<script src="temporadas_menu.js?v=20261005-0813"></script>
+<script src="temporadas_menu.js?v=20261005-0916"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20261005-0813" defer></script>
+<script src="onesignal_push.js?v=20261005-0916" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -1787,7 +1798,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
        'player' se oculta TODO lo que no este aca adentro, asi que una tarjeta
        nueva es invisible para los jugadores hasta que se la sume. Le paso a
        HIGH SET: la tarjeta estaba, pero solo la veia el cuerpo tecnico. */
-    var SHOW = ['plan_partido.html','equipo.html','nla_stats_table.html','analisis.html','prep_fisica.html','wellness.html','dashboard.html','calendario.html','horarios.html','cortes.html','baggerone.html','high_set.html',
+    var SHOW = ['plan_partido.html','equipo.html','nla_stats_table.html','analisis.html','prep_fisica.html','wellness.html','dashboard.html','calendario.html','horarios.html','cortes.html','sintesis.html','baggerone.html','high_set.html',
                 /* El plan de desarrollo es DEL JUGADOR: sus objetivos de la
                    semana y lo que tiene que mejorar. Estaba afuera de esta
                    lista, asi que la tarjeta existia pero el jugador no la
@@ -2415,7 +2426,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   else arrancar();
 })();
 </script>
-<script src="ayuda.js?v=20261005-0813"></script>
+<script src="ayuda.js?v=20261005-0916"></script>
 </body>
 </html>
 
