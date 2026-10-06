@@ -568,13 +568,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20261006-1237"></script>
-<script src="selector_categoria.js?v=20261006-1237"></script>
-<script src="lang.js?v=20261006-1237"></script>
+<script src="categorias_club.js?v=20261006-1302"></script>
+<script src="selector_categoria.js?v=20261006-1302"></script>
+<script src="lang.js?v=20261006-1302"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261006-1237">
+<link rel="stylesheet" href="movil.css?v=20261006-1302">
 </head>
 <body>
 
@@ -1314,9 +1314,9 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20261006-1237" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261006-1237"></script>
-<script src="objetivos.js?v=20261006-1237" onerror="void 0"></script>
+<script src="firebase.js?v=20261006-1302" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261006-1302"></script>
+<script src="objetivos.js?v=20261006-1302" onerror="void 0"></script>
 <!-- ══ EL MOTOR BUENO DEL DELAY, QUE EN ESTA PAGINA NO ESTABA ═══════════
      video_delay.js tiene dos motores: el de clips de 12 segundos y el de
      buffer continuo (delay_buffer.js), que es el que deja elegir el retraso
@@ -1325,14 +1325,14 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
      Resultado: el panel que usa el scout siempre caia al motor viejo, que es
      el que se siente como que "se traba". panel_voley.html si lo carga, por
      eso ahi se veia mejor. -->
-<script src="delay_buffer.js?v=20261006-1237" onerror="void 0"></script>
-<script src="video_delay.js?v=20261006-1237" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20261006-1302" onerror="void 0"></script>
+<script src="video_delay.js?v=20261006-1302" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20261006-1237" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20261006-1237"></script>
+<script src="plantel_nafels.js?v=20261006-1302" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261006-1302"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -6718,14 +6718,27 @@ function aplicarEquipo(eq, side){
      ("ROFFLER Pascal"). Sumarle el nombre de pila daba
      "ROFFLER Pascal Pascal", y asi se publicaba a todas las pantallas.
      Si el apellido ya termina con el nombre, no se vuelve a sumar. */
+  /* Johansson quedo guardado como "PatrikC", con una C de mas: la repeticion
+     no es exacta. Se acepta una letra de diferencia y se deja la version mas
+     corta. Candados: hacen falta TRES palabras (asi "SILVA Silvana" y
+     "MARTIN Martin" no se tocan) y la corta tiene que tener 4 letras o mas
+     (asi la R de "SCHMID R Roy" no cuenta). */
+  var _pvDup = function(a, b){
+    a = String(a||'').toUpperCase(); b = String(b||'').toUpperCase();
+    if(a === b) return true;
+    var corta = a.length < b.length ? a : b, larga = a.length < b.length ? b : a;
+    return corta.length >= 4 && larga.indexOf(corta) === 0 && larga.length - corta.length <= 1;
+  };
   var _nomJug = function(ape, nom){
-    var a = String(ape == null ? '' : ape).trim().replace(/\s+/g, ' ');
-    var n = String(nom == null ? '' : nom).trim().replace(/\s+/g, ' ');
-    if(!n) return a;
-    if(!a) return n;
-    var ua = a.toUpperCase(), un = n.toUpperCase();
-    if(ua === un || ua.slice(-un.length - 1) === ' ' + un) return a;
-    return a + ' ' + n;
+    var p = (String(ape == null ? '' : ape).trim() + ' ' + String(nom == null ? '' : nom).trim())
+              .trim().replace(/\s+/g, ' ').split(' ');
+    while(p.length >= 3){
+      var u = p[p.length-1], v = p[p.length-2];
+      if(!_pvDup(u, v)) break;
+      if(u.length < v.length) p[p.length-2] = u;
+      p.pop();
+    }
+    return p.join(' ');
   };
   M[side].plantel = eq.jugadores.map(j=>({c:j.c, n:_nomJug(j.apellido, j.nombre), rol:j.rol}));
   M[side].id = eq.id || '';   /* el id de Data Volley: va en [3TEAMS] */
@@ -9379,8 +9392,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20261006-1237" onerror="void 0"></script>
-<script src="ayuda.js?v=20261006-1237"></script>
+<script src="volver_inicio.js?v=20261006-1302" onerror="void 0"></script>
+<script src="ayuda.js?v=20261006-1302"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -10548,11 +10561,11 @@ function renderAnalisis(){
 </script>
 <!-- La barra de analisis (manual 9.5). Va en su propio archivo a proposito:
      solo lee y dibuja, y si no carga el panel sigue igual que siempre. -->
-<script src="analisis_vivo.js?v=20261006-1237" onerror="void 0"></script>
+<script src="analisis_vivo.js?v=20261006-1302" onerror="void 0"></script>
 <!-- El rediseno del panel: la barra agrupada, el marcador en la barra,
      las rotaciones legibles y el cuadro de "como venimos". Va en su
      propio archivo a proposito: solo reacomoda y pinta, y si no carga
      el panel queda exactamente como estaba. -->
-<script src="panel_estilo.js?v=20261006-1237" onerror="void 0"></script>
+<script src="panel_estilo.js?v=20261006-1302" onerror="void 0"></script>
 </body>
 </html>
